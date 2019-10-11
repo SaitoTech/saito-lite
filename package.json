@@ -1,0 +1,39 @@
+{
+  "name": "saito",
+  "version": "2.0.0",
+  "description": "scalable blockchain with proper economics",
+  "main": "start.js",
+  "scripts": {
+    "start": "NODE_ENV=dev node start.js",
+    "serve": "NODE_ENV=prod node --max_old_space_size=4144 start.js",
+    "nuke": " cd scripts/ && ./compile nuke",
+    "compile": " cd scripts/ && ./compile",
+    "test": "NODE_ENV=test mocha 'tests/*.spec.js'",
+    "build": "webpack --config webpack.config.js",
+    "prod": "webpack --config webpack.prod.js",
+    "analyze": "webpack --config webpack.analyze.js"
+  ***REMOVED***,
+  "author": "Team Saito",
+  "license": "SAITO",
+  "homepage": "https://saito.tech",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "body-parser": "^1.19.0",
+    "crypto": "^1.0.1",
+    "express": "^4.17.1",
+    "fs-extra": "^8.1.0",
+    "socket.io": "^2.3.0",
+    "sqlite": "^3.0.3"
+  ***REMOVED***,
+  "devDependencies": {
+    "@babel/core": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
+    "babel-loader": "^8.0.6",
+    "babel-polyfill": "^6.26.0",
+    "file-loader": "^4.2.0",
+    "webpack": "^4.40.2",
+    "webpack-bundle-analyzer": "^3.5.2",
+    "webpack-cli": "^3.3.9",
+    "webpack-merge": "^4.2.2"
+  ***REMOVED***
+***REMOVED***

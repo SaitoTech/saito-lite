@@ -1,0 +1,23 @@
+// Icon Sizes
+// -------------------------
+
+// makes the font 33% larger relative to the icon container
+.#{$fa-css-prefix***REMOVED***-lg {
+  font-size: (4em / 3);
+  line-height: (3em / 4);
+  vertical-align: -.0667em;
+***REMOVED***
+
+.#{$fa-css-prefix***REMOVED***-xs {
+  font-size: .75em;
+***REMOVED***
+
+.#{$fa-css-prefix***REMOVED***-sm {
+  font-size: .875em;
+***REMOVED***
+
+@for $i from 1 through 10 {
+  .#{$fa-css-prefix***REMOVED***-#{$i***REMOVED***x {
+    font-size: $i * 1em;
+  ***REMOVED***
+***REMOVED***

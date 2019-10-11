@@ -1,0 +1,43 @@
+{
+  "name": "saito-lib",
+  "version": "1.0.4",
+  "description": "npm library of core saito functionality",
+  "main": "dist/saito-lib.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/webpack/bin/webpack.js",
+    "watch": "./node_modules/webpack/bin/webpack.js --watch"
+  ***REMOVED***,
+  "repository": {
+    "type": "git",
+    "url": "github.com/SaitoTech/saito-lib"
+  ***REMOVED***,
+  "keywords": [
+    "lib",
+    "javascript",
+    "blockchain",
+    "cryptocurrency"
+  ],
+  "author": "Team Saito",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "babelify": "^10.0.0",
+    "base-58": "0.0.1",
+    "big.js": "5.1.2",
+    "bitwise-xor": "0.0.0",
+    "browserify": "^16.5.0",
+    "crypto-browserify": "^3.12.0",
+    "fastest-stable-stringify": "^2.0.2",
+    "merkle-tree-gen": "^1.1.0",
+    "node-cryptojs-aes": "^0.4.0",
+    "secp256k1": "^3.7.1",
+    "sha256": "^0.2.0",
+    "socket.io": "^2.3.0"
+  ***REMOVED***,
+  "devDependencies": {
+    "webpack": "^4.28.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-node-externals": "^1.7.2"
+  ***REMOVED***
+***REMOVED***

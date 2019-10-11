@@ -1,0 +1,59 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Saito Network: Frequently Asked Questions</title>
+
+  <script type="text/javascript" src="/jquery/jquery-3.2.1.min.js"></script>
+  <link rel="stylesheet" href="/jquery/jquery-ui.min.css" type="text/css" media="screen" />
+  <script type="text/javascript" src="/jquery/jquery-ui.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+
+</head>
+<body>
+
+    <div class="header">
+      <a href="/" class="logo_link">
+        <img src="/img/saito_logo_black.png" class="logo" />
+        <div class="logo_text">saito</div>
+      </a>
+    </div>
+
+    <div class="main" style="padding-top:5px;min-width:750px;line-height:1.45em;">
+
+<h2>1. If nodes can burn money to produce a block anytime, what keeps them from double-spending?</h2>
+
+<p class="padded-b" style="margin-top:20px">
+In Saito just like in bitcoin, the cost of double-spend attack is not that of producing a single block: it is the cost of producing N+1 blocks where N is the number of confirmations of the existing transaction. By quantifying the cost of any chain re-organization, Saito provides a quantifiable cost to re-writing the chain. This is equivalent to the security of the Bitcoin network in the sense that 
+</p>
+
+<p>
+What makes Saito distinct from Bitcoin is that the security in the Saito network scales with the number of transactions the network processes. Once the network is processing a significant amount of transactions daily, our burn fee will be extremely high and it will be far more costly to produce a Saito block than mine a Bitcoin block. Nonetheless, even on smaller chains, users who receive extra-ordinarily large transactions are counselled to wait for adequate confirmations until the cost of overwriting the transaction is less than the payment made.
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+With that said, Saito's design makes traditional double-spend attacks irrelevant in other ways. For those that prefer proof-of-work for larger transactions, Saito allows users to exchange cryptographic signatures over our network using extremely cheap fees. This allows Saito users to transfer funds through off-chain methods similar to the way Lightning Network works. Another option is for users to bundle a "compliance bomb" in their transaction, a compliance bomb being a valid but unbroadcast transaction that can be spent in the event of a chain re-organization. Users afraid that their transactions may be doublespent may also conspire with more powerful network nodes to ensure that their transaction is defended -- the Saito equivalent of asking Bitmain to include your transaction in one of its blocks and defend the integrity of the block with its own hashpower if necessary. This type of defensive security is -- by design -- impossible in bitcoin.
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+All of these approachs force attackers to spend significant amounts of money merely to attack the network.
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+David Lancashire
+</br>
+david@saito
+</br>
+March 18, 2018
+</p>
+
+</div>
+
+</script>
+</body>
+</html>

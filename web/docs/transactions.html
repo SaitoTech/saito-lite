@@ -1,0 +1,136 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Saito Network: Development Roadmap</title>
+
+  <script type="text/javascript" src="/jquery/jquery-3.2.1.min.js"></script>
+  <link rel="stylesheet" href="/jquery/jquery-ui.min.css" type="text/css" media="screen" />
+  <script type="text/javascript" src="/jquery/jquery-ui.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+
+</head>
+<body>
+
+    <div class="header">
+      <a href="/" class="logo_link">
+        <img src="/img/saito_logo_black.png" class="logo" />
+        <div class="logo_text">saito</div>
+      </a>
+    </div>
+
+    <div class="main" style="padding-top:5px;min-width:750px;line-height:1.45em;">
+
+<h2>An Introduction to Saito</h2>
+
+<p class="padded-b" style="margin-top:20px">
+Saito is a cryptocurrency for applications that need to send large amounts of data across the blockchain. It can be used to build decentralized versions of most Google services, along with un-astroturfable Internet forums, social networks, pay-to-play websites, distributed key registries that are secure from MITM attacks, and much more. The network gets its scalability through the use of a transient blockchain as well as a new security method that rewards bandwidth-providing nodes in the peer-to-peer network.
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+<h3>Part I: Scaling the Blockchain</h3>
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+Saito makes two changes to enable terabyte-level scaling. The first is embracing a "transient blockchain" that throws out the oldest blocks in its ledger at predictable intervals ("genesis periods"). While this avoids the problem of the blockchain growing too large for network nodes to store, it does not pay for the bandwidth needed by nodes in the peer-to-peer network. We solve that problem through a new security method we call proof-of-transactions.
+
+<p class="padded-b" style="margin-top:20px">
+Under proof-of-transactions, any node can create a block at any time provided it pays the "burn fee" set by the network as the cost of doing so. This "burn fee" is set to a high value immediately after a block is found and decreases gradually until it hits zero. Since nodes will issue blocks as soon as it becomes profitable for them to do so, our pace of block production is determined by the overall volume of transactions in the network.
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+<img src="/img/graphs/saitonet.002.jpeg" style="width:600px;margin-top:15px;margin-bottom:15px;" />
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+Our "burn fee" also makes attacking the network expensive, since any increase in the pace of block production requires attackers to pay more in transaction fees than the network is actually collecting. In practice, this means attackers must burn their own capital to attack the network.
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+<img src="/img/graphs/saitonet.003.jpeg" style="width:600px;margin-top:15px;margin-bottom:15px;" />
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+For reasons that are outlined in Section III, Saito requires attackers to pay the entire "burn fee" rather than just cover the marginal difference over the main chain. We also increase the cost of attacks over time by adjusting our "burn fee" upward to keep blocktime constant as transaction volume grows. There is a major problem with this approach however, which lies in the economic consequences of requiring nodes to burn capital to produce blocks:
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+<img src="/img/graphs/saitonet.004.jpeg" style="width:600px;margin-top:15px;margin-bottom:15px;" />
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+Avoiding a deflationary crash requires us to inject money into our economy to keep it from collapsing. But how? The bitcoin solution of attaching the coinbase directly to blocks would eliminate the entire point of having a burn fee. And where else can the network insert funds? Injecting funds elsewhere would work, but as long as block-producing nodes have any influence over how funds are allocated a savvy attacker can sibyl the network for profit, earning profits less by processing transaction and more by gaming the token-issuing mechanism.
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+In the next section, we present our solution to this problem, which involves the recycling of the burn fee back into the network through a process that cannot be coopted by any of the players in the network. We do this through a zero-sum competition between bandwidth-expending nodes and CPU-expending miners in the network. We call this battle for the "paysplit" of the network.
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+<h3>Part II: The Battle for Paysplit</h3>
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+Whenever a node produces a block, it collects what profit it can and bundles all remaining fees into a "golden ticket" that contains (1) a computational puzzle for miners to solve, and (2) a vote to increase, decrease, or hold constant the "paysplit" of the network (the percentage of all golden tickets that are paid out to miners). These tickets are included (by default) in all blocks produced. Miners listening on the network then choose which blocks to solve and -- should they find a solution to the cryptographic puzzle -- propagate their solution back into the network as a regular fee-paying transaction. In addition to a proof-of-solution, these miner transactions also include a separate vote on whether to increase, decrease, or hold constant the difficulty of the computational puzzle.
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+We specify that only one solution may be provided for any golden ticket, and that solution must be included in the very next block. If these conditions are met, our two votes take effect, and the funds locked into the golden ticket are released to the network, split between the miner that found the solution and a random node in the peer-to-peer network. And in the event a "golden ticket" is not solved? The funds locked away will eventually fall off the blockchain, at which point they can be recycled back into our economy in the coinbase of another golden ticket. This dynamic is illustrated in the three figures below:
+</p>
+
+
+<p class="padded-b" style="margin-top:20px">
+<img src="/img/graphs/saitonet.007.jpeg" style="width:600px;margin-top:15px;margin-bottom:15px;" />
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+<img src="/img/graphs/saitonet.008.jpeg" style="width:600px;margin-top:15px;margin-bottom:15px;" />
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+<img src="/img/graphs/saitonet.009.jpeg" style="width:600px;margin-top:15px;margin-bottom:15px;" />
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+This game is counterintuitive to most bitcoiners because it separates the act of "producing blocks" from the act of "issuing tokens". Also because all actors are trapped in a delicate dance requiring collusion and cooperation alike. For while both nodes and miners want at least one solution per golden ticket (because otherwise no-one gets paid), their interests otherwise diverge: miners prefer a high paysplit and high difficulty level, while nodes prefer a low paysplit and low difficulty level. Given that votes must pass between both players to change consensus settings, we end up with a competitive dynamic where agents in both groups are constantly trading-off their individual short-term against their collective long-term interests.
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+This economic design makes the Saito Network robust, pushing us towards an equilibrium point at which the security provided is optimal for both nodes and miners given the relative ease of collusion on each side. And since we acknowledge that this level is arbitrary and may not reflect the needs of the applications on the network, we allow users on the network to tag their transactions with an optimal paysplit vote. Should a user-originated transaction contain such a vote, our system insists that it can only be included in a block which votes in the same direction. Users who choose to take sides in the ongoing struggle between nodes and miners thus sacrifice the reliability and speed of transaction confirmation, but gain marginal influence over how the network allocates fees.
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+<h3>Part III: Security in the Saito Network</h3>
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+Saito takes additional steps to secure the network and deter sibylling. First of all, we have nodes sign transactions as they propagate through the network, adding to each an unforgeable history of the path it takes from its point of origin to its point of confirmation. We also decrease the amount of each transaction fee that nodes can allocate to paying their "burn fee" with each hop a transaction takes along the network, and specify that nodes cannot use any fees for that purpose from transactions that do not include them in their transaction path. In order to ensure that nodes cannot influence the distribution of funds from the golden ticket, we also specify that the node in the peer-to-peer network which wins the node share of the golden ticket is selected using a random variable sourced from the miner solution, with the winner selected from the pool of nodes contained in the transaction propagation paths found in the previous block.
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+These additional restrictions secure our network from common attacks in other cryptosystems which -- oddly -- are not commonly recognized as attacks. In Saito, for instance, transactions are naturally valuable to nodes which participate in the P2P network but useless to attackers which "lurk" on the edges. The fact that nodes must participate in the P2P network to harvest transactions thus defends us against subtle attacks like those posed by the bitcoin FIBRE network, a closed-access network which benefits its participants by undermining the profitability of nodes which mine on the peer-to-peer network. Sibylling becomes an unprofitable strategy because it necessarily adds hops in transaction routes, while hoarding is minimized because even nodes that merely participate in transaction routing have a chance of winning the golden ticket reward.
+</p>
+
+<p class="padded-b" style="margin-top:20px">
+Security is also reinforced by the competitive economic structure of our game in fascinating ways. Note that if network security falls too low, the network is incentivized to increase it by voting to pay miners more. How this secures the network is not obvious, but it does: greater pay for miners increases the amount needed to attack the network. A higher paysplit also supports the threatened chain in the long-run, and speeds up block-issurance as miners compete to have their solutions included over those of their peers. Even in situations where the network is not under active attack, the miner/node battle over the paysplit vote also serves a defensive "canary in the coalmine" function, encouraging miners to issue their own pro-miner blocks if they control enough hashpower to support the block. Rather counterintuitively, it is the threat of short-term attacks that forces nodes to keep the network paysplit high enough to protect the network long-term stealth reorganizations.
+</p>
+
+
+<p class="padded-b" style="margin-top:20px">
+David Lancashire
+</br>
+david@saito
+</br>
+November 7, 2017
+</p>
+
+</div>
+
+</script>
+</body>
+</html>
