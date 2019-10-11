@@ -1,0 +1,19 @@
+{
+  "name": "Saito",
+  "short_name": "Saito",
+  "lang": "en-US",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "img/touch/pwa-192x192.png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "img/touch/pwa-512x512.png",
+      "sizes": "512x512"
+    }
+  ]
+}

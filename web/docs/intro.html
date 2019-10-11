@@ -1,0 +1,144 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Saito Network: Development Roadmap</title>
+
+  <script type="text/javascript" src="/jquery/jquery-3.2.1.min.js"></script>
+  <link rel="stylesheet" href="/jquery/jquery-ui.min.css" type="text/css" media="screen" />
+  <script type="text/javascript" src="/jquery/jquery-ui.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+
+</head>
+<body>
+
+    <div class="header">
+      <a href="/" class="logo_link">
+        <img src="/img/saito_logo_black.png" class="logo" />
+        <div class="logo_text">saito</div>
+      </a>
+    </div>
+
+    <div class="main" style="padding-top:5px;min-width:750px;line-height:1.45em;">
+
+<h2>What is Saito and Why is it Important?</h2>
+
+<p></p>
+
+Saito is a blockchain designed to process terabytes of data on a rolling basis. Our long-term goal is to handle over 100 terabytes each day while providing the same level of security as bitcoin.
+
+<p></p>
+
+The reason we need to support such a large amount of data is that Saito is more than a payments layer: buried within each Saito transaction is a signed message field that applications can use to send their own data along with transactions. By allowing applications to define their own protocol for how this data is formatted, we essentially create an application platform capable of running decentralized alternatives to services like email, social networks, domain-name registries and more.
+
+<p></p>
+
+While there are various projects that use blockchain technology to build similar applications, none has the flexibility or scalability of Saito. The first reason for this is that other networks use traditional blockchains and thus require all nodes in the network to store their entire blockchain in perpetuity. A more subtle way in which other approaches fail is that they rely on proof-of-work and proof-of-stake variants for securing the network, and these methods have no way to compensate nodes in the peer-to-peer network for supplying the bandwidth needed by high-traffic applications. Proof-of-work networks that expect miners to support the entire network suffer scaling and centralization pressures as bandwidth use and mining difficulty becomes more extreme.
+
+<p></p>
+
+Saito solves all of these problems through an entirely new blockchain design. By doing so, it ushers in the era of truly decentralized blockchain applications (distinguishable from "smart contracts" in the way they run on the edge of the network and face no limitations on computational resources other than those imposed by the end-node itself). As unlike smart contracts, Saito applications can also upgrade their protocols and software without forcing a general network upgrade. Not only does this flexibility allow the Saito blockchain to be used for applications that have historically been impossible to decentralize, but it pushes innovation to the edge of the network and prevents web services from getting monopolized by a small team of developers: anyone who can use an application can modify it simply by editing the source code.
+
+<p></p>
+
+What can we do with this new type of blockchain? Our online demos showcase several possibilities: decentralized email and social media platforms. While these applications may seem like traditional web-apps, they are in fact radically different. In our email client, email messages are in fact transactions broadcast and received directly across the blockchain. In our social media client, our ability to publish "posts" and "status updates" across the blockchain allows us to eliminate points of centralization and censorship from the network: servers can moderate and remove content for their own users, but they cannot censor the underlying blockchain along which data passes as a common carrier. And anyone upset at any moderator's editorial policy can either run a full-node for access to all network traffic, or switch to another server with a more restrictive/permissive touch.
+
+<p></p>
+
+More interesting possibilities emerge once we realize that we can use our big-data blockchain to build decentralized consensus. One example of an application like this is a decentralized DNS system: a censorship-resistent name-key registration platform: an example of this can be found in our email client which operates using a decentralized email address name system. Other interesting possibilities are building decentralized advertising networks, and from there decentralized search engines; mobile billing systems for international telecom carriers; and of course genuine micropayments and a new monetization method for tech companies....
+
+<p></p>
+
+To understand Saito at its most abstract is thus to recognize that what it offers is an entirely new type of technical infrastructure, one in which the integrity of the data is secured by public-key cryptography, and in which the integrity of the network is secured through economic incentives. Additionally, and unexpectedly, Saito's design also helps us solve two otherwise intractable problems in computer science: how to create secure encrypted connections across a distributed network, and how to avoid sybil attacks on nodes in a blockchain. Understanding how and why these work require a more detailed understanding of how Saito works, available in our <a href="/docs/transactions.html">technical explanation of proof-of-transactions</a>.
+
+
+<p></p>
+
+
+<h2>Blockchain Scaling</h2>
+
+<p></p>
+
+The following table shows current scaling capabilities, which reflect the time needed to create and process a single Saito block on a 2017 Macbook Air. Specifically, it measures the amount of time for the function indexAndStore() in the saito/blockchain.js file to execute for a particularly block.
+
+<p></p>
+
+<table class="scaling_table">
+  <tr>
+    <th>Txs</th>
+    <th>Tx Size</th>
+    <th>Blk Size</th>
+    <th>Callbacks</th>
+    <th>Genesis Period</th>
+    <th>Memory Used</th>
+    <th>Processing Time</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>1 MB</td>
+    <td>1 MB</td>
+    <td>100</td>
+    <td>20160</td>
+    <td>~200 MB</td>
+    <td>1 second</td>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>25 MB</td>
+    <td>25 MB</td>
+    <td>100</td>
+    <td>20160</td>
+    <td>~1500 MB</td>
+    <td>24 seconds</td>
+  </tr>
+  <tr>
+    <td>1000</td>
+    <td>0.001 MB</td>
+    <td>1 MB</td>
+    <td>100</td>
+    <td>20160</td>
+    <td>~800 MB</td>
+    <td></td>
+  </tr>
+</table>
+
+<p></p>
+
+Please note that the above scaling data is significantly out-of-date. Transaction capabilities are now among the fastest of which we are aware in blockchain technology. Details available on request.
+
+
+
+<style>
+table {
+ min-width: 700px;
+}
+th {
+ text-align: left;
+}
+td { 
+ text-align: left;
+ padding-right:10px;
+}
+
+</style>
+
+
+<p></p>
+
+These figures can be replicated by enabling our Spammer module, which can be used to stress-test the network at various levels of stress. In practice, the figures will be elevated as they necessarily include the time needed to save transactions to a local wallet.
+
+<p></p>
+
+David Lancashire
+<br/>
+<i>January 2018</i>
+
+</div>
+
+</body>
+</html>
