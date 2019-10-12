@@ -43,8 +43,9 @@ class ForumCore extends ModTemplate {
           forum.savePost(tx);
           break;
         case 'comment':
-          let { post_id, parent_id } = tx.transaction.msg;
+          let { post_id, parent_id, post_author } = tx.transaction.msg;
           if (parent_id != null || post_id != null) { forum.saveComment(tx, post_id, parent_id); }
+          forum.sendCommentChatNotification(tx);
           break;
         default:
           break;
@@ -294,6 +295,19 @@ class ForumCore extends ModTemplate {
     } catch(err) {
       console.log(err);
     }
+  }
+
+  sendCommentChatNotification(tx) {
+    let { post_author } = tx.returnMessage();
+    var newtx = this.app.wallet.createUnsignedTransaction(this.app.wallet.returnPublicKey(), 0, 2);
+    newtx.transaction.msg = {
+      module: "Chat",
+      type: 'notification',
+      publickey: post_author,
+      message: `${tx.returnSender()} just commented on your post!`
+    };
+    newtx = this.app.wallet.signTransaction(newtx);
+    this.app.network.propagatTransaction(newtx);
   }
 
   shouldAffixCallbackToModule(modname) {
