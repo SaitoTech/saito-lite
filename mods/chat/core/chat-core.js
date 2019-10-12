@@ -1,8 +1,8 @@
 const fs = require('fs');
+const sqlite = require('sqlite');
 const saito = require('../../../lib/saito/saito.js');
 const ModTemplate = require('../../../lib/templates/modtemplate.js');
 
-const sqlite = require('sqlite');
 
 class ChatCore extends ModTemplate {
   constructor(app) {
@@ -31,28 +31,47 @@ class ChatCore extends ModTemplate {
       ]);
 ***REMOVED*** catch (err) { console.error(err); ***REMOVED***
 
-    let public_chatroom_params = {
-      $uuid: this.public_room_id,
-      $name: "ALL"
-***REMOVED***;
+    try {
+      let public_chatroom_params = {
+        $uuid: this.public_room_id,
+        $name: "ALL"
+  ***REMOVED***;
+      var insert_public_chatroom = `INSERT or IGNORE INTO rooms (uuid, name) VALUES ($uuid, $name)`;
+      this.db.run(insert_public_chatroom, public_chatroom_params);
 
-    var insert_public_chatroom = `INSERT or IGNORE INTO rooms (uuid, name) VALUES ($uuid, $name)`;
-    this.db.run(insert_public_chatroom, public_chatroom_params);
+      var sql = `INSERT OR IGNORE INTO records (room_id, author, message, sig, tx)
+        VALUES ($room_id, $author, $message, $sig, $tx)`;
 
-    var sql = `INSERT OR IGNORE INTO records (room_id, author, message, sig, tx)
-      VALUES ($room_id, $author, $message, $sig, $tx)`;
-
-    var params = {
-      $room_id: this.public_room_id,
-      $author: this.app.wallet.returnPublicKey(),
-      $message: "Welcome to Saito!",
-      $sig: this.app.crypto.hash(this.public_room_id),
-      $tx: "TXGOESHERE"
+      var params = {
+        $room_id: this.public_room_id,
+        $author: this.app.wallet.returnPublicKey(),
+        $message: "Welcome to Saito!",
+        $sig: this.app.crypto.hash(this.public_room_id),
+        $tx: "TXGOESHERE"
+  ***REMOVED***
+      this.db.run(sql, params);
+***REMOVED*** catch(err) {
+      console.log(err);
 ***REMOVED***
-    this.db.run(sql, params);
   ***REMOVED***
 
-  initialize() {***REMOVED***
+  async initialize() {
+    // add minimum records to existing db
+    this.db = await sqlite.open('./data/chat.sq3');
+  ***REMOVED***
+
+  onConfirmation(blk, tx, conf, app) {
+    if (conf == 0) {
+      let chat = app.modules.returnModule("Chat");
+      switch (tx.transaction.msg.type) {
+        case 'notification':
+          chat.handleModuleNotification(tx);
+          break;
+        default:
+          break;
+  ***REMOVED***
+***REMOVED***
+  ***REMOVED***
 
   handlePeerRequest(app, req, peer, mycallback) {
     if (req.request == null) { return; ***REMOVED***
@@ -70,9 +89,6 @@ class ChatCore extends ModTemplate {
         ***REMOVED***);
       ***REMOVED***
           break;
-***REMOVED*** case "chat request messages":
-***REMOVED***   this._returnRequestedMessages(req, mycallback);
-***REMOVED***   break;
 ***REMOVED*** case "chat request create room":
 ***REMOVED***   var tx = new saito.transaction(req.data);
 ***REMOVED***   if (tx == null) { return; ***REMOVED***
@@ -89,6 +105,44 @@ class ChatCore extends ModTemplate {
 ***REMOVED*** catch(err) {
       console.log(err);
 ***REMOVED***
+  ***REMOVED***
+
+  async handleModuleNotification(tx) {
+    // In the transaction
+    //
+    // We need to know
+    // - Modules need to have a custom room with the publickey that they're creating
+    // - the message needs to be formatted in a way that is consumbale (blank text for the time being)
+
+    let user_publickey = tx.transaction.from[0].add;
+    // If there doesn't exist room with the module and the user, then it needs to be created
+    let room_id = this.app.crypto.hash(`${tx.transaction.msg.name***REMOVED***${user_publickey***REMOVED***`);
+    let params = {
+      $uuid: room_id,
+      $name: tx.transaction.msg.name,
+      $publickey: user_publickey,
+      $tx: JSON.stringify(tx)
+***REMOVED***;
+    let room_sql = `INSERT OR IGNORE into rooms (uuid, name, publickey, tx)
+    VALUES ($uuid, $name, $publickey, $tx)`;
+
+    let response = await this.db.run(room_sql, params);
+
+    //
+    // update the client with a new room, and send a message
+    //
+    // var newtx = this.app.wallet.createUnsignedTransaction(to_address, 0.0, 0.0);
+    // newtx.transaction.msg = {
+    //   module: "Chat",
+    //   request: "chat response create room",
+    //   room_id: room_id,
+    //   name: tx.transaction.msg.name,
+    //   addresses: [user_publickey]
+    // ***REMOVED***;
+
+    // // newtx.transaction.msg = app.keys.encryptMessage(tx.transaction.from[0].add, newtx.transaction.msg);
+    // newtx = app.wallet.signTransaction(newtx);
+    // this.app.network.sendRequest("chat response create room", newtx.transaction);
   ***REMOVED***
 
   webServer(app, expressapp) {

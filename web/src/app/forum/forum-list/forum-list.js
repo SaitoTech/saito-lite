@@ -5,14 +5,14 @@ import { ForumListPostTemplate ***REMOVED*** from './forum-list-post.template.js
 import { ForumDetail ***REMOVED*** from '../forum-detail/forum-detail.js';
 
 export const ForumList = {
-  render(mod) {
-    document.querySelector('.main').innerHTML = ForumListTemplate();
-    mod.forum.posts.forEach((post, index) => {
-      document.querySelector('.forum-table').innerHTML += ForumListPostTemplate(post, index);
-***REMOVED***);
+    render(mod) {
+        document.querySelector('.main').innerHTML = ForumListTemplate();
+        mod.forum.posts.forEach((post, index) => {
+            document.querySelector('.forum-table').innerHTML += ForumListPostTemplate(post, index);
+    ***REMOVED***);
 
-    this.attachEvents(mod);
-  ***REMOVED***,
+        this.attachEvents(mod);
+***REMOVED***,
 
   attachEvents(mod) {
     document.querySelector('#forum.create-button')

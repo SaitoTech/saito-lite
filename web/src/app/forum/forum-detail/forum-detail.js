@@ -32,7 +32,7 @@ export const ForumDetail = {
       msg.text        = text;
       msg.post_id     = post.post_id;
       msg.parent_id   = this.parent_id;
-      msg.post_author = mod.app.saito.wallet.returnPublicKey();
+      msg.post_author = post.author;
       msg.link        = "";
 
       // TODO: needs to be changed to channel
@@ -75,6 +75,8 @@ export const ForumDetail = {
       // maybe we should cache these values?
       this.renderComments(comments);
       mod.forum.forumDetailAttachEvents(post.post_id);
+
+      //mod.saito.network.sendTransaction()
 ***REMOVED***);
 
     // TODO: turn ForumRow it's own component

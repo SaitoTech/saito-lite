@@ -25,6 +25,7 @@ if [ "$1" == "nuke" ]; then
   rm -f ../data/explorer.sq3
   rm -f ../data/timeclock.sq3
   rm -f ../data/arcade.sq3
+  rm -f ../data/chat.sq3
   rm -f ../data/database.sq3
   rm -f ../data/bank.sq3
   rm -f ../data/registry.sq3
