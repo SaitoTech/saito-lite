@@ -1,17 +1,13 @@
 import App from './app/app';
-import { Saito } from '../../lib/index';
 import Storage from './saito/storage-web';
+
+import { Saito } from '../../lib/index';
+import mods_config from '../../config/modules.config';
 
 async function init() {
   let config = {
     storage: Storage,
-    mod_paths: [
-      'arcade/lite/arcade-lite.js',
-      'chat/lite/chat-lite.js',
-      'forum/lite/forum-lite.js',
-      'twilight/lite/twilight.js',
-      'wallet/wallet.js'
-    ],
+    mod_paths: mods_config.lite,
     peers:[{"host":"localhost","port":12101,"protocol":"http","publickey":"","synctype":"lite"}]
   };
 
