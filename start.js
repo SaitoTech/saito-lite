@@ -1,12 +1,12 @@
 const server = require('./core/server.js');
 const storage = require('./core/storage-core.js');
-const mods_config = require('./mods/modules.config.js');
+const mods_config = require('./config/modules.config.js');
 
 const saito = require('./lib/index.js');
 const app = new saito.Saito({
   storage,
   server,
-  mod_paths: mods_config
+  mod_paths: mods_config.core
 ***REMOVED***);
 
 app.BROWSER           = 0;
