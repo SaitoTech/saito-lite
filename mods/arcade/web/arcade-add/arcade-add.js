@@ -1,6 +1,6 @@
 import { ArcadeList ***REMOVED*** from '../arcade-list/arcade-list.js';
 import { ArcadeAddTemplate ***REMOVED*** from './arcade-add.template.js';
-import { saito_lib ***REMOVED*** from '../../../../../lib/index.js';
+import { saito_lib ***REMOVED*** from '../../../../lib/index';
 
 export const ArcadeAdd = {
     active_game: "",

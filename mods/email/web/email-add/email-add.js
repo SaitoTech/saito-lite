@@ -1,5 +1,4 @@
 import { EmailAddTemplate ***REMOVED*** from './email-add.template.js';
-// import { saito_lib ***REMOVED*** from '../../../lib/index';
 
 export const EmailAdd = {
     render(mod) {
@@ -29,8 +28,5 @@ export const EmailAdd = {
         newtx = saito.wallet.signTransaction(newtx);
 
         saito.network.propagateTransaction(newtx);
-***REMOVED*** function() {
-***REMOVED***     alert('Message sent!');
-***REMOVED*** ***REMOVED***);
 ***REMOVED***
 ***REMOVED***

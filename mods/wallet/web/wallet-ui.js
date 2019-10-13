@@ -1,8 +1,7 @@
 import QRCode from './qrcode';
-
 import { WalletTemplate ***REMOVED*** from './wallet.template.js';
 
-export default class Wallet {
+export default class WalletUI {
 ***REMOVED***
         this.id = "bearguy@saito";
         this.balance = app.saito.wallet.wallet.balance;

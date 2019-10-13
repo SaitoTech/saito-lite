@@ -1,6 +1,6 @@
 import {SettingsTemplate***REMOVED*** from './settings.template';
 
-export default class Settings {
+export default class SettingsUI {
 ***REMOVED***
         this.app = app;
 ***REMOVED***

@@ -14,7 +14,7 @@ const path = require('path');
 ***REMOVED***,
 
     // Path to your entry point. From this file Webpack will begin his work
-    entry: ["babel-polyfill",'./web/src/index.js'],
+    entry: ["babel-polyfill",'./web/index.js'],
 
     // Webpack will bundle all JavaScript into this file
     output: {
