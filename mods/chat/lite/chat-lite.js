@@ -50,6 +50,13 @@ class ChatLite extends ModTemplate {
       ***REMOVED***);
     ***REMOVED***
         break;
+      case "chat response create room":
+        var tx = new saito.transaction(req.data);
+        if (tx == null) { return; ***REMOVED***
+        if (tx.transaction.to[0].add == app.wallet.returnPublicKey()) {
+          this._handleCreateRoomResponse(app, tx);
+    ***REMOVED***
+        break;
       default:
         break;
 ***REMOVED***
@@ -72,15 +79,45 @@ class ChatLite extends ModTemplate {
     // ***REMOVED***
   ***REMOVED***
 
+  _handleCreateRoomResponse(app, tx) {
+    let new_room = this._addNewRoom(tx);
+    if (new_room) {
+      this._addRoomToDOM(new_room);
+***REMOVED***
+  ***REMOVED***
+
   addMessageToRoom(tx) {
     var txmsg = tx.returnMessage();
     let { room_id, publickey, message, sig ***REMOVED*** = txmsg;
     this.rooms[room_id].messages.push({id: sig, timestamp: tx.transaction.ts, author: publickey, message***REMOVED***);
   ***REMOVED***
 
+  _addNewRoom(tx) {
+    let txmsg = tx.returnMessage();
+    let { name, room_id, addresses ***REMOVED*** = txmsg;
+
+    if (this.rooms[room_id]) { return; ***REMOVED***
+
+    if (addresses.length == 2) {
+      name = addresses[0] === this.app.wallet.returnPublicKey() ? addresses[1] : addresses[0]
+***REMOVED***
+
+    var new_room = {
+      room_id,
+      name,
+      addresses,
+      messages: []
+***REMOVED***
+
+    this.chat.rooms.push(new_room);
+
+    return new_room
+  ***REMOVED***
+
   // will be binded
   renderChatList() {***REMOVED***
   addMessageToDOM(tx) {***REMOVED***
+  addRoomToDOM(new_room) {***REMOVED***
   scrollToBottom() {***REMOVED***
 ***REMOVED***
 

@@ -14,7 +14,6 @@ export const ChatList = {
     ***REMOVED***);
 
         this.bindDOMFunctionstoModule(mod);
-
         this.attachEvents(mod);
 ***REMOVED***,
 
@@ -35,6 +34,7 @@ export const ChatList = {
     // persepctive of Module
     bindDOMFunctionstoModule(mod) {
         mod.chat.renderChatList = this.renderChatList(mod);
+        mod.chat.addRoomToDOM = this.addRoomToDOM(mod);
 ***REMOVED***,
 
     renderChatList(mod) {
@@ -56,4 +56,18 @@ export const ChatList = {
                     .addEventListener('click', ChatAdd.render);
     ***REMOVED***
 ***REMOVED***,
+
+    addRoomToDOM(mod) {
+        return function (room) {
+            var new_room_elem = document.createElement('div')
+            new_room_elem.innerHTML = ChatListRowTemplate(room, 0);
+
+            new_room_elem.addEventListener('click', () => {
+                let room_id = e.currentTarget.id;
+                ChatRoom.render(mod, mod.chat.rooms[room_id]);
+        ***REMOVED***);
+
+            document.querySelector('.chat').append(new_room_elem);
+    ***REMOVED***
+***REMOVED***
 ***REMOVED***

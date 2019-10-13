@@ -75,8 +75,6 @@ export const ForumDetail = {
       // maybe we should cache these values?
       this.renderComments(comments);
       mod.forum.forumDetailAttachEvents(post.post_id);
-
-      //mod.saito.network.sendTransaction()
 ***REMOVED***);
 
     // TODO: turn ForumRow it's own component

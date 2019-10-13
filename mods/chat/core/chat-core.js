@@ -114,7 +114,7 @@ class ChatCore extends ModTemplate {
     // - Modules need to have a custom room with the publickey that they're creating
     // - the message needs to be formatted in a way that is consumbale (blank text for the time being)
 
-    let user_publickey = tx.transaction.from[0].add;
+    let user_publickey = tx.returnSender();
     // If there doesn't exist room with the module and the user, then it needs to be created
     let room_id = this.app.crypto.hash(`${tx.transaction.msg.name***REMOVED***${user_publickey***REMOVED***`);
     let params = {
@@ -129,20 +129,31 @@ class ChatCore extends ModTemplate {
     let response = await this.db.run(room_sql, params);
 
     //
-    // update the client with a new room, and send a message
+    // if this is the first notification to a user, we need a new room for them
     //
-    // var newtx = this.app.wallet.createUnsignedTransaction(to_address, 0.0, 0.0);
-    // newtx.transaction.msg = {
-    //   module: "Chat",
-    //   request: "chat response create room",
-    //   room_id: room_id,
-    //   name: tx.transaction.msg.name,
-    //   addresses: [user_publickey]
-    // ***REMOVED***;
+    if (response.changes == 1) {
+      let newtx = this.app.wallet.createUnsignedTransaction(user_publickey, 0.0, 0.0);
+      newtx.transaction.msg = {
+        module: "Chat",
+        request: "chat response create room",
+        room_id: room_id,
+        name: tx.transaction.msg.name,
+        addresses: [user_publickey],
+  ***REMOVED***;
 
-    // // newtx.transaction.msg = app.keys.encryptMessage(tx.transaction.from[0].add, newtx.transaction.msg);
-    // newtx = app.wallet.signTransaction(newtx);
-    // this.app.network.sendRequest("chat response create room", newtx.transaction);
+      newtx = app.wallet.signTransaction(newtx);
+      this.app.network.sendRequest("chat response create room", newtx.transaction);
+***REMOVED***
+
+    var msg_tx = this.app.wallet.createUnsignedTransaction(user_publickey, 0.0, 0.0);
+    msg_tx.transaction.msg = {
+        room_id: room_id,
+        publickey: this.app.wallet.returnPublicKey(),
+        message: tx.transacation.msg.message,
+        sig: tx.transaction.sig,
+        tx: JSON.stringify(tx),
+***REMOVED***;
+    this._sendMessage(msg_tx);
   ***REMOVED***
 
   webServer(app, expressapp) {
@@ -217,6 +228,15 @@ class ChatCore extends ModTemplate {
     // need to track the path of a message
     if (txmsg.publickey == this.app.wallet.returnPublicKey()) { return; ***REMOVED***
 
+    // core
+    // this._saveMessageToDB(tx);
+
+    // this.message_queue.push(tx);
+    // if (!this.is_processing_message_queue) { this._processMessageQueue(); ***REMOVED***
+    this._sendMessage(tx);
+  ***REMOVED***
+
+  _sendMessage(tx) {
     // core
     this._saveMessageToDB(tx);
 
