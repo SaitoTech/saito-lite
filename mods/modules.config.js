@@ -6,3 +6,4 @@ module.exports = [
   'forum/core/forum-core.js',
   'wallet/wallet.js'
 ]
+
