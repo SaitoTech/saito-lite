@@ -50,6 +50,13 @@ class ChatLite extends ModTemplate {
           });
         }
         break;
+      case "chat response create room":
+        var tx = new saito.transaction(req.data);
+        if (tx == null) { return; }
+        if (tx.transaction.to[0].add == app.wallet.returnPublicKey()) {
+          this._handleCreateRoomResponse(app, tx);
+        }
+        break;
       default:
         break;
     }
@@ -72,15 +79,45 @@ class ChatLite extends ModTemplate {
     // }
   }
 
+  _handleCreateRoomResponse(app, tx) {
+    let new_room = this._addNewRoom(tx);
+    if (new_room) {
+      this._addRoomToDOM(new_room);
+    }
+  }
+
   addMessageToRoom(tx) {
     var txmsg = tx.returnMessage();
     let { room_id, publickey, message, sig } = txmsg;
     this.rooms[room_id].messages.push({id: sig, timestamp: tx.transaction.ts, author: publickey, message});
   }
 
+  _addNewRoom(tx) {
+    let txmsg = tx.returnMessage();
+    let { name, room_id, addresses } = txmsg;
+
+    if (this.rooms[room_id]) { return; }
+
+    if (addresses.length == 2) {
+      name = addresses[0] === this.app.wallet.returnPublicKey() ? addresses[1] : addresses[0]
+    }
+
+    var new_room = {
+      room_id,
+      name,
+      addresses,
+      messages: []
+    }
+
+    this.chat.rooms.push(new_room);
+
+    return new_room
+  }
+
   // will be binded
   renderChatList() {}
   addMessageToDOM(tx) {}
+  addRoomToDOM(new_room) {}
   scrollToBottom() {}
 }
 

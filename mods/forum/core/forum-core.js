@@ -300,14 +300,18 @@ class ForumCore extends ModTemplate {
   sendCommentChatNotification(tx) {
     let { post_author } = tx.returnMessage();
     var newtx = this.app.wallet.createUnsignedTransaction(this.app.wallet.returnPublicKey(), 0, 2);
+
     newtx.transaction.msg = {
       module: "Chat",
+      // we want to tell people that the Forum is giving them a notification
+      name: "Forum",
       type: 'notification',
       publickey: post_author,
       message: `${tx.returnSender()} just commented on your post!`
     };
+
     newtx = this.app.wallet.signTransaction(newtx);
-    this.app.network.propagatTransaction(newtx);
+    this.app.network.propagateTransaction(newtx);
   }
 
   shouldAffixCallbackToModule(modname) {

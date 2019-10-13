@@ -35,7 +35,8 @@ class ForumLite extends ModTemplate {
       if (comments[i].data.sig == comment_id) {
         return comments[i];
       } else {
-        return this.findComment(comments[i].children, comment_id)
+        let comment = this.findComment(comments[i].children, comment_id);
+        if (comment) { return comment; }
       }
     }
 

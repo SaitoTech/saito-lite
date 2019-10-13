@@ -46,5 +46,9 @@ export const ForumList = {
             });
           }
         );
+  },
+
+  addRoomToDOM(room) {
+    document.querySelector('.forum-table').append(ForumListPostTemplate(room, 0));
   }
 }
