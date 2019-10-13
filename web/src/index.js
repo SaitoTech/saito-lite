@@ -9,7 +9,6 @@ async function init() {
       'arcade/lite/arcade-lite.js',
       'chat/lite/chat-lite.js',
       'forum/lite/forum-lite.js',
-      'twilight/lite/twilight.js',
       'wallet/wallet.js'
     ],
     peers:[{"host":"localhost","port":12101,"protocol":"http","publickey":"","synctype":"lite"***REMOVED***]
