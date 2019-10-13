@@ -9,7 +9,9 @@ export default class StorageLite extends Storage{
   loadOptions() {
     if (typeof(Storage) !== "undefined") {
       let data = localStorage.getItem("options");
-      this.app.options = JSON.parse(data);
+      if (data)  {
+        this.app.options = JSON.parse(data);
+  ***REMOVED***
 ***REMOVED***
   ***REMOVED***
 
