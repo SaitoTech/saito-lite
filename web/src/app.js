@@ -1,12 +1,14 @@
-import Arcade from './arcade/arcade';
-import Chat from './chat/chat';
-import Forum from './forum/forum';
-import Wallet from './wallet/wallet';
-import Email from './email/email';
-import Settings from './settings/settings';
+import ArcadeUI from '../../mods/arcade/web/arcade-ui';
+import ChatUI from '../../mods/newchat/web/chat-ui';
+import EmailUI from '../../mods/email/web/email-ui';
+import ForumUI from '../../mods/forum/web/forum-ui';
+import WalletUI from '../../mods/wallet/web/wallet-ui';
 
-import { HomeHeader } from './components/header/home-header.js';
-import { NavBar } from './components/navbar/navbar.js';
+// Not a real module
+import SettingsUI from './settings/settings-ui';
+
+import { HomeHeader } from '../../mods/web/components/header/home-header.js';
+import { NavBar } from '../../mods/web/components/navbar/navbar.js';
 
 export default class App {
     constructor() {}
@@ -14,12 +16,12 @@ export default class App {
     init(saito) {
         this.saito = saito;
 
-        this.chat = new Chat(this);
-        this.arcade = new Arcade(this);
-        this.forum = new Forum(this);
-        this.wallet = new Wallet(this);
-        this.email = new Email(this);
-        this.settings = new Settings(this);
+        this.chat = new ChatUI(this);
+        this.arcade = new ArcadeUI(this);
+        this.forum = new ForumUI(this);
+        this.wallet = new WalletUI(this);
+        this.email = new EmailUI(this);
+        this.settings = new SettingsUI(this);
 
         this.initMods();
 

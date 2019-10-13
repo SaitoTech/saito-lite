@@ -1,8 +1,7 @@
-import { ForumTemplate } from './forum.template.js';
 import { ForumList } from './forum-list/forum-list.js';
 import { ForumDetailCommentTemplate } from './forum-detail/forum-detail-comment.template.js';
 
-export default class Forum {
+export default class ForumUI {
     constructor(app) {
         this.app = app;
         this.forum = app.saito.modules.returnModule('Forum');

@@ -1,6 +1,6 @@
 import {SettingsTemplate} from './settings.template';
 
-export default class Settings {
+export default class SettingsUI {
     constructor(app) {
         this.app = app;
     }

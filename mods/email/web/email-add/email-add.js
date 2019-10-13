@@ -1,5 +1,4 @@
 import { EmailAddTemplate } from './email-add.template.js';
-// import { saito_lib } from '../../../lib/index';
 
 export const EmailAdd = {
     render(mod) {
@@ -29,8 +28,5 @@ export const EmailAdd = {
         newtx = saito.wallet.signTransaction(newtx);
 
         saito.network.propagateTransaction(newtx);
-        // function() {
-        //     alert('Message sent!');
-        // });
     }
 }

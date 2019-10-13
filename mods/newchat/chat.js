@@ -1,21 +1,16 @@
-const saito = require('../../../lib/saito/saito.js');
-const ModTemplate = require('../../../lib/templates/modtemplate.js');
+const saito = require('../../lib/saito/saito.js');
+const ModTemplate = require('../../lib/saito/saito.js');
 
 
 
 class Chat extends ModTemplate {
 
-
   constructor(app) {
 
     super(app);
-
-    this.app  = app;
     this.name = "Chat";
 
   }
-
-
 
   //
   // messages received on the blockchain arrive here
@@ -92,7 +87,7 @@ class Chat extends ModTemplate {
 
 
 
-  chatRequestMessages(app, tx) {
+  async chatRequestMessages(app, tx) {
 
     let txmsg = tx.returnMessage();
 
@@ -127,7 +122,7 @@ class Chat extends ModTemplate {
           messages: messages.reverse()
         };
       });
-      
+
       payload.rooms = await Promise.all(payload.rooms);
       */
 
@@ -136,9 +131,10 @@ class Chat extends ModTemplate {
     // relay the results back
     //
     let newtx = new saito.transaction();
-    newtx.msg = { let payload_data_here; };
+    let payload_data_here;
+    newtx.msg = {};
     newtx.msg.request = "chat load messages";
-    this.app.network.sendPeerRequestToPeer(sender, tx);    
+    this.app.network.sendPeerRequestToPeer(sender, tx);
 
 
   }
@@ -156,7 +152,7 @@ class Chat extends ModTemplate {
     let room 	 = txmsg.room;
 
     //
-    // each chat group  
+    // each chat group
     //
     let room_id = this.app.crypto.hash(room);
 

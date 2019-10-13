@@ -1,7 +1,9 @@
 import { ChatList } from './chat-list/chat-list.js';
 import { ChatRoomMessageTemplate } from './chat-room/chatroom-message.template.js';
 
-export default class Chat {
+//{ message, publickey, timestamp }, sig, type
+
+export default class ChatUI {
     constructor(app) {
         this.app = app;
         this.saito = app.saito;
@@ -20,9 +22,8 @@ export default class Chat {
     }
 
     addMessageToDOM(tx) {
-        let {message, publickey, timestamp} = tx.returnMessage();
-        let chat_message = ChatRoomMessageTemplate(tx.transaction.msg.sig, message, publickey, timestamp, 'others');
-        document.querySelector('.chat-room-content').innerHTML += chat_message;
+        document.querySelector('.chat-room-content').innerHTML +=
+                ChatRoomMessageTemplate(tx.returnMessage(), tx.transaction.msg.sig, 'others');
     }
 
     scrollToBottom() {

@@ -1,7 +1,7 @@
 import { ArcadeList } from './arcade-list/arcade-list.js';
 import { ArcadeListRowTemplate } from './arcade-list/arcade-list-row.template.js';
 
-export default class Arcade {
+export default class ArcadeUI {
     constructor(app) {
         this.app = app;
         this.arcade = app.saito.modules.returnModule("Arcade");
