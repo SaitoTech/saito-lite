@@ -47,8 +47,4 @@ export const ForumList = {
       ***REMOVED***
         );
   ***REMOVED***,
-
-  addRoomToDOM(room) {
-    document.querySelector('.forum-table').append(ForumListPostTemplate(room, 0));
-  ***REMOVED***
 ***REMOVED***
