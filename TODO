@@ -1,8 +1,0 @@
-
-connection_dropped --> connection_down
-
-block_created_by_creator --> mempool check to avoid orphaning my own txs off longest chain
-
-
-
-
