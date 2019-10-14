@@ -1,9 +1,9 @@
 CREATE TABLE IF NOT EXISTS rooms (
   id INTEGER,
-  uuid TEXT,
+  roomhash TEXT,
   publickey TEXT,
   name TEXT,
   tx TEXT,
-  UNIQUE(uuid, publickey),
+  UNIQUE(roomhash, publickey),
   PRIMARY KEY(id ASC)
 );
