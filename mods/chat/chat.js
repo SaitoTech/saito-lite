@@ -12,6 +12,7 @@ class Chat extends ModTemplate {
 
   ***REMOVED***
 
+/****
   //
   // messages received on the blockchain arrive here
   //
@@ -104,7 +105,6 @@ class Chat extends ModTemplate {
       uuid: "5234092348309823525 FIX THIS"
 ***REMOVED***);
     
-    /* 
     payload.rooms = rooms.map(async room => {
         let { uuid, name ***REMOVED*** = room;
         let addresses = await this.db.all(
@@ -124,7 +124,6 @@ class Chat extends ModTemplate {
   ***REMOVED***);
 
       payload.rooms = await Promise.all(payload.rooms);
-      */
 
 
     //
@@ -193,6 +192,7 @@ class Chat extends ModTemplate {
     this.app.network.sendPeerRequestToPeer(receiver, tx);
 
   ***REMOVED***
+***/
 
 ***REMOVED***
 
