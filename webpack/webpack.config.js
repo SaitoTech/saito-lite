@@ -9,16 +9,20 @@ const path = require('path');
         fs: "empty",
 ***REMOVED***,
 
-    externals: {
-        sqlite: 'sqlite'
-***REMOVED***,
+    externals: [
+        {
+            sqlite: 'sqlite'
+    ***REMOVED***,
+        /\.html$/,
+        /\.sql$/
+    ],
 
     // Path to your entry point. From this file Webpack will begin his work
-    entry: ["babel-polyfill",'./lib/lite/index.js'],
+    entry: ["babel-polyfill", path.resolve(__dirname, '../lib/saito/lite/index.js')],
 
     // Webpack will bundle all JavaScript into this file
     output: {
-        path: path.resolve(__dirname, './web/dist'),
+        path: path.resolve(__dirname, '../web/dist'),
         filename: 'saito.js'
 ***REMOVED***,
 
