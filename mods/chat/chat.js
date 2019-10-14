@@ -1,6 +1,5 @@
 const saito = require('../../lib/saito/saito.js');
-const ModTemplate = require('../../lib/saito/saito.js');
-
+const ModTemplate = require('../../lib/template/modtemplate.js');
 
 
 class Chat extends ModTemplate {
