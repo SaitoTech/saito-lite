@@ -3,5 +3,6 @@ module.exports = {
     'chat/chat.js',
   ],
   lite: [
+    'chat/chat.js',
   ]
 }

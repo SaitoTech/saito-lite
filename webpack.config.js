@@ -14,12 +14,12 @@ module.exports = {
     },
 
     // Path to your entry point. From this file Webpack will begin his work
-    entry: ["babel-polyfill",'./web/index.js'],
+    entry: ["babel-polyfill",'./lib/lite/index.js'],
 
     // Webpack will bundle all JavaScript into this file
     output: {
         path: path.resolve(__dirname, './web/dist'),
-        filename: 'browser.js'
+        filename: 'saito.js'
     },
 
     // rules that we're governed by
