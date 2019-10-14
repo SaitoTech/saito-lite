@@ -1,5 +1,5 @@
-const server = require('./core/server.js');
-const storage = require('./core/storage-core.js');
+const server = require('./lib/core/server.js');
+const storage = require('./lib/core/storage-core.js');
 const mods_config = require('./config/modules.config.js');
 
 const saito = require('./lib/index.js');
