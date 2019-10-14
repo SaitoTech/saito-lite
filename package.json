@@ -6,8 +6,8 @@
   "scripts": {
     "start": "NODE_ENV=dev node start.js",
     "serve": "NODE_ENV=prod node --max_old_space_size=4144 start.js",
-    "nuke": " cd scripts/ && ./compile nuke",
-    "compile": " cd scripts/ && ./compile",
+    "nuke": " ./compile nuke",
+    "compile": " ./compile",
     "test": "NODE_ENV=test mocha 'tests/*.spec.js'",
     "build": "webpack --config webpack.config.js",
     "prod": "webpack --config webpack.prod.js",
