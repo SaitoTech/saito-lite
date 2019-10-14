@@ -1,5 +1,5 @@
-import { HomeHeader } from '../../../../web/components/header/home-header'
-import { NavBar } from '../../../../web/components/navbar/navbar.js';
+import { HomeHeader } from '../../../../web-components/header/home-header'
+import { NavBar } from '../../../../web-components/footer/navbar.js';
 
 import { ChatRoomTemplate } from './chatroom.template.js';
 import { ChatRoomHeaderTemplate } from './chatroom-header.template.js';
