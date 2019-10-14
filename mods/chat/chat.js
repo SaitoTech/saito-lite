@@ -1,5 +1,6 @@
 const saito = require('../../lib/saito/saito.js');
 const ModTemplate = require('../../lib/templates/modtemplate');
+const ChatGroup = require('./lib/chatgroup');
 
 
 class Chat extends ModTemplate {
@@ -8,12 +9,45 @@ class Chat extends ModTemplate {
 
     super(app);
     this.name = "Chat";
+    this.events = ['chat'];
+
 
   ***REMOVED***
 
-/****
+
+  initialize(app) {
+
+    super.initialize(app);
+
+    //
+    // this triggers ChatGroup pretending it has received a chat message
+    // and broadcasting a "chat" event to which we are listening, which 
+    // prompts us in turn to ask it for its data.
+    //
+
+    //
+    // example of creating chatgroup
+    //
+    this.cg = new ChatGroup(app);
+    this.cg.initialize(app);
+
+    console.log("sending chatgroup event!");
+    this.sendEvent("chatgroup", {***REMOVED***);
+
+    //
+    // EXAMPLE OF EVENT EMISSION
+    //
+    //let p = {***REMOVED***;
+    //    p.var = "string";
+    //
+    //this.sendEvent("testing", p); 
+    //
+
+  ***REMOVED***
+
+
   //
-  // messages received on the blockchain arrive here
+  // onChain messages received on the blockchain arrive here
   //
   onConfirmation(blk, tx, conf, app) {
 
@@ -27,6 +61,26 @@ class Chat extends ModTemplate {
 
   ***REMOVED***
 
+
+  receiveEvent(type, data) {
+
+    if (type === "chat") {
+      if (data.this.name === "ChatGroup") {
+console.log("Chat receive event from ChatGroup!");
+	if (data.this === this.cg) {
+console.log("it is our very own chatgroup!");
+	  let x = data.this.respondTo("chat");
+console.log("Received what data: " + x.title + " -- " + x.ts);
+	***REMOVED***
+  ***REMOVED***
+***REMOVED***
+
+  ***REMOVED***
+
+
+
+
+/****
 
   //
   // messages received peer-to-peer arrive here
