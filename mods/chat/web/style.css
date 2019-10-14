@@ -1,0 +1,301 @@
+.body, body {
+  font-family: arial, helvetica, sans-serif, sans;
+  font-size: 1rem;
+  padding:0px;
+  margin:0px;
+ }
+
+.avatar_img {
+  vertical-align: middle;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+ .register_address {
+   color: -webkit-link;
+   cursor: pointer;
+   text-decoration: underline;
+ }
+
+ .index-container {
+   display: grid;
+   grid-template-columns: 1fr;
+   grid-auto-rows: auto;
+   grid-template-areas:
+   "header"
+   "main";
+ }
+
+ .logo {
+  width:35px;
+  margin-top:10px;
+  margin-left: 1.3em;
+  margin-right: 0.35em;
+  float:left;
+ }
+
+ .logo_link {
+  text-decoration:none;
+  color:inherits
+ }
+
+ .logo_text {
+  font-family: 'Monserrat', sans-serif;
+  padding-top:5px;
+  font-size:1.1em;
+  color:#444;
+ }
+
+ .loader {
+  /* width: 100%;
+  max-width: 600px; */
+  font-size: 2em;
+  line-height: 1.8em;
+  padding: 30px;
+ }
+
+ .header {
+  grid-area: header;
+  width: 100%;
+  height: 3.1rem;
+  border-bottom: 1px solid #a5a5a5;
+  font-size:2em;
+ }
+
+ .main {
+   display: grid;
+   grid-area: main;
+   grid-template-columns: 70% auto;
+   grid-template-areas:
+   "content" "ads";
+   padding-left: 1em;
+   padding-right: 1em;
+   font-size: 1.2em;
+ }
+
+ @media only screen and (min-width: 535px) {
+   .main {
+     padding: 2.1em;
+   }
+
+   .body {
+     font-size : 13px;
+   }
+ }
+
+ li {
+  margin-top:6px;
+ }
+
+ li {
+  text-transform: capitalize;
+  font-size: 1.2em;
+  font-family: 'Montserrat',sans-serif;
+ }
+
+ .section_header {
+   font-family:'Montserrat',sans-serif;
+   font-size:2.0em;
+   /* margin-bottom:10px; */
+   color:#ff8844;
+   clear:left;
+ }
+
+ .account_text {
+  float:left;
+  /* margin-bottom:10px; */
+ }
+
+
+ .banner {
+   text-align: center;
+   background: url(http://saito.tech/img/header/jason-patrick-schuller-163973-unsplash.jpg) center repeat;
+   padding-top: 30px;
+   padding-bottom: 25px;
+   padding-left: 0px;
+   padding-right: 0px;
+ }
+
+ .network_status {
+   text-align:center;
+   width:100%;
+   font-weight:bold;
+   font-size:0.7em;
+   color:#444;
+   padding-top:15px;
+ }
+
+ td {
+   font-size: 1.2em;
+ }
+ .h {
+   font-family: 'Montserrat', sans-serif;
+   padding-right: 10px;
+   font-weight: normal;
+   color: #222;
+ }
+ .c {
+   font-family: Courier, serif;
+ }
+
+
+ h1 {
+   font-family: 'Montserrat',sans-serif;
+   font-size: 50px;
+   font-weight: 400;
+   letter-spacing: -1px;
+   margin: 0 0 22px 0;
+   color: #fff;
+ }
+ h2 {
+   font-size:34px;
+   color:#ff8844;
+   font-family: 'Montserrat', sans-serif;
+   font-weight:700;
+   letter-spacing: -1px;
+   margin:0 0 15px 0;
+   text-align:center;
+   text-transform:uppercase;
+ }
+ .application {
+   display: relative;
+   float: left;
+   height: 135px;
+   width: 175px;
+   margin-right: 25px;
+   margin-bottom: 20px;
+ }
+
+ .application img {
+   height: 135px;
+   width: 175px;
+   position:absolute;
+   -webkit-transition: opacity 0.5s ease-in-out;
+   -moz-transition: opacity 0.5s ease-in-out;
+   -o-transition: opacity 0.5s ease-in-out;
+   transition: opacity 0.5s ease-in-out;
+ }
+ .application img.tt:hover {
+   opacity:0;
+ }
+
+ .demo_title {
+  position:relative;
+  top: 10px;
+  font-family: 'Montserrat', sans-serif;
+  color:#fff;
+  font-size:1.4em;
+  text-shadow: 1px 1px 5px #222;
+ }
+
+ .orange_button {
+  text-align:center;
+  width:120px;
+  padding: 15px 35px;
+  background: #ff8844;
+  color: #fff !important;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: 'Montserrat', sans-serif;
+  display: inline-block;
+  border-radius: 3px;
+  text-transform: uppercase;
+  line-height: 25px;
+  margin-bottom: 10;
+  transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
+  cursor:pointer;
+ }
+
+ .buttons {
+  /* //margin-top:15px; */
+  clear:left;
+  float:left;
+  max-width:650px;
+  /* min-width: 410px; */
+ }
+
+ .orange_button2 {
+  width:160px;
+  padding: 15px 35px;
+  background: #ff8844;
+  color: #fff !important;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: 'Montserrat', sans-serif;
+  display: inline-block;
+  border-radius: 3px;
+  text-transform: uppercase;
+  line-height: 25px;
+  margin-bottom: 20px;
+  transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
+  cursor:pointer;
+ }
+
+ .content {
+  display: grid;
+  grid-row-gap: 1em;
+ }
+
+ .ads {
+  justify-self: right;
+  max-width: 300px;
+
+ }
+
+ /* @media only screen and (max-width: 715px) {
+    .buttons {
+      /* width: 25em;
+      width
+    }
+/* } */
+
+ @media only screen and (max-width: 500px) {
+   .main {
+     font-size: 1rem;
+     padding-bottom: 1em;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+    "content"
+    "ads";
+    grid-row-gap: 1em;
+   }
+
+   .logo {
+     margin-left: 0.5em;
+   }
+
+   .buttons {
+     justify-self: center;
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     grid-template-rows: 1fr 1fr;
+     grid-column-gap: 0.5em;
+   }
+
+   .orange_button {
+     /* width: 105px; */
+     padding: 1rem 2rem;
+     font-size: 0.8em;
+     /* padding: 0.8em 1.5em; */
+   }
+
+   .content {
+     margin-top: 1em;
+   }
+   .ads {
+      justify-self: center;
+   }
+
+   #saito_address {
+      font-size: 0.5em;
+   }
+
+   .network_status {
+     display: none;
+   }
+ }
