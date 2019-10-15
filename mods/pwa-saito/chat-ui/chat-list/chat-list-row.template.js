@@ -1,4 +1,4 @@
-module.exports = ChatListRowTemplate = ({name, room_id***REMOVED***, {message, timestamp***REMOVED***) => {
+export const ChatListRowTemplate = ({name, room_id***REMOVED***, {message, timestamp***REMOVED***) => {
   let datetime = new Date(timestamp);
   return `
     <div id="${room_id***REMOVED***" class="chat-row">

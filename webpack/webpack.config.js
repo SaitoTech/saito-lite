@@ -14,6 +14,7 @@ const path = require('path');
             sqlite: 'sqlite'
     ***REMOVED***,
         /\.html$/,
+        /\.css$/,
         /\.sql$/
     ],
 

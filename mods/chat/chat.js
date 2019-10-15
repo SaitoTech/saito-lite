@@ -2,6 +2,8 @@ const saito = require('../../lib/saito/saito.js');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const ChatGroup = require('./lib/chatgroup');
 
+const HomeHeader = require('../web-components/header/header');
+
 
 class Chat extends ModTemplate {
 
@@ -13,7 +15,6 @@ class Chat extends ModTemplate {
 
 
   ***REMOVED***
-
 
   initialize(app) {
 
@@ -34,6 +35,11 @@ class Chat extends ModTemplate {
     console.log("sending chatgroup event!");
     this.sendEvent("chatgroup", {***REMOVED***);
 
+    if (this.app.BROWSER == 1) {
+      HomeHeader.render();
+      ChatList.render();
+***REMOVED***
+
     //
     // EXAMPLE OF EVENT EMISSION
     //
@@ -43,6 +49,9 @@ class Chat extends ModTemplate {
     //this.sendEvent("testing", p); 
     //
 
+  ***REMOVED***
+
+  initializeHTML() {
   ***REMOVED***
 
 
