@@ -1,11 +1,13 @@
-const ChatListTemplate = require('./chat-list.template.js.js');
-const ChatListRowTemplate = require('./chat-list-row.template.js.js');
+const ChatListTemplate = require('./chat-list.template');
+const ChatListRowTemplate = require('./chat-list-row.template');
 
-const ChatRoom = require('../chat-room/chatroom.js.js');
-const ChatAdd = require('../chat-add/chatadd.js.js');
+const ChatRoom = require('../chat-room/chat-room');
+// const ChatAdd = require('../chat-add/chatadd');
 
 module.exports = ChatList = {
+    chat: {},
     render(chat) {
+        this.chat = chat;
         document.querySelector('.main').innerHTML = ChatListTemplate();
 
         Object.values(chat.groups).forEach((group) => {
@@ -14,60 +16,60 @@ module.exports = ChatList = {
         });
 
         // this.bindDOMFunctionstoModule(mod);
-        // this.attachEvents(mod);
+        this.attachEvents(chat);
     },
 
-    attachEvents(mod) {
+    attachEvents(chat) {
         // add click event to all of our existing chat rows
         Array.from(document.getElementsByClassName('chat-row'))
              .forEach(row => row.addEventListener('click', (e) => {
-                let room_id = e.currentTarget.id;
-                ChatRoom.render(mod, mod.chat.rooms[room_id]);
+                let group_id = e.currentTarget.id;
+                ChatRoom.render(chat, chat.groups[group_id]);
              })
         );
 
         // add click event to create-button
-        document.querySelector('#chat.create-button')
-                .addEventListener('click', ChatAdd.render);
+        // document.querySelector('#chat.create-button')
+        //         .addEventListener('click', ChatAdd.render);
     },
 
     // persepctive of Module
-    bindDOMFunctionstoModule(mod) {
-        mod.chat.renderChatList = this.renderChatList(mod);
-        mod.chat.addRoomToDOM = this.addRoomToDOM(mod);
-    },
+    // bindDOMFunctionstoModule(mod) {
+    //     mod.chat.renderChatList = this.renderChatList(mod);
+    //     mod.chat.addRoomToDOM = this.addRoomToDOM(mod);
+    // },
 
-    renderChatList(mod) {
-        return function () {
-            Object.values(mod.chat.rooms).forEach((room) => {
-                document.querySelector('.chat').innerHTML
-                    += ChatListRowTemplate(room, room.messages[room.messages.length - 1]);
-            });
+    // renderChatList(mod) {
+    //     return function () {
+    //         Object.values(mod.chat.rooms).forEach((room) => {
+    //             document.querySelector('.chat').innerHTML
+    //                 += ChatListRowTemplate(room, room.messages[room.messages.length - 1]);
+    //         });
 
-            Array.from(document.getElementsByClassName('chat-row'))
-                .forEach(row => row.addEventListener('click', (e) => {
-                    let room_id = e.currentTarget.id;
-                    ChatRoom.render(mod, mod.chat.rooms[room_id]);
-                })
-            );
+    //         Array.from(document.getElementsByClassName('chat-row'))
+    //             .forEach(row => row.addEventListener('click', (e) => {
+    //                 let room_id = e.currentTarget.id;
+    //                 ChatRoom.render(mod, mod.chat.rooms[room_id]);
+    //             })
+    //         );
 
-            // add click event to create-button
-            document.querySelector('#chat.create-button')
-                    .addEventListener('click', ChatAdd.render);
-        }
-    },
+    //         // add click event to create-button
+    //         document.querySelector('#chat.create-button')
+    //                 .addEventListener('click', ChatAdd.render);
+    //     }
+    // },
 
-    addRoomToDOM(mod) {
-        return function (room) {
-            var new_room_elem = document.createElement('div')
-            new_room_elem.innerHTML = ChatListRowTemplate(room, 0);
+    // addRoomToDOM(mod) {
+    //     return function (room) {
+    //         var new_room_elem = document.createElement('div')
+    //         new_room_elem.innerHTML = ChatListRowTemplate(room, 0);
 
-            new_room_elem.addEventListener('click', () => {
-                let room_id = e.currentTarget.id;
-                ChatRoom.render(mod, mod.chat.rooms[room_id]);
-            });
+    //         new_room_elem.addEventListener('click', () => {
+    //             let room_id = e.currentTarget.id;
+    //             ChatRoom.render(mod, mod.chat.rooms[room_id]);
+    //         });
 
-            document.querySelector('.chat').append(new_room_elem);
-        }
-    }
+    //         document.querySelector('.chat').append(new_room_elem);
+    //     }
+    // }
 }

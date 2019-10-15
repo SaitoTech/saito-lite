@@ -3,6 +3,7 @@ const ModTemplate = require('../../lib/templates/modtemplate');
 const ChatGroup = require('./lib/chatgroup');
 
 const HomeHeader = require('../web-components/header/header');
+const ChatList = require('./lib/ui/chat-list/chat-list');
 
 
 class Chat extends ModTemplate {
@@ -16,7 +17,7 @@ class Chat extends ModTemplate {
     //
     // data managed by chat manager
     //
-    this.chatgroups = [];		//
+    this.groups = [];		//
 					//
 					//
 
@@ -35,20 +36,30 @@ class Chat extends ModTemplate {
     //
     // example of creating chatgroup
     //
-    let cg = new ChatGroup(app);
-    cg.initialize(app);
-    cg.group_id = "5782903598237498723423411235";
-    this.chatgroups[cg.group_id] = cg;;
+    this.groups = ['Chat', 'Arcade', 'Forum', 'Wallet'].map(mod_name => {
+      let cg = new ChatGroup(app);
+      cg.initialize(app);
+
+      cg.group_name = mod_name;
+      cg.group_id = this.app.crypto.hash(`${cg.group_name}${new Date().getTime()}`);
+
+      cg.messages = [{
+        id: 1,
+        author: this.app.wallet.returnPublicKey(),
+        publickey: this.app.wallet.returnPublicKey(),
+        message: `Welcome to Saito ${mod_name}!`,
+        timestamp: new Date().getTime()
+      }];
+
+      return [cg.group_id, cg];
+    });
+
+    this.groups = Object.fromEntries(this.groups);
 
 
 
     console.log("sending chatgroup event!");
     this.sendEvent("chatgroup", {});
-
-    if (this.app.BROWSER == 1) {
-      HomeHeader.render();
-      ChatList.render();
-    }
 
     //
     // EXAMPLE OF EVENT EMISSION
@@ -56,12 +67,17 @@ class Chat extends ModTemplate {
     //let p = {};
     //    p.var = "string";
     //
-    //this.sendEvent("testing", p); 
+    //this.sendEvent("testing", p);
     //
+    if (this.app.BROWSER == 1) { this.renderDOM() }
 
   }
 
-  initializeHTML() {
+  initializeHTML() {}
+
+  renderDOM() {
+    HomeHeader.render();
+    ChatList.render(this);
   }
 
 

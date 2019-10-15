@@ -1,8 +1,8 @@
 import { ChatListTemplate } from './chat-list.template.js';
 import { ChatListRowTemplate } from './chat-list-row.template.js';
 
-import { ChatRoom } from '../chat-room/chatroom.js';
-import { ChatAdd  } from '../chat-add/chatadd.js';
+import { ChatRoom } from '../chat-room/chat-room.js';
+import { ChatAdd  } from '../chat-add/chat-add.js';
 
 export const ChatList = {
     render(mod) {

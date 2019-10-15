@@ -100,6 +100,10 @@ input[type=text], input[type=number] {
     justify-self: end;
 }
 
+#back-button {
+    cursor: pointer;
+}
+
 .logo {
     height: 3em;
 }
@@ -148,6 +152,7 @@ input[type=text], input[type=number] {
 
 .create-button {
     background-color: var(--saito-red);
+    cursor: pointer;
     color: white;
     border-radius: 100px;
     position: fixed;
@@ -203,6 +208,7 @@ input[type=text], input[type=number] {
     border-bottom: 1px solid var(--saito-skyline-grey);
     padding: 10px 0px;
     height: 5em;
+    cursor: pointer;
 }
 
 .chat-last-message {
