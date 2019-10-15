@@ -1,20 +1,20 @@
-const ChatListTemplate = require('./chat-list.template.js.js');
-const ChatListRowTemplate = require('./chat-list-row.template.js.js');
+import { ChatListTemplate } from './chat-list.template.js';
+import { ChatListRowTemplate } from './chat-list-row.template.js';
 
-const ChatRoom = require('../chat-room/chatroom.js.js');
-const ChatAdd = require('../chat-add/chatadd.js.js');
+import { ChatRoom } from '../chat-room/chatroom.js';
+import { ChatAdd  } from '../chat-add/chatadd.js';
 
-module.exports = ChatList = {
-    render(chat) {
+export const ChatList = {
+    render(mod) {
         document.querySelector('.main').innerHTML = ChatListTemplate();
 
-        Object.values(chat.groups).forEach((group) => {
+        Object.values(mod.chat.rooms).forEach((room) => {
             document.querySelector('.chat').innerHTML
-                += ChatListRowTemplate(group, group.messages[group.messages.length - 1]);
+                += ChatListRowTemplate(room, room.messages[room.messages.length - 1]);
         });
 
-        // this.bindDOMFunctionstoModule(mod);
-        // this.attachEvents(mod);
+        this.bindDOMFunctionstoModule(mod);
+        this.attachEvents(mod);
     },
 
     attachEvents(mod) {

@@ -1,4 +1,4 @@
-import { HomeHeader } from '../../../../web-components/header/home-header'
+import { HomeHeader } from '../../../../web-components/header/home/home-header'
 import { NavBar } from '../../../../web-components/footer/navbar.js';
 
 import { ChatRoomTemplate } from './chatroom.template.js';
