@@ -13,6 +13,12 @@ class Chat extends ModTemplate {
     this.name = "Chat";
     this.events = ['chat'];
 
+    //
+    // data managed by chat manager
+    //
+    this.chatgroups = [];		//
+					//
+					//
 
   ***REMOVED***
 
@@ -29,8 +35,12 @@ class Chat extends ModTemplate {
     //
     // example of creating chatgroup
     //
-    this.cg = new ChatGroup(app);
-    this.cg.initialize(app);
+    let cg = new ChatGroup(app);
+    cg.initialize(app);
+    cg.group_id = "5782903598237498723423411235";
+    this.chatgroups[cg.group_id] = cg;;
+
+
 
     console.log("sending chatgroup event!");
     this.sendEvent("chatgroup", {***REMOVED***);
@@ -71,15 +81,30 @@ class Chat extends ModTemplate {
   ***REMOVED***
 
 
+
   receiveEvent(type, data) {
 
     if (type === "chat") {
+
+      if (data.this === undefined) { return; ***REMOVED***
       if (data.this.name === "ChatGroup") {
 console.log("Chat receive event from ChatGroup!");
 	if (data.this === this.cg) {
 console.log("it is our very own chatgroup!");
 	  let x = data.this.respondTo("chat");
+	
+
+	//
+	//
+	//
+	this.updateDom(this.chatgroup[52]);
+
 console.log("Received what data: " + x.title + " -- " + x.ts);
+//
+//
+// i  have the data, how do i update the DOM
+//
+//
 	***REMOVED***
   ***REMOVED***
 ***REMOVED***
