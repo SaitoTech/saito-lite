@@ -7,8 +7,8 @@ import ChatUI from '../chat-ui/chat-ui';
 // Not a real module
 // import SettingsUI from './settings/settings-ui';
 
-import { HomeHeader ***REMOVED*** from '../components/header/home-header.js/index.js';
-import { NavBar ***REMOVED*** from '../components/footer/navbar.js/index.js';
+import { HomeHeader ***REMOVED*** from '../components/header/home-header';
+import { NavBar ***REMOVED*** from '../components/footer/navbar';
 
 export default class App {
     constructor() {***REMOVED***
