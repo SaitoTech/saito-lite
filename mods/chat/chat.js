@@ -80,7 +80,7 @@ console.log("Received what data: " + x.title + " -- " + x.ts);
 
 
 
-/****
+
 
   //
   // messages received peer-to-peer arrive here
@@ -133,9 +133,9 @@ console.log("Received what data: " + x.title + " -- " + x.ts);
 
     let txmsg = tx.returnMessage();
 
-    for (let i = 0; i < txmsg.number_of_rooms_to_update; i++) {
-      this.chatReceiveMessage(txmsg.number[i]);
-    }
+//    for (let i = 0; i < txmsg.number_of_rooms_to_update; i++) {
+//      this.chatReceiveMessage(txmsg.number[i]);
+//    }
 
   }
 
@@ -143,6 +143,7 @@ console.log("Received what data: " + x.title + " -- " + x.ts);
 
   async chatRequestMessages(app, tx) {
 
+/*
     let txmsg = tx.returnMessage();
 
     if (!app.storage.doesDatabaseExist("chat")) { return; }
@@ -187,7 +188,7 @@ console.log("Received what data: " + x.title + " -- " + x.ts);
     newtx.msg = {};
     newtx.msg.request = "chat load messages";
     this.app.network.sendPeerRequestToPeer(sender, tx);
-
+*/
 
   }
 
@@ -196,7 +197,7 @@ console.log("Received what data: " + x.title + " -- " + x.ts);
 
 
   chatReceiveMessage(app, tx) {
-
+/*
     let txmsg = tx.returnMessage();
 
     let sender   = txmsg.sender;
@@ -243,9 +244,9 @@ console.log("Received what data: " + x.title + " -- " + x.ts);
     // relay the chat message
     //
     this.app.network.sendPeerRequestToPeer(receiver, tx);
-
+*/
   }
-***/
+
 
 }
 
