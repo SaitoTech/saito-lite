@@ -7,8 +7,21 @@ class ChatGroup extends ModTemplate {
   constructor(app) {
 
     super(app);
-    this.name = "ChatGroup";
-    this.events = ["chatgroup"];
+    this.name     = "ChatGroup";
+    this.events   = ["chatgroup"];
+
+
+    this.group_id = "";
+    this.unread_messages = 0;
+    let obj = {};
+    obj.title    = "Title";
+    obj.text     = "Text";
+    obj.ts       = new Date().getTime();
+    obj.messages = [];
+    obj.unread   = 1;
+    obj.redirect = "";
+    obj.this     = this;
+
 
   }
 
