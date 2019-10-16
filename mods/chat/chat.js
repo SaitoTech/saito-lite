@@ -2,7 +2,7 @@ const saito = require('../../lib/saito/saito.js');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const ChatGroup = require('./lib/chatgroup');
 
-const HomeHeader = require('../web-components/header/header');
+const Header = require('../../lib/ui/header/header');
 const ChatList = require('./lib/ui/chat-list/chat-list');
 
 
@@ -76,7 +76,7 @@ class Chat extends ModTemplate {
   initializeHTML() {***REMOVED***
 
   renderDOM() {
-    HomeHeader.render();
+    Header.render();
     ChatList.render(this);
   ***REMOVED***
 
