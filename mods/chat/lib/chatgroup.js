@@ -12,15 +12,19 @@ class ChatGroup extends ModTemplate {
 
 
     this.group_id = "";
+    this.group_name = "";
     this.unread_messages = 0;
-    let obj = {***REMOVED***;
-    obj.title    = "Title";
-    obj.text     = "Text";
-    obj.ts       = new Date().getTime();
-    obj.messages = [];
-    obj.unread   = 1;
-    obj.redirect = "";
-    obj.this     = this;
+
+    this.messages = [];
+
+    // let obj = {***REMOVED***;
+    // obj.title    = "Title";
+    // obj.text     = "Text";
+    // obj.ts       = new Date().getTime();
+    // obj.messages = [];
+    // obj.unread   = 1;
+    // obj.redirect = "";
+    // obj.this     = this;
 
 
   ***REMOVED***
@@ -34,7 +38,6 @@ class ChatGroup extends ModTemplate {
     let txmsg = tx.returnMessage();
 
     if (conf == 0) {
-      
       //
       // update this chatgroup object with data received
       //
@@ -57,7 +60,14 @@ class ChatGroup extends ModTemplate {
   // manager externally (when peer-to-peer chat requests 
   // arrive)
   //
-  addMessage(txmsg="") {
+  addMessage(tx={***REMOVED***) {
+    let { publickey, message, timestamp ***REMOVED*** = tx.returnMessage();
+    this.messages.push({
+      publickey,
+      message,
+      timestamp,
+      id: tx.transaction.sig
+***REMOVED***);
 
 console.log("adding a message and updating a message.");
 

@@ -1,5 +1,5 @@
-import { ChatList ***REMOVED*** from './chat-list/chat-list.js';
-import { ChatRoomMessageTemplate ***REMOVED*** from './chat-room/chatroom-message.template.js';
+import { ChatList ***REMOVED*** from './chat-list/chat-list';
+import { ChatRoomMessageTemplate ***REMOVED*** from './chat-room/chat-room-message.template';
 
 //{ message, publickey, timestamp ***REMOVED***, sig, type
 
