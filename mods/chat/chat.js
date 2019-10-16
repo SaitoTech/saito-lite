@@ -33,6 +33,16 @@ class Chat extends ModTemplate {
     // prompts us in turn to ask it for its data.
     //
 
+//
+//
+//
+console.log("about to try and archive data...");
+setTimeout(function() {
+console.log("\n\n\n\nRUNNING SAVE TX!");
+app.storage.saveTransaction("this is our transaction");
+***REMOVED***, 3500);
+
+/*
     //
     // example of creating chatgroup
     //
@@ -70,6 +80,7 @@ class Chat extends ModTemplate {
     //this.sendEvent("testing", p);
     //
     if (this.app.BROWSER == 1) { this.renderDOM() ***REMOVED***
+*/
 
   ***REMOVED***
 
