@@ -25,5 +25,5 @@ app.storage.saveTransaction("this is our transaction");
 ***REMOVED***
 
 
-module.exports = Chat;
+module.exports = Testing;
 

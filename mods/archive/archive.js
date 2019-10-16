@@ -16,16 +16,13 @@ class Archive extends ModTemplate {
 
 
   saveTransaction(data=null) {
-
 console.log("\n\n\n SAVING A TRANSACTION IN THE SERVER MODULE \n\n\n");
-
   ***REMOVED***
 
 
 
   handlePeerRequest(app, req, peer, mycallback) {
 
-console.log(JSON.stringify(req));
     if (req.request == null) { return; ***REMOVED***
     if (req.data == null) { return; ***REMOVED***
 
@@ -33,11 +30,22 @@ console.log(JSON.stringify(req));
     // only handle archive request
     //
     if (req.request == "archive") {
-console.log("this is an archive request...");
 
       if (req.data.request == "save") {
-console.log("going ahead and saving this....");
-this.saveTransaction(req.data.tx);
+	this.saveTransaction(req.data.tx);
+  ***REMOVED***
+
+      if (req.data.request == "load") {
+	
+	let type = "";
+	let num  = 50;
+
+	if (req.data.num != "")  { num = req.data.num; ***REMOVED***
+	if (req.data.type != "") { num = req.data.type; ***REMOVED***
+
+	this.loadTransaction(type, num);
+
+
   ***REMOVED***
 
 ***REMOVED***
