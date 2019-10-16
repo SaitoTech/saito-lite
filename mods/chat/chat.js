@@ -2,7 +2,7 @@ const saito = require('../../lib/saito/saito.js');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const ChatGroup = require('./lib/chatgroup');
 
-const HomeHeader = require('../web-components/header/header');
+const Header = require('../../lib/ui/header/header');
 const ChatList = require('./lib/ui/chat-list/chat-list');
 
 
@@ -33,16 +33,28 @@ class Chat extends ModTemplate {
     // prompts us in turn to ask it for its data.
     //
 
-//
-//
-//
-console.log("about to try and archive data...");
-setTimeout(function() {
-console.log("\n\n\n\nRUNNING SAVE TX!");
-app.storage.saveTransaction("this is our transaction");
-***REMOVED***, 3500);
+    // console.log("sending chatgroup event!");
+    // this.sendEvent("chatgroup", {***REMOVED***);
 
-/*
+    //
+    // EXAMPLE OF EVENT EMISSION
+    //
+    //let p = {***REMOVED***;
+    //    p.var = "string";
+    //
+    //this.sendEvent("testing", p);
+    //
+    if (this.app.BROWSER == 1) {
+      // TODO: dummy function for testing
+      this.initDummyChat(app);
+      this.renderDOM();
+***REMOVED***
+
+  ***REMOVED***
+
+  initializeHTML() {***REMOVED***
+
+  initDummyChat(app) {
     //
     // example of creating chatgroup
     //
@@ -67,7 +79,6 @@ app.storage.saveTransaction("this is our transaction");
     this.groups = Object.fromEntries(this.groups);
 
 
-
     console.log("sending chatgroup event!");
     this.sendEvent("chatgroup", {***REMOVED***);
 
@@ -80,14 +91,11 @@ app.storage.saveTransaction("this is our transaction");
     //this.sendEvent("testing", p);
     //
     if (this.app.BROWSER == 1) { this.renderDOM() ***REMOVED***
-*/
 
   ***REMOVED***
 
-  initializeHTML() {***REMOVED***
-
   renderDOM() {
-    HomeHeader.render();
+    Header.render();
     ChatList.render(this);
   ***REMOVED***
 
@@ -120,19 +128,14 @@ console.log("Chat receive event from ChatGroup!");
 console.log("it is our very own chatgroup!");
 	  let x = data.this.respondTo("chat");
 	
-
-	//
-	//
-	//
-	this.updateDom(this.chatgroup[52]);
+	  //
+	  //
+	  //
+	  this.updateDom(this.chatgroup[52]);
 
 console.log("Received what data: " + x.title + " -- " + x.ts);
-//
-//
-// i  have the data, how do i update the DOM
-//
-//
-	***REMOVED***
+
+    ***REMOVED***
   ***REMOVED***
 ***REMOVED***
 

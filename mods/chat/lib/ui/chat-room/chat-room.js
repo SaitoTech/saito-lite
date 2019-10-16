@@ -1,4 +1,4 @@
-const HomeHeader = require('../../../../web-components/header/header');
+const Header = require('../../../../../lib/ui/header/header');
 
 const ChatRoomTemplate = require('./chat-room.template');
 const ChatRoomHeaderTemplate = require('./chat-room-header.template');
@@ -42,7 +42,7 @@ module.exports = ChatRoom = {
     ***REMOVED*** header
             let header = document.querySelector('.header');
             header.classList.remove("chat-room-header");
-            HomeHeader.render(chat.app);
+            Header.render(chat.app);
 
     ***REMOVED*** footer
             let footer = document.querySelector('.footer');

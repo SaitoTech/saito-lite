@@ -8,7 +8,10 @@ module.exports = ChatList = {
     chat: {***REMOVED***,
     render(chat) {
         this.chat = chat;
-        document.querySelector('.main').innerHTML = ChatListTemplate();
+        let chat_main = document.querySelector('.chat-main')
+
+        if (!chat_main) { return; ***REMOVED***
+        chat_main.innerHTML = ChatListTemplate();
 
         Object.values(chat.groups).forEach((group) => {
             document.querySelector('.chat').innerHTML
