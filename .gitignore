@@ -27,9 +27,7 @@ lib/saito/web/browser.js
 lib/saito/web/client.options
 lib/modules/mods/*
 
-web/dist/
-web/dist/*
-
+web/saito/saito.js
 
 mods/catan
 mods/catan/*

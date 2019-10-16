@@ -488,7 +488,7 @@ eval("var HomeHeaderTemplate = __webpack_require__(/*! ./header.template.js */ \
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("module.exports = HeaderTemplate = function HeaderTemplate() {\n  return \"\\n      <img class=\\\"logo\\\" src=\\\"/img/logo.svg\\\" >\\n  \";\n};\n\n//# sourceURL=webpack:///./lib/ui/header/header.template.js?");
+eval("module.exports = HeaderTemplate = function HeaderTemplate() {\n  return \"\\n      <img class=\\\"logo\\\" src=\\\"/saito/img/logo.svg\\\" >\\n  \";\n};\n\n//# sourceURL=webpack:///./lib/ui/header/header.template.js?");
 
 /***/ }),
 
