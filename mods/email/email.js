@@ -4,6 +4,7 @@ const ModTemplate = require('../../lib/templates/modtemplate');
 const EmailList = require('./lib/email-list/email-list');
 
 class Email extends ModTemplate {
+
   constructor(app) {
     super(app);
 
