@@ -33,6 +33,30 @@ class Chat extends ModTemplate {
     // prompts us in turn to ask it for its data.
     //
 
+
+
+    // console.log("sending chatgroup event!");
+    // this.sendEvent("chatgroup", {***REMOVED***);
+
+    //
+    // EXAMPLE OF EVENT EMISSION
+    //
+    //let p = {***REMOVED***;
+    //    p.var = "string";
+    //
+    //this.sendEvent("testing", p);
+    //
+    if (this.app.BROWSER == 1) {
+      // TODO: dummy function for testing
+      this.initDummyChat(app);
+      this.renderDOM();
+***REMOVED***
+
+  ***REMOVED***
+
+  initializeHTML() {***REMOVED***
+
+  initDummyChat(app) {
     //
     // example of creating chatgroup
     //
@@ -55,25 +79,7 @@ class Chat extends ModTemplate {
 ***REMOVED***);
 
     this.groups = Object.fromEntries(this.groups);
-
-
-
-    console.log("sending chatgroup event!");
-    this.sendEvent("chatgroup", {***REMOVED***);
-
-    //
-    // EXAMPLE OF EVENT EMISSION
-    //
-    //let p = {***REMOVED***;
-    //    p.var = "string";
-    //
-    //this.sendEvent("testing", p);
-    //
-    if (this.app.BROWSER == 1) { this.renderDOM() ***REMOVED***
-
   ***REMOVED***
-
-  initializeHTML() {***REMOVED***
 
   renderDOM() {
     Header.render();

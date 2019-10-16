@@ -631,7 +631,7 @@ input[type=text], input[type=number] {
     height: 78vh;
     display: grid;
     grid-gap: 1em;
-    grid-template-rows: 3em 3em auto 4em;
+    grid-template-rows: 3em 3em 3em auto 4em;
 ***REMOVED***
 
 .email-message {
@@ -707,7 +707,7 @@ li.jsontree_node {
     max-width: 850px;
 ***REMOVED***
 
-input[type=text] {
+input[type=text], input[type=number] {
     height: 3em;
     width: 75%;
     margin-top: 1px;
