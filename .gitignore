@@ -29,6 +29,9 @@ lib/modules/mods/*
 
 web/saito/saito.js
 
+
+mods/testing
+mods/testing/*
 mods/catan
 mods/catan/*
 mods/imperium
