@@ -23,7 +23,7 @@ const path = require('path');
 
     // Webpack will bundle all JavaScript into this file
     output: {
-        path: path.resolve(__dirname, '../web/dist'),
+        path: path.resolve(__dirname, '../web/saito'),
         filename: 'saito.js'
 ***REMOVED***,
 
