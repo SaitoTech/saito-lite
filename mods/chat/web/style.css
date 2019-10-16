@@ -1,0 +1,9 @@
+.chat {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-row {
+  margin-bottom: 1em;
+}
+

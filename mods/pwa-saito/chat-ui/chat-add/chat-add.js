@@ -1,4 +1,4 @@
-import { ChatAddTemplate } from './chatadd.template.js';
+import { ChatAddTemplate } from './chat-add.template.js';
 
 export const ChatAdd = {
     render() {

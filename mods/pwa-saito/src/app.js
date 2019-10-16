@@ -1,6 +1,5 @@
 // import ArcadeUI from '../../../mods/arcade/web/arcade-ui';
-// import ChatUI from '../../../../mods/chat/lib/ui/chat-ui';
-import ChatUI from '../../../../mods/chat/lib/ui/chat-ui';
+import ChatUI from '../chat-ui/chat-ui';
 // import EmailUI from '../../../mods/email/web/email-ui';
 // import ForumUI from '../../../mods/forum/web/forum-ui';
 // import WalletUI from '../../../mods/wallet/web/wallet-ui';
@@ -8,8 +7,8 @@ import ChatUI from '../../../../mods/chat/lib/ui/chat-ui';
 // Not a real module
 // import SettingsUI from './settings/settings-ui';
 
-import { HomeHeader } from '../../../../mods/web-components/header/home-header.js';
-import { NavBar } from '../../../../mods/web-components/footer/navbar.js';
+import { HomeHeader } from '../components/header/home-header';
+import { NavBar } from '../components/footer/navbar';
 
 export default class App {
     constructor() {}

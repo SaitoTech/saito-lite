@@ -19,24 +19,24 @@ html[data-theme='dark'] {
 
 @font-face {
     font-family: 'visuelt-black';
-    src: url('visuelt-black.eot');
-    src: url('visuelt-black.eot?#iefix') format('embedded-opentype'), url('visuelt-black.woff2') format('woff2'), url('visuelt-black.woff') format('woff'), url('visuelt-black.ttf') format('truetype');
+    src: url('/fonts/visuelt-black.eot');
+    src: url('/fonts/visuelt-black.eot?#iefix') format('embedded-opentype'), url('/fonts/visuelt-black.woff2') format('woff2'), url('/fonts/visuelt-black.woff') format('woff'), url('/fonts/visuelt-black.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'visuelt-light';
-    src: url('visuelt-light.eot');
-    src: url('visuelt-light.eot?#iefix') format('embedded-opentype'), url('visuelt-light.woff2') format('woff2'), url('visuelt-light.woff') format('woff'), url('visuelt-light.ttf') format('truetype');
+    src: url('/fonts/visuelt-light.eot');
+    src: url('/fonts/visuelt-light.eot?#iefix') format('embedded-opentype'), url('/fonts/visuelt-light.woff2') format('woff2'), url('/fonts/visuelt-light.woff') format('woff'), url('/fonts/visuelt-light.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'visuelt-medium';
-    src: url('visuelt-medium.eot');
-    src: url('visuelt-medium.eot?#iefix') format('embedded-opentype'), url('visuelt-medium.woff2') format('woff2'), url('visuelt-medium.woff') format('woff'), url('visuelt-medium.ttf') format('truetype');
+    src: url('/fonts/visuelt-medium.eot');
+    src: url('/fonts/visuelt-medium.eot?#iefix') format('embedded-opentype'), url('/fonts/visuelt-medium.woff2') format('woff2'), url('/fonts/visuelt-medium.woff') format('woff'), url('/fonts/visuelt-medium.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -100,6 +100,10 @@ input[type=text], input[type=number] {
     justify-self: end;
 }
 
+#back-button {
+    cursor: pointer;
+}
+
 .logo {
     height: 3em;
 }
@@ -148,6 +152,7 @@ input[type=text], input[type=number] {
 
 .create-button {
     background-color: var(--saito-red);
+    cursor: pointer;
     color: white;
     border-radius: 100px;
     position: fixed;
@@ -203,6 +208,7 @@ input[type=text], input[type=number] {
     border-bottom: 1px solid var(--saito-skyline-grey);
     padding: 10px 0px;
     height: 5em;
+    cursor: pointer;
 }
 
 .chat-last-message {

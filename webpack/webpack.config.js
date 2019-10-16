@@ -14,6 +14,7 @@ module.exports = {
             sqlite: 'sqlite'
         },
         /\.html$/,
+        /\.css$/,
         /\.sql$/
     ],
 

@@ -1,10 +1,11 @@
-import { HomeHeader } from '../../../../web-components/header/home-header'
-import { NavBar } from '../../../../web-components/footer/navbar.js';
+// import { HomeHeader } from '../../components/header/home-header'
+import { HomeHeader } from '../../components/header/home-header';
+import { NavBar } from '../../components/footer/navbar';
 
-import { ChatRoomTemplate } from './chatroom.template.js';
-import { ChatRoomHeaderTemplate } from './chatroom-header.template.js';
-import { ChatRoomFooterTemplate } from './chatroom-footer.template.js';
-import { ChatRoomMessageTemplate } from './chatroom-message.template.js';
+import { ChatRoomTemplate } from './chat-room.template';
+import { ChatRoomHeaderTemplate } from './chat-room-header.template';
+import { ChatRoomFooterTemplate } from './chat-room-footer.template';
+import { ChatRoomMessageTemplate } from './chat-room-message.template';
 
 export const ChatRoom = {
     render(mod, room) {
