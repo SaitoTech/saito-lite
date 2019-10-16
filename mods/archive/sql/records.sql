@@ -9,4 +9,3 @@ CREATE TABLE IF NOT EXISTS records (
   UNIQUE (sig),
   PRIMARY KEY(id ASC)
 );
-

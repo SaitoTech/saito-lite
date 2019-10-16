@@ -15,11 +15,18 @@ class Testing extends ModTemplate {
 
     super.initialize(app);
 
-console.log("about to try and archive data...");
+console.log("\n\n\n\nabout to try and archive data...");
 setTimeout(function() {
-console.log("\n\n\n\nRUNNING SAVE TX!");
-app.storage.saveTransaction("this is our transaction");
-}, 3500);
+  console.log("\n\n\n\nRUNNING SAVE TX!");
+  app.storage.saveTransaction("this is our transaction");
+  console.log("\n\n\n\nRUNNING LOAD TX!");
+  app.storage.loadTransactions("all", 50, function(data) {
+
+    console.log("RECEIVED DATA BACK FROM LOAD TRANSACTIONS");
+    console.log(JSON.stringify(data));
+
+  });
+}, 4000);
 
   }
 }
