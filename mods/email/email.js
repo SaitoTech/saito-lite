@@ -20,10 +20,7 @@ class Email extends ModTemplate {
   initialize(app) {
     super.initialize(app);
 
-    if (this.app.BROWSER) {
-      this.getTokens();
-      EmailList.render(this);
-    }
+    if (this.app.BROWSER) { EmailList.render(this); }
   }
 
   onConfirmation(blk, tx, conf, app) {
@@ -37,6 +34,8 @@ class Email extends ModTemplate {
 
   }
 
+  onPeerHandshakeComplete(app, peer) { this.getTokens(); }
+
   addEmail(tx) {
     let {title, message} = tx.returnMessage();
     this.emails.unshift({title, message, timestamp: tx.transaction.ts});
@@ -49,9 +48,7 @@ class Email extends ModTemplate {
     msg.data = {address: this.app.wallet.returnPublicKey()};
     msg.request = 'get tokens';
 
-    setTimeout(() => {
-        this.app.network.sendRequest(msg.request, msg.data);
-    }, 1000);
+    this.app.network.sendRequest(msg.request, msg.data);
   }
 
 }
