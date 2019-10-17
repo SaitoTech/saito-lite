@@ -1,7 +1,7 @@
 ***REMOVED***
   core: [
     'chat/chat.js',
-    'archive/archive.js',
+    // 'archive/archive.js',
     'email/email.js',
     'faucet/faucet.js',
     'wallet/wallet.js',

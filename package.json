@@ -31,7 +31,8 @@
     "secp256k1": "^3.7.1",
     "sha256": "^0.2.0",
     "socket.io": "^2.3.0",
-    "sqlite": "^3.0.3"
+    "sqlite": "^3.0.3",
+    "url": "^0.11.0"
   ***REMOVED***,
   "devDependencies": {
     "@babel/core": "^7.6.0",

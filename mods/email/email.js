@@ -18,11 +18,38 @@ class Email extends ModTemplate {
     ];
   ***REMOVED***
 
-  initialize(app) {
-    super.initialize(app);
+
+  initializeHTML(app) {
+
+    EmailList.render(this);
+
+  ***REMOVED***
+
+
+
+  //
+  // load transactions into interface when the network is up
+  //
+  onPeerHandshakeComplete(app, peer) {
+
+    //
+    // leaving this here for the short term, 
+    // token manager can be a separate module
+    // in the long-term, as the email client 
+    // should just handle emails
+    //
+    this.getTokens();
+
+    this.app.storage.loadTransactions("Email", 50, (txs) => {
+      for (let i = 0; i < txs.lengthl; i++) {
+        this.addEmail(txs[i]);
+  ***REMOVED***
+***REMOVED***);
 
     if (this.app.BROWSER) { EmailList.render(this); ***REMOVED***
   ***REMOVED***
+
+
 
   onConfirmation(blk, tx, conf, app) {
 
@@ -30,26 +57,40 @@ class Email extends ModTemplate {
     let email = app.modules.returnModule("Email");
 
     if (conf == 0) {
-      email.addEmail(tx);
-***REMOVED***
 
+      //
+      // if transaction is for me
+      // 
+      if (tx.isTo(app.wallet.returnPublicKey())) {
+
+	//
+	// great lets save this
+	//
+	app.storage.saveTransaction(tx);
+
+	//
+	// and update our email client
+	//
+        email.addEmail(tx);
+  ***REMOVED***
+***REMOVED***
   ***REMOVED***
 
-  onPeerHandshakeComplete(app, peer) { this.getTokens(); ***REMOVED***
 
   addEmail(tx) {
     let {title, message***REMOVED*** = tx.returnMessage();
     this.emails.unshift({title, message, timestamp: tx.transaction.ts***REMOVED***);
-
     if (this.app.BROWSER) { EmailList.render(this); ***REMOVED***
   ***REMOVED***
+
 
   getTokens() {
     let msg = {***REMOVED***;
     msg.data = {address: this.app.wallet.returnPublicKey()***REMOVED***;
     msg.request = 'get tokens';
-
-    this.app.network.sendRequest(msg.request, msg.data);
+    setTimeout(() => {
+        this.app.network.sendRequest(msg.request, msg.data);
+***REMOVED***, 1000);
   ***REMOVED***
 
 ***REMOVED***

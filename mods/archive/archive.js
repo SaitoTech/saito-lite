@@ -15,7 +15,7 @@ class Archive extends ModTemplate {
 
   async installModule(app) {
 
-    await super.initialize(app);
+    await super.installModule(app);
 
     let sql = 'INSERT INTO records (sig, publickey, tx, ts, type) VALUES ("sig", "publickey", "transaction", 1332, "email")';
     await app.storage.executeDatabase(sql, {***REMOVED***, "archive");
