@@ -28,6 +28,7 @@ lib/saito/web/client.options
 lib/modules/mods/*
 
 web/saito/saito.js
+web/saito/saito.js.map
 
 
 mods/testing

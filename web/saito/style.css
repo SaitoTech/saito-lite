@@ -96,7 +96,8 @@ input[type=text], input[type=number] {
 }
 
 .header-home {
-    grid-template-columns: auto 2em 3.2em;
+    /* grid-template-columns: auto 2em 3.2em; */
+    grid-template-columns: auto 3.2em;
     align-items: center;
 }
 

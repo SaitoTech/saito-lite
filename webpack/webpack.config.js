@@ -8,7 +8,6 @@ module.exports = {
     node: {
         fs: "empty",
     },
-
     externals: [
         {
             sqlite: 'sqlite'
@@ -17,7 +16,6 @@ module.exports = {
         /\.css$/,
         /\.sql$/
     ],
-
     // Path to your entry point. From this file Webpack will begin his work
     entry: ["babel-polyfill", path.resolve(__dirname, '../lib/saito/lite/index.js')],
 
@@ -48,5 +46,6 @@ module.exports = {
     // Depending on mode Webpack will apply different things
     // on final bundle. For now we don't need production's JavaScript
     // minifying and other thing so let's set mode to development
-    mode: 'development'
+    mode: 'development',
+    devtool: "cheap-module-eval-source-map",
 };
