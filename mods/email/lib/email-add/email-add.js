@@ -43,9 +43,9 @@ module.exports = EmailAdd = {
           alert("Unable to send, please get tokens");
     ***REMOVED***
 
-        newtx.transaction.msg.module = "Email";
-        newtx.transaction.msg.data  = email_text;
-        newtx.transaction.msg.title  = email_title;
+        newtx.transaction.msg.module   = "Email";
+        newtx.transaction.msg.title    = email_title;
+        newtx.transaction.msg.message  = email_text;
         newtx = saito.wallet.signTransaction(newtx);
 
         saito.network.propagateTransaction(newtx);
