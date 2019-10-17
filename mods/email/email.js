@@ -21,6 +21,17 @@ class Email extends ModTemplate {
 
   initializeHTML(app) {
 
+    EmailList.render(this);
+
+  }
+
+
+
+  //
+  // load transactions into interface when the network is up
+  //
+  onPeerHandshakeComplete() {
+
     //
     // leaving this here for the short term, 
     // token manager can be a separate module
@@ -28,25 +39,15 @@ class Email extends ModTemplate {
     // should just handle emails
     //
     this.getTokens();
-    EmailList.render(this);
-
-  }
-
-
-
-/***
-  //
-  // load transactions into interface when the network is up
-  //
-  onPeerHandshakeComplete() {
 
     let txs = await this.app.storage.loadTransactions("Email", 50);
     for (let i = 0; i < txs.lengthl; i++) {
       this.addEmail(txs[i]);
     }
 
+    if (this.app.BROWSER) { EmailList.render(this); }
   }
-***/
+
 
 
   onConfirmation(blk, tx, conf, app) {

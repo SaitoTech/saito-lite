@@ -3,24 +3,26 @@ const EmailListTemplate = require('./email-list.template.js');
 const EmailListRowTemplate = require('./email-list-row.template.js');
 
 module.exports = EmailList = {
+    email: {},
     render(email) {
+        if (email) { this.email = email; }
         let email_main = document.querySelector(".email-main");
 
         if (!email_main) { return; }
 
         email_main.innerHTML = EmailListTemplate();
 
-        email.emails.forEach(mail => {
+        this.email.emails.forEach(mail => {
             document.querySelector('.email-container').innerHTML += EmailListRowTemplate(mail);
         });
 
-        this.attachEvents(email);
+        this.attachEvents();
     },
 
-    attachEvents(email) {
+    attachEvents() {
         document.querySelector('#email.create-button')
             .addEventListener('click', (e) => {
-                EmailAdd.render(email);
+                EmailAdd.render(this);
             });
     }
 }

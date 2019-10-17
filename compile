@@ -22,6 +22,7 @@ if [ "$1" == "nuke" ]; then
   echo ""
   echo ""
 
+  rm -f ./data/archive.sq3
   rm -f ./data/explorer.sq3
   rm -f ./data/timeclock.sq3
   rm -f ./data/arcade.sq3
