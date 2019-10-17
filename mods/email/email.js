@@ -30,7 +30,7 @@ class Email extends ModTemplate {
   //
   // load transactions into interface when the network is up
   //
-  onPeerHandshakeComplete() {
+  onPeerHandshakeComplete(app, peer) {
 
     //
     // leaving this here for the short term, 
@@ -40,10 +40,11 @@ class Email extends ModTemplate {
     //
     this.getTokens();
 
-    let txs = await this.app.storage.loadTransactions("Email", 50);
-    for (let i = 0; i < txs.lengthl; i++) {
-      this.addEmail(txs[i]);
-    }
+    this.app.storage.loadTransactions("Email", 50, (txs) => {
+      for (let i = 0; i < txs.lengthl; i++) {
+        this.addEmail(txs[i]);
+      }
+    });
 
     if (this.app.BROWSER) { EmailList.render(this); }
   }
