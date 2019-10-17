@@ -25,6 +25,8 @@ class Archive extends ModTemplate {
 
   async handlePeerRequest(app, req, peer, mycallback) {
 
+console.log("HANDLE PEER REQUEST: " + JSON.stringify(req));
+
     if (req.request == null) { return; ***REMOVED***
     if (req.data == null) { return; ***REMOVED***
 
@@ -32,6 +34,7 @@ class Archive extends ModTemplate {
     // only handle archive request
     //
     if (req.request == "archive") {
+console.log(" 1. WE RECEIVED A REQUEST TO LOAD A TRANSACTION");
 
       if (req.data.request == "save") {
 	this.saveTransaction(req.data.tx);
@@ -41,7 +44,6 @@ class Archive extends ModTemplate {
       if (req.data.request == "load") {
 
 console.log("WE RECEIVED A REQUEST TO LOAD A TRANSACTION");
-	
 
 	let type = "";
 	let num  = 50;
@@ -56,6 +58,8 @@ console.log("AND WE FOUND THESE TRANSACTIONS: " + JSON.stringify(txs));
 	let response = {***REMOVED***;
 	    response.err = "";
 	    response.txs = txs;
+
+console.log("RETURNING: " + JSON.stringify(response));
 
 	mycallback(response);
 

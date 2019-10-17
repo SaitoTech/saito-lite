@@ -32,6 +32,8 @@ class Email extends ModTemplate {
   //
   onPeerHandshakeComplete(app, peer) {
 
+console.log("OPHComplerte in Email");
+
     //
     // leaving this here for the short term, 
     // token manager can be a separate module
@@ -39,6 +41,9 @@ class Email extends ModTemplate {
     // should just handle emails
     //
     this.getTokens();
+
+
+console.log(" LOADING TXS FOR EMAIL ");
 
     this.app.storage.loadTransactions("Email", 50, (txs) => {
       for (let i = 0; i < txs.lengthl; i++) {
