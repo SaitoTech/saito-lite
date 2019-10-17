@@ -95,7 +95,7 @@ class Chat extends ModTemplate {
   }
 
   renderDOM() {
-    Header.render();
+    Header.render(this);
     ChatList.render(this);
   }
 
