@@ -1,9 +1,6 @@
 const EmailAddTemplate = require('./email-add.template.js');
-<<<<<<< HEAD
-var numeral = require('numeral');
-=======
 const EmailList = require('../email-list/email-list');
->>>>>>> 23a24617a8b3318b6da322dcfb886445ba337559
+var numeral = require('numeral');
 
 module.exports = EmailAdd = {
     email: {***REMOVED***,
@@ -66,7 +63,6 @@ module.exports = EmailAdd = {
         newtx.transaction.msg.message  = email_text;
         newtx = saito.wallet.signTransaction(newtx);
 
-<<<<<<< HEAD
         return newtx;
 ***REMOVED***,
      
@@ -75,13 +71,10 @@ module.exports = EmailAdd = {
         var txJson = JSON.stringify(this.buildTransaction(), null, 4);
         var r = document.querySelector('.raw-message');
         r.textContent = txJson;
-***REMOVED***r.addEventListener('change', this.verifyJSON, false);
-***REMOVED***document.addEventListener('onkeyup', this.verifyJSON, false);
         document.querySelector('.email-text').style.display = "none";
         document.querySelector('.raw-switch').style.display = "none";
         r.style.display = "block";
         r.onkeyup = () => { this.verifyJSON() ***REMOVED***;
-***REMOVED***r.onchange = this.verifyJSON(r);
 ***REMOVED***,
 
     verifyJSON() {
@@ -97,13 +90,11 @@ module.exports = EmailAdd = {
         obj.style.background = "#FFF";
         obj.style.color = "#000";
         return true;
-=======
         saito.network.propagateTransaction(newtx);
 
         alert("Your email has been sent!");
 
         this.emailList.render();
->>>>>>> 23a24617a8b3318b6da322dcfb886445ba337559
 ***REMOVED***
 
 
