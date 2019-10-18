@@ -81,7 +81,9 @@ console.log("\n\n\n SAVING A TRANSACTION IN THE SERVER MODULE \n\n\n");
     let sql = "SELECT * FROM records";
     let params = {***REMOVED***;
 
-    let rows = this.app.storage.queryDatabase(sql, params, "records");
+console.log("SQL: " + sql);
+
+    let rows = await this.app.storage.queryDatabase(sql, params, "archive");
 
     console.log("\n WE HAVE LOADED THE FOLLOWING ROWS FROM DB FOR RETURN TO CLIENT: " + JSON.stringify(rows));
 
@@ -90,6 +92,7 @@ console.log("\n\n\n SAVING A TRANSACTION IN THE SERVER MODULE \n\n\n");
       txs.push(rows[i].tx);
 ***REMOVED***
 
+console.log("\n\n\nRETURNING: ");
     return txs;
 
   ***REMOVED***
