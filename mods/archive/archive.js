@@ -26,6 +26,8 @@ class Archive extends ModTemplate {
 
   async handlePeerRequest(app, req, peer, mycallback) {
 
+console.log("HANDLE PEER REQUEST: " + JSON.stringify(req));
+
     if (req.request == null) { return; ***REMOVED***
     if (req.data == null) { return; ***REMOVED***
 
@@ -33,6 +35,7 @@ class Archive extends ModTemplate {
     // only handle archive request
     //
     if (req.request == "archive") {
+      console.log(" 1. WE RECEIVED A REQUEST TO LOAD A TRANSACTION");
 
       switch(req.data.request) {
         case "save":
@@ -56,8 +59,9 @@ class Archive extends ModTemplate {
               response.err = "";
               response.txs = txs;
 
-          mycallback(response);
-          break;
+          console.log("RETURNING: " + JSON.stringify(response));
+
+	        mycallback(response);
 
         default:
           break;
@@ -79,7 +83,9 @@ class Archive extends ModTemplate {
     let sql = "SELECT * FROM records";
     let params = {***REMOVED***;
 
-    let rows = this.app.storage.queryDatabase(sql, params, "records");
+console.log("SQL: " + sql);
+
+    let rows = await this.app.storage.queryDatabase(sql, params, "archive");
 
     console.log("\n WE HAVE LOADED THE FOLLOWING ROWS FROM DB FOR RETURN TO CLIENT: " + JSON.stringify(rows));
 
@@ -88,6 +94,7 @@ class Archive extends ModTemplate {
       txs.push(rows[i].tx);
 ***REMOVED***
 
+console.log("\n\n\nRETURNING: ");
     return txs;
 
   ***REMOVED***
