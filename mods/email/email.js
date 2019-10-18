@@ -60,17 +60,17 @@ class Email extends ModTemplate {
 
       //
       // if transaction is for me
-      // 
+      //
       if (tx.isTo(app.wallet.returnPublicKey())) {
 
-	//
-	// great lets save this
-	//
-	app.storage.saveTransaction(tx);
+        //
+        // great lets save this
+        //
+        app.storage.saveTransaction(tx);
 
-	//
-	// and update our email client
-	//
+        //
+        // and update our email client
+        //
         email.addEmail(tx);
       }
     }
