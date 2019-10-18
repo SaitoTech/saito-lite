@@ -47,7 +47,13 @@ console.log(" LOADING TXS FOR EMAIL ");
 
     this.app.storage.loadTransactions("Email", 50, (txs) => {
       for (let i = 0; i < txs.lengthl; i++) {
-        this.addEmail(txs[i]);
+
+	let msg = {};
+	    msg.title = "Loaded from remote server";
+	    msg.message = "This email is not actually loaded from a remote server, but once the archives are saving transactions and returning them instead of just dummy text, we can easily correct this.";
+	    msg.timestamp = new Date().getTime();
+
+        this.addEmail(msg);
       }
     });
 
