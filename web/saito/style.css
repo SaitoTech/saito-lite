@@ -64,12 +64,18 @@ body {
 }
 
 button, .button {
-    padding: 1em;
+    padding: 8px;
     background-color: var(--saito-cyber-black);
+    border: 4px solid var(--saito-cyber-black);
     border-radius: 5px;
     color: white;
     font-size: 1em;
     font-family: 'visuelt-black';
+    cursor: pointer;   
+}
+
+button:hover, .button:hover {
+    border-bottom: 4px solid var(--saito-red);
 }
 
 input[type=text], input[type=number] {
@@ -153,6 +159,7 @@ input[type=text], input[type=number] {
 
 .create-button {
     background-color: var(--saito-red);
+    border: var(--saito-red);
     cursor: pointer;
     color: white;
     border-radius: 100px;
@@ -626,27 +633,6 @@ input[type=text], input[type=number] {
     float: right;
 }
 
-/** Email **/
-
-.email-content {
-    height: 78vh;
-    display: grid;
-    grid-gap: 1em;
-    grid-template-rows: 3em 3em 3em auto 4em;
-}
-
-.email-message {
-    display: grid;
-    grid-template-columns: auto 3.5em;
-    border-bottom: 1px solid var(--saito-skyline-grey);
-    padding: 10px 0px;
-}
-
-.email-text {
-    border: 1px solid black;
-    padding: 5px;
-    font-size: 1em;
-}
 
 .explorer-main {
     margin-top: 75px;
@@ -656,42 +642,42 @@ input[type=text], input[type=number] {
     height: 91vh;
     overflow: scroll;
     padding: 1em 12px;
-}
-
-.explorer-main table {
+  }
+  
+  .explorer-main table {
     border-spacing: 0;
-}
-
-.explorer-main table tr:hover {
+  }
+  
+  .explorer-main table tr:hover {
     background: #bbbbbb;
-}
-
-.explorer-main td {
+  }
+  
+  .explorer-main td {
     padding: 10px 5px;
-}
-
-.explorer-main th {
+  }
+  
+  .explorer-main th {
     text-align: left;
-}
-
-.explorer-main a {
+  }
+  
+  .explorer-main a {
     text-decoration: underscore;
     color: var(--text-color-highlight);
     display: inline-block;
-}
-
-.explorer-main h4 {
+  }
+  
+  .explorer-main h4 {
     display: inline-block;
     min-width: 200px;
-}
-
-.explorer-main h3 {
+  }
+  
+  .explorer-main h3 {
     margin: 20px 0 10px 0;
-}
-
-.explorer-main i {
+  }
+  
+  .explorer-main i {
     margin: 0 10px;
-}
+  }
 
 li.jsontree_node {
     list-style: none;
@@ -710,7 +696,6 @@ li.jsontree_node {
 
 input[type=text], input[type=number] {
     height: 3em;
-    width: 75%;
     margin-top: 1px;
 }
 
