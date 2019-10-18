@@ -54,6 +54,10 @@
   margin: 0 0 1em 0;
 }
 
+.email-sidebar li.button span {
+  font-family: 'visuelt-black';
+}
+
 .raw-switch {
   position: relative;
   bottom: 34px;

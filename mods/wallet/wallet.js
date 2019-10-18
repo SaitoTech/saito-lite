@@ -1,6 +1,7 @@
 var saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 
+const WalletTemplate = require('./lib/wallet.template');
 
 //////////////////
 // CONSTRUCTOR  //
@@ -14,8 +15,21 @@ class Wallet extends ModTemplate {
     this.name            = "Wallet";
     this.handlesEmail    = 1;
 
-    this.emailAppName    = "Saito Wallet";
+    this.publickey       = app.wallet.returnPublicKey();
+    // this.balance         = app.wallet.returnBalance();
+
+    if (app.BROWSER == 1) {
+      this.QRCode = require('./lib/qrcode');
+    }
+
     return this;
+  }
+
+  generateQRCode(data) {
+    return new this.QRCode(
+      document.getElementById("qrcode"),
+      data
+    );
   }
 
   onChainReorganization(bid, bsh, lc) {}
@@ -25,8 +39,6 @@ class Wallet extends ModTemplate {
     if (conf == 0) {}
   }
 
-
-
   shouldAffixCallbackToModule(module_name, tx=null) {
     if (tx != null) {
       let mypublickey = this.app.wallet.returnPublicKey();
@@ -34,6 +46,22 @@ class Wallet extends ModTemplate {
       if (tx.returnSlipsTo(mypublickey).length > 0) { return 1; }
     }
     return 0;
+  }
+
+
+  /*
+   MODULE HTML FUNCTIONS
+  */
+  returnButtonHTML() {
+    return `<i class="fas fa-dollar-sign"><span style="margin-left: 7px">Wallet</span></i>`;
+  }
+
+  returnHTML() {
+    return WalletTemplate(this.app.wallet.returnBalance(), this.publickey);
+  }
+
+  afterRender() {
+    this.generateQRCode(this.publickey);
   }
 
 }
