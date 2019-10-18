@@ -1,0 +1,21 @@
+/** Email **/
+
+.email-content {
+  height: 78vh;
+  display: grid;
+  grid-gap: 1em;
+  grid-template-rows: 3em 3em auto 4em;
+***REMOVED***
+
+.email-message {
+  display: grid;
+  grid-template-columns: auto 3.5em;
+  border-bottom: 1px solid var(--saito-skyline-grey);
+  padding: 10px 0px;
+***REMOVED***
+
+.email-text {
+  border: 1px solid black;
+  padding: 5px;
+  font-size: 1em;
+***REMOVED***

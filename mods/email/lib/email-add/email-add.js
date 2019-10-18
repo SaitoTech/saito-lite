@@ -1,9 +1,5 @@
 const EmailAddTemplate = require('./email-add.template.js');
-<<<<<<< HEAD
 var numeral = require('numeral');
-=======
-const EmailList = require('../email-list/email-list');
->>>>>>> 23a24617a8b3318b6da322dcfb886445ba337559
 
 module.exports = EmailAdd = {
     email: {***REMOVED***,
@@ -26,13 +22,15 @@ module.exports = EmailAdd = {
             .addEventListener('click', (e) => this.sendEmailTransaction());
 
         document.querySelector('.raw-switch')
-            .addEventListener('click', (e) => this.popluateRawMessage());            
+            .addEventListener('click', (e) => this.popluateRawMessage());
 
 ***REMOVED***,
 
     sendEmailTransaction(newtx) {
         let saito = this.email.app;
         saito.network.propagateTransaction(newtx);
+        alert("Your message has been sent");
+        this.emailList.render();
 ***REMOVED***,
 
     buildTransaction() {
@@ -66,10 +64,9 @@ module.exports = EmailAdd = {
         newtx.transaction.msg.message  = email_text;
         newtx = saito.wallet.signTransaction(newtx);
 
-<<<<<<< HEAD
         return newtx;
 ***REMOVED***,
-     
+
     popluateRawMessage() {
         console.log('lets get raw');
         var txJson = JSON.stringify(this.buildTransaction(), null, 4);
@@ -85,25 +82,18 @@ module.exports = EmailAdd = {
 ***REMOVED***,
 
     verifyJSON() {
-        var obj = document.querySelector('.raw-message');
-        var str = obj.value;
-    ***REMOVED***
-                JSON.parse(str);
-        ***REMOVED*** catch (e) {
-                obj.style.background = "#FCC";
-                obj.style.color = "red";
-                return false;
-        ***REMOVED***
-        obj.style.background = "#FFF";
-        obj.style.color = "#000";
-        return true;
-=======
-        saito.network.propagateTransaction(newtx);
-
-        alert("Your email has been sent!");
-
-        this.emailList.render();
->>>>>>> 23a24617a8b3318b6da322dcfb886445ba337559
+      var message_input = document.querySelector('.raw-message');
+      var str = message_input.value;
+      try {
+          JSON.parse(str);
+  ***REMOVED*** catch (e) {
+          message_input.style.background = "#FCC";
+          message_input.style.color = "red";
+          return false;
+  ***REMOVED***
+      message_input.style.background = "#FFF";
+      message_input.style.color = "#000";
+      return true;
 ***REMOVED***
 
 
