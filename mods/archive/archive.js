@@ -17,7 +17,8 @@ class Archive extends ModTemplate {
 
     await super.installModule(app);
 
-    let sql = 'INSERT INTO records (sig, publickey, tx, ts, type) VALUES ("sig", "publickey", "transaction", 1332, "email")';
+    let sql = `INSERT INTO records (sig, publickey, tx, ts, type)
+    VALUES ("sig", "publickey", "transaction", 1332, "email")`;
     await app.storage.executeDatabase(sql, {***REMOVED***, "archive");
 
   ***REMOVED***
@@ -33,41 +34,42 @@ class Archive extends ModTemplate {
     //
     if (req.request == "archive") {
 
-      if (req.data.request == "save") {
-	this.saveTransaction(req.data.tx);
-  ***REMOVED***
+      switch(req.data.request) {
+        case "save":
+          this.saveTransaction(req.data.tx);
+          break;
 
+        case "load":
+          console.log("WE RECEIVED A REQUEST TO LOAD A TRANSACTION");
 
-      if (req.data.request == "load") {
+          let type = "";
+          let num  = 50;
 
-console.log("WE RECEIVED A REQUEST TO LOAD A TRANSACTION");
-	
+          if (req.data.num != "")  { num = req.data.num; ***REMOVED***
+          if (req.data.type != "") { num = req.data.type; ***REMOVED***
 
-	let type = "";
-	let num  = 50;
+          let txs = await this.loadTransactions(type, num);
 
-	if (req.data.num != "")  { num = req.data.num; ***REMOVED***
-	if (req.data.type != "") { num = req.data.type; ***REMOVED***
+          console.log("AND WE FOUND THESE TRANSACTIONS: " + JSON.stringify(txs));
 
-	let txs = await this.loadTransactions(type, num);
+          let response = {***REMOVED***;
+              response.err = "";
+              response.txs = txs;
 
-console.log("AND WE FOUND THESE TRANSACTIONS: " + JSON.stringify(txs));
+          mycallback(response);
+          break;
 
-	let response = {***REMOVED***;
-	    response.err = "";
-	    response.txs = txs;
-
-	mycallback(response);
-
+        default:
+          break;
   ***REMOVED***
 ***REMOVED***
   ***REMOVED***
 
 
 
-  saveTransaction(tx=null) {
+  async saveTransaction(tx=null) {
 
-console.log("\n\n\n SAVING A TRANSACTION IN THE SERVER MODULE \n\n\n");
+    console.log("\n\n\n SAVING A TRANSACTION IN THE SERVER MODULE \n\n\n");
 
   ***REMOVED***
 
@@ -89,7 +91,6 @@ console.log("\n\n\n SAVING A TRANSACTION IN THE SERVER MODULE \n\n\n");
     return txs;
 
   ***REMOVED***
-
 
 ***REMOVED***
 

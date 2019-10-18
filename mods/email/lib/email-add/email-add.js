@@ -27,8 +27,9 @@ module.exports = EmailAdd = {
 
 ***REMOVED***,
 
-    sendEmailTransaction(newtx) {
+    sendEmailTransaction() {
         let saito = this.email.app;
+        let newtx = this.buildTransaction();
         saito.network.propagateTransaction(newtx);
         alert("Your message has been sent");
         this.emailList.render();
@@ -80,23 +81,6 @@ module.exports = EmailAdd = {
 ***REMOVED***,
 
     verifyJSON() {
-        var obj = document.querySelector('.raw-message');
-        var str = obj.value;
-    ***REMOVED***
-                JSON.parse(str);
-        ***REMOVED*** catch (e) {
-                obj.style.background = "#FCC";
-                obj.style.color = "red";
-                return false;
-        ***REMOVED***
-        obj.style.background = "#FFF";
-        obj.style.color = "#000";
-        return true;
-        saito.network.propagateTransaction(newtx);
-
-        alert("Your email has been sent!");
-
-        this.emailList.render();
       var message_input = document.querySelector('.raw-message');
       var str = message_input.value;
       try {
