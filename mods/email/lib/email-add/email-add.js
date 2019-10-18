@@ -23,13 +23,15 @@ module.exports = EmailAdd = {
             .addEventListener('click', (e) => this.sendEmailTransaction());
 
         document.querySelector('.raw-switch')
-            .addEventListener('click', (e) => this.popluateRawMessage());            
+            .addEventListener('click', (e) => this.popluateRawMessage());
 
 ***REMOVED***,
 
     sendEmailTransaction(newtx) {
         let saito = this.email.app;
         saito.network.propagateTransaction(newtx);
+        alert("Your message has been sent");
+        this.emailList.render();
 ***REMOVED***,
 
     buildTransaction() {
@@ -65,7 +67,7 @@ module.exports = EmailAdd = {
 
         return newtx;
 ***REMOVED***,
-     
+
     popluateRawMessage() {
         console.log('lets get raw');
         var txJson = JSON.stringify(this.buildTransaction(), null, 4);
@@ -95,6 +97,18 @@ module.exports = EmailAdd = {
         alert("Your email has been sent!");
 
         this.emailList.render();
+      var message_input = document.querySelector('.raw-message');
+      var str = message_input.value;
+      try {
+          JSON.parse(str);
+  ***REMOVED*** catch (e) {
+          message_input.style.background = "#FCC";
+          message_input.style.color = "red";
+          return false;
+  ***REMOVED***
+      message_input.style.background = "#FFF";
+      message_input.style.color = "#000";
+      return true;
 ***REMOVED***
 
 
