@@ -16,13 +16,21 @@ class Email extends ModTemplate {
         timestamp: new Date().getTime(),
   ***REMOVED***
     ];
+    this.emailMods = [];
+  ***REMOVED***
+
+  initialize(app) {
+    this.emailMods = this.app.modules.implementsKeys([
+      'afterRender',
+      'returnHTML',
+      'returnButtonHTML',
+    ]);
+    console.log(this.emailMods);
   ***REMOVED***
 
 
   initializeHTML(app) {
-
     EmailList.render(this);
-
   ***REMOVED***
 
 
@@ -35,9 +43,9 @@ class Email extends ModTemplate {
 console.log("OPHComplerte in Email");
 
     //
-    // leaving this here for the short term, 
+    // leaving this here for the short term,
     // token manager can be a separate module
-    // in the long-term, as the email client 
+    // in the long-term, as the email client
     // should just handle emails
     //
     this.getTokens();

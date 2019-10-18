@@ -54,6 +54,10 @@
   margin: 0 0 1em 0;
 ***REMOVED***
 
+.email-sidebar li.button span {
+  font-family: 'visuelt-black';
+***REMOVED***
+
 .raw-switch {
   position: relative;
   bottom: 34px;

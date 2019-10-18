@@ -9,6 +9,19 @@ module.exports = EmailAdd = {
         this.emailList = emailList;
         this.email = emailList.email;
         document.querySelector(".main").innerHTML = EmailAddTemplate();
+
+        this.email.emailMods.forEach(email_mod => {
+            let new_button = document.createElement('li');
+            new_button.classList.add('button');
+            new_button.innerHTML = email_mod.returnButtonHTML();
+            document.getElementById('email-mod-buttons').append(new_button);
+
+            new_button.addEventListener('click', (e) => {
+              document.querySelector('.email-text-wrapper').innerHTML = email_mod.returnHTML();
+              email_mod.afterRender();
+        ***REMOVED***);
+    ***REMOVED***);
+
         this.addData();
         this.attachEvents();
 ***REMOVED***,
