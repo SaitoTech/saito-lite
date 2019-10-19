@@ -1,4 +1,5 @@
 const EmailControlsTemplate = require('./email-controls.template');
+const EmailChatTemplate = require('./email-chat.template');
 
 module.exports = EmailControls = {
 
@@ -6,27 +7,32 @@ module.exports = EmailControls = {
 
       document.querySelector(".email-sidebar").innerHTML += EmailControlsTemplate();
 
-      let apps_menu = document.querySelector(".email-apps");
-      apps_menu.innerHTML += '<ul>';
+      let email_apps = document.querySelector(".email-apps");
       for (let i = 0; i < data.mods.length; i++) {
-	      apps_menu.innerHTML += `<li class="email-navigator-item">${data[i].name***REMOVED***</li>`;
+	email_apps.innerHTML += `<li class="email-navigator-item">${data.mods[i].name***REMOVED***</li>`;
   ***REMOVED***
-      apps_menu.innerHTML += '</ul>';
-
       this.attachEvents(app);
 ***REMOVED***,
 
 
     attachEvents(app) {
-      document.querySelector('.email-navigator-item')
-      	    .addEventListener('click', (e) => {
-	      var elements = document.getElementsByClassName('email-navigator-active');
-	      for (let i = elements.length-1; i >= 0; i++) {
-   		elements[i].classList.remove('email-navigator-active');
-	  ***REMOVED***
+alert("EVENT ATTACHED");
+try {
 
-        ***REMOVED***);
 
+        Array.from(document.getElementsByClassName('email-navigator-item'))
+             .forEach(row => row.addEventListener('click', (e) => {
+alert("CLICKED");
+         ***REMOVED***)
+        );
+
+
+
+alert("successfully attached event listeners!");
+
+***REMOVED*** catch (err) {
+  alert("ERROR ATTACHING EVENT: " + err);
+***REMOVED***
 ***REMOVED***
 
 ***REMOVED***
