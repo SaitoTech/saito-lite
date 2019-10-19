@@ -1,7 +1,7 @@
 const saito = require('../../lib/saito/saito.js');
 const ModTemplate = require('../../lib/templates/modtemplate');
 
-const EmailList = require('./lib/email-list/email-list');
+const EmailContainer = require('./lib/email-container/email-container');
 
 class Email extends ModTemplate {
 
@@ -44,7 +44,7 @@ class Email extends ModTemplate {
 
 
   initializeHTML(app) {
-    EmailList.render(this);
+    EmailContainer.render(this);
   ***REMOVED***
 
 
