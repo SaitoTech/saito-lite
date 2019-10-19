@@ -9,6 +9,7 @@ module.exports = EmailListRowTemplate = ({title, message, timestamp}) => {
 
   return `
   <div class="email-message">
+      <input class="email-selected" type="checkbox">
       <div class="email-message-content"">
           <h3>${title}</h3>
           <p class="emai-message-message">${message}</p>
