@@ -12,18 +12,49 @@ module.exports = EmailControls = {
             email_apps.innerHTML += `<li class="email-navigator-item">${data.mods[i].name***REMOVED***</li>`;
     ***REMOVED***
 
-        this.attachEvents(app);
 ***REMOVED***,
 
 
-    attachEvents(app) {
-***REMOVED*** let nav_items = document.getElementsByClassName('email-navigator-item')
-***REMOVED*** Array.from(nav_items)
-***REMOVED***     .forEach(item => item.addEventListener('click', (e) => {
-***REMOVED***         let id = e.currentTarget.id;
-***REMOVED***         console.log(`${id***REMOVED*** GO CLICKED`);
-***REMOVED*** ***REMOVED***)
-***REMOVED*** );
+    attachEvents(app, data) {
+
+        Array.from(document.getElementsByClassName('email-navigator-item'))
+	  .forEach(item => item.addEventListener('click', (e) => {
+
+            if (e.currentTarget.classList.contains("active-navigator-item")) {
+	      // user clicks already-active item
+	***REMOVED*** else {
+
+              Array.from(document.getElementsByClassName('email-navigator-item'))
+                .forEach(item2 => {
+                  if (item2.classList.contains("active-navigator-item")) {
+		    if (item2 != e.currentTarget) {
+		      item2.classList.remove("active-navigator-item");
+	              e.currentTarget.classList.add("active-navigator-item");
+		***REMOVED***
+		  ***REMOVED***
+         ***REMOVED***);
+
+	  ***REMOVED***
+
+          if (e.target.id === "inbox") { 
+	    data.parentmod.emails.active = 0;
+	    EmailList.render(app, data);
+	    EmailList.attachEvents(app, data);
+	  ***REMOVED***
+          if (e.target.id === "sent") {
+	    data.parentmod.emails.active = 1;
+	    EmailList.render(app, data);
+	    EmailList.attachEvents(app, data);
+      ***REMOVED***
+          if (e.target.id === "trash") { 
+	    data.parentmod.emails.active = 2; 
+	    EmailList.render(app, data);
+	    EmailList.attachEvents(app, data);
+      ***REMOVED***
+
+
+   ***REMOVED***));
+    
 
         document.getElementById('email-navigator')
                 .addEventListener('click', (e) => {

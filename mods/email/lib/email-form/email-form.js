@@ -17,28 +17,28 @@ module.exports = EmailForm = {
         document.querySelector(".email-body").innerHTML = EmailAddTemplate();
 
         this.addData();
-        this.attachEvents();
 ***REMOVED***,
+
+    attachEvents(app, data) {
+        document.querySelector('.email-submit')
+            .addEventListener('click', (e) => this.sendEmailTransaction());
+
+        document.querySelector('.raw-switch')
+            .addEventListener('click', (e) => this.popluateRawMessage());
+***REMOVED***,
+
 
     addData() {
         document.getElementById('email-from-address').value = `(Myself) ${this.saito.wallet.returnPublicKey()***REMOVED***`;
         document.querySelector('.email-balance').innerHTML = numeral(this.saito.wallet.returnBalance()).format('0,0.0000');
 ***REMOVED***,
 
-    attachEvents() {
-        document.querySelector('.email-submit')
-            .addEventListener('click', (e) => this.sendEmailTransaction());
-
-        document.querySelector('.raw-switch')
-            .addEventListener('click', (e) => this.popluateRawMessage());
-
-***REMOVED***,
-
     sendEmailTransaction() {
         let newtx = this.buildTransaction();
         this.saito.network.propagateTransaction(newtx);
         alert("Your message has been sent");
-        this.emailList.render();
+        this.emailList.render(app, {***REMOVED***);
+        this.emailList.attachEvents(app);
 ***REMOVED***,
 
     buildTransaction() {
