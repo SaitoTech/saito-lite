@@ -34,11 +34,11 @@ class Email extends ModTemplate {
     ]);
 
     //
-    // fetch chat module to get chat items  
+    // fetch chat module to get chat items
     //
     let chatManager = app.modules.returnModule("Chat");
     this.chat = chatManager.respondTo("email");
- 
+
     console.log(this.emailMods);
   ***REMOVED***
 
