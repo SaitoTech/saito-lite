@@ -1,4 +1,4 @@
-module.exports = EmailListRowTemplate = ({title, message, timestamp}) => {
+module.exports = EmailListRowTemplate = ({title, message, timestamp, sig}) => {
 
   let datetime = new Date(timestamp);
   let hours = datetime.getHours();
@@ -8,7 +8,7 @@ module.exports = EmailListRowTemplate = ({title, message, timestamp}) => {
   message = message.length > 64 ? `${message.substring(0, 64)}...`: message;
 
   return `
-  <div class="email-message">
+  <div class="email-message" id="${sig}">
       <input class="email-selected" type="checkbox">
       <div class="email-message-content"">
           <h3>${title}</h3>

@@ -13,17 +13,15 @@ module.exports = EmailMain = {
     EmailList.render(app, data);
     EmailSidebar.render(app, data);
 
-    // let email_sidebar_container = document.querySelector(".email-sidebar-container");
-    // if (!email_sidebar_container) {
-    //   alert("THERE IS NO SIDEBAR CONTAINER THERE");
-    //   return;
-    // }
-    // email_sidebar_container.innerHTML = EmailSidebarTemplate();
-
-    this.attachEvents(app);
   },
 
-  attachEvents(app) {
+  attachEvents(app, data) {
+
+alert("A");
+    EmailList.attachEvents(app, data);
+alert("B");
+    EmailSidebar.attachEvents(app, data);
+
     document.getElementById('email-select-icon')
             .addEventListener('click', (e) => {
               Array.from(document.getElementsByClassName('email-selected')).forEach(checkbox => {

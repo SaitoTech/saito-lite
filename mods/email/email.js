@@ -17,8 +17,13 @@ class Email extends ModTemplate {
     this.emails.inbox 	= [];
     this.emails.outbox 	= [];
     this.emails.trash 	= [];
+    this.emails.active  = 0;  	// inbox
+				// outbox
+				// trash
 
     this.mods   	= [];
+
+    this.uidata		= {};
 
   }
 
@@ -30,6 +35,16 @@ class Email extends ModTemplate {
     this.emails.inbox.push({
       title: "New Email",
       message: "This is a new email, just for you!",
+      timestamp: new Date().getTime(),
+    });
+    this.emails.outbox.push({
+      title: "Sent Email",
+      message: "This is an email we have recently sent.",
+      timestamp: new Date().getTime(),
+    });
+    this.emails.trash.push({
+      title: "Deleted Email",
+      message: "This is an email that we have deleted.",
       timestamp: new Date().getTime(),
     });
 
@@ -48,20 +63,14 @@ class Email extends ModTemplate {
 
   initializeHTML(app) {
 
-    let data = {};
-        data.emails = this.emails.inbox;
-        data.mods   = this.mods;
+    this.uidata.mods	  = this.mods;
+    this.uidata.parentmod = this;
 
     //
     // add all HTML elements to DOM
     //
-    EmailMain.render(app, data);
-
-    //
-    // update apps in sidebar
-    //
-    //EmailControls.render(app, data);
-
+    EmailMain.render(app, this.uidata);
+    EmailMain.attachEvents(app, this.uidata);
 
     //
     // update chat module
@@ -97,7 +106,8 @@ class Email extends ModTemplate {
 	    msg.timestamp = new Date().getTime();
 
 	this.emails.inbox.unshift(msg);
-	EmailList.render(this.app, {emails: this.emails.inbox});
+	EmailList.render(this.app, this.uidata);
+	EmailList.attachEvents(this.app, this.uidata);
 
         //this.addEmail(msg);
 
@@ -105,7 +115,11 @@ class Email extends ModTemplate {
 
     });
 
-    if (this.app.BROWSER) { EmailList.render(this.app, {emails: this.emails.inbox}); }
+    if (this.app.BROWSER) { 
+      EmailList.render(this.app, this.uidata); 
+      EmailList.attachEvents(this.app, this.uidata);
+    }
+
   }
 
 
@@ -139,7 +153,7 @@ class Email extends ModTemplate {
   addEmail(tx) {
     let {title, message} = tx.returnMessage();
     this.emails.inbox.unshift({title, message, timestamp: tx.transaction.ts});
-    if (this.app.BROWSER) { EmailList.render(this.app, {emails: this.app.emails.inbox}); }
+    if (this.app.BROWSER) { EmailList.render(this.app, this.uidata); }
   }
 
 

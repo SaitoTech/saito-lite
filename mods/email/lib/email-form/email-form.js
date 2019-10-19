@@ -17,28 +17,28 @@ module.exports = EmailForm = {
         document.querySelector(".email-body").innerHTML = EmailAddTemplate();
 
         this.addData();
-        this.attachEvents();
     },
+
+    attachEvents(app, data) {
+        document.querySelector('.email-submit')
+            .addEventListener('click', (e) => this.sendEmailTransaction());
+
+        document.querySelector('.raw-switch')
+            .addEventListener('click', (e) => this.popluateRawMessage());
+    },
+
 
     addData() {
         document.getElementById('email-from-address').value = `(Myself) ${this.saito.wallet.returnPublicKey()}`;
         document.querySelector('.email-balance').innerHTML = numeral(this.saito.wallet.returnBalance()).format('0,0.0000');
     },
 
-    attachEvents() {
-        document.querySelector('.email-submit')
-            .addEventListener('click', (e) => this.sendEmailTransaction());
-
-        document.querySelector('.raw-switch')
-            .addEventListener('click', (e) => this.popluateRawMessage());
-
-    },
-
     sendEmailTransaction() {
         let newtx = this.buildTransaction();
         this.saito.network.propagateTransaction(newtx);
         alert("Your message has been sent");
-        this.emailList.render();
+        this.emailList.render(app, {});
+        this.emailList.attachEvents(app);
     },
 
     buildTransaction() {
