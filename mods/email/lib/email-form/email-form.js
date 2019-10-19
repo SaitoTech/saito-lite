@@ -1,8 +1,9 @@
 const EmailAddTemplate = require('./email-form.template.js');
-const EmailList = require('../email-list/email-list');
+// const EmailList = require('../email-list/email-list');
+
 var numeral = require('numeral');
 
-module.exports = EmailAdd = {
+module.exports = EmailForm = {
 
     app: {***REMOVED***,
     saito: {***REMOVED***,

@@ -45,6 +45,17 @@
   padding-top: 10px;
 ***REMOVED***
 
+#email-form-options {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  left: 5px;
+  bottom: 35px;
+  color: grey;
+  font-size: 1.5em;
+  width: 3.5em;
+***REMOVED***
+
 #email-select-icon {
   width: 24px;
   height: 24px;
