@@ -7,7 +7,7 @@ module.exports = EmailControls = {
 
 alert("A");
       let apps_menu = document.querySelector(".email_apps");
-aalert("AB: ");
+alert("AB: ");
       if (!apps_menu) {
 alert("apps_menu undefined");
 	return;
