@@ -20,6 +20,7 @@ body {
   grid-template-columns: 3.5em auto;
   justify-content: space-between;
   align-items: center;
+  padding: 10px 0px;
 
   border-bottom: 1px solid var(--saito-cyber-black);
 }
