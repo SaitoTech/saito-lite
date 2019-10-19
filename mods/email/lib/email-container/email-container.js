@@ -2,15 +2,16 @@ const EmailContainerTemplate = require('./email-container.template');
 const EmailList = require('../email-list/email-list');
 
 module.exports = EmailContainer = {
-  email: {},
-  render(email) {
-    if (email) { this.email = email; }
+  parent_mod: {},
+  render(parent_mod) {
+    if (parent_mod) { this.parent_mod = parent_mod; }
+
     let email_main = document.querySelector(".email-main");
     if (!email_main) { return; }
 
     email_main.innerHTML = EmailContainerTemplate();
 
-    this.email.emailMods.forEach(email_mod => {
+    this.parent_mod.emailMods.forEach(email_mod => {
       let new_button = document.createElement('li');
       new_button.classList.add('button');
       new_button.innerHTML = email_mod.returnButtonHTML();
@@ -22,10 +23,10 @@ module.exports = EmailContainer = {
       });
     });
 
-    EmailList.render(email);
+    EmailList.render(this.parent_mod);
 
-    this.attachEvents(email);
+    this.attachEvents(this.parent_mod);
   },
 
-  attachEvents(email) {}
+  attachEvents(parent_mod) {}
 }
