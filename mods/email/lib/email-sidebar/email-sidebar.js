@@ -10,7 +10,6 @@ module.exports = EmailSidebar = {
 
     components: [],
 
-
     render(app, data=[]) {
 
       components.push(new EmailControls());
