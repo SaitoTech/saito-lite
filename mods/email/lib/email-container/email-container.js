@@ -6,11 +6,11 @@ const EmailSidebarTemplate = require('../email-sidebar/email-sidebar.template');
 
 module.exports = EmailContainer = {
 
-  email: {},
+  parentmod: {},
 
 
   render(app, parentmod) {
-    if (email) { this.email = email; }
+    if (parentmod) { this.parentmod = parentmod; }
 
     let email_main = document.querySelector(".email-main");
     if (!email_main) { return; }
@@ -19,24 +19,24 @@ module.exports = EmailContainer = {
     let email_sidebar_container = document.querySelector(".email-sidebar-container");
     if (!email_sidebar_container) { return; }
     email_sidebar_container.innerHTML = EmailSidebarTemplate();
-    EmailSidebar.render(app);
+
+    //EmailSidebar.render(app);
 
 
-    this.email.emailMods.forEach(email_mod => {
-      let new_button = document.createElement('li');
-      new_button.classList.add('button');
-      new_button.innerHTML = email_mod.returnButtonHTML();
-      document.getElementById('email-mod-buttons').append(new_button);
+    // app.emailMods.forEach(email_mod => {
+    //   let new_button = document.createElement('li');
+    //   new_button.classList.add('button');
+    //   new_button.innerHTML = email_mod.returnButtonHTML();
+    //   document.getElementById('email-mod-buttons').append(new_button);
 
-      new_button.addEventListener('click', (e) => {
-        document.querySelector('.email-text-wrapper').innerHTML = email_mod.returnHTML();
-        email_mod.afterRender();
-      });
-    });
+    //   new_button.addEventListener('click', (e) => {
+    //     document.querySelector('.email-text-wrapper').innerHTML = email_mod.returnHTML();
+    //     email_mod.afterRender();
+    //   });
+    // });
 
-    EmailList.render(email);
-
-    this.attachEvents(email);
+    EmailList.render(app);
+    this.attachEvents(app);
   },
 
   attachEvents(app) {}

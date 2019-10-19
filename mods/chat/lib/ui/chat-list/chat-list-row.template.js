@@ -4,7 +4,7 @@ module.exports = ChatListRowTemplate = ({name, group_id}, {message, timestamp}) 
   minutes = minutes.toString().length == 1 ? `0${minutes}` : `${minutes}`;
   return `
     <div id="${group_id}" class="chat-row">
-      <img src="/img/logo-color.svg">
+      <img src="/saito/img/logo-color.svg">
       <div class="chat-content">
           <div class="chat-group-name">${name}</div>
           <div class="chat-last-message">${message.substring(0, 72)}</div>

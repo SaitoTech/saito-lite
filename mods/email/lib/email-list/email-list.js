@@ -4,18 +4,13 @@ const EmailListRowTemplate = require('./email-list-row.template.js');
 
 module.exports = EmailList = {
 
-    email: {},
+    parentmod: {},
 
-    render(email) {
-        if (email) { this.email = email; }
-        // let email_main = document.querySelector(".email-main");
-        // if (!email_main) { return; }
-
-        // email_main.innerHTML = EmailListTemplate();
-
+    render(app) {
+        // if (parentmod) { this.parentmod = parentmod; }
         document.querySelector('.email-body').innerHTML = EmailListTemplate();
 
-        this.email.emails.forEach(mail => {
+        app.emails.forEach(mail => {
             document.querySelector('.email-list').innerHTML += EmailListRowTemplate(mail);
         });
 
