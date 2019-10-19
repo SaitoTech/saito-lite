@@ -1,5 +1,3 @@
-const EmailComposeBtn = require('./email-compose-btn.template.js');
-
 
 module.exports = EmailComposeBtn = {
 

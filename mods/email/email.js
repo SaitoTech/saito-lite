@@ -9,6 +9,7 @@ class Email extends ModTemplate {
     super(app);
 
     this.name = "Email";
+    this.chat = null;
     this.emails = [
       {
         title: "New Email",
@@ -22,11 +23,22 @@ class Email extends ModTemplate {
 
 
   initialize(app) {
+
+    //
+    // what does this do? function names do not adequately indicate purpose 
+    //
     this.emailMods = this.app.modules.implementsKeys([
       'afterRender',
       'returnHTML',
       'returnButtonHTML',
     ]);
+
+    //
+    // fetch chat module to get chat items
+    //
+    let chatManager = app.modules.returnModule("Chat");
+    this.chat = chatManager.respondTo("email");
+
     console.log(this.emailMods);
   }
 
