@@ -2,7 +2,7 @@ module.exports = EmailAddTemplate = () => {
   return `
       <div class="email-content">
           <div id="email-sidebar" class="email-sidebar">
-            <ul>
+            <ul id="email-mod-buttons">
               <li class="button">Inbox</li>
               <li class="button">Sent</li>
               <li class="button">Pandora</li>
@@ -17,10 +17,9 @@ module.exports = EmailAddTemplate = () => {
           <input class="email-amount" type="number" default="0.0" placeholder="Amount"/>
           <div class="email-text-wrapper">
             <textarea class="email-text" placeholde="Message"></textarea>
-            <div class="raw-switch">Raw Message</div>          
+            <div class="raw-switch">Raw Message</div>
             <textarea class="raw-message" contenteditable="true"></textarea>
           </div>
           <button class="email-submit">SUBMIT</button>
       </div>
-      
   `};
