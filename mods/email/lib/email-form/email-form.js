@@ -1,15 +1,18 @@
-const EmailAddTemplate = require('./email-add.template.js');
+const EmailAddTemplate = require('./email-form.template.js');
 const EmailList = require('../email-list/email-list');
 var numeral = require('numeral');
 
 module.exports = EmailAdd = {
 
-    email: {},
+    app: {},
+    saito: {},
     emailList: {},
 
     render(emailList) {
         this.emailList = emailList;
-        this.email = emailList.email;
+        this.app = emailList.app;
+        this.saito = this.app.app;
+
         document.querySelector(".email-body").innerHTML = EmailAddTemplate();
 
         this.addData();
@@ -17,8 +20,8 @@ module.exports = EmailAdd = {
     },
 
     addData() {
-        document.querySelector('.email-identifier').innerHTML = 'Address: ' + this.email.app.wallet.returnPublicKey();
-        document.querySelector('.email-balance').innerHTML = numeral(this.email.app.wallet.returnBalance()).format('0,0.0000');
+        document.getElementById('email-from-address').value = `(Myself) ${this.saito.wallet.returnPublicKey()}`;
+        document.querySelector('.email-balance').innerHTML = numeral(this.saito.wallet.returnBalance()).format('0,0.0000');
     },
 
     attachEvents() {
@@ -31,34 +34,33 @@ module.exports = EmailAdd = {
     },
 
     sendEmailTransaction() {
-        let saito = this.email.app;
         let newtx = this.buildTransaction();
-        saito.network.propagateTransaction(newtx);
+        this.saito.network.propagateTransaction(newtx);
         alert("Your message has been sent");
         this.emailList.render();
     },
 
     buildTransaction() {
-        let saito = this.email.app;
+        // let saito = this.email.app;
 
         let email_title = document.querySelector('.email-title').value;
-        let email_address = document.querySelector('.email-address').value;
+        let email_address = document.getElementById('email-to-address').value;
 
         if (email_address == "") {
-          email_address = saito.wallet.returnPublicKey();
+          email_address = this.saito.wallet.returnPublicKey();
         }
 
-        let email_fee = document.querySelector('.email-fee').value;
-        let email_amount = document.querySelector('.email-amount').value;
+        // let email_fee = document.querySelector('.email-fee').value;
+        // let email_amount = document.querySelector('.email-amount').value;
         let email_text = document.querySelector('.email-text').value;
 
-        if (email_fee == '') { email_fee = 0.0; }
-        if (email_amount == '') { email_amount = 0.0; }
+        // if (email_fee == '') { email_fee = 0.0; }
+        // if (email_amount == '') { email_amount = 0.0; }
 
-        let fee = parseFloat(email_fee);
-        let amt = parseFloat(email_amount);
+        let fee = 2.0; // parseFloat(email_fee);
+        let amt = 0.0; // parseFloat(email_amount);
 
-        let newtx = saito.wallet.createUnsignedTransaction(saito.wallet.returnPublicKey(), amt, fee);
+        let newtx = this.saito.wallet.createUnsignedTransaction(email_address, amt, fee);
 
         if (!newtx) {
           alert("Unable to send, please get tokens");
@@ -67,7 +69,7 @@ module.exports = EmailAdd = {
         newtx.transaction.msg.module   = "Email";
         newtx.transaction.msg.title    = email_title;
         newtx.transaction.msg.message  = email_text;
-        newtx = saito.wallet.signTransaction(newtx);
+        newtx = this.saito.wallet.signTransaction(newtx);
 
         return newtx;
     },
