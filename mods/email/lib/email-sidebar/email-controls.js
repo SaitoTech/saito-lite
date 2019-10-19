@@ -6,20 +6,18 @@ module.exports = EmailControls = {
       // data.mods = active modules
 
 alert("A");
-      let apps_menu = document.querySelector(".email_apps");
+      let email_apps = document.querySelector(".email-apps");
 alert("AB: ");
-      if (!apps_menu) {
+      if (!email_apps) {
 alert("apps_menu undefined");
 	return;
   ***REMOVED***
 
-alert("B");
+alert("B: " + data.mods.length);
 
-      apps_menu.innerHTML += '<ul>';
       for (let i = 0; i < data.mods.length; i++) {
-	apps_menu.innerHTML += `<li class="email-navigator-item">${data[i].name***REMOVED***</li>`;
+	email_apps.innerHTML += `<li class="email-navigator-item">${data.mods[i]name***REMOVED***</li>`;
   ***REMOVED***
-      apps_menu.innerHTML += '</ul>';
 
 alert("C");
       this.attachEvents(app);
