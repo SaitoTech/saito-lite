@@ -7,17 +7,15 @@ module.exports = EmailSidebar = {
 
     render(app, data) {
 
-      let sidebar_div = document.querySelector(".email-sidebar");
-      if (!sidebar_div) { return; ***REMOVED***
+      document.querySelector(".email-sidebar-container").innerHTML = EmailSidebarTemplate();
 
       EmailControls.render(app, data);
-      EmailChat.render(app, data);
+      // EmailChat.render(app, data);
 
-      this.attachEvents(app);
+      this.attachEvents();
 
 ***REMOVED***,
 
-    attachEvents(app) {
-***REMOVED***
+    attachEvents() {***REMOVED***
 
 ***REMOVED***

@@ -1,7 +1,6 @@
 const EmailMainTemplate = require('./email-main.template');
 const EmailList = require('../email-list/email-list');
 const EmailSidebar = require('../email-sidebar/email-sidebar');
-const EmailSidebarTemplate = require('../email-sidebar/email-sidebar.template');
 
 module.exports = EmailMain = {
 
@@ -10,18 +9,18 @@ module.exports = EmailMain = {
     let email_main = document.querySelector(".email-main");
     if (!email_main) { return; ***REMOVED***
     email_main.innerHTML = EmailMainTemplate();
+
     EmailList.render(app, data);
-
-
-    let email_sidebar_container = document.querySelector(".email-sidebar-container");
-    if (!email_sidebar_container) { 
-      alert("THERE IS NO SIDEBAR CONTAINER THERE");
-      return; 
-***REMOVED***
-    email_sidebar_container.innerHTML = EmailSidebarTemplate();
     EmailSidebar.render(app, data);
 
-    //this.attachEvents(app);
+    // let email_sidebar_container = document.querySelector(".email-sidebar-container");
+    // if (!email_sidebar_container) {
+    //   alert("THERE IS NO SIDEBAR CONTAINER THERE");
+    //   return;
+    // ***REMOVED***
+    // email_sidebar_container.innerHTML = EmailSidebarTemplate();
+
+    this.attachEvents(app);
   ***REMOVED***,
 
   attachEvents(app) {
