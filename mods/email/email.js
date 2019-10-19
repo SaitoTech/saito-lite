@@ -1,6 +1,6 @@
 const saito = require('../../lib/saito/saito.js');
 const ModTemplate = require('../../lib/templates/modtemplate');
-const EmailContainer = require('./lib/email-container/email-container');
+const EmailMain = require('./lib/email-main/email-main');
 
 // external dependency
 const numeral = require('numeral');
@@ -20,16 +20,20 @@ class Email extends ModTemplate {
 
     this.mods   	= [];
 
+  ***REMOVED***
+
+
+  initialize(app) {
+ 
+    //
+    // add an email
+    //
     this.emails.inbox.push({
       title: "New Email",
       message: "This is a new email, just for you!",
       timestamp: new Date().getTime(),
 ***REMOVED***);
 
-  ***REMOVED***
-
-
-  initialize(app) {
 
     //
     // what does this do? function names do not adequately indicate purpose 
@@ -45,22 +49,29 @@ class Email extends ModTemplate {
 
   initializeHTML(app) {
 
+    let data = {***REMOVED***;
+        data.emails = this.emails.inbox;
+        data.mods   = this.mods;
+
+alert("TEST");
+
     //
     // add all HTML elements to DOM
     //
-    EmailContainer.render(this);
+    EmailMain.render(app, data);
+alert("running initialize HTML 2");
 
     //
     // update apps in sidebar
     //
-    EmailControls.render(this.app, this.mods);
+    //EmailControls.render(app, data);
 
 
     //
     // update chat module
     //
-    let chatManager = app.modules.returnModule("Chat");
-    this.chat = chatManager.respondTo("email");
+    //let chatManager = app.modules.returnModule("Chat");
+    //this.chat = chatManager.respondTo("email");
 
   ***REMOVED***
 
@@ -71,6 +82,7 @@ class Email extends ModTemplate {
   //
   onPeerHandshakeComplete(app, peer) {
 
+/***
     //
     // leaving this here for the short term,
     // token manager can be a separate module
@@ -98,6 +110,8 @@ class Email extends ModTemplate {
 ***REMOVED***);
 
     if (this.app.BROWSER) { EmailList.render(this); ***REMOVED***
+**/
+
   ***REMOVED***
 
 
@@ -145,10 +159,12 @@ class Email extends ModTemplate {
   ***REMOVED***
 
   updateBalance() {
+/**
     if (this.app.BROWSER) {
       document.querySelector('.email-balance').innerHTML
         = numeral(this.app.wallet.returnBalance()).format('0,0.0000');
 ***REMOVED***
+***/
   ***REMOVED***
 
 ***REMOVED***

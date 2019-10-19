@@ -3,6 +3,7 @@ module.exports = EmailContainerTemplate = () => {
   return `
     <div class="email-container">
       <div id="email-sidebar-container" class="email-sidebar-container">
+
       </div>
       <div class="email-content">
         <div class="email-header">
