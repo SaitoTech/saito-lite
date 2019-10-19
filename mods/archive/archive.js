@@ -17,7 +17,8 @@ class Archive extends ModTemplate {
 
     await super.installModule(app);
 
-    let sql = 'INSERT INTO records (sig, publickey, tx, ts, type) VALUES ("sig", "publickey", "transaction", 1332, "email")';
+    let sql = `INSERT INTO records (sig, publickey, tx, ts, type)
+    VALUES ("sig", "publickey", "transaction", 1332, "email")`;
     await app.storage.executeDatabase(sql, {***REMOVED***, "archive");
 
   ***REMOVED***
@@ -34,44 +35,45 @@ console.log("HANDLE PEER REQUEST: " + JSON.stringify(req));
     // only handle archive request
     //
     if (req.request == "archive") {
-console.log(" 1. WE RECEIVED A REQUEST TO LOAD A TRANSACTION");
+      console.log(" 1. WE RECEIVED A REQUEST TO LOAD A TRANSACTION");
 
-      if (req.data.request == "save") {
-	this.saveTransaction(req.data.tx);
-  ***REMOVED***
+      switch(req.data.request) {
+        case "save":
+          this.saveTransaction(req.data.tx);
+          break;
 
+        case "load":
+          console.log("WE RECEIVED A REQUEST TO LOAD A TRANSACTION");
 
-      if (req.data.request == "load") {
+          let type = "";
+          let num  = 50;
 
-console.log("WE RECEIVED A REQUEST TO LOAD A TRANSACTION");
+          if (req.data.num != "")  { num = req.data.num; ***REMOVED***
+          if (req.data.type != "") { num = req.data.type; ***REMOVED***
 
-	let type = "";
-	let num  = 50;
+          let txs = await this.loadTransactions(type, num);
 
-	if (req.data.num != "")  { num = req.data.num; ***REMOVED***
-	if (req.data.type != "") { num = req.data.type; ***REMOVED***
+          console.log("AND WE FOUND THESE TRANSACTIONS: " + JSON.stringify(txs));
 
-	let txs = await this.loadTransactions(type, num);
+          let response = {***REMOVED***;
+              response.err = "";
+              response.txs = txs;
 
-console.log("AND WE FOUND THESE TRANSACTIONS: " + JSON.stringify(txs));
+          console.log("RETURNING: " + JSON.stringify(response));
 
-	let response = {***REMOVED***;
-	    response.err = "";
-	    response.txs = txs;
+	        mycallback(response);
 
-console.log("RETURNING: " + JSON.stringify(response));
-
-	mycallback(response);
-
+        default:
+          break;
   ***REMOVED***
 ***REMOVED***
   ***REMOVED***
 
 
 
-  saveTransaction(tx=null) {
+  async saveTransaction(tx=null) {
 
-console.log("\n\n\n SAVING A TRANSACTION IN THE SERVER MODULE \n\n\n");
+    console.log("\n\n\n SAVING A TRANSACTION IN THE SERVER MODULE \n\n\n");
 
   ***REMOVED***
 
@@ -96,7 +98,6 @@ console.log("\n\n\nRETURNING: ");
     return txs;
 
   ***REMOVED***
-
 
 ***REMOVED***
 

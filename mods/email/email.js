@@ -17,13 +17,22 @@ class Email extends ModTemplate {
   ***REMOVED***
     ];
 
+    this.emailMods = [];
+  ***REMOVED***
+
+
+  initialize(app) {
+    this.emailMods = this.app.modules.implementsKeys([
+      'afterRender',
+      'returnHTML',
+      'returnButtonHTML',
+    ]);
+    console.log(this.emailMods);
   ***REMOVED***
 
 
   initializeHTML(app) {
-
     EmailList.render(this);
-
   ***REMOVED***
 
 
@@ -34,9 +43,9 @@ class Email extends ModTemplate {
   onPeerHandshakeComplete(app, peer) {
 
     //
-    // leaving this here for the short term, 
+    // leaving this here for the short term,
     // token manager can be a separate module
-    // in the long-term, as the email client 
+    // in the long-term, as the email client
     // should just handle emails
     //
     this.getTokens();
@@ -73,17 +82,17 @@ class Email extends ModTemplate {
 
       //
       // if transaction is for me
-      // 
+      //
       if (tx.isTo(app.wallet.returnPublicKey())) {
 
-	//
-	// great lets save this
-	//
-	app.storage.saveTransaction(tx);
+***REMOVED***
+***REMOVED*** great lets save this
+***REMOVED***
+        app.storage.saveTransaction(tx);
 
-	//
-	// and update our email client
-	//
+***REMOVED***
+***REMOVED*** and update our email client
+***REMOVED***
         email.addEmail(tx);
   ***REMOVED***
 ***REMOVED***

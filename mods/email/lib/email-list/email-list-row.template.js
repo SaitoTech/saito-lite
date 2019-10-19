@@ -1,4 +1,5 @@
 module.exports = EmailListRowTemplate = ({title, message, timestamp***REMOVED***) => {
+
   let datetime = new Date(timestamp);
   let hours = datetime.getHours();
   let minutes = datetime.getMinutes();
