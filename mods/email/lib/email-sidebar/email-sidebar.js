@@ -16,8 +16,6 @@ module.exports = EmailSidebar = {
       sidebar_div.innerHTML += EmailControlsTemplate();
       sidebar_div.innerHTML += EmailChatTemplate();
 
-alert(sidebar_div.innerHTML);
-
       EmailControls.render(app, data);
       EmailChat.render(app, data);
 
