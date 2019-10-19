@@ -1,14 +1,12 @@
 const EmailContainerTemplate = require('./email-container.template');
 const EmailList = require('../email-list/email-list');
 const EmailSidebar = require('../email-sidebar/email-sidebar');
-const EmailSidebarTemplate = require('../email-sidebar/email-sidebar-template');
+const EmailSidebarTemplate = require('../email-sidebar/email-sidebar.template');
 
 
 module.exports = EmailContainer = {
 
   email: {},
-
-  email_sidebar: new EmailSidebar(),
 
 
   render(app, parentmod) {
@@ -21,7 +19,7 @@ module.exports = EmailContainer = {
     let email_sidebar_container = document.querySelector(".email-sidebar-container");
     if (!email_sidebar_container) { return; }
     email_sidebar_container.innerHTML = EmailSidebarTemplate();
-    email_sidebar.render(app);
+    EmailSidebar.render(app);
 
 
     this.email.emailMods.forEach(email_mod => {
