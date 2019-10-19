@@ -3,7 +3,9 @@ const EmailListTemplate = require('./email-list.template.js');
 const EmailListRowTemplate = require('./email-list-row.template.js');
 
 module.exports = EmailList = {
+
     email: {***REMOVED***,
+
     render(email) {
         if (email) { this.email = email; ***REMOVED***
 ***REMOVED*** let email_main = document.querySelector(".email-main");

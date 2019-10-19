@@ -3,8 +3,10 @@ const EmailList = require('../email-list/email-list');
 var numeral = require('numeral');
 
 module.exports = EmailAdd = {
+
     email: {***REMOVED***,
     emailList: {***REMOVED***,
+
     render(emailList) {
         this.emailList = emailList;
         this.email = emailList.email;
