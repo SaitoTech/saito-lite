@@ -1,4 +1,4 @@
-const EmailAdd = require('../email-form/email-form.js');
+const EmailForm = require('../email-form/email-form.js');
 const EmailListTemplate = require('./email-list.template.js');
 const EmailListRowTemplate = require('./email-list-row.template.js');
 
@@ -20,7 +20,7 @@ module.exports = EmailList = {
     attachEvents() {
         document.querySelector('#email.create-button')
             .addEventListener('click', (e) => {
-                EmailAdd.render(this);
+                EmailForm.render(this);
             });
     }
 }
