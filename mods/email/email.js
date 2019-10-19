@@ -1,7 +1,9 @@
 const saito = require('../../lib/saito/saito.js');
 const ModTemplate = require('../../lib/templates/modtemplate');
-
 const EmailContainer = require('./lib/email-container/email-container');
+
+// external dependency
+const numeral = require('numeral');
 
 class Email extends ModTemplate {
 
@@ -71,9 +73,9 @@ class Email extends ModTemplate {
 	    msg.message = "This email is not actually loaded from a remote server, but once the archives are saving transactions and returning them instead of just dummy text, we can easily correct this.";
 	    msg.timestamp = new Date().getTime();
 
-	this.emails.push(msg);
+	this.emails.unshift(msg);
 	EmailList.render(this);
-	
+
 ***REMOVED***this.addEmail(msg);
 
       //***REMOVED***
@@ -125,6 +127,13 @@ class Email extends ModTemplate {
     setTimeout(() => {
         this.app.network.sendRequest(msg.request, msg.data);
 ***REMOVED***, 1000);
+  ***REMOVED***
+
+  updateBalance() {
+    if (this.app.BROWSER) {
+      document.querySelector('.email-balance').innerHTML
+        = numeral(this.app.wallet.returnBalance()).format('0,0.0000');
+***REMOVED***
   ***REMOVED***
 
 ***REMOVED***

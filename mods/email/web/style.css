@@ -45,9 +45,24 @@
   padding-top: 10px;
 ***REMOVED***
 
+#email-select-icon {
+  width: 24px;
+  height: 24px;
+***REMOVED***
+
+.email-selected {
+  height: 24px;
+  width: 24px;
+  align-self: center;
+***REMOVED***
+
+.email-selected:checked {
+  background-color: var(--saito-cyber-black);
+***REMOVED***
+
 .email-message {
   display: grid;
-  grid-template-columns: auto 3.5em;
+  grid-template-columns: 2em auto 3.5em;
   border-bottom: 1px solid var(--saito-skyline-grey);
   padding: 10px 0px;
 ***REMOVED***

@@ -20,7 +20,7 @@ module.exports = EmailAdd = {
 ***REMOVED***,
 
     addData() {
-        document.querySelector('.email-identifier').innerHTML = 'Address: ' + this.saito.wallet.returnPublicKey();
+        document.getElementById('email-from-address').value = `(Myself) ${this.saito.wallet.returnPublicKey()***REMOVED***`;
         document.querySelector('.email-balance').innerHTML = numeral(this.saito.wallet.returnBalance()).format('0,0.0000');
 ***REMOVED***,
 
@@ -44,10 +44,10 @@ module.exports = EmailAdd = {
 ***REMOVED*** let saito = this.email.app;
 
         let email_title = document.querySelector('.email-title').value;
-        let email_address = document.querySelector('.email-to-address').value;
+        let email_address = document.getElementById('email-to-address').value;
 
         if (email_address == "") {
-          email_address = saito.wallet.returnPublicKey();
+          email_address = this.saito.wallet.returnPublicKey();
     ***REMOVED***
 
 ***REMOVED*** let email_fee = document.querySelector('.email-fee').value;
@@ -57,10 +57,10 @@ module.exports = EmailAdd = {
 ***REMOVED*** if (email_fee == '') { email_fee = 0.0; ***REMOVED***
 ***REMOVED*** if (email_amount == '') { email_amount = 0.0; ***REMOVED***
 
-        let fee = parseFloat(email_fee);
-        let amt = parseFloat(email_amount);
+        let fee = 2.0; // parseFloat(email_fee);
+        let amt = 0.0; // parseFloat(email_amount);
 
-        let newtx = this.saito.wallet.createUnsignedTransaction(saito.wallet.returnPublicKey(), amt, fee);
+        let newtx = this.saito.wallet.createUnsignedTransaction(email_address, amt, fee);
 
         if (!newtx) {
           alert("Unable to send, please get tokens");
@@ -69,7 +69,7 @@ module.exports = EmailAdd = {
         newtx.transaction.msg.module   = "Email";
         newtx.transaction.msg.title    = email_title;
         newtx.transaction.msg.message  = email_text;
-        newtx = saito.wallet.signTransaction(newtx);
+        newtx = this.saito.wallet.signTransaction(newtx);
 
         return newtx;
 ***REMOVED***,

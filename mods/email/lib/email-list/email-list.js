@@ -10,7 +10,7 @@ module.exports = EmailList = {
         if (app) { this.app = app; ***REMOVED***
         document.querySelector('.email-body').innerHTML = EmailListTemplate();
 
-        app.emails.forEach(mail => {
+        this.app.emails.forEach(mail => {
             document.querySelector('.email-list').innerHTML += EmailListRowTemplate(mail);
     ***REMOVED***);
 
