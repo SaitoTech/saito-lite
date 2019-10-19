@@ -16,8 +16,10 @@ class Email extends ModTemplate {
         timestamp: new Date().getTime(),
       }
     ];
+
     this.emailMods = [];
   }
+
 
   initialize(app) {
     this.emailMods = this.app.modules.implementsKeys([
@@ -40,8 +42,6 @@ class Email extends ModTemplate {
   //
   onPeerHandshakeComplete(app, peer) {
 
-console.log("OPHComplerte in Email");
-
     //
     // leaving this here for the short term,
     // token manager can be a separate module
@@ -50,19 +50,22 @@ console.log("OPHComplerte in Email");
     //
     this.getTokens();
 
-
-console.log(" LOADING TXS FOR EMAIL ");
-
     this.app.storage.loadTransactions("Email", 50, (txs) => {
-      for (let i = 0; i < txs.lengthl; i++) {
+
+      //for (let i = 0; i < txs.length; i++) {
 
 	let msg = {};
 	    msg.title = "Loaded from remote server";
 	    msg.message = "This email is not actually loaded from a remote server, but once the archives are saving transactions and returning them instead of just dummy text, we can easily correct this.";
 	    msg.timestamp = new Date().getTime();
 
-        this.addEmail(msg);
-      }
+	this.emails.push(msg);
+	EmailList.render(this);
+	
+        //this.addEmail(msg);
+
+      //}
+
     });
 
     if (this.app.BROWSER) { EmailList.render(this); }
