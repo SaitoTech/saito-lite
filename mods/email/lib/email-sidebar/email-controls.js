@@ -1,7 +1,6 @@
-const EmailLoaderTemplate = require('./email-loader.template.js');
 
+module.exports = EmailComposeBtn = {
 
-module.exports = EmailLoader = {
 
     render(app, data=[]) {
 
@@ -11,7 +10,7 @@ module.exports = EmailLoader = {
 
 
     attachEvents(app) {
-
+    
 ***REMOVED***
 
 ***REMOVED***

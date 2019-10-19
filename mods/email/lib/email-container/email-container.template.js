@@ -1,13 +1,7 @@
 module.exports = EmailContainerTemplate = () => {
   return `
     <div class="email-container">
-      <div id="email-sidebar" class="email-sidebar">
-        <div class="email-module-title"><h2>Saito Mail</h2></div>
-        <ul id="email-mod-buttons">
-          <li class="button">Inbox</li>
-          <li class="button">Sent</li>
-          <li class="button">Pandora</li>
-        </ul>
+      <div id="email-sidebar-container" class="email-sidebar-container">
       </div>
       <div class="email-content">
         <div class="email-header">
@@ -15,7 +9,7 @@ module.exports = EmailContainerTemplate = () => {
             <i class="icon-med far fa-square"></i>
             <i class="icon-med fas fa-trash-alt"></i>
           </div>
-          <div class="email-balance">1200.0000000 Saito</div>
+          <div class="email-balance">${("0.0000000").replace(/0+$/,'').replace(/\.$/,'\.0')***REMOVED*** Saito</div>
         </div>
         <div class="email-body">
         </div>
