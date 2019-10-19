@@ -8,14 +8,15 @@ module.exports = EmailList = {
 
     render(email) {
         if (email) { this.email = email; }
-        let email_main = document.querySelector(".email-main");
+        // let email_main = document.querySelector(".email-main");
+        // if (!email_main) { return; }
 
-        if (!email_main) { return; }
+        // email_main.innerHTML = EmailListTemplate();
 
-        email_main.innerHTML = EmailListTemplate();
+        document.querySelector('.email-body').innerHTML = EmailListTemplate();
 
         this.email.emails.forEach(mail => {
-            document.querySelector('.email-container').innerHTML += EmailListRowTemplate(mail);
+            document.querySelector('.email-list').innerHTML += EmailListRowTemplate(mail);
         });
 
         this.attachEvents();
