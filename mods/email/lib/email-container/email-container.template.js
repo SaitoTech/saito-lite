@@ -1,4 +1,5 @@
 module.exports = EmailContainerTemplate = () => {
+  //<i id="email-select-icon" class="icon-med far fa-square"></i>
   return `
     <div class="email-container">
       <div id="email-sidebar-container" class="email-sidebar-container">
@@ -6,8 +7,8 @@ module.exports = EmailContainerTemplate = () => {
       <div class="email-content">
         <div class="email-header">
           <div class="email-icons">
-            <i class="icon-med far fa-square"></i>
-            <i class="icon-med fas fa-trash-alt"></i>
+            <input id="email-select-icon" type="checkbox">
+            <i id="email-delete-icon" class="icon-med fas fa-trash-alt"></i>
           </div>
           <div class="email-balance">${("0.0000000").replace(/0+$/,'').replace(/\.$/,'\.0')***REMOVED*** Saito</div>
         </div>

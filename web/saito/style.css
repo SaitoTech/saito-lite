@@ -74,9 +74,9 @@ button, .button {
     cursor: pointer;   
 ***REMOVED***
 
-button:hover, .button:hover {
+/* button:hover, .button:hover {
     border-bottom: 4px solid var(--saito-red);
-***REMOVED***
+***REMOVED*** */
 
 input[type=text], input[type=number] {
     padding: 10px 5px;

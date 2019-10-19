@@ -1,16 +1,16 @@
-const EmailAdd = require('../email-add/email-add.js');
+const EmailAdd = require('../email-form/email-form.js');
 const EmailListTemplate = require('./email-list.template.js');
 const EmailListRowTemplate = require('./email-list-row.template.js');
 
 module.exports = EmailList = {
 
-    parentmod: {***REMOVED***,
+    app: {***REMOVED***,
 
     render(app) {
-***REMOVED*** if (parentmod) { this.parentmod = parentmod; ***REMOVED***
+        if (app) { this.app = app; ***REMOVED***
         document.querySelector('.email-body').innerHTML = EmailListTemplate();
 
-        app.emails.forEach(mail => {
+        this.app.emails.forEach(mail => {
             document.querySelector('.email-list').innerHTML += EmailListRowTemplate(mail);
     ***REMOVED***);
 
