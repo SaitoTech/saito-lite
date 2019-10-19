@@ -1,4 +1,7 @@
 /** Email **/
+body {
+  font-size: 1.0em;
+}
 
 .email-container {
   display: grid;
@@ -64,23 +67,100 @@
   height: 100%;
 }
 
-/* rp started here */
 
-.email-module-title, .email-identifier, .email-balance {
-  padding: 5px;
-  line-height: 2.5em;
-  vertical-align: middle;
-}
 
-.email-identifier {
-  display: block;
-  overflow: hidden;
-  white-space: nowrap;
-}
+
+
+
+
 
 .email-sidebar {
   /* grid-row: 2 / 5; */
 }
+
+
+.email-navigator {
+  list-style: none;
+  list-style-type: none;
+  font-size: 1.2em;
+  line-height: 1.4em;
+}
+.email-navigator-item {
+  cursor: pointer;
+}
+.active-navigator-item {
+  color: #d14836;
+  font-weight: bold;
+}
+
+.email-chat {
+  display: block;
+  border: 1px solid #a5a5a5;
+  width: 100%;
+  min-height: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  overflow-y: scroll;
+}
+
+
+#blockchain_syncfade {
+ width:100%;
+ max-width:140px;
+ margin-left:auto;
+ margin-right:auto;
+}
+#blockchain_syncbox {
+ background-color:#f7f7f7;
+ height:20px;
+ border: 1px solid #888;
+}
+#blockchain_syncbar {
+ background-color: #5af541;
+ width: 0%;
+ height:20px;
+ overflow: none;
+ float:left;
+}
+#blockchain_synclabel {
+ font-size:0.95em;
+ margin-top:15px;
+ margin-top:5px;
+ color: #888;
+}
+
+.email-loader {
+  margin-top: 20px;
+  width:100%;
+  margin-left: auto;
+  margin-right: auto;
+  display: none;
+}
+.email-compose-btn {
+  clear: both;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top:20px;
+  margin-bottom: 20px;
+  color: #ffffff;
+  background-color: #d14836;
+  text-align: center;
+  vertical-align: middle;
+  height: 50px;
+  font-weight: bold;
+  font-size: 1.6em;
+  background-image: linear-gradient(to bottom, #dd4b39, #d14836);
+  border: 1px solid #b0281a;
+  cursor: pointer;
+  line-height: 50px;
+}
+
+
+
+
+
 
 .email-text-wrapper {
   /* grid-row: 4;
