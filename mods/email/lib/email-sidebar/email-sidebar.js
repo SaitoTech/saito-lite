@@ -8,7 +8,7 @@ const EmailControlsTemplate 	= require('./email-controls.template.js');
 
 module.exports = EmailSidebar = {
 
-    render(app, data=[]) {
+    render(app, data) {
 
       let sidebar_div = document.querySelector(".email-sidebar");
       if (!sidebar_div) { return; }
@@ -16,8 +16,10 @@ module.exports = EmailSidebar = {
       sidebar_div.innerHTML += EmailControlsTemplate();
       sidebar_div.innerHTML += EmailChatTemplate();
 
-      EmailControls.render(app);
-      EmailChat.render(app);
+alert(sidebar_div.innerHTML);
+
+      EmailControls.render(app, data);
+      EmailChat.render(app, data);
 
       this.attachEvents(app);
 
