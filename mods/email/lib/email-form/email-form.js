@@ -9,10 +9,10 @@ module.exports = EmailForm = {
     saito: {},
     emailList: {},
 
-    render(emailList) {
-        this.emailList = emailList;
-        this.app = emailList.app;
-        this.saito = this.app.app;
+    render(app, data={ emailList: {} }) {
+        this.emailList = data.emailList;
+        this.app = app;
+        this.saito = this.app;
 
         document.querySelector(".email-body").innerHTML = EmailAddTemplate();
 

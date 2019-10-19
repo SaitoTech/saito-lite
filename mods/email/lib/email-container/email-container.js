@@ -35,7 +35,7 @@ module.exports = EmailContainer = {
     //   });
     // });
 
-    EmailList.render(app);
+    EmailList.render(app, { emails: app.emails.inbox });
     this.attachEvents(app);
   },
 
