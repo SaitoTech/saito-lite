@@ -20,7 +20,7 @@ module.exports = EmailContainer = {
     if (!email_sidebar_container) { return; }
     email_sidebar_container.innerHTML = EmailSidebarTemplate();
 
-    //EmailSidebar.render(app);
+    EmailSidebar.render(app);
 
 
     // app.emailMods.forEach(email_mod => {

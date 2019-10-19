@@ -1,12 +1,12 @@
 module.exports = EmailControlsTemplate = () => {
   return `
-      <div class="email-compose-btn" id="email-compose-btn">
-      </div>
+      <div class="email-compose-btn" id="email-compose-btn">COMPOSE</div>
       <ul class="email-navigator" id="email-navigator">
-        <li id="email-navigator-item" id="inbox">inbox</li>
-        <li id="email-navigator-item" id="sent">sent</li>
-        <li id="email-navigator-item" id="trash">trash</li>
-        <li id="email-navigator-item" id="apps">apps</li>
+        <li class="email-navigator-item active-navigator-item" id="inbox">inbox</li>
+        <li class="email-navigator-item" id="sent">sent</li>
+        <li class="email-navigator-item" id="trash">trash</li>
+     </ul>
+     <ul class="email-apps" id="email-apps">
      </ul>
      <div id="email-loader" class="email-loader">
        <div class="blockchain_synclabel">syncing blocks...</div>
