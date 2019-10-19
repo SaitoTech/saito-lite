@@ -1,47 +1,30 @@
+const EmailControlsTemplate = require('./email-controls.template');
+const EmailChatTemplate = require('./email-chat.template');
 
 module.exports = EmailControls = {
 
     render(app, data) {
 
-      // data.mods = active modules
+      document.querySelector(".email-sidebar").innerHTML += EmailControlsTemplate();
+      document.querySelector(".email-sidebar").innerHTML += EmailChatTemplate();
 
-alert("A");
       let email_apps = document.querySelector(".email-apps");
-alert("AB: ");
-      if (!email_apps) {
-alert("apps_menu undefined");
-	return;
-      }
-
-alert("B: " + data.mods.length);
-
       for (let i = 0; i < data.mods.length; i++) {
-	email_apps.innerHTML += `<li class="email-navigator-item">${data.mods[i]name}</li>`;
+	email_apps.innerHTML += `<li class="email-navigator-item">${data.mods[i].name}</li>`;
       }
 
-alert("C");
       this.attachEvents(app);
-
     },
 
 
     attachEvents(app) {
-
-console.log("attaching events to email navigator item");
-
-alert("attach events in email controls");   
-
       document.querySelector('.email-navigator-item')
       	    .addEventListener('click', (e) => {
-
-alert("testing add click event!");
-
+alert("TEST CLICK!");
 	      var elements = document.getElementsByClassName('email-navigator-active');
 	      for (let i = elements.length-1; i >= 0; i++) {
    		elements[i].classList.remove('email-navigator-active');
 	      }
-
-alert("removed the css class");
 
             });
 

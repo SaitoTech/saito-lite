@@ -22,7 +22,6 @@ class Email extends ModTemplate {
 
   }
 
-
   initialize(app) {
  
     //
@@ -53,13 +52,10 @@ class Email extends ModTemplate {
         data.emails = this.emails.inbox;
         data.mods   = this.mods;
 
-alert("TEST");
-
     //
     // add all HTML elements to DOM
     //
     EmailMain.render(app, data);
-alert("running initialize HTML 2");
 
     //
     // update apps in sidebar
@@ -101,7 +97,7 @@ alert("running initialize HTML 2");
 	    msg.timestamp = new Date().getTime();
 
 	this.emails.inbox.unshift(msg);
-	EmailList.render(this);
+	EmailList.render(this.app, {emails: this.emails.inbox});
 
         //this.addEmail(msg);
 
@@ -109,9 +105,7 @@ alert("running initialize HTML 2");
 
     });
 
-    if (this.app.BROWSER) { EmailList.render(this); }
-**/
-
+    if (this.app.BROWSER) { EmailList.render(this.app, {emails: this.emails.inbox}); }
   }
 
 
@@ -145,7 +139,7 @@ alert("running initialize HTML 2");
   addEmail(tx) {
     let {title, message} = tx.returnMessage();
     this.emails.inbox.unshift({title, message, timestamp: tx.transaction.ts});
-    if (this.app.BROWSER) { EmailList.render(this); }
+    if (this.app.BROWSER) { EmailList.render(this.app, {emails: this.app.emails.inbox}); }
   }
 
 
