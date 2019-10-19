@@ -3,11 +3,11 @@ const EmailList = require('../email-list/email-list');
 const EmailSidebar = require('../email-sidebar/email-sidebar');
 const EmailSidebarTemplate = require('../email-sidebar/email-sidebar.template');
 
+
 module.exports = EmailContainer = {
 
   parentmod: {***REMOVED***,
 
-  // email_sidebar: EmailSidebar(),
 
   render(app, parentmod) {
     if (parentmod) { this.parentmod = parentmod; ***REMOVED***
@@ -20,7 +20,7 @@ module.exports = EmailContainer = {
     if (!email_sidebar_container) { return; ***REMOVED***
     email_sidebar_container.innerHTML = EmailSidebarTemplate();
 
-    // EmailSidebar.render(app);
+    //EmailSidebar.render(app);
 
 
     // app.emailMods.forEach(email_mod => {
