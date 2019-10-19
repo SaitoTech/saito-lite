@@ -18,13 +18,15 @@ module.exports = EmailControls = {
     attachEvents(app) {
 alert("EVENT ATTACHED");
 try {
-      let elements = document.getElementsByClassName('email-navigator-item')
-      Array.from(elements).forEach(elem => {
-alert("EVENT ATTACHED 2");
-        elem.addEventListener('click', (e) => {
-	  alert("TEST CLICK");
-	***REMOVED***);
-  ***REMOVED***);
+
+
+        Array.from(document.getElementsByClassName('email-navigator-item'))
+             .forEach(row => row.addEventListener('click', (e) => {
+alert("CLICKED");
+         ***REMOVED***)
+        );
+
+
 
 alert("successfully attached event listeners!");
 
