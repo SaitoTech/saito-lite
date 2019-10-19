@@ -18,6 +18,15 @@ module.exports = EmailSidebar = {
 
     render(app, data=[]) {
 
+      if (data.length > 0) {
+	for (let i = 0; i < data.length; i++) {
+	  if (data[i] == "chat") { components[3].render(); ***REMOVED***
+	***REMOVED***
+	this.attachEvents();
+	return;
+  ***REMOVED***
+
+
       let email_sidebar_compose_btn = new EmailComposeBtn();
       let email_sidebar_navigator = new EmailNavigator();
       let email_sidebar_loader = new EmailLoader();
