@@ -88,7 +88,7 @@ class Email extends ModTemplate {
 	    msg.message = "This email is not actually loaded from a remote server, but once the archives are saving transactions and returning them instead of just dummy text, we can easily correct this.";
 	    msg.timestamp = new Date().getTime();
 
-	this.emails.unshift(msg);
+	this.emails.inbox.unshift(msg);
 	EmailList.render(this);
 
         //this.addEmail(msg);
@@ -130,7 +130,7 @@ class Email extends ModTemplate {
 
   addEmail(tx) {
     let {title, message} = tx.returnMessage();
-    this.emails.unshift({title, message, timestamp: tx.transaction.ts});
+    this.emails.inbox.unshift({title, message, timestamp: tx.transaction.ts});
     if (this.app.BROWSER) { EmailList.render(this); }
   }
 
