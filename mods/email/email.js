@@ -22,7 +22,6 @@ class Email extends ModTemplate {
 
   }
 
-
   initialize(app) {
  
     //
@@ -53,13 +52,10 @@ class Email extends ModTemplate {
         data.emails = this.emails.inbox;
         data.mods   = this.mods;
 
-alert("TEST");
-
     //
     // add all HTML elements to DOM
     //
     EmailMain.render(app, data);
-alert("running initialize HTML 2");
 
     //
     // update apps in sidebar
