@@ -10,14 +10,17 @@ class Email extends ModTemplate {
   constructor(app) {
     super(app);
 
-    this.name 	= "Email";
-    this.chat 	= null;
-    this.inbox 	= [];
-    this.outbox = [];
-    this.trash 	= [];
-    this.mods   = [];
+    this.name 		= "Email";
+    this.chat 		= null;
 
-    this.inbox.push({
+    this.emails 	= {};
+    this.emails.inbox 	= [];
+    this.emails.outbox 	= [];
+    this.emails.trash 	= [];
+
+    this.mods   	= [];
+
+    thia.emails.inbox.push({
       title: "New Email",
       message: "This is a new email, just for you!",
       timestamp: new Date().getTime(),

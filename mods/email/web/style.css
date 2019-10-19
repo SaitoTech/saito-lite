@@ -104,7 +104,7 @@ body {
   cursor: pointer;
 }
 .active-navigator-item {
-  color: #d14836;
+  color: var(--saito-red);
   font-weight: bold;
 }
 
@@ -160,13 +160,15 @@ body {
   margin-top:20px;
   margin-bottom: 20px;
   color: #ffffff;
-  background-color: #d14836;
+  background-color: var(--saito-cyber-black);
+  background-color: var(--saito-skyline-grey);
+  color: var(--saito-red);
   text-align: center;
   vertical-align: middle;
   height: 50px;
   font-weight: bold;
   font-size: 1.6em;
-  background-image: linear-gradient(to bottom, #dd4b39, #d14836);
+  /* background-image: linear-gradient(to bottom, #dd4b39, #d14836); */
   border: 1px solid #b0281a;
   cursor: pointer;
   line-height: 50px;
