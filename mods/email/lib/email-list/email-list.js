@@ -6,14 +6,15 @@ module.exports = EmailList = {
     email: {***REMOVED***,
     render(email) {
         if (email) { this.email = email; ***REMOVED***
-        let email_main = document.querySelector(".email-main");
+***REMOVED*** let email_main = document.querySelector(".email-main");
+***REMOVED*** if (!email_main) { return; ***REMOVED***
 
-        if (!email_main) { return; ***REMOVED***
+***REMOVED*** email_main.innerHTML = EmailListTemplate();
 
-        email_main.innerHTML = EmailListTemplate();
+        document.querySelector('.email-body').innerHTML = EmailListTemplate();
 
         this.email.emails.forEach(mail => {
-            document.querySelector('.email-container').innerHTML += EmailListRowTemplate(mail);
+            document.querySelector('.email-list').innerHTML += EmailListRowTemplate(mail);
     ***REMOVED***);
 
         this.attachEvents();

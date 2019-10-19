@@ -1,11 +1,49 @@
 /** Email **/
 
+.email-container {
+  display: grid;
+  grid-column-gap: 1em;
+  grid-template-columns: 15em auto;
+  grid-template-areas: "email-sidebar email-content";
+***REMOVED***
+
 .email-content {
-  height: 78vh;
+  /* height: 81vh; */
+  display: grid;
+***REMOVED***
+
+.email-header {
+  display: grid;
+  grid-template-columns: 3.5em auto;
+  justify-content: space-between;
+  align-items: center;
+
+  border-bottom: 1px solid var(--saito-cyber-black);
+***REMOVED***
+
+.email-icons {
+  display: flex;
+  justify-content: space-between;
+***REMOVED***
+
+.email-body {
+  height: 75vh;
+***REMOVED***
+
+.email-list {
+  height: 75vh;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+***REMOVED***
+
+.email-form {
+  height: 75vh;
   display: grid;
   grid-gap: 1em;
   grid-template-rows: 3em 3em 3em auto 4em;
   grid-template-columns: 12em 1fr 10em;
+
 ***REMOVED***
 
 .email-message {
@@ -38,7 +76,7 @@
 ***REMOVED***
 
 .email-sidebar {
-  grid-row: 2 / 5;
+  /* grid-row: 2 / 5; */
 ***REMOVED***
 
 .email-text-wrapper {
@@ -87,7 +125,14 @@
 ***REMOVED***
 
 @media only screen and (max-width: 600px) {
-  .email-content {
+  .main {
+    max-width: unset;
+  ***REMOVED***
+  .email-container {
+    grid-template-columns: 1fr;
+    grid-template-areas: "email-sidebar" "email-content";
+  ***REMOVED***
+  .email-form {
     grid-template-rows: 3em 3em 3em auto 4em;
     grid-template-columns: 1fr 10em;
   ***REMOVED***
