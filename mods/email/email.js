@@ -10,17 +10,22 @@ class Email extends ModTemplate {
   constructor(app) {
     super(app);
 
-    this.name = "Email";
-    this.chat = null;
-    this.emails = [
-      {
-        title: "New Email",
-        message: "This is a new email, just for you!",
-        timestamp: new Date().getTime(),
-  ***REMOVED***
-    ];
+    this.name 		= "Email";
+    this.chat 		= null;
 
-    this.emailMods = [];
+    this.emails 	= {***REMOVED***;
+    this.emails.inbox 	= [];
+    this.emails.outbox 	= [];
+    this.emails.trash 	= [];
+
+    this.mods   	= [];
+
+    this.emails.inbox.push({
+      title: "New Email",
+      message: "This is a new email, just for you!",
+      timestamp: new Date().getTime(),
+***REMOVED***);
+
   ***REMOVED***
 
 
@@ -29,24 +34,34 @@ class Email extends ModTemplate {
     //
     // what does this do? function names do not adequately indicate purpose 
     //
-    this.emailMods = this.app.modules.implementsKeys([
+    this.mods = this.app.modules.implementsKeys([
       'afterRender',
       'returnHTML',
       'returnButtonHTML',
     ]);
 
-    //
-    // fetch chat module to get chat items
-    //
-    let chatManager = app.modules.returnModule("Chat");
-    this.chat = chatManager.respondTo("email");
-
-    console.log(this.emailMods);
   ***REMOVED***
 
 
   initializeHTML(app) {
+
+    //
+    // add all HTML elements to DOM
+    //
     EmailContainer.render(this);
+
+    //
+    // update apps in sidebar
+    //
+    EmailControls.render(this.app, this.mods);
+
+
+    //
+    // update chat module
+    //
+    let chatManager = app.modules.returnModule("Chat");
+    this.chat = chatManager.respondTo("email");
+
   ***REMOVED***
 
 
@@ -73,7 +88,7 @@ class Email extends ModTemplate {
 	    msg.message = "This email is not actually loaded from a remote server, but once the archives are saving transactions and returning them instead of just dummy text, we can easily correct this.";
 	    msg.timestamp = new Date().getTime();
 
-	this.emails.unshift(msg);
+	this.emails.inbox.unshift(msg);
 	EmailList.render(this);
 
 ***REMOVED***this.addEmail(msg);
@@ -115,7 +130,7 @@ class Email extends ModTemplate {
 
   addEmail(tx) {
     let {title, message***REMOVED*** = tx.returnMessage();
-    this.emails.unshift({title, message, timestamp: tx.transaction.ts***REMOVED***);
+    this.emails.inbox.unshift({title, message, timestamp: tx.transaction.ts***REMOVED***);
     if (this.app.BROWSER) { EmailList.render(this); ***REMOVED***
   ***REMOVED***
 
