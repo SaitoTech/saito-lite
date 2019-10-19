@@ -35,7 +35,7 @@ module.exports = EmailContainer = {
     //   ***REMOVED***);
     // ***REMOVED***);
 
-    EmailList.render(app);
+    EmailList.render(app, { emails: app.emails.inbox ***REMOVED***);
     this.attachEvents(app);
   ***REMOVED***,
 

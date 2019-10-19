@@ -6,21 +6,22 @@ module.exports = EmailList = {
 
     app: {***REMOVED***,
 
-    render(app) {
+    render(app, data={emails: []***REMOVED***) {
         if (app) { this.app = app; ***REMOVED***
         document.querySelector('.email-body').innerHTML = EmailListTemplate();
 
-        this.app.emails.forEach(mail => {
+        data.emails.forEach(mail => {
             document.querySelector('.email-list').innerHTML += EmailListRowTemplate(mail);
     ***REMOVED***);
 
-        this.attachEvents();
+        this.attachEvents(app, data);
 ***REMOVED***,
 
-    attachEvents() {
+    attachEvents(app, data) {
         document.querySelector('#email.create-button')
             .addEventListener('click', (e) => {
-                EmailForm.render(this);
+                data.emailList = this;
+                EmailForm.render(app, data);
         ***REMOVED***);
 ***REMOVED***
 ***REMOVED***
