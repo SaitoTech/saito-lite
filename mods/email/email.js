@@ -89,7 +89,7 @@ class Email extends ModTemplate {
 	    msg.timestamp = new Date().getTime();
 
 	this.emails.inbox.unshift(msg);
-	EmailList.render(this);
+	EmailList.render(this.app, {emails: this.emails.inbox});
 
         //this.addEmail(msg);
 
@@ -97,7 +97,7 @@ class Email extends ModTemplate {
 
     });
 
-    if (this.app.BROWSER) { EmailList.render(this); }
+    if (this.app.BROWSER) { EmailList.render(this.app, {emails: this.emails.inbox}); }
   }
 
 
@@ -131,7 +131,7 @@ class Email extends ModTemplate {
   addEmail(tx) {
     let {title, message} = tx.returnMessage();
     this.emails.inbox.unshift({title, message, timestamp: tx.transaction.ts});
-    if (this.app.BROWSER) { EmailList.render(this); }
+    if (this.app.BROWSER) { EmailList.render(this.app, {emails: this.app.emails.inbox}); }
   }
 
 
