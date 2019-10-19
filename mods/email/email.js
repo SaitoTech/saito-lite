@@ -89,7 +89,7 @@ class Email extends ModTemplate {
 	    msg.timestamp = new Date().getTime();
 
 	this.emails.inbox.unshift(msg);
-	EmailList.render(this);
+	EmailList.render(this.app, {emails: this.emails.inbox***REMOVED***);
 
 ***REMOVED***this.addEmail(msg);
 
@@ -97,7 +97,7 @@ class Email extends ModTemplate {
 
 ***REMOVED***);
 
-    if (this.app.BROWSER) { EmailList.render(this); ***REMOVED***
+    if (this.app.BROWSER) { EmailList.render(this.app, {emails: this.emails.inbox***REMOVED***); ***REMOVED***
   ***REMOVED***
 
 
@@ -131,7 +131,7 @@ class Email extends ModTemplate {
   addEmail(tx) {
     let {title, message***REMOVED*** = tx.returnMessage();
     this.emails.inbox.unshift({title, message, timestamp: tx.transaction.ts***REMOVED***);
-    if (this.app.BROWSER) { EmailList.render(this); ***REMOVED***
+    if (this.app.BROWSER) { EmailList.render(this.app, {emails: this.app.emails.inbox***REMOVED***); ***REMOVED***
   ***REMOVED***
 
 
