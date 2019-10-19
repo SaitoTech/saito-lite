@@ -6,8 +6,8 @@ module.exports = EmailControlsTemplate = () => {
         <li class="email-navigator-item" id="sent">sent</li>
         <li class="email-navigator-item" id="trash">trash</li>
      </ul>
-     <ul class="email-apps" id="email-apps">
-     </ul>
+     <div class="email-apps" id="email-apps">
+     </div>
      <div id="email-loader" class="email-loader">
        <div class="blockchain_synclabel">syncing blocks...</div>
        <div class="blockchain_syncbox">
