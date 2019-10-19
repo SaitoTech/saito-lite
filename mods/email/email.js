@@ -20,7 +20,7 @@ class Email extends ModTemplate {
 
     this.mods   	= [];
 
-    thia.emails.inbox.push({
+    this.emails.inbox.push({
       title: "New Email",
       message: "This is a new email, just for you!",
       timestamp: new Date().getTime(),
