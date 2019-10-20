@@ -28,32 +28,28 @@ class Email extends ModTemplate {
   }
 
   initialize(app) {
- 
+
+
+
+
     //
     // add an email
     //
-    let tx = new saito.transaction();
+    let tx = app.wallet.createUnsignedTransaction();
         tx.transaction.msg.module 	= "Email";
-        tx.transaction.msg.title 	= "New Email";
-        tx.transaction.msg.message	= "This is a new email, just for you!!!";
+        tx.transaction.msg.title 	= "Welcome to Saito";
+        tx.transaction.msg.message	= "This is a fresh email, added " + new Date().getTime();
     tx = this.app.wallet.signTransaction(tx);
-
     this.emails.inbox.push(tx);
 
-/*
-    this.emails.sent.push({
-      sig: "2",
-      title: "Sent Email",
-      message: "This is an email we have recently sent.",
-      timestamp: new Date().getTime(),
-    });
-    this.emails.trash.push({
-      sig: "3",
-      title: "Deleted Email",
-      message: "This is an email that we have deleted.",
-      timestamp: new Date().getTime(),
-    });
-*/
+
+    let tx = app.wallet.createUnsignedTransaction();
+        tx.transaction.msg.module 	= "Email";
+        tx.transaction.msg.title 	= "Welcome to Saito";
+        tx.transaction.msg.message	= "This is where your sent messages go...";
+    tx = this.app.wallet.signTransaction(tx);
+    this.emails.sent.push(tx);
+
 
     //
     // what does this do? function names do not adequately indicate purpose 
@@ -90,12 +86,12 @@ class Email extends ModTemplate {
 
   deleteTransaction(tx) {
 
-    for (let i = 0; i < data.parentmod.emails[data.parentmod.emails.active].length; i++) {
-      let mytx = data.parentmod.emails[data.parentmod.emails.active][i];
+    for (let i = 0; i < this.emails[this.emails.active].length; i++) {
+      let mytx = this.emails[this.emails.active][i];
       if (mytx.transaction.sig == tx.transaction.sig) {
         this.app.storage.deleteTransaction(tx);
-        data.parentmod.emails[data.parentmod.emails.active].splice(i, 1);
-        data.parentmod.emails['trash'].unshift(tx);
+        this.emails[this.emails.active].splice(i, 1);
+        this.emails['trash'].unshift(tx);
       }
     }
 
@@ -107,6 +103,13 @@ class Email extends ModTemplate {
   //
   onPeerHandshakeComplete(app, peer) {
 
+
+    //
+    // used in testing SAVE -- works now
+    //
+    //this.app.storage.saveTransaction(this.emails['inbox'][0]);
+
+
     //
     // leaving this here for the short term,
     // token manager can be a separate module
@@ -114,6 +117,7 @@ class Email extends ModTemplate {
     // should just handle emails
     //
     //this.getTokens();
+
 
     this.app.storage.loadTransactions("Email", 50, (txs) => {
 
@@ -125,6 +129,7 @@ class Email extends ModTemplate {
       EmailList.attachEvents(this.app, this.uidata);
 
     });
+
 
     if (this.app.BROWSER) {
       EmailList.render(this.app, this.uidata);
@@ -178,12 +183,9 @@ class Email extends ModTemplate {
   }
 
   updateBalance() {
-/**
     if (this.app.BROWSER) {
-      document.querySelector('.email-balance').innerHTML
-        = numeral(this.app.wallet.returnBalance()).format('0,0.0000');
+      document.querySelector('.email-balance').innerHTML  = numeral(this.app.wallet.returnBalance()).format('0,0.0000');
     }
-***/
   }
 
 }
