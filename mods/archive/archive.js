@@ -17,16 +17,29 @@ class Archive extends ModTemplate {
 
     await super.installModule(app);
 
-    let sql = `INSERT INTO records (sig, publickey, tx, ts, type)
-    VALUES ("sig", "publickey", "transaction", 1332, "email")`;
-    await app.storage.executeDatabase(sql, {***REMOVED***, "archive");
+let tx = app.wallet.createUnsignedTransaction();
+    tx.transaction.msg.module = "Email";
+    tx.transaction.msg.title = "This is our title";
+    tx.transaction.msg.message = "This is the substance of our email";
+    tx = app.wallet.signTransaction(tx);
+
+    let sql = "INSERT INTO records (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $msgtype)";
+console.log("\n\n\n\n\n"+sql);
+    let params = {
+      $sig		:	tx.transaction.sig ,
+      $publickey	:	tx.transaction.to[0].add ,  
+      $tx		:	JSON.stringify(tx.transaction) ,
+      $ts		:	tx.transaction.ts ,
+      $msgtype		:	tx.transaction.msg.module 
+***REMOVED***
+    await app.storage.executeDatabase(sql, params, "archive");
 
   ***REMOVED***
 
 
-  async handlePeerRequest(app, req, peer, mycallback) {
 
-console.log("HANDLE PEER REQUEST: " + JSON.stringify(req));
+
+  async handlePeerRequest(app, req, peer, mycallback) {
 
     if (req.request == null) { return; ***REMOVED***
     if (req.data == null) { return; ***REMOVED***
@@ -35,9 +48,13 @@ console.log("HANDLE PEER REQUEST: " + JSON.stringify(req));
     // only handle archive request
     //
     if (req.request == "archive") {
-      console.log(" 1. WE RECEIVED A REQUEST TO LOAD A TRANSACTION");
 
       switch(req.data.request) {
+
+        case "delete":
+          this.deleteTransaction(req.data.tx);
+          break;
+
         case "save":
           this.saveTransaction(req.data.tx);
           break;
@@ -73,7 +90,44 @@ console.log("HANDLE PEER REQUEST: " + JSON.stringify(req));
 
   async saveTransaction(tx=null) {
 
-    console.log("\n\n\n SAVING A TRANSACTION IN THE SERVER MODULE \n\n\n");
+    if (tx == null) { return; ***REMOVED***
+
+    //
+    // TODO - transactions "TO" multiple ppl this means redundant sigs and txs but with unique publickeys
+    //
+    let msgtype = "";
+    if (tx.transaction.msg.module != "") { type = tx.transaction.msg.module; ***REMOVED***
+
+    let sql = "INSERT INTO records (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $type)";
+    let params = {
+      $sig		:	tx.transaction.sig ,
+      $publickey	:	tx.transaction.to[0].add,
+      $tx		:	JSON.stringify(tx.transaction.sig) ,
+      $ts		:	tx.transaction.tx ,
+      $type		:	msgtype
+***REMOVED***;
+    this.app.storage.executeDatabase(sql, params, "archives");
+
+  ***REMOVED***
+
+
+
+  async deleteTransaction(tx=null) {
+
+    if (tx == null) { return; ***REMOVED***
+
+    //
+    // TODO - transactions "TO" multiple ppl this means redundant sigs and txs but with unique publickeys
+    //
+    let msgtype = "";
+    if (tx.transaction.msg.module != "") { type = tx.transaction.msg.module; ***REMOVED***
+
+    let sql = "DELETE FROM records WHERE publickey = $publickey AND sig = $sig";
+    let params = {
+      $sig		:	tx.transaction.sig ,
+      $publickey	:	tx.transaction.to[0].add,
+***REMOVED***;
+    this.app.storage.executeDatabase(sql, params, "archives");
 
   ***REMOVED***
 
@@ -82,8 +136,6 @@ console.log("HANDLE PEER REQUEST: " + JSON.stringify(req));
 
     let sql = "SELECT * FROM records";
     let params = {***REMOVED***;
-
-console.log("SQL: " + sql);
 
     let rows = await this.app.storage.queryDatabase(sql, params, "archive");
 

@@ -90,31 +90,21 @@ class Email extends ModTemplate {
   //
   onPeerHandshakeComplete(app, peer) {
 
-/***
     //
     // leaving this here for the short term,
     // token manager can be a separate module
     // in the long-term, as the email client
     // should just handle emails
     //
-    this.getTokens();
+    //this.getTokens();
 
     this.app.storage.loadTransactions("Email", 50, (txs) => {
 
-      //for (let i = 0; i < txs.length; i++) {
-
-	let msg = {***REMOVED***;
-	    msg.title = "Loaded from remote server";
-	    msg.message = "This email is not actually loaded from a remote server, but once the archives are saving transactions and returning them instead of just dummy text, we can easily correct this.";
-	    msg.timestamp = new Date().getTime();
-
-	this.emails.inbox.unshift(msg);
+      for (let i = 0; i < txs.length; i++) {
+	this.emails.inbox.unshift(txs[i].transaction.msg);
 	EmailList.render(this.app, this.uidata);
 	EmailList.attachEvents(this.app, this.uidata);
-
-***REMOVED***this.addEmail(msg);
-
-      //***REMOVED***
+  ***REMOVED***
 
 ***REMOVED***);
 
