@@ -32,12 +32,6 @@ class Wallet extends ModTemplate {
     );
   ***REMOVED***
 
-  onChainReorganization(bid, bsh, lc) {***REMOVED***
-
-
-  onConfirmation(blk, tx, conf, app) {
-    if (conf == 0) {***REMOVED***
-  ***REMOVED***
 
   shouldAffixCallbackToModule(module_name, tx=null) {
     if (tx != null) {
@@ -52,6 +46,16 @@ class Wallet extends ModTemplate {
   /*
    MODULE HTML FUNCTIONS
   */
+  respondTo(type) {
+
+    if (type == 'email') {
+      return {***REMOVED***;
+***REMOVED***
+
+    return null;
+  ***REMOVED***
+
+
   returnButtonHTML() {
     return `<i class="fas fa-dollar-sign"><span style="margin-left: 7px">Wallet</span></i>`;
   ***REMOVED***

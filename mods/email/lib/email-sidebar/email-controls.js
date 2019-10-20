@@ -10,7 +10,7 @@ module.exports = EmailControls = {
 
         let email_apps = document.querySelector(".email-apps");
         for (let i = 0; i < data.mods.length; i++) {
-            email_apps.innerHTML += `<li class="email-navigator-item">${data.mods[i].name***REMOVED***</li>`;
+            email_apps.innerHTML += `<li class="email-apps-item">${data.mods[i].name***REMOVED***</li>`;
     ***REMOVED***
 
 ***REMOVED***,
@@ -18,6 +18,9 @@ module.exports = EmailControls = {
 
     attachEvents(app, data) {
 
+	//
+	// inbox / sent / trash
+	//
         Array.from(document.getElementsByClassName('email-navigator-item'))
 	  .forEach(item => item.addEventListener('click', (e) => {
 
@@ -33,16 +36,64 @@ module.exports = EmailControls = {
 	              e.currentTarget.classList.add("active-navigator-item");
 		***REMOVED***
 		  ***REMOVED***
-         ***REMOVED***);
+          ***REMOVED***);
+
+              Array.from(document.getElementsByClassName('email-apps-item'))
+                .forEach(item2 => {
+                  if (item2.classList.contains("active-navigator-item")) {
+		    if (item2 != e.currentTarget) {
+		      item2.classList.remove("active-navigator-item");
+	              e.currentTarget.classList.add("active-navigator-item");
+		***REMOVED***
+		  ***REMOVED***
+          ***REMOVED***);
+
+	***REMOVED***
+
+	    data.detail_header_title = "Application";
+    	    EmailDetailHeader.render(app, data);
+
+	***REMOVED***));
+
+
+	//
+	// apps
+	//
+        Array.from(document.getElementsByClassName('email-apps-item'))
+	  .forEach(item => item.addEventListener('click', (e) => {
+
+            if (e.currentTarget.classList.contains("active-navigator-item")) {
+	      // user clicks already-active item
+	***REMOVED*** else {
+
+              Array.from(document.getElementsByClassName('email-apps-item'))
+                .forEach(item2 => {
+                  if (item2.classList.contains("active-navigator-item")) {
+		    if (item2 != e.currentTarget) {
+		      item2.classList.remove("active-navigator-item");
+	              e.currentTarget.classList.add("active-navigator-item");
+		***REMOVED***
+		  ***REMOVED***
+          ***REMOVED***);
+
+              Array.from(document.getElementsByClassName('email-navigator-item'))
+                .forEach(item2 => {
+                  if (item2.classList.contains("active-navigator-item")) {
+		    if (item2 != e.currentTarget) {
+		      item2.classList.remove("active-navigator-item");
+	              e.currentTarget.classList.add("active-navigator-item");
+		***REMOVED***
+		  ***REMOVED***
+          ***REMOVED***);
 
 	  ***REMOVED***
 
-	    data.parentmod.emails.active = e.target.id;
-	    EmailList.render(app, data);
-	    EmailList.attachEvents(app, data);
+alert("loading app...");
+    data.detail_header_title = "Application Title";
+    EmailDetailHeader.render(app, data);
 
+	***REMOVED***));
 
-   ***REMOVED***));
 
         document.getElementById('email-navigator')
                 .addEventListener('click', (e) => {

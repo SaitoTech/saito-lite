@@ -142,7 +142,7 @@ body {
   border-bottom: 1px solid grey;
 ***REMOVED***
 
-.email-navigator-item {
+.email-navigator-item, .email-apps-item {
   cursor: pointer;
 ***REMOVED***
 .active-navigator-item {
