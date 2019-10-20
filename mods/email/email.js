@@ -13,11 +13,11 @@ class Email extends ModTemplate {
     this.name 		= "Email";
     this.chat 		= null;
 
-    this.emails 	= {***REMOVED***;
+    this.emails 	      = {***REMOVED***;
     this.emails.inbox 	= [];
-    this.emails.outbox 	= [];
+    this.emails.sent 	  = [];
     this.emails.trash 	= [];
-    this.emails.active  = 0;  	// inbox
+    this.emails.active  = "inbox";  	// inbox
 				// outbox
 				// trash
 
@@ -33,16 +33,19 @@ class Email extends ModTemplate {
     // add an email
     //
     this.emails.inbox.push({
+      sig: "1",
       title: "New Email",
       message: "This is a new email, just for you!",
       timestamp: new Date().getTime(),
 ***REMOVED***);
-    this.emails.outbox.push({
+    this.emails.sent.push({
+      sig: "2",
       title: "Sent Email",
       message: "This is an email we have recently sent.",
       timestamp: new Date().getTime(),
 ***REMOVED***);
     this.emails.trash.push({
+      sig: "3",
       title: "Deleted Email",
       message: "This is an email that we have deleted.",
       timestamp: new Date().getTime(),

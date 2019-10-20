@@ -16,32 +16,8 @@ module.exports = EmailMain = {
   ***REMOVED***,
 
   attachEvents(app, data) {
-
     EmailList.attachEvents(app, data);
     EmailSidebar.attachEvents(app, data);
-
-    document.getElementById('email-select-icon')
-            .addEventListener('click', (e) => {
-              Array.from(document.getElementsByClassName('email-selected')).forEach(checkbox => {
-                checkbox.checked = e.currentTarget.checked;
-          ***REMOVED***);
-        ***REMOVED***);
-
-    document.getElementById('email-delete-icon')
-            .addEventListener('click', (e) => {
-              let email_list = document.querySelector('.email-list');
-              Array.from(document.getElementsByClassName('email-message')).forEach(mail => {
-                let is_checked = mail.children[0].checked;
-
-        ***REMOVED*** remove from DOM
-                if (is_checked) {
-                  email_list.removeChild(mail);
-            ***REMOVED***
-
-        ***REMOVED*** get index to remove from Array
-
-          ***REMOVED***);
-        ***REMOVED***);
   ***REMOVED***
 
 ***REMOVED***
