@@ -25,6 +25,8 @@
     "express": "^4.17.1",
     "fastest-stable-stringify": "^2.0.2",
     "fs-extra": "^8.1.0",
+    "jquery": "^3.4.1",
+    "jsdom": "^15.2.0",
     "merkle-tree-gen": "^1.1.0",
     "node-cryptojs-aes": "^0.4.0",
     "numeral": "^2.0.6",
