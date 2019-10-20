@@ -29,7 +29,7 @@ class Email extends ModTemplate {
 
   initialize(app) {
     //
-    // what does this do? function names do not adequately indicate purpose 
+    // what does this do? function names do not adequately indicate purpose
     //
     this.mods = this.app.modules.implementsKeys([
       'afterRender',
