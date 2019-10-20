@@ -11,9 +11,9 @@ class Email extends ModTemplate {
     this.name 		= "Email";
     this.chat 		= null;
 
-    this.emails 	      = {};
+    this.emails 	= {};
     this.emails.inbox 	= [];
-    this.emails.sent 	  = [];
+    this.emails.sent 	= [];
     this.emails.trash 	= [];
     this.emails.active  = "inbox";  	// inbox
 				// outbox
@@ -48,7 +48,12 @@ class Email extends ModTemplate {
     tx = this.app.wallet.signTransaction(tx);
     this.emails.sent.push(tx);
 
+  }
 
+
+  initializeHTML(app) {
+
+/*
     //
     // what does this do? function names do not adequately indicate purpose 
     //
@@ -57,13 +62,10 @@ class Email extends ModTemplate {
       'returnHTML',
       'returnButtonHTML',
     ]);
+*/
 
-  }
 
-
-  initializeHTML(app) {
-
-    this.uidata.mods	  = this.mods;
+    this.uidata.mods	  = this.app.modules.respondTo("email-app");
     this.uidata.parentmod = this;
 
     //

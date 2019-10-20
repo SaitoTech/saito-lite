@@ -32,12 +32,6 @@ class Wallet extends ModTemplate {
     );
   }
 
-  onChainReorganization(bid, bsh, lc) {}
-
-
-  onConfirmation(blk, tx, conf, app) {
-    if (conf == 0) {}
-  }
 
   shouldAffixCallbackToModule(module_name, tx=null) {
     if (tx != null) {
@@ -52,6 +46,16 @@ class Wallet extends ModTemplate {
   /*
    MODULE HTML FUNCTIONS
   */
+  respondTo(type) {
+
+    if (type == 'email') {
+      return {};
+    }
+
+    return null;
+  }
+
+
   returnButtonHTML() {
     return `<i class="fas fa-dollar-sign"><span style="margin-left: 7px">Wallet</span></i>`;
   }

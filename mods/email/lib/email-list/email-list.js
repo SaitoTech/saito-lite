@@ -45,6 +45,7 @@ module.exports = EmailList = {
                 });
 
                 data.selected_email = selected_email[0];
+		data.detail_header_title = data.selected_email.transaction.msg.title;
                 data.emailList = this;
 
                 EmailDetail.render(app, data);
