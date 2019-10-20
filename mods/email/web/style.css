@@ -246,7 +246,15 @@ body {
   display: grid;
   justify-content: right;
   grid-gap: 1em;
-  grid-template-columns: 6em auto;
+  grid-template-columns: auto auto;
+***REMOVED***
+
+#email-detail-reply {
+  cursor: pointer;
+***REMOVED***
+
+#email-detail-forward {
+  cursor: pointer;
 ***REMOVED***
 
 
