@@ -9,6 +9,12 @@ module.exports = EmailFormHeader = {
 
   attachEvents(app, data) {
     document.getElementById('email-form-back-button')
-            .addEventListener('click', (e) => EmailList.render(app, data));
+            .addEventListener('click', (e) => {
+              // data.emailList.render(app, data)
+              // data.emailList.attachEvents(app, data)
+              EmailList.render(app, data);
+              EmailList.attachEvents(app, data);
+            });
+            // EmailList.render(app, data);
   }
 }
