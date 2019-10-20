@@ -7,7 +7,6 @@
     'wallet/wallet.js',
   ],
   lite: [
-    'testing/testing.js',
     'chat/chat.js',
     'email/email.js',
     'wallet/wallet.js',
