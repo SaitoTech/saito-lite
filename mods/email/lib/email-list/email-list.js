@@ -18,21 +18,9 @@ module.exports = EmailList = {
 
         let {emails} = data.parentmod;
 
-        // if (data.parentmod.emails.active == 0) {
-        emails[emails.active].forEach(mail => {
-            document.querySelector('.email-list').innerHTML += EmailListRowTemplate(mail);
+        emails[emails.active].forEach(tx => {
+            document.querySelector('.email-list').innerHTML += EmailListRowTemplate(tx);
         });
-        // }
-        // if (data.parentmod.emails.active == 1) {
-        //   data.parentmod.emails.outbox.forEach(mail => {
-        //     document.querySelector('.email-list').innerHTML += EmailListRowTemplate(mail);
-        //   });
-        // }
-        // if (data.parentmod.emails.active == 2) {
-        //   data.parentmod.emails.trash.forEach(mail => {
-        //     document.querySelector('.email-list').innerHTML += EmailListRowTemplate(mail);
-        //   });
-        // }
     },
 
     attachEvents(app, data) {
