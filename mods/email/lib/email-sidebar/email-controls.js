@@ -1,4 +1,5 @@
 const EmailControlsTemplate = require('./email-controls.template');
+const EmailForm = require('../email-form/email-form');
 // const EmailChatTemplate = require('./email-chat.template');
 
 module.exports = EmailControls = {
@@ -36,25 +37,12 @@ module.exports = EmailControls = {
 
 	  }
 
-          if (e.target.id === "inbox") { 
-	    data.parentmod.emails.active = 0;
+	    data.parentmod.emails.active = e.target.id;
 	    EmailList.render(app, data);
 	    EmailList.attachEvents(app, data);
-	  }
-          if (e.target.id === "sent") {
-	    data.parentmod.emails.active = 1;
-	    EmailList.render(app, data);
-	    EmailList.attachEvents(app, data);
-          }
-          if (e.target.id === "trash") { 
-	    data.parentmod.emails.active = 2; 
-	    EmailList.render(app, data);
-	    EmailList.attachEvents(app, data);
-          }
 
 
        }));
-    
 
         document.getElementById('email-navigator')
                 .addEventListener('click', (e) => {
@@ -65,9 +53,11 @@ module.exports = EmailControls = {
 
         let compose_button = document.getElementById('email-compose-btn');
             compose_button.addEventListener('click', (e) => {
-                let id = e.currentTarget.id;
-                console.log(id);
-                alert("CLICKED");
+                // let id = e.currentTarget.id;
+                // console.log(id);
+                // alert("CLICKED");
+                EmailForm.render(app, data);
+                EmailForm.attachEvents(app, data);
             });
     }
 
