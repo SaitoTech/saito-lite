@@ -17,9 +17,7 @@ module.exports = EmailMain = {
 
   attachEvents(app, data) {
 
-alert("A");
     EmailList.attachEvents(app, data);
-alert("B");
     EmailSidebar.attachEvents(app, data);
 
     document.getElementById('email-select-icon')
