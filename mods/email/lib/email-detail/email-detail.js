@@ -4,7 +4,7 @@ const EmailDetailTemplate = require('./email-detail.template');
 module.exports = EmailDetail = {
   render(app, data) {
     let email_body = document.querySelector('.email-body')
-    email_body.innerHTML = EmailDetailTemplate(data.selected_mail);
+    email_body.innerHTML = EmailDetailTemplate(data.selected_email);
     console.log(email_body);
 
     EmailDetailHeader.render(app, data);
