@@ -22,7 +22,23 @@ module.exports = EmailHeader = {
 
         ***REMOVED*** remove from DOM
                 if (is_checked) {
+
+
+		  //
+		  // remove from UI
+		  //
                   email_list.removeChild(mail);
+
+		  //
+		  // tell our parentmod to purge this transaction
+		  //
+		  let mysig = mail.id;
+                  for (let i = 0; i < data.parentmod.emails[data.parentmod.emails.active].length; i++) {
+		    let mytx = data.parentmod.emails[data.parentmod.emails.active][i];
+		    if (mytx.transaction.sig == mysig) {
+		      data.parentmod.deleteTransaction(mytx);
+		***REMOVED***
+		  ***REMOVED***
             ***REMOVED***
 
         ***REMOVED*** get index to remove from Array
