@@ -28,30 +28,6 @@ class Email extends ModTemplate {
   ***REMOVED***
 
   initialize(app) {
- 
-    //
-    // add an email
-    //
-    this.emails.inbox.push({
-      sig: "1",
-      title: "New Email",
-      message: "This is a new email, just for you!",
-      timestamp: new Date().getTime(),
-***REMOVED***);
-    this.emails.sent.push({
-      sig: "2",
-      title: "Sent Email",
-      message: "This is an email we have recently sent.",
-      timestamp: new Date().getTime(),
-***REMOVED***);
-    this.emails.trash.push({
-      sig: "3",
-      title: "Deleted Email",
-      message: "This is an email that we have deleted.",
-      timestamp: new Date().getTime(),
-***REMOVED***);
-
-
     //
     // what does this do? function names do not adequately indicate purpose 
     //
@@ -101,15 +77,16 @@ class Email extends ModTemplate {
     this.app.storage.loadTransactions("Email", 50, (txs) => {
 
       for (let i = 0; i < txs.length; i++) {
-	this.emails.inbox.unshift(txs[i].transaction.msg);
-	EmailList.render(this.app, this.uidata);
-	EmailList.attachEvents(this.app, this.uidata);
+        this.emails.inbox.unshift(txs[i]);
   ***REMOVED***
+
+      EmailList.render(this.app, this.uidata);
+      EmailList.attachEvents(this.app, this.uidata);
 
 ***REMOVED***);
 
-    if (this.app.BROWSER) { 
-      EmailList.render(this.app, this.uidata); 
+    if (this.app.BROWSER) {
+      EmailList.render(this.app, this.uidata);
       EmailList.attachEvents(this.app, this.uidata);
 ***REMOVED***
 
