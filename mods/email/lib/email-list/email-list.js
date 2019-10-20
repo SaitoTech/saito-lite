@@ -18,21 +18,9 @@ module.exports = EmailList = {
 
         let {emails***REMOVED*** = data.parentmod;
 
-***REMOVED*** if (data.parentmod.emails.active == 0) {
-        emails[emails.active].forEach(mail => {
-            document.querySelector('.email-list').innerHTML += EmailListRowTemplate(mail);
+        emails[emails.active].forEach(tx => {
+            document.querySelector('.email-list').innerHTML += EmailListRowTemplate(tx);
     ***REMOVED***);
-***REMOVED*** ***REMOVED***
-***REMOVED*** if (data.parentmod.emails.active == 1) {
-***REMOVED***   data.parentmod.emails.outbox.forEach(mail => {
-***REMOVED***     document.querySelector('.email-list').innerHTML += EmailListRowTemplate(mail);
-***REMOVED***   ***REMOVED***);
-***REMOVED*** ***REMOVED***
-***REMOVED*** if (data.parentmod.emails.active == 2) {
-***REMOVED***   data.parentmod.emails.trash.forEach(mail => {
-***REMOVED***     document.querySelector('.email-list').innerHTML += EmailListRowTemplate(mail);
-***REMOVED***   ***REMOVED***);
-***REMOVED*** ***REMOVED***
 ***REMOVED***,
 
     attachEvents(app, data) {
