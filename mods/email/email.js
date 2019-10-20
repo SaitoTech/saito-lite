@@ -2,8 +2,6 @@ const saito = require('../../lib/saito/saito.js');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const EmailMain = require('./lib/email-main/email-main');
 
-// external dependency
-const numeral = require('numeral');
 
 class Email extends ModTemplate {
 
@@ -43,7 +41,7 @@ class Email extends ModTemplate {
     this.emails.inbox.push(tx);
 
 
-    let tx = app.wallet.createUnsignedTransaction();
+        tx = app.wallet.createUnsignedTransaction();
         tx.transaction.msg.module 	= "Email";
         tx.transaction.msg.title 	= "Welcome to Saito";
         tx.transaction.msg.message	= "This is where your sent messages go...";
@@ -184,7 +182,7 @@ class Email extends ModTemplate {
 
   updateBalance() {
     if (this.app.BROWSER) {
-      document.querySelector('.email-balance').innerHTML  = numeral(this.app.wallet.returnBalance()).format('0,0.0000');
+      document.querySelector('.email-balance').innerHTML = this.app.wallet.returnBalance();
     }
   }
 
