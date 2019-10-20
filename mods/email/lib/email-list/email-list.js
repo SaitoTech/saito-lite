@@ -16,10 +16,11 @@ module.exports = EmailList = {
 
         document.querySelector('.email-body').innerHTML = EmailListTemplate();
 
-        let {emails***REMOVED*** = data.parentmod;
+        let { emails ***REMOVED*** = data.parentmod;
 
         emails[emails.active].forEach(tx => {
-            document.querySelector('.email-list').innerHTML += EmailListRowTemplate(tx);
+            document.querySelector('.email-list').innerHTML
+                += EmailListRowTemplate(tx);
     ***REMOVED***);
 ***REMOVED***,
 
@@ -36,16 +37,17 @@ module.exports = EmailList = {
 **/
         Array.from(document.getElementsByClassName('email-message')).forEach(message => {
             message.addEventListener('click', (e) => {
+                if (e.srcElement.nodeName == "INPUT") { return; ***REMOVED***
+
                 let sig = e.currentTarget.id;
                 let selected_email = data.parentmod.emails["inbox"].filter(email => {
-                    return email.sig === sig
+                    return email.transaction.sig === sig
             ***REMOVED***);
 
                 data.selected_email = selected_email[0];
                 data.emailList = this;
 
                 EmailDetail.render(app, data);
-                alert("WE CLICKED FAM")
         ***REMOVED***);
     ***REMOVED***);
 ***REMOVED***

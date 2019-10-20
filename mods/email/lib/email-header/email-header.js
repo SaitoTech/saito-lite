@@ -41,8 +41,6 @@ module.exports = EmailHeader = {
 		  ***REMOVED***
             ***REMOVED***
 
-        ***REMOVED*** get index to remove from Array
-
           ***REMOVED***);
         ***REMOVED***);
   ***REMOVED***,

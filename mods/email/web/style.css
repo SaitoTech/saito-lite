@@ -31,13 +31,14 @@ body {
 
 .email-icons {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between;    display: grid;
+  grid-template-columns: 2em auto;
 ***REMOVED***
 
 .email-detail-options {
-  display: flex;
-  justify-content: space-between;
-  width: 8.5em;
+  display: grid;
+  grid-template-columns: 2em auto;
+  width: 50vw;
 ***REMOVED***
 
 #email-form-back-button {
@@ -215,6 +216,24 @@ body {
   white-space: pre;
   overflow: auto;
   padding: 20px;
+***REMOVED***
+
+
+/** DETAIL **/
+.email-detail-addresses {
+  padding: 10px 0px;
+  border-bottom: 1px solid lightgrey;
+  display: grid;
+  grid-gap: 0.5em;
+***REMOVED***
+
+.email-detail-address-row {
+  display: grid;
+  grid-template-rows: 2em auto;
+***REMOVED***
+
+.email-detail-message {
+  padding: 10px 0px;
 ***REMOVED***
 
 @media only screen and (max-width: 600px) {
