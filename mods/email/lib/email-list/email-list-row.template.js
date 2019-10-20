@@ -2,10 +2,11 @@ module.exports = EmailListRowTemplate = (tx) => {
 
   let message 	= tx.transaction.msg.message;
   let title   	= tx.transaction.msg.title;
-  let timestamp = tx.transaction.ts;
+  let from      = tx.transaction.from;
+  let ts        = tx.transaction.ts;
   let sig 	= tx.transaction.sig;
 
-  let datetime = new Date(timestamp);
+  let datetime = new Date(ts);
   let hours = datetime.getHours();
   let minutes = datetime.getMinutes();
   minutes = minutes.toString().length == 1 ? `0${minutes}` : `${minutes}`;

@@ -36,9 +36,10 @@ class Email extends ModTemplate {
         tx.transaction.msg.module 	= "Email";
         tx.transaction.msg.title 	= "New Email";
         tx.transaction.msg.message	= "This is a new email, just for you!!!";
-    tx = this.app.signTransaction(tx);
+    tx = this.app.wallet.signTransaction(tx);
 
     this.emails.inbox.push(tx);
+
 /*
     this.emails.sent.push({
       sig: "2",
@@ -117,15 +118,16 @@ class Email extends ModTemplate {
     this.app.storage.loadTransactions("Email", 50, (txs) => {
 
       for (let i = 0; i < txs.length; i++) {
-	this.emails.inbox.unshift(txs[i]);
-	EmailList.render(this.app, this.uidata);
-	EmailList.attachEvents(this.app, this.uidata);
+        this.emails.inbox.unshift(txs[i]);
       }
+
+      EmailList.render(this.app, this.uidata);
+      EmailList.attachEvents(this.app, this.uidata);
 
     });
 
-    if (this.app.BROWSER) { 
-      EmailList.render(this.app, this.uidata); 
+    if (this.app.BROWSER) {
+      EmailList.render(this.app, this.uidata);
       EmailList.attachEvents(this.app, this.uidata);
     }
 

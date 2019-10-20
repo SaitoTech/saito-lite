@@ -41,8 +41,6 @@ module.exports = EmailHeader = {
 		  }
                 }
 
-                // get index to remove from Array
-
               });
             });
   },
