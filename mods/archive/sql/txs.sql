@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS records (
+CREATE TABLE IF NOT EXISTS txs (
   id INTEGER,
   sig TEXT,
   publickey TEXT,
