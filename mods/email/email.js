@@ -32,12 +32,14 @@ class Email extends ModTemplate {
     //
     // add an email
     //
-    this.emails.inbox.push({
-      sig: "1",
-      title: "New Email",
-      message: "This is a new email, just for you!",
-      timestamp: new Date().getTime(),
-***REMOVED***);
+    let tx = new saito.transaction();
+        tx.transaction.msg.module 	= "Email";
+        tx.transaction.msg.title 	= "New Email";
+        tx.transaction.msg.message	= "This is a new email, just for you!!!";
+    tx = this.app.signTransaction(tx);
+
+    this.emails.inbox.push(tx);
+/*
     this.emails.sent.push({
       sig: "2",
       title: "Sent Email",
@@ -50,7 +52,7 @@ class Email extends ModTemplate {
       message: "This is an email that we have deleted.",
       timestamp: new Date().getTime(),
 ***REMOVED***);
-
+*/
 
     //
     // what does this do? function names do not adequately indicate purpose 
@@ -85,6 +87,20 @@ class Email extends ModTemplate {
 
 
 
+  deleteTransaction(tx) {
+
+    for (let i = 0; i < data.parentmod.emails[data.parentmod.emails.active].length; i++) {
+      let mytx = data.parentmod.emails[data.parentmod.emails.active][i];
+      if (mytx.transaction.sig == tx.transaction.sig) {
+        this.app.storage.deleteTransaction(tx);
+        data.parentmod.emails[data.parentmod.emails.active].splice(i, 1);
+        data.parentmod.emails['trash'].unshift(tx);
+  ***REMOVED***
+***REMOVED***
+
+  ***REMOVED***
+
+
   //
   // load transactions into interface when the network is up
   //
@@ -101,7 +117,7 @@ class Email extends ModTemplate {
     this.app.storage.loadTransactions("Email", 50, (txs) => {
 
       for (let i = 0; i < txs.length; i++) {
-	this.emails.inbox.unshift(txs[i].transaction.msg);
+	this.emails.inbox.unshift(txs[i]);
 	EmailList.render(this.app, this.uidata);
 	EmailList.attachEvents(this.app, this.uidata);
   ***REMOVED***
