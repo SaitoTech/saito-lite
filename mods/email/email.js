@@ -2,8 +2,6 @@ const saito = require('../../lib/saito/saito.js');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const EmailMain = require('./lib/email-main/email-main');
 
-// external dependency
-const numeral = require('numeral');
 
 class Email extends ModTemplate {
 
@@ -28,6 +26,29 @@ class Email extends ModTemplate {
   ***REMOVED***
 
   initialize(app) {
+
+
+
+
+    //
+    // add an email
+    //
+    let tx = app.wallet.createUnsignedTransaction();
+        tx.transaction.msg.module 	= "Email";
+        tx.transaction.msg.title 	= "Welcome to Saito";
+        tx.transaction.msg.message	= "This is a fresh email, added " + new Date().getTime();
+    tx = this.app.wallet.signTransaction(tx);
+    this.emails.inbox.push(tx);
+
+
+        tx = app.wallet.createUnsignedTransaction();
+        tx.transaction.msg.module 	= "Email";
+        tx.transaction.msg.title 	= "Welcome to Saito";
+        tx.transaction.msg.message	= "This is where your sent messages go...";
+    tx = this.app.wallet.signTransaction(tx);
+    this.emails.sent.push(tx);
+
+
     //
     // what does this do? function names do not adequately indicate purpose
     //
@@ -61,10 +82,31 @@ class Email extends ModTemplate {
 
 
 
+  deleteTransaction(tx) {
+
+    for (let i = 0; i < this.emails[this.emails.active].length; i++) {
+      let mytx = this.emails[this.emails.active][i];
+      if (mytx.transaction.sig == tx.transaction.sig) {
+        this.app.storage.deleteTransaction(tx);
+        this.emails[this.emails.active].splice(i, 1);
+        this.emails['trash'].unshift(tx);
+  ***REMOVED***
+***REMOVED***
+
+  ***REMOVED***
+
+
   //
   // load transactions into interface when the network is up
   //
   onPeerHandshakeComplete(app, peer) {
+
+
+    //
+    // used in testing SAVE -- works now
+    //
+    //this.app.storage.saveTransaction(this.emails['inbox'][0]);
+
 
     //
     // leaving this here for the short term,
@@ -73,6 +115,7 @@ class Email extends ModTemplate {
     // should just handle emails
     //
     //this.getTokens();
+
 
     this.app.storage.loadTransactions("Email", 50, (txs) => {
 
@@ -84,6 +127,7 @@ class Email extends ModTemplate {
       EmailList.attachEvents(this.app, this.uidata);
 
 ***REMOVED***);
+
 
     if (this.app.BROWSER) {
       EmailList.render(this.app, this.uidata);
@@ -137,12 +181,9 @@ class Email extends ModTemplate {
   ***REMOVED***
 
   updateBalance() {
-/**
     if (this.app.BROWSER) {
-      document.querySelector('.email-balance').innerHTML
-        = numeral(this.app.wallet.returnBalance()).format('0,0.0000');
+      document.querySelector('.email-balance').innerHTML = this.app.wallet.returnBalance();
 ***REMOVED***
-***/
   ***REMOVED***
 
 ***REMOVED***

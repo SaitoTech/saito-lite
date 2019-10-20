@@ -1,4 +1,10 @@
-module.exports = EmailListRowTemplate = ({from, sig, ts***REMOVED***, {title, message***REMOVED***) => {
+module.exports = EmailListRowTemplate = (tx) => {
+
+  let message 	= tx.transaction.msg.message;
+  let title   	= tx.transaction.msg.title;
+  let from      = tx.transaction.from;
+  let ts        = tx.transaction.ts;
+  let sig 	= tx.transaction.sig;
 
   let datetime = new Date(ts);
   let hours = datetime.getHours();

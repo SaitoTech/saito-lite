@@ -18,9 +18,9 @@ module.exports = EmailList = {
 
         let { emails ***REMOVED*** = data.parentmod;
 
-        emails[emails.active].forEach(mail => {
+        emails[emails.active].forEach(tx => {
             document.querySelector('.email-list').innerHTML
-                += EmailListRowTemplate(mail.transaction, mail.returnMessage());
+                += EmailListRowTemplate(tx);
     ***REMOVED***);
 ***REMOVED***,
 
