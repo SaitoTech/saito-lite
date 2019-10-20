@@ -6,11 +6,6 @@ module.exports = EmailContainerTemplate = () => {
       </div>
       <div class="email-content">
         <div class="email-header">
-          <div class="email-icons">
-            <input id="email-select-icon" type="checkbox">
-            <i id="email-delete-icon" class="icon-med fas fa-trash-alt"></i>
-          </div>
-          <div class="email-balance">${("0.0000000").replace(/0+$/,'').replace(/\.$/,'\.0')} Saito</div>
         </div>
         <div class="email-body">
         </div>

@@ -1,5 +1,5 @@
-const EmailAddTemplate = require('./email-form.template.js');
-// const EmailList = require('../email-list/email-list');
+const EmailFormTemplate = require('./email-form.template.js');
+const EmailFormHeader = require("../email-header/email-form-header/email-form-header");
 
 var numeral = require('numeral');
 
@@ -14,7 +14,8 @@ module.exports = EmailForm = {
         this.app = app;
         this.saito = this.app;
 
-        document.querySelector(".email-body").innerHTML = EmailAddTemplate();
+        EmailFormHeader.render(app, data);
+        document.querySelector(".email-body").innerHTML = EmailFormTemplate();
 
         this.addData();
     },
@@ -23,8 +24,8 @@ module.exports = EmailForm = {
         document.querySelector('.email-submit')
             .addEventListener('click', (e) => this.sendEmailTransaction());
 
-        document.querySelector('.raw-switch')
-            .addEventListener('click', (e) => this.popluateRawMessage());
+        // document.querySelector('.raw-switch')
+        //     .addEventListener('click', (e) => this.popluateRawMessage());
     },
 
 
