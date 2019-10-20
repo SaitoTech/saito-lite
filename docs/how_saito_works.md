@@ -22,9 +22,9 @@ Consensus rules specify that nodes cannot use "routing work" from transactions t
 
 ## 3. THE PAYMENT LOTTERY
 
-Each block contains a proof-of-work challenge in the form of its block hash. If a miner finds a solution to this challenge it broadcasts it as part of a normal Saito transaction. We call the solution the "golden ticket".
+Each block contains a proof-of-work challenge in the form of its block hash. If a miner finds a solution to this challenge it broadcasts it in a fee-paying transaction we call the "golden ticket".
 
-If one valid golden ticket is included in the very next block the network will split the block reward for the previous block between the miner that found the solution and a lucky routing node. The winning routing node is selected using a random variable included in the miner solution. The "paysplit" of the network is 50-50 by default (half to miners, half to routers). Tickets are distributed so that each node has a chance of winning proportional to the amount of routing work it contributed to the block.\footnote[1]{If a transaction paying a 10 SAITO fee passes through two relay nodes before its inclusion in a block, the first relay node is deemed to have done 10 / 17.5 percent (57\%), the second node is deemed to have done 5 / 17.5 percent (29\%), and the block producer is deemed to have done 2.5 / 17.5 percent (14\%) of the routing work for that transaction. If a transaction is included without a routing path, the originator is assigned all of the work for that transaction.} 
+If one valid golden ticket is included in the very next block the network will split the block reward for the previous block between the miner that found the solution and a lucky routing node. The winning routing node is selected using a random variable included in the miner solution. The "paysplit" of the network is 50-50 by default (half to miners, half to routers). Tickets are distributed so that each node has a chance of winning proportional to the amount of routing work it contributed to the block.
 
 Mining difficulty auto-adjusts until the network produces one golden ticket on average per block.
 
