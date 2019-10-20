@@ -25,8 +25,6 @@ module.exports = EmailHeader = {
                   email_list.removeChild(mail);
                 }
 
-                // get index to remove from Array
-
               });
             });
   },

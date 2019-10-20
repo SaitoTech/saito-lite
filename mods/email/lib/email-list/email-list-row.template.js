@@ -1,6 +1,6 @@
-module.exports = EmailListRowTemplate = ({title, message, timestamp, sig}) => {
+module.exports = EmailListRowTemplate = ({from, sig, ts}, {title, message}) => {
 
-  let datetime = new Date(timestamp);
+  let datetime = new Date(ts);
   let hours = datetime.getHours();
   let minutes = datetime.getMinutes();
   minutes = minutes.toString().length == 1 ? `0${minutes}` : `${minutes}`;

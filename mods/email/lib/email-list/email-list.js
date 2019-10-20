@@ -16,23 +16,12 @@ module.exports = EmailList = {
 
         document.querySelector('.email-body').innerHTML = EmailListTemplate();
 
-        let {emails} = data.parentmod;
+        let { emails } = data.parentmod;
 
-        // if (data.parentmod.emails.active == 0) {
         emails[emails.active].forEach(mail => {
-            document.querySelector('.email-list').innerHTML += EmailListRowTemplate(mail);
+            document.querySelector('.email-list').innerHTML
+                += EmailListRowTemplate(mail.transaction, mail.returnMessage());
         });
-        // }
-        // if (data.parentmod.emails.active == 1) {
-        //   data.parentmod.emails.outbox.forEach(mail => {
-        //     document.querySelector('.email-list').innerHTML += EmailListRowTemplate(mail);
-        //   });
-        // }
-        // if (data.parentmod.emails.active == 2) {
-        //   data.parentmod.emails.trash.forEach(mail => {
-        //     document.querySelector('.email-list').innerHTML += EmailListRowTemplate(mail);
-        //   });
-        // }
     },
 
     attachEvents(app, data) {
@@ -48,16 +37,17 @@ module.exports = EmailList = {
 **/
         Array.from(document.getElementsByClassName('email-message')).forEach(message => {
             message.addEventListener('click', (e) => {
+                if (e.srcElement.nodeName == "INPUT") { return; }
+
                 let sig = e.currentTarget.id;
                 let selected_email = data.parentmod.emails["inbox"].filter(email => {
-                    return email.sig === sig
+                    return email.transaction.sig === sig
                 });
 
                 data.selected_email = selected_email[0];
                 data.emailList = this;
 
                 EmailDetail.render(app, data);
-                alert("WE CLICKED FAM")
             });
         });
     }
