@@ -21,6 +21,11 @@ class Email extends ModTemplate {
 
     this.mods   	= [];
 
+    this.header 	= 0;	// 0 = standard email controls
+				// 1 = title + back-button
+
+    this.appspace_mod_idx = -1; // index in mods of appspace module
+
     this.uidata		= {};
 
   }
@@ -53,24 +58,9 @@ class Email extends ModTemplate {
 
   initializeHTML(app) {
 
-/*
-    //
-    // what does this do? function names do not adequately indicate purpose
-    //
-    this.mods = this.app.modules.implementsKeys([
-      'afterRender',
-      'returnHTML',
-      'returnButtonHTML',
-    ]);
-*/
-
-
-    this.uidata.mods	  = this.app.modules.respondTo("email-app");
+    this.uidata.mods	  = this.app.modules.respondTo("email-appspace");
     this.uidata.parentmod = this;
 
-    //
-    // add all HTML elements to DOM
-    //
     EmailMain.render(app, this.uidata);
     EmailMain.attachEvents(app, this.uidata);
 

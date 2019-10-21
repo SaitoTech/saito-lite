@@ -25,16 +25,7 @@ module.exports = EmailList = {
     },
 
     attachEvents(app, data) {
-/**
- * - how do we know which email is clicked on, etc.
- *
-        document.querySelector('#email.create-button')
-            .addEventListener('click', (e) => {
-                data.emailList = this;
-                EmailForm.render(app, data);
-                EmailForm.attachEvents(app);
-            });
-**/
+
         Array.from(document.getElementsByClassName('email-message')).forEach(message => {
             message.addEventListener('click', (e) => {
                 if (e.srcElement.nodeName == "INPUT") { return; }
@@ -45,11 +36,14 @@ module.exports = EmailList = {
                 });
 
                 data.selected_email = selected_email[0];
-		data.detail_header_title = data.selected_email.transaction.msg.title;
+		data.parentmod.header = 0;
+		data.parentmod.header_title = data.selected_email.transaction.msg.title;
                 data.emailList = this;
 
                 EmailDetail.render(app, data);
             });
         });
+
     }
 }
+

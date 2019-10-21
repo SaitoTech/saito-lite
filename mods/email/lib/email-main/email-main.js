@@ -1,5 +1,5 @@
 const EmailMainTemplate = require('./email-main.template');
-const EmailList = require('../email-list/email-list');
+const EmailList = require('./email-list/email-list');
 const EmailSidebar = require('../email-sidebar/email-sidebar');
 
 module.exports = EmailMain = {
