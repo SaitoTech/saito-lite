@@ -18,7 +18,7 @@ class Encrypt extends ModTemplate {
 
   respondTo(type) {
 
-    if (type == 'email-app') {
+    if (type == 'email-appspace') {
       let obj = {***REMOVED***;
 	  obj.email_headers = 1;
 	  obj.render = this.renderEmail;
@@ -31,7 +31,11 @@ class Encrypt extends ModTemplate {
 
   renderEmail(app, data) {
 
-     document.querySelector(".email-app").innerHTML = '<div>Inserting this into the Email APP space in Encrypt module</div>';
+     let EncryptAppspace = require('./lib/email-appspace/encrypt-appspace');
+     EncryptAppspace.render(app, data);
+     EncryptAppspace.attachEvents(app, data);
+
+//     document.querySelector(".email-appspace").innerHTML = '<div>Inserting this into the Email APP space in Encrypt module</div>';
    
   ***REMOVED***
 
