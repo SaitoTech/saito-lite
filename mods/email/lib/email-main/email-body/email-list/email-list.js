@@ -20,16 +20,17 @@ module.exports = EmailList = {
                 if (e.srcElement.nodeName == "INPUT") { return; ***REMOVED***
 
                 let sig = e.currentTarget.id;
-                let selected_email = data.parentmod.emails["inbox"].filter(email => {
-                    return email.transaction.sig === sig
+                let selected_email = data.parentmod.emails[data.parentmod.emails.active].filter(tx => {
+                    return tx.transaction.sig === sig
             ***REMOVED***);
 
-                data.selected_email = selected_email[0];
+                data.parentmod.selected_email = selected_email[0];
 		data.parentmod.header = 0;
-		data.parentmod.header_title = data.selected_email.transaction.msg.title;
+		data.parentmod.header_title = data.parentmod.selected_email.transaction.msg.title;
                 data.emailList = this;
 
                 EmailDetail.render(app, data);
+
         ***REMOVED***);
     ***REMOVED***);
 
