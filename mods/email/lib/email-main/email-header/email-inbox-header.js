@@ -23,13 +23,7 @@ module.exports = EmailInboxHeader = {
 
         ***REMOVED*** remove from DOM
                 if (is_checked) {
-
-
-    //
-		  // remove from UI
-		  //
                   email_list.removeChild(mail);
-
 		  //
 		  // tell our parentmod to purge this transaction
 		  //
