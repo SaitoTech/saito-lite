@@ -6,7 +6,7 @@ module.exports = EmailControls = {
 
     render(app, data) {
 
-        document.querySelector(".email-sidebar").innerHTML += EmailControlsTemplate();
+        document.querySelector(".email-controls").innerHTML = EmailControlsTemplate();
 
         let email_apps = document.querySelector(".email-apps");
         for (let i = 0; i < data.mods.length; i++) {

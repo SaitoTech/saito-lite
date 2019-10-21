@@ -1,6 +1,5 @@
 const EmailMainTemplate = require('./email-main.template');
 const EmailList = require('./email-list/email-list');
-const EmailSidebar = require('../email-sidebar/email-sidebar');
 
 module.exports = EmailMain = {
 
@@ -11,13 +10,11 @@ module.exports = EmailMain = {
     email_main.innerHTML = EmailMainTemplate();
 
     EmailList.render(app, data);
-    EmailSidebar.render(app, data);
 
   ***REMOVED***,
 
   attachEvents(app, data) {
     EmailList.attachEvents(app, data);
-    EmailSidebar.attachEvents(app, data);
   ***REMOVED***
 
 ***REMOVED***
