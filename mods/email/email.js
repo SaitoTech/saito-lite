@@ -30,6 +30,7 @@ class Email extends ModTemplate {
     this.selected_email		= null;
 
     this.appspace		= 0;	// print email-body with appspace
+    this.appspace_mod		= null;
     this.appspace_mod_idx 	= -1; // index in mods of appspace module
 
     this.uidata			= {***REMOVED***;
