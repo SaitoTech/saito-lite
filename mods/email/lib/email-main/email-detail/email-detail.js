@@ -1,4 +1,4 @@
-const EmailDetailHeader   = require('../email-header/email-detail-header/email-detail-header');
+const EmailDetailHeader   = require('../email-header/email-detail-header');
 const EmailDetailTemplate = require('./email-detail.template');
 
 module.exports = EmailDetail = {

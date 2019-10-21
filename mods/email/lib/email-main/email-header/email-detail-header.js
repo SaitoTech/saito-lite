@@ -1,19 +1,31 @@
-const EmailForm = require('../../email-form/email-form');
+const EmailForm = require('../email-form/email-form');
 const EmailDetailHeaderTemplate = require('./email-detail-header.template');
 
 module.exports = EmailDetailHeader = {
+
   render(app, data) {
-    document.querySelector('.email-header').innerHTML = EmailDetailHeaderTemplate(data.detail_header_title);
+    document.querySelector('.email-header').innerHTML = EmailDetailHeaderTemplate(data.parentmod.header_title);
     this.attachEvents(app, data);
   ***REMOVED***,
 
+
   attachEvents(app, data) {
+
     document.getElementById('email-form-back-button')
             .addEventListener('click', (e) => {
-      ***REMOVED*** reset selected_email;
+
+	      data.parentmod.emails.active = "inbox";
+	      data.parentmod.header = 0;
               data.parentmod.selected_email = {***REMOVED***;
-              data.emailList.render(app, data);
-              data.emailList.attachEvents(app, data);
+
+              EmailList.render(app, data);
+              EmailList.attachEvents(app, data);
+
+              EmailSidebar.render(app, data);
+              EmailSidebar.attachEvents(app, data);
+
+      ***REMOVED***data.emailList.render(app, data);
+      ***REMOVED***data.emailList.attachEvents(app, data);
         ***REMOVED***);
 
     document.getElementById('email-detail-reply')

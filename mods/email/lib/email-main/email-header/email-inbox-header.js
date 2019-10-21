@@ -1,12 +1,15 @@
-const EmailHeaderTemplate = require('./email-header.template');
+const EmailInboxHeaderTemplate = require('./email-inbox-header.template');
 
-module.exports = EmailHeader = {
+module.exports = EmailInboxHeader = {
+
   render(app, data) {
-    document.querySelector('.email-header').innerHTML = EmailHeaderTemplate();
-    this.attachEvents(app, data);
+    if (data.parentmod.header == 0) {
+      document.querySelector('.email-header').innerHTML = EmailInboxHeaderTemplate();
+***REMOVED***
   ***REMOVED***,
 
   attachEvents(app, data) {
+
     document.getElementById('email-select-icon')
             .addEventListener('click', (e) => {
               Array.from(document.getElementsByClassName('email-selected')).forEach(checkbox => {

@@ -1,6 +1,6 @@
 const EmailControlsTemplate = require('./email-controls.template');
-const EmailForm = require('../email-form/email-form');
-// const EmailChatTemplate = require('./email-chat.template');
+const EmailForm = require('../email-main/email-form/email-form');
+const EmailAppspace = require('../email-main/email-appspace/email-appspace');
 
 module.exports = EmailControls = {
 
@@ -10,7 +10,7 @@ module.exports = EmailControls = {
 
         let email_apps = document.querySelector(".email-apps");
         for (let i = 0; i < data.mods.length; i++) {
-            email_apps.innerHTML += `<li class="email-apps-item">${data.mods[i].name***REMOVED***</li>`;
+            email_apps.innerHTML += `<li class="email-apps-item" id="${i***REMOVED***">${data.mods[i].name***REMOVED***</li>`;
     ***REMOVED***
 
 ***REMOVED***,
@@ -34,6 +34,7 @@ module.exports = EmailControls = {
 		    if (item2 != e.currentTarget) {
 		      item2.classList.remove("active-navigator-item");
 	              e.currentTarget.classList.add("active-navigator-item");
+
 		***REMOVED***
 		  ***REMOVED***
           ***REMOVED***);
@@ -48,10 +49,14 @@ module.exports = EmailControls = {
 		  ***REMOVED***
           ***REMOVED***);
 
-	***REMOVED***
 
-	    data.detail_header_title = "Application";
-    	    EmailDetailHeader.render(app, data);
+	      data.parentmod.header = 0;
+	      data.parentmod.header_title = "";
+
+    	      EmailHeader.render(app, data);
+	      EmailHeader.attachEvents(app, data);
+
+	***REMOVED***
 
 	***REMOVED***));
 
@@ -86,11 +91,18 @@ module.exports = EmailControls = {
 		  ***REMOVED***
           ***REMOVED***);
 
+
+	      data.parentmod.header = 1;
+	      data.parentmod.header_title = "Application";
+	      data.parentmod.appspace_mod_idx = e.currentTarget.id;
+
+              EmailHeader.render(app, data);
+	      EmailHeader.attachEvents(app, data);
+
+    	      EmailAppspace.render(app, data);
+	      EmailAppspace.attachEvents(app, data);
 	  ***REMOVED***
 
-alert("loading app...");
-    data.detail_header_title = "Application Title";
-    EmailDetailHeader.render(app, data);
 
 	***REMOVED***));
 

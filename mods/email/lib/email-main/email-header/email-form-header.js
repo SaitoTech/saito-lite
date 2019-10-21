@@ -1,7 +1,8 @@
-const EmailList = require('../../email-list/email-list');
+const EmailList = require('../email-list/email-list');
 const EmailFormHeaderTemplate = require('./email-form-header.template');
 
 module.exports = EmailFormHeader = {
+
   render(app, data) {
     document.querySelector('.email-header').innerHTML = EmailFormHeaderTemplate();
     this.attachEvents(app, data);
