@@ -118,7 +118,14 @@ body {
 
 
 .email-sidebar {
+  /* display: grid;
+  grid-gap: 1em; */
+  margin: 10px 10px;
+}
+
+.email-controls {
   display: grid;
+  grid-template-rows: 3em 6em auto;
   grid-gap: 1em;
 }
 
@@ -127,7 +134,6 @@ body {
   list-style-type: none;
   font-size: 1.2em;
   line-height: 1.4em;
-  margin: 0px 10px;
   padding-bottom: 10px;
 }
 
@@ -152,11 +158,6 @@ body {
 }
 
 .email-compose-btn {
-  width:100%;
-  margin-left: auto;
-  margin-right:auto;
-  margin-bottom:20px;
-  margin-top:20px;
   font-size: 1.2em;
 }
 
