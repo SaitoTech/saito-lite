@@ -1,5 +1,6 @@
 const EmailControlsTemplate = require('./email-controls.template');
-const EmailAppspace = require('../email-main/email-body/email-appspace/email-appspace');
+const EmailHeader = require('../email-main/email-header/email-header');
+const EmailBody = require('../email-main/email-body/email-body');
 
 module.exports = EmailControls = {
 
@@ -34,6 +35,17 @@ module.exports = EmailControls = {
 		      item2.classList.remove("active-navigator-item");
 	              e.currentTarget.classList.add("active-navigator-item");
 
+		      if (e.currentTarget.id == "inbox") {
+			data.parentmod.emails.active = "inbox";
+		      }
+		      if (e.currentTarget.id == "sent") {
+			data.parentmod.emails.active = "sent";
+		      }
+		      if (e.currentTarget.id == "trash") {
+			data.parentmod.emails.active = "trash";
+		      }
+
+
 		    }
 		  }
               });
@@ -44,16 +56,30 @@ module.exports = EmailControls = {
 		    if (item2 != e.currentTarget) {
 		      item2.classList.remove("active-navigator-item");
 	              e.currentTarget.classList.add("active-navigator-item");
+
+		      if (e.currentTarget.id == "inbox") {
+			data.parentmod.emails.active = "inbox";
+		      }
+		      if (e.currentTarget.id == "sent") {
+			data.parentmod.emails.active = "sent";
+		      }
+		      if (e.currentTarget.id == "trash") {
+			data.parentmod.emails.active = "trash";
+		      }
+
 		    }
 		  }
               });
 
-
+	      data.parentmod.appspace = 0;
 	      data.parentmod.header = 0;
 	      data.parentmod.header_title = "";
 
     	      EmailHeader.render(app, data);
 	      EmailHeader.attachEvents(app, data);
+
+    	      EmailBody.render(app, data);
+	      EmailBody.attachEvents(app, data);
 
 	    }
 
@@ -91,6 +117,7 @@ module.exports = EmailControls = {
               });
 
 
+	      data.parentmod.appspace = 1;
 	      data.parentmod.header = 1;
 	      data.parentmod.header_title = "Application";
 	      data.parentmod.appspace_mod_idx = e.currentTarget.id;
@@ -98,7 +125,6 @@ module.exports = EmailControls = {
               EmailHeader.render(app, data);
 	      EmailHeader.attachEvents(app, data);
 
-	      data.parentmod.appspace = 1;
     	      EmailAppspace.render(app, data);
 	      EmailAppspace.attachEvents(app, data);
 
@@ -108,20 +134,15 @@ module.exports = EmailControls = {
 	}));
 
 
-        document.getElementById('email-navigator')
-                .addEventListener('click', (e) => {
-                    if (e.target && e.target.nodeName == "LI") {
-                        console.log(e.target.id + " was clicked");
-                    }
-                })
-
         let compose_button = document.getElementById('email-compose-btn');
             compose_button.addEventListener('click', (e) => {
-                // let id = e.currentTarget.id;
-                // console.log(id);
-                // alert("CLICKED");
-                EmailForm.render(app, data);
-                EmailForm.attachEvents(app, data);
+
+	      data.parentmod.appspace = 1;
+	      data.parentmod.header = 1;
+	      data.parentmod.header_title = "Compose Email";
+
+              EmailForm.render(app, data);
+              EmailForm.attachEvents(app, data);
             });
     }
 

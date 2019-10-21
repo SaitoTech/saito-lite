@@ -9,27 +9,27 @@ class Email extends ModTemplate {
   constructor(app) {
     super(app);
 
-    this.name 		= "Email";
-    this.chat 		= null;
+    this.name 			= "Email";
+    this.chat 			= null;
 
-    this.emails 	= {};
-    this.emails.inbox 	= [];
-    this.emails.sent 	= [];
-    this.emails.trash 	= [];
-    this.emails.active  = "inbox";  	
-				// inbox
-				// outbox
-				// trash
+    this.emails 		= {};
+    this.emails.inbox 		= [];
+    this.emails.sent 		= [];
+    this.emails.trash 		= [];
+    this.emails.active  	= "inbox";  	
+					// inbox
+					// outbox
+					// trash
 
-    this.mods   	= [];
+    this.mods   		= [];
 
-    this.header 	= 0;	// 0 = standard email controls
-				// 1 = title + back-button
-    this.appspace	= 0;	// print email-body with appspace
+    this.header 		= 0;	// 0 = standard email controls
+					// 1 = title + back-button
 
-    this.appspace_mod_idx = -1; // index in mods of appspace module
+    this.appspace		= 0;	// print email-body with appspace
+    this.appspace_mod_idx 	= -1; // index in mods of appspace module
 
-    this.uidata		= {};
+    this.uidata			= {};
 
   }
 
