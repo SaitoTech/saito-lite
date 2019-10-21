@@ -25,7 +25,7 @@ module.exports = EmailList = {
                 });
 
                 data.parentmod.selected_email = selected_email[0];
-                data.parentmod.header = 0;
+                data.parentmod.header = 1;
 		data.parentmod.header_title = data.parentmod.selected_email.transaction.msg.title;
                 data.emailList = this;
 

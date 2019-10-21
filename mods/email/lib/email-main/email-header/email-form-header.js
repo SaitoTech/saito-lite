@@ -5,7 +5,6 @@ module.exports = EmailFormHeader = {
 
   render(app, data) {
     document.querySelector('.email-header').innerHTML = EmailFormHeaderTemplate();
-    this.attachEvents(app, data);
   },
 
   attachEvents(app, data) {
