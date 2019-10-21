@@ -31,6 +31,8 @@ module.exports = EmailHeader = {
 
   attachEvents(app, data) {
 
+return;
+
     if (data.parentmod.header == 0) {
       EmailInboxHeader.attachEvents(app, data);
       return;
@@ -47,4 +49,5 @@ module.exports = EmailHeader = {
 ***REMOVED***
 
   ***REMOVED***,
+
 ***REMOVED***

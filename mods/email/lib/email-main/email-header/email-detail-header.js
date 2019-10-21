@@ -5,7 +5,6 @@ module.exports = EmailDetailHeader = {
 
   render(app, data) {
     document.querySelector('.email-header').innerHTML = EmailDetailHeaderTemplate(data.parentmod.header_title);
-    this.attachEvents(app, data);
   ***REMOVED***,
 
 
