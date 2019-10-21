@@ -23,7 +23,7 @@ body {
   display: grid;
   align-items: center;
   grid-template-columns: 1fr 1fr;
-  border-bottom: 1px solid var(--saito-cyber-black);
+  border-bottom: 1px solid var(--saito-red);
 ***REMOVED***
 
 .email-icons {
@@ -50,7 +50,7 @@ body {
   height: 75vh;
   display: flex;
   flex-direction: column;
-  overflow: scroll;
+  overflow: auto;
 ***REMOVED***
 
 .email-form {
@@ -101,7 +101,7 @@ body {
 ***REMOVED***
 
 .email-message-content {
-  font-family: visuelt-medium;
+  font-family: visuelt-light;
 ***REMOVED***
 
 .email-message-timestamp {
@@ -135,18 +135,29 @@ body {
   font-size: 1.2em;
   line-height: 1.4em;
   padding-bottom: 10px;
+  
 ***REMOVED***
 
 .email-navigator {
   border-bottom: 1px solid grey;
+  height: 5.5em;
 ***REMOVED***
 
 .email-navigator-item, .email-apps-item {
   cursor: pointer;
+  border-bottom: 1px solid transparent;
+  padding-left: 2px;
+  padding-top: 5px;
 ***REMOVED***
+
 .active-navigator-item {
   color: var(--saito-red);
   font-weight: bold;
+***REMOVED***
+
+.email-navigator-item:hover, .email-apps-item:hover {
+  background-color: #efefef;
+  border-radius: 5px;
 ***REMOVED***
 
 .email-loader {
@@ -281,6 +292,14 @@ body {
   .email-detail-address-id {
     font-size: 0.8em;
   ***REMOVED***
+***REMOVED***
+
+.email-appspace {
+  padding: 10px;
+***REMOVED***
+
+.email-header h3 {
+  line-height: 30px;
 ***REMOVED***
 
 @media only screen and (min-width: 600px) {
