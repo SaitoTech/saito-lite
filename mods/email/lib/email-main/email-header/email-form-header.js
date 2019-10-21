@@ -1,5 +1,7 @@
-const EmailList = require('../email-body/email-list/email-list');
 const EmailFormHeaderTemplate = require('./email-form-header.template');
+
+const EmailBody = require('../email-body/email-body');
+const EmailHeader = require('../email-header/email-header');
 
 module.exports = EmailFormHeader = {
 
@@ -10,11 +12,11 @@ module.exports = EmailFormHeader = {
   attachEvents(app, data) {
     document.getElementById('email-form-back-button')
             .addEventListener('click', (e) => {
-              // data.emailList.render(app, data)
-              // data.emailList.attachEvents(app, data)
-              EmailList.render(app, data);
-              EmailList.attachEvents(app, data);
+              data.parentmod.active = data.parentmod.previous_state;
+              data.parentmod.previous_state = "email_form";
+
+              data.parentmod.main.render(app, data);
+              data.parentmod.main.attachEvents(app, data);
             });
-            // EmailList.render(app, data);
   }
 }
