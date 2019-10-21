@@ -36,6 +36,17 @@ class Email extends ModTemplate {
 
   ***REMOVED***
 
+  render(app, data) {
+
+    EmailMain.render(app, data);
+    EmailMain.attachEvents(app, data);
+
+    EmailSidebar.render(app, data);
+    EmailSidebar.attachEvents(app, data);
+
+
+  ***REMOVED***
+
   initialize(app) {
 
 
