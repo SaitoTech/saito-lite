@@ -6,16 +6,18 @@ module.exports = EmailAppspace = {
 
         document.querySelector(".email-body").innerHTML = EmailAppspaceTemplate();
 
-	let modobj = data.parentmod.mods[data.parentmod.appspace_mod_idx].respondTo("email-appspace");
+        if (data.parentmod.appspace_mod == null) { return; }
+	let modobj = data.parentmod.appspace_mod.respondTo("email-appspace");
 	if (modobj == null) { return; }
-
 	modobj.render(app, data);
 
     },
 
     attachEvents(app, data) {
 
-      let modobj = data.parentmod.mods[data.parentmod.appspace_mod_idx].respondTo("email-appspace");
+      if (data.parentmod.appspace_mod == null) { return; }
+      let modobj = data.parentmod.appspace_mod.respondTo("email-appspace");
+      if (modobj == null) { return; }
       modobj.attachEvents(app, data);
 
     },

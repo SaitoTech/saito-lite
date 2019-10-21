@@ -72,6 +72,7 @@ module.exports = EmailControls = {
               });
 
 	      data.parentmod.appspace = 0;
+	      data.parentmod.appspace_mod = null;
 	      data.parentmod.header = 0;
 	      data.parentmod.header_title = "";
 
@@ -120,6 +121,7 @@ module.exports = EmailControls = {
 	      data.parentmod.appspace = 1;
 	      data.parentmod.header = 1;
 	      data.parentmod.header_title = "Application";
+	      data.parentmod.appspace_mod = data.parentmod.mods[e.currentTarget.id];
 	      data.parentmod.appspace_mod_idx = e.currentTarget.id;
 
               EmailHeader.render(app, data);
