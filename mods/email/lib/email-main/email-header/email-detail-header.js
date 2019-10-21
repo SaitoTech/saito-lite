@@ -23,11 +23,7 @@ module.exports = EmailDetailHeader = {
     document.getElementById('email-delete-icon')
             .addEventListener('click', (e) => {
               // delete the email from the emaillist
-              let selected_email_tx = data.parentmod.selected_email;
-
-              data.parentmod.emails.inbox = data.parentmod.emails.inbox.filter(email => {
-                return selected_email_tx.transaction.sig !== email.transaction.sig;
-              })
+              data.parentmod.deleteTransaction(data.parentmod.selected_email);
 
               data.parentmod.emails.active = "inbox";
               data.parentmod.active = "email_list";
