@@ -16,6 +16,8 @@ class Encrypt extends ModTemplate {
   }
 
 
+
+
   respondTo(type) {
 
     if (type == 'email-appspace') {
@@ -35,13 +37,9 @@ class Encrypt extends ModTemplate {
      EncryptAppspace.render(app, data);
      EncryptAppspace.attachEvents(app, data);
 
-//     document.querySelector(".email-appspace").innerHTML = '<div>Inserting this into the Email APP space in Encrypt module</div>';
-   
   }
 
   attachEventsEmail(app, data) {
-
-    alert("attaching events to the email...");
 
   }
 
@@ -51,7 +49,7 @@ class Encrypt extends ModTemplate {
 
     if (recipient == "") { return; }
 
-    let tx 				   = this.app.wallet.createUnsignedTransactionWithDefaultFee(publickey, 0.0);
+    let tx 				   = this.app.wallet.createUnsignedTransactionWithDefaultFee(recipient, (2 * this.app.wallet.default_fee));
         tx.transaction.msg.module	   = this.name;
   	tx.transaction.msg.request 	   = "key exchange request";
 	tx.transaction.msg.alice_publickey = app.keys.initializeKeyExchange(recipient);
