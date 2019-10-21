@@ -99,8 +99,10 @@ module.exports = EmailControls = {
               EmailHeader.render(app, data);
 	      EmailHeader.attachEvents(app, data);
 
+	      data.parentmod.appspace = 1;
     	      EmailAppspace.render(app, data);
 	      EmailAppspace.attachEvents(app, data);
+
 	  }
 
 
