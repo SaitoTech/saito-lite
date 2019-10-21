@@ -20,9 +20,27 @@ module.exports = EmailDetailHeader = {
               data.parentmod.main.attachEvents(app, data);
             });
 
+    document.getElementById('email-delete-icon')
+            .addEventListener('click', (e) => {
+              // delete the email from the emaillist
+              let selected_email_tx = data.parentmod.selected_email;
+
+              data.parentmod.emails.inbox = data.parentmod.emails.inbox.filter(email => {
+                return selected_email_tx.transaction.sig !== email.transaction.sig;
+              })
+
+              data.parentmod.emails.active = "inbox";
+              data.parentmod.active = "email_list";
+              data.parentmod.selected_email = {};
+
+              data.parentmod.main.render(app, data);
+              data.parentmod.main.attachEvents(app, data);
+            });
+
     document.getElementById('email-detail-reply')
             .addEventListener('click', (e) => {
-              let { to } = data.selected_email.transaction;
+              let { to } = data.parentmod.selected_email.transaction;
+              data.parentmod.previous_state = data.parentmod.active;
               data.parentmod.active = "email_form";
               data.parentmod.main.render(app, data);
               data.parentmod.main.attachEvents(app, data);
@@ -31,7 +49,8 @@ module.exports = EmailDetailHeader = {
 
     document.getElementById('email-detail-forward')
             .addEventListener('click', (e) => {
-              let { msg } = data.selected_email.transaction;
+              let { msg } = data.parentmod.selected_email.transaction;
+              data.parentmod.previous_state = data.parentmod.active;
               data.parentmod.active = "email_form";
               data.parentmod.main.render(app, data);
               data.parentmod.main.attachEvents(app, data);
