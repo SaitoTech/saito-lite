@@ -1,6 +1,7 @@
 const saito = require('../../lib/saito/saito.js');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const EmailMain = require('./lib/email-main/email-main');
+const EmailSidebar = require('./lib/email-sidebar/email-sidebar');
 
 
 class Email extends ModTemplate {
@@ -15,7 +16,8 @@ class Email extends ModTemplate {
     this.emails.inbox 	= [];
     this.emails.sent 	= [];
     this.emails.trash 	= [];
-    this.emails.active  = "inbox";  	// inbox
+    this.emails.active  = "inbox";  	
+				// inbox
 				// outbox
 				// trash
 
@@ -45,7 +47,6 @@ class Email extends ModTemplate {
     tx = this.app.wallet.signTransaction(tx);
     this.emails.inbox.push(tx);
 
-
         tx = app.wallet.createUnsignedTransaction();
         tx.transaction.msg.module 	= "Email";
         tx.transaction.msg.title 	= "Welcome to Saito";
@@ -65,6 +66,9 @@ class Email extends ModTemplate {
 
     EmailMain.render(app, this.uidata);
     EmailMain.attachEvents(app, this.uidata);
+
+    EmailSidebar.render(app, this.uidata);
+    EmailSidebar.attachEvents(app, this.uidata);
 
     //
     // update chat module
@@ -95,6 +99,7 @@ class Email extends ModTemplate {
   //
   onPeerHandshakeComplete(app, peer) {
 
+/*****
 
     //
     // used in testing SAVE -- works now
@@ -127,6 +132,7 @@ class Email extends ModTemplate {
       EmailList.render(this.app, this.uidata);
       EmailList.attachEvents(this.app, this.uidata);
     }
+*****/
 
   }
 
