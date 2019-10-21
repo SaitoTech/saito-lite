@@ -4,8 +4,7 @@ const EmailDetailHeaderTemplate = require('./email-detail-header.template');
 module.exports = EmailDetailHeader = {
 
   render(app, data) {
-    document.querySelector('.email-header').innerHTML = EmailDetailHeaderTemplate(data.parentmod.header_active_title);
-    this.attachEvents(app, data);
+    document.querySelector('.email-header').innerHTML = EmailDetailHeaderTemplate(data.parentmod.header_title);
   },
 
 
