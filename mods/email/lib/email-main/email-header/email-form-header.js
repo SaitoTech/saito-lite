@@ -1,4 +1,4 @@
-const EmailList = require('../email-list/email-list');
+const EmailList = require('../email-body/email-list/email-list');
 const EmailFormHeaderTemplate = require('./email-form-header.template');
 
 module.exports = EmailFormHeader = {

@@ -1,5 +1,5 @@
 const EmailFormTemplate = require('./email-form.template.js');
-const EmailFormHeader = require("../email-header/email-form-header");
+const EmailFormHeader = require("../../email-header/email-form-header");
 
 var numeral = require('numeral');
 

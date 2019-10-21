@@ -1,6 +1,5 @@
 const EmailControlsTemplate = require('./email-controls.template');
-const EmailForm = require('../email-main/email-form/email-form');
-const EmailAppspace = require('../email-main/email-appspace/email-appspace');
+const EmailAppspace = require('../email-main/email-body/email-appspace/email-appspace');
 
 module.exports = EmailControls = {
 

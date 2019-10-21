@@ -1,6 +1,5 @@
-// const EmailForm = require('../email-form/email-form.js');
 const EmailDetail       = require('../email-detail/email-detail');
-const EmailHeader       = require('../email-header/email-header');
+const EmailHeader       = require('../../email-header/email-header');
 const EmailListTemplate = require('./email-list.template.js');
 const EmailListRowTemplate = require('./email-list-row.template.js');
 
