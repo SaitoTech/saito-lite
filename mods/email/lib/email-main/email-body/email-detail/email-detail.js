@@ -5,9 +5,9 @@ module.exports = EmailDetail = {
   render(app, data) {
     let email_body = document.querySelector('.email-body')
     email_body.innerHTML = EmailDetailTemplate(data.selected_email);
-    console.log(email_body);
 
-    EmailDetailHeader.render(app, data);
+    data.parentmod.header_active = 1;
+    data.parentmod.header.render(app, data);
 
     // this.attachEvents(app, data);
   },

@@ -3,7 +3,7 @@ const EmailInboxHeaderTemplate = require('./email-inbox-header.template');
 module.exports = EmailInboxHeader = {
 
   render(app, data) {
-    if (data.parentmod.header == 0) {
+    if (data.parentmod.header_active == 0) {
       document.querySelector('.email-header').innerHTML = EmailInboxHeaderTemplate();
     }
   },

@@ -16,14 +16,14 @@ class Email extends ModTemplate {
     this.emails.inbox 		= [];
     this.emails.sent 		= [];
     this.emails.trash 		= [];
-    this.emails.active  	= "inbox";  	
+    this.emails.active  	= "inbox";
 					// inbox
 					// outbox
 					// trash
 
     this.mods   		= [];
 
-    this.header 		= 0;	// 0 = standard email controls
+    this.header_active 		= 0;	// 0 = standard email controls
 					// 1 = title + back-button
 
     this.appspace		= 0;	// print email-body with appspace

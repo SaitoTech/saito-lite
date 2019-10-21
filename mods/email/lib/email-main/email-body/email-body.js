@@ -1,9 +1,9 @@
-const EmailForm = require('./email-form/email-form');
-const EmailDetail           = require('./email-detail/email-detail');
+// const EmailForm = require('./email-form/email-form');
+// const EmailDetail           = require('./email-detail/email-detail');
 const EmailAppspace         = require('./email-appspace/email-appspace');
 const EmailAppspaceTemplate = require('./email-appspace/email-appspace.template.js');
 const EmailListTemplate     = require('./email-list/email-list.template.js');
-const EmailListRowTemplate  = require('./email-list/email-list-row.template.js');
+// const EmailListRowTemplate  = require('./email-list/email-list-row.template.js');
 
 module.exports = EmailBody = {
 
@@ -11,7 +11,10 @@ module.exports = EmailBody = {
 
     render(app, data={}) {
 
-        if (app) { this.app = app; }
+				if (app) { this.app = app; }
+
+				// reference itself for others to call
+				data.parentmod.body = this;
 
 	//
 	// render email list

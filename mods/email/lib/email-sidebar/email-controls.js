@@ -1,6 +1,7 @@
 const EmailControlsTemplate = require('./email-controls.template');
 const EmailHeader = require('../email-main/email-header/email-header');
 const EmailBody = require('../email-main/email-body/email-body');
+const EmailForm = require('../email-main/email-body/email-form/email-form');
 
 module.exports = EmailControls = {
 
@@ -72,8 +73,8 @@ module.exports = EmailControls = {
               });
 
 	      data.parentmod.appspace = 0;
-	      data.parentmod.header = 0;
-	      data.parentmod.header_title = "";
+	      data.parentmod.header_active = 0;
+	      data.parentmod.header_active_title = "";
 
     	      EmailHeader.render(app, data);
 	      EmailHeader.attachEvents(app, data);
@@ -118,8 +119,8 @@ module.exports = EmailControls = {
 
 
 	      data.parentmod.appspace = 1;
-	      data.parentmod.header = 1;
-	      data.parentmod.header_title = "Application";
+	      data.parentmod.header_active = 1;
+	      data.parentmod.header_active_title = "Application";
 	      data.parentmod.appspace_mod_idx = e.currentTarget.id;
 
               EmailHeader.render(app, data);
@@ -138,8 +139,8 @@ module.exports = EmailControls = {
             compose_button.addEventListener('click', (e) => {
 
 	      data.parentmod.appspace = 1;
-	      data.parentmod.header = 1;
-	      data.parentmod.header_title = "Compose Email";
+	      data.parentmod.header_active = 1;
+	      data.parentmod.header_active_title = "Compose Email";
 
               EmailForm.render(app, data);
               EmailForm.attachEvents(app, data);
