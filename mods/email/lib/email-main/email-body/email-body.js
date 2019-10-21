@@ -1,9 +1,9 @@
-// const EmailForm = require('./email-form/email-form');
-// const EmailDetail           = require('./email-detail/email-detail');
+const EmailForm          = require('./email-form/email-form');
+const EmailDetail        = require('./email-detail/email-detail');
 const EmailAppspace         = require('./email-appspace/email-appspace');
 const EmailAppspaceTemplate = require('./email-appspace/email-appspace.template.js');
 const EmailListTemplate     = require('./email-list/email-list.template.js');
-// const EmailListRowTemplate  = require('./email-list/email-list-row.template.js');
+
 
 module.exports = EmailBody = {
 
@@ -11,37 +11,31 @@ module.exports = EmailBody = {
 
     render(app, data={}) {
 
-				if (app) { this.app = app; }
+        data.parentmod.body = this;
 
-				// reference itself for others to call
-				data.parentmod.body = this;
-
-	//
-	// render email list
-	//
-	if (data.parentmod.appspace == 0) {
-          document.querySelector('.email-body').innerHTML = EmailListTemplate();
-	  EmailList.render(app, data);
-	}
-
-	//
-	// render application
-	//
-	if (data.parentmod.appspace == 1) {
-          document.querySelector('.email-body').innerHTML = EmailAppspaceTemplate();
-	  EmailAppspace.render(app, data);
-	}
+        switch(data.parentmod.active) {
+            case "email_list":
+                EmailList.render(app, data);
+                EmailList.attachEvents(app, data);
+                break;
+            case "email_form":
+                EmailForm.render(app, data);
+                EmailForm.attachEvents(app, data);
+                break;
+            case "email_detail":
+                EmailDetail.render(app, data);
+                EmailDetail.attachEvents(app, data);
+                break;
+            case "email_appspace":
+                document.querySelector('.email-body').innerHTML = EmailAppspaceTemplate();
+                EmailAppspace.render(app, data);
+                EmailAppspace.attachEvents(app, data);
+                break;
+            default:
+                break;
+        }
     },
 
-    attachEvents(app, data) {
-
-	if (data.parentmod.appspace == 0) {
-	  EmailList.attachEvents(app, data);
-	}
-	if (data.parentmod.appspace == 1) {
-	  EmailAppspace.attachEvents(app, data);
-	}
-
-    }
+    attachEvents(app, data) {}
 }
 

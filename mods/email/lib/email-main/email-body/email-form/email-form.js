@@ -10,9 +10,7 @@ module.exports = EmailForm = {
     render(app, data={ emailList: {} }) {
         this.app = app;
         this.saito = this.app;
-        this.emailList = data.emailList;
 
-        EmailFormHeader.render(app, data);
         document.querySelector(".email-body").innerHTML = EmailFormTemplate();
 
         this.addData();
@@ -34,8 +32,9 @@ module.exports = EmailForm = {
         this.saito.network.propagateTransaction(newtx);
         alert("Your message has been sent");
 
-        // this.emailList.render(app, {});
-        // this.emailList.attachEvents(app);
+        data.parentmod.active = "email_list";
+        data.parentmod.main.render(app, data);
+        data.parentmod.main.attachEvents(app, data);
     },
 
     buildTransaction() {

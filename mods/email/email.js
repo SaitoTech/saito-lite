@@ -23,14 +23,13 @@ class Email extends ModTemplate {
 
     this.mods   		= [];
 
-    this.header_active 		= 0;	// 0 = standard email controls
-					// 1 = title + back-button
+    this.active 		= "email_list";
     this.header_title		= "";
 
     this.selected_email		= null;
 
-    this.appspace		= 0;	// print email-body with appspace
-    this.appspace_mod_idx 	= -1; // index in mods of appspace module
+    // this.appspace		= 0;	// print email-body with appspace
+    // this.appspace_mod_idx 	= -1; // index in mods of appspace module
 
     this.uidata			= {};
 

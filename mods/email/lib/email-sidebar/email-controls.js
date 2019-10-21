@@ -118,16 +118,12 @@ module.exports = EmailControls = {
               });
 
 
-	      data.parentmod.appspace = 1;
-	      data.parentmod.header_active = 1;
-	      data.parentmod.header_active_title = "Application";
-	      data.parentmod.appspace_mod_idx = e.currentTarget.id;
+            data.parentmod.active = "email_appspace";
+            data.parentmod.header_title = "Application";
+            data.parentmod.appspace_mod_idx = e.currentTarget.id;
 
-              EmailHeader.render(app, data);
-	      EmailHeader.attachEvents(app, data);
-
-    	      EmailAppspace.render(app, data);
-	      EmailAppspace.attachEvents(app, data);
+            data.parentmod.main.render(app, data)
+            data.parentmod.main.attachEvents(app, data)
 
 	  }
 
@@ -138,12 +134,12 @@ module.exports = EmailControls = {
         let compose_button = document.getElementById('email-compose-btn');
             compose_button.addEventListener('click', (e) => {
 
-	      data.parentmod.appspace = 1;
-	      data.parentmod.header_active = 1;
-	      data.parentmod.header_active_title = "Compose Email";
+                data.parentmod.active = "email_form";
+                data.parentmod.previous_state = "email_list";
+                data.parentmod.header_title = "Compose Email";
 
-              EmailForm.render(app, data);
-              EmailForm.attachEvents(app, data);
+                data.parentmod.main.render(app, data);
+                data.parentmod.main.attachEvents(app, data);
             });
     }
 

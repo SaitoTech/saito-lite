@@ -7,6 +7,8 @@ module.exports = EmailList = {
 
     render(app, data) {
 
+      document.querySelector('.email-body').innerHTML = EmailListTemplate();
+
       data.parentmod.emails[data.parentmod.emails.active].forEach(tx => {
         document.querySelector('.email-list').innerHTML += EmailListRowTemplate(tx);
       });
@@ -24,15 +26,13 @@ module.exports = EmailList = {
                     return tx.transaction.sig === sig
                 });
 
-                data.selected_email = selected_email[0];
-		data.parentmod.header_active = 0;
-		data.parentmod.header_title = data.parentmod.selected_email.transaction.msg.title;
-                data.emailList = this;
+                data.parentmod.selected_email = selected_email[0];
+                data.parentmod.header_title = data.parentmod.selected_email.transaction.msg.title;
 
-                EmailHeader.render(app, data);
-                EmailHeader.attachEvents(app, data);
+                data.parentmod.active = "email_detail";
 
-                EmailDetail.render(app, data);
+                data.parentmod.main.render(app, data);
+                data.parentmod.main.attachEvents(app, data);
 
             });
         });

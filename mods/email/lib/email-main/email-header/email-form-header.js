@@ -12,16 +12,11 @@ module.exports = EmailFormHeader = {
   attachEvents(app, data) {
     document.getElementById('email-form-back-button')
             .addEventListener('click', (e) => {
-              // data.emailList.render(app, data)
-              // data.emailList.attachEvents(app, data)
-              // EmailList.render(app, data);
-              // EmailList.attachEvents(app, data);
-              data.parentmod.header_active = 0;
-              data.parentmod.appspace = 0;
+              data.parentmod.active = data.parentmod.previous_state;
+              data.parentmod.previous_state = "email_form";
 
-              data.parentmod.body.render(app, data);
-              data.parentmod.header.render(app, data);
+              data.parentmod.main.render(app, data);
+              data.parentmod.main.attachEvents(app, data);
             });
-            // EmailList.render(app, data);
   }
 }

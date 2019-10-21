@@ -3,9 +3,7 @@ const EmailInboxHeaderTemplate = require('./email-inbox-header.template');
 module.exports = EmailInboxHeader = {
 
   render(app, data) {
-    if (data.parentmod.header_active == 0) {
-      document.querySelector('.email-header').innerHTML = EmailInboxHeaderTemplate();
-    }
+    document.querySelector('.email-header').innerHTML = EmailInboxHeaderTemplate();
   },
 
   attachEvents(app, data) {
@@ -27,7 +25,7 @@ module.exports = EmailInboxHeader = {
                 if (is_checked) {
 
 
-		  //
+    //
 		  // remove from UI
 		  //
                   email_list.removeChild(mail);
