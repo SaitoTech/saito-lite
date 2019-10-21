@@ -1,5 +1,7 @@
-const EmailList = require('../email-body/email-list/email-list');
 const EmailFormHeaderTemplate = require('./email-form-header.template');
+
+const EmailBody = require('../email-body/email-body');
+const EmailHeader = require('../email-header/email-header');
 
 module.exports = EmailFormHeader = {
 
@@ -13,8 +15,13 @@ module.exports = EmailFormHeader = {
             .addEventListener('click', (e) => {
       ***REMOVED*** data.emailList.render(app, data)
       ***REMOVED*** data.emailList.attachEvents(app, data)
-              EmailList.render(app, data);
-              EmailList.attachEvents(app, data);
+      ***REMOVED*** EmailList.render(app, data);
+      ***REMOVED*** EmailList.attachEvents(app, data);
+              data.parentmod.header_active = 0;
+              data.parentmod.appspace = 0;
+
+              data.parentmod.body.render(app, data);
+              data.parentmod.header.render(app, data);
         ***REMOVED***);
     ***REMOVED*** EmailList.render(app, data);
   ***REMOVED***

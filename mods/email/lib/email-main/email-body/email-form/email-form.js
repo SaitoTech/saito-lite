@@ -1,8 +1,6 @@
 const EmailFormTemplate = require('./email-form.template.js');
 const EmailFormHeader = require("../../email-header/email-form-header");
 
-var numeral = require('numeral');
-
 module.exports = EmailForm = {
 
     app: {***REMOVED***,
@@ -10,9 +8,9 @@ module.exports = EmailForm = {
     emailList: {***REMOVED***,
 
     render(app, data={ emailList: {***REMOVED*** ***REMOVED***) {
-        this.emailList = data.emailList;
         this.app = app;
         this.saito = this.app;
+        this.emailList = data.emailList;
 
         EmailFormHeader.render(app, data);
         document.querySelector(".email-body").innerHTML = EmailFormTemplate();
@@ -23,23 +21,21 @@ module.exports = EmailForm = {
     attachEvents(app, data) {
         document.querySelector('.email-submit')
             .addEventListener('click', (e) => this.sendEmailTransaction());
-
-***REMOVED*** document.querySelector('.raw-switch')
-***REMOVED***     .addEventListener('click', (e) => this.popluateRawMessage());
 ***REMOVED***,
 
 
     addData() {
         document.getElementById('email-from-address').value = `(Myself) ${this.saito.wallet.returnPublicKey()***REMOVED***`;
-        document.querySelector('.email-balance').innerHTML = numeral(this.saito.wallet.returnBalance()).format('0,0.0000');
+***REMOVED***document.querySelector('.email-balance').innerHTML = numeral(this.saito.wallet.returnBalance()).format('0,0.0000');
 ***REMOVED***,
 
     sendEmailTransaction() {
         let newtx = this.buildTransaction();
         this.saito.network.propagateTransaction(newtx);
         alert("Your message has been sent");
-        this.emailList.render(app, {***REMOVED***);
-        this.emailList.attachEvents(app);
+
+***REMOVED*** this.emailList.render(app, {***REMOVED***);
+***REMOVED*** this.emailList.attachEvents(app);
 ***REMOVED***,
 
     buildTransaction() {
