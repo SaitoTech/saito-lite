@@ -29,11 +29,14 @@ body {
 .email-icons {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 2.25em;
+  grid-auto-columns: 2em;
+  justify-items: center;
+  grid-gap: 0.3em;
 ***REMOVED***
 
 #email-form-back-button {
   cursor: pointer;
+  justify-self: left;
 ***REMOVED***
 
 .email-balance {
