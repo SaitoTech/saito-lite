@@ -1,7 +1,25 @@
 module.exports = EmailAppspaceTemplate = () => {
   return `
-      <div class="encrypt-email-appspace">
-	This text is sourced from /mods/encrypt/lib/email-appspace/encrypt-appspace
+
+      <div class="email-appspace-encrypt">
+
+	<div class="email-appspace-encrypt-notice">
+        Create a secure key to encrypt your communications with whom:
+        </div>
+
+        <div class="email-form">
+          <input id="email-to-address" class="email-address" type="text" placeholder="To: ">
+            <button class="email-submit">SUBMIT</button>
+        </div>
+
+
+
       </div>
+      <style type="text/css">
+	.email-appspace-encrypt-notice {
+	  padding: 50px;
+	  font-size: 3em;
+	***REMOVED***
+      </style>
   `;
 ***REMOVED***
