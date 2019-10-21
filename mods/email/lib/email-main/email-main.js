@@ -10,6 +10,8 @@ module.exports = EmailMain = {
     if (!email_main) { return; ***REMOVED***
     email_main.innerHTML = EmailMainTemplate();
 
+    data.parentmod.main = this;
+
     EmailHeader.render(app, data);
     EmailBody.render(app, data);
 

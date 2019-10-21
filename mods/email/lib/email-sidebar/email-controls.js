@@ -1,6 +1,7 @@
 const EmailControlsTemplate = require('./email-controls.template');
 const EmailHeader = require('../email-main/email-header/email-header');
 const EmailBody = require('../email-main/email-body/email-body');
+const EmailForm = require('../email-main/email-body/email-form/email-form');
 
 module.exports = EmailControls = {
 
@@ -71,8 +72,8 @@ module.exports = EmailControls = {
 		  ***REMOVED***
           ***REMOVED***);
 
-	      data.parentmod.appspace = 0;
 	      data.parentmod.appspace_mod = null;
+	      data.parentmod.active = "email_list";
 	      data.parentmod.header = 0;
 	      data.parentmod.header_title = "";
 
@@ -118,17 +119,13 @@ module.exports = EmailControls = {
           ***REMOVED***);
 
 
-	      data.parentmod.appspace = 1;
-	      data.parentmod.header = 1;
-	      data.parentmod.header_title = "Application";
-	      data.parentmod.appspace_mod = data.parentmod.mods[e.currentTarget.id];
-	      data.parentmod.appspace_mod_idx = e.currentTarget.id;
+            data.parentmod.active = "email_appspace";
+            data.parentmod.header_title = "Application";
+	    data.parentmod.appspace_mod = data.parentmod.mods[e.currentTarget.id];
+            data.parentmod.appspace_mod_idx = e.currentTarget.id;
 
-              EmailHeader.render(app, data);
-	      EmailHeader.attachEvents(app, data);
-
-    	      EmailAppspace.render(app, data);
-	      EmailAppspace.attachEvents(app, data);
+            data.parentmod.main.render(app, data)
+            data.parentmod.main.attachEvents(app, data)
 
 	  ***REMOVED***
 
@@ -139,12 +136,12 @@ module.exports = EmailControls = {
         let compose_button = document.getElementById('email-compose-btn');
             compose_button.addEventListener('click', (e) => {
 
-	      data.parentmod.appspace = 1;
-	      data.parentmod.header = 1;
-	      data.parentmod.header_title = "Compose Email";
+                data.parentmod.active = "email_form";
+                data.parentmod.previous_state = "email_list";
+                data.parentmod.header_title = "Compose Email";
 
-              EmailForm.render(app, data);
-              EmailForm.attachEvents(app, data);
+                data.parentmod.main.render(app, data);
+                data.parentmod.main.attachEvents(app, data);
         ***REMOVED***);
 ***REMOVED***
 
