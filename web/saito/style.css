@@ -65,18 +65,19 @@ body {
 
 button, .button {
     padding: 8px;
-    background-color: var(--saito-cyber-black);
-    border: 4px solid var(--saito-cyber-black);
+    background-color: var(--saito-red);
+    border: 4px solid var(--saito-red);
     border-radius: 5px;
     color: white;
     font-size: 1em;
-    font-family: 'visuelt-black';
-    cursor: pointer;   
+    font-family: 'visuelt-light';
+    cursor: pointer;
+    line-height: 1.6em;
 }
 
-/* button:hover, .button:hover {
-    border-bottom: 4px solid var(--saito-red);
-} */
+button:hover, .button:hover {
+    text-shadow: var(--saito-skyline-grey) 1px 0;
+}
 
 input[type=text], input[type=number] {
     padding: 10px 5px;
@@ -88,7 +89,8 @@ input[type=text], input[type=number] {
     display: grid;
     height: 9vh;
     padding: 0 1em;
-    background: var(--saito-red);
+    background-image: url(/saito/img/dreamscape.png);
+    background-size: cover;
     /* sus and still out to jury */
     position: fixed;
     width: 100%;
@@ -105,6 +107,7 @@ input[type=text], input[type=number] {
     color: white;
     align-self: center;
     justify-self: end;
+    text-shadow: #333 1px 0;
 }
 
 #back-button {
@@ -118,7 +121,7 @@ input[type=text], input[type=number] {
 .main {
     display: grid;
     grid-gap: 1.5em;
-    font-family: 'visuelt-black';
+    font-family: 'visuelt-light';
     padding: 1em;
     /* margin: 1em; */
     scrollbar-width: none;
@@ -133,10 +136,8 @@ input[type=text], input[type=number] {
     height: 83vh;
     margin-top: 9vh;
     margin-bottom: 9vh;
-
     margin-left: auto;
     margin-right: auto;
-
     max-width: 100vw;
 }
 
@@ -171,7 +172,7 @@ input[type=text], input[type=number] {
 }
 
 .wallet-container {
-    font-family: 'visuelt-medium';
+    font-family: 'visuelt-light';
 }
 
 .wallet-container-row {
@@ -303,7 +304,7 @@ input[type=text], input[type=number] {
     width: 100%;
 }
 
-.chat-room-input > textarea {
+.chat-room-input>textarea {
     height: 2.75em;
     font-size: 1em;
     padding: 10px 5px;
@@ -365,13 +366,12 @@ input[type=text], input[type=number] {
     grid-template-columns: 1fr 1fr;
 }
 
-#options > select {
+#options>select {
     border: 1px solid black;
     padding: 1em;
     border-radius: 5px;
     background: white;
 }
-
 
 /*.games-play-button {
     background-color: var(--saito-red);
@@ -446,7 +446,7 @@ input[type=text], input[type=number] {
 }
 
 .forum-comments {
-    font-family: visuelt-medium;
+    font-family: visuelt-light;
     margin-top: 10px;
 }
 
@@ -487,11 +487,11 @@ input[type=text], input[type=number] {
 
 /** FORUM DETAIL CSS **/
 
-.forum-detail > section {
+.forum-detail>section {
     padding: 10px 0px;
 }
 
-.forum-header > .forum-row {
+.forum-header>.forum-row {
     padding: 0px 0px 10px 0px;
     height: 5em;
 }
@@ -519,7 +519,7 @@ input[type=text], input[type=number] {
     row-gap: 1em;
 }
 
-.forum-comment > textarea {
+.forum-comment>textarea {
     border: 1px solid lightgrey;
     border-radius: 3px;
     padding: 10px 7px;
@@ -527,7 +527,7 @@ input[type=text], input[type=number] {
     height: 10em;
 }
 
-.forum-comment > button {
+.forum-comment>button {
     grid-column: 1 / 3;
 }
 
@@ -633,51 +633,50 @@ input[type=text], input[type=number] {
     float: right;
 }
 
-
 .explorer-main {
     margin-top: 75px;
     padding: 0 10px;
     line-height: 1.6em;
-    font-family: "visuelt-medium";
+    font-family: "visuelt-light";
     height: 91vh;
     overflow: scroll;
     padding: 1em 12px;
-  }
-  
-  .explorer-main table {
+}
+
+.explorer-main table {
     border-spacing: 0;
-  }
-  
-  .explorer-main table tr:hover {
+}
+
+.explorer-main table tr:hover {
     background: #bbbbbb;
-  }
-  
-  .explorer-main td {
+}
+
+.explorer-main td {
     padding: 10px 5px;
-  }
-  
-  .explorer-main th {
+}
+
+.explorer-main th {
     text-align: left;
-  }
-  
-  .explorer-main a {
+}
+
+.explorer-main a {
     text-decoration: underscore;
     color: var(--text-color-highlight);
     display: inline-block;
-  }
-  
-  .explorer-main h4 {
+}
+
+.explorer-main h4 {
     display: inline-block;
     min-width: 200px;
-  }
-  
-  .explorer-main h3 {
+}
+
+.explorer-main h3 {
     margin: 20px 0 10px 0;
-  }
-  
-  .explorer-main i {
+}
+
+.explorer-main i {
     margin: 0 10px;
-  }
+}
 
 li.jsontree_node {
     list-style: none;
