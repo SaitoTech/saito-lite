@@ -5,22 +5,12 @@ const EmailListRowTemplate = require('./email-list-row.template.js');
 
 module.exports = EmailList = {
 
-    app: {***REMOVED***,
+    render(app, data) {
 
-    render(app, data={***REMOVED***) {
+      data.parentmod.emails[data.parentmod.emails.active].forEach(tx => {
+        document.querySelector('.email-list').innerHTML += EmailListRowTemplate(tx);
+  ***REMOVED***);
 
-        if (app) { this.app = app; ***REMOVED***
-
-        EmailHeader.render(app, data);
-
-        document.querySelector('.email-body').innerHTML = EmailListTemplate();
-
-        let { emails ***REMOVED*** = data.parentmod;
-
-        emails[emails.active].forEach(tx => {
-            document.querySelector('.email-list').innerHTML
-                += EmailListRowTemplate(tx);
-    ***REMOVED***);
 ***REMOVED***,
 
     attachEvents(app, data) {

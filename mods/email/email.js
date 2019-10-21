@@ -25,8 +25,8 @@ class Email extends ModTemplate {
 
     this.header 	= 0;	// 0 = standard email controls
 				// 1 = title + back-button
+    this.appspace	= 0;	// print email-body with appspace
 
-    this.appspace	= 1;
     this.appspace_mod_idx = -1; // index in mods of appspace module
 
     this.uidata		= {***REMOVED***;
