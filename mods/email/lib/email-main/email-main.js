@@ -1,5 +1,6 @@
 const EmailMainTemplate = require('./email-main.template');
-const EmailList = require('./email-list/email-list');
+const EmailHeader = require('./email-header/email-header');
+const EmailBody = require('./email-body/email-body');
 
 module.exports = EmailMain = {
 
@@ -9,12 +10,14 @@ module.exports = EmailMain = {
     if (!email_main) { return; }
     email_main.innerHTML = EmailMainTemplate();
 
-    EmailList.render(app, data);
+    EmailHeader.render(app, data);
+    EmailBody.render(app, data);
 
   },
 
   attachEvents(app, data) {
-    EmailList.attachEvents(app, data);
+    EmailHeader.attachEvents(app, data);
+    EmailBody.attachEvents(app, data);
   }
 
 }

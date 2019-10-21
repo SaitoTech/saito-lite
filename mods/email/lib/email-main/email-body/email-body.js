@@ -1,8 +1,8 @@
-// const EmailForm = require('../email-form/email-form.js');
-const EmailDetail       = require('../email-detail/email-detail');
-const EmailHeader       = require('../email-header/email-header');
-const EmailListTemplate = require('./email-list.template.js');
-const EmailListRowTemplate = require('./email-list-row.template.js');
+const EmailForm = require('./email-form/email-form');
+const EmailDetail       = require('./email-detail/email-detail');
+const EmailAppspace     = require('./email-appspace/email-appspace');
+const EmailListTemplate = require('./email-list/email-list.template.js');
+const EmailListRowTemplate = require('./email-list/email-list-row.template.js');
 
 module.exports = EmailList = {
 
@@ -12,12 +12,9 @@ module.exports = EmailList = {
 
         if (app) { this.app = app; }
 
-        EmailHeader.render(app, data);
-
         document.querySelector('.email-body').innerHTML = EmailListTemplate();
 
         let { emails } = data.parentmod;
-
         emails[emails.active].forEach(tx => {
             document.querySelector('.email-list').innerHTML
                 += EmailListRowTemplate(tx);
