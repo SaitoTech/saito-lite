@@ -9,7 +9,7 @@ class Chat extends ModTemplate {
 
     super(app);
     this.name = "Chat";
-    this.events = ['chat'];
+    this.events = ['encrypt-key-exchange-confirm'];
 
     //
     // data managed by chat manager
@@ -26,24 +26,10 @@ class Chat extends ModTemplate {
     // create chatgroups from keychain
     //
     let keys = this.app.keys.keys;
-
     for (let i = 0; i < keys.length; i++) {
-
-      let cg = new ChatGroup(app);
-
-      cg.group_members = [];
-      cg.group_members.push(this.app.wallet.returnPublicKey());
-      cg.group_members.push(keys[i].publickey);
-      cg.group_members.sort();
-
-      cg.group_id = this.app.crypto.hash((cg.group_members[0] + "_" + cg.group_members[1]));
-      cg.group_name = keys[i].publickey.substring(0, 16);
-
-      cg.initialize(app);
-
-      this.groups.push(cg);
-
+      this.createChatGroup(keys[i].publickey);
     }
+
   }
 
 
@@ -60,12 +46,12 @@ class Chat extends ModTemplate {
   }
 
 
+
+  ////////////////
+  // eMail Chat //
+  ////////////////
   renderEmailChat(app, data) {
 
-    //
-    // fetch ourselves - we are called from other object
-    // like onConfirmation
-    //
     let chat_self = app.modules.returnModule("Chat");
 
     data.chat = {};
@@ -75,8 +61,48 @@ class Chat extends ModTemplate {
 
   }
   attachEventsEmailChat(app, data) {
-
     EmailChat.attachEvents(app, data);
+  }
+
+
+
+  receiveEvent(type, data) {
+
+    //
+    // new encryption channel opened
+    //
+    if (type === "encrypt-key-exchange-confirm") {
+      if (data.publickey === undefined) { return; }
+      this.createChatGroup(data.publickey);
+    }
+
+  }
+
+
+
+
+  createChatGroup(publickey=null) {
+
+    if (publickey==null) { return; }
+
+    let cg = new ChatGroup(this.app);
+
+    cg.group_members = [];
+    cg.group_members.push(this.app.wallet.returnPublicKey());
+    cg.group_members.push(publickey);
+    cg.group_members.sort();
+
+    cg.group_id = this.app.crypto.hash((cg.group_members[0] + "_" + cg.group_members[1]));
+    cg.group_name = publickey.substring(0, 16);
+
+    for (let i = 0; i < this.groups.length; i++) {
+      if (this.groups[i].group_id == cg.group_id) { return; }
+    }
+
+    cg.initialize(this.app);
+    this.groups.push(cg);
+
+    this.sendEvent('chat-render-request', {});
 
   }
 
@@ -86,29 +112,6 @@ class Chat extends ModTemplate {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  initializeHTML() {
-
-  }
-
-  renderDOM() {
-    Header.render(this);
-    ChatList.render(this);
-  }
 
 
   //
@@ -142,18 +145,17 @@ class Chat extends ModTemplate {
 
 
 
-  receiveEvent(type, data) {
-    if (type === "chat") {
-      if (data.this === undefined) { return; }
-      if (data.this.name === "ChatGroup") {
-	if (data.this === this.cg) {
-	  let x = data.this.respondTo("chat");
-	  this.updateDom(this.chatgroup[52]);
-console.log("Received what data: " + x.title + " -- " + x.ts);
-        }
-      }
-    }
-  }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
