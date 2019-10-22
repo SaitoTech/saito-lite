@@ -90,6 +90,7 @@ input[type=text], input[type=number] {
     height: 9vh;
     padding: 0 1em;
     background-image: url(/saito/img/dreamscape.png);
+    background-position: 0em;
     background-size: cover;
     /* sus and still out to jury */
     position: fixed;
