@@ -23,8 +23,7 @@ module.exports = EmailForm = {
 
 
     addData() {
-        document.getElementById('email-from-address').value = `(Myself) ${this.saito.wallet.returnPublicKey()***REMOVED***`;
-***REMOVED***document.querySelector('.email-balance').innerHTML = numeral(this.saito.wallet.returnBalance()).format('0,0.0000');
+        document.getElementById('email-from-address').value = `${this.saito.wallet.returnPublicKey()***REMOVED*** (me)`;
 ***REMOVED***,
 
     sendEmailTransaction() {
