@@ -1,8 +1,8 @@
-module.exports = EmailDetailHeaderTempkate = (title) => {
+module.exports = EmailDetailHeaderTempkate = (app, data) => {
   return `
     <div class="email-detail-left-options">
       <i id="email-form-back-button" class="icon-med fas fa-arrow-left"></i>
-      <h3>${title***REMOVED***</h3>
+      <h3>${data.parentmod.header_title***REMOVED***</h3>
     </div>
     <div class="email-detail-right-options">
     <div class="email-icons">
@@ -10,7 +10,7 @@ module.exports = EmailDetailHeaderTempkate = (title) => {
       <i id="email-detail-reply" class="icon-med fas fa-reply"></i>
       <i id="email-detail-forward" class="icon-med fas fa-share"></i>
     </div>
-    <div class="email-balance">${("0.0000000").replace(/0+$/,'').replace(/\.$/,'\.0')***REMOVED*** Saito</div>
+    <div class="email-balance">${app.wallet.returnBalance()***REMOVED*** Saito</div>
     </div>
   `;
 ***REMOVED***

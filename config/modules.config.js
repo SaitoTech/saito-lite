@@ -10,9 +10,9 @@
   lite: [
     'chat/chat.js',
     'debug/debug.js',
-    'settings/settings.js',
     'email/email.js',
     'encrypt/encrypt.js',
+    'settings/settings.js',
     'wallet/wallet.js',
   ]
 ***REMOVED***
