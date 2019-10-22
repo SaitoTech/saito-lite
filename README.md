@@ -9,3 +9,9 @@ If you need to get in touch with us, please reach out anytime.
 The Saito Team
 info@saito.tech
 
+## build
+
+```
+npm install
+npm start
+```
