@@ -73,7 +73,15 @@ class Email extends ModTemplate {
 
   initializeHTML(app) {
 
-    this.mods = this.app.modules.respondTo("email-appspace");
+    let x = [];
+    x = this.app.modules.respondTo("email-appspace");
+    for (let i = 0; i < x.length; i++) {
+      this.mods.push(x[i]);
+    }
+    x = this.app.modules.respondTo("email-chat");
+    for (let i = 0; i < x.length; i++) {
+      this.mods.push(x[i]);
+    }
 
     this.uidata.mods	  = this.mods;
     this.uidata.parentmod = this;

@@ -11,7 +11,9 @@ module.exports = EmailControls = {
 
         let email_apps = document.querySelector(".email-apps");
         for (let i = 0; i < data.mods.length; i++) {
+	  if (data.mods[i].respondTo('email-appspace') != null) {
             email_apps.innerHTML += `<li class="email-apps-item" id="${i}">${data.mods[i].name}</li>`;
+	  }
         }
 
     },
