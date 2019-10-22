@@ -85,27 +85,27 @@ body {
 
 /* top left*/
 
-.ribbon_top_left {
+.ribbon-top-left {
   top: -10px;
   left: -10px;
 }
 
-.ribbon_top_left::before, .ribbon_top_left::after {
+.ribbon-top-left::before, .ribbon-top-left::after {
   border-top-color: transparent;
   border-left-color: transparent;
 }
 
-.ribbon_top_left::before {
+.ribbon-top-left::before {
   top: 0;
   right: 0;
 }
 
-.ribbon_top_left::after {
+.ribbon-top-left::after {
   bottom: 0;
   left: 0;
 }
 
-.ribbon_top_left span {
+.ribbon-top-left span {
   right: -25px;
   top: 30px;
   transform: rotate(-45deg);
