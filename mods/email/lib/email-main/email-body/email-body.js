@@ -43,6 +43,7 @@ module.exports = EmailBody = {
                     data.parentmod.previous_state = "email_list";
                     data.parentmod.main.render(app, data);
                     data.parentmod.main.attachEvents(app, data);
+                    // document.querySelector('#email.create-button').style.display = "none";
                 });
     }
 }
