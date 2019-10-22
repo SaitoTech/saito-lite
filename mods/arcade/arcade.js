@@ -31,14 +31,23 @@ class Arcade extends ModTemplate {
 
   }
 
-  initialize(app) {}
+  initialize(app) {
+
+console.log("INITIQLIZING ARCADE");
+
+  }
 
 
   initializeHTML(app) {
 
+console.log("INIT: " + this.games.length);
+
     let x = [];
     x = this.app.modules.respondTo("arcade-gamelist");
+console.log("GAMES THAT RESPOND?: " + x.length);
     for (let i = 0; i < x.length; i++) {  this.games.push(x[i]); }
+
+console.log("INIT: " + this.games.length);
 
     this.data.games = this.games;
 

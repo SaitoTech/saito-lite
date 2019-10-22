@@ -121,6 +121,8 @@ class Email extends ModTemplate {
   //
   onPeerHandshakeComplete(app, peer) {
 
+    if (this.browser_active == 0) { return; }
+
     //
     // leaving this here for the short term,
     // token manager can be a separate module
@@ -141,10 +143,8 @@ class Email extends ModTemplate {
     });
 
 
-    if (this.browser_active) {
-      EmailList.render(this.app, this.uidata);
-      EmailList.attachEvents(this.app, this.uidata);
-    }
+    EmailList.render(this.app, this.uidata);
+    EmailList.attachEvents(this.app, this.uidata);
 
   }
 
@@ -178,7 +178,7 @@ class Email extends ModTemplate {
 
   addEmail(tx) {
     this.emails.inbox.unshift(tx);
-    if (this.app.BROWSER) { this.render(this.app, this.uidata); }
+    if (this.browser_active) { this.render(this.app, this.uidata); }
   }
 
 
@@ -194,7 +194,7 @@ console.log("sending request for funds...");
   }
 
   updateBalance() {
-    if (this.app.BROWSER) {
+    if (this.browser_active) {
       document.querySelector('.email-balance').innerHTML = this.app.wallet.returnBalance();
     }
   }
