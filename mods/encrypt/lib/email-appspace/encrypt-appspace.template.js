@@ -4,7 +4,7 @@ module.exports = EmailAppspaceTemplate = () => {
       <div class="email-appspace-encrypt">
 
 	<div class="email-appspace-encrypt-notice">
-        Create a secure key to encrypt your communications with whom:
+        Create a secure key to encrypt your emails / chats:
         </div>
 
         <div class="email-form">
