@@ -5,6 +5,7 @@
 
 logs
 logs/*
+*.log
 
 config/options
 config/options.*
