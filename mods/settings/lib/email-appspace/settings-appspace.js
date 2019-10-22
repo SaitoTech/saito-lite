@@ -11,18 +11,15 @@ module.exports = SettingsAppspace = {
       document.getElementById('reset-account-btn')
         .addEventListener('click', (e) => {
 
-          app.storage.resetOptions();
-          app.storage.saveOptions();
+          app.wallet.resetWallet();
+          alert("Wallet reset!");
 
-          app.wallet.wallet.privatekey            = app.crypto.generateKeys();
-          app.wallet.wallet.publickey             = app.crypto.returnPublicKey(app.wallet.wallet.privatekey);
-
-          app.options.wallet = app.wallet.wallet;
-          app.wallet.saveWallet();
+	  data.parentmod.emails.inbox = [];
+	  data.parentmod.emails.sent = [];
+	  data.parentmod.emails.trash = [];
 
 	  data.parentmod.body.render(app, data);
 	  data.parentmod.body.attachEvents(app, data);
-
 
   ***REMOVED***);
 ***REMOVED***,
