@@ -13,7 +13,6 @@ module.exports = EncryptAppspace = {
         .addEventListener('click', (e) => {
 	  let recipient = document.getElementById('email-to-address').value;
 	  data.parentmod.appspace_mod.initiate_key_exchange(recipient);
-alert("HERE WE ARE DONE!");
         });
 
     }
