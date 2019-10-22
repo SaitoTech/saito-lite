@@ -1,10 +1,7 @@
 const saito = require('../../lib/saito/saito.js');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const ChatGroup = require('./lib/chatgroup');
-
-const Header = require('../../lib/ui/header/header');
-const ChatList = require('./lib/ui/chat-list/chat-list');
-
+const EmailChat = require('./lib/email-chat/email-chat');
 
 class Chat extends ModTemplate {
 
@@ -17,9 +14,7 @@ class Chat extends ModTemplate {
     //
     // data managed by chat manager
     //
-    this.groups = [];		//
-					//
-					//
+    this.groups = [];
 
   ***REMOVED***
 
@@ -28,69 +23,84 @@ class Chat extends ModTemplate {
     super.initialize(app);
 
     //
-    // this triggers ChatGroup pretending it has received a chat message
-    // and broadcasting a "chat" event to which we are listening, which 
-    // prompts us in turn to ask it for its data.
+    // create chatgroups from keychain
     //
+    let keys = this.app.keys.keys;
 
-    // console.log("sending chatgroup event!");
-    // this.sendEvent("chatgroup", {***REMOVED***);
+    for (let i = 0; i < keys.length; i++) {
 
-    //
-    // EXAMPLE OF EVENT EMISSION
-    //
-    //let p = {***REMOVED***;
-    //    p.var = "string";
-    //
-    //this.sendEvent("testing", p);
-    //
-    if (this.app.BROWSER == 1) {
-      // TODO: dummy function for testing
-      this.initDummyChat(app);
-      this.renderDOM();
+      let cg = new ChatGroup(app);
+
+      cg.group_members = [];
+      cg.group_members.push(this.app.wallet.returnPublicKey());
+      cg.group_members.push(keys[i].publickey);
+      cg.group_members.sort();
+
+      cg.group_id = this.app.crypto.hash((cg.group_members[0] + "_" + cg.group_members[1]));
+      cg.group_name = keys[i].publickey.substring(0, 16);
+
+      cg.initialize(app);
+
+      this.groups.push(cg);
+
+***REMOVED***
+  ***REMOVED***
+
+
+  respondTo(type) {
+
+    if (type == 'email-chat') {
+      let obj = {***REMOVED***;
+          obj.render = this.renderEmailChat;
+          obj.attachEvents = this.attachEventsEmailChat;
+      return obj;
 ***REMOVED***
 
   ***REMOVED***
 
-  initializeHTML() {***REMOVED***
 
-  initDummyChat(app) {
-    //
-    // example of creating chatgroup
-    //
-    this.groups = ['Chat', 'Arcade', 'Forum', 'Wallet'].map(mod_name => {
-      let cg = new ChatGroup(app);
-      cg.initialize(app);
-
-      cg.group_name = mod_name;
-      cg.group_id = this.app.crypto.hash(`${cg.group_name***REMOVED***${new Date().getTime()***REMOVED***`);
-
-      cg.messages = [{
-        id: 1,
-        author: this.app.wallet.returnPublicKey(),
-        publickey: this.app.wallet.returnPublicKey(),
-        message: `Welcome to Saito ${mod_name***REMOVED***!`,
-        timestamp: new Date().getTime()
-  ***REMOVED***];
-
-      return [cg.group_id, cg];
-***REMOVED***);
-
-    this.groups = Object.fromEntries(this.groups);
-
-
-    console.log("sending chatgroup event!");
-    this.sendEvent("chatgroup", {***REMOVED***);
+  renderEmailChat(app, data) {
 
     //
-    // EXAMPLE OF EVENT EMISSION
+    // fetch ourselves - we are called from other object
+    // like onConfirmation
     //
-    //let p = {***REMOVED***;
-    //    p.var = "string";
-    //
-    //this.sendEvent("testing", p);
-    //
-    if (this.app.BROWSER == 1) { this.renderDOM() ***REMOVED***
+    let chat_self = app.modules.returnModule("Chat");
+
+    data.chat = {***REMOVED***;
+    data.chat.groups = chat_self.groups;
+
+    EmailChat.render(app, data);
+
+  ***REMOVED***
+  attachEventsEmailChat(app, data) {
+
+    EmailChat.attachEvents(app, data);
+
+  ***REMOVED***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  initializeHTML() {
 
   ***REMOVED***
 
@@ -117,28 +127,31 @@ class Chat extends ModTemplate {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   receiveEvent(type, data) {
-
     if (type === "chat") {
-
       if (data.this === undefined) { return; ***REMOVED***
       if (data.this.name === "ChatGroup") {
-console.log("Chat receive event from ChatGroup!");
 	if (data.this === this.cg) {
-console.log("it is our very own chatgroup!");
 	  let x = data.this.respondTo("chat");
-	
-	  //
-	  //
-	  //
 	  this.updateDom(this.chatgroup[52]);
-
 console.log("Received what data: " + x.title + " -- " + x.ts);
-
     ***REMOVED***
   ***REMOVED***
 ***REMOVED***
-
   ***REMOVED***
 
 
