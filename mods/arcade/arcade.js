@@ -13,7 +13,7 @@ class Arcade extends ModTemplate {
     super(app);
 
     this.name 			= "Arcade";
-    this.games			= [];
+    this.mods			= [];
     this.data			= {};
 
   }
@@ -32,24 +32,24 @@ class Arcade extends ModTemplate {
   }
 
   initialize(app) {
-
-console.log("INITIQLIZING ARCADE");
-
   }
 
 
   initializeHTML(app) {
 
-console.log("INIT: " + this.games.length);
-
     let x = [];
     x = this.app.modules.respondTo("arcade-gamelist");
-console.log("GAMES THAT RESPOND?: " + x.length);
-    for (let i = 0; i < x.length; i++) {  this.games.push(x[i]); }
+    for (let i = 0; i < x.length; i++) {  this.mods.push(x[i]); }
 
-console.log("INIT: " + this.games.length);
+    x = this.app.modules.respondTo("email-chat");
+    for (let i = 0; i < x.length; i++) {
+      this.mods.push(x[i]);
+    }
 
-    this.data.games = this.games;
+console.log("\n\n\n\nINIT: " + this.mods.length);
+
+
+    this.data.mods = this.mods;
 
     this.render(app, this.data);
 

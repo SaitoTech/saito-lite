@@ -12,16 +12,10 @@ module.exports = ArcadeMain = {
 
 
     let gamelist = document.getElementById("arcade-gamelist");
-console.log("\n\n\n\nPRE ADD:!");
-console.log("LEN: " + data.games.length);
-    data.games.forEach(mod => {
-console.log("\n\n\n\nADD: " + JSON.stringify(mod.name));
+    data.mods.forEach(mod => {
       let gameobj = mod.respondTo("arcade-gamelist");
-console.log("\n\n\n\nADD2: " + JSON.stringify(mod.name));
       if (gameobj != null) {
-console.log("\n\n\n\nADD3: " + JSON.stringify(mod.name));
 	gamelist.innerHTML += ArcadeGameTemplate(mod, gameobj);
-console.log("\n\n\n\nADD4: " + JSON.stringify(mod.name));
       }
     });
 

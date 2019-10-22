@@ -92,12 +92,6 @@ class Email extends ModTemplate {
     EmailSidebar.render(app, this.uidata);
     EmailSidebar.attachEvents(app, this.uidata);
 
-    //
-    // update chat module
-    //
-    //let chatManager = app.modules.returnModule("Chat");
-    //this.chat = chatManager.respondTo("email");
-
   }
 
 

@@ -13,30 +13,6 @@ class Archive extends ModTemplate {
   }
 
 
-  async installModule(app) {
-
-    await super.installModule(app);
-
-/****
-let tx = app.wallet.createUnsignedTransaction();
-    tx.transaction.msg.module = "Email";
-    tx.transaction.msg.title = "This is our title";
-    tx.transaction.msg.message = "This is the substance of our email";
-    tx = app.wallet.signTransaction(tx);
-
-    let sql = "INSERT INTO txs (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $msgtype)";
-console.log("\n\n\n\n\n"+sql);
-    let params = {
-      $sig		:	tx.transaction.sig ,
-      $publickey	:	tx.transaction.to[0].add ,  
-      $tx		:	JSON.stringify(tx.transaction) ,
-      $ts		:	tx.transaction.ts ,
-      $msgtype		:	tx.transaction.msg.module 
-    }
-    await app.storage.executeDatabase(sql, params, "archive");
-****/
-
-  }
 
   onConfirmation(blk, tx, conf, app) {
 
@@ -81,8 +57,8 @@ console.log("\n\n\n\n\n"+sql);
           let type = "";
           let num  = 50;
           if (req.data.num != "")  { num = req.data.num; }
-          if (req.data.type != "") { num = req.data.type; }
-          let txs = await this.loadTransactions(type, num);
+          if (req.data.type != "") { type = req.data.type; }
+          let txs = await this.loadTransactions(req.data.publickey, req.data.sig, type, num);
           let response = {};
               response.err = "";
               response.txs = txs;
@@ -97,12 +73,11 @@ console.log("\n\n\n\n\n"+sql);
 
 
 
+
+
   async saveTransaction(tx=null) {
 
     if (tx == null) { return; }
-
-console.log("TX IS: " );
-console.log(JSON.stringify(tx.transaction));
 
     //
     // TODO - transactions "TO" multiple ppl this means redundant sigs and txs but with unique publickeys
@@ -142,27 +117,29 @@ console.log(JSON.stringify(tx.transaction));
       };
 
       this.app.storage.executeDatabase(sql, params, "archive");
-console.log("\n\n\n\SUCCESS DELETING\n\n\n");
-console.log(sql + " --- " + JSON.stringify(params));
+
     }
   }
 
 
-  async loadTransactions(type, num) {
+  async loadTransactions(publickey, type, num) {
 
-    let sql = "SELECT * FROM txs";
+    let sql = "";
     let params = {};
+
+    if (type === "all") {
+      sql = "SELECT * FROM txs WHERE publickey = $publickey ORDER BY id DESC LIMIT $num";
+      params = { $publickey : publickey , $num : num};
+    } else {
+      sql = "SELECT * FROM txs WHERE publickey = $publickey AND type = $type ORDER BY id DESC LIMIT $num";
+      params = { $publickey : publickey , $type : type , $num : num};
+    }
 
     let rows = await this.app.storage.queryDatabase(sql, params, "archive");
 
-    console.log("\n WE HAVE LOADED THE FOLLOWING ROWS FROM DB FOR RETURN TO CLIENT: " + JSON.stringify(rows));
-
     let txs = [];
-    for (let i = 0; i < rows.length; i++) {
-      txs.push(rows[i].tx);
-    }
+    for (let i = 0; i < rows.length; i++) { txs.push(rows[i].tx); }
 
-console.log("\n\n\nRETURNING: ");
     return txs;
 
   }
