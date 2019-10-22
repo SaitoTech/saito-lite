@@ -11,6 +11,7 @@ class Email extends ModTemplate {
 
     this.name 			= "Email";
     this.chat 			= null;
+    this.events			= ['chat-render-request'];
 
     this.emails 		= {***REMOVED***;
     this.emails.inbox 		= [];
@@ -48,8 +49,7 @@ class Email extends ModTemplate {
 
   initialize(app) {
 
-
-
+    super.initialize(app);
 
     //
     // add an email
@@ -72,6 +72,8 @@ class Email extends ModTemplate {
 
 
   initializeHTML(app) {
+
+    super.initializeHTML(app);
 
     let x = [];
     x = this.app.modules.respondTo("email-appspace");
@@ -176,6 +178,19 @@ class Email extends ModTemplate {
   ***REMOVED***
 
 
+
+  receiveEvent(type, data) {
+
+console.log("EVENT RECEIVED: ");
+
+    if (type == 'chat-render-request') {
+      if (this.browser_active) {
+	EmailSidebar.render(this.app, this.uidata);
+  ***REMOVED***
+***REMOVED***
+
+  ***REMOVED***
+
   getTokens() {
 
     let msg = {***REMOVED***;
@@ -189,7 +204,7 @@ console.log("sending request for funds...");
 
   updateBalance() {
     if (this.browser_active) {
-      document.querySelector('.email-balance').innerHTML = this.app.wallet.returnBalance();
+      document.querySelector('.email-balance').innerHTML = this.app.wallet.returnBalance() + " SAITO";
 ***REMOVED***
   ***REMOVED***
 
