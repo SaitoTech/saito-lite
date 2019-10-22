@@ -30,15 +30,11 @@ class Debug extends ModTemplate {
   }
 
   renderEmail(app, data) {
-
      let DebugAppspace = require('./lib/email-appspace/debug-appspace');
      DebugAppspace.render(app, data);
-     DebugAppspace.attachEvents(app, data);
-
   }
 
   attachEventsEmail(app, data) {
-
   }
 
 

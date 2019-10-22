@@ -114,21 +114,13 @@ class Email extends ModTemplate {
   //
   onPeerHandshakeComplete(app, peer) {
 
-/*****
-
-    //
-    // used in testing SAVE -- works now
-    //
-    //this.app.storage.saveTransaction(this.emails['inbox'][0]);
-
-
     //
     // leaving this here for the short term,
     // token manager can be a separate module
     // in the long-term, as the email client
     // should just handle emails
     //
-    //this.getTokens();
+    this.getTokens();
 
 
     this.app.storage.loadTransactions("Email", 50, (txs) => {
@@ -147,7 +139,6 @@ class Email extends ModTemplate {
       EmailList.render(this.app, this.uidata);
       EmailList.attachEvents(this.app, this.uidata);
     }
-*****/
 
   }
 

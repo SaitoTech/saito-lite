@@ -10,6 +10,7 @@ module.exports = {
   lite: [
     'chat/chat.js',
     'debug/debug.js',
+    'settings/settings.js',
     'email/email.js',
     'encrypt/encrypt.js',
     'wallet/wallet.js',
