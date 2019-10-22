@@ -3,6 +3,10 @@ body {
   font-size: 1.0em;
 ***REMOVED***
 
+.main {
+  height: 90.5vh;
+***REMOVED***
+
 .footer {
   display: none;
 ***REMOVED***
@@ -46,18 +50,18 @@ body {
 ***REMOVED***
 
 .email-body {
-  height: 75vh;
+  /* height: 75vh; */
 ***REMOVED***
 
 .email-list {
-  height: 75vh;
+  height: 83vh;
   display: flex;
   flex-direction: column;
   overflow: scroll;
 ***REMOVED***
 
 .email-form {
-  height: 72vh;
+  /* height: 72vh; */
   display: grid;
   grid-template-rows: 3em 3em 3em auto 4em;
   grid-gap: 1em;
@@ -127,7 +131,7 @@ body {
 
 .email-controls {
   display: grid;
-  grid-template-rows: 3em 10em auto;
+  grid-template-rows: 3em auto auto;
   grid-gap: 0.5em;
 ***REMOVED***
 
@@ -176,13 +180,10 @@ body {
 
 
 .email-text-wrapper {
-  /* grid-row: 4;
-  grid-column: 2 /4; */
+  height: 35vh;
 ***REMOVED***
 
-.email-submit {
-  /* grid-column: 2/4; */
-***REMOVED***
+.email-submit {***REMOVED***
 
 .email-sidebar li.button {
   margin: 0 0 1em 0;
