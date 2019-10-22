@@ -1,5 +1,6 @@
 const ArcadeMainTemplate = require('./arcade-main.template');
-const ArcadeGame = require('./arcade-
+const ArcadeGame = require('./arcade-game/arcade-game');
+
 
 module.exports = ArcadeMain = {
 

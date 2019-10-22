@@ -1,23 +1,8 @@
-const ArcadeMainTemplate = require('./arcade-main.template');
-const ArcadeGame = require('./arcade-
+const ArcadeGameTemplate = require('./arcade-game.template');
 
-module.exports = ArcadeMain = {
+module.exports = ArcadeGame = {
 
   render(app, data) {
-
-    let arcade_main = document.querySelector(".arcade-main");
-    if (!arcade_main) { return; ***REMOVED***
-    arcade_main.innerHTML = ArcadeMainTemplate();
-
-    let gamelist = document.querySelector(".arcade-gamelist");
-
-    for (let i = 0; i < data.games.length; i++) {
-      let game = data.games.respondTo("arcade-gamelist");
-      if (game != null) {
-	
-  ***REMOVED***
-***REMOVED***
-
   ***REMOVED***,
 
   attachEvents(app, data) {
