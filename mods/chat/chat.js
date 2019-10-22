@@ -56,6 +56,7 @@ class Chat extends ModTemplate {
       return obj;
 ***REMOVED***
 
+    return null;
   ***REMOVED***
 
 

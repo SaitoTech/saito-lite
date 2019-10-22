@@ -1,12 +1,18 @@
 const EmailBarsMenuTemplate = require('./email-bars-menu.template');
 
 module.exports = EmailBarsMenu = {
+
   render(app, data) {
+
     document.querySelector('.email-bars-menu').innerHTML = EmailBarsMenuTemplate();
+
     let email_apps = document.querySelector(".email-apps");
     for (let i = 0; i < data.mods.length; i++) {
+      if (data.mods[i].respondTo("email-appspace") != null) {
         email_apps.innerHTML += `<li class="email-apps-item" id="${i***REMOVED***">${data.mods[i].name***REMOVED***</li>`;
+  ***REMOVED***
 ***REMOVED***
+
   ***REMOVED***,
 
   attachEvents(app, data) {
