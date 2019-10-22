@@ -1,15 +1,15 @@
+const SettingsAppspace = require('./lib/email-appspace/settings-appspace');
 var saito = require('../../lib/saito/saito');
 var ModTemplate = require('../../lib/templates/modtemplate');
 
 
-
-class Debug extends ModTemplate {
+class Settings extends ModTemplate {
 
   constructor(app) {
     super(app);
 
     this.app            = app;
-    this.name           = "Debug";
+    this.name           = "Settings";
 
     return this;
   ***REMOVED***
@@ -21,21 +21,18 @@ class Debug extends ModTemplate {
 
     if (type == 'email-appspace') {
       let obj = {***REMOVED***;
-	  obj.render = this.renderEmail;
-	  obj.attachEvents = this.attachEventsEmail;
+	  obj.render = function (app, data) {
+     	    SettingsAppspace.render(app, data);
+      ***REMOVED***
+	  obj.attachEvents = function (app, data) {
+     	    SettingsAppspace.attachEvents(app, data);
+	  ***REMOVED***
       return obj;
 ***REMOVED***
 
     return null;
   ***REMOVED***
 
-  renderEmail(app, data) {
-     let DebugAppspace = require('./lib/email-appspace/debug-appspace');
-     DebugAppspace.render(app, data);
-  ***REMOVED***
-
-  attachEventsEmail(app, data) {
-  ***REMOVED***
 
 
 ***REMOVED***
@@ -46,6 +43,6 @@ class Debug extends ModTemplate {
 
 
 
-module.exports = Debug;
+module.exports = Settings;
 
 

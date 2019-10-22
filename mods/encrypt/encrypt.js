@@ -107,55 +107,57 @@ console.log("A1");
     let encrypt_self = app.modules.returnModule("Encrypt");
 
     if (conf == 0) {
+      if (tx.transaction.to[0].add === app.wallet.returnPublicKey()) {
 
-      let sender           = tx.transaction.from[0].add;
-      let receiver         = tx.transaction.to[0].add;
-      let txmsg            = tx.returnMessage();
-      let request          = txmsg.request;  // "request"
-      if (app.keys.alreadyHaveSharedSecret(sender)) { return; ***REMOVED***
+        let sender           = tx.transaction.from[0].add;
+        let receiver         = tx.transaction.to[0].add;
+        let txmsg            = tx.returnMessage();
+        let request          = txmsg.request;  // "request"
+        if (app.keys.alreadyHaveSharedSecret(sender)) { return; ***REMOVED***
 
 console.log("A..A");
 
-      //
-      // key exchange requests
-      //
-      if (txmsg.request == "key exchange request") {
-        if (sender == app.wallet.returnPublicKey()) {
-	  console.log("\n\n\nYou have sent an encrypted channel request to " + receiver);
+***REMOVED***
+***REMOVED*** key exchange requests
+***REMOVED***
+        if (txmsg.request == "key exchange request") {
+          if (sender == app.wallet.returnPublicKey()) {
+  	    console.log("\n\n\nYou have sent an encrypted channel request to " + receiver);
+      ***REMOVED***
+          if (receiver == app.wallet.returnPublicKey()) {
+console.log("B..A");
+	    console.log("\n\n\nYou have accepted an encrypted channel request from " + receiver);
+console.log("B..A");
+            encrypt_self.accept_key_exchange(tx);
+console.log("B..A");
+      ***REMOVED***
     ***REMOVED***
-        if (receiver == app.wallet.returnPublicKey()) {
-console.log("B..A");
-	  console.log("\n\n\nYou have accepted an encrypted channel request from " + receiver);
-console.log("B..A");
-          encrypt_self.accept_key_exchange(tx);
-console.log("B..A");
-    ***REMOVED***
-  ***REMOVED***
 
-      //
-      // key confirm requests
-      //
-      if (txmsg.request == "key exchange confirm") {
+***REMOVED***
+***REMOVED*** key confirm requests
+***REMOVED***
+        if (txmsg.request == "key exchange confirm") {
 console.log("A..A");
 
 console.log("A..A");
-        let bob_publickey = new Buffer(txmsg.bob, "hex");;
+          let bob_publickey = new Buffer(txmsg.bob, "hex");;
 console.log("A..A");
-        var senderkeydata = app.keys.findByPublicKey(sender);
+          var senderkeydata = app.keys.findByPublicKey(sender);
 console.log("A..A");
-        if (senderkeydata == null) { 
-	  if (app.BROWSER == 1) {
-	    alert("Cannot find original diffie-hellman keys for key-exchange");
+          if (senderkeydata == null) { 
+	    if (app.BROWSER == 1) {
+	      alert("Cannot find original diffie-hellman keys for key-exchange");
 console.log("A..fgsdfgA");
-	    return;
-	  ***REMOVED***
-    ***REMOVED***
+	      return;
+	***REMOVED***
+      ***REMOVED***
 console.log("A..A");
-        let alice_publickey  = new Buffer(senderkeydata.aes_publickey, "hex");
-        let alice_privatekey = new Buffer(senderkeydata.aes_privatekey, "hex");
-        let alice            = app.crypto.createDiffieHellman(alice_publickey, alice_privatekey);
-        let alice_secret     = app.crypto.createDiffieHellmanSecret(alice, bob_publickey);
-        app.keys.updateCryptoByPublicKey(sender, alice_publickey.toString("hex"), alice_privatekey.toString("hex"), alice_secret.toString("hex"));
+          let alice_publickey  = new Buffer(senderkeydata.aes_publickey, "hex");
+          let alice_privatekey = new Buffer(senderkeydata.aes_privatekey, "hex");
+          let alice            = app.crypto.createDiffieHellman(alice_publickey, alice_privatekey);
+          let alice_secret     = app.crypto.createDiffieHellmanSecret(alice, bob_publickey);
+          app.keys.updateCryptoByPublicKey(sender, alice_publickey.toString("hex"), alice_privatekey.toString("hex"), alice_secret.toString("hex"));
+    ***REMOVED***
   ***REMOVED***
 ***REMOVED***
   ***REMOVED***
