@@ -12,7 +12,7 @@ module.exports = EmailDetailHeader = {
     document.getElementById('email-form-back-button')
             .addEventListener('click', (e) => {
 
-              data.parentmod.emails.active = "inbox";
+              // data.parentmod.emails.active = "inbox";
               data.parentmod.active = "email_list";
               data.parentmod.selected_email = {};
 
