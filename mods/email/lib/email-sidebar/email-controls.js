@@ -74,7 +74,6 @@ module.exports = EmailControls = {
 
 	      data.parentmod.appspace_mod = null;
 	      data.parentmod.active = "email_list";
-	      data.parentmod.header = 0;
 	      data.parentmod.header_title = "";
 
     	      EmailHeader.render(app, data);
