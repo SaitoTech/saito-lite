@@ -44,7 +44,6 @@ class Email extends ModTemplate {
     EmailSidebar.render(app, data);
     EmailSidebar.attachEvents(app, data);
 
-
   ***REMOVED***
 
   initialize(app) {
@@ -114,22 +113,13 @@ class Email extends ModTemplate {
   //
   onPeerHandshakeComplete(app, peer) {
 
-/*****
-
-    //
-    // used in testing SAVE -- works now
-    //
-    //this.app.storage.saveTransaction(this.emails['inbox'][0]);
-
-
     //
     // leaving this here for the short term,
     // token manager can be a separate module
     // in the long-term, as the email client
     // should just handle emails
     //
-    //this.getTokens();
-
+    this.getTokens();
 
     this.app.storage.loadTransactions("Email", 50, (txs) => {
 
@@ -147,7 +137,6 @@ class Email extends ModTemplate {
       EmailList.render(this.app, this.uidata);
       EmailList.attachEvents(this.app, this.uidata);
 ***REMOVED***
-*****/
 
   ***REMOVED***
 
@@ -180,17 +169,18 @@ class Email extends ModTemplate {
 
 
   addEmail(tx) {
-    let {title, message***REMOVED*** = tx.returnMessage();
-    this.emails.inbox.unshift({title, message, timestamp: tx.transaction.ts***REMOVED***);
-    if (this.app.BROWSER) { EmailList.render(this.app, this.uidata); ***REMOVED***
+    this.emails.inbox.unshift(tx);
+    if (this.app.BROWSER) { this.render(this.app, this.uidata); ***REMOVED***
   ***REMOVED***
 
 
   getTokens() {
+
     let msg = {***REMOVED***;
     msg.data = {address: this.app.wallet.returnPublicKey()***REMOVED***;
     msg.request = 'get tokens';
     setTimeout(() => {
+console.log("sending request for funds...");
         this.app.network.sendRequest(msg.request, msg.data);
 ***REMOVED***, 1000);
   ***REMOVED***

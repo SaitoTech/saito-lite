@@ -12,6 +12,7 @@
     'debug/debug.js',
     'email/email.js',
     'encrypt/encrypt.js',
+    'settings/settings.js',
     'wallet/wallet.js',
   ]
 ***REMOVED***

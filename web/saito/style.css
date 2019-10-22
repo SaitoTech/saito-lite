@@ -74,6 +74,10 @@ button, .button {
     cursor: pointer;   
 ***REMOVED***
 
+.courier {
+    font-family: 'courier';
+***REMOVED***
+
 /* button:hover, .button:hover {
     border-bottom: 4px solid var(--saito-red);
 ***REMOVED*** */
