@@ -36,6 +36,14 @@ module.exports = EmailBody = {
     ***REMOVED***
 ***REMOVED***,
 
-    attachEvents(app, data) {***REMOVED***
+    attachEvents(app, data) {
+        document.querySelector('#email.create-button')
+                .addEventListener('click', (e) => {
+                    data.parentmod.active = "email_form";
+                    data.parentmod.previous_state = "email_list";
+                    data.parentmod.main.render(app, data);
+                    data.parentmod.main.attachEvents(app, data);
+            ***REMOVED***);
+***REMOVED***
 ***REMOVED***
 

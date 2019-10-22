@@ -3,6 +3,10 @@ body {
   font-size: 1.0em;
 ***REMOVED***
 
+.main {
+  height: 90.5vh;
+***REMOVED***
+
 .footer {
   display: none;
 ***REMOVED***
@@ -22,18 +26,22 @@ body {
   padding: 10px 0px;
   display: grid;
   align-items: center;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 70% 30%;
   border-bottom: 1px solid var(--saito-cyber-black);
 ***REMOVED***
 
 .email-icons {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 2.25em;
+  grid-auto-columns: 2em;
+  justify-items: center;
+  align-items: center;
+  grid-gap: 0.3em;
 ***REMOVED***
 
 #email-form-back-button {
   cursor: pointer;
+  justify-self: left;
 ***REMOVED***
 
 .email-balance {
@@ -43,18 +51,18 @@ body {
 ***REMOVED***
 
 .email-body {
-  height: 75vh;
+  /* height: 75vh; */
 ***REMOVED***
 
 .email-list {
-  height: 75vh;
+  height: 83vh;
   display: flex;
   flex-direction: column;
   overflow: auto;
 ***REMOVED***
 
 .email-form {
-  height: 72vh;
+  /* height: 72vh; */
   display: grid;
   grid-template-rows: 3em 3em 3em auto 4em;
   grid-gap: 1em;
@@ -75,6 +83,7 @@ body {
 #email-select-icon {
   width: 24px;
   height: 24px;
+  justify-self: left;
 ***REMOVED***
 
 #email-delete-icon {
@@ -118,15 +127,13 @@ body {
 
 
 .email-sidebar {
-  /* display: grid;
-  grid-gap: 1em; */
   margin: 10px 10px;
 ***REMOVED***
 
 .email-controls {
   display: grid;
-  grid-template-rows: 3em 6em auto;
-  grid-gap: 1em;
+  grid-template-rows: 3em auto auto;
+  grid-gap: 0.5em;
 ***REMOVED***
 
 .email-navigator, .email-apps {
@@ -134,13 +141,11 @@ body {
   list-style-type: none;
   font-size: 1.2em;
   line-height: 1.4em;
-  padding-bottom: 10px;
-  
+  padding: 10px 0px;
 ***REMOVED***
 
 .email-navigator {
   border-bottom: 1px solid grey;
-  height: 5.5em;
 ***REMOVED***
 
 .email-navigator-item, .email-apps-item {
@@ -173,6 +178,7 @@ body {
 ***REMOVED***
 
 .email-chat {
+  margin-top: 0.5em;
   width:100%;
   height:300px;
   border: 1px solid #ddd;
@@ -184,13 +190,10 @@ body {
 
 
 .email-text-wrapper {
-  /* grid-row: 4;
-  grid-column: 2 /4; */
+  height: 35vh;
 ***REMOVED***
 
-.email-submit {
-  /* grid-column: 2/4; */
-***REMOVED***
+.email-submit {***REMOVED***
 
 .email-sidebar li.button {
   margin: 0 0 1em 0;
@@ -257,6 +260,7 @@ body {
   display: grid;
   grid-gap: 0.5em;
   grid-template-columns: 2em auto;
+  align-items: center;
 ***REMOVED***
 
 .email-detail-right-options {
@@ -292,6 +296,67 @@ body {
   .email-detail-address-id {
     font-size: 0.8em;
   ***REMOVED***
+
+  .email-header {
+    /* grid-template-rows: 1fr 1fr;
+    grid-gap: 0.75em; */
+  ***REMOVED***
+
+  .email-detail-right-options {
+    display: flex;
+    justify-self: end;
+    flex-direction: column-reverse;
+    padding: 10px 0px;
+  ***REMOVED***
+
+  .email-icons {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 2em;
+    align-self: end;
+    justify-items: center;
+    align-items: center;
+    grid-gap: 0.3em;
+    margin-top: 0.5em;
+  ***REMOVED***
+
+  .email-balance {
+    align-self: flex-end;
+  ***REMOVED***
+
+  .email-bars-menu {
+    position: absolute;
+    z-index: 10000;
+    left: 3.5vw;
+    top: 16.5vh;
+    width: 92.5vw;
+    background: white;
+    font-family: visuelt-medium;
+  ***REMOVED***
+
+  .email-navigator, .email-apps {
+    display: grid;
+    justify-content: center;
+    padding: 10px 0px;
+    height: 100%;
+  ***REMOVED***
+
+  .email-apps {
+    border-bottom: 1px solid black;
+  ***REMOVED***
+
+  .email-apps-item {
+    justify-self: center;
+    padding: 5px;
+  ***REMOVED***
+
+  .email-navigator-item {
+    padding: 5px;
+  ***REMOVED***
+
+  #email.create-button {
+    bottom: 2vh;
+  ***REMOVED***
 ***REMOVED***
 
 .email-appspace {
@@ -304,6 +369,10 @@ body {
 
 @media only screen and (min-width: 600px) {
   #email.create-button {
+    display: none;
+  ***REMOVED***
+
+  #email-bars-icon {
     display: none;
   ***REMOVED***
 ***REMOVED***

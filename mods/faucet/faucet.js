@@ -22,14 +22,14 @@ class Faucet extends ModTemplate {
     var publickey = message.data.address;
 
     if (publickey == null) {
-      console.error("NO PUBLICKEY PROVIDED, EXITING");
+      console.error("NO PUBLICKEY PROVIDED, EXCITING");
       return;
 ***REMOVED***
 
     let wallet_balance = this.app.wallet.returnBalance();
 
     if (wallet_balance < 1000) {
-      console.log("\n\n\n *******THE FAUCE TIS POOR******* \n\n\n");
+      console.log("\n\n\n *******THE FAUCETI SPOOR******* \n\n\n");
       return;
 ***REMOVED***
 
