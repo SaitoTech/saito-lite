@@ -1,0 +1,42 @@
+/** Email **/
+body {
+  font-size: 1.0em;
+***REMOVED***
+
+.main {
+  height: 90.5vh;
+***REMOVED***
+
+.footer {
+  display: none;
+***REMOVED***
+
+.arcade-container {
+  display: grid;
+  grid-column-gap: 1.5em;
+  grid-template-columns: 15em auto 15em;
+  grid-template-areas: "arcade-left-sidebar arcade-main arcade-right-sidebar";
+***REMOVED***
+
+.arcade-sidebar {
+  margin: 10px 10px;
+***REMOVED***
+
+
+
+@media only screen and (max-width: 600px) {
+  .main {
+    max-width: unset;
+  ***REMOVED***
+  .arcade-container {
+    grid-template-columns: 1fr;
+    grid-template-areas: "arcade-left-sidebar" "arcade-main";
+  ***REMOVED***
+  .arcade-sidebar {
+    display: none;
+  ***REMOVED***
+***REMOVED***
+
+@media only screen and (min-width: 600px) {
+***REMOVED***
+

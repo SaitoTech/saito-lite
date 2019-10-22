@@ -141,7 +141,7 @@ class Email extends ModTemplate {
 ***REMOVED***);
 
 
-    if (this.app.BROWSER) {
+    if (this.browser_active) {
       EmailList.render(this.app, this.uidata);
       EmailList.attachEvents(this.app, this.uidata);
 ***REMOVED***
