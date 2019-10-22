@@ -63,21 +63,50 @@ body {
 
 .email-form {
   /* height: 72vh; */
-  display: grid;
+  /* display: grid;
   grid-template-rows: 3em 3em 3em auto 4em;
   grid-gap: 1em;
-  padding-top: 10px;
+  padding-top: 10px; */
+}
+
+.email-form input[type=text] {
+  border: none;
+  padding: 10px 0px;
+  outline: none;
+}
+
+.email-title {
+  border-top: 1px solid lightgrey
+}
+
+.email-form textarea {
+  outline: none;
+}
+
+.email-form-row {
+  display: grid;
+  grid-template-columns: 4em auto;
+  align-items: center;
 }
 
 #email-form-options {
   display: flex;
   justify-content: space-between;
-  position: relative;
-  left: 5px;
-  bottom: 35px;
   color: grey;
-  font-size: 1.5em;
-  width: 3.5em;
+  width: 5.5em;
+}
+
+.email-title {
+  border-top: 1px solid lightgrey;
+  width: 100%;
+}
+
+.email-detail-footer {
+  display: grid;
+  grid-template-columns: 8em auto;
+  align-items: center;
+  margin-top: 1em;
+  grid-gap: 1em;
 }
 
 #email-select-icon {
@@ -309,6 +338,10 @@ body {
     padding: 10px 0px;
   }
 
+  .email-detail-right-options > .email-icons {
+    margin-top: 0.5em;
+  }
+
   .email-icons {
     display: grid;
     grid-auto-flow: column;
@@ -317,7 +350,6 @@ body {
     justify-items: center;
     align-items: center;
     grid-gap: 0.3em;
-    margin-top: 0.5em;
   }
 
   .email-balance {
