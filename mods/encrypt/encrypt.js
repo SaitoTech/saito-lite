@@ -93,7 +93,7 @@ console.log("A1");
 console.log("A1");
 
     this.app.network.propagateTransaction(newtx);
-console.log("A1");
+console.log("A1 -- transaction now propagated");
     this.app.keys.updateCryptoByPublicKey(tx.transaction.from[0].add, bob_publickey, bob_privatekey, bob_secret.toString("hex"));
 console.log("A1");
 
@@ -107,55 +107,57 @@ console.log("A1");
     let encrypt_self = app.modules.returnModule("Encrypt");
 
     if (conf == 0) {
+      if (tx.transaction.to[0].add === app.wallet.returnPublicKey()) {
 
-      let sender           = tx.transaction.from[0].add;
-      let receiver         = tx.transaction.to[0].add;
-      let txmsg            = tx.returnMessage();
-      let request          = txmsg.request;  // "request"
-      if (app.keys.alreadyHaveSharedSecret(sender)) { return; }
+        let sender           = tx.transaction.from[0].add;
+        let receiver         = tx.transaction.to[0].add;
+        let txmsg            = tx.returnMessage();
+        let request          = txmsg.request;  // "request"
+        if (app.keys.alreadyHaveSharedSecret(sender)) { return; }
 
 console.log("A..A");
 
-      //
-      // key exchange requests
-      //
-      if (txmsg.request == "key exchange request") {
-        if (sender == app.wallet.returnPublicKey()) {
-	  console.log("\n\n\nYou have sent an encrypted channel request to " + receiver);
+        //
+        // key exchange requests
+        //
+        if (txmsg.request == "key exchange request") {
+          if (sender == app.wallet.returnPublicKey()) {
+  	    console.log("\n\n\nYou have sent an encrypted channel request to " + receiver);
+          }
+          if (receiver == app.wallet.returnPublicKey()) {
+console.log("B..A");
+	    console.log("\n\n\nYou have accepted an encrypted channel request from " + receiver);
+console.log("B..A");
+            encrypt_self.accept_key_exchange(tx);
+console.log("B..A");
+          }
         }
-        if (receiver == app.wallet.returnPublicKey()) {
-console.log("B..A");
-	  console.log("\n\n\nYou have accepted an encrypted channel request from " + receiver);
-console.log("B..A");
-          encrypt_self.accept_key_exchange(tx);
-console.log("B..A");
-        }
-      }
 
-      //
-      // key confirm requests
-      //
-      if (txmsg.request == "key exchange confirm") {
+        //
+        // key confirm requests
+        //
+        if (txmsg.request == "key exchange confirm") {
 console.log("A..A");
 
 console.log("A..A");
-        let bob_publickey = new Buffer(txmsg.bob, "hex");;
+          let bob_publickey = new Buffer(txmsg.bob, "hex");;
 console.log("A..A");
-        var senderkeydata = app.keys.findByPublicKey(sender);
+          var senderkeydata = app.keys.findByPublicKey(sender);
 console.log("A..A");
-        if (senderkeydata == null) { 
-	  if (app.BROWSER == 1) {
-	    alert("Cannot find original diffie-hellman keys for key-exchange");
+          if (senderkeydata == null) { 
+	    if (app.BROWSER == 1) {
+	      alert("Cannot find original diffie-hellman keys for key-exchange");
 console.log("A..fgsdfgA");
-	    return;
-	  }
-        }
+	      return;
+	    }
+          }
 console.log("A..A");
-        let alice_publickey  = new Buffer(senderkeydata.aes_publickey, "hex");
-        let alice_privatekey = new Buffer(senderkeydata.aes_privatekey, "hex");
-        let alice            = app.crypto.createDiffieHellman(alice_publickey, alice_privatekey);
-        let alice_secret     = app.crypto.createDiffieHellmanSecret(alice, bob_publickey);
-        app.keys.updateCryptoByPublicKey(sender, alice_publickey.toString("hex"), alice_privatekey.toString("hex"), alice_secret.toString("hex"));
+          let alice_publickey  = new Buffer(senderkeydata.aes_publickey, "hex");
+          let alice_privatekey = new Buffer(senderkeydata.aes_privatekey, "hex");
+          let alice            = app.crypto.createDiffieHellman(alice_publickey, alice_privatekey);
+          let alice_secret     = app.crypto.createDiffieHellmanSecret(alice, bob_publickey);
+          app.keys.updateCryptoByPublicKey(sender, alice_publickey.toString("hex"), alice_privatekey.toString("hex"), alice_secret.toString("hex"));
+        }
       }
     }
   }
