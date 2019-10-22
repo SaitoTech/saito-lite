@@ -7,7 +7,6 @@ module.exports = DebugAppspace = {
       document.getElementById("email-appspace-debug").innerHTML = JSON.stringify(app.options, null, 2);
 ***REMOVED***,
 
-    attachEvents(app, data) {
-***REMOVED***
+    attachEvents(app, data) {***REMOVED***
 
 ***REMOVED***
