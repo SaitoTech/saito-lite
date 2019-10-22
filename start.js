@@ -3,6 +3,7 @@ const storage = require('./lib/saito/core/storage-core.js');
 const mods_config = require('./config/modules.config.js');
 
 const saito = require('./lib/index.js');
+const logger = require('./lib/saito_logger.js')
 
 async function initSaito() {
   const app = new saito.Saito({
@@ -23,7 +24,7 @@ async function initSaito() {
 
   await app.init();
 
-  console.log(`
+  logger.info(`
 
                                            
                      ◼◼◼                   
@@ -70,7 +71,7 @@ async function initSaito() {
   `);
 
   function shutdownSaito() {
-    console.log("Shutting down Saito");
+    logger.info("Shutting down Saito");
     app.server.close();
     app.network.close();
   }
@@ -80,12 +81,12 @@ async function initSaito() {
   /////////////////////
   process.on('SIGTERM', function () {
     shutdownSaito();
-    console.log("Network Shutdown");
+    logger.info("Network Shutdown");
     process.exit(0)
   });
   process.on('SIGINT', function () {
     shutdownSaito();
-    console.log("Network Shutdown");
+    logger.info("Network Shutdown");
     process.exit(0)
   });
 }
