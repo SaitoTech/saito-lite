@@ -56,6 +56,7 @@ class Chat extends ModTemplate {
       return obj;
     }
 
+    return null;
   }
 
 
