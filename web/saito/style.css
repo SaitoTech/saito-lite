@@ -5,6 +5,11 @@
     --saito-white: #ffffff;
 }
 
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 html {
     --text-color-normal: var(--saito-cyber-black);
     --backround-general: var(--saito-white);
