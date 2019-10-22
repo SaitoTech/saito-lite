@@ -23,7 +23,7 @@ body {
   display: grid;
   align-items: center;
   grid-template-columns: 1fr 1fr;
-  border-bottom: 1px solid var(--saito-red);
+  border-bottom: 1px solid var(--saito-cyber-black);
 }
 
 .email-icons {
