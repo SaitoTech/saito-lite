@@ -1,0 +1,42 @@
+/** Email **/
+body {
+  font-size: 1.0em;
+}
+
+.main {
+  height: 90.5vh;
+}
+
+.footer {
+  display: none;
+}
+
+.arcade-container {
+  display: grid;
+  grid-column-gap: 1.5em;
+  grid-template-columns: 15em auto 15em;
+  grid-template-areas: "arcade-left-sidebar arcade-main arcade-right-sidebar";
+}
+
+.arcade-sidebar {
+  margin: 10px 10px;
+}
+
+
+
+@media only screen and (max-width: 600px) {
+  .main {
+    max-width: unset;
+  }
+  .arcade-container {
+    grid-template-columns: 1fr;
+    grid-template-areas: "arcade-left-sidebar" "arcade-main";
+  }
+  .arcade-sidebar {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+}
+
