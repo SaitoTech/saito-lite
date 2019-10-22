@@ -5,8 +5,10 @@ module.exports = DebugAppspaceTemplate = () => {
       </pre>
       <style type="text/css">
 	.email-appspace-debug {
-	  padding: 20px;
-	  font-size: 1.2em;
+    font-size: 1.2em;
+    overflow: scroll;
+    height: 81vh;
+    width: 65vw;
 	***REMOVED***
       </style>
   `;
