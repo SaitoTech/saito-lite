@@ -1,21 +1,26 @@
 module.exports = EmailFormTemplate = () => {
   return `
       <div class="email-form">
-        <input id="email-from-address" class="email-address" type="text" readonly>
-        <input id="email-to-address" class="email-address" type="text" placeholder="TO Address">
-          <input class="email-title" type="text" placeholder="Title">
-          <div class="email-text-wrapper">
-            <textarea class="email-text" placeholde="Message"></textarea>
+        <div class="email-form-row">
+          <p>FROM:</p>
+          <input id="email-from-address" class="email-address" type="text" readonly>
+        </div>
+        <div class="email-form-row">
+          <p>TO:</p>
+          <input id="email-to-address" class="email-address" type="text" placeholder="Address">
+        </div>
+        <input class="email-title" type="text" placeholder="Title">
+        <div class="email-text-wrapper">
+          <textarea class="email-text" placeholde="Message"></textarea>
+        </div>
+        <div class="email-detail-footer">
+            <button class="email-submit">SUBMIT</button>
             <div id="email-form-options">
-              <i class="fas fa-paperclip"></i>
-              <i class="fas fa-image"></i>
-              <i class="fas fa-dollar-sign"></i>
+              <i class="icon-med fas fa-paperclip"></i>
+              <i class="icon-med fas fa-image"></i>
+              <i class="icon-med fas fa-dollar-sign"></i>
             </div>
-          </div>
-          <button class="email-submit">SUBMIT</button>
+        </div>
       </div>
   `
 };
-
-  // <div class="raw-switch">Raw Message</div>
-  // <textarea class="raw-message" contenteditable="true"></textarea>
