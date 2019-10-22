@@ -6,7 +6,7 @@ const EmailHeader = require('../email-header/email-header');
 module.exports = EmailFormHeader = {
 
   render(app, data) {
-    document.querySelector('.email-header').innerHTML = EmailFormHeaderTemplate();
+    document.querySelector('.email-header').innerHTML = EmailFormHeaderTemplate(app, data);
   },
 
   attachEvents(app, data) {
