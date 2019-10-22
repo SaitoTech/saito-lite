@@ -63,6 +63,13 @@ module.exports = EmailInboxHeader = {
                     email_bars_menu.addEventListener('click', () => {
                         email_bars_menu.style.display = "none";
                     });
+
+                    window.addEventListener('click', (e) => {
+                        if (e.target.id !== "email-bars-icon") {
+                            email_bars_menu.style.display = "none";
+                        }
+                    });
+
                 }
             });
   },
