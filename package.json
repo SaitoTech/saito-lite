@@ -35,7 +35,8 @@
     "sha256": "^0.2.0",
     "socket.io": "^2.3.0",
     "sqlite": "^3.0.3",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.6.0",
