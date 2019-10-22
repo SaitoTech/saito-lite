@@ -93,7 +93,7 @@ console.log("A1");
 console.log("A1");
 
     this.app.network.propagateTransaction(newtx);
-console.log("A1");
+console.log("A1 -- transaction now propagated");
     this.app.keys.updateCryptoByPublicKey(tx.transaction.from[0].add, bob_publickey, bob_privatekey, bob_secret.toString("hex"));
 console.log("A1");
 
