@@ -1,0 +1,511 @@
+body {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 13px;
+  padding: 0px;
+  margin: 0px;
+  background-color: #024;
+}
+
+.connection_monitor {
+  position: fixed;
+  display: none;
+  min-height: 30px;
+  z-index: 90000;
+  background: #ef6666;
+  font-size: 1.8em;
+  padding: 15px;
+}
+
+.link {
+  border-bottom: 1px dashed;
+  cursor: pointer;
+}
+
+.tosstiles {
+  border-bottom: 1px dashed;
+}
+
+.main {
+  display: block;
+  width: 900px;
+  margin: auto;
+  margin-bottom: none;
+  border: 1px solid orange;
+  padding: 0px;
+}
+
+.gameboard {
+  display: grid;
+  grid-template-columns: repeat(15, 15fr);
+  grid-template-rows: repeat(15, 15fr);
+  grid-gap: 3px;
+  background: #999;
+  border: 10px solid #333;
+  padding: 10px;
+}
+
+.action {
+  display: block;
+  color: #fff;
+  border: 4px solid #cccccc;
+  padding: 5px;
+  border-radius: 10px;
+  margin: 5px;
+  background-color: #777;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* #controls {
+  margin: auto;
+  display: block;
+  overflow: hidden;
+  background-color: #555;
+  border: 2px solid #333;
+  color: #EEE;
+  height: 340px;
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+} */
+
+#remainder, #lastmove {
+  /* display: inline-block; */
+  font-size: 1.7em;
+  /* padding: 10px 10px 0 10px; */
+}
+
+#remainder {
+  width: 33%;
+}
+
+.home {
+  display: inline-block;
+  font-size: 20px;
+  margin-left: 10px;
+}
+
+.home>a>i {
+  color: #fff;
+}
+
+.score {
+  font-size: 1.6rem;
+  display: grid;
+  align-content: center;
+  /* padding: 10px 20px; */
+  /* display: inline-block; */
+  /* width: 20% */
+}
+
+.rack {
+  align-self: center;
+  display: flex;
+  /* padding: 10px 0;
+  height: 80px; */
+}
+
+.shuffle {
+  display: inline-block;
+  font-size: 20px;
+  width: 12%;
+  height: 4em;
+  cursor: pointer;
+}
+
+.tiles {
+  /* display: inline-block;
+  font-size: 1.9em;
+  width: 80%;
+  position: relative;
+  top: -45px; */
+  display: flex;
+}
+
+.tile {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  text-indent: 5px;
+}
+
+.tiles div.tile {
+  width: 35px;
+  height: 35px;
+  display: inline-block;
+  text-align: center;
+  line-height: 35px;
+  font-weight: bold;
+  margin: 5px;
+  border-width: 4px;
+  border-style: solid;
+  border-color: rgb(221, 221, 221);
+  border-image: initial;
+  padding: 10px;
+  background: rgb(70, 70, 70);
+  font-size: 36px;
+}
+
+
+
+.tile-placement-controls {}.tiles .tile.O {
+	    padding: 10px 12px 10px 8px;
+	      }
+	        .tiles .tile.M {
+			    padding: 10px 14px 10px 6px;
+			      }
+			        .tiles .tile.W {
+					    padding: 10px 15px 10px 5px;
+					      }
+
+/* .status {
+  font-size: 1.5rem;
+  padding: 10px;
+  width: auto;
+  display: inline-block;
+  vertical-align: top;
+  padding: 10px 20px;
+  width: 65%;
+} */
+
+.hud {
+  /* max-width: unset; */
+}
+
+.status {
+  grid-area: hud-content;
+  display: grid;
+  grid-template-rows: 3em auto;
+}
+
+.status_container {
+  display: grid;
+  grid-template-rows: 3em auto 5em;
+}
+
+.log {
+  display: none;
+}
+
+.active-status {
+  padding: 0;
+  max-width: 300px;
+}
+
+.slot {
+  cursor: pointer;
+  display: flex;
+  background: rgb(102, 102, 102);
+  border-width: 2px;
+  border-style: solid;
+  border-color: rgb(102, 102, 102);
+  border-image: initial;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 50px;
+  height: 50px;
+}
+
+.slot div.tile {
+  color: rgb(238, 238, 238);
+  font-size: 2rem;
+  background-color: rgb(68, 68, 68);
+  text-align: center;
+  padding-top: 8px;
+  border-radius: 11px;
+}
+
+.slot:hover {
+  background-color: #036;
+  opacity: 0.8;
+}
+
+.tw {
+  border: 2px solid rgb(221, 70, 0);
+}
+
+.twbk {
+  font-size: 10px;
+  color: rgb(238, 238, 238);
+  text-align: center;
+  height: 100%;
+  background: rgb(221, 102, 0);
+  margin: auto;
+  padding: 9px 0px;
+}
+
+.dw {
+  border: 2px solid rgb(207, 31, 0);
+}
+
+.dwbk {
+  background-color: rgb(184, 28, 0);
+  font-size: 10px;
+  color: rgb(238, 238, 238);
+  text-align: center;
+  height: 100%;
+  margin: auto;
+  padding: 9px 0px;
+}
+
+.tl {
+  border: 2px solid #114477;
+}
+
+.tlbk {
+  background-color: rgb(0, 51, 102);
+  font-size: 10px;
+  color: rgb(238, 238, 238);
+  text-align: center;
+  height: 100%;
+  margin: auto;
+  padding: 9px 0px;
+}
+
+.dl {
+  border: 2px solid #117744;
+}
+
+.dlbk {
+  background-color: rgb(0, 102, 51);
+  font-size: 10px;
+  color: rgb(238, 238, 238);
+  text-align: center;
+  height: 100%;
+  margin: auto;
+  padding: 9px 0px;
+}
+
+.star {
+  border: 2px solid #888822;
+}
+
+.starbk {
+  background-color: rgb(187, 187, 102);
+  font-size: 36px;
+  color: rgb(51, 51, 51);
+  text-align: center;
+  height: 100%;
+  width: 100%;
+  margin: auto;
+  padding: 6px 0px;
+}
+
+.tile::after {
+  vertical-align: sub;
+  font-size: 33%;
+  margin-left: 1px;
+}
+
+.sc1::after {
+  content: "1";
+}
+
+.sc2::after {
+  content: "2";
+}
+
+.sc3::after {
+  content: "3";
+}
+
+.sc4::after {
+  content: "4";
+}
+
+.sc5::after {
+  content: "5";
+}
+
+.sc6::after {
+  content: "6";
+}
+
+.sc7::after {
+  content: "7";
+}
+
+.sc8::after {
+  content: "8";
+}
+
+.sc9::after {
+  content: "9";
+}
+
+.sc10::after {
+  content: "10";
+}
+
+.sc11::after {
+  content: "11";
+}
+
+#chat_container {
+  display: block;
+}
+
+.player {
+  margin: 3px 0 12px;
+  white-space: nowrap;
+  display: grid;
+  grid-template-columns: 90% 10%;
+}
+
+.player_name {
+  overflow: hidden;
+  display: inline-block;
+  text-overflow: ellipsis;
+  /* width: 85%; */
+}
+
+.player span {
+  line-height: 20px;
+}
+
+.player_score {
+  justify-self: right;
+}
+
+@media only screen and (max-width: 600px) {
+  .hud {
+    font-size: 1rem;
+  }
+  .main {
+    /* display: block; */
+    width: unset;
+    margin: auto;
+    margin-bottom: none;
+    border: 1px solid orange;
+    padding: 0px;
+  }
+  .gameboard {
+    display: grid;
+    grid-template-columns: repeat(15, 15fr);
+    grid-template-rows: repeat(15, 15fr);
+    grid-gap: 1px;
+    background: #999;
+    border: 0.5em solid #333;
+    padding: 0.5em;
+  }
+  .rack {
+    align-items: center;
+    justify-content: center;
+  }
+  .tall {
+    height: 43vh;
+  }
+  .slot {
+    cursor: pointer;
+    display: flex;
+    background: rgb(102, 102, 102);
+    border-style: solid;
+    border-color: rgb(102, 102, 102);
+    border-image: initial;
+    border-radius: 0.3em;
+    overflow: hidden;
+    width: 5vw;
+    height: 5vw;
+    justify-self: center;
+    align-self: center;
+  }
+  .tlbk {
+    padding: 3px 0px;
+    text-align: center;
+    font-size: 0.3rem;
+  }
+  .dlbk {
+    padding: 3px 0px;
+    text-align: center;
+    font-size: 0.3rem;
+  }
+  .twbk {
+    padding: 3px 0px;
+    text-align: center;
+    font-size: 0.3rem;
+  }
+  .dwbk {
+    padding: 3px 0px;
+    text-align: center;
+    font-size: 0.3rem;
+  }
+  .starbk {
+    padding: 1px 0px;
+    font-size: 0.8rem;
+  }
+  .slot div.tile {
+    color: rgb(238, 238, 238);
+    font-size: 0.7rem;
+    background-color: rgb(68, 68, 68);
+    padding-top: 4px;
+    border-radius: 2px;
+    text-indent: 2px;
+  }
+  .status {
+    margin: 0;
+    grid-gap: 0.5em;
+  }
+  .status_container {
+    grid-template-rows: 1em auto;
+  }
+  .score {
+    font-size: 1rem;
+  }
+  #remainder {
+    font-size: unset;
+  }
+  #lastmove {
+    font-size: unset;
+  }
+  #controls {
+    height: 225px;
+    overflow-y: auto;
+  }
+  .tiles div.tile {
+    width: 4.5vw;
+    height: 4.5vw;
+    display: inline-block;
+    text-align: center;
+    line-height: 0.9em;
+    text-indent: 0px;
+    font-weight: bold;
+    margin: 3px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgb(221, 221, 221);
+    border-image: initial;
+    padding: 2.5vw;
+    background: rgb(70, 70, 70);
+    font-size: 1.25em;
+  }
+  .tiles .tile.O {
+    padding: 10px 12px 10px 8px;
+  }
+  .tiles .tile.M {
+    padding: 10px 14px 10px 6px;
+  }
+  .tiles .tile.W {
+    padding: 10px 15px 10px 5px;
+  }
+  .tile-placement-controls {
+    display: grid;
+  }
+  .action {
+    justify-self: center;
+    align-self: center;
+    padding: 1.5vh 0px;
+    width: 100%;
+  }
+  .shuffle {
+    height: 3em;
+    cursor: pointer;
+  }
+  .player_name {}
+  .dragbar {
+    width: 2em;
+  }
+}
+
+.mainfixedbottom {
+  margin: 0 0 225px 0;
+}

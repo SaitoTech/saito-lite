@@ -1,10 +1,7 @@
 const saito = require('../../lib/saito/saito.js');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const ChatGroup = require('./lib/chatgroup');
-
-const Header = require('../../lib/ui/header/header');
-const ChatList = require('./lib/ui/chat-list/chat-list');
-
+const EmailChat = require('./lib/email-chat/email-chat');
 
 class Chat extends ModTemplate {
 
@@ -12,14 +9,12 @@ class Chat extends ModTemplate {
 
     super(app);
     this.name = "Chat";
-    this.events = ['chat'];
+    this.events = ['encrypt-key-exchange-confirm'];
 
     //
     // data managed by chat manager
     //
-    this.groups = [];		//
-					//
-					//
+    this.groups = [];
 
   }
 
@@ -28,76 +23,95 @@ class Chat extends ModTemplate {
     super.initialize(app);
 
     //
-    // this triggers ChatGroup pretending it has received a chat message
-    // and broadcasting a "chat" event to which we are listening, which 
-    // prompts us in turn to ask it for its data.
+    // create chatgroups from keychain
     //
-
-    // console.log("sending chatgroup event!");
-    // this.sendEvent("chatgroup", {});
-
-    //
-    // EXAMPLE OF EVENT EMISSION
-    //
-    //let p = {};
-    //    p.var = "string";
-    //
-    //this.sendEvent("testing", p);
-    //
-    if (this.app.BROWSER == 1) {
-      // TODO: dummy function for testing
-      this.initDummyChat(app);
-      this.renderDOM();
+    let keys = this.app.keys.keys;
+    for (let i = 0; i < keys.length; i++) {
+      this.createChatGroup(keys[i].publickey);
     }
 
   }
 
-  initializeHTML() {}
 
-  initDummyChat(app) {
+  respondTo(type) {
+
+    if (type == 'email-chat') {
+      let obj = {};
+          obj.render = this.renderEmailChat;
+          obj.attachEvents = this.attachEventsEmailChat;
+      return obj;
+    }
+
+    return null;
+  }
+
+
+
+  ////////////////
+  // eMail Chat //
+  ////////////////
+  renderEmailChat(app, data) {
+
+    let chat_self = app.modules.returnModule("Chat");
+
+    data.chat = {};
+    data.chat.groups = chat_self.groups;
+
+    EmailChat.render(app, data);
+
+  }
+  attachEventsEmailChat(app, data) {
+    EmailChat.attachEvents(app, data);
+  }
+
+
+
+  receiveEvent(type, data) {
+
     //
-    // example of creating chatgroup
+    // new encryption channel opened
     //
-    this.groups = ['Chat', 'Arcade', 'Forum', 'Wallet'].map(mod_name => {
-      let cg = new ChatGroup(app);
-      cg.initialize(app);
-
-      cg.group_name = mod_name;
-      cg.group_id = this.app.crypto.hash(`${cg.group_name}${new Date().getTime()}`);
-
-      cg.messages = [{
-        id: 1,
-        author: this.app.wallet.returnPublicKey(),
-        publickey: this.app.wallet.returnPublicKey(),
-        message: `Welcome to Saito ${mod_name}!`,
-        timestamp: new Date().getTime()
-      }];
-
-      return [cg.group_id, cg];
-    });
-
-    this.groups = Object.fromEntries(this.groups);
-
-
-    console.log("sending chatgroup event!");
-    this.sendEvent("chatgroup", {});
-
-    //
-    // EXAMPLE OF EVENT EMISSION
-    //
-    //let p = {};
-    //    p.var = "string";
-    //
-    //this.sendEvent("testing", p);
-    //
-    if (this.app.BROWSER == 1) { this.renderDOM() }
+    if (type === "encrypt-key-exchange-confirm") {
+      if (data.publickey === undefined) { return; }
+      this.createChatGroup(data.publickey);
+    }
 
   }
 
-  renderDOM() {
-    Header.render(this);
-    ChatList.render(this);
+
+
+
+  createChatGroup(publickey=null) {
+
+    if (publickey==null) { return; }
+
+    let cg = new ChatGroup(this.app);
+
+    cg.group_members = [];
+    cg.group_members.push(this.app.wallet.returnPublicKey());
+    cg.group_members.push(publickey);
+    cg.group_members.sort();
+
+    cg.group_id = this.app.crypto.hash((cg.group_members[0] + "_" + cg.group_members[1]));
+    cg.group_name = publickey.substring(0, 16);
+
+    for (let i = 0; i < this.groups.length; i++) {
+      if (this.groups[i].group_id == cg.group_id) { return; }
+    }
+
+    cg.initialize(this.app);
+    this.groups.push(cg);
+
+    this.sendEvent('chat-render-request', {});
+
   }
+
+
+
+
+
+
+
 
 
   //
@@ -117,29 +131,31 @@ class Chat extends ModTemplate {
 
 
 
-  receiveEvent(type, data) {
 
-    if (type === "chat") {
 
-      if (data.this === undefined) { return; }
-      if (data.this.name === "ChatGroup") {
-console.log("Chat receive event from ChatGroup!");
-	if (data.this === this.cg) {
-console.log("it is our very own chatgroup!");
-	  let x = data.this.respondTo("chat");
-	
-	  //
-	  //
-	  //
-	  this.updateDom(this.chatgroup[52]);
 
-console.log("Received what data: " + x.title + " -- " + x.ts);
 
-        }
-      }
-    }
 
-  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
