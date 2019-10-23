@@ -6,8 +6,17 @@ module.exports = EmailControls = {
 
     render(app, data) {
         document.querySelector(".email-controls").innerHTML = EmailControlsTemplate();
+
+//        let email_apps = document.querySelector(".email-apps");
+//        for (let i = 0; i < data.mods.length; i++) {
+//	  if (data.mods[i].respondTo('email-appspace') != null) {
+//            email_apps.innerHTML += `<li class="email-apps-item" id="${i***REMOVED***">${data.mods[i].name***REMOVED***</li>`;
+//	  ***REMOVED***
+//    ***REMOVED***
+
         EmailBarsMenu.render(app, data);
         EmailBarsMenu.attachEvents(app, data);
+
 ***REMOVED***,
 
     attachEvents(app, data) {

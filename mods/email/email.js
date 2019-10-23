@@ -11,6 +11,7 @@ class Email extends ModTemplate {
 
     this.name 			= "Email";
     this.chat 			= null;
+    this.events			= ['chat-render-request'];
 
     this.emails 		= {***REMOVED***;
     this.emails.inbox 		= [];
@@ -48,8 +49,7 @@ class Email extends ModTemplate {
 
   initialize(app) {
 
-
-
+    super.initialize(app);
 
     //
     // add an email
@@ -73,7 +73,17 @@ class Email extends ModTemplate {
 
   initializeHTML(app) {
 
-    this.mods = this.app.modules.respondTo("email-appspace");
+    super.initializeHTML(app);
+
+    let x = [];
+    x = this.app.modules.respondTo("email-appspace");
+    for (let i = 0; i < x.length; i++) {
+      this.mods.push(x[i]);
+***REMOVED***
+    x = this.app.modules.respondTo("email-chat");
+    for (let i = 0; i < x.length; i++) {
+      this.mods.push(x[i]);
+***REMOVED***
 
     this.uidata.mods	  = this.mods;
     this.uidata.parentmod = this;
@@ -83,12 +93,6 @@ class Email extends ModTemplate {
 
     EmailSidebar.render(app, this.uidata);
     EmailSidebar.attachEvents(app, this.uidata);
-
-    //
-    // update chat module
-    //
-    //let chatManager = app.modules.returnModule("Chat");
-    //this.chat = chatManager.respondTo("email");
 
   ***REMOVED***
 
@@ -113,6 +117,8 @@ class Email extends ModTemplate {
   //
   onPeerHandshakeComplete(app, peer) {
 
+    if (this.browser_active == 0) { return; ***REMOVED***
+
     //
     // leaving this here for the short term,
     // token manager can be a separate module
@@ -133,10 +139,8 @@ class Email extends ModTemplate {
 ***REMOVED***);
 
 
-    if (this.app.BROWSER) {
-      EmailList.render(this.app, this.uidata);
-      EmailList.attachEvents(this.app, this.uidata);
-***REMOVED***
+    EmailList.render(this.app, this.uidata);
+    EmailList.attachEvents(this.app, this.uidata);
 
   ***REMOVED***
 
@@ -170,9 +174,22 @@ class Email extends ModTemplate {
 
   addEmail(tx) {
     this.emails.inbox.unshift(tx);
-    if (this.app.BROWSER) { this.render(this.app, this.uidata); ***REMOVED***
+    if (this.browser_active) { this.render(this.app, this.uidata); ***REMOVED***
   ***REMOVED***
 
+
+
+  receiveEvent(type, data) {
+
+console.log("EVENT RECEIVED: ");
+
+    if (type == 'chat-render-request') {
+      if (this.browser_active) {
+	EmailSidebar.render(this.app, this.uidata);
+  ***REMOVED***
+***REMOVED***
+
+  ***REMOVED***
 
   getTokens() {
 
@@ -186,8 +203,8 @@ console.log("sending request for funds...");
   ***REMOVED***
 
   updateBalance() {
-    if (this.app.BROWSER) {
-      document.querySelector('.email-balance').innerHTML = this.app.wallet.returnBalance();
+    if (this.browser_active) {
+      document.querySelector('.email-balance').innerHTML = this.app.wallet.returnBalance() + " SAITO";
 ***REMOVED***
   ***REMOVED***
 

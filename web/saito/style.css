@@ -5,6 +5,11 @@
     --saito-white: #ffffff;
 ***REMOVED***
 
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+***REMOVED***
+
 html {
     --text-color-normal: var(--saito-cyber-black);
     --backround-general: var(--saito-white);
