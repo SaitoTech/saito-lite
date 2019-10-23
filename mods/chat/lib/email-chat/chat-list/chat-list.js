@@ -23,8 +23,7 @@ module.exports = ChatList = {
 
 ***REMOVED***,
 
-    attachEvents(app, data) {
-***REMOVED***,
+    attachEvents(app, data) {***REMOVED***,
 
 ***REMOVED***
 

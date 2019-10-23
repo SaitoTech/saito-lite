@@ -1,5 +1,6 @@
 const saito = require('../../lib/saito/saito.js');
 const ModTemplate = require('../../lib/templates/modtemplate');
+const Header = require('../../lib/ui/header/header');
 const EmailMain = require('./lib/email-main/email-main');
 const EmailSidebar = require('./lib/email-sidebar/email-sidebar');
 
@@ -51,6 +52,9 @@ class Email extends ModTemplate {
 
     super.initialize(app);
 
+    // add dummy keychain for testing chat message
+    this.app.keys.addKey("iHCC7Zan7oqyiLV6beLTGU7MUqgSW7BPR8VEsDWhREVB");
+
     //
     // add an email
     //
@@ -74,6 +78,8 @@ class Email extends ModTemplate {
   initializeHTML(app) {
 
     super.initializeHTML(app);
+
+    Header.render(app, this.uidata);
 
     let x = [];
     x = this.app.modules.respondTo("email-appspace");
