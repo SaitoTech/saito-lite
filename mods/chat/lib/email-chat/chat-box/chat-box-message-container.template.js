@@ -1,10 +1,10 @@
-module.exports = ChatBoxMessageContainerTemplate = (msg_id, msg_author, msg_text, msg_ts) => {
+const ChatRoomMessageTemplate = require('../../this-needs-refactoring/chat-room/chat-room-message.template');
+
+module.exports = ChatBoxMessageContainerTemplate = (data, sig, type) => {
   return `
-  <div class="chat-box-message-container">
-    <pre id="${msg_id}" class="chat-message"><i class="chat-message-author" style="color: #87afc5;">${msg_author}</i>: <p>${msg_text}</p>
-    </pre>
-    <p class="chat-timestamp">${msg_ts}</p>
-  </div>
+    <div class="chat-box-message-container chat-message-${type}">
+      ${ChatRoomMessageTemplate(data, sig, type)}
+    </div>
   `;
 }
 

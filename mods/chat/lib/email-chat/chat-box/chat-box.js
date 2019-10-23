@@ -1,5 +1,6 @@
 const ChatBoxTemplate = require('./chat-box.template.js');
 const ChatBoxMessageContainerTemplate = require('./chat-box-message-container.template.js');
+//const ChatRoomMessageTemplate = require('../../this-needs-refactoring/chat-room/chat-room-message.template');
 
 
 module.exports = ChatBox = {
@@ -13,21 +14,29 @@ module.exports = ChatBox = {
       msg_input.addEventListener("keypress", (e) => {
           if ((e.which == 13 || e.keyCode == 13) && !e.shiftKey) {
             e.preventDefault();
-	    this.sendMessage(app, data, msg_input.value);
+            this.sendMessage(app, data, msg_input.value);
+            msg_input.value = '';
           }
       });
+
+      document.querySelector('.chat-box-header')
+              .addEventListener('click', (e) => {
+                let chat_box = document.querySelector('.chat-box')
+                chat_box.style.height = chat_box.style.height == '3em' ? '38em' : '3em';
+              });
 
     },
 
     sendMessage(app, data, msg) {
-
       let msg_id = 1324124;
-      let msg_author = "3452352345";
-      let msg_text = msg;
-      let msg_ts = new Date().getTime();
+      let msg_author = "bearguy@saito";
 
-      document.querySelector(".chat-box-main").innerHTML += ChatBoxMessageContainerTemplate(msg_id, msg_author, msg_text, msg_ts);
+    //   let msg_text = msg;
+    //   let msg_ts = new Date().getTime();
 
+      let msg_data = { message: msg, publickey: msg_author, timestamp: new Date().getTime() };
+
+      document.querySelector(".chat-box-main").innerHTML += ChatBoxMessageContainerTemplate(msg_data, msg_id, "myself");
     }
 
 }

@@ -23,8 +23,7 @@ module.exports = ChatList = {
 
     },
 
-    attachEvents(app, data) {
-    },
+    attachEvents(app, data) {},
 
 }
 
