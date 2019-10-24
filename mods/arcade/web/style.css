@@ -113,6 +113,22 @@ body {
 
 
 
+.arcade-game-row-name {
+  float: left;
+  cursor: pointer;
+***REMOVED***
+.arcade-game-row-options {
+  margin-left: 30px;
+  float: left;
+  cursor: pointer;
+***REMOVED***
+.arcade-game-row-join {
+  margin-left: 30px;
+  float: left;
+  cursor: pointer;
+***REMOVED***
+
+
 
 
 @media only screen and (max-width: 600px) {

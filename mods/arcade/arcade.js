@@ -14,7 +14,8 @@ class Arcade extends ModTemplate {
 
     this.name 			= "Arcade";
     this.mods			= [];
-    this.data			= {***REMOVED***;
+    this.affix_callbacks_to 	= [];
+    this.games			= [];
 
   ***REMOVED***
 
@@ -31,43 +32,332 @@ class Arcade extends ModTemplate {
 
   ***REMOVED***
 
+
   initialize(app) {
-  ***REMOVED***
 
-
-  initializeHTML(app) {
-
+    //
+    // main-panel games
+    //
     let x = [];
-    x = this.app.modules.respondTo("arcade-gamelist");
-    for (let i = 0; i < x.length; i++) {  this.mods.push(x[i]); ***REMOVED***
+    x = this.app.modules.respondTo("arcade-games");
+    for (let i = 0; i < x.length; i++) {
+      this.mods.push(x[i]);
+      this.affix_callbacks_to.push(x[i].name);
+***REMOVED***
 
+    //
+    // left-panel chat
+    //
     x = this.app.modules.respondTo("email-chat");
     for (let i = 0; i < x.length; i++) {
       this.mods.push(x[i]);
 ***REMOVED***
 
-console.log("\n\n\n\nINIT: " + this.mods.length);
+    //
+    // add my own games (as fake txs)
+    //
+    if (this.app.options.games != undefined) {
+      for (let i = 0; i < this.app.options.games.length; i++) {
+	let z = new saito.transaction();
+	z.transaction.msg.game_id  = this.app.options.games[i].id;
+	z.transaction.msg.request  = "loaded";
+        x.transaction.msg.game     = this.app.options.games[i].module;
+        x.transaction.msg.options  = this.app.options.games[i].options;;
+console.log("LOADED A GAME!");
+	this.game.push[z];
+
+  ***REMOVED***
+***REMOVED***
+
+  ***REMOVED***
 
 
-    this.data.mods = this.mods;
+  initializeHTML(app) {
 
-    this.render(app, this.data);
+    let tx = this.createOpenTransaction(app, { name : "Wordblocks" , options : "" ***REMOVED***);
+    this.games.push(tx);
+
+    let data = {***REMOVED***;
+    data.arcade = this;
+
+    this.render(app, data);
 
   ***REMOVED***
 
 
 
-  onConfirmation(blk, tx, conf, app) {
+  async onConfirmation(blk, tx, conf, app) {
 
     let txmsg = tx.returnMessage();
-    let arcade = app.modules.returnModule("Arcade");
+    let arcade_self = app.modules.returnModule("Arcade");
 
     if (conf == 0) {
 
-***REMOVED***
+      // save state
+      if (txmsg.saveGameState != undefined && txmsg.game_id != "") {
+	arcade_self.saveGameState(blk, tx, conf, app);
+  ***REMOVED***
 
+      // open
+      if (txmsg.module == "Arcade" && txmsg.request == "open") {
+	arcade_self.receiveOpenRequest(blk, tx, conf, app);
+  ***REMOVED***
+
+      // invites
+      if (txmsg.request == "invite") {
+	arcade_self.receiveInviteRequest(blk, tx, conf, app);
+  ***REMOVED***
+
+      // acceptances
+      if (txmsg.request == "accept") {
+        arcade_self.receiveAcceptRequest(blk, tx, conf, app);
+  ***REMOVED***
+
+      // game over
+      if (txmsg.request == "gameover") {
+	arcade_self.receiveGameoverRequest(blk, tx, conf, app);
+  ***REMOVED***
+***REMOVED***
+  ***REMOVED***
+
+
+
+
+
+/********
+  async saveGameState(blk, tx, conf, app) {
+
+        let sql = `INSERT INTO gamestate (
+		game_id, 
+		player,
+		module,
+		bid,
+		tid,
+		lc,
+		last_move
+	      ) VALUES (
+		$game_id,
+		$player,
+		$module,
+		$bid,
+		$tid,
+		$lc,
+		$last_move
+	      )`;
+        let params = {
+                $game_id   : txmsg.game_id ,
+                $player    : tx.transaction.from[0].add ,
+                $module    : txmsg.module ,
+                $bid       : blk.block.id ,
+                $tid       : tx.transaction.id ,
+                $lc        : 1 ,
+                $last_move : (new Date().getTime())
+          ***REMOVED***;
+	await app.storage.executeDatabase(sql, params, "arcade");
+
+  ***REMOVED***
+******/
+
+
+
+
+
+  async receiveOpenRequest(blk, tx, conf, app) {
+
+    let txmsg = tx.returnMessage();
+
+    let module 		= txmsg.module;
+    let player		= tx.transaction.from[0].add;
+    let game_id		= tx.transaction.sig;
+    let options		= {***REMOVED***;
+    let start_bid		= blk.block.id;
+    let valid_for_minutes	= 60;
+    let created_at		= parseInt(tx.transaction.ts);
+    let expires_at 		= created_at + (60000 * parseInt(valid_for_minutes));
+
+    let sql = `INSERT INTO games (
+  		player ,
+		module ,
+		game_id ,
+		status ,
+		options ,
+		start_bid ,  
+		created_at ,
+		expires_at
+	      ) VALUES (
+		$player ,
+		$module ,
+		$game_id ,
+		$status ,
+		$options ,
+		$start_bid ,
+		$created_at ,
+		$expires_at
+	      )`;
+    let params = {
+                $player     : player ,
+                $module     : module ,
+                $game_id    : game_id ,
+	 	$status	    : "open" ,
+		$options    : options ,
+		$start_bid  : blk.block.id ,
+		$created_at : created_at ,
+		$expires_at : expires_at
+          ***REMOVED***;
+    await app.storage.executeDatabase(sql, params, "arcade");
+    return;
+  ***REMOVED***
+  sendOpenRequest(app, data) {
+    let tx = this.createOpenTransaction(app, data);
+    this.app.network.propagateTransaction(tx);
+  ***REMOVED***
+  createOpenTransaction(app, data) {
+
+    let ts = new Date().getTime();
+
+    let tx = app.wallet.createUnsignedTransactionWithDefaultFee();
+        tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey(), 0.0));
+        tx.transaction.msg.ts       = ts;
+        tx.transaction.msg.module   = "Arcade";
+        tx.transaction.msg.request  = "open";
+        tx.transaction.msg.game     = data.name;
+        tx.transaction.msg.options  = data.options;
+    tx = this.app.wallet.signTransaction(tx);
+
+    return tx;
+
+  ***REMOVED***
+
+
+
+
+  async receiveInviteRequest(blk, tx, conf, app) {
+
+alert("RECEIVE INVITE REQUEST IN ARCADE!");
+
+    let txmsg = tx.returnMessage();
+    let sql = "UPDATE games SET state = 'active', id = $gid WHERE sig = $sig";
+    let params = {
+      $gid : txmsg.game_id ,
+      $sig : txmsg.sig
+***REMOVED***
+    await this.app.storage.executeDatabase(sql, params, "arcade");
+
+  ***REMOVED***
+  sendInviteRequest(app, data, opentx) {
+    let tx = this.createInviteTransaction(app, data, opentx);
+    this.app.network.propagateTransaction(tx);
+  ***REMOVED***
+  createInviteTransaction(app, data, gametx) {
+
+    let txmsg = gametx.returnMessage();
+
+    let tx = app.wallet.createUnsignedTransactionWithDefaultFee();
+        tx.transaction.to.push(new saito.slip(gametx.transaction.from[0].add, 0.0));
+        tx.transaction.to.push(new saito.slip(app.wallet.returnPublicKey(), 0.0));
+        tx.transaction.msg.module   	= txmsg.game;
+        tx.transaction.msg.request  	= "invite";
+	tx.transaction.msg.game_id	= gametx.transaction.sig;
+        tx.transaction.msg.options  	= txmsg.options;
+    tx = this.app.wallet.signTransaction(tx);
+
+    return tx;
+
+  ***REMOVED***
+
+
+
+
+
+
+
+  async receiveAcceptRequest(blk, tx, conf, app) {
+
+        let publickeys = tx.transaction.to.map(slip => slip.add);
+        let removeDuplicates = (names) => names.filter((v,i) => names.indexOf(v) === i)
+        let unique_keys = removeDuplicates(publickeys);
+ 
+        let sql = "UPDATE games SET state = 'expired' WHERE state = $state AND player IN ($player1, $player2, $player3, $player4)";
+        let params = {
+          $state : 'open',
+          $player1 : unique_keys[0] || '',
+          $player2 : unique_keys[1] || '',
+          $player3 : unique_keys[2] || '',
+          $player4 : unique_keys[3] || '',
+    ***REMOVED***
+        await this.app.storage.executeDatabase(sql, params, "arcade");
+  ***REMOVED***
+  sendAcceptRequest(app, data) {
+
+    let game_module 	= "Wordblocks";
+    let game_id		= "7123598714987123512";
+    let opponents 	= [app.wallet.returnPublicKey()];
+
+    let tx = app.wallet.createUnsignedTransactionWithDefaultFee();
+        for (let i = 1; i < opponents.length; i++) { tx.transaction.to.push(new saito.slip(opponents[i], 0.0)); ***REMOVED***
+        tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey(), 0.0));
+        tx.transaction.msg.module   = game_module;
+        tx.transaction.msg.request  = "accept";
+        tx.transaction.msg.game_id  = game_id;
+    tx = this.app.wallet.signTransaction(tx);
+    this.app.network.propagateTransaction(tx);
+
+  ***REMOVED***
+
+
+
+
+
+
+  async receiveGameoverRequest(blk, tx, conf, app) {
+
+    let sql = "UPDATE games SET state = $state, winner = $winner WHERE game_id = $game_id";
+    let params = {
+      $state: 'over',
+      $game_id : txmsg.game_id,
+      $winner  : txmsg.winner
+***REMOVED***
+    await arcade_self.app.storage.executeDatabase(sql, params, "arcade");
+
+  ***REMOVED***
+  sendGameoverRequest(app, data) {
+
+    let game_module 	= "Wordblocks";
+    let options		= "";
+    let sig		= "";
+    let created_at      = "";
+    let player		= app.wallet.returnPublicKey();
+
+    let tx = app.wallet.createUnsignedTransactionWithDefaultFee();
+        tx.transaction.to.push(new saito.slip(player, 0.0));
+        tx.transaction.msg.module   	= game_module;
+        tx.transaction.msg.request  	= "invite";
+        tx.transaction.msg.options  	= {***REMOVED***;
+        tx.transaction.msg.ts 		= created_at;
+        tx.transaction.msg.sig  	= sig;
+    tx = this.app.wallet.signTransaction(tx);
+    this.app.network.propagateTransaction(tx);
+
+    if (this.browser_active) {
+alert("We have sent a request to invite a game");
+***REMOVED***
+  ***REMOVED***
+
+
+  
+
+
+
+
+  shouldAffixCallbackToModule(modname) {
+    if (modname == "Arcade") { return 1; ***REMOVED***
+    for (let i = 0; i < this.affix_callbacks_to.length; i++) {
+      if (this.affix_callbacks_to[i] == modname) { return 1; ***REMOVED***
+***REMOVED***
+    return 0;
   ***REMOVED***
 
 ***REMOVED***
 
 module.exports = Arcade;
+
