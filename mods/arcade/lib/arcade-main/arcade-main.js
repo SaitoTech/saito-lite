@@ -1,5 +1,6 @@
 const ArcadeMainTemplate = require('./arcade-main.template');
 const ArcadeGameTemplate = require('./arcade-game.template');
+const ArcadeGameListRowTemplate = require('./arcade-gamelist-row.template');
 
 
 module.exports = ArcadeMain = {
@@ -10,18 +11,60 @@ module.exports = ArcadeMain = {
     if (!arcade_main) { return; }
     arcade_main.innerHTML = ArcadeMainTemplate();
 
-
-    let gamelist = document.getElementById("arcade-gamelist");
-    data.mods.forEach(mod => {
-      let gameobj = mod.respondTo("arcade-gamelist");
+    //
+    // click-to-create games
+    //
+    let gamesbox = document.getElementById("arcade-games");
+    data.arcade.mods.forEach(mod => {
+console.log("TESTING MOD: " + mod.name);
+      let gameobj = mod.respondTo("arcade-games");
       if (gameobj != null) {
-	gamelist.innerHTML += ArcadeGameTemplate(mod, gameobj);
+	gamesbox.innerHTML += ArcadeGameTemplate(mod, gameobj);
       }
+console.log("TESTING MOD FINISHED: " + mod.name);
     });
+
+    //
+    // click-to-join
+    //
+    data.arcade.games.forEach(tx => {
+      document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(tx);
+    });
+console.log("Finished Render in ArcadeMain");
 
   },
 
+
   attachEvents(app, data) {
+
+    //
+    // create game
+    //
+    Array.from(document.getElementsByClassName('game')).forEach(game => {
+      game.addEventListener('click', (e) => {
+        alert("You have clicked on: " + e.currentTarget.id);
+      });
+    });
+
+    //
+    // join game
+    //
+    Array.from(document.getElementsByClassName('arcade-game-row-join')).forEach(game => {
+      game.addEventListener('click', (e) => {
+
+        let game_id = e.currentTarget.id;
+
+	for (let i = 0; i < data.arcade.games.length; i++) {
+	  if (data.arcade.games[i].transaction.sig == game_id) {
+alert("FOUND THE TX: " + JSON.stringify(data.arcade.games[i].transaction));
+	    data.arcade.sendInviteRequest(app, data, data.arcade.games[i]);
+	    return;
+	  }
+        }
+
+      });
+    });
+
   }
 
 }

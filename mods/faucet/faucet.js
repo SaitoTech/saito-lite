@@ -1,4 +1,8 @@
+var saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
+const Big = require('big.js');
+
+
 
 class Faucet extends ModTemplate {
   constructor(app) {
@@ -35,17 +39,49 @@ class Faucet extends ModTemplate {
 
     try {
 
-      let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(publickey, 1000.0);
+      let faucet_self = this;
+      let newtx = new saito.transaction();
+      let total_fees = Big(1002.0);
+      newtx.transaction.from = faucet_self.app.wallet.returnAdequateInputs(total_fees);
+      newtx.transaction.ts   = new Date().getTime();
 
+      // add change input
+      var total_inputs = Big(0.0);
+      for (let ii = 0; ii < newtx.transaction.from.length; ii++) {
+        total_inputs = total_inputs.plus(Big(newtx.transaction.from[ii].amt));
+      }
+
+      //
+      // generate change address(es)
+      //
+      var change_amount = total_inputs.minus(total_fees);
+
+      if (Big(change_amount).gt(0)) {
+        newtx.transaction.to.push(new saito.slip(faucet_self.app.wallet.returnPublicKey(), change_amount.toFixed(8)));
+        newtx.transaction.to[newtx.transaction.to.length-1].type = 0;
+      }
+
+      for (let i = 0; i < 8; i++) {
+        newtx.transaction.to.push(new saito.slip(publickey, Big(125.0)));
+        newtx.transaction.to[newtx.transaction.to.length-1].type = 0;
+      }
+
+/*
+
+      let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(publickey, 1000.0);
       if (newtx == null) {
         console.log("NEWTX IS NULL");
         return;
       }
+*/
 
       newtx.transaction.msg.module    = "Email";
       newtx.transaction.msg.title     = "Saito Faucet - Transaction Receipt";
       newtx.transaction.msg.message   = 'You have received 1000 tokens from our Saito faucet.';
       newtx = this.app.wallet.signTransaction(newtx);
+
+
+
 
       this.app.network.propagateTransaction(newtx);
       return;

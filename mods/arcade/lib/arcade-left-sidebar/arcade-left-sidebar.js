@@ -4,8 +4,6 @@ module.exports = ArcadeLeftSidebar = {
 
     render(app, data) {
 
-alert("rending in arcade left sidebar!");
-
       document.querySelector(".arcade-left-sidebar").innerHTML = ArcadeLeftSidebarTemplate();
 
       for (let i = 0; i < data.mods.length; i++) {
