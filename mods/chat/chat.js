@@ -60,6 +60,7 @@ class Chat extends ModTemplate {
     EmailChat.render(app, data);
 
   ***REMOVED***
+
   attachEventsEmailChat(app, data) {
     EmailChat.attachEvents(app, data);
   ***REMOVED***
@@ -109,57 +110,29 @@ class Chat extends ModTemplate {
 
 
 
-
-
-
-
-
   //
   // onChain messages received on the blockchain arrive here
   //
   onConfirmation(blk, tx, conf, app) {
 
     let txmsg = tx.returnMessage();
+    let chat_self = app.modules.returnModule("Chat");
 
     if (conf == 0) {
       if (txmsg.request == "chat message") {
-	this.chatReceiveMessage(app, tx);
+	    // this.chatReceiveMessage(app, tx);
+          chat_self.groups.forEach(group => {
+              if (group.group_id == txmsg.group_id) {
+                  let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: "others" ***REMOVED***);
+                  group.messages.push(msg);
+                  app.connection.emit('chat_receive_message', msg);
+          ***REMOVED***
+      ***REMOVED***);
+
   ***REMOVED***
 ***REMOVED***
 
   ***REMOVED***
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   //
@@ -229,16 +202,16 @@ class Chat extends ModTemplate {
     if (!app.storage.doesDatabaseExist("chat")) { return; ***REMOVED***
 
     let sql    = "SELECT * FROM rooms WHERE publickey = $publickey";
-    let params = { $publickey : txmsg.sender ***REMOVED*** 
+    let params = { $publickey : txmsg.sender ***REMOVED***
     let results = await app.storage.returnArrayFromDatabase(sql, params, "chat");
 
     let rooms = [];
- 
+
     rooms.push({
       name: "ALL",
       uuid: "5234092348309823525 FIX THIS"
 ***REMOVED***);
-    
+
     payload.rooms = rooms.map(async room => {
         let { uuid, name ***REMOVED*** = room;
         let addresses = await this.db.all(

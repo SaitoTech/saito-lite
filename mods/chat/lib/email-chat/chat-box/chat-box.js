@@ -1,21 +1,29 @@
 const ChatBoxTemplate = require('./chat-box.template.js');
 const ChatBoxMessageContainerTemplate = require('./chat-box-message-container.template.js');
-//const ChatRoomMessageTemplate = require('../../this-needs-refactoring/chat-room/chat-room-message.template');
 
 
 module.exports = ChatBox = {
 
     render(app, data) {
-        document.querySelector('.chat-box').innerHTML = ChatBoxTemplate();
+        document.querySelector('.chat-box').innerHTML = ChatBoxTemplate(data.chat.active.group_name);
+
+        data.chat.active.messages.forEach(message => {
+            let type = message.publickey == app.wallet.returnPublicKey() ? 'myself' : 'others';
+            document.querySelector('.chat-box-main').innerHTML += ChatBoxMessageContainerTemplate(message, '1239841203498', type);
+    ***REMOVED***);
+
+        this.scrollToBottom();
 ***REMOVED***,
 
     attachEvents(app, data) {
       let msg_input = document.querySelector(".chat-box-new-message-input");
       msg_input.addEventListener("keypress", (e) => {
           if ((e.which == 13 || e.keyCode == 13) && !e.shiftKey) {
-            e.preventDefault();
-            this.sendMessage(app, data, msg_input.value);
-            msg_input.value = '';
+              e.preventDefault();
+              if (msg_input.value == '') {return;***REMOVED***
+              this.sendMessage(app, data, msg_input.value);
+              this.scrollToBottom();
+              msg_input.value = '';
       ***REMOVED***
   ***REMOVED***);
 
@@ -28,16 +36,51 @@ module.exports = ChatBox = {
 ***REMOVED***,
 
     sendMessage(app, data, msg) {
-      let msg_id = 1324124;
-      let msg_author = "bearguy@saito";
+      let msg_data = {
+          message: msg,
+          group_id: data.chat.active.group_id,
+          publickey: app.wallet.returnPublicKey(),
+          timestamp: new Date().getTime()
+  ***REMOVED***;
 
-    //   let msg_text = msg;
-    //   let msg_ts = new Date().getTime();
+      let newtx = this.createMessage(app, data, msg_data);
+      app.network.propagateTransaction(newtx);
 
-      let msg_data = { message: msg, publickey: msg_author, timestamp: new Date().getTime() ***REMOVED***;
+      this.addMessageToDOM(msg_data, newtx.transaction.sig, "myself");
+***REMOVED***,
 
-      document.querySelector(".chat-box-main").innerHTML += ChatBoxMessageContainerTemplate(msg_data, msg_id, "myself");
+    addMessageToDOM(data, sig, type) {
+        document.querySelector(".chat-box-main").innerHTML += ChatBoxMessageContainerTemplate(data, sig, type);
+        this.scrollToBottom();
+***REMOVED***,
+
+    createMessage(app, data, msg_data) {
+        let publickey = app.network.peers[0].peer.publickey;
+        let newtx = app.wallet.createUnsignedTransactionWithDefaultFee(publickey);
+        if (newtx == null) { return; ***REMOVED***
+
+        newtx.transaction.msg = {
+            module: "Chat",
+            request: "chat message",
+            publickey: msg_data.publickey,
+            group_id: msg_data.group_id,
+            message:  msg_data.message,
+    ***REMOVED***
+    ***REMOVED*** will possibly encrypt
+    ***REMOVED*** this.saito.keys.encryptMessage(this.saito.wallet.returnPublicKey(), msg),
+    ***REMOVED***
+            timestamp: msg_data.timestamp,
+    ***REMOVED***;
+
+***REMOVED*** newtx.transaction.msg = this.app.keys.encryptMessage(this.app.wallet.returnPublicKey(), newtx.transaction.msg);
+        newtx.transaction.msg.sig = app.wallet.signMessage(JSON.stringify(newtx.transaction.msg));
+        newtx = app.wallet.signTransaction(newtx);
+        return newtx;
+***REMOVED***,
+
+    scrollToBottom() {
+        let chat_box_main = document.querySelector(".chat-box-main")
+        chat_box_main.scrollTop = chat_box_main.scrollHeight;
 ***REMOVED***
-
 ***REMOVED***
 
