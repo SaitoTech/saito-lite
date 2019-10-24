@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS explorer_tx (
+CREATE TABLE IF NOT EXISTS transactions (
     id INTEGER, 
     address TEXT, 
     amt TEXT, 

@@ -1,0 +1,104 @@
+.header {
+    padding: 0.75em 1em;
+***REMOVED***
+
+.explorer-main {
+    margin-top: 75px;
+    padding: 0 10px;
+    line-height: 1.6em;
+    font-family: "visuelt-light";
+    height: 91vh;
+    overflow: auto;
+    padding: 2em;
+***REMOVED***
+
+.explorer-main table {
+    border-spacing: 0;
+***REMOVED***
+
+.explorer-main table tr:hover {
+    background: #bbbbbb;
+***REMOVED***
+
+.explorer-main td {
+    padding: 10px 5px;
+***REMOVED***
+
+.explorer-main th {
+    text-align: left;
+***REMOVED***
+
+.explorer-main a {
+    text-decoration: underscore;
+    color: var(--text-color-highlight);
+    display: inline-block;
+***REMOVED***
+
+.explorer-main h4 {
+    display: inline-block;
+    min-width: 200px;
+***REMOVED***
+
+.explorer-main h3 {
+    margin: 20px 0 10px 0;
+***REMOVED***
+
+.explorer-main i {
+    margin: 0 10px;
+***REMOVED***
+
+li.jsontree-node {
+    list-style: none;
+***REMOVED***
+
+.json, #block-list, .block-transactions-table {
+    font-family: monospace;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background: #eee;
+    padding: 10px;
+    overflow: auto;
+    width: 99%;
+    max-width: 850px;
+***REMOVED***
+
+input[type=text], input[type=number] {
+    height: 3em;
+    margin-top: 1px;
+***REMOVED***
+
+a.button {
+    color: var(--saito-white);
+    text-decoration: none;
+***REMOVED***
+
+.hash-search-input {
+    width: 100%;
+***REMOVED***
+
+.one-line-form {
+    display: grid;
+    grid-template-columns: 1fr 15em;
+    width: 100%;
+    max-width: 850px;
+    grid-gap: 10px;
+***REMOVED***
+
+.elipsis {
+    overflow: elipsis;
+***REMOVED***
+
+.blockchain-table {
+    display: grid;
+    grid-template-columns: 1em 1em 11fr 5fr;
+    grid-gap: 10px;
+
+***REMOVED***
+
+.blockchain-table div {
+    overflow: hidden;
+***REMOVED***
+
+.table-header {
+    font-weight: bold;
+***REMOVED***
