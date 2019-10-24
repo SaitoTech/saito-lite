@@ -12,6 +12,7 @@ module.exports = {
         {
             sqlite: 'sqlite'
         },
+        /\.txt/,
         /\.png$/,
         /\.jpg$/,
         /\.html$/,

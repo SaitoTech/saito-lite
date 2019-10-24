@@ -1,6 +1,8 @@
 const ChatListTemplate = require('./chat-list.template');
 const ChatListRowTemplate = require('./chat-list-row.template');
 
+const ChatBox = require('../chat-box/chat-box');
+
 
 module.exports = ChatList = {
 
@@ -23,7 +25,18 @@ module.exports = ChatList = {
 
     },
 
-    attachEvents(app, data) {},
+    attachEvents(app, data) {
+        Array.from(document.getElementsByClassName('chat-row'))
+            .forEach(row => {
+                row.addEventListener('click', (e) => {
+                    let group_id = e.currentTarget.id;
+                    let selected_group = data.chat.groups.filter(group => group.group_id == group_id);
+                    data.chat.active = selected_group[0];
+                    ChatBox.render(app, data);
+                    ChatBox.attachEvents(app, data);
+                });
+            });
+    },
 
 }
 
