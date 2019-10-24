@@ -256,9 +256,11 @@ class ExplorerCore extends ModTemplate {
 
     returnIndexMain() {
         return '<div class="explorer-main"> \
-        <div class="explorer-data"><h4>Server Address:</h4> '+ this.app.wallet.returnPublicKey() + ' \
-        <div class="explorer-data"><h4>Balance:</h4> '+ this.app.wallet.returnBalance().toString().split(".")[0].replace(/\B(?=(\d{3***REMOVED***)+(?!\d))/g, ",") + "." + this.app.wallet.returnBalance().toString().split(".")[1] + ' \
-        <div class="explorer-data"><h4>Mempool:</h4> <a href="/explorer/mempool">'+ this.app.mempool.transactions.length + ' txs</a>' + '\
+        <div class="block-table"> \
+          <div class="explorer-data"><h4>Server Address:</h4></div> <div class="address">'+ this.app.wallet.returnPublicKey() + '</div> \
+          <div class="explorer-data"><h4>Balance:</h4> </div><div>'+ this.app.wallet.returnBalance().toString().split(".")[0].replace(/\B(?=(\d{3***REMOVED***)+(?!\d))/g, ",") + "." + this.app.wallet.returnBalance().toString().split(".")[1] + '</div> \
+          <div class="explorer-data"><h4>Mempool:</h4></div> <div><a href="/explorer/mempool">'+ this.app.mempool.transactions.length + ' txs</a></div> \
+        </div>' + '\
         <div class="explorer-data"><h4>Search for Block (by hash):</h4> \
         <form method="get" action="/explorer/block"><div class="one-line-form"><input type="text" name="hash" class="hash-search-input" /> \
         <input type="submit" class="button" value="search" /></div></form> </div> \
@@ -355,35 +357,32 @@ class ExplorerCore extends ModTemplate {
 
         var explorer_self = this;
 
-        var html = '<table class="block-table">';
-        html += '<tr><td><h4>id</h4></td><td>' + blk.block.id + '</td></tr>';
-        html += '<tr><td><h4>hash</h4></td><td>' + blk.returnHash('hex') + '</td></tr>';
-        html += '<tr><td><h4>source</h4></td><td><a href="/explorer/blocksource?hash=' + blk.returnHash('hex') + '">click to view source</a></td></tr>';
-        html += '</table>';
+        var html = '<div class="block-table">';
+        html += '<div><h4>id</h4></div><div>' + blk.block.id + '</div>';
+        html += '<div><h4>hash</h4></div><div>' + blk.returnHash('hex') + '</div>';
+        html += '<div><h4>source</h4></div><div><a href="/explorer/blocksource?hash=' + blk.returnHash('hex') + '">click to view source</a></div>';
+        html += '</div>';
 
         if (blk.transactions.length > 0) {
 
             html += '<h3>Bundled Transactions:</h3>';
 
-            html += '<table class="block-transactions-table">';
-            html += '<tr>';
-            html += '<th>id</th>';
-            html += '<th>sender</th>';
-            html += '<th>fee</th>';
-            html += '<th>type</th>';
-            html += '</tr>';
+            html += '<div class="block-transactions-table">';
+            html += '<div>id</div>';
+            html += '<div>sender</div>';
+            html += '<div>fee</div>';
+            html += '<div>type</div>';
 
             for (var mt = 0; mt < blk.transactions.length; mt++) {
                 var tmptx = blk.transactions[mt];
 
-                html += '<tr>';
-                html += '<td><a href="/explorer/transaction?bhash=' + blk.returnHash() + '&tid=' + tmptx.transaction.id + '">' + tmptx.transaction.id + '</a></td>';
-                html += '<td><a href="/explorer/transaction?bhash=' + blk.returnHash() + '&tid=' + tmptx.transaction.id + '">' + tmptx.transaction.from[0].add + '</a></td>';
-                html += '<td>' + tmptx.returnFees() + '</td>';
-                html += '<td>' + tmptx.transaction.type + '</td>';
-                html += '</tr>';
+                html += '<div><a href="/explorer/transaction?bhash=' + blk.returnHash() + '&tid=' + tmptx.transaction.id + '">' + tmptx.transaction.id + '</a></div>';
+                html += '<div><a href="/explorer/transaction?bhash=' + blk.returnHash() + '&tid=' + tmptx.transaction.id + '">' + tmptx.transaction.from[0].add + '</a></div>';
+                html += '<div>' + tmptx.returnFees() + '</div>';
+                html += '<div>' + tmptx.transaction.type + '</div>';
+
         ***REMOVED***
-            html += '</table>';
+            html += '</div>';
     ***REMOVED***
         return html;
 ***REMOVED***
