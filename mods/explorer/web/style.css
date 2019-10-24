@@ -70,6 +70,7 @@ input[type=text], input[type=number] {
 a.button {
     color: var(--saito-white);
     text-decoration: none;
+    margin-bottom: 5px;
 }
 
 .hash-search-input {
@@ -78,7 +79,7 @@ a.button {
 
 .one-line-form {
     display: grid;
-    grid-template-columns: 1fr 15em;
+    grid-template-columns: 1fr 7.5em;
     width: 100%;
     max-width: 850px;
     grid-gap: 10px;
@@ -90,9 +91,9 @@ a.button {
 
 .blockchain-table {
     display: grid;
-    grid-template-columns: 1em 1em 11fr 5fr;
+    grid-template-columns: 1.5em 1.5em 11fr 5fr;
     grid-gap: 10px;
-
+    max-width: 850px;
 }
 
 .blockchain-table div {
@@ -101,4 +102,29 @@ a.button {
 
 .table-header {
     font-weight: bold;
+}
+
+.block-table {
+    display: grid;
+    grid-template-columns: 7em 1fr;
+    grid-gap: 10px;
+    max-width: 850px;
+    margin-bottom: 2em;}
+
+.block-table div {
+    overflow: hidden;
+}
+
+.block-transactions-table {
+    display: grid;
+    grid-template-columns: 1.5em 30em 8em 1.5em;
+    grid-gap: 10px;
+    max-width: 625px;
+}
+
+h1, h2, h3, h4, h5 {
+    display: inline-block;
+    min-width: 200px;
+    width: 100%;
+    overflow: hidden;
 }
