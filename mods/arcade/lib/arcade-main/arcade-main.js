@@ -16,12 +16,10 @@ module.exports = ArcadeMain = {
     //
     let gamesbox = document.getElementById("arcade-games");
     data.arcade.mods.forEach(mod => {
-console.log("TESTING MOD: " + mod.name);
       let gameobj = mod.respondTo("arcade-games");
       if (gameobj != null) {
 	gamesbox.innerHTML += ArcadeGameTemplate(mod, gameobj);
   ***REMOVED***
-console.log("TESTING MOD FINISHED: " + mod.name);
 ***REMOVED***);
 
     //
@@ -30,21 +28,28 @@ console.log("TESTING MOD FINISHED: " + mod.name);
     data.arcade.games.forEach(tx => {
       document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(tx);
 ***REMOVED***);
-console.log("Finished Render in ArcadeMain");
 
   ***REMOVED***,
 
 
   attachEvents(app, data) {
 
+console.log("asd asdlkjasd ueroiuqwer");
+
     //
     // create game
     //
     Array.from(document.getElementsByClassName('game')).forEach(game => {
+console.log("sending open game request... 1: " + game.innerHTML);
       game.addEventListener('click', (e) => {
-        alert("You have clicked on: " + e.currentTarget.id);
+alert("testing");
+	data.arcade.sendOpenRequest(app, data, { name : e.currentTarget.id , options : {***REMOVED*** ***REMOVED*** );
   ***REMOVED***);
 ***REMOVED***);
+
+console.log("asd asdlkjasd ueroiuqwer 2");
+
+console.log("ATTACHED THE EVENT!");
 
     //
     // join game
@@ -56,7 +61,6 @@ console.log("Finished Render in ArcadeMain");
 
 	for (let i = 0; i < data.arcade.games.length; i++) {
 	  if (data.arcade.games[i].transaction.sig == game_id) {
-alert("FOUND THE TX: " + JSON.stringify(data.arcade.games[i].transaction));
 	    data.arcade.sendInviteRequest(app, data, data.arcade.games[i]);
 	    return;
 	  ***REMOVED***
