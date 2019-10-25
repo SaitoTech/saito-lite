@@ -27,11 +27,15 @@ module.exports = ChatBox = {
           }
       });
 
-      document.querySelector('.chat-box-header')
-              .addEventListener('click', (e) => {
-                let chat_box = document.querySelector('.chat-box')
-                chat_box.style.height = chat_box.style.height == '3em' ? '38em' : '3em';
-              });
+      let toggleBoxHeader = (e) => {
+        let chat_box = document.querySelector('.chat-box')
+        chat_box.style.height = chat_box.style.height == '3em' ? '38em' : '3em';
+      };
+
+      let chat_box_header = document.querySelector('.chat-box-header');
+
+      chat_box_header.removeEventListener('click', toggleBoxHeader);
+      chat_box_header.addEventListener('click', toggleBoxHeader);
 
     },
 
