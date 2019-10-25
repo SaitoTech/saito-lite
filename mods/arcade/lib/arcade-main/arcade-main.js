@@ -40,22 +40,20 @@ console.log("asd asdlkjasd ueroiuqwer");
     // create game
     //
     Array.from(document.getElementsByClassName('game')).forEach(game => {
-console.log("sending open game request... 1: " + game.innerHTML);
       game.addEventListener('click', (e) => {
-alert("testing");
-	data.arcade.sendOpenRequest(app, data, { name : e.currentTarget.id , options : {} } );
+alert("creating game!");
+	data.arcade.sendOpenRequest(app, data, { name : e.currentTarget.id , options : {} , players_needed : 2 } );
       });
     });
 
-console.log("asd asdlkjasd ueroiuqwer 2");
-
-console.log("ATTACHED THE EVENT!");
 
     //
     // join game
     //
     Array.from(document.getElementsByClassName('arcade-game-row-join')).forEach(game => {
       game.addEventListener('click', (e) => {
+
+alert("joining game!");
 
         let game_id = e.currentTarget.id;
 
@@ -68,6 +66,8 @@ console.log("ATTACHED THE EVENT!");
 
       });
     });
+
+console.log("EVENTS ATTACHED TO MAIN!");
 
   }
 
