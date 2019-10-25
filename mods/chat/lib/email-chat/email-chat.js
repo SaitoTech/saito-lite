@@ -32,15 +32,8 @@ module.exports = EmailChat = {
     },
 
     attachEvents(app, data) {
-<<<<<<< HEAD
       ChatList.attachEvents(app, data);
-      // if (data.chat.groups.length > 0) {
-        ChatBox.attachEvents(app, data);
-      // }
-=======
-        ChatList.attachEvents(app, data);
-        ChatBox.attachEvents(app, data);
->>>>>>> d076713c816bf73e2f16d2a3401f07f080e2fb9b
+      ChatBox.attachEvents(app, data);
     },
 
     addMessageToDOM(app, data, msg) {
