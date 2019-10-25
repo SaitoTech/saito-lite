@@ -92,7 +92,7 @@ input[type=text], input[type=number] {
 
 .header {
     display: grid;
-    height: 9vh;
+    height: 5em;
     padding: 0 1em;
     background-image: url(/saito/img/dreamscape.png);
     background-position: 0em;
@@ -140,7 +140,7 @@ input[type=text], input[type=number] {
     /* enables “momentum” (smooth) scrolling */
     /* sus and still out to jury */
     height: 83vh;
-    margin-top: 9vh;
+    margin-top: 5em;
     margin-bottom: 9vh;
     margin-left: auto;
     margin-right: auto;

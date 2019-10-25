@@ -39,13 +39,18 @@ class Email extends ModTemplate {
   ***REMOVED***
 
   render(app, data) {
+    this.renderMain(app, data);
+    this.renderSidebar(app, data);
+  ***REMOVED***
 
+  renderMain(app, data) {
     EmailMain.render(app, data);
     EmailMain.attachEvents(app, data);
+  ***REMOVED***
 
+  renderSidebar(app, data) {
     EmailSidebar.render(app, data);
     EmailSidebar.attachEvents(app, data);
-
   ***REMOVED***
 
   initialize(app) {
@@ -174,7 +179,7 @@ class Email extends ModTemplate {
 
   addEmail(tx) {
     this.emails.inbox.unshift(tx);
-    if (this.browser_active) { this.render(this.app, this.uidata); ***REMOVED***
+    if (this.browser_active) { this.renderMain(this.app, this.uidata); ***REMOVED***
   ***REMOVED***
 
 
@@ -185,8 +190,7 @@ class Email extends ModTemplate {
 
     if (type == 'chat-render-request') {
       if (this.browser_active) {
-        EmailSidebar.render(this.app, this.uidata);
-        EmailSidebar.attachEvents(this.app, this.uidata);
+        this.renderSidebar(app, data);
   ***REMOVED***
 ***REMOVED***
 
