@@ -5,6 +5,7 @@
     'chat/chat.js',
     'email/email.js',
     'encrypt/encrypt.js',
+    'explorer/explorer.js',
     'faucet/faucet.js',
     'wallet/wallet.js',
     'wordblocks/wordblocks.js',

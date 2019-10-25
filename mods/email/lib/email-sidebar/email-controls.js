@@ -6,13 +6,12 @@ module.exports = EmailControls = {
 
     render(app, data) {
         document.querySelector(".email-controls").innerHTML = EmailControlsTemplate();
-
         EmailBarsMenu.render(app, data);
-        EmailBarsMenu.attachEvents(app, data);
-
 ***REMOVED***,
 
     attachEvents(app, data) {
+        EmailBarsMenu.attachEvents(app, data);
+
         let compose_button = document.getElementById('email-compose-btn');
             compose_button.addEventListener('click', (e) => {
 

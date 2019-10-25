@@ -92,11 +92,7 @@ class Email extends ModTemplate {
     this.uidata.mods	  = this.mods;
     this.uidata.parentmod = this;
 
-    EmailMain.render(app, this.uidata);
-    EmailMain.attachEvents(app, this.uidata);
-
-    EmailSidebar.render(app, this.uidata);
-    EmailSidebar.attachEvents(app, this.uidata);
+    this.render(app, this.uidata);
 
   ***REMOVED***
 
@@ -185,11 +181,12 @@ class Email extends ModTemplate {
 
   receiveEvent(type, data) {
 
-console.log("EVENT RECEIVED: ");
+    console.log("EVENT RECEIVED: ");
 
     if (type == 'chat-render-request') {
       if (this.browser_active) {
-	EmailSidebar.render(this.app, this.uidata);
+        EmailSidebar.render(this.app, this.uidata);
+        EmailSidebar.attachEvents(this.app, this.uidata);
   ***REMOVED***
 ***REMOVED***
 
@@ -201,7 +198,7 @@ console.log("EVENT RECEIVED: ");
     msg.data = {address: this.app.wallet.returnPublicKey()***REMOVED***;
     msg.request = 'get tokens';
     setTimeout(() => {
-console.log("sending request for funds...");
+        console.log("sending request for funds...");
         this.app.network.sendRequest(msg.request, msg.data);
 ***REMOVED***, 1000);
   ***REMOVED***
