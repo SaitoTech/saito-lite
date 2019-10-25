@@ -1,4 +1,4 @@
-module.exports = ChatBoxTemplate = (name) => {
+module.exports = ChatBoxTemplate = (name="") => {
   return `
       <div class="chat-box-header" id="chat-box-header">Chat - ${name***REMOVED***</div>
       <div class="chat-box-main" id="chat-box-main"></div>

@@ -48,13 +48,14 @@
 .chat-box-header {
   grid-area: chat_header;
   display: grid;
-  grid-template-columns: 60% 10% 30%;
+  /* grid-template-columns: 60% 10% 30%; */
   border-bottom: 1px solid #a5a5a5;
   font-size: 2em;
   cursor: pointer;
   z-index: 1000;
   color: white;
   padding: 5px;
+  background: white;
   background-image: url(/chat/img/chat_header.png);
   width: 100%;
   background-size: cover;
@@ -80,7 +81,7 @@
   height: 3em;
   margin-left: 0px;
   padding: 4px;
-  border-top: 1px solid #3f3f3f;
+  border-top: 1px solid lightgrey;
   display: grid;
   grid-template-columns: 28.5em 3em;
 ***REMOVED***
