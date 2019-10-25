@@ -5,6 +5,12 @@ const ChatBox		 	= require('./chat-box/chat-box');
 
 module.exports = EmailChat = {
 
+    initialize(app, data) {
+      app.connection.on('chat_receive_message', (msg) => {
+        this.addMessageToDOM(app, data, msg);
+      });
+    },
+
     render(app, data) {
       document.querySelector(".email-chat").innerHTML = EmailChatTemplate();
 
@@ -22,7 +28,7 @@ module.exports = EmailChat = {
         ChatBox.attachEvents(app, data);
     },
 
-    addMessageToDOM(app, data) {
+    addMessageToDOM(app, data, msg) {
       if (data.chat.active.group_id == msg.group_id) {
           ChatBox.addMessageToDOM(msg, msg.sig, msg.type);
       }
