@@ -58,7 +58,6 @@ class Chat extends ModTemplate {
     data.chat.groups = chat_self.groups;
 
     EmailChat.initialize(app, data);
-
     EmailChat.render(app, data);
 
   }
@@ -122,14 +121,15 @@ class Chat extends ModTemplate {
 
     if (conf == 0) {
       if (txmsg.request == "chat message") {
-	    // this.chatReceiveMessage(app, tx);
-          chat_self.groups.forEach(group => {
-              if (group.group_id == txmsg.group_id) {
-                  let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: "others" });
-                  group.messages.push(msg);
-                  app.connection.emit('chat_receive_message', msg);
-              }
-          });
+        if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) { return; }
+
+        chat_self.groups.forEach(group => {
+          if (group.group_id == txmsg.group_id) {
+              let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: "others" });
+              group.messages.push(msg);
+              app.connection.emit('chat_receive_message', msg);
+          }
+        });
 
       }
     }

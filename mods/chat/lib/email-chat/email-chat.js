@@ -6,26 +6,37 @@ const ChatBox		 	= require('./chat-box/chat-box');
 module.exports = EmailChat = {
 
     initialize(app, data) {
-      app.connection.on('chat_receive_message', (msg) => {
-        this.addMessageToDOM(app, data, msg);
-      });
+      my_listener = (msg) => this.addMessageToDOM(app, data, msg);
+      app.connection.removeAllListeners('chat_receive_message');
+      app.connection.on('chat_receive_message', my_listener);
     },
 
     render(app, data) {
-      document.querySelector(".email-chat").innerHTML = EmailChatTemplate();
+      // if (data.chat.groups.length > 0) {
+        document.querySelector(".email-chat").innerHTML = EmailChatTemplate();
 
-      if (!document.querySelector('.chat-box')) {
-        document.querySelector("body").innerHTML += `<div class="chat-box"></div>`;
-        data.chat.active = data.chat.groups[0];
-        ChatBox.render(app, data);
-      }
+        if (!document.querySelector('.chat-box')) {
+          document.querySelector("body").innerHTML += `<div class="chat-box"></div>`;
+
+          if (data.chat.groups.length > 0) {
+            data.chat.active = data.chat.groups[0];
+          } else {
+            data.chat.active = {messages: []};
+          }
+
+          ChatBox.render(app, data);
+          // ChatBox.attachEvents(app, data);
+        }
+      // }
 
       ChatList.render(app, data);
     },
 
     attachEvents(app, data) {
-        ChatList.attachEvents(app, data);
-        ChatBox.attachEvents(app, data);
+        // if (data.chat.groups.length > 0) {
+          ChatList.attachEvents(app, data);
+          ChatBox.attachEvents(app, data);
+        // }
     },
 
     addMessageToDOM(app, data, msg) {
