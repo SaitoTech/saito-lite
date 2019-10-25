@@ -19,7 +19,6 @@
 
 .chat-box {
   display: grid;
-  display: none; // changed to grid in init
   position: fixed;
   bottom: 0;
   right: 0;
@@ -142,3 +141,9 @@
   font-weight: bold;
 ***REMOVED***
 
+
+@media only screen and (max-width: 600px) {
+  .chat-box {
+    display: none;
+  ***REMOVED***
+***REMOVED***
