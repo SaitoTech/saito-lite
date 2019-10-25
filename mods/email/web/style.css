@@ -236,6 +236,8 @@ body {
 
 
 
+<<<<<<< HEAD
+=======
 /*** Chat Stuff ***/
 .chat-box {
   display: grid;
@@ -364,6 +366,7 @@ body {
 
 
 
+>>>>>>> 381588a909d54e819654b244d3cb6faaddc9868f
 .email-text-wrapper {
   height: 35vh;
 }

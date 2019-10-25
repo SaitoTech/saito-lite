@@ -63,9 +63,7 @@ class Arcade extends ModTemplate {
 	z.transaction.msg.request  = "loaded";
         x.transaction.msg.game     = this.app.options.games[i].module;
         x.transaction.msg.options  = this.app.options.games[i].options;;
-console.log("LOADED A GAME!");
 	this.game.push[z];
-
       }
     }
 
@@ -74,11 +72,11 @@ console.log("LOADED A GAME!");
 
   initializeHTML(app) {
 
-    let tx = this.createOpenTransaction(app, { name : "Wordblocks" , options : "" });
-    this.games.push(tx);
-
     let data = {};
     data.arcade = this;
+
+    let tx = this.createOpenTransaction({ name : "Wordblocks" , options : {} });
+    this.games.push(tx);
 
     this.render(app, data);
 
@@ -100,6 +98,15 @@ console.log("LOADED A GAME!");
 
       // open
       if (txmsg.module == "Arcade" && txmsg.request == "open") {
+
+	arcade_self.games.push(tx);
+
+	let data = {};
+	data.arcade = arcade_self;
+
+        ArcadeMain.render(arcade_self.app, data);
+        ArcadeMain.attachEvents(arcade_self.app, data);
+	
 	arcade_self.receiveOpenRequest(blk, tx, conf, app);
       }
 
@@ -166,10 +173,10 @@ console.log("LOADED A GAME!");
 
     let txmsg = tx.returnMessage();
 
-    let module 		= txmsg.module;
-    let player		= tx.transaction.from[0].add;
-    let game_id		= tx.transaction.sig;
-    let options		= {};
+    let module 			= txmsg.game;
+    let player			= tx.transaction.from[0].add;
+    let game_id			= tx.transaction.sig;
+    let options			= {};
     let start_bid		= blk.block.id;
     let valid_for_minutes	= 60;
     let created_at		= parseInt(tx.transaction.ts);
@@ -207,21 +214,21 @@ console.log("LOADED A GAME!");
     await app.storage.executeDatabase(sql, params, "arcade");
     return;
   }
-  sendOpenRequest(app, data) {
-    let tx = this.createOpenTransaction(app, data);
+  sendOpenRequest(app, data, gamedata) {
+    let tx = this.createOpenTransaction(gamedata);
     this.app.network.propagateTransaction(tx);
   }
-  createOpenTransaction(app, data) {
+  createOpenTransaction(gamedata) {
 
     let ts = new Date().getTime();
 
-    let tx = app.wallet.createUnsignedTransactionWithDefaultFee();
+    let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
         tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey(), 0.0));
         tx.transaction.msg.ts       = ts;
         tx.transaction.msg.module   = "Arcade";
         tx.transaction.msg.request  = "open";
-        tx.transaction.msg.game     = data.name;
-        tx.transaction.msg.options  = data.options;
+        tx.transaction.msg.game     = gamedata.name;
+        tx.transaction.msg.options  = gamedata.options;
     tx = this.app.wallet.signTransaction(tx);
 
     return tx;
