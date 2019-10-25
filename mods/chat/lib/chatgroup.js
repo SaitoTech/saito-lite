@@ -32,15 +32,17 @@ class ChatGroup extends ModTemplate {
     let txmsg = tx.returnMessage();
 
     if (conf == 0) {
-      //
-      // update this chatgroup object with data received
-      //
-      addMessage(txmsg);
+        //
+        // update this chatgroup object with data received
+        //
+        if (txmsg.group_id == this.group_id) {
+            this.addMessage(txmsg);
+        }
 
-      //
-      // notify anyone who cares that we got a chat message
-      //
-      this.sendEvent("chat", this.returnChatObject());
+        //
+        // notify anyone who cares that we got a chat message
+        //
+        this.sendEvent("chat", this.returnChatObject());
     }
 
   }
@@ -51,7 +53,7 @@ class ChatGroup extends ModTemplate {
   // this function is where we update our internal
   // variables with whatever data it needs. It is called
   // by both onConfirmation internally, and by the chat
-  // manager externally (when peer-to-peer chat requests 
+  // manager externally (when peer-to-peer chat requests
   // arrive)
   //
   addMessage(tx={}) {
@@ -63,7 +65,7 @@ class ChatGroup extends ModTemplate {
       id: tx.transaction.sig
     });
 
-console.log("adding a message and updating a message.");
+    // re-render our UI
 
   }
 
@@ -105,7 +107,7 @@ this.sendEvent("chat", this.returnChatObject());
     obj.ts       = new Date().getTime();
     obj.messages = [];
     obj.unread   = 1;
-    obj.redirect = ""; 
+    obj.redirect = "";
     obj.this     = this;
 
     return obj;
