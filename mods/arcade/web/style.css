@@ -112,7 +112,9 @@ body {
 ***REMOVED***
 
 
-
+arcade-game-invitation {
+  clear:both;
+***REMOVED***
 .arcade-game-row-name {
   float: left;
   cursor: pointer;
