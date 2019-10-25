@@ -5,17 +5,26 @@ const ChatBoxMessageContainerTemplate = require('./chat-box-message-container.te
 module.exports = ChatBox = {
 
     render(app, data) {
-        document.querySelector('.chat-box').innerHTML = ChatBoxTemplate(data.chat.active.group_name);
 
-        data.chat.active.messages.forEach(message => {
+	let active_group_name = "";
+	if (data.chat.active != undefined) {
+	  active_group_name = data.chat.active.group_name;
+	***REMOVED***
+
+        document.querySelector('.chat-box').innerHTML = ChatBoxTemplate(active_group_name);
+
+	if (data.chat.active != undefined) {
+          data.chat.active.messages.forEach(message => {
             let type = message.publickey == app.wallet.returnPublicKey() ? 'myself' : 'others';
             document.querySelector('.chat-box-main').innerHTML += ChatBoxMessageContainerTemplate(message, '1239841203498', type);
-    ***REMOVED***);
+      ***REMOVED***);
+	***REMOVED***
 
         this.scrollToBottom();
 ***REMOVED***,
 
     attachEvents(app, data) {
+
       let msg_input = document.querySelector(".chat-box-new-message-input");
       msg_input.addEventListener("keypress", (e) => {
           if ((e.which == 13 || e.keyCode == 13) && !e.shiftKey) {

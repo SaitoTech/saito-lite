@@ -1,10 +1,10 @@
 
 
 .email-chat {
+  display: none;
   margin-top: 0.5em;
   width:100%;
   height:300px;
-  border: 1px solid #ddd;
   font-size: 0.8em;
 ***REMOVED***
 
@@ -19,6 +19,7 @@
 
 .chat-box {
   display: grid;
+  display: none; // changed to grid in init
   position: fixed;
   bottom: 0;
   right: 0;

@@ -24,11 +24,11 @@ class Arcade extends ModTemplate {
     ArcadeMain.render(app, data);
     ArcadeMain.attachEvents(app, data);
 
-    ArcadeLeftSidebar.render(app, data);
-    ArcadeLeftSidebar.attachEvents(app, data);
+//    ArcadeLeftSidebar.render(app, data);
+//    ArcadeLeftSidebar.attachEvents(app, data);
 
-    ArcadeRightSidebar.render(app, data);
-    ArcadeRightSidebar.attachEvents(app, data);
+//    ArcadeRightSidebar.render(app, data);
+//    ArcadeRightSidebar.attachEvents(app, data);
 
   ***REMOVED***
 
@@ -75,7 +75,7 @@ class Arcade extends ModTemplate {
     let data = {***REMOVED***;
     data.arcade = this;
 
-    let tx = this.createOpenTransaction({ name : "Wordblocks" , options : {***REMOVED*** ***REMOVED***);
+    let tx = this.createOpenTransaction({ name : "Wordblocks" , options : {***REMOVED*** , players_needed : 2 ***REMOVED***);
     this.games.push(tx);
 
     this.render(app, data);
@@ -224,11 +224,14 @@ class Arcade extends ModTemplate {
 
     let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
         tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey(), 0.0));
-        tx.transaction.msg.ts       = ts;
-        tx.transaction.msg.module   = "Arcade";
-        tx.transaction.msg.request  = "open";
-        tx.transaction.msg.game     = gamedata.name;
-        tx.transaction.msg.options  = gamedata.options;
+        tx.transaction.msg.ts       		= ts;
+        tx.transaction.msg.module   		= "Arcade";
+        tx.transaction.msg.request  		= "open";
+        tx.transaction.msg.game     		= gamedata.name;
+        tx.transaction.msg.options  		= gamedata.options;
+        tx.transaction.msg.players_needed 	= gamedata.players_needed;
+        tx.transaction.msg.players  		= [];
+        tx.transaction.msg.players.push(this.app.wallet.returnPublicKey());
     tx = this.app.wallet.signTransaction(tx);
 
     return tx;
@@ -239,8 +242,6 @@ class Arcade extends ModTemplate {
 
 
   async receiveInviteRequest(blk, tx, conf, app) {
-
-alert("RECEIVE INVITE REQUEST IN ARCADE!");
 
     let txmsg = tx.returnMessage();
     let sql = "UPDATE games SET state = 'active', id = $gid WHERE sig = $sig";

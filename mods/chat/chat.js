@@ -52,18 +52,25 @@ class Chat extends ModTemplate {
   ////////////////
   renderEmailChat(app, data) {
 
+console.log("render email chat... 1");
+
     let chat_self = app.modules.returnModule("Chat");
+console.log("render email chat... 1");
 
     data.chat = {***REMOVED***;
     data.chat.groups = chat_self.groups;
+console.log("render email chat... 1");
 
     EmailChat.initialize(app, data);
     EmailChat.render(app, data);
+console.log("render email chat... 2");
 
   ***REMOVED***
 
   attachEventsEmailChat(app, data) {
+console.log("render email chat... 3");
     EmailChat.attachEvents(app, data);
+console.log("render email chat... 4");
   ***REMOVED***
 
 

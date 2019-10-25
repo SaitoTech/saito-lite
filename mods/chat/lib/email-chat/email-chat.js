@@ -12,7 +12,7 @@ module.exports = EmailChat = {
 ***REMOVED***,
 
     render(app, data) {
-      // if (data.chat.groups.length > 0) {
+
         document.querySelector(".email-chat").innerHTML = EmailChatTemplate();
 
         if (!document.querySelector('.chat-box')) {
@@ -25,18 +25,22 @@ module.exports = EmailChat = {
       ***REMOVED***
 
           ChatBox.render(app, data);
-  ***REMOVED*** ChatBox.attachEvents(app, data);
     ***REMOVED***
-      // ***REMOVED***
 
       ChatList.render(app, data);
+
 ***REMOVED***,
 
     attachEvents(app, data) {
+<<<<<<< HEAD
       ChatList.attachEvents(app, data);
       // if (data.chat.groups.length > 0) {
         ChatBox.attachEvents(app, data);
       // ***REMOVED***
+=======
+        ChatList.attachEvents(app, data);
+        ChatBox.attachEvents(app, data);
+>>>>>>> d076713c816bf73e2f16d2a3401f07f080e2fb9b
 ***REMOVED***,
 
     addMessageToDOM(app, data, msg) {
