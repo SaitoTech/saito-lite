@@ -12,6 +12,7 @@ const path = require('path');
         {
             sqlite: 'sqlite'
     ***REMOVED***,
+        /\.txt/,
         /\.png$/,
         /\.jpg$/,
         /\.html$/,
