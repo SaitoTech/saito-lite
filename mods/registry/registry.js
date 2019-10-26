@@ -73,7 +73,7 @@ class Registry extends ModTemplate {
     let txmsg = tx.returnMessage();
 
     if (txmsg.module === "Registry") {
-      if (tx.isTo(registery_self.publickey)) {
+      if (tx.isTo(registry_self.publickey)) {
 
         let request = txmsg.request;
         let identifier = txmsg.identifier;
