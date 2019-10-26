@@ -188,8 +188,10 @@ body {
 ***REMOVED***
 
 .email-navigator-item:hover, .email-apps-item:hover {
-  background-color: #efefef;
-  border-radius: 5px;
+  /*background-color: var(--saito-red-wash);
+  */
+  border-bottom: 1px solid var(--saito-red-wash);
+  border-radius: 0px;
 ***REMOVED***
 
 .email-loader {
