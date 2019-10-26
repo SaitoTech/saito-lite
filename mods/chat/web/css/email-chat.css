@@ -58,6 +58,7 @@
   background-image: url(/chat/img/chat_header.png);
   width: 100%;
   background-size: cover;
+  line-height: 1.4em;
 }
 
 .chat-box-main {
