@@ -24,7 +24,6 @@ class Registry extends ModTemplate {
 
 
 
-
   respondTo(type) {
     if (type == 'email-appspace') {
       let obj = {***REMOVED***;
@@ -66,11 +65,24 @@ class Registry extends ModTemplate {
   ***REMOVED***
 
 
+  onPeerHandshakeComplete(peer) {
+
+    let registry_self = peer.app.modules.returnModule("Registry");
+
+    if (registry_self.app.options.server != undefined) {
+      registry_self.publickey = registry_self.app.wallet.returnPublicKey();
+***REMOVED*** else {
+      registry_self.publickey = peer.peer.publickey;
+***REMOVED***
+
+  ***REMOVED***
+
 
   async onConfirmation(blk, tx, conf, app) {
 
     let registry_self = app.modules.returnModule("Registry");
     let txmsg = tx.returnMessage();
+
 
     if (txmsg.module === "Registry") {
       if (tx.isTo(registry_self.publickey)) {
