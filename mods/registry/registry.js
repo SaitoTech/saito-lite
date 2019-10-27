@@ -72,7 +72,7 @@ class Registry extends ModTemplate {
     if (registry_self.app.options.server != undefined) {
       registry_self.publickey = registry_self.app.wallet.returnPublicKey();
     } else {
-      registry_self.publickey = peer.peer.publickey;
+      registry_self.publickey = peer.publickey;
     }
 
   }
@@ -131,19 +131,19 @@ class Registry extends ModTemplate {
 	$lc
       )`;
     let params = {
-        identifier	:	identifier ,
-        publickey	:	publickey ,
-        unixtime	:	unixtime ,
-        bid		:	bid ,
-        bsh		:	bsh ,
-        lock_block	:	lock_block ,
-        sig		:	sig,
-        signer		:	signer,
-        lc		:	lc,
+        $identifier	:	identifier ,
+        $publickey	:	publickey ,
+        $unixtime	:	unixtime ,
+        $bid		:	bid ,
+        $bsh		:	bsh ,
+        $lock_block	:	lock_block ,
+        $sig		:	sig,
+        $signer		:	signer,
+        $lc		:	lc,
       }
     await this.app.storage.executeDatabase(sql, params, "registry");
 
-    sql = "SELECT FROM records WHERE identifier = $identifier, publickey = $publickey, unixtime = $unixtime, bid = $bid, bsh = $bsh, lock_block = $lock_block, sig = $sig, signer = $signer, lc = $lc";
+    sql = "SELECT * FROM records WHERE identifier = $identifier AND publickey = $publickey AND unixtime = $unixtime AND bid = $bid AND bsh = $bsh AND lock_block = $lock_block AND sig = $sig AND signer = $signer AND lc = $lc";
     let rows = this.app.storage.queryDatabase(sql, params, "registry");
 
     console.log("\n\n\nRESULTS OF DNS REGISTRATION: " + JSON.stringify(rows));
