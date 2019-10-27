@@ -209,7 +209,7 @@ class Email extends ModTemplate {
 
   updateBalance() {
     if (this.browser_active) {
-      document.querySelector('.email-balance').innerHTML = this.app.wallet.returnBalance() + " SAITO";
+      document.querySelector('.email-balance').innerHTML = this.app.wallet.returnBalance() + " Saito";
 ***REMOVED***
   ***REMOVED***
 
