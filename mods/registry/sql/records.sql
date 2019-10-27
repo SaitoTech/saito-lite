@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS addresses (\
+CREATE TABLE IF NOT EXISTS records (
   id INTEGER,
   identifier TEXT,
   publickey TEXT,
@@ -11,5 +11,5 @@ CREATE TABLE IF NOT EXISTS addresses (\
   lc INTEGER,
   UNIQUE (identifier),
   PRIMARY KEY(id ASC)
-)";
+);
 

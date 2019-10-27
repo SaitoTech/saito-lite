@@ -65,9 +65,9 @@ class Registry extends ModTemplate {
   ***REMOVED***
 
 
-  onPeerHandshakeComplete(peer) {
+  onPeerHandshakeComplete(app, peer) {
 
-    let registry_self = peer.app.modules.returnModule("Registry");
+    let registry_self = app.modules.returnModule("Registry");
 
     if (registry_self.app.options.server != undefined) {
       registry_self.publickey = registry_self.app.wallet.returnPublicKey();
@@ -109,14 +109,15 @@ class Registry extends ModTemplate {
 
   async addRecord(identifier="", publickey="", unixtime=0, bid=0, bsh="", lock_block=0, sig="", signer="", lc=1) {
 
-    let sql = `INSERT INTO TABLE records (
+    let sql = `INSERT INTO records (
 	identifier, 
 	publickey, 
 	unixtime, 
 	bid, 
 	bsh, 
 	lock_block, 
-	sig, signer, 
+	sig,
+	signer, 
 	lc
       ) VALUES (
 	$identifier, 
