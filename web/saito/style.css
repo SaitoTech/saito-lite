@@ -202,6 +202,10 @@ input[type=text], input[type=number] {
     font-size: 1.5em;
 ***REMOVED***
 
+.icon-med:hover {
+/*    color: var(--saito-red-wash);*/
+***REMOVED***
+
 .icon-large {
     font-size: 2em;
 ***REMOVED***
