@@ -83,25 +83,49 @@ class Registry extends ModTemplate {
     let registry_self = app.modules.returnModule("Registry");
     let txmsg = tx.returnMessage();
 
+    if (conf == 0) {
+      if (txmsg.module === "Registry") {
+        if (tx.isTo(registry_self.publickey) && app.wallet.returnPublicKey() == registry_self.publickey) {
 
-    if (txmsg.module === "Registry") {
-      if (tx.isTo(registry_self.publickey)) {
+          let request = txmsg.request;
+          let identifier = txmsg.identifier;
+          let publickey = tx.transaction.from[0].add;
+  	  let unixtime = new Date().getTime();
+          let bid = blk.block.id;
+          let bsh = blk.returnHash();
+  	  let lock_block = 0;
+	  let sig = "";
+	  let signer = this.publickey;
+	  let lc = 1;
 
-        let request = txmsg.request;
-        let identifier = txmsg.identifier;
-        let publickey = tx.transaction.from[0].add;
-	let unixtime = new Date().getTime();
-        let bid = blk.block.id;
-        let bsh = blk.returnHash();
-  	let lock_block = 0;
-	let sig = "";
-	let signer = this.publickey;
-	let lc = 1;
+  ***REMOVED*** servers update database
+          let res = await registry_self.addRecord(identifier, publickey, unixtime, bid, bsh, lock_block, sig, signer, 1);
+          let fee = tx.returnPaymentTo(registry_self.publickey);
 
-***REMOVED*** servers update database
-        registry_self.addRecord(identifier, publickey, unixtime, bid, bsh, lock_block, sig, signer, 1);
-        return;
+	  // send message
+	  if (res == 1) {
+	    
+	    let newtx = registry_self.app.wallet.createUnsignedTransaction(tx.transaction.from[0].add, 0.0, fee);	    
+		newtx.transaction.msg.module = "Email";
+		newtx.transaction.msg.title  = "Address Registration Success!";
+	    	newtx.transaction.msg.message = "You have successfully registered the identifier: " + identifier;
+	    newtx = registry_self.app.wallet.signTransaction(newtx);
+	    registry_self.app.network.propagateTransaction(newtx);
 
+	  ***REMOVED*** else {
+
+            let newtx = registry_self.app.wallet.createUnsignedTransaction(tx.transaction.from[0].add, 0.0, fee);
+                newtx.transaction.msg.module = "Email";
+                newtx.transaction.msg.title  = "Address Registration Failed!";
+                newtx.transaction.msg.message = "The identifier you requested (" + identifier + ") has already been registered";
+            newtx = registry_self.app.wallet.signTransaction(newtx);
+            registry_self.app.network.propagateTransaction(newtx);
+
+	  ***REMOVED***
+
+          return;
+
+    ***REMOVED***
   ***REMOVED***
 ***REMOVED***
   ***REMOVED***
@@ -121,7 +145,7 @@ class Registry extends ModTemplate {
 	lc
       ) VALUES (
 	$identifier, 
-	$publickey, 
+	$publickey,
 	$unixtime, 
 	$bid, 
 	$bsh, 
@@ -144,11 +168,16 @@ class Registry extends ModTemplate {
     await this.app.storage.executeDatabase(sql, params, "registry");
 
     sql = "SELECT * FROM records WHERE identifier = $identifier AND publickey = $publickey AND unixtime = $unixtime AND bid = $bid AND bsh = $bsh AND lock_block = $lock_block AND sig = $sig AND signer = $signer AND lc = $lc";
-    let rows = this.app.storage.queryDatabase(sql, params, "registry");
-
-    console.log("\n\n\nRESULTS OF DNS REGISTRATION: " + JSON.stringify(rows));
-
-    return 1;
+    let rows = await this.app.storage.queryDatabase(sql, params, "registry");
+console.log(sql);
+console.log(params);
+console.log("\n\n\nRES: " + JSON.stringify(rows));
+console.log("ROWS: " + rows.length);
+    if (rows.length == 0) {
+      return 0;
+***REMOVED*** else {
+      return 1;
+***REMOVED***
 
   ***REMOVED***
 
