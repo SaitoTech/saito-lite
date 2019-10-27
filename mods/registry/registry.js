@@ -145,16 +145,18 @@ class Registry extends ModTemplate {
       if (txmsg.module == "Email") {
 	if (tx.transaction.from[0].add == registry_self.publickey) {
 	  if (tx.transaction.to[0].add == registry_self.app.wallet.returnPublicKey()) {
+	    if (tx.transaction.msg.identifier != "" && tx.transaction.msg.signed_message != "" && tx.transaction.msg.sig != "") {
 
-	    //
-	    // am email? for us? from the DNS registrar?
-	    //
-	    let identifier 	= tx.transaction.msg.identifier;
-	    let signed_message 	= tx.transaction.msg.signed_message;
-	    let sig		= tx.transaction.msg.sig;
+	      //
+	      // am email? for us? from the DNS registrar?
+	      //
+	      let identifier 	= tx.transaction.msg.identifier;
+	      let signed_message 	= tx.transaction.msg.signed_message;
+	      let sig		= tx.transaction.msg.sig;
 
-	    if (registry_self.app.crypto.verifyMessage(signed_message, sig, registry_self.publickey)) {
-	      registry_self.app.keys.addKey(tx.transaction.to[0].add, identifier, true, "", blk.block.id, blk.returnHash(), 1);
+	      if (registry_self.app.crypto.verifyMessage(signed_message, sig, registry_self.publickey)) {
+	        registry_self.app.keys.addKey(tx.transaction.to[0].add, identifier, true, "", blk.block.id, blk.returnHash(), 1);
+	  ***REMOVED***
 	***REMOVED***
 	  ***REMOVED***
 	***REMOVED***
