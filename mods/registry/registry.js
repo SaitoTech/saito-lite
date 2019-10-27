@@ -94,7 +94,8 @@ class Registry extends ModTemplate {
           let bid = blk.block.id;
           let bsh = blk.returnHash();
   	  let lock_block = 0;
-	  let sig = "";
+          let signed_message = identifier + publickey + bid + bsh;
+	  let sig = registry_self.app.wallet.signMessage(signed_message);
 	  let signer = this.publickey;
 	  let lc = 1;
 
@@ -109,6 +110,10 @@ class Registry extends ModTemplate {
 		newtx.transaction.msg.module = "Email";
 		newtx.transaction.msg.title  = "Address Registration Success!";
 	    	newtx.transaction.msg.message = "You have successfully registered the identifier: " + identifier;
+                newtx.transaction.msg.identifier = identifier;
+                newtx.transaction.msg.signed_message = signed_message;
+                newtx.transaction.msg.sig = sig;
+
 	    newtx = registry_self.app.wallet.signTransaction(newtx);
 	    registry_self.app.network.propagateTransaction(newtx);
 
@@ -118,6 +123,10 @@ class Registry extends ModTemplate {
                 newtx.transaction.msg.module = "Email";
                 newtx.transaction.msg.title  = "Address Registration Failed!";
                 newtx.transaction.msg.message = "The identifier you requested (" + identifier + ") has already been registered";
+                newtx.transaction.msg.identifier = identifier;
+                newtx.transaction.msg.signed_message = "";
+                newtx.transaction.msg.sig = "";
+
             newtx = registry_self.app.wallet.signTransaction(newtx);
             registry_self.app.network.propagateTransaction(newtx);
 
@@ -126,6 +135,29 @@ class Registry extends ModTemplate {
           return;
 
     ***REMOVED***
+  ***REMOVED***
+
+
+
+      //
+      //
+      //
+      if (txmsg.module == "Email") {
+	if (tx.transaction.from[0].add == registry_self.publickey) {
+	  if (tx.transaction.to[0].add == registry_self.app.wallet.returnPublicKey()) {
+
+	    //
+	    // am email? for us? from the DNS registrar?
+	    //
+	    let identifier 	= tx.transaction.msg.identifier;
+	    let signed_message 	= tx.transaction.msg.signed_message;
+	    let sig		= tx.transaction.msg.sig;
+
+	    if (registry_self.app.crypto.verifyMessage(signed_message, sig, registry_self.publickey)) {
+	      registry_self.app.keys.addKey(tx.transaction.to[0].add, identifier, true, "", blk.block.id, blk.returnHash(), 1);
+	***REMOVED***
+	  ***REMOVED***
+	***REMOVED***
   ***REMOVED***
 ***REMOVED***
   ***REMOVED***
@@ -197,6 +229,15 @@ console.log("ROWS: " + rows.length);
   
 
 
+
+  shouldAffixCallbackToModule(modname) {
+    if (modname == this.name) { return 1; ***REMOVED***
+    if (modname == "Email") { return 1; ***REMOVED***
+    return 0;
+  ***REMOVED***
+
+
+
   sendSuccessResponse(tx) {
 
     let fee = tx.returnPaymentTo(this.app.wallet.returnPublicKey());
@@ -237,6 +278,9 @@ console.log("ROWS: " + rows.length);
     this.app.network.propagateTransaction(newtx); 
 
   ***REMOVED***
+
+
+
 
 ***REMOVED***
 module.exports = Registry;

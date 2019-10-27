@@ -1,6 +1,12 @@
-module.exports = EmailDetailTemplate = (selected_mail) => {
+module.exports = EmailDetailTemplate = (app, selected_mail) => {
   let { from, to, ts ***REMOVED*** = selected_mail.transaction;
   let { message ***REMOVED*** = selected_mail.returnMessage();
+
+  let hr_from = app.keys.returnIdentifierByPublicKey(from);
+  let hr_to   = app.keys.returnIdentifierByPublicKey(to);
+
+  if (hr_from != "") { from = hr_from; ***REMOVED***
+  if (hr_to != "")   { to   = hr_to; ***REMOVED***
 
   let datetime = new Date(ts);
   let hours = datetime.getHours();
@@ -25,4 +31,5 @@ module.exports = EmailDetailTemplate = (selected_mail) => {
       </div>
     </div>
   `;
+
 ***REMOVED***
