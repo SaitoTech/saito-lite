@@ -61,11 +61,12 @@ class Arcade extends ModTemplate {
 	let z = new saito.transaction();
 	z.transaction.msg.game_id  = this.app.options.games[i].id;
 	z.transaction.msg.request  = "loaded";
-        x.transaction.msg.game     = this.app.options.games[i].module;
-        x.transaction.msg.options  = this.app.options.games[i].options;;
-	this.game.push[z];
+        z.transaction.msg.game     = this.app.options.games[i].module;
+        z.transaction.msg.options  = this.app.options.games[i].options;;
+	this.games.push[z];
       }
     }
+
 
   }
 
