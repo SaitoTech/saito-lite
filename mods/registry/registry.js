@@ -72,7 +72,7 @@ class Registry extends ModTemplate {
     if (registry_self.app.options.server != undefined) {
       registry_self.publickey = registry_self.app.wallet.returnPublicKey();
     } else {
-      registry_self.publickey = peer.publickey;
+      registry_self.publickey = peer.peer.publickey;
     }
 
   }
