@@ -2,6 +2,7 @@ const saito = require('../../lib/saito/saito.js');
 const ModTemplate = require('../../lib/templates/modtemplate');
 
 const ArcadeMain = require('./lib/arcade-main/arcade-main');
+const ArcadeLoader = require('./lib/arcade-main/arcade-loader');
 const ArcadeLeftSidebar = require('./lib/arcade-left-sidebar/arcade-left-sidebar');
 const ArcadeRightSidebar = require('./lib/arcade-right-sidebar/arcade-right-sidebar');
 
@@ -244,6 +245,9 @@ class Arcade extends ModTemplate {
 
   async receiveInviteRequest(blk, tx, conf, app) {
 
+    //
+    // servers
+    //
     let txmsg = tx.returnMessage();
     let sql = "UPDATE games SET state = 'active', id = $gid WHERE sig = $sig";
     let params = {
@@ -251,6 +255,21 @@ class Arcade extends ModTemplate {
       $sig : txmsg.sig
 ***REMOVED***
     await this.app.storage.executeDatabase(sql, params, "arcade");
+    if (this.browser_active == 0) { return; ***REMOVED***
+
+    //
+    // browsers
+    //
+    let opponent = tx.transaction.from[0].add;
+    let invitee  = tx.transaction.to[0].add;
+
+    data = {***REMOVED***;
+    data.arcade = this;
+
+    //ArcadeLoader.render(app, data);
+    //ArcadeLoader.render(app, data);
+
+    console.log("RECEIVED INVITE");
 
   ***REMOVED***
   sendInviteRequest(app, data, opentx) {
