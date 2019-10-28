@@ -3,6 +3,10 @@
     --saito-skyline-grey: rgb(234, 234, 239);
     --saito-cyber-black: rgb(28, 28, 35);
     --saito-white: #ffffff;
+
+    --saito-red-wash: rgb(247, 31, 61, 0.3);
+    --saito-cyber-black-wash: rgb(28, 28, 35, 0.3);
+    --saito-cyber-black-cut: rgb(28, 28, 35, 0.5);
 }
 
 * {
@@ -71,23 +75,29 @@ body {
 button, .button {
     padding: 8px;
     background-color: var(--saito-red);
-    border: 4px solid var(--saito-red);
+    border: 1px solid var(--saito-red);
     border-radius: 5px;
     color: white;
     font-size: 1em;
     font-family: 'visuelt-light';
     cursor: pointer;
-    line-height: 1.6em;
 }
 
 button:hover, .button:hover {
     text-shadow: var(--saito-skyline-grey) 1px 0;
 }
 
+.button-secondary {
+    background: var(--saito-cyber-black-cut);
+    border: 1px solid var(--saito-cyber-black-cut);
+}
+
+
 input[type=text], input[type=number] {
     padding: 10px 5px;
-    border-radius: 5px;
+    border-radius: 0px;
     font-size: 1em;
+    border-bottom: 1px solid var(--saito-cyber-black-wash);
 }
 
 .header {
@@ -197,6 +207,10 @@ input[type=text], input[type=number] {
 
 .icon-med {
     font-size: 1.5em;
+}
+
+.icon-med:hover {
+/*    color: var(--saito-red-wash);*/
 }
 
 .icon-large {
@@ -649,3 +663,6 @@ input[type=text], input[type=number] {
     padding: 1em 12px;
 }
 
+.monospace {
+    font-family: monospace, 'Courier New', Courier;
+}

@@ -1,30 +1,23 @@
 module.exports = EmailAppspaceTemplate = (app) => {
   return `
+  <link rel="stylesheet" href="/settings/style.css">
+  <div class="email-appspace-settings">
 
-      <div class="email-appspace-settings">
+  <h3>Network Keys</h3>
 
-        <b>Network Keys:</b>
+  <div class="monospace settings-grid">
+      <div class="grid-title">public:</div>
+      <div>${app.wallet.returnPublicKey()}</div>
+      <div class="grid-title">private:</div>
+      <div><input id="privatekey" type="password" value="${app.wallet.returnPrivateKey()}" class="password" /></div>
+      <div class="grid-title">address:</div>
+      <div>${app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey()) || "no address registered"}</div>
 
-	<div class="courier">	
-
-          public:&nbsp;${app.wallet.returnPublicKey()}
-          private: <input id="privatekey" type="password" value="${app.wallet.returnPrivateKey()}" class="password" />
-          address: ${app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey()) || "no address registered"}
-
-        </div>
-
-	<p></p> 
-
-        <input type="button" id="reset-account-btn" class="reset-account-btn" value="Reset Account" />
-
-      </div>
-      <style type="text/css">
-	.email-appspace-debug {
-    font-size: 1.2em;
-    overflow: auto;
-    height: 81vh;
-    width: 65vw;
-	}
-      </style>
+  </div>
+  <div class="settings-buttons">
+      <input type="button" class="button button-secondary" id="reset-account-btn" class="reset-account-btn" value="Reset Account" />
+  </div>
+</div>
+</style>     
   `;
 }

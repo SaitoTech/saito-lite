@@ -1,0 +1,118 @@
+body {
+    font-family: arial, helvetica, sans-serif;
+    font-size: 13px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.container {
+    display: grid;
+    grid-template-rows: 3.1rem auto;
+    grid-template-areas: "header" "content"
+}
+
+h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.33em;
+    text-align: center;
+    font-weight: 400;
+    letter-spacing: -1px;
+    text-align: left;
+    color: #ff8844;
+}
+
+.submit {
+    text-align: center;
+    min-width: 200px;
+    padding: 5px 35px;
+    background: #ff8844;
+    color: #fff !important;
+    font-size: 16px;
+    font-weight: 400;
+    font-family: 'Montserrat', sans-serif;
+    display: inline-block;
+    border-radius: 3px;
+    text-transform: uppercase;
+    line-height: 25px;
+    margin-bottom: 10;
+    transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    margin: 5px 0;
+}
+
+.field {
+    display: inline-block;
+    border: 1px solid #ff8844;
+    border-radius: 5px;
+    padding: 0 10px 10px 10px;
+    margin: 10px 0;
+}
+
+.header {
+    grid-area: header;
+    /* width: 1200px; */
+    /* height: 50px; */
+    /* background-color: #e5e5e5; */
+    border-bottom: 1px solid #a5a5a5;
+    font-size: 2em;
+}
+
+.loader {
+    padding: 40px;
+}
+
+.label {
+    font-size: 1.4em;
+}
+
+.logo {
+    width: 35px;
+    margin-top: 10px;
+    margin-left: 1.3em;
+    margin-right: 0.35em;
+    float: left;
+}
+
+input {
+    border: 1px solid #999999;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 1.4em;
+    color: #111111;
+    text-align: right;
+}
+
+#requested_identifier, #email {
+    border-color: grey;
+    width: 250px;
+    height: 1.4em;
+    margin-right: 3px;
+    width:300px;
+}
+
+#requested_identifier {
+    text-align: right;
+}
+
+.main {
+    /* max-width: 1200px; */
+    display: grid;
+    padding: 1em;
+    grid-row-gap: 1em;
+    font-size: 1.2em;
+    /* width: 1200px; */
+}
+
+@media only screen and (max-width: 535px) {
+    h1 {
+        text-align: center;
+    }
+    .submit {
+        max-width: 100%;
+    }
+    .logo {
+        margin-left: 0.6em;
+    }
+}

@@ -32,15 +32,12 @@ class Encrypt extends ModTemplate {
   }
 
   renderEmail(app, data) {
-
      let EncryptAppspace = require('./lib/email-appspace/encrypt-appspace');
      EncryptAppspace.render(app, data);
-     EncryptAppspace.attachEvents(app, data);
-
   }
 
   attachEventsEmail(app, data) {
-
+     EncryptAppspace.attachEvents(app, data);
   }
 
 
