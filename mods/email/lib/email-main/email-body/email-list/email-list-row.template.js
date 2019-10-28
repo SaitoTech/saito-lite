@@ -1,3 +1,5 @@
+const datetimeFormatter = require('../../../../../../lib/helpers/datetime_formatter');
+
 module.exports = EmailListRowTemplate = (tx) => {
 
   let message 	= tx.transaction.msg.message;
@@ -6,10 +8,7 @@ module.exports = EmailListRowTemplate = (tx) => {
   let ts        = tx.transaction.ts;
   let sig 	= tx.transaction.sig;
 
-  let datetime = new Date(ts);
-  let hours = datetime.getHours();
-  let minutes = datetime.getMinutes();
-  minutes = minutes.toString().length == 1 ? `0${minutes}` : `${minutes}`;
+  let datetime = datetimeFormatter(ts);
 
   message = message.length > 64 ? `${message.substring(0, 64)}...`: message;
 
@@ -20,6 +19,6 @@ module.exports = EmailListRowTemplate = (tx) => {
           <h3>${title}</h3>
           <p class="emai-message-message">${message}</p>
       </div>
-      <p class="email-message-timestamp">${hours}:${minutes}</p>
+      <p class="email-message-timestamp">${datetime.hours}:${datetime.minutes}</p>
   </div>`
 };
