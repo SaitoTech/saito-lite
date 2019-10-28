@@ -14,12 +14,12 @@ module.exports = ChatList = {
 
         for (let i = 0; i < data.chat.groups.length; i++) {
 
-        let name 	= data.chat.groups[i].group_name;
-        let group_id 	= data.chat.groups[i].group_id;
-        let message	= "temporary message";
-        let ts	= new Date().getTime();
+            let name 	= data.chat.groups[i].group_name;
+            let group_id 	= data.chat.groups[i].group_id;
+            let message	= data.chat.groups[i].messages[data.chat.groups[i].messages.length - 1] || '';
+            let ts	= new Date().getTime();
 
-        chat_list.innerHTML += ChatListRowTemplate(name, group_id, message, ts);
+            chat_list.innerHTML += ChatListRowTemplate(name, group_id, message, ts);
 
     ***REMOVED***
 
@@ -30,8 +30,12 @@ module.exports = ChatList = {
             .forEach(row => {
                 row.addEventListener('click', (e) => {
                     let group_id = e.currentTarget.id;
+
+                    if (document.getElementById(`chat-box-${group_id***REMOVED***`)) { return; ***REMOVED***
+
                     let selected_group = data.chat.groups.filter(group => group.group_id == group_id);
                     data.chat.active = selected_group[0];
+
                     ChatBox.render(app, data);
                     ChatBox.attachEvents(app, data);
             ***REMOVED***);

@@ -14,12 +14,17 @@
   font-size: 1em;
 ***REMOVED***
 
-
-.chat-box {
-  display: grid;
+.chat-manager {
+  display: flex;
   position: fixed;
   bottom: 0;
   right: 0;
+***REMOVED***
+
+
+.chat-box {
+  display: grid;
+  margin-left: 1em;
   background-color: white;
   border: 1px solid #a5a5a5;
   font-size: 0.8rem;
@@ -45,7 +50,7 @@
 .chat-box-header {
   grid-area: chat_header;
   display: grid;
-  /* grid-template-columns: 60% 10% 30%; */
+  grid-template-columns: 90% 10%;
   border-bottom: 1px solid #a5a5a5;
   font-size: 2em;
   cursor: pointer;

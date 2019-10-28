@@ -124,6 +124,41 @@ input[type=text], input[type=number] {
     align-self: center;
     justify-self: end;
     text-shadow: #333 1px 0;
+    cursor: pointer;
+***REMOVED***
+
+.header-dropdown {
+    position: absolute;
+    right: 0;
+    top: 50px;
+    margin: 14px;
+    background: white;
+    color: black;
+    padding: 10px;
+    font-size: 1.2em;
+    font-family: visuelt-light;
+    border: 1px solid lightgrey;
+***REMOVED***
+
+.header-dropdown-modules {
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid grey;
+***REMOVED***
+
+.header-dropdown-settings {
+    padding-top: 0.5em;
+***REMOVED***
+
+.header-dropdown ul {
+    list-style: none;
+    list-style-type: none;
+    line-height: 1.5em;
+    cursor: pointer;
+***REMOVED***
+
+.header-dropdown a {
+    text-decoration: none;
+    color: black;
 ***REMOVED***
 
 #back-button {
