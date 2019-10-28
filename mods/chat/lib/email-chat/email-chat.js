@@ -12,8 +12,10 @@ module.exports = EmailChat = {
 ***REMOVED***,
 
     render(app, data) {
+        let email_chat = document.querySelector(".email-chat")
+        email_chat.innerHTML = EmailChatTemplate();
 
-        document.querySelector(".email-chat").innerHTML = EmailChatTemplate();
+        if (data.chat.groups.length == 0) { email_chat.style.display = "none" ***REMOVED***
 
         if (!document.querySelector('.chat-box')) {
           document.querySelector("body").innerHTML += `<div class="chat-box"></div>`;

@@ -190,7 +190,7 @@ class Email extends ModTemplate {
 
     if (type == 'chat-render-request') {
       if (this.browser_active) {
-        this.renderSidebar(app, data);
+        this.renderSidebar(this.app, data);
   ***REMOVED***
 ***REMOVED***
 
