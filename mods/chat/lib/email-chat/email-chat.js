@@ -34,8 +34,8 @@ module.exports = EmailChat = {
 ***REMOVED***,
 
     attachEvents(app, data) {
-        ChatList.attachEvents(app, data);
-        ChatBox.attachEvents(app, data);
+      ChatList.attachEvents(app, data);
+      ChatBox.attachEvents(app, data);
 ***REMOVED***,
 
     addMessageToDOM(app, data, msg) {

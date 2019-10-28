@@ -18,7 +18,7 @@ module.exports = EmailForm = {
 
     attachEvents(app, data) {
         document.querySelector('.email-submit')
-            .addEventListener('click', (e) => this.sendEmailTransaction());
+            .addEventListener('click', (e) => this.sendEmailTransaction(app, data));
 ***REMOVED***,
 
 
@@ -26,40 +26,17 @@ module.exports = EmailForm = {
         document.getElementById('email-from-address').value = `${this.saito.wallet.returnPublicKey()***REMOVED*** (me)`;
 ***REMOVED***,
 
-    sendEmailTransaction() {
-        let newtx = this.buildTransaction();
-        this.saito.network.propagateTransaction(newtx);
-        alert("Your message has been sent");
-
-        data.parentmod.active = "email_list";
-        data.parentmod.main.render(app, data);
-        data.parentmod.main.attachEvents(app, data);
-***REMOVED***,
-
-    buildTransaction() {
-***REMOVED*** let saito = this.email.app;
+    sendEmailTransaction(app, data) {
 
         let email_title = document.querySelector('.email-title').value;
-        let email_address = document.getElementById('email-to-address').value;
-
-        if (email_address == "") {
-          email_address = this.saito.wallet.returnPublicKey();
-    ***REMOVED***
-
-***REMOVED*** let email_fee = document.querySelector('.email-fee').value;
-***REMOVED*** let email_amount = document.querySelector('.email-amount').value;
         let email_text = document.querySelector('.email-text').value;
+        let email_to = document.getElementById('email-to-address').value;
+        let email_from = this.saito.wallet.returnPublicKey();
 
-***REMOVED*** if (email_fee == '') { email_fee = 0.0; ***REMOVED***
-***REMOVED*** if (email_amount == '') { email_amount = 0.0; ***REMOVED***
-
-        let fee = 2.0; // parseFloat(email_fee);
-        let amt = 0.0; // parseFloat(email_amount);
-
-        let newtx = this.saito.wallet.createUnsignedTransaction(email_address, amt, fee);
-
+        let newtx = app.wallet.createUnsignedTransactionWithDefaultFee(email_to, 0.0);
         if (!newtx) {
-          alert("Unable to send, please get tokens");
+          alert("Unable to send email. You appear to need more tokens");
+	  return
     ***REMOVED***
 
         newtx.transaction.msg.module   = "Email";
@@ -67,18 +44,14 @@ module.exports = EmailForm = {
         newtx.transaction.msg.message  = email_text;
         newtx = this.saito.wallet.signTransaction(newtx);
 
-        return newtx;
-***REMOVED***,
+        app.network.propagateTransaction(newtx);
 
-    popluateRawMessage() {
-        console.log('lets get raw');
-        var txJson = JSON.stringify(this.buildTransaction(), null, 4);
-        var r = document.querySelector('.raw-message');
-        r.textContent = txJson;
-        document.querySelector('.email-text').style.display = "none";
-        document.querySelector('.raw-switch').style.display = "none";
-        r.style.display = "block";
-        r.onkeyup = () => { this.verifyJSON() ***REMOVED***;
+        data.parentmod.active = "email_list";
+        data.parentmod.main.render(app, data);
+        data.parentmod.main.attachEvents(app, data);
+
+        alert("Your message has been sent");
+
 ***REMOVED***,
 
     verifyJSON() {

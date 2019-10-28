@@ -23,7 +23,8 @@ class Faucet extends ModTemplate {
   ***REMOVED***
 
   sendTokensSuccess(message) {
-    var publickey = message.data.address;
+
+    let publickey = message.data.address;
 
     if (publickey == null) {
       console.error("NO PUBLICKEY PROVIDED, EXCITING");
@@ -40,10 +41,13 @@ class Faucet extends ModTemplate {
     try {
 
       let faucet_self = this;
-      let newtx = new saito.transaction();
       let total_fees = Big(1002.0);
-      newtx.transaction.from = faucet_self.app.wallet.returnAdequateInputs(total_fees);
+      let newtx = new saito.transaction();
+      newtx.transaction.from = faucet_self.app.wallet.returnAdequateInputs(total_fees.toString());
       newtx.transaction.ts   = new Date().getTime();
+
+
+console.log("INPUTS: " + JSON.stringify(faucet_self.app.wallet.wallet.inputs));
 
       // add change input
       var total_inputs = Big(0.0);

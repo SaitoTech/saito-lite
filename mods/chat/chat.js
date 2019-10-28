@@ -25,7 +25,7 @@ class Chat extends ModTemplate {
     //
     // create chatgroups from keychain
     //
-    let keys = this.app.keys.keys;
+    let keys = this.app.keys.returnKeys();
     for (let i = 0; i < keys.length; i++) {
       this.createChatGroup(keys[i].publickey);
 ***REMOVED***

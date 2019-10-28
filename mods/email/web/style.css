@@ -71,7 +71,8 @@ body {
 
 .email-form input[type=text] {
   border: none;
-  padding: 10px 0px;
+  border-bottom: 1px solid var(--saito-cyber-black-wash);
+  padding: 10px 3px;
   outline: none;
 ***REMOVED***
 
@@ -137,12 +138,17 @@ body {
   cursor: pointer;
 ***REMOVED***
 
+.email-message:hover {
+  border-bottom: 1px solid var(--saito-red-wash);
+***REMOVED***
+
 .email-message-content {
   font-family: visuelt-light;
 ***REMOVED***
 
 .email-message-timestamp {
   text-align: right;
+  font-family: monospace, 'Courier New', Courier;
 ***REMOVED***
 
 .email-text {
@@ -188,8 +194,10 @@ body {
 ***REMOVED***
 
 .email-navigator-item:hover, .email-apps-item:hover {
-  background-color: #efefef;
-  border-radius: 5px;
+  /*background-color: var(--saito-red-wash);
+  */
+  border-bottom: 1px solid var(--saito-red-wash);
+  border-radius: 0px;
 ***REMOVED***
 
 .email-loader {
@@ -202,6 +210,7 @@ body {
 
 .email-compose-btn {
   font-size: 1.2em;
+  line-height: 1.9em;
 ***REMOVED***
 
 /* .email-chat {
