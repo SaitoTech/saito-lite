@@ -1,24 +1,25 @@
 const ChatBoxTemplate = require('./chat-box.template.js');
 const ChatBoxMessageContainerTemplate = require('./chat-box-message-container.template.js');
 
+const elParser = require('../../../../../lib/helpers/el_parser');
 
 module.exports = ChatBox = {
 
     render(app, data) {
 
-	let active_group_name = "";
-	if (data.chat.active != undefined) {
-	  active_group_name = data.chat.active.group_name;
-	}
+        let active_group_name = "";
+        if (data.chat.active != undefined) {
+          active_group_name = data.chat.active.group_name;
+        }
 
-        document.querySelector('.chat-box').innerHTML = ChatBoxTemplate(active_group_name);
+        document.querySelector('.chat-manager').append(elParser(ChatBoxTemplate(active_group_name, data.chat.active.group_id)));
 
-	if (data.chat.active != undefined) {
+        if (data.chat.active != undefined) {
           data.chat.active.messages.forEach(message => {
             let type = message.publickey == app.wallet.returnPublicKey() ? 'myself' : 'others';
             document.querySelector('.chat-box-main').innerHTML += ChatBoxMessageContainerTemplate(message, '1239841203498', type);
           });
-	}
+        }
 
         this.scrollToBottom();
     },
@@ -63,7 +64,9 @@ module.exports = ChatBox = {
     },
 
     addMessageToDOM(data, sig, type) {
-        document.querySelector(".chat-box-main").innerHTML += ChatBoxMessageContainerTemplate(data, sig, type);
+        let chat_box_main = document.getElementById(`chat-box-main-${data.group_id}`)
+        if (!chat_box_main) { return; }
+        chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(data, sig, type);
         this.scrollToBottom();
     },
 

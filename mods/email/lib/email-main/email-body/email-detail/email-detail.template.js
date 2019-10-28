@@ -1,3 +1,5 @@
+const datetimeFormatter = require('../../../../../../lib/helpers/datetime_formatter');
+
 module.exports = EmailDetailTemplate = (app, selected_mail) => {
   let from  	= selected_mail.transaction.from[0].add;
   let to  	= selected_mail.transaction.to[0].add;
@@ -9,10 +11,7 @@ module.exports = EmailDetailTemplate = (app, selected_mail) => {
   if (hr_from != "") { from = hr_from; }
   if (hr_to != "")   { to   = hr_to; }
 
-  let datetime = new Date(ts);
-  let hours = datetime.getHours();
-  let minutes = datetime.getMinutes();
-  minutes = minutes.toString().length == 1 ? `0${minutes}` : `${minutes}`;
+  let datetime = datetimeFormatter(ts);
 
   return `
     <div>
@@ -27,7 +26,7 @@ module.exports = EmailDetailTemplate = (app, selected_mail) => {
         </div>
       </div>
       <div class="email-detail-message">
-        <p class="email-detail-timestamp">${hours}:${minutes}</p>
+        <p class="email-detail-timestamp">${datetime.hours}:${datetime.minutes}</p>
         <p>${message.message}</p>
       </div>
     </div>
