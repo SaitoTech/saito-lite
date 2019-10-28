@@ -9,7 +9,7 @@ module.exports = EmailFormTemplate = () => {
           <p>TO:</p>
           <input id="email-to-address" class="email-address" type="text" placeholder="Address">
         </div>
-        <input class="email-title" type="text" placeholder="Title">
+        <input class="email-title" type="text" placeholder="Subject">
         <div class="email-text-wrapper">
           <textarea class="email-text" placeholde="Message"></textarea>
         </div>
