@@ -607,12 +607,18 @@ class Block {
   ***REMOVED***
 
 
+console.log("\n\nTRANSACTIONS IN BLOCK:\n"+JSON.stringify(this.transactions));
+
+
       let hmap = [];
       let number_of_golden_tickets = 0;
       let index_of_block_payment = -1;
       let index_of_golden_ticket = -1;
 
       for (let i = 0; i <= this.transactions.length-1; i++) {
+
+console.log("PROCESSING TX: " + i + " --- " + this.transactions.length-1)l
+console.log(JSON.stringify(this.transactions[i].transaction));
 
 ***REMOVED***
 ***REMOVED*** sequential ids
@@ -630,6 +636,7 @@ class Block {
             console.log("ERROR 581029: two block paymeet (type=2) transactions in block");
             return 0;
       ***REMOVED***
+console.log("SETTING INDEX OF BLOCK PAYMENT TO: " + i);
           index_of_block_payment = i;
     ***REMOVED***
 
@@ -638,6 +645,7 @@ class Block {
 ***REMOVED***
         if (this.transactions[i].transaction.type == 1) {
 
+console.log("SETTING INDEX OF GOLDEN TICKET TO: " + i);
           index_of_golden_ticket = i;
 
           if (this.transactions[i].transaction.msg.target != prevblk.returnHash()) {
@@ -656,9 +664,12 @@ class Block {
     ***REMOVED***
     ***REMOVED*** prevblk is not null here
     ***REMOVED***
+console.log("about to go into return Block Payouts...");
             let payments = prevblk.returnBlockPayouts(this.transactions[i].transaction.msg);
+console.log("done...");
             reclaimed = payments.reclaimed;
 
+console.log("done... 2");
             let slips = [];
             payments.blocks.forEach((block) => {
               if (block.producer_share > 0) {
@@ -676,8 +687,34 @@ class Block {
         ***REMOVED***);
             for (let x = 0; x < slips.length; x++) { slips[x].sid = x; ***REMOVED***
 
+console.log("done... 3");
       ***REMOVED***
     ***REMOVED***
+
+console.log("prior to GT check " + i);
+
+	//
+	// golden tickets must pay out
+	//
+        if (index_of_golden_ticket > -1) {
+	  if (index_of_block_payment == -1) {
+            console.log("ERROR 697812: golden ticket in block, but not block payment transaction");
+            return 0;
+      ***REMOVED*** else {
+
+    ***REMOVED***
+    ***REMOVED*** check accurate
+    ***REMOVED***
+            if (this.app.crypto.hash(JSON.stringify(slips)) == this.app.crypto.hash(JSON.stringify(this.transactions[index_of_block_payment].transaction.to))) {
+        ***REMOVED*** else {
+              console.log("ERROR 840192: to slips in block fee transaction invalid");
+              console.log("RECOVERED SLIPS: ", slips);
+              console.log("TX TO SLIPS", this.transactions[index_of_block_payment].transaction.to);
+              return 0;
+        ***REMOVED***
+      ***REMOVED***
+    ***REMOVED***
+
 
 ***REMOVED***
 ***REMOVED*** merkle sigs
@@ -705,28 +742,7 @@ class Block {
           this.transactions[i].is_valid = 0;
           return 0;
     ***REMOVED***
-  ***REMOVED***
 
-      //
-      // golden tickets must pay out
-      //
-      if (index_of_golden_ticket > -1) {
-	if (index_of_block_payment == -1) {
-          console.log("ERROR 697812: golden ticket in block, but not block payment transaction");
-          return 0;
-    ***REMOVED*** else {
-
-  ***REMOVED***
-  ***REMOVED*** check accurate
-  ***REMOVED***
-          if (this.app.crypto.hash(JSON.stringify(slips)) == this.app.crypto.hash(JSON.stringify(this.transactions[index_of_block_payment].transaction.to))) {
-      ***REMOVED*** else {
-            console.log("ERROR 840192: to slips in block fee transaction invalid");
-            console.log("RECOVERED SLIPS: ", slips);
-            console.log("TX TO SLIPS", this.transactions[index_of_block_payment].transaction.to);
-            return 0;
-      ***REMOVED*** 
-    ***REMOVED***
   ***REMOVED***
 
 
