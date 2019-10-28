@@ -71,7 +71,8 @@ body {
 
 .email-form input[type=text] {
   border: none;
-  padding: 10px 0px;
+  border-bottom: 1px solid var(--saito-cyber-black-wash);
+  padding: 10px 3px;
   outline: none;
 }
 
@@ -209,6 +210,7 @@ body {
 
 .email-compose-btn {
   font-size: 1.2em;
+  line-height: 1.9em;
 }
 
 .email-chat {
