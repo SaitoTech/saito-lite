@@ -22,7 +22,6 @@ class Encrypt extends ModTemplate {
 
     if (type == 'email-appspace') {
       let obj = {};
-	  obj.email_headers = 1;
 	  obj.render = this.renderEmail;
 	  obj.attachEvents = this.attachEventsEmail;
       return obj;

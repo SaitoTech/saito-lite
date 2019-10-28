@@ -21,6 +21,8 @@ async function initSaito() {
   //
   global.__webdir = __dirname + "/lib/saito/web/";
 
+console.log("heading into INIT!");
+
   await app.init();
 
   console.log(`
