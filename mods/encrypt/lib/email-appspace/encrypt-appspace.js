@@ -13,7 +13,15 @@ module.exports = EncryptAppspace = {
         .addEventListener('click', (e) => {
 	  let recipient = document.getElementById('email-to-address').value;
 	  data.parentmod.appspace_mod.initiate_key_exchange(recipient);
-    ***REMOVED***);
+  ***REMOVED***);
+
+      document.querySelector('.fetch')
+        .addEventListener('click', (e) => {
+alert("testing fetch identifier: ");
+	  data.parentmod.app.keys.fetchIdentifier("*", function(rows) {
+alert("RESULT: " + JSON.stringify(rows));
+	  ***REMOVED***);
+  ***REMOVED***);
 
 ***REMOVED***
 
