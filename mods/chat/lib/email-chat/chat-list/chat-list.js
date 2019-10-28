@@ -8,8 +8,6 @@ module.exports = ChatList = {
 
     render(app, data) {
 
-        if (data.chat.groups.length == 0) { email_chat.style.display = "none" ***REMOVED***;
-
         let chat_list = document.querySelector('.chat-list');
 
         chat_list.innerHTML = "";
