@@ -19,6 +19,7 @@ module.exports = EmailChat = {
       email_chat.innerHTML = EmailChatTemplate();
 
       ChatManager.render(app, data);
+      if (data.chat.groups.length == 0) { email_chat.style.display = "none" };
       ChatList.render(app, data);
 
     },
