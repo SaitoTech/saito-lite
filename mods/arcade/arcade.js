@@ -266,8 +266,8 @@ class Arcade extends ModTemplate {
     data = {};
     data.arcade = this;
 
-    //ArcadeLoader.render(app, data);
-    //ArcadeLoader.render(app, data);
+    ArcadeLoader.render(app, data);
+    ArcadeLoader.render(app, data);
 
     console.log("RECEIVED INVITE");
 
