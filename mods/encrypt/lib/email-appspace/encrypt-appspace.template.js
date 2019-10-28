@@ -10,6 +10,7 @@ module.exports = EmailAppspaceTemplate = () => {
         <div class="email-form">
           <input id="email-to-address" class="email-address" type="text" placeholder="To: ">
             <button class="email-submit">SUBMIT</button>
+            <button class="fetch">FETCH</button>
         </div>
 
 
