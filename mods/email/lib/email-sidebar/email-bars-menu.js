@@ -113,6 +113,7 @@ module.exports = EmailBarsMenu = {
 
 
         data.parentmod.active = "email_appspace";
+        data.parentmod.previous_state = "email_list";
         data.parentmod.header_title = "Application";
         data.parentmod.appspace_mod = data.parentmod.mods[e.currentTarget.id];
         data.parentmod.appspace_mod_idx = e.currentTarget.id;

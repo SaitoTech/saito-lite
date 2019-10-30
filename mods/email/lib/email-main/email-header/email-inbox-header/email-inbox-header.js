@@ -1,4 +1,4 @@
-const EmailBarsMenuTemplate = require('../../email-sidebar/email-bars-menu.template');
+const EmailBarsMenuTemplate = require('../../../email-sidebar/email-bars-menu.template');
 const EmailInboxHeaderTemplate = require('./email-inbox-header.template');
 
 module.exports = EmailInboxHeader = {
