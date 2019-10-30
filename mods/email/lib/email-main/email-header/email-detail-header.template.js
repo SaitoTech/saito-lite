@@ -10,7 +10,7 @@ module.exports = EmailDetailHeaderTempkate = (app, data) => {
       <i id="email-detail-reply" class="icon-med fas fa-reply"></i>
       <i id="email-detail-forward" class="icon-med fas fa-share"></i>
     </div>
-    <div class="email-balance">${app.wallet.returnBalance()***REMOVED*** Saito</div>
+    <div class="email-balance"></div>
     </div>
   `;
 ***REMOVED***
