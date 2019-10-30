@@ -4,7 +4,7 @@ const ModTemplate = require('../../lib/templates/modtemplate');
 const QRScannerTemplate = require('./qrscanner.template');
 
 class QRScanner extends ModTemplate {
-  constructor(app, callback=null) {
+  constructor(app) {
     super(app);
 
     this.video = null;
@@ -21,7 +21,7 @@ class QRScanner extends ModTemplate {
   ***REMOVED***
 ***REMOVED***;
 
-    this.callback = callback;
+    qrcode.callback = this.read;
 
     this.name = "QRScanner";
   ***REMOVED***
@@ -31,8 +31,6 @@ class QRScanner extends ModTemplate {
   ***REMOVED***
 
   async initializeHTML(app) {
-    qrcode.callback = this.callback != null ? callback : this.read;
-
     this.video = document.querySelector('video');
     this.canvas = document.getElementById('qr-canvas');
 
