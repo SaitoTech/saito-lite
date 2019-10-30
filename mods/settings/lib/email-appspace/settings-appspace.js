@@ -1,5 +1,4 @@
 const SettingsAppspaceTemplate = require('./settings-appspace.template.js');
-const QRCode = require('../../../../lib/helpers/qrcode');
 
 module.exports = SettingsAppspace = {
 
@@ -27,6 +26,7 @@ module.exports = SettingsAppspace = {
     },
 
     generateQRCode(data) {
+      const QRCode = require('../../../../lib/helpers/qrcode');
       return new QRCode(
         document.getElementById("qrcode"),
         data
