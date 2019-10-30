@@ -29,6 +29,8 @@ module.exports = EmailHeader = {
         break;
 ***REMOVED***
 
+    data.parentmod.updateBalance();
+
   ***REMOVED***,
 
   attachEvents(app, data) {***REMOVED***,
