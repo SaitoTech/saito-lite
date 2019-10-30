@@ -1,13 +1,12 @@
 module.exports = EmailFormTemplate = () => {
   return `
-<div class="email-form">
-  <div class="email-form-meta grid">
-      <div class="grid-title">FROM:</div>
-      <div>
+      <div class="email-form">
+        <div class="email-form-row">
+          <p>From:</p>
           <input id="email-from-address" class="email-address" type="text" readonly>
-      </div>
-      <div class="grid-title">TO:</div>
-      <div>
+        </div>
+        <div class="email-form-row">
+          <p>To:</p>
           <input id="email-to-address" class="email-address" type="text" placeholder="Address">
       </div>
       <div></div>

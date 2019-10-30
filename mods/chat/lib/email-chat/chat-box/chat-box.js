@@ -47,6 +47,13 @@ module.exports = ChatBox = {
       chat_box_header.removeEventListener('click', toggleBoxHeader);
       chat_box_header.addEventListener('click', toggleBoxHeader);
 
+      document.getElementById('chat-box-close')
+              .addEventListener('click', (e) => {
+                e.stopPropagation();
+                let chat_manager = document.querySelector('.chat-manager');
+                chat_manager.removeChild(e.path[2]);
+          ***REMOVED***);
+
 ***REMOVED***,
 
     sendMessage(app, data, msg) {

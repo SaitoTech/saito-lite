@@ -19,7 +19,7 @@ class Wallet extends ModTemplate {
     // this.balance         = app.wallet.returnBalance();
 
     if (app.BROWSER == 1) {
-      this.QRCode = require('./lib/qrcode');
+      this.QRCode = require('../../lib/helpers/qrcode');
 ***REMOVED***
 
     return this;
