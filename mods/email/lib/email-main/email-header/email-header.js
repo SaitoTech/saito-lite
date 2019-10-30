@@ -1,6 +1,7 @@
-const EmailInboxHeader = require('./email-inbox-header');
-const EmailDetailHeader = require('./email-detail-header');
-const EmailFormHeader = require('./email-form-header');
+const EmailInboxHeader = require('./email-inbox-header/email-inbox-header');
+const EmailDetailHeader = require('./email-detail-header/email-detail-header');
+const EmailFormHeader = require('./email-form-header/email-form-header');
+const EmailAppspaceHeader = require('./email-appspace-header/email-appspace-header');
 
 module.exports = EmailHeader = {
 
@@ -22,8 +23,8 @@ module.exports = EmailHeader = {
         EmailFormHeader.attachEvents(app, data);
         break;
       case "email_appspace":
-        EmailDetailHeader.render(app, data);
-        EmailDetailHeader.attachEvents(app, data);
+        EmailAppspaceHeader.render(app, data);
+        EmailAppspaceHeader.attachEvents(app, data);
         break;
       default:
         break;

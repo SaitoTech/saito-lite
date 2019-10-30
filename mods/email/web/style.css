@@ -4,9 +4,9 @@ body {
   font-size: 1.0em;
 }
 
-.main {
+/* .main {
   height: 91vh;
-}
+} */
 
 .footer {
   display: none;
@@ -58,7 +58,7 @@ body {
 }
 
 .email-list {
-  height: 83vh;
+  height: 82vh;
   display: flex;
   flex-direction: column;
   overflow: auto;
@@ -142,10 +142,11 @@ body {
 
 .email-message {
   display: grid;
-  grid-template-columns: 2em auto 3.5em;
+  grid-template-columns: 2em auto 3em;
   border-bottom: 1px solid var(--saito-skyline-grey);
   padding: 10px 0px;
   cursor: pointer;
+  grid-gap: 0.5em;
 }
 
 .email-message:hover {
@@ -154,6 +155,12 @@ body {
 
 .email-message-content {
   font-family: visuelt-light;
+  display: grid;
+  grid-gap: 5px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .email-message-timestamp {
@@ -349,6 +356,10 @@ body {
   }
   #email.create-button {
     bottom: 2vh;
+  }
+
+  .email-message {
+    padding: 1em 0;
   }
 }
 

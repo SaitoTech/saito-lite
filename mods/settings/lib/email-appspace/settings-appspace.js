@@ -1,9 +1,11 @@
 const SettingsAppspaceTemplate = require('./settings-appspace.template.js');
+const QRCode = require('../../../../lib/helpers/qrcode');
 
 module.exports = SettingsAppspace = {
 
     render(app, data) {
       document.querySelector(".email-appspace").innerHTML = SettingsAppspaceTemplate(app);
+      this.generateQRCode(app.wallet.returnPublicKey());
     },
 
     attachEvents(app, data) {
@@ -22,6 +24,13 @@ module.exports = SettingsAppspace = {
 	  data.parentmod.body.attachEvents(app, data);
 
       });
+    },
+
+    generateQRCode(data) {
+      return new QRCode(
+        document.getElementById("qrcode"),
+        data
+      );
     },
 
 }

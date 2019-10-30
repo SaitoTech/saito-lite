@@ -1,8 +1,5 @@
 const EmailFormHeaderTemplate = require('./email-form-header.template');
 
-const EmailBody = require('../email-body/email-body');
-const EmailHeader = require('../email-header/email-header');
-
 module.exports = EmailFormHeader = {
 
   render(app, data) {
