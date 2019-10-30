@@ -19,3 +19,7 @@
 #privatekey {
     width: 95%;
 }
+
+#qrcode {
+    display: inline-block;
+}

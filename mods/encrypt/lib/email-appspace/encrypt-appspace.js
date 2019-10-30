@@ -23,6 +23,6 @@ alert("RESULT: " + JSON.stringify(rows));
 	  });
       });
 
-    }
+    },
 
 }

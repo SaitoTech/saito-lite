@@ -7,8 +7,8 @@ module.exports = DebugAppspaceTemplate = () => {
 	.email-appspace-debug {
     font-size: 1.2em;
     overflow: auto;
-    height: 81vh;
-    width: 65vw;
+    height: 83vh;
+    width: calc(100vw - 15em);
 	}
       </style>
   `;
