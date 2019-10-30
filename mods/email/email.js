@@ -35,6 +35,7 @@ class Email extends ModTemplate {
     this.appspace_mod_idx 	= -1; // index in mods of appspace module
 
     this.uidata			= {***REMOVED***;
+    this.count = 0;
 
   ***REMOVED***
 
@@ -208,8 +209,10 @@ class Email extends ModTemplate {
   ***REMOVED***
 
   updateBalance() {
+
     if (this.browser_active) {
-      document.querySelector('.email-balance').innerHTML = this.app.wallet.returnBalance() + " Saito";
+      var balance = Number(this.app.wallet.returnBalance());
+      document.querySelector('.email-balance').innerHTML = balance.toLocaleString('lookup', {style:"decimal",maximumFractionDigits:6,minimumFractionDigits:2***REMOVED***) + " SAITO";
 ***REMOVED***
   ***REMOVED***
 

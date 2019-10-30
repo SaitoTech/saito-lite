@@ -1,9 +1,9 @@
 :root {
     --saito-red: rgb(247, 31, 61);
+    --saito-orange: #ff8235;
     --saito-skyline-grey: rgb(234, 234, 239);
     --saito-cyber-black: rgb(28, 28, 35);
     --saito-white: #ffffff;
-
     --saito-red-wash: rgb(247, 31, 61, 0.3);
     --saito-cyber-black-wash: rgb(28, 28, 35, 0.3);
     --saito-cyber-black-cut: rgb(28, 28, 35, 0.5);
@@ -87,11 +87,21 @@ button:hover, .button:hover {
     text-shadow: var(--saito-skyline-grey) 1px 0;
 ***REMOVED***
 
-.button-secondary {
-    background: var(--saito-cyber-black-cut);
-    border: 1px solid var(--saito-cyber-black-cut);
+.button-main {
+    font-size: 1.2em;
+    line-height: 1.9em;
+    font-family: visuelt-medium;
+    letter-spacing: 2px;
 ***REMOVED***
 
+.button-secondary {
+    background: var(--saito-orange);
+    border: 1px solid var(--saito-orange);
+    font-family: visuelt-medium;
+    letter-spacing: 1.5px;
+    overflow: hidden;
+    height: 1.9em;
+***REMOVED***
 
 input[type=text], input[type=number] {
     padding: 10px 5px;
@@ -169,6 +179,19 @@ input[type=text], input[type=number] {
     height: 3em;
 ***REMOVED***
 
+/* grid */
+
+.grid-title {
+    font-family: visuelt-medium;
+    align-self: center;
+***REMOVED***
+
+.grid input[type=text] {
+    width: 100%;
+***REMOVED***
+
+
+
 .main {
     display: grid;
     grid-gap: 1.5em;
@@ -241,11 +264,11 @@ input[type=text], input[type=number] {
 ***REMOVED***
 
 .icon-med {
-    font-size: 1.5em;
+    font-size: 1.33em;
 ***REMOVED***
 
 .icon-med:hover {
-/*    color: var(--saito-red-wash);*/
+    /*    color: var(--saito-red-wash);*/
 ***REMOVED***
 
 .icon-large {
