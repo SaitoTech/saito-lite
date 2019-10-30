@@ -30,6 +30,8 @@ module.exports = EmailHeader = {
         break;
     }
 
+    data.parentmod.updateBalance();
+
   },
 
   attachEvents(app, data) {},
