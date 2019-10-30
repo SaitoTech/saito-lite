@@ -1,30 +1,10 @@
-:root {
-    --saito-red: rgb(247, 31, 61);
-    --saito-orange: #ff8235;
-    --saito-skyline-grey: rgb(234, 234, 239);
-    --saito-cyber-black: rgb(28, 28, 35);
-    --saito-white: #ffffff;
-    --saito-red-wash: rgb(247, 31, 61, 0.3);
-    --saito-cyber-black-wash: rgb(28, 28, 35, 0.3);
-    --saito-cyber-black-cut: rgb(28, 28, 35, 0.5);
-}
+/* 
 
-* {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
+Generic Style Settings for Modules in the Saito App Suite
 
-html {
-    --text-color-normal: var(--saito-cyber-black);
-    --backround-general: var(--saito-white);
-    --text-color-highlight: var(--saito-red);
-}
+*/
 
-html[data-theme='dark'] {
-    --text-color-normal: var(--saito-skyline-grey);
-    --backround-general: var(--saito-cyber-black);
-    --text-color-highlight: var(--saito-red);
-}
+/* Visuelt fonts */
 
 @font-face {
     font-family: 'visuelt-black';
@@ -50,10 +30,36 @@ html[data-theme='dark'] {
     font-style: normal;
 }
 
+/* HTML and Page Structure */
+:root {
+    --saito-red: rgb(247, 31, 61);
+    --saito-orange: #ff8235;
+    --saito-skyline-grey: rgb(234, 234, 239);
+    --saito-cyber-black: rgb(28, 28, 35);
+    --saito-white: #ffffff;
+    --saito-red-wash: rgb(247, 31, 61, 0.3);
+    --saito-cyber-black-wash: rgb(28, 28, 35, 0.3);
+    --saito-cyber-black-cut: rgb(28, 28, 35, 0.5);
+}
+
 * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+html {
+    --text-color-normal: var(--saito-cyber-black);
+    --backround-general: var(--saito-white);
+    --text-color-highlight: var(--saito-red);
+}
+
+html[data-theme='dark'] {
+    --text-color-normal: var(--saito-skyline-grey);
+    --backround-general: var(--saito-cyber-black);
+    --text-color-highlight: var(--saito-red);
 }
 
 html, body {
@@ -72,19 +78,58 @@ body {
     color: var(--text-color-normal);
 }
 
+h1, h2, h3, h4, h5, h6, p {
+    margin: 0.5em 0;
+}
+
+.monospace {
+    font-family: monospace, 'Courier New', Courier;
+}
+
+/* Forms and Inputs */
+
 button, .button {
-    padding: 8px;
-    background-color: var(--saito-red);
-    border: 1px solid var(--saito-red);
     border-radius: 5px;
-    color: white;
-    font-size: 1em;
-    font-family: 'visuelt-light';
     cursor: pointer;
+    font-size: 1em;
+    min-width: 10em;
+    padding: 10px 6px;
+    background: #fefefe;
+    border: 1px solid var(--saito-red);
+    margin: 0 1em 1em 0;
+    color: var(--saito-red);
+    letter-spacing: 1px;
 }
 
 button:hover, .button:hover {
+    text-shadow: #ffffff 1px 0;
+    background: var(--saito-red);
+    color: #ffffff;
+}
+
+button.super {
+    padding: 12px 8px 8px 8px;
+    font-size: 1.4em;
+    font-family: visuelt-medium;
+    letter-spacing: 2px;
+    background-color: var(--saito-red);
+    border: 1px solid var(--saito-red);
+    color: white;
+    text-transform: uppercase;
+}
+
+button.super:hover, .button.super:hover {
     text-shadow: var(--saito-skyline-grey) 1px 0;
+}
+
+button.sub {
+    border: 1px solid var(--saito-cyber-black);
+    color: var(--saito-cyber-black);
+}
+
+button.sub:hover, .button.sub:hover {
+    text-shadow: var(--saito-cyber-black) 1px 0;
+    background: var(--saito-skyline-grey);
 }
 
 .button-main {
@@ -92,6 +137,16 @@ button:hover, .button:hover {
     line-height: 1.9em;
     font-family: visuelt-medium;
     letter-spacing: 2px;
+    
+}
+
+button i {
+    margin: 0 0.5em;
+}
+
+fieldset {
+    padding: 1em;
+    border: 1px solid var(--saito-cyber-black-wash);
 }
 
 .button-secondary {
@@ -103,12 +158,66 @@ button:hover, .button:hover {
     height: 1.9em;
 }
 
-input[type=text], input[type=number] {
+.grid-4 {
+    display: grid;
+    grid-gap: 1em;
+    grid-template-columns: 7em 1fr 7em 1fr;
+    margin: 0 0 1em 0;
+}
+
+.grid-4 div:nth-child(2n-1), .grid-2 div:nth-child(2n-1) {
+    font-family: visuelt-medium;
+}
+
+.grid-4 div, .grid-2 div {
+    align-self: center;
+}
+
+@media only screen and (max-width: 1000px) {
+    .grid-4 {
+        grid-template-columns: 7em 1fr;
+    }
+}
+
+.grid-2 {
+    display: grid;
+    grid-gap: 1em;
+    grid-template-columns: 7em 1fr;
+    margin: 0 0 1em 0;
+}
+
+input {
+    cursor: pointer;
+}
+
+input[type=text], input[type=number], input[type=range], input[type=password]{
+    width: 100%;
+    border: none;
+}
+
+input[type=checkbox], input[type=radio] {
+    margin: 0 1em;
+    width: 24px;
+    height: 24px;
+ }
+
+input[type=text], input[type=number], input[type=password], input[type=date] {
+    border: none;
     padding: 10px 5px;
     border-radius: 0px;
     font-size: 1em;
     border-bottom: 1px solid var(--saito-cyber-black-wash);
 }
+
+textarea {
+    width: 100%;
+    min-height: 10em;
+    border: 1px solid var(--saito-cyber-black-wash);
+    padding: 1em;
+    margin: 0 0 1em 0;
+}
+
+/* Page Sections */
 
 .header {
     display: grid;
@@ -179,19 +288,6 @@ input[type=text], input[type=number] {
     height: 3em;
 }
 
-/* grid */
-
-.grid-title {
-    font-family: visuelt-medium;
-    align-self: center;
-}
-
-.grid input[type=text] {
-    width: 100%;
-}
-
-
-
 .main {
     display: grid;
     grid-gap: 1.5em;
@@ -221,512 +317,4 @@ input[type=text], input[type=number] {
     /* Remove scrollbar space */
     background: transparent;
     /* Optional: just make scrollbar invisible */
-}
-
-.container {
-    display: grid;
-    grid-gap: 1em;
-}
-
-.welcome {
-    grid-template-rows: 17.5em auto;
-}
-
-.create-button {
-    background-color: var(--saito-red);
-    border: var(--saito-red);
-    cursor: pointer;
-    color: white;
-    border-radius: 100px;
-    position: fixed;
-    bottom: 10vh;
-    right: 0.8em;
-    width: 3.2em;
-    height: 3.2em;
-}
-
-.wallet-container {
-    font-family: 'visuelt-light';
-}
-
-.wallet-container-row {
-    display: flex;
-    justify-content: space-between;
-}
-
-.module-container {
-    display: flex;
-    justify-content: space-around;
-}
-
-.icon-small {
-    font-size: 1em;
-}
-
-.icon-med {
-    font-size: 1.33em;
-}
-
-.icon-med:hover {
-    /*    color: var(--saito-red-wash);*/
-}
-
-.icon-large {
-    font-size: 2em;
-}
-
-.module-button {
-    border: 2px solid var(--saito-cyber-black);
-    text-align: center;
-    border-radius: 10px;
-    width: 25vw;
-    padding: 0.75em 1.25em;
-    text-align: center;
-}
-
-/** CHAT CSS **/
-
-.chat {}
-
-.chat-row {
-    display: grid;
-    grid-column-gap: 1em;
-    grid-template-columns: 2.5em auto 2.5em;
-    border-bottom: 1px solid var(--saito-skyline-grey);
-    padding: 10px 0px;
-    height: 5em;
-    cursor: pointer;
-}
-
-.chat-last-message {
-    font-family: visuelt-light;
-}
-
-.chat-last-message-timestamp {
-    font-family: visuelt-light;
-}
-
-/** CHAT ADD **/
-
-.chat-add {
-    display: grid;
-    height: 22vh;
-    grid-template-rows: 1fr 1fr 1fr;
-    row-gap: 1em;
-    align-self: end;
-}
-
-/** CHAT ROOM **/
-
-.chat-room {}
-
-.chat-room-header {
-    grid-template-columns: 5.2em auto 2em 3.2em;
-    align-items: center;
-    color: white;
-}
-
-.chat-room-name {
-    text-align: center;
-    color: white;
-    font-size: 1.25em;
-}
-
-.chat-room-content {
-    display: grid;
-    row-gap: 0.75em;
-    padding-bottom: 1em;
-}
-
-.chat-room-message {
-    display: grid;
-    grid-gap: 0.5em;
-    padding: 1em;
-    max-width: 75%;
-    border-radius: 5px;
-}
-
-.chat-message-header {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.9em;
-    color: darkgrey;
-}
-
-.chat-message-timestamp {
-    margin-left: 1em;
-}
-
-.chat-room-message-others {
-    background: var(--saito-skyline-grey);
-    justify-self: left;
-}
-
-.chat-room-message-myself {
-    background: var(--saito-cyber-black);
-    color: white;
-    justify-self: right;
-}
-
-.chat-room-footer {
-    padding: 0 0 0 0.5em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.chat-room-input {
-    display: grid;
-    grid-template-columns: auto 3em;
-    align-items: center;
-    width: 100%;
-}
-
-.chat-room-input>textarea {
-    height: 2.75em;
-    font-size: 1em;
-    padding: 10px 5px;
-    border: 1px solid lightgrey;
-    border-radius: 5px;
-    resize: none;
-}
-
-.chat-room-submit-button {
-    justify-self: center;
-    background: var(--saito-red);
-    padding: 7px 10px;
-    color: white;
-    border-radius: 100px;
-    cursor: pointer;
-}
-
-/** ARCADE CSS **/
-
-.arcade {
-    grid-template-rows: 1.5em auto;
-}
-
-.arcade-content {
-    overflow: auto;
-}
-
-.games-table-header {
-    display: grid;
-    grid-template-columns: 85% 15%;
-    align-items: center;
-}
-
-.game {
-    margin-right: 1em;
-    width: 88vw;
-}
-
-.gamelist {
-    display: flex;
-    overflow-x: scroll;
-}
-
-.arcade-start-game {
-    margin-top: 1em;
-    grid-gap: 1em;
-}
-
-.gameimage {
-    text-align: center;
-    border: 3px solid #888;
-    cursor: pointer;
-    max-height: 12em;
-}
-
-#options {
-    display: grid;
-    grid-row-gap: 0.5em;
-    grid-template-columns: 1fr 1fr;
-}
-
-#options>select {
-    border: 1px solid black;
-    padding: 1em;
-    border-radius: 5px;
-    background: white;
-}
-
-/*.games-play-button {
-    background-color: var(--saito-red);
-    color: white;
-    border-radius: 100px;
-    position: fixed;
-    bottom: 10vh;
-    right: 3vw;
-    width: 3.2em;
-    height: 3.2em;
-}*/
-
-.games-table {
-    /*display: grid;
-    grid-gap: 5px;*/
-}
-
-.games-author {
-    font-family: 'visuelt-light';
-}
-
-.games-row {
-    display: grid;
-    grid-template-columns: 2.5em auto 7em;
-    border: 2px solid var(--saito-skyline-grey);
-    padding: 10px;
-    margin-top: 5px;
-}
-
-.games-content {
-    display: grid;
-    grid-gap: 0.25em;
-}
-
-.games-button {
-    max-height: 3.5em;
-    align-self: center;
-}
-
-.accept-button {}
-
-.delete-button {
-    max-height: 3.5em;
-    align-self: center;
-    background: var(--saito-red);
-}
-
-/** FORUM CSS **/
-
-.forum {}
-
-.forum-row {
-    display: grid;
-    grid-template-columns: 2.5em auto 1em;
-    grid-column-gap: 1em;
-    padding: 10px 0px;
-    border-bottom: 1px solid var(--saito-skyline-grey);
-}
-
-.forum-meta-data {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-}
-
-.forum-author {
-    font-family: visuelt-light;
-}
-
-.forum-channel {
-    color: darkgrey;
-}
-
-.forum-comments {
-    font-family: visuelt-light;
-    margin-top: 10px;
-}
-
-.forum-voting {
-    display: grid;
-    justify-items: center;
-    max-height: 5em;
-}
-
-.forum-score {
-    text-align: center;
-}
-
-/** FORUM ADD POST **/
-
-#forum-add-post {
-    display: grid;
-    grid-gap: 0.5em;
-}
-
-#forum-add-post input[type="text"] {
-    width: 100%;
-}
-
-#forum-add-post textarea {
-    width: 100%;
-    height: 220px;
-    border: 1px solid darkgrey;
-    border-radius: 3px;
-    padding: 10px 7px;
-    font-size: 0.9em;
-}
-
-#forum-toggle {
-    background-color: var(--saito-skyline-grey);
-    color: black;
-}
-
-/** FORUM DETAIL CSS **/
-
-.forum-detail>section {
-    padding: 10px 0px;
-}
-
-.forum-header>.forum-row {
-    padding: 0px 0px 10px 0px;
-    height: 5em;
-}
-
-#forum-detail-text {
-    padding: 10px 0px;
-    min-height: 15vh;
-}
-
-#forum-post-comment {
-    display: grid;
-    grid-gap: 1em;
-}
-
-#forum-comment-text-input {
-    padding: 10px 7.5px;
-    height: 20vh;
-    border: 1px solid lightgrey;
-    border-radius: 3px;
-}
-
-.forum-comment {
-    display: grid;
-    grid-template-columns: auto 1rem;
-    row-gap: 1em;
-}
-
-.forum-comment>textarea {
-    border: 1px solid lightgrey;
-    border-radius: 3px;
-    padding: 10px 7px;
-    grid-column: 1 / 3;
-    height: 10em;
-}
-
-.forum-comment>button {
-    grid-column: 1 / 3;
-}
-
-.forum-comment-content {
-    display: grid;
-    row-gap: 5px;
-}
-
-#forum-comments-table {
-    display: grid;
-    row-gap: 1.5em;
-}
-
-.forum-comment-buttons {
-    font-size: 0.9em;
-}
-
-#forum-comment-text {
-    padding: 5px 0px;
-}
-
-/** WALLET CSS **/
-
-#qrcode {
-    justify-self: center;
-    border: 2px solid var(--saito-cyber-black);
-    padding: 10px;
-    border-radius: 5px;
-}
-
-.register-button {
-    width: 100%;
-    margin-top: 1em;
-}
-
-/** COMPONENTS CSS **/
-
-/** FOOTER **/
-
-.footer {
-    position: fixed;
-    bottom: 0%;
-    width: 100%;
-    height: 8vh;
-    border-top: 1px solid var(--saito-skyline-grey);
-    font-family: visuelt-light;
-    background: var(--backround-general);
-    /* overscroll-behavior: none; */
-}
-
-/** NAV BAR **/
-
-.nav-bar {
-    display: flex;
-    justify-content: space-between;
-    font-family: visuelt-light;
-    padding: 0 1em;
-    color: var(--text-color-normal);
-}
-
-.nav-button {
-    display: grid;
-    align-items: center;
-    justify-items: center;
-    margin: 0.5em 0;
-}
-
-/** Dark Mode **/
-
-/** SETTINGS **/
-
-.settings {}
-
-.settings-button-table {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    margin-top: 1em;
-    grid-gap: 0.25em;
-}
-
-.settings-peer-table {}
-
-.settings-dns {
-    margin: 1em 0em;
-}
-
-.settings-dns-table {
-    display: grid;
-    grid-gap: 0.5em;
-    margin-top: 0.5em;
-}
-
-.settings-dns-row {
-    display: flex;
-    justify-content: space-between;
-}
-
-.settings-dns-row>div {
-    font-family: visuelt-light;
-}
-
-#theme-mode i {
-    float: right;
-}
-
-.explorer-main {
-    margin-top: 75px;
-    padding: 0 10px;
-    line-height: 1.6em;
-    font-family: "visuelt-light";
-    height: 91vh;
-    overflow: auto;
-    padding: 1em 12px;
-}
-
-.monospace {
-    font-family: monospace, 'Courier New', Courier;
-}
-
-@media only screen and (max-width: 600px) {
-    html, body {
-        position: unset;
-    }
 }
