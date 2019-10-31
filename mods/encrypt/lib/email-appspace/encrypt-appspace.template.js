@@ -1,26 +1,20 @@
 module.exports = EmailAppspaceTemplate = () => {
   return `
-
-      <div class="email-appspace-encrypt">
-
-	<div class="email-appspace-encrypt-notice">
-        Create a secure key to encrypt your emails / chats:
-        </div>
-
-        <div class="email-form">
-          <input id="email-to-address" class="email-address" type="text" placeholder="To: ">
-            <button class="email-submit">SUBMIT</button>
-            <button class="fetch">FETCH</button>
-        </div>
-
-
-
-      </div>
-      <style type="text/css">
-	.email-appspace-encrypt-notice {
-	  padding: 50px;
-	  font-size: 3em;
-	}
-      </style>
+<div class="email-appspace-encrypt">
+  <h3>Encrypt transations and messages:</h3>
+  <p>
+    Enter a private key or address to perform an onchain Diffie-Hellman key exchange and encrypt your transactions.
+  </p>
+  <br />
+  <div class="grid-2">
+    <div>Address:</div>
+    <div><input id="email-to-address" type="text" placeholder="Recipient Address"></div>
+    <div></div>
+    <div>
+      <button class="email-submit">Encrypt</button>
+      <button class="fetch">Fetch</button>
+    </div>
+  </div>
+</div> 
   `;
 }

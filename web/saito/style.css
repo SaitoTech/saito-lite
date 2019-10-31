@@ -31,6 +31,7 @@ Generic Style Settings for Modules in the Saito App Suite
 }
 
 /* HTML and Page Structure */
+
 :root {
     --saito-red: rgb(247, 31, 61);
     --saito-orange: #ff8235;
@@ -78,8 +79,16 @@ body {
     color: var(--text-color-normal);
 }
 
-h1, h2, h3, h4, h5, h6, p {
+h1, h2, h3, h4, h5, h6 {
     margin: 0.5em 0;
+}
+
+hr {
+    margin: 1em 0;
+}
+
+.spacer {
+    margin-bottom: 2.5em;
 }
 
 .monospace {
@@ -99,7 +108,11 @@ button, .button {
     margin: 0 1em 1em 0;
     color: var(--saito-red);
     letter-spacing: 1px;
-}
+    transition: transform .25s;
+} 
+button:active, .button:active {
+    transform: scale(.96);
+  }
 
 button:hover, .button:hover {
     text-shadow: #ffffff 1px 0;
@@ -116,6 +129,7 @@ button.super {
     border: 1px solid var(--saito-red);
     color: white;
     text-transform: uppercase;
+    height: 2em;
 }
 
 button.super:hover, .button.super:hover {
@@ -137,7 +151,6 @@ button.sub:hover, .button.sub:hover {
     line-height: 1.9em;
     font-family: visuelt-medium;
     letter-spacing: 2px;
-    
 }
 
 button i {
@@ -161,7 +174,7 @@ fieldset {
 .grid-4 {
     display: grid;
     grid-gap: 1em;
-    grid-template-columns: 7em 1fr 7em 1fr;
+    grid-template-columns: 5em 1fr 5em 1fr;
     margin: 0 0 1em 0;
 }
 
@@ -175,14 +188,28 @@ fieldset {
 
 @media only screen and (max-width: 1000px) {
     .grid-4 {
-        grid-template-columns: 7em 1fr;
+        grid-template-columns: 5em 1fr;
     }
 }
 
 .grid-2 {
     display: grid;
     grid-gap: 1em;
-    grid-template-columns: 7em 1fr;
+    grid-template-columns: 5em 1fr;
+    margin: 0 0 1em 0;
+}
+
+.grid-2-columns {
+    display: grid;
+    grid-gap: 1em;
+    grid-template-columns: 1fr 1fr;
+    margin: 0 0 1em 0;
+}
+
+.grid-3-columns {
+    display: grid;
+    grid-gap: 1em;
+    grid-template-columns: 1fr 1fr 1fr;
     margin: 0 0 1em 0;
 }
 
@@ -190,16 +217,20 @@ input {
     cursor: pointer;
 }
 
-input[type=text], input[type=number], input[type=range], input[type=password]{
+input[type=text], input[type=number], input[type=range], input[type=password] {
     width: 100%;
     border: none;
 }
 
+input[type=number] {
+    width: 80%;
+}
+
 input[type=checkbox], input[type=radio] {
     margin: 0 1em;
-    width: 24px;
-    height: 24px;
- }
+    width: 20px;
+    height: 20px;
+}
 
 input[type=text], input[type=number], input[type=password], input[type=date] {
     border: none;
@@ -209,12 +240,26 @@ input[type=text], input[type=number], input[type=password], input[type=date] {
     border-bottom: 1px solid var(--saito-cyber-black-wash);
 }
 
+select { 
+    float: left;
+    display: block;
+    border: 1px solid transparent;
+    background-color: white;
+    outline: none;
+    padding: 1em 0;
+}
+
 textarea {
     width: 100%;
     min-height: 10em;
     border: 1px solid var(--saito-cyber-black-wash);
     padding: 1em;
     margin: 0 0 1em 0;
+}
+
+textarea:focus, input:focus{
+    outline: none;
+    border-bottom: 1px solid var(--saito-red);
 }
 
 /* Page Sections */
@@ -317,4 +362,8 @@ textarea {
     /* Remove scrollbar space */
     background: transparent;
     /* Optional: just make scrollbar invisible */
+}
+
+.jsontree_node {
+    list-style: none;
 }
