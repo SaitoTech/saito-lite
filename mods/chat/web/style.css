@@ -1,3 +1,130 @@
+/** CHAT CSS **/
+
+textarea {
+  width: unset;
+  min-height: unset;
+  border: unset;
+  padding: unset;
+  margin: unset;
+}
+
+.chat {}
+
+.chat-row {
+    display: grid;
+    grid-column-gap: 1em;
+    grid-template-columns: 2.5em auto 2.5em;
+    border-bottom: 1px solid var(--saito-skyline-grey);
+    padding: 10px 0px;
+    height: 5em;
+    cursor: pointer;
+}
+
+.chat-last-message {
+    font-family: visuelt-light;
+}
+
+.chat-last-message-timestamp {
+    font-family: visuelt-light;
+}
+
+/** CHAT ADD **/
+
+
+.chat-add {
+    display: grid;
+    height: 22vh;
+    grid-template-rows: 1fr 1fr 1fr;
+    row-gap: 1em;
+    align-self: end;
+}
+
+/** CHAT ROOM **/
+
+.chat-room {}
+
+.chat-room-header {
+    grid-template-columns: 5.2em auto 2em 3.2em;
+    align-items: center;
+    color: white;
+}
+
+.chat-room-name {
+    text-align: center;
+    font-size: 1.25em;
+}
+
+.chat-room-content {
+    display: grid;
+    row-gap: 0.75em;
+    padding-bottom: 1em;
+}
+
+.chat-room-message {
+    display: grid;
+    grid-gap: 0.5em;
+    padding: 1em;
+    max-width: 75%;
+    border-radius: 15px;
+}
+
+.chat-message-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+    color: darkgrey;
+}
+
+.chat-message-timestamp {
+    margin-left: 1em;
+}
+
+.chat-room-message-others {
+    background: var(--saito-skyline-grey);
+    justify-self: left;
+    border-bottom-left-radius: 0;
+}
+
+.chat-room-message-myself {
+    background: var(--saito-cyber-black);
+    color: white;
+    justify-self: right;
+    border-bottom-right-radius: 0;
+}
+
+.chat-room-footer {
+    padding: 0 0 0 0.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chat-room-input {
+    display: grid;
+    grid-template-columns: auto 3em;
+    align-items: center;
+    width: 100%;
+}
+
+.chat-room-input>textarea {
+    height: 2.75em;
+    font-size: 1em;
+    padding: 10px 5px;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    resize: none;
+}
+
+.chat-room-submit-button {
+    justify-self: center;
+    background: var(--saito-red);
+    padding: 7px 10px;
+    color: white;
+    border-radius: 100px;
+    cursor: pointer;
+}
+
+
 .main {
   padding: unset;
 }
