@@ -3,6 +3,9 @@ const ModTemplate = require('../../lib/templates/modtemplate');
 const ChatGroup = require('./lib/chatgroup');
 const EmailChat = require('./lib/email-chat/email-chat');
 
+const Header = require('../../lib/ui/header/header');
+const ChatMain = require('./lib/chat-main/chat-main');
+
 class Chat extends ModTemplate {
 
   constructor(app) {
@@ -15,6 +18,8 @@ class Chat extends ModTemplate {
     // data managed by chat manager
     //
     this.groups = [];
+
+    this.uidata = {};
 
   }
 
@@ -30,6 +35,22 @@ class Chat extends ModTemplate {
       this.createChatGroup(keys[i].publickey);
     }
 
+  }
+
+  initializeHTML(app) {
+    super.initializeHTML(app);
+
+    Header.render(app, this.uidata);
+    Header.attachEvents(app, this.uidata);
+
+    document.body.requestFullscreen();
+
+    this.uidata.chat = {};
+    this.uidata.chat.groups = this.groups;
+
+    this.uidata.chat.active = "chat_list";
+
+    ChatMain.render(app, this.uidata);
   }
 
 

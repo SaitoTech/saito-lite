@@ -1,4 +1,4 @@
-const ChatRoomMessageTemplate = require('../../this-needs-refactoring/chat-room/chat-room-message.template');
+const ChatRoomMessageTemplate = require('../../chat-main/chat-room/chat-room-message.template');
 
 module.exports = ChatBoxMessageContainerTemplate = (data, sig, type) => {
   return `
