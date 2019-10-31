@@ -1,3 +1,7 @@
+.main {
+  padding: unset;
+***REMOVED***
+
 .chat {
   display: flex;
   flex-direction: column;
@@ -5,4 +9,73 @@
 
 .chat-row {
   margin-bottom: 1em;
+***REMOVED***
+
+.footer {
+  display: none;
+***REMOVED***
+
+
+#chat.create-button {
+  bottom: 2vh;
+***REMOVED***
+
+.chat-room {
+  display: grid;
+  grid-template-rows: 3.5em auto 7vh;
+***REMOVED***
+
+.chat-room-header {
+  grid-template-columns: 5.2em auto 2em 3.2em;
+  align-items: center;
+  color: black;
+  display: grid;
+  border-bottom: 1px solid var(--saito-skyline-grey);
+  padding: 1em;
+***REMOVED***
+
+.chat-room-name {
+  margin-top: 3px;
+***REMOVED***
+
+.chat-room-content {
+  display: flex;
+  padding: 1em;
+  flex-direction: column;
+  overflow-y: scroll;
+  height: 76vh;
+***REMOVED***
+
+.chat-message-container {
+  display: flex;
+  margin-bottom: 5px;
+***REMOVED***
+
+.chat-message-myself {
+  flex-direction: row-reverse;
+***REMOVED***
+
+.chat-room-footer {
+  padding: 0 0 0 0.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid var(--saito-skyline-grey);
+
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1em 0 1em 5px;
+  background: white;
+***REMOVED***
+
+.chat-row {
+  margin: 1em;
+***REMOVED***
+
+@media only screen and (min-width: 600px) {
+  #chat.create-button {
+    display: none;
+  ***REMOVED***
 ***REMOVED***

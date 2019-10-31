@@ -328,7 +328,6 @@ input[type=text], input[type=number] {
 
 .chat-room-name {
     text-align: center;
-    color: white;
     font-size: 1.25em;
 ***REMOVED***
 
@@ -343,7 +342,7 @@ input[type=text], input[type=number] {
     grid-gap: 0.5em;
     padding: 1em;
     max-width: 75%;
-    border-radius: 5px;
+    border-radius: 15px;
 ***REMOVED***
 
 .chat-message-header {
@@ -360,12 +359,14 @@ input[type=text], input[type=number] {
 .chat-room-message-others {
     background: var(--saito-skyline-grey);
     justify-self: left;
+    border-bottom-left-radius: 0;
 ***REMOVED***
 
 .chat-room-message-myself {
     background: var(--saito-cyber-black);
     color: white;
     justify-self: right;
+    border-bottom-right-radius: 0;
 ***REMOVED***
 
 .chat-room-footer {
