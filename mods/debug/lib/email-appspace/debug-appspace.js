@@ -1,10 +1,11 @@
 const DebugAppspaceTemplate = require('./debug-appspace.template.js');
+const jsonTree = require('json-tree-viewer');
 
 module.exports = DebugAppspace = {
 
     render(app, data) {
       document.querySelector(".email-appspace").innerHTML = DebugAppspaceTemplate();
-      document.getElementById("email-appspace-debug").innerHTML = JSON.stringify(app.options, null, 2);
+      var tree = jsonTree.create(app.options, document.getElementById("email-appspace-debug"));
 ***REMOVED***,
 
     attachEvents(app, data) {***REMOVED***

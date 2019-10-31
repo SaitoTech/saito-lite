@@ -13,6 +13,7 @@
     'settings/settings.js',
     'wallet/wallet.js',
     'wordblocks/wordblocks.js',
+    'design/design.js'
   ],
   lite: [
     'arcade/arcade.js',
@@ -26,5 +27,6 @@
     'settings/settings.js',
     'wallet/wallet.js',
     'wordblocks/wordblocks.js',
+    'design/design.js'
   ]
 ***REMOVED***

@@ -28,6 +28,7 @@
     "fs-extra": "^8.1.0",
     "jquery": "^3.4.1",
     "jsdom": "^15.2.0",
+    "json-tree-viewer": "0.0.2",
     "merkle-tree-gen": "^1.1.0",
     "node-cryptojs-aes": "^0.4.0",
     "numeral": "^2.0.6",

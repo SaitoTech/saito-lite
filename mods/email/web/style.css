@@ -31,6 +31,11 @@ body {
   border-bottom: 1px solid var(--saito-cyber-black);
 ***REMOVED***
 
+.email-header-title {
+  font-family: visuelt-medium;
+  font-size: 1.2em;
+***REMOVED***
+
 .email-icons {
   display: grid;
   grid-auto-flow: column;
@@ -54,7 +59,13 @@ body {
 ***REMOVED***
 
 .email-body {
-  padding-top: 10px;
+  padding: 1em;
+***REMOVED***
+
+.email-compose {
+  padding: 1em;
+  border: 1px solid var(--saito-cyber-black-wash);
+  margin: 0 0 1em 0;
 ***REMOVED***
 
 .email-list {
@@ -105,6 +116,8 @@ body {
   justify-content: space-between;
   color: grey;
   width: 5.5em;
+  float: right;
+  margin: 10px;
 ***REMOVED***
 
 .email-title {
@@ -130,6 +143,10 @@ body {
   cursor: pointer;
 ***REMOVED***
 
+.email-list input[type=checkbox] {
+  margin: auto;
+***REMOVED***
+
 .email-selected {
   height: 24px;
   width: 24px;
@@ -153,11 +170,14 @@ body {
   border-bottom: 1px solid var(--saito-red-wash);
 ***REMOVED***
 
+.email-message h4 {
+  margin: 2px 0;
+***REMOVED***
+
 .email-message-content {
   font-family: visuelt-light;
   display: grid;
   grid-gap: 5px;
-
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -169,11 +189,11 @@ body {
 ***REMOVED***
 
 .email-text {
-  border: 1px solid var(--saito-cyber-black-wash);
-  padding: 5px;
+  border: none;
   font-size: 1em;
   width: 100%;
-  height: 100%;
+  height: 200px;
+  margin: 1em 0 0 0;
 ***REMOVED***
 
 .email-sidebar {
@@ -272,6 +292,7 @@ body {
   grid-gap: 0.5em;
   grid-template-columns: 2em auto;
   align-items: center;
+  margin: 10px 1em 0 0;
 ***REMOVED***
 
 .email-detail-right-options {
@@ -307,10 +328,8 @@ body {
   .email-detail-address-id {
     font-size: 0.8em;
   ***REMOVED***
-  .email-header {
-    /* grid-template-rows: 1fr 1fr;
-    grid-gap: 0.75em; */
-  ***REMOVED***
+
+
   .email-detail-right-options {
     display: flex;
     justify-self: end;
@@ -357,7 +376,6 @@ body {
   #email.create-button {
     bottom: 2vh;
   ***REMOVED***
-
   .email-message {
     padding: 1em 0;
   ***REMOVED***
