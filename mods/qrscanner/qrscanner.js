@@ -7,6 +7,8 @@ class QRScanner extends ModTemplate {
   constructor(app) {
     super(app);
 
+    this.events = ['encrypt-key-exchange-confirm'];
+
     this.video = null;
     this.canvas = null;
 
@@ -21,7 +23,7 @@ class QRScanner extends ModTemplate {
   ***REMOVED***
 ***REMOVED***;
 
-    qrcode.callback = this.read;
+    qrcode.callback = (data) => { this.read(data) ***REMOVED***;
 
     this.name = "QRScanner";
   ***REMOVED***
@@ -98,9 +100,24 @@ class QRScanner extends ModTemplate {
     console.log('navigator.MediaDevices.getUserMedia error: ', error.message, error.name);
   ***REMOVED***
 
+  receiveEvent(type, data) {
+    if (type === "encrypt-key-exchange-confirm") {
+        if (document.getElementById('qr-canvas')) {
+          alert('sucess');
+          window.location.assign('/chat');
+    ***REMOVED***
+***REMOVED***
+  ***REMOVED***
+
   // default read value that we provide if a callback isn't declared in initialize
   read(a) {
-    alert(a);
+    if (this.app.crypto.isPublicKey(a)) {
+      let encrypt_mod = this.app.modules.returnModule('Encrypt');
+      encrypt_mod.initiate_key_exchange(a);
+      alert(`Initiating Key Exchange with ${a***REMOVED***`);
+***REMOVED*** else {
+      this.sendEvent('qrcode', a);
+***REMOVED***
     setTimeout(() => { this.attemptQRDecode() ***REMOVED***, 500);
   ***REMOVED***
 ***REMOVED***

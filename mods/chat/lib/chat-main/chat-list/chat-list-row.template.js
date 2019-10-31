@@ -1,6 +1,6 @@
 const datetimeFormatter = require('../../../../../lib/helpers/datetime_formatter');
 
-module.exports = ChatListRowTemplate = ({name, group_id***REMOVED***, {message, timestamp***REMOVED***) => {
+module.exports = ChatListRowTemplate = ({name, group_id, message, timestamp***REMOVED***) => {
 
   let datetime = datetimeFormatter(timestamp);
 

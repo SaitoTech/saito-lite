@@ -1,9 +1,9 @@
 const datetimeFormatter = require('../../../../lib/helpers/datetime_formatter');
 
-export const ChatListRowTemplate = ({name, room_id***REMOVED***, {message, timestamp***REMOVED***) => {
+export const ChatListRowTemplate = ({name, group_id, message, timestamp***REMOVED***) => {
   let datetime = datetimeFormatter(timestamp);
   return `
-    <div id="${room_id***REMOVED***" class="chat-row">
+    <div id="${group_id***REMOVED***" class="chat-row">
       <img src="logo-color.svg">
       <div class="chat-content">
           <div class="chat-group-name">${name***REMOVED***</div>
