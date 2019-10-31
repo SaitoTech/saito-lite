@@ -16,15 +16,39 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <style>
-  video {
-    height: 100%;
+  html, body{
+    margin: 0;
+    padding: 0;
+  }
+  .video-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
     width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  .video-container video {
+    /* Make video to at least 100% wide and tall */
+    min-width: 100%;
+    min-height: 100%;
+    /* Setting width & height to auto prevents the browser from stretching or squishing the video */
+    width: auto;
+    height: auto;
+
+    /* Center the video */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
   }
 </style>
 
 <body>
-  <button class="file-button">UPLOAD</button>
-  <video playsinline autoplay></video>
+  <!-- <button class="file-button">UPLOAD</button> -->
+  <div class="video-container">
+    <video playsinline autoplay></video>
+  </div>
   <canvas style="display: none" id="qr-canvas"></canvas>
   <input style="display: none" id="file-input" type="file">
   <script type="text/javascript" src="/saito/saito.js"></script>

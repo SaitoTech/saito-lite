@@ -5,29 +5,49 @@ const ChatRoom = require('../chat-room/chat-room');
 // const ChatAdd = require('../chat-add/chatadd');
 
 module.exports = ChatList = {
-    chat: {},
-    render(chat) {
-        this.chat = chat;
+    render(app, data) {
         let chat_main = document.querySelector('.chat-main')
 
         if (!chat_main) { return; }
         chat_main.innerHTML = ChatListTemplate();
 
-        Object.values(chat.groups).forEach((group) => {
+        // Object.values(data.chat.groups).forEach((group) => {
+        //     document.querySelector('.chat').innerHTML
+        //         += ChatListRowTemplate(group, group.messages[group.messages.length - 1]);
+        // });
+
+        data.chat.groups.forEach((group) => {
+            let last_message = group.messages[group.messages.length - 1];
+
+            let message = '';
+            let timestamp = new Date().getTime();
+
+            if (last_message) {
+                message = last_message.message
+                timestamp = last_message.ts;
+            }
+
+            let msg = {
+                name: group.group_name,
+                group_id: group.group_id,
+                message,
+                timestamp
+            }
             document.querySelector('.chat').innerHTML
-                += ChatListRowTemplate(group, group.messages[group.messages.length - 1]);
+                += ChatListRowTemplate(msg);
         });
 
         // this.bindDOMFunctionstoModule(mod);
-        this.attachEvents(chat);
+        // this.attachEvents(chat);
     },
 
-    attachEvents(chat) {
+    attachEvents(app, data) {
         // add click event to all of our existing chat rows
         Array.from(document.getElementsByClassName('chat-row'))
              .forEach(row => row.addEventListener('click', (e) => {
                 let group_id = e.currentTarget.id;
-                ChatRoom.render(chat, chat.groups[group_id]);
+                data.chat.active_group_id = group_id;
+                ChatRoom.render(app, data);
              })
         );
 
