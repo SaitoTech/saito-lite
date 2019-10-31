@@ -1,30 +1,10 @@
-:root {
-    --saito-red: rgb(247, 31, 61);
-    --saito-orange: #ff8235;
-    --saito-skyline-grey: rgb(234, 234, 239);
-    --saito-cyber-black: rgb(28, 28, 35);
-    --saito-white: #ffffff;
-    --saito-red-wash: rgb(247, 31, 61, 0.3);
-    --saito-cyber-black-wash: rgb(28, 28, 35, 0.3);
-    --saito-cyber-black-cut: rgb(28, 28, 35, 0.5);
-}
+/* 
 
-* {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
+Generic Style Settings for Modules in the Saito App Suite
 
-html {
-    --text-color-normal: var(--saito-cyber-black);
-    --backround-general: var(--saito-white);
-    --text-color-highlight: var(--saito-red);
-}
+*/
 
-html[data-theme='dark'] {
-    --text-color-normal: var(--saito-skyline-grey);
-    --backround-general: var(--saito-cyber-black);
-    --text-color-highlight: var(--saito-red);
-}
+/* Visuelt fonts */
 
 @font-face {
     font-family: 'visuelt-black';
@@ -50,10 +30,37 @@ html[data-theme='dark'] {
     font-style: normal;
 }
 
+/* HTML and Page Structure */
+
+:root {
+    --saito-red: rgb(247, 31, 61);
+    --saito-orange: #ff8235;
+    --saito-skyline-grey: rgb(234, 234, 239);
+    --saito-cyber-black: rgb(28, 28, 35);
+    --saito-white: #ffffff;
+    --saito-red-wash: rgb(247, 31, 61, 0.3);
+    --saito-cyber-black-wash: rgb(28, 28, 35, 0.3);
+    --saito-cyber-black-cut: rgb(28, 28, 35, 0.5);
+}
+
 * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+html {
+    --text-color-normal: var(--saito-cyber-black);
+    --backround-general: var(--saito-white);
+    --text-color-highlight: var(--saito-red);
+}
+
+html[data-theme='dark'] {
+    --text-color-normal: var(--saito-skyline-grey);
+    --backround-general: var(--saito-cyber-black);
+    --text-color-highlight: var(--saito-red);
 }
 
 html, body {
@@ -72,19 +79,71 @@ body {
     color: var(--text-color-normal);
 }
 
-button, .button {
-    padding: 8px;
-    background-color: var(--saito-red);
-    border: 1px solid var(--saito-red);
-    border-radius: 5px;
-    color: white;
-    font-size: 1em;
-    font-family: 'visuelt-light';
-    cursor: pointer;
+h1, h2, h3, h4, h5, h6 {
+    margin: 0.5em 0;
 }
 
+hr {
+    margin: 1em 0;
+}
+
+.spacer {
+    margin-bottom: 2.5em;
+}
+
+.monospace {
+    font-family: monospace, 'Courier New', Courier;
+}
+
+/* Forms and Inputs */
+
+button, .button {
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    min-width: 10em;
+    padding: 10px 6px;
+    background: #fefefe;
+    border: 1px solid var(--saito-red);
+    margin: 0 1em 1em 0;
+    color: var(--saito-red);
+    letter-spacing: 1px;
+    transition: transform .25s;
+} 
+button:active, .button:active {
+    transform: scale(.96);
+  }
+
 button:hover, .button:hover {
+    text-shadow: #ffffff 1px 0;
+    background: var(--saito-red);
+    color: #ffffff;
+}
+
+button.super {
+    padding: 12px 8px 8px 8px;
+    font-size: 1.4em;
+    font-family: visuelt-medium;
+    letter-spacing: 2px;
+    background-color: var(--saito-red);
+    border: 1px solid var(--saito-red);
+    color: white;
+    text-transform: uppercase;
+    height: 2em;
+}
+
+button.super:hover, .button.super:hover {
     text-shadow: var(--saito-skyline-grey) 1px 0;
+}
+
+button.sub {
+    border: 1px solid var(--saito-cyber-black);
+    color: var(--saito-cyber-black);
+}
+
+button.sub:hover, .button.sub:hover {
+    text-shadow: var(--saito-cyber-black) 1px 0;
+    background: var(--saito-skyline-grey);
 }
 
 .button-main {
@@ -92,6 +151,15 @@ button:hover, .button:hover {
     line-height: 1.9em;
     font-family: visuelt-medium;
     letter-spacing: 2px;
+}
+
+button i {
+    margin: 0 0.5em;
+}
+
+fieldset {
+    padding: 1em;
+    border: 1px solid var(--saito-cyber-black-wash);
 }
 
 .button-secondary {
@@ -103,12 +171,98 @@ button:hover, .button:hover {
     height: 1.9em;
 }
 
-input[type=text], input[type=number] {
+.grid-4 {
+    display: grid;
+    grid-gap: 1em;
+    grid-template-columns: 5em 1fr 5em 1fr;
+    margin: 0 0 1em 0;
+}
+
+.grid-4 div:nth-child(2n-1), .grid-2 div:nth-child(2n-1) {
+    font-family: visuelt-medium;
+}
+
+.grid-4 div, .grid-2 div {
+    align-self: center;
+}
+
+@media only screen and (max-width: 1000px) {
+    .grid-4 {
+        grid-template-columns: 5em 1fr;
+    }
+}
+
+.grid-2 {
+    display: grid;
+    grid-gap: 1em;
+    grid-template-columns: 5em 1fr;
+    margin: 0 0 1em 0;
+}
+
+.grid-2-columns {
+    display: grid;
+    grid-gap: 1em;
+    grid-template-columns: 1fr 1fr;
+    margin: 0 0 1em 0;
+}
+
+.grid-3-columns {
+    display: grid;
+    grid-gap: 1em;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: 0 0 1em 0;
+}
+
+input {
+    cursor: pointer;
+}
+
+input[type=text], input[type=number], input[type=range], input[type=password] {
+    width: 100%;
+    border: none;
+}
+
+input[type=number] {
+    width: 80%;
+}
+
+input[type=checkbox], input[type=radio] {
+    margin: 0 1em;
+    width: 20px;
+    height: 20px;
+}
+
+input[type=text], input[type=number], input[type=password], input[type=date] {
+    border: none;
     padding: 10px 5px;
     border-radius: 0px;
     font-size: 1em;
     border-bottom: 1px solid var(--saito-cyber-black-wash);
 }
+
+select {
+    float: left;
+    display: block;
+    border: 1px solid transparent;
+    background-color: white;
+    outline: none;
+    padding: 1em 0;
+}
+
+textarea {
+    width: 100%;
+    min-height: 10em;
+    border: 1px solid var(--saito-cyber-black-wash);
+    padding: 1em;
+    margin: 0 0 1em 0;
+}
+
+textarea:focus, input:focus{
+    outline: none;
+    border-bottom: 1px solid var(--saito-red);
+}
+
+/* Page Sections */
 
 .header {
     display: grid;
@@ -179,19 +333,6 @@ input[type=text], input[type=number] {
     height: 3em;
 }
 
-/* grid */
-
-.grid-title {
-    font-family: visuelt-medium;
-    align-self: center;
-}
-
-.grid input[type=text] {
-    width: 100%;
-}
-
-
-
 .main {
     display: grid;
     grid-gap: 1.5em;
@@ -223,7 +364,7 @@ input[type=text], input[type=number] {
     /* Optional: just make scrollbar invisible */
 }
 
-.container {
+/* .container {
     display: grid;
     grid-gap: 1em;
 }
@@ -268,7 +409,7 @@ input[type=text], input[type=number] {
 }
 
 .icon-med:hover {
-    /*    color: var(--saito-red-wash);*/
+     color: var(--saito-red-wash);
 }
 
 .icon-large {
@@ -285,7 +426,7 @@ input[type=text], input[type=number] {
 }
 
 /** CHAT CSS **/
-
+/*
 .chat {}
 
 .chat-row {
@@ -308,6 +449,7 @@ input[type=text], input[type=number] {
 
 /** CHAT ADD **/
 
+/*
 .chat-add {
     display: grid;
     height: 22vh;
@@ -315,9 +457,11 @@ input[type=text], input[type=number] {
     row-gap: 1em;
     align-self: end;
 }
+*/
 
 /** CHAT ROOM **/
 
+/*
 .chat-room {}
 
 .chat-room-header {
@@ -400,9 +544,10 @@ input[type=text], input[type=number] {
     border-radius: 100px;
     cursor: pointer;
 }
+*/
 
 /** ARCADE CSS **/
-
+/*
 .arcade {
     grid-template-rows: 1.5em auto;
 }
@@ -452,6 +597,8 @@ input[type=text], input[type=number] {
     background: white;
 }
 
+*/
+
 /*.games-play-button {
     background-color: var(--saito-red);
     color: white;
@@ -463,12 +610,12 @@ input[type=text], input[type=number] {
     height: 3.2em;
 }*/
 
-.games-table {
+/* .games-table {
     /*display: grid;
-    grid-gap: 5px;*/
+    grid-gap: 5px;
 }
 
-.games-author {
+/* .games-author {
     font-family: 'visuelt-light';
 }
 
@@ -496,11 +643,11 @@ input[type=text], input[type=number] {
     max-height: 3.5em;
     align-self: center;
     background: var(--saito-red);
-}
+} */
 
 /** FORUM CSS **/
 
-.forum {}
+/* .forum {}
 
 .forum-row {
     display: grid;
@@ -537,11 +684,11 @@ input[type=text], input[type=number] {
 
 .forum-score {
     text-align: center;
-}
+} */
 
 /** FORUM ADD POST **/
 
-#forum-add-post {
+/* #forum-add-post {
     display: grid;
     grid-gap: 0.5em;
 }
@@ -562,11 +709,11 @@ input[type=text], input[type=number] {
 #forum-toggle {
     background-color: var(--saito-skyline-grey);
     color: black;
-}
+} */
 
 /** FORUM DETAIL CSS **/
 
-.forum-detail>section {
+/* .forum-detail>section {
     padding: 10px 0px;
 }
 
@@ -626,11 +773,11 @@ input[type=text], input[type=number] {
 
 #forum-comment-text {
     padding: 5px 0px;
-}
+} */
 
 /** WALLET CSS **/
 
-#qrcode {
+/* #qrcode {
     justify-self: center;
     border: 2px solid var(--saito-cyber-black);
     padding: 10px;
@@ -640,12 +787,13 @@ input[type=text], input[type=number] {
 .register-button {
     width: 100%;
     margin-top: 1em;
-}
+} */
 
 /** COMPONENTS CSS **/
 
 /** FOOTER **/
 
+/*
 .footer {
     position: fixed;
     bottom: 0%;
@@ -654,12 +802,13 @@ input[type=text], input[type=number] {
     border-top: 1px solid var(--saito-skyline-grey);
     font-family: visuelt-light;
     background: var(--backround-general);
-    /* overscroll-behavior: none; */
+    /* overscroll-behavior: none;
 }
+*/
 
 /** NAV BAR **/
 
-.nav-bar {
+/* .nav-bar {
     display: flex;
     justify-content: space-between;
     font-family: visuelt-light;
@@ -672,13 +821,13 @@ input[type=text], input[type=number] {
     align-items: center;
     justify-items: center;
     margin: 0.5em 0;
-}
+} */
 
 /** Dark Mode **/
 
 /** SETTINGS **/
 
-.settings {}
+/* .settings {}
 
 .settings-button-table {
     display: grid;
@@ -730,4 +879,8 @@ input[type=text], input[type=number] {
     html, body {
         position: unset;
     }
+} */
+
+.jsontree_node {
+    list-style: none;
 }

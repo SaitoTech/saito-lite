@@ -13,6 +13,7 @@ module.exports = {
     'settings/settings.js',
     'wallet/wallet.js',
     'wordblocks/wordblocks.js',
+    'design/design.js'
   ],
   lite: [
     'arcade/arcade.js',
@@ -26,5 +27,6 @@ module.exports = {
     'settings/settings.js',
     'wallet/wallet.js',
     'wordblocks/wordblocks.js',
+    'design/design.js'
   ]
 }
