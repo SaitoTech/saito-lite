@@ -12,7 +12,6 @@ module.exports = EmailAppspaceTemplate = () => {
     <div></div>
     <div>
       <button class="email-submit">Encrypt</button>
-      <button class="fetch">Fetch</button>
     </div>
   </div>
 </div> 

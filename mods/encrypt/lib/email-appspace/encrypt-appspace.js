@@ -15,14 +15,6 @@ module.exports = EncryptAppspace = {
 	  data.parentmod.appspace_mod.initiate_key_exchange(recipient);
   ***REMOVED***);
 
-      document.querySelector('.fetch')
-        .addEventListener('click', (e) => {
-alert("testing fetch identifier: ");
-	  data.parentmod.app.keys.fetchIdentifier("*", function(rows) {
-alert("RESULT: " + JSON.stringify(rows));
-	  ***REMOVED***);
-  ***REMOVED***);
-
 ***REMOVED***,
 
 ***REMOVED***
