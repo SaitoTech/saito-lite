@@ -43,8 +43,6 @@ class Chat extends ModTemplate {
     Header.render(app, this.uidata);
     Header.attachEvents(app, this.uidata);
 
-    document.body.requestFullscreen();
-
     this.uidata.chat = {***REMOVED***;
     this.uidata.chat.groups = this.groups;
 

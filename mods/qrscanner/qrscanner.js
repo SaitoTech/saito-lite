@@ -1,6 +1,7 @@
 const qrcode = require('./lib/scanner');
 const ModTemplate = require('../../lib/templates/modtemplate');
 
+const HeaderDropdownTemplate = require('../../lib/ui/header/header-dropdown.template');
 const QRScannerTemplate = require('./qrscanner.template');
 
 class QRScanner extends ModTemplate {
@@ -49,18 +50,29 @@ class QRScanner extends ModTemplate {
 
   render() {
     document.querySelector('body').innerHTML = QRScannerTemplate();
+
+    let header = document.getElementsById('qr-hud-header');
+    header.append(
+        elParser(HeaderDropdownTemplate())
+    );
   ***REMOVED***
 
   attachEvents() {
-    document.querySelector('.file-button')
+    // document.querySelector('.file-button')
+    //      .addEventListener('click', (e) => {
+    //         let inputFile  = document.getElementById('file-input');
+    //          inputFile.addEventListener('change', (e) => {
+    //             let file = e.target.files[0];
+    //             if (!file) { return; ***REMOVED***
+    //             this.decodeFromFile(file);
+    //      ***REMOVED***);
+    //          inputFile.click();
+    //  ***REMOVED***);
+
+    document.querySelector('#navigator')
          .addEventListener('click', (e) => {
-            let inputFile  = document.getElementById('file-input');
-             inputFile.addEventListener('change', (e) => {
-                let file = e.target.files[0];
-                if (!file) { return; ***REMOVED***
-                this.decodeFromFile(file);
-         ***REMOVED***);
-             inputFile.click();
+             let header_dropdown = document.querySelector('.header-dropdown');
+             header_dropdown.style.display = header_dropdown.style.display == "none" ? "block" : "none";
      ***REMOVED***);
   ***REMOVED***
 

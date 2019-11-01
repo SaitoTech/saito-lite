@@ -20,8 +20,13 @@ textarea {
     cursor: pointer;
 ***REMOVED***
 
+.chat-group-name {
+  font-weight: bold;
+***REMOVED***
+
 .chat-last-message {
     font-family: visuelt-light;
+    margin-top: 0.5em;
 ***REMOVED***
 
 .chat-last-message-timestamp {
@@ -194,7 +199,7 @@ textarea {
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 1em 0 1em 5px;
+  padding: 0.5em 0 0.5em 5px;
   background: white;
 ***REMOVED***
 

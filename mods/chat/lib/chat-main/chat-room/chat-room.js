@@ -43,11 +43,11 @@ module.exports = ChatRoom = {
 
         console.log("NEW GROUP: ", this.group);
 
-        let renderDefaultHeaderAndFooter = (chat) => {
+        let renderDefaultHeaderAndFooter = (app) => {
     ***REMOVED*** header
             let header = document.querySelector('.header');
             header.classList.remove("chat-room-header");
-            Header.render(chat.app);
+            Header.render(app);
 
     ***REMOVED*** footer
             let footer = document.querySelector('.footer');
@@ -76,12 +76,12 @@ module.exports = ChatRoom = {
             this.scrollToBottom();
     ***REMOVED***
 
-***REMOVED*** document.querySelector('#back-button')
-***REMOVED***         .addEventListener('click', () => {
-***REMOVED***             data.chat.active = "chat_list";
-***REMOVED***             renderDefaultHeaderAndFooter(chat);
-***REMOVED***             data.chat.main.render(app, data);
-***REMOVED***     ***REMOVED***);
+        document.querySelector('#back-button')
+                .addEventListener('click', () => {
+                    data.chat.active = "chat_list";
+            ***REMOVED*** renderDefaultHeaderAndFooter(chat);
+                    data.chat.main.render(app, data);
+            ***REMOVED***);
 
         document.querySelector('.chat-room-submit-button')
                 .addEventListener('click', () => {
