@@ -4,7 +4,7 @@ module.exports = EmailAppspaceTemplate = (app) => {
   <div class="email-appspace-settings">
       <h3>Network Keys</h3>
   
-      <div class="grid-3-columns">
+      <div class="grid-1-2-columns">
           <div id="qrcode"></div>
           <div>
               <div class="grid-2">
