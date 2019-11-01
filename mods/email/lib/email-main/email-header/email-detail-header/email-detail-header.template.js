@@ -2,7 +2,7 @@ module.exports = EmailDetailHeaderTempkate = (app, data) => {
   return `
     <div class="email-detail-left-options">
       <i id="email-form-back-button" class="icon-med fas fa-arrow-left"></i>
-      <h3>${data.parentmod.header_title***REMOVED***</h3>
+      <h4>${data.parentmod.header_title***REMOVED***</h4>
     </div>
     <div class="email-detail-right-options">
     <div class="email-icons">
