@@ -52,8 +52,8 @@ module.exports = EmailInboxHeader = {
                     email_bars_menu.style.display = "block";
                     email_bars_menu.innerHTML = EmailBarsMenuTemplate();
                     for (let i = 0; i < data.mods.length; i++) {
-                        let mobile_email_apps = email_bars_menu.querySelectorAll(":scope > .email-apps")
-                        mobile_email_apps[0].innerHTML
+                        let mobile_email_apps = email_bars_menu.querySelector(".email-apps")
+                        mobile_email_apps.innerHTML
                             += `<li class="email-apps-item" id="${i***REMOVED***">${data.mods[i].name***REMOVED***</li>`;
                 ***REMOVED***
                     document.querySelector('body').append(email_bars_menu);
