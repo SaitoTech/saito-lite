@@ -5,6 +5,6 @@ module.exports = EmailInboxHeaderTemplate = (app, data) => {
       <i id="email-delete-icon" class="icon-med far fa-trash-alt"></i>
       <i id="email-bars-icon" class="icon-med fas fa-bars"></i>
     </div>
-    <div class="email-balance"></div>
+    <div class="detail email-balance"></div>
   `;
 }
