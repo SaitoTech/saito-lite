@@ -24,7 +24,7 @@ module.exports = ChatList = {
 
             if (last_message) {
                 message = last_message.message
-                timestamp = last_message.ts;
+                timestamp = last_message.timestamp;
             }
 
             let msg = {
