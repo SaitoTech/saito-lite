@@ -144,7 +144,8 @@ textarea {
 
 
 #chat.create-button {
-  bottom: 2vh;
+  /* bottom: 2vh; */
+  min-width: unset;
 ***REMOVED***
 
 .chat-room {

@@ -364,7 +364,7 @@ textarea:focus, input:focus{
     /* Optional: just make scrollbar invisible */
 ***REMOVED***
 
-/* .container {
+.container {
     display: grid;
     grid-gap: 1em;
 ***REMOVED***
@@ -380,8 +380,10 @@ textarea:focus, input:focus{
     color: white;
     border-radius: 100px;
     position: fixed;
-    bottom: 10vh;
-    right: 0.8em;
+    /* bottom: 10vh;
+    right: 0.8em; */
+    right: 0;
+    bottom: 0;
     width: 3.2em;
     height: 3.2em;
 ***REMOVED***
