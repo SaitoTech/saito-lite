@@ -51,6 +51,11 @@ body {
   margin-left: 5px;
 ***REMOVED***
 
+#email-compose-btn {
+  margin: unset;
+  padding: 8px;
+***REMOVED***
+
 .email-balance {
   justify-self: right;
   font-family: visuelt-medium;
@@ -405,18 +410,9 @@ body {
   .email-navigator-item {
     padding: 5px;
   ***REMOVED***
+
   #email.create-button {
-    bottom: 2vh;
-    background-color: var(--saito-red);
-    color: #ffffff;
-    height: 2.5em;
-    width: 2.5em;
-    min-width: 2.5em;
-    border-radius: 2.5em;
-    padding: 4px;
-    position: fixed;
-    bottom: 0px;
-    right: 1em;
+    min-width: unset;
   ***REMOVED***
   .email-message {
     padding: 1em 0;
