@@ -1,8 +1,8 @@
 module.exports = HospitalProfileTemplate = () => {
   return `
   <h3>Make Appointment</h3>
-  <div class="grid-2">
-      <div>First Name:</div>
+  <div class="grid-2"> 
+     <div>First Name:</div>
       <div>
           <input type="text" name="name_first" placeholder="First Name" />
       </div>
@@ -27,7 +27,7 @@ module.exports = HospitalProfileTemplate = () => {
           <input type="number" name="phone_number" />
       </div>
   </div>
-  <button id="confirm-profile-accurate-btn ">Confirm</button>
+  <button id="confirm-profile-accurate-btn">Confirm</button>
   
   <div style="display:none; " class="row ">
       <div class="col-20 ">
@@ -100,5 +100,11 @@ module.exports = HospitalProfileTemplate = () => {
           </select>
       </div>
   </div>
+  <style>
+.grid-2 {
+  grid-template-columns: 7em 1fr;
+***REMOVED***
+  </style>
+
     `;
 ***REMOVED***

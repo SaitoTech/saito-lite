@@ -1,11 +1,12 @@
 ***REMOVED***
   core: [
-    'arcade/arcade.js',
+    'appstore/appstore.js',
     'archive/archive.js',
+    'arcade/arcade.js',
     'chat/chat.js',
     'email/email.js',
     'encrypt/encrypt.js',
-    'explorer/explorer.js',
+//    'explorer/explorer.js',
     'faucet/faucet.js',
     'hospital/hospital.js',
     'qrscanner/qrscanner.js',
@@ -16,6 +17,7 @@
     'design/design.js'
   ],
   lite: [
+    'appstore/appstore.js',
     'arcade/arcade.js',
     'chat/chat.js',
     'debug/debug.js',
