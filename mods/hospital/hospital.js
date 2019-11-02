@@ -1,6 +1,6 @@
-var saito = require('../../lib/saito/saito');
-var ModTemplate = require('../../lib/templates/modtemplate');
-
+const saito = require('../../lib/saito/saito');
+const ModTemplate = require('../../lib/templates/modtemplate');
+const HospitalAppspace = require('./lib/email-appspace/hospital-appspace');
 
 class Hospital extends ModTemplate {
 
@@ -15,6 +15,19 @@ class Hospital extends ModTemplate {
 
 
 
+  async installModule(app) {
+    await super.installModule(app);
+
+    let sql = "INSERT INTO appointments (hospital_id, date, time) VALUES ($hospital_id, $date, $time)";
+    let params = {
+      $hospital_id : 1 ,
+      $date : (new Date().getTime()) ,
+      $time : 730
+    }
+    await app.storage.executeDatabase(sql, params, "hospital");
+
+  }
+
 
   respondTo(type) {
     if (type == 'email-appspace') {
@@ -27,11 +40,12 @@ class Hospital extends ModTemplate {
     return null;
   }
   renderEmail(app, data) {
-     let HospitalAppspace = require('./lib/email-appspace/hospital-appspace');
+     data.hospital = app.modules.returnModule("Hospital");;
      HospitalAppspace.render(app, data);
   }
 
   attachEventsEmail(app, data) {
+     data.hospital = app.modules.returnModule("Hospital");;
      HospitalAppspace.attachEvents(app, data);
   }
 
@@ -40,11 +54,7 @@ class Hospital extends ModTemplate {
 
 
   initialize(app) {
-    if (app.options.profile == undefined) {
-      this.profile = this.newProfile();
-    } else {
-      this.profile = app.options.profile;
-    }
+    super.initialize(app);
   }
 
 

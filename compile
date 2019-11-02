@@ -22,6 +22,8 @@ if [ "$1" == "nuke" ]; then
   echo ""
   echo ""
 
+  rm -f ./data/appstore.sq3
+  rm -f ./data/hospital.sq3
   rm -f ./data/records.sq3
   rm -f ./data/archive.sq3
   rm -f ./data/explorer.sq3
