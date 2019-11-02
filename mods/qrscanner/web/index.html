@@ -7,6 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="author" content="Stephen Peterkins">
 
+  <link rel="stylesheet" href="/saito/lib/font-awesome-5/css/all.css" type="text/css" media="screen" />
+
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="application-name" content="Saito">
@@ -14,11 +16,54 @@
   <meta name="theme-color" content="#FFFFFF">
   <meta name="msapplication-navbutton-color" content="#FFFFFF">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <title>QR Saito</title>
+  <link rel="stylesheet" href="/saito/style.css">
 </head>
 <style>
   html, body{
     margin: 0;
     padding: 0;
+    font-family: viseult-medium;
+  }
+  .opaque-black {
+    background: rgb(0,0,0,0.4);
+  }
+  #qr-hud {
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 4em auto;
+  }
+  #qr-hud-header {
+    color: white;
+    padding: 0 1em;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+  #qr-hud-body {
+    display: grid;
+    grid-template-rows: 25% auto 40%;
+  }
+  #qr-hud-mid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+  }
+  .qr-hud-mid-opacity {
+    opacity: 0.4;
+    background: black;
+  }
+  #qr-hud-target {
+    width: 18em;
+    height: 18em;
+    border: 2px solid red;
+    background-color: transparent;
+  }
+  #qr-hud-footer {
+    background: black;
   }
   .video-container {
     position: absolute;
@@ -32,6 +77,7 @@
     /* Make video to at least 100% wide and tall */
     min-width: 100%;
     min-height: 100%;
+
     /* Setting width & height to auto prevents the browser from stretching or squishing the video */
     width: auto;
     height: auto;
@@ -46,6 +92,41 @@
 
 <body>
   <!-- <button class="file-button">UPLOAD</button> -->
+  <div id="qr-hud">
+    <div class="opaque-black" id="qr-hud-header">
+      <h2>QR Code</h2>
+      <i id="navigator" class="header-icon icon-med fas fa-bars"></i>
+      <div class="header-dropdown" style="display: none">
+        <div class="header-dropdown-modules">
+          <ul>
+            <a href="/arcade"><li>Arcade</li></a>
+            <a href="/chat"><li>Chat</li></a>
+            <a href="/email"><li>Email</li></a>
+            <a href="/forum"><li>Forum</li></a>
+          </ul>
+        </div>
+        <div class="header-dropdown-settings">
+          <ul>
+            <li id="header-dropdown-reset-wallet">Reset Wallet</li>
+            <li id="header-dropdown-load-wallet">Load Wallet</li>
+            <li>Settings</li>
+            <a href="/qrscanner"><li>Scan QR</li></a>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div id="qr-hud-body">
+      <div class="opaque-black" id="qr-hud-top"></div>
+      <div id="qr-hud-mid">
+        <div class="opaque-black"></div>
+        <div id="qr-hud-target"></div>
+        <div class="opaque-black"></div>
+      </div>
+      <div class="opaque-black" id="qr-hud-bot"></div>
+    </div>
+    <!-- <div id="qr-hud-footer">
+    </div> -->
+  </div>
   <div class="video-container">
     <video playsinline autoplay></video>
   </div>

@@ -43,11 +43,11 @@ module.exports = ChatRoom = {
 
         console.log("NEW GROUP: ", this.group);
 
-        let renderDefaultHeaderAndFooter = (chat) => {
+        let renderDefaultHeaderAndFooter = (app) => {
             // header
             let header = document.querySelector('.header');
             header.classList.remove("chat-room-header");
-            Header.render(chat.app);
+            Header.render(app);
 
             // footer
             let footer = document.querySelector('.footer');
@@ -76,12 +76,12 @@ module.exports = ChatRoom = {
             this.scrollToBottom();
         }
 
-        // document.querySelector('#back-button')
-        //         .addEventListener('click', () => {
-        //             data.chat.active = "chat_list";
-        //             renderDefaultHeaderAndFooter(chat);
-        //             data.chat.main.render(app, data);
-        //         });
+        document.querySelector('#back-button')
+                .addEventListener('click', () => {
+                    data.chat.active = "chat_list";
+                    // renderDefaultHeaderAndFooter(chat);
+                    data.chat.main.render(app, data);
+                });
 
         document.querySelector('.chat-room-submit-button')
                 .addEventListener('click', () => {
