@@ -24,6 +24,7 @@ module.exports = {
     'email/email.js',
     'encrypt/encrypt.js',
     'hospital/hospital.js',
+    'gettokens/gettokens.js',
     'qrscanner/qrscanner.js',
     'registry/registry.js',
     'settings/settings.js',
