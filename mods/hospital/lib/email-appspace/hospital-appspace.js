@@ -1,5 +1,6 @@
 const HospitalAppspaceTemplate 	= require('./hospital-appspace.template.js');
-const HospitalAppointment 	= require('./hospital-appointment.js');
+const HospitalMakeAppointment 	= require('./hospital-make-appointment.js');
+const HospitalViewAppointment 	= require('./hospital-view-appointment.js');
 
 
 module.exports = HospitalAppspace = {
@@ -13,15 +14,16 @@ module.exports = HospitalAppspace = {
       document.getElementById('hospital-make-appointment-btn')
         .addEventListener('click', (e) => {
 
-	  HospitalAppointment.render(app, data);
-	  HospitalAppointment.attachEvents(app, data);
+	  HospitalMakeAppointment.render(app, data);
+	  HospitalMakeAppointment.attachEvents(app, data);
 
         });
 
       document.getElementById('hospital-view-appointments-btn')
         .addEventListener('click', (e) => {
 
-alert("Viewing your appointments...");
+	  HospitalViewAppointment.render(app, data);
+	  HospitalViewAppointment.attachEvents(app, data);
 
         });
 
