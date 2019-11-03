@@ -24,6 +24,9 @@ class QRScanner extends ModTemplate {
       }
     };
 
+    // WASM version
+    this.decoder = null;
+
     qrcode.callback = (data) => { this.read(data) };
 
     this.name = "QRScanner";
@@ -38,6 +41,11 @@ class QRScanner extends ModTemplate {
     this.canvas = document.getElementById('qr-canvas');
 
     this.canvas_context = this.canvas.getContext("2d");
+
+    //this.decoder = new Worker('/qrscanner/quirc_worker', {type: 'module'});
+    this.decoder = new Worker('/qrscanner/quirc_worker.js');
+
+    this.decoder.onmessage = this.onDecoderMessage;
 
     try {
       let stream = await navigator.mediaDevices.getUserMedia(this.constraints)
@@ -76,14 +84,39 @@ class QRScanner extends ModTemplate {
          });
   }
 
+  onDecoderMessage(msg) {
+    //console.log("on decode message");
+    //console.log(msg);
+    if (msg.data != 'done') {
+      var qrid = msg.data['payload_string'];
+      //let right_now = Date.now();
+      // if (qrid != QRReader.last_scanned_raw || QRReader.last_scanned_at < right_now - QRReader.debounce_timeout) {
+        // QRReader.active = false;
+        // QRReader.last_scanned_raw = qrid;
+        // QRReader.last_scanned_at = right_now;
+      alert(qrid);
+      // } else if (qrid == QRReader.last_scanned_raw) {
+      //   QRReader.last_scanned_at = right_now;
+      // }
+    }
+    setTimeout(() => { this.attemptQRDecode() }, 0);
+  }
+
+
   attemptQRDecode() {
     if (this.isStreamInit)  {
         this.canvas.width = this.video.videoWidth;
         this.canvas.height = this.video.videoHeight;
         this.canvas_context.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
 
+        var imgData = this.canvas_context.getImageData(0, 0, this.canvas.width, this.canvas.height);
+
+        if (imgData.data) {
+          this.decoder.postMessage(imgData);
+        }
+
         try {
-            qrcode.decode();
+            // qrcode.decode();
         } catch (err) {
             console.log(err);
             setTimeout(() => { this.attemptQRDecode() }, 500);
