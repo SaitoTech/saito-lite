@@ -1,5 +1,6 @@
-module.exports = HospitalProfileTemplate = () => {
+module.exports = HospitalMakeAppointmentTemplate = () => {
   return `
+  <link rel="stylesheet" href="/hospital/css/email-appspace.css">
 
   <h3>Available Appointments</h3>
 
