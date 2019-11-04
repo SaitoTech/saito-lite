@@ -1,6 +1,5 @@
 // Webpack uses this to work with directories
 const path = require('path');
-const WorkerPlugin = require('worker-plugin');
 
 // This is main configuration object.
 // Here you write different options and tell Webpack what to do
@@ -61,10 +60,6 @@ const WorkerPlugin = require('worker-plugin');
         ***REMOVED***
         ]
 ***REMOVED***,
-
-    plugins: [
-        new WorkerPlugin()
-    ],
 
 
     // Default mode for Webpack is production.
