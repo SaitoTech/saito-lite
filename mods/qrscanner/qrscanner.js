@@ -1,4 +1,4 @@
-const qrcode = require('./lib/scanner');
+// const qrcode = require('./lib/scanner');
 const ModTemplate = require('../../lib/templates/modtemplate');
 
 const HeaderDropdownTemplate = require('../../lib/ui/header/header-dropdown.template');
@@ -24,10 +24,13 @@ class QRScanner extends ModTemplate {
       }
     };
 
-    // WASM version
+    // quirc wasm version
     this.decoder = null;
+    this.last_scanned_raw = null;
+    this.last_scanned_at = null;
 
-    qrcode.callback = (data) => { this.read(data) };
+    // In milliseconds
+    this.debounce_timeout = 750;
 
     this.name = "QRScanner";
   }
@@ -41,14 +44,12 @@ class QRScanner extends ModTemplate {
     this.canvas = document.getElementById('qr-canvas');
 
     this.canvas_context = this.canvas.getContext("2d");
-
-    //this.decoder = new Worker('/qrscanner/quirc_worker', {type: 'module'});
     this.decoder = new Worker('/qrscanner/quirc_worker.js');
 
-    this.decoder.onmessage = this.onDecoderMessage;
+    this.decoder.onmessage = (msg) => { this.onDecoderMessage(msg) };
 
     try {
-      let stream = await navigator.mediaDevices.getUserMedia(this.constraints)
+      let stream = await navigator.mediaDevices.getUserMedia(this.constraints);
       this.handleSuccess(stream);
     } catch (err) {
       this.handleError(err);
@@ -84,27 +85,13 @@ class QRScanner extends ModTemplate {
          });
   }
 
-  onDecoderMessage(msg) {
-    //console.log("on decode message");
-    //console.log(msg);
-    if (msg.data != 'done') {
-      var qrid = msg.data['payload_string'];
-      //let right_now = Date.now();
-      // if (qrid != QRReader.last_scanned_raw || QRReader.last_scanned_at < right_now - QRReader.debounce_timeout) {
-        // QRReader.active = false;
-        // QRReader.last_scanned_raw = qrid;
-        // QRReader.last_scanned_at = right_now;
-      alert(qrid);
-      // } else if (qrid == QRReader.last_scanned_raw) {
-      //   QRReader.last_scanned_at = right_now;
-      // }
-    }
-    setTimeout(() => { this.attemptQRDecode() }, 0);
-  }
 
-
+  //
+  // main loop sending messages to quirc_worker to detect qrcodes on the page
+  //
   attemptQRDecode() {
     if (this.isStreamInit)  {
+      try {
         this.canvas.width = this.video.videoWidth;
         this.canvas.height = this.video.videoHeight;
         this.canvas_context.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
@@ -114,13 +101,48 @@ class QRScanner extends ModTemplate {
         if (imgData.data) {
           this.decoder.postMessage(imgData);
         }
+      } catch (err) {
+        if (err.name == 'NS_ERROR_NOT_AVAILABLE') setTimeout(() => { this.attemptQRDecode() }, 0);
+          console.log("Error");
+          console.log(err);
+      }
+    }
+  }
 
-        try {
-            // qrcode.decode();
-        } catch (err) {
-            console.log(err);
-            setTimeout(() => { this.attemptQRDecode() }, 500);
-        }
+  //
+  // worker passes back a message either containing decoded data, 
+  // or it attempts t
+  //
+  onDecoderMessage(msg) {
+    if (msg.data != 'done') {
+      var qrid = msg.data['payload_string'];
+      let right_now = Date.now();
+      if (qrid != this.last_scanned_raw || this.last_scanned_at < right_now - this.debounce_timeout) {
+        this.last_scanned_raw = qrid;
+        this.last_scanned_at = right_now;
+
+        this.handleDecodedMessage(qrid);
+      } else if (qrid == this.last_scanned_raw) {
+        this.last_scanned_at = right_now;
+      }
+    }
+    setTimeout(() => { this.attemptQRDecode() }, 0);
+  }
+
+  //
+  // The default behavior of just a publickey is to created initiate a keyexchange.
+  // Else, the message is broadcast for other modules to utilize
+  //
+  handleDecodedMessage(msg) {
+    if (this.app.crypto.isPublicKey(msg)) {
+      let encrypt_mod = this.app.modules.returnModule('Encrypt');
+      encrypt_mod.initiate_key_exchange(msg);
+
+      // need to add chat while this is happening
+      // window.location.assign('/chat');
+      alert(`Initiating Key Exchange with ${msg}`);
+    } else {
+      this.sendEvent('qrcode', a);
     }
   }
 
@@ -129,7 +151,7 @@ class QRScanner extends ModTemplate {
     reader.onload = ((file) => {
          return (e) => {
             this.canvas_context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            qrcode.decode(e.target.result);
+            // port to new quirc system
          };
     })(f);
     reader.readAsDataURL(f);
@@ -148,22 +170,9 @@ class QRScanner extends ModTemplate {
   receiveEvent(type, data) {
     if (type === "encrypt-key-exchange-confirm") {
         if (document.getElementById('qr-canvas')) {
-          alert('sucess');
           window.location.assign('/chat');
         }
     }
-  }
-
-  // default read value that we provide if a callback isn't declared in initialize
-  read(a) {
-    if (this.app.crypto.isPublicKey(a)) {
-      let encrypt_mod = this.app.modules.returnModule('Encrypt');
-      encrypt_mod.initiate_key_exchange(a);
-      alert(`Initiating Key Exchange with ${a}`);
-    } else {
-      this.sendEvent('qrcode', a);
-    }
-    setTimeout(() => { this.attemptQRDecode() }, 500);
   }
 }
 
