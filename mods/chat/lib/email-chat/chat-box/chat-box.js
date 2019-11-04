@@ -44,7 +44,7 @@ module.exports = ChatBox = {
 
       let toggleBoxHeader = (e) => {
         let chat_box = document.getElementById(`chat-box-${group_id}`);
-        chat_box.style.height = chat_box.style.height == '3em' ? '38em' : '3em';
+        chat_box.classList.toggle('chat-box-hide');
       };
 
       let chat_box_header = document.getElementById(`chat-box-header-${group_id}`);

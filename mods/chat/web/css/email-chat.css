@@ -110,6 +110,7 @@
 
 .chat-box-hide {
   height: 3em;
+  align-self: flex-end;
 }
 
 .chat-box-header {
@@ -145,7 +146,7 @@
 .chat-box-input {
   position: fixed;
   bottom: 0%;
-  width: 100%;
+  width: 32em;
   height: 3em;
   margin-left: 0px;
   padding: 4px;
