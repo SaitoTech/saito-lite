@@ -24,12 +24,27 @@ body {
 
 
 
+.arcade-game-invitation {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 2fr 2fr 1fr;
+  border: 1px solid grey;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 14px;
+  padding-right: 14px;
+  margin-top: 10px;
+}
+
+
 
 
 
 .game {
   min-width: 150px;
   position: relative;
+  list-style: none;
+  cursor: pointer;
 }
 
 .game-image {
