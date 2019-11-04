@@ -4,10 +4,26 @@
 .hospital-splash-image {
     max-width: 100%;
 ***REMOVED***
-.hospital-splash-buttons-container {
 
+.hospital {
+    float: left;
+    display: block;
+    border: 1px solid transparent;
+    background-color: white;
+    outline: none;
+    padding: 1em 0;
 ***REMOVED***
-.hospital-button {
 
+.appointment-time-select {
+    float: left;
+    display: block;
+    border: 1px solid transparent;
+    background-color: white;
+    outline: none;
+    padding: 1em 0;
+    border: 1px solid #444;
+    padding: 5px;
+    font-size: 1em;
+    margin-top: 20px;
 ***REMOVED***
 

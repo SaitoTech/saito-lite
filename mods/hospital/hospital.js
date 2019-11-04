@@ -9,6 +9,7 @@ class Hospital extends ModTemplate {
 
     this.app            = app;
     this.name           = "Hospital";
+    this.db_tables.push("hospitals JOIN appointments");
 
     return this;
   ***REMOVED***
@@ -26,7 +27,50 @@ class Hospital extends ModTemplate {
 ***REMOVED***
     await app.storage.executeDatabase(sql, params, "hospital");
 
+    params = {
+      $hospital_id : 1 ,
+      $date : 413131214 ,
+      $time : 1130
+***REMOVED***
+    await app.storage.executeDatabase(sql, params, "hospital");
+
+    params = {
+      $hospital_id : 1 ,
+      $date : (new Date().getTime()) ,
+      $time : 1430
+***REMOVED***
+    await app.storage.executeDatabase(sql, params, "hospital");
+
+    params = {
+      $hospital_id : 2 ,
+      $date : (new Date().getTime()) ,
+      $time : 1345
+***REMOVED***
+    await app.storage.executeDatabase(sql, params, "hospital");
+
+    sql = "INSERT INTO hospitals (name, address, phone, admin) VALUES ($name, $address, $phone, $admin)";
+    params = {
+      $name 	: "Saint Mary of the Sacred Heart" ,
+      $address	: "74 Mount Crescent Road, Montreal Canada" ,
+      $phone    : 485038955234 ,
+      $admin	: "henry@saito" ,
+***REMOVED***
+    await app.storage.executeDatabase(sql, params, "hospital");
+
+    params = {
+      $name 	: "University Children's Hospital" ,
+      $address	: "575 Avenue Road, Toronto Canada" ,
+      $phone    : 41605820394 ,
+      $admin	: "the_doctor@saito" ,
+***REMOVED***
+    await app.storage.executeDatabase(sql, params, "hospital");
+
   ***REMOVED***
+
+
+
+
+
 
 
   respondTo(type) {
