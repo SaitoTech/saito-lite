@@ -34,7 +34,7 @@ module.exports = ChatList = {
                     if (document.getElementById(`chat-box-${group_id***REMOVED***`)) { return; ***REMOVED***
 
                     let selected_group = data.chat.groups.filter(group => group.group_id == group_id);
-                    data.chat.active = selected_group[0];
+                    data.chat.active_groups.push(selected_group[0]);
 
                     ChatBox.render(app, data);
                     ChatBox.attachEvents(app, data);
