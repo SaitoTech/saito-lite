@@ -104,14 +104,24 @@ class AppStore extends ModTemplate {
 	}
 	this.executeDatabase(sql, params, "appstore");
 
-console.log(sql);
-console.log(params);
-
       }
-
     }
-
   }
+
+
+
+
+  //
+  // override webserver to permit module-hosting
+  //
+  webServer(app, expressapp, express) {
+
+    let fs = app.storage.returnFileSystem();
+    if (fs != null) {
+      expressapp.use('/'+encodeURI(this.name), express.static(__dirname + "/web"));
+    }
+  }
+
 }
 
 
