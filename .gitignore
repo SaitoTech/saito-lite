@@ -29,6 +29,7 @@ lib/modules/mods/*
 
 web/saito/saito.js
 web/saito/saito.js.map
+web/saito/*.wasm
 
 
 mods/testing
