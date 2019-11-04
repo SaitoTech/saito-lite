@@ -41,6 +41,23 @@ const path = require('path');
                 ***REMOVED***
             ***REMOVED***
         ***REMOVED***,
+    ***REMOVED*** Emscripten JS files define a global. With `exports-loader` we can
+    ***REMOVED*** load these files correctly (provided the global’s name is the same
+    ***REMOVED*** as the file name).
+            {
+                test: /quirc\.js$/,
+                loader: "exports-loader"
+        ***REMOVED***,
+    ***REMOVED*** wasm files should not be processed but just be emitted and we want
+    ***REMOVED*** to have their public URL.
+            {
+                test: /quirc\.wasm$/,
+                type: "javascript/auto",
+                loader: "file-loader",
+                options: {
+                    publicPath: "dist/"
+            ***REMOVED***
+        ***REMOVED***
         ]
 ***REMOVED***,
 

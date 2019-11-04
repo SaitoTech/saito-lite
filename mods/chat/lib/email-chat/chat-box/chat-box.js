@@ -50,6 +50,9 @@ module.exports = ChatBox = {
       document.getElementById('chat-box-close')
               .addEventListener('click', (e) => {
                 e.stopPropagation();
+                let group_id = e.currentTarget.id;
+                data.chat.active = data.chat.active.filter(group => group.group_id != group_id);
+
                 let chat_manager = document.querySelector('.chat-manager');
                 chat_manager.removeChild(e.path[2]);
           ***REMOVED***);
