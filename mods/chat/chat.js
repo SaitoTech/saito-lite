@@ -74,6 +74,7 @@ class Chat extends ModTemplate {
 
     data.chat = {***REMOVED***;
     data.chat.groups = chat_self.groups;
+    data.chat.active_groups = [];
 
     EmailChat.initialize(app, data);
     EmailChat.render(app, data);

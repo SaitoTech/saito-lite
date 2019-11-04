@@ -136,6 +136,8 @@ class QRScanner extends ModTemplate {
   handleDecodedMessage(msg) {
     if (this.app.crypto.isPublicKey(msg)) {
       let encrypt_mod = this.app.modules.returnModule('Encrypt');
+
+      this.initializing_key = true;
       encrypt_mod.initiate_key_exchange(msg);
 
       // need to add chat while this is happening
@@ -169,7 +171,7 @@ class QRScanner extends ModTemplate {
 
   receiveEvent(type, data) {
     if (type === "encrypt-key-exchange-confirm") {
-        if (document.getElementById('qr-canvas')) {
+        if (document.getElementById('qr-canvas') && this.initializing_key) {
           window.location.assign('/chat');
     ***REMOVED***
 ***REMOVED***
