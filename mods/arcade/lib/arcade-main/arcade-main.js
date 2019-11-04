@@ -35,8 +35,6 @@ module.exports = ArcadeMain = {
 
   attachEvents(app, data) {
 
-console.log("asd asdlkjasd ueroiuqwer");
-
     //
     // create game
     //
@@ -67,12 +65,8 @@ alert("creating game!");
 	    return;
 	  ***REMOVED***
     ***REMOVED***
-
   ***REMOVED***);
 ***REMOVED***);
-
-console.log("EVENTS ATTACHED TO MAIN!");
-
   ***REMOVED***
 
 ***REMOVED***

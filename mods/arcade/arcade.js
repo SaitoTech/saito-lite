@@ -77,8 +77,10 @@ class Arcade extends ModTemplate {
     let data = {***REMOVED***;
     data.arcade = this;
 
+/*
     let tx = this.createOpenTransaction({ name : "Wordblocks" , options : {***REMOVED*** , players_needed : 2 ***REMOVED***);
     this.games.push(tx);
+*/
 
     this.render(app, data);
 
@@ -223,6 +225,7 @@ class Arcade extends ModTemplate {
   createOpenTransaction(gamedata) {
 
     let ts = new Date().getTime();
+    let accept_sig = this.app.crypto.signMessage(("create_game_"+ts), this.app.wallet.returnPrivateKey());
 
     let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
         tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey(), 0.0));
@@ -232,6 +235,7 @@ class Arcade extends ModTemplate {
         tx.transaction.msg.game     		= gamedata.name;
         tx.transaction.msg.options  		= gamedata.options;
         tx.transaction.msg.players_needed 	= gamedata.players_needed;
+        tx.transaction.msg.accept_sig 		= accept_sig;
         tx.transaction.msg.players  		= [];
         tx.transaction.msg.players.push(this.app.wallet.returnPublicKey());
     tx = this.app.wallet.signTransaction(tx);
@@ -266,10 +270,7 @@ class Arcade extends ModTemplate {
     data = {***REMOVED***;
     data.arcade = this;
 
-    ArcadeLoader.render(app, data);
-    ArcadeLoader.render(app, data);
-
-    console.log("RECEIVED INVITE");
+    alert("RECEIVED INVITE");
 
   ***REMOVED***
   sendInviteRequest(app, data, opentx) {
@@ -287,6 +288,10 @@ class Arcade extends ModTemplate {
         tx.transaction.msg.request  	= "invite";
 	tx.transaction.msg.game_id	= gametx.transaction.sig;
         tx.transaction.msg.options  	= txmsg.options;
+        tx.transaction.msg.accept_sig   = "";
+	if (gametx.transaction.msg.accept_sig != "") { 
+          tx.transaction.msg.accept_sig   = gametx.transaction.msg.accept_sig;
+    ***REMOVED***
     tx = this.app.wallet.signTransaction(tx);
 
     return tx;
@@ -301,19 +306,25 @@ class Arcade extends ModTemplate {
 
   async receiveAcceptRequest(blk, tx, conf, app) {
 
-        let publickeys = tx.transaction.to.map(slip => slip.add);
-        let removeDuplicates = (names) => names.filter((v,i) => names.indexOf(v) === i)
-        let unique_keys = removeDuplicates(publickeys);
+console.log("\n\n\nReceive Accept Request");
+
+    ArcadeLoader.render(app, data);
+    ArcadeLoader.render(app, data);
+
+    let publickeys = tx.transaction.to.map(slip => slip.add);
+    let removeDuplicates = (names) => names.filter((v,i) => names.indexOf(v) === i)
+    let unique_keys = removeDuplicates(publickeys);
  
-        let sql = "UPDATE games SET state = 'expired' WHERE state = $state AND player IN ($player1, $player2, $player3, $player4)";
-        let params = {
-          $state : 'open',
-          $player1 : unique_keys[0] || '',
-          $player2 : unique_keys[1] || '',
-          $player3 : unique_keys[2] || '',
-          $player4 : unique_keys[3] || '',
-    ***REMOVED***
-        await this.app.storage.executeDatabase(sql, params, "arcade");
+    let sql = "UPDATE games SET state = 'expired' WHERE state = $state AND player IN ($player1, $player2, $player3, $player4)";
+    let params = {
+      $state : 'open',
+      $player1 : unique_keys[0] || '',
+      $player2 : unique_keys[1] || '',
+      $player3 : unique_keys[2] || '',
+      $player4 : unique_keys[3] || '',
+***REMOVED***
+    await this.app.storage.executeDatabase(sql, params, "arcade");
+
   ***REMOVED***
   sendAcceptRequest(app, data) {
 
