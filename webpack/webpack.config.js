@@ -41,6 +41,23 @@ module.exports = {
                     }
                 }
             },
+            // Emscripten JS files define a global. With `exports-loader` we can
+            // load these files correctly (provided the global’s name is the same
+            // as the file name).
+            {
+                test: /quirc\.js$/,
+                loader: "exports-loader"
+            },
+            // wasm files should not be processed but just be emitted and we want
+            // to have their public URL.
+            {
+                test: /quirc\.wasm$/,
+                type: "javascript/auto",
+                loader: "file-loader",
+                options: {
+                    publicPath: "dist/"
+                }
+            }
         ]
     },
 
