@@ -6,7 +6,7 @@ module.exports = {
     'chat/chat.js',
     'email/email.js',
     'encrypt/encrypt.js',
-//    'explorer/explorer.js',
+    'explorer/explorer.js',
     'faucet/faucet.js',
     'hospital/hospital.js',
     'qrscanner/qrscanner.js',
