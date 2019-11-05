@@ -40,7 +40,6 @@ module.exports = ArcadeMain = {
     //
     Array.from(document.getElementsByClassName('game')).forEach(game => {
       game.addEventListener('click', (e) => {
-alert("creating game!");
 	data.arcade.sendOpenRequest(app, data, { name : e.currentTarget.id , options : {***REMOVED*** , players_needed : 2 ***REMOVED*** );
   ***REMOVED***);
 ***REMOVED***);
@@ -58,7 +57,6 @@ alert("creating game!");
 	  if (data.arcade.games[i].transaction.sig == game_id) {
 	    data.arcade.sendInviteRequest(app, data, data.arcade.games[i]);
 
-	    alert("joining game!");
 	    ArcadeLoader.render(app, data);
 	    ArcadeLoader.attachEvents(app, data);
 
