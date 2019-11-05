@@ -5,19 +5,9 @@ body {
   margin: 0px;
 }
 
-.connection_monitor {
-  position: fixed;
-  display: none;
-  min-height: 30px;
-  z-index: 90000;
-  background: #ef6666;
-  font-size: 1.8em;
-  padding: 15px;
-}
-
 .gameboard {
   position: absolute;
-  background-image: url("images/gameboard.jpg");
+  background-image: url("img/gameboard.jpg");
   background-size: cover;
   width: 1504px;
   height: 1000px;
@@ -29,15 +19,12 @@ body {
 # height: 300px;
 # width: auto;
 # margin-top: 50px;
-
     width: 1000px;
     margin-left: auto;
     margin-right: auto;
     clear: both;
     padding-left: 600px;
     padding-top:100px;
-}
-.menu_option {
 }
 
 .card {
@@ -50,7 +37,6 @@ body {
  margin-left: auto;
  margin-right: auto;
  width: 1000px;
-
 }
 
 %.card:nth-child(1n+2) {

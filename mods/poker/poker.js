@@ -2,7 +2,6 @@ var saito = require('../../lib/saito/saito');
 var GameTemplate = require('../../lib/templates/gametemplate');
 
 
-
 //////////////////
 // CONSTRUCTOR  //
 //////////////////
@@ -28,6 +27,10 @@ class Poker extends GameTemplate {
 
   initializeGame(game_id) {
 
+    //
+    // game engine needs this to start
+    //
+    this.game.queue.push("READY");
 
   }
 
