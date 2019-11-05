@@ -122,6 +122,7 @@ class Arcade extends ModTemplate {
       // acceptances
       if (txmsg.request == "accept") {
         arcade_self.receiveAcceptRequest(blk, tx, conf, app);
+	arcade_self.launchGame(txmsg.game_id);
       }
 
       // game over
@@ -132,6 +133,42 @@ class Arcade extends ModTemplate {
   }
 
 
+
+  launchGame(game_id) {
+
+    if (this.browser_active == 0) { return; }
+
+    let arcade_self = this;
+
+    arcade_self.is_initializing = true;
+    arcade_self.initialization_timer = setInterval(() => {
+
+      let game_idx = -1;
+      if (arcade_self.app.options.games != undefined) {
+        for (let i = 0; i < arcade_self.app.options.games.length; i++) {
+          if (arcade_self.app.options.games[i].id == game_id) {
+              game_idx = i;
+          }
+        }
+      }
+
+      if (game_idx == -1) { return; }
+
+      if (arcade_self.app.options.games[game_idx].initializing == 0) {
+
+        clearInterval(arcade_self.initialization_timer);
+
+	let data = {};
+	    data.arcade   = arcade_self;
+	    data.game_id  = game_id;
+
+	ArcadeLoader.render(arcade_self.app, data);
+	ArcadeLoader.attachEvents(arcade_self.app, data);
+
+      }
+    }, 1000);
+
+  }
 
 
 
@@ -311,10 +348,10 @@ console.log("msg created for verify: " + ("create_game_"+ts));
 
   async receiveAcceptRequest(blk, tx, conf, app) {
 
-console.log("\n\n\nReceive Accept Request");
-
-    ArcadeLoader.render(app, data);
-    ArcadeLoader.render(app, data);
+    if (this.browser_active == 1) {
+      ArcadeLoader.render(app, data);
+      ArcadeLoader.attachEvents(app, data);
+    }
 
     let publickeys = tx.transaction.to.map(slip => slip.add);
     let removeDuplicates = (names) => names.filter((v,i) => names.indexOf(v) === i)
@@ -382,9 +419,6 @@ console.log("\n\n\nReceive Accept Request");
     tx = this.app.wallet.signTransaction(tx);
     this.app.network.propagateTransaction(tx);
 
-    if (this.browser_active) {
-alert("We have sent a request to invite a game");
-    }
   }
 
 
