@@ -56,11 +56,12 @@ module.exports = ChatBox = {
               .addEventListener('click', (e) => {
                 e.stopPropagation();
 
-                let group_id = e.currentTarget.id;
+                let group_id = e.currentTarget.id.split('-')[3];
                 data.chat.active_groups = data.chat.active_groups.filter(group => group.group_id != group_id);
 
                 let chat_manager = document.querySelector('.chat-manager');
-                chat_manager.removeChild(e.path[2]);
+                let chat_box_to_delete = document.getElementById(`chat-box-${group_id}`);
+                chat_manager.removeChild(chat_box_to_delete);
               });
 
     },
