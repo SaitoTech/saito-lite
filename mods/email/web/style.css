@@ -64,8 +64,13 @@ body {
   text-transform: capitalize;
 ***REMOVED***
 
+.email-main {
+  display: grid;
+  grid-template-rows: 3em calc(100vh - 9.1em);
+***REMOVED***
+
 .email-body {
-  padding: 1em;
+  /* padding: 1em; */
 ***REMOVED***
 
 .email-compose {
@@ -75,7 +80,8 @@ body {
 ***REMOVED***
 
 .email-list {
-  height: 82vh;
+  /* height: calc(100vh - 9.1em); */
+  height: 100%;
   display: flex;
   flex-direction: column;
   overflow: auto;
