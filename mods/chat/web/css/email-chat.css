@@ -62,15 +62,47 @@
 
 
 
+/** add contact module **/
+
+#add-contact-modal-content {
+  width: 30em;
+***REMOVED***
+
+#add-contact-add-button {
+  margin: 0;
+  /* margin-left: 2em; */
+***REMOVED***
+
+#qr-scanner-icon {
+  text-decoration: none;
+  margin-left: 1.5em;
+***REMOVED***
+
+#qr-code-icon {
+  color: var(--saito-cyber-black-wash)
+***REMOVED***
+
+#qr-code-icon:hover {
+  color: black;
+***REMOVED***
 
 
+/** **/
 
 .email-chat {
   margin-top: 0.5em;
   width:100%;
   height:300px;
-  border: 1px solid #ddd;
+  /* border: 1px solid #ddd; */
   font-size: 0.8em;
+***REMOVED***
+
+.chat-list {
+  border: 1px solid #ddd;
+***REMOVED***
+
+#email-chat-add-contact {
+  cursor: pointer;
 ***REMOVED***
 
 .email-chat .chat-row {
@@ -85,7 +117,6 @@
   bottom: 0;
   right: 0;
 ***REMOVED***
-
 
 .chat-box {
   display: grid;

@@ -19,19 +19,43 @@ module.exports = EmailChat = {
       email_chat.innerHTML = EmailChatTemplate();
 
       ChatManager.render(app, data);
-      if (data.chat.groups.length == 0) { email_chat.style.display = "none" ***REMOVED***;
+      // if (data.chat.groups.length == 0) { email_chat.style.display = "none" ***REMOVED***;
       ChatList.render(app, data);
 
 ***REMOVED***,
 
     attachEvents(app, data) {
+      var modal = document.getElementById('add-contact-modal');
+
+      document.getElementById('email-chat-add-contact')
+              .onclick = () => modal.style.display = "block";
+
+      document.getElementsByClassName("close")[0]
+              .onclick = () => modal.style.display = "none";
+
+      document.getElementById('add-contact-add-button')
+              .onclick = () => {
+                let publickey = document.getElementById('add-contact-input').value;
+                let encrypt_mod = app.modules.returnModule('Encrypt');
+                encrypt_mod.initiate_key_exchange(publickey);
+
+        ***REMOVED***
+        ***REMOVED*** show success modal
+        ***REMOVED***
+
+
+        ***REMOVED*** then hide it
+        ***REMOVED***
+                modal.style.display = "none";
+
+          ***REMOVED***;
+
       ChatList.attachEvents(app, data);
-      // ChatBox.attachEvents(app, data);
 ***REMOVED***,
 
     addMessageToDOM(app, data, msg) {
       // if (data.chat.active.group_id == msg.group_id) {
-        ChatBox.addMessageToDOM(msg, msg.sig, msg.type);
+      ChatBox.addMessageToDOM(msg, msg.sig, msg.type);
       // ***REMOVED***
 ***REMOVED***,
 
