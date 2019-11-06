@@ -109,7 +109,9 @@ button, .button, .file-label {
     color: var(--saito-red);
     letter-spacing: 1px;
     transition: transform .25s;
+    margin: 0.2em 0;
 } 
+
 button:active, .button:active {
     transform: scale(.96);
   }
