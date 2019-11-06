@@ -97,7 +97,7 @@ hr {
 
 /* Forms and Inputs */
 
-button, .button {
+button, .button, .file-label {
     border-radius: 5px;
     cursor: pointer;
     font-size: 1em;
@@ -252,8 +252,18 @@ input[type=text], input[type=number], input[type=password], input[type=date] {
     border: none;
     padding: 10px 5px;
     border-radius: 0px;
-    font-size: 1em;
+    font-size: 1.2em;
     border-bottom: 1px solid var(--saito-cyber-black-wash);
+}
+
+input[type=file] {
+    border: none;
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
 }
 
 select {
@@ -263,6 +273,7 @@ select {
     background-color: white;
     outline: none;
     padding: 1em 0;
+    font-size: 1.2em;
 }
 
 textarea {
@@ -273,9 +284,60 @@ textarea {
     margin: 0 0 1em 0;
 }
 
-textarea:focus, input:focus{
+input:focus{
     outline: none;
     border-bottom: 1px solid var(--saito-red);
+}
+
+input::hidden {
+    border: none;
+}
+
+label.treated {
+    color: var(--saito-red);
+}
+
+#alert-shim {
+    z-index: 2000;
+    background-color: #0008;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+}
+
+#alert-box {
+    width: 50%;
+    transition: all 333ms ease-in-out;
+    background: rgb(234, 234, 239);
+    margin: auto;
+    position: relative;
+    top: -500px;
+    border: 1px solid var(--saito-red);
+    border-radius: 0 0 5px 5px;
+    padding: 1em 1em 3.5em 1em;
+}
+
+#alert-buttons {
+    float: right;
+}
+
+#alert-box button {
+    margin: 0;
+}
+
+#alert-box p {
+        font-family: 'visuelt-light';
+        font-size: 1.4em;
+        text-align: center;
+        align-self: center;
+        font-weight: bold;
+        display: block;
+        margin: 1em 0;
+}
+
+.top-0 {
+    top: 0 !important;
 }
 
 /* Page Sections */
