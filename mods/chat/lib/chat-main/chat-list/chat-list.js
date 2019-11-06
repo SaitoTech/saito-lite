@@ -2,6 +2,8 @@ const ChatListTemplate = require('./chat-list.template');
 const ChatListRowTemplate = require('./chat-list-row.template');
 
 const ChatRoom = require('../chat-room/chat-room');
+const ChatNavTemplate = require('../chat-nav/chat-nav.template');
+
 // const ChatAdd = require('../chat-add/chatadd');
 
 module.exports = ChatList = {
@@ -10,6 +12,7 @@ module.exports = ChatList = {
 
         if (!chat_main) { return; ***REMOVED***
         chat_main.innerHTML = ChatListTemplate();
+        chat_main.append(elParser(ChatNavTemplate()));
 
 ***REMOVED*** Object.values(data.chat.groups).forEach((group) => {
 ***REMOVED***     document.querySelector('.chat').innerHTML
@@ -27,14 +30,16 @@ module.exports = ChatList = {
                 timestamp = last_message.timestamp;
         ***REMOVED***
 
-            let msg = {
+            let row = {
                 name: group.group_name,
                 group_id: group.group_id,
                 message,
-                timestamp
+                timestamp,
+                is_encrypted: group.is_encrypted
         ***REMOVED***
+
             document.querySelector('.chat').innerHTML
-                += ChatListRowTemplate(msg);
+                += ChatListRowTemplate(row);
     ***REMOVED***);
 
 ***REMOVED*** this.bindDOMFunctionstoModule(mod);
@@ -52,8 +57,15 @@ module.exports = ChatList = {
         );
 
 ***REMOVED*** add click event to create-button
-***REMOVED*** document.querySelector('#chat.create-button')
-***REMOVED***         .addEventListener('click', ChatAdd.render);
+        document.querySelector('#chat.create-button')
+                .onclick = () => {
+                    this.toggleChatNav();
+            ***REMOVED***;
+***REMOVED***,
+
+    toggleChatNav() {
+        let chat_nav = document.getElementById('chat-nav');
+        chat_nav.style.display = chat_nav.style.display == 'none' ? 'flex' : 'none';
 ***REMOVED***,
 
     // persepctive of Module

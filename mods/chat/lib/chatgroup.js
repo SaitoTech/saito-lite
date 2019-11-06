@@ -18,6 +18,8 @@ class ChatGroup extends ModTemplate {
 
     this.unread_messages = 0;
 
+    this.is_encrypted = false;
+
     this.messages = [];
 
   ***REMOVED***

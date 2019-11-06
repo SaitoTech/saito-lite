@@ -3,6 +3,7 @@ const ModTemplate = require('../../lib/templates/modtemplate');
 
 const HeaderDropdownTemplate = require('../../lib/ui/header/header-dropdown.template');
 const QRScannerTemplate = require('./qrscanner.template');
+const AddContact = require('./lib/add-contact');
 
 class QRScanner extends ModTemplate {
   constructor(app) {
@@ -79,10 +80,10 @@ class QRScanner extends ModTemplate {
     //  ***REMOVED***);
 
     document.querySelector('#navigator')
-         .addEventListener('click', (e) => {
-             let header_dropdown = document.querySelector('.header-dropdown');
-             header_dropdown.style.display = header_dropdown.style.display == "none" ? "block" : "none";
-     ***REMOVED***);
+        .addEventListener('click', (e) => {
+          let header_dropdown = document.querySelector('.header-dropdown');
+          header_dropdown.style.display = header_dropdown.style.display == "none" ? "block" : "none";
+    ***REMOVED***);
   ***REMOVED***
 
 
@@ -135,14 +136,19 @@ class QRScanner extends ModTemplate {
   //
   handleDecodedMessage(msg) {
     if (this.app.crypto.isPublicKey(msg)) {
-      let encrypt_mod = this.app.modules.returnModule('Encrypt');
+      // let encrypt_mod = this.app.modules.returnModule('Encrypt');
 
-      this.initializing_key = true;
-      encrypt_mod.initiate_key_exchange(msg);
+      // this.initializing_key = true;
+      // encrypt_mod.initiate_key_exchange(msg);
 
-      // need to add chat while this is happening
-      // window.location.assign('/chat');
-      alert(`Initiating Key Exchange with ${msg***REMOVED***`);
+      // // need to add chat while this is happening
+      // // window.location.assign('/chat');
+      // alert(`Initiating Key Exchange with ${msg***REMOVED***`);
+
+      this.decoder.terminate();
+
+      AddContact.render(this.app, {publickey: msg***REMOVED***);
+      AddContact.attachEvents(this.app, {publickey: msg***REMOVED***);
 ***REMOVED*** else {
       this.sendEvent('qrcode', a);
 ***REMOVED***
