@@ -97,7 +97,7 @@ hr {
 
 /* Forms and Inputs */
 
-button, .button {
+button, .button, .file-label {
     border-radius: 5px;
     cursor: pointer;
     font-size: 1em;
@@ -109,7 +109,9 @@ button, .button {
     color: var(--saito-red);
     letter-spacing: 1px;
     transition: transform .25s;
+    margin: 0.2em 0;
 ***REMOVED*** 
+
 button:active, .button:active {
     transform: scale(.96);
   ***REMOVED***
@@ -174,7 +176,7 @@ fieldset {
 .grid-4 {
     display: grid;
     grid-gap: 1em;
-    grid-template-columns: 5em 1fr 5em 1fr;
+    grid-template-columns: auto 1fr auto 1fr;
     margin: 0 0 1em 0;
 ***REMOVED***
 
@@ -189,14 +191,14 @@ fieldset {
 .grid-2 {
     display: grid;
     grid-gap: 1em;
-    grid-template-columns: 5em 1fr;
+    grid-template-columns: auto 1fr;
     margin: 0 0 1em 0;
 ***REMOVED***
 
 .grid-1-2-columns {
     display: grid;
     grid-gap: 1em;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: auto 1fr;
     margin: 0 0 1em 0;
 ***REMOVED***
 
@@ -252,8 +254,18 @@ input[type=text], input[type=number], input[type=password], input[type=date] {
     border: none;
     padding: 10px 5px;
     border-radius: 0px;
-    font-size: 1em;
+    font-size: 1.2em;
     border-bottom: 1px solid var(--saito-cyber-black-wash);
+***REMOVED***
+
+input[type=file] {
+    border: none;
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
 ***REMOVED***
 
 select {
@@ -263,6 +275,7 @@ select {
     background-color: white;
     outline: none;
     padding: 1em 0;
+    font-size: 1.2em;
 ***REMOVED***
 
 textarea {
@@ -273,9 +286,64 @@ textarea {
     margin: 0 0 1em 0;
 ***REMOVED***
 
-textarea:focus, input:focus{
+textarea:focus {
+    outline: none;
+***REMOVED***
+
+input:focus{
     outline: none;
     border-bottom: 1px solid var(--saito-red);
+***REMOVED***
+
+input::hidden {
+    border: none;
+***REMOVED***
+
+label.treated {
+    color: var(--saito-red);
+***REMOVED***
+
+#alert-shim {
+    z-index: 2000;
+    background-color: #0008;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+***REMOVED***
+
+#alert-box {
+    width: 50%;
+    transition: all 333ms ease-in-out;
+    background: rgb(234, 234, 239);
+    margin: auto;
+    position: relative;
+    top: -500px;
+    border: 1px solid var(--saito-red);
+    border-radius: 0 0 5px 5px;
+    padding: 1em 1em 3.5em 1em;
+***REMOVED***
+
+#alert-buttons {
+    float: right;
+***REMOVED***
+
+#alert-box button {
+    margin: 0;
+***REMOVED***
+
+#alert-box p {
+        font-family: 'visuelt-light';
+        font-size: 1.4em;
+        text-align: center;
+        align-self: center;
+        font-weight: bold;
+        display: block;
+        margin: 1em 0;
+***REMOVED***
+
+.top-0 {
+    top: 0 !important;
 ***REMOVED***
 
 /* Page Sections */
