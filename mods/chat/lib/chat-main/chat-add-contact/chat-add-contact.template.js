@@ -1,6 +1,5 @@
-module.exports = AddContactTemplate = ({ publickey ***REMOVED***) => {
+module.exports = ChatAddContactTemplate = () => {
   return `
-    <div class="header"></div>
     <div
       style="
         display: grid;
@@ -8,14 +7,17 @@ module.exports = AddContactTemplate = ({ publickey ***REMOVED***) => {
         justify-items: center;
         align-items: center;
         padding: 1em;
-        margin-top: 5em;
+        height: 20vh;
       ">
       <div style="display:grid; grid-template-columns: 5.2em auto 5.2e; width:100%">
         <i id="back-button" class="icon-med fas fa-arrow-left"></i>
         <h1 style="justify-self: center">Add Contact</h1>
       </div>
-      <input id="add-contact-publickey" type="text" placeholder="Publickey" value="${publickey***REMOVED***">
-      <button style="margin: 0; padding: 1em; width: 100%;" id="add-contact-add-button">ADD</button>
+      <input id="add-contact-publickey" type="text" placeholder="Publickey">
+      <button style="margin: 0; padding: 1em; width: 100%;" id="chat-add-contact-button">ADD</button>
     </div>
+    <button id="chat-add" class="create-button" onclick="location.href = '/qrscanner'">
+      <i class="icon-med fas fa-qrcode"></i>
+    </button>
   `;
-***REMOVED***;
+***REMOVED***

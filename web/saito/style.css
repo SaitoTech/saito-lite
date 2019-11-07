@@ -469,12 +469,14 @@ label.treated {
     color: white;
     border-radius: 100px;
     position: fixed;
-    /* bottom: 10vh;
-    right: 0.8em; */
-    right: 0;
-    bottom: 0;
+    right: 1em;
+    bottom: 1em;
     width: 3.2em;
     height: 3.2em;
+***REMOVED***
+
+.create-button:focus {
+    outline: 0;
 ***REMOVED***
 
 .wallet-container {
