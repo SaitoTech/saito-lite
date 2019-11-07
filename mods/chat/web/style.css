@@ -129,6 +129,37 @@ textarea {
     cursor: pointer;
 ***REMOVED***
 
+#chat-nav {
+  top: unset;
+  bottom: 4em;
+  background: var(--saito-skyline-grey);
+  border-radius: 5px 5px 0 5px;
+***REMOVED***
+
+.chat-nav-arrow {
+  position: absolute;
+  right: -1px;
+  bottom: -13px;
+  width: 0;
+  height: 0;
+  border-color: transparent lightgrey;
+  border-bottom: 12px solid transparent;
+  border-right: 12px solid lightgrey;
+***REMOVED***
+
+#chat-nav-arrow-interior {
+  bottom: -11px;
+  right: 0px;
+  border-bottom: 12px solid transparent;
+  border-right: 12px solid var(--saito-skyline-grey);
+***REMOVED***
+
+.chat-nav-row {
+  display: grid;
+  grid-template-columns: 1em auto;
+  grid-gap: 10px;
+***REMOVED***
+
 
 .main {
   padding: unset;
