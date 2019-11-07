@@ -2,7 +2,6 @@
   core: [
     'appstore/appstore.js',
     'archive/archive.js',
-    'arcade/arcade.js',
     'chat/chat.js',
     'email/email.js',
     'encrypt/encrypt.js',
@@ -13,13 +12,14 @@
     'qrscanner/qrscanner.js',
     'registry/registry.js',
     'settings/settings.js',
+    'twilight/twilight.js',
     'wallet/wallet.js',
     'wordblocks/wordblocks.js',
-    'design/design.js'
+    'design/design.js',
+    'arcade/arcade.js',
   ],
   lite: [
     'appstore/appstore.js',
-    'arcade/arcade.js',
     'chat/chat.js',
     'debug/debug.js',
     'email/email.js',
@@ -30,8 +30,10 @@
     'poker/poker.js',
     'registry/registry.js',
     'settings/settings.js',
+    'twilight/twilight.js',
     'wallet/wallet.js',
     'wordblocks/wordblocks.js',
-    'design/design.js'
+    'design/design.js',
+    'arcade/arcade.js',
   ]
 ***REMOVED***
