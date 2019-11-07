@@ -8,6 +8,12 @@
   cursor: pointer;
 }
 
+.chat-content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .chat-last-message {
   font-family: visuelt-light;
 }

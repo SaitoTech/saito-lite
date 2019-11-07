@@ -32,7 +32,7 @@ class Chat extends ModTemplate {
     //
     let keys = this.app.keys.returnKeys();
     for (let i = 0; i < keys.length; i++) {
-      this.createChatGroup(keys[i].publickey);
+      this.createChatGroup(keys[i]);
     }
 
   }
@@ -93,7 +93,7 @@ class Chat extends ModTemplate {
     //
     if (type === "encrypt-key-exchange-confirm") {
       if (data.publickey === undefined) { return; }
-      this.createChatGroup(data.publickey);
+      this.createChatGroup(data);
     }
 
   }
@@ -101,19 +101,21 @@ class Chat extends ModTemplate {
 
 
 
-  createChatGroup(publickey=null) {
+  createChatGroup(key=null) {
 
-    if (publickey==null) { return; }
+    if (key.publickey==null) { return; }
 
     let cg = new ChatGroup(this.app);
 
     cg.group_members = [];
     cg.group_members.push(this.app.wallet.returnPublicKey());
-    cg.group_members.push(publickey);
+    cg.group_members.push(key.publickey);
     cg.group_members.sort();
 
-    cg.group_id = this.app.crypto.hash((cg.group_members[0] + "_" + cg.group_members[1]));
-    cg.group_name = publickey.substring(0, 16);
+    cg.group_id = this.app.crypto.hash(`${cg.group_members[0]}_${cg.group_members[1]}`);
+    cg.group_name = key.publickey.substring(0, 16);
+
+    cg.is_encrypted = key.aes_publickey !== '';
 
     for (let i = 0; i < this.groups.length; i++) {
       if (this.groups[i].group_id == cg.group_id) { return; }

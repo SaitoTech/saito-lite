@@ -42,15 +42,11 @@ module.exports = ChatBox = {
           }
       });
 
-      let toggleBoxHeader = (e) => {
+      let chat_box_header = document.getElementById(`chat-box-header-${group_id}`);
+      chat_box_header.onclick = () => {
         let chat_box = document.getElementById(`chat-box-${group_id}`);
         chat_box.classList.toggle('chat-box-hide');
       };
-
-      let chat_box_header = document.getElementById(`chat-box-header-${group_id}`);
-
-      chat_box_header.removeEventListener('click', toggleBoxHeader);
-      chat_box_header.addEventListener('click', toggleBoxHeader);
 
       document.getElementById(`chat-box-close-${group_id}`)
               .addEventListener('click', (e) => {

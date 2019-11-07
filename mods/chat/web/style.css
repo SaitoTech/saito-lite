@@ -129,6 +129,37 @@ textarea {
     cursor: pointer;
 }
 
+#chat-nav {
+  top: unset;
+  bottom: 4em;
+  background: var(--saito-skyline-grey);
+  border-radius: 5px 5px 0 5px;
+}
+
+.chat-nav-arrow {
+  position: absolute;
+  right: -1px;
+  bottom: -13px;
+  width: 0;
+  height: 0;
+  border-color: transparent lightgrey;
+  border-bottom: 12px solid transparent;
+  border-right: 12px solid lightgrey;
+}
+
+#chat-nav-arrow-interior {
+  bottom: -11px;
+  right: 0px;
+  border-bottom: 12px solid transparent;
+  border-right: 12px solid var(--saito-skyline-grey);
+}
+
+.chat-nav-row {
+  display: grid;
+  grid-template-columns: 1em auto;
+  grid-gap: 10px;
+}
+
 
 .main {
   padding: unset;
