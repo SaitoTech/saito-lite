@@ -71,6 +71,7 @@ module.exports = ChatBox = {
       };
 
       let newtx = this.createMessage(app, data, msg_data);
+console.log("A");
       app.network.propagateTransaction(newtx);
 
       this.addMessageToDOM(msg_data, newtx.transaction.sig, "myself");
@@ -85,6 +86,7 @@ module.exports = ChatBox = {
     },
 
     createMessage(app, data, msg_data) {
+
         let publickey = app.network.peers[0].peer.publickey;
         let newtx = app.wallet.createUnsignedTransactionWithDefaultFee(publickey);
         if (newtx == null) { return; }
@@ -95,6 +97,7 @@ module.exports = ChatBox = {
             publickey: msg_data.publickey,
             group_id: msg_data.group_id,
             message:  msg_data.message,
+
             //
             // will possibly encrypt
             // this.saito.keys.encryptMessage(this.saito.wallet.returnPublicKey(), msg),
