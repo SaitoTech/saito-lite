@@ -4,7 +4,7 @@ module.exports = ChatRoomMessageTemplate = ({ message, publickey, timestamp }, s
   let datetime = datetimeFormatter(timestamp);
   return `
     <div id="${sig}" class="chat-room-message chat-room-message-${type}">
-      <p>${message}</p>
+      <p class="chat-message-text">${message}</p>
       <div class="chat-message-header">
           <p class="chat-message-author">${publickey.substring(0, 20)}</p>
           <p class="chat-message-timestamp">${datetime.hours}:${datetime.minutes}</p>
