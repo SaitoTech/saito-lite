@@ -4,6 +4,8 @@ module.exports = ChatListRowTemplate = (name, group_id, message, timestamp) => {
 
   let datetime = datetimeFormatter(timestamp);
 
+  if (message != '') { message = message.substring(0, 72); ***REMOVED***
+
   return `
     <div id="${group_id***REMOVED***" class="chat-row">
       <img src="/saito/img/logo-color.svg">
