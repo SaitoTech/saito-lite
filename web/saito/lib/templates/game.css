@@ -1,459 +1,3 @@
-.status {
-  height: unset !important;
-***REMOVED***
-
-@media screen and (orientation:landscape) and (max-width: 1660px) {
-  .hud {
-    left: 37%;
-    width: 25%;
-  ***REMOVED***
-***REMOVED***
-
-/* .log {
-  width: unset !important;
-***REMOVED*** */
-
-#dropdown-button {
-  float:right;
-  margin-top:6px;
-***REMOVED***
-.menu-dropdown {
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  left: 10px;
-  top: 10px;
-  z-index: 1;
-  cursor: pointer;
-***REMOVED***
-
-.menu-dropdown-box {
-  display: flex;
-  width: 150px;
-***REMOVED***
-
-.menu-dropdown-box ul {
-  width: 100%;
-  list-style: none;
-  background-color: #444;
-  text-align: center;
-  padding: 0;
-  margin: 0;
-***REMOVED***
-
-.menu-dropdown-box li {
-  width: 100%;
-  list-style: none;
-  background-color: #444;
-  text-align: center;
-  padding: 0;
-  margin: 0;
-***REMOVED***
-
-.menu-dropdown-box li {
-  width: 100%;
-  border-bottom: none;
-  height: 50px;
-  line-height: 50px;
-  font-size: 1.4rem;
-  cursor: pointer;
-***REMOVED***
-
-.menu-dropdown-box a {
-  text-decoration: none;
-  color: #fff;
-  display: block;
-  transition: .3s background-color;
-***REMOVED***
-
-.menu-dropdown-box a:hover {
-  background-color: #005f5f;
-***REMOVED***
-
-.menu-dropdown-box a.active {
-  background-color: #fff;
-  color: #444;
-  cursor: default;
-***REMOVED***
-
-.hud-navigation {
-  display: flex;
-  width: 100%;
-***REMOVED***
-
-.hud-navigation ul {
-  width: 100%;
-  list-style: none;
-  text-align: center;
-  padding: 0;
-  margin: 0;
-***REMOVED***
-
-.hud-navigation li {
-  width: 100%;
-  list-style: none;
-  text-align: center;
-  padding: 0;
-  margin: 0;
-  border-bottom: none;
-  height: 50px;
-  line-height: 50px;
-  font-size: 1.2rem;
-  cursor: pointer;
-***REMOVED***
-
-.hud-navigation a {
-  text-decoration: none;
-  color: #fff;
-  display: block;
-  transition: 0.3s background-color;
-***REMOVED***
-
-.hud-navigation a:hover {
-  background-color: #005f5f;
-***REMOVED***
-
-.hud-navigation a.active {
-  background-color: #fff;
-  color: #444;
-  cursor: default;
-***REMOVED***
-
-.hud-clickable {
-  cursor: pointer;
-  grid-area: hud-clickable;
-  background-color: #333;
-  padding-left: 5px;
-  padding-right: 5px;
-***REMOVED***
-
-#counter > #countdown{
-  margin: auto;
-***REMOVED***
-
-.loaded {
-  margin-left:20px;
-  margin-right:20px;
-  background-image: linear-gradient(
-      to right,
-      silver 50%,
-      transparent 0%
-  );
-  background-size: 8px 4px;
-  background-repeat: repeat-x;
-  background-position: 0% bottom;
-***REMOVED***
-.loading {
-  margin-left:20px;
-  margin-right:20px;
-  background-image: linear-gradient(
-      to right,
-      silver 50%,
-      transparent 0%
-  );
-  background-size: 8px 4px;
-  background-repeat: repeat-x;
-  background-position: 0% bottom;
-
-  animation-name: loading-animation;
-  animation-duration: 6s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-***REMOVED***
-@keyframes loading-animation {
-  from {
-    background-position: 0% bottom;
-  ***REMOVED***
-  to {
-    background-position: 100% bottom;
-  ***REMOVED***
-***REMOVED***
-
-
-.hud {
-  display: grid;
-  grid-template-areas:
-  "hud-header hud-content hud-content";
-  grid-template-columns: 5em 12fr 8fr;
-  grid-template-rows: auto;
-
-  position: fixed;
-  left: 50%;
-  bottom: 0%;
-  float: none;
-  z-index: 40000;
-
-  color: #eee;
-
-  font-size: 1.2rem;
-  width: 40%;
-  min-width: 750px;
-  max-width: 9.1em;
-
-  background-color: #707070;
-  border: 2px solid #948f8b;
-  border-bottom: 0px;
-  cursor: move;
-
-  transform: translate(-50%, -0%);
-  transition: height 0.2s ease;
-***REMOVED***
-
-.tall {
-  height: 20rem;
-***REMOVED***
-
-.short {
-  height: 6rem;
-***REMOVED***
-
-.wide {
-  width: 17.8em;
-***REMOVED***
-
-.narrow {
-  width: 9.1em;
-***REMOVED***
-
-.short .hud-header {
-  overflow: hidden;
-***REMOVED***
-
-.hud-header {
-  grid-area: hud-header;
-  display: flex;
-  flex-flow: column;
-  overflow-y: auto;
-***REMOVED***
-
-/* .hud-header::-webkit-scrollbar {
-  width: 0px;
-  background: transparent;
-***REMOVED*** */
-
-.hud-header ul {
-  width: 99%;
-  list-style: none;
-  background-color: #444;
-  text-align: center;
-  padding: 0;
-  margin: 0;
-  height: 100%;
-  scrollbar-width: none;
-***REMOVED***
-
-.hud-header li {
-  width: 99%;
-  border-bottom: none;
-  height: 50px;
-  line-height: 50px;
-  font-size: 1.2rem;
-  cursor: pointer;
-***REMOVED***
-
-.hud-header a, .hud-header span {
-  text-decoration: none;
-  color: #fff;
-  display: block;
-  transition: .3s background-color;
-  line-height: 50px;
-***REMOVED***
-
-.hud-header a:hover {
-  background-color: #005f5f;
-***REMOVED***
-
-.hud-header a.active {
-  background-color: #fff;
-  color: #444;
-  cursor: default;
-***REMOVED***
-
-.dragbar {
-  width: 4.44em;
-***REMOVED***
-
-.zoombar {
-  grid-area: zoombar;
-***REMOVED***
-
-.keytip {
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 1em;
-***REMOVED***
-
-.status, .hud_menu_overlay {
-  overflow-y: auto;
-  border-right: 1px solid gray;
-***REMOVED***
-
-.status, #menu-container {
-  padding: 0.8rem;
-***REMOVED***
-
-.log {
-  overflow-y: auto;
-  font-size:0.75em;
-  padding: 0.8rem;
-  margin-bottom: 3px;
-***REMOVED***
-
-.hide {
-  display: none;
-***REMOVED***
-
-.controls {
-  width: 99%;
-***REMOVED***
-
-.controls-content div {
-  display: block;
-  line-height: 2em;
-***REMOVED***
-
-.controls-content .hud-button {
-  width: 1em;
-***REMOVED***
-
-.hud-button {
-  padding: 5px 4px;
-  cursor: pointer;
-***REMOVED***
-
-.fa:before {
-  width: 0.8em;
-  display: inline-block;
-  text-align: center;
-***REMOVED***
-
-@media screen and (orientation:landscape) and (max-height: 950px) {
-  .cardbox {
-    position: fixed;
-    top: 270px !important;
-    zoom: 0.85;
-  ***REMOVED***
-***REMOVED***
-
-/* and (orientation:landscape) */
-@media screen and (orientation:portrait) and (max-width: 700px) {
-  .hud {
-    /* position: absolute; */
-    bottom: 0;
-    width: 100%;
-    grid-template-areas: "hud-header" "hud-content";
-    grid-template-columns: 1fr;
-    grid-template-rows: 8vh auto;
-    /* font-size: 1.3em; */
-    max-width: unset;
-    min-width: unset;
-  ***REMOVED***
-
-  .hud-header {
-    flex-flow: row;
-    flex-direction: row-reverse;
-    /* height: 6vh; */
-  ***REMOVED***
-
-  .dragbar {
-    width: 12%;
-  ***REMOVED***
-
-  .hud-header ul {
-    list-style-type: none;
-  ***REMOVED***
-
-  .hud-header li {
-    float: left;
-    height: 100%;
-    width: 25%;
-    line-height: 58px;
-    font-size: 1em;
-  ***REMOVED***
-
-  .hud-header a {
-    padding-left: 15px;
-    padding-right: 15px;
-    line-height: 8vh;
-    /* line-height: 58px; */
-  ***REMOVED***
-
-  #sizer {
-    padding: 20px 10px;
-    padding-left: 22px;
-  ***REMOVED***
-
-  .status {
-    margin-bottom: 15px;
-  ***REMOVED***
-
-  .status {
-    margin-bottom: 15px;
-  ***REMOVED***
-
-  .tall {
-    height: 50vh;
-  ***REMOVED***
-
-  .short {
-    height: 10vh;
-  ***REMOVED***
-
-  .controls {
-    width: unset;
-    float: right;
-  ***REMOVED***
-***REMOVED***
-
-
-@media screen and (orientation:landscape) and (max-height: 700px) {
-  .hud {
-    grid-template-areas: "hud-header hud-content";
-    grid-template-columns: 5em auto;
-    grid-template-rows: auto;
-    min-width: unset;
-    max-width: unset;
-    height: 100%;
-    right: -9em;
-    left: unset;
-    cursor: unset;
-    max-height: unset;
-  ***REMOVED***
-
-  .hud-header ul {
-    overflow-y: scroll;
-    margin-bottom: 15px;
-  ***REMOVED***
-
-  .status {
-    margin-bottom: 23px;
-  ***REMOVED***
-
-  .controls {
-    width: 9%;
-  ***REMOVED***
-
-  #sizer {
-    padding-left: 1.7em;
-    padding-right: 2em;
-    padding-top: 0.8em;
-  ***REMOVED***
-
-  .mail_chat_popup {
-    display: none;
-  ***REMOVED***
-***REMOVED***
-
-.hud {
-  scrollbar-face-color: #868686;
-  scrollbar-base-color: #868686;
-  scrollbar-3dlight-color: #868686;
-  scrollbar-highlight-color: #868686;
-  scrollbar-track-color: #646464;
-  scrollbar-arrow-color: #646464;
-  scrollbar-shadow-color: #868686;
-  /* scrollbar-dark-shadow-color: #868686; */
-***REMOVED***
-
 ::-webkit-scrollbar { width: 8px; height: 3px;***REMOVED***
 ::-webkit-scrollbar-button {  background-color: #868686; ***REMOVED***
 ::-webkit-scrollbar-track {  background-color: #868686;***REMOVED***
@@ -462,16 +6,100 @@
 ::-webkit-scrollbar-corner { background-color: #868686;***REMOVED***
 ::-webkit-resizer { background-color: #646464;***REMOVED***
 
-@media screen and (max-width: 700px) {
-  ::-webkit-scrollbar {
-    width: 0px;
-    background: transparent;
-  ***REMOVED***
+
+
+.cardbox {
+  height: 400px;
+  width: 200px;
+  position: fixed;
+  left: 50%;
+  top: 30%;
+  z-index: 39;
+  background-color: whitesmoke;
 ***REMOVED***
 
-@media screen and (orientation: landscape) and (max-height: 700px) {
-  ::-webkit-scrollbar {
-    width: 0px;
-    background: transparent;
-  ***REMOVED***
+
+.hud {
+
+  scrollbar-face-color: #868686;
+  scrollbar-base-color: #868686;
+  scrollbar-3dlight-color: #868686;
+  scrollbar-highlight-color: #868686;
+  scrollbar-track-color: #646464;
+  scrollbar-arrow-color: #646464;
+  scrollbar-shadow-color: #868686;
+
+  display: grid;
+  grid-template-areas:
+    "hud-header"
+    "hud-body";
+  grid-template-rows: 40px auto;
+
+  background-color: grey;
+
+  position: fixed;
+  left: 50%;
+  bottom: 0%;
+  float: none;
+  z-index: 40;
+
+  color: #eee;
+  font-size: 1.2rem;
+
+  height: 400px;
+  width: 400px;
+  min-width: 750px;
+  max-width: 9.1em;
+  
+  border: 2px solid #948f8b;
+  border-bottom: 0px;
+  cursor: move;
+
+  transform: translate(-50%, -0%);
+  transition: height 0.2s ease;
+
 ***REMOVED***
+
+
+.hud-header {
+  display: block;
+  background-color: white;
+  width: 100%;
+  height: 40px;
+***REMOVED***
+.hud-body {
+  display: grid;
+  grid-template-areas:
+    "hud-menu status log";
+  grid-template-columns: 100px 50% auto;
+***REMOVED***
+.hud-menu {
+  background-color: red;
+***REMOVED***
+.status {
+  color: black;
+  background-color: whitesmoke;
+  width: unset !important;
+***REMOVED***
+.log {
+  color: black;
+  background-color: white;
+  width: unset !important;
+***REMOVED***
+
+
+
+@media screen and (orientation:landscape) and (max-width: 1660px) {
+***REMOVED***
+@media screen and (orientation:landscape) and (max-height: 950px) {
+***REMOVED***
+@media screen and (orientation:portrait) and (max-width: 700px) {
+***REMOVED***
+@media screen and (orientation:landscape) and (max-height: 700px) {
+***REMOVED***
+@media screen and (max-width: 700px) {
+***REMOVED***
+@media screen and (orientation: landscape) and (max-height: 700px) {
+***REMOVED***
+
+

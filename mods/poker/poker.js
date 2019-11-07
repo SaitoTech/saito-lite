@@ -30,16 +30,41 @@ class Poker extends GameTemplate {
     //
     // game engine needs this to start
     //
-    this.game.queue.push("READY");
+    if (this.game.dice == "") {
+      this.initializeDice();
+      this.game.queue.push("READY");
+***REMOVED***
 
   ***REMOVED***
 
 
 
-  handleGame(msg=null) {
+  handleGameLoop() {
 
+    ///////////
+    // QUEUE //
+    ///////////
+    if (this.game.queue.length > 0) {
 
+console.log("QUEUE: " + JSON.stringify(this.game.queue));
+
+      let qe = this.game.queue.length-1;
+      let mv = this.game.queue[qe].split("\t");
+      let shd_continue = 1;
+
+      if (mv[0] === "notify") {
+        this.updateLog(mv[1]);
+        this.game.queue.splice(qe, 1);
   ***REMOVED***
+
+
+      if (shd_continue == 1) {
+        return 1;
+  ***REMOVED***
+***REMOVED***
+    return 1;
+  ***REMOVED***
+
 
 ***REMOVED***
 
