@@ -22,11 +22,13 @@ class Arcade extends ModTemplate {
 
   render(app, data) {
 
+    if (this.browser_active == 0) { return; }
+
     ArcadeMain.render(app, data);
     ArcadeMain.attachEvents(app, data);
 
-//    ArcadeLeftSidebar.render(app, data);
-//    ArcadeLeftSidebar.attachEvents(app, data);
+    ArcadeLeftSidebar.render(app, data);
+    ArcadeLeftSidebar.attachEvents(app, data);
 
 //    ArcadeRightSidebar.render(app, data);
 //    ArcadeRightSidebar.attachEvents(app, data);
@@ -77,11 +79,6 @@ class Arcade extends ModTemplate {
     let data = {};
     data.arcade = this;
 
-/*
-    let tx = this.createOpenTransaction({ name : "Wordblocks" , options : {} , players_needed : 2 });
-    this.games.push(tx);
-*/
-
     this.render(app, data);
 
   }
@@ -95,12 +92,9 @@ class Arcade extends ModTemplate {
 
     if (conf == 0) {
 
-      // save state
-      if (txmsg.saveGameState != undefined && txmsg.game_id != "") {
-	arcade_self.saveGameState(blk, tx, conf, app);
-      }
-
-      // open
+      //
+      // open msgs -- prolifigate
+      //
       if (txmsg.module == "Arcade" && txmsg.request == "open") {
 
 	arcade_self.games.push(tx);
@@ -113,6 +107,18 @@ class Arcade extends ModTemplate {
 	
 	arcade_self.receiveOpenRequest(blk, tx, conf, app);
       }
+
+      //
+      // ignore msgs for others
+      //
+      if (!tx.isTo(app.wallet.returnPublicKey())) { return; }
+
+
+      // save state
+      if (txmsg.saveGameState != undefined && txmsg.game_id != "") {
+	arcade_self.saveGameState(blk, tx, conf, app);
+      }
+
 
       // invites
       if (txmsg.request == "invite") {
@@ -263,7 +269,6 @@ class Arcade extends ModTemplate {
 
     let ts = new Date().getTime();
     let accept_sig = this.app.crypto.signMessage(("create_game_"+ts), this.app.wallet.returnPrivateKey());
-console.log("msg created for verify: " + ("create_game_"+ts));
 
     let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
         tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey(), 0.0));
@@ -332,7 +337,6 @@ console.log("msg created for verify: " + ("create_game_"+ts));
 	if (gametx.transaction.msg.ts != "") { 
           tx.transaction.msg.ts   = gametx.transaction.msg.ts;
         }
-        console.log("\n\n\nCREATE INVITE SIG: " + ("invite_game_"+tx.transaction.msg.ts) + " ------ " + app.wallet.returnPrivateKey());
         tx.transaction.msg.invite_sig   = app.crypto.signMessage(("invite_game_"+tx.transaction.msg.ts), app.wallet.returnPrivateKey());
     tx = this.app.wallet.signTransaction(tx);
 
