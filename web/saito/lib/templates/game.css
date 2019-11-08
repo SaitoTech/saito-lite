@@ -16,6 +16,7 @@
   top: 30%;
   z-index: 39;
   background-color: whitesmoke;
+  display: none;
 ***REMOVED***
 
 
@@ -34,8 +35,7 @@
     "hud-header"
     "hud-body";
   grid-template-rows: 40px auto;
-
-  background-color: grey;
+  font-family: visuelt-light;
 
   position: fixed;
   left: 50%;
@@ -43,15 +43,14 @@
   float: none;
   z-index: 40;
 
-  color: #eee;
+  /* color: #eee; */
   font-size: 1.2rem;
 
   height: 400px;
   width: 400px;
   min-width: 750px;
   max-width: 9.1em;
-  
-  border: 2px solid #948f8b;
+
   border-bottom: 0px;
   cursor: move;
 
@@ -61,32 +60,96 @@
 ***REMOVED***
 
 
+/** HUD HEADER **/
+
 .hud-header {
-  display: block;
-  background-color: white;
+  display: grid;
+  grid-template-columns: 100px auto;
   width: 100%;
   height: 40px;
+  background-color: whitesmoke;
+  border-bottom: 1px solid var(--saito-skyline-grey);
 ***REMOVED***
+
+.controls {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+***REMOVED***
+
+/** HUD BODY **/
+
 .hud-body {
   display: grid;
-  grid-template-areas:
-    "hud-menu status log";
+  grid-template-areas: "hud-menu status log";
   grid-template-columns: 100px 50% auto;
 ***REMOVED***
+
 .hud-menu {
-  background-color: red;
+  background-color: whitesmoke;
+  border-right: 1px solid var(--saito-skyline-grey);
 ***REMOVED***
+
 .status {
   color: black;
   background-color: whitesmoke;
   width: unset !important;
+  border-right: 1px solid var(--saito-skyline-grey);
 ***REMOVED***
+
 .log {
   color: black;
-  background-color: white;
+  background-color: whitesmoke;
   width: unset !important;
 ***REMOVED***
 
+/** HUD SIDEBAR **/
+
+.hud-menu {
+  display: flex;
+  color: black;
+***REMOVED***
+
+.hud-menu ul {
+  width: 100%;
+  list-style: none;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+***REMOVED***
+
+.hud-menu ul li {
+  width: 100%;
+  list-style: none;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+***REMOVED***
+
+.hud-menu ul li {
+  width: 100%;
+  border-bottom: none;
+  height: 50px;
+  line-height: 50px;
+  font-size: 1.4rem;
+  cursor: pointer;
+***REMOVED***
+
+.hud-menu ul li a {
+  text-decoration: none;
+  display: block;
+  transition: .3s background-color;
+***REMOVED***
+
+.hud-menu ul li a:hover {
+  border-bottom: 2px solid var(--saito-red);
+  border-radius: 0px;
+***REMOVED***
+
+.hud-menu ul li a:active {
+  color: var(--saito-red);
+  font-style: bold;
+***REMOVED***
 
 
 @media screen and (orientation:landscape) and (max-width: 1660px) {
