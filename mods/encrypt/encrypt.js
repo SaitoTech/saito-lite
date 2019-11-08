@@ -82,7 +82,12 @@ console.log("FOUND: " + JSON.stringify(tx));
     newtx = this.app.wallet.signTransaction(newtx);
 
     this.app.network.propagateTransaction(newtx);
-    this.app.keys.updateCryptoByPublicKey(tx.transaction.from[0].add, bob_publickey, bob_privatekey, bob_secret.toString("hex"));
+
+console.log("\n\nUPDATE CRYPTO BY PUBLICKEY: ");
+
+    this.app.keys.updateCryptoByPublicKey(remote_address, bob_publickey.toString("hex"), bob_privatekey.toString("hex"), bob_secret.toString("hex"));
+    this.sendEvent('encrypt-key-exchange-confirm', { publickey : remote_address ***REMOVED***);
+
 
   ***REMOVED***
 

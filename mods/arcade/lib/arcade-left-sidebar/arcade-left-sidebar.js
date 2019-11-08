@@ -15,6 +15,11 @@ module.exports = ArcadeLeftSidebar = {
 ***REMOVED***,
 
     attachEvents(app, data) {
+      for (let i = 0; i < data.arcade.mods.length; i++) {
+        if (data.arcade.mods[i].respondTo('email-chat') != null) {
+          data.arcade.mods[i].respondTo('email-chat').attachEvents(app, data);
+    ***REMOVED***
+  ***REMOVED***
 ***REMOVED***
 
 ***REMOVED***
