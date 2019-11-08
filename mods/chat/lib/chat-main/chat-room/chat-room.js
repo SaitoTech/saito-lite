@@ -43,19 +43,19 @@ module.exports = ChatRoom = {
 
         console.log("NEW GROUP: ", this.group);
 
-        let renderDefaultHeaderAndFooter = (app) => {
-    ***REMOVED*** header
-            let header = document.querySelector('.header');
-            header.classList.remove("chat-room-header");
-            Header.render(app);
+***REMOVED*** let renderDefaultHeaderAndFooter = (app) => {
+***REMOVED***     // header
+***REMOVED***     let header = document.querySelector('.header');
+***REMOVED***     header.classList.remove("chat-room-header");
+***REMOVED***     Header.render(app);
 
-    ***REMOVED*** footer
-            let footer = document.querySelector('.footer');
-            footer.classList.remove("chat-room-footer");
-            footer.innerHTML = '';
-            footer.style.display = 'none';
-    ***REMOVED*** NavBar.render(chat.app);
-    ***REMOVED***
+***REMOVED***     // footer
+***REMOVED***     let footer = document.querySelector('.footer');
+***REMOVED***     footer.classList.remove("chat-room-footer");
+***REMOVED***     footer.innerHTML = '';
+***REMOVED***     footer.style.display = 'none';
+***REMOVED***     // NavBar.render(chat.app);
+***REMOVED*** ***REMOVED***
 
         let submitMessage = () => {
             let message_input = document.querySelector('#input.chat-room-input');
@@ -67,26 +67,18 @@ module.exports = ChatRoom = {
             let newtx = this.createMessage(app, this.group[0].group_id, msg);
             this.sendMessageOnChain(app, newtx);
 
-            console.log(this.group);
-
-    ***REMOVED*** add message to group
-    ***REMOVED*** this.group.addMessage(newtx);
-
             this.addTXToDOM(newtx);
             this.scrollToBottom();
     ***REMOVED***
 
         document.querySelector('#back-button')
-                .addEventListener('click', () => {
+                .onclick = () => {
                     data.chat.active = "chat_list";
-            ***REMOVED*** renderDefaultHeaderAndFooter(chat);
                     data.chat.main.render(app, data);
-            ***REMOVED***);
+            ***REMOVED***;
 
         document.querySelector('.chat-room-submit-button')
-                .addEventListener('click', () => {
-                    submitMessage();
-            ***REMOVED***);
+                .onclick = (e) =>  submitMessage();
 
         document.addEventListener('keydown', (e) => {
             if (e.keyCode == '13') {
@@ -94,10 +86,22 @@ module.exports = ChatRoom = {
                     fired = true;
                     e.preventDefault();
                     submitMessage();
-
-                    console.log("event fired");
             ***REMOVED***
         ***REMOVED***
+    ***REMOVED***);
+
+        let chat_room_input = document.querySelector('#input.chat-room-input')
+
+        chat_room_input.addEventListener('focusin', () => {
+            let chat_room_content = document.querySelector('.chat-room-content')
+            chat_room_content.style.height = "52vh";
+            setTimeout(() => this.scrollToBottom(), 100);
+    ***REMOVED***);
+
+        chat_room_input.addEventListener('focusout', () => {
+            let chat_room_content = document.querySelector('.chat-room-content')
+            chat_room_content.style.height = "76vh";
+            setTimeout(() => this.scrollToBottom(), 100);
     ***REMOVED***);
 
         document.addEventListener('keyup', (e) => {

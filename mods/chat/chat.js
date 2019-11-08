@@ -147,7 +147,8 @@ class Chat extends ModTemplate {
           if (group.group_id == txmsg.group_id) {
               let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: "others" ***REMOVED***);
               group.messages.push(msg);
-              app.connection.emit('chat_receive_message', msg);
+
+              chat_self.sendEvent('chat_receive_message', msg);
       ***REMOVED***
     ***REMOVED***);
 
