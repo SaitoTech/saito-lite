@@ -43,19 +43,19 @@ module.exports = ChatRoom = {
 
         console.log("NEW GROUP: ", this.group);
 
-        let renderDefaultHeaderAndFooter = (app) => {
-            // header
-            let header = document.querySelector('.header');
-            header.classList.remove("chat-room-header");
-            Header.render(app);
+        // let renderDefaultHeaderAndFooter = (app) => {
+        //     // header
+        //     let header = document.querySelector('.header');
+        //     header.classList.remove("chat-room-header");
+        //     Header.render(app);
 
-            // footer
-            let footer = document.querySelector('.footer');
-            footer.classList.remove("chat-room-footer");
-            footer.innerHTML = '';
-            footer.style.display = 'none';
-            // NavBar.render(chat.app);
-        }
+        //     // footer
+        //     let footer = document.querySelector('.footer');
+        //     footer.classList.remove("chat-room-footer");
+        //     footer.innerHTML = '';
+        //     footer.style.display = 'none';
+        //     // NavBar.render(chat.app);
+        // }
 
         let submitMessage = () => {
             let message_input = document.querySelector('#input.chat-room-input');
@@ -67,26 +67,18 @@ module.exports = ChatRoom = {
             let newtx = this.createMessage(app, this.group[0].group_id, msg);
             this.sendMessageOnChain(app, newtx);
 
-            console.log(this.group);
-
-            // add message to group
-            // this.group.addMessage(newtx);
-
             this.addTXToDOM(newtx);
             this.scrollToBottom();
         }
 
         document.querySelector('#back-button')
-                .addEventListener('click', () => {
+                .onclick = () => {
                     data.chat.active = "chat_list";
-                    // renderDefaultHeaderAndFooter(chat);
                     data.chat.main.render(app, data);
-                });
+                };
 
         document.querySelector('.chat-room-submit-button')
-                .addEventListener('click', () => {
-                    submitMessage();
-                });
+                .onclick = (e) =>  submitMessage();
 
         document.addEventListener('keydown', (e) => {
             if (e.keyCode == '13') {
@@ -94,10 +86,22 @@ module.exports = ChatRoom = {
                     fired = true;
                     e.preventDefault();
                     submitMessage();
-
-                    console.log("event fired");
                 }
             }
+        });
+
+        let chat_room_input = document.querySelector('#input.chat-room-input')
+
+        chat_room_input.addEventListener('focusin', () => {
+            let chat_room_content = document.querySelector('.chat-room-content')
+            chat_room_content.style.height = "52vh";
+            setTimeout(() => this.scrollToBottom(), 100);
+        });
+
+        chat_room_input.addEventListener('focusout', () => {
+            let chat_room_content = document.querySelector('.chat-room-content')
+            chat_room_content.style.height = "76vh";
+            setTimeout(() => this.scrollToBottom(), 100);
         });
 
         document.addEventListener('keyup', (e) => {
