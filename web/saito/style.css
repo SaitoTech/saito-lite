@@ -79,9 +79,10 @@ body {
     color: var(--text-color-normal);
 ***REMOVED***
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, p {
     margin: 0.5em 0;
 ***REMOVED***
+
 
 hr {
     margin: 1em 0;
@@ -214,6 +215,10 @@ fieldset {
     grid-gap: 1em;
     grid-template-columns: 1fr 1fr 1fr;
     margin: 0 0 1em 0;
+***REMOVED***
+
+.grid-2 div, .grid-4 div {
+    padding: 0.5em 0;
 ***REMOVED***
 
 @media only screen and (max-width: 1000px) {
