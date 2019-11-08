@@ -187,12 +187,40 @@ body {
 ***REMOVED***
 
 .email-message-content {
+  font-size: 1.2em;
   font-family: visuelt-light;
   display: grid;
-  grid-gap: 5px;
+  grid-gap: 1em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  grid-template-columns: 300px 300px 1fr;
+***REMOVED***
+
+@media only screen and (max-width: 1200px) {
+  .email-message-content {
+    grid-template-columns: 300px 1fr;
+  ***REMOVED***
+***REMOVED***
+
+@media only screen and (max-width: 900px) {
+  .email-message-content {
+    grid-template-columns: 300px;
+  ***REMOVED***
+***REMOVED***
+
+.email-message-from, .email-message-title {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+  display: block;
+  overflow: hidden;
+  font-weight: bold;
+  align-self: center;
+***REMOVED***
+
+.email-message-message {
+  align-self: center;
 ***REMOVED***
 
 .email-message-timestamp {
@@ -422,7 +450,6 @@ body {
   .email-navigator-item {
     padding: 5px;
   ***REMOVED***
-
   #email.create-button {
     min-width: unset;
   ***REMOVED***
@@ -434,7 +461,6 @@ body {
     grid-gap: 1em;
     grid-template-columns: 1fr 1fr;
   ***REMOVED***
-
   #qrcode img {
     width: 66%;
     margin: 0.5em 16.6% 1em;
