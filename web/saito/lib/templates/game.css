@@ -46,13 +46,12 @@
   /* color: #eee; */
   font-size: 1.2rem;
 
-  height: 400px;
-  width: 400px;
-  min-width: 750px;
+  height: 320px;
+  width: 640px;
+  min-width: 640px;
   max-width: 9.1em;
 
   border-bottom: 0px;
-  cursor: move;
 
   transform: translate(-50%, -0%);
   transition: height 0.2s ease;
@@ -67,6 +66,7 @@
   grid-template-columns: 100px auto;
   width: 100%;
   height: 40px;
+  cursor: move;
   background-color: whitesmoke;
   border-bottom: 1px solid var(--saito-skyline-grey);
 ***REMOVED***
@@ -119,19 +119,15 @@
 ***REMOVED***
 
 .hud-menu ul li {
-  width: 100%;
   list-style: none;
   text-align: center;
   padding: 0;
   margin: 0;
-***REMOVED***
-
-.hud-menu ul li {
   width: 100%;
   border-bottom: none;
   height: 50px;
   line-height: 50px;
-  font-size: 1.4rem;
+  font-size: 1.1rem;
   cursor: pointer;
 ***REMOVED***
 
