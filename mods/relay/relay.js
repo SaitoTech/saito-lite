@@ -82,6 +82,14 @@ console.log("CALLBACK SENT FROM RELAY sendRelayMessage" + JSON.stringify(res));
 
       let relay_self = app.modules.returnModule("Relay");
 
+console.log("relay mod handle peer request: " + message.request);
+
+      if (message.request === "relay test alert") {
+console.log("HERE IT IS");
+	alert(message.data);
+  ***REMOVED***
+
+
       if (message.request === "relay peer message") {
 
 ***REMOVED***
@@ -92,23 +100,33 @@ console.log("CALLBACK SENT FROM RELAY sendRelayMessage" + JSON.stringify(res));
         if (tx.transaction.to.length <= 0) { return; ***REMOVED***
         if (tx.transaction.to[0].add == undefined) { return; ***REMOVED***
 
+console.log("RELAY 4: " + tx.returnMessage());
+
 ***REMOVED***
 ***REMOVED*** get the inner-tx / tx-to-relay
 ***REMOVED***
+***REMOVED***
         let tx2 = new saito.transaction(tx.returnMessage());
 
+console.log("RELAY 5: " + JSON.stringify(tx2));
 ***REMOVED***
 ***REMOVED*** is original tx addressed to me
 ***REMOVED***
-        if (tx2.transaction == undefined) {
+console.log("RELAY 6");
 
-	  if (tx.transaction.to[0].add == app.wallet.returnPublicKey() && tx2.request != undefined) {
-	    app.modules.handlePeerRequest(tx2.returnMessage(), peer, mycallback);
-            mycallback({ err : "" , success : 1 ***REMOVED***);
-	  ***REMOVED***
+	if (tx.transaction.to[0].add == app.wallet.returnPublicKey() && txmsg.request != undefined) {
+
+console.log("EXECUTING RELAYED MSG!");
+
+	  app.modules.handlePeerRequest(txmsg, peer, mycallback);
+          mycallback({ err : "" , success : 1 ***REMOVED***);
+
     ***REMOVED*** else {
 
+console.log("RELAY 7");
 	  let peer_found = 0;
+
+console.log("FWD MESG TO PEER: " + tx2.transaction.to[0].add);
 
           for (let i = 0; i < app.network.peers.length; i++) {
 	    if (tx2.transaction.to[0].add == app.network.peers[i].peer.publickey) {
