@@ -23,6 +23,49 @@ class Chat extends ModTemplate {
 
   ***REMOVED***
 
+
+
+
+  respondTo(type) {
+    if (type == 'email-chat') {
+      let obj = {***REMOVED***;
+          obj.render = this.renderEmailChat;
+          obj.attachEvents = this.attachEventsEmailChat;
+      return obj;
+***REMOVED***
+    return null;
+  ***REMOVED***
+  renderEmailChat(app, data) {
+    let chat_self = app.modules.returnModule("Chat");
+
+    data.chat = {***REMOVED***;
+    data.chat.groups = chat_self.groups;
+    data.chat.active_groups = [];
+
+    EmailChat.initialize(app, data);
+    EmailChat.render(app, data);
+  ***REMOVED***
+  attachEventsEmailChat(app, data) {
+    EmailChat.attachEvents(app, data);
+  ***REMOVED***
+
+
+
+  receiveEvent(type, data) {
+
+    //
+    // new encryption channel opened
+    //
+    if (type === "encrypt-key-exchange-confirm") {
+      if (data.publickey === undefined) { return; ***REMOVED***
+      this.createChatGroup(data);
+***REMOVED***
+
+  ***REMOVED***
+
+
+
+
   initialize(app) {
 
     super.initialize(app);
@@ -51,52 +94,6 @@ class Chat extends ModTemplate {
     ChatMain.render(app, this.uidata);
   ***REMOVED***
 
-
-  respondTo(type) {
-
-    if (type == 'email-chat') {
-      let obj = {***REMOVED***;
-          obj.render = this.renderEmailChat;
-          obj.attachEvents = this.attachEventsEmailChat;
-      return obj;
-***REMOVED***
-
-    return null;
-  ***REMOVED***
-
-
-
-  ////////////////
-  // eMail Chat //
-  ////////////////
-  renderEmailChat(app, data) {
-    let chat_self = app.modules.returnModule("Chat");
-
-    data.chat = {***REMOVED***;
-    data.chat.groups = chat_self.groups;
-    data.chat.active_groups = [];
-
-    EmailChat.initialize(app, data);
-    EmailChat.render(app, data);
-  ***REMOVED***
-
-  attachEventsEmailChat(app, data) {
-    EmailChat.attachEvents(app, data);
-  ***REMOVED***
-
-
-
-  receiveEvent(type, data) {
-
-    //
-    // new encryption channel opened
-    //
-    if (type === "encrypt-key-exchange-confirm") {
-      if (data.publickey === undefined) { return; ***REMOVED***
-      this.createChatGroup(data);
-***REMOVED***
-
-  ***REMOVED***
 
 
 
@@ -142,16 +139,7 @@ class Chat extends ModTemplate {
     if (conf == 0) {
       if (txmsg.request == "chat message") {
         if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) { return; ***REMOVED***
-
-        chat_self.groups.forEach(group => {
-          if (group.group_id == txmsg.group_id) {
-              let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: "others" ***REMOVED***);
-              group.messages.push(msg);
-
-              chat_self.sendEvent('chat_receive_message', msg);
-      ***REMOVED***
-    ***REMOVED***);
-
+	this.receiveChatMessage(app, tx);
   ***REMOVED***
 ***REMOVED***
 
@@ -176,13 +164,13 @@ class Chat extends ModTemplate {
 	  this.chatReceiveMessage(app, tx);
   	  break;
 
-        case "chat load messages":
-	  this.chatLoadMessages(app, tx);
-  	  break;
+***REMOVED***case "chat load messages":
+	//  this.chatLoadMessages(app, tx);
+  	//  break;
 
-        case "chat request messages":
-	  this.chatLoadMessages(app, tx);
-  	  break;
+***REMOVED***case "chat request messages":
+	//  this.chatLoadMessages(app, tx);
+  	//  break;
 
         default:
 	  break;
@@ -213,7 +201,18 @@ class Chat extends ModTemplate {
   ***REMOVED***
 
 
+
   chatReceiveMessage(app, tx) {
+
+    let txmsg = tx.returnMessage();
+
+    chat_self.groups.forEach(group => {
+      if (group.group_id == txmsg.group_id) {
+        let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: "others" ***REMOVED***);
+        group.messages.push(msg);
+        chat_self.sendEvent('chat_receive_message', msg);
+  ***REMOVED***
+***REMOVED***);
   ***REMOVED***
 
 

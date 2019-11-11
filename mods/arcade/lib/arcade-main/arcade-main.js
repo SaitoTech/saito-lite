@@ -2,6 +2,7 @@ const ArcadeMainTemplate = require('./arcade-main.template');
 const ArcadeGameTemplate = require('./arcade-game.template');
 const ArcadeGameListRowTemplate = require('./arcade-gamelist-row.template');
 const ArcadeLoader = require('./arcade-loader');
+const ArcadeGameCreate = require('./arcade-game-create/arcade-game-create');
 
 
 module.exports = ArcadeMain = {
@@ -40,7 +41,11 @@ module.exports = ArcadeMain = {
     //
     Array.from(document.getElementsByClassName('game')).forEach(game => {
       game.addEventListener('click', (e) => {
-	data.arcade.sendOpenRequest(app, data, { name : e.currentTarget.id , options : {***REMOVED*** , players_needed : 2 ***REMOVED*** );
+
+        data.active_game = e.currentTarget.id;
+	ArcadeGameCreate.render(app, data);
+        ArcadeGameCreate.attachEvents(app, data);
+
   ***REMOVED***);
 ***REMOVED***);
 

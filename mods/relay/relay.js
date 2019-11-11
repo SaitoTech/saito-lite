@@ -51,12 +51,18 @@ class Relay extends ModTemplate {
       if (this.app.network.peers[i].peer.modules.includes(this.name)) {
         let peer = this.app.network.peers[i];
 
-        let tx2 = new saito.transaction();
-        tx2.transaction.from.push(new saito.slip(this.app.wallet.returnPublicKey())); 
-        tx2.transaction.to.push(new saito.slip(peer.peer.publickey));
-        tx2.transaction.ts   	= new Date().getTime();
-        tx2.transaction.msg 	= tx.transaction;
-        tx2 = this.app.wallet.signTransaction(tx2);
+	let tx2 = tx;
+
+	if (peer.peer.publickey !== recipient) {
+
+          tx2 = new saito.transaction();
+          tx2.transaction.from.push(new saito.slip(this.app.wallet.returnPublicKey())); 
+          tx2.transaction.to.push(new saito.slip(peer.peer.publickey));
+          tx2.transaction.ts   	= new Date().getTime();
+          tx2.transaction.msg 	= tx.transaction;
+          tx2 = this.app.wallet.signTransaction(tx2);
+
+	***REMOVED***
 
 ***REMOVED***
 ***REMOVED*** forward to peer
@@ -114,7 +120,7 @@ console.log("RELAY 5: " + JSON.stringify(tx2));
 ***REMOVED***
 console.log("RELAY 6");
 
-	if (tx.transaction.to[0].add == app.wallet.returnPublicKey() && txmsg.request != undefined) {
+	if (tx.isTo(app.wallet.returnPublicKey()) && txmsg.request != undefined) {
 
 console.log("EXECUTING RELAYED MSG!");
 
@@ -126,10 +132,8 @@ console.log("EXECUTING RELAYED MSG!");
 console.log("RELAY 7");
 	  let peer_found = 0;
 
-console.log("FWD MESG TO PEER: " + tx2.transaction.to[0].add);
-
           for (let i = 0; i < app.network.peers.length; i++) {
-	    if (tx2.transaction.to[0].add == app.network.peers[i].peer.publickey) {
+	    if (tx2.isTo(app.network.peers[i].peer.publickey)) {
 	      peer_found = 1;
               app.network.peers[i].sendRequest("relay peer message", tx2.transaction.msg, function() {
 	        mycallback({ err : "" , success : 1 ***REMOVED***);
