@@ -32,8 +32,6 @@ web/saito/saito.js.map
 web/saito/*.wasm
 
 
-mods/testing
-mods/testing/*
 mods/catan
 mods/catan/*
 mods/imperium
