@@ -30,13 +30,15 @@ class Arcade extends ModTemplate {
     ArcadeLeftSidebar.render(app, data);
     ArcadeLeftSidebar.attachEvents(app, data);
 
-//    ArcadeRightSidebar.render(app, data);
-//    ArcadeRightSidebar.attachEvents(app, data);
+    ArcadeRightSidebar.render(app, data);
+    ArcadeRightSidebar.attachEvents(app, data);
 
   }
 
 
   initialize(app) {
+
+    super.initialize(app);
 
     //
     // main-panel games
@@ -84,6 +86,44 @@ class Arcade extends ModTemplate {
   }
 
 
+  //
+  // load transactions into interface when the network is up
+  //
+  onPeerHandshakeComplete(app, peer) {
+
+    if (this.browser_active == 0) { return; }
+
+    let arcade_self = this;
+
+    //
+    // load open games from server
+    //
+    this.sendPeerDatabaseRequest("arcade", "games", "*", "status = 'open'", null, function(res) {
+      console.log("HERE in loading open games: " + JSON.stringify(res));
+      if (res.rows == undefined) { return; }
+      if (res.rows.length > 0) {
+        for (let i = 0; i < res.rows.length; i++) {
+	  let tx = new saito.transaction(JSON.parse(res.rows[i].tx));
+	  arcade_self.addGameToOpenList(tx);
+	}
+      }
+    });
+  }
+
+
+  addGameToOpenList(tx) {
+    this.games.push(tx);
+
+    let data = {};
+    data.arcade = this;
+
+    if (this.browser_active == 1) {
+      ArcadeMain.render(this.app, data);
+      ArcadeMain.attachEvents(this.app, data);
+    }
+
+  }
+
 
   async onConfirmation(blk, tx, conf, app) {
 
@@ -96,15 +136,7 @@ class Arcade extends ModTemplate {
       // open msgs -- prolifigate
       //
       if (txmsg.module == "Arcade" && txmsg.request == "open") {
-
-	arcade_self.games.push(tx);
-
-	let data = {};
-	data.arcade = arcade_self;
-
-        ArcadeMain.render(arcade_self.app, data);
-        ArcadeMain.attachEvents(arcade_self.app, data);
-	
+	arcade_self.addGameToOpenList(tx);
 	arcade_self.receiveOpenRequest(blk, tx, conf, app);
       }
 
@@ -235,6 +267,7 @@ class Arcade extends ModTemplate {
 		game_id ,
 		status ,
 		options ,
+		tx ,
 		start_bid ,  
 		created_at ,
 		expires_at
@@ -244,6 +277,7 @@ class Arcade extends ModTemplate {
 		$game_id ,
 		$status ,
 		$options ,
+		$tx,
 		$start_bid ,
 		$created_at ,
 		$expires_at
@@ -254,10 +288,12 @@ class Arcade extends ModTemplate {
                 $game_id    : game_id ,
 	 	$status	    : "open" ,
 		$options    : options ,
+		$tx         : JSON.stringify(tx.transaction) ,
 		$start_bid  : blk.block.id ,
 		$created_at : created_at ,
 		$expires_at : expires_at
               };
+console.log("INSERTING OPEN GAME: " + sql + " -- " + params);
     await app.storage.executeDatabase(sql, params, "arcade");
     return;
   }
