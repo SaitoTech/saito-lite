@@ -3,11 +3,13 @@ module.exports = ArcadeGameCreate = (game) => {
 
     <div class="create-game-wizard">
 
-      <img class="game-image" src="/arcade/img/twilight.jpg">
+      <img class="game-image" src="" />
 
       <div class="game-description"></div>
 
       <div class="game-details"></div>
+
+      <button id="game-create-btn" class="game-create-btn">find opponent</button>
 
       <div id="game-publisher-message" class="game-publisher-message"></div>
 
