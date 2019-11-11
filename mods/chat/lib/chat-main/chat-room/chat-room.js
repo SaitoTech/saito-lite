@@ -65,7 +65,8 @@ module.exports = ChatRoom = {
             message_input.value = '';
 
             let newtx = this.createMessage(app, this.group[0].group_id, msg);
-            this.sendMessageOnChain(app, newtx);
+            data.chat.sendMessage(app, tx);
+    ***REMOVED*** this.sendMessageOnChain(app, newtx);
 
             this.addTXToDOM(newtx);
             this.scrollToBottom();

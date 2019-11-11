@@ -16,5 +16,6 @@ module.exports = EmailChat = {
 	  data.mods[i].respondTo('email-chat').attachEvents(app, data);
     ***REMOVED***
   ***REMOVED***
-***REMOVED***
+***REMOVED***,
+
 ***REMOVED***
