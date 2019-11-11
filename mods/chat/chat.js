@@ -23,6 +23,49 @@ class Chat extends ModTemplate {
 
   }
 
+
+
+
+  respondTo(type) {
+    if (type == 'email-chat') {
+      let obj = {};
+          obj.render = this.renderEmailChat;
+          obj.attachEvents = this.attachEventsEmailChat;
+      return obj;
+    }
+    return null;
+  }
+  renderEmailChat(app, data) {
+    let chat_self = app.modules.returnModule("Chat");
+
+    data.chat = {};
+    data.chat.groups = chat_self.groups;
+    data.chat.active_groups = [];
+
+    EmailChat.initialize(app, data);
+    EmailChat.render(app, data);
+  }
+  attachEventsEmailChat(app, data) {
+    EmailChat.attachEvents(app, data);
+  }
+
+
+
+  receiveEvent(type, data) {
+
+    //
+    // new encryption channel opened
+    //
+    if (type === "encrypt-key-exchange-confirm") {
+      if (data.publickey === undefined) { return; }
+      this.createChatGroup(data);
+    }
+
+  }
+
+
+
+
   initialize(app) {
 
     super.initialize(app);
@@ -51,52 +94,6 @@ class Chat extends ModTemplate {
     ChatMain.render(app, this.uidata);
   }
 
-
-  respondTo(type) {
-
-    if (type == 'email-chat') {
-      let obj = {};
-          obj.render = this.renderEmailChat;
-          obj.attachEvents = this.attachEventsEmailChat;
-      return obj;
-    }
-
-    return null;
-  }
-
-
-
-  ////////////////
-  // eMail Chat //
-  ////////////////
-  renderEmailChat(app, data) {
-    let chat_self = app.modules.returnModule("Chat");
-
-    data.chat = {};
-    data.chat.groups = chat_self.groups;
-    data.chat.active_groups = [];
-
-    EmailChat.initialize(app, data);
-    EmailChat.render(app, data);
-  }
-
-  attachEventsEmailChat(app, data) {
-    EmailChat.attachEvents(app, data);
-  }
-
-
-
-  receiveEvent(type, data) {
-
-    //
-    // new encryption channel opened
-    //
-    if (type === "encrypt-key-exchange-confirm") {
-      if (data.publickey === undefined) { return; }
-      this.createChatGroup(data);
-    }
-
-  }
 
 
 
@@ -142,16 +139,7 @@ class Chat extends ModTemplate {
     if (conf == 0) {
       if (txmsg.request == "chat message") {
         if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) { return; }
-
-        chat_self.groups.forEach(group => {
-          if (group.group_id == txmsg.group_id) {
-              let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: "others" });
-              group.messages.push(msg);
-
-              chat_self.sendEvent('chat_receive_message', msg);
-          }
-        });
-
+	this.receiveChatMessage(app, tx);
       }
     }
 
@@ -176,13 +164,13 @@ class Chat extends ModTemplate {
 	  this.chatReceiveMessage(app, tx);
   	  break;
 
-        case "chat load messages":
-	  this.chatLoadMessages(app, tx);
-  	  break;
+        //case "chat load messages":
+	//  this.chatLoadMessages(app, tx);
+  	//  break;
 
-        case "chat request messages":
-	  this.chatLoadMessages(app, tx);
-  	  break;
+        //case "chat request messages":
+	//  this.chatLoadMessages(app, tx);
+  	//  break;
 
         default:
 	  break;
@@ -213,7 +201,18 @@ class Chat extends ModTemplate {
   }
 
 
+
   chatReceiveMessage(app, tx) {
+
+    let txmsg = tx.returnMessage();
+
+    chat_self.groups.forEach(group => {
+      if (group.group_id == txmsg.group_id) {
+        let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: "others" });
+        group.messages.push(msg);
+        chat_self.sendEvent('chat_receive_message', msg);
+      }
+    });
   }
 
 
