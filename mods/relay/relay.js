@@ -37,12 +37,7 @@ class Relay extends ModTemplate {
     //
     // ... wrapped in transaction to end-user (routing from relay)
     //
-    let tx = new saito.transaction();
-    tx.transaction.from.push(new saito.slip(this.app.wallet.returnPublicKey()));
-    tx.transaction.to.push(new saito.slip(recipient));
-    tx.transaction.ts   = new Date().getTime();
-    tx.transaction.msg = tx3.transaction;
-    tx = this.app.wallet.signTransaction(tx);
+    let tx2 = tx3;
 
     //
     // ... wrapped in transaction to relaying peer
@@ -51,9 +46,14 @@ class Relay extends ModTemplate {
       if (this.app.network.peers[i].peer.modules.includes(this.name)) {
         let peer = this.app.network.peers[i];
 
-        let tx2 = tx;
+	if (peer.peer.publickey !== recipient) {
 
-        if (peer.peer.publickey !== recipient) {
+          let tx = new saito.transaction();
+          tx.transaction.from.push(new saito.slip(this.app.wallet.returnPublicKey()));
+          tx.transaction.to.push(new saito.slip(recipient));
+          tx.transaction.ts   = new Date().getTime();
+          tx.transaction.msg = tx3.transaction;
+          tx = this.app.wallet.signTransaction(tx);
 
           tx2 = new saito.transaction();
           tx2.transaction.from.push(new saito.slip(this.app.wallet.returnPublicKey()));
@@ -91,8 +91,8 @@ console.log("CALLBACK SENT FROM RELAY sendRelayMessage" + JSON.stringify(res));
 console.log("relay mod handle peer request: " + message.request);
 
       if (message.request === "relay test alert") {
-console.log("HERE IT IS");
-        alert(message.data);
+console.log("\n\n\nHERE IT IS");
+//alert(message.data);
       }
 
 
