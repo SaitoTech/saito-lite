@@ -71,8 +71,12 @@ module.exports = ChatBox = {
       };
 
       let newtx = this.createMessage(app, data, msg_data);
-console.log("A");
-      app.network.propagateTransaction(newtx);
+
+      data.mods.forEach(mod => {
+        if (mod.respondTo('email-chat') != null) {
+          mod.respondTo('email-chat').sendMessage(app, newtx);
+        }
+      });
 
       this.addMessageToDOM(msg_data, newtx.transaction.sig, "myself");
     },

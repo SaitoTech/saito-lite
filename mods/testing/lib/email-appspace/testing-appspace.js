@@ -17,7 +17,8 @@ module.exports = TestingAppspace = {
 	if (x == null) { alert("x is null!"); }
         if (x != null) {
 alert("Testing Button Clicked");
-	  x.sendRelayMessage(app.wallet.returnPublicKey(), "relay test alert", "alert message here");
+let publickey = app.network.peers[0].peer.publickey;
+	  x.sendRelayMessage(publickey, "relay test alert", "alert message here");
 alert("Testing Button Clicked 2");
 	}
       });
