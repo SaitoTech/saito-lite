@@ -64,7 +64,7 @@ console.log("RESPONSE TO REQUEST: " + response);
         window.location = '/'+arcade_self.app.options.games[arcade_self.app.options.games.length-1].module.toLowerCase();
 
       } else {
-console.log("ERROR FETCHING GAME");
+console.log("ERROR 418019: error fetching game for observer mode");
       }
     });
   }
