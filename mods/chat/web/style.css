@@ -91,7 +91,7 @@ textarea {
   padding: 1em 1em 0.5em 1em;
   flex-direction: column;
   overflow-y: scroll;
-  height: 76vh;
+  height: calc(100vh - 13.2em);
   margin-top: 3.5em;
 ***REMOVED***
 

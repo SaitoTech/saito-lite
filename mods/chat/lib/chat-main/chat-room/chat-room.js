@@ -26,7 +26,7 @@ module.exports = ChatRoom = {
 ***REMOVED*** header.classList.remove("header-home");
 ***REMOVED*** header.classList.add("chat-room-header");
 ***REMOVED*** header.innerHTML = ChatRoomHeaderTemplate(this.group[0].name);
-        document.querySelector('.chat-room-header').innerHTML = ChatRoomHeaderTemplate(this.group[0].group_name);
+        document.querySelector('.chat-room-header').innerHTML = ChatRoomHeaderTemplate(this.group[0].name);
 
 ***REMOVED*** let footer = document.querySelector('.footer');
 ***REMOVED*** footer.classList.remove("nav-bar");
