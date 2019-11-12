@@ -69,16 +69,21 @@ class Chat extends ModTemplate {
     super.initialize(app);
 
     //
-    // create chat groups from peers
+    // create chat groups from options
     //
+    if (this.app.options.chat) {
+      let { groups ***REMOVED*** = this.app.options.chat;
+      this.groups = groups.map(group => new ChatGroup(this.app, group));
+***REMOVED***
+
 
     //
     // create chatgroups from keychain
     //
-    let keys = this.app.keys.returnKeys();
-    for (let i = 0; i < keys.length; i++) {
-      this.createChatGroup(keys[i]);
-***REMOVED***
+    // let keys = this.app.keys.returnKeys();
+    // for (let i = 0; i < keys.length; i++) {
+    //   this.createChatGroup(keys[i]);
+    // ***REMOVED***
 
   ***REMOVED***
 
@@ -97,36 +102,82 @@ class Chat extends ModTemplate {
   ***REMOVED***
 
 
-  onPeerHandshakeComplete(app, peer) {
-    let hash = this.app.crypto.hash(peer.peer.publickey);
-    this.createChatGroup({publickey: hash***REMOVED***);
+  async onPeerHandshakeComplete(app, peer) {
+
+    if (this.groups.length == 0) {
+      let { publickey ***REMOVED*** = peer.peer;
+      let hash = this.app.crypto.hash(publickey);
+
+      let cg = new ChatGroup(this.app, {
+        id: hash,
+        name: publickey.substring(0, 16),
+        members: []
+  ***REMOVED***);
+
+      cg.initialize(this.app);
+      this.groups.push(cg);
+***REMOVED***
+
+    let group_ids = this.groups.map(group => group.id);
+
+    let txs = new Promise((resolve, reject) => {
+      this.app.storage.loadTransactionsByKeys(group_ids, "Chat", 50, (txs) => {
+        resolve(txs);
+  ***REMOVED***);
+***REMOVED***);
+
+    let tx_messages = {***REMOVED*** ;
+
+    txs = await txs;
+    txs.forEach(tx => {
+      let { group_id ***REMOVED*** = tx.transaction.msg;
+      let txmsg = tx.returnMessage();
+      let msg_type = tx.transaction.from[0].add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
+      let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: msg_type ***REMOVED***);
+      (tx_messages[group_id] = tx_messages[group_id] || []).unshift(msg);
+***REMOVED***);
+
+    this.groups = this.groups.map(group => {
+      group.messages = tx_messages[group.id] || [];
+      return group;
+***REMOVED***);
+
+    this.sendEvent('chat-render-request', {***REMOVED***);
+
+    this.saveChat();
+
+    // this.createChatGroup({publickey, hash***REMOVED***);
   ***REMOVED***
 
 
+  // key can be singular person or group key (TODO group keys?)
   createChatGroup(key=null) {
 
     if (key.publickey == null) { return; ***REMOVED***
 
-    let cg = new ChatGroup(this.app);
+    let members = [this.app.wallet.returnPublicKey(), key.publickey];
+    members.sort();
 
-    cg.group_members = [];
-    cg.group_members.push(this.app.wallet.returnPublicKey());
-    cg.group_members.push(key.publickey);
-    cg.group_members.sort();
-
-    cg.group_id = this.app.crypto.hash(`${cg.group_members[0]***REMOVED***_${cg.group_members[1]***REMOVED***`);
-    cg.group_name = key.publickey.substring(0, 16);
-
-    cg.is_encrypted = key.aes_publickey !== '';
+    let id = this.app.crypto.hash(`${members.join('_')***REMOVED***`)
 
     for (let i = 0; i < this.groups.length; i++) {
-      if (this.groups[i].group_id == cg.group_id) { return; ***REMOVED***
+      if (this.groups[i].id == id) { return; ***REMOVED***
 ***REMOVED***
+
+    let cg = new ChatGroup(this.app, {
+      id,
+      name: key.publickey.substring(0, 16),
+      members,
+***REMOVED***);
+
+    cg.is_encrypted = key.aes_publickey !== '';
 
     cg.initialize(this.app);
     this.groups.push(cg);
 
     this.sendEvent('chat-render-request', {***REMOVED***);
+
+    this.saveChat();
 
   ***REMOVED***
 
@@ -163,9 +214,29 @@ class Chat extends ModTemplate {
 
     try {
 
-      if (req.request == "chat message") {
-	this.chatReceiveMessage(app, tx);
-        if (mycallback) { mycallback({ "payload": "success", "error": {***REMOVED*** ***REMOVED***); ***REMOVED***;
+      switch (req.request) {
+
+        case "chat message":
+          this.chatReceiveMessage(app, new saito.transaction(tx.transaction));
+          if (mycallback) { mycallback({ "payload": "success", "error": {***REMOVED*** ***REMOVED***); ***REMOVED***;
+          break;
+
+        case "chat broadcast message":
+
+  ***REMOVED*** save state of message
+          let archive = this.app.modules.returnModule("Archive");
+          archive.saveTransactionByKey(tx.transaction.msg.group_id, tx);
+
+          this.app.network.peers.forEach(p => {
+            if (p.peer.publickey !== peer.peer.publickey) {
+              p.sendRequest("chat message", tx);
+        ***REMOVED***
+      ***REMOVED***)
+          if (mycallback) { mycallback({ "payload": "success", "error": {***REMOVED*** ***REMOVED***); ***REMOVED***;
+          break;
+
+        default:
+	        break;
   ***REMOVED***
 
  ***REMOVED*** catch(err) {
@@ -202,13 +273,24 @@ class Chat extends ModTemplate {
 
     let txmsg = tx.returnMessage();
 
-    chat_self.groups.forEach(group => {
-      if (group.group_id == txmsg.group_id) {
-        let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: "others" ***REMOVED***);
+    this.groups.forEach(group => {
+      if (group.id == txmsg.group_id) {
+        let msg_type = tx.transaction.from[0].add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
+        let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: msg_type ***REMOVED***);
         group.messages.push(msg);
-        chat_self.sendEvent('chat_receive_message', msg);
+        this.sendEvent('chat_receive_message', msg);
+        this.sendEvent('chat-render-request', {***REMOVED***);
   ***REMOVED***
 ***REMOVED***);
+  ***REMOVED***
+
+  saveChat() {
+    this.app.options.chat = Object.assign({***REMOVED***, this.app.options.chat);
+    this.app.options.chat.groups = this.groups.map(group => {
+      let {id, name, members, is_encrypted***REMOVED*** = group;
+      return {id, name, members, is_encrypted***REMOVED***;
+***REMOVED***);
+    this.app.storage.saveOptions();
   ***REMOVED***
 
 
