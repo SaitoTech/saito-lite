@@ -1,4 +1,4 @@
-const saito = require('../../lib/saito/saito.js');
+const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const ChatGroup = require('./lib/chatgroup');
 const EmailChat = require('./lib/email-chat/email-chat');
@@ -31,10 +31,12 @@ class Chat extends ModTemplate {
       let obj = {};
           obj.render = this.renderEmailChat;
           obj.attachEvents = this.attachEventsEmailChat;
+          obj.sendMessage = this.sendMessage;
       return obj;
     }
     return null;
   }
+
   renderEmailChat(app, data) {
     let chat_self = app.modules.returnModule("Chat");
 
@@ -45,11 +47,10 @@ class Chat extends ModTemplate {
     EmailChat.initialize(app, data);
     EmailChat.render(app, data);
   }
+
   attachEventsEmailChat(app, data) {
     EmailChat.attachEvents(app, data);
   }
-
-
 
   receiveEvent(type, data) {
 
@@ -63,12 +64,13 @@ class Chat extends ModTemplate {
 
   }
 
-
-
-
   initialize(app) {
 
     super.initialize(app);
+
+    //
+    // create chat groups from peers
+    //
 
     //
     // create chatgroups from keychain
@@ -95,12 +97,15 @@ class Chat extends ModTemplate {
   }
 
 
-
+  onPeerHandshakeComplete(app, peer) {
+    let hash = this.app.crypto.hash(peer.peer.publickey);
+    this.createChatGroup({publickey: hash});
+  }
 
 
   createChatGroup(key=null) {
 
-    if (key.publickey==null) { return; }
+    if (key.publickey == null) { return; }
 
     let cg = new ChatGroup(this.app);
 
@@ -154,7 +159,7 @@ class Chat extends ModTemplate {
     if (req.request == null) { return; }
     if (req.data == null) { return; }
 
-    let tx = new saito.transaction(JSON.parse(req.data));
+    let tx = req.data //new saito.transaction(JSON.parse(req.data));
 
     try {
 
@@ -162,7 +167,11 @@ class Chat extends ModTemplate {
 
         case "chat message":
 	  this.chatReceiveMessage(app, tx);
-  	  break;
+      break;
+        case "chat broadcast message":
+          console.log("RECEIVED MESSAGE");
+          //this.chatSendDirectMessage();
+          break;
 
         //case "chat load messages":
 	//  this.chatLoadMessages(app, tx);
@@ -193,14 +202,26 @@ class Chat extends ModTemplate {
 
 
 
-  chatLoadMessages(app, tx) {
+  chatLoadMessages(app, tx) {}
+
+  async chatRequestMessages(app, tx) {}
+
+  sendMessage (app, tx) {
+    let recipient = app.network.peers[0].peer.publickey;
+    let relay_mod = app.modules.returnModule('Relay');
+
+    // let newtx = new saito.transaction();
+    // newtx.transaction.from.push(new saito.slip(app.wallet.returnPublicKey()));
+    // newtx.transaction.to.push(new saito.slip(recipient));
+    // newtx.transaction.ts = new Date().getTime();
+    // newtx.transaction.msg.request = 'chat broadcast message';
+    // newtx.transaction.msg.data 	= tx;
+    // newtx = app.wallet.signTransaction(tx);
+
+    // app.network.sendRequest("relay peer message", tx.transaction);
+
+    relay_mod.sendRelayMessage(recipient, 'chat broadcast message', tx);
   }
-
-
-  async chatRequestMessages(app, tx) {
-  }
-
-
 
   chatReceiveMessage(app, tx) {
 
