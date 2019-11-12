@@ -89,21 +89,23 @@ class Archive extends ModTemplate {
 
     if (tx == null) { return; }
 
-    //
-    // TODO - transactions "TO" multiple ppl this means redundant sigs and txs but with unique publickeys
-    //
     let msgtype = "";
     if (tx.transaction.msg.module != "") { msgtype = tx.transaction.msg.module; }
 
-    let sql = "INSERT INTO txs (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $type)";
-    let params = {
-      $sig		:	tx.transaction.sig ,
-      $publickey	:	tx.transaction.to[0].add ,
-      $tx		:	JSON.stringify(tx.transaction) ,
-      $ts		:	tx.transaction.ts ,
-      $type		:	msgtype
-    };
-    this.app.storage.executeDatabase(sql, params, "archive");
+    let sql = "";
+    let params = {};
+
+    for (let i = 0; i < tx.transaction.to.length; i++) {    
+      sql = "INSERT INTO txs (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $type)";
+      params = {
+        $sig		:	tx.transaction.sig ,
+        $publickey	:	tx.transaction.to[i].add ,
+        $tx		:	JSON.stringify(tx.transaction) ,
+        $ts		:	tx.transaction.ts ,
+        $type		:	msgtype
+      };
+      this.app.storage.executeDatabase(sql, params, "archive");
+    }
 
   }
 
