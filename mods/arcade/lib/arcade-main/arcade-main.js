@@ -28,7 +28,19 @@ module.exports = ArcadeMain = {
     // click-to-join
     //
     data.arcade.games.forEach(tx => {
-      document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(tx);
+      let txmsg = tx.returnMessage();
+      let game_id = txmsg.game_id;
+      let button_text = "JOIN";
+
+      if (data.arcade.app.options.games != undefined) {
+        for (let z = 0; z < data.arcade.app.options.games.length; z++) {
+	  if (data.arcade.app.options.games[z].initializing == 0) {
+	    button_text = "CONTINUE";
+	  ***REMOVED***
+    ***REMOVED***
+  ***REMOVED***
+
+      document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(tx, button_text);
 ***REMOVED***);
 
   ***REMOVED***,

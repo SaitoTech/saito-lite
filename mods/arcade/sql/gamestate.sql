@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS gamestate (
           tid INTEGER ,
           lc INTEGER ,
           last_move INTEGER ,
-          game_state BLOB ,
-          key_state BLOB ,
+          game_state TEXT ,
+          key_state TEXT ,
           PRIMARY KEY (id ASC)
 );
