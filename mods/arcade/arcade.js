@@ -16,7 +16,57 @@ class Arcade extends ModTemplate {
     this.mods			= [];
     this.affix_callbacks_to 	= [];
     this.games			= [];
+    this.observer		= [];
 
+  }
+
+ 
+
+  observeGame(msg) {
+
+    let msgobj 			= JSON.parse(this.app.crypto.base64ToString(msg));
+alert("IN ARCADE OBSERVE GAME: " + JSON.stringify(msgobj));
+    let address_to_watch 	= msgobj.publickey;
+    let game_id 		= msgobj.game_id;
+    let arcade_self		= this;
+
+    $.get(`/arcade/observer/${game_id}`, (response, error) => {
+
+      if (error == "success") {
+
+console.log("RESPONSE TO REQUEST: " + response);
+
+        let game = JSON.parse(response);
+
+        //
+        // tell peers to forward this address transactions
+        //
+        arcade_self.app.keys.addWatchedPublicKey(address_to_watch);
+
+        //
+        // specify observer mode only
+        //
+        game.player = 0;
+        if (arcade_self.app.options.games == undefined) {
+          arcade_self.app.options.games = [];
+        }
+        for (let i = 0; i < arcade_self.app.options.games.length; i++) {
+          if (arcade_self.app.options.games[i].id == game.id) {
+            arcade_self.app.options.games.splice(i, 1);
+          }
+        }
+        arcade_self.app.options.games.push(game);
+        arcade_self.app.storage.saveOptions();
+
+        //
+        // move into game
+        //
+        window.location = '/'+arcade_self.app.options.games[arcade_self.app.options.games.length-1].module.toLowerCase();
+
+      } else {
+console.log("ERROR FETCHING GAME");
+      }
+    });
   }
 
   render(app, data) {
@@ -98,7 +148,7 @@ class Arcade extends ModTemplate {
     //
     // load open games from server
     //
-    this.sendPeerDatabaseRequest("arcade", "games", "*", "status = 'open'", null, function(res) {
+    this.sendPeerDatabaseRequest("arcade", "games", "*", "status = 'open'", null, function(res, data) {
       if (res.rows == undefined) { return; }
       if (res.rows.length > 0) {
         for (let i = 0; i < res.rows.length; i++) {
@@ -112,18 +162,36 @@ class Arcade extends ModTemplate {
     //
     // load active games for observer mode
     //
-    this.sendPeerDatabaseRequest("arcade", "gamestate", "DISTINCT game_id", "1 = 1 GROUP BY game_id ORDER BY last_move DESC LIMIT 50", null, function(res) {
+    this.sendPeerDatabaseRequest("arcade", "gamestate", "DISTINCT game_id, player", "1 = 1 GROUP BY game_id ORDER BY last_move DESC LIMIT 50", null, function(res) {
       if (res.rows == undefined) { return; }
       if (res.rows.length > 0) {
-console.log("ACTIVE GAMES:" + JSON.stringify(res.rows));
-//        for (let i = 0; i < res.rows.length; i++) {
-//	  let tx = new saito.transaction(JSON.parse(res.rows[i].tx));
-//	  arcade_self.addGameToOpenList(tx);
-//	}
+console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
+        for (let i = 0; i < res.rows.length; i++) {
+	  arcade_self.addGameToObserverList({ game_id : res.rows[i].game_id, publickey : res.rows[i].player });
+	}
       }
     });
 
 
+  }
+
+
+  addGameToObserverList(msg) {
+
+    for (let i = 0; i < this.observer.length; i++) {
+      if (msg.game_id == this.observer[i].game_id) {
+        return;
+      }
+    }
+    this.observer.push(msg);
+
+    let data = {};
+    data.arcade = this;
+
+    if (this.browser_active == 1) {
+      ArcadeRightSidebar.render(this.app, data);
+      ArcadeRightSidebar.attachEvents(this.app, data);
+    }
   }
 
 
@@ -170,11 +238,7 @@ console.log("ACTIVE GAMES:" + JSON.stringify(res.rows));
       //
       // save state -- also prolifigate
       //
-console.log("GAME STATE: " + txmsg.game_state);
-console.log("GAME ID: " + txmsg.game_id);
-
       if (txmsg.game_state != undefined && txmsg.game_id != "") {
-console.log("HEADING INTO SAVE GAME STATE!");
 	arcade_self.saveGameState(blk, tx, conf, app);
       }
 
@@ -296,13 +360,10 @@ console.log("HEADING INTO SAVE GAME STATE!");
                 $bid       : blk.block.id ,
                 $tid       : tx.transaction.id ,
                 $lc        : 1 ,
-                $key_state : key_state ,
-                $game_state : game_state ,
+                $key_state : JSON.stringify(key_state) ,
+                $game_state : JSON.stringify(game_state) ,
                 $last_move : (new Date().getTime())
         };
-console.log("\n\n\nSAVING GAMESTATE: ");
-console.log(sql);
-console.log(params);
     await app.storage.executeDatabase(sql, params, "arcade");
 
   }
@@ -527,6 +588,89 @@ console.log("INSERTING OPEN GAME: " + sql + " -- " + params);
 
   
 
+
+  webServer(app, expressapp, express) {
+
+    super.webServer(app, expressapp, express);
+
+    let fs = app.storage.returnFileSystem();
+    if (fs != null) {
+
+      expressapp.get('/arcade/observer/:game_id', async (req, res) => {
+
+console.log("\n\n\n\nHERE WE ARE!");
+
+        let sql    = "SELECT * FROM gamestate WHERE game_id = $game_id ORDER BY id DESC LIMIT 1";
+        let params = { $game_id : req.params.game_id }
+        let games  = await app.storage.queryDatabase(sql, params, "arcade");
+
+        if (games.length > 0) {
+          let game = games[0];
+          res.setHeader('Content-type', 'text/html');
+          res.charset = 'UTF-8';
+console.log(JSON.stringify(game));
+          res.write(game.game_state);
+          res.end();
+          return;
+        }
+
+      });
+
+
+      expressapp.get('/arcade/keystate/:game_id/:player_pkey', async (req, res) => {
+
+        let sql = "SELECT * FROM gamestate WHERE game_id = $game_id AND player_pkey = $playerpkey ORDER BY id DESC LIMIT 1";
+        let params = {
+          $game_id : req.params.game_id ,
+          $playerpkey : req.params.player_pkey
+        }
+        let games  = await app.storage.queryDatabase(sql, params, "arcade");
+
+        if (games.length > 0) {
+
+          let game = games[0];
+          res.setHeader('Content-type', 'text/html');
+          res.charset = 'UTF-8';
+          res.write(game.key_state.toString());
+          res.end();
+          return;
+
+        }
+      });
+
+
+
+      expressapp.get('/arcade/restore/:game_id/:player_pkey', async (req, res) => {
+
+        let sql    = "SELECT * FROM gamestate WHERE game_id = $game_id ORDER BY id DESC LIMIT 10";
+        let params = { $game_id : req.params.game_id }
+        let games  = await app.storage.queryDatabase(sql, params, "arcade");
+
+        let stop_now = 0;
+        let games_to_push = [];
+        let recovering_pkey = "";
+
+        try {
+          if (req.params.player_pkey != undefined) { recovering_pkey = req.params.pkayer_pkey; }
+        } catch (err) {}
+
+        if (games.length > 0) {
+          for (let z = 0; z < games.length; z++) {
+            let game = games[z];
+            if (game.player_pkey == recovering_pkey) { stop_now = 1; } else { games_to_push.push(game.state); }
+            if (recovering_pkey == "" || stop_now == 1) { z = games.length+1; }
+          }
+          res.setHeader('Content-type', 'text/html');
+          res.charset = 'UTF-8';
+          res.write(JSON.stringify(games_to_push));
+          res.end();
+          return;
+        }
+
+      });
+
+    }
+  }
 
 
 

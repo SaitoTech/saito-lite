@@ -163,35 +163,10 @@ class Chat extends ModTemplate {
 
     try {
 
-      switch (req.request) {
-
-        case "chat message":
-	  this.chatReceiveMessage(app, tx);
-      break;
-        case "chat broadcast message":
-          console.log("RECEIVED MESSAGE");
-          //this.chatSendDirectMessage();
-          break;
-
-        //case "chat load messages":
-	//  this.chatLoadMessages(app, tx);
-  	//  break;
-
-        //case "chat request messages":
-	//  this.chatLoadMessages(app, tx);
-  	//  break;
-
-        default:
-	  break;
-
+      if (req.request == "chat message") {
+	this.chatReceiveMessage(app, tx);
+        if (mycallback) { mycallback({ "payload": "success", "error": {} }); };
       }
-
-      if (mycallback) {
-        mycallback({
-          "payload": "success",
-            "error": {}
-        });
-      };
 
      } catch(err) {
       console.log(err);
