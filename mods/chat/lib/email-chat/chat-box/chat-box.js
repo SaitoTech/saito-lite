@@ -11,49 +11,49 @@ module.exports = ChatBox = {
 
         let active_group_name = "";
         if (group != null) {
-          active_group_name = group.group_name;
+          active_group_name = group.name;
         }
 
-        document.querySelector('.chat-manager').append(elParser(ChatBoxTemplate(active_group_name, group.group_id)));
+        document.querySelector('.chat-manager').append(elParser(ChatBoxTemplate(active_group_name, group.id)));
 
         if (group != null) {
           group.messages.forEach(message => {
             let type = message.publickey == app.wallet.returnPublicKey() ? 'myself' : 'others';
-            document.getElementById(`chat-box-main-${group.group_id}`).innerHTML += ChatBoxMessageContainerTemplate(message, '1239841203498', type);
+            document.getElementById(`chat-box-main-${group.id}`).innerHTML += ChatBoxMessageContainerTemplate(message, '1239841203498', type);
           });
         }
 
-        this.scrollToBottom(group.group_id);
+        this.scrollToBottom(group.id);
     },
 
     attachEvents(app, data, group) {
-      let { group_id } = group;
+      // let { id } = group;
 
-      let msg_input = document.getElementById(`chat-box-new-message-input-${group_id}`);
+      let msg_input = document.getElementById(`chat-box-new-message-input-${group.id}`);
       msg_input.addEventListener("keypress", (e) => {
           if ((e.which == 13 || e.keyCode == 13) && !e.shiftKey) {
               e.preventDefault();
               if (msg_input.value == '') { return; }
 
-              this.sendMessage(app, data, msg_input.value, group_id);
+              this.sendMessage(app, data, msg_input.value, group.id);
               this.scrollToBottom();
 
               msg_input.value = '';
           }
       });
 
-      let chat_box_header = document.getElementById(`chat-box-header-${group_id}`);
+      let chat_box_header = document.getElementById(`chat-box-header-${group.id}`);
       chat_box_header.onclick = () => {
-        let chat_box = document.getElementById(`chat-box-${group_id}`);
+        let chat_box = document.getElementById(`chat-box-${group.id}`);
         chat_box.classList.toggle('chat-box-hide');
       };
 
-      document.getElementById(`chat-box-close-${group_id}`)
+      document.getElementById(`chat-box-close-${group.id}`)
               .addEventListener('click', (e) => {
                 e.stopPropagation();
 
                 let group_id = e.currentTarget.id.split('-')[3];
-                data.chat.active_groups = data.chat.active_groups.filter(group => group.group_id != group_id);
+                data.chat.active_groups = data.chat.active_groups.filter(group => group.id != group_id);
 
                 let chat_manager = document.querySelector('.chat-manager');
                 let chat_box_to_delete = document.getElementById(`chat-box-${group_id}`);
@@ -92,7 +92,7 @@ module.exports = ChatBox = {
     createMessage(app, data, msg_data) {
 
         let publickey = app.network.peers[0].peer.publickey;
-        let newtx = app.wallet.createUnsignedTransactionWithDefaultFee(publickey);
+        let newtx = app.wallet.createUnsignedTransaction(publickey, 0.0, 0.0);
         if (newtx == null) { return; }
 
         newtx.transaction.msg = {

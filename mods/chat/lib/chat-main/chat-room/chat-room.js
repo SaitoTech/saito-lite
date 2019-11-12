@@ -13,7 +13,7 @@ module.exports = ChatRoom = {
         let main = document.querySelector('.main');
         main.innerHTML = ChatRoomTemplate();
 
-        this.group = data.chat.groups.filter(group => data.chat.active_group_id === `chat-row-${group.group_id}`);
+        this.group = data.chat.groups.filter(group => data.chat.active_group_id === `chat-row-${group.id}`);
 
         this.group[0].messages.forEach(room_message => {
             let { author, timestamp } = room_message;
@@ -64,7 +64,7 @@ module.exports = ChatRoom = {
 
             message_input.value = '';
 
-            let newtx = this.createMessage(app, this.group[0].group_id, msg);
+            let newtx = this.createMessage(app, this.group[0].id, msg);
             data.chat.sendMessage(app, tx);
             // this.sendMessageOnChain(app, newtx);
 

@@ -69,16 +69,21 @@ class Chat extends ModTemplate {
     super.initialize(app);
 
     //
-    // create chat groups from peers
+    // create chat groups from options
     //
+    if (this.app.options.chat) {
+      let { groups } = this.app.options.chat;
+      this.groups = groups.map(group => new ChatGroup(this.app, group));
+    }
+
 
     //
     // create chatgroups from keychain
     //
-    let keys = this.app.keys.returnKeys();
-    for (let i = 0; i < keys.length; i++) {
-      this.createChatGroup(keys[i]);
-    }
+    // let keys = this.app.keys.returnKeys();
+    // for (let i = 0; i < keys.length; i++) {
+    //   this.createChatGroup(keys[i]);
+    // }
 
   }
 
@@ -97,36 +102,82 @@ class Chat extends ModTemplate {
   }
 
 
-  onPeerHandshakeComplete(app, peer) {
-    let hash = this.app.crypto.hash(peer.peer.publickey);
-    this.createChatGroup({publickey: hash});
+  async onPeerHandshakeComplete(app, peer) {
+
+    if (this.groups.length == 0) {
+      let { publickey } = peer.peer;
+      let hash = this.app.crypto.hash(publickey);
+
+      let cg = new ChatGroup(this.app, {
+        id: hash,
+        name: publickey.substring(0, 16),
+        members: []
+      });
+
+      cg.initialize(this.app);
+      this.groups.push(cg);
+    }
+
+    let group_ids = this.groups.map(group => group.id);
+
+    let txs = new Promise((resolve, reject) => {
+      this.app.storage.loadTransactionsByKeys(group_ids, "Chat", 50, (txs) => {
+        resolve(txs);
+      });
+    });
+
+    let tx_messages = {} ;
+
+    txs = await txs;
+    txs.forEach(tx => {
+      let { group_id } = tx.transaction.msg;
+      let txmsg = tx.returnMessage();
+      let msg_type = tx.transaction.from[0].add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
+      let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: msg_type });
+      (tx_messages[group_id] = tx_messages[group_id] || []).unshift(msg);
+    });
+
+    this.groups = this.groups.map(group => {
+      group.messages = tx_messages[group.id] || [];
+      return group;
+    });
+
+    this.sendEvent('chat-render-request', {});
+
+    this.saveChat();
+
+    // this.createChatGroup({publickey, hash});
   }
 
 
+  // key can be singular person or group key (TODO group keys?)
   createChatGroup(key=null) {
 
     if (key.publickey == null) { return; }
 
-    let cg = new ChatGroup(this.app);
+    let members = [this.app.wallet.returnPublicKey(), key.publickey];
+    members.sort();
 
-    cg.group_members = [];
-    cg.group_members.push(this.app.wallet.returnPublicKey());
-    cg.group_members.push(key.publickey);
-    cg.group_members.sort();
-
-    cg.group_id = this.app.crypto.hash(`${cg.group_members[0]}_${cg.group_members[1]}`);
-    cg.group_name = key.publickey.substring(0, 16);
-
-    cg.is_encrypted = key.aes_publickey !== '';
+    let id = this.app.crypto.hash(`${members.join('_')}`)
 
     for (let i = 0; i < this.groups.length; i++) {
-      if (this.groups[i].group_id == cg.group_id) { return; }
+      if (this.groups[i].id == id) { return; }
     }
+
+    let cg = new ChatGroup(this.app, {
+      id,
+      name: key.publickey.substring(0, 16),
+      members,
+    });
+
+    cg.is_encrypted = key.aes_publickey !== '';
 
     cg.initialize(this.app);
     this.groups.push(cg);
 
     this.sendEvent('chat-render-request', {});
+
+    this.saveChat();
 
   }
 
@@ -166,32 +217,27 @@ class Chat extends ModTemplate {
       switch (req.request) {
 
         case "chat message":
-	  this.chatReceiveMessage(app, tx);
-      break;
-        case "chat broadcast message":
-          console.log("RECEIVED MESSAGE");
-          //this.chatSendDirectMessage();
+          this.chatReceiveMessage(app, new saito.transaction(tx.transaction));
+          if (mycallback) { mycallback({ "payload": "success", "error": {} }); };
           break;
 
-        //case "chat load messages":
-	//  this.chatLoadMessages(app, tx);
-  	//  break;
+        case "chat broadcast message":
 
-        //case "chat request messages":
-	//  this.chatLoadMessages(app, tx);
-  	//  break;
+          // save state of message
+          let archive = this.app.modules.returnModule("Archive");
+          archive.saveTransactionByKey(tx.transaction.msg.group_id, tx);
+
+          this.app.network.peers.forEach(p => {
+            if (p.peer.publickey !== peer.peer.publickey) {
+              p.sendRequest("chat message", tx);
+            }
+          })
+          if (mycallback) { mycallback({ "payload": "success", "error": {} }); };
+          break;
 
         default:
-	  break;
-
+	        break;
       }
-
-      if (mycallback) {
-        mycallback({
-          "payload": "success",
-            "error": {}
-        });
-      };
 
      } catch(err) {
       console.log(err);
@@ -227,13 +273,24 @@ class Chat extends ModTemplate {
 
     let txmsg = tx.returnMessage();
 
-    chat_self.groups.forEach(group => {
-      if (group.group_id == txmsg.group_id) {
-        let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: "others" });
+    this.groups.forEach(group => {
+      if (group.id == txmsg.group_id) {
+        let msg_type = tx.transaction.from[0].add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
+        let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: msg_type });
         group.messages.push(msg);
-        chat_self.sendEvent('chat_receive_message', msg);
+        this.sendEvent('chat_receive_message', msg);
+        this.sendEvent('chat-render-request', {});
       }
     });
+  }
+
+  saveChat() {
+    this.app.options.chat = Object.assign({}, this.app.options.chat);
+    this.app.options.chat.groups = this.groups.map(group => {
+      let {id, name, members, is_encrypted} = group;
+      return {id, name, members, is_encrypted};
+    });
+    this.app.storage.saveOptions();
   }
 
 

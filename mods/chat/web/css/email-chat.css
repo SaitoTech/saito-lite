@@ -8,13 +8,19 @@
   cursor: pointer;
 }
 
+.chat-row-image {
+  width: 100%;
+}
+
 .chat-content {
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+text-overflow: ellipsis;
 }
 
 .chat-last-message {
+  color: grey;
+  margin-top: 7px;
   font-family: visuelt-light;
 }
 
@@ -25,14 +31,15 @@
 .chat-room-message {
   /* display: grid;
   grid-gap: 0.5em; */
-  padding: 1em;
+  padding: 8px 12px;
   max-width: 75%;
   border-radius: 15px;
 }
 
 .chat-message-text {
-  word-wrap: break-word;
+  margin: unset;
   margin-bottom: 5px;
+  word-wrap: break-word;
 }
 
 .chat-room-message-others {
@@ -64,7 +71,12 @@
   color: darkgrey;
 }
 
+.chat-message-author {
+  margin: unset;
+}
+
 .chat-message-timestamp {
+  margin: unset;
   margin-left: 1em;
 }
 
@@ -104,11 +116,12 @@
   margin-top: 0.5em;
   width:100%;
   height:300px;
-  /* border: 1px solid #ddd; */
   font-size: 0.8em;
 }
 
 .chat-list {
+  height: 255px;
+  overflow-y: scroll;
   border: 1px solid #ddd;
 }
 
@@ -199,7 +212,8 @@
 
 .chat-box-new-message-input {
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
+  height: 30px;
   min-height: unset;
   resize: none;
   margin: auto;
