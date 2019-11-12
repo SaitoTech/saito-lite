@@ -52,7 +52,8 @@ class ExplorerCore extends ModTemplate {
                                 $lc: 1,
                                 $rebroadcast: 0
                             }
-                            let rows = await this.db.run(sql, params);
+			    await this.app.storage.executeDatabase(sql, params, "explorer");
+//                            let rows = await this.db.run(sql, params);
                         }
                     }
                 }
@@ -64,15 +65,6 @@ class ExplorerCore extends ModTemplate {
 
     }
 
-    /*webServer(app, expressapp) {
-        expressapp.get('/explorer', (req, res) => {
-            res.sendFile(__dirname + '/web/index.html');
-            document.querySelector('.main').innerHTML = "Hello worldyo";
-            return;
-        });
-    };
-
-    */
 
     webServer(app, expressapp) {
 
