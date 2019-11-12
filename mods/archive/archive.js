@@ -23,10 +23,9 @@ class Archive extends ModTemplate {
     //
     if (conf == 0) {
       if (tx.transaction.msg.module != "") {
-	this.saveTransaction(tx);
+        this.saveTransaction(tx);
   ***REMOVED***
-***REMOVED***    
-   
+***REMOVED***
   ***REMOVED***
 
 
@@ -37,6 +36,8 @@ class Archive extends ModTemplate {
     if (req.request == null) { return; ***REMOVED***
     if (req.data == null) { return; ***REMOVED***
 
+    var txs;
+    var response = {***REMOVED***;
     //
     // only handle archive request
     //
@@ -58,12 +59,21 @@ class Archive extends ModTemplate {
           let num  = 50;
           if (req.data.num != "")  { num = req.data.num; ***REMOVED***
           if (req.data.type != "") { type = req.data.type; ***REMOVED***
-          let txs = await this.loadTransactions(req.data.publickey, req.data.sig, type, num);
-          let response = {***REMOVED***;
-              response.err = "";
-              response.txs = txs;
-	  mycallback(response);
+          txs = await this.loadTransactions(req.data.publickey, req.data.sig, type, num);
+          response.err = "";
+          response.txs = txs;
+          mycallback(response);
+          break;
 
+        case "load_keys":
+          if (!req.data.keys) { return; ***REMOVED***
+          txs = await this.loadTransactionsByKeys(req.data);
+
+          response.err = "";
+          response.txs = txs;
+
+          mycallback(response);
+          break;
 
         default:
           break;
@@ -113,7 +123,7 @@ class Archive extends ModTemplate {
       let sql = "DELETE FROM txs WHERE publickey = $publickey AND sig = $sig";
       let params = {
         $sig		:	tx.transaction.sig ,
-        $publickey	:	authorizing_publickey 
+        $publickey	:	authorizing_publickey
   ***REMOVED***;
 
       this.app.storage.executeDatabase(sql, params, "archive");
@@ -136,11 +146,69 @@ class Archive extends ModTemplate {
 ***REMOVED***
 
     let rows = await this.app.storage.queryDatabase(sql, params, "archive");
-
-    let txs = [];
-    for (let i = 0; i < rows.length; i++) { txs.push(rows[i].tx); ***REMOVED***
+    let txs = rows.map(row => row.tx);
 
     return txs;
+
+  ***REMOVED***
+
+  async saveTransactionByKey(key="", tx=null) {
+
+    if (tx == null) { return; ***REMOVED***
+
+    //
+    // TODO - transactions "TO" multiple ppl this means redundant sigs and txs but with unique publickeys
+    //
+    let msgtype = "";
+    if (tx.transaction.msg.module != "") { msgtype = tx.transaction.msg.module; ***REMOVED***
+
+    let sql = "INSERT INTO txs (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $type)";
+    let params = {
+      $sig:	tx.transaction.sig ,
+      $publickey:	key,
+      $tx:	JSON.stringify(tx.transaction),
+      $ts:	tx.transaction.ts,
+      $type:	msgtype
+***REMOVED***;
+    this.app.storage.executeDatabase(sql, params, "archive");
+
+  ***REMOVED***
+
+  async loadTransactionsByKeys({keys=[], type='all', num=50***REMOVED***) {
+    let sql = "";
+    let params = {***REMOVED***;
+
+    let count = 0;
+    let paramkey = '';
+    let where_statement_array = [];
+
+    try {
+
+      keys.forEach(key => {
+        paramkey = `$key${count***REMOVED***`;
+        where_statement_array.push(paramkey);
+        params[paramkey] =  key;
+        count++;
+  ***REMOVED***);
+
+      if (type === "all") {
+        sql = `SELECT * FROM txs WHERE publickey IN ( ${where_statement_array.join(',')***REMOVED*** ) ORDER BY id DESC LIMIT $num`;
+        params = Object.assign(params, { $num : num ***REMOVED***);
+  ***REMOVED*** else {
+        sql = `SELECT * FROM txs WHERE publickey IN ( ${where_statement_array.join(',')***REMOVED*** ) AND type = $type ORDER BY id DESC LIMIT $num`;
+        params = Object.assign(params, { $type : type , $num : num***REMOVED***);
+  ***REMOVED***
+***REMOVED*** catch(err) {
+      console.log(err);
+***REMOVED***
+
+    try {
+      let rows = await this.app.storage.queryDatabase(sql, params, "archive");
+      let txs = rows.map(row => row.tx);
+      return txs;
+***REMOVED*** catch (err) {
+      console.log(err);
+***REMOVED***
 
   ***REMOVED***
 
