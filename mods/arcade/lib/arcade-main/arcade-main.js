@@ -60,8 +60,25 @@ module.exports = ArcadeMain = {
 
 	for (let i = 0; i < data.arcade.games.length; i++) {
 	  if (data.arcade.games[i].transaction.sig == game_id) {
-	    data.arcade.sendInviteRequest(app, data, data.arcade.games[i]);
 
+	    //
+	    //
+	    //
+	    if (data.arcade.app.options.games != undefined) {
+	      if (data.arcade.app.options.games.length > 0) {
+	        for (let z = 0; z < data.arcade.app.options.games.length; z++) {
+	          if (data.arcade.app.options.games[z].id == game_id) {
+                    app.options.games[z].ts = new Date().getTime();
+                    app.options.games[z].initialize_game_run = 0;
+                    app.storage.saveOptions();
+                    window.location = '/' + app.options.games[i].module.toLowerCase();
+	            return;
+	      ***REMOVED***
+	    ***REMOVED***
+	  ***REMOVED***
+	***REMOVED***
+
+	    data.arcade.sendInviteRequest(app, data, data.arcade.games[i]);
 	    ArcadeLoader.render(app, data);
 	    ArcadeLoader.attachEvents(app, data);
 

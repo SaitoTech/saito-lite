@@ -27,9 +27,6 @@ module.exports = ArcadeGameDreate = {
 
 	    let options  = {***REMOVED***;
 
-alert("Game Dreate Btn");
-
-
 	    $('form input, form select').each(
               function(index) {
                 var input = $(this);
@@ -43,17 +40,12 @@ alert("Game Dreate Btn");
           ***REMOVED***
             );
 
-alert("OPTIONS: " + options);
-
 	    let gamedata = {***REMOVED***;
 	        gamedata.name = gamemod.name;
 	        gamedata.options = gamemod.returnQuickLinkGameOptions(options);
 	        gamedata.players_needed = 2;
 
 	    data.arcade.sendOpenRequest(app, data, gamedata);
-
-alert("Back to Main!");
-
 	    data.arcade.render(app, data);
 
       ***REMOVED***);

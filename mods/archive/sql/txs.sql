@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS txs (
   tx TEXT,
   ts INTEGER,
   type TEXT,
-  UNIQUE (tx),
-  UNIQUE (sig),
+  UNIQUE (publickey, tx),
   PRIMARY KEY(id ASC)
 );

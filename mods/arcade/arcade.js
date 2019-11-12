@@ -1,6 +1,5 @@
 const saito = require('../../lib/saito/saito.js');
 const ModTemplate = require('../../lib/templates/modtemplate');
-
 const ArcadeMain = require('./lib/arcade-main/arcade-main');
 const ArcadeLoader = require('./lib/arcade-main/arcade-loader');
 const ArcadeLeftSidebar = require('./lib/arcade-left-sidebar/arcade-left-sidebar');
@@ -64,11 +63,12 @@ class Arcade extends ModTemplate {
     if (this.app.options.games != undefined) {
       for (let i = 0; i < this.app.options.games.length; i++) {
 	let z = new saito.transaction();
+	z.transaction.sig          = this.app.options.games[i].id;
 	z.transaction.msg.game_id  = this.app.options.games[i].id;
 	z.transaction.msg.request  = "loaded";
         z.transaction.msg.game     = this.app.options.games[i].module;
         z.transaction.msg.options  = this.app.options.games[i].options;;
-	this.games.push[z];
+	this.addGameToOpenList(z);
   ***REMOVED***
 ***REMOVED***
 
@@ -99,7 +99,6 @@ class Arcade extends ModTemplate {
     // load open games from server
     //
     this.sendPeerDatabaseRequest("arcade", "games", "*", "status = 'open'", null, function(res) {
-      console.log("HERE in loading open games: " + JSON.stringify(res));
       if (res.rows == undefined) { return; ***REMOVED***
       if (res.rows.length > 0) {
         for (let i = 0; i < res.rows.length; i++) {
@@ -108,10 +107,39 @@ class Arcade extends ModTemplate {
 	***REMOVED***
   ***REMOVED***
 ***REMOVED***);
+
+
+    //
+    // load active games for observer mode
+    //
+    this.sendPeerDatabaseRequest("arcade", "gamestate", "DISTINCT game_id", "1 = 1 GROUP BY game_id ORDER BY last_move DESC LIMIT 50", null, function(res) {
+      if (res.rows == undefined) { return; ***REMOVED***
+      if (res.rows.length > 0) {
+console.log("ACTIVE GAMES:" + JSON.stringify(res.rows));
+//        for (let i = 0; i < res.rows.length; i++) {
+//	  let tx = new saito.transaction(JSON.parse(res.rows[i].tx));
+//	  arcade_self.addGameToOpenList(tx);
+//	***REMOVED***
+  ***REMOVED***
+***REMOVED***);
+
+
   ***REMOVED***
 
 
   addGameToOpenList(tx) {
+
+    let txmsg = tx.returnMessage();
+
+    for (let i = 0; i < this.games.length; i++) {
+      if (this.games[i].transaction.sig == tx.transaction.sig) { 
+        return;
+  ***REMOVED***
+      if (txmsg.game_id == this.games[i].transaction.sig) {
+        return;
+  ***REMOVED***
+***REMOVED***
+
     this.games.push(tx);
 
     let data = {***REMOVED***;
@@ -121,7 +149,6 @@ class Arcade extends ModTemplate {
       ArcadeMain.render(this.app, data);
       ArcadeMain.attachEvents(this.app, data);
 ***REMOVED***
-
   ***REMOVED***
 
 
@@ -141,24 +168,45 @@ class Arcade extends ModTemplate {
   ***REMOVED***
 
       //
+      // save state -- also prolifigate
+      //
+console.log("GAME STATE: " + txmsg.game_state);
+console.log("GAME ID: " + txmsg.game_id);
+
+      if (txmsg.game_state != undefined && txmsg.game_id != "") {
+console.log("HEADING INTO SAVE GAME STATE!");
+	arcade_self.saveGameState(blk, tx, conf, app);
+  ***REMOVED***
+
+
+      //
       // ignore msgs for others
       //
       if (!tx.isTo(app.wallet.returnPublicKey())) { return; ***REMOVED***
 
 
-      // save state
-      if (txmsg.saveGameState != undefined && txmsg.game_id != "") {
-	arcade_self.saveGameState(blk, tx, conf, app);
-  ***REMOVED***
-
 
       // invites
       if (txmsg.request == "invite") {
+
+        for (let i = 0; i < arcade_self.app.options.games.length; i++) {
+	  if (arcade_self.app.options.games[i].id == txmsg.game_id) {
+	    if (arcade_self.app.options.games[i].initializing == 0) { return; ***REMOVED***
+	  ***REMOVED***
+    ***REMOVED***
+
 	arcade_self.receiveInviteRequest(blk, tx, conf, app);
   ***REMOVED***
 
       // acceptances
       if (txmsg.request == "accept") {
+
+        for (let i = 0; i < arcade_self.app.options.games.length; i++) {
+	  if (arcade_self.app.options.games[i].id == txmsg.game_id) {
+	    if (arcade_self.app.options.games[i].initializing == 0) { return; ***REMOVED***
+	  ***REMOVED***
+    ***REMOVED***
+
         arcade_self.receiveAcceptRequest(blk, tx, conf, app);
 	arcade_self.launchGame(txmsg.game_id);
   ***REMOVED***
@@ -185,7 +233,7 @@ class Arcade extends ModTemplate {
       if (arcade_self.app.options.games != undefined) {
         for (let i = 0; i < arcade_self.app.options.games.length; i++) {
           if (arcade_self.app.options.games[i].id == game_id) {
-              game_idx = i;
+            game_idx = i;
       ***REMOVED***
     ***REMOVED***
   ***REMOVED***
@@ -210,39 +258,54 @@ class Arcade extends ModTemplate {
 
 
 
-/********
   async saveGameState(blk, tx, conf, app) {
 
-        let sql = `INSERT INTO gamestate (
-		game_id, 
-		player,
-		module,
-		bid,
-		tid,
-		lc,
+    let txmsg = tx.returnMessage();
+
+    let game_state = "";
+    let key_state  = "";
+
+    if (txmsg.game_state != "") { game_state = txmsg.game_state; ***REMOVED***
+    if (txmsg.key_state != "") { key_state = txmsg.key_state; ***REMOVED***
+
+    let sql = `INSERT INTO gamestate (
+		game_id , 
+		player ,
+		module ,
+		bid ,
+		tid ,
+		lc ,
+		key_state ,
+		game_state ,
 		last_move
-	      ) VALUES (
+       ) VALUES (
 		$game_id,
 		$player,
 		$module,
 		$bid,
 		$tid,
 		$lc,
+		$key_state,
+		$game_state,
 		$last_move
-	      )`;
-        let params = {
+        )`;
+    let params = {
                 $game_id   : txmsg.game_id ,
                 $player    : tx.transaction.from[0].add ,
                 $module    : txmsg.module ,
                 $bid       : blk.block.id ,
                 $tid       : tx.transaction.id ,
                 $lc        : 1 ,
+                $key_state : key_state ,
+                $game_state : game_state ,
                 $last_move : (new Date().getTime())
-          ***REMOVED***;
-	await app.storage.executeDatabase(sql, params, "arcade");
+    ***REMOVED***;
+console.log("\n\n\nSAVING GAMESTATE: ");
+console.log(sql);
+console.log(params);
+    await app.storage.executeDatabase(sql, params, "arcade");
 
   ***REMOVED***
-******/
 
 
 
@@ -397,7 +460,7 @@ console.log("INSERTING OPEN GAME: " + sql + " -- " + params);
     let removeDuplicates = (names) => names.filter((v,i) => names.indexOf(v) === i)
     let unique_keys = removeDuplicates(publickeys);
  
-    let sql = "UPDATE games SET state = 'expired' WHERE state = $state AND player IN ($player1, $player2, $player3, $player4)";
+    let sql = "UPDATE games SET state = 'accepted' WHERE state = $state AND player IN ($player1, $player2, $player3, $player4)";
     let params = {
       $state : 'open',
       $player1 : unique_keys[0] || '',
