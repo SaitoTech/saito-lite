@@ -26,8 +26,8 @@ module.exports = ChatList = {
             }
 
             let row = {
-                name: group.group_name,
-                group_id: group.group_id,
+                name: group.name,
+                group_id: group.id,
                 message,
                 timestamp,
                 is_encrypted: group.is_encrypted
