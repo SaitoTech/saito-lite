@@ -56,24 +56,24 @@ class Relay extends ModTemplate {
           tx = this.app.wallet.signTransaction(tx);
 
           tx2 = new saito.transaction();
-          tx2.transaction.from.push(new saito.slip(this.app.wallet.returnPublicKey())); 
+          tx2.transaction.from.push(new saito.slip(this.app.wallet.returnPublicKey()));
           tx2.transaction.to.push(new saito.slip(peer.peer.publickey));
           tx2.transaction.ts   	= new Date().getTime();
           tx2.transaction.msg 	= tx.transaction;
           tx2 = this.app.wallet.signTransaction(tx2);
 
-	***REMOVED***
+    ***REMOVED***
 
 ***REMOVED***
 ***REMOVED*** forward to peer
 ***REMOVED***
         peer.sendRequestWithCallback("relay peer message", tx2.transaction, function(res) {
 console.log("CALLBACK SENT FROM RELAY sendRelayMessage" + JSON.stringify(res));
-    ***REMOVED***);   
+    ***REMOVED***);
 
   ***REMOVED***
 ***REMOVED***
-    
+
     return;
 
   ***REMOVED***
@@ -120,29 +120,29 @@ console.log("RELAY 5: " + JSON.stringify(tx2));
 ***REMOVED***
 console.log("RELAY 6");
 
-	if (tx.isTo(app.wallet.returnPublicKey()) && txmsg.request != undefined) {
+        if (tx.isTo(app.wallet.returnPublicKey()) && txmsg.request != undefined) {
 
 console.log("EXECUTING RELAYED MSG!");
 
-	  app.modules.handlePeerRequest(txmsg, peer, mycallback);
+          app.modules.handlePeerRequest(txmsg, peer, mycallback);
           mycallback({ err : "" , success : 1 ***REMOVED***);
 
     ***REMOVED*** else {
 
 console.log("RELAY 7");
-	  let peer_found = 0;
+          let peer_found = 0;
 
           for (let i = 0; i < app.network.peers.length; i++) {
-	    if (tx2.isTo(app.network.peers[i].peer.publickey)) {
-	      peer_found = 1;
+            if (tx2.isTo(app.network.peers[i].peer.publickey)) {
+              peer_found = 1;
               app.network.peers[i].sendRequest("relay peer message", tx2.transaction.msg, function() {
-	        mycallback({ err : "" , success : 1 ***REMOVED***);
-	  ***REMOVED***);
-	***REMOVED***
+                mycallback({ err : "" , success : 1 ***REMOVED***);
+          ***REMOVED***);
+        ***REMOVED***
       ***REMOVED***
-	  if (peer_found == 0) {
-	    mycallback({ err : "ERROR 141423: peer not found in relay module" , success : 0 ***REMOVED***);
-  	  ***REMOVED***
+          if (peer_found == 0) {
+            mycallback({ err : "ERROR 141423: peer not found in relay module" , success : 0 ***REMOVED***);
+        ***REMOVED***
     ***REMOVED***
   ***REMOVED***
 ***REMOVED*** catch (err) {***REMOVED***
