@@ -96,6 +96,8 @@ class Chat extends ModTemplate {
     this.uidata.chat = {***REMOVED***;
     this.uidata.chat.groups = this.groups;
 
+    this.uidata.chatmod = this;
+
     this.uidata.chat.active = "chat_list";
 
     ChatMain.render(app, this.uidata);
@@ -217,7 +219,7 @@ class Chat extends ModTemplate {
       switch (req.request) {
 
         case "chat message":
-          this.chatReceiveMessage(app, new saito.transaction(tx.transaction));
+          this.receiveMessage(app, new saito.transaction(tx.transaction));
           if (mycallback) { mycallback({ "payload": "success", "error": {***REMOVED*** ***REMOVED***); ***REMOVED***;
           break;
 
@@ -255,21 +257,10 @@ class Chat extends ModTemplate {
   sendMessage (app, tx) {
     let recipient = app.network.peers[0].peer.publickey;
     let relay_mod = app.modules.returnModule('Relay');
-
-    // let newtx = new saito.transaction();
-    // newtx.transaction.from.push(new saito.slip(app.wallet.returnPublicKey()));
-    // newtx.transaction.to.push(new saito.slip(recipient));
-    // newtx.transaction.ts = new Date().getTime();
-    // newtx.transaction.msg.request = 'chat broadcast message';
-    // newtx.transaction.msg.data 	= tx;
-    // newtx = app.wallet.signTransaction(tx);
-
-    // app.network.sendRequest("relay peer message", tx.transaction);
-
     relay_mod.sendRelayMessage(recipient, 'chat broadcast message', tx);
   ***REMOVED***
 
-  chatReceiveMessage(app, tx) {
+  receiveMessage(app, tx) {
 
     let txmsg = tx.returnMessage();
 
@@ -278,7 +269,11 @@ class Chat extends ModTemplate {
         let msg_type = tx.transaction.from[0].add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
         let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: msg_type ***REMOVED***);
         group.messages.push(msg);
-        this.sendEvent('chat_receive_message', msg);
+
+        if (this.app.wallet.returnPublicKey() != txmsg.publickey) {
+          this.sendEvent('chat_receive_message', msg);
+    ***REMOVED***
+
         this.sendEvent('chat-render-request', {***REMOVED***);
   ***REMOVED***
 ***REMOVED***);

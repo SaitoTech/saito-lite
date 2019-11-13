@@ -24,6 +24,10 @@ textarea {
   margin: unset;
 ***REMOVED***
 
+p {
+  margin: unset;
+***REMOVED***
+
 .chat-row {
     display: grid;
     grid-column-gap: 1em;
@@ -72,6 +76,7 @@ textarea {
   display: grid;
   border-bottom: 1px solid var(--saito-skyline-grey);
   padding: 1em;
+  height: 3.5em;
 
   position: fixed;
   background: white;
@@ -91,7 +96,8 @@ textarea {
   padding: 1em 1em 0.5em 1em;
   flex-direction: column;
   overflow-y: scroll;
-  height: calc(100vh - 13.2em);
+  /* height: calc(100vh - 12.7em); */
+  height: calc(100vh - 12em);
   margin-top: 3.5em;
 ***REMOVED***
 
@@ -111,6 +117,7 @@ textarea {
   align-items: center;
   border-top: 1px solid var(--saito-skyline-grey);
 
+  height: 3.5em;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -122,7 +129,8 @@ textarea {
 .chat-room-message {
     /* display: grid;
     grid-gap: 0.5em; */
-    padding: 1em;
+    /* padding: 1em; */
+    padding: 0.75em;
     max-width: 75%;
     border-radius: 15px;
 ***REMOVED***

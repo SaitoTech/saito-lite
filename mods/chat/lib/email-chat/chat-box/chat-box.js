@@ -27,17 +27,24 @@ module.exports = ChatBox = {
 ***REMOVED***,
 
     attachEvents(app, data, group) {
-      // let { id ***REMOVED*** = group;
-
       let msg_input = document.getElementById(`chat-box-new-message-input-${group.id***REMOVED***`);
       msg_input.addEventListener("keypress", (e) => {
           if ((e.which == 13 || e.keyCode == 13) && !e.shiftKey) {
               e.preventDefault();
               if (msg_input.value == '') { return; ***REMOVED***
 
-              this.sendMessage(app, data, msg_input.value, group.id);
-              this.scrollToBottom();
+              let msg_data = {
+                message: msg_input.value,
+                group_id: group.id,
+                publickey: app.wallet.returnPublicKey(),
+                timestamp: new Date().getTime()
+          ***REMOVED***;
 
+              let newtx = this.createMessage(app, data, msg_data);
+              app.modules.returnModule("Chat")
+                      .sendMessage(app, newtx);
+
+              this.addMessage(app, newtx);
               msg_input.value = '';
       ***REMOVED***
   ***REMOVED***);
@@ -62,31 +69,28 @@ module.exports = ChatBox = {
 
 ***REMOVED***,
 
-    sendMessage(app, data, msg, group_id) {
-      let msg_data = {
-          message: msg,
-          group_id: group_id,
-          publickey: app.wallet.returnPublicKey(),
-          timestamp: new Date().getTime()
-  ***REMOVED***;
-
-      let newtx = this.createMessage(app, data, msg_data);
-
-      data.mods.forEach(mod => {
-        if (mod.respondTo('email-chat') != null) {
-          mod.respondTo('email-chat').sendMessage(app, newtx);
-    ***REMOVED***
-  ***REMOVED***);
-
-      this.addMessageToDOM(msg_data, newtx.transaction.sig, "myself");
+    addMessage(app, tx) {
+      app.modules.returnModule("Chat")
+                      .receiveMessage(app, tx);
+      this.addTXToDOM(tx);
 ***REMOVED***,
 
-    addMessageToDOM(data, sig, type) {
-        let chat_box_main = document.getElementById(`chat-box-main-${data.group_id***REMOVED***`)
+    addMessageToDOM(msg) {
+      let chat_box_main = document.getElementById(`chat-box-main-${msg.group_id***REMOVED***`)
+      if (!chat_box_main) { return; ***REMOVED***
+
+      chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(msg, msg.sig, msg.type);
+      this.scrollToBottom(msg.group_id);
+***REMOVED***,
+
+    addTXToDOM(tx) {
+***REMOVED***
+
+        let chat_box_main = document.getElementById(`chat-box-main-${txmsg.group_id***REMOVED***`)
         if (!chat_box_main) { return; ***REMOVED***
 
-        chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(data, sig, type);
-        this.scrollToBottom(data.group_id);
+        chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(txmsg, tx.transaction.msg.sig, 'myself');
+        this.scrollToBottom(txmsg.group_id);
 ***REMOVED***,
 
     createMessage(app, data, msg_data) {

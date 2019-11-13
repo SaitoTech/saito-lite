@@ -27,7 +27,7 @@ module.exports = EmailChat = {
 ***REMOVED***,
 
     addMessageToDOM(app, data, msg) {
-      ChatBox.addMessageToDOM(msg, msg.sig, msg.type);
+      ChatBox.addMessageToDOM(msg);
 ***REMOVED***,
 
 ***REMOVED***

@@ -16,8 +16,8 @@ module.exports = ChatRoom = {
         this.group = data.chat.groups.filter(group => data.chat.active_group_id === `chat-row-${group.id***REMOVED***`);
 
         this.group[0].messages.forEach(room_message => {
-            let { author, timestamp ***REMOVED*** = room_message;
-            let type = app.wallet.returnPublicKey() == author ? 'myself' : 'others';
+            let { publickey, timestamp ***REMOVED*** = room_message;
+            let type = app.wallet.returnPublicKey() == publickey ? 'myself' : 'others';
             document.querySelector('.chat-room-content').innerHTML
                 += ChatMessageContainerTemplate(room_message, timestamp, type);
     ***REMOVED***)
@@ -64,13 +64,9 @@ module.exports = ChatRoom = {
 
             message_input.value = '';
 
-            salert("Testing out the alert");
-
             let newtx = this.createMessage(app, this.group[0].id, msg);
-            data.chat.sendMessage(app, tx);
-    ***REMOVED*** this.sendMessageOnChain(app, newtx);
-
-            this.addTXToDOM(newtx);
+            data.chatmod.sendMessage(app, newtx);
+            this.addMessage(app, newtx);
             this.scrollToBottom();
     ***REMOVED***
 
@@ -95,7 +91,7 @@ module.exports = ChatRoom = {
 
         let chat_room_input = document.querySelector('#input.chat-room-input')
 
-        if (this.app.browser.isMobileBrowser(navigator.userAgent)) {
+        if (app.browser.isMobileBrowser(navigator.userAgent)) {
             chat_room_input.addEventListener('focusin', () => {
                 let chat_room_content = document.querySelector('.chat-room-content')
                 chat_room_content.style.height = "52vh";
@@ -140,8 +136,10 @@ module.exports = ChatRoom = {
         return newtx;
 ***REMOVED***,
 
-    sendMessage(app, tx, callback=null) {
-        app.network.sendTransactionToPeers(tx, "chat send message", callback);
+    addMessage(app, tx) {
+      data.chatmod.receiveMessage(app, tx);
+      this.addTXToDOM(tx);
+      this.scrollToBottom();
 ***REMOVED***,
 
     sendMessageOnChain(app, tx, callback=null) {
