@@ -69,14 +69,6 @@ class Chat extends ModTemplate {
     super.initialize(app);
 
     //
-    // create chat groups from options
-    //
-    //if (this.app.options.chat) {
-    //  let { groups } = this.app.options.chat;
-    //  this.groups = groups.map(group => new ChatGroup(this.app, group));
-    //}
-
-    //
     // create chatgroups from keychain
     //
     let keys = this.app.keys.returnKeys();
@@ -90,8 +82,11 @@ class Chat extends ModTemplate {
       chatgroup.members = [];
       chatgroup.members.push(keys[i].publickey);
       chatgroup.members.push(app.wallet.returnPublicKey());
+      chatgroup.identicon = app.keys.returnIdenticon(keys[i].publickey);
       chatgroup.messages = [];
       chatgroup.is_encrypted = 0;
+
+console.log("JUST SET IDENTICON TO: " + chatgroup.identicon);
 
       if (this.app.options.chat != undefined) {
         if (this.app.options.chat.groups != undefined) {
@@ -121,6 +116,9 @@ console.log("ADDING: " + JSON.stringify(chatgroup));
       chatgroup.members = g[i].members;
       chatgroup.messages = [];
       chatgroup.is_encrypted = 0;
+      chatgroup.identicon = app.keys.returnIdenticon(chatgroup.id);
+
+console.log("JUST SET IDENTICON TO: " + chatgroup.identicon);
 
       if (this.app.options.chat != undefined) {
         if (this.app.options.chat.groups != undefined) {
@@ -132,7 +130,6 @@ console.log("ADDING: " + JSON.stringify(chatgroup));
         }
       }
 
-console.log("ADDING: " + JSON.stringify(chatgroup));
       this.groups.push(new ChatGroup(this.app, chatgroup));
     }
   
@@ -172,6 +169,9 @@ console.log("P: " + JSON.stringify(peer.peer));
 	  chatgroup.name = hash.substring(0, 16);
 	  chatgroup.members = [];
 	  chatgroup.message = [];
+	  chatgroup.identicon = this.app.keys.returnIdenticon(publickey);
+
+console.log("JUST SET IDENTICON TO: " + chatgroup.identicon);
 
       let cg = new ChatGroup(this.app, chatgroup);
       cg.initialize(this.app);
@@ -190,10 +190,7 @@ console.log("P: " + JSON.stringify(peer.peer));
 
     txs = await txs;
 
-console.log("TXS: " + JSON.stringify(txs));
 if (txs.length > 0) {
-console.log("CHAT MAUY BE BROKEN< PLS CHECK");
-process.exit();
     txs.forEach(tx => {
       let { group_id } = tx.transaction.msg;
       let txmsg = tx.returnMessage();
@@ -212,7 +209,6 @@ process.exit();
     this.sendEvent('chat-render-request', {});
 
     this.saveChat();
-    // this.createChatGroup({publickey, hash});
   }
 
 
@@ -230,19 +226,22 @@ process.exit();
       if (this.groups[i].id == id) { return; }
     }
 
-    let cg = new ChatGroup(this.app, {
-      id,
-      name: key.publickey.substring(0, 16),
-      members,
-    });
+    let hash = this.app.crypto.hash(id);
+    let chatgroup = {};
+        chatgroup.id = hash;
+        chatgroup.name = key.publickey.substring(0, 16);
+        chatgroup.members = members;
+        chatgroup.messages = [];
+        chatgroup.identicon = this.app.keys.returnIdenticon(key.publickey);
 
+console.log("JUST SET IDENTICON TO: " + chatgroup.identicon);
+
+    let cg = new ChatGroup(this.app, chatgroup);
     cg.is_encrypted = key.aes_publickey !== '';
-
     cg.initialize(this.app);
+
     this.groups.push(cg);
-
     this.sendEvent('chat-render-request', {});
-
     this.saveChat();
 
   }
@@ -344,12 +343,13 @@ process.exit();
   }
 
   saveChat() {
-    this.app.options.chat = Object.assign({}, this.app.options.chat);
 for (let i = 0; i < this.groups.length; i++) {
   console.log("G " + i + " " + this.groups[i].id);
 }
 
+    this.app.options.chat = Object.assign({}, this.app.options.chat);
     this.app.options.chat.groups = this.groups.map(group => {
+      let {id, name, members, is_encrypted} = group;
       return {id, name, members, is_encrypted};
     });
     this.app.storage.saveOptions();
