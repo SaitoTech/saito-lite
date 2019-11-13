@@ -1,29 +1,86 @@
 
 .hospital-splash-image-container {
 ***REMOVED***
+.hospital-title{
+    text-align: center;
+    vertical-align: middle;
+***REMOVED***
 .hospital-splash-image {
     max-width: 100%;
 ***REMOVED***
-
-.hospital {
-    float: left;
+.grid-2-columns{
+    max-width: 500px;
     display: block;
-    border: 1px solid transparent;
-    background-color: white;
-    outline: none;
-    padding: 1em 0;
 ***REMOVED***
-
-.appointment-time-select {
-    float: left;
+#hospital-make-appointment-btn{
+    background-color: #F71F3D;
+    color: white;
+***REMOVED***
+.hospital-btn-box{
+    margin:0 auto;
+***REMOVED***
+.hospital-button{
+    margin: 0 auto;
     display: block;
-    border: 1px solid transparent;
-    background-color: white;
-    outline: none;
-    padding: 1em 0;
-    border: 1px solid #444;
-    padding: 5px;
+    min-width: 260px;
+    margin-top: 15px;
+***REMOVED***
+.hospital{
+    display: block;
+    width:300px;
+    height:auto;
+    border:1px #eee solid;
+    box-shadow:1px 1px 1px 1px rgba(0, 0, 0, 0.05);
+    padding: 6px;
+    overflow: hidden;
+    margin-top: 1em;
+***REMOVED***
+.hospital-name{
     font-size: 1em;
-    margin-top: 20px;
+    font-weight: bolder;
+    margin-bottom: 2px;
 ***REMOVED***
+.hospital-address{
+    font-size: 0.8em;
+    margin-bottom:6px;
+***REMOVED***
+.hospital-select-time{
+    width: 100%;
+    font-weight:bolder;
+    margin-bottom: 6px;
+***REMOVED***
+select {
+    background-color: white;
+    outline: none;
+    padding: 1em 0;
+    border: 1px solid #F71F3D;
+    font-size: 1em;
+    display: block;
+    color: #F71F3D;
+    float: left;
+***REMOVED***
+select:hover{
+    cursor: pointer;
+    background-color: #F71F3D;
+    color: white;
+***REMOVED***
+.book-appointment-slot-btn{
+    width: 40%;
+    float: right;
+    display: none;
+***REMOVED***
+.appointment-info-box {
+    width:auto;
+    height:auto;
+    padding:12px;
+    border:1px #eee solid;
+    display: block;
+    box-shadow:1px 1px 1px 1px rgba(0, 0, 0, 0.05);
+***REMOVED***
+.confirmInfo{
+    margin-top: 15px;
+    margin-bottom: 15px;
+***REMOVED***
+
+
 
