@@ -274,13 +274,15 @@ input[type=file] {
 }
 
 select {
+
     float: left;
     display: block;
-    border: 1px solid transparent;
-    background-color: white;
+    background-color: #efefef;
     outline: none;
     padding: 1em 0;
-    font-size: 1.2em;
+    font-size: 1.3em;
+    color: 1px solid #7b6f6f;
+    border: 1px solid #7b6f6f;
 }
 
 textarea {
