@@ -90,11 +90,16 @@
 ***REMOVED***
 
 .chat-room-message {
-    display: grid;
-    grid-gap: 0.5em;
+    /* display: grid;
+    grid-gap: 0.5em; */
     padding: 1em;
     max-width: 75%;
     border-radius: 5px;
+***REMOVED***
+
+.chat-message-text {
+    word-wrap: break-word;
+    margin-bottom: 5px;
 ***REMOVED***
 
 .chat-message-header {

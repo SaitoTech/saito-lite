@@ -4,7 +4,7 @@ module.exports = EmailAppspaceTemplate = (app) => {
 
   <h3>h3 - Module header</h3>
 
-  <button class="super">Main*</button>
+  <button onclick="salert('hey, hey, hey');" class="super">Main*</button>
 
   <p>Four Column Form*</p>
   <div class="grid-4">
@@ -22,7 +22,11 @@ module.exports = EmailAppspaceTemplate = (app) => {
       <div><input type="checkbox" checked></input><input type="checkbox"></input><input type="checkbox"></input><input type="checkbox"></input></div>
       <div>Radio Buttons</div>
       <div><input type="radio" checked></input><input type="radio"></input><input type="radio"></input><input type="radio"></input></div>
-  </div>
+      <div>File</div>
+      <div><input type="file" name="file" id="file" class="inputfile" /></div>
+      <div>Multi File</div>
+      <div><input type="file" name="multi-file" id="multi-file" class="inputfile" multiple /></div>
+      </div>
 
   <hr />
 
@@ -93,5 +97,8 @@ module.exports = EmailAppspaceTemplate = (app) => {
 </fieldset>
 
 <hr>
+
+<button onclick="salert('This is a Saito native Alert');" >Alert</button>
+<button onclick="sconfirm('This is a Saito native Confirm');" >Confirm</button>
   `;
 ***REMOVED***

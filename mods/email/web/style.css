@@ -1,7 +1,7 @@
 /** Email **/
 
 body {
-  font-size: 1.0em;
+  max-width: 1500px;
 ***REMOVED***
 
 /* .main {
@@ -64,18 +64,24 @@ body {
   text-transform: capitalize;
 ***REMOVED***
 
+.email-main {
+  display: grid;
+  grid-template-rows: 4em calc(100vh - 10.1em);
+***REMOVED***
+
 .email-body {
-  padding: 1em;
+  /* padding: 1em; */
 ***REMOVED***
 
 .email-compose {
   padding: 1em;
   border: 1px solid var(--saito-cyber-black-wash);
-  margin: 0 0 1em 0;
+  margin: 1em 0;
 ***REMOVED***
 
 .email-list {
-  height: 82vh;
+  /* height: calc(100vh - 9.1em); */
+  height: 100%;
   display: flex;
   flex-direction: column;
   overflow: auto;
@@ -181,12 +187,40 @@ body {
 ***REMOVED***
 
 .email-message-content {
+  font-size: 1.2em;
   font-family: visuelt-light;
   display: grid;
-  grid-gap: 5px;
+  grid-gap: 1em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  grid-template-columns: 300px 300px 1fr;
+***REMOVED***
+
+@media only screen and (max-width: 1200px) {
+  .email-message-content {
+    grid-template-columns: 300px 1fr;
+  ***REMOVED***
+***REMOVED***
+
+@media only screen and (max-width: 900px) {
+  .email-message-content {
+    grid-template-columns: 300px;
+  ***REMOVED***
+***REMOVED***
+
+.email-message-from, .email-message-title {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+  display: block;
+  overflow: hidden;
+  font-weight: bold;
+  align-self: center;
+***REMOVED***
+
+.email-message-message {
+  align-self: center;
 ***REMOVED***
 
 .email-message-timestamp {
@@ -319,8 +353,11 @@ body {
 ***REMOVED***
 
 @media only screen and (max-width: 600px) {
-  body {
+  /* body {
     zoom: 1.1;
+  ***REMOVED*** */
+  input[type=checkbox] {
+    margin: 0 0.65em;
   ***REMOVED***
   .main {
     max-width: unset;
@@ -331,6 +368,9 @@ body {
   ***REMOVED***
   .email-header {
     padding: 0 0 5px 0px;
+  ***REMOVED***
+  .email-main {
+    grid-template-rows: 3em calc(100vh - 9.1em);
   ***REMOVED***
   .email-container {
     grid-template-columns: 1fr;
@@ -378,7 +418,7 @@ body {
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: 2em;
-    align-self: end;
+    align-self: center;
     justify-items: center;
     align-items: center;
     grid-gap: 0.3em;
@@ -410,7 +450,6 @@ body {
   .email-navigator-item {
     padding: 5px;
   ***REMOVED***
-
   #email.create-button {
     min-width: unset;
   ***REMOVED***
@@ -422,7 +461,6 @@ body {
     grid-gap: 1em;
     grid-template-columns: 1fr 1fr;
   ***REMOVED***
-
   #qrcode img {
     width: 66%;
     margin: 0.5em 16.6% 1em;

@@ -4,21 +4,19 @@ const ModTemplate = require('../../../lib/templates/modtemplate');
 
 class ChatGroup extends ModTemplate {
 
-  constructor(app) {
+  constructor(app, {id="", name="", members=[], messages=[]***REMOVED***) {
 
     super(app);
 
-    this.name     = "ChatGroup";
     this.events   = ["chatgroup"];
 
+    this.id = id;
+    this.name = name;
+    this.members = members;
+    this.messages = messages;
 
-    this.group_id = "";
-    this.group_name = "";
-    this.group_members = [];
-
+    this.is_encrypted = false;
     this.unread_messages = 0;
-
-    this.messages = [];
 
   ***REMOVED***
 
@@ -35,7 +33,7 @@ class ChatGroup extends ModTemplate {
 ***REMOVED***
 ***REMOVED*** update this chatgroup object with data received
 ***REMOVED***
-        if (txmsg.group_id == this.group_id) {
+        if (txmsg.id == this.id) {
             this.addMessage(txmsg);
     ***REMOVED***
 

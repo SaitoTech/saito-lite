@@ -47,6 +47,10 @@
     margin: 0 10px;
 ***REMOVED***
 
+#explorer-button {
+    min-width: unset;
+***REMOVED***
+
 .jsontree_node {
     list-style: none;
 ***REMOVED***
