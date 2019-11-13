@@ -1,8 +1,15 @@
 const ArcadeMainTemplate = require('./arcade-main.template');
+
+const ArcadeGameCarouselTemplate = require('./arcade-game-carousel/arcade-game-carousel.template');
+
 const ArcadeGameTemplate = require('./arcade-game.template');
 const ArcadeGameListRowTemplate = require('./arcade-gamelist-row.template');
+
 const ArcadeLoader = require('./arcade-loader');
 const ArcadeGameCreate = require('./arcade-game-create/arcade-game-create');
+
+// Use for Carousel
+// const Glide = require('@glidejs/glide');
 
 
 module.exports = ArcadeMain = {
@@ -11,18 +18,20 @@ module.exports = ArcadeMain = {
 
     let arcade_main = document.querySelector(".arcade-main");
     if (!arcade_main) { return; ***REMOVED***
-    arcade_main.innerHTML = ArcadeMainTemplate();
+    // arcade_main.innerHTML += ArcadeGameCarouselTemplate();
+    arcade_main.innerHTML += ArcadeMainTemplate();
 
     //
     // click-to-create games
     //
-    let gamesbox = document.getElementById("arcade-games");
-    data.arcade.mods.forEach(mod => {
-      let gameobj = mod.respondTo("arcade-games");
-      if (gameobj != null) {
-	gamesbox.innerHTML += ArcadeGameTemplate(mod, gameobj);
-  ***REMOVED***
-***REMOVED***);
+    // let carousel = document.getElementById("arcade-carousel-list");
+    // // if (carousel)
+    // data.arcade.mods.forEach(mod => {
+    //   let gameobj = mod.respondTo("arcade-games");
+    //   if (gameobj != null) {
+    //     carousel.innerHTML += ArcadeGameTemplate(mod, gameobj);
+    //   ***REMOVED***
+    // ***REMOVED***);
 
     //
     // click-to-join
@@ -42,6 +51,9 @@ module.exports = ArcadeMain = {
 
       document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(tx, button_text);
 ***REMOVED***);
+
+    // mount our Carousel
+    // new Glide.default('.glide').mount();
 
   ***REMOVED***,
 
