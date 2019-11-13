@@ -35,23 +35,31 @@ module.exports = HospitalMakeAppointment = {
 	      appointments_obj.innerHTML += HospitalMakeAppointmentRowTemplate(res.rows[i]);
             }
 
-            Array.from(document.getElementsByClassName('book-appointment-slot-btn')).forEach(appointment => {
-              appointment.addEventListener('click', (e) => {
 
-	        let id 			= e.currentTarget.id;
+            Array.from(document.getElementsByClassName('appointment-time-select')).forEach(appointment => {
+              appointment.addEventListener('change', (e) => {
+
+		let value = e.currentTarget.value;
+		if (value === "select") { return; }
+
+		let id    = e.currentTarget.id;
+
 		let div_selected	= "appointment-time-select-"+id;
-		let slot_selected 	= document.getElementById(div_selected).value;
+		let slot_selected 	= value;
+	
+		let sc = sconfirm("Do you want to make an appointment at this hospital for "+value);
+		if (sc) {
 
-	        HospitalConfirmAppointment.render(app, data);
-	        HospitalConfirmAppointment.attachEvents(app, data);
+	          HospitalConfirmAppointment.render(app, data);
+	          HospitalConfirmAppointment.attachEvents(app, data);
 
-              })
-            });
+		}
 
+	      })
+	    });
 
-
-          });
-        })
+          })
+      })
     }
 
 }
