@@ -66,7 +66,7 @@ module.exports = ChatRoom = {
 
             let newtx = this.createMessage(app, this.group[0].id, msg);
             data.chatmod.sendMessage(app, newtx);
-            this.addMessage(app, newtx);
+            this.addMessage(app, data, newtx);
             this.scrollToBottom();
         }
 
@@ -136,7 +136,7 @@ module.exports = ChatRoom = {
         return newtx;
     },
 
-    addMessage(app, tx) {
+    addMessage(app, data, tx) {
       data.chatmod.receiveMessage(app, tx);
       this.addTXToDOM(tx);
       this.scrollToBottom();
