@@ -210,9 +210,15 @@ class Email extends ModTemplate {
 
   updateBalance() {
 
+console.log("UPDATING BALANCE: " + this.browser_active);
+
     if (this.browser_active) {
-      var balance = Number(this.app.wallet.returnBalance());
-      document.querySelector('.email-balance').innerHTML = balance.toLocaleString('lookup', {style:"decimal",maximumFractionDigits:6,minimumFractionDigits:2}) + " SAITO";
+      //var balance = Number(this.app.wallet.returnBalance());
+      let balance = this.app.wallet.returnBalance();
+console.log("bALANCE now: " + balance);
+//Number(this.app.wallet.returnBalance());
+      document.querySelector('.email-balance').innerHTML = balance + " SAITO";
+//balance.toLocaleString('lookup', {style:"decimal",maximumFractionDigits:6,minimumFractionDigits:2}) + " SAITO";
     }
   }
 
