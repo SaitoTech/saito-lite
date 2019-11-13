@@ -64,6 +64,8 @@ module.exports = ChatRoom = {
 
             message_input.value = '';
 
+            salert("Testing out the alert");
+
             let newtx = this.createMessage(app, this.group[0].id, msg);
             data.chat.sendMessage(app, tx);
             // this.sendMessageOnChain(app, newtx);
@@ -93,17 +95,19 @@ module.exports = ChatRoom = {
 
         let chat_room_input = document.querySelector('#input.chat-room-input')
 
-        chat_room_input.addEventListener('focusin', () => {
-            let chat_room_content = document.querySelector('.chat-room-content')
-            chat_room_content.style.height = "52vh";
-            setTimeout(() => this.scrollToBottom(), 100);
-        });
+        if (this.app.browser.isMobileBrowser(navigator.userAgent)) {
+            chat_room_input.addEventListener('focusin', () => {
+                let chat_room_content = document.querySelector('.chat-room-content')
+                chat_room_content.style.height = "52vh";
+                setTimeout(() => this.scrollToBottom(), 100);
+            });
 
-        chat_room_input.addEventListener('focusout', () => {
-            let chat_room_content = document.querySelector('.chat-room-content')
-            chat_room_content.style.height = "76vh";
-            setTimeout(() => this.scrollToBottom(), 100);
-        });
+            chat_room_input.addEventListener('focusout', () => {
+                let chat_room_content = document.querySelector('.chat-room-content')
+                chat_room_content.style.height = "76vh";
+                setTimeout(() => this.scrollToBottom(), 100);
+            });
+        }
 
         document.addEventListener('keyup', (e) => {
             if (e.keyCode == '13') { fired = false; }

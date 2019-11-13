@@ -231,8 +231,8 @@ class Chat extends ModTemplate {
             if (p.peer.publickey !== peer.peer.publickey) {
               p.sendRequest("chat message", tx);
             }
-          })
-          if (mycallback) { mycallback({ "payload": "success", "error": {} }); };
+          });
+          if (mycallback) { mycallback({ "payload": "success", "error": {} }); }
           break;
 
         default:
