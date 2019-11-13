@@ -47,6 +47,10 @@
     margin: 0 10px;
 }
 
+#explorer-button {
+    min-width: unset;
+}
+
 .jsontree_node {
     list-style: none;
 }

@@ -2,6 +2,7 @@ const ArcadeMainTemplate = require('./arcade-main.template');
 const ArcadeGameTemplate = require('./arcade-game.template');
 const ArcadeGameListRowTemplate = require('./arcade-gamelist-row.template');
 const ArcadeLoader = require('./arcade-loader');
+const ArcadeGameCreate = require('./arcade-game-create/arcade-game-create');
 
 
 module.exports = ArcadeMain = {
@@ -27,7 +28,19 @@ module.exports = ArcadeMain = {
     // click-to-join
     //
     data.arcade.games.forEach(tx => {
-      document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(tx);
+      let txmsg = tx.returnMessage();
+      let game_id = txmsg.game_id;
+      let button_text = "JOIN";
+
+      if (data.arcade.app.options.games != undefined) {
+        for (let z = 0; z < data.arcade.app.options.games.length; z++) {
+	  if (data.arcade.app.options.games[z].initializing == 0) {
+	    button_text = "CONTINUE";
+	  }
+        }
+      }
+
+      document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(tx, button_text);
     });
 
   },
@@ -40,8 +53,11 @@ module.exports = ArcadeMain = {
     //
     Array.from(document.getElementsByClassName('game')).forEach(game => {
       game.addEventListener('click', (e) => {
-alert("creating game!");
-	data.arcade.sendOpenRequest(app, data, { name : e.currentTarget.id , options : {} , players_needed : 2 } );
+
+        data.active_game = e.currentTarget.id;
+	ArcadeGameCreate.render(app, data);
+        ArcadeGameCreate.attachEvents(app, data);
+
       });
     });
 
@@ -56,9 +72,25 @@ alert("creating game!");
 
 	for (let i = 0; i < data.arcade.games.length; i++) {
 	  if (data.arcade.games[i].transaction.sig == game_id) {
-	    data.arcade.sendInviteRequest(app, data, data.arcade.games[i]);
 
-	    alert("joining game!");
+	    //
+	    //
+	    //
+	    if (data.arcade.app.options.games != undefined) {
+	      if (data.arcade.app.options.games.length > 0) {
+	        for (let z = 0; z < data.arcade.app.options.games.length; z++) {
+	          if (data.arcade.app.options.games[z].id == game_id) {
+                    app.options.games[z].ts = new Date().getTime();
+                    app.options.games[z].initialize_game_run = 0;
+                    app.storage.saveOptions();
+                    window.location = '/' + app.options.games[i].module.toLowerCase();
+	            return;
+	          }
+	        }
+	      }
+	    }
+
+	    data.arcade.sendInviteRequest(app, data, data.arcade.games[i]);
 	    ArcadeLoader.render(app, data);
 	    ArcadeLoader.attachEvents(app, data);
 

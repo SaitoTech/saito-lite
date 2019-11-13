@@ -46,7 +46,6 @@ class Faucet extends ModTemplate {
       newtx.transaction.from = faucet_self.app.wallet.returnAdequateInputs(total_fees.toString());
       newtx.transaction.ts   = new Date().getTime();
 
-
 console.log("INPUTS: " + JSON.stringify(faucet_self.app.wallet.wallet.inputs));
 
       // add change input
@@ -60,32 +59,20 @@ console.log("INPUTS: " + JSON.stringify(faucet_self.app.wallet.wallet.inputs));
       //
       var change_amount = total_inputs.minus(total_fees);
 
-      if (Big(change_amount).gt(0)) {
-        newtx.transaction.to.push(new saito.slip(faucet_self.app.wallet.returnPublicKey(), change_amount.toFixed(8)));
-        newtx.transaction.to[newtx.transaction.to.length-1].type = 0;
-      }
-
       for (let i = 0; i < 8; i++) {
         newtx.transaction.to.push(new saito.slip(publickey, Big(125.0)));
         newtx.transaction.to[newtx.transaction.to.length-1].type = 0;
       }
 
-/*
-
-      let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(publickey, 1000.0);
-      if (newtx == null) {
-        console.log("NEWTX IS NULL");
-        return;
+      if (Big(change_amount).gt(0)) {
+        newtx.transaction.to.push(new saito.slip(faucet_self.app.wallet.returnPublicKey(), change_amount.toFixed(8)));
+        newtx.transaction.to[newtx.transaction.to.length-1].type = 0;
       }
-*/
 
       newtx.transaction.msg.module    = "Email";
       newtx.transaction.msg.title     = "Saito Faucet - Transaction Receipt";
       newtx.transaction.msg.message   = 'You have received 1000 tokens from our Saito faucet.';
       newtx = this.app.wallet.signTransaction(newtx);
-
-
-
 
       this.app.network.propagateTransaction(newtx);
       return;

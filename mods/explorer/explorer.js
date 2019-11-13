@@ -52,7 +52,8 @@ class ExplorerCore extends ModTemplate {
                                 $lc: 1,
                                 $rebroadcast: 0
                             }
-                            let rows = await this.db.run(sql, params);
+			    await this.app.storage.executeDatabase(sql, params, "explorer");
+//                            let rows = await this.db.run(sql, params);
                         }
                     }
                 }
@@ -64,15 +65,6 @@ class ExplorerCore extends ModTemplate {
 
     }
 
-    /*webServer(app, expressapp) {
-        expressapp.get('/explorer', (req, res) => {
-            res.sendFile(__dirname + '/web/index.html');
-            document.querySelector('.main').innerHTML = "Hello worldyo";
-            return;
-        });
-    };
-
-    */
 
     webServer(app, expressapp) {
 
@@ -262,7 +254,7 @@ class ExplorerCore extends ModTemplate {
         </div>' + '\
         <div class="explorer-data"><h4>Search for Block (by hash):</h4> \
         <form method="get" action="/explorer/block"><div class="one-line-form"><input type="text" name="hash" class="hash-search-input" /> \
-        <input type="submit" class="button" value="search" /></div></form> </div> \
+        <input type="submit" id="explorer-button" class="button" value="search" /></div></form> </div> \
         <div class="explorer-data"><h3>Recent Blocks:</h3></div> \
         <div id="block-list">'+ this.listBlocks() + '</div> \
       </div> ';

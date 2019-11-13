@@ -1,4 +1,4 @@
-const saito = require('../../lib/saito/saito.js');
+const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const ChatGroup = require('./lib/chatgroup');
 const EmailChat = require('./lib/email-chat/email-chat');
@@ -23,17 +23,67 @@ class Chat extends ModTemplate {
 
   }
 
+
+
+
+  respondTo(type) {
+    if (type == 'email-chat') {
+      let obj = {};
+          obj.render = this.renderEmailChat;
+          obj.attachEvents = this.attachEventsEmailChat;
+          obj.sendMessage = this.sendMessage;
+      return obj;
+    }
+    return null;
+  }
+
+  renderEmailChat(app, data) {
+    let chat_self = app.modules.returnModule("Chat");
+
+    data.chat = {};
+    data.chat.groups = chat_self.groups;
+    data.chat.active_groups = [];
+
+    EmailChat.initialize(app, data);
+    EmailChat.render(app, data);
+  }
+
+  attachEventsEmailChat(app, data) {
+    EmailChat.attachEvents(app, data);
+  }
+
+  receiveEvent(type, data) {
+
+    //
+    // new encryption channel opened
+    //
+    if (type === "encrypt-key-exchange-confirm") {
+      if (data.publickey === undefined) { return; }
+      this.createChatGroup(data);
+    }
+
+  }
+
   initialize(app) {
 
     super.initialize(app);
 
     //
+    // create chat groups from options
+    //
+    if (this.app.options.chat) {
+      let { groups } = this.app.options.chat;
+      this.groups = groups.map(group => new ChatGroup(this.app, group));
+    }
+
+
+    //
     // create chatgroups from keychain
     //
-    let keys = this.app.keys.returnKeys();
-    for (let i = 0; i < keys.length; i++) {
-      this.createChatGroup(keys[i].publickey);
-    }
+    // let keys = this.app.keys.returnKeys();
+    // for (let i = 0; i < keys.length; i++) {
+    //   this.createChatGroup(keys[i]);
+    // }
 
   }
 
@@ -46,82 +96,90 @@ class Chat extends ModTemplate {
     this.uidata.chat = {};
     this.uidata.chat.groups = this.groups;
 
+    this.uidata.chatmod = this;
+
     this.uidata.chat.active = "chat_list";
 
     ChatMain.render(app, this.uidata);
   }
 
 
-  respondTo(type) {
+  async onPeerHandshakeComplete(app, peer) {
 
-    if (type == 'email-chat') {
-      let obj = {};
-          obj.render = this.renderEmailChat;
-          obj.attachEvents = this.attachEventsEmailChat;
-      return obj;
+    if (this.groups.length == 0) {
+      let { publickey } = peer.peer;
+      let hash = this.app.crypto.hash(publickey);
+
+      let cg = new ChatGroup(this.app, {
+        id: hash,
+        name: publickey.substring(0, 16),
+        members: []
+      });
+
+      cg.initialize(this.app);
+      this.groups.push(cg);
     }
 
-    return null;
+    let group_ids = this.groups.map(group => group.id);
+
+    let txs = new Promise((resolve, reject) => {
+      this.app.storage.loadTransactionsByKeys(group_ids, "Chat", 50, (txs) => {
+        resolve(txs);
+      });
+    });
+
+    let tx_messages = {} ;
+
+    txs = await txs;
+    txs.forEach(tx => {
+      let { group_id } = tx.transaction.msg;
+      let txmsg = tx.returnMessage();
+      let msg_type = tx.transaction.from[0].add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
+      let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: msg_type });
+      (tx_messages[group_id] = tx_messages[group_id] || []).unshift(msg);
+    });
+
+    this.groups = this.groups.map(group => {
+      group.messages = tx_messages[group.id] || [];
+      return group;
+    });
+
+    this.sendEvent('chat-render-request', {});
+
+    this.saveChat();
+
+    // this.createChatGroup({publickey, hash});
   }
 
 
+  // key can be singular person or group key (TODO group keys?)
+  createChatGroup(key=null) {
 
-  ////////////////
-  // eMail Chat //
-  ////////////////
-  renderEmailChat(app, data) {
-    let chat_self = app.modules.returnModule("Chat");
+    if (key.publickey == null) { return; }
 
-    data.chat = {};
-    data.chat.groups = chat_self.groups;
+    let members = [this.app.wallet.returnPublicKey(), key.publickey];
+    members.sort();
 
-    EmailChat.initialize(app, data);
-    EmailChat.render(app, data);
-  }
-
-  attachEventsEmailChat(app, data) {
-    EmailChat.attachEvents(app, data);
-  }
-
-
-
-  receiveEvent(type, data) {
-
-    //
-    // new encryption channel opened
-    //
-    if (type === "encrypt-key-exchange-confirm") {
-      if (data.publickey === undefined) { return; }
-      this.createChatGroup(data.publickey);
-    }
-
-  }
-
-
-
-
-  createChatGroup(publickey=null) {
-
-    if (publickey==null) { return; }
-
-    let cg = new ChatGroup(this.app);
-
-    cg.group_members = [];
-    cg.group_members.push(this.app.wallet.returnPublicKey());
-    cg.group_members.push(publickey);
-    cg.group_members.sort();
-
-    cg.group_id = this.app.crypto.hash((cg.group_members[0] + "_" + cg.group_members[1]));
-    cg.group_name = publickey.substring(0, 16);
+    let id = this.app.crypto.hash(`${members.join('_')}`)
 
     for (let i = 0; i < this.groups.length; i++) {
-      if (this.groups[i].group_id == cg.group_id) { return; }
+      if (this.groups[i].id == id) { return; }
     }
+
+    let cg = new ChatGroup(this.app, {
+      id,
+      name: key.publickey.substring(0, 16),
+      members,
+    });
+
+    cg.is_encrypted = key.aes_publickey !== '';
 
     cg.initialize(this.app);
     this.groups.push(cg);
 
     this.sendEvent('chat-render-request', {});
+
+    this.saveChat();
 
   }
 
@@ -139,15 +197,7 @@ class Chat extends ModTemplate {
     if (conf == 0) {
       if (txmsg.request == "chat message") {
         if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) { return; }
-
-        chat_self.groups.forEach(group => {
-          if (group.group_id == txmsg.group_id) {
-              let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: "others" });
-              group.messages.push(msg);
-              app.connection.emit('chat_receive_message', msg);
-          }
-        });
-
+	this.receiveChatMessage(app, tx);
       }
     }
 
@@ -162,35 +212,34 @@ class Chat extends ModTemplate {
     if (req.request == null) { return; }
     if (req.data == null) { return; }
 
-    let tx = new saito.transaction(JSON.parse(req.data));
+    let tx = req.data //new saito.transaction(JSON.parse(req.data));
 
     try {
 
       switch (req.request) {
 
         case "chat message":
-	  this.chatReceiveMessage(app, tx);
-  	  break;
+          this.receiveMessage(app, new saito.transaction(tx.transaction));
+          if (mycallback) { mycallback({ "payload": "success", "error": {} }); };
+          break;
 
-        case "chat load messages":
-	  this.chatLoadMessages(app, tx);
-  	  break;
+        case "chat broadcast message":
 
-        case "chat request messages":
-	  this.chatLoadMessages(app, tx);
-  	  break;
+          // save state of message
+          let archive = this.app.modules.returnModule("Archive");
+          archive.saveTransactionByKey(tx.transaction.msg.group_id, tx);
+
+          this.app.network.peers.forEach(p => {
+            if (p.peer.publickey !== peer.peer.publickey) {
+              p.sendRequest("chat message", tx);
+            }
+          });
+          if (mycallback) { mycallback({ "payload": "success", "error": {} }); }
+          break;
 
         default:
-	  break;
-
+	        break;
       }
-
-      if (mycallback) {
-        mycallback({
-          "payload": "success",
-            "error": {}
-        });
-      };
 
      } catch(err) {
       console.log(err);
@@ -201,122 +250,42 @@ class Chat extends ModTemplate {
 
 
 
-  chatLoadMessages(app, tx) {
+  chatLoadMessages(app, tx) {}
 
-    let txmsg = tx.returnMessage();
+  async chatRequestMessages(app, tx) {}
 
-//    for (let i = 0; i < txmsg.number_of_rooms_to_update; i++) {
-//      this.chatReceiveMessage(txmsg.number[i]);
-//    }
-
+  sendMessage (app, tx) {
+    let recipient = app.network.peers[0].peer.publickey;
+    let relay_mod = app.modules.returnModule('Relay');
+    relay_mod.sendRelayMessage(recipient, 'chat broadcast message', tx);
   }
 
+  receiveMessage(app, tx) {
 
-
-  async chatRequestMessages(app, tx) {
-
-/*
     let txmsg = tx.returnMessage();
 
-    if (!app.storage.doesDatabaseExist("chat")) { return; }
+    this.groups.forEach(group => {
+      if (group.id == txmsg.group_id) {
+        let msg_type = tx.transaction.from[0].add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
+        let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: msg_type });
+        group.messages.push(msg);
 
-    let sql    = "SELECT * FROM rooms WHERE publickey = $publickey";
-    let params = { $publickey : txmsg.sender }
-    let results = await app.storage.returnArrayFromDatabase(sql, params, "chat");
+        if (this.app.wallet.returnPublicKey() != txmsg.publickey) {
+          this.sendEvent('chat_receive_message', msg);
+        }
 
-    let rooms = [];
-
-    rooms.push({
-      name: "ALL",
-      uuid: "5234092348309823525 FIX THIS"
-    });
-
-    payload.rooms = rooms.map(async room => {
-        let { uuid, name } = room;
-        let addresses = await this.db.all(
-          "SELECT publickey from rooms WHERE uuid = $uuid",
-          { $uuid: uuid }
-        );
-        let messages = await this.db.all(
-          "SELECT * FROM records WHERE room_id = $room_id ORDER BY id DESC LIMIT 50",
-          { $room_id: uuid }
-        );
-        return {
-          room_id: uuid,
-          name: name,
-          addresses: addresses.map(address => address.publickey).filter(publickey => publickey != null),
-          messages: messages.reverse()
-        };
-      });
-
-      payload.rooms = await Promise.all(payload.rooms);
-
-
-    //
-    // relay the results back
-    //
-    let newtx = new saito.transaction();
-    let payload_data_here;
-    newtx.msg = {};
-    newtx.msg.request = "chat load messages";
-    this.app.network.sendPeerRequestToPeer(sender, tx);
-*/
-
-  }
-
-
-
-
-
-  chatReceiveMessage(app, tx) {
-/*
-    let txmsg = tx.returnMessage();
-
-    let sender   = txmsg.sender;
-    let receiver = txmsg.receiver;
-    let room 	 = txmsg.room;
-
-    //
-    // each chat group
-    //
-    let room_id = this.app.crypto.hash(room);
-
-    //
-    // servers, save the data and relay
-    //
-    if (i_am_not_a_party_to_this_chat) {
-
-      //
-      // save to database for my friends
-      //
-      let room_sql = `INSERT OR IGNORE into rooms (uuid, name, publickey, tx) VALUES ($uuid, $name, $publickey, $tx)`;
-      let params   = {};
-      this.app.storage.insertDatabaseEntryOnDatabase(room_sql, params, "chat");
-
-
-    } else {
-
-      //
-      // create module to handle chat
-      //
-      let chatroom = this.app.modules.returnModule(room_id);
-      if (chatroom == null) {
-        this.app.modules.push(new saito.chat(room_id))
-        chatroom = this.app.modules.returnModule(room_id);
+        this.sendEvent('chat-render-request', {});
       }
+    });
+  }
 
-      //
-      // send information to this chat module
-      //
-      chatroom.addMessage(app, tx);
-
-    }
-
-    //
-    // relay the chat message
-    //
-    this.app.network.sendPeerRequestToPeer(receiver, tx);
-*/
+  saveChat() {
+    this.app.options.chat = Object.assign({}, this.app.options.chat);
+    this.app.options.chat.groups = this.groups.map(group => {
+      let {id, name, members, is_encrypted} = group;
+      return {id, name, members, is_encrypted};
+    });
+    this.app.storage.saveOptions();
   }
 
 

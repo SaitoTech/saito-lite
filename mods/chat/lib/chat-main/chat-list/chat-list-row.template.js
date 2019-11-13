@@ -1,8 +1,9 @@
 const datetimeFormatter = require('../../../../../lib/helpers/datetime_formatter');
 
-module.exports = ChatListRowTemplate = ({name, group_id, message, timestamp}) => {
+module.exports = ChatListRowTemplate = ({name, group_id, message, timestamp, is_encrypted}) => {
 
   let datetime = datetimeFormatter(timestamp);
+  let lock_icon_html = is_encrypted ? '<div style="justify-self: center;"><i class="fas fa-lock" style="color: black;"></i></div>' : '';
 
   return `
     <div id="chat-row-${group_id}" class="chat-row">
@@ -11,7 +12,10 @@ module.exports = ChatListRowTemplate = ({name, group_id, message, timestamp}) =>
           <div class="chat-group-name">${name}</div>
           <div class="chat-last-message">${message.substring(0, 72)}</div>
       </div>
-      <div class="chat-last-message-timestamp">${datetime.hours}:${datetime.minutes}</div>
+      <div style="display: grid;">
+        <div class="chat-last-message-timestamp">${datetime.hours}:${datetime.minutes}</div>
+        ${lock_icon_html}
+      </div>
     </div>
   `;
 }

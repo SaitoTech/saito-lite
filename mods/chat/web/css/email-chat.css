@@ -8,7 +8,19 @@
   cursor: pointer;
 }
 
+.chat-row-image {
+  width: 100%;
+}
+
+.chat-content {
+  white-space: nowrap;
+  overflow: hidden;
+text-overflow: ellipsis;
+}
+
 .chat-last-message {
+  color: grey;
+  margin-top: 7px;
   font-family: visuelt-light;
 }
 
@@ -17,11 +29,17 @@
 }
 
 .chat-room-message {
-  display: grid;
-  grid-gap: 0.5em;
-  padding: 1em;
+  /* display: grid;
+  grid-gap: 0.5em; */
+  padding: 8px 12px;
   max-width: 75%;
   border-radius: 15px;
+}
+
+.chat-message-text {
+  margin: unset;
+  margin-bottom: 5px;
+  word-wrap: break-word;
 }
 
 .chat-room-message-others {
@@ -53,7 +71,12 @@
   color: darkgrey;
 }
 
+.chat-message-author {
+  margin: unset;
+}
+
 .chat-message-timestamp {
+  margin: unset;
   margin-left: 1em;
 }
 
@@ -62,15 +85,48 @@
 
 
 
+/** add contact module **/
+
+#add-contact-modal-content {
+  width: 30em;
+}
+
+#add-contact-add-button {
+  margin: 0;
+  /* margin-left: 2em; */
+}
+
+#qr-scanner-icon {
+  text-decoration: none;
+  margin-left: 1.5em;
+}
+
+#qr-code-icon {
+  color: var(--saito-cyber-black-wash)
+}
+
+#qr-code-icon:hover {
+  color: black;
+}
 
 
+/** **/
 
 .email-chat {
   margin-top: 0.5em;
   width:100%;
   height:300px;
-  border: 1px solid #ddd;
   font-size: 0.8em;
+}
+
+.chat-list {
+  height: 255px;
+  overflow-y: scroll;
+  border: 1px solid #ddd;
+}
+
+#email-chat-add-contact {
+  cursor: pointer;
 }
 
 .email-chat .chat-row {
@@ -85,7 +141,6 @@
   bottom: 0;
   right: 0;
 }
-
 
 .chat-box {
   display: grid;
@@ -110,6 +165,7 @@
 
 .chat-box-hide {
   height: 3em;
+  align-self: flex-end;
 }
 
 .chat-box-header {
@@ -145,7 +201,7 @@
 .chat-box-input {
   position: fixed;
   bottom: 0%;
-  width: 100%;
+  width: 32em;
   height: 3em;
   margin-left: 0px;
   padding: 4px;
@@ -156,7 +212,8 @@
 
 .chat-box-new-message-input {
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
+  height: 30px;
   min-height: unset;
   resize: none;
   margin: auto;

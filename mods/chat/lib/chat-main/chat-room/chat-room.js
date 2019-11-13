@@ -13,11 +13,11 @@ module.exports = ChatRoom = {
         let main = document.querySelector('.main');
         main.innerHTML = ChatRoomTemplate();
 
-        this.group = data.chat.groups.filter(group => data.chat.active_group_id === `chat-row-${group.group_id}`);
+        this.group = data.chat.groups.filter(group => data.chat.active_group_id === `chat-row-${group.id}`);
 
         this.group[0].messages.forEach(room_message => {
-            let { author, timestamp } = room_message;
-            let type = app.wallet.returnPublicKey() == author ? 'myself' : 'others';
+            let { publickey, timestamp } = room_message;
+            let type = app.wallet.returnPublicKey() == publickey ? 'myself' : 'others';
             document.querySelector('.chat-room-content').innerHTML
                 += ChatMessageContainerTemplate(room_message, timestamp, type);
         })
@@ -26,7 +26,7 @@ module.exports = ChatRoom = {
         // header.classList.remove("header-home");
         // header.classList.add("chat-room-header");
         // header.innerHTML = ChatRoomHeaderTemplate(this.group[0].name);
-        document.querySelector('.chat-room-header').innerHTML = ChatRoomHeaderTemplate(this.group[0].group_name);
+        document.querySelector('.chat-room-header').innerHTML = ChatRoomHeaderTemplate(this.group[0].name);
 
         // let footer = document.querySelector('.footer');
         // footer.classList.remove("nav-bar");
@@ -43,19 +43,19 @@ module.exports = ChatRoom = {
 
         console.log("NEW GROUP: ", this.group);
 
-        let renderDefaultHeaderAndFooter = (app) => {
-            // header
-            let header = document.querySelector('.header');
-            header.classList.remove("chat-room-header");
-            Header.render(app);
+        // let renderDefaultHeaderAndFooter = (app) => {
+        //     // header
+        //     let header = document.querySelector('.header');
+        //     header.classList.remove("chat-room-header");
+        //     Header.render(app);
 
-            // footer
-            let footer = document.querySelector('.footer');
-            footer.classList.remove("chat-room-footer");
-            footer.innerHTML = '';
-            footer.style.display = 'none';
-            // NavBar.render(chat.app);
-        }
+        //     // footer
+        //     let footer = document.querySelector('.footer');
+        //     footer.classList.remove("chat-room-footer");
+        //     footer.innerHTML = '';
+        //     footer.style.display = 'none';
+        //     // NavBar.render(chat.app);
+        // }
 
         let submitMessage = () => {
             let message_input = document.querySelector('#input.chat-room-input');
@@ -64,29 +64,20 @@ module.exports = ChatRoom = {
 
             message_input.value = '';
 
-            let newtx = this.createMessage(app, this.group[0].group_id, msg);
-            this.sendMessageOnChain(app, newtx);
-
-            console.log(this.group);
-
-            // add message to group
-            // this.group.addMessage(newtx);
-
-            this.addTXToDOM(newtx);
+            let newtx = this.createMessage(app, this.group[0].id, msg);
+            data.chatmod.sendMessage(app, newtx);
+            this.addMessage(app, data, newtx);
             this.scrollToBottom();
         }
 
         document.querySelector('#back-button')
-                .addEventListener('click', () => {
+                .onclick = () => {
                     data.chat.active = "chat_list";
-                    // renderDefaultHeaderAndFooter(chat);
                     data.chat.main.render(app, data);
-                });
+                };
 
         document.querySelector('.chat-room-submit-button')
-                .addEventListener('click', () => {
-                    submitMessage();
-                });
+                .onclick = (e) =>  submitMessage();
 
         document.addEventListener('keydown', (e) => {
             if (e.keyCode == '13') {
@@ -94,11 +85,25 @@ module.exports = ChatRoom = {
                     fired = true;
                     e.preventDefault();
                     submitMessage();
-
-                    console.log("event fired");
                 }
             }
         });
+
+        let chat_room_input = document.querySelector('#input.chat-room-input')
+
+        if (app.browser.isMobileBrowser(navigator.userAgent)) {
+            chat_room_input.addEventListener('focusin', () => {
+                let chat_room_content = document.querySelector('.chat-room-content')
+                chat_room_content.style.height = "52vh";
+                setTimeout(() => this.scrollToBottom(), 100);
+            });
+
+            chat_room_input.addEventListener('focusout', () => {
+                let chat_room_content = document.querySelector('.chat-room-content')
+                chat_room_content.style.height = "76vh";
+                setTimeout(() => this.scrollToBottom(), 100);
+            });
+        }
 
         document.addEventListener('keyup', (e) => {
             if (e.keyCode == '13') { fired = false; }
@@ -131,8 +136,10 @@ module.exports = ChatRoom = {
         return newtx;
     },
 
-    sendMessage(app, tx, callback=null) {
-        app.network.sendTransactionToPeers(tx, "chat send message", callback);
+    addMessage(app, data, tx) {
+      data.chatmod.receiveMessage(app, tx);
+      this.addTXToDOM(tx);
+      this.scrollToBottom();
     },
 
     sendMessageOnChain(app, tx, callback=null) {

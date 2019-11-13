@@ -2,7 +2,6 @@ var saito = require('../../lib/saito/saito');
 var GameTemplate = require('../../lib/templates/gametemplate');
 
 
-
 //////////////////
 // CONSTRUCTOR  //
 //////////////////
@@ -28,15 +27,44 @@ class Poker extends GameTemplate {
 
   initializeGame(game_id) {
 
+    //
+    // game engine needs this to start
+    //
+    if (this.game.dice == "") {
+      this.initializeDice();
+      this.game.queue.push("READY");
+    }
 
   }
 
 
 
-  handleGame(msg=null) {
+  handleGameLoop() {
+
+    ///////////
+    // QUEUE //
+    ///////////
+    if (this.game.queue.length > 0) {
+
+console.log("QUEUE: " + JSON.stringify(this.game.queue));
+
+      let qe = this.game.queue.length-1;
+      let mv = this.game.queue[qe].split("\t");
+      let shd_continue = 1;
+
+      if (mv[0] === "notify") {
+        this.updateLog(mv[1]);
+        this.game.queue.splice(qe, 1);
+      }
 
 
+      if (shd_continue == 1) {
+        return 1;
+      }
+    }
+    return 1;
   }
+
 
 }
 
