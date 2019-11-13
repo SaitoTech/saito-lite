@@ -345,11 +345,8 @@ process.exit();
 
   saveChat() {
     this.app.options.chat = Object.assign({}, this.app.options.chat);
-for (let i = 0; i < this.groups.length; i++) {
-  console.log("G " + i + " " + this.groups[i].id);
-}
-
     this.app.options.chat.groups = this.groups.map(group => {
+//console.log("THIS GROUP: " + JSON.stringify(group));
       return {id, name, members, is_encrypted};
     });
     this.app.storage.saveOptions();

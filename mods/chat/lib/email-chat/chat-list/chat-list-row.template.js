@@ -11,8 +11,6 @@ module.exports = ChatListRowTemplate = ({name, id, messages=[]}) => {
     msg = message.message.substring(0, 48);
   }
 
-  // if (message != '' && message != null) { message = message.substring(0, 72); }
-
   let datetime = datetimeFormatter(ts);
 
   return `
