@@ -19,13 +19,25 @@ module.exports = ChatList = {
         Array.from(document.getElementsByClassName('chat-row'))
             .forEach(row => {
                 row.addEventListener('click', (e) => {
+
                     let group_id = e.currentTarget.id;
-                    if (document.getElementById(`chat-box-${group_id}`)) { return; }
+                    if (document.getElementById(`chat-box-${group_id}`)) { 
+	 	      let textareaobj = document.getElementById(`chat-box-new-message-input-${group_id}`);	
+		      textareaobj.focus();
+		      textareaobj.select();
+		      return; 
+		    }
 
                     let selected_group = data.chat.groups.filter(group => group.id == group_id);
                     ChatManager.addChatBox(app, data, selected_group[0]);
 
                     data.chat.active_groups.push(selected_group[0]);
+
+		    // select textarea
+	 	    let textareaobj = document.getElementById(`chat-box-new-message-input-${group_id}`);	
+		    textareaobj.focus();
+		    textareaobj.select();
+
                 });
             });
     },

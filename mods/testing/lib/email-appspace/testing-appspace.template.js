@@ -6,6 +6,9 @@ module.exports = TestingAppspaceTemplate = () => {
     Enter a private key or address to perform an onchain Diffie-Hellman key exchange and encrypt your transactions.
   </p>
   <br />
+  <div class="testdiv" id="testdiv">
+
+  </div>
   <button class="testing-btn">Click to Test Button</button>
 </div> 
   `;

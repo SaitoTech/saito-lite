@@ -28,6 +28,7 @@
     "express": "^4.17.1",
     "fastest-stable-stringify": "^2.0.2",
     "fs-extra": "^8.1.0",
+    "identicon.js": "^2.3.3",
     "jquery": "^3.4.1",
     "jsdom": "^15.2.0",
     "json-tree-viewer": "0.0.2",

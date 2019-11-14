@@ -58,8 +58,10 @@ class Chat extends ModTemplate {
     // new encryption channel opened
     //
     if (type === "encrypt-key-exchange-confirm") {
-      if (data.publickey === undefined) { return; }
-      this.createChatGroup(data);
+      if (data.members === undefined) { return; }
+      this.createChatGroup(data.members);
+      this.sendEvent('chat-render-request', {});
+      this.saveChat();
     }
 
   }
@@ -69,23 +71,32 @@ class Chat extends ModTemplate {
     super.initialize(app);
 
     //
-    // create chat groups from options
+    // create chatgroups from keychain
     //
-    if (this.app.options.chat) {
-      let { groups } = this.app.options.chat;
-      this.groups = groups.map(group => new ChatGroup(this.app, group));
+    let keys = this.app.keys.returnKeys();
+    for (let i = 0; i < keys.length; i++) {
+
+      let members = [keys[i].publickey, this.app.wallet.returnPublicKey()];
+      this.createChatGroup(members);
+
     }
 
 
     //
-    // create chatgroups from keychain
+    // create chatgroups from groups
     //
-    // let keys = this.app.keys.returnKeys();
-    // for (let i = 0; i < keys.length; i++) {
-    //   this.createChatGroup(keys[i]);
-    // }
+    let g = this.app.keys.returnGroups();
+    for (let i = 0; i < g.length; i++) {
+      let members = g[i].members;
+      this.createChatGroup(members);
+    }
+
+    this.sendEvent('chat-render-request', {});
 
   }
+
+
+
 
   initializeHTML(app) {
     super.initializeHTML(app);
@@ -108,22 +119,14 @@ class Chat extends ModTemplate {
 
     if (this.groups.length == 0) {
       let { publickey } = peer.peer;
-      let hash = this.app.crypto.hash(publickey);
-
-      let cg = new ChatGroup(this.app, {
-        id: hash,
-        name: publickey.substring(0, 16),
-        members: []
-      });
-
-      cg.initialize(this.app);
-      this.groups.push(cg);
+      let members = [peer.peer.publickey, app.wallet.returnPublicKey()];
+      this.createChatGroup(members);
     }
 
     let group_ids = this.groups.map(group => group.id);
 
     let txs = new Promise((resolve, reject) => {
-      this.app.storage.loadTransactionsByKeys(group_ids, "Chat", 50, (txs) => {
+      app.storage.loadTransactionsByKeys(group_ids, "Chat", 50, (txs) => {
         resolve(txs);
       });
     });
@@ -131,55 +134,78 @@ class Chat extends ModTemplate {
     let tx_messages = {} ;
 
     txs = await txs;
+
+if (txs.length > 0) {
     txs.forEach(tx => {
       let { group_id } = tx.transaction.msg;
       let txmsg = tx.returnMessage();
-      let msg_type = tx.transaction.from[0].add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
+      let msg_type = tx.transaction.from[0].add == app.wallet.returnPublicKey() ? 'myself' : 'others';
       let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: msg_type });
       (tx_messages[group_id] = tx_messages[group_id] || []).unshift(msg);
     });
 
+     
     this.groups = this.groups.map(group => {
       group.messages = tx_messages[group.id] || [];
       return group;
     });
+}
 
     this.sendEvent('chat-render-request', {});
 
     this.saveChat();
-
-    // this.createChatGroup({publickey, hash});
   }
 
 
   // key can be singular person or group key (TODO group keys?)
-  createChatGroup(key=null) {
+  createChatGroup(members=null) {
 
-    if (key.publickey == null) { return; }
-
-    let members = [this.app.wallet.returnPublicKey(), key.publickey];
+    if (members == null) { return; }
     members.sort();
 
     let id = this.app.crypto.hash(`${members.join('_')}`)
+    let identicon = "";
+    let address = "";
+
+    if (members.length == 2) {
+      if (members[0] != this.app.wallet.returnPublicKey()) {
+        address = members[0];
+      } else {
+        address = members[1];
+      }
+    } else {
+      address = "Group " + id.substring(0, 6);
+    }
+    identicon = this.app.keys.returnIdenticon(address);
 
     for (let i = 0; i < this.groups.length; i++) {
       if (this.groups[i].id == id) { return; }
     }
 
-    let cg = new ChatGroup(this.app, {
-      id,
-      name: key.publickey.substring(0, 16),
-      members,
-    });
+    let chatgroup = {};
+        chatgroup.id = id;
+        chatgroup.name = address.substring(0, 16);
+        chatgroup.members = members;
+        chatgroup.messages = [];
+        chatgroup.identicon = identicon;
 
-    cg.is_encrypted = key.aes_publickey !== '';
+    let cg = new ChatGroup(this.app, chatgroup);
 
+    if (this.app.options.chat != undefined) {
+      if (this.app.options.chat.groups != undefined) {
+        for (let z = 0; z < this.app.options.chat.groups.length; z++) {
+          if (this.app.options.chat.groups[z].id == chatgroup.id) {
+            cg.messages = this.app.options.chat.groups[z].messages;
+          }
+        }
+      }
+    }
+
+console.log("JUST SET IDENTICON TO: " + chatgroup.identicon);
+
+    cg.is_encrypted = 0;
     cg.initialize(this.app);
     this.groups.push(cg);
-
-    this.sendEvent('chat-render-request', {});
-
-    this.saveChat();
 
   }
 
@@ -280,6 +306,10 @@ class Chat extends ModTemplate {
   }
 
   saveChat() {
+for (let i = 0; i < this.groups.length; i++) {
+  console.log("G " + i + " " + this.groups[i].id);
+}
+
     this.app.options.chat = Object.assign({}, this.app.options.chat);
     this.app.options.chat.groups = this.groups.map(group => {
       let {id, name, members, is_encrypted} = group;

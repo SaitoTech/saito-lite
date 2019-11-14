@@ -4,7 +4,7 @@ const ModTemplate = require('../../../lib/templates/modtemplate');
 
 class ChatGroup extends ModTemplate {
 
-  constructor(app, {id="", name="", members=[], messages=[]}) {
+  constructor(app, {id="", name="", members=[], messages=[], identicon=""}) {
 
     super(app);
 
@@ -14,6 +14,7 @@ class ChatGroup extends ModTemplate {
     this.name = name;
     this.members = members;
     this.messages = messages;
+    this.identicon = identicon;
 
     this.is_encrypted = false;
     this.unread_messages = 0;
@@ -70,15 +71,9 @@ class ChatGroup extends ModTemplate {
 
 
   receiveEvent(type, data) {
-
-console.log("RECEIVED EVENTIN CHATGROUP: " + type);
-
     if (type === "chatgroup") {
-
-this.sendEvent("chat", this.returnChatObject());
-
+      this.sendEvent("chat", this.returnChatObject());
     }
-
   }
 
 

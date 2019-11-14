@@ -1,6 +1,6 @@
 const datetimeFormatter = require('../../../../../lib/helpers/datetime_formatter');
 
-module.exports = ChatListRowTemplate = ({name, id, messages=[]}) => {
+module.exports = ChatListRowTemplate = ({name, id, messages=[], identicon}) => {
 
   let ts = new Date().getTime();
   let msg = '';
@@ -11,13 +11,11 @@ module.exports = ChatListRowTemplate = ({name, id, messages=[]}) => {
     msg = message.message.substring(0, 48);
   }
 
-  // if (message != '' && message != null) { message = message.substring(0, 72); }
-
   let datetime = datetimeFormatter(ts);
 
   return `
     <div id="${id}" class="chat-row">
-      <img class="chat-row-image" src="/saito/img/logo-color.svg">
+      <img class="chat-row-image" src="${identicon}">
       <div class="chat-content">
           <div class="chat-group-name">${name}</div>
           <div class="chat-last-message">${msg}</div>
