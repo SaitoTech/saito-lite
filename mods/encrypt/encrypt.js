@@ -43,8 +43,7 @@ class Encrypt extends ModTemplate {
 
     if (recipient == "") { return; }
 
-    let tx 				   = this.app.wallet.createUnsignedTransactionWithDefaultFee(recipient, (2 * this.app.wallet.wallet.default_fee)); 
-
+    let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee(recipient, (2 * this.app.wallet.wallet.default_fee)); 
         tx.transaction.msg.module	   = this.name;
   	tx.transaction.msg.request 	   = "key exchange request";
 	tx.transaction.msg.alice_publickey = this.app.keys.initializeKeyExchange(recipient);
@@ -89,7 +88,7 @@ console.log("ACCEPT KEY EXCHANGE 3");
 console.log("\n\nUPDATE CRYPTO BY PUBLICKEY: ");
 
     this.app.keys.updateCryptoByPublicKey(remote_address, bob_publickey.toString("hex"), bob_privatekey.toString("hex"), bob_secret.toString("hex"));
-    this.sendEvent('encrypt-key-exchange-confirm', { publickey : remote_address });
+    this.sendEvent('encrypt-key-exchange-confirm', { members : [remote_address, our_address] });
 
 console.log("ACCEPT KEY EXCHANGE 4");
 
