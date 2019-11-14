@@ -3,15 +3,18 @@ module.exports = ArcadeGameListRowTemplate = (tx, button_text) => {
   let optionstxt = "";
   let jointxt = "JOIN";
 
-console.log("\n\n\nADDING GAME: " + JSON.stringify(tx.returnMessage()));
+  let {sig, msg} = tx.transaction;
+  let {options, game} = msg;
 
-  if (JSON.stringify(tx.transaction.msg.options).length > 2) { optionstxt = JSON.stringify(tx.transaction.msg.options); }
+  // console.log("\n\n\nADDING GAME: " + JSON.stringify(tx.returnMessage()));
+
+  // if (JSON.stringify(options).length > 2) { optionstxt = JSON.stringify(options); }
 
   return `
-    <div class="arcade-game-invitation" id="${tx.transaction.sig}">
-      <div class="arcade-game-row-name" id="${tx.transaction.sig}">${tx.transaction.msg.game}</div>
-      <div class="arcade-game-row-options" id="${tx.transaction.sig}">${optionstxt}</div>
-      <div class="arcade-game-row-join" id="${tx.transaction.sig}">${button_text}</div>
+    <div class="arcade-game-invitation" id="arcade-game-${sig}">
+      <div class="arcade-game-row-name" id="arcade-game-name-${sig}">${game}</div>
+      <div class="arcade-game-row-options" id="arcade-game-options-${sig}">${optionstxt}</div>
+      <button class="arcade-game-row-join" id="arcade-game-join-${sig}">${button_text}</button>
     </div>
   `;
 

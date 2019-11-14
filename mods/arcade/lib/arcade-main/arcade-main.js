@@ -8,9 +8,6 @@ const ArcadeGameListRowTemplate = require('./arcade-gamelist-row.template');
 const ArcadeLoader = require('./arcade-loader');
 const ArcadeGameCreate = require('./arcade-game-create/arcade-game-create');
 
-// Use for Carousel
-// const Glide = require('@glidejs/glide');
-
 
 module.exports = ArcadeMain = {
 
@@ -24,17 +21,16 @@ module.exports = ArcadeMain = {
     //
     // click-to-create games
     //
-    // let carousel = document.getElementById("arcade-carousel-list");
-    // // if (carousel)
-    // data.arcade.mods.forEach(mod => {
-    //   let gameobj = mod.respondTo("arcade-games");
-    //   if (gameobj != null) {
-    //     carousel.innerHTML += ArcadeGameTemplate(mod, gameobj);
-    //   }
-    // });
+    let carousel = document.getElementById("arcade-carousel-slides");
+    data.arcade.mods.forEach(mod => {
+      let gameobj = mod.respondTo("arcade-games");
+      if (gameobj != null) {
+        carousel.innerHTML += ArcadeGameTemplate(mod, gameobj);
+      }
+    });
 
     //
-    // click-to-join
+    // click-to-joina
     //
     data.arcade.games.forEach(tx => {
       let txmsg = tx.returnMessage();
@@ -43,17 +39,14 @@ module.exports = ArcadeMain = {
 
       if (data.arcade.app.options.games != undefined) {
         for (let z = 0; z < data.arcade.app.options.games.length; z++) {
-	  if (data.arcade.app.options.games[z].initializing == 0) {
-	    button_text = "CONTINUE";
-	  }
+          if (data.arcade.app.options.games[z].initializing == 0) {
+            button_text = "CONTINUE";
+          }
         }
       }
 
       document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(tx, button_text);
     });
-
-    // mount our Carousel
-    // new Glide.default('.glide').mount();
 
   },
 
@@ -67,7 +60,8 @@ module.exports = ArcadeMain = {
       game.addEventListener('click', (e) => {
 
         data.active_game = e.currentTarget.id;
-	ArcadeGameCreate.render(app, data);
+
+        ArcadeGameCreate.render(app, data);
         ArcadeGameCreate.attachEvents(app, data);
 
       });
@@ -82,32 +76,32 @@ module.exports = ArcadeMain = {
 
         let game_id = e.currentTarget.id;
 
-	for (let i = 0; i < data.arcade.games.length; i++) {
-	  if (data.arcade.games[i].transaction.sig == game_id) {
+        for (let i = 0; i < data.arcade.games.length; i++) {
+          if (data.arcade.games[i].transaction.sig == game_id) {
 
-	    //
-	    //
-	    //
-	    if (data.arcade.app.options.games != undefined) {
-	      if (data.arcade.app.options.games.length > 0) {
-	        for (let z = 0; z < data.arcade.app.options.games.length; z++) {
-	          if (data.arcade.app.options.games[z].id == game_id) {
-                    app.options.games[z].ts = new Date().getTime();
-                    app.options.games[z].initialize_game_run = 0;
-                    app.storage.saveOptions();
-                    window.location = '/' + app.options.games[i].module.toLowerCase();
-	            return;
-	          }
-	        }
-	      }
-	    }
+            //
+            //
+            //
+            if (data.arcade.app.options.games != undefined) {
+              if (data.arcade.app.options.games.length > 0) {
+                for (let z = 0; z < data.arcade.app.options.games.length; z++) {
+                  if (data.arcade.app.options.games[z].id == game_id) {
+                          app.options.games[z].ts = new Date().getTime();
+                          app.options.games[z].initialize_game_run = 0;
+                          app.storage.saveOptions();
+                          window.location = '/' + app.options.games[i].module.toLowerCase();
+                    return;
+                  }
+                }
+              }
+            }
 
-	    data.arcade.sendInviteRequest(app, data, data.arcade.games[i]);
-	    ArcadeLoader.render(app, data);
-	    ArcadeLoader.attachEvents(app, data);
+            data.arcade.sendInviteRequest(app, data, data.arcade.games[i]);
+            ArcadeLoader.render(app, data);
+            ArcadeLoader.attachEvents(app, data);
 
-	    return;
-	  }
+            return;
+          }
         }
       });
     });

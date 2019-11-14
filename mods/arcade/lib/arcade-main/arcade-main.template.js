@@ -1,16 +1,13 @@
 module.exports = ArcadeMainTemplate = () => {
   return `
-        <div class="glide">
+      <div id="arcade-carousel" class="glide">
         <div class="glide__track" data-glide-el="track">
-          <ul class="glide__slides">
-            <li class="glide__slide">0</li>
-            <li class="glide__slide">1</li>
-            <li class="glide__slide">2</li>
+          <ul id="arcade-carousel-slides" class="glide__slides">
           </ul>
         </div>
         <div class="glide__arrows" data-glide-el="controls">
-          <button class="glide__arrow glide__arrow--left" data-glide-dir="<">prev</button>
-          <button class="glide__arrow glide__arrow--right" data-glide-dir=">">next</button>
+          <button class="glide__arrow glide__arrow--left" data-glide-dir="<"><i class="icon-med fas fa-angle-left"></i></button>
+          <button class="glide__arrow glide__arrow--right" data-glide-dir=">"><i class="icon-med fas fa-angle-right"></i></button>
         </div>
       </div>
       <div class="arcade-games" id="arcade-games"></div>
