@@ -37,7 +37,7 @@ body {
 .arcade-sidebar-active-games-body {
   border: 1px solid grey;
   height: 40vh;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
 .arcade-observer-game-row {
@@ -97,7 +97,7 @@ body {
 
 /** Game Carousel **/
 #arcade-carousel {
-  /* max-width: 1000px; */f
+  /* max-width: 1000px; */
 }
 
 .glide__arrows {
