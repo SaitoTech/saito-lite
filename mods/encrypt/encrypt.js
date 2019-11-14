@@ -1,7 +1,27 @@
+/*********************************************************************************
+  
+ ENCRYPT MODULE v.2
+
+ This is a general encryption class that permits on-chain exchange of cryptographic
+ secrets, enabling users to communicate with encrypted messages over the blockchain.
+
+ For N > 2 channels, we avoid Diffie-Hellman exchanges *for now* in order to have
+ something that is fast to setup, and simply default to having the initiating user
+ provide the secret, but only communicating it to members with whom he/she already
+ has a shared-secret.
+
+ This module thus does two things:
+ 
+   1. create Diffie-Hellman key exchanges (2 parties)
+   2. distribute keys for Groups using DH-generated keys
+
+ The keys as well as group members / shared keys are saved in the keychain class,
+ where they are generally available for any Saito application to leverage.
+
+*********************************************************************************/
 var saito = require('../../lib/saito/saito');
 var ModTemplate = require('../../lib/templates/modtemplate');
 const Big = require('big.js');
-
 
 
 class Encrypt extends ModTemplate {
@@ -19,14 +39,12 @@ class Encrypt extends ModTemplate {
 
 
   respondTo(type) {
-
     if (type == 'email-appspace') {
       let obj = {};
 	  obj.render = this.renderEmail;
 	  obj.attachEvents = this.attachEventsEmail;
       return obj;
     }
-
     return null;
   }
   renderEmail(app, data) {
