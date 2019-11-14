@@ -59,9 +59,7 @@ class Chat extends ModTemplate {
     //
     if (type === "encrypt-key-exchange-confirm") {
       if (data.members === undefined) { return; ***REMOVED***
-      this.createChatGroup(data.members);
-      this.sendEvent('chat-render-request', {***REMOVED***);
-      this.saveChat();
+      this.createChatGroup(data);
 ***REMOVED***
 
   ***REMOVED***
@@ -76,10 +74,33 @@ class Chat extends ModTemplate {
     let keys = this.app.keys.returnKeys();
     for (let i = 0; i < keys.length; i++) {
 
-      let members = [keys[i].publickey, this.app.wallet.returnPublicKey()];
-      this.createChatGroup(members);
+      let chatgroup = {***REMOVED***;
+      let publickey = keys[i].publickey;
 
+      chatgroup.id = this.app.crypto.hash(publickey);
+      chatgroup.name = publickey.substring(0, 16);
+      chatgroup.members = [];
+      chatgroup.members.push(keys[i].publickey);
+      chatgroup.members.push(app.wallet.returnPublicKey());
+      chatgroup.identicon = app.keys.returnIdenticon(keys[i].publickey);
+      chatgroup.messages = [];
+      chatgroup.is_encrypted = 0;
+
+console.log("JUST SET IDENTICON TO: " + chatgroup.identicon);
+
+      if (this.app.options.chat != undefined) {
+        if (this.app.options.chat.groups != undefined) {
+          for (let z = 0; z < this.app.options.chat.groups.length; z++) {
+	    if (this.app.options.chat.groups[z].id == chatgroup.id) {
+	      chatgroup.messages = this.app.options.chat.groups[z].messages;
+	***REMOVED***
+	  ***REMOVED***
+	***REMOVED***
+  ***REMOVED***
+console.log("ADDING: " + JSON.stringify(chatgroup));
+      this.groups.push(new ChatGroup(this.app, chatgroup));
 ***REMOVED***
+
 
 
     //
@@ -87,14 +108,33 @@ class Chat extends ModTemplate {
     //
     let g = this.app.keys.returnGroups();
     for (let i = 0; i < g.length; i++) {
-      let members = g[i].members;
-      this.createChatGroup(members);
-***REMOVED***
 
-    this.sendEvent('chat-render-request', {***REMOVED***);
+      let chatgroup = {***REMOVED***;
 
+      chatgroup.id = g[i].id;
+      chatgroup.name = g[i].name;
+      chatgroup.members = g[i].members;
+      chatgroup.messages = [];
+      chatgroup.is_encrypted = 0;
+      chatgroup.identicon = app.keys.returnIdenticon(chatgroup.id);
+
+console.log("JUST SET IDENTICON TO: " + chatgroup.identicon);
+
+      if (this.app.options.chat != undefined) {
+        if (this.app.options.chat.groups != undefined) {
+          for (let z = 0; z < this.app.options.chat.groups.length; z++) {
+            if (this.app.options.chat.groups[z].id == chatgroup.id) {
+              chatgroup.messages = this.app.options.chat.groups[z].messages;
+        ***REMOVED***
+      ***REMOVED***
+    ***REMOVED***
   ***REMOVED***
 
+      this.groups.push(new ChatGroup(this.app, chatgroup));
+***REMOVED***
+  
+
+  ***REMOVED***
 
 
 
@@ -118,15 +158,30 @@ class Chat extends ModTemplate {
   async onPeerHandshakeComplete(app, peer) {
 
     if (this.groups.length == 0) {
+
       let { publickey ***REMOVED*** = peer.peer;
-      let members = [peer.peer.publickey, app.wallet.returnPublicKey()];
-      this.createChatGroup(members);
+
+console.log("P: " + JSON.stringify(peer.peer));
+
+      let hash = this.app.crypto.hash(publickey);
+      let chatgroup = {***REMOVED***;
+          chatgroup.id = hash;
+	  chatgroup.name = hash.substring(0, 16);
+	  chatgroup.members = [];
+	  chatgroup.message = [];
+	  chatgroup.identicon = this.app.keys.returnIdenticon(publickey);
+
+console.log("JUST SET IDENTICON TO: " + chatgroup.identicon);
+
+      let cg = new ChatGroup(this.app, chatgroup);
+      cg.initialize(this.app);
+      this.groups.push(cg);
 ***REMOVED***
 
     let group_ids = this.groups.map(group => group.id);
 
     let txs = new Promise((resolve, reject) => {
-      app.storage.loadTransactionsByKeys(group_ids, "Chat", 50, (txs) => {
+      this.app.storage.loadTransactionsByKeys(group_ids, "Chat", 50, (txs) => {
         resolve(txs);
   ***REMOVED***);
 ***REMOVED***);
@@ -139,7 +194,7 @@ if (txs.length > 0) {
     txs.forEach(tx => {
       let { group_id ***REMOVED*** = tx.transaction.msg;
       let txmsg = tx.returnMessage();
-      let msg_type = tx.transaction.from[0].add == app.wallet.returnPublicKey() ? 'myself' : 'others';
+      let msg_type = tx.transaction.from[0].add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
       let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: msg_type ***REMOVED***);
       (tx_messages[group_id] = tx_messages[group_id] || []).unshift(msg);
 ***REMOVED***);
@@ -161,51 +216,33 @@ if (txs.length > 0) {
   createChatGroup(members=null) {
 
     if (members == null) { return; ***REMOVED***
+
+    let members = [this.app.wallet.returnPublicKey(), key.publickey];
     members.sort();
 
     let id = this.app.crypto.hash(`${members.join('_')***REMOVED***`)
-    let identicon = "";
-    let address = "";
-
-    if (members.length == 2) {
-      if (members[0] != this.app.wallet.returnPublicKey()) {
-        address = members[0];
-  ***REMOVED*** else {
-        address = members[1];
-  ***REMOVED***
-***REMOVED*** else {
-      address = "Group " + id.substring(0, 6);
-***REMOVED***
-    identicon = this.app.keys.returnIdenticon(address);
 
     for (let i = 0; i < this.groups.length; i++) {
       if (this.groups[i].id == id) { return; ***REMOVED***
 ***REMOVED***
 
+    let hash = this.app.crypto.hash(id);
     let chatgroup = {***REMOVED***;
-        chatgroup.id = id;
-        chatgroup.name = address.substring(0, 16);
+        chatgroup.id = hash;
+        chatgroup.name = key.publickey.substring(0, 16);
         chatgroup.members = members;
         chatgroup.messages = [];
-        chatgroup.identicon = identicon;
-
-    let cg = new ChatGroup(this.app, chatgroup);
-
-    if (this.app.options.chat != undefined) {
-      if (this.app.options.chat.groups != undefined) {
-        for (let z = 0; z < this.app.options.chat.groups.length; z++) {
-          if (this.app.options.chat.groups[z].id == chatgroup.id) {
-            cg.messages = this.app.options.chat.groups[z].messages;
-      ***REMOVED***
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
+        chatgroup.identicon = this.app.keys.returnIdenticon(key.publickey);
 
 console.log("JUST SET IDENTICON TO: " + chatgroup.identicon);
 
-    cg.is_encrypted = 0;
+    let cg = new ChatGroup(this.app, chatgroup);
+    cg.is_encrypted = key.aes_publickey !== '';
     cg.initialize(this.app);
+
     this.groups.push(cg);
+    this.sendEvent('chat-render-request', {***REMOVED***);
+    this.saveChat();
 
   ***REMOVED***
 
