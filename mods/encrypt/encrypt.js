@@ -39,16 +39,40 @@ class Encrypt extends ModTemplate {
 
 
 
-  initiate_key_exchange(recipient) {
+  //
+  // recipients can be a string (single address) or an array (multiple addresses)
+  //
+  initiate_key_exchange(recipients) {    
+
+    let recipient = "";
+    let parties_to_exchange = 2;
+
+    if (recipients.isArray()) {
+      if (recipients.length > 0) {
+        recipients.sort();
+        recipient = recipients[0]; 
+	parties_to_exchange = recipients.length;
+      }
+      else {
+	recipient = recipients; 
+	parties_to_exchange = 2;
+      }
+    }
+  
 
     if (recipient == "") { return; }
 
-    let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee(recipient, (2 * this.app.wallet.wallet.default_fee)); 
+    let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee(recipient, (parties_to_exchange * this.app.wallet.wallet.default_fee)); 
         tx.transaction.msg.module	   = this.name;
   	tx.transaction.msg.request 	   = "key exchange request";
 	tx.transaction.msg.alice_publickey = this.app.keys.initializeKeyExchange(recipient);
 
-console.log("FOUND: " + JSON.stringify(tx));
+    if (parties_to_exchange > 2) {
+      for (let i = 1; i < parties_to_exchange; i++) {
+        tx.transaction.to.push(new saito.slip(recipients[i], 0.0));
+      }
+    }
+
     tx = this.app.wallet.signTransaction(tx);
     this.app.network.propagateTransaction(tx);
 
@@ -58,6 +82,18 @@ console.log("FOUND: " + JSON.stringify(tx));
 
     let txmsg = tx.returnMessage();
 
+/****
+    let recipients = [];
+    for (let z = 0; z < tx.transaction.to.length; z++) {
+      recipients.push(tx.transaction.to[z].add);
+    }
+    recipients.push(tx.transaction.from[0].add);
+
+    //
+    // make array unique
+    //
+    recipients = a.filter(function(item, pos) { return a.indexOf(item) == pos; })
+****/
     let remote_address  = tx.transaction.from[0].add;
     let our_address    	= tx.transaction.to[0].add;
     let alice_publickey	= txmsg.alice_publickey;
