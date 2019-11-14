@@ -22,6 +22,28 @@ body {
   margin: 10px 10px;
 ***REMOVED***
 
+.arcade-sidebar-box {
+  display: grid;
+  justify-content: center;
+***REMOVED***
+
+#arcade-play-btn {
+  padding-bottom: 1.7em;
+***REMOVED***
+
+.arcade-observer-game-row {
+  border: 1px solid grey;
+  padding: 10px;
+***REMOVED***
+
+.arcade-main {
+  display: grid;
+  justify-content: center;
+***REMOVED***
+
+.arcade-extra {
+  width: 100%;
+***REMOVED***
 
 
 .arcade-game-invitation {
@@ -37,6 +59,28 @@ body {
 ***REMOVED***
 
 
+/** Game Carousel **/
+#arcade-carousel {
+  /* max-width: 500px; */
+  max-width: 1000px;
+***REMOVED***
+
+.glide__arrows {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  bottom: 14em;
+  padding: 0px 10px;
+***REMOVED***
+
+.glide__arrow {
+  margin: unset;
+  background: var(--saito-cyber-black);
+  color: var(--saito-skyline-grey);
+  border: unset;
+  min-width: unset;
+  border-radius: 50px;
+***REMOVED***
 
 
 
@@ -52,8 +96,12 @@ body {
   text-align: center;
   border: 3px solid #888;
   cursor: pointer;
-  max-width: 375px;
-  max-height: 240px;
+  /* max-width: 375px; */
+  max-width: 1125px;
+  /** 1125px **/
+  /* max-height: 240px; */
+  max-height: 720px;
+  /** 720px **/
   grid-area: gameimage;
 ***REMOVED***
 
