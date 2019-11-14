@@ -1,7 +1,27 @@
+/*********************************************************************************
+  
+ ENCRYPT MODULE v.2
+
+ This is a general encryption class that permits on-chain exchange of cryptographic
+ secrets, enabling users to communicate with encrypted messages over the blockchain.
+
+ For N > 2 channels, we avoid Diffie-Hellman exchanges *for now* in order to have
+ something that is fast to setup, and simply default to having the initiating user
+ provide the secret, but only communicating it to members with whom he/she already
+ has a shared-secret.
+
+ This module thus does two things:
+ 
+   1. create Diffie-Hellman key exchanges (2 parties)
+   2. distribute keys for Groups using DH-generated keys
+
+ The keys as well as group members / shared keys are saved in the keychain class,
+ where they are generally available for any Saito application to leverage.
+
+*********************************************************************************/
 var saito = require('../../lib/saito/saito');
 var ModTemplate = require('../../lib/templates/modtemplate');
 const Big = require('big.js');
-
 
 
 class Encrypt extends ModTemplate {
@@ -19,14 +39,12 @@ class Encrypt extends ModTemplate {
 
 
   respondTo(type) {
-
     if (type == 'email-appspace') {
       let obj = {***REMOVED***;
 	  obj.render = this.renderEmail;
 	  obj.attachEvents = this.attachEventsEmail;
       return obj;
 ***REMOVED***
-
     return null;
   ***REMOVED***
   renderEmail(app, data) {
@@ -39,17 +57,40 @@ class Encrypt extends ModTemplate {
 
 
 
-  initiate_key_exchange(recipient) {
+  //
+  // recipients can be a string (single address) or an array (multiple addresses)
+  //
+  initiate_key_exchange(recipients) {    
+
+    let recipient = "";
+    let parties_to_exchange = 2;
+
+    if (recipients.isArray()) {
+      if (recipients.length > 0) {
+        recipients.sort();
+        recipient = recipients[0]; 
+	parties_to_exchange = recipients.length;
+  ***REMOVED***
+      else {
+	recipient = recipients; 
+	parties_to_exchange = 2;
+  ***REMOVED***
+***REMOVED***
+  
 
     if (recipient == "") { return; ***REMOVED***
 
-    let tx 				   = this.app.wallet.createUnsignedTransactionWithDefaultFee(recipient, (2 * this.app.wallet.wallet.default_fee)); 
-
+    let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee(recipient, (parties_to_exchange * this.app.wallet.wallet.default_fee)); 
         tx.transaction.msg.module	   = this.name;
   	tx.transaction.msg.request 	   = "key exchange request";
 	tx.transaction.msg.alice_publickey = this.app.keys.initializeKeyExchange(recipient);
 
-console.log("FOUND: " + JSON.stringify(tx));
+    if (parties_to_exchange > 2) {
+      for (let i = 1; i < parties_to_exchange; i++) {
+        tx.transaction.to.push(new saito.slip(recipients[i], 0.0));
+  ***REMOVED***
+***REMOVED***
+
     tx = this.app.wallet.signTransaction(tx);
     this.app.network.propagateTransaction(tx);
 
@@ -59,6 +100,18 @@ console.log("FOUND: " + JSON.stringify(tx));
 
     let txmsg = tx.returnMessage();
 
+/****
+    let recipients = [];
+    for (let z = 0; z < tx.transaction.to.length; z++) {
+      recipients.push(tx.transaction.to[z].add);
+***REMOVED***
+    recipients.push(tx.transaction.from[0].add);
+
+    //
+    // make array unique
+    //
+    recipients = a.filter(function(item, pos) { return a.indexOf(item) == pos; ***REMOVED***)
+****/
     let remote_address  = tx.transaction.from[0].add;
     let our_address    	= tx.transaction.to[0].add;
     let alice_publickey	= txmsg.alice_publickey;
@@ -89,7 +142,7 @@ console.log("ACCEPT KEY EXCHANGE 3");
 console.log("\n\nUPDATE CRYPTO BY PUBLICKEY: ");
 
     this.app.keys.updateCryptoByPublicKey(remote_address, bob_publickey.toString("hex"), bob_privatekey.toString("hex"), bob_secret.toString("hex"));
-    this.sendEvent('encrypt-key-exchange-confirm', { publickey : remote_address ***REMOVED***);
+    this.sendEvent('encrypt-key-exchange-confirm', { members : [remote_address, our_address] ***REMOVED***);
 
 console.log("ACCEPT KEY EXCHANGE 4");
 
