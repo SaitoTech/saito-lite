@@ -57,10 +57,10 @@ class Wordblocks extends GameTemplate {
 
   initializeGame(game_id) {
 
-    if (!this.app.browser.isMobileBrowser(navigator.userAgent)) {
-      const chat = this.app.modules.returnModule("Chat");
-      chat.addPopUpChat();
-    }
+//    if (!this.app.browser.isMobileBrowser(navigator.userAgent)) {
+//      const chat = this.app.modules.returnModule("Chat");
+//      chat.addPopUpChat();
+//    }
     this.updateStatus("loading game...");
     this.loadGame(game_id);
 
@@ -80,7 +80,7 @@ class Wordblocks extends GameTemplate {
       this.updateStatus("Generating the Game");
 
       if (this.game.opponents.length == 1) {
-        this.game.queue.push("EMAIL\tready");
+        this.game.queue.push("READY");
         this.game.queue.push("DEAL\t1\t2\t7");
         this.game.queue.push("DEAL\t1\t1\t7");
         this.game.queue.push("DECKENCRYPT\t1\t2");
@@ -90,7 +90,7 @@ class Wordblocks extends GameTemplate {
       }
 
       if (this.game.opponents.length == 2) {
-        this.game.queue.push("EMAIL\tready");
+        this.game.queue.push("READY");
         this.game.queue.push("DEAL\t1\t3\t7");
         this.game.queue.push("DEAL\t1\t2\t7");
         this.game.queue.push("DEAL\t1\t1\t7");
@@ -103,7 +103,7 @@ class Wordblocks extends GameTemplate {
       }
 
       if (this.game.opponents.length == 3) {
-        this.game.queue.push("EMAIL\tready");
+        this.game.queue.push("READY");
         this.game.queue.push("DEAL\t1\t4\t7");
         this.game.queue.push("DEAL\t1\t3\t7");
         this.game.queue.push("DEAL\t1\t2\t7");
