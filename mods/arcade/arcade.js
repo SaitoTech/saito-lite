@@ -84,6 +84,10 @@ console.log("ERROR 418019: error fetching game for observer mode");
     ArcadeRightSidebar.render(app, data);
     ArcadeRightSidebar.attachEvents(app, data);
 
+    if (this.glide) {
+      this.glide.mount();
+    }
+
   }
 
 
@@ -134,6 +138,12 @@ console.log("ERROR 418019: error fetching game for observer mode");
             game: 'Twilight Struggle',
             game_id: app.crypto.hash(`${new Date().getTime()}`),
             options: ['US +2', 'ES'],
+            options_html: `
+              <div class="game-options-html">
+                <div class="pill">US +2</div>
+                <div class="pill">ES</div>
+              </div>
+            `
           },
           sig: app.crypto.hash(`${new Date().getTime()}`)
         })
@@ -160,7 +170,7 @@ console.log("ERROR 418019: error fetching game for observer mode");
     this.render(app, data);
 
     // Use for Carousel
-    async function importGlide() {
+    importGlide = async () => {
       const Glide = await import('./web/glide.min.js');
       // const Glide = await import('@glidejs/glide');
       this.glide = new Glide.default('.glide', {
@@ -168,9 +178,7 @@ console.log("ERROR 418019: error fetching game for observer mode");
         perView: 2
       });
 
-      setTimeout(() => {
-        this.glide.mount();
-      }, 50);
+      this.glide.mount();
     }
     importGlide();
     //.mount();

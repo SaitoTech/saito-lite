@@ -45,7 +45,7 @@ module.exports = ArcadeMain = {
         }
       }
 
-      document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(tx, button_text);
+      document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(app, tx, button_text);
     });
 
   },

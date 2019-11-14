@@ -4,7 +4,9 @@ body {
 }
 
 .main {
-  height: 90.5vh;
+  height: calc(100vh - 5em);
+  width: 100vw;
+  /* 90.5vh; */
 }
 
 .footer {
@@ -23,22 +25,56 @@ body {
 }
 
 .arcade-sidebar-box {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
+}
+
+.arcade-sidebar-active-games-header {
+  text-align: center;
+}
+
+.arcade-sidebar-active-games-body {
+  border: 1px solid grey;
+  height: 40vh;
+  overflow: scroll;
+}
+
+.arcade-observer-game-row {
+  /* border: 1px solid grey;
+  padding: 10px;
+  margin-top: 10px; */
+
+  /* border: 1px solid grey; */
+  padding: 10px;
+  margin-bottom: 10px;
+  background: whitesmoke;
 }
 
 #arcade-play-btn {
   padding-bottom: 1.7em;
 }
 
-.arcade-observer-game-row {
-  border: 1px solid grey;
-  padding: 10px;
-}
+
+/** MAIN **/
 
 .arcade-main {
   display: grid;
   justify-content: center;
+}
+
+.game-options-html {
+  display: flex;
+}
+
+.pill {
+  background: var(--saito-cyber-black);
+  color: white;
+  padding: 7px;
+  border-radius: 50px;
+  min-width: 4em;
+  text-align: center;
+  margin: 2px;
 }
 
 .arcade-extra {
@@ -49,7 +85,7 @@ body {
 .arcade-game-invitation {
   display: grid;
   align-items: center;
-  grid-template-columns: 2fr 2fr 1fr;
+  grid-template-columns: 1fr 2fr 2fr 1fr;
   border: 1px solid grey;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -61,8 +97,7 @@ body {
 
 /** Game Carousel **/
 #arcade-carousel {
-  /* max-width: 500px; */
-  max-width: 1000px;
+  /* max-width: 1000px; */f
 }
 
 .glide__arrows {
@@ -111,6 +146,38 @@ body {
   margin-top: 6px;
   text-align: center;
   cursor: pointer;
+}
+
+/* GAME WIZARD */
+.create-game-wizard {
+  display: flex;
+  flex-direction: column;
+}
+
+.game-image-wizard {
+  max-width: 500px;
+}
+
+.return_to_arcade {
+  height: 2em;
+  margin-bottom: 1em;
+  display: flex;
+  align-items: center;
+}
+
+.game-info-container {
+  display: flex;
+  margin: 1em 0;
+}
+
+.game-details {
+  margin: 1em;
+}
+
+/* USED BY WORDBLOCKS */
+#options {
+  display: grid;
+  grid-template-columns: 10em auto;
 }
 
 
