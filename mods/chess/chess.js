@@ -114,7 +114,7 @@ class Chess extends GameTemplate {
         }
         else {
           try {
-            opponent = await this.app.keys.fetchIdentifier(opponent);
+            opponent = await this.app.keys.fetchIdentifierPromise(opponent);
           }
           catch (err) {
             console.log(err);
