@@ -1,0 +1,19 @@
+<!-- Created with Inkscape (http://www.inkscape.org/) --><svg xmlns:svg="http://www.w3.org/2000/svg" width="100" id="svg2" height="100" xmlns="http://www.w3.org/2000/svg" version="1.0">
+  <defs id="defs5">
+    <filter x="-0.10506912" width="1.2101382" id="filter3256" height="1.2101382" y="-0.10506912" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="3.8963134" id="feGaussianBlur3258"/>
+    </filter>
+    <filter color-interpolation-filters="sRGB" id="filter4795">
+      <feGaussianBlur stdDeviation="2.2698653" id="feGaussianBlur4797"/>
+    </filter>
+  </defs>
+  <rect x="5.5812325" y="5.8613443" width="89" style="opacity:0.89671362;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3256)" rx="11" id="rect2384" ry="11" height="89"/>
+  <rect x="2.5" y="2.5" width="89" style="fill:#cfc1a4;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.48235294;stroke-dasharray:none" rx="11" id="rect2392" ry="11" height="89"/>
+  <g id="g3669" transform="matrix(0.63699787,0,0,0.63699787,15.767506,-8.1404251)">
+    <path d="m 82.539682,-49.682544 -29.791908,-21.033236 -27.6908,20.786319 10.797591,-34.833416 -28.3258923,-19.912193 36.4651863,-0.49499 10.184435,-33.09273 11.739134,34.52749 34.620222,-0.54025 -29.210005,21.834165 11.212037,32.758841 z" id="path3171" style="fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter4795)" transform="matrix(0.5720625,0,0,0.5720625,19.647397,113.09899)"/>
+    <path d="m 82.539682,-49.682544 -29.791908,-21.033236 -27.6908,20.786319 10.797591,-34.833416 -28.3258923,-19.912193 36.4651863,-0.49499 10.184435,-33.09273 11.739134,34.52749 34.620222,-0.54025 -29.210005,21.834165 11.212037,32.758841 z" id="path2913" style="fill:#ffffff;fill-opacity:1;stroke:none" transform="matrix(0.5720625,0,0,0.5720625,17.647397,111.09899)"/>
+  </g>
+  <rect x="1.6781328" y="1.6781328" width="90.643738" style="fill:none;stroke:#000000;stroke-width:2.03693795;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" rx="11.203158" id="rect3606" ry="11.203158" height="90.643738"/>
+  <text xml:space="preserve" x="46.153526" y="60.580914" id="text3772" style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;text-align:center;line-height:119.00000572%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Impact;-inkscape-font-specification:Impact Condensed"><tspan x="46.153526" id="tspan3774" y="60.580914">Bear Trap</tspan><tspan x="46.153526" id="tspan3776" y="77.240913"/></text>
+  <text xml:space="preserve" x="16.182573" y="22.406639" id="text3778" style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;text-align:center;line-height:119.00000572%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Impact;-inkscape-font-specification:Impact Condensed"><tspan x="16.182573" id="tspan3780" y="22.406639">44</tspan></text>
+</svg>

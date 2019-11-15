@@ -1,0 +1,34 @@
+<!-- Created with Inkscape (http://www.inkscape.org/) --><svg xmlns:svg="http://www.w3.org/2000/svg" width="100" id="svg2" height="100" xmlns="http://www.w3.org/2000/svg" version="1.0">
+  <defs id="defs5">
+    <filter x="-0.10506912" width="1.2101382" id="filter3256" height="1.2101382" y="-0.10506912" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="3.8963134" id="feGaussianBlur3258"/>
+    </filter>
+    <filter color-interpolation-filters="sRGB" id="filter3818">
+      <feGaussianBlur stdDeviation="1.5861172" id="feGaussianBlur3820"/>
+    </filter>
+    <filter color-interpolation-filters="sRGB" id="filter3818-6">
+      <feGaussianBlur stdDeviation="1.5861172" id="feGaussianBlur3820-5"/>
+    </filter>
+    <filter color-interpolation-filters="sRGB" id="filter3818-2">
+      <feGaussianBlur stdDeviation="1.5861172" id="feGaussianBlur3820-1"/>
+    </filter>
+    <filter color-interpolation-filters="sRGB" id="filter3818-0">
+      <feGaussianBlur stdDeviation="1.5861172" id="feGaussianBlur3820-8"/>
+    </filter>
+  </defs>
+  <rect x="5.5812325" y="5.8613443" width="89" style="opacity:0.89671362;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3256)" rx="11" id="rect2384" ry="11" height="89"/>
+  <rect x="2.5" y="2.5" width="89" style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" rx="11" id="rect2561" ry="11" height="89"/>
+  <rect x="1.6781328" y="1.6781328" width="90.643738" style="fill:none;stroke:#000000;stroke-width:2.03693795;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" rx="11.203158" id="rect3606" ry="11.203158" height="90.643738"/>
+  <g style="fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3818-6)" id="g3815" transform="translate(-136.5,-4.5)"/>
+  <g style="opacity:0.5" id="g4929" transform="matrix(0.93779182,0,0,0.93779182,2.9545933,3.5457705)">
+    <path style="fill:none;stroke:#010c89;stroke-width:3.19900417;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" id="path4927" d="m 47.495257,31.448272 c -14.110064,0 -25.550192,11.439942 -25.550192,25.550192 0,14.110063 11.439941,25.550193 25.550192,25.550193 14.110813,0 25.550193,-11.440128 25.550193,-25.550193 0,-14.110252 -11.439193,-25.550192 -25.550193,-25.550192 z m 0,2.045418 c 12.982021,10e-7 23.504775,10.523501 23.504775,23.504774 0,0.711009 -0.0482,1.409492 -0.111037,2.103859 l -17.368521,0 0.292203,-16.810467 c 0,0 -0.689649,9.094152 -2.232428,16.810467 l -27.484573,0 c -0.06133,-0.694365 -0.105192,-1.392848 -0.105192,-2.103859 0,-12.981274 10.523687,-23.504774 23.504773,-23.504774 z m -21.885975,32.03709 24.416449,0 c -0.317134,1.072981 -0.656215,2.089883 -1.016865,3.009686 -0.693388,1.768423 -4.098549,8.463643 -11.127371,8.203668 -6.676284,-0.25127 -10.270498,-7.694654 -11.76962,-10.0387 -0.175318,-0.385745 -0.347763,-0.77814 -0.502593,-1.174654 z m 27.788467,0 15.977636,0 C 66.623769,72.578865 60.579137,77.980558 53.128923,79.819485 L 53.397749,65.53078 z"/>
+    <path style="fill:#ffd700;fill-opacity:1" id="path3" d="m 70.998208,56.997249 c 0,12.982209 -10.522845,23.505429 -23.504868,23.505429 -12.981087,0 -23.505238,-10.52322 -23.505238,-23.505429 0,-12.981274 10.524151,-23.504868 23.505238,-23.504868 12.982023,0 23.504868,10.523594 23.504868,23.504868 z"/>
+    <path style="fill:#010c89;fill-opacity:1" id="path5" d="m 47.49334,37.277082 c -11.16354,0 -20.214431,9.050332 -20.214431,20.214433 0,2.665823 0.524374,3.169253 1.462974,5.199991 l -0.14194,0.02226 c 1.104666,4.171811 4.353865,10.013073 9.429069,10.013073 5.308065,0 8.521613,-5.048529 10.796772,-13.175219 3.153357,-8.361389 4.454383,-19.242732 4.454383,-19.242732 l 1.087274,0 -0.492584,36.353366 c 8.033,-2.673116 13.833665,-10.239152 13.833665,-19.170733 0,-11.164102 -9.050706,-20.214433 -20.215182,-20.214433 z"/>
+    <path style="fill:#d2232a;fill-opacity:1" id="path7" d="m 47.495257,31.448272 c -14.110064,0 -25.550192,11.439942 -25.550192,25.550192 0,14.110063 11.439941,25.550193 25.550192,25.550193 14.110813,0 25.550193,-11.440128 25.550193,-25.550193 0,-14.110252 -11.439193,-25.550192 -25.550193,-25.550192 z m 0,2.045418 c 12.982021,10e-7 23.504775,10.523501 23.504775,23.504774 0,0.711009 -0.0482,1.409492 -0.111037,2.103859 l -17.368521,0 0.292203,-16.810467 c 0,0 -0.689649,9.094152 -2.232428,16.810467 l -27.484573,0 c -0.06133,-0.694365 -0.105192,-1.392848 -0.105192,-2.103859 0,-12.981274 10.523687,-23.504774 23.504773,-23.504774 z m -21.885975,32.03709 24.416449,0 c -0.317134,1.072981 -0.656215,2.089883 -1.016865,3.009686 -0.693388,1.768423 -4.098549,8.463643 -11.127371,8.203668 -6.676284,-0.25127 -10.270498,-7.694654 -11.76962,-10.0387 -0.175318,-0.385745 -0.347763,-0.77814 -0.502593,-1.174654 z m 27.788467,0 15.977636,0 C 66.623769,72.578865 60.579137,77.980558 53.128923,79.819485 L 53.397749,65.53078 z"/>
+    <polygon id="polygon33" style="fill:#d2232a;fill-opacity:1;stroke:#ffd700;stroke-width:3.58815813;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" points="193.507,76.977 181.34,46.297 193.507,29.707 176.579,30.429 170.231,14.031 170.231,14.031 163.357,30.429 150.659,30.429 160.444,42.594 150.659,76.977 170.231,54.761 " transform="matrix(0.18700964,0,0,0.15722448,21.825315,32.631865)"/>
+    <text xml:space="preserve" x="23.348633" y="64.438049" id="text2394" style="font-size:5.98430872px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ffd700;fill-opacity:1;stroke:none;font-family:FreeSans;-inkscape-font-specification:FreeSans Bold"><tspan x="23.348633" id="tspan2398" y="64.438049">ИНТЕРКОСМОС</tspan></text>
+  </g>
+  <text xml:space="preserve" x="48.014648" y="29" id="text4322" style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;text-align:center;line-height:110.00000238%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Impact;-inkscape-font-specification:Impact Condensed"><tspan x="48.014648" id="tspan3785" y="29">2nd Card</tspan><tspan x="48.014648" id="tspan3787" y="51">Played</tspan></text>
+  <g style="fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3818-2)" id="g3815-9" transform="translate(198.41877,-2.361344)"/>
+  <g style="fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3818-0)" id="g3815-5" transform="translate(-114.97371,0.76439764)"/>
+</svg>
