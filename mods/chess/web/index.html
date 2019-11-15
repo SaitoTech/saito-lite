@@ -1,0 +1,73 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="/lib/jquery/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="/lib/jquery/jquery-ui.min.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/chess/chessboard.css" type="text/css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/chat/style.css" />
+    <link rel="stylesheet" type="text/css" href="/mailchat/style.css" />
+    <link rel="stylesheet" type="text/css" href="/chess/style.css" />
+    <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/lib/font-awesome-5/css/all.min.css" type="text/css" media="screen" />
+    <link rel="icon" media="all" type="image/x-icon" href="/favicon.ico?v=2" />
+
+    <title>Saito Chess</title>
+</head>
+
+<body>
+
+    <div id="Chess_browser_active"></div>
+
+    <div class="container">
+        <div class="header">
+            <div class="connection_monitor" id="connection_monitor">CONNECTION UNSTABLE (refresh your browser) ...</div>
+            <a href="/">
+                <img src="/img/saito_logo_black.png" class="logo" />
+            </a>
+            <a href="/" style="text-decoration:none;color:inherits">
+                <div class="module_label">saito chess</div>
+            </a>
+        </div>
+
+        <div class="module_container row">
+            <div class="board-space column">
+                <div id="board"></div>
+                <div id="buttons" class="button_row">
+                    <button id="move_accept" class="chess_button column" disabled>✔</button>
+                    <button id="move_reject" class="chess_button column" disabled>✘</button>
+                </div>
+                <div id="promotion" class="promotion-holder">
+                    <span id="promotion-choices"></span>
+                </div>
+            </div>
+            <div class="controls column">
+
+                <p id="status_display">Status: <span id="status"></span>
+                    <span id="home" class="home">
+                        <a href="/arcade">
+                            <i id="home_icon" class="fas fa-home"></i>
+                        </a>
+                    </span></p>
+                <p id="status_oponent">Opponent: <span id="opponent_id"></span></p>
+                <p id="status_captured">Captured: <span id="captured"></span></p>
+                <p id="status_history">History</p>
+                <p id="status_log"><span id="log"></span></p>
+                <!--p id="status_white">White: <span id="white_id"></span></p>
+    			<p id="status_black">Black: <span id="black_id"></span></p-->
+            </div>
+        </div>
+
+    </div>
+    <script src="/mailchat/script.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/browser.js"></script>
+</body>
+
+</html>

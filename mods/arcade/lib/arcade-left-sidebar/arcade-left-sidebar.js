@@ -12,6 +12,15 @@ module.exports = ArcadeLeftSidebar = {
     ***REMOVED***
   ***REMOVED***
 
+      let games_menu = document.querySelector(".arcade-apps");
+      let gamemods = data.arcade.mods;
+      
+      for (let i = 0; i < gamemods.length; i++) {
+        if (gamemods[i].respondTo("arcade-games")) {
+          games_menu.innerHTML += `<li class="arcade-navigator-item" id="${gamemods[i].name***REMOVED***">${gamemods[i].name***REMOVED***</li>`;
+    ***REMOVED***
+  ***REMOVED***
+
 ***REMOVED***,
 
     attachEvents(app, data) {

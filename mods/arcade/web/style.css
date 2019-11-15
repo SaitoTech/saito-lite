@@ -263,6 +263,23 @@ body {
 
 
 
+
+.arcade-navigator, .arcade-apps {
+  list-style: none;
+  list-style-type: none;
+  font-size: 1.2em;
+  line-height: 1.4em;
+  padding: 10px 0px;
+***REMOVED***
+
+.arcade-navigator {
+  border-bottom: 1px solid grey;
+***REMOVED***
+
+
+
+
+
 @media only screen and (max-width: 600px) {
   .main {
     max-width: unset;
