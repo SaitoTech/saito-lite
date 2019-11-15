@@ -40,7 +40,8 @@ module.exports = ArcadeGameDreate = {
 
             let gamedata = {};
                 gamedata.name = gamemod.name;
-                gamedata.options = gamemod.returnQuickLinkGameOptions(options);
+                gamedata.options = gamemod.returnFormattedGameOptions(options);
+                gamedata.options_html = gamemod.returnGameRowOptionsHTML(options);
                 gamedata.players_needed = 2;
 
             data.arcade.sendOpenRequest(app, data, gamedata);

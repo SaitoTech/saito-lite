@@ -9,7 +9,6 @@ module.exports = ArcadeMainTemplate = () => {
           <button class="glide__arrow glide__arrow--right" data-glide-dir=">"><i class="icon-med fas fa-angle-right"></i></button>
         </div>
       </div>
-      <!-- <div class="arcade-games" id="arcade-games"></div> -->
       <ul class="arcade-gamelist" id="arcade-gamelist"></ul>
   `;
 }

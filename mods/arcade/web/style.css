@@ -59,8 +59,11 @@ body {
 /** MAIN **/
 
 .arcade-main {
-  display: grid;
-  justify-content: center;
+  /* display: grid;
+  justify-content: center; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .game-options-html {

@@ -98,10 +98,6 @@ console.log("ERROR 418019: error fetching game for observer mode");
     ArcadeRightSidebar.render(app, data);
     ArcadeRightSidebar.attachEvents(app, data);
 
-    if (this.glide) {
-      this.glide.mount();
-    }
-
   }
 
 
@@ -143,7 +139,7 @@ console.log("ERROR 418019: error fetching game for observer mode");
     }
 
     // fake games
-    for (let i=0; i < 10; i++) {
+    for (let i=0; i < 5; i++) {
       this.games.unshift(
         new saito.transaction({
           to: [],
@@ -271,7 +267,7 @@ console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
       }
     }
 
-    this.games.push(tx);
+    this.games.unshift(tx);
 
     let data = {};
     data.arcade = this;
@@ -500,6 +496,7 @@ console.log("INSERTING OPEN GAME: " + sql + " -- " + params);
         tx.transaction.msg.request  		= "open";
         tx.transaction.msg.game     		= gamedata.name;
         tx.transaction.msg.options  		= gamedata.options;
+        tx.transaction.msg.options_html = gamedata.options_html;
         tx.transaction.msg.players_needed 	= gamedata.players_needed;
         tx.transaction.msg.accept_sig 		= accept_sig;
         tx.transaction.msg.players  		= [];

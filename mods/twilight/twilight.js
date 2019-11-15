@@ -14084,7 +14084,7 @@ addLogCardEvents() {
 
 }
 
-returnQuickLinkGameOptions(options) {
+returnFormattedGameOptions(options) {
   let new_options = {};
   for (var index in options) {
     if (index == "player1") {
