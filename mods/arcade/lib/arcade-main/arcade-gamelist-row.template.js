@@ -1,17 +1,26 @@
-module.exports = ArcadeGameListRowTemplate = (tx, button_text) => {
+module.exports = ArcadeGameListRowTemplate = (app, tx, button_text) => {
 
   let optionstxt = "";
   let jointxt = "JOIN";
 
-console.log("\n\n\nADDING GAME: " + JSON.stringify(tx.returnMessage()));
+  let {sig, from, msg***REMOVED*** = tx.transaction;
+  let {options_html, game***REMOVED*** = msg;
 
-  if (JSON.stringify(tx.transaction.msg.options).length > 2) { optionstxt = JSON.stringify(tx.transaction.msg.options); ***REMOVED***
+  let publickey = from[0].add;
 
   return `
-    <div class="arcade-game-invitation" id="${tx.transaction.sig***REMOVED***">
-      <div class="arcade-game-row-name" id="${tx.transaction.sig***REMOVED***">${tx.transaction.msg.game***REMOVED***</div>
-      <div class="arcade-game-row-options" id="${tx.transaction.sig***REMOVED***">${optionstxt***REMOVED***</div>
-      <div class="arcade-game-row-join" id="${tx.transaction.sig***REMOVED***">${button_text***REMOVED***</div>
+    <div class="arcade-game-invitation" id="arcade-game-${sig***REMOVED***">
+      <div class="arcade-game-row-name" id="arcade-game-name-${sig***REMOVED***">
+
+        <div class="game-row-avi">
+          <img style="height: 1.7em" src="${app.keys.returnIdenticon(publickey)***REMOVED***">
+        </div>
+        <!-- ${publickey.substring(0,8)***REMOVED*** -->
+
+      </div>
+      <div class="arcade-game-row-name" id="arcade-game-name-${sig***REMOVED***">${game***REMOVED***</div>
+      <div class="arcade-game-row-options" id="arcade-game-options-${sig***REMOVED***">${options_html***REMOVED***</div>
+      <button class="arcade-game-row-join" id="arcade-game-join-${sig***REMOVED***">${button_text***REMOVED***</button>
     </div>
   `;
 
