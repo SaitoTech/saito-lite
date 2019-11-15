@@ -1,0 +1,238 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Twilight Struggle</title>
+
+  <script type="text/javascript" src="/saito/lib/jquery/jquery-3.2.1.min.js"></script>
+  <link rel="stylesheet" href="/saito/lib/jquery/jquery-ui.min.css" type="text/css" media="screen" />
+  <script type="text/javascript" src="/saito/lib/jquery/jquery-ui.min.js"></script>
+
+  <script type="text/javascript" src="/saito/lib/hammer/hammer.min.js"></script>
+
+  <link rel="stylesheet" href="/saito/lib/font-awesome/css/font-awesome.min.css" type="text/css" media="screen" />
+
+  <link rel="stylesheet" type="text/css" href="/saito/lib/templates/game.css" />
+  <link rel="stylesheet" type="text/css" href="/twilight/style.css" />
+
+  <link rel="icon" media="all" type="image/x-icon" href="/favicon.ico?v=2"/>
+
+</head>
+<body>
+
+  <div id="main" class="main" style="display:all">
+    <div class="connection_monitor" id="connection_monitor">CONNECTION UNSTABLE (refresh your browser) ...</div>
+    <div id="game_modal" class="modal">
+      <div class="modal_content">
+
+        <div class="modal_header">
+          <span class="close">&times;</span>
+          <h2 id="modal_header_text">One More Thing!</h2>
+        </div>
+
+        <div class="modal_body">
+          <p id="modal_body_text">How do you want to invite your opponent?</p>
+          <div style="display: grid">
+            <div id="game_start_options">
+            </div>
+          </div>
+        </div>
+
+        <div class="modal_footer">
+          <button class="modal_ok_button"> OK</button>
+        </div>
+
+      </div>
+    </div>
+    <div class="cardbox" id="cardbox" style="display:none">
+      <div class="cardbox-exit" id="cardbox-exit" style="display:none">×</div>
+      <div class="cardbox_menu_playcard cardbox_menu_btn" id="cardbox_menu_playcard" style="display:none">PLAY</div>
+    </div>
+    <!---
+    <div class="cardbox_event_blocker" id="cardbox_event_blocker"></div>
+    --->
+    <!-- <div class="cardbox_menu" id="cardbox_menu"> -->
+      <!-- <div class="cardbox_menu_cancelcard cardbox_menu_btn redbtn" id="cardbox_menu_cancelcard">cancel</div>
+    </div> -->
+    <div class="gameboard" id="gameboard">
+      <div class="active_events" style="float:right">
+	<img src="/twilight/img/Event16.svg" id="eventtile_warsaw" class="event_tile" />
+	<img src="/twilight/img/Event17.svg" id="eventtile_degaulle" class="event_tile" />
+	<img src="/twilight/img/Event21.svg" id="eventtile_nato" class="event_tile" />
+	<img src="/twilight/img/Event23.svg" id="eventtile_marshall" class="event_tile" />
+	<img src="/twilight/img/Event27.svg" id="eventtile_usjapan" class="event_tile" />
+	<img src="/twilight/img/Event35.svg" id="eventtile_formosan" class="event_tile" />
+	<img src="/twilight/img/Event42.svg" id="eventtile_quagmire" class="event_tile" />
+	<img src="/twilight/img/Event44.svg" id="eventtile_beartrap" class="event_tile" />
+	<img src="/twilight/img/Event55.svg" id="eventtile_willybrandt" class="event_tile" />
+	<img src="/twilight/img/Event59.svg" id="eventtile_flowerpower" class="event_tile" />
+	<img src="/twilight/img/Event65.svg" id="eventtile_campdavid" class="event_tile" />
+	<img src="/twilight/img/Event73.png" id="eventtile_shuttlediplomacy" class="event_tile" />
+	<img src="/twilight/img/Event68.svg" id="eventtile_johnpaul" class="event_tile" />
+	<img src="/twilight/img/Event82.svg" id="eventtile_iranianhostagecrisis" class="event_tile" />
+	<img src="/twilight/img/Event83.svg" id="eventtile_ironlady" class="event_tile" />
+	<img src="/twilight/img/Event86.svg" id="eventtile_northseaoil" class="event_tile" />
+	<img src="/twilight/img/Event87.svg" id="eventtile_reformer" class="event_tile" />
+	<img src="/twilight/img/Event96.svg" id="eventtile_teardown" class="event_tile" />
+	<img src="/twilight/img/Event97.svg" id="eventtile_evilempire" class="event_tile" />
+	<img src="/twilight/img/Event106.svg" id="eventtile_norad" class="event_tile" />
+	<img src="/twilight/img/Event110.svg" id="eventtile_awacs" class="event_tile" />
+      </div>
+
+      <div class="scoring_card" id="europe" style="top: 60px;left: 1090px;width: 140px;height: 100px;position: absolute;cursor:pointer;"></div>
+      <div class="display_card" id="europe"
+            style="top: 60px;left:1380px;width: 240px;height: 100px;position:absolute;cursor:pointer;display:none;background-color:grey;border:1px solid black;border-radius:5px">
+        <div class="display_vp" id="europe" style="font-size: 4em; color:white;display:flex;justify-content:center;margin-top:20px;"></div>
+      </div>
+
+      <div class="scoring_card" id="mideast" style="top: 820px; left: 1590px; width: 140px; height: 100px; position: absolute; cursor:pointer;"></div>
+      <div class="display_card" id="mideast"
+            style="top: 930px; left: 1540px; width: 240px; height: 100px;position:absolute;cursor:pointer;display:none;background-color:grey;border:1px solid black;border-radius:5px">
+        <div class="display_vp" id="mideast" style="font-size: 4em; color:white;display:flex;justify-content:center;margin-top:20px;"></div>
+      </div>
+
+      <div class="scoring_card" id="asia" style="top: 640px; left: 1840px; width: 140px; height: 100px; position: absolute; cursor:pointer;"></div>
+      <div class="display_card" id="asia"
+            style="top: 530px; left: 1790px; width: 240px; height: 100px;position:absolute;cursor:pointer;display:none;background-color:grey;border:1px solid black;border-radius:5px">
+        <div class="display_vp" id="asia" style="font-size: 4em; color:white;display:flex;justify-content:center;margin-top:20px;"></div>
+      </div>
+
+      <div class="scoring_card" id="seasia" style="top: 960px; left: 1870px; width: 140px; height: 100px; position: absolute; cursor:pointer;"></div>
+      <div class="display_card" id="seasia"
+            style="top: 1070px; left: 1820px; width: 240px; height: 100px;position:absolute;cursor:pointer;display:none;background-color:grey;border:1px solid black;border-radius:5px">
+        <div class="display_vp" id="seasia" style="font-size: 4em; color:white;display:flex;justify-content:center;margin-top:20px;"></div>
+      </div>
+
+      <div class="scoring_card" id="centralamerica" style="top: 670px; left: 520px; width: 140px; height: 100px; position: absolute; cursor:pointer;"></div>
+      <div class="display_card" id="centralamerica"
+            style="top: 560px; left: 475px; width: 240px; height: 100px;position:absolute;cursor:pointer;display:none;background-color:grey;border:1px solid black;border-radius:5px">
+        <div class="display_vp" id="centralamerica" style="font-size: 4em; color:white;display:flex;justify-content:center;margin-top:20px;"></div>
+      </div>
+
+      <div class="scoring_card" id="southamerica" style="top: 1070px; left: 525px; width: 140px; height: 100px; position: absolute; cursor:pointer;"></div>
+      <div class="display_card" id="southamerica"
+            style="top: 940px; left: 650px; width: 240px; height: 100px;position:absolute;cursor:pointer;display:none;background-color:grey;border:1px solid black;border-radius:5px">
+        <div class="display_vp" id="southamerica" style="font-size: 4em; color:white;display:flex;justify-content:center;margin-top:20px;"></div>
+      </div>
+
+      <div class="scoring_card" id="africa" style="top: 1020px; left: 935px; width: 140px; height: 100px; position: absolute; cursor:pointer;"></div>
+      <div class="display_card" id="africa"
+            style="top: 1130px; left: 890px; width: 240px; height: 100px;position:absolute;cursor:pointer;display:none;background-color:grey;border:1px solid black;border-radius:5px">
+        <div class="display_vp" id="africa" style="font-size: 4em; color:white;display:flex;justify-content:center;margin-top:20px;"></div>
+      </div>
+
+
+      <div class="formosan_resolution" id="formosan_resolution"></div>
+      <div class="round" id="round"></div>
+      <div class="action_round_us" id="action_round_us"></div>
+      <div class="action_round_ussr" id="action_round_ussr"></div>
+      <div class="action_round_cover action_round_8_cover" id="action_round_7_cover"></div>
+      <div class="action_round_cover action_round_7_cover" id="action_round_8_cover"></div>
+      <div class="defcon" id="defcon"></div>
+      <div class="vp" id="vp"></div>
+      <div class="space_race_us" id="space_race_us"></div>
+      <div class="space_race_ussr" id="space_race_ussr"></div>
+      <div class="milops_us" id="milops_us"></div>
+      <div class="milops_ussr" id="milops_ussr"></div>
+      <div class="country" id="canada"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="uk"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="france"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="benelux"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="italy"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="westgermany"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="eastgermany"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="poland"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="spain"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="greece"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="turkey"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="yugoslavia"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="bulgaria"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="hungary"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="romania"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="austria"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="czechoslovakia"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="denmark"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="norway"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="sweden"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="finland"><div class="us"></div><div class="ussr"></div></div>
+
+      <div class="country" id="libya"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="egypt"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="lebanon"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="syria"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="israel"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="iraq"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="iran"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="jordan"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="gulfstates"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="saudiarabia"><div class="us"></div><div class="ussr"></div></div>
+
+      <div class="country" id="afghanistan"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="pakistan"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="india"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="burma"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="laos"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="thailand"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="vietnam"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="malaysia"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="australia"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="indonesia"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="philippines"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="taiwan"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="japan"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="southkorea"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="northkorea"><div class="us"></div><div class="ussr"></div></div>
+
+      <div class="country" id="mexico"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="guatemala"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="elsalvador"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="honduras"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="nicaragua"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="costarica"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="panama"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="cuba"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="haiti"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="dominicanrepublic"><div class="us"></div><div class="ussr"></div></div>
+
+      <div class="country" id="venezuela"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="colombia"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="ecuador"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="peru"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="chile"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="bolivia"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="argentina"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="paraguay"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="uruguay"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="brazil"><div class="us"></div><div class="ussr"></div></div>
+
+      <div class="country" id="morocco"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="algeria"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="saharanstates"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="tunisia"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="westafricanstates"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="sudan"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="ivorycoast"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="nigeria"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="ethiopia"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="somalia"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="cameroon"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="zaire"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="kenya"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="angola"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="seafricanstates"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="zimbabwe"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="botswana"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="southafrica"><div class="us"></div><div class="ussr"></div></div>
+    </div>
+    <div class="controls"></div>
+  </div>
+
+  <script src="/saito/saito.js"></script>
+
+</body>
+</html>
+

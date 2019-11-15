@@ -1,0 +1,40 @@
+
+The files contained in the /web/images directory are from a Game Module released by GMT Games under the following conditions:
+
+	https://www.gmtgames.com/t-GMTVASSAL.aspx
+
+	We provide or sanction electronically assisted gaming modules as well as “Living Rules*”
+	for our games free of charge. We have only two restrictions on the use of these files:
+ 
+	In order to legally use these files to play a game, at least one of the players must own a 
+	copy of the game upon which that module or files are based.
+
+	All rights, copyrights, and trademarks of this page's Living Rules and the associated 
+	original games remain vested in GMT Games, LLC and/or the original game artists. We hereby 
+	grant permission for players to make photocopies of rules, playbooks, player aids, or other
+	game-related content posted herein for personal, non-commercial use. Any use of these 
+	materials except for that express non-commercial use is prohibited without express permission 
+	from GMT Games, LLC.
+
+
+	GMT Games LLC
+	PO Box 1308
+	Hanford, CA 93230
+	Phone: 800-523-6111 (US and Canada) 559-583-1236
+	FAX: 559-582-7775
+	E-Mail: gmtoffice@gmtgames.com
+
+
+The blockchain module files not explicitly owned by GMT Games are happily released under the same license as the Saito engine.
+
+- - - - - - - - - - - - - - - - - - - 
+
+Copyright 2019, David Lancashire
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+The module is run atop the open source Saito Game Engine.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
