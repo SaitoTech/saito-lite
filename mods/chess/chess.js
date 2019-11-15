@@ -114,7 +114,7 @@ class Chess extends GameTemplate {
     ***REMOVED***
         else {
   ***REMOVED***
-            opponent = await this.app.keys.fetchIdentifier(opponent);
+            opponent = await this.app.keys.fetchIdentifierPromise(opponent);
       ***REMOVED***
           catch (err) {
 ***REMOVED***
