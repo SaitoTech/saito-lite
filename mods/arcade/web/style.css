@@ -97,14 +97,16 @@ body {
 
 /** Game Carousel **/
 #arcade-carousel {
-  /* max-width: 1000px; */
+  width: 100%;
+  max-width: 1100px;
+  justify-self: center;
 }
 
 .glide__arrows {
   display: flex;
   justify-content: space-between;
   position: relative;
-  bottom: 14em;
+  bottom: 6em;
   padding: 0px 10px;
 }
 
@@ -132,10 +134,10 @@ body {
   border: 3px solid #888;
   cursor: pointer;
   /* max-width: 375px; */
-  max-width: 1125px;
+  max-width: 375px;
   /** 1125px **/
-  /* max-height: 240px; */
-  max-height: 720px;
+  max-height: 240px;
+  /* max-height: 400px; */
   /** 720px **/
   grid-area: gameimage;
 }

@@ -187,7 +187,7 @@ console.log("ERROR 418019: error fetching game for observer mode");
     importGlide = async () => {
       const Glide = await import('./lib/glide/glide.min.js');
       this.glide = new Glide.default('.glide', {
-        // type: 'carousel',
+        type: 'carousel',
         autoplay: 3000,
         perView: 3,
       });
