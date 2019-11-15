@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.0"
+   width="100"
+   height="100"
+   id="svg2">
+  <defs
+     id="defs5">
+    <filter
+       x="-0.10506912"
+       y="-0.10506912"
+       width="1.2101382"
+       height="1.2101382"
+       color-interpolation-filters="sRGB"
+       id="filter3256">
+      <feGaussianBlur
+         id="feGaussianBlur3258"
+         stdDeviation="3.8963134" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter4191">
+      <feGaussianBlur
+         id="feGaussianBlur4193"
+         stdDeviation="2.2698653" />
+    </filter>
+  </defs>
+  <rect
+     width="89"
+     height="89"
+     rx="11"
+     ry="11"
+     x="5.5812325"
+     y="5.8613443"
+     id="rect2384"
+     style="opacity:0.89671362;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3256)" />
+  <rect
+     width="89"
+     height="89"
+     rx="11"
+     ry="11"
+     x="2.5"
+     y="2.5"
+     id="rect2469"
+     style="fill:#008fd5;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.48235294;stroke-dasharray:none" />
+  <path
+     d="m 82.539682,-49.682544 -29.791908,-21.033236 -27.6908,20.786319 10.797591,-34.833416 -28.3258923,-19.912193 36.4651863,-0.49499 10.184435,-33.09273 11.739134,34.52749 34.620222,-0.54025 -29.210005,21.834165 11.212037,32.758841 z"
+     transform="matrix(0.6987715,0,0,0.6987715,12.466178,112.99475)"
+     id="path4161"
+     style="fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter4191)" />
+  <path
+     d="m 82.539682,-49.682544 -29.791908,-21.033236 -27.6908,20.786319 10.797591,-34.833416 -28.3258923,-19.912193 36.4651863,-0.49499 10.184435,-33.09273 11.739134,34.52749 34.620222,-0.54025 -29.210005,21.834165 11.212037,32.758841 z"
+     transform="matrix(0.6987715,0,0,0.6987715,10.466442,110.99434)"
+     id="path2471"
+     style="fill:#ffffff;fill-opacity:1;stroke:none" />
+  <rect
+     width="90.643738"
+     height="90.643738"
+     rx="11.203158"
+     ry="11.203158"
+     x="1.6781328"
+     y="1.6781328"
+     id="rect3606"
+     style="fill:none;stroke:#000000;stroke-width:2.03693795;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+</svg>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="svg2" xmlns:svg="http://www.w3.org/2000/svg"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 388 538"
+	 style="enable-background:new 0 0 388 538;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#F4AD43;stroke:#000000;}
+	.st1{fill:#F9CD8C;stroke:#000000;}
+	.st2{fill:#FFFFFF;}
+	.st3{font-family:'STBaoliSC-Regular';}
+	.st4{font-size:36px;}
+	.st5{font-family:'STKaiti';}
+	.st6{font-size:20.9px;}
+	.st7{font-size:20px;}
+</style>
+<rect id="rect3690" x="44" y="121.5" class="st0" width="300" height="105"/>
+<rect id="rect3623" x="44" y="226.5" class="st1" width="300" height="220"/>
+<rect id="rect3736" x="44.5" y="386" class="st2" width="299" height="60"/>
+<text transform="matrix(1 0 0 1 122 172.8282)" class="st3 st4">亚洲计分</text>
+<text transform="matrix(1 0 0 1 141.7498 220.3282)" class="st5 st6">双方获分：</text>
+<rect id="rect3706" x="44.5" y="227" class="st2" width="299" height="35"/>
+<rect id="rect3734" x="44.5" y="295" class="st2" width="299" height="33"/>
+<text transform="matrix(1 0 0 1 159.3102 253.8282)" class="st5 st7">存在：3</text>
+<text transform="matrix(1 0 0 1 159.31 287.0782)" class="st5 st7">支配：7</text>
+<text transform="matrix(1 0 0 1 159.31 320.5782)" class="st5 st7">控制：9</text>
+<text transform="matrix(1 0 0 1 82.6402 364.9082)" class="st5 st7">每控制一个区域战场国+1</text>
+<text transform="matrix(1 0 0 1 103.9998 412.0782)" class="st5 st7">没控制一个邻近敌方</text>
+<text transform="matrix(1 0 0 1 112.8629 437.1582)" class="st5 st7">超级大国的国家+1</text>
+</svg>

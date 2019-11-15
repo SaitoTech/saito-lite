@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   width="388"
+   height="538"
+   id="svg2">
+  <defs
+     id="defs6" />
+  <rect
+     width="300"
+     height="326"
+     x="37.500381"
+     y="121.49958"
+     id="rect3690"
+     style="fill:#c7c8e4;fill-opacity:1;stroke:#000000;stroke-width:0.99999994;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+  <text
+     x="187.5"
+     y="220.57817"
+     id="text3702"
+     xml:space="preserve"
+     style="font-size:20.89999962px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia"><tspan
+       x="187.5"
+       y="220.57817"
+       id="tspan2841">Both sides score:</tspan></text>
+  <rect
+     width="299"
+     height="34"
+     x="38"
+     y="228"
+     id="rect3706"
+     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+  <path
+     d="M 38,122 337,122 38,227 38,122 z"
+     id="rect4029"
+     style="fill:#a597c8;fill-opacity:1;stroke:none" />
+  <rect
+     width="299"
+     height="33"
+     x="38"
+     y="295"
+     id="rect3734"
+     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+  <rect
+     width="299"
+     height="59"
+     x="38.099998"
+     y="388"
+     id="rect3736"
+     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+  <text
+     x="187.5"
+     y="254.07817"
+     id="text3710"
+     xml:space="preserve"
+     style="font-size:20.89999962px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia"><tspan
+       x="187.5"
+       y="254.07817"
+       id="tspan2851">Presence: 3</tspan></text>
+  <text
+     x="187.75"
+     y="287.07819"
+     id="text3714"
+     xml:space="preserve"
+     style="font-size:20.89999962px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia"><tspan
+       x="187.75"
+       y="287.07819"
+       id="tspan2857">Domination: 7</tspan></text>
+  <text
+     x="187.5"
+     y="320.57819"
+     id="text3718"
+     xml:space="preserve"
+     style="font-size:20.89999962px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia"><tspan
+       x="187.5"
+       y="320.57819"
+       id="tspan2863">Control: Automatic Victory</tspan></text>
+  <text
+     x="187.5"
+     y="353.82819"
+     id="text3722"
+     xml:space="preserve"
+     style="font-size:20.89999962px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia"><tspan
+       x="187.5"
+       y="353.82819"
+       id="tspan3623">+1 per controlled Battleground</tspan><tspan
+       x="187.5"
+       y="378.90817"
+       id="tspan3625">Country in Region</tspan></text>
+  <text
+     x="187.25"
+     y="412.07819"
+     id="text3728"
+     xml:space="preserve"
+     style="font-size:20.89999962px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia"><tspan
+       x="187.25"
+       y="412.07819"
+       id="tspan3627">+1 per Country controlled that is</tspan><tspan
+       x="187.25"
+       y="437.15817"
+       id="tspan3629">adjacent to enemy superpower</tspan></text>
+  <text
+     x="184"
+     y="157.82817"
+     id="text3696"
+     xml:space="preserve"
+     style="font-size:29px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:121.00000381%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia Bold"><tspan
+       x="184"
+       y="157.82817"
+       id="tspan3692">EUROPE</tspan><tspan
+       x="184"
+       y="192.91817"
+       id="tspan3694"> SCORING</tspan></text>
+  <path
+     d="m 37.366094,227.36609 300.267816,0.26782"
+     id="path3694"
+     style="fill:none;stroke:#000000;stroke-width:0.73199999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+</svg>
