@@ -12,20 +12,20 @@ module.exports = ArcadeGameDreate = {
     for (let i = 0; i < data.arcade.mods.length; i++) {
       if (data.arcade.mods[i].name === game_id) {
 
-	let gamemod = data.arcade.mods[i];
-	let gamemod_url = "/" + gamemod.name.toLowerCase() + "/img/arcade.jpg";
+        let gamemod = data.arcade.mods[i];
+        let gamemod_url = "/" + gamemod.name.toLowerCase() + "/img/arcade.jpg";
 
         document.querySelector('.game-image').src = gamemod_url;
         document.querySelector('.game-description').innerHTML = gamemod.description;
         document.querySelector('.game-publisher-message').innerHTML = gamemod.publisher_message;
-	document.querySelector('.game-details').innerHTML = gamemod.returnGameOptionsHTML();
+        document.querySelector('.game-details').innerHTML = gamemod.returnGameOptionsHTML();
 
         document.getElementById('game-create-btn')
           .addEventListener('click', (e) => {
 
-	    let options  = {***REMOVED***;
+            let options  = {***REMOVED***;
 
-	    $('form input, form select').each(
+            $('form input, form select').each(
               function(index) {
                 var input = $(this);
                 if (input.is(":checkbox")) {
@@ -38,17 +38,19 @@ module.exports = ArcadeGameDreate = {
           ***REMOVED***
             );
 
-	    let gamedata = {***REMOVED***;
-	        gamedata.name = gamemod.name;
-	        gamedata.options = gamemod.returnQuickLinkGameOptions(options);
-	        gamedata.players_needed = 2;
+            let gamedata = {***REMOVED***;
+                gamedata.name = gamemod.name;
+                gamedata.options = gamemod.returnFormattedGameOptions(options);
+                gamedata.options_html = gamemod.returnGameRowOptionsHTML(options);
+                gamedata.players_needed = 2;
 
-	    data.arcade.sendOpenRequest(app, data, gamedata);
-	    data.arcade.render(app, data);
+            data.arcade.sendOpenRequest(app, data, gamedata);
+            document.querySelector('.arcade-main').innerHTML = '';
+            data.arcade.render(app, data);
 
       ***REMOVED***);
 
-	return;
+        return;
   ***REMOVED***
 ***REMOVED***
   ***REMOVED***,

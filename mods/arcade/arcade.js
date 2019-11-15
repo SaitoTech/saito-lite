@@ -15,6 +15,7 @@ class Arcade extends ModTemplate {
     super(app);
 
     this.name 			= "Arcade";
+    this.events			= ['chat-render-request'];
     this.mods			= [];
     this.affix_callbacks_to 	= [];
     this.games			= [];
@@ -23,6 +24,19 @@ class Arcade extends ModTemplate {
   ***REMOVED***
 
  
+
+
+   receiveEvent(type, data) {
+     if (type == 'chat-render-request') {
+       if (this.browser_active) {
+         let uidata = {***REMOVED***;
+	     uidata.arcade = this;
+         ArcadeLeftSidebar.render(this.app, uidata);
+         ArcadeLeftSidebar.attachEvents(this.app, uidata);
+   ***REMOVED***
+ ***REMOVED***
+  ***REMOVED***
+
 
   observeGame(msg) {
 
@@ -84,10 +98,6 @@ console.log("ERROR 418019: error fetching game for observer mode");
     ArcadeRightSidebar.render(app, data);
     ArcadeRightSidebar.attachEvents(app, data);
 
-    if (this.glide) {
-      this.glide.mount();
-***REMOVED***
-
   ***REMOVED***
 
 
@@ -129,7 +139,7 @@ console.log("ERROR 418019: error fetching game for observer mode");
 ***REMOVED***
 
     // fake games
-    for (let i=0; i < 10; i++) {
+    for (let i=0; i < 5; i++) {
       this.games.unshift(
         new saito.transaction({
           to: [],
@@ -171,17 +181,16 @@ console.log("ERROR 418019: error fetching game for observer mode");
 
     // Use for Carousel
     importGlide = async () => {
-      const Glide = await import('./web/glide.min.js');
-      // const Glide = await import('@glidejs/glide');
+      const Glide = await import('./lib/glide/glide.min.js');
       this.glide = new Glide.default('.glide', {
+        type: 'carousel',
         autoplay: 3000,
-        perView: 2
+        perView: 3,
   ***REMOVED***);
 
       this.glide.mount();
 ***REMOVED***
     importGlide();
-    //.mount();
 
   ***REMOVED***
 
@@ -258,7 +267,7 @@ console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
   ***REMOVED***
 ***REMOVED***
 
-    this.games.push(tx);
+    this.games.unshift(tx);
 
     let data = {***REMOVED***;
     data.arcade = this;
@@ -487,6 +496,7 @@ console.log("INSERTING OPEN GAME: " + sql + " -- " + params);
         tx.transaction.msg.request  		= "open";
         tx.transaction.msg.game     		= gamedata.name;
         tx.transaction.msg.options  		= gamedata.options;
+        tx.transaction.msg.options_html = gamedata.options_html;
         tx.transaction.msg.players_needed 	= gamedata.players_needed;
         tx.transaction.msg.accept_sig 		= accept_sig;
         tx.transaction.msg.players  		= [];

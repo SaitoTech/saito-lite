@@ -59,8 +59,11 @@ body {
 /** MAIN **/
 
 .arcade-main {
-  display: grid;
-  justify-content: center;
+  /* display: grid;
+  justify-content: center; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 ***REMOVED***
 
 .game-options-html {
@@ -97,14 +100,16 @@ body {
 
 /** Game Carousel **/
 #arcade-carousel {
-  /* max-width: 1000px; */
+  width: 100%;
+  max-width: 1100px;
+  justify-self: center;
 ***REMOVED***
 
 .glide__arrows {
   display: flex;
   justify-content: space-between;
   position: relative;
-  bottom: 14em;
+  bottom: 6em;
   padding: 0px 10px;
 ***REMOVED***
 
@@ -132,10 +137,10 @@ body {
   border: 3px solid #888;
   cursor: pointer;
   /* max-width: 375px; */
-  max-width: 1125px;
+  max-width: 375px;
   /** 1125px **/
-  /* max-height: 240px; */
-  max-height: 720px;
+  max-height: 240px;
+  /* max-height: 400px; */
   /** 720px **/
   grid-area: gameimage;
 ***REMOVED***
@@ -179,6 +184,25 @@ body {
   display: grid;
   grid-template-columns: 10em auto;
 ***REMOVED***
+
+
+/* observer mode box */
+.arcade-observer-game-players {
+  float:right;
+***REMOVED***
+.arcade-observer-game-players-identicon {
+  height: 60px;
+  width: 60px;
+  float:right;
+  margin-left: 8px;
+***REMOVED***
+.arcade-observer-game-name {
+
+***REMOVED***
+.arcade-observer-game-row {
+
+***REMOVED***
+
 
 
 /* RIBBON */
@@ -259,6 +283,23 @@ body {
   float: left;
   cursor: pointer;
 ***REMOVED***
+
+
+
+
+
+.arcade-navigator, .arcade-apps {
+  list-style: none;
+  list-style-type: none;
+  font-size: 1.2em;
+  line-height: 1.4em;
+  padding: 10px 0px;
+***REMOVED***
+
+.arcade-navigator {
+  border-bottom: 1px solid grey;
+***REMOVED***
+
 
 
 

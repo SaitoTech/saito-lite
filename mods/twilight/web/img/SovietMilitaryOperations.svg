@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.0"
+   width="100"
+   height="100"
+   id="svg2">
+  <defs
+     id="defs5">
+    <filter
+       x="-0.10506912"
+       y="-0.10506912"
+       width="1.2101382"
+       height="1.2101382"
+       color-interpolation-filters="sRGB"
+       id="filter3256">
+      <feGaussianBlur
+         id="feGaussianBlur3258"
+         stdDeviation="3.8963134" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3818">
+      <feGaussianBlur
+         id="feGaussianBlur3820"
+         stdDeviation="1.5861172" />
+    </filter>
+  </defs>
+  <rect
+     width="89"
+     height="89"
+     rx="11"
+     ry="11"
+     x="5.5812325"
+     y="5.8613443"
+     id="rect2384"
+     style="opacity:0.89671362;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3256)" />
+  <g
+     transform="translate(104.98319,-5.6610641)"
+     id="g6884"
+     style="stroke:#ffffff;stroke-width:4;stroke-miterlimit:4;stroke-opacity:0.48235294;stroke-dasharray:none">
+    <rect
+       width="89"
+       height="89"
+       rx="11"
+       ry="11"
+       x="-102.48319"
+       y="8.1610641"
+       id="rect3373"
+       style="fill:#d2232a;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.48235294;stroke-dasharray:none" />
+  </g>
+  <image
+     xlink:href="data:image/png;base64,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 "
+     x="7.7628379"
+     y="38.889442"
+     width="85"
+     height="40"
+     id="image3717" />
+  <g
+     id="g3815"
+     style="fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3818)" />
+  <rect
+     width="90.643738"
+     height="90.643738"
+     rx="11.203158"
+     ry="11.203158"
+     x="1.6781328"
+     y="1.6781328"
+     id="rect3606"
+     style="fill:none;stroke:#000000;stroke-width:2.03693795;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+  <text
+     x="46.894531"
+     y="26.701172"
+     id="text3717"
+     xml:space="preserve"
+     style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Impact;-inkscape-font-specification:Impact Condensed"><tspan
+       x="46.894531"
+       y="26.701172"
+       id="tspan2843">USSR</tspan></text>
+</svg>
