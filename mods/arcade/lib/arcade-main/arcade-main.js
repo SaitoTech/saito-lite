@@ -1,6 +1,6 @@
 const ArcadeMainTemplate = require('./arcade-main.template');
 
-const ArcadeGameCarouselTemplate = require('./arcade-game-carousel/arcade-game-carousel.template');
+// const ArcadeGameCarouselTemplate = require('./arcade-game-carousel/arcade-game-carousel.template');
 
 const ArcadeGameTemplate = require('./arcade-game.template');
 const ArcadeGameListRowTemplate = require('./arcade-gamelist-row.template');
@@ -15,8 +15,7 @@ module.exports = ArcadeMain = {
 
     let arcade_main = document.querySelector(".arcade-main");
     if (!arcade_main) { return; ***REMOVED***
-    // arcade_main.innerHTML += ArcadeGameCarouselTemplate();
-    arcade_main.innerHTML += ArcadeMainTemplate();
+    arcade_main.innerHTML = ArcadeMainTemplate();
 
     //
     // click-to-create games
@@ -47,6 +46,10 @@ module.exports = ArcadeMain = {
 
       document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(app, tx, button_text);
 ***REMOVED***);
+
+    if (data.arcade.glide) {
+      data.arcade.glide.mount();
+***REMOVED***
 
   ***REMOVED***,
 
