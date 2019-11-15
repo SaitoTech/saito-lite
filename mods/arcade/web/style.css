@@ -181,6 +181,25 @@ body {
 ***REMOVED***
 
 
+/* observer mode box */
+.arcade-observer-game-players {
+  float:right;
+***REMOVED***
+.arcade-observer-game-players-identicon {
+  height: 60px;
+  width: 60px;
+  float:right;
+  margin-left: 8px;
+***REMOVED***
+.arcade-observer-game-name {
+
+***REMOVED***
+.arcade-observer-game-row {
+
+***REMOVED***
+
+
+
 /* RIBBON */
 
 .ribbon {
