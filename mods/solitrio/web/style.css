@@ -1,0 +1,71 @@
+body {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 13px;
+  padding: 0px;
+  margin: 0px;
+***REMOVED***
+
+.connection_monitor {
+  position: fixed;
+  display: none;
+  min-height: 30px;
+  z-index: 90000;
+  background: #ef6666;
+  font-size: 1.8em;
+  padding: 15px;
+***REMOVED***
+
+.gameboard {
+  position: absolute;
+  background-image: url("img/gameboard.jpg");
+  background-size: cover;
+  width: 1504px;
+  height: 1000px;
+  min-width: 100%;
+  min-height: 100%;
+***REMOVED***
+
+.logobox {
+  position: absolute;
+  float: left;
+  left: 82%;
+  top: 40px;
+  width: 16%;
+  cursor:pointer;
+***REMOVED***
+.logobox img {
+  width: 100%;
+***REMOVED***
+.chances {
+ position: absolute;
+ top: 80%;
+ left: 36%;
+***REMOVED***
+
+.rowbox {
+  float:left;
+  padding: 40px;
+***REMOVED***
+.card {
+  position: relative;
+  float:left;
+  #width: 100px;
+  #min-width:10%;
+***REMOVED***
+.slot {
+ position: relative;
+ width:8%;
+ #width: 100px;
+ min-height: 150px;
+ float: left;
+***REMOVED***
+.row {
+ position:relative;
+ #height: 110px;
+ clear: both;
+***REMOVED***
+.slot img {
+ width: 100%;
+***REMOVED***
+
+

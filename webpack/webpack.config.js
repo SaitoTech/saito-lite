@@ -17,7 +17,8 @@ const path = require('path');
         /\.jpg$/,
         /\.html$/,
         /\.css$/,
-        /\.sql$/
+        /\.sql$/,
+        /\/web\//
     ],
     // Path to your entry point. From this file Webpack will begin his work
     entry: ["babel-polyfill", path.resolve(__dirname, '../lib/saito/lite/index.js')],
