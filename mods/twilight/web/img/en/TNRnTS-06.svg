@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.1"
+   width="388"
+   height="538"
+   id="svg2">
+  <defs
+     id="defs6" />
+  <text
+     x="196.24637"
+     y="245.73825"
+     transform="scale(0.95247393,1.0498975)"
+     id="text4245"
+     xml:space="preserve"
+     style="font-size:28px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia Bold"><tspan
+       x="196.24637"
+       y="245.73825"
+       id="tspan2911">THE CHINA CARD</tspan></text>
+  <text
+     x="187.5"
+     y="326"
+     id="text4249"
+     xml:space="preserve"
+     style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia"><tspan
+       x="187.5"
+       y="326"
+       id="tspan2913">+1 Operations value when all</tspan><tspan
+       x="187.5"
+       y="350"
+       id="tspan2915">points are used in Asia. Pass to</tspan><tspan
+       x="187.5"
+       y="374"
+       id="tspan2917">opponent after play.</tspan></text>
+  <g
+     transform="matrix(1.0000074,0,0,0.99726396,-0.50142205,0.09166391)"
+     id="g3868">
+    <rect
+       width="181.99866"
+       height="121.33197"
+       x="101.50067"
+       y="95.168724"
+       id="rect3062"
+       style="fill:#de2910;stroke:#000000;stroke-width:2.00273418;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    <path
+       d="m 120.68601,139.67248 4.03388,-12.54476 -10.60072,-7.77702 13.12882,-0.0245 4.09053,-12.52625 4.08018,12.52965 13.1288,0.0354 -10.60713,7.7682 4.02352,12.54812 -10.63575,-7.72865 -10.64213,7.71979 0,0 z"
+       id="star"
+       style="fill:#ffde00" />
+    <use
+       transform="matrix(0.312837,0.115102,-0.115102,0.312837,135.00134,95.058328)"
+       id="use3065"
+       x="0"
+       y="0"
+       width="1"
+       height="1"
+       xlink:href="#star" />
+    <use
+       transform="matrix(0.333094,-0.0127962,0.0127962,0.333094,128.47568,97.176298)"
+       id="use3067"
+       x="0"
+       y="0"
+       width="1"
+       height="1"
+       xlink:href="#star" />
+    <use
+       transform="matrix(0.298835,-0.147693,0.147693,0.298835,116.06499,100.97167)"
+       id="use3069"
+       x="0"
+       y="0"
+       width="1"
+       height="1"
+       xlink:href="#star" />
+    <use
+       transform="matrix(0.307068,0.129711,-0.129711,0.307068,137.51943,51.370311)"
+       id="use3071"
+       x="0"
+       y="0"
+       width="1"
+       height="1"
+       xlink:href="#star" />
+  </g>
+  <text
+     x="187.5"
+     y="409.16666"
+     id="text3884"
+     xml:space="preserve"
+     style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia"><tspan
+       x="187.5"
+       y="409.16666"
+       id="tspan2919">+1 VP for the player holding this</tspan><tspan
+       x="187.5"
+       y="433.16666"
+       id="tspan2921">card at the end of Turn 10.</tspan></text>
+  <text
+     x="187.75"
+     y="292.5"
+     id="text3896"
+     xml:space="preserve"
+     style="font-size:18px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia Italic"><tspan
+       x="187.75"
+       y="292.5"
+       id="tspan2839">Begins the game with the USSR player.</tspan></text>
+  <text
+     x="187.33333"
+     y="465.25"
+     id="text3904"
+     xml:space="preserve"
+     style="font-size:18px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia Italic"><tspan
+       x="187.33333"
+       y="465.25"
+       id="tspan2923">Cancels effect of 'Formosan Resolution' if</tspan><tspan
+       x="187.33333"
+       y="486.85001"
+       id="tspan2925">this card is played by the US player.</tspan></text>
+</svg>

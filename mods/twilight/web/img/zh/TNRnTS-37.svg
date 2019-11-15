@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="svg2" xmlns:svg="http://www.w3.org/2000/svg"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 388 538"
+	 style="enable-background:new 0 0 388 538;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#D9E2A3;stroke:#000000;stroke-width:1.0008;}
+	.st1{fill:#FFFFFF;}
+	.st2{font-family:'STBaoliSC-Regular';}
+	.st3{font-size:36px;}
+	.st4{font-family:'STKaiti';}
+	.st5{font-size:20px;}
+	.st6{fill:none;stroke:#000000;stroke-width:0.7322;}
+</style>
+<rect id="rect3690" x="44" y="121.5" class="st0" width="300" height="326"/>
+<rect id="rect3736" x="44.6" y="386.5" class="st1" width="298.9" height="61"/>
+<text transform="matrix(0.958 0 0 1 107.7766 174.5781)" class="st2 st3">中美洲计分</text>
+<text transform="matrix(1 0 0 1 144 220.3282)" class="st4 st5">双方获分：</text>
+<rect id="rect3706" x="44.8" y="226.5" class="st1" width="298.4" height="35.5"/>
+<path id="path3694" class="st6" d="M43.9,226.4l300.3,0.3"/>
+<rect id="rect3734" x="44.5" y="295" class="st1" width="299" height="33"/>
+<text transform="matrix(1 0 0 1 159.3804 253.5782)" class="st4 st5">存在：1</text>
+<text transform="matrix(1 0 0 1 159.3801 287.0782)" class="st4 st5">支配：1</text>
+<text transform="matrix(1 0 0 1 159.3804 320.3282)" class="st4 st5">控制：5</text>
+<text transform="matrix(1 0 0 1 83.3301 365.8282)" class="st4 st5">每控制一个区域战场国+1</text>
+<text transform="matrix(1 0 0 1 104 412.0782)" class="st4 st5">每控制一个邻近敌方</text>
+<text transform="matrix(1 0 0 1 112.4814 436.0782)" class="st4 st5">超级大国的国家+1</text>
+</svg>

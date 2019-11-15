@@ -1,0 +1,175 @@
+body {
+ font-family: arial, helvetica, sans-serif;
+ //font-size: 13px;
+ font-size: 8px;
+ padding:0px;
+ margin:0px;
+}
+.gameboard {
+  position: absolute;
+  background-image: url("img/TS Map-11.jpg");
+  background-size: cover;
+  //width: 5100px;
+  //height: 3300px;
+  //width: 2550px;
+  //height: 1650px;
+  width: 1275px;
+  height: 825px;
+}
+.status {
+  float: left;
+  font-size: 1.8em;
+  padding:10px;
+//  width: 390px;
+//  height: 425px;
+  width:170px;
+  height:212px;
+  background-color: #fffccd;
+  border: 2px solid #948f8b;
+  border-bottom: 0px;
+}
+.log {
+  overflow: hidden;
+  position: absolute;
+  //top: 431px;
+  top: 215px;
+  left: 0px;
+  float: left;
+  padding:10px;
+  font-family: Courier, Sans-Serif;
+  //height: 200px;
+  //width: 390px;
+  font-size: 1.2em;
+  height:100px;
+  width:170px;
+  background-color: #fffccd;
+  border: 2px solid #948f8b; 
+  border-top: 0px;
+}
+
+li {
+ margin-top: 6px;
+}
+.round {
+ position: absolute;
+ background-image: url("img/Turn.svg");
+ background-size: cover;
+}
+.action_round_us {
+ position: absolute;
+ background-image: url("img/AmericanActionRound.svg");
+ background-size: cover;
+ display:all;
+}
+.action_round_ussr {
+ position: absolute;
+ background-image: url("img/SovietActionRound.svg");
+ background-size: cover;
+ display:all;
+}
+.defcon {
+ position: absolute;
+ background-image: url("img/Radiation_warning_symbol.svg");
+ background-size: cover;
+}
+.vp {
+ position: absolute;
+ background-image: url("img/VPs.svg");
+ background-size: cover;
+}
+.space_race_us {
+ position: absolute;
+ background-image: url("img/AmericanSpaceRace.svg");
+ background-size: cover;
+}
+.space_race_ussr {
+ position: absolute;
+ background-image: url("img/SovietSpaceRace.svg");
+ background-size: cover;
+}
+.milops_us {
+ position: absolute;
+ background-image: url("img/AmericanMilitaryOperations.svg");
+ background-size: cover;
+}
+.milops_ussr {
+ position: absolute;
+ background-image: url("img/SovietMilitaryOperations.svg");
+ background-size: cover;
+}
+.inline {
+  display:inline;
+}
+.card {
+ cursor: pointer;
+}
+.link {
+  display:inline;
+  text-decoration:underline;
+  cursor:pointer;
+}
+.country {
+  position: absolute;
+  cursor: pointer;
+}
+.showcard {
+ text-decoration: none;
+}
+.cardimg {
+ position: absolute;
+ left: 0;
+ top: 0;
+ height: 520px;
+ width: 375px;
+}
+.cardbox {
+  position: absolute;
+  left: 413;
+  height: 520px;
+  width: 375px;
+  background-image: url("/twilight/img/Base.svg");
+  background-size: cover;
+  z-index:1000;
+  display:none;
+}
+.us {
+ display: inline;
+ float:left;
+}
+.ussr {
+ display: inline;
+ float:left;
+}
+.us_control {
+  color: #FFFFFF;
+  background-image: url("img/AmericanInfluenceControlledBackground.png");
+  background-size: cover;
+}
+.us_uncontrol {
+  color: #008fd5;
+  background-image: url("img/AmericanInfluenceUnControlledBackground.png");
+  background-size: cover;
+}
+.ussr_control {
+  color: #FFFFFF;
+  background-image: url("img/SovietInfluenceControlledBackground.png");
+  background-size: cover;
+}
+.ussr_uncontrol {
+  color: #d2232a;
+  background-size: cover;
+  background-image: url("img/SovietInfluenceUnControlledBackground.png");
+}
+
+
+
+.loader {
+ width: 100%;
+ max-width: 600px;
+}
+.main {
+}
+
+
+
+
