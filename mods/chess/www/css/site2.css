@@ -1,0 +1,376 @@
+/*----------------------------------------------------------------------------*/
+/* prettyPrint
+/*----------------------------------------------------------------------------*/
+.pln {
+  color: #c5c8c6;
+}
+@media screen {
+  .str {
+    color: #b5bd68;
+  }
+  .kwd {
+    color: #b294bb;
+  }
+  .com {
+    color: #969896;
+  }
+  .typ {
+    color: #81a2be;
+  }
+  .lit {
+    color: #de935f;
+  }
+  .pun {
+    color: #c5c8c6;
+  }
+  .opn {
+    color: #c5c8c6;
+  }
+  .clo {
+    color: #c5c8c6;
+  }
+  .tag {
+    color: #cc6666;
+  }
+  .atn {
+    color: #de935f;
+  }
+  .atv {
+    color: #8abeb7;
+  }
+  .dec {
+    color: #de935f;
+  }
+  .var {
+    color: #cc6666;
+  }
+  .fun {
+    color: #81a2be;
+  }
+}
+@media print,projection {
+  .str {
+    color: #060;
+  }
+  .kwd {
+    color: #006;
+    font-weight: bold;
+  }
+  .com {
+    color: #600;
+    font-style: italic;
+  }
+  .typ {
+    color: #404;
+    font-weight: bold;
+  }
+  .lit {
+    color: #044;
+  }
+  .pun,
+  .opn,
+  .clo {
+    color: #440;
+  }
+  .tag {
+    color: #006;
+    font-weight: bold;
+  }
+  .atn {
+    color: #404;
+  }
+  .atv {
+    color: #060;
+  }
+}
+pre.prettyprint {
+  background: #1d1f21;
+  font-family: Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+ol.linenums {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/*----------------------------------------------------------------------------*/
+/* General
+/*----------------------------------------------------------------------------*/
+
+body {
+  font-family: "Open Sans";
+}
+
+.body-width {
+  margin: 0 auto;
+  width: 960px;
+}
+
+.clearfix {
+  clear: both;
+}
+
+.vertical-bar {
+  border-top: 1px solid #efefef;
+}
+
+h2 {
+  font-size: 26px;
+  font-weight: 300;
+}
+
+h4 {
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+pre.prettyprint {
+  margin: 8px 0 30px 0;
+}
+
+/*----------------------------------------------------------------------------*/
+/* Header
+/*----------------------------------------------------------------------------*/
+
+#topBar {
+  background-image: url('../img/board-background.png');
+  background-position: center top;
+  height: 35px;
+}
+
+#headerWrapper {
+  padding: 20px 0;
+}
+
+#headerWrapper .left-col {
+  float: left;
+  width: 300px;
+}
+
+#homeLink {
+  color: #444;
+  font-size: 18px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+#homeLink .piece {
+  font-weight: normal;
+}
+
+#headerWrapper .right-col {
+  float: right;
+  text-align: right;
+  width: 600px;
+}
+
+#headerWrapper .nav-link {
+  display: block;
+  color: #444;
+  float: right;
+  font-size: 18px;
+  text-align: center;
+  text-decoration: none;
+  width: 140px;
+}
+
+#headerWrapper .nav-link .piece {
+  visibility: hidden;
+}
+
+#headerWrapper .nav-link:hover .piece {
+  visibility: visible;
+}
+
+/*----------------------------------------------------------------------------*/
+/* Footer
+/*----------------------------------------------------------------------------*/
+
+#footerWrapper {
+  background: #333;
+  color: #999;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  padding: 15px 0 30px 0;
+}
+
+#footerWrapper p {
+  margin: 0 0 8px 0;
+}
+
+#footerWrapper a {
+  color: #fff;
+  text-decoration: none;
+}
+
+#footerWrapper a:hover {
+  text-decoration: underline;
+}
+
+#footerWrapper .left-col {
+  float: left;
+  width: 400px;
+}
+
+#footerWrapper .right-col {
+  float: right;
+  text-align: right;
+  width: 400px;
+}
+
+#footerWrapper .right-col a {
+  padding: 0px 8px;
+}
+
+/*----------------------------------------------------------------------------*/
+/* Homepage
+/*----------------------------------------------------------------------------*/
+#heroWrapper {
+  background-image: url('../img/board-background.png');
+  background-position: center top;
+}
+
+#hero {
+  height: 420px;
+  margin: 0px auto;
+  padding-top: 118px;
+  text-align: center;
+}
+
+#hero img {
+  display: block;
+  height: 60px;
+  margin: 0 auto;
+  width: 60px;
+}
+
+#hero h1 {
+  color: #fff;
+  font-size: 44px;
+  font-weight: 400;
+  margin: 0;
+  padding-top: 16px;
+}
+
+#hero h3 {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 300;
+  margin: 0;
+  padding-top: 8px;
+}
+
+#hero a {
+  background: #ffdc10;
+  color: #333;
+  display: block;
+  margin: 50px auto 0 auto;
+  padding: 12px 24px;
+  width: 160px;
+  text-decoration: none;
+
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px;
+  border-radius: 6px;
+}
+
+.nav-bar a {
+  color: #444;
+  display: block;
+  float: left;
+  font-size: 18px;
+  padding: 20px 0;
+  text-align: center;
+  text-decoration: none;
+  width: 240px;
+}
+
+.nav-bar .piece {
+  visibility: hidden;
+}
+
+.hover-effect a:hover .piece {
+  visibility: visible;
+}
+
+.col {
+  float: left;
+  padding: 40px;
+  width: 400px;
+}
+
+/*----------------------------------------------------------------------------*/
+/* Examples
+/*----------------------------------------------------------------------------*/
+
+#examplesListContainer {
+  float: left;
+  padding: 40px 0;
+  width: 205px;
+}
+
+#examplesListContainer h4 {
+  background: #f2f2f2;
+  border-top: 1px solid #e6e6e6;
+  border-right: 1px solid #e6e6e6;
+  border-left: 3px solid #ccc;
+  color: #555;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: normal;
+  margin: 0px;
+  padding: 15px 20px;
+  text-transform: none;
+}
+
+#examplesListContainer h4.active {
+  background: #4d4d4d;
+  border-top: 1px solid #1a1a1a;
+  border-right: 1px solid #1a1a1a;
+  border-left: 4px solid #1a1a1a;
+  color: #fff;
+  font-weight: bold;
+}
+
+#examplesListContainer .group-container {
+  border-left: 3px solid #eee;
+  border-right: 1px solid #eee;
+  margin-bottom: 0px;
+  padding: 10px 0px;
+}
+
+#examplesListContainer .example-link {
+  color: #666;
+  cursor: pointer;
+  font-size: 14px;
+  list-style: none;
+  padding: 5px 0px 5px 15px;
+}
+
+#examplesListContainer .active {
+  color: #222;
+  font-weight: bold;
+}
+
+#examplesBodyWrapper {
+  float: right;
+  font-size: 14px;
+  padding: 40px 0;
+  width: 665px;
+}
+
+#exampleName {
+  margin: 0;
+  font-size: 38px;
+}
+
+#exampleHtmlContainer {
+  margin-bottom: 40px;
+}
