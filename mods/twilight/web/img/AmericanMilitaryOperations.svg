@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.0"
+   width="100"
+   height="100"
+   id="svg2">
+  <defs
+     id="defs5">
+    <filter
+       x="-0.10506912"
+       y="-0.10506912"
+       width="1.2101382"
+       height="1.2101382"
+       color-interpolation-filters="sRGB"
+       id="filter3256">
+      <feGaussianBlur
+         stdDeviation="3.8963134"
+         id="feGaussianBlur3258" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3818">
+      <feGaussianBlur
+         stdDeviation="1.5861172"
+         id="feGaussianBlur3820" />
+    </filter>
+  </defs>
+  <rect
+     width="89"
+     height="89"
+     rx="11"
+     ry="11"
+     x="5.5812325"
+     y="5.8613443"
+     id="rect2384"
+     style="opacity:0.89671362;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3256)" />
+  <rect
+     width="89"
+     height="89"
+     rx="11"
+     ry="11"
+     x="2.5000024"
+     y="2.5"
+     id="rect3249"
+     style="fill:#008fd5;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.48235294;stroke-dasharray:none" />
+  <image
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEkAAAA2CAYAAACLB7TIAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A /wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9oCGBEeO+iypkUAAARgSURBVGje 7ZpPaBRXHMc/NuJCDoGFHAI9BAQPgkIgEEFYQQj0IPQQsHgI5BAQeih4sAR6KPTgQTwUPAiCPXkI WDwoESIJFQwtrCgWUjxEVgykxLKysoENY5mwPcx34PUxk53JvsnuTuYLP95mM/t23/f9/r8HBQoU KJAphjJ7OEcEzQBt4GOhL//Hd8Bz4D2wDVwHJpN88IsjQtA0cBWoAOPAZ8kUMFz4HZgHXsq8TGkA Xx1lgkZlSr8BnkXOurSqdFTJKQG3LG25C5wZRDNwHVWvAm8Mcl4Dl/tVW04C5633vgXmMviuU8Ci CAnJeaTwXu5XDZmRvbe1q+8tX7Do4DvKwBVg2Zj3d2ABmMhqYcccmtBd4CxwAvhHO/03cBO4LS37 E9gDPulzb/XcXyLxRczcl4BZjWHI3gG+AZ5mvfuuSJpUmI3CBeAc8LUWPKGxJMKGRNpjkXpCGlNS LnNRBIek/gr8AryLIHOvn53xl5ZptTQuA9cMMzTD8bYVhdY1tiNkQyQPNKZiFndSzrQV8/+2fNcD +Zao55rAT3nITW5YGhRKaAZ39iEpifSUJBe122f5CQBf4y6wCtxT1BsFngGv9P+0vuNdL0k67rAM CLVqVz5kU5FtXDIV4WQ7JZXhM6t5KAdOW+axJV9ivudHvJdUyIMmDUuDwrB9R3+PSBMqwL9G4ZkW Fc1V1XhGKcNAoKzoZYb+mhHyXcm2Mfp6fV+52UNV++sKIH2DUyoP7lmh+rwKywVrkd4ByfElXodn zHRirh8ImgZWInIZ8wd7RpLoO9YqP4b8uvF6pVfkjEeYUZQjXgeWDPNrJVh405HmhVKjB4ccFWXE cT/KMwiakIO+b+yw30EjGgnJTCPVwyRo8QAm07Re70dAQ3nVI6UODYdETR9WE63ueIcbVq8pdMxN R/M3jbleK4fLFBsRP76RwrHaUldfaN4yVZem9kBRN5xzKes2bgX4UV/kOVjAkjF3zXDuVZHbcuC4 fWsjw9xt2SqNnGXc11Sgpi1443ZuRHnUsPHMsDLoIaPreJCd3zEy/LJRaG8omJSU9TtHOyKZ8xOY VVwE9BNESBey31wrRqfTGUk2Ia6Tw15IXa7EKUl5ET/GP3Yd3fJCSpQkSg86dSb/GPA+11BMYDGj d9ckrVmT5g2jLkhaJTjrGlTsxRxchHjrgqRNgtPVvJibSdoTEp7+Jjkt+ZAj8wpJ+0hwSLHjcuK6 laT5KfOlLbVZax0iUJY5WMsYZ7LYgSvKVLup1LcSNNuSFtFpuwLmfPNpF5/mwsQYwXn8D+pSZoXv pVElIwJNEly66HQJtNNZ3hOCmyi7Wdv1aYIrd7UMTOJih97WHMEVnzcpzbOubsahY0xmWHWUEae9 5DWivlF1H7JaBMdN110XtWlRIjhC8rp0qmNd/o6wDTNHcOTVlyhrx6opCfMI7lUeOcxGEOXF9KUW +n0xxzKe/2dFp3GZ5QeC6zdrBNdpNilQoECBAqnwH4Y9/20MGmiuAAAAAElFTkSuQmCC "
+     x="11.531748"
+     y="26.904762"
+     width="73"
+     height="54"
+     id="image3713" />
+  <g
+     id="g3815"
+     style="fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3818)" />
+  <rect
+     width="90.643738"
+     height="90.643738"
+     rx="11.203158"
+     ry="11.203158"
+     x="1.6781328"
+     y="1.6781328"
+     id="rect3606"
+     style="fill:none;stroke:#000000;stroke-width:2.03693795;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+  <text
+     x="46.894299"
+     y="26.701172"
+     id="text3717"
+     xml:space="preserve"
+     style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Impact;-inkscape-font-specification:Impact Condensed"><tspan
+       x="46.894299"
+       y="26.701172"
+       id="tspan2841">US</tspan></text>
+</svg>

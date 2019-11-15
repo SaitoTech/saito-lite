@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.0"
+   width="100"
+   height="100"
+   id="svg2">
+  <defs
+     id="defs5">
+    <filter
+       x="-0.10506912"
+       y="-0.10506912"
+       width="1.2101382"
+       height="1.2101382"
+       color-interpolation-filters="sRGB"
+       id="filter3256">
+      <feGaussianBlur
+         id="feGaussianBlur3258"
+         stdDeviation="3.8963134" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3818">
+      <feGaussianBlur
+         id="feGaussianBlur3820"
+         stdDeviation="1.5861172" />
+    </filter>
+  </defs>
+  <rect
+     width="89"
+     height="89"
+     rx="11"
+     ry="11"
+     x="5.5812325"
+     y="5.8613443"
+     id="rect2384"
+     style="opacity:0.89671362;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3256)" />
+  <g
+     transform="translate(117.86835,-0.61904764)"
+     id="g7301">
+    <rect
+       width="89"
+       height="89"
+       rx="11"
+       ry="11"
+       x="-115.36835"
+       y="3.1190476"
+       id="rect4002"
+       style="fill:#d2232a;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.48235294;stroke-dasharray:none" />
+    <path
+       d="m -37.081453,47.317016 c 0,19.073721 -15.460375,34.534646 -34.533821,34.534646 -19.072073,0 -34.534366,-15.460925 -34.534366,-34.534646 0,-19.072347 15.462293,-34.533821 34.534366,-34.533821 19.073446,0 34.533821,15.461474 34.533821,34.533821 z"
+       id="path3"
+       style="fill:#ffd700;fill-opacity:1" />
+    <path
+       d="m -71.615274,18.343753 c -16.401697,0 -29.699446,13.296928 -29.699446,29.699449 0,3.91668 0.77042,4.656329 2.149431,7.63993 l -0.208541,0.0327 c 1.622997,6.129308 6.396785,14.711408 13.853376,14.711408 7.798715,0 12.520123,-7.4174 15.862833,-19.357296 4.632974,-12.284719 6.544468,-28.271805 6.544468,-28.271805 l 1.597445,0 -0.723714,53.41109 c 11.802243,-3.927395 20.324696,-15.043566 20.324696,-28.166023 0,-16.402521 -13.297478,-29.699449 -29.700548,-29.699449 z"
+       id="path5"
+       style="fill:#010c89;fill-opacity:1" />
+    <path
+       d="m -71.612458,9.7799494 c -20.730788,0 -37.538852,16.8077906 -37.538852,37.5388526 0,20.730786 16.80779,37.538853 37.538852,37.538853 20.731888,0 37.538853,-16.808064 37.538853,-37.538853 0,-20.731064 -16.80669,-37.5388526 -37.538853,-37.5388526 z m 0,3.0051686 c 19.073444,10e-7 34.533684,15.461338 34.533684,34.533684 0,1.044628 -0.07082,2.070853 -0.163138,3.091031 l -25.518177,0 0.42931,-24.698273 c 0,0 -1.013245,13.361309 -3.279927,24.698273 l -40.380884,0 c -0.0901,-1.020175 -0.15455,-2.0464 -0.15455,-3.091031 0,-19.072348 15.461611,-34.533684 34.533682,-34.533684 z m -32.155312,47.069532 35.873135,0 c -0.46594,1.576445 -0.964124,3.070498 -1.493998,4.421891 -1.01874,2.598202 -6.021671,12.434953 -16.348556,12.052993 -9.80893,-0.369171 -15.089621,-11.305139 -17.292161,-14.749059 -0.25758,-0.566744 -0.51094,-1.143258 -0.73842,-1.725825 z m 40.827371,0 23.474662,0 c -4.04273,10.355187 -12.923624,18.291462 -23.869627,20.993251 l 0.394965,-20.993251 z"
+       id="path7"
+       style="fill:#d2232a;fill-opacity:1" />
+    <polygon
+       points="150.659,30.429 160.444,42.594 150.659,76.977 170.231,54.761 193.507,76.977 181.34,46.297 193.507,29.707 176.579,30.429 170.231,14.031 170.231,14.031 163.357,30.429 "
+       transform="matrix(0.2747583,0,0,0.23099735,-109.32725,11.518907)"
+       id="polygon33"
+       style="fill:#d2232a;fill-opacity:1;stroke:#ffd700;stroke-width:2.29029393;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    <text
+       x="-107.08916"
+       y="58.249187"
+       id="text2394"
+       xml:space="preserve"
+       style="font-size:8.79226589px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ffd700;fill-opacity:1;stroke:none;font-family:FreeSans;-inkscape-font-specification:FreeSans Bold"><tspan
+         x="-107.08916"
+         y="58.249187"
+         id="tspan2398">ИНТЕРКОСМОС</tspan></text>
+  </g>
+  <g
+     id="g3815"
+     style="fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3818)" />
+  <rect
+     width="90.643738"
+     height="90.643738"
+     rx="11.203158"
+     ry="11.203158"
+     x="1.6781328"
+     y="1.6781328"
+     id="rect3606"
+     style="fill:none;stroke:#000000;stroke-width:2.03693795;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+</svg>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   width="388"
+   height="538"
+   id="svg2">
+  <defs
+     id="defs6" />
+  <rect
+     width="299.99924"
+     height="105.99924"
+     x="37.500381"
+     y="122.50039"
+     id="rect3690"
+     style="fill:#a0c987;fill-opacity:1;stroke:#000000;stroke-width:1.00076532;stroke-opacity:1" />
+  <text
+     x="187.5"
+     y="158.82817"
+     id="text3696"
+     xml:space="preserve"
+     style="font-size:28px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia Bold"><tspan
+       x="187.5"
+       y="158.82817"
+       id="tspan2832">SOUTH AMERICA</tspan><tspan
+       x="187.5"
+       y="192.42818"
+       id="tspan2834">SCORING</tspan></text>
+  <text
+     x="187.5"
+     y="221.32817"
+     id="text3702"
+     xml:space="preserve"
+     style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia"><tspan
+       x="187.5"
+       y="221.32817"
+       id="tspan2862">Both sides score:</tspan></text>
+  <rect
+     width="299.99924"
+     height="160.99899"
+     x="37.500381"
+     y="228.50061"
+     id="rect2904"
+     style="fill:#cce0bd;fill-opacity:1;stroke:#000000;stroke-width:1.00100005;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+  <rect
+     width="299"
+     height="34"
+     x="38"
+     y="229"
+     id="rect3706"
+     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+  <rect
+     width="299"
+     height="33"
+     x="38"
+     y="296"
+     id="rect3734"
+     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+  <text
+     x="187.5"
+     y="254.82817"
+     id="text3710"
+     xml:space="preserve"
+     style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia"><tspan
+       x="187.5"
+       y="254.82817"
+       id="tspan2856">Presence: 2</tspan></text>
+  <text
+     x="187.75"
+     y="288.07819"
+     id="text3714"
+     xml:space="preserve"
+     style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia"><tspan
+       x="187.75"
+       y="288.07819"
+       id="tspan2850">Domination: 5</tspan></text>
+  <text
+     x="187.5"
+     y="321.57819"
+     id="text3718"
+     xml:space="preserve"
+     style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia"><tspan
+       x="187.5"
+       y="321.57819"
+       id="tspan2844">Control: 6</tspan></text>
+  <text
+     x="187.75"
+     y="354.82819"
+     id="text3722"
+     xml:space="preserve"
+     style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Georgia"><tspan
+       x="187.75"
+       y="354.82819"
+       id="tspan2836">+1 per controlled Battleground</tspan><tspan
+       x="187.75"
+       y="378.82819"
+       id="tspan2838">Country in Region</tspan></text>
+</svg>

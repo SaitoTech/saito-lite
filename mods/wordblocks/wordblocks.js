@@ -57,10 +57,12 @@ class Wordblocks extends GameTemplate {
 
   initializeGame(game_id) {
 
-    if (!this.app.browser.isMobileBrowser(navigator.userAgent)) {
-      const chat = this.app.modules.returnModule("Chat");
-      chat.addPopUpChat();
-    }
+console.log("INITIALIZE GAME");
+
+//    if (!this.app.browser.isMobileBrowser(navigator.userAgent)) {
+//      const chat = this.app.modules.returnModule("Chat");
+//      chat.addPopUpChat();
+//    }
     this.updateStatus("loading game...");
     this.loadGame(game_id);
 
@@ -69,9 +71,12 @@ class Wordblocks extends GameTemplate {
     }
 
     var dictionary = this.game.options.dictionary;
+console.log("INITIALIZE GAME 2");
 
-    jQuery.get("/wordblocks/dictionaries/" + dictionary + "/" + dictionary + ".js", function(data) { this.wordlist = data; });
-
+//
+// JQUERY NOT INSTALLED BY DEFAULT
+//    $.get("/wordblocks/dictionaries/" + dictionary + "/" + dictionary + ".js", function(data) { this.wordlist = data; });
+//
     //
     // deal cards 
     //
@@ -80,7 +85,7 @@ class Wordblocks extends GameTemplate {
       this.updateStatus("Generating the Game");
 
       if (this.game.opponents.length == 1) {
-        this.game.queue.push("EMAIL\tready");
+        this.game.queue.push("READY");
         this.game.queue.push("DEAL\t1\t2\t7");
         this.game.queue.push("DEAL\t1\t1\t7");
         this.game.queue.push("DECKENCRYPT\t1\t2");
@@ -90,7 +95,7 @@ class Wordblocks extends GameTemplate {
       }
 
       if (this.game.opponents.length == 2) {
-        this.game.queue.push("EMAIL\tready");
+        this.game.queue.push("READY");
         this.game.queue.push("DEAL\t1\t3\t7");
         this.game.queue.push("DEAL\t1\t2\t7");
         this.game.queue.push("DEAL\t1\t1\t7");
@@ -103,7 +108,7 @@ class Wordblocks extends GameTemplate {
       }
 
       if (this.game.opponents.length == 3) {
-        this.game.queue.push("EMAIL\tready");
+        this.game.queue.push("READY");
         this.game.queue.push("DEAL\t1\t4\t7");
         this.game.queue.push("DEAL\t1\t3\t7");
         this.game.queue.push("DEAL\t1\t2\t7");
@@ -120,6 +125,9 @@ class Wordblocks extends GameTemplate {
       let tmp_json = JSON.stringify(this.returnDeck());
       this.game.queue.push("DECK\t1\t" + tmp_json);
     };
+
+console.log("INITIALIZE GAME 2");
+
 
     resizeBoard = function resizeBoard(app) {
 
@@ -1044,7 +1052,7 @@ class Wordblocks extends GameTemplate {
 
   returnDeck() {
     var dictionary = this.game.options.dictionary;
-    if (jQuery.isEmptyObject(this.mydeck)) {
+    if ($.isEmptyObject(this.mydeck)) {
       var tmpdeck = {};
       $.ajax({
         async: false,
@@ -1064,7 +1072,7 @@ class Wordblocks extends GameTemplate {
 
   returnLetters() {
     var dictionary = this.game.options.dictionary;
-    if (jQuery.isEmptyObject(this.letterset)) {
+    if ($.isEmptyObject(this.letterset)) {
       var tmpletters = {};
       $.ajax({
         async: false,
@@ -1607,7 +1615,7 @@ class Wordblocks extends GameTemplate {
   //
   // Core Game Logic
   //
-  handleGame(msg = null) {
+  handleGameLoop(msg = null) {
 
     let wordblocks_self = this;
 

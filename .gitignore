@@ -34,10 +34,6 @@ web/saito/*.wasm
 
 mods/catan
 mods/catan/*
-mods/imperium
-mods/imperium/*
-mods/imperium4
-mods/imperium4/*
 mods/pandemic
 mods/pandemic/*
 mods/citysim
