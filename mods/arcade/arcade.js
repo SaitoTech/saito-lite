@@ -5,6 +5,8 @@ const ArcadeLoader = require('./lib/arcade-main/arcade-loader');
 const ArcadeLeftSidebar = require('./lib/arcade-left-sidebar/arcade-left-sidebar');
 const ArcadeRightSidebar = require('./lib/arcade-right-sidebar/arcade-right-sidebar');
 
+const Header = require('../../lib/ui/header/header');
+
 
 class Arcade extends ModTemplate {
 
@@ -82,6 +84,10 @@ console.log("ERROR 418019: error fetching game for observer mode");
     ArcadeRightSidebar.render(app, data);
     ArcadeRightSidebar.attachEvents(app, data);
 
+    if (this.glide) {
+      this.glide.mount();
+    }
+
   }
 
 
@@ -122,6 +128,32 @@ console.log("ERROR 418019: error fetching game for observer mode");
       }
     }
 
+    // fake games
+    for (let i=0; i < 10; i++) {
+      this.games.unshift(
+        new saito.transaction({
+          to: [],
+          from: [{ add: app.wallet.returnPublicKey() }],
+          msg: {
+            game: 'Twilight Struggle',
+            game_id: app.crypto.hash(`${new Date().getTime()}`),
+            options: ['US +2', 'ES'],
+            options_html: `
+              <div class="game-options-html">
+                <div class="pill">US +2</div>
+                <div class="pill">ES</div>
+              </div>
+            `
+          },
+          sig: app.crypto.hash(`${new Date().getTime()}`)
+        })
+      )
+
+      this.addGameToObserverList({
+        game_id : app.crypto.hash(`${new Date().getTime()}`),
+        publickey : app.crypto.hash(`${new Date().getTime()}`)
+      });
+    }
 
   }
 
@@ -131,7 +163,25 @@ console.log("ERROR 418019: error fetching game for observer mode");
     let data = {};
     data.arcade = this;
 
+
+    Header.render(app, data);
+    Header.attachEvents(app, data);
+
     this.render(app, data);
+
+    // Use for Carousel
+    importGlide = async () => {
+      const Glide = await import('./web/glide.min.js');
+      // const Glide = await import('@glidejs/glide');
+      this.glide = new Glide.default('.glide', {
+        autoplay: 3000,
+        perView: 2
+      });
+
+      this.glide.mount();
+    }
+    importGlide();
+    //.mount();
 
   }
 

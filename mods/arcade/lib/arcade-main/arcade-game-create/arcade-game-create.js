@@ -20,8 +20,6 @@ module.exports = ArcadeGameDreate = {
         document.querySelector('.game-publisher-message').innerHTML = gamemod.publisher_message;
 	document.querySelector('.game-details').innerHTML = gamemod.returnGameOptionsHTML();
 
-
-	
         document.getElementById('game-create-btn')
           .addEventListener('click', (e) => {
 
@@ -52,20 +50,17 @@ module.exports = ArcadeGameDreate = {
 
 	return;
       }
-    }    
+    }
   },
 
 
   attachEvents(app, data) {
 
     document.getElementById('return_to_arcade')
-      .addEventListener('click', (e) => {
-
-	data.arcade.render(app, data);
-
-    });
-
-
+      .onclick = (e) => {
+        document.querySelector('.arcade-main').innerHTML = '';
+        data.arcade.render(app, data);
+      }
 
   }
 

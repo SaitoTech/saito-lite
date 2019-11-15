@@ -4,7 +4,9 @@ body {
 }
 
 .main {
-  height: 90.5vh;
+  height: calc(100vh - 5em);
+  width: 100vw;
+  /* 90.5vh; */
 }
 
 .footer {
@@ -22,12 +24,68 @@ body {
   margin: 10px 10px;
 }
 
+.arcade-sidebar-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.arcade-sidebar-active-games-header {
+  text-align: center;
+}
+
+.arcade-sidebar-active-games-body {
+  border: 1px solid grey;
+  height: 40vh;
+  overflow-y: scroll;
+}
+
+.arcade-observer-game-row {
+  /* border: 1px solid grey;
+  padding: 10px;
+  margin-top: 10px; */
+
+  /* border: 1px solid grey; */
+  padding: 10px;
+  margin-bottom: 10px;
+  background: whitesmoke;
+}
+
+#arcade-play-btn {
+  padding-bottom: 1.7em;
+}
+
+
+/** MAIN **/
+
+.arcade-main {
+  display: grid;
+  justify-content: center;
+}
+
+.game-options-html {
+  display: flex;
+}
+
+.pill {
+  background: var(--saito-cyber-black);
+  color: white;
+  padding: 7px;
+  border-radius: 50px;
+  min-width: 4em;
+  text-align: center;
+  margin: 2px;
+}
+
+.arcade-extra {
+  width: 100%;
+}
 
 
 .arcade-game-invitation {
   display: grid;
   align-items: center;
-  grid-template-columns: 2fr 2fr 1fr;
+  grid-template-columns: 1fr 2fr 2fr 1fr;
   border: 1px solid grey;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -37,6 +95,27 @@ body {
 }
 
 
+/** Game Carousel **/
+#arcade-carousel {
+  /* max-width: 1000px; */
+}
+
+.glide__arrows {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  bottom: 14em;
+  padding: 0px 10px;
+}
+
+.glide__arrow {
+  margin: unset;
+  background: var(--saito-cyber-black);
+  color: var(--saito-skyline-grey);
+  border: unset;
+  min-width: unset;
+  border-radius: 50px;
+}
 
 
 
@@ -52,8 +131,12 @@ body {
   text-align: center;
   border: 3px solid #888;
   cursor: pointer;
-  max-width: 375px;
-  max-height: 240px;
+  /* max-width: 375px; */
+  max-width: 1125px;
+  /** 1125px **/
+  /* max-height: 240px; */
+  max-height: 720px;
+  /** 720px **/
   grid-area: gameimage;
 }
 
@@ -63,6 +146,38 @@ body {
   margin-top: 6px;
   text-align: center;
   cursor: pointer;
+}
+
+/* GAME WIZARD */
+.create-game-wizard {
+  display: flex;
+  flex-direction: column;
+}
+
+.game-image-wizard {
+  max-width: 500px;
+}
+
+.return_to_arcade {
+  height: 2em;
+  margin-bottom: 1em;
+  display: flex;
+  align-items: center;
+}
+
+.game-info-container {
+  display: flex;
+  margin: 1em 0;
+}
+
+.game-details {
+  margin: 1em;
+}
+
+/* USED BY WORDBLOCKS */
+#options {
+  display: grid;
+  grid-template-columns: 10em auto;
 }
 
 
