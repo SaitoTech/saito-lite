@@ -15,6 +15,7 @@ class Arcade extends ModTemplate {
     super(app);
 
     this.name 			= "Arcade";
+    this.events			= ['chat-render-request'];
     this.mods			= [];
     this.affix_callbacks_to 	= [];
     this.games			= [];
@@ -23,6 +24,19 @@ class Arcade extends ModTemplate {
   }
 
  
+
+
+   receiveEvent(type, data) {
+     if (type == 'chat-render-request') {
+       if (this.browser_active) {
+         let uidata = {};
+	     uidata.arcade = this;
+         ArcadeLeftSidebar.render(this.app, uidata);
+         ArcadeLeftSidebar.attachEvents(this.app, uidata);
+       }
+     }
+  }
+
 
   observeGame(msg) {
 
