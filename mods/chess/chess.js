@@ -48,8 +48,8 @@ class Chessgame extends GameTemplate {
       //  chat.addPopUpChat();
       //***REMOVED***
 
-      let chess = require('chess.js');
-      let chessboard = require("./www/js/chessboard");
+      chess = require('./lib/chess.js');
+      chessboard = require('./lib/chessboard');
 
       this.board = new chessboard('board', { pieceTheme: 'chess/pieces/{piece***REMOVED***.png' ***REMOVED***);
       this.engine = new chess.Chess();
