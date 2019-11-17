@@ -246,8 +246,8 @@ class Imperium extends GameTemplate {
     //
     // specify players
     //
-    this.totalPlayers = this.game.players_info.length;
-  
+    this.totalPlayers = this.game.players.length;  
+
     //
     // position non-hex pieces
     //
@@ -6002,7 +6002,7 @@ class Imperium extends GameTemplate {
         if (flagships > 0 ) { space_frames.push("white_space_flagship.png"); }
   
         for (let i = 0; i < space_frames.length; i++) {
-          bg += 'url(imperium/img/frame/'+space_frames[i]+')';
+          bg += 'url(/imperium/img/frame/'+space_frames[i]+')';
           bgsize += 'contain';
   	if (i < space_frames.length-1) { 
   	  bg += ','; 
