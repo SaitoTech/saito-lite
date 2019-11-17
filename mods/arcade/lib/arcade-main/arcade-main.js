@@ -115,7 +115,7 @@ console.log("HERE: " + JSON.stringify(tx));
 		return;
 	  ***REMOVED***
       	      if (res.rows.length > 0) {
-        	if (res.rows[i].game_still_open == 1) {
+        	if (res.rows[0].game_still_open == 1) {
 
             	  data.arcade.sendInviteRequest(app, data, data.arcade.games[i]);
             	  ArcadeLoader.render(app, data);
