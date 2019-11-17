@@ -49,7 +49,10 @@ class Chessgame extends GameTemplate {
       //}
   
       chess = require('chess.js');
-      chessboard = require("../chess/web/chessboard");
+
+
+
+      chessboard = require(("web/chessboard"));
       this.board = new chessboard('board', { pieceTheme: 'chess/pieces/{piece}.png' });
       this.engine = new chess.Chess();
     }
