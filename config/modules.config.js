@@ -3,6 +3,7 @@
     'appstore/appstore.js',
     'archive/archive.js',
     'chat/chat.js',
+    'chess/chess.js',
     'email/email.js',
     'encrypt/encrypt.js',
     'explorer/explorer.js',
@@ -23,7 +24,9 @@
     'arcade/arcade.js',
   ],
   lite: [
+    'archive/archive.js',
     'appstore/appstore.js',
+    'chess/chess.js',
     'chat/chat.js',
     'debug/debug.js',
     'email/email.js',

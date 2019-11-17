@@ -20,7 +20,6 @@ class Chessgame extends GameTemplate {
     this.name = "Chess";
     this.description = "Chess is a two-player strategy board game played on a checkered board with 64 squares arranged in an 8×8 grid."
   
-    this.game = {***REMOVED***;
     this.board = null;
     this.engine = null;
     this_chess = this;
@@ -44,11 +43,10 @@ class Chessgame extends GameTemplate {
     if (this.browser_active == 1) {
   
       // enable chat
-  
-      if (!this.app.browser.isMobileBrowser(navigator.userAgent)) {
-        const chat = this.app.modules.returnModule("Chat");
-        chat.addPopUpChat();
-  ***REMOVED***
+      //if (!this.app.browser.isMobileBrowser(navigator.userAgent)) {
+      //  const chat = this.app.modules.returnModule("Chat");
+      //  chat.addPopUpChat();
+      //***REMOVED***
   
       chess = require('chess.js');
       chessboard = require("../chess/web/chessboard");
@@ -65,8 +63,7 @@ class Chessgame extends GameTemplate {
     // finish initializing
     //
     if (this.game.initializing == 1) {
-      this.game.initializing = 0;
-      this.saveGame(this.game.id);
+      this.game.queue.push("READY");
 ***REMOVED***
   
 
@@ -116,7 +113,12 @@ class Chessgame extends GameTemplate {
   handleGameLoop(msg={***REMOVED***) {
   
     msg = {***REMOVED***;
-    msg.extra = JSON.parse(this.app.crypto.Base64ToString(this.game.queue[this.game.queue.length-1]));
+console.log("QUEUE: " + this.game.queue);
+    if (this.game.queue.length > 0) {
+      msg.extra = JSON.parse(this.app.crypto.base64ToString(this.game.queue[this.game.queue.length-1]));
+***REMOVED*** else {
+      msg.extra = {***REMOVED***;
+***REMOVED***
     this.game.queue.splice(this.game.queue.length-1, 1);
   
     if (msg.extra == undefined) {
