@@ -29,7 +29,7 @@ module.exports = ArcadeMain = {
     });
 
     //
-    // click-to-joina
+    // click-to-join
     //
     data.arcade.games.forEach(tx => {
       let txmsg = tx.returnMessage();
@@ -43,7 +43,7 @@ module.exports = ArcadeMain = {
           }
         }
       }
-
+console.log("HERE: " + JSON.stringify(tx));
       document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(app, tx, button_text);
     });
 
@@ -78,9 +78,15 @@ module.exports = ArcadeMain = {
       game.addEventListener('click', (e) => {
 
         let game_id = e.currentTarget.id;
+	    game_id = game_id.substring(17);
 
         for (let i = 0; i < data.arcade.games.length; i++) {
           if (data.arcade.games[i].transaction.sig == game_id) {
+
+	    if (data.arcade.games[i].transaction.from[0].add == app.wallet.returnPublicKey()) {
+	      salert("You cannot accept your own game!");
+	      return;
+	    }
 
             //
             //
@@ -99,9 +105,29 @@ module.exports = ArcadeMain = {
               }
             }
 
-            data.arcade.sendInviteRequest(app, data, data.arcade.games[i]);
-            ArcadeLoader.render(app, data);
-            ArcadeLoader.attachEvents(app, data);
+
+	    //
+	    // check with server to see if this game is taken yet
+	    //
+    	    data.arcade.sendPeerDatabaseRequest("arcade", "games", "is_game_already_accepted", data.arcade.games[i].id, null, function(res) {
+      	      if (res.rows == undefined) { 
+		console.log("ERROR 458103: cannot fetch information on whether game already accepted!");
+		return;
+	      }
+      	      if (res.rows.length > 0) {
+        	if (res.rows[i].game_still_open == 1) {
+
+            	  data.arcade.sendInviteRequest(app, data, data.arcade.games[i]);
+            	  ArcadeLoader.render(app, data);
+            	  ArcadeLoader.attachEvents(app, data);
+
+	        } else {
+
+		  salert("Sorry... game already accepted. Your list of open games will update shortly on next block!");
+
+		}
+      	      }
+    	    });
 
             return;
           }

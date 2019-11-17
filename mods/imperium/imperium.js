@@ -72,8 +72,8 @@ class Imperium extends GameTemplate {
         </div>
         <ul>
      `;
-    for (let i = 0; i < this.game.players.length; i++) {
-      html += `  <li class="card" id="${i}">${factions[this.game.players[i].faction].name}</li>`;
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      html += `  <li class="card" id="${i}">${factions[this.game.players_info[i].faction].name}</li>`;
     }
     html += `
         </ul>
@@ -118,8 +118,8 @@ class Imperium extends GameTemplate {
         </div>
         <ul>
      `;
-    for (let i = 0; i < this.game.players.length; i++) {
-    html += `  <li class="card" id="${i}">${factions[this.game.players[i].faction].name}</li>`;
+    for (let i = 0; i < this.game.players_info.length; i++) {
+    html += `  <li class="card" id="${i}">${factions[this.game.players_info[i].faction].name}</li>`;
     }
     html += `
         </ul>
@@ -133,7 +133,7 @@ class Imperium extends GameTemplate {
     $('.card').on('click', function() {
   
       let p = $(this).attr("id");
-      let tech = imperium_self.game.players[p].tech;
+      let tech = imperium_self.game.players_info[p].tech;
   
       let html  = "<ul>";
       for (let z = 0; z < tech.length; z++) {
@@ -160,8 +160,8 @@ class Imperium extends GameTemplate {
         </div>
         <ul>
      `;
-    for (let i = 0; i < this.game.players.length; i++) {
-    html += `  <li class="card" id="${i}">${factions[this.game.players[i].faction].name}</li>`;
+    for (let i = 0; i < this.game.players_info.length; i++) {
+    html += `  <li class="card" id="${i}">${factions[this.game.players_info[i].faction].name}</li>`;
     }
     html += `
         </ul>
@@ -175,11 +175,11 @@ class Imperium extends GameTemplate {
     $('.card').on('click', function() {
   
       let p = $(this).attr("id");
-      let commodities_total = imperium_self.game.players[p].commodities;
-      let goods_total = imperium_self.game.players[p].goods;
-      let fleet_total = imperium_self.game.players[p].fleet_supply;
-      let command_total = imperium_self.game.players[p].command_tokens;
-      let strategy_total = imperium_self.game.players[p].strategy_tokens;
+      let commodities_total = imperium_self.game.players_info[p].commodities;
+      let goods_total = imperium_self.game.players_info[p].goods;
+      let fleet_total = imperium_self.game.players_info[p].fleet_supply;
+      let command_total = imperium_self.game.players_info[p].command_tokens;
+      let strategy_total = imperium_self.game.players_info[p].strategy_tokens;
   
       let html  = "Total Faction Resources: <p></p><ul>";
       html += '<li>' + commodities_total + " commodities" + '</li>';
@@ -246,7 +246,7 @@ class Imperium extends GameTemplate {
     //
     // specify players
     //
-    this.totalPlayers = this.game.players.length;
+    this.totalPlayers = this.game.players_info.length;
   
     //
     // position non-hex pieces
@@ -279,7 +279,7 @@ class Imperium extends GameTemplate {
       this.game.systems = this.returnSystems();
       this.game.planets = this.returnPlanets();
       this.game.tech    = this.returnTechnologyTree();
-      this.game.players = this.returnPlayers(this.totalPlayers); // factions and player info
+      this.game.players_info = this.returnPlayers(this.totalPlayers); // factions and player info
       this.game.state   = this.returnState();
       this.game.state.strategy_cards = [];
       let x = this.returnStrategyCards();
@@ -289,10 +289,10 @@ class Imperium extends GameTemplate {
       // put homeworlds on board
       //
       let factions = this.returnFactions();
-      let hwsectors = this.returnHomeworldSectors(this.game.players.length);
-      for (let i = 0; i < this.game.players.length; i++) {
-        this.game.players[i].homeworld = hwsectors[i];
-        this.game.board[hwsectors[i]].tile = factions[this.game.players[i].faction].homeworld;
+      let hwsectors = this.returnHomeworldSectors(this.game.players_info.length);
+      for (let i = 0; i < this.game.players_info.length; i++) {
+        this.game.players_info[i].homeworld = hwsectors[i];
+        this.game.board[hwsectors[i]].tile = factions[this.game.players_info[i].faction].homeworld;
       }
   
       //
@@ -425,7 +425,7 @@ class Imperium extends GameTemplate {
       this.game.queue.push("SHUFFLE\t4");
       this.game.queue.push("SHUFFLE\t5");
       this.game.queue.push("SHUFFLE\t6");
-      for (let i = 0; i < this.game.players.length; i++) {
+      for (let i = 0; i < this.game.players_info.length; i++) {
         this.game.queue.push("DEAL\t6\t"+(i+1)+"\t2");
       }
       this.game.queue.push("POOL\t3");   // stage ii objectives
@@ -506,8 +506,8 @@ class Imperium extends GameTemplate {
   	this.game.state.turn++;
   
   	let new_round = 1;
-        for (let i = 0; i < this.game.players.length; i++) {
-  	  if (this.game.players[i].passed == 0) { new_round = 0; }
+        for (let i = 0; i < this.game.players_info.length; i++) {
+  	  if (this.game.players_info[i].passed == 0) { new_round = 0; }
         }
   
   	//
@@ -529,7 +529,7 @@ class Imperium extends GameTemplate {
   	this.game.queue.push("resolve\tsetinitiativeorder");
   
   	for (let i = 0; i < initiative_order.length; i++) {
-  	  if (this.game.players[initiative_order[i]-1].passed == 0) {
+  	  if (this.game.players_info[initiative_order[i]-1].passed == 0) {
   	    this.game.queue.push("play\t"+initiative_order[i]);
   	  }
   	}
@@ -542,7 +542,7 @@ class Imperium extends GameTemplate {
   
   	this.game.confirms_needed = parseInt(mv[1]);
   	this.game.confirms_received = 0;
-  	this.playerAllocateNewTokens(this.game.player, (this.game.players[this.game.player-1].new_tokens_per_round+this.game.players[this.game.player-1].new_token_bonus_when_issued));
+  	this.playerAllocateNewTokens(this.game.player, (this.game.players_info[this.game.player-1].new_tokens_per_round+this.game.players_info[this.game.player-1].new_token_bonus_when_issued));
   	return 0;
   
       }
@@ -553,9 +553,9 @@ class Imperium extends GameTemplate {
         //
   	// reset tech bonuses
   	//
-        for (let i = 0; i < this.game.players.length; i++) {
-          for (let ii = 0; ii < this.game.players[i].tech.length; ii++) {
-            this.game.tech[this.game.players[i].tech[ii]].onNewRound();
+        for (let i = 0; i < this.game.players_info.length; i++) {
+          for (let ii = 0; ii < this.game.players_info[i].tech.length; ii++) {
+            this.game.tech[this.game.players_info[i].tech[ii]].onNewRound();
   	  }
   	}
   
@@ -577,8 +577,8 @@ class Imperium extends GameTemplate {
   	//
   	// RESET USER ACCOUNTS
   	//
-        for (let i = 0; i < this.game.players.length; i++) {
-  	  this.game.players[i].passed = 0;
+        for (let i = 0; i < this.game.players_info.length; i++) {
+  	  this.game.players_info[i].passed = 0;
         }
   
   	//
@@ -600,28 +600,28 @@ class Imperium extends GameTemplate {
   	//
   	// ACTION CARDS
   	//
-  	//for (let i = 1; i <= this.game.players.length; i++) {
-          //  this.game.queue.push("DEAL\t2\t"+i+'\t'+(this.game.players[this.game.player-1].action_cards_per_round+this.game.players[this.game.player-1].action_cards_bonus_when_issued));
+  	//for (let i = 1; i <= this.game.players_info.length; i++) {
+          //  this.game.queue.push("DEAL\t2\t"+i+'\t'+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
   	//}
   	
   
   	//
   	// ALLOCATE TOKENS
   	//
-        //this.game.queue.push("tokenallocation\t"+this.game.players.length);
+        //this.game.queue.push("tokenallocation\t"+this.game.players_info.length);
   
   	//
   	// mark as ready 
   	//	  
   	if (this.game.initializing == 1) {
-          this.game.queue.push("EMAIL\tready");
+          this.game.queue.push("READY");
   	}
   
   	//
   	// FLIP NEW AGENDA CARDS
   	//
           //this.game.queue.push("revealagendas");
-  	//for (let i = 1; i <= this.game.players.length; i++) {
+  	//for (let i = 1; i <= this.game.players_info.length; i++) {
           //  this.game.queue.push("FLIPCARD\t3\t3\t1\t"+i); // deck card poolnum player
   	//}
   
@@ -631,10 +631,10 @@ class Imperium extends GameTemplate {
           //if (this.game.state.round == 1) {
   	//console.log("\n\n\n\nFLIPPING PUBLIC OBJECTIVES!\n\n\n");
           //this.game.queue.push("revealobjectives");
-  	//for (let i = 1; i <= this.game.players.length; i++) {
+  	//for (let i = 1; i <= this.game.players_info.length; i++) {
           //  this.game.queue.push("FLIPCARD\t4\t8\t2\t"+i); // deck card poolnum player
   	//}
-  	//for (let i = 1; i <= this.game.players.length; i++) {
+  	//for (let i = 1; i <= this.game.players_info.length; i++) {
           //  this.game.queue.push("FLIPCARD\t5\t8\t2\t"+i); // deck card poolnum player
   	//}
           //}
@@ -726,7 +726,7 @@ class Imperium extends GameTemplate {
   	let objective    = mv[3];
   
   	this.updateLog(this.returnFaction(player)+" scores "+vp+" VP");
-  	this.game.players[player-1].vp += vp;
+  	this.game.players_info[player-1].vp += vp;
   
   	this.game.queue.splice(qe-1, 2);
   	return 1;
@@ -758,10 +758,10 @@ class Imperium extends GameTemplate {
   	  this.addMove("addbonustounselectedstrategycards");
   
   	  let cards_to_select = 1;
-  	  if (this.game.players.length == 2) { cards_to_select = 3; }
-  	  if (this.game.players.length == 3) { cards_to_select = 2; }
-  	  if (this.game.players.length == 4) { cards_to_select = 2; }
-  	  if (this.game.players.length >= 5) { cards_to_select = 1; }
+  	  if (this.game.players_info.length == 2) { cards_to_select = 3; }
+  	  if (this.game.players_info.length == 3) { cards_to_select = 2; }
+  	  if (this.game.players_info.length == 4) { cards_to_select = 2; }
+  	  if (this.game.players_info.length >= 5) { cards_to_select = 1; }
   
   	  //
   	  // TODO -- pick appropriate card number
@@ -769,9 +769,9 @@ class Imperium extends GameTemplate {
   	  cards_to_select = 1;
   
   	  for (cts = 0; cts < cards_to_select; cts++) {
-            for (let i = 0; i < this.game.players.length; i++) {
+            for (let i = 0; i < this.game.players_info.length; i++) {
   	      let this_player = this.game.state.speaker+i;
-  	      if (this_player > this.game.players.length) { this_player -= this.game.players.length; }
+  	      if (this_player > this.game.players_info.length) { this_player -= this.game.players_info.length; }
   	      this.rmoves.push("pickstrategy\t"+this_player);
             }
   	  }
@@ -906,13 +906,13 @@ class Imperium extends GameTemplate {
         let details      = mv[3];
   
         if (type == "command") {
-  	  this.game.players[player-1].command_tokens -= parseInt(details);
+  	  this.game.players_info[player-1].command_tokens -= parseInt(details);
   	}
         if (type == "strategy") {
-  	  this.game.players[player-1].strategy_tokens -= parseInt(details);
+  	  this.game.players_info[player-1].strategy_tokens -= parseInt(details);
   	}
         if (type == "trade") {
-  	  this.game.players[player-1].goods -= parseInt(details);
+  	  this.game.players_info[player-1].goods -= parseInt(details);
   	}
         if (type == "planet") {
   	  this.game.planets[details].exhausted = 1;
@@ -948,17 +948,17 @@ class Imperium extends GameTemplate {
   
   	if (offer == "goods") {
   	  amount = parseInt(amount);
-  	  if (this.game.players[player-1].goods >= amount) {
-  	    this.game.players[player-1].goods -= amount;
-  	    this.game.players[recipient-1].goods += amount;
+  	  if (this.game.players_info[player-1].goods >= amount) {
+  	    this.game.players_info[player-1].goods -= amount;
+  	    this.game.players_info[recipient-1].goods += amount;
   	  }
   	}
   
   	if (offer == "commodities") {
   	  amount = parseInt(amount);
-  	  if (this.game.players[player-1].commodities >= amount) {
-  	    this.game.players[player-1].commodities -= amount;
-  	    this.game.players[recipient-1].goods += amount;
+  	  if (this.game.players_info[player-1].commodities >= amount) {
+  	    this.game.players_info[player-1].commodities -= amount;
+  	    this.game.players_info[recipient-1].goods += amount;
   	  }
   	}
   
@@ -1008,10 +1008,10 @@ class Imperium extends GameTemplate {
   
   	  this.updateLog(this.returnFaction(player) + " takes " + mv[3]);
   
-  	  this.game.players[player-1].strategy.push(mv[3]);
+  	  this.game.players_info[player-1].strategy.push(mv[3]);
   	  for (let i = 0; i < this.game.state.strategy_cards.length; i++) {
   	    if (this.game.state.strategy_cards[i] === mv[3]) {
-  	      this.game.players[player-1].goods += this.game.state.strategy_cards_bonus[i];
+  	      this.game.players_info[player-1].goods += this.game.state.strategy_cards_bonus[i];
   	      this.game.state.strategy_cards.splice(i, 1);
   	      this.game.state.strategy_cards_bonus.splice(i, 1);
   	      i = this.game.state.strategy_cards.length+2;
@@ -1021,32 +1021,32 @@ class Imperium extends GameTemplate {
 
         if (item == "tech") {
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3]);
-  	  this.game.players[player-1].tech.push(mv[3]);
+  	  this.game.players_info[player-1].tech.push(mv[3]);
   	  this.game.tech[mv[3]].onNewRound(imperium_self, player, function() {});
   	  this.upgradePlayerUnitsOnBoard(player);
   	}
         if (item == "goods") {
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " trade goods");
-  	  this.game.players[player-1].goods += amount;
+  	  this.game.players_info[player-1].goods += amount;
   	}
 
         if (item == "commodities") {
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " commodities");
-  	  this.game.players[player-1].commodities += amount;
+  	  this.game.players_info[player-1].commodities += amount;
   	}
 
         if (item == "command") {
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " command tokens");
-  	  this.game.players[player-1].command_tokens += amount;
+  	  this.game.players_info[player-1].command_tokens += amount;
   	}
         if (item == "strategy") {
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " strategy tokens");
-  	  this.game.players[player-1].strategy_tokens += amount;
+  	  this.game.players_info[player-1].strategy_tokens += amount;
   	}
 
         if (item == "fleetsupply") {
-  	  this.game.players[player-1].fleet_supply += amount;
-  	  this.updateLog(this.returnFaction(player) + " increases their fleet supply to " + this.game.players[player-1].fleet_supply);
+  	  this.game.players_info[player-1].fleet_supply += amount;
+  	  this.updateLog(this.returnFaction(player) + " increases their fleet supply to " + this.game.players_info[player-1].fleet_supply);
   	}
   
   	this.game.queue.splice(qe, 1);
@@ -1057,7 +1057,7 @@ class Imperium extends GameTemplate {
 
       if (mv[0] === "pass") {
   	let player       = parseInt(mv[1]);
-  	this.game.players[player-1].passed = 1;
+  	this.game.players_info[player-1].passed = 1;
   	this.game.queue.splice(qe, 1);
   	return 1;  
       }
@@ -1229,9 +1229,9 @@ class Imperium extends GameTemplate {
     //
     // reset tech bonuses
     //
-    for (let i = 0; i < this.game.players.length; i++) {
-      for (let ii = 0; ii < this.game.players[i].tech.length; ii++) {
-        this.game.tech[this.game.players[i].tech[ii]].onNewTurn();
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      for (let ii = 0; ii < this.game.players_info[i].tech.length; ii++) {
+        this.game.tech[this.game.players_info[i].tech[ii]].onNewTurn();
       }
     }
   
@@ -1248,11 +1248,11 @@ class Imperium extends GameTemplate {
   
       let playercol = "color"+this.game.player;
   
-      let html  = '<div class="terminal_header">[command: '+this.game.players[this.game.player-1].command_tokens+'] [strategy: '+this.game.players[this.game.player-1].strategy_tokens+'] [fleet: '+this.game.players[this.game.player-1].fleet_supply+']</div>';
+      let html  = '<div class="terminal_header">[command: '+this.game.players_info[this.game.player-1].command_tokens+'] [strategy: '+this.game.players_info[this.game.player-1].strategy_tokens+'] [fleet: '+this.game.players_info[this.game.player-1].fleet_supply+']</div>';
           html  += '<p style="margin-top:20px"></p>';
           html  += '<div class="terminal_header2"><div class="player_color_box '+playercol+'"></div>' + this.returnFaction(this.game.player) + ":</div><p></p><ul class='terminal_header3'>";
       html += '<li class="option" id="get_new_tokens">get new tokens</li>';
-      if (this.game.players[this.game.player-1].command_tokens > 0) {
+      if (this.game.players_info[this.game.player-1].command_tokens > 0) {
         html += '<li class="option" id="activate">activate system</li>';
       }
       if (this.canPlayerPlayStrategyCard(this.game.player) == 1) {
@@ -1425,7 +1425,7 @@ class Imperium extends GameTemplate {
 
   canPlayerPlayStrategyCard(player) {
   
-    if (this.game.players[this.game.player-1].strategy.length > 0) {
+    if (this.game.players_info[this.game.player-1].strategy.length > 0) {
       return 1;
     }
   
@@ -1457,7 +1457,7 @@ class Imperium extends GameTemplate {
 
   canPlayerResearchTechnology(tech) {
   
-    let mytech = this.game.players[this.game.player-1].tech;
+    let mytech = this.game.players_info[this.game.player-1].tech;
     if (mytech.includes(tech)) { return 0; }
   
     let prereqs = JSON.parse(JSON.stringify(this.game.tech[tech].prereqs));
@@ -1711,8 +1711,8 @@ class Imperium extends GameTemplate {
       //
       // reduce production costs if needed
       //
-      if (this.game.players[player-1].production_bonus > 0) {
-        calculated_total_cost -= this.game.players[player-1].production_bonus;
+      if (this.game.players_info[player-1].production_bonus > 0) {
+        calculated_total_cost -= this.game.players_info[player-1].production_bonus;
       }
   
   
@@ -1791,8 +1791,8 @@ class Imperium extends GameTemplate {
     let factions = this.returnFactions();
   
     let html = 'Initiate Trade Offer with Faction: <p></p><ul>';
-    for (let i = 0; i < this.game.players.length; i++) {
-      html += `  <li class="option" id="${i}">${factions[this.game.players[i].faction].name}</li>`;
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      html += `  <li class="option" id="${i}">${factions[this.game.players_info[i].faction].name}</li>`;
     }
     html += '</ul>';
   
@@ -1829,11 +1829,11 @@ class Imperium extends GameTemplate {
   	}
         }
   
-        if (commodities_selected > imperium_self.game.players[imperium_self.game.player-1].commodities) {
-  	commodities_selected = imperium_self.game.players[imperium_self.game.player-1].commodities;
+        if (commodities_selected > imperium_self.game.players_info[imperium_self.game.player-1].commodities) {
+  	commodities_selected = imperium_self.game.players_info[imperium_self.game.player-1].commodities;
         }
-        if (goods_selected > imperium_self.game.players[imperium_self.game.player-1].goods) {
-  	goods_selected = imperium_self.game.players[imperium_self.game.player-1].goods;
+        if (goods_selected > imperium_self.game.players_info[imperium_self.game.player-1].goods) {
+  	goods_selected = imperium_self.game.players_info[imperium_self.game.player-1].goods;
         }
   
         $('.commodities_total').html(commodities_selected);
@@ -1912,7 +1912,7 @@ class Imperium extends GameTemplate {
     for (let z = 0; z < array_of_cards.length; z++) {
       total_available_resources += this.game.planets[array_of_cards[z]].resources;
     }
-    total_available_resources += this.game.players[player-1].goods;
+    total_available_resources += this.game.players_info[player-1].goods;
     return total_available_resources;
   
   }
@@ -1926,7 +1926,7 @@ class Imperium extends GameTemplate {
     for (let z = 0; z < array_of_cards.length; z++) {
       total_available_influence += this.game.planets[array_of_cards[z]].influence;
     }
-    total_available_influence += this.game.players[player-1].goods;
+    total_available_influence += this.game.players_info[player-1].goods;
     return total_available_influence;
   
   }
@@ -1991,8 +1991,8 @@ class Imperium extends GameTemplate {
     let command_spent  = 0;
   
     let html  = "Select "+cost+" in influence: <p></p><ul>";
-        html += '<li class="option" id="command"><span id="player_command_total">'+this.game.players[this.game.player-1].command_tokens+'</span> remaining command tokens</li>';
-        html += '<li class="option" id="strategy"><span id="player_strategy_total">'+this.game.players[this.game.player-1].strategy_tokens+'</span> remaining strategy tokens</li>';
+        html += '<li class="option" id="command"><span id="player_command_total">'+this.game.players_info[this.game.player-1].command_tokens+'</span> remaining command tokens</li>';
+        html += '<li class="option" id="strategy"><span id="player_strategy_total">'+this.game.players_info[this.game.player-1].strategy_tokens+'</span> remaining strategy tokens</li>';
         html += '</ul>';
   
     this.updateStatus(html);
@@ -2004,7 +2004,7 @@ class Imperium extends GameTemplate {
       let divid = "#player_"+action+"_total";
   
       if (action == "command") {
-        let remaining = imperium_self.game.players[this.game.player-1].command_tokens - command_spent;
+        let remaining = imperium_self.game.players_info[this.game.player-1].command_tokens - command_spent;
         if (remaining > 0) {
           command_spent++;
           imperium_self.addMove("expend\t"+imperium_self.game.player+"\t"+"command"+"\t"+1);
@@ -2012,7 +2012,7 @@ class Imperium extends GameTemplate {
         }
       }
       if (action == "strategy") {
-        let remaining = imperium_self.game.players[this.game.player-1].command_tokens - strategy_spent;
+        let remaining = imperium_self.game.players_info[this.game.player-1].command_tokens - strategy_spent;
         if (remaining > 0) {
           strategy_spent++;
           imperium_self.addMove("expend\t"+imperium_self.game.player+"\t"+"strategy"+"\t"+1);
@@ -2103,7 +2103,7 @@ class Imperium extends GameTemplate {
   //
   playerSelectStrategyCard(mycallback) {
   
-    let array_of_cards = this.game.players[this.game.player-1].strategy;
+    let array_of_cards = this.game.players_info[this.game.player-1].strategy;
   
     let html = "<ul>";
     for (let z in array_of_cards) {
@@ -2159,8 +2159,8 @@ class Imperium extends GameTemplate {
   
     let obj = {};
         obj.max_hops = 2;
-        obj.ship_move_bonus = this.game.players[this.game.player-1].ship_move_bonus;
-        obj.fleet_move_bonus = this.game.players[this.game.player-1].fleet_move_bonus;
+        obj.ship_move_bonus = this.game.players_info[this.game.player-1].ship_move_bonus;
+        obj.fleet_move_bonus = this.game.players_info[this.game.player-1].fleet_move_bonus;
         obj.ships_and_sectors = [];
         obj.stuff_to_move = [];  
         obj.stuff_to_load = [];  
@@ -3539,10 +3539,10 @@ class Imperium extends GameTemplate {
   
   
   
-    for (let i = 0; i < this.game.players.length; i++) {
+    for (let i = 0; i < this.game.players_info.length; i++) {
       player_lowest[i] = 100000;
-      for (let k = 0; k < this.game.players[i].strategy.length; k++) {
-        let sc = this.game.players[i].strategy[k];
+      for (let k = 0; k < this.game.players_info[i].strategy.length; k++) {
+        let sc = this.game.players_info[i].strategy[k];
         let or = card_io_hmap[sc];
         if (or < player_lowest[i]) { player_lowest[i] = or; }
       }
@@ -3762,54 +3762,54 @@ class Imperium extends GameTemplate {
     var planets = {};
   
     // regular planets
-    planets['planet1']	= { type : "hazardous" , img : "/imperium/images/planet_card_template.png" , name : "Crystalis" , resources : 3 , influence : 0 , bonus : ""  }
-    planets['planet2']	= { type : "hazardous" , img : "/imperium/images/planet_card_template.png" , name : "Troth" , resources : 2 , influence : 0 , bonus : ""  }
-    planets['planet3']	= { type : "industrial" , img : "/imperium/images/planet_card_template.png" , name : "Londrak" , resources : 1 , influence : 2 , bonus : ""  }
-    planets['planet4']	= { type : "hazardous" , img : "/imperium/images/planet_card_template.png" , name : "Citadel" , resources : 0 , influence : 4 , bonus : "red"  }
-    planets['planet5']	= { type : "industrial" , img : "/imperium/images/planet_card_template.png" , name : "Belvedyr" , resources : 1 , influence : 2 , bonus : ""  }
-    planets['planet6']	= { type : "industrial" , img : "/imperium/images/planet_card_template.png" , name : "Shriva" , resources : 2 , influence : 1 , bonus : ""  }
-    planets['planet7']	= { type : "hazardous" , img : "/imperium/images/planet_card_template.png" , name : "Zondor" , resources : 3 , influence : 1 , bonus : ""  }
-    planets['planet8']	= { type : "hazardous" , img : "/imperium/images/planet_card_template.png" , name : "Calthrex" , resources : 2 , influence : 3 , bonus : ""  }
-    planets['planet9']	= { type : "cultural" , img : "/imperium/images/planet_card_template.png" , name : "Soundra IV" , resources : 1 , influence : 3 , bonus : ""  }
-    planets['planet10']	= { type : "industrial" , img : "/imperium/images/planet_card_template.png" , name : "Udon I" , resources : 1 , influence : 1 , bonus : "blue"  }
-    planets['planet11']	= { type : "cultural" , img : "/imperium/images/planet_card_template.png" , name : "Udon II" , resources : 1 , influence : 2 , bonus : ""  }
-    planets['planet12']	= { type : "cultural" , img : "/imperium/images/planet_card_template.png" , name : "New Jylanx" , resources : 2 , influence : 0 , bonus : ""  }
-    planets['planet13']	= { type : "cultural" , img : "/imperium/images/planet_card_template.png" , name : "Terra Core" , resources : 0 , influence : 2 , bonus : ""  }
-    planets['planet14']	= { type : "cultural" , img : "/imperium/images/planet_card_template.png" , name : "Olympia" , resources : 1 , influence : 2 , bonus : ""  }
-    planets['planet15']	= { type : "industrial" , img : "/imperium/images/planet_card_template.png" , name : "Granton Mex" , resources : 1 , influence : 0 , bonus : "yellow"  }
-    planets['planet16']	= { type : "hazardous" , img : "/imperium/images/planet_card_template.png" , name : "Harkon Caledonia" , resources : 2 , influence : 1 , bonus : ""  }
-    planets['planet17']	= { type : "cultural" , img : "/imperium/images/planet_card_template.png" , name : "New Illia" , resources : 3 , influence : 1 , bonus : ""  }
-    planets['planet18']	= { type : "hazardous" , img : "/imperium/images/planet_card_template.png" , name : "Lazak's Curse" , resources : 1 , influence : 3 , bonus : "red"  }
-    planets['planet19']	= { type : "cultural" , img : "/imperium/images/planet_card_template.png" , name : "Voluntra" , resources : 0 , influence : 2 , bonus : ""  }
-    planets['planet20']	= { type : "hazardous" , img : "/imperium/images/planet_card_template.png" , name : "Xerxes IV" , resources : 3 , influence : 1 , bonus : ""  }
-    planets['planet21']	= { type : "industrial" , img : "/imperium/images/planet_card_template.png" , name : "Siren's End" , resources : 1 , influence : 1 , bonus : "green"  }
-    planets['planet22']	= { type : "hazardous" , img : "/imperium/images/planet_card_template.png" , name : "Riftview" , resources : 2 , influence : 1 , bonus : ""  }
-    planets['planet23']	= { type : "cultural" , img : "/imperium/images/planet_card_template.png" , name : "Broughton" , resources : 1 , influence : 2 , bonus : ""  }
-    planets['planet24']	= { type : "industrial" , img : "/imperium/images/planet_card_template.png" , name : "Fjordra" , resources : 0 , influence : 3 , bonus : ""  }
-    planets['planet25']	= { type : "cultural" , img : "/imperium/images/planet_card_template.png" , name : "Singharta" , resources : 1 , influence : 1 , bonus : ""  }
-    planets['planet26']	= { type : "industrial" , img : "/imperium/images/planet_card_template.png" , name : "Nova Klondike" , resources : 2 , influence : 2 , bonus : ""  }
-    planets['planet27']	= { type : "industrial" , img : "/imperium/images/planet_card_template.png" , name : "Contouri I" , resources : 1 , influence : 1 , bonus : "green"  }
-    planets['planet28']	= { type : "hazardous" , img : "/imperium/images/planet_card_template.png" , name : "Contouri II" , resources : 2 , influence : 0 , bonus : ""  }
-    planets['planet29']	= { type : "cultural" , img : "/imperium/images/planet_card_template.png" , name : "Hoth" , resources : 2 , influence : 2 , bonus : ""  }
-    planets['planet29']	= { type : "industrial" , img : "/imperium/images/planet_card_template.png" , name : "Unsulla" , resources : 1 , influence : 2 , bonus : ""  }
-    planets['planet30']	= { type : "industrial" , img : "/imperium/images/planet_card_template.png" , name : "Grox Towers" , resources : 1 , influence : 1 , bonus : "blue"  }
-    planets['planet30']	= { type : "hazardous" , img : "/imperium/images/planet_card_template.png" , name : "Gravity's Edge" , resources : 2 , influence : 1 , bonus : ""  }
-    planets['planet31']	= { type : "industrial" , img : "/imperium/images/planet_card_template.png" , name : "Populax" , resources : 3 , influence : 2 , bonus : "yellow"  }
-    planets['planet32']	= { type : "cultural" , img : "/imperium/images/planet_card_template.png" , name : "Old Moltour" , resources : 2 , influence : 0 , bonus : ""  }
-    planets['planet33']	= { type : "" , img : "/imperium/images/planet_card_template.png" , name : "New Byzantium" , resources : 1 , influence : 6 , bonus : ""  }
-    planets['planet34']	= { type : "cultural" , img : "/imperium/images/planet_card_template.png" , name : "Outerant" , resources : 1 , influence : 3 , bonus : ""  }
-    planets['planet35']	= { type : "industrial" , img : "/imperium/images/planet_card_template.png" , name : "Vespar" , resources : 2 , influence : 2 , bonus : ""  }
-    planets['planet36']	= { type : "hazardous" , img : "/imperium/images/planet_card_template.png" , name : "Craw Populi" , resources : 1 , influence : 2 , bonus : ""  }
-    planets['planet37']	= { type : "cultural" , img : "/imperium/images/planet_card_template.png" , name : "Yssari II" , resources : 0 , influence : 1 , bonus : ""  }
-    planets['planet38']	= { type : "industrial" , img : "/imperium/images/planet_card_template.png" , name : "Hope's Lure" , resources : 3 , influence : 2 , bonus : ""  }
-    planets['planet39']	= { type : "hazardous" , img : "/imperium/images/planet_card_template.png" , name : "Quandam" , resources : 1 , influence : 1 , bonus : ""  }
-    planets['planet40']	= { type : "cultural" , img : "/imperium/images/planet_card_template.png" , name : "Quandor" , resources : 2 , influence : 1 , bonus : ""  }
-    planets['planet41']	= { type : "industrial" , img : "/imperium/images/planet_card_template.png" , name : "Lorstruck" , resources : 1 , influence : 0 , bonus : ""  }
-    planets['planet42']	= { type : "hazardous" , img : "/imperium/images/planet_card_template.png" , name : "Industryl" , resources : 3 , influence : 1 , bonus : ""  }
-    planets['planet43']	= { type : "cultural" , img : "/imperium/images/planet_card_template.png" , name : "Mechanex" , resources : 1 , influence : 0 , bonus : ""  }
-    planets['planet44']	= { type : "industrial" , img : "/imperium/images/planet_card_template.png" , name : "Hearthslough" , resources : 3 , influence : 0 , bonus : ""  }
-    planets['planet45']	= { type : "hazardous" , img : "/imperium/images/planet_card_template.png" , name : "Incarth" , resources : 2 , influence : 0 , bonus : ""  }
-    planets['planet46']	= { type : "cultural" , img : "/imperium/images/planet_card_template.png" , name : "Aandor" , resources : 2 , influence : 1 , bonus : ""  }
+    planets['planet1']	= { type : "hazardous" , img : "/imperium/img/planet_card_template.png" , name : "Crystalis" , resources : 3 , influence : 0 , bonus : ""  }
+    planets['planet2']	= { type : "hazardous" , img : "/imperium/img/planet_card_template.png" , name : "Troth" , resources : 2 , influence : 0 , bonus : ""  }
+    planets['planet3']	= { type : "industrial" , img : "/imperium/img/planet_card_template.png" , name : "Londrak" , resources : 1 , influence : 2 , bonus : ""  }
+    planets['planet4']	= { type : "hazardous" , img : "/imperium/img/planet_card_template.png" , name : "Citadel" , resources : 0 , influence : 4 , bonus : "red"  }
+    planets['planet5']	= { type : "industrial" , img : "/imperium/img/planet_card_template.png" , name : "Belvedyr" , resources : 1 , influence : 2 , bonus : ""  }
+    planets['planet6']	= { type : "industrial" , img : "/imperium/img/planet_card_template.png" , name : "Shriva" , resources : 2 , influence : 1 , bonus : ""  }
+    planets['planet7']	= { type : "hazardous" , img : "/imperium/img/planet_card_template.png" , name : "Zondor" , resources : 3 , influence : 1 , bonus : ""  }
+    planets['planet8']	= { type : "hazardous" , img : "/imperium/img/planet_card_template.png" , name : "Calthrex" , resources : 2 , influence : 3 , bonus : ""  }
+    planets['planet9']	= { type : "cultural" , img : "/imperium/img/planet_card_template.png" , name : "Soundra IV" , resources : 1 , influence : 3 , bonus : ""  }
+    planets['planet10']	= { type : "industrial" , img : "/imperium/img/planet_card_template.png" , name : "Udon I" , resources : 1 , influence : 1 , bonus : "blue"  }
+    planets['planet11']	= { type : "cultural" , img : "/imperium/img/planet_card_template.png" , name : "Udon II" , resources : 1 , influence : 2 , bonus : ""  }
+    planets['planet12']	= { type : "cultural" , img : "/imperium/img/planet_card_template.png" , name : "New Jylanx" , resources : 2 , influence : 0 , bonus : ""  }
+    planets['planet13']	= { type : "cultural" , img : "/imperium/img/planet_card_template.png" , name : "Terra Core" , resources : 0 , influence : 2 , bonus : ""  }
+    planets['planet14']	= { type : "cultural" , img : "/imperium/img/planet_card_template.png" , name : "Olympia" , resources : 1 , influence : 2 , bonus : ""  }
+    planets['planet15']	= { type : "industrial" , img : "/imperium/img/planet_card_template.png" , name : "Granton Mex" , resources : 1 , influence : 0 , bonus : "yellow"  }
+    planets['planet16']	= { type : "hazardous" , img : "/imperium/img/planet_card_template.png" , name : "Harkon Caledonia" , resources : 2 , influence : 1 , bonus : ""  }
+    planets['planet17']	= { type : "cultural" , img : "/imperium/img/planet_card_template.png" , name : "New Illia" , resources : 3 , influence : 1 , bonus : ""  }
+    planets['planet18']	= { type : "hazardous" , img : "/imperium/img/planet_card_template.png" , name : "Lazak's Curse" , resources : 1 , influence : 3 , bonus : "red"  }
+    planets['planet19']	= { type : "cultural" , img : "/imperium/img/planet_card_template.png" , name : "Voluntra" , resources : 0 , influence : 2 , bonus : ""  }
+    planets['planet20']	= { type : "hazardous" , img : "/imperium/img/planet_card_template.png" , name : "Xerxes IV" , resources : 3 , influence : 1 , bonus : ""  }
+    planets['planet21']	= { type : "industrial" , img : "/imperium/img/planet_card_template.png" , name : "Siren's End" , resources : 1 , influence : 1 , bonus : "green"  }
+    planets['planet22']	= { type : "hazardous" , img : "/imperium/img/planet_card_template.png" , name : "Riftview" , resources : 2 , influence : 1 , bonus : ""  }
+    planets['planet23']	= { type : "cultural" , img : "/imperium/img/planet_card_template.png" , name : "Broughton" , resources : 1 , influence : 2 , bonus : ""  }
+    planets['planet24']	= { type : "industrial" , img : "/imperium/img/planet_card_template.png" , name : "Fjordra" , resources : 0 , influence : 3 , bonus : ""  }
+    planets['planet25']	= { type : "cultural" , img : "/imperium/img/planet_card_template.png" , name : "Singharta" , resources : 1 , influence : 1 , bonus : ""  }
+    planets['planet26']	= { type : "industrial" , img : "/imperium/img/planet_card_template.png" , name : "Nova Klondike" , resources : 2 , influence : 2 , bonus : ""  }
+    planets['planet27']	= { type : "industrial" , img : "/imperium/img/planet_card_template.png" , name : "Contouri I" , resources : 1 , influence : 1 , bonus : "green"  }
+    planets['planet28']	= { type : "hazardous" , img : "/imperium/img/planet_card_template.png" , name : "Contouri II" , resources : 2 , influence : 0 , bonus : ""  }
+    planets['planet29']	= { type : "cultural" , img : "/imperium/img/planet_card_template.png" , name : "Hoth" , resources : 2 , influence : 2 , bonus : ""  }
+    planets['planet29']	= { type : "industrial" , img : "/imperium/img/planet_card_template.png" , name : "Unsulla" , resources : 1 , influence : 2 , bonus : ""  }
+    planets['planet30']	= { type : "industrial" , img : "/imperium/img/planet_card_template.png" , name : "Grox Towers" , resources : 1 , influence : 1 , bonus : "blue"  }
+    planets['planet30']	= { type : "hazardous" , img : "/imperium/img/planet_card_template.png" , name : "Gravity's Edge" , resources : 2 , influence : 1 , bonus : ""  }
+    planets['planet31']	= { type : "industrial" , img : "/imperium/img/planet_card_template.png" , name : "Populax" , resources : 3 , influence : 2 , bonus : "yellow"  }
+    planets['planet32']	= { type : "cultural" , img : "/imperium/img/planet_card_template.png" , name : "Old Moltour" , resources : 2 , influence : 0 , bonus : ""  }
+    planets['planet33']	= { type : "" , img : "/imperium/img/planet_card_template.png" , name : "New Byzantium" , resources : 1 , influence : 6 , bonus : ""  }
+    planets['planet34']	= { type : "cultural" , img : "/imperium/img/planet_card_template.png" , name : "Outerant" , resources : 1 , influence : 3 , bonus : ""  }
+    planets['planet35']	= { type : "industrial" , img : "/imperium/img/planet_card_template.png" , name : "Vespar" , resources : 2 , influence : 2 , bonus : ""  }
+    planets['planet36']	= { type : "hazardous" , img : "/imperium/img/planet_card_template.png" , name : "Craw Populi" , resources : 1 , influence : 2 , bonus : ""  }
+    planets['planet37']	= { type : "cultural" , img : "/imperium/img/planet_card_template.png" , name : "Yssari II" , resources : 0 , influence : 1 , bonus : ""  }
+    planets['planet38']	= { type : "industrial" , img : "/imperium/img/planet_card_template.png" , name : "Hope's Lure" , resources : 3 , influence : 2 , bonus : ""  }
+    planets['planet39']	= { type : "hazardous" , img : "/imperium/img/planet_card_template.png" , name : "Quandam" , resources : 1 , influence : 1 , bonus : ""  }
+    planets['planet40']	= { type : "cultural" , img : "/imperium/img/planet_card_template.png" , name : "Quandor" , resources : 2 , influence : 1 , bonus : ""  }
+    planets['planet41']	= { type : "industrial" , img : "/imperium/img/planet_card_template.png" , name : "Lorstruck" , resources : 1 , influence : 0 , bonus : ""  }
+    planets['planet42']	= { type : "hazardous" , img : "/imperium/img/planet_card_template.png" , name : "Industryl" , resources : 3 , influence : 1 , bonus : ""  }
+    planets['planet43']	= { type : "cultural" , img : "/imperium/img/planet_card_template.png" , name : "Mechanex" , resources : 1 , influence : 0 , bonus : ""  }
+    planets['planet44']	= { type : "industrial" , img : "/imperium/img/planet_card_template.png" , name : "Hearthslough" , resources : 3 , influence : 0 , bonus : ""  }
+    planets['planet45']	= { type : "hazardous" , img : "/imperium/img/planet_card_template.png" , name : "Incarth" , resources : 2 , influence : 0 , bonus : ""  }
+    planets['planet46']	= { type : "cultural" , img : "/imperium/img/planet_card_template.png" , name : "Aandor" , resources : 2 , influence : 1 , bonus : ""  }
   
     for (var i in planets) {
       planets[i].exhausted = 0;
@@ -3853,42 +3853,42 @@ class Imperium extends GameTemplate {
   
     var systems = {};
   
-    systems['sector1']         = { img : "/imperium/images/sector1.png" , 	   name : "Sector 1" , hw : 0 , mr : 0 , planets : [] }
-    systems['sector2']         = { img : "/imperium/images/sector2.png" , 	   name : "Sector 2" , hw : 0 , mr : 0 , planets : [] }
-    systems['sector3']         = { img : "/imperium/images/sector3.png" , 	   name : "Sector 3" , hw : 0 , mr : 0 , planets : [] }
-    systems['sector4']         = { img : "/imperium/images/sector4.png" , 	   name : "Sector 4" , hw : 0 , mr : 0 , planets : [] }
-    systems['sector5']         = { img : "/imperium/images/sector5.png" , 	   name : "Sector 5" , hw : 0 , mr : 0 , planets : [] }
-    systems['sector6']         = { img : "/imperium/images/sector6.png" , 	   name : "Sector 6" , hw : 0 , mr : 0 , planets : [] }
-    systems['sector7']         = { img : "/imperium/images/sector7.png" , 	   name : "Sector 7" , hw : 0 , mr : 0 , planets : [] }
-    systems['sector8']         = { img : "/imperium/images/sector8.png" , 	   name : "Sector 8" , hw : 0 , mr : 0 , planets : ['planet1','planet2'] }
-    systems['sector9']         = { img : "/imperium/images/sector9.png" , 	   name : "Sector 9" , hw : 0 , mr : 0 , planets : ['planet3','planet4'] }
-    systems['sector10']        = { img : "/imperium/images/sector10.png" , 	   name : "Sector 10" , hw : 0 , mr : 0 , planets : ['planet5','planet6'] }
-    systems['sector11']        = { img : "/imperium/images/sector11.png" , 	   name : "Sector 11" , hw : 0 , mr : 0 , planets : ['planet7','planet8'] }
-    systems['sector12']        = { img : "/imperium/images/sector12.png" , 	   name : "Sector 12" , hw : 0 , mr : 0 , planets : ['planet9','planet10'] }
-    systems['sector13']        = { img : "/imperium/images/sector13.png" , 	   name : "Sector 13" , hw : 0 , mr : 0 , planets : ['planet11','planet12'] }
-    systems['sector14']        = { img : "/imperium/images/sector14.png" , 	   name : "Sector 14" , hw : 0 , mr : 0 , planets : ['planet13','planet14'] }
-    systems['sector15']        = { img : "/imperium/images/sector15.png" , 	   name : "Sector 15" , hw : 0 , mr : 0 , planets : ['planet15','planet16'] }
-    systems['sector16']        = { img : "/imperium/images/sector16.png" , 	   name : "Sector 16" , hw : 0 , mr : 0 , planets : ['planet17','planet18'] }
-    systems['sector17']        = { img : "/imperium/images/sector17.png" , 	   name : "Sector 17" , hw : 0 , mr : 0 , planets : ['planet19','planet20'] }
-    systems['sector18']        = { img : "/imperium/images/sector18.png" , 	   name : "Sector 18" , hw : 0 , mr : 0 , planets : ['planet21','planet22'] }
-    systems['sector19']        = { img : "/imperium/images/sector19.png" , 	   name : "Sector 19" , hw : 0 , mr : 0 , planets : ['planet23','planet24'] }
-    systems['sector20']        = { img : "/imperium/images/sector20.png" , 	   name : "Sector 20" , hw : 0 , mr : 0 , planets : ['planet25','planet26'] }
-    systems['sector21']        = { img : "/imperium/images/sector21.png" , 	   name : "Sector 21" , hw : 0 , mr : 0 , planets : ['planet27','planet28'] }
-    systems['sector22']        = { img : "/imperium/images/sector22.png" , 	   name : "Sector 22" , hw : 0 , mr : 0 , planets : ['planet29'] }
-    systems['sector23']        = { img : "/imperium/images/sector23.png" , 	   name : "Sector 23" , hw : 0 , mr : 0 , planets : ['planet30'] }
-    systems['sector24']        = { img : "/imperium/images/sector24.png" , 	   name : "Sector 24" , hw : 0 , mr : 0 , planets : ['planet31'] }
-    systems['sector25']        = { img : "/imperium/images/sector26.png" , 	   name : "Sector 26" , hw : 0 , mr : 0 , planets : ['planet32'] }
-    systems['sector27']        = { img : "/imperium/images/sector27.png" , 	   name : "Sector 27" , hw : 0 , mr : 0 , planets : ['planet34'] }
-    systems['sector28']        = { img : "/imperium/images/sector28.png" , 	   name : "Sector 28" , hw : 0 , mr : 0 , planets : ['planet35'] }
-    systems['sector29']        = { img : "/imperium/images/sector29.png" , 	   name : "Sector 29" , hw : 0 , mr : 0 , planets : ['planet36'] }
-    systems['sector30']        = { img : "/imperium/images/sector32.png" , 	   name : "Sector 32" , hw : 0 , mr : 0 , planets : ['planet39'] }
-    systems['sector31']        = { img : "/imperium/images/sector33.png" , 	   name : "Sector 33" , hw : 0 , mr : 0 , planets : [] }
-    systems['sector32']        = { img : "/imperium/images/sector34.png" , 	   name : "Sector 34" , hw : 0 , mr : 0 , planets : [] }
-    systems['sector33']        = { img : "/imperium/images/sector35.png" , 	   name : "Sector 35" , hw : 0 , mr : 0 , planets : [] }
-    systems['sector34']        = { img : "/imperium/images/sector36.png" , 	   name : "Sector 36" , hw : 0 , mr : 0 , planets : [] }
-    systems['new-byzantium']   = { img : "/imperium/images/sector25.png" , 	   name : "New Byzantium" , hw : 0 , mr : 1 , planets : ['planet33'] }
-    systems['homeworld1']      = { img : "/imperium/images/sector30.png" , 	   name : "Sector 30" , hw : 1 , mr : 0 , planets : ['planet37'] }
-    systems['homeworld2']     = { img : "/imperium/images/sector31.png" , 	   name : "Sector 31" , hw : 1 , mr : 0 , planets : ['planet38'] }
+    systems['sector1']         = { img : "/imperium/img/sector1.png" , 	   name : "Sector 1" , hw : 0 , mr : 0 , planets : [] }
+    systems['sector2']         = { img : "/imperium/img/sector2.png" , 	   name : "Sector 2" , hw : 0 , mr : 0 , planets : [] }
+    systems['sector3']         = { img : "/imperium/img/sector3.png" , 	   name : "Sector 3" , hw : 0 , mr : 0 , planets : [] }
+    systems['sector4']         = { img : "/imperium/img/sector4.png" , 	   name : "Sector 4" , hw : 0 , mr : 0 , planets : [] }
+    systems['sector5']         = { img : "/imperium/img/sector5.png" , 	   name : "Sector 5" , hw : 0 , mr : 0 , planets : [] }
+    systems['sector6']         = { img : "/imperium/img/sector6.png" , 	   name : "Sector 6" , hw : 0 , mr : 0 , planets : [] }
+    systems['sector7']         = { img : "/imperium/img/sector7.png" , 	   name : "Sector 7" , hw : 0 , mr : 0 , planets : [] }
+    systems['sector8']         = { img : "/imperium/img/sector8.png" , 	   name : "Sector 8" , hw : 0 , mr : 0 , planets : ['planet1','planet2'] }
+    systems['sector9']         = { img : "/imperium/img/sector9.png" , 	   name : "Sector 9" , hw : 0 , mr : 0 , planets : ['planet3','planet4'] }
+    systems['sector10']        = { img : "/imperium/img/sector10.png" , 	   name : "Sector 10" , hw : 0 , mr : 0 , planets : ['planet5','planet6'] }
+    systems['sector11']        = { img : "/imperium/img/sector11.png" , 	   name : "Sector 11" , hw : 0 , mr : 0 , planets : ['planet7','planet8'] }
+    systems['sector12']        = { img : "/imperium/img/sector12.png" , 	   name : "Sector 12" , hw : 0 , mr : 0 , planets : ['planet9','planet10'] }
+    systems['sector13']        = { img : "/imperium/img/sector13.png" , 	   name : "Sector 13" , hw : 0 , mr : 0 , planets : ['planet11','planet12'] }
+    systems['sector14']        = { img : "/imperium/img/sector14.png" , 	   name : "Sector 14" , hw : 0 , mr : 0 , planets : ['planet13','planet14'] }
+    systems['sector15']        = { img : "/imperium/img/sector15.png" , 	   name : "Sector 15" , hw : 0 , mr : 0 , planets : ['planet15','planet16'] }
+    systems['sector16']        = { img : "/imperium/img/sector16.png" , 	   name : "Sector 16" , hw : 0 , mr : 0 , planets : ['planet17','planet18'] }
+    systems['sector17']        = { img : "/imperium/img/sector17.png" , 	   name : "Sector 17" , hw : 0 , mr : 0 , planets : ['planet19','planet20'] }
+    systems['sector18']        = { img : "/imperium/img/sector18.png" , 	   name : "Sector 18" , hw : 0 , mr : 0 , planets : ['planet21','planet22'] }
+    systems['sector19']        = { img : "/imperium/img/sector19.png" , 	   name : "Sector 19" , hw : 0 , mr : 0 , planets : ['planet23','planet24'] }
+    systems['sector20']        = { img : "/imperium/img/sector20.png" , 	   name : "Sector 20" , hw : 0 , mr : 0 , planets : ['planet25','planet26'] }
+    systems['sector21']        = { img : "/imperium/img/sector21.png" , 	   name : "Sector 21" , hw : 0 , mr : 0 , planets : ['planet27','planet28'] }
+    systems['sector22']        = { img : "/imperium/img/sector22.png" , 	   name : "Sector 22" , hw : 0 , mr : 0 , planets : ['planet29'] }
+    systems['sector23']        = { img : "/imperium/img/sector23.png" , 	   name : "Sector 23" , hw : 0 , mr : 0 , planets : ['planet30'] }
+    systems['sector24']        = { img : "/imperium/img/sector24.png" , 	   name : "Sector 24" , hw : 0 , mr : 0 , planets : ['planet31'] }
+    systems['sector25']        = { img : "/imperium/img/sector26.png" , 	   name : "Sector 26" , hw : 0 , mr : 0 , planets : ['planet32'] }
+    systems['sector27']        = { img : "/imperium/img/sector27.png" , 	   name : "Sector 27" , hw : 0 , mr : 0 , planets : ['planet34'] }
+    systems['sector28']        = { img : "/imperium/img/sector28.png" , 	   name : "Sector 28" , hw : 0 , mr : 0 , planets : ['planet35'] }
+    systems['sector29']        = { img : "/imperium/img/sector29.png" , 	   name : "Sector 29" , hw : 0 , mr : 0 , planets : ['planet36'] }
+    systems['sector30']        = { img : "/imperium/img/sector32.png" , 	   name : "Sector 32" , hw : 0 , mr : 0 , planets : ['planet39'] }
+    systems['sector31']        = { img : "/imperium/img/sector33.png" , 	   name : "Sector 33" , hw : 0 , mr : 0 , planets : [] }
+    systems['sector32']        = { img : "/imperium/img/sector34.png" , 	   name : "Sector 34" , hw : 0 , mr : 0 , planets : [] }
+    systems['sector33']        = { img : "/imperium/img/sector35.png" , 	   name : "Sector 35" , hw : 0 , mr : 0 , planets : [] }
+    systems['sector34']        = { img : "/imperium/img/sector36.png" , 	   name : "Sector 36" , hw : 0 , mr : 0 , planets : [] }
+    systems['new-byzantium']   = { img : "/imperium/img/sector25.png" , 	   name : "New Byzantium" , hw : 0 , mr : 1 , planets : ['planet33'] }
+    systems['homeworld1']      = { img : "/imperium/img/sector30.png" , 	   name : "Sector 30" , hw : 1 , mr : 0 , planets : ['planet37'] }
+    systems['homeworld2']     = { img : "/imperium/img/sector31.png" , 	   name : "Sector 31" , hw : 1 , mr : 0 , planets : ['planet38'] }
   
     for (var i in systems) {
       systems[i].units = [this.totalPlayers]; // array to store units
@@ -4071,7 +4071,7 @@ class Imperium extends GameTemplate {
   
     secret['military-catastrophe']			= {
       name 	: 	"Military Catastrophe" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Destroy the flagship of another player" ,
       type	: 	"instant" ,
       func	:	function(imperium_self, player) {
@@ -4083,7 +4083,7 @@ class Imperium extends GameTemplate {
     };
     secret['nuke-them-from-orbit']			= {
       name 	: 	"Nuke them from Orbit" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Destroy a player's last infantry using bombardment" ,
       type	: 	"instant" ,
       func	:	function(imperium_self, player) {
@@ -4095,7 +4095,7 @@ class Imperium extends GameTemplate {
     };
     secret['anti-imperialism']			= {
       name 	: 	"Anti-Imperialism" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Achieve victory in combat with a player with the most VP" ,
       type	: 	"instant" , 
       func	:	function(imperium_self, player) {
@@ -4107,7 +4107,7 @@ class Imperium extends GameTemplate {
     };
     secret['close-the-trap']			= {
       name 	: 	"Close the Trap" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Destroy another player's last ship in a system using a PDS" ,
       type	: 	"instant" ,
       func	:	function(imperium_self, player) {
@@ -4119,7 +4119,7 @@ class Imperium extends GameTemplate {
     };
     secret['flagship-dominance']			= {
       name 	: 	"Launch Flagship" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Achieve victory in a space combat in a system containing your flagship. Your flagship must survive this combat" ,
       type	: 	"instant" ,
       func	:	function(imperium_self, player) {
@@ -4131,7 +4131,7 @@ class Imperium extends GameTemplate {
     };
     secret['faction-technologies']			= {
       name 	: 	"Faction Technologies" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Research 2 faction technologies" ,
       type	: 	"instant" ,
       func	:	function(imperium_self, player) {
@@ -4143,7 +4143,7 @@ class Imperium extends GameTemplate {
     };
     secret['wormhole-administrator']			= {
       name 	: 	"Wormhole Administrator" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Have at least 1 ship in systems containing alpha and beta wormholes respectively" ,
       type	: 	"instant" ,
       func	:	function(imperium_self, player) {
@@ -4155,7 +4155,7 @@ class Imperium extends GameTemplate {
     };
     secret['galactic-observer']			= {
       name 	: 	"Galactic Observer" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Have at least 1 ship in 6 different sectors" ,
       type	: 	"instant" ,
       func	:	function(imperium_self, player) {
@@ -4167,7 +4167,7 @@ class Imperium extends GameTemplate {
     };
     secret['establish-a-blockade']			= {
       name 	: 	"Establish a Blockade" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Have at least 1 ship in the same sector as an opponent's space dock" ,
       type	: 	"instant" ,
       func	:	function(imperium_self, player) {
@@ -4179,7 +4179,7 @@ class Imperium extends GameTemplate {
     };
     secret['ion-cannon-master']			= {
       name 	: 	"Master of the Ion Cannon" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Have at least 4 PDS units in play" ,
       type	: 	"instant" ,
       func	:	function(imperium_self, player) {
@@ -4191,7 +4191,7 @@ class Imperium extends GameTemplate {
     };
     secret['cultural-diplomacy']			= {
       name 	: 	"Cultural Diplomacy" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Control at least 4 cultural planets" ,
       type	: 	"instant" ,
       func	:	function(imperium_self, player) {
@@ -4203,7 +4203,7 @@ class Imperium extends GameTemplate {
     };
     secret['act-of-espionage']			= {
       name 	: 	"Act of Espionage" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Discard 5 action cards from your hand" ,
       type	: 	"instant" ,
       func	:	function(imperium_self, player) {
@@ -4215,7 +4215,7 @@ class Imperium extends GameTemplate {
     };
     secret['war-engine']			= {
       name 	: 	"Engine of War" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Have three space docks in play" ,
       type	: 	"instant" ,
       func	:	function(imperium_self, player) {
@@ -4227,7 +4227,7 @@ class Imperium extends GameTemplate {
     };
     secret['fleet-of-terror']			= {
       name 	: 	"Fleet of Terror" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Have 5 dreadnaughts in play" ,
       type	: 	"instant" ,
       func	:	function(imperium_self, player) {
@@ -4239,7 +4239,7 @@ class Imperium extends GameTemplate {
     };
     secret['space-to-breathe']			= {
       name 	: 	"Space to Breathe" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Have at least 1 ship in 3 systems with no planets" ,
       type	: 	"instant" ,
       func	:	function(imperium_self, player) {
@@ -4251,7 +4251,7 @@ class Imperium extends GameTemplate {
     };
     secret['ascendant-technocracy']			= {
       name 	: 	"Ascendant Technocracy" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Research 4 tech upgrades on the same color path" ,
       type	: 	"instant" ,
       func	:	function(imperium_self, player) {
@@ -4263,7 +4263,7 @@ class Imperium extends GameTemplate {
     };
     secret['penal-colonies']			= {
       name 	: 	"Penal Colonies" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Control four planets with hazardous conditions" ,
       type	: 	"instant" ,
       func	:	function(imperium_self, player) {
@@ -4275,7 +4275,7 @@ class Imperium extends GameTemplate {
     };
     secret['master-of-production']			= {
       name 	: 	"Master of Production" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Control four planets with industrial civilizations" ,
       type	: 	"instant" ,
       func	:	function(imperium_self, player) {
@@ -4287,7 +4287,7 @@ class Imperium extends GameTemplate {
     };
     secret['occupy-new-byzantium']			= {
       name 	: 	"Occupy New Byzantium" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Control New Byzantium and have at least 3 ships protecting the sector" ,
       type	: 	"instant",
       func	:	function(imperium_self, player) {
@@ -4299,7 +4299,7 @@ class Imperium extends GameTemplate {
     };
     secret['cast-a-long-shadow']			= {
       name 	: 	"Cast a Long Shadow" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Have at least 1 ship in a system adjacent to an opponents homeworld" ,
       type	: 	"instant",
       func	:	function(imperium_self, player) {
@@ -4325,7 +4325,7 @@ class Imperium extends GameTemplate {
   
     obj['manage-to-breathe']			= {
       name 	: 	"Figure out Breathing" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Just score this for free..." ,
       func	:	function(imperium_self, player) {
   
@@ -4338,7 +4338,7 @@ class Imperium extends GameTemplate {
     };
     obj['planetary-unity']			= {
       name 	: 	"Planetary Unity" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Control four planets of the same planet type" ,
       func	:	function(imperium_self, player) {
   
@@ -4366,11 +4366,11 @@ class Imperium extends GameTemplate {
     };
     obj['forge-of-war']				= {
       name 	: 	"Forge of War" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Research 2 unit upgrade technologies" ,
       func	:	function(imperium_self, player) {
   
-        let tech = imperium_self.game.players[player-1].tech;
+        let tech = imperium_self.game.players_info[player-1].tech;
         let unit_upgrades = 0;
         for (let i = 0; i < tech.length; i++) {
   	if (imperium_self.game.tech[tech[i]].unit == 1) { unit_upgrades++; }
@@ -4385,11 +4385,11 @@ class Imperium extends GameTemplate {
     };
     obj['diversified-research']			= {
       name 	: 	"Diversified Research" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Research 2 technologies in two different color paths" ,
       func	:	function(imperium_self, player) {
   
-        let tech = imperium_self.game.players[player-1].tech;
+        let tech = imperium_self.game.players_info[player-1].tech;
         let colortech = [];
         for (let i = 0; i < 4; i++) { colortech[i] = 0; }
   
@@ -4417,7 +4417,7 @@ class Imperium extends GameTemplate {
     };
     obj['mining-conglomerate']			= {
       name 	: 	"Mining Conglomerate" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Spend eight resources when scoring" ,
       func	:	function(imperium_self, player) {
   
@@ -4436,7 +4436,7 @@ class Imperium extends GameTemplate {
     };
     obj['colonization']				= {
       name 	: 	"Colonization" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Control six planets outside your home system" ,
       func	:	function(imperium_self, player) {
   
@@ -4459,7 +4459,7 @@ class Imperium extends GameTemplate {
     };
     obj['conquest-of-science']			= {
       name 	: 	"Conquest of Science" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Control 3 planets with tech specialities" ,
       func	:	function(imperium_self, player) {
   
@@ -4482,10 +4482,10 @@ class Imperium extends GameTemplate {
     };
     obj['grand-gesture']				= {
       name 	: 	"A Grand Gesture" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Spend 3 command or strategy tokens when scoring" ,
       func	:	function(imperium_self, player) {
-        if ((imperium_self.game.players[player-1].command_tokens + imperium_self.game.players[player-1].strategy_tokens) >= 3) { return 1; }
+        if ((imperium_self.game.players_info[player-1].command_tokens + imperium_self.game.players_info[player-1].strategy_tokens) >= 3) { return 1; }
         return 0;
       },
       post	:	function(imperium_self, player, mycallback) {
@@ -4496,11 +4496,11 @@ class Imperium extends GameTemplate {
     };
     obj['trade-outposts']				= {
       name 	: 	"Establish Trade Outposts" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Spend 5 trade goods when scoring" ,
       func	:	function(imperium_self, player) {
   
-        if (imperium_self.game.players[player-1].goods >= 5) { return 1; }
+        if (imperium_self.game.players_info[player-1].goods >= 5) { return 1; }
         return 0;
   
       },
@@ -4512,7 +4512,7 @@ class Imperium extends GameTemplate {
     };
     obj['pecuniary-diplomacy']			= {
       name 	: 	"Pecuniary Diplomacy" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Spend 8 influence when scoring" ,
       func	:	function(imperium_self, player) {
   
@@ -4545,7 +4545,7 @@ class Imperium extends GameTemplate {
   
     obj['manage-two-breathe']			= {
       name 	: 	"Figure outwo Breathing" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Just score this two VP for free..." ,
       func	:	function(imperium_self, player) {
   
@@ -4558,11 +4558,11 @@ class Imperium extends GameTemplate {
     };
     obj['master-of-commerce']			= {
       name 	: 	"Master of Commerce" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Spend 10 trade goods when scoring" ,
       func	:	function(imperium_self, player) {
   
-        if (imperium_self.game.players[player-1].goods >= 10) { return 1; }
+        if (imperium_self.game.players_info[player-1].goods >= 10) { return 1; }
         return 0;
   
       },
@@ -4574,7 +4574,7 @@ class Imperium extends GameTemplate {
     };
     obj['display-of-dominance']			= {
       name 	: 	"Display of Dominance" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Control at least 1 planet in another player's home sector" ,
       func	:	function(imperium_self, player) {
   
@@ -4594,7 +4594,7 @@ class Imperium extends GameTemplate {
     };
     obj['technological-empire']			= {
       name 	: 	"Technological Empire" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Control 5 planets with tech bonuses" ,
       func	:	function(imperium_self, player) {
   
@@ -4618,7 +4618,7 @@ class Imperium extends GameTemplate {
     };
     obj['galactic-currency']			= {
       name 	: 	"Establish Galactic Currency" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Spend 16 resources when scoring" ,
       func	:	function(imperium_self, player) {
   
@@ -4638,11 +4638,11 @@ class Imperium extends GameTemplate {
     };
     obj['cultural-revolution']			= {
       name 	: 	"A Cultural Revolution" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Spend 6 command or strategy tokens when scoring" ,
       func	:	function(imperium_self, player) {
   
-        if ((imperium_self.game.players[player-1].command_tokens + imperium_self.game.players[player-1].strategy_tokens) >= 6) { return 1; }
+        if ((imperium_self.game.players_info[player-1].command_tokens + imperium_self.game.players_info[player-1].strategy_tokens) >= 6) { return 1; }
         return 0;
   
       },
@@ -4655,7 +4655,7 @@ class Imperium extends GameTemplate {
     };
     obj['power-broken']			= {
       name 	: 	"Power Broken" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Spend 16 influence when scoring" ,
       func	:	function(imperium_self, player) {
   
@@ -4675,11 +4675,11 @@ class Imperium extends GameTemplate {
     };
     obj['master-of-science']			= {
       name 	: 	"Master of Science" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Own 2 tech upgrades in each of 4 tech color paths" ,
       func	:	function(imperium_self, player) {
   
-        let tech = imperium_self.game.players[player-1].tech;
+        let tech = imperium_self.game.players_info[player-1].tech;
         let colortech = [];
         for (let i = 0; i < 4; i++) { colortech[i] = 0; }
   
@@ -4707,7 +4707,7 @@ class Imperium extends GameTemplate {
     };
     obj['colonial-dominance']			= {
       name 	: 	"Colonial Dominance" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Control 11 planets outside your home system" ,
       func	:	function(imperium_self, player) {
   
@@ -4731,11 +4731,11 @@ class Imperium extends GameTemplate {
     };
     obj['advanced-technologies']			= {
       name 	: 	"Advanced Technologies" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Research 3 unit upgrade technologies" ,
       func	:	function(imperium_self, player) {
   
-        let tech = imperium_self.game.players[player-1].tech;
+        let tech = imperium_self.game.players_info[player-1].tech;
         let unit_upgrades = 0;
         for (let i = 0; i < tech.length; i++) {
   	if (imperium_self.game.tech[tech[i]].unit == 1) { unit_upgrades++; }
@@ -4751,7 +4751,7 @@ class Imperium extends GameTemplate {
     };
     obj['imperial-unity']			= {
       name 	: 	"Imperial Unity" ,
-      img		:	"/imperium/images/objective_card_1_template.png" ,
+      img		:	"/imperium/img/objective_card_1_template.png" ,
       text	:	"Control 6 planets of the same planet type" ,
       func	:	function(imperium_self, player) {
   
@@ -4801,29 +4801,29 @@ class Imperium extends GameTemplate {
     //
     tech['neural-implants']                       = {
       name        :       "Neural Implants" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "green" ,
       unit        :       0 ,
       type	:	"normal" ,
       prereqs     :       [],
       onNewRound     :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].action_cards_bonus_when_issued = 1;
+        imperium_self.game.players_info[player-1].action_cards_bonus_when_issued = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].action_cards_bonus_when_issued = 1;
+        imperium_self.game.players_info[player-1].action_cards_bonus_when_issued = 1;
         mycallback(1);
       }
     };
     tech['resuscitation-pods']                    = {
       name        :       "Resuscitation Pods" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "green" ,
       unit        :       0 ,
       type	:	"normal" ,
       prereqs     :       ['green'],
       onNewRound     :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].reinforce_infantry_after_successful_ground_combat = 1;
+        imperium_self.game.players_info[player-1].reinforce_infantry_after_successful_ground_combat = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
@@ -4832,29 +4832,29 @@ class Imperium extends GameTemplate {
     };
     tech['biotic-enhancements']                   = {
       name        :       "Biotic Enhancements" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "green" ,
       unit        :       0 ,
       type	:	"normal" ,
       prereqs     :       ['green','green'],
       onNewRound     :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].new_token_bonus_when_issued = 1;
+        imperium_self.game.players_info[player-1].new_token_bonus_when_issued = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].new_token_bonus_when_issued = 1;
+        imperium_self.game.players_info[player-1].new_token_bonus_when_issued = 1;
         mycallback(1);
       }
     };
     tech['viral-plasma']                  = {
       name        :       "X-91 Viral Plasma" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "green" ,
       unit        :       0 ,
       type	:	"normal" ,
       prereqs     :       ['green','green','green'],
       onNewRound     :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].x91_bacterial_bombardment = 1;
+        imperium_self.game.players_info[player-1].x91_bacterial_bombardment = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
@@ -4868,67 +4868,67 @@ class Imperium extends GameTemplate {
     //
     tech['electron-shielding']                    = {
       name        :       "Electron Shielding" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "blue" ,
       unit        :       0 ,
       type	:	"normal" ,
       prereqs     :       [],
       onNewRound     :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].fly_through_asteroids = 1;
-        imperium_self.game.players[player-1].evasive_bonus_on_pds_shots = 1;
+        imperium_self.game.players_info[player-1].fly_through_asteroids = 1;
+        imperium_self.game.players_info[player-1].evasive_bonus_on_pds_shots = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].fly_through_asteroids = 1;
-        imperium_self.game.players[player-1].evasive_bonus_on_pds_shots = 1;
+        imperium_self.game.players_info[player-1].fly_through_asteroids = 1;
+        imperium_self.game.players_info[player-1].evasive_bonus_on_pds_shots = 1;
         mycallback(1);
       }
     };
     tech['slingshot-drive']                       = {
       name        :       "Slingshot Drive" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "blue" ,
       unit        :       0 ,
       type	:	"normal" ,
       prereqs     :       ['blue'],
       onNewRound     :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].ship_move_bonus = 1;
+        imperium_self.game.players_info[player-1].ship_move_bonus = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].ship_move_bonus = 1;
+        imperium_self.game.players_info[player-1].ship_move_bonus = 1;
         mycallback(1);
       }
     };
     tech['fleet-ansible']                 = {
       name        :       "Fleet Ansible" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "blue" ,
       unit        :       0 ,
       type	:	"normal" ,
       prereqs     :       ['blue','blue'],
       onNewRound     :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].perform_two_actions = 1;
+        imperium_self.game.players_info[player-1].perform_two_actions = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].perform_two_actions = 1;
+        imperium_self.game.players_info[player-1].perform_two_actions = 1;
         mycallback(1);
       }
     };
     tech['stealth-cloaking']                      = {
       name        :       "Stealth Cloaking" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "blue" ,
       unit        :       0 ,
       prereqs     :       ['blue','blue','blue'],
       type	:	"normal" ,
       onNewRound     :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].move_through_sectors_with_opponent_ships = 1;
+        imperium_self.game.players_info[player-1].move_through_sectors_with_opponent_ships = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].move_through_sectors_with_opponent_ships = 1;
+        imperium_self.game.players_info[player-1].move_through_sectors_with_opponent_ships = 1;
         mycallback(1);
       }
     };
@@ -4938,29 +4938,29 @@ class Imperium extends GameTemplate {
     //
     tech['waste-recycling']                       = {
       name        :       "Waste Recycling" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "yellow" ,
       unit        :       0 ,
       prereqs     :       [],
       type	:	"normal" ,
       onNewRound     :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].production_bonus = 1;
+        imperium_self.game.players_info[player-1].production_bonus = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].production_bonus = 1;
+        imperium_self.game.players_info[player-1].production_bonus = 1;
         mycallback(1);
       }
     };
     tech['laser-targeting']                       = {
       name        :       "Laser Targeting" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "yellow" ,
       unit        :       0 ,
       type	:	"normal" ,
       prereqs     :       ['yellow'],
       onNewRound     :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].assign_pds_hits_to_non_fighters = 1;
+        imperium_self.game.players_info[player-1].assign_pds_hits_to_non_fighters = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
@@ -4969,13 +4969,13 @@ class Imperium extends GameTemplate {
     };
     tech['deep-space-reanimatronics']                     = {
       name        :       "Deep Space Reanimatronics" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "yellow" ,
       unit        :       0 ,
       prereqs     :       ['yellow','yellow'],
       type	:	"normal" ,
       onNewRound     :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].reallocate_four_infantry_per_round = 1;
+        imperium_self.game.players_info[player-1].reallocate_four_infantry_per_round = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player) {
@@ -4984,17 +4984,17 @@ class Imperium extends GameTemplate {
     };
     tech['frontline-assembly']                    = {
       name        :       "Frontline Assembly" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "yellow" ,
       unit        :       0 ,
       prereqs     :       ['yellow','yellow','yellow'],
       type	:	"normal" ,
       onNewRound     :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].may_produce_after_gaining_planet = 1;
+        imperium_self.game.players_info[player-1].may_produce_after_gaining_planet = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].may_produce_after_gaining_planet = 1;
+        imperium_self.game.players_info[player-1].may_produce_after_gaining_planet = 1;
         mycallback(1);
       }
     };
@@ -5004,30 +5004,30 @@ class Imperium extends GameTemplate {
     //
     tech['plasma-clusters']                       = {
       name        :       "Plasma Clusters" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "red" ,
       unit        :       0 ,
       prereqs     :       [],
       type	:	"normal" ,
       onNewRound     :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].extra_roll_on_bombardment_or_pdf = 1;
+        imperium_self.game.players_info[player-1].extra_roll_on_bombardment_or_pdf = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].extra_roll_on_bombardment_or_pdf = 1;
+        imperium_self.game.players_info[player-1].extra_roll_on_bombardment_or_pdf = 1;
         mycallback(1);
   
       }
     };
     tech['stasis-fields']                 = {
       name        :       "Stasis Fields" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "red" ,
       unit        :       0 ,
       prereqs     :       ['red'],
       type	:	"normal" ,
       onNewRound     :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].stasis_on_opponent_combat_first_round = 1;
+        imperium_self.game.players_info[player-1].stasis_on_opponent_combat_first_round = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
@@ -5036,178 +5036,178 @@ class Imperium extends GameTemplate {
     };
     tech['titanium-shielding']                    = {
       name        :       "Titanium Shielding" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "red" ,
       unit        :       0 ,
       prereqs     :       ['red','red'],
       type	:	"normal" ,
       onNewRound     :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].may_repair_damaged_ships_after_space_combat = 1;
+        imperium_self.game.players_info[player-1].may_repair_damaged_ships_after_space_combat = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].may_repair_damaged_ships_after_space_combat = 1;
+        imperium_self.game.players_info[player-1].may_repair_damaged_ships_after_space_combat = 1;
         mycallback(1);
       }
     };
     tech['chain-shot']                    = {
       name        :       "Chain Shot" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "red" ,
       unit        :       0 ,
       prereqs     :       ['red','red','red'],
       type	:	"normal" ,
       onNewRound     :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].chain_shot = 1;
+        imperium_self.game.players_info[player-1].chain_shot = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players[player-1].chain_shot = 1;
+        imperium_self.game.players_info[player-1].chain_shot = 1;
         mycallback(1);
       }
     };
   
     tech['fighter-ii']                    = {
       name        :       "Fighter II" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "" ,
       unit        :       1 ,
       prereqs     :       ['green','blue'],
       type	:	"normal" ,
       onNewRound     :       function(imperium_self, player, mycallback) {
-        this.game.players[player-1].upgraded_fighter = 1;
+        this.game.players_info[player-1].upgraded_fighter = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
-        this.game.players[player-1].upgraded_fighter = 1;
+        this.game.players_info[player-1].upgraded_fighter = 1;
         mycallback(1);
       }
     };
     tech['infantry-ii']                   = {
       name        :       "Infantry II" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "" ,
       unit        :       1 ,
       prereqs     :       ['green','green'],
       type	:	"normal" ,
       onNewRound     :       function(imperium_self, player, mycallback) {
-        this.game.players[player-1].upgraded_infantry = 1;
+        this.game.players_info[player-1].upgraded_infantry = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
-        this.game.players[player-1].upgraded_infantry = 1;
+        this.game.players_info[player-1].upgraded_infantry = 1;
         mycallback(1);
       }
     };
     tech['carrier-ii']                    = {
       name        :       "Carrier II" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "" ,
       unit        :       1 ,
       prereqs     :       ['green','green','blue','blue'],
       type	:	"normal" ,
       onNewRound     :       function(imperium_self, player, mycallback) {
-        this.game.players[player-1].upgraded_carrier = 1;
+        this.game.players_info[player-1].upgraded_carrier = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
-        this.game.players[player-1].upgraded_carrier = 1;
+        this.game.players_info[player-1].upgraded_carrier = 1;
         mycallback(1);
       }
     };
     tech['dreadnaught-ii']                        = {
       name        :       "Dreadnaught II" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "" ,
       unit        :       1 ,
       prereqs     :       ['blue','blue','yellow'],
       type	:	"normal" ,
       onNewRound     :       function(imperium_self, player, mycallback) {
-        this.game.players[player-1].upgraded_dreadnaught = 1;
+        this.game.players_info[player-1].upgraded_dreadnaught = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
-        this.game.players[player-1].upgraded_dreadnaught = 1;
+        this.game.players_info[player-1].upgraded_dreadnaught = 1;
         mycallback(1);
       }
     };
     tech['cruiser-ii']                    = {
       name        :       "Cruiser II" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "" ,
       unit        :       1 ,
       prereqs     :       ['green','yellow','red'],
       type	:	"normal" ,
       onNewRound     :       function(imperium_self, player, mycallback) {
-        this.game.players[player-1].upgraded_cruiser = 1;
+        this.game.players_info[player-1].upgraded_cruiser = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
-        this.game.players[player-1].upgraded_cruiser = 1;
+        this.game.players_info[player-1].upgraded_cruiser = 1;
         mycallback(1);
       }
     };
     tech['spacedock-ii']                  = {
       name        :       "Space Dock II" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "" ,
       unit        :       1 ,
       prereqs     :       ['yellow','yellow'],
       type	:	"normal" ,
       onNewRound     :       function(imperium_self, player, mycallback) {
-        this.game.players[player-1].upgraded_spacedock = 1;
+        this.game.players_info[player-1].upgraded_spacedock = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
-        this.game.players[player-1].upgraded_spacedock = 1;
+        this.game.players_info[player-1].upgraded_spacedock = 1;
         mycallback(1);
       }
     };
     tech['destroyer-ii']                  = {
       name        :       "Destroyer II" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "" ,
       unit        :       1 ,
       prereqs     :       ['red','red'],
       type	:	"normal" ,
       onNewRound     :       function(imperium_self, player, mycallback) {
-        this.game.players[player-1].upgraded_destroyer = 1;
+        this.game.players_info[player-1].upgraded_destroyer = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
-        this.game.players[player-1].upgraded_destroyer = 1;
+        this.game.players_info[player-1].upgraded_destroyer = 1;
         mycallback(1);
       }
     };
     tech['pds-ii']                        = {
       name        :       "PDS II" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "" ,
       unit        :       1 ,
       prereqs     :       ['yellow','red'],
       type	:	"normal" ,
       onNewRound     :       function(imperium_self, player, mycallback) {
-        this.game.players[player-1].upgraded_pds = 1;
+        this.game.players_info[player-1].upgraded_pds = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
-        this.game.players[player-1].upgraded_pds = 1;
+        this.game.players_info[player-1].upgraded_pds = 1;
         mycallback(1);
       }
     };
     tech['war-sun']                       = {
       name        :       "War Sun" ,
-      img         :       "/imperium/images/card_template.jpg" ,
+      img         :       "/imperium/img/card_template.jpg" ,
       color       :       "" ,
       unit        :       1 ,
       prereqs     :       ['yellow','red','red','red'],
       type	:	"normal" ,
       onNewRound     :       function(imperium_self, player, mycallback) {
-        this.game.players[player-1].upgraded_warsun = 1;
+        this.game.players_info[player-1].upgraded_warsun = 1;
         mycallback(1);
       },
       onNewTurn        :       function(imperium_self, player, mycallback) {
-        this.game.players[player-1].upgraded_warsun = 1;
+        this.game.players_info[player-1].upgraded_warsun = 1;
         mycallback(1);
       }
     };
@@ -5223,14 +5223,14 @@ class Imperium extends GameTemplate {
   
     let strategy = {};
   
-    strategy['initiative']	= { order : 1 , img : "/imperium/images/card_template.jpg" , name : "Initiative" };
-    strategy['negotiation'] 	= { order : 2 , img : "/imperium/images/card_template.jpg" , name : "Negotiation" };
-    strategy['politics'] 		= { order : 3 , img : "/imperium/images/card_template.jpg" , name : "Politics" };
-    strategy['infrastructure'] 	= { order : 4 , img : "/imperium/images/card_template.jpg" , name : "Infrastructure" };
-    strategy['trade'] 	 	= { order : 5 , img : "/imperium/images/card_template.jpg" , name : "Trade" };
-    strategy['military'] 	 	= { order : 6 , img : "/imperium/images/card_template.jpg" , name : "Military" };
-    strategy['tech'] 		= { order : 7 , img : "/imperium/images/card_template.jpg" , name : "Tech Research" };
-    strategy['empire'] 	 	= { order : 8 , img : "/imperium/images/card_template.jpg" , name : "Imperial" };
+    strategy['initiative']	= { order : 1 , img : "/imperium/img/card_template.jpg" , name : "Initiative" };
+    strategy['negotiation'] 	= { order : 2 , img : "/imperium/img/card_template.jpg" , name : "Negotiation" };
+    strategy['politics'] 		= { order : 3 , img : "/imperium/img/card_template.jpg" , name : "Politics" };
+    strategy['infrastructure'] 	= { order : 4 , img : "/imperium/img/card_template.jpg" , name : "Infrastructure" };
+    strategy['trade'] 	 	= { order : 5 , img : "/imperium/img/card_template.jpg" , name : "Trade" };
+    strategy['military'] 	 	= { order : 6 , img : "/imperium/img/card_template.jpg" , name : "Military" };
+    strategy['tech'] 		= { order : 7 , img : "/imperium/img/card_template.jpg" , name : "Tech Research" };
+    strategy['empire'] 	 	= { order : 8 , img : "/imperium/img/card_template.jpg" , name : "Imperial" };
   
     return strategy;
   
@@ -5248,61 +5248,61 @@ class Imperium extends GameTemplate {
   	name : "Diaspora Uprising" ,
   	type : "instant" ,
   	text : "Gain control of one planet not controlled by any player" ,
-  	img : "/imperium/images/action_card_template.png" ,
+  	img : "/imperium/img/action_card_template.png" ,
     };
     action['action2']	= { 
   	name : "Hydrocannon Cooling" ,
   	type : "instant" ,
   	text : "Ship gets -2 on combat rolls next round" ,
-  	img : "/imperium/images/action_card_template.png" ,
+  	img : "/imperium/img/action_card_template.png" ,
     };
     action['action3']	= { 
   	name : "Agile Thrusters" ,
   	type : "instant" ,
   	text : "Attached ship may cancel up to 2 hits by PDS or Ion Cannons" ,
-  	img : "/imperium/images/action_card_template.png" ,
+  	img : "/imperium/img/action_card_template.png" ,
     };
     action['action4']	= { 
   	name : "" ,
   	type : "instant" ,
   	text : "Exhaust a planet card held by another player. Gain trade goods equal to resource value." ,
-  	img : "/imperium/images/action_card_template.png" ,
+  	img : "/imperium/img/action_card_template.png" ,
     };
     action['action5']	= { 
   	name : "" ,
   	type : "instant" ,
   	text : "Cancel 1 yellow technology prerequisite" ,
-  	img : "/imperium/images/action_card_template.png" ,
+  	img : "/imperium/img/action_card_template.png" ,
     };
     action['action6']	= { 
   	name : "" ,
   	type : "instant" ,
   	text : "Cancel 1 blue technology prerequisite" ,
-  	img : "/imperium/images/action_card_template.png" ,
+  	img : "/imperium/img/action_card_template.png" ,
     };
     action['action7']	= { 
   	name : "" ,
   	type : "instant" ,
   	text : "Cancel 1 red technology prerequisite" ,
-  	img : "/imperium/images/action_card_template.png" ,
+  	img : "/imperium/img/action_card_template.png" ,
     };
     action['action8']	= { 
   	name : "" ,
   	type : "instant" ,
   	text : "Cancel 1 green technology prerequisite" ,
-  	img : "/imperium/images/action_card_template.png" ,
+  	img : "/imperium/img/action_card_template.png" ,
     };
     action['action9']	= { 
   	name : "" ,
   	type : "instant" ,
   	text : "Replace 1 of your Destroyers with a Dreadnaught" ,
-  	img : "/imperium/images/action_card_template.png" ,
+  	img : "/imperium/img/action_card_template.png" ,
     };
     action['action10']	= { 
   	name : "" ,
   	type : "instant" ,
   	text : "Place 1 Destroyer in a system with no existing ships" ,
-  	img : "/imperium/images/action_card_template.png" ,
+  	img : "/imperium/img/action_card_template.png" ,
     };
   
     return action;
@@ -5321,55 +5321,55 @@ class Imperium extends GameTemplate {
   	name : "Unruly Natives" ,
   	type : "Law" ,
   	text : "All invasions of unoccupied planets require conquering 1 infantry" ,
-  	img : "/imperium/images/agenda_card_template.png" ,
+  	img : "/imperium/img/agenda_card_template.png" ,
     };
     agenda['a2']	= { 
   	name : "Wormhole Travel Ban" ,
   	type : "Law" ,
   	text : "All invasions of unoccupied planets require conquering 1 infantry" ,
-  	img : "/imperium/images/agenda_card_template.png" ,
+  	img : "/imperium/img/agenda_card_template.png" ,
     };
     agenda['a3']	= { 
   	name : "Regulated Bureaucracy" ,
   	type : "Law" ,
   	text : "Players may have a maximum of 3 action cards in their hands at all times" ,
-  	img : "/imperium/images/agenda_card_template.png" ,
+  	img : "/imperium/img/agenda_card_template.png" ,
     };
     agenda['a4']	= { 
   	name : "Freedom in Arms Act" ,
   	type : "Law" ,
   	text : "Players may place any number of PDS units on planets" ,
-  	img : "/imperium/images/agenda_card_template.png" ,
+  	img : "/imperium/img/agenda_card_template.png" ,
     };
     agenda['a5']	= { 
   	name : "Performance Testing" ,
   	type : "Law" ,
   	text : "After any player researches a tach, he must destroy a non-fighter ship if possible" ,
-  	img : "/imperium/images/agenda_card_template.png" ,
+  	img : "/imperium/img/agenda_card_template.png" ,
     };
     agenda['a6']	= { 
   	name : "Fleet Limitations" ,
   	type : "Law" ,
   	text : "Players may have a maximum of four tokens in their fleet supply." ,
-  	img : "/imperium/images/agenda_card_template.png" ,
+  	img : "/imperium/img/agenda_card_template.png" ,
     };
     agenda['a7']	= { 
   	name : "Restricted Conscription" ,
   	type : "Law" ,
   	text : "Production cost for infantry and fighters is 1 rather than 0.5 resources" ,
-  	img : "/imperium/images/agenda_card_template.png" ,
+  	img : "/imperium/img/agenda_card_template.png" ,
     };
     agenda['a8']	= { 
   	name : "Representative Democracy" ,
   	type : "Law" ,
   	text : "All players have only 1 vote in each Politics Vote" ,
-  	img : "/imperium/images/agenda_card_template.png" ,
+  	img : "/imperium/img/agenda_card_template.png" ,
     };
     agenda['a9']	= { 
   	name : "Hidden Agenda" ,
   	type : "Law" ,
   	text : "Agendas are Hidden By Default and Only Revealed when the Politics Card is Played" ,
-  	img : "/imperium/images/agenda_card_template.png" ,
+  	img : "/imperium/img/agenda_card_template.png" ,
     };
   
     return agenda;
@@ -5381,13 +5381,13 @@ class Imperium extends GameTemplate {
   /////////////////////
   returnFaction(player) {
     let factions = this.returnFactions();
-    if (this.game.players[player-1] == null) { return "Unknown"; }
-    if (this.game.players[player-1] == undefined) { return "Unknown"; }
-    return factions[this.game.players[player-1].faction].name;
+    if (this.game.players_info[player-1] == null) { return "Unknown"; }
+    if (this.game.players_info[player-1] == undefined) { return "Unknown"; }
+    return factions[this.game.players_info[player-1].faction].name;
   }
   returnSpeaker() {
     let factions = this.returnFactions();
-    return factions[this.game.players[this.game.state.speaker-1].faction].name;
+    return factions[this.game.players_info[this.game.state.speaker-1].faction].name;
   }
   returnSectorName(pid) {
     return this.game.systems[this.game.board[pid].tile].name;
@@ -5775,7 +5775,7 @@ class Imperium extends GameTemplate {
 
   upgradeUnit(unit, player) {
   
-    let p = this.game.players[player-1];
+    let p = this.game.players_info[player-1];
   
     if (unit.name == "fighter") {
       if (p.upgraded_fighter == 1) {
@@ -5920,8 +5920,8 @@ class Imperium extends GameTemplate {
         html += '<hr />';
         html += '<ul>';
   
-    for (let i = 0; i < this.game.players.length; i++) {
-      html += `  <li class="card" id="${i}">${factions[this.game.players[i].faction].name} -- ${this.game.players[i].vp} VP</li>`;
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      html += `  <li class="card" id="${i}">${factions[this.game.players_info[i].faction].name} -- ${this.game.players_info[i].vp} VP</li>`;
     }
   
     html += '</ul>';
@@ -6002,7 +6002,7 @@ class Imperium extends GameTemplate {
         if (flagships > 0 ) { space_frames.push("white_space_flagship.png"); }
   
         for (let i = 0; i < space_frames.length; i++) {
-          bg += 'url(imperium/images/frame/'+space_frames[i]+')';
+          bg += 'url(imperium/img/frame/'+space_frames[i]+')';
           bgsize += 'contain';
   	if (i < space_frames.length-1) { 
   	  bg += ','; 
@@ -6127,7 +6127,7 @@ class Imperium extends GameTemplate {
   
     let planets = [];
   
-    for (let i = 0; i < this.game.players.length; i++) {
+    for (let i = 0; i < this.game.players_info.length; i++) {
       if (this.game.player != (i+1)) {
         let their_home_planets = this.returnPlayerHomeworldPlanets((i+1));
         for (let z = 0; z < their_home_planets.length; z++) {
@@ -6142,7 +6142,7 @@ class Imperium extends GameTemplate {
   
   
   returnPlayerHomeworldPlanets(player=this.game.player) {
-    let home_sector = this.game.board[this.game.players[player-1].homeworld].tile;  // "sector";
+    let home_sector = this.game.board[this.game.players_info[player-1].homeworld].tile;  // "sector";
     return this.game.systems[home_sector].planets;
   }
   
@@ -6294,12 +6294,12 @@ class Imperium extends GameTemplate {
     let strategy_cards = this.returnStrategyCards();
     this.updateStatus(this.returnFaction(player) + " is playing the " + strategy_cards[card].name + " strategy card");
   
-    let player_confirmation_needed = this.game.players.length;
+    let player_confirmation_needed = this.game.players_info.length;
   
     if (card == "initiative") {
   
-      this.game.players[player-1].command_tokens += 2;
-      this.game.players[player-1].strategy_tokens += 1;
+      this.game.players_info[player-1].command_tokens += 2;
+      this.game.players_info[player-1].strategy_tokens += 1;
   
       if (this.game.player == player) {
         this.addMove("resolve\tstrategy");
@@ -6317,7 +6317,7 @@ class Imperium extends GameTemplate {
         this.playerSelectSector(function(sector) {
           imperium_self.addMove("resolve\tstrategy");
           imperium_self.addMove("strategy\t"+card+"\t"+player+"\t2\t"+player_confirmation_needed);
-          for (let i = 0; i < imperium_self.game.players.length; i++) {
+          for (let i = 0; i < imperium_self.game.players_info.length; i++) {
             imperium_self.addMove("activate\t"+(i+1)+"\t"+sector);
           }
   
@@ -6367,13 +6367,13 @@ class Imperium extends GameTemplate {
         this.addMove("resolve\tstrategy");
         this.addMove("strategy\t"+card+"\t"+player+"\t2\t"+player_confirmation_needed);
         this.addMove("purchase\t"+this.game.player+"\tgoods\t3");
-        this.addMove("purchase\t"+this.game.player+"\tcommodities\t"+this.game.players[this.game.player-1].commodity_limit);
+        this.addMove("purchase\t"+this.game.player+"\tcommodities\t"+this.game.players_info[this.game.player-1].commodity_limit);
   
         let factions = this.returnFactions();
         let html = 'Issue commodities to which players: <p></p><ul>';
-        for (let i = 0; i < this.game.players.length; i++) {
+        for (let i = 0; i < this.game.players_info.length; i++) {
   	if (i != this.game.player-1) {
-  	  html += '<li class="option" id="'+i+'">' + factions[this.game.players[i].faction].name + '</li>';
+  	  html += '<li class="option" id="'+i+'">' + factions[this.game.players_info[i].faction].name + '</li>';
           }
         }
         html += '<li class="option" id="finish">finish and end turn</li>';
@@ -6384,7 +6384,7 @@ class Imperium extends GameTemplate {
         $('.option').on('click', function() {
   	let id = $(this).attr("id");
   	if (id != "finish") {
-            imperium_self.addMove("purchase\t"+(id+1)+"\tcommodities\t"+imperium_self.game.players[id].commodity_limit);
+            imperium_self.addMove("purchase\t"+(id+1)+"\tcommodities\t"+imperium_self.game.players_info[id].commodity_limit);
   	  $(this).hide();
   	} else {
             imperium_self.endTurn();
@@ -6446,7 +6446,7 @@ class Imperium extends GameTemplate {
     let strategy_cards = this.returnStrategyCards();
     this.updateStatus("Moving into the secondary of the " + strategy_cards[card].name + " strategy card");
   
-    let player_confirmation_needed = this.game.players.length;
+    let player_confirmation_needed = this.game.players_info.length;
   
     this.game.confirms_needed = player_confirmation_needed;
     this.game.confirms_received = 0;
@@ -6593,7 +6593,7 @@ class Imperium extends GameTemplate {
   
           if (id == "yes") {
             imperium_self.addMove("resolve\tstrategy\t1");
-            imperium_self.addMove("purchase\t"+this.game.player+"\tcommodities\t"+this.game.players[this.game.player-1].commodity_limit);
+            imperium_self.addMove("purchase\t"+this.game.player+"\tcommodities\t"+this.game.players_info[this.game.player-1].commodity_limit);
             imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
           }
           if (id == "no") {
@@ -6629,7 +6629,7 @@ class Imperium extends GameTemplate {
           if (id == "yes") {
             imperium_self.addMove("resolve\tstrategy\t1");
             imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
-  	  imperium_self.playerProduceUnits(this.game.players[this.game.player-1].homeworld);
+  	  imperium_self.playerProduceUnits(this.game.players_info[this.game.player-1].homeworld);
           }
           if (id == "no") {
             imperium_self.addMove("resolve\tstrategy\t1");
@@ -6760,8 +6760,8 @@ class Imperium extends GameTemplate {
     if (this.game.player == player) {
   
       let obj = {};
-          obj.current_command = this.game.players[player-1].command_tokens;
-          obj.current_strategy = this.game.players[player-1].strategy_tokens;
+          obj.current_command = this.game.players_info[player-1].command_tokens;
+          obj.current_strategy = this.game.players_info[player-1].strategy_tokens;
           obj.new_command = 0;
           obj.new_strategy = 0;
           obj.new_tokens = tokens;

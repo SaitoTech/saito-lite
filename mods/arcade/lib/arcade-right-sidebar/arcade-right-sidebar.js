@@ -4,9 +4,17 @@ const ObserverRow = require('./arcade-right-sidebar-observer-game-row.template.j
 module.exports = ArcadeRightSidebar = {
 
     render(app, data) {
-      let players = [{ identicon : app.keys.returnIdenticon(app.crypto.hash("david")) }, { identicon : app.keys.returnIdenticon(app.crypto.hash("stephen")) }];
       document.querySelector(".arcade-right-sidebar").innerHTML = ArcadeRightSidebarTemplate();
       for (let i = 0; i < data.arcade.observer.length; i++) {
+
+console.log("OBSERVER GAMES OPEN: " + JSON.stringify(data.arcade.observer));
+
+        let players = [];
+        let players_array = data.arcade.observer[i].players_array.split("_");
+        for (let z = 0; z < players_array.length; z++) {
+console.log("PLAYERS ARRAY: " + players_array);
+	  players.push({ identicon : app.keys.returnIdenticon(app.crypto.hash(players_array[z])) , publickey : players_array[z] });
+        }
         document.querySelector(".arcade-sidebar-active-games-body").innerHTML
           += ObserverRow(data.arcade.observer[i], players, app.crypto.stringToBase64(JSON.stringify(data.arcade.observer[i])));
       }
