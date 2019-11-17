@@ -1,0 +1,19 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "modules": false
+  ***REMOVED***
+    ]
+  ],
+  "env": {
+    "test": {
+      "presets": [
+        [
+          "env"
+        ]
+      ]
+***REMOVED***
+  ***REMOVED***
+***REMOVED***

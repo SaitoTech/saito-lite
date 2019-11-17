@@ -11,7 +11,7 @@ module.exports = ObserverGameTemplate = (msg, players, msgjson) => {
   html += `
       </div>
       <div class="arcade-observer-game-name" id="arcade-observer-game">
-        ${msg.name***REMOVED***
+        ${msg.module***REMOVED***
       </div>
       <button style="width: 100%" class="arcade-observer-game-btn" id=${msgjson***REMOVED***">WATCH</button
     </div>

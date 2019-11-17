@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS gamestate (
           game_id TEXT ,
           status TEXT ,
           player TEXT ,
+          players_array TEXT ,
           module TEXT ,
           bid INTEGER ,
           tid INTEGER ,

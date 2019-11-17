@@ -20,10 +20,10 @@ class Arcade extends ModTemplate {
     this.affix_callbacks_to 	= [];
     this.games			= [];
     this.observer		= [];
+    this.accepted               = [];
 
   ***REMOVED***
 
- 
 
 
    receiveEvent(type, data) {
@@ -41,16 +41,27 @@ class Arcade extends ModTemplate {
   observeGame(msg) {
 
     let msgobj 			= JSON.parse(this.app.crypto.base64ToString(msg));
-alert("IN ARCADE OBSERVE GAME: " + JSON.stringify(msgobj));
     let address_to_watch 	= msgobj.publickey;
     let game_id 		= msgobj.game_id;
     let arcade_self		= this;
 
+    //
+    // already watching game... load it
+    //
+    for (let i = 0; i < arcade_self.app.options.games.length; i++) {
+      if (arcade_self.app.options.games[i].id == game_id) {
+
+	arcade_self.app.options.games[i].ts = new Date().getTime();
+        arcade_self.app.storage.saveOptions();
+        window.location = '/'+arcade_self.app.options.games[i].module.toLowerCase();
+        return;
+  ***REMOVED***
+***REMOVED***
+
+
     $.get(`/arcade/observer/${game_id***REMOVED***`, (response, error) => {
 
       if (error == "success") {
-
-console.log("RESPONSE TO REQUEST: " + response);
 
         let game = JSON.parse(response);
 
@@ -101,6 +112,7 @@ console.log("ERROR 418019: error fetching game for observer mode");
   ***REMOVED***
 
 
+
   initialize(app) {
 
     super.initialize(app);
@@ -129,15 +141,22 @@ console.log("ERROR 418019: error fetching game for observer mode");
     if (this.app.options.games != undefined) {
       for (let i = 0; i < this.app.options.games.length; i++) {
 	let z = new saito.transaction();
+        for (let j = 0; j < this.app.options.games[i].players.length; j++) {
+	  z.transaction.to.push(new saito.slip(this.app.options.games[i].players[j]));
+    ***REMOVED***
+        for (let j = 0; j < this.app.options.games[i].players.length; j++) {
+	  z.transaction.from.push(new saito.slip(this.app.options.games[i].players[j]));
+    ***REMOVED***
 	z.transaction.sig          = this.app.options.games[i].id;
 	z.transaction.msg.game_id  = this.app.options.games[i].id;
 	z.transaction.msg.request  = "loaded";
-        z.transaction.msg.game     = this.app.options.games[i].module;
+        z.transaction.msg.game   = this.app.options.games[i].module;
         z.transaction.msg.options  = this.app.options.games[i].options;;
 	this.addGameToOpenList(z);
   ***REMOVED***
 ***REMOVED***
 
+/****
     // fake games
     for (let i=0; i < 5; i++) {
       this.games.unshift(
@@ -164,6 +183,7 @@ console.log("ERROR 418019: error fetching game for observer mode");
         publickey : app.crypto.hash(`${new Date().getTime()***REMOVED***`)
   ***REMOVED***);
 ***REMOVED***
+****/
 
   ***REMOVED***
 
@@ -221,12 +241,12 @@ console.log("ERROR 418019: error fetching game for observer mode");
     //
     // load active games for observer mode
     //
-    this.sendPeerDatabaseRequest("arcade", "gamestate", "DISTINCT game_id, player", "1 = 1 GROUP BY game_id ORDER BY last_move DESC LIMIT 50", null, function(res) {
+    this.sendPeerDatabaseRequest("arcade", "gamestate", "DISTINCT game_id, module, player, players_array", "1 = 1 GROUP BY game_id ORDER BY last_move DESC LIMIT 50", null, function(res) {
       if (res.rows == undefined) { return; ***REMOVED***
       if (res.rows.length > 0) {
 console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
         for (let i = 0; i < res.rows.length; i++) {
-	  arcade_self.addGameToObserverList({ game_id : res.rows[i].game_id, publickey : res.rows[i].player ***REMOVED***);
+	  arcade_self.addGameToObserverList({ game_id : res.rows[i].game_id, module : res.rows[i].module , players_array : res.rows[i].players_array, publickey : res.rows[i].player ***REMOVED***);
 	***REMOVED***
   ***REMOVED***
 ***REMOVED***);
@@ -394,6 +414,7 @@ console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
     let sql = `INSERT INTO gamestate (
 		game_id , 
 		player ,
+		players_array ,
 		module ,
 		bid ,
 		tid ,
@@ -404,6 +425,7 @@ console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
        ) VALUES (
 		$game_id,
 		$player,
+		$players_array,
 		$module,
 		$bid,
 		$tid,
@@ -412,9 +434,16 @@ console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
 		$game_state,
 		$last_move
         )`;
+    let x = [];
+    let txto = tx.transaction.to;
+    for (let z = 0; z < txto.length; z++) {
+      if (!x.includes(txto[z].add)) { x.push(txto[z].add); ***REMOVED***
+***REMOVED***
+    let players_array = x.join("_");
     let params = {
                 $game_id   : txmsg.game_id ,
                 $player    : tx.transaction.from[0].add ,
+                $players_array    : players_array ,
                 $module    : txmsg.module ,
                 $bid       : blk.block.id ,
                 $tid       : tx.transaction.id ,
@@ -523,6 +552,12 @@ console.log("INSERTING OPEN GAME: " + sql + " -- " + params);
 ***REMOVED***
     await this.app.storage.executeDatabase(sql, params, "arcade");
     if (this.browser_active == 0) { return; ***REMOVED***
+
+    //
+    // auto-accept
+    //
+    this.accepted[txmsg.sig] = 1;
+
 
     //
     // browsers
@@ -731,6 +766,54 @@ console.log(JSON.stringify(game));
 
 ***REMOVED***
   ***REMOVED***
+
+
+
+
+  //
+  // reset list of games that can be accepted
+  //
+  onNewBlock(blk, lc) {
+    if (lc == 1) {
+console.log("IN ARCADE RESETTING ACCEPTED!");
+      this.accepted = [];
+***REMOVED***
+  ***REMOVED***
+
+
+
+  async sendPeerDatabaseRequest(dbname, tablename, select="", where="", peer=null, mycallback=null) {
+
+    //
+    // if someone is trying to accept a game, check no-one else has taken it yet
+    //
+    if (dbname == "arcade" && tablename == "games" && select == "is_game_already_accepted") {
+
+      let game_id = where;
+      let res = {***REMOVED***;
+          res.rows = [];
+
+      if (this.accepted[game_id] == 1) { 
+        res.rows.push({ game_still_open : 0 ***REMOVED***);
+  ***REMOVED*** else {
+        res.rows.push({ game_still_open : 1 ***REMOVED***);
+        this.accepted[game_id] = 1;
+  ***REMOVED***
+
+      mycallback(res);
+      return;
+
+***REMOVED***
+
+    //
+    // otherwise kick into parent
+    //
+    super.sendPeerDatabaseRequest(dbname, tablename, select, where, peer, mycallback);
+
+  ***REMOVED***
+
+
+
 
 
 
