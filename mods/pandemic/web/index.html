@@ -1,0 +1,128 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Pandemic</title>
+
+  <script type="text/javascript" src="/saito/lib/jquery/jquery-3.2.1.min.js"></script>
+  <link rel="stylesheet" href="/saito/lib/jquery/jquery-ui.min.css" type="text/css" media="screen" />
+  <script type="text/javascript" src="/saito/lib/jquery/jquery-ui.min.js"></script>
+
+  <link rel="stylesheet" href="/saito/lib/font-awesome/css/font-awesome.min.css" type="text/css" media="screen" />
+
+  <link rel="stylesheet" type="text/css" href="/saito/lib/templates/game.css" />
+  <link rel="stylesheet" type="text/css" href="/pandemic/style.css" />
+
+  <link rel="icon" media="all" type="image/x-icon" href="/favicon.ico?v=2"/>
+
+</head>
+<body>
+
+  <div id="Pandemic_browser_active"></div>
+
+  <div class="main" style="display:all">
+    <div class="cardbox" id="cardbox" style="display:none">
+      <div class="cardbox-exit" id="cardbox-exit" style="display:none">×</div>
+      <div class="cardbox_menu_playcard cardbox_menu_btn" id="cardbox_menu_playcard" style="display:none">PLAY</div>
+    </div>
+    <div class="gameboard">
+
+      <div class="role_cards">
+        <div class="player1_role_card role_card"></div>
+        <div class="player2_role_card role_card"></div>
+        <div class="player3_role_card role_card"></div>
+        <div class="player4_role_card role_card"></div>
+      </div>
+
+      <div class="back_player_card"></div>
+      <div class="player_discard_pile"></div>
+      <div class="back_infection_card"></div>
+      <div class="infection_deck"></div>
+      <div class="infection_discard_pile"></div>
+
+      <div class="research_station research_station1"></div>
+      <div class="research_station research_station2"></div>
+      <div class="research_station research_station3"></div>
+      <div class="research_station research_station4"></div>
+      <div class="research_station research_station5"></div>
+      <div class="research_station research_station6"></div>
+
+      <div class="vial vial_yellow"></div>
+      <div class="vial vial_blue"></div>
+      <div class="vial vial_black"></div>
+      <div class="vial vial_red"></div>
+
+      <div class="player player1"></div>
+      <div class="player player2"></div>
+      <div class="player player3"></div>
+      <div class="player player4"></div>
+
+      <div class="marker_infection_rate"></div>
+      <div class="marker_outbreak"></div>
+
+      <div class="city" id="sanfrancisco"></div>
+      <div class="city" id="chicago"></div>
+      <div class="city" id="montreal"></div>
+      <div class="city" id="newyork"></div>
+      <div class="city" id="washington"></div>
+      <div class="city" id="atlanta"></div>
+      <div class="city" id="losangeles"></div>
+      <div class="city" id="mexicocity"></div>
+      <div class="city" id="miami"></div>
+      <div class="city" id="bogota"></div>
+      <div class="city" id="lima"></div>
+      <div class="city" id="santiago"></div>
+      <div class="city" id="buenosaires"></div>
+      <div class="city" id="saopaulo"></div>
+      <div class="city" id="lagos"></div>
+      <div class="city" id="khartoum"></div>
+      <div class="city" id="kinshasa"></div>
+      <div class="city" id="johannesburg"></div>
+      <div class="city" id="london"></div>
+      <div class="city" id="madrid"></div>
+      <div class="city" id="essen"></div>
+      <div class="city" id="paris"></div>
+      <div class="city" id="stpetersburg"></div>
+      <div class="city" id="milan"></div>
+      <div class="city" id="algiers"></div>
+      <div class="city" id="cairo"></div>
+      <div class="city" id="istanbul"></div>
+      <div class="city" id="moscow"></div>
+      <div class="city" id="baghdad"></div>
+      <div class="city" id="riyadh"></div>
+      <div class="city" id="tehran"></div>
+      <div class="city" id="karachi"></div>
+      <div class="city" id="mumbai"></div>
+      <div class="city" id="delhi"></div>
+      <div class="city" id="chennai"></div>
+      <div class="city" id="kolkata"></div>
+      <div class="city" id="bangkok"></div>
+      <div class="city" id="jakarta"></div>
+      <div class="city" id="sydney"></div>
+      <div class="city" id="manila"></div>
+      <div class="city" id="hochiminhcity"></div>
+      <div class="city" id="hongkong"></div>
+      <div class="city" id="taipei"></div>
+      <div class="city" id="shanghai"></div>
+      <div class="city" id="beijing"></div>
+      <div class="city" id="seoul"></div>
+      <div class="city" id="tokyo"></div>
+      <div class="city" id="osaka"></div>
+      <div class="infection_rate" id="infection_rate"></div>
+      <div class="infection_deck" id="infection_deck"></div>
+      <div class="infection_discard" id="infection_discard"></div>
+      <div class="player_deck" id="player_deck"></div>
+      <div class="player_discard" id="player_discard"></div>
+    </div>
+  </div>
+
+  <script src="/saito/saito.js"></script>
+  <script src="/pandemic/script.js"></script>
+
+</body>
+</html>
+

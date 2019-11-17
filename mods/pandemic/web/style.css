@@ -1,0 +1,281 @@
+
+.vial {
+  position: absolute;
+  background-size: cover;
+  width: 82px;
+  height: 102px;
+***REMOVED***
+.role_cards {
+  position: absolute;
+  left: 0;
+  top: 0;
+***REMOVED***
+.active_role_card {
+  float:left;
+  width: 243px;
+  height: 343px;
+***REMOVED***
+.role_card {
+  float:left;
+  width: 243px;
+  height: 343px;
+***REMOVED***
+.player1_role_card {
+***REMOVED***
+.player2_role_card {
+***REMOVED***
+.player3_role_card {
+***REMOVED***
+.player4_role_card {
+***REMOVED***
+
+
+.vial_yellow {
+  background-image: url("/pandemic/img/Vial%20Yellow.png");
+***REMOVED***
+.vial_blue {
+  background-image: url("/pandemic/img/Vial%20Blue.png");
+***REMOVED***
+.vial_red {
+  background-image: url("/pandemic/img/Vial%20Red.png");
+***REMOVED***
+.vial_black {
+  background-image: url("/pandemic/img/Vial%20Black.png");
+***REMOVED***
+
+.cardimg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+***REMOVED***
+
+.cardbox-hud-image {
+  float:left;
+  margin-right: 10px;
+  margin-bottom: 10px;
+***REMOVED***
+.cardbox_event_blocker {
+ position:absolute;
+ width:0px;
+ height:0px;
+ background-color: black;
+ z-index: 89999;
+ display:none;
+ opacity: 0.4;
+***REMOVED***
+
+.cardbox {
+  position: absolute;
+  left: 413;
+  height: 81vh;
+  max-height: 520px;
+  width: 100vw;
+  max-width: 375px;
+  background-image: url("/twilight/img/Base.svg");
+  background-size: cover;
+  z-index: 2;
+  display: none;
+  top: 30%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+***REMOVED***
+
+
+.cardbox-hud {
+  display: block;
+  width: calc(7.0em * 0.7211);
+  height: 7.0em;
+  z-index: 2;
+  transform: translate(0%, 0%);
+
+  justify-self: center;
+***REMOVED***
+
+.cardbox-hud-status {
+  margin-top: 0;
+***REMOVED***
+
+
+.cardbox_menu {
+  position: absolute;
+  display: none;
+  top: 50%;
+  left: 50%;
+  width: 10%;
+  height: 10%;
+  z-index: 999999;
+  transform: translate(-50%, -50%);
+***REMOVED***
+
+.cardbox-exit {
+  text-align: center;
+  font-size: 2.9em;
+  color: white;
+  z-index: 9999999999;
+***REMOVED***
+
+#cardbox-exit-background {
+  position: absolute;
+  left: 85%;
+  width: 5vh;
+  height: 5vh;
+  border: 3px black solid;
+  border-radius: 100px;
+  top: -1%;
+  background: #eb2d2d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+***REMOVED***
+
+.cardbox_menu_btn {
+  text-align: center;
+  width: 72%;
+  font-size: 2em;
+  font-weight: bold;
+  background-color: #eb2d2d;
+  border: 2px solid #111311;
+  cursor: pointer;
+  padding: 10px 25px;
+  text-decoration: none;
+  color: white;
+  border-radius: 10px;
+  position: fixed;
+  left: 0%;
+  top: 100%;
+  z-index: 900009;
+***REMOVED***
+
+
+
+
+
+
+
+
+
+.card {
+  cursor: pointer;
+***REMOVED***
+
+body {
+ font-family: arial, helvetica, sans-serif;
+ font-size: 1.4em;
+ padding:0px;
+ margin:0px;
+***REMOVED***
+.link {
+ border-bottom: 1px dashed;
+***REMOVED***
+.dashed {
+ border-bottom: 1px dashed;
+***REMOVED***
+.cube {
+  height: 60px;
+***REMOVED***
+.player {
+  position: absolute;
+  width: 32px;
+  height: 44px;
+  /* too small -- double it */
+  width: 48px;
+  height: 66px;
+  top: 50px;
+  background-size: cover;
+  z-index: 9000;
+***REMOVED***
+.research_station {
+  position: absolute;
+  background-image: url("/img/Marker%20Research%20Station.png");
+  background-size: cover;
+  width: 45px;
+  height: 51px;
+  z-index: 1000;
+***REMOVED***
+.research_station1 {
+ display: none;
+***REMOVED***
+.research_station2 {
+ display: none;
+***REMOVED***
+.research_station3 {
+ display: none;
+***REMOVED***
+.research_station4 {
+ display: none;
+***REMOVED***
+.research_station5 {
+ display: none;
+***REMOVED***
+.research_station6 {
+ display: none;
+***REMOVED***
+.marker_infection_rate {
+  position: absolute;
+  background-image: url("/img/Marker%20Infection%20Rate.png");
+  background-size: cover;
+  width: 86px;
+  height: 84px;
+***REMOVED***
+.marker_outbreak {
+  position: absolute;
+  background-image: url("/img/Marker%20Outbreak.png");
+  background-size: cover;
+  width: 87px;
+  height: 88px;
+***REMOVED***
+.back_player_card {
+  position: absolute;
+  background-image: url("/img/Back%20Player%20Card.gif");
+  background-size: cover;
+  width: 243px;
+  height: 341px;
+***REMOVED***
+.player_discard_pile {
+  position: absolute;
+  background-image: url("/img/Back%20Player%20Card.gif");
+  background-size: cover;
+  width: 243px;
+  height: 341px;
+***REMOVED***
+.back_infection_card {
+  position: absolute;
+  background-image: url("/img/Back%20Infection.gif");
+  background-size: cover;
+  width: 340px;
+  height: 243px;
+***REMOVED***
+.infection_deck {
+  position: absolute;
+  background-size: cover;
+  width: 340px;
+  height: 243px;
+***REMOVED***
+.infection_discard_pile {
+  position: absolute;
+  background-image: url("/img/Back%20Infection.gif");
+  background-size: cover;
+  width: 340px;
+  height: 243px;
+***REMOVED***
+.gameboard {
+  position: absolute;
+  background-image: url("/img/Board.jpg");
+  background-size: cover;
+  width: 2602px;
+  height: 1812px;
+  //width: 1301px;
+  //height: 906px;
+***REMOVED***
+.city {
+  position: absolute;
+  cursor: pointer;
+  height: 100px;
+  width: 100px;
+  z-index: 10000;
+***REMOVED***
+
+
