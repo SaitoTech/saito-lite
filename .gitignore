@@ -34,12 +34,8 @@ web/saito/*.wasm
 
 mods/catan
 mods/catan/*
-mods/pandemic
-mods/pandemic/*
 mods/citysim
 mods/citysim/*
-mods/scrabble
-mods/scrabble/*
 mods/appstore/saitolib
 mods/appstore/saitolib/*
 mods/appstore/saitolib/saito/web/client.options
