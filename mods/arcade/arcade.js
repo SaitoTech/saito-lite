@@ -344,13 +344,30 @@ console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
       // acceptances
       if (txmsg.request == "accept") {
 
+console.log("ARCADE GETS ACCEPT MESSAGE: " + txmsg.request);
+
         for (let i = 0; i < arcade_self.app.options.games.length; i++) {
 	  if (arcade_self.app.options.games[i].id == txmsg.game_id) {
-	    if (arcade_self.app.options.games[i].initializing == 0) { return; }
+console.log("GAME NO LONGER INITIALIZING!");
+	    if (arcade_self.app.options.games[i].initializing == 0) { 
+
+	      //
+	      // is this old? exit
+	      //
+	      let currentTime = new Date().getTime();
+	      if ((currentTime-arcade_self.app.options.games[i].ts) > 2000) {
+console.log(currentTime + " ------- " + arcade_self.app.options.games[i].ts);
+	        return;
+	      }
+	    }
 	  }
         }
 
+console.log("... still here... receive accept request!");
         arcade_self.receiveAcceptRequest(blk, tx, conf, app);
+
+console.log("\n\n\nlaunching request to launch game... flag button, etc.");
+
 	arcade_self.launchGame(txmsg.game_id);
       }
 
@@ -624,7 +641,9 @@ console.log("INSERTING OPEN GAME: " + sql + " -- " + params);
       $player3 : unique_keys[2] || '',
       $player4 : unique_keys[3] || '',
     }
+console.log("about to await execut db");
     await this.app.storage.executeDatabase(sql, params, "arcade");
+console.log("done now...");
 
   }
   sendAcceptRequest(app, data) {

@@ -41,42 +41,32 @@ class Archive extends ModTemplate {
     //
     // only handle archive request
     //
-    if (req.request == "archive") {
+    if (req.request === "archive") {
 
-      switch(req.data.request) {
+console.log("archive hpr: " + req.request + " -- " + req.data.request);
 
-        case "delete":
-          this.deleteTransaction(req.data.tx, req.data.publickey, req.data.sig);
-          break;
-
-        case "save":
-          this.saveTransaction(req.data.tx);
-          break;
-
-        case "load":
-
-          let type = "";
-          let num  = 50;
-          if (req.data.num != "")  { num = req.data.num; }
-          if (req.data.type != "") { type = req.data.type; }
-          txs = await this.loadTransactions(req.data.publickey, req.data.sig, type, num);
-          response.err = "";
-          response.txs = txs;
-          mycallback(response);
-          break;
-
-        case "load_keys":
-          if (!req.data.keys) { return; }
-          txs = await this.loadTransactionsByKeys(req.data);
-
-          response.err = "";
-          response.txs = txs;
-
-          mycallback(response);
-          break;
-
-        default:
-          break;
+      if (req.data.request === "delete") {
+        this.deleteTransaction(req.data.tx, req.data.publickey, req.data.sig);
+      }
+      if (req.data.request === "save") {
+        this.saveTransaction(req.data.tx);
+      }
+      if (req.data.request === "load") {
+        let type = "";
+        let num  = 50;
+        if (req.data.num != "")  { num = req.data.num; }
+        if (req.data.type != "") { type = req.data.type; }
+        txs = await this.loadTransactions(req.data.publickey, req.data.sig, type, num);
+        response.err = "";
+        response.txs = txs;
+        mycallback(response);
+      }
+      if (req.data.request === "load_keys") {
+        if (!req.data.keys) { return; }
+        txs = await this.loadTransactionsByKeys(req.data);
+        response.err = "";
+        response.txs = txs;
+        mycallback(response);
       }
     }
   }
@@ -148,8 +138,13 @@ class Archive extends ModTemplate {
     }
 
     let rows = await this.app.storage.queryDatabase(sql, params, "archive");
-    let txs = rows.map(row => row.tx);
+    let txs = [];
 
+    if (rows != undefined) {
+      if (rows.length > 0) {
+        txs = rows.map(row => row.tx);
+      }
+    }
     return txs;
 
   }
@@ -206,7 +201,12 @@ class Archive extends ModTemplate {
 
     try {
       let rows = await this.app.storage.queryDatabase(sql, params, "archive");
-      let txs = rows.map(row => row.tx);
+      let txs = [];
+      if (rows != undefined) {
+	if (rows.length > 0) {
+          txs = rows.map(row => row.tx);
+        }
+      }
       return txs;
     } catch (err) {
       console.log(err);
