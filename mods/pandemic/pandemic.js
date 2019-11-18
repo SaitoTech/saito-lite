@@ -66,7 +66,7 @@ class Pandemic extends GameTemplate {
   
       for (let i = 0; i < deck.length; i++) {
         let city = pandemic_self.game.deck[1].cards[deck[i]];
-        display_message += `<div class="cardbox-hud" id="cardbox-hud-${i}"><img src="/pandemic/images/${city.img}" /></div>`;
+        display_message += `<div class="cardbox-hud" id="cardbox-hud-${i}"><img src="/pandemic/img/${city.img}" /></div>`;
       }
   
       display_message = `<div class="display-cards">${display_message}</div>`;
@@ -139,7 +139,7 @@ class Pandemic extends GameTemplate {
       //
       // Shuffle Infection Cards
       //
-      this.game.queue.push("EMAIL\tready");
+      this.game.queue.push("READY");
   
       //
       // Shuffle Player Cards
@@ -159,7 +159,7 @@ class Pandemic extends GameTemplate {
     //
     for (let i = 1; i <= this.game.players.length; i++) {
       let divname = ".player"+i+"_role_card";
-      let cssvalue = 'url("/pandemic/images/'+this.game.players[i-1].card+'")';
+      let cssvalue = 'url("/pandemic/img/'+this.game.players[i-1].card+'")';
       $(divname).css('background-image',cssvalue);
     }
   
@@ -189,7 +189,7 @@ class Pandemic extends GameTemplate {
       let msg = {};
       msg.extra = {};
       msg.extra.target = this.game.target;
-      this.handleGame(msg);
+      this.handleGameLoop(msg);
     }
   
   }
@@ -1343,7 +1343,7 @@ class Pandemic extends GameTemplate {
   //
   // Core Game Logic
   //
-  handleGame(msg=null) {
+  handleGameLoop(msg=null) {
   
     let pandemic_self = this;
   
@@ -2255,12 +2255,12 @@ class Pandemic extends GameTemplate {
   displayDecks() {
   
     if (this.game.state.infection_topcard != "") {
-      let imgurl = 'url("/pandemic/images/'+this.game.deck[0].cards[this.game.state.infection_topcard].img+'")';
+      let imgurl = 'url("/pandemic/img/'+this.game.deck[0].cards[this.game.state.infection_topcard].img+'")';
       $('.infection_discard_pile').css('background-image', imgurl);
     }
   
     if (this.game.state.player_topcard != "") {
-      let imgurl = 'url("/pandemic/images/'+this.game.deck[1].cards[this.game.state.player_topcard].img+'")';
+      let imgurl = 'url("/pandemic/img/'+this.game.deck[1].cards[this.game.state.player_topcard].img+'")';
       $('.player_discard_pile').css('background-image', imgurl);
     }
   
@@ -2288,7 +2288,7 @@ class Pandemic extends GameTemplate {
         }
   
         for (let z = 0; z < cubes; z++) {
-          cubedeath += '<img class="cube" src="/pandemic/images/cube_yellow.png" style="position:absolute;top:-'+this.scale(20)+'px;left:'+this.scale(starting_point)+'px;" />';
+          cubedeath += '<img class="cube" src="/pandemic/img/cube_yellow.png" style="position:absolute;top:-'+this.scale(20)+'px;left:'+this.scale(starting_point)+'px;" />';
           starting_point += cube_gap;
         }
       }
@@ -2308,7 +2308,7 @@ class Pandemic extends GameTemplate {
         }
   
         for (let z = 0; z < cubes; z++) {
-          cubedeath += '<img class="cube" src="/pandemic/images/cube_red.png" style="position:absolute;top:'+this.scale(starting_point)+'px;left:'+this.scale(80)+'px;" />';
+          cubedeath += '<img class="cube" src="/pandemic/img/cube_red.png" style="position:absolute;top:'+this.scale(starting_point)+'px;left:'+this.scale(80)+'px;" />';
           starting_point += cube_gap;
         }
       }
@@ -2329,7 +2329,7 @@ class Pandemic extends GameTemplate {
         }
   
         for (let z = 0; z < cubes; z++) {
-          cubedeath += '<img class="cube" src="/pandemic/images/cube_blue.png" style="position:absolute;top:'+this.scale(80)+'px;left:'+this.scale(starting_point)+'px;" />';
+          cubedeath += '<img class="cube" src="/pandemic/img/cube_blue.png" style="position:absolute;top:'+this.scale(80)+'px;left:'+this.scale(starting_point)+'px;" />';
           starting_point += cube_gap;
         }
       }
@@ -2349,7 +2349,7 @@ class Pandemic extends GameTemplate {
         }
   
         for (let z = 0; z < cubes; z++) {
-          cubedeath += '<img class="cube" src="/pandemic/images/cube_black.png" style="position:absolute;top:'+this.scale(starting_point)+'px;left:-'+this.scale(20)+'px;" />';
+          cubedeath += '<img class="cube" src="/pandemic/img/cube_black.png" style="position:absolute;top:'+this.scale(starting_point)+'px;left:-'+this.scale(20)+'px;" />';
           starting_point += cube_gap;
         }
       }
@@ -2373,16 +2373,16 @@ class Pandemic extends GameTemplate {
     $('.vial_black').css('left', this.scale(1182)+"px");
   
     if (this.game.state.yellow_cure == 1) {
-      $('.vial_yellow').css('background-image','url("/pandemic/images/Vial%20Yellow%20Eradicated.png")');
+      $('.vial_yellow').css('background-image','url("/pandemic/img/Vial%20Yellow%20Eradicated.png")');
     }
     if (this.game.state.blue_cure == 1) {
-      $('.vial_blue').css('background-image','url("/pandemic/images/Vial%20Blue%20Eradicated.png")');
+      $('.vial_blue').css('background-image','url("/pandemic/img/Vial%20Blue%20Eradicated.png")');
     }
     if (this.game.state.black_cure == 1) {
-      $('.vial_black').css('background-image','url("/pandemic/images/Vial%20Black%20Eradicated.png")');
+      $('.vial_black').css('background-image','url("/pandemic/img/Vial%20Black%20Eradicated.png")');
     }
     if (this.game.state.red_cure == 1) {
-      $('.vial_red').css('background-image','url("/pandemic/images/Vial%20Red%20Eradicated.png")');
+      $('.vial_red').css('background-image','url("/pandemic/img/Vial%20Red%20Eradicated.png")');
     }
   
   }
@@ -2390,7 +2390,7 @@ class Pandemic extends GameTemplate {
   
     for (let i = 0; i < this.game.players.length; i++) {
     
-      let imgurl = 'url("/pandemic/images/'+this.game.players[i].pawn+'")';
+      let imgurl = 'url("/pandemic/img/'+this.game.players[i].pawn+'")';
       let divname = ".player"+(i+1);
   
       let city = this.game.players[i].city;
@@ -2625,7 +2625,7 @@ class Pandemic extends GameTemplate {
     if (cardtype == "city") { c = this.game.deck[1].cards[cardname]; }
     if (cardtype == "infection") { c = this.game.deck[0].cards[cardname]; }
     
-    var html = `<img class="cardimg" src="/pandemic/images/${c.img}" />`;
+    var html = `<img class="cardimg" src="/pandemic/img/${c.img}" />`;
     return html;
   
   }
