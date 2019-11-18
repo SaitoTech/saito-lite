@@ -18,6 +18,9 @@ module.exports = {
         /\.html$/,
         /\.css$/,
         /\.sql$/,
+        /\.md$/,
+        /\.pdf$/,
+        /\.sh$/,
         /\/web\//,
         /\/www\//
     ],

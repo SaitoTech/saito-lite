@@ -35,12 +35,12 @@ module.exports = EmailDetailHeader = {
 
     document.getElementById('email-detail-reply')
             .addEventListener('click', (e) => {
-              let { to } = data.parentmod.selected_email.transaction;
+              let { from } = data.parentmod.selected_email.transaction;
               data.parentmod.previous_state = data.parentmod.active;
               data.parentmod.active = "email_form";
               data.parentmod.main.render(app, data);
               data.parentmod.main.attachEvents(app, data);
-              document.getElementById('email-to-address').value = to[0].add;
+              document.getElementById('email-to-address').value = from[0].add;
             });
 
     document.getElementById('email-detail-forward')

@@ -10,15 +10,18 @@ module.exports = EmailList = {
       document.querySelector('.email-body').innerHTML = EmailListTemplate();
 
       data.parentmod.emails[data.parentmod.emails.active].forEach(tx => {
-        document.querySelector('.email-list').innerHTML += EmailListRowTemplate(tx);
+        document.querySelector('.email-list').innerHTML +=
+            EmailListRowTemplate(tx, data.parentmod.addrController.returnAddressHTML(tx.transaction.from[0].add));
       });
 
     },
 
     attachEvents(app, data) {
 
+        data.parentmod.addrController.attachEvents();
+
         Array.from(document.getElementsByClassName('email-message')).forEach(message => {
-            message.addEventListener('click', (e) => {
+            message.onclick = (e) => {
                 if (e.srcElement.nodeName == "INPUT") { return; }
 
                 let sig = e.currentTarget.id;
@@ -34,7 +37,7 @@ module.exports = EmailList = {
                 data.parentmod.main.render(app, data);
                 data.parentmod.main.attachEvents(app, data);
 
-            });
+            };
         });
 
     }
