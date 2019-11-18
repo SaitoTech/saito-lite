@@ -3,32 +3,25 @@ module.exports = HospitalConfirmAppointmentTemplate = () => {
   <link rel="stylesheet" href="/hospital/css/email-appspace.css">
 
   <h3>Confirm Appointment</h3>
-
+<div class="confirm-appointment-box">
   <div class="appointment-info">
-    You have selected an appointment at:
-
-    <p></p>
-
-    Sister of Mercy Childrens' Hospital
-    9:30 AM on Wednesday, January 2nd (tomorrow)
-    5729 Silversmith Road, Petaluma, CA
-
-    581-403-2938
-
+      <p>sister of Mercy Childrens' Hospital</p>
+      <p>9:30 AM on Wednesday</p>
+      <p>2th January 2019</p>
+      <p>Silversmith Road,Petaluma,CA 58-403-2938</div>
     <h4>Please confirm your 
-
 
     N.B.: Clicking submit makes the booking request into the system. If you have
     used this system before, bookings are usually automatic -- you will receive
-    confirmation within a few minutes.
+    confirmation within a few minutes.</h4>
 
-
-    <b>Is this information correct?</by>    
-
-    <button class="reselect">resel</button>
-    <button class="confirm super">confirm</button>
-
-  </div>
-
+   <h4>Is this information correct?</h4>
+   <div class="confirm-btn-box">
+     <button class="reset sub"><i class="fas fa-redo"></i>Reset</button>
+     <button class="confirm sub" id="confirm-btn"><i class="far fa-calendar-check"></i>Confirm</button>
+   </div>
+      
+</div>
+  
     `;
 }
