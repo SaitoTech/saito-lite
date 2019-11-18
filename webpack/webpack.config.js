@@ -18,6 +18,9 @@ const path = require('path');
         /\.html$/,
         /\.css$/,
         /\.sql$/,
+        /\.md$/,
+        /\.pdf$/,
+        /\.sh$/,
         /\/web\//,
         /\/www\//
     ],

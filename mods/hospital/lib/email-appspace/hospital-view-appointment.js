@@ -11,13 +11,19 @@ module.exports = HospitalViewAppointment = {
 
     attachEvents(app, data) {
 
-      document.getElementById('appointment')
-        .addEventListener('click', (e) => {
 
-	  HospitalViewAppointmentQRCode.render(app, data);
-	  HospitalViewAppointmentQRCode.attachEvents(app, data);
+      Array.from(document.getElementsByClassName('appointment')).forEach(appointment => {
+        appointment.addEventListener('click', (e) => {
 
-  ***REMOVED***)
+            alert("CLICK!");
+
+          HospitalAppointmentQRCode.render(app, data);
+          HospitalAppointmentQRCode.attachEvents(app, data);
+
+    ***REMOVED***);
+  ***REMOVED***);
+
+
 ***REMOVED***
 
 ***REMOVED***

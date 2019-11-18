@@ -102,6 +102,30 @@ select:hover{
     background: var(--saito-red);
     color: #ffffff;
 ***REMOVED***
+.view-appointments-box li{
+    max-width: 600px;
+    list-style-type:none;
+    padding:10px;
+    font-size: 1em;
+    height: auto;
+    border: 1px #eee solid;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.05);
+    margin-bottom: 15px;
+***REMOVED***
+.appointment-hospital-name{
+    font-size: 1.2em;
+    font-weight: bolder;
+***REMOVED***
+.qrcode-appointment{
+    width:500px;  
+    padding:10px;
+    margin-top:15px;
+***REMOVED***
 
-
+#qrcode-appointment-info{
+    margin-top: 15px;
+    padding: 10px;
+    border: 1px #eee solid;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.05);
+***REMOVED***
 

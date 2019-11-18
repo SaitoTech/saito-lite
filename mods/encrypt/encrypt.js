@@ -60,23 +60,23 @@ class Encrypt extends ModTemplate {
   //
   // recipients can be a string (single address) or an array (multiple addresses)
   //
-  initiate_key_exchange(recipients) {    
+  initiate_key_exchange(recipients) {
 
     let recipient = "";
     let parties_to_exchange = 2;
 
-    if (recipients.isArray()) {
+    if (Array.isArray(recipients)) {
       if (recipients.length > 0) {
         recipients.sort();
         recipient = recipients[0]; 
 	parties_to_exchange = recipients.length;
   ***REMOVED***
       else {
-	recipient = recipients; 
+	recipient = recipients;
 	parties_to_exchange = 2;
   ***REMOVED***
 ***REMOVED***
-  
+
 
     if (recipient == "") { return; ***REMOVED***
 
