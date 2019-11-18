@@ -69,17 +69,38 @@ select:hover{
     float: right;
     display: none;
 ***REMOVED***
-.appointment-info-box {
-    width:auto;
+.confirm-appointment-box{
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+***REMOVED***
+.appointment-info{
+    padding-left: 8px;
+    font-size: 1em;
     height:auto;
-    padding:12px;
     border:1px #eee solid;
-    display: block;
     box-shadow:1px 1px 1px 1px rgba(0, 0, 0, 0.05);
+    margin-bottom: 15px;
 ***REMOVED***
 .confirmInfo{
     margin-top: 15px;
     margin-bottom: 15px;
+***REMOVED***
+.confirm-btn-box{
+    margin-top: 15px;
+    align-self: center;
+***REMOVED***
+.reset,.confirm{
+    display: inline-block;
+***REMOVED***
+#confirm-btn{
+    border: 1px solid var(--saito-red);
+    color: var(--saito-red);
+***REMOVED***
+#confirm-btn:hover{
+    text-shadow: #ffffff 1px 0;
+    background: var(--saito-red);
+    color: #ffffff;
 ***REMOVED***
 
 
