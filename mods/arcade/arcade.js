@@ -155,36 +155,6 @@ console.log("ERROR 418019: error fetching game for observer mode");
 	this.addGameToOpenList(z);
   ***REMOVED***
 ***REMOVED***
-
-/****
-    // fake games
-    for (let i=0; i < 5; i++) {
-      this.games.unshift(
-        new saito.transaction({
-          to: [],
-          from: [{ add: app.wallet.returnPublicKey() ***REMOVED***],
-          msg: {
-            game: 'Twilight Struggle',
-            game_id: app.crypto.hash(`${new Date().getTime()***REMOVED***`),
-            options: ['US +2', 'ES'],
-            options_html: `
-              <div class="game-options-html">
-                <div class="pill">US +2</div>
-                <div class="pill">ES</div>
-              </div>
-            `
-      ***REMOVED***,
-          sig: app.crypto.hash(`${new Date().getTime()***REMOVED***`)
-    ***REMOVED***)
-      )
-
-      this.addGameToObserverList({
-        game_id : app.crypto.hash(`${new Date().getTime()***REMOVED***`),
-        publickey : app.crypto.hash(`${new Date().getTime()***REMOVED***`)
-  ***REMOVED***);
-***REMOVED***
-****/
-
   ***REMOVED***
 
 
