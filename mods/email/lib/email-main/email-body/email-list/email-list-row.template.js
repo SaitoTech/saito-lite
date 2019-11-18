@@ -1,6 +1,6 @@
 const datetimeFormatter = require('../../../../../../lib/helpers/datetime_formatter');
 
-module.exports = EmailListRowTemplate = (tx) => {
+module.exports = EmailListRowTemplate = (tx, addr_html) => {
 
   let message 	= tx.transaction.msg.message;
   let title   	= tx.transaction.msg.title;
@@ -16,7 +16,7 @@ module.exports = EmailListRowTemplate = (tx) => {
   <div class="email-message" id="${sig***REMOVED***">
       <input class="email-selected" type="checkbox">
       <div class="email-message-content"">
-          <div class="email-message-from">${from[0].add***REMOVED***</div>
+          <div class="email-message-from">${addr_html***REMOVED***</div>
           <div class="email-message-title">${title***REMOVED***</div>
           <div class="email-message-message">${message***REMOVED***</div>
       </div>
