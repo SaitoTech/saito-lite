@@ -4,6 +4,8 @@ const Header = require('../../lib/ui/header/header');
 const EmailMain = require('./lib/email-main/email-main');
 const EmailSidebar = require('./lib/email-sidebar/email-sidebar');
 
+const AddressController = require('../../lib/ui/menu/address-controller');
+
 
 class Email extends ModTemplate {
 
@@ -94,6 +96,9 @@ class Email extends ModTemplate {
     for (let i = 0; i < x.length; i++) {
       this.mods.push(x[i]);
     }
+
+    // add our address controller
+    this.addrController = new AddressController(app, this.uidata, this.returnMenuItems());
 
     this.uidata.mods	  = this.mods;
     this.uidata.parentmod = this;
@@ -195,6 +200,23 @@ class Email extends ModTemplate {
       }
     }
 
+  }
+
+  returnMenuItems() {
+    return {
+      'send-email': {
+        name: 'Send Email',
+        callback: (address) => {
+          this.previous_state = this.active;
+          this.active = "email_form";
+
+          this.main.render(this.app, this.uidata);
+          this.main.attachEvents(this.app, this.uidata);
+
+          document.getElementById('email-to-address').value = address;
+        }
+      }
+    }
   }
 
   getTokens() {
