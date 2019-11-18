@@ -5,6 +5,7 @@ const Big = require('big.js');
 
 
 class Faucet extends ModTemplate {
+
   constructor(app) {
     super(app);
 
