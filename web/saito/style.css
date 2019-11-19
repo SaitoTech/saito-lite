@@ -383,6 +383,8 @@ label.treated {
 
 .header-dropdown {
     position: absolute;
+    right: 0;
+    top: 50px;
     right: -200px;
     top: 90px;
     background: white;
@@ -677,3 +679,4 @@ label.treated {
 .show-right-sidebar {
     right: 0 !important;
 }
+
