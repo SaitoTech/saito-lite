@@ -421,6 +421,7 @@ label.treated {
     overflow: hidden;
     right: 8px;
     top: 82px;
+}
 /*
 #modules-dropdown {
     right: 2.7em;
@@ -441,7 +442,7 @@ label.treated {
     border-color: var(--saito-red);
     color: var(--saito-red);
 }
-  
+
 .personal-info{
     display: block;
 }
