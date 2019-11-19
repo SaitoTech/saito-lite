@@ -138,10 +138,10 @@ console.log("ERROR 418019: error fetching game for observer mode");
     //
     // add my own games (as fake txs)
     //
-    if (this.app.options.games != null) {
+    if (this.app.options.games != undefined) {
       for (let i = 0; i < this.app.options.games.length; i++) {
 	let z = new saito.transaction();
-        if (this.app.options.games[i].players == null) {
+        if (this.app.options.games[i].players == undefined) {
 	  z.transaction.from.push(new saito.slip(app.wallet.returnPublicKey()));
 	  z.transaction.to.push(new saito.slip(app.wallet.returnPublicKey()));
         } else {
