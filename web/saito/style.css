@@ -1,7 +1,5 @@
 /* 
-
 Generic Style Settings for Modules in the Saito App Suite
-
 */
 
 /* Visuelt fonts */
@@ -61,11 +59,6 @@ html[data-theme='dark'] {
     --text-color-normal: var(--saito-skyline-grey);
     --backround-general: var(--saito-cyber-black);
     --text-color-highlight: var(--saito-red);
-***REMOVED***
-
-html, body {
-    /* position: fixed;
-    overflow: hidden; */
 ***REMOVED***
 
 p {
@@ -169,7 +162,6 @@ fieldset {
     border: 1px solid var(--saito-cyber-black-wash);
     padding: 1em;
     box-shadow: 0px 0px 3px 1px rgba(220, 220, 220, 0.75);
-***REMOVED***
 ***REMOVED***
 
 .button-secondary {
@@ -500,7 +492,8 @@ label.treated {
     font-size: 14px;
     text-align: center;
     vertical-align: middle;
-    color: #5f6368 font-size: 14px;
+    color: #5f6368;
+     font-size: 14px;
 ***REMOVED***
 
 .header-dropdown-modules {
