@@ -387,10 +387,8 @@ label.treated {
     position: absolute;
     right: 0;
     top: 50px;
-  /****
     right: -200px;
     top: 90px;
-****/
     background: white;
     color: var(--text-color-normal);
     padding: 15px;
@@ -406,11 +404,7 @@ label.treated {
     transition: all 500ms ease;
 }
 
-.show-right-sidebar {
-    right: 0;
-}
-
-#settings-dropdown{
+#settings-dropdown {
     width: 354px;
     background-color: #fff;
     border: 1px solid #ccc;
@@ -419,9 +413,10 @@ label.treated {
     box-shadow: 0 2px 10px rgba(0,0,0,.2);
     position: absolute;
     overflow: hidden;
-    right: 8px;
+    right: -400px;
     top: 82px;
 }
+
 /*
 #modules-dropdown {
     right: 2.7em;
@@ -681,4 +676,8 @@ label.treated {
 
 .jsontree_node {
     list-style: none;
+}
+
+.show-right-sidebar {
+    right: 0 !important;
 }
