@@ -18,6 +18,27 @@ console.log("PLAYERS ARRAY: " + players_array);
         document.querySelector(".arcade-sidebar-active-games-body").innerHTML
           += ObserverRow(data.arcade.observer[i], players, app.crypto.stringToBase64(JSON.stringify(data.arcade.observer[i])));
   ***REMOVED***
+
+
+      //
+      //
+      //
+      data.arcade.mods.forEach(mod => {
+        let gameobj = mod.respondTo("arcade-sidebar");
+        if (gameobj != null) {
+
+          let modname = "arcade-sidebar-"+mod.name.toLowerCase();
+          let x = document.querySelector(("."+modname));
+
+          if (x == null || x == undefined) {
+            document.querySelector(".arcade-right-sidebar").innerHTML += `<div class="${modname***REMOVED***"></div>`;
+      ***REMOVED***
+
+          gameobj.render(app, data);
+          gameobj.attachEvents(app, data);
+    ***REMOVED***
+  ***REMOVED***);
+
 ***REMOVED***,
 
     attachEvents(app, data) {
