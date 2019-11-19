@@ -284,10 +284,6 @@ body {
   cursor: pointer;
 }
 
-
-
-
-
 .arcade-navigator, .arcade-apps {
   list-style: none;
   list-style-type: none;
@@ -300,9 +296,15 @@ body {
   border-bottom: 1px solid grey;
 }
 
+.arcade-navigator-item, .arcade-apps-item {
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  padding: 5px 0 2px 10px;
+}
 
-
-
+.arcade-apps-item:hover, .arcade-navigator-item:hover {
+  background-color: var(--saito-skyline-grey);
+}
 
 @media only screen and (max-width: 600px) {
   .main {
