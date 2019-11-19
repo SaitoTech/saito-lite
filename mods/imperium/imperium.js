@@ -5939,6 +5939,7 @@ class Imperium extends GameTemplate {
     let sys = this.returnSystemAndPlanets(sector);
   
     let divsector = '#hex_space_'+sector;
+    let fleet_color = '';
     let bg = '';
     let bgsize = '';
   
@@ -5992,7 +5993,7 @@ class Imperium extends GameTemplate {
         ////////////////////
         // SPACE GRAPHICS //
         ////////////////////
-        let fleet_color = "color"+player;
+        fleet_color = "color"+player;
         
         if (fighters > 0 ) { space_frames.push("white_space_fighter.png"); }
         if (carriers > 0 ) { space_frames.push("white_space_carrier.png"); }
@@ -6079,10 +6080,40 @@ class Imperium extends GameTemplate {
     divsector = '#hex_ground_' + sector;
     $(divsector).html(html);
   
+
+    //
+    // display planet ownership
+    //
+    let ground_frames = [];
+    if (sys.p.length == 1) {
+      ground_frames.push("white_planet_center.png");
+    }
+    if (sys.p.length == 2) {
+      ground_frames.push("white_planet_left_top.png");
+      ground_frames.push("white_planet_right_bottom.png");
+    }
   
+    /////////////////////
+    // PLANET GRAPHICS //
+    /////////////////////
+    bg = '';
+    bgsize = '';
+    for (let i = 0; i < ground_frames.length; i++) {
+      bg += 'url(/imperium/img/frame/'+ground_frames[i]+')';
+      bgsize += 'contain';
+      if (i < ground_frames.length-1) { 
+        bg += ','; 
+  	bgsize += ','; 
+      }
+    }
+
+console.log("BACKGROUND IMAGE: " + bg);
+console.log("BACKGROUND SIZE:  " + bgsize);
+    $(divsector).css('background-image', bg);
+    $(divsector).css('background-size', bgsize);
+
   };
   
-
 
 
 
