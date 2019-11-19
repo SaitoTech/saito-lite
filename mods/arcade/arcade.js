@@ -141,11 +141,16 @@ console.log("ERROR 418019: error fetching game for observer mode");
     if (this.app.options.games != undefined) {
       for (let i = 0; i < this.app.options.games.length; i++) {
 	let z = new saito.transaction();
-        for (let j = 0; j < this.app.options.games[i].players.length; j++) {
-	  z.transaction.to.push(new saito.slip(this.app.options.games[i].players[j]));
-    ***REMOVED***
-        for (let j = 0; j < this.app.options.games[i].players.length; j++) {
-	  z.transaction.from.push(new saito.slip(this.app.options.games[i].players[j]));
+        if (this.app.options.games[i].players == undefined) {
+	  z.transaction.from.push(new saito.slip(app.wallet.returnPublicKey()));
+	  z.transaction.to.push(new saito.slip(app.wallet.returnPublicKey()));
+    ***REMOVED*** else {
+          for (let j = 0; j < this.app.options.games[i].players.length; j++) {
+	    z.transaction.to.push(new saito.slip(this.app.options.games[i].players[j]));
+      ***REMOVED***
+          for (let j = 0; j < this.app.options.games[i].players.length; j++) {
+	    z.transaction.from.push(new saito.slip(this.app.options.games[i].players[j]));
+      ***REMOVED***
     ***REMOVED***
 	z.transaction.sig          = this.app.options.games[i].id;
 	z.transaction.msg.game_id  = this.app.options.games[i].id;

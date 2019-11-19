@@ -62,6 +62,7 @@
 /** HUD HEADER **/
 
 .hud-header {
+  position: absolute;
   display: grid;
   grid-template-columns: 100px auto;
   width: 100%;
