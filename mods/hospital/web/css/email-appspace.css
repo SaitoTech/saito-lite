@@ -27,7 +27,7 @@
 }
 .hospital{
     display: block;
-    width:300px;
+    width:400px;
     height:auto;
     border:1px #eee solid;
     box-shadow:1px 1px 1px 1px rgba(0, 0, 0, 0.05);
@@ -36,18 +36,18 @@
     margin-top: 1em;
 }
 .hospital-name{
-    font-size: 1em;
+    font-size: 18px;
     font-weight: bolder;
-    margin-bottom: 2px;
+    margin-bottom: 5px;
 }
-.hospital-address{
-    font-size: 0.8em;
-    margin-bottom:6px;
+.hospital-address,.hospital-select-time{
+    font-size: 16px;
+    margin-bottom:5px;
 }
 .hospital-select-time{
     width: 100%;
     font-weight:bolder;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
 }
 select {
     background-color: white;
@@ -70,7 +70,7 @@ select:hover{
     display: none;
 }
 .confirm-appointment-box{
-    max-width: 600px;
+    max-width: 500px;
     display: flex;
     flex-direction: column;
 }
@@ -102,30 +102,14 @@ select:hover{
     background: var(--saito-red);
     color: #ffffff;
 }
-.view-appointments-box li{
-    max-width: 600px;
-    list-style-type:none;
+.hospital-appointments-box li{
+    list-style: none;
+    max-width: 500px;
     padding:10px;
     font-size: 1em;
     height: auto;
     border: 1px #eee solid;
     box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.05);
-    margin-bottom: 15px;
-}
-.appointment-hospital-name{
-    font-size: 1.2em;
-    font-weight: bolder;
-}
-.qrcode-appointment{
-    width:500px;  
-    padding:10px;
-    margin-top:15px;
-}
-
-#qrcode-appointment-info{
-    margin-top: 15px;
-    padding: 10px;
-    border: 1px #eee solid;
-    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.05);
+    margin: 15px 0;
 }
 
