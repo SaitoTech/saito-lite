@@ -105,14 +105,6 @@ console.log("CALLBACK SENT FROM RELAY sendRelayMessage" + JSON.stringify(res));
 
       let relay_self = app.modules.returnModule("Relay");
 
-console.log("relay mod handle peer request: " + message.request);
-
-      if (message.request === "relay test alert") {
-console.log("\n\n\nHERE IT IS");
-//alert(message.data);
-      }
-
-
       if (message.request === "relay peer message") {
 
         //
@@ -145,7 +137,7 @@ console.log("RELAY 6");
 console.log("EXECUTING RELAYED MSG!");
 
           app.modules.handlePeerRequest(txmsg, peer, mycallback);
-          mycallback({ err : "" , success : 1 });
+          if (mycallback != null) { mycallback({ err : "" , success : 1 }); }
 
         } else {
 
@@ -160,15 +152,19 @@ console.log("PEER: " + app.network.peers[i].peer.publickey);
             if (tx2.isTo(app.network.peers[i].peer.publickey)) {
               peer_found = 1;
               app.network.peers[i].sendRequest("relay peer message", tx2.transaction.msg, function() {
-                mycallback({ err : "" , success : 1 });
+	        if (mycallback != null) {
+                  mycallback({ err : "" , success : 1 });
+		}
               });
             } else {
 console.log("TX2 is not for this peer!");
 	    }
           }
           if (peer_found == 0) {
-            mycallback({ err : "ERROR 141423: peer not found in relay module" , success : 0 });
-            }
+	    if (mycallback != null) {
+              mycallback({ err : "ERROR 141423: peer not found in relay module" , success : 0 });
+	    }
+          }
         }
       }
     } catch (err) {
