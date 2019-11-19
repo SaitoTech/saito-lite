@@ -32,9 +32,10 @@
 
   display: grid;
   grid-template-areas:
-    "hud-header"
-    "hud-body";
+    "hud-header hud-header"
+    "hud-menu hud-body";
   grid-template-rows: 40px auto;
+  grid-template-columns: 100px auto;
   font-family: visuelt-light;
 
   position: fixed;
@@ -46,9 +47,9 @@
   /* color: #eee; */
   font-size: 1.2rem;
 
-  height: 320px;
-  width: 640px;
-  min-width: 640px;
+  height: 420px;
+  width: 760px;
+  min-width: 760px;
   max-width: 9.1em;
 
   border-bottom: 0px;
@@ -62,6 +63,7 @@
 /** HUD HEADER **/
 
 .hud-header {
+  grid-area: hud-header;
   display: grid;
   grid-template-columns: 100px auto;
   width: 100%;
@@ -80,12 +82,14 @@
 /** HUD BODY **/
 
 .hud-body {
+  grid-area: hud-body;
   display: grid;
-  grid-template-areas: "hud-menu status log";
-  grid-template-columns: 100px 50% auto;
+  grid-template-columns: auto 200px;
+  height: 380px;
 ***REMOVED***
 
 .hud-menu {
+  grid-area: hud-menu;
   background-color: whitesmoke;
   border-right: 1px solid var(--saito-skyline-grey);
 ***REMOVED***
@@ -95,12 +99,14 @@
   background-color: whitesmoke;
   width: unset !important;
   border-right: 1px solid var(--saito-skyline-grey);
+  overflow-y: scroll;
 ***REMOVED***
 
 .log {
   color: black;
   background-color: whitesmoke;
-  width: unset !important;
+  /* width: unset !important; */
+  overflow-y: scroll;
 ***REMOVED***
 
 /** HUD SIDEBAR **/
@@ -153,12 +159,187 @@
 @media screen and (orientation:landscape) and (max-height: 950px) {
 ***REMOVED***
 @media screen and (orientation:portrait) and (max-width: 700px) {
+  .hud {
+    /* position: absolute; */
+    bottom: 0;
+    width: 100%;
+    /* grid-template-areas: "hud-header" "hud-content"; */
+    grid-template-areas: "hud-menu hud-header"
+    "hud-content hud-content";
+    /* grid-template-columns: 1fr; */
+    /* grid-template-rows: 2vh auto; */
+    grid-template-columns: auto 2em;
+    grid-template-rows: 8vh auto;
+    /* font-size: 1.3em; */
+    max-width: unset;
+    min-width: unset;
+
+    height: 50vh;
+  ***REMOVED***
+
+  .hud-header {
+    grid-area: hud-header;
+    flex-flow: row;
+    flex-direction: row-reverse;
+    height: unset;
+  ***REMOVED***
+
+
+  .hud-menu {
+    grid-area: hud-menu;
+    border-bottom: 1px solid var(--saito-skyline-grey);
+  ***REMOVED***
+
+  .hud-body {
+    grid-area: hud-content;
+    grid-template-rows: auto 1em;
+    grid-template-columns: unset;
+    grid-template-areas: unset;
+    height: unset;
+    overflow: unset;
+  ***REMOVED***
+
+  /* .dragbar {
+    width: 12%;
+  ***REMOVED*** */
+
+  .hud-menu ul {
+    list-style-type: none;
+    display: flex;
+  ***REMOVED***
+
+  .hud-menu ul li {
+    float: left;
+    height: 100%;
+    width: 25%;
+    line-height: 58px;
+    font-size: 1em;
+    height: 100%;
+  ***REMOVED***
+
+  .hud-menu a {
+    padding-left: 15px;
+    padding-right: 15px;
+    line-height: 7.5vh;
+    /* line-height: 58px; */
+  ***REMOVED***
+
+  .log {
+    height: 1em;
+    /* bottom: 0; */
+    padding: 0.2rem;
+    /* position: fixed; */
+    background: black;
+    overflow: hidden;
+    margin-bottom: 0px;
+    width: 100%;
+  ***REMOVED***
 ***REMOVED***
 @media screen and (orientation:landscape) and (max-height: 700px) {
 ***REMOVED***
 @media screen and (max-width: 700px) {
 ***REMOVED***
 @media screen and (orientation: landscape) and (max-height: 700px) {
+  .hud {
+    grid-template-areas: "hud-header hud-menu hud-content";
+    grid-template-columns: 2em 5em auto;
+    grid-template-rows: unset;
+    min-width: unset;
+    max-width: unset;
+    width: 50vw;
+    height: 100vh;
+    right: -25vw;
+    left: unset;
+    cursor: unset;
+    max-height: unset;
+  ***REMOVED***
+
+  .hud-header {
+    grid-template-rows: 50px auto;
+    grid-template-columns: unset;
+    width: unset;
+    height: 100%;
+    border-right: 1px solid grey;
+  ***REMOVED***
+
+  .hud-menu ul {
+    overflow-y: scroll;
+    margin-bottom: 15px;
+  ***REMOVED***
+
+  .hud-body {
+    height: 100%;
+    grid-template-columns: unset;
+    grid-template-areas: unset;
+  ***REMOVED***
+
+  .status {
+    /* margin-bottom: 23px; */
+    height: 100vh;
+  ***REMOVED***
+
+  .controls {
+    width: 9%;
+  ***REMOVED***
+
+  #sizer {
+    padding-left: 1.7em;
+    padding-right: 2em;
+    padding-top: 0.8em;
+  ***REMOVED***
+
+  .mail_chat_popup {
+    display: none;
+  ***REMOVED***
+
+  .log {
+    height: 15px;
+    bottom: 0;
+    padding: 0.2rem;
+    position: fixed;
+    background: black;
+    overflow: hidden;
+    margin-bottom: 0px;
+    width: 100%;
+    z-index: 1000;
+  ***REMOVED***
 ***REMOVED***
 
 
+.hud {
+  scrollbar-face-color: #868686;
+  scrollbar-base-color: #868686;
+  scrollbar-3dlight-color: #868686;
+  scrollbar-highlight-color: #868686;
+  scrollbar-track-color: #646464;
+  scrollbar-arrow-color: #646464;
+  scrollbar-shadow-color: #868686;
+  /* scrollbar-dark-shadow-color: #868686; */
+***REMOVED***
+
+::-webkit-scrollbar { width: 8px; height: 3px;***REMOVED***
+::-webkit-scrollbar-button {  background-color: #868686; ***REMOVED***
+::-webkit-scrollbar-track {  background-color: #868686;***REMOVED***
+::-webkit-scrollbar-track-piece { background-color: #ddd;***REMOVED***
+::-webkit-scrollbar-thumb { height: 50px; background-color: #868686; border-radius: 3px;***REMOVED***
+::-webkit-scrollbar-corner { background-color: #868686;***REMOVED***
+::-webkit-resizer { background-color: #ddd;***REMOVED***
+
+@media screen and (max-width: 700px) {
+  ::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  ***REMOVED***
+***REMOVED***
+
+@media screen and (orientation: landscape) and (max-height: 700px) {
+  ::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  ***REMOVED***
+***REMOVED***
+
+/** USED WHEN TOGGLING **/
+.hud-hidden {
+  height: 8vh;
+***REMOVED***

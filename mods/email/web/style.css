@@ -206,6 +206,7 @@ body {
 @media only screen and (max-width: 900px) {
   .email-message-content {
     grid-template-columns: 300px;
+    grid-gap: 0.5em;
   ***REMOVED***
 ***REMOVED***
 
@@ -261,20 +262,16 @@ body {
 .email-navigator-item, .email-apps-item {
   cursor: pointer;
   border-bottom: 1px solid transparent;
-  padding-left: 2px;
-  padding-top: 5px;
+  padding: 5px 0 2px 10px;
+***REMOVED***
+
+.email-apps-item:hover, .email-navigator-item:hover {
+  background-color: var(--saito-skyline-grey);
 ***REMOVED***
 
 .active-navigator-item {
   color: var(--saito-red);
   font-weight: bold;
-***REMOVED***
-
-.email-navigator-item:hover, .email-apps-item:hover {
-  /*background-color: var(--saito-red-wash);
-  */
-  border-bottom: 1px solid var(--saito-red-wash);
-  border-radius: 0px;
 ***REMOVED***
 
 .email-loader {
