@@ -333,6 +333,7 @@ label.treated {
 
 #alert-buttons {
     float: right;
+    margin: 0 0 0 1em;
 ***REMOVED***
 
 #alert-box button {
