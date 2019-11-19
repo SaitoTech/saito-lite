@@ -109,7 +109,7 @@ button, .button, .file-label {
     letter-spacing: 1px;
     transition: transform .25s;
     margin: 0.2em 0;
-***REMOVED*** 
+***REMOVED***
 
 button:active, .button:active {
     transform: scale(.96);
