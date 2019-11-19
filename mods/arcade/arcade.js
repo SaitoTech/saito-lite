@@ -138,14 +138,19 @@ console.log("ERROR 418019: error fetching game for observer mode");
     //
     // add my own games (as fake txs)
     //
-    if (this.app.options.games != undefined) {
+    if (this.app.options.games != null) {
       for (let i = 0; i < this.app.options.games.length; i++) {
 	let z = new saito.transaction();
-        for (let j = 0; j < this.app.options.games[i].players.length; j++) {
-	  z.transaction.to.push(new saito.slip(this.app.options.games[i].players[j]));
-        }
-        for (let j = 0; j < this.app.options.games[i].players.length; j++) {
-	  z.transaction.from.push(new saito.slip(this.app.options.games[i].players[j]));
+        if (this.app.options.games[i].players == null) {
+	  z.transaction.from.push(new saito.slip(app.wallet.returnPublicKey()));
+	  z.transaction.to.push(new saito.slip(app.wallet.returnPublicKey()));
+        } else {
+          for (let j = 0; j < this.app.options.games[i].players.length; j++) {
+	    z.transaction.to.push(new saito.slip(this.app.options.games[i].players[j]));
+          }
+          for (let j = 0; j < this.app.options.games[i].players.length; j++) {
+	    z.transaction.from.push(new saito.slip(this.app.options.games[i].players[j]));
+          }
         }
 	z.transaction.sig          = this.app.options.games[i].id;
 	z.transaction.msg.game_id  = this.app.options.games[i].id;
