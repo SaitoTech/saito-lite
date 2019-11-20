@@ -149,48 +149,15 @@ body {
 
 
 .tile-placement-controls {***REMOVED***.tiles .tile.O {
-	    padding: 10px 12px 10px 8px;
-	  ***REMOVED***
-	        .tiles .tile.M {
-			    padding: 10px 14px 10px 6px;
-			  ***REMOVED***
-			        .tiles .tile.W {
-					    padding: 10px 15px 10px 5px;
-					  ***REMOVED***
-
-/* .status {
-  font-size: 1.5rem;
-  padding: 10px;
-  width: auto;
-  display: inline-block;
-  vertical-align: top;
-  padding: 10px 20px;
-  width: 65%;
-***REMOVED*** */
-
-.hud {
-  /* max-width: unset; */
+  padding: 10px 12px 10px 8px;
+***REMOVED***
+.tiles .tile.M {
+  padding: 10px 14px 10px 6px;
+***REMOVED***
+.tiles .tile.W {
+  padding: 10px 15px 10px 5px;
 ***REMOVED***
 
-.status {
-  grid-area: hud-content;
-  display: grid;
-  grid-template-rows: 3em auto;
-***REMOVED***
-
-.status_container {
-  display: grid;
-  grid-template-rows: 3em auto 5em;
-***REMOVED***
-
-.log {
-  display: none;
-***REMOVED***
-
-.active-status {
-  padding: 0;
-  max-width: 300px;
-***REMOVED***
 
 .slot {
   cursor: pointer;

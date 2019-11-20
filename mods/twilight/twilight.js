@@ -13837,44 +13837,7 @@ console.log("\n\n\n\n");
   // OVERWRITES GAME.JS MODULE TO ADD CARD HOVERING
   //
   updateLog(str, length = 150) {
-
     this.hud.updateLog(str, this.addLogCardEvents.bind(this));
-
-    // let twilight_self = this;
-
-    // //
-    // // workaround repeat messages
-    // //
-    // if (str === this.last_log_msg) {
-    //   if (str.indexOf("is affected by") > 0) { return; ***REMOVED***  ***REMOVED***
-
-    // this.last_log_msg = str;
-
-    // if (str) {
-    //   this.game.log.unshift(str);
-    //   if (this.game.log.length > length) { this.game.log.splice(length); ***REMOVED***
-    // ***REMOVED***
-
-    // let html = '';
-
-    // for (let i = 0; i < this.game.log.length; i++) {
-    //   if (i > 0) { html += '<br/>'; ***REMOVED***
-    //   html += "> <span>" + this.game.log[i] + "</span>";
-    // ***REMOVED***
-
-    // if (this.app.BROWSER == 1) {
-
-    //   $('#log').html(html);
-    //   twilight_self.addLogCardEvents();
-
-    //   try {
-    //     if (! $('#game_log').isVisible()) {
-    //       $('#game_log').addClass("loading");
-    // ***REMOVED***
-    //   ***REMOVED*** catch (err) {***REMOVED***
-
-    // ***REMOVED***
-
   ***REMOVED***
 
 
