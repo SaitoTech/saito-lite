@@ -9,13 +9,12 @@
 
 
 .cardbox {
-  height: 400px;
-  width: 200px;
+  height: 48vh;
+  width: 24vh;
   position: fixed;
   left: 50%;
-  top: 30%;
+  top: 27%;
   z-index: 39;
-  background-color: whitesmoke;
   display: none;
 }
 
@@ -107,6 +106,23 @@
   overflow-y: scroll;
 }
 
+.status ul {
+  list-style: none;
+}
+
+.status ul li {
+  line-height: 2em;
+  border-top: 1px solid var(--saito-skyline-grey);
+}
+
+.status ul li:last-child {
+  border-bottom: 1px solid var(--saito-skyline-grey);
+}
+
+.status ul li:hover {
+  background: var(--saito-skyline-grey);
+}
+
 .log {
   color: black;
   background-color: whitesmoke;
@@ -173,7 +189,7 @@
     "hud-content hud-content";
     /* grid-template-columns: 1fr; */
     /* grid-template-rows: 2vh auto; */
-    grid-template-columns: auto 2em;
+    grid-template-columns: 87vw 13vw;
     grid-template-rows: 8vh auto;
     /* font-size: 1.3em; */
     max-width: unset;
@@ -193,8 +209,13 @@
   .hud-menu {
     grid-area: hud-menu;
     border-bottom: 1px solid var(--saito-skyline-grey);
+    overflow-x: scroll;
   }
-  
+
+  .controls {
+    padding: 0 5vw;
+  }
+
   #hud-home-button {
     display: none;
   }
@@ -221,6 +242,7 @@
     float: left;
     height: 100%;
     width: 25%;
+    min-width: 25%;
     line-height: 58px;
     font-size: 1em;
     height: 100%;
