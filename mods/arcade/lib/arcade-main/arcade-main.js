@@ -117,6 +117,10 @@ console.log("HERE: " + JSON.stringify(tx));
       	      if (res.rows.length > 0) {
         	if (res.rows[0].game_still_open == 1) {
 
+		  //
+		  // sanity check
+		  //
+console.log("CHECKING OPTIONS WHEN INVITING: " + JSON.stringify(data.arcade.games[i]));
             	  data.arcade.sendInviteRequest(app, data, data.arcade.games[i]);
             	  ArcadeLoader.render(app, data);
             	  ArcadeLoader.attachEvents(app, data);
