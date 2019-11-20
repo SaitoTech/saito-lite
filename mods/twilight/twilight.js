@@ -1,6 +1,9 @@
 const saito = require('../../lib/saito/saito');
-const GameTemplate = require('../../lib/templates/gametemplate');
 const util = require('util');
+const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
+const GameTemplate = require('../../lib/templates/gametemplate');
+
+const addHammerListeners = require('../../lib/helpers/hammer');
 
 
 
@@ -32,7 +35,8 @@ class Twilight extends GameTemplate {
     this.app             = app;
 
     this.name            = "Twilight";
-    this.description     = `Twilight Struggle is a card-driven strategy game for two players, with its theme taken from the Cold War. One player plays the United States (US), and the other plays the Soviet Union (USSR).`
+    this.description     = `Twilight Struggle is a card-driven strategy game for two players, with its theme taken from the Cold War.
+      One player plays the United States (US), and the other plays the Soviet Union (USSR).`;
     this.publisher_message = "GMT Games";
 
     //
@@ -50,19 +54,168 @@ class Twilight extends GameTemplate {
     this.gameboardZoom  = 0.90;
     this.gameboardMobileZoom = 0.67;
 
-    return this;
+    this.hud = new GameHud(this.app, 0, 0, this.menuItems());
 
   }
 
 
 
+  menuItems() {
+    return {
+      'game-cards': {
+        name: 'Cards',
+        callback: this.handleCardsMenuItem.bind(this)
+      },
+      'game-lang': {
+        name: 'Lang',
+        callback: this.handleLangMenuItem.bind(this)
+      },
+      'game-player': {
+        name: 'Players',
+        callback: this.handlePlayerMenuItem.bind(this)
+      },
+    }
+  }
+
+  handleCardsMenuItem() {
+    let twilight_self = this;
+    let html =
+    `
+      <div id="menu-container">
+        <div style="margin-bottom: 1em">
+          Select your deck:
+        </div>
+        <ul>
+          <li class="card" id="hand">Hand</li>
+          <li class="card" id="discards">Discard</li>
+          <li class="card" id="removed">Removed</li>
+        </ul>
+      </div>
+    `;
+
+    $('.hud-menu-overlay').html(html);
+
+    $('.card').on('click', function() {
+
+      let player_action = $(this).attr("id");
+      var deck = twilight_self.game.deck[0];
+      var cards_img_html = [];
+      var cards;
+
+      switch (player_action) {
+        case "hand":
+          cards = deck.hand
+          break;
+        case "discards":
+          cards = Object.keys(deck.discards)
+          break;
+        case "removed":
+          cards = Object.keys(deck.removed)
+          break;
+        default:
+          break;
+      }
+
+      let cards_in_pile = 0;
+
+      cards_img_html = cards.map(card =>  {
+        return `
+          <div class="cardbox-hud" id="cardbox-hud-${cards_in_pile}">
+            ${twilight_self.returnCardImage(card)}
+          </div>`;
+      });
+
+      // for (var z in cards) {
+      //   cards_in_pile++;
+      //   if (cards[z] != undefined) {
+      //     display_message += `<div class="cardbox-hud" id="cardbox-hud-${cards_in_pile}">${twilight_self.returnCardImage(cards[z])}</div>`
+      //   }
+      // }
+
+      let display_message = `<div class="display-cards">${cards_img_html.join('')}</div>`;
+
+      if (cards_img_html.length == 0) {
+        display_message = `
+          <div style="text-align:center; margin: auto;">
+            There are no cards in ${player_action}
+          </div>
+        `;
+      }
+
+      $('.hud-menu-overlay').html(display_message);
+    });
+
+  }
+
+  handleLangMenuItem() {
+
+    let twilight_self = this;
+    let user_message = `
+      <div id="menu-container">
+        <h3>Select Language:</h3>
+        <ul>
+          <li class="card" id="english">English</li>
+          <li class="card" id="chinese">简体中文</li>
+        </ul>
+      </div>`;
+
+    $('.hud-menu-overlay').html(user_message);
+
+    // leave action enabled on other panels
+    //$('.card').off();
+    $('.card').on('click', function() {
+
+      let action2 = $(this).attr("id");
+
+      if (action2 === "english") {
+        // twilight_self.displayModal("Card settings changed to English");
+        twilight_self.displayModal("Language Settings", "Card settings changed to English");
+        twilight_self.lang = "en";
+        twilight_self.saveGamePreference("lang", "en");
+      }
+      if (action2 === "chinese") {
+        // twilight_self.displayModal("卡牌语言改成简体中文");
+        twilight_self.displayModal("语言设定", "卡牌语言改成简体中文");
+        twilight_self.lang = "zh";
+        twilight_self.saveGamePreference("lang", "zh");
+      }
+
+    });
+  }
+
+  async handlePlayerMenuItem() {
+    // let opponent = await this.app.dns.fetchIdentifierPromise(this.game.opponents[0]);
+
+    // let's use the address controller for this in the future;
+    let opponent = this.game.opponents[0];
+
+    if (this.app.crypto.isPublicKey(opponent)) {
+      opponent = opponent.substring(0, 16);
+    }
+
+    let user_message = `
+      <div id="menu-container">
+        Opponent: ${opponent}
+      </div>
+    `;
+
+    $('.hud-menu-overlay').html(user_message);
+  }
+
+  handleLogMenuItem() {
+    //
+    // we explicitly add this in the mobile version
+    //
+    $('.hud-menu-overlay').html(`<div style="padding: 0.5em">${$('.log').html()}</div>`);
+    twilight_self.addLogCardEvents();
+  }
 
 
 
-////////////////
-// initialize //
-////////////////
-initializeGame(game_id) {
+  ////////////////
+  // initialize //
+  ////////////////
+  initializeGame(game_id) {
 
   //
   // enable chat
@@ -162,6 +315,10 @@ console.log("\n\n\n\n");
 
   this.countries = this.game.countries;
 
+  // this.hud = new GameHud(this.app, 0, 0, this.menuItems());
+  // this.hud.render(this.app, this.game);
+  // this.hud.attachEvents(this.app, this.game);
+
   //
   // adjust screen ratio
   //
@@ -214,149 +371,7 @@ console.log("\n\n\n\n");
 
 
   var element = document.getElementById('gameboard');
-
-  if (element !== null) {
-/*******
-    var hammertime = new Hammer(element, {});
-
-    hammertime.get('pinch').set({ enable: true });
-    hammertime.get('pan').set({ threshold: 0 });
-
-    var fixHammerjsDeltaIssue = undefined;
-    var pinchStart = { x: undefined, y: undefined }
-    var lastEvent = undefined;
-
-    var originalSize = {
-      width: 2550,
-      height: 1650
-    }
-
-    var current = {
-      x: 0,
-      y: 0,
-      z: 1,
-      zooming: false,
-      width: originalSize.width * 1,
-      height: originalSize.height * 1,
-    }
-
-    var last = {
-      x: current.x,
-      y: current.y,
-      z: current.z
-    }
-
-    function getRelativePosition(element, point, originalSize, scale) {
-      var domCoords = getCoords(element);
-
-      var elementX = point.x - domCoords.x;
-      var elementY = point.y - domCoords.y;
-
-      var relativeX = elementX / (originalSize.width * scale / 2) - 1;
-      var relativeY = elementY / (originalSize.height * scale / 2) - 1;
-      return { x: relativeX, y: relativeY }
-    }
-
-    function getCoords(elem) { // crossbrowser version
-      var box = elem.getBoundingClientRect();
-
-      var body = document.body;
-      var docEl = document.documentElement;
-
-      var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
-      var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
-
-      var clientTop = docEl.clientTop || body.clientTop || 0;
-      var clientLeft = docEl.clientLeft || body.clientLeft || 0;
-
-      var top  = box.top +  scrollTop - clientTop;
-      var left = box.left + scrollLeft - clientLeft;
-
-      return { x: Math.round(left), y: Math.round(top) };
-    }
-
-    function scaleFrom(zoomOrigin, currentScale, newScale) {
-      var currentShift = getCoordinateShiftDueToScale(originalSize, currentScale);
-      var newShift = getCoordinateShiftDueToScale(originalSize, newScale)
-
-      var zoomDistance = newScale - currentScale
-
-      var shift = {
-              x: currentShift.x - newShift.x,
-              y: currentShift.y - newShift.y,
-      }
-
-      var output = {
-          x: zoomOrigin.x * shift.x,
-          y: zoomOrigin.y * shift.y,
-          z: zoomDistance
-      }
-      return output
-    }
-
-
-    function getCoordinateShiftDueToScale(size, scale){
-      var newWidth = scale * size.width;
-      var newHeight = scale * size.height;
-      var dx = (newWidth - size.width) / 2
-      var dy = (newHeight - size.height) / 2
-      return {
-        x: dx,
-        y: dy
-      }
-    }
-
-    hammertime.on('pan', function(e) {
-      if (lastEvent !== 'pan') {
-        fixHammerjsDeltaIssue = {
-          x: e.deltaX,
-          y: e.deltaY
-        }
-      }
-
-      current.x = last.x + e.deltaX - fixHammerjsDeltaIssue.x;
-      current.y = last.y + e.deltaY - fixHammerjsDeltaIssue.y;
-      lastEvent = 'pan';
-      update();
-    });
-
-    hammertime.on('pinch', function(e) {
-      var d = scaleFrom(pinchZoomOrigin, last.z, last.z * e.scale)
-      current.x = d.x + last.x + e.deltaX;
-      current.y = d.y + last.y + e.deltaY;
-      current.z = d.z + last.z;
-      lastEvent = 'pinch';
-      update();
-    })
-
-    var pinchZoomOrigin = undefined;
-    hammertime.on('pinchstart', function(e) {
-      pinchStart.x = e.center.x;
-      pinchStart.y = e.center.y;
-      pinchZoomOrigin = getRelativePosition(element, { x: pinchStart.x, y: pinchStart.y }, originalSize, current.z);
-      lastEvent = 'pinchstart';
-    })
-
-    hammertime.on('panend', function(e) {
-      last.x = current.x;
-      last.y = current.y;
-      lastEvent = 'panend';
-    })
-
-    hammertime.on('pinchend', function(e) {
-      last.x = current.x;
-      last.y = current.y;
-      last.z = current.z;
-      lastEvent = 'pinchend';
-    })
-
-    function update() {
-      current.height = originalSize.height * current.z;
-      current.width = originalSize.width * current.z;
-      element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
-    }
-******/
-  }
+  if (element !== null) { addHammerListeners(element); }
 
 
   let twilight_self = this;
@@ -1371,8 +1386,8 @@ console.log("\n\n\n");
         //
         // unset formosan if China card played by US
         //
-        if (mv[1] == "us" && mv[2] == "china") { 
-	  this.game.state.events.formosan = 0; 
+        if (mv[1] == "us" && mv[2] == "china") {
+	  this.game.state.events.formosan = 0;
 	  $('.formosan').hide();
 	}
         this.playOps(mv[1], mv[3], mv[2]);
@@ -1414,7 +1429,7 @@ console.log("\n\n\n");
 	let card = "";
 	if (mv.length >= 5) { card = mv[4]; }
 
-        this.updateLog("<span>" + mv[1].toUpperCase() + "</span> <span>coups</span> <span>" + this.countries[mv[2]].name + "</span> <span>with</span> <span>" + mv[3] + "</span> <span>OPS</span>"); 
+        this.updateLog("<span>" + mv[1].toUpperCase() + "</span> <span>coups</span> <span>" + this.countries[mv[2]].name + "</span> <span>with</span> <span>" + mv[3] + "</span> <span>OPS</span>");
         if (this.game.state.limit_milops != 1) {
 	  //
 	  // modify ops is handled incoherently with milops, so we calculate afresh here
@@ -1812,7 +1827,7 @@ console.log("IN PLACEMENT");
 	let xor    = "";
 	let card   = "";
 
-	if (mv.length > 2) {	  
+	if (mv.length > 2) {
 	  stage = mv[1];
 	  player = parseInt(mv[2]);
 	}
@@ -2518,7 +2533,7 @@ playHeadlineModern(stage, player, hash="", xor="", card="") {
 
 
     //
-    // first player sends card 
+    // first player sends card
     //
     if (stage == "headline1") {
 
@@ -2536,7 +2551,7 @@ playHeadlineModern(stage, player, hash="", xor="", card="") {
 
 
     //
-    // second player sends card 
+    // second player sends card
     //
     if (stage == "headline2") {
 
@@ -2709,7 +2724,7 @@ playHeadlineModern(stage, player, hash="", xor="", card="") {
 
   //
   // second player plays headline card
-  // 
+  //
   if (stage == "headline7") {
 
     let my_card = this.game.state.headline_card;
@@ -2972,7 +2987,7 @@ playOps(player, ops, card) {
             // If the placement array is full, then
             // undo all of the influence placed this turn
 	    //
-            if (twilight_self.undoMove(action2, ops - j)) { 
+            if (twilight_self.undoMove(action2, ops - j)) {
               twilight_self.playOps(player, ops, card);
 	    }
 	  });
@@ -2982,7 +2997,7 @@ playOps(player, ops, card) {
       }
 
       if (action2 == "coup") {
- 
+
         let html = twilight_self.formatStatusHeader("Pick a country to coup", true);
         twilight_self.updateStatus(html);
         twilight_self.playerCoupCountry(player, ops, card);
@@ -3141,8 +3156,8 @@ playerPickHeadlineCard() {
   //
   // HEADLINE PEEKING / man in earth orbit
   //
-  if (this.game.state.man_in_earth_orbit != "") { 
-    if (this.game.state.man_in_earth_orbit === "us") { 
+  if (this.game.state.man_in_earth_orbit != "") {
+    if (this.game.state.man_in_earth_orbit === "us") {
       if (this.game.player == 1) {
         x = `<div class="cardbox-status-container">
           <div><span>${player.toUpperCase()}</span> <span>pick your headline card first</span></div>
@@ -4662,7 +4677,7 @@ playerPlaceInfluence(player, mycallback=null) {
     // Chernobyl
     //
     if (this.game.player == 1 && this.game.state.events.chernobyl != "") {
-      if (this.countries[i].region == this.game.state.events.chernobyl) { restricted_country = 1; 
+      if (this.countries[i].region == this.game.state.events.chernobyl) { restricted_country = 1;
 
       }
     }
@@ -4672,7 +4687,7 @@ playerPlaceInfluence(player, mycallback=null) {
     if (restricted_country == 1) {
 
 alert("restricted COUNTRY == 1: " + divname);
- 
+
       $(divname).off();
       $(divname).on('click', function() {
         twilight_self.displayModal("Invalid Target");
@@ -6127,7 +6142,7 @@ playEvent(player, card) {
     }
 
     //
-    // Defectors can be PULLED in the headline phase by 5 Year Plan or Grain Sales, in which 
+    // Defectors can be PULLED in the headline phase by 5 Year Plan or Grain Sales, in which
     // case it can only cancel the USSR headline if the USSR headline has not already gone.
     // what an insanely great but complicated game dynamic at play here....
     //
@@ -6288,7 +6303,7 @@ playEvent(player, card) {
     let original_us = parseInt(this.countries["egypt"].us);
     let influence_to_remove = 0;
 
-    while (original_us > 0) { 
+    while (original_us > 0) {
       influence_to_remove++;
       original_us -= 2;
     }
@@ -6974,8 +6989,8 @@ playEvent(player, card) {
           if (twilight_self.countries[i].us > 1) { available_targets += 2; }
 	}
       }
-      if (available_targets < 3) { 
-	ops_to_purge = available_targets; 
+      if (available_targets < 3) {
+	ops_to_purge = available_targets;
         this.updateStatus("Remove "+ops_to_purge+" US influence from Western Europe (max 2 per country)");
       }
 
@@ -6989,7 +7004,7 @@ playEvent(player, card) {
         if (i == "italy" || i == "turkey" || i == "greece" || i == "spain" || i == "france" || i == "westgermany" || i == "uk" ||  i == "canada" || i == "benelux" || i == "finland" || i == "austria" || i == "denmark" || i == "norway" || i == "sweden") {
 
           twilight_self.countries[countryname].place = 1;
-	  
+
 	  if (twilight_self.countries[countryname].us > 0) {
 
             $(divname).off();
@@ -10421,7 +10436,7 @@ playEvent(player, card) {
     }
 
     if (this.game.player == 1) {
-      updateStatus("Opponent retrieving event from discard pile");
+      this.updateStatus("Opponent retrieving event from discard pile");
       return 0;
     }
 
@@ -11129,15 +11144,15 @@ playEvent(player, card) {
 	if (player == "ussr" && ussr_predominates == 1) { placeable.push(countryname); }
       }
     }
- 
+
     if (placeable.length == 0) {
       this.updateLog(player + " cannot place 1 additional OP");
       return 1;
     } else {
 
-      if (player == opponent) { 
+      if (player == opponent) {
 	this.updateStatus("Opponent is placing 1 influence in a European country in which they have a predominance of influence");
-	return 0; 
+	return 0;
       }
 
       this.addMove("resolve\tberlinagreement");
@@ -11233,9 +11248,9 @@ returnArrayOfRegionBonuses(card="") {
     // Vietnam Revolts does not give bonus to 1 OP card in SEA if USSR Red Purged
     // https://boardgamegeek.com/thread/1136951/red-scarepurge-and-vietnam-revolts
     let pushme = 1;
-    if (card != "") { 
+    if (card != "") {
       if (this.game.state.events.redscare_player1 == 1) {
-        if (this.returnOpsOfCard(card) == 1) { pushme = 0; } 
+        if (this.returnOpsOfCard(card) == 1) { pushme = 0; }
       }
     }
     if (pushme == 1) {
@@ -11386,7 +11401,7 @@ finalScoring() {
   //
   //
   //
-  if (this.whoHasTheChinaCard() == "ussr") { 
+  if (this.whoHasTheChinaCard() == "ussr") {
     this.game.state.vp--;
     this.updateLog("USSR receives 1 VP for the China Card");
     if (this.game.state.vp <= -20) {
@@ -11846,7 +11861,7 @@ scoreRegion(card) {
     // GOUZENKO AFFAIR -- early war optional
     //
     if (this.game.state.events.optional.gouzenkoaffair == 1) {
-      if (this.isControlled("us", "canada") == 1) { vp_us++; }  
+      if (this.isControlled("us", "canada") == 1) { vp_us++; }
     }
 
 
@@ -12710,33 +12725,35 @@ updateStatusAndListCards(message, cards=null) {
 
 
 
-updateStatus(str) {
+  updateStatus(status_html) {
+    this.hud.updateStatus(status_html, this.addShowCardEvents.bind(this));
 
-  let twilight_self = this;
+    // let twilight_self = this;
 
-  this.game.status = str;
+    // this.game.status = status_html;
 
-  if (this.browser_active == 1) {
 
-    $('#status').html("<span>" + this.game.status + "</span>");
+    // if (this.browser_active == 1) {
 
-    try {
-      twilight_self.addShowCardEvents();
-    } catch (err) {}
+    //   // $('#status').html("<span>" + this.game.status + "</span>");
 
-    $('#status').show();
+    //   try {
+    //     twilight_self.addShowCardEvents();
+    //   } catch (err) {}
 
-    try {
-      if ($('#game_log').hasClass("loading") == true) {
-        $('#game_log').removeClass("loading");
-        $('#game_log').addClass("loaded");
-      } else {
-      }
-    } catch (err) {
-    }
-  };
+    //   $('#status').show();
 
-}
+    //   try {
+    //     if ($('#game_log').hasClass("loading") == true) {
+    //       $('#game_log').removeClass("loading");
+    //       $('#game_log').addClass("loaded");
+    //     } else {
+    //     }
+    //   } catch (err) {
+    //   }
+    // };
+
+  }
 
 
 
@@ -13882,7 +13899,7 @@ returnGameOptionsHTML() {
 
           <label for="deck">Deck:</label>
           <select name="deck" id="deckselect" onchange='
-if ($("#deckselect").val() == "saito") { $(".saito_edition").prop("checked",true); } else { $(".saito_edition").prop("checked", false); if ($("#deckselect").val() == "optional") { $(".optional_edition").prop("checked", false); } else { $(".optional_edition").prop("checked", true); } }  '> 
+if ($("#deckselect").val() == "saito") { $(".saito_edition").prop("checked",true); } else { $(".saito_edition").prop("checked", false); if ($("#deckselect").val() == "optional") { $(".optional_edition").prop("checked", false); } else { $(".optional_edition").prop("checked", true); } }  '>
            <option value="original">original</option>
             <option value="optional">optional</option>
             <option value="saito" selected>saito edition</option>
@@ -14065,6 +14082,7 @@ addShowCardEvents() {
   }
 
 }
+
 addLogCardEvents() {
 
   let twilight_self = this;
