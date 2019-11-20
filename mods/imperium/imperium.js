@@ -3855,7 +3855,6 @@ console.log("resolving earlier: " + this.game.queue[z]);
       for (let j = 0; j < this.totalPlayers; j++) {
         planets[i].units[j] = [];
 
-/****
 	if (j == 1) {
 	  planets[i].units[j].push(this.returnUnit("infantry", 1));
 	  planets[i].units[j].push(this.returnUnit("infantry", 1));
@@ -3864,10 +3863,7 @@ console.log("resolving earlier: " + this.game.queue[z]);
 	  planets[i].units[j].push(this.returnUnit("pds", 1));
 	  planets[i].units[j].push(this.returnUnit("spacedock", 1));
 	}
-****/     
-
       }
-
     }
   
     return planets;
@@ -6046,13 +6042,44 @@ console.log("resolving earlier: " + this.game.queue[z]);
         ////////////////////
         fleet_color = "color"+player;
         
-        if (fighters > 0 ) { space_frames.push("white_space_fighter.png"); }
-        if (carriers > 0 ) { space_frames.push("white_space_carrier.png"); }
-        if (destroyers > 0 ) { space_frames.push("white_space_destroyer.png"); }
-        if (cruisers > 0 ) { space_frames.push("white_space_cruiser.png"); }
-        if (dreadnaughts > 0 ) { space_frames.push("white_space_dreadnaught.png"); }
-        if (flagships > 0 ) { space_frames.push("white_space_flagship.png"); }
-  
+        if (fighters > 0 ) { 
+//	  space_frames.push("white_space_fighter.png");
+	  let x = fighters; if (fighters > 9) { x = 9; } 
+	  let numpng = "white_space_frame_1_"+x+".png";
+	  space_frames.push(numpng);
+	}
+        if (destroyers > 0 ) { 
+//	  space_frames.push("white_space_destroyer.png"); 
+	  let x = destroyers; if (destroyers > 9) { x = 9; } 
+	  let numpng = "white_space_frame_2_"+x+".png";
+	  space_frames.push(numpng);
+	}
+        if (carriers > 0 ) {
+//	  space_frames.push("white_space_carrier.png"); 
+	  let x = carriers; if (carriers > 9) { x = 9; } 
+	  let numpng = "white_space_frame_3_"+x+".png";
+	  space_frames.push(numpng);
+	}
+        if (cruisers > 0 ) { 
+//	  space_frames.push("white_space_cruiser.png"); 
+	  let x = cruisers; if (cruisers > 9) { x = 9; } 
+	  let numpng = "white_space_frame_4_"+x+".png";
+	  space_frames.push(numpng);
+	}
+        if (dreadnaughts > 0 ) { 
+//	  space_frames.push("white_space_dreadnaught.png"); 
+	  let x = dreadnaughts; if (dreadnaughts > 9) { x = 9; } 
+	  let numpng = "white_space_frame_5_"+x+".png";
+	  space_frames.push(numpng);
+	}
+        if (flagships > 0 ) { 
+//	  space_frames.push("white_space_flagship.png"); 
+	  let x = flagships; if (flagships > 9) { x = 9; } 
+	  let numpng = "white_space_frame_6_"+x+".png";
+	  space_frames.push(numpng);
+	}
+
+
         for (let i = 0; i < space_frames.length; i++) {
           bg += 'url(/imperium/img/frame/'+space_frames[i]+')';
           bgsize += 'contain';
@@ -6069,6 +6096,8 @@ console.log("resolving earlier: " + this.game.queue[z]);
     $(divsector).css('background-size', bgsize);
   
   
+    let ground_frames = [];
+    let ground_pos    = [];
 
     html = '';
     for (let z = 0; z < sys.s.units.length; z++) {
@@ -6104,48 +6133,42 @@ console.log("resolving earlier: " + this.game.queue[z]);
 
 console.log("PLAYER " + player + " has units in " + sector);
 
-	  let top = 0;
-	  let left = 0;
+	  let postext = "";
 
-          if (sys.p.length == 1) {
-	    top = 34;
-	    left = 16;
- 	  }
-          if (sys.p.length == 2) {
-            if (j == 0) {
-	      top = 16;
-	      left = 7.5;
- 	    }
-            if (j == 1) {
-	      top = 54;
-	      left = 22;
- 	    }
- 	  }
+	  ground_frames.push("white_planet_center.png");
+	  if (sys.p.length == 1) {
+	    postext = "center";
+	  } else {
+	    if (j == 0) {
+	      postext = "top_left";
+	    }
+	    if (j == 1) {
+	      postext = "bottom_right";
+	    }
+	  }
+	  ground_pos.push(postext);
 
-//        //let pstyle = "top:"+top+"%;left:"+left+"%";
-  
-          //html += '<div class="planet" id="planet_'+j+'" style="'+pstyle+'">';
-          //html += '<div class="ground_forces">';
-  
-          // infantry
-          //html += '<div class="troops" alt="'+infantry+'">';
-          if (infantry > 0) { html += '<div class="infantry">'+infantry+'</div>'; }
-          //html += '</div>';
-  
-          // spacedocks
-          //html += '<div class="spacedocks" alt="'+spacedock+'">';
-          if (spacedock > 0) { html += '<div class="spacedock">'+spacedock+'</div>'; }
-          //html += '</div>';
-  
-          // pds
-          //html += '<div class="pdsunits" alt="'+pds+'">';
-          if (pds > 0) { html += '<div class="pds">'+pds+'</div>'; }
-          //html += '</div>';
 
-          //html += '</div>';
-          //html += '</div>';
-  
+          if (infantry > 0) { 
+  	    let x = infantry; if (infantry > 9) { x = 9; } 
+	    let numpng = "white_planet_center_1_"+x+".png";
+	    ground_frames.push(numpng);
+	    ground_pos.push(postext);
+	  }
+          if (spacedock > 0) { 
+  	    let x = spacedock; if (spacedock > 9) { x = 9; } 
+	    let numpng = "white_planet_center_2_"+x+".png";
+	    ground_frames.push(numpng);
+	    ground_pos.push(postext);
+	  }
+          if (pds > 0) { 
+  	    let x = pds; if (pds > 9) { x = 9; } 
+	    let numpng = "white_planet_center_3_"+x+".png";
+	    ground_frames.push(numpng);
+	    ground_pos.push(postext);
+	  }
         }
+
       }
     }
   
@@ -6153,30 +6176,39 @@ console.log("PLAYER " + player + " has units in " + sector);
     divsector = '#hex_ground_' + sector;
     $(divsector).html(html);
   
-
-    //
-    // display planet ownership
-    //
-    let ground_frames = [];
-    if (sys.p.length == 1) {
-      ground_frames.push("white_planet_center.png");
-    }
-    if (sys.p.length == 2) {
-      ground_frames.push("white_planet_left_top.png");
-      ground_frames.push("white_planet_right_bottom.png");
-    }
   
     /////////////////////
     // PLANET GRAPHICS //
     /////////////////////
+
+    let height_of_sector = $(divsector).height();
+console.log("\n\n\nHEIGHT: " + height_of_sector);
+
     bg = '';
     bgsize = '';
+    let bgpos = '';
+    let bgrepeat = '';
+
     for (let i = 0; i < ground_frames.length; i++) {
       bg += 'url(/imperium/img/frame/'+ground_frames[i]+')';
-      bgsize += 'contain';
+      bgsize += '200px 200px';
+
+      if (ground_pos[i] == "center") {
+        bgpos += '50px 40px';
+      }
+      if (ground_pos[i] == "top_left") {
+        bgpos += '5px -15px';
+      }
+      if (ground_pos[i] == "bottom_right") {
+        bgpos += '110px 105px';
+      }
+
+      bgrepeat += 'no-repeat';
       if (i < ground_frames.length-1) { 
         bg += ','; 
   	bgsize += ','; 
+  	bgpos += ','; 
+  	bgrepeat += ','; 
       }
     }
 
@@ -6185,6 +6217,8 @@ console.log("BACKGROUND IMAGE: " + bg);
 console.log("BACKGROUND SIZE:  " + bgsize);
     $(divsector).css('background-image', bg);
     $(divsector).css('background-size', bgsize);
+    $(divsector).css('background-position', bgpos);
+    $(divsector).css('background-repeat', bgrepeat);
 
   };
   
