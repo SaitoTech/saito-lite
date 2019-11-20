@@ -61,11 +61,6 @@ html[data-theme='dark'] {
     --text-color-highlight: var(--saito-red);
 ***REMOVED***
 
-html, body {
-    /* position: fixed;
-    overflow: hidden; */
-***REMOVED***
-
 p {
     font-family: 'visuelt-light';
 ***REMOVED***
@@ -80,7 +75,6 @@ body {
 h1, h2, h3, h4, h5, h6, p {
     margin: 0.5em 0;
 ***REMOVED***
-
 
 hr {
     margin: 1em 0;
@@ -109,11 +103,11 @@ button, .button, .file-label {
     letter-spacing: 1px;
     transition: transform .25s;
     margin: 0.2em 0;
-***REMOVED*** 
+***REMOVED***
 
 button:active, .button:active {
     transform: scale(.96);
-  ***REMOVED***
+***REMOVED***
 
 button:hover, .button:hover {
     text-shadow: #ffffff 1px 0;
@@ -142,6 +136,11 @@ button.sub {
     color: var(--saito-cyber-black);
 ***REMOVED***
 
+button.action {
+    background-color: var(--saito-red);
+    color: var(--saito-white);
+***REMOVED***
+
 button.sub:hover, .button.sub:hover {
     text-shadow: var(--saito-cyber-black) 1px 0;
     background: var(--saito-skyline-grey);
@@ -161,6 +160,8 @@ button i {
 fieldset {
     padding: 1em;
     border: 1px solid var(--saito-cyber-black-wash);
+    padding: 1em;
+    box-shadow: 0px 0px 3px 1px rgba(220, 220, 220, 0.75);
 ***REMOVED***
 
 .button-secondary {
@@ -223,15 +224,12 @@ fieldset {
     .grid-4 {
         grid-template-columns: 5em 1fr;
 ***REMOVED***
-
     .grid-1-2-columns, .grid-3-columns {
         grid-template-columns: 1fr;
 ***REMOVED***
-
     .grid-2 div, .grid-4 div, .grid-2-columns div, .grid-3-columns div, .grid-1-2-columns div {
         overflow: hidden;
 ***REMOVED***
-
 ***REMOVED***
 
 input {
@@ -272,7 +270,6 @@ input[type=file] {
 ***REMOVED***
 
 select {
-
     float: left;
     display: block;
     background-color: #efefef;
@@ -295,7 +292,7 @@ textarea:focus {
     outline: none;
 ***REMOVED***
 
-input:focus{
+input:focus {
     outline: none;
     border-bottom: 1px solid var(--saito-red);
 ***REMOVED***
@@ -339,13 +336,13 @@ label.treated {
 ***REMOVED***
 
 #alert-box p {
-        font-family: 'visuelt-light';
-        font-size: 1.4em;
-        text-align: center;
-        align-self: center;
-        font-weight: bold;
-        display: block;
-        margin: 1em 0;
+    font-family: 'visuelt-light';
+    font-size: 1.4em;
+    text-align: center;
+    align-self: center;
+    font-weight: bold;
+    display: block;
+    margin: 1em 0;
 ***REMOVED***
 
 .top-0 {
@@ -384,42 +381,31 @@ label.treated {
 .header-dropdown {
     position: absolute;
     right: 0;
-    top: 50px;
-    right: -200px;
+    right: -250px;
     top: 90px;
-    background: white;
     color: var(--text-color-normal);
     padding: 15px;
     font-family: visuelt-light;
-    border: 1px solid var( --saito-cyber-black-cut);
+    border: 1px solid var( --saito-cyber-black-wash);
     border-radius: 5px 0 0 5px;
-    width: 200px;
-    font-size: 1.4em;
+    width: 250px;
+    font-size: 1.2em;
     height: calc(100vh - 100px);
     box-sizing: border-box;
-    box-shadow: 0px 0px 3px 1px rgba(170,170,170,0.75);
+    box-shadow: 0px 0px 3px 1px rgba(170, 170, 170, 0.75);
     background-color: #fcfcfc;
     transition: all 500ms ease;
 ***REMOVED***
 
 #settings-dropdown {
-    width: 354px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-color:rgba(0,0,0,.2);
-    border-radius: 3px;
-    box-shadow: 0 2px 10px rgba(0,0,0,.2);
-    position: absolute;
-    overflow: hidden;
+    width: 400px;
     right: -400px;
-    top: 82px;
+    position: absolute;
 ***REMOVED***
 
-/*
-#modules-dropdown {
-    right: 2.7em;
+.show-right-sidebar {
+    right: 0 !important;
 ***REMOVED***
-*/
 
 .header-dropdown ul li {
     border: 1px solid var(--saito-cyber-black-cut);
@@ -436,73 +422,80 @@ label.treated {
     color: var(--saito-red);
 ***REMOVED***
 
-.personal-info{
-    display: block;
+
+
+.personal-info {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-gap: 1em;
+    margin: 0 0 1em 0;
 ***REMOVED***
-.profile-photo{
-    height: 80px;
-    width: 80px;
-    border-radius: 50%;
+
+.profile-photo {
+    border-radius: 10px;
     background-color: blue;
-    margin-left: 127px;
-    margin-top:20px;
+    height: 75px;
+    width: 75px;
 ***REMOVED***
-  
-.account-info{
-    color: #5f6368;
-    font-size: 14px;
-    letter-spacing: normal;
-    text-align: center;
-    display: block;
-    line-height: 19px;
-    margin:10px 0;
+
+.account-info {
+    display: grid;
+    grid-gap: 0.5em;
 ***REMOVED***
-.manage-account{
-    background-color: #ffffff;
-    border: 1px solid #dadce0;
-    border-radius: 100px;
-    display: inline-block;
-    font-size: 16px;
-    font-family: visuelt-medium;
-    letter-spacing: .25px;
-    margin: 16px 0 0;
-    max-width: 254px;
-    padding: 8px 16px;
-    text-align: center;
+
+.account-info div {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 ***REMOVED***
-.reset-wallet{
+
+.manage-account {
+    width: 100%;
+    font-size: 0.9em;
+    zoom: 1;
+    font-family: visuelt-light;
+    padding: 12px 0 8px 0;
+***REMOVED***
+
+.reset-wallet {
     margin-top: 20px;
     color: #000;
 ***REMOVED***
-.scan-qr{
-    border-top:1px solid rgba(0,0,0,.1);
+
+.scan-qr {
+    border-top: 1px solid rgba(0, 0, 0, .1);
     letter-spacing: .25px;
     padding: 14px 41px;
     font-size: 16px;
     font-family: visuelt-medium;
 ***REMOVED***
-.scan-qr i{
+
+.scan-qr i {
     margin-right: 10px;
 ***REMOVED***
-.backup-wallet{
+
+.backup-wallet {
     font-family: visuelt-medium;
-    border-top:1px solid rgba(0,0,0,.1);
+    border-top: 1px solid rgba(0, 0, 0, .1);
     letter-spacing: .25px;
     padding: 14px 41px;
     font-size: 16px;
 ***REMOVED***
-.backup-wallet i{
+
+.backup-wallet i {
     margin-right: 10px;
 ***REMOVED***
-.terms{
-    border-top:1px solid rgba(0,0,0,.1);
+
+.terms {
+    border-top: 1px solid rgba(0, 0, 0, .1);
     padding: 14px 41px 4px 41px;
     font-size: 14px;
     text-align: center;
     vertical-align: middle;
-    color: #5f6368
-    font-size: 14px;
+    color: #5f6368;
+     font-size: 14px;
 ***REMOVED***
+
 .header-dropdown-modules {
     padding-bottom: 0.5em;
     border-bottom: 1px solid grey;
@@ -612,7 +605,7 @@ label.treated {
 ***REMOVED***
 
 .icon-med:hover {
-     color: var(--saito-red-wash);
+    color: var(--saito-red-wash);
 ***REMOVED***
 
 .icon-large {
@@ -631,20 +624,30 @@ label.treated {
 /** MODAL **/
 
 /* The Modal (background) */
+
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
 ***REMOVED***
 
-  /* Modal Content/Box */
+/* Modal Content/Box */
+
 .modal-content {
     background-color: #fefefe;
     margin: 20% auto;
@@ -656,6 +659,7 @@ label.treated {
 ***REMOVED***
 
 /* The Close Button */
+
 .close {
     color: #aaa;
     float: right;
@@ -664,19 +668,12 @@ label.treated {
     height: 0px;
 ***REMOVED***
 
-.close:hover,
-.close:focus {
+.close:hover, .close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
 ***REMOVED***
 
-
 .jsontree_node {
     list-style: none;
 ***REMOVED***
-
-.show-right-sidebar {
-    right: 0 !important;
-***REMOVED***
-
