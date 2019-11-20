@@ -1,0 +1,142 @@
+#app-search{
+	width: 460px;
+	height: 40px;
+	border: 1.2px solid #eee;
+	padding: 10px 20px 10px 20px;
+	box-shadow: 0 2px 5px rgba(0,0,0,.1);
+	border-radius: 20px;
+}
+.email-appspace-appstore-search{
+	margin-top:15px;
+}
+.app-search-input{
+	display: inline-block;
+	margin-left: 30px;
+}
+.app-search-input i{
+	position: relative;
+	bottom: 0;
+	right: 40px;
+	z-index:1;
+}
+.featured-applications {
+	width: 200px;
+	display: inline-block;
+}
+
+.appstore-app{		
+	 width: 800px;
+     height: 300px;
+     margin-top: 15px;
+}
+.appstore-app-list{
+    width: 160px;
+    height: 250px;
+    background-color: #fff;
+    border:1px solid #eee;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.2);
+    margin-right: 15px;
+    display: inline-block;
+}
+.app-list-one-box{
+	margin: 17px 17px 0 17px;
+	width: 128px;
+	height: 128px;
+	background-color: #2962ff;
+	border-radius: 2px;
+}
+.app-one-info{
+	padding: 10px;
+	margin: 0 auto;
+}
+.app-one-name{
+	font-size:16px;
+	color: #000;
+	font-family: visuelt-medium;
+}
+.app-score{
+    font-size: 14px;
+    margin-top: 3px;
+    margin-bottom: 5px;
+    color: #484646;
+}
+.app-install-btn{
+    padding: 5px 45px 5px 45px;
+    font-size: 16px;
+    border-radius:20px;
+    color: red;
+    margin:0 auto;
+}
+.app-view-more{
+	margin-top: 10px;
+	margin-left: 250px;
+}
+.app-view-more i{
+	margin-right: 5px;
+}
+.app-view-more-tip{
+    height:30px;
+    width: 200px;
+    font-size: 16px;
+    font-family: visuelt-medium;
+}
+.app-view-more-btn:hover{
+    cursor: pointer;
+    text-decoration: underline;
+    color: red;
+}
+.appstore-sort{
+    width: 800px;
+    height: 200px;
+    border-top:1px solid #bbb;
+    margin-top: 20px;
+}
+.appstore-sort-title{
+	margin-top: 15px;
+	font-size: 24px;
+	font-weight: bold;
+}
+.appstore-sort-list{
+	width: 160px;
+	height: 100px;
+	background-color: #fff;
+	border:1px solid #eee;
+	border-radius: 10px;
+	box-shadow: 0 2px 10px rgba(0,0,0,.2);
+	font-family:visuelt-medium;
+	margin-right: 15px;
+	margin-top: 20px;
+	display: inline-block;
+}
+.appstore-sort-info{
+    margin-top: 30px;
+    margin-left: 15px;
+}
+.appstore-sort-name{
+    font-size: 24px;
+}
+.appstore-sort-amount{
+	font-size: 14px;
+	color: #aaa;
+}
+.appstore-sort-icon{
+	position: relative;
+    bottom: 60px;
+    left: 120px;
+}
+.appstore-sort-icon i{
+	color: var(--saito-red);
+	width: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
