@@ -64,6 +64,11 @@ body {
   text-align: center;
 }
 
+.status-header {
+  display: grid;
+  grid-template-columns: 1em auto;
+}
+
 .log {
   padding: 2px;
 }
@@ -195,7 +200,7 @@ body {
 
 #back_button {
   font-size: 1.2em;
-  position: absolute;
+  /* position: absolute; */
   cursor:pointer;
   width:30px;
   height:30px;
@@ -361,16 +366,19 @@ body {
 
 .cardbox {
   position: absolute;
-  left: 413;
-  height: 81vh;
+  /* left: 413; */
+  /* height: 81vh; */
+  height: 48vh;
   max-height: 520px;
-  width: 100vw;
+  /* width: 100vw; */
+  width: calc(48vh * 0.72110);
   max-width: 375px;
   background-image: url("/twilight/img/Base.svg");
   background-size: cover;
   z-index: 2;
   display: none;
-  top: 30%;
+  /* top: 30%; */
+  top: 27%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
