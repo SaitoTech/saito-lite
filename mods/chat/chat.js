@@ -201,8 +201,6 @@ if (txs.length > 0) {
       }
     }
 
-console.log("JUST SET IDENTICON TO: " + chatgroup.identicon);
-
     cg.is_encrypted = 0;
     cg.initialize(this.app);
     this.groups.push(cg);
@@ -306,9 +304,6 @@ console.log("JUST SET IDENTICON TO: " + chatgroup.identicon);
   }
 
   saveChat() {
-for (let i = 0; i < this.groups.length; i++) {
-  console.log("G " + i + " " + this.groups[i].id);
-}
 
     this.app.options.chat = Object.assign({}, this.app.options.chat);
     this.app.options.chat.groups = this.groups.map(group => {
