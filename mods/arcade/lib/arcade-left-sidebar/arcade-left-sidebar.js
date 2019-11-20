@@ -1,4 +1,5 @@
 const ArcadeLeftSidebarTemplate 	= require('./arcade-left-sidebar.template.js');
+const ArcadeGameCreate			= require('./../arcade-main/arcade-game-create/arcade-game-create');
 
 module.exports = ArcadeLeftSidebar = {
 
@@ -24,6 +25,20 @@ module.exports = ArcadeLeftSidebar = {
 ***REMOVED***,
 
     attachEvents(app, data) {
+
+      Array.from(document.getElementsByClassName('arcade-navigator-item')).forEach(game => {
+        game.addEventListener('click', (e) => {
+
+          data.active_game = e.currentTarget.id;
+
+          ArcadeGameCreate.render(app, data);
+          ArcadeGameCreate.attachEvents(app, data);
+
+    ***REMOVED***);
+  ***REMOVED***);
+
+
+
       for (let i = 0; i < data.arcade.mods.length; i++) {
         if (data.arcade.mods[i].respondTo('email-chat') != null) {
           data.arcade.mods[i].respondTo('email-chat').attachEvents(app, data);
