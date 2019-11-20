@@ -4,6 +4,18 @@
 ***REMOVED***
 
 
+.infantry {
+ left: 54px;
+ top: 50px;
+ font-weight: bold;
+ font-size: 1.6em;
+ transform: rotate(45deg); /* Equal to rotateZ(45deg) */
+***REMOVED***
+
+
+
+
+
 
 .player_color_box {
   width: 25px;
@@ -175,7 +187,7 @@ body {
 
 .hex_ground {
   height: 100%;
-  width: 20%;
+  width: 100%;
   margin: 0 auto;
   z-index: 20000;
   font-weight: bold;
@@ -183,6 +195,7 @@ body {
   z-index: 100000;
   opacity: 1.0;
   position: relative;
+  left: 28.5%;
 ***REMOVED***
 .hex_space {
   height: 100%;

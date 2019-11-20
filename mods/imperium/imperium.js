@@ -276,10 +276,10 @@ class Imperium extends GameTemplate {
       //
       // units are stored in within systems / planets
       //
+      this.game.players_info = this.returnPlayers(this.totalPlayers); // factions and player info
       this.game.systems = this.returnSystems();
       this.game.planets = this.returnPlanets();
       this.game.tech    = this.returnTechnologyTree();
-      this.game.players_info = this.returnPlayers(this.totalPlayers); // factions and player info
       this.game.state   = this.returnState();
       this.game.state.strategy_cards = [];
       let x = this.returnStrategyCards();
@@ -477,30 +477,62 @@ class Imperium extends GameTemplate {
   ***REMOVED***
   
       if (mv[0] === "resolve") {
+
+        let le = this.game.queue.length-2;
+        let lmv = [];
+        if (le >= 0) {
+	  lmv = this.game.queue[le].split("\t");
+	***REMOVED***
   
-  	if (mv[2] != undefined) {
+	if (mv[1] == lmv[0]) {
+
+  	  if (mv[2] != undefined) {
   
-  	  this.game.confirms_received += parseInt(mv[2]);
+  	    this.game.confirms_received += parseInt(mv[2]);
   
-  	  if (this.game.confirms_needed <= this.game.confirms_received) {
-  	    this.game.confirms_needed = 0;
-  	    this.game.confirms_received = 0;
+  	    if (this.game.confirms_needed <= this.game.confirms_received) {
+  	      this.game.confirms_needed = 0;
+  	      this.game.confirms_received = 0;
+    	      this.game.queue.splice(qe-1, 2);
+  	      return 1;
+  	***REMOVED*** else {
+    	      this.game.queue.splice(qe, 1);
+  	      return 0;
+        ***REMOVED***
+  
+            return 0;
+  
+  	  ***REMOVED*** else {
     	    this.game.queue.splice(qe-1, 2);
   	    return 1;
-  	  ***REMOVED*** else {
-    	    this.game.queue.splice(qe, 1);
-  	    return 0;
-      ***REMOVED***
-  
-          return 0;
-  
-  	***REMOVED*** else {
-    	  this.game.queue.splice(qe-1, 2);
-  	  return 1;
-  	***REMOVED***
+  	  ***REMOVED***
+    ***REMOVED*** else {
+
+console.log("removing event here...");
+
   ***REMOVED***
-  
-  
+  ***REMOVED*** remove the event
+  ***REMOVED***
+          this.game.queue.splice(qe, 1);
+
+  ***REMOVED***
+  ***REMOVED*** go back through the queue and remove any event tht matches this one
+  ***REMOVED***
+          for (let z = le, zz = 1; z >= 0 && zz == 1; z--) {
+            let tmplmv = this.game.queue[z].split("\t");
+            if (tmplmv.length > 0) {
+              if (tmplmv[0] === mv[1]) {
+console.log("resolving earlier: " + this.game.queue[z]);
+                this.game.queue.splice(z);
+                zz = 0;
+          ***REMOVED***
+        ***REMOVED***
+      ***REMOVED***
+	***REMOVED***
+  ***REMOVED*** 
+ 
+
+
       if (mv[0] === "turn") {
   
   	this.game.state.turn++;
@@ -539,10 +571,11 @@ class Imperium extends GameTemplate {
   ***REMOVED***
   
       if (mv[0] == "tokenallocation") {
-  
+ 
   	this.game.confirms_needed = parseInt(mv[1]);
   	this.game.confirms_received = 0;
-  	this.playerAllocateNewTokens(this.game.player, (this.game.players_info[this.game.player-1].new_tokens_per_round+this.game.players_info[this.game.player-1].new_token_bonus_when_issued));
+ 
+ 	this.playerAllocateNewTokens(this.game.player, (this.game.players_info[this.game.player-1].new_tokens_per_round+this.game.players_info[this.game.player-1].new_token_bonus_when_issued));
   	return 0;
   
   ***REMOVED***
@@ -580,7 +613,8 @@ class Imperium extends GameTemplate {
         for (let i = 0; i < this.game.players_info.length; i++) {
   	  this.game.players_info[i].passed = 0;
     ***REMOVED***
-  
+ 
+
   	//
   	// REPAIR UNITS
   	//
@@ -595,20 +629,20 @@ class Imperium extends GameTemplate {
   	//
   	// STRATEGY CARDS
   	//
-***REMOVED***this.game.queue.push("playerschoosestrategycards");
+        this.game.queue.push("playerschoosestrategycards");
   
   	//
   	// ACTION CARDS
   	//
-  	//for (let i = 1; i <= this.game.players_info.length; i++) {
-  ***REMOVED***  this.game.queue.push("DEAL\t2\t"+i+'\t'+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
-  	//***REMOVED***
+  	for (let i = 1; i <= this.game.players_info.length; i++) {
+          this.game.queue.push("DEAL\t2\t"+i+'\t'+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
+  	***REMOVED***
   	
   
   	//
   	// ALLOCATE TOKENS
   	//
-***REMOVED***this.game.queue.push("tokenallocation\t"+this.game.players_info.length);
+        this.game.queue.push("tokenallocation\t"+this.game.players_info.length);
   
   	//
   	// mark as ready 
@@ -617,37 +651,36 @@ class Imperium extends GameTemplate {
           this.game.queue.push("READY");
   	***REMOVED***
   
+
   	//
   	// FLIP NEW AGENDA CARDS
   	//
-  ***REMOVED***this.game.queue.push("revealagendas");
-  	//for (let i = 1; i <= this.game.players_info.length; i++) {
-  ***REMOVED***  this.game.queue.push("FLIPCARD\t3\t3\t1\t"+i); // deck card poolnum player
-  	//***REMOVED***
-  
+        this.game.queue.push("revealagendas");
+  	for (let i = 1; i <= this.game.players_info.length; i++) {
+          this.game.queue.push("FLIPCARD\t3\t3\t1\t"+i); // deck card poolnum player
+  	***REMOVED***
+ 
+
+/***
   	//
   	// FLIP NEW OBJECTIVES
   	//
-  ***REMOVED***if (this.game.state.round == 1) {
-  	//console.log("\n\n\n\nFLIPPING PUBLIC OBJECTIVES!\n\n\n");
-  ***REMOVED***this.game.queue.push("revealobjectives");
-  	//for (let i = 1; i <= this.game.players_info.length; i++) {
-  ***REMOVED***  this.game.queue.push("FLIPCARD\t4\t8\t2\t"+i); // deck card poolnum player
-  	//***REMOVED***
-  	//for (let i = 1; i <= this.game.players_info.length; i++) {
-  ***REMOVED***  this.game.queue.push("FLIPCARD\t5\t8\t2\t"+i); // deck card poolnum player
-  	//***REMOVED***
-  ***REMOVED******REMOVED***
-  
-  
-  	return 1;
-  
-  ***REMOVED***
-  ***REMOVED***
-  ***REMOVED***
+        if (this.game.state.round == 1) {
+          this.game.queue.push("revealobjectives");
+  	  for (let i = 1; i <= this.game.players_info.length; i++) {
+            this.game.queue.push("FLIPCARD\t4\t8\t2\t"+i); // deck card poolnum player
+  	  ***REMOVED***
+  	  for (let i = 1; i <= this.game.players_info.length; i++) {
+            this.game.queue.push("FLIPCARD\t5\t8\t2\t"+i); // deck card poolnum player
+  	  ***REMOVED***
+    ***REMOVED***
+***/
+
+    	return 1;
   
   ***REMOVED***
-  
+ 
+
       if (mv[0] === "revealagendas") {
   
   	this.updateLog("revealing upcoming agendas...");
@@ -1243,7 +1276,9 @@ class Imperium extends GameTemplate {
   
     let html = '';
     let imperium_self = this;
-  
+
+    this.game.confirms_needed = 0;  
+
     if (stage == "main") {
   
       let playercol = "color"+this.game.player;
@@ -3584,7 +3619,7 @@ class Imperium extends GameTemplate {
 
 
 
-  returnSectorsWithHopDistance(destination, hops) {
+  returnSectorsWithinHopDistance(destination, hops) {
   
     let sectors = [];
     let distance = [];
@@ -3814,10 +3849,25 @@ class Imperium extends GameTemplate {
     for (var i in planets) {
       planets[i].exhausted = 0;
       planets[i].owner = -1;
+      planets[i].owner = 1;
       planets[i].units = [this.totalPlayers]; // array to store units
+
       for (let j = 0; j < this.totalPlayers; j++) {
         planets[i].units[j] = [];
+
+/****
+	if (j == 1) {
+	  planets[i].units[j].push(this.returnUnit("infantry", 1));
+	  planets[i].units[j].push(this.returnUnit("infantry", 1));
+	  planets[i].units[j].push(this.returnUnit("infantry", 1));
+	  planets[i].units[j].push(this.returnUnit("pds", 1));
+	  planets[i].units[j].push(this.returnUnit("pds", 1));
+	  planets[i].units[j].push(this.returnUnit("spacedock", 1));
+	***REMOVED***
+****/     
+
   ***REMOVED***
+
 ***REMOVED***
   
     return planets;
@@ -5421,6 +5471,7 @@ class Imperium extends GameTemplate {
       players[i] = {***REMOVED***;
       players[i].action_cards_per_round = 1;
       players[i].new_tokens_per_round = 2;
+      players[i].new_token_bonus_when_issued = 0;
       players[i].command_tokens  	= 3;
       players[i].strategy_tokens 	= 2;
       players[i].fleet_supply    	= 3;
@@ -6018,6 +6069,7 @@ class Imperium extends GameTemplate {
     $(divsector).css('background-size', bgsize);
   
   
+
     html = '';
     for (let z = 0; z < sys.s.units.length; z++) {
   
@@ -6049,34 +6101,55 @@ class Imperium extends GameTemplate {
             if (unit.name == "spacedock") { spacedock++; ***REMOVED***
   
       ***REMOVED***
+
+console.log("PLAYER " + player + " has units in " + sector);
+
+	  let top = 0;
+	  let left = 0;
+
+          if (sys.p.length == 1) {
+	    top = 34;
+	    left = 16;
+ 	  ***REMOVED***
+          if (sys.p.length == 2) {
+            if (j == 0) {
+	      top = 16;
+	      left = 7.5;
+ 	***REMOVED***
+            if (j == 1) {
+	      top = 54;
+	      left = 22;
+ 	***REMOVED***
+ 	  ***REMOVED***
+
+//***REMOVED***let pstyle = "top:"+top+"%;left:"+left+"%";
   
-          let pstyle = "top:"+this.scale(sys.p[j].top)+"px;left:"+this.scale(sys.p[j].left)+"px";
-  
-          html += '<div class="planet" id="planet_'+j+'" style="'+pstyle+'">';
-          html += '<div class="ground_forces">';
+  ***REMOVED***html += '<div class="planet" id="planet_'+j+'" style="'+pstyle+'">';
+  ***REMOVED***html += '<div class="ground_forces">';
   
   ***REMOVED*** infantry
-          html += '<div class="troops" alt="'+infantry+'">';
+  ***REMOVED***html += '<div class="troops" alt="'+infantry+'">';
           if (infantry > 0) { html += '<div class="infantry">'+infantry+'</div>'; ***REMOVED***
-          html += '</div>';
+  ***REMOVED***html += '</div>';
   
   ***REMOVED*** spacedocks
-          html += '<div class="spacedocks" alt="'+spacedock+'">';
+  ***REMOVED***html += '<div class="spacedocks" alt="'+spacedock+'">';
           if (spacedock > 0) { html += '<div class="spacedock">'+spacedock+'</div>'; ***REMOVED***
-          html += '</div>';
+  ***REMOVED***html += '</div>';
   
   ***REMOVED*** pds
-          html += '<div class="pdsunits" alt="'+pds+'">';
+  ***REMOVED***html += '<div class="pdsunits" alt="'+pds+'">';
           if (pds > 0) { html += '<div class="pds">'+pds+'</div>'; ***REMOVED***
-  
-          html += '</div>';
-          html += '</div>';
-          html += '</div>';
+  ***REMOVED***html += '</div>';
+
+  ***REMOVED***html += '</div>';
+  ***REMOVED***html += '</div>';
   
     ***REMOVED***
   ***REMOVED***
 ***REMOVED***
   
+
     divsector = '#hex_ground_' + sector;
     $(divsector).html(html);
   
@@ -6107,6 +6180,7 @@ class Imperium extends GameTemplate {
   ***REMOVED***
 ***REMOVED***
 
+console.log("DIVSECTOR: " + divsector);
 console.log("BACKGROUND IMAGE: " + bg);
 console.log("BACKGROUND SIZE:  " + bgsize);
     $(divsector).css('background-image', bg);
@@ -6810,39 +6884,41 @@ console.log("BACKGROUND SIZE:  " + bgsize);
         $('.option').on('click', function() {
   
   	let id = $(this).attr("id");
-  
-  	if (id == "strategy") {
-  	  obj.new_strategy++;
-  	  obj.new_tokens--;
+
+ 
+        if (id == "strategy") {
+          obj.new_strategy++;
+          obj.new_tokens--;
       ***REMOVED***
-  
-  	if (id == "command") {
-  	  obj.new_command++;
-  	  obj.new_tokens--;
+
+        if (id == "command") {
+          obj.new_command++;
+          obj.new_tokens--;
       ***REMOVED***
-  
-  	if (obj.new_tokens == 0) {
+
+        if (obj.new_tokens == 0) {
             imperium_self.addMove("resolve\ttokenallocation\t1");
             imperium_self.addMove("purchase\t"+player+"\tstrategy\t"+obj.new_strategy);
             imperium_self.addMove("purchase\t"+player+"\tcommand\t"+obj.new_command);
-  	  imperium_self.endTurn();
+          imperium_self.endTurn();
       ***REMOVED*** else {
-  	  updateInterface(imperium_self, obj, updateInterface);
-  	***REMOVED***
-  
+          updateInterface(imperium_self, obj, updateInterface);
+    ***REMOVED***
+
     ***REMOVED***);
-  
+
   ***REMOVED***;
-  
+
       updateInterface(imperium_self, obj, updateInterface);
-  
+
 ***REMOVED***
-  
+
     return 0;
   ***REMOVED***
 
- 
+
 ***REMOVED***
-  
+
 module.exports = Imperium;
   
+

@@ -43,8 +43,6 @@ class Archive extends ModTemplate {
     //
     if (req.request === "archive") {
 
-console.log("archive hpr: " + req.request + " -- " + req.data.request);
-
       if (req.data.request === "delete") {
         this.deleteTransaction(req.data.tx, req.data.publickey, req.data.sig);
   ***REMOVED***
