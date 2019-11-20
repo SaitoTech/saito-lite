@@ -58,6 +58,16 @@ body {
   margin-top: unset;
 ***REMOVED***
 
+/** STATUS **/
+.status {
+  padding: 5px;
+  text-align: center;
+***REMOVED***
+
+.log {
+  padding: 2px;
+***REMOVED***
+
 /** Modal **/
 .modal {
   display: none; /* Hidden by default */
@@ -515,7 +525,7 @@ body {
   .status {
     font-size: 0.8em;
   ***REMOVED***
-  
+
   .status > ul {
     margin: 0;
   ***REMOVED***
