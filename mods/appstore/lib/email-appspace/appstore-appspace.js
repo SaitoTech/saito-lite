@@ -8,6 +8,7 @@ module.exports = AooStoreAppspace = {
 
     attachEvents(app, data) {
 
+        /*
       let fileUpload 	= document.querySelector('#module-file-upload-btn');
       let fileObj	= document.getElementById("module-file");
 
@@ -29,9 +30,9 @@ module.exports = AooStoreAppspace = {
 	  ***REMOVED***
 
 	  let newtx = app.wallet.createUnsignedTransactionWithDefaultFee(app.wallet.returnPublicKey(), 0.0);
-          if (newtx == null) { 
+          if (newtx == null) {
 	    alert("Error sending transaction. Does your wallet have enough tokens?");
-	    return; 
+	    return;
 	  ***REMOVED***
           newtx.transaction.msg.module   = "AppStore";
   	  newtx.transaction.msg.request  = "submit module";
@@ -43,7 +44,7 @@ module.exports = AooStoreAppspace = {
 
   ***REMOVED***);
 
-
+*/
 ***REMOVED***
 
 ***REMOVED***
