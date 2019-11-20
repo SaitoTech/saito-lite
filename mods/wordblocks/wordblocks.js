@@ -71,12 +71,27 @@ console.log("INITIALIZE GAME");
 ***REMOVED***
 
     var dictionary = this.game.options.dictionary;
-console.log("INITIALIZE GAME 2");
+    let durl = "/wordblocks/dictionaries/" + dictionary + "/" + dictionary + ".js";
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', durl, false);
 
-//
-// JQUERY NOT INSTALLED BY DEFAULT
-//    $.get("/wordblocks/dictionaries/" + dictionary + "/" + dictionary + ".js", function(data) { this.wordlist = data; ***REMOVED***);
-//
+    try {
+      xhr.send();
+      if (xhr.status != 200) {
+        salert(`Network issues downloading dictionary -- ${durl***REMOVED***`);
+  ***REMOVED*** else {
+	//
+	// TODO -- dictionary should be JSON
+	//
+	eval(xhr.response);
+        this.wordlist = wordlist;
+  ***REMOVED***
+***REMOVED*** catch(err) { // instead of onerror
+      salert("Network issues downloading dictionary");
+***REMOVED***
+
+console.log("\n\n\nDOWNLOADED WORDLIST: " + JSON.stringify(this.wordlist));
+
     //
     // deal cards 
     //
@@ -129,6 +144,17 @@ console.log("INITIALIZE GAME 2");
 console.log("INITIALIZE GAME 2");
 
 
+    //
+    // stop here if initializing
+    //
+    if (this.game.initializing == 1) { return; ***REMOVED***
+
+
+
+
+
+
+
     resizeBoard = function resizeBoard(app) {
 
       if (this.window && !app.browser.isMobileBrowser(navigator.userAgent)) {
@@ -177,12 +203,12 @@ console.log("INITIALIZE GAME 2");
 ***REMOVED***;
 
 
+
     responsive = function responsive() {***REMOVED***;
 
     //
     // show tiles
     //
-
     this.showTiles();
 
     //
@@ -233,7 +259,6 @@ console.log("INITIALIZE GAME 2");
       $('.score').html(html);
 ***REMOVED***
 
-
     if (this.game.target == this.game.player) {
       this.updateStatusWithTiles("YOUR TURN: click on the board to place tiles, or <span class=\"link tosstiles\">discard tiles</span>.");
       this.enableEvents();
@@ -241,7 +266,6 @@ console.log("INITIALIZE GAME 2");
       this.updateStatusWithTiles(`Waiting for Player ${this.game.target***REMOVED*** to move.`);
       this.disableEvents();
 ***REMOVED***
-
 
     //
     // return letters
@@ -309,7 +333,7 @@ console.log("INITIALIZE GAME 2");
     var element = document.getElementById('gameboard');
 
     if (element !== null) {
-
+/********
       var hammertime = new Hammer(element, {***REMOVED***);
 
       hammertime.get('pinch').set({ enable: true ***REMOVED***);
@@ -472,6 +496,7 @@ console.log("INITIALIZE GAME 2");
 
         element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
   ***REMOVED***
+*****/
 ***REMOVED***
 
     $('#game_status').on('click', () => {
@@ -1050,19 +1075,17 @@ console.log("INITIALIZE GAME 2");
 
 
 
+
   returnDeck() {
     var dictionary = this.game.options.dictionary;
-    if ($.isEmptyObject(this.mydeck)) {
-      var tmpdeck = {***REMOVED***;
-      $.ajax({
-        async: false,
-        url: "/wordblocks/dictionaries/" + dictionary + "/" + dictionary + ".deck.json",
-        dataType: "json",
-        success: function (response) {
-          tmpdeck = response;
-    ***REMOVED***
-  ***REMOVED***);
-      this.mydeck = tmpdeck;
+    if (dictionary === "twl") {
+      this.mydeck = {"1":{"name":"A"***REMOVED***,"2":{"name":"A"***REMOVED***,"3":{"name":"A"***REMOVED***,"4":{"name":"A"***REMOVED***,"5":{"name":"A"***REMOVED***,"6":{"name":"A"***REMOVED***,"7":{"name":"A"***REMOVED***,"8":{"name":"A"***REMOVED***,"9":{"name":"A"***REMOVED***,"10":{"name":"B"***REMOVED***,"11":{"name":"B"***REMOVED***,"12":{"name":"C"***REMOVED***,"13":{"name":"C"***REMOVED***,"14":{"name":"D"***REMOVED***,"15":{"name":"D"***REMOVED***,"16":{"name":"D"***REMOVED***,"17":{"name":"D"***REMOVED***,"18":{"name":"E"***REMOVED***,"19":{"name":"E"***REMOVED***,"20":{"name":"E"***REMOVED***,"21":{"name":"E"***REMOVED***,"22":{"name":"E"***REMOVED***,"23":{"name":"E"***REMOVED***,"24":{"name":"E"***REMOVED***,"25":{"name":"E"***REMOVED***,"26":{"name":"E"***REMOVED***,"27":{"name":"E"***REMOVED***,"28":{"name":"E"***REMOVED***,"29":{"name":"E"***REMOVED***,"30":{"name":"F"***REMOVED***,"41":{"name":"F"***REMOVED***,"42":{"name":"G"***REMOVED***,"43":{"name":"G"***REMOVED***,"44":{"name":"G"***REMOVED***,"45":{"name":"H"***REMOVED***,"46":{"name":"H"***REMOVED***,"47":{"name":"I"***REMOVED***,"48":{"name":"I"***REMOVED***,"49":{"name":"I"***REMOVED***,"50":{"name":"I"***REMOVED***,"51":{"name":"I"***REMOVED***,"52":{"name":"I"***REMOVED***,"53":{"name":"I"***REMOVED***,"54":{"name":"I"***REMOVED***,"55":{"name":"I"***REMOVED***,"56":{"name":"J"***REMOVED***,"57":{"name":"K"***REMOVED***,"58":{"name":"L"***REMOVED***,"59":{"name":"L"***REMOVED***,"60":{"name":"L"***REMOVED***,"61":{"name":"L"***REMOVED***,"62":{"name":"M"***REMOVED***,"63":{"name":"M"***REMOVED***,"64":{"name":"N"***REMOVED***,"65":{"name":"N"***REMOVED***,"66":{"name":"N"***REMOVED***,"67":{"name":"N"***REMOVED***,"68":{"name":"N"***REMOVED***,"69":{"name":"N"***REMOVED***,"70":{"name":"O"***REMOVED***,"71":{"name":"O"***REMOVED***,"72":{"name":"O"***REMOVED***,"73":{"name":"O"***REMOVED***,"74":{"name":"O"***REMOVED***,"75":{"name":"O"***REMOVED***,"76":{"name":"O"***REMOVED***,"77":{"name":"O"***REMOVED***,"78":{"name":"P"***REMOVED***,"79":{"name":"P"***REMOVED***,"80":{"name":"Q"***REMOVED***,"81":{"name":"R"***REMOVED***,"82":{"name":"R"***REMOVED***,"83":{"name":"R"***REMOVED***,"84":{"name":"R"***REMOVED***,"85":{"name":"R"***REMOVED***,"86":{"name":"R"***REMOVED***,"87":{"name":"S"***REMOVED***,"88":{"name":"S"***REMOVED***,"89":{"name":"S"***REMOVED***,"90":{"name":"S"***REMOVED***,"91":{"name":"T"***REMOVED***,"92":{"name":"T"***REMOVED***,"93":{"name":"T"***REMOVED***,"94":{"name":"T"***REMOVED***,"95":{"name":"T"***REMOVED***,"96":{"name":"T"***REMOVED***,"97":{"name":"U"***REMOVED***,"98":{"name":"U"***REMOVED***,"99":{"name":"U"***REMOVED***,"100":{"name":"U"***REMOVED***,"101":{"name":"V"***REMOVED***,"102":{"name":"V"***REMOVED***,"103":{"name":"W"***REMOVED***,"104":{"name":"W"***REMOVED***,"105":{"name":"X"***REMOVED***,"106":{"name":"U"***REMOVED***,"107":{"name":"Y"***REMOVED***,"108":{"name":"Y"***REMOVED***,"109":{"name":"Z"***REMOVED******REMOVED***;
+***REMOVED***
+    if (dictionary === "fise") {
+      this.mydeck = {"1":{"name":"A"***REMOVED***,"2":{"name":"A"***REMOVED***,"3":{"name":"A"***REMOVED***,"4":{"name":"A"***REMOVED***,"5":{"name":"A"***REMOVED***,"6":{"name":"A"***REMOVED***,"7":{"name":"A"***REMOVED***,"8":{"name":"A"***REMOVED***,"9":{"name":"A"***REMOVED***,"10":{"name":"A"***REMOVED***,"11":{"name":"A"***REMOVED***,"12":{"name":"A"***REMOVED***,"13":{"name":"B"***REMOVED***,"14":{"name":"B"***REMOVED***,"15":{"name":"C"***REMOVED***,"16":{"name":"C"***REMOVED***,"17":{"name":"C"***REMOVED***,"18":{"name":"C"***REMOVED***,"19":{"name":"C"***REMOVED***,"20":{"name":"D"***REMOVED***,"21":{"name":"D"***REMOVED***,"22":{"name":"D"***REMOVED***,"23":{"name":"D"***REMOVED***,"24":{"name":"D"***REMOVED***,"25":{"name":"E"***REMOVED***,"26":{"name":"E"***REMOVED***,"27":{"name":"E"***REMOVED***,"28":{"name":"E"***REMOVED***,"29":{"name":"E"***REMOVED***,"30":{"name":"E"***REMOVED***,"31":{"name":"E"***REMOVED***,"32":{"name":"E"***REMOVED***,"33":{"name":"E"***REMOVED***,"34":{"name":"E"***REMOVED***,"35":{"name":"E"***REMOVED***,"36":{"name":"E"***REMOVED***,"37":{"name":"E"***REMOVED***,"38":{"name":"F"***REMOVED***,"39":{"name":"G"***REMOVED***,"40":{"name":"G"***REMOVED***,"41":{"name":"H"***REMOVED***,"42":{"name":"H"***REMOVED***,"43":{"name":"H"***REMOVED***,"44":{"name":"I"***REMOVED***,"45":{"name":"I"***REMOVED***,"46":{"name":"I"***REMOVED***,"47":{"name":"I"***REMOVED***,"48":{"name":"I"***REMOVED***,"49":{"name":"I"***REMOVED***,"50":{"name":"J"***REMOVED***,"51":{"name":"L"***REMOVED***,"52":{"name":"L"***REMOVED***,"53":{"name":"L"***REMOVED***,"54":{"name":"L"***REMOVED***,"55":{"name":"L"***REMOVED***,"56":{"name":"L"***REMOVED***,"57":{"name":"M"***REMOVED***,"58":{"name":"M"***REMOVED***,"59":{"name":"N"***REMOVED***,"60":{"name":"N"***REMOVED***,"61":{"name":"N"***REMOVED***,"62":{"name":"N"***REMOVED***,"63":{"name":"N"***REMOVED***,"64":{"name":"Ñ"***REMOVED***,"65":{"name":"Ñ"***REMOVED***,"66":{"name":"O"***REMOVED***,"67":{"name":"O"***REMOVED***,"68":{"name":"O"***REMOVED***,"69":{"name":"O"***REMOVED***,"70":{"name":"O"***REMOVED***,"71":{"name":"O"***REMOVED***,"72":{"name":"O"***REMOVED***,"73":{"name":"O"***REMOVED***,"74":{"name":"O"***REMOVED***,"75":{"name":"O"***REMOVED***,"76":{"name":"P"***REMOVED***,"77":{"name":"P"***REMOVED***,"78":{"name":"Q"***REMOVED***,"79":{"name":"R"***REMOVED***,"80":{"name":"R"***REMOVED***,"81":{"name":"R"***REMOVED***,"82":{"name":"R"***REMOVED***,"83":{"name":"R"***REMOVED***,"84":{"name":"R"***REMOVED***,"85":{"name":"R"***REMOVED***,"86":{"name":"S"***REMOVED***,"87":{"name":"S"***REMOVED***,"88":{"name":"S"***REMOVED***,"89":{"name":"S"***REMOVED***,"90":{"name":"S"***REMOVED***,"91":{"name":"S"***REMOVED***,"92":{"name":"S"***REMOVED***,"93":{"name":"T"***REMOVED***,"94":{"name":"T"***REMOVED***,"95":{"name":"T"***REMOVED***,"96":{"name":"T"***REMOVED***,"97":{"name":"U"***REMOVED***,"98":{"name":"U"***REMOVED***,"99":{"name":"U"***REMOVED***,"100":{"name":"U"***REMOVED***,"101":{"name":"U"***REMOVED***,"102":{"name":"V"***REMOVED***,"103":{"name":"X"***REMOVED***,"104":{"name":"Y"***REMOVED***,"105":{"name":"Z"***REMOVED******REMOVED***;
+***REMOVED***
+    if (dictionary === "sowpods") {
+      this.mydeck = {"1":{"name":"A"***REMOVED***,"2":{"name":"A"***REMOVED***,"3":{"name":"A"***REMOVED***,"4":{"name":"A"***REMOVED***,"5":{"name":"A"***REMOVED***,"6":{"name":"A"***REMOVED***,"7":{"name":"A"***REMOVED***,"8":{"name":"A"***REMOVED***,"9":{"name":"A"***REMOVED***,"10":{"name":"B"***REMOVED***,"11":{"name":"B"***REMOVED***,"12":{"name":"C"***REMOVED***,"13":{"name":"C"***REMOVED***,"14":{"name":"D"***REMOVED***,"15":{"name":"D"***REMOVED***,"16":{"name":"D"***REMOVED***,"17":{"name":"D"***REMOVED***,"18":{"name":"E"***REMOVED***,"19":{"name":"E"***REMOVED***,"20":{"name":"E"***REMOVED***,"21":{"name":"E"***REMOVED***,"22":{"name":"E"***REMOVED***,"23":{"name":"E"***REMOVED***,"24":{"name":"E"***REMOVED***,"25":{"name":"E"***REMOVED***,"26":{"name":"E"***REMOVED***,"27":{"name":"E"***REMOVED***,"28":{"name":"E"***REMOVED***,"29":{"name":"E"***REMOVED***,"30":{"name":"F"***REMOVED***,"41":{"name":"F"***REMOVED***,"42":{"name":"G"***REMOVED***,"43":{"name":"G"***REMOVED***,"44":{"name":"G"***REMOVED***,"45":{"name":"H"***REMOVED***,"46":{"name":"H"***REMOVED***,"47":{"name":"I"***REMOVED***,"48":{"name":"I"***REMOVED***,"49":{"name":"I"***REMOVED***,"50":{"name":"I"***REMOVED***,"51":{"name":"I"***REMOVED***,"52":{"name":"I"***REMOVED***,"53":{"name":"I"***REMOVED***,"54":{"name":"I"***REMOVED***,"55":{"name":"I"***REMOVED***,"56":{"name":"J"***REMOVED***,"57":{"name":"K"***REMOVED***,"58":{"name":"L"***REMOVED***,"59":{"name":"L"***REMOVED***,"60":{"name":"L"***REMOVED***,"61":{"name":"L"***REMOVED***,"62":{"name":"M"***REMOVED***,"63":{"name":"M"***REMOVED***,"64":{"name":"N"***REMOVED***,"65":{"name":"N"***REMOVED***,"66":{"name":"N"***REMOVED***,"67":{"name":"N"***REMOVED***,"68":{"name":"N"***REMOVED***,"69":{"name":"N"***REMOVED***,"70":{"name":"O"***REMOVED***,"71":{"name":"O"***REMOVED***,"72":{"name":"O"***REMOVED***,"73":{"name":"O"***REMOVED***,"74":{"name":"O"***REMOVED***,"75":{"name":"O"***REMOVED***,"76":{"name":"O"***REMOVED***,"77":{"name":"O"***REMOVED***,"78":{"name":"P"***REMOVED***,"79":{"name":"P"***REMOVED***,"80":{"name":"Q"***REMOVED***,"81":{"name":"R"***REMOVED***,"82":{"name":"R"***REMOVED***,"83":{"name":"R"***REMOVED***,"84":{"name":"R"***REMOVED***,"85":{"name":"R"***REMOVED***,"86":{"name":"R"***REMOVED***,"87":{"name":"S"***REMOVED***,"88":{"name":"S"***REMOVED***,"89":{"name":"S"***REMOVED***,"90":{"name":"S"***REMOVED***,"91":{"name":"T"***REMOVED***,"92":{"name":"T"***REMOVED***,"93":{"name":"T"***REMOVED***,"94":{"name":"T"***REMOVED***,"95":{"name":"T"***REMOVED***,"96":{"name":"T"***REMOVED***,"97":{"name":"U"***REMOVED***,"98":{"name":"U"***REMOVED***,"99":{"name":"U"***REMOVED***,"100":{"name":"U"***REMOVED***,"101":{"name":"V"***REMOVED***,"102":{"name":"V"***REMOVED***,"103":{"name":"W"***REMOVED***,"104":{"name":"W"***REMOVED***,"105":{"name":"X"***REMOVED***,"106":{"name":"U"***REMOVED***,"107":{"name":"Y"***REMOVED***,"108":{"name":"Y"***REMOVED***,"109":{"name":"Z"***REMOVED******REMOVED***;
 ***REMOVED***
     return this.mydeck;
   ***REMOVED***
@@ -1072,20 +1095,19 @@ console.log("INITIALIZE GAME 2");
 
   returnLetters() {
     var dictionary = this.game.options.dictionary;
-    if ($.isEmptyObject(this.letterset)) {
-      var tmpletters = {***REMOVED***;
-      $.ajax({
-        async: false,
-        url:"/wordblocks/dictionaries/" + dictionary + "/" + dictionary + ".letters.js",
-        dataType: "json",
-        success: function (response) {
-          tmpletters = response;
-    ***REMOVED***
-  ***REMOVED***);
-      this.letterset = tmpletters;
+    if (dictionary === "twl") {
+      this.letterset = {"A":{"score":1***REMOVED***,"B":{"score":3***REMOVED***,"C":{"score":2***REMOVED***,"D":{"score":2***REMOVED***,"E":{"score":1***REMOVED***,"F":{"score":2***REMOVED***,"G":{"score":2***REMOVED***,"H":{"score":1***REMOVED***,"I":{"score":1***REMOVED***,"J":{"score":8***REMOVED***,"K":{"score":4***REMOVED***,"L":{"score":2***REMOVED***,"M":{"score":2***REMOVED***,"N":{"score":1***REMOVED***,"O":{"score":1***REMOVED***,"P":{"score":2***REMOVED***,"Q":{"score":10***REMOVED***,"R":{"score":1***REMOVED***,"S":{"score":1***REMOVED***,"T":{"score":1***REMOVED***,"U":{"score":2***REMOVED***,"V":{"score":3***REMOVED***,"W":{"score":2***REMOVED***,"X":{"score":8***REMOVED***,"Y":{"score":2***REMOVED***,"Z":{"score":10***REMOVED******REMOVED***;
+***REMOVED***
+    if (dictionary === "fise") {
+      this.letterset = {"A":{"score":1***REMOVED***,"B":{"score":2***REMOVED***,"C":{"score":3***REMOVED***,"D":{"score":2***REMOVED***,"E":{"score":1***REMOVED***,"F":{"score":4***REMOVED***,"G":{"score":2***REMOVED***,"H":{"score":4***REMOVED***,"I":{"score":1***REMOVED***,"J":{"score":8***REMOVED***,"L":{"score":1***REMOVED***,"M":{"score":3***REMOVED***,"N":{"score":1***REMOVED***,"Ñ":{"score":8***REMOVED***,"O":{"score":1***REMOVED***,"P":{"score":3***REMOVED***,"Q":{"score":6***REMOVED***,"R":{"score":2***REMOVED***,"S":{"score":1***REMOVED***,"T":{"score":1***REMOVED***,"U":{"score":1***REMOVED***,"V":{"score":4***REMOVED***,"X":{"score":8***REMOVED***,"Y":{"score":4***REMOVED***,"Z":{"score":10***REMOVED******REMOVED***;
+***REMOVED***
+    if (dictionary === "sowpods") {
+      this.letterset = {"A":{"score":1***REMOVED***,"B":{"score":3***REMOVED***,"C":{"score":2***REMOVED***,"D":{"score":2***REMOVED***,"E":{"score":1***REMOVED***,"F":{"score":2***REMOVED***,"G":{"score":2***REMOVED***,"H":{"score":1***REMOVED***,"I":{"score":1***REMOVED***,"J":{"score":8***REMOVED***,"K":{"score":4***REMOVED***,"L":{"score":2***REMOVED***,"M":{"score":2***REMOVED***,"N":{"score":1***REMOVED***,"O":{"score":1***REMOVED***,"P":{"score":2***REMOVED***,"Q":{"score":10***REMOVED***,"R":{"score":1***REMOVED***,"S":{"score":1***REMOVED***,"T":{"score":1***REMOVED***,"U":{"score":2***REMOVED***,"V":{"score":3***REMOVED***,"W":{"score":2***REMOVED***,"X":{"score":8***REMOVED***,"Y":{"score":2***REMOVED***,"Z":{"score":10***REMOVED******REMOVED***;
 ***REMOVED***
     return this.letterset;
   ***REMOVED***
+
+
 
 
   checkWord(word) {
@@ -1811,7 +1833,7 @@ console.log("INITIALIZE GAME 2");
 
           <label for="dictionary">Dictionary:</label>
           <select name="dictionary">
-            <option value="sowpods" default>English: SOWPODS</option>
+            <option value="sowpods" selected>English: SOWPODS</option>
             <option value="twl">English: TWL06</option>
             <option value="fise">Spanish: FISE</option>
           </select>

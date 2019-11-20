@@ -208,11 +208,6 @@ console.log("\n\n\n\n");
     if (this.countries[i].ussr > 0) { this.showInfluence(i, "ussr"); ***REMOVED***
   ***REMOVED***
 
-
-
-
-
-
   var element = document.getElementById('gameboard');
 
   if (element !== null) {
@@ -359,6 +354,7 @@ console.log("\n\n\n\n");
   ***REMOVED***
 
 
+/*****
   let twilight_self = this;
   $('.scoring_card').off();
   $('.scoring_card')
@@ -382,6 +378,7 @@ console.log("\n\n\n\n");
       let region = this.id;
       $(`.display_card#${region***REMOVED***`).hide();
 ***REMOVED***)
+*****/
 
 ***REMOVED***
 
@@ -13883,7 +13880,7 @@ returnGameOptionsHTML() {
           <label for="deck">Deck:</label>
           <select name="deck" id="deckselect" onchange='
 if ($("#deckselect").val() == "saito") { $(".saito_edition").prop("checked",true); ***REMOVED*** else { $(".saito_edition").prop("checked", false); if ($("#deckselect").val() == "optional") { $(".optional_edition").prop("checked", false); ***REMOVED*** else { $(".optional_edition").prop("checked", true); ***REMOVED*** ***REMOVED***  '> 
-           <option value="original">original</option>
+            <option value="original">original</option>
             <option value="optional">optional</option>
             <option value="saito" selected>saito edition</option>
           </select>

@@ -207,6 +207,7 @@ console.log("ERROR 418019: error fetching game for observer mode");
       if (res.rows.length > 0) {
         for (let i = 0; i < res.rows.length; i++) {
 	  let tx = new saito.transaction(JSON.parse(res.rows[i].tx));
+console.log("ADDING OPEN GAME FROM SERVER: " + JSON.stringify(tx.transaction));
 	  arcade_self.addGameToOpenList(tx);
 	***REMOVED***
   ***REMOVED***
@@ -255,12 +256,16 @@ console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
 
     for (let i = 0; i < this.games.length; i++) {
       if (this.games[i].transaction.sig == tx.transaction.sig) { 
+console.log("QUITTING A: " + this.games[i].transaction.options);
         return;
   ***REMOVED***
       if (txmsg.game_id == this.games[i].transaction.sig) {
+console.log("QUITTING B: " + this.games[i].transaction.options);
         return;
   ***REMOVED***
 ***REMOVED***
+
+console.log("PUSHING BACK: " + JSON.stringify(tx.transaction));
 
     this.games.unshift(tx);
 
@@ -323,7 +328,9 @@ console.log("ARCADE GETS ACCEPT MESSAGE: " + txmsg.request);
 
         for (let i = 0; i < arcade_self.app.options.games.length; i++) {
 	  if (arcade_self.app.options.games[i].id == txmsg.game_id) {
+
 console.log("GAME NO LONGER INITIALIZING!");
+
 	    if (arcade_self.app.options.games[i].initializing == 0) { 
 
 	      //
@@ -460,6 +467,7 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
     let player			= tx.transaction.from[0].add;
     let game_id			= tx.transaction.sig;
     let options			= {***REMOVED***;
+    if (txmsg.options != undefined) { options = txmsg.options; ***REMOVED***
     let start_bid		= blk.block.id;
     let valid_for_minutes	= 60;
     let created_at		= parseInt(tx.transaction.ts);
@@ -500,6 +508,7 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
 console.log("INSERTING OPEN GAME: " + sql + " -- " + params);
     await app.storage.executeDatabase(sql, params, "arcade");
     return;
+
   ***REMOVED***
   sendOpenRequest(app, data, gamedata) {
     let tx = this.createOpenTransaction(gamedata);
@@ -556,6 +565,20 @@ console.log("INSERTING OPEN GAME: " + sql + " -- " + params);
     //
     let opponent = tx.transaction.from[0].add;
     let invitee  = tx.transaction.to[0].add;
+
+    //
+    //
+    //
+    if (this.app.options.games != undefined) {
+      for (let i = 0; i < this.app.options.games.length; i++) {
+        if (this.app.options.games[i].id == txmsg.game_id) {
+console.log("UPDATED: " + JSON.stringify(txmsg.options));
+          this.app.options.games[i].options = txmsg.options;
+          this.app.storage.saveOptions();
+    ***REMOVED***
+  ***REMOVED***
+***REMOVED***
+
 
     data = {***REMOVED***;
     data.arcade = this;
