@@ -57,6 +57,8 @@ module.exports = EmailAppspaceTemplate = (app) => {
 
 <button class="sub"><i class="fas fa-file-download"></i>Sub Button*</button>
 
+<button class="action"><i class="fas fa-sign-out-alt"></i>Action Button*</button>
+
 <hr />
 
 <p>Monospace*</p>
