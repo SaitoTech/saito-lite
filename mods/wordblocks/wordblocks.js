@@ -1285,7 +1285,7 @@ console.log("INITIALIZE GAME 2");
         score += this.letters[thisletter].score * letter_bonus;
       }
 
-      if (!checkWord(thisword)) {
+      if (!this.checkWord(thisword)) {
         return -1;
       }
 
@@ -1399,7 +1399,7 @@ console.log("INITIALIZE GAME 2");
 
             score += wordscore * word_bonus;
 
-            if (!checkWord(thisword)) {
+            if (!this.checkWord(thisword)) {
               return -1;
             }
           }
@@ -1498,7 +1498,7 @@ console.log("INITIALIZE GAME 2");
         score += this.letters[thisletter].score * letter_bonus;
       }
 
-      if (!checkWord(thisword)) {
+      if (!this.checkWord(thisword)) {
         return -1;
       }
 
