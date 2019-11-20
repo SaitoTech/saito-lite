@@ -314,9 +314,34 @@ body {
     grid-template-columns: 1fr;
     grid-template-areas: "arcade-left-sidebar" "arcade-main";
   ***REMOVED***
-  .arcade-sidebar {
+
+  .arcade-left-sidebar {
     display: none;
   ***REMOVED***
+  .arcade-right-sidebar {
+    display: none;
+  ***REMOVED***
+
+  #arcade-carousel {
+    max-width: 90vw;
+  ***REMOVED***
+
+  .arcade-gamelist {
+    width: 100%;
+  ***REMOVED***
+
+  .arcade-game-invitation {
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+  ***REMOVED***
+
+  .arcade-game-invitation div {
+    margin-left: unset;
+  ***REMOVED***
+
+  /* .arcade-sidebar {
+    display: none;
+  ***REMOVED*** */
 ***REMOVED***
 
 @media only screen and (min-width: 600px) {
