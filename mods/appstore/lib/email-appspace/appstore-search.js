@@ -3,11 +3,11 @@ const AppStoreAppspaceTemplate 	= require('./appstore-search.template.js');
 module.exports = AppStoreSearch = {
 
     render(app, data) {
-      document.querySelector(".email-appspace").innerHTML += AppStoreSearchTemplate();
+//      document.querySelector(".email-appspace").innerHTML += AppStoreSearchTemplate();
 ***REMOVED***,
 
     attachEvents(app, data) {
-
+/*
       document.querySelector('#appstore-search-btn')
         .addEventListener('click', (e) => {
 	  let querystr = document.getElementById("appstore-search").value;
@@ -29,20 +29,15 @@ module.exports = AppStoreSearch = {
               r_obj.innerHTML += `<div class="slot">${JSON.stringify(res.rows[i])***REMOVED***</div>`;
         ***REMOVED***
 
-/*
+
             Array.from(document.getElementsByClassName('slot')).forEach(appointment => {
               appointment.addEventListener('click', (e) => {
 alert("We have clicked an appointment!");
           ***REMOVED***)
         ***REMOVED***);
-*/
-
-
       ***REMOVED***);
-
-
-
   ***REMOVED***);
+*/
 
 
 ***REMOVED***

@@ -1,25 +1,150 @@
 module.exports = AppStoreAppspaceTemplate = () => {
   return `
+<link rel="stylesheet" type="text/css" href="/appstore/css/email-appspace.css">
+
 <div class="email-appspace-appstore">
-  <h2>Submit Module to AppStore</h2>
-  <div>
-    <h4>Please attach your Saito module as a ZIP file:</h4>
-  </div>
-  <fieldset>
-  <div class="grid-2">
-	<div>File:</div>
-	<div>
-	<input type="hidden" name="module-file" id="module-file" />
-          <input type="file" id="module-file-upload-btn" multiple accept="*" />
+
+  <div class="email-appspace-appstore-search">
+
+    <div class="featured-applications">
+     <h3>Featured Applications</h3>
     </div>
+    
+    <div class="app-search-input">
+      <input type="text" placeholder="Search Applications for ..." id="app-search">
+      <i class="fas fa-search"></i>
+    </div>
+
   </div>
-  <button class="button inactive" id="appstore-submit">Upload to Network</button>
-  <p>
-	  <h5>Uploading a module automatically submits it to all listening AppStores on the Saito network.</h5>
-  </p>
-  </fieldset>
+  
+  <div class="appstore-app">
+    
+    <div class="appstore-app-list">
+
+      <div class="app-list-one-box">
+        <a href="" class="app-list-one-img"></a>
+      </div>
+
+      <div class="app-one-info">
+        <div class="app-one-name">Honey and Stones</div>
+        <div class="app-score">score: 8.5</div>
+        <button class="app-install-btn">insall</button>
+      </div>
+    
+    </div>
+
+    <div class="appstore-app-list">
+
+      <div class="app-list-one-box">
+        <a href="" class="app-list-one-img"></a>
+      </div>
+
+      <div class="app-one-info">
+        <div class="app-one-name">Honey and Stones</div>
+        <div class="app-score">score: 8.5</div>
+        <button class="app-install-btn">insall</button>
+      </div>
+    
+    </div>
+
+    <div class="appstore-app-list">
+
+      <div class="app-list-one-box">
+        <a href="" class="app-list-one-img"></a>
+      </div>
+
+      <div class="app-one-info">
+        <div class="app-one-name">Honey and Stones</div>
+        <div class="app-score">score: 8.5</div>
+        <button class="app-install-btn">insall</button>
+      </div>
+    
+    </div>
+
+    <div class="appstore-app-list">
+
+      <div class="app-list-one-box">
+        <a href="" class="app-list-one-img"></a>
+      </div>
+
+      <div class="app-one-info">
+        <div class="app-one-name">Honey and Stones</div>
+        <div class="app-score">score: 8.5</div>
+        <button class="app-install-btn">insall</button>
+      </div>
+    
+    </div>
+
+    <div class="app-view-more">
+      <i class="fas fa-chevron-circle-down"></i><a href="" class="app-view-more-tip">view more applications</a>
+    </div>
+        
+  </div>
+
+
+  <div class="appstore-sort">
+
+    <div class="appstore-sort-title">Sort</div>
+
+    <div class="appstore-sort-list">
+
+      <div class="appstore-sort-list-one">
+
+        <div class="appstore-sort-info">
+          <div class="appstore-sort-name">Games</div>
+          <div class="appstore-sort-amount">23000</div>
+        </div>
+        <div class="appstore-sort-icon"><i class="fas fa-gamepad"></i></div>
+
+      </div>
+
+    </div>
+
+    <div class="appstore-sort-list">
+
+      <div class="appstore-sort-list-one">
+
+        <div class="appstore-sort-info">
+          <div class="appstore-sort-name">Games</div>
+          <div class="appstore-sort-amount">23000</div>
+        </div>
+        <div class="appstore-sort-icon"><i class="fas fa-gamepad"></i></div>
+
+      </div>
+
+    </div>
+
+    <div class="appstore-sort-list">
+
+      <div class="appstore-sort-list-one">
+
+        <div class="appstore-sort-info">
+          <div class="appstore-sort-name">Games</div>
+          <div class="appstore-sort-amount">23000</div>
+        </div>
+        <div class="appstore-sort-icon"><i class="fas fa-gamepad"></i></div>
+
+      </div>
+
+    </div>
+
+    <div class="appstore-sort-list">
+
+      <div class="appstore-sort-list-one">
+
+        <div class="appstore-sort-info">
+          <div class="appstore-sort-name">Games</div>
+          <div class="appstore-sort-amount">23000</div>
+        </div>
+        <div class="appstore-sort-icon"><i class="fas fa-gamepad"></i></div>
+
+      </div>
+
+    </div>
+
+  </div>
+  
 </div>
-<hr />
 
   `;
 ***REMOVED***
