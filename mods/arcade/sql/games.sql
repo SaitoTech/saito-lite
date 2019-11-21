@@ -1,6 +1,9 @@
 CREATE TABLE IF NOT EXISTS games (
   id 		INTEGER,
   player 	TEXT,
+  players_needed 	INTEGER,
+  players_accepted 	INTEGER,
+  players_array TEXT ,
   module	TEXT,
   game_id	TEXT,
   status 	TEXT,

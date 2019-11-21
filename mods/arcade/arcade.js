@@ -136,6 +136,14 @@ console.log("ERROR 418019: error fetching game for observer mode");
 ***REMOVED***
 
     //
+    // right-panel sidebar
+    //
+    x = this.app.modules.respondTo("arcade-sidebar");
+    for (let i = 0; i < x.length; i++) {
+      this.mods.push(x[i]);
+***REMOVED***
+
+    //
     // add my own games (as fake txs)
     //
     if (this.app.options.games != null) {
@@ -156,7 +164,8 @@ console.log("ERROR 418019: error fetching game for observer mode");
 	z.transaction.msg.game_id  = this.app.options.games[i].id;
 	z.transaction.msg.request  = "loaded";
         z.transaction.msg.game   = this.app.options.games[i].module;
-        z.transaction.msg.options  = this.app.options.games[i].options;;
+        z.transaction.msg.options  = this.app.options.games[i].options;
+        z.transaction.msg.players_needed = this.app.options.games[i].players_needed;
 	this.addGameToOpenList(z);
   ***REMOVED***
 ***REMOVED***
@@ -468,15 +477,21 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
     let module 			= txmsg.game;
     let player			= tx.transaction.from[0].add;
     let game_id			= tx.transaction.sig;
+    let players_needed		= 2;
+    if (txmsg.players_needed > 2) { players_needed = txmsg.players_needed; ***REMOVED***
     let options			= {***REMOVED***;
     if (txmsg.options != undefined) { options = txmsg.options; ***REMOVED***
     let start_bid		= blk.block.id;
     let valid_for_minutes	= 60;
     let created_at		= parseInt(tx.transaction.ts);
     let expires_at 		= created_at + (60000 * parseInt(valid_for_minutes));
+    let players_array           = player;
 
     let sql = `INSERT INTO games (
   		player ,
+  		players_needed ,
+  		players_accepted ,
+  		players_array ,
 		module ,
 		game_id ,
 		status ,
@@ -487,6 +502,9 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
 		expires_at
 	      ) VALUES (
 		$player ,
+		$players_needed ,
+  		$players_accepted ,
+  		$players_array ,
 		$module ,
 		$game_id ,
 		$status ,
@@ -498,6 +516,9 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
 	      )`;
     let params = {
                 $player     : player ,
+                $players_needed     : players_needed ,
+                $players_accepted   : 0 ,
+                $players_array      : players_array ,
                 $module     : module ,
                 $game_id    : game_id ,
 	 	$status	    : "open" ,
@@ -507,7 +528,6 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
 		$created_at : created_at ,
 		$expires_at : expires_at
           ***REMOVED***;
-console.log("INSERTING OPEN GAME: " + sql + " -- " + params);
     await app.storage.executeDatabase(sql, params, "arcade");
     return;
 
@@ -548,13 +568,37 @@ console.log("INSERTING OPEN GAME: " + sql + " -- " + params);
     // servers
     //
     let txmsg = tx.returnMessage();
-    let sql = "UPDATE games SET state = 'active', id = $gid WHERE sig = $sig";
+    //let sql = "UPDATE games SET state = 'active', id = $gid WHERE sig = $sig";
+    //let params = {
+    //  $gid : txmsg.game_id ,
+    //  $sig : txmsg.sig
+    //***REMOVED***
+    //await this.app.storage.executeDatabase(sql, params, "arcade");
+
+    let unique_keys = [];
+    for (let i = 0; i < tx.transaction.to.length; i++) {
+      if (!unique_keys.contains(tx.transaction.to[i].add)) {
+	unique_keys.push(tx.transaction.to[i].add);
+  ***REMOVED***
+***REMOVED***
+    unique_keys.sort();
+    let players_array = unique_keys.join("_"); 
+
+    let sql = "UPDATE games SET players_accepted = "+unique_keys.length+", players_array = $players_array WHERE state = $state AND player IN ($player1, $player2, $player3, $player4)";
     let params = {
-      $gid : txmsg.game_id ,
-      $sig : txmsg.sig
+      $players_array : players_array ,
+      $state : 'open',
+      $player1 : unique_keys[0] || '' ,
+      $player2 : unique_keys[1] || '' ,
+      $player3 : unique_keys[2] || '' ,
+      $player4 : unique_keys[3] || '' ,
 ***REMOVED***
     await this.app.storage.executeDatabase(sql, params, "arcade");
+
+
+
     if (this.browser_active == 0) { return; ***REMOVED***
+
 
     //
     // auto-accept
@@ -574,7 +618,6 @@ console.log("INSERTING OPEN GAME: " + sql + " -- " + params);
     if (this.app.options.games != undefined) {
       for (let i = 0; i < this.app.options.games.length; i++) {
         if (this.app.options.games[i].id == txmsg.game_id) {
-console.log("UPDATED: " + JSON.stringify(txmsg.options));
           this.app.options.games[i].options = txmsg.options;
           this.app.storage.saveOptions();
     ***REMOVED***
@@ -601,6 +644,7 @@ console.log("UPDATED: " + JSON.stringify(txmsg.options));
         tx.transaction.msg.module   	= txmsg.game;
         tx.transaction.msg.request  	= "invite";
 	tx.transaction.msg.game_id	= gametx.transaction.sig;
+        tx.transaction.msg.players_needed 	= txmsg.players_needed;
         tx.transaction.msg.options  	= txmsg.options;
         tx.transaction.msg.accept_sig   = "";
 	if (gametx.transaction.msg.accept_sig != "") { 
@@ -632,17 +676,34 @@ console.log("UPDATED: " + JSON.stringify(txmsg.options));
     let publickeys = tx.transaction.to.map(slip => slip.add);
     let removeDuplicates = (names) => names.filter((v,i) => names.indexOf(v) === i)
     let unique_keys = removeDuplicates(publickeys);
- 
-    let sql = "UPDATE games SET state = 'accepted' WHERE state = $state AND player IN ($player1, $player2, $player3, $player4)";
+    unique_keys.sort();
+    let players_array = unique_keys.join("_"); 
+
+    let sql = "UPDATE games SET players_accepted = (players_accepted+1), players_array = $players_array WHERE state = $state AND player IN ($player1, $player2, $player3, $player4)";
     let params = {
+      $players_array : players_array ,
       $state : 'open',
-      $player1 : unique_keys[0] || '',
-      $player2 : unique_keys[1] || '',
-      $player3 : unique_keys[2] || '',
-      $player4 : unique_keys[3] || '',
+      $player1 : unique_keys[0] || '' ,
+      $player2 : unique_keys[1] || '' ,
+      $player3 : unique_keys[2] || '' ,
+      $player4 : unique_keys[3] || '' ,
+***REMOVED***
+    await this.app.storage.executeDatabase(sql, params, "arcade");
+
+
+    sql = "UPDATE games SET state = 'active' WHERE state = $state AND players_accepted >= players_needed AND player IN ($player1, $player2, $player3, $player4)";
+    params = {
+      $state : 'open',
+      $player1 : unique_keys[0] || '' ,
+      $player2 : unique_keys[1] || '' ,
+      $player3 : unique_keys[2] || '' ,
+      $player4 : unique_keys[3] || '' ,
 ***REMOVED***
 console.log("about to await execut db");
     await this.app.storage.executeDatabase(sql, params, "arcade");
+
+
+
 console.log("done now...");
 
   ***REMOVED***
@@ -794,7 +855,6 @@ console.log(JSON.stringify(game));
   //
   onNewBlock(blk, lc) {
     if (lc == 1) {
-console.log("IN ARCADE RESETTING ACCEPTED!");
       this.accepted = [];
 ***REMOVED***
   ***REMOVED***
