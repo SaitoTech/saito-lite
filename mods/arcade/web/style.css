@@ -66,6 +66,10 @@ body {
   align-items: center;
 }
 
+.arcade-gamelist {
+  width: 100%;
+}
+
 .game-options-html {
   display: flex;
 }
@@ -159,9 +163,9 @@ body {
   flex-direction: column;
 }
 
-.game-image-wizard {
+/* .game-image-wizard {
   max-width: 500px;
-}
+} */
 
 .return_to_arcade {
   height: 2em;
