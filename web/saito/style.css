@@ -94,7 +94,6 @@ button, .button, .file-label {
     border-radius: 5px;
     cursor: pointer;
     font-size: 1em;
-    min-width: 10em;
     padding: 10px 6px;
     background: #fefefe;
     border: 1px solid var(--saito-red);
@@ -443,7 +442,7 @@ label.treated {
     grid-gap: 0.5em;
 }
 
-.account-info div {
+.account-info div{
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
