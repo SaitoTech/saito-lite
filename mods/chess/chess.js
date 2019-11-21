@@ -28,8 +28,6 @@ class Chessgame extends GameTemplate {
 
   }
 
-
-
   async initializeGame(game_id) {
 
     console.log('######################################################');
@@ -51,7 +49,7 @@ class Chessgame extends GameTemplate {
       chess = require('./lib/chess.js');
       chessboard = require('./lib/chessboard');
 
-      this.board = new chessboard('board', { pieceTheme: 'chess/pieces/{piece}.png' });
+      this.board = new chessboard('board', { pieceTheme: 'img/pieces/{piece}.png' });
       this.engine = new chess.Chess();
     }
 
@@ -105,9 +103,6 @@ class Chessgame extends GameTemplate {
 
   }
 
-
-
-
   ////////////////
   // handleGame //
   ////////////////
@@ -159,8 +154,6 @@ console.log("QUEUE: " + this.game.queue);
 
   }
 
-
-
   endTurn(data) {
 
     let extra = {};
@@ -174,12 +167,6 @@ console.log("QUEUE: " + this.game.queue);
     this.sendMessage("game", extra);
 
   }
-
-
-
-
-
-
 
   attachEvents() {
 
@@ -221,8 +208,6 @@ console.log("QUEUE: " + this.game.queue);
       this_chess.board.resize();
     });
   }
-
-
 
   updateStatusMessage(str = "") {
 
@@ -280,9 +265,6 @@ console.log("QUEUE: " + this.game.queue);
 
   };
 
-
-
-
   setBoard(position) {
 
     this.game.moveStartPosition = position;
@@ -296,7 +278,8 @@ console.log("QUEUE: " + this.game.queue);
     let cfg = {
       draggable: true,
       position: position,
-      pieceTheme: 'chess/pieces/{piece}.png',
+      // pieceTheme: 'chess/pieces/{piece}.png',
+      pieceTheme: 'img/pieces/{piece}.png',
       onDragStart: this.onDragStart,
       onDrop: this.onDrop,
       onMouseoutSquare: this.onMouseoutSquare,
@@ -317,7 +300,6 @@ console.log("QUEUE: " + this.game.queue);
 
   }
 
-
   lockBoard(position) {
 
     if (this.board != undefined) {
@@ -327,7 +309,7 @@ console.log("QUEUE: " + this.game.queue);
     }
 
     let cfg = {
-      pieceTheme: 'chess/pieces/{piece}.png',
+      pieceTheme: 'img/pieces/{piece}.png',
       moveSpeed: 0,
       position: position
     }
@@ -352,9 +334,6 @@ console.log("QUEUE: " + this.game.queue);
       return false;
     }
   };
-
-
-
 
   onDrop(source, target, piece, newPos, oldPos, orientation, topromote) {
 
@@ -384,9 +363,6 @@ console.log("QUEUE: " + this.game.queue);
     }
   }
 
-
-
-
   promoteAfterDrop(source, target, piece) {
     var move = this_chess.engine.move({
       from: source,
@@ -408,9 +384,6 @@ console.log("QUEUE: " + this.game.queue);
 
   };
 
-
-
-
   checkPromotion(source, target, color) {
     $('#buttons').hide();
     let html = "";
@@ -430,11 +403,6 @@ console.log("QUEUE: " + this.game.queue);
     this_chess.updateStatusMessage('Chose promotion piece');
     $('#promotion').show();
   }
-
-
-
-
-
 
   onMouseoverSquare(square, piece) {
 
@@ -456,26 +424,17 @@ console.log("QUEUE: " + this.game.queue);
     }
   };
 
-
-
-
   onMouseoutSquare(square, piece) {
     this_chess.removeGreySquares();
   };
-
-
 
   onSnapEnd() {
     this_chess.board.position(this_chess.engine.fen());
   };
 
-
-
   removeGreySquares() {
     $('#board .square-55d63').css('background', '');
   };
-
-
 
   greySquare(square) {
 
@@ -489,9 +448,6 @@ console.log("QUEUE: " + this.game.queue);
     squareEl.css('background', background);
 
   };
-
-
-
 
   onChange(oldPos, newPos) {
 
@@ -509,8 +465,6 @@ console.log("QUEUE: " + this.game.queue);
 
   };
 
-
-
   colours(x) {
 
     switch (x) {
@@ -521,9 +475,6 @@ console.log("QUEUE: " + this.game.queue);
     return;
 
   }
-
-
-
 
   pieces(x) {
 
@@ -540,13 +491,6 @@ console.log("QUEUE: " + this.game.queue);
 
   }
 
-
-
-
-
-
-
-
   returnCaptured(afen) {
     afen = afen.split(" ")[0];
     let WH = ["Q", "R", "R", "B", "B", "N", "N", "P", "P", "P", "P", "P", "P", "P", "P"];
@@ -562,8 +506,6 @@ console.log("QUEUE: " + this.game.queue);
     return [WH, BL];
   }
 
-
-
   returnCapturedHTML(acapt) {
     let captHTML = "";
     for (var i = 0; i < acapt[0].length; i++) {
@@ -576,32 +518,21 @@ console.log("QUEUE: " + this.game.queue);
     return captHTML;
   }
 
-
-
-
   piecehtml(p, c) {
-    var pieceImg = '<img class="captured" alt="' + p + '" src = "/chess/pieces/' + c + p.toUpperCase() + '.png">';
-    return (pieceImg);
+    return `<img class="captured" alt="${p}" src = "img/pieces/${c}${p.toUpperCase()}.png">`;
   }
 
-
-
-
   returnGameOptionsHTML() {
-
     return `
-          <h3>Chess: </h3>
-
-          <form id="options" class="options">
-
-            <label for="color">Pick Your Color:</label>
-            <select name="color">
-              <option value="black" default>Black</option>
-              <option value="white">White</option>
-            </select>
-
-            </form>
-            `;
+      <h3>Chess: </h3>
+      <form id="options" class="options">
+        <label for="color">Pick Your Color:</label>
+        <select name="color">
+          <option value="black" default>Black</option>
+          <option value="white">White</option>
+        </select>
+      </form>
+    `;
   }
 
 }
