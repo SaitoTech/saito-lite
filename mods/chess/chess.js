@@ -28,8 +28,6 @@ class Chessgame extends GameTemplate {
 
   ***REMOVED***
 
-
-
   async initializeGame(game_id) {
 
     console.log('######################################################');
@@ -51,7 +49,7 @@ class Chessgame extends GameTemplate {
       chess = require('./lib/chess.js');
       chessboard = require('./lib/chessboard');
 
-      this.board = new chessboard('board', { pieceTheme: 'chess/pieces/{piece***REMOVED***.png' ***REMOVED***);
+      this.board = new chessboard('board', { pieceTheme: 'img/pieces/{piece***REMOVED***.png' ***REMOVED***);
       this.engine = new chess.Chess();
 ***REMOVED***
 
@@ -105,9 +103,6 @@ class Chessgame extends GameTemplate {
 
   ***REMOVED***
 
-
-
-
   ////////////////
   // handleGame //
   ////////////////
@@ -159,8 +154,6 @@ console.log("QUEUE: " + this.game.queue);
 
   ***REMOVED***
 
-
-
   endTurn(data) {
 
     let extra = {***REMOVED***;
@@ -174,12 +167,6 @@ console.log("QUEUE: " + this.game.queue);
     this.sendMessage("game", extra);
 
   ***REMOVED***
-
-
-
-
-
-
 
   attachEvents() {
 
@@ -221,8 +208,6 @@ console.log("QUEUE: " + this.game.queue);
       this_chess.board.resize();
 ***REMOVED***);
   ***REMOVED***
-
-
 
   updateStatusMessage(str = "") {
 
@@ -280,9 +265,6 @@ console.log("QUEUE: " + this.game.queue);
 
   ***REMOVED***;
 
-
-
-
   setBoard(position) {
 
     this.game.moveStartPosition = position;
@@ -296,7 +278,8 @@ console.log("QUEUE: " + this.game.queue);
     let cfg = {
       draggable: true,
       position: position,
-      pieceTheme: 'chess/pieces/{piece***REMOVED***.png',
+      // pieceTheme: 'chess/pieces/{piece***REMOVED***.png',
+      pieceTheme: 'img/pieces/{piece***REMOVED***.png',
       onDragStart: this.onDragStart,
       onDrop: this.onDrop,
       onMouseoutSquare: this.onMouseoutSquare,
@@ -317,7 +300,6 @@ console.log("QUEUE: " + this.game.queue);
 
   ***REMOVED***
 
-
   lockBoard(position) {
 
     if (this.board != undefined) {
@@ -327,7 +309,7 @@ console.log("QUEUE: " + this.game.queue);
 ***REMOVED***
 
     let cfg = {
-      pieceTheme: 'chess/pieces/{piece***REMOVED***.png',
+      pieceTheme: 'img/pieces/{piece***REMOVED***.png',
       moveSpeed: 0,
       position: position
 ***REMOVED***
@@ -352,9 +334,6 @@ console.log("QUEUE: " + this.game.queue);
       return false;
 ***REMOVED***
   ***REMOVED***;
-
-
-
 
   onDrop(source, target, piece, newPos, oldPos, orientation, topromote) {
 
@@ -384,9 +363,6 @@ console.log("QUEUE: " + this.game.queue);
 ***REMOVED***
   ***REMOVED***
 
-
-
-
   promoteAfterDrop(source, target, piece) {
     var move = this_chess.engine.move({
       from: source,
@@ -408,9 +384,6 @@ console.log("QUEUE: " + this.game.queue);
 
   ***REMOVED***;
 
-
-
-
   checkPromotion(source, target, color) {
     $('#buttons').hide();
     let html = "";
@@ -430,11 +403,6 @@ console.log("QUEUE: " + this.game.queue);
     this_chess.updateStatusMessage('Chose promotion piece');
     $('#promotion').show();
   ***REMOVED***
-
-
-
-
-
 
   onMouseoverSquare(square, piece) {
 
@@ -456,26 +424,17 @@ console.log("QUEUE: " + this.game.queue);
 ***REMOVED***
   ***REMOVED***;
 
-
-
-
   onMouseoutSquare(square, piece) {
     this_chess.removeGreySquares();
   ***REMOVED***;
-
-
 
   onSnapEnd() {
     this_chess.board.position(this_chess.engine.fen());
   ***REMOVED***;
 
-
-
   removeGreySquares() {
     $('#board .square-55d63').css('background', '');
   ***REMOVED***;
-
-
 
   greySquare(square) {
 
@@ -489,9 +448,6 @@ console.log("QUEUE: " + this.game.queue);
     squareEl.css('background', background);
 
   ***REMOVED***;
-
-
-
 
   onChange(oldPos, newPos) {
 
@@ -509,8 +465,6 @@ console.log("QUEUE: " + this.game.queue);
 
   ***REMOVED***;
 
-
-
   colours(x) {
 
     switch (x) {
@@ -521,9 +475,6 @@ console.log("QUEUE: " + this.game.queue);
     return;
 
   ***REMOVED***
-
-
-
 
   pieces(x) {
 
@@ -540,13 +491,6 @@ console.log("QUEUE: " + this.game.queue);
 
   ***REMOVED***
 
-
-
-
-
-
-
-
   returnCaptured(afen) {
     afen = afen.split(" ")[0];
     let WH = ["Q", "R", "R", "B", "B", "N", "N", "P", "P", "P", "P", "P", "P", "P", "P"];
@@ -562,8 +506,6 @@ console.log("QUEUE: " + this.game.queue);
     return [WH, BL];
   ***REMOVED***
 
-
-
   returnCapturedHTML(acapt) {
     let captHTML = "";
     for (var i = 0; i < acapt[0].length; i++) {
@@ -576,32 +518,21 @@ console.log("QUEUE: " + this.game.queue);
     return captHTML;
   ***REMOVED***
 
-
-
-
   piecehtml(p, c) {
-    var pieceImg = '<img class="captured" alt="' + p + '" src = "/chess/pieces/' + c + p.toUpperCase() + '.png">';
-    return (pieceImg);
+    return `<img class="captured" alt="${p***REMOVED***" src = "img/pieces/${c***REMOVED***${p.toUpperCase()***REMOVED***.png">`;
   ***REMOVED***
 
-
-
-
   returnGameOptionsHTML() {
-
     return `
-          <h3>Chess: </h3>
-
-          <form id="options" class="options">
-
-            <label for="color">Pick Your Color:</label>
-            <select name="color">
-              <option value="black" default>Black</option>
-              <option value="white">White</option>
-            </select>
-
-            </form>
-            `;
+      <h3>Chess: </h3>
+      <form id="options" class="options">
+        <label for="color">Pick Your Color:</label>
+        <select name="color">
+          <option value="black" default>Black</option>
+          <option value="white">White</option>
+        </select>
+      </form>
+    `;
   ***REMOVED***
 
 ***REMOVED***

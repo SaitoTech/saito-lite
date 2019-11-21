@@ -66,6 +66,10 @@ body {
   align-items: center;
 ***REMOVED***
 
+.arcade-gamelist {
+  width: 100%;
+***REMOVED***
+
 .game-options-html {
   display: flex;
 ***REMOVED***
@@ -159,9 +163,9 @@ body {
   flex-direction: column;
 ***REMOVED***
 
-.game-image-wizard {
+/* .game-image-wizard {
   max-width: 500px;
-***REMOVED***
+***REMOVED*** */
 
 .return_to_arcade {
   height: 2em;
