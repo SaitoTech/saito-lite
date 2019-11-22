@@ -4,17 +4,26 @@ module.exports = ArcadeGameListRowTemplate = (app, tx, button_text) => {
   let jointxt = "JOIN";
 
   let {sig, from, to, msg***REMOVED*** = tx.transaction;
-  let {options_html, game***REMOVED*** = msg;
+  let {players_array, options_html, game***REMOVED*** = msg;
 
+  if (players_array == undefined) {
+    players_array = "";
+    for (let i = 0; i < to.length; i++) {
+      players_array += to[i].add;
+      if (i < (to.length-1)) { players_array += "_"; ***REMOVED***
+***REMOVED***
+  ***REMOVED***
+  let players = players_array.split("_");
   let players_needed = 2;
+  if (options_html == undefined) { options_html = ""; ***REMOVED***
   if (msg.players_needed > 2) { players_needed = msg.players_needed; ***REMOVED***
   let total_players = 1;
-
+  
   let publickeys = [from[0].add];
-  if (to.length > 0) {
-    for (let i = 0; i < to.length; i++) {
-      if (!publickeys.includes(to[i].add)) {
-	publickeys.push(to[i].add);
+  if (players.length > 1) {
+    for (let i = 0; i < players.length; i++) {
+      if (!publickeys.includes(players[i])) {
+	publickeys.push(players[i]);
   ***REMOVED***
 ***REMOVED***
   ***REMOVED***

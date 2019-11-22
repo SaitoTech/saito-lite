@@ -37,6 +37,8 @@ class Poker extends GameTemplate {
     //
     if (this.game.deck.length == 0) {
 
+      this.game.state = this.returnState();
+
       this.updateStatus("Generating the Game");
 
       this.game.queue.push("round");
@@ -107,7 +109,9 @@ class Poker extends GameTemplate {
         this.game.queue.splice(qe, 1);
         if (parseInt(mv[1]) == this.game.player) {
           this.playerTurn();
-    ***REMOVED***
+    ***REMOVED*** else {
+	  this.updateStatus("Waiting for Player " + this.game.player); 
+	***REMOVED***
         shd_continue = 0;
   ***REMOVED***
       if (mv[0] === "round") {
@@ -191,6 +195,31 @@ class Poker extends GameTemplate {
 ***REMOVED***
 
   ***REMOVED***
+
+
+
+  returnState(num_of_players) {
+
+    let state = {***REMOVED***;
+        state.pot = 0.0;
+	state.passed = [];
+	state.round = 0;
+	state.big_blind = 50;
+	state.small_blind = 25;
+
+    for (let i = 0; i < num_of_players; i++) {
+      state.passed[i] = 0;
+***REMOVED***
+
+    //
+    // call
+    // hold
+    // match
+    //
+
+  ***REMOVED***
+
+
 
 
 

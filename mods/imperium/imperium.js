@@ -237,9 +237,13 @@ class Imperium extends GameTemplate {
   // initializeGame //
   ////////////////////
   async initializeGame(game_id) {
+
+console.log("IMPERIUM INIT GAME: " + game_id);
   
     this.updateStatus("loading game...");
     this.loadGame(game_id);
+
+console.log(this.game.id);
   
     if (this.game.status != "") { this.updateStatus(this.game.status); ***REMOVED***
   
@@ -257,6 +261,8 @@ class Imperium extends GameTemplate {
     // create new board
     //
     if (this.game.board == null) {
+
+console.log("\n\nGAME BOARD IS NULL!");
   
       this.game.board = {***REMOVED***;
       for (let i = 1, j = 4; i <= 7; i++) {
@@ -290,8 +296,18 @@ class Imperium extends GameTemplate {
       //
       let factions = this.returnFactions();
       let hwsectors = this.returnHomeworldSectors(this.game.players_info.length);
+console.log("HWSECTORS: ");
+console.log(JSON.stringify(hwsectors));
+console.log("PLAYERS INFO: ");
+console.log(JSON.stringify(this.game.players_info));
+console.log("FACTIONS: ");
+console.log(JSON.stringify(factions));
+
       for (let i = 0; i < this.game.players_info.length; i++) {
+console.log("setting homeworld: " + i);
         this.game.players_info[i].homeworld = hwsectors[i];
+console.log("DOES THE TILE EXIST: " + JSON.stringify(this.game.board[hwsectors[i]].tile));
+console.log("FACTION IDX: " + this.game.players_info[i].faction);
         this.game.board[hwsectors[i]].tile = factions[this.game.players_info[i].faction].homeworld;
   ***REMOVED***
   
@@ -412,7 +428,9 @@ class Imperium extends GameTemplate {
     // initialize game queue
     //
     if (this.game.queue.length == 0) {
-  
+
+console.log("hitting queue management!");  
+
       this.game.queue.push("turn");
       this.game.queue.push("newround");
   
@@ -440,6 +458,10 @@ class Imperium extends GameTemplate {
   
 ***REMOVED***
   
+
+
+console.log("HIT DOWN HERE AT END OF FUNCTION!");
+
     //
     // add events to board 
     //
@@ -3927,15 +3949,15 @@ console.log("resolving earlier: " + this.game.queue[z]);
     systems['sector27']        = { img : "/imperium/img/sector27.png" , 	   name : "Sector 27" , hw : 0 , mr : 0 , planets : ['planet34'] ***REMOVED***
     systems['sector28']        = { img : "/imperium/img/sector28.png" , 	   name : "Sector 28" , hw : 0 , mr : 0 , planets : ['planet35'] ***REMOVED***
     systems['sector29']        = { img : "/imperium/img/sector29.png" , 	   name : "Sector 29" , hw : 0 , mr : 0 , planets : ['planet36'] ***REMOVED***
-    systems['sector30']        = { img : "/imperium/img/sector32.png" , 	   name : "Sector 32" , hw : 0 , mr : 0 , planets : ['planet39'] ***REMOVED***
-    systems['sector31']        = { img : "/imperium/img/sector33.png" , 	   name : "Sector 33" , hw : 0 , mr : 0 , planets : [] ***REMOVED***
-    systems['sector32']        = { img : "/imperium/img/sector34.png" , 	   name : "Sector 34" , hw : 0 , mr : 0 , planets : [] ***REMOVED***
-    systems['sector33']        = { img : "/imperium/img/sector35.png" , 	   name : "Sector 35" , hw : 0 , mr : 0 , planets : [] ***REMOVED***
-    systems['sector34']        = { img : "/imperium/img/sector36.png" , 	   name : "Sector 36" , hw : 0 , mr : 0 , planets : [] ***REMOVED***
+    systems['sector30']        = { img : "/imperium/img/sector33.png" , 	   name : "Sector 33" , hw : 0 , mr : 0 , planets : [] ***REMOVED***
+    systems['sector31']        = { img : "/imperium/img/sector34.png" , 	   name : "Sector 34" , hw : 0 , mr : 0 , planets : [] ***REMOVED***
+    systems['sector32']        = { img : "/imperium/img/sector35.png" , 	   name : "Sector 35" , hw : 0 , mr : 0 , planets : [] ***REMOVED***
+    systems['sector33']        = { img : "/imperium/img/sector36.png" , 	   name : "Sector 36" , hw : 0 , mr : 0 , planets : [] ***REMOVED***
     systems['new-byzantium']   = { img : "/imperium/img/sector25.png" , 	   name : "New Byzantium" , hw : 0 , mr : 1 , planets : ['planet33'] ***REMOVED***
     systems['homeworld1']      = { img : "/imperium/img/sector30.png" , 	   name : "Sector 30" , hw : 1 , mr : 0 , planets : ['planet37'] ***REMOVED***
     systems['homeworld2']     = { img : "/imperium/img/sector31.png" , 	   name : "Sector 31" , hw : 1 , mr : 0 , planets : ['planet38'] ***REMOVED***
-  
+    systems['homeworld3']        = { img : "/imperium/img/sector32.png" , 	   name : "Sector 32" , hw : 1 , mr : 0 , planets : ['planet39'] ***REMOVED***
+
     for (var i in systems) {
       systems[i].units = [this.totalPlayers]; // array to store units
       systems[i].activated = [this.totalPlayers]; // array to store units
@@ -5574,11 +5596,11 @@ console.log("resolving earlier: " + this.game.queue[z]);
       homeworld: "homeworld2",
       name: "Faction 2"
 ***REMOVED***;
-  /**
     factions['faction3'] = {
-      homeworld: "sector32",
+      homeworld: "homeworld3",
       name: "Faction 3"
 ***REMOVED***;
+  /**
     factions['faction4'] = {
       homeworld: "sector32",
       name: "Faction 4"
