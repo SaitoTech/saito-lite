@@ -6,13 +6,9 @@ module.exports = ArcadeRightSidebar = {
     render(app, data) {
       document.querySelector(".arcade-right-sidebar").innerHTML = ArcadeRightSidebarTemplate();
       for (let i = 0; i < data.arcade.observer.length; i++) {
-
-console.log("OBSERVER GAMES OPEN: " + JSON.stringify(data.arcade.observer));
-
         let players = [];
         let players_array = data.arcade.observer[i].players_array.split("_");
         for (let z = 0; z < players_array.length; z++) {
-console.log("PLAYERS ARRAY: " + players_array);
 	  players.push({ identicon : app.keys.returnIdenticon(app.crypto.hash(players_array[z])) , publickey : players_array[z] ***REMOVED***);
     ***REMOVED***
         document.querySelector(".arcade-sidebar-active-games-body").innerHTML
@@ -21,7 +17,7 @@ console.log("PLAYERS ARRAY: " + players_array);
 
 
       //
-      //
+      // arcade sidebar
       //
       data.arcade.mods.forEach(mod => {
         let gameobj = mod.respondTo("arcade-sidebar");
