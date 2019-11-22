@@ -5,6 +5,11 @@ body {
   margin: 0px;
 ***REMOVED***
 
+.main {
+  margin-top: unset;
+  padding: unset;
+***REMOVED***
+
 .gameboard {
   position: absolute;
   background-image: url("img/gameboard.jpg");
@@ -14,17 +19,17 @@ body {
 ***REMOVED***
 
 .hand {
-# margin-left: auto;
-# margin-right: auto;
-# height: 300px;
-# width: auto;
-# margin-top: 50px;
-    width: 1000px;
-    margin-left: auto;
-    margin-right: auto;
-    clear: both;
-    padding-left: 600px;
-    padding-top:100px;
+  /* margin-left: auto;
+  margin-right: auto;
+  height: 300px;
+  width: auto;
+  margin-top: 50px;
+  width: 1000px; */
+  margin-left: auto;
+  margin-right: auto;
+  clear: both;
+  padding-left: 600px;
+  padding-top:100px;
 ***REMOVED***
 
 .card {
@@ -39,9 +44,9 @@ body {
  width: 1000px;
 ***REMOVED***
 
-%.card:nth-child(1n+2) {
-%  left: -130px;
-%***REMOVED***
+/* .card:nth-child(1n+2) {
+  left: -130px;
+***REMOVED*** */
 
 .hand > .card:nth-child(1) {
   -webkit-transform: rotate(-20deg);

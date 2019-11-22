@@ -32,6 +32,7 @@ module.exports = ArcadeMain = {
     // click-to-join
     //
     data.arcade.games.forEach(tx => {
+
       let txmsg = tx.returnMessage();
       let game_id = txmsg.game_id;
       let button_text = "JOIN";
@@ -54,6 +55,11 @@ console.log("HERE: " + JSON.stringify(tx));
   ***REMOVED***,
 
 
+
+
+
+
+
   attachEvents(app, data) {
 
     //
@@ -63,7 +69,6 @@ console.log("HERE: " + JSON.stringify(tx));
       game.addEventListener('click', (e) => {
 
         data.active_game = e.currentTarget.id;
-
         ArcadeGameCreate.render(app, data);
         ArcadeGameCreate.attachEvents(app, data);
 
@@ -84,6 +89,16 @@ console.log("HERE: " + JSON.stringify(tx));
           if (data.arcade.games[i].transaction.sig == game_id) {
 
 	    if (data.arcade.games[i].transaction.from[0].add == app.wallet.returnPublicKey()) {
+
+	      if (data.arcade.games[i].players.length > 1) {
+		alert("This is your game! Not enough players have joined the game for us to start, but we'll take you to the loading page since at least one other player is waiting for this game to start....");
+
+                ArcadeLoader.render(app, data);
+            	ArcadeLoader.attachEvents(app, data);
+		
+		return;
+	  ***REMOVED***
+
 	      salert("You cannot accept your own game!");
 	      return;
 	***REMOVED***
@@ -95,11 +110,29 @@ console.log("HERE: " + JSON.stringify(tx));
               if (data.arcade.app.options.games.length > 0) {
                 for (let z = 0; z < data.arcade.app.options.games.length; z++) {
                   if (data.arcade.app.options.games[z].id == game_id) {
-                          app.options.games[z].ts = new Date().getTime();
-                          app.options.games[z].initialize_game_run = 0;
-                          app.storage.saveOptions();
-                          window.location = '/' + app.options.games[i].module.toLowerCase();
+
+console.log("THIS IS THE GAME WE R OPENING: ");
+console.log(JSON.stringify(data.arcade.app.options.games[z]));
+
+	    	    if (data.arcade.games[z].initializing == 1) {
+	    	      salert("This game is initializing!");
+
+                      ArcadeLoader.render(app, data);
+            	      ArcadeLoader.attachEvents(app, data);
+
+	    	      return;
+	    	***REMOVED***
+
+
+		    //
+		    // solid game already created
+		    //
+                    app.options.games[z].ts = new Date().getTime();
+                    app.options.games[z].initialize_game_run = 0;
+                    app.storage.saveOptions();
+                    window.location = '/' + app.options.games[i].module.toLowerCase();
                     return;
+
               ***REMOVED***
             ***REMOVED***
           ***REMOVED***
@@ -110,6 +143,9 @@ console.log("HERE: " + JSON.stringify(tx));
 	    // check with server to see if this game is taken yet
 	    //
     	    data.arcade.sendPeerDatabaseRequest("arcade", "games", "is_game_already_accepted", data.arcade.games[i].id, null, function(res) {
+
+console.log("CHECKING TO SEE IF THERE IS STILL SPACE IN THE GAME: " + JSON.stringify(res.rows));
+
       	      if (res.rows == undefined) { 
 		console.log("ERROR 458103: cannot fetch information on whether game already accepted!");
 		return;
@@ -118,10 +154,27 @@ console.log("HERE: " + JSON.stringify(tx));
         	if (res.rows[0].game_still_open == 1) {
 
 		  //
+		  // data re: game in form of tx
+		  //
+		  if (data.arcade.games[i].transaction != undefined) {
+		    if (data.arcade.games[i].transaction.msg != undefined) {
+		      if (data.arcade.games[i].transaction.msg.players_array != undefined) {
+			let players = data.arcade.games[i].transaction.msg.players_array.split("_");
+           	        if (players.length >= 2) {
+			  data.arcade.sendMultiplayerAcceptRequest(app, data, data.arcade.games[i]);
+			  return;
+			***REMOVED***
+		  ***REMOVED***
+		***REMOVED***
+		  ***REMOVED***
+
+		  //
 		  // sanity check
 		  //
 console.log("CHECKING OPTIONS WHEN INVITING: " + JSON.stringify(data.arcade.games[i]));
-            	  data.arcade.sendInviteRequest(app, data, data.arcade.games[i]);
+
+
+           	  data.arcade.sendInviteRequest(app, data, data.arcade.games[i]);
             	  ArcadeLoader.render(app, data);
             	  ArcadeLoader.attachEvents(app, data);
 
