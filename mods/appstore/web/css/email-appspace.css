@@ -1,133 +1,117 @@
-#app-search{
-	width: 460px;
-	height: 40px;
-	border: 1.2px solid #eee;
-	padding: 10px 20px 10px 20px;
-	box-shadow: 0 2px 5px rgba(0,0,0,.1);
-	border-radius: 20px;
+.appspace-appstore-container {
+	display: grid;
+	grid-template-rows: appstore-header-featured appstore-app-list appstore-app-viewmore-header appstore-header-browse appstore-browse;
+	grid-column-gap: 15px;
+	grid-row-gap: 20px;
+    grid-auto-flow: row;
+    align-items: center;
 ***REMOVED***
-.email-appspace-appstore-search{
-	margin-top:15px;
-***REMOVED***
-.app-search-input{
-	display: inline-block;
-	margin-left: 30px;
-***REMOVED***
-.app-search-input i{
-	position: relative;
-	bottom: 0;
-	right: 40px;
-	z-index:1;
-***REMOVED***
-.featured-applications {
+.appstore-header-featured h3{
+	margin-top: 10px;
 	width: 200px;
-	display: inline-block;
+	float: left;
+	display: block;
 ***REMOVED***
-
-.appstore-app{		
-	 width: 800px;
-     height: 300px;
-     margin-top: 15px;
+#appstore-search-box{
+    width: 460px;
+    height: 40px;
+    border:1px solid #eee;
+    box-shadow: 0 2px 5px rgba(0,0,0,.1);
+    border-radius: 40px;
+    padding:0 20px;
+    float: right;
+    margin-left: 20px;
+***REMOVED***    
+.appstore-app-list {			
+    display: grid;
+    grid-template-columns: repeat(4,auto);
 ***REMOVED***
-.appstore-app-list{
+.appstore-app-item {
+    display:grid;
     width: 160px;
-    height: 250px;
     background-color: #fff;
     border:1px solid #eee;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0,0,0,.2);
-    margin-right: 15px;
-    display: inline-block;
+***REMOVED***      
+.appstore-app-item-image {
+    margin: 17px 17px 0 17px;
+    width: 128px;
+    height: 128px;
+    background-color: #2962ff;
+    border-radius: 2px;
 ***REMOVED***
-.app-list-one-box{
-	margin: 17px 17px 0 17px;
-	width: 128px;
-	height: 128px;
-	background-color: #2962ff;
-	border-radius: 2px;
+.appstore-app-item-name{
+    font-size: 16px;
+    color: #000;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-left: 10px;
 ***REMOVED***
-.app-one-info{
-	padding: 10px;
-	margin: 0 auto;
-***REMOVED***
-.app-one-name{
-	font-size:16px;
-	color: #000;
-	font-family: visuelt-medium;
-***REMOVED***
-.app-score{
+.appstore-app-item-rating{
     font-size: 14px;
-    margin-top: 3px;
-    margin-bottom: 5px;
-    color: #484646;
+    color: #605f5f;
+    margin-left: 10px;
 ***REMOVED***
-.app-install-btn{
+.appstore-app-install-btn{
     padding: 5px 45px 5px 45px;
     font-size: 16px;
     border-radius:20px;
     color: red;
     margin:0 auto;
+    border:1px solid red;
+    margin-top: 10px;
+    margin-bottom: 15px;
 ***REMOVED***
-.app-view-more{
-	margin-top: 10px;
-	margin-left: 250px;
+.appstore-app-viewmore-header{
+    justify-self: center;
+    align-self: center;
 ***REMOVED***
-.app-view-more i{
-	margin-right: 5px;
+.appstore-browse-list{
+    display: grid;
+    grid-template-columns: repeat(4,auto);
+    
 ***REMOVED***
-.app-view-more-tip{
-    height:30px;
-    width: 200px;
-    font-size: 16px;
-    font-family: visuelt-medium;
-***REMOVED***
-.app-view-more-btn:hover{
-    cursor: pointer;
-    text-decoration: underline;
-    color: red;
-***REMOVED***
-.appstore-sort{
-    width: 800px;
-    height: 200px;
-    border-top:1px solid #bbb;
+.appstore-browse-item{
+    width: 160px;
+    height: 100px;
+    background-color: #fff;
+    border:1px solid #eee;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.2);
+    font-family:visuelt-medium;
+    margin-right: 15px;
     margin-top: 20px;
+    display: grid;
 ***REMOVED***
-.appstore-sort-title{
-	margin-top: 15px;
-	font-size: 24px;
-	font-weight: bold;
+.appstore-browse-item{
+    width: 170px;
 ***REMOVED***
-.appstore-sort-list{
-	width: 160px;
-	height: 100px;
-	background-color: #fff;
-	border:1px solid #eee;
-	border-radius: 10px;
-	box-shadow: 0 2px 10px rgba(0,0,0,.2);
-	font-family:visuelt-medium;
-	margin-right: 15px;
-	margin-top: 20px;
-	display: inline-block;
-***REMOVED***
-.appstore-sort-info{
+
+.appstore-sort-item-name{
+    font-size: 18px;
+    font-weight: bold;
     margin-top: 30px;
     margin-left: 15px;
 ***REMOVED***
-.appstore-sort-name{
-    font-size: 24px;
+
+.appstore-app-item-rating{
+   font-size: 14px;
+   color: #868282; 
+   margin-top: 10px;
+   margin-left: 15px;
 ***REMOVED***
-.appstore-sort-amount{
-	font-size: 14px;
-	color: #aaa;
-***REMOVED***
-.appstore-sort-icon{
-	position: relative;
+        
+.appstore-sort-item-icon{
+    position: relative;
     bottom: 60px;
     left: 120px;
+    color: var(--saito-red);
 ***REMOVED***
-.appstore-sort-icon i{
-	color: var(--saito-red);
-	width: 10px;
+.appstore-sort-item-amount{
+    font-size: 14px;
+    color: #868282; 
+    margin-left: 15px;
 ***REMOVED***
 
 
