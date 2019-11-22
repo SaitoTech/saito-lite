@@ -20,6 +20,23 @@ module.exports = ArcadeGameDreate = {
         document.querySelector('.game-publisher-message').innerHTML = gamemod.publisher_message;
         document.querySelector('.game-details').innerHTML = gamemod.returnGameOptionsHTML();
 
+
+	if (gamemod.maxPlayers > 2) {
+          $('.game-players-select').css('display', "block");
+	  if (gamemod.maxPlayers < 6) {
+	    $('#game-players-select-6p').css('display','none');
+	  }
+	  if (gamemod.maxPlayers < 5) {
+	    $('#game-players-select-5p').css('display','none');
+	  }
+	  if (gamemod.maxPlayers < 4) {
+	    $('#game-players-select-4p').css('display','none');
+	  }
+	}
+
+
+
+
         document.getElementById('game-create-btn')
           .addEventListener('click', (e) => {
 
@@ -42,7 +59,7 @@ module.exports = ArcadeGameDreate = {
                 gamedata.name = gamemod.name;
                 gamedata.options = gamemod.returnFormattedGameOptions(options);
                 gamedata.options_html = gamemod.returnGameRowOptionsHTML(options);
-                gamedata.players_needed = 2;
+                gamedata.players_needed = $('.game-players-select').val();
 
             data.arcade.sendOpenRequest(app, data, gamedata);
             document.querySelector('.arcade-main').innerHTML = '';

@@ -106,6 +106,7 @@ class Poker extends GameTemplate {
       // raise
       //
       if (mv[0] === "turn") {
+	this.displayBoard();
         this.game.queue.splice(qe, 1);
         if (parseInt(mv[1]) == this.game.player) {
           this.playerTurn();
