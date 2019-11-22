@@ -5,7 +5,6 @@ const EscrowGameWizard	 	= require('./escrow-game-wizard.js');
 module.exports = EscrowSidebar = {
 
   render(app, data) {
-alert("RENDING ESCROW SIDEBAR!");
     document.querySelector(".arcade-sidebar-escrow").innerHTML = EscrowSidebarTemplate();
   },
 
