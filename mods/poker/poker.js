@@ -1,5 +1,6 @@
 var saito = require('../../lib/saito/saito');
 var GameTemplate = require('../../lib/templates/gametemplate');
+const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
 
 
 //////////////////
@@ -17,6 +18,8 @@ class Poker extends GameTemplate {
 
     this.interface = 1;
     this.boardgameWidth  = 5100;
+
+    this.hud = new GameHud(this.app, {***REMOVED***, {height: 200, width: 125***REMOVED***);
 
     return this;
 
