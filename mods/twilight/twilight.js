@@ -54,7 +54,7 @@ class Twilight extends GameTemplate {
     this.gameboardZoom  = 0.90;
     this.gameboardMobileZoom = 0.67;
 
-    this.hud = new GameHud(this.app, 0, 0, this.menuItems());
+    this.hud = new GameHud(this.app, this.menuItems());
 
   ***REMOVED***
 
