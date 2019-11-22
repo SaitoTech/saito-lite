@@ -89,7 +89,8 @@
   grid-area: hud-body;
   display: grid;
   grid-template-columns: auto 200px;
-  height: 380px;
+  /* height: 380px; */
+  height: 100%;
 }
 
 .hud-menu {
