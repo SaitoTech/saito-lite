@@ -3,6 +3,35 @@ body {
     font-size: 1.4em;
 }
 
+.main {
+    background-image: url('/saito/img/dreamscape.png');
+    background-size: cover;
+    min-height: 800px;
+    width: 100%;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+}
+
+
+.header {
+    background-image: transparent;
+    background: transparent;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 section {
     background-color: #fff;
     padding: 1em;
@@ -55,11 +84,6 @@ section div div {
 h1, h2, h3, h4, h5, h5, h6 {
     margin: 0 0 0.5em 0;
     color: var(--saito-red);
-}
-
-.main {
-    padding: 0;
-    margin: 100px 0 0 0;
 }
 
 #splash-space {
