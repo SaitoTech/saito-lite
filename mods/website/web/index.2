@@ -36,22 +36,19 @@
   <div class="main">
  
 
-
-    <div class="glide">
-      <div class="glide__track" data-glide-el="track">
-        <ul class="glide__slides">
-          <li class="glide__slide">Slide 0</li>
-          <li class="glide__slide">Slide 1</li>
-          <li class="glide__slide">Slide 2</li>
-        </ul>
-      </div>
-      <div data-glide-el="controls">
-        <button data-glide-dir="<<">Start</button>
-        <button data-glide-dir=">>">End</button>
-      </div>
-    </div>
-
-
+<div class="glide">
+  <div class="glide__track" data-glide-el="track">
+    <ul class="glide__slides">
+      <li class="glide__slide">0</li>
+      <li class="glide__slide">1</li>
+      <li class="glide__slide">2</li>
+    </ul>
+  </div>
+  <div data-glide-el="controls">
+    <button data-glide-dir="<<">Start</button>
+    <button data-glide-dir=">>">End</button>
+  </div>
+</div>
 
 
   </div>
@@ -59,10 +56,11 @@
   <div class="footer"></div>
 
 
-  <script type="text/javascript" src="/saito/lib/glide/glide.js"></script>
-  <script type="text/javascript">
-    new Glide('.glide').mount();
+  <script src="/saito/lib/glide/glide.js"></script>
+  <script>
+    new Glide('.glide').mount()
   </script>
+
   <script type="text/javascript" src="/saito/saito.js"></script>
 
 </body>
