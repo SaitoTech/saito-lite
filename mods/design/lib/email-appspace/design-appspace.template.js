@@ -14,6 +14,12 @@ module.exports = EmailAppspaceTemplate = (app) => {
       <div><input id="password" type="password" value="This is a password field" class="password" /></div>
       <div>Text Input</div>
       <div><input type="text" value="This is a text field."></input></div>
+      <div>Drop Down</div>
+      <div><select>
+        <option>option a</option>
+        <option>option b</option>
+        <option>option c</option>
+      </select></div>
       <div>Date Input</div>
       <div><input type="date" value="2019-10-21"></input></div>
       <div>Range Input</div>
@@ -38,6 +44,12 @@ module.exports = EmailAppspaceTemplate = (app) => {
     <div><input id="password" type="password" value="This is a password field" class="password" /></div>
     <div>Text Input</div>
     <div><input type="text" value="This is a text field."></input></div>
+    <div>Drop Down</div>
+    <div><select>
+      <option>option a</option>
+      <option>option b</option>
+      <option>option c</option>
+    </select></div>
     <div>Date Input</div>
     <div><input type="date" value="2019-10-21"></input></div>
     <div>Range Input</div>
