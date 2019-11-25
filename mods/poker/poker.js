@@ -2,7 +2,6 @@ var saito = require('../../lib/saito/saito');
 var GameTemplate = require('../../lib/templates/gametemplate');
 const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
 
-
 //////////////////
 // CONSTRUCTOR  //
 //////////////////
@@ -33,11 +32,11 @@ class Poker extends GameTemplate {
 
 
     let hand1 = ["D13","C12","C11","C10","C9","C1","C5"];
-    let h1score = scoreHand(hand1);
+    let h1score = this.scoreHand(hand1);
     let hand2 = ["S5","D5","H5","C2","H10","D13","C1"];
-    let h2score = scoreHand(hand2);
+    let h2score = this.scoreHand(hand2);
 
-    let winner = pickWinner(h1score, h2score);
+    let winner = this.pickWinner(h1score, h2score);
 
 console.log(h1score);
 console.log(h2score);
@@ -255,46 +254,166 @@ console.log("WINNER: " + winner);
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
 
-      switch (mv[0]) {
+      if (mv[0] == "notify") {
 
-        case "notify":
           this.updateLog(mv[1]);
           this.game.queue.splice(qe, 1);
-          break;
 
-        case "turn":
+      }
+
+      if (mv[0] === "turn") {
+
           this.displayBoard();
-          this.game.queue.splice(qe, 1);
-          if (parseInt(mv[1]) == this.game.player) {
-            this.playerTurn();
-          } else {
-            this.updateStatus("Waiting for Player " + this.game.player);
+	  if (this.game.state.passed[this.game.player-1] == 1) {
+            this.game.queue.splice(qe, 1);
+	  } else {
+            this.game.queue.splice(qe, 1);
+
+	    //
+	    // if this is the first turn
+	    // 
+            if (parseInt(mv[1]) == this.game.player) {
+console.log("\n\nit is my turn ... ");
+              this.playerTurn();
+            } else {
+              this.updateStatus("Waiting for Player " + this.game.player);
+            }
+            shd_continue = 0;
           }
-          shd_continue = 0;
-          break;
+      }
 
-        case "round":
+
+      if (mv[0] === "round") {
+
           this.displayBoard();
+
+	  //
+	  // if players are out-of-tokens, set as inactive
+	  //
+	  for (let i = 0; i < this.game.state.player_credit.length; i++) {
+	    if (this.game.state.player_credit[i] <= 0) {
+	      this.game.state.passed[i] = 1;
+	      this.game.state.player_credit[i] = -1;
+	    }
+	  }
+
+	  //
+	  // update game state
+	  //
+	  this.game.state.round++;
+	  this.game.state.turn = 0;
+
+	  this.game.state.big_blind_player++;
+	  this.game.state.small_blind_player++;
+	  this.game.state.required_pot = this.game.state.big_blind;
+
+	  if (this.game.state.big_blind_player > this.game.players.length) { this.game.state.big_blind_player = 1; }
+	  if (this.game.state.small_blind_player > this.game.players.length) { this.game.state.small_blind_player = 1; }
+
           this.updateStatus("Your opponent is making the first move.");
-          for (let i = 0; i < this.game.opponents.length+1; i++) { this.game.queue.push("turn\t"+(i+1)); }
-          shd_continue = 1;
-          break;
+          for (let i = (this.game.state.big_blind_player-1); i < (this.game.state.big_blind_player+this.game.players.length); i++) { 
+	    let player_to_go = (i%this.game.players.length);
+	    this.game.queue.push("turn\t"+(player_to_go+1)); 
+	  }
 
-        case "play":
-          this.game.queue.splice(qe, 1);
-          break;
+	  //
+	  // Big Blind
+	  //	  
+          if (this.game.state.player_credit[this.game.state.big_blind_player-1] <= this.game.state.big_blind) {
+	    this.updateLog("Player "+this.game.state.big_blind_player+" deposits remainder of tokens as big blind and is removed from game");
+	    this.game.state.player_pot[this.game.state.big_blind_player-1] += this.game.state.player_credit[this.game.state.big_blind_player-1];
+	    this.game.state.pot += this.game.state.player_credit[this.game.state.big_blind_player-1];
+	    this.game.state.player_credit[this.game.state.big_blind_player-1] = -1;
+	  } else {
+	    this.updateLog("Player "+this.game.state.big_blind_player+" deposits the big blind ("+this.game.state.big_blind+")");
+	    this.game.state.player_pot[this.game.state.big_blind_player-1] += this.game.state.big_blind;
+	    this.game.state.pot += this.game.state.big_blind;
+	    this.game.state.player_credit[this.game.state.big_blind_player-1] -= this.game.state.big_blind;
+	  }
 
-        case "call":
-          this.game.queue.splice(qe, 1);
-          break;
+	  //
+	  // Small Blind
+	  //
+          if (this.game.state.player_credit[this.game.state.small_blind_player-1] <= this.game.state.small_blind) {
+	    this.updateLog("Player "+this.game.state.small_blind_player+" deposits remainder tokens as small blind and is removed from game");
+	    this.game.state.player_pot[this.game.state.big_blind_player-1] += this.game.state.player_credit[this.game.state.small_blind_player-1];
+	    this.game.state.pot += this.game.state.player_credit[this.game.state.small_blind_player-1];
+	    this.game.state.player_credit[this.game.state.small_blind_player-1] = -1;
+	  } else {
+	    this.updateLog("Player "+this.game.state.small_blind_player+" deposits the small blind ("+this.game.state.big_blind+")");
+	    this.game.state.player_pot[this.game.state.small_blind_player-1] += this.game.state.small_blind;
+	    this.game.state.pot += this.game.state.small_blind;
+	    this.game.state.player_credit[this.game.state.small_blind_player-1] -= this.game.state.small_blind;
+	  }
 
-        case "fold":
-          this.game.queue.splice(qe, 1);
-          break;
+      }
 
-        case "raise":
+      if (mv[0] === "call") {
+
+	  let player = parseInt(mv[1]);
+	  let amount_to_call = 0;
+
+	  this.updateLog("Player " + player + " calls " + this.game.state.required_pot + " -- " + this.game.state.player_pot[player-1]);
+	  if (this.game.state.required_pot > this.game.state.player_pot[player-1]) {
+	    amount_to_call = this.game.state.required_pot - this.game.state.player_pot[player-1];
+	  }
+
+	  this.game.state.player_credit[player-1] -= amount_to_call;
+	  this.game.state.player_pot[player-1]  += amount_to_call;
+	  this.game.state.pot += amount_to_call;
+//
+// calling does not increase required pot
+//	  this.game.state.required_pot  += amount_to_call;
+
           this.game.queue.splice(qe, 1);
-          break;
+      }
+
+      if (mv[0] === "fold") {
+	  let player = parseInt(mv[1]);
+	  this.updateLog("Player " + player + " folds.");
+	  this.game.state.passed[player-1] = 1;
+          this.game.queue.splice(qe, 1);
+      }
+
+      if (mv[0] === "pass") {
+          this.game.queue.splice(qe, 1);
+	  this.updateLog("Player " + player + " passes.");
+      }
+
+
+
+      if (mv[0] == "raise") {
+
+	  let player = parseInt(mv[1]);
+	  let raise = parseInt(mv[2]);
+
+	  let call_portion = 0;
+	  let raise_portion = 0;
+
+	  if (this.game.state.required_pot > this.game.state.player_pot[player-1]) {
+	    call_portion = this.game.state.required_pot - this.game.state.player_pot[player-1];
+	    raise_portion = raise - call_portion;
+
+	    this.game.state.player_credit[player-1] -= call_portion;
+	    this.game.state.required_pot += call_portion;
+
+	    this.game.state.player_credit[player-1] -= raise_portion;
+	    this.game.state.required_pot += raise_portion;
+	    this.game.state.last_raise = raise_portion;
+
+	    this.updateLog("Player " + player + " raises " + raise_portion + ".");
+
+	  } else {
+
+	    this.game.state.player_credit[player-1] -= raise;
+	    this.game.state.required_pot += raise;
+	    this.game.state.last_raise = raise;
+
+	    this.updateLog("Player " + player + " raises " + raise + ".");
+
+          }
+
+          this.game.queue.splice(qe, 1);
       }
 
       //
@@ -317,31 +436,123 @@ console.log("WINNER: " + winner);
 
     this.displayBoard();
 
+    //
+    // does the player need to call or raise?
+    //
+    let match_required = this.game.state.required_pot - this.game.state.player_pot[this.game.player-1];
+    let raise_required = this.game.state.last_raise;
     let html = '';
-    html  = 'Please select an option below: <p></p><ul>';
-    html += '<li class="menu_option" id="deal">deal card</li>';
-    html += '<li class="menu_option" id="flip">flip card</li>';
-    html += '</ul>';
 
-    this.updateStatus(html);
+    let can_fold = 1;
+    let can_call = 1;
+    let can_raise = 1;
+
+    if (this.game.state.player_credit[this.game.state.player-1] < match_required) { can_call = 0; }
+    if (this.game.state.player_credit[this.game.state.player-1] < (match_required+this.game.state.last_raise)) { can_raise = 0; }
+
+    if (can_call == 0 && can_raise == 0) {
+      this.updateStatus("You can only fold...");
+      this.addMove("fold\t"+poker_self.game.player);
+      this.endTurn();
+      return;
+    }
+console.log("Here we are 2!");
+console.log("RP: " + this.game.state.required_pot + " -- " + this.game.state.player_pot[this.game.player-1]);
+
+    if (this.game.state.required_pot >= this.game.state.player_pot[this.game.player-1]) {
+      html += 'You are Player '+this.game.player+'. ';
+      if (this.game.player == this.game.state.big_blind_player) {
+        html += "You are the big blind. ";
+      }
+      if (this.game.player == this.game.state.small_blind_player) {
+        html += "You are the small blind. ";
+      }
+      html += 'You have '+this.game.state.player_pot[this.game.player-1]+' in the pot and '+this.game.state.player_credit[this.game.player-1]+' in chips. Calling requires an additional '+match_required+'. Total pot has '+this.game.state.pot+'. Please select an option below: <p></p><ul>';
+      if (can_fold == 1)  { html += '<li class="menu_option" id="fold">fold</li>'; }
+      if (can_call == 1)  { html += '<li class="menu_option" id="call">call</li>'; }
+      if (can_raise == 1) { html += '<li class="menu_option" id="raise">raise</li>'; }
+      html += '</ul>';
+      this.updateStatus(html);
+    } else {
+      if (this.game.state.required_pot == this.game.state.player_pot[this.game.player-1]) {
+        html  = 'Please select an option below: <p></p><ul>';
+        if (can_fold == 1)  { html += '<li class="menu_option" id="fold">fold</li>'; }
+        if (can_fold == 1)  { html += '<li class="menu_option" id="pass">pass</li>'; }
+        if (can_call == 1)  { html += '<li class="menu_option" id="call">call</li>'; }
+        if (can_raise == 1) { html += '<li class="menu_option" id="raise">raise</li>'; }
+        html += '</ul>';
+        this.updateStatus(html);
+      } else {
+	this.updateStatus("ERROR 257293: logic error in poker module, please report");
+      }
+    }
+
 
     $('.menu_option').off();
     $('.menu_option').on('click', function() {
 
       let choice = $(this).attr("id");
 
-      poker_self.updateStatus("making your move...");
-
-      if (choice === "flip") {
-        for (let i = 0; i < players.length; i++) {
-          poker_self.addMove("FLIPCARD\t1\t1\t1\t"+(i+1));
-        }
-        poker_self.addMove("FLIPRESET\t1");
+      if (choice === "fold") {
+        poker_self.addMove("fold\t"+poker_self.game.player);
         poker_self.endTurn();
       }
-      if (choice === "deal") {
-        poker_self.addMove("DEAL\t1\t"+poker_self.game.player+"\t1");
+
+      if (choice === "pass") {
+        poker_self.addMove("pass\t"+poker_self.game.player);
         poker_self.endTurn();
+      }
+
+      if (choice === "call") {
+        poker_self.addMove("call\t"+poker_self.game.player);
+        poker_self.endTurn();
+      }
+
+      if (choice === "raise") {
+
+	// match_required
+	// raise_required
+	let credit_remaining = poker_self.game.state.player_credit[poker_self.game.player-1];
+	let all_in_remaining = poker_self.game.state.player_credit[poker_self.game.player-1] - raise_required;
+
+console.log("MR: " + match_required);
+console.log("RR: " + raise_required);
+console.log("PP: " + poker_self.game.state.player_pot[poker_self.game.player-1]);
+
+        html  = 'Please select an option below: <p></p><ul>';
+        if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
+	  html += '<li class="menu_option" id="'+(raise_required)+'">'+(raise_required)+'</li>';
+        }
+        if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
+	  html += '<li class="menu_option" id="'+(raise_required + (1 * poker_self.game.state.last_raise))+'">'+(raise_required + (1 * poker_self.game.state.last_raise))+'</li>';
+        }
+        if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
+	  html += '<li class="menu_option" id="'+(raise_required + (2 * poker_self.game.state.last_raise))+'">'+(raise_required + (2 * poker_self.game.state.last_raise))+'</li>';
+        }
+        if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
+	  html += '<li class="menu_option" id="'+(raise_required + (3 * poker_self.game.state.last_raise))+'">'+(raise_required + (3 * poker_self.game.state.last_raise))+'</li>';
+        }
+        if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
+	  html += '<li class="menu_option" id="'+(raise_required + (4 * poker_self.game.state.last_raise))+'">'+(raise_required + (4 * poker_self.game.state.last_raise))+'</li>';
+        }
+        if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
+	  html += '<li class="menu_option" id="'+(raise_required + (5 * poker_self.game.state.last_raise))+'">'+(raise_required + (5 * poker_self.game.state.last_raise))+'</li>';
+        }
+        if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
+	  html += '<li class="menu_option" id="'+(all_in_remaining)+'">'+(all_in_remaining)+'</li>';
+        }
+
+        html += '</ul>';
+        poker_self.updateStatus(html);
+
+          $('.menu_option').off();
+          $('.menu_option').on('click', function() {
+
+          let raise = $(this).attr("id");
+          poker_self.addMove("raise\t"+poker_self.game.player+"\t"+raise);
+          poker_self.endTurn();
+
+        });
       }
     });
   }
@@ -366,13 +577,25 @@ console.log("WINNER: " + winner);
   returnState(num_of_players) {
 
     let state = {};
+
+        state.round = 0;
+        state.new_round = 0;
+        state.turn = 0;
+
+        state.started = 0;
         state.pot = 0.0;
         state.player_pot = [];
+	state.player_credit = [];
 	state.passed = [];
 	state.round = 0;
 	state.big_blind = 50;
 	state.small_blind = 25;
 	state.big_blind_player = 1;
+	state.small_blind_player = 2;
+	state.big_blind_paid = 0;
+	state.small_blind_paid = 0;
+	state.required_pot = 0;
+	state.last_raise = state.big_blind;
 
     for (let i = 0; i < num_of_players; i++) {
       state.passed[i] = 0;
@@ -380,6 +603,11 @@ console.log("WINNER: " + winner);
     for (let i = 0; i < num_of_players; i++) {
       state.player_pot[i] = 0;
     }
+    for (let i = 0; i < num_of_players; i++) {
+      state.player_credit[i] = 1000;
+    }
+
+    return state;
 
   }
 
@@ -903,7 +1131,7 @@ console.log("WINNER: " + winner);
     //
     // FLUSH
     //
-    if (isFlush(suite, val) != "") {
+    if (this.isFlush(suite, val) != "") {
 
       let x = this.isFlush(suite, val);
       let y = [];
@@ -929,7 +1157,7 @@ console.log("WINNER: " + winner);
     //
     // STRAIGHT
     //
-    if (isStraight(suite, val) > 0) {
+    if (this.isStraight(suite, val) > 0) {
 
       let x = this.isStraight(suite, val);
 
