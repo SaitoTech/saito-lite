@@ -186,18 +186,19 @@ console.log("ERROR 418019: error fetching game for observer mode");
     let perView = this.app.browser.isMobileBrowser(navigator.userAgent) ? 1 : 3;
 
     // Use for Carousel
-    importGlide = async () => {
-      const Glide = await import('./lib/glide/glide.min.js');
-      this.glide = new Glide.default('.glide', {
-        type: 'carousel',
-        autoplay: 3000,
-        perView,
-      });
+    if (typeof window !== "undefined") {
+      importGlide = async () => {
+        const Glide = await import('./lib/glide/glide.min.js');
+        this.glide = new Glide.default('.glide', {
+          type: 'carousel',
+          autoplay: 3000,
+          perView,
+        });
 
-      this.glide.mount();
+        this.glide.mount();
+      }
+      importGlide();
     }
-    importGlide();
-
   }
 
 
@@ -218,6 +219,11 @@ console.log("ERROR 418019: error fetching game for observer mode");
       if (res.rows.length > 0) {
         for (let i = 0; i < res.rows.length; i++) {
 	  let tx = new saito.transaction(JSON.parse(res.rows[i].tx));
+
+	  tx.transaction.msg.players_needed = res.rows[i].players_needed;
+	  tx.transaction.msg.players_available = res.rows[i].players_available;
+	  tx.transaction.msg.players_array = res.rows[i].players_array;
+
 console.log("ADDING OPEN GAME FROM SERVER: " + JSON.stringify(tx.transaction));
 	  arcade_self.addGameToOpenList(tx);
 	}
@@ -313,29 +319,45 @@ console.log("PUSHING BACK: " + JSON.stringify(tx.transaction));
       }
 
 
+
+
+      // invites
+      if (txmsg.request == "invite") {
+console.log("ARCADE GETS INVITE REQUEST");
+
+	//
+	// this might be a server, in which cse it doesn't have options.games
+	//
+        if (arcade_self.app.options != undefined) {
+          if (arcade_self.app.options.games != undefined) {
+            for (let i = 0; i < arcade_self.app.options.games.length; i++) {
+	      if (arcade_self.app.options.games[i].id == txmsg.game_id) {
+	        if (arcade_self.app.options.games[i].initializing == 0) { return; }
+  	      }
+  	    }
+          }
+        }
+console.log("ARCADE PROCESSING RECEIVE INVITE REQUEST");
+	arcade_self.receiveInviteRequest(blk, tx, conf, app);
+      }
+
+
       //
       // ignore msgs for others
       //
       if (!tx.isTo(app.wallet.returnPublicKey())) { return; }
 
 
-
-      // invites
-      if (txmsg.request == "invite") {
-
-        for (let i = 0; i < arcade_self.app.options.games.length; i++) {
-	  if (arcade_self.app.options.games[i].id == txmsg.game_id) {
-	    if (arcade_self.app.options.games[i].initializing == 0) { return; }
-	  }
-        }
-
-	arcade_self.receiveInviteRequest(blk, tx, conf, app);
-      }
-
       // acceptances
       if (txmsg.request == "accept") {
 
 console.log("ARCADE GETS ACCEPT MESSAGE: " + txmsg.request);
+
+	//
+	// multiplayer games might hit here without options.games
+	// in which case we need to import game details including
+	// options, etc.
+	//
 
         for (let i = 0; i < arcade_self.app.options.games.length; i++) {
 	  if (arcade_self.app.options.games[i].id == txmsg.game_id) {
@@ -357,7 +379,7 @@ console.log(currentTime + " ------- " + arcade_self.app.options.games[i].ts);
         }
 
 console.log("... still here... receive accept request!");
-        arcade_self.receiveAcceptRequest(blk, tx, conf, app);
+        await arcade_self.receiveAcceptRequest(blk, tx, conf, app);
 
 console.log("\n\n\nlaunching request to launch game... flag button, etc.");
 
@@ -379,7 +401,12 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
 
     let arcade_self = this;
 
+console.log("THIS IS WHERE WE ARE IN LAUNCH GAME!");
+
     arcade_self.is_initializing = true;
+
+console.log("ARCADE_SELF APP OPTIONS GAMES: ");
+
     arcade_self.initialization_timer = setInterval(() => {
 
       let game_idx = -1;
@@ -391,15 +418,23 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
         }
       }
 
+console.log("IDX OF GAME: " + game_idx);
+
       if (game_idx == -1) { return; }
 
       if (arcade_self.app.options.games[game_idx].initializing == 0) {
 
+console.log("GAME IS NO LONGER INITIALIZING: " + arcade_self.app.options.games[game_idx].initializing);
+
         clearInterval(arcade_self.initialization_timer);
+
+console.log("CLEARING INTERVAL!");
 
 	let data = {};
 	    data.arcade   = arcade_self;
 	    data.game_id  = game_id;
+
+console.log("RENDERING LOADER!");
 
 	ArcadeLoader.render(arcade_self.app, data);
 	ArcadeLoader.attachEvents(arcade_self.app, data);
@@ -568,37 +603,36 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
     // servers
     //
     let txmsg = tx.returnMessage();
-    //let sql = "UPDATE games SET state = 'active', id = $gid WHERE sig = $sig";
-    //let params = {
-    //  $gid : txmsg.game_id ,
-    //  $sig : txmsg.sig
-    //}
-    //await this.app.storage.executeDatabase(sql, params, "arcade");
 
     let unique_keys = [];
     for (let i = 0; i < tx.transaction.to.length; i++) {
-      if (!unique_keys.contains(tx.transaction.to[i].add)) {
+      if (!unique_keys.includes(tx.transaction.to[i].add)) {
 	unique_keys.push(tx.transaction.to[i].add);
       }
     }
     unique_keys.sort();
+console.log("UNIQUE KEYS: " + unique_keys);
     let players_array = unique_keys.join("_"); 
+console.log("PLAYER ARRAY FOR UPDATE: " + unique_keys);
 
-    let sql = "UPDATE games SET players_accepted = "+unique_keys.length+", players_array = $players_array WHERE state = $state AND player IN ($player1, $player2, $player3, $player4)";
+    let sql = "UPDATE games SET players_accepted = "+unique_keys.length+", players_array = $players_array WHERE status = $status AND game_id = $game_id";
     let params = {
       $players_array : players_array ,
-      $state : 'open',
-      $player1 : unique_keys[0] || '' ,
-      $player2 : unique_keys[1] || '' ,
-      $player3 : unique_keys[2] || '' ,
-      $player4 : unique_keys[3] || '' ,
+      $status : 'open',
+      $game_id : txmsg.game_id 
     }
+console.log("UPDATING ARCADE DB: ");
+console.log(sql);
+console.log(params);
     await this.app.storage.executeDatabase(sql, params, "arcade");
 
 
-
+    //
+    // servers nope out
+    //
     if (this.browser_active == 0) { return; }
 
+console.log("ARCADE BUT ONLY IN BROWSER!");
 
     //
     // auto-accept
@@ -669,40 +703,41 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
   async receiveAcceptRequest(blk, tx, conf, app) {
 
     if (this.browser_active == 1) {
+      let data = {};
+      data.arcade = this;
       ArcadeLoader.render(app, data);
       ArcadeLoader.attachEvents(app, data);
     }
 
+    let txmsg = tx.returnMessage();
     let publickeys = tx.transaction.to.map(slip => slip.add);
     let removeDuplicates = (names) => names.filter((v,i) => names.indexOf(v) === i)
     let unique_keys = removeDuplicates(publickeys);
     unique_keys.sort();
     let players_array = unique_keys.join("_"); 
 
-    let sql = "UPDATE games SET players_accepted = (players_accepted+1), players_array = $players_array WHERE state = $state AND player IN ($player1, $player2, $player3, $player4)";
+console.log("RECEIVE TX IN ACCEPT: " + JSON.stringify(txmsg));
+
+    let sql = "UPDATE games SET players_accepted = (players_accepted+1), players_array = $players_array WHERE status = $status AND game_id = $game_id";
     let params = {
       $players_array : players_array ,
       $state : 'open',
-      $player1 : unique_keys[0] || '' ,
-      $player2 : unique_keys[1] || '' ,
-      $player3 : unique_keys[2] || '' ,
-      $player4 : unique_keys[3] || '' ,
+      $game_id : txmsg.game_id 
     }
     await this.app.storage.executeDatabase(sql, params, "arcade");
 
 
-    sql = "UPDATE games SET state = 'active' WHERE state = $state AND players_accepted >= players_needed AND player IN ($player1, $player2, $player3, $player4)";
+    sql = "UPDATE games SET state = 'active' WHERE state = $state AND players_accepted >= players_needed AND game_id = $game_id";
     params = {
       $state : 'open',
-      $player1 : unique_keys[0] || '' ,
-      $player2 : unique_keys[1] || '' ,
-      $player3 : unique_keys[2] || '' ,
-      $player4 : unique_keys[3] || '' ,
+      $game_id : txmsg.game_id 
     }
+
 console.log("about to await execut db");
+console.log(sql);
+console.log(params);
+
     await this.app.storage.executeDatabase(sql, params, "arcade");
-
-
 
 console.log("done now...");
 
@@ -723,15 +758,66 @@ console.log("done now...");
     this.app.network.propagateTransaction(tx);
 
   }
+  sendMultiplayerAcceptRequest(app, data, gameobj) {
+
+console.log("SEND MULTIPLE ACCEPT: " + JSON.stringify(gameobj));
+
+    let txmsg = gameobj.transaction.msg;
+    let players_array = txmsg.players_array;
+    let players_needed = txmsg.players_needed;
+    let game_id = gameobj.transaction.sig;
+    let options = txmsg.options;
+    let opponents = players_array.split("_");
+    let game_self = app.modules.returnModule(txmsg.game);
+
+console.log("LOADED THE GAME: " + txmsg.game);
+
+    //
+    // create the game
+    //
+    game_self.loadGame(game_id);
+    for (let i = 0; i < opponents.length; i++) {
+      game_self.addPlayer(opponents[i]);
+    }
+    game_self.game.players_needed = players_needed;
+
+    //
+    // GAME LIBRARY ACCEPT CREATES GAMES AS WELL
+    // if this code is updated, update the 
+    // SAGE receiveInvite code
+    //
+    game_self.game.module = txmsg.module;
+    game_self.game.options = options;
+    game_self.game.id = game_id;
+    game_self.game.accept = 1;
+    game_self.saveGame(game_id);
 
 
+    let tx = app.wallet.createUnsignedTransactionWithDefaultFee();
+        for (let i = 0; i < opponents.length; i++) { tx.transaction.to.push(new saito.slip(opponents[i], 0.0)); }
+        tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey(), 0.0));
+	//
+	// arcade will listen, but we need game engine to receive to start initialization
+	//
+        tx.transaction.msg.module   = txmsg.game;
+        tx.transaction.msg.request  = "accept";
+        tx.transaction.msg.multiple  = 1;
+        tx.transaction.msg.game = txmsg.game;
+        tx.transaction.msg.options = options;
+        tx.transaction.msg.game_id  = game_id;
+	opponents.push(this.app.wallet.returnPublicKey());
+        tx.transaction.msg.players_array = opponents.join("_");
+        tx.transaction.msg.players_needed = players_needed;
+    tx = this.app.wallet.signTransaction(tx);
+    this.app.network.propagateTransaction(tx);
 
+  }
 
 
 
   async receiveGameoverRequest(blk, tx, conf, app) {
 
-    let sql = "UPDATE games SET state = $state, winner = $winner WHERE game_id = $game_id";
+    let sql = "UPDATE games SET status = $status, winner = $winner WHERE game_id = $game_id";
     let params = {
       $state: 'over',
       $game_id : txmsg.game_id,

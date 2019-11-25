@@ -24,6 +24,7 @@ module.exports = {
     'wordblocks/wordblocks.js',
     'design/design.js',
     'arcade/arcade.js',
+    'website/website.js',
   ],
   lite: [
     'archive/archive.js',
@@ -50,5 +51,6 @@ module.exports = {
     'wordblocks/wordblocks.js',
     'design/design.js',
     'arcade/arcade.js',
-  ]
+    'website/website.js',
+    ]
 }
