@@ -55,47 +55,192 @@ console.log("WINNER: " + winner);
     //
     if (this.game.deck.length == 0) {
 
-      this.game.state = this.returnState();
+      this.game.state = this.returnState(this.game.players.length);
 
       this.updateStatus("Generating the Game");
 
       this.game.queue.push("round");
       this.game.queue.push("READY");
-      this.game.queue.push("FLIPCARD\t1\t1\t1\t2");
-      this.game.queue.push("FLIPCARD\t1\t1\t1\t1");
-      this.game.queue.push("FLIPRESET\t1");
-      this.game.queue.push("POOL\t1"); // pool for cards on table
-      this.game.queue.push("DEAL\t1\t2\t2");
-      this.game.queue.push("DEAL\t1\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t1");
-      this.game.queue.push("DECKXOR\t1\t2");
-      this.game.queue.push("DECKXOR\t1\t1");
-      this.game.queue.push("DECK\t1\t"+JSON.stringify(this.returnDeck()));
 
-      //
-      // old 1-player mode
-      //
-      // DECK [decknum] [array of cards]
-      // POOL [poolnum]
-      // FLIPCARD [decknum] [cardnum] [poolnum]
-      // RESOLVEFLIP [decknum] [cardnum] [poolnum
-      //
-      // this.game.queue.push("FLIPCARD\t1\t2\t1");
-      // this.game.queue.push("POOL\t1"); // pool for cards on table
-      // this.game.queue.push("DEAL\t1\t1\t2");
-      // this.game.queue.push("SHUFFLE\t1");
-      // this.game.queue.push("DECK\t1\t"+JSON.stringify(this.returnDeck()));
+      if (this.game.players.length == 2) {
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t2");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t1");
+        this.game.queue.push("FLIPRESET\t1");
+        this.game.queue.push("POOL\t1"); // pool for cards on table
+        this.game.queue.push("DEAL\t1\t2\t2");
+        this.game.queue.push("DEAL\t1\t1\t2");
+        this.game.queue.push("DECKENCRYPT\t1\t2");
+        this.game.queue.push("DECKENCRYPT\t1\t1");
+        this.game.queue.push("DECKXOR\t1\t2");
+        this.game.queue.push("DECKXOR\t1\t1");
+      }
+      if (this.game.players.length == 3) {
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t3");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t2");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t1");
+        this.game.queue.push("FLIPRESET\t1");
+        this.game.queue.push("POOL\t1"); // pool for cards on table
+        this.game.queue.push("DEAL\t1\t3\t2");
+        this.game.queue.push("DEAL\t1\t2\t2");
+        this.game.queue.push("DEAL\t1\t1\t2");
+        this.game.queue.push("DECKENCRYPT\t1\t3");
+        this.game.queue.push("DECKENCRYPT\t1\t2");
+        this.game.queue.push("DECKENCRYPT\t1\t1");
+        this.game.queue.push("DECKXOR\t1\t3");
+        this.game.queue.push("DECKXOR\t1\t2");
+        this.game.queue.push("DECKXOR\t1\t1");
+      }
+      if (this.game.players.length == 4) {
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t4");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t3");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t2");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t1");
+        this.game.queue.push("FLIPRESET\t1");
+        this.game.queue.push("POOL\t1"); // pool for cards on table
+        this.game.queue.push("DEAL\t1\t4\t2");
+        this.game.queue.push("DEAL\t1\t3\t2");
+        this.game.queue.push("DEAL\t1\t2\t2");
+        this.game.queue.push("DEAL\t1\t1\t2");
+        this.game.queue.push("DECKENCRYPT\t1\t4");
+        this.game.queue.push("DECKENCRYPT\t1\t3");
+        this.game.queue.push("DECKENCRYPT\t1\t2");
+        this.game.queue.push("DECKENCRYPT\t1\t1");
+        this.game.queue.push("DECKXOR\t1\t4");
+        this.game.queue.push("DECKXOR\t1\t3");
+        this.game.queue.push("DECKXOR\t1\t2");
+        this.game.queue.push("DECKXOR\t1\t1");
+      }
+      if (this.game.players.length == 5) {
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t5");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t4");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t3");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t2");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t1");
+        this.game.queue.push("FLIPRESET\t1");
+        this.game.queue.push("POOL\t1"); // pool for cards on table
+        this.game.queue.push("DEAL\t1\t5\t2");
+        this.game.queue.push("DEAL\t1\t4\t2");
+        this.game.queue.push("DEAL\t1\t3\t2");
+        this.game.queue.push("DEAL\t1\t2\t2");
+        this.game.queue.push("DEAL\t1\t1\t2");
+        this.game.queue.push("DECKENCRYPT\t1\t5");
+        this.game.queue.push("DECKENCRYPT\t1\t4");
+        this.game.queue.push("DECKENCRYPT\t1\t3");
+        this.game.queue.push("DECKENCRYPT\t1\t2");
+        this.game.queue.push("DECKENCRYPT\t1\t1");
+        this.game.queue.push("DECKXOR\t1\t5");
+        this.game.queue.push("DECKXOR\t1\t4");
+        this.game.queue.push("DECKXOR\t1\t3");
+        this.game.queue.push("DECKXOR\t1\t2");
+        this.game.queue.push("DECKXOR\t1\t1");
+      }
+      if (this.game.players.length == 6) {
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t6");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t5");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t4");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t3");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t2");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t1");
+        this.game.queue.push("FLIPRESET\t1");
+        this.game.queue.push("POOL\t1"); // pool for cards on table
+        this.game.queue.push("DEAL\t1\t6\t2");
+        this.game.queue.push("DEAL\t1\t5\t2");
+        this.game.queue.push("DEAL\t1\t4\t2");
+        this.game.queue.push("DEAL\t1\t3\t2");
+        this.game.queue.push("DEAL\t1\t2\t2");
+        this.game.queue.push("DEAL\t1\t1\t2");
+        this.game.queue.push("DECKENCRYPT\t1\t6");
+        this.game.queue.push("DECKENCRYPT\t1\t5");
+        this.game.queue.push("DECKENCRYPT\t1\t4");
+        this.game.queue.push("DECKENCRYPT\t1\t3");
+        this.game.queue.push("DECKENCRYPT\t1\t2");
+        this.game.queue.push("DECKENCRYPT\t1\t1");
+        this.game.queue.push("DECKXOR\t1\t6");
+        this.game.queue.push("DECKXOR\t1\t5");
+        this.game.queue.push("DECKXOR\t1\t4");
+        this.game.queue.push("DECKXOR\t1\t3");
+        this.game.queue.push("DECKXOR\t1\t2");
+        this.game.queue.push("DECKXOR\t1\t1");
+      }
+      if (this.game.players.length == 7) {
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t7");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t6");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t5");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t4");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t3");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t2");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t1");
+        this.game.queue.push("FLIPRESET\t1");
+        this.game.queue.push("POOL\t1"); // pool for cards on table
+        this.game.queue.push("DEAL\t1\t7\t2");
+        this.game.queue.push("DEAL\t1\t6\t2");
+        this.game.queue.push("DEAL\t1\t5\t2");
+        this.game.queue.push("DEAL\t1\t4\t2");
+        this.game.queue.push("DEAL\t1\t3\t2");
+        this.game.queue.push("DEAL\t1\t2\t2");
+        this.game.queue.push("DEAL\t1\t1\t2");
+        this.game.queue.push("DECKENCRYPT\t1\t7");
+        this.game.queue.push("DECKENCRYPT\t1\t6");
+        this.game.queue.push("DECKENCRYPT\t1\t5");
+        this.game.queue.push("DECKENCRYPT\t1\t4");
+        this.game.queue.push("DECKENCRYPT\t1\t3");
+        this.game.queue.push("DECKENCRYPT\t1\t2");
+        this.game.queue.push("DECKENCRYPT\t1\t1");
+        this.game.queue.push("DECKXOR\t1\t7");
+        this.game.queue.push("DECKXOR\t1\t6");
+        this.game.queue.push("DECKXOR\t1\t5");
+        this.game.queue.push("DECKXOR\t1\t4");
+        this.game.queue.push("DECKXOR\t1\t3");
+        this.game.queue.push("DECKXOR\t1\t2");
+        this.game.queue.push("DECKXOR\t1\t1");
+      }
+      if (this.game.players.length == 8) {
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t8");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t7");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t6");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t5");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t4");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t3");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t2");
+        this.game.queue.push("FLIPCARD\t1\t1\t1\t1");
+        this.game.queue.push("FLIPRESET\t1");
+        this.game.queue.push("POOL\t1"); // pool for cards on table
+        this.game.queue.push("DEAL\t1\t8\t2");
+        this.game.queue.push("DEAL\t1\t7\t2");
+        this.game.queue.push("DEAL\t1\t6\t2");
+        this.game.queue.push("DEAL\t1\t5\t2");
+        this.game.queue.push("DEAL\t1\t4\t2");
+        this.game.queue.push("DEAL\t1\t3\t2");
+        this.game.queue.push("DEAL\t1\t2\t2");
+        this.game.queue.push("DEAL\t1\t1\t2");
+        this.game.queue.push("DECKENCRYPT\t1\t8");
+        this.game.queue.push("DECKENCRYPT\t1\t7");
+        this.game.queue.push("DECKENCRYPT\t1\t6");
+        this.game.queue.push("DECKENCRYPT\t1\t5");
+        this.game.queue.push("DECKENCRYPT\t1\t4");
+        this.game.queue.push("DECKENCRYPT\t1\t3");
+        this.game.queue.push("DECKENCRYPT\t1\t2");
+        this.game.queue.push("DECKENCRYPT\t1\t1");
+        this.game.queue.push("DECKXOR\t1\t8");
+        this.game.queue.push("DECKXOR\t1\t7");
+        this.game.queue.push("DECKXOR\t1\t6");
+        this.game.queue.push("DECKXOR\t1\t5");
+        this.game.queue.push("DECKXOR\t1\t4");
+        this.game.queue.push("DECKXOR\t1\t3");
+        this.game.queue.push("DECKXOR\t1\t2");
+        this.game.queue.push("DECKXOR\t1\t1");
+      }
+
+      this.game.queue.push("DECK\t1\t"+JSON.stringify(this.returnDeck()));
 
     }
 
     if (this.browser_active) {
       this.displayBoard();
     }
-
-
-
   }
+
+
 
 
 
@@ -111,6 +256,7 @@ console.log("WINNER: " + winner);
       let shd_continue = 1;
 
       switch (mv[0]) {
+
         case "notify":
           this.updateLog(mv[1]);
           this.game.queue.splice(qe, 1);
@@ -151,12 +297,6 @@ console.log("WINNER: " + winner);
           break;
       }
 
-      // if (mv[0] === "notify") {
-      //   this.updateLog(mv[1]);
-      //   this.game.queue.splice(qe, 1);
-      //
-
-
       //
       // avoid infinite loops
       //
@@ -193,8 +333,9 @@ console.log("WINNER: " + winner);
       poker_self.updateStatus("making your move...");
 
       if (choice === "flip") {
-        poker_self.addMove("FLIPCARD\t1\t1\t1\t2");
-        poker_self.addMove("FLIPCARD\t1\t1\t1\t1");
+        for (let i = 0; i < players.length; i++) {
+          poker_self.addMove("FLIPCARD\t1\t1\t1\t"+(i+1));
+        }
         poker_self.addMove("FLIPRESET\t1");
         poker_self.endTurn();
       }
@@ -226,20 +367,19 @@ console.log("WINNER: " + winner);
 
     let state = {};
         state.pot = 0.0;
+        state.player_pot = [];
 	state.passed = [];
 	state.round = 0;
 	state.big_blind = 50;
 	state.small_blind = 25;
+	state.big_blind_player = 1;
 
     for (let i = 0; i < num_of_players; i++) {
       state.passed[i] = 0;
     }
-
-    //
-    // call
-    // hold
-    // match
-    //
+    for (let i = 0; i < num_of_players; i++) {
+      state.player_pot[i] = 0;
+    }
 
   }
 
