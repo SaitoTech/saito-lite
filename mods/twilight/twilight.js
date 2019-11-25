@@ -12721,35 +12721,35 @@ console.log("\n\n\n\n");
 
 
 
-    updateStatus(status_html) {
-      this.hud.updateStatus(status_html, this.addShowCardEvents.bind(this));
+  updateStatus(status_html) {
+    this.hud.updateStatus(status_html, this.addShowCardEvents.bind(this));
 
-      // let twilight_self = this;
+    // let twilight_self = this;
 
-      // this.game.status = status_html;
+    // this.game.status = status_html;
 
 
-      // if (this.browser_active == 1) {
+    // if (this.browser_active == 1) {
 
-      //   // $('#status').html("<span>" + this.game.status + "</span>");
+    //   // $('#status').html("<span>" + this.game.status + "</span>");
 
-      //   try {
-      //     twilight_self.addShowCardEvents();
-      //   ***REMOVED*** catch (err) {***REMOVED***
+    //   try {
+    //     twilight_self.addShowCardEvents();
+    //   ***REMOVED*** catch (err) {***REMOVED***
 
-      //   $('#status').show();
+    //   $('#status').show();
 
-      //   try {
-      //     if ($('#game_log').hasClass("loading") == true) {
-      //       $('#game_log').removeClass("loading");
-      //       $('#game_log').addClass("loaded");
-      // ***REMOVED*** else {
-      // ***REMOVED***
-      //   ***REMOVED*** catch (err) {
-      //   ***REMOVED***
-      // ***REMOVED***;
+    //   try {
+    //     if ($('#game_log').hasClass("loading") == true) {
+    //       $('#game_log').removeClass("loading");
+    //       $('#game_log').addClass("loaded");
+    // ***REMOVED*** else {
+    // ***REMOVED***
+    //   ***REMOVED*** catch (err) {
+    //   ***REMOVED***
+    // ***REMOVED***;
 
-***REMOVED***
+  ***REMOVED***
 
 
 
