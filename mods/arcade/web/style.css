@@ -1,6 +1,54 @@
 /** Email **/
+
 body {
   font-size: 1.0em;
+  color: var(--saito-skyline-grey);
+  background: linear-gradient(-45deg, #422 50%, #1e1e1f 100%);
+  font-size: 1.4em;
+***REMOVED***
+
+button, .button, .file-label {
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  min-width: 10em;
+  padding: 10px 6px;
+  background: linear-gradient(-45deg, #222 50%, #1e1e1f 100%);
+  border: 1px solid var(--saito-red);
+  color: var(--saito-skyline-grey);
+  letter-spacing: 1px;
+  transition: transform .25s;
+  margin: 0.2em 0;
+  min-width: 180px;
+***REMOVED***
+
+select {
+  border: 1px solid var(--saito-red);
+  border-radius: 5px;
+  font-size: 1em;
+  padding: 10px 6px;
+  background: linear-gradient(-45deg, #222 50%, #1e1e1f 100%);
+  border: 1px solid var(--saito-red);
+  color: var(--saito-skyline-grey);
+  letter-spacing: 1px;
+  transition: transform .25s;
+  min-width: 180px;
+***REMOVED***
+
+.background-shim {
+  position: absolute;
+  top: 110px;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+  z-index: 0;
+***REMOVED***
+
+.background-shim-cover {
+  width: 100%;
+  height: 100%;
+  background-color: #00000099;
 ***REMOVED***
 
 .main {
@@ -35,16 +83,16 @@ body {
 ***REMOVED***
 
 .arcade-sidebar-active-games-body {
-  border: 1px solid grey;
+  border: 1px solid var(--saito-red);
+  background: #1e1e1f50;
   height: 40vh;
-  overflow-y: scroll;
+  overflow-y: auto;
 ***REMOVED***
 
 .arcade-observer-game-row {
   /* border: 1px solid grey;
   padding: 10px;
   margin-top: 10px; */
-
   /* border: 1px solid grey; */
   padding: 10px;
   margin-bottom: 10px;
@@ -55,6 +103,12 @@ body {
   padding-bottom: 1.7em;
 ***REMOVED***
 
+.chat-list {
+  height: 255px;
+  overflow-y: auto;
+  border: 1px solid var(--saito-red);
+  background: #1e1e1f50;
+***REMOVED***
 
 /** MAIN **/
 
@@ -88,7 +142,6 @@ body {
   width: 100%;
 ***REMOVED***
 
-
 .arcade-game-invitation {
   display: grid;
   align-items: center;
@@ -101,8 +154,8 @@ body {
   margin-top: 10px;
 ***REMOVED***
 
-
 /** Game Carousel **/
+
 #arcade-carousel {
   width: 100%;
   max-width: 1100px;
@@ -126,8 +179,6 @@ body {
   border-radius: 50px;
 ***REMOVED***
 
-
-
 .game {
   min-width: 150px;
   position: relative;
@@ -137,16 +188,6 @@ body {
 
 .game-image {
   width: 100%;
-  text-align: center;
-  border: 3px solid #888;
-  cursor: pointer;
-  /* max-width: 375px; */
-  max-width: 375px;
-  /** 1125px **/
-  max-height: 240px;
-  /* max-height: 400px; */
-  /** 720px **/
-  grid-area: gameimage;
 ***REMOVED***
 
 .game-title {
@@ -158,9 +199,28 @@ body {
 ***REMOVED***
 
 /* GAME WIZARD */
+
 .create-game-wizard {
   display: flex;
   flex-direction: column;
+  position: absolute;
+  width: 80%;
+  margin: 1em auto;
+  background-color: #0009;
+  padding: 2em;
+  z-index: 5;
+  max-width: 900px;
+***REMOVED***
+
+.game-wizard-form {
+  display: grid;
+  grid-gap: 1em;
+***REMOVED***
+
+.game-info-container {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 1fr;
 ***REMOVED***
 
 /* .game-image-wizard {
@@ -168,46 +228,49 @@ body {
 ***REMOVED*** */
 
 .return_to_arcade {
-  height: 2em;
-  margin-bottom: 1em;
-  display: flex;
-  align-items: center;
+  position: absolute;
+  right: 25px;
+  display: inline-block;
+  top: 0;
+  width: 0;
+  top: -20px;
 ***REMOVED***
 
-.game-info-container {
-  display: flex;
-  margin: 1em 0;
+.game-description {
+  font-size: 1.2em;
+  line-height: 1.2em;
+  text-align: justify;
 ***REMOVED***
 
-.game-details {
-  margin: 1em;
+.game-details form#options {
+  display: grid;
+  grid-template-columns: 6em auto;
+  grid-gap: 1em;
 ***REMOVED***
 
 /* USED BY WORDBLOCKS */
+
 #options {
   display: grid;
   grid-template-columns: 10em auto;
 ***REMOVED***
 
-
 /* observer mode box */
+
 .arcade-observer-game-players {
-  float:right;
+  float: right;
 ***REMOVED***
+
 .arcade-observer-game-players-identicon {
   height: 60px;
   width: 60px;
-  float:right;
+  float: right;
   margin-left: 8px;
 ***REMOVED***
-.arcade-observer-game-name {
 
-***REMOVED***
-.arcade-observer-game-row {
+.arcade-observer-game-name {***REMOVED***
 
-***REMOVED***
-
-
+.arcade-observer-game-row {***REMOVED***
 
 /* RIBBON */
 
@@ -269,19 +332,21 @@ body {
   transform: rotate(-45deg);
 ***REMOVED***
 
-
 .arcade-game-invitation {
-  clear:both;
+  clear: both;
 ***REMOVED***
+
 .arcade-game-row-name {
   float: left;
   cursor: pointer;
 ***REMOVED***
+
 .arcade-game-row-options {
   margin-left: 30px;
   float: left;
   cursor: pointer;
 ***REMOVED***
+
 .arcade-game-row-join {
   margin-left: 30px;
   float: left;
@@ -318,36 +383,107 @@ body {
     grid-template-columns: 1fr;
     grid-template-areas: "arcade-left-sidebar" "arcade-main";
   ***REMOVED***
-
   .arcade-left-sidebar {
     display: none;
   ***REMOVED***
   .arcade-right-sidebar {
     display: none;
   ***REMOVED***
-
   #arcade-carousel {
     max-width: 90vw;
   ***REMOVED***
-
   .arcade-gamelist {
     width: 100%;
   ***REMOVED***
-
   .arcade-game-invitation {
     grid-template-rows: 1fr 1fr;
     grid-template-columns: 1fr 1fr;
   ***REMOVED***
-
   .arcade-game-invitation div {
     margin-left: unset;
   ***REMOVED***
-
   /* .arcade-sidebar {
     display: none;
   ***REMOVED*** */
 ***REMOVED***
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 600px) {***REMOVED***
+
+.remove_cards_box {
+  max-height: 400px;
+  overflow: auto;
+  padding: 1em;
 ***REMOVED***
 
+.removecards {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 1fr;
+***REMOVED***
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  outline: 0;
+  box-shadow: none;
+  border: 0 !important;
+  background-image: none;
+***REMOVED***
+/* Remove IE arrow */
+select::-ms-expand {
+  display: none;
+***REMOVED***
+/* Custom Select */
+.saito-select {
+  position: relative;
+  display: flex;
+  width: 20em;
+  height: 3em;
+  line-height: 3;
+  background: #55555555;
+  overflow: hidden;
+  border-bottom: 1px solid var(--saito-red);
+  width: 100%;
+***REMOVED***
+select {
+  flex: 1;
+  padding: 0 .5em;
+  color: #fff;
+  cursor: pointer;
+***REMOVED***
+/* Arrow */
+.saito-select::after {
+  content: '\25BC';
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0 1em;
+  background: #55555533;
+  cursor: pointer;
+  pointer-events: none;
+  -webkit-transition: .25s all ease;
+  -o-transition: .25s all ease;
+  transition: .25s all ease;
+***REMOVED***
+/* Transition */
+.saito-select:hover::after {
+  color: var(--saito-red);
+***REMOVED***
+
+
+.game-details label {
+  align-self: center;
+  font-weight: bold;
+***REMOVED***
+
+option {
+  background: var(--saito-cyber-black);
+***REMOVED***
+
+.game-start-controls {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 4fr;
+***REMOVED***
