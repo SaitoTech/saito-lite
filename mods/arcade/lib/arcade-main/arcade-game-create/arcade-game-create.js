@@ -16,6 +16,8 @@ module.exports = ArcadeGameDreate = {
         let gamemod_url = "/" + gamemod.name.toLowerCase() + "/img/arcade.jpg";
 
         document.querySelector('.game-image').src = gamemod_url;
+        document.querySelector('.background-shim').style.backgroundImage = 'url(' + gamemod_url + ')';
+        document.querySelector('.game-title').innerHTML = gamemod.name;
         document.querySelector('.game-description').innerHTML = gamemod.description;
         document.querySelector('.game-publisher-message').innerHTML = gamemod.publisher_message;
         document.querySelector('.game-details').innerHTML = gamemod.returnGameOptionsHTML();
@@ -75,7 +77,13 @@ module.exports = ArcadeGameDreate = {
 
   attachEvents(app, data) {
 
-    document.getElementById('return_to_arcade')
+    document.querySelector('#return_to_arcade')
+      .onclick = (e) => {
+        document.querySelector('.arcade-main').innerHTML = '';
+        data.arcade.render(app, data);
+  ***REMOVED***
+
+      document.querySelector('.background-shim-cover')
       .onclick = (e) => {
         document.querySelector('.arcade-main').innerHTML = '';
         data.arcade.render(app, data);
