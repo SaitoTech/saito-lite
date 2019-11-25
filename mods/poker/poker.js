@@ -452,20 +452,8 @@ console.log("WINNER: " + winner);
 
 
   displayHand() {
-
     this.cardfan.render(this.app, this);
     this.cardfan.attachEvents(this.app, this);
-    //.deck[0].cards[this.game.deck[0].hand[i]]);
-
-    // $('#hand').empty();
-
-    // for (let i = 0; i < this.game.deck[0].hand.length; i++) {
-    //   let card = this.game.deck[0].cards[this.game.deck[0].hand[i]];
-    //   let card_img = card.name + ".png";
-    //   let html = '<img class="card" src="/poker/img/cards/'+card_img+'" />';
-    //   $('#hand').append(html);
-    // }
-
   }
 
 
@@ -525,7 +513,6 @@ console.log("WINNER: " + winner);
       } else {
 	return 2;
       }
-      return 0;
     }
     if (score1.hand_description == "royal flush") { return 1; }
     if (score2.hand_description == "royal flush") { return 2; }
@@ -537,7 +524,6 @@ console.log("WINNER: " + winner);
       } else {
         return 2;
       }
-      return 0;
     }
     if (score1.hand_description == "straight flush") { return 1; }
     if (score2.hand_description == "straight flush") { return 2; }
@@ -549,7 +535,6 @@ console.log("WINNER: " + winner);
       } else {
         return 2;
       }
-      return 0;
     }
     if (score1.hand_description == "four-of-a-kind") { return 1; }
     if (score2.hand_description == "four-of-a-kind") { return 2; }
@@ -561,7 +546,6 @@ console.log("WINNER: " + winner);
       } else {
         return 2;
       }
-      return 0;
     }
     if (score1.hand_description == "full house") { return 1; }
     if (score2.hand_description == "full house") { return 2; }
@@ -573,7 +557,6 @@ console.log("WINNER: " + winner);
       } else {
         return 2;
       }
-      return 0;
     }
     if (score1.hand_description == "flush") { return 1; }
     if (score2.hand_description == "flush") { return 2; }
@@ -585,7 +568,6 @@ console.log("WINNER: " + winner);
       } else {
         return 2;
       }
-      return 0;
     }
     if (score1.hand_description == "straight") { return 1; }
     if (score2.hand_description == "straight") { return 2; }
@@ -597,7 +579,6 @@ console.log("WINNER: " + winner);
       } else {
         return 2;
       }
-      return 0;
     }
     if (score1.hand_description == "three-of-a-kind") { return 1; }
     if (score2.hand_description == "three-of-a-kind") { return 2; }

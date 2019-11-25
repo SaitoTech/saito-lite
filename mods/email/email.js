@@ -140,12 +140,17 @@ class Email extends ModTemplate {
 
     this.app.storage.loadTransactions("Email", 50, (txs) => {
 
+      let keys = [];
+
       for (let i = 0; i < txs.length; i++) {
         this.emails.inbox.unshift(txs[i]);
+        keys.push(txs[i].transaction.from[0].add);
       }
 
       EmailList.render(this.app, this.uidata);
       EmailList.attachEvents(this.app, this.uidata);
+
+      this.addrController.fetchIdentifiers(keys);
 
     });
 
