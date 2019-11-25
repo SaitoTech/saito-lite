@@ -25,6 +25,7 @@ data/shashmaps/*.smap
 lib/saito/*.swp
 lib/saito/web/browser.js
 lib/saito/web/client.options
+lib/saito/0.saito.js
 lib/modules/mods/*
 
 web/saito/saito.js
