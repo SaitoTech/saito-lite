@@ -132,45 +132,6 @@ class Poker extends GameTemplate {
           break;
   ***REMOVED***
 
-      // if (mv[0] === "notify") {
-      //   this.updateLog(mv[1]);
-      //   this.game.queue.splice(qe, 1);
-      // ***REMOVED***
-
-      //
-      // round
-      // play
-      // call
-      // fold
-      // raise
-      //
-  //     if (mv[0] === "turn") {
-	// this.displayBoard();
-  //       this.game.queue.splice(qe, 1);
-  //       if (parseInt(mv[1]) == this.game.player) {
-  //         this.playerTurn();
-  //   ***REMOVED***
-  //       shd_continue = 0;
-  // ***REMOVED***
-  //     if (mv[0] === "round") {
-  //       this.displayBoard();
-  //       this.updateStatus("Your opponent is making the first move.");
-  //       for (let i = 0; i < this.game.opponents.length+1; i++) { this.game.queue.push("turn\t"+(i+1)); ***REMOVED***
-  //       shd_continue = 1;
-  // ***REMOVED***
-  //     if (mv[0] === "play") {
-  //       this.game.queue.splice(qe, 1);
-  // ***REMOVED***
-  //     if (mv[0] === "call") {
-  //       this.game.queue.splice(qe, 1);
-  // ***REMOVED***
-  //     if (mv[0] === "fold") {
-  //       this.game.queue.splice(qe, 1);
-  // ***REMOVED***
-  //     if (mv[0] === "raise") {
-  //       this.game.queue.splice(qe, 1);
-  // ***REMOVED***
-
       //
       // avoid infinite loops
       //
