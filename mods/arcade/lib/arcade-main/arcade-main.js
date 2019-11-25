@@ -130,7 +130,7 @@ console.log(JSON.stringify(data.arcade.app.options.games[z]));
                     app.options.games[z].ts = new Date().getTime();
                     app.options.games[z].initialize_game_run = 0;
                     app.storage.saveOptions();
-                    window.location = '/' + app.options.games[i].module.toLowerCase();
+                    window.location = '/' + app.options.games[z].module.toLowerCase();
                     return;
 
                   }

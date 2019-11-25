@@ -8589,23 +8589,29 @@ console.log("\n\n\n\n");
           let x = 0;
           let y = 0;
 
-          this.updateStatus('<span>You win the Summit:</span><p></p><ul><li class="card" id="raise">raise DEFCON</li><li class="card" id="lower">lower DEFCON</li></ul>');
+          this.updateStatus('<span>You win the Summit:</span><p></p><ul><li class="card" id="raise">raise DEFCON</li><li class="card" id="lower">lower DEFCON</li><li class="card" id="same">do not change</li></ul>');
 
           $('.card').off();
           $('.card').on('click', function() {
 
             let action2 = $(this).attr("id");
 
-              if (action2 == "raise") {
+            if (action2 == "raise") {
               twilight_self.updateStatus("broadcasting choice....");
               twilight_self.addMove("resolve\tsummit");
               twilight_self.addMove("defcon\traise");
               twilight_self.endTurn();
             }
-              if (action2 == "lower") {
+            if (action2 == "lower") {
               twilight_self.updateStatus("broadcasting choice....");
               twilight_self.addMove("resolve\tsummit");
               twilight_self.addMove("defcon\tlower");
+              twilight_self.endTurn();
+            }
+            if (action2 == "same") {
+              twilight_self.updateStatus("broadcasting choice....");
+              twilight_self.addMove("resolve\tsummit");
+              twilight_self.addMove("notify\tDEFCON left untouched");
               twilight_self.endTurn();
             }
 
