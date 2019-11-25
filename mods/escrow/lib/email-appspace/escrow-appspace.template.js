@@ -22,7 +22,7 @@ module.exports = EscrowAppspaceTemplate = (escrow) => {
 
     html = `
 
-    <h3>Ecrow Service</h3>
+    <h3>Escrow Service</h3>
 
     <p></p>
 

@@ -3,7 +3,7 @@ module.exports = EscrowSidebarTemplate = () => {
 
   <link rel="stylesheet" href="/escrow/css/escrow-sidebar.css">
 
-  <h3>Ecrow Service</h3>
+  <h3>Escrow Service</h3>
 
   <p></p>
 
