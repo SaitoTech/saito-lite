@@ -18,7 +18,8 @@ class Pandemic extends GameTemplate {
     this.useHUD          = 1;
     this.addHUDMenu      = ['Cards'];
     this.maxPlayers      = 4;
-  
+    this.minPlayers      = 2;  
+
     this.gameboardWidth  = 2602;
   
     this.moves           = [];
@@ -111,7 +112,7 @@ class Pandemic extends GameTemplate {
       this.game.events    = this.returnEvents();
       this.game.cities    = this.returnCities();
       this.game.state     = this.returnState();
-      this.game.players   = this.returnPlayers((this.game.opponents.length+1));
+      this.game.players   = this.returnPlayers((this.game.players.length));
   
       this.updateStatus("Generating the Game");
   
