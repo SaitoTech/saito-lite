@@ -1,6 +1,54 @@
 /** Email **/
+
 body {
   font-size: 1.0em;
+  color: var(--saito-skyline-grey);
+  background: linear-gradient(-45deg, #422 50%, #1e1e1f 100%);
+  font-size: 1.4em;
+}
+
+button, .button, .file-label {
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  min-width: 10em;
+  padding: 10px 6px;
+  background: linear-gradient(-45deg, #222 50%, #1e1e1f 100%);
+  border: 1px solid var(--saito-red);
+  color: var(--saito-skyline-grey);
+  letter-spacing: 1px;
+  transition: transform .25s;
+  margin: 0.2em 0;
+  min-width: 180px;
+}
+
+select {
+  border: 1px solid var(--saito-red);
+  border-radius: 5px;
+  font-size: 1em;
+  padding: 10px 6px;
+  background: linear-gradient(-45deg, #222 50%, #1e1e1f 100%);
+  border: 1px solid var(--saito-red);
+  color: var(--saito-skyline-grey);
+  letter-spacing: 1px;
+  transition: transform .25s;
+  min-width: 180px;
+}
+
+.background-shim {
+  position: absolute;
+  top: 110px;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+  z-index: 0;
+}
+
+.background-shim-cover {
+  width: 100%;
+  height: 100%;
+  background-color: #00000099;
 }
 
 .main {
@@ -35,16 +83,16 @@ body {
 }
 
 .arcade-sidebar-active-games-body {
-  border: 1px solid grey;
+  border: 1px solid var(--saito-red);
+  background: #1e1e1f50;
   height: 40vh;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .arcade-observer-game-row {
   /* border: 1px solid grey;
   padding: 10px;
   margin-top: 10px; */
-
   /* border: 1px solid grey; */
   padding: 10px;
   margin-bottom: 10px;
@@ -55,6 +103,12 @@ body {
   padding-bottom: 1.7em;
 }
 
+.chat-list {
+  height: 255px;
+  overflow-y: auto;
+  border: 1px solid var(--saito-red);
+  background: #1e1e1f50;
+}
 
 /** MAIN **/
 
@@ -88,7 +142,6 @@ body {
   width: 100%;
 }
 
-
 .arcade-game-invitation {
   display: grid;
   align-items: center;
@@ -101,8 +154,8 @@ body {
   margin-top: 10px;
 }
 
-
 /** Game Carousel **/
+
 #arcade-carousel {
   width: 100%;
   max-width: 1100px;
@@ -126,8 +179,6 @@ body {
   border-radius: 50px;
 }
 
-
-
 .game {
   min-width: 150px;
   position: relative;
@@ -137,16 +188,6 @@ body {
 
 .game-image {
   width: 100%;
-  text-align: center;
-  border: 3px solid #888;
-  cursor: pointer;
-  /* max-width: 375px; */
-  max-width: 375px;
-  /** 1125px **/
-  max-height: 240px;
-  /* max-height: 400px; */
-  /** 720px **/
-  grid-area: gameimage;
 }
 
 .game-title {
@@ -158,9 +199,28 @@ body {
 }
 
 /* GAME WIZARD */
+
 .create-game-wizard {
   display: flex;
   flex-direction: column;
+  position: absolute;
+  width: 80%;
+  margin: 1em auto;
+  background-color: #0009;
+  padding: 2em;
+  z-index: 5;
+  max-width: 900px;
+}
+
+.game-wizard-form {
+  display: grid;
+  grid-gap: 1em;
+}
+
+.game-info-container {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 1fr;
 }
 
 /* .game-image-wizard {
@@ -168,46 +228,49 @@ body {
 } */
 
 .return_to_arcade {
-  height: 2em;
-  margin-bottom: 1em;
-  display: flex;
-  align-items: center;
+  position: absolute;
+  right: 25px;
+  display: inline-block;
+  top: 0;
+  width: 0;
+  top: -20px;
 }
 
-.game-info-container {
-  display: flex;
-  margin: 1em 0;
+.game-description {
+  font-size: 1.2em;
+  line-height: 1.2em;
+  text-align: justify;
 }
 
-.game-details {
-  margin: 1em;
+.game-details form#options {
+  display: grid;
+  grid-template-columns: 6em auto;
+  grid-gap: 1em;
 }
 
 /* USED BY WORDBLOCKS */
+
 #options {
   display: grid;
   grid-template-columns: 10em auto;
 }
 
-
 /* observer mode box */
+
 .arcade-observer-game-players {
-  float:right;
+  float: right;
 }
+
 .arcade-observer-game-players-identicon {
   height: 60px;
   width: 60px;
-  float:right;
+  float: right;
   margin-left: 8px;
 }
-.arcade-observer-game-name {
 
-}
-.arcade-observer-game-row {
+.arcade-observer-game-name {}
 
-}
-
-
+.arcade-observer-game-row {}
 
 /* RIBBON */
 
@@ -269,19 +332,21 @@ body {
   transform: rotate(-45deg);
 }
 
-
 .arcade-game-invitation {
-  clear:both;
+  clear: both;
 }
+
 .arcade-game-row-name {
   float: left;
   cursor: pointer;
 }
+
 .arcade-game-row-options {
   margin-left: 30px;
   float: left;
   cursor: pointer;
 }
+
 .arcade-game-row-join {
   margin-left: 30px;
   float: left;
@@ -318,36 +383,107 @@ body {
     grid-template-columns: 1fr;
     grid-template-areas: "arcade-left-sidebar" "arcade-main";
   }
-
   .arcade-left-sidebar {
     display: none;
   }
   .arcade-right-sidebar {
     display: none;
   }
-
   #arcade-carousel {
     max-width: 90vw;
   }
-
   .arcade-gamelist {
     width: 100%;
   }
-
   .arcade-game-invitation {
     grid-template-rows: 1fr 1fr;
     grid-template-columns: 1fr 1fr;
   }
-
   .arcade-game-invitation div {
     margin-left: unset;
   }
-
   /* .arcade-sidebar {
     display: none;
   } */
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 600px) {}
+
+.remove_cards_box {
+  max-height: 400px;
+  overflow: auto;
+  padding: 1em;
 }
 
+.removecards {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 1fr;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  outline: 0;
+  box-shadow: none;
+  border: 0 !important;
+  background-image: none;
+}
+/* Remove IE arrow */
+select::-ms-expand {
+  display: none;
+}
+/* Custom Select */
+.saito-select {
+  position: relative;
+  display: flex;
+  width: 20em;
+  height: 3em;
+  line-height: 3;
+  background: #55555555;
+  overflow: hidden;
+  border-bottom: 1px solid var(--saito-red);
+  width: 100%;
+}
+select {
+  flex: 1;
+  padding: 0 .5em;
+  color: #fff;
+  cursor: pointer;
+}
+/* Arrow */
+.saito-select::after {
+  content: '\25BC';
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0 1em;
+  background: #55555533;
+  cursor: pointer;
+  pointer-events: none;
+  -webkit-transition: .25s all ease;
+  -o-transition: .25s all ease;
+  transition: .25s all ease;
+}
+/* Transition */
+.saito-select:hover::after {
+  color: var(--saito-red);
+}
+
+
+.game-details label {
+  align-self: center;
+  font-weight: bold;
+}
+
+option {
+  background: var(--saito-cyber-black);
+}
+
+.game-start-controls {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 4fr;
+}
