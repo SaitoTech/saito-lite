@@ -10,6 +10,7 @@
     "compile": " ./compile",
     "test": "NODE_ENV=test mocha 'tests/*.spec.js'",
     "build": "webpack --config ./webpack/webpack.config.js",
+    "build_json": "webpack --config ./webpack/webpack.config.js",
     "prod": "webpack --config ./webpack/webpack.prod.js",
     "analyze": "webpack --config ./webpack/webpack.analyze.js"
   ***REMOVED***,

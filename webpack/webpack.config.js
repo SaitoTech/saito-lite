@@ -12,6 +12,9 @@ const path = require('path');
         {
             sqlite: 'sqlite'
     ***REMOVED***,
+        {
+            child_process: 'child_process'
+    ***REMOVED***,
         /\.txt/,
         /\.png$/,
         /\.jpg$/,

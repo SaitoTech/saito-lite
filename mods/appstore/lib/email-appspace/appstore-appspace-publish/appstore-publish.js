@@ -47,6 +47,6 @@ module.exports = AppStorePublish = {
   createPublishTX(app, { module_zip ***REMOVED***) {
     let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
     newtx.transaction.msg = { module: "AppStore", request: "submit module", module_zip ***REMOVED***;
-    return app.wallet.signTransaction(newtx);;
+    return app.wallet.signTransaction(newtx);
   ***REMOVED***,
 ***REMOVED***

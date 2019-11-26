@@ -114,6 +114,17 @@ class AppStore extends ModTemplate {
     this.app.storage.executeDatabase(sql, params, "appstore");
   ***REMOVED***
 
+  createBundleTX(filename) {
+    let fs = app.storage.returnFileSystem();
+    if (fs) {
+      let bundle_base64 = fs.readFileSync('/path/to/file.jpg', { encoding: 'base64' ***REMOVED***);
+      let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
+      newtx.transaction.msg = { module: "AppStore", request: "submit module", bundle: bundle_base64 ***REMOVED***;
+      return app.wallet.signTransaction(newtx);
+***REMOVED***
+    return null;
+  ***REMOVED***
+
 
 
 
@@ -125,6 +136,83 @@ class AppStore extends ModTemplate {
     let fs = app.storage.returnFileSystem();
     if (fs != null) {
       expressapp.use('/'+encodeURI(this.name), express.static(__dirname + "/web"));
+
+      expressapp.post('/bundle', async (req, res) => {
+***REMOVED***
+***REMOVED*** require inclusion of  module versions and paths for loading into the system
+***REMOVED***
+        let { versions, paths ***REMOVED*** = req.body;
+
+        let ts = new Date().getTime();
+        let hash = this.app.crypto.hash(versions.join(''));
+
+        let modules_filename = `modules.config-${ts***REMOVED***-${hash***REMOVED***.json`
+
+        await fs.writeFile(path.resolve(__dirname, `bundler/${modules_filename***REMOVED***`),
+          JSON.stringify({paths***REMOVED***)
+        );
+
+        let IndexTemplate = require(index.template.js);
+        let index_filename = `saito-${ts***REMOVED***-${hash***REMOVED***.js`;
+
+        await fs.writeFile(path.resolve(__dirname, `bundler/modules.config-${ts***REMOVED***-${hash***REMOVED***.json`),
+          IndexTemplate(modules_config_filename)
+        );
+
+***REMOVED***
+***REMOVED*** TODO: unzip existing modules and stage them
+***REMOVED***
+
+***REMOVED***
+***REMOVED*** create temp module_paths file and index.client.js\
+***REMOVED***
+        let webpackConfig = require('../../webpack/webpack.config');
+        webpackConfig.entry = ["babel-polyfill", path.resolve(__dirname, `./bundler/index-${ts***REMOVED***-${hash***REMOVED***.js`)],
+        webpackConfig.output = {
+            path: path.resolve(__dirname, './bundler/dist'),
+            filename: index_filename
+    ***REMOVED***
+
+***REMOVED***
+***REMOVED*** write config to file
+***REMOVED***
+***REMOVED***
+          await fs.writeFile(path.resolve(__dirname, `bundler/webpack.config-${ts***REMOVED***-${sig***REMOVED***.json`));
+    ***REMOVED*** catch(err) {
+          console.log(err);
+    ***REMOVED***
+
+***REMOVED***
+***REMOVED*** execute bundling process
+***REMOVED***
+        const util = require('util');
+        const exec = util.promisify(require('child_process').exec);
+
+***REMOVED***
+  ***REMOVED***
+  ***REMOVED*** TODO: json
+  ***REMOVED***
+          const { stdout, stderr ***REMOVED*** = await exec('webpack --config ./bundler/webpack.config.json' );
+
+  ***REMOVED***
+  ***REMOVED*** if there are no errors
+  ***REMOVED***
+          res.send({
+            payload: {
+              filename
+        ***REMOVED***
+      ***REMOVED***);
+
+          let newtx = this.createBundleTX(filename);
+
+  ***REMOVED***
+  ***REMOVED*** publish our bundle
+  ***REMOVED***
+          this.app.network.propagateTransaction(newtx);
+    ***REMOVED*** catch(err) {
+          console.log(err);
+    ***REMOVED***
+  ***REMOVED***);
 ***REMOVED***
   ***REMOVED***
 
