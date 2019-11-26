@@ -12,6 +12,9 @@ module.exports = {
         {
             sqlite: 'sqlite'
         },
+        {
+            child_process: 'child_process'
+        },
         /\.txt/,
         /\.png$/,
         /\.jpg$/,

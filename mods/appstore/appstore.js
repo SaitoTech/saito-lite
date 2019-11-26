@@ -114,6 +114,17 @@ class AppStore extends ModTemplate {
     this.app.storage.executeDatabase(sql, params, "appstore");
   }
 
+  createBundleTX(filename) {
+    let fs = app.storage.returnFileSystem();
+    if (fs) {
+      let bundle_base64 = fs.readFileSync('/path/to/file.jpg', { encoding: 'base64' });
+      let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
+      newtx.transaction.msg = { module: "AppStore", request: "submit module", bundle: bundle_base64 };
+      return app.wallet.signTransaction(newtx);
+    }
+    return null;
+  }
+
 
 
 
@@ -125,6 +136,83 @@ class AppStore extends ModTemplate {
     let fs = app.storage.returnFileSystem();
     if (fs != null) {
       expressapp.use('/'+encodeURI(this.name), express.static(__dirname + "/web"));
+
+      expressapp.post('/bundle', async (req, res) => {
+        //
+        // require inclusion of  module versions and paths for loading into the system
+        //
+        let { versions, paths } = req.body;
+
+        let ts = new Date().getTime();
+        let hash = this.app.crypto.hash(versions.join(''));
+
+        let modules_filename = `modules.config-${ts}-${hash}.json`
+
+        await fs.writeFile(path.resolve(__dirname, `bundler/${modules_filename}`),
+          JSON.stringify({paths})
+        );
+
+        let IndexTemplate = require(index.template.js);
+        let index_filename = `saito-${ts}-${hash}.js`;
+
+        await fs.writeFile(path.resolve(__dirname, `bundler/modules.config-${ts}-${hash}.json`),
+          IndexTemplate(modules_config_filename)
+        );
+
+        //
+        // TODO: unzip existing modules and stage them
+        //
+
+        //
+        // create temp module_paths file and index.client.js\
+        //
+        let webpackConfig = require('../../webpack/webpack.config');
+        webpackConfig.entry = ["babel-polyfill", path.resolve(__dirname, `./bundler/index-${ts}-${hash}.js`)],
+        webpackConfig.output = {
+            path: path.resolve(__dirname, './bundler/dist'),
+            filename: index_filename
+        }
+
+        //
+        // write config to file
+        //
+        try {
+          await fs.writeFile(path.resolve(__dirname, `bundler/webpack.config-${ts}-${sig}.json`));
+        } catch(err) {
+          console.log(err);
+        }
+
+        //
+        // execute bundling process
+        //
+        const util = require('util');
+        const exec = util.promisify(require('child_process').exec);
+
+        try {
+          //
+          // TODO: json
+          //
+          const { stdout, stderr } = await exec('webpack --config ./bundler/webpack.config.json' );
+
+          //
+          // if there are no errors
+          //
+          res.send({
+            payload: {
+              filename
+            }
+          });
+
+          let newtx = this.createBundleTX(filename);
+
+          //
+          // publish our bundle
+          //
+          this.app.network.propagateTransaction(newtx);
+        } catch(err) {
+          console.log(err);
+        }
+      });
     }
   }
 
