@@ -264,6 +264,16 @@ console.log("WINNER: " + winner);
       if (mv[0] === "turn") {
 
           this.displayBoard();
+
+
+	  this.game.state.plays_since_last_raise++;
+	  if (this.game.state.plays_since_last_raise == 0) {
+	    this.game.state.plays_since_last_raise++;
+	  ***REMOVED***
+
+	  this.game.state.turn++;
+
+
 	  if (this.game.state.passed[this.game.player-1] == 1) {
             this.game.queue.splice(qe, 1);
 	  ***REMOVED*** else {
@@ -273,7 +283,6 @@ console.log("WINNER: " + winner);
 	    // if this is the first turn
 	    // 
             if (parseInt(mv[1]) == this.game.player) {
-console.log("\n\nit is my turn ... ");
               this.playerTurn();
         ***REMOVED*** else {
               this.updateStatus("Waiting for Player " + this.game.player);
@@ -285,7 +294,49 @@ console.log("\n\nit is my turn ... ");
 
       if (mv[0] === "round") {
 
+          let flipcard = 0;
+
           this.displayBoard();
+
+console.log("ROUND: " + this.game.state.plays_since_last_raise);
+console.log("TURN: " + this.game.state.plays_since_last_raise);
+
+
+	  //
+	  // if not everyone has called
+	  //
+	  if (this.game.state.plays_since_last_raise >= this.game.players.length) {
+
+	    //
+	    // setup another loop
+	    //
+            for (let i = (this.game.state.big_blind_player); i < (this.game.state.big_blind_player+this.game.players.length); i++) { 
+	      let player_to_go = (i%this.game.players.length);
+	      this.game.queue.push("turn\t"+(player_to_go+1)); 
+	***REMOVED***
+
+	    //
+	    // remember to continue!
+	    //
+	    return 1;
+
+	  //
+	  //
+	  //
+	  ***REMOVED*** else {
+
+	    //
+	    // should we flip?
+	    //
+	    if (this.game.state.turn > 0) {
+              flipcard = 1;
+	***REMOVED***
+
+	  ***REMOVED***
+
+
+
+
 
 	  //
 	  // if players are out-of-tokens, set as inactive
@@ -306,15 +357,30 @@ console.log("\n\nit is my turn ... ");
 	  this.game.state.big_blind_player++;
 	  this.game.state.small_blind_player++;
 	  this.game.state.required_pot = this.game.state.big_blind;
+	  this.game.state.plays_since_last_raise = 0;
 
 	  if (this.game.state.big_blind_player > this.game.players.length) { this.game.state.big_blind_player = 1; ***REMOVED***
 	  if (this.game.state.small_blind_player > this.game.players.length) { this.game.state.small_blind_player = 1; ***REMOVED***
 
           this.updateStatus("Your opponent is making the first move.");
-          for (let i = (this.game.state.big_blind_player-1); i < (this.game.state.big_blind_player+this.game.players.length); i++) { 
+	  // not -1 to start with small blind
+          for (let i = (this.game.state.big_blind_player); i < (this.game.state.big_blind_player+this.game.players.length); i++) { 
 	    let player_to_go = (i%this.game.players.length);
 	    this.game.queue.push("turn\t"+(player_to_go+1)); 
 	  ***REMOVED***
+
+console.log("JUST INITIALIZED WITH: " + this.game.queue);
+
+	  if (flipcard == 1) {
+	      //
+	      // flip card
+	      //
+      	      for (let i = this.game.players.length-1; i >= 0; i--) {
+      		this.game.queue.push("FLIPCARD\t1\t1\t1\t"+i);
+	  ***REMOVED***
+       	      this.game.queue.push("FLIPRESET\t1");
+	  ***REMOVED***
+
 
 	  //
 	  // Big Blind
@@ -361,12 +427,12 @@ console.log("\n\nit is my turn ... ");
 	  this.game.state.player_credit[player-1] -= amount_to_call;
 	  this.game.state.player_pot[player-1]  += amount_to_call;
 	  this.game.state.pot += amount_to_call;
-//
-// calling does not increase required pot
-//	  this.game.state.required_pot  += amount_to_call;
 
           this.game.queue.splice(qe, 1);
+
+console.log("AFTER CALL QUEUE: " + this.game.queue);
   ***REMOVED***
+
 
       if (mv[0] === "fold") {
 	  let player = parseInt(mv[1]);
@@ -389,6 +455,11 @@ console.log("\n\nit is my turn ... ");
 
 	  let call_portion = 0;
 	  let raise_portion = 0;
+
+	  //
+	  // 1 instead of 0 as my play is first player
+	  //
+	  this.game.state.plays_since_last_raise = 1;
 
 	  if (this.game.state.required_pot > this.game.state.player_pot[player-1]) {
 	    call_portion = this.game.state.required_pot - this.game.state.player_pot[player-1];
@@ -581,6 +652,8 @@ console.log("PP: " + poker_self.game.state.player_pot[poker_self.game.player-1])
         state.round = 0;
         state.new_round = 0;
         state.turn = 0;
+
+	state.plays_since_last_raise = -1;
 
         state.started = 0;
         state.pot = 0.0;
