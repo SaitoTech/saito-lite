@@ -114,6 +114,17 @@
     margin-left: 15px;
 ***REMOVED***
 
+/** APPSTORE PUBLISH **/
+
+.appstore-publish {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+***REMOVED***
+
+.appstore-publish h3 {
+    margin-right: 1em;
+***REMOVED***
 
 
 
