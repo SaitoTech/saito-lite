@@ -27,31 +27,9 @@ class Poker extends GameTemplate {
   ***REMOVED***
 
 
+  initializeQueue() {
 
-  initializeGame(game_id) {
-
-
-    let hand1 = ["D13","C12","C11","C10","C9","C1","C5"];
-    let h1score = this.scoreHand(hand1);
-    let hand2 = ["S5","D5","H5","C2","H10","D13","C1"];
-    let h2score = this.scoreHand(hand2);
-
-    let winner = this.pickWinner(h1score, h2score);
-
-    //
-    // game engine needs this to start
-    //
-    if (this.game.status != "") { this.updateStatus(this.game.status); ***REMOVED***
-    if (this.game.dice == "") { this.initializeDice(); ***REMOVED***
-
-    //
-    // initialize
-    //
-    if (this.game.deck.length == 0) {
-
-      this.game.state = this.returnState(this.game.players.length);
-
-      this.updateStatus("Generating the Game");
+    this.game.queue = [];
 
       this.game.queue.push("round");
       this.game.queue.push("READY");
@@ -224,8 +202,34 @@ class Poker extends GameTemplate {
         this.game.queue.push("DECKXOR\t1\t2");
         this.game.queue.push("DECKXOR\t1\t1");
   ***REMOVED***
-
       this.game.queue.push("DECK\t1\t"+JSON.stringify(this.returnDeck()));
+  ***REMOVED***
+
+  initializeGame(game_id) {
+
+
+    let hand1 = ["D13","C12","C11","C10","C9","C1","C5"];
+    let h1score = this.scoreHand(hand1);
+    let hand2 = ["S5","D5","H5","C2","H10","D13","C1"];
+    let h2score = this.scoreHand(hand2);
+
+    let winner = this.pickWinner(h1score, h2score);
+
+    //
+    // game engine needs this to start
+    //
+    if (this.game.status != "") { this.updateStatus(this.game.status); ***REMOVED***
+    if (this.game.dice == "") { this.initializeDice(); ***REMOVED***
+
+    //
+    // initialize
+    //
+    if (this.game.deck.length == 0) {
+
+      this.game.state = this.returnState(this.game.players.length);
+
+      this.updateStatus("Generating the Game");
+      this.initializeQueue();
 
 ***REMOVED***
 
@@ -234,6 +238,40 @@ class Poker extends GameTemplate {
 ***REMOVED***
   ***REMOVED***
 
+
+
+
+  startNextRound() {
+
+console.log("Starting the neext round!");
+
+    this.game.state.turn = 0;
+    this.game.state.round++;
+
+    this.game.state.big_blind_player++;
+    this.game.state.small_blind_player++;
+    if (this.game.state.big_blind_player > this.game.players.length) { this.game.state.big_blind_player = 1; ***REMOVED***
+    if (this.game.state.small_blind_player > this.game.players.length) { this.game.state.small_blind_player = 1; ***REMOVED***
+
+    state.flipped = 0;
+    state.plays_since_last_raise = -1;
+    state.started = 0;
+    state.pot = 0.0;
+    state.big_blind_paid = 0;
+    state.small_blind_paid = 0;
+    state.required_pot = 0;
+    state.last_raise = state.big_blind;
+
+    for (let i = 0; i < num_of_players; i++) {
+      state.passed[i] = 0;
+***REMOVED***
+    for (let i = 0; i < num_of_players; i++) {
+      state.player_pot[i] = 0;
+***REMOVED***
+
+    this.initializeQueue();
+
+  ***REMOVED***
 
 
 
@@ -265,10 +303,27 @@ console.log("START OF THE TURN!");
 
 console.log("START OF TURN, PSLR: " + this.game.state.plays_since_last_raise);
 
+
+	  //
+	  //
+	  //
+
+
 	  //
 	  // CHECK TO SEE IF WE NEED TO FLIP CARDS
 	  //
 	  if (this.game.state.plays_since_last_raise >= this.game.players.length) {
+
+	    //
+	    // figure out who won...
+	    //
+	    if (this.game.state.flipped == 5) {
+alert("who won?");
+	      this.startNextRound();
+	      return 1;
+	***REMOVED***
+
+
 	    let cards_to_flip = 1;
 console.log("FLIPPING: "+this.game.state.flipped);
 	    if (this.game.state.flipped == 0) { 
@@ -314,6 +369,7 @@ for (let z = 0; z < cards_to_flip; z++) {
   ***REMOVED***
 
 
+
       if (mv[0] === "round") {
 
 console.log("start round");
@@ -321,7 +377,6 @@ console.log("start round");
           this.displayBoard();
 
 console.log("ROUND: " + this.game.state.round + " - " + this.game.state.turn + " ---- " + this.game.state.plays_since_last_raise);
-
 
 	  //
 	  // if players are out-of-tokens, set as inactive
@@ -375,12 +430,6 @@ console.log("ROUND: " + this.game.state.round + " - " + this.game.state.turn + "
 	  this.game.state.turn++;
 
 	  this.game.state.required_pot = this.game.state.big_blind;
-	  //this.game.state.plays_since_last_raise = 0;
-
-//	  this.game.state.big_blind_player++;
-//	  this.game.state.small_blind_player++;
-//	  if (this.game.state.big_blind_player > this.game.players.length) { this.game.state.big_blind_player = 1; ***REMOVED***
-//	  if (this.game.state.small_blind_player > this.game.players.length) { this.game.state.small_blind_player = 1; ***REMOVED***
 
           this.updateStatus("Your opponent is making the first move.");
 	  // not -1 to start with small blind
@@ -451,9 +500,11 @@ console.log("AFTER CALL QUEUE: " + this.game.queue);
 
 	    this.game.state.player_credit[player-1] -= call_portion;
 	    this.game.state.required_pot += call_portion;
+	    this.game.state.pot += call_portion;
 
 	    this.game.state.player_credit[player-1] -= raise_portion;
 	    this.game.state.required_pot += raise_portion;
+	    this.game.state.pot += raise_portion;
 	    this.game.state.last_raise = raise_portion;
 
 	    this.updateLog("Player " + player + " raises " + raise_portion + ".");
@@ -462,6 +513,7 @@ console.log("AFTER CALL QUEUE: " + this.game.queue);
 
 	    this.game.state.player_credit[player-1] -= raise;
 	    this.game.state.required_pot += raise;
+	    this.game.state.pot += raise;
 	    this.game.state.last_raise = raise;
 
 	    this.updateLog("Player " + player + " raises " + raise + ".");
