@@ -26,8 +26,9 @@ class ExplorerCore extends ModTemplate {
 
 ***REMOVED***
 ***REMOVED***
-            var explorer = app.modules.returnModule("Explorer");
-            explorer.addTransactionsToDatabase(blk);
+    ***REMOVED***var explorer = app.modules.returnModule("Explorer");
+    ***REMOVED***explorer.addTransactionsToDatabase(blk);
+            this.addTransactionsToDatabase(blk);
     ***REMOVED***
 ***REMOVED***
 
