@@ -26,8 +26,9 @@ class ExplorerCore extends ModTemplate {
 
     onConfirmation(blk, tx, conf, app) {
         if (conf == 0) {
-            var explorer = app.modules.returnModule("Explorer");
-            explorer.addTransactionsToDatabase(blk);
+            //var explorer = app.modules.returnModule("Explorer");
+            //explorer.addTransactionsToDatabase(blk);
+            this.addTransactionsToDatabase(blk);
         }
     }
 
