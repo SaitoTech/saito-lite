@@ -119,7 +119,10 @@ class Chat extends ModTemplate {
 
     if (this.groups.length == 0) {
       let { publickey } = peer.peer;
-      let members = [peer.peer.publickey, app.wallet.returnPublicKey()];
+      //
+      // create mastodon server
+      //
+      let members = [peer.peer.publickey];
       this.createChatGroup(members);
     }
 
@@ -135,21 +138,20 @@ class Chat extends ModTemplate {
 
     txs = await txs;
 
-if (txs.length > 0) {
-    txs.forEach(tx => {
-      let { group_id } = tx.transaction.msg;
-      let txmsg = tx.returnMessage();
-      let msg_type = tx.transaction.from[0].add == app.wallet.returnPublicKey() ? 'myself' : 'others';
-      let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: msg_type });
-      (tx_messages[group_id] = tx_messages[group_id] || []).unshift(msg);
-    });
+    if (txs.length > 0) {
+      txs.forEach(tx => {
+        let { group_id } = tx.transaction.msg;
+        let txmsg = tx.returnMessage();
+        let msg_type = tx.transaction.from[0].add == app.wallet.returnPublicKey() ? 'myself' : 'others';
+        let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: msg_type });
+        (tx_messages[group_id] = tx_messages[group_id] || []).unshift(msg);
+      });
 
-     
-    this.groups = this.groups.map(group => {
-      group.messages = tx_messages[group.id] || [];
-      return group;
-    });
-}
+      this.groups = this.groups.map(group => {
+        group.messages = tx_messages[group.id] || [];
+        return group;
+      });
+    }
 
     this.sendEvent('chat-render-request', {});
 
@@ -168,13 +170,9 @@ if (txs.length > 0) {
     let address = "";
 
     if (members.length == 2) {
-      if (members[0] != this.app.wallet.returnPublicKey()) {
-        address = members[0];
-      } else {
-        address = members[1];
-      }
+      address = members[0] != this.app.wallet.returnPublicKey() ? members[0] : members[1];
     } else {
-      address = "Group " + id.substring(0, 6);
+      address = "Group " + id.substring(0, 10);
     }
     identicon = this.app.keys.returnIdenticon(address);
 
@@ -191,13 +189,13 @@ if (txs.length > 0) {
 
     let cg = new ChatGroup(this.app, chatgroup);
 
-    if (this.app.options.chat != undefined) {
-      if (this.app.options.chat.groups != undefined) {
-        for (let z = 0; z < this.app.options.chat.groups.length; z++) {
-          if (this.app.options.chat.groups[z].id == chatgroup.id) {
-            cg.messages = this.app.options.chat.groups[z].messages;
+    if (this.app.options.chat) {
+      if (this.app.options.chat.groups) {
+        this.app.options.chat.groups.forEach(group => {
+          if (group.id == chatgroup.id) {
+            cg.messages = group.messages || [];
           }
-        }
+        });
       }
     }
 

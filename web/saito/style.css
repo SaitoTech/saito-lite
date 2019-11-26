@@ -272,7 +272,60 @@ input[type=file] {
 }
 
 select {
-}
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    outline: 0;
+    box-shadow: none;
+    border: 0 !important;
+    background-image: none;
+  }
+  /* Remove IE arrow */
+  select::-ms-expand {
+    display: none;
+  }
+  /* Custom Select */
+  .saito-select {
+    position: relative;
+    display: flex;
+    width: 20em;
+    height: 3em;
+    line-height: 3;
+    background: #fff;
+    overflow: hidden;
+    border-bottom: 1px solid var(--saito-red);
+    width: 100%;
+  }
+  select {
+      font-size: 1.2em;
+    flex: 1;
+    padding: 0 .5em;
+    cursor: pointer;
+    background: none;
+  }
+  /* Arrow */
+  .saito-select::after {
+    content: '\25BC';
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0 1em;
+    background: #fff;
+    cursor: pointer;
+    pointer-events: none;
+    -webkit-transition: .25s all ease;
+    -o-transition: .25s all ease;
+    transition: .25s all ease;
+  }
+  /* Transition */
+  .saito-select:hover::after {
+    color: var(--saito-red);
+  }
+  
+  option {
+    background: var(--saito-skyline-grey);
+  }
 
 textarea {
     width: 100%;
