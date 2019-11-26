@@ -1,6 +1,7 @@
 module.exports = AppStoreAppspaceTemplate = () => {
   return `
 <link rel="stylesheet" type="text/css" href="/appstore/css/email-appspace.css">
+<link rel="stylesheet" type="text/css" href="/appstore/css/email-appspace.css">
 
 <div class="appspace-appstore-container">
 
@@ -85,8 +86,12 @@ module.exports = AppStoreAppspaceTemplate = () => {
 
         </div>
 
+        <div class="appstore-publish">
+          <h3>Developer?</h3>
+          <button id="appstore-publish-button">PUBLISH</button>
+        </div>
+
 
   </div>
-   
   `;
 }
