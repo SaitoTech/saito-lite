@@ -15,6 +15,9 @@ module.exports = {
         {
             child_process: 'child_process'
         },
+        {
+            webpack: 'webpack'
+        },
         /\.txt/,
         /\.png$/,
         /\.jpg$/,
