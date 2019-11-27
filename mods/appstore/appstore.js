@@ -90,6 +90,10 @@ class AppStore extends ModTemplate {
         case 'submit module':
           this.submitModule(blk, tx);
           break;
+        case 'add bundle':
+          console.log("RECEIVING BUNDLE");
+          this.addBundle(blk, tx);
+          break;
         default:
           break;
   ***REMOVED***
@@ -114,13 +118,29 @@ class AppStore extends ModTemplate {
     this.app.storage.executeDatabase(sql, params, "appstore");
   ***REMOVED***
 
+  addBundle(blk, tx) {
+    let sql = `INSERT INTO bundles (version, publickey, unixtime, bid, bsh, script)
+    VALUES ($version, $publickey, $unixtime, $bid, $bsh, $script)`;
+    let { from, sig, ts, msg ***REMOVED*** = tx.transaction;
+    let params = {
+      $version	:	`${ts***REMOVED***-${sig***REMOVED***`,
+      $publickey	:	from[0].add ,
+      $unixtime	:	ts ,
+      $bid		:	blk.block.id ,
+      $bsh		:	blk.returnHash() ,
+      $script : msg.bundle,
+***REMOVED***
+    this.app.storage.executeDatabase(sql, params, "appstore");
+  ***REMOVED***
+
   createBundleTX(filename) {
-    let fs = app.storage.returnFileSystem();
+    const path = require('path');
+    let fs = this.app.storage.returnFileSystem();
     if (fs) {
-      let bundle_base64 = fs.readFileSync('/path/to/file.jpg', { encoding: 'base64' ***REMOVED***);
-      let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
-      newtx.transaction.msg = { module: "AppStore", request: "submit module", bundle: bundle_base64 ***REMOVED***;
-      return app.wallet.signTransaction(newtx);
+      let bundle_base64 = fs.readFileSync(path.resolve(__dirname, `bundler/dist/${filename***REMOVED***`), { encoding: 'base64' ***REMOVED***);
+      let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+      newtx.transaction.msg = { module: "AppStore", request: "add bundle", bundle: bundle_base64 ***REMOVED***;
+      return this.app.wallet.signTransaction(newtx);
 ***REMOVED***
     return null;
   ***REMOVED***
@@ -138,6 +158,7 @@ class AppStore extends ModTemplate {
       expressapp.use('/'+encodeURI(this.name), express.static(__dirname + "/web"));
 
       expressapp.post('/bundle', async (req, res) => {
+        const path = require('path');
 ***REMOVED***
 ***REMOVED*** require inclusion of  module versions and paths for loading into the system
 ***REMOVED***
@@ -146,16 +167,22 @@ class AppStore extends ModTemplate {
         let ts = new Date().getTime();
         let hash = this.app.crypto.hash(versions.join(''));
 
-        let modules_filename = `modules.config-${ts***REMOVED***-${hash***REMOVED***.json`
+        let bundle_filename = `saito-${ts***REMOVED***-${hash***REMOVED***.js`;
+        let index_filename  = `index-${ts***REMOVED***-${hash***REMOVED***.js`;
+        let modules_config_filename = `modules.config-${ts***REMOVED***-${hash***REMOVED***.json`;
 
-        await fs.writeFile(path.resolve(__dirname, `bundler/${modules_filename***REMOVED***`),
+***REMOVED***
+***REMOVED*** write our modules config file
+***REMOVED***
+        await fs.writeFile(path.resolve(__dirname, `bundler/${modules_config_filename***REMOVED***`),
           JSON.stringify({paths***REMOVED***)
         );
 
-        let IndexTemplate = require(index.template.js);
-        let index_filename = `saito-${ts***REMOVED***-${hash***REMOVED***.js`;
-
-        await fs.writeFile(path.resolve(__dirname, `bundler/modules.config-${ts***REMOVED***-${hash***REMOVED***.json`),
+***REMOVED***
+***REMOVED*** write our index file for bundling
+***REMOVED***
+        let IndexTemplate = require('./bundler/templates/index.template.js');
+        await fs.writeFile(path.resolve(__dirname, `bundler/${index_filename***REMOVED***`),
           IndexTemplate(modules_config_filename)
         );
 
@@ -164,54 +191,54 @@ class AppStore extends ModTemplate {
 ***REMOVED***
 
 ***REMOVED***
-***REMOVED*** create temp module_paths file and index.client.js\
-***REMOVED***
-        let webpackConfig = require('../../webpack/webpack.config');
-        webpackConfig.entry = ["babel-polyfill", path.resolve(__dirname, `./bundler/index-${ts***REMOVED***-${hash***REMOVED***.js`)],
-        webpackConfig.output = {
-            path: path.resolve(__dirname, './bundler/dist'),
-            filename: index_filename
-    ***REMOVED***
-
-***REMOVED***
-***REMOVED*** write config to file
-***REMOVED***
-***REMOVED***
-          await fs.writeFile(path.resolve(__dirname, `bundler/webpack.config-${ts***REMOVED***-${sig***REMOVED***.json`));
-    ***REMOVED*** catch(err) {
-          console.log(err);
-    ***REMOVED***
-
-***REMOVED***
 ***REMOVED*** execute bundling process
 ***REMOVED***
+        let entry = path.resolve(__dirname, `bundler/${index_filename***REMOVED***`);
+        let output_path = path.resolve(__dirname, 'bundler/dist');
+
         const util = require('util');
         const exec = util.promisify(require('child_process').exec);
 
 ***REMOVED***
-  ***REMOVED***
-  ***REMOVED*** TODO: json
-  ***REMOVED***
-          const { stdout, stderr ***REMOVED*** = await exec('webpack --config ./bundler/webpack.config.json' );
-
-  ***REMOVED***
-  ***REMOVED*** if there are no errors
-  ***REMOVED***
-          res.send({
-            payload: {
-              filename
-        ***REMOVED***
-      ***REMOVED***);
-
-          let newtx = this.createBundleTX(filename);
-
-  ***REMOVED***
-  ***REMOVED*** publish our bundle
-  ***REMOVED***
-          this.app.network.propagateTransaction(newtx);
-    ***REMOVED*** catch(err) {
+          const { stdout, stderr ***REMOVED*** = await exec(
+            `node webpack.js ${entry***REMOVED*** ${output_path***REMOVED*** ${bundle_filename***REMOVED***`
+          );
+    ***REMOVED*** catch (err) {
           console.log(err);
     ***REMOVED***
+
+***REMOVED*** Done processing
+
+***REMOVED***
+***REMOVED*** file cleanup
+***REMOVED***
+        fs.unlink(path.resolve(__dirname, `bundler/${index_filename***REMOVED***`));
+        fs.unlink(path.resolve(__dirname, `bundler/${modules_config_filename***REMOVED***`));
+
+
+***REMOVED***
+***REMOVED*** if there are no errors, send response back
+***REMOVED***
+        res.send({
+          payload: {
+            filename: bundle_filename
+      ***REMOVED***
+    ***REMOVED***);
+
+***REMOVED***
+***REMOVED*** create tx
+***REMOVED***
+        let newtx = this.createBundleTX(bundle_filename);
+
+***REMOVED***
+***REMOVED*** publish our bundle
+***REMOVED***
+        this.app.network.propagateTransaction(newtx);
+
+***REMOVED***
+***REMOVED*** delete bundle
+***REMOVED***
+        fs.unlink(path.resolve(__dirname, `bundler/dist/${bundle_filename***REMOVED***`));
   ***REMOVED***);
 ***REMOVED***
   ***REMOVED***

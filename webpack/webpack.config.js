@@ -15,6 +15,9 @@ const path = require('path');
         {
             child_process: 'child_process'
     ***REMOVED***,
+        {
+            webpack: 'webpack'
+    ***REMOVED***,
         /\.txt/,
         /\.png$/,
         /\.jpg$/,

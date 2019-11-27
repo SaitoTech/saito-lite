@@ -10,7 +10,6 @@
     "compile": " ./compile",
     "test": "NODE_ENV=test mocha 'tests/*.spec.js'",
     "build": "webpack --config ./webpack/webpack.config.js",
-    "build_json": "webpack --config ./webpack/webpack.config.js",
     "prod": "webpack --config ./webpack/webpack.prod.js",
     "analyze": "webpack --config ./webpack/webpack.analyze.js"
   ***REMOVED***,
@@ -30,8 +29,6 @@
     "fastest-stable-stringify": "^2.0.2",
     "fs-extra": "^8.1.0",
     "identicon.js": "^2.3.3",
-    "jquery": "^3.4.1",
-    "jsdom": "^15.2.0",
     "json-tree-viewer": "0.0.2",
     "merkle-tree-gen": "^1.1.0",
     "node-cryptojs-aes": "^0.4.0",
