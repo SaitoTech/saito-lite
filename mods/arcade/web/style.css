@@ -560,7 +560,7 @@ option {
   ***REMOVED***
 ***REMOVED***
 
-@media only screen and (max-width: 7500px) {
+@media only screen and (max-width: 750px) {
   .start-game-list {
     grid-template-columns: 1fr;
   ***REMOVED***
@@ -571,7 +571,8 @@ option {
   grid-gap: 1em;
   grid-template-columns: 2fr 3fr;
   cursor: pointer;
-  border: 1px solid transparent;
+  border: 1px solid var(--saito-red);
+  padding: 10px;
 ***REMOVED***
 
 .arcade-game-list-item:hover {
@@ -594,3 +595,4 @@ option {
   transition: all ease 0.5s;
   background: #00000099;
 ***REMOVED***
+
