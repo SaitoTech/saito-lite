@@ -1,18 +1,20 @@
 module.exports = ArcadeMainTemplate = () => {
   return `
-  
-  <!--div id="arcade-carousel" class="glide">
-        <div class="glide__track" data-glide-el="track">
-          <ul id="arcade-carousel-slides" class="glide__slides"></ul>
-        </div>
-        <div class="glide__arrows" data-glide-el="controls">
-          <button class="glide__arrow glide__arrow--left" data-glide-dir="<"><i class="icon-med fas fa-angle-left"></i></button>
-          <button class="glide__arrow glide__arrow--right" data-glide-dir=">"><i class="icon-med fas fa-angle-right"></i></button>
-        </div>
-      </div-->
-      <div class="play-now-holder">
-        <button id="play-now" class="play-now">Create Game</button>
-      </div>
-      <ul class="arcade-gamelist" id="arcade-gamelist"></ul>
+  <link rel="stylesheet" href="/arcade/hero.css">
+  <div>
+  <div class="arcade-hero">
+    <div class="arcade-hero-wrapper">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <img style="width: 100%" src="16by5.png" />
+    </div>
+  </div>  
+  <div class="play-now-holder">
+    <button id="play-now" class="play-now">Create Game</button>
+  </div>
+  <ul class="arcade-gamelist" id="arcade-gamelist"></ul>
   `;
 ***REMOVED***
