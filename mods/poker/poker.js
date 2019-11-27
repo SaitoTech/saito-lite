@@ -240,9 +240,39 @@ class Poker extends GameTemplate {
 
   ***REMOVED***
 
+      if (mv[0] === "winner") {
+	this.updateStatus("Game Over: Player " + mv[1] + " wins!");
+	this.updateLog("Game Over: Player " + mv[1] + " wins!");
+	this.game.over = 1;
+	this.saveGame(this.game.id);
+	return 0;
+  ***REMOVED***
+
       if (mv[0] === "turn") {
 
           this.displayBoard();
+
+	  //
+	  // if everyone except 1 player has zero credit...
+	  //
+	  let alive_players = 0;
+	  for (let i = 0; i < this.game.state.player_credit.length; i++) {
+	    if (this.game.state.player_credit[i] > 0) { alive_players++; ***REMOVED***
+	  ***REMOVED***
+
+console.log("Players Alive: " + alive_players);
+console.log(" ... reported turn: " + this.game.state.turn);
+
+	  if (alive_players == 1 && this.game.state.turn == 1) {
+	    for (let i = 0; i < this.game.state.player_credit; i++) {
+	      if (this.game.state.player_credit[i] > 0) {
+            	this.addMove("winner\t"+this.game.player);
+      	    	this.endTurn();
+		return 0;
+	  ***REMOVED***
+	***REMOVED***
+	  ***REMOVED***
+
 
 	  //
 	  // if everyone except 1 player has folded...
@@ -316,7 +346,7 @@ class Poker extends GameTemplate {
 	  if (this.game.state.plays_since_last_raise == 0) {
 	    this.game.state.plays_since_last_raise++;
 	  ***REMOVED***
-
+console.log("INCREMENTING TURN!")
 	  this.game.state.turn++;
 
 	  if (this.game.state.passed[this.game.player-1] == 1) {
@@ -369,7 +399,6 @@ class Poker extends GameTemplate {
 	// we have all of the hands, and can pick a winner
 	//
         if (this.game.state.player_cards_reported == this.game.state.player_cards_required) {
-	  console.log("HANDS: " + JSON.stringify(this.game.state.player_cards));
 
 	  let player1 = -1;
 	  let player2 = -1;	
@@ -488,7 +517,6 @@ console.log("start round");
 
           this.displayBoard();
 
-console.log("ROUND: " + this.game.state.round + " - " + this.game.state.turn + " ---- " + this.game.state.plays_since_last_raise);
 
 	  //
 	  // if players are out-of-tokens, set as inactive
@@ -539,6 +567,7 @@ console.log("ROUND: " + this.game.state.round + " - " + this.game.state.turn + "
 	  // update game state
 	  //
 	  this.game.state.round++;
+console.log("INCREMENTING TURN 2!")
 	  this.game.state.turn++;
 
 	  this.game.state.required_pot = this.game.state.big_blind;
@@ -574,7 +603,6 @@ console.log("QUEUE CREATED: " + this.game.queue);
 
           this.game.queue.splice(qe, 1);
 
-console.log("AFTER CALL QUEUE: " + this.game.queue);
   ***REMOVED***
 
 
@@ -691,7 +719,6 @@ console.log("AFTER CALL QUEUE: " + this.game.queue);
       this.endTurn();
       return;
 ***REMOVED***
-console.log("RP: " + this.game.state.required_pot + " -- " + this.game.state.player_pot[this.game.player-1]);
 
     html += 'You are Player '+this.game.player+'. ';
     if (this.game.player == this.game.state.big_blind_player) {
@@ -716,9 +743,6 @@ console.log("RP: " + this.game.state.required_pot + " -- " + this.game.state.pla
         html += '</ul>';
         this.updateStatus(html);
   ***REMOVED*** else {
-
-console.log("HERE: " + JSON.stringify(this.game.state));
-
 	this.updateStatus("ERROR 257293: logic error in poker module, please report");
   ***REMOVED***
 ***REMOVED***
@@ -843,7 +867,7 @@ console.log("HERE: " + JSON.stringify(this.game.state));
       state.player_pot[i] = 0;
 ***REMOVED***
     for (let i = 0; i < num_of_players; i++) {
-      state.player_credit[i] = 1000;
+      state.player_credit[i] = 100;
 ***REMOVED***
 
     return state;
@@ -858,8 +882,6 @@ console.log("HERE: " + JSON.stringify(this.game.state));
     let deck = this.returnDeck();
     let card = deck[idx];
 
-console.log("TESTING: " + idx);
-console.log("FOUND: " + card.name.substring(0, card.name.indexOf('.')));
     return card.name.substring(0, card.name.indexOf('.'));
 
   ***REMOVED***
