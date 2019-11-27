@@ -4,6 +4,7 @@ const ArcadeMain = require('./lib/arcade-main/arcade-main');
 const ArcadeLoader = require('./lib/arcade-main/arcade-loader');
 const ArcadeLeftSidebar = require('./lib/arcade-left-sidebar/arcade-left-sidebar');
 const ArcadeRightSidebar = require('./lib/arcade-right-sidebar/arcade-right-sidebar');
+const ArcadeStartGameList = require('./lib/arcade-start-game-list/arcade-start-game-list');
 
 const Header = require('../../lib/ui/header/header');
 
@@ -186,6 +187,7 @@ console.log("ERROR 418019: error fetching game for observer mode");
     let perView = this.app.browser.isMobileBrowser(navigator.userAgent) ? 1 : 3;
 
     // Use for Carousel
+    /*
     if (typeof window !== "undefined") {
       importGlide = async () => {
         const Glide = await import('./lib/glide/glide.min.js');
@@ -199,6 +201,7 @@ console.log("ERROR 418019: error fetching game for observer mode");
       }
       importGlide();
     }
+    */
   }
 
 

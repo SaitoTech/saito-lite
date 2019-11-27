@@ -1,10 +1,13 @@
 /** Email **/
 
+:root {
+  --saito-red: #639;
+}
+
 body {
   font-size: 1.0em;
   color: var(--saito-skyline-grey);
-  background: linear-gradient(-45deg, #422 50%, #1e1e1f 100%);
-  font-size: 1.4em;
+  background: linear-gradient(-45deg, #324 50%, #1e1e1f 100%);
 }
 
 button, .button, .file-label {
@@ -13,13 +16,17 @@ button, .button, .file-label {
   font-size: 1em;
   min-width: 10em;
   padding: 10px 6px;
-  background: linear-gradient(-45deg, #222 50%, #1e1e1f 100%);
+  background: linear-gradient(-45deg, #426 50%, #213 100%);
   border: 1px solid var(--saito-red);
   color: var(--saito-skyline-grey);
   letter-spacing: 1px;
   transition: transform .25s;
   margin: 0.2em 0;
   min-width: 180px;
+}
+
+button:hover, .button:hover {
+  background: linear-gradient(-45deg, #537 50%, #324 100%);
 }
 
 select {
@@ -35,12 +42,17 @@ select {
   min-width: 180px;
 }
 
+input {
+  background: #55555555;
+  color: var(--saito-skyline-grey);
+}
+
 .background-shim {
   position: absolute;
-  top: 110px;
+  top: 4em;
   left: 0;
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 4em);
   background-size: cover;
   z-index: 0;
 }
@@ -66,10 +78,15 @@ select {
   grid-column-gap: 1.5em;
   grid-template-columns: 15em auto 15em;
   grid-template-areas: "arcade-left-sidebar arcade-main arcade-right-sidebar";
+  font-size: 1.11em;
 }
 
 .arcade-sidebar {
   margin: 10px 10px;
+}
+
+.sidebar>div {
+  margin: 1.5em 0;
 }
 
 .arcade-sidebar-box {
@@ -125,7 +142,7 @@ select {
 }
 
 .game-options-html {
-  display: flex;
+  /*display: flex;*/
 }
 
 .pill {
@@ -146,7 +163,7 @@ select {
   display: grid;
   align-items: center;
   grid-template-columns: 1fr 2fr 2fr 1fr;
-  border: 1px solid grey;
+  border: 1px solid #84C;
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 14px;
@@ -200,16 +217,20 @@ select {
 
 /* GAME WIZARD */
 
-.create-game-wizard {
+.create-game-wizard, .escrow-game-wizard {
   display: flex;
   flex-direction: column;
   position: absolute;
   width: 80%;
   margin: 1em auto;
   background-color: #0009;
-  padding: 2em;
+  padding: 1em;
   z-index: 5;
   max-width: 900px;
+}
+
+.escrow-game-wizard div {
+  margin: 1em 0;
 }
 
 .game-wizard-form {
@@ -221,6 +242,21 @@ select {
   display: grid;
   grid-gap: 1em;
   grid-template-columns: 1fr 1fr;
+}
+
+.game-start-controls {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 4fr;
+}
+
+@media only screen and (max-width: 650px) {
+  .game-info-container {
+    grid-template-columns: 1fr;
+  }
+  .game-start-controls {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* .game-image-wizard {
@@ -361,6 +397,10 @@ select {
   padding: 10px 0px;
 }
 
+.arcade-apps-wrapper {
+  border: 1px solid var(--saito-red);
+}
+
 .arcade-navigator {
   border-bottom: 1px solid grey;
 }
@@ -372,7 +412,7 @@ select {
 }
 
 .arcade-apps-item:hover, .arcade-navigator-item:hover {
-  background-color: var(--saito-skyline-grey);
+  background-color: #33669999;
 }
 
 @media only screen and (max-width: 600px) {
@@ -431,11 +471,15 @@ select {
   border: 0 !important;
   background-image: none;
 }
+
 /* Remove IE arrow */
+
 select::-ms-expand {
   display: none;
 }
+
 /* Custom Select */
+
 .saito-select {
   position: relative;
   display: flex;
@@ -447,13 +491,16 @@ select::-ms-expand {
   border-bottom: 1px solid var(--saito-red);
   width: 100%;
 }
+
 select {
   flex: 1;
   padding: 0 .5em;
   color: #fff;
   cursor: pointer;
 }
+
 /* Arrow */
+
 .saito-select::after {
   content: '\25BC';
   position: absolute;
@@ -467,11 +514,12 @@ select {
   -o-transition: .25s all ease;
   transition: .25s all ease;
 }
+
 /* Transition */
+
 .saito-select:hover::after {
   color: var(--saito-red);
 }
-
 
 .game-details label {
   align-self: center;
@@ -482,8 +530,67 @@ option {
   background: var(--saito-cyber-black);
 }
 
-.game-start-controls {
+.play-now-holder {
+  width: 100%;
+}
+
+.play-now {
+  font-size: 1.6em;
+  padding: 0.5em;
+  width: 100%;
+}
+
+.start-game-list {
   display: grid;
   grid-gap: 1em;
-  grid-template-columns: 1fr 4fr;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.start-game {
+  background: #0009;
+  padding: 1em;
+  width: 90%;
+  margin: 2em auto;
+  opacity: 0;
+}
+
+@media only screen and (max-width: 1000px) {
+  .start-game-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media only screen and (max-width: 7500px) {
+  .start-game-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.arcade-game-list-item {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 2fr 3fr;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.arcade-game-list-item:hover {
+  border: 1px solid var(--saito-red);
+}
+
+.arcade-game-list-image {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+#game-list-wrapper {
+  top: 5em;
+  width: 100%;
+  position: fixed;
+  height: calc(100vh - 4em);
+  overflow: auto;
+  margin: auto;
+  transition: all ease 0.5s;
+  background: #00000099;
 }

@@ -19,6 +19,7 @@ class Pandemic extends GameTemplate {
     this.addHUDMenu      = ['Cards'];
     this.maxPlayers      = 4;
     this.minPlayers      = 2;  
+    this.type            = "Cooperative Boardgme";
 
     this.gameboardWidth  = 2602;
   

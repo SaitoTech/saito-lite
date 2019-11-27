@@ -12,6 +12,19 @@ module.exports = EscrowGameWizardT = {
 
   attachEvents(app, data) {
 
+    document.querySelector('#return_to_arcade')
+    .onclick = (e) => {
+      document.querySelector('.arcade-main').innerHTML = '';
+      data.arcade.render(app, data);
+    }
+
+    document.querySelector('.background-shim-cover')
+    .onclick = (e) => {
+      document.querySelector('.arcade-main').innerHTML = '';
+      data.arcade.render(app, data);
+    }
+
+
     Array.from(document.getElementsByClassName('escrow-game-select')).forEach(game => {
       game.addEventListener('change', (e) => {
 
