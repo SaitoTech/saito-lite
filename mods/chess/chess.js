@@ -24,6 +24,10 @@ class Chessgame extends GameTemplate {
     this.engine = null;
     this_chess = this;
 
+    this.minPlayers = 2;
+    this.maxPlayers = 2;
+    this.type       = "Classic Boardgame";
+
     return this;
 
   ***REMOVED***

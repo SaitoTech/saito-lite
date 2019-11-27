@@ -21,7 +21,9 @@ class Wordblocks extends GameTemplate {
     //
     // Game Class VARS
     //
+    this.minPlayers = 2;
     this.maxPlayers = 4;
+    this.type       = "Wordgame";
     this.useHUD = 1;
 
 

@@ -20,13 +20,13 @@ module.exports = ArcadeMain = {
     //
     // click-to-create games
     //
-    let carousel = document.getElementById("arcade-carousel-slides");
-    data.arcade.mods.forEach(mod => {
-      let gameobj = mod.respondTo("arcade-games");
-      if (gameobj != null) {
-        carousel.innerHTML += ArcadeGameTemplate(mod, gameobj);
-  ***REMOVED***
-***REMOVED***);
+    //let carousel = document.getElementById("arcade-carousel-slides");
+    //data.arcade.mods.forEach(mod => {
+    //  let gameobj = mod.respondTo("arcade-games");
+    //  if (gameobj != null) {
+    //    carousel.innerHTML += ArcadeGameTemplate(mod, gameobj);
+    //  ***REMOVED***
+    //***REMOVED***);
 
     //
     // click-to-join
@@ -74,7 +74,11 @@ console.log("HERE: " + JSON.stringify(tx));
 
   ***REMOVED***);
 ***REMOVED***);
-
+    
+    document.querySelector('#play-now').addEventListener('click', function() {
+      ArcadeStartGameList.render(app,data);
+      ArcadeStartGameList.attachEvents(app,data);  
+***REMOVED***);
 
     //
     // join game

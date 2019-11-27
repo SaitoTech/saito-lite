@@ -54,6 +54,10 @@ class Twilight extends GameTemplate {
     this.gameboardZoom  = 0.90;
     this.gameboardMobileZoom = 0.67;
 
+    this.minPlayers = 2;
+    this.maxPlayers = 2;
+    this.type       = "Strategy Boardgame";
+
     this.hud = new GameHud(this.app, this.menuItems());
 
   ***REMOVED***

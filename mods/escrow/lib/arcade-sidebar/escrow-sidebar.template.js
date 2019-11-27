@@ -1,18 +1,18 @@
 module.exports = EscrowSidebarTemplate = () => {
   return `
+  <div class="escrow-sidebar-outer">
+    <link rel="stylesheet" href="/escrow/css/escrow-sidebar.css">
 
-  <link rel="stylesheet" href="/escrow/css/escrow-sidebar.css">
+    <h3>Escrow Service</h3>
+    <div class="escrow-sidebar-inner">
+        <div>
 
-  <h3>Escrow Service</h3>
+            Play a charity game with your favourite crypto. Loser donates staked amount from escrow:
 
-  <p></p>
+        </div>
 
-  Play a charity game with your favourite crypto. Loser donates staked amount from escrow:
-
-  <p></p>
-
-  <button id="escrow-sidebar-btn">create game</button>
-
-  </div>
+        <button id="escrow-sidebar-btn">create game</button>
+    </div>
+</div>
   `;
 ***REMOVED***
