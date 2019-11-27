@@ -215,6 +215,17 @@ class Poker extends GameTemplate {
       this.game.state.player_pot[i] = 0;
 ***REMOVED***
 
+    //
+    // if players are out-of-tokens, set as inactive
+    //
+    for (let i = 0; i < this.game.state.player_credit.length; i++) {
+      if (this.game.state.player_credit[i] <= 0) {
+        this.game.state.passed[i] = 1;
+        this.game.state.player_credit[i] = -1;
+  ***REMOVED***
+***REMOVED***
+
+
     this.initializeQueue();
 
   ***REMOVED***
@@ -257,20 +268,30 @@ class Poker extends GameTemplate {
 	  //
 	  let alive_players = 0;
 	  for (let i = 0; i < this.game.state.player_credit.length; i++) {
-	    if (this.game.state.player_credit[i] > 0) { alive_players++; ***REMOVED***
+	    if (this.game.state.player_credit[i] > 0) {
+	        alive_players++; 
+	***REMOVED*** else {
+	      if (this.game.state.passed[i] == 0 && this.game.state.turn > 2) {
+	        alive_players++; 
+	  ***REMOVED***
+	***REMOVED***
 	  ***REMOVED***
 
 console.log("Players Alive: " + alive_players);
 console.log(" ... reported turn: " + this.game.state.turn);
+alert("PA: " + alive_players + " -- " + this.game.state.turn);
 
 	  if (alive_players == 1 && this.game.state.turn == 1) {
-	    for (let i = 0; i < this.game.state.player_credit; i++) {
+	    for (let i = 0; i < this.game.state.player_credit.length; i++) {
 	      if (this.game.state.player_credit[i] > 0) {
+	 
             	this.addMove("winner\t"+this.game.player);
       	    	this.endTurn();
 		return 0;
 	  ***REMOVED***
 	***REMOVED***
+	    this.updateStatus("Game Over");
+	    return 0;
 	  ***REMOVED***
 
 
@@ -518,47 +539,48 @@ console.log("start round");
           this.displayBoard();
 
 
-	  //
-	  // if players are out-of-tokens, set as inactive
-	  //
-	  for (let i = 0; i < this.game.state.player_credit.length; i++) {
-	    if (this.game.state.player_credit[i] <= 0) {
-	      this.game.state.passed[i] = 1;
-	      this.game.state.player_credit[i] = -1;
-	***REMOVED***
-	  ***REMOVED***
-
 
           if (this.game.state.turn == 0) {
-  	  //
-	  // Big Blind
-	  //	  
-          if (this.game.state.player_credit[this.game.state.big_blind_player-1] <= this.game.state.big_blind) {
-	    this.updateLog("Player "+this.game.state.big_blind_player+" deposits remainder of tokens as big blind and is removed from game");
-	    this.game.state.player_pot[this.game.state.big_blind_player-1] += this.game.state.player_credit[this.game.state.big_blind_player-1];
-	    this.game.state.pot += this.game.state.player_credit[this.game.state.big_blind_player-1];
-	    this.game.state.player_credit[this.game.state.big_blind_player-1] = -1;
-	  ***REMOVED*** else {
-	    this.updateLog("Player "+this.game.state.big_blind_player+" deposits the big blind ("+this.game.state.big_blind+")");
-	    this.game.state.player_pot[this.game.state.big_blind_player-1] += this.game.state.big_blind;
-	    this.game.state.pot += this.game.state.big_blind;
-	    this.game.state.player_credit[this.game.state.big_blind_player-1] -= this.game.state.big_blind;
-	  ***REMOVED***
 
-	  //
-	  // Small Blind
-	  //
-          if (this.game.state.player_credit[this.game.state.small_blind_player-1] <= this.game.state.small_blind) {
-	    this.updateLog("Player "+this.game.state.small_blind_player+" deposits remainder tokens as small blind and is removed from game");
-	    this.game.state.player_pot[this.game.state.small_blind_player-1] += this.game.state.player_credit[this.game.state.small_blind_player-1];
-	    this.game.state.pot += this.game.state.player_credit[this.game.state.small_blind_player-1];
-	    this.game.state.player_credit[this.game.state.small_blind_player-1] = -1;
+    	    //
+	    // Big Blind
+	    //	  
+            if (this.game.state.player_credit[this.game.state.big_blind_player-1] <= this.game.state.big_blind) {
+              if (this.game.state.player_credit[this.game.state.big_blind_player-1] == this.game.state.big_blind) {
+  	        this.updateLog("Player "+this.game.state.big_blind_player+" has no more chips");
 	  ***REMOVED*** else {
-	    this.updateLog("Player "+this.game.state.small_blind_player+" deposits the small blind ("+this.game.state.small_blind+")");
-	    this.game.state.player_pot[this.game.state.small_blind_player-1] += this.game.state.small_blind;
-	    this.game.state.pot += this.game.state.small_blind;
-	    this.game.state.player_credit[this.game.state.small_blind_player-1] -= this.game.state.small_blind;
+  	        this.updateLog("Player "+this.game.state.big_blind_player+" deposits remainder of tokens as big blind and is removed from game");
 	  ***REMOVED***
+	      this.game.state.player_pot[this.game.state.big_blind_player-1] += this.game.state.player_credit[this.game.state.big_blind_player-1];
+	      this.game.state.pot += this.game.state.player_credit[this.game.state.big_blind_player-1];
+	      this.game.state.player_credit[this.game.state.big_blind_player-1] = -1;
+	      this.game.state.passed[this.game.state.big_blind_player-1] = 1;
+	***REMOVED*** else {
+	      this.updateLog("Player "+this.game.state.big_blind_player+" deposits the big blind ("+this.game.state.big_blind+")");
+	      this.game.state.player_pot[this.game.state.big_blind_player-1] += this.game.state.big_blind;
+	      this.game.state.pot += this.game.state.big_blind;
+	      this.game.state.player_credit[this.game.state.big_blind_player-1] -= this.game.state.big_blind;
+	***REMOVED***
+
+	    //
+	    // Small Blind
+	    //
+            if (this.game.state.player_credit[this.game.state.small_blind_player-1] <= this.game.state.small_blind) {
+              if (this.game.state.player_credit[this.game.state.small_blind_player-1] <= this.game.state.small_blind) {
+	        this.updateLog("Player "+this.game.state.small_blind_player+" has no more chips");
+	  ***REMOVED*** else {
+	        this.updateLog("Player "+this.game.state.small_blind_player+" deposits remainder tokens as small blind and is removed from game");
+	  ***REMOVED***
+	      this.game.state.player_pot[this.game.state.small_blind_player-1] += this.game.state.player_credit[this.game.state.small_blind_player-1];
+	      this.game.state.pot += this.game.state.player_credit[this.game.state.small_blind_player-1];
+	      this.game.state.player_credit[this.game.state.small_blind_player-1] = -1;
+	      this.game.state.passed[this.game.state.small_blind_player-1] = 1;
+	***REMOVED*** else {
+	      this.updateLog("Player "+this.game.state.small_blind_player+" deposits the small blind ("+this.game.state.small_blind+")");
+	      this.game.state.player_pot[this.game.state.small_blind_player-1] += this.game.state.small_blind;
+	      this.game.state.pot += this.game.state.small_blind;
+	      this.game.state.player_credit[this.game.state.small_blind_player-1] -= this.game.state.small_blind;
+	***REMOVED***
 	  ***REMOVED***
 
 
