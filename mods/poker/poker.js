@@ -13,7 +13,7 @@ class Poker extends GameTemplate {
 
     this.app             = app;
     this.name            = "Poker";
-    this.description     = '<span style="background-color:yellow">This is a non-playable demo under development</span>. In this version of Texas Hold\'em Poker for the Saito Arcade, with five cards on the table and two in your hand, can you bet and bluff your way to victory?';
+    this.description     = 'In this version of Texas Hold\'em Poker for the Saito Arcade, with five cards on the table and two in your hand, can you bet and bluff your way to victory? This game is a playable demo under active development!';
 
     this.interface = 1;
     this.boardgameWidth  = 5100;
@@ -35,9 +35,6 @@ class Poker extends GameTemplate {
       this.game.queue.push("READY");
 
       if (this.game.players.length == 2) {
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t2");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t1");
-***REMOVED***this.game.queue.push("FLIPRESET\t1");
         this.game.queue.push("POOL\t1"); // pool for cards on table
         this.game.queue.push("DEAL\t1\t2\t2");
         this.game.queue.push("DEAL\t1\t1\t2");
@@ -47,10 +44,6 @@ class Poker extends GameTemplate {
         this.game.queue.push("DECKXOR\t1\t1");
   ***REMOVED***
       if (this.game.players.length == 3) {
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t3");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t2");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t1");
-***REMOVED***this.game.queue.push("FLIPRESET\t1");
         this.game.queue.push("POOL\t1"); // pool for cards on table
         this.game.queue.push("DEAL\t1\t3\t2");
         this.game.queue.push("DEAL\t1\t2\t2");
@@ -63,11 +56,6 @@ class Poker extends GameTemplate {
         this.game.queue.push("DECKXOR\t1\t1");
   ***REMOVED***
       if (this.game.players.length == 4) {
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t4");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t3");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t2");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t1");
-***REMOVED***this.game.queue.push("FLIPRESET\t1");
         this.game.queue.push("POOL\t1"); // pool for cards on table
         this.game.queue.push("DEAL\t1\t4\t2");
         this.game.queue.push("DEAL\t1\t3\t2");
@@ -83,12 +71,6 @@ class Poker extends GameTemplate {
         this.game.queue.push("DECKXOR\t1\t1");
   ***REMOVED***
       if (this.game.players.length == 5) {
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t5");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t4");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t3");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t2");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t1");
-***REMOVED***this.game.queue.push("FLIPRESET\t1");
         this.game.queue.push("POOL\t1"); // pool for cards on table
         this.game.queue.push("DEAL\t1\t5\t2");
         this.game.queue.push("DEAL\t1\t4\t2");
@@ -107,13 +89,6 @@ class Poker extends GameTemplate {
         this.game.queue.push("DECKXOR\t1\t1");
   ***REMOVED***
       if (this.game.players.length == 6) {
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t6");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t5");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t4");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t3");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t2");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t1");
-***REMOVED***this.game.queue.push("FLIPRESET\t1");
         this.game.queue.push("POOL\t1"); // pool for cards on table
         this.game.queue.push("DEAL\t1\t6\t2");
         this.game.queue.push("DEAL\t1\t5\t2");
@@ -135,14 +110,6 @@ class Poker extends GameTemplate {
         this.game.queue.push("DECKXOR\t1\t1");
   ***REMOVED***
       if (this.game.players.length == 7) {
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t7");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t6");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t5");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t4");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t3");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t2");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t1");
-***REMOVED***this.game.queue.push("FLIPRESET\t1");
         this.game.queue.push("POOL\t1"); // pool for cards on table
         this.game.queue.push("DEAL\t1\t7\t2");
         this.game.queue.push("DEAL\t1\t6\t2");
@@ -167,15 +134,6 @@ class Poker extends GameTemplate {
         this.game.queue.push("DECKXOR\t1\t1");
   ***REMOVED***
       if (this.game.players.length == 8) {
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t8");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t7");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t6");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t5");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t4");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t3");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t2");
-***REMOVED***this.game.queue.push("FLIPCARD\t1\t1\t1\t1");
-***REMOVED***this.game.queue.push("FLIPRESET\t1");
         this.game.queue.push("POOL\t1"); // pool for cards on table
         this.game.queue.push("DEAL\t1\t8\t2");
         this.game.queue.push("DEAL\t1\t7\t2");
@@ -207,14 +165,6 @@ class Poker extends GameTemplate {
 
   initializeGame(game_id) {
 
-
-    let hand1 = ["D13","C12","C11","C10","C9","C1","C5"];
-    let h1score = this.scoreHand(hand1);
-    let hand2 = ["S5","D5","H5","C2","H10","D13","C1"];
-    let h2score = this.scoreHand(hand2);
-
-    let winner = this.pickWinner(h1score, h2score);
-
     //
     // game engine needs this to start
     //
@@ -243,8 +193,6 @@ class Poker extends GameTemplate {
 
   startNextRound() {
 
-console.log("Starting the neext round!");
-
     this.game.state.turn = 0;
     this.game.state.round++;
 
@@ -253,21 +201,30 @@ console.log("Starting the neext round!");
     if (this.game.state.big_blind_player > this.game.players.length) { this.game.state.big_blind_player = 1; ***REMOVED***
     if (this.game.state.small_blind_player > this.game.players.length) { this.game.state.small_blind_player = 1; ***REMOVED***
 
-    state.flipped = 0;
-    state.plays_since_last_raise = -1;
-    state.started = 0;
-    state.pot = 0.0;
-    state.big_blind_paid = 0;
-    state.small_blind_paid = 0;
-    state.required_pot = 0;
-    state.last_raise = state.big_blind;
+    this.game.state.flipped = 0;
+    this.game.state.plays_since_last_raise = -1;
+    this.game.state.started = 0;
+    this.game.state.pot = 0.0;
+    this.game.state.big_blind_paid = 0;
+    this.game.state.small_blind_paid = 0;
+    this.game.state.required_pot = 0;
+    this.game.state.last_raise = this.game.state.big_blind;
 
-    for (let i = 0; i < num_of_players; i++) {
-      state.passed[i] = 0;
+    for (let i = 0; i < this.game.players.length; i++) {
+      this.game.state.passed[i] = 0;
+      this.game.state.player_pot[i] = 0;
 ***REMOVED***
-    for (let i = 0; i < num_of_players; i++) {
-      state.player_pot[i] = 0;
+
+    //
+    // if players are out-of-tokens, set as inactive
+    //
+    for (let i = 0; i < this.game.state.player_credit.length; i++) {
+      if (this.game.state.player_credit[i] <= 0) {
+        this.game.state.passed[i] = 1;
+        this.game.state.player_credit[i] = -1;
+  ***REMOVED***
 ***REMOVED***
+
 
     this.initializeQueue();
 
@@ -278,7 +235,6 @@ console.log("Starting the neext round!");
 
   handleGameLoop() {
 
-console.log("hgl: "+this.game.queue.length);
     ///////////
     // QUEUE //
     ///////////
@@ -295,18 +251,68 @@ console.log("hgl: "+this.game.queue.length);
 
   ***REMOVED***
 
-      if (mv[0] === "turn") {
+      if (mv[0] === "winner") {
+	this.updateStatus("Game Over: Player " + mv[1] + " wins!");
+	this.updateLog("Game Over: Player " + mv[1] + " wins!");
+	this.game.over = 1;
+	this.saveGame(this.game.id);
+	return 0;
+  ***REMOVED***
 
-console.log("START OF THE TURN!");
+      if (mv[0] === "turn") {
 
           this.displayBoard();
 
-console.log("START OF TURN, PSLR: " + this.game.state.plays_since_last_raise);
+	  //
+	  // if everyone except 1 player has zero credit...
+	  //
+	  let alive_players = 0;
+	  for (let i = 0; i < this.game.state.player_credit.length; i++) {
+	    if (this.game.state.player_credit[i] > 0) {
+	        alive_players++; 
+	***REMOVED*** else {
+	      if (this.game.state.passed[i] == 0 && this.game.state.turn > 2) {
+	        alive_players++; 
+	  ***REMOVED***
+	***REMOVED***
+	  ***REMOVED***
+
+console.log("Players Alive: " + alive_players);
+console.log(" ... reported turn: " + this.game.state.turn);
+alert("PA: " + alive_players + " -- " + this.game.state.turn);
+
+	  if (alive_players == 1 && this.game.state.turn == 1) {
+	    for (let i = 0; i < this.game.state.player_credit.length; i++) {
+	      if (this.game.state.player_credit[i] > 0) {
+	 
+            	this.addMove("winner\t"+this.game.player);
+      	    	this.endTurn();
+		return 0;
+	  ***REMOVED***
+	***REMOVED***
+	    this.updateStatus("Game Over");
+	    return 0;
+	  ***REMOVED***
 
 
 	  //
+	  // if everyone except 1 player has folded...
 	  //
-	  //
+	  let active_players = 0;
+	  for (let i = 0; i < this.game.state.passed.length; i++) {
+	    if (this.game.state.passed[i] == 0) { active_players++; ***REMOVED***
+	  ***REMOVED***
+	  if (active_players == 1) {
+	    for (let i = 0; i < this.game.state.passed.length; i++) {
+	      if (this.game.state.passed[i] == 0) {
+	        this.updateLog("Player: " + i+1 + " wins " + this.game.state.pot);
+                this.game.state.player_credit[i] += this.game.state.pot;
+	  ***REMOVED***
+	***REMOVED***
+
+            this.startNextRound();
+            return 1;
+	  ***REMOVED***
 
 
 	  //
@@ -318,38 +324,51 @@ console.log("START OF TURN, PSLR: " + this.game.state.plays_since_last_raise);
 	    // figure out who won...
 	    //
 	    if (this.game.state.flipped == 5) {
-alert("who won?");
-	      this.startNextRound();
-	      return 1;
+
+	      this.game.state.player_cards = {***REMOVED***;
+	      this.game.state.player_cards_reported = 0;
+	      this.game.state.player_cards_required = 0;
+
+
+	      let first_scorer = -1;
+	      for (let i = 0; i < this.game.state.passed.length; i++) {
+		if (this.game.state.passed[i] == 0) {
+		  if (first_scorer == -1) { first_scorer = i; ***REMOVED***
+		  this.game.state.player_cards_required++;
+		  this.game.state.player_cards[i] = [];
+		***REMOVED***
+ 	  ***REMOVED***
+
+	      if (first_scorer == this.game.player-1) {
+      		this.addMove("reveal\t"+this.game.player+"\t"+this.game.deck[0].hand[0]+"\t"+this.game.deck[0].hand[1]);
+      		this.endTurn();
+	  ***REMOVED***
+
+	      return 0;
 	***REMOVED***
 
 
 	    let cards_to_flip = 1;
-console.log("FLIPPING: "+this.game.state.flipped);
 	    if (this.game.state.flipped == 0) { 
 	      cards_to_flip = 3; 
 	***REMOVED***
-console.log("CTF: " + cards_to_flip);
 	    this.game.state.flipped += cards_to_flip;
-for (let z = 0; z < cards_to_flip; z++) {
-      	    for (let i = this.game.players.length-1; i >= 0; i--) {
-      	      this.game.queue.push("FLIPCARD\t1\t1\t1\t"+(i+1));
+	    for (let z = 0; z < cards_to_flip; z++) {
+      	      for (let i = this.game.players.length-1; i >= 0; i--) {
+      	        this.game.queue.push("FLIPCARD\t1\t1\t1\t"+(i+1));
+	  ***REMOVED***
+       	      this.game.queue.push("FLIPRESET\t1");
 	***REMOVED***
-       	    this.game.queue.push("FLIPRESET\t1");
-***REMOVED***
 	    this.game.state.plays_since_last_raise = 0;
 	    return 1;
 	  ***REMOVED***
-
-
 
 	  this.game.state.plays_since_last_raise++;
 	  if (this.game.state.plays_since_last_raise == 0) {
 	    this.game.state.plays_since_last_raise++;
 	  ***REMOVED***
-
+console.log("INCREMENTING TURN!")
 	  this.game.state.turn++;
-
 
 	  if (this.game.state.passed[this.game.player-1] == 1) {
             this.game.queue.splice(qe, 1);
@@ -370,55 +389,198 @@ for (let z = 0; z < cards_to_flip; z++) {
 
 
 
+
+      if (mv[0] === "reveal") {
+
+	let scorer = parseInt(mv[1]);
+	let card1  = mv[2];
+	let card2  = mv[3];
+        this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(card1));
+        this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(card2));
+
+	this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[0]));
+	this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[1]));
+	this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[2]));
+	this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[3]));
+	this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[4]));
+
+	let everyone_ties = 1;
+	let winners = [];
+
+	this.game.state.player_cards_reported++;
+
+	let first_scorer = -1;
+        for (let i = scorer; i < this.game.state.passed.length; i++) {
+	  if (this.game.state.passed[i] == 0) {
+	    if (first_scorer == -1) { first_scorer = i; ***REMOVED***
+	  ***REMOVED***
+    ***REMOVED***
+
+	//
+	// we have all of the hands, and can pick a winner
+	//
+        if (this.game.state.player_cards_reported == this.game.state.player_cards_required) {
+
+	  let player1 = -1;
+	  let player2 = -1;	
+
+	  let deck1 = null;
+	  let deck2 = null;	
+
+	  let winning_player = -1;
+	  let winning_deck = null;
+
+
+	  let i = 0;
+	  for (var key in this.game.state.player_cards) {
+
+	    if (i == 0) {
+
+	      deck2 = this.game.state.player_cards[key];
+	      player2 = parseInt(key)+1;
+
+	***REMOVED*** else {
+
+	      deck1 = this.game.state.player_cards[key];
+	      player1 = parseInt(key)+1;
+
+	      let h1score = this.scoreHand(deck1);
+	      let h2score = this.scoreHand(deck2);
+
+	      let winner = this.pickWinner(h1score, h2score);
+
+	      if (winner == 0) {
+
+		//
+		// players all have the same hand (public cards)
+		//	
+		this.updateLog("Players tie -- no winner");
+		this.game.state.player_credit[player1-1] += this.game.state.player_pot[player1-1];
+		this.game.state.player_credit[player2-1] += this.game.state.player_pot[player2-1];
+
+		winners.push(player1);
+		winners.push(player2);
+
+	  ***REMOVED*** else {
+
+		everyone_ties = 0;
+		winners = [];
+
+	        if (winner == 1) {
+	  	  deck2 = deck1;
+		  player2 = player1;
+		  winning_player = player1;
+		  winners.push(player1);
+		  winning_deck = deck1;
+	    ***REMOVED*** else {
+
+	  	  deck2 = deck2;
+		  player2 = player2;
+		  winning_player = player2;
+		  winners.push(player2);
+		  winning_deck = deck2;
+	    ***REMOVED***
+
+	  ***REMOVED***
+	***REMOVED***
+	    i++;
+	  ***REMOVED***
+
+	  //
+	  // report winner
+	  //
+	  console.log("\n\nTHE WINNER IS: " + JSON.stringify(winners));
+
+
+	  if (winners.length > 1) {
+
+    ***REMOVED***
+	    // split winnings among winners
+	    //
+	    let pot_size = Math.floor(this.game.state.pot / winners.length)
+	    for (let i = 0; i < winners.length; i++) {
+	      this.updateLog("Player: " + winners[i] + " splits pot and wins " + pot_size);
+	      this.game.state.player_credit[winners[i]-1] += pot_size;
+	***REMOVED***
+
+	  ***REMOVED*** else {
+
+    ***REMOVED***
+	    // winner gets everything
+	    //
+	    this.updateLog("Player: " + winners[0] + " wins " + this.game.state.pot);
+	    this.game.state.player_credit[winners[0]-1] += this.game.state.pot;
+
+	  ***REMOVED***
+
+          this.startNextRound();
+	  return 1;
+	***REMOVED***
+	
+
+	if (this.game.player-1 == first_scorer) {
+          this.addMove("reveal\t"+this.game.player+"\t"+this.game.deck[0].hand[0]+"\t"+this.game.deck[0].hand[1]);
+      	  this.endTurn();
+	***REMOVED***
+
+	return 0;
+  ***REMOVED***
+
+
+
+
+
+
+
       if (mv[0] === "round") {
 
 console.log("start round");
 
           this.displayBoard();
 
-console.log("ROUND: " + this.game.state.round + " - " + this.game.state.turn + " ---- " + this.game.state.plays_since_last_raise);
-
-	  //
-	  // if players are out-of-tokens, set as inactive
-	  //
-	  for (let i = 0; i < this.game.state.player_credit.length; i++) {
-	    if (this.game.state.player_credit[i] <= 0) {
-	      this.game.state.passed[i] = 1;
-	      this.game.state.player_credit[i] = -1;
-	***REMOVED***
-	  ***REMOVED***
 
 
           if (this.game.state.turn == 0) {
-  	  //
-	  // Big Blind
-	  //	  
-          if (this.game.state.player_credit[this.game.state.big_blind_player-1] <= this.game.state.big_blind) {
-	    this.updateLog("Player "+this.game.state.big_blind_player+" deposits remainder of tokens as big blind and is removed from game");
-	    this.game.state.player_pot[this.game.state.big_blind_player-1] += this.game.state.player_credit[this.game.state.big_blind_player-1];
-	    this.game.state.pot += this.game.state.player_credit[this.game.state.big_blind_player-1];
-	    this.game.state.player_credit[this.game.state.big_blind_player-1] = -1;
-	  ***REMOVED*** else {
-	    this.updateLog("Player "+this.game.state.big_blind_player+" deposits the big blind ("+this.game.state.big_blind+")");
-	    this.game.state.player_pot[this.game.state.big_blind_player-1] += this.game.state.big_blind;
-	    this.game.state.pot += this.game.state.big_blind;
-	    this.game.state.player_credit[this.game.state.big_blind_player-1] -= this.game.state.big_blind;
-	  ***REMOVED***
 
-	  //
-	  // Small Blind
-	  //
-          if (this.game.state.player_credit[this.game.state.small_blind_player-1] <= this.game.state.small_blind) {
-	    this.updateLog("Player "+this.game.state.small_blind_player+" deposits remainder tokens as small blind and is removed from game");
-	    this.game.state.player_pot[this.game.state.small_blind_player-1] += this.game.state.player_credit[this.game.state.small_blind_player-1];
-	    this.game.state.pot += this.game.state.player_credit[this.game.state.small_blind_player-1];
-	    this.game.state.player_credit[this.game.state.small_blind_player-1] = -1;
+    	    //
+	    // Big Blind
+	    //	  
+            if (this.game.state.player_credit[this.game.state.big_blind_player-1] <= this.game.state.big_blind) {
+              if (this.game.state.player_credit[this.game.state.big_blind_player-1] == this.game.state.big_blind) {
+  	        this.updateLog("Player "+this.game.state.big_blind_player+" has no more chips");
 	  ***REMOVED*** else {
-	    this.updateLog("Player "+this.game.state.small_blind_player+" deposits the small blind ("+this.game.state.small_blind+")");
-	    this.game.state.player_pot[this.game.state.small_blind_player-1] += this.game.state.small_blind;
-	    this.game.state.pot += this.game.state.small_blind;
-	    this.game.state.player_credit[this.game.state.small_blind_player-1] -= this.game.state.small_blind;
+  	        this.updateLog("Player "+this.game.state.big_blind_player+" deposits remainder of tokens as big blind and is removed from game");
 	  ***REMOVED***
+	      this.game.state.player_pot[this.game.state.big_blind_player-1] += this.game.state.player_credit[this.game.state.big_blind_player-1];
+	      this.game.state.pot += this.game.state.player_credit[this.game.state.big_blind_player-1];
+	      this.game.state.player_credit[this.game.state.big_blind_player-1] = -1;
+	      this.game.state.passed[this.game.state.big_blind_player-1] = 1;
+	***REMOVED*** else {
+	      this.updateLog("Player "+this.game.state.big_blind_player+" deposits the big blind ("+this.game.state.big_blind+")");
+	      this.game.state.player_pot[this.game.state.big_blind_player-1] += this.game.state.big_blind;
+	      this.game.state.pot += this.game.state.big_blind;
+	      this.game.state.player_credit[this.game.state.big_blind_player-1] -= this.game.state.big_blind;
+	***REMOVED***
+
+	    //
+	    // Small Blind
+	    //
+            if (this.game.state.player_credit[this.game.state.small_blind_player-1] <= this.game.state.small_blind) {
+              if (this.game.state.player_credit[this.game.state.small_blind_player-1] <= this.game.state.small_blind) {
+	        this.updateLog("Player "+this.game.state.small_blind_player+" has no more chips");
+	  ***REMOVED*** else {
+	        this.updateLog("Player "+this.game.state.small_blind_player+" deposits remainder tokens as small blind and is removed from game");
+	  ***REMOVED***
+	      this.game.state.player_pot[this.game.state.small_blind_player-1] += this.game.state.player_credit[this.game.state.small_blind_player-1];
+	      this.game.state.pot += this.game.state.player_credit[this.game.state.small_blind_player-1];
+	      this.game.state.player_credit[this.game.state.small_blind_player-1] = -1;
+	      this.game.state.passed[this.game.state.small_blind_player-1] = 1;
+	***REMOVED*** else {
+	      this.updateLog("Player "+this.game.state.small_blind_player+" deposits the small blind ("+this.game.state.small_blind+")");
+	      this.game.state.player_pot[this.game.state.small_blind_player-1] += this.game.state.small_blind;
+	      this.game.state.pot += this.game.state.small_blind;
+	      this.game.state.player_credit[this.game.state.small_blind_player-1] -= this.game.state.small_blind;
+	***REMOVED***
 	  ***REMOVED***
 
 
@@ -427,6 +589,7 @@ console.log("ROUND: " + this.game.state.round + " - " + this.game.state.turn + "
 	  // update game state
 	  //
 	  this.game.state.round++;
+console.log("INCREMENTING TURN 2!")
 	  this.game.state.turn++;
 
 	  this.game.state.required_pot = this.game.state.big_blind;
@@ -462,7 +625,6 @@ console.log("QUEUE CREATED: " + this.game.queue);
 
           this.game.queue.splice(qe, 1);
 
-console.log("AFTER CALL QUEUE: " + this.game.queue);
   ***REMOVED***
 
 
@@ -471,6 +633,23 @@ console.log("AFTER CALL QUEUE: " + this.game.queue);
 	  this.updateLog("Player " + player + " folds.");
 	  this.game.state.passed[player-1] = 1;
           this.game.queue.splice(qe, 1);
+
+	  //
+	  // if everyone folds, last player in wins
+	  //
+	  let players_left = 0;
+	  let player_left_idx = -1;
+	  for (let i = 0; i < this.game.state.passed.length; i++) {
+	    if (this.game.state.passed == 0) {
+	      players_left++;
+	      player_left_idx = i;
+	***REMOVED***
+      ***REMOVED***
+
+	  if (players_left == 1) {
+	    this.game.state.player_credit[player_left_idx] = this,game.state.pot;
+	    this.startNextRound();
+      ***REMOVED***
   ***REMOVED***
 
       if (mv[0] === "check") {
@@ -519,7 +698,6 @@ console.log("AFTER CALL QUEUE: " + this.game.queue);
 	    this.updateLog("Player " + player + " raises " + raise + ".");
 
       ***REMOVED***
-
           this.game.queue.splice(qe, 1);
   ***REMOVED***
 
@@ -563,7 +741,6 @@ console.log("AFTER CALL QUEUE: " + this.game.queue);
       this.endTurn();
       return;
 ***REMOVED***
-console.log("RP: " + this.game.state.required_pot + " -- " + this.game.state.player_pot[this.game.player-1]);
 
     html += 'You are Player '+this.game.player+'. ';
     if (this.game.player == this.game.state.big_blind_player) {
@@ -588,9 +765,6 @@ console.log("RP: " + this.game.state.required_pot + " -- " + this.game.state.pla
         html += '</ul>';
         this.updateStatus(html);
   ***REMOVED*** else {
-
-console.log("HERE: " + JSON.stringify(this.game.state));
-
 	this.updateStatus("ERROR 257293: logic error in poker module, please report");
   ***REMOVED***
 ***REMOVED***
@@ -687,6 +861,10 @@ console.log("HERE: " + JSON.stringify(this.game.state));
         state.turn = 0;
         state.flipped = 0;
 
+	state.player_cards = {***REMOVED***;
+	state.player_cards_reported = 0;
+	state.player_cards_required = 0;
+
 	state.plays_since_last_raise = -1;
 
         state.started = 0;
@@ -711,7 +889,7 @@ console.log("HERE: " + JSON.stringify(this.game.state));
       state.player_pot[i] = 0;
 ***REMOVED***
     for (let i = 0; i < num_of_players; i++) {
-      state.player_credit[i] = 1000;
+      state.player_credit[i] = 100;
 ***REMOVED***
 
     return state;
@@ -721,6 +899,14 @@ console.log("HERE: " + JSON.stringify(this.game.state));
 
 
 
+  returnCardFromDeck(idx) {
+
+    let deck = this.returnDeck();
+    let card = deck[idx];
+
+    return card.name.substring(0, card.name.indexOf('.'));
+
+  ***REMOVED***
 
   returnDeck() {
 
@@ -841,6 +1027,13 @@ console.log("HERE: " + JSON.stringify(this.game.state));
 
 
   pickWinner(score1, score2) {
+
+
+    let hands_differ = 0;
+    for (let i = 0; i < score1.cards_to_score.length; i++) {
+      if (score1.cards_to_score[i] !== score2.cards_to_score[i]) { hands_differ = 1; ***REMOVED***
+***REMOVED***
+    if (hands_differ == 0) { return 0; ***REMOVED***
 
     if (score1.hand_description == "royal flush" && score2.hand_description == "royal flush") {
       if (this.returnHigherCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
@@ -1256,7 +1449,7 @@ console.log("HERE: " + JSON.stringify(this.game.state));
 	cards_to_score.push(this.returnHighestSuiteCard(suite, val, 11));
 	cards_to_score.push(this.returnHighestSuiteCard(suite, val, 10));
   ***REMOVED*** else {
-        for (let i = 4; i > 0; i--) {
+        for (let i = 4; i >= 0; i--) {
 	  cards_to_score.push(this.returnHighestSuiteCard(suite, val, x+i));
     ***REMOVED***
   ***REMOVED***
@@ -1324,7 +1517,7 @@ console.log("HERE: " + JSON.stringify(this.game.state));
 	***REMOVED***
   ***REMOVED***
 
-      let remaining1 = this.returnHighestCard(suite, val, cards_to-score);
+      let remaining1 = this.returnHighestCard(suite, val, cards_to_score);
       cards_to_score.push(remaining1);
       hand_description = "two pair";
 
@@ -1377,6 +1570,12 @@ console.log("HERE: " + JSON.stringify(this.game.state));
     let remaining3 = this.returnHighestCard(suite, val, [remaining1, remaining2]);
     let remaining4 = this.returnHighestCard(suite, val, [remaining1, remaining2. remaining3]);
     let remaining5 = this.returnHighestCard(suite, val, [remaining1, remaining2, remaining3, remaining4]);
+
+    cards_to_score.push(remaining1);
+    cards_to_score.push(remaining2);
+    cards_to_score.push(remaining3);
+    cards_to_score.push(remaining4);
+    cards_to_score.push(remaining5);
 
     hand_description = "highest card";
     highest_card = remaining1;
