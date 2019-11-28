@@ -91,7 +91,6 @@ class AppStore extends ModTemplate {
           this.submitModule(blk, tx);
           break;
         case 'add bundle':
-          console.log("RECEIVING BUNDLE");
           this.addBundle(blk, tx);
           break;
         default:
@@ -101,20 +100,23 @@ class AppStore extends ModTemplate {
   ***REMOVED***
 
   submitModule(blk, tx) {
-    console.log('PUBLISHING MODULE');
     let sql = `INSERT INTO modules (name, description, version, publickey, unixtime, bid, bsh, tx)
     VALUES ($name, $description, $version, $publickey, $unixtime, $bid, $bsh, $tx)`;
+
     let { from, sig, ts ***REMOVED*** = tx.transaction;
+    let { name, description ***REMOVED*** = tx.returnMessage();
+
     let params = {
-      $name		:	`Application ${ts***REMOVED***`,
-      $description	:	`Application ${ts***REMOVED***`,
-      $version	:	`${ts***REMOVED***-${sig***REMOVED***`,
-      $publickey	:	from[0].add ,
-      $unixtime	:	ts ,
-      $bid		:	blk.block.id ,
-      $bsh		:	blk.returnHash() ,
-      $tx		:	JSON.stringify(tx.transaction),
-***REMOVED***
+      $name:	name,
+      $description:	description,
+      $version:	`${ts***REMOVED***-${sig***REMOVED***`,
+      $publickey:	from[0].add,
+      $unixtime:	ts,
+      $bid:	blk.block.id,
+      $bsh:	blk.returnHash(),
+      $tx:	JSON.stringify(tx.transaction),
+***REMOVED***;
+
     this.app.storage.executeDatabase(sql, params, "appstore");
   ***REMOVED***
 
