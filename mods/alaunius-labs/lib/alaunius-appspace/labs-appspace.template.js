@@ -1,4 +1,4 @@
-module.exports = SettingsAppspaceTemplate = (app) => {
+module.exports = LabsAppspaceTemplate = (app) => {
   return `
   <link rel="stylesheet" href="/settings/style.css">
   <div class="email-appspace-settings">
