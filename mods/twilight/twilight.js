@@ -480,7 +480,9 @@ console.log("\n\n\n\n");
           //
           // OPTIONAL - players pick sides
           //
-          let tmpar = this.game.id.split("&");
+	  // HACK
+//
+          let tmpar = this.game.players[0];
           if (this.game.options.player1 != undefined) {
 
             //
@@ -495,7 +497,7 @@ console.log("\n\n\n\n");
               }
             }
 
-            if (tmpar[0] === this.app.wallet.returnPublicKey()) {
+            if (this.game.players[0] === this.app.wallet.returnPublicKey()) {
               if (this.game.options.player1 == "us") {
                 this.game.player = 2;
               } else {
@@ -1754,9 +1756,10 @@ console.log("\n\n\n\n");
 
           if (this.is_testing == 1) {
             if (this.game.player == 1) {
-              this.game.deck[0].hand = ["wwby","fiveyearplan", "berlinagreement", "junta", "che","degaulle","nato","naziscientist","missileenvy","formosan"];
+              this.game.deck[0].hand = ["aldrichames","fiveyearplan", "berlinagreement", "junta", "che","degaulle","nato","naziscientist","missileenvy","formosan"];
             } else {
-              this.game.deck[0].hand = ["duckandcover","degaulle","lonegunman","cubanmissile","handshake","lonegunman","asia","nasser","sadat"];
+              //this.game.deck[0].hand = ["duckandcover","degaulle","lonegunman","cubanmissile","handshake","lonegunman","asia","nasser","sadat"];
+              this.game.deck[0].hand = ["duckandcover","degaulle"];
             }
           }
 
