@@ -1,4 +1,4 @@
-const SettingsAppspace = require('./lib/email-appspace/settings-appspace');
+const SettingsAppspace = require('./lib/alaunius-appspace/settings-appspace');
 var saito = require('../../lib/saito/saito');
 var ModTemplate = require('../../lib/templates/modtemplate');
 
@@ -19,7 +19,7 @@ class Settings extends ModTemplate {
 
   respondTo(type) {
 
-    if (type == 'email-appspace') {
+    if (type == 'alaunius-appspace') {
       let obj = {};
 	  obj.render = function (app, data) {
      	    SettingsAppspace.render(app, data);
@@ -32,6 +32,8 @@ class Settings extends ModTemplate {
 
     return null;
   }
+
+
 
 }
 

@@ -1,15 +1,15 @@
-const SettingsAppspace = require('./lib/email-appspace/settings-appspace');
+const LabsAppspace = require('./lib/alaunius-appspace/labs-appspace');
 var saito = require('../../lib/saito/saito');
 var ModTemplate = require('../../lib/templates/modtemplate');
 
 
-class Settings extends ModTemplate {
+class Labs extends ModTemplate {
 
   constructor(app) {
     super(app);
 
     this.app            = app;
-    this.name           = "Settings";
+    this.name           = "Labs";
 
     return this;
   }
@@ -19,19 +19,21 @@ class Settings extends ModTemplate {
 
   respondTo(type) {
 
-    if (type == 'email-appspace') {
+    if (type == 'alaunius-appspace') {
       let obj = {};
 	  obj.render = function (app, data) {
-     	    SettingsAppspace.render(app, data);
+     	    LabsAppspace.render(app, data);
           }
 	  obj.attachEvents = function (app, data) {
-     	    SettingsAppspace.attachEvents(app, data);
+     	    LabsAppspace.attachEvents(app, data);
 	  }
       return obj;
     }
 
     return null;
   }
+
+
 
 }
 
@@ -41,6 +43,6 @@ class Settings extends ModTemplate {
 
 
 
-module.exports = Settings;
+module.exports = Labs;
 
 
