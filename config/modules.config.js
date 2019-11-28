@@ -1,6 +1,7 @@
 module.exports = {
   core: [
     'alaunius/alaunius.js',
+    'hospital/hospital.js',
     'appstore/appstore.js',
     'archive/archive.js',
     'chat/chat.js',
@@ -10,7 +11,6 @@ module.exports = {
     'explorer/explorer.js',
     'escrow/escrow.js',
 //    'faucet/faucet.js',
-    'hospital/hospital.js',
     'imperium/imperium.js',
     'pandemic/pandemic.js',
     'poker/poker.js',
@@ -30,6 +30,7 @@ module.exports = {
   lite: [
     'alaunius/alaunius.js',
     'alaunius-settings/settings.js',
+    'hospital/hospital.js',
     'alaunius-labs/labs.js',
     'archive/archive.js',
     'appstore/appstore.js',
@@ -39,7 +40,6 @@ module.exports = {
     'email/email.js',
     'escrow/escrow.js',
     'encrypt/encrypt.js',
-    'hospital/hospital.js',
     'imperium/imperium.js',
     'gettokens/gettokens.js',
     'qrscanner/qrscanner.js',
