@@ -85,6 +85,39 @@ class Escrow extends ModTemplate {
 
 
 
+  sendOpenRequest(app, data, gamedata) {
+
+    let ts = new Date().getTime();
+    let accept_sig = this.app.crypto.signMessage(("create_game_"+ts), this.app.wallet.returnPrivateKey());
+
+    let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee(gamedata.opponent);
+
+console.log("THIS IS THE TX CREATED BY DEFAULT: " + JSON.stringify(tx.transaction));
+console.log("GDOPP: " +gamedata.opponent);
+
+        tx.transaction.msg.ts                   = ts;
+        tx.transaction.msg.module               = this.name;
+        tx.transaction.msg.request              = "open";
+        tx.transaction.msg.stake                = gamedata.stake;
+        tx.transaction.msg.game                 = gamedata.name;
+        tx.transaction.msg.options              = gamedata.options;
+        tx.transaction.msg.options_html 	= gamedata.options_html;
+        tx.transaction.msg.players_needed       = gamedata.players_needed;
+        tx.transaction.msg.accept_sig           = accept_sig;
+        tx.transaction.msg.players              = [];
+        tx.transaction.msg.players.push(this.app.wallet.returnPublicKey());
+    tx = this.app.wallet.signTransaction(tx);
+
+console.log("TESTING ESCROW: " + JSON.stringify(tx.transaction));
+
+    this.app.network.propagateTransaction(tx);
+
+  ***REMOVED***
+
+
+
+
+
   saveEscrow() {
     this.app.options.escrow = Object.assign({***REMOVED***, this.app.options.escrow);
     this.app.options.escrow = this.escrow;
@@ -108,9 +141,17 @@ class Escrow extends ModTemplate {
     let escrow_self = app.modules.returnModule("Escrow");
     let txmsg = tx.returnMessage();
 
+console.log("ESCROW ON CONF: ");
+
     if (conf == 0) {
+
+console.log("ESCROW ON CONF 0: " + JSON.stringify(tx.transaction));
+
       if (txmsg.module == escrow_self.name) {
 
+	//
+	// CHECK BALANCE FROM ESCROW SERVER
+	//
 	//if (tx.isFrom(escrow_self.publickey) && tx.isTo(app.wallet.returnPublicKey())) {
 	if (tx.transaction.to[0].add == app.wallet.returnPublicKey()) {
 	  if (txmsg.request === "account balance") {
@@ -124,6 +165,59 @@ alert("SAVING ESCROW: " + txmsg.address);
 
 	  ***REMOVED***
 	***REMOVED***
+
+
+	//
+	// OPEN INVITATION IN ARCADE -- receiver
+	//
+	//if (tx.transaction.to[0].add == app.wallet.returnPublicKey()) {
+	if (tx.transaction.to[0].add == app.wallet.returnPublicKey() || tx.transaction.from[0].add == app.wallet.returnPublicKey()) {
+	  if (txmsg.request === "open") {
+
+console.log("RECEIVED ESCROW INVITATION: " + JSON.stringify(txmsg));
+
+	    //
+	    // change arcade info
+	    //
+	    tx.transaction.msg.module = "Arcade";
+	    tx.transaction.msg.options_html = '<div class="pill" style="background-color:yellow;color:black">CHARITY GAME: '+txmsg.stake+'</div>'+tx.transaction.msg.options_html;
+
+	    let arcade_self = app.modules.returnModule("Arcade");
+	    if (arcade_self != null) {
+	      arcade_self.onConfirmation(blk, tx, conf, app);
+	      return;
+	***REMOVED***
+
+	  ***REMOVED***
+	***REMOVED***
+
+/*
+	//
+	// OPEN INVITATION IN ARCADE -- sender
+	//
+	if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) {
+	  if (txmsg.request === "open") {
+
+console.log("RECEIVED ESCROW INVITATION I SENT: " + JSON.stringify(txmsg));
+
+	    //
+	    // change arcade info
+	    //
+	    tx.transaction.msg.module = "Arcade";
+	    tx.transaction.msg.options_html = '<div class="pill" style="background-color:yellow;color:black">CHARITY GAME: '+txmsg.stake+'</div>'+tx.transaction.msg.options_html;
+
+	    let arcade_self = app.modules.returnModule("Arcade");
+	    if (arcade_self != null) {
+              arcade_self.receiveOpenRequest(blk, tx, conf, app);
+	      return;
+	***REMOVED***
+
+	  ***REMOVED***
+	***REMOVED***
+*/
+
+
+
 
 
 ***REMOVED***if (tx.isTo(escrow_self.publickey)) {
@@ -187,7 +281,6 @@ console.log("INSERT KEYS INTO USERBASE: ");
 
 	  ***REMOVED***
 	***REMOVED***
-
 
   ***REMOVED***
 ***REMOVED***

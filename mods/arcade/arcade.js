@@ -328,6 +328,7 @@ console.log("PUSHING BACK: " + JSON.stringify(tx.transaction));
       if (txmsg.request == "invite") {
 console.log("ARCADE GETS INVITE REQUEST");
 
+
 	//
 	// this might be a server, in which cse it doesn't have options.games
 	//
@@ -352,9 +353,12 @@ console.log("ARCADE PROCESSING RECEIVE INVITE REQUEST");
 
 
       // acceptances
-      if (txmsg.request == "accept") {
+      if (txmsg.request === "accept") {
 
 console.log("ARCADE GETS ACCEPT MESSAGE: " + txmsg.request);
+console.log("i am " + app.wallet.returnPublicKey());
+console.log("TX: " + JSON.stringify(tx.transaction));
+console.log("MSG: " + txmsg);
 
 	//
 	// multiplayer games might hit here without options.games
@@ -586,7 +590,7 @@ console.log("RENDERING LOADER!");
         tx.transaction.msg.request  		= "open";
         tx.transaction.msg.game     		= gamedata.name;
         tx.transaction.msg.options  		= gamedata.options;
-        tx.transaction.msg.options_html = gamedata.options_html;
+        tx.transaction.msg.options_html 	= gamedata.options_html;
         tx.transaction.msg.players_needed 	= gamedata.players_needed;
         tx.transaction.msg.accept_sig 		= accept_sig;
         tx.transaction.msg.players  		= [];
