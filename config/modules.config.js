@@ -1,6 +1,6 @@
 ***REMOVED***
   core: [
-    'alaunius/alaunius.js',
+    //'alaunius/alaunius.js',
     'appstore/appstore.js',
     'archive/archive.js',
     'chat/chat.js',
@@ -17,7 +17,7 @@
     'qrscanner/qrscanner.js',
     'relay/relay.js',
     'registry/registry.js',
-//    'settings/settings.js',
+    'settings/settings.js',
     'solitrio/solitrio.js',
     'testing/testing.js',
     'twilight/twilight.js',
@@ -28,9 +28,9 @@
     'website/website.js',
   ],
   lite: [
-    'alaunius/alaunius.js',
-    'alaunius-settings/settings.js',
-    'alaunius-labs/labs.js',
+    //'alaunius/alaunius.js',
+    //'alaunius-settings/settings.js',
+    //'alaunius-labs/labs.js',
     'archive/archive.js',
     'appstore/appstore.js',
     'chess/chess.js',
@@ -47,7 +47,7 @@
     'poker/poker.js',
     'relay/relay.js',
     'registry/registry.js',
-//    'settings/settings.js',
+    'settings/settings.js',
     'solitrio/solitrio.js',
     'testing/testing.js',
     'twilight/twilight.js',
