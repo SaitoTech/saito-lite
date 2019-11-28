@@ -1,6 +1,5 @@
 ***REMOVED***
   core: [
-    //'alaunius/alaunius.js',
     'appstore/appstore.js',
     'archive/archive.js',
     'chat/chat.js',
@@ -28,11 +27,8 @@
     'website/website.js',
   ],
   lite: [
-    //'alaunius/alaunius.js',
-    //'alaunius-settings/settings.js',
-    //'alaunius-labs/labs.js',
-    'archive/archive.js',
     'appstore/appstore.js',
+    'archive/archive.js',
     'chess/chess.js',
     'chat/chat.js',
     'debug/debug.js',
