@@ -4,9 +4,7 @@ const AppStoreAppspacePublish   = require('./appstore-appspace-publish/appstore-
 module.exports = AooStoreAppspace = {
 
     render(app, data) {
-      setTimeout(() => {
-        document.querySelector(".email-appspace").innerHTML = AppStoreAppspaceTemplate();
-      }, 2000);
+      document.querySelector(".email-appspace").innerHTML = AppStoreAppspaceTemplate();
     },
 
     attachEvents(app, data) {
