@@ -48,8 +48,8 @@ module.exports = EscrowGameWizardT = {
 	    let opponent = "";
 	    let stake = "";
 
-	    opponent = document.getElementById(".opponent_address").value;
-	    stake    = document.getElementById(".escrow_stake").value;
+	    opponent = document.getElementById("opponent_address").value;
+	    stake    = document.getElementById("escrow_stake").value;
 
             $('form input, form select').each(
               function(index) {
@@ -69,17 +69,19 @@ module.exports = EscrowGameWizardT = {
 	    //
 	    alert("Manually Formatting Send Request!");
 
-/***
             let gamedata = {};
                 gamedata.name = gamemod.name;
                 gamedata.options = gamemod.returnFormattedGameOptions(options);
                 gamedata.options_html = gamemod.returnGameRowOptionsHTML(options);
+                gamedata.opponent = opponent;
                 gamedata.stake = stake;
 
-            data.arcade.sendOpenRequest(app, data, gamedata);
-            document.querySelector('.arcade-main').innerHTML = '';
-            data.arcade.render(app, data);
-***/
+            data.escrow.sendOpenRequest(app, data, gamedata);
+            document.querySelector('.arcade-main').innerHTML = 'We have sent the invitation request. If your opponent does not have our module installed they will not receive the invitation. If they do it will appear on their Arcade page as a special kind of invitation';
+//            data.arcade.render(app, data);
+
+	    alert("Invitation Sent!");
+
 	});
       });
     });
