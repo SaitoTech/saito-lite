@@ -64,6 +64,7 @@ class AppStore extends ModTemplate {
   installModule(app) {
     super.installModule(app);
 
+/*
     const archiver = require('archiver');
     const path = require('path');
     const { readdirSync, readFileSync, createWriteStream ***REMOVED*** = require('fs');
@@ -112,6 +113,7 @@ class AppStore extends ModTemplate {
       newtx = this.app.wallet.signTransaction(newtx);
       this.app.network.propagateTransaction(newtx);
 ***REMOVED***);
+*/
   ***REMOVED***
 
   initialize(app) {
