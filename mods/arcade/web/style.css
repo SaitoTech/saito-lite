@@ -372,13 +372,21 @@ button.add-games {
   transform: rotate(-45deg);
 }
 
+.arcade-game-row-avi {
+  display: grid;
+}
+
+.identicon {
+  width: 100%;
+  max-width: 2em;
+}
 .arcade-game-invitation {
   clear: both;
 }
 
 .arcade-game-row-name {
-  float: left;
-  cursor: pointer;
+  cursor: default;
+  padding: 0 3px;
 }
 
 .arcade-game-row-options {

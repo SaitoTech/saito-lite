@@ -32,15 +32,15 @@ module.exports = ArcadeGameListRowTemplate = (app, tx, button_text) => {
     <div class="arcade-game-invitation" id="arcade-game-${sig}">
       <div class="arcade-game-row-name" id="arcade-game-name-${sig}">
 
-        <div class="game-row-avi">`;
+        <div class="arcade-game-row-avi">`;
 
   for (let i = 0; i < publickeys.length; i++) {
-     html += `<img style="height: 1.7em" src="${app.keys.returnIdenticon(publickeys[i])}">
+     html += `<img class="identicon" src="${app.keys.returnIdenticon(publickeys[i])}">
           <!-- ${publickeys[i].substring(0,8)} -->
 	`;
   }
   for (let i = publickeys.length; i < players_needed; i++) {
-     html += `<img style="height: 1.7em" src="${app.keys.returnIdenticon("AAAAAAAAAAAAAAAAAAAAAAAAAAA")}">`;
+     html += `<img class="identicon" src="${app.keys.returnIdenticon("AAAAAAAAAAAAAAAAAAAAAAAAAAA")}">`;
   }
   html += `
         </div>

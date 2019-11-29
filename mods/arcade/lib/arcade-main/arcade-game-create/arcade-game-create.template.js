@@ -1,7 +1,7 @@
 module.exports = ArcadeGameCreate = (game) => {
   return `
   <div class="create-game-wizard">
-  <div class="return_to_arcade" id="return_to_arcade">
+  <div class="return-to-arcade" id="return-to-arcade">
         <i class="icon-large fas fa-times-circle"></i>
       </div>
   <div class="game-wizard-form">
