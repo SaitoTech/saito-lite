@@ -77,7 +77,7 @@ module.exports = ArcadeGameDreate = {
 
   attachEvents(app, data) {
 
-    document.querySelector('#return_to_arcade')
+    document.querySelector('#return-to-arcade')
       .onclick = (e) => {
         document.querySelector('.arcade-main').innerHTML = '';
         data.arcade.render(app, data);

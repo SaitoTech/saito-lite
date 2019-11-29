@@ -18,7 +18,7 @@ module.exports = ArcadeMain = {
     arcade_main.innerHTML = ArcadeMainTemplate();
 
     //
-    // click-to-create games
+    // click-to-Create Games
     //
     //let carousel = document.getElementById("arcade-carousel-slides");
     //data.arcade.mods.forEach(mod => {
@@ -63,7 +63,7 @@ console.log("HERE: " + JSON.stringify(tx));
   attachEvents(app, data) {
 
     //
-    // create game
+    // Create Game
     //
     Array.from(document.getElementsByClassName('game')).forEach(game => {
       game.addEventListener('click', (e) => {
