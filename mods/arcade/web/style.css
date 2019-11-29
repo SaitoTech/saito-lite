@@ -611,6 +611,7 @@ option {
 
 .header {
   background: none;
+***REMOVED***
 
 /** CHAT STYLING **/
 
@@ -642,6 +643,7 @@ option {
 
 .chat-box-new-message-input {
   background: var(--saito-cyber-black);
+  color: white;
 ***REMOVED***
 
 .chat-room-submit-button {
