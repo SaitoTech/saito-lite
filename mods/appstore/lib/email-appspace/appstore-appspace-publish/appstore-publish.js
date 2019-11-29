@@ -5,7 +5,7 @@ module.exports = AppStorePublish = {
   render(app, data) {
     document.querySelector(".email-appspace")
             .innerHTML = AppStorePublishTemplate();
-    zip.workerScriptsPath = 'zip/';
+    zip.workerScriptsPath = '/saito/lib/zip/';
   ***REMOVED***,
 
   attachEvents(app, data) {
@@ -31,7 +31,7 @@ module.exports = AppStorePublish = {
           ***REMOVED***
 
               zip_reader.onload = function() {
-                let text = reader2.result;
+                let text = zip_reader.result;
         ***REMOVED***
         ***REMOVED*** get name and description
                 let getNameRegex = RegExp('[\n\r]*this.name\s*([^\n\r]*)');
