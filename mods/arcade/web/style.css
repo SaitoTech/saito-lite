@@ -86,7 +86,11 @@ input {
 }
 
 .sidebar>div {
-  margin: 1.5em 0;
+  margin: 0 0 2em 0;
+}
+
+button.add-games {
+  width: 100%;
 }
 
 .arcade-sidebar-box {
@@ -263,7 +267,7 @@ input {
   max-width: 500px;
 } */
 
-.return_to_arcade {
+.return-to-arcade {
   position: absolute;
   right: 25px;
   display: inline-block;
@@ -596,3 +600,15 @@ option {
   background: #00000099;
 }
 
+.arcade-main-hero {
+  width: 100%;
+}
+
+.start-game-list .return-to-arcade {
+  right: 90px;
+  top: 20px;
+}
+
+.header {
+  background: none;
+}
