@@ -63,10 +63,6 @@ input {
   background-color: #00000099;
 }
 
-.header {
-  background-image: unset;
-}
-
 .main {
   height: calc(100vh - 5em);
   width: 100vw;
