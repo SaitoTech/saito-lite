@@ -1,8 +1,8 @@
-module.exports = EmailFormTemplate = () => {
+module.exports = EmailAppspaceTemplate = () => {
   return `
-      <div class="email-appspace">
-	This is where our application can put its HTML form
-      </div>
-  `
+    <div class="email-appspace">
+      <center><div class="loader"></div></center>
+    </div>
+  `;
 ***REMOVED***;
 

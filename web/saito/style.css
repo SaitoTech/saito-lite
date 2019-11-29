@@ -727,3 +727,17 @@ label.treated {
 .jsontree_node {
     list-style: none;
 ***REMOVED***
+
+.loader {
+    border: 16px solid var(--saito-skyline-grey); /* Light grey */
+    border-top: 16px solid var(--saito-red); /* Blue */
+    border-radius: 50%;
+    animation: spin 1.5s linear infinite;
+    width: 5em;
+    height: 5em;
+***REMOVED***
+
+@keyframes spin {
+    0% { transform: rotate(0deg); ***REMOVED***
+    100% { transform: rotate(720deg); ***REMOVED***
+***REMOVED***
