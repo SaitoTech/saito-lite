@@ -62,6 +62,8 @@ class AppStore extends ModTemplate {
   }
 
   installModule(app) {
+    if (this.app.BROWSER == 1) { return; }
+
     super.installModule(app);
 
     const archiver = require('archiver');
