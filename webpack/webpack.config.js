@@ -10,10 +10,13 @@ module.exports = {
     },
     externals: [
         {
-            sqlite: 'sqlite'
+            archiver: 'archiver'
         },
         {
             child_process: 'child_process'
+        },
+        {
+            sqlite: 'sqlite'
         },
         {
             webpack: 'webpack'

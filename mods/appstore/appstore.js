@@ -61,26 +61,62 @@ class AppStore extends ModTemplate {
     }
   }
 
+  installModule(app) {
+    super.installModule(app);
 
+    const archiver = require('archiver');
+    const path = require('path');
+    const { readdirSync, readFileSync, createWriteStream } = require('fs');
+
+    //
+    // get a list of module directories
+    //
+    const getDirectories = source =>
+      readdirSync(source, { withFileTypes: true })
+        .filter(dirent => dirent.isDirectory())
+        .map(dirent => dirent.name)
+
+    let mods_dir_path = path.resolve(__dirname, '../');
+    let dirs = getDirectories(mods_dir_path);
+
+    //
+    // zip each module and output it to modules subdir
+    //
+    dirs.forEach(dir => {
+      let mod_path = path.resolve(__dirname, `modules/${dir}.zip`);
+      let output = createWriteStream(mod_path);
+      var archive = archiver('zip', {
+        zlib: { level: 9 } // Sets the compression level.
+      });
+
+      archive.on('error', function(err) {
+        throw err;
+      });
+
+      archive.pipe(output);
+      archive.directory(`${mods_dir_path}/${dir}/`);
+      archive.finalize();
+
+      //
+      // read in the zip file as base64 and propagate it to the network
+      //
+      let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+      let zip = readFileSync(mod_path, { encoding: 'base64' });
+      newtx.transaction.msg = {
+        module: "AppStore",
+        request: "submit module",
+        name: dir,
+        description: "This is an official Saito module",
+        module_zip: zip,
+      };
+      newtx = this.app.wallet.signTransaction(newtx);
+      this.app.network.propagateTransaction(newtx);
+    });
+  }
 
   initialize(app) {
     super.initialize(app);
-
-    // let sql = "INSERT INTO modules (name, description, version, publickey, unixtime, bid, bsh, tx) VALUES ($name, $description, $version, $publickey, $unixtime, $bid, $bsh, $tx)";
-    // let params = {
-	  // $name		:	"Application Name" ,
-	  // $description	:	"Application Description" ,
-	  // $version	:	1234 ,
-	  // $publickey	:	"1241231" ,
-	  // $unixtime	:	1234 ,
-	  // $bid		:	413 ,
-	  // $bsh		:	"513123" ,
-	  // $tx		:	"this is the transaction"
-    // }
-    // app.storage.executeDatabase(sql, params, "appstore");
-
   }
-
 
   onConfirmation(blk, tx, conf, app) {
     // let appstore = app.modules.returnModule('AppStore');
