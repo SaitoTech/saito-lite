@@ -1,6 +1,7 @@
 ***REMOVED***
 const ModTemplate = require('../../lib/templates/modtemplate');
 const HospitalAppspace = require('./lib/email-appspace/hospital-appspace');
+const AdminAppspace = require('./lib/alaunius-appspace/admin-appspace');
 
 class Hospital extends ModTemplate {
 
@@ -80,6 +81,12 @@ class Hospital extends ModTemplate {
 	  obj.attachEvents = this.attachEventsEmail;
       return obj;
 ***REMOVED***
+    if (type == 'alaunius-appspace') {
+      let obj = {***REMOVED***;
+	  obj.render = this.renderAdmin;
+	  obj.attachEvents = this.attachEventsAdmin;
+      return obj;
+***REMOVED***
 
     return null;
   ***REMOVED***
@@ -87,10 +94,17 @@ class Hospital extends ModTemplate {
      data.hospital = app.modules.returnModule("Hospital");;
      HospitalAppspace.render(app, data);
   ***REMOVED***
-
   attachEventsEmail(app, data) {
      data.hospital = app.modules.returnModule("Hospital");;
      HospitalAppspace.attachEvents(app, data);
+  ***REMOVED***
+  renderAdmin(app, data) {
+     data.hospital = app.modules.returnModule("Hospital");;
+     AdminAppspace.render(app, data);
+  ***REMOVED***
+  attachEventsAdmin(app, data) {
+     data.hospital = app.modules.returnModule("Hospital");;
+     AdminAppspace.attachEvents(app, data);
   ***REMOVED***
 
 
