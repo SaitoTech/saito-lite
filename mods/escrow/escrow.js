@@ -22,14 +22,24 @@ class Escrow extends ModTemplate {
 
 
   initialize(app) {
+
     super.initialize(app);
+
     if (app.options.escrow != undefined) {
       this.escrow.address = app.options.escrow.address;
       this.escrow.balance = app.options.escrow.balance;
       this.escrow.create_pending = app.options.escrow.create_pending;
 ***REMOVED***
-  ***REMOVED***
 
+    let oldPropagateTransactionWithCallback = app.network.propagateTransactionWithCallback;
+    app.network.propagateTransactionWithCallback = function newPropagateTransactionWithCallback(newtx, mycallback) {
+console.log("\n\nESCROW HAS OVERWRITTEN THIS FUNCTION TO DO SOME STUFF FIRST!\n\n");
+      newtx.transaction.msg.escrow = this.publickey;
+      newtx = app.wallet.signTransaction(newtx);
+      oldPropagateTransactionWithCallback(newtx, mycallback);
+***REMOVED***
+
+  ***REMOVED***
 
 
   registerAccount() {
@@ -149,6 +159,18 @@ console.log("ESCROW ON CONF 0: " + JSON.stringify(tx.transaction));
 
       if (txmsg.module == escrow_self.name) {
 
+
+***REMOVED***
+	// START MONITORING IF BALANCE EXISTS
+	//
+	if (txmsg.escrow != "") {
+console.log("--------------------------------");
+console.log(JSON.stringify(txmsg));
+console.log("--------------------------------");
+	***REMOVED***
+
+
+
 	//
 	// CHECK BALANCE FROM ESCROW SERVER
 	//
@@ -170,7 +192,6 @@ alert("SAVING ESCROW: " + txmsg.address);
 	//
 	// OPEN INVITATION IN ARCADE -- receiver
 	//
-	//if (tx.transaction.to[0].add == app.wallet.returnPublicKey()) {
 	if (tx.transaction.to[0].add == app.wallet.returnPublicKey() || tx.transaction.from[0].add == app.wallet.returnPublicKey()) {
 	  if (txmsg.request === "open") {
 
@@ -190,32 +211,6 @@ console.log("RECEIVED ESCROW INVITATION: " + JSON.stringify(txmsg));
 
 	  ***REMOVED***
 	***REMOVED***
-
-/*
-	//
-	// OPEN INVITATION IN ARCADE -- sender
-	//
-	if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) {
-	  if (txmsg.request === "open") {
-
-console.log("RECEIVED ESCROW INVITATION I SENT: " + JSON.stringify(txmsg));
-
-	    //
-	    // change arcade info
-	    //
-	    tx.transaction.msg.module = "Arcade";
-	    tx.transaction.msg.options_html = '<div class="pill" style="background-color:yellow;color:black">CHARITY GAME: '+txmsg.stake+'</div>'+tx.transaction.msg.options_html;
-
-	    let arcade_self = app.modules.returnModule("Arcade");
-	    if (arcade_self != null) {
-              arcade_self.receiveOpenRequest(blk, tx, conf, app);
-	      return;
-	***REMOVED***
-
-	  ***REMOVED***
-	***REMOVED***
-*/
-
 
 
 
