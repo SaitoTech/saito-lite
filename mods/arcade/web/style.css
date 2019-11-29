@@ -611,4 +611,39 @@ option {
 
 .header {
   background: none;
+
+/** CHAT STYLING **/
+
+.chat-row {
+  border-bottom: 1px solid var(--saito-red);
+***REMOVED***
+
+.chat-box {
+  background-color: var(--saito-cyber-black);
+  border: 1px solid var(--saito-red);
+***REMOVED***
+
+.chat-box-header {
+  border-bottom: 1px solid var(--saito-red);
+  background: linear-gradient(-45deg, #426 50%, #213 100%);
+***REMOVED***
+
+.chat-room-message-myself {
+  background: #426;
+***REMOVED***
+
+.chat-message-others {
+  color: black;
+***REMOVED***
+
+.chat-box-input {
+  border-top: 1px solid var(--saito-red);
+***REMOVED***
+
+.chat-box-new-message-input {
+  background: var(--saito-cyber-black);
+***REMOVED***
+
+.chat-room-submit-button {
+  background: #426;
 ***REMOVED***
