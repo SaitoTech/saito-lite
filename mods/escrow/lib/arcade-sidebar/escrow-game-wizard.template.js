@@ -3,7 +3,7 @@ module.exports = EscrowGameWizardTemplate = () => {
   let html = `
 
   <div class="escrow-game-wizard">
-  <div class="return_to_arcade" id="return_to_arcade">
+  <div class="return-to-arcade" id="return-to-arcade">
   <i class="icon-large fas fa-times-circle"></i>
 </div>
 
