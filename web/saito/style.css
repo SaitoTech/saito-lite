@@ -512,28 +512,23 @@ label.treated {
     color: #000;
 ***REMOVED***
 
-.scan-qr {
+.wallet-actions {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1em;
+***REMOVED***
+
+.wallet-action-row {
     border-top: 1px solid rgba(0, 0, 0, .1);
     letter-spacing: .25px;
-    padding: 14px 41px;
-    font-size: 16px;
+    padding: 1em 3em;
+    font-size: 0.8em;
     font-family: visuelt-medium;
-***REMOVED***
+    cursor: pointer;
 
-.scan-qr i {
-    margin-right: 10px;
-***REMOVED***
-
-.backup-wallet {
-    font-family: visuelt-medium;
-    border-top: 1px solid rgba(0, 0, 0, .1);
-    letter-spacing: .25px;
-    padding: 14px 41px;
-    font-size: 16px;
-***REMOVED***
-
-.backup-wallet i {
-    margin-right: 10px;
+    display: grid;
+    grid-template-columns: 1em auto;
+    grid-gap: 0.5em;
 ***REMOVED***
 
 .terms {
@@ -543,7 +538,7 @@ label.treated {
     text-align: center;
     vertical-align: middle;
     color: #5f6368;
-     font-size: 14px;
+    font-size: 14px;
 ***REMOVED***
 
 .header-dropdown-modules {
