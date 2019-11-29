@@ -44,6 +44,7 @@ if [ "$1" == "nuke" ]; then
   rm -f ./data/tmp/*.zip
   rm -f ./config/options
   rm -f ./mods/registry/web/addresses.txt
+  rm -f ./mods/appstore/modules/*.zip
   rm -f ./logs/*
 
 

@@ -10,10 +10,13 @@ const path = require('path');
 ***REMOVED***,
     externals: [
         {
-            sqlite: 'sqlite'
+            archiver: 'archiver'
     ***REMOVED***,
         {
             child_process: 'child_process'
+    ***REMOVED***,
+        {
+            sqlite: 'sqlite'
     ***REMOVED***,
         {
             webpack: 'webpack'
