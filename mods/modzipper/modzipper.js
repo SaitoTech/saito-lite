@@ -19,32 +19,70 @@ class Modzipper extends ModTemplate {
 
 
 
-  onConfirmation(blk, tx, conf, app) {
+  installModule(app) {
 
     let modzipper_self = app.modules.returnModule("Modzipper");
 
-    if (modzipper_self.zipped_and_submitted == 0) {
+    if (app.BROWSER != 0) { return; ***REMOVED***
 
-      for (let i = 0; i < modzipper_self.mods.length; i++) {
+    const archiver = require('archiver');
+    const path = require('path');
+    const { readdirSync, readFileSync, createWriteStream ***REMOVED*** = require('fs');
 
-console.log("Zipping: " + modzipper_self.mods[i]); 
+    //
+    // get a list of module directories
+    //
+    const getDirectories = source =>
+      readdirSync(source, { withFileTypes: true ***REMOVED***)
+        .filter(dirent => dirent.isDirectory())
+        .map(dirent => dirent.name)
 
-        var newtx = app.wallet.createUnsignedTransactionWithDefaultFee(app.wallet.returnPublicKey());
-        if (newtx == null) { return; ***REMOVED***
-        newtx.transaction.msg.module   = "AppStore";
-        newtx.transaction.msg.request  = "submit module";
-        newtx.transaction.msg.zip      = "ZIPFILE GOES HERE";
-        newtx = this.app.wallet.signTransaction(newtx);
-        app.network.propagateTransaction(newtx);
+    let mods_dir_path = path.resolve(__dirname, '../');
+    let dirs = getDirectories(mods_dir_path);
+
+    //
+    // zip each module and output it to modules subdir
+    //
+    dirs.forEach(dir => {
+
+
+console.log("installing " + dir);
+
+      let mod_path = path.resolve(__dirname, `modules/${dir***REMOVED***.zip`);
+      let output = createWriteStream(mod_path);
+      var archive = archiver('zip', {
+        zlib: { level: 9 ***REMOVED*** // Sets the compression level.
+  ***REMOVED***);
+
+      archive.on('error', function(err) {
+        throw err;
+  ***REMOVED***);
+
+      archive.pipe(output);
+      archive.directory(`${mods_dir_path***REMOVED***/${dir***REMOVED***/`);
+      archive.finalize();
+
+      //
+      // read in the zip file as base64 and propagate it to the network
+      //
+      let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+      let zip = readFileSync(mod_path, { encoding: 'base64' ***REMOVED***);
+      newtx.transaction.msg = {
+        module: "AppStore",
+        request: "submit module",
+        name: dir,
+        description: "This is an official Saito module",
+        module_zip: zip,
+  ***REMOVED***;
+      newtx = this.app.wallet.signTransaction(newtx);
+
+console.log("ZIPPED MODULE: " + JSON.stringify(newtx.transaction));
+
+      this.app.network.propagateTransaction(newtx);
+***REMOVED***);
 
   ***REMOVED***
 ***REMOVED***
-  ***REMOVED***
-
-***REMOVED***
-
-
-
 
 
 module.exports = Modzipper;
