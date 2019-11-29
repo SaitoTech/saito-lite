@@ -518,28 +518,23 @@ label.treated {
     color: #000;
 ***REMOVED***
 
-.scan-qr {
+.wallet-actions {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1em;
+***REMOVED***
+
+.wallet-action-row {
     border-top: 1px solid rgba(0, 0, 0, .1);
     letter-spacing: .25px;
-    padding: 14px 41px;
-    font-size: 16px;
+    padding: 1em 3em;
+    font-size: 0.8em;
     font-family: visuelt-medium;
-***REMOVED***
+    cursor: pointer;
 
-.scan-qr i {
-    margin-right: 10px;
-***REMOVED***
-
-.backup-wallet {
-    font-family: visuelt-medium;
-    border-top: 1px solid rgba(0, 0, 0, .1);
-    letter-spacing: .25px;
-    padding: 14px 41px;
-    font-size: 16px;
-***REMOVED***
-
-.backup-wallet i {
-    margin-right: 10px;
+    display: grid;
+    grid-template-columns: 1em auto;
+    grid-gap: 0.5em;
 ***REMOVED***
 
 .terms {
@@ -738,3 +733,16 @@ label.treated {
     padding: 0.6em 0;
 ***REMOVED***
 
+.loader {
+    border: 16px solid var(--saito-skyline-grey); /* Light grey */
+    border-top: 16px solid var(--saito-red); /* Blue */
+    border-radius: 50%;
+    animation: spin 1.5s linear infinite;
+    width: 5em;
+    height: 5em;
+***REMOVED***
+
+@keyframes spin {
+    0% { transform: rotate(0deg); ***REMOVED***
+    100% { transform: rotate(720deg); ***REMOVED***
+***REMOVED***
