@@ -1,14 +1,10 @@
 module.exports = ArcadeLeftSidebarTemplate = () => {
   return `
-  <div class="email-chat"></div>
-  <div class="add-games-control">
-  <h4>Get More Games</h4>
-      <button class="add-games"><i class="fas fa-plus-circle"></i>Saito Appstore</button>
-  </div>
+
   <div class="arcade-controls">
       <div class="arcade-bars-menu">
           <div class="arcade-navigator-bars-menu">
-              <h4>Quick Start</h4>
+              <h2>Quick Start</h2>
               <div class="arcade-apps-wrapper">
                   <ul class="arcade-apps" id="arcade-apps">
                   </ul>
@@ -16,6 +12,11 @@ module.exports = ArcadeLeftSidebarTemplate = () => {
           </div>
       </div>
   </div>
+  <div class="add-games-control">
+  <h3>Get More Games</h3>
+      <button class="add-games"><i class="fas fa-plus-circle"></i>Saito Appstore</button>
+  </div>
+  <div class="email-chat"></div>
     
   `;
 ***REMOVED***

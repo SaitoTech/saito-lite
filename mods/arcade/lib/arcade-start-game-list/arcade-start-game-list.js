@@ -9,8 +9,14 @@ module.exports = ArcadeStartGameList = {
 
         var wrapper = document.createElement('div');
         wrapper.id = 'game-list-wrapper';
-        var html = '<div class="start-game"><h1>Start A Game</h1><div class="start-game-list">';
-        for (let i = 0; i < gamemods.length; i++) {
+        var html = `<div class="start-game">
+                        <h1>Start A Game</h1>
+                        <div class="start-game-list">
+                        <div class="return-to-arcade" id="return-to-arcade">
+                            <i class="icon-large fas fa-times-circle"></i>
+                        </div>
+                        `;
+            for (let i = 0; i < gamemods.length; i++) {
             if (gamemods[i].respondTo("arcade-games")) {
                 let gamemod_url = "/" + gamemods[i].name.toLowerCase() + "/img/arcade.jpg";
                 var players = "Players: ";
@@ -39,9 +45,12 @@ module.exports = ArcadeStartGameList = {
         setTimeout(() => {
             document.querySelector('.start-game').style.opacity = 1;
     ***REMOVED***, 100);
-***REMOVED***document.addEventListener("click", function () {
-***REMOVED***    wrapper.remove();
-***REMOVED******REMOVED***, false);
+        document.querySelector('#game-list-wrapper').addEventListener("click", function () {
+            wrapper.remove();
+    ***REMOVED***, false);
+        document.querySelector('#return-to-arcade').addEventListener("click", function () {
+            wrapper.remove();
+    ***REMOVED***, false);
 ***REMOVED***,
 
     attachEvents(app, data) {
