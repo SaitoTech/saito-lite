@@ -2,12 +2,13 @@
 
 :root {
   --saito-red: #639;
+  --saito-nightscape: linear-gradient(-45deg, #324 50%, #1e1e1f 100%);
 ***REMOVED***
 
 body {
   font-size: 1.0em;
   color: var(--saito-skyline-grey);
-  background: linear-gradient(-45deg, #324 50%, #1e1e1f 100%);
+  background: var(--saito-nightscape);
 ***REMOVED***
 
 button, .button, .file-label {
@@ -166,13 +167,14 @@ button.add-games {
 .arcade-game-invitation {
   display: grid;
   align-items: center;
-  grid-template-columns: 1fr 2fr 2fr 1fr;
+  grid-template-columns: 3fr 3fr 4fr 1fr 1fr;
   border: 1px solid #84C;
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 14px;
   padding-right: 14px;
   margin-top: 10px;
+  grid-gap: 1em;
 ***REMOVED***
 
 /** Game Carousel **/
@@ -373,7 +375,7 @@ button.add-games {
 ***REMOVED***
 
 .arcade-game-row-avi {
-  display: grid;
+  display: inline;
 ***REMOVED***
 
 .identicon {
@@ -656,4 +658,8 @@ option {
 
 .chat-room-submit-button {
   background: #426;
+***REMOVED***
+
+#alert-box {
+  background: var(--saito-nightscape);
 ***REMOVED***

@@ -35,22 +35,28 @@ module.exports = ArcadeMain = {
 
       let txmsg = tx.returnMessage();
       let game_id = txmsg.game_id;
-      let button_text = "JOIN";
+      let button_text = {***REMOVED***;
+      button_text.main = "JOIN";
 
       if (data.arcade.app.options.games != undefined) {
         for (let z = 0; z < data.arcade.app.options.games.length; z++) {
           if (data.arcade.app.options.games[z].initializing == 0) {
-            button_text = "CONTINUE";
+            button_text.main = "CONTINUE";
       ***REMOVED***
     ***REMOVED***
   ***REMOVED***
-console.log("HERE: " + JSON.stringify(tx));
+      
+      for (let y = 0; y < txmsg.players.length; y++) {
+        if(data.arcade.app.wallet.returnPublicKey() == txmsg.players[y]) {
+          button_text.delete = "DELETE";
+    ***REMOVED***
+  ***REMOVED***
+
       document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(app, tx, button_text);
+      console.log(button_text);
 ***REMOVED***);
 
-    if (data.arcade.glide) {
-      data.arcade.glide.mount();
-***REMOVED***
+    
 
   ***REMOVED***,
 
@@ -125,6 +131,7 @@ console.log("HERE: " + JSON.stringify(tx));
             if (existing_game) {
               if (existing_game.initializing == 1) {
                 salert("This game is initializing!");
+                
                 ArcadeLoader.render(app, data);
                 ArcadeLoader.attachEvents(app, data);
                 return;
@@ -189,6 +196,13 @@ console.log("CHECKING TO SEE IF THERE IS STILL SPACE IN THE GAME: " + JSON.strin
         ***REMOVED***);
     ***REMOVED***
   ***REMOVED***;
+***REMOVED***);
+    Array.from(document.getElementsByClassName('arcade-game-row-delete')).forEach(game => {
+      game.addEventListener('click', (e) => {
+        let game_id = e.currentTarget.id;
+	    game_id = game_id.substring(17);
+        salert("Delete game id: " + game_id);
+  ***REMOVED***);
 ***REMOVED***);
   ***REMOVED***
 

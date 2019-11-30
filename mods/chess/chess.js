@@ -209,7 +209,9 @@ console.log("QUEUE: " + this.game.queue);
 ***REMOVED***);
 
     $(window).resize(function () {
-      this_chess.board.resize();
+      if(this_chess) {
+        this_chess.board.resize();
+  ***REMOVED***
 ***REMOVED***);
   ***REMOVED***
 
