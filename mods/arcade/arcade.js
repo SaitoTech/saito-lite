@@ -1,3 +1,4 @@
+const axios = require('axios');
 const saito = require('../../lib/saito/saito.js');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const ArcadeMain = require('./lib/arcade-main/arcade-main');
@@ -31,7 +32,7 @@ class Arcade extends ModTemplate {
      if (type == 'chat-render-request') {
        if (this.browser_active) {
          let uidata = {***REMOVED***;
-	     uidata.arcade = this;
+             uidata.arcade = this;
          ArcadeLeftSidebar.render(this.app, uidata);
          ArcadeLeftSidebar.attachEvents(this.app, uidata);
    ***REMOVED***
@@ -49,52 +50,50 @@ class Arcade extends ModTemplate {
     //
     // already watching game... load it
     //
-    for (let i = 0; i < arcade_self.app.options.games.length; i++) {
-      if (arcade_self.app.options.games[i].id == game_id) {
+    if (this.app.options.games) {
+      let { games ***REMOVED*** = this.app.options;
 
-	arcade_self.app.options.games[i].ts = new Date().getTime();
-        arcade_self.app.storage.saveOptions();
-        window.location = '/'+arcade_self.app.options.games[i].module.toLowerCase();
-        return;
+      for (let i = 0; i < games.length; i++) {
+        if (games[i].id == game_id) {
+          games[i].ts = new Date().getTime();
+          this.app.storage.saveOptions();
+          window.location = '/'+games[i].module.toLowerCase();
+          return;
+    ***REMOVED***
   ***REMOVED***
 ***REMOVED***
 
-
-    $.get(`/arcade/observer/${game_id***REMOVED***`, (response, error) => {
-
-      if (error == "success") {
-
-        let game = JSON.parse(response);
-
+    axios.get(`/arcade/observer/${game_id***REMOVED***`)
+      .then(response => {
+        let game = response.data;
 ***REMOVED***
 ***REMOVED*** tell peers to forward this address transactions
 ***REMOVED***
-        arcade_self.app.keys.addWatchedPublicKey(address_to_watch);
+        this.app.keys.addWatchedPublicKey(address_to_watch);
 
 ***REMOVED***
 ***REMOVED*** specify observer mode only
 ***REMOVED***
         game.player = 0;
-        if (arcade_self.app.options.games == undefined) {
-          arcade_self.app.options.games = [];
+        if (this.app.options.games == undefined) {
+          this.app.options.games = [];
     ***REMOVED***
-        for (let i = 0; i < arcade_self.app.options.games.length; i++) {
-          if (arcade_self.app.options.games[i].id == game.id) {
-            arcade_self.app.options.games.splice(i, 1);
+
+        for (let i = 0; i < this.app.options.games.length; i++) {
+          if (this.app.options.games[i].id == game.id) {
+            this.app.options.games.splice(i, 1);
       ***REMOVED***
     ***REMOVED***
-        arcade_self.app.options.games.push(game);
-        arcade_self.app.storage.saveOptions();
+
+        this.app.options.games.push(game);
+        this.app.storage.saveOptions();
 
 ***REMOVED***
 ***REMOVED*** move into game
 ***REMOVED***
         window.location = '/'+arcade_self.app.options.games[arcade_self.app.options.games.length-1].module.toLowerCase();
-
-  ***REMOVED*** else {
-console.log("ERROR 418019: error fetching game for observer mode");
-  ***REMOVED***
-***REMOVED***);
+  ***REMOVED***)
+      .catch(err => console.log("ERROR 418019: error fetching game for observer mode", err));
   ***REMOVED***
 
   render(app, data) {
@@ -148,27 +147,33 @@ console.log("ERROR 418019: error fetching game for observer mode");
     // add my own games (as fake txs)
     //
     if (this.app.options.games != null) {
-      for (let i = 0; i < this.app.options.games.length; i++) {
-	let z = new saito.transaction();
-        if (this.app.options.games[i].players == null) {
-	  z.transaction.from.push(new saito.slip(app.wallet.returnPublicKey()));
-	  z.transaction.to.push(new saito.slip(app.wallet.returnPublicKey()));
+
+      let { games ***REMOVED*** = this.app.options;
+
+      games.forEach(game => {
+        let game_tx = new saito.transaction();
+
+        if (game.players) {
+          game_tx.transaction.to = game.players.map(player => new saito.slip(player));
+          game_tx.transaction.from = game.players.map(player => new saito.slip(player));
     ***REMOVED*** else {
-          for (let j = 0; j < this.app.options.games[i].players.length; j++) {
-	    z.transaction.to.push(new saito.slip(this.app.options.games[i].players[j]));
-      ***REMOVED***
-          for (let j = 0; j < this.app.options.games[i].players.length; j++) {
-	    z.transaction.from.push(new saito.slip(this.app.options.games[i].players[j]));
-      ***REMOVED***
+          game_tx.transaction.from.push(new saito.slip(this.app.wallet.returnPublicKey()));
+          game_tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey()));
     ***REMOVED***
-	z.transaction.sig          = this.app.options.games[i].id;
-	z.transaction.msg.game_id  = this.app.options.games[i].id;
-	z.transaction.msg.request  = "loaded";
-        z.transaction.msg.game   = this.app.options.games[i].module;
-        z.transaction.msg.options  = this.app.options.games[i].options;
-        z.transaction.msg.players_needed = this.app.options.games[i].players_needed;
-	this.addGameToOpenList(z);
-  ***REMOVED***
+
+        let msg = {
+          request: "loaded",
+          game: game.module,
+          game_id: game.id,
+          options: game.options,
+          players_needed: game.players_needed,
+    ***REMOVED***
+
+        game_tx.transaction.sig = game.id;
+        game_tx.transaction.msg = msg;
+
+        this.addGameToOpenList(game_tx);
+  ***REMOVED***);
 ***REMOVED***
   ***REMOVED***
 
@@ -184,7 +189,7 @@ console.log("ERROR 418019: error fetching game for observer mode");
 
     this.render(app, data);
 
-    let perView = this.app.browser.isMobileBrowser(navigator.userAgent) ? 1 : 3;
+    // let perView = this.app.browser.isMobileBrowser(navigator.userAgent) ? 1 : 3;
 
     // Use for Carousel
     /*
@@ -221,15 +226,15 @@ console.log("ERROR 418019: error fetching game for observer mode");
       if (res.rows == undefined) { return; ***REMOVED***
       if (res.rows.length > 0) {
         for (let i = 0; i < res.rows.length; i++) {
-	  let tx = new saito.transaction(JSON.parse(res.rows[i].tx));
+          let tx = new saito.transaction(JSON.parse(res.rows[i].tx));
 
-	  tx.transaction.msg.players_needed = res.rows[i].players_needed;
-	  tx.transaction.msg.players_available = res.rows[i].players_available;
-	  tx.transaction.msg.players_array = res.rows[i].players_array;
+          tx.transaction.msg.players_needed = res.rows[i].players_needed;
+          tx.transaction.msg.players_available = res.rows[i].players_available;
+          tx.transaction.msg.players_array = res.rows[i].players_array;
 
 console.log("ADDING OPEN GAME FROM SERVER: " + JSON.stringify(tx.transaction));
-	  arcade_self.addGameToOpenList(tx);
-	***REMOVED***
+          arcade_self.addGameToOpenList(tx);
+    ***REMOVED***
   ***REMOVED***
 ***REMOVED***);
 
@@ -242,8 +247,8 @@ console.log("ADDING OPEN GAME FROM SERVER: " + JSON.stringify(tx.transaction));
       if (res.rows.length > 0) {
 console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
         for (let i = 0; i < res.rows.length; i++) {
-	  arcade_self.addGameToObserverList({ game_id : res.rows[i].game_id, module : res.rows[i].module , players_array : res.rows[i].players_array, publickey : res.rows[i].player ***REMOVED***);
-	***REMOVED***
+          arcade_self.addGameToObserverList({ game_id : res.rows[i].game_id, module : res.rows[i].module , players_array : res.rows[i].players_array, publickey : res.rows[i].player ***REMOVED***);
+    ***REMOVED***
   ***REMOVED***
 ***REMOVED***);
 
@@ -302,7 +307,7 @@ console.log("PUSHING BACK: " + JSON.stringify(tx.transaction));
   async onConfirmation(blk, tx, conf, app) {
 
     let txmsg = tx.returnMessage();
-    let arcade_self = app.modules.returnModule("Arcade");
+    // let arcade_self = app.modules.returnModule("Arcade");
 
     if (conf == 0) {
 
@@ -310,15 +315,15 @@ console.log("PUSHING BACK: " + JSON.stringify(tx.transaction));
       // open msgs -- prolifigate
       //
       if (txmsg.module == "Arcade" && txmsg.request == "open") {
-	arcade_self.addGameToOpenList(tx);
-	arcade_self.receiveOpenRequest(blk, tx, conf, app);
+        this.addGameToOpenList(tx);
+        this.receiveOpenRequest(blk, tx, conf, app);
   ***REMOVED***
 
       //
       // save state -- also prolifigate
       //
       if (txmsg.game_state != undefined && txmsg.game_id != "") {
-	arcade_self.saveGameState(blk, tx, conf, app);
+        this.saveGameState(blk, tx, conf, app);
   ***REMOVED***
 
 
@@ -329,27 +334,27 @@ console.log("PUSHING BACK: " + JSON.stringify(tx.transaction));
 console.log("ARCADE GETS INVITE REQUEST");
 
 
-	//
-	// this might be a server, in which cse it doesn't have options.games
-	//
-        if (arcade_self.app.options != undefined) {
-          if (arcade_self.app.options.games != undefined) {
-            for (let i = 0; i < arcade_self.app.options.games.length; i++) {
-	      if (arcade_self.app.options.games[i].id == txmsg.game_id) {
-	        if (arcade_self.app.options.games[i].initializing == 0) { return; ***REMOVED***
-  	  ***REMOVED***
-  	***REMOVED***
+***REMOVED***
+***REMOVED*** this might be a server, in which cse it doesn't have options.games
+***REMOVED***
+        if (this.app.options != undefined) {
+          if (this.app.options.games != undefined) {
+            for (let i = 0; i < this.app.options.games.length; i++) {
+              if (this.app.options.games[i].id == txmsg.game_id) {
+                if (this.app.options.games[i].initializing == 0) { return; ***REMOVED***
+            ***REMOVED***
+          ***REMOVED***
       ***REMOVED***
     ***REMOVED***
 console.log("ARCADE PROCESSING RECEIVE INVITE REQUEST");
-	arcade_self.receiveInviteRequest(blk, tx, conf, app);
+        this.receiveInviteRequest(blk, tx, conf, app);
   ***REMOVED***
 
 
       //
       // ignore msgs for others
       //
-      if (!tx.isTo(app.wallet.returnPublicKey())) { return; ***REMOVED***
+      // if (!tx.isTo(app.wallet.returnPublicKey())) { return; ***REMOVED***
 
 
       // acceptances
@@ -360,42 +365,44 @@ console.log("i am " + app.wallet.returnPublicKey());
 console.log("TX: " + JSON.stringify(tx.transaction));
 console.log("MSG: " + txmsg);
 
-	//
-	// multiplayer games might hit here without options.games
-	// in which case we need to import game details including
-	// options, etc.
-	//
+***REMOVED***
+***REMOVED*** multiplayer games might hit here without options.games
+***REMOVED*** in which case we need to import game details including
+***REMOVED*** options, etc.
+***REMOVED***
 
-        for (let i = 0; i < arcade_self.app.options.games.length; i++) {
-	  if (arcade_self.app.options.games[i].id == txmsg.game_id) {
-
-console.log("GAME NO LONGER INITIALIZING!");
-
-	    if (arcade_self.app.options.games[i].initializing == 0) { 
-
-	      //
-	      // is this old? exit
-	      //
-	      let currentTime = new Date().getTime();
-	      if ((currentTime-arcade_self.app.options.games[i].ts) > 2000) {
-console.log(currentTime + " ------- " + arcade_self.app.options.games[i].ts);
-	        return;
-	  ***REMOVED***
-	***REMOVED***
-	  ***REMOVED***
+        if (this.app.BROWSER == 1) {
+          for (let i = 0; i < this.app.options.games.length; i++) {
+            if (this.app.options.games[i].id == txmsg.game_id) {
+  
+  console.log("GAME NO LONGER INITIALIZING!");
+  
+              if (this.app.options.games[i].initializing == 0) { 
+  
+        ***REMOVED***
+        ***REMOVED*** is this old? exit
+        ***REMOVED***
+                let currentTime = new Date().getTime();
+                if ((currentTime-this.app.options.games[i].ts) > 2000) {
+  console.log(currentTime + " ------- " + this.app.options.games[i].ts);
+                  return;
+            ***REMOVED***
+          ***REMOVED***
+        ***REMOVED***
+      ***REMOVED***
     ***REMOVED***
 
 console.log("... still here... receive accept request!");
-        await arcade_self.receiveAcceptRequest(blk, tx, conf, app);
+        await this.receiveAcceptRequest(blk, tx, conf, app);
 
 console.log("\n\n\nlaunching request to launch game... flag button, etc.");
 
-	arcade_self.launchGame(txmsg.game_id);
+        this.launchGame(txmsg.game_id);
   ***REMOVED***
 
       // game over
       if (txmsg.request == "gameover") {
-	arcade_self.receiveGameoverRequest(blk, tx, conf, app);
+        this.receiveGameoverRequest(blk, tx, conf, app);
   ***REMOVED***
 ***REMOVED***
   ***REMOVED***
@@ -437,14 +444,14 @@ console.log("GAME IS NO LONGER INITIALIZING: " + arcade_self.app.options.games[g
 
 console.log("CLEARING INTERVAL!");
 
-	let data = {***REMOVED***;
-	    data.arcade   = arcade_self;
-	    data.game_id  = game_id;
+        let data = {***REMOVED***;
+            data.arcade   = arcade_self;
+            data.game_id  = game_id;
 
 console.log("RENDERING LOADER!");
 
-	ArcadeLoader.render(arcade_self.app, data);
-	ArcadeLoader.attachEvents(arcade_self.app, data);
+        ArcadeLoader.render(arcade_self.app, data);
+        ArcadeLoader.attachEvents(arcade_self.app, data);
 
   ***REMOVED***
 ***REMOVED***, 1000);
@@ -464,27 +471,27 @@ console.log("RENDERING LOADER!");
     if (txmsg.key_state != "") { key_state = txmsg.key_state; ***REMOVED***
 
     let sql = `INSERT INTO gamestate (
-		game_id , 
-		player ,
-		players_array ,
-		module ,
-		bid ,
-		tid ,
-		lc ,
-		key_state ,
-		game_state ,
-		last_move
+                game_id , 
+                player ,
+                players_array ,
+                module ,
+                bid ,
+                tid ,
+                lc ,
+                key_state ,
+                game_state ,
+                last_move
        ) VALUES (
-		$game_id,
-		$player,
-		$players_array,
-		$module,
-		$bid,
-		$tid,
-		$lc,
-		$key_state,
-		$game_state,
-		$last_move
+                $game_id,
+                $player,
+                $players_array,
+                $module,
+                $bid,
+                $tid,
+                $lc,
+                $key_state,
+                $game_state,
+                $last_move
         )`;
     let x = [];
     let txto = tx.transaction.to;
@@ -530,32 +537,32 @@ console.log("RENDERING LOADER!");
     let players_array           = player;
 
     let sql = `INSERT INTO games (
-  		player ,
-  		players_needed ,
-  		players_accepted ,
-  		players_array ,
-		module ,
-		game_id ,
-		status ,
-		options ,
-		tx ,
-		start_bid ,  
-		created_at ,
-		expires_at
-	      ) VALUES (
-		$player ,
-		$players_needed ,
-  		$players_accepted ,
-  		$players_array ,
-		$module ,
-		$game_id ,
-		$status ,
-		$options ,
-		$tx,
-		$start_bid ,
-		$created_at ,
-		$expires_at
-	      )`;
+                  player ,
+                  players_needed ,
+                  players_accepted ,
+                  players_array ,
+                module ,
+                game_id ,
+                status ,
+                options ,
+                tx ,
+                start_bid ,  
+                created_at ,
+                expires_at
+              ) VALUES (
+                $player ,
+                $players_needed ,
+                  $players_accepted ,
+                  $players_array ,
+                $module ,
+                $game_id ,
+                $status ,
+                $options ,
+                $tx,
+                $start_bid ,
+                $created_at ,
+                $expires_at
+              )`;
     let params = {
                 $player     : player ,
                 $players_needed     : players_needed ,
@@ -563,12 +570,12 @@ console.log("RENDERING LOADER!");
                 $players_array      : players_array ,
                 $module     : module ,
                 $game_id    : game_id ,
-	 	$status	    : "open" ,
-		$options    : options ,
-		$tx         : JSON.stringify(tx.transaction) ,
-		$start_bid  : blk.block.id ,
-		$created_at : created_at ,
-		$expires_at : expires_at
+                 $status	    : "open" ,
+                $options    : options ,
+                $tx         : JSON.stringify(tx.transaction) ,
+                $start_bid  : blk.block.id ,
+                $created_at : created_at ,
+                $expires_at : expires_at
           ***REMOVED***;
     await app.storage.executeDatabase(sql, params, "arcade");
     return;
@@ -614,12 +621,12 @@ console.log("RENDERING LOADER!");
     let unique_keys = [];
     for (let i = 0; i < tx.transaction.to.length; i++) {
       if (!unique_keys.includes(tx.transaction.to[i].add)) {
-	unique_keys.push(tx.transaction.to[i].add);
+        unique_keys.push(tx.transaction.to[i].add);
   ***REMOVED***
 ***REMOVED***
     unique_keys.sort();
 console.log("UNIQUE KEYS: " + unique_keys);
-    let players_array = unique_keys.join("_"); 
+    let players_array = unique_keys.join("_");
 console.log("PLAYER ARRAY FOR UPDATE: " + unique_keys);
 
     let sql = "UPDATE games SET players_accepted = "+unique_keys.length+", players_array = $players_array WHERE status = $status AND game_id = $game_id";
@@ -670,10 +677,12 @@ console.log("ARCADE BUT ONLY IN BROWSER!");
     data.arcade = this;
 
   ***REMOVED***
+
   sendInviteRequest(app, data, opentx) {
     let tx = this.createInviteTransaction(app, data, opentx);
     this.app.network.propagateTransaction(tx);
   ***REMOVED***
+
   createInviteTransaction(app, data, gametx) {
 
     let txmsg = gametx.returnMessage();
@@ -684,14 +693,14 @@ console.log("ARCADE BUT ONLY IN BROWSER!");
         tx.transaction.msg.ts   	= "";
         tx.transaction.msg.module   	= txmsg.game;
         tx.transaction.msg.request  	= "invite";
-	tx.transaction.msg.game_id	= gametx.transaction.sig;
+        tx.transaction.msg.game_id	= gametx.transaction.sig;
         tx.transaction.msg.players_needed 	= txmsg.players_needed;
         tx.transaction.msg.options  	= txmsg.options;
         tx.transaction.msg.accept_sig   = "";
-	if (gametx.transaction.msg.accept_sig != "") { 
+        if (gametx.transaction.msg.accept_sig != "") { 
           tx.transaction.msg.accept_sig   = gametx.transaction.msg.accept_sig;
     ***REMOVED***
-	if (gametx.transaction.msg.ts != "") { 
+        if (gametx.transaction.msg.ts != "") { 
           tx.transaction.msg.ts   = gametx.transaction.msg.ts;
     ***REMOVED***
         tx.transaction.msg.invite_sig   = app.crypto.signMessage(("invite_game_"+tx.transaction.msg.ts), app.wallet.returnPrivateKey());
@@ -729,42 +738,35 @@ console.log("RECEIVE TX IN ACCEPT: " + JSON.stringify(txmsg));
     let params = {
       $players_array : players_array ,
       $state : 'open',
-      $game_id : txmsg.game_id 
+      $game_id : txmsg.game_id
 ***REMOVED***
-    await this.app.storage.executeDatabase(sql, params, "arcade");
 
+    try {
+      let resp = await this.app.storage.executeDatabase(sql, params, "arcade"); 
+***REMOVED*** catch (err) {
+      console.log(err);
+***REMOVED***
 
-    sql = "UPDATE games SET state = 'active' WHERE state = $state AND players_accepted >= players_needed AND game_id = $game_id";
+    sql = "UPDATE games SET status = 'active' WHERE status = $status AND players_accepted >= players_needed AND game_id = $game_id";
     params = {
-      $state : 'open',
-      $game_id : txmsg.game_id 
+      $status : 'open',
+      $game_id : txmsg.game_id
 ***REMOVED***
 
 console.log("about to await execut db");
 console.log(sql);
 console.log(params);
 
-    await this.app.storage.executeDatabase(sql, params, "arcade");
+    try {
+      let resp = await this.app.storage.executeDatabase(sql, params, "arcade"); 
+***REMOVED*** catch (err) {
+      console.log(err);
+***REMOVED***
 
 console.log("done now...");
 
   ***REMOVED***
-  sendAcceptRequest(app, data) {
 
-    let game_module 	= "Wordblocks";
-    let game_id		= "7123598714987123512";
-    let opponents 	= [app.wallet.returnPublicKey()];
-
-    let tx = app.wallet.createUnsignedTransactionWithDefaultFee();
-        for (let i = 1; i < opponents.length; i++) { tx.transaction.to.push(new saito.slip(opponents[i], 0.0)); ***REMOVED***
-        tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey(), 0.0));
-        tx.transaction.msg.module   = game_module;
-        tx.transaction.msg.request  = "accept";
-        tx.transaction.msg.game_id  = game_id;
-    tx = this.app.wallet.signTransaction(tx);
-    this.app.network.propagateTransaction(tx);
-
-  ***REMOVED***
   sendMultiplayerAcceptRequest(app, data, gameobj) {
 
 console.log("SEND MULTIPLE ACCEPT: " + JSON.stringify(gameobj));
@@ -803,16 +805,16 @@ console.log("LOADED THE GAME: " + txmsg.game);
     let tx = app.wallet.createUnsignedTransactionWithDefaultFee();
         for (let i = 0; i < opponents.length; i++) { tx.transaction.to.push(new saito.slip(opponents[i], 0.0)); ***REMOVED***
         tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey(), 0.0));
-	//
-	// arcade will listen, but we need game engine to receive to start initialization
-	//
+***REMOVED***
+***REMOVED*** arcade will listen, but we need game engine to receive to start initialization
+***REMOVED***
         tx.transaction.msg.module   = txmsg.game;
         tx.transaction.msg.request  = "accept";
         tx.transaction.msg.multiple  = 1;
         tx.transaction.msg.game = txmsg.game;
         tx.transaction.msg.options = options;
         tx.transaction.msg.game_id  = game_id;
-	opponents.push(this.app.wallet.returnPublicKey());
+        opponents.push(this.app.wallet.returnPublicKey());
         tx.transaction.msg.players_array = opponents.join("_");
         tx.transaction.msg.players_needed = players_needed;
     tx = this.app.wallet.signTransaction(tx);
@@ -833,6 +835,7 @@ console.log("LOADED THE GAME: " + txmsg.game);
     await arcade_self.app.storage.executeDatabase(sql, params, "arcade");
 
   ***REMOVED***
+
   sendGameoverRequest(app, data) {
 
     let game_module 	= "Wordblocks";
@@ -852,9 +855,6 @@ console.log("LOADED THE GAME: " + txmsg.game);
     this.app.network.propagateTransaction(tx);
 
   ***REMOVED***
-
-
-  
 
 
   webServer(app, expressapp, express) {
