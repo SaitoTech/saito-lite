@@ -26,13 +26,11 @@ class AppStore extends ModTemplate {
 ***REMOVED***
     return null;
   ***REMOVED***
-
   renderEmail(app, data) {
      data.appstore = app.modules.returnModule("AppStore");
      AppStoreAppspace.render(app, data);
      AppStoreSearch.render(app, data);
   ***REMOVED***
-
   attachEventsEmail(app, data) {
      data.appstore = app.modules.returnModule("AppStore");
      AppStoreAppspace.attachEvents(app, data);
@@ -64,61 +62,65 @@ class AppStore extends ModTemplate {
   installModule(app) {
     super.installModule(app);
 
-/*
-    const archiver = require('archiver');
-    const path = require('path');
-    const { readdirSync, readFileSync, createWriteStream ***REMOVED*** = require('fs');
+    let fs = app.storage.returnFileSystem();
+    if (fs != null) {
 
-    //
-    // get a list of module directories
-    //
-    const getDirectories = source =>
-      readdirSync(source, { withFileTypes: true ***REMOVED***)
-        .filter(dirent => dirent.isDirectory())
-        .map(dirent => dirent.name)
-
-    let mods_dir_path = path.resolve(__dirname, '../');
-    let dirs = getDirectories(mods_dir_path);
-
-    //
-    // zip each module and output it to modules subdir
-    //
-    dirs.forEach(dir => {
-      let mod_path = path.resolve(__dirname, `modules/${dir***REMOVED***.zip`);
-      let output = createWriteStream(mod_path);
-      var archive = archiver('zip', {
-        zlib: { level: 9 ***REMOVED*** // Sets the compression level.
-  ***REMOVED***);
-
-      archive.on('error', function(err) {
-        throw err;
-  ***REMOVED***);
-
-      archive.pipe(output);
-      archive.directory(`${mods_dir_path***REMOVED***/${dir***REMOVED***/`);
-      archive.finalize();
+      const archiver = require('archiver');
+      const path = require('path');
 
       //
-      // read in the zip file as base64 and propagate it to the network
+      // get a list of module directories
       //
-      let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
-      let zip = readFileSync(mod_path, { encoding: 'base64' ***REMOVED***);
-      newtx.transaction.msg = {
-        module: "AppStore",
-        request: "submit module",
-        name: dir,
-        description: "This is an official Saito module",
-        module_zip: zip,
-  ***REMOVED***;
-      newtx = this.app.wallet.signTransaction(newtx);
-      this.app.network.propagateTransaction(newtx);
-***REMOVED***);
-*/
+      const getDirectories = source =>
+        fs.readdirSync(source, { withFileTypes: true ***REMOVED***)
+          .filter(dirent => dirent.isDirectory())
+          .map(dirent => dirent.name)
+
+      let mods_dir_path = path.resolve(__dirname, '../');
+      let dirs = getDirectories(mods_dir_path);
+
+      //
+      // zip each module and output it to modules subdir
+      //
+      dirs.forEach(dir => {
+
+        let mod_path = path.resolve(__dirname, `modules/${dir***REMOVED***.zip`);
+        let output = fs.createWriteStream(mod_path);
+        var archive = archiver('zip', {
+          zlib: { level: 9 ***REMOVED*** // Sets the compression level.
+    ***REMOVED***);
+
+        archive.on('error', function(err) {
+          throw err;
+    ***REMOVED***);
+
+        archive.pipe(output);
+        archive.directory(`${mods_dir_path***REMOVED***/${dir***REMOVED***/`);
+        archive.finalize();
+
+***REMOVED***
+***REMOVED*** read in the zip file as base64 and propagate it to the network
+***REMOVED***
+        let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+console.log("modpath:" + mod_path);
+        let zip = fs.readFileSync(mod_path, { encoding: 'base64' ***REMOVED***);
+console.log("ZIP IS: " + zip);
+        newtx.transaction.msg = {
+          module: "AppStore",
+          request: "submit module",
+          zip: zip,
+    ***REMOVED***;
+        newtx = this.app.wallet.signTransaction(newtx);
+        this.app.network.propagateTransaction(newtx);
+  ***REMOVED***);
+
+***REMOVED***
   ***REMOVED***
 
   initialize(app) {
     super.initialize(app);
   ***REMOVED***
+
 
   onConfirmation(blk, tx, conf, app) {
     // let appstore = app.modules.returnModule('AppStore');
@@ -128,8 +130,8 @@ class AppStore extends ModTemplate {
         case 'submit module':
           this.submitModule(blk, tx);
           break;
-        case 'add bundle':
-          this.addBundle(blk, tx);
+        case 'request bundle':
+          this.requestBundle(blk, tx);
           break;
         default:
           break;
@@ -137,32 +139,143 @@ class AppStore extends ModTemplate {
 ***REMOVED***
   ***REMOVED***
 
+
   submitModule(blk, tx) {
+
     let sql = `INSERT INTO modules (name, description, version, publickey, unixtime, bid, bsh, tx)
     VALUES ($name, $description, $version, $publickey, $unixtime, $bid, $bsh, $tx)`;
 
     let { from, sig, ts ***REMOVED*** = tx.transaction;
-    let { name, description ***REMOVED*** = tx.returnMessage();
+
+    // should happen locally from ZIP
+    let { zip ***REMOVED*** = tx.returnMessage();
+
+    let name    = "Module Name";
+    let description = "Module Description"
 
     let params = {
-      $name:	name,
+      $name:		name,
       $description:	description,
-      $version:	`${ts***REMOVED***-${sig***REMOVED***`,
+      $version:		`${ts***REMOVED***-${sig***REMOVED***`,
       $publickey:	from[0].add,
       $unixtime:	ts,
-      $bid:	blk.block.id,
-      $bsh:	blk.returnHash(),
-      $tx:	JSON.stringify(tx.transaction),
+      $bid:		blk.block.id,
+      $bsh:		blk.returnHash(),
+      $tx:		JSON.stringify(tx.transaction),
 ***REMOVED***;
 
     this.app.storage.executeDatabase(sql, params, "appstore");
   ***REMOVED***
 
-  addBundle(blk, tx) {
-    let sql = `INSERT INTO bundles (version, publickey, unixtime, bid, bsh, script)
-    VALUES ($version, $publickey, $unixtime, $bid, $bsh, $script)`;
+
+  async requestBundle(blk, tx) {
+
+    let sql = '';
+    let params = '';
+    let txmsg = tx.returnMessage();
+    let module_list = txmsg.list;
+
+console.log("request bundle: " + JSON.stringify(module_list));
+
+    //
+    // module list = [
+    //   { name : "Email" , version : "" ***REMOVED*** ,
+    //   { name : "", version : "1830591927-AE752CDF7529E0419C2E13ABCCD6ABCA252313" ***REMOVED***
+    // ]
+    //
+    let module_names = [];
+    let module_versions = [];
+    let modules_selected = [];
+
+    for (let i = 0; i < module_list.length; i++) {
+      if (module_list[i].version != "") {
+	module_versions.push(module_list[i].version);
+  ***REMOVED*** else {
+	if (module_list[i].name != "") {
+	  module_names.push(module_list[i].name);
+    ***REMOVED***
+  ***REMOVED***
+***REMOVED***
+
+console.log("VER: " + JSON.stringify(module_versions));
+console.log("NAMES: " + JSON.stringify(module_names));
+
+    //
+    // TO-DO single query, not loop
+    //
+    for (let i = 0; i < module_versions.length; i++) {
+      sql = `SELECT * FROM modules WHERE version = $version`;
+      params = { $version : module_versions[i] ***REMOVED***;
+      let rows = await this.app.storage.queryDatabase(sql, params, "appstore");
+
+console.log(sql);
+console.log(params);
+console.log(rows);
+
+      for (let i = 0; i < rows.length; i++) {
+        let tx = JSON.parse(rows[i].tx);
+        modules_selected.push(
+	  {
+	    name : rows[i].name ,
+	    description : rows[i].description ,
+	    zip : tx.msg.zip 
+	  ***REMOVED***
+        );
+  ***REMOVED***
+***REMOVED***
+
+    //
+    // supplement with preferred versions of unversioned apps
+    //
+    //
+    for (let i = 0; i < module_names.length; i++) {
+      sql = `SELECT * FROM modules WHERE name = $name`;
+      params = { $name : module_names[i] ***REMOVED***;
+      let rows = await this.app.storage.queryDatabase(sql, params, "appstore");
+
+      for (let i = 0; i < rows.length; i++) {
+        let tx = JSON.parse(rows[i].tx);
+        modules_selected.push(
+	  {
+	    name : rows[i].name ,
+	    description : rows[i].description ,
+	    zip : tx.msg.zip 
+	  ***REMOVED***
+        );
+  ***REMOVED***
+***REMOVED***
+
+console.log("MOD SEL: " + JSON.stringify(modules_selected));
+
+    //
+    // modules_selected contains our modules
+    //
+    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
+    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
+    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
+    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
+    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
+    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
+    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
+    // WEBPACK WEBPACK WEBPACK WEBPACK CANT GET ENOUGH OF THIS WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
+    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
+    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
+    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
+    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
+    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
+    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
+    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
+    //
+    //
+    //
+
+
+    //
+    // insert resulting JS into our bundles database
+    //
+    sql = `INSERT INTO bundles (version, publickey, unixtime, bid, bsh, script) VALUES ($version, $publickey, $unixtime, $bid, $bsh, $script)`;
     let { from, sig, ts, msg ***REMOVED*** = tx.transaction;
-    let params = {
+    params = {
       $version	:	`${ts***REMOVED***-${sig***REMOVED***`,
       $publickey	:	from[0].add ,
       $unixtime	:	ts ,

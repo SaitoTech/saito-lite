@@ -13,6 +13,7 @@
 //    'imperium/imperium.js',
 //    'pandemic/pandemic.js',
 //    'poker/poker.js',
+//    'modzipper/modzipper.js',
     'qrscanner/qrscanner.js',
     'relay/relay.js',
     'registry/registry.js',
