@@ -167,14 +167,13 @@ button.add-games {
 .arcade-game-invitation {
   display: grid;
   align-items: center;
-  grid-template-columns: 3fr 3fr 4fr 1fr 1fr;
+  grid-template-columns: 3fr 3fr 4fr auto auto;
   border: 1px solid #84C;
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 14px;
   padding-right: 14px;
   margin-top: 10px;
-  grid-gap: 1em;
 ***REMOVED***
 
 /** Game Carousel **/
@@ -662,4 +661,8 @@ option {
 
 #alert-box {
   background: var(--saito-nightscape);
+***REMOVED***
+
+.arcade-game-row-name {
+  padding: 0 0 0 1em;
 ***REMOVED***
