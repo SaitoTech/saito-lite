@@ -277,10 +277,6 @@ class Poker extends GameTemplate {
 	    }
 	  }
 
-console.log("Players Alive: " + alive_players);
-console.log(" ... reported turn: " + this.game.state.turn);
-alert("PA: " + alive_players + " -- " + this.game.state.turn);
-
 	  if (alive_players == 1 && this.game.state.turn == 1) {
 	    for (let i = 0; i < this.game.state.player_credit.length; i++) {
 	      if (this.game.state.player_credit[i] > 0) {
