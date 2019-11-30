@@ -126,7 +126,6 @@
     font-weight: bold;
 }
 
-
 .appstore-sort-item-icon {
     /* position: relative; */
     /* bottom: 60px;
@@ -143,7 +142,6 @@
     color: #868282;
 }
 
-
 /** APPSTORE PUBLISH **/
 
 .appstore-publish {
@@ -156,13 +154,40 @@
 .appstore-publish h3 {
     margin-right: 1em;
 }
-
-
-
-
-
-
-
+#appstore-publish-moddrop{
+  width:400px;
+  height:220px;
+  border-style:dashed; 
+  border-width:2px;
+  position: relative; 
+  border-radius: 15px;
+  text-align: center;
+  line-height: 220px;
+  color: #414040;
+  font-family: visuelt-medium;
+  letter-spacing: 0.05em;
+  font-size: 20px;
+  border-color: #bbb;
+  margin:20px 0 20px 0;
+}
+#appstore-publish-moddrop-inside{
+  background-color: white;
+  border-radius: 15px;
+  width:404px;
+  height:224px;
+  position: absolute;
+  top:-2px;
+  left:-2px;
+}
+.submit-file-btn-box{
+    width: 400px;
+    height: auto;
+    margin-top: 20px;
+}
+#submit-file-btn{
+    display: block;
+    margin: 0 auto;
+}
 
 
 
