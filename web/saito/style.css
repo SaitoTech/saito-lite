@@ -399,6 +399,7 @@ label.treated {
     font-weight: bold;
     display: block;
     margin: 1em 0;
+    overflow-wrap: break-word;
 ***REMOVED***
 
 .promptval {
