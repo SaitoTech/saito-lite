@@ -65,6 +65,7 @@ class AppStore extends ModTemplate {
     super.installModule(app);
 
     let fs = app.storage.returnFileSystem();
+
     if (fs != null) {
 
       const archiver = require('archiver');
@@ -88,6 +89,7 @@ class AppStore extends ModTemplate {
 
         let mod_path = path.resolve(__dirname, `modules/${dir}.zip`);
         let output = fs.createWriteStream(mod_path);
+
         var archive = archiver('zip', {
           zlib: { level: 9 } // Sets the compression level.
         });
@@ -97,21 +99,44 @@ class AppStore extends ModTemplate {
         });
 
         archive.pipe(output);
-        archive.directory(`${mods_dir_path}/${dir}/`);
+
+        //
+        // recursively go through and find all files in dir
+        //
+        function getFiles(dir) {
+          const dirents = fs.readdirSync(dir, { withFileTypes: true });
+          const files = dirents.map((dirent) => {
+            const res = path.resolve(dir, dirent.name);
+            return dirent.isDirectory() ? getFiles(res) : res;
+          });
+          return Array.prototype.concat(...files);
+        }
+
+        let file_array = getFiles(`${mods_dir_path}/${dir}/`);
+
+        //
+        // append them to the archiver
+        //
+        file_array.forEach(file => {
+          let fileReadStream = fs.createReadStream(file);
+          let pathBasename = path.basename(file);
+          archive.append(fileReadStream, { name: pathBasename});
+        });
+
         archive.finalize();
 
         //
         // read in the zip file as base64 and propagate it to the network
         //
         let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
-console.log("modpath:" + mod_path);
         let zip = fs.readFileSync(mod_path, { encoding: 'base64' });
-console.log("ZIP IS: " + zip);
+
         newtx.transaction.msg = {
           module: "AppStore",
           request: "submit module",
           zip: zip,
         };
+
         newtx = this.app.wallet.signTransaction(newtx);
         this.app.network.propagateTransaction(newtx);
       });
