@@ -35,22 +35,28 @@ module.exports = ArcadeMain = {
 
       let txmsg = tx.returnMessage();
       let game_id = txmsg.game_id;
-      let button_text = "JOIN";
+      let button_text = {};
+      button_text.main = "JOIN";
 
       if (data.arcade.app.options.games != undefined) {
         for (let z = 0; z < data.arcade.app.options.games.length; z++) {
           if (data.arcade.app.options.games[z].initializing == 0) {
-            button_text = "CONTINUE";
+            button_text.main = "CONTINUE";
           }
         }
       }
-console.log("HERE: " + JSON.stringify(tx));
+      
+      for (let y = 0; y < txmsg.players.length; y++) {
+        if(data.arcade.app.wallet.returnPublicKey() == txmsg.players[y]) {
+          button_text.delete = "DELETE";
+        }
+      }
+
       document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(app, tx, button_text);
+      console.log(button_text);
     });
 
-    if (data.arcade.glide) {
-      data.arcade.glide.mount();
-    }
+    
 
   },
 
@@ -86,7 +92,7 @@ console.log("HERE: " + JSON.stringify(tx));
     Array.from(document.getElementsByClassName('arcade-game-row-join')).forEach(game => {
       game.addEventListener('click', (e) => {
 
-        let game_id = e.currentTarget.id;
+      let game_id = e.currentTarget.id;
 	    game_id = game_id.substring(17);
 
         for (let i = 0; i < data.arcade.games.length; i++) {
@@ -193,6 +199,13 @@ console.log("CHECKING OPTIONS WHEN INVITING: " + JSON.stringify(data.arcade.game
             return;
           }
         }
+      });
+    });
+    Array.from(document.getElementsByClassName('arcade-game-row-delete')).forEach(game => {
+      game.addEventListener('click', (e) => {
+        let game_id = e.currentTarget.id;
+	    game_id = game_id.substring(17);
+        salert("Delete game id: " + game_id);
       });
     });
   }

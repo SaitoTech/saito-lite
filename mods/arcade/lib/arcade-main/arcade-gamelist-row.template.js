@@ -42,15 +42,22 @@ module.exports = ArcadeGameListRowTemplate = (app, tx, button_text) => {
   for (let i = publickeys.length; i < players_needed; i++) {
      html += `<img class="identicon" src="${app.keys.returnIdenticon("AAAAAAAAAAAAAAAAAAAAAAAAAAA")}">`;
   }
+  var main_button_text = button_text.main;
+  var delete_button_text = button_text.delete;
+
   html += `
         </div>
-
       </div>
       <div class="arcade-game-row-name" id="arcade-game-name-${sig}">${game}</div>
-      <div class="arcade-game-row-options" id="arcade-game-options-${sig}"><div class="game-options-html">${options_html}</div></div>
-      <button class="arcade-game-row-join" id="arcade-game-join-${sig}">${button_text}</button>
-    </div>
-  `;
+      <div class="arcade-game-row-options" id="arcade-game-options-${sig}">
+      <div class="game-options-html">${options_html}</div></div>`;
+  if (delete_button_text) {
+    html += `
+      <button class="arcade-game-row-delete" id="arcade-game-delete-${sig}">${delete_button_text}</button> `;
+  }
+
+  html +=  `  <button class="arcade-game-row-join" id="arcade-game-join-${sig}">${main_button_text}</button>
+            </div>`;
 
   return html;
 
