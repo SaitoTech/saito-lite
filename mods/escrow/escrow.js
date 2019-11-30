@@ -31,12 +31,12 @@ class Escrow extends ModTemplate {
       this.escrow.create_pending = app.options.escrow.create_pending;
     }
 
-    let oldPropagateTransactionWithCallback = app.network.propagateTransactionWithCallback;
+    app.network.oldPropagateTransactionWithCallback = app.network.propagateTransactionWithCallback;
     app.network.propagateTransactionWithCallback = function newPropagateTransactionWithCallback(newtx, mycallback) {
 console.log("\n\nESCROW HAS OVERWRITTEN THIS FUNCTION TO DO SOME STUFF FIRST!\n\n");
       newtx.transaction.msg.escrow = this.publickey;
       newtx = app.wallet.signTransaction(newtx);
-      oldPropagateTransactionWithCallback(newtx, mycallback);
+      app.network.oldPropagateTransactionWithCallback(newtx, mycallback);
     }
 
   }
@@ -116,11 +116,11 @@ console.log("GDOPP: " +gamedata.opponent);
         tx.transaction.msg.accept_sig           = accept_sig;
         tx.transaction.msg.players              = [];
         tx.transaction.msg.players.push(this.app.wallet.returnPublicKey());
-    tx = this.app.wallet.signTransaction(tx);
+    tx = app.wallet.signTransaction(tx);
 
 console.log("TESTING ESCROW: " + JSON.stringify(tx.transaction));
 
-    this.app.network.propagateTransaction(tx);
+    app.network.propagateTransaction(tx);
 
   }
 

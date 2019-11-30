@@ -60,6 +60,8 @@ class AppStore extends ModTemplate {
   }
 
   installModule(app) {
+    if (this.app.BROWSER == 1) { return; }
+
     super.installModule(app);
 
     let fs = app.storage.returnFileSystem();
