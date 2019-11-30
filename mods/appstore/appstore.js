@@ -65,6 +65,7 @@ class AppStore extends ModTemplate {
     super.installModule(app);
 
     let fs = app.storage.returnFileSystem();
+
     if (fs != null) {
 
       const archiver = require('archiver');
@@ -88,6 +89,7 @@ class AppStore extends ModTemplate {
 
         let mod_path = path.resolve(__dirname, `modules/${dir***REMOVED***.zip`);
         let output = fs.createWriteStream(mod_path);
+
         var archive = archiver('zip', {
           zlib: { level: 9 ***REMOVED*** // Sets the compression level.
     ***REMOVED***);
@@ -97,21 +99,44 @@ class AppStore extends ModTemplate {
     ***REMOVED***);
 
         archive.pipe(output);
-        archive.directory(`${mods_dir_path***REMOVED***/${dir***REMOVED***/`);
+
+***REMOVED***
+***REMOVED*** recursively go through and find all files in dir
+***REMOVED***
+        function getFiles(dir) {
+          const dirents = fs.readdirSync(dir, { withFileTypes: true ***REMOVED***);
+          const files = dirents.map((dirent) => {
+            const res = path.resolve(dir, dirent.name);
+            return dirent.isDirectory() ? getFiles(res) : res;
+      ***REMOVED***);
+          return Array.prototype.concat(...files);
+    ***REMOVED***
+
+        let file_array = getFiles(`${mods_dir_path***REMOVED***/${dir***REMOVED***/`);
+
+***REMOVED***
+***REMOVED*** append them to the archiver
+***REMOVED***
+        file_array.forEach(file => {
+          let fileReadStream = fs.createReadStream(file);
+          let pathBasename = path.basename(file);
+          archive.append(fileReadStream, { name: pathBasename***REMOVED***);
+    ***REMOVED***);
+
         archive.finalize();
 
 ***REMOVED***
 ***REMOVED*** read in the zip file as base64 and propagate it to the network
 ***REMOVED***
         let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
-console.log("modpath:" + mod_path);
         let zip = fs.readFileSync(mod_path, { encoding: 'base64' ***REMOVED***);
-console.log("ZIP IS: " + zip);
+
         newtx.transaction.msg = {
           module: "AppStore",
           request: "submit module",
           zip: zip,
     ***REMOVED***;
+
         newtx = this.app.wallet.signTransaction(newtx);
         this.app.network.propagateTransaction(newtx);
   ***REMOVED***);
