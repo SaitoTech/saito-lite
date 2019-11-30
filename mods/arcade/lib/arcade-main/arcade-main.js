@@ -74,7 +74,7 @@ console.log("HERE: " + JSON.stringify(tx));
 
   ***REMOVED***);
 ***REMOVED***);
-    
+
     document.querySelector('#play-now').addEventListener('click', function() {
       ArcadeStartGameList.render(app,data);
       ArcadeStartGameList.attachEvents(app,data);  
@@ -84,116 +84,111 @@ console.log("HERE: " + JSON.stringify(tx));
     // join game
     //
     Array.from(document.getElementsByClassName('arcade-game-row-join')).forEach(game => {
-      game.addEventListener('click', (e) => {
+      game.onclick = (e) => {
 
         let game_id = e.currentTarget.id;
-	    game_id = game_id.substring(17);
+        game_id = game_id.substring(17);
 
-        for (let i = 0; i < data.arcade.games.length; i++) {
-          if (data.arcade.games[i].transaction.sig == game_id) {
+***REMOVED***
+***REMOVED*** find our accepted game
+***REMOVED***
+        let { games ***REMOVED*** = data.arcade;
+        let accepted_game = null;
 
-	    if (data.arcade.games[i].transaction.from[0].add == app.wallet.returnPublicKey()) {
+        games.forEach((g) => {
+          if (g.transaction.sig === game_id) accepted_game = g;
+    ***REMOVED***);
 
-	      if (data.arcade.games[i].players.length > 1) {
-		alert("This is your game! Not enough players have joined the game for us to start, but we'll take you to the loading page since at least one other player is waiting for this game to start....");
+        if (!accepted_game) return;
 
+***REMOVED***
+***REMOVED*** check that we're not accepting our own game
+***REMOVED***
+        if (accepted_game.transaction.from[0].add == app.wallet.returnPublicKey()) {
+          if (accepted_game.players.length > 1) {
+            salert(`
+              This is your game! Not enough players have joined the game for us to start,
+              but we'll take you to the loading page since at least one other player is waiting for this game to start....
+            `);
+            ArcadeLoader.render(app, data);
+            ArcadeLoader.attachEvents(app, data);
+      ***REMOVED*** else {
+            salert("You cannot accept your own game!");
+      ***REMOVED***
+    ***REMOVED*** else {
+  ***REMOVED***
+  ***REMOVED*** check if we've already accepted game and have it locally
+  ***REMOVED***
+          if (app.options.games) {
+            let existing_game = app.options.games.find(game => game.id == game_id);
+
+            if (existing_game) {
+              if (existing_game.initializing == 1) {
+                salert("This game is initializing!");
                 ArcadeLoader.render(app, data);
-            	ArcadeLoader.attachEvents(app, data);
-		
-		return;
-	  ***REMOVED***
-
-	      salert("You cannot accept your own game!");
-	      return;
-	***REMOVED***
-
-    ***REMOVED***
-    ***REMOVED***
-    ***REMOVED***
-            if (data.arcade.app.options.games != undefined) {
-              if (data.arcade.app.options.games.length > 0) {
-                for (let z = 0; z < data.arcade.app.options.games.length; z++) {
-                  if (data.arcade.app.options.games[z].id == game_id) {
-
-console.log("THIS IS THE GAME WE R OPENING: ");
-console.log(JSON.stringify(data.arcade.app.options.games[z]));
-
-	    	    if (data.arcade.games[z].initializing == 1) {
-	    	      salert("This game is initializing!");
-
-                      ArcadeLoader.render(app, data);
-            	      ArcadeLoader.attachEvents(app, data);
-
-	    	      return;
-	    	***REMOVED***
-
-
-		    //
-		    // solid game already created
-		    //
-                    app.options.games[z].ts = new Date().getTime();
-                    app.options.games[z].initialize_game_run = 0;
-                    app.storage.saveOptions();
-                    window.location = '/' + app.options.games[z].module.toLowerCase();
-                    return;
-
-              ***REMOVED***
-            ***REMOVED***
+                ArcadeLoader.attachEvents(app, data);
+                return;
+          ***REMOVED*** else {
+        ***REMOVED***
+        ***REMOVED*** solid game already created
+        ***REMOVED***
+                existing_game.ts = new Date().getTime();
+                existing_game.initialize_game_run = 0;
+                app.storage.saveOptions();
+                window.location = '/' + existing_game.module.toLowerCase();
+                return;
           ***REMOVED***
         ***REMOVED***
+      ***REMOVED***
 
-
-	    //
-	    // check with server to see if this game is taken yet
-	    //
-    	    data.arcade.sendPeerDatabaseRequest("arcade", "games", "is_game_already_accepted", data.arcade.games[i].id, null, function(res) {
+  ***REMOVED***
+  ***REMOVED*** check with server to see if this game is taken yet
+  ***REMOVED***
+          data.arcade.sendPeerDatabaseRequest(
+            "arcade",
+            "games",
+            "is_game_already_accepted",
+            accepted_game.id,
+            null,
+            (res) => {
 
 console.log("CHECKING TO SEE IF THERE IS STILL SPACE IN THE GAME: " + JSON.stringify(res.rows));
+              if (res.rows == undefined) {
+                console.log("ERROR 458103: cannot fetch information on whether game already accepted!");
+                return;
+          ***REMOVED***
 
-      	      if (res.rows == undefined) { 
-		console.log("ERROR 458103: cannot fetch information on whether game already accepted!");
-		return;
-	  ***REMOVED***
-      	      if (res.rows.length > 0) {
-        	if (res.rows[0].game_still_open == 1) {
+              if (res.rows.length > 0) {
+                if (res.rows[0].game_still_open == 1) {
+          ***REMOVED***
+          ***REMOVED*** data re: game in form of tx
+          ***REMOVED***
+                  let { transaction ***REMOVED*** = accepted_game;
+                  let game_tx = Object.assign({ msg: { players_array: null ***REMOVED*** ***REMOVED***, transaction);
 
-		  //
-		  // data re: game in form of tx
-		  //
-		  if (data.arcade.games[i].transaction != undefined) {
-		    if (data.arcade.games[i].transaction.msg != undefined) {
-		      if (data.arcade.games[i].transaction.msg.players_array != undefined) {
-			let players = data.arcade.games[i].transaction.msg.players_array.split("_");
-           	        if (players.length >= 2) {
-			  data.arcade.sendMultiplayerAcceptRequest(app, data, data.arcade.games[i]);
-			  return;
-			***REMOVED***
-		  ***REMOVED***
-		***REMOVED***
-		  ***REMOVED***
+                  if (game_tx.msg.players_array) {
+                    let players = transaction.msg.players_array.split("_");
+                    if (players.length >= 2) {
+                      data.arcade.sendMultiplayerAcceptRequest(app, data, accepted_game);
+                      return;
+                ***REMOVED***
+              ***REMOVED***
 
-		  //
-		  // sanity check
-		  //
-console.log("CHECKING OPTIONS WHEN INVITING: " + JSON.stringify(data.arcade.games[i]));
+          ***REMOVED***
+          ***REMOVED*** sanity check
+          ***REMOVED***
+  console.log("CHECKING OPTIONS WHEN INVITING: " + JSON.stringify(accepted_game));
 
-
-           	  data.arcade.sendInviteRequest(app, data, data.arcade.games[i]);
-            	  ArcadeLoader.render(app, data);
-            	  ArcadeLoader.attachEvents(app, data);
-
-	    ***REMOVED*** else {
-
-		  salert("Sorry... game already accepted. Your list of open games will update shortly on next block!");
-
-		***REMOVED***
-      	  ***REMOVED***
-    	***REMOVED***);
-
-            return;
-      ***REMOVED***
+                  data.arcade.sendInviteRequest(app, data, accepted_game);
+                  ArcadeLoader.render(app, data);
+                  ArcadeLoader.attachEvents(app, data);
+            ***REMOVED*** else {
+                  salert("Sorry... game already accepted. Your list of open games will update shortly on next block!");
+            ***REMOVED***
+          ***REMOVED***
+        ***REMOVED***);
     ***REMOVED***
-  ***REMOVED***);
+  ***REMOVED***;
 ***REMOVED***);
   ***REMOVED***
 
