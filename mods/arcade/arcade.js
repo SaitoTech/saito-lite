@@ -758,7 +758,7 @@ console.log(sql);
 console.log(params);
 
     try {
-      let resp = await this.app.storage.executeDatabase(sql, params, "arcade"); 
+      let resp = await this.app.storage.executeDatabase(sql, params, "arcade");
 ***REMOVED*** catch (err) {
       console.log(err);
 ***REMOVED***

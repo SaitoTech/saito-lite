@@ -30,6 +30,7 @@ const path = require('path');
         /\.md$/,
         /\.pdf$/,
         /\.sh$/,
+        /\.zip$/,
         /\/web\//,
         /\/www\//
     ],

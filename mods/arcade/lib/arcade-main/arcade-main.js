@@ -34,29 +34,31 @@ module.exports = ArcadeMain = {
     data.arcade.games.forEach(tx => {
 
       let txmsg = tx.returnMessage();
-      let game_id = txmsg.game_id;
+      let { game_id ***REMOVED*** = txmsg;
+
       let button_text = {***REMOVED***;
       button_text.main = "JOIN";
 
-      if (data.arcade.app.options.games != undefined) {
-        for (let z = 0; z < data.arcade.app.options.games.length; z++) {
-          if (data.arcade.app.options.games[z].initializing == 0) {
+      if (app.options.games) {
+        app.options.games.forEach(game => {
+          if (game.initializing == 0 && game.game_id == game_id)
             button_text.main = "CONTINUE";
-      ***REMOVED***
-    ***REMOVED***
+    ***REMOVED***);
   ***REMOVED***
-      
-      for (let y = 0; y < txmsg.players.length; y++) {
-        if(data.arcade.app.wallet.returnPublicKey() == txmsg.players[y]) {
-          button_text.delete = "DELETE";
-    ***REMOVED***
+
+      //
+      // some games don't have players attribute
+      //
+      if (txmsg.players) {
+        txmsg.players.forEach(player => {
+          if (app.wallet.returnPublicKey() == player)
+            button_text.delete = "DELETE";
+    ***REMOVED***);
   ***REMOVED***
 
       document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(app, tx, button_text);
       console.log(button_text);
 ***REMOVED***);
-
-    
 
   ***REMOVED***,
 
@@ -83,7 +85,7 @@ module.exports = ArcadeMain = {
 
     document.querySelector('#play-now').addEventListener('click', function() {
       ArcadeStartGameList.render(app,data);
-      ArcadeStartGameList.attachEvents(app,data);  
+      ArcadeStartGameList.attachEvents(app,data);
 ***REMOVED***);
 
     //
@@ -131,7 +133,7 @@ module.exports = ArcadeMain = {
             if (existing_game) {
               if (existing_game.initializing == 1) {
                 salert("This game is initializing!");
-                
+
                 ArcadeLoader.render(app, data);
                 ArcadeLoader.attachEvents(app, data);
                 return;

@@ -175,17 +175,17 @@ console.log("QUEUE: " + this.game.queue);
   attachEvents() {
 
     $('#move_accept').off();
-    $('#move_accept').on('click', function () {
+    $('#move_accept').on('click', () => {
 
       console.log('send move transaction and wait for reply.');
 
       var data = {***REMOVED***;
-      data.white = this_chess.game.white;
-      data.black = this_chess.game.black;
-      data.id = this_chess.game.id;
-      data.position = this_chess.engine.fen();
-      data.move = this_chess.game.move;
-      this_chess.endTurn(data);
+      data.white = this.game.white;
+      data.black = this.game.black;
+      data.id = this.game.id;
+      data.position = this.engine.fen();
+      data.move = this.game.move;
+      this.endTurn(data);
 
       $('#move_accept').prop('disabled', true);
       $('#move_accept').removeClass('green');
@@ -197,9 +197,9 @@ console.log("QUEUE: " + this.game.queue);
 
 
     $('#move_reject').off();
-    $('#move_reject').on('click', function () {
+    $('#move_reject').on('click', () => {
 
-      this_chess.setBoard(this_chess.game.position);
+      this.setBoard(this.game.position);
       $('#move_accept').prop('disabled', true);
       $('#move_accept').removeClass('green');
 
@@ -208,9 +208,9 @@ console.log("QUEUE: " + this.game.queue);
 
 ***REMOVED***);
 
-    $(window).resize(function () {
-      if(this_chess) {
-        this_chess.board.resize();
+    $(window).resize(() => {
+      if(this) {
+        this.board.resize();
   ***REMOVED***
 ***REMOVED***);
   ***REMOVED***
