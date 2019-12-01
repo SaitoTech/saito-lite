@@ -7,6 +7,8 @@ body {
     font-size: 13px;
     padding: 0;
     margin: 0;
+    background: linear-gradient(-45deg, #333 50%, #1e1e1f 100%);
+    overflow: hidden;
 ***REMOVED***
 
 h1 {
@@ -27,15 +29,19 @@ h1 {
     grid-area: header;
     border-bottom: 1px solid #a5a5a5;
     font-size: 2em;
-    height: 3.1rem;
+    height: 2.5em;
 ***REMOVED***
 
 .logo {
-    width: 35px;
-    margin-top: 10px;
-    margin-left: 1.3em;
-    margin-right: 0.35em;
+    width: 120px;
+    margin: 12px;
     float: left;
+***REMOVED***
+
+.header a {
+    color: #fff;
+    text-decoration: none;
+    line-height: 70px;
 ***REMOVED***
 
 .board-space {
@@ -70,8 +76,8 @@ h1 {
     grid-template-columns: 50% 50%;
     max-height: 701px;
     grid-template-rows: 100%;
-    background-color: #fff;
-    color: #555;
+    padding: 0 1em;
+    background: linear-gradient(-45deg, #333 50%, #1e1e1f 100%);    color: #555;
 ***REMOVED***
 
 .column {
@@ -114,7 +120,7 @@ h1 {
 ***REMOVED***
 
 #status_opponent {
-    font-size: 1.2vw;
+    font-size: 1.2vw; 
     overflow: hidden;
     display: block;
 ***REMOVED***
@@ -122,6 +128,7 @@ h1 {
 #opponent_id {
     font-family: 'Courier New', Courier, monospace;
     font-size: 1.2vw;
+    text-overflow: ellipsis;
 ***REMOVED***
 
 #status_log {
@@ -167,7 +174,7 @@ img.captured {
 
 @media only screen and (max-width: 900px) {
     .logo {
-        width: 25px;
+        width: 76px;
         margin-top: 5px;
         margin-left: 5x;
         margin-right: 10px;
@@ -177,10 +184,16 @@ img.captured {
         font-size: 20px;
         height: 40px;
 ***REMOVED***
+
+    .header a {
+        line-height: 36px;
+***REMOVED***
+
     .row {
         grid-template-columns: 100%;
         grid-template-rows: auto 60%;
-        margin-bottom: 
+        position: absolute;
+        top: 4em; 
 ***REMOVED***
     .column{
         border-radius: 0;
@@ -225,4 +238,8 @@ img.captured {
 
 #home a i::before {
     color: #ffffff;
+***REMOVED***
+
+.controls.column p {
+    margin: 0 0 6px 0;
 ***REMOVED***
