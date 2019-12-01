@@ -8,6 +8,7 @@ logs/*
 
 config/options
 config/options.*
+config/modules.config.js
 
 .DS_Store
 node_modules
