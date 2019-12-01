@@ -1,6 +1,5 @@
 var saito = require('../../lib/saito/saito');
 var GameTemplate = require('../../lib/templates/gametemplate');
-const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
 
 //////////////////
 // CONSTRUCTOR  //

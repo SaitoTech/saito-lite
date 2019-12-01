@@ -319,6 +319,18 @@ console.log("PUSHING BACK: " + JSON.stringify(tx.transaction));
 ***REMOVED***
   ***REMOVED***
 
+  removeGameFromOpenList(tx) {
+    this.games = this.games.filter(game => game.transaction.sig == tx.transaction.sig);
+
+    let data = {***REMOVED***;
+    data.arcade = this;
+
+    if (this.browser_active == 1) {
+      ArcadeMain.render(this.app, data);
+      ArcadeMain.attachEvents(this.app, data);
+***REMOVED***
+  ***REMOVED***
+
 
   async onConfirmation(blk, tx, conf, app) {
 
@@ -333,6 +345,14 @@ console.log("PUSHING BACK: " + JSON.stringify(tx.transaction));
       if (txmsg.module == "Arcade" && txmsg.request == "open") {
         this.addGameToOpenList(tx);
         this.receiveOpenRequest(blk, tx, conf, app);
+  ***REMOVED***
+
+      //
+      // cancel open games
+      //
+      if (txmsg.module == "Arcade" && txmsg.request == "close") {
+        this.removeGameFromOpenList(tx);
+        this.receiveCloseRequest(blk, tx, conf, app);
   ***REMOVED***
 
       //
@@ -597,10 +617,12 @@ console.log("RENDERING LOADER!");
     return;
 
   ***REMOVED***
+
   sendOpenRequest(app, data, gamedata) {
     let tx = this.createOpenTransaction(gamedata);
     this.app.network.propagateTransaction(tx);
   ***REMOVED***
+
   createOpenTransaction(gamedata) {
 
     let ts = new Date().getTime();
@@ -624,6 +646,12 @@ console.log("RENDERING LOADER!");
 
   ***REMOVED***
 
+  async receiveCloseRequest(blk, tx, conf, app) {
+    let txmsg = tx.returnMessage();
+    let sql = `UPDATE games SET status = $status WHERE game_id = $game_id`
+    let params = { $status: 'close', $game_id: txmsg.sig ***REMOVED***;
+    let resp = await app.storage.executeDatabase(sql, params, "arcade");
+  ***REMOVED***
 
 
 
