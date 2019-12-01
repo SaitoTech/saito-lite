@@ -153,6 +153,11 @@ class Arcade extends ModTemplate {
       games.forEach(game => {
         let game_tx = new saito.transaction();
 
+        //
+        // ignore games that are over
+        //
+        if (game.over) return;
+
         if (game.players) {
           game_tx.transaction.to = game.players.map(player => new saito.slip(player));
           game_tx.transaction.from = game.players.map(player => new saito.slip(player));
@@ -222,19 +227,19 @@ class Arcade extends ModTemplate {
     //
     // load open games from server
     //
-    this.sendPeerDatabaseRequest("arcade", "games", "*", "status = 'open'", null, function(res, data) {
-      if (res.rows == undefined) { return; }
-      if (res.rows.length > 0) {
-        for (let i = 0; i < res.rows.length; i++) {
-          let tx = new saito.transaction(JSON.parse(res.rows[i].tx));
+    this.sendPeerDatabaseRequest("arcade", "games", "*", "status = 'open'", null, (res, data) => {
+      if (res.rows) {
+        res.rows.forEach(row => {
+          let tx = new saito.transaction(JSON.parse(row.tx));
 
-          tx.transaction.msg.players_needed = res.rows[i].players_needed;
-          tx.transaction.msg.players_available = res.rows[i].players_available;
-          tx.transaction.msg.players_array = res.rows[i].players_array;
+          tx.transaction.msg.players_needed = row.players_needed;
+          tx.transaction.msg.players_available = row.players_available;
+          tx.transaction.msg.players_array = row.players_array;
 
 console.log("ADDING OPEN GAME FROM SERVER: " + JSON.stringify(tx.transaction));
-          arcade_self.addGameToOpenList(tx);
-        }
+          this.addGameToOpenList(tx);
+        });
+
       }
     });
 
@@ -242,13 +247,24 @@ console.log("ADDING OPEN GAME FROM SERVER: " + JSON.stringify(tx.transaction));
     //
     // load active games for observer mode
     //
-    this.sendPeerDatabaseRequest("arcade", "gamestate", "DISTINCT game_id, module, player, players_array", "1 = 1 GROUP BY game_id ORDER BY last_move DESC LIMIT 50", null, function(res) {
-      if (res.rows == undefined) { return; }
-      if (res.rows.length > 0) {
+    this.sendPeerDatabaseRequest(
+      "arcade",
+      "gamestate",
+      "DISTINCT game_id, module, player, players_array",
+      "1 = 1 GROUP BY game_id ORDER BY last_move DESC LIMIT 50",
+      null,
+      (res) => {
+      if (res.rows) {
 console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
-        for (let i = 0; i < res.rows.length; i++) {
-          arcade_self.addGameToObserverList({ game_id : res.rows[i].game_id, module : res.rows[i].module , players_array : res.rows[i].players_array, publickey : res.rows[i].player });
-        }
+        res.rows.forEach(row => {
+          let { game_id, module, players_array, player } = row;
+          this.addGameToObserverList({
+            game_id,
+            module,
+            players_array,
+            publickey,
+          });
+        });
       }
     });
 
@@ -822,17 +838,15 @@ console.log("LOADED THE GAME: " + txmsg.game);
 
   }
 
-
-
   async receiveGameoverRequest(blk, tx, conf, app) {
-
+    let txmsg = tx.returnMessage();
     let sql = "UPDATE games SET status = $status, winner = $winner WHERE game_id = $game_id";
     let params = {
-      $state: 'over',
+      $status: 'over',
       $game_id : txmsg.game_id,
       $winner  : txmsg.winner
     }
-    await arcade_self.app.storage.executeDatabase(sql, params, "arcade");
+    await this.app.storage.executeDatabase(sql, params, "arcade");
 
   }
 
