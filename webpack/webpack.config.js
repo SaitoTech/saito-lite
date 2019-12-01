@@ -30,6 +30,7 @@ module.exports = {
         /\.md$/,
         /\.pdf$/,
         /\.sh$/,
+        /\.zip$/,
         /\/web\//,
         /\/www\//
     ],

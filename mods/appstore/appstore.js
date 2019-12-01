@@ -124,7 +124,13 @@ class AppStore extends ModTemplate {
         });
 
         archive.finalize();
+      });
 
+      //
+      // introduce a second loop to avoid data races with archiver
+      //
+      dirs.forEach(dir => {
+        let mod_path = path.resolve(__dirname, `modules/${dir}.zip`);
         //
         // read in the zip file as base64 and propagate it to the network
         //
