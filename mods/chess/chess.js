@@ -1,4 +1,5 @@
 const saito = require('../../lib/saito/saito');
+const Header = require('../../lib/ui/header/header');
 const GameTemplate = require('../../lib/templates/gametemplate');
 var this_chess = null;
 var chess = null;
@@ -91,7 +92,7 @@ class Chessgame extends GameTemplate {
         }
         else {
           try {
-            opponent = await this.app.keys.fetchIdentifierPromise(opponent);
+            opponent = await this.app.keychain.fetchIdentifierPromise(opponent);
           }
           catch (err) {
             console.log(err);
@@ -169,7 +170,8 @@ console.log("QUEUE: " + this.game.queue);
     this.game.turn = [data_to_send];
     this.moves = [];
     this.sendMessage("game", extra);
-
+    this.updateLog(data.move, 999);
+    this.updateStatusMessage();
   }
 
   attachEvents() {
@@ -186,6 +188,7 @@ console.log("QUEUE: " + this.game.queue);
       data.position = this.engine.fen();
       data.move = this.game.move;
       this.endTurn(data);
+    
 
       $('#move_accept').prop('disabled', true);
       $('#move_accept').removeClass('green');
@@ -540,7 +543,6 @@ console.log("QUEUE: " + this.game.queue);
       </form>
     `;
   }
-
 }
 module.exports = Chessgame;
 
