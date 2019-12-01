@@ -627,6 +627,13 @@ option {
   background: none;
 ***REMOVED***
 
+/** ARCADE INIT **/
+
+.arcade-initialize-game-container {
+  display: grid;
+  grid-gap: 1em;
+***REMOVED***
+
 /** CHAT STYLING **/
 
 .chat-row {
