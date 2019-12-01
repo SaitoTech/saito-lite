@@ -536,10 +536,10 @@ console.log("INITIALIZE GAME 2");
           </div>
         </div>
         <div class="rack" id="rack">
+        <img id="shuffle" class="shuffle" src="/wordblocks/img/reload.png">
           <div class="tiles" id="tiles">
             ${tile_html***REMOVED***
           </div>
-          <img id="shuffle" class="shuffle" src="/wordblocks/img/reload.png">
         </div>
         <div class="score" id="score">loading...</div>
       </div
