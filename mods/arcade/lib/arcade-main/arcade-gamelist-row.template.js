@@ -18,11 +18,11 @@ module.exports = ArcadeGameListRowTemplate = (app, tx, button_text) => {
     publickeys.push(from[0].add);
     players.forEach(player => {
       if (!publickeys.includes(player))
-        publickeys.push(players)
+        publickeys.push(player);
     });
   }
 
-  let identicons = players.map(publickey => `<img class="identicon" src="${app.keys.returnIdenticon(publickey)}">`).join("");
+  let identicons = publickeys.map(publickey => `<img class="identicon" src="${app.keys.returnIdenticon(publickey)}">`).join("");
 
   var button_html = '';
   if (button_text.delete) {
