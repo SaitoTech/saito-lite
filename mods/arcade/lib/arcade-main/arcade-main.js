@@ -40,19 +40,13 @@ module.exports = ArcadeMain = {
       button_text.main = "JOIN";
 
       if (app.options.games) {
-        app.options.games.forEach(game => {
-          if (game.initializing == 0 && game.game_id == game_id)
+        let { games } = app.options;
+        games.forEach(game => {
+          if (game.initializing == 0 && game.id == game_id) {
             button_text.main = "CONTINUE";
-        });
-      }
-
-      //
-      // some games don't have players attribute
-      //
-      if (txmsg.players) {
-        txmsg.players.forEach(player => {
-          if (app.wallet.returnPublicKey() == player)
-            button_text.delete = "DELETE";
+            if (game.players.some(player => app.wallet.returnPublicKey() == player))
+              button_text.delete = "DELETE";
+          }
         });
       }
 
@@ -95,7 +89,7 @@ module.exports = ArcadeMain = {
       game.onclick = (e) => {
 
         let game_id = e.currentTarget.id;
-        game_id = game_id.substring(17);
+        game_id = game_id.split('-').pop();
 
         //
         // find our accepted game
@@ -113,7 +107,8 @@ module.exports = ArcadeMain = {
         // check that we're not accepting our own game
         //
         if (accepted_game.transaction.from[0].add == app.wallet.returnPublicKey()) {
-          if (accepted_game.players.length > 1) {
+          let { players } = accepted_game.returnMessage();
+          if (players.length > 1) {
             salert(`
               This is your game! Not enough players have joined the game for us to start,
               but we'll take you to the loading page since at least one other player is waiting for this game to start....
@@ -128,9 +123,9 @@ module.exports = ArcadeMain = {
           // check if we've already accepted game and have it locally
           //
           if (app.options.games) {
-            let existing_game = app.options.games.find(game => game.id == game_id);
+            let existing_game = app.options.games.find(g => g.id == game_id);
 
-            if (existing_game) {
+            if (existing_game != -1 && existing_game) {
               if (existing_game.initializing == 1) {
                 salert("This game is initializing!");
 
@@ -199,12 +194,25 @@ console.log("CHECKING TO SEE IF THERE IS STILL SPACE IN THE GAME: " + JSON.strin
         }
       };
     });
+
     Array.from(document.getElementsByClassName('arcade-game-row-delete')).forEach(game => {
-      game.addEventListener('click', (e) => {
+      game.onclick = function(e) {
         let game_id = e.currentTarget.id;
-	    game_id = game_id.substring(17);
+        game_id = game_id.split('-').pop();
         salert("Delete game id: " + game_id);
-      });
+
+        if (app.options.games) {
+          let { games } = app.options;
+          let resigned_game = games.find(game => game.id == game_id);
+          if (resigned_game != -1) {
+            let game_mod = app.modules.returnModule(resigned_game.module);
+            game_mod.resignGame(game_id);
+          }
+
+          document.getElementById(`arcade-gamelist`)
+                  .removeChild(document.getElementById(`arcade-game-${game_id}`));
+        }
+      };
     });
   }
 
