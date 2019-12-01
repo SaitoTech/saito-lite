@@ -559,6 +559,11 @@ option {
   grid-template-columns: 1fr 1fr 1fr;
 ***REMOVED***
 
+.start-game-btn {
+  text-transform: capitalize;
+  margin: 3em 0;
+***REMOVED***
+
 .start-game {
   background: #0009;
   padding: 1em;
