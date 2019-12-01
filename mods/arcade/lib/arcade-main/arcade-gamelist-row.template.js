@@ -1,4 +1,4 @@
-module.exports = ArcadeGameListRowTemplate = (app, tx, button_text) => {
+module.exports = ArcadeGameListRowTemplate = (app, tx, button_map) => {
 
   let { sig, from, to, msg } = tx.transaction;
   let { players_array, options_html, game } = msg;
@@ -24,11 +24,9 @@ module.exports = ArcadeGameListRowTemplate = (app, tx, button_text) => {
 
   let identicons = publickeys.map(publickey => `<img class="identicon" src="${app.keys.returnIdenticon(publickey)}">`).join("");
 
-  var button_html = '';
-  if (button_text.delete) {
-    button_html += `<button class="arcade-game-row-delete" id="arcade-game-delete-row-${sig}">${button_text.delete}</button>`;
-  }
-  button_html += `<button class="arcade-game-row-join" id="arcade-game-join-row-${sig}">${button_text.main}</button>`;
+  var button_html = Object.entries(button_map).map(([key, value]) => {
+    return `<button class="arcade-game-row-${key}" id="arcade-game-${key}-row-${sig}">${value}</button>`
+  }).join('');
 
   return `
     <div class="arcade-game-invitation" id="arcade-game-${sig}">

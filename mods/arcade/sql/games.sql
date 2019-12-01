@@ -13,5 +13,6 @@ CREATE TABLE IF NOT EXISTS games (
   created_at 	INTEGER,
   expires_at 	INTEGER,
   winner 	TEXT,
+  UNIQUE (game_id),
   PRIMARY KEY (id ASC)
 );

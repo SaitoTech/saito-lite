@@ -34,18 +34,26 @@ module.exports = ArcadeMain = {
     data.arcade.games.forEach(tx => {
 
       let txmsg = tx.returnMessage();
+      let publickey = app.wallet.returnPublicKey();
       let { game_id } = txmsg;
 
       let button_text = {};
-      button_text.main = "JOIN";
+      button_text.join = "JOIN";
+
+      if (tx.isFrom(publickey))
+        button_text.cancel = "CANCEL";
 
       if (app.options.games) {
         let { games } = app.options;
+
         games.forEach(game => {
           if (game.initializing == 0 && game.id == game_id) {
-            button_text.main = "CONTINUE";
-            if (game.players.some(player => app.wallet.returnPublicKey() == player))
+            button_text.continue = "CONTINUE";
+            delete button_text.join;
+
+            if (game.players.some(player => publickey == player))
               button_text.delete = "DELETE";
+              delete button_text.cancel;
           }
         });
       }
@@ -196,10 +204,10 @@ console.log("CHECKING TO SEE IF THERE IS STILL SPACE IN THE GAME: " + JSON.strin
     });
 
     Array.from(document.getElementsByClassName('arcade-game-row-delete')).forEach(game => {
-      game.onclick = function(e) {
+      game.onclick = (e) => {
         let game_id = e.currentTarget.id;
         game_id = game_id.split('-').pop();
-        salert("Delete game id: " + game_id);
+        salert(`Delete game id: ${game_id}`);
 
         if (app.options.games) {
           let { games } = app.options;
@@ -209,11 +217,37 @@ console.log("CHECKING TO SEE IF THERE IS STILL SPACE IN THE GAME: " + JSON.strin
             game_mod.resignGame(game_id);
           }
 
-          document.getElementById(`arcade-gamelist`)
-                  .removeChild(document.getElementById(`arcade-game-${game_id}`));
+          this.removeGameFromList(game_id);
         }
       };
     });
+
+    Array.from(document.getElementsByClassName('arcade-game-row-cancel')).forEach(game => {
+      game.onclick = (e) => {
+        let game_id = e.currentTarget.id;
+        sig = game_id.split('-').pop();
+        salert(`Cancel game id: ${game_id}`);
+
+        let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
+        let msg = {
+          sig: sig,
+          status: 'close',
+          request: 'close',
+          module: 'Arcade'
+        }
+
+        newtx.transaction.msg = msg;
+        newtx = app.wallet.signTransaction(newtx);
+        app.network.propagateTransaction(newtx);
+
+        this.removeGameFromList(game_id);
+      }
+    });
+  },
+
+  removeGameFromList(game_id) {
+    document.getElementById(`arcade-gamelist`)
+                  .removeChild(document.getElementById(`arcade-game-${game_id}`));
   }
 
 }
