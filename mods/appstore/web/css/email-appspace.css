@@ -77,6 +77,12 @@
     /* margin-left: 10px; */
 }
 
+.appstore-app-item-publisher {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 150px;
+}
+
 .appstore-app-install-btn {
     padding: 5px 45px 5px 45px;
     border-radius:20px;
