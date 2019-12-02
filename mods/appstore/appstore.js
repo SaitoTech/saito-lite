@@ -10,8 +10,8 @@ class AppStore extends ModTemplate {
   constructor(app) {
     super(app);
 
-    this.app            = app;
-    this.name           = "AppStore";
+    this.app = app;
+    this.name = "AppStore";
   ***REMOVED***
 
 
@@ -20,8 +20,8 @@ class AppStore extends ModTemplate {
   respondTo(type) {
     if (type == 'email-appspace') {
       let obj = {***REMOVED***;
-	  obj.render = this.renderEmail;
-	  obj.attachEvents = this.attachEventsEmail;
+          obj.render = this.renderEmail;
+          obj.attachEvents = this.attachEventsEmail;
       return obj;
 ***REMOVED***
     return null;
@@ -87,7 +87,7 @@ class AppStore extends ModTemplate {
       //
       dirs.forEach(dir => {
 
-        let mod_path = path.resolve(__dirname, `modules/${dir***REMOVED***.zip`);
+        let mod_path = path.resolve(__dirname, `mods/${dir***REMOVED***.zip`);
         let output = fs.createWriteStream(mod_path);
 
         var archive = archiver('zip', {
@@ -123,28 +123,33 @@ class AppStore extends ModTemplate {
           archive.append(fileReadStream, { name: pathBasename***REMOVED***);
     ***REMOVED***);
 
+***REMOVED*** listen for all archive data to be written
+***REMOVED*** 'close' event is fired only when a file descriptor is involved
+        output.on('close', function() {
+          console.log(archive.pointer() + ' total bytes');
+
+          let mod_zip_filename = path.basename(this.path);
+          let mod_path = path.resolve(__dirname, `mods/${mod_zip_filename***REMOVED***`);
+  ***REMOVED*** let zip_text = fs.readFileSync(mod_path, 'utf-8');
+  ***REMOVED*** let name, description = this.getNameAndDescriptionFromZip(zip_text);
+  ***REMOVED***
+  ***REMOVED*** read in the zip file as base64 and propagate it to the network
+  ***REMOVED***
+          let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
+          let zip = fs.readFileSync(mod_path, { encoding: 'binary' ***REMOVED***);
+
+          newtx.transaction.msg = {
+            module: "AppStore",
+            request: "submit module",
+            zip,
+            name: dir,
+      ***REMOVED***;
+
+          newtx = app.wallet.signTransaction(newtx);
+          app.network.propagateTransaction(newtx);
+    ***REMOVED***);
+
         archive.finalize();
-  ***REMOVED***);
-
-      //
-      // introduce a second loop to avoid data races with archiver
-      //
-      dirs.forEach(dir => {
-        let mod_path = path.resolve(__dirname, `modules/${dir***REMOVED***.zip`);
-***REMOVED***
-***REMOVED*** read in the zip file as base64 and propagate it to the network
-***REMOVED***
-        let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
-        let zip = fs.readFileSync(mod_path, { encoding: 'base64' ***REMOVED***);
-
-        newtx.transaction.msg = {
-          module: "AppStore",
-          request: "submit module",
-          zip: zip,
-    ***REMOVED***;
-
-        newtx = this.app.wallet.signTransaction(newtx);
-        this.app.network.propagateTransaction(newtx);
   ***REMOVED***);
 
 ***REMOVED***
@@ -172,23 +177,81 @@ class AppStore extends ModTemplate {
 ***REMOVED***
   ***REMOVED***
 
+  async getNameAndDescriptionFromZip(zip_bin, zip_path) {
+    const fs = this.app.storage.returnFileSystem();
+    const path = require('path');
+    const unzipper = require('unzipper');
 
-  submitModule(blk, tx) {
+    fs.writeFileSync(path.resolve(__dirname, zip_path), zip_bin, { encoding: 'binary' ***REMOVED***);
+
+    let name = 'Unknown Module';
+    let description = 'unknown';
+
+    try {
+      const directory = await unzipper.Open.file(path.resolve(__dirname, zip_path));
+      // const file =
+      let promises = directory.files.map(async file => {
+        let content = await file.buffer();
+        let zip_text = content.toString('utf-8')
+
+***REMOVED***
+***REMOVED*** get name and description
+        let getNameRegex = RegExp('[\n\r]*this.name\s*([^\n\r]*)');
+        let getDescriptionRegex = RegExp('[\n\r]*this.description\s*([^\n\r]*)');
+        let cleanupRegex = RegExp('=(.*)');
+
+        let nameMatch = zip_text.match(getNameRegex);
+        let descriptionMatch = zip_text.match(getDescriptionRegex);
+
+        if (!nameMatch) { return; ***REMOVED***
+        if (nameMatch[1].length > 30) { return; ***REMOVED***
+        if (nameMatch[1] == "this.name\s*([^\n\r]*)');") { return; ***REMOVED***
+
+        function cleanString(str) {
+          str = str.substring(1, str.length - 1);
+          return [...str].map(char => {
+            if (char == "\'" || char == "\"" || char == ";") return ''
+            return char
+      ***REMOVED***).join('');
+    ***REMOVED***
+
+        let nameCleanup = nameMatch[1].match(cleanupRegex);
+        if (!nameCleanup) { return; ***REMOVED***
+        name = cleanString(nameCleanup[1]);
+
+        if (!descriptionMatch) { return; ***REMOVED***
+        let descriptionCleanup = descriptionMatch[1].match(cleanupRegex);
+        if (!descriptionCleanup) { return; ***REMOVED***
+        description = cleanString(descriptionCleanup[1]);
+
+  ***REMOVED***);
+
+      await Promise.all(promises);
+***REMOVED*** catch(err) {
+      console.log(err);
+***REMOVED***
+
+    return { name, description ***REMOVED***;
+  ***REMOVED***
+
+
+  async submitModule(blk, tx) {
+    // const path = require('path');
 
     let sql = `INSERT INTO modules (name, description, version, publickey, unixtime, bid, bsh, tx)
     VALUES ($name, $description, $version, $publickey, $unixtime, $bid, $bsh, $tx)`;
 
     let { from, sig, ts ***REMOVED*** = tx.transaction;
+    // const fs = this.app.storage.returnFileSystem();
 
     // should happen locally from ZIP
     let { zip ***REMOVED*** = tx.returnMessage();
 
-    let name    = "Module Name";
-    let description = "Module Description"
+    let { name, description ***REMOVED*** = await this.getNameAndDescriptionFromZip(zip, `mods/module-${sig***REMOVED***-${ts***REMOVED***.zip`);
 
     let params = {
       $name:		name,
-      $description:	description,
+      $description:	'',
       $version:		`${ts***REMOVED***-${sig***REMOVED***`,
       $publickey:	from[0].add,
       $unixtime:	ts,
@@ -222,16 +285,13 @@ console.log("request bundle: " + JSON.stringify(module_list));
 
     for (let i = 0; i < module_list.length; i++) {
       if (module_list[i].version != "") {
-	module_versions.push(module_list[i].version);
+        module_versions.push(module_list[i].version);
   ***REMOVED*** else {
-	if (module_list[i].name != "") {
-	  module_names.push(module_list[i].name);
+        if (module_list[i].name != "") {
+          module_names.push(module_list[i].name);
     ***REMOVED***
   ***REMOVED***
 ***REMOVED***
-
-console.log("VER: " + JSON.stringify(module_versions));
-console.log("NAMES: " + JSON.stringify(module_names));
 
     //
     // TO-DO single query, not loop
@@ -241,18 +301,14 @@ console.log("NAMES: " + JSON.stringify(module_names));
       params = { $version : module_versions[i] ***REMOVED***;
       let rows = await this.app.storage.queryDatabase(sql, params, "appstore");
 
-console.log(sql);
-console.log(params);
-console.log(rows);
-
       for (let i = 0; i < rows.length; i++) {
         let tx = JSON.parse(rows[i].tx);
         modules_selected.push(
-	  {
-	    name : rows[i].name ,
-	    description : rows[i].description ,
-	    zip : tx.msg.zip 
-	  ***REMOVED***
+          {
+            name : rows[i].name ,
+            description : rows[i].description ,
+            zip : tx.msg.zip
+      ***REMOVED***
         );
   ***REMOVED***
 ***REMOVED***
@@ -269,11 +325,11 @@ console.log(rows);
       for (let i = 0; i < rows.length; i++) {
         let tx = JSON.parse(rows[i].tx);
         modules_selected.push(
-	  {
-	    name : rows[i].name ,
-	    description : rows[i].description ,
-	    zip : tx.msg.zip 
-	  ***REMOVED***
+          {
+            name : rows[i].name ,
+            description : rows[i].description ,
+            zip : tx.msg.zip
+      ***REMOVED***
         );
   ***REMOVED***
 ***REMOVED***
@@ -300,7 +356,8 @@ console.log("MOD SEL: " + JSON.stringify(modules_selected));
     // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
     //
     //
-    //
+
+    let bundle_filename = await bundler(modules_selected);
 
 
     //
@@ -323,12 +380,105 @@ console.log("MOD SEL: " + JSON.stringify(modules_selected));
     const path = require('path');
     let fs = this.app.storage.returnFileSystem();
     if (fs) {
-      let bundle_base64 = fs.readFileSync(path.resolve(__dirname, `bundler/dist/${filename***REMOVED***`), { encoding: 'base64' ***REMOVED***);
+      let bundle_bin = fs.readFileSync(path.resolve(__dirname, `bundler/dist/${filename***REMOVED***`), { encoding: 'binary' ***REMOVED***);
       let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
-      newtx.transaction.msg = { module: "AppStore", request: "add bundle", bundle: bundle_base64 ***REMOVED***;
+      newtx.transaction.msg = { module: "AppStore", request: "add bundle", bundle: bundle_bin ***REMOVED***;
       return this.app.wallet.signTransaction(newtx);
 ***REMOVED***
     return null;
+  ***REMOVED***
+
+  async bundler(modules) {
+    //
+    // modules has name, description, zip (helpful)
+    //
+    // require inclusion of  module versions and paths for loading into the system
+    //
+    const path = require('path');
+
+    let ts = new Date().getTime();
+    let hash = this.app.crypto.hash(versions.join(''));
+
+    //
+    // first
+    //
+    let modules_config_filename = `modules.config-${ts***REMOVED***-${hash***REMOVED***.json`;
+
+    let module_paths = modules.map(mod => {
+      let mod_path = `modules/${mod.name.toLowercase()***REMOVED***-${ts***REMOVED***-${hash***REMOVED***.zip`;
+      fs.writeFileSync(path.resolve(__dirname, mod_path), mod.zip, { encoding: 'binary' ***REMOVED***);
+      fs.createReadStream(mod_path)
+        .pipe(unzipper.Extract({ path: `bundler/mods/${mod.name.toLowercase()***REMOVED***-${ts***REMOVED***-${hash***REMOVED***` ***REMOVED***));
+
+        return `${mod.name.toLowercase()***REMOVED***-${ts***REMOVED***-${hash***REMOVED***/${mod.name.toLowercase()***REMOVED***`;
+***REMOVED***);
+
+    //
+    // write our modules config file
+    //
+    await fs.writeFile(path.resolve(__dirname, `bundler/${modules_config_filename***REMOVED***`),
+      JSON.stringify({module_paths***REMOVED***)
+    );
+
+    //
+    // other filenames
+    //
+    let bundle_filename = `saito-${ts***REMOVED***-${hash***REMOVED***.js`;
+    let index_filename  = `index-${ts***REMOVED***-${hash***REMOVED***.js`;
+
+    //
+    // write our index file for bundling
+    //
+    let IndexTemplate = require('./bundler/templates/index.template.js');
+    await fs.writeFile(path.resolve(__dirname, `bundler/${index_filename***REMOVED***`),
+      IndexTemplate(modules_config_filename)
+    );
+
+    //
+    // TODO: unzip existing modules and stage them
+    //
+
+    //
+    // execute bundling process
+    //
+    let entry = path.resolve(__dirname, `bundler/${index_filename***REMOVED***`);
+    let output_path = path.resolve(__dirname, 'bundler/dist');
+
+    const util = require('util');
+    const exec = util.promisify(require('child_process').exec);
+
+    try {
+      const { stdout, stderr ***REMOVED*** = await exec(
+        `node webpack.js ${entry***REMOVED*** ${output_path***REMOVED*** ${bundle_filename***REMOVED***`
+      );
+***REMOVED*** catch (err) {
+      console.log(err);
+***REMOVED***
+
+    // Done processing
+
+    //
+    // file cleanup
+    //
+    fs.unlink(path.resolve(__dirname, `bundler/${index_filename***REMOVED***`));
+    fs.unlink(path.resolve(__dirname, `bundler/${modules_config_filename***REMOVED***`));
+
+    //
+    // create tx
+    //
+    let newtx = this.createBundleTX(bundle_filename);
+
+    //
+    // publish our bundle
+    //
+    this.app.network.propagateTransaction(newtx);
+
+    // //
+    // // delete bundle
+    // //
+    // fs.unlink(path.resolve(__dirname, `bundler/dist/${bundle_filename***REMOVED***`));
+
+    return bundle_filename;
   ***REMOVED***
 
 
@@ -435,5 +585,3 @@ console.log("MOD SEL: " + JSON.stringify(modules_selected));
 
 
 module.exports = AppStore;
-
-

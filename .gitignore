@@ -38,7 +38,7 @@ mods/catan
 mods/catan/*
 mods/citysim
 mods/citysim/*
-mods/appstore/modules/*.zip
+mods/appstore/mods/*.zip
 mods/appstore/bundler/dist
 mods/appstore/saitolib
 mods/appstore/saitolib/*

@@ -19,6 +19,9 @@ const path = require('path');
             sqlite: 'sqlite'
     ***REMOVED***,
         {
+            unzipper: 'unzipper'
+    ***REMOVED***,
+        {
             webpack: 'webpack'
     ***REMOVED***,
         /\.txt/,
