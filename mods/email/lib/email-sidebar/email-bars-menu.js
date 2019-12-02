@@ -136,7 +136,7 @@ module.exports = EmailBarsMenu = {
 
 	let modname = app.browser.returnURLParameter("module"); 
         for (let i = 0; i < data.mods.length; i++) {
-          if (data.mods[i].name.toLowerCase() == modname) {
+          if (data.mods[i].returnSlug() == modname) {
 
             let modobj = document.querySelector(`.email-apps-item-${i***REMOVED***`);
 
