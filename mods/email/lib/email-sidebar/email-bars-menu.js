@@ -2,6 +2,8 @@ const EmailBarsMenuTemplate = require('./email-bars-menu.template');
 
 module.exports = EmailBarsMenu = {
 
+  module_application_loaded: 0,
+
   render(app, data) {
 
     document.querySelector('.email-bars-menu').innerHTML = EmailBarsMenuTemplate();
@@ -9,13 +11,14 @@ module.exports = EmailBarsMenu = {
     let email_apps = document.querySelector(".email-apps");
     for (let i = 0; i < data.mods.length; i++) {
       if (data.mods[i].respondTo("email-appspace") != null) {
-        email_apps.innerHTML += `<li class="email-apps-item" id="${i***REMOVED***">${data.mods[i].name***REMOVED***</li>`;
+        email_apps.innerHTML += `<li class="email-apps-item email-apps-item-${i***REMOVED***" id="${i***REMOVED***">${data.mods[i].name***REMOVED***</li>`;
   ***REMOVED***
 ***REMOVED***
 
   ***REMOVED***,
 
   attachEvents(app, data) {
+
     //
     // inbox / sent / trash
     //
@@ -77,13 +80,10 @@ module.exports = EmailBarsMenu = {
           data.parentmod.main.attachEvents(app, data);
 
     ***REMOVED***
-
 ***REMOVED***));
 
 
-    //
-    // apps
-    //
+
     Array.from(document.getElementsByClassName('email-apps-item'))
       .forEach(item => item.addEventListener('click', (e) => {
 
@@ -111,19 +111,48 @@ module.exports = EmailBarsMenu = {
           ***REMOVED***
       ***REMOVED***);
 
+          data.parentmod.active = "email_appspace";
+          data.parentmod.previous_state = "email_list";
+          data.parentmod.header_title = "Application";
+          data.parentmod.appspace_mod = data.parentmod.mods[e.currentTarget.id];
+          data.parentmod.appspace_mod_idx = e.currentTarget.id;
 
-        data.parentmod.active = "email_appspace";
-        data.parentmod.previous_state = "email_list";
-        data.parentmod.header_title = "Application";
-        data.parentmod.appspace_mod = data.parentmod.mods[e.currentTarget.id];
-        data.parentmod.appspace_mod_idx = e.currentTarget.id;
+          data.parentmod.main.render(app, data)
+          data.parentmod.main.attachEvents(app, data)
 
-        data.parentmod.main.render(app, data)
-        data.parentmod.main.attachEvents(app, data)
-
-  ***REMOVED***
-
-
+    ***REMOVED***
 ***REMOVED***));
+
+
+
+    //
+    // load first app
+    //
+    if (this.module_application_loaded == 0) { 
+
+      this.module_application_loaded = 1; 
+
+      if (app.browser.returnURLParameter("module") != "") {
+
+	let modname = app.browser.returnURLParameter("module"); 
+        for (let i = 0; i < data.mods.length; i++) {
+          if (data.mods[i].returnSlug() == modname) {
+
+            let modobj = document.querySelector(`.email-apps-item-${i***REMOVED***`);
+
+// 	    data.parentmod.active	    = "email_appspace";
+// 	    data.parentmod.previous_state   = "email_list";
+//    	    data.parentmod.header_title     = "Saito AppStore";
+//    	    data.parentmod.appspace_mod     = data.parentmod.mods[i];
+//   	    data.parentmod.appspace_mod_idx = i;
+
+	    setTimeout(function () { 
+	      modobj.click();
+        ***REMOVED***, 500);
+
+	  ***REMOVED***
+	***REMOVED***
+  ***REMOVED***
+***REMOVED***
   ***REMOVED***
 ***REMOVED***
