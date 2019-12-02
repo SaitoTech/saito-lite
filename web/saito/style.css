@@ -371,7 +371,8 @@ label.treated {
 }
 
 #alert-box {
-    width: 50%;
+    width: 75vw;
+    max-width: 700px;
     transition: all 333ms ease-in-out;
     background: rgb(234, 234, 239);
     margin: auto;
@@ -747,3 +748,27 @@ label.treated {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(720deg); }
 }
+
+@media only screen and (max-width: 600px) {
+    #alert-box {
+        padding: 3px;
+    }
+    #alert-buttons {
+        float: unset;
+        margin: 0;
+        padding: 1em;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 1em;
+    }
+
+    #alert-buttons button {
+        width: 100%;
+    }
+    .alert-prompt {
+        padding: 0 1em;
+    }
+
+}
+
+

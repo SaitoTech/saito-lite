@@ -529,7 +529,7 @@ console.log("INITIALIZE GAME 2");
       `
       <div>${status}</div>
       <div class="status_container">
-        <div style="display: flex; font-size: 0.8rem;">
+        <div>
           <div id="remainder" class="remainder">Tiles left: ${this.game.deck[0].crypt.length}</div>
           <div id="lastmove" class="lastmove">
           ${last_move_html}
