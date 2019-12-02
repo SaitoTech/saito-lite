@@ -34,29 +34,33 @@ module.exports = ArcadeMain = {
     data.arcade.games.forEach(tx => {
 
       let txmsg = tx.returnMessage();
-      let game_id = txmsg.game_id;
-      let button_text = {***REMOVED***;
-      button_text.main = "JOIN";
+      let publickey = app.wallet.returnPublicKey();
+      let { game_id ***REMOVED*** = txmsg;
 
-      if (data.arcade.app.options.games != undefined) {
-        for (let z = 0; z < data.arcade.app.options.games.length; z++) {
-          if (data.arcade.app.options.games[z].initializing == 0) {
-            button_text.main = "CONTINUE";
+      let button_text = {***REMOVED***;
+      button_text.join = "JOIN";
+
+      if (tx.isFrom(publickey))
+        button_text.cancel = "CANCEL";
+
+      if (app.options.games) {
+        let { games ***REMOVED*** = app.options;
+
+        games.forEach(game => {
+          if (game.initializing == 0 && game.id == game_id) {
+            button_text.continue = "CONTINUE";
+            delete button_text.join;
+
+            if (game.players.some(player => publickey == player))
+              button_text.delete = "DELETE";
+              delete button_text.cancel;
       ***REMOVED***
-    ***REMOVED***
-  ***REMOVED***
-      
-      for (let y = 0; y < txmsg.players.length; y++) {
-        if(data.arcade.app.wallet.returnPublicKey() == txmsg.players[y]) {
-          button_text.delete = "DELETE";
-    ***REMOVED***
+    ***REMOVED***);
   ***REMOVED***
 
       document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(app, tx, button_text);
       console.log(button_text);
 ***REMOVED***);
-
-    
 
   ***REMOVED***,
 
@@ -83,7 +87,7 @@ module.exports = ArcadeMain = {
 
     document.querySelector('#play-now').addEventListener('click', function() {
       ArcadeStartGameList.render(app,data);
-      ArcadeStartGameList.attachEvents(app,data);  
+      ArcadeStartGameList.attachEvents(app,data);
 ***REMOVED***);
 
     //
@@ -93,7 +97,7 @@ module.exports = ArcadeMain = {
       game.onclick = (e) => {
 
         let game_id = e.currentTarget.id;
-        game_id = game_id.substring(17);
+        game_id = game_id.split('-').pop();
 
 ***REMOVED***
 ***REMOVED*** find our accepted game
@@ -111,7 +115,8 @@ module.exports = ArcadeMain = {
 ***REMOVED*** check that we're not accepting our own game
 ***REMOVED***
         if (accepted_game.transaction.from[0].add == app.wallet.returnPublicKey()) {
-          if (accepted_game.players.length > 1) {
+          let { players ***REMOVED*** = accepted_game.returnMessage();
+          if (players.length > 1) {
             salert(`
               This is your game! Not enough players have joined the game for us to start,
               but we'll take you to the loading page since at least one other player is waiting for this game to start....
@@ -126,12 +131,12 @@ module.exports = ArcadeMain = {
   ***REMOVED*** check if we've already accepted game and have it locally
   ***REMOVED***
           if (app.options.games) {
-            let existing_game = app.options.games.find(game => game.id == game_id);
+            let existing_game = app.options.games.find(g => g.id == game_id);
 
-            if (existing_game) {
+            if (existing_game != -1 && existing_game) {
               if (existing_game.initializing == 1) {
                 salert("This game is initializing!");
-                
+
                 ArcadeLoader.render(app, data);
                 ArcadeLoader.attachEvents(app, data);
                 return;
@@ -197,13 +202,52 @@ console.log("CHECKING TO SEE IF THERE IS STILL SPACE IN THE GAME: " + JSON.strin
     ***REMOVED***
   ***REMOVED***;
 ***REMOVED***);
+
     Array.from(document.getElementsByClassName('arcade-game-row-delete')).forEach(game => {
-      game.addEventListener('click', (e) => {
+      game.onclick = (e) => {
         let game_id = e.currentTarget.id;
-	    game_id = game_id.substring(17);
-        salert("Delete game id: " + game_id);
-  ***REMOVED***);
+        game_id = game_id.split('-').pop();
+        salert(`Delete game id: ${game_id***REMOVED***`);
+
+        if (app.options.games) {
+          let { games ***REMOVED*** = app.options;
+          let resigned_game = games.find(game => game.id == game_id);
+          if (resigned_game != -1) {
+            let game_mod = app.modules.returnModule(resigned_game.module);
+            game_mod.resignGame(game_id);
+      ***REMOVED***
+
+          this.removeGameFromList(game_id);
+    ***REMOVED***
+  ***REMOVED***;
 ***REMOVED***);
+
+    Array.from(document.getElementsByClassName('arcade-game-row-cancel')).forEach(game => {
+      game.onclick = (e) => {
+        let game_id = e.currentTarget.id;
+        sig = game_id.split('-').pop();
+        salert(`Cancel game id: ${game_id***REMOVED***`);
+
+        let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
+        let msg = {
+          sig: sig,
+          status: 'close',
+          request: 'close',
+          module: 'Arcade'
+    ***REMOVED***
+
+        newtx.transaction.msg = msg;
+        newtx = app.wallet.signTransaction(newtx);
+        app.network.propagateTransaction(newtx);
+
+        this.removeGameFromList(game_id);
+  ***REMOVED***
+***REMOVED***);
+  ***REMOVED***,
+
+  removeGameFromList(game_id) {
+    document.getElementById(`arcade-gamelist`)
+                  .removeChild(document.getElementById(`arcade-game-${game_id***REMOVED***`));
   ***REMOVED***
 
 ***REMOVED***

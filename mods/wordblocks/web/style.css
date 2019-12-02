@@ -4,6 +4,15 @@ body {
   padding: 0px;
   margin: 0px;
   background-color: #024;
+  overflow-x: hidden;
+    overflow-y: auto;
+  scrollbar-face-color: #868686;
+  scrollbar-base-color: #868686;
+  scrollbar-3dlight-color: #868686;
+  scrollbar-highlight-color: #868686;
+  scrollbar-track-color: #646464;
+  scrollbar-arrow-color: #646464;
+  scrollbar-shadow-color: #868686;
 ***REMOVED***
 
 .connection_monitor {
@@ -25,13 +34,9 @@ body {
   border-bottom: 1px dashed;
 ***REMOVED***
 
-.main {
-  display: block;
-  width: 900px;
-  margin: auto;
-  margin-bottom: none;
+.wb-main {
   border: 1px solid orange;
-  padding: 0px;
+  max-width: 902px;
 ***REMOVED***
 
 .gameboard {
@@ -42,6 +47,10 @@ body {
   background: #999;
   border: 10px solid #333;
   padding: 10px;
+  max-width: 900px;
+  max-height: 900px;
+  width: 99vw;
+  height: 99vw;
 ***REMOVED***
 
 .action {
@@ -130,11 +139,10 @@ body {
 ***REMOVED***
 
 .tiles div.tile {
-  width: 35px;
-  height: 35px;
+  width: 65px;
+  height: 60px;
   display: inline-block;
   text-align: center;
-  line-height: 35px;
   font-weight: bold;
   margin: 5px;
   border-width: 4px;
@@ -144,11 +152,10 @@ body {
   padding: 10px;
   background: rgb(70, 70, 70);
   font-size: 36px;
+  color: #efefec;
 ***REMOVED***
 
-
-
-.tile-placement-controls {***REMOVED***.tiles .tile.O {
+/*.tiles .tile.O {
   padding: 10px 12px 10px 8px;
 ***REMOVED***
 .tiles .tile.M {
@@ -156,21 +163,20 @@ body {
 ***REMOVED***
 .tiles .tile.W {
   padding: 10px 15px 10px 5px;
-***REMOVED***
-
+***REMOVED****/
 
 .slot {
   cursor: pointer;
   display: flex;
   background: rgb(102, 102, 102);
-  border-width: 2px;
-  border-style: solid;
-  border-color: rgb(102, 102, 102);
+  border-width: 2px solid rgb(102, 102, 102);
   border-image: initial;
-  border-radius: 10px;
+  border-radius: 5px;
   overflow: hidden;
-  width: 50px;
-  height: 50px;
+  justify-self: center;
+  align-self: center;
+  width: 54px;
+  height: 54px;
 ***REMOVED***
 
 .slot div.tile {
@@ -179,7 +185,7 @@ body {
   background-color: rgb(68, 68, 68);
   text-align: center;
   padding-top: 8px;
-  border-radius: 11px;
+  border-radius: 3px;
 ***REMOVED***
 
 .slot:hover {
@@ -187,12 +193,15 @@ body {
   opacity: 0.8;
 ***REMOVED***
 
+.slot div {
+  font-size: 11px;
+***REMOVED***
+
 .tw {
   border: 2px solid rgb(221, 70, 0);
 ***REMOVED***
 
 .twbk {
-  font-size: 10px;
   color: rgb(238, 238, 238);
   text-align: center;
   height: 100%;
@@ -207,7 +216,6 @@ body {
 
 .dwbk {
   background-color: rgb(184, 28, 0);
-  font-size: 10px;
   color: rgb(238, 238, 238);
   text-align: center;
   height: 100%;
@@ -221,7 +229,6 @@ body {
 
 .tlbk {
   background-color: rgb(0, 51, 102);
-  font-size: 10px;
   color: rgb(238, 238, 238);
   text-align: center;
   height: 100%;
@@ -235,7 +242,6 @@ body {
 
 .dlbk {
   background-color: rgb(0, 102, 51);
-  font-size: 10px;
   color: rgb(238, 238, 238);
   text-align: center;
   height: 100%;
@@ -249,7 +255,7 @@ body {
 
 .starbk {
   background-color: rgb(187, 187, 102);
-  font-size: 36px;
+  font-size: 36px !important;
   color: rgb(51, 51, 51);
   text-align: center;
   height: 100%;
@@ -334,17 +340,191 @@ body {
   justify-self: right;
 ***REMOVED***
 
-@media only screen and (max-width: 600px) {
-  .hud {
-    font-size: 1rem;
+.hud {
+  display: grid;
+  grid-template-rows: 40px auto;
+  grid-template-columns: 100px auto;
+  grid-template-areas: "hud-header hud-header" "hud-menu hud-body";
+  font-family: visuelt-light;
+  position: fixed;
+  left: 50%;
+  bottom: 0%;
+  float: none;
+  z-index: 40;
+  height: 420px;
+  width: 760px;
+  min-width: 760px;
+  max-width: 9.1em;
+  border-bottom: 0px;
+  transform: translate(-50%, -0%);
+  transition: height 0.2s ease;
+***REMOVED***
+
+/** HUD HEADER **/
+
+.hud-header {
+  grid-area: hud-header;
+  display: grid;
+  grid-template-columns: 100px auto;
+  width: 100%;
+  height: 40px;
+  cursor: move;
+***REMOVED***
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+***REMOVED***
+
+.hud-button {
+  cursor: pointer;
+***REMOVED***
+
+/** HUD BODY **/
+
+.hud-body {
+  grid-area: hud-body;
+  display: grid;
+  grid-template-columns: auto 200px;
+  height: 100%;
+***REMOVED***
+
+.hud-menu {
+  grid-area: hud-menu;
+  border-right: 1px solid var(--saito-skyline-grey);
+***REMOVED***
+
+.status {
+  width: unset !important;
+***REMOVED***
+
+.status ul {
+  list-style: none;
+***REMOVED***
+
+.status ul li {
+  line-height: 2em;
+***REMOVED***
+
+.status ul li:last-child {***REMOVED***
+
+.status ul li:hover {***REMOVED***
+
+/** HUD SIDEBAR **/
+
+.hud-menu {
+  display: flex;
+  color: black;
+***REMOVED***
+
+.hud-menu ul {
+  width: 100%;
+  list-style: none;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+***REMOVED***
+
+.hud-menu ul li {
+  list-style: none;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  border-bottom: none;
+  height: 50px;
+  line-height: 50px;
+  font-size: 1.1rem;
+  cursor: pointer;
+***REMOVED***
+
+.hud-menu ul li a {
+  text-decoration: none;
+  display: block;
+  transition: .3s background-color;
+  font-size: 22px;
+***REMOVED***
+
+.hud-menu ul li a:hover {
+  border-bottom: 2px solid var(--saito-red);
+  border-radius: 0px;
+***REMOVED***
+
+.hud-menu ul li a:active {
+  color: var(--saito-red);
+  font-style: bold;
+***REMOVED***
+
+/* hud */
+
+.hud div {
+  background: #333;
+  color: var(--saito-skyline-grey);
+***REMOVED***
+
+.hud-button {
+  color: var(--saito-skyline-grey);
+  margin: auto;
+  font-size: 24px;
+***REMOVED***
+
+.status {
+  padding: 1em;
+  overflow-y: auto;
+  border: none;
+***REMOVED***
+
+.hud-body .log {
+  display: none;
+***REMOVED***
+
+.hud-body {
+  grid-template-columns: auto;
+***REMOVED***
+
+.hud-header {
+  border-bottom: 1px solid #555;
+***REMOVED***
+
+.hud-menu {
+  border-right: 1px solid #555;
+***REMOVED***
+
+.status div {
+  font-size: 24px;
+overflow-wrap: break-word;
+max-width: 95vw;
+***REMOVED***
+
+.player span {
+  line-height: 40px;
+***REMOVED***
+
+@media only screen and (max-width: 750px) {
+  .score {
+    font-size: 1em;
   ***REMOVED***
-  .main {
-    /* display: block; */
-    width: unset;
-    margin: auto;
-    margin-bottom: none;
-    border: 1px solid orange;
-    padding: 0px;
+  .hud div {
+    font-size: 1em;
+  ***REMOVED***
+  #remainder {
+    font-size: 1em;
+  ***REMOVED***
+  .hud {
+    font-size: 22px;
+    width: 100vw;
+    position: absolute;
+    top: 100vw;
+    left: 0;
+    height: calc(100vh - 100vw);
+    min-height: 350px;
+    transform: none;
+    display: block;
+  ***REMOVED***
+  .hud-header, .hud-menu {
+    display: none;
   ***REMOVED***
   .gameboard {
     display: grid;
@@ -355,13 +535,6 @@ body {
     border: 0.5em solid #333;
     padding: 0.5em;
   ***REMOVED***
-  .rack {
-    align-items: center;
-    justify-content: center;
-  ***REMOVED***
-  .tall {
-    height: 43vh;
-  ***REMOVED***
   .slot {
     cursor: pointer;
     display: flex;
@@ -371,40 +544,40 @@ body {
     border-image: initial;
     border-radius: 0.3em;
     overflow: hidden;
-    width: 5vw;
-    height: 5vw;
+    width: 6vw;
+    height: 6vw;
     justify-self: center;
     align-self: center;
+  ***REMOVED***
+  .slot div {
+    font-size: 1.2vw;
+    padding: 0.5vw 0;
   ***REMOVED***
   .tlbk {
     padding: 3px 0px;
     text-align: center;
-    font-size: 0.3rem;
   ***REMOVED***
   .dlbk {
     padding: 3px 0px;
     text-align: center;
-    font-size: 0.3rem;
   ***REMOVED***
   .twbk {
     padding: 3px 0px;
     text-align: center;
-    font-size: 0.3rem;
   ***REMOVED***
   .dwbk {
     padding: 3px 0px;
     text-align: center;
-    font-size: 0.3rem;
   ***REMOVED***
   .starbk {
     padding: 1px 0px;
-    font-size: 0.8rem;
+    font-size: 3.2vw !important;
   ***REMOVED***
   .slot div.tile {
     color: rgb(238, 238, 238);
-    font-size: 0.7rem;
+    font-size: 4vw;
     background-color: rgb(68, 68, 68);
-    padding-top: 4px;
+    padding-top: 0.4vw;
     border-radius: 2px;
     text-indent: 2px;
   ***REMOVED***
@@ -414,23 +587,21 @@ body {
   ***REMOVED***
   .status_container {
     grid-template-rows: 1em auto;
+    margin: 12px 0 0 0 ;
   ***REMOVED***
   .score {
     font-size: 1rem;
   ***REMOVED***
-  #remainder {
-    font-size: unset;
+  
+  .player {
+    width: calc(100vw - 2em) !important;
   ***REMOVED***
-  #lastmove {
-    font-size: unset;
-  ***REMOVED***
-  #controls {
-    height: 225px;
-    overflow-y: auto;
+  .tiles {
+    display: inline-block;
+    width: calc(100% - 3em);
+    float: left;
   ***REMOVED***
   .tiles div.tile {
-    width: 4.5vw;
-    height: 4.5vw;
     display: inline-block;
     text-align: center;
     line-height: 0.9em;
@@ -441,38 +612,34 @@ body {
     border-style: solid;
     border-color: rgb(221, 221, 221);
     border-image: initial;
-    padding: 2.5vw;
     background: rgb(70, 70, 70);
     font-size: 1.25em;
-  ***REMOVED***
-  .tiles .tile.O {
-    padding: 10px 12px 10px 8px;
-  ***REMOVED***
-  .tiles .tile.M {
-    padding: 10px 14px 10px 6px;
-  ***REMOVED***
-  .tiles .tile.W {
-    padding: 10px 15px 10px 5px;
-  ***REMOVED***
-  .tile-placement-controls {
-    display: grid;
-  ***REMOVED***
-  .action {
-    justify-self: center;
-    align-self: center;
-    padding: 1.5vh 0px;
-    width: 100%;
-  ***REMOVED***
-  .shuffle {
-    height: 3em;
-    cursor: pointer;
-  ***REMOVED***
-  .player_name {***REMOVED***
-  .dragbar {
-    width: 2em;
+    width: 54px;
+    height: 54px;
+    padding: 13px 12px;
   ***REMOVED***
 ***REMOVED***
+.rack {
+  width: calc(100vw - 2em);
+  max-width: 640px;
+***REMOVED***
 
-.mainfixedbottom {
-  margin: 0 0 225px 0;
+.tile-placement-controls {
+  display: grid;
+***REMOVED***
+
+.action {
+  justify-self: center;
+  align-self: center;
+  padding: 1.5vh 0px;
+  width: 100%;
+***REMOVED***
+
+.shuffle {
+  height: 3em;
+  width: 3em;
+  cursor: pointer;
+  float: left;
+***REMOVED***
+
 ***REMOVED***
