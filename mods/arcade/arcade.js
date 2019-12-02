@@ -16,7 +16,7 @@ class Arcade extends ModTemplate {
 
     super(app);
 
-    this.name 			= "Arcade";
+    this.name = "Arcade";
     this.events			= ['chat-render-request'];
     this.mods			= [];
     this.affix_callbacks_to 	= [];

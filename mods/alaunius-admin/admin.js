@@ -8,8 +8,8 @@ class Admin extends ModTemplate {
   constructor(app) {
     super(app);
 
-    this.app            = app;
-    this.name           = "Admin";
+    this.app = app;
+    this.name = "Admin";
 
     return this;
   }

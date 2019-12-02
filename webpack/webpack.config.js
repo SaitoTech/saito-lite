@@ -19,6 +19,9 @@ module.exports = {
             sqlite: 'sqlite'
         },
         {
+            unzipper: 'unzipper'
+        },
+        {
             webpack: 'webpack'
         },
         /\.txt/,

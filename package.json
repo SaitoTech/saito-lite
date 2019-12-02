@@ -38,6 +38,7 @@
     "sha256": "^0.2.0",
     "socket.io": "^2.3.0",
     "sqlite": "^3.0.3",
+    "unzipper": "^0.10.5",
     "url": "^0.11.0"
   },
   "devDependencies": {
