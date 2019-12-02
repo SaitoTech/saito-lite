@@ -444,6 +444,7 @@ body {
   text-decoration: none;
   display: block;
   transition: .3s background-color;
+  font-size: 22px;
 }
 
 .hud-menu ul li a:hover {
@@ -466,6 +467,7 @@ body {
 .hud-button {
   color: var(--saito-skyline-grey);
   margin: auto;
+  font-size: 24px;
 }
 
 .status {
@@ -491,7 +493,9 @@ body {
 }
 
 .status div {
-  margin: 0.5vw 0;
+  font-size: 24px;
+overflow-wrap: break-word;
+max-width: 95vw;
 }
 
 .player span {
@@ -583,6 +587,7 @@ body {
   }
   .status_container {
     grid-template-rows: 1em auto;
+    margin: 12px 0 0 0 ;
   }
   .score {
     font-size: 1rem;
@@ -616,6 +621,7 @@ body {
 }
 .rack {
   width: calc(100vw - 2em);
+  max-width: 640px;
 }
 
 .tile-placement-controls {
