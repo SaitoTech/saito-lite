@@ -4,7 +4,7 @@ const AppStoreAppBoxTemplate      = require('./appstore-app-box.template.js');
 const AppStoreAppCategoryTemplate = require('./appstore-app-category.template.js');
 
 
-module.exports = AooStoreAppspace = {
+module.exports = AppStoreAppspace = {
 
     render(app, data) {
 
@@ -15,15 +15,18 @@ module.exports = AooStoreAppspace = {
       //
       // fetch modules from appstore
       //
-      data.appstore.sendPeerDatabaseRequest("appstore", "modules", "*", "", null, function(res, data) {
+      data.appstore.sendPeerDatabaseRequest(
+        "appstore", "modules", "name, description, version, publickey, unixtime, bid, bsh",
+        "",
+        null,
+        function(res, data) {
         if (res.rows != undefined) {
-            for (let i = 0; i < res.rows.length; i++) {
+          for (let i = 0; i < res.rows.length; i++) {
             document.querySelector(".appstore-app-list").innerHTML += AppStoreAppBoxTemplate(app, res.rows[i]);
       ***REMOVED***
     ***REMOVED***
 
         appstore_self.attachEvents(app, data);
-        
   ***REMOVED***);
 
       //

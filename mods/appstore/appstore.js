@@ -46,7 +46,7 @@ class AppStore extends ModTemplate {
 
     if (message.request === "appstore load modules") {
 
-      let sql = "SELECT * FROM modules";
+      let sql = "SELECT name, description, version, publickey, unixtime, bid, bsh FROM modules";
       let params = {***REMOVED***;
       let rows = await this.app.storage.queryDatabase(sql, params, message.data.dbname);
 
@@ -231,6 +231,11 @@ class AppStore extends ModTemplate {
       console.log(err);
 ***REMOVED***
 
+    //
+    // delete unziped module
+    //
+    fs.unlink(path.resolve(__dirname, zip_path));
+
     return { name, description ***REMOVED***;
   ***REMOVED***
 
@@ -249,15 +254,16 @@ class AppStore extends ModTemplate {
 
     let { name, description ***REMOVED*** = await this.getNameAndDescriptionFromZip(zip, `mods/module-${sig***REMOVED***-${ts***REMOVED***.zip`);
 
+
     let params = {
-      $name:		name,
-      $description:	'',
-      $version:		`${ts***REMOVED***-${sig***REMOVED***`,
+      $name: name,
+      $description:	description || '',
+      $version:	`${ts***REMOVED***-${sig***REMOVED***`,
       $publickey:	from[0].add,
-      $unixtime:	ts,
-      $bid:		blk.block.id,
-      $bsh:		blk.returnHash(),
-      $tx:		JSON.stringify(tx.transaction),
+      $unixtime: ts,
+      $bid:	blk.block.id,
+      $bsh:	blk.returnHash(),
+      $tx: JSON.stringify(tx.transaction),
 ***REMOVED***;
 
     this.app.storage.executeDatabase(sql, params, "appstore");
@@ -265,6 +271,8 @@ class AppStore extends ModTemplate {
 
 
   async requestBundle(blk, tx) {
+
+    if (this.app.BROWSER == 1) { return; ***REMOVED***
 
     let sql = '';
     let params = '';
@@ -334,7 +342,7 @@ console.log("request bundle: " + JSON.stringify(module_list));
   ***REMOVED***
 ***REMOVED***
 
-console.log("MOD SEL: " + JSON.stringify(modules_selected));
+// console.log("MOD SEL: " + JSON.stringify(modules_selected));
 
     //
     // modules_selected contains our modules
@@ -357,7 +365,7 @@ console.log("MOD SEL: " + JSON.stringify(modules_selected));
     //
     //
 
-    let bundle_filename = await bundler(modules_selected);
+    let bundle_filename = await this.bundler(modules_selected);
 
 
     //
@@ -395,9 +403,11 @@ console.log("MOD SEL: " + JSON.stringify(modules_selected));
     // require inclusion of  module versions and paths for loading into the system
     //
     const path = require('path');
+    const unzipper = require('unzipper');
+    const fs = this.app.storage.returnFileSystem();
 
     let ts = new Date().getTime();
-    let hash = this.app.crypto.hash(versions.join(''));
+    let hash = this.app.crypto.hash(modules.map(mod => mod.version).join(''));
 
     //
     // first
@@ -405,12 +415,20 @@ console.log("MOD SEL: " + JSON.stringify(modules_selected));
     let modules_config_filename = `modules.config-${ts***REMOVED***-${hash***REMOVED***.json`;
 
     let module_paths = modules.map(mod => {
-      let mod_path = `modules/${mod.name.toLowercase()***REMOVED***-${ts***REMOVED***-${hash***REMOVED***.zip`;
+      let mod_path = `mods/${mod.name.toLowerCase()***REMOVED***-${ts***REMOVED***-${hash***REMOVED***.zip`;
       fs.writeFileSync(path.resolve(__dirname, mod_path), mod.zip, { encoding: 'binary' ***REMOVED***);
-      fs.createReadStream(mod_path)
-        .pipe(unzipper.Extract({ path: `bundler/mods/${mod.name.toLowercase()***REMOVED***-${ts***REMOVED***-${hash***REMOVED***` ***REMOVED***));
+      fs.createReadStream(path.resolve(__dirname, mod_path))
+        .pipe(unzipper.Extract({
+          path: path.resolve(__dirname, `bundler/mods/${mod.name.toLowerCase()***REMOVED***-${ts***REMOVED***-${hash***REMOVED***`)
+    ***REMOVED***));
 
-        return `${mod.name.toLowercase()***REMOVED***-${ts***REMOVED***-${hash***REMOVED***/${mod.name.toLowercase()***REMOVED***`;
+      //
+      // delete the other files
+      //
+      fs.unlink(path.resolve(__dirname, mod_path));
+
+      // return the path
+      return `${mod.name.toLowerCase()***REMOVED***-${ts***REMOVED***-${hash***REMOVED***/${mod.name.toLowerCase()***REMOVED***`;
 ***REMOVED***);
 
     //
@@ -477,6 +495,11 @@ console.log("MOD SEL: " + JSON.stringify(modules_selected));
     // // delete bundle
     // //
     // fs.unlink(path.resolve(__dirname, `bundler/dist/${bundle_filename***REMOVED***`));
+
+    module_paths.forEach(modpath => {
+      let mod_dir = modpath.split('/')[0];
+      fs.rmdir(path.resolve(__dirname, `bundler/mods/${mod_dir***REMOVED***`));
+***REMOVED***)
 
     return bundle_filename;
   ***REMOVED***
