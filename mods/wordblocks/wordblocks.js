@@ -159,7 +159,7 @@ console.log("INITIALIZE GAME 2");
 
     resizeBoard = function resizeBoard(app) {
 
-      if (this.window && !app.browser.isMobileBrowser(navigator.userAgent)) {
+    /*  if (this.window && !app.browser.isMobileBrowser(navigator.userAgent)) {
 
         let height = this.screen.height;
         let width = this.screen.width;
@@ -201,7 +201,7 @@ console.log("INITIALIZE GAME 2");
           $('#controls').removeClass('fixedbottom');
           $('.main').removeClass('mainfixedbottom');
         }
-      }
+      } */
     };
 
 
@@ -529,17 +529,17 @@ console.log("INITIALIZE GAME 2");
       `
       <div>${status}</div>
       <div class="status_container">
-        <div style="display: flex; font-size: 0.8rem;">
+        <div>
           <div id="remainder" class="remainder">Tiles left: ${this.game.deck[0].crypt.length}</div>
           <div id="lastmove" class="lastmove">
           ${last_move_html}
           </div>
         </div>
         <div class="rack" id="rack">
+        <img id="shuffle" class="shuffle" src="/wordblocks/img/reload.png">
           <div class="tiles" id="tiles">
             ${tile_html}
           </div>
-          <img id="shuffle" class="shuffle" src="/wordblocks/img/reload.png">
         </div>
         <div class="score" id="score">loading...</div>
       </div
@@ -632,14 +632,14 @@ console.log("INITIALIZE GAME 2");
   }
 
 
-  addEventsToBoard() {
+  async addEventsToBoard() {
     let wordblocks_self = this;
     $('.tosstiles').off();
-    $('.tosstiles').on('click', function () {
-      tiles = prompt("Which tiles do you want to discard? Tossed tiles count against your score:");
+    $('.tosstiles').on('click', async function () {
+      tiles = await sprompt("Which tiles do you want to discard? Tossed tiles count against your score:");
 
       if (tiles) {
-        alert("Tossed: " + tiles);
+        salert("Tossed: " + tiles);
         wordblocks_self.removeTilesFromHand(tiles);
         wordblocks_self.addMove("turn\t" + wordblocks_self.game.player);
         let cards_needed = 7;
@@ -710,7 +710,7 @@ console.log("INITIALIZE GAME 2");
       }
 
       $('.action').off();
-      $('.action').on('click', function () {
+      $('.action').on('click', async function () {
 
         let action2 = $(this).attr("id");
 
@@ -731,7 +731,7 @@ console.log("INITIALIZE GAME 2");
           return;
         }
 
-        word = prompt("Provide your word:");
+        word = await sprompt("Provide your word:");
 
         if (word) {
           //
@@ -810,7 +810,7 @@ console.log("INITIALIZE GAME 2");
     });
     $('#tiles').sortable();
     $('#tiles').disableSelection();
-    $(window).resize(function () { resizeBoard(); });
+    //$(window).resize(function () { resizeBoard(); });
   }
 
 
@@ -849,7 +849,7 @@ console.log("INITIALIZE GAME 2");
     if (this.firstmove == 1) {
       if (orientation == "vertical") {
         if (x != 6 && x != 10) {
-          alert("First Word must be placed to cross a Star");
+          salert("First Word must be placed to cross a Star");
           return 0;
         }
 
@@ -857,14 +857,14 @@ console.log("INITIALIZE GAME 2");
         let ending_point = y + word.length - 1;
 
         if (starting_point <= 6 && ending_point >= 6 || starting_point <= 10 && ending_point >= 6) { } else {
-          alert("First Word must be long enough to cross a Star");
+          salert("First Word must be long enough to cross a Star");
           return 0;
         }
       }
 
       if (orientation == "horizontal") {
         if (y != 6 && y != 10) {
-          alert("First Word must be placed to cross a Star");
+          salert("First Word must be placed to cross a Star");
           return 0;
         }
 
@@ -872,7 +872,7 @@ console.log("INITIALIZE GAME 2");
         let ending_point = x + word.length - 1;
 
         if (starting_point <= 6 && ending_point >= 6 || starting_point <= 10 && ending_point >= 6) { } else {
-          alert("First Word must be long enough to cross a Star");
+          salert("First Word must be long enough to cross a Star");
           return 0;
         }
       } //this.firstmove = 0;
@@ -906,14 +906,14 @@ console.log("INITIALIZE GAME 2");
         }
 
         if (letter_found == 0) {
-          alert("INVALID: letter not in hand: " + letter);
+          salert("INVALID: letter not in hand: " + letter);
           return 0;
         }
       }
     }
 
     if (valid_placement == 0) {
-      alert("This is an invalid placement!");
+      salert("This is an invalid placement!");
     }
 
     return valid_placement;
@@ -1115,7 +1115,7 @@ console.log("INITIALIZE GAME 2");
   checkWord(word) {
     if (word.length >= 1 && typeof this.wordlist != "undefined") {
       if (this.wordlist.indexOf(word.toLowerCase()) <= 0) {
-        alert(word + " is not a playable word.");
+        salert(word + " is not a playable word.");
         return false;
       } else {
         return true;
@@ -1623,7 +1623,7 @@ console.log("INITIALIZE GAME 2");
     }
 
     if (this.firstmove == 0 && touchesWord == 0) {
-      alert("Word does not cross our touch an existing word.");
+      salert("Word does not cross our touch an existing word.");
       return -1;
     }
 

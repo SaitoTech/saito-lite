@@ -1,4 +1,5 @@
 const saito = require('../../lib/saito/saito');
+const Header = require('../../lib/ui/header/header');
 const GameTemplate = require('../../lib/templates/gametemplate');
 var this_chess = null;
 var chess = null;
@@ -91,7 +92,7 @@ class Chessgame extends GameTemplate {
         }
         else {
           try {
-            opponent = await this.app.keys.fetchIdentifierPromise(opponent);
+            opponent = await this.app.keychain.fetchIdentifierPromise(opponent);
           }
           catch (err) {
             console.log(err);
@@ -169,23 +170,25 @@ console.log("QUEUE: " + this.game.queue);
     this.game.turn = [data_to_send];
     this.moves = [];
     this.sendMessage("game", extra);
-
+    this.updateLog(data.move, 999);
+    this.updateStatusMessage();
   }
 
   attachEvents() {
 
     $('#move_accept').off();
-    $('#move_accept').on('click', function () {
+    $('#move_accept').on('click', () => {
 
       console.log('send move transaction and wait for reply.');
 
       var data = {};
-      data.white = this_chess.game.white;
-      data.black = this_chess.game.black;
-      data.id = this_chess.game.id;
-      data.position = this_chess.engine.fen();
-      data.move = this_chess.game.move;
-      this_chess.endTurn(data);
+      data.white = this.game.white;
+      data.black = this.game.black;
+      data.id = this.game.id;
+      data.position = this.engine.fen();
+      data.move = this.game.move;
+      this.endTurn(data);
+    
 
       $('#move_accept').prop('disabled', true);
       $('#move_accept').removeClass('green');
@@ -197,9 +200,9 @@ console.log("QUEUE: " + this.game.queue);
 
 
     $('#move_reject').off();
-    $('#move_reject').on('click', function () {
+    $('#move_reject').on('click', () => {
 
-      this_chess.setBoard(this_chess.game.position);
+      this.setBoard(this.game.position);
       $('#move_accept').prop('disabled', true);
       $('#move_accept').removeClass('green');
 
@@ -208,9 +211,9 @@ console.log("QUEUE: " + this.game.queue);
 
     });
 
-    $(window).resize(function () {
-      if(this_chess) {
-        this_chess.board.resize();
+    $(window).resize(() => {
+      if(this) {
+        this.board.resize();
       }
     });
   }
@@ -540,7 +543,6 @@ console.log("QUEUE: " + this.game.queue);
       </form>
     `;
   }
-
 }
 module.exports = Chessgame;
 

@@ -8,6 +8,7 @@ logs/*
 
 config/options
 config/options.*
+config/modules.config.js
 
 .DS_Store
 node_modules
@@ -37,7 +38,7 @@ mods/catan
 mods/catan/*
 mods/citysim
 mods/citysim/*
-mods/appstore/modules
+mods/appstore/modules/*.zip
 mods/appstore/bundler/dist
 mods/appstore/saitolib
 mods/appstore/saitolib/*

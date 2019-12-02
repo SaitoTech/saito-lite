@@ -53,6 +53,10 @@ if [ "$1" == "nuke" ]; then
     cp config/options.conf config/options
   fi
 
+  if [ ! -f config/modules.config.js ]; then
+    cp config/modules.default.js config/modules.config.js
+  fi
+
   # if [ -f ../config/options.server ]; then
   #   cp ../config/options.server ../config/options
   # fi
