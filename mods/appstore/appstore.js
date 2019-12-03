@@ -3,7 +3,20 @@ const ModTemplate = require('../../lib/templates/modtemplate');
 const AppStoreAppspace = require('./lib/email-appspace/appstore-appspace');
 const AppStoreSearch = require('./lib/email-appspace/appstore-search');
 
+const fs = require('fs');
+const path = require('path');
 
+//
+// recursively go through and find all files in dir
+//
+function getFiles(dir) {
+  const dirents = fs.readdirSync(dir, { withFileTypes: true });
+  const files = dirents.map((dirent) => {
+    const res = path.resolve(dir, dirent.name);
+    return dirent.isDirectory() ? getFiles(res) : res;
+  });
+  return Array.prototype.concat(...files);
+}
 
 class AppStore extends ModTemplate {
 
@@ -100,18 +113,6 @@ class AppStore extends ModTemplate {
 
         archive.pipe(output);
 
-        //
-        // recursively go through and find all files in dir
-        //
-        function getFiles(dir) {
-          const dirents = fs.readdirSync(dir, { withFileTypes: true });
-          const files = dirents.map((dirent) => {
-            const res = path.resolve(dir, dirent.name);
-            return dirent.isDirectory() ? getFiles(res) : res;
-          });
-          return Array.prototype.concat(...files);
-        }
-
         let file_array = getFiles(`${mods_dir_path}/${dir}/`);
 
         //
@@ -161,7 +162,6 @@ class AppStore extends ModTemplate {
 
 
   onConfirmation(blk, tx, conf, app) {
-    // let appstore = app.modules.returnModule('AppStore');
     let txmsg = tx.returnMessage();
     if (conf == 0) {
       switch(txmsg.request) {
@@ -171,6 +171,9 @@ class AppStore extends ModTemplate {
         case 'request bundle':
           this.requestBundle(blk, tx);
           break;
+        case 'receive bundle':
+          if ( tx.isTo(app.wallet.returnPublicKey()) )
+            this.receiveBundle(blk, tx);
         default:
           break;
       }
@@ -241,7 +244,8 @@ class AppStore extends ModTemplate {
 
 
   async submitModule(blk, tx) {
-    // const path = require('path');
+
+    if (this.app.BROWSER == 1) { return; }
 
     let sql = `INSERT INTO modules (name, description, version, publickey, unixtime, bid, bsh, tx)
     VALUES ($name, $description, $version, $publickey, $unixtime, $bid, $bsh, $tx)`;
@@ -278,8 +282,6 @@ class AppStore extends ModTemplate {
     let params = '';
     let txmsg = tx.returnMessage();
     let module_list = txmsg.list;
-
-console.log("request bundle: " + JSON.stringify(module_list));
 
     //
     // module list = [
@@ -371,17 +373,39 @@ console.log("request bundle: " + JSON.stringify(module_list));
     //
     // insert resulting JS into our bundles database
     //
-    sql = `INSERT INTO bundles (version, publickey, unixtime, bid, bsh, script) VALUES ($version, $publickey, $unixtime, $bid, $bsh, $script)`;
-    let { from, sig, ts, msg } = tx.transaction;
+    let bundle_binary = fs.readFileSync(path.resolve(__dirname, `bundler/dist/${bundle_filename}`), { encoding: 'binary' });
+
+    //
+    // show link to bundle or save in it? Should save it as a file
+    //
+    sql = `INSERT INTO bundles (version, publickey, unixtime, bid, bsh, name, script) VALUES ($version, $publickey, $unixtime, $bid, $bsh, name, script)`;
+    let { from, sig, ts } = tx.transaction;
     params = {
       $version	:	`${ts}-${sig}`,
-      $publickey	:	from[0].add ,
-      $unixtime	:	ts ,
+      $publickey	:	from[0].add,
+      $unixtime	:	ts,
       $bid		:	blk.block.id ,
-      $bsh		:	blk.returnHash() ,
-      $script : msg.bundle,
+      $bsh		:	blk.returnHash(),
+      $name: bundle_filename,
+      $script : bundle_binary,
     }
+
     this.app.storage.executeDatabase(sql, params, "appstore");
+
+    //
+    // send our filename back at our person of interest
+    //
+    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(from[0].add);
+    let msg = {
+      module: "AppStore",
+      request: "receive bundle",
+      bundle_filename
+    };
+
+    newtx.transaction.msg = msg;
+    newtx = this.app.wallet.signTransaction(newtx);
+
+    this.app.network.propagateTransaction(newtx);
   }
 
   createBundleTX(filename) {
@@ -402,9 +426,10 @@ console.log("request bundle: " + JSON.stringify(module_list));
     //
     // require inclusion of  module versions and paths for loading into the system
     //
+
+    const fs = this.app.storage.returnFileSystem();
     const path = require('path');
     const unzipper = require('unzipper');
-    const fs = this.app.storage.returnFileSystem();
 
     let ts = new Date().getTime();
     let hash = this.app.crypto.hash(modules.map(mod => mod.version).join(''));
@@ -491,17 +516,24 @@ console.log("request bundle: " + JSON.stringify(module_list));
     //
     this.app.network.propagateTransaction(newtx);
 
-    // //
-    // // delete bundle
-    // //
-    // fs.unlink(path.resolve(__dirname, `bundler/dist/${bundle_filename}`));
-
     module_paths.forEach(modpath => {
       let mod_dir = modpath.split('/')[0];
+      let files = getFiles(path.resolve(__dirname, `bundler/mods/${mod_dir}`));
+      files.forEach(file_path => fs.unlink(file_path));
       fs.rmdir(path.resolve(__dirname, `bundler/mods/${mod_dir}`));
-    })
+    });
 
     return bundle_filename;
+  }
+
+  receiveBundle(blk, tx) {
+    let txmsg = tx.returnMessage();
+    let { bundle_filename } = txmsg;
+
+    this.app.options.bundle = bundle_filename;
+    this.app.storage.saveOptions();
+
+    salert(`Bundle filename received!: ${bundle_filename}`);
   }
 
 
@@ -515,89 +547,7 @@ console.log("request bundle: " + JSON.stringify(module_list));
     let fs = app.storage.returnFileSystem();
     if (fs != null) {
       expressapp.use('/'+encodeURI(this.name), express.static(__dirname + "/web"));
-
-      expressapp.post('/bundle', async (req, res) => {
-        const path = require('path');
-        //
-        // require inclusion of  module versions and paths for loading into the system
-        //
-        let { versions, paths } = req.body;
-
-        let ts = new Date().getTime();
-        let hash = this.app.crypto.hash(versions.join(''));
-
-        let bundle_filename = `saito-${ts}-${hash}.js`;
-        let index_filename  = `index-${ts}-${hash}.js`;
-        let modules_config_filename = `modules.config-${ts}-${hash}.json`;
-
-        //
-        // write our modules config file
-        //
-        await fs.writeFile(path.resolve(__dirname, `bundler/${modules_config_filename}`),
-          JSON.stringify({paths})
-        );
-
-        //
-        // write our index file for bundling
-        //
-        let IndexTemplate = require('./bundler/templates/index.template.js');
-        await fs.writeFile(path.resolve(__dirname, `bundler/${index_filename}`),
-          IndexTemplate(modules_config_filename)
-        );
-
-        //
-        // TODO: unzip existing modules and stage them
-        //
-
-        //
-        // execute bundling process
-        //
-        let entry = path.resolve(__dirname, `bundler/${index_filename}`);
-        let output_path = path.resolve(__dirname, 'bundler/dist');
-
-        const util = require('util');
-        const exec = util.promisify(require('child_process').exec);
-
-        try {
-          const { stdout, stderr } = await exec(
-            `node webpack.js ${entry} ${output_path} ${bundle_filename}`
-          );
-        } catch (err) {
-          console.log(err);
-        }
-
-        // Done processing
-
-        //
-        // file cleanup
-        //
-        fs.unlink(path.resolve(__dirname, `bundler/${index_filename}`));
-        fs.unlink(path.resolve(__dirname, `bundler/${modules_config_filename}`));
-
-
-        //
-        // if there are no errors, send response back
-        //
-        res.send({
-          payload: {
-            filename: bundle_filename
-          }
-        });
-
-        //
-        // create tx
-        //
-        let newtx = this.createBundleTX(bundle_filename);
-
-        //
-        // publish our bundle
-        //
-        this.app.network.propagateTransaction(newtx);
-
-        //
-        // delete bundle
-        //
-        fs.unlink(path.resolve(__dirname, `bundler/dist/${bundle_filename}`));
+      expressapp.get('/appstore/bundle/:filename', async (req, res) => {
       });
     }
   }

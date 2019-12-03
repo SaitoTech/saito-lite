@@ -5,7 +5,9 @@ CREATE TABLE IF NOT EXISTS bundles (
   unixtime INTEGER,
   bid INTEGER,
   bsh TEXT,
+  name TEXT,
   script BLOB,
+  UNIQUE (name)
   PRIMARY KEY(id ASC)
 );
 
