@@ -20,7 +20,7 @@ module.exports = ChatRoom = {
             let type = app.wallet.returnPublicKey() == publickey ? 'myself' : 'others';
             document.querySelector('.chat-room-content').innerHTML
                 += ChatMessageContainerTemplate(room_message, timestamp, type);
-    ***REMOVED***)
+    ***REMOVED***);
 
 ***REMOVED*** let header = document.querySelector('.header');
 ***REMOVED*** header.classList.remove("header-home");
@@ -35,6 +35,7 @@ module.exports = ChatRoom = {
 ***REMOVED*** footer.style.display = 'flex';
         document.querySelector('.chat-room-footer').innerHTML = ChatRoomFooterTemplate();
 
+        this.scrollToBottom();
         this.attachEvents(app, data);
 ***REMOVED***,
 
@@ -138,7 +139,7 @@ module.exports = ChatRoom = {
 
     addMessage(app, data, tx) {
       data.chatmod.receiveMessage(app, tx);
-      this.addTXToDOM(tx);
+      //this.addTXToDOM(tx);
       this.scrollToBottom();
 ***REMOVED***,
 
