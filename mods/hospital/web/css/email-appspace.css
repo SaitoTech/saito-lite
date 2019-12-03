@@ -1,6 +1,17 @@
 
 .hospital-splash-image-container {
+  max-width: 600px;
 ***REMOVED***
+
+.appointment-select-category {
+  max-width: 300px;
+  font-size:1.4em;
+***REMOVED***
+.appointment-select-appointment {
+  margin-top: 40px;
+  display: none;
+***REMOVED***
+
 .hospital-title{
     text-align: center;
     vertical-align: middle;
