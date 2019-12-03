@@ -1,4 +1,4 @@
-module.exports = HospitalConfirmAppointmentTemplate = () => {
+module.exports = HospitalAwaitConfirmTemplate = () => {
   return `
   <link rel="stylesheet" href="/hospital/css/email-appspace.css">
 
