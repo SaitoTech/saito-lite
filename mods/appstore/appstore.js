@@ -95,6 +95,10 @@ class AppStore extends ModTemplate {
       let mods_dir_path = path.resolve(__dirname, '../');
       let dirs = getDirectories(mods_dir_path);
 
+      if (!fs.existsSync(path.resolve(__dirname, `mods`))){
+        fs.mkdirSync(path.resolve(__dirname, `mods`));
+  ***REMOVED***
+
       //
       // zip each module and output it to modules subdir
       //
