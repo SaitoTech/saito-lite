@@ -78,6 +78,13 @@ module.exports = AppStoreAppspace = {
           newtx = app.wallet.signTransaction(newtx);
           app.network.propagateTransaction(newtx);
 
+          document.querySelector(".email-appspace").innerHTML = `
+            <div>
+              <center>Your apps are being downloaded. Please do not leave this page</center>
+              <center><div class="loader" id="game_spinner"></div></center>
+            </div>
+          `;
+
     ***REMOVED***;
   ***REMOVED***);
 ***REMOVED***
