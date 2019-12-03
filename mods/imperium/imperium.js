@@ -6555,7 +6555,7 @@ $(divsector).append('<img class="hex_frame" id="hex_frame_'+slot+'" src="/imperi
         imperium_self.addMove("change_speaker\t"+(id+1));
         imperium_self.addMove("vote\t"+this.game.player+"\t"+(id+1));
         imperium_self.endTurn();
-  ***REMOVED***
+  ***REMOVED***);
   
 ***REMOVED***
     if (card == "infrastructure") {
