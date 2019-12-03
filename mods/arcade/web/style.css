@@ -380,6 +380,7 @@ button.add-games {
 .identicon {
   width: 100%;
   max-width: 2em;
+  margin: 0 3px;
 }
 .arcade-game-invitation {
   clear: both;
@@ -677,6 +678,10 @@ option {
 
 .arcade-game-row-name {
   padding: 0 0 0 1em;
+}
+
+.arcade-game-row-delete {
+  margin: 0 0 0 12px;
 }
 
 .loader {
