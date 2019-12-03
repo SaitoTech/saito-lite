@@ -22,7 +22,7 @@ module.exports = HospitalConfirmAppointmentTemplate = () => {
   <h4>Is this information correct?</h4>
   
   <div class="confirm-btn-box">
-    <button class="reset sub"><i class="fas fa-redo"></i>Reset</button>
+    <button class="reselect sub"><i class="fas fa-redo"></i>Reselect</button>
     <button class="confirm sub" id="confirm-btn"><i class="far fa-calendar-check"></i>Confirm</button>
    </div>
       
