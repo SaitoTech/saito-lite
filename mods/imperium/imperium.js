@@ -581,6 +581,27 @@ console.log("resolving earlier: " + this.game.queue[z]);
   
       }
   
+     
+
+
+      if (mv[0] == "vote") {
+
+        console.log("\n\n\nVOTING\n\n\n");
+  	this.game.queue.splice(qe, 1);
+  	return 1;
+
+      }
+
+
+      if (mv[0] == "change_speaker") {
+  
+  	this.game.state.speaker = parseInt(mv[1]);
+  	this.game.queue.splice(qe, 1);
+  	return 1;
+  
+      }
+
+
       if (mv[0] == "setinitiativeorder") {
   
   	let initiative_order = this.returnInitiativeOrder();
@@ -6238,13 +6259,18 @@ console.log("\n\n\nHEIGHT: " + height_of_sector);
       }
     }
 
-console.log("DIVSECTOR: " + divsector);
-console.log("BACKGROUND IMAGE: " + bg);
-console.log("BACKGROUND SIZE:  " + bgsize);
-    $(divsector).css('background-image', bg);
-    $(divsector).css('background-size', bgsize);
-    $(divsector).css('background-position', bgpos);
-    $(divsector).css('background-repeat', bgrepeat);
+
+let slot = 12;
+$(divsector).append('<img class="hex_frame" id="hex_frame_'+slot+'" src="/imperium/img/frame/white_planet_center.png" />');
+
+
+//console.log("DIVSECTOR: " + divsector);
+//console.log("BACKGROUND IMAGE: " + bg);
+//console.log("BACKGROUND SIZE:  " + bgsize);
+//    $(divsector).css('background-image', bg);
+//    $(divsector).css('background-size', bgsize);
+//    $(divsector).css('background-position', bgpos);
+//    $(divsector).css('background-repeat', bgrepeat);
 
   };
   
@@ -6512,7 +6538,24 @@ console.log("BACKGROUND SIZE:  " + bgsize);
       this.addMove("resolve\tstrategy");
       this.addMove("strategy\t"+card+"\t"+player+"\t2\t"+player_confirmation_needed);
       this.addMove("DEAL\t2\t"+this.game.player+"\t2");
-      this.endTurn();
+
+      //
+      // pick the speaker
+      //
+      let factions = this.returnFactions();
+      let html = 'Make which player the speaker?';
+      for (let i = 0; i < this.game.players_info.length; i++) {
+  	html += '<li class="option" id="'+i+'">' + factions[this.game.players_info[i].faction].name + '</li>';
+      }
+      this.updateStatus(html);
+  
+      $('.option').off();
+      $('.option').on('click', function() {
+  	let id = $(this).attr("id");
+        imperium_self.addMove("change_speaker\t"+(id+1));
+        imperium_self.addMove("vote\t"+this.game.player+"\t"+(id+1));
+        imperium_self.endTurn();
+      }
   
     }
     if (card == "infrastructure") {
