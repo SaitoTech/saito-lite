@@ -94,6 +94,24 @@ button.add-games {
   width: 100%;
 ***REMOVED***
 
+.arcade-leaderboard-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  padding: 0.5em;
+  grid-gap: 1em;
+***REMOVED***
+
+.arcade-leaderboard-row-winner {
+  overflow: hidden;
+  text-overflow: ellipsis;
+***REMOVED***
+
+.arcade-leaderboard-row-module {***REMOVED***
+
+.arcade-leaderboard-row-score {
+  justify-self: end;
+***REMOVED***
+
 .arcade-sidebar-box {
   display: flex;
   flex-direction: column;
@@ -104,11 +122,16 @@ button.add-games {
   text-align: center;
 ***REMOVED***
 
-.arcade-sidebar-active-games-body {
+.arcade-sidebar-active-games-body,
+.arcade-sidebar-active-leaderboard-body {
   border: 1px solid var(--saito-red);
   background: #1e1e1f50;
   height: 40vh;
   overflow-y: auto;
+***REMOVED***
+
+.arcade-sidebar-active-leaderboard-body {
+  height: 25vh;
 ***REMOVED***
 
 .arcade-observer-game-row {

@@ -108,10 +108,11 @@ class Chat extends ModTemplate {
     this.uidata.chat.groups = this.groups;
 
     this.uidata.chatmod = this;
-
     this.uidata.chat.active = "chat_list";
 
-    ChatMain.render(app, this.uidata);
+    ChatMain.initialize(app, this.uidata);
+
+    // ChatMain.render(app, this.uidata);
   ***REMOVED***
 
 

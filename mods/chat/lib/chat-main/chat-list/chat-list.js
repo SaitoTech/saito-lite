@@ -43,15 +43,14 @@ module.exports = ChatList = {
         Array.from(document.getElementsByClassName('chat-row'))
              .forEach(row => row.addEventListener('click', (e) => {
                 let group_id = e.currentTarget.id;
+                data.chat.active = "chat_room";
                 data.chat.active_group_id = group_id;
-                ChatRoom.render(app, data);
+                data.chat.main.render(app, data);
          ***REMOVED***)
         );
 
         document.querySelector('#chat.create-button')
-                .onclick = () => {
-                    this.toggleChatNav();
-            ***REMOVED***;
+                .onclick = () => this.toggleChatNav();
 
         document.getElementById('chat-nav-new-chat').onclick = () => {
             data.chat.active = 'chat_new';

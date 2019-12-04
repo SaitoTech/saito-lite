@@ -5,6 +5,13 @@ const ChatAddContact = require('./chat-add-contact/chat-add-contact');
 
 
 module.exports = ChatMain = {
+  initialize(app, data) {
+    app.connection.removeAllListeners('chat-render-request');
+    app.connection.on('chat-render-request', () => this.render(app, data));
+
+    this.render(app, data);
+  ***REMOVED***,
+
   render(app, data) {
     data.chat.main = this;
 
