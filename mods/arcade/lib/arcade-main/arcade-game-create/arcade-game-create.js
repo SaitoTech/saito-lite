@@ -59,6 +59,7 @@ module.exports = ArcadeGameDreate = {
 
             let gamedata = {};
                 gamedata.name = gamemod.name;
+                gamedata.slug = gamemod.slug || gamemod.name;
                 gamedata.options = gamemod.returnFormattedGameOptions(options);
                 gamedata.options_html = gamemod.returnGameRowOptionsHTML(options);
                 gamedata.players_needed = $('.game-players-select').val();

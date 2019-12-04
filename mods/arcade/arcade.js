@@ -22,7 +22,9 @@ class Arcade extends ModTemplate {
     this.affix_callbacks_to 	= [];
     this.games			= [];
     this.observer		= [];
-    this.accepted               = [];
+    this.leaderboard = [];
+
+    this.accepted = [];
 
   }
 
@@ -268,6 +270,16 @@ console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
       }
     });
 
+    // select winner, sum(score), module from leaderboard group by winner
+    // SELECT winner, sum(score), module FROM leaderboard GROUP by winner ORDER BY score DESC LIMIT 10
+    let message = {};
+    message.request = "arcade leaderboard list";
+    message.data = {};
+
+    this.app.network.sendRequestWithCallback(message.request, message.data, (res) => {
+      res.rows.forEach(row => this.addWinnerToLeaderboard(row));
+    })
+
 
   }
 
@@ -280,6 +292,18 @@ console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
       }
     }
     this.observer.push(msg);
+
+    let data = {};
+    data.arcade = this;
+
+    if (this.browser_active == 1) {
+      ArcadeRightSidebar.render(this.app, data);
+      ArcadeRightSidebar.attachEvents(this.app, data);
+    }
+  }
+
+  addWinnerToLeaderboard(msg) {
+    this.leaderboard.push(msg);
 
     let data = {};
     data.arcade = this;
@@ -443,7 +467,22 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
     }
   }
 
+  async handlePeerRequest(app, message, peer, mycallback=null) {
+    switch(message.request) {
+      case 'arcade leaderboard list':
+        let sql = `
+        SELECT winner, sum(score) as highscore, module FROM leaderboard
+        GROUP by winner, module
+        ORDER BY highscore
+        DESC LIMIT 10`;
 
+        let rows = await this.app.storage.queryDatabase(sql, {}, 'arcade');
+        mycallback({rows});
+        break;
+      default:
+        break;
+    }
+  }
 
   launchGame(game_id) {
 
@@ -867,6 +906,9 @@ console.log("LOADED THE GAME: " + txmsg.game);
   }
 
   async receiveGameoverRequest(blk, tx, conf, app) {
+    //
+    // we want to update the game, and also give the winner points
+    //
     let txmsg = tx.returnMessage();
     let sql = "UPDATE games SET status = $status, winner = $winner WHERE game_id = $game_id";
     let params = {
@@ -876,8 +918,36 @@ console.log("LOADED THE GAME: " + txmsg.game);
     }
     await this.app.storage.executeDatabase(sql, params, "arcade");
 
+    // module	TEXT,
+    // game_id	TEXT,
+    // tx		TEXT,
+    // bid	INTEGER,
+    // bsh TEXT,
+    // created_at 	INTEGER,
+    // expires_at 	INTEGER,
+    // winner 	TEXT,
+
+    sql = `INSERT INTO leaderboard (module, game_id, winner, score, tx, bid, bsh, timestamp, sig)
+    VALUES ($module, $game_id, $winner, $score, $tx, $bid, $bsh, $timestamp, $sig)`;
+    params = {
+      $module: txmsg.module,
+      $game_id: txmsg.game_id,
+      $winner: txmsg.winner,
+      $score: 50,
+      $tx: JSON.stringify(tx.transaction),
+      $bid: blk.block.id,
+      $bsh: blk.returnHash(),
+      $timestamp: tx.transaction.ts,
+      $sig: tx.transaction.sig
+    }
+
+    await this.app.storage.executeDatabase(sql, params, "arcade");
+
   }
 
+  //
+  // ????
+  //
   sendGameoverRequest(app, data) {
 
     let game_module 	= "Wordblocks";
