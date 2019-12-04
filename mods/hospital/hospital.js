@@ -18,10 +18,63 @@ class Hospital extends ModTemplate {
 
 
   async installModule(app) {
+
     await super.installModule(app);
 
-    let sql = "INSERT INTO appointments (hospital_id, date, time) VALUES ($hospital_id, $date, $time)";
-    let params = {
+    let sql = "";
+    let params = {};
+
+    //
+    // SPECIALITIES
+    //
+    sql = "INSERT INTO specialities (name) VALUES ('General Medicine')";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+    sql = "INSERT INTO specialities (name) VALUES ('Pediatrics')";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+    sql = "INSERT INTO specialities (name) VALUES ('Dentistry')";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+    sql = "INSERT INTO specialities (name) VALUES ('Cardiology')";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+    sql = "INSERT INTO specialities (name) VALUES ('Endocrinology')";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+    sql = "INSERT INTO specialities (name) VALUES ('Oncology')";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+    sql = "INSERT INTO specialities (name) VALUES ('Surgery')";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+    sql = "INSERT INTO specialities (name) VALUES ('Dermatology')";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+    sql = "INSERT INTO specialities (name) VALUES ('Ophthalmology')";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+    sql = "INSERT INTO specialities (name) VALUES ('Gastroenterology')";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+    sql = "INSERT INTO specialities (name) VALUES ('Radiology')";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+    sql = "INSERT INTO specialities (name) VALUES ('Pathology')";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+    sql = "INSERT INTO specialities (name) VALUES ('Neurology')";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+    sql = "INSERT INTO specialities (name) VALUES ('OB/GYN)";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+    sql = "INSERT INTO specialities (name) VALUES ('Urology')";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+    sql = "INSERT INTO specialities (name) VALUES ('Anesthesiology')";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+    sql = "INSERT INTO specialities (name) VALUES ('Psychiatry')";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+    sql = "INSERT INTO specialities (name) VALUES ('Pulmonology')";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+    sql = "INSERT INTO specialities (name) VALUES ('Rheumatology')";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+    sql = "INSERT INTO specialities (name) VALUES ('Hematology')";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+    sql = "INSERT INTO specialities (name) VALUES ('Orthopedics')";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+    sql = "INSERT INTO specialities (name) VALUES ('Emergency Medicine')";
+    await app.storage.executeDatabase(sql, {}, "hospital");
+
+
+    sql = "INSERT INTO appointments (hospital_id, date, time) VALUES ($hospital_id, $date, $time)";
+    params = {
       $hospital_id : 1 ,
       $date : (new Date().getTime()) ,
       $time : 730
@@ -136,20 +189,32 @@ class Hospital extends ModTemplate {
   newProfile() {
 
     let profile = {};
+        profile.personal = {};
 
-    profile.fist_name = "";
-    profile.last_name = "";
-    profile.phone = "";
-    profile.email = "";
-    profile.birthday_year = "";
-    profile.birthday_month = "";
-    profile.birthday_day = "";
+    profile.personal.fist_name = "";
+    profile.personal.last_name = "";
+    profile.personal.phone = "";
+    profile.personal.email = "";
+    profile.personal.birth_year = "";
+    profile.personal.birth_month = "";
+    profile.personal.birth_day = "";
+    profile.personal.address = "";
+    profile.personal.gender = "";
+
     profile.id = "";
-    profile.address = "";
-    profile.gender = "";
     profile.appointments = [];
 
     return profile;
+
+  }
+
+
+  newAppointmentRequest() {
+
+    let request = {};
+        request.random = this.app.wallet.generateKeys();
+        
+    return request;
 
   }
 
