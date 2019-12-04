@@ -1,4 +1,4 @@
-module.exports = HospitalMakeAppointmentTemplate = () => {
+module.exports = HospitalMakeAppointmentTemplate = (default_date) => {
   return `
   <link rel="stylesheet" href="/hospital/css/email-appspace.css">
 
@@ -16,7 +16,7 @@ module.exports = HospitalMakeAppointmentTemplate = () => {
 
   <div class="appointment-select-appointment">
 
-    Date Selected: <input type="date" id="appointment-date" class="appointment-date" name="appointment-date" />
+    Date Selected: <input type="date" id="appointment-date" class="appointment-date" name="appointment-date" value="${default_date}" />
 
     <div class="appointments">
     </div>

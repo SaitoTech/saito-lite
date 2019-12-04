@@ -59,7 +59,7 @@ class Arcade extends ModTemplate {
         if (games[i].id == game_id) {
           games[i].ts = new Date().getTime();
           this.app.storage.saveOptions();
-          window.location = '/'+games[i].module.toLowerCase();
+          window.location = '/'+games[i].module.returnSlug();
           return;
         }
       }
@@ -490,11 +490,7 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
 
     let arcade_self = this;
 
-console.log("THIS IS WHERE WE ARE IN LAUNCH GAME!");
-
     arcade_self.is_initializing = true;
-
-console.log("ARCADE_SELF APP OPTIONS GAMES: ");
 
     arcade_self.initialization_timer = setInterval(() => {
 
@@ -507,23 +503,15 @@ console.log("ARCADE_SELF APP OPTIONS GAMES: ");
         }
       }
 
-console.log("IDX OF GAME: " + game_idx);
-
       if (game_idx == -1) { return; }
 
       if (arcade_self.app.options.games[game_idx].initializing == 0) {
 
-console.log("GAME IS NO LONGER INITIALIZING: " + arcade_self.app.options.games[game_idx].initializing);
-
         clearInterval(arcade_self.initialization_timer);
-
-console.log("CLEARING INTERVAL!");
 
         let data = {};
             data.arcade   = arcade_self;
             data.game_id  = game_id;
-
-console.log("RENDERING LOADER!");
 
         ArcadeLoader.render(arcade_self.app, data);
         ArcadeLoader.attachEvents(arcade_self.app, data);
