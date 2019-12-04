@@ -1,0 +1,36 @@
+.fc.fc-bootstrap a {
+  text-decoration: none;
+***REMOVED***
+
+.fc.fc-bootstrap a[data-goto]:hover {
+  text-decoration: underline;
+***REMOVED***
+
+.fc-bootstrap hr.fc-divider {
+  border-color: inherit;
+***REMOVED***
+
+.fc-bootstrap .fc-today.alert {
+  border-radius: 0;
+***REMOVED***
+
+.fc-bootstrap a.fc-event:not([href]):not([tabindex]) {
+  color: #fff;
+***REMOVED***
+
+.fc-bootstrap .fc-popover.card {
+  position: absolute;
+***REMOVED***
+
+/* Popover
+--------------------------------------------------------------------------------------------------*/
+.fc-bootstrap .fc-popover .card-body {
+  padding: 0;
+***REMOVED***
+
+/* TimeGrid Slats (lines that run horizontally)
+--------------------------------------------------------------------------------------------------*/
+.fc-bootstrap .fc-time-grid .fc-slats table {
+  /* some themes have background color. see through to slats */
+  background: none;
+***REMOVED***

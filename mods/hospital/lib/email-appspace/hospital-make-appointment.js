@@ -7,10 +7,18 @@ const HospitalConfirmAppointment	 	= require('./hospital-confirm-appointment.js'
 module.exports = HospitalMakeAppointment = {
 
     category: "general",
-    appointment_date:  new Date().getTime(),
+    appointment_date: new Date(),
 
     render(app, data) {
-      document.querySelector(".email-appspace").innerHTML = HospitalMakeAppointmentTemplate();
+
+      // tomorrow
+      this.appointment_date.setDate(this.appointment_date.getDate()+1);
+      this.appointment_date = this.appointment_date.toISOString().substring(0, 10);
+
+
+      document.querySelector(".email-appspace").innerHTML = HospitalMakeAppointmentTemplate(this.appointment_date);
+      document.getElementById('appointment-date').value = this.appointment_date;
+
 ***REMOVED***,
 
     showAppointments(app, data, category, date) {

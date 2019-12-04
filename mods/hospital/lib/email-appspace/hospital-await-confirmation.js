@@ -1,8 +1,8 @@
 const HospitalAwaitConfirmationTemplate = require('./hospital-await-confirmation.template.js');
-let HospitalAppspace		 	= require('./hospital-appspace.js');
+const HospitalAppspace		 	= require('./hospital-appspace.js');
 
 
-module.exports = HospitalConfirmAppointment = {
+module.exports = HospitalAwaitConfirmation = {
 
     render(app, data) {
       document.querySelector(".email-appspace").innerHTML = HospitalAwaitConfirmationTemplate();
@@ -12,8 +12,8 @@ module.exports = HospitalConfirmAppointment = {
 
       document.querySelector('.return-to-mainpage')
         .addEventListener('click', (e) => {
-          HospitalAppspace.render(app, data);
-          HospitalAppspace.attachEvents(app, data);
+          data.hospital.renderEmail(app, data);
+          data.hospital.attachEventsEmail(app, data);
   ***REMOVED***);
 
 ***REMOVED***
