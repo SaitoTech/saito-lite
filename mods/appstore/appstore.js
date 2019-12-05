@@ -175,20 +175,19 @@ class AppStore extends ModTemplate {
     let txmsg = tx.returnMessage();
     if (conf == 0) {
 
-      if (txmsg.request == "submit module") {
-        this.submitModule(blk, tx);
-      }
+      switch(txmsg.request) {
+        case 'submit module':
+          this.submitModule(blk, tx);
+          break;
+        case 'request bundle':
+          this.requestBundle(blk, tx);
+          break;
+        case 'receive bundle':
+          if (tx.isTo(app.wallet.returnPublicKey()) && !tx.isFrom(app.wallet.returnPublicKey())) {
+            this.receiveBundle(blk, tx);
+          break;
 
-      if (txmsg.request == "request bundle") {
-        this.requestBundle(blk, tx);
       }
-
-      if (txmsg.request == "receive bundle") {
-        if (tx.isTo(app.wallet.returnPublicKey()) && !tx.isFrom(app.wallet.returnPublicKey())) {
-          this.receiveBundle(blk, tx);
-	}
-      }
-
     }
   }
 

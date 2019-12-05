@@ -34,8 +34,8 @@ class Twilight extends GameTemplate {
 
     this.app             = app;
 
-    this.name            = "Twilight Struggle";
-    this.slug		 = "twilight";
+    this.name            = "Twilight";
+    this.slug		         = "twilight";
     this.description     = `Twilight Struggle is a card-driven strategy game for two players, with its theme taken from the Cold War.
       One player plays the United States (US), and the other plays the Soviet Union (USSR).`;
     this.publisher_message = "GMT Games";
