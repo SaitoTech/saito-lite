@@ -1,88 +1,91 @@
-var saito = require('../../lib/saito/saito');
-const ModTemplate = require('../../lib/templates/modtemplate');
-const Big = require('big.js');
-
-
+***REMOVED***
+***REMOVED***
 
 class Faucet extends ModTemplate {
-
-  constructor(app) {
-    super(app);
-
-    this.app = app;
-    this.name = "Faucet";
-  ***REMOVED***
-
-  handlePeerRequest(app, message, peer, mycallback=null) {
-    switch(message.request) {
-      case 'get tokens':
-        this.sendTokensSuccess(message);
-        break;
-      default:
-        break;
 ***REMOVED***
-  ***REMOVED***
-
-  sendTokensSuccess(message) {
-
-    let publickey = message.data.address;
-
-    if (publickey == null) {
-      console.error("NO PUBLICKEY PROVIDED, EXCITING");
-      return;
 ***REMOVED***
 
-    let wallet_balance = this.app.wallet.returnBalance();
+        this.app = app;
+        this.name = "Faucet";
 
-    if (wallet_balance < 1000) {
-      console.log("\n\n\n *******THE FAUCETI SPOOR******* \n\n\n");
-      return;
+        this.initial = 5;
 ***REMOVED***
 
-    try {
 
-      let faucet_self = this;
-      let total_fees = Big(1002.0);
-      let newtx = new saito.transaction();
-      newtx.transaction.from = faucet_self.app.wallet.returnAdequateInputs(total_fees.toString());
-      newtx.transaction.ts   = new Date().getTime();
-
-console.log("INPUTS: " + JSON.stringify(faucet_self.app.wallet.wallet.inputs));
-
-      // add change input
-      var total_inputs = Big(0.0);
-      for (let ii = 0; ii < newtx.transaction.from.length; ii++) {
-        total_inputs = total_inputs.plus(Big(newtx.transaction.from[ii].amt));
-  ***REMOVED***
-
-      //
-      // generate change address(es)
-      //
-      var change_amount = total_inputs.minus(total_fees);
-
-      for (let i = 0; i < 8; i++) {
-        newtx.transaction.to.push(new saito.slip(publickey, Big(125.0)));
-        newtx.transaction.to[newtx.transaction.to.length-1].type = 0;
-  ***REMOVED***
-
-      if (Big(change_amount).gt(0)) {
-        newtx.transaction.to.push(new saito.slip(faucet_self.app.wallet.returnPublicKey(), change_amount.toFixed(8)));
-        newtx.transaction.to[newtx.transaction.to.length-1].type = 0;
-  ***REMOVED***
-
-      newtx.transaction.msg.module    = "Email";
-      newtx.transaction.msg.title     = "Saito Faucet - Transaction Receipt";
-      newtx.transaction.msg.message   = 'You have received 1000 tokens from our Saito faucet.';
-      newtx = this.app.wallet.signTransaction(newtx);
-
-      this.app.network.propagateTransaction(newtx);
-      return;
-
-***REMOVED*** catch(err) {
-      console.log("ERROR CAUGHT IN FAUCET: ", err);
-      return;
 ***REMOVED***
-  ***REMOVED***
+        console.log('######################################################');
+        console.log('######################################################');
+        console.log('##################                ####################');
+        console.log('##################  CONFIRMATION  ####################');
+        console.log('##################                ####################');
+        console.log('######################################################');
+        console.log('######################################################');
+***REMOVED***
+            this.addTransactionsToDatabase(blk);
+    ***REMOVED***
+***REMOVED***
+
+    async addTransactionsToDatabase(blk) {
+***REMOVED***
+            for (let i = 0; i < blk.transactions.length; i++) {
+                if (blk.transactions[i].transaction.type >= -999) {
+                    for (let ii = 0; ii < blk.transactions[i].transaction.from.length; ii++) {
+                        if (blk.transactions[i].transaction.from[ii].type >= -999) {
+                            let sql = `INSERT OR IGNORE INTO users (
+                                add,
+                                tx_count,
+                                balance,
+                                games_finished,
+                                game_tx_count,
+                                first_tx,
+                                latest_tx,
+                                last_payout_ts,
+                                last_payout_amt,
+                                total_payout,
+                                total_spend,
+                                referer)
+                           VALUES (
+                                $add,
+                                $tx_count,
+                                $balance,
+                                $games_finished,
+                                $game_tx_count,
+                                $first_tx,
+                                $latest_tx,
+                                $last_payout_ts,
+                                $last_payout_amt,
+                                $total_payout,
+                                $total_spend,
+                                $referer)
+                                );`
+                            var isGame = 0;
+                            if (typeof blk.transactions[i].transaction.msg.game_id != undefined) { isGame = 1 ***REMOVED***;
+                            let params = {
+                                $add: blk.transactions[i].transaction.from[ii].add,
+                                $tx_count: 1,
+                                $balance: 0,
+                                $games_finished: 0,
+                                $games_tx_count: isGame,
+                                $first_tx: blk.transactions[i].ts,
+                                $latest_tx: blk.transactions[i].ts,
+                                $last_payout_ts: blk.transactions[i].ts,
+                                $last_payout_amt: this.initial,
+                                $total_payout: this.initial,
+                                $total_spend: blk.transactions[i].fees_total,
+                                $referer: ""
+                        ***REMOVED***
+                            await this.app.storage.executeDatabase(sql, params, "faucet");
+                    ***REMOVED***
+                ***REMOVED***
+            ***REMOVED***
+        ***REMOVED***
+            return;
+    ***REMOVED*** catch (err) {
+            console.error(err);
+    ***REMOVED***
+
+***REMOVED***
+
 ***REMOVED***
 
 module.exports = Faucet;
