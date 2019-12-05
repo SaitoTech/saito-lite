@@ -3,12 +3,12 @@
 
 class Faucet extends ModTemplate {
 ***REMOVED***
+
 ***REMOVED***
 
-        this.app = app;
         this.name = "Faucet";
-
         this.initial = 5;
+
 ***REMOVED***
 
 
