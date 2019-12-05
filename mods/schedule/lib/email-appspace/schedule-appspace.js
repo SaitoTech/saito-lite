@@ -1,16 +1,17 @@
-const AppointmentsAppspaceTemplate 	= require('./appointments-appspace.template.js');
+const ScheduleAppspaceTemplate 	= require('./schedule-appspace.template.js');
 
 
-module.exports = AppointmentsAppspace = {
+module.exports = ScheduleAppspace = {
 
     render(app, data) {
 
-      document.querySelector(".email-appspace").innerHTML = AppointmentsAppspaceTemplate();
+      document.querySelector(".email-appspace").innerHTML = ScheduleAppspaceTemplate();
 
-      var calendarEl = document.getElementById('appointments-calendar');
+      var calendarEl = document.getElementById('schedule-calendar');
 
       var calendar = new FullCalendar.Calendar(calendarEl, {
         plugins: [ 'dayGrid' ],
+/***
 	events: [
    	  {
       	    	title: 'Meeting',
@@ -26,8 +27,9 @@ module.exports = AppointmentsAppspace = {
       		borderColor: 'green'
     	  ***REMOVED***,
         ],
+****/
   	dayRender: function(dayRenderInfo) {
-          dayRenderInfo.el.innerHTML = '<div class="appointments-calendar-day">custom view</div>';
+          dayRenderInfo.el.innerHTML = '<div class="schedule-calendar-day"><div class="schedule-calendar-day-appointment-num"></div></div>';
   	***REMOVED***,
   ***REMOVED***);
 

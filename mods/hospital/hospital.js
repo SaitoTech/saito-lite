@@ -25,6 +25,40 @@ class Hospital extends ModTemplate {
     let params = {***REMOVED***;
 
     //
+    // appointments
+    //
+    sql = "INSERT INTO appointments (appointment_id, date, time) VALUES ($appointment_id, $date, $time)";
+    params = {
+      $appointment_id : 1 ,
+      $date : (new Date().getTime()) ,
+      $time : 730
+***REMOVED***
+    await app.storage.executeDatabase(sql, params, "hospital");
+
+    params = {
+      $appointment_id : 1 ,
+      $date : 413131214 ,
+      $time : 1130
+***REMOVED***
+    await app.storage.executeDatabase(sql, params, "hospital");
+
+    params = {
+      $appointment_id : 1 ,
+      $date : (new Date().getTime()) ,
+      $time : 1430
+***REMOVED***
+    await app.storage.executeDatabase(sql, params, "hospital");
+
+    params = {
+      $appointment_id : 2 ,
+      $date : (new Date().getTime()) ,
+      $time : 1345
+***REMOVED***
+    await app.storage.executeDatabase(sql, params, "hospital");
+
+
+
+    //
     // SPECIALITIES
     //
     sql = "INSERT INTO specialities (name) VALUES ('General Medicine')";
