@@ -2,6 +2,7 @@
 const ModTemplate = require('../../lib/templates/modtemplate');
 const AppStoreAppspace = require('./lib/email-appspace/appstore-appspace');
 const AppStoreSearch = require('./lib/email-appspace/appstore-search');
+const AppStoreBundleConfirm = require('./lib/email-appspace/appstore-bundle-confirm');
 
 const fs = require('fs');
 const path = require('path');
@@ -72,7 +73,12 @@ class AppStore extends ModTemplate {
 ***REMOVED***
   ***REMOVED***
 
+
+  //
+  // publish modules into database on module install
+  //
   installModule(app) {
+
     if (this.app.BROWSER == 1) { return; ***REMOVED***
 
     super.installModule(app);
@@ -131,7 +137,6 @@ class AppStore extends ModTemplate {
 ***REMOVED*** listen for all archive data to be written
 ***REMOVED*** 'close' event is fired only when a file descriptor is involved
         output.on('close', function() {
-          console.log(archive.pointer() + ' total bytes');
 
           let mod_zip_filename = path.basename(this.path);
           let mod_path = path.resolve(__dirname, `mods/${mod_zip_filename***REMOVED***`);
@@ -166,25 +171,30 @@ class AppStore extends ModTemplate {
 
 
   onConfirmation(blk, tx, conf, app) {
+
     let txmsg = tx.returnMessage();
     if (conf == 0) {
-      switch(txmsg.request) {
-        case 'submit module':
-          this.submitModule(blk, tx);
-          break;
-        case 'request bundle':
-          this.requestBundle(blk, tx);
-          break;
-        case 'receive bundle':
-          if ( tx.isTo(app.wallet.returnPublicKey()) )
-            this.receiveBundle(blk, tx);
-        default:
-          break;
+
+      if (txmsg.request == "submit module") {
+        this.submitModule(blk, tx);
   ***REMOVED***
+
+      if (txmsg.request == "request bundle") {
+        this.requestBundle(blk, tx);
+  ***REMOVED***
+
+      if (txmsg.request == "receive bundle") {
+        if (tx.isTo(app.wallet.returnPublicKey()) && !tx.isFrom(app.wallet.returnPublicKey())) {
+          this.receiveBundle(blk, tx);
+	***REMOVED***
+  ***REMOVED***
+
 ***REMOVED***
   ***REMOVED***
 
+
   async getNameAndDescriptionFromZip(zip_bin, zip_path) {
+
     const fs = this.app.storage.returnFileSystem();
     const path = require('path');
     const unzipper = require('unzipper');
@@ -278,6 +288,8 @@ class AppStore extends ModTemplate {
   ***REMOVED***
 
 
+
+
   async requestBundle(blk, tx) {
 
     if (this.app.BROWSER == 1) { return; ***REMOVED***
@@ -348,10 +360,6 @@ class AppStore extends ModTemplate {
   ***REMOVED***
 ***REMOVED***
 
-// console.log("MOD SEL: " + JSON.stringify(modules_selected));
-
-    //
-    // modules_selected contains our modules
     //
     // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
     // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
@@ -370,7 +378,6 @@ class AppStore extends ModTemplate {
     // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
     //
     //
-
     let bundle_filename = await this.bundler(modules_selected);
 
 
@@ -382,19 +389,25 @@ class AppStore extends ModTemplate {
     //
     // show link to bundle or save in it? Should save it as a file
     //
-    sql = `INSERT INTO bundles (version, publickey, unixtime, bid, bsh, name, script) VALUES ($version, $publickey, $unixtime, $bid, $bsh, name, script)`;
+    sql = `INSERT INTO bundles (version, publickey, unixtime, bid, bsh, name, script) VALUES ($version, $publickey, $unixtime, $bid, $bsh, $name, $script)`;
     let { from, sig, ts ***REMOVED*** = tx.transaction;
     params = {
-      $version	:	`${ts***REMOVED***-${sig***REMOVED***`,
+      $version		:	`${ts***REMOVED***-${sig***REMOVED***`,
       $publickey	:	from[0].add,
-      $unixtime	:	ts,
+      $unixtime		:	ts,
       $bid		:	blk.block.id ,
       $bsh		:	blk.returnHash(),
-      $name: bundle_filename,
-      $script : bundle_binary,
+      $name		: 	bundle_filename,
+      $script 		: 	bundle_binary,
 ***REMOVED***
+    await this.app.storage.executeDatabase(sql, params, "appstore");
 
-    this.app.storage.executeDatabase(sql, params, "appstore");
+    //
+    //
+    //
+    let online_version = "http://"+this.app.options.server.endpoint.host+":"+this.app.options.server.endpoint.port+"/appstore/bundle/"+bundle_filename;
+
+console.log(bundle_filename + " -- " + online_version);
 
     //
     // send our filename back at our person of interest
@@ -403,28 +416,18 @@ class AppStore extends ModTemplate {
     let msg = {
       module: "AppStore",
       request: "receive bundle",
-      bundle_filename
+      bundle: online_version
 ***REMOVED***;
-
     newtx.transaction.msg = msg;
     newtx = this.app.wallet.signTransaction(newtx);
-
     this.app.network.propagateTransaction(newtx);
+
   ***REMOVED***
 
-  createBundleTX(filename) {
-    const path = require('path');
-    let fs = this.app.storage.returnFileSystem();
-    if (fs) {
-      let bundle_bin = fs.readFileSync(path.resolve(__dirname, `bundler/dist/${filename***REMOVED***`), { encoding: 'binary' ***REMOVED***);
-      let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
-      newtx.transaction.msg = { module: "AppStore", request: "add bundle", bundle: bundle_bin ***REMOVED***;
-      return this.app.wallet.signTransaction(newtx);
-***REMOVED***
-    return null;
-  ***REMOVED***
+
 
   async bundler(modules) {
+
     //
     // modules has name, description, zip (helpful)
     //
@@ -467,6 +470,8 @@ class AppStore extends ModTemplate {
       JSON.stringify({module_paths***REMOVED***)
     );
 
+console.log("Module Paths: " + JSON.stringify(module_paths));
+
     //
     // other filenames
     //
@@ -480,10 +485,6 @@ class AppStore extends ModTemplate {
     await fs.writeFile(path.resolve(__dirname, `bundler/${index_filename***REMOVED***`),
       IndexTemplate(modules_config_filename)
     );
-
-    //
-    // TODO: unzip existing modules and stage them
-    //
 
     //
     // execute bundling process
@@ -502,22 +503,21 @@ class AppStore extends ModTemplate {
       console.log(err);
 ***REMOVED***
 
-    // Done processing
-
     //
-    // file cleanup
+    // cleanup
     //
     fs.unlink(path.resolve(__dirname, `bundler/${index_filename***REMOVED***`));
     fs.unlink(path.resolve(__dirname, `bundler/${modules_config_filename***REMOVED***`));
 
+
     //
     // create tx
     //
-    let newtx = this.createBundleTX(bundle_filename);
-
-    //
-    // publish our bundle
-    //
+    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+    let bundle_bin = "";
+    if (fs) { bundle_bin = fs.readFileSync(path.resolve(__dirname, `bundler/dist/${bundle_filename***REMOVED***`), { encoding: 'binary' ***REMOVED***); ***REMOVED***
+    newtx.transaction.msg = { module: "AppStore", request: "add bundle", bundle: bundle_bin ***REMOVED***;
+    newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
     module_paths.forEach(modpath => {
@@ -531,13 +531,19 @@ class AppStore extends ModTemplate {
   ***REMOVED***
 
   receiveBundle(blk, tx) {
+
+    if (this.app.BROWSER != 1) { return; ***REMOVED***
+
     let txmsg = tx.returnMessage();
-    let { bundle_filename ***REMOVED*** = txmsg;
 
-    this.app.options.bundle = bundle_filename;
-    this.app.storage.saveOptions();
+      let data = {***REMOVED***;
+          data.appstore = this;
+          data.bundle_appstore_publickey = tx.transaction.from[0].add;
+          data.appstore_bundle = txmsg.bundle;
 
-    salert(`Bundle filename received!: ${bundle_filename***REMOVED***`);
+      AppStoreBundleConfirm.render(this.app, data);
+      AppStoreBundleConfirm.attachEvents(this.app, data);
+
   ***REMOVED***
 
 
@@ -550,8 +556,42 @@ class AppStore extends ModTemplate {
 
     let fs = app.storage.returnFileSystem();
     if (fs != null) {
-      expressapp.use('/'+encodeURI(this.name), express.static(__dirname + "/web"));
+
+      //expressapp.use('/'+encodeURI(this.name), express.static(__dirname + "/web"));
+
+
       expressapp.get('/appstore/bundle/:filename', async (req, res) => {
+
+console.log("\n\n\nscriptname!");
+	let scriptname = req.params.filename;
+
+console.log("REQUEST FOR SCRIPTNAME: " + scriptname);
+
+        let sql = "SELECT script FROM bundles WHERE name = $scriptname";
+	let params = {
+	  $scriptname	:	scriptname
+	***REMOVED***
+	let rows = await app.storage.queryDatabase(sql, params, "appstore");
+
+console.log("ROWS: " + JSON.stringify(rows));
+
+	if (rows != null) {
+	  if (rows.length > 0) {
+
+            res.setHeader('Content-type', 'text/javascript');
+            res.charset = 'UTF-8';
+            res.write(rows[0].script);
+            res.end();	    
+
+	  ***REMOVED***
+	***REMOVED*** else {
+
+            res.setHeader('Content-type', 'text/javascript');
+            res.charset = 'UTF-8';
+            res.write('alert("Server does not contain your Saito javascript bundle...");');
+            res.end();	    
+
+	***REMOVED***
   ***REMOVED***);
 ***REMOVED***
   ***REMOVED***

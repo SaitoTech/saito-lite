@@ -1,6 +1,6 @@
 
 .appointments-calendar {
-  width: 600px;
+ max-width: 850px;
 ***REMOVED***
 .appointments-calendar-sidebar {
  float:right;

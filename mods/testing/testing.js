@@ -22,6 +22,13 @@ class Testing extends ModTemplate {
   ***REMOVED***
 
 
+  initialize(app) {
+
+    console.log("########################");
+    console.log("#########TESTING########");
+    console.log("########################");
+
+  ***REMOVED***
 
 
   respondTo(type) {
