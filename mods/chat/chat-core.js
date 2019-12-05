@@ -149,17 +149,13 @@ class ChatCore extends ModTemplate {
   // onChain messages received on the blockchain arrive here
   //
   onConfirmation(blk, tx, conf, app) {
-
     let txmsg = tx.returnMessage();
-    let chat_self = app.modules.returnModule("Chat");
-
     if (conf == 0) {
       if (txmsg.request == "chat message") {
         if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) { return; ***REMOVED***
 	      this.receiveChatMessage(app, tx);
   ***REMOVED***
 ***REMOVED***
-
   ***REMOVED***
 
 
@@ -195,9 +191,6 @@ class ChatCore extends ModTemplate {
       ***REMOVED***);
           if (mycallback) { mycallback({ "payload": "success", "error": {***REMOVED*** ***REMOVED***); ***REMOVED***
           break;
-
-        default:
-	        break;
   ***REMOVED***
 
  ***REMOVED*** catch(err) {

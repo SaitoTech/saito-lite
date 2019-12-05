@@ -479,8 +479,6 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
         let rows = await this.app.storage.queryDatabase(sql, {***REMOVED***, 'arcade');
         mycallback({rows***REMOVED***);
         break;
-      default:
-        break;
 ***REMOVED***
   ***REMOVED***
 
