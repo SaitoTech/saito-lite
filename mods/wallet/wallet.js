@@ -43,9 +43,6 @@ class Wallet extends ModTemplate {
   }
 
 
-  /*
-   MODULE HTML FUNCTIONS
-  */
   respondTo(type) {
 
     if (type == 'email') {

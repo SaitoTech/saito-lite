@@ -14,8 +14,8 @@ class Testing extends ModTemplate {
     super(app);
 
     this.app             = app;
-    this.name            = "Testing Application";
-    this.description     = "This application does absolutely nothing except help us test the AppStore";
+    this.name            = "Testing";
+    this.description     = "Demo application with a clickable button - intended as guide for developers";
 
     return this;
 

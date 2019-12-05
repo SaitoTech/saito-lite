@@ -37,7 +37,7 @@ class Encrypt extends ModTemplate {
 
 
 
-
+/*******
   respondTo(type) {
     if (type == 'email-appspace') {
       let obj = {};
@@ -54,7 +54,7 @@ class Encrypt extends ModTemplate {
   attachEventsEmail(app, data) {
      EncryptAppspace.attachEvents(app, data);
   }
-
+*******/
 
 
   //

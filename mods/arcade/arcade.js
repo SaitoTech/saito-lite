@@ -696,19 +696,13 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
       }
     }
     unique_keys.sort();
-console.log("UNIQUE KEYS: " + unique_keys);
     let players_array = unique_keys.join("_");
-console.log("PLAYER ARRAY FOR UPDATE: " + unique_keys);
-
     let sql = "UPDATE games SET players_accepted = "+unique_keys.length+", players_array = $players_array WHERE status = $status AND game_id = $game_id";
     let params = {
       $players_array : players_array ,
       $status : 'open',
       $game_id : txmsg.game_id 
     }
-console.log("UPDATING ARCADE DB: ");
-console.log(sql);
-console.log(params);
     await this.app.storage.executeDatabase(sql, params, "arcade");
 
 
@@ -716,8 +710,6 @@ console.log(params);
     // servers nope out
     //
     if (this.browser_active == 0) { return; }
-
-console.log("ARCADE BUT ONLY IN BROWSER!");
 
     //
     // auto-accept
@@ -802,8 +794,6 @@ console.log("ARCADE BUT ONLY IN BROWSER!");
     let unique_keys = removeDuplicates(publickeys);
     unique_keys.sort();
     let players_array = unique_keys.join("_"); 
-
-console.log("RECEIVE TX IN ACCEPT: " + JSON.stringify(txmsg));
 
     let sql = "UPDATE games SET players_accepted = (players_accepted+1), players_array = $players_array WHERE status = $status AND game_id = $game_id";
     let params = {
