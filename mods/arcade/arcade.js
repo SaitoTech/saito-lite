@@ -468,6 +468,8 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
   }
 
   async handlePeerRequest(app, message, peer, mycallback=null) {
+    super.handlePeerRequest(app, message, peer, mycallback);
+
     switch(message.request) {
       case 'arcade leaderboard list':
         let sql = `
