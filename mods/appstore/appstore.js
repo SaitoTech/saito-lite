@@ -185,8 +185,8 @@ class AppStore extends ModTemplate {
         case 'receive bundle':
           if (tx.isTo(app.wallet.returnPublicKey()) && !tx.isFrom(app.wallet.returnPublicKey())) {
             this.receiveBundle(blk, tx);
+          }
           break;
-
       }
     }
   }
