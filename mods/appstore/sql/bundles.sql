@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS bundles (
   bsh TEXT,
   name TEXT,
   script BLOB,
-  UNIQUE (name)
+  UNIQUE (name),
   PRIMARY KEY(id ASC)
 );
 

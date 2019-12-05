@@ -22,6 +22,13 @@ class Testing extends ModTemplate {
   }
 
 
+  initialize(app) {
+
+    console.log("########################");
+    console.log("#########TESTING########");
+    console.log("########################");
+
+  }
 
 
   respondTo(type) {

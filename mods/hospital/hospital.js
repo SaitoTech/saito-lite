@@ -72,53 +72,6 @@ class Hospital extends ModTemplate {
     sql = "INSERT INTO specialities (name) VALUES ('Emergency Medicine')";
     await app.storage.executeDatabase(sql, {}, "hospital");
 
-
-    sql = "INSERT INTO appointments (hospital_id, date, time) VALUES ($hospital_id, $date, $time)";
-    params = {
-      $hospital_id : 1 ,
-      $date : (new Date().getTime()) ,
-      $time : 730
-    }
-    await app.storage.executeDatabase(sql, params, "hospital");
-
-    params = {
-      $hospital_id : 1 ,
-      $date : 413131214 ,
-      $time : 1130
-    }
-    await app.storage.executeDatabase(sql, params, "hospital");
-
-    params = {
-      $hospital_id : 1 ,
-      $date : (new Date().getTime()) ,
-      $time : 1430
-    }
-    await app.storage.executeDatabase(sql, params, "hospital");
-
-    params = {
-      $hospital_id : 2 ,
-      $date : (new Date().getTime()) ,
-      $time : 1345
-    }
-    await app.storage.executeDatabase(sql, params, "hospital");
-
-    sql = "INSERT INTO hospitals (name, address, phone, admin) VALUES ($name, $address, $phone, $admin)";
-    params = {
-      $name 	: "Saint Mary of the Sacred Heart" ,
-      $address	: "74 Mount Crescent Road, Montreal Canada" ,
-      $phone    : 485038955234 ,
-      $admin	: "henry@saito" ,
-    }
-    await app.storage.executeDatabase(sql, params, "hospital");
-
-    params = {
-      $name 	: "University Children's Hospital" ,
-      $address	: "575 Avenue Road, Toronto Canada" ,
-      $phone    : 41605820394 ,
-      $admin	: "the_doctor@saito" ,
-    }
-    await app.storage.executeDatabase(sql, params, "hospital");
-
   }
 
 

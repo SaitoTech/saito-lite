@@ -1,7 +1,8 @@
-CREATE TABLE IF NOT EXISTS roles (
+CREATE TABLE IF NOT EXISTS permissions (
   id INTEGER,
+  parent_id INTEGER,
+  child_id INTEGER,
   publickey TEXT,
-  permission TEXT,
   UNIQUE (publickey, permission),
   PRIMARY KEY(id ASC)
 );
