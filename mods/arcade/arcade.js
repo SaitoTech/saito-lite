@@ -479,8 +479,6 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
         let rows = await this.app.storage.queryDatabase(sql, {}, 'arcade');
         mycallback({rows});
         break;
-      default:
-        break;
     }
   }
 
