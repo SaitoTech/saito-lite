@@ -32,8 +32,6 @@ module.exports = ChatMain = {
         ChatAddContact.render(app, data);
         ChatAddContact.attachEvents(app, data);
         break;
-      default:
-        break
 ***REMOVED***
   ***REMOVED***,
 
