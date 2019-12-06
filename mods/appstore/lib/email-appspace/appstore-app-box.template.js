@@ -7,7 +7,7 @@ module.exports = AppStoreAppBoxTemplate = (app, approw) => {
 
   return `
       <div id="appstore-app-item-${approw.version***REMOVED***" class="appstore-app-item">
-        <div class="appstore-app-item-image"></div>
+        <div class="appstore-app-item-image"><img src="${app.keys.returnIdenticon(base64msg)***REMOVED***"></div>
         <div class="appstore-app-item-name">${approw.name***REMOVED***</div>
         <div class="appstore-app-item-description">${approw.description***REMOVED***</div>
         <div class="appstore-app-item-publisher">${approw.publickey***REMOVED***</div>
