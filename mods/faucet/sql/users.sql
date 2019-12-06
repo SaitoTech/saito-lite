@@ -1,7 +1,6 @@
 CREATE TABLE IF NOT EXISTS users (
     address TEXT,
     tx_count INTEGER,
-    balance FLOAT,
     games_finished INTEGER,
     game_tx_count INTEGER,
     first_tx INTEGER,

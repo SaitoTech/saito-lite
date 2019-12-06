@@ -11,7 +11,7 @@ module.exports = EscrowSidebarTemplate = () => {
 
         </div>
 
-        <button id="escrow-sidebar-btn">create game</button>
+        <button id="escrow-sidebar-btn">Create Game</button>
     </div>
 </div>
   `;

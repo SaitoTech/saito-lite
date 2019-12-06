@@ -1,7 +1,9 @@
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate.js');
+/*
 const sqlite = require('sqlite');
 const fs = require('fs');
+*/
 
 class ExplorerCore extends ModTemplate {
     constructor(app) {
@@ -10,24 +12,10 @@ class ExplorerCore extends ModTemplate {
 
         this.app = app;
         this.name = "Explorer";
-
-        this.db = null;
-    }
-
-    // Initialize Module //
-    async initialize(app) {
-        if (this.db == null) {
-            try {
-                this.db = await app.storage.returnDatabaseByName('explorer');
-            } catch (err) { console.error(err); }
-        }
-
     }
 
     onConfirmation(blk, tx, conf, app) {
         if (conf == 0) {
-            //var explorer = app.modules.returnModule("Explorer");
-            //explorer.addTransactionsToDatabase(blk);
             this.addTransactionsToDatabase(blk);
         }
     }
@@ -42,7 +30,39 @@ class ExplorerCore extends ModTemplate {
                 if (blk.transactions[i].transaction.type >= -999) {
                     for (let ii = 0; ii < blk.transactions[i].transaction.to.length; ii++) {
                         if (blk.transactions[i].transaction.to[ii].type >= -999) {
-                            let sql = "INSERT INTO transactions (address, amt, bid, tid, sid, bhash, lc, rebroadcast) VALUES ($address, $amt, $bid, $tid, $sid, $bhash, $lc, $rebroadcast)";
+                            let sql = `INSERT OR IGNORE INTO transactions (
+                                address, 
+                                amt, 
+                                bid, 
+                                tid, 
+                                sid, 
+                                bhash, 
+                                lc, 
+                                rebroadcast,
+                                sig,
+                                ts,
+                                type,
+                                tx_from,
+                                tx_to,
+                                name,
+                                module
+                                )
+                             VALUES ($address, 
+                                $amt, 
+                                $bid, 
+                                $tid, 
+                                $sid, 
+                                $bhash, 
+                                $lc, 
+                                $rebroadcast,
+                                $sig,
+                                $ts,
+                                $type,
+                                $tx_from,
+                                $tx_to,
+                                $name,
+                                $module
+                                )`;
                             let params = {
                                 $address: blk.transactions[i].transaction.to[ii].add,
                                 $amt: blk.transactions[i].transaction.to[ii].amt,
@@ -51,9 +71,16 @@ class ExplorerCore extends ModTemplate {
                                 $sid: ii,
                                 $bhash: blk.returnHash(),
                                 $lc: 1,
-                                $rebroadcast: 0
+                                $rebroadcast: 0,
+                                $sig: blk.transactions[i].transaction.sig,
+                                $ts: blk.transactions[i].transaction.ts,
+                                $type: blk.transactions[i].transaction.msg.type,
+                                $tx_from: blk.transactions[i].transaction.from[0].add,
+                                $tx_to: blk.transactions[i].transaction.to[ii].add,
+                                $name: blk.transactions[i].transaction.msg.name,
+                                $module: blk.transactions[i].transaction.msg.module
                             }
-			    await this.app.storage.executeDatabase(sql, params, "explorer");
+			                await this.app.storage.executeDatabase(sql, params, "explorer");
 //                            let rows = await this.db.run(sql, params);
                         }
                     }
