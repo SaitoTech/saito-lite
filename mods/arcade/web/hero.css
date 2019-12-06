@@ -137,7 +137,8 @@
 }
 
 .big {
-    margin: 4% 5%;
+    margin: 2% 0%;
+    padding: 1% 5%;
     font-size: 5vw;
     font-weight: 900;
     -webkit-text-stroke-width: thick;
@@ -150,7 +151,7 @@
     text-shadow: 2px 2px 3px red;
 }
 .med {
-    margin: 0% 27%;
+    padding: 1% 27%;
     font-size: 3vw;
     font-weight: 500;
     -webkit-text-stroke-width: thick;
@@ -163,7 +164,8 @@
 }
 
 .small {
-    margin: 3% 10%;
+    margin: 1% 0;
+    padding: 1% 10%;
     font-size: 2vw;
     font-weight: 500;
     -webkit-text-stroke-width: thick;
