@@ -170,7 +170,8 @@ button.add-games {
 ***REMOVED***
 
 .game-options-html {
-  /*display: flex;*/
+    overflow-y: auto;
+    max-height: 4em;
 ***REMOVED***
 
 .pill {

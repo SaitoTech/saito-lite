@@ -39,7 +39,7 @@ module.exports = EscrowGameWizardTemplate = () => {
           NOTE: creating a game with escrow does not use the typical Arcade initialization process. Your opponent will be sent an invite via the Saito EMAIL client. They will need to have created and funded their escrow channel before they can play. May the best player win!
       </div>
       <div>
-          <button id="escrow-submit-btn">create game</button>
+          <button id="escrow-submit-btn">Create Game</button>
       </div>
   </div>
 </div>

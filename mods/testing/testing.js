@@ -1,5 +1,5 @@
-var saito = require('../../lib/saito/saito');
-var ModTemplate = require('../../lib/templates/modtemplate');
+// var saito = require('../../lib/saito/saito');
+var ModTemplate = require('ModTemplate');
 var TestingAppspace = require('./lib/email-appspace/testing-appspace');
 
 
