@@ -79,6 +79,12 @@ module.exports = {
         ]
     },
 
+    resolve: {
+        alias: {
+            ModTemplate$: path.resolve(__dirname, '../lib/templates/modtemplate.js'),
+        }
+    },
+
 
     // Default mode for Webpack is production.
     // Depending on mode Webpack will apply different things

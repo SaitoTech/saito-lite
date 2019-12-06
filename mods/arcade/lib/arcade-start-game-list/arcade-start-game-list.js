@@ -33,7 +33,7 @@ module.exports = ArcadeStartGameList = {
               <div class="arcade-gema-list-details">
                 <div class="arcade-game-list-title"><h4>${gamemods[i].name}</h4></div>
                 <div class="arcade-game-list-type">${gamemods[i].type}</h4></div>
-                <div class="arcade-game-list-players">${players}</h4></div>                        
+                <div class="arcade-game-list-players">${players}</h4></div>
               </div>
             </div>`;
             }
