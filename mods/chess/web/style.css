@@ -243,3 +243,8 @@ img.captured {
 .controls.column p {
     margin: 0 0 6px 0;
 }
+
+#status_oponent {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

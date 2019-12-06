@@ -2,11 +2,18 @@ CREATE TABLE IF NOT EXISTS transactions (
     id INTEGER, 
     address TEXT, 
     amt TEXT, 
-    bid INTEGER, 
+    bid INTEGER,
     tid INTEGER, 
     sid INTEGER, 
     bhash TEXT, 
     lc INTEGER, 
     rebroadcast INTEGER, 
-    PRIMARY KEY (id ASC)
+    sig TEXT,
+    ts INTEGER,
+    type TEXT,
+    tx_from TEXT,
+    tx_to TEXT,
+    name TEXT,
+    module TEXT,
+    PRIMARY KEY (sig ASC)
 );
