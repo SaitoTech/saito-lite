@@ -47,10 +47,11 @@ if [ "$1" == "nuke" ]; then
   rm -f ./mods/appstore/mods/*.zip
   rm -rf ./mods/appstore/bundler/mods/*
   rm -f ./mods/appstore/bundler/dist/*
+  rm -f ./mods/appstore/bundler/*.js
+  rm -f ./mods/appstore/bundler/*.json
   rm -f ./logs/*
 
 
-#  cp -rfp data/fork1/* data/blocks/
   if [ -f config/options.conf ]; then
     cp config/options.conf config/options
   fi
@@ -59,60 +60,14 @@ if [ "$1" == "nuke" ]; then
     cp config/modules.default.js config/modules.config.js
   fi
 
-  # if [ -f ../config/options.server ]; then
-  #   cp ../config/options.server ../config/options
-  # fi
-
 fi
 
-# For our docker config
-# rm -r ../tests/config/env/blocks
-# cp -r ../tests/config/blocks ../tests/config/env/
 
-# for config in ../tests/config/*.json; do
-#     name=${config##*/}
-#     base=${name%.txt}
-#     cp "$config" ../tests/config/env/"$base"
-# done
-
-# rm -f ../lib/remixtmp.js
-# rm -f ../lib/saito/web/options
-# rm -f ../lib/saito/web/browser.js.gz
-# rm -f ../lib/saito/web/browser.js-*
-
-# cp ../mods/welcome/web/index.html ../lib/saito/web/index.html
-# cp ../mods/welcome/web/style.css ../lib/saito/web/style.css
+npm run build
 
 
-cd ./web && npm run build
-
-
-# generate browser.js
-# sed 's/app.BROWSER           = 0;/app.BROWSER           = 1;/g' ../start.js > ../browser.js
-# ../node_modules/.bin/browserify ../start.js > ../web/browser.js -i express -i sqlite3 -i express-basic-auth -i sendgrid -i request -i bluebird -i socket.io -i phantomjs -i express-fileupload -i body-parser -i shashmap -i http -i http-proxy -i simple-socks -i unzip -i node-zip -i shelljs -i crx -i jimp -i image-resolver -i fs-extra -i firebase-admin -i fs -t [ babelify --plugins [ @babel/plugin-proposal-class-properties ] ]
-# sed -i -e 's/app.BROWSER = 0;/app.BROWSER = 1;/g' ../web/browser.js
-
-#-i winston -i winston-daily-rotate-file
-
-# if [ "$1" == "nuke" ]; then
-#   for d in ../mods/* ; do
-#    if [ -f $d/compile ] ; then
-#      chmod +x $d/compile
-#      $d/compile
-#    fi
-#   done
-
-# else
-
-#   for d in ../mods/* ; do
-#    if [ -f $d/refresh ] ; then
-#      chmod +x $d/refresh
-#      $d/refresh
-#    fi
-#   done
-
-# fi
-
+cat ./lib/saito/boot.js ./web/saito/saito.js > ./web/saito/saito2.js
+mv -f ./web/saito/saito2.js ./web/saito/saito.js
 
 
 

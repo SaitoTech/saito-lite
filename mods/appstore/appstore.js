@@ -1,7 +1,12 @@
-const saito = require('../../lib/saito/saito');
-const ModTemplate = require('../../lib/templates/modtemplate');
+var ModTemplate;
+try {
+  ModTemplate = require('ModTemplate');
+} catch {
+  ModTemplate = require('../../lib/templates/modtemplate');
+}
 const AppStoreAppspace = require('./lib/email-appspace/appstore-appspace');
 const AppStoreSearch = require('./lib/email-appspace/appstore-search');
+const AppStoreBundleConfirm = require('./lib/email-appspace/appstore-bundle-confirm');
 
 const fs = require('fs');
 const path = require('path');
@@ -25,6 +30,7 @@ class AppStore extends ModTemplate {
 
     this.app = app;
     this.name = "AppStore";
+    this.featured_apps = ['Email','Debug','Testing'];
   }
 
 
@@ -57,9 +63,11 @@ class AppStore extends ModTemplate {
   //
   async handlePeerRequest(app, message, peer, mycallback=null) {
 
+console.log("SEARCH MODULES 1: " + JSON.stringify(message));
+
     if (message.request === "appstore load modules") {
 
-      let sql = "SELECT name, description, version, publickey, unixtime, bid, bsh FROM modules";
+      let sql = "SELECT name, description, version, publickey, unixtime, bid, bsh FROM modules WHERE featured = 1";
       let params = {};
       let rows = await this.app.storage.queryDatabase(sql, params, message.data.dbname);
 
@@ -70,9 +78,42 @@ class AppStore extends ModTemplate {
       mycallback(res);
 
     }
+
+
+    if (message.request === "appstore search modules") {
+
+      let squery1 = "%"+message.data+"%";
+      let squery2 = message.data;
+
+      let sql = "SELECT name, description, version, publickey, unixtime, bid, bsh FROM modules WHERE description LIKE $squery1 OR name = $squery2";
+      let params = {
+	$squery1	: squery1  ,
+	$squery2	: squery2  ,
+      };
+
+console.log("SEARCH MODULES: " + sql + " -- " + params);
+
+      let rows = await this.app.storage.queryDatabase(sql, params, "appstore");
+
+
+console.log("FOUND: " + JSON.stringify(rows));
+      let res = {};
+          res.err = "";
+          res.rows = rows;
+
+      mycallback(res);
+
+    }
+
+
   }
 
+
+  //
+  // publish modules into database on module install
+  //
   installModule(app) {
+
     if (this.app.BROWSER == 1) { return; }
 
     super.installModule(app);
@@ -124,14 +165,16 @@ class AppStore extends ModTemplate {
         //
         file_array.forEach(file => {
           let fileReadStream = fs.createReadStream(file);
-          let pathBasename = path.basename(file);
-          archive.append(fileReadStream, { name: pathBasename});
+          var fileArray = path.relative(process.cwd(), file).split('/');
+          fileArray.splice(0,2);
+          let filename = fileArray.join('/');
+          // let pathBasename = path.basename(file);
+          archive.append(fileReadStream, { name: filename });
         });
 
         // listen for all archive data to be written
         // 'close' event is fired only when a file descriptor is involved
         output.on('close', function() {
-          console.log(archive.pointer() + ' total bytes');
 
           let mod_zip_filename = path.basename(this.path);
           let mod_path = path.resolve(__dirname, `mods/${mod_zip_filename}`);
@@ -166,8 +209,10 @@ class AppStore extends ModTemplate {
 
 
   onConfirmation(blk, tx, conf, app) {
+
     let txmsg = tx.returnMessage();
     if (conf == 0) {
+
       switch(txmsg.request) {
         case 'submit module':
           this.submitModule(blk, tx);
@@ -176,15 +221,17 @@ class AppStore extends ModTemplate {
           this.requestBundle(blk, tx);
           break;
         case 'receive bundle':
-          if ( tx.isTo(app.wallet.returnPublicKey()) )
+          if (tx.isTo(app.wallet.returnPublicKey()) && !tx.isFrom(app.wallet.returnPublicKey())) {
             this.receiveBundle(blk, tx);
-        default:
+          }
           break;
       }
     }
   }
 
+
   async getNameAndDescriptionFromZip(zip_bin, zip_path) {
+
     const fs = this.app.storage.returnFileSystem();
     const path = require('path');
     const unzipper = require('unzipper');
@@ -251,31 +298,49 @@ class AppStore extends ModTemplate {
 
     if (this.app.BROWSER == 1) { return; }
 
-    let sql = `INSERT INTO modules (name, description, version, publickey, unixtime, bid, bsh, tx)
-    VALUES ($name, $description, $version, $publickey, $unixtime, $bid, $bsh, $tx)`;
+    let sql = `INSERT INTO modules (name, description, version, publickey, unixtime, bid, bsh, tx, featured)
+    VALUES ($name, $description, $version, $publickey, $unixtime, $bid, $bsh, $tx, $featured)`;
 
     let { from, sig, ts } = tx.transaction;
-    // const fs = this.app.storage.returnFileSystem();
 
     // should happen locally from ZIP
     let { zip } = tx.returnMessage();
 
     let { name, description } = await this.getNameAndDescriptionFromZip(zip, `mods/module-${sig}-${ts}.zip`);
 
-
     let params = {
       $name: name,
-      $description:	description || '',
-      $version:	`${ts}-${sig}`,
-      $publickey:	from[0].add,
-      $unixtime: ts,
-      $bid:	blk.block.id,
-      $bsh:	blk.returnHash(),
-      $tx: JSON.stringify(tx.transaction),
+      $description	: description || '',
+      $version		: `${ts}-${sig}`,
+      $publickey	: from[0].add,
+      $unixtime		: ts,
+      $bid		: blk.block.id,
+      $bsh		: blk.returnHash(),
+      $tx		: JSON.stringify(tx.transaction),
+      $featured		: 0,
     };
+    await this.app.storage.executeDatabase(sql, params, "appstore");
 
-    this.app.storage.executeDatabase(sql, params, "appstore");
+
+    if (this.featured_apps.includes(name) && tx.isFrom(this.app.wallet.returnPublicKey())) {
+
+      sql = "UPDATE modules SET featured = 0 WHERE name = $name";
+      params = { $name : name };
+      await this.app.storage.executeDatabase(sql, params, "appstore");
+
+      sql = "UPDATE modules SET featured = 1 WHERE name = $name AND version = $version";
+      params = {
+        $name : name,
+        $version : `${ts}-${sig}`,
+      };
+      await this.app.storage.executeDatabase(sql, params, "appstore");
+
+    }
+
+
   }
+
+
 
 
   async requestBundle(blk, tx) {
@@ -348,10 +413,6 @@ class AppStore extends ModTemplate {
       }
     }
 
-// console.log("MOD SEL: " + JSON.stringify(modules_selected));
-
-    //
-    // modules_selected contains our modules
     //
     // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
     // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
@@ -370,7 +431,6 @@ class AppStore extends ModTemplate {
     // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
     //
     //
-
     let bundle_filename = await this.bundler(modules_selected);
 
 
@@ -382,19 +442,25 @@ class AppStore extends ModTemplate {
     //
     // show link to bundle or save in it? Should save it as a file
     //
-    sql = `INSERT INTO bundles (version, publickey, unixtime, bid, bsh, name, script) VALUES ($version, $publickey, $unixtime, $bid, $bsh, name, script)`;
+    sql = `INSERT INTO bundles (version, publickey, unixtime, bid, bsh, name, script) VALUES ($version, $publickey, $unixtime, $bid, $bsh, $name, $script)`;
     let { from, sig, ts } = tx.transaction;
     params = {
-      $version	:	`${ts}-${sig}`,
+      $version		:	`${ts}-${sig}`,
       $publickey	:	from[0].add,
-      $unixtime	:	ts,
+      $unixtime		:	ts,
       $bid		:	blk.block.id ,
       $bsh		:	blk.returnHash(),
-      $name: bundle_filename,
-      $script : bundle_binary,
+      $name		: 	bundle_filename,
+      $script 		: 	bundle_binary,
     }
+    await this.app.storage.executeDatabase(sql, params, "appstore");
 
-    this.app.storage.executeDatabase(sql, params, "appstore");
+    //
+    //
+    //
+    let online_version = "http://"+this.app.options.server.endpoint.host+":"+this.app.options.server.endpoint.port+"/appstore/bundle/"+bundle_filename;
+
+console.log(bundle_filename + " -- " + online_version);
 
     //
     // send our filename back at our person of interest
@@ -403,28 +469,18 @@ class AppStore extends ModTemplate {
     let msg = {
       module: "AppStore",
       request: "receive bundle",
-      bundle_filename
+      bundle: online_version
     };
-
     newtx.transaction.msg = msg;
     newtx = this.app.wallet.signTransaction(newtx);
-
     this.app.network.propagateTransaction(newtx);
+
   }
 
-  createBundleTX(filename) {
-    const path = require('path');
-    let fs = this.app.storage.returnFileSystem();
-    if (fs) {
-      let bundle_bin = fs.readFileSync(path.resolve(__dirname, `bundler/dist/${filename}`), { encoding: 'binary' });
-      let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
-      newtx.transaction.msg = { module: "AppStore", request: "add bundle", bundle: bundle_bin };
-      return this.app.wallet.signTransaction(newtx);
-    }
-    return null;
-  }
+
 
   async bundler(modules) {
+
     //
     // modules has name, description, zip (helpful)
     //
@@ -457,15 +513,17 @@ class AppStore extends ModTemplate {
       fs.unlink(path.resolve(__dirname, mod_path));
 
       // return the path
-      return `${mod.name.toLowerCase()}-${ts}-${hash}/${mod.name.toLowerCase()}`;
+      return `appstore/bundler/mods/${mod.name.toLowerCase()}-${ts}-${hash}/${mod.name.toLowerCase()}`;
     });
 
     //
     // write our modules config file
     //
-    await fs.writeFile(path.resolve(__dirname, `bundler/${modules_config_filename}`),
-      JSON.stringify({module_paths})
+    await fs.writeFile(path.resolve(__dirname, `../../bundler/${modules_config_filename}`),
+      JSON.stringify({ mod_paths: module_paths })
     );
+
+console.log("Module Paths: " + JSON.stringify(module_paths));
 
     //
     // other filenames
@@ -477,18 +535,14 @@ class AppStore extends ModTemplate {
     // write our index file for bundling
     //
     let IndexTemplate = require('./bundler/templates/index.template.js');
-    await fs.writeFile(path.resolve(__dirname, `bundler/${index_filename}`),
+    await fs.writeFile(path.resolve(__dirname, `../../bundler/${index_filename}`),
       IndexTemplate(modules_config_filename)
     );
 
     //
-    // TODO: unzip existing modules and stage them
-    //
-
-    //
     // execute bundling process
     //
-    let entry = path.resolve(__dirname, `bundler/${index_filename}`);
+    let entry = path.resolve(__dirname, `../../bundler/${index_filename}`);
     let output_path = path.resolve(__dirname, 'bundler/dist');
 
     const util = require('util');
@@ -502,42 +556,59 @@ class AppStore extends ModTemplate {
       console.log(err);
     }
 
-    // Done processing
-
     //
-    // file cleanup
+    // cleanup
     //
     fs.unlink(path.resolve(__dirname, `bundler/${index_filename}`));
     fs.unlink(path.resolve(__dirname, `bundler/${modules_config_filename}`));
 
+
     //
     // create tx
     //
-    let newtx = this.createBundleTX(bundle_filename);
-
-    //
-    // publish our bundle
-    //
+    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+    let bundle_bin = "";
+    if (fs) { bundle_bin = fs.readFileSync(path.resolve(__dirname, `bundler/dist/${bundle_filename}`), { encoding: 'binary' }); }
+    newtx.transaction.msg = { module: "AppStore", request: "add bundle", bundle: bundle_bin };
+    newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
+    //
+    // delete mods in bundler/mods
     module_paths.forEach(modpath => {
-      let mod_dir = modpath.split('/')[0];
+      let mod_dir = modpath.split('/')[3];
       let files = getFiles(path.resolve(__dirname, `bundler/mods/${mod_dir}`));
       files.forEach(file_path => fs.unlink(file_path));
       fs.rmdir(path.resolve(__dirname, `bundler/mods/${mod_dir}`));
     });
 
+    //
+    // delete files in root bundler
+    try {
+      let bundler_dir = path.resolve(__dirname, `../../bundler`);
+      let files = getFiles(bundler_dir);
+      files.forEach(file_path => fs.unlink(file_path));
+    } catch(err) {
+      console.log(err);
+    }
+
     return bundle_filename;
   }
 
   receiveBundle(blk, tx) {
+
+    if (this.app.BROWSER != 1) { return; }
+
     let txmsg = tx.returnMessage();
-    let { bundle_filename } = txmsg;
 
-    this.app.options.bundle = bundle_filename;
-    this.app.storage.saveOptions();
+      let data = {};
+          data.appstore = this;
+          data.bundle_appstore_publickey = tx.transaction.from[0].add;
+          data.appstore_bundle = txmsg.bundle;
 
-    salert(`Bundle filename received!: ${bundle_filename}`);
+      AppStoreBundleConfirm.render(this.app, data);
+      AppStoreBundleConfirm.attachEvents(this.app, data);
+
   }
 
 
@@ -550,8 +621,41 @@ class AppStore extends ModTemplate {
 
     let fs = app.storage.returnFileSystem();
     if (fs != null) {
-      expressapp.use('/'+encodeURI(this.name), express.static(__dirname + "/web"));
+
+      //expressapp.use('/'+encodeURI(this.name), express.static(__dirname + "/web"));
+
+
       expressapp.get('/appstore/bundle/:filename', async (req, res) => {
+
+console.log("\n\n\nscriptname!");
+        let scriptname = req.params.filename;
+
+console.log("REQUEST FOR SCRIPTNAME: " + scriptname);
+
+        let sql = "SELECT script FROM bundles WHERE name = $scriptname";
+        let params = {
+          $scriptname	:	scriptname
+        }
+        let rows = await app.storage.queryDatabase(sql, params, "appstore");
+
+// console.log("ROWS: " + JSON.stringify(rows));
+
+        if (rows) {
+          if (rows.length > 0) {
+
+            res.setHeader('Content-type', 'text/javascript');
+            res.charset = 'UTF-8';
+            res.write(rows[0].script);
+            res.end();
+
+            return;
+          }
+        }
+
+        res.setHeader('Content-type', 'text/javascript');
+        res.charset = 'UTF-8';
+        res.write('alert("Server does not contain your Saito javascript bundle...");');
+        res.end();
       });
     }
   }

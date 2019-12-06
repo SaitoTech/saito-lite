@@ -23,7 +23,7 @@ class Registry extends ModTemplate {
 
 
 
-
+/*******
   respondTo(type) {
     if (type == 'email-appspace') {
       let obj = {};
@@ -42,7 +42,7 @@ class Registry extends ModTemplate {
      data.registry = app.modules.returnModule("Registry");
      RegistryAppspace.attachEvents(app, data);
   }
-
+*******/
 
 
 

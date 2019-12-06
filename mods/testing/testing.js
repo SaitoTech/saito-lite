@@ -1,5 +1,5 @@
-var saito = require('../../lib/saito/saito');
-var ModTemplate = require('../../lib/templates/modtemplate');
+// var saito = require('../../lib/saito/saito');
+var ModTemplate = require('ModTemplate');
 var TestingAppspace = require('./lib/email-appspace/testing-appspace');
 
 
@@ -14,14 +14,21 @@ class Testing extends ModTemplate {
     super(app);
 
     this.app             = app;
-    this.name            = "Testing Application";
-    this.description     = "This application does absolutely nothing except help us test the AppStore";
+    this.name            = "Testing";
+    this.description     = "Demo application with a clickable button - intended as guide for developers";
 
     return this;
 
   }
 
 
+  initialize(app) {
+
+    console.log("########################");
+    console.log("#########TESTING########");
+    console.log("########################");
+
+  }
 
 
   respondTo(type) {

@@ -3,12 +3,12 @@ const ModTemplate = require('../../lib/templates/modtemplate.js');
 
 class Faucet extends ModTemplate {
     constructor(app) {
+
         super(app);
 
-        this.app = app;
         this.name = "Faucet";
-
         this.initial = 5;
+
     }
 
 
