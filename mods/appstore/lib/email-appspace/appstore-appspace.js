@@ -79,12 +79,13 @@ module.exports = AppStoreAppspace = {
           newtx.transaction.msg.module   = "AppStore";
           newtx.transaction.msg.request  = "request bundle";
           newtx.transaction.msg.list	 = module_list;
+alert("LIST: " + module_list);
           newtx = app.wallet.signTransaction(newtx);
           app.network.propagateTransaction(newtx);
 
           document.querySelector(".email-appspace").innerHTML = `
-            <div>
-              <center>Your apps are being downloaded. Please do not leave this page</center>
+            <div class="appstore-bundler-install-notice">
+              <center style="margin-bottom:20px">Your custom Saito bundle is being compiled. Please do not leave this page -- estimated time to completion 60 seconds.</center>
               <center><div class="loader" id="game_spinner"></div></center>
             </div>
           `;
