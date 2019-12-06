@@ -26,6 +26,7 @@ class AppStore extends ModTemplate {
 
     this.app = app;
     this.name = "AppStore";
+    this.featured_apps = ['Email','Debug','Testing'];
   }
 
 
@@ -58,9 +59,11 @@ class AppStore extends ModTemplate {
   //
   async handlePeerRequest(app, message, peer, mycallback=null) {
 
+console.log("SEARCH MODULES 1: " + JSON.stringify(message));
+
     if (message.request === "appstore load modules") {
 
-      let sql = "SELECT name, description, version, publickey, unixtime, bid, bsh FROM modules";
+      let sql = "SELECT name, description, version, publickey, unixtime, bid, bsh FROM modules WHERE featured = 1";
       let params = {};
       let rows = await this.app.storage.queryDatabase(sql, params, message.data.dbname);
 
@@ -71,6 +74,34 @@ class AppStore extends ModTemplate {
       mycallback(res);
 
     }
+
+
+    if (message.request === "appstore search modules") {
+
+      let squery1 = "%"+message.data+"%";
+      let squery2 = message.data;
+
+      let sql = "SELECT name, description, version, publickey, unixtime, bid, bsh FROM modules WHERE description LIKE $squery1 OR name = $squery2";
+      let params = {
+	$squery1	: squery1  ,
+	$squery2	: squery2  ,
+      };
+
+console.log("SEARCH MODULES: " + sql + " -- " + params);
+
+      let rows = await this.app.storage.queryDatabase(sql, params, "appstore");
+
+
+console.log("FOUND: " + JSON.stringify(rows));
+      let res = {};
+          res.err = "";
+          res.rows = rows;
+
+      mycallback(res);
+
+    }
+
+
   }
 
 
@@ -260,30 +291,46 @@ class AppStore extends ModTemplate {
 
     if (this.app.BROWSER == 1) { return; }
 
-    let sql = `INSERT INTO modules (name, description, version, publickey, unixtime, bid, bsh, tx)
-    VALUES ($name, $description, $version, $publickey, $unixtime, $bid, $bsh, $tx)`;
+    let sql = `INSERT INTO modules (name, description, version, publickey, unixtime, bid, bsh, tx, featured)
+    VALUES ($name, $description, $version, $publickey, $unixtime, $bid, $bsh, $tx, $featured)`;
 
     let { from, sig, ts } = tx.transaction;
-    // const fs = this.app.storage.returnFileSystem();
 
     // should happen locally from ZIP
     let { zip } = tx.returnMessage();
 
     let { name, description } = await this.getNameAndDescriptionFromZip(zip, `mods/module-${sig}-${ts}.zip`);
 
-
     let params = {
       $name: name,
-      $description:	description || '',
-      $version:	`${ts}-${sig}`,
-      $publickey:	from[0].add,
-      $unixtime: ts,
-      $bid:	blk.block.id,
-      $bsh:	blk.returnHash(),
-      $tx: JSON.stringify(tx.transaction),
+      $description	: description || '',
+      $version		: `${ts}-${sig}`,
+      $publickey	: from[0].add,
+      $unixtime		: ts,
+      $bid		: blk.block.id,
+      $bsh		: blk.returnHash(),
+      $tx		: JSON.stringify(tx.transaction),
+      $featured		: 0,
     };
+    await this.app.storage.executeDatabase(sql, params, "appstore");
 
-    this.app.storage.executeDatabase(sql, params, "appstore");
+
+    if (this.featured_apps.includes(name) && tx.isFrom(this.app.wallet.returnPublicKey())) {
+
+      sql = "UPDATE modules SET featured = 0 WHERE name = $name";
+      params = { $name : name };
+      await this.app.storage.executeDatabase(sql, params, "appstore");
+
+      sql = "UPDATE modules SET featured = 1 WHERE name = $name AND version = $version";
+      params = {
+        $name : name,
+        $version : `${ts}-${sig}`,
+      };
+      await this.app.storage.executeDatabase(sql, params, "appstore");
+
+    }
+
+
   }
 
 

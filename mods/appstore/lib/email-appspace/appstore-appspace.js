@@ -17,16 +17,13 @@ module.exports = AppStoreAppspace = {
       //
       data.appstore.sendPeerDatabaseRequest(
         "appstore", "modules", "name, description, version, publickey, unixtime, bid, bsh",
-        "",
+        "featured = 1",
         null,
-        function(res, data) {
+        (res, data) => {
         if (res.rows != undefined) {
-          for (let i = 0; i < res.rows.length; i++) {
-            document.querySelector(".appstore-app-list").innerHTML += AppStoreAppBoxTemplate(app, res.rows[i]);
-          }
-        }
+	  this.populateAppsSpace(app, data, res.rows);
+	}
 
-        appstore_self.attachEvents(app, data);
       });
 
       //
@@ -36,16 +33,25 @@ module.exports = AppStoreAppspace = {
 
     },
 
-    attachEvents(app, data) {
+    populateAppsSpace(app, data, rows) {
 
-      document.getElementById('appstore-publish-button').onclick = () => {
-        AppStoreAppspacePublish.render(app, data);
-        AppStoreAppspacePublish.attachEvents(app, data);
+      document.querySelector(".appstore-app-list").innerHTML = "";
+      for (let i = 0; i < rows.length; i++) {
+        document.querySelector(".appstore-app-list").innerHTML += AppStoreAppBoxTemplate(app, rows[i]);
       }
 
+      //
+      // make apps installable
+      //
+      appstore_self.attachEventsToModules(app, data);
+
+    },
+
+
+    attachEventsToModules(app, data) {
 
       //
-      // Create Game
+      // install module (button)
       //
       Array.from(document.getElementsByClassName("appstore-app-install-btn")).forEach(installbtn => {
 
@@ -86,6 +92,41 @@ module.exports = AppStoreAppspace = {
           `;
 
         };
+      });
+
+    },
+
+
+    attachEvents(app, data) {
+
+      //
+      // publish apps
+      //
+      document.getElementById('appstore-publish-button').onclick = () => {
+        AppStoreAppspacePublish.render(app, data);
+        AppStoreAppspacePublish.attachEvents(app, data);
+      }
+
+      //
+      // search box
+      //
+      document.getElementById('appstore-search-box').addEventListener('keypress', (e) => {
+        let key = e.which || e.keyCode;
+        if (key === 13) {
+          alert("Search Query: " + e.currentTarget.value);
+
+	  var message             = {};
+    	  message.request         = "appstore search modules";
+          message.data		  = e.currentTarget.value;
+
+          app.network.sendRequestWithCallback(message.request, message.data, (res) => {
+alert("received data in return");
+console.log(JSON.stringify(res));
+            if (res.rows != undefined) {
+	      this.populateAppsSpace(app, data, res.rows);
+	    }
+	  });
+        }
       });
     }
 
