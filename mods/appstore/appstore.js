@@ -1,7 +1,6 @@
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const AppStoreAppspace = require('./lib/email-appspace/appstore-appspace');
-const AppStoreSearch = require('./lib/email-appspace/appstore-search');
 const AppStoreBundleConfirm = require('./lib/email-appspace/appstore-bundle-confirm');
 
 const fs = require('fs');
@@ -26,7 +25,7 @@ class AppStore extends ModTemplate {
 
     this.app = app;
     this.name = "AppStore";
-    this.featured_apps = ['Email','Debug','Testing'];
+    this.featured_apps = ['Email','Testing','Escrow','Design'];
   }
 
 
@@ -44,12 +43,10 @@ class AppStore extends ModTemplate {
   renderEmail(app, data) {
      data.appstore = app.modules.returnModule("AppStore");
      AppStoreAppspace.render(app, data);
-     AppStoreSearch.render(app, data);
   }
   attachEventsEmail(app, data) {
      data.appstore = app.modules.returnModule("AppStore");
      AppStoreAppspace.attachEvents(app, data);
-     AppStoreSearch.attachEvents(app, data);
   }
 
 
@@ -603,9 +600,7 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
     let fs = app.storage.returnFileSystem();
     if (fs != null) {
 
-      //expressapp.use('/'+encodeURI(this.name), express.static(__dirname + "/web"));
-
-
+      expressapp.use('/'+encodeURI(this.name), express.static(__dirname + "/web"));
       expressapp.get('/appstore/bundle/:filename', async (req, res) => {
 
 console.log("\n\n\nscriptname!");

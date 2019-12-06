@@ -8,8 +8,6 @@ module.exports = AppStoreAppspace = {
 
     render(app, data) {
 
-      let appstore_self = this;
-
       document.querySelector(".email-appspace").innerHTML = AppStoreAppspaceTemplate();
 
       //
@@ -43,7 +41,7 @@ module.exports = AppStoreAppspace = {
       //
       // make apps installable
       //
-      appstore_self.attachEventsToModules(app, data);
+      this.attachEventsToModules(app, data);
 
     },
 
