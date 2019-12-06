@@ -112,6 +112,11 @@
     grid-gap: 1em;
 ***REMOVED***
 
+.appstore-bundler-install-notice {
+  font-size:1.2em;
+  margin-top: 30px;
+***REMOVED***
+
 .appstore-browse-item{
     display: grid;
     grid-template-areas:
