@@ -63,7 +63,7 @@ if [ "$1" == "nuke" ]; then
 fi
 
 
-cd ./web && npm run build
+npm run build
 
 
 cat ./lib/saito/boot.js ./web/saito/saito.js > ./web/saito/saito2.js

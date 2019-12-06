@@ -53,7 +53,13 @@ webpack({
     ***REMOVED***,
     ]
   ***REMOVED***,
-  mode: 'development'
+  resolve: {
+    alias: {
+      ModTemplate$: path.resolve(__dirname, 'lib/templates/modtemplate.js'),
+***REMOVED***
+  ***REMOVED***,
+  mode: 'development',
+  devtool: "cheap-module-eval-source-map",
   ***REMOVED***, (err, stats) => {
   if (err || stats.hasErrors()) {
     let info = stats.toJson();

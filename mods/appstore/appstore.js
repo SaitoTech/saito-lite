@@ -1,5 +1,9 @@
+var ModTemplate;
+try {
+  ModTemplate = require('ModTemplate');
+***REMOVED*** catch {
+  ModTemplate = require('../../lib/templates/modtemplate');
 ***REMOVED***
-const ModTemplate = require('../../lib/templates/modtemplate');
 const AppStoreAppspace = require('./lib/email-appspace/appstore-appspace');
 const AppStoreSearch = require('./lib/email-appspace/appstore-search');
 const AppStoreBundleConfirm = require('./lib/email-appspace/appstore-bundle-confirm');
@@ -130,8 +134,11 @@ class AppStore extends ModTemplate {
 ***REMOVED***
         file_array.forEach(file => {
           let fileReadStream = fs.createReadStream(file);
-          let pathBasename = path.basename(file);
-          archive.append(fileReadStream, { name: pathBasename***REMOVED***);
+          var fileArray = path.relative(process.cwd(), file).split('/');
+          fileArray.splice(0,2);
+          let filename = fileArray.join('/');
+  ***REMOVED*** let pathBasename = path.basename(file);
+          archive.append(fileReadStream, { name: filename ***REMOVED***);
     ***REMOVED***);
 
 ***REMOVED*** listen for all archive data to be written
@@ -459,14 +466,14 @@ console.log(bundle_filename + " -- " + online_version);
       fs.unlink(path.resolve(__dirname, mod_path));
 
       // return the path
-      return `${mod.name.toLowerCase()***REMOVED***-${ts***REMOVED***-${hash***REMOVED***/${mod.name.toLowerCase()***REMOVED***`;
+      return `appstore/bundler/mods/${mod.name.toLowerCase()***REMOVED***-${ts***REMOVED***-${hash***REMOVED***/${mod.name.toLowerCase()***REMOVED***`;
 ***REMOVED***);
 
     //
     // write our modules config file
     //
-    await fs.writeFile(path.resolve(__dirname, `bundler/${modules_config_filename***REMOVED***`),
-      JSON.stringify({module_paths***REMOVED***)
+    await fs.writeFile(path.resolve(__dirname, `../../bundler/${modules_config_filename***REMOVED***`),
+      JSON.stringify({ mod_paths: module_paths ***REMOVED***)
     );
 
 console.log("Module Paths: " + JSON.stringify(module_paths));
@@ -481,14 +488,14 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
     // write our index file for bundling
     //
     let IndexTemplate = require('./bundler/templates/index.template.js');
-    await fs.writeFile(path.resolve(__dirname, `bundler/${index_filename***REMOVED***`),
+    await fs.writeFile(path.resolve(__dirname, `../../bundler/${index_filename***REMOVED***`),
       IndexTemplate(modules_config_filename)
     );
 
     //
     // execute bundling process
     //
-    let entry = path.resolve(__dirname, `bundler/${index_filename***REMOVED***`);
+    let entry = path.resolve(__dirname, `../../bundler/${index_filename***REMOVED***`);
     let output_path = path.resolve(__dirname, 'bundler/dist');
 
     const util = require('util');
@@ -519,12 +526,24 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
+    //
+    // delete mods in bundler/mods
     module_paths.forEach(modpath => {
-      let mod_dir = modpath.split('/')[0];
+      let mod_dir = modpath.split('/')[3];
       let files = getFiles(path.resolve(__dirname, `bundler/mods/${mod_dir***REMOVED***`));
       files.forEach(file_path => fs.unlink(file_path));
       fs.rmdir(path.resolve(__dirname, `bundler/mods/${mod_dir***REMOVED***`));
 ***REMOVED***);
+
+    //
+    // delete files in root bundler
+    try {
+      let bundler_dir = path.resolve(__dirname, `../../bundler`);
+      let files = getFiles(bundler_dir);
+      files.forEach(file_path => fs.unlink(file_path));
+***REMOVED*** catch(err) {
+      console.log(err);
+***REMOVED***
 
     return bundle_filename;
   ***REMOVED***
@@ -562,35 +581,34 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
       expressapp.get('/appstore/bundle/:filename', async (req, res) => {
 
 console.log("\n\n\nscriptname!");
-	let scriptname = req.params.filename;
+        let scriptname = req.params.filename;
 
 console.log("REQUEST FOR SCRIPTNAME: " + scriptname);
 
         let sql = "SELECT script FROM bundles WHERE name = $scriptname";
-	let params = {
-	  $scriptname	:	scriptname
-	***REMOVED***
-	let rows = await app.storage.queryDatabase(sql, params, "appstore");
+        let params = {
+          $scriptname	:	scriptname
+    ***REMOVED***
+        let rows = await app.storage.queryDatabase(sql, params, "appstore");
 
-console.log("ROWS: " + JSON.stringify(rows));
+// console.log("ROWS: " + JSON.stringify(rows));
 
-	if (rows != null) {
-	  if (rows.length > 0) {
+        if (rows) {
+          if (rows.length > 0) {
 
             res.setHeader('Content-type', 'text/javascript');
             res.charset = 'UTF-8';
             res.write(rows[0].script);
-            res.end();	    
+            res.end();
 
-	  ***REMOVED***
-	***REMOVED*** else {
+            return;
+      ***REMOVED***
+    ***REMOVED***
 
-            res.setHeader('Content-type', 'text/javascript');
-            res.charset = 'UTF-8';
-            res.write('alert("Server does not contain your Saito javascript bundle...");');
-            res.end();	    
-
-	***REMOVED***
+        res.setHeader('Content-type', 'text/javascript');
+        res.charset = 'UTF-8';
+        res.write('alert("Server does not contain your Saito javascript bundle...");');
+        res.end();
   ***REMOVED***);
 ***REMOVED***
   ***REMOVED***

@@ -79,6 +79,12 @@ const path = require('path');
         ]
 ***REMOVED***,
 
+    resolve: {
+        alias: {
+            ModTemplate$: path.resolve(__dirname, '../lib/templates/modtemplate.js'),
+    ***REMOVED***
+***REMOVED***,
+
 
     // Default mode for Webpack is production.
     // Depending on mode Webpack will apply different things
