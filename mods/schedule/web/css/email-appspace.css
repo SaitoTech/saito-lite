@@ -4,9 +4,8 @@
 }
 .schedule-calendar-sidebar {
  float:right;
- width:200px;
- background-color: yellow;
- height: 200px;;
+ width:250px;
+ height: 40px;
 }
 .schedule-calendar-day {
   width: 100%;
@@ -21,4 +20,13 @@
   font-weight: bold;
   color: #888;
 }
-
+#add_btn{
+  min-width: 120px;
+	display: inline-block;
+  margin-top: 20px;
+}
+#edit_btn{
+  min-width: 120px;
+	display: inline-block;
+   margin-top: 20px;
+}
