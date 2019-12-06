@@ -64,10 +64,9 @@ fi
 
 
 cd ./web && npm run build
-
-
-#cat ./lib/saito/boot.js ./web/saito/saito.js > ./web/saito/saito2.js
-#mv -f ./web/saito/saito2.js ./web/saito/saito.js
+cd ..
+cat ./lib/saito/boot.js ./web/saito/saito.js > ./web/saito/saito2.js
+mv -f ./web/saito/saito2.js ./web/saito/saito.js
 
 
 
