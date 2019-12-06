@@ -34,6 +34,8 @@ web/saito/saito.js.map
 web/saito/*.wasm
 
 
+mods/appstore/bundler
+mods/appstore/bundler/*
 mods/appstore/modules
 mods/appstore/modules/*
 mods/catan
