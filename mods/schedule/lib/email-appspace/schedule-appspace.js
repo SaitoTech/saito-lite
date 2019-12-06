@@ -8,9 +8,24 @@ module.exports = ScheduleAppspace = {
       this.renderMonthCalendar();
 ***REMOVED***,
 
-    attachEvents(app, data) {
-***REMOVED***,
 
+    attachEvents(app, data) {
+
+
+      document.getElementById('add_btn').addEventListener('click', (e) => {
+        alert("add");
+  ***REMOVED***);
+
+      document.getElementById('edit_btn').addEventListener('click', (e) => {
+        alert("edit");
+  ***REMOVED***);
+
+      const selectElement = document.querySelector('.schedule-calendar-sidebar-select');
+      selectElement.addEventListener('change',(e) =>{
+       alert(selectElement.value);
+  ***REMOVED***)
+
+***REMOVED***,
 
     renderDayCalendar() {
       document.querySelector(".email-appspace").innerHTML = ScheduleAppspaceTemplate();
@@ -62,5 +77,8 @@ alert("Clicked!");
 ***REMOVED***,
 
 
-
 ***REMOVED***
+
+
+
+
