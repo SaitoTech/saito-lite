@@ -6,10 +6,11 @@ const saito = require('./lib/index.js');
 
 async function initSaito() {
   const app = new saito.Saito({
-    storage,
-    server,
     mod_paths: mods_config.core
   });
+
+  app.server = new server(app);
+  app.storage = new storage(app);
 
   app.BROWSER           = 0;
   app.SPVMODE           = 0;
