@@ -802,8 +802,7 @@ console.log("setting init order");
 console.log("initiative order is: " + JSON.stringify(initiative_order));
  
 
-  	for (let i = 1; i < initiative_order.length; i++) {
-//  	for (let i = initiative_order.length-1; i >= 0; i--) {
+  	for (let i = 1; i <= initiative_order.length; i++) {
   	  if (this.game.players_info[initiative_order[i]-1].passed == 0) {
   	    this.game.queue.push("play\t"+initiative_order[i]);
   	  ***REMOVED***
@@ -4089,7 +4088,7 @@ console.log("adding influence: " + this.game.planets[array_of_cards[z]].influenc
     planets['planet30']	= { type : "hazardous" , img : "/imperium/img/planet_card_template.png" , name : "Gravity's Edge" , resources : 2 , influence : 1 , bonus : ""  ***REMOVED***
     planets['planet31']	= { type : "industrial" , img : "/imperium/img/planet_card_template.png" , name : "Populax" , resources : 3 , influence : 2 , bonus : "yellow"  ***REMOVED***
     planets['planet32']	= { type : "cultural" , img : "/imperium/img/planet_card_template.png" , name : "Old Moltour" , resources : 2 , influence : 0 , bonus : ""  ***REMOVED***
-    planets['planet33']	= { type : "" , img : "/imperium/img/planet_card_template.png" , name : "New Byzantium" , resources : 1 , influence : 6 , bonus : ""  ***REMOVED***
+    planets['planet33']	= { type : "diplomatic" , img : "/imperium/img/planet_card_template.png" , name : "New Byzantium" , resources : 1 , influence : 6 , bonus : ""  ***REMOVED***
     planets['planet34']	= { type : "cultural" , img : "/imperium/img/planet_card_template.png" , name : "Outerant" , resources : 1 , influence : 3 , bonus : ""  ***REMOVED***
     planets['planet35']	= { type : "industrial" , img : "/imperium/img/planet_card_template.png" , name : "Vespar" , resources : 2 , influence : 2 , bonus : ""  ***REMOVED***
     planets['planet36']	= { type : "hazardous" , img : "/imperium/img/planet_card_template.png" , name : "Craw Populi" , resources : 1 , influence : 2 , bonus : ""  ***REMOVED***
