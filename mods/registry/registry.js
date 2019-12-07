@@ -47,7 +47,7 @@ class Registry extends ModTemplate {
 
 
 
-  register_identifier(identifier) {
+  registerIdentifier(identifier, domain="@saito") {
 
     let newtx = this.app.wallet.createUnsignedTransaction(this.publickey, this.app.wallet.wallet.default_fee, this.app.wallet.wallet.default_fee);
     if (newtx == null) {
@@ -55,12 +55,20 @@ class Registry extends ModTemplate {
       return;
     }
 
-    newtx.transaction.msg.module   	= "Registry";
-    newtx.transaction.msg.request	= "register";
-    newtx.transaction.msg.identifier	= identifier;
+    if (typeof identifier === 'string' || identifier instanceof String) {
+      var regex=/^[0-9A-Za-z]+$/;
+      if (!regex.test(identifier)) { salert("Alphanumeric Characters only"); return false; }
 
-    newtx = this.app.wallet.signTransaction(newtx);
-    this.app.network.propagateTransaction(newtx); 
+      newtx.transaction.msg.module   	= "Registry";
+      newtx.transaction.msg.request	= "register";
+      newtx.transaction.msg.identifier	= identifier + domain;
+
+      newtx = this.app.wallet.signTransaction(newtx);
+      this.app.network.propagateTransaction(newtx);
+
+      // sucessful send
+      return true;
+    }
 
   }
 
