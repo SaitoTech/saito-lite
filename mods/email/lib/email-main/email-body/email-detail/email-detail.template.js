@@ -8,8 +8,8 @@ module.exports = EmailDetailTemplate = (app, data) => {
   let ts  	= selected_email.transaction.ts;
   let message	= selected_email.returnMessage();
 
-  let hr_from = addrController.returnAddressHTML(from, app.keys.returnIdentifierByPublicKey(from));
-  let hr_to   = addrController.returnAddressHTML(to, app.keys.returnIdentifierByPublicKey(to));
+  let hr_from = addrController.returnAddressHTML(from);
+  let hr_to   = addrController.returnAddressHTML(to);
 
   if (hr_from != "") { from = hr_from; }
   if (hr_to != "")   { to   = hr_to; }

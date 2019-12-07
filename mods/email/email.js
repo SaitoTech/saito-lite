@@ -191,6 +191,7 @@ class Email extends ModTemplate {
 
   addEmail(tx) {
     this.emails.inbox.unshift(tx);
+    this.addrController.fetchIdentifiers([tx.transaction.from[0].add]);
     if (this.browser_active) { this.renderMain(this.app, this.uidata); }
   }
 
