@@ -85,11 +85,6 @@ module.exports = ArcadeMain = {
       });
     });
 
-    document.querySelector('#play-now').addEventListener('click', function() {
-      ArcadeStartGameList.render(app,data);
-      ArcadeStartGameList.attachEvents(app,data);
-    });
-
     //
     // join game
     //
