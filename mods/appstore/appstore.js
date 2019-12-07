@@ -60,8 +60,6 @@ class AppStore extends ModTemplate {
   //
   async handlePeerRequest(app, message, peer, mycallback=null) {
 
-console.log("SEARCH MODULES 1: " + JSON.stringify(message));
-
     if (message.request === "appstore load modules") {
 
       let sql = "SELECT name, description, version, publickey, unixtime, bid, bsh FROM modules WHERE featured = 1";
@@ -88,12 +86,8 @@ console.log("SEARCH MODULES 1: " + JSON.stringify(message));
 	$squery2	: squery2  ,
       };
 
-console.log("SEARCH MODULES: " + sql + " -- " + params);
-
       let rows = await this.app.storage.queryDatabase(sql, params, "appstore");
 
-
-console.log("FOUND: " + JSON.stringify(rows));
       let res = {};
           res.err = "";
           res.rows = rows;
