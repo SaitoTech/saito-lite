@@ -642,12 +642,8 @@ console.log("\n\n\n\n");
 
               let twilight_self = this;
 
-              $('.card').off();
-              twilight_self.addShowCardEvents();
-
-              $('.card').on('click', function() {
-              let action2 = $(this).attr("id");
-
+              twilight_self.addShowCardEvents(function(card) {
+                let action2 = $(card).attr("id");
                 if (action2 == "play") {
           ***REMOVED*** trigger play of selected card
                   twilight_self.addMove("resolve\tgrainsales");
@@ -660,6 +656,7 @@ console.log("\n\n\n\n");
                   twilight_self.endTurn();
             ***REMOVED***
           ***REMOVED***);
+
         ***REMOVED***
             shd_continue = 0;
       ***REMOVED***
@@ -1224,14 +1221,10 @@ console.log("\n\n\n\n");
 
               let twilight_self = this;
 
-              $('.card').off();
-              twilight_self.addShowCardEvents();
-              $('.card').on('click', function() {
-
-                let action2 = $(this).attr("id");
+              twilight_self.addShowCardEvents(function(card) {
+                let action2 = $(card).attr("id");
                 twilight_self.addMove("aldrich\tussr\t"+action2);
                 twilight_self.endTurn();
-
           ***REMOVED***);
         ***REMOVED***
 
@@ -2030,16 +2023,12 @@ console.log("\n\n\n\n");
                 user_message += '</ul><p></p></span>If you wish to cancel your discard,</span> <span class="card dashed" id="finished">click here</span>.';
                 twilight_self.updateStatus(user_message);
 
-                $('.card').off();
-                twilight_self.addShowCardEvents();
-                $('.card').on('click', function() {
-
-                  let action2 = $(this).attr("id");
-
+                twilight_self.addShowCardEvents(function(card) {
+                  let action2 = $(card).attr("id");
                   if (action2 == "finished") {
                     twilight_self.endTurn(1);
               ***REMOVED*** else {
-                    $(this).hide();
+                    $(card).hide();
                     twilight_self.hideCard();
                     twilight_self.updateStatus("Discarding...");
                     cards_discarded++;
@@ -2934,6 +2923,7 @@ console.log("\n\n\n\n");
       let html = twilight_self.formatPlayOpsStatus(player, ops);
       twilight_self.updateStatus(html);
 
+      // TODO:
       $('.card').off();
       $('.card').on('click', function() {
 
@@ -3197,19 +3187,11 @@ console.log("\n\n\n\n");
       </div>`;
 ***REMOVED***
 
-
-
-
-
-
     this.updateStatus(x);
 
+    twilight_self.addShowCardEvents(function(card) {
 
-    $('.card').off();
-    twilight_self.addShowCardEvents();
-    $('.card').on('click', function() {
-
-      let card = $(this).attr("id");
+      card = $(card).attr("id");
 
       //
       // mobile clients have sanity check on card check
@@ -3488,11 +3470,9 @@ console.log("\n\n\n\n");
 ***REMOVED***
 
 
-    $('.card').off();
-    twilight_self.addShowCardEvents();
-    $('.card').on('click', function() {
+    twilight_self.addShowCardEvents(function(card) {
 
-      let card = $(this).attr("id");
+      card = $(card).attr("id");
 
       //
       // mobile clients have sanity check on card check
@@ -3521,6 +3501,7 @@ console.log("\n\n\n\n");
       twilight_self.playerTurnCardSelected(card, player);
 
 ***REMOVED***);
+
   ***REMOVED***
 
 
@@ -8308,11 +8289,9 @@ console.log("\n\n\n\n");
         twilight_self.updateStatus(user_message);
         twilight_self.addMove("resolve\tasknot");
 
-        $('.card').off();
-        twilight_self.addShowCardEvents();
-        $('.card').on('click', function() {
+        twilight_self.addShowCardEvents(function(card) {
 
-          let action2 = $(this).attr("id");
+          let action2 = $(card).attr("id");
 
           if (action2 == "finished") {
 
@@ -8357,19 +8336,20 @@ console.log("\n\n\n\n");
 
                 if (twilight_self.app.browser.isMobileBrowser(navigator.userAgent)) {
               twilight_self.mobileCardSelect(card, player, function() {
-                $(this).hide();
+                $(card).hide();
                 cards_discarded++;
                 twilight_self.removeCardFromHand(action2);
                 twilight_self.addMove("discard\tus\t"+action2);
           ***REMOVED***, "discard");
         ***REMOVED*** else {
-              $(this).hide();
+              $(card).hide();
                 cards_discarded++;
               twilight_self.removeCardFromHand(action2);
               twilight_self.addMove("discard\tus\t"+action2);
         ***REMOVED***
       ***REMOVED***
     ***REMOVED***);
+
   ***REMOVED***
 
       return 0;
@@ -10471,11 +10451,9 @@ console.log("\n\n\n\n");
       user_message += '</li>';
       twilight_self.updateStatus(user_message);
 
-      $('.card').off();
-      twilight_self.addShowCardEvents();
-      $('.card').on('click', function() {
+      twilight_self.addShowCardEvents(function(card) {
 
-        let action2 = $(this).attr("id");
+        let action2 = $(card).attr("id");
 
         if (twilight_self.app.browser.isMobileBrowser(navigator.userAgent)) {
           twilight_self.mobileCardSelect(card, player, function() {
@@ -11192,10 +11170,6 @@ console.log("\n\n\n\n");
 
       return 0;
 ***REMOVED***
-
-
-
-
 
 
 
@@ -12733,39 +12707,9 @@ console.log("\n\n\n\n");
     this.addShowCardEvents();
   ***REMOVED***
 
-
-
   updateStatus(status_html) {
     this.hud.updateStatus(status_html, this.addShowCardEvents.bind(this));
-
-    // let twilight_self = this;
-
-    // this.game.status = status_html;
-
-
-    // if (this.browser_active == 1) {
-
-    //   // $('#status').html("<span>" + this.game.status + "</span>");
-
-    //   try {
-    //     twilight_self.addShowCardEvents();
-    //   ***REMOVED*** catch (err) {***REMOVED***
-
-    //   $('#status').show();
-
-    //   try {
-    //     if ($('#game_log').hasClass("loading") == true) {
-    //       $('#game_log').removeClass("loading");
-    //       $('#game_log').addClass("loaded");
-    // ***REMOVED*** else {
-    // ***REMOVED***
-    //   ***REMOVED*** catch (err) {
-    //   ***REMOVED***
-    // ***REMOVED***;
-
   ***REMOVED***
-
-
 
   updateRound() {
 
@@ -14039,9 +13983,11 @@ console.log("\n\n\n\n");
 
   ***REMOVED***
 
-  addShowCardEvents() {
+  addShowCardEvents(onCardClickFunction) {
 
     let twilight_self = this;
+
+    $('.card').off();
 
     if (!this.app.browser.isMobileBrowser(navigator.userAgent)) {
 
@@ -14055,6 +14001,15 @@ console.log("\n\n\n\n");
   ***REMOVED***);
 
 ***REMOVED***
+
+    this.hud.status_callback = () => {
+      $('.card').on('click', function() {
+***REMOVED*** pass our click option
+        onCardClickFunction(this);
+  ***REMOVED***);
+***REMOVED***
+
+    this.hud.status_callback();
 
   ***REMOVED***
 
