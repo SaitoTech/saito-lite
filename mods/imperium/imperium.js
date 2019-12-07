@@ -45,27 +45,31 @@ class Imperium extends GameTemplate {
   /////////////////
   /// HUD MENUS ///
   /////////////////
-/****
-  Imperium.prototype.triggerHUDMenu = function triggerHUDMenu(menuitem) {
-    switch (menuitem) {
-      case "planets":
-        this.handlePlanetsMenuItem();
-        break;
-      case "tech":
-        this.handleTechMenuItem();
-        break;
-      case "trade":
-        this.handleTradeMenuItem();
-        break;
-      case "laws":
-        this.handleLawsMenuItem();
-        break;
-      default:
-        break;
+  menuItems() {
+    return {
+      'game-planets': {
+        name: 'Planets',
+        callback: this.handlePlanetsMenuItem.bind(this)
+  ***REMOVED***,
+      'game-tech': {
+        name: 'Tech',
+        callback: this.handleTechMenuItem.bind(this)
+  ***REMOVED***,
+      'game-player': {
+        name: 'Trade',
+        callback: this.handleTradeMenuItem.bind(this)
+  ***REMOVED***,
+      'game-player': {
+        name: 'Laws',
+        callback: this.handleLawsMenuItem.bind(this)
+  ***REMOVED***,
 ***REMOVED***
   ***REMOVED***
-  
-  Imperium.prototype.handlePlanetsMenuItem = function handlePlanetsMenuItem() {
+
+
+
+
+  handlePlanetsMenuItem() {
   
     let imperium_self = this;
     let factions = this.returnFactions();
@@ -110,8 +114,10 @@ class Imperium extends GameTemplate {
   ***REMOVED***
   
   
-  
-  Imperium.prototype.handleTechMenuItem = function handleTechMenuItem() {
+
+
+ 
+  handleTechMenuItem() {
   
     let imperium_self = this;
     let factions = this.returnFactions();
@@ -151,9 +157,12 @@ class Imperium extends GameTemplate {
 ***REMOVED***);
   ***REMOVED***
   
+
+
+
+
   
-  
-  Imperium.prototype.handleTradeMenuItem = function handleTradeMenuItem() {
+  handleTradeMenuItem() {
   
     let imperium_self = this;
     let factions = this.returnFactions();
@@ -198,8 +207,11 @@ class Imperium extends GameTemplate {
   
 ***REMOVED***);
   ***REMOVED***
-  
-  Imperium.prototype.handleLawsMenuItem = function handleLawsMenuItem() {
+
+
+
+
+  handleLawsMenuItem() {
   
     let imperium_self = this;
     let laws = this.returnAgendaCards();
@@ -233,8 +245,10 @@ class Imperium extends GameTemplate {
     $('.hud_menu_overlay').html(html);
   
   ***REMOVED***
-  ******/
   
+
+
+
   
   
   
@@ -639,6 +653,8 @@ console.log("VOTING FINISHED 4!");
 	    if (votes_against < votes_for) { direction_of_vote = "passes"; ***REMOVED***	    
 	  ***REMOVED***
 
+console.log("FINISH VOTING 1");
+
 	  //
 	  // announce if the vote passed
 	  //
@@ -648,11 +664,14 @@ console.log("VOTING FINISHED 4!");
 	  //
 	  //
 	  if (direction_of_vote == "passes") {
+console.log("FINISH VOTING 2");
 	    laws[imperium_self.game.state.agendas[agenda_num]].onPass(imperium_self, players_in_favour, players_opposed, function(res) {
 	      console.log("\n\nBACK FROM AGENDA ONPASS FUNCTION");
 	***REMOVED***);
 	  ***REMOVED*** else {
+console.log("FINISH VOTING 2");
 	    if (direction_of_vote == "fails") {
+console.log("FINISH VOTING 3");
 	      laws[imperium_self.game.state.agendas[agenda_num]].onPass(imperium_self, players_in_favour, players_opposed, function(res) {
 	        console.log("\n\nBACK FROM AGENDA ONPASS FUNCTION");
 	  ***REMOVED***);
@@ -774,11 +793,17 @@ console.log("VOTING FINISHED 5!");
 
 
       if (mv[0] == "setinitiativeorder") {
-  
+
+console.log("setting init order"); 
+
   	let initiative_order = this.returnInitiativeOrder();
   	this.game.queue.push("resolve\tsetinitiativeorder");
-  
-  	for (let i = 0; i < initiative_order.length; i++) {
+
+console.log("initiative order is: " + JSON.stringify(initiative_order));
+ 
+
+  	for (let i = 1; i < initiative_order.length; i++) {
+//  	for (let i = initiative_order.length-1; i >= 0; i--) {
   	  if (this.game.players_info[initiative_order[i]-1].passed == 0) {
   	    this.game.queue.push("play\t"+initiative_order[i]);
   	  ***REMOVED***
@@ -1571,9 +1596,12 @@ console.log("VOTING FINISHED 5!");
     let imperium_self = this;
   
     if (this.returnAvailableInfluence(this.game.player) <= 2) {
+console.log("SKIPPING INFLUENCE PURCHASE 1!");
       this.updateStatus("Skipping purchase of tokens as insufficient influence...");
+console.log("SKIPPING INFLUENCE PURCHASE 2!");
       this.endTurn();
-      return;
+console.log("SKIPPING INFLUENCE PURCHASE 3!");
+      return 0;
 ***REMOVED***
   
     let html = 'Do you wish to purchase any command or strategy tokens? <p></p><ul>';
@@ -2160,9 +2188,11 @@ console.log("VOTING FINISHED 5!");
   
   returnAvailableVotes(player) {
 
-    let array_of_cards = this.returnPlayerPlanetCards(player); 
+    let array_of_cards = this.returnPlayerPlanetCards(player);
+console.log("cards / planets for votes: " + JSON.stringify(array_of_cards));
     let total_available_votes = 0;
     for (let z = 0; z < array_of_cards.length; z++) {
+console.log("adding influence: " + this.game.planets[array_of_cards[z]].influence);
       total_available_votes += this.game.planets[array_of_cards[z]].influence;
 ***REMOVED***
     return total_available_votes;
@@ -3802,7 +3832,6 @@ console.log("VOTING FINISHED 5!");
 ***REMOVED***
   
   
-  
     for (let i = 0; i < this.game.players_info.length; i++) {
       player_lowest[i] = 100000;
       for (let k = 0; k < this.game.players_info[i].strategy.length; k++) {
@@ -4078,7 +4107,6 @@ console.log("VOTING FINISHED 5!");
     for (var i in planets) {
       planets[i].exhausted = 0;
       planets[i].owner = -1;
-      planets[i].owner = 1;
       planets[i].units = [this.totalPlayers]; // array to store units
 
       for (let j = 0; j < this.totalPlayers; j++) {
@@ -5530,140 +5558,60 @@ console.log("VOTING FINISHED 5!");
   	type : "instant" ,
   	text : "Gain control of one planet not controlled by any player" ,
   	img : "/imperium/img/action_card_template.png" ,
-        onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW PASSED!");
-          mycallback(1);
-	***REMOVED*** ,
-        onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW FAILS!");
-          mycallback(1);
-	***REMOVED*** ,
 ***REMOVED***;
     action['action2']	= { 
   	name : "Hydrocannon Cooling" ,
   	type : "instant" ,
   	text : "Ship gets -2 on combat rolls next round" ,
   	img : "/imperium/img/action_card_template.png" ,
-        onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW PASSED!");
-          mycallback(1);
-	***REMOVED*** ,
-        onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW FAILS!");
-          mycallback(1);
-	***REMOVED*** ,
 ***REMOVED***;
     action['action3']	= { 
   	name : "Agile Thrusters" ,
   	type : "instant" ,
   	text : "Attached ship may cancel up to 2 hits by PDS or Ion Cannons" ,
   	img : "/imperium/img/action_card_template.png" ,
-        onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW PASSED!");
-          mycallback(1);
-	***REMOVED***,
-        onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW FAILS!");
-          mycallback(1);
-	***REMOVED***,
 ***REMOVED***;
     action['action4']	= { 
   	name : "" ,
   	type : "instant" ,
   	text : "Exhaust a planet card held by another player. Gain trade goods equal to resource value." ,
   	img : "/imperium/img/action_card_template.png" ,
-        onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW PASSED!");
-          mycallback(1);
-	***REMOVED***,
-        onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW FAILS!");
-          mycallback(1);
-	***REMOVED***,
 ***REMOVED***;
     action['action5']	= { 
   	name : "" ,
   	type : "instant" ,
   	text : "Cancel 1 yellow technology prerequisite" ,
   	img : "/imperium/img/action_card_template.png" ,
-        onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW PASSED!");
-          mycallback(1);
-	***REMOVED***,
-        onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW FAILS!");
-          mycallback(1);
-	***REMOVED***,
 ***REMOVED***;
     action['action6']	= { 
   	name : "" ,
   	type : "instant" ,
   	text : "Cancel 1 blue technology prerequisite" ,
   	img : "/imperium/img/action_card_template.png" ,
-        onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW PASSED!");
-          mycallback(1);
-	***REMOVED***,
-        onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW FAILS!");
-          mycallback(1);
-	***REMOVED***,
 ***REMOVED***;
     action['action7']	= { 
   	name : "" ,
   	type : "instant" ,
   	text : "Cancel 1 red technology prerequisite" ,
   	img : "/imperium/img/action_card_template.png" ,
-        onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW PASSED!");
-          mycallback(1);
-	***REMOVED***,
-        onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW FAILS!");
-          mycallback(1);
-	***REMOVED***,
 ***REMOVED***;
     action['action8']	= { 
   	name : "" ,
   	type : "instant" ,
   	text : "Cancel 1 green technology prerequisite" ,
   	img : "/imperium/img/action_card_template.png" ,
-        onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW PASSED!");
-          mycallback(1);
-	***REMOVED***,
-        onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW FAILS!");
-          mycallback(1);
-	***REMOVED***,
 ***REMOVED***;
     action['action9']	= { 
   	name : "" ,
   	type : "instant" ,
   	text : "Replace 1 of your Destroyers with a Dreadnaught" ,
   	img : "/imperium/img/action_card_template.png" ,
-        onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW PASSED!");
-          mycallback(1);
-	***REMOVED***,
-        onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW FAILS!");
-          mycallback(1);
-	***REMOVED***,
 ***REMOVED***;
     action['action10']	= { 
   	name : "" ,
   	type : "instant" ,
   	text : "Place 1 Destroyer in a system with no existing ships" ,
   	img : "/imperium/img/action_card_template.png" ,
-        onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW PASSED!");
-          mycallback(1);
-	***REMOVED***,
-        onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW FAILS!");
-          mycallback(1);
-	***REMOVED***,
 ***REMOVED***;
   
     return action;
@@ -5683,54 +5631,126 @@ console.log("THE LAW FAILS!");
   	type : "Law" ,
   	text : "All invasions of unoccupied planets require conquering 1 infantry" ,
   	img : "/imperium/img/agenda_card_template.png" ,
+        onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
+console.log("THE LAW PASSED!");
+          mycallback(1);
+	***REMOVED*** ,
+        onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
+console.log("THE LAW FAILS!");
+          mycallback(1);
+	***REMOVED*** ,
 ***REMOVED***;
     agenda['a2']	= { 
   	name : "Wormhole Travel Ban" ,
   	type : "Law" ,
   	text : "All invasions of unoccupied planets require conquering 1 infantry" ,
   	img : "/imperium/img/agenda_card_template.png" ,
+        onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
+console.log("THE LAW PASSED!");
+          mycallback(1);
+	***REMOVED*** ,
+        onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
+console.log("THE LAW FAILS!");
+          mycallback(1);
+	***REMOVED*** ,
 ***REMOVED***;
     agenda['a3']	= { 
   	name : "Regulated Bureaucracy" ,
   	type : "Law" ,
   	text : "Players may have a maximum of 3 action cards in their hands at all times" ,
   	img : "/imperium/img/agenda_card_template.png" ,
+        onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
+console.log("THE LAW PASSED!");
+          mycallback(1);
+	***REMOVED*** ,
+        onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
+console.log("THE LAW FAILS!");
+          mycallback(1);
+	***REMOVED*** ,
 ***REMOVED***;
     agenda['a4']	= { 
   	name : "Freedom in Arms Act" ,
   	type : "Law" ,
   	text : "Players may place any number of PDS units on planets" ,
   	img : "/imperium/img/agenda_card_template.png" ,
+        onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
+console.log("THE LAW PASSED!");
+          mycallback(1);
+	***REMOVED*** ,
+        onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
+console.log("THE LAW FAILS!");
+          mycallback(1);
+	***REMOVED*** ,
 ***REMOVED***;
     agenda['a5']	= { 
   	name : "Performance Testing" ,
   	type : "Law" ,
   	text : "After any player researches a tach, he must destroy a non-fighter ship if possible" ,
   	img : "/imperium/img/agenda_card_template.png" ,
+        onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
+console.log("THE LAW PASSED!");
+          mycallback(1);
+	***REMOVED*** ,
+        onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
+console.log("THE LAW FAILS!");
+          mycallback(1);
+	***REMOVED*** ,
 ***REMOVED***;
     agenda['a6']	= { 
   	name : "Fleet Limitations" ,
   	type : "Law" ,
   	text : "Players may have a maximum of four tokens in their fleet supply." ,
   	img : "/imperium/img/agenda_card_template.png" ,
+        onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
+console.log("THE LAW PASSED!");
+          mycallback(1);
+	***REMOVED*** ,
+        onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
+console.log("THE LAW FAILS!");
+          mycallback(1);
+	***REMOVED*** ,
 ***REMOVED***;
     agenda['a7']	= { 
   	name : "Restricted Conscription" ,
   	type : "Law" ,
   	text : "Production cost for infantry and fighters is 1 rather than 0.5 resources" ,
   	img : "/imperium/img/agenda_card_template.png" ,
+        onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
+console.log("THE LAW PASSED!");
+          mycallback(1);
+	***REMOVED*** ,
+        onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
+console.log("THE LAW FAILS!");
+          mycallback(1);
+	***REMOVED*** ,
 ***REMOVED***;
     agenda['a8']	= { 
   	name : "Representative Democracy" ,
   	type : "Law" ,
   	text : "All players have only 1 vote in each Politics Vote" ,
   	img : "/imperium/img/agenda_card_template.png" ,
+        onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
+console.log("THE LAW PASSED!");
+          mycallback(1);
+	***REMOVED*** ,
+        onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
+console.log("THE LAW FAILS!");
+          mycallback(1);
+	***REMOVED*** ,
 ***REMOVED***;
     agenda['a9']	= { 
   	name : "Hidden Agenda" ,
   	type : "Law" ,
   	text : "Agendas are Hidden By Default and Only Revealed when the Politics Card is Played" ,
   	img : "/imperium/img/agenda_card_template.png" ,
+        onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
+console.log("THE LAW PASSED!");
+          mycallback(1);
+	***REMOVED*** ,
+        onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
+console.log("THE LAW FAILS!");
+          mycallback(1);
+	***REMOVED*** ,
 ***REMOVED***;
   
     return agenda;
@@ -6503,13 +6523,14 @@ console.log("PLAYER " + player + " has units in " + sector);
   ***REMOVED***;
   
   endTurn(nextTarget = 0) {
+
     for (let i = this.rmoves.length - 1; i >= 0; i--) {
       this.moves.push(this.rmoves[i]);
 ***REMOVED***
-  
+
+console.log("SENDING INFO: " + this.moves); 
+ 
     this.updateStatus("Waiting for information from peers....");
-    let extra = {***REMOVED***;
-    extra.target = this.returnNextPlayer(this.game.player);
   
     if (nextTarget != 0) {
       extra.target = nextTarget;
@@ -6518,7 +6539,9 @@ console.log("PLAYER " + player + " has units in " + sector);
     this.game.turn = this.moves;
     this.moves = [];
     this.rmoves = [];
-    this.sendMessage("game", extra);
+console.log("NOW SENDING MOVE:");
+    this.sendMessage("game", {***REMOVED***);
+;
   ***REMOVED***;
   
   endGame(winner, method) {
@@ -6918,8 +6941,10 @@ alert(chancellor);
   ***REMOVED***
 ***REMOVED***
   ***REMOVED***
-  
-  
+
+
+
+
   playStrategyCardSecondary(player, card) {
   
     let imperium_self = this;
@@ -6928,10 +6953,12 @@ alert(chancellor);
     this.updateStatus("Moving into the secondary of the " + strategy_cards[card].name + " strategy card");
   
     let player_confirmation_needed = this.game.players_info.length;
-  
     this.game.confirms_needed = player_confirmation_needed;
     this.game.confirms_received = 0;
   
+
+console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.confirms_received);
+
   
     if (card == "initiative") {
       this.addMove("resolve\tstrategy\t1");
@@ -7017,7 +7044,6 @@ alert(chancellor);
 ***REMOVED***
   
     if (card == "politics") {
-  
       imperium_self.addMove("resolve\tstrategy\t1");
       imperium_self.playerBuyActionCards();
       return 0;
@@ -7273,7 +7299,7 @@ alert(chancellor);
       ***REMOVED***
 
         if (obj.new_tokens == 0) {
-            imperium_self.addMove("resolve\ttokenallocation\t1\t1"); // 1 = halt after move
+            imperium_self.addMove("resolve\ttokenallocation\t1");
             imperium_self.addMove("purchase\t"+player+"\tstrategy\t"+obj.new_strategy);
             imperium_self.addMove("purchase\t"+player+"\tcommand\t"+obj.new_command);
           imperium_self.endTurn();
