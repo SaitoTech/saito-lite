@@ -5,7 +5,8 @@ const LeaderboardRow = require('./arcade-right-sidebar-leaderboard-row.template.
 module.exports = ArcadeRightSidebar = {
 
     render(app, data) {
-      document.querySelector(".arcade-right-sidebar").innerHTML = ArcadeRightSidebarTemplate();
+      let id = app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey());
+      document.querySelector(".arcade-right-sidebar").innerHTML = ArcadeRightSidebarTemplate(id);
       for (let i = 0; i < data.arcade.observer.length; i++) {
         let players = [];
         let players_array = data.arcade.observer[i].players_array.split("_");
@@ -49,6 +50,12 @@ module.exports = ArcadeRightSidebar = {
           data.arcade.observeGame(e.currentTarget.id);
         };
       });
+
+      let reg_button = document.getElementById('register-button')
+      if (reg_button)
+        document.getElementById('register-button').onclick = (e) => {
+          app.modules.returnModule("Registry").showModal();
+        }
 
     }
 

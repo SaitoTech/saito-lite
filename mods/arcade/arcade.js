@@ -1074,17 +1074,19 @@ console.log(JSON.stringify(game));
 
   }
 
-
-
-
-
-
   shouldAffixCallbackToModule(modname) {
     if (modname == "Arcade") { return 1; }
     for (let i = 0; i < this.affix_callbacks_to.length; i++) {
       if (this.affix_callbacks_to[i] == modname) { return 1; }
     }
     return 0;
+  }
+
+  updateBalance() {
+    if (this.browser_active) {
+      let balance = this.app.wallet.returnBalance();
+      document.querySelector('.saito-balance').innerHTML = balance + " SAITO";
+    }
   }
 
 }
