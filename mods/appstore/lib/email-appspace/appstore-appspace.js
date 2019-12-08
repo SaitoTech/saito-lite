@@ -27,7 +27,7 @@ module.exports = AppStoreAppspace = {
       //
       // load some categories
       //
-      document.querySelector(".appstore-browse-list").innerHTML += AppStoreAppCategoryTemplate({***REMOVED***);
+      //document.querySelector(".appstore-browse-list").innerHTML += AppStoreAppCategoryTemplate({***REMOVED***);
 
 ***REMOVED***,
 
@@ -109,6 +109,11 @@ alert("LIST: " + module_list);
       //
       // search box
       //
+      document.getElementById('appstore-search-box').addEventListener('click', (e) => {
+	e.currentTarget.placeholder = "";
+        e.currentTarget.value = "";
+  ***REMOVED***);
+
       document.getElementById('appstore-search-box').addEventListener('keypress', (e) => {
         let key = e.which || e.keyCode;
         if (key === 13) {
