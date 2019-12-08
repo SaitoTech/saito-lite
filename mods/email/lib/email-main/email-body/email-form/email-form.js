@@ -26,17 +26,19 @@ module.exports = EmailForm = {
         document.getElementById('email-from-address').value = `${this.saito.wallet.returnPublicKey()} (me)`;
     },
 
-    sendEmailTransaction(app, data) {
+    async sendEmailTransaction(app, data) {
 
         let email_title = document.querySelector('.email-title').value;
         let email_text = document.querySelector('.email-text').value;
         let email_to = document.getElementById('email-to-address').value;
         let email_from = this.saito.wallet.returnPublicKey();
 
+        email_to = await data.parentmod.addrController.returnPublicKey(email_to);
+
         let newtx = app.wallet.createUnsignedTransactionWithDefaultFee(email_to, 0.0);
         if (!newtx) {
           alert("Unable to send email. You appear to need more tokens");
-	  return
+	      return;
         }
 
         newtx.transaction.msg.module   = "Email";
