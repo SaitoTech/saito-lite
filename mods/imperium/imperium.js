@@ -544,7 +544,7 @@ console.log("MV3 is undefined, so we stop...");
           ***REMOVED*** else {
 console.log("MV3 is defined, so we fall through...");
     	        this.game.queue.splice(qe, 1);
-  	        return 1;
+  	        return 0;
 	  ***REMOVED***
         ***REMOVED***
   
@@ -882,7 +882,9 @@ console.log("GAME QUEUE IS PUSHED TO BE: " + this.game.queue);
   	// STRATEGY CARDS
   	//
         this.game.queue.push("playerschoosestrategycards");
-  
+ 
+
+
   	//
   	// ACTION CARDS
   	//
@@ -895,7 +897,8 @@ console.log("GAME QUEUE IS PUSHED TO BE: " + this.game.queue);
   	// ALLOCATE TOKENS
   	//
         this.game.queue.push("tokenallocation\t"+this.game.players_info.length);
-  
+ 
+
   	//
   	// mark as ready 
   	//	  
@@ -1563,9 +1566,6 @@ console.log("GAME QUEUE IS PUSHED TO BE: " + this.game.queue);
   
         let action2 = $(this).attr("id");
   
-        if (action2 == "get_new_tokens") {
-          imperium_self.playerAllocateNewTokens(imperium_self.game.player, 5);
-    ***REMOVED***
         if (action2 == "activate") {
           imperium_self.playerActivateSystem();
     ***REMOVED***
@@ -7339,7 +7339,11 @@ console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.co
       ***REMOVED***
 
         if (obj.new_tokens == 0) {
-            imperium_self.addMove("resolve\ttokenallocation\t1");
+            if (imperium_self.game.confirms_needed > 0) {
+              imperium_self.addMove("resolve\ttokenallocation\t1");
+	***REMOVED*** else {
+              imperium_self.addMove("resolve\ttokenallocation");
+	***REMOVED***
             imperium_self.addMove("purchase\t"+player+"\tstrategy\t"+obj.new_strategy);
             imperium_self.addMove("purchase\t"+player+"\tcommand\t"+obj.new_command);
           imperium_self.endTurn();
