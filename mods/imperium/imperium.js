@@ -1,6 +1,6 @@
 const saito = require('../../lib/saito/saito');
+const GameHud = require('../../lib/templates/lib/game-hud/game-hud'); 
 const GameTemplate = require('../../lib/templates/gametemplate');
-  
   
 class Imperium extends GameTemplate {
   
@@ -13,9 +13,6 @@ class Imperium extends GameTemplate {
     this.minPlayers      = 2;
     this.maxPlayers      = 4;  
 
-    this.useHUD = 1;
-    this.addHUDMenu      = ['Planets','Tech','Trade','Laws'];
-  
     this.gameboardWidth  = 1900;
   
     this.rmoves          = [];
@@ -26,6 +23,9 @@ class Imperium extends GameTemplate {
     this.minPlayers = 3;
     this.maxPlayers = 6;
     this.type       = "Strategy Boardgame";
+
+    this.hud = new GameHud(this.app, this.menuItems());
+
   
     //
     // game-related
@@ -499,6 +499,9 @@ console.log("hitting queue management!");
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
   
+
+console.log("GAME QUEUE: " + this.game.queue);
+
       if (mv[0] === "gameover") {
   	if (imperium_self.browser_active == 1) {
   	  alert("Game Over");
@@ -541,7 +544,7 @@ console.log("MV3 is undefined, so we stop...");
               } else {
 console.log("MV3 is defined, so we fall through...");
     	        this.game.queue.splice(qe, 1);
-  	        return 1;
+  	        return 0;
 	      }
             }
   
@@ -581,9 +584,11 @@ console.log("resolving earlier: " + this.game.queue[z]);
       if (mv[0] === "turn") {
   
   	this.game.state.turn++;
-  
+ 
   	let new_round = 1;
+console.log("TESTING PLAYER INFO LENGTH: " + this.game.players_info.length);
         for (let i = 0; i < this.game.players_info.length; i++) {
+console.log("IS PASSED: " + this.game.players_info[i].passed);
   	  if (this.game.players_info[i].passed == 0) { new_round = 0; }
         }
   
@@ -591,8 +596,11 @@ console.log("resolving earlier: " + this.game.queue[z]);
   	// NEW TURN
   	//
   	if (new_round == 1) {
+console.log("ADDING NEWROUND");
+  	  this.game.queue.push("setinitiativeorder");
   	  this.game.queue.push("newround");
   	} else {
+console.log("SET INIT ORDER");
   	  this.game.queue.push("setinitiativeorder");
   	}
   
@@ -802,12 +810,14 @@ console.log("setting init order");
 console.log("initiative order is: " + JSON.stringify(initiative_order));
  
 
-  	for (let i = 1; i <= initiative_order.length; i++) {
+  	for (let i = 0; i < initiative_order.length; i++) {
   	  if (this.game.players_info[initiative_order[i]-1].passed == 0) {
   	    this.game.queue.push("play\t"+initiative_order[i]);
   	  }
   	}
-  
+ 
+console.log("GAME QUEUE IS PUSHED TO BE: " + this.game.queue);
+
   	return 1;
   
       }
@@ -872,7 +882,9 @@ console.log("initiative order is: " + JSON.stringify(initiative_order));
   	// STRATEGY CARDS
   	//
         this.game.queue.push("playerschoosestrategycards");
-  
+ 
+
+
   	//
   	// ACTION CARDS
   	//
@@ -885,7 +897,8 @@ console.log("initiative order is: " + JSON.stringify(initiative_order));
   	// ALLOCATE TOKENS
   	//
         this.game.queue.push("tokenallocation\t"+this.game.players_info.length);
-  
+ 
+
   	//
   	// mark as ready 
   	//	  
@@ -1553,9 +1566,6 @@ console.log("initiative order is: " + JSON.stringify(initiative_order));
   
         let action2 = $(this).attr("id");
   
-        if (action2 == "get_new_tokens") {
-          imperium_self.playerAllocateNewTokens(imperium_self.game.player, 5);
-        }
         if (action2 == "activate") {
           imperium_self.playerActivateSystem();
         }
@@ -2483,8 +2493,12 @@ console.log("adding influence: " + this.game.planets[array_of_cards[z]].influenc
     }
   
     obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance);
+
+console.log("into updateinterface function...");
   
     let updateInterface = function(imperium_self, obj, updateInterface) {
+
+console.log("into updateInterface function...");
   
       let subjective_distance_adjustment = 0;
       if (obj.ship_move_bonus > 0) {
@@ -2536,9 +2550,10 @@ console.log("adding influence: " + this.game.planets[array_of_cards[z]].influenc
       }
       html += '<p></p>';
       html += '<div id="confirm" class="option">click here to move</div>';
-  
       imperium_self.updateStatus(html);
-  
+console.log("HERE 1"); 
+ 
+
       $('.option').off();
       $('.option').on('click', function() {
   
@@ -2563,6 +2578,8 @@ console.log("adding influence: " + this.game.planets[array_of_cards[z]].influenc
         };
   
   
+console.log("HERE 2");
+
         //
         // highlight ship on menu
         //
@@ -2598,6 +2615,8 @@ console.log("adding influence: " + this.game.planets[array_of_cards[z]].influenc
   
   
         obj.stuff_to_move.push(x);
+
+console.log("HERE 3: " + JSON.stringify(obj.stuff_to_move));
   
         updateInterface(imperium_self, obj, updateInterface);
   
@@ -2612,6 +2631,8 @@ console.log("adding influence: " + this.game.planets[array_of_cards[z]].influenc
   	    remove_what_capacity += thisunit.capacity_required;
   	  }
           }
+
+console.log("HERE 4");
   
           let user_message = `<div id="menu-container">This ship has <span class="capacity_remaining">${total_ship_capacity}</span> capacity to carry fighters / infantry. Do you wish to add them? <p></p><ul>`;
   
@@ -2628,6 +2649,8 @@ console.log("adding influence: " + this.game.planets[array_of_cards[z]].influenc
             }
           }
   
+console.log("HERE 5");
+
           let fighters_available_to_move = 0;
           for (let i = 0; i < sys.s.units[imperium_self.game.player-1].length; i++) {
             if (sys.s.units[imperium_self.game.player-1][i].name == "fighter") {
@@ -2638,13 +2661,17 @@ console.log("adding influence: " + this.game.planets[array_of_cards[z]].influenc
           user_message += '<li class="card" id="skip">skip</li>';
           user_message += '</ul></div>';
   
+console.log("HERE 6");
+
           //
           // choice
           //
           $('.hud_menu_overlay').html(user_message);
-          $('.status').hide();
+//          $('.status').show();
           $('.hud_menu_overlay').show();
   
+alert("HERE 7");
+
           // leave action enabled on other panels
           $('.card').on('click', function() {
   
@@ -3829,27 +3856,40 @@ console.log("adding influence: " + this.game.planets[array_of_cards[z]].influenc
     for (let j in strategy_cards) {
       card_io_hmap[j] = strategy_cards[j].order;
     }
-  
-  
+
+ 
+console.log("Cards: " + JSON.stringify(card_io_hmap));
+ 
     for (let i = 0; i < this.game.players_info.length; i++) {
+
       player_lowest[i] = 100000;
+
+console.log("PLAYER " + (i+1) + " ----> " + JSON.stringify(this.game.players_info[i].strategy));
+
       for (let k = 0; k < this.game.players_info[i].strategy.length; k++) {
         let sc = this.game.players_info[i].strategy[k];
+console.log("this sc is: " + sc);
         let or = card_io_hmap[sc];
+console.log("comes wth or: " + or);
         if (or < player_lowest[i]) { player_lowest[i] = or; }
       }
     }
   
-  
+
+console.log("LOWEST PER PLAYER: " + JSON.stringify(player_lowest));
+ 
     let loop = player_lowest.length;
     let player_initiative_order = [];
   
     for (let i = 0; i < loop; i++) {
       let a = player_lowest.indexOf(Math.max(...player_lowest));
+console.log("pushing player: " + (a+1));
       player_lowest[a] = -1;
       player_initiative_order.push(a+1);
     }
+
   
+
     return player_initiative_order;
   
   }
@@ -5855,12 +5895,12 @@ console.log("THE LAW FAILS!");
       if (i == 4) { players[i].color   = "purple"; }
       if (i == 5) { players[i].color   = "black"; }
   
-      players[i].planets = [];
+      players[i].planets = [];		
       players[i].tech = [];
       players[i].tech_exhausted_this_turn = [];
       players[i].upgrades = [];
-      players[i].strategy = [];
-  
+      players[i].strategy = [];		// strategy cards  
+
       // scored objectives
       players[i].scored_objectives = [];
       players[i].secret_objectives = [];
@@ -6803,8 +6843,9 @@ console.log("NOW SENDING MOVE:");
         // two action cards
         //
         this.addMove("resolve\tstrategy");
-        this.addMove("strategy\t"+card+"\t"+player+"\t2\t"+player_confirmation_needed);
         this.addMove("DEAL\t2\t"+this.game.player+"\t2");
+        this.addMove("notify\tdealing two action cards to player "+player);
+        this.addMove("strategy\t"+card+"\t"+player+"\t2\t"+player_confirmation_needed);
 
         //
         // pick the speaker
@@ -7298,7 +7339,11 @@ console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.co
           }
 
         if (obj.new_tokens == 0) {
-            imperium_self.addMove("resolve\ttokenallocation\t1");
+            if (imperium_self.game.confirms_needed > 0) {
+              imperium_self.addMove("resolve\ttokenallocation\t1");
+	    } else {
+              imperium_self.addMove("resolve\ttokenallocation");
+	    }
             imperium_self.addMove("purchase\t"+player+"\tstrategy\t"+obj.new_strategy);
             imperium_self.addMove("purchase\t"+player+"\tcommand\t"+obj.new_command);
           imperium_self.endTurn();

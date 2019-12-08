@@ -1,0 +1,19 @@
+/** Email **/
+
+body {
+  max-width: 1500px;
+}
+
+.footer {
+  display: none;
+}
+
+.remix-code {
+  display: none;
+}
+
+.remix-publish-module-btn {
+  display: none;
+}
+
+
