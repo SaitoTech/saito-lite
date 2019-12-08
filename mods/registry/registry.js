@@ -2,6 +2,7 @@ const path        = require('path');
 ***REMOVED***
 const ModTemplate = require('../../lib/templates/modtemplate');
 
+const RegistryModal = require('./lib/modal/registry-modal');
 
 
 class Registry extends ModTemplate {
@@ -44,8 +45,10 @@ class Registry extends ModTemplate {
   ***REMOVED***
 *******/
 
-
-
+  showModal() {
+    RegistryModal.render(this.app, this);
+    RegistryModal.attachEvents(this.app, this);
+  ***REMOVED***
 
   registerIdentifier(identifier, domain="@saito") {
 
@@ -113,8 +116,8 @@ class Registry extends ModTemplate {
 
 	  // send message
 	  if (res == 1) {
-	    
-	    let newtx = registry_self.app.wallet.createUnsignedTransaction(tx.transaction.from[0].add, 0.0, fee);	    
+
+	    let newtx = registry_self.app.wallet.createUnsignedTransaction(tx.transaction.from[0].add, 50.0, fee);
 		newtx.transaction.msg.module = "Email";
 		newtx.transaction.msg.title  = "Address Registration Success!";
 	    	newtx.transaction.msg.message = "You have successfully registered the identifier: " + identifier;
