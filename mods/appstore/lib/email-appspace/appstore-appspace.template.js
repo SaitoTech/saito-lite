@@ -5,27 +5,20 @@ module.exports = AppStoreAppspaceTemplate = () => {
 
 <div class="appspace-appstore-container">
   <div class="appstore-header-featured">
-    <h3>Featured Applications</h3>
+    <h3>Install a New Application:</h3>
     <div class="searchbox">
-        <input type="text" placeholder="Search Applications for ..." id="appstore-search-box">
+        <input type="text" placeholder="search for apps..." id="appstore-search-box">
     </div>
   </div>
 
   <div class="appstore-app-list"></div>
 
-  <div class="appstore-app-viewmore-header">
-    <a href="">view more applications</a>
-  </div>
-
-  <div class="appstore-header-browse">
-    <h3>Browse All Available</h3>
-  </div>
-
-  <div class="appstore-browse-list"></div>
-
   <div class="appstore-publish">
-    <h3>Developer?</h3>
-    <button id="appstore-publish-button">PUBLISH</button>
+    <h3>Are you a Developer?</h3>
+    <p></p>
+    It takes about five minutes to code your first Saito Application: <a href="https://org.saito.tech/" target="_saito">click here to learn how</a>. When you are done, publish your applications to the network for anyone to install and use:
+    <p></p>
+    <button id="appstore-publish-button">Publish Application</button>
   </div>
 
 </div>
