@@ -1074,17 +1074,19 @@ console.log(JSON.stringify(game));
 
   ***REMOVED***
 
-
-
-
-
-
   shouldAffixCallbackToModule(modname) {
     if (modname == "Arcade") { return 1; ***REMOVED***
     for (let i = 0; i < this.affix_callbacks_to.length; i++) {
       if (this.affix_callbacks_to[i] == modname) { return 1; ***REMOVED***
 ***REMOVED***
     return 0;
+  ***REMOVED***
+
+  updateBalance() {
+    if (this.browser_active) {
+      let balance = this.app.wallet.returnBalance();
+      document.querySelector('.saito-balance').innerHTML = balance + " SAITO";
+***REMOVED***
   ***REMOVED***
 
 ***REMOVED***
