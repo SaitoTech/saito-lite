@@ -26,6 +26,13 @@ module.exports = ArcadeLeftSidebar = {
 
     attachEvents(app, data) {
 
+      document.querySelector('#play-now').addEventListener('click', function() {
+        ArcadeStartGameList.render(app,data);
+        ArcadeStartGameList.attachEvents(app,data);
+      });
+
+
+
       Array.from(document.getElementsByClassName('arcade-navigator-item')).forEach(game => {
         game.addEventListener('click', (e) => {
 

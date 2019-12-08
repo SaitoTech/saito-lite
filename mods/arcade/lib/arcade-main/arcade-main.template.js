@@ -20,9 +20,6 @@ module.exports = ArcadeMainTemplate = () => {
         </div>
     </div>
 </div>
-<div class="play-now-holder">
-    <button id="play-now" class="play-now">Create Game</button>
-</div>
 <ul class="arcade-gamelist" id="arcade-gamelist"></ul>
   `;
 }

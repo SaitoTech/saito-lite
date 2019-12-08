@@ -4,11 +4,54 @@
 }
 
 
+.sector_graphics_space {
+
+}
+.sector_graphics_planet {
+  display: none;
+}
+
+.sector_graphics {
+  position: relative;
+  top: 0px;
+  left: 0px;
+}
+
+
+/* https://codepen.io/sosuke/pen/Pjoqqp */
+
+.player_color_1 {
+  filter: brightness(0) saturate(100%) invert(57%) sepia(13%) saturate(2390%) hue-rotate(84deg) brightness(93%) contrast(80%);
+}
+.player_color_2 {
+  filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
+}
+.player_color_3 {
+  filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
+}
+.player_color_4 {
+  filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
+}
+.player_color_5 {
+  filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
+}
+.player_color_6 {
+  filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
+}
+.player_color_7 {
+  filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
+}
+.player_color_8 {
+  filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
+}
+
+
 .player_color_box {
   width: 25px;
   height: 25px;
   display: inline-block;
   margin-right: 10px;
+  background-color: #000;
 }
 
 .terminal_header {
@@ -83,26 +126,6 @@ body {
   /* height: 3300px; */
   /* width: 2550px; */
   /* height: 1650px; */
-}
-
-
-.color1 {
-  background-color: #14ff2d;
-}
-.color2 {
-  background-color: #4614ff;
-}
-.color3 {
-  background-color: #ff1414;
-}
-.color4 {
-  background-color: #a714ff;
-}
-.color5 {
-  background-color: #144dff;
-}
-.color6 {
-  background-color: #f2ff14;
 }
 
 
