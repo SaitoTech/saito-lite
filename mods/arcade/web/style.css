@@ -104,7 +104,7 @@ input {
   grid-column-gap: 1.5em;
   grid-template-columns: 15em auto 15em;
   grid-template-areas: "arcade-left-sidebar arcade-main arcade-right-sidebar";
-  font-size: 1.11em;
+  font-size: 0.9em;
 ***REMOVED***
 
 .arcade-sidebar {
@@ -145,6 +145,10 @@ button.add-games {
 
 .arcade-sidebar-active-games-header {
   text-align: center;
+  background: linear-gradient(-45deg, #426 50%, #213 100%);
+  padding: 10px;
+  border: 1px solid var(--saito-red);
+  margin-bottom: unset;
 ***REMOVED***
 
 .arcade-sidebar-active-games-body,
@@ -171,6 +175,13 @@ button.add-games {
 
 #arcade-play-btn {
   padding-bottom: 1.7em;
+***REMOVED***
+
+.chat-header {
+  background: var(--saito-nightscape);
+  border: 1px solid var(--saito-red);
+  padding: 5px;
+  background: linear-gradient(-45deg, #426 50%, #213 100%);
 ***REMOVED***
 
 .chat-list {
@@ -452,6 +463,10 @@ button.add-games {
   cursor: pointer;
 ***REMOVED***
 
+.arcade-game-row-cancel {
+  margin-left: 10px;
+***REMOVED***
+
 .arcade-navigator, .arcade-apps {
   list-style: none;
   list-style-type: none;
@@ -701,6 +716,10 @@ option {
 ***REMOVED***
 
 .chat-room-message-myself {
+  background: #565656;
+***REMOVED***
+
+.chat-room-message-others {
   background: #426;
 ***REMOVED***
 
