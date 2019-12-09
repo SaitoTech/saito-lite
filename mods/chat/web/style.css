@@ -152,13 +152,13 @@ p {
 ***REMOVED***
 
 .chat-room-message-others {
-    background: var(--saito-skyline-grey);
-    justify-self: left;
-    border-bottom-left-radius: 0;
+  background: var(--saito-cyber-black);
+  justify-self: left;
+  border-bottom-left-radius: 0;
 ***REMOVED***
 
 .chat-room-message-myself {
-    background: var(--saito-cyber-black);
+    background: var(--saito-skyline-grey);
     color: white;
     justify-self: right;
     border-bottom-right-radius: 0;
