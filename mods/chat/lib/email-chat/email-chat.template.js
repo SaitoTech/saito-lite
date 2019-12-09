@@ -1,6 +1,6 @@
 module.exports = EmailChatTemplate = () => {
   return `
-      <div style="display: flex;
+      <div class="chat-header" style="display: flex;
       align-items: center;
       justify-content: space-between;">
         <h2>Chat</h2>
