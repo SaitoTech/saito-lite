@@ -16,7 +16,9 @@
    width: 100%;
    height: 100%;
 ***REMOVED***
-
+.leaf:nth-child(1) {
+   display:none;
+***REMOVED***
 
 
 .big {
