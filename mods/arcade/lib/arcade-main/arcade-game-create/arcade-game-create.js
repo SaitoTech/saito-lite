@@ -38,7 +38,6 @@ module.exports = ArcadeGameDreate = {
 
 
 
-
         document.getElementById('game-create-btn')
           .addEventListener('click', (e) => {
 

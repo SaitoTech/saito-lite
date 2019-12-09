@@ -2,6 +2,8 @@ const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate.js');
 const Big = require('big.js');
 
+const FaucetAppSpace = require('./lib/email-appspace/faucet-appspace');
+
 class Faucet extends ModTemplate {
     constructor(app) {
 
@@ -12,6 +14,29 @@ class Faucet extends ModTemplate {
         this.payoutRatio = 0.8;
 
     }
+
+
+
+
+  respondTo(type) {
+    if (type == 'email-appspace') {
+      let obj = {};
+          obj.render = this.renderEmail;
+          obj.attachEvents = this.attachEventsEmail;
+      return obj;
+    }
+    return null;
+  }
+  renderEmail(app, data) {
+     data.faucet = app.modules.returnModule("Faucet");
+     FaucetAppspace.render(app, data);
+  }
+  attachEventsEmail(app, data) {
+     data.faucet = app.modules.returnModule("Faucet");
+     FaucetAppspace.attachEvents(app, data);
+  }
+
+
 
 
     onConfirmation(blk, tx, conf, app) {
