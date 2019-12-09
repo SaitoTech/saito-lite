@@ -11,6 +11,31 @@ body {
   background: var(--saito-nightscape);
 ***REMOVED***
 
+
+.play-now {
+    cursor: pointer;
+    font-size: 1em;
+    width: 100%;
+    padding: 10px 6px;
+    background: linear-gradient(-45deg, #426 50%, #213 100%);
+    border: 1px solid var(--saito-red);
+    color: var(--saito-skyline-grey);
+    letter-spacing: 1px;
+    transition: transform .25s;
+    margin: 0;
+***REMOVED***
+.add-games {
+    cursor: pointer;
+    font-size: 1em;
+    width: 100%;
+    padding: 10px 6px;
+    background: linear-gradient(-45deg, #426 50%, #213 100%);
+    border: 1px solid var(--saito-red);
+    color: var(--saito-skyline-grey);
+    letter-spacing: 1px;
+    transition: transform .25s;
+    margin: 0;
+***REMOVED***
 button, .button, .file-label {
   border-radius: 5px;
   cursor: pointer;
@@ -339,7 +364,7 @@ button.add-games {
 
 /* RIBBON */
 
-.ribbon {
+.rilbon {
   width: 150px;
   height: 150px;
   overflow: hidden;

@@ -29,11 +29,12 @@
 .arcade-hero-wrapper div.leaf:nth-child(1) {
     opacity: 1;
     background-color: orange;
-    background-image: url(./img/ts-background-gg.jpg);
+    background-image: url('/imperium/img/arcade/arcade-banner-background.png');
 ***REMOVED***
 
 .arcade-hero-wrapper div.leaf:nth-child(2) {
     background-color: orangered;
+    background-image: url('/twilight/img/arcade/arcade-banner-background.png');
 ***REMOVED***
 
 .arcade-hero-wrapper div.leaf:nth-child(3) {
