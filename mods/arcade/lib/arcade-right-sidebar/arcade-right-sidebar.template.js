@@ -1,6 +1,7 @@
 module.exports = ArcadeRightSidebarTemplate = (publickey, id) => {
   let identifier_html = id ? `<h3>${id}</h3>` :
   `
+
   <div class="saito-identifier" style="width: 100%; display: grid;">
     <div style="
       font-size: 1.4em;
@@ -23,8 +24,9 @@ module.exports = ArcadeRightSidebarTemplate = (publickey, id) => {
     </div>
 
     <div class="arcade-sidebar-box">
-      <h2 class="arcade-sidebar-active-games-header">Leaderboard</h2>
-      <div class="arcade-sidebar-active-leaderboard-body"></div>
+      <div class="arcade-sidebar-active-leaderboard-body">
+        <h2 class="arcade-sidebar-active-games-header">Leaderboard</h2>
+      </div>
     </div>
 
     <!-- <div class="arcade-sidebar-box">
