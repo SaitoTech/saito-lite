@@ -93,7 +93,7 @@ class Arcade extends ModTemplate {
 ***REMOVED***
 ***REMOVED*** move into game
 ***REMOVED***
-        window.location = '/'+arcade_self.app.options.games[arcade_self.app.options.games.length-1].module.toLowerCase();
+        window.location = '/'+arcade_self.app.options.games[arcade_self.app.options.games.length-1].module.toLowerCase().replace(/\w/,'_');
   ***REMOVED***)
       .catch(err => console.log("ERROR 418019: error fetching game for observer mode", err));
   ***REMOVED***
