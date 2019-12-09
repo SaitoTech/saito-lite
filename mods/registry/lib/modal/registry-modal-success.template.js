@@ -12,7 +12,7 @@ module.exports = RegistrySuccessModalTemplate = () => {
             <p>To get more SAITO, provide us an email or join us on Discord and Telegram</p>
             <div style="
               display: grid;
-              grid-template-columns: 4fr 1fr 1fr;
+              grid-template-columns: 6fr 1fr 1fr;
               justify-items: right;
               align-items: center;
               ">
@@ -22,12 +22,12 @@ module.exports = RegistrySuccessModalTemplate = () => {
               </div>
               <div id="registry-succes-discord">
                 <a href="https://discord.gg/2KbHYrX" target="_blank">
-                  <i class="fab fa-discord" style="color: black; font-size: 3em"></i>
+                  <i class="fab fa-discord" style="color: black; font-size: 2em"></i>
                 </a>
               </div>
               <div id="registry-succes-telegram">
                 <a href="https://t.me/joinchat/HqTpD0_BR8HYmPg20G8IBw" target="_blank">
-                  <i class="fab fa-telegram" style="color: black; font-size: 3em"></i>
+                  <i class="fab fa-telegram" style="color: black; font-size: 2em"></i>
                 </a>
               </div>
             </div>
