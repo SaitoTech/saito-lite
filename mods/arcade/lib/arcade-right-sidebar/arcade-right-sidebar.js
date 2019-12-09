@@ -29,7 +29,7 @@ module.exports = ArcadeRightSidebar = {
         let gameobj = mod.respondTo("arcade-sidebar");
         if (gameobj != null) {
 
-          let modname = "arcade-sidebar-"+mod.name.toLowerCase();
+          let modname = "arcade-sidebar-"+mod.slug;
           let x = document.querySelector(("."+modname));
 
           if (x == null || x == undefined) {
