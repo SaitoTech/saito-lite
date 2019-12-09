@@ -21,7 +21,7 @@ module.exports = ArcadeGameCarousel = {
 
     let carousel = document.querySelector(".arcade-hero-wrapper");
     carousel.innerHTML = "";
-    carousel.innerHTML += ArcadeGameLeafTemplate();
+    // carousel.innerHTML += ArcadeGameLeafTemplate();
 
   ***REMOVED***,
 
