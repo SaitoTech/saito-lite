@@ -6,7 +6,6 @@ const GameTemplate = require('../../lib/templates/gametemplate');
 const addHammerListeners = require('../../lib/helpers/hammer');
 
 
-
 //
 // Missile Envy is a bit messy
 //
@@ -100,6 +99,10 @@ class Twilight extends GameTemplate {
 
     $('.hud-menu-overlay').html(html);
 
+    $('.status').hide();
+    $('.hud-menu-overlay').show();
+
+
     $('.card').on('click', function() {
 
       let player_action = $(this).attr("id");
@@ -166,6 +169,9 @@ class Twilight extends GameTemplate {
 
     $('.hud-menu-overlay').html(user_message);
 
+    $('.status').hide();
+    $('.hud-menu-overlay').show();
+
     // leave action enabled on other panels
     //$('.card').off();
     $('.card').on('click', function() {
@@ -191,6 +197,8 @@ class Twilight extends GameTemplate {
   async handlePlayerMenuItem() {
     // let opponent = await this.app.dns.fetchIdentifierPromise(this.game.opponents[0]);
 
+    $('.status').hide();
+    $('.hud-menu-overlay').show();
     // let's use the address controller for this in the future;
     let opponent = this.game.opponents[0];
 
