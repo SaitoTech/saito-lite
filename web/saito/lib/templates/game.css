@@ -107,6 +107,15 @@
   overflow-y: scroll;
 }
 
+.hud-menu-overlay {
+  color: black;
+  background-color: whitesmoke;
+  width: unset !important;
+  border-right: 1px solid var(--saito-skyline-grey);
+  overflow-y: scroll;
+  display: none;
+}
+
 .status ul {
   list-style: none;
 }

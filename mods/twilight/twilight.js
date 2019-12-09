@@ -34,7 +34,7 @@ class Twilight extends GameTemplate {
 
     this.app             = app;
 
-    this.name            = "Twilight";
+    this.name            = "Twilight Struggle";
     this.slug		         = "twilight";
     this.description     = `Twilight Struggle is a card-driven strategy game for two players, with its theme taken from the Cold War.
       One player plays the United States (US), and the other plays the Soviet Union (USSR).`;
@@ -62,6 +62,30 @@ class Twilight extends GameTemplate {
     this.hud = new GameHud(this.app, this.menuItems());
 
   }
+
+
+
+
+  //
+  // manually announce arcade banner support
+  //
+  respondTo(type) {
+
+    if (super.respondTo(type) != null) {
+      return super.respondTo(type);
+    }
+
+    if (type == "arcade-carousel") {
+      let obj = {};
+      obj.background = "/twilight/img/arcade/arcade-banner-background.png";
+      obj.title = "Twilight Struggle";
+      return obj;
+    }
+   
+    return null;
+ 
+  }
+
 
 
 

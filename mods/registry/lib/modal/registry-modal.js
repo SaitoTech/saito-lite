@@ -20,6 +20,11 @@ module.exports = RegistryModal = {
     document.getElementById("modal-close")
             .onclick = () => modal.style.display = "none";
 
+    let registry_input = document.getElementById('registry-input')
+    registry_input.onfocus = () => registry_input.placeholder = '';
+    registry_input.onblur = () => registry_input.placeholder = 'Username';
+
+
     let registry_button = document.getElementById('registry-add-button');
     if (registry_button)
       registry_button.onclick = () => {

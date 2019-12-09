@@ -5,8 +5,9 @@ const LeaderboardRow = require('./arcade-right-sidebar-leaderboard-row.template.
 module.exports = ArcadeRightSidebar = {
 
     render(app, data) {
-      let id = app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey());
-      document.querySelector(".arcade-right-sidebar").innerHTML = ArcadeRightSidebarTemplate(id);
+      let publickey = app.wallet.returnPublicKey();
+      let id = app.keys.returnIdentifierByPublicKey(publickey);
+      document.querySelector(".arcade-right-sidebar").innerHTML = ArcadeRightSidebarTemplate(publickey, id);
       for (let i = 0; i < data.arcade.observer.length; i++) {
         let players = [];
         let players_array = data.arcade.observer[i].players_array.split("_");
@@ -29,7 +30,7 @@ module.exports = ArcadeRightSidebar = {
         let gameobj = mod.respondTo("arcade-sidebar");
         if (gameobj != null) {
 
-          let modname = "arcade-sidebar-"+mod.name.toLowerCase();
+          let modname = "arcade-sidebar-"+mod.slug;
           let x = document.querySelector(("."+modname));
 
           if (x == null || x == undefined) {

@@ -13,7 +13,7 @@ module.exports = ArcadeGameDreate = {
       if (data.arcade.mods[i].name === game_id) {
 
         let gamemod = data.arcade.mods[i];
-        let gamemod_url = "/" + gamemod.name.toLowerCase() + "/img/arcade.jpg";
+        let gamemod_url = "/" + gamemod.slug + "/img/arcade.jpg";
 
         document.querySelector('.game-image').src = gamemod_url;
         document.querySelector('.background-shim').style.backgroundImage = 'url(' + gamemod_url + ')';

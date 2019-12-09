@@ -18,7 +18,7 @@ module.exports = ArcadeStartGameList = {
                         `;
             for (let i = 0; i < gamemods.length; i++) {
             if (gamemods[i].respondTo("arcade-games")) {
-                let gamemod_url = "/" + gamemods[i].name.toLowerCase() + "/img/arcade.jpg";
+                let gamemod_url = "/" + gamemods[i].slug + "/img/arcade.jpg";
                 var players = "Players: ";
                 var minPlayers = gamemods[i].minPlayers;
                 var maxPlayers = gamemods[i].maxPlayers;
