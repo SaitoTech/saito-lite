@@ -41,17 +41,19 @@ text-overflow: ellipsis;
   margin: unset;
   margin-bottom: 5px;
   word-wrap: break-word;
+  /* color: #dadada; */
+  font-family: visuelt-medium;
 ***REMOVED***
 
 .chat-room-message-others {
-  background: var(--saito-skyline-grey);
+  background: var(--saito-cyber-black);
+  color: white;
   justify-self: left;
   border-bottom-left-radius: 0;
 ***REMOVED***
 
 .chat-room-message-myself {
-  background: var(--saito-cyber-black);
-  color: white;
+  background: var(--saito-skyline-grey);
   justify-self: right;
   border-bottom-right-radius: 0;
 ***REMOVED***

@@ -1,16 +1,24 @@
-module.exports = ArcadeRightSidebarTemplate = (id) => {
+module.exports = ArcadeRightSidebarTemplate = (publickey, id) => {
   let identifier_html = id ? `<h3>${id***REMOVED***</h3>` :
-  `<div class="saito-identifier">
-    <h2 style="justify-self: center">Get a Username</h2>
-    <button id="register-button" style="width: 100%">REGISTER</button>
+  `
+  <div class="saito-identifier" style="width: 100%; display: grid;">
+    <div style="
+      font-size: 1.4em;
+      width: 10.5em;
+      text-overflow: ellipsis;
+      overflow: hidden;" class="saito-balance">${publickey***REMOVED***</div>
+    <div>
+    <button id="register-button" style="width: 100%; margin-top: 1em">SIGN UP</button>
   </div>`;
 
   return `
     <div style="display: grid; justify-items: right;">
+      <h2>Account</h2>
       <div style="
         font-size: 1.4em;
         text-overflow: ellipsis;
         overflow: hidden;" class="saito-balance">0.0 SAITO</div>
+      <div>
         ${identifier_html***REMOVED***
     </div>
 
