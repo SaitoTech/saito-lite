@@ -2707,6 +2707,28 @@ class Pandemic extends GameTemplate {
               <option value="medic">medic</option>
               <option value="operationsexpert">operations expert</option>
             </select>
+
+<div class="game-players-select-3p" id="game-players-select-3p" style="display:none">
+            <label for="player3">Player 3:</label>
+            <select name="player3">
+              <option value="random" default>random</option>
+              <option value="generalist" default>generalist</option>
+              <option value="scientist">scientist</option>
+              <option value="medic">medic</option>
+              <option value="operationsexpert">operations expert</option>
+            </select>
+</div>
+
+<div class="game-players-select-4p" id="game-players-select-4p" style="display:none">
+            <label for="player4">Player 4:</label>
+            <select name="player4">
+              <option value="random" default>random</option>
+              <option value="generalist" default>generalist</option>
+              <option value="scientist">scientist</option>
+              <option value="medic">medic</option>
+              <option value="operationsexpert">operations expert</option>
+            </select>
+</div>
   
   	</form>
   

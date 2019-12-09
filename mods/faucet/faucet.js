@@ -2,6 +2,8 @@
 ***REMOVED***
 const Big = require('big.js');
 
+const FaucetAppSpace = require('./lib/email-appspace/faucet-appspace');
+
 class Faucet extends ModTemplate {
 ***REMOVED***
 
@@ -12,6 +14,29 @@ class Faucet extends ModTemplate {
         this.payoutRatio = 0.8;
 
 ***REMOVED***
+
+
+
+
+  respondTo(type) {
+    if (type == 'email-appspace') {
+      let obj = {***REMOVED***;
+          obj.render = this.renderEmail;
+          obj.attachEvents = this.attachEventsEmail;
+      return obj;
+***REMOVED***
+    return null;
+  ***REMOVED***
+  renderEmail(app, data) {
+     data.faucet = app.modules.returnModule("Faucet");
+     FaucetAppspace.render(app, data);
+  ***REMOVED***
+  attachEventsEmail(app, data) {
+     data.faucet = app.modules.returnModule("Faucet");
+     FaucetAppspace.attachEvents(app, data);
+  ***REMOVED***
+
+
 
 
 ***REMOVED***
