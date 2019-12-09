@@ -1,0 +1,82 @@
+
+
+.arcade-game-carousel {
+  width:100%;
+  min-height: 35%;
+  margin-bottom:20px;
+***REMOVED***
+
+.arcade-carousel-wrapper {
+    width: 100%;
+    height: 100%;
+***REMOVED***
+
+.leaf {
+   background-size: cover;
+   width: 100%;
+   height: 100%;
+***REMOVED***
+
+
+
+.big {
+    margin: 2% 0%;
+    padding: 1% 5%;
+    font-size: 5vw;
+    font-weight: 900;
+    -webkit-text-stroke-width: thick;
+    background: #0009;
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke-width: 3px;
+    -webkit-text-stroke-color: black;
+    font-family: visuelt-black;
+    text-shadow: 2px 2px 3px red;
+***REMOVED***
+.med {
+    padding: 1% 27%;
+    font-size: 3vw;
+    font-weight: 500;
+    -webkit-text-stroke-width: thick;
+    background: #0009;
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: black;
+    font-family: visuelt-black;
+    text-shadow: 2px 2px 3px red;
+***REMOVED***
+
+.small {
+    margin: 1% 0;
+    padding: 1% 10%;
+    font-size: 2vw;
+    font-weight: 500;
+    -webkit-text-stroke-width: thick;
+    background: #0009;
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: black;
+    font-family: visuelt-black;
+    text-shadow: 2px 2px 3px red;
+***REMOVED***
+
+img.HIS, img.CD, img.RLIRS {
+    width: 9vw;
+    position: absolute;
+    box-shadow: 0px 0px 5px 2px #000;
+***REMOVED***
+
+img.HIS {
+    top: 10%;
+    left: 74%;
+***REMOVED***
+
+img.RLIRS {
+    top: 25%;
+    left: 83%;
+***REMOVED***
+
+img.CD {
+    display: none;
+***REMOVED***
+
+

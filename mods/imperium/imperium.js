@@ -40,6 +40,28 @@ class Imperium extends GameTemplate {
   
   
   
+
+  //
+  // manually add arcade banner support
+  //
+  respondTo(type) {
+
+    if (super.respondTo(type) != null) {
+      return super.respondTo(type);
+***REMOVED***
+
+    if (type == "arcade-carousel") {
+      let obj = {***REMOVED***;
+      obj.background = "/imperium/img/arcade/arcade-banner-background.png";
+      obj.title = "Red Imperium";
+      return obj;
+***REMOVED***
+
+    return null;
+
+  ***REMOVED***
+
+
   
   
   /////////////////
