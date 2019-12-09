@@ -1,6 +1,5 @@
 module.exports = ArcadeLeftSidebarTemplate = () => {
   return `
-
   <div class="arcade-controls">
       <div class="arcade-bars-menu">
         <div class="play-now-holder">
