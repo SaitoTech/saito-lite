@@ -1,0 +1,172 @@
+.big {
+    padding: 3% 5%;
+    font-size: 5vw;
+    font-weight: 900;
+    background: #0009;
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke-width: 3px;
+    -webkit-text-stroke-color: black;
+    font-family: visuelt-black;
+    text-shadow: 2px 2px 3px red;
+    top: 25%;
+    position: relative;
+***REMOVED***
+
+.arcade-game-carousel {
+  width:100%;
+  min-height: 35%;
+  margin-bottom:20px;
+***REMOVED***
+
+.arcade-carousel-wrapper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+***REMOVED***
+
+.leaf {
+   background-size: cover;
+   width: 100%;
+   height: 100%;
+   position: absolute;
+   opacity: 0;
+***REMOVED***
+
+.arcade-carousel-wrapper > div {
+    animation: rightToLeft 20s linear infinite 0s;
+***REMOVED***
+
+.arcade-carousel-wrapper div.leaf:nth-child(1) {
+    animation-delay: 0s;
+***REMOVED***
+
+.arcade-carousel-wrapper div.leaf:nth-child(2) {
+    animation-delay: 10s;
+***REMOVED***
+
+.arcade-carousel-wrapper div.leaf:nth-child(3) {
+    animation-delay: 20s;
+***REMOVED***
+
+.arcade-carousel-wrapper div.leaf:nth-child(4) {
+    animation-delay: 30s;
+***REMOVED***
+
+.arcade-carousel-wrapper div.leaf:nth-child(5) {
+    animation-delay: 40s;
+***REMOVED***
+
+
+
+/*rightToLeft Animation*/
+
+@keyframes rightToLeft {
+    0% {
+        opacity: 0;
+***REMOVED***
+    5% {
+        opacity: 0;
+        transform: translateX(-100%);
+***REMOVED***
+    15% {
+        opacity: 1;
+        transform: translateX(0px);
+***REMOVED***
+    85% {
+        opacity: 1;
+        transform: translateX(0px);
+***REMOVED***
+    90% {
+        opacity: 0;
+        transform: translateX(100%);
+***REMOVED***
+    100% {
+        opacity: 0;
+***REMOVED***
+***REMOVED***
+/*
+@-moz-keyframes rightToLeft {
+    0% {
+        opacity: 0;
+***REMOVED***
+    5% {
+        opacity: 0;
+        -moz-transform: translateX(-100%);
+***REMOVED***
+    10% {
+        opacity: 1;
+        -moz-transform: translateX(0px);
+***REMOVED***
+    25% {
+        opacity: 1;
+        -moz-transform: translateX(0px);
+***REMOVED***
+    30% {
+        opacity: 0;
+        -moz-transform: translateX(100%);
+***REMOVED***
+    80% {
+        opacity: 0;
+***REMOVED***
+    100% {
+        opacity: 0;
+***REMOVED***
+***REMOVED***
+
+@-webkit-keyframes rightToLeft {
+    0% {
+        opacity: 0;
+***REMOVED***
+    5% {
+        opacity: 0;
+        -webkit-transform: translateX(-100%);
+***REMOVED***
+    10% {
+        opacity: 1;
+        -webkit-transform: translateX(0px);
+***REMOVED***
+    25% {
+        opacity: 1;
+        -webkit-transform: translateX(0px);
+***REMOVED***
+    30% {
+        opacity: 0;
+        -webkit-transform: translateX(100%);
+***REMOVED***
+    80% {
+        opacity: 0;
+***REMOVED***
+    100% {
+        opacity: 0;
+***REMOVED***
+***REMOVED***
+
+@-ms-keyframes rightToLeft {
+    0% {
+        opacity: 0;
+***REMOVED***
+    5% {
+        opacity: 0;
+        -ms-transform: translateX(-100%);
+***REMOVED***
+    10% {
+        opacity: 1;
+        -ms-transform: translateX(0px);
+***REMOVED***
+    25% {
+        opacity: 1;
+        -ms-transform: translateX(0px);
+***REMOVED***
+    30% {
+        opacity: 0;
+        -ms-transform: translateX(100%);
+***REMOVED***
+    80% {
+        opacity: 0;
+***REMOVED***
+    100% {
+        opacity: 0;
+***REMOVED***
+***REMOVED***
+*/
