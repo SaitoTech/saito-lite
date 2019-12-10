@@ -231,24 +231,38 @@ class Faucet extends ModTemplate {
 
         modal.render();
 
+        document.querySelector('.tutorial-skip')
+                .onclick = () => showRegistryModal(false);
+
+        const showRegistryModal = (are_tokens_sent=true) => {
+            modal.destroy();
+            modal.title = "Register a Username";
+            modal.content = FaucetModalRegistryTemplate(are_tokens_sent);
+
+            modal.render();
+            modal.attachEvents(registryModalEvents);
+    ***REMOVED***
+
         const captchaCallback = () => {
     ***REMOVED***
     ***REMOVED*** TODO: SEND TOKENS WITH FAUCET HERE
     ***REMOVED***
     ***REMOVED*** send out faucet request for tokens
     ***REMOVED***
-            modal.destroy();
-            modal.title = "Register a Username";
-            modal.content = FaucetModalRegistryTemplate();
-
-            modal.render();
-            modal.attachEvents(registryModalEvents);
+            showRegistryModal(true);
     ***REMOVED***
 
         const registryModalEvents = () => {
             let registry_input = document.getElementById('registry-input')
             registry_input.onfocus = () => registry_input.placeholder = '';
             registry_input.onblur = () => registry_input.placeholder = 'Username';
+
+            const showSocialModal = (are_tokens_sent=true) => {
+                modal.destroy();
+                modal.title = 'Learn More'
+                modal.content = FaucetModalSocialTemplate(are_tokens_sent);
+                modal.render();
+        ***REMOVED***
 
             document.getElementById('registry-add-button').onclick = () => {
                 let identifier = document.getElementById('registry-input').value
@@ -260,15 +274,14 @@ class Faucet extends ModTemplate {
                             elem.innerHTML = `<h3>${identifier***REMOVED***@saito</h3>`
                     ***REMOVED***);
             ***REMOVED***
-            ***REMOVED*** Add email capture and links to discord and Telegram
+            ***REMOVED*** TODO: Add email capture and links to discord and Telegram
             ***REMOVED***
-                    modal.destroy();
-                    modal.title = 'Success!'
-                    modal.content = FaucetModalSocialTemplate();
-                    modal.render();
+                    showSocialModal(true);
             ***REMOVED***
-
         ***REMOVED***;
+
+            document.querySelector('.tutorial-skip')
+                    .onclick = () => showSocialModal(false);
     ***REMOVED***
 
 ***REMOVED***

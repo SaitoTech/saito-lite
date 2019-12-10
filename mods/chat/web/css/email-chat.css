@@ -42,9 +42,8 @@ text-overflow: ellipsis;
 
 .chat-message-text {
   margin: unset;
-  margin-bottom: 5px;
+  margin-bottom: 1px;
   word-wrap: break-word;
-  /* color: #dadada; */
   font-family: visuelt-medium;
 ***REMOVED***
 

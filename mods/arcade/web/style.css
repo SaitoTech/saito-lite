@@ -3,6 +3,7 @@
 :root {
   --saito-red: #639;
   --saito-nightscape: linear-gradient(-45deg, #324 50%, #1e1e1f 100%);
+  --saito-jester: linear-gradient(-45deg, #426 50%, #213 100%);
 ***REMOVED***
 
 body {
@@ -22,6 +23,7 @@ body {
     color: var(--saito-skyline-grey);
     letter-spacing: 1px;
     margin: 0;
+    text-align: center;
 ***REMOVED***
 
 
@@ -30,7 +32,7 @@ body {
     font-size: 1em;
     width: 100%;
     padding: 10px 6px;
-    background: linear-gradient(-45deg, #426 50%, #213 100%);
+    background: var(--saito-jester);
     border: 1px solid var(--saito-red);
     border-bottom: 0px;
     color: var(--saito-skyline-grey);
@@ -45,7 +47,7 @@ button, .button, .file-label {
   font-size: 1em;
   min-width: 10em;
   padding: 10px 6px;
-  background: linear-gradient(-45deg, #426 50%, #213 100%);
+  background: var(--saito-jester);
   border: 1px solid var(--saito-red);
   color: var(--saito-skyline-grey);
   letter-spacing: 1px;
@@ -148,10 +150,10 @@ button.add-games {
 
 .arcade-sidebar-active-games-header {
   text-align: center;
-  background: linear-gradient(-45deg, #426 50%, #213 100%);
+  background: var(--saito-jester);
   padding: 10px;
   border: 1px solid var(--saito-red);
-  margin-bottom: unset;
+  margin: unset;
 ***REMOVED***
 
 .arcade-sidebar-active-games-body,
@@ -186,7 +188,7 @@ button.add-games {
   border-bottom: 0px;
   padding-left: 5px;
   padding-right: 5px;
-  background: linear-gradient(-45deg, #426 50%, #213 100%);
+  background: var(--saito-jester);
 ***REMOVED***
 
 .chat-list {
@@ -621,6 +623,11 @@ option {
   font-size: 1.6em;
   padding: 0.5em;
   width: 100%;
+
+  background: var(--saito-red);
+  border-radius: 5px;
+  text-align: center;
+  margin-bottom: 1em;
 ***REMOVED***
 
 .start-game-list {
@@ -707,9 +714,9 @@ option {
 /** CHAT STYLING **/
 
 .chat-row {
-/*  border-bottom: 1px solid var(--saito-red); */
-  border-bottom: 0px;
+  border-bottom: 1px solid var(--saito-red);
 ***REMOVED***
+
 .chat-row:hover {
   background-color: #33669999;
 ***REMOVED***
@@ -721,7 +728,7 @@ option {
 
 .chat-box-header {
   border-bottom: 1px solid var(--saito-red);
-  background: linear-gradient(-45deg, #426 50%, #213 100%);
+  background: var(--saito-jester);
 ***REMOVED***
 
 .chat-room-message-myself {

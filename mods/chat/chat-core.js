@@ -10,6 +10,7 @@ class ChatCore extends ModTemplate {
     this.name = "Chat";
     this.events = ['encrypt-key-exchange-confirm'];
     this.groups = [];
+    this.active_groups = [];
   ***REMOVED***
 
   receiveEvent(type, data) {

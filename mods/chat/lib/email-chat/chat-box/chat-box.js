@@ -14,13 +14,15 @@ module.exports = ChatBox = {
           active_group_name = group.name;
     ***REMOVED***
 
-        document.querySelector('.chat-manager').append(elParser(ChatBoxTemplate(active_group_name, group.id)));
+        if (!document.getElementById(`chat-box-${group.id***REMOVED***`)) {
+          document.querySelector('.chat-manager').append(elParser(ChatBoxTemplate(active_group_name, group.id)));
 
-        if (group != null) {
-          group.messages.forEach(message => {
-            let type = message.publickey == app.wallet.returnPublicKey() ? 'myself' : 'others';
-            document.getElementById(`chat-box-main-${group.id***REMOVED***`).innerHTML += ChatBoxMessageContainerTemplate(message, '1239841203498', type);
-      ***REMOVED***);
+          if (group != null) {
+            group.messages.forEach(message => {
+              let type = message.publickey == app.wallet.returnPublicKey() ? 'myself' : 'others';
+              document.getElementById(`chat-box-main-${group.id***REMOVED***`).innerHTML += ChatBoxMessageContainerTemplate(message, '1239841203498', type);
+        ***REMOVED***);
+      ***REMOVED***
     ***REMOVED***
 
         this.scrollToBottom(group.id);
