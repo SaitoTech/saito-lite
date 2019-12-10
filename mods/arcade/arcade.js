@@ -828,6 +828,17 @@ console.log("done now...");
 
   ***REMOVED***
 
+
+
+  launchSinglePlayerGame(app, data, gameobj) {
+
+    //
+    //
+    window.location = '/'+gameobj.slug;
+    return;
+
+  ***REMOVED***
+
   sendMultiplayerAcceptRequest(app, data, gameobj) {
 
 console.log("SEND MULTIPLE ACCEPT: " + JSON.stringify(gameobj));

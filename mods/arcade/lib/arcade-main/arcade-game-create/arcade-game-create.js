@@ -24,7 +24,41 @@ module.exports = ArcadeGameDreate = {
 
 
 setTimeout(() => {
+
         let current_sel = $('.game-players-select').val();
+
+
+	if (gamemod.maxPlayers == 1) {
+	  document.querySelector('.game-players-select').value = 1;
+          content_sel = 1;
+	  $('#game-players-select-2p').css('display','none');
+	  $('.game-players-options-2p').parent('.saito-select').css('display', 'none');
+	  $('.game-players-options-2p').css('display','none');
+
+	  $('#game-players-select-3p').css('display','none');
+	  $('.game-players-options-3p').parent('.saito-select').css('display', 'none');
+	  $('.game-players-options-3p').css('display','none');
+
+	  $('#game-players-select-4p').css('display','none');
+	  $('.game-players-options-4p').parent('.saito-select').css('display', 'none');
+	  $('.game-players-options-4p').css('display','none');
+
+	  $('#game-players-select-5p').css('display','none');
+	  $('.game-players-options-5p').parent('.saito-select').css('display', 'none');
+	  $('.game-players-options-5p').css('display','none');
+
+	  $('#game-players-select-6p').css('display','none');
+	  $('.game-players-options-6p').parent('.saito-select').css('display', 'none');
+	  $('.game-players-options-6p').css('display','none');
+    ***REMOVED***
+
+	if (gamemod.minPlayers > 1) {
+          for (let z = 1; z < gamemod.minPlayers; z++) {
+	    $(('#game-players-select-'+z+'p')).css('display','none');
+	    $(('.game-players-options-'+z+'p')).parent('.saito-select').css('display', 'none');
+	    $(('.game-players-options-'+z+'p')).css('display','none');
+      ***REMOVED***
+    ***REMOVED***
 
 	if (gamemod.maxPlayers > 2) {
           $('.game-players-select').css('display', "flex");
@@ -47,11 +81,6 @@ setTimeout(() => {
 	    $('#game-players-select-3p').css('display','none');
 	    $('#game-players-select-3p').parent('.saito-select').css('display', 'none');
 	    $('.game-players-options-3p').css('display','none');
-	  ***REMOVED***
-	  if (gamemod.maxPlayers < 2 || current_sel < 2) {
-	    $('#game-players-select-2p').css('display','none');
-	    $('.game-players-options-2p').parent('.saito-select').css('display', 'none');
-	    $('.game-players-options-2p').css('display','none');
 	  ***REMOVED***
 	***REMOVED***
 ***REMOVED***, 100);
@@ -77,10 +106,16 @@ setTimeout(() => {
 
             let gamedata = {***REMOVED***;
                 gamedata.name = gamemod.name;
-                gamedata.slug = gamemod.slug || gamemod.name;
+                gamedata.slug = gamemod.returnSlug();
                 gamedata.options = gamemod.returnFormattedGameOptions(options);
                 gamedata.options_html = gamemod.returnGameRowOptionsHTML(options);
                 gamedata.players_needed = $('.game-players-select').val();
+
+	    if (gamedata.players_needed == 1) {
+	      // 1 player games just launch
+              data.arcade.launchSinglePlayerGame(app, data, gamedata);
+	      return;
+        ***REMOVED***
 
             data.arcade.sendOpenRequest(app, data, gamedata);
             document.querySelector('.arcade-main').innerHTML = '';
