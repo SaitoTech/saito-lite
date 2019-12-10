@@ -1095,8 +1095,10 @@ console.log(JSON.stringify(game));
 
   updateBalance() {
     if (this.browser_active) {
-      let balance = this.app.wallet.returnBalance();
-      document.querySelector('.saito-balance').innerHTML = balance + " SAITO";
+      try {
+        let balance = this.app.wallet.returnBalance();
+        document.querySelector('.saito-balance').innerHTML = balance + " SAITO";
+  ***REMOVED*** catch (err) {***REMOVED***
 ***REMOVED***
   ***REMOVED***
 
