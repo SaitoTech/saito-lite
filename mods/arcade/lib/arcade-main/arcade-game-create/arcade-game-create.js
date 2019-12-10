@@ -23,19 +23,38 @@ module.exports = ArcadeGameDreate = {
         document.querySelector('.game-details').innerHTML = gamemod.returnGameOptionsHTML();
 
 
+setTimeout(() => {
+        let current_sel = $('.game-players-select').val();
+
 	if (gamemod.maxPlayers > 2) {
-          $('.game-players-select').css('display', "block");
-	  if (gamemod.maxPlayers < 6) {
+          $('.game-players-select').css('display', "flex");
+	  if (gamemod.maxPlayers < 6 || current_sel < 6) {
 	    $('#game-players-select-6p').css('display','none');
+	    $('.game-players-options-6p').parent('.saito-select').css('display', 'none');
+	    $('.game-players-options-6p').css('display','none');
 	  ***REMOVED***
-	  if (gamemod.maxPlayers < 5) {
+	  if (gamemod.maxPlayers < 5 || current_sel < 5) {
 	    $('#game-players-select-5p').css('display','none');
+	    $('.game-players-options-5p').parent('.saito-select').css('display', 'none');
+	    $('.game-players-options-5p').css('display','none');
 	  ***REMOVED***
-	  if (gamemod.maxPlayers < 4) {
+	  if (gamemod.maxPlayers < 4 || current_sel < 4) {
 	    $('#game-players-select-4p').css('display','none');
+	    $('#game-players-select-4p').parent('.saito-select').css('display', 'none');
+	    $('.game-players-options-4p').css('display','none');
+	  ***REMOVED***
+	  if (gamemod.maxPlayers < 3 || current_sel < 3) {
+	    $('#game-players-select-3p').css('display','none');
+	    $('#game-players-select-3p').parent('.saito-select').css('display', 'none');
+	    $('.game-players-options-3p').css('display','none');
+	  ***REMOVED***
+	  if (gamemod.maxPlayers < 2 || current_sel < 2) {
+	    $('#game-players-select-2p').css('display','none');
+	    $('.game-players-options-2p').parent('.saito-select').css('display', 'none');
+	    $('.game-players-options-2p').css('display','none');
 	  ***REMOVED***
 	***REMOVED***
-
+***REMOVED***, 100);
 
 
         document.getElementById('game-create-btn')
@@ -67,7 +86,29 @@ module.exports = ArcadeGameDreate = {
             document.querySelector('.arcade-main').innerHTML = '';
             data.arcade.render(app, data);
 
+
       ***REMOVED***);
+
+
+
+          document.querySelector('.game-players-select').addEventListener('change',(e) =>{
+            let players = parseInt(e.currentTarget.value);
+
+            for (let i = 0; i < 10; i++) {
+	      let classhit = ".game-players-options-"+(i+1)+"p";
+	      let classhit2 = "#game-players-select-"+(i+1)+"p";
+              if (i < players) {
+                $(classhit).css('display', "flex");
+		$(classhit2).parent('.saito-select').css('display', 'flex');
+          ***REMOVED*** else {
+                $(classhit).css('display', "none");
+		$(classhit2).parent('.saito-select').css('display', 'none');
+          ***REMOVED***
+        ***REMOVED***
+      ***REMOVED***)
+
+
+
 
         return;
   ***REMOVED***
@@ -76,6 +117,7 @@ module.exports = ArcadeGameDreate = {
 
 
   attachEvents(app, data) {
+
 
     document.querySelector('#return-to-arcade')
       .onclick = (e) => {
