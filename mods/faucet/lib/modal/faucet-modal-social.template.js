@@ -1,8 +1,9 @@
-module.exports = FaucetModalSocialTemplate = () => {
+module.exports = FaucetModalSocialTemplate = (tokens_sent=true) => {
+  let are_tokens_sent = tokens_sent ? `<p>As a thanks, have 50 SAITO on us.</p>` : '';
   return `
-    <p>As a thanks, have 50 SAITO on us.
-    Check out some of the modules on the system to get more SAITO.</p>
-    <ul style="margin-left: 1em">
+    ${are_tokens_sent}
+    <p>Check out some of the modules on the system to get more SAITO.</p>
+    <ul style="margin-left: 1em;line-height: 1.5em;">
       <a href="/email"><li>Email</li></a>
       <a href="/arcade"><li>Arcade</li></a>
       <a href="/faucet"><li>Faucet</li></a>
@@ -15,7 +16,7 @@ module.exports = FaucetModalSocialTemplate = () => {
     align-items: center;
     ">
     <div class="registry-succes-email" style="display: flex;width: 100%;">
-        <input style="color: black" id="registry-input" type="text" placeholder="Email">
+        <input style="color: black;font-size: 1em;" id="registry-input" type="text" placeholder="Email">
         <button id="registry-email-button" style="margin: unset;margin-left: 10px;">SUBMIT</button>
     </div>
     <div id="registry-succes-discord">

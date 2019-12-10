@@ -14,13 +14,15 @@ module.exports = ChatBox = {
           active_group_name = group.name;
         }
 
-        document.querySelector('.chat-manager').append(elParser(ChatBoxTemplate(active_group_name, group.id)));
+        if (!document.getElementById(`chat-box-${group.id}`)) {
+          document.querySelector('.chat-manager').append(elParser(ChatBoxTemplate(active_group_name, group.id)));
 
-        if (group != null) {
-          group.messages.forEach(message => {
-            let type = message.publickey == app.wallet.returnPublicKey() ? 'myself' : 'others';
-            document.getElementById(`chat-box-main-${group.id}`).innerHTML += ChatBoxMessageContainerTemplate(message, '1239841203498', type);
-          });
+          if (group != null) {
+            group.messages.forEach(message => {
+              let type = message.publickey == app.wallet.returnPublicKey() ? 'myself' : 'others';
+              document.getElementById(`chat-box-main-${group.id}`).innerHTML += ChatBoxMessageContainerTemplate(message, '1239841203498', type);
+            });
+          }
         }
 
         this.scrollToBottom(group.id);

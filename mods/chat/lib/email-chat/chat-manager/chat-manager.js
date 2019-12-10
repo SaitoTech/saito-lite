@@ -3,7 +3,9 @@ const elParser = require('../../../../../lib/helpers/el_parser');
 
 module.exports = ChatManager = {
   render(app, data) {
-    document.querySelector('body').append(elParser('<div class="chat-manager"></div>'));
+    if (!document.querySelector('.chat-manager')) {
+      document.querySelector('body').append(elParser('<div class="chat-manager"></div>'));
+    }
     data.chat.active_groups.forEach(group => this.addChatBox(app, data, group));
   },
 

@@ -31,7 +31,7 @@ class Chat extends ChatCore {
 
     data.chat = {};
     data.chat.groups = chat_self.groups;
-    data.chat.active_groups = [];
+    data.chat.active_groups = chat_self.active_groups
 
     EmailChat.initialize(app, data);
     EmailChat.render(app, data);

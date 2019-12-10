@@ -231,24 +231,38 @@ class Faucet extends ModTemplate {
 
         modal.render();
 
+        document.querySelector('.tutorial-skip')
+                .onclick = () => showRegistryModal(false);
+
+        const showRegistryModal = (are_tokens_sent=true) => {
+            modal.destroy();
+            modal.title = "Register a Username";
+            modal.content = FaucetModalRegistryTemplate(are_tokens_sent);
+
+            modal.render();
+            modal.attachEvents(registryModalEvents);
+        }
+
         const captchaCallback = () => {
             //
             // TODO: SEND TOKENS WITH FAUCET HERE
             //
             // send out faucet request for tokens
             //
-            modal.destroy();
-            modal.title = "Register a Username";
-            modal.content = FaucetModalRegistryTemplate();
-
-            modal.render();
-            modal.attachEvents(registryModalEvents);
+            showRegistryModal(true);
         }
 
         const registryModalEvents = () => {
             let registry_input = document.getElementById('registry-input')
             registry_input.onfocus = () => registry_input.placeholder = '';
             registry_input.onblur = () => registry_input.placeholder = 'Username';
+
+            const showSocialModal = (are_tokens_sent=true) => {
+                modal.destroy();
+                modal.title = 'Learn More'
+                modal.content = FaucetModalSocialTemplate(are_tokens_sent);
+                modal.render();
+            }
 
             document.getElementById('registry-add-button').onclick = () => {
                 let identifier = document.getElementById('registry-input').value
@@ -260,15 +274,14 @@ class Faucet extends ModTemplate {
                             elem.innerHTML = `<h3>${identifier}@saito</h3>`
                         });
                     //
-                    // Add email capture and links to discord and Telegram
+                    // TODO: Add email capture and links to discord and Telegram
                     //
-                    modal.destroy();
-                    modal.title = 'Success!'
-                    modal.content = FaucetModalSocialTemplate();
-                    modal.render();
+                    showSocialModal(true);
                 }
-
             };
+
+            document.querySelector('.tutorial-skip')
+                    .onclick = () => showSocialModal(false);
         }
 
         //
