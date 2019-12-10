@@ -1,8 +1,8 @@
 .big {
-    padding: 3% 5%;
-    font-size: 5vw;
+    padding: 2% 5%;
+    font-size: 3.5vw;
     font-weight: 900;
-    background: #0009;
+    background: #0006;
     -webkit-text-fill-color: white;
     -webkit-text-stroke-width: 3px;
     -webkit-text-stroke-color: black;
@@ -15,7 +15,6 @@
 .arcade-game-carousel {
   width:100%;
   min-height: 35%;
-  margin-bottom:20px;
 ***REMOVED***
 
 .arcade-carousel-wrapper {

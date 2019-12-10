@@ -2681,15 +2681,15 @@ class Pandemic extends GameTemplate {
     return `
           <h3>Pandemic: </h3>
   
-          <form id="options" class="options">
-  
+          <form id="options" class="options" style="">
+
             <label for="difficulty">Difficulty:</label>
             <select name="difficulty">
               <option value="easy">easy</option>
               <option value="medium" default>not so easy</option>
               <option value="hard">damn hard</option>
             </select>
-  
+
             <label for="player1">Player 1:</label>
             <select name="player1">
               <option value="random" default>random</option>
@@ -2708,27 +2708,23 @@ class Pandemic extends GameTemplate {
               <option value="operationsexpert">operations expert</option>
             </select>
 
-<div class="game-players-select-3p" id="game-players-select-3p" style="display:none">
-            <label for="player3">Player 3:</label>
-            <select name="player3">
+            <label for="player3" class="game-players-options game-players-options-3p">Player 3:</label>
+            <select name="player3" id="game-players-select-3p" class="game-players-options game-players-options-3p">
               <option value="random" default>random</option>
               <option value="generalist" default>generalist</option>
               <option value="scientist">scientist</option>
               <option value="medic">medic</option>
               <option value="operationsexpert">operations expert</option>
             </select>
-</div>
 
-<div class="game-players-select-4p" id="game-players-select-4p" style="display:none">
-            <label for="player4">Player 4:</label>
-            <select name="player4">
+            <label for="player4" class="game-players-options game-players-options-4p">Player 4:</label>
+            <select name="player4" id="game-players-select-4p" class="game-players-options game-players-options-4p">
               <option value="random" default>random</option>
               <option value="generalist" default>generalist</option>
               <option value="scientist">scientist</option>
               <option value="medic">medic</option>
               <option value="operationsexpert">operations expert</option>
             </select>
-</div>
   
   	</form>
   
