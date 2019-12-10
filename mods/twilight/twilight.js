@@ -64,6 +64,30 @@ class Twilight extends GameTemplate {
 
 
 
+
+  //
+  // manually announce arcade banner support
+  //
+  respondTo(type) {
+
+    if (super.respondTo(type) != null) {
+      return super.respondTo(type);
+    }
+
+    if (type == "arcade-carousel") {
+      let obj = {};
+      obj.background = "/twilight/img/arcade/arcade-banner-background.png";
+      obj.title = "Twilight Struggle";
+      return obj;
+    }
+   
+    return null;
+ 
+  }
+
+
+
+
   menuItems() {
     return {
       'game-cards': {

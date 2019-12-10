@@ -1,5 +1,5 @@
 const ArcadeGameCarouselTemplate = require('./arcade-game-carousel.template.js');
-const ArcadeGameLeafTemplate = require('./arcade-game-carousel-leaf.template.js');
+const ArcadeGameCarouselLeafTemplate = require('./arcade-game-carousel-leaf.template.js');
 
 module.exports = ArcadeGameCarousel = {
 
@@ -9,22 +9,27 @@ module.exports = ArcadeGameCarousel = {
 
 
     //
-    // click-to-Create Games
+    // carousel
     //
-    //let carousel = document.getElementById("arcade-carousel-slides");
-    //data.arcade.mods.forEach(mod => {
-    //  let gameobj = mod.respondTo("arcade-games");
-    //  if (gameobj != null) {
-    //    carousel.innerHTML += ArcadeGameTemplate(mod, gameobj);
-    //  }
-    //});
-
-    let carousel = document.querySelector(".arcade-hero-wrapper");
+    let carousel = document.querySelector(".arcade-carousel-wrapper");
     carousel.innerHTML = "";
-    // carousel.innerHTML += ArcadeGameLeafTemplate();
+
+    data.arcade.mods.forEach(mod => {
+      let gameobj = mod.respondTo("arcade-games");
+      if (gameobj != null) {
+        let gameobj2 = mod.respondTo("arcade-carousel");
+	if (gameobj2 != null) {
+
+	  //
+	  // these modules support ARCADE and ARCADE-CAROUSEL
+	  //
+          carousel.innerHTML += ArcadeGameCarouselLeafTemplate(mod, gameobj2);
+
+	}
+      }
+    });
 
   },
-
 
 
 
