@@ -12,6 +12,19 @@ body {
 }
 
 
+.arcade-announcement {
+    cursor: pointer;
+    font-size: 0.9em;
+    width: 100%;
+    padding: 5px;
+    background: #66339910;
+    border: 2px dashed var(--saito-red);
+    color: var(--saito-skyline-grey);
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+
 .play-now {
     cursor: pointer;
     font-size: 1em;
