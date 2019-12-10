@@ -828,6 +828,17 @@ console.log("done now...");
 
   }
 
+
+
+  launchSinglePlayerGame(app, data, gameobj) {
+
+    //
+    //
+    window.location = '/'+gameobj.slug;
+    return;
+
+  }
+
   sendMultiplayerAcceptRequest(app, data, gameobj) {
 
 console.log("SEND MULTIPLE ACCEPT: " + JSON.stringify(gameobj));
@@ -1084,8 +1095,10 @@ console.log(JSON.stringify(game));
 
   updateBalance() {
     if (this.browser_active) {
-      let balance = this.app.wallet.returnBalance();
-      document.querySelector('.saito-balance').innerHTML = balance + " SAITO";
+      try {
+        let balance = this.app.wallet.returnBalance();
+        document.querySelector('.saito-balance').innerHTML = balance + " SAITO";
+      } catch (err) {}
     }
   }
 

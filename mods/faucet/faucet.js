@@ -7,6 +7,8 @@ const FaucetModalCaptchaTemplate = require('./lib/modal/faucet-modal-captcha.tem
 const FaucetModalRegistryTemplate = require('./lib/modal/faucet-modal-registry.template')
 const FaucetModalSocialTemplate = require('./lib/modal/faucet-modal-social.template')
 
+const FaucetAppSpace = require('./lib/email-appspace/faucet-appspace');
+
 class Faucet extends ModTemplate {
     constructor(app) {
 
@@ -17,6 +19,29 @@ class Faucet extends ModTemplate {
         this.payoutRatio = 0.8;
 
     }
+
+
+
+
+  respondTo(type) {
+    if (type == 'email-appspace') {
+      let obj = {};
+          obj.render = this.renderEmail;
+          obj.attachEvents = this.attachEventsEmail;
+      return obj;
+    }
+    return null;
+  }
+  renderEmail(app, data) {
+     data.faucet = app.modules.returnModule("Faucet");
+     FaucetAppspace.render(app, data);
+  }
+  attachEventsEmail(app, data) {
+     data.faucet = app.modules.returnModule("Faucet");
+     FaucetAppspace.attachEvents(app, data);
+  }
+
+
 
 
     onConfirmation(blk, tx, conf, app) {

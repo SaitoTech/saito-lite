@@ -7,7 +7,9 @@
   height: 5em;
   cursor: pointer;
 }
-
+.chat-row:hover {
+  background-color: var(--saito-skyline-grey);
+}
 .chat-row-image {
   width: 2rem;
   height: 2rem;
