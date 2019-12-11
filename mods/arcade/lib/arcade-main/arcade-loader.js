@@ -31,7 +31,12 @@ module.exports = ArcadeLoader = {
               app.options.games[i].ts = new Date().getTime();
               app.options.games[i].initialize_game_run = 0;
               app.storage.saveOptions();
-              window.location = '/' + app.options.games[i].module.toLowerCase().replace(' ', '_');
+	      for (let z = 0; z < app.modules.mods.length; z++) {
+	        if (app.modules.mods[z].name == app.options.games[i].module) {
+              	  window.location = '/' + app.modules.mods[z].returnSlug();
+	  	  return;
+	 	}
+	      }
               break;
             }
           }

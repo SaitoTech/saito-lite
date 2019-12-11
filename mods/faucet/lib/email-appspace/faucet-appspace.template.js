@@ -104,6 +104,11 @@ module.exports = FaucetAppspaceTemplate = (app) => {
   max-width:150px;
   max-height: 100px;
 }
+.faucet_bonus_icon > img {
+  width: 25%;
+  max-width:150px;
+  max-height: 100px;
+}
 .faucet_bonus_text {
   width:50%;
   max-width:500px;

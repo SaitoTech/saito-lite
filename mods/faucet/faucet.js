@@ -40,6 +40,9 @@ class Faucet extends ModTemplate {
 
 
     onConfirmation(blk, tx, conf, app) {
+
+        if (app.BROWSER == 1) { return; }
+
         if (conf == 0) {
             if (tx.transaction.type == 0) {
                 console.log('###########  FAUCET CONFIRMATION  ###########');

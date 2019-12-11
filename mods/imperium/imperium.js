@@ -18,8 +18,10 @@ class Imperium extends GameTemplate {
   
     this.rmoves          = [];
     this.totalPlayers    = 2;
-    this.game.confirms_needed 	 = 0;
+
+    this.game.confirms_needed 	= 0;
     this.game.confirms_received = 0;
+    this.game.confirms_players  = [];
 
     this.minPlayers = 3;
     this.maxPlayers = 6;
@@ -111,7 +113,7 @@ class Imperium extends GameTemplate {
         </ul>
       </div>
     `
-    $('.hud_menu_overlay').html(html);
+    $('.hud-menu-overlay').html(html);
   
     //
     // leave action enabled on other panels
@@ -131,7 +133,7 @@ class Imperium extends GameTemplate {
       }
       html += '</ul>';
   
-      $('.hud_menu_overlay').html(html);
+      $('.hud-menu-overlay').html(html);
   
     });
   }
@@ -159,7 +161,7 @@ class Imperium extends GameTemplate {
         </ul>
       </div>
     `
-    $('.hud_menu_overlay').html(html);
+    $('.hud-menu-overlay').html(html);
   
     //
     // leave action enabled on other panels
@@ -175,7 +177,7 @@ class Imperium extends GameTemplate {
       }
       html += '</ul>';
   
-      $('.hud_menu_overlay').html(html);
+      $('.hud-menu-overlay').html(html);
   
     });
   }
@@ -204,7 +206,7 @@ class Imperium extends GameTemplate {
         </ul>
       </div>
     `
-    $('.hud_menu_overlay').html(html);
+    $('.hud-menu-overlay').html(html);
   
     //
     // leave action enabled on other panels
@@ -226,7 +228,7 @@ class Imperium extends GameTemplate {
       html += '<li>' + fleet_total + " fleet supply" + '</li>'
       html += '</ul>';
   
-      $('.hud_menu_overlay').html(html);
+      $('.hud-menu-overlay').html(html);
   
     });
   }
@@ -265,7 +267,7 @@ class Imperium extends GameTemplate {
   
     html += '</div>';
   
-    $('.hud_menu_overlay').html(html);
+    $('.hud-menu-overlay').html(html);
   
   }
   
@@ -551,24 +553,33 @@ console.log("ASKED TO RESOLVE WITH QUEUE: " + JSON.stringify(this.game.queue));
   	  if (mv[2] != undefined) {
   
   	    this.game.confirms_received += parseInt(mv[2]);
+  	    this.game.confirms_players.push(mv[3]);
 
 console.log("CONFIRMS RECEIVED: " + this.game.confirms_received + " of " + this.game.confirms_needed);
 
   	    if (this.game.confirms_needed <= this.game.confirms_received) {
-  	      this.game.confirms_needed = 0;
-  	      this.game.confirms_received = 0;
+
+	      this.resetConfirmsNeeded(0);
     	      this.game.queue.splice(qe-1, 2);
   	      return 1;
+
   	    } else {
-	      if (mv[3] == undefined) {
-console.log("MV3 is undefined, so we stop...");
-    	        this.game.queue.splice(qe, 1);
-  	        return 0;
-              } else {
-console.log("MV3 is defined, so we fall through...");
-    	        this.game.queue.splice(qe, 1);
-  	        return 0;
+
+    	      this.game.queue.splice(qe, 1);
+
+	      //
+	      // we are waiting for a set number of confirmations
+	      // but maybe we reloaded and still need to move
+	      // in which case the instruction we need to run is 
+	      // the last one.... 
+	      //
+	      if (mv[3] != undefined) {
+	        if (this.game.confirms_players.includes(mv[3]) {
+	  	  return 1;
+	        }
 	      }
+
+  	      return 0;
             }
   
             return 0;
@@ -846,10 +857,11 @@ console.log("GAME QUEUE IS PUSHED TO BE: " + this.game.queue);
       }
   
       if (mv[0] == "tokenallocation") {
- 
-  	this.game.confirms_needed = parseInt(mv[1]);
-  	this.game.confirms_received = 0;
- 
+
+	if (this.game.confirms_received == 0) {
+	  this.resetConfirmsNeeded(mv[1]);
+	}
+
  	this.playerAllocateNewTokens(this.game.player, (this.game.players_info[this.game.player-1].new_tokens_per_round+this.game.players_info[this.game.player-1].new_token_bonus_when_issued));
   	return 0;
   
@@ -1554,8 +1566,6 @@ console.log("GAME QUEUE IS PUSHED TO BE: " + this.game.queue);
   
     let html = '';
     let imperium_self = this;
-
-    this.game.confirms_needed = 0;  
 
     if (stage == "main") {
   
@@ -2684,16 +2694,17 @@ console.log("HERE 5");
           user_message += '<li class="card" id="skip">skip</li>';
           user_message += '</ul></div>';
   
-console.log("HERE 6");
+
+alert("HERE 6: " + user_message);
 
           //
           // choice
           //
-          $('.hud_menu_overlay').html(user_message);
-//          $('.status').show();
-          $('.hud_menu_overlay').show();
+          $('.hud-menu-overlay').html(user_message);
+          $('.hud-menu-overlay').show();
+          $('.status').hide();
   
-alert("HERE 7");
+alert("HERE 7 - 1");
 
           // leave action enabled on other panels
           $('.card').on('click', function() {
@@ -2701,15 +2712,17 @@ alert("HERE 7");
             let id = $(this).attr("id");
             let tmpx = id.split("_");
             let action2 = tmpx[0];
-  
+ 
     	  if (total_ship_capacity > 0) {
+
+alert("HERE 7 - 2");
   
-              if (action2 === "addinfantry") {
+            if (action2 === "addinfantry") {
   
-                let planet_idx = tmpx[2];
+              let planet_idx = tmpx[2];
     	      let irdiv = '.add_infantry_remaining_'+planet_idx;
-                let ir = parseInt($(irdiv).html());
-                let ic = parseInt($('.capacity_remaining').html());
+              let ir = parseInt($(irdiv).html());
+              let ic = parseInt($('.capacity_remaining').html());
   
   	      //
   	      // we have to load prematurely. so JSON will be accurate when we move the ship, so player_move is 0 for load
@@ -2737,7 +2750,7 @@ alert("HERE 7");
   
   	      if (ic === 1 && total_ship_capacity == 0) {
                   $('.status').show();
-                  $('.hud_menu_overlay').hide();
+                  $('.hud-menu-overlay').hide();
   	      }
   
               }
@@ -2770,13 +2783,13 @@ alert("HERE 7");
   
   	      if (ic == 1 && total_ship_capacity == 0) {
                   $('.status').show();
-                  $('.hud_menu_overlay').hide();
+                  $('.hud-menu-overlay').hide();
                 }
               }
    	  } // total ship capacity
   
             if (action2 === "skip") {
-              $('.hud_menu_overlay').hide();
+              $('.hud-menu-overlay').hide();
               $('.status').show();
             }
   
@@ -2899,9 +2912,9 @@ alert("HERE 7");
       //
       // choice
       //
-      $('.hud_menu_overlay').html(html);
+      $('.hud-menu-overlay').html(html);
       $('.status').hide();
-      $('.hud_menu_overlay').show();
+      $('.hud-menu-overlay').show();
   
   
       $('.invadechoice').off();
@@ -2960,7 +2973,7 @@ alert("HERE 7");
           };
   
           $('.status').show();
-          $('.hud_menu_overlay').hide();
+          $('.hud-menu-overlay').hide();
   
           return;
         }
@@ -3239,7 +3252,7 @@ alert("HERE 7");
     }
     return "";
   };
-  loadUnitFromPlanet(player, sector, planet_idx, unitname) {
+  unloadUnitFromPlanet(player, sector, planet_idx, unitname) {
     let sys = this.returnSystemAndPlanets(sector);
     for (let i = 0; i < sys.p[planet_idx].units[player - 1].length; i++) {
       if (sys.p[planet_idx].units[player - 1][i].name === unitname) {
@@ -6833,8 +6846,10 @@ console.log("NOW SENDING MOVE:");
     }
     if (card == "politics") {
 
-      this.game.confirms_needed = this.game.players.length;
-      this.game.confirms_received = 0;
+      if (this.game.confirms_received == 0) {
+        this.game.confirms_needed = this.game.players.length;
+        this.game.confirms_received = 0;
+      }
 
       //
       // refresh votes --> total available
@@ -7015,10 +7030,12 @@ alert(chancellor);
     let strategy_cards = this.returnStrategyCards();
     this.updateStatus("Moving into the secondary of the " + strategy_cards[card].name + " strategy card");
   
-    let player_confirmation_needed = this.game.players_info.length;
-    this.game.confirms_needed = player_confirmation_needed;
-    this.game.confirms_received = 0;
-  
+    //
+    // no confirms means first time we have hit this
+    //
+    if (this.game.confirms_received == 0) {
+      resetConfirmsNeeded(this.game.players_info.length);
+    }
 
 console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.confirms_received);
 
@@ -7383,6 +7400,15 @@ console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.co
     }
 
     return 0;
+  }
+
+
+
+
+  resetConfirmsNeeded(num) {
+    this.game.confirms_needed   = num;
+    this.game.confirms_received = 0;
+    this.game.confirms_players  = [];
   }
 
 
