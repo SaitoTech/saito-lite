@@ -22,6 +22,12 @@
     height: 100%;
     overflow: hidden;
     position: relative;
+
+    background-image: url(/arcade/img/8bit-Saito-Arcade.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+
 }
 
 .leaf {
