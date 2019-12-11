@@ -37,7 +37,9 @@ module.exports = ArcadeMain = {
 
       let txmsg = tx.returnMessage();
       let publickey = app.wallet.returnPublicKey();
-      let { game_id } = txmsg;
+      let { game_id, game } = txmsg;
+
+      if (game == '') return;
 
       let button_text = {};
       button_text.join = "JOIN";

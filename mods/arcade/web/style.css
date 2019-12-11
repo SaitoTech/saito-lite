@@ -107,7 +107,7 @@ input {
 .arcade-container {
   display: grid;
   grid-column-gap: 1.5em;
-  grid-template-columns: 15em auto 15em;
+  grid-template-columns: 15em auto 20em;
   grid-template-areas: "arcade-left-sidebar arcade-main arcade-right-sidebar";
   font-size: 0.9em;
 }
@@ -126,7 +126,7 @@ button.add-games {
 
 .arcade-leaderboard-row {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-columns: 5fr 1fr 1fr;
   padding: 0.5em;
   grid-gap: 1em;
 }
@@ -447,6 +447,7 @@ button.add-games {
 .identicon {
   width: 100%;
   max-width: 2em;
+  min-width: 2em;
   margin: 0 3px;
 }
 .arcade-game-invitation {

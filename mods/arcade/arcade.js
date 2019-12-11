@@ -8,6 +8,7 @@ const ArcadeRightSidebar = require('./lib/arcade-right-sidebar/arcade-right-side
 const ArcadeStartGameList = require('./lib/arcade-start-game-list/arcade-start-game-list');
 
 const Header = require('../../lib/ui/header/header');
+const AddressController = require('../../lib/ui/menu/address-controller');
 
 
 class Arcade extends ModTemplate {
@@ -25,6 +26,8 @@ class Arcade extends ModTemplate {
     this.leaderboard = [];
 
     this.accepted = [];
+
+    this.addrController = new AddressController(app);
 
   }
 
@@ -190,7 +193,6 @@ class Arcade extends ModTemplate {
     let data = {};
     data.arcade = this;
 
-
     Header.render(app, data);
     Header.attachEvents(app, data);
 
@@ -317,6 +319,7 @@ console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
 
   addGameToOpenList(tx) {
 
+    if (!tx.transaction.sig) { return; }
     let txmsg = tx.returnMessage();
 
     for (let i = 0; i < this.games.length; i++) {

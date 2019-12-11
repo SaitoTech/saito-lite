@@ -18,9 +18,18 @@ module.exports = ChatBox = {
           document.querySelector('.chat-manager').append(elParser(ChatBoxTemplate(active_group_name, group.id)));
 
           if (group != null) {
+            if (group.messages.length == 0) {
+              document.getElementById(`chat-box-main-${group.id}`).innerHTML =
+                `<p id="chat-box-default-message-${group.id}" style="text-align:center">
+                  No messages in this group :(
+                </p>`;
+            }
+
             group.messages.forEach(message => {
               let type = message.publickey == app.wallet.returnPublicKey() ? 'myself' : 'others';
-              document.getElementById(`chat-box-main-${group.id}`).innerHTML += ChatBoxMessageContainerTemplate(message, '1239841203498', type);
+              message.publickey = data.chat.addrController.returnAddressHTML(message.publickey);
+              document.getElementById(`chat-box-main-${group.id}`).innerHTML +=
+                ChatBoxMessageContainerTemplate(message, message.sig, type);
             });
           }
         }
@@ -46,7 +55,7 @@ module.exports = ChatBox = {
               app.modules.returnModule("Chat")
                       .sendMessage(app, newtx);
 
-              this.addMessage(app, newtx);
+              this.addMessage(app, data, newtx);
               msg_input.value = '';
           }
       });
@@ -71,28 +80,27 @@ module.exports = ChatBox = {
 
     },
 
-    addMessage(app, tx) {
+    addMessage(app, data, tx) {
       app.modules.returnModule("Chat")
                       .receiveMessage(app, tx);
-      this.addTXToDOM(tx);
+      this.addTXToDOM(data, tx);
     },
 
-    addMessageToDOM(msg) {
+    addMessageToDOM(data, msg) {
       let chat_box_main = document.getElementById(`chat-box-main-${msg.group_id}`)
       if (!chat_box_main) { return; }
+
+      msg.publickey = data.chat.addrController.returnAddressHTML(msg.publickey);
+
+      if (document.getElementById(`chat-box-default-message-${msg.group_id}`)) { chat_box_main.innerHTML = '' }
 
       chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(msg, msg.sig, msg.type);
       this.scrollToBottom(msg.group_id);
     },
 
-    addTXToDOM(tx) {
-        let txmsg = tx.returnMessage();
-
-        let chat_box_main = document.getElementById(`chat-box-main-${txmsg.group_id}`)
-        if (!chat_box_main) { return; }
-
-        chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(txmsg, tx.transaction.msg.sig, 'myself');
-        this.scrollToBottom(txmsg.group_id);
+    addTXToDOM(data, tx) {
+        let msg = Object.assign({}, tx.returnMessage(), { type: 'myself' });
+        this.addMessageToDOM(data, msg);
     },
 
     createMessage(app, data, msg_data) {

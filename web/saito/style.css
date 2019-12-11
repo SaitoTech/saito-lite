@@ -442,7 +442,7 @@ label.treated {
 .header-dropdown {
     position: absolute;
     right: 0;
-    right: -250px;
+    right: -255px;
     top: 90px;
     color: var(--text-color-normal);
     padding: 15px;
@@ -697,6 +697,7 @@ label.treated {
     /* Fallback color */
     background-color: rgba(0, 0, 0, 0.4);
     /* Black w/ opacity */
+
 }
 
 /* Modal Content/Box */
@@ -709,6 +710,11 @@ label.treated {
     width: 80%;
     font-size: 1.3em;
     border-radius: 5px;
+    transition: max-width linear .25s;
+}
+
+.modal-med-size {
+    max-width: 700px;
 }
 
 /* The Close Button */

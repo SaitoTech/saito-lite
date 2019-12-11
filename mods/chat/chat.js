@@ -5,6 +5,8 @@ const EmailChat = require('./lib/email-chat/email-chat');
 const Header = require('../../lib/ui/header/header');
 const ChatMain = require('./lib/chat-main/chat-main');
 
+const AddressController = require('../../lib/ui/menu/address-controller');
+
 class Chat extends ChatCore {
 
   constructor(app) {
@@ -13,6 +15,8 @@ class Chat extends ChatCore {
     this.name = "Chat";
     this.description = "Wechat-style chat application, combining on-chain and off-chain messaging and providing for encrypted communications if available.";
     this.uidata = {};
+
+    this.addrController = new AddressController(app);
   }
 
   respondTo(type) {
@@ -31,7 +35,8 @@ class Chat extends ChatCore {
 
     data.chat = {};
     data.chat.groups = chat_self.groups;
-    data.chat.active_groups = chat_self.active_groups
+    data.chat.active_groups = chat_self.active_groups;
+    data.chat.addrController = chat_self.addrController;
 
     EmailChat.initialize(app, data);
     EmailChat.render(app, data);
