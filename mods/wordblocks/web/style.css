@@ -37,6 +37,7 @@ body {
 .wb-main {
   border: 1px solid orange;
   max-width: 902px;
+  margin: auto;
 ***REMOVED***
 
 .gameboard {
@@ -358,6 +359,10 @@ body {
   border-bottom: 0px;
   transform: translate(-50%, -0%);
   transition: height 0.2s ease;
+***REMOVED***
+
+.hud-hidden {
+  height: 40px;
 ***REMOVED***
 
 /** HUD HEADER **/

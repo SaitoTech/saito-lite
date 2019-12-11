@@ -47,6 +47,7 @@ class Faucet extends ModTemplate {
 ***REMOVED***
 ***REMOVED***
             if (tx.transaction.type == 0) {
+                if (this.app.BROWSER == 1) { return; ***REMOVED***
                 console.log('###########  FAUCET CONFIRMATION  ###########');
                 this.updateUsers(tx);
         ***REMOVED***
@@ -259,7 +260,7 @@ class Faucet extends ModTemplate {
 
             const showSocialModal = (are_tokens_sent=true) => {
                 modal.destroy();
-                modal.title = 'Learn More'
+                modal.title = 'Explore Saito'
                 modal.content = FaucetModalSocialTemplate(are_tokens_sent);
                 modal.render();
         ***REMOVED***

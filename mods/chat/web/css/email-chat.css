@@ -78,6 +78,9 @@ text-overflow: ellipsis;
 
 .chat-message-author {
   margin: unset;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100px;
 ***REMOVED***
 
 .chat-message-timestamp {

@@ -37,6 +37,8 @@ class ChatCore extends ModTemplate {
     //
     let keys = this.app.keys.returnKeys();
     for (let i = 0; i < keys.length; i++) {
+      if (keys[i].aes_publickey == "") { return; ***REMOVED***
+
       let members = [keys[i].publickey, this.app.wallet.returnPublicKey()];
       let newgroup = this.createChatGroup(members);
       this.addNewGroup(newgroup);
@@ -56,15 +58,15 @@ class ChatCore extends ModTemplate {
 
   async onPeerHandshakeComplete(app, peer) {
 
-    if (this.groups.length == 0) {
-      let { publickey ***REMOVED*** = peer.peer;
-      //
-      // create mastodon server
-      //
-      let members = [peer.peer.publickey];
-      let newgroup = this.createChatGroup(members);
-      this.addNewGroup(newgroup);
-***REMOVED***
+    // if (this.groups.length == 0) {
+    let { publickey ***REMOVED*** = peer.peer;
+    //
+    // create mastodon server
+    //
+    let members = [peer.peer.publickey];
+    let newgroup = this.createChatGroup(members);
+    this.addNewGroup(newgroup);
+    // ***REMOVED***
 
     let group_ids = this.groups.map(group => group.id);
 

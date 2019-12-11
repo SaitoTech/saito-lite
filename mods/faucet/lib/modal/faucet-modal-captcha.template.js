@@ -9,7 +9,7 @@ module.exports = FaucetModalIntroTemplate = () => {
       <div style="display: flex;justify-content: space-between;">
         <div id="recaptcha"></div>
         <div class="tutorial-skip" style="
-        align-self: end;
+        align-self: flex-end;
         font-size: 0.65em;
         color:gray;
         text-decoration: underline;
