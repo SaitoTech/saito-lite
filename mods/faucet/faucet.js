@@ -40,6 +40,9 @@ class Faucet extends ModTemplate {
 
 
 ***REMOVED***
+
+        if (app.BROWSER == 1) { return; ***REMOVED***
+
 ***REMOVED***
             if (tx.transaction.type == 0) {
                 console.log('###########  FAUCET CONFIRMATION  ###########');

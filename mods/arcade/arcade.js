@@ -319,16 +319,45 @@ console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
 
     let txmsg = tx.returnMessage();
 
+
     for (let i = 0; i < this.games.length; i++) {
       if (this.games[i].transaction.sig == tx.transaction.sig) { 
+console.log("#");
+console.log("#");
+console.log("#");
 console.log("QUITTING A: " + this.games[i].transaction.options);
         return;
   ***REMOVED***
       if (txmsg.game_id == this.games[i].transaction.sig) {
+console.log("#");
+console.log("#");
+console.log("#");
 console.log("QUITTING B: " + this.games[i].transaction.options);
         return;
   ***REMOVED***
 ***REMOVED***
+
+
+/****
+    //
+    // ensure not in options either
+    //
+    if (this.app.options != undefined) {
+      if (this.app.options.games != undefined) {
+        for (let i = 0; i < this.app.options.games.length; i++) {
+          if (this.app.options.games[i].id == txmsg.game_id) {
+console.log("#");
+console.log("#");
+console.log("#");
+console.log("QUITTING C: " + this.app.options.games[i].id);
+            return;
+      ***REMOVED***
+    ***REMOVED***
+  ***REMOVED***
+***REMOVED***
+****/
+console.log("ARCADE PROCESSING RECEIVE INVITE REQUEST");
+
 
 console.log("PUSHING BACK: " + JSON.stringify(tx.transaction));
 
@@ -393,7 +422,6 @@ console.log("PUSHING BACK: " + JSON.stringify(tx.transaction));
       if (txmsg.request == "invite") {
 console.log("ARCADE GETS INVITE REQUEST");
 
-
 ***REMOVED***
 ***REMOVED*** this might be a server, in which cse it doesn't have options.games
 ***REMOVED***
@@ -402,8 +430,8 @@ console.log("ARCADE GETS INVITE REQUEST");
             for (let i = 0; i < this.app.options.games.length; i++) {
               if (this.app.options.games[i].id == txmsg.game_id) {
                 if (this.app.options.games[i].initializing == 0) { return; ***REMOVED***
-            ***REMOVED***
           ***REMOVED***
+        ***REMOVED***
       ***REMOVED***
     ***REMOVED***
 console.log("ARCADE PROCESSING RECEIVE INVITE REQUEST");
