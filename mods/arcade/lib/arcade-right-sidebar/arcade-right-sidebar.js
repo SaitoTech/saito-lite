@@ -7,18 +7,26 @@ module.exports = ArcadeRightSidebar = {
     render(app, data) {
       let publickey = app.wallet.returnPublicKey();
       let id = app.keys.returnIdentifierByPublicKey(publickey);
+
       document.querySelector(".arcade-right-sidebar").innerHTML = ArcadeRightSidebarTemplate(publickey, id);
+
       for (let i = 0; i < data.arcade.observer.length; i++) {
         let players = [];
         let players_array = data.arcade.observer[i].players_array.split("_");
+
         for (let z = 0; z < players_array.length; z++) {
-	  players.push({ identicon : app.keys.returnIdenticon(app.crypto.hash(players_array[z])) , publickey : players_array[z] ***REMOVED***);
+          players.push({ identicon : app.keys.returnIdenticon(app.crypto.hash(players_array[z])) , publickey : players_array[z] ***REMOVED***);
     ***REMOVED***
+
         document.querySelector(".arcade-sidebar-active-games-body").innerHTML
           += ObserverRow(data.arcade.observer[i], players, app.crypto.stringToBase64(JSON.stringify(data.arcade.observer[i])));
   ***REMOVED***
 
-      data.arcade.leaderboard.forEach(leader => {
+      data.arcade.leaderboard.forEach(async leader => {
+        if (app.crypto.isPublicKey(leader.winner)) {
+          leader.winner = await data.arcade.addrController.returnAddressHTMLPromise(leader.winner);
+    ***REMOVED***
+
         document.querySelector(".arcade-sidebar-active-leaderboard-body")
                 .innerHTML += LeaderboardRow(leader);
   ***REMOVED***);
@@ -61,10 +69,10 @@ module.exports = ArcadeRightSidebar = {
       let faucetmod = app.modules.returnModule("Faucet");
       if (faucetmod != null) {
         document.querySelector('.arcade-announcement').onclick = (e) => {
-	  document.querySelector('.arcade-main').innerHTML = '<div class="email-main"><div class="email-appspace"></div></div>';
-	  data = {***REMOVED***;
-	  data.arcade = this;
-	  data.faucet = faucetmod;
+          document.querySelector('.arcade-main').innerHTML = '<div class="email-main"><div class="email-appspace"></div></div>';
+          data = {***REMOVED***;
+          data.arcade = this;
+          data.faucet = faucetmod;
           faucetmod.renderEmail(app, data);
           faucetmod.attachEvents(app, data);
     ***REMOVED***

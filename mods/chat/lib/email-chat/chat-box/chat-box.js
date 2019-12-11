@@ -14,13 +14,24 @@ module.exports = ChatBox = {
           active_group_name = group.name;
     ***REMOVED***
 
-        document.querySelector('.chat-manager').append(elParser(ChatBoxTemplate(active_group_name, group.id)));
+        if (!document.getElementById(`chat-box-${group.id***REMOVED***`)) {
+          document.querySelector('.chat-manager').append(elParser(ChatBoxTemplate(active_group_name, group.id)));
 
-        if (group != null) {
-          group.messages.forEach(message => {
-            let type = message.publickey == app.wallet.returnPublicKey() ? 'myself' : 'others';
-            document.getElementById(`chat-box-main-${group.id***REMOVED***`).innerHTML += ChatBoxMessageContainerTemplate(message, '1239841203498', type);
-      ***REMOVED***);
+          if (group != null) {
+            if (group.messages.length == 0) {
+              document.getElementById(`chat-box-main-${group.id***REMOVED***`).innerHTML =
+                `<p id="chat-box-default-message-${group.id***REMOVED***" style="text-align:center">
+                  No messages in this group :(
+                </p>`;
+        ***REMOVED***
+
+            group.messages.forEach(message => {
+              let type = message.publickey == app.wallet.returnPublicKey() ? 'myself' : 'others';
+              message.publickey = data.chat.addrController.returnAddressHTML(message.publickey);
+              document.getElementById(`chat-box-main-${group.id***REMOVED***`).innerHTML +=
+                ChatBoxMessageContainerTemplate(message, message.sig, type);
+        ***REMOVED***);
+      ***REMOVED***
     ***REMOVED***
 
         this.scrollToBottom(group.id);
@@ -44,7 +55,7 @@ module.exports = ChatBox = {
               app.modules.returnModule("Chat")
                       .sendMessage(app, newtx);
 
-              this.addMessage(app, newtx);
+              this.addMessage(app, data, newtx);
               msg_input.value = '';
       ***REMOVED***
   ***REMOVED***);
@@ -69,28 +80,27 @@ module.exports = ChatBox = {
 
 ***REMOVED***,
 
-    addMessage(app, tx) {
+    addMessage(app, data, tx) {
       app.modules.returnModule("Chat")
                       .receiveMessage(app, tx);
-      this.addTXToDOM(tx);
+      this.addTXToDOM(data, tx);
 ***REMOVED***,
 
-    addMessageToDOM(msg) {
+    addMessageToDOM(data, msg) {
       let chat_box_main = document.getElementById(`chat-box-main-${msg.group_id***REMOVED***`)
       if (!chat_box_main) { return; ***REMOVED***
+
+      msg.publickey = data.chat.addrController.returnAddressHTML(msg.publickey);
+
+      if (document.getElementById(`chat-box-default-message-${msg.group_id***REMOVED***`)) { chat_box_main.innerHTML = '' ***REMOVED***
 
       chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(msg, msg.sig, msg.type);
       this.scrollToBottom(msg.group_id);
 ***REMOVED***,
 
-    addTXToDOM(tx) {
-***REMOVED***
-
-        let chat_box_main = document.getElementById(`chat-box-main-${txmsg.group_id***REMOVED***`)
-        if (!chat_box_main) { return; ***REMOVED***
-
-        chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(txmsg, tx.transaction.msg.sig, 'myself');
-        this.scrollToBottom(txmsg.group_id);
+    addTXToDOM(data, tx) {
+        let msg = Object.assign({***REMOVED***, tx.returnMessage(), { type: 'myself' ***REMOVED***);
+        this.addMessageToDOM(data, msg);
 ***REMOVED***,
 
     createMessage(app, data, msg_data) {

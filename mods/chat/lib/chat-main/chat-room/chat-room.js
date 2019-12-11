@@ -110,8 +110,8 @@ module.exports = ChatRoom = {
             if (e.keyCode == '13') { fired = false; ***REMOVED***
     ***REMOVED***);
 
-        app.connection.on('chat_receive_message', (data) => {
-            this.addMessageToDOM(data);
+        app.connection.on('chat_receive_message', (msg) => {
+            this.addMessageToDOM(data, msg);
             this.scrollToBottom();
     ***REMOVED***);
 ***REMOVED***,
