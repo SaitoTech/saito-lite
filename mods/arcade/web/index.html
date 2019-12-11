@@ -28,9 +28,23 @@
     <link rel="stylesheet" href="/saito/style.css">
     <link rel="stylesheet" href="/chat/css/email-chat.css">
     <link rel="stylesheet" href="/arcade/style.css">
-    
+
     <!-- Glide Carousel CSS-->
     <link rel="stylesheet" href="/saito/lib/glide/css/glide.core.min.css">
+    <!-- <script src="https://www.google.com/recaptcha/api.js" async defer></script> -->
+    <script type="text/javascript">
+      var recaptchaCallback = function () {
+        console.log('recaptcha is ready'); // showing
+        grecaptcha.render("recaptcha", {
+            sitekey: '6Leg78YUAAAAABk61GMIGE6r1IPeb8TEU485LHrf',
+            callback: function () {
+                console.log('recaptcha callback');
+            }
+        });
+      }
+    </script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer>
+    </script>
 
     <script type="text/javascript" src="/saito/lib/jquery/jquery-3.2.1.min.js"></script>
 

@@ -4,6 +4,7 @@ module.exports = ArcadeLeftSidebarTemplate = () => {
       <div class="arcade-bars-menu">
         <div id="play-now" class="play-now">Create Game</div>
         <div class="arcade-navigator-bars-menu">
+            <h2 class="arcade-sidebar-active-games-header">Games</h2>
             <div class="arcade-apps-wrapper">
               <ul class="arcade-apps" id="arcade-apps"></ul>
             </div>

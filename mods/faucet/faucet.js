@@ -2,6 +2,11 @@ const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate.js');
 const Big = require('big.js');
 
+const Modal = require('../../lib/ui/modal/modal');
+const FaucetModalCaptchaTemplate = require('./lib/modal/faucet-modal-captcha.template')
+const FaucetModalRegistryTemplate = require('./lib/modal/faucet-modal-registry.template')
+const FaucetModalSocialTemplate = require('./lib/modal/faucet-modal-social.template')
+
 const FaucetAppSpace = require('./lib/email-appspace/faucet-appspace');
 
 class Faucet extends ModTemplate {
@@ -45,12 +50,13 @@ class Faucet extends ModTemplate {
 
         if (conf == 0) {
             if (tx.transaction.type == 0) {
+                if (this.app.BROWSER == 1) { return; }
                 console.log('###########  FAUCET CONFIRMATION  ###########');
                 this.updateUsers(tx);
             }
         }
     }
-    
+
     async updateUsers(tx) {
         try {
             if (tx.transaction.type >= -999) {
@@ -143,7 +149,7 @@ class Faucet extends ModTemplate {
             }
             let sql = "INSERT OR IGNORE INTO users (address, tx_count, games_finished, game_tx_count, first_tx, latest_tx, last_payout_ts, last_payout_amt, total_payout, total_spend, referer) VALUES ('"+tx.transaction.from[ii].add+"', "+1+", "+0+", "+isGame+", "+tx.transaction.ts+", "+tx.transaction.ts+", "+tx.transaction.ts+", "+this.initial+", "+this.initial+", "+Number(tx.fees_total)+", '');";
             params = {};
-           
+
             await this.app.storage.executeDatabase(sql, params, "faucet");
 
             //initial funds sent
@@ -157,64 +163,137 @@ class Faucet extends ModTemplate {
 
     async makePayout(address, amount) {
         //send the user a little something.
-    
+
         let wallet_balance = this.app.wallet.returnBalance();
-    
+
         if (wallet_balance < amount) {
           console.log("\n\n\n *******THE FAUCET IS POOR******* \n\n\n");
           return;
         }
-    
+
         try {
-    
+
           let faucet_self = this;
           let total_fees = Big(amount+2);
           let newtx = new saito.transaction();
           newtx.transaction.from = faucet_self.app.wallet.returnAdequateInputs(total_fees.toString());
           newtx.transaction.ts   = new Date().getTime();
-    
+
           console.log("FAUCET INPUTS: " + JSON.stringify(faucet_self.app.wallet.wallet.inputs));
-    
+
           // add change input
           var total_inputs = Big(0.0);
           for (let i = 0; i < newtx.transaction.from.length; i++) {
             total_inputs = total_inputs.plus(Big(newtx.transaction.from[i].amt));
           }
-    
+
           //
           // generate change address(es)
           //
           var change_amount = total_inputs.minus(total_fees);
-    
+
           // break up payment into many slips if large
           var chunks = Math.floor(amount/100);
           var remainder = amount % 100;
-          
+
           for (let i = 0; i < chunks; i++) {
             newtx.transaction.to.push(new saito.slip(address, Big(100.0)));
             newtx.transaction.to[newtx.transaction.to.length-1].type = 0;
           }
           newtx.transaction.to.push(new saito.slip(address, Big(remainder)));
             newtx.transaction.to[newtx.transaction.to.length-1].type = 0;
-    
+
           if (Big(change_amount).gt(0)) {
             newtx.transaction.to.push(new saito.slip(faucet_self.app.wallet.returnPublicKey(), change_amount.toFixed(8)));
             newtx.transaction.to[newtx.transaction.to.length-1].type = 0;
           }
-    
+
           newtx.transaction.msg.module    = "Email";
           newtx.transaction.msg.title     = "Saito Faucet - You have been Rewarded";
           newtx.transaction.msg.message   = 'You have received ' + amount + ' tokens from our Saito faucet.';
           newtx = this.app.wallet.signTransaction(newtx);
-    
+
           this.app.network.propagateTransaction(newtx);
           return;
-    
+
         } catch(err) {
           console.log("ERROR CAUGHT IN FAUCET: ", err);
           return;
         }
 
+    }
+
+    tutorialModal() {
+        //
+        // initial modal state
+        //
+        let modal = new Modal(this.app, {
+            id: 'faucet',
+            title: 'Welcome to Saito',
+            content: FaucetModalCaptchaTemplate()
+        });
+
+        modal.render();
+
+        document.querySelector('.tutorial-skip')
+                .onclick = () => showRegistryModal(false);
+
+        const showRegistryModal = (are_tokens_sent=true) => {
+            modal.destroy();
+            modal.title = "Register a Username";
+            modal.content = FaucetModalRegistryTemplate(are_tokens_sent);
+
+            modal.render();
+            modal.attachEvents(registryModalEvents);
+        }
+
+        const captchaCallback = () => {
+            //
+            // TODO: SEND TOKENS WITH FAUCET HERE
+            //
+            // send out faucet request for tokens
+            //
+            showRegistryModal(true);
+        }
+
+        const registryModalEvents = () => {
+            let registry_input = document.getElementById('registry-input')
+            registry_input.onfocus = () => registry_input.placeholder = '';
+            registry_input.onblur = () => registry_input.placeholder = 'Username';
+
+            const showSocialModal = (are_tokens_sent=true) => {
+                modal.destroy();
+                modal.title = 'Explore Saito'
+                modal.content = FaucetModalSocialTemplate(are_tokens_sent);
+                modal.render();
+            }
+
+            document.getElementById('registry-add-button').onclick = () => {
+                let identifier = document.getElementById('registry-input').value
+                let registry_success = this.app.modules.returnModule("Registry").registerIdentifier(identifier);
+
+                if (registry_success) {
+                    Array.from(document.getElementsByClassName('saito-identifier'))
+                        .forEach(elem => {
+                            elem.innerHTML = `<h3>${identifier}@saito</h3>`
+                        });
+                    //
+                    // TODO: Add email capture and links to discord and Telegram
+                    //
+                    showSocialModal(true);
+                }
+            };
+
+            document.querySelector('.tutorial-skip')
+                    .onclick = () => showSocialModal(false);
+        }
+
+        //
+        // captcha rendering for first modal
+        grecaptcha.render("recaptcha", {
+            sitekey: '6Lc18MYUAAAAAKb0_kFKkhA1ebdPu_hLmyyRo3Cd',
+            callback: captchaCallback
+        });
     }
 
     shouldAffixCallbackToModule() { return 1; }
