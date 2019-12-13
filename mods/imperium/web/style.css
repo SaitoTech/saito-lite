@@ -11,6 +11,9 @@
   cursor: pointer;
 }
 
+.sector_name {
+  cursor: pointer;
+}
 .sector_graphics_space {
 
 }
@@ -253,7 +256,17 @@ body {
 
 }
 
-.hex_bg img {
+.sector_graphics_background {
+  left: -100%;
+  right: -100%;
+  width: auto;
+  height: 100%;
+  margin: 0 auto;
+  -webkit-transform: rotate3d(0,0,0,0deg);
+      -ms-transform: rotate3d(0,0,0,0deg);
+          transform: rotate3d(0,0,0,0deg);
+}
+.sector_graphics {
   left: -100%;
   right: -100%;
   width: auto;
@@ -267,7 +280,7 @@ body {
   transform: translate(-50px,-55px);
 }
 .bottom_right {
-  transform: translate(-50px,-50px);
+  transform: translate(50px,50px);
 }
 
 
@@ -520,6 +533,5 @@ body {
         font-size: 13px;
     }
 }
-
 
 
