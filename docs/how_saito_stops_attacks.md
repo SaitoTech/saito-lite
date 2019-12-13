@@ -66,7 +66,16 @@ Occasionally people new to Saito think their way into circular critiques where t
 All consensus systems fail in situations where one's view of the longest chain (i.e. consensus) is dictated by an attacker. Saito is no different than other blockchains in this regard. For those concerned about these issues, the important thing to note is that only Saito provides explicit economic incentives that prevent these issues. While proof-of-work and proof-of-stake variant networks typically suffer from an underprovision of unpaid access nodes, in Saito access to the network is easy: any scarcity in access points is an immediate and profitable commercial opportunity.
 
 
-## 8. OTHER ATTACKS
+## 8. "SCALABILITY TRILEMMA"
+
+The "scalability trilemma" exists in blockchains with monolithic security functions, such as proof-of-work and proof-of-stake. In these networks any reduction in revenue to miners or stakers lowers security, because only miners and stakers are providing security to the network.
+
+Saito does not have a monolithic security function: the routing network controls the distribution of "work" flowing into the network, cryptographic signatures prevent the "orphaning" of this work by attackers, and the miner-led payment lottery enforces the cost of attacking the chain. Redirecting fees from miners to routing nodes incentivizes decentralization while paying directly for network scaling. There are many situations in which this shift explicitly increases overall network security.
+
+For those who understand the Saito mechanism, a self-evident example of this can be seen in the analysis of a shift in PAYSPLIT from 1.0 (all money to miners) to 0.5 (a division in payments between mining and routing nodes). The ability of the routing network to dynamically increase the cost-of-attack to specific nodes by routing transactions away from them provide another, unrelated but optional, security mechanism that grows in importance as the network grows more decentralized.
+
+
+## 9. OTHER ATTACKS
 
 Concerned about other attacks? Contact us at info@saito.tech and we will expand this document to clarify any outstanding issues.
 
