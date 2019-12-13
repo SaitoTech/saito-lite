@@ -515,6 +515,9 @@ console.log("hitting queue management!");
   /////////////////////
   handleGameLoop(msg=null) {
   
+console.log("CONFIRMS NEEDED: " + this.game.confirms_needed + " -- " + this.game.confirms_received);
+
+
     let imperium_self = this;
     if (this.game.queue.length > 0) {
   
@@ -538,6 +541,9 @@ console.log("GAME QUEUE: " + this.game.queue);
   
 
 
+	//
+	// resolve [action] [1] [publickey voting or 1 for agenda]
+	//
       if (mv[0] === "resolve") {
 
 console.log("ASKED TO RESOLVE WITH QUEUE: " + JSON.stringify(this.game.queue));
@@ -559,11 +565,15 @@ console.log("CONFIRMS RECEIVED: " + this.game.confirms_received + " of " + this.
 
   	    if (this.game.confirms_needed <= this.game.confirms_received) {
 
+console.log("HERE A");
+
 	      this.resetConfirmsNeeded(0);
     	      this.game.queue.splice(qe-1, 2);
   	      return 1;
 
   	    } else {
+
+console.log("HERE B");
 
     	      this.game.queue.splice(qe, 1);
 
@@ -573,8 +583,12 @@ console.log("CONFIRMS RECEIVED: " + this.game.confirms_received + " of " + this.
 	      // in which case the instruction we need to run is 
 	      // the last one.... 
 	      //
+console.log("MV3: " + mv[3]);
+
 	      if (mv[3] != undefined) {
-	        if (this.game.confirms_players.includes(mv[3]) {
+console.log("MY ADDRESS: " + this.app.wallet.returnPublicKey());
+console.log("MOVED: " + JSON.stringify(this.game.confirms_players));
+	        if (!this.game.confirms_players.includes(this.app.wallet.returnPublicKey())) {
 	  	  return 1;
 	        }
 	      }
@@ -786,7 +800,7 @@ console.log("VOTING FINISHED 5!");
 	
 	    if (vote == "abstain") {
 
-	      imperium_self.addMove("resolve\tagenda\t1\t1"); // final 1 means continue after removing
+	      imperium_self.addMove("resolve\tagenda\t1\t"+imperium_self.app.wallet.returnPublicKey());
 	      imperium_self.addMove("vote\t"+agenda_num+"\t"+imperium_self.game.player+"\t"+vote+"\t"+votes);
 	      imperium_self.endTurn();
 	      return 0;
@@ -810,7 +824,7 @@ console.log("VOTING FINISHED 5!");
 
                 votes = $(this).attr("id");
  
-  	        imperium_self.addMove("resolve\tagenda\t1\t1"); // 4th 1 = continue
+  	        imperium_self.addMove("resolve\tagenda\t1\t"+imperium_self.app.wallet.returnPublicKey());
 	        imperium_self.addMove("vote\t"+agenda_num+"\t"+imperium_self.game.player+"\t"+vote+"\t"+votes);
 	        imperium_self.endTurn();
 	        return 0;
@@ -856,15 +870,33 @@ console.log("GAME QUEUE IS PUSHED TO BE: " + this.game.queue);
   
       }
   
-      if (mv[0] == "tokenallocation") {
+      //
+      // resetconfirmsneeded [confirms_before_continuing] [array \t of \t pkeys]
+      //
+      if (mv[0] == "resetconfirmsneeded") {
 
-	if (this.game.confirms_received == 0) {
-	  this.resetConfirmsNeeded(mv[1]);
+console.log("###############################");
+console.log("### RESET CONFS NEEDED: "+ mv[1] +"###");
+console.log("###############################");
+
+	let confirms = 1;
+	if (parseInt(mv[1]) > 1) { confirms = parseInt(mv[1]); }
+ 	this.resetConfirmsNeeded(confirms);
+
+	for (let i = 2; i < mv.length; i++) {
+	  if (mv[i] != undefined) {
+	    this.game.confirms_players.push(mv[i]);
+	  }
 	}
 
+  	this.game.queue.splice(qe, 1);
+  	return 1;
+
+      }
+
+      if (mv[0] == "tokenallocation") {
  	this.playerAllocateNewTokens(this.game.player, (this.game.players_info[this.game.player-1].new_tokens_per_round+this.game.players_info[this.game.player-1].new_token_bonus_when_issued));
   	return 0;
-  
       }
   
   
@@ -932,7 +964,8 @@ console.log("GAME QUEUE IS PUSHED TO BE: " + this.game.queue);
   	// ALLOCATE TOKENS
   	//
         this.game.queue.push("tokenallocation\t"+this.game.players_info.length);
- 
+        this.game.queue.push("resetconfirmsneeded\t"+this.game.players_info.length);
+
 
   	//
   	// mark as ready 
@@ -6799,8 +6832,6 @@ console.log("NOW SENDING MOVE:");
     let strategy_cards = this.returnStrategyCards();
     this.updateStatus(this.returnFaction(player) + " is playing the " + strategy_cards[card].name + " strategy card");
   
-    let player_confirmation_needed = this.game.players_info.length;
-  
     if (card == "initiative") {
   
       this.game.players_info[player-1].command_tokens += 2;
@@ -6808,7 +6839,12 @@ console.log("NOW SENDING MOVE:");
   
       if (this.game.player == player) {
         this.addMove("resolve\tstrategy");
-        this.addMove("strategy\t"+card+"\t"+player+"\t2\t"+player_confirmation_needed);
+
+	//
+	// everyone gets to play the secondary
+	//
+        this.addMove("strategy\t"+card+"\t"+player+"\t2");
+        this.addMove("resetconfirmsneeded\tthis.game.players_info.length);
         this.addMove("notify\t"+player+" gains 2 command and 1 strategy tokens");
         this.endTurn();
       }
@@ -6821,7 +6857,9 @@ console.log("NOW SENDING MOVE:");
         this.updateStatus('Select sector to quagmire in diplomatic negotiations: ');
         this.playerSelectSector(function(sector) {
           imperium_self.addMove("resolve\tstrategy");
-          imperium_self.addMove("strategy\t"+card+"\t"+player+"\t2\t"+player_confirmation_needed);
+          imperium_self.addMove("strategy\t"+card+"\t"+player+"\t2");
+          this.addMove("resolve\tstrategy\t1\t"+imperum_self.app.wallet.returnPublicKey());
+          this.addMove("resetconfirmsneeded\tthis.game.players_info.length);
           for (let i = 0; i < imperium_self.game.players_info.length; i++) {
             imperium_self.addMove("activate\t"+(i+1)+"\t"+sector);
           }
@@ -6846,9 +6884,8 @@ console.log("NOW SENDING MOVE:");
     }
     if (card == "politics") {
 
-      if (this.game.confirms_received == 0) {
-        this.game.confirms_needed = this.game.players.length;
-        this.game.confirms_received = 0;
+      if (this.game.confirms_needed == 0) {
+        resetConfirmsNeeded(this.game.players.length);
       }
 
       //
@@ -6883,7 +6920,8 @@ console.log("NOW SENDING MOVE:");
         this.addMove("resolve\tstrategy");
         this.addMove("DEAL\t2\t"+this.game.player+"\t2");
         this.addMove("notify\tdealing two action cards to player "+player);
-        this.addMove("strategy\t"+card+"\t"+player+"\t2\t"+player_confirmation_needed);
+        this.addMove("strategy\t"+card+"\t"+player+"\t2");
+        this.addMove("resetconfirmsneeded\t"+this.game.players_info.length);
 
         //
         // pick the speaker
@@ -6937,6 +6975,8 @@ alert(chancellor);
       if (this.game.player == player) {
         this.addMove("resolve\tstrategy");
         this.addMove("strategy\t"+card+"\t"+player+"\t2\t"+player_confirmation_needed);
+        this.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+        this.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
         this.playerBuildInfrastructure();
       }
   
@@ -6947,7 +6987,9 @@ alert(chancellor);
       if (this.game.player == player) {
   
         this.addMove("resolve\tstrategy");
-        this.addMove("strategy\t"+card+"\t"+player+"\t2\t"+player_confirmation_needed);
+        this.addMove("strategy\t"+card+"\t"+player+"\t2");
+        this.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+        this.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
         this.addMove("purchase\t"+this.game.player+"\tgoods\t3");
         this.addMove("purchase\t"+this.game.player+"\tcommodities\t"+this.game.players_info[this.game.player-1].commodity_limit);
   
@@ -6982,8 +7024,10 @@ alert(chancellor);
         this.updateStatus('Select sector to de-activate.');
         this.playerSelectSector(function(sector) {
           imperium_self.addMove("resolve\tstrategy");
-          imperium_self.addMove("strategy\t"+card+"\t"+player+"\t2\t"+player_confirmation_needed);
+          imperium_self.addMove("strategy\t"+card+"\t"+player+"\t2");
+          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
           imperium_self.addMove("deactivate\t"+player+"\t"+sector);
+          imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
           imperium_self.endTurn();
         });
   
@@ -6996,7 +7040,10 @@ alert(chancellor);
   
         this.playerResearchTechnology(function(tech) {
           imperium_self.addMove("resolve\tstrategy");
-          imperium_self.addMove("strategy\t"+card+"\t"+player+"\t2\t"+player_confirmation_needed);
+          imperium_self.addMove("strategy\t"+card+"\t"+player+"\t2");
+          imperium_self.addMove("strategy\t"+card+"\t"+player+"\t2");
+          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+          imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
           imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
           imperium_self.endTurn();
         });
@@ -7010,7 +7057,8 @@ alert(chancellor);
       if (this.game.player == player) {
         imperium_self.addMove("resolve\tstrategy");
         this.playerScoreVictoryPoints(function(vp, objective) {
-          imperium_self.addMove("strategy\t"+card+"\t"+player+"\t2\t"+player_confirmation_needed);
+          imperium_self.addMove("strategy\t"+card+"\t"+player+"\t2");
+          imperium_self.addMove("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
   	  if (vp > 0) {
             imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective);
   	  }
@@ -7380,7 +7428,7 @@ console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.co
 
         if (obj.new_tokens == 0) {
             if (imperium_self.game.confirms_needed > 0) {
-              imperium_self.addMove("resolve\ttokenallocation\t1");
+              imperium_self.addMove("resolve\ttokenallocation\t1\t"+imperium_self.app.wallet.returnPublicKey());
 	    } else {
               imperium_self.addMove("resolve\ttokenallocation");
 	    }
