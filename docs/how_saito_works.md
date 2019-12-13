@@ -4,7 +4,7 @@ This document is divided into four parts. The first discusses the Saito mechanis
 
 ## 1. PRUNING THE BLOCKCHAIN
 
-Saito divides the blockchain into "epochs" of roughly 100,000 blocks. If the latest block is 500,000, the current epoch streches from block 400,001 onwards. We are launching MAINNET with a fixed "epoch length" but it is hypothetically possible to have a dynamic one, where the "epoch length" increases to keep the cost of attack at some constant.
+Saito divides the blockchain into "epochs" of roughly 100,000 blocks. If the latest block is 500,000, the current epoch streches from block 400,001 onwards.
 
 Once a block falls out of the current epoch, its unspent transaction outputs (UTXO) are no longer spendable. Any UTXO from that block which contains enough tokens to pay a rebroadcasting fee must be re-included in the very next block. The rebroadcasting fee is twice the average fee per byte paid by new transactions over a smoothing period.
 

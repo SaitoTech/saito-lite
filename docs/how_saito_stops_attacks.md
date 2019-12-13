@@ -72,7 +72,7 @@ The "scalability trilemma" exists in blockchains with monolithic security functi
 
 Saito does not have a monolithic security function: the routing network controls the distribution of "work" flowing into the network, cryptographic signatures prevent the "orphaning" of this work by attackers, and the miner-led payment lottery enforces payment-for-work so that attackers must always lose money censoring the chain. Redirecting fees from miners to routing nodes very clearly promotes decentralization and throughput. In Saito there are many situations in which this shift explicitly increases security as well.
 
-For those who understand the Saito mechanism, a self-evident example of this can be seen in a shiftoff PAYSPLIT from 1.0 (all money to miners) to 0.5 (a division in payments between mining and routing nodes). The ability of the routing network to control the flow of "work" to nodes in the network acts as another independent security function that can compensate for gains / losses in the cost-of-attack of specific nodes in the network.
+For those who understand the Saito mechanism, a self-evident example of this can be seen in a shift of PAYSPLIT from 1.0 (all money to miners) to 0.5 (a division in payments between mining and routing nodes). The ability of the routing network to control the flow of "work" to nodes in the network acts as another independent security function that can compensate for gains / losses in the cost-of-attack of specific nodes in the network.
 
 
 ## 9. OTHER ATTACKS
