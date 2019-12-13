@@ -638,7 +638,6 @@ console.log("resolving earlier: " + this.game.queue[z]);
   	this.game.state.turn++;
  
   	let new_round = 1;
-console.log("TESTING PLAYER INFO LENGTH: " + this.game.players_info.length);
         for (let i = 0; i < this.game.players_info.length; i++) {
 console.log("IS PASSED: " + this.game.players_info[i].passed);
   	  if (this.game.players_info[i].passed == 0) { new_round = 0; ***REMOVED***
@@ -938,8 +937,9 @@ console.log("###############################");
   	//
         for (let i = 0; i < this.game.players_info.length; i++) {
   	  this.game.players_info[i].passed = 0;
+	  this.game.players_info[i].strategy_cards_played = [];
     ***REMOVED***
- 
+
 
   	//
   	// REPAIR UNITS
@@ -967,11 +967,6 @@ console.log("###############################");
   	***REMOVED***
   	
   
-  	//
-  	// ALLOCATE TOKENS
-  	//
-        this.game.queue.push("tokenallocation\t"+this.game.players_info.length);
-        this.game.queue.push("resetconfirmsneeded\t"+this.game.players_info.length);
 
 
   	//
@@ -979,7 +974,13 @@ console.log("###############################");
   	//	  
   	if (this.game.initializing == 1) {
           this.game.queue.push("READY");
-  	***REMOVED***
+  	***REMOVED*** else {
+  	  //
+  	  // ALLOCATE TOKENS
+  	  //
+          this.game.queue.push("tokenallocation\t"+this.game.players_info.length);
+          this.game.queue.push("resetconfirmsneeded\t"+this.game.players_info.length);
+	***REMOVED***
   
 
   	//
@@ -1077,7 +1078,7 @@ console.log("###############################");
   	//
   	this.updatePlanetOwner(sector, planet_idx);
   
-  	this.game.queue.splice(qe-1, 2);
+  	this.game.queue.splice(qe, 1);
   	return 1;
   ***REMOVED***
   
@@ -1176,7 +1177,9 @@ console.log("###############################");
   
 
       if (mv[0] === "land") {
-  
+
+console.log("executing LAND function in MV0...");  
+
   	let player       = mv[1];
   	let player_moves = mv[2];
         let sector       = mv[3];
@@ -1184,26 +1187,40 @@ console.log("###############################");
         let source_idx   = mv[5];   // planet_idx or ship_idx
         let planet_idx   = mv[6];
         let unitjson     = mv[7];
+
+console.log("PLAY MOVES TOO HERE: " + player_moves);
+console.log("LANDING UNIT ON "+sector+" -- "+ planet_idx);
   
         let sys = this.returnSystemAndPlanets(sector);
   
   	if (this.game.player != player || player_moves == 1) {
           if (source == "planet") {
+console.log(" ... a");
             this.unloadUnitByJSONFromPlanet(player, sector, source_idx, unitjson);
+console.log("loading unit onto planet F p: " + sector + " --- " + planet_idx + " -- " + unitjson);
             this.loadUnitByJSONOntoPlanet(player, sector, planet_idx, unitjson);
       ***REMOVED*** else {
+console.log(" ... b");
             if (source == "ship") {
+console.log(" ... c");
               this.unloadUnitByJSONFromShip(player, sector, source_idx, unitjson);
+console.log("loading unit onto planet F s: " + sector + " --- " + planet_idx + " -- " + unitjson);
               this.loadUnitByJSONOntoPlanet(player, sector, planet_idx, unitjson);
         ***REMOVED*** else {
+console.log(" ... d");
       ***REMOVED***this.loadUnitByJSONOntoShipByJSON(player, sector, shipjson, unitjson);
         ***REMOVED***
       ***REMOVED***
     ***REMOVED***
   
+console.log(" ... e");
         this.saveSystemAndPlanets(sys);
+console.log(" ... f");
         this.updateSectorGraphics(sector);
+console.log(" ... g");
         this.game.queue.splice(qe, 1);
+console.log(" ... h");
+console.log("POST LAND WITH QUEUE: " + this.game.queue);
         return 1;
   
   ***REMOVED***
@@ -1491,7 +1508,12 @@ console.log("###############################");
   	let player = mv[1];
   	let sector = mv[2];
   	let options_available = 0;
-  
+
+	//
+	// unpack space ships
+	//
+	this.unloadStoredShipsIntoSector(player, sector);
+
   	//
   	// check to see if any ships survived....
   	//
@@ -1551,9 +1573,12 @@ console.log("###############################");
       if (mv[0] === "strategy") {
   
   	let card = mv[1];
-  	let player = mv[2];
+  	let player = parseInt(mv[2]);
   	let stage = mv[3];
   
+  	imperium_self.game.players_info[player-1].strategy_cards_played.push(success);
+
+
   	if (stage == 1) {
   	  this.playStrategyCardPrimary(player, card);
   	***REMOVED***
@@ -1677,19 +1702,13 @@ console.log("###############################");
   
     let imperium_self = this;
 
-console.log("IN PLAYER BUY TOKENS!");
- 
     if (this.returnAvailableInfluence(this.game.player) <= 2) {
-console.log("SKIPPING INFLUENCE PURCHASE 1!");
+      this.updateLog("You skip the initiative secondary, as you lack adequate influence...");
       this.updateStatus("Skipping purchase of tokens as insufficient influence...");
-console.log("SKIPPING INFLUENCE PURCHASE 2!");
       this.endTurn();
-console.log("SKIPPING INFLUENCE PURCHASE 3!");
       return 0;
 ***REMOVED***
  
-console.log("ABOUT TO UPDATE WITH PURCHASE SUGGESTION!");
-
 
     let html = 'Do you wish to purchase any command or strategy tokens? <p></p><ul>';
     html += '<li class="buildchoice" id="command">Command Tokens (<span class="command_total">0</span>)</li>';
@@ -1701,8 +1720,6 @@ console.log("ABOUT TO UPDATE WITH PURCHASE SUGGESTION!");
   
     this.updateStatus(html);
   
-
-console.log("done updating html!");
 
     let command_tokens = 0;
     let strategy_tokens = 0;
@@ -1796,7 +1813,7 @@ console.log("done updating html!");
 
   canPlayerPlayStrategyCard(player) {
   
-    if (this.game.players_info[this.game.player-1].strategy.length > 0) {
+    if (this.game.players_info[player-1].strategy.length != this.game.players_info[player-1].strategy_cards_played.length) {
       return 1;
 ***REMOVED***
   
@@ -2486,12 +2503,14 @@ console.log("adding influence: " + this.game.planets[array_of_cards[z]].influenc
   // already chosen.
   //
   playerSelectStrategyCard(mycallback) {
-  
+
     let array_of_cards = this.game.players_info[this.game.player-1].strategy;
   
     let html = "<ul>";
     for (let z in array_of_cards) {
-      html += '<li class="cardchoice" id="'+array_of_cards[z]+'">' + this.returnStrategyCard(array_of_cards[z]) + '</li>';
+      if (!this.game.players_info[this.game.player-1].strategy_cards_played.includes(array_of_cards[z])) {
+        html += '<li class="cardchoice" id="'+array_of_cards[z]+'">' + this.returnStrategyCard(array_of_cards[z]) + '</li>';
+  ***REMOVED***
 ***REMOVED***
     html += '</ul>';
   
@@ -2883,6 +2902,7 @@ console.log("HERE 5");
     let space_transport_used = 0;
   
     let landing_forces = [];
+    let planets_invaded = [];
   
     html = 'Which planet(s) do you invade: <p></p><ul>';
     for (let i = 0; i < sys.p.length; i++) {
@@ -2890,7 +2910,7 @@ console.log("HERE 5");
         html += '<li class="option sector_name" id="' + i + '">' + sys.p[i].name + ' (<span class="invadeplanet_'+i+'">0</span>)</li>'; 
   ***REMOVED***
 ***REMOVED***
-    html += '<li class="option" id="confirm">click here to confirm</li>'; 
+    html += '<li class="option" id="confirm">launch invasion(s)</li>'; 
     html += '</ul>';
     this.updateStatus(html);
   
@@ -2905,14 +2925,20 @@ console.log("HERE 5");
     $(adiv).on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.removePlanetHighlight(sector, s); ***REMOVED***);
     $('.option').on('click', function () {
   
+
       let planet_idx = $(this).attr('id');
   
       if (planet_idx == "confirm") {
         imperium_self.endTurn();
         return;
   ***REMOVED***
-  
-      imperium_self.addMove("invade_planet\t"+imperium_self.game.player+"\t"+1+"\t"+imperium_self.game.player+"\t"+sys.p[planet_idx].owner+"\t"+sector+"\t"+planet_idx);
+
+console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+
+      if (!planets_invaded.includes(planet_idx)) {
+        imperium_self.addMove("invade_planet\t"+imperium_self.game.player+"\t"+1+"\t"+imperium_self.game.player+"\t"+sys.p[planet_idx].owner+"\t"+sector+"\t"+planet_idx);
+        planets_invaded.push(planet_idx);
+  ***REMOVED***
   
       //
       // figure out available infantry and ships capacity
@@ -2989,7 +3015,7 @@ console.log("HERE 5");
   
       $('.invadechoice').off();
       $('.invadechoice').on('click', function() {
-  
+
         let id = $(this).attr("id");
         let tmpx = id.split("_");
   
@@ -3019,8 +3045,10 @@ console.log("HERE 5");
               landing.source_idx = source_idx;
               landing.planet_idx = planet_idx;
               landing.unitjson = unitjson;
-  
+ 
+console.log("LOADING THIS UNIT INTO LANDING FORCES: " + unitjson); 
           landing_forces.push(landing);
+console.log("LANDING FORCES NOW HAVE N UNITS: " + landing_forces.length);
   
           let planet_counter = ".invadeplanet_"+planet_idx;
           let planet_forces = parseInt($(planet_counter).html());
@@ -3038,10 +3066,13 @@ console.log("HERE 5");
   ***REMOVED***
   ***REMOVED*** submit when done
   ***REMOVED***
-          for (let y = 0; y < landing_forces.length; y++) { 
-  	  imperium_self.addMove("land\t"+imperium_self.game.player+"\t"+1+"\t"+landing_forces[y].sector+"\t"+landing_forces[y].source+"\t"+landing_forces[y].source_idx+"\t"+landing_forces[y].planet_idx+"\t"+landing_forces[y].unitjson);
+console.log("TOTAL FORCES LANDING: " + landing_forces.length);
+          for (let y = 0; y < landing_forces.length; y++) {
+console.log("\n\nLANDING 1 UNIT: ");
+    	    imperium_self.addMove("land\t"+imperium_self.game.player+"\t"+1+"\t"+landing_forces[y].sector+"\t"+landing_forces[y].source+"\t"+landing_forces[y].source_idx+"\t"+landing_forces[y].planet_idx+"\t"+landing_forces[y].unitjson);
       ***REMOVED***;
-  
+	  landing_forces = [];  
+
           $('.status').show();
           $('.hud-menu-overlay').hide();
   
@@ -3067,14 +3098,22 @@ console.log("HERE 5");
   
     let imperium_self = this;
     let html  = "Select a sector to activate: ";
+    let activated_once = 0;
   
     imperium_self.updateStatus(html);
   
     $('.sector').off();
     $('.sector').on('click', function() {
-  
+
+      //
+      // only allowed 1 at a time
+      //
+      if (activated_once == 1) { return; ***REMOVED***
+      activated_once = 1;
+
       let pid = $(this).attr("id");
   
+
       if (imperium_self.canPlayerActivateSystem(pid) == 0) {
   
         alert("You cannot activate that system: " + pid);
@@ -3089,7 +3128,7 @@ console.log("HERE 5");
   
         let c = confirm("Activate this system?");
         if (c) {
-          $('.sector').off();
+  ***REMOVED***$('.sector').off();
           sys.s.activated[imperium_self.game.player-1] = 1;
     //      imperium_self.addMove("resolve\tplay");
           imperium_self.addMove("activate\t"+imperium_self.game.player+"\t"+pid);
@@ -3349,8 +3388,8 @@ console.log("HERE 5");
   ***REMOVED***;
   unloadUnitByJSONFromShip(player, sector, ship_idx, unitjson) {
     let sys = this.returnSystemAndPlanets(sector);
-    for (let i = 0; i < sys.s.units[player - 1][ship_idx].storage.length; i++) {
-      if (JSON.stringify(sys.s.units[player - 1][ship_idx].storage[i]) === unitjson) {
+    for (let i = 0; i < sys.s.units[player - 1][ship_idx].length; i++) {
+      if (JSON.stringify(sys.s.units[player - 1][ship_idx][i]) === unitjson) {
         sys.s.units[player-1][ship_idx].storage.splice(i, 1);
         this.saveSystemAndPlanets(sys);
         return unitjson;
@@ -3388,8 +3427,28 @@ console.log("HERE 5");
 ***REMOVED***
     return "";
   ***REMOVED***;
-  
-  
+  unloadStoredShipsIntoSector(player, sector) {
+    let sys = this.returnSystemAndPlanets(sector);
+console.log("111a");
+    for (let i = 0; i < sys.s.units[player - 1].length; i++) {
+console.log("111a: " + i);
+      for (let j = 0; j < sys.s.units[player - 1][i].storage.length; j++) {
+	let unit = sys.s.units[player-1][i].storage[j];
+console.log("unitjson: " + unitjson);
+	let unitjson = JSON.stringify(unit);
+console.log("JSONstringifyunit: " + JSON.stringify(unit));
+console.log("checking to see if we should unload: " + unit.name);
+        if (unit.name === "fighter") {
+	  sys.s.units[player-1].push(unit);
+          sys.s.units[player-1][i].storage.splice(j, 1);
+	***REMOVED***
+  ***REMOVED***
+***REMOVED***
+console.log("updating graphics...");
+    this.updateSectorGraphics(sector);
+    this.saveSystemAndPlanets(sys);
+console.log("saved system and planets...");
+  ***REMOVED***
   
   
   
@@ -3493,6 +3552,9 @@ console.log("HERE 5");
       //
       attacker_forces = this.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
       defender_forces = this.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx);
+
+this.updateLog("attacker forces: " + attacker_forces);
+this.updateLog("defender forces: " + defender_forces);
   
       let total_attacker_hits = 0;
       let total_defender_hits = 0;
@@ -3547,8 +3609,14 @@ console.log("HERE 5");
       if (total_defender_hits > 0) {
         this.updateLog(total_defender_hits + " hits for " + this.returnFaction(defender));
   ***REMOVED***
-***REMOVED***
+***REMOVED*** else {
+
+      attacker_forces = this.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
   
+   ***REMOVED***
+  
+this.updateLog("attacker forces: " + attacker_forces);
+this.updateLog("defender forces: " + defender_forces);
   
     //
     // evaluate if planet has changed hands
@@ -3562,6 +3630,10 @@ console.log("HERE 5");
         sys.p[planet_idx].units[defender-1] = [];
   ***REMOVED***
   
+
+console.log("This is who is on the planet: ");
+console.log(JSON.stringify(sys.p[planet_idx].units[attacker-1]));
+
       //
       // notify everyone
       //
@@ -3971,8 +4043,6 @@ console.log("Cards: " + JSON.stringify(card_io_hmap));
 
       player_lowest[i] = 100000;
 
-console.log("PLAYER " + (i+1) + " ----> " + JSON.stringify(this.game.players_info[i].strategy));
-
       for (let k = 0; k < this.game.players_info[i].strategy.length; k++) {
         let sc = this.game.players_info[i].strategy[k];
 console.log("this sc is: " + sc);
@@ -3983,8 +4053,6 @@ console.log("comes wth or: " + or);
 ***REMOVED***
   
 
-console.log("LOWEST PER PLAYER: " + JSON.stringify(player_lowest));
- 
     let loop = player_lowest.length;
     let player_initiative_order = [];
   
@@ -4257,7 +4325,7 @@ console.log("pushing player: " + (a+1));
 
       for (let j = 0; j < this.totalPlayers; j++) {
         planets[i].units[j] = [];
-
+/*
 	if (j == 1) {
 	  planets[i].units[j].push(this.returnUnit("infantry", 1));
 	  planets[i].units[j].push(this.returnUnit("infantry", 1));
@@ -4266,7 +4334,7 @@ console.log("pushing player: " + (a+1));
 	  planets[i].units[j].push(this.returnUnit("pds", 1));
 	  planets[i].units[j].push(this.returnUnit("spacedock", 1));
 	***REMOVED***
-
+*/
   ***REMOVED***
 ***REMOVED***
   
@@ -5960,7 +6028,7 @@ console.log("THE LAW FAILS!");
   
       players[i].vp		= 0;
       players[i].passed		= 0;
-      players[i].strategy_cards_played = 0;
+      players[i].strategy_cards_played = [];
   
       //
       // gameplay modifiers (action cards + tech)
@@ -6600,8 +6668,6 @@ console.log("THE LAW FAILS!");
             if (unit.name == "spacedock") { spacedock++; ***REMOVED***
   
       ***REMOVED***
-
-console.log("PLAYER " + player + " has units in " + sector);
 
 	  let postext = "";
 
