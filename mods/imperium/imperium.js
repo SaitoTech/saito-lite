@@ -591,6 +591,10 @@ console.log("MOVED: " + JSON.stringify(this.game.confirms_players));
 	        if (!this.game.confirms_players.includes(this.app.wallet.returnPublicKey())) {
 	  	  return 1;
 	        }
+                if (mv[1] == "agenda") {
+console.log("Agenda manually monitors itself... permitting fallthrough...");
+		  return 1;
+		}
 	      }
 
   	      return 0;
@@ -758,6 +762,9 @@ console.log("VOTING FINISHED 5!");
 
       if (mv[0] == "agenda") {
 
+	//
+	// we repeatedly hit "agenda"
+	//
 	let laws = imperium_self.returnAgendaCards();
         let agenda_num = parseInt(mv[1]);
 	let agenda_name = laws[imperium_self.game.state.agendas[agenda_num]].name;
@@ -1669,7 +1676,9 @@ console.log("###############################");
   playerBuyTokens() {
   
     let imperium_self = this;
-  
+
+console.log("IN PLAYER BUY TOKENS!");
+ 
     if (this.returnAvailableInfluence(this.game.player) <= 2) {
 console.log("SKIPPING INFLUENCE PURCHASE 1!");
       this.updateStatus("Skipping purchase of tokens as insufficient influence...");
@@ -1678,7 +1687,10 @@ console.log("SKIPPING INFLUENCE PURCHASE 2!");
 console.log("SKIPPING INFLUENCE PURCHASE 3!");
       return 0;
     }
-  
+ 
+console.log("ABOUT TO UPDATE WITH PURCHASE SUGGESTION!");
+
+
     let html = 'Do you wish to purchase any command or strategy tokens? <p></p><ul>';
     html += '<li class="buildchoice" id="command">Command Tokens (<span class="command_total">0</span>)</li>';
     html += '<li class="buildchoice" id="strategy">Strategy Tokens (<span class="strategy_total">0</span>)</li>';
@@ -1689,6 +1701,9 @@ console.log("SKIPPING INFLUENCE PURCHASE 3!");
   
     this.updateStatus(html);
   
+
+console.log("done updating html!");
+
     let command_tokens = 0;
     let strategy_tokens = 0;
     let total_cost = 0;
@@ -2711,7 +2726,7 @@ console.log("HERE 4");
               }
             }
             if (infantry_available_to_move > 0) {
-              user_message += '<li class="card" id="addinfantry_p_'+i+'">add infantry from '+sys.p[i].name+' (<span class="add_infantry_remaining_'+i+'">'+infantry_available_to_move+'</span>)</li>';
+              user_message += '<li class="addoption" id="addinfantry_p_'+i+'">add infantry from '+sys.p[i].name+' (<span class="add_infantry_remaining_'+i+'">'+infantry_available_to_move+'</span>)</li>';
             }
           }
   
@@ -2723,12 +2738,10 @@ console.log("HERE 5");
     	    fighters_available_to_move++;
             }
           }
-          user_message += '<li class="card" id="addfighter_s_s">add fighter (<span class="add_fighters_remaining">'+fighters_available_to_move+'</span>)</li>';
-          user_message += '<li class="card" id="skip">skip</li>';
+          user_message += '<li class="addoption" id="addfighter_s_s">add fighter (<span class="add_fighters_remaining">'+fighters_available_to_move+'</span>)</li>';
+          user_message += '<li class="addoption" id="skip">finish</li>';
           user_message += '</ul></div>';
   
-
-alert("HERE 6: " + user_message);
 
           //
           // choice
@@ -2736,11 +2749,24 @@ alert("HERE 6: " + user_message);
           $('.hud-menu-overlay').html(user_message);
           $('.hud-menu-overlay').show();
           $('.status').hide();
-  
-alert("HERE 7 - 1");
+          $('.addoption').off();
 
+	  //
+	  // add hover / mouseover to message
+	  //
+	  let adddiv = "";
+          for (let i = 0; i < sys.p.length; i++) {
+	    adddiv = "#addinfantry_p_"+i;
+	    $(adddiv).on('mouseenter', function() { imperium_self.addPlanetHighlight(sector, i); });
+	    $(adddiv).on('mouseleave', function() { imperium_self.removePlanetHighlight(sector, i); });
+	  }
+	  adddiv = "#addfighter_s_s";
+	  $(adddiv).on('mouseenter', function() { imperium_self.addSectorHighlight(sector); });
+	  $(adddiv).on('mouseleave', function() { imperium_self.removeSectorHighlight(sector); });
+
+  
           // leave action enabled on other panels
-          $('.card').on('click', function() {
+          $('.addoption').on('click', function() {
   
             let id = $(this).attr("id");
             let tmpx = id.split("_");
@@ -2748,8 +2774,6 @@ alert("HERE 7 - 1");
  
     	  if (total_ship_capacity > 0) {
 
-alert("HERE 7 - 2");
-  
             if (action2 === "addinfantry") {
   
               let planet_idx = tmpx[2];
@@ -2793,33 +2817,33 @@ alert("HERE 7 - 2");
   
                 let ir = parseInt($('.add_fighters_remaining').html());
                 let ic = parseInt($('.capacity_remaining').html());
-    	      $('.add_fighters_remaining').html((ir-1));
-  	      $('.capacity_remaining').html((ic-1));
+    	        $('.add_fighters_remaining').html((ir-1));
+  	        $('.capacity_remaining').html((ic-1));
   
-  	      let unitjson = imperium_self.removeSpaceUnit(imperium_self.game.player, sector, "fighter");
+  	        let unitjson = imperium_self.removeSpaceUnit(imperium_self.game.player, sector, "fighter");
   
                 imperium_self.loadUnitByJSONOntoShip(imperium_self.game.player, sector, obj.ships_and_sectors[i].ship_idxs[ii], unitjson);
   
-  	      let loading = {};
-    	      obj.stuff_to_load.push(loading);
+  	        let loading = {};
+    	        obj.stuff_to_load.push(loading);
   
-  	      loading.sector = sector;
-  	      loading.source = "ship";
-  	      loading.source_idx = "";
-  	      loading.unitjson = unitjson;
-  	      loading.ship_idx = obj.ships_and_sectors[i].ship_idxs[ii];
-  	      loading.shipjson = JSON.stringify(sys.s.units[imperium_self.game.player-1][obj.ships_and_sectors[i].ship_idxs[ii]]);;
-  	      loading.i = i;
-  	      loading.ii = ii;
+  	        loading.sector = sector;
+  	        loading.source = "ship";
+  	        loading.source_idx = "";
+  	        loading.unitjson = unitjson;
+  	        loading.ship_idx = obj.ships_and_sectors[i].ship_idxs[ii];
+  	        loading.shipjson = JSON.stringify(sys.s.units[imperium_self.game.player-1][obj.ships_and_sectors[i].ship_idxs[ii]]);;
+  	        loading.i = i;
+  	        loading.ii = ii;
   
-  	      total_ship_capacity--;
+  	        total_ship_capacity--;
   
-  	      if (ic == 1 && total_ship_capacity == 0) {
+  	        if (ic == 1 && total_ship_capacity == 0) {
                   $('.status').show();
                   $('.hud-menu-overlay').hide();
                 }
               }
-   	  } // total ship capacity
+   	    } // total ship capacity
   
             if (action2 === "skip") {
               $('.hud-menu-overlay').hide();
@@ -2973,8 +2997,8 @@ alert("HERE 7 - 2");
           if (counter == 0) { 
    	  alert("You cannot attack with forces you do not have available."); return;
           }
-  
-  	let unitjson = JSON.stringify(imperium_self.returnUnit("infantry", this.game.player));
+ 
+    	  let unitjson = JSON.stringify(imperium_self.returnUnit("infantry", imperium_self.game.player));
   
           let landing = {};
               landing.sector = sector;
@@ -4220,7 +4244,6 @@ console.log("pushing player: " + (a+1));
       for (let j = 0; j < this.totalPlayers; j++) {
         planets[i].units[j] = [];
 
-/***
 	if (j == 1) {
 	  planets[i].units[j].push(this.returnUnit("infantry", 1));
 	  planets[i].units[j].push(this.returnUnit("infantry", 1));
@@ -4229,7 +4252,7 @@ console.log("pushing player: " + (a+1));
 	  planets[i].units[j].push(this.returnUnit("pds", 1));
 	  planets[i].units[j].push(this.returnUnit("spacedock", 1));
 	}
-***/
+
       }
     }
   
@@ -6546,7 +6569,7 @@ console.log("THE LAW FAILS!");
       for (let j = 0; j < sys.p.length; j++) {
         total_ground_forces_of_player += sys.p[j].units[z].length;
       }
-  
+ 
       if (total_ground_forces_of_player > 0) {
         for (let j = 0; j < sys.p.length; j++) {
   
@@ -6602,7 +6625,6 @@ console.log("PLAYER " + player + " has units in " + sector);
 	  }
         }
 
-
 	//
 	// remove and re-add space frames
 	//
@@ -6611,7 +6633,8 @@ console.log("PLAYER " + player + " has units in " + sector);
 	let divsector2 = "#hex_bg_"+sector;
         let player_color = "player_color_"+player;
         for (let i = 0; i < ground_frames.length; i++) {
-          $(divsector2).append('<img class="sector_graphics '+player_color+' sector_graphics_planet sector_graphics_planet_'+sector+'" src="/imperium/img/frame/'+ground_frames[i]+'" />');
+
+          $(divsector2).append('<img class="sector_graphics '+player_color+' sector_graphics_planet sector_graphics_planet_'+sector+' '+ground_pos[i]+'" src="/imperium/img/frame/'+ground_frames[i]+'" />');
         }
       }
     }
@@ -6844,7 +6867,7 @@ console.log("NOW SENDING MOVE:");
 	// everyone gets to play the secondary
 	//
         this.addMove("strategy\t"+card+"\t"+player+"\t2");
-        this.addMove("resetconfirmsneeded\tthis.game.players_info.length);
+        this.addMove("resetconfirmsneeded\t"+this.game.players_info.length);
         this.addMove("notify\t"+player+" gains 2 command and 1 strategy tokens");
         this.endTurn();
       }
@@ -6858,8 +6881,8 @@ console.log("NOW SENDING MOVE:");
         this.playerSelectSector(function(sector) {
           imperium_self.addMove("resolve\tstrategy");
           imperium_self.addMove("strategy\t"+card+"\t"+player+"\t2");
-          this.addMove("resolve\tstrategy\t1\t"+imperum_self.app.wallet.returnPublicKey());
-          this.addMove("resetconfirmsneeded\tthis.game.players_info.length);
+          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+          imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
           for (let i = 0; i < imperium_self.game.players_info.length; i++) {
             imperium_self.addMove("activate\t"+(i+1)+"\t"+sector);
           }
@@ -6885,28 +6908,25 @@ console.log("NOW SENDING MOVE:");
     if (card == "politics") {
 
       if (this.game.confirms_needed == 0) {
-        resetConfirmsNeeded(this.game.players.length);
-      }
+        //
+        // refresh votes --> total available
+        //
+        this.game.state.votes_available = [];
+        this.game.state.votes_cast = [];
+        this.game.state.how_voted_on_agenda = [];
+        this.game.state.voted_on_agenda = [];
+        this.game.state.voting_on_agenda = 0;
 
-      //
-      // refresh votes --> total available
-      //
-      this.game.state.votes_available = [];
-      this.game.state.votes_cast = [];
-      this.game.state.how_voted_on_agenda = [];
-      this.game.state.voted_on_agenda = [];
-      this.game.state.voting_on_agenda = 0;
-
-      for (let i = 0; i < this.game.players.length; i++) {
-	this.game.state.votes_available.push(this.returnAvailableVotes(i+1));
-	this.game.state.votes_cast.push(0);
-	this.game.state.voted_on_agenda[i] = [];
-	this.game.state.how_voted_on_agenda[i] = "abstain";
-	for (let z = 0; z < this.game.state.agendas_per_round; z++) {
-	  this.game.state.voted_on_agenda[z].push(0);
-	}
+        for (let i = 0; i < this.game.players.length; i++) {
+	  this.game.state.votes_available.push(this.returnAvailableVotes(i+1));
+	  this.game.state.votes_cast.push(0);
+	  this.game.state.voted_on_agenda[i] = [];
+	  this.game.state.how_voted_on_agenda[i] = "abstain";
+	  for (let z = 0; z < this.game.state.agendas_per_round; z++) {
+	    this.game.state.voted_on_agenda[z].push(0);
+  	  }
+        }
       }
-      
 
 
       //
@@ -7082,14 +7102,14 @@ alert(chancellor);
     // no confirms means first time we have hit this
     //
     if (this.game.confirms_received == 0) {
-      resetConfirmsNeeded(this.game.players_info.length);
+      this.resetConfirmsNeeded(this.game.players_info.length);
     }
 
 console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.confirms_received);
 
   
     if (card == "initiative") {
-      this.addMove("resolve\tstrategy\t1");
+      this.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
       this.playerBuyTokens();
       return 0;
     }
@@ -7111,7 +7131,7 @@ console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.co
   
   	if (id == "yes") {
   
-            imperium_self.addMove("resolve\tstrategy\t1");
+            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
             let array_of_cards = imperium_self.returnPlayerExhaustedPlanetCards(imperium_self.game.player); // unexhausted
   
   	  let choices_selected = 0;
@@ -7156,7 +7176,7 @@ console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.co
   	}
   
   	if (id == "no") {
-            imperium_self.addMove("resolve\tstrategy\t1");
+            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
             imperium_self.endTurn();
             return 0;
   	}
@@ -7164,7 +7184,7 @@ console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.co
         });
   
       } else {
-        imperium_self.addMove("resolve\tstrategy\t1");
+        imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
         imperium_self.endTurn();
         return 0;
       }
@@ -7172,7 +7192,7 @@ console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.co
     }
   
     if (card == "politics") {
-      imperium_self.addMove("resolve\tstrategy\t1");
+      imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
       imperium_self.playerBuyActionCards();
       return 0;
   
@@ -7195,14 +7215,14 @@ console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.co
         let id = $(this).attr("id");
   
         if (id == "yes") {
-          imperium_self.addMove("resolve\tstrategy\t1");
+          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
   	if (imperium_self.game.player != player) {
             imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
   	}
           imperium_self.playerBuildInfrastructure();
         }
         if (id == "no") {
-          imperium_self.addMove("resolve\tstrategy\t1");
+          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
           imperium_self.endTurn();
           return 0;
         }
@@ -7227,12 +7247,12 @@ console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.co
           let id = $(this).attr("id");
   
           if (id == "yes") {
-            imperium_self.addMove("resolve\tstrategy\t1");
+            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
             imperium_self.addMove("purchase\t"+this.game.player+"\tcommodities\t"+this.game.players_info[this.game.player-1].commodity_limit);
             imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
           }
           if (id == "no") {
-            imperium_self.addMove("resolve\tstrategy\t1");
+            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
             imperium_self.endTurn();
             return 0;
           }
@@ -7262,19 +7282,19 @@ console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.co
           let id = $(this).attr("id");
   
           if (id == "yes") {
-            imperium_self.addMove("resolve\tstrategy\t1");
+            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
             imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
   	  imperium_self.playerProduceUnits(this.game.players_info[this.game.player-1].homeworld);
           }
           if (id == "no") {
-            imperium_self.addMove("resolve\tstrategy\t1");
+            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
             imperium_self.endTurn();
             return 0;
           }
   
         });
       } else {
-        this.addMove("resolve\tstrategy\t1");
+        this.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
         this.endTurn();
         return 0;
       }
@@ -7297,26 +7317,24 @@ console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.co
           let id = $(this).attr("id");
   
           if (id == "yes") {
-            imperium_self.addMove("resolve\tstrategy\t1");
+
+            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
             imperium_self.playerSelectResources(4, function(success) {
   
   	    if (success == 1) {
                 imperium_self.playerResearchTechnology(function(tech) {
-                  imperium_self.addMove("resolve\tstrategy");
-                  imperium_self.addMove("strategy\t"+card+"\t"+player+"\t2\t"+player_confirmation_needed);
                   imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
                   imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
                   imperium_self.endTurn();
                 });
   	    } else {
-  
-  alert("insufficient resources to build this tech... dying");
-  
+alert("insufficient resources to build this tech... purchase denied");
+              imperium_self.endTurn();
   	    }
             });
           }
           if (id == "no") {
-            imperium_self.addMove("resolve\tstrategy\t1");
+            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
             imperium_self.endTurn();
             return 0;
           }
@@ -7342,8 +7360,7 @@ console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.co
   
   	    if (success == 1) {
                 imperium_self.playerResearchTechnology(function(tech) {
-                  imperium_self.addMove("resolve\tstrategy");
-                  imperium_self.addMove("strategy\t"+card+"\t"+player+"\t2\t"+player_confirmation_needed);
+                  imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
                   imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
                   imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
                   imperium_self.endTurn();
@@ -7356,7 +7373,7 @@ console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.co
             });
           }
           if (id == "no") {
-            imperium_self.addMove("resolve\tstrategy\t1");
+            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
             imperium_self.endTurn();
             return 0;
           }
@@ -7367,7 +7384,7 @@ console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.co
   
     if (card == "empire") {
   
-      imperium_self.addMove("resolve\tstrategy\t1");
+      imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
       this.playerScoreVictoryPoints(function(vp, objective) {
         if (vp > 0) {
           imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective);
@@ -7459,6 +7476,24 @@ console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.co
     this.game.confirms_players  = [];
   }
 
+
+
+  addSectorHighlight(sector) {
+    let divname = "#hex_space_"+sector;
+    $(divname).css('background-color', '#900');
+  }
+  removeSectorHighlight(sector) {
+    let divname = "#hex_space_"+sector;
+    $(divname).css('background-color', 'transparent'); 
+  }
+  addPlanetHighlight(sector, pid)  {
+    let divname = "#hex_space_"+sector;
+    $(divname).css('background-color', '#900');
+  }
+  removePlanetHighlight(sector, pid)  {
+    let divname = "#hex_space_"+sector;
+    $(divname).css('background-color', 'transparent'); 
+  }
 
 }
 
