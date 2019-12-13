@@ -3,6 +3,13 @@
     padding: 0;
 ***REMOVED***
 
+.addoption {
+  cursor: pointer;
+  margin-left: 20px;  
+***REMOVED***
+.card {
+  cursor: pointer;
+***REMOVED***
 
 .sector_graphics_space {
 
@@ -246,7 +253,7 @@ body {
 
 ***REMOVED***
 
-.hex img {
+.hex_bg img {
   left: -100%;
   right: -100%;
   width: auto;
@@ -256,6 +263,13 @@ body {
       -ms-transform: rotate3d(0,0,0,0deg);
           transform: rotate3d(0,0,0,0deg);
 ***REMOVED***
+.top_left {
+  transform: translate(-50px,-55px);
+***REMOVED***
+.bottom_right {
+  transform: translate(-50px,-50px);
+***REMOVED***
+
 
 
 
@@ -444,6 +458,8 @@ body {
  margin-left: auto;
  margin-right: auto;
 ***REMOVED***
+
+
 
 
 
