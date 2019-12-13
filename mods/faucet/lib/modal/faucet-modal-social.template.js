@@ -3,13 +3,9 @@ module.exports = FaucetModalSocialTemplate = (tokens_sent=true) => {
   return `
     <div>
       ${are_tokens_sent***REMOVED***
-      <p>Check out some of our other modules to earn even more SAITO.</p>
+      <p>You should back up your wallet now that you have some tokens</p>
     </div>
-    <ul style="margin-left: 1em;line-height: 1.5em;">
-      <a href="/email"><li>Email</li></a>
-      <a href="/arcade"><li>Arcade</li></a>
-      <a href="/faucet"><li>Faucet</li></a>
-    </ul>
+    <button id="registry-backup-wallet">BACKUP</button>
     <p style="font-size: 0.9em;color: var(--saito-cyber-black-cut);">
       Want to learn more about Saito? Subscribe to our email newsletter or join us on Discord and Telegram
     </p>

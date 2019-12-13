@@ -63,7 +63,7 @@ class ChatCore extends ModTemplate {
     //
     // create mastodon server
     //
-    let members = [peer.peer.publickey];
+    let members = [publickey];
     let newgroup = this.createChatGroup(members);
     this.addNewGroup(newgroup);
     // ***REMOVED***

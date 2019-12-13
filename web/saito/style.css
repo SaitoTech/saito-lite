@@ -148,6 +148,17 @@ button.sub:hover, .button.sub:hover {
     background: var(--saito-skyline-grey);
 ***REMOVED***
 
+button:disabled,
+button[disabled] {
+    border: 1px solid #999999;
+    background: #cccccc;
+    color: #666666;
+***REMOVED***
+
+button:disabled:hover {
+    background: #bbbbbb;
+***REMOVED***
+
 .button-main {
     font-size: 1.2em;
     line-height: 1.9em;

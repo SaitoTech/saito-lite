@@ -236,37 +236,42 @@ class Faucet extends ModTemplate {
         modal.render();
 
         document.querySelector('.tutorial-skip')
-                .onclick = () => showRegistryModal(false);
+                .onclick = () => showSocialModal(false);
 
-        const showRegistryModal = (are_tokens_sent=true) => {
+***REMOVED*** const showRegistryModal = (are_tokens_sent=true) => {
+***REMOVED***     modal.destroy();
+***REMOVED***     modal.title = "Register a Username";
+***REMOVED***     modal.content = FaucetModalRegistryTemplate(are_tokens_sent);
+
+***REMOVED***     modal.render();
+***REMOVED***     modal.attachEvents(registryModalEvents);
+***REMOVED*** ***REMOVED***
+
+        const socialModalEvents = () => {
+            let backup_button = document.getElementById('registry-backup-wallet');
+            backup_button.onclick = () => {
+                var pom = document.createElement('a');
+                pom.setAttribute('type', "hidden");
+                pom.setAttribute('href', 'data:application/json;utf-8,' + encodeURIComponent(JSON.stringify(this.app.options)));
+                pom.setAttribute('download', "saito.wallet.json");
+                document.body.appendChild(pom);
+                pom.click();
+                pom.remove();
+        ***REMOVED***;
+    ***REMOVED***
+
+        const showSocialModal = (are_tokens_sent=true) => {
             modal.destroy();
-            modal.title = "Register a Username";
-            modal.content = FaucetModalRegistryTemplate(are_tokens_sent);
-
+            modal.title = 'Explore Saito'
+            modal.content = FaucetModalSocialTemplate(are_tokens_sent);
             modal.render();
-            modal.attachEvents(registryModalEvents);
-    ***REMOVED***
-
-        const captchaCallback = () => {
-    ***REMOVED***
-    ***REMOVED*** TODO: SEND TOKENS WITH FAUCET HERE
-    ***REMOVED***
-    ***REMOVED*** send out faucet request for tokens
-    ***REMOVED***
-            showRegistryModal(true);
+            modal.attachEvents(socialModalEvents);
     ***REMOVED***
 
         const registryModalEvents = () => {
             let registry_input = document.getElementById('registry-input')
             registry_input.onfocus = () => registry_input.placeholder = '';
             registry_input.onblur = () => registry_input.placeholder = 'Username';
-
-            const showSocialModal = (are_tokens_sent=true) => {
-                modal.destroy();
-                modal.title = 'Explore Saito'
-                modal.content = FaucetModalSocialTemplate(are_tokens_sent);
-                modal.render();
-        ***REMOVED***
 
             document.getElementById('registry-add-button').onclick = () => {
                 let identifier = document.getElementById('registry-input').value
@@ -286,6 +291,18 @@ class Faucet extends ModTemplate {
 
             document.querySelector('.tutorial-skip')
                     .onclick = () => showSocialModal(false);
+    ***REMOVED***
+
+        modal.attachEvents(registryModalEvents);
+
+
+        const captchaCallback = () => {
+    ***REMOVED***
+    ***REMOVED*** TODO: SEND TOKENS WITH FAUCET HERE
+    ***REMOVED***
+    ***REMOVED*** send out faucet request for tokens
+    ***REMOVED***
+            document.getElementById('registry-add-button').disabled = false;
     ***REMOVED***
 
 ***REMOVED***
