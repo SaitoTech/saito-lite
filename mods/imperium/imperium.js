@@ -2598,7 +2598,7 @@ console.log("into updateInterface function...");
       for (let i = 0; i < obj.ships_and_sectors.length; i++) {
   
         let sys = imperium_self.returnSystemAndPlanets(obj.ships_and_sectors[i].sector);
-        html += '<b style="margin-top:10px">'+sys.s.name+'</b>';
+        html += '<b class="sector_name" id="'+obj.ships_and_sectors[i].sector+'" style="margin-top:10px">'+sys.s.name+'</b>';
         html += '<ul>';
         for (let ii = 0; ii < obj.ships_and_sectors[i].ships.length; ii++) {
   
@@ -2634,6 +2634,14 @@ console.log("into updateInterface function...");
       imperium_self.updateStatus(html);
 console.log("HERE 1"); 
  
+      //
+      // add hover / mouseover to sector names
+      //
+      let adddiv = ".sector_name";
+      $(adddiv).on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.addSectorHighlight(s); ***REMOVED***);
+      $(adddiv).on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.removeSectorHighlight(s); ***REMOVED***);
+
+
 
       $('.option').off();
       $('.option').on('click', function() {
@@ -2751,10 +2759,12 @@ console.log("HERE 5");
           $('.status').hide();
           $('.addoption').off();
 
+
+
+  
 	  //
 	  // add hover / mouseover to message
 	  //
-	  let adddiv = "";
           for (let i = 0; i < sys.p.length; i++) {
 	    adddiv = "#addinfantry_p_"+i;
 	    $(adddiv).on('mouseenter', function() { imperium_self.addPlanetHighlight(sector, i); ***REMOVED***);
@@ -2874,10 +2884,10 @@ console.log("HERE 5");
   
     let landing_forces = [];
   
-    html = 'Which planet(s) do you wish to invade: <p></p><ul>';
+    html = 'Which planet(s) do you invade: <p></p><ul>';
     for (let i = 0; i < sys.p.length; i++) {
       if (sys.p[i].owner != player) {
-        html += '<li class="option" id="' + i + '">' + sys.p[i].name + ' (<span class="invadeplanet_'+i+'">0</span>)</li>'; 
+        html += '<li class="option sector_name" id="' + i + '">' + sys.p[i].name + ' (<span class="invadeplanet_'+i+'">0</span>)</li>'; 
   ***REMOVED***
 ***REMOVED***
     html += '<li class="option" id="confirm">click here to confirm</li>'; 
@@ -2890,6 +2900,9 @@ console.log("HERE 5");
     let forces_on_ships = [];
   
     $('.option').off();
+    let adiv = ".sector_name";
+    $(adiv).on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.addPlanetHighlight(sector, s); ***REMOVED***);
+    $(adiv).on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.removePlanetHighlight(sector, s); ***REMOVED***);
     $('.option').on('click', function () {
   
       let planet_idx = $(this).attr('id');
@@ -2989,13 +3002,13 @@ console.log("HERE 5");
         if (action2 == "invasion") {
   
           if (source == "planet") {
-    	  if (space_transport_available <= 0) { alert("Invalid Choice! No space transport available!"); return; ***REMOVED***
-  	  forces_on_planets[source_idx]--;
+     	    if (space_transport_available <= 0) { alert("Invalid Choice! No space transport available!"); return; ***REMOVED***
+  	    forces_on_planets[source_idx]--;
       ***REMOVED*** else {
-  	  forces_on_ships[source_idx]--;
+  	    forces_on_ships[source_idx]--;
       ***REMOVED***
           if (counter == 0) { 
-   	  alert("You cannot attack with forces you do not have available."); return;
+   	    alert("You cannot attack with forces you do not have available."); return;
       ***REMOVED***
  
     	  let unitjson = JSON.stringify(imperium_self.returnUnit("infantry", imperium_self.game.player));
@@ -3074,14 +3087,15 @@ console.log("HERE 5");
         $(divpid).find('.hex_activated').css('background-color', 'yellow');
         $(divpid).find('.hex_activated').css('opacity', '0.3');
   
-    //    let c = confirm("Activate this system?");
-    //    if (c) {
+        let c = confirm("Activate this system?");
+        if (c) {
+          $('.sector').off();
           sys.s.activated[imperium_self.game.player-1] = 1;
     //      imperium_self.addMove("resolve\tplay");
           imperium_self.addMove("activate\t"+imperium_self.game.player+"\t"+pid);
           imperium_self.addMove("expend\t"+imperium_self.game.player+"\t"+"command"+"\t"+1);
           imperium_self.playerPostActivateSystem(pid);
-    //***REMOVED***
+    ***REMOVED***
   ***REMOVED***
   
 ***REMOVED***);
@@ -4164,7 +4178,7 @@ console.log("pushing player: " + (a+1));
           <div class="hexIn" id="hexIn_'+slot+'"> \
             <div class="hexLink" id="hexLink_'+slot+'"> \
               <div class="hex_bg" id="hex_bg_'+slot+'"> \
-                <img class="hex_img" id="hex_img_'+slot+'" src="" /> \
+                <img class="hex_img sector_graphics_background" id="hex_img_'+slot+'" src="" /> \
                 <div class="hex_activated" id="hex_activated_'+slot+'"> \
   	      </div> \
                 <div class="hex_space" id="hex_space_'+slot+'"> \
@@ -6632,9 +6646,10 @@ console.log("PLAYER " + player + " has units in " + sector);
         $(old_images).remove();
 	let divsector2 = "#hex_bg_"+sector;
         let player_color = "player_color_"+player;
+	let pid = 0;
         for (let i = 0; i < ground_frames.length; i++) {
-
-          $(divsector2).append('<img class="sector_graphics '+player_color+' sector_graphics_planet sector_graphics_planet_'+sector+' '+ground_pos[i]+'" src="/imperium/img/frame/'+ground_frames[i]+'" />');
+          if (i > 0 && ground_pos[i] != ground_pos[i-1]) { pid++; ***REMOVED***
+          $(divsector2).append('<img class="sector_graphics '+player_color+' sector_graphics_planet sector_graphics_planet_'+sector+' sector_graphics_planet_'+sector+'_'+pid+' '+ground_pos[i]+'" src="/imperium/img/frame/'+ground_frames[i]+'" />');
     ***REMOVED***
   ***REMOVED***
 ***REMOVED***
@@ -7487,12 +7502,12 @@ alert("insufficient resources to build this tech... purchase denied");
     $(divname).css('background-color', 'transparent'); 
   ***REMOVED***
   addPlanetHighlight(sector, pid)  {
-    let divname = "#hex_space_"+sector;
-    $(divname).css('background-color', '#900');
+    let divname = ".sector_graphics_planet_"+sector+'_'+pid;
+    $(divname).show();
   ***REMOVED***
   removePlanetHighlight(sector, pid)  {
-    let divname = "#hex_space_"+sector;
-    $(divname).css('background-color', 'transparent'); 
+    let divname = ".sector_graphics_planet_"+sector+'_'+pid;
+    $(divname).hide();
   ***REMOVED***
 
 ***REMOVED***
