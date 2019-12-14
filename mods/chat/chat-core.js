@@ -65,7 +65,9 @@ class ChatCore extends ModTemplate {
     //
     let members = [publickey];
     let newgroup = this.createChatGroup(members);
-    this.addNewGroup(newgroup);
+    if (newgroup) {
+      this.addNewGroup(newgroup);
+    }
     // }
 
     let group_ids = this.groups.map(group => group.id);
