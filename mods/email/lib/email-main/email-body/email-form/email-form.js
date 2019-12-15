@@ -37,7 +37,7 @@ module.exports = EmailForm = {
 
         let newtx = app.wallet.createUnsignedTransactionWithDefaultFee(email_to, 0.0);
         if (!newtx) {
-          alert("Unable to send email. You appear to need more tokens");
+          salert("Unable to send email. You appear to need more tokens");
 	      return;
     ***REMOVED***
 
@@ -52,7 +52,7 @@ module.exports = EmailForm = {
         data.parentmod.main.render(app, data);
         data.parentmod.main.attachEvents(app, data);
 
-        alert("Your message has been sent");
+        salert("Your message has been sent");
 
 ***REMOVED***,
 

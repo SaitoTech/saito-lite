@@ -148,6 +148,16 @@ button.sub:hover, .button.sub:hover {
     background: var(--saito-skyline-grey);
 ***REMOVED***
 
+button:disabled, button[disabled] {
+    border: 1px solid #999999;
+    background: #cccccc;
+    color: #666666;
+***REMOVED***
+
+button:disabled:hover {
+    background: #bbbbbb;
+***REMOVED***
+
 .button-main {
     font-size: 1.2em;
     line-height: 1.9em;
@@ -496,6 +506,11 @@ label.treated {
     box-shadow: 0px 0px 3px 1px rgba(170, 170, 170, 0.75);
 ***REMOVED***
 
+.profile-register-link {
+    width: 250px;
+    padding: 10px 10px 5px 10px;
+***REMOVED***
+
 .account-info {
     display: grid;
     grid-gap: 0.5em;
@@ -527,17 +542,23 @@ label.treated {
 ***REMOVED***
 
 .wallet-action-row {
-    border-top: 1px solid rgba(0, 0, 0, .1);
     letter-spacing: .25px;
-    padding: 1em 3em;
-    font-size: 0.8em;
-    font-family: visuelt-medium;
+    padding: 0.6em;
     cursor: pointer;
-
     display: grid;
-    grid-template-columns: 1em auto;
+    grid-template-columns: auto;
     grid-gap: 0.5em;
 ***REMOVED***
+
+.wallet-action-row:hover {
+    background-color: var(--saito-skyline-grey);
+  ***REMOVED***
+
+  .wallet-action-row i {
+      padding: 0 10px 0 0;
+  ***REMOVED***
+
+
 
 .terms {
     border-top: 1px solid rgba(0, 0, 0, .1);
@@ -697,7 +718,6 @@ label.treated {
     /* Fallback color */
     background-color: rgba(0, 0, 0, 0.4);
     /* Black w/ opacity */
-
 ***REMOVED***
 
 /* Modal Content/Box */
@@ -742,8 +762,10 @@ label.treated {
 ***REMOVED***
 
 .loader {
-    border: 16px solid var(--saito-skyline-grey); /* Light grey */
-    border-top: 16px solid var(--saito-red); /* Blue */
+    border: 16px solid var(--saito-skyline-grey);
+    /* Light grey */
+    border-top: 16px solid var(--saito-red);
+    /* Blue */
     border-radius: 50%;
     animation: spin 1.5s linear infinite;
     width: 5em;
@@ -751,8 +773,12 @@ label.treated {
 ***REMOVED***
 
 @keyframes spin {
-    0% { transform: rotate(0deg); ***REMOVED***
-    100% { transform: rotate(720deg); ***REMOVED***
+    0% {
+        transform: rotate(0deg);
+***REMOVED***
+    100% {
+        transform: rotate(720deg);
+***REMOVED***
 ***REMOVED***
 
 @media only screen and (max-width: 600px) {
@@ -767,14 +793,10 @@ label.treated {
         grid-template-columns: 1fr;
         grid-gap: 1em;
 ***REMOVED***
-
     #alert-buttons button {
         width: 100%;
 ***REMOVED***
     .alert-prompt {
         padding: 0 1em;
 ***REMOVED***
-
 ***REMOVED***
-
-
