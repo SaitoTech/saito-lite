@@ -1133,6 +1133,14 @@ console.log(JSON.stringify(game));
     }
   }
 
+  updateIdentifier() {
+    if (this.browser_active) {
+      let uidata = { arcade: this };
+      ArcadeRightSidebar.render(this.app, uidata);
+      ArcadeRightSidebar.attachEvents(this.app, uidata);
+    }
+  }
+
 }
 
 module.exports = Arcade;
