@@ -273,7 +273,36 @@ class Faucet extends ModTemplate {
             registry_input.onfocus = () => registry_input.placeholder = '';
             registry_input.onblur = () => registry_input.placeholder = 'Username';
 
+            var idTimeout;
+            var invalidID;
+
+            registry_input.onkeypress = () => {
+                clearTimeout(idTimeout);
+
+                registry_input.classList.remove('red-bottom-border');
+                registry_input.classList.remove('green-bottom-border');
+
+                idTimeout = setTimeout(async () => {
+                    let publickey = registry_input.value;
+                    let id_response = await this.app.keys.fetchPublicKeyPromise(publickey);
+
+                    if (id_response.rows.length == 0) {
+                ***REMOVED*** return green checkmark
+                        registry_input.classList.remove('red-bottom-border');
+                        registry_input.classList.add('green-bottom-border');
+                        invalidID = false;
+                ***REMOVED*** else {
+                ***REMOVED*** give red mark
+                        registry_input.classList.remove('green-bottom-border');
+                        registry_input.classList.add('red-bottom-border');
+                        invalidID = true;
+                ***REMOVED***
+            ***REMOVED***, 1000);
+        ***REMOVED***
+
             document.getElementById('registry-add-button').onclick = () => {
+                if (invalidID) { salert("Please regsiter an ID that isn't taken"); return;***REMOVED***
+
                 let identifier = document.getElementById('registry-input').value
                 let registry_success = this.app.modules.returnModule("Registry").registerIdentifier(identifier);
 
