@@ -1133,6 +1133,14 @@ console.log(JSON.stringify(game));
 ***REMOVED***
   ***REMOVED***
 
+  updateIdentifier() {
+    if (this.browser_active) {
+      let uidata = { arcade: this ***REMOVED***;
+      ArcadeRightSidebar.render(this.app, uidata);
+      ArcadeRightSidebar.attachEvents(this.app, uidata);
+***REMOVED***
+  ***REMOVED***
+
 ***REMOVED***
 
 module.exports = Arcade;
