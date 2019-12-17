@@ -2,7 +2,11 @@ body {
   background-color: var(--saito-skyline-grey);
   font-size: 1.4em;
 ***REMOVED***
+
 .header {
+  position: absolute;
+  top: 0px;
+  left: 0px;
   background-image: transparent;
   background: transparent;
 ***REMOVED***
@@ -11,14 +15,16 @@ body {
   padding:0;
   margin:0;
   width: 100%;
-  min-height: 800px;
+  min-height: 1000px;
+  height: 100%;
 ***REMOVED***
 
 .background-image {
   background-image: url('/saito/img/dreamscape.png');
   background-size: cover;
   width: 100%;
-  min-height: 800px;
+  min-height: 1000px;
+  height: 100%;
 ***REMOVED***
 
 .quote-container {
@@ -58,7 +64,7 @@ body {
 .intro-box {
   height: auto;
   width: 620px;
-  top: -550px;
+  top: -750px;
   left: 50%;
   position: relative;
   background-color: #f2f2f2;

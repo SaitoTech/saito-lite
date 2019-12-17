@@ -304,12 +304,15 @@ console.log("\n\n\n\n");
 
     this.updateStatus("Generating the Game");
 
+console.log("1");
+
     this.game.queue.push("round");
     if (this.game.options.usbonus != undefined) {
       if (this.game.options.usbonus > 0) {
         this.game.queue.push("placement_bonus\t2\t"+this.game.options.usbonus);
   ***REMOVED***
 ***REMOVED***
+console.log("2");
     this.game.queue.push("placement\t2");
     this.game.queue.push("placement\t1");
     this.game.queue.push("READY");
@@ -320,6 +323,7 @@ console.log("\n\n\n\n");
     this.game.queue.push("DECKXOR\t1\t2");
     this.game.queue.push("DECKXOR\t1\t1");
 
+console.log("3");
     //
     // TESTING
     //
@@ -342,14 +346,17 @@ console.log("\n\n\n\n");
 ***REMOVED*** else {
       this.game.queue.push("DECK\t1\t"+JSON.stringify(this.returnEarlyWarCards()));
 ***REMOVED***
+console.log("4");
     this.game.queue.push("init");
 
     if (this.game.dice === "") {
       this.initializeDice();
 ***REMOVED***
+console.log("5");
 
   ***REMOVED***
 
+console.log("6");
   this.countries = this.game.countries;
 
   // this.hud = new GameHud(this.app, 0, 0, this.menuItems());
@@ -364,6 +371,7 @@ console.log("\n\n\n\n");
   $('.ussr').css('width', this.scale(100)+"px");
   $('.us').css('height', this.scale(100)+"px");
   $('.ussr').css('height', this.scale(100)+"px");
+console.log("7");
 
   //
   $('.formosan_resolution').css('width', this.scale(202)+"px");
@@ -374,12 +382,19 @@ console.log("\n\n\n\n");
   //
   // update defcon and milops and stuff
   //
+console.log("8");
   this.updateDefcon();
+console.log("9");
   this.updateActionRound();
+console.log("1");
   this.updateSpaceRace();
+console.log("2");
   this.updateVictoryPoints();
+console.log("3");
   this.updateMilitaryOperations();
+console.log("4");
   this.updateRound();
+console.log("5");
 
   //
   // initialize interface
@@ -402,9 +417,11 @@ console.log("\n\n\n\n");
     if (this.countries[i].ussr > 0) { this.showInfluence(i, "ussr"); ***REMOVED***
   ***REMOVED***
 
+console.log("1");
   var element = document.getElementById('gameboard');
   // if (element !== null) { addHammerListeners(element); ***REMOVED***
 
+console.log("1");
 
 /*****
   let twilight_self = this;
