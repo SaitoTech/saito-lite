@@ -281,6 +281,14 @@ input[type=file] {
     z-index: -1;
 }
 
+input[type=text].green-bottom-border {
+    border-bottom: 2px solid green;
+}
+
+input[type=text].red-bottom-border {
+    border-bottom: 2px solid red;
+}
+
 select {
     -webkit-appearance: none;
     -moz-appearance: none;

@@ -101,34 +101,34 @@ class Registry extends ModTemplate {
           let request = txmsg.request;
           let identifier = txmsg.identifier;
           let publickey = tx.transaction.from[0].add;
-  	  let unixtime = new Date().getTime();
+            let unixtime = new Date().getTime();
           let bid = blk.block.id;
           let bsh = blk.returnHash();
-  	  let lock_block = 0;
+            let lock_block = 0;
           let signed_message = identifier + publickey + bid + bsh;
-	  let sig = registry_self.app.wallet.signMessage(signed_message);
-	  let signer = this.publickey;
-	  let lc = 1;
+          let sig = registry_self.app.wallet.signMessage(signed_message);
+          let signer = this.publickey;
+          let lc = 1;
 
           // servers update database
           let res = await registry_self.addRecord(identifier, publickey, unixtime, bid, bsh, lock_block, sig, signer, 1);
           let fee = tx.returnPaymentTo(registry_self.publickey);
 
-	  // send message
-	  if (res == 1) {
+          // send message
+          if (res == 1) {
 
-	    let newtx = registry_self.app.wallet.createUnsignedTransaction(tx.transaction.from[0].add, 50.0, fee);
-		newtx.transaction.msg.module = "Email";
-		newtx.transaction.msg.title  = "Address Registration Success!";
-	    	newtx.transaction.msg.message = "You have successfully registered the identifier: " + identifier;
+            let newtx = registry_self.app.wallet.createUnsignedTransaction(tx.transaction.from[0].add, 50.0, fee);
+                newtx.transaction.msg.module = "Email";
+                newtx.transaction.msg.title  = "Address Registration Success!";
+                    newtx.transaction.msg.message = "You have successfully registered the identifier: " + identifier;
                 newtx.transaction.msg.identifier = identifier;
                 newtx.transaction.msg.signed_message = signed_message;
                 newtx.transaction.msg.sig = sig;
 
-	    newtx = registry_self.app.wallet.signTransaction(newtx);
-	    registry_self.app.network.propagateTransaction(newtx);
+            newtx = registry_self.app.wallet.signTransaction(newtx);
+            registry_self.app.network.propagateTransaction(newtx);
 
-	  } else {
+          } else {
 
             let newtx = registry_self.app.wallet.createUnsignedTransaction(tx.transaction.from[0].add, 0.0, fee);
                 newtx.transaction.msg.module = "Email";
@@ -141,7 +141,7 @@ class Registry extends ModTemplate {
             newtx = registry_self.app.wallet.signTransaction(newtx);
             registry_self.app.network.propagateTransaction(newtx);
 
-	  }
+          }
 
           return;
 
@@ -154,23 +154,24 @@ class Registry extends ModTemplate {
       //
       //
       if (txmsg.module == "Email") {
-	if (tx.transaction.from[0].add == registry_self.publickey) {
-	  if (tx.transaction.to[0].add == registry_self.app.wallet.returnPublicKey()) {
-	    if (tx.transaction.msg.identifier != undefined && tx.transaction.msg.signed_message != undefined && tx.transaction.msg.sig != undefined) {
+        if (tx.transaction.from[0].add == registry_self.publickey) {
+          if (tx.transaction.to[0].add == registry_self.app.wallet.returnPublicKey()) {
+            if (tx.transaction.msg.identifier != undefined && tx.transaction.msg.signed_message != undefined && tx.transaction.msg.sig != undefined) {
 
-	      //
-	      // am email? for us? from the DNS registrar?
-	      //
-	      let identifier 	 = tx.transaction.msg.identifier;
-	      let signed_message = tx.transaction.msg.signed_message;
-	      let sig		 = tx.transaction.msg.sig;
+              //
+              // am email? for us? from the DNS registrar?
+              //
+              let identifier 	 = tx.transaction.msg.identifier;
+              let signed_message = tx.transaction.msg.signed_message;
+              let sig		 = tx.transaction.msg.sig;
 
-	      if (registry_self.app.crypto.verifyMessage(signed_message, sig, registry_self.publickey)) {
-	        registry_self.app.keys.addKey(tx.transaction.to[0].add, identifier, true, "", blk.block.id, blk.returnHash(), 1);
-	      }
-	    }
-	  }
-	}
+              if (registry_self.app.crypto.verifyMessage(signed_message, sig, registry_self.publickey)) {
+                registry_self.app.keys.addKey(tx.transaction.to[0].add, identifier, true, "", blk.block.id, blk.returnHash(), 1);
+                registry_self.app.modules.updateIdentifier();
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -179,25 +180,25 @@ class Registry extends ModTemplate {
   async addRecord(identifier="", publickey="", unixtime=0, bid=0, bsh="", lock_block=0, sig="", signer="", lc=1) {
 
     let sql = `INSERT INTO records (
-	identifier, 
-	publickey, 
-	unixtime, 
-	bid, 
-	bsh, 
-	lock_block, 
-	sig,
-	signer, 
-	lc
+        identifier, 
+        publickey, 
+        unixtime, 
+        bid, 
+        bsh, 
+        lock_block, 
+        sig,
+        signer, 
+        lc
       ) VALUES (
-	$identifier, 
-	$publickey,
-	$unixtime, 
-	$bid, 
-	$bsh, 
-	$lock_block, 
-	$sig, 
-	$signer, 
-	$lc
+        $identifier, 
+        $publickey,
+        $unixtime, 
+        $bid, 
+        $bsh, 
+        $lock_block, 
+        $sig, 
+        $signer, 
+        $lc
       )`;
     let params = {
         $identifier	:	identifier ,
@@ -238,8 +239,6 @@ console.log("ROWS: " + rows.length);
     return;
 
   }
-
-  
 
 
 
