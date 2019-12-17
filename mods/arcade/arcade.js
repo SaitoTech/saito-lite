@@ -432,6 +432,9 @@ console.log("ARCADE GETS INVITE REQUEST");
           if (this.app.options.games != undefined) {
             for (let i = 0; i < this.app.options.games.length; i++) {
               if (this.app.options.games[i].id == txmsg.game_id) {
+
+console.log("WE HAVE FOUND AN EXISTING GAME: is it inits? " + this.app.options.games[i].initializing);
+
                 if (this.app.options.games[i].initializing == 0) { return; ***REMOVED***
           ***REMOVED***
         ***REMOVED***
@@ -463,20 +466,26 @@ console.log("MSG: " + txmsg);
 ***REMOVED***
 
         if (this.app.BROWSER == 1) {
-          for (let i = 0; i < this.app.options.games.length; i++) {
-            if (this.app.options.games[i].id == txmsg.game_id) {
+
+          if (this.app.options != undefined) {
+	    if (this.app.options.games != undefined) {
+
+              for (let i = 0; i < this.app.options.games.length; i++) {
+                if (this.app.options.games[i].id == txmsg.game_id) {
   
-  console.log("GAME NO LONGER INITIALIZING!");
+  console.log("GAME NO LONGER INITIALIZING! ---> " + this.app.options.games[i].initializing);
   
-              if (this.app.options.games[i].initializing == 0) { 
+                  if (this.app.options.games[i].initializing == 0) { 
   
-        ***REMOVED***
-        ***REMOVED*** is this old? exit
-        ***REMOVED***
-                let currentTime = new Date().getTime();
-                if ((currentTime-this.app.options.games[i].ts) > 2000) {
+            ***REMOVED***
+            ***REMOVED*** is this old? exit
+            ***REMOVED***
+                    let currentTime = new Date().getTime();
+                    if ((currentTime - this.app.options.games[i].ts) > 2000) {
   console.log(currentTime + " ------- " + this.app.options.games[i].ts);
-                  return;
+                      return;
+                ***REMOVED***
+              ***REMOVED***
             ***REMOVED***
           ***REMOVED***
         ***REMOVED***
