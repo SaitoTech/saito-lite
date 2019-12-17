@@ -114,6 +114,8 @@ class Imperium extends GameTemplate {
       </div>
     `
     $('.hud-menu-overlay').html(html);
+    $('.hud-menu-overlay').show();
+    $('.status').hide();
   
     //
     // leave action enabled on other panels
@@ -134,6 +136,7 @@ class Imperium extends GameTemplate {
       html += '</ul>';
   
       $('.hud-menu-overlay').html(html);
+      $('.hud-menu-overlay').show();
   
     });
   }
@@ -162,6 +165,8 @@ class Imperium extends GameTemplate {
       </div>
     `
     $('.hud-menu-overlay').html(html);
+    $('.hud-menu-overlay').show();
+    $('.status').hide();
   
     //
     // leave action enabled on other panels
@@ -207,6 +212,8 @@ class Imperium extends GameTemplate {
       </div>
     `
     $('.hud-menu-overlay').html(html);
+    $('.hud-menu-overlay').show();
+    $('.status').hide();
   
     //
     // leave action enabled on other panels
@@ -268,6 +275,8 @@ class Imperium extends GameTemplate {
     html += '</div>';
   
     $('.hud-menu-overlay').html(html);
+    $('.hud-menu-overlay').show();
+    $('.status').hide();
   
   }
   
