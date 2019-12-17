@@ -283,8 +283,8 @@ class Faucet extends ModTemplate {
                 registry_input.classList.remove('green-bottom-border');
 
                 idTimeout = setTimeout(async () => {
-                    let publickey = registry_input.value;
-                    let id_response = await this.app.keys.fetchPublicKeyPromise(publickey);
+                    let identifier = `${registry_input.value***REMOVED***@saito`;
+                    let id_response = await this.app.keys.fetchPublicKeyPromise(identifier);
 
                     if (id_response.rows.length == 0) {
                 ***REMOVED*** return green checkmark
