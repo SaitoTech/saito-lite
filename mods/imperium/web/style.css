@@ -3,6 +3,17 @@
     padding: 0;
 }
 
+
+
+
+
+.ship_graphic {
+  filter: brightness(0) saturate(100%) invert(76%) sepia(0%) saturate(7455%) hue-rotate(66deg) brightness(66%) contrast(92%);
+}
+.pointer {
+  cursor: pointer;
+}
+
 .addoption {
   cursor: pointer;
   margin-left: 20px;  
@@ -91,18 +102,71 @@
   width: 100%;
   background-color: lightyellow;
 }
+
+
+
 .agendabox {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-}
-.agendas {
-  float:right;
-  height: 180px;
-  width: 600px;
+  float: right;
+  width: 200px;
+  height: 200px;
   background-color: lightyellow;
 }
+.agendas {
+}
+.agendacard {
+ width: 180px;
+ height: 252px;
+ position: relative;
+ left: 0px;
+ top: 0px;
+ background-size: cover;
+ float: right;
+ border: 2px solid white;
+ margin-left: 10px;
+}
+.agendacard_name {
+ color: white;
+ position: relative;
+ top: 6%;
+ font-weight: bold;
+ text-align: center;
+ width: inherit;
+ margin-left: auto;
+ margin-right: auto;
+}
+.agendacard:nth-child(1) {
+  transform: translate(0px, 50px);
+}
+.agendacard:nth-child(2) {
+  transform: translate(0px, 100px);
+}
+.agendacard:nth-child(3) {
+  transform: translate(0px, 150px);
+}
+
+.actionbox {
+  background-color: lightblue;
+}
+.actioncards {
+
+}
+.techbox {
+  background-color: lightgrey;
+}
+.techcards {
+
+}
+.objectivebox {
+  background-color: orange;
+}
+.objectives {
+
+}
+
+
+
+
+
 
 .option {
  cursor:pointer;
@@ -443,26 +507,6 @@ body {
  margin-bottom: 10px;
 }
 .actioncard_name {
- position: relative;
- top: 6%;
- font-weight: bold;
- text-align: center;
- width: inherit;
- margin-left: auto;
- margin-right: auto;
-}
-
-.agendacard {
- width: 180px;
- height: 252px;
- position: relative;
- background-size: cover;
- float: right;
- border: 2px solid white;
- margin-left: 10px;
-}
-.agendacard_name {
- color: white;
  position: relative;
  top: 6%;
  font-weight: bold;
