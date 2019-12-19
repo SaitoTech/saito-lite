@@ -72,7 +72,6 @@ input[type=text], input[type=number] {
 }
 
 a.button {
-    color: var(--saito-white);
     text-decoration: none;
     margin-bottom: 5px;
 }
