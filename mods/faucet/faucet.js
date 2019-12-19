@@ -15,8 +15,8 @@ class Faucet extends ModTemplate {
         super(app);
 
         this.name = "Faucet";
-        this.initial = 5;
-        this.payoutRatio = 0.8;
+        this.initial = 10;
+        this.payoutRatio = 0.75;
 
     }
 
@@ -51,7 +51,6 @@ class Faucet extends ModTemplate {
         if (conf == 0) {
             if (tx.transaction.type == 0) {
                 if (this.app.BROWSER == 1) { return; }
-                console.log('###########  FAUCET CONFIRMATION  ###########');
                 this.updateUsers(tx);
             }
         }
@@ -90,7 +89,7 @@ class Faucet extends ModTemplate {
         let sql = "";
         let params = {};
         var payout = ((row.total_spend / (row.total_payout + 0.01)) >= this.payoutRatio);
-        var newPayout = row.last_payout_amt / this.payoutRatio;
+        var newPayout = Math.ceil( row.last_payout_amt / this.payoutRatio );
         var isGame = 0;
         if (typeof tx.transaction.msg.game_id != "undefined") { isGame = 1 };
         var gameOver = 0;
@@ -179,7 +178,7 @@ class Faucet extends ModTemplate {
           newtx.transaction.from = faucet_self.app.wallet.returnAdequateInputs(total_fees.toString());
           newtx.transaction.ts   = new Date().getTime();
 
-          console.log("FAUCET INPUTS: " + JSON.stringify(faucet_self.app.wallet.wallet.inputs));
+          //console.log("FAUCET INPUTS: " + JSON.stringify(faucet_self.app.wallet.wallet.inputs));
 
           // add change input
           var total_inputs = Big(0.0);

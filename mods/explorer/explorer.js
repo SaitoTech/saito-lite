@@ -1,15 +1,9 @@
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate.js');
-/*
-const sqlite = require('sqlite');
-const fs = require('fs');
-*/
 
 class ExplorerCore extends ModTemplate {
     constructor(app) {
         super(app);
-
-
         this.app = app;
         this.name = "Explorer";
     }
@@ -81,7 +75,6 @@ class ExplorerCore extends ModTemplate {
                                 $module: blk.transactions[i].transaction.msg.module
                             }
 			                await this.app.storage.executeDatabase(sql, params, "explorer");
-//                            let rows = await this.db.run(sql, params);
                         }
                     }
                 }

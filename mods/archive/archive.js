@@ -84,7 +84,7 @@ class Archive extends ModTemplate {
     let params = {};
 
     for (let i = 0; i < tx.transaction.to.length; i++) {    
-      sql = "INSERT INTO txs (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $type)";
+      sql = "INSERT OR IGNORE INTO txs (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $type)";
       params = {
         $sig		:	tx.transaction.sig ,
         $publickey	:	tx.transaction.to[i].add ,
@@ -157,7 +157,7 @@ class Archive extends ModTemplate {
     let msgtype = "";
     if (tx.transaction.msg.module != "") { msgtype = tx.transaction.msg.module; }
 
-    let sql = "INSERT INTO txs (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $type)";
+    let sql = "INSERTOR IGNORE INTO txs (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $type)";
     let params = {
       $sig:	tx.transaction.sig ,
       $publickey:	key,

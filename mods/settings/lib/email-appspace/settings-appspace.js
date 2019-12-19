@@ -13,7 +13,7 @@ module.exports = SettingsAppspace = {
         .addEventListener('click', (e) => {
 
           app.wallet.resetWallet();
-          alert("Wallet reset!");
+          salert("Wallet reset!");
 
 	  data.parentmod.emails.inbox = [];
 	  data.parentmod.emails.sent = [];

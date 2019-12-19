@@ -14,6 +14,5 @@ CREATE TABLE IF NOT EXISTS transactions (
     tx_from TEXT,
     tx_to TEXT,
     name TEXT,
-    module TEXT,
-    PRIMARY KEY (sig ASC)
+    module TEXT
 );
