@@ -19,7 +19,8 @@
 .chat-content {
   white-space: nowrap;
   overflow: hidden;
-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  padding: 4px 0 0 0;
 ***REMOVED***
 
 .chat-last-message {
@@ -30,6 +31,7 @@ text-overflow: ellipsis;
 
 .chat-last-message-timestamp {
   font-family: visuelt-light;
+  padding: 4px 0 0 0;
 ***REMOVED***
 
 .chat-room-message {
@@ -45,11 +47,12 @@ text-overflow: ellipsis;
   margin-bottom: 1px;
   word-wrap: break-word;
   font-family: visuelt-medium;
+  color: var(--saito-cyber-black);
 ***REMOVED***
 
 .chat-room-message-others {
   background: var(--saito-cyber-black);
-  color: white;
+  color: var(--saito-skyline-grey);
   justify-self: left;
   border-bottom-left-radius: 0;
 ***REMOVED***
@@ -63,7 +66,7 @@ text-overflow: ellipsis;
 .chat-room-submit-button {
   justify-self: center;
   background: var(--saito-cyber-black);
-  padding: 7px 10px;
+  padding: 9px 10px;
   color: white;
   border-radius: 100px;
   cursor: pointer;
@@ -167,13 +170,22 @@ text-overflow: ellipsis;
   font-family: visuelt-light;
 ***REMOVED***
 
-.chat-bow-show {
-  height: 38em;
+
+.chat-box .chat-box-header {
+  cursor: s-resize;
 ***REMOVED***
 
 .chat-box-hide {
   height: 3em;
   align-self: flex-end;
+***REMOVED***
+
+.chat-box-hide .chat-box-header {
+  cursor: n-resize;
+***REMOVED***
+
+.chat-box-close {
+  cursor: pointer;
 ***REMOVED***
 
 .chat-box-header {
@@ -182,7 +194,6 @@ text-overflow: ellipsis;
   grid-template-columns: 90% 10%;
   border-bottom: 1px solid #a5a5a5;
   font-size: 2em;
-  cursor: pointer;
   z-index: 1000;
   color: white;
   padding: 5px;
@@ -204,6 +215,12 @@ text-overflow: ellipsis;
 
 .chat-room-message {
   margin-bottom: 0.5em;
+***REMOVED***
+
+.chat-room-message-identicon {
+  float: left;
+  width: 2em;
+  margin: 0 5px 0 0;
 ***REMOVED***
 
 .chat-box-input {

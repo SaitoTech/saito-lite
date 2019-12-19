@@ -92,6 +92,8 @@ module.exports = ChatBox = {
 
       msg.publickey = data.chat.addrController.returnAddressHTML(msg.publickey);
 
+      msg.identicon = data.parentmod.app.keys.returnIdenticon(msg.publickey);
+
       if (document.getElementById(`chat-box-default-message-${msg.group_id***REMOVED***`)) { chat_box_main.innerHTML = '' ***REMOVED***
 
       chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(msg, msg.sig, msg.type);
@@ -99,13 +101,15 @@ module.exports = ChatBox = {
 ***REMOVED***,
 
     addTXToDOM(data, tx) {
-        let msg = Object.assign({***REMOVED***, tx.returnMessage(), { type: 'myself' ***REMOVED***);
+      //xxx undo?
+        let msg = Object.assign({***REMOVED***, tx.returnMessage(), { identicon: data.parentmod.app.keys.returnIdenticon(tx.returnMessage().publickey), type: 'myself' ***REMOVED***);
         this.addMessageToDOM(data, msg);
 ***REMOVED***,
 
     createMessage(app, data, msg_data) {
 
         let publickey = app.network.peers[0].peer.publickey;
+        let identicon = app.keys.returnIdenticon(msg_data.publickey);
         let newtx = app.wallet.createUnsignedTransaction(publickey, 0.0, 0.0);
         if (newtx == null) { return; ***REMOVED***
 
@@ -113,6 +117,7 @@ module.exports = ChatBox = {
             module: "Chat",
             request: "chat message",
             publickey: msg_data.publickey,
+            identicon: identicon,
             group_id: msg_data.group_id,
             message:  msg_data.message,
 

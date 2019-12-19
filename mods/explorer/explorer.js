@@ -1,15 +1,9 @@
 ***REMOVED***
 ***REMOVED***
-/*
-const sqlite = require('sqlite');
-const fs = require('fs');
-*/
 
 class ExplorerCore extends ModTemplate {
 ***REMOVED***
 ***REMOVED***
-
-
         this.app = app;
         this.name = "Explorer";
 ***REMOVED***
@@ -81,7 +75,6 @@ class ExplorerCore extends ModTemplate {
                                 $module: blk.transactions[i].transaction.msg.module
                         ***REMOVED***
 			                await this.app.storage.executeDatabase(sql, params, "explorer");
-//                            let rows = await this.db.run(sql, params);
                     ***REMOVED***
                 ***REMOVED***
             ***REMOVED***

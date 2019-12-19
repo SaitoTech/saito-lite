@@ -51,6 +51,12 @@ p {
     font-family: visuelt-light;
 ***REMOVED***
 
+.chat-room-message-identicon {
+  float: left;
+  width: 2em;
+  margin: 0 5px 0 0;
+***REMOVED***
+
 /** CHAT ADD **/
 
 
@@ -153,13 +159,14 @@ p {
 
 .chat-room-message-others {
   background: var(--saito-cyber-black);
+  color: var(--saito-skyline-grey);
   justify-self: left;
   border-bottom-left-radius: 0;
 ***REMOVED***
 
 .chat-room-message-myself {
     background: var(--saito-skyline-grey);
-    color: white;
+    color: var(--saito-cyber-black);
     justify-self: right;
     border-bottom-right-radius: 0;
 ***REMOVED***
