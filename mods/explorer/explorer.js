@@ -41,7 +41,8 @@ class ExplorerCore extends ModTemplate {
                                 name,
                                 module
                                 )
-                             VALUES ($address, 
+                             VALUES (
+                                $address, 
                                 $amt, 
                                 $bid, 
                                 $tid, 
@@ -188,7 +189,6 @@ class ExplorerCore extends ModTemplate {
         expressapp.get('/explorer/transaction', async function (req, res) {
 
             var tid = req.query.tid;
-    ***REMOVED***var hash = req.query.bhash;
             if (tid == null) {
 
                 res.setHeader('Content-type', 'text/html');
@@ -199,11 +199,12 @@ class ExplorerCore extends ModTemplate {
 
         ***REMOVED*** else {
 
-                let sql = "SELECT bhash FROM transactions WHERE tid = $id AND lc = 1";
-                let params = { $id: tid ***REMOVED***;
+                let sql = "SELECT bhash FROM transactions WHERE tid = $tid AND lc = 1";
+                let params = { $tid: tid ***REMOVED***;
 
         ***REMOVED***app.storage.queryDatabase(sql, params, function (err, row) {
-                let row = await explorer_self.db.get(sql, params);
+        ***REMOVED***let row = await explorer_self.db.get(sql, params);
+                let row = await explorer_self.app.storage.queryDatabase(sql, params, "explorer");
 
                 if (row == null) {
 
@@ -215,7 +216,7 @@ class ExplorerCore extends ModTemplate {
 
             ***REMOVED*** else {
 
-                    var bhash = row.bhash;
+                    var bhash = row[0].bhash;
 
                     let blk = explorer_self.app.storage.loadBlockByHash(bhash);
                     if (blk == null) {
