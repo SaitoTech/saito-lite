@@ -23,7 +23,7 @@ class Settings extends ModTemplate {
   respondTo(type) {
 
     if (type == "header-dropdown") {
-      return {};
+//      return {};
     }
     if (type == 'email-appspace') {
       let obj = {};

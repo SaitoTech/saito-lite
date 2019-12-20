@@ -23,7 +23,9 @@ class Arcade extends ModTemplate {
     this.affix_callbacks_to 	= [];
     this.games			= [];
     this.observer		= [];
-    this.leaderboard = [];
+    this.leaderboard 		= [];
+
+    this.icon_fa                = "fas fa-gamepad";
 
     this.accepted = [];
 
