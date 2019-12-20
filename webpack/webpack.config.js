@@ -16,6 +16,9 @@ const path = require('path');
             child_process: 'child_process'
     ***REMOVED***,
         {
+            nodemailer: 'nodemailer'
+    ***REMOVED***,
+        {
             sqlite: 'sqlite'
     ***REMOVED***,
         {
