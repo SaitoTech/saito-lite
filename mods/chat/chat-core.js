@@ -216,6 +216,7 @@ class ChatCore extends ModTemplate {
     this.groups.forEach(group => {
       if (group.id == txmsg.group_id) {
         let msg_type = tx.transaction.from[0].add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
+        txmsg.identicon = this.app.keys.returnIdenticon(tx.transaction.from[0].add);
         let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: msg_type });
         group.messages.push(msg);
 

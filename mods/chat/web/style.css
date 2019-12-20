@@ -55,6 +55,7 @@ p {
   float: left;
   width: 2em;
   margin: 0 5px 0 0;
+  border: 1px solid #8885;
 }
 
 /** CHAT ADD **/
@@ -133,17 +134,17 @@ p {
 }
 
 .chat-room-message {
-    /* display: grid;
-    grid-gap: 0.5em; */
-    /* padding: 1em; */
-    padding: 0.75em;
-    max-width: 75%;
-    border-radius: 15px;
+  padding: 0.75em;
+  max-width: 85%;
+  border-radius: 15px;
+  display: grid;
+  grid-template-columns: 2em auto;
+  grid-gap: 0em 0.5em;
+  min-width: 420px;
 }
 
 .chat-message-text {
   word-wrap: break-word;
-  margin-bottom: 5px;
 }
 
 .chat-message-header {
@@ -151,6 +152,7 @@ p {
     justify-content: space-between;
     font-size: 0.9em;
     color: darkgrey;
+    margin: 3px 0;
 }
 
 .chat-message-timestamp {
