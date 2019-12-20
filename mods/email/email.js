@@ -84,6 +84,17 @@ class Email extends ModTemplate {
   ***REMOVED***
 
 
+
+  respondTo(type="") {
+    if (type == "header-dropdown") { 
+      return {***REMOVED***; 
+***REMOVED***
+    return null;
+  ***REMOVED***
+
+
+
+
   initializeHTML(app) {
 
     super.initializeHTML(app);
@@ -190,9 +201,12 @@ class Email extends ModTemplate {
 
 
   addEmail(tx) {
-    this.emails.inbox.unshift(tx);
-    this.addrController.fetchIdentifiers([tx.transaction.from[0].add]);
-    if (this.browser_active) { this.renderMain(this.app, this.uidata); ***REMOVED***
+    try {
+      this.emails.inbox.unshift(tx);
+      this.addrController.fetchIdentifiers([tx.transaction.from[0].add]);
+      if (this.browser_active) { this.renderMain(this.app, this.uidata); ***REMOVED***
+***REMOVED*** catch (err) {
+***REMOVED***
   ***REMOVED***
 
 
