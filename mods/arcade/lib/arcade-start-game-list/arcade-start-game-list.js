@@ -10,7 +10,7 @@ module.exports = ArcadeStartGameList = {
         var wrapper = document.createElement('div');
         wrapper.id = 'game-list-wrapper';
         var html = `<div class="start-game">
-                        <h1>Start A Game</h1>
+                        <h1>Installed Games</h1>
                         <div class="start-game-list">
                         <div class="return-to-arcade" id="return-to-arcade">
                             <i class="icon-large fas fa-times-circle"></i>
@@ -38,6 +38,19 @@ module.exports = ArcadeStartGameList = {
             </div>`;
             }
         }
+        gamemod_url = '/saito/img/dreamscape.png';
+        html +=
+           `<div class="arcade-game-list-item" data-game="Install New Game"> \
+              <div class="arcade-game-list-image" style="background-image: url(${gamemod_url});"></div>
+              <div class="arcade-gema-list-details">
+                <div class="arcade-game-list-title"><h4>Install New Game</h4></div>
+                <div class="arcade-game-list-type">Saito Appstore</h4></div>
+                <div class="arcade-game-list-players">1 - 6</h4></div>
+              </div>
+            </div>`;
+
+
+
         html += "</div></div>";
         wrapper.innerHTML = html;
         document.querySelector('.arcade-main').appendChild(wrapper);

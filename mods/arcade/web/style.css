@@ -149,10 +149,13 @@ button.add-games {
 }
 
 .arcade-sidebar-active-games-header {
-  text-align: center;
+  font-size: 0.8em;
+  text-align: left;
   background: var(--saito-jester);
-  padding: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
   border: 1px solid var(--saito-red);
+  border-bottom: 0px;
   margin: unset;
 }
 
@@ -186,8 +189,8 @@ button.add-games {
   background: var(--saito-nightscape);
   border: 1px solid var(--saito-red);
   border-bottom: 0px;
-  padding-left: 5px;
-  padding-right: 5px;
+  padding-left: 15px;
+  padding-right: 15px;
   background: var(--saito-jester);
 }
 
@@ -715,7 +718,8 @@ option {
 /** CHAT STYLING **/
 
 .chat-row {
-  border-bottom: 1px solid var(--saito-red);
+  /* no border */
+  border-bottom: 0px solid var(--saito-red);
 }
 
 .chat-row:hover {

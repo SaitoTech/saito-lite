@@ -27,8 +27,12 @@ class Chat extends ChatCore {
           obj.sendMessage = this.sendMessage;
       return obj;
     }
+    if (type == "header-dropdown") { 
+      return {};
+    }
     return null;
   }
+
 
   renderEmailChat(app, data) {
     let chat_self = app.modules.returnModule("Chat");
