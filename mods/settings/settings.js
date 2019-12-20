@@ -10,6 +10,9 @@ class Settings extends ModTemplate {
 
     this.app            = app;
     this.name           = "Settings";
+    this.link           = "/email?module=settings";
+
+//    if (app.modules.returnModule("Email") != null) { this.link = "/email?module=settings"; }
 
     return this;
   }
@@ -19,6 +22,9 @@ class Settings extends ModTemplate {
 
   respondTo(type) {
 
+    if (type == "header-dropdown") {
+      return {};
+    }
     if (type == 'email-appspace') {
       let obj = {};
 	  obj.render = function (app, data) {

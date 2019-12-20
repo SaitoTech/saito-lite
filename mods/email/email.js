@@ -84,6 +84,17 @@ class Email extends ModTemplate {
   }
 
 
+
+  respondTo(type="") {
+    if (type == "header-dropdown") { 
+      return {}; 
+    }
+    return null;
+  }
+
+
+
+
   initializeHTML(app) {
 
     super.initializeHTML(app);

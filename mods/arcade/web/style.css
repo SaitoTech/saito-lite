@@ -155,6 +155,7 @@ button.add-games {
   padding-left: 15px;
   padding-right: 15px;
   border: 1px solid var(--saito-red);
+  border-bottom: 0px;
   margin: unset;
 }
 
