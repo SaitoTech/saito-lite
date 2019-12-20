@@ -16,6 +16,9 @@ module.exports = {
             child_process: 'child_process'
         },
         {
+            nodemailer: 'nodemailer'
+        },
+        {
             sqlite: 'sqlite'
         },
         {
