@@ -118,6 +118,17 @@ class Arcade extends ModTemplate {
 
 
 
+
+  respondTo(type="") {
+    if (type == "header-dropdown") { 
+      return {***REMOVED***;
+***REMOVED***
+    return null;
+  ***REMOVED***
+
+
+
+
   initialize(app) {
 
     super.initialize(app);
