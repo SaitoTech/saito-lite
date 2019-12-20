@@ -35,10 +35,8 @@
 ***REMOVED***
 
 .chat-room-message {
-  /* display: grid;
-  grid-gap: 0.5em; */
   padding: 8px 12px;
-  max-width: 75%;
+  max-width: 90%;
   border-radius: 15px;
 ***REMOVED***
 
@@ -46,8 +44,15 @@
   margin: unset;
   margin-bottom: 1px;
   word-wrap: break-word;
-  font-family: visuelt-medium;
-  color: var(--saito-cyber-black);
+  font-family: visuelt-light;
+    line-height: 16px;
+    font-size: 15px;
+***REMOVED***
+
+.saito-address {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 ***REMOVED***
 
 .chat-room-message-others {
@@ -75,8 +80,12 @@
 .chat-message-header {
   display: flex;
   justify-content: space-between;
-  font-size: 0.9em;
-  color: darkgrey;
+  font-size: 0.8em;
+  color: #333;
+***REMOVED***
+
+.chat-message-others .chat-message-header {
+  color: var(--saito-skyline-grey);
 ***REMOVED***
 
 .chat-message-author {
@@ -214,13 +223,17 @@
 ***REMOVED***
 
 .chat-room-message {
-  margin-bottom: 0.5em;
+  display: grid;
+  grid-template-columns: 2em auto;
+  grid-gap: 0 0.5em;
+  margin: 0.5em 0;
 ***REMOVED***
 
 .chat-room-message-identicon {
   float: left;
   width: 2em;
   margin: 0 5px 0 0;
+  border: 1px solid #8885;
 ***REMOVED***
 
 .chat-box-input {
