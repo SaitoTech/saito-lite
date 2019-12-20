@@ -15,6 +15,7 @@ class Email extends ModTemplate {
     this.name 			= "Email";
     this.chat 			= null;
     this.events			= ['chat-render-request'];
+    this.icon_fa		= "fas fa-envelope";
 
     this.emails 		= {***REMOVED***;
     this.emails.inbox 		= [];

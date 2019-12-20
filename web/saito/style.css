@@ -232,16 +232,8 @@ fieldset {
     padding: 0.5em 0;
 ***REMOVED***
 
-@media only screen and (max-width: 1000px) {
-    .grid-4 {
-        grid-template-columns: 5em 1fr;
-***REMOVED***
-    .grid-1-2-columns, .grid-3-columns {
-        grid-template-columns: 1fr;
-***REMOVED***
-    .grid-2 div, .grid-4 div, .grid-2-columns div, .grid-3-columns div, .grid-1-2-columns div {
-        overflow: hidden;
-***REMOVED***
+#navigator {
+    display: none;
 ***REMOVED***
 
 input {
@@ -446,7 +438,7 @@ label.treated {
 ***REMOVED***
 
 .header-home {
-    grid-template-columns: 12em auto 3.2em;
+    grid-template-columns: 12em auto;
     align-items: center;
 ***REMOVED***
 
@@ -456,6 +448,14 @@ label.treated {
     justify-self: end;
     text-shadow: #333 1px 0;
     cursor: pointer;
+***REMOVED***
+
+.header-icon-links {
+    text-align: right;
+***REMOVED***
+.header-icon-links i {
+    margin-left: 25px;
+    font-size:1.7em;
 ***REMOVED***
 
 .header-dropdown {
@@ -790,7 +790,25 @@ label.treated {
 ***REMOVED***
 ***REMOVED***
 
+@media only screen and (max-width: 1000px) {
+    .grid-4 {
+        grid-template-columns: 5em 1fr;
+***REMOVED***
+    .grid-1-2-columns, .grid-3-columns {
+        grid-template-columns: 1fr;
+***REMOVED***
+    .grid-2 div, .grid-4 div, .grid-2-columns div, .grid-3-columns div, .grid-1-2-columns div {
+        overflow: hidden;
+***REMOVED***
+***REMOVED***
+
 @media only screen and (max-width: 600px) {
+    .header-icon-fullscreen {
+	display: none;
+***REMOVED***
+    #navigator {
+	display: inline-block;
+***REMOVED***
     #alert-box {
         padding: 3px;
 ***REMOVED***
