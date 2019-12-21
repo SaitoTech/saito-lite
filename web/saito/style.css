@@ -868,6 +868,8 @@ label.treated {
     padding: 1.5em;
     background: #333d;
     color: var(--saito-skyline-grey);
+    position: relative;
+    /* */
 }
 
 .welcome-modal-exit .fa-arrow-right {
@@ -877,6 +879,7 @@ label.treated {
     bottom: 0px;
     width: 100%;
     text-align: center;
+    position: absolute;
 }
 
 .welcome-modal-action {
