@@ -18,11 +18,39 @@ class MailRelay extends ModTemplate {
         }
     }
 
+    initialize(app) {
+
+        super.initialize(app);
+    
+        //
+        // add an email
+        //
+        let to      = 'richard@saito.tec';
+        let from    = 'testnet@saito.io';
+        let subject = 'This is a test email sent by the MailRelay module.';
+        let message = 'This is a plain text email \n Very plain.';
+        let attachments = "";
+        try {
+            this.sendMail(to, from, subject, message, attachments;)
+        } catch(err) {
+            console.log(err);
+        }
+      }
+
     sendMail (to, from, subject, message, attachments){
-        let transporter = nodemailer.createTransport({
-            sendmail: true,
-            newline: 'unix'
-        });
+        nodemailer.createTransport({
+            host: "smtp.sendgrid.net",
+            port: 587,
+            secure: true, // upgrade later with STARTTLS
+            auth: {
+              user: "apikey",
+              pass: "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"
+            },
+            tls: {
+                // do not fail on invalid certs
+                rejectUnauthorized: false
+              }
+          });
         transporter.sendMail({
             from: from,
             to: to,

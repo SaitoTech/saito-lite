@@ -3,9 +3,10 @@ const ModTemplate = require('../../lib/templates/modtemplate.js');
 const Big = require('big.js');
 
 const Modal = require('../../lib/ui/modal/modal');
-const FaucetModalCaptchaTemplate = require('./lib/modal/faucet-modal-captcha.template')
-const FaucetModalRegistryTemplate = require('./lib/modal/faucet-modal-registry.template')
-const FaucetModalSocialTemplate = require('./lib/modal/faucet-modal-social.template')
+const FaucetModalCaptchaTemplate = require('./lib/modal/faucet-modal-captcha.template');
+const FaucetModalRegistryTemplate = require('./lib/modal/faucet-modal-registry.template');
+const FaucetModalSocialTemplate = require('./lib/modal/faucet-modal-social.template');
+const FaucetModalBackupTemplate = require('./lib/modal/faucet-modal-backup.template');
 
 const FaucetAppSpace = require('./lib/email-appspace/faucet-appspace');
 
@@ -229,14 +230,15 @@ class Faucet extends ModTemplate {
         let modal = new Modal(this.app, {
             id: 'faucet',
             title: 'Welcome to Saito',
-            content: FaucetModalCaptchaTemplate()
+            content: FaucetModalBackupTemplate()
         });
 
-        modal.render();
+        modal.render("blank");
 
-        document.querySelector('.tutorial-skip')
-                .onclick = () => showSocialModal(false);
-
+        if (document.querySelector('.tutorial-skip')) {
+            document.querySelector('.tutorial-skip')
+                .onclick = () => modal.destroy();
+        }
         // const showRegistryModal = (are_tokens_sent=true) => {
         //     modal.destroy();
         //     modal.title = "Register a Username";
@@ -245,7 +247,7 @@ class Faucet extends ModTemplate {
         //     modal.render();
         //     modal.attachEvents(registryModalEvents);
         // }
-
+        /*
         const socialModalEvents = () => {
             let backup_button = document.getElementById('registry-backup-wallet');
             backup_button.onclick = () => {
@@ -339,6 +341,7 @@ class Faucet extends ModTemplate {
             sitekey: '6Lc18MYUAAAAAKb0_kFKkhA1ebdPu_hLmyyRo3Cd',
             callback: captchaCallback
         });
+        */
     }
 
     shouldAffixCallbackToModule() { return 1; }
