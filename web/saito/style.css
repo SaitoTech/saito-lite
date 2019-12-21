@@ -757,6 +757,15 @@ label.treated {
     transition: max-width linear .25s;
 }
 
+.modal-content-blank {
+    background-color: #fefefe;
+    margin: 15% auto;
+    width: 80%;
+    font-size: 1.3em;
+    transition: max-width linear .25s;
+}
+
+
 .modal-med-size {
     max-width: 700px;
 }
@@ -841,4 +850,59 @@ label.treated {
     .alert-prompt {
         padding: 0 1em;
     }
+}
+
+
+/* modals */
+
+.welcome-modal-wrapper {
+    display: grid;
+    grid-template-columns: 7fr 3fr;
+    font-family: visuelt-light;
+    background-image: url(/saito/img/dreamscape.png);
+    background-position: 0em;
+    background-size: cover;
+}
+
+.welcome-modal-exit {
+    padding: 1.5em;
+    background: #333d;
+    color: var(--saito-skyline-grey);
+}
+
+.welcome-modal-exit .fa-arrow-right {
+    margin: auto;
+    font-size: 200px;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    text-align: center;
+}
+
+.welcome-modal-action {
+    padding: 1.5em;
+    color: var(--saito-skyline-grey);
+}
+
+.welcome-modal-action p {
+    line-height: 1.5em;
+}
+
+.welcome-modal-signup {
+    margin: 1em 0;
+    display: flex;
+}
+
+.welcome-modal-explanation {
+    font-size: 0.8em;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 1em;
+    line-height: 1.3em;
+}
+
+#signup {
+    margin: 0 1em 0 0;
+    width: 40px;
+    height: 40px;
 }
