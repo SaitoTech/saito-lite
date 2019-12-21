@@ -11,9 +11,9 @@ module.exports = EmailBody = {
 
     render(app, data={}) {
 
-        data.parentmod.body = this;
+        data.email.body = this;
 
-        switch(data.parentmod.active) {
+        switch(data.email.active) {
             case "email_list":
                 EmailList.render(app, data);
                 EmailList.attachEvents(app, data);
@@ -39,10 +39,10 @@ module.exports = EmailBody = {
     attachEvents(app, data) {
         document.querySelector('#email.create-button')
                 .addEventListener('click', (e) => {
-                    data.parentmod.active = "email_form";
-                    data.parentmod.previous_state = "email_list";
-                    data.parentmod.main.render(app, data);
-                    data.parentmod.main.attachEvents(app, data);
+                    data.email.active = "email_form";
+                    data.email.previous_state = "email_list";
+                    data.email.main.render(app, data);
+                    data.email.main.attachEvents(app, data);
                     // document.querySelector('#email.create-button').style.display = "none";
                 });
     }

@@ -9,33 +9,33 @@ module.exports = EmailList = {
 
       document.querySelector('.email-body').innerHTML = EmailListTemplate();
 
-      data.parentmod.emails[data.parentmod.emails.active].forEach(tx => {
+      data.email.emails[data.email.emails.active].forEach(tx => {
         document.querySelector('.email-list').innerHTML +=
-            EmailListRowTemplate(tx, data.parentmod.addrController.returnAddressHTML(tx.transaction.from[0].add));
+            EmailListRowTemplate(tx, data.email.addrController.returnAddressHTML(tx.transaction.from[0].add));
       });
 
     },
 
     attachEvents(app, data) {
 
-        data.parentmod.addrController.attachEvents();
+        data.email.addrController.attachEvents();
 
         Array.from(document.getElementsByClassName('email-message')).forEach(message => {
             message.onclick = (e) => {
                 if (e.srcElement.nodeName == "INPUT") { return; }
 
                 let sig = e.currentTarget.id;
-                let selected_email = data.parentmod.emails[data.parentmod.emails.active].filter(tx => {
+                let selected_email = data.email.emails[data.email.emails.active].filter(tx => {
                     return tx.transaction.sig === sig
                 });
 
-                data.parentmod.selected_email = selected_email[0];
-                data.parentmod.header_title = data.parentmod.selected_email.transaction.msg.title;
+                data.email.selected_email = selected_email[0];
+                data.email.header_title = data.email.selected_email.transaction.msg.title;
 
-                data.parentmod.active = "email_detail";
+                data.email.active = "email_detail";
 
-                data.parentmod.main.render(app, data);
-                data.parentmod.main.attachEvents(app, data);
+                data.email.main.render(app, data);
+                data.email.main.attachEvents(app, data);
 
             };
         });

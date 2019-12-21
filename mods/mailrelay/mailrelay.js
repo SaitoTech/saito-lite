@@ -31,7 +31,7 @@ class MailRelay extends ModTemplate {
         let message = 'This is a plain text email \n Very plain.';
         let attachments = "";
         try {
-            this.sendMail(to, from, subject, message, attachments;)
+            this.sendMail(to, from, subject, message, attachments);
         } catch(err) {
             console.log(err);
         }

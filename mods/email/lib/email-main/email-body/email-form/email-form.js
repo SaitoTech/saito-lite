@@ -33,7 +33,7 @@ module.exports = EmailForm = {
         let email_to = document.getElementById('email-to-address').value;
         let email_from = this.saito.wallet.returnPublicKey();
 
-        email_to = await data.parentmod.addrController.returnPublicKey(email_to);
+        email_to = await data.email.addrController.returnPublicKey(email_to);
 
         let newtx = app.wallet.createUnsignedTransactionWithDefaultFee(email_to, 0.0);
         if (!newtx) {
@@ -48,9 +48,9 @@ module.exports = EmailForm = {
 
         app.network.propagateTransaction(newtx);
 
-        data.parentmod.active = "email_list";
-        data.parentmod.main.render(app, data);
-        data.parentmod.main.attachEvents(app, data);
+        data.email.active = "email_list";
+        data.email.main.render(app, data);
+        data.email.main.attachEvents(app, data);
 
         salert("Your message has been sent");
 

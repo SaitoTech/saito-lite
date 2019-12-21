@@ -7,9 +7,9 @@ module.exports = EmailHeader = {
 
   render(app, data) {
 
-    data.parentmod.header = this;
+    data.email.header = this;
 
-    switch(data.parentmod.active) {
+    switch(data.email.active) {
       case "email_list":
         EmailInboxHeader.render(app, data);
         EmailInboxHeader.attachEvents(app, data);
@@ -30,7 +30,7 @@ module.exports = EmailHeader = {
         break;
     }
 
-    data.parentmod.updateBalance();
+    data.email.updateBalance();
 
   },
 
