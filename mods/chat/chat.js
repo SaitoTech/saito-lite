@@ -38,8 +38,8 @@ class Chat extends ChatCore {
 
   renderEmailChat(app, data) {
     let chat_self = app.modules.returnModule("Chat");
-
     data.chat = {};
+    data.chat.app = app;
     data.chat.groups = chat_self.groups;
     data.chat.active_groups = chat_self.active_groups;
     data.chat.addrController = chat_self.addrController;
@@ -77,6 +77,7 @@ class Chat extends ChatCore {
     Header.attachEvents(app, this.uidata);
 
     this.uidata.chat = {};
+    this.uidata.chat.app = app;
     this.uidata.chat.groups = this.groups;
 
     this.uidata.chatmod = this;
