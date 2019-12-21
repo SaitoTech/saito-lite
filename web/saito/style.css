@@ -240,6 +240,19 @@ input {
     cursor: pointer;
 }
 
+.redicon {
+    box-sizing: border-box;
+    background: red;
+    position: relative;
+    top: -30px;
+    left: 18px;
+    padding: 3px;
+    border-radius: 50%;
+    height: 17px;
+    width: 17px;
+    display: none;
+}
+
 input[type=text], input[type=number], input[type=range], input[type=password] {
     width: 100%;
     border: none;
@@ -452,6 +465,8 @@ label.treated {
 
 .header-icon-links {
     text-align: right;
+    height: 44px;
+    padding-top: 10px;
 }
 .header-icon-links i {
     margin-left: 25px;

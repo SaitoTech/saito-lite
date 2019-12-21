@@ -203,6 +203,7 @@ class Email extends ModTemplate {
 
   addEmail(tx) {
     try {
+      if (this.browser_active == 0) { this.showAlert(); }
       this.emails.inbox.unshift(tx);
       this.addrController.fetchIdentifiers([tx.transaction.from[0].add]);
       if (this.browser_active) { this.renderMain(this.app, this.uidata); }
