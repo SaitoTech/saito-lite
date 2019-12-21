@@ -12,7 +12,7 @@ module.exports = EncryptAppspace = {
       document.querySelector('.email-submit')
         .addEventListener('click', (e) => {
 	  let recipient = document.getElementById('email-to-address').value;
-	  data.parentmod.appspace_mod.initiate_key_exchange(recipient);
+	  data.email.appspace_mod.initiate_key_exchange(recipient);
   ***REMOVED***);
 
 ***REMOVED***,

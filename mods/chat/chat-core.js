@@ -154,13 +154,15 @@ class ChatCore extends ModTemplate {
   // onChain messages received on the blockchain arrive here
   //
   onConfirmation(blk, tx, conf, app) {
+
     let txmsg = tx.returnMessage();
     if (conf == 0) {
       if (txmsg.request == "chat message") {
         if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) { return; ***REMOVED***
-	      this.receiveChatMessage(app, tx);
+	this.receiveMessage(app, tx);
   ***REMOVED***
 ***REMOVED***
+
   ***REMOVED***
 
 
@@ -212,6 +214,16 @@ class ChatCore extends ModTemplate {
   receiveMessage(app, tx) {
 
     let txmsg = tx.returnMessage();
+
+    //
+    // add alert if we are not in a chat-positive application
+    //
+    let m = app.modules.returnActiveModule();
+    if (!m.events.includes("chat-render-request")) {
+      this.showAlert();
+***REMOVED***
+
+
 
     this.groups.forEach(group => {
       if (group.id == txmsg.group_id) {
