@@ -12,44 +12,44 @@ module.exports = EmailDetailHeader = {
     document.getElementById('email-form-back-button')
             .addEventListener('click', (e) => {
 
-      ***REMOVED*** data.parentmod.emails.active = "inbox";
-              data.parentmod.active = "email_list";
-              data.parentmod.selected_email = {***REMOVED***;
+      ***REMOVED*** data.email.emails.active = "inbox";
+              data.email.active = "email_list";
+              data.email.selected_email = {***REMOVED***;
 
-              data.parentmod.main.render(app, data);
-              data.parentmod.main.attachEvents(app, data);
+              data.email.main.render(app, data);
+              data.email.main.attachEvents(app, data);
         ***REMOVED***);
 
     document.getElementById('email-delete-icon')
             .addEventListener('click', (e) => {
       ***REMOVED*** delete the email from the emaillist
-              data.parentmod.deleteTransaction(data.parentmod.selected_email);
+              data.email.deleteTransaction(data.email.selected_email);
 
-              data.parentmod.emails.active = "inbox";
-              data.parentmod.active = "email_list";
-              data.parentmod.selected_email = {***REMOVED***;
+              data.email.emails.active = "inbox";
+              data.email.active = "email_list";
+              data.email.selected_email = {***REMOVED***;
 
-              data.parentmod.main.render(app, data);
-              data.parentmod.main.attachEvents(app, data);
+              data.email.main.render(app, data);
+              data.email.main.attachEvents(app, data);
         ***REMOVED***);
 
     document.getElementById('email-detail-reply')
             .addEventListener('click', (e) => {
-              let { from ***REMOVED*** = data.parentmod.selected_email.transaction;
-              data.parentmod.previous_state = data.parentmod.active;
-              data.parentmod.active = "email_form";
-              data.parentmod.main.render(app, data);
-              data.parentmod.main.attachEvents(app, data);
+              let { from ***REMOVED*** = data.email.selected_email.transaction;
+              data.email.previous_state = data.email.active;
+              data.email.active = "email_form";
+              data.email.main.render(app, data);
+              data.email.main.attachEvents(app, data);
               document.getElementById('email-to-address').value = from[0].add;
         ***REMOVED***);
 
     document.getElementById('email-detail-forward')
             .addEventListener('click', (e) => {
-              let { msg ***REMOVED*** = data.parentmod.selected_email.transaction;
-              data.parentmod.previous_state = data.parentmod.active;
-              data.parentmod.active = "email_form";
-              data.parentmod.main.render(app, data);
-              data.parentmod.main.attachEvents(app, data);
+              let { msg ***REMOVED*** = data.email.selected_email.transaction;
+              data.email.previous_state = data.email.active;
+              data.email.active = "email_form";
+              data.email.main.render(app, data);
+              data.email.main.attachEvents(app, data);
               document.querySelector('.email-title').value = msg.title;
               document.querySelector('.email-text').value = msg.message;
         ***REMOVED***);

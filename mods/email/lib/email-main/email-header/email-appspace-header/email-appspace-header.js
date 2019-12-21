@@ -9,11 +9,11 @@ module.exports = EmailAppspaceHeader = {
   attachEvents(app, data) {
     document.getElementById('email-form-back-button')
             .addEventListener('click', (e) => {
-              data.parentmod.active = data.parentmod.previous_state;
-              data.parentmod.previous_state = "email_appspace";
+              data.email.active = data.email.previous_state;
+              data.email.previous_state = "email_appspace";
 
-              data.parentmod.main.render(app, data);
-              data.parentmod.main.attachEvents(app, data);
+              data.email.main.render(app, data);
+              data.email.main.attachEvents(app, data);
         ***REMOVED***);
   ***REMOVED***,
 ***REMOVED***
