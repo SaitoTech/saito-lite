@@ -401,10 +401,11 @@ console.log("PUSHING BACK: " + JSON.stringify(tx.transaction));
   ***REMOVED***
 
 
+
   async onConfirmation(blk, tx, conf, app) {
 
     let txmsg = tx.returnMessage();
-    // let arcade_self = app.modules.returnModule("Arcade");
+    let arcade_self = app.modules.returnModule("Arcade");
 
     if (conf == 0) {
 
@@ -436,7 +437,6 @@ console.log("PUSHING BACK: " + JSON.stringify(tx.transaction));
 
       // invites
       if (txmsg.request == "invite") {
-console.log("ARCADE GETS INVITE REQUEST");
 
 ***REMOVED***
 ***REMOVED*** this might be a server, in which cse it doesn't have options.games
@@ -445,15 +445,11 @@ console.log("ARCADE GETS INVITE REQUEST");
           if (this.app.options.games != undefined) {
             for (let i = 0; i < this.app.options.games.length; i++) {
               if (this.app.options.games[i].id == txmsg.game_id) {
-
-console.log("WE HAVE FOUND AN EXISTING GAME: is it inits? " + this.app.options.games[i].initializing);
-
                 if (this.app.options.games[i].initializing == 0) { return; ***REMOVED***
           ***REMOVED***
         ***REMOVED***
       ***REMOVED***
     ***REMOVED***
-console.log("ARCADE PROCESSING RECEIVE INVITE REQUEST");
         this.receiveInviteRequest(blk, tx, conf, app);
   ***REMOVED***
 
@@ -507,6 +503,11 @@ console.log("MSG: " + txmsg);
 
 console.log("... still here... receive accept request!");
         await this.receiveAcceptRequest(blk, tx, conf, app);
+
+	//
+	// alert us someone has accepted our game
+	//
+        if (this.browser_active == 0) { this.showAlert(); ***REMOVED***
 
 console.log("\n\n\nlaunching request to launch game... flag button, etc.");
 
@@ -1101,6 +1102,9 @@ console.log(JSON.stringify(game));
   // reset list of games that can be accepted
   //
   onNewBlock(blk, lc) {
+
+    this.showAlert();
+
     if (lc == 1) {
       this.accepted = [];
 ***REMOVED***
