@@ -1,7 +1,7 @@
 const datetimeFormatter = require('../../../../../../lib/helpers/datetime_formatter');
 
 module.exports = EmailDetailTemplate = (app, data) => {
-  let { selected_email, addrController }  = data.parentmod;
+  let { selected_email, addrController }  = data.email;
 
   let from  	= selected_email.transaction.from[0].add;
   let to  	= selected_email.transaction.to[0].add;
