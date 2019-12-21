@@ -37,13 +37,13 @@ module.exports = EmailBarsMenu = {
                   e.currentTarget.classList.add("active-navigator-item");
 
                   if (e.currentTarget.id == "inbox") {
-                    data.parentmod.emails.active = "inbox";
+                    data.email.emails.active = "inbox";
                   }
                   if (e.currentTarget.id == "sent") {
-                    data.parentmod.emails.active = "sent";
+                    data.email.emails.active = "sent";
                   }
                   if (e.currentTarget.id == "trash") {
-                    data.parentmod.emails.active = "trash";
+                    data.email.emails.active = "trash";
                   }
 
 
@@ -59,25 +59,25 @@ module.exports = EmailBarsMenu = {
                   e.currentTarget.classList.add("active-navigator-item");
 
                   if (e.currentTarget.id == "inbox") {
-                    data.parentmod.emails.active = "inbox";
+                    data.email.emails.active = "inbox";
                   }
                   if (e.currentTarget.id == "sent") {
-                    data.parentmod.emails.active = "sent";
+                    data.email.emails.active = "sent";
                   }
                   if (e.currentTarget.id == "trash") {
-                    data.parentmod.emails.active = "trash";
+                    data.email.emails.active = "trash";
                   }
 
                 }
               }
           });
 
-          data.parentmod.appspace_mod = null;
-          data.parentmod.active = "email_list";
-          data.parentmod.header_title = "";
+          data.email.appspace_mod = null;
+          data.email.active = "email_list";
+          data.email.header_title = "";
 
-          data.parentmod.main.render(app, data);
-          data.parentmod.main.attachEvents(app, data);
+          data.email.main.render(app, data);
+          data.email.main.attachEvents(app, data);
 
         }
     }));
@@ -111,14 +111,14 @@ module.exports = EmailBarsMenu = {
               }
           });
 
-          data.parentmod.active = "email_appspace";
-          data.parentmod.previous_state = "email_list";
-          data.parentmod.header_title = "Application";
-          data.parentmod.appspace_mod = data.parentmod.mods[e.currentTarget.id];
-          data.parentmod.appspace_mod_idx = e.currentTarget.id;
+          data.email.active = "email_appspace";
+          data.email.previous_state = "email_list";
+          data.email.header_title = "Application";
+          data.email.appspace_mod = data.email.mods[e.currentTarget.id];
+          data.email.appspace_mod_idx = e.currentTarget.id;
 
-          data.parentmod.main.render(app, data)
-          data.parentmod.main.attachEvents(app, data)
+          data.email.main.render(app, data)
+          data.email.main.attachEvents(app, data)
 
         }
     }));
@@ -140,11 +140,11 @@ module.exports = EmailBarsMenu = {
 
             let modobj = document.querySelector(`.email-apps-item-${i}`);
 
-// 	    data.parentmod.active	    = "email_appspace";
-// 	    data.parentmod.previous_state   = "email_list";
-//    	    data.parentmod.header_title     = "Saito AppStore";
-//    	    data.parentmod.appspace_mod     = data.parentmod.mods[i];
-//   	    data.parentmod.appspace_mod_idx = i;
+// 	    data.email.active	    = "email_appspace";
+// 	    data.email.previous_state   = "email_list";
+//    	    data.email.header_title     = "Saito AppStore";
+//    	    data.email.appspace_mod     = data.email.mods[i];
+//   	    data.email.appspace_mod_idx = i;
 
 	    setTimeout(function () { 
 	      modobj.click();

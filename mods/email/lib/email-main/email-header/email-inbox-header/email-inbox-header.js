@@ -26,13 +26,13 @@ module.exports = EmailInboxHeader = {
                 if (is_checked) {
                   email_list.removeChild(mail);
                   //
-                  // tell our parentmod to purge this transaction
+                  // tell our email to purge this transaction
                   //
                   let mysig = mail.id;
-                  for (let i = 0; i < data.parentmod.emails[data.parentmod.emails.active].length; i++) {
-                    let mytx = data.parentmod.emails[data.parentmod.emails.active][i];
+                  for (let i = 0; i < data.email.emails[data.email.emails.active].length; i++) {
+                    let mytx = data.email.emails[data.email.emails.active][i];
                     if (mytx.transaction.sig == mysig) {
-                      data.parentmod.deleteTransaction(mytx);
+                      data.email.deleteTransaction(mytx);
                     }
                   }
                 }
