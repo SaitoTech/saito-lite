@@ -92,7 +92,7 @@ module.exports = ChatBox = {
 
       msg.publickey = data.chat.addrController.returnAddressHTML(msg.publickey);
 
-      msg.identicon = data.parentmod.app.keys.returnIdenticon(msg.publickey);
+      msg.identicon = data.chat.app.keys.returnIdenticon(msg.publickey);
 
       if (document.getElementById(`chat-box-default-message-${msg.group_id***REMOVED***`)) { chat_box_main.innerHTML = '' ***REMOVED***
 
@@ -102,7 +102,7 @@ module.exports = ChatBox = {
 
     addTXToDOM(data, tx) {
       //xxx undo?
-        let msg = Object.assign({***REMOVED***, tx.returnMessage(), { identicon: data.parentmod.app.keys.returnIdenticon(tx.returnMessage().publickey), type: 'myself' ***REMOVED***);
+        let msg = Object.assign({***REMOVED***, tx.returnMessage(), { identicon: data.chat.app.keys.returnIdenticon(tx.returnMessage().publickey), type: 'myself' ***REMOVED***);
         this.addMessageToDOM(data, msg);
 ***REMOVED***,
 

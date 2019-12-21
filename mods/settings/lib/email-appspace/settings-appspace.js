@@ -15,12 +15,12 @@ module.exports = SettingsAppspace = {
           app.wallet.resetWallet();
           salert("Wallet reset!");
 
-	  data.parentmod.emails.inbox = [];
-	  data.parentmod.emails.sent = [];
-	  data.parentmod.emails.trash = [];
+	  data.email.emails.inbox = [];
+	  data.email.emails.sent = [];
+	  data.email.emails.trash = [];
 
-	  data.parentmod.body.render(app, data);
-	  data.parentmod.body.attachEvents(app, data);
+	  data.email.body.render(app, data);
+	  data.email.body.attachEvents(app, data);
 
   ***REMOVED***);
 ***REMOVED***,
