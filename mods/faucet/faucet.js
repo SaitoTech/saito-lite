@@ -236,6 +236,61 @@ class Faucet extends ModTemplate {
             title: 'Welcome to Saito',
             content: FaucetModalBackupTemplate()
       });
+<<<<<<< HEAD
+=======
+
+      modal.render("blank");
+
+      if (document.querySelector('.tutorial-skip')) {
+
+        document.querySelector('.tutorial-skip').onclick = () => {
+        modal.destroy();
+
+    	let tx = this.app.wallet.createUnsignedTransaction();
+            tx.transaction.msg.module       = "Email";
+            tx.transaction.msg.title        = "Using Saito in Anonymous Mode - HOWTO";
+            tx.transaction.msg.message      = `
+Welcome Anonymous User!
+
+It is entirely possible to use Saito without backing up your wallet or registering a username. In privacy-mode, everyone will just know you by your address on the network.
+
+In order to prevent robots from abusing the network, we do not give tokens to anonymous accounts by default. So in privacy-mode your account will not automatically-earn tokens as you use the network. To fix this, purchase some tokens from someone in the community or ask a community member to send you some.
+
+If you change your mind and would like to backup your wallet, you can do so by clicking on the "gear" icon at the top-right of this page. We recommend that you do this periodically to avoid application-layer data loss.
+    `;
+
+	    tx = this.app.wallet.signTransaction(tx);
+	    let emailmod = this.app.modules.returnModule("Email");
+
+	    if (emailmod != null) {
+	      emailmod.addEmail(tx);
+	      this.app.storage.saveTransaction(tx);
+	    }
+          }
+        }
+
+        // const showRegistryModal = (are_tokens_sent=true) => {
+        //     modal.destroy();
+        //     modal.title = "Register a Username";
+        //     modal.content = FaucetModalRegistryTemplate(are_tokens_sent);
+
+        //     modal.render();
+        //     modal.attachEvents(registryModalEvents);
+        // }
+        /*
+        const socialModalEvents = () => {
+            let backup_button = document.getElementById('registry-backup-wallet');
+            backup_button.onclick = () => {
+                var pom = document.createElement('a');
+                pom.setAttribute('type', "hidden");
+                pom.setAttribute('href', 'data:application/json;utf-8,' + encodeURIComponent(JSON.stringify(this.app.options)));
+                pom.setAttribute('download', "saito.wallet.json");
+                document.body.appendChild(pom);
+                pom.click();
+                pom.remove();
+            };
+        }
+>>>>>>> a8f0c8f232888f4f927589b8d2fcba295c9709d8
 
       modal.render("blank");
 
@@ -276,6 +331,7 @@ Questions or comments? Contact us anytime.
 	      }
         }
 
+<<<<<<< HEAD
 
         document.querySelector('.tutorial-skip').onclick = () => {
 
@@ -310,6 +366,15 @@ Questions or comments? Contact us anytime.
           
         }
       }
+=======
+        //
+        // captcha rendering for first modal
+        grecaptcha.render("recaptcha", {
+            sitekey: '6Lc18MYUAAAAAKb0_kFKkhA1ebdPu_hLmyyRo3Cd',
+            callback: captchaCallback
+        });
+        */
+>>>>>>> a8f0c8f232888f4f927589b8d2fcba295c9709d8
     }
 
     shouldAffixCallbackToModule() { return 1; }
