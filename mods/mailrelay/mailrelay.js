@@ -33,7 +33,7 @@ class MailRelay extends ModTemplate {
         // add an email
         //
         let to      = 'richard@saito.tech';
-        let from    = 'testnet@saito.io';
+        let from    = 'testnet@saito.tech';
         let subject = 'This is a test email sent by the MailRelay module.';
         let message = 'This is a plain text email \n Very plain.';
         let attachments = "";
