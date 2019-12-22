@@ -11,17 +11,16 @@ const FaucetModalBackupTemplate = require('./lib/modal/faucet-modal-backup.templ
 const FaucetAppSpace = require('./lib/email-appspace/faucet-appspace');
 
 class Faucet extends ModTemplate {
-***REMOVED***
 
-***REMOVED***
+  constructor(app) {
 
-        this.name = "Faucet";
-        this.initial = 10;
-        this.payoutRatio = 0.75;
+    super(app);
 
-***REMOVED***
+    this.name = "Faucet";
+    this.initial = 10;
+    this.payoutRatio = 0.75;
 
-
+  ***REMOVED***
 
 
   respondTo(type) {
@@ -223,22 +222,51 @@ class Faucet extends ModTemplate {
 
 ***REMOVED***
 
+
+
+
+
     tutorialModal() {
-***REMOVED***
-***REMOVED*** initial modal state
-***REMOVED***
-        let modal = new Modal(this.app, {
+
+      //
+      // initial modal state
+      //
+      let modal = new Modal(this.app, {
             id: 'faucet',
             title: 'Welcome to Saito',
             content: FaucetModalBackupTemplate()
-    ***REMOVED***);
+  ***REMOVED***);
 
-        modal.render("blank");
+      modal.render("blank");
 
-        if (document.querySelector('.tutorial-skip')) {
-            document.querySelector('.tutorial-skip')
-                .onclick = () => modal.destroy();
+      if (document.querySelector('.tutorial-skip')) {
+
+        document.querySelector('.tutorial-skip').onclick = () => {
+        modal.destroy();
+
+    	let tx = this.app.wallet.createUnsignedTransaction();
+            tx.transaction.msg.module       = "Email";
+            tx.transaction.msg.title        = "Using Saito in Anonymous Mode - HOWTO";
+            tx.transaction.msg.message      = `
+Welcome Anonymous User!
+
+It is entirely possible to use Saito without backing up your wallet or registering a username. In privacy-mode, everyone will just know you by your address on the network.
+
+In order to prevent robots from abusing the network, we do not give tokens to anonymous accounts by default. So in privacy-mode your account will not automatically-earn tokens as you use the network. To fix this, purchase some tokens from someone in the community or ask a community member to send you some.
+
+If you change your mind and would like to backup your wallet, you can do so by clicking on the "gear" icon at the top-right of this page. We recommend that you do this periodically to avoid application-layer data loss.
+    `;
+
+	    tx = this.app.wallet.signTransaction(tx);
+	    let emailmod = this.app.modules.returnModule("Email");
+
+	    if (emailmod != null) {
+	      emailmod.addEmail(tx);
+	      this.app.storage.saveTransaction(tx);
+	***REMOVED***
+      ***REMOVED***
     ***REMOVED***
+
 ***REMOVED*** const showRegistryModal = (are_tokens_sent=true) => {
 ***REMOVED***     modal.destroy();
 ***REMOVED***     modal.title = "Register a Username";
