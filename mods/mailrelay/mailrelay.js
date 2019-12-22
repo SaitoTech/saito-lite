@@ -24,7 +24,6 @@ class MailRelay extends ModTemplate {
         }
     }
 
-
     initialize(app) {
 
         super.initialize(app);
@@ -53,10 +52,13 @@ class MailRelay extends ModTemplate {
             text: message,
             attachments: attachments  // ref: https://github.com/guileen/node-sendmail/blob/master/examples/attachmentFile.js            
         }, (err, info) => {
-            console.log(info.envelope);
-            console.log(info.messageId);
+            try {
+                console.log(info.envelope);
+                console.log(info.messageId);
+            } catch(err) {
+                console.log(err);
+            }
         });
-
 
     }
 

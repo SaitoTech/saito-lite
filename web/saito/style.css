@@ -28,6 +28,11 @@ Generic Style Settings for Modules in the Saito App Suite
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'p-word';
+    src: url('/saito/fonts/password.ttf') format('truetype');
+}
+
 /* HTML and Page Structure */
 
 :root {
@@ -468,9 +473,10 @@ label.treated {
     height: 44px;
     padding-top: 10px;
 }
+
 .header-icon-links i {
     margin-left: 25px;
-    font-size:1.7em;
+    font-size: 1.7em;
 }
 
 .header-dropdown {
@@ -576,13 +582,11 @@ label.treated {
 
 .wallet-action-row:hover {
     background-color: var(--saito-skyline-grey);
-  }
+}
 
-  .wallet-action-row i {
-      padding: 0 10px 0 0;
-  }
-
-
+.wallet-action-row i {
+    padding: 0 10px 0 0;
+}
 
 .terms {
     border-top: 1px solid rgba(0, 0, 0, .1);
@@ -765,7 +769,6 @@ label.treated {
     transition: max-width linear .25s;
 }
 
-
 .modal-med-size {
     max-width: 700px;
 }
@@ -828,10 +831,10 @@ label.treated {
 
 @media only screen and (max-width: 600px) {
     .header-icon-fullscreen {
-	display: none;
+        display: none;
     }
     #navigator {
-	display: inline-block;
+        display: inline-block;
     }
     #alert-box {
         padding: 3px;
@@ -851,12 +854,6 @@ label.treated {
         padding: 0 1em;
     }
 }
-
-
-
-
-
-
 
 /* modals */
 
@@ -890,14 +887,9 @@ label.treated {
     font-size: 2em;
 }
 
-.welcome-modal-main {
+.welcome-modal-main {}
 
-}
-
-.welcome-modal-info {
-
-}
-
+.welcome-modal-info {}
 
 .welcome-modal-action {
     padding: 1.5em;
@@ -925,4 +917,8 @@ label.treated {
     margin: 0;
     width: 15px;
     height: 21px;
+}
+
+.welcome-modal-action button:hover {
+    border-color: #fff;
 }
