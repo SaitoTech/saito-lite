@@ -7,6 +7,7 @@ const FaucetModalCaptchaTemplate = require('./lib/modal/faucet-modal-captcha.tem
 const FaucetModalRegistryTemplate = require('./lib/modal/faucet-modal-registry.template');
 const FaucetModalSocialTemplate = require('./lib/modal/faucet-modal-social.template');
 const FaucetModalBackupTemplate = require('./lib/modal/faucet-modal-backup.template');
+const FaucetModalBackup = require('./lib/modal/faucet-modal-backup.js');
 
 const FaucetAppSpace = require('./lib/email-appspace/faucet-appspace');
 
@@ -236,11 +237,16 @@ class Faucet extends ModTemplate {
             title: 'Welcome to Saito',
             content: FaucetModalBackupTemplate()
       });
-<<<<<<< HEAD
-=======
+
+      let data = {};
+          data.faucet = this;
+          data.modal = modal;
 
       modal.render("blank");
 
+      FaucetModalBackup.attachEvents(this.app, data);
+
+/****
       if (document.querySelector('.tutorial-skip')) {
 
         document.querySelector('.tutorial-skip').onclick = () => {
@@ -269,39 +275,21 @@ If you change your mind and would like to backup your wallet, you can do so by c
           }
         }
 
-        // const showRegistryModal = (are_tokens_sent=true) => {
-        //     modal.destroy();
-        //     modal.title = "Register a Username";
-        //     modal.content = FaucetModalRegistryTemplate(are_tokens_sent);
-
-        //     modal.render();
-        //     modal.attachEvents(registryModalEvents);
-        // }
-        /*
-        const socialModalEvents = () => {
-            let backup_button = document.getElementById('registry-backup-wallet');
-            backup_button.onclick = () => {
-                var pom = document.createElement('a');
-                pom.setAttribute('type', "hidden");
-                pom.setAttribute('href', 'data:application/json;utf-8,' + encodeURIComponent(JSON.stringify(this.app.options)));
-                pom.setAttribute('download', "saito.wallet.json");
-                document.body.appendChild(pom);
-                pom.click();
-                pom.remove();
-            };
-        }
->>>>>>> a8f0c8f232888f4f927589b8d2fcba295c9709d8
-
-      modal.render("blank");
-
-      if (document.querySelector('.tutorial-skip')) {
 
         document.querySelector('#registry-input').onclick = () => {
 	  document.querySelector('#registry-input').setAttribute("placeholder", "");
 	}
 
+
         document.querySelector('#registry-email-button').onclick = () => {
+
+	  document.querySelector(".welcome-modal-header").innerHTML = '<div>Almost Done!</div>';
+	  document.querySelector(".welcome-modal-main").innerHTML = '<div>Provide a password to encrypt your wallet before you send it to yourself for backup. This password will be known only to you.</div>';
+	  document.querySelector(".welcome-modal-footer").innerHTML = '<div>Provide a password to encrypt your wallet before you send it to yourself for backup. This password will be known only to you.</div>';
+
           modal.destroy();
+
+
 
     	  let tx = this.app.wallet.createUnsignedTransaction();
               tx.transaction.msg.module       = "Email";
@@ -331,50 +319,14 @@ Questions or comments? Contact us anytime.
 	      }
         }
 
-<<<<<<< HEAD
-
-        document.querySelector('.tutorial-skip').onclick = () => {
-
-          modal.destroy();
- 
-      	  let tx = this.app.wallet.createUnsignedTransaction();
-              tx.transaction.msg.module       = "Email";
-              tx.transaction.msg.title        = "Anonymous Mode Enabled";
-              tx.transaction.msg.message      = `
-
-You are using Saito without backing up your wallet or registering a username. In anonymous-mode, everyone will know you by your address on the network.
-
-To prevent spammers from attacking the network, we do not give tokens to anonymous accounts by default. So your account will not automatically earn tokens as you use the network. If you wish to begin earning tokens, purchase some tokens from someone in the community or ask someone to send you some.
-
-We also recommend manually backing up your wallet periodically to avoid application-layer data loss. You can do this anytime by clicking on the "gear" icon at the top-right of this page.
-
-Questions or comments? Contact us anytime.
-
--- The Saito Team
-
-            `;
-
-	      tx = this.app.wallet.signTransaction(tx);
-	      let emailmod = this.app.modules.returnModule("Email");
-
-	      if (emailmod != null) {
-		setTimeout(() => {
-	          emailmod.addEmail(tx);
-	          this.app.storage.saveTransaction(tx);
-	      }, 1500);
-	    }
-          
-        }
-      }
-=======
         //
         // captcha rendering for first modal
-        grecaptcha.render("recaptcha", {
-            sitekey: '6Lc18MYUAAAAAKb0_kFKkhA1ebdPu_hLmyyRo3Cd',
-            callback: captchaCallback
-        });
-        */
->>>>>>> a8f0c8f232888f4f927589b8d2fcba295c9709d8
+        //grecaptcha.render("recaptcha", {
+        //    sitekey: '6Lc18MYUAAAAAKb0_kFKkhA1ebdPu_hLmyyRo3Cd',
+        //    callback: captchaCallback
+        //});
+****/
+
     }
 
     shouldAffixCallbackToModule() { return 1; }
