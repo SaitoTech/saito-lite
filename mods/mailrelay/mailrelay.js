@@ -2,7 +2,9 @@ const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate.js');
 const nodemailer = require("nodemailer");
 
+
 class MailRelay extends ModTemplate {
+
     constructor(app) {
         super(app);
         this.app = app;
@@ -17,6 +19,7 @@ class MailRelay extends ModTemplate {
             }
         }
     }
+
 
     initialize(app) {
 
@@ -66,3 +69,7 @@ class MailRelay extends ModTemplate {
     }
 
 }
+
+
+module.exports = MailRelay;
+
