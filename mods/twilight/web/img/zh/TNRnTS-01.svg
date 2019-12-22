@@ -4,14 +4,14 @@
 	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 388 538"
 	 style="enable-background:new 0 0 388 538;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:#F4AD43;stroke:#000000;***REMOVED***
-	.st1{fill:#F9CD8C;stroke:#000000;***REMOVED***
-	.st2{fill:#FFFFFF;***REMOVED***
-	.st3{font-family:'STBaoliSC-Regular';***REMOVED***
-	.st4{font-size:36px;***REMOVED***
-	.st5{font-family:'STKaiti';***REMOVED***
-	.st6{font-size:20.9px;***REMOVED***
-	.st7{font-size:20px;***REMOVED***
+	.st0{fill:#F4AD43;stroke:#000000;}
+	.st1{fill:#F9CD8C;stroke:#000000;}
+	.st2{fill:#FFFFFF;}
+	.st3{font-family:'STBaoliSC-Regular';}
+	.st4{font-size:36px;}
+	.st5{font-family:'STKaiti';}
+	.st6{font-size:20.9px;}
+	.st7{font-size:20px;}
 </style>
 <rect id="rect3690" x="44" y="121.5" class="st0" width="300" height="105"/>
 <rect id="rect3623" x="44" y="226.5" class="st1" width="300" height="220"/>

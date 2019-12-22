@@ -7,8 +7,8 @@ Docs & License: https://fullcalendar.io/
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@fullcalendar/core')) :
     typeof define === 'function' && define.amd ? define(['exports', '@fullcalendar/core'], factory) :
-    (global = global || self, factory(global.FullCalendarBootstrap = {***REMOVED***, global.FullCalendar));
-***REMOVED***(this, function (exports, core) { 'use strict';
+    (global = global || self, factory(global.FullCalendarBootstrap = {}, global.FullCalendar));
+}(this, function (exports, core) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -28,24 +28,24 @@ Docs & License: https://fullcalendar.io/
 
     var extendStatics = function(d, b) {
         extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] ***REMOVED*** instanceof Array && function (d, b) { d.__proto__ = b; ***REMOVED***) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; ***REMOVED***;
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
-***REMOVED***;
+    };
 
     function __extends(d, b) {
         extendStatics(d, b);
-        function __() { this.constructor = d; ***REMOVED***
+        function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-***REMOVED***
+    }
 
     var BootstrapTheme = /** @class */ (function (_super) {
         __extends(BootstrapTheme, _super);
         function BootstrapTheme() {
             return _super !== null && _super.apply(this, arguments) || this;
-    ***REMOVED***
+        }
         return BootstrapTheme;
-***REMOVED***(core.Theme));
+    }(core.Theme));
     BootstrapTheme.prototype.classes = {
         widget: 'fc-bootstrap',
         tableGrid: 'table-bordered',
@@ -58,14 +58,14 @@ Docs & License: https://fullcalendar.io/
         popover: 'card card-primary',
         popoverHeader: 'card-header',
         popoverContent: 'card-body',
-***REMOVED*** day grid
-***REMOVED*** for left/right border color when border is inset from edges (all-day in timeGrid view)
-***REMOVED*** avoid `table` class b/c don't want margins/padding/structure. only border color.
+        // day grid
+        // for left/right border color when border is inset from edges (all-day in timeGrid view)
+        // avoid `table` class b/c don't want margins/padding/structure. only border color.
         headerRow: 'table-bordered',
         dayRow: 'table-bordered',
-***REMOVED*** list view
+        // list view
         listView: 'card card-primary'
-***REMOVED***;
+    };
     BootstrapTheme.prototype.baseIconClass = 'fa';
     BootstrapTheme.prototype.iconClasses = {
         close: 'fa-times',
@@ -73,19 +73,19 @@ Docs & License: https://fullcalendar.io/
         next: 'fa-chevron-right',
         prevYear: 'fa-angle-double-left',
         nextYear: 'fa-angle-double-right'
-***REMOVED***;
+    };
     BootstrapTheme.prototype.iconOverrideOption = 'bootstrapFontAwesome';
     BootstrapTheme.prototype.iconOverrideCustomButtonOption = 'bootstrapFontAwesome';
     BootstrapTheme.prototype.iconOverridePrefix = 'fa-';
     var main = core.createPlugin({
         themeClasses: {
             bootstrap: BootstrapTheme
-    ***REMOVED***
-***REMOVED***);
+        }
+    });
 
     exports.BootstrapTheme = BootstrapTheme;
     exports.default = main;
 
-    Object.defineProperty(exports, '__esModule', { value: true ***REMOVED***);
+    Object.defineProperty(exports, '__esModule', { value: true });
 
-***REMOVED***));
+}));

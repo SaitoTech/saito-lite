@@ -12,10 +12,10 @@ class Settings extends ModTemplate {
     this.name           = "Settings";
     this.link           = "/email?module=settings";
 
-//    if (app.modules.returnModule("Email") != null) { this.link = "/email?module=settings"; ***REMOVED***
+//    if (app.modules.returnModule("Email") != null) { this.link = "/email?module=settings"; }
 
     return this;
-  ***REMOVED***
+  }
 
 
 
@@ -23,23 +23,23 @@ class Settings extends ModTemplate {
   respondTo(type) {
 
     if (type == "header-dropdown") {
-//      return {***REMOVED***;
-***REMOVED***
+//      return {};
+    }
     if (type == 'email-appspace') {
-      let obj = {***REMOVED***;
+      let obj = {};
 	  obj.render = function (app, data) {
      	    SettingsAppspace.render(app, data);
-      ***REMOVED***
+          }
 	  obj.attachEvents = function (app, data) {
      	    SettingsAppspace.attachEvents(app, data);
-	  ***REMOVED***
+	  }
       return obj;
-***REMOVED***
+    }
 
     return null;
-  ***REMOVED***
+  }
 
-***REMOVED***
+}
 
 
 

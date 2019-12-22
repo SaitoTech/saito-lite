@@ -4,8 +4,8 @@ module.exports = DesignAppspace = {
 
     render(app, data) {
       document.querySelector(".email-appspace").innerHTML = DesignAppspaceTemplate(app);
-***REMOVED***,
+    },
 
-    attachEvents(app, data) {***REMOVED***,
+    attachEvents(app, data) {},
 
-***REMOVED***
+}

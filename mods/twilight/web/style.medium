@@ -3,7 +3,7 @@ body {
  font-size: 13px;
  padding:0px;
  margin:0px;
-***REMOVED***
+}
 .gameboard {
   position: absolute;
   background-image: url("img/TS Map-11.jpg");
@@ -12,7 +12,7 @@ body {
   //height: 3300px;
   width: 2550px;
   height: 1650px;
-***REMOVED***
+}
 .status {
   float: left;
   font-size: 1.8em;
@@ -22,7 +22,7 @@ body {
   background-color: #fffccd;
   border: 2px solid #948f8b;
   border-bottom: 0px;
-***REMOVED***
+}
 .log {
   overflow: hidden;
   position: absolute;
@@ -37,83 +37,83 @@ body {
   background-color: #fffccd;
   border: 2px solid #948f8b; 
   border-top: 0px;
-***REMOVED***
+}
 
 li {
  margin-top: 6px;
-***REMOVED***
+}
 .round {
  position: absolute;
  background-image: url("img/Turn.svg");
  background-size: cover;
-***REMOVED***
+}
 .action_round_us {
  position: absolute;
  background-image: url("img/AmericanActionRound.svg");
  background-size: cover;
  display:all;
-***REMOVED***
+}
 .action_round_ussr {
  position: absolute;
  background-image: url("img/SovietActionRound.svg");
  background-size: cover;
  display:all;
-***REMOVED***
+}
 .defcon {
  position: absolute;
  background-image: url("img/Radiation_warning_symbol.svg");
  background-size: cover;
-***REMOVED***
+}
 .vp {
  position: absolute;
  background-image: url("img/VPs.svg");
  background-size: cover;
-***REMOVED***
+}
 .space_race_us {
  position: absolute;
  background-image: url("img/AmericanSpaceRace.svg");
  background-size: cover;
-***REMOVED***
+}
 .space_race_ussr {
  position: absolute;
  background-image: url("img/SovietSpaceRace.svg");
  background-size: cover;
-***REMOVED***
+}
 .milops_us {
  position: absolute;
  background-image: url("img/AmericanMilitaryOperations.svg");
  background-size: cover;
-***REMOVED***
+}
 .milops_ussr {
  position: absolute;
  background-image: url("img/SovietMilitaryOperations.svg");
  background-size: cover;
-***REMOVED***
+}
 .inline {
   display:inline;
-***REMOVED***
+}
 .card {
  cursor: pointer;
-***REMOVED***
+}
 .link {
   display:inline;
   text-decoration:underline;
   cursor:pointer;
-***REMOVED***
+}
 .country {
   position: absolute;
   cursor: pointer;
-***REMOVED***
+}
 .showcard {
  text-decoration: none;
-***REMOVED***
+}
 .cardimg {
  position: absolute;
  left: 0;
  top: 0;
  height: 520px;
  width: 375px;
-***REMOVED***
+}
 .cardbox {
   position: absolute;
   left: 413;
@@ -123,44 +123,44 @@ li {
   background-size: cover;
   z-index:1000;
   display:none;
-***REMOVED***
+}
 .us {
  display: inline;
  float:left;
-***REMOVED***
+}
 .ussr {
  display: inline;
  float:left;
-***REMOVED***
+}
 .us_control {
   color: #FFFFFF;
   background-image: url("img/AmericanInfluenceControlledBackground.png");
   background-size: cover;
-***REMOVED***
+}
 .us_uncontrol {
   color: #008fd5;
   background-image: url("img/AmericanInfluenceUnControlledBackground.png");
   background-size: cover;
-***REMOVED***
+}
 .ussr_control {
   color: #FFFFFF;
   background-image: url("img/SovietInfluenceControlledBackground.png");
   background-size: cover;
-***REMOVED***
+}
 .ussr_uncontrol {
   color: #d2232a;
   background-size: cover;
   background-image: url("img/SovietInfluenceUnControlledBackground.png");
-***REMOVED***
+}
 
 
 
 .loader {
  width: 100%;
  max-width: 600px;
-***REMOVED***
+}
 .main {
-***REMOVED***
+}
 
 
 

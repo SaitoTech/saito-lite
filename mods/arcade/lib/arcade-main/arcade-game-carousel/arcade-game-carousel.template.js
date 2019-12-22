@@ -5,4 +5,4 @@ module.exports = AracadeGameCarouselTemplate = () => {
   <img src="./img/16by9.png" class="carousel-spacer" />
   </div>
   `;
-***REMOVED***
+}

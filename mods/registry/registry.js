@@ -1,5 +1,5 @@
 const path        = require('path');
-***REMOVED***
+const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 
 const RegistryModal = require('./lib/modal/registry-modal');
@@ -20,35 +20,35 @@ class Registry extends ModTemplate {
     this.publickey = '23ykRYbjvAzHLRaTYPcqjkQ2LnFYeMkg9cJgXPbrWcHmr'
 
     return this;
-  ***REMOVED***
+  }
 
 
 
 /*******
   respondTo(type) {
     if (type == 'email-appspace') {
-      let obj = {***REMOVED***;
+      let obj = {};
           obj.render = this.renderEmail;
           obj.attachEvents = this.attachEventsEmail;
       return obj;
-***REMOVED***
+    }
     return null;
-  ***REMOVED***
+  }
   renderEmail(app, data) {
      data.registry = app.modules.returnModule("Registry");
      let RegistryAppspace = require('./lib/email-appspace/registry-appspace');
      RegistryAppspace.render(app, data);
-  ***REMOVED***
+  }
   attachEventsEmail(app, data) {
      data.registry = app.modules.returnModule("Registry");
      RegistryAppspace.attachEvents(app, data);
-  ***REMOVED***
+  }
 *******/
 
   showModal() {
     RegistryModal.render(this.app, this);
     RegistryModal.attachEvents(this.app, this);
-  ***REMOVED***
+  }
 
   registerIdentifier(identifier, domain="@saito") {
 
@@ -56,11 +56,11 @@ class Registry extends ModTemplate {
     if (newtx == null) {
       console.log("NULL TX CREATED IN REGISTRY MODULE")
       return;
-***REMOVED***
+    }
 
     if (typeof identifier === 'string' || identifier instanceof String) {
       var regex=/^[0-9A-Za-z]+$/;
-      if (!regex.test(identifier)) { salert("Alphanumeric Characters only"); return false; ***REMOVED***
+      if (!regex.test(identifier)) { salert("Alphanumeric Characters only"); return false; }
 
       newtx.transaction.msg.module   	= "Registry";
       newtx.transaction.msg.request	= "register";
@@ -71,9 +71,9 @@ class Registry extends ModTemplate {
 
       // sucessful send
       return true;
-***REMOVED***
+    }
 
-  ***REMOVED***
+  }
 
 
   onPeerHandshakeComplete(app, peer) {
@@ -82,11 +82,11 @@ class Registry extends ModTemplate {
 
     if (registry_self.app.options.server != undefined) {
       registry_self.publickey = registry_self.app.wallet.returnPublicKey();
-***REMOVED*** else {
+    } else {
       registry_self.publickey = peer.peer.publickey;
-***REMOVED***
+    }
 
-  ***REMOVED***
+  }
 
 
   async onConfirmation(blk, tx, conf, app) {
@@ -110,11 +110,11 @@ class Registry extends ModTemplate {
           let signer = this.publickey;
           let lc = 1;
 
-  ***REMOVED*** servers update database
+          // servers update database
           let res = await registry_self.addRecord(identifier, publickey, unixtime, bid, bsh, lock_block, sig, signer, 1);
           let fee = tx.returnPaymentTo(registry_self.publickey);
 
-  ***REMOVED*** send message
+          // send message
           if (res == 1) {
 
             let newtx = registry_self.app.wallet.createUnsignedTransaction(tx.transaction.from[0].add, 50.0, fee);
@@ -128,7 +128,7 @@ class Registry extends ModTemplate {
             newtx = registry_self.app.wallet.signTransaction(newtx);
             registry_self.app.network.propagateTransaction(newtx);
 
-      ***REMOVED*** else {
+          } else {
 
             let newtx = registry_self.app.wallet.createUnsignedTransaction(tx.transaction.from[0].add, 0.0, fee);
                 newtx.transaction.msg.module = "Email";
@@ -141,12 +141,12 @@ class Registry extends ModTemplate {
             newtx = registry_self.app.wallet.signTransaction(newtx);
             registry_self.app.network.propagateTransaction(newtx);
 
-      ***REMOVED***
+          }
 
           return;
 
-    ***REMOVED***
-  ***REMOVED***
+        }
+      }
 
 
 
@@ -158,9 +158,9 @@ class Registry extends ModTemplate {
           if (tx.transaction.to[0].add == registry_self.app.wallet.returnPublicKey()) {
             if (tx.transaction.msg.identifier != undefined && tx.transaction.msg.signed_message != undefined && tx.transaction.msg.sig != undefined) {
 
-      ***REMOVED***
-      ***REMOVED*** am email? for us? from the DNS registrar?
-      ***REMOVED***
+              //
+              // am email? for us? from the DNS registrar?
+              //
               let identifier 	 = tx.transaction.msg.identifier;
               let signed_message = tx.transaction.msg.signed_message;
               let sig		 = tx.transaction.msg.sig;
@@ -168,13 +168,13 @@ class Registry extends ModTemplate {
               if (registry_self.app.crypto.verifyMessage(signed_message, sig, registry_self.publickey)) {
                 registry_self.app.keys.addKey(tx.transaction.to[0].add, identifier, true, "", blk.block.id, blk.returnHash(), 1);
                 registry_self.app.modules.updateIdentifier();
-          ***REMOVED***
-        ***REMOVED***
-      ***REMOVED***
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
-  ***REMOVED***
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 
 
   async addRecord(identifier="", publickey="", unixtime=0, bid=0, bsh="", lock_block=0, sig="", signer="", lc=1) {
@@ -210,7 +210,7 @@ class Registry extends ModTemplate {
         $sig		:	sig,
         $signer		:	signer,
         $lc		:	lc,
-  ***REMOVED***
+      }
     await this.app.storage.executeDatabase(sql, params, "registry");
 
     sql = "SELECT * FROM records WHERE identifier = $identifier AND publickey = $publickey AND unixtime = $unixtime AND bid = $bid AND bsh = $bsh AND lock_block = $lock_block AND sig = $sig AND signer = $signer AND lc = $lc";
@@ -221,11 +221,11 @@ console.log("\n\n\nRES: " + JSON.stringify(rows));
 console.log("ROWS: " + rows.length);
     if (rows.length == 0) {
       return 0;
-***REMOVED*** else {
+    } else {
       return 1;
-***REMOVED***
+    }
 
-  ***REMOVED***
+  }
 
 
 
@@ -233,20 +233,20 @@ console.log("ROWS: " + rows.length);
   async onChainReorganization(bid, bsh, lc) {
 
     var sql    = "UPDATE records SET lc = $lc WHERE bid = $bid AND bsh = $bsh";
-    var params = { $bid : bid , $bsh : bsh ***REMOVED***
+    var params = { $bid : bid , $bsh : bsh }
     await this.app.storage.executeDatabase(sql, params, "registry");
 
     return;
 
-  ***REMOVED***
+  }
 
 
 
   shouldAffixCallbackToModule(modname) {
-    if (modname == this.name) { return 1; ***REMOVED***
-    if (modname == "Email") { return 1; ***REMOVED***
+    if (modname == this.name) { return 1; }
+    if (modname == "Email") { return 1; }
     return 0;
-  ***REMOVED***
+  }
 
 
 
@@ -258,7 +258,7 @@ console.log("ROWS: " + rows.length);
     if (newtx == null) {
       console.log("NULL TX CREATED IN REGISTRY MODULE")
       return;
-***REMOVED***
+    }
 
     newtx.transaction.msg.module   = "Email";
     newtx.transaction.msg.data     = "You have successfully registered your address";
@@ -267,7 +267,7 @@ console.log("ROWS: " + rows.length);
     newtx = this.app.wallet.signTransaction(tx);
     this.app.network.propagateTransaction(newtx); 
 
-  ***REMOVED***
+  }
 
 
 
@@ -280,7 +280,7 @@ console.log("ROWS: " + rows.length);
     if (newtx == null) {
       console.log("NULL TX CREATED IN REGISTRY MODULE")
       return;
-***REMOVED***
+    }
 
     newtx.transaction.msg.module   = "Email";
     newtx.transaction.msg.data     = "You have successfully registered your address";
@@ -289,12 +289,12 @@ console.log("ROWS: " + rows.length);
     newtx = this.app.wallet.signTransaction(tx);
     this.app.network.propagateTransaction(newtx); 
 
-  ***REMOVED***
+  }
 
 
 
 
-***REMOVED***
+}
 module.exports = Registry;
 
 

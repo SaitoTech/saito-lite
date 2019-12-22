@@ -1,20 +1,20 @@
 // Bordered & Pulled
 // -------------------------
 
-.#{$fa-css-prefix***REMOVED***-border {
+.#{$fa-css-prefix}-border {
   border: solid .08em $fa-border-color;
   border-radius: .1em;
   padding: .2em .25em .15em;
-***REMOVED***
+}
 
-.#{$fa-css-prefix***REMOVED***-pull-left { float: left; ***REMOVED***
-.#{$fa-css-prefix***REMOVED***-pull-right { float: right; ***REMOVED***
+.#{$fa-css-prefix}-pull-left { float: left; }
+.#{$fa-css-prefix}-pull-right { float: right; }
 
-.#{$fa-css-prefix***REMOVED***,
+.#{$fa-css-prefix},
 .fas,
 .far,
 .fal,
 .fab {
-  &.#{$fa-css-prefix***REMOVED***-pull-left { margin-right: .3em; ***REMOVED***
-  &.#{$fa-css-prefix***REMOVED***-pull-right { margin-left: .3em; ***REMOVED***
-***REMOVED***
+  &.#{$fa-css-prefix}-pull-left { margin-right: .3em; }
+  &.#{$fa-css-prefix}-pull-right { margin-left: .3em; }
+}

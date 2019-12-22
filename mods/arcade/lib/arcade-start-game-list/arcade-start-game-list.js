@@ -24,24 +24,24 @@ module.exports = ArcadeStartGameList = {
                 var maxPlayers = gamemods[i].maxPlayers;
                 if (minPlayers == maxPlayers) {
                     players += minPlayers;
-            ***REMOVED*** else {
+                } else {
                     players += minPlayers + "-" + maxPlayers;
-            ***REMOVED***
+                }
                 html +=
-                    `<div class="arcade-game-list-item" data-game="${gamemods[i].name***REMOVED***"> \
-              <div class="arcade-game-list-image" style="background-image: url(${gamemod_url***REMOVED***);"></div>
+                    `<div class="arcade-game-list-item" data-game="${gamemods[i].name}"> \
+              <div class="arcade-game-list-image" style="background-image: url(${gamemod_url});"></div>
               <div class="arcade-gema-list-details">
-                <div class="arcade-game-list-title"><h4>${gamemods[i].name***REMOVED***</h4></div>
-                <div class="arcade-game-list-type">${gamemods[i].type***REMOVED***</h4></div>
-                <div class="arcade-game-list-players">${players***REMOVED***</h4></div>
+                <div class="arcade-game-list-title"><h4>${gamemods[i].name}</h4></div>
+                <div class="arcade-game-list-type">${gamemods[i].type}</h4></div>
+                <div class="arcade-game-list-players">${players}</h4></div>
               </div>
             </div>`;
-        ***REMOVED***
-    ***REMOVED***
+            }
+        }
         gamemod_url = '/saito/img/dreamscape.png';
         html +=
            `<div class="arcade-game-list-item" data-game="Install New Game"> \
-              <div class="arcade-game-list-image" style="background-image: url(${gamemod_url***REMOVED***);"></div>
+              <div class="arcade-game-list-image" style="background-image: url(${gamemod_url});"></div>
               <div class="arcade-gema-list-details">
                 <div class="arcade-game-list-title"><h4>Install New Game</h4></div>
                 <div class="arcade-game-list-type">Saito Appstore</h4></div>
@@ -57,14 +57,14 @@ module.exports = ArcadeStartGameList = {
 
         setTimeout(() => {
             document.querySelector('.start-game').style.opacity = 1;
-    ***REMOVED***, 100);
+        }, 100);
         document.querySelector('#game-list-wrapper').addEventListener("click", function () {
             wrapper.remove();
-    ***REMOVED***, false);
+        }, false);
         document.querySelector('#return-to-arcade').addEventListener("click", function () {
             wrapper.remove();
-    ***REMOVED***, false);
-***REMOVED***,
+        }, false);
+    },
 
     attachEvents(app, data) {
 
@@ -76,9 +76,9 @@ module.exports = ArcadeStartGameList = {
                 ArcadeGameCreate.render(app, data);
                 ArcadeGameCreate.attachEvents(app, data);
 
-        ***REMOVED***);
-    ***REMOVED***);
+            });
+        });
 
 
-***REMOVED***
-***REMOVED***
+    }
+}

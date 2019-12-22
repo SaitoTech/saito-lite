@@ -10,7 +10,7 @@ module.exports = ChatMain = {
     app.connection.on('chat-render-request', () => this.render(app, data));
 
     this.render(app, data);
-  ***REMOVED***,
+  },
 
   render(app, data) {
     data.chat.main = this;
@@ -32,10 +32,10 @@ module.exports = ChatMain = {
         ChatAddContact.render(app, data);
         ChatAddContact.attachEvents(app, data);
         break;
-***REMOVED***
-  ***REMOVED***,
+    }
+  },
 
   attachEvents(app, data) {
 
-  ***REMOVED***
-***REMOVED***
+  }
+}

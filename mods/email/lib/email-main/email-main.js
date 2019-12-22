@@ -7,7 +7,7 @@ module.exports = EmailMain = {
   render(app, data) {
 
     let email_main = document.querySelector(".email-main");
-    if (!email_main) { return; ***REMOVED***
+    if (!email_main) { return; }
     email_main.innerHTML = EmailMainTemplate();
 
     data.email.main = this;
@@ -15,11 +15,11 @@ module.exports = EmailMain = {
     EmailHeader.render(app, data);
     EmailBody.render(app, data);
 
-  ***REMOVED***,
+  },
 
   attachEvents(app, data) {
     EmailHeader.attachEvents(app, data);
     EmailBody.attachEvents(app, data);
-  ***REMOVED***
+  }
 
-***REMOVED***
+}

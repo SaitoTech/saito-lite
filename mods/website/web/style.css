@@ -1,7 +1,7 @@
 body {
   background-color: var(--saito-skyline-grey);
   font-size: 1.4em;
-***REMOVED***
+}
 
 .header {
   position: absolute;
@@ -9,7 +9,7 @@ body {
   left: 0px;
   background-image: transparent;
   background: transparent;
-***REMOVED***
+}
 
 .main {
   padding:0;
@@ -17,7 +17,7 @@ body {
   width: 100%;
   min-height: 1000px;
   height: 100%;
-***REMOVED***
+}
 
 .background-image {
   background-image: url('/saito/img/dreamscape.png');
@@ -25,7 +25,7 @@ body {
   width: 100%;
   min-height: 1000px;
   height: 100%;
-***REMOVED***
+}
 
 .quote-container {
   width: 580px;
@@ -33,14 +33,14 @@ body {
   position: relative;
   top: -1050px;
   left: 70px;
-***REMOVED***
+}
 
 .quote-content {
   font: normal normal normal 36px/1.4em poppins-semibold,poppins,sans-serif;
   margin-top: 15px;
   display: inline;
   margin:0 4px;
-***REMOVED***
+}
 
 .quote-author {
   clear: both;
@@ -49,17 +49,17 @@ body {
   color: #fff;
   font-weight: 500;
   margin:20px 0 0 45px;
-***REMOVED***
+}
 
 .fa-quote-left {
   font-size:0.8em;
   vertical-align: top;
-***REMOVED***
+}
 
 .fa-quote-right {
   vertical-align: top;
   font-size:0.8em;
-***REMOVED***
+}
 
 .intro-box {
   height: auto;
@@ -69,7 +69,7 @@ body {
   position: relative;
   background-color: #f2f2f2;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
-***REMOVED***
+}
 
 .intro-title {
   color: #f71e3d;
@@ -77,7 +77,7 @@ body {
   left: 52px;
   font: normal normal normal 40px/1.4em poppins-semibold,poppins,sans-serif;
   font-weight: 700;
-***REMOVED***
+}
 
 .border-box{
   width:113px;
@@ -86,7 +86,7 @@ body {
   margin-left: 52px;
   box-sizing: border-box;
   border-top: 3px solid #f71e3d;
-***REMOVED***
+}
 
 .intro-content {
   font: normal normal normal 16px/1.4em helvetica-w01-light,helvetica-w02-light,sans-serif;
@@ -96,5 +96,5 @@ body {
   display: block;
   padding: 20px 52px 37px 52px;
   letter-spacing: 0.05em;
-***REMOVED***
+}
 

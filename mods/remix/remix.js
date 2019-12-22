@@ -12,7 +12,7 @@ class Remix extends ModTemplate {
 
     this.name = "Remix";
 
-  ***REMOVED***
+  }
 
 
 
@@ -22,14 +22,14 @@ class Remix extends ModTemplate {
       return {
 	render : function(app, data) { 
 	  document.querySelector(".email-appspace").innerHTML = "MY APPLICATION!";
-	***REMOVED*** ,
+	} ,
         attachEvents : function(app, data) {
 	  alert("Attaching Events!");
-	***REMOVED*** ,
-  ***REMOVED***
-***REMOVED***
+	} ,
+      }
+    }
     return null;
-  ***REMOVED***
+  }
 
 
 
@@ -53,13 +53,13 @@ class Remix extends ModTemplate {
         $(".remix-code-textarea").show();
         $(".remix-code").show();
         $(".remix-publish-module-btn").show();
-  ***REMOVED***);
+      });
 
       $('.remix-create-module-btn').hide();
 
       alert("Loading template for: " + remix_self.module_name);
 
-***REMOVED***);
+    });
 
 
 
@@ -94,9 +94,9 @@ alert("Publishing this application!");
       pom.click();
       pom.remove();
 
-***REMOVED***);
-  ***REMOVED***
-***REMOVED***
+    });
+  }
+}
 
 module.exports = Remix;
 

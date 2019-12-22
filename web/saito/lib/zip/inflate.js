@@ -174,13 +174,13 @@
 				c[b[bindex + p]]++;
 				p++;
 				i--; // assume all entries <= BMAX
-			***REMOVED*** while (i !== 0);
+			} while (i !== 0);
 
 			if (c[0] == n) { // null input--all zero length codes
 				t[0] = -1;
 				m[0] = 0;
 				return Z_OK;
-			***REMOVED***
+			}
 
 			// Find minimum and maximum length, bound *m by those
 			l = m[0];
@@ -190,26 +190,26 @@
 			k = j; // minimum code length
 			if (l < j) {
 				l = j;
-			***REMOVED***
+			}
 			for (i = BMAX; i !== 0; i--) {
 				if (c[i] !== 0)
 					break;
-			***REMOVED***
+			}
 			g = i; // maximum code length
 			if (l > i) {
 				l = i;
-			***REMOVED***
+			}
 			m[0] = l;
 
 			// Adjust last length count to fill out codes, if needed
 			for (y = 1 << j; j < i; j++, y <<= 1) {
 				if ((y -= c[j]) < 0) {
 					return Z_DATA_ERROR;
-				***REMOVED***
-			***REMOVED***
+				}
+			}
 			if ((y -= c[i]) < 0) {
 				return Z_DATA_ERROR;
-			***REMOVED***
+			}
 			c[i] += y;
 
 			// Generate starting offsets into the value table for each length
@@ -220,7 +220,7 @@
 				x[xp] = (j += c[p]);
 				xp++;
 				p++;
-			***REMOVED***
+			}
 
 			// Make a table of values in order of bit lengths
 			i = 0;
@@ -228,9 +228,9 @@
 			do {
 				if ((j = b[bindex + p]) !== 0) {
 					v[x[j]++] = i;
-				***REMOVED***
+				}
 				p++;
-			***REMOVED*** while (++i < n);
+			} while (++i < n);
 			n = x[g]; // set n to length of v
 
 			// Generate the Huffman codes and for each, make the table entries
@@ -264,15 +264,15 @@
 									if ((f <<= 1) <= c[++xp])
 										break; // enough codes to use up j bits
 									f -= c[xp]; // else deduct codes from patterns
-								***REMOVED***
-							***REMOVED***
-						***REMOVED***
+								}
+							}
+						}
 						z = 1 << j; // table entries for j-bit table
 
 						// allocate new table
 						if (hn[0] + z > MANY) { // (note: doesn't matter for fixed)
 							return Z_DATA_ERROR; // overflow of MANY
-						***REMOVED***
+						}
 						u[h] = q = /* hp+ */hn[0]; // DEBUG
 						hn[0] += z;
 
@@ -287,35 +287,35 @@
 							// to
 							// last
 							// table
-						***REMOVED*** else {
+						} else {
 							t[0] = q; // first table is returned result
-						***REMOVED***
-					***REMOVED***
+						}
+					}
 
 					// set up table entry in r
 					r[1] = /* (byte) */(k - w);
 					if (p >= n) {
 						r[0] = 128 + 64; // out of values--invalid code
-					***REMOVED*** else if (v[p] < s) {
+					} else if (v[p] < s) {
 						r[0] = /* (byte) */(v[p] < 256 ? 0 : 32 + 64); // 256 is
 						// end-of-block
 						r[2] = v[p++]; // simple code is just the value
-					***REMOVED*** else {
+					} else {
 						r[0] = /* (byte) */(e[v[p] - s] + 16 + 64); // non-simple--look
 						// up in lists
 						r[2] = d[v[p++] - s];
-					***REMOVED***
+					}
 
 					// fill code-like entries with r
 					f = 1 << (k - w);
 					for (j = i >>> w; j < z; j += f) {
 						hp.set(r, (q + j) * 3);
-					***REMOVED***
+					}
 
 					// backwards increment the k-bit code i
 					for (j = 1 << (k - 1); (i & j) !== 0; j >>>= 1) {
 						i ^= j;
-					***REMOVED***
+					}
 					i ^= j;
 
 					// backup over finished tables
@@ -324,12 +324,12 @@
 						h--; // don't need to update q
 						w -= l;
 						mask = (1 << w) - 1;
-					***REMOVED***
-				***REMOVED***
-			***REMOVED***
+					}
+				}
+			}
 			// Return Z_BUF_ERROR if we were given an incomplete table
 			return y !== 0 && g != 1 ? Z_BUF_ERROR : Z_OK;
-		***REMOVED***
+		}
 
 		function initWorkArea(vsize) {
 			var i;
@@ -340,24 +340,24 @@
 				r = []; // new Array(3);
 				u = new Int32Array(BMAX); // new Array(BMAX);
 				x = new Int32Array(BMAX + 1); // new Array(BMAX + 1);
-			***REMOVED***
+			}
 			if (v.length < vsize) {
 				v = []; // new Array(vsize);
-			***REMOVED***
+			}
 			for (i = 0; i < vsize; i++) {
 				v[i] = 0;
-			***REMOVED***
+			}
 			for (i = 0; i < BMAX + 1; i++) {
 				c[i] = 0;
-			***REMOVED***
+			}
 			for (i = 0; i < 3; i++) {
 				r[i] = 0;
-			***REMOVED***
-			// for(int i=0; i<BMAX; i++){u[i]=0;***REMOVED***
+			}
+			// for(int i=0; i<BMAX; i++){u[i]=0;}
 			u.set(c.subarray(0, BMAX), 0);
-			// for(int i=0; i<BMAX+1; i++){x[i]=0;***REMOVED***
+			// for(int i=0; i<BMAX+1; i++){x[i]=0;}
 			x.set(c.subarray(0, BMAX + 1), 0);
-		***REMOVED***
+		}
 
 		that.inflate_trees_bits = function(c, // 19 code lengths
 		bb, // bits tree desired/actual depth
@@ -372,12 +372,12 @@
 
 			if (result == Z_DATA_ERROR) {
 				z.msg = "oversubscribed dynamic bit lengths tree";
-			***REMOVED*** else if (result == Z_BUF_ERROR || bb[0] === 0) {
+			} else if (result == Z_BUF_ERROR || bb[0] === 0) {
 				z.msg = "incomplete dynamic bit lengths tree";
 				result = Z_DATA_ERROR;
-			***REMOVED***
+			}
 			return result;
-		***REMOVED***;
+		};
 
 		that.inflate_trees_dynamic = function(nl, // number of literal/length codes
 		nd, // number of distance codes
@@ -398,12 +398,12 @@
 			if (result != Z_OK || bl[0] === 0) {
 				if (result == Z_DATA_ERROR) {
 					z.msg = "oversubscribed literal/length tree";
-				***REMOVED*** else if (result != Z_MEM_ERROR) {
+				} else if (result != Z_MEM_ERROR) {
 					z.msg = "incomplete literal/length tree";
 					result = Z_DATA_ERROR;
-				***REMOVED***
+				}
 				return result;
-			***REMOVED***
+			}
 
 			// build distance tree
 			initWorkArea(288);
@@ -412,20 +412,20 @@
 			if (result != Z_OK || (bd[0] === 0 && nl > 257)) {
 				if (result == Z_DATA_ERROR) {
 					z.msg = "oversubscribed distance tree";
-				***REMOVED*** else if (result == Z_BUF_ERROR) {
+				} else if (result == Z_BUF_ERROR) {
 					z.msg = "incomplete distance tree";
 					result = Z_DATA_ERROR;
-				***REMOVED*** else if (result != Z_MEM_ERROR) {
+				} else if (result != Z_MEM_ERROR) {
 					z.msg = "empty distance tree with lengths";
 					result = Z_DATA_ERROR;
-				***REMOVED***
+				}
 				return result;
-			***REMOVED***
+			}
 
 			return Z_OK;
-		***REMOVED***;
+		};
 
-	***REMOVED***
+	}
 
 	InfTree.inflate_trees_fixed = function(bl, // literal desired/actual bit depth
 	bd, // distance desired/actual bit depth
@@ -437,7 +437,7 @@
 		tl[0] = fixed_tl;
 		td[0] = fixed_td;
 		return Z_OK;
-	***REMOVED***;
+	};
 
 	// InfCodes
 
@@ -526,7 +526,7 @@
 					n--;
 					b |= (z.read_byte(p++) & 0xff) << k;
 					k += 8;
-				***REMOVED***
+				}
 
 				t = b & ml;
 				tp = tl;
@@ -539,7 +539,7 @@
 					s.window[q++] = /* (byte) */tp[tp_index_t_3 + 2];
 					m--;
 					continue;
-				***REMOVED***
+				}
 				do {
 
 					b >>= (tp[tp_index_t_3 + 1]);
@@ -557,7 +557,7 @@
 							n--;
 							b |= (z.read_byte(p++) & 0xff) << k;
 							k += 8;
-						***REMOVED***
+						}
 
 						t = b & md;
 						tp = td;
@@ -577,7 +577,7 @@
 									n--;
 									b |= (z.read_byte(p++) & 0xff) << k;
 									k += 8;
-								***REMOVED***
+								}
 
 								d = tp[tp_index_t_3 + 2] + (b & inflate_mask[e]);
 
@@ -597,53 +597,53 @@
 										// loop a
 										// little
 										c -= 2;
-									***REMOVED*** else {
+									} else {
 										s.window.set(s.window.subarray(r, r + 2), q);
 										q += 2;
 										r += 2;
 										c -= 2;
-									***REMOVED***
-								***REMOVED*** else { // else offset after destination
+									}
+								} else { // else offset after destination
 									r = q - d;
 									do {
 										r += s.end; // force pointer in window
-									***REMOVED*** while (r < 0); // covers invalid distances
+									} while (r < 0); // covers invalid distances
 									e = s.end - r;
 									if (c > e) { // if source crosses,
 										c -= e; // wrapped copy
 										if (q - r > 0 && e > (q - r)) {
 											do {
 												s.window[q++] = s.window[r++];
-											***REMOVED*** while (--e !== 0);
-										***REMOVED*** else {
+											} while (--e !== 0);
+										} else {
 											s.window.set(s.window.subarray(r, r + e), q);
 											q += e;
 											r += e;
 											e = 0;
-										***REMOVED***
+										}
 										r = 0; // copy rest from start of window
-									***REMOVED***
+									}
 
-								***REMOVED***
+								}
 
 								// copy all or what's left
 								if (q - r > 0 && c > (q - r)) {
 									do {
 										s.window[q++] = s.window[r++];
-									***REMOVED*** while (--c !== 0);
-								***REMOVED*** else {
+									} while (--c !== 0);
+								} else {
 									s.window.set(s.window.subarray(r, r + c), q);
 									q += c;
 									r += c;
 									c = 0;
-								***REMOVED***
+								}
 								break;
-							***REMOVED*** else if ((e & 64) === 0) {
+							} else if ((e & 64) === 0) {
 								t += tp[tp_index_t_3 + 2];
 								t += (b & inflate_mask[e]);
 								tp_index_t_3 = (tp_index + t) * 3;
 								e = tp[tp_index_t_3];
-							***REMOVED*** else {
+							} else {
 								z.msg = "invalid distance code";
 
 								c = z.avail_in - n;
@@ -660,10 +660,10 @@
 								s.write = q;
 
 								return Z_DATA_ERROR;
-							***REMOVED***
-						***REMOVED*** while (true);
+							}
+						} while (true);
 						break;
-					***REMOVED***
+					}
 
 					if ((e & 64) === 0) {
 						t += tp[tp_index_t_3 + 2];
@@ -677,8 +677,8 @@
 							s.window[q++] = /* (byte) */tp[tp_index_t_3 + 2];
 							m--;
 							break;
-						***REMOVED***
-					***REMOVED*** else if ((e & 32) !== 0) {
+						}
+					} else if ((e & 32) !== 0) {
 
 						c = z.avail_in - n;
 						c = (k >> 3) < c ? k >> 3 : c;
@@ -694,7 +694,7 @@
 						s.write = q;
 
 						return Z_STREAM_END;
-					***REMOVED*** else {
+					} else {
 						z.msg = "invalid literal/length code";
 
 						c = z.avail_in - n;
@@ -711,9 +711,9 @@
 						s.write = q;
 
 						return Z_DATA_ERROR;
-					***REMOVED***
-				***REMOVED*** while (true);
-			***REMOVED*** while (m >= 258 && n >= 10);
+					}
+				} while (true);
+			} while (m >= 258 && n >= 10);
 
 			// not enough input or output--restore pointers and return
 			c = z.avail_in - n;
@@ -730,7 +730,7 @@
 			s.write = q;
 
 			return Z_OK;
-		***REMOVED***
+		}
 
 		that.init = function(bl, bd, tl, tl_index, td, td_index) {
 			mode = START;
@@ -741,7 +741,7 @@
 			dtree = td;
 			dtree_index = td_index;
 			tree = null;
-		***REMOVED***;
+		};
 
 		that.proc = function(s, z, r) {
 			var j; // temporary storage
@@ -788,8 +788,8 @@
 						if (r != Z_OK) {
 							mode = r == Z_STREAM_END ? WASH : BADCODE;
 							break;
-						***REMOVED***
-					***REMOVED***
+						}
+					}
 					need = lbits;
 					tree = ltree;
 					tree_index = ltree_index;
@@ -811,11 +811,11 @@
 							z.next_in_index = p;
 							s.write = q;
 							return s.inflate_flush(z, r);
-						***REMOVED***
+						}
 						n--;
 						b |= (z.read_byte(p++) & 0xff) << k;
 						k += 8;
-					***REMOVED***
+					}
 
 					tindex = (tree_index + (b & inflate_mask[j])) * 3;
 
@@ -828,22 +828,22 @@
 						lit = tree[tindex + 2];
 						mode = LIT;
 						break;
-					***REMOVED***
+					}
 					if ((e & 16) !== 0) { // length
 						get = e & 15;
 						len = tree[tindex + 2];
 						mode = LENEXT;
 						break;
-					***REMOVED***
+					}
 					if ((e & 64) === 0) { // next table
 						need = e;
 						tree_index = tindex / 3 + tree[tindex + 2];
 						break;
-					***REMOVED***
+					}
 					if ((e & 32) !== 0) { // end of block
 						mode = WASH;
 						break;
-					***REMOVED***
+					}
 					mode = BADCODE; // invalid code
 					z.msg = "invalid literal/length code";
 					r = Z_DATA_ERROR;
@@ -871,11 +871,11 @@
 							z.next_in_index = p;
 							s.write = q;
 							return s.inflate_flush(z, r);
-						***REMOVED***
+						}
 						n--;
 						b |= (z.read_byte(p++) & 0xff) << k;
 						k += 8;
-					***REMOVED***
+					}
 
 					len += (b & inflate_mask[j]);
 
@@ -902,11 +902,11 @@
 							z.next_in_index = p;
 							s.write = q;
 							return s.inflate_flush(z, r);
-						***REMOVED***
+						}
 						n--;
 						b |= (z.read_byte(p++) & 0xff) << k;
 						k += 8;
-					***REMOVED***
+					}
 
 					tindex = (tree_index + (b & inflate_mask[j])) * 3;
 
@@ -919,12 +919,12 @@
 						dist = tree[tindex + 2];
 						mode = DISTEXT;
 						break;
-					***REMOVED***
+					}
 					if ((e & 64) === 0) { // next table
 						need = e;
 						tree_index = tindex / 3 + tree[tindex + 2];
 						break;
-					***REMOVED***
+					}
 					mode = BADCODE; // invalid code
 					z.msg = "invalid distance code";
 					r = Z_DATA_ERROR;
@@ -952,11 +952,11 @@
 							z.next_in_index = p;
 							s.write = q;
 							return s.inflate_flush(z, r);
-						***REMOVED***
+						}
 						n--;
 						b |= (z.read_byte(p++) & 0xff) << k;
 						k += 8;
-					***REMOVED***
+					}
 
 					dist += (b & inflate_mask[j]);
 
@@ -969,14 +969,14 @@
 					f = q - dist;
 					while (f < 0) { // modulo window size-"while" instead
 						f += s.end; // of "if" handles invalid distances
-					***REMOVED***
+					}
 					while (len !== 0) {
 
 						if (m === 0) {
 							if (q == s.end && s.read !== 0) {
 								q = 0;
 								m = q < s.read ? s.read - q - 1 : s.end - q;
-							***REMOVED***
+							}
 							if (m === 0) {
 								s.write = q;
 								r = s.inflate_flush(z, r);
@@ -986,7 +986,7 @@
 								if (q == s.end && s.read !== 0) {
 									q = 0;
 									m = q < s.read ? s.read - q - 1 : s.end - q;
-								***REMOVED***
+								}
 
 								if (m === 0) {
 									s.bitb = b;
@@ -996,9 +996,9 @@
 									z.next_in_index = p;
 									s.write = q;
 									return s.inflate_flush(z, r);
-								***REMOVED***
-							***REMOVED***
-						***REMOVED***
+								}
+							}
+						}
 
 						s.window[q++] = s.window[f++];
 						m--;
@@ -1006,7 +1006,7 @@
 						if (f == s.end)
 							f = 0;
 						len--;
-					***REMOVED***
+					}
 					mode = START;
 					break;
 				case LIT: // o: got literal, waiting for output space
@@ -1014,7 +1014,7 @@
 						if (q == s.end && s.read !== 0) {
 							q = 0;
 							m = q < s.read ? s.read - q - 1 : s.end - q;
-						***REMOVED***
+						}
 						if (m === 0) {
 							s.write = q;
 							r = s.inflate_flush(z, r);
@@ -1024,7 +1024,7 @@
 							if (q == s.end && s.read !== 0) {
 								q = 0;
 								m = q < s.read ? s.read - q - 1 : s.end - q;
-							***REMOVED***
+							}
 							if (m === 0) {
 								s.bitb = b;
 								s.bitk = k;
@@ -1033,9 +1033,9 @@
 								z.next_in_index = p;
 								s.write = q;
 								return s.inflate_flush(z, r);
-							***REMOVED***
-						***REMOVED***
-					***REMOVED***
+							}
+						}
+					}
 					r = Z_OK;
 
 					s.window[q++] = /* (byte) */lit;
@@ -1048,7 +1048,7 @@
 						k -= 8;
 						n++;
 						p--; // can always return one
-					***REMOVED***
+					}
 
 					s.write = q;
 					r = s.inflate_flush(z, r);
@@ -1063,7 +1063,7 @@
 						z.next_in_index = p;
 						s.write = q;
 						return s.inflate_flush(z, r);
-					***REMOVED***
+					}
 					mode = END;
 					/* falls through */
 				case END:
@@ -1098,15 +1098,15 @@
 					z.next_in_index = p;
 					s.write = q;
 					return s.inflate_flush(z, r);
-				***REMOVED***
-			***REMOVED***
-		***REMOVED***;
+				}
+			}
+		};
 
 		that.free = function() {
 			// ZFREE(z, c);
-		***REMOVED***;
+		};
 
-	***REMOVED***
+	}
 
 	// InfBlocks
 
@@ -1159,15 +1159,15 @@
 			if (c)
 				c[0] = check;
 			// if (mode == BTREE || mode == DTREE) {
-			// ***REMOVED***
+			// }
 			if (mode == CODES) {
 				codes.free(z);
-			***REMOVED***
+			}
 			mode = TYPE;
 			that.bitk = 0;
 			that.bitb = 0;
 			that.read = that.write = 0;
-		***REMOVED***;
+		};
 
 		that.reset(z, null);
 
@@ -1219,7 +1219,7 @@
 				z.next_out.set(that.window.subarray(q, q + n), p);
 				p += n;
 				q += n;
-			***REMOVED***
+			}
 
 			// update pointers
 			z.next_out_index = p;
@@ -1227,7 +1227,7 @@
 
 			// done
 			return r;
-		***REMOVED***;
+		};
 
 		that.proc = function(z, r) {
 			var t; // temporary storage
@@ -1246,11 +1246,11 @@
 			n = z.avail_in;
 			b = that.bitb;
 			k = that.bitk;
-			// ***REMOVED***
+			// }
 			// {
 			q = that.write;
 			m = /* (int) */(q < that.read ? that.read - q - 1 : that.end - q);
-			// ***REMOVED***
+			// }
 
 			// process input based on current state
 			// DEBUG dtree
@@ -1261,7 +1261,7 @@
 					while (k < (3)) {
 						if (n !== 0) {
 							r = Z_OK;
-						***REMOVED*** else {
+						} else {
 							that.bitb = b;
 							that.bitk = k;
 							z.avail_in = n;
@@ -1269,11 +1269,11 @@
 							z.next_in_index = p;
 							that.write = q;
 							return that.inflate_flush(z, r);
-						***REMOVED***
+						}
 						n--;
 						b |= (z.read_byte(p++) & 0xff) << k;
 						k += 8;
-					***REMOVED***
+					}
 					t = /* (int) */(b & 7);
 					last = t & 1;
 
@@ -1282,13 +1282,13 @@
 						// {
 						b >>>= (3);
 						k -= (3);
-						// ***REMOVED***
+						// }
 						t = k & 7; // go to byte boundary
 
 						// {
 						b >>>= (t);
 						k -= (t);
-						// ***REMOVED***
+						// }
 						mode = LENS; // get length of stored block
 						break;
 					case 1: // fixed
@@ -1300,12 +1300,12 @@
 
 						InfTree.inflate_trees_fixed(bl, bd, tl, td);
 						codes.init(bl[0], bd[0], tl[0], 0, td[0], 0);
-						// ***REMOVED***
+						// }
 
 						// {
 						b >>>= (3);
 						k -= (3);
-						// ***REMOVED***
+						// }
 
 						mode = CODES;
 						break;
@@ -1314,7 +1314,7 @@
 						// {
 						b >>>= (3);
 						k -= (3);
-						// ***REMOVED***
+						// }
 
 						mode = TABLE;
 						break;
@@ -1323,7 +1323,7 @@
 						// {
 						b >>>= (3);
 						k -= (3);
-						// ***REMOVED***
+						// }
 						mode = BADBLOCKS;
 						z.msg = "invalid block type";
 						r = Z_DATA_ERROR;
@@ -1335,14 +1335,14 @@
 						z.next_in_index = p;
 						that.write = q;
 						return that.inflate_flush(z, r);
-					***REMOVED***
+					}
 					break;
 				case LENS:
 
 					while (k < (32)) {
 						if (n !== 0) {
 							r = Z_OK;
-						***REMOVED*** else {
+						} else {
 							that.bitb = b;
 							that.bitk = k;
 							z.avail_in = n;
@@ -1350,11 +1350,11 @@
 							z.next_in_index = p;
 							that.write = q;
 							return that.inflate_flush(z, r);
-						***REMOVED***
+						}
 						n--;
 						b |= (z.read_byte(p++) & 0xff) << k;
 						k += 8;
-					***REMOVED***
+					}
 
 					if ((((~b) >>> 16) & 0xffff) != (b & 0xffff)) {
 						mode = BADBLOCKS;
@@ -1368,7 +1368,7 @@
 						z.next_in_index = p;
 						that.write = q;
 						return that.inflate_flush(z, r);
-					***REMOVED***
+					}
 					left = (b & 0xffff);
 					b = k = 0; // dump bits
 					mode = left !== 0 ? STORED : (last !== 0 ? DRY : TYPE);
@@ -1382,13 +1382,13 @@
 						z.next_in_index = p;
 						that.write = q;
 						return that.inflate_flush(z, r);
-					***REMOVED***
+					}
 
 					if (m === 0) {
 						if (q == that.end && that.read !== 0) {
 							q = 0;
 							m = /* (int) */(q < that.read ? that.read - q - 1 : that.end - q);
-						***REMOVED***
+						}
 						if (m === 0) {
 							that.write = q;
 							r = that.inflate_flush(z, r);
@@ -1397,7 +1397,7 @@
 							if (q == that.end && that.read !== 0) {
 								q = 0;
 								m = /* (int) */(q < that.read ? that.read - q - 1 : that.end - q);
-							***REMOVED***
+							}
 							if (m === 0) {
 								that.bitb = b;
 								that.bitk = k;
@@ -1406,9 +1406,9 @@
 								z.next_in_index = p;
 								that.write = q;
 								return that.inflate_flush(z, r);
-							***REMOVED***
-						***REMOVED***
-					***REMOVED***
+							}
+						}
+					}
 					r = Z_OK;
 
 					t = left;
@@ -1430,7 +1430,7 @@
 					while (k < (14)) {
 						if (n !== 0) {
 							r = Z_OK;
-						***REMOVED*** else {
+						} else {
 							that.bitb = b;
 							that.bitk = k;
 							z.avail_in = n;
@@ -1438,12 +1438,12 @@
 							z.next_in_index = p;
 							that.write = q;
 							return that.inflate_flush(z, r);
-						***REMOVED***
+						}
 
 						n--;
 						b |= (z.read_byte(p++) & 0xff) << k;
 						k += 8;
-					***REMOVED***
+					}
 
 					table = t = (b & 0x3fff);
 					if ((t & 0x1f) > 29 || ((t >> 5) & 0x1f) > 29) {
@@ -1458,20 +1458,20 @@
 						z.next_in_index = p;
 						that.write = q;
 						return that.inflate_flush(z, r);
-					***REMOVED***
+					}
 					t = 258 + (t & 0x1f) + ((t >> 5) & 0x1f);
 					if (!blens || blens.length < t) {
 						blens = []; // new Array(t);
-					***REMOVED*** else {
+					} else {
 						for (i = 0; i < t; i++) {
 							blens[i] = 0;
-						***REMOVED***
-					***REMOVED***
+						}
+					}
 
 					// {
 					b >>>= (14);
 					k -= (14);
-					// ***REMOVED***
+					// }
 
 					index = 0;
 					mode = BTREE;
@@ -1481,7 +1481,7 @@
 						while (k < (3)) {
 							if (n !== 0) {
 								r = Z_OK;
-							***REMOVED*** else {
+							} else {
 								that.bitb = b;
 								that.bitk = k;
 								z.avail_in = n;
@@ -1489,23 +1489,23 @@
 								z.next_in_index = p;
 								that.write = q;
 								return that.inflate_flush(z, r);
-							***REMOVED***
+							}
 							n--;
 							b |= (z.read_byte(p++) & 0xff) << k;
 							k += 8;
-						***REMOVED***
+						}
 
 						blens[border[index++]] = b & 7;
 
 						// {
 						b >>>= (3);
 						k -= (3);
-						// ***REMOVED***
-					***REMOVED***
+						// }
+					}
 
 					while (index < 19) {
 						blens[border[index++]] = 0;
-					***REMOVED***
+					}
 
 					bb[0] = 7;
 					t = inftree.inflate_trees_bits(blens, bb, tb, hufts, z);
@@ -1514,7 +1514,7 @@
 						if (r == Z_DATA_ERROR) {
 							blens = null;
 							mode = BADBLOCKS;
-						***REMOVED***
+						}
 
 						that.bitb = b;
 						that.bitk = k;
@@ -1523,7 +1523,7 @@
 						z.next_in_index = p;
 						that.write = q;
 						return that.inflate_flush(z, r);
-					***REMOVED***
+					}
 
 					index = 0;
 					mode = DTREE;
@@ -1533,7 +1533,7 @@
 						t = table;
 						if (index >= 258 + (t & 0x1f) + ((t >> 5) & 0x1f)) {
 							break;
-						***REMOVED***
+						}
 
 						var j, c;
 
@@ -1542,7 +1542,7 @@
 						while (k < (t)) {
 							if (n !== 0) {
 								r = Z_OK;
-							***REMOVED*** else {
+							} else {
 								that.bitb = b;
 								that.bitk = k;
 								z.avail_in = n;
@@ -1550,15 +1550,15 @@
 								z.next_in_index = p;
 								that.write = q;
 								return that.inflate_flush(z, r);
-							***REMOVED***
+							}
 							n--;
 							b |= (z.read_byte(p++) & 0xff) << k;
 							k += 8;
-						***REMOVED***
+						}
 
 						// if (tb[0] == -1) {
 						// System.err.println("null...");
-						// ***REMOVED***
+						// }
 
 						t = hufts[(tb[0] + (b & inflate_mask[t])) * 3 + 1];
 						c = hufts[(tb[0] + (b & inflate_mask[t])) * 3 + 2];
@@ -1567,14 +1567,14 @@
 							b >>>= (t);
 							k -= (t);
 							blens[index++] = c;
-						***REMOVED*** else { // c == 16..18
+						} else { // c == 16..18
 							i = c == 18 ? 7 : c - 14;
 							j = c == 18 ? 11 : 3;
 
 							while (k < (t + i)) {
 								if (n !== 0) {
 									r = Z_OK;
-								***REMOVED*** else {
+								} else {
 									that.bitb = b;
 									that.bitk = k;
 									z.avail_in = n;
@@ -1582,11 +1582,11 @@
 									z.next_in_index = p;
 									that.write = q;
 									return that.inflate_flush(z, r);
-								***REMOVED***
+								}
 								n--;
 								b |= (z.read_byte(p++) & 0xff) << k;
 								k += 8;
-							***REMOVED***
+							}
 
 							b >>>= (t);
 							k -= (t);
@@ -1611,15 +1611,15 @@
 								z.next_in_index = p;
 								that.write = q;
 								return that.inflate_flush(z, r);
-							***REMOVED***
+							}
 
 							c = c == 16 ? blens[i - 1] : 0;
 							do {
 								blens[i++] = c;
-							***REMOVED*** while (--j !== 0);
+							} while (--j !== 0);
 							index = i;
-						***REMOVED***
-					***REMOVED***
+						}
+					}
 
 					tb[0] = -1;
 					// {
@@ -1637,7 +1637,7 @@
 						if (t == Z_DATA_ERROR) {
 							blens = null;
 							mode = BADBLOCKS;
-						***REMOVED***
+						}
 						r = t;
 
 						that.bitb = b;
@@ -1647,9 +1647,9 @@
 						z.next_in_index = p;
 						that.write = q;
 						return that.inflate_flush(z, r);
-					***REMOVED***
+					}
 					codes.init(bl_[0], bd_[0], hufts, tl_[0], hufts, td_[0]);
-					// ***REMOVED***
+					// }
 					mode = CODES;
 					/* falls through */
 				case CODES:
@@ -1662,7 +1662,7 @@
 
 					if ((r = codes.proc(that, z, r)) != Z_STREAM_END) {
 						return that.inflate_flush(z, r);
-					***REMOVED***
+					}
 					r = Z_OK;
 					codes.free(z);
 
@@ -1676,7 +1676,7 @@
 					if (last === 0) {
 						mode = TYPE;
 						break;
-					***REMOVED***
+					}
 					mode = DRY;
 					/* falls through */
 				case DRY:
@@ -1692,7 +1692,7 @@
 						z.next_in_index = p;
 						that.write = q;
 						return that.inflate_flush(z, r);
-					***REMOVED***
+					}
 					mode = DONELOCKS;
 					/* falls through */
 				case DONELOCKS:
@@ -1726,29 +1726,29 @@
 					z.next_in_index = p;
 					that.write = q;
 					return that.inflate_flush(z, r);
-				***REMOVED***
-			***REMOVED***
-		***REMOVED***;
+				}
+			}
+		};
 
 		that.free = function(z) {
 			that.reset(z, null);
 			that.window = null;
 			hufts = null;
 			// ZFREE(z, s);
-		***REMOVED***;
+		};
 
 		that.set_dictionary = function(d, start, n) {
 			that.window.set(d.subarray(start, start + n), 0);
 			that.read = that.write = n;
-		***REMOVED***;
+		};
 
 		// Returns true if inflate is currently at the end of a block generated
 		// by Z_SYNC_FLUSH or Z_FULL_FLUSH.
 		that.sync_point = function() {
 			return mode == LENS ? 1 : 0;
-		***REMOVED***;
+		};
 
-	***REMOVED***
+	}
 
 	// Inflate
 
@@ -1799,7 +1799,7 @@
 			z.istate.mode = BLOCKS;
 			z.istate.blocks.reset(z, null);
 			return Z_OK;
-		***REMOVED***
+		}
 
 		that.inflateEnd = function(z) {
 			if (that.blocks)
@@ -1807,7 +1807,7 @@
 			that.blocks = null;
 			// ZFREE(z, z->state);
 			return Z_OK;
-		***REMOVED***;
+		};
 
 		that.inflateInit = function(z, w) {
 			z.msg = null;
@@ -1817,7 +1817,7 @@
 			if (w < 8 || w > 15) {
 				that.inflateEnd(z);
 				return Z_STREAM_ERROR;
-			***REMOVED***
+			}
 			that.wbits = w;
 
 			z.istate.blocks = new InfBlocks(z, 1 << w);
@@ -1825,7 +1825,7 @@
 			// reset state
 			inflateReset(z);
 			return Z_OK;
-		***REMOVED***;
+		};
 
 		that.inflate = function(z, f) {
 			var r;
@@ -1851,13 +1851,13 @@
 						z.msg = "unknown compression method";
 						z.istate.marker = 5; // can't try inflateSync
 						break;
-					***REMOVED***
+					}
 					if ((z.istate.method >> 4) + 8 > z.istate.wbits) {
 						z.istate.mode = BAD;
 						z.msg = "invalid window size";
 						z.istate.marker = 5; // can't try inflateSync
 						break;
-					***REMOVED***
+					}
 					z.istate.mode = FLAG;
 					/* falls through */
 				case FLAG:
@@ -1875,12 +1875,12 @@
 						z.msg = "incorrect header check";
 						z.istate.marker = 5; // can't try inflateSync
 						break;
-					***REMOVED***
+					}
 
 					if ((b & PRESET_DICT) === 0) {
 						z.istate.mode = BLOCKS;
 						break;
-					***REMOVED***
+					}
 					z.istate.mode = DICT4;
 					/* falls through */
 				case DICT4:
@@ -1939,13 +1939,13 @@
 						z.istate.mode = BAD;
 						z.istate.marker = 0; // can try inflateSync
 						break;
-					***REMOVED***
+					}
 					if (r == Z_OK) {
 						r = f;
-					***REMOVED***
+					}
 					if (r != Z_STREAM_END) {
 						return r;
-					***REMOVED***
+					}
 					r = f;
 					z.istate.blocks.reset(z, z.istate.was);
 					z.istate.mode = DONE;
@@ -1956,9 +1956,9 @@
 					return Z_DATA_ERROR;
 				default:
 					return Z_STREAM_ERROR;
-				***REMOVED***
-			***REMOVED***
-		***REMOVED***;
+				}
+			}
+		};
 
 		that.inflateSetDictionary = function(z, dictionary, dictLength) {
 			var index = 0;
@@ -1969,11 +1969,11 @@
 			if (length >= (1 << z.istate.wbits)) {
 				length = (1 << z.istate.wbits) - 1;
 				index = dictLength - length;
-			***REMOVED***
+			}
 			z.istate.blocks.set_dictionary(dictionary, index, length);
 			z.istate.mode = BLOCKS;
 			return Z_OK;
-		***REMOVED***;
+		};
 
 		that.inflateSync = function(z) {
 			var n; // number of bytes to look at
@@ -1987,7 +1987,7 @@
 			if (z.istate.mode != BAD) {
 				z.istate.mode = BAD;
 				z.istate.marker = 0;
-			***REMOVED***
+			}
 			if ((n = z.avail_in) === 0)
 				return Z_BUF_ERROR;
 			p = z.next_in_index;
@@ -1997,14 +1997,14 @@
 			while (n !== 0 && m < 4) {
 				if (z.read_byte(p) == mark[m]) {
 					m++;
-				***REMOVED*** else if (z.read_byte(p) !== 0) {
+				} else if (z.read_byte(p) !== 0) {
 					m = 0;
-				***REMOVED*** else {
+				} else {
 					m = 4 - m;
-				***REMOVED***
+				}
 				p++;
 				n--;
-			***REMOVED***
+			}
 
 			// restore
 			z.total_in += p - z.next_in_index;
@@ -2015,7 +2015,7 @@
 			// return no joy or set up to restart on a new block
 			if (m != 4) {
 				return Z_DATA_ERROR;
-			***REMOVED***
+			}
 			r = z.total_in;
 			w = z.total_out;
 			inflateReset(z);
@@ -2023,7 +2023,7 @@
 			z.total_out = w;
 			z.istate.mode = BLOCKS;
 			return Z_OK;
-		***REMOVED***;
+		};
 
 		// Returns true if inflate is currently at the end of a block generated
 		// by Z_SYNC_FLUSH or Z_FULL_FLUSH. This function is used by one PPP
@@ -2036,13 +2036,13 @@
 			if (!z || !z.istate || !z.istate.blocks)
 				return Z_STREAM_ERROR;
 			return z.istate.blocks.sync_point();
-		***REMOVED***;
-	***REMOVED***
+		};
+	}
 
 	// ZStream
 
 	function ZStream() {
-	***REMOVED***
+	}
 
 	ZStream.prototype = {
 		inflateInit : function(bits) {
@@ -2051,14 +2051,14 @@
 			if (!bits)
 				bits = MAX_BITS;
 			return that.istate.inflateInit(that, bits);
-		***REMOVED***,
+		},
 
 		inflate : function(f) {
 			var that = this;
 			if (!that.istate)
 				return Z_STREAM_ERROR;
 			return that.istate.inflate(that, f);
-		***REMOVED***,
+		},
 
 		inflateEnd : function() {
 			var that = this;
@@ -2067,29 +2067,29 @@
 			var ret = that.istate.inflateEnd(that);
 			that.istate = null;
 			return ret;
-		***REMOVED***,
+		},
 
 		inflateSync : function() {
 			var that = this;
 			if (!that.istate)
 				return Z_STREAM_ERROR;
 			return that.istate.inflateSync(that);
-		***REMOVED***,
+		},
 		inflateSetDictionary : function(dictionary, dictLength) {
 			var that = this;
 			if (!that.istate)
 				return Z_STREAM_ERROR;
 			return that.istate.inflateSetDictionary(that, dictionary, dictLength);
-		***REMOVED***,
+		},
 		read_byte : function(start) {
 			var that = this;
 			return that.next_in.subarray(start, start + 1)[0];
-		***REMOVED***,
+		},
 		read_buf : function(start, size) {
 			var that = this;
 			return that.next_in.subarray(start, start + size);
-		***REMOVED***
-	***REMOVED***;
+		}
+	};
 
 	// Inflater
 
@@ -2117,12 +2117,12 @@
 				if ((z.avail_in === 0) && (!nomoreinput)) { // if buffer is empty and more input is available, refill it
 					z.next_in_index = 0;
 					nomoreinput = true;
-				***REMOVED***
+				}
 				err = z.inflate(flush);
 				if (nomoreinput && (err === Z_BUF_ERROR)) {
 					if (z.avail_in !== 0)
 						throw new Error("inflating: bad input");
-				***REMOVED*** else if (err !== Z_OK && err !== Z_STREAM_END)
+				} else if (err !== Z_OK && err !== Z_STREAM_END)
 					throw new Error("inflating: " + z.msg);
 				if ((nomoreinput || err === Z_STREAM_END) && (z.avail_in === data.length))
 					throw new Error("inflating: bad input");
@@ -2135,21 +2135,21 @@
 				if (onprogress && z.next_in_index > 0 && z.next_in_index != lastIndex) {
 					onprogress(z.next_in_index);
 					lastIndex = z.next_in_index;
-				***REMOVED***
-			***REMOVED*** while (z.avail_in > 0 || z.avail_out === 0);
+				}
+			} while (z.avail_in > 0 || z.avail_out === 0);
 			array = new Uint8Array(bufferSize);
 			buffers.forEach(function(chunk) {
 				array.set(chunk, bufferIndex);
 				bufferIndex += chunk.length;
-			***REMOVED***);
+			});
 			return array;
-		***REMOVED***;
+		};
 		that.flush = function() {
 			z.inflateEnd();
-		***REMOVED***;
-	***REMOVED***
+		};
+	}
 
 	// 'zip' may not be defined in z-worker and some tests
 	var env = global.zip || global;
 	env.Inflater = env._jzlib_Inflater = Inflater;
-***REMOVED***)(this);
+})(this);

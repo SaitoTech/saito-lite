@@ -10,7 +10,7 @@ class RemixTemplate extends ModTemplate {
     super(app);
     this.name = "RemixTemplate";
 
-  ***REMOVED***
+  }
 
 
 
@@ -25,21 +25,21 @@ class RemixTemplate extends ModTemplate {
       //
       if (tx.isTo(app.wallet.returnPublicKey())) {
 
-***REMOVED***
+        let txmsg = tx.returnMessage();
 
-***REMOVED***
-***REMOVED*** do something !
-***REMOVED***
+        //
+        // do something !
+        //
 	conole.log("OUR DATA: " + txmsg);
 
 	//
 	// why not send ourselves an email
 	//
 
-  ***REMOVED***
-***REMOVED***
-  ***REMOVED***
+      }
+    }
+  }
 
-***REMOVED***
+}
 
 module.exports = Remix;

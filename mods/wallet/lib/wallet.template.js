@@ -5,13 +5,13 @@ module.exports = WalletTemplate = (balance, publickey) => {
           <div class="wallet-container">
               <div class="wallet-container-row">
                   <span>Balance:</span>
-                  <span>${balance***REMOVED***</span>
+                  <span>${balance}</span>
               </div>
               <div class="wallet-container-row">
                   <span>Address:</span>
-                  <span>${publickey***REMOVED***</span>
+                  <span>${publickey}</span>
               </div>
           </div>
       </div>
   `;
-***REMOVED***
+}

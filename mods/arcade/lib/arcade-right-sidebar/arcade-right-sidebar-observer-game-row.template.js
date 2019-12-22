@@ -5,16 +5,16 @@ module.exports = ObserverGameTemplate = (msg, players, msgjson) => {
       `;
   for (let z = 0; z < players.length; z++) {
       html += `
-        <img class="arcade-observer-game-players-identicon" src="${players[z].identicon***REMOVED***" />
+        <img class="arcade-observer-game-players-identicon" src="${players[z].identicon}" />
       `;
-  ***REMOVED***
+  }
   html += `
       </div>
       <div class="arcade-observer-game-name" id="arcade-observer-game">
-        ${msg.module***REMOVED***
+        ${msg.module}
       </div>
-      <button style="width: 100%" class="arcade-observer-game-btn" id=${msgjson***REMOVED***">WATCH</button
+      <button style="width: 100%" class="arcade-observer-game-btn" id=${msgjson}">WATCH</button
     </div>
   `;
   return html;
-***REMOVED***
+}

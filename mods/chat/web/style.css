@@ -1,20 +1,20 @@
 /** CHAT CSS **/
 .main {
   padding: unset;
-***REMOVED***
+}
 
 .chat {
   display: flex;
   flex-direction: column;
-***REMOVED***
+}
 
 .chat-row {
   margin-bottom: 1em;
-***REMOVED***
+}
 
 .footer {
   display: none;
-***REMOVED***
+}
 
 textarea {
   width: unset;
@@ -22,11 +22,11 @@ textarea {
   border: unset;
   padding: unset;
   margin: unset;
-***REMOVED***
+}
 
 p {
   margin: unset;
-***REMOVED***
+}
 
 .chat-row {
     display: grid;
@@ -36,27 +36,27 @@ p {
     padding: 10px 0px;
     height: 5em;
     cursor: pointer;
-***REMOVED***
+}
 
 .chat-group-name {
   font-weight: bold;
-***REMOVED***
+}
 
 .chat-last-message {
     font-family: visuelt-light;
     margin-top: 0.5em;
-***REMOVED***
+}
 
 .chat-last-message-timestamp {
     font-family: visuelt-light;
-***REMOVED***
+}
 
 .chat-room-message-identicon {
   float: left;
   width: 2em;
   margin: 0 5px 0 0;
   border: 1px solid #8885;
-***REMOVED***
+}
 
 /** CHAT ADD **/
 
@@ -67,14 +67,14 @@ p {
     grid-template-rows: 1fr 1fr 1fr;
     row-gap: 1em;
     align-self: end;
-***REMOVED***
+}
 
 /** CHAT ROOM **/
 
 .chat-room {
   display: grid;
   grid-template-rows: 3.5em auto 7vh;
-***REMOVED***
+}
 
 .chat-room-header {
   grid-template-columns: 5.2em auto 2em 3.2em;
@@ -88,13 +88,13 @@ p {
   position: fixed;
   background: white;
   width: 100%;
-***REMOVED***
+}
 
 .chat-room-name {
   text-align: center;
   font-size: 1.25em;
   margin-top: 3px;
-***REMOVED***
+}
 
 .chat-room-content {
   display: flex;
@@ -106,16 +106,16 @@ p {
   /* height: calc(100vh - 12.7em); */
   height: calc(100vh - 12em);
   margin-top: 3.5em;
-***REMOVED***
+}
 
 .chat-message-container {
   display: flex;
   margin-bottom: 10px;
-***REMOVED***
+}
 
 .chat-message-myself {
   flex-direction: row-reverse;
-***REMOVED***
+}
 
 .chat-room-footer {
   padding: 0 0 0 0.5em;
@@ -131,7 +131,7 @@ p {
   width: 100%;
   padding: 0.5em 0 0.5em 5px;
   background: white;
-***REMOVED***
+}
 
 .chat-room-message {
   padding: 0.75em;
@@ -141,11 +141,11 @@ p {
   grid-template-columns: 2em auto;
   grid-gap: 0em 0.5em;
   min-width: 420px;
-***REMOVED***
+}
 
 .chat-message-text {
   word-wrap: break-word;
-***REMOVED***
+}
 
 .chat-message-header {
     display: flex;
@@ -153,39 +153,39 @@ p {
     font-size: 0.9em;
     color: darkgrey;
     margin: 3px 0;
-***REMOVED***
+}
 
 .chat-message-timestamp {
     margin-left: 1em;
-***REMOVED***
+}
 
 .chat-room-message-others {
   background: var(--saito-cyber-black);
   color: var(--saito-skyline-grey);
   justify-self: left;
   border-bottom-left-radius: 0;
-***REMOVED***
+}
 
 .chat-room-message-myself {
     background: var(--saito-skyline-grey);
     color: var(--saito-cyber-black);
     justify-self: right;
     border-bottom-right-radius: 0;
-***REMOVED***
+}
 
 /* .chat-room-footer {
     padding: 0 0 0 0.5em;
     display: flex;
     justify-content: center;
     align-items: center;
-***REMOVED*** */
+} */
 
 .chat-room-input {
     display: grid;
     grid-template-columns: auto 3em;
     align-items: center;
     width: 100%;
-***REMOVED***
+}
 
 .chat-room-input>textarea {
     height: 2.75em;
@@ -194,7 +194,7 @@ p {
     border: 1px solid lightgrey;
     border-radius: 5px;
     resize: none;
-***REMOVED***
+}
 
 .chat-room-submit-button {
     justify-self: center;
@@ -203,14 +203,14 @@ p {
     color: white;
     border-radius: 100px;
     cursor: pointer;
-***REMOVED***
+}
 
 #chat-nav {
   top: unset;
   bottom: 4em;
   background: var(--saito-skyline-grey);
   border-radius: 5px 5px 0 5px;
-***REMOVED***
+}
 
 .chat-nav-arrow {
   position: absolute;
@@ -221,14 +221,14 @@ p {
   border-color: transparent lightgrey;
   border-bottom: 12px solid transparent;
   border-right: 12px solid lightgrey;
-***REMOVED***
+}
 
 #chat-nav-arrow-interior {
   bottom: -11px;
   right: 0px;
   border-bottom: 12px solid transparent;
   border-right: 12px solid var(--saito-skyline-grey);
-***REMOVED***
+}
 
 .chat-nav-row {
   display: grid;
@@ -237,37 +237,37 @@ p {
 
   border-bottom: 1px solid lightgrey;
   padding-bottom: 5px;
-***REMOVED***
+}
 
 .chat-nav-row:last-child {
   border-bottom: unset;
   padding-bottom: unset;
-***REMOVED***
+}
 
 
 #chat.create-button {
   bottom: 1em;
   right: 1em;
   min-width: unset;
-***REMOVED***
+}
 
 .chat-row {
   margin: 1em;
-***REMOVED***
+}
 
 
 /** Chat Add Contact **/
 
 #chat-add.create-button {
   min-width: unset;
-***REMOVED***
+}
 
 /** Chat New **/
 
 .chat-new {
   display: grid;
   grid-template-rows: 3.5em auto;
-***REMOVED***
+}
 
 .chat-new-header {
   grid-template-columns: 2em auto;
@@ -276,7 +276,7 @@ p {
   display: grid;
   border-bottom: 1px solid var(--saito-skyline-grey);
   padding: 0 1em;
-***REMOVED***
+}
 
 .chat-new-content {
   /* display: flex; */
@@ -284,10 +284,10 @@ p {
   /* flex-direction: column; */
   /* overflow-y: scroll;
   height: 76vh; */
-***REMOVED***
+}
 
 @media only screen and (min-width: 600px) {
   #chat.create-button {
     display: none;
-  ***REMOVED***
-***REMOVED***
+  }
+}

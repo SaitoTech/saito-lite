@@ -8,60 +8,60 @@ const ChatRoomMessageTemplate = require('./chat-room-message.template');
 const ChatMessageContainerTemplate = require('./chat-message-container.template');
 
 module.exports = ChatRoom = {
-    group: {***REMOVED***,
+    group: {},
     render(app, data) {
         let main = document.querySelector('.main');
         main.innerHTML = ChatRoomTemplate();
 
-        this.group = data.chat.groups.filter(group => data.chat.active_group_id === `chat-row-${group.id***REMOVED***`);
+        this.group = data.chat.groups.filter(group => data.chat.active_group_id === `chat-row-${group.id}`);
 
         this.group[0].messages.forEach(room_message => {
-            let { publickey, timestamp ***REMOVED*** = room_message;
+            let { publickey, timestamp } = room_message;
             let type = app.wallet.returnPublicKey() == publickey ? 'myself' : 'others';
             document.querySelector('.chat-room-content').innerHTML
                 += ChatMessageContainerTemplate(room_message, timestamp, type);
-    ***REMOVED***);
+        });
 
-***REMOVED*** let header = document.querySelector('.header');
-***REMOVED*** header.classList.remove("header-home");
-***REMOVED*** header.classList.add("chat-room-header");
-***REMOVED*** header.innerHTML = ChatRoomHeaderTemplate(this.group[0].name);
+        // let header = document.querySelector('.header');
+        // header.classList.remove("header-home");
+        // header.classList.add("chat-room-header");
+        // header.innerHTML = ChatRoomHeaderTemplate(this.group[0].name);
         document.querySelector('.chat-room-header').innerHTML = ChatRoomHeaderTemplate(this.group[0].name);
 
-***REMOVED*** let footer = document.querySelector('.footer');
-***REMOVED*** footer.classList.remove("nav-bar");
-***REMOVED*** footer.classList.add("chat-room-footer");
-***REMOVED*** footer.innerHTML = ChatRoomFooterTemplate();
-***REMOVED*** footer.style.display = 'flex';
+        // let footer = document.querySelector('.footer');
+        // footer.classList.remove("nav-bar");
+        // footer.classList.add("chat-room-footer");
+        // footer.innerHTML = ChatRoomFooterTemplate();
+        // footer.style.display = 'flex';
         document.querySelector('.chat-room-footer').innerHTML = ChatRoomFooterTemplate();
 
         this.scrollToBottom();
         this.attachEvents(app, data);
-***REMOVED***,
+    },
 
     attachEvents(app, data) {
         let fired = false;
 
         console.log("NEW GROUP: ", this.group);
 
-***REMOVED*** let renderDefaultHeaderAndFooter = (app) => {
-***REMOVED***     // header
-***REMOVED***     let header = document.querySelector('.header');
-***REMOVED***     header.classList.remove("chat-room-header");
-***REMOVED***     Header.render(app);
+        // let renderDefaultHeaderAndFooter = (app) => {
+        //     // header
+        //     let header = document.querySelector('.header');
+        //     header.classList.remove("chat-room-header");
+        //     Header.render(app);
 
-***REMOVED***     // footer
-***REMOVED***     let footer = document.querySelector('.footer');
-***REMOVED***     footer.classList.remove("chat-room-footer");
-***REMOVED***     footer.innerHTML = '';
-***REMOVED***     footer.style.display = 'none';
-***REMOVED***     // NavBar.render(chat.app);
-***REMOVED*** ***REMOVED***
+        //     // footer
+        //     let footer = document.querySelector('.footer');
+        //     footer.classList.remove("chat-room-footer");
+        //     footer.innerHTML = '';
+        //     footer.style.display = 'none';
+        //     // NavBar.render(chat.app);
+        // }
 
         let submitMessage = () => {
             let message_input = document.querySelector('#input.chat-room-input');
             let msg = message_input.value;
-            if (msg == '') { return; ***REMOVED***
+            if (msg == '') { return; }
 
             message_input.value = '';
 
@@ -69,13 +69,13 @@ module.exports = ChatRoom = {
             data.chatmod.sendMessage(app, newtx);
             this.addMessage(app, data, newtx);
             this.scrollToBottom();
-    ***REMOVED***
+        }
 
         document.querySelector('#back-button')
                 .onclick = () => {
                     data.chat.active = "chat_list";
                     data.chat.main.render(app, data);
-            ***REMOVED***;
+                };
 
         document.querySelector('.chat-room-submit-button')
                 .onclick = (e) =>  submitMessage();
@@ -86,9 +86,9 @@ module.exports = ChatRoom = {
                     fired = true;
                     e.preventDefault();
                     submitMessage();
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***);
+                }
+            }
+        });
 
         let chat_room_input = document.querySelector('#input.chat-room-input')
 
@@ -97,29 +97,29 @@ module.exports = ChatRoom = {
                 let chat_room_content = document.querySelector('.chat-room-content')
                 chat_room_content.style.height = "52vh";
                 setTimeout(() => this.scrollToBottom(), 100);
-        ***REMOVED***);
+            });
 
             chat_room_input.addEventListener('focusout', () => {
                 let chat_room_content = document.querySelector('.chat-room-content')
                 chat_room_content.style.height = "76vh";
                 setTimeout(() => this.scrollToBottom(), 100);
-        ***REMOVED***);
-    ***REMOVED***
+            });
+        }
 
         document.addEventListener('keyup', (e) => {
-            if (e.keyCode == '13') { fired = false; ***REMOVED***
-    ***REMOVED***);
+            if (e.keyCode == '13') { fired = false; }
+        });
 
         app.connection.on('chat_receive_message', (msg) => {
             this.addMessageToDOM(data, msg);
             this.scrollToBottom();
-    ***REMOVED***);
-***REMOVED***,
+        });
+    },
 
     createMessage(app, group_id, msg) {
         let publickey = app.network.peers[0].peer.publickey;
         let newtx = app.wallet.createUnsignedTransaction(publickey, 0.0, 0.0);
-        if (newtx == null) { return; ***REMOVED***
+        if (newtx == null) { return; }
 
         newtx.transaction.msg = {
             module: "Chat",
@@ -127,39 +127,39 @@ module.exports = ChatRoom = {
             publickey: app.wallet.returnPublicKey(),
             group_id: group_id,
             message:  msg,
-    ***REMOVED***this.app.keys.encryptMessage(this.app.wallet.returnPublicKey(), msg),
+            //this.app.keys.encryptMessage(this.app.wallet.returnPublicKey(), msg),
             timestamp: new Date().getTime(),
-    ***REMOVED***;
+        };
 
-***REMOVED*** newtx.transaction.msg = this.app.keys.encryptMessage(this.app.wallet.returnPublicKey(), newtx.transaction.msg);
+        // newtx.transaction.msg = this.app.keys.encryptMessage(this.app.wallet.returnPublicKey(), newtx.transaction.msg);
         newtx.transaction.msg.sig = app.wallet.signMessage(JSON.stringify(newtx.transaction.msg));
         newtx = app.wallet.signTransaction(newtx);
         return newtx;
-***REMOVED***,
+    },
 
     addMessage(app, data, tx) {
       data.chatmod.receiveMessage(app, tx);
       //this.addTXToDOM(tx);
       this.scrollToBottom();
-***REMOVED***,
+    },
 
     sendMessageOnChain(app, tx, callback=null) {
         app.network.propagateTransaction(tx);
-***REMOVED***,
+    },
 
     addTXToDOM(tx) {
         document.querySelector('.chat-room-content')
                 .innerHTML += ChatMessageContainerTemplate(tx.returnMessage(), tx.transaction.msg.sig, 'myself');
-***REMOVED***,
+    },
 
     addMessageToDOM(msg) {
         document.querySelector('.chat-room-content')
                 .innerHTML += ChatMessageContainerTemplate(msg, msg.sig, msg.type);
-***REMOVED***,
+    },
 
     scrollToBottom() {
         let chat_room_content = document.querySelector(".chat-room-content");
         chat_room_content.scrollTop = chat_room_content.scrollHeight;
-***REMOVED*** chat_room_content.scrollIntoView(false);
-***REMOVED***
-***REMOVED***
+        // chat_room_content.scrollIntoView(false);
+    }
+}

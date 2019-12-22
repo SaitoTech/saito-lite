@@ -35,4 +35,4 @@ module.exports = ArcadeGameCreate = (game) => {
   <div id="background-shim-cover" class="background-shim-cover"></div>
 </div>
   `;
-***REMOVED***
+}

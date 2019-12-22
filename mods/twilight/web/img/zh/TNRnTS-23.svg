@@ -4,12 +4,12 @@
 	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 388 538"
 	 style="enable-background:new 0 0 388 538;" xml:space="preserve">
 <style type="text/css">
-	.st0{font-family:'STKaiti';***REMOVED***
-	.st1{font-size:20px;***REMOVED***
-	.st2{fill:none;stroke:#000000;stroke-width:2;***REMOVED***
-	.st3{font-family:'STBaoliSC-Regular';***REMOVED***
-	.st4{font-size:36px;***REMOVED***
-	.st5{fill:none;stroke:#D82044;stroke-width:2;***REMOVED***
+	.st0{font-family:'STKaiti';}
+	.st1{font-size:20px;}
+	.st2{fill:none;stroke:#000000;stroke-width:2;}
+	.st3{font-family:'STBaoliSC-Regular';}
+	.st4{font-size:36px;}
+	.st5{fill:none;stroke:#D82044;stroke-width:2;}
 </style>
 <text transform="matrix(1 0 0 1 79.3801 376.5)" class="st0 st1">在7个苏联控制的西欧国家</text>
 <text transform="matrix(1 0 0 1 97.4612 400.5)" class="st0 st1">各增加1点美国影响力。</text>

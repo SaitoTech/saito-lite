@@ -2,7 +2,7 @@ module.exports = FaucetModalRegistryTemplate = (tokens_sent=true) => {
   let are_tokens_sent = tokens_sent ? `<p>The tokens are on their way!</p>` : '';
   return `
     <div>
-      ${are_tokens_sent***REMOVED***
+      ${are_tokens_sent}
       <p>You'll want a username on Saito so people know who you are.</p>
     </div>
     <div style="display: grid; grid-template-columns: 4fr 1fr;">
@@ -22,4 +22,4 @@ module.exports = FaucetModalRegistryTemplate = (tokens_sent=true) => {
       text-align: right;
       cursor: pointer">No thanks</div>
   `;
-***REMOVED***
+}

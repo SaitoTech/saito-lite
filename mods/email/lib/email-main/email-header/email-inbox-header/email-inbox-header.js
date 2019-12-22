@@ -5,7 +5,7 @@ module.exports = EmailInboxHeader = {
 
   render(app, data) {
     document.querySelector('.email-header').innerHTML = EmailInboxHeaderTemplate(app, data);
-  ***REMOVED***,
+  },
 
   attachEvents(app, data) {
 
@@ -13,8 +13,8 @@ module.exports = EmailInboxHeader = {
             .addEventListener('click', (e) => {
               Array.from(document.getElementsByClassName('email-selected')).forEach(checkbox => {
                 checkbox.checked = e.currentTarget.checked;
-          ***REMOVED***);
-        ***REMOVED***);
+              });
+            });
 
     document.getElementById('email-delete-icon')
             .addEventListener('click', (e) => {
@@ -22,30 +22,30 @@ module.exports = EmailInboxHeader = {
               Array.from(document.getElementsByClassName('email-message')).forEach(mail => {
                 let is_checked = mail.children[0].checked;
 
-        ***REMOVED*** remove from DOM
+                // remove from DOM
                 if (is_checked) {
                   email_list.removeChild(mail);
-          ***REMOVED***
-          ***REMOVED*** tell our email to purge this transaction
-          ***REMOVED***
+                  //
+                  // tell our email to purge this transaction
+                  //
                   let mysig = mail.id;
                   for (let i = 0; i < data.email.emails[data.email.emails.active].length; i++) {
                     let mytx = data.email.emails[data.email.emails.active][i];
                     if (mytx.transaction.sig == mysig) {
                       data.email.deleteTransaction(mytx);
-                ***REMOVED***
-              ***REMOVED***
-            ***REMOVED***
+                    }
+                  }
+                }
 
-          ***REMOVED***);
-        ***REMOVED***);
+              });
+            });
 
     document.getElementById('email-bars-icon')
             .addEventListener('click', (e) => {
                 let email_bars_menu = document.querySelector('#mobile.email-bars-menu');
                 if (email_bars_menu != null) {
                     email_bars_menu.style.display = email_bars_menu.style.display == "block" ? "none" : "block";
-            ***REMOVED*** else {
+                } else {
                     email_bars_menu = document.createElement('DIV');
                     email_bars_menu.classList.add('email-bars-menu');
                     email_bars_menu.id = "mobile"
@@ -54,23 +54,23 @@ module.exports = EmailInboxHeader = {
                     for (let i = 0; i < data.mods.length; i++) {
                         let mobile_email_apps = email_bars_menu.querySelector(".email-apps")
                         mobile_email_apps.innerHTML
-                            += `<li class="email-apps-item" id="${i***REMOVED***">${data.mods[i].name***REMOVED***</li>`;
-                ***REMOVED***
+                            += `<li class="email-apps-item" id="${i}">${data.mods[i].name}</li>`;
+                    }
                     document.querySelector('body').append(email_bars_menu);
                     EmailBarsMenu.attachEvents(app, data);
-            ***REMOVED*** extend functionatliy for mobile menu
+                    // extend functionatliy for mobile menu
 
                     email_bars_menu.addEventListener('click', () => {
                         email_bars_menu.style.display = "none";
-                ***REMOVED***);
+                    });
 
                     window.addEventListener('click', (e) => {
                         if (e.target.id !== "email-bars-icon") {
                             email_bars_menu.style.display = "none";
-                    ***REMOVED***
-                ***REMOVED***);
+                        }
+                    });
 
-            ***REMOVED***
-        ***REMOVED***);
-  ***REMOVED***,
-***REMOVED***
+                }
+            });
+  },
+}

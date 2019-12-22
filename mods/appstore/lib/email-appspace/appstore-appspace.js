@@ -20,30 +20,30 @@ module.exports = AppStoreAppspace = {
         (res, data) => {
         if (res.rows != undefined) {
 	  this.populateAppsSpace(app, data, res.rows);
-	***REMOVED***
+	}
 
-  ***REMOVED***);
+      });
 
       //
       // load some categories
       //
-      //document.querySelector(".appstore-browse-list").innerHTML += AppStoreAppCategoryTemplate({***REMOVED***);
+      //document.querySelector(".appstore-browse-list").innerHTML += AppStoreAppCategoryTemplate({});
 
-***REMOVED***,
+    },
 
     populateAppsSpace(app, data, rows) {
 
       document.querySelector(".appstore-app-list").innerHTML = "";
       for (let i = 0; i < rows.length; i++) {
         document.querySelector(".appstore-app-list").innerHTML += AppStoreAppBoxTemplate(app, rows[i]);
-  ***REMOVED***
+      }
 
       //
       // make apps installable
       //
       this.attachEventsToModules(app, data);
 
-***REMOVED***,
+    },
 
 
     attachEventsToModules(app, data) {
@@ -64,18 +64,18 @@ module.exports = AppStoreAppspace = {
             for (let z = 0; z < module_list.length; z++) {
               if (module_obj.name != "" && module_list[z].name != module_obj.name) {
                 replacing_old = 1;
-          ***REMOVED***
-        ***REMOVED***
+              }
+            }
             if (replacing_old == 0) {
-                module_list.push({ name : app.options.modules[i].name , version : app.options.modules[i].version ***REMOVED***);
-        ***REMOVED***
-      ***REMOVED***
+                module_list.push({ name : app.options.modules[i].name , version : app.options.modules[i].version });
+            }
+          }
 
-  ***REMOVED***
-  ***REMOVED*** READY TO SUBMIT
-  ***REMOVED***
+          //
+          // READY TO SUBMIT
+          //
           var newtx = app.wallet.createUnsignedTransactionWithDefaultFee(app.wallet.returnPublicKey(), 0);
-          if (newtx == null) { return; ***REMOVED***
+          if (newtx == null) { return; }
           newtx.transaction.msg.module   = "AppStore";
           newtx.transaction.msg.request  = "request bundle";
           newtx.transaction.msg.list	 = module_list;
@@ -90,10 +90,10 @@ alert("LIST: " + module_list);
             </div>
           `;
 
-    ***REMOVED***;
-  ***REMOVED***);
+        };
+      });
 
-***REMOVED***,
+    },
 
 
     attachEvents(app, data) {
@@ -104,7 +104,7 @@ alert("LIST: " + module_list);
       document.getElementById('appstore-publish-button').onclick = () => {
         AppStoreAppspacePublish.render(app, data);
         AppStoreAppspacePublish.attachEvents(app, data);
-  ***REMOVED***
+      }
 
       //
       // search box
@@ -112,14 +112,14 @@ alert("LIST: " + module_list);
       document.getElementById('appstore-search-box').addEventListener('click', (e) => {
 	e.currentTarget.placeholder = "";
         e.currentTarget.value = "";
-  ***REMOVED***);
+      });
 
       document.getElementById('appstore-search-box').addEventListener('keypress', (e) => {
         let key = e.which || e.keyCode;
         if (key === 13) {
           alert("Search Query: " + e.currentTarget.value);
 
-	  var message             = {***REMOVED***;
+	  var message             = {};
     	  message.request         = "appstore search modules";
           message.data		  = e.currentTarget.value;
 
@@ -128,10 +128,10 @@ alert("received data in return");
 console.log(JSON.stringify(res));
             if (res.rows != undefined) {
 	      this.populateAppsSpace(app, data, res.rows);
-	***REMOVED***
-	  ***REMOVED***);
-    ***REMOVED***
-  ***REMOVED***);
-***REMOVED***
+	    }
+	  });
+        }
+      });
+    }
 
-***REMOVED***
+}

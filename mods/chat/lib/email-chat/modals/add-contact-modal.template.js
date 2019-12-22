@@ -20,4 +20,4 @@ module.exports = AddContactModalTemplate = () => {
       </div>
     </div>
   `;
-***REMOVED***
+}

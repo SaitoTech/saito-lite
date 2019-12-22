@@ -5,4 +5,4 @@ module.exports = EmailHeaderTemplate = (app, data) => {
     </div>
     <div class="email-balance"></div>
   `;
-***REMOVED***
+}

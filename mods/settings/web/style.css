@@ -3,19 +3,19 @@
     grid-template-columns: 7em 1fr;
     grid-gap: 10px;
     margin: 10px 0;
-***REMOVED***
+}
 
 .settings-buttons {
     display: grid;
     grid-template-columns: 15em 15em;
     grid-gap: 10px;
     margin: 10px 0;
-***REMOVED***
+}
 
 #privatekey {
     width: 95%;
-***REMOVED***
+}
 
 #qrcode {
     display: inline-block;
-***REMOVED***
+}

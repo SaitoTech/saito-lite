@@ -4,14 +4,14 @@
 	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 388 538"
 	 style="enable-background:new 0 0 388 538;" xml:space="preserve">
 <style type="text/css">
-	.st0{font-family:'STBaoliSC-Regular';***REMOVED***
-	.st1{font-size:36px;***REMOVED***
-	.st2{font-family:'STKaiti';***REMOVED***
-	.st3{font-size:20px;***REMOVED***
-	.st4{fill:#D6EEFA;stroke:#FFFFFF;stroke-width:2;***REMOVED***
-	.st5{fill:none;stroke:#FFFFFF;stroke-width:2.5;stroke-linejoin:round;***REMOVED***
-	.st6{fill:#64B0CA;stroke:#FFFFFF;stroke-width:0.5;stroke-linejoin:round;***REMOVED***
-	.st7{fill:#64B0CA;stroke:#64B0CA;stroke-width:0.7;stroke-linejoin:round;***REMOVED***
+	.st0{font-family:'STBaoliSC-Regular';}
+	.st1{font-size:36px;}
+	.st2{font-family:'STKaiti';}
+	.st3{font-size:20px;}
+	.st4{fill:#D6EEFA;stroke:#FFFFFF;stroke-width:2;}
+	.st5{fill:none;stroke:#FFFFFF;stroke-width:2.5;stroke-linejoin:round;}
+	.st6{fill:#64B0CA;stroke:#FFFFFF;stroke-width:0.5;stroke-linejoin:round;}
+	.st7{fill:#64B0CA;stroke:#64B0CA;stroke-width:0.7;stroke-linejoin:round;}
 </style>
 <text transform="matrix(0.9401 0 0 1 143.2358 245.7499)" class="st0 st1">奥运会</text>
 <text transform="matrix(1 0 0 1 114.0002 282.5)" class="st2 st3">玩家主办奥运会。</text>

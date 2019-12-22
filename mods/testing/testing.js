@@ -19,7 +19,7 @@ class Testing extends ModTemplate {
 
     return this;
 
-  ***REMOVED***
+  }
 
 
   initialize(app) {
@@ -28,31 +28,31 @@ class Testing extends ModTemplate {
     console.log("#########TESTING########");
     console.log("########################");
 
-  ***REMOVED***
+  }
 
 
   respondTo(type) {
 
     if (type == 'email-appspace') {
-      let obj = {***REMOVED***;
+      let obj = {};
           obj.render = this.renderEmail;
           obj.attachEvents = this.attachEventsEmail;
       return obj;
-***REMOVED***
+    }
 
     return null;
-  ***REMOVED***
+  }
   renderEmail(app, data) {
      TestingAppspace.render(app, data);
-  ***REMOVED***
+  }
   attachEventsEmail(app, data) {
      TestingAppspace.attachEvents(app, data);
-  ***REMOVED***
+  }
 
 
 
 
-***REMOVED***
+}
 
 module.exports = Testing;
 

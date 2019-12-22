@@ -7,4 +7,4 @@ module.exports = EmailInboxHeaderTemplate = (app, data) => {
     </div>
     <div class="detail email-balance"></div>
   `;
-***REMOVED***
+}

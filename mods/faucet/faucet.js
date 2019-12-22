@@ -1,5 +1,5 @@
-***REMOVED***
-***REMOVED***
+const saito = require('../../lib/saito/saito');
+const ModTemplate = require('../../lib/templates/modtemplate.js');
 const Big = require('big.js');
 
 const Modal = require('../../lib/ui/modal/modal');
@@ -20,44 +20,44 @@ class Faucet extends ModTemplate {
     this.initial = 10;
     this.payoutRatio = 0.75;
 
-  ***REMOVED***
+  }
 
 
   respondTo(type) {
     if (type == 'email-appspace') {
-      let obj = {***REMOVED***;
+      let obj = {};
           obj.render = this.renderEmail;
           obj.attachEvents = this.attachEventsEmail;
       return obj;
-***REMOVED***
+    }
     return null;
-  ***REMOVED***
+  }
   renderEmail(app, data) {
      data.faucet = app.modules.returnModule("Faucet");
      FaucetAppspace.render(app, data);
-  ***REMOVED***
+  }
   attachEventsEmail(app, data) {
      data.faucet = app.modules.returnModule("Faucet");
      FaucetAppspace.attachEvents(app, data);
-  ***REMOVED***
+  }
 
 
 
 
-***REMOVED***
+    onConfirmation(blk, tx, conf, app) {
 
-        if (app.BROWSER == 1) { return; ***REMOVED***
+        if (app.BROWSER == 1) { return; }
 
-***REMOVED***
+        if (conf == 0) {
             if (tx.transaction.type == 0) {
-                if (this.app.BROWSER == 1) { return; ***REMOVED***
+                if (this.app.BROWSER == 1) { return; }
                 this.updateUsers(tx);
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+            }
+        }
+    }
 
     async updateUsers(tx) {
-***REMOVED***
+        try {
             if (tx.transaction.type >= -999) {
                 for (let ii = 0; ii < tx.transaction.from.length; ii++) {
                     if (tx.transaction.from[ii].type >= -999) {
@@ -65,35 +65,35 @@ class Faucet extends ModTemplate {
                             let sql = "SELECT * FROM users where address = $address";
                             let params = {
                                 $address: tx.transaction.from[ii].add
-                        ***REMOVED***;
+                            };
                             let rows = await this.app.storage.queryDatabase(sql, params, "faucet");
                             if (rows.length == 0) {
                                 this.addUser(tx, ii);
-                        ***REMOVED*** else {
+                            } else {
                                 for (let j = 0; j < rows.length; j++) {
                                     if (rows[j].address == tx.transaction.from[ii].add) {
                                         this.updateUser(rows[j], tx, ii);
-                                ***REMOVED***
-                            ***REMOVED***
-                        ***REMOVED***
-                    ***REMOVED***
-                ***REMOVED***
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED*** catch (err) {
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (err) {
             console.error(err);
-    ***REMOVED***
-***REMOVED***
+        }
+    }
 
     async updateUser(row, tx, ii) {
         let sql = "";
-        let params = {***REMOVED***;
+        let params = {};
         var payout = ((row.total_spend / (row.total_payout + 0.01)) >= this.payoutRatio);
         var newPayout = Math.ceil( row.last_payout_amt / this.payoutRatio );
         var isGame = 0;
-        if (typeof tx.transaction.msg.game_id != "undefined") { isGame = 1 ***REMOVED***;
+        if (typeof tx.transaction.msg.game_id != "undefined") { isGame = 1 };
         var gameOver = 0;
-        if (tx.name == "game over") { gameOver = 1 ***REMOVED***;
+        if (tx.name == "game over") { gameOver = 1 };
         if (payout == true) {
             params = {
                 $address: row.address,
@@ -105,10 +105,10 @@ class Faucet extends ModTemplate {
                 $game_tx_count: row.game_tx_count + isGame,
                 $latest_tx: tx.transaction.ts,
                 $total_spend: row.total_spend + Number(tx.fees_total)
-        ***REMOVED***
+            }
             sql = `UPDATE users SET last_payout_ts = $last_payout_ts, last_payout_amt = $last_payout_amt, total_payout = $total_payout, tx_count = $tx_count, games_finished = $games_finished, game_tx_count = $game_tx_count, latest_tx = $latest_tx, total_spend = $total_spend WHERE address = $address`
 
-    ***REMOVED*** else {
+        } else {
             params = {
                 $address: row.address,
                 $tx_count: row.tx_count + 1,
@@ -116,23 +116,23 @@ class Faucet extends ModTemplate {
                 $game_tx_count: row.game_tx_count + isGame,
                 $latest_tx: tx.transaction.ts,
                 $total_spend: row.total_spend + Number(tx.fees_total)
-        ***REMOVED***
+            }
             sql = `UPDATE users SET last_payout_ts = $last_payout_ts, tx_count = $tx_count, games_finished = $games_finished, game_tx_count = $game_tx_count, latest_tx = $latest_tx, total_spend = $total_spend WHERE address = $address`
-    ***REMOVED***
+        }
         let resp = await this.app.storage.executeDatabase(sql, params, "faucet");
 
         if (payout) {
             this.makePayout(row.address, newPayout);
-    ***REMOVED***
+        }
 
-***REMOVED***
+    }
 
 
     async addUser(tx, ii) {
         try{
-    ***REMOVED***let sql = "INSERT OR IGNORE INTO users (address, tx_count, games_finished, game_tx_count, first_tx, latest_tx, last_payout_ts, last_payout_amt, total_payout, total_spend, referer) VALUES ($address, $tx_count, $games_finished, $game_tx_count, $first_tx, $latest_tx, $last_payout_ts, $last_payout_amt, $total_payout, $total_spend, $referer);"
+            //let sql = "INSERT OR IGNORE INTO users (address, tx_count, games_finished, game_tx_count, first_tx, latest_tx, last_payout_ts, last_payout_amt, total_payout, total_spend, referer) VALUES ($address, $tx_count, $games_finished, $game_tx_count, $first_tx, $latest_tx, $last_payout_ts, $last_payout_amt, $total_payout, $total_spend, $referer);"
             var isGame = 0;
-            if (typeof tx.transaction.msg.game_id != undefined) { isGame = 1 ***REMOVED***;
+            if (typeof tx.transaction.msg.game_id != undefined) { isGame = 1 };
             let params = {
                 $address: tx.transaction.from[ii].add,
                 $tx_count: 1,
@@ -145,32 +145,32 @@ class Faucet extends ModTemplate {
                 $total_payout: this.initial,
                 $total_spend: Number(tx.fees_total),
                 $referer: '',
-        ***REMOVED***
+            }
             let sql = "INSERT OR IGNORE INTO users (address, tx_count, games_finished, game_tx_count, first_tx, latest_tx, last_payout_ts, last_payout_amt, total_payout, total_spend, referer) VALUES ('"+tx.transaction.from[ii].add+"', "+1+", "+0+", "+isGame+", "+tx.transaction.ts+", "+tx.transaction.ts+", "+tx.transaction.ts+", "+this.initial+", "+this.initial+", "+Number(tx.fees_total)+", '');";
-            params = {***REMOVED***;
+            params = {};
 
             await this.app.storage.executeDatabase(sql, params, "faucet");
 
-    ***REMOVED***initial funds sent
+            //initial funds sent
             this.makePayout(tx.transaction.from[ii].add, this.initial);
 
             return;
-    ***REMOVED*** catch (err) {
+        } catch (err) {
             console.error(err);
-    ***REMOVED***
-***REMOVED***
+        }
+    }
 
     async makePayout(address, amount) {
-***REMOVED***send the user a little something.
+        //send the user a little something.
 
         let wallet_balance = this.app.wallet.returnBalance();
 
         if (wallet_balance < amount) {
           console.log("\n\n\n *******THE FAUCET IS POOR******* \n\n\n");
           return;
-    ***REMOVED***
+        }
 
-***REMOVED***
+        try {
 
           let faucet_self = this;
           let total_fees = Big(amount+2);
@@ -178,34 +178,34 @@ class Faucet extends ModTemplate {
           newtx.transaction.from = faucet_self.app.wallet.returnAdequateInputs(total_fees.toString());
           newtx.transaction.ts   = new Date().getTime();
 
-  ***REMOVED***console.log("FAUCET INPUTS: " + JSON.stringify(faucet_self.app.wallet.wallet.inputs));
+          //console.log("FAUCET INPUTS: " + JSON.stringify(faucet_self.app.wallet.wallet.inputs));
 
-  ***REMOVED*** add change input
+          // add change input
           var total_inputs = Big(0.0);
           for (let i = 0; i < newtx.transaction.from.length; i++) {
             total_inputs = total_inputs.plus(Big(newtx.transaction.from[i].amt));
-      ***REMOVED***
+          }
 
-  ***REMOVED***
-  ***REMOVED*** generate change address(es)
-  ***REMOVED***
+          //
+          // generate change address(es)
+          //
           var change_amount = total_inputs.minus(total_fees);
 
-  ***REMOVED*** break up payment into many slips if large
+          // break up payment into many slips if large
           var chunks = Math.floor(amount/100);
           var remainder = amount % 100;
 
           for (let i = 0; i < chunks; i++) {
             newtx.transaction.to.push(new saito.slip(address, Big(100.0)));
             newtx.transaction.to[newtx.transaction.to.length-1].type = 0;
-      ***REMOVED***
+          }
           newtx.transaction.to.push(new saito.slip(address, Big(remainder)));
             newtx.transaction.to[newtx.transaction.to.length-1].type = 0;
 
           if (Big(change_amount).gt(0)) {
             newtx.transaction.to.push(new saito.slip(faucet_self.app.wallet.returnPublicKey(), change_amount.toFixed(8)));
             newtx.transaction.to[newtx.transaction.to.length-1].type = 0;
-      ***REMOVED***
+          }
 
           newtx.transaction.msg.module    = "Email";
           newtx.transaction.msg.title     = "Saito Faucet - You have been Rewarded";
@@ -215,12 +215,12 @@ class Faucet extends ModTemplate {
           this.app.network.propagateTransaction(newtx);
           return;
 
-    ***REMOVED*** catch(err) {
+        } catch(err) {
           console.log("ERROR CAUGHT IN FAUCET: ", err);
           return;
-    ***REMOVED***
+        }
 
-***REMOVED***
+    }
 
 
 
@@ -235,7 +235,7 @@ class Faucet extends ModTemplate {
             id: 'faucet',
             title: 'Welcome to Saito',
             content: FaucetModalBackupTemplate()
-  ***REMOVED***);
+      });
 
       modal.render("blank");
 
@@ -263,18 +263,18 @@ If you change your mind and would like to backup your wallet, you can do so by c
 	    if (emailmod != null) {
 	      emailmod.addEmail(tx);
 	      this.app.storage.saveTransaction(tx);
-	***REMOVED***
-      ***REMOVED***
-    ***REMOVED***
+	    }
+          }
+        }
 
-***REMOVED*** const showRegistryModal = (are_tokens_sent=true) => {
-***REMOVED***     modal.destroy();
-***REMOVED***     modal.title = "Register a Username";
-***REMOVED***     modal.content = FaucetModalRegistryTemplate(are_tokens_sent);
+        // const showRegistryModal = (are_tokens_sent=true) => {
+        //     modal.destroy();
+        //     modal.title = "Register a Username";
+        //     modal.content = FaucetModalRegistryTemplate(are_tokens_sent);
 
-***REMOVED***     modal.render();
-***REMOVED***     modal.attachEvents(registryModalEvents);
-***REMOVED*** ***REMOVED***
+        //     modal.render();
+        //     modal.attachEvents(registryModalEvents);
+        // }
         /*
         const socialModalEvents = () => {
             let backup_button = document.getElementById('registry-backup-wallet');
@@ -286,8 +286,8 @@ If you change your mind and would like to backup your wallet, you can do so by c
                 document.body.appendChild(pom);
                 pom.click();
                 pom.remove();
-        ***REMOVED***;
-    ***REMOVED***
+            };
+        }
 
         const showSocialModal = (are_tokens_sent=true) => {
             modal.destroy();
@@ -295,7 +295,7 @@ If you change your mind and would like to backup your wallet, you can do so by c
             modal.content = FaucetModalSocialTemplate(are_tokens_sent);
             modal.render();
             modal.attachEvents(socialModalEvents);
-    ***REMOVED***
+        }
 
         const registryModalEvents = () => {
             let registry_input = document.getElementById('registry-input')
@@ -312,25 +312,25 @@ If you change your mind and would like to backup your wallet, you can do so by c
                 registry_input.classList.remove('green-bottom-border');
 
                 idTimeout = setTimeout(async () => {
-                    let identifier = `${registry_input.value***REMOVED***@saito`;
+                    let identifier = `${registry_input.value}@saito`;
                     let id_response = await this.app.keys.fetchPublicKeyPromise(identifier);
 
                     if (id_response.rows.length == 0) {
-                ***REMOVED*** return green checkmark
+                        // return green checkmark
                         registry_input.classList.remove('red-bottom-border');
                         registry_input.classList.add('green-bottom-border');
                         invalidID = false;
-                ***REMOVED*** else {
-                ***REMOVED*** give red mark
+                    } else {
+                        // give red mark
                         registry_input.classList.remove('green-bottom-border');
                         registry_input.classList.add('red-bottom-border');
                         invalidID = true;
-                ***REMOVED***
-            ***REMOVED***, 1000);
-        ***REMOVED***
+                    }
+                }, 1000);
+            }
 
             document.getElementById('registry-add-button').onclick = () => {
-                if (invalidID) { salert("Please regsiter an ID that isn't taken"); return;***REMOVED***
+                if (invalidID) { salert("Please regsiter an ID that isn't taken"); return;}
 
                 let identifier = document.getElementById('registry-input').value
                 let registry_success = this.app.modules.returnModule("Registry").registerIdentifier(identifier);
@@ -338,42 +338,42 @@ If you change your mind and would like to backup your wallet, you can do so by c
                 if (registry_success) {
                     Array.from(document.getElementsByClassName('saito-identifier'))
                         .forEach(elem => {
-                            elem.innerHTML = `<h3>${identifier***REMOVED***@saito</h3>`
-                    ***REMOVED***);
-            ***REMOVED***
-            ***REMOVED*** TODO: Add email capture and links to discord and Telegram
-            ***REMOVED***
+                            elem.innerHTML = `<h3>${identifier}@saito</h3>`
+                        });
+                    //
+                    // TODO: Add email capture and links to discord and Telegram
+                    //
                     showSocialModal(true);
-            ***REMOVED***
-        ***REMOVED***;
+                }
+            };
 
             document.querySelector('.tutorial-skip')
                     .onclick = () => showSocialModal(false);
-    ***REMOVED***
+        }
 
         modal.attachEvents(registryModalEvents);
 
 
         const captchaCallback = () => {
-    ***REMOVED***
-    ***REMOVED*** TODO: SEND TOKENS WITH FAUCET HERE
-    ***REMOVED***
-    ***REMOVED*** send out faucet request for tokens
-    ***REMOVED***
+            //
+            // TODO: SEND TOKENS WITH FAUCET HERE
+            //
+            // send out faucet request for tokens
+            //
             document.getElementById('registry-add-button').disabled = false;
-    ***REMOVED***
+        }
 
-***REMOVED***
-***REMOVED*** captcha rendering for first modal
+        //
+        // captcha rendering for first modal
         grecaptcha.render("recaptcha", {
             sitekey: '6Lc18MYUAAAAAKb0_kFKkhA1ebdPu_hLmyyRo3Cd',
             callback: captchaCallback
-    ***REMOVED***);
+        });
         */
-***REMOVED***
+    }
 
-***REMOVED***
+    shouldAffixCallbackToModule() { return 1; }
 
-***REMOVED***
+}
 
 module.exports = Faucet;

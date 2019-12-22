@@ -17,7 +17,7 @@ class Email extends ModTemplate {
     this.events			= ['chat-render-request'];
     this.icon_fa		= "fas fa-envelope";
 
-    this.emails 		= {***REMOVED***;
+    this.emails 		= {};
     this.emails.inbox 		= [];
     this.emails.sent 		= [];
     this.emails.trash 		= [];
@@ -37,29 +37,29 @@ class Email extends ModTemplate {
     this.appspace_mod		= null;
     this.appspace_mod_idx 	= -1; // index in mods of appspace module
 
-    this.uidata			= {***REMOVED***;
+    this.uidata			= {};
     this.uidata.mods		= [];
     this.count = 0;
 
     // add our address controller
     this.addrController = new AddressController(app, this.returnMenuItems());
 
-  ***REMOVED***
+  }
 
   render(app, data) {
     this.renderMain(app, data);
     this.renderSidebar(app, data);
-  ***REMOVED***
+  }
 
   renderMain(app, data) {
     EmailMain.render(app, data);
     EmailMain.attachEvents(app, data);
-  ***REMOVED***
+  }
 
   renderSidebar(app, data) {
     EmailSidebar.render(app, data);
     EmailSidebar.attachEvents(app, data);
-  ***REMOVED***
+  }
 
   initialize(app) {
 
@@ -92,16 +92,16 @@ Saito is an application blockchain. To get started:
     tx = this.app.wallet.signTransaction(tx);
     this.emails.sent.push(tx);
 
-  ***REMOVED***
+  }
 
 
 
   respondTo(type="") {
     if (type == "header-dropdown") { 
-      return {***REMOVED***; 
-***REMOVED***
+      return {}; 
+    }
     return null;
-  ***REMOVED***
+  }
 
 
 
@@ -117,18 +117,18 @@ Saito is an application blockchain. To get started:
     x = this.app.modules.respondTo("email-appspace");
     for (let i = 0; i < x.length; i++) {
       this.mods.push(x[i]);
-***REMOVED***
+    }
     x = this.app.modules.respondTo("email-chat");
     for (let i = 0; i < x.length; i++) {
       this.mods.push(x[i]);
-***REMOVED***
+    }
 
     this.uidata.mods	  = this.mods;
     this.uidata.email = this;
 
     this.render(app, this.uidata);
 
-  ***REMOVED***
+  }
 
 
 
@@ -140,10 +140,10 @@ Saito is an application blockchain. To get started:
         this.app.storage.deleteTransaction(tx);
         this.emails[this.emails.active].splice(i, 1);
         this.emails['trash'].unshift(tx);
-  ***REMOVED***
-***REMOVED***
+      }
+    }
 
-  ***REMOVED***
+  }
 
 
   //
@@ -151,7 +151,7 @@ Saito is an application blockchain. To get started:
   //
   onPeerHandshakeComplete(app, peer) {
 
-    if (this.browser_active == 0) { return; ***REMOVED***
+    if (this.browser_active == 0) { return; }
 
     //
     // leaving this here for the short term,
@@ -168,20 +168,20 @@ Saito is an application blockchain. To get started:
       for (let i = 0; i < txs.length; i++) {
         this.emails.inbox.unshift(txs[i]);
         keys.push(txs[i].transaction.from[0].add);
-  ***REMOVED***
+      }
 
       EmailList.render(this.app, this.uidata);
       EmailList.attachEvents(this.app, this.uidata);
 
       this.addrController.fetchIdentifiers(keys);
 
-***REMOVED***);
+    });
 
 
     EmailList.render(this.app, this.uidata);
     EmailList.attachEvents(this.app, this.uidata);
 
-  ***REMOVED***
+  }
 
 
 
@@ -197,29 +197,29 @@ Saito is an application blockchain. To get started:
       //
       if (tx.isTo(app.wallet.returnPublicKey())) {
 
-***REMOVED***
-***REMOVED*** great lets save this
-***REMOVED***
+        //
+        // great lets save this
+        //
         app.storage.saveTransaction(tx);
 
-***REMOVED***
-***REMOVED*** and update our email client
-***REMOVED***
+        //
+        // and update our email client
+        //
         email.addEmail(tx);
-  ***REMOVED***
-***REMOVED***
-  ***REMOVED***
+      }
+    }
+  }
 
 
   addEmail(tx) {
     try {
-      if (this.browser_active == 0) { this.showAlert(); ***REMOVED***
+      if (this.browser_active == 0) { this.showAlert(); }
       this.emails.inbox.unshift(tx);
       this.addrController.fetchIdentifiers([tx.transaction.from[0].add]);
-      if (this.browser_active) { this.renderMain(this.app, this.uidata); ***REMOVED***
-***REMOVED*** catch (err) {
-***REMOVED***
-  ***REMOVED***
+      if (this.browser_active) { this.renderMain(this.app, this.uidata); }
+    } catch (err) {
+    }
+  }
 
 
 
@@ -230,10 +230,10 @@ Saito is an application blockchain. To get started:
     if (type == 'chat-render-request') {
       if (this.browser_active) {
         this.renderSidebar(this.app, this.uidata);
-  ***REMOVED***
-***REMOVED***
+      }
+    }
 
-  ***REMOVED***
+  }
 
   returnMenuItems() {
     return {
@@ -247,29 +247,29 @@ Saito is an application blockchain. To get started:
           this.main.attachEvents(this.app, this.uidata);
 
           document.getElementById('email-to-address').value = address;
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
-  ***REMOVED***
+        }
+      }
+    }
+  }
 
   getTokens() {
 
-    let msg = {***REMOVED***;
-    msg.data = {address: this.app.wallet.returnPublicKey()***REMOVED***;
+    let msg = {};
+    msg.data = {address: this.app.wallet.returnPublicKey()};
     msg.request = 'get tokens';
     setTimeout(() => {
         console.log("sending request for funds...");
         this.app.network.sendRequest(msg.request, msg.data);
-***REMOVED***, 1000);
-  ***REMOVED***
+    }, 1000);
+  }
 
   updateBalance() {
     if (this.browser_active) {
       let balance = this.app.wallet.returnBalance();
       document.querySelector('.email-balance').innerHTML = balance + " SAITO";
-***REMOVED***
-  ***REMOVED***
+    }
+  }
 
-***REMOVED***
+}
 
 module.exports = Email;

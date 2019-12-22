@@ -1,8 +1,8 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {***REMOVED***, global.FullCalendarLocales.he = factory()));
-***REMOVED***(this, function () { 'use strict';
+    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.he = factory()));
+}(this, function () { 'use strict';
 
     var he = {
         code: "he",
@@ -15,13 +15,13 @@
             week: "שבוע",
             day: "יום",
             list: "סדר יום"
-    ***REMOVED***,
+        },
         allDayText: "כל היום",
         eventLimitText: "אחר",
         noEventsMessage: "אין אירועים להצגה",
         weekLabel: "שבוע"
-***REMOVED***;
+    };
 
     return he;
 
-***REMOVED***));
+}));

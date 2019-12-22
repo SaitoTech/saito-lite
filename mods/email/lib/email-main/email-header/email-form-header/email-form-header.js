@@ -4,7 +4,7 @@ module.exports = EmailFormHeader = {
 
   render(app, data) {
     document.querySelector('.email-header').innerHTML = EmailFormHeaderTemplate(app, data);
-  ***REMOVED***,
+  },
 
   attachEvents(app, data) {
     document.getElementById('email-form-back-button')
@@ -14,6 +14,6 @@ module.exports = EmailFormHeader = {
 
               data.email.main.render(app, data);
               data.email.main.attachEvents(app, data);
-        ***REMOVED***);
-  ***REMOVED***
-***REMOVED***
+            });
+  }
+}

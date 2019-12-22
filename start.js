@@ -7,7 +7,7 @@ const saito = require('./lib/index.js');
 async function initSaito() {
   const app = new saito.Saito({
     mod_paths: mods_config.core
-  ***REMOVED***);
+  });
 
   app.server = new server(app);
   app.storage = new storage(app);
@@ -61,8 +61,8 @@ console.log("heading into INIT!");
 
     Welcome to Saito
 
-    address: ${app.wallet.returnPublicKey()***REMOVED***
-    balance: ${app.wallet.returnBalance()***REMOVED***
+    address: ${app.wallet.returnPublicKey()}
+    balance: ${app.wallet.returnBalance()}
 
     This is the address and balance of your computer on the Saito network. Once Saito
     is running it will generate tokens automatically over time. The more transactions
@@ -76,7 +76,7 @@ console.log("heading into INIT!");
     console.log("Shutting down Saito");
     app.server.close();
     app.network.close();
-  ***REMOVED***
+  }
 
   /////////////////////
   // Cntl-C to Close //
@@ -85,12 +85,12 @@ console.log("heading into INIT!");
     shutdownSaito();
     console.log("Network Shutdown");
     process.exit(0)
-  ***REMOVED***);
+  });
   process.on('SIGINT', function () {
     shutdownSaito();
     console.log("Network Shutdown");
     process.exit(0)
-  ***REMOVED***);
-***REMOVED***
+  });
+}
 
 initSaito();

@@ -10,17 +10,17 @@ webpack({
   target: 'web',
   node: {
       fs: "empty",
-  ***REMOVED***,
+  },
   externals: [
       {
           sqlite: 'sqlite'
-  ***REMOVED***,
+      },
       {
           child_process: 'child_process'
-  ***REMOVED***,
+      },
       {
           webpack: 'webpack'
-  ***REMOVED***,
+      },
       /\.txt/,
       /\.png$/,
       /\.jpg$/,
@@ -37,7 +37,7 @@ webpack({
   output: {
       path: output_path,
       filename: output_filename
-  ***REMOVED***,
+  },
   // rules that we're governed by
   module: {
     rules: [
@@ -48,25 +48,25 @@ webpack({
                 loader: 'babel-loader',
                 options: {
                     presets: ['@babel/preset-env']
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***,
+                }
+            }
+        },
     ]
-  ***REMOVED***,
+  },
   resolve: {
     alias: {
       ModTemplate$: path.resolve(__dirname, 'lib/templates/modtemplate.js'),
-***REMOVED***
-  ***REMOVED***,
+    }
+  },
   mode: 'development',
   devtool: "cheap-module-eval-source-map",
-  ***REMOVED***, (err, stats) => {
+  }, (err, stats) => {
   if (err || stats.hasErrors()) {
     let info = stats.toJson();
     console.log(info.errors);
-  ***REMOVED***
+  }
   //
   // Done processing
   //
   console.log("Bundle Success!");
-***REMOVED***);
+});

@@ -1,7 +1,7 @@
 * {
     margin: 0;
     padding: 0;
-***REMOVED***
+}
 
 
 
@@ -9,62 +9,62 @@
 
 .ship_graphic {
   filter: brightness(0) saturate(100%) invert(76%) sepia(0%) saturate(7455%) hue-rotate(66deg) brightness(66%) contrast(92%);
-***REMOVED***
+}
 .pointer {
   cursor: pointer;
-***REMOVED***
+}
 
 .addoption {
   cursor: pointer;
   margin-left: 20px;  
-***REMOVED***
+}
 .card {
   cursor: pointer;
-***REMOVED***
+}
 
 .sector_name {
   cursor: pointer;
-***REMOVED***
+}
 .sector_graphics_space {
 
-***REMOVED***
+}
 .sector_graphics_planet {
   display: none;
-***REMOVED***
+}
 
 .sector_graphics {
   position: relative;
   top: 0px;
   left: 0px;
-***REMOVED***
+}
 
 
 /* https://codepen.io/sosuke/pen/Pjoqqp */
 
 .player_color_1 {
   filter: brightness(0) saturate(100%) invert(57%) sepia(13%) saturate(2390%) hue-rotate(84deg) brightness(93%) contrast(80%);
-***REMOVED***
+}
 .player_color_2 {
   filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
-***REMOVED***
+}
 .player_color_3 {
   filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
-***REMOVED***
+}
 .player_color_4 {
   filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
-***REMOVED***
+}
 .player_color_5 {
   filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
-***REMOVED***
+}
 .player_color_6 {
   filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
-***REMOVED***
+}
 .player_color_7 {
   filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
-***REMOVED***
+}
 .player_color_8 {
   filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
-***REMOVED***
+}
 
 
 .player_color_box {
@@ -73,22 +73,22 @@
   display: inline-block;
   margin-right: 10px;
   background-color: #000;
-***REMOVED***
+}
 
 .terminal_header {
   margin-bottom: 15px;
-***REMOVED***
+}
 .terminal_header2 {
   margin-bottom: 15px;
-***REMOVED***
+}
 .terminal_header3 {
-***REMOVED***
+}
 
 
 
 .exhausted {
   opacity: 0.3;
-***REMOVED***
+}
 
 
 .leaderboardbox {
@@ -96,12 +96,12 @@
   top: 0;
   left: 0;
   width: 300px;
-***REMOVED***
+}
 .leaderboard {
   height: 280px;
   width: 100%;
   background-color: lightyellow;
-***REMOVED***
+}
 
 
 
@@ -110,9 +110,9 @@
   width: 200px;
   height: 200px;
   background-color: lightyellow;
-***REMOVED***
+}
 .agendas {
-***REMOVED***
+}
 .agendacard {
  width: 180px;
  height: 252px;
@@ -123,7 +123,7 @@
  float: right;
  border: 2px solid white;
  margin-left: 10px;
-***REMOVED***
+}
 .agendacard_name {
  color: white;
  position: relative;
@@ -133,35 +133,35 @@
  width: inherit;
  margin-left: auto;
  margin-right: auto;
-***REMOVED***
+}
 .agendacard:nth-child(1) {
   transform: translate(0px, 50px);
-***REMOVED***
+}
 .agendacard:nth-child(2) {
   transform: translate(0px, 100px);
-***REMOVED***
+}
 .agendacard:nth-child(3) {
   transform: translate(0px, 150px);
-***REMOVED***
+}
 
 .actionbox {
   background-color: lightblue;
-***REMOVED***
+}
 .actioncards {
 
-***REMOVED***
+}
 .techbox {
   background-color: lightgrey;
-***REMOVED***
+}
 .techcards {
 
-***REMOVED***
+}
 .objectivebox {
   background-color: orange;
-***REMOVED***
+}
 .objectives {
 
-***REMOVED***
+}
 
 
 
@@ -170,7 +170,7 @@
 
 .option {
  cursor:pointer;
-***REMOVED***
+}
 
 
 
@@ -183,7 +183,7 @@ body {
  font-size: 13px;
  padding:0px;
  margin:0px;
-***REMOVED***
+}
 .connection_monitor {
  display:none;
  min-height: 30px;
@@ -192,7 +192,7 @@ body {
  background: #ef6666;
  font-size: 1.8em;
  padding: 15px;
-***REMOVED***
+}
 .gameboard {
   position: absolute;
   background-size: cover;
@@ -200,7 +200,7 @@ body {
   /* height: 3300px; */
   /* width: 2550px; */
   /* height: 1650px; */
-***REMOVED***
+}
 
 
 
@@ -228,18 +228,18 @@ body {
 %  -o-transform: perspective(600px) rotateX(60deg);
 %  transform: perspective(600px) rotateX(60deg);
 
-***REMOVED***
+}
 
 .hex {
   position: relative;
   visibility:hidden;
   outline:1px solid transparent; /* fix for jagged edges in FF on hover transition */
-***REMOVED***
+}
 .hex::after{
   content:'';
   display:block;
   padding-bottom: 86.602%;  /* =  100 / tan(60) * 1.5 */
-***REMOVED***
+}
 .hexIn{
   position: absolute;
   width:96%;
@@ -251,12 +251,12 @@ body {
   -webkit-transform: rotate3d(0,0,1,-60deg) skewY(30deg);
       -ms-transform: rotate3d(0,0,1,-60deg) skewY(30deg);
           transform: rotate3d(0,0,1,-60deg) skewY(30deg);
-***REMOVED***
+}
 .hexIn * {
   position: absolute;
   visibility: visible;
   outline:1px solid transparent; /* fix for jagged edges in FF on hover transition */
-***REMOVED***
+}
 .hexLink {
   display:block;
   width: 100%;
@@ -267,7 +267,7 @@ body {
   -webkit-transform: skewY(-30deg) rotate3d(0,0,1,60deg);
       -ms-transform: skewY(-30deg) rotate3d(0,0,1,60deg);
           transform: skewY(-30deg) rotate3d(0,0,1,60deg);
-***REMOVED***
+}
 
 .hex_ground {
   height: 100%;
@@ -280,7 +280,7 @@ body {
   opacity: 1.0;
   position: relative;
   left: 28.5%;
-***REMOVED***
+}
 .hex_space {
   height: 100%;
   width: 100%;
@@ -292,7 +292,7 @@ body {
   opacity: 1.0;
   position: relative;
   left: 28.5%;
-***REMOVED***
+}
 .hex_activated {
   position: fixed;
   top: 0;
@@ -306,7 +306,7 @@ body {
   z-index: 100000;
   background-color: transparent;
   opacity: 1.0;
-***REMOVED***
+}
 .hex_bg {
   left: -100%;
   right: -100%;
@@ -318,7 +318,7 @@ body {
           transform: rotate3d(0,0,0,0deg);
           transform: rotate(30deg) scale(0.88);
 
-***REMOVED***
+}
 
 .sector_graphics_background {
   left: -100%;
@@ -329,7 +329,7 @@ body {
   -webkit-transform: rotate3d(0,0,0,0deg);
       -ms-transform: rotate3d(0,0,0,0deg);
           transform: rotate3d(0,0,0,0deg);
-***REMOVED***
+}
 .sector_graphics {
   left: -100%;
   right: -100%;
@@ -339,13 +339,13 @@ body {
   -webkit-transform: rotate3d(0,0,0,0deg);
       -ms-transform: rotate3d(0,0,0,0deg);
           transform: rotate3d(0,0,0,0deg);
-***REMOVED***
+}
 .top_left {
   transform: translate(-50px,-55px);
-***REMOVED***
+}
 .bottom_right {
   transform: translate(50px,50px);
-***REMOVED***
+}
 
 
 
@@ -356,7 +356,7 @@ body {
 
 .fleet * {
   position: relative;
-***REMOVED***
+}
 .fighter {
   #background-color: white;
   width: 20px;
@@ -365,7 +365,7 @@ body {
   float: left;
   margin-right: 10px;
   margin-top: 10px;
-***REMOVED***
+}
 .destroyer {
   #background-color: white;
   width: 20px;
@@ -374,7 +374,7 @@ body {
   float: left;
   margin-right: 10px;
   margin-top: 10px;
-***REMOVED***
+}
 .carrier {
   #background-color: white;
   width: 90px;
@@ -383,7 +383,7 @@ body {
   float: left;
   margin-right: 10px;
   margin-top: 10px;
-***REMOVED***
+}
 .cruiser {
   #background-color: white;
   width: 120px;
@@ -392,7 +392,7 @@ body {
   float: left;
   margin-right: 10px;
   margin-top: 10px;
-***REMOVED***
+}
 .dreadnaught {
   #background-color: white;
   width: 120px;
@@ -401,7 +401,7 @@ body {
   float: left;
   margin-right: 10px;
   margin-top: 10px;
-***REMOVED***
+}
 .flagship {
   #background-color: white;
   width: 140px;
@@ -410,19 +410,19 @@ body {
   float: left;
   margin-right: 10px;
   margin-top: 10px;
-***REMOVED***
+}
 .planet {
   position: absolute;
   height: 90px;
   width: 90px;
   background-color: white;
   z-index: 9000000;
-***REMOVED***
+}
 
 .ground_forces * {
   position: relative;
   float: left;
-***REMOVED***
+}
 .infantry {
   position: relative;
   background-color: blue;
@@ -430,7 +430,7 @@ body {
   height: 35px;
   padding: 3px;
   float: left;
-***REMOVED***
+}
 .pds {
   position: relative;
   background-color: red;
@@ -438,7 +438,7 @@ body {
   height: 35px;
   padding: 3px;
   float: left;
-***REMOVED***
+}
 .spacedock {
   position: relative;
   background-color: green;
@@ -446,7 +446,7 @@ body {
   height: 35px;
   padding: 3px;
   float: left;
-***REMOVED***
+}
 
 
 
@@ -456,7 +456,7 @@ body {
  position: relative;
  background-size: cover;
  margin-bottom: 10px;
-***REMOVED***
+}
 .planetcard_name {
  position: relative;
  top: 6%;
@@ -465,21 +465,21 @@ body {
  width: inherit;
  margin-left: auto;
  margin-right: auto;
-***REMOVED***
+}
 .planetcard_resources {
   top: 70%;
   width: 50%;
   position: relative;
   font-size: 3em;
   float: left;
-***REMOVED***
+}
 .planetcard_influence {
   top: 70%;
   width: 50%;
   position: relative;
   font-size: 3em;
   float: left;
-***REMOVED***
+}
 
 .strategycard {
  width:180px;
@@ -487,7 +487,7 @@ body {
  position: relative;
  background-size: cover;
  margin-bottom: 10px;
-***REMOVED***
+}
 .strategycard_name {
  position: relative;
  top: 6%;
@@ -496,7 +496,7 @@ body {
  width: inherit;
  margin-left: auto;
  margin-right: auto;
-***REMOVED***
+}
 
 
 .actioncard {
@@ -505,7 +505,7 @@ body {
  position: relative;
  background-size: cover;
  margin-bottom: 10px;
-***REMOVED***
+}
 .actioncard_name {
  position: relative;
  top: 6%;
@@ -514,7 +514,7 @@ body {
  width: inherit;
  margin-left: auto;
  margin-right: auto;
-***REMOVED***
+}
 
 
 
@@ -527,55 +527,55 @@ body {
 @media (min-width:1201px) { /* <- 5-4  hexagons per row */
   #hexGrid{
     padding-bottom: 4.4%
-  ***REMOVED***
+  }
   .hex {
     width: 12.5%; /* = 100 / 8 */
-  ***REMOVED***
+  }
   .hex:nth-child(15n+9){ /* first hexagon of even rows */
     margin-left:6.25%;  /* = width of .hex / 2  to indent even rows */
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 @media (max-width: 1200px) and (min-width:901px) { /* <- 4-3  hexagons per row */
   #hexGrid{
     padding-bottom: 5.5%
-  ***REMOVED***
+  }
   .hex {
     width: 12.5%; /* = 100 / 8 */
-  ***REMOVED***
+  }
   .hex:nth-child(15n+9){ /* first hexagon of even rows */
     margin-left:6.25%;  /* = width of .hex / 2  to indent even rows */
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 @media (max-width: 900px) and (min-width:601px) { /* <- 3-2  hexagons per row */
   #hexGrid{
     padding-bottom: 7.4%
-  ***REMOVED***
+  }
   .hex {
     width: 12.5%; /* = 100 / 8 */
-  ***REMOVED***
+  }
   .hex:nth-child(15n+9){ /* first hexagon of even rows */
     margin-left:6.25%;  /* = width of .hex / 2  to indent even rows */
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 @media (max-width: 600px) { /* <- 2-1  hexagons per row */
   #hexGrid{
     padding-bottom: 11.2%
-  ***REMOVED***
+  }
   .hex {
     width: 12.5%; /* = 100 / 8 */
-  ***REMOVED***
+  }
   .hex:nth-child(15n+9){ /* first hexagon of even rows */
     margin-left:6.25%;  /* = width of .hex / 2  to indent even rows */
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 @media (max-width: 400px) {
     #hexGrid {
         font-size: 13px;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 

@@ -10,7 +10,7 @@ module.exports = ChatList = {
     render(app, data) {
         let chat_main = document.querySelector('.chat-main')
 
-        if (!chat_main) { return; ***REMOVED***
+        if (!chat_main) { return; }
         chat_main.innerHTML = ChatListTemplate();
         chat_main.append(elParser(ChatNavTemplate()));
 
@@ -23,7 +23,7 @@ module.exports = ChatList = {
             if (last_message) {
                 message = last_message.message
                 timestamp = last_message.timestamp;
-        ***REMOVED***
+            }
 
             let row = {
                 name: group.name,
@@ -31,13 +31,13 @@ module.exports = ChatList = {
                 message,
                 timestamp,
                 is_encrypted: group.is_encrypted
-        ***REMOVED***
+            }
 
             document.querySelector('.chat').innerHTML
                 += ChatListRowTemplate(row);
-    ***REMOVED***);
+        });
 
-***REMOVED***,
+    },
 
     attachEvents(app, data) {
         Array.from(document.getElementsByClassName('chat-row'))
@@ -46,7 +46,7 @@ module.exports = ChatList = {
                 data.chat.active = "chat_room";
                 data.chat.active_group_id = group_id;
                 data.chat.main.render(app, data);
-         ***REMOVED***)
+             })
         );
 
         document.querySelector('#chat.create-button')
@@ -55,16 +55,16 @@ module.exports = ChatList = {
         document.getElementById('chat-nav-new-chat').onclick = () => {
             data.chat.active = 'chat_new';
             data.chat.main.render(app, data);
-    ***REMOVED***;
+        };
 
         document.getElementById('chat-nav-add-contact').onclick = () => {
             data.chat.active = 'chat_add_contact';
             data.chat.main.render(app, data);
-    ***REMOVED***;
-***REMOVED***,
+        };
+    },
 
     toggleChatNav() {
         let chat_nav = document.getElementById('chat-nav');
         chat_nav.style.display = chat_nav.style.display == 'none' ? 'flex' : 'none';
-***REMOVED***,
-***REMOVED***
+    },
+}

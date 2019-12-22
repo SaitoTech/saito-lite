@@ -12,7 +12,7 @@ npm install saito-lib --save
 On startup, instantiate a Saito instance and connect to the chain via a full node of your own choosing:
 
 ```javascript
-import { Saito ***REMOVED*** from 'saito-lib';
+import { Saito } from 'saito-lib';
 
 const saito = new Saito({
   peers: [{
@@ -20,8 +20,8 @@ const saito = new Saito({
     port: 443,
     protocol: "https",
     synctype: "lite"
-  ***REMOVED***]
-***REMOVED***);
+  }]
+});
 ```
 
 The configuration passed to Saito is what will be used as your `options` file. You can pass in any fields that exist for the standard Saito options file:
@@ -35,12 +35,12 @@ const saito = new Saito({
     port: 443,
     protocol: "https",
     synctype: "lite"
-  ***REMOVED***],
+  }],
   wallet: {
     privatekey: "5e8aaab4c1551f0145adf9dd790ae03ba2b01e3563dd1713775639ed8ab4a295",
     publickey: "mn2u1muJVEeJfmcKcqfXVEAFam4JQ11yYx8YzCFskkeP"
-  ***REMOVED***,
-***REMOVED***);
+  },
+});
 ```
 
 ## Usable Actions
@@ -49,13 +49,13 @@ To see the list of functions that are available, checkout the [existing document
 ```javascript
 var newtx = saito.wallet.createUnsignedTransaction(address, amount, fee);
 
-newtx.transaction.msg = Object.assign({***REMOVED***, { module: "OurModule" ***REMOVED***);
+newtx.transaction.msg = Object.assign({}, { module: "OurModule" });
 
 newtx = saito.wallet.signTransaction(newtx);
 
 saito.network.propagateTransactionWithCallback(newtx, () => {
 	if (this.app.BROWSER) {
 		alert("your message was propagated")
-	***REMOVED***
-***REMOVED***);
+	}
+});
 ```

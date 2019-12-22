@@ -3,10 +3,10 @@
 //   ../../../../../@fullcalendar/core
 
 declare module '@fullcalendar/bootstrap' {
-    import { Theme ***REMOVED*** from '@fullcalendar/core';
+    import { Theme } from '@fullcalendar/core';
     export class BootstrapTheme extends Theme {
-***REMOVED***
+    }
     const _default: import("@fullcalendar/core").PluginDef;
     export default _default;
-***REMOVED***
+}
 

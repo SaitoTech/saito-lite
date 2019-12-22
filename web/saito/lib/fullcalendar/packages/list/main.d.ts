@@ -4,14 +4,14 @@
 
 declare module '@fullcalendar/list' {
     import ListView from '@fullcalendar/list/ListView';
-    export { ListView ***REMOVED***;
+    export { ListView };
     const _default: import("@fullcalendar/core").PluginDef;
     export default _default;
-***REMOVED***
+}
 
 declare module '@fullcalendar/list/ListView' {
-    import { View, ViewProps, ScrollComponent, DateMarker, DateRange, DateProfileGenerator, ComponentContext, ViewSpec, EventUiHash, EventRenderRange, EventStore, Seg ***REMOVED*** from '@fullcalendar/core';
-    export { ListView as default, ListView ***REMOVED***;
+    import { View, ViewProps, ScrollComponent, DateMarker, DateRange, DateProfileGenerator, ComponentContext, ViewSpec, EventUiHash, EventRenderRange, EventStore, Seg } from '@fullcalendar/core';
+    export { ListView as default, ListView };
     class ListView extends View {
         scroller: ScrollComponent;
         contentEl: HTMLElement;
@@ -28,6 +28,6 @@ declare module '@fullcalendar/list/ListView' {
         renderSegList(allSegs: any): void;
         groupSegsByDay(segs: any): any[];
         buildDayHeaderRow(dayDate: any): HTMLTableRowElement;
-***REMOVED***
-***REMOVED***
+    }
+}
 

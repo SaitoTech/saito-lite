@@ -4,7 +4,7 @@ Docs & License: https://fullcalendar.io/
 (c) 2019 Adam Shaw
 */
 
-import { createPlugin, Theme ***REMOVED*** from '@fullcalendar/core';
+import { createPlugin, Theme } from '@fullcalendar/core';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -24,24 +24,24 @@ and limitations under the License.
 
 var extendStatics = function(d, b) {
     extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] ***REMOVED*** instanceof Array && function (d, b) { d.__proto__ = b; ***REMOVED***) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; ***REMOVED***;
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
     return extendStatics(d, b);
-***REMOVED***;
+};
 
 function __extends(d, b) {
     extendStatics(d, b);
-    function __() { this.constructor = d; ***REMOVED***
+    function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-***REMOVED***
+}
 
 var BootstrapTheme = /** @class */ (function (_super) {
     __extends(BootstrapTheme, _super);
     function BootstrapTheme() {
         return _super !== null && _super.apply(this, arguments) || this;
-***REMOVED***
+    }
     return BootstrapTheme;
-***REMOVED***(Theme));
+}(Theme));
 BootstrapTheme.prototype.classes = {
     widget: 'fc-bootstrap',
     tableGrid: 'table-bordered',
@@ -61,7 +61,7 @@ BootstrapTheme.prototype.classes = {
     dayRow: 'table-bordered',
     // list view
     listView: 'card card-primary'
-***REMOVED***;
+};
 BootstrapTheme.prototype.baseIconClass = 'fa';
 BootstrapTheme.prototype.iconClasses = {
     close: 'fa-times',
@@ -69,15 +69,15 @@ BootstrapTheme.prototype.iconClasses = {
     next: 'fa-chevron-right',
     prevYear: 'fa-angle-double-left',
     nextYear: 'fa-angle-double-right'
-***REMOVED***;
+};
 BootstrapTheme.prototype.iconOverrideOption = 'bootstrapFontAwesome';
 BootstrapTheme.prototype.iconOverrideCustomButtonOption = 'bootstrapFontAwesome';
 BootstrapTheme.prototype.iconOverridePrefix = 'fa-';
 var main = createPlugin({
     themeClasses: {
         bootstrap: BootstrapTheme
-***REMOVED***
-***REMOVED***);
+    }
+});
 
 export default main;
-export { BootstrapTheme ***REMOVED***;
+export { BootstrapTheme };

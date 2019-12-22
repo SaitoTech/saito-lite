@@ -6,7 +6,7 @@ module.exports = EscrowSidebar = {
 
   render(app, data) {
     document.querySelector(".arcade-sidebar-escrow").innerHTML = EscrowSidebarTemplate();
-  ***REMOVED***,
+  },
 
   attachEvents(app, data) {
 
@@ -14,8 +14,8 @@ module.exports = EscrowSidebar = {
         .addEventListener('click', (e) => {
           EscrowGameWizard.render(app, data);
           EscrowGameWizard.attachEvents(app, data);
-***REMOVED***);
+    });
 
-  ***REMOVED***
+  }
 
-***REMOVED***
+}

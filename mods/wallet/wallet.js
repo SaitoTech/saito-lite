@@ -20,52 +20,52 @@ class Wallet extends ModTemplate {
 
     if (app.BROWSER == 1) {
       this.QRCode = require('../../lib/helpers/qrcode');
-***REMOVED***
+    }
 
     return this;
-  ***REMOVED***
+  }
 
   generateQRCode(data) {
     return new this.QRCode(
       document.getElementById("qrcode"),
       data
     );
-  ***REMOVED***
+  }
 
 
   shouldAffixCallbackToModule(module_name, tx=null) {
     if (tx != null) {
       let mypublickey = this.app.wallet.returnPublicKey();
-      if (tx.transaction.from[0].add == mypublickey) { return 1; ***REMOVED***
-      if (tx.returnSlipsTo(mypublickey).length > 0) { return 1; ***REMOVED***
-***REMOVED***
+      if (tx.transaction.from[0].add == mypublickey) { return 1; }
+      if (tx.returnSlipsTo(mypublickey).length > 0) { return 1; }
+    }
     return 0;
-  ***REMOVED***
+  }
 
 
   respondTo(type) {
 
     if (type == 'email') {
-      return {***REMOVED***;
-***REMOVED***
+      return {};
+    }
 
     return null;
-  ***REMOVED***
+  }
 
 
   returnButtonHTML() {
     return `<i class="fas fa-dollar-sign"><span style="margin-left: 7px">Wallet</span></i>`;
-  ***REMOVED***
+  }
 
   returnHTML() {
     return WalletTemplate(this.app.wallet.returnBalance(), this.publickey);
-  ***REMOVED***
+  }
 
   afterRender() {
     this.generateQRCode(this.publickey);
-  ***REMOVED***
+  }
 
-***REMOVED***
+}
 
 
 module.exports = Wallet;

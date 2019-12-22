@@ -7,9 +7,9 @@ const EmailListTemplate     = require('./email-list/email-list.template.js');
 
 module.exports = EmailBody = {
 
-    app: {***REMOVED***,
+    app: {},
 
-    render(app, data={***REMOVED***) {
+    render(app, data={}) {
 
         data.email.body = this;
 
@@ -33,8 +33,8 @@ module.exports = EmailBody = {
                 break;
             default:
                 break;
-    ***REMOVED***
-***REMOVED***,
+        }
+    },
 
     attachEvents(app, data) {
         document.querySelector('#email.create-button')
@@ -43,8 +43,8 @@ module.exports = EmailBody = {
                     data.email.previous_state = "email_list";
                     data.email.main.render(app, data);
                     data.email.main.attachEvents(app, data);
-            ***REMOVED*** document.querySelector('#email.create-button').style.display = "none";
-            ***REMOVED***);
-***REMOVED***
-***REMOVED***
+                    // document.querySelector('#email.create-button').style.display = "none";
+                });
+    }
+}
 

@@ -7,8 +7,8 @@ Docs & License: https://fullcalendar.io/
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@fullcalendar/core')) :
     typeof define === 'function' && define.amd ? define(['exports', '@fullcalendar/core'], factory) :
-    (global = global || self, factory(global.FullCalendarGoogleCalendar = {***REMOVED***, global.FullCalendar));
-***REMOVED***(this, function (exports, core) { 'use strict';
+    (global = global || self, factory(global.FullCalendarGoogleCalendar = {}, global.FullCalendar));
+}(this, function (exports, core) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -30,11 +30,11 @@ Docs & License: https://fullcalendar.io/
             for (var s, i = 1, n = arguments.length; i < n; i++) {
                 s = arguments[i];
                 for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-        ***REMOVED***
+            }
             return t;
-    ***REMOVED***;
+        };
         return __assign.apply(this, arguments);
-***REMOVED***;
+    };
 
     // TODO: expose somehow
     var API_BASE = 'https://www.googleapis.com/calendar/v3/calendars';
@@ -43,24 +43,24 @@ Docs & License: https://fullcalendar.io/
         googleCalendarApiKey: String,
         googleCalendarId: String,
         data: null
-***REMOVED***;
+    };
     var eventSourceDef = {
         parseMeta: function (raw) {
             if (typeof raw === 'string') {
-                raw = { url: raw ***REMOVED***;
-        ***REMOVED***
+                raw = { url: raw };
+            }
             if (typeof raw === 'object') {
                 var standardProps = core.refineProps(raw, STANDARD_PROPS);
                 if (!standardProps.googleCalendarId && standardProps.url) {
                     standardProps.googleCalendarId = parseGoogleCalendarId(standardProps.url);
-            ***REMOVED***
+                }
                 delete standardProps.url;
                 if (standardProps.googleCalendarId) {
                     return standardProps;
-            ***REMOVED***
-        ***REMOVED***
+                }
+            }
             return null;
-    ***REMOVED***,
+        },
         fetch: function (arg, onSuccess, onFailure) {
             var calendar = arg.calendar;
             var meta = arg.eventSource.meta;
@@ -68,8 +68,8 @@ Docs & License: https://fullcalendar.io/
             if (!apiKey) {
                 onFailure({
                     message: 'Specify a googleCalendarApiKey. See http://fullcalendar.io/docs/google_calendar/'
-            ***REMOVED***);
-        ***REMOVED***
+                });
+            }
             else {
                 var url = buildUrl(meta);
                 var requestParams_1 = buildRequestParams(arg.range, apiKey, meta.data, calendar.dateEnv);
@@ -79,68 +79,68 @@ Docs & License: https://fullcalendar.io/
                             message: 'Google Calendar API: ' + body.error.message,
                             errors: body.error.errors,
                             xhr: xhr
-                    ***REMOVED***);
-                ***REMOVED***
+                        });
+                    }
                     else {
                         onSuccess({
                             rawEvents: gcalItemsToRawEventDefs(body.items, requestParams_1.timeZone),
                             xhr: xhr
-                    ***REMOVED***);
-                ***REMOVED***
-            ***REMOVED***, function (message, xhr) {
-                    onFailure({ message: message, xhr: xhr ***REMOVED***);
-            ***REMOVED***);
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***;
+                        });
+                    }
+                }, function (message, xhr) {
+                    onFailure({ message: message, xhr: xhr });
+                });
+            }
+        }
+    };
     function parseGoogleCalendarId(url) {
         var match;
-***REMOVED*** detect if the ID was specified as a single string.
-***REMOVED*** will match calendars like "asdf1234@calendar.google.com" in addition to person email calendars.
+        // detect if the ID was specified as a single string.
+        // will match calendars like "asdf1234@calendar.google.com" in addition to person email calendars.
         if (/^[^\/]+@([^\/\.]+\.)*(google|googlemail|gmail)\.com$/.test(url)) {
             return url;
-    ***REMOVED***
+        }
         else if ((match = /^https:\/\/www.googleapis.com\/calendar\/v3\/calendars\/([^\/]*)/.exec(url)) ||
             (match = /^https?:\/\/www.google.com\/calendar\/feeds\/([^\/]*)/.exec(url))) {
             return decodeURIComponent(match[1]);
-    ***REMOVED***
-***REMOVED***
+        }
+    }
     function buildUrl(meta) {
         return API_BASE + '/' + encodeURIComponent(meta.googleCalendarId) + '/events';
-***REMOVED***
+    }
     function buildRequestParams(range, apiKey, extraParams, dateEnv) {
         var params;
         var startStr;
         var endStr;
         if (dateEnv.canComputeOffset) {
-    ***REMOVED*** strings will naturally have offsets, which GCal needs
+            // strings will naturally have offsets, which GCal needs
             startStr = dateEnv.formatIso(range.start);
             endStr = dateEnv.formatIso(range.end);
-    ***REMOVED***
+        }
         else {
-    ***REMOVED*** when timezone isn't known, we don't know what the UTC offset should be, so ask for +/- 1 day
-    ***REMOVED*** from the UTC day-start to guarantee we're getting all the events
-    ***REMOVED*** (start/end will be UTC-coerced dates, so toISOString is okay)
+            // when timezone isn't known, we don't know what the UTC offset should be, so ask for +/- 1 day
+            // from the UTC day-start to guarantee we're getting all the events
+            // (start/end will be UTC-coerced dates, so toISOString is okay)
             startStr = core.addDays(range.start, -1).toISOString();
             endStr = core.addDays(range.end, 1).toISOString();
-    ***REMOVED***
-        params = __assign({***REMOVED***, (extraParams || {***REMOVED***), { key: apiKey, timeMin: startStr, timeMax: endStr, singleEvents: true, maxResults: 9999 ***REMOVED***);
+        }
+        params = __assign({}, (extraParams || {}), { key: apiKey, timeMin: startStr, timeMax: endStr, singleEvents: true, maxResults: 9999 });
         if (dateEnv.timeZone !== 'local') {
             params.timeZone = dateEnv.timeZone;
-    ***REMOVED***
+        }
         return params;
-***REMOVED***
+    }
     function gcalItemsToRawEventDefs(items, gcalTimezone) {
         return items.map(function (item) {
             return gcalItemToRawEventDef(item, gcalTimezone);
-    ***REMOVED***);
-***REMOVED***
+        });
+    }
     function gcalItemToRawEventDef(item, gcalTimezone) {
         var url = item.htmlLink || null;
-***REMOVED*** make the URLs for each event show times in the correct timezone
+        // make the URLs for each event show times in the correct timezone
         if (url && gcalTimezone) {
             url = injectQsComponent(url, 'ctz=' + gcalTimezone);
-    ***REMOVED***
+        }
         return {
             id: item.id,
             title: item.summary,
@@ -149,22 +149,22 @@ Docs & License: https://fullcalendar.io/
             url: url,
             location: item.location,
             description: item.description
-    ***REMOVED***;
-***REMOVED***
+        };
+    }
     // Injects a string like "arg=value" into the querystring of a URL
     // TODO: move to a general util file?
     function injectQsComponent(url, component) {
-***REMOVED*** inject it after the querystring but before the fragment
+        // inject it after the querystring but before the fragment
         return url.replace(/(\?.*?)?(#|$)/, function (whole, qs, hash) {
             return (qs ? qs + '&' : '?') + component + hash;
-    ***REMOVED***);
-***REMOVED***
+        });
+    }
     var main = core.createPlugin({
         eventSourceDefs: [eventSourceDef]
-***REMOVED***);
+    });
 
     exports.default = main;
 
-    Object.defineProperty(exports, '__esModule', { value: true ***REMOVED***);
+    Object.defineProperty(exports, '__esModule', { value: true });
 
-***REMOVED***));
+}));

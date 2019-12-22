@@ -12,7 +12,7 @@ class Website extends ModTemplate {
     this.name           = "Website";
 
     return this;
-  ***REMOVED***
+  }
 
 
   initializeHTML(app) {
@@ -32,14 +32,14 @@ class Website extends ModTemplate {
         type: 'carousel',
         autoplay: 3000,
         perView,
-  ***REMOVED***);
+      });
       this.glide.mount();
-***REMOVED*** 
+    } 
     importGlide();
 ****/
-  ***REMOVED***
+  }
 
-***REMOVED***
+}
 
 
 module.exports = Website;

@@ -4,13 +4,13 @@
   --saito-red: #639;
   --saito-nightscape: linear-gradient(-45deg, #324 50%, #1e1e1f 100%);
   --saito-jester: linear-gradient(-45deg, #426 50%, #213 100%);
-***REMOVED***
+}
 
 body {
   font-size: 1.0em;
   color: var(--saito-skyline-grey);
   background: var(--saito-nightscape);
-***REMOVED***
+}
 
 
 .arcade-announcement {
@@ -24,7 +24,7 @@ body {
     letter-spacing: 1px;
     margin: 0;
     text-align: center;
-***REMOVED***
+}
 
 
 .play-now {
@@ -39,7 +39,7 @@ body {
     letter-spacing: 1px;
     transition: transform .25s;
     margin: 0;
-***REMOVED***
+}
 
 button, .button, .file-label {
   border-radius: 5px;
@@ -54,11 +54,11 @@ button, .button, .file-label {
   transition: transform .25s;
   margin: 0.2em 0;
   min-width: 180px;
-***REMOVED***
+}
 
 button:hover, .button:hover {
   background: linear-gradient(-45deg, #537 50%, #324 100%);
-***REMOVED***
+}
 
 select {
   border: 1px solid var(--saito-red);
@@ -71,12 +71,12 @@ select {
   letter-spacing: 1px;
   transition: transform .25s;
   min-width: 180px;
-***REMOVED***
+}
 
 input {
   background: #55555555;
   color: var(--saito-skyline-grey);
-***REMOVED***
+}
 
 .background-shim {
   position: absolute;
@@ -86,23 +86,23 @@ input {
   height: calc(100vh - 4em);
   background-size: cover;
   z-index: 0;
-***REMOVED***
+}
 
 .background-shim-cover {
   width: 100%;
   height: 100%;
   background-color: #00000099;
-***REMOVED***
+}
 
 .main {
   height: calc(100vh - 5em);
   width: 100vw;
   /* 90.5vh; */
-***REMOVED***
+}
 
 .footer {
   display: none;
-***REMOVED***
+}
 
 .arcade-container {
   display: grid;
@@ -110,43 +110,43 @@ input {
   grid-template-columns: 15em auto 20em;
   grid-template-areas: "arcade-left-sidebar arcade-main arcade-right-sidebar";
   font-size: 0.9em;
-***REMOVED***
+}
 
 .arcade-sidebar {
   margin: 10px 10px;
-***REMOVED***
+}
 
 .sidebar>div {
   margin: 0 0 2em 0;
-***REMOVED***
+}
 
 button.add-games {
   width: 100%;
-***REMOVED***
+}
 
 .arcade-leaderboard-row {
   display: grid;
   grid-template-columns: 5fr 1fr 1fr;
   padding: 0.5em;
   grid-gap: 1em;
-***REMOVED***
+}
 
 .arcade-leaderboard-row-winner {
   overflow: hidden;
   text-overflow: ellipsis;
-***REMOVED***
+}
 
-.arcade-leaderboard-row-module {***REMOVED***
+.arcade-leaderboard-row-module {}
 
 .arcade-leaderboard-row-score {
   justify-self: end;
-***REMOVED***
+}
 
 .arcade-sidebar-box {
   display: flex;
   flex-direction: column;
   justify-content: center;
-***REMOVED***
+}
 
 .arcade-sidebar-active-games-header {
   font-size: 0.8em;
@@ -157,7 +157,7 @@ button.add-games {
   border: 1px solid var(--saito-red);
   border-bottom: 0px;
   margin: unset;
-***REMOVED***
+}
 
 .arcade-sidebar-active-games-body,
 .arcade-sidebar-active-leaderboard-body {
@@ -165,11 +165,11 @@ button.add-games {
   background: #1e1e1f50;
   height: 40vh;
   overflow-y: auto;
-***REMOVED***
+}
 
 .arcade-sidebar-active-leaderboard-body {
   height: 25vh;
-***REMOVED***
+}
 
 .arcade-observer-game-row {
   /* border: 1px solid grey;
@@ -179,11 +179,11 @@ button.add-games {
   padding: 10px;
   margin-bottom: 10px;
   background: whitesmoke;
-***REMOVED***
+}
 
 #arcade-play-btn {
   padding-bottom: 1.7em;
-***REMOVED***
+}
 
 .chat-header {
   background: var(--saito-nightscape);
@@ -192,14 +192,14 @@ button.add-games {
   padding-left: 15px;
   padding-right: 15px;
   background: var(--saito-jester);
-***REMOVED***
+}
 
 .chat-list {
   height: 255px;
   overflow-y: auto;
   border: 1px solid var(--saito-red);
   background: #1e1e1f50;
-***REMOVED***
+}
 
 /** MAIN **/
 
@@ -209,16 +209,16 @@ button.add-games {
   display: flex;
   flex-direction: column;
   align-items: center;
-***REMOVED***
+}
 
 .arcade-gamelist {
   width: 100%;
-***REMOVED***
+}
 
 .game-options-html {
     overflow-y: auto;
     max-height: 4em;
-***REMOVED***
+}
 
 .pill {
   background: var(--saito-cyber-black);
@@ -228,11 +228,11 @@ button.add-games {
   min-width: 4em;
   text-align: center;
   margin: 2px;
-***REMOVED***
+}
 
 .arcade-extra {
   width: 100%;
-***REMOVED***
+}
 
 .arcade-game-invitation {
   display: grid;
@@ -244,7 +244,7 @@ button.add-games {
   padding-left: 14px;
   padding-right: 14px;
   margin-top: 10px;
-***REMOVED***
+}
 
 /** Game Carousel **/
 
@@ -252,7 +252,7 @@ button.add-games {
   width: 100%;
   max-width: 1100px;
   justify-self: center;
-***REMOVED***
+}
 
 .glide__arrows {
   display: flex;
@@ -260,7 +260,7 @@ button.add-games {
   position: relative;
   bottom: 6em;
   padding: 0px 10px;
-***REMOVED***
+}
 
 .glide__arrow {
   margin: unset;
@@ -269,18 +269,18 @@ button.add-games {
   border: unset;
   min-width: unset;
   border-radius: 50px;
-***REMOVED***
+}
 
 .game {
   min-width: 150px;
   position: relative;
   list-style: none;
   cursor: pointer;
-***REMOVED***
+}
 
 .game-image {
   width: 100%;
-***REMOVED***
+}
 
 .game-title {
   font-size: 1.2em;
@@ -288,7 +288,7 @@ button.add-games {
   margin-top: 6px;
   text-align: center;
   cursor: pointer;
-***REMOVED***
+}
 
 /* GAME WIZARD */
 
@@ -302,41 +302,41 @@ button.add-games {
   padding: 1em;
   z-index: 5;
   max-width: 900px;
-***REMOVED***
+}
 
 .escrow-game-wizard div {
   margin: 1em 0;
-***REMOVED***
+}
 
 .game-wizard-form {
   display: grid;
   grid-gap: 1em;
-***REMOVED***
+}
 
 .game-info-container {
   display: grid;
   grid-gap: 1em;
   grid-template-columns: 1fr 1fr;
-***REMOVED***
+}
 
 .game-start-controls {
   display: grid;
   grid-gap: 1em;
   grid-template-columns: 1fr 4fr;
-***REMOVED***
+}
 
 @media only screen and (max-width: 650px) {
   .game-info-container {
     grid-template-columns: 1fr;
-  ***REMOVED***
+  }
   .game-start-controls {
     grid-template-columns: 1fr;
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 /* .game-image-wizard {
   max-width: 500px;
-***REMOVED*** */
+} */
 
 .return-to-arcade {
   position: absolute;
@@ -345,43 +345,43 @@ button.add-games {
   top: 0;
   width: 0;
   top: -20px;
-***REMOVED***
+}
 
 .game-description {
   font-size: 1.2em;
   line-height: 1.2em;
   text-align: justify;
-***REMOVED***
+}
 
 .game-details form#options {
   display: grid;
   grid-template-columns: 6em auto;
   grid-gap: 1em;
-***REMOVED***
+}
 
 /* USED BY WORDBLOCKS */
 
 #options {
   display: grid;
   grid-template-columns: 10em auto;
-***REMOVED***
+}
 
 /* observer mode box */
 
 .arcade-observer-game-players {
   float: right;
-***REMOVED***
+}
 
 .arcade-observer-game-players-identicon {
   height: 60px;
   width: 60px;
   float: right;
   margin-left: 8px;
-***REMOVED***
+}
 
-.arcade-observer-game-name {***REMOVED***
+.arcade-observer-game-name {}
 
-.arcade-observer-game-row {***REMOVED***
+.arcade-observer-game-row {}
 
 /* RIBBON */
 
@@ -390,7 +390,7 @@ button.add-games {
   height: 150px;
   overflow: hidden;
   position: absolute;
-***REMOVED***
+}
 
 .ribbon::before, .ribbon::after {
   position: absolute;
@@ -398,7 +398,7 @@ button.add-games {
   content: '';
   display: block;
   border: 5px solid #990000;
-***REMOVED***
+}
 
 .ribbon span {
   position: absolute;
@@ -413,70 +413,70 @@ button.add-games {
   text-transform: uppercase;
   text-align: center;
   /* z-index: 5; */
-***REMOVED***
+}
 
 /* top left*/
 
 .ribbon-top-left {
   top: -10px;
   left: -10px;
-***REMOVED***
+}
 
 .ribbon-top-left::before, .ribbon-top-left::after {
   border-top-color: transparent;
   border-left-color: transparent;
-***REMOVED***
+}
 
 .ribbon-top-left::before {
   top: 0;
   right: 0;
-***REMOVED***
+}
 
 .ribbon-top-left::after {
   bottom: 0;
   left: 0;
-***REMOVED***
+}
 
 .ribbon-top-left span {
   right: -25px;
   top: 30px;
   transform: rotate(-45deg);
-***REMOVED***
+}
 
 .arcade-game-row-avi {
   display: inline;
-***REMOVED***
+}
 
 .identicon {
   width: 100%;
   max-width: 2em;
   min-width: 2em;
   margin: 0 3px;
-***REMOVED***
+}
 .arcade-game-invitation {
   clear: both;
-***REMOVED***
+}
 
 .arcade-game-row-name {
   cursor: default;
   padding: 0 3px;
-***REMOVED***
+}
 
 .arcade-game-row-options {
   margin-left: 30px;
   float: left;
   cursor: pointer;
-***REMOVED***
+}
 
 .arcade-game-row-join {
   margin-left: 30px;
   float: left;
   cursor: pointer;
-***REMOVED***
+}
 
 .arcade-game-row-cancel {
   margin-left: 10px;
-***REMOVED***
+}
 
 .arcade-navigator, .arcade-apps {
   list-style: none;
@@ -484,71 +484,71 @@ button.add-games {
   font-size: 1.2em;
   line-height: 1.4em;
   padding: 10px 0px;
-***REMOVED***
+}
 
 .arcade-apps-wrapper {
   border: 1px solid var(--saito-red);
-***REMOVED***
+}
 
 .arcade-navigator {
   border-bottom: 1px solid grey;
-***REMOVED***
+}
 
 .arcade-navigator-item, .arcade-apps-item {
   cursor: pointer;
   border-bottom: 1px solid transparent;
   padding: 5px 0 2px 10px;
-***REMOVED***
+}
 
 .arcade-apps-item:hover, .arcade-navigator-item:hover {
   background-color: #33669999;
-***REMOVED***
+}
 
 @media only screen and (max-width: 600px) {
   .main {
     max-width: unset;
-  ***REMOVED***
+  }
   .arcade-container {
     grid-template-columns: 1fr;
     grid-template-areas: "arcade-left-sidebar" "arcade-main";
-  ***REMOVED***
+  }
   .arcade-left-sidebar {
     display: none;
-  ***REMOVED***
+  }
   .arcade-right-sidebar {
     display: none;
-  ***REMOVED***
+  }
   #arcade-carousel {
     max-width: 90vw;
-  ***REMOVED***
+  }
   .arcade-gamelist {
     width: 100%;
-  ***REMOVED***
+  }
   .arcade-game-invitation {
     grid-template-rows: 1fr 1fr;
     grid-template-columns: 1fr 1fr;
-  ***REMOVED***
+  }
   .arcade-game-invitation div {
     margin-left: unset;
-  ***REMOVED***
+  }
   /* .arcade-sidebar {
     display: none;
-  ***REMOVED*** */
-***REMOVED***
+  } */
+}
 
-@media only screen and (min-width: 600px) {***REMOVED***
+@media only screen and (min-width: 600px) {}
 
 .remove_cards_box {
   max-height: 400px;
   overflow: auto;
   padding: 1em;
-***REMOVED***
+}
 
 .removecards {
   display: grid;
   grid-gap: 1em;
   grid-template-columns: 1fr 1fr;
-***REMOVED***
+}
 
 select {
   -webkit-appearance: none;
@@ -559,13 +559,13 @@ select {
   box-shadow: none;
   border: 0 !important;
   background-image: none;
-***REMOVED***
+}
 
 /* Remove IE arrow */
 
 select::-ms-expand {
   display: none;
-***REMOVED***
+}
 
 /* Custom Select */
 
@@ -579,14 +579,14 @@ select::-ms-expand {
   overflow: hidden;
   border-bottom: 1px solid var(--saito-red);
   width: 100%;
-***REMOVED***
+}
 
 select {
   flex: 1;
   padding: 0 .5em;
   color: #fff;
   cursor: pointer;
-***REMOVED***
+}
 
 /* Arrow */
 
@@ -602,26 +602,26 @@ select {
   -webkit-transition: .25s all ease;
   -o-transition: .25s all ease;
   transition: .25s all ease;
-***REMOVED***
+}
 
 /* Transition */
 
 .saito-select:hover::after {
   color: var(--saito-red);
-***REMOVED***
+}
 
 .game-details label {
   align-self: center;
   font-weight: bold;
-***REMOVED***
+}
 
 option {
   background: var(--saito-cyber-black);
-***REMOVED***
+}
 
 .play-now-holder {
   width: 100%;
-***REMOVED***
+}
 
 .play-now {
   font-size: 1.6em;
@@ -632,18 +632,18 @@ option {
   border-radius: 5px;
   text-align: center;
   margin-bottom: 1em;
-***REMOVED***
+}
 
 .start-game-list {
   display: grid;
   grid-gap: 1em;
   grid-template-columns: 1fr 1fr 1fr;
-***REMOVED***
+}
 
 .start-game-btn {
   text-transform: capitalize;
   margin: 3em 0;
-***REMOVED***
+}
 
 .start-game {
   background: #0009;
@@ -651,19 +651,19 @@ option {
   width: 90%;
   margin: 2em auto;
   opacity: 0;
-***REMOVED***
+}
 
 @media only screen and (max-width: 1000px) {
   .start-game-list {
     grid-template-columns: 1fr 1fr;
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 @media only screen and (max-width: 750px) {
   .start-game-list {
     grid-template-columns: 1fr;
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 .arcade-game-list-item {
   display: grid;
@@ -672,17 +672,17 @@ option {
   cursor: pointer;
   border: 1px solid var(--saito-red);
   padding: 10px;
-***REMOVED***
+}
 
 .arcade-game-list-item:hover {
   border: 1px solid var(--saito-red);
-***REMOVED***
+}
 
 .arcade-game-list-image {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
-***REMOVED***
+}
 
 #game-list-wrapper {
   top: 5em;
@@ -693,86 +693,86 @@ option {
   margin: auto;
   transition: all ease 0.5s;
   background: #00000099;
-***REMOVED***
+}
 
 .arcade-main-hero {
   width: 100%;
-***REMOVED***
+}
 
 .start-game-list .return-to-arcade {
   right: 90px;
   top: 20px;
-***REMOVED***
+}
 
 .header {
   background: none;
-***REMOVED***
+}
 
 /** ARCADE INIT **/
 
 .arcade-initialize-game-container {
   display: grid;
   grid-gap: 1em;
-***REMOVED***
+}
 
 /** CHAT STYLING **/
 
 .chat-row {
   /* no border */
   border-bottom: 0px solid var(--saito-red);
-***REMOVED***
+}
 
 .chat-row:hover {
   background-color: #33669999;
-***REMOVED***
+}
 
 .chat-box {
   background-color: var(--saito-cyber-black);
   border: 1px solid var(--saito-red);
-***REMOVED***
+}
 
 .chat-box-header {
   border-bottom: 1px solid var(--saito-red);
   background: var(--saito-jester);
-***REMOVED***
+}
 
 .chat-room-message-myself {
   background: #565656;
-***REMOVED***
+}
 
 .chat-room-message-others {
   background: #426;
-***REMOVED***
+}
 
 .chat-message-others {
   color: black;
-***REMOVED***
+}
 
 .chat-box-input {
   border-top: 1px solid var(--saito-red);
-***REMOVED***
+}
 
 .chat-box-new-message-input {
   background: var(--saito-cyber-black);
   color: white;
-***REMOVED***
+}
 
 .chat-room-submit-button {
   background: #426;
-***REMOVED***
+}
 
 #alert-box {
   background: var(--saito-nightscape);
-***REMOVED***
+}
 
 .arcade-game-row-name {
   padding: 0 0 0 1em;
-***REMOVED***
+}
 
 .arcade-game-row-delete {
   margin: 0 0 0 12px;
-***REMOVED***
+}
 
 .loader {
   margin: 25%;
-***REMOVED***
+}

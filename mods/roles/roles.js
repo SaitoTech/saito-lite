@@ -15,7 +15,7 @@ class Roles extends ModTemplate {
 
     return this;
 
-  ***REMOVED***
+  }
 
 
 
@@ -27,7 +27,7 @@ class Roles extends ModTemplate {
     //alert("WE HAVE DONE SOMETHING ON THE BACKEND!");
     //window.location = '/email';
 
-  ***REMOVED***
+  }
 
   initialize(app) {
 
@@ -47,7 +47,7 @@ Click on this link and we'll see what happens:
     let newtx = app.wallet.createUnsignedTransactionWithDefaultFee(email_to, 0.0);
     if (!newtx) {
       return;
-***REMOVED***
+    }
 
     newtx.transaction.msg.module   = "Email";
     newtx.transaction.msg.title    = email_title;
@@ -59,19 +59,19 @@ Click on this link and we'll see what happens:
 try {
 console.log("ADDING EMAIL TO ONCONFIRMATION!");
       emailmod.onConfirmation(null, newtx, 0, app);
-***REMOVED*** catch (err) {***REMOVED***
-***REMOVED***
+} catch (err) {}
+    }
 
-  ***REMOVED***
+  }
 
 
   respondTo(type) {
     return null;
-  ***REMOVED***
+  }
 
 
 
-***REMOVED***
+}
 
 
 

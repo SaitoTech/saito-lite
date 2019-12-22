@@ -12,7 +12,7 @@ class Debug extends ModTemplate {
     this.name           = "Debug";
 
     return this;
-  ***REMOVED***
+  }
 
 
 
@@ -20,25 +20,25 @@ class Debug extends ModTemplate {
   respondTo(type) {
 
     if (type == 'email-appspace') {
-      let obj = {***REMOVED***;
+      let obj = {};
 	  obj.render = this.renderEmail;
 	  obj.attachEvents = this.attachEventsEmail;
       return obj;
-***REMOVED***
+    }
 
     return null;
-  ***REMOVED***
+  }
 
   renderEmail(app, data) {
      let DebugAppspace = require('./lib/email-appspace/debug-appspace');
      DebugAppspace.render(app, data);
-  ***REMOVED***
+  }
 
   attachEventsEmail(app, data) {
-  ***REMOVED***
+  }
 
 
-***REMOVED***
+}
 
 
 

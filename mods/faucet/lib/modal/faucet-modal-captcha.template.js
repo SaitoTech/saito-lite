@@ -27,4 +27,4 @@ module.exports = FaucetModalIntroTemplate = () => {
         cursor: pointer;">No thanks</div>
     </div>
   `
-***REMOVED***
+}

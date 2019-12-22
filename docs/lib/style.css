@@ -3,19 +3,19 @@
     --saito-skyline-grey: rgb(234, 234, 239);
     --saito-cyber-black: rgb(28, 28, 35);
     --saito-white: #ffffff;
-***REMOVED***
+}
 
 html {
     --text-color-normal: var(--saito-cyber-black);
     --backround-general: var(--saito-white);
     --text-color-highlight: var(--saito-red);
-***REMOVED***
+}
 
 html[data-theme='dark'] {
     --text-color-normal: var(--saito-skyline-grey);
     --backround-general: var(--saito-cyber-black);
     --text-color-highlight: var(--saito-red);
-***REMOVED***
+}
 
 @font-face {
     font-family: 'visuelt-black';
@@ -23,7 +23,7 @@ html[data-theme='dark'] {
     src: url('/saito/fonts/visuelt-black.eot?#iefix') format('embedded-opentype'), url('/saito/fonts/visuelt-black.woff2') format('woff2'), url('/saito/fonts/visuelt-black.woff') format('woff'), url('/saito/fonts/visuelt-black.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
-***REMOVED***
+}
 
 @font-face {
     font-family: 'visuelt-light';
@@ -31,7 +31,7 @@ html[data-theme='dark'] {
     src: url('/saito/fonts/visuelt-light.eot?#iefix') format('embedded-opentype'), url('/saito/fonts/visuelt-light.woff2') format('woff2'), url('/saito/fonts/visuelt-light.woff') format('woff'), url('/saito/fonts/visuelt-light.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
-***REMOVED***
+}
 
 @font-face {
     font-family: 'visuelt-medium';
@@ -39,7 +39,7 @@ html[data-theme='dark'] {
     src: url('/saito/fonts/visuelt-medium.eot?#iefix') format('embedded-opentype'), url('/saito/fonts/visuelt-medium.woff2') format('woff2'), url('/saito/fonts/visuelt-medium.woff') format('woff'), url('/saito/fonts/visuelt-medium.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
-***REMOVED***
+}
 
 * {
     -webkit-font-smoothing: antialiased;
@@ -48,31 +48,31 @@ html[data-theme='dark'] {
     -webkit-text-size-adjust: none;
     -webkit-touch-callout: none;
     box-sizing: border-box
-***REMOVED***
+}
 
 body:not(.ready) {
     overflow: hidden
-***REMOVED***
+}
 
 body:not(.ready) .app-nav, body:not(.ready)>nav, body:not(.ready) [data-cloak] {
     display: none
-***REMOVED***
+}
 
 div#app {
     font-size: 30px;
     font-weight: lighter;
     margin: 40vh auto;
     text-align: center
-***REMOVED***
+}
 
 div#app:empty:before {
     content: "Loading..."
-***REMOVED***
+}
 
 .emoji {
     height: 1.2rem;
     vertical-align: middle
-***REMOVED***
+}
 
 .progress {
     background-color: var(--saito-red);
@@ -84,20 +84,20 @@ div#app:empty:before {
     transition: width .2s, opacity .4s;
     width: 0;
     z-index: 5
-***REMOVED***
+}
 
 .search .search-keyword, .search a:hover {
     color: var(--saito-red)
-***REMOVED***
+}
 
 .search .search-keyword {
     font-style: normal;
     font-weight: 700
-***REMOVED***
+}
 
 body, html {
     height: 100%
-***REMOVED***
+}
 
 body {
     -moz-osx-font-smoothing: grayscale;
@@ -108,16 +108,16 @@ body {
     letter-spacing: 0;
     margin: 0;
     overflow-x: hidden
-***REMOVED***
+}
 
 img {
     max-width: 100%
-***REMOVED***
+}
 
 a[disabled] {
     cursor: not-allowed;
     opacity: .6
-***REMOVED***
+}
 
 kbd {
     border: 1px solid #ccc;
@@ -128,12 +128,12 @@ kbd {
     margin-bottom: 3px;
     padding: 3px 5px;
     vertical-align: middle
-***REMOVED***
+}
 
 li input[type=checkbox] {
     margin: 0 .2em .25em 0;
     vertical-align: middle
-***REMOVED***
+}
 
 .app-nav {
     margin: 25px 60px 0 0;
@@ -141,48 +141,48 @@ li input[type=checkbox] {
     right: 0;
     text-align: right;
     z-index: 2
-***REMOVED***
+}
 
 .app-nav.no-badge {
     margin-right: 25px
-***REMOVED***
+}
 
 .app-nav p {
     margin: 0
-***REMOVED***
+}
 
 .app-nav>a {
     margin: 0 1rem;
     padding: 5px 0
-***REMOVED***
+}
 
 .app-nav li, .app-nav ul {
     display: inline-block;
     list-style: none;
     margin: 0
-***REMOVED***
+}
 
 .app-nav a {
     color: inherit;
     font-size: 16px;
     text-decoration: none;
     transition: color .3s
-***REMOVED***
+}
 
 .app-nav a.active, .app-nav a:hover {
     color: var(--saito-red)
-***REMOVED***
+}
 
 .app-nav a.active {
     border-bottom: 2px solid var(--saito-red)
-***REMOVED***
+}
 
 .app-nav li {
     display: inline-block;
     margin: 0 1rem;
     padding: 5px 0;
     position: relative
-***REMOVED***
+}
 
 .app-nav li ul {
     background-color: #fff;
@@ -199,7 +199,7 @@ li input[type=checkbox] {
     text-align: left;
     top: 100%;
     white-space: nowrap
-***REMOVED***
+}
 
 .app-nav li ul li {
     display: block;
@@ -208,22 +208,22 @@ li input[type=checkbox] {
     margin: 0;
     margin: 8px 14px;
     white-space: nowrap
-***REMOVED***
+}
 
 .app-nav li ul a {
     display: block;
     font-size: inherit;
     margin: 0;
     padding: 0
-***REMOVED***
+}
 
 .app-nav li ul a.active {
     border-bottom: 0
-***REMOVED***
+}
 
 .app-nav li:hover ul {
     display: block
-***REMOVED***
+}
 
 .github-corner {
     border-bottom: 0;
@@ -232,18 +232,18 @@ li input[type=checkbox] {
     text-decoration: none;
     top: 0;
     z-index: 1
-***REMOVED***
+}
 
 .github-corner:hover .octo-arm {
     animation: a .56s ease-in-out
-***REMOVED***
+}
 
 .github-corner svg {
     color: #fff;
     fill: var(--saito-red);
     height: 80px;
     width: 80px
-***REMOVED***
+}
 
 main {
     display: block;
@@ -251,25 +251,25 @@ main {
     width: 100vw;
     height: 100%;
     z-index: 0
-***REMOVED***
+}
 
 main.hidden {
     display: none
-***REMOVED***
+}
 
 .anchor {
     display: inline-block;
     text-decoration: none;
     transition: all .3s
-***REMOVED***
+}
 
 .anchor span {
     color: var(--text-color-normal);
-***REMOVED***
+}
 
 .anchor:hover {
     text-decoration: underline
-***REMOVED***
+}
 
 .sidebar {
     border-right: 1px solid rgba(0, 0, 0, .07);
@@ -282,73 +282,73 @@ main.hidden {
     transition: transform .25s ease-out;
     width: 300px;
     z-index: 3
-***REMOVED***
+}
 
 .sidebar>h1 {
     margin: 0 auto 1rem;
     font-size: 1.5rem;
     font-weight: 300;
     text-align: center
-***REMOVED***
+}
 
 .sidebar>h1 a {
     color: inherit;
     text-decoration: none
-***REMOVED***
+}
 
 .sidebar>h1 .app-nav {
     display: block;
     position: static
-***REMOVED***
+}
 
 .sidebar .sidebar-nav {
     line-height: 2em;
     padding-bottom: 40px
-***REMOVED***
+}
 
 .sidebar li.collapse .app-sub-sidebar {
     display: none
-***REMOVED***
+}
 
 .sidebar ul {
     margin: 0 0 0 15px;
     padding: 0
-***REMOVED***
+}
 
 .sidebar li>p {
     font-weight: 700;
     margin: 0
-***REMOVED***
+}
 
 .sidebar ul, .sidebar ul li {
     list-style: none
-***REMOVED***
+}
 
 .sidebar ul li a {
     border-bottom: none;
     display: block
-***REMOVED***
+}
 
 .sidebar ul li ul {
     padding-left: 20px
-***REMOVED***
+}
 
 .sidebar::-webkit-scrollbar {
     width: 4px
-***REMOVED***
+}
 
 .sidebar::-webkit-scrollbar-thumb {
     background: transparent;
     border-radius: 4px
-***REMOVED***
+}
 
 .sidebar:hover::-webkit-scrollbar-thumb {
     background: hsla(0, 0%, 53%, .4)
-***REMOVED***
+}
 
 .sidebar:hover::-webkit-scrollbar-track {
     background: hsla(0, 0%, 53%, .1)
-***REMOVED***
+}
 
 .sidebar-toggle {
     background-color: transparent;
@@ -363,11 +363,11 @@ main.hidden {
     transition: opacity .3s;
     width: 284px;
     z-index: 4
-***REMOVED***
+}
 
 .sidebar-toggle .sidebar-toggle-button:hover {
     opacity: .4
-***REMOVED***
+}
 
 .sidebar-toggle span {
     background-color: var(--saito-red);
@@ -375,11 +375,11 @@ main.hidden {
     margin-bottom: 4px;
     width: 16px;
     height: 2px
-***REMOVED***
+}
 
 body.sticky .sidebar, body.sticky .sidebar-toggle {
     position: fixed
-***REMOVED***
+}
 
 .content {
     padding-top: 60px;
@@ -389,35 +389,35 @@ body.sticky .sidebar, body.sticky .sidebar-toggle {
     bottom: 0;
     left: 300px;
     transition: left .25s ease
-***REMOVED***
+}
 
 .markdown-section {
     margin: 0 auto;
     max-width: 800px;
     padding: 30px 15px 40px;
     position: relative
-***REMOVED***
+}
 
 .markdown-section>* {
     box-sizing: border-box;
     font-size: inherit
-***REMOVED***
+}
 
 .markdown-section>:first-child {
     margin-top: 0!important
-***REMOVED***
+}
 
 .markdown-section hr {
     border: none;
     border-bottom: 1px solid #eee;
     margin: 2em 0
-***REMOVED***
+}
 
 .markdown-section iframe {
     border: 1px solid #eee;
     width: 1px;
     min-width: 100%
-***REMOVED***
+}
 
 .markdown-section table {
     border-collapse: collapse;
@@ -426,24 +426,24 @@ body.sticky .sidebar, body.sticky .sidebar-toggle {
     margin-bottom: 1rem;
     overflow: auto;
     width: 100%
-***REMOVED***
+}
 
 .markdown-section th {
     font-weight: 700
-***REMOVED***
+}
 
 .markdown-section td, .markdown-section th {
     border: 1px solid #ddd;
     padding: 6px 13px
-***REMOVED***
+}
 
 .markdown-section tr {
     border-top: 1px solid #ccc
-***REMOVED***
+}
 
 .markdown-section p.tip, .markdown-section tr:nth-child(2n) {
     background-color: #f8f8f8
-***REMOVED***
+}
 
 .markdown-section p.tip {
     border-bottom-right-radius: 2px;
@@ -452,7 +452,7 @@ body.sticky .sidebar, body.sticky .sidebar-toggle {
     margin: 2em 0;
     padding: 12px 24px 12px 30px;
     position: relative
-***REMOVED***
+}
 
 .markdown-section p.tip:before {
     background-color: #f66;
@@ -469,111 +469,111 @@ body.sticky .sidebar, body.sticky .sidebar-toggle {
     width: 20px;
     text-align: center;
     top: 14px
-***REMOVED***
+}
 
 .markdown-section p.tip code {
     background-color: #efefef
-***REMOVED***
+}
 
 .markdown-section p.tip em {
     color: #5e3434
-***REMOVED***
+}
 
 .markdown-section p.warn {
     background: rgba(66, 185, 131, .1);
     border-radius: 2px;
     padding: 1rem
-***REMOVED***
+}
 
 .markdown-section ul.task-list>li {
     list-style-type: none
-***REMOVED***
+}
 
 body.close .sidebar {
     transform: translateX(-300px)
-***REMOVED***
+}
 
 body.close .sidebar-toggle {
     width: auto
-***REMOVED***
+}
 
 body.close .content {
     left: 0
-***REMOVED***
+}
 
 @media print {
     .app-nav, .github-corner, .sidebar, .sidebar-toggle {
         display: none
-***REMOVED***
-***REMOVED***
+    }
+}
 
 @media screen and (max-width:768px) {
     .github-corner, .sidebar, .sidebar-toggle {
         position: fixed
-***REMOVED***
+    }
     .app-nav {
         margin-top: 16px
-***REMOVED***
+    }
     .app-nav li ul {
         top: 30px
-***REMOVED***
+    }
     main {
         height: auto;
         overflow-x: hidden
-***REMOVED***
+    }
     .sidebar {
         left: -300px;
         transition: transform .25s ease-out
-***REMOVED***
+    }
     .content {
         left: 0;
         max-width: 100vw;
         position: static;
         padding-top: 20px;
         transition: transform .25s ease
-***REMOVED***
+    }
     .app-nav, .github-corner {
         transition: transform .25s ease-out
-***REMOVED***
+    }
     .sidebar-toggle {
         background-color: transparent;
         width: auto;
         padding: 30px 30px 10px 10px
-***REMOVED***
+    }
     body.close .sidebar {
         transform: translateX(300px)
-***REMOVED***
+    }
     body.close .sidebar-toggle {
         background-color: hsla(0, 0%, 100%, .8);
         transition: background-color 1s;
         width: 284px;
         padding: 10px
-***REMOVED***
+    }
     body.close .content {
         transform: translateX(300px)
-***REMOVED***
+    }
     body.close .app-nav, body.close .github-corner {
         display: none
-***REMOVED***
+    }
     .github-corner:hover .octo-arm {
         animation: none
-***REMOVED***
+    }
     .github-corner .octo-arm {
         animation: a .56s ease-in-out
-***REMOVED***
-***REMOVED***
+    }
+}
 
 @keyframes a {
     0%, to {
         transform: rotate(0)
-***REMOVED***
+    }
     20%, 60% {
         transform: rotate(-25deg)
-***REMOVED***
+    }
     40%, 80% {
         transform: rotate(10deg)
-***REMOVED***
-***REMOVED***
+    }
+}
 
 section.cover {
     -ms-flex-align: center;
@@ -583,12 +583,12 @@ section.cover {
     background-size: cover;
     height: 100vh;
     display: none
-***REMOVED***
+}
 
 section.cover.show {
     display: -ms-flexbox;
     display: flex
-***REMOVED***
+}
 
 section.cover.has-mask .mask {
     background-color: #fff;
@@ -597,7 +597,7 @@ section.cover.has-mask .mask {
     top: 0;
     height: 100%;
     width: 100%
-***REMOVED***
+}
 
 section.cover .cover-main {
     -ms-flex: 1;
@@ -605,20 +605,20 @@ section.cover .cover-main {
     margin: -20px 16px 0;
     text-align: center;
     z-index: 1
-***REMOVED***
+}
 
 section.cover a {
     color: inherit
-***REMOVED***
+}
 
 section.cover a, section.cover a:hover {
     text-decoration: none
-***REMOVED***
+}
 
 section.cover p {
     line-height: 1.5rem;
     margin: 1em 0
-***REMOVED***
+}
 
 section.cover h1 {
     color: inherit;
@@ -627,22 +627,22 @@ section.cover h1 {
     margin: .625rem 0 2.5rem;
     position: relative;
     text-align: center
-***REMOVED***
+}
 
 section.cover h1 a {
     display: block
-***REMOVED***
+}
 
 section.cover h1 small {
     bottom: -.4375rem;
     font-size: 1rem;
     position: absolute
-***REMOVED***
+}
 
 section.cover blockquote {
     font-size: 1.5rem;
     text-align: center
-***REMOVED***
+}
 
 section.cover ul {
     line-height: 1.8;
@@ -650,7 +650,7 @@ section.cover ul {
     margin: 1em auto;
     max-width: 500px;
     padding: 0
-***REMOVED***
+}
 
 section.cover .cover-main>p:last-child a {
     border: 1px solid var(--saito-red);
@@ -664,42 +664,42 @@ section.cover .cover-main>p:last-child a {
     padding: .75em 2rem;
     text-decoration: none;
     transition: all .15s ease
-***REMOVED***
+}
 
 section.cover .cover-main>p:last-child a:last-child {
     background-color: var(--saito-red);
     color: #fff
-***REMOVED***
+}
 
 section.cover .cover-main>p:last-child a:last-child:hover {
     color: inherit;
     opacity: .8
-***REMOVED***
+}
 
 section.cover .cover-main>p:last-child a:hover {
     color: inherit
-***REMOVED***
+}
 
 section.cover blockquote>p>a {
     border-bottom: 2px solid var(--saito-red);
     transition: color .3s
-***REMOVED***
+}
 
 section.cover blockquote>p>a:hover {
     color: var(--saito-red)
-***REMOVED***
+}
 
 .sidebar, body {
     background-color: #fff
-***REMOVED***
+}
 
 .sidebar {
     color: #364149
-***REMOVED***
+}
 
 .sidebar li {
     margin: 6px 0
-***REMOVED***
+}
 
 .sidebar ul li a {
     color: #505d6b;
@@ -709,98 +709,98 @@ section.cover blockquote>p>a:hover {
     text-decoration: none;
     text-overflow: ellipsis;
     white-space: nowrap
-***REMOVED***
+}
 
 .sidebar ul li a:hover {
     text-decoration: underline
-***REMOVED***
+}
 
 .sidebar ul li ul {
     padding: 0
-***REMOVED***
+}
 
 .sidebar ul li.active>a {
     border-right: 2px solid;
     color: var(--saito-red);
     font-weight: 600
-***REMOVED***
+}
 
 .app-sub-sidebar li:before {
     content: "-";
     padding-right: 4px;
     float: left
-***REMOVED***
+}
 
 .markdown-section h1, .markdown-section h2, .markdown-section h3, .markdown-section h4, .markdown-section strong {
     color: #2c3e50;
     font-weight: 600
-***REMOVED***
+}
 
 .markdown-section a {
     color: var(--saito-red);
     font-weight: 600
-***REMOVED***
+}
 
 .markdown-section h1 {
     font-size: 2rem;
     margin: 0 0 1rem
-***REMOVED***
+}
 
 .markdown-section h2 {
     font-size: 1.75rem;
     margin: 45px 0 .8rem
-***REMOVED***
+}
 
 .markdown-section h3 {
     font-size: 1.5rem;
     margin: 40px 0 .6rem
-***REMOVED***
+}
 
 .markdown-section h4 {
     font-size: 1.25rem
-***REMOVED***
+}
 
 .markdown-section h5 {
     font-size: 1rem
-***REMOVED***
+}
 
 .markdown-section h6 {
     color: #777;
     font-size: 1rem
-***REMOVED***
+}
 
 .markdown-section figure, .markdown-section p {
     margin: 1.2em 0
-***REMOVED***
+}
 
 .markdown-section ol, .markdown-section p, .markdown-section ul {
     line-height: 1.6rem;
     word-spacing: .05rem
-***REMOVED***
+}
 
 .markdown-section ol, .markdown-section ul {
     padding-left: 1.5rem
-***REMOVED***
+}
 
 .markdown-section blockquote {
     border-left: 4px solid var(--saito-red);
     color: #858585;
     margin: 2em 0;
     padding-left: 20px
-***REMOVED***
+}
 
 .markdown-section blockquote p {
     font-weight: 600;
     margin-left: 0
-***REMOVED***
+}
 
 .markdown-section iframe {
     margin: 1em 0
-***REMOVED***
+}
 
 .markdown-section em {
     color: #7f8c8d
-***REMOVED***
+}
 
 .markdown-section code {
     border-radius: 2px;
@@ -809,12 +809,12 @@ section.cover blockquote>p>a:hover {
     margin: 0 2px;
     padding: 3px 5px;
     white-space: pre-wrap
-***REMOVED***
+}
 
 .markdown-section code, .markdown-section pre {
     background-color: #f8f8f8;
     font-family: Monaco, courier, monospace
-***REMOVED***
+}
 
 .markdown-section pre {
     -moz-osx-font-smoothing: initial;
@@ -825,88 +825,88 @@ section.cover blockquote>p>a:hover {
     padding: 0 1.4rem;
     position: relative;
     word-wrap: normal
-***REMOVED***
+}
 
 .token.cdata, .token.comment, .token.doctype, .token.prolog {
     color: #8e908c
-***REMOVED***
+}
 
 .token.namespace {
     opacity: .7
-***REMOVED***
+}
 
 .token.boolean, .token.number {
     color: #c76b29
-***REMOVED***
+}
 
 .token.punctuation {
     color: #525252
-***REMOVED***
+}
 
 .token.property {
     color: #c08b30
-***REMOVED***
+}
 
 .token.tag {
     color: #2973b7
-***REMOVED***
+}
 
 .token.string {
     color: var(--saito-red)
-***REMOVED***
+}
 
 .token.selector {
     color: #6679cc
-***REMOVED***
+}
 
 .token.attr-name {
     color: #2973b7
-***REMOVED***
+}
 
 .language-css .token.string, .style .token.string, .token.entity, .token.url {
     color: #22a2c9
-***REMOVED***
+}
 
 .token.attr-value, .token.control, .token.directive, .token.unit {
     color: var(--saito-red)
-***REMOVED***
+}
 
 .token.function, .token.keyword {
     color: #e96900
-***REMOVED***
+}
 
 .token.atrule, .token.regex, .token.statement {
     color: #22a2c9
-***REMOVED***
+}
 
 .token.placeholder, .token.variable {
     color: #3d8fd1
-***REMOVED***
+}
 
 .token.deleted {
     text-decoration: line-through
-***REMOVED***
+}
 
 .token.inserted {
     border-bottom: 1px dotted #202746;
     text-decoration: none
-***REMOVED***
+}
 
 .token.italic {
     font-style: italic
-***REMOVED***
+}
 
 .token.bold, .token.important {
     font-weight: 700
-***REMOVED***
+}
 
 .token.important {
     color: #c94922
-***REMOVED***
+}
 
 .token.entity {
     cursor: help
-***REMOVED***
+}
 
 .markdown-section pre>code {
     -moz-osx-font-smoothing: initial;
@@ -923,17 +923,17 @@ section.cover blockquote>p>a:hover {
     overflow: inherit;
     padding: 2.2em 5px;
     white-space: inherit
-***REMOVED***
+}
 
 .markdown-section code:after, .markdown-section code:before {
     letter-spacing: .05rem
-***REMOVED***
+}
 
 code .token {
     -moz-osx-font-smoothing: initial;
     -webkit-font-smoothing: initial;
     min-height: 1.5rem
-***REMOVED***
+}
 
 pre:after {
     color: #ccc;
@@ -947,4 +947,4 @@ pre:after {
     right: 0;
     text-align: right;
     top: 0
-***REMOVED***
+}

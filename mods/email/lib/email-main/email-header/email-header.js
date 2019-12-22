@@ -28,12 +28,12 @@ module.exports = EmailHeader = {
         break;
       default:
         break;
-***REMOVED***
+    }
 
     data.email.updateBalance();
 
-  ***REMOVED***,
+  },
 
-  attachEvents(app, data) {***REMOVED***,
+  attachEvents(app, data) {},
 
-***REMOVED***
+}

@@ -2,7 +2,7 @@ module.exports = FaucetModalSocialTemplate = (tokens_sent=true) => {
   let are_tokens_sent = tokens_sent ? `<p>You successfully registered your username! As a thanks, have 50 SAITO on us.</p>` : '';
   return `
     <div>
-      ${are_tokens_sent***REMOVED***
+      ${are_tokens_sent}
       <p>You should back up your wallet now that you have some tokens</p>
     </div>
     <button id="registry-backup-wallet">BACKUP</button>
@@ -31,4 +31,4 @@ module.exports = FaucetModalSocialTemplate = (tokens_sent=true) => {
     </div>
     </div>
   `;
-***REMOVED***
+}

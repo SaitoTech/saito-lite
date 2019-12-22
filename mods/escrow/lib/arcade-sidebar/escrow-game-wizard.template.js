@@ -51,4 +51,4 @@ module.exports = EscrowGameWizardTemplate = () => {
 `;
 
   return html;
-***REMOVED***
+}

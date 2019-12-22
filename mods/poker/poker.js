@@ -21,7 +21,7 @@ class Poker extends GameTemplate {
 
     return this;
 
-  ***REMOVED***
+  }
 
 
   initializeQueue() {
@@ -39,7 +39,7 @@ class Poker extends GameTemplate {
         this.game.queue.push("DECKENCRYPT\t1\t1");
         this.game.queue.push("DECKXOR\t1\t2");
         this.game.queue.push("DECKXOR\t1\t1");
-  ***REMOVED***
+      }
       if (this.game.players.length == 3) {
         this.game.queue.push("POOL\t1"); // pool for cards on table
         this.game.queue.push("DEAL\t1\t3\t2");
@@ -51,7 +51,7 @@ class Poker extends GameTemplate {
         this.game.queue.push("DECKXOR\t1\t3");
         this.game.queue.push("DECKXOR\t1\t2");
         this.game.queue.push("DECKXOR\t1\t1");
-  ***REMOVED***
+      }
       if (this.game.players.length == 4) {
         this.game.queue.push("POOL\t1"); // pool for cards on table
         this.game.queue.push("DEAL\t1\t4\t2");
@@ -66,7 +66,7 @@ class Poker extends GameTemplate {
         this.game.queue.push("DECKXOR\t1\t3");
         this.game.queue.push("DECKXOR\t1\t2");
         this.game.queue.push("DECKXOR\t1\t1");
-  ***REMOVED***
+      }
       if (this.game.players.length == 5) {
         this.game.queue.push("POOL\t1"); // pool for cards on table
         this.game.queue.push("DEAL\t1\t5\t2");
@@ -84,7 +84,7 @@ class Poker extends GameTemplate {
         this.game.queue.push("DECKXOR\t1\t3");
         this.game.queue.push("DECKXOR\t1\t2");
         this.game.queue.push("DECKXOR\t1\t1");
-  ***REMOVED***
+      }
       if (this.game.players.length == 6) {
         this.game.queue.push("POOL\t1"); // pool for cards on table
         this.game.queue.push("DEAL\t1\t6\t2");
@@ -105,7 +105,7 @@ class Poker extends GameTemplate {
         this.game.queue.push("DECKXOR\t1\t3");
         this.game.queue.push("DECKXOR\t1\t2");
         this.game.queue.push("DECKXOR\t1\t1");
-  ***REMOVED***
+      }
       if (this.game.players.length == 7) {
         this.game.queue.push("POOL\t1"); // pool for cards on table
         this.game.queue.push("DEAL\t1\t7\t2");
@@ -129,7 +129,7 @@ class Poker extends GameTemplate {
         this.game.queue.push("DECKXOR\t1\t3");
         this.game.queue.push("DECKXOR\t1\t2");
         this.game.queue.push("DECKXOR\t1\t1");
-  ***REMOVED***
+      }
       if (this.game.players.length == 8) {
         this.game.queue.push("POOL\t1"); // pool for cards on table
         this.game.queue.push("DEAL\t1\t8\t2");
@@ -156,17 +156,17 @@ class Poker extends GameTemplate {
         this.game.queue.push("DECKXOR\t1\t3");
         this.game.queue.push("DECKXOR\t1\t2");
         this.game.queue.push("DECKXOR\t1\t1");
-  ***REMOVED***
+      }
       this.game.queue.push("DECK\t1\t"+JSON.stringify(this.returnDeck()));
-  ***REMOVED***
+  }
 
   initializeGame(game_id) {
 
     //
     // game engine needs this to start
     //
-    if (this.game.status != "") { this.updateStatus(this.game.status); ***REMOVED***
-    if (this.game.dice == "") { this.initializeDice(); ***REMOVED***
+    if (this.game.status != "") { this.updateStatus(this.game.status); }
+    if (this.game.dice == "") { this.initializeDice(); }
 
     //
     // initialize
@@ -178,12 +178,12 @@ class Poker extends GameTemplate {
       this.updateStatus("Generating the Game");
       this.initializeQueue();
 
-***REMOVED***
+    }
 
     if (this.browser_active) {
       this.displayBoard();
-***REMOVED***
-  ***REMOVED***
+    }
+  }
 
 
 
@@ -195,8 +195,8 @@ class Poker extends GameTemplate {
 
     this.game.state.big_blind_player++;
     this.game.state.small_blind_player++;
-    if (this.game.state.big_blind_player > this.game.players.length) { this.game.state.big_blind_player = 1; ***REMOVED***
-    if (this.game.state.small_blind_player > this.game.players.length) { this.game.state.small_blind_player = 1; ***REMOVED***
+    if (this.game.state.big_blind_player > this.game.players.length) { this.game.state.big_blind_player = 1; }
+    if (this.game.state.small_blind_player > this.game.players.length) { this.game.state.small_blind_player = 1; }
 
     this.game.state.flipped = 0;
     this.game.state.plays_since_last_raise = -1;
@@ -210,7 +210,7 @@ class Poker extends GameTemplate {
     for (let i = 0; i < this.game.players.length; i++) {
       this.game.state.passed[i] = 0;
       this.game.state.player_pot[i] = 0;
-***REMOVED***
+    }
 
     //
     // if players are out-of-tokens, set as inactive
@@ -219,13 +219,13 @@ class Poker extends GameTemplate {
       if (this.game.state.player_credit[i] <= 0) {
         this.game.state.passed[i] = 1;
         this.game.state.player_credit[i] = -1;
-  ***REMOVED***
-***REMOVED***
+      }
+    }
 
 
     this.initializeQueue();
 
-  ***REMOVED***
+  }
 
 
 
@@ -246,7 +246,7 @@ class Poker extends GameTemplate {
           this.updateLog(mv[1]);
           this.game.queue.splice(qe, 1);
 
-  ***REMOVED***
+      }
 
       if (mv[0] === "winner") {
 	this.updateStatus("Game Over: Player " + mv[1] + " wins!");
@@ -254,7 +254,7 @@ class Poker extends GameTemplate {
 	this.game.over = 1;
 	this.saveGame(this.game.id);
 	return 0;
-  ***REMOVED***
+      }
 
       if (mv[0] === "turn") {
 
@@ -267,12 +267,12 @@ class Poker extends GameTemplate {
 	  for (let i = 0; i < this.game.state.player_credit.length; i++) {
 	    if (this.game.state.player_credit[i] > 0) {
 	        alive_players++; 
-	***REMOVED*** else {
+	    } else {
 	      if (this.game.state.passed[i] == 0 && this.game.state.turn > 2) {
 	        alive_players++; 
-	  ***REMOVED***
-	***REMOVED***
-	  ***REMOVED***
+	      }
+	    }
+	  }
 
 	  if (alive_players == 1 && this.game.state.turn == 1) {
 	    for (let i = 0; i < this.game.state.player_credit.length; i++) {
@@ -281,11 +281,11 @@ class Poker extends GameTemplate {
             	this.addMove("winner\t"+this.game.player);
       	    	this.endTurn();
 		return 0;
-	  ***REMOVED***
-	***REMOVED***
+	      }
+	    }
 	    this.updateStatus("Game Over");
 	    return 0;
-	  ***REMOVED***
+	  }
 
 
 	  //
@@ -293,19 +293,19 @@ class Poker extends GameTemplate {
 	  //
 	  let active_players = 0;
 	  for (let i = 0; i < this.game.state.passed.length; i++) {
-	    if (this.game.state.passed[i] == 0) { active_players++; ***REMOVED***
-	  ***REMOVED***
+	    if (this.game.state.passed[i] == 0) { active_players++; }
+	  }
 	  if (active_players == 1) {
 	    for (let i = 0; i < this.game.state.passed.length; i++) {
 	      if (this.game.state.passed[i] == 0) {
 	        this.updateLog("Player: " + i+1 + " wins " + this.game.state.pot);
                 this.game.state.player_credit[i] += this.game.state.pot;
-	  ***REMOVED***
-	***REMOVED***
+	      }
+	    }
 
             this.startNextRound();
             return 1;
-	  ***REMOVED***
+	  }
 
 
 	  //
@@ -318,7 +318,7 @@ class Poker extends GameTemplate {
 	    //
 	    if (this.game.state.flipped == 5) {
 
-	      this.game.state.player_cards = {***REMOVED***;
+	      this.game.state.player_cards = {};
 	      this.game.state.player_cards_reported = 0;
 	      this.game.state.player_cards_required = 0;
 
@@ -326,46 +326,46 @@ class Poker extends GameTemplate {
 	      let first_scorer = -1;
 	      for (let i = 0; i < this.game.state.passed.length; i++) {
 		if (this.game.state.passed[i] == 0) {
-		  if (first_scorer == -1) { first_scorer = i; ***REMOVED***
+		  if (first_scorer == -1) { first_scorer = i; }
 		  this.game.state.player_cards_required++;
 		  this.game.state.player_cards[i] = [];
-		***REMOVED***
- 	  ***REMOVED***
+		}
+ 	      }
 
 	      if (first_scorer == this.game.player-1) {
       		this.addMove("reveal\t"+this.game.player+"\t"+this.game.deck[0].hand[0]+"\t"+this.game.deck[0].hand[1]);
       		this.endTurn();
-	  ***REMOVED***
+	      }
 
 	      return 0;
-	***REMOVED***
+	    }
 
 
 	    let cards_to_flip = 1;
 	    if (this.game.state.flipped == 0) { 
 	      cards_to_flip = 3; 
-	***REMOVED***
+	    }
 	    this.game.state.flipped += cards_to_flip;
 	    for (let z = 0; z < cards_to_flip; z++) {
       	      for (let i = this.game.players.length-1; i >= 0; i--) {
       	        this.game.queue.push("FLIPCARD\t1\t1\t1\t"+(i+1));
-	  ***REMOVED***
+	      }
        	      this.game.queue.push("FLIPRESET\t1");
-	***REMOVED***
+	    }
 	    this.game.state.plays_since_last_raise = 0;
 	    return 1;
-	  ***REMOVED***
+	  }
 
 	  this.game.state.plays_since_last_raise++;
 	  if (this.game.state.plays_since_last_raise == 0) {
 	    this.game.state.plays_since_last_raise++;
-	  ***REMOVED***
+	  }
 console.log("INCREMENTING TURN!")
 	  this.game.state.turn++;
 
 	  if (this.game.state.passed[this.game.player-1] == 1) {
             this.game.queue.splice(qe, 1);
-	  ***REMOVED*** else {
+	  } else {
             this.game.queue.splice(qe, 1);
 
 	    //
@@ -373,12 +373,12 @@ console.log("INCREMENTING TURN!")
 	    // 
             if (parseInt(mv[1]) == this.game.player) {
               this.playerTurn();
-        ***REMOVED*** else {
+            } else {
               this.updateStatus("Waiting for Player " + mv[1]);
-        ***REMOVED***
+            }
             shd_continue = 0;
-      ***REMOVED***
-  ***REMOVED***
+          }
+      }
 
 
 
@@ -405,9 +405,9 @@ console.log("INCREMENTING TURN!")
 	let first_scorer = -1;
         for (let i = scorer; i < this.game.state.passed.length; i++) {
 	  if (this.game.state.passed[i] == 0) {
-	    if (first_scorer == -1) { first_scorer = i; ***REMOVED***
-	  ***REMOVED***
-    ***REMOVED***
+	    if (first_scorer == -1) { first_scorer = i; }
+	  }
+        }
 
 	//
 	// we have all of the hands, and can pick a winner
@@ -432,7 +432,7 @@ console.log("INCREMENTING TURN!")
 	      deck2 = this.game.state.player_cards[key];
 	      player2 = parseInt(key)+1;
 
-	***REMOVED*** else {
+	    } else {
 
 	      deck1 = this.game.state.player_cards[key];
 	      player1 = parseInt(key)+1;
@@ -454,7 +454,7 @@ console.log("INCREMENTING TURN!")
 		winners.push(player1);
 		winners.push(player2);
 
-	  ***REMOVED*** else {
+	      } else {
 
 		everyone_ties = 0;
 		winners = [];
@@ -465,19 +465,19 @@ console.log("INCREMENTING TURN!")
 		  winning_player = player1;
 		  winners.push(player1);
 		  winning_deck = deck1;
-	    ***REMOVED*** else {
+	        } else {
 
 	  	  deck2 = deck2;
 		  player2 = player2;
 		  winning_player = player2;
 		  winners.push(player2);
 		  winning_deck = deck2;
-	    ***REMOVED***
+	        }
 
-	  ***REMOVED***
-	***REMOVED***
+	      }
+	    }
 	    i++;
-	  ***REMOVED***
+	  }
 
 	  //
 	  // report winner
@@ -487,37 +487,37 @@ console.log("INCREMENTING TURN!")
 
 	  if (winners.length > 1) {
 
-    ***REMOVED***
+            //
 	    // split winnings among winners
 	    //
 	    let pot_size = Math.floor(this.game.state.pot / winners.length)
 	    for (let i = 0; i < winners.length; i++) {
 	      this.updateLog("Player: " + winners[i] + " splits pot and wins " + pot_size);
 	      this.game.state.player_credit[winners[i]-1] += pot_size;
-	***REMOVED***
+	    }
 
-	  ***REMOVED*** else {
+	  } else {
 
-    ***REMOVED***
+            //
 	    // winner gets everything
 	    //
 	    this.updateLog("Player: " + winners[0] + " wins " + this.game.state.pot);
 	    this.game.state.player_credit[winners[0]-1] += this.game.state.pot;
 
-	  ***REMOVED***
+	  }
 
           this.startNextRound();
 	  return 1;
-	***REMOVED***
+	}
 	
 
 	if (this.game.player-1 == first_scorer) {
           this.addMove("reveal\t"+this.game.player+"\t"+this.game.deck[0].hand[0]+"\t"+this.game.deck[0].hand[1]);
       	  this.endTurn();
-	***REMOVED***
+	}
 
 	return 0;
-  ***REMOVED***
+      }
 
 
 
@@ -541,19 +541,19 @@ console.log("start round");
             if (this.game.state.player_credit[this.game.state.big_blind_player-1] <= this.game.state.big_blind) {
               if (this.game.state.player_credit[this.game.state.big_blind_player-1] == this.game.state.big_blind) {
   	        this.updateLog("Player "+this.game.state.big_blind_player+" has no more chips");
-	  ***REMOVED*** else {
+	      } else {
   	        this.updateLog("Player "+this.game.state.big_blind_player+" deposits remainder of tokens as big blind and is removed from game");
-	  ***REMOVED***
+	      }
 	      this.game.state.player_pot[this.game.state.big_blind_player-1] += this.game.state.player_credit[this.game.state.big_blind_player-1];
 	      this.game.state.pot += this.game.state.player_credit[this.game.state.big_blind_player-1];
 	      this.game.state.player_credit[this.game.state.big_blind_player-1] = -1;
 	      this.game.state.passed[this.game.state.big_blind_player-1] = 1;
-	***REMOVED*** else {
+	    } else {
 	      this.updateLog("Player "+this.game.state.big_blind_player+" deposits the big blind ("+this.game.state.big_blind+")");
 	      this.game.state.player_pot[this.game.state.big_blind_player-1] += this.game.state.big_blind;
 	      this.game.state.pot += this.game.state.big_blind;
 	      this.game.state.player_credit[this.game.state.big_blind_player-1] -= this.game.state.big_blind;
-	***REMOVED***
+	    }
 
 	    //
 	    // Small Blind
@@ -561,20 +561,20 @@ console.log("start round");
             if (this.game.state.player_credit[this.game.state.small_blind_player-1] <= this.game.state.small_blind) {
               if (this.game.state.player_credit[this.game.state.small_blind_player-1] <= this.game.state.small_blind) {
 	        this.updateLog("Player "+this.game.state.small_blind_player+" has no more chips");
-	  ***REMOVED*** else {
+	      } else {
 	        this.updateLog("Player "+this.game.state.small_blind_player+" deposits remainder tokens as small blind and is removed from game");
-	  ***REMOVED***
+	      }
 	      this.game.state.player_pot[this.game.state.small_blind_player-1] += this.game.state.player_credit[this.game.state.small_blind_player-1];
 	      this.game.state.pot += this.game.state.player_credit[this.game.state.small_blind_player-1];
 	      this.game.state.player_credit[this.game.state.small_blind_player-1] = -1;
 	      this.game.state.passed[this.game.state.small_blind_player-1] = 1;
-	***REMOVED*** else {
+	    } else {
 	      this.updateLog("Player "+this.game.state.small_blind_player+" deposits the small blind ("+this.game.state.small_blind+")");
 	      this.game.state.player_pot[this.game.state.small_blind_player-1] += this.game.state.small_blind;
 	      this.game.state.pot += this.game.state.small_blind;
 	      this.game.state.player_credit[this.game.state.small_blind_player-1] -= this.game.state.small_blind;
-	***REMOVED***
-	  ***REMOVED***
+	    }
+	  }
 
 
 
@@ -592,15 +592,15 @@ console.log("INCREMENTING TURN 2!")
 
           for (let i = 0; i < this.game.players.length; i++) {
 	    let player_to_go = this.game.state.big_blind_player-i;
-	    if (player_to_go <= 0) { player_to_go += this.game.players.length; ***REMOVED***
+	    if (player_to_go <= 0) { player_to_go += this.game.players.length; }
 	    this.game.queue.push("turn\t"+player_to_go);
-	  ***REMOVED***
+	  }
 
 
 console.log("QUEUE CREATED: " + this.game.queue);
 
 
-  ***REMOVED***
+      }
 
       if (mv[0] === "call") {
 
@@ -610,7 +610,7 @@ console.log("QUEUE CREATED: " + this.game.queue);
 	  this.updateLog("Player " + player + " calls " + this.game.state.required_pot + " -- " + this.game.state.player_pot[player-1]);
 	  if (this.game.state.required_pot > this.game.state.player_pot[player-1]) {
 	    amount_to_call = this.game.state.required_pot - this.game.state.player_pot[player-1];
-	  ***REMOVED***
+	  }
 
 	  this.game.state.player_credit[player-1] -= amount_to_call;
 	  this.game.state.player_pot[player-1]  += amount_to_call;
@@ -618,7 +618,7 @@ console.log("QUEUE CREATED: " + this.game.queue);
 
           this.game.queue.splice(qe, 1);
 
-  ***REMOVED***
+      }
 
 
       if (mv[0] === "fold") {
@@ -636,20 +636,20 @@ console.log("QUEUE CREATED: " + this.game.queue);
 	    if (this.game.state.passed == 0) {
 	      players_left++;
 	      player_left_idx = i;
-	***REMOVED***
-      ***REMOVED***
+	    }
+          }
 
 	  if (players_left == 1) {
 	    this.game.state.player_credit[player_left_idx] = this,game.state.pot;
 	    this.startNextRound();
-      ***REMOVED***
-  ***REMOVED***
+          }
+      }
 
       if (mv[0] === "check") {
 	  let player = parseInt(mv[1]);
           this.game.queue.splice(qe, 1);
 	  this.updateLog("Player " + player + " checks.");
-  ***REMOVED***
+      }
 
 
 
@@ -681,7 +681,7 @@ console.log("QUEUE CREATED: " + this.game.queue);
 
 	    this.updateLog("Player " + player + " raises " + raise_portion + ".");
 
-	  ***REMOVED*** else {
+	  } else {
 
 	    this.game.state.player_credit[player-1] -= raise;
 	    this.game.state.required_pot += raise;
@@ -690,9 +690,9 @@ console.log("QUEUE CREATED: " + this.game.queue);
 
 	    this.updateLog("Player " + player + " raises " + raise + ".");
 
-      ***REMOVED***
+          }
           this.game.queue.splice(qe, 1);
-  ***REMOVED***
+      }
 
       //
       // avoid infinite loops
@@ -700,10 +700,10 @@ console.log("QUEUE CREATED: " + this.game.queue);
       if (shd_continue == 0) {
         console.log("NOT CONTINUING");
         return 0;
-  ***REMOVED***
-***REMOVED***
+      }
+    }
     return 1;
-  ***REMOVED***
+  }
 
 
 
@@ -725,42 +725,42 @@ console.log("QUEUE CREATED: " + this.game.queue);
     let can_call = 1;
     let can_raise = 1;
 
-    if (this.game.state.player_credit[this.game.state.player-1] < match_required) { can_call = 0; ***REMOVED***
-    if (this.game.state.player_credit[this.game.state.player-1] < (match_required+this.game.state.last_raise)) { can_raise = 0; ***REMOVED***
+    if (this.game.state.player_credit[this.game.state.player-1] < match_required) { can_call = 0; }
+    if (this.game.state.player_credit[this.game.state.player-1] < (match_required+this.game.state.last_raise)) { can_raise = 0; }
 
     if (can_call == 0 && can_raise == 0) {
       this.updateStatus("You can only fold...");
       this.addMove("fold\t"+poker_self.game.player);
       this.endTurn();
       return;
-***REMOVED***
+    }
 
     html += 'You are Player '+this.game.player+'. ';
     if (this.game.player == this.game.state.big_blind_player) {
       html += "You are the big blind. ";
-***REMOVED***
+    }
     if (this.game.player == this.game.state.small_blind_player) {
       html += "You are the small blind. ";
-***REMOVED***
+    }
     html += 'You have '+this.game.state.player_pot[this.game.player-1]+' in the pot and '+this.game.state.player_credit[this.game.player-1]+' in chips. Calling requires an additional '+match_required+'. Total pot has '+this.game.state.pot+'. Please select an option below: <p></p><ul>';
     if (this.game.state.required_pot > this.game.state.player_pot[this.game.player-1]) {
-      if (can_fold == 1)  { html += '<li class="menu_option" id="fold">fold</li>'; ***REMOVED***
-      if (can_call == 1)  { html += '<li class="menu_option" id="call">call</li>'; ***REMOVED***
-      if (can_raise == 1) { html += '<li class="menu_option" id="raise">raise</li>'; ***REMOVED***
+      if (can_fold == 1)  { html += '<li class="menu_option" id="fold">fold</li>'; }
+      if (can_call == 1)  { html += '<li class="menu_option" id="call">call</li>'; }
+      if (can_raise == 1) { html += '<li class="menu_option" id="raise">raise</li>'; }
       html += '</ul>';
       this.updateStatus(html);
-***REMOVED*** else {
+    } else {
 
       if (this.game.state.required_pot > this.game.state.player_pot[this.game.player-1] || this.game.state.required_pot == this.game.state.player_pot[this.game.player-1]) {
-        if (can_fold == 1)  { html += '<li class="menu_option" id="fold">fold</li>'; ***REMOVED***
-        if (can_fold == 1)  { html += '<li class="menu_option" id="check">check</li>'; ***REMOVED***
-        if (can_raise == 1) { html += '<li class="menu_option" id="raise">raise</li>'; ***REMOVED***
+        if (can_fold == 1)  { html += '<li class="menu_option" id="fold">fold</li>'; }
+        if (can_fold == 1)  { html += '<li class="menu_option" id="check">check</li>'; }
+        if (can_raise == 1) { html += '<li class="menu_option" id="raise">raise</li>'; }
         html += '</ul>';
         this.updateStatus(html);
-  ***REMOVED*** else {
+      } else {
 	this.updateStatus("ERROR 257293: logic error in poker module, please report");
-  ***REMOVED***
-***REMOVED***
+      }
+    }
 
 
     $('.menu_option').off();
@@ -771,17 +771,17 @@ console.log("QUEUE CREATED: " + this.game.queue);
       if (choice === "fold") {
         poker_self.addMove("fold\t"+poker_self.game.player);
         poker_self.endTurn();
-  ***REMOVED***
+      }
 
       if (choice === "check") {
         poker_self.addMove("check\t"+poker_self.game.player);
         poker_self.endTurn();
-  ***REMOVED***
+      }
 
       if (choice === "call") {
         poker_self.addMove("call\t"+poker_self.game.player);
         poker_self.endTurn();
-  ***REMOVED***
+      }
 
       if (choice === "raise") {
 
@@ -793,25 +793,25 @@ console.log("QUEUE CREATED: " + this.game.queue);
         html  = 'Please select an option below: <p></p><ul>';
         if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
 	  html += '<li class="menu_option" id="'+(raise_required)+'">'+(raise_required)+'</li>';
-    ***REMOVED***
+        }
         if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
 	  html += '<li class="menu_option" id="'+(raise_required + (1 * poker_self.game.state.last_raise))+'">'+(raise_required + (1 * poker_self.game.state.last_raise))+'</li>';
-    ***REMOVED***
+        }
         if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
 	  html += '<li class="menu_option" id="'+(raise_required + (2 * poker_self.game.state.last_raise))+'">'+(raise_required + (2 * poker_self.game.state.last_raise))+'</li>';
-    ***REMOVED***
+        }
         if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
 	  html += '<li class="menu_option" id="'+(raise_required + (3 * poker_self.game.state.last_raise))+'">'+(raise_required + (3 * poker_self.game.state.last_raise))+'</li>';
-    ***REMOVED***
+        }
         if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
 	  html += '<li class="menu_option" id="'+(raise_required + (4 * poker_self.game.state.last_raise))+'">'+(raise_required + (4 * poker_self.game.state.last_raise))+'</li>';
-    ***REMOVED***
+        }
         if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
 	  html += '<li class="menu_option" id="'+(raise_required + (5 * poker_self.game.state.last_raise))+'">'+(raise_required + (5 * poker_self.game.state.last_raise))+'</li>';
-    ***REMOVED***
+        }
         if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
 	  html += '<li class="menu_option" id="'+(all_in_remaining)+'">'+(all_in_remaining)+'</li>';
-    ***REMOVED***
+        }
 
         html += '</ul>';
         poker_self.updateStatus(html);
@@ -823,38 +823,38 @@ console.log("QUEUE CREATED: " + this.game.queue);
           poker_self.addMove("raise\t"+poker_self.game.player+"\t"+raise);
           poker_self.endTurn();
 
-    ***REMOVED***);
-  ***REMOVED***
-***REMOVED***);
-  ***REMOVED***
+        });
+      }
+    });
+  }
 
 
 
 
   displayBoard() {
 
-    if (this.browser_active == 0) { return; ***REMOVED***
+    if (this.browser_active == 0) { return; }
 
     try {
       this.displayHand();
       this.displayDeal();
-***REMOVED*** catch (err) {
-***REMOVED***
+    } catch (err) {
+    }
 
-  ***REMOVED***
+  }
 
 
 
   returnState(num_of_players) {
 
-    let state = {***REMOVED***;
+    let state = {};
 
         state.round = 0;
         state.new_round = 0;
         state.turn = 0;
         state.flipped = 0;
 
-	state.player_cards = {***REMOVED***;
+	state.player_cards = {};
 	state.player_cards_reported = 0;
 	state.player_cards_required = 0;
 
@@ -877,17 +877,17 @@ console.log("QUEUE CREATED: " + this.game.queue);
 
     for (let i = 0; i < num_of_players; i++) {
       state.passed[i] = 0;
-***REMOVED***
+    }
     for (let i = 0; i < num_of_players; i++) {
       state.player_pot[i] = 0;
-***REMOVED***
+    }
     for (let i = 0; i < num_of_players; i++) {
       state.player_credit[i] = 100;
-***REMOVED***
+    }
 
     return state;
 
-  ***REMOVED***
+  }
 
 
 
@@ -899,68 +899,68 @@ console.log("QUEUE CREATED: " + this.game.queue);
 
     return card.name.substring(0, card.name.indexOf('.'));
 
-  ***REMOVED***
+  }
 
   returnDeck() {
 
-    var deck = {***REMOVED***;
+    var deck = {};
 
-    deck['1']                 = { name : "S1.png" ***REMOVED***
-    deck['2']                 = { name : "S2.png" ***REMOVED***
-    deck['3']                 = { name : "S3.png" ***REMOVED***
-    deck['4']                 = { name : "S4.png" ***REMOVED***
-    deck['5']                 = { name : "S5.png" ***REMOVED***
-    deck['6']                 = { name : "S6.png" ***REMOVED***
-    deck['7']                 = { name : "S7.png" ***REMOVED***
-    deck['8']                 = { name : "S8.png" ***REMOVED***
-    deck['9']                 = { name : "S9.png" ***REMOVED***
-    deck['10']                = { name : "S10.png" ***REMOVED***
-    deck['11']                = { name : "S11.png" ***REMOVED***
-    deck['12']                = { name : "S12.png" ***REMOVED***
-    deck['13']                = { name : "S13.png" ***REMOVED***
-    deck['14']                = { name : "C1.png" ***REMOVED***
-    deck['15']                = { name : "C2.png" ***REMOVED***
-    deck['16']                = { name : "C3.png" ***REMOVED***
-    deck['17']                = { name : "C4.png" ***REMOVED***
-    deck['18']                = { name : "C5.png" ***REMOVED***
-    deck['19']                = { name : "C6.png" ***REMOVED***
-    deck['20']                = { name : "C7.png" ***REMOVED***
-    deck['21']                = { name : "C8.png" ***REMOVED***
-    deck['22']                = { name : "C9.png" ***REMOVED***
-    deck['23']                = { name : "C10.png" ***REMOVED***
-    deck['24']                = { name : "C11.png" ***REMOVED***
-    deck['25']                = { name : "C12.png" ***REMOVED***
-    deck['26']                = { name : "C13.png" ***REMOVED***
-    deck['27']                = { name : "H1.png" ***REMOVED***
-    deck['28']                = { name : "H2.png" ***REMOVED***
-    deck['29']                = { name : "H3.png" ***REMOVED***
-    deck['30']                = { name : "H4.png" ***REMOVED***
-    deck['31']                = { name : "H5.png" ***REMOVED***
-    deck['32']                = { name : "H6.png" ***REMOVED***
-    deck['33']                = { name : "H7.png" ***REMOVED***
-    deck['34']                = { name : "H8.png" ***REMOVED***
-    deck['35']                = { name : "H9.png" ***REMOVED***
-    deck['36']                = { name : "H10.png" ***REMOVED***
-    deck['37']                = { name : "H11.png" ***REMOVED***
-    deck['38']                = { name : "H12.png" ***REMOVED***
-    deck['39']                = { name : "H13.png" ***REMOVED***
-    deck['40']                = { name : "D1.png" ***REMOVED***
-    deck['41']                = { name : "D2.png" ***REMOVED***
-    deck['42']                = { name : "D3.png" ***REMOVED***
-    deck['43']                = { name : "D4.png" ***REMOVED***
-    deck['44']                = { name : "D5.png" ***REMOVED***
-    deck['45']                = { name : "D6.png" ***REMOVED***
-    deck['46']                = { name : "D7.png" ***REMOVED***
-    deck['47']                = { name : "D8.png" ***REMOVED***
-    deck['48']                = { name : "D9.png" ***REMOVED***
-    deck['49']                = { name : "D10.png" ***REMOVED***
-    deck['50']                = { name : "D11.png" ***REMOVED***
-    deck['51']                = { name : "D12.png" ***REMOVED***
-    deck['52']                = { name : "D13.png" ***REMOVED***
+    deck['1']                 = { name : "S1.png" }
+    deck['2']                 = { name : "S2.png" }
+    deck['3']                 = { name : "S3.png" }
+    deck['4']                 = { name : "S4.png" }
+    deck['5']                 = { name : "S5.png" }
+    deck['6']                 = { name : "S6.png" }
+    deck['7']                 = { name : "S7.png" }
+    deck['8']                 = { name : "S8.png" }
+    deck['9']                 = { name : "S9.png" }
+    deck['10']                = { name : "S10.png" }
+    deck['11']                = { name : "S11.png" }
+    deck['12']                = { name : "S12.png" }
+    deck['13']                = { name : "S13.png" }
+    deck['14']                = { name : "C1.png" }
+    deck['15']                = { name : "C2.png" }
+    deck['16']                = { name : "C3.png" }
+    deck['17']                = { name : "C4.png" }
+    deck['18']                = { name : "C5.png" }
+    deck['19']                = { name : "C6.png" }
+    deck['20']                = { name : "C7.png" }
+    deck['21']                = { name : "C8.png" }
+    deck['22']                = { name : "C9.png" }
+    deck['23']                = { name : "C10.png" }
+    deck['24']                = { name : "C11.png" }
+    deck['25']                = { name : "C12.png" }
+    deck['26']                = { name : "C13.png" }
+    deck['27']                = { name : "H1.png" }
+    deck['28']                = { name : "H2.png" }
+    deck['29']                = { name : "H3.png" }
+    deck['30']                = { name : "H4.png" }
+    deck['31']                = { name : "H5.png" }
+    deck['32']                = { name : "H6.png" }
+    deck['33']                = { name : "H7.png" }
+    deck['34']                = { name : "H8.png" }
+    deck['35']                = { name : "H9.png" }
+    deck['36']                = { name : "H10.png" }
+    deck['37']                = { name : "H11.png" }
+    deck['38']                = { name : "H12.png" }
+    deck['39']                = { name : "H13.png" }
+    deck['40']                = { name : "D1.png" }
+    deck['41']                = { name : "D2.png" }
+    deck['42']                = { name : "D3.png" }
+    deck['43']                = { name : "D4.png" }
+    deck['44']                = { name : "D5.png" }
+    deck['45']                = { name : "D6.png" }
+    deck['46']                = { name : "D7.png" }
+    deck['47']                = { name : "D8.png" }
+    deck['48']                = { name : "D9.png" }
+    deck['49']                = { name : "D10.png" }
+    deck['50']                = { name : "D11.png" }
+    deck['51']                = { name : "D12.png" }
+    deck['52']                = { name : "D13.png" }
 
     return deck;
 
-  ***REMOVED***
+  }
 
 
 
@@ -968,7 +968,7 @@ console.log("QUEUE CREATED: " + this.game.queue);
   displayHand() {
     this.cardfan.render(this.app, this);
     this.cardfan.attachEvents(this.app, this);
-  ***REMOVED***
+  }
 
 
 
@@ -980,23 +980,23 @@ console.log("QUEUE CREATED: " + this.game.queue);
     $('#deal').empty();
 
     for (let i = 0; i < 5 || i < this.game.pool[0].hand.length; i++) {
-      let card = {***REMOVED***;
-      if (i < this.game.pool[0].hand.length) { card = this.game.pool[0].cards[this.game.pool[0].hand[i]]; ***REMOVED*** else { card.name = "red_back.png"; ***REMOVED***
+      let card = {};
+      if (i < this.game.pool[0].hand.length) { card = this.game.pool[0].cards[this.game.pool[0].hand[i]]; } else { card.name = "red_back.png"; }
 
       // let card_img = card.name + ".png";
-      let html = `<img class="card" src="${this.card_img_dir***REMOVED***/${card.name***REMOVED***">`;
+      let html = `<img class="card" src="${this.card_img_dir}/${card.name}">`;
       //document.getElementById('deal').innerHTML += html;
       $('#deal').append(html);
-***REMOVED***
+    }
 
-  ***REMOVED***
+  }
 
 
 
 
   addMove(mv) {
     this.moves.push(mv);
-  ***REMOVED***
+  }
 
 
 
@@ -1008,15 +1008,15 @@ console.log("QUEUE CREATED: " + this.game.queue);
 
     $(".menu_option").off();
 
-    let extra = {***REMOVED***;
+    let extra = {};
         extra.target = this.returnNextPlayer(this.game.player);
 
-    if (nextTarget != 0) { extra.target = nextTarget; ***REMOVED***
+    if (nextTarget != 0) { extra.target = nextTarget; }
     this.game.turn = this.moves;
     this.moves = [];
     this.sendMessage("game", extra);
 
-  ***REMOVED***
+  }
 
 
   pickWinner(score1, score2) {
@@ -1024,146 +1024,146 @@ console.log("QUEUE CREATED: " + this.game.queue);
 
     let hands_differ = 0;
     for (let i = 0; i < score1.cards_to_score.length; i++) {
-      if (score1.cards_to_score[i] !== score2.cards_to_score[i]) { hands_differ = 1; ***REMOVED***
-***REMOVED***
-    if (hands_differ == 0) { return 0; ***REMOVED***
+      if (score1.cards_to_score[i] !== score2.cards_to_score[i]) { hands_differ = 1; }
+    }
+    if (hands_differ == 0) { return 0; }
 
     if (score1.hand_description == "royal flush" && score2.hand_description == "royal flush") {
       if (this.returnHigherCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
         return 1;
-  ***REMOVED*** else {
+      } else {
 	return 2;
-  ***REMOVED***
-***REMOVED***
-    if (score1.hand_description == "royal flush") { return 1; ***REMOVED***
-    if (score2.hand_description == "royal flush") { return 2; ***REMOVED***
+      }
+    }
+    if (score1.hand_description == "royal flush") { return 1; }
+    if (score2.hand_description == "royal flush") { return 2; }
 
 
     if (score1.hand_description == "straight flush" && score2.hand_description == "straight flush") {
       if (this.returnHigherCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
 	return 1;
-  ***REMOVED*** else {
+      } else {
         return 2;
-  ***REMOVED***
-***REMOVED***
-    if (score1.hand_description == "straight flush") { return 1; ***REMOVED***
-    if (score2.hand_description == "straight flush") { return 2; ***REMOVED***
+      }
+    }
+    if (score1.hand_description == "straight flush") { return 1; }
+    if (score2.hand_description == "straight flush") { return 2; }
 
 
     if (score1.hand_description == "four-of-a-kind" && score2.hand_description == "four-of-a-kind") {
       if (this.returnHigherCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
         return 1;
-  ***REMOVED*** else {
+      } else {
         return 2;
-  ***REMOVED***
-***REMOVED***
-    if (score1.hand_description == "four-of-a-kind") { return 1; ***REMOVED***
-    if (score2.hand_description == "four-of-a-kind") { return 2; ***REMOVED***
+      }
+    }
+    if (score1.hand_description == "four-of-a-kind") { return 1; }
+    if (score2.hand_description == "four-of-a-kind") { return 2; }
 
 
     if (score1.hand_description == "full house" && score2.hand_description == "full house") {
       if (this.returnHigherCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
         return 1;
-  ***REMOVED*** else {
+      } else {
         return 2;
-  ***REMOVED***
-***REMOVED***
-    if (score1.hand_description == "full house") { return 1; ***REMOVED***
-    if (score2.hand_description == "full house") { return 2; ***REMOVED***
+      }
+    }
+    if (score1.hand_description == "full house") { return 1; }
+    if (score2.hand_description == "full house") { return 2; }
 
 
     if (score1.hand_description == "flush" && score2.hand_description == "flush") {
       if (this.returnHigherCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
         return 1;
-  ***REMOVED*** else {
+      } else {
         return 2;
-  ***REMOVED***
-***REMOVED***
-    if (score1.hand_description == "flush") { return 1; ***REMOVED***
-    if (score2.hand_description == "flush") { return 2; ***REMOVED***
+      }
+    }
+    if (score1.hand_description == "flush") { return 1; }
+    if (score2.hand_description == "flush") { return 2; }
 
 
     if (score1.hand_description == "straight" && score2.hand_description == "straight") {
       if (this.returnHigherCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
         return 1;
-  ***REMOVED*** else {
+      } else {
         return 2;
-  ***REMOVED***
-***REMOVED***
-    if (score1.hand_description == "straight") { return 1; ***REMOVED***
-    if (score2.hand_description == "straight") { return 2; ***REMOVED***
+      }
+    }
+    if (score1.hand_description == "straight") { return 1; }
+    if (score2.hand_description == "straight") { return 2; }
 
 
     if (score1.hand_description == "three-of-a-kind" && score2.hand_description == "three-of-a-kind") {
       if (this.returnHigherCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
         return 1;
-  ***REMOVED*** else {
+      } else {
         return 2;
-  ***REMOVED***
-***REMOVED***
-    if (score1.hand_description == "three-of-a-kind") { return 1; ***REMOVED***
-    if (score2.hand_description == "three-of-a-kind") { return 2; ***REMOVED***
+      }
+    }
+    if (score1.hand_description == "three-of-a-kind") { return 1; }
+    if (score2.hand_description == "three-of-a-kind") { return 2; }
 
 
     if (score1.hand_description == "two pair" && score2.hand_description == "two pair") {
       if (parseInt(score1.cards_to_score[0].substring(1)) > parseInt(score2.cards_to_score[0].substring(1))) {
         return 1;
-  ***REMOVED*** else {
+      } else {
         if (parseInt(score1.cards_to_score[0].substring(1)) < parseInt(score2.cards_to_score[0].substring(1))) {
 	  return 2;
-	***REMOVED*** else {
+	} else {
           if (parseInt(score1.cards_to_score[2].substring(1)) > parseInt(score2.cards_to_score[2].substring(1))) {
 	    return 1;
-	  ***REMOVED*** else {
+	  } else {
             if (parseInt(score1.cards_to_score[2].substring(1)) < parseInt(score2.cards_to_score[2].substring(1))) {
 	      return 2;
-	***REMOVED*** else {
+	    } else {
               if (this.returnHigherCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score1.cards_to_score[4]) {
 		return 1;
-	  ***REMOVED*** else {
+	      } else {
 		return 2;
-	  ***REMOVED***
-	***REMOVED***
-	  ***REMOVED***
-	***REMOVED***
+	      }
+	    }
+	  }
+	}
         return 2;
-  ***REMOVED***
-***REMOVED***
-    if (score1.hand_description == "two pair") { return 1; ***REMOVED***
-    if (score2.hand_description == "two pair") { return 2; ***REMOVED***
+      }
+    }
+    if (score1.hand_description == "two pair") { return 1; }
+    if (score2.hand_description == "two pair") { return 2; }
 
 
     if (score1.hand_description == "pair" && score2.hand_description == "pair") {
       if (parseInt(score1.cards_to_score[0].substring(1)) > parseInt(score2.cards_to_score[0].substring(1))) {
         return 1;
-  ***REMOVED*** else {
+      } else {
         if (parseInt(score1.cards_to_score[0].substring(1)) < parseInt(score2.cards_to_score[0].substring(1))) {
 	  return 2;
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
+        }
+      }
+    }
     for (let z = 2; z < score1.cards_to_score.length; z++) {
       if (this.returnHigherCard(score1.cards_to_score[z], score2.cards_to_score[z]) == score1.cards_to_score[z]) {
 	return 1;
-  ***REMOVED*** else {
+      } else {
 	return 2;
-  ***REMOVED***
-***REMOVED***
-    if (score1.hand_description == "pair") { return 1; ***REMOVED***
-    if (score2.hand_description == "pair") { return 2; ***REMOVED***
+      }
+    }
+    if (score1.hand_description == "pair") { return 1; }
+    if (score2.hand_description == "pair") { return 2; }
 
 
     if (score1.hand_description == "highest card" && score2.hand_description == "highest card") {
       if (this.returnHigherCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
 	return 1;
-  ***REMOVED*** else {
+      } else {
 	return 2;
-  ***REMOVED***
-***REMOVED***
-    if (score1.hand_description == "highest card") { return 1; ***REMOVED***
-    if (score2.hand_description == "highest card") { return 2; ***REMOVED***
+      }
+    }
+    if (score1.hand_description == "highest card") { return 1; }
+    if (score2.hand_description == "highest card") { return 2; }
 
-  ***REMOVED***
+  }
 
 
 
@@ -1189,11 +1189,11 @@ console.log("QUEUE CREATED: " + this.game.queue);
       let x = this.isTwo(suite, val, idx);
       if (x == 0) {
 	idx = 14;
-  ***REMOVED*** else {
+      } else {
 	pairs.push(x);
 	idx = x+1;
-  ***REMOVED***
-***REMOVED*** 
+      }
+    } 
  
 
     //
@@ -1204,11 +1204,11 @@ console.log("QUEUE CREATED: " + this.game.queue);
       let x = this.isThree(suite, val, idx);
       if (x == 0) {
 	idx = 14;
-  ***REMOVED*** else {
+      } else {
 	three_of_a_kind.push(x);
 	idx = x+1;
-  ***REMOVED***
-***REMOVED***  
+      }
+    }  
 
 
     //
@@ -1219,11 +1219,11 @@ console.log("QUEUE CREATED: " + this.game.queue);
       let x = this.isFour(suite, val, idx);
       if (x == 0) {
 	idx = 14;
-  ***REMOVED*** else {
+      } else {
 	four_of_a_kind.push(x);
 	idx = x+1;
-  ***REMOVED***
-***REMOVED***  
+      }
+    }  
 
 
     //
@@ -1234,11 +1234,11 @@ console.log("QUEUE CREATED: " + this.game.queue);
       let x = this.isStraight(suite, val, idx);
       if (x == 0) {
 	idx = 11;
-  ***REMOVED*** else {
+      } else {
 	straights.push(x);
 	idx = x+1;
-  ***REMOVED***
-***REMOVED***
+      }
+    }
 
 
     //
@@ -1249,16 +1249,16 @@ console.log("QUEUE CREATED: " + this.game.queue);
       for( var z = 0; z < three_of_a_kind.length; z++){ 
         if ( three_of_a_kind[z] === four_of_a_kind[i]) {
           three_of_a_kind.splice(z, 1);
-	***REMOVED***
-  ***REMOVED***
+	}
+      }
 
       for( var z = 0; z < pairs.length; z++){ 
         if ( pairs[z] === four_of_a_kind[i]) {
           pairs.splice(z, 1);
-	***REMOVED***
-  ***REMOVED***
+	}
+      }
 
-***REMOVED***
+    }
 
 
     //
@@ -1268,9 +1268,9 @@ console.log("QUEUE CREATED: " + this.game.queue);
       for( var z = 0; z < pairs.length; z++){ 
         if ( pairs[z] === three_of_a_kind[i]) {
           pairs.splice(z, 1);
-	***REMOVED***
-  ***REMOVED***
-***REMOVED***
+	}
+      }
+    }
 
 
 
@@ -1312,10 +1312,10 @@ console.log("QUEUE CREATED: " + this.game.queue);
 	  cards_to_score.push("11"+x); 
 	  cards_to_score.push("10"+x); 
 	  hand_description = "royal flush";
-	  return { cards_to_score : cards_to_score , hand_description : hand_description ***REMOVED***;
-	***REMOVED***
-  ***REMOVED***  
-***REMOVED***
+	  return { cards_to_score : cards_to_score , hand_description : hand_description };
+	}
+      }  
+    }
    
  
     //
@@ -1338,12 +1338,12 @@ console.log("QUEUE CREATED: " + this.game.queue);
 	    cards_to_score.push((straights[i]+1)+x); 
 	    cards_to_score.push((straights[i])+x); 
 	    hand_description = "straight flush";
-	    return { cards_to_score : cards_to_score , hand_description : hand_description ***REMOVED***;
-	  ***REMOVED***
-	***REMOVED***
+	    return { cards_to_score : cards_to_score , hand_description : hand_description };
+	  }
+	}
 
-  ***REMOVED***  
-***REMOVED***
+      }  
+    }
     
     //
     // FOUR OF A KIND
@@ -1355,8 +1355,8 @@ console.log("QUEUE CREATED: " + this.game.queue);
         highest_card = this.returnHighestCard(suite, val, cards_to_score);
         cards_to_score.push(highest_card);
         hand_description = "four-of-a-kind";
-        return { cards_to_score : cards_to_score , hand_description : hand_description ***REMOVED***
-  ***REMOVED***
+        return { cards_to_score : cards_to_score , hand_description : hand_description }
+      }
 
       cards_to_score = [
 	"C"+(four_of_a_kind[four_of_a_kind.length-1]),
@@ -1367,9 +1367,9 @@ console.log("QUEUE CREATED: " + this.game.queue);
       highest_card = this.returnHighestCard(suite, val, cards_to_score);
       hand_description = "four-of-a-kind";
       cards_to_score.push(highest_card);
-      return { cards_to_score : cards_to_score , hand_description : hand_description ***REMOVED***;
+      return { cards_to_score : cards_to_score , hand_description : hand_description };
 
-***REMOVED***
+    }
     
 
  
@@ -1384,21 +1384,21 @@ console.log("QUEUE CREATED: " + this.game.queue);
 	if (val[i] == three_of_a_kind[three_of_a_kind.length-1]) {
 	  if (this.isHigherSuite(suite[i], highest_suite)) {
 	    highest_suite = suite[i];
-      ***REMOVED***
+          }
 	  cards_to_score.push(suite[i] + val[i]);
-	***REMOVED***
-  ***REMOVED***
+	}
+      }
       highest_card = highest_suite + three_of_a_kind[three_of_a_kind.length-1];
 
       for (let i = 0; i < val.length; i++) {
 	if (val[i] == pairs[pairs.length-1]) {
 	  cards_to_score.push(suite[i] + val[i]);
-	***REMOVED***
-  ***REMOVED***
+	}
+      }
 
       hand_description = "full house";
-      return { cards_to_score : cards_to_score , hand_description : hand_description , highest_card : highest_card ***REMOVED***;
-***REMOVED***
+      return { cards_to_score : cards_to_score , hand_description : hand_description , highest_card : highest_card };
+    }
 
 
  
@@ -1413,18 +1413,18 @@ console.log("QUEUE CREATED: " + this.game.queue);
       for (let i = 0; i < val.length; i++) {
 	if (suite[i] == x) {
 	  y.push(val[i]);
-	***REMOVED***
-  ***REMOVED***
+	}
+      }
 
       // y now contians onyl in-suite vals
       y.sort();
       y.splice(0, (y.length-5));
-      for (let i = y.length-1; i >= 0;  i--) { cards_to_score.push(x + y[i]); ***REMOVED***
+      for (let i = y.length-1; i >= 0;  i--) { cards_to_score.push(x + y[i]); }
 
       hand_description = "flush";
-      return { cards_to_score : cards_to_score , hand_description : hand_description ***REMOVED***;
+      return { cards_to_score : cards_to_score , hand_description : hand_description };
 
-***REMOVED***
+    }
 
 
 
@@ -1441,15 +1441,15 @@ console.log("QUEUE CREATED: " + this.game.queue);
 	cards_to_score.push(this.returnHighestSuiteCard(suite, val, 12));
 	cards_to_score.push(this.returnHighestSuiteCard(suite, val, 11));
 	cards_to_score.push(this.returnHighestSuiteCard(suite, val, 10));
-  ***REMOVED*** else {
+      } else {
         for (let i = 4; i >= 0; i--) {
 	  cards_to_score.push(this.returnHighestSuiteCard(suite, val, x+i));
-    ***REMOVED***
-  ***REMOVED***
+        }
+      }
       hand_description = "straight";
-      return { cards_to_score : cards_to_score , hand_description : hand_description ***REMOVED***;
+      return { cards_to_score : cards_to_score , hand_description : hand_description };
 
-***REMOVED***
+    }
 
 
     //
@@ -1468,24 +1468,24 @@ console.log("QUEUE CREATED: " + this.game.queue);
 	  suite.splice(i, 1);
 	  cards_remaining--;
           i--;
-	***REMOVED***
-  ***REMOVED***
+	}
+      }
 
       for (let i = 0; i < y.length; i++) {
         cards_to_score.push(y[i]);
-  ***REMOVED***
+      }
 
       let remaining1 = this.returnHighestCard(suite, val);
       let remaining2 = this.returnHighestCard(suite, val, [remaining1]);
       let remaining_cards = this.sortByValue([remaining1, remaining2]);
       for (let i = 0; i < remaining_cards.length; i++) {
         cards_to_score.push(remaining_cards[i]);
-  ***REMOVED***
+      }
 
       hand_description = "three-of-a-kind";
-      return { cards_to_score : cards_to_score , hand_description : hand_description ***REMOVED***;
+      return { cards_to_score : cards_to_score , hand_description : hand_description };
 
-***REMOVED***
+    }
 
 
     //
@@ -1496,8 +1496,8 @@ console.log("QUEUE CREATED: " + this.game.queue);
       let x = pairs[pairs.length-1];
       let y = pairs[pairs.length-2];
 
-      if (x > y) { highest_card = x; ***REMOVED***
-      else { highest_card = y; ***REMOVED***
+      if (x > y) { highest_card = x; }
+      else { highest_card = y; }
 
       cards_remaining = val.length;
       for (let i = 0; i < cards_remaining; i++) {
@@ -1507,16 +1507,16 @@ console.log("QUEUE CREATED: " + this.game.queue);
 	  suite.splice(i, 1);
 	  cards_remaining--;
 	  i--;
-	***REMOVED***
-  ***REMOVED***
+	}
+      }
 
       let remaining1 = this.returnHighestCard(suite, val, cards_to_score);
       cards_to_score.push(remaining1);
       hand_description = "two pair";
 
-      return { cards_to_score : cards_to_score , hand_description : hand_description ***REMOVED***;
+      return { cards_to_score : cards_to_score , hand_description : hand_description };
 
-***REMOVED***
+    }
 
 
     //
@@ -1535,8 +1535,8 @@ console.log("QUEUE CREATED: " + this.game.queue);
 	  suite.splice(i, 1);
 	  cards_remaining--;
 	  i--;
-	***REMOVED***
-  ***REMOVED***
+	}
+      }
 
       let remaining1 = this.returnHighestCard(suite, val);
       let remaining2 = this.returnHighestCard(suite, val, [remaining1]);
@@ -1547,11 +1547,11 @@ console.log("QUEUE CREATED: " + this.game.queue);
       cards_to_score.push(y[1]);
       for (let i = 0; i < cards_remaining2.length; i++) {
         cards_to_score.push(cards_remaining2[i]);
-  ***REMOVED***
+      }
       hand_description = "pair";
-      return { cards_to_score : cards_to_score , hand_description : hand_description ***REMOVED***;
+      return { cards_to_score : cards_to_score , hand_description : hand_description };
 
-***REMOVED***
+    }
 
 
 
@@ -1572,28 +1572,28 @@ console.log("QUEUE CREATED: " + this.game.queue);
 
     hand_description = "highest card";
     highest_card = remaining1;
-    return { cards_to_score : cards_to_score , hand_description : hand_description ***REMOVED***;
+    return { cards_to_score : cards_to_score , hand_description : hand_description };
 
-  ***REMOVED***
+  }
 
 
 
 
   convertHand(hand) {
 
-    let x = {***REMOVED***;
+    let x = {};
         x.suite = [];
         x.val = [];
 
     for (let i = 0; i < hand.length; i++) {
       x.suite.push(hand[i][0]);
       x.val.push(parseInt(hand[i].substring(1)));
-***REMOVED***
+    }
 
 
     return x;
 
-  ***REMOVED***
+  }
 
 
   sortByValue(cards) {
@@ -1611,15 +1611,15 @@ console.log("QUEUE CREATED: " + this.game.queue);
         if (this.returnHigherCard(highest_card, cards[i]) == cards[i]) {
 	  highest_card = cards[i];
 	  highest_card_idx = i;
-	***REMOVED***
-  ***REMOVED***
+	}
+      }
       y.push(highest_card);
       cards.splice(highest_card_idx, 1);
       cards_length = cards.length;
-***REMOVED***
+    }
 
     return y;
-  ***REMOVED***
+  }
 
 
   returnHigherCard(card1, card2) {
@@ -1630,33 +1630,33 @@ console.log("QUEUE CREATED: " + this.game.queue);
     let card2_suite = card2[0];
     let card2_val = parseInt(card2.substring(1));
 
-    if (card1_val == 1) { card1_val == 14; ***REMOVED***
-    if (card2_val == 1) { card2_val == 14; ***REMOVED***
+    if (card1_val == 1) { card1_val == 14; }
+    if (card2_val == 1) { card2_val == 14; }
 
-    if (card1_val > card2_val) { return card1; ***REMOVED***
-    if (card2_val > card1_val) { return card2; ***REMOVED***
+    if (card1_val > card2_val) { return card1; }
+    if (card2_val > card1_val) { return card2; }
     if (card2_val == card1_val) { 
       if (this.isHigherSuite(card1_suite, card2_suite)) {
 	return card1;
-  ***REMOVED*** else {
+      } else {
 	return card2;
-  ***REMOVED***
-***REMOVED***
+      }
+    }
 
-  ***REMOVED***
+  }
 
 
 
   isHigherSuite(currentv, newv) {
-    if (currentv === "S") { return 1; ***REMOVED***
-    if (newv == "S") { return 0; ***REMOVED***
-    if (currentv === "H") { return 1; ***REMOVED***
-    if (newv == "H") { return 0; ***REMOVED***
-    if (currentv === "D") { return 1; ***REMOVED***
-    if (newv == "D") { return 0; ***REMOVED***
-    if (currentv === "C") { return 1; ***REMOVED***
-    if (newv == "C") { return 0; ***REMOVED***
-  ***REMOVED***
+    if (currentv === "S") { return 1; }
+    if (newv == "S") { return 0; }
+    if (currentv === "H") { return 1; }
+    if (newv == "H") { return 0; }
+    if (currentv === "D") { return 1; }
+    if (newv == "D") { return 0; }
+    if (currentv === "C") { return 1; }
+    if (newv == "C") { return 0; }
+  }
 
 
   returnHighestSuiteCard(suite, val, x) {
@@ -1670,15 +1670,15 @@ console.log("QUEUE CREATED: " + this.game.queue);
 	  if (this.isHigherSuite(suite_to_return, suite[i])) {
 	    suite_to_return = suite[i];
 	    card_to_return = suite[i] + val[i];
-	  ***REMOVED***
-	***REMOVED*** else {
+	  }
+	} else {
 	  suite_to_return = suite[i];
 	  card_to_return = suite[i] + val[i];
-	***REMOVED***
-  ***REMOVED***
-***REMOVED***
+	}
+      }
+    }
     return card_to_return;
-  ***REMOVED***
+  }
 
 
   returnHighestCard(suite, val, noval=[], less_than=14) {
@@ -1690,7 +1690,7 @@ console.log("QUEUE CREATED: " + this.game.queue);
     for (let i = 0; i < val.length; i++) {
 
       if (noval.includes((suite[i]+val[i]))) {
-  ***REMOVED*** else {
+      } else {
 
         if (highest_card == 1) { 
           if (val[i] == 1) {
@@ -1698,29 +1698,29 @@ console.log("QUEUE CREATED: " + this.game.queue);
               highest_idx = i;
   	      highest_card = 1;
   	      highest_suite = suite[i];
-	***REMOVED***
-	  ***REMOVED***
-    ***REMOVED*** else {
+	    }
+	  }
+        } else {
   	  if (val[i] > highest_card && val[i] < less_than) {
 	    if (this.isHigherSuite(suite[i], highest_suite)) {
               highest_idx = i;
   	      highest_card = val[i];
   	      highest_suite = suite[i];
-	***REMOVED*** else {
-	***REMOVED***
-      ***REMOVED***
+	    } else {
+	    }
+          }
           if (val[i] == 1 && less_than == 14) {
 	    if (this.isHigherSuite(suite[i], highest_suite)) {
               highest_idx = i;
   	      highest_card = val[i];
   	      highest_suite = suite[i];
-	***REMOVED***
-      ***REMOVED***
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
+	    }
+          }
+        }
+      }
+    }
     return highest_suite + highest_card;
-  ***REMOVED***
+  }
 
 
 
@@ -1734,26 +1734,26 @@ console.log("QUEUE CREATED: " + this.game.queue);
     for (let i = 0; i < suite.length; i++) {
       if (suite[i] == "C") {
 	total_clubs++;
-  ***REMOVED***
+      }
       if (suite[i] == "D") {
 	total_diamonds++;
-  ***REMOVED***
+      }
       if (suite[i] == "H") {
 	total_hearts++;
-  ***REMOVED***
+      }
       if (suite[i] == "S") {
 	total_spades++;
-  ***REMOVED***
-***REMOVED***
+      }
+    }
 
-    if (total_clubs >= 5) { return "C"; ***REMOVED***
-    if (total_spades >= 5) { return "S"; ***REMOVED***
-    if (total_hearts >= 5) { return "H"; ***REMOVED***
-    if (total_diamonds >= 5) { return "D"; ***REMOVED***
+    if (total_clubs >= 5) { return "C"; }
+    if (total_spades >= 5) { return "S"; }
+    if (total_hearts >= 5) { return "H"; }
+    if (total_diamonds >= 5) { return "D"; }
 
     return "";
 
-  ***REMOVED***
+  }
 
 
 
@@ -1766,14 +1766,14 @@ console.log("QUEUE CREATED: " + this.game.queue);
 	  total++;
 	  if (total == 4) {
 	    return (i+1);
-	  ***REMOVED***
-	***REMOVED***
-  ***REMOVED***
-***REMOVED***
+	  }
+	}
+      }
+    }
 
     return 0;
 
-  ***REMOVED***
+  }
 
 
 
@@ -1787,14 +1787,14 @@ console.log("QUEUE CREATED: " + this.game.queue);
 	  total++;
 	  if (total == 3) {
 	    return (i+1);
-	  ***REMOVED***
-	***REMOVED***
-  ***REMOVED***
-***REMOVED***
+	  }
+	}
+      }
+    }
 
     return 0;
 
-  ***REMOVED***
+  }
 
 
 
@@ -1807,14 +1807,14 @@ console.log("QUEUE CREATED: " + this.game.queue);
 	  total++;
 	  if (total == 2) {
 	    return (i+1);
-	  ***REMOVED***
-	***REMOVED***
-  ***REMOVED***
-***REMOVED***
+	  }
+	}
+      }
+    }
 
     return 0;
 
-  ***REMOVED***
+  }
 
 
 
@@ -1839,9 +1839,9 @@ console.log("QUEUE CREATED: " + this.game.queue);
 	  val.includes(1)
         ) { 
 	  return 10;
-    ***REMOVED***
+        }
 	return 0;
-  ***REMOVED***;
+      };
 
       if (
 	val.includes((i+1)) &&
@@ -1851,13 +1851,13 @@ console.log("QUEUE CREATED: " + this.game.queue);
         val.includes((i+5))
       ) {
 	return (i+1);
-  ***REMOVED***
+      }
 
-***REMOVED***
+    }
 
     return 0;
 
-  ***REMOVED***
+  }
 
 
   isCardSuite(suite, val, card, s) {
@@ -1865,15 +1865,15 @@ console.log("QUEUE CREATED: " + this.game.queue);
       if (val[i] == card) {
 	if (suite[i] == s) {
 	  return 1;
-	***REMOVED***
-  ***REMOVED***
-***REMOVED***
+	}
+      }
+    }
     return 0;
-  ***REMOVED***
+  }
 
 
 
-***REMOVED***
+}
 
 
 module.exports = Poker;

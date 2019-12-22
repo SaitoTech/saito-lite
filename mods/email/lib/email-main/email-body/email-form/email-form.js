@@ -3,28 +3,28 @@ const EmailFormHeader = require("../../email-header/email-form-header/email-form
 
 module.exports = EmailForm = {
 
-    app: {***REMOVED***,
-    saito: {***REMOVED***,
-    emailList: {***REMOVED***,
+    app: {},
+    saito: {},
+    emailList: {},
 
-    render(app, data={ emailList: {***REMOVED*** ***REMOVED***) {
+    render(app, data={ emailList: {} }) {
         this.app = app;
         this.saito = this.app;
 
         document.querySelector(".email-body").innerHTML = EmailFormTemplate();
 
         this.addData();
-***REMOVED***,
+    },
 
     attachEvents(app, data) {
         document.querySelector('.email-submit')
             .addEventListener('click', (e) => this.sendEmailTransaction(app, data));
-***REMOVED***,
+    },
 
 
     addData() {
-        document.getElementById('email-from-address').value = `${this.saito.wallet.returnPublicKey()***REMOVED*** (me)`;
-***REMOVED***,
+        document.getElementById('email-from-address').value = `${this.saito.wallet.returnPublicKey()} (me)`;
+    },
 
     async sendEmailTransaction(app, data) {
 
@@ -39,7 +39,7 @@ module.exports = EmailForm = {
         if (!newtx) {
           salert("Unable to send email. You appear to need more tokens");
 	      return;
-    ***REMOVED***
+        }
 
         newtx.transaction.msg.module   = "Email";
         newtx.transaction.msg.title    = email_title;
@@ -54,22 +54,22 @@ module.exports = EmailForm = {
 
         salert("Your message has been sent");
 
-***REMOVED***,
+    },
 
     verifyJSON() {
       var message_input = document.querySelector('.raw-message');
       var str = message_input.value;
       try {
           JSON.parse(str);
-  ***REMOVED*** catch (e) {
+      } catch (e) {
           message_input.style.background = "#FCC";
           message_input.style.color = "red";
           return false;
-  ***REMOVED***
+      }
       message_input.style.background = "#FFF";
       message_input.style.color = "#000";
       return true;
-***REMOVED***
+    }
 
 
-***REMOVED***
+}

@@ -12,7 +12,7 @@
     "build": "webpack --config ./webpack/webpack.config.js",
     "prod": "webpack --config ./webpack/webpack.prod.js",
     "analyze": "webpack --config ./webpack/webpack.analyze.js"
-  ***REMOVED***,
+  },
   "author": "Team Saito",
   "license": "SAITO",
   "homepage": "https://saito.tech",
@@ -42,7 +42,7 @@
     "sqlite": "^3.0.3",
     "unzipper": "^0.10.5",
     "url": "^0.11.0"
-  ***REMOVED***,
+  },
   "devDependencies": {
     "@babel/core": "^7.6.0",
     "@babel/preset-env": "^7.6.0",
@@ -54,5 +54,5 @@
     "webpack-cli": "^3.3.9",
     "webpack-merge": "^4.2.2",
     "worker-plugin": "^3.2.0"
-  ***REMOVED***
-***REMOVED***
+  }
+}

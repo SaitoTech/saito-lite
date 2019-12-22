@@ -3,12 +3,12 @@ body {
   font-size: 13px;
   padding: 0px;
   margin: 0px;
-***REMOVED***
+}
 
 .main {
   margin-top: unset;
   padding: unset;
-***REMOVED***
+}
 
 .gameboard {
   position: absolute;
@@ -16,11 +16,11 @@ body {
   background-size: cover;
   width: 1504px;
   height: 1000px;
-***REMOVED***
+}
 
 .hud {
   height: 220px;
-***REMOVED***
+}
 
 .hand {
   /* margin-left: auto;
@@ -34,23 +34,23 @@ body {
   clear: both;
   padding-left: 600px;
   padding-top:100px;
-***REMOVED***
+}
 
 .card {
   width: 200px;
   float:left;
   position: relative;
-***REMOVED***
+}
 
 .deal {
  margin-left: auto;
  margin-right: auto;
  width: 1000px;
-***REMOVED***
+}
 
 /* .card:nth-child(1n+2) {
   left: -130px;
-***REMOVED*** */
+} */
 
 .hand > .card:nth-child(1) {
   -webkit-transform: rotate(-20deg);
@@ -59,7 +59,7 @@ body {
   -ms-transform: rotate(-20deg);
   transform: rotate(-20deg);
   left: -0px;
-***REMOVED***
+}
 .hand > .card:nth-child(2) {
   -webkit-transform: rotate(-10deg);
   -moz-transform: rotate(-10deg);
@@ -67,7 +67,7 @@ body {
   -ms-transform: rotate(-10deg);
   transform: rotate(-10deg);
   left: -150px;
-***REMOVED***
+}
 .hand > .card:nth-child(3) {
   -webkit-transform: rotate(0deg);
   -moz-transform: rotate(0deg);
@@ -75,7 +75,7 @@ body {
   -ms-transform: rotate(0deg);
   transform: rotate(0deg);
   left: -300px;
-***REMOVED***
+}
 .hand > .card:nth-child(4) {
   -webkit-transform: rotate(10deg);
   -moz-transform: rotate(10deg);
@@ -83,7 +83,7 @@ body {
   -ms-transform: rotate(10deg);
   transform: rotate(10deg);
   left: -450px;
-***REMOVED***
+}
 .hand > .card:nth-child(5) {
   -webkit-transform: rotate(20deg);
   -moz-transform: rotate(20deg);
@@ -91,7 +91,7 @@ body {
   -ms-transform: rotate(20deg);
   transform: rotate(20deg);
   left: -600px;
-***REMOVED***
+}
 
 
 

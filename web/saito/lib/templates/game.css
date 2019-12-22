@@ -1,10 +1,10 @@
-::-webkit-scrollbar { width: 8px; height: 3px;***REMOVED***
-::-webkit-scrollbar-button {  background-color: #868686; ***REMOVED***
-::-webkit-scrollbar-track {  background-color: #868686;***REMOVED***
-::-webkit-scrollbar-track-piece { background-color: #646464;***REMOVED***
-::-webkit-scrollbar-thumb { height: 50px; background-color: #868686; border-radius: 3px;***REMOVED***
-::-webkit-scrollbar-corner { background-color: #868686;***REMOVED***
-::-webkit-resizer { background-color: #646464;***REMOVED***
+::-webkit-scrollbar { width: 8px; height: 3px;}
+::-webkit-scrollbar-button {  background-color: #868686; }
+::-webkit-scrollbar-track {  background-color: #868686;}
+::-webkit-scrollbar-track-piece { background-color: #646464;}
+::-webkit-scrollbar-thumb { height: 50px; background-color: #868686; border-radius: 3px;}
+::-webkit-scrollbar-corner { background-color: #868686;}
+::-webkit-resizer { background-color: #646464;}
 
 
 
@@ -16,7 +16,7 @@
   top: 27%;
   z-index: 900000;
   display: none;
-***REMOVED***
+}
 
 
 .hud {
@@ -56,7 +56,7 @@
   transform: translate(-50%, -0%);
   transition: height 0.2s ease;
 
-***REMOVED***
+}
 
 
 /** HUD HEADER **/
@@ -70,18 +70,18 @@
   cursor: move;
   background-color: whitesmoke;
   border-bottom: 1px solid var(--saito-skyline-grey);
-***REMOVED***
+}
 
 .controls {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 10px;
-***REMOVED***
+}
 
 .hud-button {
   cursor: pointer;
-***REMOVED***
+}
 
 /** HUD BODY **/
 
@@ -91,13 +91,13 @@
   grid-template-columns: auto 200px;
   /* height: 380px; */
   height: 100%;
-***REMOVED***
+}
 
 .hud-menu {
   grid-area: hud-menu;
   background-color: whitesmoke;
   border-right: 1px solid var(--saito-skyline-grey);
-***REMOVED***
+}
 
 .status {
   color: black;
@@ -105,7 +105,7 @@
   width: unset !important;
   border-right: 1px solid var(--saito-skyline-grey);
   overflow-y: scroll;
-***REMOVED***
+}
 
 .hud-menu-overlay {
   color: black;
@@ -113,38 +113,38 @@
   width: unset !important;
   border-right: 1px solid var(--saito-skyline-grey);
   overflow-y: scroll;
-***REMOVED***
+}
 
 .status ul {
   list-style: none;
-***REMOVED***
+}
 
 .status ul li {
   line-height: 2em;
   border-top: 1px solid var(--saito-skyline-grey);
-***REMOVED***
+}
 
 .status ul li:last-child {
   border-bottom: 1px solid var(--saito-skyline-grey);
-***REMOVED***
+}
 
 .status ul li:hover {
   background: var(--saito-skyline-grey);
-***REMOVED***
+}
 
 .log {
   color: black;
   background-color: whitesmoke;
   /* width: unset !important; */
   overflow-y: scroll;
-***REMOVED***
+}
 
 /** HUD SIDEBAR **/
 
 .hud-menu {
   display: flex;
   color: black;
-***REMOVED***
+}
 
 .hud-menu ul {
   width: 100%;
@@ -152,7 +152,7 @@
   text-align: center;
   padding: 0;
   margin: 0;
-***REMOVED***
+}
 
 .hud-menu ul li {
   list-style: none;
@@ -165,23 +165,23 @@
   line-height: 50px;
   font-size: 1.1rem;
   cursor: pointer;
-***REMOVED***
+}
 
 .hud-menu ul li a {
   text-decoration: none;
   display: block;
   transition: .3s background-color;
-***REMOVED***
+}
 
 .hud-menu ul li a:hover {
   border-bottom: 2px solid var(--saito-red);
   border-radius: 0px;
-***REMOVED***
+}
 
 .hud-menu ul li a:active {
   color: var(--saito-red);
   font-style: bold;
-***REMOVED***
+}
 
 /** CARDFAN CSS **/
 
@@ -201,23 +201,23 @@
   clear: both;
   padding-left: 600px;
   padding-top: 100px;
-***REMOVED***
+}
 
 .card {
   width: 200px;
   float:left;
   position: relative;
-***REMOVED***
+}
 
 .deal {
  margin-left: auto;
  margin-right: auto;
  width: 1000px;
-***REMOVED***
+}
 
 /* .card:nth-child(1n+2) {
   left: -130px;
-***REMOVED*** */
+} */
 
 .cardfan > .card:nth-child(1) {
   -webkit-transform: rotate(-20deg);
@@ -226,7 +226,7 @@
   -ms-transform: rotate(-20deg);
   transform: rotate(-20deg);
   left: -0px;
-***REMOVED***
+}
 .cardfan > .card:nth-child(2) {
   -webkit-transform: rotate(-10deg);
   -moz-transform: rotate(-10deg);
@@ -234,7 +234,7 @@
   -ms-transform: rotate(-10deg);
   transform: rotate(-10deg);
   left: -150px;
-***REMOVED***
+}
 .cardfan > .card:nth-child(3) {
   -webkit-transform: rotate(0deg);
   -moz-transform: rotate(0deg);
@@ -242,7 +242,7 @@
   -ms-transform: rotate(0deg);
   transform: rotate(0deg);
   left: -300px;
-***REMOVED***
+}
 .cardfan > .card:nth-child(4) {
   -webkit-transform: rotate(10deg);
   -moz-transform: rotate(10deg);
@@ -250,7 +250,7 @@
   -ms-transform: rotate(10deg);
   transform: rotate(10deg);
   left: -450px;
-***REMOVED***
+}
 .cardfan > .card:nth-child(5) {
   -webkit-transform: rotate(20deg);
   -moz-transform: rotate(20deg);
@@ -258,13 +258,13 @@
   -ms-transform: rotate(20deg);
   transform: rotate(20deg);
   left: -600px;
-***REMOVED***
+}
 
 
 @media screen and (orientation:landscape) and (max-width: 1660px) {
-***REMOVED***
+}
 @media screen and (orientation:landscape) and (max-height: 950px) {
-***REMOVED***
+}
 @media screen and (orientation:portrait) and (max-width: 700px) {
   .hud {
     /* position: absolute; */
@@ -282,29 +282,29 @@
     min-width: unset;
 
     height: 50vh;
-  ***REMOVED***
+  }
 
   .hud-header {
     grid-area: hud-header;
     flex-flow: row;
     flex-direction: row-reverse;
     height: unset;
-  ***REMOVED***
+  }
 
 
   .hud-menu {
     grid-area: hud-menu;
     border-bottom: 1px solid var(--saito-skyline-grey);
     overflow-x: scroll;
-  ***REMOVED***
+  }
 
   .controls {
     padding: 0 5vw;
-  ***REMOVED***
+  }
 
   #hud-home-button {
     display: none;
-  ***REMOVED***
+  }
 
   .hud-body {
     grid-area: hud-content;
@@ -313,16 +313,16 @@
     grid-template-areas: unset;
     height: unset;
     overflow: unset;
-  ***REMOVED***
+  }
 
   /* .dragbar {
     width: 12%;
-  ***REMOVED*** */
+  } */
 
   .hud-menu ul {
     list-style-type: none;
     display: flex;
-  ***REMOVED***
+  }
 
   .hud-menu ul li {
     float: left;
@@ -332,14 +332,14 @@
     line-height: 58px;
     font-size: 1em;
     height: 100%;
-  ***REMOVED***
+  }
 
   .hud-menu a {
     padding-left: 15px;
     padding-right: 15px;
     line-height: 7.5vh;
     /* line-height: 58px; */
-  ***REMOVED***
+  }
 
   .log {
     height: 1em;
@@ -350,12 +350,12 @@
     overflow: hidden;
     margin-bottom: 0px;
     width: 100%;
-  ***REMOVED***
-***REMOVED***
+  }
+}
 @media screen and (orientation:landscape) and (max-height: 700px) {
-***REMOVED***
+}
 @media screen and (max-width: 700px) {
-***REMOVED***
+}
 @media screen and (orientation: landscape) and (max-height: 700px) {
   .hud {
     grid-template-areas: "hud-header hud-menu hud-content";
@@ -369,7 +369,7 @@
     left: unset;
     cursor: unset;
     max-height: unset;
-  ***REMOVED***
+  }
 
   .hud-header {
     grid-template-rows: 50px auto;
@@ -377,37 +377,37 @@
     width: unset;
     height: 100%;
     border-right: 1px solid grey;
-  ***REMOVED***
+  }
 
   .hud-menu ul {
     overflow-y: scroll;
     margin-bottom: 15px;
-  ***REMOVED***
+  }
 
   .hud-body {
     height: 100%;
     grid-template-columns: unset;
     grid-template-areas: unset;
-  ***REMOVED***
+  }
 
   .status {
     /* margin-bottom: 23px; */
     height: 100vh;
-  ***REMOVED***
+  }
 
   .controls {
     width: 9%;
-  ***REMOVED***
+  }
 
   #sizer {
     padding-left: 1.7em;
     padding-right: 2em;
     padding-top: 0.8em;
-  ***REMOVED***
+  }
 
   .mail_chat_popup {
     display: none;
-  ***REMOVED***
+  }
 
   .log {
     height: 15px;
@@ -419,8 +419,8 @@
     margin-bottom: 0px;
     width: 100%;
     z-index: 1000;
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 
 .hud {
@@ -432,31 +432,31 @@
   scrollbar-arrow-color: #646464;
   scrollbar-shadow-color: #868686;
   /* scrollbar-dark-shadow-color: #868686; */
-***REMOVED***
+}
 
-::-webkit-scrollbar { width: 8px; height: 3px;***REMOVED***
-::-webkit-scrollbar-button {  background-color: #c9c9c9; ***REMOVED***
-::-webkit-scrollbar-track {  background-color: #c9c9c9;***REMOVED***
-::-webkit-scrollbar-track-piece { background-color: #ddd;***REMOVED***
-::-webkit-scrollbar-thumb { height: 50px; background-color: #c9c9c9; border-radius: 3px;***REMOVED***
-::-webkit-scrollbar-corner { background-color: #c9c9c9;***REMOVED***
-::-webkit-resizer { background-color: #ddd;***REMOVED***
+::-webkit-scrollbar { width: 8px; height: 3px;}
+::-webkit-scrollbar-button {  background-color: #c9c9c9; }
+::-webkit-scrollbar-track {  background-color: #c9c9c9;}
+::-webkit-scrollbar-track-piece { background-color: #ddd;}
+::-webkit-scrollbar-thumb { height: 50px; background-color: #c9c9c9; border-radius: 3px;}
+::-webkit-scrollbar-corner { background-color: #c9c9c9;}
+::-webkit-resizer { background-color: #ddd;}
 
 @media screen and (max-width: 700px) {
   ::-webkit-scrollbar {
     width: 0px;
     background: transparent;
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 @media screen and (orientation: landscape) and (max-height: 700px) {
   ::-webkit-scrollbar {
     width: 0px;
     background: transparent;
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 /** USED WHEN TOGGLING **/
 .hud-hidden {
   height: 40px;
-***REMOVED***
+}

@@ -7,7 +7,7 @@ module.exports = EmailControls = {
     render(app, data) {
         document.querySelector(".email-controls").innerHTML = EmailControlsTemplate();
         EmailBarsMenu.render(app, data);
-***REMOVED***,
+    },
 
     attachEvents(app, data) {
         EmailBarsMenu.attachEvents(app, data);
@@ -21,7 +21,7 @@ module.exports = EmailControls = {
 
                 data.email.main.render(app, data);
                 data.email.main.attachEvents(app, data);
-        ***REMOVED***);
-***REMOVED***
+            });
+    }
 
-***REMOVED***
+}

@@ -1,4 +1,4 @@
-***REMOVED***
+const saito = require('../../lib/saito/saito');
 const Header = require('../../lib/ui/header/header');
 const GameTemplate = require('../../lib/templates/gametemplate');
 var this_chess = null;
@@ -31,7 +31,7 @@ class Chessgame extends GameTemplate {
 
     return this;
 
-  ***REMOVED***
+  }
 
   async initializeGame(game_id) {
 
@@ -49,14 +49,14 @@ class Chessgame extends GameTemplate {
       //if (!this.app.browser.isMobileBrowser(navigator.userAgent)) {
       //  const chat = this.app.modules.returnModule("Chat");
       //  chat.addPopUpChat();
-      //***REMOVED***
+      //}
 
       chess = require('./lib/chess.js');
       chessboard = require('./lib/chessboard');
 
-      this.board = new chessboard('board', { pieceTheme: 'img/pieces/{piece***REMOVED***.png' ***REMOVED***);
+      this.board = new chessboard('board', { pieceTheme: 'img/pieces/{piece}.png' });
       this.engine = new chess.Chess();
-***REMOVED***
+    }
 
     //
     // load this.game object
@@ -68,68 +68,68 @@ class Chessgame extends GameTemplate {
     //
     if (this.game.initializing == 1) {
       this.game.queue.push("READY");
-***REMOVED***
+    }
 
 
     if (this.browser_active == 1) {
       if (this.game.position != undefined) {
         this.engine.load(this.game.position);
-  ***REMOVED*** else {
+      } else {
         this.game.position = this.engine.fen();
-  ***REMOVED***
+      }
 
       if (this.game.target == this.game.player) {
         this.setBoard(this.engine.fen());
-  ***REMOVED*** else {
+      } else {
         this.lockBoard(this.engine.fen());
-  ***REMOVED***
+      }
 
       var opponent = this.game.opponents[0];
 
       if (this.app.crypto.isPublicKey(opponent)) {
         if (this.app.keys.returnIdentifierByPublicKey(opponent).length >= 6) {
           opponent = this.app.keys.returnIdentifierByPublicKey(opponent);
-    ***REMOVED***
+        }
         else {
-  ***REMOVED***
+          try {
             opponent = await this.app.keychain.fetchIdentifierPromise(opponent);
-      ***REMOVED***
+          }
           catch (err) {
-***REMOVED***
-      ***REMOVED***
-    ***REMOVED***
-  ***REMOVED***
+            console.log(err);
+          }
+        }
+      }
 
       $('#opponent_id').html(opponent);
       this.updateStatusMessage();
       this.attachEvents();
 
-***REMOVED***
+    }
 
-  ***REMOVED***
+  }
 
   ////////////////
   // handleGame //
   ////////////////
-  handleGameLoop(msg={***REMOVED***) {
+  handleGameLoop(msg={}) {
 
-    msg = {***REMOVED***;
+    msg = {};
 console.log("QUEUE: " + this.game.queue);
     if (this.game.queue.length > 0) {
       msg.extra = JSON.parse(this.app.crypto.base64ToString(this.game.queue[this.game.queue.length-1]));
-***REMOVED*** else {
-      msg.extra = {***REMOVED***;
-***REMOVED***
+    } else {
+      msg.extra = {};
+    }
     this.game.queue.splice(this.game.queue.length-1, 1);
 
     if (msg.extra == undefined) {
       console.log("NO MESSAGE DEFINED!");
       return;
-***REMOVED***
+    }
     if (msg.extra.data == undefined) {
       console.log("NO MESSAGE RECEIVED!");
       return;
-***REMOVED***
+    }
 
     //
     // the message we get from the other player
@@ -146,22 +146,22 @@ console.log("QUEUE: " + this.game.queue);
         this.setBoard(this.game.position);
         this.updateLog(data.move, 999);
         this.updateStatusMessage();
-  ***REMOVED***
-***REMOVED*** else {
+      }
+    } else {
       if (this.browser_active == 1) {
         this.lockBoard(this.game.position);
-  ***REMOVED***
-***REMOVED***
+      }
+    }
 
     this.saveGame(this.game.id);
 
     return 0;
 
-  ***REMOVED***
+  }
 
   endTurn(data) {
 
-    let extra = {***REMOVED***;
+    let extra = {};
 
     extra.target = this.returnNextPlayer(this.game.player);
     extra.data = JSON.stringify(data);
@@ -172,7 +172,7 @@ console.log("QUEUE: " + this.game.queue);
     this.sendMessage("game", extra);
     this.updateLog(data.move, 999);
     this.updateStatusMessage();
-  ***REMOVED***
+  }
 
   attachEvents() {
 
@@ -181,7 +181,7 @@ console.log("QUEUE: " + this.game.queue);
 
       console.log('send move transaction and wait for reply.');
 
-      var data = {***REMOVED***;
+      var data = {};
       data.white = this.game.white;
       data.black = this.game.black;
       data.id = this.game.id;
@@ -196,7 +196,7 @@ console.log("QUEUE: " + this.game.queue);
       $('#move_reject').prop('disabled', true);
       $('#move_reject').removeClass('red');
 
-***REMOVED***);
+    });
 
 
     $('#move_reject').off();
@@ -209,18 +209,18 @@ console.log("QUEUE: " + this.game.queue);
       $('#move_reject').prop('disabled', true);
       $('#move_reject').removeClass('red');
 
-***REMOVED***);
+    });
 
     $(window).resize(() => {
       if(this) {
         this.board.resize();
-  ***REMOVED***
-***REMOVED***);
-  ***REMOVED***
+      }
+    });
+  }
 
   updateStatusMessage(str = "") {
 
-    if (this.browser_active != 1) { return; ***REMOVED***
+    if (this.browser_active != 1) { return; }
 
     //
     // print message if provided
@@ -229,24 +229,24 @@ console.log("QUEUE: " + this.game.queue);
       var statusEl = $('#status');
       statusEl.html(str);
       return;
-***REMOVED***
+    }
 
     var status = '';
 
     var moveColor = 'White';
     if (this.engine.turn() === 'b') {
       moveColor = 'Black';
-***REMOVED***
+    }
 
     // checkmate?
     if (this.engine.in_checkmate() === true) {
       status = 'Game over, ' + moveColor + ' is in checkmate.';
-***REMOVED***
+    }
 
     // draw?
     else if (this.engine.in_draw() === true) {
       status = 'Game over, drawn position';
-***REMOVED***
+    }
 
     // game still on
     else {
@@ -256,9 +256,9 @@ console.log("QUEUE: " + this.game.queue);
       // check?
       if (this.engine.in_check() === true) {
         status += ', ' + moveColor + ' is in check';
-  ***REMOVED***
+      }
 
-***REMOVED***
+    }
 
 
     var statusEl = $('#status');
@@ -272,7 +272,7 @@ console.log("QUEUE: " + this.game.queue);
     capturedEL.html(this.returnCapturedHTML(this.returnCaptured(this.engine.fen())));
     this.updateLog();
 
-  ***REMOVED***;
+  };
 
   setBoard(position) {
 
@@ -281,14 +281,14 @@ console.log("QUEUE: " + this.game.queue);
     if (this.board != undefined) {
       if (this.board.destroy != undefined) {
         this.board.destroy();
-  ***REMOVED***
-***REMOVED***
+      }
+    }
 
     let cfg = {
       draggable: true,
       position: position,
-      // pieceTheme: 'chess/pieces/{piece***REMOVED***.png',
-      pieceTheme: 'img/pieces/{piece***REMOVED***.png',
+      // pieceTheme: 'chess/pieces/{piece}.png',
+      pieceTheme: 'img/pieces/{piece}.png',
       onDragStart: this.onDragStart,
       onDrop: this.onDrop,
       onMouseoutSquare: this.onMouseoutSquare,
@@ -296,41 +296,41 @@ console.log("QUEUE: " + this.game.queue);
       onSnapEnd: this.onSnapEnd,
       onMoveEnd: this.onMoveEnd,
       onChange: this.onChange
-***REMOVED***;
+    };
 
     if (this.browser_active == 1) {
       this.board = new chessboard('board', cfg);
-***REMOVED***
+    }
     this.engine.load(position);
 
     if (this.game.player == 2 && this.browser_active == 1) {
       this.board.orientation('black');
-***REMOVED***
+    }
 
-  ***REMOVED***
+  }
 
   lockBoard(position) {
 
     if (this.board != undefined) {
       if (this.board.destroy != undefined) {
         this.board.destroy();
-  ***REMOVED***
-***REMOVED***
+      }
+    }
 
     let cfg = {
-      pieceTheme: 'img/pieces/{piece***REMOVED***.png',
+      pieceTheme: 'img/pieces/{piece}.png',
       moveSpeed: 0,
       position: position
-***REMOVED***
+    }
 
     this.board = new chessboard('board', cfg);
     this.engine.load(position);
 
     if (this.game.player == 2) {
       this.board.orientation('black');
-***REMOVED***
+    }
 
-  ***REMOVED***
+  }
 
   //////////////////
   // Board Config //
@@ -341,8 +341,8 @@ console.log("QUEUE: " + this.game.queue);
       (this_chess.engine.turn() === 'w' && piece.search(/^b/) !== -1) ||
       (this_chess.engine.turn() === 'b' && piece.search(/^w/) !== -1)) {
       return false;
-***REMOVED***
-  ***REMOVED***;
+    }
+  };
 
   onDrop(source, target, piece, newPos, oldPos, orientation, topromote) {
 
@@ -355,13 +355,13 @@ console.log("QUEUE: " + this.game.queue);
         || (source.charAt(1) == 2 && target.charAt(1) == 1 && piece == 'bP')) {
       // check with user on desired piece to promote.
       this_chess.checkPromotion(source, target, piece.charAt(0));
-***REMOVED*** else {
+    } else {
       // see if the move is legal
       var move = this_chess.engine.move({
         from: source,
         to: target,
         promotion: 'q' // NOTE: always promote to a queen for example simplicity
-  ***REMOVED***);
+      });
       // illegal move
       if (move === null) return 'snapback';
       // legal move - make it
@@ -369,15 +369,15 @@ console.log("QUEUE: " + this.game.queue);
       this_chess.game.move += this_chess.pieces(move.piece) + " ";
 
       this_chess.game.move += " - " + move.san;
-***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   promoteAfterDrop(source, target, piece) {
     var move = this_chess.engine.move({
       from: source,
       to: target,
       promotion: piece
-***REMOVED***);
+    });
     $('#promotion').hide();
     $('#buttons').show();
 
@@ -391,7 +391,7 @@ console.log("QUEUE: " + this.game.queue);
 
     this_chess.updateStatusMessage('Pawn promoted to ' + this_chess.pieces(piece) + '.');
 
-  ***REMOVED***;
+  };
 
   checkPromotion(source, target, color) {
     $('#buttons').hide();
@@ -407,11 +407,11 @@ console.log("QUEUE: " + this.game.queue);
         $('#promotion').hide();
         $('#buttons').show();
         this_chess.promoteAfterDrop(source, target, $this.attr('alt'));
-  ***REMOVED***);
-***REMOVED***);
+      });
+    });
     this_chess.updateStatusMessage('Chose promotion piece');
     $('#promotion').show();
-  ***REMOVED***
+  }
 
   onMouseoverSquare(square, piece) {
 
@@ -419,10 +419,10 @@ console.log("QUEUE: " + this.game.queue);
     var moves = this_chess.engine.moves({
       square: square,
       verbose: true
-***REMOVED***);
+    });
 
     // exit if there are no moves available for this square
-    if (moves.length === 0) { return; ***REMOVED***
+    if (moves.length === 0) { return; }
 
     // highlight the square they moused over
     this_chess.greySquare(square);
@@ -430,20 +430,20 @@ console.log("QUEUE: " + this.game.queue);
     // highlight the possible squares for this piece
     for (var i = 0; i < moves.length; i++) {
       this_chess.greySquare(moves[i].to);
-***REMOVED***
-  ***REMOVED***;
+    }
+  };
 
   onMouseoutSquare(square, piece) {
     this_chess.removeGreySquares();
-  ***REMOVED***;
+  };
 
   onSnapEnd() {
     this_chess.board.position(this_chess.engine.fen());
-  ***REMOVED***;
+  };
 
   removeGreySquares() {
     $('#board .square-55d63').css('background', '');
-  ***REMOVED***;
+  };
 
   greySquare(square) {
 
@@ -452,11 +452,11 @@ console.log("QUEUE: " + this.game.queue);
     var background = '#a9a9a9';
     if (squareEl.hasClass('black-3c85d') === true) {
       background = '#696969';
-***REMOVED***
+    }
 
     squareEl.css('background', background);
 
-  ***REMOVED***;
+  };
 
   onChange(oldPos, newPos) {
 
@@ -470,20 +470,20 @@ console.log("QUEUE: " + this.game.queue);
 
     if ($('#buttons').is("vissible")) {
       this_chess.updateStatusMessage("Confirm Move to Send!");
-***REMOVED***
+    }
 
-  ***REMOVED***;
+  };
 
   colours(x) {
 
     switch (x) {
       case "w": return ("White");
       case "b": return ("Black");
-***REMOVED***
+    }
 
     return;
 
-  ***REMOVED***
+  }
 
   pieces(x) {
 
@@ -494,11 +494,11 @@ console.log("QUEUE: " + this.game.queue);
       case "b": return ("Bishop");
       case "q": return ("Queen");
       case "k": return ("King");
-***REMOVED***
+    }
 
     return;
 
-  ***REMOVED***
+  }
 
   returnCaptured(afen) {
     afen = afen.split(" ")[0];
@@ -507,29 +507,29 @@ console.log("QUEUE: " + this.game.queue);
     for (var i = 0; i < afen.length; i++) {
       if (WH.indexOf(afen[i]) >= 0) {
         WH.splice(WH.indexOf(afen[i]), 1);
-  ***REMOVED***
+      }
       if (BL.indexOf(afen[i]) >= 0) {
         BL.splice(BL.indexOf(afen[i]), 1);
-  ***REMOVED***
-***REMOVED***
+      }
+    }
     return [WH, BL];
-  ***REMOVED***
+  }
 
   returnCapturedHTML(acapt) {
     let captHTML = "";
     for (var i = 0; i < acapt[0].length; i++) {
       captHTML += this.piecehtml(acapt[0][i], "w");
-***REMOVED***
+    }
     captHTML += "<br />";
     for (var i = 0; i < acapt[1].length; i++) {
       captHTML += this.piecehtml(acapt[1][i], "b");
-***REMOVED***
+    }
     return captHTML;
-  ***REMOVED***
+  }
 
   piecehtml(p, c) {
-    return `<img class="captured" alt="${p***REMOVED***" src = "img/pieces/${c***REMOVED***${p.toUpperCase()***REMOVED***.png">`;
-  ***REMOVED***
+    return `<img class="captured" alt="${p}" src = "img/pieces/${c}${p.toUpperCase()}.png">`;
+  }
 
   returnGameOptionsHTML() {
     return `
@@ -542,7 +542,7 @@ console.log("QUEUE: " + this.game.queue);
         </select>
       </form>
     `;
-  ***REMOVED***
-***REMOVED***
+  }
+}
 module.exports = Chessgame;
 

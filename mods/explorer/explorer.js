@@ -1,25 +1,25 @@
-***REMOVED***
-***REMOVED***
+const saito = require('../../lib/saito/saito');
+const ModTemplate = require('../../lib/templates/modtemplate.js');
 
 class ExplorerCore extends ModTemplate {
-***REMOVED***
-***REMOVED***
+    constructor(app) {
+        super(app);
         this.app = app;
         this.name = "Explorer";
-***REMOVED***
+    }
 
-***REMOVED***
-***REMOVED***
+    onConfirmation(blk, tx, conf, app) {
+        if (conf == 0) {
             this.addTransactionsToDatabase(blk);
-    ***REMOVED***
-***REMOVED***
+        }
+    }
 
     onNewBlock(blk, lc) {
         console.log('explorer - on new block');
-***REMOVED***
+    }
 
     async addTransactionsToDatabase(blk) {
-***REMOVED***
+        try {
             for (let i = 0; i < blk.transactions.length; i++) {
                 if (blk.transactions[i].transaction.type >= -999) {
                     for (let ii = 0; ii < blk.transactions[i].transaction.to.length; ii++) {
@@ -74,41 +74,41 @@ class ExplorerCore extends ModTemplate {
                                 $tx_to: blk.transactions[i].transaction.to[ii].add,
                                 $name: blk.transactions[i].transaction.msg.name,
                                 $module: blk.transactions[i].transaction.msg.module
-                        ***REMOVED***
+                            }
 			                await this.app.storage.executeDatabase(sql, params, "explorer");
-                    ***REMOVED***
-                ***REMOVED***
-            ***REMOVED***
-        ***REMOVED***
+                        }
+                    }
+                }
+            }
             return;
-    ***REMOVED*** catch (err) {
+        } catch (err) {
             console.error(err);
-    ***REMOVED***
+        }
 
-***REMOVED***
+    }
 
 
     webServer(app, expressapp) {
 
         var explorer_self = app.modules.returnModule("Explorer");
 
-***REMOVED***/////////////////
-***REMOVED*** web resources //
-***REMOVED***/////////////////
+        ///////////////////
+        // web resources //
+        ///////////////////
         expressapp.get('/explorer/', function (req, res) {
             res.setHeader('Content-type', 'text/html');
             res.charset = 'UTF-8';
             res.write(explorer_self.returnIndexHTML(app));
             res.end();
             return;
-    ***REMOVED***);
+        });
         expressapp.get('/explorer/style.css', function (req, res) {
             res.sendFile(__dirname + '/web/style.css');
             return;
-    ***REMOVED***);
+        });
         expressapp.get('/explorer/vip', function (req, res) {
             explorer_self.printVIP(res);
-    ***REMOVED***);
+        });
         expressapp.get('/explorer/block', function (req, res) {
 
             var hash = req.query.hash;
@@ -121,7 +121,7 @@ class ExplorerCore extends ModTemplate {
                 res.end();
                 return;
 
-        ***REMOVED*** else {
+            } else {
 
                 if (hash != null) {
 
@@ -133,17 +133,17 @@ class ExplorerCore extends ModTemplate {
                         res.write("NO BLOCK FOUND: ");
                         res.end();
                         return;
-                ***REMOVED*** else {
+                    } else {
                         res.setHeader('Content-type', 'text/html');
                         res.charset = 'UTF-8';
                         res.write(explorer_self.returnBlockHTML(app, blk));
                         res.end();
                         return;
-                ***REMOVED***
+                    }
 
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***);
+                }
+            }
+        });
         expressapp.get('/explorer/mempool', function (req, res) {
 
             res.setHeader('Content-type', 'text/html');
@@ -152,7 +152,7 @@ class ExplorerCore extends ModTemplate {
             res.end();
             return;
 
-    ***REMOVED***);
+        });
         expressapp.get('/explorer/blocksource', function (req, res) {
 
             var hash = req.query.hash;
@@ -164,7 +164,7 @@ class ExplorerCore extends ModTemplate {
                 res.end();
                 return;
 
-        ***REMOVED*** else {
+            } else {
 
                 if (hash != null) {
 
@@ -175,16 +175,16 @@ class ExplorerCore extends ModTemplate {
                         res.write("NO BLOCK FOUND1: ");
                         res.end();
                         return;
-                ***REMOVED*** else {
+                    } else {
                         res.setHeader('Content-type', 'text/html');
                         res.charset = 'UTF-8';
                         res.write(explorer_self.returnBlockSourceHTML(app, blk));
                         res.end();
                         return;
-                ***REMOVED***
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***);
+                    }
+                }
+            }
+        });
 
         expressapp.get('/explorer/transaction', async function (req, res) {
 
@@ -197,13 +197,13 @@ class ExplorerCore extends ModTemplate {
                 res.end();
                 return;
 
-        ***REMOVED*** else {
+            } else {
 
                 let sql = "SELECT bhash FROM transactions WHERE tid = $tid AND lc = 1";
-                let params = { $tid: tid ***REMOVED***;
+                let params = { $tid: tid };
 
-        ***REMOVED***app.storage.queryDatabase(sql, params, function (err, row) {
-        ***REMOVED***let row = await explorer_self.db.get(sql, params);
+                //app.storage.queryDatabase(sql, params, function (err, row) {
+                //let row = await explorer_self.db.get(sql, params);
                 let row = await explorer_self.app.storage.queryDatabase(sql, params, "explorer");
 
                 if (row == null) {
@@ -214,7 +214,7 @@ class ExplorerCore extends ModTemplate {
                     res.end();
                     return;
 
-            ***REMOVED*** else {
+                } else {
 
                     var bhash = row[0].bhash;
 
@@ -225,18 +225,18 @@ class ExplorerCore extends ModTemplate {
                         res.write("NO BLOCK FOUND1: ");
                         res.end();
                         return;
-                ***REMOVED*** else {
+                    } else {
                         res.setHeader('Content-type', 'text/html');
                         res.charset = 'UTF-8';
                         res.write(explorer_self.returnTransactionHTML(blk, tid));
                         res.end();
                         return;
-                ***REMOVED***
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***);
+                    }
+                }
+            }
+        });
 
-***REMOVED***
+    }
 
     returnHead() {
         return '<html> \
@@ -257,7 +257,7 @@ class ExplorerCore extends ModTemplate {
     <link rel="icon" sizes="512x512" href="/saito/img/touch/pwa-512x512.png"> \
     <link rel="apple-touch-icon" sizes="512x512" href="/saito/img/touch/pwa-512x512.png"></link> \
   </head> ';
-***REMOVED***
+    }
 
     returnHeader() {
         return '<body> \
@@ -265,13 +265,13 @@ class ExplorerCore extends ModTemplate {
         <div class="header header-home"> \
         <img class="logo" src="/logo.svg"> \
     </div>';
-***REMOVED***
+    }
 
     returnIndexMain() {
         return '<div class="explorer-main"> \
         <div class="block-table"> \
           <div class="explorer-data"><h4>Server Address:</h4></div> <div class="address">'+ this.app.wallet.returnPublicKey() + '</div> \
-          <div class="explorer-data"><h4>Balance:</h4> </div><div>'+ this.app.wallet.returnBalance().toString().split(".")[0].replace(/\B(?=(\d{3***REMOVED***)+(?!\d))/g, ",") + "." + this.app.wallet.returnBalance().toString().split(".")[1] + '</div> \
+          <div class="explorer-data"><h4>Balance:</h4> </div><div>'+ this.app.wallet.returnBalance().toString().split(".")[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "." + this.app.wallet.returnBalance().toString().split(".")[1] + '</div> \
           <div class="explorer-data"><h4>Mempool:</h4></div> <div><a href="/explorer/mempool">'+ this.app.mempool.transactions.length + ' txs</a></div> \
         </div>' + '\
         <div class="explorer-data"><h4>Search for Block (by hash):</h4> \
@@ -280,12 +280,12 @@ class ExplorerCore extends ModTemplate {
         <div class="explorer-data"><h3>Recent Blocks:</h3></div> \
         <div id="block-list">'+ this.listBlocks() + '</div> \
       </div> ';
-***REMOVED***
+    }
 
     returnPageClose() {
         return '</body> \
         </html>';
-***REMOVED***
+    }
 
     /////////////////////
     // Main Index Page //
@@ -293,7 +293,7 @@ class ExplorerCore extends ModTemplate {
     returnIndexHTML(app) {
         var html = this.returnHead() + this.returnHeader() + this.returnIndexMain() + this.returnPageClose();
         return html;
-***REMOVED***
+    }
 
     returnMempoolHTML(){
         var html = this.returnHead() 
@@ -304,7 +304,7 @@ class ExplorerCore extends ModTemplate {
         html += this.returnInvokeJSONTree();
         html += this.returnPageClose();
         return html;
-***REMOVED***
+    }
 
     returnBlockSourceHTML(app, blk) {
         var html = this.returnHead() 
@@ -315,7 +315,7 @@ class ExplorerCore extends ModTemplate {
         html += this.returnInvokeJSONTree();
         html += this.returnPageClose();
         return html;
-***REMOVED***
+    }
 
     returnInvokeJSONTree() {
     var jstxt = '\n <script> \n \
@@ -325,7 +325,7 @@ class ExplorerCore extends ModTemplate {
     var tree = jsonTree.create(JSON.parse(jsonTxt), jsonObj); \n \
     </script> \n'
     return jstxt;
-***REMOVED***
+    }
 
     listBlocks() {
 
@@ -336,17 +336,17 @@ class ExplorerCore extends ModTemplate {
         for (var mb = explorer_self.app.blockchain.index.blocks.length - 1; mb >= 0 && mb > explorer_self.app.blockchain.index.blocks.length - 200; mb--) {
             if(explorer_self.app.blockchain.lc_pos == mb){
                 html += '<div>*</div>';
-        ***REMOVED*** else {
+            } else {
                 html += '<div></div>';
-        ***REMOVED***
+            }
             html += '<div><a href="/explorer/block?hash=' + explorer_self.app.blockchain.index.blocks[mb].returnHash('hex') + '">' + explorer_self.app.blockchain.index.blocks[mb].block.id + '</a></div>';
             html += '<div><a href="/explorer/block?hash=' + explorer_self.app.blockchain.index.blocks[mb].returnHash('hex') + '">' + explorer_self.app.blockchain.index.blocks[mb].returnHash() + '</a></div>';
             html += '<div class="elipsis">' + explorer_self.app.blockchain.index.blocks[mb].block.prevbsh + '</div>';
-    ***REMOVED***html += '</tr>';
-    ***REMOVED***
+            //html += '</tr>';
+        }
         html += '</div>';
         return html;
-***REMOVED***
+    }
 
 
     ////////////////////////
@@ -364,7 +364,7 @@ class ExplorerCore extends ModTemplate {
         html += this.returnPageClose();
         return html;
 
-***REMOVED***
+    }
 
     listTransactions(blk) {
 
@@ -394,11 +394,11 @@ class ExplorerCore extends ModTemplate {
                 html += '<div>' + tmptx.returnFees() + '</div>';
                 html += '<div>' + tmptx.transaction.type + '</div>';
 
-        ***REMOVED***
+            }
             html += '</div>';
-    ***REMOVED***
+        }
         return html;
-***REMOVED***
+    }
 
 
 
@@ -413,8 +413,8 @@ class ExplorerCore extends ModTemplate {
         for (var x = 0; x < blk.transactions.length; x++) {
             if (blk.transactions[x].transaction.id == txid) {
                 tmptx = blk.transactions[x];
-        ***REMOVED***
-    ***REMOVED***
+            }
+        }
         var html = this.returnHead() + this.returnHeader();
         html += '<div class="explorer-main"> \
         <div class="explorer-nav-buttons"> \
@@ -429,10 +429,10 @@ class ExplorerCore extends ModTemplate {
         html += this.returnPageClose();
 
         return html;
-***REMOVED***
+    }
 
-***REMOVED***
+    shouldAffixCallbackToModule() { return 1; }
 
-***REMOVED***
+}
 
 module.exports = ExplorerCore;

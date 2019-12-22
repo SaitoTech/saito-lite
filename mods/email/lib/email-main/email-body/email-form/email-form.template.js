@@ -25,4 +25,4 @@ module.exports = EmailFormTemplate = () => {
       </div>
   </div>
   `
-***REMOVED***;
+};

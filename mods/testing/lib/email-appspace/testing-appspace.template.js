@@ -12,4 +12,4 @@ module.exports = TestingAppspaceTemplate = () => {
   <button class="testing-btn">Click to Test Button</button>
 </div> 
   `;
-***REMOVED***
+}

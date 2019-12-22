@@ -6,8 +6,8 @@ module.exports = DebugAppspace = {
     render(app, data) {
       document.querySelector(".email-appspace").innerHTML = DebugAppspaceTemplate();
       var tree = jsonTree.create(app.options, document.getElementById("email-appspace-debug"));
-***REMOVED***,
+    },
 
-    attachEvents(app, data) {***REMOVED***
+    attachEvents(app, data) {}
 
-***REMOVED***
+}

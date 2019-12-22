@@ -9,4 +9,4 @@ module.exports = ChatNavTemplate = () => {
       <div class="chat-nav-arrow" id="chat-nav-arrow-interior"></div>
     </div>
   `;
-***REMOVED***
+}

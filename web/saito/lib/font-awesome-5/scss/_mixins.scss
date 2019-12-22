@@ -9,17 +9,17 @@
   font-variant: normal;
   font-weight: normal;
   line-height: 1;
-***REMOVED***
+}
 
 @mixin fa-icon-rotate($degrees, $rotation) {
-  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=#{$rotation***REMOVED***)";
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=#{$rotation})";
   transform: rotate($degrees);
-***REMOVED***
+}
 
 @mixin fa-icon-flip($horiz, $vert, $rotation) {
-  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=#{$rotation***REMOVED***, mirror=1)";
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=#{$rotation}, mirror=1)";
   transform: scale($horiz, $vert);
-***REMOVED***
+}
 
 
 // Only display content to screen readers. A la Bootstrap 4.
@@ -35,7 +35,7 @@
   padding: 0;
   position: absolute;
   width: 1px;
-***REMOVED***
+}
 
 // Use in conjunction with .sr-only to only display content when it's focused.
 //
@@ -52,5 +52,5 @@
     overflow: visible;
     position: static;
     width: auto;
-  ***REMOVED***
-***REMOVED***
+  }
+}

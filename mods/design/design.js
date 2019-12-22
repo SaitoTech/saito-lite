@@ -12,7 +12,7 @@ class Design extends ModTemplate {
     this.name           = "Design";
 
     return this;
-  ***REMOVED***
+  }
 
 
 
@@ -20,23 +20,23 @@ class Design extends ModTemplate {
   respondTo(type) {
 
     if (type == 'email-appspace') {
-      let obj = {***REMOVED***;
+      let obj = {};
 	  obj.render = this.renderEmail;
 	  return obj;
-***REMOVED***
+    }
 
     return null;
-  ***REMOVED***
+  }
 
   renderEmail(app, data) {
      let DesignAppspace = require('./lib/email-appspace/design-appspace');
      DesignAppspace.render(app, data);
-  ***REMOVED***
+  }
 
 
 
 
-***REMOVED***
+}
 
 
 module.exports = Design;

@@ -3,7 +3,7 @@ body {
   font-size: 13px;
   padding: 0px;
   margin: 0px;
-***REMOVED***
+}
 
 .connection_monitor {
   position: fixed;
@@ -13,7 +13,7 @@ body {
   background: #ef6666;
   font-size: 1.8em;
   padding: 15px;
-***REMOVED***
+}
 
 .gameboard {
   position: absolute;
@@ -23,7 +23,7 @@ body {
   height: 1000px;
   min-width: 100%;
   min-height: 100%;
-***REMOVED***
+}
 
 .logobox {
   position: absolute;
@@ -32,40 +32,40 @@ body {
   top: 40px;
   width: 16%;
   cursor:pointer;
-***REMOVED***
+}
 .logobox img {
   width: 100%;
-***REMOVED***
+}
 .chances {
  position: absolute;
  top: 80%;
  left: 36%;
-***REMOVED***
+}
 
 .rowbox {
   float:left;
   padding: 40px;
-***REMOVED***
+}
 .card {
   position: relative;
   float:left;
   #width: 100px;
   #min-width:10%;
-***REMOVED***
+}
 .slot {
  position: relative;
  width:8%;
  #width: 100px;
  min-height: 150px;
  float: left;
-***REMOVED***
+}
 .row {
  position:relative;
  #height: 110px;
  clear: both;
-***REMOVED***
+}
 .slot img {
  width: 100%;
-***REMOVED***
+}
 
 

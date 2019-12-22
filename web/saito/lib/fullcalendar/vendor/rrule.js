@@ -7,10 +7,10 @@
 		exports["rrule"] = factory(require("luxon"));
 	else
 		root["rrule"] = factory(root["luxon"]);
-***REMOVED***)(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE__2__) {
+})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE__2__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
-/******/ 	var installedModules = {***REMOVED***;
+/******/ 	var installedModules = {};
 /******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
@@ -18,13 +18,13 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-/******/ 		***REMOVED***
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
 /******/ 			l: false,
-/******/ 			exports: {***REMOVED***
-/******/ 		***REMOVED***;
+/******/ 			exports: {}
+/******/ 		};
 /******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
@@ -34,7 +34,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
-/******/ 	***REMOVED***
+/******/ 	}
 /******/
 /******/
 /******/ 	// expose the modules object (__webpack_modules__)
@@ -46,17 +46,17 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter ***REMOVED***);
-/******/ 		***REMOVED***
-/******/ 	***REMOVED***;
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
 /******/
 /******/ 	// define __esModule on exports
 /******/ 	__webpack_require__.r = function(exports) {
 /******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' ***REMOVED***);
-/******/ 		***REMOVED***
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true ***REMOVED***);
-/******/ 	***REMOVED***;
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
 /******/
 /******/ 	// create a fake namespace object
 /******/ 	// mode & 1: value is a module id, require it
@@ -69,22 +69,22 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
 /******/ 		var ns = Object.create(null);
 /******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value ***REMOVED***);
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; ***REMOVED***.bind(null, key));
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
 /******/ 		return ns;
-/******/ 	***REMOVED***;
+/******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
 /******/ 	__webpack_require__.n = function(module) {
 /******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; ***REMOVED*** :
-/******/ 			function getModuleExports() { return module; ***REMOVED***;
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
 /******/ 		__webpack_require__.d(getter, 'a', getter);
 /******/ 		return getter;
-/******/ 	***REMOVED***;
+/******/ 	};
 /******/
 /******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); ***REMOVED***;
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
@@ -92,86 +92,86 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(__webpack_require__.s = 1);
-/******/ ***REMOVED***)
+/******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return isPresent; ***REMOVED***);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return isNumber; ***REMOVED***);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return isArray; ***REMOVED***);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return range; ***REMOVED***);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return isPresent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return isNumber; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return isArray; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return range; });
 /* unused harmony export clone */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return repeat; ***REMOVED***);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return toArray; ***REMOVED***);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return padStart; ***REMOVED***);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return split; ***REMOVED***);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return pymod; ***REMOVED***);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return divmod; ***REMOVED***);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return empty; ***REMOVED***);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return notEmpty; ***REMOVED***);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return includes; ***REMOVED***);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return repeat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return toArray; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return padStart; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return split; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return pymod; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return divmod; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return empty; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return notEmpty; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return includes; });
 // =============================================================================
 // Helper functions
 // =============================================================================
 var isPresent = function (value) {
     return value !== null && value !== undefined;
-***REMOVED***;
+};
 var isNumber = function (value) {
     return typeof value === 'number';
-***REMOVED***;
+};
 var isArray = Array.isArray;
 /**
  * Simplified version of python's range()
  */
 var range = function (start, end) {
-    if (end === void 0) { end = start; ***REMOVED***
+    if (end === void 0) { end = start; }
     if (arguments.length === 1) {
         end = start;
         start = 0;
-***REMOVED***
+    }
     var rang = [];
     for (var i = start; i < end; i++)
         rang.push(i);
     return rang;
-***REMOVED***;
+};
 var clone = function (array) {
     return [].concat(array);
-***REMOVED***;
+};
 var repeat = function (value, times) {
     var i = 0;
     var array = [];
     if (isArray(value)) {
         for (; i < times; i++)
             array[i] = [].concat(value);
-***REMOVED***
+    }
     else {
         for (; i < times; i++)
             array[i] = value;
-***REMOVED***
+    }
     return array;
-***REMOVED***;
+};
 var toArray = function (item) {
     if (isArray(item)) {
         return item;
-***REMOVED***
+    }
     return [item];
-***REMOVED***;
+};
 function padStart(item, targetLength, padString) {
-    if (padString === void 0) { padString = ' '; ***REMOVED***
+    if (padString === void 0) { padString = ' '; }
     var str = String(item);
     targetLength = targetLength >> 0;
     if (str.length > targetLength) {
         return String(str);
-***REMOVED***
+    }
     targetLength = targetLength - str.length;
     if (targetLength > padString.length) {
         padString += repeat(padString, targetLength / padString.length);
-***REMOVED***
+    }
     return padString.slice(0, targetLength) + String(str);
-***REMOVED***
+}
 /**
  * Python like split
  */
@@ -180,7 +180,7 @@ var split = function (str, sep, num) {
     return num
         ? splits.slice(0, num).concat([splits.slice(num).join(sep)])
         : splits;
-***REMOVED***;
+};
 /**
  * closure/goog/math/math.js:modulo
  * Copyright 2006 The Closure Library Authors.
@@ -191,43 +191,43 @@ var split = function (str, sep, num) {
  * correct modulo behavior, which is useful for certain applications such as
  * calculating an offset index in a circular list.
  *
- * @param {number***REMOVED*** a The dividend.
- * @param {number***REMOVED*** b The divisor.
- * @return {number***REMOVED*** a % b where the result is between 0 and b (either 0 <= x < b
+ * @param {number} a The dividend.
+ * @param {number} b The divisor.
+ * @return {number} a % b where the result is between 0 and b (either 0 <= x < b
  *     or b < x <= 0, depending on the sign of b).
  */
 var pymod = function (a, b) {
     var r = a % b;
     // If r and b differ in sign, add b to wrap the result to the correct sign.
     return r * b < 0 ? r + b : r;
-***REMOVED***;
+};
 /**
  * @see: <http://docs.python.org/library/functions.html#divmod>
  */
 var divmod = function (a, b) {
-    return { div: Math.floor(a / b), mod: pymod(a, b) ***REMOVED***;
-***REMOVED***;
+    return { div: Math.floor(a / b), mod: pymod(a, b) };
+};
 var empty = function (obj) {
     return !isPresent(obj) || obj.length === 0;
-***REMOVED***;
+};
 /**
  * Python-like boolean
- * @return {Boolean***REMOVED*** value of an object/primitive, taking into account
+ * @return {Boolean} value of an object/primitive, taking into account
  * the fact that in Python an empty list's/tuple's
  * boolean value is False, whereas in JS it's true
  */
 var notEmpty = function (obj) {
     return !empty(obj);
-***REMOVED***;
+};
 /**
  * Return true if a value is in an array
  */
 var includes = function (arr, val) {
     return notEmpty(arr) && arr.indexOf(val) !== -1;
-***REMOVED***;
+};
 
 
-/***/ ***REMOVED***),
+/***/ }),
 /* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -274,94 +274,94 @@ var dateutil_dateutil;
         return (Math.ceil((dateNoTime.valueOf() -
             new Date(date.getUTCFullYear(), 0, 1).valueOf()) /
             dateutil.ONE_DAY) + 1);
-***REMOVED***;
+    };
     dateutil.isLeapYear = function (year) {
         return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
-***REMOVED***;
+    };
     dateutil.isDate = function (value) {
         return value instanceof Date;
-***REMOVED***;
+    };
     dateutil.isValidDate = function (value) {
         return dateutil.isDate(value) && !isNaN(value.getTime());
-***REMOVED***;
+    };
     /**
-     * @return {Number***REMOVED*** the date's timezone offset in ms
+     * @return {Number} the date's timezone offset in ms
      */
     dateutil.tzOffset = function (date) {
         return date.getTimezoneOffset() * 60 * 1000;
-***REMOVED***;
+    };
     /**
      * @see: <http://www.mcfedries.com/JavaScript/DaysBetween.asp>
      */
     dateutil.daysBetween = function (date1, date2) {
-***REMOVED*** The number of milliseconds in one day
-***REMOVED*** Convert both dates to milliseconds
+        // The number of milliseconds in one day
+        // Convert both dates to milliseconds
         var date1ms = date1.getTime() - dateutil.tzOffset(date1);
         var date2ms = date2.getTime() - dateutil.tzOffset(date2);
-***REMOVED*** Calculate the difference in milliseconds
+        // Calculate the difference in milliseconds
         var differencems = date1ms - date2ms;
-***REMOVED*** Convert back to days and return
+        // Convert back to days and return
         return Math.round(differencems / dateutil.ONE_DAY);
-***REMOVED***;
+    };
     /**
      * @see: <http://docs.python.org/library/datetime.html#datetime.date.toordinal>
      */
     dateutil.toOrdinal = function (date) {
         return dateutil.daysBetween(date, dateutil.ORDINAL_BASE);
-***REMOVED***;
+    };
     /**
      * @see - <http://docs.python.org/library/datetime.html#datetime.date.fromordinal>
      */
     dateutil.fromOrdinal = function (ordinal) {
         return new Date(dateutil.ORDINAL_BASE.getTime() + ordinal * dateutil.ONE_DAY);
-***REMOVED***;
+    };
     dateutil.getMonthDays = function (date) {
         var month = date.getUTCMonth();
         return month === 1 && dateutil.isLeapYear(date.getUTCFullYear())
             ? 29
             : dateutil.MONTH_DAYS[month];
-***REMOVED***;
+    };
     /**
-     * @return {Number***REMOVED*** python-like weekday
+     * @return {Number} python-like weekday
      */
     dateutil.getWeekday = function (date) {
         return dateutil.PY_WEEKDAYS[date.getUTCDay()];
-***REMOVED***;
+    };
     /**
      * @see: <http://docs.python.org/library/calendar.html#calendar.monthrange>
      */
     dateutil.monthRange = function (year, month) {
         var date = new Date(Date.UTC(year, month, 1));
         return [dateutil.getWeekday(date), dateutil.getMonthDays(date)];
-***REMOVED***;
+    };
     /**
      * @see: <http://docs.python.org/library/datetime.html#datetime.datetime.combine>
      */
     dateutil.combine = function (date, time) {
         time = time || date;
         return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds()));
-***REMOVED***;
+    };
     dateutil.clone = function (date) {
         var dolly = new Date(date.getTime());
         return dolly;
-***REMOVED***;
+    };
     dateutil.cloneDates = function (dates) {
         var clones = [];
         for (var i = 0; i < dates.length; i++) {
             clones.push(dateutil.clone(dates[i]));
-    ***REMOVED***
+        }
         return clones;
-***REMOVED***;
+    };
     /**
      * Sorts an array of Date or dateutil.Time objects
      */
     dateutil.sort = function (dates) {
         dates.sort(function (a, b) {
             return a.getTime() - b.getTime();
-    ***REMOVED***);
-***REMOVED***;
+        });
+    };
     dateutil.timeToUntilString = function (time, utc) {
-        if (utc === void 0) { utc = true; ***REMOVED***
+        if (utc === void 0) { utc = true; }
         var date = new Date(time);
         return [
             Object(helpers["h" /* padStart */])(date.getUTCFullYear().toString(), 4, '0'),
@@ -373,15 +373,15 @@ var dateutil_dateutil;
             Object(helpers["h" /* padStart */])(date.getUTCSeconds(), 2, '0'),
             utc ? 'Z' : ''
         ].join('');
-***REMOVED***;
+    };
     dateutil.untilStringToDate = function (until) {
-        var re = /^(\d{4***REMOVED***)(\d{2***REMOVED***)(\d{2***REMOVED***)(T(\d{2***REMOVED***)(\d{2***REMOVED***)(\d{2***REMOVED***)Z?)?$/;
+        var re = /^(\d{4})(\d{2})(\d{2})(T(\d{2})(\d{2})(\d{2})Z?)?$/;
         var bits = re.exec(until);
         if (!bits)
             throw new Error("Invalid UNTIL value: " + until);
         return new Date(Date.UTC(parseInt(bits[1], 10), parseInt(bits[2], 10) - 1, parseInt(bits[3], 10), parseInt(bits[5], 10) || 0, parseInt(bits[6], 10) || 0, parseInt(bits[7], 10) || 0));
-***REMOVED***;
-***REMOVED***)(dateutil_dateutil || (dateutil_dateutil = {***REMOVED***));
+    };
+})(dateutil_dateutil || (dateutil_dateutil = {}));
 /* harmony default export */ var src_dateutil = (dateutil_dateutil);
 
 // CONCATENATED MODULE: ./src/iterresult.ts
@@ -401,20 +401,20 @@ var IterResult = /** @class */ (function () {
                 ? args.before
                 : new Date(args.before.getTime() - 1);
             this.minDate = args.inc ? args.after : new Date(args.after.getTime() + 1);
-    ***REMOVED***
+        }
         else if (method === 'before') {
             this.maxDate = args.inc ? args.dt : new Date(args.dt.getTime() - 1);
-    ***REMOVED***
+        }
         else if (method === 'after') {
             this.minDate = args.inc ? args.dt : new Date(args.dt.getTime() + 1);
-    ***REMOVED***
-***REMOVED***
+        }
+    }
     /**
      * Possibly adds a date into the result.
      *
-     * @param {Date***REMOVED*** date - the date isn't necessarly added to the result
+     * @param {Date} date - the date isn't necessarly added to the result
      *                      list (if it is too late/too early)
-     * @return {Boolean***REMOVED*** true if it makes sense to continue the iteration
+     * @return {Boolean} true if it makes sense to continue the iteration
      *                   false if we're done.
      */
     IterResult.prototype.accept = function (date) {
@@ -426,32 +426,32 @@ var IterResult = /** @class */ (function () {
                 return true;
             if (tooLate)
                 return false;
-    ***REMOVED***
+        }
         else if (this.method === 'before') {
             if (tooLate)
                 return false;
-    ***REMOVED***
+        }
         else if (this.method === 'after') {
             if (tooEarly)
                 return true;
             this.add(date);
             return false;
-    ***REMOVED***
+        }
         return this.add(date);
-***REMOVED***;
+    };
     /**
      *
-     * @param {Date***REMOVED*** date that is part of the result.
-     * @return {Boolean***REMOVED*** whether we are interested in more values.
+     * @param {Date} date that is part of the result.
+     * @return {Boolean} whether we are interested in more values.
      */
     IterResult.prototype.add = function (date) {
         this._result.push(date);
         return true;
-***REMOVED***;
+    };
     /**
      * 'before' and 'after' return only one date, whereas 'all'
      * and 'between' an array.
-     * @return {Date,Array?***REMOVED***
+     * @return {Date,Array?}
      */
     IterResult.prototype.getValue = function () {
         var res = this._result;
@@ -463,13 +463,13 @@ var IterResult = /** @class */ (function () {
             case 'after':
             default:
                 return (res.length ? res[res.length - 1] : null);
-    ***REMOVED***
-***REMOVED***;
+        }
+    };
     IterResult.prototype.clone = function () {
         return new IterResult(this.method, this.args);
-***REMOVED***;
+    };
     return IterResult;
-***REMOVED***());
+}());
 /* harmony default export */ var iterresult = (IterResult);
 
 // CONCATENATED MODULE: ./node_modules/tslib/tslib.es6.js
@@ -491,66 +491,66 @@ and limitations under the License.
 
 var extendStatics = function(d, b) {
     extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] ***REMOVED*** instanceof Array && function (d, b) { d.__proto__ = b; ***REMOVED***) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; ***REMOVED***;
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
     return extendStatics(d, b);
-***REMOVED***;
+};
 
 function __extends(d, b) {
     extendStatics(d, b);
-    function __() { this.constructor = d; ***REMOVED***
+    function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-***REMOVED***
+}
 
 var __assign = function() {
     __assign = Object.assign || function __assign(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
             s = arguments[i];
             for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-    ***REMOVED***
+        }
         return t;
-***REMOVED***
+    }
     return __assign.apply(this, arguments);
-***REMOVED***
+}
 
 function __rest(s, e) {
-    var t = {***REMOVED***;
+    var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
         for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
             t[p[i]] = s[p[i]];
     return t;
-***REMOVED***
+}
 
 function __decorate(decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
-***REMOVED***
+}
 
 function __param(paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); ***REMOVED***
-***REMOVED***
+    return function (target, key) { decorator(target, key, paramIndex); }
+}
 
 function __metadata(metadataKey, metadataValue) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
-***REMOVED***
+}
 
 function __awaiter(thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); ***REMOVED*** catch (e) { reject(e); ***REMOVED*** ***REMOVED***
-        function rejected(value) { try { step(generator["throw"](value)); ***REMOVED*** catch (e) { reject(e); ***REMOVED*** ***REMOVED***
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); ***REMOVED***).then(fulfilled, rejected); ***REMOVED***
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
-***REMOVED***);
-***REMOVED***
+    });
+}
 
 function __generator(thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; ***REMOVED***, trys: [], ops: [] ***REMOVED***, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) ***REMOVED***, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; ***REMOVED***), g;
-    function verb(n) { return function (v) { return step([n, v]); ***REMOVED***; ***REMOVED***
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (_) try {
@@ -558,26 +558,26 @@ function __generator(thisArg, body) {
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false ***REMOVED***;
+                case 4: _.label++; return { value: op[1], done: false };
                 case 5: _.label++; y = op[1]; op = [0]; continue;
                 case 7: op = _.ops.pop(); _.trys.pop(); continue;
                 default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; ***REMOVED***
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; ***REMOVED***
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; ***REMOVED***
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; ***REMOVED***
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
                     if (t[2]) _.ops.pop();
                     _.trys.pop(); continue;
-        ***REMOVED***
+            }
             op = body.call(thisArg, _);
-    ***REMOVED*** catch (e) { op = [6, e]; y = 0; ***REMOVED*** finally { f = t = 0; ***REMOVED***
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true ***REMOVED***;
-***REMOVED***
-***REMOVED***
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+}
 
 function __exportStar(m, exports) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-***REMOVED***
+}
 
 function __values(o) {
     var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
@@ -585,10 +585,10 @@ function __values(o) {
     return {
         next: function () {
             if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o ***REMOVED***;
-    ***REMOVED***
-***REMOVED***;
-***REMOVED***
+            return { value: o && o[i++], done: !o };
+        }
+    };
+}
 
 function __read(o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
@@ -596,69 +596,69 @@ function __read(o, n) {
     var i = m.call(o), r, ar = [], e;
     try {
         while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-***REMOVED***
-    catch (error) { e = { error: error ***REMOVED***; ***REMOVED***
+    }
+    catch (error) { e = { error: error }; }
     finally {
-***REMOVED***
+        try {
             if (r && !r.done && (m = i["return"])) m.call(i);
-    ***REMOVED***
-        finally { if (e) throw e.error; ***REMOVED***
-***REMOVED***
+        }
+        finally { if (e) throw e.error; }
+    }
     return ar;
-***REMOVED***
+}
 
 function __spread() {
     for (var ar = [], i = 0; i < arguments.length; i++)
         ar = ar.concat(__read(arguments[i]));
     return ar;
-***REMOVED***
+}
 
 function __await(v) {
     return this instanceof __await ? (this.v = v, this) : new __await(v);
-***REMOVED***
+}
 
 function __asyncGenerator(thisArg, _arguments, generator) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var g = generator.apply(thisArg, _arguments || []), i, q = [];
-    return i = {***REMOVED***, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; ***REMOVED***, i;
-    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); ***REMOVED***); ***REMOVED***; ***REMOVED***
-    function resume(n, v) { try { step(g[n](v)); ***REMOVED*** catch (e) { settle(q[0][3], e); ***REMOVED*** ***REMOVED***
-    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); ***REMOVED***
-    function fulfill(value) { resume("next", value); ***REMOVED***
-    function reject(value) { resume("throw", value); ***REMOVED***
-    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); ***REMOVED***
-***REMOVED***
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+}
 
 function __asyncDelegator(o) {
     var i, p;
-    return i = {***REMOVED***, verb("next"), verb("throw", function (e) { throw e; ***REMOVED***), verb("return"), i[Symbol.iterator] = function () { return this; ***REMOVED***, i;
-    function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" ***REMOVED*** : f ? f(v) : v; ***REMOVED*** : f; ***REMOVED***
-***REMOVED***
+    return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+    function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
+}
 
 function __asyncValues(o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator], i;
-    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {***REMOVED***, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; ***REMOVED***, i);
-    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); ***REMOVED***); ***REMOVED***; ***REMOVED***
-    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d ***REMOVED***); ***REMOVED***, reject); ***REMOVED***
-***REMOVED***
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+}
 
 function __makeTemplateObject(cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw ***REMOVED***); ***REMOVED*** else { cooked.raw = raw; ***REMOVED***
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
-***REMOVED***;
+};
 
 function __importStar(mod) {
     if (mod && mod.__esModule) return mod;
-    var result = {***REMOVED***;
+    var result = {};
     if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
     result.default = mod;
     return result;
-***REMOVED***
+}
 
 function __importDefault(mod) {
-    return (mod && mod.__esModule) ? mod : { default: mod ***REMOVED***;
-***REMOVED***
+    return (mod && mod.__esModule) ? mod : { default: mod };
+}
 
 // CONCATENATED MODULE: ./src/callbackiterresult.ts
 
@@ -673,16 +673,16 @@ var callbackiterresult_CallbackIterResult = /** @class */ (function (_super) {
         var _this = _super.call(this, method, args) || this;
         _this.iterator = iterator;
         return _this;
-***REMOVED***
+    }
     CallbackIterResult.prototype.add = function (date) {
         if (this.iterator(date, this._result.length)) {
             this._result.push(date);
             return true;
-    ***REMOVED***
+        }
         return false;
-***REMOVED***;
+    };
     return CallbackIterResult;
-***REMOVED***(iterresult));
+}(iterresult));
 /* harmony default export */ var callbackiterresult = (callbackiterresult_CallbackIterResult);
 
 // CONCATENATED MODULE: ./src/types.ts
@@ -695,10 +695,10 @@ var Frequency;
     Frequency[Frequency["HOURLY"] = 4] = "HOURLY";
     Frequency[Frequency["MINUTELY"] = 5] = "MINUTELY";
     Frequency[Frequency["SECONDLY"] = 6] = "SECONDLY";
-***REMOVED***)(Frequency || (Frequency = {***REMOVED***));
+})(Frequency || (Frequency = {}));
 function freqIsDailyOrGreater(freq) {
     return freq < Frequency.HOURLY;
-***REMOVED***
+}
 
 // CONCATENATED MODULE: ./src/weekday.ts
 // =============================================================================
@@ -711,28 +711,28 @@ var Weekday = /** @class */ (function () {
             throw new Error("Can't create weekday with n == 0");
         this.weekday = weekday;
         this.n = n;
-***REMOVED***
+    }
     // __call__ - Cannot call the object directly, do it through
     // e.g. RRule.TH.nth(-1) instead,
     Weekday.prototype.nth = function (n) {
         return this.n === n ? this : new Weekday(this.weekday, n);
-***REMOVED***;
+    };
     // __eq__
     Weekday.prototype.equals = function (other) {
         return this.weekday === other.weekday && this.n === other.n;
-***REMOVED***;
+    };
     // __repr__
     Weekday.prototype.toString = function () {
         var s = WDAYS[this.weekday];
         if (this.n)
             s = (this.n > 0 ? '+' : '') + String(this.n) + s;
         return s;
-***REMOVED***;
+    };
     Weekday.prototype.getJsWeekday = function () {
         return this.weekday === 6 ? 0 : this.weekday + 1;
-***REMOVED***;
+    };
     return Weekday;
-***REMOVED***());
+}());
 
 
 // CONCATENATED MODULE: ./src/datetime.ts
@@ -746,25 +746,25 @@ var Time = /** @class */ (function () {
         this.minute = minute;
         this.second = second;
         this.millisecond = millisecond || 0;
-***REMOVED***
+    }
     Time.prototype.getHours = function () {
         return this.hour;
-***REMOVED***;
+    };
     Time.prototype.getMinutes = function () {
         return this.minute;
-***REMOVED***;
+    };
     Time.prototype.getSeconds = function () {
         return this.second;
-***REMOVED***;
+    };
     Time.prototype.getMilliseconds = function () {
         return this.millisecond;
-***REMOVED***;
+    };
     Time.prototype.getTime = function () {
         return ((this.hour * 60 * 60 + this.minute * 60 + this.second) * 1000 +
             this.millisecond);
-***REMOVED***;
+    };
     return Time;
-***REMOVED***());
+}());
 
 var datetime_DateTime = /** @class */ (function (_super) {
     __extends(DateTime, _super);
@@ -774,28 +774,28 @@ var datetime_DateTime = /** @class */ (function (_super) {
         _this.month = month;
         _this.day = day;
         return _this;
-***REMOVED***
+    }
     DateTime.fromDate = function (date) {
         return new this(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), date.valueOf() % 1000);
-***REMOVED***;
+    };
     DateTime.prototype.getWeekday = function () {
         return dateutil_dateutil.getWeekday(new Date(this.getTime()));
-***REMOVED***;
+    };
     DateTime.prototype.getTime = function () {
         return new Date(Date.UTC(this.year, this.month - 1, this.day, this.hour, this.minute, this.second, this.millisecond)).getTime();
-***REMOVED***;
+    };
     DateTime.prototype.getDay = function () {
         return this.day;
-***REMOVED***;
+    };
     DateTime.prototype.getMonth = function () {
         return this.month;
-***REMOVED***;
+    };
     DateTime.prototype.getYear = function () {
         return this.year;
-***REMOVED***;
+    };
     DateTime.prototype.addYears = function (years) {
         this.year += years;
-***REMOVED***;
+    };
     DateTime.prototype.addMonths = function (months) {
         this.month += months;
         if (this.month > 12) {
@@ -806,85 +806,85 @@ var datetime_DateTime = /** @class */ (function (_super) {
             if (this.month === 0) {
                 this.month = 12;
                 --this.year;
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***;
+            }
+        }
+    };
     DateTime.prototype.addWeekly = function (days, wkst) {
         if (wkst > this.getWeekday()) {
             this.day += -(this.getWeekday() + 1 + (6 - wkst)) + days * 7;
-    ***REMOVED***
+        }
         else {
             this.day += -(this.getWeekday() - wkst) + days * 7;
-    ***REMOVED***
+        }
         this.fixDay();
-***REMOVED***;
+    };
     DateTime.prototype.addDaily = function (days) {
         this.day += days;
         this.fixDay();
-***REMOVED***;
+    };
     DateTime.prototype.addHours = function (hours, filtered, byhour) {
         if (filtered) {
-    ***REMOVED*** Jump to one iteration before next day
+            // Jump to one iteration before next day
             this.hour += Math.floor((23 - this.hour) / hours) * hours;
-    ***REMOVED***
+        }
         while (true) {
             this.hour += hours;
             var _a = Object(helpers["a" /* divmod */])(this.hour, 24), dayDiv = _a.div, hourMod = _a.mod;
             if (dayDiv) {
                 this.hour = hourMod;
                 this.addDaily(dayDiv);
-        ***REMOVED***
+            }
             if (Object(helpers["b" /* empty */])(byhour) || Object(helpers["c" /* includes */])(byhour, this.hour))
                 break;
-    ***REMOVED***
-***REMOVED***;
+        }
+    };
     DateTime.prototype.addMinutes = function (minutes, filtered, byhour, byminute) {
         if (filtered) {
-    ***REMOVED*** Jump to one iteration before next day
+            // Jump to one iteration before next day
             this.minute +=
                 Math.floor((1439 - (this.hour * 60 + this.minute)) / minutes) * minutes;
-    ***REMOVED***
+        }
         while (true) {
             this.minute += minutes;
             var _a = Object(helpers["a" /* divmod */])(this.minute, 60), hourDiv = _a.div, minuteMod = _a.mod;
             if (hourDiv) {
                 this.minute = minuteMod;
                 this.addHours(hourDiv, false, byhour);
-        ***REMOVED***
+            }
             if ((Object(helpers["b" /* empty */])(byhour) || Object(helpers["c" /* includes */])(byhour, this.hour)) &&
                 (Object(helpers["b" /* empty */])(byminute) || Object(helpers["c" /* includes */])(byminute, this.minute))) {
                 break;
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***;
+            }
+        }
+    };
     DateTime.prototype.addSeconds = function (seconds, filtered, byhour, byminute, bysecond) {
         if (filtered) {
-    ***REMOVED*** Jump to one iteration before next day
+            // Jump to one iteration before next day
             this.second +=
                 Math.floor((86399 - (this.hour * 3600 + this.minute * 60 + this.second)) / seconds) * seconds;
-    ***REMOVED***
+        }
         while (true) {
             this.second += seconds;
             var _a = Object(helpers["a" /* divmod */])(this.second, 60), minuteDiv = _a.div, secondMod = _a.mod;
             if (minuteDiv) {
                 this.second = secondMod;
                 this.addMinutes(minuteDiv, false, byhour, byminute);
-        ***REMOVED***
+            }
             if ((Object(helpers["b" /* empty */])(byhour) || Object(helpers["c" /* includes */])(byhour, this.hour)) &&
                 (Object(helpers["b" /* empty */])(byminute) || Object(helpers["c" /* includes */])(byminute, this.minute)) &&
                 (Object(helpers["b" /* empty */])(bysecond) || Object(helpers["c" /* includes */])(bysecond, this.second))) {
                 break;
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***;
+            }
+        }
+    };
     DateTime.prototype.fixDay = function () {
         if (this.day <= 28) {
             return;
-    ***REMOVED***
+        }
         var daysinmonth = dateutil_dateutil.monthRange(this.year, this.month - 1)[1];
         if (this.day <= daysinmonth) {
             return;
-    ***REMOVED***
+        }
         while (this.day > daysinmonth) {
             this.day -= daysinmonth;
             ++this.month;
@@ -893,11 +893,11 @@ var datetime_DateTime = /** @class */ (function (_super) {
                 ++this.year;
                 if (this.year > dateutil_dateutil.MAXYEAR) {
                     return;
-            ***REMOVED***
-        ***REMOVED***
+                }
+            }
             daysinmonth = dateutil_dateutil.monthRange(this.year, this.month - 1)[1];
-    ***REMOVED***
-***REMOVED***;
+        }
+    };
     DateTime.prototype.add = function (options, filtered) {
         var freq = options.freq, interval = options.interval, wkst = options.wkst, byhour = options.byhour, byminute = options.byminute, bysecond = options.bysecond;
         switch (freq) {
@@ -908,10 +908,10 @@ var datetime_DateTime = /** @class */ (function (_super) {
             case Frequency.HOURLY: return this.addHours(interval, filtered, byhour);
             case Frequency.MINUTELY: return this.addMinutes(interval, filtered, byhour, byminute);
             case Frequency.SECONDLY: return this.addSeconds(interval, filtered, byhour, byminute, bysecond);
-    ***REMOVED***
-***REMOVED***;
+        }
+    };
     return DateTime;
-***REMOVED***(Time));
+}(Time));
 
 
 // CONCATENATED MODULE: ./src/parseoptions.ts
@@ -924,7 +924,7 @@ var datetime_DateTime = /** @class */ (function (_super) {
 function initializeOptions(options) {
     var invalid = [];
     var keys = Object.keys(options);
-    var initializedOptions = {***REMOVED***;
+    var initializedOptions = {};
     // Shallow copy for options and origOptions and check for invalid
     keys.forEach(function (key) {
         var value = options[key];
@@ -933,12 +933,12 @@ function initializeOptions(options) {
             invalid.push(key);
         if (src_dateutil.isDate(value) && !src_dateutil.isValidDate(value))
             invalid.push(key);
-***REMOVED***);
+    });
     if (invalid.length) {
         throw new Error('Invalid options: ' + invalid.join(', '));
-***REMOVED***
+    }
     return initializedOptions;
-***REMOVED***
+}
 function parseOptions(options) {
     var opts = initializeOptions(options);
     var keys = Object.keys(options);
@@ -946,23 +946,23 @@ function parseOptions(options) {
     rrule_defaultKeys.forEach(function (key) {
         if (!Object(helpers["c" /* includes */])(keys, key) || !Object(helpers["f" /* isPresent */])(opts[key]))
             opts[key] = DEFAULT_OPTIONS[key];
-***REMOVED***);
+    });
     if (Object(helpers["f" /* isPresent */])(opts.byeaster))
         opts.freq = src_rrule.YEARLY;
     if (!(Object(helpers["f" /* isPresent */])(opts.freq) && src_rrule.FREQUENCIES[opts.freq])) {
         throw new Error("Invalid frequency: " + opts.freq + " " + options.freq);
-***REMOVED***
+    }
     if (!opts.dtstart)
         opts.dtstart = new Date(new Date().setMilliseconds(0));
     if (!Object(helpers["f" /* isPresent */])(opts.wkst)) {
         opts.wkst = src_rrule.MO.weekday;
-***REMOVED***
+    }
     else if (Object(helpers["e" /* isNumber */])(opts.wkst)) {
-***REMOVED*** cool, just keep it like that
-***REMOVED***
+        // cool, just keep it like that
+    }
     else {
         opts.wkst = opts.wkst.weekday;
-***REMOVED***
+    }
     if (Object(helpers["f" /* isPresent */])(opts.bysetpos)) {
         if (Object(helpers["e" /* isNumber */])(opts.bysetpos))
             opts.bysetpos = [opts.bysetpos];
@@ -970,9 +970,9 @@ function parseOptions(options) {
             var v = opts.bysetpos[i];
             if (v === 0 || !(v >= -366 && v <= 366)) {
                 throw new Error('bysetpos must be between 1 and 366,' + ' or between -366 and -1');
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+            }
+        }
+    }
     if (!(Boolean(opts.byweekno) ||
         Object(helpers["g" /* notEmpty */])(opts.byweekno) ||
         Object(helpers["g" /* notEmpty */])(opts.byyearday) ||
@@ -992,23 +992,23 @@ function parseOptions(options) {
             case src_rrule.WEEKLY:
                 opts.byweekday = [src_dateutil.getWeekday(opts.dtstart)];
                 break;
-    ***REMOVED***
-***REMOVED***
+        }
+    }
     // bymonth
     if (Object(helpers["f" /* isPresent */])(opts.bymonth) && !Object(helpers["d" /* isArray */])(opts.bymonth)) {
         opts.bymonth = [opts.bymonth];
-***REMOVED***
+    }
     // byyearday
     if (Object(helpers["f" /* isPresent */])(opts.byyearday) &&
         !Object(helpers["d" /* isArray */])(opts.byyearday) &&
         Object(helpers["e" /* isNumber */])(opts.byyearday)) {
         opts.byyearday = [opts.byyearday];
-***REMOVED***
+    }
     // bymonthday
     if (!Object(helpers["f" /* isPresent */])(opts.bymonthday)) {
         opts.bymonthday = [];
         opts.bynmonthday = [];
-***REMOVED***
+    }
     else if (Object(helpers["d" /* isArray */])(opts.bymonthday)) {
         var bymonthday = [];
         var bynmonthday = [];
@@ -1016,44 +1016,44 @@ function parseOptions(options) {
             var v = opts.bymonthday[i];
             if (v > 0) {
                 bymonthday.push(v);
-        ***REMOVED***
+            }
             else if (v < 0) {
                 bynmonthday.push(v);
-        ***REMOVED***
-    ***REMOVED***
+            }
+        }
         opts.bymonthday = bymonthday;
         opts.bynmonthday = bynmonthday;
-***REMOVED***
+    }
     else if (opts.bymonthday < 0) {
         opts.bynmonthday = [opts.bymonthday];
         opts.bymonthday = [];
-***REMOVED***
+    }
     else {
         opts.bynmonthday = [];
         opts.bymonthday = [opts.bymonthday];
-***REMOVED***
+    }
     // byweekno
     if (Object(helpers["f" /* isPresent */])(opts.byweekno) && !Object(helpers["d" /* isArray */])(opts.byweekno)) {
         opts.byweekno = [opts.byweekno];
-***REMOVED***
+    }
     // byweekday / bynweekday
     if (!Object(helpers["f" /* isPresent */])(opts.byweekday)) {
         opts.bynweekday = null;
-***REMOVED***
+    }
     else if (Object(helpers["e" /* isNumber */])(opts.byweekday)) {
         opts.byweekday = [opts.byweekday];
         opts.bynweekday = null;
-***REMOVED***
+    }
     else if (opts.byweekday instanceof Weekday) {
         if (!opts.byweekday.n || opts.freq > src_rrule.MONTHLY) {
             opts.byweekday = [opts.byweekday.weekday];
             opts.bynweekday = null;
-    ***REMOVED***
+        }
         else {
             opts.bynweekday = [[opts.byweekday.weekday, opts.byweekday.n]];
             opts.byweekday = null;
-    ***REMOVED***
-***REMOVED***
+        }
+    }
     else {
         var byweekday = [];
         var bynweekday = [];
@@ -1062,59 +1062,59 @@ function parseOptions(options) {
             if (Object(helpers["e" /* isNumber */])(wday)) {
                 byweekday.push(wday);
                 continue;
-        ***REMOVED***
+            }
             var wd = wday;
             if (!wd.n || opts.freq > src_rrule.MONTHLY) {
                 byweekday.push(wd.weekday);
-        ***REMOVED***
+            }
             else {
                 bynweekday.push([wd.weekday, wd.n]);
-        ***REMOVED***
-    ***REMOVED***
+            }
+        }
         opts.byweekday = Object(helpers["g" /* notEmpty */])(byweekday) ? byweekday : null;
         opts.bynweekday = Object(helpers["g" /* notEmpty */])(bynweekday) ? bynweekday : null;
-***REMOVED***
+    }
     // byhour
     if (!Object(helpers["f" /* isPresent */])(opts.byhour)) {
         opts.byhour =
             opts.freq < src_rrule.HOURLY ? [opts.dtstart.getUTCHours()] : null;
-***REMOVED***
+    }
     else if (Object(helpers["e" /* isNumber */])(opts.byhour)) {
         opts.byhour = [opts.byhour];
-***REMOVED***
+    }
     // byminute
     if (!Object(helpers["f" /* isPresent */])(opts.byminute)) {
         opts.byminute =
             opts.freq < src_rrule.MINUTELY ? [opts.dtstart.getUTCMinutes()] : null;
-***REMOVED***
+    }
     else if (Object(helpers["e" /* isNumber */])(opts.byminute)) {
         opts.byminute = [opts.byminute];
-***REMOVED***
+    }
     // bysecond
     if (!Object(helpers["f" /* isPresent */])(opts.bysecond)) {
         opts.bysecond =
             opts.freq < src_rrule.SECONDLY ? [opts.dtstart.getUTCSeconds()] : null;
-***REMOVED***
+    }
     else if (Object(helpers["e" /* isNumber */])(opts.bysecond)) {
         opts.bysecond = [opts.bysecond];
-***REMOVED***
-    return { parsedOptions: opts ***REMOVED***;
-***REMOVED***
+    }
+    return { parsedOptions: opts };
+}
 function buildTimeset(opts) {
     var millisecondModulo = opts.dtstart.getTime() % 1000;
     if (!freqIsDailyOrGreater(opts.freq)) {
         return [];
-***REMOVED***
+    }
     var timeset = [];
     opts.byhour.forEach(function (hour) {
         opts.byminute.forEach(function (minute) {
             opts.bysecond.forEach(function (second) {
                 timeset.push(new Time(hour, minute, second, millisecondModulo));
-        ***REMOVED***);
-    ***REMOVED***);
-***REMOVED***);
+            });
+        });
+    });
     return timeset;
-***REMOVED***
+}
 
 // CONCATENATED MODULE: ./src/parsestring.ts
 
@@ -1123,22 +1123,22 @@ function buildTimeset(opts) {
 
 
 function parseString(rfcString) {
-    var options = rfcString.split('\n').map(parseLine).filter(function (x) { return x !== null; ***REMOVED***);
-    return __assign({***REMOVED***, options[0], options[1]);
-***REMOVED***
+    var options = rfcString.split('\n').map(parseLine).filter(function (x) { return x !== null; });
+    return __assign({}, options[0], options[1]);
+}
 function parseDtstart(line) {
-    var options = {***REMOVED***;
+    var options = {};
     var dtstartWithZone = /DTSTART(?:;TZID=([^:=]+?))?(?::|=)([^;\s]+)/i.exec(line);
     if (!dtstartWithZone) {
         return options;
-***REMOVED***
+    }
     var _ = dtstartWithZone[0], tzid = dtstartWithZone[1], dtstart = dtstartWithZone[2];
     if (tzid) {
         options.tzid = tzid;
-***REMOVED***
+    }
     options.dtstart = src_dateutil.untilStringToDate(dtstart);
     return options;
-***REMOVED***
+}
 function parseLine(rfcString) {
     rfcString = rfcString.replace(/^\s+|\s+$/, '');
     if (!rfcString.length)
@@ -1146,7 +1146,7 @@ function parseLine(rfcString) {
     var header = /^([A-Z]+?)[:;]/.exec(rfcString.toUpperCase());
     if (!header) {
         return parseRrule(rfcString);
-***REMOVED***
+    }
     var _ = header[0], key = header[1];
     switch (key.toUpperCase()) {
         case 'RRULE':
@@ -1156,8 +1156,8 @@ function parseLine(rfcString) {
             return parseDtstart(rfcString);
         default:
             throw new Error("Unsupported RFC prop " + key + " in " + rfcString);
-***REMOVED***
-***REMOVED***
+    }
+}
 function parseRrule(line) {
     var strippedLine = line.replace(/^RRULE:/i, '');
     var options = parseDtstart(strippedLine);
@@ -1183,7 +1183,7 @@ function parseRrule(line) {
             case 'BYSECOND':
                 var num = parseNumber(value);
                 var optionKey = key.toLowerCase();
-        ***REMOVED*** @ts-ignore
+                // @ts-ignore
                 options[optionKey] = num;
                 break;
             case 'BYWEEKDAY':
@@ -1192,7 +1192,7 @@ function parseRrule(line) {
                 break;
             case 'DTSTART':
             case 'TZID':
-        ***REMOVED*** for backwards compatibility
+                // for backwards compatibility
                 var dtstart = parseDtstart(line);
                 options.tzid = dtstart.tzid;
                 options.dtstart = dtstart.dtstart;
@@ -1205,38 +1205,38 @@ function parseRrule(line) {
                 break;
             default:
                 throw new Error("Unknown RRULE property '" + key + "'");
-    ***REMOVED***
-***REMOVED***);
+        }
+    });
     return options;
-***REMOVED***
+}
 function parseNumber(value) {
     if (value.indexOf(',') !== -1) {
         var values = value.split(',');
         return values.map(parseIndividualNumber);
-***REMOVED***
+    }
     return parseIndividualNumber(value);
-***REMOVED***
+}
 function parseIndividualNumber(value) {
     if (/^[+-]?\d+$/.test(value)) {
         return Number(value);
-***REMOVED***
+    }
     return value;
-***REMOVED***
+}
 function parseWeekday(value) {
     var days = value.split(',');
     return days.map(function (day) {
         if (day.length === 2) {
-    ***REMOVED*** MO, TU, ...
+            // MO, TU, ...
             return Days[day]; // wday instanceof Weekday
-    ***REMOVED***
-***REMOVED*** -1MO, +3FR, 1SO, 13TU ...
-        var parts = day.match(/^([+-]?\d{1,2***REMOVED***)([A-Z]{2***REMOVED***)$/);
+        }
+        // -1MO, +3FR, 1SO, 13TU ...
+        var parts = day.match(/^([+-]?\d{1,2})([A-Z]{2})$/);
         var n = Number(parts[1]);
         var wdaypart = parts[2];
         var wday = Days[wdaypart].weekday;
         return new Weekday(wday, n);
-***REMOVED***);
-***REMOVED***
+    });
+}
 
 // EXTERNAL MODULE: external "luxon"
 var external_luxon_ = __webpack_require__(2);
@@ -1248,43 +1248,43 @@ var datewithzone_DateWithZone = /** @class */ (function () {
     function DateWithZone(date, tzid) {
         this.date = date;
         this.tzid = tzid;
-***REMOVED***
+    }
     Object.defineProperty(DateWithZone.prototype, "isUTC", {
         get: function () {
             return !this.tzid || this.tzid.toUpperCase() === 'UTC';
-    ***REMOVED***,
+        },
         enumerable: true,
         configurable: true
-***REMOVED***);
+    });
     DateWithZone.prototype.toString = function () {
         var datestr = src_dateutil.timeToUntilString(this.date.getTime(), this.isUTC);
         if (!this.isUTC) {
             return ";TZID=" + this.tzid + ":" + datestr;
-    ***REMOVED***
+        }
         return ":" + datestr;
-***REMOVED***;
+    };
     DateWithZone.prototype.getTime = function () {
         return this.date.getTime();
-***REMOVED***;
+    };
     DateWithZone.prototype.rezonedDate = function () {
         if (this.isUTC) {
             return this.date;
-    ***REMOVED***
-***REMOVED***
+        }
+        try {
             var datetime = external_luxon_["DateTime"]
                 .fromJSDate(this.date);
-            var rezoned = datetime.setZone(this.tzid, { keepLocalTime: true ***REMOVED***);
+            var rezoned = datetime.setZone(this.tzid, { keepLocalTime: true });
             return rezoned.toJSDate();
-    ***REMOVED***
+        }
         catch (e) {
             if (e instanceof TypeError) {
                 console.error('Using TZID without Luxon available is unsupported. Returned times are in UTC, not the requested time zone');
-        ***REMOVED***
+            }
             return this.date;
-    ***REMOVED***
-***REMOVED***;
+        }
+    };
     return DateWithZone;
-***REMOVED***());
+}());
 
 
 // CONCATENATED MODULE: ./src/optionstostring.ts
@@ -1315,10 +1315,10 @@ function optionsToString(options) {
             case 'WKST':
                 if (Object(helpers["e" /* isNumber */])(value)) {
                     outValue = new Weekday(value).toString();
-            ***REMOVED***
+                }
                 else {
                     outValue = value.toString();
-            ***REMOVED***
+                }
                 break;
             case 'BYWEEKDAY':
                 /*
@@ -1336,12 +1336,12 @@ function optionsToString(options) {
                 outValue = Object(helpers["m" /* toArray */])(value).map(function (wday) {
                     if (wday instanceof Weekday) {
                         return wday;
-                ***REMOVED***
+                    }
                     if (Object(helpers["d" /* isArray */])(wday)) {
                         return new Weekday(wday[0], wday[1]);
-                ***REMOVED***
+                    }
                     return new Weekday(wday);
-            ***REMOVED***).toString();
+                }).toString();
                 break;
             case 'DTSTART':
                 dtstart = buildDtstart(value, options.tzid);
@@ -1354,33 +1354,33 @@ function optionsToString(options) {
                     var strValues = [];
                     for (var j = 0; j < value.length; j++) {
                         strValues[j] = String(value[j]);
-                ***REMOVED***
+                    }
                     outValue = strValues.toString();
-            ***REMOVED***
+                }
                 else {
                     outValue = String(value);
-            ***REMOVED***
-    ***REMOVED***
+                }
+        }
         if (outValue) {
             rrule.push([key, outValue]);
-    ***REMOVED***
-***REMOVED***
+        }
+    }
     var rules = rrule.map(function (_a) {
         var key = _a[0], value = _a[1];
         return key + "=" + value.toString();
-***REMOVED***).join(';');
+    }).join(';');
     var ruleString = '';
     if (rules !== '') {
         ruleString = "RRULE:" + rules;
-***REMOVED***
-    return [dtstart, ruleString].filter(function (x) { return !!x; ***REMOVED***).join('\n');
-***REMOVED***
+    }
+    return [dtstart, ruleString].filter(function (x) { return !!x; }).join('\n');
+}
 function buildDtstart(dtstart, tzid) {
     if (!dtstart) {
         return '';
-***REMOVED***
+    }
     return 'DTSTART' + new datewithzone_DateWithZone(new Date(dtstart), tzid).toString();
-***REMOVED***
+}
 
 // CONCATENATED MODULE: ./src/cache.ts
 
@@ -1392,11 +1392,11 @@ var cache_Cache = /** @class */ (function () {
         this.before = [];
         this.after = [];
         this.between = [];
-***REMOVED***
+    }
     /**
-     * @param {String***REMOVED*** what - all/before/after/between
-     * @param {Array,Date***REMOVED*** value - an array of dates, one date, or null
-     * @param {Object?***REMOVED*** args - _iter arguments
+     * @param {String} what - all/before/after/between
+     * @param {Array,Date} value - an array of dates, one date, or null
+     * @param {Object?} args - _iter arguments
      */
     Cache.prototype._cacheAdd = function (what, value, args) {
         if (value) {
@@ -1404,15 +1404,15 @@ var cache_Cache = /** @class */ (function () {
                 value instanceof Date
                     ? src_dateutil.clone(value)
                     : src_dateutil.cloneDates(value);
-    ***REMOVED***
+        }
         if (what === 'all') {
             this.all = value;
-    ***REMOVED***
+        }
         else {
             args._value = value;
             this[what].push(args);
-    ***REMOVED***
-***REMOVED***;
+        }
+    };
     /**
      * @return false - not in the cache
      *         null  - cached, but zero occurrences (before/after)
@@ -1428,44 +1428,44 @@ var cache_Cache = /** @class */ (function () {
                 var key = argsKeys[i];
                 if (String(args[key]) !== String(item[key])) {
                     return true;
-            ***REMOVED***
-        ***REMOVED***
+                }
+            }
             return false;
-    ***REMOVED***;
+        };
         var cachedObject = this[what];
         if (what === 'all') {
             cached = this.all;
-    ***REMOVED***
+        }
         else if (Object(helpers["d" /* isArray */])(cachedObject)) {
-    ***REMOVED*** Let's see whether we've already called the
-    ***REMOVED*** 'what' method with the same 'args'
+            // Let's see whether we've already called the
+            // 'what' method with the same 'args'
             for (var i = 0; i < cachedObject.length; i++) {
                 var item = cachedObject[i];
                 if (argsKeys.length && findCacheDiff(item))
                     continue;
                 cached = item._value;
                 break;
-        ***REMOVED***
-    ***REMOVED***
+            }
+        }
         if (!cached && this.all) {
-    ***REMOVED*** Not in the cache, but we already know all the occurrences,
-    ***REMOVED*** so we can find the correct dates from the cached ones.
+            // Not in the cache, but we already know all the occurrences,
+            // so we can find the correct dates from the cached ones.
             var iterResult = new iterresult(what, args);
             for (var i = 0; i < this.all.length; i++) {
                 if (!iterResult.accept(this.all[i]))
                     break;
-        ***REMOVED***
+            }
             cached = iterResult.getValue();
             this._cacheAdd(what, cached, args);
-    ***REMOVED***
+        }
         return Object(helpers["d" /* isArray */])(cached)
             ? src_dateutil.cloneDates(cached)
             : cached instanceof Date
                 ? src_dateutil.clone(cached)
                 : cached;
-***REMOVED***;
+    };
     return Cache;
-***REMOVED***());
+}());
 
 
 // CONCATENATED MODULE: ./src/masks.ts
@@ -1495,7 +1495,7 @@ var WDAYMASK = (function () {
     for (var i = 0; i < 55; i++)
         wdaymask = wdaymask.concat(Object(helpers["j" /* range */])(7));
     return wdaymask;
-***REMOVED***)();
+})();
 
 
 // CONCATENATED MODULE: ./src/iterinfo/yearinfo.ts
@@ -1512,26 +1512,26 @@ function rebuildYear(year, options) {
     var result = __assign({ yearlen: yearlen,
         nextyearlen: nextyearlen,
         yearordinal: yearordinal,
-        yearweekday: yearweekday ***REMOVED***, baseYearMasks(year), { wnomask: null ***REMOVED***);
+        yearweekday: yearweekday }, baseYearMasks(year), { wnomask: null });
     if (Object(helpers["b" /* empty */])(options.byweekno)) {
         return result;
-***REMOVED***
+    }
     result.wnomask = Object(helpers["k" /* repeat */])(0, yearlen + 7);
     var firstwkst;
     var wyearlen;
     var no1wkst = firstwkst = Object(helpers["i" /* pymod */])(7 - yearweekday + options.wkst, 7);
     if (no1wkst >= 4) {
         no1wkst = 0;
-***REMOVED*** Number of days in the year, plus the days we got
-***REMOVED*** from last year.
+        // Number of days in the year, plus the days we got
+        // from last year.
         wyearlen =
             result.yearlen + Object(helpers["i" /* pymod */])(yearweekday - options.wkst, 7);
-***REMOVED***
+    }
     else {
-***REMOVED*** Number of days in the year, minus the days we
-***REMOVED*** left in last year.
+        // Number of days in the year, minus the days we
+        // left in last year.
         wyearlen = yearlen - no1wkst;
-***REMOVED***
+    }
     var div = Math.floor(wyearlen / 7);
     var mod = Object(helpers["i" /* pymod */])(wyearlen, 7);
     var numweeks = Math.floor(div + mod / 4);
@@ -1539,51 +1539,51 @@ function rebuildYear(year, options) {
         var n = options.byweekno[j];
         if (n < 0) {
             n += numweeks + 1;
-    ***REMOVED***
+        }
         if (!(n > 0 && n <= numweeks)) {
             continue;
-    ***REMOVED***
+        }
         var i = void 0;
         if (n > 1) {
             i = no1wkst + (n - 1) * 7;
             if (no1wkst !== firstwkst) {
                 i -= 7 - firstwkst;
-        ***REMOVED***
-    ***REMOVED***
+            }
+        }
         else {
             i = no1wkst;
-    ***REMOVED***
+        }
         for (var k = 0; k < 7; k++) {
             result.wnomask[i] = 1;
             i++;
             if (result.wdaymask[i] === options.wkst)
                 break;
-    ***REMOVED***
-***REMOVED***
+        }
+    }
     if (Object(helpers["c" /* includes */])(options.byweekno, 1)) {
-***REMOVED*** Check week number 1 of next year as well
-***REMOVED*** orig-TODO : Check -numweeks for next year.
+        // Check week number 1 of next year as well
+        // orig-TODO : Check -numweeks for next year.
         var i = no1wkst + numweeks * 7;
         if (no1wkst !== firstwkst)
             i -= 7 - firstwkst;
         if (i < yearlen) {
-    ***REMOVED*** If week starts in next year, we
-    ***REMOVED*** don't care about it.
+            // If week starts in next year, we
+            // don't care about it.
             for (var j = 0; j < 7; j++) {
                 result.wnomask[i] = 1;
                 i += 1;
                 if (result.wdaymask[i] === options.wkst)
                     break;
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+            }
+        }
+    }
     if (no1wkst) {
-***REMOVED*** Check last week number of last year as
-***REMOVED*** well. If no1wkst is 0, either the year
-***REMOVED*** started on week start, or week number 1
-***REMOVED*** got days from last year, so there are no
-***REMOVED*** days from last year's last week number in
-***REMOVED*** this year.
+        // Check last week number of last year as
+        // well. If no1wkst is 0, either the year
+        // started on week start, or week number 1
+        // got days from last year, so there are no
+        // days from last year's last week number in
+        // this year.
         var lnumweeks = void 0;
         if (!Object(helpers["c" /* includes */])(options.byweekno, -1)) {
             var lyearweekday = src_dateutil.getWeekday(new Date(Date.UTC(year - 1, 0, 1)));
@@ -1593,22 +1593,22 @@ function rebuildYear(year, options) {
             if (lno1wkst >= 4) {
                 lno1wkst = 0;
                 weekst = lyearlen + Object(helpers["i" /* pymod */])(lyearweekday - options.wkst, 7);
-        ***REMOVED***
+            }
             else {
                 weekst = yearlen - no1wkst;
-        ***REMOVED***
+            }
             lnumweeks = Math.floor(52 + Object(helpers["i" /* pymod */])(weekst, 7) / 4);
-    ***REMOVED***
+        }
         else {
             lnumweeks = -1;
-    ***REMOVED***
+        }
         if (Object(helpers["c" /* includes */])(options.byweekno, lnumweeks)) {
             for (var i = 0; i < no1wkst; i++)
                 result.wnomask[i] = 1;
-    ***REMOVED***
-***REMOVED***
+        }
+    }
     return result;
-***REMOVED***
+}
 function baseYearMasks(year) {
     var yearlen = src_dateutil.isLeapYear(year) ? 366 : 365;
     var firstyday = new Date(Date.UTC(year, 0, 1));
@@ -1620,16 +1620,16 @@ function baseYearMasks(year) {
             nmdaymask: NMDAY365MASK,
             wdaymask: WDAYMASK.slice(wday),
             mrange: M365RANGE
-    ***REMOVED***;
-***REMOVED***
+        };
+    }
     return {
         mmask: M366MASK,
         mdaymask: MDAY366MASK,
         nmdaymask: NMDAY366MASK,
         wdaymask: WDAYMASK.slice(wday),
         mrange: M366RANGE
-***REMOVED***;
-***REMOVED***
+    };
+}
 
 // CONCATENATED MODULE: ./src/iterinfo/monthinfo.ts
 
@@ -1639,25 +1639,25 @@ function rebuildMonth(year, month, yearlen, mrange, wdaymask, options) {
         lastyear: year,
         lastmonth: month,
         nwdaymask: []
-***REMOVED***;
+    };
     var ranges = [];
     if (options.freq === src_rrule.YEARLY) {
         if (Object(helpers["b" /* empty */])(options.bymonth)) {
             ranges = [[0, yearlen]];
-    ***REMOVED***
+        }
         else {
             for (var j = 0; j < options.bymonth.length; j++) {
                 month = options.bymonth[j];
                 ranges.push(mrange.slice(month - 1, month + 1));
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+            }
+        }
+    }
     else if (options.freq === src_rrule.MONTHLY) {
         ranges = [mrange.slice(month - 1, month + 1)];
-***REMOVED***
+    }
     if (Object(helpers["b" /* empty */])(ranges)) {
         return result;
-***REMOVED***
+    }
     // Weekly frequency won't get here, so we may not
     // care about cross-year weekly periods.
     result.nwdaymask = Object(helpers["k" /* repeat */])(0, yearlen);
@@ -1671,21 +1671,21 @@ function rebuildMonth(year, month, yearlen, mrange, wdaymask, options) {
             if (n < 0) {
                 i = last + (n + 1) * 7;
                 i -= Object(helpers["i" /* pymod */])(wdaymask[i] - wday, 7);
-        ***REMOVED***
+            }
             else {
                 i = first + (n - 1) * 7;
                 i += Object(helpers["i" /* pymod */])(7 - wdaymask[i] + wday, 7);
-        ***REMOVED***
+            }
             if (first <= i && i <= last)
                 result.nwdaymask[i] = 1;
-    ***REMOVED***
-***REMOVED***
+        }
+    }
     return result;
-***REMOVED***
+}
 
 // CONCATENATED MODULE: ./src/iterinfo/easter.ts
 function easter(y, offset) {
-    if (offset === void 0) { offset = 0; ***REMOVED***
+    if (offset === void 0) { offset = 0; }
     var a = y % 19;
     var b = Math.floor(y / 100);
     var c = y % 100;
@@ -1703,7 +1703,7 @@ function easter(y, offset) {
     var date = Date.UTC(y, month - 1, day + offset);
     var yearStart = Date.UTC(y, 0, 1);
     return [Math.ceil((date - yearStart) / (1000 * 60 * 60 * 24))];
-***REMOVED***
+}
 
 // CONCATENATED MODULE: ./src/iterinfo/index.ts
 
@@ -1719,108 +1719,108 @@ function easter(y, offset) {
 var iterinfo_Iterinfo = /** @class */ (function () {
     function Iterinfo(options) {
         this.options = options;
-***REMOVED***
+    }
     Iterinfo.prototype.rebuild = function (year, month) {
         var options = this.options;
         if (year !== this.lastyear) {
             this.yearinfo = rebuildYear(year, options);
-    ***REMOVED***
+        }
         if (Object(helpers["g" /* notEmpty */])(options.bynweekday) &&
             (month !== this.lastmonth || year !== this.lastyear)) {
             var _a = this.yearinfo, yearlen = _a.yearlen, mrange = _a.mrange, wdaymask = _a.wdaymask;
             this.monthinfo = rebuildMonth(year, month, yearlen, mrange, wdaymask, options);
-    ***REMOVED***
+        }
         if (Object(helpers["f" /* isPresent */])(options.byeaster)) {
             this.eastermask = easter(year, options.byeaster);
-    ***REMOVED***
-***REMOVED***;
+        }
+    };
     Object.defineProperty(Iterinfo.prototype, "lastyear", {
         get: function () {
             return this.monthinfo ? this.monthinfo.lastyear : null;
-    ***REMOVED***,
+        },
         enumerable: true,
         configurable: true
-***REMOVED***);
+    });
     Object.defineProperty(Iterinfo.prototype, "lastmonth", {
         get: function () {
             return this.monthinfo ? this.monthinfo.lastmonth : null;
-    ***REMOVED***,
+        },
         enumerable: true,
         configurable: true
-***REMOVED***);
+    });
     Object.defineProperty(Iterinfo.prototype, "yearlen", {
         get: function () {
             return this.yearinfo.yearlen;
-    ***REMOVED***,
+        },
         enumerable: true,
         configurable: true
-***REMOVED***);
+    });
     Object.defineProperty(Iterinfo.prototype, "yearordinal", {
         get: function () {
             return this.yearinfo.yearordinal;
-    ***REMOVED***,
+        },
         enumerable: true,
         configurable: true
-***REMOVED***);
+    });
     Object.defineProperty(Iterinfo.prototype, "mrange", {
         get: function () {
             return this.yearinfo.mrange;
-    ***REMOVED***,
+        },
         enumerable: true,
         configurable: true
-***REMOVED***);
+    });
     Object.defineProperty(Iterinfo.prototype, "wdaymask", {
         get: function () {
             return this.yearinfo.wdaymask;
-    ***REMOVED***,
+        },
         enumerable: true,
         configurable: true
-***REMOVED***);
+    });
     Object.defineProperty(Iterinfo.prototype, "mmask", {
         get: function () {
             return this.yearinfo.mmask;
-    ***REMOVED***,
+        },
         enumerable: true,
         configurable: true
-***REMOVED***);
+    });
     Object.defineProperty(Iterinfo.prototype, "wnomask", {
         get: function () {
             return this.yearinfo.wnomask;
-    ***REMOVED***,
+        },
         enumerable: true,
         configurable: true
-***REMOVED***);
+    });
     Object.defineProperty(Iterinfo.prototype, "nwdaymask", {
         get: function () {
             return this.monthinfo ? this.monthinfo.nwdaymask : [];
-    ***REMOVED***,
+        },
         enumerable: true,
         configurable: true
-***REMOVED***);
+    });
     Object.defineProperty(Iterinfo.prototype, "nextyearlen", {
         get: function () {
             return this.yearinfo.nextyearlen;
-    ***REMOVED***,
+        },
         enumerable: true,
         configurable: true
-***REMOVED***);
+    });
     Object.defineProperty(Iterinfo.prototype, "mdaymask", {
         get: function () {
             return this.yearinfo.mdaymask;
-    ***REMOVED***,
+        },
         enumerable: true,
         configurable: true
-***REMOVED***);
+    });
     Object.defineProperty(Iterinfo.prototype, "nmdaymask", {
         get: function () {
             return this.yearinfo.nmdaymask;
-    ***REMOVED***,
+        },
         enumerable: true,
         configurable: true
-***REMOVED***);
+    });
     Iterinfo.prototype.ydayset = function () {
         return [Object(helpers["j" /* range */])(this.yearlen), 0, this.yearlen];
-***REMOVED***;
+    };
     Iterinfo.prototype.mdayset = function (_, month, __) {
         var start = this.mrange[month - 1];
         var end = this.mrange[month];
@@ -1828,9 +1828,9 @@ var iterinfo_Iterinfo = /** @class */ (function () {
         for (var i = start; i < end; i++)
             set[i] = i;
         return [set, start, end];
-***REMOVED***;
+    };
     Iterinfo.prototype.wdayset = function (year, month, day) {
-***REMOVED*** We need to handle cross-year weeks here.
+        // We need to handle cross-year weeks here.
         var set = Object(helpers["k" /* repeat */])(null, this.yearlen + 7);
         var i = src_dateutil.toOrdinal(new Date(Date.UTC(year, month - 1, day))) -
             this.yearordinal;
@@ -1840,35 +1840,35 @@ var iterinfo_Iterinfo = /** @class */ (function () {
             ++i;
             if (this.wdaymask[i] === this.options.wkst)
                 break;
-    ***REMOVED***
+        }
         return [set, start, i];
-***REMOVED***;
+    };
     Iterinfo.prototype.ddayset = function (year, month, day) {
         var set = Object(helpers["k" /* repeat */])(null, this.yearlen);
         var i = src_dateutil.toOrdinal(new Date(Date.UTC(year, month - 1, day))) -
             this.yearordinal;
         set[i] = i;
         return [set, i, i + 1];
-***REMOVED***;
+    };
     Iterinfo.prototype.htimeset = function (hour, _, second, millisecond) {
         var _this = this;
         var set = [];
         this.options.byminute.forEach(function (minute) {
             set = set.concat(_this.mtimeset(hour, minute, second, millisecond));
-    ***REMOVED***);
+        });
         src_dateutil.sort(set);
         return set;
-***REMOVED***;
+    };
     Iterinfo.prototype.mtimeset = function (hour, minute, _, millisecond) {
         var set = this.options.bysecond.map(function (second) {
             return new Time(hour, minute, second, millisecond);
-    ***REMOVED***);
+        });
         src_dateutil.sort(set);
         return set;
-***REMOVED***;
+    };
     Iterinfo.prototype.stimeset = function (hour, minute, second, millisecond) {
         return [new Time(hour, minute, second, millisecond)];
-***REMOVED***;
+    };
     Iterinfo.prototype.getdayset = function (freq) {
         switch (freq) {
             case Frequency.YEARLY: return this.ydayset.bind(this);
@@ -1876,17 +1876,17 @@ var iterinfo_Iterinfo = /** @class */ (function () {
             case Frequency.WEEKLY: return this.wdayset.bind(this);
             case Frequency.DAILY: return this.ddayset.bind(this);
             default: return this.ddayset.bind(this);
-    ***REMOVED***
-***REMOVED***;
+        }
+    };
     Iterinfo.prototype.gettimeset = function (freq) {
         switch (freq) {
             case Frequency.HOURLY: return this.htimeset.bind(this);
             case Frequency.MINUTELY: return this.mtimeset.bind(this);
             case Frequency.SECONDLY: return this.stimeset.bind(this);
-    ***REMOVED***
-***REMOVED***;
+        }
+    };
     return Iterinfo;
-***REMOVED***());
+}());
 /* harmony default export */ var iterinfo = (iterinfo_Iterinfo);
 
 // CONCATENATED MODULE: ./src/iter/poslist.ts
@@ -1901,36 +1901,36 @@ function buildPoslist(bysetpos, timeset, start, end, ii, dayset) {
         if (pos < 0) {
             daypos = Math.floor(pos / timeset.length);
             timepos = Object(helpers["i" /* pymod */])(pos, timeset.length);
-    ***REMOVED***
+        }
         else {
             daypos = Math.floor((pos - 1) / timeset.length);
             timepos = Object(helpers["i" /* pymod */])(pos - 1, timeset.length);
-    ***REMOVED***
+        }
         var tmp = [];
         for (var k = start; k < end; k++) {
             var val = dayset[k];
             if (!Object(helpers["f" /* isPresent */])(val))
                 continue;
             tmp.push(val);
-    ***REMOVED***
+        }
         var i = void 0;
         if (daypos < 0) {
             i = tmp.slice(daypos)[0];
-    ***REMOVED***
+        }
         else {
             i = tmp[daypos];
-    ***REMOVED***
+        }
         var time = timeset[timepos];
         var date = src_dateutil.fromOrdinal(ii.yearordinal + i);
         var res = src_dateutil.combine(date, time);
-***REMOVED*** XXX: can this ever be in the array?
-***REMOVED*** - compare the actual date instead?
+        // XXX: can this ever be in the array?
+        // - compare the actual date instead?
         if (!Object(helpers["c" /* includes */])(poslist, res))
             poslist.push(res);
-***REMOVED***
+    }
     src_dateutil.sort(poslist);
     return poslist;
-***REMOVED***
+}
 
 // CONCATENATED MODULE: ./src/iter/index.ts
 
@@ -1947,7 +1947,7 @@ function iter(iterResult, options) {
     var count = options.count;
     if (count === 0 || interval === 0) {
         return emitResult(iterResult);
-***REMOVED***
+    }
     var counterDate = datetime_DateTime.fromDate(dtstart);
     var ii = new iterinfo(options);
     ii.rebuild(counterDate.year, counterDate.month);
@@ -1961,63 +1961,63 @@ function iter(iterResult, options) {
                 var res = poslist[j];
                 if (until && res > until) {
                     return emitResult(iterResult);
-            ***REMOVED***
+                }
                 if (res >= dtstart) {
                     var rezonedDate = rezoneIfNeeded(res, options);
                     if (!iterResult.accept(rezonedDate)) {
                         return emitResult(iterResult);
-                ***REMOVED***
+                    }
                     if (count) {
                         --count;
                         if (!count) {
                             return emitResult(iterResult);
-                    ***REMOVED***
-                ***REMOVED***
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
+                        }
+                    }
+                }
+            }
+        }
         else {
             for (var j = start; j < end; j++) {
                 var currentDay = dayset[j];
                 if (!Object(helpers["f" /* isPresent */])(currentDay)) {
                     continue;
-            ***REMOVED***
+                }
                 var date = src_dateutil.fromOrdinal(ii.yearordinal + currentDay);
                 for (var k = 0; k < timeset.length; k++) {
                     var time = timeset[k];
                     var res = src_dateutil.combine(date, time);
                     if (until && res > until) {
                         return emitResult(iterResult);
-                ***REMOVED***
+                    }
                     if (res >= dtstart) {
                         var rezonedDate = rezoneIfNeeded(res, options);
                         if (!iterResult.accept(rezonedDate)) {
                             return emitResult(iterResult);
-                    ***REMOVED***
+                        }
                         if (count) {
                             --count;
                             if (!count) {
                                 return emitResult(iterResult);
-                        ***REMOVED***
-                    ***REMOVED***
-                ***REMOVED***
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
+                            }
+                        }
+                    }
+                }
+            }
+        }
         if (options.interval === 0) {
             return emitResult(iterResult);
-    ***REMOVED***
-***REMOVED*** Handle frequency and interval
+        }
+        // Handle frequency and interval
         counterDate.add(options, filtered);
         if (counterDate.year > src_dateutil.MAXYEAR) {
             return emitResult(iterResult);
-    ***REMOVED***
+        }
         if (!freqIsDailyOrGreater(freq)) {
             timeset = ii.gettimeset(freq)(counterDate.hour, counterDate.minute, counterDate.second, 0);
-    ***REMOVED***
+        }
         ii.rebuild(counterDate.year, counterDate.month);
-***REMOVED***
-***REMOVED***
+    }
+}
 function isFiltered(ii, currentDay, options) {
     var bymonth = options.bymonth, byweekno = options.byweekno, byweekday = options.byweekday, byeaster = options.byeaster, bymonthday = options.bymonthday, bynmonthday = options.bynmonthday, byyearday = options.byyearday;
     return ((Object(helpers["g" /* notEmpty */])(bymonth) && !Object(helpers["c" /* includes */])(bymonth, ii.mmask[currentDay])) ||
@@ -2035,13 +2035,13 @@ function isFiltered(ii, currentDay, options) {
                 (currentDay >= ii.yearlen &&
                     !Object(helpers["c" /* includes */])(byyearday, currentDay + 1 - ii.yearlen) &&
                     !Object(helpers["c" /* includes */])(byyearday, -ii.nextyearlen + currentDay - ii.yearlen)))));
-***REMOVED***
+}
 function rezoneIfNeeded(date, options) {
     return new datewithzone_DateWithZone(date, options.tzid).rezonedDate();
-***REMOVED***
+}
 function emitResult(iterResult) {
     return iterResult.getValue();
-***REMOVED***
+}
 function removeFilteredDays(dayset, start, end, ii, options) {
     var filtered = false;
     for (var dayCounter = start; dayCounter < end; dayCounter++) {
@@ -2049,14 +2049,14 @@ function removeFilteredDays(dayset, start, end, ii, options) {
         filtered = isFiltered(ii, currentDay, options);
         if (filtered)
             dayset[currentDay] = null;
-***REMOVED***
+    }
     return filtered;
-***REMOVED***
+}
 function makeTimeset(ii, counterDate, options) {
     var freq = options.freq, byhour = options.byhour, byminute = options.byminute, bysecond = options.bysecond;
     if (freqIsDailyOrGreater(freq)) {
         return buildTimeset(options);
-***REMOVED***
+    }
     if ((freq >= src_rrule.HOURLY &&
         Object(helpers["g" /* notEmpty */])(byhour) &&
         !Object(helpers["c" /* includes */])(byhour, counterDate.hour)) ||
@@ -2067,9 +2067,9 @@ function makeTimeset(ii, counterDate, options) {
             Object(helpers["g" /* notEmpty */])(bysecond) &&
             !Object(helpers["c" /* includes */])(bysecond, counterDate.second))) {
         return [];
-***REMOVED***
+    }
     return ii.gettimeset(freq)(counterDate.hour, counterDate.minute, counterDate.second, counterDate.millisecond);
-***REMOVED***
+}
 
 // CONCATENATED MODULE: ./src/rrule.ts
 
@@ -2086,9 +2086,9 @@ var getnlp = function () {
     // Lazy, runtime import to avoid circular refs.
     if (!getnlp._nlp) {
         getnlp._nlp = __webpack_require__(3);
-***REMOVED***
+    }
     return getnlp._nlp;
-***REMOVED***;
+};
 // =============================================================================
 // RRule
 // =============================================================================
@@ -2100,7 +2100,7 @@ var Days = {
     FR: new Weekday(4),
     SA: new Weekday(5),
     SU: new Weekday(6)
-***REMOVED***;
+};
 var DEFAULT_OPTIONS = {
     freq: Frequency.YEARLY,
     dtstart: null,
@@ -2121,64 +2121,64 @@ var DEFAULT_OPTIONS = {
     byminute: null,
     bysecond: null,
     byeaster: null
-***REMOVED***;
+};
 var rrule_defaultKeys = Object.keys(DEFAULT_OPTIONS);
 /**
  *
- * @param {Options?***REMOVED*** options - see <http://labix.org/python-dateutil/#head-cf004ee9a75592797e076752b2a889c10f445418>
+ * @param {Options?} options - see <http://labix.org/python-dateutil/#head-cf004ee9a75592797e076752b2a889c10f445418>
  *        The only required option is `freq`, one of RRule.YEARLY, RRule.MONTHLY, ...
  * @constructor
  */
 var rrule_RRule = /** @class */ (function () {
     function RRule(options, noCache) {
-        if (options === void 0) { options = {***REMOVED***; ***REMOVED***
-        if (noCache === void 0) { noCache = false; ***REMOVED***
-***REMOVED*** RFC string
+        if (options === void 0) { options = {}; }
+        if (noCache === void 0) { noCache = false; }
+        // RFC string
         this._cache = noCache ? null : new cache_Cache();
-***REMOVED*** used by toString()
+        // used by toString()
         this.origOptions = initializeOptions(options);
         var parsedOptions = parseOptions(options).parsedOptions;
         this.options = parsedOptions;
-***REMOVED***
+    }
     RRule.parseText = function (text, language) {
         return getnlp().parseText(text, language);
-***REMOVED***;
+    };
     RRule.fromText = function (text, language) {
         return getnlp().fromText(text, language);
-***REMOVED***;
+    };
     RRule.fromString = function (str) {
         return new RRule(RRule.parseString(str) || undefined);
-***REMOVED***;
+    };
     RRule.prototype._iter = function (iterResult) {
         return iter(iterResult, this.options);
-***REMOVED***;
+    };
     RRule.prototype._cacheGet = function (what, args) {
         if (!this._cache)
             return false;
         return this._cache._cacheGet(what, args);
-***REMOVED***;
+    };
     RRule.prototype._cacheAdd = function (what, value, args) {
         if (!this._cache)
             return;
         return this._cache._cacheAdd(what, value, args);
-***REMOVED***;
+    };
     /**
-     * @param {Function***REMOVED*** iterator - optional function that will be called
+     * @param {Function} iterator - optional function that will be called
      *                   on each date that is added. It can return false
      *                   to stop the iteration.
      * @return Array containing all recurrences.
      */
     RRule.prototype.all = function (iterator) {
         if (iterator) {
-            return this._iter(new callbackiterresult('all', {***REMOVED***, iterator));
-    ***REMOVED***
+            return this._iter(new callbackiterresult('all', {}, iterator));
+        }
         var result = this._cacheGet('all');
         if (result === false) {
-            result = this._iter(new iterresult('all', {***REMOVED***));
+            result = this._iter(new iterresult('all', {}));
             this._cacheAdd('all', result);
-    ***REMOVED***
+        }
         return result;
-***REMOVED***;
+    };
     /**
      * Returns all the occurrences of the rrule between after and before.
      * The inc keyword defines what happens if after and/or before are
@@ -2187,24 +2187,24 @@ var rrule_RRule = /** @class */ (function () {
      * @return Array
      */
     RRule.prototype.between = function (after, before, inc, iterator) {
-        if (inc === void 0) { inc = false; ***REMOVED***
+        if (inc === void 0) { inc = false; }
         if (!src_dateutil.isValidDate(after) || !src_dateutil.isValidDate(before))
             throw new Error('Invalid date passed in to RRule.between');
         var args = {
             before: before,
             after: after,
             inc: inc
-    ***REMOVED***;
+        };
         if (iterator) {
             return this._iter(new callbackiterresult('between', args, iterator));
-    ***REMOVED***
+        }
         var result = this._cacheGet('between', args);
         if (result === false) {
             result = this._iter(new iterresult('between', args));
             this._cacheAdd('between', result, args);
-    ***REMOVED***
+        }
         return result;
-***REMOVED***;
+    };
     /**
      * Returns the last recurrence before the given datetime instance.
      * The inc keyword defines what happens if dt is an occurrence.
@@ -2212,17 +2212,17 @@ var rrule_RRule = /** @class */ (function () {
      * @return Date or null
      */
     RRule.prototype.before = function (dt, inc) {
-        if (inc === void 0) { inc = false; ***REMOVED***
+        if (inc === void 0) { inc = false; }
         if (!src_dateutil.isValidDate(dt))
             throw new Error('Invalid date passed in to RRule.before');
-        var args = { dt: dt, inc: inc ***REMOVED***;
+        var args = { dt: dt, inc: inc };
         var result = this._cacheGet('before', args);
         if (result === false) {
             result = this._iter(new iterresult('before', args));
             this._cacheAdd('before', result, args);
-    ***REMOVED***
+        }
         return result;
-***REMOVED***;
+    };
     /**
      * Returns the first recurrence after the given datetime instance.
      * The inc keyword defines what happens if dt is an occurrence.
@@ -2230,24 +2230,24 @@ var rrule_RRule = /** @class */ (function () {
      * @return Date or null
      */
     RRule.prototype.after = function (dt, inc) {
-        if (inc === void 0) { inc = false; ***REMOVED***
+        if (inc === void 0) { inc = false; }
         if (!src_dateutil.isValidDate(dt))
             throw new Error('Invalid date passed in to RRule.after');
-        var args = { dt: dt, inc: inc ***REMOVED***;
+        var args = { dt: dt, inc: inc };
         var result = this._cacheGet('after', args);
         if (result === false) {
             result = this._iter(new iterresult('after', args));
             this._cacheAdd('after', result, args);
-    ***REMOVED***
+        }
         return result;
-***REMOVED***;
+    };
     /**
      * Returns the number of recurrences in this set. It will have go trough
      * the whole recurrence, if this hasn't been done before.
      */
     RRule.prototype.count = function () {
         return this.all().length;
-***REMOVED***;
+    };
     /**
      * Converts the rrule into its string representation
      * @see <http://www.ietf.org/rfc/rfc2445.txt>
@@ -2255,24 +2255,24 @@ var rrule_RRule = /** @class */ (function () {
      */
     RRule.prototype.toString = function () {
         return optionsToString(this.origOptions);
-***REMOVED***;
+    };
     /**
      * Will convert all rules described in nlp:ToText
      * to text.
      */
     RRule.prototype.toText = function (gettext, language, dateFormatter) {
         return getnlp().toText(this, gettext, language, dateFormatter);
-***REMOVED***;
+    };
     RRule.prototype.isFullyConvertibleToText = function () {
         return getnlp().isFullyConvertible(this);
-***REMOVED***;
+    };
     /**
      * @return a RRule instance with the same freq and options
      *          as this one (cache is not cloned)
      */
     RRule.prototype.clone = function () {
         return new RRule(this.origOptions);
-***REMOVED***;
+    };
     // RRule class 'constants'
     RRule.FREQUENCIES = [
         'YEARLY',
@@ -2300,7 +2300,7 @@ var rrule_RRule = /** @class */ (function () {
     RRule.parseString = parseString;
     RRule.optionsToString = optionsToString;
     return RRule;
-***REMOVED***());
+}());
 /* harmony default export */ var src_rrule = (rrule_RRule);
 
 // CONCATENATED MODULE: ./src/iterset.ts
@@ -2308,19 +2308,19 @@ var rrule_RRule = /** @class */ (function () {
 
 
 function iterSet(iterResult, _rrule, _exrule, _rdate, _exdate, tzid) {
-    var _exdateHash = {***REMOVED***;
+    var _exdateHash = {};
     var _accept = iterResult.accept;
     function evalExdate(after, before) {
         _exrule.forEach(function (rrule) {
             rrule.between(after, before, true).forEach(function (date) {
                 _exdateHash[Number(date)] = true;
-        ***REMOVED***);
-    ***REMOVED***);
-***REMOVED***
+            });
+        });
+    }
     _exdate.forEach(function (date) {
         var zonedDate = new datewithzone_DateWithZone(date, tzid).rezonedDate();
         _exdateHash[Number(zonedDate)] = true;
-***REMOVED***);
+    });
     iterResult.accept = function (date) {
         var dt = Number(date);
         if (!_exdateHash[dt]) {
@@ -2328,10 +2328,10 @@ function iterSet(iterResult, _rrule, _exrule, _rdate, _exdate, tzid) {
             if (!_exdateHash[dt]) {
                 _exdateHash[dt] = true;
                 return _accept.call(this, date);
-        ***REMOVED***
-    ***REMOVED***
+            }
+        }
         return true;
-***REMOVED***;
+    };
     if (iterResult.method === 'between') {
         evalExdate(iterResult.args.after, iterResult.args.before);
         iterResult.accept = function (date) {
@@ -2339,18 +2339,18 @@ function iterSet(iterResult, _rrule, _exrule, _rdate, _exdate, tzid) {
             if (!_exdateHash[dt]) {
                 _exdateHash[dt] = true;
                 return _accept.call(this, date);
-        ***REMOVED***
+            }
             return true;
-    ***REMOVED***;
-***REMOVED***
+        };
+    }
     for (var i = 0; i < _rdate.length; i++) {
         var zonedDate = new datewithzone_DateWithZone(_rdate[i], tzid).rezonedDate();
         if (!iterResult.accept(new Date(zonedDate.getTime())))
             break;
-***REMOVED***
+    }
     _rrule.forEach(function (rrule) {
         iter(iterResult, rrule.options);
-***REMOVED***);
+    });
     var res = iterResult._result;
     src_dateutil.sort(res);
     switch (iterResult.method) {
@@ -2362,8 +2362,8 @@ function iterSet(iterResult, _rrule, _exrule, _rdate, _exdate, tzid) {
         case 'after':
         default:
             return ((res.length && res[0]) || null);
-***REMOVED***
-***REMOVED***
+    }
+}
 
 // CONCATENATED MODULE: ./src/rrulestr.ts
 
@@ -2383,7 +2383,7 @@ var rrulestr_DEFAULT_OPTIONS = {
     forceset: false,
     compatible: false,
     tzid: null
-***REMOVED***;
+};
 function parseInput(s, options) {
     var rrulevals = [];
     var rdatevals = [];
@@ -2399,20 +2399,20 @@ function parseInput(s, options) {
             case 'RRULE':
                 if (parms.length) {
                     throw new Error("unsupported RRULE parm: " + parms.join(','));
-            ***REMOVED***
+                }
                 rrulevals.push(parseString(line));
                 break;
             case 'RDATE':
                 var _b = /RDATE(?:;TZID=([^:=]+))?/i.exec(line), _ = _b[0], rdateTzid = _b[1];
                 if (rdateTzid && !tzid) {
                     tzid = rdateTzid;
-            ***REMOVED***
+                }
                 rdatevals = rdatevals.concat(parseRDate(value, parms));
                 break;
             case 'EXRULE':
                 if (parms.length) {
                     throw new Error("unsupported EXRULE parm: " + parms.join(','));
-            ***REMOVED***
+                }
                 exrulevals.push(parseString(value));
                 break;
             case 'EXDATE':
@@ -2422,8 +2422,8 @@ function parseInput(s, options) {
                 break;
             default:
                 throw new Error('unsupported property: ' + name);
-    ***REMOVED***
-***REMOVED***);
+        }
+    });
     return {
         dtstart: dtstart,
         tzid: tzid,
@@ -2431,15 +2431,15 @@ function parseInput(s, options) {
         rdatevals: rdatevals,
         exrulevals: exrulevals,
         exdatevals: exdatevals
-***REMOVED***;
-***REMOVED***
+    };
+}
 function buildRule(s, options) {
     var _a = parseInput(s, options), rrulevals = _a.rrulevals, rdatevals = _a.rdatevals, exrulevals = _a.exrulevals, exdatevals = _a.exdatevals, dtstart = _a.dtstart, tzid = _a.tzid;
     var noCache = options.cache === false;
     if (options.compatible) {
         options.forceset = true;
         options.unfold = true;
-***REMOVED***
+    }
     if (options.forceset ||
         rrulevals.length > 1 ||
         rdatevals.length ||
@@ -2450,31 +2450,31 @@ function buildRule(s, options) {
         rset_1.tzid(tzid || undefined);
         rrulevals.forEach(function (val) {
             rset_1.rrule(new src_rrule(groomRruleOptions(val, dtstart, tzid), noCache));
-    ***REMOVED***);
+        });
         rdatevals.forEach(function (date) {
             rset_1.rdate(date);
-    ***REMOVED***);
+        });
         exrulevals.forEach(function (val) {
             rset_1.exrule(new src_rrule(groomRruleOptions(val, dtstart, tzid), noCache));
-    ***REMOVED***);
+        });
         exdatevals.forEach(function (date) {
             rset_1.exdate(date);
-    ***REMOVED***);
+        });
         if (options.compatible && options.dtstart)
             rset_1.rdate(dtstart);
         return rset_1;
-***REMOVED***
-    var val = rrulevals[0] || {***REMOVED***;
+    }
+    var val = rrulevals[0] || {};
     return new src_rrule(groomRruleOptions(val, val.dtstart || options.dtstart || dtstart, val.tzid || options.tzid || tzid), noCache);
-***REMOVED***
+}
 function rrulestr(s, options) {
-    if (options === void 0) { options = {***REMOVED***; ***REMOVED***
+    if (options === void 0) { options = {}; }
     return buildRule(s, rrulestr_initializeOptions(options));
-***REMOVED***
+}
 function groomRruleOptions(val, dtstart, tzid) {
-    return __assign({***REMOVED***, val, { dtstart: dtstart,
-        tzid: tzid ***REMOVED***);
-***REMOVED***
+    return __assign({}, val, { dtstart: dtstart,
+        tzid: tzid });
+}
 function rrulestr_initializeOptions(options) {
     var invalid = [];
     var keys = Object.keys(options);
@@ -2482,31 +2482,31 @@ function rrulestr_initializeOptions(options) {
     keys.forEach(function (key) {
         if (!Object(helpers["c" /* includes */])(defaultKeys, key))
             invalid.push(key);
-***REMOVED***);
+    });
     if (invalid.length) {
         throw new Error('Invalid options: ' + invalid.join(', '));
-***REMOVED***
-    var initializedOptions = __assign({***REMOVED***, options);
+    }
+    var initializedOptions = __assign({}, options);
     // Merge in default options
     defaultKeys.forEach(function (key) {
         if (!Object(helpers["c" /* includes */])(keys, key))
             initializedOptions[key] = rrulestr_DEFAULT_OPTIONS[key];
-***REMOVED***);
+    });
     return initializedOptions;
-***REMOVED***
+}
 function extractName(line) {
     if (line.indexOf(':') === -1) {
         return {
             name: 'RRULE',
             value: line
-    ***REMOVED***;
-***REMOVED***
+        };
+    }
     var _a = Object(helpers["l" /* split */])(line, ':', 1), name = _a[0], value = _a[1];
     return {
         name: name,
         value: value
-***REMOVED***;
-***REMOVED***
+    };
+}
 function breakDownLine(line) {
     var _a = extractName(line), name = _a.name, value = _a.value;
     var parms = name.split(';');
@@ -2516,10 +2516,10 @@ function breakDownLine(line) {
         name: parms[0].toUpperCase(),
         parms: parms.slice(1),
         value: value
-***REMOVED***;
-***REMOVED***
+    };
+}
 function splitIntoLines(s, unfold) {
-    if (unfold === void 0) { unfold = false; ***REMOVED***
+    if (unfold === void 0) { unfold = false; }
     s = s && s.trim();
     if (!s)
         throw new Error('Invalid empty string');
@@ -2527,38 +2527,38 @@ function splitIntoLines(s, unfold) {
     // Go head to http://www.ietf.org/rfc/rfc2445.txt
     if (!unfold) {
         return s.split(/\s/);
-***REMOVED***
+    }
     var lines = s.split('\n');
     var i = 0;
     while (i < lines.length) {
-***REMOVED*** TODO
+        // TODO
         var line = (lines[i] = lines[i].replace(/\s+$/g, ''));
         if (!line) {
             lines.splice(i, 1);
-    ***REMOVED***
+        }
         else if (i > 0 && line[0] === ' ') {
             lines[i - 1] += line.slice(1);
             lines.splice(i, 1);
-    ***REMOVED***
+        }
         else {
             i += 1;
-    ***REMOVED***
-***REMOVED***
+        }
+    }
     return lines;
-***REMOVED***
+}
 function validateDateParm(parms) {
     parms.forEach(function (parm) {
         if (!/(VALUE=DATE(-TIME)?)|(TZID=)/.test(parm)) {
             throw new Error('unsupported RDATE/EXDATE parm: ' + parm);
-    ***REMOVED***
-***REMOVED***);
-***REMOVED***
+        }
+    });
+}
 function parseRDate(rdateval, parms) {
     validateDateParm(parms);
     return rdateval
         .split(',')
-        .map(function (datestr) { return src_dateutil.untilStringToDate(datestr); ***REMOVED***);
-***REMOVED***
+        .map(function (datestr) { return src_dateutil.untilStringToDate(datestr); });
+}
 
 // CONCATENATED MODULE: ./src/rruleset.ts
 
@@ -2573,29 +2573,29 @@ function createGetterSetter(fieldName) {
     return function (field) {
         if (field !== undefined) {
             _this["_" + fieldName] = field;
-    ***REMOVED***
+        }
         if (_this["_" + fieldName] !== undefined) {
             return _this["_" + fieldName];
-    ***REMOVED***
+        }
         for (var i = 0; i < _this._rrule.length; i++) {
             var field_1 = _this._rrule[i].origOptions[fieldName];
             if (field_1) {
                 return field_1;
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***;
-***REMOVED***
+            }
+        }
+    };
+}
 var rruleset_RRuleSet = /** @class */ (function (_super) {
     __extends(RRuleSet, _super);
     /**
      *
-     * @param {Boolean?***REMOVED*** noCache
+     * @param {Boolean?} noCache
      *  The same stratagy as RRule on cache, default to false
      * @constructor
      */
     function RRuleSet(noCache) {
-        if (noCache === void 0) { noCache = false; ***REMOVED***
-        var _this = _super.call(this, {***REMOVED***, noCache) || this;
+        if (noCache === void 0) { noCache = false; }
+        var _this = _super.call(this, {}, noCache) || this;
         _this.dtstart = createGetterSetter.apply(_this, ['dtstart']);
         _this.tzid = createGetterSetter.apply(_this, ['tzid']);
         _this._rrule = [];
@@ -2603,95 +2603,95 @@ var rruleset_RRuleSet = /** @class */ (function (_super) {
         _this._exrule = [];
         _this._exdate = [];
         return _this;
-***REMOVED***
+    }
     RRuleSet.prototype._iter = function (iterResult) {
         return iterSet(iterResult, this._rrule, this._exrule, this._rdate, this._exdate, this.tzid());
-***REMOVED***;
+    };
     /**
      * Adds an RRule to the set
      *
-     * @param {RRule***REMOVED***
+     * @param {RRule}
      */
     RRuleSet.prototype.rrule = function (rrule) {
         _addRule(rrule, this._rrule);
-***REMOVED***;
+    };
     /**
      * Adds an EXRULE to the set
      *
-     * @param {RRule***REMOVED***
+     * @param {RRule}
      */
     RRuleSet.prototype.exrule = function (rrule) {
         _addRule(rrule, this._exrule);
-***REMOVED***;
+    };
     /**
      * Adds an RDate to the set
      *
-     * @param {Date***REMOVED***
+     * @param {Date}
      */
     RRuleSet.prototype.rdate = function (date) {
         _addDate(date, this._rdate);
-***REMOVED***;
+    };
     /**
      * Adds an EXDATE to the set
      *
-     * @param {Date***REMOVED***
+     * @param {Date}
      */
     RRuleSet.prototype.exdate = function (date) {
         _addDate(date, this._exdate);
-***REMOVED***;
+    };
     /**
      * Get list of included rrules in this recurrence set.
      *
      * @return List of rrules
      */
     RRuleSet.prototype.rrules = function () {
-        return this._rrule.map(function (e) { return rrulestr(e.toString()); ***REMOVED***);
-***REMOVED***;
+        return this._rrule.map(function (e) { return rrulestr(e.toString()); });
+    };
     /**
      * Get list of excluded rrules in this recurrence set.
      *
      * @return List of exrules
      */
     RRuleSet.prototype.exrules = function () {
-        return this._exrule.map(function (e) { return rrulestr(e.toString()); ***REMOVED***);
-***REMOVED***;
+        return this._exrule.map(function (e) { return rrulestr(e.toString()); });
+    };
     /**
      * Get list of included datetimes in this recurrence set.
      *
      * @return List of rdates
      */
     RRuleSet.prototype.rdates = function () {
-        return this._rdate.map(function (e) { return new Date(e.getTime()); ***REMOVED***);
-***REMOVED***;
+        return this._rdate.map(function (e) { return new Date(e.getTime()); });
+    };
     /**
      * Get list of included datetimes in this recurrence set.
      *
      * @return List of exdates
      */
     RRuleSet.prototype.exdates = function () {
-        return this._exdate.map(function (e) { return new Date(e.getTime()); ***REMOVED***);
-***REMOVED***;
+        return this._exdate.map(function (e) { return new Date(e.getTime()); });
+    };
     RRuleSet.prototype.valueOf = function () {
         var result = [];
         if (!this._rrule.length && this._dtstart) {
-            result = result.concat(optionsToString({ dtstart: this._dtstart ***REMOVED***));
-    ***REMOVED***
+            result = result.concat(optionsToString({ dtstart: this._dtstart }));
+        }
         this._rrule.forEach(function (rrule) {
             result = result.concat(rrule.toString().split('\n'));
-    ***REMOVED***);
+        });
         this._exrule.forEach(function (exrule) {
             result = result.concat(exrule.toString().split('\n')
-                .map(function (line) { return line.replace(/^RRULE:/, 'EXRULE:'); ***REMOVED***)
-                .filter(function (line) { return !/^DTSTART/.test(line); ***REMOVED***));
-    ***REMOVED***);
+                .map(function (line) { return line.replace(/^RRULE:/, 'EXRULE:'); })
+                .filter(function (line) { return !/^DTSTART/.test(line); }));
+        });
         if (this._rdate.length) {
             result.push(rdatesToString('RDATE', this._rdate, this.tzid()));
-    ***REMOVED***
+        }
         if (this._exdate.length) {
             result.push(rdatesToString('EXDATE', this._exdate, this.tzid()));
-    ***REMOVED***
+        }
         return result;
-***REMOVED***;
+    };
     /**
      * to generate recurrence field such as:
      *   DTSTART:19970902T010000Z
@@ -2700,53 +2700,53 @@ var rruleset_RRuleSet = /** @class */ (function (_super) {
      */
     RRuleSet.prototype.toString = function () {
         return this.valueOf().join('\n');
-***REMOVED***;
+    };
     /**
      * Create a new RRuleSet Object completely base on current instance
      */
     RRuleSet.prototype.clone = function () {
         var rrs = new RRuleSet(!!this._cache);
-        this._rrule.forEach(function (rule) { return rrs.rrule(rule.clone()); ***REMOVED***);
-        this._exrule.forEach(function (rule) { return rrs.exrule(rule.clone()); ***REMOVED***);
-        this._rdate.forEach(function (date) { return rrs.rdate(new Date(date.getTime())); ***REMOVED***);
-        this._exdate.forEach(function (date) { return rrs.exdate(new Date(date.getTime())); ***REMOVED***);
+        this._rrule.forEach(function (rule) { return rrs.rrule(rule.clone()); });
+        this._exrule.forEach(function (rule) { return rrs.exrule(rule.clone()); });
+        this._rdate.forEach(function (date) { return rrs.rdate(new Date(date.getTime())); });
+        this._exdate.forEach(function (date) { return rrs.exdate(new Date(date.getTime())); });
         return rrs;
-***REMOVED***;
+    };
     return RRuleSet;
-***REMOVED***(src_rrule));
+}(src_rrule));
 /* harmony default export */ var rruleset = (rruleset_RRuleSet);
 function _addRule(rrule, collection) {
     if (!(rrule instanceof src_rrule)) {
         throw new TypeError(String(rrule) + ' is not RRule instance');
-***REMOVED***
+    }
     if (!Object(helpers["c" /* includes */])(collection.map(String), String(rrule))) {
         collection.push(rrule);
-***REMOVED***
-***REMOVED***
+    }
+}
 function _addDate(date, collection) {
     if (!(date instanceof Date)) {
         throw new TypeError(String(date) + ' is not Date instance');
-***REMOVED***
+    }
     if (!Object(helpers["c" /* includes */])(collection.map(Number), Number(date))) {
         collection.push(date);
         src_dateutil.sort(collection);
-***REMOVED***
-***REMOVED***
+    }
+}
 function rdatesToString(param, rdates, tzid) {
     var isUTC = !tzid || tzid.toUpperCase() === 'UTC';
     var header = isUTC ? param + ":" : param + ";TZID=" + tzid + ":";
     var dateString = rdates
-        .map(function (rdate) { return src_dateutil.timeToUntilString(rdate.valueOf(), isUTC); ***REMOVED***)
+        .map(function (rdate) { return src_dateutil.timeToUntilString(rdate.valueOf(), isUTC); })
         .join(',');
     return "" + header + dateString;
-***REMOVED***
+}
 
 // CONCATENATED MODULE: ./src/index.ts
-/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "Frequency", function() { return Frequency; ***REMOVED***);
-/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "Weekday", function() { return Weekday; ***REMOVED***);
-/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "RRule", function() { return src_rrule; ***REMOVED***);
-/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "RRuleSet", function() { return rruleset; ***REMOVED***);
-/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "rrulestr", function() { return rrulestr; ***REMOVED***);
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "Frequency", function() { return Frequency; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "Weekday", function() { return Weekday; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "RRule", function() { return src_rrule; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "RRuleSet", function() { return rruleset; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "rrulestr", function() { return rrulestr; });
 /*!
  * rrule.js - Library for working with recurrence rules for calendar dates.
  * https://github.com/jakubroztocil/rrule
@@ -2774,13 +2774,13 @@ function rdatesToString(param, rdates, tzid) {
 /* harmony default export */ var src = __webpack_exports__["default"] = (src_rrule);
 
 
-/***/ ***REMOVED***),
+/***/ }),
 /* 2 */
 /***/ (function(module, exports) {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE__2__;
 
-/***/ ***REMOVED***),
+/***/ }),
 /* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2844,8 +2844,8 @@ var ENGLISH = {
         'november': /^nov(ember)?/i,
         'december': /^dec(ember)?/i,
         'comma': /^(,\s*|(and|or)\s*)+/i
-***REMOVED***
-***REMOVED***;
+    }
+};
 /* harmony default export */ var i18n = (ENGLISH);
 
 // EXTERNAL MODULE: ./src/index.ts + 23 modules
@@ -2866,22 +2866,22 @@ var helpers = __webpack_require__(0);
  */
 var contains = function (arr, val) {
     return arr.indexOf(val) !== -1;
-***REMOVED***;
-var defaultGetText = function (id) { return id.toString(); ***REMOVED***;
-var defaultDateFormatter = function (year, month, day) { return month + " " + day + ", " + year; ***REMOVED***;
+};
+var defaultGetText = function (id) { return id.toString(); };
+var defaultDateFormatter = function (year, month, day) { return month + " " + day + ", " + year; };
 /**
  *
- * @param {RRule***REMOVED*** rrule
+ * @param {RRule} rrule
  * Optional:
- * @param {Function***REMOVED*** gettext function
- * @param {Object***REMOVED*** language definition
+ * @param {Function} gettext function
+ * @param {Object} language definition
  * @constructor
  */
 var totext_ToText = /** @class */ (function () {
     function ToText(rrule, gettext, language, dateFormatter) {
-        if (gettext === void 0) { gettext = defaultGetText; ***REMOVED***
-        if (language === void 0) { language = i18n; ***REMOVED***
-        if (dateFormatter === void 0) { dateFormatter = defaultDateFormatter; ***REMOVED***
+        if (gettext === void 0) { gettext = defaultGetText; }
+        if (language === void 0) { language = i18n; }
+        if (dateFormatter === void 0) { dateFormatter = defaultDateFormatter; }
         this.text = [];
         this.language = language || i18n;
         this.gettext = gettext;
@@ -2892,13 +2892,13 @@ var totext_ToText = /** @class */ (function () {
         if (this.origOptions.bymonthday) {
             var bymonthday = [].concat(this.options.bymonthday);
             var bynmonthday = [].concat(this.options.bynmonthday);
-            bymonthday.sort(function (a, b) { return a - b; ***REMOVED***);
-            bynmonthday.sort(function (a, b) { return b - a; ***REMOVED***);
-    ***REMOVED*** 1, 2, 3, .., -5, -4, -3, ..
+            bymonthday.sort(function (a, b) { return a - b; });
+            bynmonthday.sort(function (a, b) { return b - a; });
+            // 1, 2, 3, .., -5, -4, -3, ..
             this.bymonthday = bymonthday.concat(bynmonthday);
             if (!this.bymonthday.length)
                 this.bymonthday = null;
-    ***REMOVED***
+        }
         if (Object(helpers["f" /* isPresent */])(this.origOptions.byweekday)) {
             var byweekday = !Object(helpers["d" /* isArray */])(this.origOptions.byweekday)
                 ? [this.origOptions.byweekday]
@@ -2907,10 +2907,10 @@ var totext_ToText = /** @class */ (function () {
             this.byweekday = {
                 allWeeks: byweekday.filter(function (weekday) {
                     return !weekday.n;
-            ***REMOVED***),
+                }),
                 someWeeks: byweekday.filter(function (weekday) {
                     return Boolean(weekday.n);
-            ***REMOVED***),
+                }),
                 isWeekdays: days.indexOf('MO') !== -1 &&
                     days.indexOf('TU') !== -1 &&
                     days.indexOf('WE') !== -1 &&
@@ -2925,25 +2925,25 @@ var totext_ToText = /** @class */ (function () {
                     days.indexOf('FR') !== -1 &&
                     days.indexOf('SA') !== -1 &&
                     days.indexOf('SU') !== -1
-        ***REMOVED***;
+            };
             var sortWeekDays = function (a, b) {
                 return a.weekday - b.weekday;
-        ***REMOVED***;
+            };
             this.byweekday.allWeeks.sort(sortWeekDays);
             this.byweekday.someWeeks.sort(sortWeekDays);
             if (!this.byweekday.allWeeks.length)
                 this.byweekday.allWeeks = null;
             if (!this.byweekday.someWeeks.length)
                 this.byweekday.someWeeks = null;
-    ***REMOVED***
+        }
         else {
             this.byweekday = null;
-    ***REMOVED***
-***REMOVED***
+        }
+    }
     /**
      * Test whether the rrule can be fully converted to text.
-     * @param {RRule***REMOVED*** rrule
-     * @return {Boolean***REMOVED***
+     * @param {RRule} rrule
+     * @return {Boolean}
      */
     ToText.isFullyConvertible = function (rrule) {
         var canConvert = true;
@@ -2956,46 +2956,46 @@ var totext_ToText = /** @class */ (function () {
                 return true;
             if (!contains(ToText.IMPLEMENTED[rrule.options.freq], key))
                 return false;
-    ***REMOVED***
+        }
         return canConvert;
-***REMOVED***;
+    };
     ToText.prototype.isFullyConvertible = function () {
         return ToText.isFullyConvertible(this.rrule);
-***REMOVED***;
+    };
     /**
      * Perform the conversion. Only some of the frequencies are supported.
      * If some of the rrule's options aren't supported, they'll
      * be omitted from the output an "(~ approximate)" will be appended.
-     * @return {****REMOVED***
+     * @return {*}
      */
     ToText.prototype.toString = function () {
         var gettext = this.gettext;
         if (!(this.options.freq in ToText.IMPLEMENTED)) {
             return gettext('RRule error: Unable to fully convert this rrule to text');
-    ***REMOVED***
+        }
         this.text = [gettext('every')];
-***REMOVED*** @ts-ignore
+        // @ts-ignore
         this[src["default"].FREQUENCIES[this.options.freq]]();
         if (this.options.until) {
             this.add(gettext('until'));
             var until = this.options.until;
             this.add(this.dateFormatter(until.getUTCFullYear(), this.language.monthNames[until.getUTCMonth()], until.getUTCDate()));
-    ***REMOVED***
+        }
         else if (this.options.count) {
             this.add(gettext('for'))
                 .add(this.options.count.toString())
                 .add(this.plural(this.options.count) ? gettext('times') : gettext('time'));
-    ***REMOVED***
+        }
         if (!this.isFullyConvertible())
             this.add(gettext('(~ approximate)'));
         return this.text.join('');
-***REMOVED***;
+    };
     ToText.prototype.HOURLY = function () {
         var gettext = this.gettext;
         if (this.options.interval !== 1)
             this.add(this.options.interval.toString());
         this.add(this.plural(this.options.interval) ? gettext('hours') : gettext('hour'));
-***REMOVED***;
+    };
     ToText.prototype.MINUTELY = function () {
         var gettext = this.gettext;
         if (this.options.interval !== 1)
@@ -3003,7 +3003,7 @@ var totext_ToText = /** @class */ (function () {
         this.add(this.plural(this.options.interval)
             ? gettext('minutes')
             : gettext('minutes'));
-***REMOVED***;
+    };
     ToText.prototype.DAILY = function () {
         var gettext = this.gettext;
         if (this.options.interval !== 1)
@@ -3012,57 +3012,57 @@ var totext_ToText = /** @class */ (function () {
             this.add(this.plural(this.options.interval)
                 ? gettext('weekdays')
                 : gettext('weekday'));
-    ***REMOVED***
+        }
         else {
             this.add(this.plural(this.options.interval) ? gettext('days') : gettext('day'));
-    ***REMOVED***
+        }
         if (this.origOptions.bymonth) {
             this.add(gettext('in'));
             this._bymonth();
-    ***REMOVED***
+        }
         if (this.bymonthday) {
             this._bymonthday();
-    ***REMOVED***
+        }
         else if (this.byweekday) {
             this._byweekday();
-    ***REMOVED***
+        }
         else if (this.origOptions.byhour) {
             this._byhour();
-    ***REMOVED***
-***REMOVED***;
+        }
+    };
     ToText.prototype.WEEKLY = function () {
         var gettext = this.gettext;
         if (this.options.interval !== 1) {
             this.add(this.options.interval.toString()).add(this.plural(this.options.interval) ? gettext('weeks') : gettext('week'));
-    ***REMOVED***
+        }
         if (this.byweekday && this.byweekday.isWeekdays) {
             if (this.options.interval === 1) {
                 this.add(this.plural(this.options.interval)
                     ? gettext('weekdays')
                     : gettext('weekday'));
-        ***REMOVED***
+            }
             else {
                 this.add(gettext('on')).add(gettext('weekdays'));
-        ***REMOVED***
-    ***REMOVED***
+            }
+        }
         else if (this.byweekday && this.byweekday.isEveryDay) {
             this.add(this.plural(this.options.interval) ? gettext('days') : gettext('day'));
-    ***REMOVED***
+        }
         else {
             if (this.options.interval === 1)
                 this.add(gettext('week'));
             if (this.origOptions.bymonth) {
                 this.add(gettext('in'));
                 this._bymonth();
-        ***REMOVED***
+            }
             if (this.bymonthday) {
                 this._bymonthday();
-        ***REMOVED***
+            }
             else if (this.byweekday) {
                 this._byweekday();
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***;
+            }
+        }
+    };
     ToText.prototype.MONTHLY = function () {
         var gettext = this.gettext;
         if (this.origOptions.bymonth) {
@@ -3070,65 +3070,65 @@ var totext_ToText = /** @class */ (function () {
                 this.add(this.options.interval.toString()).add(gettext('months'));
                 if (this.plural(this.options.interval))
                     this.add(gettext('in'));
-        ***REMOVED***
+            }
             else {
-        ***REMOVED*** this.add(gettext('MONTH'))
-        ***REMOVED***
+                // this.add(gettext('MONTH'))
+            }
             this._bymonth();
-    ***REMOVED***
+        }
         else {
             if (this.options.interval !== 1)
                 this.add(this.options.interval.toString());
             this.add(this.plural(this.options.interval)
                 ? gettext('months')
                 : gettext('month'));
-    ***REMOVED***
+        }
         if (this.bymonthday) {
             this._bymonthday();
-    ***REMOVED***
+        }
         else if (this.byweekday && this.byweekday.isWeekdays) {
             this.add(gettext('on')).add(gettext('weekdays'));
-    ***REMOVED***
+        }
         else if (this.byweekday) {
             this._byweekday();
-    ***REMOVED***
-***REMOVED***;
+        }
+    };
     ToText.prototype.YEARLY = function () {
         var gettext = this.gettext;
         if (this.origOptions.bymonth) {
             if (this.options.interval !== 1) {
                 this.add(this.options.interval.toString());
                 this.add(gettext('years'));
-        ***REMOVED***
+            }
             else {
-        ***REMOVED*** this.add(gettext('YEAR'))
-        ***REMOVED***
+                // this.add(gettext('YEAR'))
+            }
             this._bymonth();
-    ***REMOVED***
+        }
         else {
             if (this.options.interval !== 1)
                 this.add(this.options.interval.toString());
             this.add(this.plural(this.options.interval) ? gettext('years') : gettext('year'));
-    ***REMOVED***
+        }
         if (this.bymonthday) {
             this._bymonthday();
-    ***REMOVED***
+        }
         else if (this.byweekday) {
             this._byweekday();
-    ***REMOVED***
+        }
         if (this.options.byyearday) {
             this.add(gettext('on the'))
                 .add(this.list(this.options.byyearday, this.nth, gettext('and')))
                 .add(gettext('day'));
-    ***REMOVED***
+        }
         if (this.options.byweekno) {
             this.add(gettext('in'))
                 .add(this.plural(this.options.byweekno.length)
                 ? gettext('weeks')
                 : gettext('week'))
                 .add(this.list(this.options.byweekno, undefined, gettext('and')));
-    ***REMOVED***
-***REMOVED***;
+        }
+    };
     ToText.prototype._bymonthday = function () {
         var gettext = this.gettext;
         if (this.byweekday && this.byweekday.allWeeks) {
@@ -3136,30 +3136,30 @@ var totext_ToText = /** @class */ (function () {
                 .add(this.list(this.byweekday.allWeeks, this.weekdaytext, gettext('or')))
                 .add(gettext('the'))
                 .add(this.list(this.bymonthday, this.nth, gettext('or')));
-    ***REMOVED***
+        }
         else {
             this.add(gettext('on the')).add(this.list(this.bymonthday, this.nth, gettext('and')));
-    ***REMOVED***
-***REMOVED*** this.add(gettext('DAY'))
-***REMOVED***;
+        }
+        // this.add(gettext('DAY'))
+    };
     ToText.prototype._byweekday = function () {
         var gettext = this.gettext;
         if (this.byweekday.allWeeks && !this.byweekday.isWeekdays) {
             this.add(gettext('on')).add(this.list(this.byweekday.allWeeks, this.weekdaytext));
-    ***REMOVED***
+        }
         if (this.byweekday.someWeeks) {
             if (this.byweekday.allWeeks)
                 this.add(gettext('and'));
             this.add(gettext('on the')).add(this.list(this.byweekday.someWeeks, this.weekdaytext, gettext('and')));
-    ***REMOVED***
-***REMOVED***;
+        }
+    };
     ToText.prototype._byhour = function () {
         var gettext = this.gettext;
         this.add(gettext('at')).add(this.list(this.origOptions.byhour, undefined, gettext('and')));
-***REMOVED***;
+    };
     ToText.prototype._bymonth = function () {
         this.add(this.list(this.options.bymonth, this.monthtext, this.gettext('and')));
-***REMOVED***;
+    };
     ToText.prototype.nth = function (n) {
         n = parseInt(n.toString(), 10);
         var nth;
@@ -3184,62 +3184,62 @@ var totext_ToText = /** @class */ (function () {
                 break;
             default:
                 nth = npos + gettext('th');
-    ***REMOVED***
+        }
         return n < 0 ? nth + ' ' + gettext('last') : nth;
-***REMOVED***;
+    };
     ToText.prototype.monthtext = function (m) {
         return this.language.monthNames[m - 1];
-***REMOVED***;
+    };
     ToText.prototype.weekdaytext = function (wday) {
         var weekday = Object(helpers["e" /* isNumber */])(wday) ? (wday + 1) % 7 : wday.getJsWeekday();
         return ((wday.n ? this.nth(wday.n) + ' ' : '') + this.language.dayNames[weekday]);
-***REMOVED***;
+    };
     ToText.prototype.plural = function (n) {
         return n % 100 !== 1;
-***REMOVED***;
+    };
     ToText.prototype.add = function (s) {
         this.text.push(' ');
         this.text.push(s);
         return this;
-***REMOVED***;
+    };
     ToText.prototype.list = function (arr, callback, finalDelim, delim) {
-        if (delim === void 0) { delim = ','; ***REMOVED***
+        if (delim === void 0) { delim = ','; }
         if (!Object(helpers["d" /* isArray */])(arr)) {
             arr = [arr];
-    ***REMOVED***
+        }
         var delimJoin = function (array, delimiter, finalDelimiter) {
             var list = '';
             for (var i = 0; i < array.length; i++) {
                 if (i !== 0) {
                     if (i === array.length - 1) {
                         list += ' ' + finalDelimiter + ' ';
-                ***REMOVED***
+                    }
                     else {
                         list += delimiter + ' ';
-                ***REMOVED***
-            ***REMOVED***
+                    }
+                }
                 list += array[i];
-        ***REMOVED***
+            }
             return list;
-    ***REMOVED***;
+        };
         callback =
             callback ||
                 function (o) {
                     return o.toString();
-            ***REMOVED***;
+                };
         var self = this;
         var realCallback = function (arg) {
             return callback && callback.call(self, arg);
-    ***REMOVED***;
+        };
         if (finalDelim) {
             return delimJoin(arr.map(realCallback), delim, finalDelim);
-    ***REMOVED***
+        }
         else {
             return arr.map(realCallback).join(delim + ' ');
-    ***REMOVED***
-***REMOVED***;
+        }
+    };
     return ToText;
-***REMOVED***());
+}());
 /* harmony default export */ var totext = (totext_ToText);
 
 // CONCATENATED MODULE: ./src/nlp/parsetext.ts
@@ -3252,15 +3252,15 @@ var Parser = /** @class */ (function () {
     function Parser(rules) {
         this.done = true;
         this.rules = rules;
-***REMOVED***
+    }
     Parser.prototype.start = function (text) {
         this.text = text;
         this.done = false;
         return this.nextSymbol();
-***REMOVED***;
+    };
     Parser.prototype.isDone = function () {
         return this.done && this.symbol === null;
-***REMOVED***;
+    };
     Parser.prototype.nextSymbol = function () {
         var best;
         var bestSymbol;
@@ -3279,59 +3279,59 @@ var Parser = /** @class */ (function () {
                     if (best === null || match[0].length > best[0].length) {
                         best = match;
                         bestSymbol = name_1;
-                ***REMOVED***
-            ***REMOVED***
-        ***REMOVED***
+                    }
+                }
+            }
             if (best != null) {
                 this.text = this.text.substr(best[0].length);
                 if (this.text === '')
                     this.done = true;
-        ***REMOVED***
+            }
             if (best == null) {
                 this.done = true;
                 this.symbol = null;
                 this.value = null;
                 return;
-        ***REMOVED***
-    ***REMOVED*** @ts-ignore
-    ***REMOVED*** while (bestSymbol === 'SKIP');
-***REMOVED*** @ts-ignore
+            }
+            // @ts-ignore
+        } while (bestSymbol === 'SKIP');
+        // @ts-ignore
         this.symbol = bestSymbol;
         this.value = best;
         return true;
-***REMOVED***;
+    };
     Parser.prototype.accept = function (name) {
         if (this.symbol === name) {
             if (this.value) {
                 var v = this.value;
                 this.nextSymbol();
                 return v;
-        ***REMOVED***
+            }
             this.nextSymbol();
             return true;
-    ***REMOVED***
+        }
         return false;
-***REMOVED***;
+    };
     Parser.prototype.acceptNumber = function () {
         return this.accept('number');
-***REMOVED***;
+    };
     Parser.prototype.expect = function (name) {
         if (this.accept(name))
             return true;
         throw new Error('expected ' + name + ' but found ' + this.symbol);
-***REMOVED***;
+    };
     return Parser;
-***REMOVED***());
+}());
 function parseText(text, language) {
-    if (language === void 0) { language = i18n; ***REMOVED***
-    var options = {***REMOVED***;
+    if (language === void 0) { language = i18n; }
+    var options = {};
     var ttr = new Parser(language.tokens);
     if (!ttr.start(text))
         return null;
     S();
     return options;
     function S() {
-***REMOVED*** every [n]
+        // every [n]
         ttr.expect('every');
         var n = ttr.acceptNumber();
         if (n)
@@ -3344,10 +3344,10 @@ function parseText(text, language) {
                 if (ttr.nextSymbol()) {
                     AT();
                     F();
-            ***REMOVED***
+                }
                 break;
-    ***REMOVED*** FIXME Note: every 2 weekdays != every two weeks on weekdays.
-    ***REMOVED*** DAILY on weekdays is not a valid rule
+            // FIXME Note: every 2 weekdays != every two weeks on weekdays.
+            // DAILY on weekdays is not a valid rule
             case 'weekday(s)':
                 options.freq = src["default"].WEEKLY;
                 options.byweekday = [
@@ -3365,35 +3365,35 @@ function parseText(text, language) {
                 if (ttr.nextSymbol()) {
                     ON();
                     F();
-            ***REMOVED***
+                }
                 break;
             case 'hour(s)':
                 options.freq = src["default"].HOURLY;
                 if (ttr.nextSymbol()) {
                     ON();
                     F();
-            ***REMOVED***
+                }
                 break;
             case 'minute(s)':
                 options.freq = src["default"].MINUTELY;
                 if (ttr.nextSymbol()) {
                     ON();
                     F();
-            ***REMOVED***
+                }
                 break;
             case 'month(s)':
                 options.freq = src["default"].MONTHLY;
                 if (ttr.nextSymbol()) {
                     ON();
                     F();
-            ***REMOVED***
+                }
                 break;
             case 'year(s)':
                 options.freq = src["default"].YEARLY;
                 if (ttr.nextSymbol()) {
                     ON();
                     F();
-            ***REMOVED***
+                }
                 break;
             case 'monday':
             case 'tuesday':
@@ -3407,18 +3407,18 @@ function parseText(text, language) {
                 options.byweekday = [src["default"][key]];
                 if (!ttr.nextSymbol())
                     return;
-        ***REMOVED*** TODO check for duplicates
+                // TODO check for duplicates
                 while (ttr.accept('comma')) {
                     if (ttr.isDone())
                         throw new Error('Unexpected end');
                     var wkd = decodeWKD();
                     if (!wkd) {
                         throw new Error('Unexpected symbol ' + ttr.symbol + ', expected weekday');
-                ***REMOVED***
-            ***REMOVED*** @ts-ignore
+                    }
+                    // @ts-ignore
                     options.byweekday.push(src["default"][wkd]);
                     ttr.nextSymbol();
-            ***REMOVED***
+                }
                 MDAYs();
                 F();
                 break;
@@ -3438,24 +3438,24 @@ function parseText(text, language) {
                 options.bymonth = [decodeM()];
                 if (!ttr.nextSymbol())
                     return;
-        ***REMOVED*** TODO check for duplicates
+                // TODO check for duplicates
                 while (ttr.accept('comma')) {
                     if (ttr.isDone())
                         throw new Error('Unexpected end');
                     var m = decodeM();
                     if (!m) {
                         throw new Error('Unexpected symbol ' + ttr.symbol + ', expected month');
-                ***REMOVED***
+                    }
                     options.bymonth.push(m);
                     ttr.nextSymbol();
-            ***REMOVED***
+                }
                 ON();
                 F();
                 break;
             default:
                 throw new Error('Unknown symbol');
-    ***REMOVED***
-***REMOVED***
+        }
+    }
     function ON() {
         var on = ttr.accept('on');
         var the = ttr.accept('the');
@@ -3465,32 +3465,32 @@ function parseText(text, language) {
             var nth = decodeNTH();
             var wkd = decodeWKD();
             var m = decodeM();
-    ***REMOVED*** nth <weekday> | <weekday>
+            // nth <weekday> | <weekday>
             if (nth) {
-        ***REMOVED*** ttr.nextSymbol()
+                // ttr.nextSymbol()
                 if (wkd) {
                     ttr.nextSymbol();
                     if (!options.byweekday)
                         options.byweekday = [];
-            ***REMOVED*** @ts-ignore
+                    // @ts-ignore
                     options.byweekday.push(src["default"][wkd].nth(nth));
-            ***REMOVED***
+                }
                 else {
                     if (!options.bymonthday)
                         options.bymonthday = [];
-            ***REMOVED*** @ts-ignore
+                    // @ts-ignore
                     options.bymonthday.push(nth);
                     ttr.accept('day(s)');
-            ***REMOVED***
-        ***REMOVED*** <weekday>
-        ***REMOVED***
+                }
+                // <weekday>
+            }
             else if (wkd) {
                 ttr.nextSymbol();
                 if (!options.byweekday)
                     options.byweekday = [];
-        ***REMOVED*** @ts-ignore
+                // @ts-ignore
                 options.byweekday.push(src["default"][wkd]);
-        ***REMOVED***
+            }
             else if (ttr.symbol === 'weekday(s)') {
                 ttr.nextSymbol();
                 if (!options.byweekday) {
@@ -3501,35 +3501,35 @@ function parseText(text, language) {
                         src["default"].TH,
                         src["default"].FR
                     ];
-            ***REMOVED***
-        ***REMOVED***
+                }
+            }
             else if (ttr.symbol === 'week(s)') {
                 ttr.nextSymbol();
                 var n = ttr.acceptNumber();
                 if (!n) {
                     throw new Error('Unexpected symbol ' + ttr.symbol + ', expected week number');
-            ***REMOVED***
+                }
                 options.byweekno = [parseInt(n[0], 10)];
                 while (ttr.accept('comma')) {
                     n = ttr.acceptNumber();
                     if (!n) {
                         throw new Error('Unexpected symbol ' + ttr.symbol + '; expected monthday');
-                ***REMOVED***
+                    }
                     options.byweekno.push(parseInt(n[0], 10));
-            ***REMOVED***
-        ***REMOVED***
+                }
+            }
             else if (m) {
                 ttr.nextSymbol();
                 if (!options.bymonth)
                     options.bymonth = [];
-        ***REMOVED*** @ts-ignore
+                // @ts-ignore
                 options.bymonth.push(m);
-        ***REMOVED***
+            }
             else {
                 return;
-        ***REMOVED***
-    ***REMOVED*** while (ttr.accept('comma') || ttr.accept('the') || ttr.accept('on'));
-***REMOVED***
+            }
+        } while (ttr.accept('comma') || ttr.accept('the') || ttr.accept('on'));
+    }
     function AT() {
         var at = ttr.accept('at');
         if (!at)
@@ -3538,17 +3538,17 @@ function parseText(text, language) {
             var n = ttr.acceptNumber();
             if (!n) {
                 throw new Error('Unexpected symbol ' + ttr.symbol + ', expected hour');
-        ***REMOVED***
+            }
             options.byhour = [parseInt(n[0], 10)];
             while (ttr.accept('comma')) {
                 n = ttr.acceptNumber();
                 if (!n) {
                     throw new Error('Unexpected symbol ' + ttr.symbol + '; expected hour');
-            ***REMOVED***
+                }
                 options.byhour.push(parseInt(n[0], 10));
-        ***REMOVED***
-    ***REMOVED*** while (ttr.accept('comma') || ttr.accept('at'));
-***REMOVED***
+            }
+        } while (ttr.accept('comma') || ttr.accept('at'));
+    }
     function decodeM() {
         switch (ttr.symbol) {
             case 'january':
@@ -3577,8 +3577,8 @@ function parseText(text, language) {
                 return 12;
             default:
                 return false;
-    ***REMOVED***
-***REMOVED***
+        }
+    }
     function decodeWKD() {
         switch (ttr.symbol) {
             case 'monday':
@@ -3591,8 +3591,8 @@ function parseText(text, language) {
                 return ttr.symbol.substr(0, 2).toUpperCase();
             default:
                 return false;
-    ***REMOVED***
-***REMOVED***
+        }
+    }
     function decodeNTH() {
         switch (ttr.symbol) {
             case 'last':
@@ -3615,8 +3615,8 @@ function parseText(text, language) {
                 return ttr.accept('last') ? -v : v;
             default:
                 return false;
-    ***REMOVED***
-***REMOVED***
+        }
+    }
     function MDAYs() {
         ttr.accept('on');
         ttr.accept('the');
@@ -3629,31 +3629,31 @@ function parseText(text, language) {
             nth = decodeNTH();
             if (!nth) {
                 throw new Error('Unexpected symbol ' + ttr.symbol + '; expected monthday');
-        ***REMOVED***
+            }
             options.bymonthday.push(nth);
             ttr.nextSymbol();
-    ***REMOVED***
-***REMOVED***
+        }
+    }
     function F() {
         if (ttr.symbol === 'until') {
             var date = Date.parse(ttr.text);
             if (!date)
                 throw new Error('Cannot parse until date:' + ttr.text);
             options.until = new Date(date);
-    ***REMOVED***
+        }
         else if (ttr.accept('for')) {
             options.count = parseInt(ttr.value[0], 10);
             ttr.expect('number');
-    ***REMOVED*** ttr.expect('times')
-    ***REMOVED***
-***REMOVED***
-***REMOVED***
+            // ttr.expect('times')
+        }
+    }
+}
 
 // CONCATENATED MODULE: ./src/nlp/index.ts
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fromText", function() { return fromText; ***REMOVED***);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isFullyConvertible", function() { return isFullyConvertible; ***REMOVED***);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toText", function() { return toText; ***REMOVED***);
-/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "parseText", function() { return parseText; ***REMOVED***);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fromText", function() { return fromText; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isFullyConvertible", function() { return isFullyConvertible; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toText", function() { return toText; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "parseText", function() { return parseText; });
 
 
 
@@ -3744,13 +3744,13 @@ function parseText(text, language) {
  *
  * [yearday]: first, 1., 2., 1st, 2nd, second, ... 366th, last day, 2nd last day, ..
  *
- * @param {String***REMOVED*** text
- * @return {Object, Boolean***REMOVED*** the rule, or null.
+ * @param {String} text
+ * @return {Object, Boolean} the rule, or null.
  */
 var fromText = function (text, language) {
-    if (language === void 0) { language = i18n; ***REMOVED***
+    if (language === void 0) { language = i18n; }
     return new src["default"](parseText(text, language) || undefined);
-***REMOVED***;
+};
 var common = [
     'count',
     'until',
@@ -3771,12 +3771,12 @@ totext.IMPLEMENTED[src["default"].YEARLY] = ['byweekno', 'byyearday'].concat(com
 // =============================================================================
 var toText = function (rrule, gettext, language, dateFormatter) {
     return new totext(rrule, gettext, language, dateFormatter).toString();
-***REMOVED***;
+};
 var isFullyConvertible = totext.isFullyConvertible;
 
 
 
-/***/ ***REMOVED***)
+/***/ })
 /******/ ]);
-***REMOVED***);
+});
 //# sourceMappingURL=rrule.js.map

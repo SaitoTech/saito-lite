@@ -1,15 +1,15 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {***REMOVED***, global.FullCalendarLocales.hi = factory()));
-***REMOVED***(this, function () { 'use strict';
+    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.hi = factory()));
+}(this, function () { 'use strict';
 
     var hi = {
         code: "hi",
         week: {
             dow: 0,
             doy: 6 // The week that contains Jan 1st is the first week of the year.
-    ***REMOVED***,
+        },
         buttonText: {
             prev: "पिछला",
             next: "अगला",
@@ -18,15 +18,15 @@
             week: "सप्ताह",
             day: "दिन",
             list: "कार्यसूची"
-    ***REMOVED***,
+        },
         weekLabel: "हफ्ता",
         allDayText: "सभी दिन",
         eventLimitText: function (n) {
             return "+अधिक " + n;
-    ***REMOVED***,
+        },
         noEventsMessage: "कोई घटनाओं को प्रदर्शित करने के लिए"
-***REMOVED***;
+    };
 
     return hi;
 
-***REMOVED***));
+}));

@@ -12,9 +12,9 @@ module.exports = EmailList = {
       data.email.emails[data.email.emails.active].forEach(tx => {
         document.querySelector('.email-list').innerHTML +=
             EmailListRowTemplate(tx, data.email.addrController.returnAddressHTML(tx.transaction.from[0].add));
-  ***REMOVED***);
+      });
 
-***REMOVED***,
+    },
 
     attachEvents(app, data) {
 
@@ -22,12 +22,12 @@ module.exports = EmailList = {
 
         Array.from(document.getElementsByClassName('email-message')).forEach(message => {
             message.onclick = (e) => {
-                if (e.srcElement.nodeName == "INPUT") { return; ***REMOVED***
+                if (e.srcElement.nodeName == "INPUT") { return; }
 
                 let sig = e.currentTarget.id;
                 let selected_email = data.email.emails[data.email.emails.active].filter(tx => {
                     return tx.transaction.sig === sig
-            ***REMOVED***);
+                });
 
                 data.email.selected_email = selected_email[0];
                 data.email.header_title = data.email.selected_email.transaction.msg.title;
@@ -37,9 +37,9 @@ module.exports = EmailList = {
                 data.email.main.render(app, data);
                 data.email.main.attachEvents(app, data);
 
-        ***REMOVED***;
-    ***REMOVED***);
+            };
+        });
 
-***REMOVED***
-***REMOVED***
+    }
+}
 

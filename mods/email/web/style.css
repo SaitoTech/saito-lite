@@ -2,26 +2,26 @@
 
 body {
   max-width: 1500px;
-***REMOVED***
+}
 
 /* .main {
   height: 91vh;
-***REMOVED*** */
+} */
 
 .footer {
   display: none;
-***REMOVED***
+}
 
 .email-container {
   display: grid;
   grid-column-gap: 1.5em;
   grid-template-columns: 15em auto;
   grid-template-areas: "email-sidebar email-main";
-***REMOVED***
+}
 
 .email-content {
   display: grid;
-***REMOVED***
+}
 
 .email-header {
   padding: 10px 0px;
@@ -29,12 +29,12 @@ body {
   align-items: center;
   grid-template-columns: 60% 40%;
   border-bottom: 1px solid var(--saito-cyber-black);
-***REMOVED***
+}
 
 .email-header-title {
   font-family: visuelt-medium;
   font-size: 1.2em;
-***REMOVED***
+}
 
 .email-icons {
   display: grid;
@@ -43,17 +43,17 @@ body {
   justify-items: center;
   align-items: center;
   grid-gap: 0.3em;
-***REMOVED***
+}
 
 #email-form-back-button {
   cursor: pointer;
   justify-self: left;
   margin-left: 5px;
-***REMOVED***
+}
 
 #email-compose-btn {
   margin: unset;
-***REMOVED***
+}
 
 .email-balance {
   justify-self: right;
@@ -61,23 +61,23 @@ body {
   align-self: flex-end;
   font-size: 1.33em;
   text-transform: capitalize;
-***REMOVED***
+}
 
 .email-main {
   display: grid;
   grid-template-rows: 4em calc(100vh - 10.1em);
-***REMOVED***
+}
 
 .email-body {
   /* padding: 1em; */
-***REMOVED***
+}
 
 .email-compose {
   padding: 1em;
   border: 1px solid var(--saito-cyber-black-wash);
   margin: 1em 0;
   box-shadow: 0px 0px 3px 1px rgba(220, 220, 220, 0.75);
-***REMOVED***
+}
 
 .email-list {
   /* height: calc(100vh - 9.1em); */
@@ -85,7 +85,7 @@ body {
   display: flex;
   flex-direction: column;
   overflow: auto;
-***REMOVED***
+}
 
 .email-form {
   /* height: 72vh; */
@@ -93,35 +93,35 @@ body {
   grid-template-rows: 3em 3em 3em auto 4em;
   grid-gap: 1em;
   padding-top: 10px; */
-***REMOVED***
+}
 
 .email-form-meta {
   display: grid;
   grid-gap: 10px;
   grid-template-columns: 5em 1fr;
   margin-bottom: 10px;
-***REMOVED***
+}
 
 .email-form input[type=text] {
   border: none;
   border-bottom: 1px solid var(--saito-cyber-black-wash);
   padding: 10px 3px;
   outline: none;
-***REMOVED***
+}
 
 .email-title {
   border-top: 1px solid lightgrey
-***REMOVED***
+}
 
 .email-form textarea {
   outline: none;
-***REMOVED***
+}
 
 .email-form-row {
   display: grid;
   grid-template-columns: 4em auto;
   align-items: center;
-***REMOVED***
+}
 
 #email-form-options {
   display: flex;
@@ -130,12 +130,12 @@ body {
   width: 5.5em;
   float: right;
   margin: 10px;
-***REMOVED***
+}
 
 .email-title {
   border-top: 1px solid lightgrey;
   width: 100%;
-***REMOVED***
+}
 
 .email-detail-footer {
   display: grid;
@@ -143,31 +143,31 @@ body {
   align-items: center;
   margin-top: 1em;
   grid-gap: 1em;
-***REMOVED***
+}
 
 #email-select-icon {
   width: 24px;
   height: 24px;
   justify-self: left;
-***REMOVED***
+}
 
 #email-delete-icon {
   cursor: pointer;
-***REMOVED***
+}
 
 .email-list input[type=checkbox] {
   margin: auto;
-***REMOVED***
+}
 
 .email-selected {
   height: 24px;
   width: 24px;
   align-self: center;
-***REMOVED***
+}
 
 .email-selected:checked {
   background-color: var(--saito-cyber-black);
-***REMOVED***
+}
 
 .email-message {
   display: grid;
@@ -176,15 +176,15 @@ body {
   padding: 10px 0px;
   cursor: pointer;
   grid-gap: 0.5em;
-***REMOVED***
+}
 
 .email-message:hover {
   border-bottom: 1px solid var(--saito-red-wash);
-***REMOVED***
+}
 
 .email-message h4 {
   margin: 2px 0;
-***REMOVED***
+}
 
 .email-message-content {
   font-size: 1.2em;
@@ -195,20 +195,20 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   grid-template-columns: 300px 300px 1fr;
-***REMOVED***
+}
 
 @media only screen and (max-width: 1200px) {
   .email-message-content {
     grid-template-columns: 300px 1fr;
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 @media only screen and (max-width: 900px) {
   .email-message-content {
     grid-template-columns: 300px;
     grid-gap: 0.5em;
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 .email-message-from, .email-message-title {
   white-space: nowrap;
@@ -219,17 +219,17 @@ body {
   font-weight: bold;
   align-self: center;
   padding: 10px 0 0 0;
-***REMOVED***
+}
 
 .email-message-message {
   padding: 10px 0 0 0;
   align-self: center;
-***REMOVED***
+}
 
 .email-message-timestamp {
   text-align: right;
   font-family: monospace, 'Courier New', Courier;
-***REMOVED***
+}
 
 .email-text {
   border: none;
@@ -238,17 +238,17 @@ body {
   height: 200px;
   margin: 1em 0 0 0;
   padding: 0 5px;
-***REMOVED***
+}
 
 .email-sidebar {
   margin: 10px 10px;
-***REMOVED***
+}
 
 .email-controls {
   display: grid;
   grid-template-rows: 3em auto auto;
   grid-gap: 0.5em;
-***REMOVED***
+}
 
 .email-navigator, .email-apps {
   list-style: none;
@@ -256,26 +256,26 @@ body {
   font-size: 1.2em;
   line-height: 1.4em;
   padding: 10px 0px;
-***REMOVED***
+}
 
 .email-navigator {
   border-bottom: 1px solid grey;
-***REMOVED***
+}
 
 .email-navigator-item, .email-apps-item {
   cursor: pointer;
   border-bottom: 1px solid transparent;
   padding: 5px 0 2px 10px;
-***REMOVED***
+}
 
 .email-apps-item:hover, .email-navigator-item:hover {
   background-color: var(--saito-skyline-grey);
-***REMOVED***
+}
 
 .active-navigator-item {
   color: var(--saito-red);
   font-weight: bold;
-***REMOVED***
+}
 
 .email-loader {
   margin-top: 20px;
@@ -283,24 +283,24 @@ body {
   margin-left: auto;
   margin-right: auto;
   display: none;
-***REMOVED***
+}
 
 .email-text-wrapper {
   height: 35vh;
-***REMOVED***
+}
 
 .email-sidebar li.button {
   margin: 0 0 1em 0;
-***REMOVED***
+}
 
 .email-sidebar li.button span {
   font-family: 'visuelt-black';
-***REMOVED***
+}
 
 .email-info {
   display: grid;
   grid-template-columns: 1fr 10em;
-***REMOVED***
+}
 
 /** DETAIL **/
 
@@ -309,24 +309,24 @@ body {
   border-bottom: 1px solid lightgrey;
   display: grid;
   grid-gap: 0.5em;
-***REMOVED***
+}
 
 .email-detail-address-row {
   display: grid;
   grid-gap: 0.5em;
   grid-template-columns: 3em auto;
   overflow: hidden;
-***REMOVED***
+}
 
 .email-detail-message {
   padding: 10px 0px;
   display: grid;
-***REMOVED***
+}
 
 .email-detail-timestamp {
   justify-self: right;
   color: grey;
-***REMOVED***
+}
 
 .email-detail-left-options {
   display: grid;
@@ -334,7 +334,7 @@ body {
   grid-template-columns: 2em auto;
   align-items: center;
   margin: 10px 1em 0 0;
-***REMOVED***
+}
 
 .email-detail-right-options {
   display: grid;
@@ -342,78 +342,78 @@ body {
   grid-gap: 1em;
   grid-template-columns: auto auto;
   align-items: baseline;
-***REMOVED***
+}
 
 #email-detail-reply {
   cursor: pointer;
-***REMOVED***
+}
 
 #email-detail-forward {
   cursor: pointer;
-***REMOVED***
+}
 
 @media only screen and (max-width: 600px) {
   /* body {
     zoom: 1.1;
-  ***REMOVED*** */
+  } */
   input[type=checkbox] {
     margin: 0 0.65em;
-  ***REMOVED***
+  }
   .main {
     max-width: unset;
     padding: 1em 3px;
-  ***REMOVED***
+  }
   .email-body {
     padding: 3px;
-  ***REMOVED***
+  }
   .email-header {
     padding: 0 0 5px 0px;
-  ***REMOVED***
+  }
   .email-main {
     grid-template-rows: 3em calc(100vh - 9.1em);
-  ***REMOVED***
+  }
   .email-container {
     grid-template-columns: 1fr;
     grid-template-areas: "email-sidebar" "email-content";
-  ***REMOVED***
+  }
   .email-module-title {
     display: none;
-  ***REMOVED***
+  }
   .email-sidebar {
     display: none;
-  ***REMOVED***
+  }
   .email-detail-address-id {
     font-size: 0.8em;
-  ***REMOVED***
+  }
   .email-header {
     grid-template-columns: 1fr 1fr;
     /* grid-template-columns: 30% 70%; */
-  ***REMOVED***
+  }
   .email-balance, .email-header-title {
     font-size: 1em;
-  ***REMOVED***
+  }
   .email-balance.detail {
     display: none;
-  ***REMOVED***
+  }
   .email-text {
     height: 85px;
-  ***REMOVED***
+  }
   .email-detail-right-options {
     display: flex;
     justify-self: end;
     flex-direction: column-reverse;
     padding: 0;
-  ***REMOVED***
+  }
   .email-detail-right-options, .email-detail-left-options, h4 {
     margin: 0;
-  ***REMOVED***
+  }
   .email-detail-left-options h4 {
     overflow: hidden;
     white-space: nowrap;
-  ***REMOVED***
+  }
   .email-detail-right-options>.email-icons {
     margin: 0 0 0.3em 0;
-  ***REMOVED***
+  }
   .email-icons {
     display: grid;
     grid-auto-flow: column;
@@ -422,7 +422,7 @@ body {
     justify-items: center;
     align-items: center;
     grid-gap: 0.3em;
-  ***REMOVED***
+  }
   .email-bars-menu {
     position: absolute;
     z-index: 10000;
@@ -431,55 +431,55 @@ body {
     padding: 0 1em;
     background: white;
     font-family: visuelt-light;
-  ***REMOVED***
+  }
   .email-navigator, .email-apps {
     justify-content: left;
     padding: 10px 0px;
     height: 100%;
-  ***REMOVED***
+  }
   .email-apps {
     border-bottom: 1px solid black;
-  ***REMOVED***
+  }
   .email-apps-item {
     justify-self: left;
     padding: 5px;
-  ***REMOVED***
+  }
   .email-apps-item:active {
     background-color: var(--saito-cyber-black-wash);
-  ***REMOVED***
+  }
   .email-navigator-item {
     padding: 5px;
-  ***REMOVED***
+  }
   #email.create-button {
     min-width: unset;
-  ***REMOVED***
+  }
   .email-message {
     padding: 1em 0;
-  ***REMOVED***
+  }
   .email-navigator-bars-menu {
     display: grid;
     grid-gap: 1em;
     grid-template-columns: 1fr 1fr;
-  ***REMOVED***
+  }
   #qrcode img {
     width: 66%;
     margin: 0.5em 16.6% 1em;
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 .email-appspace {
   padding-top: 10px;
-***REMOVED***
+}
 
 .email-header h3 {
   padding-top: 7px;
-***REMOVED***
+}
 
 @media only screen and (min-width: 600px) {
   #email.create-button {
     display: none;
-  ***REMOVED***
+  }
   #email-bars-icon {
     display: none;
-  ***REMOVED***
-***REMOVED***
+  }
+}

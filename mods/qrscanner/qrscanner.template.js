@@ -5,4 +5,4 @@ module.exports = QRScannerTemplate = () => {
     <canvas style="display: none" id="qr-canvas"></canvas>
     <input style="display: none" id="file-input" type="file">
   `
-***REMOVED***
+}

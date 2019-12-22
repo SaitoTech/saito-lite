@@ -15,17 +15,17 @@
   cursor: pointer;
   transition: opacity 150ms ease, border 300ms ease-in-out;
   transform: translateY(-50%);
-  line-height: 1; ***REMOVED***
+  line-height: 1; }
   .glide__arrow:focus {
-    outline: none; ***REMOVED***
+    outline: none; }
   .glide__arrow:hover {
-    border-color: white; ***REMOVED***
+    border-color: white; }
   .glide__arrow--left {
-    left: 2em; ***REMOVED***
+    left: 2em; }
   .glide__arrow--right {
-    right: 2em; ***REMOVED***
+    right: 2em; }
   .glide__arrow--disabled {
-    opacity: 0.33; ***REMOVED***
+    opacity: 0.33; }
 
 .glide__bullets {
   position: absolute;
@@ -34,7 +34,7 @@
   left: 50%;
   display: inline-flex;
   list-style: none;
-  transform: translateX(-50%); ***REMOVED***
+  transform: translateX(-50%); }
 
 .glide__bullet {
   background-color: rgba(255, 255, 255, 0.5);
@@ -47,21 +47,21 @@
   cursor: pointer;
   line-height: 0;
   box-shadow: 0 0.25em 0.5em 0 rgba(0, 0, 0, 0.1);
-  margin: 0 0.25em; ***REMOVED***
+  margin: 0 0.25em; }
   .glide__bullet:focus {
-    outline: none; ***REMOVED***
+    outline: none; }
   .glide__bullet:hover, .glide__bullet:focus {
     border: 2px solid white;
-    background-color: rgba(255, 255, 255, 0.5); ***REMOVED***
+    background-color: rgba(255, 255, 255, 0.5); }
   .glide__bullet--active {
-    background-color: white; ***REMOVED***
+    background-color: white; }
 
 .glide--swipeable {
   cursor: grab;
   cursor: -moz-grab;
-  cursor: -webkit-grab; ***REMOVED***
+  cursor: -webkit-grab; }
 
 .glide--dragging {
   cursor: grabbing;
   cursor: -moz-grabbing;
-  cursor: -webkit-grabbing; ***REMOVED***
+  cursor: -webkit-grabbing; }

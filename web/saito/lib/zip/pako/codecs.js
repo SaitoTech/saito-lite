@@ -5,7 +5,7 @@
 	"use strict";
 
 	function Codec(isDeflater, options) {
-		var newOptions = { raw: true, chunkSize: 1024 * 1024 ***REMOVED***;
+		var newOptions = { raw: true, chunkSize: 1024 * 1024 };
 		if (options && typeof options.level === 'number')
 			newOptions.level = options.level;
 		this._backEnd = isDeflater?
@@ -14,11 +14,11 @@
 		this._chunks = [];
 		this._dataLength = 0;
 		this._backEnd.onData = this._onData.bind(this);
-	***REMOVED***
+	}
 	Codec.prototype._onData = function _onData(chunk) {
 		this._chunks.push(chunk);
 		this._dataLength += chunk.length;
-	***REMOVED***;
+	};
 	Codec.prototype._fetchData = function _fetchData() {
 		var be = this._backEnd;
 		if (be.err !== 0)
@@ -33,32 +33,32 @@
 				var chunk = chunks[i];
 				data.set(chunk, off);
 				off += chunk.length;
-			***REMOVED***
-		***REMOVED***
+			}
+		}
 		chunks.length = 0;
 		this._dataLength = 0;
 		return data;
-	***REMOVED***;
+	};
 	Codec.prototype.append = function append(bytes, onprogress) {
 		this._backEnd.push(bytes, false);
 		return this._fetchData();
-	***REMOVED***;
+	};
 	Codec.prototype.flush = function flush() {
 		this._backEnd.push(new Uint8Array(0), true);
 		return this._fetchData();
-	***REMOVED***;
+	};
 
 	function Deflater(options) {
 		Codec.call(this, true, options);
-	***REMOVED***
+	}
 	Deflater.prototype = Object.create(Codec.prototype);
 	function Inflater() {
 		Codec.call(this, false);
-	***REMOVED***
+	}
 	Inflater.prototype = Object.create(Codec.prototype);
 
 	// 'zip' may not be defined in z-worker and some tests
 	var env = global.zip || global;
 	env.Deflater = env._pako_Deflater = Deflater;
 	env.Inflater = env._pako_Inflater = Inflater;
-***REMOVED***)(this);
+})(this);

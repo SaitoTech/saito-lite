@@ -7,19 +7,19 @@ module.exports = ArcadeLoader = {
   render(app, data) {
 
     let arcade_main = document.querySelector(".arcade-main");
-    if (!arcade_main) { return; ***REMOVED***
+    if (!arcade_main) { return; }
 
     arcade_main.innerHTML = data.game_id == undefined || data.game_id == "" ?
       ArcadeLoaderTemplate() : ArcadeLoadedTemplate(data.game_id);
 
-  ***REMOVED***,
+  },
 
 
   attachEvents(app, data) {
 
     if (data.game_id == "" || data.game_id == undefined) {
 
-***REMOVED*** else {
+    } else {
 
       //
       // kick into init
@@ -35,13 +35,13 @@ module.exports = ArcadeLoader = {
 	        if (app.modules.mods[z].name == app.options.games[i].module) {
               	  window.location = '/' + app.modules.mods[z].returnSlug();
 	  	  return;
-	 	***REMOVED***
-	  ***REMOVED***
+	 	}
+	      }
               break;
-        ***REMOVED***
-      ***REMOVED***
-  ***REMOVED***);
+            }
+          }
+      });
 
-***REMOVED***
-  ***REMOVED***
-***REMOVED***
+    }
+  }
+}

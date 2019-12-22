@@ -1,4 +1,4 @@
-// import { modules ***REMOVED*** from "../../../../../lib/saito/saito";
+// import { modules } from "../../../../../lib/saito/saito";
 
 module.exports = ChatRoomFooterTemplate = () => {
     return `
@@ -7,4 +7,4 @@ module.exports = ChatRoomFooterTemplate = () => {
             <div class="chat-room-submit-button"><i class="icon-small fas fa-arrow-right"></i></div>
         </div>
     `;
-***REMOVED***
+}

@@ -36,4 +36,4 @@ module.exports = RegistrySuccessModalTemplate = () => {
       </div>
     <!-- </div> -->
   `;
-***REMOVED***
+}

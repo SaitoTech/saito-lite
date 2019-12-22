@@ -20,4 +20,4 @@ module.exports = RegistryModalTemplate = () => {
       </div>
     </div>
   `;
-***REMOVED***
+}

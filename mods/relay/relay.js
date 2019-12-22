@@ -13,7 +13,7 @@ class Relay extends ModTemplate {
     this.name           = "Relay";
 
     return this;
-  ***REMOVED***
+  }
 
 
 
@@ -27,11 +27,11 @@ class Relay extends ModTemplate {
     // recipient can be an array
     //
     if (Array.isArray(recipients)) {
-***REMOVED*** else {
+    } else {
       recipient = recipients;
       recipients = [];
       recipients.push(recipient);
-***REMOVED***
+    }
 
     //
     // transaction to end-user, containing msg.request / msg.data is
@@ -40,7 +40,7 @@ class Relay extends ModTemplate {
     tx3.transaction.from.push(new saito.slip(this.app.wallet.returnPublicKey()));
     for (let i = 0; i < recipients.length; i++) {
       tx3.transaction.to.push(new saito.slip(recipients[i]));
-***REMOVED***
+    }
     tx3.transaction.ts   = new Date().getTime();
     tx3.transaction.msg.request 	= message_request;
     tx3.transaction.msg.data 	= message_data;
@@ -64,7 +64,7 @@ class Relay extends ModTemplate {
           tx.transaction.from.push(new saito.slip(this.app.wallet.returnPublicKey()));
           for (let i = 0; i < recipients.length; i++) {
             tx.transaction.to.push(new saito.slip(recipients[i]));
-      ***REMOVED***
+          }
           tx.transaction.ts   = new Date().getTime();
           tx.transaction.msg = tx3.transaction;
           tx = this.app.wallet.signTransaction(tx);
@@ -76,20 +76,20 @@ class Relay extends ModTemplate {
           tx2.transaction.msg 	= tx.transaction;
           tx2 = this.app.wallet.signTransaction(tx2);
 
-    ***REMOVED***
+        }
 
-***REMOVED***
-***REMOVED*** forward to peer
-***REMOVED***
+        //
+        // forward to peer
+        //
         peer.sendRequestWithCallback("relay peer message", tx2.transaction, function(res) {
-    ***REMOVED***);
+        });
 
-  ***REMOVED***
-***REMOVED***
+      }
+    }
 
     return;
 
-  ***REMOVED***
+  }
 
 
   //
@@ -103,31 +103,31 @@ class Relay extends ModTemplate {
 
       if (message.request === "relay peer message") {
 
-***REMOVED***
-***REMOVED*** sanity check on tx
-***REMOVED***
+        //
+        // sanity check on tx
+        //
         let txobj = message.data;
         let tx = new saito.transaction(message.data);
 
-        if (tx.transaction.to.length <= 0) { return; ***REMOVED***
-        if (tx.transaction.to[0].add == undefined) { return; ***REMOVED***
+        if (tx.transaction.to.length <= 0) { return; }
+        if (tx.transaction.to[0].add == undefined) { return; }
 
-***REMOVED***
-***REMOVED*** get the inner-tx / tx-to-relay
-***REMOVED***
-***REMOVED***
+        //
+        // get the inner-tx / tx-to-relay
+        //
+        let txmsg = tx.returnMessage();
         let tx2 = new saito.transaction(tx.returnMessage());
 
-***REMOVED***
-***REMOVED*** is original tx addressed to me
-***REMOVED***
+        //
+        // is original tx addressed to me
+        //
 
         if (tx.isTo(app.wallet.returnPublicKey()) && txmsg.request != undefined) {
 
           app.modules.handlePeerRequest(txmsg, peer, mycallback);
-          if (mycallback != null) { mycallback({ err : "" , success : 1 ***REMOVED***); ***REMOVED***
+          if (mycallback != null) { mycallback({ err : "" , success : 1 }); }
 
-    ***REMOVED*** else {
+        } else {
 
           let peer_found = 0;
 
@@ -136,23 +136,23 @@ class Relay extends ModTemplate {
               peer_found = 1;
               app.network.peers[i].sendRequest("relay peer message", tx2.transaction.msg, function() {
 	        if (mycallback != null) {
-                  mycallback({ err : "" , success : 1 ***REMOVED***);
-		***REMOVED***
-          ***REMOVED***);
-        ***REMOVED*** else {
-	***REMOVED***
-      ***REMOVED***
+                  mycallback({ err : "" , success : 1 });
+		}
+              });
+            } else {
+	    }
+          }
           if (peer_found == 0) {
 	    if (mycallback != null) {
-              mycallback({ err : "ERROR 141423: peer not found in relay module" , success : 0 ***REMOVED***);
-	***REMOVED***
-      ***REMOVED***
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED*** catch (err) {
-***REMOVED***
-  ***REMOVED***
-***REMOVED***
+              mycallback({ err : "ERROR 141423: peer not found in relay module" , success : 0 });
+	    }
+          }
+        }
+      }
+    } catch (err) {
+    }
+  }
+}
 
 module.exports = Relay;
 

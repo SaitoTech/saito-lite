@@ -4,29 +4,29 @@
 	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 388 538"
 	 style="enable-background:new 0 0 388 538;" xml:space="preserve">
 <style type="text/css">
-	.st0{font-family:'STBaoliSC-Regular';***REMOVED***
-	.st1{font-size:28.8895px;***REMOVED***
-	.st2{fill:none;stroke:#000000;stroke-width:2;stroke-linecap:square;***REMOVED***
-	.st3{font-family:'STKaiti';***REMOVED***
-	.st4{font-size:20px;***REMOVED***
-	.st5{fill:#0067C6;***REMOVED***
-	.st6{fill:#FFFFFF;***REMOVED***
-	.st7{fill:#FFCE00;***REMOVED***
-	.st8{fill:#84D6FF;***REMOVED***
-	.st9{fill:none;stroke:#84D6FF;stroke-width:6.8337;***REMOVED***
-	.st10{fill:none;stroke:#FFFFFF;stroke-width:3.4169;***REMOVED***
-	.st11{fill:#317CA6;***REMOVED***
-	.st12{fill:#D21734;***REMOVED***
-	.st13{fill:none;stroke:#000000;stroke-width:2.0853;stroke-linecap:round;***REMOVED***
-	.st14{fill:#57702E;***REMOVED***
-	.st15{fill:#1D332F;***REMOVED***
-	.st16{fill:#8DC32E;***REMOVED***
-	.st17{fill:#C0148C;***REMOVED***
-	.st18{fill:#FDCE12;***REMOVED***
-	.st19{fill:#4E94C2;***REMOVED***
-	.st20{fill:#1B4895;***REMOVED***
-	.st21{fill:#FDCE12;stroke:#000000;stroke-width:2.0501;***REMOVED***
-	.st22{fill:none;stroke:#FFFFFF;stroke-width:6.8337;stroke-opacity:0;***REMOVED***
+	.st0{font-family:'STBaoliSC-Regular';}
+	.st1{font-size:28.8895px;}
+	.st2{fill:none;stroke:#000000;stroke-width:2;stroke-linecap:square;}
+	.st3{font-family:'STKaiti';}
+	.st4{font-size:20px;}
+	.st5{fill:#0067C6;}
+	.st6{fill:#FFFFFF;}
+	.st7{fill:#FFCE00;}
+	.st8{fill:#84D6FF;}
+	.st9{fill:none;stroke:#84D6FF;stroke-width:6.8337;}
+	.st10{fill:none;stroke:#FFFFFF;stroke-width:3.4169;}
+	.st11{fill:#317CA6;}
+	.st12{fill:#D21734;}
+	.st13{fill:none;stroke:#000000;stroke-width:2.0853;stroke-linecap:round;}
+	.st14{fill:#57702E;}
+	.st15{fill:#1D332F;}
+	.st16{fill:#8DC32E;}
+	.st17{fill:#C0148C;}
+	.st18{fill:#FDCE12;}
+	.st19{fill:#4E94C2;}
+	.st20{fill:#1B4895;}
+	.st21{fill:#FDCE12;stroke:#000000;stroke-width:2.0501;}
+	.st22{fill:none;stroke:#FFFFFF;stroke-width:6.8337;stroke-opacity:0;}
 </style>
 <text transform="matrix(0.9394 0 0 1 126.1555 251.5004)" class="st0 st1">奥特加当选</text>
 <text transform="matrix(0.9394 0 0 1 105.8018 286.1674)" class="st0 st1">尼加拉瓜总统*</text>

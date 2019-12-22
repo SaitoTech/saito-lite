@@ -11,7 +11,7 @@ function initThemeChooser(settings) {
 
   systemSelectEl.addEventListener('change', function() {
     setThemeSystem(this.value);
-  ***REMOVED***);
+  });
 
   setThemeSystem(systemSelectEl.value);
 
@@ -23,8 +23,8 @@ function initThemeChooser(settings) {
         currentThemeSystem,
         themeSelectEl.options[themeSelectEl.selectedIndex].value
       );
-***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
 
   function setThemeSystem(themeSystem) {
@@ -38,13 +38,13 @@ function initThemeChooser(settings) {
       if (themeSelectWrapEl.getAttribute('data-theme-system') === themeSystem) {
         selectedTheme = themeSelectEl.options[themeSelectEl.selectedIndex].value;
         themeSelectWrapEl.style.display = 'inline-block';
-  ***REMOVED*** else {
+      } else {
         themeSelectWrapEl.style.display = 'none';
-  ***REMOVED***
-***REMOVED***);
+      }
+    });
 
     setTheme(themeSystem, selectedTheme);
-  ***REMOVED***
+  }
 
 
   function setTheme(themeSystem, themeName) {
@@ -55,13 +55,13 @@ function initThemeChooser(settings) {
       if (!isInitialized) {
         isInitialized = true;
         settings.init(themeSystem);
-  ***REMOVED***
+      }
       else {
         settings.change(themeSystem);
-  ***REMOVED***
+      }
 
       showCredits(themeSystem, themeName);
-***REMOVED***
+    }
 
     if (stylesheetUrl) {
       stylesheetEl = document.createElement('link');
@@ -74,31 +74,31 @@ function initThemeChooser(settings) {
       whenStylesheetLoaded(stylesheetEl, function() {
         if (currentStylesheetEl) {
           currentStylesheetEl.parentNode.removeChild(currentStylesheetEl);
-    ***REMOVED***
+        }
         currentStylesheetEl = stylesheetEl;
         loadingEl.style.display = 'none';
         done();
-  ***REMOVED***);
-***REMOVED*** else {
+      });
+    } else {
       if (currentStylesheetEl) {
         currentStylesheetEl.parentNode.removeChild(currentStylesheetEl);
         currentStylesheetEl = null
-  ***REMOVED***
+      }
       done();
-***REMOVED***
-  ***REMOVED***
+    }
+  }
 
 
   function generateStylesheetUrl(themeSystem, themeName) {
     if (themeSystem === 'bootstrap') {
       if (themeName) {
         return 'https://bootswatch.com/4/' + themeName + '/bootstrap.min.css';
-  ***REMOVED***
+      }
       else { // the default bootstrap theme
         return 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css';
-  ***REMOVED***
-***REMOVED***
-  ***REMOVED***
+      }
+    }
+  }
 
 
   function showCredits(themeSystem, themeName) {
@@ -107,22 +107,22 @@ function initThemeChooser(settings) {
     if (themeSystem.match('bootstrap')) {
       if (themeName) {
         creditId = 'bootstrap-custom';
-  ***REMOVED***
+      }
       else {
         creditId = 'bootstrap-standard';
-  ***REMOVED***
-***REMOVED***
+      }
+    }
 
     Array.prototype.slice.call( // convert to real array
       document.querySelectorAll('.credits')
     ).forEach(function(creditEl) {
       if (creditEl.getAttribute('data-credit-id') === creditId) {
         creditEl.style.display = 'block';
-  ***REMOVED*** else {
+      } else {
         creditEl.style.display = 'none';
-  ***REMOVED***
-***REMOVED***)
-  ***REMOVED***
+      }
+    })
+  }
 
 
   function whenStylesheetLoaded(linkNode, callback) {
@@ -132,10 +132,10 @@ function initThemeChooser(settings) {
       if (!isReady) { // avoid double-call
         isReady = true;
         callback();
-  ***REMOVED***
-***REMOVED***
+      }
+    }
 
     linkNode.onload = ready; // does not work cross-browser
     setTimeout(ready, 2000); // max wait. also handles browsers that don't support onload
-  ***REMOVED***
-***REMOVED***
+  }
+}

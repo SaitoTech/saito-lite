@@ -8,4 +8,4 @@ module.exports = EmailChatTemplate = () => {
       </div>
       <div class="chat-list"></div>
   `;
-***REMOVED***
+}

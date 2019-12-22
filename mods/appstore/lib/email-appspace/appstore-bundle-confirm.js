@@ -5,7 +5,7 @@ module.exports = AppStoreBundleConfirm = {
 
     render(app, data) {
       document.querySelector(".email-appspace").innerHTML = AppStoreBundleConfirmTemplate(data.bundle_appstore_publickey);
-***REMOVED***,
+    },
 
     attachEvents(app, data) {
 
@@ -18,11 +18,11 @@ alert("accepting bundle: " + data.appstore_bundle);
           app.storage.saveOptions();
 alert("UPDATED: please reload your browser to use your new version of Saito");
 
-    ***REMOVED***);
+        });
 
 
    
 
-***REMOVED***
+    }
 
-***REMOVED***
+}

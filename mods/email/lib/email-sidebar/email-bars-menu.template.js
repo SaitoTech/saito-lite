@@ -13,4 +13,4 @@ module.exports = EmailBarsMenuTemplate = () => {
   </div>
   </div>
   `;
-***REMOVED***
+}

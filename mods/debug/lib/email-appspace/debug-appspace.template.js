@@ -6,4 +6,4 @@ module.exports = DebugAppspaceTemplate = () => {
   <div id="email-appspace-debug" class="email-appspace-debug"></div>
   <hr />
   `;
-***REMOVED***
+}

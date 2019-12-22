@@ -4,105 +4,105 @@
 
 declare module '@fullcalendar/core' {
     export const version = "<%= version %>";
-    export { OptionsInput ***REMOVED*** from '@fullcalendar/core/types/input-types';
-    export { EventInput, EventDef, EventDefHash, EventInstance, EventInstanceHash, parseEventDef, createEventInstance, EventTuple ***REMOVED*** from '@fullcalendar/core/structs/event';
-    export { BusinessHoursInput, parseBusinessHours ***REMOVED*** from '@fullcalendar/core/structs/business-hours';
-    export { applyAll, debounce, padStart, isInt, capitaliseFirstLetter, parseFieldSpecs, compareByFieldSpecs, compareByFieldSpec, flexibleCompare, computeVisibleDayRange, refineProps, matchCellWidths, uncompensateScroll, compensateScroll, subtractInnerElHeight, isMultiDayRange, distributeHeight, undistributeHeight, preventSelection, allowSelection, preventContextMenu, allowContextMenu, compareNumbers, enableCursor, disableCursor, diffDates ***REMOVED*** from '@fullcalendar/core/util/misc';
-    export { htmlEscape, cssToStr ***REMOVED*** from '@fullcalendar/core/util/html';
-    export { removeExact, isArraysEqual ***REMOVED*** from '@fullcalendar/core/util/array';
-    export { memoize, memoizeOutput ***REMOVED*** from '@fullcalendar/core/util/memoize';
-    export { memoizeRendering, MemoizedRendering ***REMOVED*** from '@fullcalendar/core/component/memoized-rendering';
-    export { intersectRects, Rect, pointInsideRect, constrainPoint, getRectCenter, diffPoints, Point, translateRect ***REMOVED*** from '@fullcalendar/core/util/geom';
-    export { mapHash, filterHash, isPropsEqual ***REMOVED*** from '@fullcalendar/core/util/object';
-    export { findElements, findChildren, htmlToElement, createElement, insertAfterElement, prependToElement, removeElement, appendToElement, applyStyle, applyStyleProp, elementMatches, elementClosest, forceClassName ***REMOVED*** from '@fullcalendar/core/util/dom-manip';
-    export { EventStore, filterEventStoreDefs, createEmptyEventStore, mergeEventStores, getRelevantEvents, eventTupleToStore ***REMOVED*** from '@fullcalendar/core/structs/event-store';
-    export { EventUiHash, EventUi, processScopedUiProps, combineEventUis ***REMOVED*** from '@fullcalendar/core/component/event-ui';
-    export { default as Splitter, SplittableProps ***REMOVED*** from '@fullcalendar/core/component/event-splitting';
-    export { buildGotoAnchorHtml, getAllDayHtml, getDayClasses ***REMOVED*** from '@fullcalendar/core/component/date-rendering';
-    export { preventDefault, listenBySelector, whenTransitionDone ***REMOVED*** from '@fullcalendar/core/util/dom-event';
-    export { computeInnerRect, computeEdges, computeHeightAndMargins, getClippingParents, computeClippingRect, computeRect ***REMOVED*** from '@fullcalendar/core/util/dom-geom';
-    export { unpromisify ***REMOVED*** from '@fullcalendar/core/util/promise';
-    export { default as EmitterMixin, EmitterInterface ***REMOVED*** from '@fullcalendar/core/common/EmitterMixin';
-    export { DateRange, rangeContainsMarker, intersectRanges, rangesEqual, rangesIntersect, rangeContainsRange ***REMOVED*** from '@fullcalendar/core/datelib/date-range';
-    export { default as Mixin ***REMOVED*** from '@fullcalendar/core/common/Mixin';
-    export { default as PositionCache ***REMOVED*** from '@fullcalendar/core/common/PositionCache';
-    export { default as ScrollComponent, ScrollbarWidths ***REMOVED*** from '@fullcalendar/core/common/ScrollComponent';
-    export { ScrollController, ElementScrollController, WindowScrollController ***REMOVED*** from '@fullcalendar/core/common/scroll-controller';
-    export { default as Theme ***REMOVED*** from '@fullcalendar/core/theme/Theme';
-    export { default as Component, ComponentContext ***REMOVED*** from '@fullcalendar/core/component/Component';
-    export { default as DateComponent, Seg, EventSegUiInteractionState ***REMOVED*** from '@fullcalendar/core/component/DateComponent';
-    export { default as Calendar, DatePointTransform, DateSpanTransform, DateSelectionApi ***REMOVED*** from '@fullcalendar/core/Calendar';
-    export { default as View, ViewProps ***REMOVED*** from '@fullcalendar/core/View';
-    export { default as FgEventRenderer, buildSegCompareObj ***REMOVED*** from '@fullcalendar/core/component/renderers/FgEventRenderer';
-    export { default as FillRenderer ***REMOVED*** from '@fullcalendar/core/component/renderers/FillRenderer';
-    export { default as DateProfileGenerator, DateProfile ***REMOVED*** from '@fullcalendar/core/DateProfileGenerator';
-    export { ViewDef ***REMOVED*** from '@fullcalendar/core/structs/view-def';
-    export { ViewSpec ***REMOVED*** from '@fullcalendar/core/structs/view-spec';
-    export { DateSpan, DateSpanApi, DatePointApi, isDateSpansEqual ***REMOVED*** from '@fullcalendar/core/structs/date-span';
-    export { DateMarker, addDays, startOfDay, addMs, addWeeks, diffWeeks, diffWholeWeeks, diffWholeDays, diffDayAndTime, diffDays, isValidDate ***REMOVED*** from '@fullcalendar/core/datelib/marker';
-    export { Duration, createDuration, isSingleDay, multiplyDuration, addDurations, asRoughMinutes, asRoughSeconds, asRoughMs, wholeDivideDurations, greatestDurationDenominator ***REMOVED*** from '@fullcalendar/core/datelib/duration';
-    export { DateEnv, DateMarkerMeta ***REMOVED*** from '@fullcalendar/core/datelib/env';
-    export { DateFormatter, createFormatter, VerboseFormattingArg, formatIsoTimeString ***REMOVED*** from '@fullcalendar/core/datelib/formatting';
-    export { NamedTimeZoneImpl ***REMOVED*** from '@fullcalendar/core/datelib/timezone';
-    export { parse as parseMarker ***REMOVED*** from '@fullcalendar/core/datelib/parsing';
-    export { EventSourceDef, EventSource, EventSourceHash ***REMOVED*** from '@fullcalendar/core/structs/event-source';
-    export { Interaction, InteractionSettings, interactionSettingsToStore, interactionSettingsStore, InteractionSettingsStore ***REMOVED*** from '@fullcalendar/core/interactions/interaction';
-    export { PointerDragEvent ***REMOVED*** from '@fullcalendar/core/interactions/pointer';
-    export { Hit ***REMOVED*** from '@fullcalendar/core/interactions/hit';
-    export { dateSelectionJoinTransformer ***REMOVED*** from '@fullcalendar/core/interactions/date-selecting';
-    export { eventDragMutationMassager, EventDropTransformers ***REMOVED*** from '@fullcalendar/core/interactions/event-dragging';
-    export { EventResizeJoinTransforms ***REMOVED*** from '@fullcalendar/core/interactions/event-resizing';
-    export { default as ElementDragging ***REMOVED*** from '@fullcalendar/core/interactions/ElementDragging';
-    export { formatDate, formatRange ***REMOVED*** from '@fullcalendar/core/formatting-api';
-    export { globalDefaults, config ***REMOVED*** from '@fullcalendar/core/options';
-    export { RecurringType, ParsedRecurring ***REMOVED*** from '@fullcalendar/core/structs/recurring-event';
-    export { DragMetaInput, DragMeta, parseDragMeta ***REMOVED*** from '@fullcalendar/core/structs/drag-meta';
-    export { createPlugin, PluginDef, PluginDefInput, ViewPropsTransformer, ViewContainerModifier ***REMOVED*** from '@fullcalendar/core/plugin-system';
-    export { reducerFunc, Action, CalendarState ***REMOVED*** from '@fullcalendar/core/reducers/types';
-    export { CalendarComponentProps ***REMOVED*** from '@fullcalendar/core/CalendarComponent';
-    export { default as DayHeader ***REMOVED*** from '@fullcalendar/core/common/DayHeader';
-    export { computeFallbackHeaderFormat, renderDateCell ***REMOVED*** from '@fullcalendar/core/common/table-utils';
-    export { default as DaySeries ***REMOVED*** from '@fullcalendar/core/common/DaySeries';
-    export { EventInteractionState ***REMOVED*** from '@fullcalendar/core/interactions/event-interaction-state';
-    export { EventRenderRange, sliceEventStore, hasBgRendering, getElSeg ***REMOVED*** from '@fullcalendar/core/component/event-rendering';
-    export { default as DayTable, DayTableSeg, DayTableCell ***REMOVED*** from '@fullcalendar/core/common/DayTable';
-    export { default as Slicer, SlicedProps ***REMOVED*** from '@fullcalendar/core/common/slicing-utils';
-    export { EventMutation, applyMutationToEventStore ***REMOVED*** from '@fullcalendar/core/structs/event-mutation';
-    export { Constraint, ConstraintInput, AllowFunc, isPropsValid, isInteractionValid ***REMOVED*** from '@fullcalendar/core/validation';
-    export { default as EventApi ***REMOVED*** from '@fullcalendar/core/api/EventApi';
-    export { default as requestJson ***REMOVED*** from '@fullcalendar/core/util/requestJson';
-***REMOVED***
+    export { OptionsInput } from '@fullcalendar/core/types/input-types';
+    export { EventInput, EventDef, EventDefHash, EventInstance, EventInstanceHash, parseEventDef, createEventInstance, EventTuple } from '@fullcalendar/core/structs/event';
+    export { BusinessHoursInput, parseBusinessHours } from '@fullcalendar/core/structs/business-hours';
+    export { applyAll, debounce, padStart, isInt, capitaliseFirstLetter, parseFieldSpecs, compareByFieldSpecs, compareByFieldSpec, flexibleCompare, computeVisibleDayRange, refineProps, matchCellWidths, uncompensateScroll, compensateScroll, subtractInnerElHeight, isMultiDayRange, distributeHeight, undistributeHeight, preventSelection, allowSelection, preventContextMenu, allowContextMenu, compareNumbers, enableCursor, disableCursor, diffDates } from '@fullcalendar/core/util/misc';
+    export { htmlEscape, cssToStr } from '@fullcalendar/core/util/html';
+    export { removeExact, isArraysEqual } from '@fullcalendar/core/util/array';
+    export { memoize, memoizeOutput } from '@fullcalendar/core/util/memoize';
+    export { memoizeRendering, MemoizedRendering } from '@fullcalendar/core/component/memoized-rendering';
+    export { intersectRects, Rect, pointInsideRect, constrainPoint, getRectCenter, diffPoints, Point, translateRect } from '@fullcalendar/core/util/geom';
+    export { mapHash, filterHash, isPropsEqual } from '@fullcalendar/core/util/object';
+    export { findElements, findChildren, htmlToElement, createElement, insertAfterElement, prependToElement, removeElement, appendToElement, applyStyle, applyStyleProp, elementMatches, elementClosest, forceClassName } from '@fullcalendar/core/util/dom-manip';
+    export { EventStore, filterEventStoreDefs, createEmptyEventStore, mergeEventStores, getRelevantEvents, eventTupleToStore } from '@fullcalendar/core/structs/event-store';
+    export { EventUiHash, EventUi, processScopedUiProps, combineEventUis } from '@fullcalendar/core/component/event-ui';
+    export { default as Splitter, SplittableProps } from '@fullcalendar/core/component/event-splitting';
+    export { buildGotoAnchorHtml, getAllDayHtml, getDayClasses } from '@fullcalendar/core/component/date-rendering';
+    export { preventDefault, listenBySelector, whenTransitionDone } from '@fullcalendar/core/util/dom-event';
+    export { computeInnerRect, computeEdges, computeHeightAndMargins, getClippingParents, computeClippingRect, computeRect } from '@fullcalendar/core/util/dom-geom';
+    export { unpromisify } from '@fullcalendar/core/util/promise';
+    export { default as EmitterMixin, EmitterInterface } from '@fullcalendar/core/common/EmitterMixin';
+    export { DateRange, rangeContainsMarker, intersectRanges, rangesEqual, rangesIntersect, rangeContainsRange } from '@fullcalendar/core/datelib/date-range';
+    export { default as Mixin } from '@fullcalendar/core/common/Mixin';
+    export { default as PositionCache } from '@fullcalendar/core/common/PositionCache';
+    export { default as ScrollComponent, ScrollbarWidths } from '@fullcalendar/core/common/ScrollComponent';
+    export { ScrollController, ElementScrollController, WindowScrollController } from '@fullcalendar/core/common/scroll-controller';
+    export { default as Theme } from '@fullcalendar/core/theme/Theme';
+    export { default as Component, ComponentContext } from '@fullcalendar/core/component/Component';
+    export { default as DateComponent, Seg, EventSegUiInteractionState } from '@fullcalendar/core/component/DateComponent';
+    export { default as Calendar, DatePointTransform, DateSpanTransform, DateSelectionApi } from '@fullcalendar/core/Calendar';
+    export { default as View, ViewProps } from '@fullcalendar/core/View';
+    export { default as FgEventRenderer, buildSegCompareObj } from '@fullcalendar/core/component/renderers/FgEventRenderer';
+    export { default as FillRenderer } from '@fullcalendar/core/component/renderers/FillRenderer';
+    export { default as DateProfileGenerator, DateProfile } from '@fullcalendar/core/DateProfileGenerator';
+    export { ViewDef } from '@fullcalendar/core/structs/view-def';
+    export { ViewSpec } from '@fullcalendar/core/structs/view-spec';
+    export { DateSpan, DateSpanApi, DatePointApi, isDateSpansEqual } from '@fullcalendar/core/structs/date-span';
+    export { DateMarker, addDays, startOfDay, addMs, addWeeks, diffWeeks, diffWholeWeeks, diffWholeDays, diffDayAndTime, diffDays, isValidDate } from '@fullcalendar/core/datelib/marker';
+    export { Duration, createDuration, isSingleDay, multiplyDuration, addDurations, asRoughMinutes, asRoughSeconds, asRoughMs, wholeDivideDurations, greatestDurationDenominator } from '@fullcalendar/core/datelib/duration';
+    export { DateEnv, DateMarkerMeta } from '@fullcalendar/core/datelib/env';
+    export { DateFormatter, createFormatter, VerboseFormattingArg, formatIsoTimeString } from '@fullcalendar/core/datelib/formatting';
+    export { NamedTimeZoneImpl } from '@fullcalendar/core/datelib/timezone';
+    export { parse as parseMarker } from '@fullcalendar/core/datelib/parsing';
+    export { EventSourceDef, EventSource, EventSourceHash } from '@fullcalendar/core/structs/event-source';
+    export { Interaction, InteractionSettings, interactionSettingsToStore, interactionSettingsStore, InteractionSettingsStore } from '@fullcalendar/core/interactions/interaction';
+    export { PointerDragEvent } from '@fullcalendar/core/interactions/pointer';
+    export { Hit } from '@fullcalendar/core/interactions/hit';
+    export { dateSelectionJoinTransformer } from '@fullcalendar/core/interactions/date-selecting';
+    export { eventDragMutationMassager, EventDropTransformers } from '@fullcalendar/core/interactions/event-dragging';
+    export { EventResizeJoinTransforms } from '@fullcalendar/core/interactions/event-resizing';
+    export { default as ElementDragging } from '@fullcalendar/core/interactions/ElementDragging';
+    export { formatDate, formatRange } from '@fullcalendar/core/formatting-api';
+    export { globalDefaults, config } from '@fullcalendar/core/options';
+    export { RecurringType, ParsedRecurring } from '@fullcalendar/core/structs/recurring-event';
+    export { DragMetaInput, DragMeta, parseDragMeta } from '@fullcalendar/core/structs/drag-meta';
+    export { createPlugin, PluginDef, PluginDefInput, ViewPropsTransformer, ViewContainerModifier } from '@fullcalendar/core/plugin-system';
+    export { reducerFunc, Action, CalendarState } from '@fullcalendar/core/reducers/types';
+    export { CalendarComponentProps } from '@fullcalendar/core/CalendarComponent';
+    export { default as DayHeader } from '@fullcalendar/core/common/DayHeader';
+    export { computeFallbackHeaderFormat, renderDateCell } from '@fullcalendar/core/common/table-utils';
+    export { default as DaySeries } from '@fullcalendar/core/common/DaySeries';
+    export { EventInteractionState } from '@fullcalendar/core/interactions/event-interaction-state';
+    export { EventRenderRange, sliceEventStore, hasBgRendering, getElSeg } from '@fullcalendar/core/component/event-rendering';
+    export { default as DayTable, DayTableSeg, DayTableCell } from '@fullcalendar/core/common/DayTable';
+    export { default as Slicer, SlicedProps } from '@fullcalendar/core/common/slicing-utils';
+    export { EventMutation, applyMutationToEventStore } from '@fullcalendar/core/structs/event-mutation';
+    export { Constraint, ConstraintInput, AllowFunc, isPropsValid, isInteractionValid } from '@fullcalendar/core/validation';
+    export { default as EventApi } from '@fullcalendar/core/api/EventApi';
+    export { default as requestJson } from '@fullcalendar/core/util/requestJson';
+}
 
 declare module '@fullcalendar/core/types/input-types' {
     import View from '@fullcalendar/core/View';
-    import { EventSourceInput, EventInputTransformer ***REMOVED*** from '@fullcalendar/core/structs/event-source';
-    import { Duration, DurationInput ***REMOVED*** from '@fullcalendar/core/datelib/duration';
-    import { DateInput ***REMOVED*** from '@fullcalendar/core/datelib/env';
-    import { FormatterInput ***REMOVED*** from '@fullcalendar/core/datelib/formatting';
-    import { DateRangeInput ***REMOVED*** from '@fullcalendar/core/datelib/date-range';
-    import { BusinessHoursInput ***REMOVED*** from '@fullcalendar/core/structs/business-hours';
+    import { EventSourceInput, EventInputTransformer } from '@fullcalendar/core/structs/event-source';
+    import { Duration, DurationInput } from '@fullcalendar/core/datelib/duration';
+    import { DateInput } from '@fullcalendar/core/datelib/env';
+    import { FormatterInput } from '@fullcalendar/core/datelib/formatting';
+    import { DateRangeInput } from '@fullcalendar/core/datelib/date-range';
+    import { BusinessHoursInput } from '@fullcalendar/core/structs/business-hours';
     import EventApi from '@fullcalendar/core/api/EventApi';
-    import { AllowFunc, ConstraintInput, OverlapFunc ***REMOVED*** from '@fullcalendar/core/validation';
-    import { PluginDef ***REMOVED*** from '@fullcalendar/core/plugin-system';
-    import { LocaleSingularArg, RawLocale ***REMOVED*** from '@fullcalendar/core/datelib/locale';
+    import { AllowFunc, ConstraintInput, OverlapFunc } from '@fullcalendar/core/validation';
+    import { PluginDef } from '@fullcalendar/core/plugin-system';
+    import { LocaleSingularArg, RawLocale } from '@fullcalendar/core/datelib/locale';
     export interface ToolbarInput {
         left?: string;
         center?: string;
         right?: string;
-***REMOVED***
+    }
     export interface CustomButtonInput {
         text: string;
         icon?: string;
         themeIcon?: string;
         bootstrapFontAwesome?: string;
         click(element: HTMLElement): void;
-***REMOVED***
+    }
     export interface ButtonIconsInput {
         prev?: string;
         next?: string;
         prevYear?: string;
         nextYear?: string;
-***REMOVED***
+    }
     export interface ButtonTextCompoundInput {
         prev?: string;
         next?: string;
@@ -113,25 +113,25 @@ declare module '@fullcalendar/core/types/input-types' {
         week?: string;
         day?: string;
         [viewId: string]: string | undefined;
-***REMOVED***
+    }
     export interface EventSegment {
         event: EventApi;
         start: Date;
         end: Date;
         isStart: boolean;
         isEnd: boolean;
-***REMOVED***
+    }
     export interface CellInfo {
         date: Date;
         dayEl: HTMLElement;
         moreEl: HTMLElement;
         segs: EventSegment[];
         hiddenSegs: EventSegment[];
-***REMOVED***
+    }
     export interface DropInfo {
         start: Date;
         end: Date;
-***REMOVED***
+    }
     export type EventHandlerName = '_init' | 'selectAllow' | 'eventAllow' | 'eventDataTransform' | 'datesRender' | 'datesDestroy' | 'dayRender' | 'windowResize' | 'dateClick' | 'eventClick' | 'eventMouseEnter' | 'eventMouseLeave' | 'select' | 'unselect' | 'loading' | 'eventRender' | 'eventPositioned' | '_eventsPositioned' | 'eventDestroy' | 'eventDragStart' | 'eventDragStop' | 'eventDrop' | '_destroyed' | 'drop' | 'eventResizeStart' | 'eventResizeStop' | 'eventResize' | 'eventReceive' | 'eventLeave' | 'viewSkeletonRender' | 'viewSkeletonDestroy' | '_noEventDrop' | '_noEventResize' | 'eventLimitClick' | 'resourceRender';
     export type EventHandlerArgs<T extends EventHandlerName> = Parameters<Extract<OptionsInput[T], (...args: any[]) => any>>;
     export type EventHandlerArg<T extends EventHandlerName> = EventHandlerArgs<T>[0];
@@ -140,7 +140,7 @@ declare module '@fullcalendar/core/types/input-types' {
         footer?: boolean | ToolbarInput;
         customButtons?: {
             [name: string]: CustomButtonInput;
-    ***REMOVED***;
+        };
         buttonIcons?: boolean | ButtonIconsInput;
         themeSystem?: 'standard' | string;
         bootstrapFontAwesome?: boolean | ButtonIconsInput;
@@ -169,7 +169,7 @@ declare module '@fullcalendar/core/types/input-types' {
             hiddenSegs: any[];
             jsEvent: MouseEvent;
             view: View;
-    ***REMOVED***) => void);
+        }) => void);
         timeZone?: string | boolean;
         now?: DateInput | (() => DateInput);
         defaultView?: string;
@@ -265,17 +265,17 @@ declare module '@fullcalendar/core/types/input-types' {
         datesRender?(arg: {
             view: View;
             el: HTMLElement;
-    ***REMOVED***): void;
+        }): void;
         datesDestroy?(arg: {
             view: View;
             el: HTMLElement;
-    ***REMOVED***): void;
+        }): void;
         dayRender?(arg: {
             view: View;
             date: Date;
             allDay?: boolean;
             el: HTMLElement;
-    ***REMOVED***): void;
+        }): void;
         windowResize?(view: View): void;
         dateClick?(arg: {
             date: Date;
@@ -285,25 +285,25 @@ declare module '@fullcalendar/core/types/input-types' {
             dayEl: HTMLElement;
             jsEvent: MouseEvent;
             view: View;
-    ***REMOVED***): void;
+        }): void;
         eventClick?(arg: {
             el: HTMLElement;
             event: EventApi;
             jsEvent: MouseEvent;
             view: View;
-    ***REMOVED***): boolean | void;
+        }): boolean | void;
         eventMouseEnter?(arg: {
             el: HTMLElement;
             event: EventApi;
             jsEvent: MouseEvent;
             view: View;
-    ***REMOVED***): void;
+        }): void;
         eventMouseLeave?(arg: {
             el: HTMLElement;
             event: EventApi;
             jsEvent: MouseEvent;
             view: View;
-    ***REMOVED***): void;
+        }): void;
         select?(arg: {
             start: Date;
             end: Date;
@@ -313,11 +313,11 @@ declare module '@fullcalendar/core/types/input-types' {
             resource?: any;
             jsEvent: MouseEvent;
             view: View;
-    ***REMOVED***): void;
+        }): void;
         unselect?(arg: {
             view: View;
             jsEvent: Event;
-    ***REMOVED***): void;
+        }): void;
         loading?(isLoading: boolean): void;
         eventRender?(arg: {
             isMirror: boolean;
@@ -326,7 +326,7 @@ declare module '@fullcalendar/core/types/input-types' {
             event: EventApi;
             el: HTMLElement;
             view: View;
-    ***REMOVED***): void;
+        }): void;
         eventPositioned?(arg: {
             isMirror: boolean;
             isStart: boolean;
@@ -334,28 +334,28 @@ declare module '@fullcalendar/core/types/input-types' {
             event: EventApi;
             el: HTMLElement;
             view: View;
-    ***REMOVED***): void;
+        }): void;
         _eventsPositioned?(arg: {
             view: View;
-    ***REMOVED***): void;
+        }): void;
         eventDestroy?(arg: {
             isMirror: boolean;
             event: EventApi;
             el: HTMLElement;
             view: View;
-    ***REMOVED***): void;
+        }): void;
         eventDragStart?(arg: {
             event: EventApi;
             el: HTMLElement;
             jsEvent: MouseEvent;
             view: View;
-    ***REMOVED***): void;
+        }): void;
         eventDragStop?(arg: {
             event: EventApi;
             el: HTMLElement;
             jsEvent: MouseEvent;
             view: View;
-    ***REMOVED***): void;
+        }): void;
         eventDrop?(arg: {
             el: HTMLElement;
             event: EventApi;
@@ -364,19 +364,19 @@ declare module '@fullcalendar/core/types/input-types' {
             revert: () => void;
             jsEvent: Event;
             view: View;
-    ***REMOVED***): void;
+        }): void;
         eventResizeStart?(arg: {
             el: HTMLElement;
             event: EventApi;
             jsEvent: MouseEvent;
             view: View;
-    ***REMOVED***): void;
+        }): void;
         eventResizeStop?(arg: {
             el: HTMLElement;
             event: EventApi;
             jsEvent: MouseEvent;
             view: View;
-    ***REMOVED***): void;
+        }): void;
         eventResize?(arg: {
             el: HTMLElement;
             startDelta: Duration;
@@ -386,7 +386,7 @@ declare module '@fullcalendar/core/types/input-types' {
             revert: () => void;
             jsEvent: Event;
             view: View;
-    ***REMOVED***): void;
+        }): void;
         drop?(arg: {
             date: Date;
             dateStr: string;
@@ -394,25 +394,25 @@ declare module '@fullcalendar/core/types/input-types' {
             draggedEl: HTMLElement;
             jsEvent: MouseEvent;
             view: View;
-    ***REMOVED***): void;
+        }): void;
         eventReceive?(arg: {
             event: EventApi;
             draggedEl: HTMLElement;
             view: View;
-    ***REMOVED***): void;
+        }): void;
         eventLeave?(arg: {
             draggedEl: HTMLElement;
             event: EventApi;
             view: View;
-    ***REMOVED***): void;
+        }): void;
         viewSkeletonRender?(arg: {
             el: HTMLElement;
             view: View;
-    ***REMOVED***): void;
+        }): void;
         viewSkeletonDestroy?(arg: {
             el: HTMLElement;
             view: View;
-    ***REMOVED***): void;
+        }): void;
         _destroyed?(): void;
         _init?(): void;
         _noEventDrop?(): void;
@@ -421,27 +421,27 @@ declare module '@fullcalendar/core/types/input-types' {
             resource: any;
             el: HTMLElement;
             view: View;
-    ***REMOVED***): void;
-***REMOVED***
+        }): void;
+    }
     export interface ViewOptionsInput extends OptionsInputBase {
         type?: string;
         buttonText?: string;
-***REMOVED***
+    }
     export interface OptionsInput extends OptionsInputBase {
         buttonText?: ButtonTextCompoundInput;
         views?: {
             [viewId: string]: ViewOptionsInput;
-    ***REMOVED***;
+        };
         plugins?: (PluginDef | string)[];
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/structs/event' {
-    import { DateInput ***REMOVED*** from '@fullcalendar/core/datelib/env';
+    import { DateInput } from '@fullcalendar/core/datelib/env';
     import Calendar from '@fullcalendar/core/Calendar';
-    import { DateRange ***REMOVED*** from '@fullcalendar/core/datelib/date-range';
-    import { Duration ***REMOVED*** from '@fullcalendar/core/datelib/duration';
-    import { UnscopedEventUiInput, EventUi ***REMOVED*** from '@fullcalendar/core/component/event-ui';
+    import { DateRange } from '@fullcalendar/core/datelib/date-range';
+    import { Duration } from '@fullcalendar/core/datelib/duration';
+    import { UnscopedEventUiInput, EventUi } from '@fullcalendar/core/component/event-ui';
     export type EventRenderingChoice = '' | 'background' | 'inverse-background' | 'none';
     export interface EventNonDateInput extends UnscopedEventUiInput {
         id?: string | number;
@@ -451,13 +451,13 @@ declare module '@fullcalendar/core/structs/event' {
         rendering?: EventRenderingChoice;
         extendedProps?: object;
         [extendedProp: string]: any;
-***REMOVED***
+    }
     export interface EventDateInput {
         start?: DateInput;
         end?: DateInput;
         date?: DateInput;
         allDay?: boolean;
-***REMOVED***
+    }
     export type EventInput = EventNonDateInput & EventDateInput;
     export interface EventDef {
         defId: string;
@@ -470,30 +470,30 @@ declare module '@fullcalendar/core/structs/event' {
             typeId: number;
             typeData: any;
             duration: Duration | null;
-    ***REMOVED*** | null;
+        } | null;
         title: string;
         url: string;
         rendering: EventRenderingChoice;
         ui: EventUi;
         extendedProps: any;
-***REMOVED***
+    }
     export interface EventInstance {
         instanceId: string;
         defId: string;
         range: DateRange;
         forcedStartTzo: number | null;
         forcedEndTzo: number | null;
-***REMOVED***
+    }
     export interface EventTuple {
         def: EventDef;
         instance: EventInstance | null;
-***REMOVED***
+    }
     export type EventInstanceHash = {
         [instanceId: string]: EventInstance;
-***REMOVED***;
+    };
     export type EventDefHash = {
         [defId: string]: EventDef;
-***REMOVED***;
+    };
     export const NON_DATE_PROPS: {
         id: StringConstructor;
         groupId: StringConstructor;
@@ -501,32 +501,32 @@ declare module '@fullcalendar/core/structs/event' {
         url: StringConstructor;
         rendering: StringConstructor;
         extendedProps: any;
-***REMOVED***;
+    };
     export const DATE_PROPS: {
         start: any;
         date: any;
         end: any;
         allDay: any;
-***REMOVED***;
+    };
     export function parseEvent(raw: EventInput, sourceId: string, calendar: Calendar, allowOpenRange?: boolean): EventTuple | null;
     export function parseEventDef(raw: EventNonDateInput, sourceId: string, allDay: boolean, hasEnd: boolean, calendar: Calendar): EventDef;
     export type eventDefParserFunc = (def: EventDef, props: any, leftovers: any) => void;
     export function createEventInstance(defId: string, range: DateRange, forcedStartTzo?: number, forcedEndTzo?: number): EventInstance;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/structs/business-hours' {
     import Calendar from '@fullcalendar/core/Calendar';
-    import { EventInput ***REMOVED*** from '@fullcalendar/core/structs/event';
-    import { EventStore ***REMOVED*** from '@fullcalendar/core/structs/event-store';
+    import { EventInput } from '@fullcalendar/core/structs/event';
+    import { EventStore } from '@fullcalendar/core/structs/event-store';
     export type BusinessHoursInput = boolean | EventInput | EventInput[];
     export function parseBusinessHours(input: BusinessHoursInput, calendar: Calendar): EventStore;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/util/misc' {
-    import { DateMarker ***REMOVED*** from '@fullcalendar/core/datelib/marker';
-    import { Duration ***REMOVED*** from '@fullcalendar/core/datelib/duration';
-    import { DateEnv ***REMOVED*** from '@fullcalendar/core/datelib/env';
-    import { DateRange, OpenDateRange ***REMOVED*** from '@fullcalendar/core/datelib/date-range';
+    import { DateMarker } from '@fullcalendar/core/datelib/marker';
+    import { Duration } from '@fullcalendar/core/datelib/duration';
+    import { DateEnv } from '@fullcalendar/core/datelib/env';
+    import { DateRange, OpenDateRange } from '@fullcalendar/core/datelib/date-range';
     export function compensateScroll(rowEl: HTMLElement, scrollbarWidths: any): void;
     export function uncompensateScroll(rowEl: HTMLElement): void;
     export function disableCursor(): void;
@@ -552,13 +552,13 @@ declare module '@fullcalendar/core/util/misc' {
     export function debounce(func: any, wait: any): () => any;
     export type GenericHash = {
         [key: string]: any;
-***REMOVED***;
+    };
     export function refineProps(rawProps: GenericHash, processors: GenericHash, defaults?: GenericHash, leftoverProps?: GenericHash): GenericHash;
     export function computeAlignedDayRange(timedRange: DateRange): DateRange;
     export function computeVisibleDayRange(timedRange: OpenDateRange, nextDayThreshold?: Duration): OpenDateRange;
     export function isMultiDayRange(range: DateRange): boolean;
     export function diffDates(date0: DateMarker, date1: DateMarker, dateEnv: DateEnv, largeUnit?: string): Duration;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/util/html' {
     export function htmlEscape(s: any): string;
@@ -566,61 +566,61 @@ declare module '@fullcalendar/core/util/html' {
     export function attrsToStr(attrs: any): string;
     export type ClassNameInput = string | string[];
     export function parseClassName(raw: ClassNameInput): string[];
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/util/array' {
     export function removeMatching(array: any, testFunc: any): number;
     export function removeExact(array: any, exactVal: any): number;
     export function isArraysEqual(a0: any, a1: any): boolean;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/util/memoize' {
     export function memoize<T>(workerFunc: T): T;
     export function memoizeOutput<T>(workerFunc: T, equalityFunc: (output0: any, output1: any) => boolean): T;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/component/memoized-rendering' {
     export interface MemoizedRendering<ArgsType extends any[]> {
         (...args: ArgsType): void;
         unrender: () => void;
         dependents: MemoizedRendering<any>[];
-***REMOVED***
+    }
     export function memoizeRendering<ArgsType extends any[]>(renderFunc: (...args: ArgsType) => void, unrenderFunc?: (...args: ArgsType) => void, dependencies?: MemoizedRendering<any>[]): MemoizedRendering<ArgsType>;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/util/geom' {
     export interface Point {
         left: number;
         top: number;
-***REMOVED***
+    }
     export interface Rect {
         left: number;
         right: number;
         top: number;
         bottom: number;
-***REMOVED***
+    }
     export function pointInsideRect(point: Point, rect: Rect): boolean;
     export function intersectRects(rect1: Rect, rect2: Rect): Rect | false;
     export function translateRect(rect: Rect, deltaX: number, deltaY: number): Rect;
     export function constrainPoint(point: Point, rect: Rect): Point;
     export function getRectCenter(rect: Rect): Point;
     export function diffPoints(point1: Point, point2: Point): Point;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/util/object' {
     export function mergeProps(propObjs: any, complexProps?: any): any;
-    export function filterHash(hash: any, func: any): {***REMOVED***;
+    export function filterHash(hash: any, func: any): {};
     export function mapHash<InputItem, OutputItem>(hash: {
         [key: string]: InputItem;
-***REMOVED***, func: (input: InputItem, key: string) => OutputItem): {
+    }, func: (input: InputItem, key: string) => OutputItem): {
         [key: string]: OutputItem;
-***REMOVED***;
+    };
     export function arrayToHash(a: any): {
         [key: string]: true;
-***REMOVED***;
+    };
     export function hashValuesToArray(obj: any): any[];
     export function isPropsEqual(obj0: any, obj1: any): boolean;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/util/dom-manip' {
     export function createElement(tagName: string, attrs: object | null, content?: ElementContent): HTMLElement;
@@ -638,17 +638,17 @@ declare module '@fullcalendar/core/util/dom-manip' {
     export function forceClassName(el: HTMLElement, className: string, bool: any): void;
     export function applyStyle(el: HTMLElement, props: object): void;
     export function applyStyleProp(el: HTMLElement, name: string, val: any): void;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/structs/event-store' {
-    import { EventInput, EventDef, EventDefHash, EventInstanceHash, EventTuple ***REMOVED*** from '@fullcalendar/core/structs/event';
-    import { EventSource ***REMOVED*** from '@fullcalendar/core/structs/event-source';
+    import { EventInput, EventDef, EventDefHash, EventInstanceHash, EventTuple } from '@fullcalendar/core/structs/event';
+    import { EventSource } from '@fullcalendar/core/structs/event-source';
     import Calendar from '@fullcalendar/core/Calendar';
-    import { DateRange ***REMOVED*** from '@fullcalendar/core/datelib/date-range';
+    import { DateRange } from '@fullcalendar/core/datelib/date-range';
     export interface EventStore {
         defs: EventDefHash;
         instances: EventInstanceHash;
-***REMOVED***
+    }
     export function parseEvents(rawEvents: EventInput[], sourceId: string, calendar: Calendar, allowOpenRange?: boolean): EventStore;
     export function eventTupleToStore(tuple: EventTuple, eventStore?: EventStore): EventStore;
     export function expandRecurring(eventStore: EventStore, framingRange: DateRange, calendar: Calendar): EventStore;
@@ -657,11 +657,11 @@ declare module '@fullcalendar/core/structs/event-store' {
     export function createEmptyEventStore(): EventStore;
     export function mergeEventStores(store0: EventStore, store1: EventStore): EventStore;
     export function filterEventStoreDefs(eventStore: EventStore, filterFunc: (eventDef: EventDef) => boolean): EventStore;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/component/event-ui' {
-    import { Constraint, AllowFunc, ConstraintInput ***REMOVED*** from '@fullcalendar/core/validation';
-    import { parseClassName ***REMOVED*** from '@fullcalendar/core/util/html';
+    import { Constraint, AllowFunc, ConstraintInput } from '@fullcalendar/core/validation';
+    import { parseClassName } from '@fullcalendar/core/util/html';
     import Calendar from '@fullcalendar/core/Calendar';
     export interface UnscopedEventUiInput {
         editable?: boolean;
@@ -676,7 +676,7 @@ declare module '@fullcalendar/core/component/event-ui' {
         borderColor?: string;
         textColor?: string;
         color?: string;
-***REMOVED***
+    }
     export interface EventUi {
         startEditable: boolean | null;
         durationEditable: boolean | null;
@@ -687,10 +687,10 @@ declare module '@fullcalendar/core/component/event-ui' {
         borderColor: string;
         textColor: string;
         classNames: string[];
-***REMOVED***
+    }
     export type EventUiHash = {
         [defId: string]: EventUi;
-***REMOVED***;
+    };
     export const UNSCOPED_EVENT_UI_PROPS: {
         editable: BooleanConstructor;
         startEditable: BooleanConstructor;
@@ -704,18 +704,18 @@ declare module '@fullcalendar/core/component/event-ui' {
         backgroundColor: StringConstructor;
         borderColor: StringConstructor;
         textColor: StringConstructor;
-***REMOVED***;
+    };
     export function processUnscopedUiProps(rawProps: UnscopedEventUiInput, calendar: Calendar, leftovers?: any): EventUi;
     export function processScopedUiProps(prefix: string, rawScoped: any, calendar: Calendar, leftovers?: any): EventUi;
     export function combineEventUis(uis: EventUi[]): EventUi;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/component/event-splitting' {
-    import { EventStore ***REMOVED*** from '@fullcalendar/core/structs/event-store';
-    import { EventDef ***REMOVED*** from '@fullcalendar/core/structs/event';
-    import { EventInteractionState ***REMOVED*** from '@fullcalendar/core/interactions/event-interaction-state';
-    import { EventUiHash, EventUi ***REMOVED*** from '@fullcalendar/core/component/event-ui';
-    import { DateSpan ***REMOVED*** from '@fullcalendar/core/structs/date-span';
+    import { EventStore } from '@fullcalendar/core/structs/event-store';
+    import { EventDef } from '@fullcalendar/core/structs/event';
+    import { EventInteractionState } from '@fullcalendar/core/interactions/event-interaction-state';
+    import { EventUiHash, EventUi } from '@fullcalendar/core/component/event-ui';
+    import { DateSpan } from '@fullcalendar/core/structs/date-span';
     export interface SplittableProps {
         businessHours: EventStore | null;
         dateSelection: DateSpan | null;
@@ -724,41 +724,41 @@ declare module '@fullcalendar/core/component/event-splitting' {
         eventSelection: string;
         eventDrag: EventInteractionState | null;
         eventResize: EventInteractionState | null;
-***REMOVED***
-    export { Splitter as default, Splitter ***REMOVED***;
+    }
+    export { Splitter as default, Splitter };
     abstract class Splitter<PropsType extends SplittableProps = SplittableProps> {
         abstract getKeyInfo(props: PropsType): {
             [key: string]: {
                 ui?: EventUi;
                 businessHours?: EventStore;
-        ***REMOVED***;
-    ***REMOVED***;
+            };
+        };
         abstract getKeysForDateSpan(dateSpan: DateSpan): string[];
         abstract getKeysForEventDef(eventDef: EventDef): string[];
         splitProps(props: PropsType): {
             [key: string]: SplittableProps;
-    ***REMOVED***;
-***REMOVED***
-***REMOVED***
+        };
+    }
+}
 
 declare module '@fullcalendar/core/component/date-rendering' {
-    import { DateMarker ***REMOVED*** from '@fullcalendar/core/datelib/marker';
-    import Component, { ComponentContext ***REMOVED*** from '@fullcalendar/core/component/Component';
-    import { DateProfile ***REMOVED*** from '@fullcalendar/core/DateProfileGenerator';
+    import { DateMarker } from '@fullcalendar/core/datelib/marker';
+    import Component, { ComponentContext } from '@fullcalendar/core/component/Component';
+    import { DateProfile } from '@fullcalendar/core/DateProfileGenerator';
     export function buildGotoAnchorHtml(component: Component<any>, gotoOptions: any, attrs: any, innerHtml?: any): string;
     export function getAllDayHtml(component: Component<any>): any;
     export function getDayClasses(date: DateMarker, dateProfile: DateProfile, context: ComponentContext, noThemeHighlight?: any): any[];
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/util/dom-event' {
     export function preventDefault(ev: any): void;
     export function listenBySelector(container: HTMLElement, eventType: string, selector: string, handler: (ev: Event, matchedTarget: HTMLElement) => void): () => void;
     export function listenToHoverBySelector(container: HTMLElement, selector: string, onMouseEnter: (ev: Event, matchedTarget: HTMLElement) => void, onMouseLeave: (ev: Event, matchedTarget: HTMLElement) => void): () => void;
     export function whenTransitionDone(el: HTMLElement, callback: (ev: Event) => void): void;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/util/dom-geom' {
-    import { Rect ***REMOVED*** from '@fullcalendar/core/util/geom';
+    import { Rect } from '@fullcalendar/core/util/geom';
     export interface EdgeInfo {
         borderLeft: number;
         borderRight: number;
@@ -771,24 +771,24 @@ declare module '@fullcalendar/core/util/dom-geom' {
         paddingRight?: number;
         paddingTop?: number;
         paddingBottom?: number;
-***REMOVED***
+    }
     export function computeEdges(el: any, getPadding?: boolean): EdgeInfo;
     export function computeInnerRect(el: any, goWithinPadding?: boolean): {
         left: number;
         right: number;
         top: number;
         bottom: number;
-***REMOVED***;
+    };
     export function computeRect(el: any): Rect;
     export function computeHeightAndMargins(el: HTMLElement): number;
     export function computeVMargins(el: HTMLElement): number;
     export function getClippingParents(el: HTMLElement): HTMLElement[];
     export function computeClippingRect(el: HTMLElement): Rect;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/util/promise' {
     export function unpromisify(func: any, success: any, failure?: any): void;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/common/EmitterMixin' {
     import Mixin from '@fullcalendar/core/common/Mixin';
@@ -799,8 +799,8 @@ declare module '@fullcalendar/core/common/EmitterMixin' {
         trigger(type: any, ...args: any[]): any;
         triggerWith(type: any, context: any, args: any): any;
         hasHandlers(type: any): any;
-***REMOVED***
-    export { EmitterMixin as default, EmitterMixin ***REMOVED***;
+    }
+    export { EmitterMixin as default, EmitterMixin };
     class EmitterMixin extends Mixin implements EmitterInterface {
         _handlers: any;
         _oneHandlers: any;
@@ -810,24 +810,24 @@ declare module '@fullcalendar/core/common/EmitterMixin' {
         trigger(type: any, ...args: any[]): this;
         triggerWith(type: any, context: any, args: any): this;
         hasHandlers(type: any): any;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/datelib/date-range' {
-    import { DateMarker ***REMOVED*** from '@fullcalendar/core/datelib/marker';
-    import { DateEnv, DateInput ***REMOVED*** from '@fullcalendar/core/datelib/env';
+    import { DateMarker } from '@fullcalendar/core/datelib/marker';
+    import { DateEnv, DateInput } from '@fullcalendar/core/datelib/env';
     export interface DateRangeInput {
         start?: DateInput;
         end?: DateInput;
-***REMOVED***
+    }
     export interface OpenDateRange {
         start: DateMarker | null;
         end: DateMarker | null;
-***REMOVED***
+    }
     export interface DateRange {
         start: DateMarker;
         end: DateMarker;
-***REMOVED***
+    }
     export function parseRange(input: DateRangeInput, dateEnv: DateEnv): OpenDateRange;
     export function invertRanges(ranges: DateRange[], constraintRange: DateRange): DateRange[];
     export function intersectRanges(range0: OpenDateRange, range1: OpenDateRange): OpenDateRange;
@@ -836,19 +836,19 @@ declare module '@fullcalendar/core/datelib/date-range' {
     export function rangeContainsRange(outerRange: OpenDateRange, innerRange: OpenDateRange): boolean;
     export function rangeContainsMarker(range: OpenDateRange, date: DateMarker | number): boolean;
     export function constrainMarkerToRange(date: DateMarker, range: DateRange): DateMarker;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/common/Mixin' {
-    export { Mixin as default, Mixin ***REMOVED***;
+    export { Mixin as default, Mixin };
     class Mixin {
         static mixInto(destClass: any): void;
         static mixIntoObj(destObj: any): void;
         static mixOver(destClass: any): void;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/common/PositionCache' {
-    export { PositionCache as default, PositionCache ***REMOVED***;
+    export { PositionCache as default, PositionCache };
     class PositionCache {
         originClientRect: ClientRect;
         els: HTMLElement[];
@@ -867,17 +867,17 @@ declare module '@fullcalendar/core/common/PositionCache' {
         topToIndex(topPosition: number): any;
         getWidth(leftIndex: number): number;
         getHeight(topIndex: number): number;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/common/ScrollComponent' {
-    import { ElementScrollController ***REMOVED*** from '@fullcalendar/core/common/scroll-controller';
+    import { ElementScrollController } from '@fullcalendar/core/common/scroll-controller';
     export interface ScrollbarWidths {
         left: number;
         right: number;
         bottom: number;
-***REMOVED***
-    export { ScrollComponent as default, ScrollComponent ***REMOVED***;
+    }
+    export { ScrollComponent as default, ScrollComponent };
     class ScrollComponent extends ElementScrollController {
         overflowX: string;
         overflowY: string;
@@ -888,8 +888,8 @@ declare module '@fullcalendar/core/common/ScrollComponent' {
         lockOverflow(scrollbarWidths: ScrollbarWidths): void;
         setHeight(height: number | string): void;
         getScrollbarWidths(): ScrollbarWidths;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/common/scroll-controller' {
     export abstract class ScrollController {
@@ -909,7 +909,7 @@ declare module '@fullcalendar/core/common/scroll-controller' {
         canScrollDown(): boolean;
         canScrollLeft(): boolean;
         canScrollRight(): boolean;
-***REMOVED***
+    }
     export class ElementScrollController extends ScrollController {
         el: HTMLElement;
         constructor(el: HTMLElement);
@@ -921,7 +921,7 @@ declare module '@fullcalendar/core/common/scroll-controller' {
         getScrollHeight(): number;
         getClientHeight(): number;
         getClientWidth(): number;
-***REMOVED***
+    }
     export class WindowScrollController extends ScrollController {
         getScrollTop(): number;
         getScrollLeft(): number;
@@ -931,11 +931,11 @@ declare module '@fullcalendar/core/common/scroll-controller' {
         getScrollHeight(): number;
         getClientHeight(): number;
         getClientWidth(): number;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/theme/Theme' {
-    export { Theme as default, Theme ***REMOVED***;
+    export { Theme as default, Theme };
     class Theme {
         calendarOptions: any;
         classes: any;
@@ -951,28 +951,28 @@ declare module '@fullcalendar/core/theme/Theme' {
         getClass(key: any): any;
         getIconClass(buttonName: any): string;
         getCustomButtonIconClass(customButtonProps: any): string;
-***REMOVED***
+    }
     export type ThemeClass = {
         new (calendarOptions: any): Theme;
-***REMOVED***;
-***REMOVED***
+    };
+}
 
 declare module '@fullcalendar/core/component/Component' {
     import Calendar from '@fullcalendar/core/Calendar';
     import View from '@fullcalendar/core/View';
     import Theme from '@fullcalendar/core/theme/Theme';
-    import { DateEnv ***REMOVED*** from '@fullcalendar/core/datelib/env';
+    import { DateEnv } from '@fullcalendar/core/datelib/env';
     export interface ComponentContext {
         options: any;
         dateEnv: DateEnv;
         theme: Theme;
         calendar: Calendar;
         view: View;
-***REMOVED***
+    }
     export type EqualityFuncHash = {
         [propName: string]: (obj0: any, obj1: any) => boolean;
-***REMOVED***;
-    export { Component as default, Component ***REMOVED***;
+    };
+    export { Component as default, Component };
     class Component<PropsType> {
         equalityFuncs: EqualityFuncHash;
         uid: string;
@@ -989,22 +989,22 @@ declare module '@fullcalendar/core/component/Component' {
         receiveProps(props: PropsType): void;
         protected render(props: PropsType): void;
         destroy(): void;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/component/DateComponent' {
-    import Component, { ComponentContext ***REMOVED*** from '@fullcalendar/core/component/Component';
-    import { EventRenderRange ***REMOVED*** from '@fullcalendar/core/component/event-rendering';
-    import { DateSpan ***REMOVED*** from '@fullcalendar/core/structs/date-span';
-    import { EventInstanceHash ***REMOVED*** from '@fullcalendar/core/structs/event';
-    import { Hit ***REMOVED*** from '@fullcalendar/core/interactions/hit';
+    import Component, { ComponentContext } from '@fullcalendar/core/component/Component';
+    import { EventRenderRange } from '@fullcalendar/core/component/event-rendering';
+    import { DateSpan } from '@fullcalendar/core/structs/date-span';
+    import { EventInstanceHash } from '@fullcalendar/core/structs/event';
+    import { Hit } from '@fullcalendar/core/interactions/hit';
     import FgEventRenderer from '@fullcalendar/core/component/renderers/FgEventRenderer';
     import FillRenderer from '@fullcalendar/core/component/renderers/FillRenderer';
-    import { EventInteractionState ***REMOVED*** from '@fullcalendar/core/interactions/event-interaction-state';
-    import { EventHandlerName, EventHandlerArgs ***REMOVED*** from '@fullcalendar/core/types/input-types';
+    import { EventInteractionState } from '@fullcalendar/core/interactions/event-interaction-state';
+    import { EventHandlerName, EventHandlerArgs } from '@fullcalendar/core/types/input-types';
     export type DateComponentHash = {
         [uid: string]: DateComponent<any>;
-***REMOVED***;
+    };
     export interface Seg {
         component?: DateComponent<any>;
         isStart: boolean;
@@ -1012,14 +1012,14 @@ declare module '@fullcalendar/core/component/DateComponent' {
         eventRange?: EventRenderRange;
         el?: HTMLElement;
         [otherProp: string]: any;
-***REMOVED***
+    }
     export interface EventSegUiInteractionState {
         affectedInstances: EventInstanceHash;
         segs: Seg[];
         isEvent: boolean;
         sourceSeg: any;
-***REMOVED***
-    export { DateComponent as default, DateComponent ***REMOVED***;
+    }
+    export { DateComponent as default, DateComponent };
     class DateComponent<PropsType> extends Component<PropsType> {
         fgSegSelector: string;
         bgSegSelector: string;
@@ -1043,57 +1043,57 @@ declare module '@fullcalendar/core/component/DateComponent' {
         isValidDateDownEl(el: HTMLElement): boolean;
         isPopover(): boolean;
         isInPopover(el: HTMLElement): boolean;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/Calendar' {
-    import { EmitterInterface ***REMOVED*** from '@fullcalendar/core/common/EmitterMixin';
+    import { EmitterInterface } from '@fullcalendar/core/common/EmitterMixin';
     import OptionsManager from '@fullcalendar/core/OptionsManager';
     import View from '@fullcalendar/core/View';
     import Theme from '@fullcalendar/core/theme/Theme';
-    import { OptionsInput, EventHandlerName, EventHandlerArgs ***REMOVED*** from '@fullcalendar/core/types/input-types';
-    import { RawLocaleMap ***REMOVED*** from '@fullcalendar/core/datelib/locale';
-    import { DateEnv, DateInput ***REMOVED*** from '@fullcalendar/core/datelib/env';
-    import { DateMarker ***REMOVED*** from '@fullcalendar/core/datelib/marker';
-    import { Duration, DurationInput ***REMOVED*** from '@fullcalendar/core/datelib/duration';
-    import { DateSpan, DateSpanApi, DatePointApi ***REMOVED*** from '@fullcalendar/core/structs/date-span';
-    import { DateRangeInput ***REMOVED*** from '@fullcalendar/core/datelib/date-range';
+    import { OptionsInput, EventHandlerName, EventHandlerArgs } from '@fullcalendar/core/types/input-types';
+    import { RawLocaleMap } from '@fullcalendar/core/datelib/locale';
+    import { DateEnv, DateInput } from '@fullcalendar/core/datelib/env';
+    import { DateMarker } from '@fullcalendar/core/datelib/marker';
+    import { Duration, DurationInput } from '@fullcalendar/core/datelib/duration';
+    import { DateSpan, DateSpanApi, DatePointApi } from '@fullcalendar/core/structs/date-span';
+    import { DateRangeInput } from '@fullcalendar/core/datelib/date-range';
     import DateProfileGenerator from '@fullcalendar/core/DateProfileGenerator';
-    import { EventSourceInput ***REMOVED*** from '@fullcalendar/core/structs/event-source';
-    import { EventInput ***REMOVED*** from '@fullcalendar/core/structs/event';
-    import { CalendarState, Action ***REMOVED*** from '@fullcalendar/core/reducers/types';
+    import { EventSourceInput } from '@fullcalendar/core/structs/event-source';
+    import { EventInput } from '@fullcalendar/core/structs/event';
+    import { CalendarState, Action } from '@fullcalendar/core/reducers/types';
     import EventSourceApi from '@fullcalendar/core/api/EventSourceApi';
     import EventApi from '@fullcalendar/core/api/EventApi';
-    import { EventStore ***REMOVED*** from '@fullcalendar/core/structs/event-store';
-    import { EventUiHash, EventUi ***REMOVED*** from '@fullcalendar/core/component/event-ui';
-    import { ViewSpecHash, ViewSpec ***REMOVED*** from '@fullcalendar/core/structs/view-spec';
-    import { PluginSystem ***REMOVED*** from '@fullcalendar/core/plugin-system';
+    import { EventStore } from '@fullcalendar/core/structs/event-store';
+    import { EventUiHash, EventUi } from '@fullcalendar/core/component/event-ui';
+    import { ViewSpecHash, ViewSpec } from '@fullcalendar/core/structs/view-spec';
+    import { PluginSystem } from '@fullcalendar/core/plugin-system';
     import CalendarComponent from '@fullcalendar/core/CalendarComponent';
     import DateComponent from '@fullcalendar/core/component/DateComponent';
-    import { PointerDragEvent ***REMOVED*** from '@fullcalendar/core/interactions/pointer';
-    import { InteractionSettingsInput, Interaction ***REMOVED*** from '@fullcalendar/core/interactions/interaction';
+    import { PointerDragEvent } from '@fullcalendar/core/interactions/pointer';
+    import { InteractionSettingsInput, Interaction } from '@fullcalendar/core/interactions/interaction';
     export interface DateClickApi extends DatePointApi {
         dayEl: HTMLElement;
         jsEvent: UIEvent;
         view: View;
-***REMOVED***
+    }
     export interface DateSelectionApi extends DateSpanApi {
         jsEvent: UIEvent;
         view: View;
-***REMOVED***
+    }
     export type DatePointTransform = (dateSpan: DateSpan, calendar: Calendar) => any;
     export type DateSpanTransform = (dateSpan: DateSpan, calendar: Calendar) => any;
     export type CalendarInteraction = {
         destroy(): any;
-***REMOVED***;
+    };
     export type CalendarInteractionClass = {
         new (calendar: Calendar): CalendarInteraction;
-***REMOVED***;
+    };
     export type OptionChangeHandler = (propValue: any, calendar: Calendar, deepEqual: any) => void;
     export type OptionChangeHandlerMap = {
         [propName: string]: OptionChangeHandler;
-***REMOVED***;
-    export { Calendar as default, Calendar ***REMOVED***;
+    };
+    export { Calendar as default, Calendar };
     class Calendar {
         static on: EmitterInterface['on'];
         static off: EmitterInterface['off'];
@@ -1110,7 +1110,7 @@ declare module '@fullcalendar/core/Calendar' {
         viewSpecs: ViewSpecHash;
         dateProfileGenerators: {
             [viewName: string]: DateProfileGenerator;
-    ***REMOVED***;
+        };
         theme: Theme;
         dateEnv: DateEnv;
         availableRawLocales: RawLocaleMap;
@@ -1120,7 +1120,7 @@ declare module '@fullcalendar/core/Calendar' {
         calendarInteractions: CalendarInteraction[];
         interactionsStore: {
             [componentUid: string]: Interaction[];
-    ***REMOVED***;
+        };
         removeNavLinkListener: any;
         windowResizeProxy: any;
         isHandlingWindowResize: boolean;
@@ -1209,25 +1209,25 @@ declare module '@fullcalendar/core/Calendar' {
         removeAllEventSources(): void;
         refetchEvents(): void;
         scrollToTime(timeInput: DurationInput): void;
-***REMOVED***
+    }
     function buildDelayedRerender(this: Calendar, wait: any): any;
-    export {***REMOVED***;
-***REMOVED***
+    export {};
+}
 
 declare module '@fullcalendar/core/View' {
-    import DateProfileGenerator, { DateProfile ***REMOVED*** from '@fullcalendar/core/DateProfileGenerator';
-    import { DateMarker ***REMOVED*** from '@fullcalendar/core/datelib/marker';
-    import { Duration ***REMOVED*** from '@fullcalendar/core/datelib/duration';
-    import { EmitterInterface ***REMOVED*** from '@fullcalendar/core/common/EmitterMixin';
-    import { ViewSpec ***REMOVED*** from '@fullcalendar/core/structs/view-spec';
-    import { ComponentContext ***REMOVED*** from '@fullcalendar/core/component/Component';
+    import DateProfileGenerator, { DateProfile } from '@fullcalendar/core/DateProfileGenerator';
+    import { DateMarker } from '@fullcalendar/core/datelib/marker';
+    import { Duration } from '@fullcalendar/core/datelib/duration';
+    import { EmitterInterface } from '@fullcalendar/core/common/EmitterMixin';
+    import { ViewSpec } from '@fullcalendar/core/structs/view-spec';
+    import { ComponentContext } from '@fullcalendar/core/component/Component';
     import DateComponent from '@fullcalendar/core/component/DateComponent';
-    import { EventStore ***REMOVED*** from '@fullcalendar/core/structs/event-store';
-    import { EventUiHash, EventUi ***REMOVED*** from '@fullcalendar/core/component/event-ui';
-    import { EventRenderRange ***REMOVED*** from '@fullcalendar/core/component/event-rendering';
-    import { DateSpan ***REMOVED*** from '@fullcalendar/core/structs/date-span';
-    import { EventInteractionState ***REMOVED*** from '@fullcalendar/core/interactions/event-interaction-state';
-    import { EventDef ***REMOVED*** from '@fullcalendar/core/structs/event';
+    import { EventStore } from '@fullcalendar/core/structs/event-store';
+    import { EventUiHash, EventUi } from '@fullcalendar/core/component/event-ui';
+    import { EventRenderRange } from '@fullcalendar/core/component/event-rendering';
+    import { DateSpan } from '@fullcalendar/core/structs/date-span';
+    import { EventInteractionState } from '@fullcalendar/core/interactions/event-interaction-state';
+    import { EventDef } from '@fullcalendar/core/structs/event';
     export interface ViewProps {
         dateProfile: DateProfile;
         businessHours: EventStore;
@@ -1237,8 +1237,8 @@ declare module '@fullcalendar/core/View' {
         eventSelection: string;
         eventDrag: EventInteractionState | null;
         eventResize: EventInteractionState | null;
-***REMOVED***
-    export { View as default, View ***REMOVED***;
+    }
+    export { View as default, View };
     abstract class View extends DateComponent<ViewProps> {
         usesMinMaxTime: boolean;
         dateProfileGeneratorClass: any;
@@ -1309,21 +1309,21 @@ declare module '@fullcalendar/core/View' {
         applyQueuedScroll(isResize: boolean): void;
         queryScroll(): any;
         applyScroll(scroll: any, isResize: boolean): void;
-        computeDateScroll(duration: Duration): {***REMOVED***;
-        queryDateScroll(): {***REMOVED***;
+        computeDateScroll(duration: Duration): {};
+        queryDateScroll(): {};
         applyDateScroll(scroll: any): void;
         scrollToDuration(duration: Duration): void;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/component/renderers/FgEventRenderer' {
-    import { DateMarker ***REMOVED*** from '@fullcalendar/core/datelib/marker';
-    import { DateFormatter ***REMOVED*** from '@fullcalendar/core/datelib/formatting';
-    import { EventUi ***REMOVED*** from '@fullcalendar/core/component/event-ui';
-    import { EventRenderRange ***REMOVED*** from '@fullcalendar/core/component/event-rendering';
-    import { Seg ***REMOVED*** from '@fullcalendar/core/component/DateComponent';
-    import { ComponentContext ***REMOVED*** from '@fullcalendar/core/component/Component';
-    export { FgEventRenderer as default, FgEventRenderer ***REMOVED***;
+    import { DateMarker } from '@fullcalendar/core/datelib/marker';
+    import { DateFormatter } from '@fullcalendar/core/datelib/formatting';
+    import { EventUi } from '@fullcalendar/core/component/event-ui';
+    import { EventRenderRange } from '@fullcalendar/core/component/event-rendering';
+    import { Seg } from '@fullcalendar/core/component/DateComponent';
+    import { ComponentContext } from '@fullcalendar/core/component/Component';
+    export { FgEventRenderer as default, FgEventRenderer };
     abstract class FgEventRenderer {
         context: ComponentContext;
         eventTimeFormat: DateFormatter;
@@ -1349,7 +1349,7 @@ declare module '@fullcalendar/core/component/renderers/FgEventRenderer' {
             'background-color': string;
             'border-color': string;
             color: string;
-    ***REMOVED***;
+        };
         sortEventSegs(segs: any): Seg[];
         computeSizes(force: boolean): void;
         assignSizes(force: boolean): void;
@@ -1359,14 +1359,14 @@ declare module '@fullcalendar/core/component/renderers/FgEventRenderer' {
         showByHash(hash: any): void;
         selectByInstanceId(instanceId: string): void;
         unselectByInstanceId(instanceId: string): void;
-***REMOVED***
+    }
     export function buildSegCompareObj(seg: Seg): any;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/component/renderers/FillRenderer' {
-    import { Seg ***REMOVED*** from '@fullcalendar/core/component/DateComponent';
-    import { ComponentContext ***REMOVED*** from '@fullcalendar/core/component/Component';
-    export { FillRenderer as default, FillRenderer ***REMOVED***;
+    import { Seg } from '@fullcalendar/core/component/DateComponent';
+    import { ComponentContext } from '@fullcalendar/core/component/Component';
+    export { FillRenderer as default, FillRenderer };
     abstract class FillRenderer {
         context: ComponentContext;
         fillSegTag: string;
@@ -1385,15 +1385,15 @@ declare module '@fullcalendar/core/component/renderers/FillRenderer' {
         assignSizes(force: boolean): void;
         computeSegSizes(segs: Seg[]): void;
         assignSegSizes(segs: Seg[]): void;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/DateProfileGenerator' {
-    import { DateMarker ***REMOVED*** from '@fullcalendar/core/datelib/marker';
-    import { Duration ***REMOVED*** from '@fullcalendar/core/datelib/duration';
-    import { DateRange, OpenDateRange ***REMOVED*** from '@fullcalendar/core/datelib/date-range';
-    import { ViewSpec ***REMOVED*** from '@fullcalendar/core/structs/view-spec';
-    import { DateEnv ***REMOVED*** from '@fullcalendar/core/datelib/env';
+    import { DateMarker } from '@fullcalendar/core/datelib/marker';
+    import { Duration } from '@fullcalendar/core/datelib/duration';
+    import { DateRange, OpenDateRange } from '@fullcalendar/core/datelib/date-range';
+    import { ViewSpec } from '@fullcalendar/core/structs/view-spec';
+    import { DateEnv } from '@fullcalendar/core/datelib/env';
     import Calendar from '@fullcalendar/core/Calendar';
     export interface DateProfile {
         currentRange: DateRange;
@@ -1406,8 +1406,8 @@ declare module '@fullcalendar/core/DateProfileGenerator' {
         maxTime: Duration;
         isValid: boolean;
         dateIncrement: Duration;
-***REMOVED***
-    export { DateProfileGenerator as default, DateProfileGenerator ***REMOVED***;
+    }
+    export { DateProfileGenerator as default, DateProfileGenerator };
     class DateProfileGenerator {
         viewSpec: ViewSpec;
         options: any;
@@ -1423,17 +1423,17 @@ declare module '@fullcalendar/core/DateProfileGenerator' {
             duration: any;
             unit: any;
             range: any;
-    ***REMOVED***;
+        };
         getFallbackDuration(): Duration;
         adjustActiveRange(range: DateRange, minTime: Duration, maxTime: Duration): {
             start: Date;
             end: Date;
-    ***REMOVED***;
+        };
         buildRangeFromDuration(date: DateMarker, direction: any, duration: Duration, unit: any): any;
         buildRangeFromDayCount(date: DateMarker, direction: any, dayCount: any): {
             start: Date;
             end: Date;
-    ***REMOVED***;
+        };
         buildCustomVisibleRange(date: DateMarker): OpenDateRange;
         buildRenderRange(currentRange: DateRange, currentRangeUnit: any, isRangeAllDay: any): DateRange;
         buildDateIncrement(fallback: any): Duration;
@@ -1442,28 +1442,28 @@ declare module '@fullcalendar/core/DateProfileGenerator' {
         trimHiddenDays(range: DateRange): DateRange | null;
         isHiddenDay(day: any): boolean;
         skipHiddenDays(date: DateMarker, inc?: number, isExclusive?: boolean): Date;
-***REMOVED***
+    }
     export function isDateProfilesEqual(p0: DateProfile, p1: DateProfile): boolean;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/structs/view-def' {
-    import { ViewClass, ViewConfigHash ***REMOVED*** from '@fullcalendar/core/structs/view-config';
+    import { ViewClass, ViewConfigHash } from '@fullcalendar/core/structs/view-config';
     export interface ViewDef {
         type: string;
         class: ViewClass;
         overrides: any;
         defaults: any;
-***REMOVED***
+    }
     export type ViewDefHash = {
         [viewType: string]: ViewDef;
-***REMOVED***;
+    };
     export function compileViewDefs(defaultConfigs: ViewConfigHash, overrideConfigs: ViewConfigHash): ViewDefHash;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/structs/view-spec' {
-    import { Duration ***REMOVED*** from '@fullcalendar/core/datelib/duration';
+    import { Duration } from '@fullcalendar/core/datelib/duration';
     import OptionsManager from '@fullcalendar/core/OptionsManager';
-    import { ViewConfigInputHash, ViewClass ***REMOVED*** from '@fullcalendar/core/structs/view-config';
+    import { ViewConfigInputHash, ViewClass } from '@fullcalendar/core/structs/view-config';
     export interface ViewSpec {
         type: string;
         class: ViewClass;
@@ -1473,60 +1473,60 @@ declare module '@fullcalendar/core/structs/view-spec' {
         options: any;
         buttonTextOverride: string;
         buttonTextDefault: string;
-***REMOVED***
+    }
     export type ViewSpecHash = {
         [viewType: string]: ViewSpec;
-***REMOVED***;
+    };
     export function buildViewSpecs(defaultInputs: ViewConfigInputHash, optionsManager: OptionsManager): ViewSpecHash;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/structs/date-span' {
-    import { DateRange, OpenDateRange ***REMOVED*** from '@fullcalendar/core/datelib/date-range';
-    import { DateInput, DateEnv ***REMOVED*** from '@fullcalendar/core/datelib/env';
-    import { Duration ***REMOVED*** from '@fullcalendar/core/datelib/duration';
-    import { EventRenderRange ***REMOVED*** from '@fullcalendar/core/component/event-rendering';
-    import { EventUiHash ***REMOVED*** from '@fullcalendar/core/component/event-ui';
+    import { DateRange, OpenDateRange } from '@fullcalendar/core/datelib/date-range';
+    import { DateInput, DateEnv } from '@fullcalendar/core/datelib/env';
+    import { Duration } from '@fullcalendar/core/datelib/duration';
+    import { EventRenderRange } from '@fullcalendar/core/component/event-rendering';
+    import { EventUiHash } from '@fullcalendar/core/component/event-ui';
     import Calendar from '@fullcalendar/core/Calendar';
     export interface OpenDateSpanInput {
         start?: DateInput;
         end?: DateInput;
         allDay?: boolean;
         [otherProp: string]: any;
-***REMOVED***
+    }
     export interface DateSpanInput extends OpenDateSpanInput {
         start: DateInput;
         end: DateInput;
-***REMOVED***
+    }
     export interface OpenDateSpan {
         range: OpenDateRange;
         allDay: boolean;
         [otherProp: string]: any;
-***REMOVED***
+    }
     export interface DateSpan extends OpenDateSpan {
         range: DateRange;
-***REMOVED***
+    }
     export interface DateSpanApi {
         start: Date;
         end: Date;
         startStr: string;
         endStr: string;
         allDay: boolean;
-***REMOVED***
+    }
     export interface DatePointApi {
         date: Date;
         dateStr: string;
         allDay: boolean;
-***REMOVED***
+    }
     export function parseDateSpan(raw: DateSpanInput, dateEnv: DateEnv, defaultDuration?: Duration): DateSpan | null;
     export function parseOpenDateSpan(raw: OpenDateSpanInput, dateEnv: DateEnv): OpenDateSpan | null;
     export function isDateSpansEqual(span0: DateSpan, span1: DateSpan): boolean;
     export function buildDateSpanApi(span: DateSpan, dateEnv: DateEnv): DateSpanApi;
     export function buildDatePointApi(span: DateSpan, dateEnv: DateEnv): DatePointApi;
     export function fabricateEventRange(dateSpan: DateSpan, eventUiBases: EventUiHash, calendar: Calendar): EventRenderRange;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/datelib/marker' {
-    import { Duration ***REMOVED*** from '@fullcalendar/core/datelib/duration';
+    import { Duration } from '@fullcalendar/core/datelib/duration';
     export type DateMarker = Date;
     export const DAY_IDS: string[];
     export function addWeeks(m: DateMarker, n: number): Date;
@@ -1551,7 +1551,7 @@ declare module '@fullcalendar/core/datelib/marker' {
     export function arrayToUtcDate(a: any): Date;
     export function isValidDate(m: DateMarker): boolean;
     export function timeAsMs(m: DateMarker): number;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/datelib/duration' {
     export type DurationInput = DurationObjectInput | string | number;
@@ -1573,13 +1573,13 @@ declare module '@fullcalendar/core/datelib/duration' {
         milliseconds?: number;
         millisecond?: number;
         ms?: number;
-***REMOVED***
+    }
     export interface Duration {
         years: number;
         months: number;
         days: number;
         milliseconds: number;
-***REMOVED***
+    }
     export function createDuration(input: DurationInput, unit?: string): Duration | null;
     export function getWeeksFromInput(obj: DurationObjectInput): number;
     export function durationsEqual(d0: Duration, d1: Duration): boolean;
@@ -1589,14 +1589,14 @@ declare module '@fullcalendar/core/datelib/duration' {
         months: number;
         days: number;
         milliseconds: number;
-***REMOVED***;
+    };
     export function subtractDurations(d1: Duration, d0: Duration): Duration;
     export function multiplyDuration(d: Duration, n: number): {
         years: number;
         months: number;
         days: number;
         milliseconds: number;
-***REMOVED***;
+    };
     export function asRoughYears(dur: Duration): number;
     export function asRoughMonths(dur: Duration): number;
     export function asRoughDays(dur: Duration): number;
@@ -1608,17 +1608,17 @@ declare module '@fullcalendar/core/datelib/duration' {
     export function greatestDurationDenominator(dur: Duration, dontReturnWeeks?: boolean): {
         unit: string;
         value: number;
-***REMOVED***;
-***REMOVED***
+    };
+}
 
 declare module '@fullcalendar/core/datelib/env' {
-    import { DateMarker ***REMOVED*** from '@fullcalendar/core/datelib/marker';
-    import { CalendarSystem ***REMOVED*** from '@fullcalendar/core/datelib/calendar-system';
-    import { Locale ***REMOVED*** from '@fullcalendar/core/datelib/locale';
-    import { NamedTimeZoneImpl, NamedTimeZoneImplClass ***REMOVED*** from '@fullcalendar/core/datelib/timezone';
-    import { Duration ***REMOVED*** from '@fullcalendar/core/datelib/duration';
-    import { DateFormatter ***REMOVED*** from '@fullcalendar/core/datelib/formatting';
-    import { CmdFormatterFunc ***REMOVED*** from '@fullcalendar/core/datelib/formatting-cmd';
+    import { DateMarker } from '@fullcalendar/core/datelib/marker';
+    import { CalendarSystem } from '@fullcalendar/core/datelib/calendar-system';
+    import { Locale } from '@fullcalendar/core/datelib/locale';
+    import { NamedTimeZoneImpl, NamedTimeZoneImplClass } from '@fullcalendar/core/datelib/timezone';
+    import { Duration } from '@fullcalendar/core/datelib/duration';
+    import { DateFormatter } from '@fullcalendar/core/datelib/formatting';
+    import { CmdFormatterFunc } from '@fullcalendar/core/datelib/formatting-cmd';
     export interface DateEnvSettings {
         timeZone: string;
         namedTimeZoneImpl?: NamedTimeZoneImplClass;
@@ -1628,13 +1628,13 @@ declare module '@fullcalendar/core/datelib/env' {
         firstDay?: any;
         weekLabel?: string;
         cmdFormatter?: CmdFormatterFunc;
-***REMOVED***
+    }
     export type DateInput = Date | string | number | number[];
     export interface DateMarkerMeta {
         marker: DateMarker;
         isTimeUnspecified: boolean;
         forcedTzo: number | null;
-***REMOVED***
+    }
     export class DateEnv {
         timeZone: string;
         namedTimeZoneImpl: NamedTimeZoneImpl;
@@ -1654,7 +1654,7 @@ declare module '@fullcalendar/core/datelib/env' {
             marker: Date;
             isTimeUnspecified: boolean;
             forcedTzo: any;
-    ***REMOVED***;
+        };
         getYear(marker: DateMarker): number;
         getMonth(marker: DateMarker): number;
         add(marker: DateMarker, dur: Duration): DateMarker;
@@ -1666,7 +1666,7 @@ declare module '@fullcalendar/core/datelib/env' {
         greatestWholeUnit(m0: DateMarker, m1: DateMarker): {
             unit: string;
             value: number;
-    ***REMOVED***;
+        };
         countDurationsBetween(m0: DateMarker, m1: DateMarker, d: Duration): number;
         startOf(m: DateMarker, unit: string): Date;
         startOfYear(m: DateMarker): DateMarker;
@@ -1675,29 +1675,29 @@ declare module '@fullcalendar/core/datelib/env' {
         computeWeekNumber(marker: DateMarker): number;
         format(marker: DateMarker, formatter: DateFormatter, dateOptions?: {
             forcedTzo?: number;
-    ***REMOVED***): any;
+        }): any;
         formatRange(start: DateMarker, end: DateMarker, formatter: DateFormatter, dateOptions?: {
             forcedStartTzo?: number;
             forcedEndTzo?: number;
             isEndExclusive?: boolean;
-    ***REMOVED***): any;
+        }): any;
         formatIso(marker: DateMarker, extraOptions?: any): string;
         timestampToMarker(ms: number): Date;
         offsetForMarker(m: DateMarker): number;
         toDate(m: DateMarker, forcedTzo?: number): Date;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/datelib/formatting' {
-    import { DateMarker ***REMOVED*** from '@fullcalendar/core/datelib/marker';
-    import { CalendarSystem ***REMOVED*** from '@fullcalendar/core/datelib/calendar-system';
-    import { Locale ***REMOVED*** from '@fullcalendar/core/datelib/locale';
-    import { CmdFormatterFunc ***REMOVED*** from '@fullcalendar/core/datelib/formatting-cmd';
-    import { FuncFormatterFunc ***REMOVED*** from '@fullcalendar/core/datelib/formatting-func';
+    import { DateMarker } from '@fullcalendar/core/datelib/marker';
+    import { CalendarSystem } from '@fullcalendar/core/datelib/calendar-system';
+    import { Locale } from '@fullcalendar/core/datelib/locale';
+    import { CmdFormatterFunc } from '@fullcalendar/core/datelib/formatting-cmd';
+    import { FuncFormatterFunc } from '@fullcalendar/core/datelib/formatting-func';
     export interface ZonedMarker {
         marker: DateMarker;
         timeZoneOffset: number;
-***REMOVED***
+    }
     export interface ExpandedZonedMarker extends ZonedMarker {
         array: number[];
         year: number;
@@ -1707,7 +1707,7 @@ declare module '@fullcalendar/core/datelib/formatting' {
         minute: number;
         second: number;
         millisecond: number;
-***REMOVED***
+    }
     export interface VerboseFormattingArg {
         date: ExpandedZonedMarker;
         start: ExpandedZonedMarker;
@@ -1715,7 +1715,7 @@ declare module '@fullcalendar/core/datelib/formatting' {
         timeZone: string;
         localeCodes: string[];
         separator: string;
-***REMOVED***
+    }
     export interface DateFormattingContext {
         timeZone: string;
         locale: Locale;
@@ -1723,18 +1723,18 @@ declare module '@fullcalendar/core/datelib/formatting' {
         computeWeekNumber: (d: DateMarker) => number;
         weekLabel: string;
         cmdFormatter?: CmdFormatterFunc;
-***REMOVED***
+    }
     export interface DateFormatter {
         format(date: ZonedMarker, context: DateFormattingContext): any;
         formatRange(start: ZonedMarker, end: ZonedMarker, context: DateFormattingContext): any;
-***REMOVED***
+    }
     export type FormatterInput = object | string | FuncFormatterFunc;
     export function createFormatter(input: FormatterInput, defaultSeparator?: string): DateFormatter;
     export function buildIsoString(marker: DateMarker, timeZoneOffset?: number, stripZeroTime?: boolean): string;
     export function formatIsoTimeString(marker: DateMarker): string;
     export function formatTimeZoneOffset(minutes: number, doIso?: boolean): string;
     export function createVerboseFormattingArg(start: ZonedMarker, end: ZonedMarker, context: DateFormattingContext, separator?: string): VerboseFormattingArg;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/datelib/timezone' {
     export abstract class NamedTimeZoneImpl {
@@ -1742,32 +1742,32 @@ declare module '@fullcalendar/core/datelib/timezone' {
         constructor(timeZoneName: string);
         abstract offsetForArray(a: number[]): number;
         abstract timestampToArray(ms: number): number[];
-***REMOVED***
+    }
     export type NamedTimeZoneImplClass = {
         new (timeZoneName: string): NamedTimeZoneImpl;
-***REMOVED***;
-***REMOVED***
+    };
+}
 
 declare module '@fullcalendar/core/datelib/parsing' {
     export function parse(str: any): {
         marker: Date;
         isTimeUnspecified: boolean;
         timeZoneOffset: any;
-***REMOVED***;
-***REMOVED***
+    };
+}
 
 declare module '@fullcalendar/core/structs/event-source' {
-    import { EventInput ***REMOVED*** from '@fullcalendar/core/structs/event';
+    import { EventInput } from '@fullcalendar/core/structs/event';
     import Calendar from '@fullcalendar/core/Calendar';
-    import { DateRange ***REMOVED*** from '@fullcalendar/core/datelib/date-range';
-    import { EventSourceFunc ***REMOVED*** from '@fullcalendar/core/event-sources/func-event-source';
-    import { EventUi ***REMOVED*** from '@fullcalendar/core/component/event-ui';
-    import { ConstraintInput, AllowFunc ***REMOVED*** from '@fullcalendar/core/validation';
+    import { DateRange } from '@fullcalendar/core/datelib/date-range';
+    import { EventSourceFunc } from '@fullcalendar/core/event-sources/func-event-source';
+    import { EventUi } from '@fullcalendar/core/component/event-ui';
+    import { ConstraintInput, AllowFunc } from '@fullcalendar/core/validation';
     export type EventSourceError = {
         message: string;
         response?: any;
         [otherProp: string]: any;
-***REMOVED***;
+    };
     export type EventInputTransformer = (eventInput: EventInput) => EventInput | null;
     export type EventSourceSuccessResponseHandler = (rawData: any, response: any) => EventInput[] | void;
     export type EventSourceErrorResponseHandler = (error: EventSourceError) => void;
@@ -1797,7 +1797,7 @@ declare module '@fullcalendar/core/structs/event-source' {
         textColor?: string;
         color?: string;
         [otherProp: string]: any;
-***REMOVED***
+    }
     export type EventSourceInput = ExtendedEventSourceInput | // object in extended form
     EventSourceFunc | // just a function
     string;
@@ -1816,26 +1816,26 @@ declare module '@fullcalendar/core/structs/event-source' {
         success: EventSourceSuccessResponseHandler | null;
         failure: EventSourceErrorResponseHandler | null;
         extendedProps: any;
-***REMOVED***
+    }
     export type EventSourceHash = {
         [sourceId: string]: EventSource;
-***REMOVED***;
+    };
     export type EventSourceFetcher = (arg: {
         eventSource: EventSource;
         calendar: Calendar;
         range: DateRange;
-***REMOVED***, success: (res: {
+    }, success: (res: {
         rawEvents: EventInput[];
         xhr?: XMLHttpRequest;
-***REMOVED***) => void, failure: (error: EventSourceError) => void) => (void | PromiseLike<EventInput[]>);
+    }) => void, failure: (error: EventSourceError) => void) => (void | PromiseLike<EventInput[]>);
     export interface EventSourceDef {
         ignoreRange?: boolean;
         parseMeta: (raw: EventSourceInput) => object | null;
         fetch: EventSourceFetcher;
-***REMOVED***
+    }
     export function doesSourceNeedRange(eventSource: EventSource, calendar: Calendar): boolean;
     export function parseEventSource(raw: EventSourceInput, calendar: Calendar): EventSource | null;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/interactions/interaction' {
     import DateComponent from '@fullcalendar/core/component/DateComponent';
@@ -1843,28 +1843,28 @@ declare module '@fullcalendar/core/interactions/interaction' {
         component: DateComponent<any>;
         constructor(settings: InteractionSettings);
         destroy(): void;
-***REMOVED***
+    }
     export type InteractionClass = {
         new (settings: InteractionSettings): Interaction;
-***REMOVED***;
+    };
     export interface InteractionSettingsInput {
         el: HTMLElement;
         useEventCenter?: boolean;
-***REMOVED***
+    }
     export interface InteractionSettings {
         component: DateComponent<any>;
         el: HTMLElement;
         useEventCenter: boolean;
-***REMOVED***
+    }
     export type InteractionSettingsStore = {
         [componenUid: string]: InteractionSettings;
-***REMOVED***;
+    };
     export function parseInteractionSettings(component: DateComponent<any>, input: InteractionSettingsInput): InteractionSettings;
     export function interactionSettingsToStore(settings: InteractionSettings): {
         [x: string]: InteractionSettings;
-***REMOVED***;
+    };
     export let interactionSettingsStore: InteractionSettingsStore;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/interactions/pointer' {
     export interface PointerDragEvent {
@@ -1875,47 +1875,47 @@ declare module '@fullcalendar/core/interactions/pointer' {
         pageY: number;
         deltaX: number;
         deltaY: number;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/interactions/hit' {
     import DateComponent from '@fullcalendar/core/component/DateComponent';
-    import { DateSpan ***REMOVED*** from '@fullcalendar/core/structs/date-span';
-    import { Rect ***REMOVED*** from '@fullcalendar/core/util/geom';
+    import { DateSpan } from '@fullcalendar/core/structs/date-span';
+    import { Rect } from '@fullcalendar/core/util/geom';
     export interface Hit {
         component: DateComponent<any>;
         dateSpan: DateSpan;
         dayEl: HTMLElement;
         rect: Rect;
         layer: number;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/interactions/date-selecting' {
-    import { Hit ***REMOVED*** from '@fullcalendar/core/interactions/hit';
+    import { Hit } from '@fullcalendar/core/interactions/hit';
     export type dateSelectionJoinTransformer = (hit0: Hit, hit1: Hit) => any;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/interactions/event-dragging' {
     import Calendar from '@fullcalendar/core/Calendar';
-    import { EventMutation ***REMOVED*** from '@fullcalendar/core/structs/event-mutation';
-    import { Hit ***REMOVED*** from '@fullcalendar/core/interactions/hit';
-    import { EventDef ***REMOVED*** from '@fullcalendar/core/structs/event';
-    import { EventUi ***REMOVED*** from '@fullcalendar/core/component/event-ui';
-    import { View ***REMOVED*** from '@fullcalendar/core';
+    import { EventMutation } from '@fullcalendar/core/structs/event-mutation';
+    import { Hit } from '@fullcalendar/core/interactions/hit';
+    import { EventDef } from '@fullcalendar/core/structs/event';
+    import { EventUi } from '@fullcalendar/core/component/event-ui';
+    import { View } from '@fullcalendar/core';
     export type eventDragMutationMassager = (mutation: EventMutation, hit0: Hit, hit1: Hit) => void;
     export type EventDropTransformers = (mutation: EventMutation, calendar: Calendar) => any;
     export type eventIsDraggableTransformer = (val: boolean, eventDef: EventDef, eventUi: EventUi, view: View) => boolean;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/interactions/event-resizing' {
-    import { Hit ***REMOVED*** from '@fullcalendar/core/interactions/hit';
+    import { Hit } from '@fullcalendar/core/interactions/hit';
     export type EventResizeJoinTransforms = (hit0: Hit, hit1: Hit) => false | object;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/interactions/ElementDragging' {
     import EmitterMixin from '@fullcalendar/core/common/EmitterMixin';
-    export { ElementDragging as default, ElementDragging ***REMOVED***;
+    export { ElementDragging as default, ElementDragging };
     abstract class ElementDragging {
         emitter: EmitterMixin;
         constructor(el: HTMLElement);
@@ -1924,20 +1924,20 @@ declare module '@fullcalendar/core/interactions/ElementDragging' {
         setMirrorIsVisible(bool: boolean): void;
         setMirrorNeedsRevert(bool: boolean): void;
         setAutoScrollEnabled(bool: boolean): void;
-***REMOVED***
+    }
     export type ElementDraggingClass = {
         new (el: HTMLElement): ElementDragging;
-***REMOVED***;
-***REMOVED***
+    };
+}
 
 declare module '@fullcalendar/core/formatting-api' {
-    import { DateInput ***REMOVED*** from '@fullcalendar/core/datelib/env';
-    export function formatDate(dateInput: DateInput, settings?: {***REMOVED***): any;
+    import { DateInput } from '@fullcalendar/core/datelib/env';
+    export function formatDate(dateInput: DateInput, settings?: {}): any;
     export function formatRange(startInput: DateInput, endInput: DateInput, settings: any): any;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/options' {
-    import { PluginDef ***REMOVED*** from '@fullcalendar/core/plugin-system';
+    import { PluginDef } from '@fullcalendar/core/plugin-system';
     export const config: any;
     export const globalDefaults: {
         defaultRangeSeparator: string;
@@ -1945,7 +1945,7 @@ declare module '@fullcalendar/core/options' {
         defaultTimedEventDuration: string;
         defaultAllDayEventDuration: {
             day: number;
-    ***REMOVED***;
+        };
         forceEventDuration: boolean;
         nextDayThreshold: string;
         columnHeader: boolean;
@@ -1955,7 +1955,7 @@ declare module '@fullcalendar/core/options' {
             left: string;
             center: string;
             right: string;
-    ***REMOVED***;
+        };
         weekends: boolean;
         weekNumbers: boolean;
         weekNumberCalculation: string;
@@ -1985,93 +1985,93 @@ declare module '@fullcalendar/core/options' {
             month: string;
             day: string;
             year: string;
-    ***REMOVED***;
+        };
         handleWindowResize: boolean;
         windowResizeDelay: number;
         longPressDelay: number;
         eventDragMinDistance: number;
-***REMOVED***;
+    };
     export const rtlDefaults: {
         header: {
             left: string;
             center: string;
             right: string;
-    ***REMOVED***;
+        };
         buttonIcons: {
             prev: string;
             next: string;
             prevYear: string;
             nextYear: string;
-    ***REMOVED***;
-***REMOVED***;
+        };
+    };
     export function mergeOptions(optionObjs: any): any;
     export function refinePluginDefs(pluginInputs: any[]): PluginDef[];
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/structs/recurring-event' {
-    import { EventInput, EventDef ***REMOVED*** from '@fullcalendar/core/structs/event';
-    import { DateRange ***REMOVED*** from '@fullcalendar/core/datelib/date-range';
-    import { DateEnv ***REMOVED*** from '@fullcalendar/core/datelib/env';
-    import { Duration ***REMOVED*** from '@fullcalendar/core/datelib/duration';
-    import { DateMarker ***REMOVED*** from '@fullcalendar/core/datelib/marker';
+    import { EventInput, EventDef } from '@fullcalendar/core/structs/event';
+    import { DateRange } from '@fullcalendar/core/datelib/date-range';
+    import { DateEnv } from '@fullcalendar/core/datelib/env';
+    import { Duration } from '@fullcalendar/core/datelib/duration';
+    import { DateMarker } from '@fullcalendar/core/datelib/marker';
     export interface ParsedRecurring {
         typeData: any;
         allDayGuess: boolean | null;
         duration: Duration | null;
-***REMOVED***
+    }
     export interface RecurringType {
         parse: (rawEvent: EventInput, leftoverProps: any, dateEnv: DateEnv) => ParsedRecurring | null;
         expand: (typeData: any, framingRange: DateRange, dateEnv: DateEnv) => DateMarker[];
-***REMOVED***
+    }
     export function parseRecurring(eventInput: EventInput, allDayDefault: boolean | null, dateEnv: DateEnv, recurringTypes: RecurringType[], leftovers: any): {
         allDay: any;
         duration: Duration;
         typeData: any;
         typeId: number;
-***REMOVED***;
+    };
     export function expandRecurringRanges(eventDef: EventDef, duration: Duration, framingRange: DateRange, dateEnv: DateEnv, recurringTypes: RecurringType[]): DateMarker[];
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/structs/drag-meta' {
-    import { Duration, DurationInput ***REMOVED*** from '@fullcalendar/core/datelib/duration';
-    import { EventNonDateInput ***REMOVED*** from '@fullcalendar/core/structs/event';
+    import { Duration, DurationInput } from '@fullcalendar/core/datelib/duration';
+    import { EventNonDateInput } from '@fullcalendar/core/structs/event';
     export interface DragMetaInput extends EventNonDateInput {
         startTime?: DurationInput;
         duration?: DurationInput;
         create?: boolean;
         sourceId?: string;
-***REMOVED***
+    }
     export interface DragMeta {
         startTime: Duration | null;
         duration: Duration | null;
         create: boolean;
         sourceId: string;
         leftoverProps: object;
-***REMOVED***
+    }
     export function parseDragMeta(raw: DragMetaInput): DragMeta;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/plugin-system' {
-    import { reducerFunc ***REMOVED*** from '@fullcalendar/core/reducers/types';
-    import { eventDefParserFunc ***REMOVED*** from '@fullcalendar/core/structs/event';
-    import { eventDefMutationApplier ***REMOVED*** from '@fullcalendar/core/structs/event-mutation';
-    import Calendar, { DatePointTransform, DateSpanTransform, CalendarInteractionClass, OptionChangeHandlerMap ***REMOVED*** from '@fullcalendar/core/Calendar';
-    import { ViewConfigInputHash ***REMOVED*** from '@fullcalendar/core/structs/view-config';
-    import { ViewSpec ***REMOVED*** from '@fullcalendar/core/structs/view-spec';
-    import View, { ViewProps ***REMOVED*** from '@fullcalendar/core/View';
-    import { CalendarComponentProps ***REMOVED*** from '@fullcalendar/core/CalendarComponent';
-    import { isPropsValidTester ***REMOVED*** from '@fullcalendar/core/validation';
-    import { eventDragMutationMassager, eventIsDraggableTransformer, EventDropTransformers ***REMOVED*** from '@fullcalendar/core/interactions/event-dragging';
-    import { dateSelectionJoinTransformer ***REMOVED*** from '@fullcalendar/core/interactions/date-selecting';
-    import { EventResizeJoinTransforms ***REMOVED*** from '@fullcalendar/core/interactions/event-resizing';
-    import { ExternalDefTransform ***REMOVED*** from '@fullcalendar/core/interactions/external-element-dragging';
-    import { InteractionClass ***REMOVED*** from '@fullcalendar/core/interactions/interaction';
-    import { ThemeClass ***REMOVED*** from '@fullcalendar/core/theme/Theme';
-    import { EventSourceDef ***REMOVED*** from '@fullcalendar/core/structs/event-source';
-    import { CmdFormatterFunc ***REMOVED*** from '@fullcalendar/core/datelib/formatting-cmd';
-    import { RecurringType ***REMOVED*** from '@fullcalendar/core/structs/recurring-event';
-    import { NamedTimeZoneImplClass ***REMOVED*** from '@fullcalendar/core/datelib/timezone';
-    import { ElementDraggingClass ***REMOVED*** from '@fullcalendar/core/interactions/ElementDragging';
+    import { reducerFunc } from '@fullcalendar/core/reducers/types';
+    import { eventDefParserFunc } from '@fullcalendar/core/structs/event';
+    import { eventDefMutationApplier } from '@fullcalendar/core/structs/event-mutation';
+    import Calendar, { DatePointTransform, DateSpanTransform, CalendarInteractionClass, OptionChangeHandlerMap } from '@fullcalendar/core/Calendar';
+    import { ViewConfigInputHash } from '@fullcalendar/core/structs/view-config';
+    import { ViewSpec } from '@fullcalendar/core/structs/view-spec';
+    import View, { ViewProps } from '@fullcalendar/core/View';
+    import { CalendarComponentProps } from '@fullcalendar/core/CalendarComponent';
+    import { isPropsValidTester } from '@fullcalendar/core/validation';
+    import { eventDragMutationMassager, eventIsDraggableTransformer, EventDropTransformers } from '@fullcalendar/core/interactions/event-dragging';
+    import { dateSelectionJoinTransformer } from '@fullcalendar/core/interactions/date-selecting';
+    import { EventResizeJoinTransforms } from '@fullcalendar/core/interactions/event-resizing';
+    import { ExternalDefTransform } from '@fullcalendar/core/interactions/external-element-dragging';
+    import { InteractionClass } from '@fullcalendar/core/interactions/interaction';
+    import { ThemeClass } from '@fullcalendar/core/theme/Theme';
+    import { EventSourceDef } from '@fullcalendar/core/structs/event-source';
+    import { CmdFormatterFunc } from '@fullcalendar/core/datelib/formatting-cmd';
+    import { RecurringType } from '@fullcalendar/core/structs/recurring-event';
+    import { NamedTimeZoneImplClass } from '@fullcalendar/core/datelib/timezone';
+    import { ElementDraggingClass } from '@fullcalendar/core/interactions/ElementDragging';
     export interface PluginDefInput {
         deps?: PluginDef[];
         reducers?: reducerFunc[];
@@ -2093,7 +2093,7 @@ declare module '@fullcalendar/core/plugin-system' {
         calendarInteractions?: CalendarInteractionClass[];
         themeClasses?: {
             [themeSystemName: string]: ThemeClass;
-    ***REMOVED***;
+        };
         eventSourceDefs?: EventSourceDef[];
         cmdFormatter?: CmdFormatterFunc;
         recurringTypes?: RecurringType[];
@@ -2101,7 +2101,7 @@ declare module '@fullcalendar/core/plugin-system' {
         defaultView?: string;
         elementDraggingImpl?: ElementDraggingClass;
         optionChangeHandlers?: OptionChangeHandlerMap;
-***REMOVED***
+    }
     export interface PluginHooks {
         reducers: reducerFunc[];
         eventDefParsers: eventDefParserFunc[];
@@ -2122,7 +2122,7 @@ declare module '@fullcalendar/core/plugin-system' {
         calendarInteractions: CalendarInteractionClass[];
         themeClasses: {
             [themeSystemName: string]: ThemeClass;
-    ***REMOVED***;
+        };
         eventSourceDefs: EventSourceDef[];
         cmdFormatter?: CmdFormatterFunc;
         recurringTypes: RecurringType[];
@@ -2130,39 +2130,39 @@ declare module '@fullcalendar/core/plugin-system' {
         defaultView: string;
         elementDraggingImpl?: ElementDraggingClass;
         optionChangeHandlers: OptionChangeHandlerMap;
-***REMOVED***
+    }
     export interface PluginDef extends PluginHooks {
         id: string;
         deps: PluginDef[];
-***REMOVED***
+    }
     export type ViewPropsTransformerClass = new () => ViewPropsTransformer;
     export interface ViewPropsTransformer {
         transform(viewProps: ViewProps, viewSpec: ViewSpec, calendarProps: CalendarComponentProps, view: View): any;
-***REMOVED***
+    }
     export type ViewContainerModifier = (contentEl: HTMLElement, calendar: Calendar) => void;
     export function createPlugin(input: PluginDefInput): PluginDef;
     export class PluginSystem {
         hooks: PluginHooks;
         addedHash: {
             [pluginId: string]: true;
-    ***REMOVED***;
+        };
         constructor();
         add(plugin: PluginDef): void;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/reducers/types' {
-    import { EventInput, EventInstanceHash ***REMOVED*** from '@fullcalendar/core/structs/event';
-    import { DateRange ***REMOVED*** from '@fullcalendar/core/datelib/date-range';
-    import { EventStore ***REMOVED*** from '@fullcalendar/core/structs/event-store';
-    import { EventMutation ***REMOVED*** from '@fullcalendar/core/structs/event-mutation';
-    import { EventSource, EventSourceHash, EventSourceError ***REMOVED*** from '@fullcalendar/core/structs/event-source';
-    import { DateProfile ***REMOVED*** from '@fullcalendar/core/DateProfileGenerator';
-    import { EventInteractionState ***REMOVED*** from '@fullcalendar/core/interactions/event-interaction-state';
-    import { DateSpan ***REMOVED*** from '@fullcalendar/core/structs/date-span';
-    import { DateEnv ***REMOVED*** from '@fullcalendar/core/datelib/env';
+    import { EventInput, EventInstanceHash } from '@fullcalendar/core/structs/event';
+    import { DateRange } from '@fullcalendar/core/datelib/date-range';
+    import { EventStore } from '@fullcalendar/core/structs/event-store';
+    import { EventMutation } from '@fullcalendar/core/structs/event-mutation';
+    import { EventSource, EventSourceHash, EventSourceError } from '@fullcalendar/core/structs/event-source';
+    import { DateProfile } from '@fullcalendar/core/DateProfileGenerator';
+    import { EventInteractionState } from '@fullcalendar/core/interactions/event-interaction-state';
+    import { DateSpan } from '@fullcalendar/core/structs/date-span';
+    import { DateEnv } from '@fullcalendar/core/datelib/env';
     import Calendar from '@fullcalendar/core/Calendar';
-    import { DateMarker ***REMOVED*** from '@fullcalendar/core/datelib/marker';
+    import { DateMarker } from '@fullcalendar/core/datelib/marker';
     export interface CalendarState {
         eventSources: EventSourceHash;
         eventSourceLoadingLevel: number;
@@ -2175,111 +2175,111 @@ declare module '@fullcalendar/core/reducers/types' {
         eventSelection: string;
         eventDrag: EventInteractionState | null;
         eventResize: EventInteractionState | null;
-***REMOVED***
+    }
     export type reducerFunc = (state: CalendarState, action: Action, calendar: Calendar) => CalendarState;
     export type Action = {
         type: 'INIT';
-***REMOVED*** | // wont it create another rerender?
+    } | // wont it create another rerender?
     {
         type: 'PREV';
-***REMOVED*** | {
+    } | {
         type: 'NEXT';
-***REMOVED*** | {
+    } | {
         type: 'SET_DATE';
         dateMarker: DateMarker;
-***REMOVED*** | {
+    } | {
         type: 'SET_VIEW_TYPE';
         viewType: string;
         dateMarker?: DateMarker;
-***REMOVED*** | {
+    } | {
         type: 'SELECT_DATES';
         selection: DateSpan;
-***REMOVED*** | {
+    } | {
         type: 'UNSELECT_DATES';
-***REMOVED*** | {
+    } | {
         type: 'SELECT_EVENT';
         eventInstanceId: string;
-***REMOVED*** | {
+    } | {
         type: 'UNSELECT_EVENT';
-***REMOVED*** | {
+    } | {
         type: 'SET_EVENT_DRAG';
         state: EventInteractionState;
-***REMOVED*** | {
+    } | {
         type: 'UNSET_EVENT_DRAG';
-***REMOVED*** | {
+    } | {
         type: 'SET_EVENT_RESIZE';
         state: EventInteractionState;
-***REMOVED*** | {
+    } | {
         type: 'UNSET_EVENT_RESIZE';
-***REMOVED*** | {
+    } | {
         type: 'ADD_EVENT_SOURCES';
         sources: EventSource[];
-***REMOVED*** | {
+    } | {
         type: 'REMOVE_EVENT_SOURCE';
         sourceId: string;
-***REMOVED*** | {
+    } | {
         type: 'REMOVE_ALL_EVENT_SOURCES';
-***REMOVED*** | {
+    } | {
         type: 'FETCH_EVENT_SOURCES';
         sourceIds?: string[];
-***REMOVED*** | // if no sourceIds, fetch all
+    } | // if no sourceIds, fetch all
     {
         type: 'CHANGE_TIMEZONE';
         oldDateEnv: DateEnv;
-***REMOVED*** | {
+    } | {
         type: 'RECEIVE_EVENTS';
         sourceId: string;
         fetchId: string;
         fetchRange: DateRange | null;
         rawEvents: EventInput[];
-***REMOVED*** | {
+    } | {
         type: 'RECEIVE_EVENT_ERROR';
         sourceId: string;
         fetchId: string;
         fetchRange: DateRange | null;
         error: EventSourceError;
-***REMOVED*** | // need all these?
+    } | // need all these?
     {
         type: 'ADD_EVENTS';
         eventStore: EventStore;
-***REMOVED*** | {
+    } | {
         type: 'MERGE_EVENTS';
         eventStore: EventStore;
-***REMOVED*** | {
+    } | {
         type: 'MUTATE_EVENTS';
         instanceId: string;
         mutation: EventMutation;
         fromApi?: boolean;
-***REMOVED*** | {
+    } | {
         type: 'REMOVE_EVENT_DEF';
         defId: string;
-***REMOVED*** | {
+    } | {
         type: 'REMOVE_EVENT_INSTANCES';
         instances: EventInstanceHash;
-***REMOVED*** | {
+    } | {
         type: 'REMOVE_ALL_EVENTS';
-***REMOVED*** | {
+    } | {
         type: 'RESET_EVENTS';
-***REMOVED***;
-***REMOVED***
+    };
+}
 
 declare module '@fullcalendar/core/CalendarComponent' {
-    import Component, { ComponentContext ***REMOVED*** from '@fullcalendar/core/component/Component';
-    import { ViewSpec ***REMOVED*** from '@fullcalendar/core/structs/view-spec';
+    import Component, { ComponentContext } from '@fullcalendar/core/component/Component';
+    import { ViewSpec } from '@fullcalendar/core/structs/view-spec';
     import View from '@fullcalendar/core/View';
     import Toolbar from '@fullcalendar/core/Toolbar';
-    import DateProfileGenerator, { DateProfile ***REMOVED*** from '@fullcalendar/core/DateProfileGenerator';
-    import { EventStore ***REMOVED*** from '@fullcalendar/core/structs/event-store';
-    import { EventUiHash ***REMOVED*** from '@fullcalendar/core/component/event-ui';
-    import { BusinessHoursInput ***REMOVED*** from '@fullcalendar/core/structs/business-hours';
-    import { DateMarker ***REMOVED*** from '@fullcalendar/core/datelib/marker';
-    import { CalendarState ***REMOVED*** from '@fullcalendar/core/reducers/types';
+    import DateProfileGenerator, { DateProfile } from '@fullcalendar/core/DateProfileGenerator';
+    import { EventStore } from '@fullcalendar/core/structs/event-store';
+    import { EventUiHash } from '@fullcalendar/core/component/event-ui';
+    import { BusinessHoursInput } from '@fullcalendar/core/structs/business-hours';
+    import { DateMarker } from '@fullcalendar/core/datelib/marker';
+    import { CalendarState } from '@fullcalendar/core/reducers/types';
     export interface CalendarComponentProps extends CalendarState {
         viewSpec: ViewSpec;
         dateProfileGenerator: DateProfileGenerator;
         eventUiBases: EventUiHash;
-***REMOVED***
-    export { CalendarComponent as default, CalendarComponent ***REMOVED***;
+    }
+    export { CalendarComponent as default, CalendarComponent };
     class CalendarComponent extends Component<CalendarComponentProps> {
         view: View;
         header: Toolbar;
@@ -2301,120 +2301,120 @@ declare module '@fullcalendar/core/CalendarComponent' {
         queryToolbarsHeight(): number;
         freezeHeight(): void;
         thawHeight(): void;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/common/DayHeader' {
-    import Component, { ComponentContext ***REMOVED*** from '@fullcalendar/core/component/Component';
-    import { DateMarker ***REMOVED*** from '@fullcalendar/core/datelib/marker';
-    import { DateProfile ***REMOVED*** from '@fullcalendar/core/DateProfileGenerator';
+    import Component, { ComponentContext } from '@fullcalendar/core/component/Component';
+    import { DateMarker } from '@fullcalendar/core/datelib/marker';
+    import { DateProfile } from '@fullcalendar/core/DateProfileGenerator';
     export interface DayTableHeaderProps {
         dates: DateMarker[];
         dateProfile: DateProfile;
         datesRepDistinctDays: boolean;
         renderIntroHtml?: () => string;
-***REMOVED***
-    export { DayHeader as default, DayHeader ***REMOVED***;
+    }
+    export { DayHeader as default, DayHeader };
     class DayHeader extends Component<DayTableHeaderProps> {
         el: HTMLElement;
         thead: HTMLElement;
         constructor(context: ComponentContext, parentEl: HTMLElement);
         destroy(): void;
         render(props: DayTableHeaderProps): void;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/common/table-utils' {
-    import { DateMarker ***REMOVED*** from '@fullcalendar/core/datelib/marker';
-    import { DateProfile ***REMOVED*** from '@fullcalendar/core/DateProfileGenerator';
-    import { ComponentContext ***REMOVED*** from '@fullcalendar/core/component/Component';
+    import { DateMarker } from '@fullcalendar/core/datelib/marker';
+    import { DateProfile } from '@fullcalendar/core/DateProfileGenerator';
+    import { ComponentContext } from '@fullcalendar/core/component/Component';
     export function computeFallbackHeaderFormat(datesRepDistinctDays: boolean, dayCnt: number): {
         weekday: string;
         month?: undefined;
         day?: undefined;
         omitCommas?: undefined;
-***REMOVED*** | {
+    } | {
         weekday: string;
         month: string;
         day: string;
         omitCommas: boolean;
-***REMOVED***;
+    };
     export function renderDateCell(dateMarker: DateMarker, dateProfile: DateProfile, datesRepDistinctDays: any, colCnt: any, colHeadFormat: any, context: ComponentContext, colspan?: any, otherAttrs?: any): string;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/common/DaySeries' {
     import DateProfileGenerator from '@fullcalendar/core/DateProfileGenerator';
-    import { DateMarker ***REMOVED*** from '@fullcalendar/core/datelib/marker';
-    import { DateRange ***REMOVED*** from '@fullcalendar/core/datelib/date-range';
+    import { DateMarker } from '@fullcalendar/core/datelib/marker';
+    import { DateRange } from '@fullcalendar/core/datelib/date-range';
     export interface DaySeriesSeg {
         firstIndex: number;
         lastIndex: number;
         isStart: boolean;
         isEnd: boolean;
-***REMOVED***
-    export { DaySeries as default, DaySeries ***REMOVED***;
+    }
+    export { DaySeries as default, DaySeries };
     class DaySeries {
         cnt: number;
         dates: DateMarker[];
         indices: number[];
         constructor(range: DateRange, dateProfileGenerator: DateProfileGenerator);
         sliceRange(range: DateRange): DaySeriesSeg | null;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/interactions/event-interaction-state' {
-    import { EventStore ***REMOVED*** from '@fullcalendar/core/structs/event-store';
-    import { Seg ***REMOVED*** from '@fullcalendar/core/component/DateComponent';
+    import { EventStore } from '@fullcalendar/core/structs/event-store';
+    import { Seg } from '@fullcalendar/core/component/DateComponent';
     export interface EventInteractionState {
         affectedEvents: EventStore;
         mutatedEvents: EventStore;
         isEvent: boolean;
         origSeg: Seg | null;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/component/event-rendering' {
-    import { EventDef, EventTuple, EventDefHash ***REMOVED*** from '@fullcalendar/core/structs/event';
-    import { EventStore ***REMOVED*** from '@fullcalendar/core/structs/event-store';
-    import { DateRange ***REMOVED*** from '@fullcalendar/core/datelib/date-range';
-    import { Duration ***REMOVED*** from '@fullcalendar/core/datelib/duration';
-    import { Seg ***REMOVED*** from '@fullcalendar/core/component/DateComponent';
+    import { EventDef, EventTuple, EventDefHash } from '@fullcalendar/core/structs/event';
+    import { EventStore } from '@fullcalendar/core/structs/event-store';
+    import { DateRange } from '@fullcalendar/core/datelib/date-range';
+    import { Duration } from '@fullcalendar/core/datelib/duration';
+    import { Seg } from '@fullcalendar/core/component/DateComponent';
     import View from '@fullcalendar/core/View';
-    import { EventUi, EventUiHash ***REMOVED*** from '@fullcalendar/core/component/event-ui';
+    import { EventUi, EventUiHash } from '@fullcalendar/core/component/event-ui';
     export interface EventRenderRange extends EventTuple {
         ui: EventUi;
         range: DateRange;
         isStart: boolean;
         isEnd: boolean;
-***REMOVED***
+    }
     export function sliceEventStore(eventStore: EventStore, eventUiBases: EventUiHash, framingRange: DateRange, nextDayThreshold?: Duration): {
         bg: EventRenderRange[];
         fg: EventRenderRange[];
-***REMOVED***;
+    };
     export function hasBgRendering(def: EventDef): boolean;
     export function filterSegsViaEls(view: View, segs: Seg[], isMirror: boolean): Seg[];
     export function getElSeg(el: HTMLElement): Seg | null;
     export function compileEventUis(eventDefs: EventDefHash, eventUiBases: EventUiHash): {
         [key: string]: EventUi;
-***REMOVED***;
+    };
     export function compileEventUi(eventDef: EventDef, eventUiBases: EventUiHash): EventUi;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/common/DayTable' {
     import DaySeries from '@fullcalendar/core/common/DaySeries';
-    import { DateRange ***REMOVED*** from '@fullcalendar/core/datelib/date-range';
-    import { DateMarker ***REMOVED*** from '@fullcalendar/core/datelib/marker';
-    import { Seg ***REMOVED*** from '@fullcalendar/core/component/DateComponent';
+    import { DateRange } from '@fullcalendar/core/datelib/date-range';
+    import { DateMarker } from '@fullcalendar/core/datelib/marker';
+    import { Seg } from '@fullcalendar/core/component/DateComponent';
     export interface DayTableSeg extends Seg {
         row: number;
         firstCol: number;
         lastCol: number;
-***REMOVED***
+    }
     export interface DayTableCell {
         date: DateMarker;
         htmlAttrs?: string;
-***REMOVED***
-    export { DayTable as default, DayTable ***REMOVED***;
+    }
+    export { DayTable as default, DayTable };
     class DayTable {
         rowCnt: number;
         colCnt: number;
@@ -2422,19 +2422,19 @@ declare module '@fullcalendar/core/common/DayTable' {
         headerDates: DateMarker[];
         constructor(daySeries: DaySeries, breakOnWeeks: boolean);
         sliceRange(range: DateRange): DayTableSeg[];
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/common/slicing-utils' {
-    import { DateRange ***REMOVED*** from '@fullcalendar/core/datelib/date-range';
-    import { EventStore ***REMOVED*** from '@fullcalendar/core/structs/event-store';
-    import { EventUiHash ***REMOVED*** from '@fullcalendar/core/component/event-ui';
-    import { DateProfile ***REMOVED*** from '@fullcalendar/core/DateProfileGenerator';
-    import DateComponent, { Seg, EventSegUiInteractionState ***REMOVED*** from '@fullcalendar/core/component/DateComponent';
-    import { DateSpan ***REMOVED*** from '@fullcalendar/core/structs/date-span';
-    import { EventInteractionState ***REMOVED*** from '@fullcalendar/core/interactions/event-interaction-state';
-    import { Duration ***REMOVED*** from '@fullcalendar/core/datelib/duration';
-    import { DateMarker ***REMOVED*** from '@fullcalendar/core/datelib/marker';
+    import { DateRange } from '@fullcalendar/core/datelib/date-range';
+    import { EventStore } from '@fullcalendar/core/structs/event-store';
+    import { EventUiHash } from '@fullcalendar/core/component/event-ui';
+    import { DateProfile } from '@fullcalendar/core/DateProfileGenerator';
+    import DateComponent, { Seg, EventSegUiInteractionState } from '@fullcalendar/core/component/DateComponent';
+    import { DateSpan } from '@fullcalendar/core/structs/date-span';
+    import { EventInteractionState } from '@fullcalendar/core/interactions/event-interaction-state';
+    import { Duration } from '@fullcalendar/core/datelib/duration';
+    import { DateMarker } from '@fullcalendar/core/datelib/marker';
     export interface SliceableProps {
         dateSelection: DateSpan;
         businessHours: EventStore;
@@ -2443,7 +2443,7 @@ declare module '@fullcalendar/core/common/slicing-utils' {
         eventResize: EventInteractionState | null;
         eventSelection: string;
         eventUiBases: EventUiHash;
-***REMOVED***
+    }
     export interface SlicedProps<SegType extends Seg> {
         dateSelectionSegs: SegType[];
         businessHourSegs: SegType[];
@@ -2452,8 +2452,8 @@ declare module '@fullcalendar/core/common/slicing-utils' {
         eventDrag: EventSegUiInteractionState | null;
         eventResize: EventSegUiInteractionState | null;
         eventSelection: string;
-***REMOVED***
-    export { Slicer as default, Slicer ***REMOVED***;
+    }
+    export { Slicer as default, Slicer };
     abstract class Slicer<SegType extends Seg, ExtraArgs extends any[] = []> {
         abstract sliceRange(dateRange: DateRange, ...extraArgs: ExtraArgs): SegType[];
         sliceProps(props: SliceableProps, dateProfile: DateProfile, nextDayThreshold: Duration | null, component: DateComponent<any>, // TODO: kill
@@ -2461,34 +2461,34 @@ declare module '@fullcalendar/core/common/slicing-utils' {
         sliceNowDate(// does not memoize
         date: DateMarker, component: DateComponent<any>, // TODO: kill
         ...extraArgs: ExtraArgs): SegType[];
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/structs/event-mutation' {
-    import { Duration ***REMOVED*** from '@fullcalendar/core/datelib/duration';
-    import { EventStore ***REMOVED*** from '@fullcalendar/core/structs/event-store';
-    import { EventDef ***REMOVED*** from '@fullcalendar/core/structs/event';
+    import { Duration } from '@fullcalendar/core/datelib/duration';
+    import { EventStore } from '@fullcalendar/core/structs/event-store';
+    import { EventDef } from '@fullcalendar/core/structs/event';
     import Calendar from '@fullcalendar/core/Calendar';
-    import { EventUiHash ***REMOVED*** from '@fullcalendar/core/component/event-ui';
+    import { EventUiHash } from '@fullcalendar/core/component/event-ui';
     export interface EventMutation {
         datesDelta?: Duration;
         startDelta?: Duration;
         endDelta?: Duration;
         standardProps?: any;
         extendedProps?: any;
-***REMOVED***
+    }
     export function applyMutationToEventStore(eventStore: EventStore, eventConfigBase: EventUiHash, mutation: EventMutation, calendar: Calendar): EventStore;
     export type eventDefMutationApplier = (eventDef: EventDef, mutation: EventMutation, calendar: Calendar) => void;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/validation' {
-    import { EventStore ***REMOVED*** from '@fullcalendar/core/structs/event-store';
+    import { EventStore } from '@fullcalendar/core/structs/event-store';
     import Calendar from '@fullcalendar/core/Calendar';
-    import { DateSpan, DateSpanApi ***REMOVED*** from '@fullcalendar/core/structs/date-span';
+    import { DateSpan, DateSpanApi } from '@fullcalendar/core/structs/date-span';
     import EventApi from '@fullcalendar/core/api/EventApi';
-    import { EventInput ***REMOVED*** from '@fullcalendar/core/structs/event';
-    import { EventInteractionState ***REMOVED*** from '@fullcalendar/core/interactions/event-interaction-state';
-    import { SplittableProps ***REMOVED*** from '@fullcalendar/core/component/event-splitting';
+    import { EventInput } from '@fullcalendar/core/structs/event';
+    import { EventInteractionState } from '@fullcalendar/core/interactions/event-interaction-state';
+    import { SplittableProps } from '@fullcalendar/core/component/event-splitting';
     export type ConstraintInput = 'businessHours' | string | EventInput | EventInput[];
     export type Constraint = 'businessHours' | string | EventStore | false;
     export type OverlapFunc = ((stillEvent: EventApi, movingEvent: EventApi | null) => boolean);
@@ -2496,19 +2496,19 @@ declare module '@fullcalendar/core/validation' {
     export type isPropsValidTester = (props: SplittableProps, calendar: Calendar) => boolean;
     export function isInteractionValid(interaction: EventInteractionState, calendar: Calendar): boolean;
     export function isDateSelectionValid(dateSelection: DateSpan, calendar: Calendar): boolean;
-    export function isPropsValid(state: SplittableProps, calendar: Calendar, dateSpanMeta?: {***REMOVED***, filterConfig?: any): boolean;
+    export function isPropsValid(state: SplittableProps, calendar: Calendar, dateSpanMeta?: {}, filterConfig?: any): boolean;
     export function normalizeConstraint(input: ConstraintInput, calendar: Calendar): Constraint | null;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/api/EventApi' {
     import Calendar from '@fullcalendar/core/Calendar';
-    import { EventDef, EventInstance ***REMOVED*** from '@fullcalendar/core/structs/event';
-    import { EventMutation ***REMOVED*** from '@fullcalendar/core/structs/event-mutation';
-    import { DateInput ***REMOVED*** from '@fullcalendar/core/datelib/env';
-    import { DurationInput ***REMOVED*** from '@fullcalendar/core/datelib/duration';
-    import { FormatterInput ***REMOVED*** from '@fullcalendar/core/datelib/formatting';
+    import { EventDef, EventInstance } from '@fullcalendar/core/structs/event';
+    import { EventMutation } from '@fullcalendar/core/structs/event-mutation';
+    import { DateInput } from '@fullcalendar/core/datelib/env';
+    import { DurationInput } from '@fullcalendar/core/datelib/duration';
+    import { FormatterInput } from '@fullcalendar/core/datelib/formatting';
     import EventSourceApi from '@fullcalendar/core/api/EventSourceApi';
-    export { EventApi as default, EventApi ***REMOVED***;
+    export { EventApi as default, EventApi };
     class EventApi {
         _calendar: Calendar;
         _def: EventDef;
@@ -2519,20 +2519,20 @@ declare module '@fullcalendar/core/api/EventApi' {
         setStart(startInput: DateInput, options?: {
             granularity?: string;
             maintainDuration?: boolean;
-    ***REMOVED***): void;
+        }): void;
         setEnd(endInput: DateInput | null, options?: {
             granularity?: string;
-    ***REMOVED***): void;
+        }): void;
         setDates(startInput: DateInput, endInput: DateInput | null, options?: {
             allDay?: boolean;
             granularity?: string;
-    ***REMOVED***): void;
+        }): void;
         moveStart(deltaInput: DurationInput): void;
         moveEnd(deltaInput: DurationInput): void;
         moveDates(deltaInput: DurationInput): void;
         setAllDay(allDay: boolean, options?: {
             maintainDuration?: boolean;
-    ***REMOVED***): void;
+        }): void;
         formatRange(formatInput: FormatterInput): any;
         mutate(mutation: EventMutation): void;
         remove(): void;
@@ -2555,12 +2555,12 @@ declare module '@fullcalendar/core/api/EventApi' {
         readonly textColor: string;
         readonly classNames: string[];
         readonly extendedProps: any;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/util/requestJson' {
     export default function requestJson(method: string, url: string, params: object, successCallback: any, failureCallback: any): void;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/datelib/locale' {
     export type LocaleCodeArg = string | string[];
@@ -2571,27 +2571,27 @@ declare module '@fullcalendar/core/datelib/locale' {
         week: {
             dow: number;
             doy: number;
-    ***REMOVED***;
+        };
         simpleNumberFormat: Intl.NumberFormat;
         options: any;
-***REMOVED***
+    }
     export interface RawLocale {
         code: string;
         [otherProp: string]: any;
-***REMOVED***
+    }
     export type RawLocaleMap = {
         [code: string]: RawLocale;
-***REMOVED***;
+    };
     export interface RawLocaleInfo {
         map: RawLocaleMap;
         defaultCode: string;
-***REMOVED***
+    }
     export function parseRawLocales(explicitRawLocales: RawLocale[]): RawLocaleInfo;
     export function buildLocale(inputSingular: LocaleSingularArg, available: RawLocaleMap): Locale;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/OptionsManager' {
-    export { OptionsManager as default, OptionsManager ***REMOVED***;
+    export { OptionsManager as default, OptionsManager };
     class OptionsManager {
         dirDefaults: any;
         localeDefaults: any;
@@ -2601,13 +2601,13 @@ declare module '@fullcalendar/core/OptionsManager' {
         constructor(overrides: any);
         mutate(updates: any, removals: string[], isDynamic?: boolean): void;
         compute(): void;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/api/EventSourceApi' {
     import Calendar from '@fullcalendar/core/Calendar';
-    import { EventSource ***REMOVED*** from '@fullcalendar/core/structs/event-source';
-    export { EventSourceApi as default, EventSourceApi ***REMOVED***;
+    import { EventSource } from '@fullcalendar/core/structs/event-source';
+    export { EventSourceApi as default, EventSourceApi };
     class EventSourceApi {
         calendar: Calendar;
         internalEventSource: EventSource;
@@ -2616,50 +2616,50 @@ declare module '@fullcalendar/core/api/EventSourceApi' {
         refetch(): void;
         readonly id: string;
         readonly url: string;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/structs/view-config' {
     import View from '@fullcalendar/core/View';
-    import { ViewSpec ***REMOVED*** from '@fullcalendar/core/structs/view-spec';
-    import { ComponentContext ***REMOVED*** from '@fullcalendar/core/component/Component';
+    import { ViewSpec } from '@fullcalendar/core/structs/view-spec';
+    import { ComponentContext } from '@fullcalendar/core/component/Component';
     import DateProfileGenerator from '@fullcalendar/core/DateProfileGenerator';
     export type ViewClass = new (context: ComponentContext, viewSpec: ViewSpec, dateProfileGenerator: DateProfileGenerator, parentEl: HTMLElement) => View;
     export interface ViewConfigObjectInput {
         type?: string;
         class?: ViewClass;
         [optionName: string]: any;
-***REMOVED***
+    }
     export type ViewConfigInput = ViewClass | ViewConfigObjectInput;
     export type ViewConfigInputHash = {
         [viewType: string]: ViewConfigInput;
-***REMOVED***;
+    };
     export interface ViewConfig {
         superType: string;
         class: ViewClass | null;
         options: any;
-***REMOVED***
+    }
     export type ViewConfigHash = {
         [viewType: string]: ViewConfig;
-***REMOVED***;
+    };
     export function parseViewConfigs(inputs: ViewConfigInputHash): ViewConfigHash;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/datelib/calendar-system' {
-    import { DateMarker ***REMOVED*** from '@fullcalendar/core/datelib/marker';
+    import { DateMarker } from '@fullcalendar/core/datelib/marker';
     export interface CalendarSystem {
         getMarkerYear(d: DateMarker): number;
         getMarkerMonth(d: DateMarker): number;
         getMarkerDay(d: DateMarker): number;
         arrayToMarker(arr: number[]): DateMarker;
         markerToArray(d: DateMarker): number[];
-***REMOVED***
+    }
     export function registerCalendarSystem(name: any, theClass: any): void;
     export function createCalendarSystem(name: any): any;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/datelib/formatting-cmd' {
-    import { DateFormatter, DateFormattingContext, ZonedMarker, VerboseFormattingArg ***REMOVED*** from '@fullcalendar/core/datelib/formatting';
+    import { DateFormatter, DateFormattingContext, ZonedMarker, VerboseFormattingArg } from '@fullcalendar/core/datelib/formatting';
     export type CmdFormatterFunc = (cmd: string, arg: VerboseFormattingArg) => string;
     export class CmdFormatter implements DateFormatter {
         cmdStr: string;
@@ -2667,40 +2667,40 @@ declare module '@fullcalendar/core/datelib/formatting-cmd' {
         constructor(cmdStr: string, separator?: string);
         format(date: ZonedMarker, context: DateFormattingContext): string;
         formatRange(start: ZonedMarker, end: ZonedMarker, context: DateFormattingContext): string;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/datelib/formatting-func' {
-    import { DateFormatter, DateFormattingContext, ZonedMarker, VerboseFormattingArg ***REMOVED*** from '@fullcalendar/core/datelib/formatting';
+    import { DateFormatter, DateFormattingContext, ZonedMarker, VerboseFormattingArg } from '@fullcalendar/core/datelib/formatting';
     export type FuncFormatterFunc = (arg: VerboseFormattingArg) => string;
     export class FuncFormatter implements DateFormatter {
         func: FuncFormatterFunc;
         constructor(func: FuncFormatterFunc);
         format(date: ZonedMarker, context: DateFormattingContext): string;
         formatRange(start: ZonedMarker, end: ZonedMarker, context: DateFormattingContext): string;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/core/event-sources/func-event-source' {
-    import { EventSourceError ***REMOVED*** from '@fullcalendar/core/structs/event-source';
-    import { EventInput ***REMOVED*** from '@fullcalendar/core/structs/event';
+    import { EventSourceError } from '@fullcalendar/core/structs/event-source';
+    import { EventInput } from '@fullcalendar/core/structs/event';
     export type EventSourceFunc = (arg: {
         start: Date;
         end: Date;
         timeZone: string;
-***REMOVED***, successCallback: (events: EventInput[]) => void, failureCallback: (error: EventSourceError) => void) => (void | PromiseLike<EventInput[]>);
+    }, successCallback: (events: EventInput[]) => void, failureCallback: (error: EventSourceError) => void) => (void | PromiseLike<EventInput[]>);
     const _default: import("@fullcalendar/core/plugin-system").PluginDef;
     export default _default;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/interactions/external-element-dragging' {
-    import { DateSpan ***REMOVED*** from '@fullcalendar/core/structs/date-span';
-    import { DragMeta ***REMOVED*** from '@fullcalendar/core/structs/drag-meta';
+    import { DateSpan } from '@fullcalendar/core/structs/date-span';
+    import { DragMeta } from '@fullcalendar/core/structs/drag-meta';
     export type ExternalDefTransform = (dateSpan: DateSpan, dragMeta: DragMeta) => any;
-***REMOVED***
+}
 
 declare module '@fullcalendar/core/Toolbar' {
-    import Component, { ComponentContext ***REMOVED*** from '@fullcalendar/core/component/Component';
+    import Component, { ComponentContext } from '@fullcalendar/core/component/Component';
     export interface ToolbarRenderProps {
         layout: any;
         title: string;
@@ -2708,8 +2708,8 @@ declare module '@fullcalendar/core/Toolbar' {
         isTodayEnabled: boolean;
         isPrevEnabled: boolean;
         isNextEnabled: boolean;
-***REMOVED***
-    export { Toolbar as default, Toolbar ***REMOVED***;
+    }
+    export { Toolbar as default, Toolbar };
     class Toolbar extends Component<ToolbarRenderProps> {
         el: HTMLElement;
         viewsWithButtons: any;
@@ -2725,6 +2725,6 @@ declare module '@fullcalendar/core/Toolbar' {
         updateTitle(text: any): void;
         updateActiveButton(buttonName?: any): void;
         toggleButtonEnabled(buttonName: any, bool: any): void;
-***REMOVED***
-***REMOVED***
+    }
+}
 

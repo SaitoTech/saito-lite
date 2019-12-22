@@ -1,6 +1,6 @@
 .header {
     padding: 0.75em 1em;
-***REMOVED***
+}
 
 .explorer-main {
     margin-top: 75px;
@@ -10,50 +10,50 @@
     height: 91vh;
     overflow: auto;
     padding: 2em;
-***REMOVED***
+}
 
 .explorer-main table {
     border-spacing: 0;
-***REMOVED***
+}
 
 .explorer-main table tr:hover {
     background: #bbbbbb;
-***REMOVED***
+}
 
 .explorer-main td {
     padding: 10px 5px;
-***REMOVED***
+}
 
 .explorer-main th {
     text-align: left;
-***REMOVED***
+}
 
 .explorer-main a {
     text-decoration: underscore;
     color: var(--text-color-highlight);
     display: inline-block;
-***REMOVED***
+}
 
 .explorer-main h4 {
     display: inline-block;
     min-width: 200px;
-***REMOVED***
+}
 
 .explorer-main h3 {
     margin: 20px 0 10px 0;
-***REMOVED***
+}
 
 .explorer-main i {
     margin: 0 10px;
-***REMOVED***
+}
 
 #explorer-button {
     min-width: unset;
-***REMOVED***
+}
 
 .jsontree_node {
     list-style: none;
-***REMOVED***
+}
 
 .json, #block-list, .block-transactions-table {
     font-family: monospace;
@@ -64,21 +64,21 @@
     overflow: auto;
     width: 99%;
     max-width: 850px;
-***REMOVED***
+}
 
 input[type=text], input[type=number] {
     height: 3em;
     margin-top: 1px;
-***REMOVED***
+}
 
 a.button {
     text-decoration: none;
     margin-bottom: 5px;
-***REMOVED***
+}
 
 .hash-search-input {
     width: 100%;
-***REMOVED***
+}
 
 .one-line-form {
     display: grid;
@@ -86,48 +86,48 @@ a.button {
     width: 100%;
     max-width: 850px;
     grid-gap: 10px;
-***REMOVED***
+}
 
 .elipsis {
     overflow: elipsis;
-***REMOVED***
+}
 
 .blockchain-table {
     display: grid;
     grid-template-columns: 1.5em 1.5em 11fr 5fr;
     grid-gap: 10px;
     max-width: 850px;
-***REMOVED***
+}
 
 .blockchain-table div {
     overflow: hidden;
-***REMOVED***
+}
 
 .table-header {
     font-weight: bold;
-***REMOVED***
+}
 
 .block-table {
     display: grid;
     grid-template-columns: 7em 1fr;
     grid-gap: 10px;
     max-width: 850px;
-    margin-bottom: 2em;***REMOVED***
+    margin-bottom: 2em;}
 
 .block-table div {
     overflow: hidden;
-***REMOVED***
+}
 
 .block-transactions-table {
     display: grid;
     grid-template-columns: 1.5em 30em 8em 1.5em;
     grid-gap: 10px;
     max-width: 625px;
-***REMOVED***
+}
 
 h1, h2, h3, h4, h5 {
     display: inline-block;
     min-width: 200px;
     width: 100%;
     overflow: hidden;
-***REMOVED***
+}

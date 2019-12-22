@@ -10,10 +10,10 @@
     {
       "src": "/saito/img/touch/pwa-192x192.png",
       "sizes": "192x192"
-***REMOVED***,
+    },
     {
       "src": "/saito/img/touch/pwa-512x512.png",
       "sizes": "512x512"
-***REMOVED***
+    }
   ]
-***REMOVED***
+}

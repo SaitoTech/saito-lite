@@ -19,4 +19,4 @@ module.exports = AddContactCompleteTemplate = () => {
       <button style="margin: 0; width: 100%;padding: 1em;font-size: 1.2em;" onclick="location.href='/chat'"><i class="far fa-comments"></i>Chat</button>
     </div>
   `;
-***REMOVED***;
+};

@@ -42,4 +42,4 @@ module.exports = FaucetModalBackupTemplate = () => {
   </div>
 
   `;
-***REMOVED***
+}

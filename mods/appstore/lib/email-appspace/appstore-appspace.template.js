@@ -23,4 +23,4 @@ module.exports = AppStoreAppspaceTemplate = () => {
 
 </div>
   `;
-***REMOVED***
+}

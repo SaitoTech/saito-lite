@@ -7,7 +7,7 @@ module.exports = EscrowGameWizardT = {
 
     document.querySelector(".arcade-main").innerHTML = EscrowGameWizardTemplate();
 
-  ***REMOVED***,
+  },
 
 
   attachEvents(app, data) {
@@ -16,26 +16,26 @@ module.exports = EscrowGameWizardT = {
     .onclick = (e) => {
       document.querySelector('.arcade-main').innerHTML = '';
       data.arcade.render(app, data);
-***REMOVED***
+    }
 
     document.querySelector('.background-shim-cover')
     .onclick = (e) => {
       document.querySelector('.arcade-main').innerHTML = '';
       data.arcade.render(app, data);
-***REMOVED***
+    }
 
 
     Array.from(document.getElementsByClassName('escrow-game-select')).forEach(game => {
       game.addEventListener('change', (e) => {
 
         let value = e.currentTarget.value;
-        if (value === "select") { return; ***REMOVED***
+        if (value === "select") { return; }
         let gamemod = app.modules.returnModule(value);
 
 	if (gamemod == null) { 
 	  alert("Error -- could not find game!");
 	  return;
-	***REMOVED***
+	}
 
 
         document.querySelector('.game-details').innerHTML = gamemod.returnGameOptionsHTML();
@@ -44,7 +44,7 @@ module.exports = EscrowGameWizardT = {
         document.getElementById('escrow-submit-btn')
           .addEventListener('click', (e) => {
 
-            let options  = {***REMOVED***;
+            let options  = {};
 	    let opponent = "";
 	    let stake = "";
 
@@ -57,11 +57,11 @@ module.exports = EscrowGameWizardT = {
                 if (input.is(":checkbox")) {
                   if (input.prop("checked")) {
                     options[input.attr('name')] = 1;
-              ***REMOVED***
-            ***REMOVED*** else {
+                  }
+                } else {
                   options[input.attr('name')] = input.val();
-            ***REMOVED***
-          ***REMOVED***
+                }
+              }
             );
 
 	    //
@@ -69,7 +69,7 @@ module.exports = EscrowGameWizardT = {
 	    //
 	    alert("Manually Formatting Send Request!");
 
-            let gamedata = {***REMOVED***;
+            let gamedata = {};
                 gamedata.name = gamemod.name;
                 gamedata.options = gamemod.returnFormattedGameOptions(options);
                 gamedata.options_html = gamemod.returnGameRowOptionsHTML(options);
@@ -82,9 +82,9 @@ module.exports = EscrowGameWizardT = {
 
 	    alert("Invitation Sent!");
 
-	***REMOVED***);
-  ***REMOVED***);
-***REMOVED***);
-  ***REMOVED***
+	});
+      });
+    });
+  }
 
-***REMOVED***
+}

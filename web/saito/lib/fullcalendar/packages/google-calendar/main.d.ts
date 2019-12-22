@@ -6,15 +6,15 @@ declare module '@fullcalendar/google-calendar' {
     module '@fullcalendar/core' {
         interface OptionsInput {
             googleCalendarApiKey?: string;
-    ***REMOVED***
-***REMOVED***
+        }
+    }
     module '@fullcalendar/core/structs/event-source' {
         interface ExtendedEventSourceInput {
             googleCalendarApiKey?: string;
             googleCalendarId?: string;
-    ***REMOVED***
-***REMOVED***
+        }
+    }
     const _default: import("@fullcalendar/core").PluginDef;
     export default _default;
-***REMOVED***
+}
 

@@ -50,15 +50,15 @@ setTimeout(() => {
 	  $('#game-players-select-6p').css('display','none');
 	  $('.game-players-options-6p').parent('.saito-select').css('display', 'none');
 	  $('.game-players-options-6p').css('display','none');
-    ***REMOVED***
+        }
 
 	if (gamemod.minPlayers > 1) {
           for (let z = 1; z < gamemod.minPlayers; z++) {
 	    $(('#game-players-select-'+z+'p')).css('display','none');
 	    $(('.game-players-options-'+z+'p')).parent('.saito-select').css('display', 'none');
 	    $(('.game-players-options-'+z+'p')).css('display','none');
-      ***REMOVED***
-    ***REMOVED***
+          }
+        }
 
 	if (gamemod.maxPlayers > 2) {
           $('.game-players-select').css('display', "flex");
@@ -66,30 +66,30 @@ setTimeout(() => {
 	    $('#game-players-select-6p').css('display','none');
 	    $('.game-players-options-6p').parent('.saito-select').css('display', 'none');
 	    $('.game-players-options-6p').css('display','none');
-	  ***REMOVED***
+	  }
 	  if (gamemod.maxPlayers < 5 || current_sel < 5) {
 	    $('#game-players-select-5p').css('display','none');
 	    $('.game-players-options-5p').parent('.saito-select').css('display', 'none');
 	    $('.game-players-options-5p').css('display','none');
-	  ***REMOVED***
+	  }
 	  if (gamemod.maxPlayers < 4 || current_sel < 4) {
 	    $('#game-players-select-4p').css('display','none');
 	    $('#game-players-select-4p').parent('.saito-select').css('display', 'none');
 	    $('.game-players-options-4p').css('display','none');
-	  ***REMOVED***
+	  }
 	  if (gamemod.maxPlayers < 3 || current_sel < 3) {
 	    $('#game-players-select-3p').css('display','none');
 	    $('#game-players-select-3p').parent('.saito-select').css('display', 'none');
 	    $('.game-players-options-3p').css('display','none');
-	  ***REMOVED***
-	***REMOVED***
-***REMOVED***, 100);
+	  }
+	}
+}, 100);
 
 
         document.getElementById('game-create-btn')
           .addEventListener('click', (e) => {
 
-            let options  = {***REMOVED***;
+            let options  = {};
 
             $('form input, form select').each(
               function(index) {
@@ -97,14 +97,14 @@ setTimeout(() => {
                 if (input.is(":checkbox")) {
                   if (input.prop("checked")) {
                     options[input.attr('name')] = 1;
-              ***REMOVED***
-            ***REMOVED*** else {
+                  }
+                } else {
                   options[input.attr('name')] = input.val();
-            ***REMOVED***
-          ***REMOVED***
+                }
+              }
             );
 
-            let gamedata = {***REMOVED***;
+            let gamedata = {};
                 gamedata.name = gamemod.name;
                 gamedata.slug = gamemod.returnSlug();
                 gamedata.options = gamemod.returnFormattedGameOptions(options);
@@ -115,14 +115,14 @@ setTimeout(() => {
 	      // 1 player games just launch
               data.arcade.launchSinglePlayerGame(app, data, gamedata);
 	      return;
-        ***REMOVED***
+            }
 
             data.arcade.sendOpenRequest(app, data, gamedata);
             document.querySelector('.arcade-main').innerHTML = '';
             data.arcade.render(app, data);
 
 
-      ***REMOVED***);
+          });
 
 
 
@@ -135,20 +135,20 @@ setTimeout(() => {
               if (i < players) {
                 $(classhit).css('display', "flex");
 		$(classhit2).parent('.saito-select').css('display', 'flex');
-          ***REMOVED*** else {
+              } else {
                 $(classhit).css('display', "none");
 		$(classhit2).parent('.saito-select').css('display', 'none');
-          ***REMOVED***
-        ***REMOVED***
-      ***REMOVED***)
+              }
+            }
+          })
 
 
 
 
         return;
-  ***REMOVED***
-***REMOVED***
-  ***REMOVED***,
+      }
+    }
+  },
 
 
   attachEvents(app, data) {
@@ -158,14 +158,14 @@ setTimeout(() => {
       .onclick = (e) => {
         document.querySelector('.arcade-main').innerHTML = '';
         data.arcade.render(app, data);
-  ***REMOVED***
+      }
 
       document.querySelector('.background-shim-cover')
       .onclick = (e) => {
         document.querySelector('.arcade-main').innerHTML = '';
         data.arcade.render(app, data);
-  ***REMOVED***
+      }
 
-  ***REMOVED***
+  }
 
-***REMOVED***
+}

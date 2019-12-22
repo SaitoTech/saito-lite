@@ -10,7 +10,7 @@ class Archive extends ModTemplate {
     this.name = "Archive";
     this.events = [];
 
-  ***REMOVED***
+  }
 
 
 
@@ -24,20 +24,20 @@ class Archive extends ModTemplate {
     if (conf == 0) {
       if (tx.transaction.msg.module != "") {
         this.saveTransaction(tx);
-  ***REMOVED***
-***REMOVED***
-  ***REMOVED***
+      }
+    }
+  }
 
 
 
 
   async handlePeerRequest(app, req, peer, mycallback) {
 
-    if (req.request == null) { return; ***REMOVED***
-    if (req.data == null) { return; ***REMOVED***
+    if (req.request == null) { return; }
+    if (req.data == null) { return; }
 
     var txs;
-    var response = {***REMOVED***;
+    var response = {};
     //
     // only handle archive request
     //
@@ -45,29 +45,29 @@ class Archive extends ModTemplate {
 
       if (req.data.request === "delete") {
         this.deleteTransaction(req.data.tx, req.data.publickey, req.data.sig);
-  ***REMOVED***
+      }
       if (req.data.request === "save") {
         this.saveTransaction(req.data.tx);
-  ***REMOVED***
+      }
       if (req.data.request === "load") {
         let type = "";
         let num  = 50;
-        if (req.data.num != "")  { num = req.data.num; ***REMOVED***
-        if (req.data.type != "") { type = req.data.type; ***REMOVED***
+        if (req.data.num != "")  { num = req.data.num; }
+        if (req.data.type != "") { type = req.data.type; }
         txs = await this.loadTransactions(req.data.publickey, req.data.sig, type, num);
         response.err = "";
         response.txs = txs;
         mycallback(response);
-  ***REMOVED***
+      }
       if (req.data.request === "load_keys") {
-        if (!req.data.keys) { return; ***REMOVED***
+        if (!req.data.keys) { return; }
         txs = await this.loadTransactionsByKeys(req.data);
         response.err = "";
         response.txs = txs;
         mycallback(response);
-  ***REMOVED***
-***REMOVED***
-  ***REMOVED***
+      }
+    }
+  }
 
 
 
@@ -75,13 +75,13 @@ class Archive extends ModTemplate {
 
   async saveTransaction(tx=null) {
 
-    if (tx == null) { return; ***REMOVED***
+    if (tx == null) { return; }
 
     let msgtype = "";
-    if (tx.transaction.msg.module != "") { msgtype = tx.transaction.msg.module; ***REMOVED***
+    if (tx.transaction.msg.module != "") { msgtype = tx.transaction.msg.module; }
 
     let sql = "";
-    let params = {***REMOVED***;
+    let params = {};
 
     for (let i = 0; i < tx.transaction.to.length; i++) {    
       sql = "INSERT OR IGNORE INTO txs (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $type)";
@@ -91,17 +91,17 @@ class Archive extends ModTemplate {
         $tx		:	JSON.stringify(tx.transaction) ,
         $ts		:	tx.transaction.ts ,
         $type		:	msgtype
-  ***REMOVED***;
+      };
       this.app.storage.executeDatabase(sql, params, "archive");
-***REMOVED***
+    }
 
-  ***REMOVED***
+  }
 
 
 
   async deleteTransaction(tx=null, authorizing_publickey="", authorizing_sig="") {
 
-    if (tx == null) { return; ***REMOVED***
+    if (tx == null) { return; }
 
     //
     // the individual requesting deletion should sign the transaction.sig with their own
@@ -114,26 +114,26 @@ class Archive extends ModTemplate {
       let params = {
         $sig		:	tx.transaction.sig ,
         $publickey	:	authorizing_publickey
-  ***REMOVED***;
+      };
 
       this.app.storage.executeDatabase(sql, params, "archive");
 
-***REMOVED***
-  ***REMOVED***
+    }
+  }
 
 
   async loadTransactions(publickey, type, num) {
 
     let sql = "";
-    let params = {***REMOVED***;
+    let params = {};
 
     if (type === "all") {
       sql = "SELECT * FROM txs WHERE publickey = $publickey ORDER BY id DESC LIMIT $num";
-      params = { $publickey : publickey , $num : num***REMOVED***;
-***REMOVED*** else {
+      params = { $publickey : publickey , $num : num};
+    } else {
       sql = "SELECT * FROM txs WHERE publickey = $publickey AND type = $type ORDER BY id DESC LIMIT $num";
-      params = { $publickey : publickey , $type : type , $num : num***REMOVED***;
-***REMOVED***
+      params = { $publickey : publickey , $type : type , $num : num};
+    }
 
     let rows = await this.app.storage.queryDatabase(sql, params, "archive");
     let txs = [];
@@ -141,21 +141,21 @@ class Archive extends ModTemplate {
     if (rows != undefined) {
       if (rows.length > 0) {
         txs = rows.map(row => row.tx);
-  ***REMOVED***
-***REMOVED***
+      }
+    }
     return txs;
 
-  ***REMOVED***
+  }
 
   async saveTransactionByKey(key="", tx=null) {
 
-    if (tx == null) { return; ***REMOVED***
+    if (tx == null) { return; }
 
     //
     // TODO - transactions "TO" multiple ppl this means redundant sigs and txs but with unique publickeys
     //
     let msgtype = "";
-    if (tx.transaction.msg.module != "") { msgtype = tx.transaction.msg.module; ***REMOVED***
+    if (tx.transaction.msg.module != "") { msgtype = tx.transaction.msg.module; }
 
     let sql = "INSERTOR IGNORE INTO txs (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $type)";
     let params = {
@@ -164,14 +164,14 @@ class Archive extends ModTemplate {
       $tx:	JSON.stringify(tx.transaction),
       $ts:	tx.transaction.ts,
       $type:	msgtype
-***REMOVED***;
+    };
     this.app.storage.executeDatabase(sql, params, "archive");
 
-  ***REMOVED***
+  }
 
-  async loadTransactionsByKeys({keys=[], type='all', num=50***REMOVED***) {
+  async loadTransactionsByKeys({keys=[], type='all', num=50}) {
     let sql = "";
-    let params = {***REMOVED***;
+    let params = {};
 
     let count = 0;
     let paramkey = '';
@@ -180,22 +180,22 @@ class Archive extends ModTemplate {
     try {
 
       keys.forEach(key => {
-        paramkey = `$key${count***REMOVED***`;
+        paramkey = `$key${count}`;
         where_statement_array.push(paramkey);
         params[paramkey] =  key;
         count++;
-  ***REMOVED***);
+      });
 
       if (type === "all") {
-        sql = `SELECT * FROM txs WHERE publickey IN ( ${where_statement_array.join(',')***REMOVED*** ) ORDER BY id DESC LIMIT $num`;
-        params = Object.assign(params, { $num : num ***REMOVED***);
-  ***REMOVED*** else {
-        sql = `SELECT * FROM txs WHERE publickey IN ( ${where_statement_array.join(',')***REMOVED*** ) AND type = $type ORDER BY id DESC LIMIT $num`;
-        params = Object.assign(params, { $type : type , $num : num***REMOVED***);
-  ***REMOVED***
-***REMOVED*** catch(err) {
+        sql = `SELECT * FROM txs WHERE publickey IN ( ${where_statement_array.join(',')} ) ORDER BY id DESC LIMIT $num`;
+        params = Object.assign(params, { $num : num });
+      } else {
+        sql = `SELECT * FROM txs WHERE publickey IN ( ${where_statement_array.join(',')} ) AND type = $type ORDER BY id DESC LIMIT $num`;
+        params = Object.assign(params, { $type : type , $num : num});
+      }
+    } catch(err) {
       console.log(err);
-***REMOVED***
+    }
 
     try {
       let rows = await this.app.storage.queryDatabase(sql, params, "archive");
@@ -203,16 +203,16 @@ class Archive extends ModTemplate {
       if (rows != undefined) {
 	if (rows.length > 0) {
           txs = rows.map(row => row.tx);
-    ***REMOVED***
-  ***REMOVED***
+        }
+      }
       return txs;
-***REMOVED*** catch (err) {
+    } catch (err) {
       console.log(err);
-***REMOVED***
+    }
 
-  ***REMOVED***
+  }
 
-***REMOVED***
+}
 
 
 module.exports = Archive;

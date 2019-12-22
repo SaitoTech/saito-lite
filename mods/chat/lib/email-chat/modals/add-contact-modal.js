@@ -5,7 +5,7 @@ const elParser = require('../../../../../lib/helpers/el_parser');
 module.exports = AddContactModal = {
   render(app, data) {
     document.querySelector(".email-chat").append(elParser(AddContactModalTemplate()));
-  ***REMOVED***,
+  },
 
   attachEvents(app, data) {
     var modal = document.getElementById('add-contact-modal');
@@ -22,21 +22,21 @@ module.exports = AddContactModal = {
               let encrypt_mod = app.modules.returnModule('Encrypt');
               encrypt_mod.initiate_key_exchange(publickey);
 
-      ***REMOVED***
-      ***REMOVED*** show success modal
-      ***REMOVED***
+              //
+              // show success modal
+              //
 
 
-      ***REMOVED*** then hide it
-      ***REMOVED***
+              // then hide it
+              //
               modal.style.display = "none";
 
-      ***REMOVED*** document.querySelector(".email-chat").append(elParser(AddContactSuccessModalTemplate()))
+              // document.querySelector(".email-chat").append(elParser(AddContactSuccessModalTemplate()))
 
-        ***REMOVED***;
+            };
 
       document.addEventListener('keydown', (e) => {
-        if (e.keyCode == '27') { modal.style.display = "none"; ***REMOVED***
-  ***REMOVED***);
-  ***REMOVED***,
-***REMOVED***
+        if (e.keyCode == '27') { modal.style.display = "none"; }
+      });
+  },
+}

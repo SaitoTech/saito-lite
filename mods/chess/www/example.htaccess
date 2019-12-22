@@ -11,8 +11,8 @@ RewriteBase /
 </Files>
 
 # allow any files or directories that exist to be displayed directly
-RewriteCond %{REQUEST_FILENAME***REMOVED*** !-f
-RewriteCond %{REQUEST_FILENAME***REMOVED*** !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 
 # Rewrite all other URLs to index.php
 RewriteRule ^(.+)$ index.php?_route=$1 [PT,QSA]

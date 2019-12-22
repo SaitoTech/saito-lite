@@ -1,85 +1,85 @@
 .pln {
   color: #c5c8c6;
-***REMOVED***
+}
 @media screen {
   .str {
     color: #b5bd68;
-  ***REMOVED***
+  }
   .kwd {
     color: #b294bb;
-  ***REMOVED***
+  }
   .com {
     color: #969896;
-  ***REMOVED***
+  }
   .typ {
     color: #81a2be;
-  ***REMOVED***
+  }
   .lit {
     color: #de935f;
-  ***REMOVED***
+  }
   .pun {
     color: #c5c8c6;
-  ***REMOVED***
+  }
   .opn {
     color: #c5c8c6;
-  ***REMOVED***
+  }
   .clo {
     color: #c5c8c6;
-  ***REMOVED***
+  }
   .tag {
     color: #cc6666;
-  ***REMOVED***
+  }
   .atn {
     color: #de935f;
-  ***REMOVED***
+  }
   .atv {
     color: #8abeb7;
-  ***REMOVED***
+  }
   .dec {
     color: #de935f;
-  ***REMOVED***
+  }
   .var {
     color: #cc6666;
-  ***REMOVED***
+  }
   .fun {
     color: #81a2be;
-  ***REMOVED***
-***REMOVED***
+  }
+}
 @media print,projection {
   .str {
     color: #060;
-  ***REMOVED***
+  }
   .kwd {
     color: #006;
     font-weight: bold;
-  ***REMOVED***
+  }
   .com {
     color: #600;
     font-style: italic;
-  ***REMOVED***
+  }
   .typ {
     color: #404;
     font-weight: bold;
-  ***REMOVED***
+  }
   .lit {
     color: #044;
-  ***REMOVED***
+  }
   .pun,
   .opn,
   .clo {
     color: #440;
-  ***REMOVED***
+  }
   .tag {
     color: #006;
     font-weight: bold;
-  ***REMOVED***
+  }
   .atn {
     color: #404;
-  ***REMOVED***
+  }
   .atv {
     color: #060;
-  ***REMOVED***
-***REMOVED***
+  }
+}
 pre.prettyprint {
   background: #1d1f21;
   font-family: Menlo, Monaco, Consolas, monospace;
@@ -87,57 +87,57 @@ pre.prettyprint {
   line-height: 1.5;
   border: 1px solid #ccc;
   padding: 10px;
-***REMOVED***
+}
 ol.linenums {
   margin-top: 0;
   margin-bottom: 0;
-***REMOVED***
+}
 html {
   background: #333;
-***REMOVED***
+}
 body {
   background: url('../img/satinweave.png') repeat;
-***REMOVED***
+}
 div#body_container {
   min-height: 700px;
   padding: 30px 0px;
-***REMOVED***
+}
 div#footer {
   background: #333;
   color: #999;
   padding: 18px 0px;
-***REMOVED***
+}
 div#footer div.row {
   background: #333;
-***REMOVED***
+}
 div#footer a {
   color: #fff;
-***REMOVED***
+}
 div#footer p {
   font-size: 12px;
   margin-bottom: 0px;
-***REMOVED***
+}
 div#left_footer a {
   text-decoration: underline;
-***REMOVED***
+}
 div#left_footer a:hover {
   text-decoration: none;
-***REMOVED***
+}
 div#right_footer {
   text-align: right;
-***REMOVED***
+}
 div#right_footer a {
   color: #fff;
   font-size: 12px;
   padding: 0px 8px;
   text-decoration: none;
-***REMOVED***
+}
 div#right_footer a:hover {
   text-decoration: underline;
-***REMOVED***
+}
 div.row {
   background: #fff;
-***REMOVED***
+}
 h1,
 h2,
 h3,
@@ -145,7 +145,7 @@ h4,
 h5,
 h6 {
   font-family: 'Open Sans', sans-serif;
-***REMOVED***
+}
 div.top-bar li a {
   color: #fff;
   display: block;
@@ -156,33 +156,33 @@ div.top-bar li a {
   line-height: 45px;
   padding: 0 15px;
   text-decoration: none;
-***REMOVED***
+}
 div.top-bar li.name a {
   font-weight: bold !important;
-***REMOVED***
+}
 div.top-bar li.active,
 div.top-bar li:hover {
   background: #000;
-***REMOVED***
+}
 div.top-bar li.active a,
 div.top-bar li a:hover {
   color: #d9d9d9;
-***REMOVED***
+}
 small {
   font-size: 80%;
-***REMOVED***
+}
 input.demo-btn {
   margin-top: 15px;
-***REMOVED***
+}
 div.section {
   padding: 0px 0px 15px 0px;
-***REMOVED***
+}
 input#runAgainBtn {
   margin-top: 12px;
-***REMOVED***
+}
 h2#example_name {
   margin-top: 0px;
-***REMOVED***
+}
 div#examples_list_container h4 {
   background: #f2f2f2;
   border-top: 1px solid #e6e6e6;
@@ -194,7 +194,7 @@ div#examples_list_container h4 {
   font-weight: normal;
   margin: 0px;
   padding: 15px 20px;
-***REMOVED***
+}
 div#examples_list_container h4.active {
   background: #4d4d4d;
   border-top: 1px solid #1a1a1a;
@@ -202,101 +202,101 @@ div#examples_list_container h4.active {
   border-left: 4px solid #1a1a1a;
   color: #fff;
   font-weight: bold;
-***REMOVED***
+}
 div#examples_list_container ul {
   border-left: 3px solid #eee;
   border-right: 1px solid #eee;
   margin-bottom: 0px;
   padding: 10px 0px;
-***REMOVED***
+}
 div#examples_list_container li {
   color: #666;
   cursor: pointer;
   list-style: none;
   padding: 5px 0px 5px 20px;
-***REMOVED***
+}
 div#examples_list_container li:hover {
   color: #222;
-***REMOVED***
+}
 div#examples_list_container li.active {
   color: #222;
   font-weight: bold;
-***REMOVED***
+}
 div#example_html_container {
   margin-bottom: 40px;
-***REMOVED***
+}
 div#example_js_container pre {
   overflow-x: hidden;
-***REMOVED***
+}
 div.etymology {
   margin: 30px 0px;
-***REMOVED***
+}
 div.word {
   font-size: 26px;
   margin-bottom: 20px;
-***REMOVED***
+}
 div.part-of-speech {
   color: #878787;
   margin-bottom: 6px;
-***REMOVED***
+}
 div.definition {
   font-style: italic;
-***REMOVED***
+}
 div.example {
   padding: 40px 0px;
   margin-bottom: 300px;
-***REMOVED***
+}
 code {
   background: none;
   color: #000;
   font-family: 'Droid Sans Mono', 'Courier New', monospace;
   font-size: 13px;
   font-weight: normal;
-***REMOVED***
+}
 code.plain {
   color: #d94d3a;
-***REMOVED***
+}
 code.html,
 code.keyword {
   color: #0066cc;
-***REMOVED***
+}
 code.string {
   color: blue;
-***REMOVED***
+}
 code.number {
   color: #7f0000;
-***REMOVED***
+}
 pre {
   font-size: 14px;
-***REMOVED***
+}
 a {
   text-decoration: underline;
-***REMOVED***
+}
 td.center {
   text-align: center;
-***REMOVED***
+}
 hr.divider {
   margin: 50px 0px;
-***REMOVED***
+}
 div.release li {
   list-style: none;
-***REMOVED***
+}
 ul.disc li {
   list-style: disc;
-***REMOVED***
+}
 table#markup_example_tbl {
   width: 100%;
   margin-bottom: 400px;
   border: 0px;
-***REMOVED***
+}
 table#markup_example_tbl tr {
   background: #fff;
-***REMOVED***
+}
 table#markup_example_tbl td {
   width: 50%;
   padding: 20px;
   padding-bottom: 250px;
-***REMOVED***
+}
 
 #example_html_container input, input.btn, button.btn {
   -webkit-box-sizing: border-box;
@@ -336,8 +336,8 @@ table#markup_example_tbl td {
   -ms-border-radius: 3px;
   -o-border-radius: 3px;
   border-radius: 3px;  
-***REMOVED***
+}
 
 thead.center th {
   text-align: center;
-***REMOVED***
+}

@@ -1,4 +1,4 @@
-***REMOVED***
+const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const EscrowAppspace = require('./lib/email-appspace/escrow-appspace');
 const ArcadeEscrowSidebar = require('./lib/arcade-sidebar/escrow-sidebar');
@@ -12,13 +12,13 @@ class Escrow extends ModTemplate {
     this.name           = "Escrow";
     this.publickey      = app.wallet.returnPublicKey();
 
-    this.escrow         = {***REMOVED***;
+    this.escrow         = {};
     this.escrow.address	= "";
     this.escrow.balance	= 0.0;
     this.escrow.create_pending = 0;
 
     return this;
-  ***REMOVED***
+  }
 
 
   initialize(app) {
@@ -29,7 +29,7 @@ class Escrow extends ModTemplate {
       this.escrow.address = app.options.escrow.address;
       this.escrow.balance = app.options.escrow.balance;
       this.escrow.create_pending = app.options.escrow.create_pending;
-***REMOVED***
+    }
 
     app.network.oldPropagateTransactionWithCallback = app.network.propagateTransactionWithCallback;
     app.network.propagateTransactionWithCallback = function newPropagateTransactionWithCallback(newtx, mycallback) {
@@ -37,9 +37,9 @@ console.log("\n\nESCROW HAS OVERWRITTEN THIS FUNCTION TO DO SOME STUFF FIRST!\n\
       newtx.transaction.msg.escrow = this.publickey;
       newtx = app.wallet.signTransaction(newtx);
       app.network.oldPropagateTransactionWithCallback(newtx, mycallback);
-***REMOVED***
+    }
 
-  ***REMOVED***
+  }
 
 
   registerAccount() {
@@ -48,7 +48,7 @@ console.log("\n\nESCROW HAS OVERWRITTEN THIS FUNCTION TO DO SOME STUFF FIRST!\n\
     if (newtx == null) {
       console.log("NULL TX CREATED IN REGISTRY MODULE")
       return 0;
-***REMOVED***
+    }
     newtx.transaction.msg.module        = this.name;
     newtx.transaction.msg.request       = "register account";
     newtx = this.app.wallet.signTransaction(newtx);
@@ -56,41 +56,41 @@ console.log("\n\nESCROW HAS OVERWRITTEN THIS FUNCTION TO DO SOME STUFF FIRST!\n\
 
     return 1;
 
-  ***REMOVED***
+  }
 
 
 
   respondTo(type) {
     if (type == 'email-appspace') {
-      let obj = {***REMOVED***;
+      let obj = {};
 	  obj.render = this.renderEmail;
 	  obj.attachEvents = this.attachEventsEmail;
       return obj;
-***REMOVED***
+    }
     if (type == 'arcade-sidebar') {
-      let obj = {***REMOVED***;
+      let obj = {};
 	  obj.render = this.renderArcadeSidebar;
 	  obj.attachEvents = this.attachEventsArcadeSidebar;
       return obj;
-***REMOVED***
+    }
     return null;
-  ***REMOVED***
+  }
   renderEmail(app, data) {
      data.escrow = app.modules.returnModule("Escrow");;
      EscrowAppspace.render(app, data);
-  ***REMOVED***
+  }
   attachEventsEmail(app, data) {
      data.escrow = app.modules.returnModule("Escrow");;
      EscrowAppspace.attachEvents(app, data);
-  ***REMOVED***
+  }
   renderArcadeSidebar(app, data) {
      data.escrow = app.modules.returnModule("Escrow");;
      ArcadeEscrowSidebar.render(app, data);
-  ***REMOVED***
+  }
   attachEventsArcadeSidebar(app, data) {
      data.escrow = app.modules.returnModule("Escrow");;
      ArcadeEscrowSidebar.attachEvents(app, data);
-  ***REMOVED***
+  }
 
 
 
@@ -122,26 +122,26 @@ console.log("TESTING ESCROW: " + JSON.stringify(tx.transaction));
 
     app.network.propagateTransaction(tx);
 
-  ***REMOVED***
+  }
 
 
 
 
 
   saveEscrow() {
-    this.app.options.escrow = Object.assign({***REMOVED***, this.app.options.escrow);
+    this.app.options.escrow = Object.assign({}, this.app.options.escrow);
     this.app.options.escrow = this.escrow;
     this.app.storage.saveOptions();
-  ***REMOVED***
+  }
 
 
   returnCryptoBalances(mycallback) {
     mycallback(['balances']);
-  ***REMOVED***
+  }
 
   returnAccountHistory(mycallback) {
     mycallback(['history']);
-  ***REMOVED***
+  }
 
 
 
@@ -160,14 +160,14 @@ console.log("ESCROW ON CONF 0: " + JSON.stringify(tx.transaction));
       if (txmsg.module == escrow_self.name) {
 
 
-***REMOVED***
+        //
 	// START MONITORING IF BALANCE EXISTS
 	//
 	if (txmsg.escrow != "") {
 console.log("--------------------------------");
 console.log(JSON.stringify(txmsg));
 console.log("--------------------------------");
-	***REMOVED***
+	}
 
 
 
@@ -185,8 +185,8 @@ console.log("--------------------------------");
 
 alert("SAVING ESCROW: " + txmsg.address);
 
-	  ***REMOVED***
-	***REMOVED***
+	  }
+	}
 
 
 	//
@@ -207,15 +207,15 @@ console.log("RECEIVED ESCROW INVITATION: " + JSON.stringify(txmsg));
 	    if (arcade_self != null) {
 	      arcade_self.onConfirmation(blk, tx, conf, app);
 	      return;
-	***REMOVED***
+	    }
 
-	  ***REMOVED***
-	***REMOVED***
-
-
+	  }
+	}
 
 
-***REMOVED***if (tx.isTo(escrow_self.publickey)) {
+
+
+        //if (tx.isTo(escrow_self.publickey)) {
         if (1) {
 
 	  if (txmsg.request === "register account") {
@@ -237,7 +237,7 @@ console.log("RECEIVED ESCROW INVITATION: " + JSON.stringify(txmsg));
 	    sql = "INSERT INTO users (publickey) VALUES ($publickey)";
 	    params = {
 	        $publickey	:	tx.transaction.from[0].add
-	***REMOVED***
+	    }
 	    await escrow_self.app.storage.executeDatabase(sql, params, "escrow");
 
 
@@ -247,11 +247,11 @@ console.log("RECEIVED ESCROW INVITATION: " + JSON.stringify(txmsg));
 	    sql = "SELECT id FROM users WHERE publickey = $publickey";
 	    params = {
 	        $publickey	:	tx.transaction.from[0].add
-	***REMOVED***
+	    }
 	    let rows = await escrow_self.app.storage.queryDatabase(sql, params, "escrow");
 console.log("ROWS: " + rows);
-	    if (rows == null) { return; ***REMOVED***
-	    if (rows.length <= 0) { return; ***REMOVED***
+	    if (rows == null) { return; }
+	    if (rows.length <= 0) { return; }
 	    let user_id = rows[0].id;
 
 console.log("INSERT KEYS INTO USERBASE: ");
@@ -263,7 +263,7 @@ console.log("INSERT KEYS INTO USERBASE: ");
 		$user_id	:	user_id ,
 		$publickey	:	new_crypto_publickey ,
 		$privatekey	:	new_crypto_privatekey
-	***REMOVED***
+	    }
 	    await escrow_self.app.storage.executeDatabase(sql, params, "escrow");
 
 console.log("INSERT KEYS INTO USERBASE: ");
@@ -274,12 +274,12 @@ console.log("INSERT KEYS INTO USERBASE: ");
 	    //
 	    escrow_self.sendAccountBalance(tx.transaction.from[0].add, new_crypto_publickey, 0.0);
 
-	  ***REMOVED***
-	***REMOVED***
+	  }
+	}
 
-  ***REMOVED***
-***REMOVED***
-  ***REMOVED***
+      }
+    }
+  }
 
   
 
@@ -289,7 +289,7 @@ console.log("INSERT KEYS INTO USERBASE: ");
     if (newtx == null) {
       console.log("NULL TX CREATED IN REGISTRY MODULE")
       return;
-***REMOVED***
+    }
 
     newtx.transaction.msg.module        = this.name;
     newtx.transaction.msg.request       = "account balance";
@@ -299,10 +299,10 @@ console.log("INSERT KEYS INTO USERBASE: ");
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
-  ***REMOVED***
+  }
 
 
-***REMOVED***
+}
 
 
 module.exports = Escrow;

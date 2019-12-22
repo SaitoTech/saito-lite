@@ -13,7 +13,7 @@ date_default_timezone_set('UTC');
 class Event {
 
   // Tests whether the given ISO8601 string has a time-of-day or not
-  const ALL_DAY_REGEX = '/^\d{4***REMOVED***-\d\d-\d\d$/'; // matches strings like "2013-12-29"
+  const ALL_DAY_REGEX = '/^\d{4}-\d\d-\d\d$/'; // matches strings like "2013-12-29"
 
   public $title;
   public $allDay; // a boolean
@@ -31,17 +31,17 @@ class Event {
     if (isset($array['allDay'])) {
       // allDay has been explicitly specified
       $this->allDay = (bool)$array['allDay'];
-***REMOVED***
+    }
     else {
       // Guess allDay based off of ISO8601 date strings
       $this->allDay = preg_match(self::ALL_DAY_REGEX, $array['start']) &&
         (!isset($array['end']) || preg_match(self::ALL_DAY_REGEX, $array['end']));
-***REMOVED***
+    }
 
     if ($this->allDay) {
       // If dates are allDay, we want to parse them in UTC to avoid DST issues.
       $timeZone = null;
-***REMOVED***
+    }
 
     // Parse dates
     $this->start = parseDateTime($array['start'], $timeZone);
@@ -51,9 +51,9 @@ class Event {
     foreach ($array as $name => $value) {
       if (!in_array($name, array('title', 'allDay', 'start', 'end'))) {
         $this->properties[$name] = $value;
-  ***REMOVED***
-***REMOVED***
-  ***REMOVED***
+      }
+    }
+  }
 
 
   // Returns whether the date range of our event intersects with the given all-day range.
@@ -65,14 +65,14 @@ class Event {
 
     if (isset($this->end)) {
       $eventEnd = stripTime($this->end); // normalize
-***REMOVED***
+    }
     else {
       $eventEnd = $eventStart; // consider this a zero-duration event
-***REMOVED***
+    }
 
     // Check if the two whole-day ranges intersect.
     return $eventStart < $rangeEnd && $eventEnd >= $rangeStart;
-  ***REMOVED***
+  }
 
 
   // Converts this Event object back to a plain data array, to be used for generating JSON
@@ -86,21 +86,21 @@ class Event {
     // Figure out the date format. This essentially encodes allDay into the date string.
     if ($this->allDay) {
       $format = 'Y-m-d'; // output like "2013-12-29"
-***REMOVED***
+    }
     else {
       $format = 'c'; // full ISO8601 output, like "2013-12-29T09:00:00+08:00"
-***REMOVED***
+    }
 
     // Serialize dates into strings
     $array['start'] = $this->start->format($format);
     if (isset($this->end)) {
       $array['end'] = $this->end->format($format);
-***REMOVED***
+    }
 
     return $array;
-  ***REMOVED***
+  }
 
-***REMOVED***
+}
 
 
 // Date Utilities
@@ -118,13 +118,13 @@ function parseDateTime($string, $timeZone=null) {
   if ($timeZone) {
     // If our timeZone was ignored above, force it.
     $date->setTimezone($timeZone);
-  ***REMOVED***
+  }
   return $date;
-***REMOVED***
+}
 
 
 // Takes the year/month/date values of the given DateTime and converts them to a new DateTime,
 // but in UTC.
 function stripTime($datetime) {
   return new DateTime($datetime->format('Y-m-d'));
-***REMOVED***
+}

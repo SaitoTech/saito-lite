@@ -25,17 +25,17 @@ module.exports = ArcadeGameCarousel = {
 	  //
           carousel.innerHTML += ArcadeGameCarouselLeafTemplate(mod, gameobj2);
 
-	***REMOVED***
-  ***REMOVED***
-***REMOVED***);
+	}
+      }
+    });
 
-  ***REMOVED***,
+  },
 
 
 
   attachEvents(app, data) {
 
-  ***REMOVED***,
+  },
 
 
-***REMOVED***
+}

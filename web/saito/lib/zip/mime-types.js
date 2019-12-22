@@ -685,7 +685,7 @@
 			"x-perfmon" : [ "pma", "pmc", "pml", "pmr", "pmw" ],
 			"x-pkcs7-mime" : [ "p7c", "p7m" ],
 			"ynd.ms-pkipko" : "pko"
-		***REMOVED***,
+		},
 		"audio" : {
 			"amr" : "amr",
 			"amr-wb" : "awb",
@@ -727,7 +727,7 @@
 			"x-pn-realaudio-plugin" : "rmp",
 			"xm" : "xm",
 			"mid" : [ "mid", "rmi" ]
-		***REMOVED***,
+		},
 		"chemical" : {
 			"x-alchemy" : "alc",
 			"x-cache" : [ "cac", "cache" ],
@@ -778,7 +778,7 @@
 			"x-vmd" : "vmd",
 			"x-xtel" : "xtel",
 			"x-xyz" : "xyz"
-		***REMOVED***,
+		},
 		"image" : {
 			"gif" : "gif",
 			"ief" : "ief",
@@ -837,10 +837,10 @@
 			"x-tga" : "tga",
 			"cis-cod" : "cod",
 			"pipeg" : "jfif"
-		***REMOVED***,
+		},
 		"message" : {
 			"rfc822" : [ "eml", "mime", "mht", "mhtml", "nws" ]
-		***REMOVED***,
+		},
 		"model" : {
 			"iges" : [ "igs", "iges" ],
 			"mesh" : [ "msh", "mesh", "silo" ],
@@ -854,7 +854,7 @@
 			"vnd.gtw" : "gtw",
 			"vnd.mts" : "mts",
 			"vnd.vtu" : "vtu"
-		***REMOVED***,
+		},
 		"text" : {
 			"cache-manifest" : [ "manifest", "appcache" ],
 			"calendar" : [ "ics", "icz", "ifb" ],
@@ -918,7 +918,7 @@
 			"x-sfv" : "sfv",
 			"x-uuencode" : "uu",
 			"webviewhtml" : "htt"
-		***REMOVED***,
+		},
 		"video" : {
 			"3gpp" : "3gp",
 			"annodex" : "axv",
@@ -964,17 +964,17 @@
 			"x-m4v" : "m4v",
 			"x-ms-vob" : "vob",
 			"x-smv" : "smv"
-		***REMOVED***,
+		},
 		"x-conference" : {
 			"x-cooltalk" : "ice"
-		***REMOVED***,
+		},
 		"x-world" : {
 			"x-vrml" : [ "vrm", "vrml", "wrl", "flr", "wrz", "xaf", "xof" ]
-		***REMOVED***
-	***REMOVED***;
+		}
+	};
 
 	var mimeTypes = (function() {
-		var type, subtype, val, index, mimeTypes = {***REMOVED***;
+		var type, subtype, val, index, mimeTypes = {};
 		for (type in table) {
 			if (table.hasOwnProperty(type)) {
 				for (subtype in table[type]) {
@@ -982,21 +982,21 @@
 						val = table[type][subtype];
 						if (typeof val == "string") {
 							mimeTypes[val] = type + "/" + subtype;
-						***REMOVED*** else {
+						} else {
 							for (index = 0; index < val.length; index++) {
 								mimeTypes[val[index]] = type + "/" + subtype;
-							***REMOVED***
-						***REMOVED***
-					***REMOVED***
-				***REMOVED***
-			***REMOVED***
-		***REMOVED***
+							}
+						}
+					}
+				}
+			}
+		}
 		return mimeTypes;
-	***REMOVED***)();
+	})();
 
 	zip.getMimeType = function(filename) {
 		var defaultValue = "application/octet-stream";
 		return filename && mimeTypes[filename.split(".").pop().toLowerCase()] || defaultValue;
-	***REMOVED***;
+	};
 
-***REMOVED***)();
+})();

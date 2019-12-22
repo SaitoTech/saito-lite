@@ -4,7 +4,7 @@ const ModTemplate = require('../../../lib/templates/modtemplate');
 
 class ChatGroup extends ModTemplate {
 
-  constructor(app, {id="", name="", members=[], messages=[], identicon=""***REMOVED***) {
+  constructor(app, {id="", name="", members=[], messages=[], identicon=""}) {
 
     super(app);
 
@@ -19,7 +19,7 @@ class ChatGroup extends ModTemplate {
     this.is_encrypted = false;
     this.unread_messages = 0;
 
-  ***REMOVED***
+  }
 
 
 
@@ -31,20 +31,20 @@ class ChatGroup extends ModTemplate {
     let txmsg = tx.returnMessage();
 
     if (conf == 0) {
-***REMOVED***
-***REMOVED*** update this chatgroup object with data received
-***REMOVED***
+        //
+        // update this chatgroup object with data received
+        //
         if (txmsg.id == this.id) {
             this.addMessage(txmsg);
-    ***REMOVED***
+        }
 
-***REMOVED***
-***REMOVED*** notify anyone who cares that we got a chat message
-***REMOVED***
+        //
+        // notify anyone who cares that we got a chat message
+        //
         this.sendEvent("chat", this.returnChatObject());
-***REMOVED***
+    }
 
-  ***REMOVED***
+  }
 
 
 
@@ -55,26 +55,26 @@ class ChatGroup extends ModTemplate {
   // manager externally (when peer-to-peer chat requests
   // arrive)
   //
-  addMessage(tx={***REMOVED***) {
-    let { publickey, message, timestamp ***REMOVED*** = tx.returnMessage();
+  addMessage(tx={}) {
+    let { publickey, message, timestamp } = tx.returnMessage();
     this.messages.push({
       publickey,
       message,
       timestamp,
       id: tx.transaction.sig
-***REMOVED***);
+    });
 
     // re-render our UI
 
-  ***REMOVED***
+  }
 
 
 
   receiveEvent(type, data) {
     if (type === "chatgroup") {
       this.sendEvent("chat", this.returnChatObject());
-***REMOVED***
-  ***REMOVED***
+    }
+  }
 
 
   respondTo(request_type) {
@@ -83,18 +83,18 @@ class ChatGroup extends ModTemplate {
 
     if (request_type === "chat") {
       obj = this.returnChatObject();
-***REMOVED***
+    }
 
     return obj;
 
-  ***REMOVED***
+  }
 
 
 
 
   returnChatObject() {
 
-    let obj = {***REMOVED***;
+    let obj = {};
     obj.title    = "Title";
     obj.text     = "Text";
     obj.ts       = new Date().getTime();
@@ -105,12 +105,12 @@ class ChatGroup extends ModTemplate {
 
     return obj;
 
-  ***REMOVED***
+  }
 
 
 
 
-***REMOVED***
+}
 
 
 

@@ -147,7 +147,7 @@
 				if (bits > max_length) {
 					bits = max_length;
 					overflow++;
-				***REMOVED***
+				}
 				tree[n * 2 + 1] = bits;
 				// We overwrite tree[n*2+1] which is no longer needed
 
@@ -162,7 +162,7 @@
 				s.opt_len += f * (bits + xbits);
 				if (stree)
 					s.static_len += f * (stree[n * 2 + 1] + xbits);
-			***REMOVED***
+			}
 			if (overflow === 0)
 				return;
 
@@ -178,7 +178,7 @@
 				// The brother of the overflow item also moves one step up,
 				// but this does not affect bl_count[max_length]
 				overflow -= 2;
-			***REMOVED*** while (overflow > 0);
+			} while (overflow > 0);
 
 			for (bits = max_length; bits !== 0; bits--) {
 				n = s.bl_count[bits];
@@ -189,11 +189,11 @@
 					if (tree[m * 2 + 1] != bits) {
 						s.opt_len += (bits - tree[m * 2 + 1]) * tree[m * 2];
 						tree[m * 2 + 1] = bits;
-					***REMOVED***
+					}
 					n--;
-				***REMOVED***
-			***REMOVED***
-		***REMOVED***
+				}
+			}
+		}
 
 		// Reverse the first len bits of a code, using straightforward code (a
 		// faster
@@ -207,9 +207,9 @@
 				res |= code & 1;
 				code >>>= 1;
 				res <<= 1;
-			***REMOVED*** while (--len > 0);
+			} while (--len > 0);
 			return res >>> 1;
-		***REMOVED***
+		}
 
 		// Generate the codes for a given tree and bit counts (which need not be
 		// optimal).
@@ -232,7 +232,7 @@
 			// without bit reversal.
 			for (bits = 1; bits <= MAX_BITS; bits++) {
 				next_code[bits] = code = ((code + bl_count[bits - 1]) << 1);
-			***REMOVED***
+			}
 
 			// Check that the bit counts in bl_count are consistent. The last code
 			// must be all ones.
@@ -246,8 +246,8 @@
 					continue;
 				// Now reverse the bits
 				tree[n * 2] = bi_reverse(next_code[len]++, len);
-			***REMOVED***
-		***REMOVED***
+			}
+		}
 
 		// Construct one Huffman tree and assigns the code bit strings and lengths.
 		// Update the total bit length for the current block.
@@ -273,10 +273,10 @@
 				if (tree[n * 2] !== 0) {
 					s.heap[++s.heap_len] = max_code = n;
 					s.depth[n] = 0;
-				***REMOVED*** else {
+				} else {
 					tree[n * 2 + 1] = 0;
-				***REMOVED***
-			***REMOVED***
+				}
+			}
 
 			// The pkzip format requires that at least one distance code exists,
 			// and that at least one bit should be sent even if there is only one
@@ -290,7 +290,7 @@
 				if (stree)
 					s.static_len -= stree[node * 2 + 1];
 				// node is 0 or 1 so it does not have extra bits
-			***REMOVED***
+			}
 			that.max_code = max_code;
 
 			// The elements heap[heap_len/2+1 .. heap_len] are leaves of the tree,
@@ -321,7 +321,7 @@
 				// and insert the new node in the heap
 				s.heap[1] = node++;
 				s.pqdownheap(tree, 1);
-			***REMOVED*** while (s.heap_len >= 2);
+			} while (s.heap_len >= 2);
 
 			s.heap[--s.heap_max] = s.heap[1];
 
@@ -332,9 +332,9 @@
 
 			// The field len is now set, we can generate the bit codes
 			gen_codes(tree, that.max_code, s.bl_count);
-		***REMOVED***;
+		};
 
-	***REMOVED***
+	}
 
 	Tree._length_code = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 12, 12, 13, 13, 13, 13, 14, 14, 14, 14, 15, 15, 15, 15, 16, 16, 16, 16,
 			16, 16, 16, 16, 17, 17, 17, 17, 17, 17, 17, 17, 18, 18, 18, 18, 18, 18, 18, 18, 19, 19, 19, 19, 19, 19, 19, 19, 20, 20, 20, 20, 20, 20, 20, 20, 20,
@@ -354,7 +354,7 @@
 	// used.
 	Tree.d_code = function(dist) {
 		return ((dist) < 256 ? _dist_code[dist] : _dist_code[256 + ((dist) >>> 7)]);
-	***REMOVED***;
+	};
 
 	// extra bits for each length code
 	Tree.extra_lbits = [ 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 0 ];
@@ -376,7 +376,7 @@
 		that.extra_base = extra_base;
 		that.elems = elems;
 		that.max_length = max_length;
-	***REMOVED***
+	}
 
 	StaticTree.static_ltree = [ 12, 8, 140, 8, 76, 8, 204, 8, 44, 8, 172, 8, 108, 8, 236, 8, 28, 8, 156, 8, 92, 8, 220, 8, 60, 8, 188, 8, 124, 8, 252, 8, 2, 8,
 			130, 8, 66, 8, 194, 8, 34, 8, 162, 8, 98, 8, 226, 8, 18, 8, 146, 8, 82, 8, 210, 8, 50, 8, 178, 8, 114, 8, 242, 8, 10, 8, 138, 8, 74, 8, 202, 8, 42,
@@ -416,7 +416,7 @@
 		that.nice_length = nice_length;
 		that.max_chain = max_chain;
 		that.func = func;
-	***REMOVED***
+	}
 
 	var STORED = 0;
 	var FAST = 1;
@@ -471,7 +471,7 @@
 		var tn2 = tree[n * 2];
 		var tm2 = tree[m * 2];
 		return (tn2 < tm2 || (tn2 == tm2 && depth[n] <= depth[m]));
-	***REMOVED***
+	}
 
 	function Deflate() {
 
@@ -633,7 +633,7 @@
 			head[hash_size - 1] = 0;
 			for (i = 0; i < hash_size - 1; i++) {
 				head[i] = 0;
-			***REMOVED***
+			}
 
 			// Set the default configuration parameters:
 			max_lazy_match = config_table[level].max_lazy;
@@ -647,7 +647,7 @@
 			match_length = prev_length = MIN_MATCH - 1;
 			match_available = 0;
 			ins_h = 0;
-		***REMOVED***
+		}
 
 		function init_block() {
 			var i;
@@ -662,7 +662,7 @@
 			dyn_ltree[END_BLOCK * 2] = 1;
 			that.opt_len = that.static_len = 0;
 			last_lit = matches = 0;
-		***REMOVED***
+		}
 
 		// Initialize the tree data structures for a new zlib stream.
 		function tr_init() {
@@ -682,7 +682,7 @@
 
 			// Initialize the first block of the first file:
 			init_block();
-		***REMOVED***
+		}
 
 		// Restore the heap property by moving down the tree starting at node k,
 		// exchanging a node with the smallest of its two sons if necessary,
@@ -699,7 +699,7 @@
 				// Set j to the smallest of the two sons:
 				if (j < that.heap_len && smaller(tree, heap[j + 1], heap[j], that.depth)) {
 					j++;
-				***REMOVED***
+				}
 				// Exit if v is smaller than both sons
 				if (smaller(tree, v, heap[j], that.depth))
 					break;
@@ -709,9 +709,9 @@
 				k = j;
 				// And continue down the tree, setting j to the left son of k
 				j <<= 1;
-			***REMOVED***
+			}
 			heap[k] = v;
-		***REMOVED***;
+		};
 
 		// Scan a literal or distance tree to determine the frequencies of the codes
 		// in the bit length tree.
@@ -729,7 +729,7 @@
 			if (nextlen === 0) {
 				max_count = 138;
 				min_count = 3;
-			***REMOVED***
+			}
 			tree[(max_code + 1) * 2 + 1] = 0xffff; // guard
 
 			for (n = 0; n <= max_code; n++) {
@@ -737,31 +737,31 @@
 				nextlen = tree[(n + 1) * 2 + 1];
 				if (++count < max_count && curlen == nextlen) {
 					continue;
-				***REMOVED*** else if (count < min_count) {
+				} else if (count < min_count) {
 					bl_tree[curlen * 2] += count;
-				***REMOVED*** else if (curlen !== 0) {
+				} else if (curlen !== 0) {
 					if (curlen != prevlen)
 						bl_tree[curlen * 2]++;
 					bl_tree[REP_3_6 * 2]++;
-				***REMOVED*** else if (count <= 10) {
+				} else if (count <= 10) {
 					bl_tree[REPZ_3_10 * 2]++;
-				***REMOVED*** else {
+				} else {
 					bl_tree[REPZ_11_138 * 2]++;
-				***REMOVED***
+				}
 				count = 0;
 				prevlen = curlen;
 				if (nextlen === 0) {
 					max_count = 138;
 					min_count = 3;
-				***REMOVED*** else if (curlen == nextlen) {
+				} else if (curlen == nextlen) {
 					max_count = 6;
 					min_count = 3;
-				***REMOVED*** else {
+				} else {
 					max_count = 7;
 					min_count = 4;
-				***REMOVED***
-			***REMOVED***
-		***REMOVED***
+				}
+			}
+		}
 
 		// Construct the Huffman tree for the bit lengths and return the index in
 		// bl_order of the last bit length code to send.
@@ -784,28 +784,28 @@
 			for (max_blindex = BL_CODES - 1; max_blindex >= 3; max_blindex--) {
 				if (bl_tree[Tree.bl_order[max_blindex] * 2 + 1] !== 0)
 					break;
-			***REMOVED***
+			}
 			// Update opt_len to include the bit length tree and counts
 			that.opt_len += 3 * (max_blindex + 1) + 5 + 5 + 4;
 
 			return max_blindex;
-		***REMOVED***
+		}
 
 		// Output a byte on the stream.
 		// IN assertion: there is enough room in pending_buf.
 		function put_byte(p) {
 			that.pending_buf[that.pending++] = p;
-		***REMOVED***
+		}
 
 		function put_short(w) {
 			put_byte(w & 0xff);
 			put_byte((w >>> 8) & 0xff);
-		***REMOVED***
+		}
 
 		function putShortMSB(b) {
 			put_byte((b >> 8) & 0xff);
 			put_byte((b & 0xff) & 0xff);
-		***REMOVED***
+		}
 
 		function send_bits(value, length) {
 			var val, len = length;
@@ -816,17 +816,17 @@
 				put_short(bi_buf);
 				bi_buf = val >>> (Buf_size - bi_valid);
 				bi_valid += len - Buf_size;
-			***REMOVED*** else {
+			} else {
 				// bi_buf |= (value) << bi_valid;
 				bi_buf |= (((value) << bi_valid) & 0xffff);
 				bi_valid += len;
-			***REMOVED***
-		***REMOVED***
+			}
+		}
 
 		function send_code(c, tree) {
 			var c2 = c * 2;
 			send_bits(tree[c2] & 0xffff, tree[c2 + 1] & 0xffff);
-		***REMOVED***
+		}
 
 		// Send a literal or distance tree in compressed form, using the codes in
 		// bl_tree.
@@ -844,45 +844,45 @@
 			if (nextlen === 0) {
 				max_count = 138;
 				min_count = 3;
-			***REMOVED***
+			}
 
 			for (n = 0; n <= max_code; n++) {
 				curlen = nextlen;
 				nextlen = tree[(n + 1) * 2 + 1];
 				if (++count < max_count && curlen == nextlen) {
 					continue;
-				***REMOVED*** else if (count < min_count) {
+				} else if (count < min_count) {
 					do {
 						send_code(curlen, bl_tree);
-					***REMOVED*** while (--count !== 0);
-				***REMOVED*** else if (curlen !== 0) {
+					} while (--count !== 0);
+				} else if (curlen !== 0) {
 					if (curlen != prevlen) {
 						send_code(curlen, bl_tree);
 						count--;
-					***REMOVED***
+					}
 					send_code(REP_3_6, bl_tree);
 					send_bits(count - 3, 2);
-				***REMOVED*** else if (count <= 10) {
+				} else if (count <= 10) {
 					send_code(REPZ_3_10, bl_tree);
 					send_bits(count - 3, 3);
-				***REMOVED*** else {
+				} else {
 					send_code(REPZ_11_138, bl_tree);
 					send_bits(count - 11, 7);
-				***REMOVED***
+				}
 				count = 0;
 				prevlen = curlen;
 				if (nextlen === 0) {
 					max_count = 138;
 					min_count = 3;
-				***REMOVED*** else if (curlen == nextlen) {
+				} else if (curlen == nextlen) {
 					max_count = 6;
 					min_count = 3;
-				***REMOVED*** else {
+				} else {
 					max_count = 7;
 					min_count = 4;
-				***REMOVED***
-			***REMOVED***
-		***REMOVED***
+				}
+			}
+		}
 
 		// Send the header for a block using dynamic Huffman trees: the counts, the
 		// lengths of the bit length codes, the literal tree and the distance tree.
@@ -895,10 +895,10 @@
 			send_bits(blcodes - 4, 4); // not -3 as stated in appnote.txt
 			for (rank = 0; rank < blcodes; rank++) {
 				send_bits(bl_tree[Tree.bl_order[rank] * 2 + 1], 3);
-			***REMOVED***
+			}
 			send_tree(dyn_ltree, lcodes - 1); // literal tree
 			send_tree(dyn_dtree, dcodes - 1); // distance tree
-		***REMOVED***
+		}
 
 		// Flush the bit buffer, keeping at most 7 bits in it.
 		function bi_flush() {
@@ -906,12 +906,12 @@
 				put_short(bi_buf);
 				bi_buf = 0;
 				bi_valid = 0;
-			***REMOVED*** else if (bi_valid >= 8) {
+			} else if (bi_valid >= 8) {
 				put_byte(bi_buf & 0xff);
 				bi_buf >>>= 8;
 				bi_valid -= 8;
-			***REMOVED***
-		***REMOVED***
+			}
+		}
 
 		// Send one empty static block to give enough lookahead for inflate.
 		// This takes 10 bits, of which 7 may remain in the bit buffer.
@@ -936,9 +936,9 @@
 				send_bits(STATIC_TREES << 1, 3);
 				send_code(END_BLOCK, StaticTree.static_ltree);
 				bi_flush();
-			***REMOVED***
+			}
 			last_eob_len = 7;
-		***REMOVED***
+		}
 
 		// Save the match info and tally the frequency counts. Return true if
 		// the current block must be flushed.
@@ -955,13 +955,13 @@
 			if (dist === 0) {
 				// lc is the unmatched char
 				dyn_ltree[lc * 2]++;
-			***REMOVED*** else {
+			} else {
 				matches++;
 				// Here, lc is the match length - MIN_MATCH
 				dist--; // dist = match distance - 1
 				dyn_ltree[(Tree._length_code[lc] + LITERALS + 1) * 2]++;
 				dyn_dtree[Tree.d_code(dist) * 2]++;
-			***REMOVED***
+			}
 
 			if ((last_lit & 0x1fff) === 0 && level > 2) {
 				// Compute an upper bound for the compressed length
@@ -969,17 +969,17 @@
 				in_length = strstart - block_start;
 				for (dcode = 0; dcode < D_CODES; dcode++) {
 					out_length += dyn_dtree[dcode * 2] * (5 + Tree.extra_dbits[dcode]);
-				***REMOVED***
+				}
 				out_length >>>= 3;
 				if ((matches < Math.floor(last_lit / 2)) && out_length < Math.floor(in_length / 2))
 					return true;
-			***REMOVED***
+			}
 
 			return (last_lit == lit_bufsize - 1);
 			// We avoid equality with lit_bufsize because of wraparound at 64K
 			// on 16 bit machines and because stored blocks are restricted to
 			// 64K-1 bytes.
-		***REMOVED***
+		}
 
 		// Send the block data compressed using the given Huffman trees
 		function compress_block(ltree, dtree) {
@@ -997,7 +997,7 @@
 
 					if (dist === 0) {
 						send_code(lc, ltree); // send a literal byte
-					***REMOVED*** else {
+					} else {
 						// Here, lc is the match length - MIN_MATCH
 						code = Tree._length_code[lc];
 
@@ -1007,7 +1007,7 @@
 						if (extra !== 0) {
 							lc -= Tree.base_length[code];
 							send_bits(lc, extra); // send the extra length bits
-						***REMOVED***
+						}
 						dist--; // dist is now the match distance - 1
 						code = Tree.d_code(dist);
 
@@ -1016,28 +1016,28 @@
 						if (extra !== 0) {
 							dist -= Tree.base_dist[code];
 							send_bits(dist, extra); // send the extra distance bits
-						***REMOVED***
-					***REMOVED*** // literal or match pair ?
+						}
+					} // literal or match pair ?
 
 					// Check that the overlay between pending_buf and d_buf+l_buf is
 					// ok:
-				***REMOVED*** while (lx < last_lit);
-			***REMOVED***
+				} while (lx < last_lit);
+			}
 
 			send_code(END_BLOCK, ltree);
 			last_eob_len = ltree[END_BLOCK * 2 + 1];
-		***REMOVED***
+		}
 
 		// Flush the bit buffer and align the output on a byte boundary
 		function bi_windup() {
 			if (bi_valid > 8) {
 				put_short(bi_buf);
-			***REMOVED*** else if (bi_valid > 0) {
+			} else if (bi_valid > 0) {
 				put_byte(bi_buf & 0xff);
-			***REMOVED***
+			}
 			bi_buf = 0;
 			bi_valid = 0;
-		***REMOVED***
+		}
 
 		// Copy a stored block, storing first the length and its
 		// one's complement if requested.
@@ -1051,11 +1051,11 @@
 			if (header) {
 				put_short(len);
 				put_short(~len);
-			***REMOVED***
+			}
 
 			that.pending_buf.set(window.subarray(buf, buf + len), that.pending);
 			that.pending += len;
-		***REMOVED***
+		}
 
 		// Send a stored block
 		function _tr_stored_block(buf, // input block
@@ -1064,7 +1064,7 @@
 		) {
 			send_bits((STORED_BLOCK << 1) + (eof ? 1 : 0), 3); // send block type
 			copy_block(buf, stored_len, true); // with header
-		***REMOVED***
+		}
 
 		// Determine the best encoding for the current block: dynamic trees, static
 		// trees or store, and output the encoded block to the zip file.
@@ -1098,9 +1098,9 @@
 
 				if (static_lenb <= opt_lenb)
 					opt_lenb = static_lenb;
-			***REMOVED*** else {
+			} else {
 				opt_lenb = static_lenb = stored_len + 5; // force a stored block
-			***REMOVED***
+			}
 
 			if ((stored_len + 4 <= opt_lenb) && buf != -1) {
 				// 4: two words for the lengths
@@ -1111,14 +1111,14 @@
 				// successful. If LIT_BUFSIZE <= WSIZE, it is never too late to
 				// transform a block into a stored block.
 				_tr_stored_block(buf, stored_len, eof);
-			***REMOVED*** else if (static_lenb == opt_lenb) {
+			} else if (static_lenb == opt_lenb) {
 				send_bits((STATIC_TREES << 1) + (eof ? 1 : 0), 3);
 				compress_block(StaticTree.static_ltree, StaticTree.static_dtree);
-			***REMOVED*** else {
+			} else {
 				send_bits((DYN_TREES << 1) + (eof ? 1 : 0), 3);
 				send_all_trees(l_desc.max_code + 1, d_desc.max_code + 1, max_blindex + 1);
 				compress_block(dyn_ltree, dyn_dtree);
-			***REMOVED***
+			}
 
 			// The above check is made mod 2^32, for files larger than 512 MB
 			// and uLong implemented on 32 bits.
@@ -1127,14 +1127,14 @@
 
 			if (eof) {
 				bi_windup();
-			***REMOVED***
-		***REMOVED***
+			}
+		}
 
 		function flush_block_only(eof) {
 			_tr_flush_block(block_start >= 0 ? block_start : -1, strstart - block_start, eof);
 			block_start = strstart;
 			strm.flush_pending();
-		***REMOVED***
+		}
 
 		// Fill the window when the lookahead becomes insufficient.
 		// Updates strstart and lookahead.
@@ -1155,7 +1155,7 @@
 				// Deal with !@#$% 64K limit:
 				if (more === 0 && strstart === 0 && lookahead === 0) {
 					more = w_size;
-				***REMOVED*** else if (more == -1) {
+				} else if (more == -1) {
 					// Very unlikely, but possible on 16 bit machine if strstart ==
 					// 0
 					// and lookahead == 1 (input done one byte at time)
@@ -1165,7 +1165,7 @@
 					// lookahead,
 					// move the upper half to the lower one to make room in the
 					// upper half.
-				***REMOVED*** else if (strstart >= w_size + w_size - MIN_LOOKAHEAD) {
+				} else if (strstart >= w_size + w_size - MIN_LOOKAHEAD) {
 					window.set(window.subarray(w_size, w_size + w_size), 0);
 
 					match_start -= w_size;
@@ -1185,7 +1185,7 @@
 					do {
 						m = (head[--p] & 0xffff);
 						head[p] = (m >= w_size ? m - w_size : 0);
-					***REMOVED*** while (--n !== 0);
+					} while (--n !== 0);
 
 					n = w_size;
 					p = n;
@@ -1194,9 +1194,9 @@
 						prev[p] = (m >= w_size ? m - w_size : 0);
 						// If n is not on any hash chain, prev[n] is garbage but
 						// its value will never be used.
-					***REMOVED*** while (--n !== 0);
+					} while (--n !== 0);
 					more += w_size;
-				***REMOVED***
+				}
 
 				if (strm.avail_in === 0)
 					return;
@@ -1219,13 +1219,13 @@
 				if (lookahead >= MIN_MATCH) {
 					ins_h = window[strstart] & 0xff;
 					ins_h = (((ins_h) << hash_shift) ^ (window[strstart + 1] & 0xff)) & hash_mask;
-				***REMOVED***
+				}
 				// If the whole input has less than MIN_MATCH bytes, ins_h is
 				// garbage,
 				// but this is not important since only literal bytes will be
 				// emitted.
-			***REMOVED*** while (lookahead < MIN_LOOKAHEAD && strm.avail_in !== 0);
-		***REMOVED***
+			} while (lookahead < MIN_LOOKAHEAD && strm.avail_in !== 0);
+		}
 
 		// Copy without compression as much as possible from the input stream,
 		// return
@@ -1244,7 +1244,7 @@
 
 			if (max_block_size > pending_buf_size - 5) {
 				max_block_size = pending_buf_size - 5;
-			***REMOVED***
+			}
 
 			// Copy as much as possible from input to output:
 			while (true) {
@@ -1255,7 +1255,7 @@
 						return NeedMore;
 					if (lookahead === 0)
 						break; // flush the current block
-				***REMOVED***
+				}
 
 				strstart += lookahead;
 				lookahead = 0;
@@ -1271,7 +1271,7 @@
 					if (strm.avail_out === 0)
 						return NeedMore;
 
-				***REMOVED***
+				}
 
 				// Flush if we may have to slide, otherwise block_start may become
 				// negative and the data will be gone:
@@ -1279,15 +1279,15 @@
 					flush_block_only(false);
 					if (strm.avail_out === 0)
 						return NeedMore;
-				***REMOVED***
-			***REMOVED***
+				}
+			}
 
 			flush_block_only(flush == Z_FINISH);
 			if (strm.avail_out === 0)
 				return (flush == Z_FINISH) ? FinishStarted : NeedMore;
 
 			return flush == Z_FINISH ? FinishDone : BlockDone;
-		***REMOVED***
+		}
 
 		function longest_match(cur_match) {
 			var chain_length = max_chain_length; // max hash chain length
@@ -1314,7 +1314,7 @@
 			// Do not waste too much time if we already have a good match:
 			if (prev_length >= good_match) {
 				chain_length >>= 2;
-			***REMOVED***
+			}
 
 			// Do not look for matches beyond the end of the input. This is
 			// necessary
@@ -1342,7 +1342,7 @@
 				// We check for insufficient lookahead only every 8th comparison;
 				// the 256th check will be made at strstart+258.
 				do {
-				***REMOVED*** while (window[++scan] == window[++match] && window[++scan] == window[++match] && window[++scan] == window[++match]
+				} while (window[++scan] == window[++match] && window[++scan] == window[++match] && window[++scan] == window[++match]
 						&& window[++scan] == window[++match] && window[++scan] == window[++match] && window[++scan] == window[++match]
 						&& window[++scan] == window[++match] && window[++scan] == window[++match] && scan < strend);
 
@@ -1356,14 +1356,14 @@
 						break;
 					scan_end1 = window[scan + best_len - 1];
 					scan_end = window[scan + best_len];
-				***REMOVED***
+				}
 
-			***REMOVED*** while ((cur_match = (prev[cur_match & wmask] & 0xffff)) > limit && --chain_length !== 0);
+			} while ((cur_match = (prev[cur_match & wmask] & 0xffff)) > limit && --chain_length !== 0);
 
 			if (best_len <= lookahead)
 				return best_len;
 			return lookahead;
-		***REMOVED***
+		}
 
 		// Compress as much as possible from the input stream, return the current
 		// block state.
@@ -1384,10 +1384,10 @@
 					fill_window();
 					if (lookahead < MIN_LOOKAHEAD && flush == Z_NO_FLUSH) {
 						return NeedMore;
-					***REMOVED***
+					}
 					if (lookahead === 0)
 						break; // flush the current block
-				***REMOVED***
+				}
 
 				// Insert the string window[strstart .. strstart+2] in the
 				// dictionary, and set hash_head to the head of the hash chain:
@@ -1398,7 +1398,7 @@
 					hash_head = (head[ins_h] & 0xffff);
 					prev[strstart & w_mask] = head[ins_h];
 					head[ins_h] = strstart;
-				***REMOVED***
+				}
 
 				// Find the longest match, discarding those <= prev_length.
 				// At this point we have always match_length < MIN_MATCH
@@ -1409,9 +1409,9 @@
 					// of the string with itself at the start of the input file).
 					if (strategy != Z_HUFFMAN_ONLY) {
 						match_length = longest_match(hash_head);
-					***REMOVED***
+					}
 					// longest_match() sets match_start
-				***REMOVED***
+				}
 				if (match_length >= MIN_MATCH) {
 					// check_match(strstart, match_start, match_length);
 
@@ -1434,9 +1434,9 @@
 
 							// strstart never exceeds WSIZE-MAX_MATCH, so there are
 							// always MIN_MATCH bytes ahead.
-						***REMOVED*** while (--match_length !== 0);
+						} while (--match_length !== 0);
 						strstart++;
-					***REMOVED*** else {
+					} else {
 						strstart += match_length;
 						match_length = 0;
 						ins_h = window[strstart] & 0xff;
@@ -1445,21 +1445,21 @@
 						// If lookahead < MIN_MATCH, ins_h is garbage, but it does
 						// not
 						// matter since it will be recomputed at next deflate call.
-					***REMOVED***
-				***REMOVED*** else {
+					}
+				} else {
 					// No match, output a literal byte
 
 					bflush = _tr_tally(0, window[strstart] & 0xff);
 					lookahead--;
 					strstart++;
-				***REMOVED***
+				}
 				if (bflush) {
 
 					flush_block_only(false);
 					if (strm.avail_out === 0)
 						return NeedMore;
-				***REMOVED***
-			***REMOVED***
+				}
+			}
 
 			flush_block_only(flush == Z_FINISH);
 			if (strm.avail_out === 0) {
@@ -1467,9 +1467,9 @@
 					return FinishStarted;
 				else
 					return NeedMore;
-			***REMOVED***
+			}
 			return flush == Z_FINISH ? FinishDone : BlockDone;
-		***REMOVED***
+		}
 
 		// Same as above, but achieves better compression. We use a lazy
 		// evaluation for matches: a match is finally adopted only if there is
@@ -1491,10 +1491,10 @@
 					fill_window();
 					if (lookahead < MIN_LOOKAHEAD && flush == Z_NO_FLUSH) {
 						return NeedMore;
-					***REMOVED***
+					}
 					if (lookahead === 0)
 						break; // flush the current block
-				***REMOVED***
+				}
 
 				// Insert the string window[strstart .. strstart+2] in the
 				// dictionary, and set hash_head to the head of the hash chain:
@@ -1505,7 +1505,7 @@
 					hash_head = (head[ins_h] & 0xffff);
 					prev[strstart & w_mask] = head[ins_h];
 					head[ins_h] = strstart;
-				***REMOVED***
+				}
 
 				// Find the longest match, discarding those <= prev_length.
 				prev_length = match_length;
@@ -1519,7 +1519,7 @@
 
 					if (strategy != Z_HUFFMAN_ONLY) {
 						match_length = longest_match(hash_head);
-					***REMOVED***
+					}
 					// longest_match() sets match_start
 
 					if (match_length <= 5 && (strategy == Z_FILTERED || (match_length == MIN_MATCH && strstart - match_start > 4096))) {
@@ -1527,8 +1527,8 @@
 						// If prev_match is also MIN_MATCH, match_start is garbage
 						// but we will ignore the current match anyway.
 						match_length = MIN_MATCH - 1;
-					***REMOVED***
-				***REMOVED***
+					}
+				}
 
 				// If there was a match at the previous step and the current
 				// match is not better, output the previous match:
@@ -1553,8 +1553,8 @@
 							hash_head = (head[ins_h] & 0xffff);
 							prev[strstart & w_mask] = head[ins_h];
 							head[ins_h] = strstart;
-						***REMOVED***
-					***REMOVED*** while (--prev_length !== 0);
+						}
+					} while (--prev_length !== 0);
 					match_available = 0;
 					match_length = MIN_MATCH - 1;
 					strstart++;
@@ -1563,8 +1563,8 @@
 						flush_block_only(false);
 						if (strm.avail_out === 0)
 							return NeedMore;
-					***REMOVED***
-				***REMOVED*** else if (match_available !== 0) {
+					}
+				} else if (match_available !== 0) {
 
 					// If there was no match at the previous position, output a
 					// single literal. If there was a match but the current match
@@ -1574,25 +1574,25 @@
 
 					if (bflush) {
 						flush_block_only(false);
-					***REMOVED***
+					}
 					strstart++;
 					lookahead--;
 					if (strm.avail_out === 0)
 						return NeedMore;
-				***REMOVED*** else {
+				} else {
 					// There is no previous match to compare with, wait for
 					// the next step to decide.
 
 					match_available = 1;
 					strstart++;
 					lookahead--;
-				***REMOVED***
-			***REMOVED***
+				}
+			}
 
 			if (match_available !== 0) {
 				bflush = _tr_tally(0, window[strstart - 1] & 0xff);
 				match_available = 0;
-			***REMOVED***
+			}
 			flush_block_only(flush == Z_FINISH);
 
 			if (strm.avail_out === 0) {
@@ -1600,10 +1600,10 @@
 					return FinishStarted;
 				else
 					return NeedMore;
-			***REMOVED***
+			}
 
 			return flush == Z_FINISH ? FinishDone : BlockDone;
-		***REMOVED***
+		}
 
 		function deflateReset(strm) {
 			strm.total_in = strm.total_out = 0;
@@ -1619,7 +1619,7 @@
 			tr_init();
 			lm_init();
 			return Z_OK;
-		***REMOVED***
+		}
 
 		that.deflateInit = function(strm, _level, bits, _method, memLevel, _strategy) {
 			if (!_method)
@@ -1635,7 +1635,7 @@
 			// if (!version || version[0] != my_version[0]
 			// || stream_size != sizeof(z_stream)) {
 			// return Z_VERSION_ERROR;
-			// ***REMOVED***
+			// }
 
 			strm.msg = null;
 
@@ -1645,7 +1645,7 @@
 			if (memLevel < 1 || memLevel > MAX_MEM_LEVEL || _method != Z_DEFLATED || bits < 9 || bits > 15 || _level < 0 || _level > 9 || _strategy < 0
 					|| _strategy > Z_HUFFMAN_ONLY) {
 				return Z_STREAM_ERROR;
-			***REMOVED***
+			}
 
 			strm.dstate = that;
 
@@ -1678,12 +1678,12 @@
 			method = _method & 0xff;
 
 			return deflateReset(strm);
-		***REMOVED***;
+		};
 
 		that.deflateEnd = function() {
 			if (status != INIT_STATE && status != BUSY_STATE && status != FINISH_STATE) {
 				return Z_STREAM_ERROR;
-			***REMOVED***
+			}
 			// Deallocate in reverse order of allocations:
 			that.pending_buf = null;
 			head = null;
@@ -1692,22 +1692,22 @@
 			// free
 			that.dstate = null;
 			return status == BUSY_STATE ? Z_DATA_ERROR : Z_OK;
-		***REMOVED***;
+		};
 
 		that.deflateParams = function(strm, _level, _strategy) {
 			var err = Z_OK;
 
 			if (_level == Z_DEFAULT_COMPRESSION) {
 				_level = 6;
-			***REMOVED***
+			}
 			if (_level < 0 || _level > 9 || _strategy < 0 || _strategy > Z_HUFFMAN_ONLY) {
 				return Z_STREAM_ERROR;
-			***REMOVED***
+			}
 
 			if (config_table[level].func != config_table[_level].func && strm.total_in !== 0) {
 				// Flush the last buffer:
 				err = strm.deflate(Z_PARTIAL_FLUSH);
-			***REMOVED***
+			}
 
 			if (level != _level) {
 				level = _level;
@@ -1715,10 +1715,10 @@
 				good_match = config_table[level].good_length;
 				nice_match = config_table[level].nice_length;
 				max_chain_length = config_table[level].max_chain;
-			***REMOVED***
+			}
 			strategy = _strategy;
 			return err;
-		***REMOVED***;
+		};
 
 		that.deflateSetDictionary = function(strm, dictionary, dictLength) {
 			var length = dictLength;
@@ -1732,7 +1732,7 @@
 			if (length > w_size - MIN_LOOKAHEAD) {
 				length = w_size - MIN_LOOKAHEAD;
 				index = dictLength - length; // use the tail of the dictionary
-			***REMOVED***
+			}
 			window.set(dictionary.subarray(index, index + length), 0);
 
 			strstart = length;
@@ -1749,25 +1749,25 @@
 				ins_h = (((ins_h) << hash_shift) ^ (window[(n) + (MIN_MATCH - 1)] & 0xff)) & hash_mask;
 				prev[n & w_mask] = head[ins_h];
 				head[ins_h] = n;
-			***REMOVED***
+			}
 			return Z_OK;
-		***REMOVED***;
+		};
 
 		that.deflate = function(_strm, flush) {
 			var i, header, level_flags, old_flush, bstate;
 
 			if (flush > Z_FINISH || flush < 0) {
 				return Z_STREAM_ERROR;
-			***REMOVED***
+			}
 
 			if (!_strm.next_out || (!_strm.next_in && _strm.avail_in !== 0) || (status == FINISH_STATE && flush != Z_FINISH)) {
 				_strm.msg = z_errmsg[Z_NEED_DICT - (Z_STREAM_ERROR)];
 				return Z_STREAM_ERROR;
-			***REMOVED***
+			}
 			if (_strm.avail_out === 0) {
 				_strm.msg = z_errmsg[Z_NEED_DICT - (Z_BUF_ERROR)];
 				return Z_BUF_ERROR;
-			***REMOVED***
+			}
 
 			strm = _strm; // just in case
 			old_flush = last_flush;
@@ -1787,7 +1787,7 @@
 
 				status = BUSY_STATE;
 				putShortMSB(header);
-			***REMOVED***
+			}
 
 			// Flush as much pending output as possible
 			if (that.pending !== 0) {
@@ -1801,22 +1801,22 @@
 					// return OK instead of BUF_ERROR at next call of deflate:
 					last_flush = -1;
 					return Z_OK;
-				***REMOVED***
+				}
 
 				// Make sure there is something to do and avoid duplicate
 				// consecutive
 				// flushes. For repeated and useless calls with Z_FINISH, we keep
 				// returning Z_STREAM_END instead of Z_BUFF_ERROR.
-			***REMOVED*** else if (strm.avail_in === 0 && flush <= old_flush && flush != Z_FINISH) {
+			} else if (strm.avail_in === 0 && flush <= old_flush && flush != Z_FINISH) {
 				strm.msg = z_errmsg[Z_NEED_DICT - (Z_BUF_ERROR)];
 				return Z_BUF_ERROR;
-			***REMOVED***
+			}
 
 			// User must not provide more input after the first FINISH:
 			if (status == FINISH_STATE && strm.avail_in !== 0) {
 				_strm.msg = z_errmsg[Z_NEED_DICT - (Z_BUF_ERROR)];
 				return Z_BUF_ERROR;
-			***REMOVED***
+			}
 
 			// Start a new block or continue the current one.
 			if (strm.avail_in !== 0 || lookahead !== 0 || (flush != Z_NO_FLUSH && status != FINISH_STATE)) {
@@ -1832,15 +1832,15 @@
 					bstate = deflate_slow(flush);
 					break;
 				default:
-				***REMOVED***
+				}
 
 				if (bstate == FinishStarted || bstate == FinishDone) {
 					status = FINISH_STATE;
-				***REMOVED***
+				}
 				if (bstate == NeedMore || bstate == FinishStarted) {
 					if (strm.avail_out === 0) {
 						last_flush = -1; // avoid BUF_ERROR next call, see above
-					***REMOVED***
+					}
 					return Z_OK;
 					// If flush != Z_NO_FLUSH && avail_out === 0, the next call
 					// of deflate should use the same flush parameter to make sure
@@ -1848,12 +1848,12 @@
 					// empty block here, this will be done at next call. This also
 					// ensures that for a very small output buffer, we emit at most
 					// one empty block.
-				***REMOVED***
+				}
 
 				if (bstate == BlockDone) {
 					if (flush == Z_PARTIAL_FLUSH) {
 						_tr_align();
-					***REMOVED*** else { // FULL_FLUSH or SYNC_FLUSH
+					} else { // FULL_FLUSH or SYNC_FLUSH
 						_tr_stored_block(0, 0, false);
 						// For a full flush, this empty block will be recognized
 						// as a special marker by inflate_sync().
@@ -1862,21 +1862,21 @@
 							for (i = 0; i < hash_size/*-1*/; i++)
 								// forget history
 								head[i] = 0;
-						***REMOVED***
-					***REMOVED***
+						}
+					}
 					strm.flush_pending();
 					if (strm.avail_out === 0) {
 						last_flush = -1; // avoid BUF_ERROR at next call, see above
 						return Z_OK;
-					***REMOVED***
-				***REMOVED***
-			***REMOVED***
+					}
+				}
+			}
 
 			if (flush != Z_FINISH)
 				return Z_OK;
 			return Z_STREAM_END;
-		***REMOVED***;
-	***REMOVED***
+		};
+	}
 
 	// ZStream
 
@@ -1892,7 +1892,7 @@
 		that.total_out = 0; // total nb of bytes output so far
 		// that.msg;
 		// that.dstate;
-	***REMOVED***
+	}
 
 	ZStream.prototype = {
 		deflateInit : function(level, bits) {
@@ -1901,15 +1901,15 @@
 			if (!bits)
 				bits = MAX_BITS;
 			return that.dstate.deflateInit(that, level, bits);
-		***REMOVED***,
+		},
 
 		deflate : function(flush) {
 			var that = this;
 			if (!that.dstate) {
 				return Z_STREAM_ERROR;
-			***REMOVED***
+			}
 			return that.dstate.deflate(that, flush);
-		***REMOVED***,
+		},
 
 		deflateEnd : function() {
 			var that = this;
@@ -1918,21 +1918,21 @@
 			var ret = that.dstate.deflateEnd();
 			that.dstate = null;
 			return ret;
-		***REMOVED***,
+		},
 
 		deflateParams : function(level, strategy) {
 			var that = this;
 			if (!that.dstate)
 				return Z_STREAM_ERROR;
 			return that.dstate.deflateParams(that, level, strategy);
-		***REMOVED***,
+		},
 
 		deflateSetDictionary : function(dictionary, dictLength) {
 			var that = this;
 			if (!that.dstate)
 				return Z_STREAM_ERROR;
 			return that.dstate.deflateSetDictionary(that, dictionary, dictLength);
-		***REMOVED***,
+		},
 
 		// Read a new buffer from the current input stream, update the
 		// total number of bytes read. All deflate() input goes through
@@ -1951,7 +1951,7 @@
 			that.next_in_index += len;
 			that.total_in += len;
 			return len;
-		***REMOVED***,
+		},
 
 		// Flush as much pending output as possible. All deflate() output goes
 		// through this function so some applications may wish to modify it
@@ -1972,7 +1972,7 @@
 			// console.log(that.dstate.pending_buf.length + ", " + that.dstate.pending_out + ", " + that.next_out.length + ", " +
 			// that.next_out_index + ", " + len);
 			// console.log("avail_out=" + that.avail_out);
-			// ***REMOVED***
+			// }
 
 			that.next_out.set(that.dstate.pending_buf.subarray(that.dstate.pending_out, that.dstate.pending_out + len), that.next_out_index);
 
@@ -1983,9 +1983,9 @@
 			that.dstate.pending -= len;
 			if (that.dstate.pending === 0) {
 				that.dstate.pending_out = 0;
-			***REMOVED***
-		***REMOVED***
-	***REMOVED***;
+			}
+		}
+	};
 
 	// Deflater
 
@@ -2023,15 +2023,15 @@
 				if (onprogress && z.next_in_index > 0 && z.next_in_index != lastIndex) {
 					onprogress(z.next_in_index);
 					lastIndex = z.next_in_index;
-				***REMOVED***
-			***REMOVED*** while (z.avail_in > 0 || z.avail_out === 0);
+				}
+			} while (z.avail_in > 0 || z.avail_out === 0);
 			array = new Uint8Array(bufferSize);
 			buffers.forEach(function(chunk) {
 				array.set(chunk, bufferIndex);
 				bufferIndex += chunk.length;
-			***REMOVED***);
+			});
 			return array;
-		***REMOVED***;
+		};
 		that.flush = function() {
 			var err, buffers = [], bufferIndex = 0, bufferSize = 0, array;
 			do {
@@ -2043,18 +2043,18 @@
 				if (bufsize - z.avail_out > 0)
 					buffers.push(new Uint8Array(buf.subarray(0, z.next_out_index)));
 				bufferSize += z.next_out_index;
-			***REMOVED*** while (z.avail_in > 0 || z.avail_out === 0);
+			} while (z.avail_in > 0 || z.avail_out === 0);
 			z.deflateEnd();
 			array = new Uint8Array(bufferSize);
 			buffers.forEach(function(chunk) {
 				array.set(chunk, bufferIndex);
 				bufferIndex += chunk.length;
-			***REMOVED***);
+			});
 			return array;
-		***REMOVED***;
-	***REMOVED***
+		};
+	}
 
 	// 'zip' may not be defined in z-worker and some tests
 	var env = global.zip || global;
 	env.Deflater = env._jzlib_Deflater = Deflater;
-***REMOVED***)(this);
+})(this);

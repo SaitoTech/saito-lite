@@ -7,5 +7,5 @@ declare module '@fullcalendar/moment-timezone' {
     import 'moment-timezone/builds/moment-timezone-with-data';
     const _default: import("@fullcalendar/core").PluginDef;
     export default _default;
-***REMOVED***
+}
 

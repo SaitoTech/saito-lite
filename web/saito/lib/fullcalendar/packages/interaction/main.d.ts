@@ -6,18 +6,18 @@ declare module '@fullcalendar/interaction' {
     import FeaturefulElementDragging from '@fullcalendar/interaction/dnd/FeaturefulElementDragging';
     const _default: import("@fullcalendar/core").PluginDef;
     export default _default;
-    export { FeaturefulElementDragging ***REMOVED***;
-    export { default as PointerDragging ***REMOVED*** from '@fullcalendar/interaction/dnd/PointerDragging';
-    export { default as Draggable ***REMOVED*** from '@fullcalendar/interaction/interactions-external/ExternalDraggable';
-    export { default as ThirdPartyDraggable ***REMOVED*** from '@fullcalendar/interaction/interactions-external/ThirdPartyDraggable';
-***REMOVED***
+    export { FeaturefulElementDragging };
+    export { default as PointerDragging } from '@fullcalendar/interaction/dnd/PointerDragging';
+    export { default as Draggable } from '@fullcalendar/interaction/interactions-external/ExternalDraggable';
+    export { default as ThirdPartyDraggable } from '@fullcalendar/interaction/interactions-external/ThirdPartyDraggable';
+}
 
 declare module '@fullcalendar/interaction/dnd/FeaturefulElementDragging' {
-    import { PointerDragEvent, ElementDragging ***REMOVED*** from '@fullcalendar/core';
+    import { PointerDragEvent, ElementDragging } from '@fullcalendar/core';
     import PointerDragging from '@fullcalendar/interaction/dnd/PointerDragging';
     import ElementMirror from '@fullcalendar/interaction/dnd/ElementMirror';
     import AutoScroller from '@fullcalendar/interaction/dnd/AutoScroller';
-    export { FeaturefulElementDragging as default, FeaturefulElementDragging ***REMOVED***;
+    export { FeaturefulElementDragging as default, FeaturefulElementDragging };
     class FeaturefulElementDragging extends ElementDragging {
         pointer: PointerDragging;
         mirror: ElementMirror;
@@ -46,12 +46,12 @@ declare module '@fullcalendar/interaction/dnd/FeaturefulElementDragging' {
         setMirrorIsVisible(bool: boolean): void;
         setMirrorNeedsRevert(bool: boolean): void;
         setAutoScrollEnabled(bool: boolean): void;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/interaction/dnd/PointerDragging' {
-    import { EmitterMixin, PointerDragEvent ***REMOVED*** from '@fullcalendar/core';
-    export { PointerDragging as default, PointerDragging ***REMOVED***;
+    import { EmitterMixin, PointerDragEvent } from '@fullcalendar/core';
+    export { PointerDragging as default, PointerDragging };
     class PointerDragging {
         containerEl: EventTarget;
         subjectEl: HTMLElement | null;
@@ -90,21 +90,21 @@ declare module '@fullcalendar/interaction/dnd/PointerDragging' {
         destroyScrollWatch(): void;
         createEventFromMouse(ev: MouseEvent, isFirst?: boolean): PointerDragEvent;
         createEventFromTouch(ev: TouchEvent, isFirst?: boolean): PointerDragEvent;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/interaction/interactions-external/ExternalDraggable' {
-    import { PointerDragEvent ***REMOVED*** from '@fullcalendar/core';
+    import { PointerDragEvent } from '@fullcalendar/core';
     import FeaturefulElementDragging from '@fullcalendar/interaction/dnd/FeaturefulElementDragging';
-    import { DragMetaGenerator ***REMOVED*** from '@fullcalendar/interaction/interactions-external/ExternalElementDragging';
+    import { DragMetaGenerator } from '@fullcalendar/interaction/interactions-external/ExternalElementDragging';
     export interface ExternalDraggableSettings {
         eventData?: DragMetaGenerator;
         itemSelector?: string;
         minDistance?: number;
         longPressDelay?: number;
         appendTo?: HTMLElement;
-***REMOVED***
-    export { ExternalDraggable as default, ExternalDraggable ***REMOVED***;
+    }
+    export { ExternalDraggable as default, ExternalDraggable };
     class ExternalDraggable {
         dragging: FeaturefulElementDragging;
         settings: ExternalDraggableSettings;
@@ -112,28 +112,28 @@ declare module '@fullcalendar/interaction/interactions-external/ExternalDraggabl
         handlePointerDown: (ev: PointerDragEvent) => void;
         handleDragStart: (ev: PointerDragEvent) => void;
         destroy(): void;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/interaction/interactions-external/ThirdPartyDraggable' {
-    import { DragMetaGenerator ***REMOVED*** from '@fullcalendar/interaction/interactions-external/ExternalElementDragging';
+    import { DragMetaGenerator } from '@fullcalendar/interaction/interactions-external/ExternalElementDragging';
     import InferredElementDragging from '@fullcalendar/interaction/interactions-external/InferredElementDragging';
     export interface ThirdPartyDraggableSettings {
         eventData?: DragMetaGenerator;
         itemSelector?: string;
         mirrorSelector?: string;
-***REMOVED***
-    export { ThirdPartyDraggable as default, ThirdPartyDraggable ***REMOVED***;
+    }
+    export { ThirdPartyDraggable as default, ThirdPartyDraggable };
     class ThirdPartyDraggable {
         dragging: InferredElementDragging;
         constructor(containerOrSettings?: EventTarget | ThirdPartyDraggableSettings, settings?: ThirdPartyDraggableSettings);
         destroy(): void;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/interaction/dnd/ElementMirror' {
-    import { Rect ***REMOVED*** from '@fullcalendar/core';
-    export { ElementMirror as default, ElementMirror ***REMOVED***;
+    import { Rect } from '@fullcalendar/core';
+    export { ElementMirror as default, ElementMirror };
     class ElementMirror {
         isVisible: boolean;
         origScreenX?: number;
@@ -154,12 +154,12 @@ declare module '@fullcalendar/interaction/dnd/ElementMirror' {
         cleanup(): void;
         updateElPosition(): void;
         getMirrorEl(): HTMLElement;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/interaction/dnd/AutoScroller' {
-    import { ScrollGeomCache ***REMOVED*** from '@fullcalendar/interaction/scroll-geom-cache';
-    export { AutoScroller as default, AutoScroller ***REMOVED***;
+    import { ScrollGeomCache } from '@fullcalendar/interaction/scroll-geom-cache';
+    export { AutoScroller as default, AutoScroller };
     class AutoScroller {
         isEnabled: boolean;
         scrollQuery: (Window | string)[];
@@ -178,19 +178,19 @@ declare module '@fullcalendar/interaction/dnd/AutoScroller' {
         handleMove(pageX: number, pageY: number): void;
         stop(): void;
         requestAnimation(now: number): void;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/interaction/interactions-external/ExternalElementDragging' {
-    import { Hit, PointerDragEvent, EventTuple, DatePointApi, Calendar, EventInteractionState, DragMetaInput, DragMeta, View, ElementDragging ***REMOVED*** from '@fullcalendar/core';
+    import { Hit, PointerDragEvent, EventTuple, DatePointApi, Calendar, EventInteractionState, DragMetaInput, DragMeta, View, ElementDragging } from '@fullcalendar/core';
     import HitDragging from '@fullcalendar/interaction/interactions/HitDragging';
     export type DragMetaGenerator = DragMetaInput | ((el: HTMLElement) => DragMetaInput);
     export interface ExternalDropApi extends DatePointApi {
         draggedEl: HTMLElement;
         jsEvent: UIEvent;
         view: View;
-***REMOVED***
-    export { ExternalElementDragging as default, ExternalElementDragging ***REMOVED***;
+    }
+    export { ExternalElementDragging as default, ExternalElementDragging };
     class ExternalElementDragging {
         hitDragging: HitDragging;
         receivingCalendar: Calendar | null;
@@ -205,13 +205,13 @@ declare module '@fullcalendar/interaction/interactions-external/ExternalElementD
         displayDrag(nextCalendar: Calendar | null, state: EventInteractionState): void;
         clearDrag(): void;
         canDropElOnCalendar(el: HTMLElement, receivingCalendar: Calendar): boolean;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/interaction/interactions-external/InferredElementDragging' {
-    import { PointerDragEvent, ElementDragging ***REMOVED*** from '@fullcalendar/core';
+    import { PointerDragEvent, ElementDragging } from '@fullcalendar/core';
     import PointerDragging from '@fullcalendar/interaction/dnd/PointerDragging';
-    export { InferredElementDragging as default, InferredElementDragging ***REMOVED***;
+    export { InferredElementDragging as default, InferredElementDragging };
     class InferredElementDragging extends ElementDragging {
         pointer: PointerDragging;
         shouldIgnoreMove: boolean;
@@ -224,11 +224,11 @@ declare module '@fullcalendar/interaction/interactions-external/InferredElementD
         handlePointerUp: (ev: PointerDragEvent) => void;
         setIgnoreMove(bool: boolean): void;
         setMirrorIsVisible(bool: boolean): void;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/interaction/scroll-geom-cache' {
-    import { Rect, ScrollController ***REMOVED*** from '@fullcalendar/core';
+    import { Rect, ScrollController } from '@fullcalendar/core';
     export abstract class ScrollGeomCache extends ScrollController {
         clientRect: Rect;
         origScrollTop: number;
@@ -255,7 +255,7 @@ declare module '@fullcalendar/interaction/scroll-geom-cache' {
         getScrollWidth(): number;
         getScrollHeight(): number;
         handleScrollChange(): void;
-***REMOVED***
+    }
     export class ElementScrollGeomCache extends ScrollGeomCache {
         constructor(el: HTMLElement, doesListening: boolean);
         getEventTarget(): EventTarget;
@@ -264,20 +264,20 @@ declare module '@fullcalendar/interaction/scroll-geom-cache' {
             right: number;
             top: number;
             bottom: number;
-    ***REMOVED***;
-***REMOVED***
+        };
+    }
     export class WindowScrollGeomCache extends ScrollGeomCache {
         constructor(doesListening: boolean);
         getEventTarget(): EventTarget;
         computeClientRect(): Rect;
         handleScrollChange(): void;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 declare module '@fullcalendar/interaction/interactions/HitDragging' {
-    import { EmitterMixin, PointerDragEvent, Point, Hit, InteractionSettingsStore, ElementDragging ***REMOVED*** from '@fullcalendar/core';
+    import { EmitterMixin, PointerDragEvent, Point, Hit, InteractionSettingsStore, ElementDragging } from '@fullcalendar/core';
     import OffsetTracker from '@fullcalendar/interaction/OffsetTracker';
-    export { HitDragging as default, HitDragging ***REMOVED***;
+    export { HitDragging as default, HitDragging };
     class HitDragging {
         droppableStore: InteractionSettingsStore;
         dragging: ElementDragging;
@@ -286,7 +286,7 @@ declare module '@fullcalendar/interaction/interactions/HitDragging' {
         requireInitial: boolean;
         offsetTrackers: {
             [componentUid: string]: OffsetTracker;
-    ***REMOVED***;
+        };
         initialHit: Hit | null;
         movingHit: Hit | null;
         finalHit: Hit | null;
@@ -302,14 +302,14 @@ declare module '@fullcalendar/interaction/interactions/HitDragging' {
         prepareHits(): void;
         releaseHits(): void;
         queryHitForOffset(offsetLeft: number, offsetTop: number): Hit | null;
-***REMOVED***
+    }
     export function isHitsEqual(hit0: Hit | null, hit1: Hit | null): boolean;
-***REMOVED***
+}
 
 declare module '@fullcalendar/interaction/OffsetTracker' {
-    import { Rect ***REMOVED*** from '@fullcalendar/core';
-    import { ElementScrollGeomCache ***REMOVED*** from '@fullcalendar/interaction/scroll-geom-cache';
-    export { OffsetTracker as default, OffsetTracker ***REMOVED***;
+    import { Rect } from '@fullcalendar/core';
+    import { ElementScrollGeomCache } from '@fullcalendar/interaction/scroll-geom-cache';
+    export { OffsetTracker as default, OffsetTracker };
     class OffsetTracker {
         scrollCaches: ElementScrollGeomCache[];
         origRect: Rect;
@@ -318,6 +318,6 @@ declare module '@fullcalendar/interaction/OffsetTracker' {
         computeLeft(): number;
         computeTop(): number;
         isWithinClipping(pageX: number, pageY: number): boolean;
-***REMOVED***
-***REMOVED***
+    }
+}
 

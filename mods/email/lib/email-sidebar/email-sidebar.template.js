@@ -5,4 +5,4 @@ module.exports = EmailSidebarTemplate = () => {
     <div class="email-chat">
     </div>
   `;
-***REMOVED***
+}

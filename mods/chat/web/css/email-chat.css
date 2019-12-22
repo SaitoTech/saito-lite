@@ -6,39 +6,39 @@
   padding: 10px 0px;
   height: 5em;
   cursor: pointer;
-***REMOVED***
+}
 .chat-row:hover {
   background-color: var(--saito-skyline-grey);
-***REMOVED***
+}
 .chat-row-image {
   width: 2rem;
   height: 2rem;
   align-self: center;
-***REMOVED***
+}
 
 .chat-content {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   padding: 4px 0 0 0;
-***REMOVED***
+}
 
 .chat-last-message {
   color: grey;
   margin-top: 7px;
   font-family: visuelt-light;
-***REMOVED***
+}
 
 .chat-last-message-timestamp {
   font-family: visuelt-light;
   padding: 4px 0 0 0;
-***REMOVED***
+}
 
 .chat-room-message {
   padding: 8px 12px;
   max-width: 90%;
   border-radius: 15px;
-***REMOVED***
+}
 
 .chat-message-text {
   margin: unset;
@@ -47,26 +47,26 @@
   font-family: visuelt-light;
     line-height: 16px;
     font-size: 15px;
-***REMOVED***
+}
 
 .saito-address {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-***REMOVED***
+}
 
 .chat-room-message-others {
   background: var(--saito-cyber-black);
   color: var(--saito-skyline-grey);
   justify-self: left;
   border-bottom-left-radius: 0;
-***REMOVED***
+}
 
 .chat-room-message-myself {
   background: var(--saito-skyline-grey);
   justify-self: right;
   border-bottom-right-radius: 0;
-***REMOVED***
+}
 
 .chat-room-submit-button {
   justify-self: center;
@@ -75,30 +75,30 @@
   color: white;
   border-radius: 100px;
   cursor: pointer;
-***REMOVED***
+}
 
 .chat-message-header {
   display: flex;
   justify-content: space-between;
   font-size: 0.8em;
   color: #333;
-***REMOVED***
+}
 
 .chat-message-others .chat-message-header {
   color: var(--saito-skyline-grey);
-***REMOVED***
+}
 
 .chat-message-author {
   margin: unset;
   overflow: hidden;
   text-overflow: ellipsis;
   width: 100px;
-***REMOVED***
+}
 
 .chat-message-timestamp {
   margin: unset;
   margin-left: 1em;
-***REMOVED***
+}
 
 
 
@@ -109,25 +109,25 @@
 
 #add-contact-modal-content {
   width: 30em;
-***REMOVED***
+}
 
 #add-contact-add-button {
   margin: 0;
   /* margin-left: 2em; */
-***REMOVED***
+}
 
 #qr-scanner-icon {
   text-decoration: none;
   margin-left: 1.5em;
-***REMOVED***
+}
 
 #qr-code-icon {
   color: var(--saito-cyber-black-wash)
-***REMOVED***
+}
 
 #qr-code-icon:hover {
   color: black;
-***REMOVED***
+}
 
 
 /** **/
@@ -137,30 +137,30 @@
   width:100%;
   height:300px;
   font-size: 0.8em;
-***REMOVED***
+}
 
 .chat-list {
   height: 255px;
   overflow-y: scroll;
   border: 1px solid #ddd;
-***REMOVED***
+}
 
 #email-chat-add-contact {
   cursor: pointer;
-***REMOVED***
+}
 
 .email-chat .chat-row {
   padding: 5px;
   height: 4em;
   font-size: 1em;
-***REMOVED***
+}
 
 .chat-manager {
   display: flex;
   position: fixed;
   bottom: 0;
   right: 0;
-***REMOVED***
+}
 
 .chat-box {
   display: grid;
@@ -177,25 +177,25 @@
   width: 32em;
   height: 38em;
   font-family: visuelt-light;
-***REMOVED***
+}
 
 
 .chat-box .chat-box-header {
   cursor: s-resize;
-***REMOVED***
+}
 
 .chat-box-hide {
   height: 3em;
   align-self: flex-end;
-***REMOVED***
+}
 
 .chat-box-hide .chat-box-header {
   cursor: n-resize;
-***REMOVED***
+}
 
 .chat-box-close {
   cursor: pointer;
-***REMOVED***
+}
 
 .chat-box-header {
   grid-area: chat_header;
@@ -211,7 +211,7 @@
   width: 100%;
   background-size: cover;
   line-height: 1.4em;
-***REMOVED***
+}
 
 .chat-box-main {
   display: flex;
@@ -220,21 +220,21 @@
   grid-area: chat_main;
   overflow-y: scroll;
   padding: 5px;
-***REMOVED***
+}
 
 .chat-room-message {
   display: grid;
   grid-template-columns: 2em auto;
   grid-gap: 0 0.5em;
   margin: 0.5em 0;
-***REMOVED***
+}
 
 .chat-room-message-identicon {
   float: left;
   width: 2em;
   margin: 0 5px 0 0;
   border: 1px solid #8885;
-***REMOVED***
+}
 
 .chat-box-input {
   position: fixed;
@@ -246,7 +246,7 @@
   border-top: 1px solid lightgrey;
   display: grid;
   grid-template-columns: 28.5em 3em;
-***REMOVED***
+}
 
 .chat-box-new-message-input {
   width: 100%;
@@ -261,7 +261,7 @@
   box-shadow: none;
   outline: none;
   resize: none;
-***REMOVED***
+}
 
 .chat-timestamp {
     justify-self: right;
@@ -276,39 +276,39 @@
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
-***REMOVED***
+}
 
 .chat-box-message-container {
     display: flex;
-***REMOVED***
+}
 
 .chat-message-myself {
   flex-direction: row-reverse;
-***REMOVED***
+}
 
 .chat-box-message-others {
   flex-direction: flex-start;
-***REMOVED***
+}
 
 .chat-message {
     margin-right: 1px;
     line-height: 1.2em;
     font-size: 1.2em;
     white-space: normal;
-***REMOVED***
+}
 
 .chat-message > p  {
     display: inline-block;
     margin: 0;
-***REMOVED***
+}
 
 .chat-nessage-author {
   font-weight: bold;
-***REMOVED***
+}
 
 
 @media only screen and (max-width: 600px) {
   .chat-box {
     display: none;
-  ***REMOVED***
-***REMOVED***
+  }
+}

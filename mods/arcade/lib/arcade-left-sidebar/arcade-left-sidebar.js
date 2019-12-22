@@ -10,26 +10,26 @@ module.exports = ArcadeLeftSidebar = {
       for (let i = 0; i < data.arcade.mods.length; i++) {
         if (data.arcade.mods[i].respondTo('email-chat') != null) {
           data.arcade.mods[i].respondTo('email-chat').render(app, data);
-    ***REMOVED***
-  ***REMOVED***
+        }
+      }
 
       let games_menu = document.querySelector(".arcade-apps");
       let gamemods = data.arcade.mods;
       
       for (let i = 0; i < gamemods.length; i++) {
         if (gamemods[i].respondTo("arcade-games")) {
-          games_menu.innerHTML += `<li class="arcade-navigator-item" id="${gamemods[i].name***REMOVED***">${gamemods[i].name***REMOVED***</li>`;
-    ***REMOVED***
-  ***REMOVED***
+          games_menu.innerHTML += `<li class="arcade-navigator-item" id="${gamemods[i].name}">${gamemods[i].name}</li>`;
+        }
+      }
 
-***REMOVED***,
+    },
 
     attachEvents(app, data) {
 
       document.querySelector('#games-add-game').addEventListener('click', function() {
         ArcadeStartGameList.render(app,data);
         ArcadeStartGameList.attachEvents(app,data);
-  ***REMOVED***);
+      });
 
 
       Array.from(document.getElementsByClassName('arcade-navigator-item')).forEach(game => {
@@ -40,19 +40,19 @@ module.exports = ArcadeLeftSidebar = {
           ArcadeGameCreate.render(app, data);
           ArcadeGameCreate.attachEvents(app, data);
 
-    ***REMOVED***);
-  ***REMOVED***);
+        });
+      });
 
 
 
       for (let i = 0; i < data.arcade.mods.length; i++) {
         if (data.arcade.mods[i].respondTo('email-chat') != null) {
           data.arcade.mods[i].respondTo('email-chat').attachEvents(app, data);
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
+        }
+      }
+    }
 
-***REMOVED***
+}
 
 
 

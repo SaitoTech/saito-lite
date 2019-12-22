@@ -5,12 +5,12 @@
       "plugins": [
         "add-module-exports"
       ]
-***REMOVED***,
+    },
     "production": {
       "presets": ["env", "minify"],
       "plugins": [
         "add-module-exports"
       ]
-***REMOVED***
-  ***REMOVED***
-***REMOVED***
+    }
+  }
+}

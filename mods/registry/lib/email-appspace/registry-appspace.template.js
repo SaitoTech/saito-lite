@@ -8,4 +8,4 @@ module.exports = RegistryAppspaceTemplate = () => {
 </div>  
 <button class="registry-submit" id="registry-submit">register</button>
   `;
-***REMOVED***
+}

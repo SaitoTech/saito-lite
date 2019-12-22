@@ -18,7 +18,7 @@ module.exports = EscrowAppspaceTemplate = (escrow) => {
 
     `;
 
-  ***REMOVED*** else {
+  } else {
 
     html = `
 
@@ -26,19 +26,19 @@ module.exports = EscrowAppspaceTemplate = (escrow) => {
 
     <p></p>
 
-    BALANCE: ${escrow.balance***REMOVED***
+    BALANCE: ${escrow.balance}
 
     <p></p>
 
-    DEPOSIT: ${escrow.address***REMOVED***
+    DEPOSIT: ${escrow.address}
 
     <p></p>
 
     This is an experimental escrow service for cryptocurrency use-cases. It is a BETA SERVICE offered with NO GUARANTEES, not even the guarantee of continued service. Please do not deposit more than 20 USD worth of tokens. If you wish to make a withdrawal, click here. Withdrawals will be processed in approximately 24 hours.
 
     `;
-  ***REMOVED***
+  }
 
   return html;
 
-***REMOVED***
+}

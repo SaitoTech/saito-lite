@@ -1,17 +1,17 @@
 module.exports = ArcadeGameListRowTemplate = (app, tx, button_map) => {
 
-  let { sig, from, to, msg ***REMOVED*** = tx.transaction;
-  let { players_array, options_html, game ***REMOVED*** = msg;
+  let { sig, from, to, msg } = tx.transaction;
+  let { players_array, options_html, game } = msg;
 
   if (players_array == undefined) {
     players_array = to.map(t => t.add).join('_');
-  ***REMOVED***
+  }
 
   let players_needed = 2;
   let players = players_array.split("_");
 
-  if (options_html == undefined) { options_html = ""; ***REMOVED***
-  if (msg.players_needed > 2) { players_needed = msg.players_needed; ***REMOVED***
+  if (options_html == undefined) { options_html = ""; }
+  if (msg.players_needed > 2) { players_needed = msg.players_needed; }
 
   let publickeys = [];
   if (from.length > 0) {
@@ -19,31 +19,31 @@ module.exports = ArcadeGameListRowTemplate = (app, tx, button_map) => {
     players.forEach(player => {
       if (!publickeys.includes(player))
         publickeys.push(player);
-***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
-  let identicons = publickeys.map(publickey => `<img class="identicon" src="${app.keys.returnIdenticon(publickey)***REMOVED***">`).join("");
+  let identicons = publickeys.map(publickey => `<img class="identicon" src="${app.keys.returnIdenticon(publickey)}">`).join("");
 
   var button_html = Object.entries(button_map).map(([key, value]) => {
-    return `<button class="arcade-game-row-${key***REMOVED***" id="arcade-game-${key***REMOVED***-row-${sig***REMOVED***">${value***REMOVED***</button>`
-  ***REMOVED***).join('');
+    return `<button class="arcade-game-row-${key}" id="arcade-game-${key}-row-${sig}">${value}</button>`
+  }).join('');
 
   return `
-    <div class="arcade-game-invitation" id="arcade-game-${sig***REMOVED***">
-      <div class="arcade-game-row-name" id="arcade-game-name-${sig***REMOVED***">
+    <div class="arcade-game-invitation" id="arcade-game-${sig}">
+      <div class="arcade-game-row-name" id="arcade-game-name-${sig}">
 
         <div class="arcade-game-row-avi">
-          ${identicons***REMOVED***
+          ${identicons}
         </div>
       </div>
 
-      <div class="arcade-game-row-name" id="arcade-game-name-${sig***REMOVED***">${game***REMOVED***</div>
-      <div class="arcade-game-row-options" id="arcade-game-options-${sig***REMOVED***">
-      <div class="game-options-html">${options_html***REMOVED***</div>
+      <div class="arcade-game-row-name" id="arcade-game-name-${sig}">${game}</div>
+      <div class="arcade-game-row-options" id="arcade-game-options-${sig}">
+      <div class="game-options-html">${options_html}</div>
       </div>
 
-      ${button_html***REMOVED***
+      ${button_html}
     </div>
   `;
 
-***REMOVED***
+}

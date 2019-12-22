@@ -1,4 +1,4 @@
-***REMOVED***
+module.exports = {
   core: [
     'appstore/appstore.js',
     'archive/archive.js',
@@ -49,4 +49,4 @@
     'arcade/arcade.js',
     'website/website.js',
   ]
-***REMOVED***
+}

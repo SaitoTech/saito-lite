@@ -39,14 +39,14 @@
 	var appendABViewSupported;
 	try {
 		appendABViewSupported = new Blob([ new DataView(new ArrayBuffer(0)) ]).size === 0;
-	***REMOVED*** catch (e) {
-	***REMOVED***
+	} catch (e) {
+	}
 
 	function isHttpFamily(url) {
 		var a = document.createElement("a");
 		a.href = url;
 		return a.protocol === "http:" || a.protocol === "https:";
-	***REMOVED***
+	}
 
 	function HttpReader(url) {
 		var that = this;
@@ -60,14 +60,14 @@
 						that.size = Number(request.getResponseHeader("Content-Length")) || Number(request.response.byteLength);
 					that.data = new Uint8Array(request.response);
 					callback();
-				***REMOVED***, false);
+				}, false);
 				request.addEventListener("error", onerror, false);
 				request.open("GET", url);
 				request.responseType = "arraybuffer";
 				request.send();
-			***REMOVED*** else
+			} else
 				callback();
-		***REMOVED***
+		}
 
 		function init(callback, onerror) {
 			if (!isHttpFamily(url)) {
@@ -75,32 +75,32 @@
 				// so use HTTP GET instead.
 				getData(callback, onerror);
 				return;
-			***REMOVED***
+			}
 			var request = new XMLHttpRequest();
 			request.addEventListener("load", function() {
 				that.size = Number(request.getResponseHeader("Content-Length"));
 				// If response header doesn't return size then prefetch the content.
 				if (!that.size) {
 					getData(callback, onerror);
-				***REMOVED*** else {
+				} else {
 					callback();
-				***REMOVED***
-			***REMOVED***, false);
+				}
+			}, false);
 			request.addEventListener("error", onerror, false);
 			request.open("HEAD", url);
 			request.send();
-		***REMOVED***
+		}
 
 		function readUint8Array(index, length, callback, onerror) {
 			getData(function() {
 				callback(new Uint8Array(that.data.subarray(index, index + length)));
-			***REMOVED***, onerror);
-		***REMOVED***
+			}, onerror);
+		}
 
 		that.size = 0;
 		that.init = init;
 		that.readUint8Array = readUint8Array;
-	***REMOVED***
+	}
 	HttpReader.prototype = new Reader();
 	HttpReader.prototype.constructor = HttpReader;
 
@@ -115,11 +115,11 @@
 					callback();
 				else
 					onerror(ERR_HTTP_RANGE);
-			***REMOVED***, false);
+			}, false);
 			request.addEventListener("error", onerror, false);
 			request.open("HEAD", url);
 			request.send();
-		***REMOVED***
+		}
 
 		function readArrayBuffer(index, length, callback, onerror) {
 			var request = new XMLHttpRequest();
@@ -128,21 +128,21 @@
 			request.setRequestHeader("Range", "bytes=" + index + "-" + (index + length - 1));
 			request.addEventListener("load", function() {
 				callback(request.response);
-			***REMOVED***, false);
+			}, false);
 			request.addEventListener("error", onerror, false);
 			request.send();
-		***REMOVED***
+		}
 
 		function readUint8Array(index, length, callback, onerror) {
 			readArrayBuffer(index, length, function(arraybuffer) {
 				callback(new Uint8Array(arraybuffer));
-			***REMOVED***, onerror);
-		***REMOVED***
+			}, onerror);
+		}
 
 		that.size = 0;
 		that.init = init;
 		that.readUint8Array = readUint8Array;
-	***REMOVED***
+	}
 	HttpRangeReader.prototype = new Reader();
 	HttpRangeReader.prototype.constructor = HttpRangeReader;
 
@@ -152,16 +152,16 @@
 		function init(callback, onerror) {
 			that.size = arrayBuffer.byteLength;
 			callback();
-		***REMOVED***
+		}
 
 		function readUint8Array(index, length, callback, onerror) {
 			callback(new Uint8Array(arrayBuffer.slice(index, index + length)));
-		***REMOVED***
+		}
 
 		that.size = 0;
 		that.init = init;
 		that.readUint8Array = readUint8Array;
-	***REMOVED***
+	}
 	ArrayBufferReader.prototype = new Reader();
 	ArrayBufferReader.prototype.constructor = ArrayBufferReader;
 
@@ -171,7 +171,7 @@
 		function init(callback, onerror) {
 			array = new Uint8Array();
 			callback();
-		***REMOVED***
+		}
 
 		function writeUint8Array(arr, callback, onerror) {
 			var tmpArray = new Uint8Array(array.length + arr.length);
@@ -179,16 +179,16 @@
 			tmpArray.set(arr, array.length);
 			array = tmpArray;
 			callback();
-		***REMOVED***
+		}
 
 		function getData(callback) {
 			callback(array.buffer);
-		***REMOVED***
+		}
 
 		that.init = init;
 		that.writeUint8Array = writeUint8Array;
 		that.getData = getData;
-	***REMOVED***
+	}
 	ArrayBufferWriter.prototype = new Writer();
 	ArrayBufferWriter.prototype.constructor = ArrayBufferWriter;
 
@@ -199,29 +199,29 @@
 			fileEntry.createWriter(function(fileWriter) {
 				writer = fileWriter;
 				callback();
-			***REMOVED***, onerror);
-		***REMOVED***
+			}, onerror);
+		}
 
 		function writeUint8Array(array, callback, onerror) {
 			var blob = new Blob([ appendABViewSupported ? array : array.buffer ], {
 				type : contentType
-			***REMOVED***);
+			});
 			writer.onwrite = function() {
 				writer.onwrite = null;
 				callback();
-			***REMOVED***;
+			};
 			writer.onerror = onerror;
 			writer.write(blob);
-		***REMOVED***
+		}
 
 		function getData(callback) {
 			fileEntry.file(callback);
-		***REMOVED***
+		}
 
 		that.init = init;
 		that.writeUint8Array = writeUint8Array;
 		that.getData = getData;
-	***REMOVED***
+	}
 	FileWriter.prototype = new Writer();
 	FileWriter.prototype.constructor = FileWriter;
 
@@ -239,21 +239,21 @@
 					return directory ? new ZipDirectoryEntry(parent.fs, name, params, parent) : new zip.fs.ZipFileEntry(parent.fs, name, params, parent);
 				else
 					throw "Parent entry is not a directory.";
-			***REMOVED***
+			}
 
 			return addChild(this, name, {
 				data : URL,
 				Reader : useRangeHeader ? HttpRangeReader : HttpReader
-			***REMOVED***);
-		***REMOVED***;
+			});
+		};
 		ZipDirectoryEntry.prototype.importHttpContent = function(URL, useRangeHeader, onend, onerror) {
 			this.importZip(useRangeHeader ? new HttpRangeReader(URL) : new HttpReader(URL), onend, onerror);
-		***REMOVED***;
+		};
 		zip.fs.FS.prototype.importHttpContent = function(URL, useRangeHeader, onend, onerror) {
 			this.entries = [];
 			this.root = new ZipDirectoryEntry(this);
 			this.root.importHttpContent(URL, useRangeHeader, onend, onerror);
-		***REMOVED***;
-	***REMOVED***
+		};
+	}
 
-***REMOVED***)();
+})();

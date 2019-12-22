@@ -8,4 +8,4 @@ module.exports = merge(common, {
     new BundleAnalyzerPlugin()
   ],
   mode: 'production'
-***REMOVED***);
+});

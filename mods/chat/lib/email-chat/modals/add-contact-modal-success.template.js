@@ -14,4 +14,4 @@ module.exports = AddContactModalSuccessTemplate = () => {
       </div>
     </div>
   `;
-***REMOVED***
+}

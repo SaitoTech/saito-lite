@@ -9,14 +9,14 @@ module.exports = EmailSidebar = {
       document.querySelector(".email-sidebar").innerHTML = EmailSidebarTemplate();
       EmailControls.render(app, data);
       EmailChat.render(app, data);
-***REMOVED***,
+    },
 
     attachEvents(app, data) {
       EmailControls.attachEvents(app, data);
       EmailChat.attachEvents(app, data);
-***REMOVED***
+    }
 
-***REMOVED***
+}
 
 
 

@@ -4,5 +4,5 @@ module.exports = EmailAppspaceTemplate = () => {
       <center><div class="loader"></div></center>
     </div>
   `;
-***REMOVED***;
+};
 

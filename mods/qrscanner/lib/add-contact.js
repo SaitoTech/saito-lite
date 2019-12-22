@@ -7,7 +7,7 @@ module.exports = AddContact = {
     document.querySelector('body').innerHTML = AddContactTemplate(data);
     Header.render(app, data);
     Header.attachEvents(app, data);
-  ***REMOVED***,
+  },
 
   attachEvents(app, data) {
     document.getElementById('add-contact-add-button')
@@ -17,6 +17,6 @@ module.exports = AddContact = {
               encrypt_mod.initiate_key_exchange(publickey);
 
               AddContactComplete.render(app, data);
-        ***REMOVED***
-  ***REMOVED***,
-***REMOVED***
+            }
+  },
+}

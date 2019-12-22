@@ -4,11 +4,11 @@
 //   ../../../../../@fullcalendar/core
 
 declare module '@fullcalendar/luxon' {
-    import { DateTime as LuxonDateTime, Duration as LuxonDuration ***REMOVED*** from 'luxon';
-    import { Calendar, Duration ***REMOVED*** from '@fullcalendar/core';
+    import { DateTime as LuxonDateTime, Duration as LuxonDuration } from 'luxon';
+    import { Calendar, Duration } from '@fullcalendar/core';
     export function toDateTime(date: Date, calendar: Calendar): LuxonDateTime;
     export function toDuration(duration: Duration, calendar: Calendar): LuxonDuration;
     const _default: import("@fullcalendar/core").PluginDef;
     export default _default;
-***REMOVED***
+}
 

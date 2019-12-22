@@ -75,27 +75,27 @@ module.exports = FaucetAppspaceTemplate = (app) => {
   border: 4px dashed #efefef;
   border-radius: 5px;
   padding: 6px;
-***REMOVED***
+}
 
 .faucet-bonuses {
   width: 100%;
   margin-top: 40px;
-***REMOVED***
+}
 
 .faucet-bonus-icon {
   width: 25%;
   max-width:150px;
   max-height: 100px;
-***REMOVED***
+}
 .faucet-bonus-icon img {
   width: 5em;
-***REMOVED***
+}
 
 .faucet-bonus-text {
   width:50%;
   max-width:500px;
-***REMOVED***
+}
 
   </style>
   `;
-***REMOVED***
+}

@@ -12,21 +12,21 @@ var defaults = {
    * `slider` - Rewinds slider to the start/end when it reaches the first or last slide.
    * `carousel` - Changes slides without starting over when it reaches the first or last slide.
    *
-   * @type {String***REMOVED***
+   * @type {String}
    */
   type: 'slider',
 
   /**
    * Start at specific slide number defined with zero-based index.
    *
-   * @type {Number***REMOVED***
+   * @type {Number}
    */
   startAt: 0,
 
   /**
    * A number of slides visible on the single viewport.
    *
-   * @type {Number***REMOVED***
+   * @type {Number}
    */
   perView: 1,
 
@@ -37,35 +37,35 @@ var defaults = {
    * `center` - Current slide will be always focused at the center of a track.
    * `0,1,2,3...` - Current slide will be focused on the specified zero-based index.
    *
-   * @type {String|Number***REMOVED***
+   * @type {String|Number}
    */
   focusAt: 0,
 
   /**
    * A size of the gap added between slides.
    *
-   * @type {Number***REMOVED***
+   * @type {Number}
    */
   gap: 10,
 
   /**
    * Change slides after a specified interval. Use `false` for turning off autoplay.
    *
-   * @type {Number|Boolean***REMOVED***
+   * @type {Number|Boolean}
    */
   autoplay: false,
 
   /**
    * Stop autoplay on mouseover event.
    *
-   * @type {Boolean***REMOVED***
+   * @type {Boolean}
    */
   hoverpause: true,
 
   /**
    * Allow for changing slides with left and right keyboard arrows.
    *
-   * @type {Boolean***REMOVED***
+   * @type {Boolean}
    */
   keyboard: true,
 
@@ -75,77 +75,77 @@ var defaults = {
    * a slider. Works only with `slider` type and a
    * non-centered `focusAt` setting.
    *
-   * @type {Boolean***REMOVED***
+   * @type {Boolean}
    */
   bound: false,
 
   /**
    * Minimal swipe distance needed to change the slide. Use `false` for turning off a swiping.
    *
-   * @type {Number|Boolean***REMOVED***
+   * @type {Number|Boolean}
    */
   swipeThreshold: 80,
 
   /**
    * Minimal mouse drag distance needed to change the slide. Use `false` for turning off a dragging.
    *
-   * @type {Number|Boolean***REMOVED***
+   * @type {Number|Boolean}
    */
   dragThreshold: 120,
 
   /**
    * A maximum number of slides to which movement will be made on swiping or dragging. Use `false` for unlimited.
    *
-   * @type {Number|Boolean***REMOVED***
+   * @type {Number|Boolean}
    */
   perTouch: false,
 
   /**
    * Moving distance ratio of the slides on a swiping and dragging.
    *
-   * @type {Number***REMOVED***
+   * @type {Number}
    */
   touchRatio: 0.5,
 
   /**
    * Angle required to activate slides moving on swiping or dragging.
    *
-   * @type {Number***REMOVED***
+   * @type {Number}
    */
   touchAngle: 45,
 
   /**
    * Duration of the animation in milliseconds.
    *
-   * @type {Number***REMOVED***
+   * @type {Number}
    */
   animationDuration: 400,
 
   /**
    * Allows looping the `slider` type. Slider will rewind to the first/last slide when it's at the start/end.
    *
-   * @type {Boolean***REMOVED***
+   * @type {Boolean}
    */
   rewind: true,
 
   /**
    * Duration of the rewinding animation of the `slider` type in milliseconds.
    *
-   * @type {Number***REMOVED***
+   * @type {Number}
    */
   rewindDuration: 800,
 
   /**
    * Easing function for the animation.
    *
-   * @type {String***REMOVED***
+   * @type {String}
    */
   animationTimingFunc: 'cubic-bezier(.165, .840, .440, 1)',
 
   /**
    * Throttle costly events at most once per every wait milliseconds.
    *
-   * @type {Number***REMOVED***
+   * @type {Number}
    */
   throttle: 10,
 
@@ -156,7 +156,7 @@ var defaults = {
    * - 'ltr' - left to right movement,
    * - 'rtl' - right to left movement.
    *
-   * @type {String***REMOVED***
+   * @type {String}
    */
   direction: 'ltr',
 
@@ -168,9 +168,9 @@ var defaults = {
    *
    * For example:
    * `100` - Peek 100px on the both sides.
-   * { before: 100, after: 50 ***REMOVED***` - Peek 100px on the left side and 50px on the right side.
+   * { before: 100, after: 50 }` - Peek 100px on the left side and 50px on the right side.
    *
-   * @type {Number|String|Object***REMOVED***
+   * @type {Number|String|Object}
    */
   peek: 0,
 
@@ -180,22 +180,22 @@ var defaults = {
    * `{
    *   '800px': {
    *     perView: 2
-   *   ***REMOVED***
-   * ***REMOVED***`
+   *   }
+   * }`
    */
-  breakpoints: {***REMOVED***,
+  breakpoints: {},
 
   /**
    * Collection of internally used HTML classes.
    *
-   * @todo Refactor `slider` and `carousel` properties to single `type: { slider: '', carousel: '' ***REMOVED***` object
-   * @type {Object***REMOVED***
+   * @todo Refactor `slider` and `carousel` properties to single `type: { slider: '', carousel: '' }` object
+   * @type {Object}
    */
   classes: {
     direction: {
       ltr: 'glide--ltr',
       rtl: 'glide--rtl'
-***REMOVED***,
+    },
     slider: 'glide--slider',
     carousel: 'glide--carousel',
     swipeable: 'glide--swipeable',
@@ -204,30 +204,30 @@ var defaults = {
     activeNav: 'glide__bullet--active',
     activeSlide: 'glide__slide--active',
     disabledArrow: 'glide__arrow--disabled'
-  ***REMOVED***
-***REMOVED***;
+  }
+};
 
 /**
  * Outputs warning message to the bowser console.
  *
- * @param  {String***REMOVED*** msg
- * @return {Void***REMOVED***
+ * @param  {String} msg
+ * @return {Void}
  */
 function warn(msg) {
   console.error("[Glide warn]: " + msg);
-***REMOVED***
+}
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
-***REMOVED*** : function (obj) {
+} : function (obj) {
   return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-***REMOVED***;
+};
 
 var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
-  ***REMOVED***
-***REMOVED***;
+  }
+};
 
 var createClass = function () {
   function defineProperties(target, props) {
@@ -237,15 +237,15 @@ var createClass = function () {
       descriptor.configurable = true;
       if ("value" in descriptor) descriptor.writable = true;
       Object.defineProperty(target, descriptor.key, descriptor);
-***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   return function (Constructor, protoProps, staticProps) {
     if (protoProps) defineProperties(Constructor.prototype, protoProps);
     if (staticProps) defineProperties(Constructor, staticProps);
     return Constructor;
-  ***REMOVED***;
-***REMOVED***();
+  };
+}();
 
 var _extends = Object.assign || function (target) {
   for (var i = 1; i < arguments.length; i++) {
@@ -254,12 +254,12 @@ var _extends = Object.assign || function (target) {
     for (var key in source) {
       if (Object.prototype.hasOwnProperty.call(source, key)) {
         target[key] = source[key];
-  ***REMOVED***
-***REMOVED***
-  ***REMOVED***
+      }
+    }
+  }
 
   return target;
-***REMOVED***;
+};
 
 var get = function get(object, property, receiver) {
   if (object === null) object = Function.prototype;
@@ -270,26 +270,26 @@ var get = function get(object, property, receiver) {
 
     if (parent === null) {
       return undefined;
-***REMOVED*** else {
+    } else {
       return get(parent, property, receiver);
-***REMOVED***
-  ***REMOVED*** else if ("value" in desc) {
+    }
+  } else if ("value" in desc) {
     return desc.value;
-  ***REMOVED*** else {
+  } else {
     var getter = desc.get;
 
     if (getter === undefined) {
       return undefined;
-***REMOVED***
+    }
 
     return getter.call(receiver);
-  ***REMOVED***
-***REMOVED***;
+  }
+};
 
 var inherits = function (subClass, superClass) {
   if (typeof superClass !== "function" && superClass !== null) {
     throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  ***REMOVED***
+  }
 
   subClass.prototype = Object.create(superClass && superClass.prototype, {
     constructor: {
@@ -297,56 +297,56 @@ var inherits = function (subClass, superClass) {
       enumerable: false,
       writable: true,
       configurable: true
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
   if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-***REMOVED***;
+};
 
 var possibleConstructorReturn = function (self, call) {
   if (!self) {
     throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  ***REMOVED***
+  }
 
   return call && (typeof call === "object" || typeof call === "function") ? call : self;
-***REMOVED***;
+};
 
 /**
  * Converts value entered as number
  * or string to integer value.
  *
- * @param {String***REMOVED*** value
- * @returns {Number***REMOVED***
+ * @param {String} value
+ * @returns {Number}
  */
 function toInt(value) {
   return parseInt(value);
-***REMOVED***
+}
 
 /**
  * Converts value entered as number
  * or string to flat value.
  *
- * @param {String***REMOVED*** value
- * @returns {Number***REMOVED***
+ * @param {String} value
+ * @returns {Number}
  */
 function toFloat(value) {
   return parseFloat(value);
-***REMOVED***
+}
 
 /**
  * Indicates whether the specified value is a string.
  *
- * @param  {****REMOVED***   value
- * @return {Boolean***REMOVED***
+ * @param  {*}   value
+ * @return {Boolean}
  */
 function isString(value) {
   return typeof value === 'string';
-***REMOVED***
+}
 
 /**
  * Indicates whether the specified value is an object.
  *
- * @param  {****REMOVED*** value
- * @return {Boolean***REMOVED***
+ * @param  {*} value
+ * @return {Boolean}
  *
  * @see https://github.com/jashkenas/underscore
  */
@@ -354,112 +354,112 @@ function isObject(value) {
   var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
 
   return type === 'function' || type === 'object' && !!value; // eslint-disable-line no-mixed-operators
-***REMOVED***
+}
 
 /**
  * Indicates whether the specified value is a number.
  *
- * @param  {****REMOVED*** value
- * @return {Boolean***REMOVED***
+ * @param  {*} value
+ * @return {Boolean}
  */
 function isNumber(value) {
   return typeof value === 'number';
-***REMOVED***
+}
 
 /**
  * Indicates whether the specified value is a function.
  *
- * @param  {****REMOVED*** value
- * @return {Boolean***REMOVED***
+ * @param  {*} value
+ * @return {Boolean}
  */
 function isFunction(value) {
   return typeof value === 'function';
-***REMOVED***
+}
 
 /**
  * Indicates whether the specified value is undefined.
  *
- * @param  {****REMOVED*** value
- * @return {Boolean***REMOVED***
+ * @param  {*} value
+ * @return {Boolean}
  */
 function isUndefined(value) {
   return typeof value === 'undefined';
-***REMOVED***
+}
 
 /**
  * Indicates whether the specified value is an array.
  *
- * @param  {****REMOVED*** value
- * @return {Boolean***REMOVED***
+ * @param  {*} value
+ * @return {Boolean}
  */
 function isArray(value) {
   return value.constructor === Array;
-***REMOVED***
+}
 
 /**
  * Creates and initializes specified collection of extensions.
  * Each extension receives access to instance of glide and rest of components.
  *
- * @param {Object***REMOVED*** glide
- * @param {Object***REMOVED*** extensions
+ * @param {Object} glide
+ * @param {Object} extensions
  *
- * @returns {Object***REMOVED***
+ * @returns {Object}
  */
 function mount(glide, extensions, events) {
-  var components = {***REMOVED***;
+  var components = {};
 
   for (var name in extensions) {
     if (isFunction(extensions[name])) {
       components[name] = extensions[name](glide, components, events);
-***REMOVED*** else {
+    } else {
       warn('Extension must be a function');
-***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   for (var _name in components) {
     if (isFunction(components[_name].mount)) {
       components[_name].mount();
-***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   return components;
-***REMOVED***
+}
 
 /**
  * Defines getter and setter property on the specified object.
  *
- * @param  {Object***REMOVED*** obj         Object where property has to be defined.
- * @param  {String***REMOVED*** prop        Name of the defined property.
- * @param  {Object***REMOVED*** definition  Get and set definitions for the property.
- * @return {Void***REMOVED***
+ * @param  {Object} obj         Object where property has to be defined.
+ * @param  {String} prop        Name of the defined property.
+ * @param  {Object} definition  Get and set definitions for the property.
+ * @return {Void}
  */
 function define(obj, prop, definition) {
   Object.defineProperty(obj, prop, definition);
-***REMOVED***
+}
 
 /**
  * Sorts aphabetically object keys.
  *
- * @param  {Object***REMOVED*** obj
- * @return {Object***REMOVED***
+ * @param  {Object} obj
+ * @return {Object}
  */
 function sortKeys(obj) {
   return Object.keys(obj).sort().reduce(function (r, k) {
     r[k] = obj[k];
 
     return r[k], r;
-  ***REMOVED***, {***REMOVED***);
-***REMOVED***
+  }, {});
+}
 
 /**
  * Merges passed settings object with default options.
  *
- * @param  {Object***REMOVED*** defaults
- * @param  {Object***REMOVED*** settings
- * @return {Object***REMOVED***
+ * @param  {Object} defaults
+ * @param  {Object} settings
+ * @return {Object}
  */
 function mergeOptions(defaults, settings) {
-  var options = _extends({***REMOVED***, defaults, settings);
+  var options = _extends({}, defaults, settings);
 
   // `Object.assign` do not deeply merge objects, so we
   // have to do it manually for every nested object
@@ -467,39 +467,39 @@ function mergeOptions(defaults, settings) {
   // it's smaller and faster than some fancy
   // merging deep-merge algorithm script.
   if (settings.hasOwnProperty('classes')) {
-    options.classes = _extends({***REMOVED***, defaults.classes, settings.classes);
+    options.classes = _extends({}, defaults.classes, settings.classes);
 
     if (settings.classes.hasOwnProperty('direction')) {
-      options.classes.direction = _extends({***REMOVED***, defaults.classes.direction, settings.classes.direction);
-***REMOVED***
-  ***REMOVED***
+      options.classes.direction = _extends({}, defaults.classes.direction, settings.classes.direction);
+    }
+  }
 
   if (settings.hasOwnProperty('breakpoints')) {
-    options.breakpoints = _extends({***REMOVED***, defaults.breakpoints, settings.breakpoints);
-  ***REMOVED***
+    options.breakpoints = _extends({}, defaults.breakpoints, settings.breakpoints);
+  }
 
   return options;
-***REMOVED***
+}
 
 var EventsBus = function () {
   /**
    * Construct a EventBus instance.
    *
-   * @param {Object***REMOVED*** events
+   * @param {Object} events
    */
   function EventsBus() {
-    var events = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {***REMOVED***;
+    var events = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     classCallCheck(this, EventsBus);
 
     this.events = events;
     this.hop = events.hasOwnProperty;
-  ***REMOVED***
+  }
 
   /**
    * Adds listener to the specifed event.
    *
-   * @param {String|Array***REMOVED*** event
-   * @param {Function***REMOVED*** handler
+   * @param {String|Array} event
+   * @param {Function} handler
    */
 
 
@@ -509,13 +509,13 @@ var EventsBus = function () {
       if (isArray(event)) {
         for (var i = 0; i < event.length; i++) {
           this.on(event[i], handler);
-    ***REMOVED***
-  ***REMOVED***
+        }
+      }
 
       // Create the event's object if not yet created
       if (!this.hop.call(this.events, event)) {
         this.events[event] = [];
-  ***REMOVED***
+      }
 
       // Add the handler to queue
       var index = this.events[event].push(handler) - 1;
@@ -524,52 +524,52 @@ var EventsBus = function () {
       return {
         remove: function remove() {
           delete this.events[event][index];
-    ***REMOVED***
-  ***REMOVED***;
-***REMOVED***
+        }
+      };
+    }
 
     /**
      * Runs registered handlers for specified event.
      *
-     * @param {String|Array***REMOVED*** event
-     * @param {Object=***REMOVED*** context
+     * @param {String|Array} event
+     * @param {Object=} context
      */
 
-  ***REMOVED***, {
+  }, {
     key: 'emit',
     value: function emit(event, context) {
       if (isArray(event)) {
         for (var i = 0; i < event.length; i++) {
           this.emit(event[i], context);
-    ***REMOVED***
-  ***REMOVED***
+        }
+      }
 
       // If the event doesn't exist, or there's no handlers in queue, just leave
       if (!this.hop.call(this.events, event)) {
         return;
-  ***REMOVED***
+      }
 
       // Cycle through events queue, fire!
       this.events[event].forEach(function (item) {
-        item(context || {***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
-  ***REMOVED***]);
+        item(context || {});
+      });
+    }
+  }]);
   return EventsBus;
-***REMOVED***();
+}();
 
 var Glide = function () {
   /**
    * Construct glide.
    *
-   * @param  {String***REMOVED*** selector
-   * @param  {Object***REMOVED*** options
+   * @param  {String} selector
+   * @param  {Object} options
    */
   function Glide(selector) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {***REMOVED***;
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     classCallCheck(this, Glide);
 
-    this._c = {***REMOVED***;
+    this._c = {};
     this._t = [];
     this._e = new EventsBus();
 
@@ -577,322 +577,322 @@ var Glide = function () {
     this.selector = selector;
     this.settings = mergeOptions(defaults, options);
     this.index = this.settings.startAt;
-  ***REMOVED***
+  }
 
   /**
    * Initializes glide.
    *
-   * @param {Object***REMOVED*** extensions Collection of extensions to initialize.
-   * @return {Glide***REMOVED***
+   * @param {Object} extensions Collection of extensions to initialize.
+   * @return {Glide}
    */
 
 
   createClass(Glide, [{
     key: 'mount',
     value: function mount$$1() {
-      var extensions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {***REMOVED***;
+      var extensions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
       this._e.emit('mount.before');
 
       if (isObject(extensions)) {
         this._c = mount(this, extensions, this._e);
-  ***REMOVED*** else {
+      } else {
         warn('You need to provide a object on `mount()`');
-  ***REMOVED***
+      }
 
       this._e.emit('mount.after');
 
       return this;
-***REMOVED***
+    }
 
     /**
      * Collects an instance `translate` transformers.
      *
-     * @param  {Array***REMOVED*** transformers Collection of transformers.
-     * @return {Void***REMOVED***
+     * @param  {Array} transformers Collection of transformers.
+     * @return {Void}
      */
 
-  ***REMOVED***, {
+  }, {
     key: 'mutate',
     value: function mutate() {
       var transformers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 
       if (isArray(transformers)) {
         this._t = transformers;
-  ***REMOVED*** else {
+      } else {
         warn('You need to provide a array on `mutate()`');
-  ***REMOVED***
+      }
 
       return this;
-***REMOVED***
+    }
 
     /**
      * Updates glide with specified settings.
      *
-     * @param {Object***REMOVED*** settings
-     * @return {Glide***REMOVED***
+     * @param {Object} settings
+     * @return {Glide}
      */
 
-  ***REMOVED***, {
+  }, {
     key: 'update',
     value: function update() {
-      var settings = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {***REMOVED***;
+      var settings = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
       this.settings = mergeOptions(this.settings, settings);
 
       if (settings.hasOwnProperty('startAt')) {
         this.index = settings.startAt;
-  ***REMOVED***
+      }
 
       this._e.emit('update');
 
       return this;
-***REMOVED***
+    }
 
     /**
      * Change slide with specified pattern. A pattern must be in the special format:
      * `>` - Move one forward
      * `<` - Move one backward
-     * `={i***REMOVED***` - Go to {i***REMOVED*** zero-based slide (eq. '=1', will go to second slide)
+     * `={i}` - Go to {i} zero-based slide (eq. '=1', will go to second slide)
      * `>>` - Rewinds to end (last slide)
      * `<<` - Rewinds to start (first slide)
      *
-     * @param {String***REMOVED*** pattern
-     * @return {Glide***REMOVED***
+     * @param {String} pattern
+     * @return {Glide}
      */
 
-  ***REMOVED***, {
+  }, {
     key: 'go',
     value: function go(pattern) {
       this._c.Run.make(pattern);
 
       return this;
-***REMOVED***
+    }
 
     /**
      * Move track by specified distance.
      *
-     * @param {String***REMOVED*** distance
-     * @return {Glide***REMOVED***
+     * @param {String} distance
+     * @return {Glide}
      */
 
-  ***REMOVED***, {
+  }, {
     key: 'move',
     value: function move(distance) {
       this._c.Transition.disable();
       this._c.Move.make(distance);
 
       return this;
-***REMOVED***
+    }
 
     /**
      * Destroy instance and revert all changes done by this._c.
      *
-     * @return {Glide***REMOVED***
+     * @return {Glide}
      */
 
-  ***REMOVED***, {
+  }, {
     key: 'destroy',
     value: function destroy() {
       this._e.emit('destroy');
 
       return this;
-***REMOVED***
+    }
 
     /**
      * Start instance autoplaying.
      *
-     * @param {Boolean|Number***REMOVED*** interval Run autoplaying with passed interval regardless of `autoplay` settings
-     * @return {Glide***REMOVED***
+     * @param {Boolean|Number} interval Run autoplaying with passed interval regardless of `autoplay` settings
+     * @return {Glide}
      */
 
-  ***REMOVED***, {
+  }, {
     key: 'play',
     value: function play() {
       var interval = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
       if (interval) {
         this.settings.autoplay = interval;
-  ***REMOVED***
+      }
 
       this._e.emit('play');
 
       return this;
-***REMOVED***
+    }
 
     /**
      * Stop instance autoplaying.
      *
-     * @return {Glide***REMOVED***
+     * @return {Glide}
      */
 
-  ***REMOVED***, {
+  }, {
     key: 'pause',
     value: function pause() {
       this._e.emit('pause');
 
       return this;
-***REMOVED***
+    }
 
     /**
      * Sets glide into a idle status.
      *
-     * @return {Glide***REMOVED***
+     * @return {Glide}
      */
 
-  ***REMOVED***, {
+  }, {
     key: 'disable',
     value: function disable() {
       this.disabled = true;
 
       return this;
-***REMOVED***
+    }
 
     /**
      * Sets glide into a active status.
      *
-     * @return {Glide***REMOVED***
+     * @return {Glide}
      */
 
-  ***REMOVED***, {
+  }, {
     key: 'enable',
     value: function enable() {
       this.disabled = false;
 
       return this;
-***REMOVED***
+    }
 
     /**
      * Adds cuutom event listener with handler.
      *
-     * @param  {String|Array***REMOVED*** event
-     * @param  {Function***REMOVED*** handler
-     * @return {Glide***REMOVED***
+     * @param  {String|Array} event
+     * @param  {Function} handler
+     * @return {Glide}
      */
 
-  ***REMOVED***, {
+  }, {
     key: 'on',
     value: function on(event, handler) {
       this._e.on(event, handler);
 
       return this;
-***REMOVED***
+    }
 
     /**
      * Checks if glide is a precised type.
      *
-     * @param  {String***REMOVED*** name
-     * @return {Boolean***REMOVED***
+     * @param  {String} name
+     * @return {Boolean}
      */
 
-  ***REMOVED***, {
+  }, {
     key: 'isType',
     value: function isType(name) {
       return this.settings.type === name;
-***REMOVED***
+    }
 
     /**
      * Gets value of the core options.
      *
-     * @return {Object***REMOVED***
+     * @return {Object}
      */
 
-  ***REMOVED***, {
+  }, {
     key: 'settings',
     get: function get$$1() {
       return this._o;
-***REMOVED***
+    }
 
     /**
      * Sets value of the core options.
      *
-     * @param  {Object***REMOVED*** o
-     * @return {Void***REMOVED***
+     * @param  {Object} o
+     * @return {Void}
      */
     ,
     set: function set$$1(o) {
       if (isObject(o)) {
         this._o = o;
-  ***REMOVED*** else {
+      } else {
         warn('Options must be an `object` instance.');
-  ***REMOVED***
-***REMOVED***
+      }
+    }
 
     /**
      * Gets current index of the slider.
      *
-     * @return {Object***REMOVED***
+     * @return {Object}
      */
 
-  ***REMOVED***, {
+  }, {
     key: 'index',
     get: function get$$1() {
       return this._i;
-***REMOVED***
+    }
 
     /**
      * Sets current index a slider.
      *
-     * @return {Object***REMOVED***
+     * @return {Object}
      */
     ,
     set: function set$$1(i) {
       this._i = toInt(i);
-***REMOVED***
+    }
 
     /**
      * Gets type name of the slider.
      *
-     * @return {String***REMOVED***
+     * @return {String}
      */
 
-  ***REMOVED***, {
+  }, {
     key: 'type',
     get: function get$$1() {
       return this.settings.type;
-***REMOVED***
+    }
 
     /**
      * Gets value of the idle status.
      *
-     * @return {Boolean***REMOVED***
+     * @return {Boolean}
      */
 
-  ***REMOVED***, {
+  }, {
     key: 'disabled',
     get: function get$$1() {
       return this._d;
-***REMOVED***
+    }
 
     /**
      * Sets value of the idle status.
      *
-     * @return {Boolean***REMOVED***
+     * @return {Boolean}
      */
     ,
     set: function set$$1(status) {
       this._d = !!status;
-***REMOVED***
-  ***REMOVED***]);
+    }
+  }]);
   return Glide;
-***REMOVED***();
+}();
 
 function Run (Glide, Components, Events) {
   var Run = {
     /**
      * Initializes autorunning of the glide.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     mount: function mount() {
       this._o = false;
-***REMOVED***,
+    },
 
 
     /**
      * Makes glides running based on the passed moving schema.
      *
-     * @param {String***REMOVED*** move
+     * @param {String} move
      */
     make: function make(move) {
       var _this = this;
@@ -911,30 +911,30 @@ function Run (Glide, Components, Events) {
         Components.Transition.after(function () {
           if (_this.isStart()) {
             Events.emit('run.start', _this.move);
-      ***REMOVED***
+          }
 
           if (_this.isEnd()) {
             Events.emit('run.end', _this.move);
-      ***REMOVED***
+          }
 
           if (_this.isOffset('<') || _this.isOffset('>')) {
             _this._o = false;
 
             Events.emit('run.offset', _this.move);
-      ***REMOVED***
+          }
 
           Events.emit('run.after', _this.move);
 
           Glide.enable();
-    ***REMOVED***);
-  ***REMOVED***
-***REMOVED***,
+        });
+      }
+    },
 
 
     /**
      * Calculates current index based on defined move.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     calculate: function calculate() {
       var move = this.move,
@@ -949,33 +949,33 @@ function Run (Glide, Components, Events) {
         case '>':
           if (steps === '>') {
             Glide.index = length;
-      ***REMOVED*** else if (this.isEnd()) {
+          } else if (this.isEnd()) {
             if (!(Glide.isType('slider') && !Glide.settings.rewind)) {
               this._o = true;
 
               Glide.index = 0;
-        ***REMOVED***
-      ***REMOVED*** else if (countableSteps) {
+            }
+          } else if (countableSteps) {
             Glide.index += Math.min(length - Glide.index, -toInt(steps));
-      ***REMOVED*** else {
+          } else {
             Glide.index++;
-      ***REMOVED***
+          }
           break;
 
         case '<':
           if (steps === '<') {
             Glide.index = 0;
-      ***REMOVED*** else if (this.isStart()) {
+          } else if (this.isStart()) {
             if (!(Glide.isType('slider') && !Glide.settings.rewind)) {
               this._o = true;
 
               Glide.index = length;
-        ***REMOVED***
-      ***REMOVED*** else if (countableSteps) {
+            }
+          } else if (countableSteps) {
             Glide.index -= Math.min(Glide.index, toInt(steps));
-      ***REMOVED*** else {
+          } else {
             Glide.index--;
-      ***REMOVED***
+          }
           break;
 
         case '=':
@@ -985,56 +985,56 @@ function Run (Glide, Components, Events) {
         default:
           warn('Invalid direction pattern [' + direction + steps + '] has been used');
           break;
-  ***REMOVED***
-***REMOVED***,
+      }
+    },
 
 
     /**
      * Checks if we are on the first slide.
      *
-     * @return {Boolean***REMOVED***
+     * @return {Boolean}
      */
     isStart: function isStart() {
       return Glide.index === 0;
-***REMOVED***,
+    },
 
 
     /**
      * Checks if we are on the last slide.
      *
-     * @return {Boolean***REMOVED***
+     * @return {Boolean}
      */
     isEnd: function isEnd() {
       return Glide.index === this.length;
-***REMOVED***,
+    },
 
 
     /**
      * Checks if we are making a offset run.
      *
-     * @param {String***REMOVED*** direction
-     * @return {Boolean***REMOVED***
+     * @param {String} direction
+     * @return {Boolean}
      */
     isOffset: function isOffset(direction) {
       return this._o && this.move.direction === direction;
-***REMOVED***
-  ***REMOVED***;
+    }
+  };
 
   define(Run, 'move', {
     /**
      * Gets value of the move schema.
      *
-     * @returns {Object***REMOVED***
+     * @returns {Object}
      */
     get: function get() {
       return this._m;
-***REMOVED***,
+    },
 
 
     /**
      * Sets value of the move schema.
      *
-     * @returns {Object***REMOVED***
+     * @returns {Object}
      */
     set: function set(value) {
       var step = value.substr(1);
@@ -1042,16 +1042,16 @@ function Run (Glide, Components, Events) {
       this._m = {
         direction: value.substr(0, 1),
         steps: step ? toInt(step) ? toInt(step) : step : 0
-  ***REMOVED***;
-***REMOVED***
-  ***REMOVED***);
+      };
+    }
+  });
 
   define(Run, 'length', {
     /**
      * Gets value of the running distance based
      * on zero-indexing number of slides.
      *
-     * @return {Number***REMOVED***
+     * @return {Number}
      */
     get: function get() {
       var settings = Glide.settings;
@@ -1063,43 +1063,43 @@ function Run (Glide, Components, Events) {
 
       if (Glide.isType('slider') && settings.focusAt !== 'center' && settings.bound) {
         return length - 1 - (toInt(settings.perView) - 1) + toInt(settings.focusAt);
-  ***REMOVED***
+      }
 
       return length - 1;
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   define(Run, 'offset', {
     /**
      * Gets status of the offsetting flag.
      *
-     * @return {Boolean***REMOVED***
+     * @return {Boolean}
      */
     get: function get() {
       return this._o;
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   return Run;
-***REMOVED***
+}
 
 /**
  * Returns a current time.
  *
- * @return {Number***REMOVED***
+ * @return {Number}
  */
 function now() {
   return new Date().getTime();
-***REMOVED***
+}
 
 /**
  * Returns a function, that, when invoked, will only be triggered
  * at most once during a given window of time.
  *
- * @param {Function***REMOVED*** func
- * @param {Number***REMOVED*** wait
- * @param {Object=***REMOVED*** options
- * @return {Function***REMOVED***
+ * @param {Function} func
+ * @param {Number} wait
+ * @param {Object=} options
+ * @return {Function}
  *
  * @see https://github.com/jashkenas/underscore
  */
@@ -1109,14 +1109,14 @@ function throttle(func, wait, options) {
       args = void 0,
       result = void 0;
   var previous = 0;
-  if (!options) options = {***REMOVED***;
+  if (!options) options = {};
 
   var later = function later() {
     previous = options.leading === false ? 0 : now();
     timeout = null;
     result = func.apply(context, args);
     if (!timeout) context = args = null;
-  ***REMOVED***;
+  };
 
   var throttled = function throttled() {
     var at = now();
@@ -1128,29 +1128,29 @@ function throttle(func, wait, options) {
       if (timeout) {
         clearTimeout(timeout);
         timeout = null;
-  ***REMOVED***
+      }
       previous = at;
       result = func.apply(context, args);
       if (!timeout) context = args = null;
-***REMOVED*** else if (!timeout && options.trailing !== false) {
+    } else if (!timeout && options.trailing !== false) {
       timeout = setTimeout(later, remaining);
-***REMOVED***
+    }
     return result;
-  ***REMOVED***;
+  };
 
   throttled.cancel = function () {
     clearTimeout(timeout);
     previous = 0;
     timeout = context = args = null;
-  ***REMOVED***;
+  };
 
   return throttled;
-***REMOVED***
+}
 
 var MARGIN_TYPE = {
   ltr: ['marginLeft', 'marginRight'],
   rtl: ['marginRight', 'marginLeft']
-***REMOVED***;
+};
 
 function Gaps (Glide, Components, Events) {
   var Gaps = {
@@ -1158,8 +1158,8 @@ function Gaps (Glide, Components, Events) {
      * Applies gaps between slides. First and last
      * slides do not receive it's edge margins.
      *
-     * @param {HTMLCollection***REMOVED*** slides
-     * @return {Void***REMOVED***
+     * @param {HTMLCollection} slides
+     * @return {Void}
      */
     apply: function apply(slides) {
       for (var i = 0, len = slides.length; i < len; i++) {
@@ -1168,24 +1168,24 @@ function Gaps (Glide, Components, Events) {
 
         if (i !== 0) {
           style[MARGIN_TYPE[direction][0]] = this.value / 2 + 'px';
-    ***REMOVED*** else {
+        } else {
           style[MARGIN_TYPE[direction][0]] = '';
-    ***REMOVED***
+        }
 
         if (i !== slides.length - 1) {
           style[MARGIN_TYPE[direction][1]] = this.value / 2 + 'px';
-    ***REMOVED*** else {
+        } else {
           style[MARGIN_TYPE[direction][1]] = '';
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***,
+        }
+      }
+    },
 
 
     /**
      * Removes gaps from the slides.
      *
-     * @param {HTMLCollection***REMOVED*** slides
-     * @returns {Void***REMOVED***
+     * @param {HTMLCollection} slides
+     * @returns {Void}
     */
     remove: function remove(slides) {
       for (var i = 0, len = slides.length; i < len; i++) {
@@ -1193,46 +1193,46 @@ function Gaps (Glide, Components, Events) {
 
         style.marginLeft = '';
         style.marginRight = '';
-  ***REMOVED***
-***REMOVED***
-  ***REMOVED***;
+      }
+    }
+  };
 
   define(Gaps, 'value', {
     /**
      * Gets value of the gap.
      *
-     * @returns {Number***REMOVED***
+     * @returns {Number}
      */
     get: function get() {
       return toInt(Glide.settings.gap);
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   define(Gaps, 'grow', {
     /**
      * Gets additional dimentions value caused by gaps.
      * Used to increase width of the slides wrapper.
      *
-     * @returns {Number***REMOVED***
+     * @returns {Number}
      */
     get: function get() {
       return Gaps.value * (Components.Sizes.length - 1);
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   define(Gaps, 'reductor', {
     /**
      * Gets reduction value caused by gaps.
      * Used to subtract width of the slides.
      *
-     * @returns {Number***REMOVED***
+     * @returns {Number}
      */
     get: function get() {
       var perView = Glide.settings.perView;
 
       return Gaps.value * (perView - 1) / perView;
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   /**
    * Apply calculated gaps:
@@ -1241,7 +1241,7 @@ function Gaps (Glide, Components, Events) {
    */
   Events.on(['build.after', 'update'], throttle(function () {
     Gaps.apply(Components.Html.wrapper.children);
-  ***REMOVED***, 30));
+  }, 30));
 
   /**
    * Remove gaps:
@@ -1249,16 +1249,16 @@ function Gaps (Glide, Components, Events) {
    */
   Events.on('destroy', function () {
     Gaps.remove(Components.Html.wrapper.children);
-  ***REMOVED***);
+  });
 
   return Gaps;
-***REMOVED***
+}
 
 /**
  * Finds siblings nodes of the passed node.
  *
- * @param  {Element***REMOVED*** node
- * @return {Array***REMOVED***
+ * @param  {Element} node
+ * @return {Array}
  */
 function siblings(node) {
   if (node && node.parentNode) {
@@ -1268,28 +1268,28 @@ function siblings(node) {
     for (; n; n = n.nextSibling) {
       if (n.nodeType === 1 && n !== node) {
         matched.push(n);
-  ***REMOVED***
-***REMOVED***
+      }
+    }
 
     return matched;
-  ***REMOVED***
+  }
 
   return [];
-***REMOVED***
+}
 
 /**
  * Checks if passed node exist and is a valid element.
  *
- * @param  {Element***REMOVED*** node
- * @return {Boolean***REMOVED***
+ * @param  {Element} node
+ * @return {Boolean}
  */
 function exist(node) {
   if (node && node instanceof window.HTMLElement) {
     return true;
-  ***REMOVED***
+  }
 
   return false;
-***REMOVED***
+}
 
 var TRACK_SELECTOR = '[data-glide-el="track"]';
 
@@ -1298,131 +1298,131 @@ function Html (Glide, Components) {
     /**
      * Setup slider HTML nodes.
      *
-     * @param {Glide***REMOVED*** glide
+     * @param {Glide} glide
      */
     mount: function mount() {
       this.root = Glide.selector;
       this.track = this.root.querySelector(TRACK_SELECTOR);
       this.slides = Array.prototype.slice.call(this.wrapper.children).filter(function (slide) {
         return !slide.classList.contains(Glide.settings.classes.cloneSlide);
-  ***REMOVED***);
-***REMOVED***
-  ***REMOVED***;
+      });
+    }
+  };
 
   define(Html, 'root', {
     /**
      * Gets node of the glide main element.
      *
-     * @return {Object***REMOVED***
+     * @return {Object}
      */
     get: function get() {
       return Html._r;
-***REMOVED***,
+    },
 
 
     /**
      * Sets node of the glide main element.
      *
-     * @return {Object***REMOVED***
+     * @return {Object}
      */
     set: function set(r) {
       if (isString(r)) {
         r = document.querySelector(r);
-  ***REMOVED***
+      }
 
       if (exist(r)) {
         Html._r = r;
-  ***REMOVED*** else {
+      } else {
         warn('Root element must be a existing Html node');
-  ***REMOVED***
-***REMOVED***
-  ***REMOVED***);
+      }
+    }
+  });
 
   define(Html, 'track', {
     /**
      * Gets node of the glide track with slides.
      *
-     * @return {Object***REMOVED***
+     * @return {Object}
      */
     get: function get() {
       return Html._t;
-***REMOVED***,
+    },
 
 
     /**
      * Sets node of the glide track with slides.
      *
-     * @return {Object***REMOVED***
+     * @return {Object}
      */
     set: function set(t) {
       if (exist(t)) {
         Html._t = t;
-  ***REMOVED*** else {
+      } else {
         warn('Could not find track element. Please use ' + TRACK_SELECTOR + ' attribute.');
-  ***REMOVED***
-***REMOVED***
-  ***REMOVED***);
+      }
+    }
+  });
 
   define(Html, 'wrapper', {
     /**
      * Gets node of the slides wrapper.
      *
-     * @return {Object***REMOVED***
+     * @return {Object}
      */
     get: function get() {
       return Html.track.children[0];
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   return Html;
-***REMOVED***
+}
 
 function Peek (Glide, Components, Events) {
   var Peek = {
     /**
      * Setups how much to peek based on settings.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     mount: function mount() {
       this.value = Glide.settings.peek;
-***REMOVED***
-  ***REMOVED***;
+    }
+  };
 
   define(Peek, 'value', {
     /**
      * Gets value of the peek.
      *
-     * @returns {Number|Object***REMOVED***
+     * @returns {Number|Object}
      */
     get: function get() {
       return Peek._v;
-***REMOVED***,
+    },
 
 
     /**
      * Sets value of the peek.
      *
-     * @param {Number|Object***REMOVED*** value
-     * @return {Void***REMOVED***
+     * @param {Number|Object} value
+     * @return {Void}
      */
     set: function set(value) {
       if (isObject(value)) {
         value.before = toInt(value.before);
         value.after = toInt(value.after);
-  ***REMOVED*** else {
+      } else {
         value = toInt(value);
-  ***REMOVED***
+      }
 
       Peek._v = value;
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   define(Peek, 'reductor', {
     /**
      * Gets reduction value caused by peek.
      *
-     * @returns {Number***REMOVED***
+     * @returns {Number}
      */
     get: function get() {
       var value = Peek.value;
@@ -1430,11 +1430,11 @@ function Peek (Glide, Components, Events) {
 
       if (isObject(value)) {
         return value.before / perView + value.after / perView;
-  ***REMOVED***
+      }
 
       return value * 2 / perView;
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   /**
    * Recalculate peeking sizes on:
@@ -1442,28 +1442,28 @@ function Peek (Glide, Components, Events) {
    */
   Events.on(['resize', 'update'], function () {
     Peek.mount();
-  ***REMOVED***);
+  });
 
   return Peek;
-***REMOVED***
+}
 
 function Move (Glide, Components, Events) {
   var Move = {
     /**
      * Constructs move component.
      *
-     * @returns {Void***REMOVED***
+     * @returns {Void}
      */
     mount: function mount() {
       this._o = 0;
-***REMOVED***,
+    },
 
 
     /**
      * Calculates a movement value based on passed offset and currently active index.
      *
-     * @param  {Number***REMOVED*** offset
-     * @return {Void***REMOVED***
+     * @param  {Number} offset
+     * @return {Void}
      */
     make: function make() {
       var _this = this;
@@ -1474,53 +1474,53 @@ function Move (Glide, Components, Events) {
 
       Events.emit('move', {
         movement: this.value
-  ***REMOVED***);
+      });
 
       Components.Transition.after(function () {
         Events.emit('move.after', {
           movement: _this.value
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
-  ***REMOVED***;
+        });
+      });
+    }
+  };
 
   define(Move, 'offset', {
     /**
      * Gets an offset value used to modify current translate.
      *
-     * @return {Object***REMOVED***
+     * @return {Object}
      */
     get: function get() {
       return Move._o;
-***REMOVED***,
+    },
 
 
     /**
      * Sets an offset value used to modify current translate.
      *
-     * @return {Object***REMOVED***
+     * @return {Object}
      */
     set: function set(value) {
       Move._o = !isUndefined(value) ? toInt(value) : 0;
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   define(Move, 'translate', {
     /**
      * Gets a raw movement value.
      *
-     * @return {Number***REMOVED***
+     * @return {Number}
      */
     get: function get() {
       return Components.Sizes.slideWidth * Glide.index;
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   define(Move, 'value', {
     /**
      * Gets an actual movement value corrected by offset.
      *
-     * @return {Number***REMOVED***
+     * @return {Number}
      */
     get: function get() {
       var offset = this.offset;
@@ -1528,11 +1528,11 @@ function Move (Glide, Components, Events) {
 
       if (Components.Direction.is('rtl')) {
         return translate + offset;
-  ***REMOVED***
+      }
 
       return translate - offset;
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   /**
    * Make movement to proper slide on:
@@ -1541,17 +1541,17 @@ function Move (Glide, Components, Events) {
    */
   Events.on(['build.before', 'run'], function () {
     Move.make();
-  ***REMOVED***);
+  });
 
   return Move;
-***REMOVED***
+}
 
 function Sizes (Glide, Components, Events) {
   var Sizes = {
     /**
      * Setups dimentions of slides.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     setupSlides: function setupSlides() {
       var width = this.slideWidth + 'px';
@@ -1559,79 +1559,79 @@ function Sizes (Glide, Components, Events) {
 
       for (var i = 0; i < slides.length; i++) {
         slides[i].style.width = width;
-  ***REMOVED***
-***REMOVED***,
+      }
+    },
 
 
     /**
      * Setups dimentions of slides wrapper.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     setupWrapper: function setupWrapper(dimention) {
       Components.Html.wrapper.style.width = this.wrapperSize + 'px';
-***REMOVED***,
+    },
 
 
     /**
      * Removes applied styles from HTML elements.
      *
-     * @returns {Void***REMOVED***
+     * @returns {Void}
      */
     remove: function remove() {
       var slides = Components.Html.slides;
 
       for (var i = 0; i < slides.length; i++) {
         slides[i].style.width = '';
-  ***REMOVED***
+      }
 
       Components.Html.wrapper.style.width = '';
-***REMOVED***
-  ***REMOVED***;
+    }
+  };
 
   define(Sizes, 'length', {
     /**
      * Gets count number of the slides.
      *
-     * @return {Number***REMOVED***
+     * @return {Number}
      */
     get: function get() {
       return Components.Html.slides.length;
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   define(Sizes, 'width', {
     /**
      * Gets width value of the glide.
      *
-     * @return {Number***REMOVED***
+     * @return {Number}
      */
     get: function get() {
       return Components.Html.root.offsetWidth;
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   define(Sizes, 'wrapperSize', {
     /**
      * Gets size of the slides wrapper.
      *
-     * @return {Number***REMOVED***
+     * @return {Number}
      */
     get: function get() {
       return Sizes.slideWidth * Sizes.length + Components.Gaps.grow + Components.Clones.grow;
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   define(Sizes, 'slideWidth', {
     /**
      * Gets width value of the single slide.
      *
-     * @return {Number***REMOVED***
+     * @return {Number}
      */
     get: function get() {
       return Sizes.width / Glide.settings.perView - Components.Peek.reductor - Components.Gaps.reductor;
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   /**
    * Apply calculated glide's dimensions:
@@ -1642,7 +1642,7 @@ function Sizes (Glide, Components, Events) {
   Events.on(['build.before', 'resize', 'update'], function () {
     Sizes.setupSlides();
     Sizes.setupWrapper();
-  ***REMOVED***);
+  });
 
   /**
    * Remove calculated glide's dimensions:
@@ -1650,10 +1650,10 @@ function Sizes (Glide, Components, Events) {
    */
   Events.on('destroy', function () {
     Sizes.remove();
-  ***REMOVED***);
+  });
 
   return Sizes;
-***REMOVED***
+}
 
 function Build (Glide, Components, Events) {
   var Build = {
@@ -1661,7 +1661,7 @@ function Build (Glide, Components, Events) {
      * Init glide building. Adds classes, sets
      * dimensions and setups initial state.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     mount: function mount() {
       Events.emit('build.before');
@@ -1670,23 +1670,23 @@ function Build (Glide, Components, Events) {
       this.activeClass();
 
       Events.emit('build.after');
-***REMOVED***,
+    },
 
 
     /**
      * Adds `type` class to the glide element.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     typeClass: function typeClass() {
       Components.Html.root.classList.add(Glide.settings.classes[Glide.settings.type]);
-***REMOVED***,
+    },
 
 
     /**
      * Sets active class to current slide.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     activeClass: function activeClass() {
       var classes = Glide.settings.classes;
@@ -1697,15 +1697,15 @@ function Build (Glide, Components, Events) {
 
         siblings(slide).forEach(function (sibling) {
           sibling.classList.remove(classes.activeSlide);
-    ***REMOVED***);
-  ***REMOVED***
-***REMOVED***,
+        });
+      }
+    },
 
 
     /**
      * Removes HTML classes applied at building.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     removeClasses: function removeClasses() {
       var classes = Glide.settings.classes;
@@ -1714,9 +1714,9 @@ function Build (Glide, Components, Events) {
 
       Components.Html.slides.forEach(function (sibling) {
         sibling.classList.remove(classes.activeSlide);
-  ***REMOVED***);
-***REMOVED***
-  ***REMOVED***;
+      });
+    }
+  };
 
   /**
    * Clear building classes:
@@ -1725,7 +1725,7 @@ function Build (Glide, Components, Events) {
    */
   Events.on(['destroy', 'update'], function () {
     Build.removeClasses();
-  ***REMOVED***);
+  });
 
   /**
    * Remount component:
@@ -1734,7 +1734,7 @@ function Build (Glide, Components, Events) {
    */
   Events.on(['resize', 'update'], function () {
     Build.mount();
-  ***REMOVED***);
+  });
 
   /**
    * Swap active class of current slide:
@@ -1742,10 +1742,10 @@ function Build (Glide, Components, Events) {
    */
   Events.on('move.after', function () {
     Build.activeClass();
-  ***REMOVED***);
+  });
 
   return Build;
-***REMOVED***
+}
 
 function Clones (Glide, Components, Events) {
   var Clones = {
@@ -1757,14 +1757,14 @@ function Clones (Glide, Components, Events) {
 
       if (Glide.isType('carousel')) {
         this.items = this.collect();
-  ***REMOVED***
-***REMOVED***,
+      }
+    },
 
 
     /**
      * Collect clones with pattern.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     collect: function collect() {
       var items = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
@@ -1786,7 +1786,7 @@ function Clones (Glide, Components, Events) {
           clone.classList.add(classes.cloneSlide);
 
           items.push(clone);
-    ***REMOVED***
+        }
 
         for (var _i = 0; _i < end.length; _i++) {
           var _clone = end[_i].cloneNode(true);
@@ -1794,17 +1794,17 @@ function Clones (Glide, Components, Events) {
           _clone.classList.add(classes.cloneSlide);
 
           items.unshift(_clone);
-    ***REMOVED***
-  ***REMOVED***
+        }
+      }
 
       return items;
-***REMOVED***,
+    },
 
 
     /**
      * Append cloned slides with generated pattern.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     append: function append() {
       var items = this.items;
@@ -1820,22 +1820,22 @@ function Clones (Glide, Components, Events) {
 
       for (var i = 0; i < append.length; i++) {
         wrapper.appendChild(append[i]);
-  ***REMOVED***
+      }
 
       for (var _i2 = 0; _i2 < prepend.length; _i2++) {
         wrapper.insertBefore(prepend[_i2], slides[0]);
-  ***REMOVED***
+      }
 
       for (var _i3 = 0; _i3 < items.length; _i3++) {
         items[_i3].style.width = width;
-  ***REMOVED***
-***REMOVED***,
+      }
+    },
 
 
     /**
      * Remove all cloned slides.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     remove: function remove() {
       var items = this.items;
@@ -1843,20 +1843,20 @@ function Clones (Glide, Components, Events) {
 
       for (var i = 0; i < items.length; i++) {
         Components.Html.wrapper.removeChild(items[i]);
-  ***REMOVED***
-***REMOVED***
-  ***REMOVED***;
+      }
+    }
+  };
 
   define(Clones, 'grow', {
     /**
      * Gets additional dimentions value caused by clones.
      *
-     * @return {Number***REMOVED***
+     * @return {Number}
      */
     get: function get() {
       return (Components.Sizes.slideWidth + Components.Gaps.value) * Clones.items.length;
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   /**
    * Append additional slide's clones:
@@ -1866,7 +1866,7 @@ function Clones (Glide, Components, Events) {
     Clones.remove();
     Clones.mount();
     Clones.append();
-  ***REMOVED***);
+  });
 
   /**
    * Append additional slide's clones:
@@ -1875,8 +1875,8 @@ function Clones (Glide, Components, Events) {
   Events.on('build.before', function () {
     if (Glide.isType('carousel')) {
       Clones.append();
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   /**
    * Remove clones HTMLElements:
@@ -1884,30 +1884,30 @@ function Clones (Glide, Components, Events) {
    */
   Events.on('destroy', function () {
     Clones.remove();
-  ***REMOVED***);
+  });
 
   return Clones;
-***REMOVED***
+}
 
 var EventsBinder = function () {
   /**
    * Construct a EventsBinder instance.
    */
   function EventsBinder() {
-    var listeners = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {***REMOVED***;
+    var listeners = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     classCallCheck(this, EventsBinder);
 
     this.listeners = listeners;
-  ***REMOVED***
+  }
 
   /**
    * Adds events listeners to arrows HTML elements.
    *
-   * @param  {String|Array***REMOVED*** events
-   * @param  {Element|Window|Document***REMOVED*** el
-   * @param  {Function***REMOVED*** closure
-   * @param  {Boolean|Object***REMOVED*** capture
-   * @return {Void***REMOVED***
+   * @param  {String|Array} events
+   * @param  {Element|Window|Document} el
+   * @param  {Function} closure
+   * @param  {Boolean|Object} capture
+   * @return {Void}
    */
 
 
@@ -1918,58 +1918,58 @@ var EventsBinder = function () {
 
       if (isString(events)) {
         events = [events];
-  ***REMOVED***
+      }
 
       for (var i = 0; i < events.length; i++) {
         this.listeners[events[i]] = closure;
 
         el.addEventListener(events[i], this.listeners[events[i]], capture);
-  ***REMOVED***
-***REMOVED***
+      }
+    }
 
     /**
      * Removes event listeners from arrows HTML elements.
      *
-     * @param  {String|Array***REMOVED*** events
-     * @param  {Element|Window|Document***REMOVED*** el
-     * @param  {Boolean|Object***REMOVED*** capture
-     * @return {Void***REMOVED***
+     * @param  {String|Array} events
+     * @param  {Element|Window|Document} el
+     * @param  {Boolean|Object} capture
+     * @return {Void}
      */
 
-  ***REMOVED***, {
+  }, {
     key: 'off',
     value: function off(events, el) {
       var capture = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
       if (isString(events)) {
         events = [events];
-  ***REMOVED***
+      }
 
       for (var i = 0; i < events.length; i++) {
         el.removeEventListener(events[i], this.listeners[events[i]], capture);
-  ***REMOVED***
-***REMOVED***
+      }
+    }
 
     /**
      * Destroy collected listeners.
      *
-     * @returns {Void***REMOVED***
+     * @returns {Void}
      */
 
-  ***REMOVED***, {
+  }, {
     key: 'destroy',
     value: function destroy() {
       delete this.listeners;
-***REMOVED***
-  ***REMOVED***]);
+    }
+  }]);
   return EventsBinder;
-***REMOVED***();
+}();
 
 function Resize (Glide, Components, Events) {
   /**
    * Instance of the binder for DOM Events.
    *
-   * @type {EventsBinder***REMOVED***
+   * @type {EventsBinder}
    */
   var Binder = new EventsBinder();
 
@@ -1979,31 +1979,31 @@ function Resize (Glide, Components, Events) {
      */
     mount: function mount() {
       this.bind();
-***REMOVED***,
+    },
 
 
     /**
      * Binds `rezsize` listener to the window.
      * It's a costly event, so we are debouncing it.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     bind: function bind() {
       Binder.on('resize', window, throttle(function () {
         Events.emit('resize');
-  ***REMOVED***, Glide.settings.throttle));
-***REMOVED***,
+      }, Glide.settings.throttle));
+    },
 
 
     /**
      * Unbinds listeners from the window.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     unbind: function unbind() {
       Binder.off('resize', window);
-***REMOVED***
-  ***REMOVED***;
+    }
+  };
 
   /**
    * Remove bindings from window:
@@ -2012,103 +2012,103 @@ function Resize (Glide, Components, Events) {
   Events.on('destroy', function () {
     Resize.unbind();
     Binder.destroy();
-  ***REMOVED***);
+  });
 
   return Resize;
-***REMOVED***
+}
 
 var VALID_DIRECTIONS = ['ltr', 'rtl'];
 var FLIPED_MOVEMENTS = {
   '>': '<',
   '<': '>',
   '=': '='
-***REMOVED***;
+};
 
 function Direction (Glide, Components, Events) {
   var Direction = {
     /**
      * Setups gap value based on settings.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     mount: function mount() {
       this.value = Glide.settings.direction;
-***REMOVED***,
+    },
 
 
     /**
      * Resolves pattern based on direction value
      *
-     * @param {String***REMOVED*** pattern
-     * @returns {String***REMOVED***
+     * @param {String} pattern
+     * @returns {String}
      */
     resolve: function resolve(pattern) {
       var token = pattern.slice(0, 1);
 
       if (this.is('rtl')) {
         return pattern.split(token).join(FLIPED_MOVEMENTS[token]);
-  ***REMOVED***
+      }
 
       return pattern;
-***REMOVED***,
+    },
 
 
     /**
      * Checks value of direction mode.
      *
-     * @param {String***REMOVED*** direction
-     * @returns {Boolean***REMOVED***
+     * @param {String} direction
+     * @returns {Boolean}
      */
     is: function is(direction) {
       return this.value === direction;
-***REMOVED***,
+    },
 
 
     /**
      * Applies direction class to the root HTML element.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     addClass: function addClass() {
       Components.Html.root.classList.add(Glide.settings.classes.direction[this.value]);
-***REMOVED***,
+    },
 
 
     /**
      * Removes direction class from the root HTML element.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     removeClass: function removeClass() {
       Components.Html.root.classList.remove(Glide.settings.classes.direction[this.value]);
-***REMOVED***
-  ***REMOVED***;
+    }
+  };
 
   define(Direction, 'value', {
     /**
      * Gets value of the direction.
      *
-     * @returns {Number***REMOVED***
+     * @returns {Number}
      */
     get: function get() {
       return Direction._v;
-***REMOVED***,
+    },
 
 
     /**
      * Sets value of the direction.
      *
-     * @param {String***REMOVED*** value
-     * @return {Void***REMOVED***
+     * @param {String} value
+     * @return {Void}
      */
     set: function set(value) {
       if (VALID_DIRECTIONS.indexOf(value) > -1) {
         Direction._v = value;
-  ***REMOVED*** else {
+      } else {
         warn('Direction value must be `ltr` or `rtl`');
-  ***REMOVED***
-***REMOVED***
-  ***REMOVED***);
+      }
+    }
+  });
 
   /**
    * Clear direction class:
@@ -2117,7 +2117,7 @@ function Direction (Glide, Components, Events) {
    */
   Events.on(['destroy', 'update'], function () {
     Direction.removeClass();
-  ***REMOVED***);
+  });
 
   /**
    * Remount component:
@@ -2125,7 +2125,7 @@ function Direction (Glide, Components, Events) {
    */
   Events.on('update', function () {
     Direction.mount();
-  ***REMOVED***);
+  });
 
   /**
    * Apply direction class:
@@ -2134,92 +2134,92 @@ function Direction (Glide, Components, Events) {
    */
   Events.on(['build.before', 'update'], function () {
     Direction.addClass();
-  ***REMOVED***);
+  });
 
   return Direction;
-***REMOVED***
+}
 
 /**
  * Reflects value of glide movement.
  *
- * @param  {Object***REMOVED*** Glide
- * @param  {Object***REMOVED*** Components
- * @return {Object***REMOVED***
+ * @param  {Object} Glide
+ * @param  {Object} Components
+ * @return {Object}
  */
 function Rtl (Glide, Components) {
   return {
     /**
      * Negates the passed translate if glide is in RTL option.
      *
-     * @param  {Number***REMOVED*** translate
-     * @return {Number***REMOVED***
+     * @param  {Number} translate
+     * @return {Number}
      */
     modify: function modify(translate) {
       if (Components.Direction.is('rtl')) {
         return -translate;
-  ***REMOVED***
+      }
 
       return translate;
-***REMOVED***
-  ***REMOVED***;
-***REMOVED***
+    }
+  };
+}
 
 /**
  * Updates glide movement with a `gap` settings.
  *
- * @param  {Object***REMOVED*** Glide
- * @param  {Object***REMOVED*** Components
- * @return {Object***REMOVED***
+ * @param  {Object} Glide
+ * @param  {Object} Components
+ * @return {Object}
  */
 function Gap (Glide, Components) {
   return {
     /**
      * Modifies passed translate value with number in the `gap` settings.
      *
-     * @param  {Number***REMOVED*** translate
-     * @return {Number***REMOVED***
+     * @param  {Number} translate
+     * @return {Number}
      */
     modify: function modify(translate) {
       return translate + Components.Gaps.value * Glide.index;
-***REMOVED***
-  ***REMOVED***;
-***REMOVED***
+    }
+  };
+}
 
 /**
  * Updates glide movement with width of additional clones width.
  *
- * @param  {Object***REMOVED*** Glide
- * @param  {Object***REMOVED*** Components
- * @return {Object***REMOVED***
+ * @param  {Object} Glide
+ * @param  {Object} Components
+ * @return {Object}
  */
 function Grow (Glide, Components) {
   return {
     /**
      * Adds to the passed translate width of the half of clones.
      *
-     * @param  {Number***REMOVED*** translate
-     * @return {Number***REMOVED***
+     * @param  {Number} translate
+     * @return {Number}
      */
     modify: function modify(translate) {
       return translate + Components.Clones.grow / 2;
-***REMOVED***
-  ***REMOVED***;
-***REMOVED***
+    }
+  };
+}
 
 /**
  * Updates glide movement with a `peek` settings.
  *
- * @param  {Object***REMOVED*** Glide
- * @param  {Object***REMOVED*** Components
- * @return {Object***REMOVED***
+ * @param  {Object} Glide
+ * @param  {Object} Components
+ * @return {Object}
  */
 function Peeking (Glide, Components) {
   return {
     /**
      * Modifies passed translate value with a `peek` setting.
      *
-     * @param  {Number***REMOVED*** translate
-     * @return {Number***REMOVED***
+     * @param  {Number} translate
+     * @return {Number}
      */
     modify: function modify(translate) {
       if (Glide.settings.focusAt >= 0) {
@@ -2227,30 +2227,30 @@ function Peeking (Glide, Components) {
 
         if (isObject(peek)) {
           return translate - peek.before;
-    ***REMOVED***
+        }
 
         return translate - peek;
-  ***REMOVED***
+      }
 
       return translate;
-***REMOVED***
-  ***REMOVED***;
-***REMOVED***
+    }
+  };
+}
 
 /**
  * Updates glide movement with a `focusAt` settings.
  *
- * @param  {Object***REMOVED*** Glide
- * @param  {Object***REMOVED*** Components
- * @return {Object***REMOVED***
+ * @param  {Object} Glide
+ * @param  {Object} Components
+ * @return {Object}
  */
 function Focusing (Glide, Components) {
   return {
     /**
      * Modifies passed translate value with index in the `focusAt` setting.
      *
-     * @param  {Number***REMOVED*** translate
-     * @return {Number***REMOVED***
+     * @param  {Number} translate
+     * @return {Number}
      */
     modify: function modify(translate) {
       var gap = Components.Gaps.value;
@@ -2260,19 +2260,19 @@ function Focusing (Glide, Components) {
 
       if (focusAt === 'center') {
         return translate - (width / 2 - slideWidth / 2);
-  ***REMOVED***
+      }
 
       return translate - slideWidth * focusAt - gap * focusAt;
-***REMOVED***
-  ***REMOVED***;
-***REMOVED***
+    }
+  };
+}
 
 /**
  * Applies diffrent transformers on translate value.
  *
- * @param  {Object***REMOVED*** Glide
- * @param  {Object***REMOVED*** Components
- * @return {Object***REMOVED***
+ * @param  {Object} Glide
+ * @param  {Object} Components
+ * @return {Object}
  */
 function mutator (Glide, Components, Events) {
   /**
@@ -2280,7 +2280,7 @@ function mutator (Glide, Components, Events) {
    * It's important that the Rtl component be last on the list,
    * so it reflects all previous transformations.
    *
-   * @type {Array***REMOVED***
+   * @type {Array}
    */
   var TRANSFORMERS = [Gap, Grow, Peeking, Focusing].concat(Glide._t, [Rtl]);
 
@@ -2288,8 +2288,8 @@ function mutator (Glide, Components, Events) {
     /**
      * Piplines translate value with registered transformers.
      *
-     * @param  {Number***REMOVED*** translate
-     * @return {Number***REMOVED***
+     * @param  {Number} translate
+     * @return {Number}
      */
     mutate: function mutate(translate) {
       for (var i = 0; i < TRANSFORMERS.length; i++) {
@@ -2297,40 +2297,40 @@ function mutator (Glide, Components, Events) {
 
         if (isFunction(transformer) && isFunction(transformer().modify)) {
           translate = transformer(Glide, Components, Events).modify(translate);
-    ***REMOVED*** else {
+        } else {
           warn('Transformer should be a function that returns an object with `modify()` method');
-    ***REMOVED***
-  ***REMOVED***
+        }
+      }
 
       return translate;
-***REMOVED***
-  ***REMOVED***;
-***REMOVED***
+    }
+  };
+}
 
 function Translate (Glide, Components, Events) {
   var Translate = {
     /**
      * Sets value of translate on HTML element.
      *
-     * @param {Number***REMOVED*** value
-     * @return {Void***REMOVED***
+     * @param {Number} value
+     * @return {Void}
      */
     set: function set(value) {
       var transform = mutator(Glide, Components).mutate(value);
 
       Components.Html.wrapper.style.transform = 'translate3d(' + -1 * transform + 'px, 0px, 0px)';
-***REMOVED***,
+    },
 
 
     /**
      * Removes value of translate from HTML element.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     remove: function remove() {
       Components.Html.wrapper.style.transform = '';
-***REMOVED***
-  ***REMOVED***;
+    }
+  };
 
   /**
    * Set new translate value:
@@ -2347,23 +2347,23 @@ function Translate (Glide, Components, Events) {
         Events.emit('translate.jump');
 
         Translate.set(width * (length - 1));
-  ***REMOVED***);
+      });
 
       return Translate.set(-width - gap * length);
-***REMOVED***
+    }
 
     if (Glide.isType('carousel') && Components.Run.isOffset('>')) {
       Components.Transition.after(function () {
         Events.emit('translate.jump');
 
         Translate.set(0);
-  ***REMOVED***);
+      });
 
       return Translate.set(width * length + gap * length);
-***REMOVED***
+    }
 
     return Translate.set(context.movement);
-  ***REMOVED***);
+  });
 
   /**
    * Remove translate:
@@ -2371,17 +2371,17 @@ function Translate (Glide, Components, Events) {
    */
   Events.on('destroy', function () {
     Translate.remove();
-  ***REMOVED***);
+  });
 
   return Translate;
-***REMOVED***
+}
 
 function Transition (Glide, Components, Events) {
   /**
    * Holds inactivity status of transition.
    * When true transition is not applied.
    *
-   * @type {Boolean***REMOVED***
+   * @type {Boolean}
    */
   var disabled = false;
 
@@ -2389,97 +2389,97 @@ function Transition (Glide, Components, Events) {
     /**
      * Composes string of the CSS transition.
      *
-     * @param {String***REMOVED*** property
-     * @return {String***REMOVED***
+     * @param {String} property
+     * @return {String}
      */
     compose: function compose(property) {
       var settings = Glide.settings;
 
       if (!disabled) {
         return property + ' ' + this.duration + 'ms ' + settings.animationTimingFunc;
-  ***REMOVED***
+      }
 
       return property + ' 0ms ' + settings.animationTimingFunc;
-***REMOVED***,
+    },
 
 
     /**
      * Sets value of transition on HTML element.
      *
-     * @param {String=***REMOVED*** property
-     * @return {Void***REMOVED***
+     * @param {String=} property
+     * @return {Void}
      */
     set: function set() {
       var property = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'transform';
 
       Components.Html.wrapper.style.transition = this.compose(property);
-***REMOVED***,
+    },
 
 
     /**
      * Removes value of transition from HTML element.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     remove: function remove() {
       Components.Html.wrapper.style.transition = '';
-***REMOVED***,
+    },
 
 
     /**
      * Runs callback after animation.
      *
-     * @param  {Function***REMOVED*** callback
-     * @return {Void***REMOVED***
+     * @param  {Function} callback
+     * @return {Void}
      */
     after: function after(callback) {
       setTimeout(function () {
         callback();
-  ***REMOVED***, this.duration);
-***REMOVED***,
+      }, this.duration);
+    },
 
 
     /**
      * Enable transition.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     enable: function enable() {
       disabled = false;
 
       this.set();
-***REMOVED***,
+    },
 
 
     /**
      * Disable transition.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     disable: function disable() {
       disabled = true;
 
       this.set();
-***REMOVED***
-  ***REMOVED***;
+    }
+  };
 
   define(Transition, 'duration', {
     /**
      * Gets duration of the transition based
      * on currently running animation type.
      *
-     * @return {Number***REMOVED***
+     * @return {Number}
      */
     get: function get() {
       var settings = Glide.settings;
 
       if (Glide.isType('slider') && Components.Run.offset) {
         return settings.rewindDuration;
-  ***REMOVED***
+      }
 
       return settings.animationDuration;
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   /**
    * Set transition `style` value:
@@ -2487,7 +2487,7 @@ function Transition (Glide, Components, Events) {
    */
   Events.on('move', function () {
     Transition.set();
-  ***REMOVED***);
+  });
 
   /**
    * Disable transition:
@@ -2497,7 +2497,7 @@ function Transition (Glide, Components, Events) {
    */
   Events.on(['build.before', 'resize', 'translate.jump'], function () {
     Transition.disable();
-  ***REMOVED***);
+  });
 
   /**
    * Enable transition:
@@ -2505,7 +2505,7 @@ function Transition (Glide, Components, Events) {
    */
   Events.on('run', function () {
     Transition.enable();
-  ***REMOVED***);
+  });
 
   /**
    * Remove transition:
@@ -2513,10 +2513,10 @@ function Transition (Glide, Components, Events) {
    */
   Events.on('destroy', function () {
     Transition.remove();
-  ***REMOVED***);
+  });
 
   return Transition;
-***REMOVED***
+}
 
 /**
  * Test via a getter in the options object to see
@@ -2528,15 +2528,15 @@ function Transition (Glide, Components, Events) {
 var supportsPassive = false;
 
 try {
-  var opts = Object.defineProperty({***REMOVED***, 'passive', {
+  var opts = Object.defineProperty({}, 'passive', {
     get: function get() {
       supportsPassive = true;
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   window.addEventListener('testPassive', null, opts);
   window.removeEventListener('testPassive', null, opts);
-***REMOVED*** catch (e) {***REMOVED***
+} catch (e) {}
 
 var supportsPassive$1 = supportsPassive;
 
@@ -2549,7 +2549,7 @@ function Swipe (Glide, Components, Events) {
   /**
    * Instance of the binder for DOM Events.
    *
-   * @type {EventsBinder***REMOVED***
+   * @type {EventsBinder}
    */
   var Binder = new EventsBinder();
 
@@ -2557,24 +2557,24 @@ function Swipe (Glide, Components, Events) {
   var swipeStartX = 0;
   var swipeStartY = 0;
   var disabled = false;
-  var capture = supportsPassive$1 ? { passive: true ***REMOVED*** : false;
+  var capture = supportsPassive$1 ? { passive: true } : false;
 
   var Swipe = {
     /**
      * Initializes swipe bindings.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     mount: function mount() {
       this.bindSwipeStart();
-***REMOVED***,
+    },
 
 
     /**
      * Handler for `swipestart` event. Calculates entry points of the user's tap.
      *
-     * @param {Object***REMOVED*** event
-     * @return {Void***REMOVED***
+     * @param {Object} event
+     * @return {Void}
      */
     start: function start(event) {
       if (!disabled && !Glide.disabled) {
@@ -2590,14 +2590,14 @@ function Swipe (Glide, Components, Events) {
         this.bindSwipeEnd();
 
         Events.emit('swipe.start');
-  ***REMOVED***
-***REMOVED***,
+      }
+    },
 
 
     /**
      * Handler for `swipemove` event. Calculates user's tap angle and distance.
      *
-     * @param {Object***REMOVED*** event
+     * @param {Object} event
      */
     move: function move(event) {
       if (!Glide.disabled) {
@@ -2626,18 +2626,18 @@ function Swipe (Glide, Components, Events) {
           Components.Html.root.classList.add(classes.dragging);
 
           Events.emit('swipe.move');
-    ***REMOVED*** else {
+        } else {
           return false;
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***,
+        }
+      }
+    },
 
 
     /**
      * Handler for `swipeend` event. Finitializes user's tap and decides about glide move.
      *
-     * @param {Object***REMOVED*** event
-     * @return {Void***REMOVED***
+     * @param {Object} event
+     * @return {Void}
      */
     end: function end(event) {
       if (!Glide.disabled) {
@@ -2653,31 +2653,31 @@ function Swipe (Glide, Components, Events) {
         this.enable();
 
         if (swipeDistance > threshold && swipeDeg < settings.touchAngle) {
-  ***REMOVED*** While swipe is positive and greater than threshold move backward.
+          // While swipe is positive and greater than threshold move backward.
           if (settings.perTouch) {
             steps = Math.min(steps, toInt(settings.perTouch));
-      ***REMOVED***
+          }
 
           if (Components.Direction.is('rtl')) {
             steps = -steps;
-      ***REMOVED***
+          }
 
           Components.Run.make(Components.Direction.resolve('<' + steps));
-    ***REMOVED*** else if (swipeDistance < -threshold && swipeDeg < settings.touchAngle) {
-  ***REMOVED*** While swipe is negative and lower than negative threshold move forward.
+        } else if (swipeDistance < -threshold && swipeDeg < settings.touchAngle) {
+          // While swipe is negative and lower than negative threshold move forward.
           if (settings.perTouch) {
             steps = Math.max(steps, -toInt(settings.perTouch));
-      ***REMOVED***
+          }
 
           if (Components.Direction.is('rtl')) {
             steps = -steps;
-      ***REMOVED***
+          }
 
           Components.Run.make(Components.Direction.resolve('>' + steps));
-    ***REMOVED*** else {
-  ***REMOVED*** While swipe don't reach distance apply previous transform.
+        } else {
+          // While swipe don't reach distance apply previous transform.
           Components.Move.make();
-    ***REMOVED***
+        }
 
         Components.Html.root.classList.remove(settings.classes.dragging);
 
@@ -2685,14 +2685,14 @@ function Swipe (Glide, Components, Events) {
         this.unbindSwipeEnd();
 
         Events.emit('swipe.end');
-  ***REMOVED***
-***REMOVED***,
+      }
+    },
 
 
     /**
      * Binds swipe's starting event.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     bindSwipeStart: function bindSwipeStart() {
       var _this = this;
@@ -2702,110 +2702,110 @@ function Swipe (Glide, Components, Events) {
       if (settings.swipeThreshold) {
         Binder.on(START_EVENTS[0], Components.Html.wrapper, function (event) {
           _this.start(event);
-    ***REMOVED***, capture);
-  ***REMOVED***
+        }, capture);
+      }
 
       if (settings.dragThreshold) {
         Binder.on(START_EVENTS[1], Components.Html.wrapper, function (event) {
           _this.start(event);
-    ***REMOVED***, capture);
-  ***REMOVED***
-***REMOVED***,
+        }, capture);
+      }
+    },
 
 
     /**
      * Unbinds swipe's starting event.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     unbindSwipeStart: function unbindSwipeStart() {
       Binder.off(START_EVENTS[0], Components.Html.wrapper, capture);
       Binder.off(START_EVENTS[1], Components.Html.wrapper, capture);
-***REMOVED***,
+    },
 
 
     /**
      * Binds swipe's moving event.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     bindSwipeMove: function bindSwipeMove() {
       var _this2 = this;
 
       Binder.on(MOVE_EVENTS, Components.Html.wrapper, throttle(function (event) {
         _this2.move(event);
-  ***REMOVED***, Glide.settings.throttle), capture);
-***REMOVED***,
+      }, Glide.settings.throttle), capture);
+    },
 
 
     /**
      * Unbinds swipe's moving event.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     unbindSwipeMove: function unbindSwipeMove() {
       Binder.off(MOVE_EVENTS, Components.Html.wrapper, capture);
-***REMOVED***,
+    },
 
 
     /**
      * Binds swipe's ending event.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     bindSwipeEnd: function bindSwipeEnd() {
       var _this3 = this;
 
       Binder.on(END_EVENTS, Components.Html.wrapper, function (event) {
         _this3.end(event);
-  ***REMOVED***);
-***REMOVED***,
+      });
+    },
 
 
     /**
      * Unbinds swipe's ending event.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     unbindSwipeEnd: function unbindSwipeEnd() {
       Binder.off(END_EVENTS, Components.Html.wrapper);
-***REMOVED***,
+    },
 
 
     /**
      * Normalizes event touches points accorting to different types.
      *
-     * @param {Object***REMOVED*** event
+     * @param {Object} event
      */
     touches: function touches(event) {
       if (MOUSE_EVENTS.indexOf(event.type) > -1) {
         return event;
-  ***REMOVED***
+      }
 
       return event.touches[0] || event.changedTouches[0];
-***REMOVED***,
+    },
 
 
     /**
      * Gets value of minimum swipe distance settings based on event type.
      *
-     * @return {Number***REMOVED***
+     * @return {Number}
      */
     threshold: function threshold(event) {
       var settings = Glide.settings;
 
       if (MOUSE_EVENTS.indexOf(event.type) > -1) {
         return settings.dragThreshold;
-  ***REMOVED***
+      }
 
       return settings.swipeThreshold;
-***REMOVED***,
+    },
 
 
     /**
      * Enables swipe event.
      *
-     * @return {self***REMOVED***
+     * @return {self}
      */
     enable: function enable() {
       disabled = false;
@@ -2813,13 +2813,13 @@ function Swipe (Glide, Components, Events) {
       Components.Transition.enable();
 
       return this;
-***REMOVED***,
+    },
 
 
     /**
      * Disables swipe event.
      *
-     * @return {self***REMOVED***
+     * @return {self}
      */
     disable: function disable() {
       disabled = true;
@@ -2827,8 +2827,8 @@ function Swipe (Glide, Components, Events) {
       Components.Transition.disable();
 
       return this;
-***REMOVED***
-  ***REMOVED***;
+    }
+  };
 
   /**
    * Add component class:
@@ -2836,7 +2836,7 @@ function Swipe (Glide, Components, Events) {
    */
   Events.on('build.after', function () {
     Components.Html.root.classList.add(Glide.settings.classes.swipeable);
-  ***REMOVED***);
+  });
 
   /**
    * Remove swiping bindings:
@@ -2847,16 +2847,16 @@ function Swipe (Glide, Components, Events) {
     Swipe.unbindSwipeMove();
     Swipe.unbindSwipeEnd();
     Binder.destroy();
-  ***REMOVED***);
+  });
 
   return Swipe;
-***REMOVED***
+}
 
 function Images (Glide, Components, Events) {
   /**
    * Instance of the binder for DOM Events.
    *
-   * @type {EventsBinder***REMOVED***
+   * @type {EventsBinder}
    */
   var Binder = new EventsBinder();
 
@@ -2864,42 +2864,42 @@ function Images (Glide, Components, Events) {
     /**
      * Binds listener to glide wrapper.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     mount: function mount() {
       this.bind();
-***REMOVED***,
+    },
 
 
     /**
      * Binds `dragstart` event on wrapper to prevent dragging images.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     bind: function bind() {
       Binder.on('dragstart', Components.Html.wrapper, this.dragstart);
-***REMOVED***,
+    },
 
 
     /**
      * Unbinds `dragstart` event on wrapper.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     unbind: function unbind() {
       Binder.off('dragstart', Components.Html.wrapper);
-***REMOVED***,
+    },
 
 
     /**
      * Event handler. Prevents dragging.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     dragstart: function dragstart(event) {
       event.preventDefault();
-***REMOVED***
-  ***REMOVED***;
+    }
+  };
 
   /**
    * Remove bindings from images:
@@ -2908,16 +2908,16 @@ function Images (Glide, Components, Events) {
   Events.on('destroy', function () {
     Images.unbind();
     Binder.destroy();
-  ***REMOVED***);
+  });
 
   return Images;
-***REMOVED***
+}
 
 function Anchors (Glide, Components, Events) {
   /**
    * Instance of the binder for DOM Events.
    *
-   * @type {EventsBinder***REMOVED***
+   * @type {EventsBinder}
    */
   var Binder = new EventsBinder();
 
@@ -2926,7 +2926,7 @@ function Anchors (Glide, Components, Events) {
    * Prevents detaching of already detached anchors.
    *
    * @private
-   * @type {Boolean***REMOVED***
+   * @type {Boolean}
    */
   var detached = false;
 
@@ -2935,7 +2935,7 @@ function Anchors (Glide, Components, Events) {
    * If `true` redirection after click will be disabled.
    *
    * @private
-   * @type {Boolean***REMOVED***
+   * @type {Boolean}
    */
   var prevented = false;
 
@@ -2943,59 +2943,59 @@ function Anchors (Glide, Components, Events) {
     /**
      * Setups a initial state of anchors component.
      *
-     * @returns {Void***REMOVED***
+     * @returns {Void}
      */
     mount: function mount() {
       /**
        * Holds collection of anchors elements.
        *
        * @private
-       * @type {HTMLCollection***REMOVED***
+       * @type {HTMLCollection}
        */
       this._a = Components.Html.wrapper.querySelectorAll('a');
 
       this.bind();
-***REMOVED***,
+    },
 
 
     /**
      * Binds events to anchors inside a track.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     bind: function bind() {
       Binder.on('click', Components.Html.wrapper, this.click);
-***REMOVED***,
+    },
 
 
     /**
      * Unbinds events attached to anchors inside a track.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     unbind: function unbind() {
       Binder.off('click', Components.Html.wrapper);
-***REMOVED***,
+    },
 
 
     /**
      * Handler for click event. Prevents clicks when glide is in `prevent` status.
      *
-     * @param  {Object***REMOVED*** event
-     * @return {Void***REMOVED***
+     * @param  {Object} event
+     * @return {Void}
      */
     click: function click(event) {
       if (prevented) {
         event.stopPropagation();
         event.preventDefault();
-  ***REMOVED***
-***REMOVED***,
+      }
+    },
 
 
     /**
      * Detaches anchors click event inside glide.
      *
-     * @return {self***REMOVED***
+     * @return {self}
      */
     detach: function detach() {
       prevented = true;
@@ -3007,19 +3007,19 @@ function Anchors (Glide, Components, Events) {
           this.items[i].setAttribute('data-href', this.items[i].getAttribute('href'));
 
           this.items[i].removeAttribute('href');
-    ***REMOVED***
+        }
 
         detached = true;
-  ***REMOVED***
+      }
 
       return this;
-***REMOVED***,
+    },
 
 
     /**
      * Attaches anchors click events inside glide.
      *
-     * @return {self***REMOVED***
+     * @return {self}
      */
     attach: function attach() {
       prevented = false;
@@ -3029,25 +3029,25 @@ function Anchors (Glide, Components, Events) {
           this.items[i].draggable = true;
 
           this.items[i].setAttribute('href', this.items[i].getAttribute('data-href'));
-    ***REMOVED***
+        }
 
         detached = false;
-  ***REMOVED***
+      }
 
       return this;
-***REMOVED***
-  ***REMOVED***;
+    }
+  };
 
   define(Anchors, 'items', {
     /**
      * Gets collection of the arrows HTML elements.
      *
-     * @return {HTMLElement[]***REMOVED***
+     * @return {HTMLElement[]}
      */
     get: function get() {
       return Anchors._a;
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   /**
    * Detach anchors inside slides:
@@ -3055,7 +3055,7 @@ function Anchors (Glide, Components, Events) {
    */
   Events.on('swipe.move', function () {
     Anchors.detach();
-  ***REMOVED***);
+  });
 
   /**
    * Attach anchors inside slides:
@@ -3064,8 +3064,8 @@ function Anchors (Glide, Components, Events) {
   Events.on('swipe.end', function () {
     Components.Transition.after(function () {
       Anchors.attach();
-***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   /**
    * Unbind anchors inside slides:
@@ -3075,10 +3075,10 @@ function Anchors (Glide, Components, Events) {
     Anchors.attach();
     Anchors.unbind();
     Binder.destroy();
-  ***REMOVED***);
+  });
 
   return Anchors;
-***REMOVED***
+}
 
 var NAV_SELECTOR = '[data-glide-el="controls[nav]"]';
 var CONTROLS_SELECTOR = '[data-glide-el^="controls"]';
@@ -3087,25 +3087,25 @@ function Controls (Glide, Components, Events) {
   /**
    * Instance of the binder for DOM Events.
    *
-   * @type {EventsBinder***REMOVED***
+   * @type {EventsBinder}
    */
   var Binder = new EventsBinder();
 
-  var capture = supportsPassive$1 ? { passive: true ***REMOVED*** : false;
+  var capture = supportsPassive$1 ? { passive: true } : false;
 
   var Controls = {
     /**
      * Inits arrows. Binds events listeners
      * to the arrows HTML elements.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     mount: function mount() {
       /**
        * Collection of navigation HTML elements.
        *
        * @private
-       * @type {HTMLCollection***REMOVED***
+       * @type {HTMLCollection}
        */
       this._n = Components.Html.root.querySelectorAll(NAV_SELECTOR);
 
@@ -3113,43 +3113,43 @@ function Controls (Glide, Components, Events) {
        * Collection of controls HTML elements.
        *
        * @private
-       * @type {HTMLCollection***REMOVED***
+       * @type {HTMLCollection}
        */
       this._c = Components.Html.root.querySelectorAll(CONTROLS_SELECTOR);
 
       this.addBindings();
-***REMOVED***,
+    },
 
 
     /**
      * Sets active class to current slide.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     setActive: function setActive() {
       for (var i = 0; i < this._n.length; i++) {
         this.addClass(this._n[i].children);
-  ***REMOVED***
-***REMOVED***,
+      }
+    },
 
 
     /**
      * Removes active class to current slide.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     removeActive: function removeActive() {
       for (var i = 0; i < this._n.length; i++) {
         this.removeClass(this._n[i].children);
-  ***REMOVED***
-***REMOVED***,
+      }
+    },
 
 
     /**
      * Toggles active class on items inside navigation.
      *
-     * @param  {HTMLElement***REMOVED*** controls
-     * @return {Void***REMOVED***
+     * @param  {HTMLElement} controls
+     * @return {Void}
      */
     addClass: function addClass(controls) {
       var settings = Glide.settings;
@@ -3160,75 +3160,75 @@ function Controls (Glide, Components, Events) {
 
         siblings(item).forEach(function (sibling) {
           sibling.classList.remove(settings.classes.activeNav);
-    ***REMOVED***);
-  ***REMOVED***
-***REMOVED***,
+        });
+      }
+    },
 
 
     /**
      * Removes active class from active control.
      *
-     * @param  {HTMLElement***REMOVED*** controls
-     * @return {Void***REMOVED***
+     * @param  {HTMLElement} controls
+     * @return {Void}
      */
     removeClass: function removeClass(controls) {
       var item = controls[Glide.index];
 
       if (item) {
         item.classList.remove(Glide.settings.classes.activeNav);
-  ***REMOVED***
-***REMOVED***,
+      }
+    },
 
 
     /**
      * Adds handles to the each group of controls.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     addBindings: function addBindings() {
       for (var i = 0; i < this._c.length; i++) {
         this.bind(this._c[i].children);
-  ***REMOVED***
-***REMOVED***,
+      }
+    },
 
 
     /**
      * Removes handles from the each group of controls.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     removeBindings: function removeBindings() {
       for (var i = 0; i < this._c.length; i++) {
         this.unbind(this._c[i].children);
-  ***REMOVED***
-***REMOVED***,
+      }
+    },
 
 
     /**
      * Binds events to arrows HTML elements.
      *
-     * @param {HTMLCollection***REMOVED*** elements
-     * @return {Void***REMOVED***
+     * @param {HTMLCollection} elements
+     * @return {Void}
      */
     bind: function bind(elements) {
       for (var i = 0; i < elements.length; i++) {
         Binder.on('click', elements[i], this.click);
         Binder.on('touchstart', elements[i], this.click, capture);
-  ***REMOVED***
-***REMOVED***,
+      }
+    },
 
 
     /**
      * Unbinds events binded to the arrows HTML elements.
      *
-     * @param {HTMLCollection***REMOVED*** elements
-     * @return {Void***REMOVED***
+     * @param {HTMLCollection} elements
+     * @return {Void}
      */
     unbind: function unbind(elements) {
       for (var i = 0; i < elements.length; i++) {
         Binder.off(['click', 'touchstart'], elements[i]);
-  ***REMOVED***
-***REMOVED***,
+      }
+    },
 
 
     /**
@@ -3236,26 +3236,26 @@ function Controls (Glide, Components, Events) {
      * Moves slider in driection precised in
      * `data-glide-dir` attribute.
      *
-     * @param {Object***REMOVED*** event
-     * @return {Void***REMOVED***
+     * @param {Object} event
+     * @return {Void}
      */
     click: function click(event) {
       event.preventDefault();
 
       Components.Run.make(Components.Direction.resolve(event.currentTarget.getAttribute('data-glide-dir')));
-***REMOVED***
-  ***REMOVED***;
+    }
+  };
 
   define(Controls, 'items', {
     /**
      * Gets collection of the controls HTML elements.
      *
-     * @return {HTMLElement[]***REMOVED***
+     * @return {HTMLElement[]}
      */
     get: function get() {
       return Controls._c;
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   /**
    * Swap active class of current navigation item:
@@ -3264,7 +3264,7 @@ function Controls (Glide, Components, Events) {
    */
   Events.on(['mount.after', 'move.after'], function () {
     Controls.setActive();
-  ***REMOVED***);
+  });
 
   /**
    * Remove bindings and HTML Classes:
@@ -3274,16 +3274,16 @@ function Controls (Glide, Components, Events) {
     Controls.removeBindings();
     Controls.removeActive();
     Binder.destroy();
-  ***REMOVED***);
+  });
 
   return Controls;
-***REMOVED***
+}
 
 function Keyboard (Glide, Components, Events) {
   /**
    * Instance of the binder for DOM Events.
    *
-   * @type {EventsBinder***REMOVED***
+   * @type {EventsBinder}
    */
   var Binder = new EventsBinder();
 
@@ -3291,51 +3291,51 @@ function Keyboard (Glide, Components, Events) {
     /**
      * Binds keyboard events on component mount.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     mount: function mount() {
       if (Glide.settings.keyboard) {
         this.bind();
-  ***REMOVED***
-***REMOVED***,
+      }
+    },
 
 
     /**
      * Adds keyboard press events.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     bind: function bind() {
       Binder.on('keyup', document, this.press);
-***REMOVED***,
+    },
 
 
     /**
      * Removes keyboard press events.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     unbind: function unbind() {
       Binder.off('keyup', document);
-***REMOVED***,
+    },
 
 
     /**
      * Handles keyboard's arrows press and moving glide foward and backward.
      *
-     * @param  {Object***REMOVED*** event
-     * @return {Void***REMOVED***
+     * @param  {Object} event
+     * @return {Void}
      */
     press: function press(event) {
       if (event.keyCode === 39) {
         Components.Run.make(Components.Direction.resolve('>'));
-  ***REMOVED***
+      }
 
       if (event.keyCode === 37) {
         Components.Run.make(Components.Direction.resolve('<'));
-  ***REMOVED***
-***REMOVED***
-  ***REMOVED***;
+      }
+    }
+  };
 
   /**
    * Remove bindings from keyboard:
@@ -3344,7 +3344,7 @@ function Keyboard (Glide, Components, Events) {
    */
   Events.on(['destroy', 'update'], function () {
     Keyboard.unbind();
-  ***REMOVED***);
+  });
 
   /**
    * Remount component
@@ -3352,7 +3352,7 @@ function Keyboard (Glide, Components, Events) {
    */
   Events.on('update', function () {
     Keyboard.mount();
-  ***REMOVED***);
+  });
 
   /**
    * Destroy binder:
@@ -3360,16 +3360,16 @@ function Keyboard (Glide, Components, Events) {
    */
   Events.on('destroy', function () {
     Binder.destroy();
-  ***REMOVED***);
+  });
 
   return Keyboard;
-***REMOVED***
+}
 
 function Autoplay (Glide, Components, Events) {
   /**
    * Instance of the binder for DOM Events.
    *
-   * @type {EventsBinder***REMOVED***
+   * @type {EventsBinder}
    */
   var Binder = new EventsBinder();
 
@@ -3377,22 +3377,22 @@ function Autoplay (Glide, Components, Events) {
     /**
      * Initializes autoplaying and events.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     mount: function mount() {
       this.start();
 
       if (Glide.settings.hoverpause) {
         this.bind();
-  ***REMOVED***
-***REMOVED***,
+      }
+    },
 
 
     /**
      * Starts autoplaying in configured interval.
      *
-     * @param {Boolean|Number***REMOVED*** force Run autoplaying with passed interval regardless of `autoplay` settings
-     * @return {Void***REMOVED***
+     * @param {Boolean|Number} force Run autoplaying with passed interval regardless of `autoplay` settings
+     * @return {Void}
      */
     start: function start() {
       var _this = this;
@@ -3405,67 +3405,67 @@ function Autoplay (Glide, Components, Events) {
             Components.Run.make('>');
 
             _this.start();
-      ***REMOVED***, this.time);
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***,
+          }, this.time);
+        }
+      }
+    },
 
 
     /**
      * Stops autorunning of the glide.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     stop: function stop() {
       this._i = clearInterval(this._i);
-***REMOVED***,
+    },
 
 
     /**
      * Stops autoplaying while mouse is over glide's area.
      *
-     * @return {Void***REMOVED***
+     * @return {Void}
      */
     bind: function bind() {
       var _this2 = this;
 
       Binder.on('mouseover', Components.Html.root, function () {
         _this2.stop();
-  ***REMOVED***);
+      });
 
       Binder.on('mouseout', Components.Html.root, function () {
         _this2.start();
-  ***REMOVED***);
-***REMOVED***,
+      });
+    },
 
 
     /**
      * Unbind mouseover events.
      *
-     * @returns {Void***REMOVED***
+     * @returns {Void}
      */
     unbind: function unbind() {
       Binder.off(['mouseover', 'mouseout'], Components.Html.root);
-***REMOVED***
-  ***REMOVED***;
+    }
+  };
 
   define(Autoplay, 'time', {
     /**
      * Gets time period value for the autoplay interval. Prioritizes
      * times in `data-glide-autoplay` attrubutes over options.
      *
-     * @return {Number***REMOVED***
+     * @return {Number}
      */
     get: function get() {
       var autoplay = Components.Html.slides[Glide.index].getAttribute('data-glide-autoplay');
 
       if (autoplay) {
         return toInt(autoplay);
-  ***REMOVED***
+      }
 
       return toInt(Glide.settings.autoplay);
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   /**
    * Stop autoplaying and unbind events:
@@ -3474,7 +3474,7 @@ function Autoplay (Glide, Components, Events) {
    */
   Events.on(['destroy', 'update'], function () {
     Autoplay.unbind();
-  ***REMOVED***);
+  });
 
   /**
    * Stop autoplaying:
@@ -3486,7 +3486,7 @@ function Autoplay (Glide, Components, Events) {
    */
   Events.on(['run.before', 'pause', 'destroy', 'swipe.start', 'update'], function () {
     Autoplay.stop();
-  ***REMOVED***);
+  });
 
   /**
    * Start autoplaying:
@@ -3496,7 +3496,7 @@ function Autoplay (Glide, Components, Events) {
    */
   Events.on(['run.after', 'play', 'swipe.end'], function () {
     Autoplay.start();
-  ***REMOVED***);
+  });
 
   /**
    * Remount autoplaying:
@@ -3504,7 +3504,7 @@ function Autoplay (Glide, Components, Events) {
    */
   Events.on('update', function () {
     Autoplay.mount();
-  ***REMOVED***);
+  });
 
   /**
    * Destroy a binder:
@@ -3512,39 +3512,39 @@ function Autoplay (Glide, Components, Events) {
    */
   Events.on('destroy', function () {
     Binder.destroy();
-  ***REMOVED***);
+  });
 
   return Autoplay;
-***REMOVED***
+}
 
 /**
  * Sorts keys of breakpoint object so they will be ordered from lower to bigger.
  *
- * @param {Object***REMOVED*** points
- * @returns {Object***REMOVED***
+ * @param {Object} points
+ * @returns {Object}
  */
 function sortBreakpoints(points) {
   if (isObject(points)) {
     return sortKeys(points);
-  ***REMOVED*** else {
+  } else {
     warn('Breakpoints option must be an object');
-  ***REMOVED***
+  }
 
-  return {***REMOVED***;
-***REMOVED***
+  return {};
+}
 
 function Breakpoints (Glide, Components, Events) {
   /**
    * Instance of the binder for DOM Events.
    *
-   * @type {EventsBinder***REMOVED***
+   * @type {EventsBinder}
    */
   var Binder = new EventsBinder();
 
   /**
    * Holds reference to settings.
    *
-   * @type {Object***REMOVED***
+   * @type {Object}
    */
   var settings = Glide.settings;
 
@@ -3553,23 +3553,23 @@ function Breakpoints (Glide, Components, Events) {
    * from smaller to larger. It is required in order to proper
    * matching currently active breakpoint settings.
    *
-   * @type {Object***REMOVED***
+   * @type {Object}
    */
   var points = sortBreakpoints(settings.breakpoints);
 
   /**
    * Cache initial settings before overwritting.
    *
-   * @type {Object***REMOVED***
+   * @type {Object}
    */
-  var defaults = _extends({***REMOVED***, settings);
+  var defaults = _extends({}, settings);
 
   var Breakpoints = {
     /**
      * Matches settings for currectly matching media breakpoint.
      *
-     * @param {Object***REMOVED*** points
-     * @returns {Object***REMOVED***
+     * @param {Object} points
+     * @returns {Object}
      */
     match: function match(points) {
       if (typeof window.matchMedia !== 'undefined') {
@@ -3577,14 +3577,14 @@ function Breakpoints (Glide, Components, Events) {
           if (points.hasOwnProperty(point)) {
             if (window.matchMedia('(max-width: ' + point + 'px)').matches) {
               return points[point];
-        ***REMOVED***
-      ***REMOVED***
-    ***REMOVED***
-  ***REMOVED***
+            }
+          }
+        }
+      }
 
       return defaults;
-***REMOVED***
-  ***REMOVED***;
+    }
+  };
 
   /**
    * Overwrite instance settings with currently matching breakpoint settings.
@@ -3598,7 +3598,7 @@ function Breakpoints (Glide, Components, Events) {
    */
   Binder.on('resize', window, throttle(function () {
     Glide.settings = mergeOptions(settings, Breakpoints.match(points));
-  ***REMOVED***, Glide.settings.throttle));
+  }, Glide.settings.throttle));
 
   /**
    * Resort and update default settings:
@@ -3607,8 +3607,8 @@ function Breakpoints (Glide, Components, Events) {
   Events.on('update', function () {
     points = sortBreakpoints(points);
 
-    defaults = _extends({***REMOVED***, settings);
-  ***REMOVED***);
+    defaults = _extends({}, settings);
+  });
 
   /**
    * Unbind resize listener:
@@ -3616,10 +3616,10 @@ function Breakpoints (Glide, Components, Events) {
    */
   Events.on('destroy', function () {
     Binder.off('resize', window);
-  ***REMOVED***);
+  });
 
   return Breakpoints;
-***REMOVED***
+}
 
 var COMPONENTS = {
   // Required
@@ -3644,7 +3644,7 @@ var COMPONENTS = {
   Keyboard: Keyboard,
   Autoplay: Autoplay,
   Breakpoints: Breakpoints
-***REMOVED***;
+};
 
 var Glide$1 = function (_Core) {
   inherits(Glide$$1, _Core);
@@ -3652,17 +3652,17 @@ var Glide$1 = function (_Core) {
   function Glide$$1() {
     classCallCheck(this, Glide$$1);
     return possibleConstructorReturn(this, (Glide$$1.__proto__ || Object.getPrototypeOf(Glide$$1)).apply(this, arguments));
-  ***REMOVED***
+  }
 
   createClass(Glide$$1, [{
     key: 'mount',
     value: function mount() {
-      var extensions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {***REMOVED***;
+      var extensions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-      return get(Glide$$1.prototype.__proto__ || Object.getPrototypeOf(Glide$$1.prototype), 'mount', this).call(this, _extends({***REMOVED***, COMPONENTS, extensions));
-***REMOVED***
-  ***REMOVED***]);
+      return get(Glide$$1.prototype.__proto__ || Object.getPrototypeOf(Glide$$1.prototype), 'mount', this).call(this, _extends({}, COMPONENTS, extensions));
+    }
+  }]);
   return Glide$$1;
-***REMOVED***(Glide);
+}(Glide);
 
 export default Glide$1;

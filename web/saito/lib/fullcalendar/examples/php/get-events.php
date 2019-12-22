@@ -15,7 +15,7 @@ require dirname(__FILE__) . '/utils.php';
 // Short-circuit if the client did not give us a date range.
 if (!isset($_GET['start']) || !isset($_GET['end'])) {
   die("Please provide a date range.");
-***REMOVED***
+}
 
 // Parse the start/end parameters.
 // These are assumed to be ISO8601 strings with no time nor timeZone, like "2013-12-29".
@@ -27,7 +27,7 @@ $range_end = parseDateTime($_GET['end']);
 $time_zone = null;
 if (isset($_GET['timeZone'])) {
   $time_zone = new DateTimeZone($_GET['timeZone']);
-***REMOVED***
+}
 
 // Read and parse our events JSON file into an array of event data arrays.
 $json = file_get_contents(dirname(__FILE__) . '/../json/events.json');
@@ -43,8 +43,8 @@ foreach ($input_arrays as $array) {
   // If the event is in-bounds, add it to the output
   if ($event->isWithinDayRange($range_start, $range_end)) {
     $output_arrays[] = $event->toArray();
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 // Send JSON to the client.
 echo json_encode($output_arrays);

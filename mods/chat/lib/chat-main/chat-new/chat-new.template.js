@@ -21,4 +21,4 @@ module.exports = ChatNewTemplate = () => {
       </div>
     </div>
   `;
-***REMOVED***
+}

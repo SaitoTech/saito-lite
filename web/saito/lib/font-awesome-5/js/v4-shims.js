@@ -6,17 +6,17 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global['fontawesome-free-shims'] = factory());
-***REMOVED***(this, (function () { 'use strict';
+}(this, (function () { 'use strict';
 
-  var _WINDOW = {***REMOVED***;
-  var _DOCUMENT = {***REMOVED***;
+  var _WINDOW = {};
+  var _DOCUMENT = {};
 
   try {
     if (typeof window !== 'undefined') _WINDOW = window;
     if (typeof document !== 'undefined') _DOCUMENT = document;
-  ***REMOVED*** catch (e) {***REMOVED***
+  } catch (e) {}
 
-  var _ref = _WINDOW.navigator || {***REMOVED***,
+  var _ref = _WINDOW.navigator || {},
       _ref$userAgent = _ref.userAgent,
       userAgent = _ref$userAgent === void 0 ? '' : _ref$userAgent;
 
@@ -30,25 +30,25 @@
   var PRODUCTION = function () {
     try {
       return process.env.NODE_ENV === 'production';
-***REMOVED*** catch (e) {
+    } catch (e) {
       return false;
-***REMOVED***
-  ***REMOVED***();
+    }
+  }();
 
   function bunker(fn) {
     try {
       fn();
-***REMOVED*** catch (e) {
+    } catch (e) {
       if (!PRODUCTION) {
         throw e;
-  ***REMOVED***
-***REMOVED***
-  ***REMOVED***
+      }
+    }
+  }
 
-  var w = WINDOW || {***REMOVED***;
-  if (!w[NAMESPACE_IDENTIFIER]) w[NAMESPACE_IDENTIFIER] = {***REMOVED***;
-  if (!w[NAMESPACE_IDENTIFIER].styles) w[NAMESPACE_IDENTIFIER].styles = {***REMOVED***;
-  if (!w[NAMESPACE_IDENTIFIER].hooks) w[NAMESPACE_IDENTIFIER].hooks = {***REMOVED***;
+  var w = WINDOW || {};
+  if (!w[NAMESPACE_IDENTIFIER]) w[NAMESPACE_IDENTIFIER] = {};
+  if (!w[NAMESPACE_IDENTIFIER].styles) w[NAMESPACE_IDENTIFIER].styles = {};
+  if (!w[NAMESPACE_IDENTIFIER].hooks) w[NAMESPACE_IDENTIFIER].hooks = {};
   if (!w[NAMESPACE_IDENTIFIER].shims) w[NAMESPACE_IDENTIFIER].shims = [];
   var namespace = w[NAMESPACE_IDENTIFIER];
 
@@ -56,13 +56,13 @@
   bunker(function () {
     if (typeof namespace.hooks.addShims === 'function') {
       namespace.hooks.addShims(shims);
-***REMOVED*** else {
+    } else {
       var _namespace$shims;
 
       (_namespace$shims = namespace.shims).push.apply(_namespace$shims, shims);
-***REMOVED***
-  ***REMOVED***);
+    }
+  });
 
   return shims;
 
-***REMOVED***)));
+})));

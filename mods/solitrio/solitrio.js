@@ -24,7 +24,7 @@ class Solitrio extends GameTemplate {
     //
     this.boardgameWidth  = 5100;
 
-  ***REMOVED***
+  }
 
 
 
@@ -37,7 +37,7 @@ class Solitrio extends GameTemplate {
     //if (this.browser_active == 1) {
     //const chat = this.app.modules.returnModule("Chat");
     //chat.addPopUpChat();
-    //***REMOVED***
+    //}
 
     this.updateStatus("loading game...");
     this.loadGame(game_id);
@@ -48,8 +48,8 @@ class Solitrio extends GameTemplate {
     this.saveGame();
     this.loadGame(this.game.id);
 
-    if (this.game.status != "") { this.updateStatus(this.game.status); ***REMOVED***
-    if (this.game.dice == "") { this.initializeDice(); ***REMOVED***
+    if (this.game.status != "") { this.updateStatus(this.game.status); }
+    if (this.game.dice == "") { this.initializeDice(); }
 
     //
     // initialize
@@ -64,24 +64,24 @@ class Solitrio extends GameTemplate {
       this.game.queue.push("SHUFFLE\t1\t1");
       this.game.queue.push("DECK\t1\t"+JSON.stringify(this.returnDeck()));
 
-      this.game.board = {***REMOVED***;
+      this.game.board = {};
       this.game.state = this.returnState();
 
-***REMOVED***
+    }
 
     this.saveGame(game_id);
     $('.slot').css('min-height', $('.card').css('min-height'));
 
-  ***REMOVED***
+  }
 
 
   returnState() {
 
-    let state = {***REMOVED***;
+    let state = {};
     state.recycles_remaining = 2;
     return state;
 
-  ***REMOVED***
+  }
 
 
   playerTurn() {
@@ -94,7 +94,7 @@ class Solitrio extends GameTemplate {
     html  = 'Play Solitrio like your life Depends on it!';
     this.updateStatus(html);
 
-  ***REMOVED***
+  }
 
 
 
@@ -113,26 +113,26 @@ class Solitrio extends GameTemplate {
         solitrio_self.untoggleCard(card);
         selected = "";
         return;
-  ***REMOVED***
+      }
 
       if (selected != card) {
         if (selected == "") {
-          if (card[0] === 'E') { return; ***REMOVED***
+          if (card[0] === 'E') { return; }
 
           selected = card;
           solitrio_self.toggleCard(card);
   	  return;
-    ***REMOVED***
+        }
 
 
-***REMOVED***
-***REMOVED*** selected must work in this context
-***REMOVED***
+        //
+        // selected must work in this context
+        //
         if (solitrio_self.canCardPlaceInSlot(selected, card)) {
 
-  ***REMOVED***
-  ***REMOVED*** swap
-  ***REMOVED***
+          //
+          // swap
+          //
           let x = JSON.stringify(solitrio_self.game.board[selected]);
           let y = JSON.stringify(solitrio_self.game.board[card]);
 
@@ -148,20 +148,20 @@ class Solitrio extends GameTemplate {
 	  let winning_state = solitrio_self.isWinningState();
 	  if (winning_state == 1) {
 	    alert("Congratulations! You win!");
-	  ***REMOVED***
+	  }
 
 	  return;
 
-    ***REMOVED*** else {
+        } else {
 	  alert("Cannot Card Place in Slot...");
 	  solitrio_self.untoggleCard(selected);
 	  selected = "";
 	  solitrio_self.displayBoard();
 	  return;
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***);
-  ***REMOVED***
+        }
+      }
+    });
+  }
 
 
 
@@ -176,20 +176,20 @@ class Solitrio extends GameTemplate {
     //
     // 2 can go in the first slot
     //
-    if (tmparr[1] === "slot1" && card_value[1] == '2') { return 1; ***REMOVED***
+    if (tmparr[1] === "slot1" && card_value[1] == '2') { return 1; }
 
     //
     // otherwise depends on predecessor
     //
-    if (tmparr[1] == "slot2") { precessor = tmparr[0] + "_" + "slot1"; ***REMOVED***
-    if (tmparr[1] == "slot3") { precessor = tmparr[0] + "_" + "slot2"; ***REMOVED***
-    if (tmparr[1] == "slot4") { precessor = tmparr[0] + "_" + "slot3"; ***REMOVED***
-    if (tmparr[1] == "slot5") { precessor = tmparr[0] + "_" + "slot4"; ***REMOVED***
-    if (tmparr[1] == "slot6") { precessor = tmparr[0] + "_" + "slot5"; ***REMOVED***
-    if (tmparr[1] == "slot7") { precessor = tmparr[0] + "_" + "slot6"; ***REMOVED***
-    if (tmparr[1] == "slot8") { precessor = tmparr[0] + "_" + "slot7"; ***REMOVED***
-    if (tmparr[1] == "slot9") { precessor = tmparr[0] + "_" + "slot8"; ***REMOVED***
-    if (tmparr[1] == "slot10") { precessor = tmparr[0] + "_" + "slot9"; ***REMOVED***
+    if (tmparr[1] == "slot2") { precessor = tmparr[0] + "_" + "slot1"; }
+    if (tmparr[1] == "slot3") { precessor = tmparr[0] + "_" + "slot2"; }
+    if (tmparr[1] == "slot4") { precessor = tmparr[0] + "_" + "slot3"; }
+    if (tmparr[1] == "slot5") { precessor = tmparr[0] + "_" + "slot4"; }
+    if (tmparr[1] == "slot6") { precessor = tmparr[0] + "_" + "slot5"; }
+    if (tmparr[1] == "slot7") { precessor = tmparr[0] + "_" + "slot6"; }
+    if (tmparr[1] == "slot8") { precessor = tmparr[0] + "_" + "slot7"; }
+    if (tmparr[1] == "slot9") { precessor = tmparr[0] + "_" + "slot8"; }
+    if (tmparr[1] == "slot10") { precessor = tmparr[0] + "_" + "slot9"; }
 
     //
     // otherwise depends on predecessor
@@ -207,22 +207,22 @@ console.log(precessor_value_num + " -- " + card_value_num);
     if (card_value_num == (precessor_value_num+1)) { 
       if (card_value_suit === precessor_value_suit) {
         return 1; 
-  ***REMOVED***
-***REMOVED***
+      }
+    }
     return 0;
 
-  ***REMOVED***
+  }
 
 
   toggleCard(divname) {
     divname = '#' + divname;
     $(divname).css('opacity', '0.75');
-  ***REMOVED***
+  }
 
   untoggleCard(divname) {
     divname = '#' + divname;
     $(divname).css('opacity', '1.0');
-  ***REMOVED***
+  }
 
 
 
@@ -233,7 +233,7 @@ console.log(precessor_value_num + " -- " + card_value_num);
     if (this.game.over == 1) {
       this.updateStatus("Game Over: Player "+winner.toUpperCase() + " wins");
       return 0;
-***REMOVED***
+    }
 
 
     this.displayBoard();
@@ -260,10 +260,10 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
         this.game.queue.splice(qe, 1);
 	if (parseInt(mv[1]) == this.game.player) {
 	  this.playerTurn();
-	***REMOVED***
+	}
 	shd_continue = 0;
 console.log("HERE WE ARE!");
-  ***REMOVED***
+      }
       if (mv[0] === "round") {
 
 	this.displayUserInterface();
@@ -314,19 +314,19 @@ console.log("HERE WE ARE!");
 
 	this.displayBoard();
 	shd_continue = 0;
-  ***REMOVED***
+      }
       if (mv[0] === "play") {
         this.game.queue.splice(qe, 1);
-  ***REMOVED***
+      }
       if (mv[0] === "call") {
         this.game.queue.splice(qe, 1);
-  ***REMOVED***
+      }
       if (mv[0] === "fold") {
         this.game.queue.splice(qe, 1);
-  ***REMOVED***
+      }
       if (mv[0] === "raise") {
         this.game.queue.splice(qe, 1);
-  ***REMOVED***
+      }
 
 
       //
@@ -335,86 +335,86 @@ console.log("HERE WE ARE!");
       if (shd_continue == 0) { 
         console.log("NOT CONTINUING");
         return 0; 
-  ***REMOVED***
-***REMOVED*** // if cards in queue
+      }
+    } // if cards in queue
     return 1;
-  ***REMOVED***
+  }
 
 
 
   displayBoard() {
 
-    if (this.browser_active == 0) { return; ***REMOVED***
+    if (this.browser_active == 0) { return; }
 
     try {
       for (let i in this.game.board) {
         let divname = '#'+i;
         $(divname).html(this.returnCardImageHTML(this.game.board[i].name));
-  ***REMOVED***
-***REMOVED*** catch (err) {
-***REMOVED***
+      }
+    } catch (err) {
+    }
 
     this.attachEventsToBoard();
-  ***REMOVED***
+  }
 
 
 
 
   returnCardImageHTML(name) {
-    if (name[0] == 'E') { return ""; ***REMOVED***
-    else { return '<img src="/solitrio/img/cards/'+name+'.png" />'; ***REMOVED***
-  ***REMOVED***
+    if (name[0] == 'E') { return ""; }
+    else { return '<img src="/solitrio/img/cards/'+name+'.png" />'; }
+  }
 
 
 
   returnDeck() {
 
-    var deck = {***REMOVED***;
+    var deck = {};
 
-    deck['2']		    = { name : "S2" ***REMOVED***
-    deck['3']		    = { name : "S3" ***REMOVED***
-    deck['4']		    = { name : "S4" ***REMOVED***
-    deck['5']		    = { name : "S5" ***REMOVED***
-    deck['6']		    = { name : "S6" ***REMOVED***
-    deck['7']		    = { name : "S7" ***REMOVED***
-    deck['8']		    = { name : "S8" ***REMOVED***
-    deck['9']		    = { name : "S9" ***REMOVED***
-    deck['10']		    = { name : "S10" ***REMOVED***
-    deck['12']		    = { name : "C2" ***REMOVED***
-    deck['13']		    = { name : "C3" ***REMOVED***
-    deck['14']		    = { name : "C4" ***REMOVED***
-    deck['15']		    = { name : "C5" ***REMOVED***
-    deck['16']		    = { name : "C6" ***REMOVED***
-    deck['17']		    = { name : "C7" ***REMOVED***
-    deck['18']		    = { name : "C8" ***REMOVED***
-    deck['19']		    = { name : "C9" ***REMOVED***
-    deck['20']		    = { name : "C10" ***REMOVED***
-    deck['22']		    = { name : "H2" ***REMOVED***
-    deck['23']		    = { name : "H3" ***REMOVED***
-    deck['24']		    = { name : "H4" ***REMOVED***
-    deck['25']		    = { name : "H5" ***REMOVED***
-    deck['26']		    = { name : "H6" ***REMOVED***
-    deck['27']		    = { name : "H7" ***REMOVED***
-    deck['28']		    = { name : "H8" ***REMOVED***
-    deck['29']		    = { name : "H9" ***REMOVED***
-    deck['30']		    = { name : "H10" ***REMOVED***
-    deck['32']		    = { name : "D2" ***REMOVED***
-    deck['33']		    = { name : "D3" ***REMOVED***
-    deck['34']		    = { name : "D4" ***REMOVED***
-    deck['35']		    = { name : "D5" ***REMOVED***
-    deck['36']		    = { name : "D6" ***REMOVED***
-    deck['37']		    = { name : "D7" ***REMOVED***
-    deck['38']		    = { name : "D8" ***REMOVED***
-    deck['39']		    = { name : "D9" ***REMOVED***
-    deck['40']		    = { name : "D10" ***REMOVED***
-    deck['41']		    = { name : "E1" ***REMOVED***
-    deck['42']		    = { name : "E2" ***REMOVED***
-    deck['43']		    = { name : "E3" ***REMOVED***
-    deck['44']		    = { name : "E4" ***REMOVED***
+    deck['2']		    = { name : "S2" }
+    deck['3']		    = { name : "S3" }
+    deck['4']		    = { name : "S4" }
+    deck['5']		    = { name : "S5" }
+    deck['6']		    = { name : "S6" }
+    deck['7']		    = { name : "S7" }
+    deck['8']		    = { name : "S8" }
+    deck['9']		    = { name : "S9" }
+    deck['10']		    = { name : "S10" }
+    deck['12']		    = { name : "C2" }
+    deck['13']		    = { name : "C3" }
+    deck['14']		    = { name : "C4" }
+    deck['15']		    = { name : "C5" }
+    deck['16']		    = { name : "C6" }
+    deck['17']		    = { name : "C7" }
+    deck['18']		    = { name : "C8" }
+    deck['19']		    = { name : "C9" }
+    deck['20']		    = { name : "C10" }
+    deck['22']		    = { name : "H2" }
+    deck['23']		    = { name : "H3" }
+    deck['24']		    = { name : "H4" }
+    deck['25']		    = { name : "H5" }
+    deck['26']		    = { name : "H6" }
+    deck['27']		    = { name : "H7" }
+    deck['28']		    = { name : "H8" }
+    deck['29']		    = { name : "H9" }
+    deck['30']		    = { name : "H10" }
+    deck['32']		    = { name : "D2" }
+    deck['33']		    = { name : "D3" }
+    deck['34']		    = { name : "D4" }
+    deck['35']		    = { name : "D5" }
+    deck['36']		    = { name : "D6" }
+    deck['37']		    = { name : "D7" }
+    deck['38']		    = { name : "D8" }
+    deck['39']		    = { name : "D9" }
+    deck['40']		    = { name : "D10" }
+    deck['41']		    = { name : "E1" }
+    deck['42']		    = { name : "E2" }
+    deck['43']		    = { name : "E3" }
+    deck['44']		    = { name : "E4" }
 
     return deck;
 
-  ***REMOVED***
+  }
 
 
 
@@ -427,15 +427,15 @@ console.log("HERE WE ARE!");
     //
     $(".menu_option").off();
 
-    let extra = {***REMOVED***;
+    let extra = {};
         extra.target = this.returnNextPlayer(this.game.player);
 
-    if (nextTarget != 0) { extra.target = nextTarget; ***REMOVED***
+    if (nextTarget != 0) { extra.target = nextTarget; }
     this.game.turn = this.moves;
     this.moves = [];
     this.sendMessage("game", extra);
 
-  ***REMOVED***
+  }
 
 
 
@@ -448,18 +448,18 @@ console.log("HERE WE ARE!");
     if (this.game.state.recycles_remaining == 2) { 
       html += 'two more times.'; 
       $('.chances').text('two chances');
-***REMOVED***
+    }
     if (this.game.state.recycles_remaining == 1) { 
       html += 'one more time.'; 
       $('.chances').text('one chance');
-***REMOVED***
+    }
     if (this.game.state.recycles_remaining == 0) { 
       html += 'no more times.'; 
       $('.chances').text('no chances');
-***REMOVED***
+    }
     if (this.game.state.recycles_remaining > 0) {
       html += ' <p></p><div id="recycles_remaining">click here to cycle the board</div>';
-***REMOVED***
+    }
     this.updateStatus(html);	
 
     $('.logobox').off();
@@ -467,15 +467,15 @@ console.log("HERE WE ARE!");
       solitrio_self.recycleBoard();
       solitrio_self.game.state.recycles_remaining--;
       solitrio_self.displayUserInterface();
-***REMOVED***);
+    });
 
     $('#recycles_remaining').off();
     $('#recycles_remaining').on('click', function() {
       solitrio_self.recycleBoard();
       solitrio_self.game.state.recycles_remaining--;
       solitrio_self.displayUserInterface();
-***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
 
   recycleBoard() {
@@ -500,24 +500,24 @@ console.log("HERE WE ARE!");
 
         if (j == 1 && num == 2) {
           rowsuite = suite;
-    ***REMOVED*** else {
-  	  if (rowsuite !== suite) { continuous = 0; ***REMOVED***
-    ***REMOVED***
+        } else {
+  	  if (rowsuite !== suite) { continuous = 0; }
+        }
 
         if (rowsuite == suite && continuous == 1) {
 	  if (num == j+1) {
-  	    if (i == 1) { row1 = j; ***REMOVED***
-	    if (i == 2) { row2 = j; ***REMOVED***
-	    if (i == 3) { row3 = j; ***REMOVED***
-	    if (i == 4) { row4 = j; ***REMOVED***
-	  ***REMOVED*** else {
+  	    if (i == 1) { row1 = j; }
+	    if (i == 2) { row2 = j; }
+	    if (i == 3) { row3 = j; }
+	    if (i == 4) { row4 = j; }
+	  } else {
 	    continuous = 0;
-	  ***REMOVED***
-    ***REMOVED*** else {
+	  }
+        } else {
   	  continuous = 0;
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
+        }
+      }
+    }
 
 
     //
@@ -526,19 +526,19 @@ console.log("HERE WE ARE!");
     for (let i = row1+1; i < 11; i++) {
       let divname = "row1_slot"+i;
       myarray.push(this.game.board[divname]);
-***REMOVED***
+    }
     for (let i = row2+1; i < 11; i++) {
       let divname = "row2_slot"+i;
       myarray.push(this.game.board[divname]);
-***REMOVED***
+    }
     for (let i = row3+1; i < 11; i++) {
       let divname = "row3_slot"+i;
       myarray.push(this.game.board[divname]);
-***REMOVED***
+    }
     for (let i = row4+1; i < 11; i++) {
       let divname = "row4_slot"+i;
       myarray.push(this.game.board[divname]);
-***REMOVED***
+    }
 
     //
     // shuffle the array
@@ -553,22 +553,22 @@ console.log("HERE WE ARE!");
       let divname = "row1_slot"+i;
       this.game.board[divname] = myarray[maidx];
       maidx++;
-***REMOVED***
+    }
     for (let i = row2+1; i < 11; i++) {
       let divname = "row2_slot"+i;
       this.game.board[divname] = myarray[maidx];
       maidx++;
-***REMOVED***
+    }
     for (let i = row3+1; i < 11; i++) {
       let divname = "row3_slot"+i;
       this.game.board[divname] = myarray[maidx];
       maidx++;
-***REMOVED***
+    }
     for (let i = row4+1; i < 11; i++) {
       let divname = "row4_slot"+i;
       this.game.board[divname] = myarray[maidx];
       maidx++;
-***REMOVED***
+    }
 
     //
     //
@@ -576,25 +576,25 @@ console.log("HERE WE ARE!");
     this.saveGame(this.game.id);
     this.displayBoard();
 
-  ***REMOVED***
+  }
 
 
 
   returnCardSuite(slot) {
     let card = this.game.board[slot].name;
     return card[0];
-  ***REMOVED***
+  }
   returnCardNumber(slot) {
     let card = this.game.board[slot].name;
     return card.substring(1);
-  ***REMOVED***
+  }
 
 
   addMove(mv) {
     this.moves.push(mv);
-  ***REMOVED***
+  }
 
-***REMOVED***
+}
 
 module.exports = Solitrio;
 

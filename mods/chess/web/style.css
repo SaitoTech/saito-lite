@@ -1,6 +1,6 @@
 html, body {
     height: 99.999%;
-***REMOVED***
+}
 
 body {
     font-family: arial, helvetica, sans-serif;
@@ -9,11 +9,11 @@ body {
     margin: 0;
     background: linear-gradient(-45deg, #333 50%, #1e1e1f 100%);
     overflow: hidden;
-***REMOVED***
+}
 
 h1 {
     margin: 0;
-***REMOVED***
+}
 
 .connection_monitor {
     position: fixed;
@@ -23,52 +23,52 @@ h1 {
     background: #ef6666;
     font-size: 1.8em;
     padding: 15px;
-***REMOVED***
+}
 
 .header {
     grid-area: header;
     border-bottom: 1px solid #a5a5a5;
     font-size: 2em;
     height: 2.5em;
-***REMOVED***
+}
 
 .logo {
     width: 120px;
     margin: 12px;
     float: left;
-***REMOVED***
+}
 
 .header a {
     color: #fff;
     text-decoration: none;
     line-height: 70px;
-***REMOVED***
+}
 
 .board-space {
     padding: 15px;
-***REMOVED***
+}
 
 #board {
     max-width: 700px;
     margin: auto;
-***REMOVED***
+}
 
 .module_label {
     line-height: 2em;
     color: black;
-***REMOVED***
+}
 
 .container {
     width: 100%;
     height: 100%;
-***REMOVED***
+}
 
 .module_container {
     max-width: 1200px;
     margin: auto;
     display: block;
     margin-top: 10px;
-***REMOVED***
+}
 
 .row {
     display: grid;
@@ -78,7 +78,7 @@ h1 {
     grid-template-rows: 100%;
     padding: 0 1em;
     background: linear-gradient(-45deg, #333 50%, #1e1e1f 100%);    color: #555;
-***REMOVED***
+}
 
 .column {
     background-color: #555;
@@ -86,19 +86,19 @@ h1 {
     border-radius: 5px;
     padding: 20px;
     font-size: 1.7em;
-***REMOVED***
+}
 
 .button_row {
     margin-top: 15px;
     display: grid;
     grid-gap: 10px;
     grid-template-columns: 50% 50%;
-***REMOVED***
+}
 
 #promotion-choices {
     display: block;
     text-align: center;
-***REMOVED***
+}
 
 #promotion-choices img {
     margin: 10px;
@@ -108,48 +108,48 @@ h1 {
     padding: 7px;
     background-color: #ccc;
     cursor: pointer;
-***REMOVED***
+}
 
 #promotion-choices img:hover {
     border: 4px solid #eee;
-***REMOVED***
+}
 
 #status_display {
     font-size: 2.0vw;
     margin: 0;
-***REMOVED***
+}
 
 #status_opponent {
     font-size: 1.2vw; 
     overflow: hidden;
     display: block;
-***REMOVED***
+}
 
 #opponent_id {
     font-family: 'Courier New', Courier, monospace;
     font-size: 1.2vw;
     text-overflow: ellipsis;
-***REMOVED***
+}
 
 #status_log {
     height:384px
-***REMOVED***
+}
 
 #log {
     overflow-y: auto;
     display: block;
     height: 100%;
     max-height: 450px;
-***REMOVED***
+}
 
 span#captured {
     display: block;
     margin-top: 5px;
-***REMOVED***
+}
 
 img.captured {
     width: 32px;
-***REMOVED***
+}
 
 .chess_button {
     background-color: #999;
@@ -158,19 +158,19 @@ img.captured {
     border-radius: 5px;
     color: #DDD;
     max-height: 100px;
-***REMOVED***
+}
 
 /* white square */
 .white-1e1d7 {
     background-color: #eeeeee;
     color: #b58863;
-  ***REMOVED***
+  }
   
   /* black square */
   .black-3c85d {
     background-color: #777;
     color: #f0d9b5;
-  ***REMOVED***
+  }
 
 @media only screen and (max-width: 900px) {
     .logo {
@@ -179,72 +179,72 @@ img.captured {
         margin-left: 5x;
         margin-right: 10px;
         float: left;
-***REMOVED***
+    }
     .header {
         font-size: 20px;
         height: 40px;
-***REMOVED***
+    }
 
     .header a {
         line-height: 36px;
-***REMOVED***
+    }
 
     .row {
         grid-template-columns: 100%;
         grid-template-rows: auto 60%;
         position: absolute;
         top: 4em; 
-***REMOVED***
+    }
     .column{
         border-radius: 0;
-***REMOVED***
+    }
     .module_container {
         height: 99%;
         margin-top: 0;
-***REMOVED***
+    }
     #board {
         max-width: 500px;
-***REMOVED***
+    }
     #status_display {
         font-size: 24px;
         margin: 0;
-***REMOVED***
+    }
     #status_opponent {
         font-size: 20px;
-***REMOVED***
+    }
     .controls {
         overflow-y: scroll;
         overflow-x: hidden;
-***REMOVED***
+    }
     #opponent_id {
         font-size: 20px;
-***REMOVED***
+    }
     html, body {
         overflow: hidden;
-***REMOVED***
-***REMOVED***
+    }
+}
 
 .red {
     color: red;
-***REMOVED***
+}
 
 .green {
     color: green;
-***REMOVED***
+}
 
 #home {
     float: right;
-***REMOVED***
+}
 
 #home a i::before {
     color: #ffffff;
-***REMOVED***
+}
 
 .controls.column p {
     margin: 0 0 6px 0;
-***REMOVED***
+}
 
 #status_oponent {
     text-overflow: ellipsis;
     overflow: hidden;
-***REMOVED***
+}

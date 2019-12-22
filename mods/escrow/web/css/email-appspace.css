@@ -1,30 +1,30 @@
 
 .hospital-splash-image-container {
-***REMOVED***
+}
 .hospital-title{
     text-align: center;
     vertical-align: middle;
-***REMOVED***
+}
 .hospital-splash-image {
     max-width: 100%;
-***REMOVED***
+}
 .grid-2-columns{
     max-width: 500px;
     display: block;
-***REMOVED***
+}
 #hospital-make-appointment-btn{
     background-color: #F71F3D;
     color: white;
-***REMOVED***
+}
 .hospital-btn-box{
     margin:0 auto;
-***REMOVED***
+}
 .hospital-button{
     margin: 0 auto;
     display: block;
     min-width: 260px;
     margin-top: 15px;
-***REMOVED***
+}
 .hospital{
     display: block;
     width:300px;
@@ -34,21 +34,21 @@
     padding: 6px;
     overflow: hidden;
     margin-top: 1em;
-***REMOVED***
+}
 .hospital-name{
     font-size: 1em;
     font-weight: bolder;
     margin-bottom: 2px;
-***REMOVED***
+}
 .hospital-address{
     font-size: 0.8em;
     margin-bottom:6px;
-***REMOVED***
+}
 .hospital-select-time{
     width: 100%;
     font-weight:bolder;
     margin-bottom: 6px;
-***REMOVED***
+}
 select {
     background-color: white;
     outline: none;
@@ -58,17 +58,17 @@ select {
     display: block;
     color: #F71F3D;
     float: left;
-***REMOVED***
+}
 select:hover{
     cursor: pointer;
     background-color: #F71F3D;
     color: white;
-***REMOVED***
+}
 .book-appointment-slot-btn{
     width: 40%;
     float: right;
     display: none;
-***REMOVED***
+}
 .appointment-info-box {
     width:auto;
     height:auto;
@@ -76,11 +76,11 @@ select:hover{
     border:1px #eee solid;
     display: block;
     box-shadow:1px 1px 1px 1px rgba(0, 0, 0, 0.05);
-***REMOVED***
+}
 .confirmInfo{
     margin-top: 15px;
     margin-bottom: 15px;
-***REMOVED***
+}
 
 
 

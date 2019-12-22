@@ -15,20 +15,20 @@
     "type": "git",
     "url": "https://github.com/fullcalendar/fullcalendar.git",
     "homepage": "https://github.com/fullcalendar/fullcalendar"
-  ***REMOVED***,
+  },
   "license": "MIT",
   "author": {
     "name": "Adam Shaw",
     "email": "arshaw@arshaw.com",
     "url": "http://arshaw.com/"
-  ***REMOVED***,
+  },
   "copyright": "2019 Adam Shaw",
   "peerDependencies": {
     "@fullcalendar/core": "~4.3.0",
     "moment": "^2.24.0"
-  ***REMOVED***,
+  },
   "main": "main.js",
   "module": "main.esm.js",
   "unpkg": "main.min.js",
   "types": "main.d.ts"
-***REMOVED***
+}

@@ -6,20 +6,20 @@ module.exports = EmailAppspace = {
 
         document.querySelector(".email-body").innerHTML = EmailAppspaceTemplate();
 
-        if (data.email.appspace_mod == null) { return; ***REMOVED***
+        if (data.email.appspace_mod == null) { return; }
 	let modobj = data.email.appspace_mod.respondTo("email-appspace");
-	if (modobj == null) { return; ***REMOVED***
+	if (modobj == null) { return; }
 	modobj.render(app, data);
 
-***REMOVED***,
+    },
 
     attachEvents(app, data) {
 
-      if (data.email.appspace_mod == null) { return; ***REMOVED***
+      if (data.email.appspace_mod == null) { return; }
       let modobj = data.email.appspace_mod.respondTo("email-appspace");
-      if (modobj == null) { return; ***REMOVED***
+      if (modobj == null) { return; }
       modobj.attachEvents(app, data);
 
-***REMOVED***,
+    },
 
-***REMOVED***
+}

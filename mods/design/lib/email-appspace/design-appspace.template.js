@@ -94,7 +94,7 @@ module.exports = EmailAppspaceTemplate = (app) => {
         "stakepool": "0",
         "treasury": "2390083333.33333333",
         "ts": 1572407380711
-    ***REMOVED***
+        }
 </pre>
 
 <p>Fieldset</p>
@@ -115,4 +115,4 @@ module.exports = EmailAppspaceTemplate = (app) => {
 <button onclick="salert('This is a Saito native Alert');" >Alert</button>
 <button onclick="sconfirm('This is a Saito native Confirm');" >Confirm</button>
   `;
-***REMOVED***
+}

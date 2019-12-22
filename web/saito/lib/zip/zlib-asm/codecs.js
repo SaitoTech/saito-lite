@@ -10,11 +10,11 @@
 			this.level = options.level;
 		this._inputLength = 0;
 		this._input = [];
-	***REMOVED***
+	}
 	Codec.prototype.append = function append(bytes, onprogress) {
 		this._inputLength += bytes.length;
 		this._input.push(bytes);
-	***REMOVED***;
+	};
 	Codec.prototype.flush = function flush() {
 		var bytes;
 		var input = this._input;
@@ -26,24 +26,24 @@
 				var slice = input[i];
 				bytes.set(slice, off);
 				off += slice.length;
-			***REMOVED***
-		***REMOVED***
+			}
+		}
 		return this._isDeflater ?
 			zlib.rawDeflate(bytes, this.level) :
 			zlib.rawInflate(bytes);
-	***REMOVED***;
+	};
 
 	function Deflater(options) {
 		Codec.call(this, true, options);
-	***REMOVED***
+	}
 	Deflater.prototype = Object.create(Codec.prototype);
 	function Inflater() {
 		Codec.call(this, false);
-	***REMOVED***
+	}
 	Inflater.prototype = Object.create(Codec.prototype);
 
 	// 'zip' may not be defined in z-worker and some tests
 	var env = global.zip || global;
 	env.Deflater = env._zlib_asm_Deflater = Deflater;
 	env.Inflater = env._zlib_asm_Inflater = Inflater;
-***REMOVED***)(this);
+})(this);

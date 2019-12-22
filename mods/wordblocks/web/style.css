@@ -13,7 +13,7 @@ body {
   scrollbar-track-color: #646464;
   scrollbar-arrow-color: #646464;
   scrollbar-shadow-color: #868686;
-***REMOVED***
+}
 
 .connection_monitor {
   position: fixed;
@@ -23,22 +23,22 @@ body {
   background: #ef6666;
   font-size: 1.8em;
   padding: 15px;
-***REMOVED***
+}
 
 .link {
   border-bottom: 1px dashed;
   cursor: pointer;
-***REMOVED***
+}
 
 .tosstiles {
   border-bottom: 1px dashed;
-***REMOVED***
+}
 
 .wb-main {
   border: 1px solid orange;
   max-width: 902px;
   margin: auto;
-***REMOVED***
+}
 
 .gameboard {
   display: grid;
@@ -52,7 +52,7 @@ body {
   max-height: 900px;
   width: 99vw;
   height: 99vw;
-***REMOVED***
+}
 
 .action {
   display: block;
@@ -64,7 +64,7 @@ body {
   background-color: #777;
   cursor: pointer;
   text-align: center;
-***REMOVED***
+}
 
 /* #controls {
   margin: auto;
@@ -77,27 +77,27 @@ body {
   position: relative;
   width: 100%;
   max-width: 900px;
-***REMOVED*** */
+} */
 
 #remainder, #lastmove {
   /* display: inline-block; */
   font-size: 25px;
   padding: 10px 0;
-***REMOVED***
+}
 
 #remainder {
   width: 33%;
-***REMOVED***
+}
 
 .home {
   display: inline-block;
   font-size: 20px;
   margin-left: 10px;
-***REMOVED***
+}
 
 .home>a>i {
   color: #fff;
-***REMOVED***
+}
 
 .score {
   font-size: 1.6rem;
@@ -106,14 +106,14 @@ body {
   /* padding: 10px 20px; */
   /* display: inline-block; */
   /* width: 20% */
-***REMOVED***
+}
 
 .rack {
   align-self: center;
   display: flex;
   /* padding: 10px 0;
   height: 80px; */
-***REMOVED***
+}
 
 .shuffle {
   display: inline-block;
@@ -121,7 +121,7 @@ body {
   width: 12%;
   height: 4em;
   cursor: pointer;
-***REMOVED***
+}
 
 .tiles {
   /* display: inline-block;
@@ -130,14 +130,14 @@ body {
   position: relative;
   top: -45px; */
   display: flex;
-***REMOVED***
+}
 
 .tile {
   width: 100%;
   height: 100%;
   cursor: pointer;
   text-indent: 5px;
-***REMOVED***
+}
 
 .tiles div.tile {
   width: 65px;
@@ -154,17 +154,17 @@ body {
   background: rgb(70, 70, 70);
   font-size: 36px;
   color: #efefec;
-***REMOVED***
+}
 
 /*.tiles .tile.O {
   padding: 10px 12px 10px 8px;
-***REMOVED***
+}
 .tiles .tile.M {
   padding: 10px 14px 10px 6px;
-***REMOVED***
+}
 .tiles .tile.W {
   padding: 10px 15px 10px 5px;
-***REMOVED****/
+}*/
 
 .slot {
   cursor: pointer;
@@ -178,7 +178,7 @@ body {
   align-self: center;
   width: 54px;
   height: 54px;
-***REMOVED***
+}
 
 .slot div.tile {
   color: rgb(238, 238, 238);
@@ -187,20 +187,20 @@ body {
   text-align: center;
   padding-top: 8px;
   border-radius: 3px;
-***REMOVED***
+}
 
 .slot:hover {
   background-color: #036;
   opacity: 0.8;
-***REMOVED***
+}
 
 .slot div {
   font-size: 11px;
-***REMOVED***
+}
 
 .tw {
   border: 2px solid rgb(221, 70, 0);
-***REMOVED***
+}
 
 .twbk {
   color: rgb(238, 238, 238);
@@ -209,11 +209,11 @@ body {
   background: rgb(221, 102, 0);
   margin: auto;
   padding: 9px 0px;
-***REMOVED***
+}
 
 .dw {
   border: 2px solid rgb(207, 31, 0);
-***REMOVED***
+}
 
 .dwbk {
   background-color: rgb(184, 28, 0);
@@ -222,11 +222,11 @@ body {
   height: 100%;
   margin: auto;
   padding: 9px 0px;
-***REMOVED***
+}
 
 .tl {
   border: 2px solid #114477;
-***REMOVED***
+}
 
 .tlbk {
   background-color: rgb(0, 51, 102);
@@ -235,11 +235,11 @@ body {
   height: 100%;
   margin: auto;
   padding: 9px 0px;
-***REMOVED***
+}
 
 .dl {
   border: 2px solid #117744;
-***REMOVED***
+}
 
 .dlbk {
   background-color: rgb(0, 102, 51);
@@ -248,11 +248,11 @@ body {
   height: 100%;
   margin: auto;
   padding: 9px 0px;
-***REMOVED***
+}
 
 .star {
   border: 2px solid #888822;
-***REMOVED***
+}
 
 .starbk {
   background-color: rgb(187, 187, 102);
@@ -263,83 +263,83 @@ body {
   width: 100%;
   margin: auto;
   padding: 6px 0px;
-***REMOVED***
+}
 
 .tile::after {
   vertical-align: sub;
   font-size: 33%;
   margin-left: 1px;
-***REMOVED***
+}
 
 .sc1::after {
   content: "1";
-***REMOVED***
+}
 
 .sc2::after {
   content: "2";
-***REMOVED***
+}
 
 .sc3::after {
   content: "3";
-***REMOVED***
+}
 
 .sc4::after {
   content: "4";
-***REMOVED***
+}
 
 .sc5::after {
   content: "5";
-***REMOVED***
+}
 
 .sc6::after {
   content: "6";
-***REMOVED***
+}
 
 .sc7::after {
   content: "7";
-***REMOVED***
+}
 
 .sc8::after {
   content: "8";
-***REMOVED***
+}
 
 .sc9::after {
   content: "9";
-***REMOVED***
+}
 
 .sc10::after {
   content: "10";
-***REMOVED***
+}
 
 .sc11::after {
   content: "11";
-***REMOVED***
+}
 
 #chat_container {
   display: block;
-***REMOVED***
+}
 
 .player {
   margin: 3px 0 12px;
   white-space: nowrap;
   display: grid;
   grid-template-columns: 90% 10%;
-***REMOVED***
+}
 
 .player_name {
   overflow: hidden;
   display: inline-block;
   text-overflow: ellipsis;
   /* width: 85%; */
-***REMOVED***
+}
 
 .player span {
   line-height: 20px;
-***REMOVED***
+}
 
 .player_score {
   justify-self: right;
-***REMOVED***
+}
 
 .hud {
   display: grid;
@@ -359,11 +359,11 @@ body {
   border-bottom: 0px;
   transform: translate(-50%, -0%);
   transition: height 0.2s ease;
-***REMOVED***
+}
 
 .hud-hidden {
   height: 40px;
-***REMOVED***
+}
 
 /** HUD HEADER **/
 
@@ -374,18 +374,18 @@ body {
   width: 100%;
   height: 40px;
   cursor: move;
-***REMOVED***
+}
 
 .controls {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 10px;
-***REMOVED***
+}
 
 .hud-button {
   cursor: pointer;
-***REMOVED***
+}
 
 /** HUD BODY **/
 
@@ -394,35 +394,35 @@ body {
   display: grid;
   grid-template-columns: auto 200px;
   height: 100%;
-***REMOVED***
+}
 
 .hud-menu {
   grid-area: hud-menu;
   border-right: 1px solid var(--saito-skyline-grey);
-***REMOVED***
+}
 
 .status {
   width: unset !important;
-***REMOVED***
+}
 
 .status ul {
   list-style: none;
-***REMOVED***
+}
 
 .status ul li {
   line-height: 2em;
-***REMOVED***
+}
 
-.status ul li:last-child {***REMOVED***
+.status ul li:last-child {}
 
-.status ul li:hover {***REMOVED***
+.status ul li:hover {}
 
 /** HUD SIDEBAR **/
 
 .hud-menu {
   display: flex;
   color: black;
-***REMOVED***
+}
 
 .hud-menu ul {
   width: 100%;
@@ -430,7 +430,7 @@ body {
   text-align: center;
   padding: 0;
   margin: 0;
-***REMOVED***
+}
 
 .hud-menu ul li {
   list-style: none;
@@ -443,80 +443,80 @@ body {
   line-height: 50px;
   font-size: 1.1rem;
   cursor: pointer;
-***REMOVED***
+}
 
 .hud-menu ul li a {
   text-decoration: none;
   display: block;
   transition: .3s background-color;
   font-size: 22px;
-***REMOVED***
+}
 
 .hud-menu ul li a:hover {
   border-bottom: 2px solid var(--saito-red);
   border-radius: 0px;
-***REMOVED***
+}
 
 .hud-menu ul li a:active {
   color: var(--saito-red);
   font-style: bold;
-***REMOVED***
+}
 
 /* hud */
 
 .hud div {
   background: #333;
   color: var(--saito-skyline-grey);
-***REMOVED***
+}
 
 .hud-button {
   color: var(--saito-skyline-grey);
   margin: auto;
   font-size: 24px;
-***REMOVED***
+}
 
 .status {
   padding: 1em;
   overflow-y: auto;
   border: none;
-***REMOVED***
+}
 
 .hud-body .log {
   display: none;
-***REMOVED***
+}
 
 .hud-body {
   grid-template-columns: auto;
-***REMOVED***
+}
 
 .hud-header {
   border-bottom: 1px solid #555;
-***REMOVED***
+}
 
 .hud-menu {
   border-right: 1px solid #555;
-***REMOVED***
+}
 
 .status div {
   font-size: 24px;
 overflow-wrap: break-word;
 max-width: 95vw;
-***REMOVED***
+}
 
 .player span {
   line-height: 40px;
-***REMOVED***
+}
 
 @media only screen and (max-width: 750px) {
   .score {
     font-size: 1em;
-  ***REMOVED***
+  }
   .hud div {
     font-size: 1em;
-  ***REMOVED***
+  }
   #remainder {
     font-size: 1em;
-  ***REMOVED***
+  }
   .hud {
     font-size: 22px;
     width: 100vw;
@@ -528,10 +528,10 @@ max-width: 95vw;
     min-width: 100vw;
     transform: none;
     display: block;
-  ***REMOVED***
+  }
   .hud-header, .hud-menu {
     display: none;
-  ***REMOVED***
+  }
   .gameboard {
     display: grid;
     grid-template-columns: repeat(15, 15fr);
@@ -540,7 +540,7 @@ max-width: 95vw;
     background: #999;
     border: 0.5em solid #333;
     padding: 0.5em;
-  ***REMOVED***
+  }
   .slot {
     cursor: pointer;
     display: flex;
@@ -554,31 +554,31 @@ max-width: 95vw;
     height: 6vw;
     justify-self: center;
     align-self: center;
-  ***REMOVED***
+  }
   .slot div {
     font-size: 1.2vw;
     padding: 0.5vw 0;
-  ***REMOVED***
+  }
   .tlbk {
     padding: 3px 0px;
     text-align: center;
-  ***REMOVED***
+  }
   .dlbk {
     padding: 3px 0px;
     text-align: center;
-  ***REMOVED***
+  }
   .twbk {
     padding: 3px 0px;
     text-align: center;
-  ***REMOVED***
+  }
   .dwbk {
     padding: 3px 0px;
     text-align: center;
-  ***REMOVED***
+  }
   .starbk {
     padding: 1px 0px;
     font-size: 3.2vw !important;
-  ***REMOVED***
+  }
   .slot div.tile {
     color: rgb(238, 238, 238);
     font-size: 4vw;
@@ -586,31 +586,31 @@ max-width: 95vw;
     padding-top: 0.4vw;
     border-radius: 2px;
     text-indent: 2px;
-  ***REMOVED***
+  }
   .status {
     margin: 0;
     grid-gap: 0.5em;
-  ***REMOVED***
+  }
   .status div {
     overflow-wrap: unset;
-  ***REMOVED***
+  }
   .status_container {
     grid-template-rows: 1em auto;
     margin: 12px 0 0 0 ;
-  ***REMOVED***
+  }
   .score {
     font-size: 1rem;
-  ***REMOVED***
+  }
   .player {
     width: calc(100vw - 2em) !important;
     line-height: 1em;
     height: 3vh;
-  ***REMOVED***
+  }
   .tiles {
     display: inline-block;
     width: calc(100% - 3em);
     float: left;
-  ***REMOVED***
+  }
   .tiles div.tile {
     display: inline-block;
     text-align: center;
@@ -627,28 +627,28 @@ max-width: 95vw;
     width: 54px;
     height: 54px;
     padding: 15px 10px;
-  ***REMOVED***
-***REMOVED***
+  }
+}
 .rack {
   width: calc(100vw - 2em);
   max-width: 640px;
-***REMOVED***
+}
 
 .tile-placement-controls {
   display: grid;
-***REMOVED***
+}
 
 .action {
   justify-self: center;
   align-self: center;
   padding: 1.5vh 0px;
   width: 100%;
-***REMOVED***
+}
 
 .shuffle {
   height: 3em;
   width: 3em;
   cursor: pointer;
   float: left;
-***REMOVED***
+}
 

@@ -6,4 +6,4 @@ module.exports = ArcadeLoaderTemplate = () => {
         <center><div id="status" class="status"></div></center>
       </div>
   `;
-***REMOVED***
+}

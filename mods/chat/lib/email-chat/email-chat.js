@@ -10,7 +10,7 @@ module.exports = EmailChat = {
       my_listener = (msg) => this.addMessageToDOM(app, data, msg);
       app.connection.removeAllListeners('chat_receive_message');
       app.connection.on('chat_receive_message', my_listener);
-***REMOVED***,
+    },
 
     render(app, data) {
       let email_chat = document.querySelector(".email-chat")
@@ -19,15 +19,15 @@ module.exports = EmailChat = {
       AddContactModal.render(app, data);
       ChatManager.render(app, data);
       ChatList.render(app, data);
-***REMOVED***,
+    },
 
     attachEvents(app, data) {
       AddContactModal.attachEvents(app, data);
       ChatList.attachEvents(app, data);
-***REMOVED***,
+    },
 
     addMessageToDOM(app, data, msg) {
       ChatBox.addMessageToDOM(data, msg);
-***REMOVED***,
+    },
 
-***REMOVED***
+}

@@ -3,7 +3,7 @@ module.exports = AppStoreBundleConfirmTemplate = (publickey) => {
   return `
 <link rel="stylesheet" type="text/css" href="/appstore/css/email-appspace.css">
 
-  The AppStore identified by publickey ${publickey***REMOVED*** has generated a new Saito bundle for you.
+  The AppStore identified by publickey ${publickey} has generated a new Saito bundle for you.
 
   <p></p>
 
@@ -15,4 +15,4 @@ module.exports = AppStoreBundleConfirmTemplate = (publickey) => {
 
 </div>
   `;
-***REMOVED***
+}

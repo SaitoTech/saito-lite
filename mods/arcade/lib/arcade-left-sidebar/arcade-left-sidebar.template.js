@@ -15,4 +15,4 @@ module.exports = ArcadeLeftSidebarTemplate = () => {
   </div>
   <div class="email-chat"></div>
   `;
-***REMOVED***
+}

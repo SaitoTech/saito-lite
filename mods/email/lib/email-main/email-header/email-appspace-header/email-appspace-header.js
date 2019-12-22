@@ -4,7 +4,7 @@ const EmailAppspaceHeaderTemplate = require('./email-appspace-header.template');
 module.exports = EmailAppspaceHeader = {
   render(app, data) {
     document.querySelector('.email-header').innerHTML = EmailAppspaceHeaderTemplate(app, data);
-  ***REMOVED***,
+  },
 
   attachEvents(app, data) {
     document.getElementById('email-form-back-button')
@@ -14,7 +14,7 @@ module.exports = EmailAppspaceHeader = {
 
               data.email.main.render(app, data);
               data.email.main.attachEvents(app, data);
-        ***REMOVED***);
-  ***REMOVED***,
-***REMOVED***
+            });
+  },
+}
 

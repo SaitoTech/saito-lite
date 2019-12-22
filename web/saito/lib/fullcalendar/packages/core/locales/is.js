@@ -1,15 +1,15 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {***REMOVED***, global.FullCalendarLocales.is = factory()));
-***REMOVED***(this, function () { 'use strict';
+    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.is = factory()));
+}(this, function () { 'use strict';
 
     var is = {
         code: "is",
         week: {
             dow: 1,
             doy: 4 // The week that contains Jan 4th is the first week of the year.
-    ***REMOVED***,
+        },
         buttonText: {
             prev: "Fyrri",
             next: "Næsti",
@@ -18,13 +18,13 @@
             week: "Vika",
             day: "Dagur",
             list: "Dagskrá"
-    ***REMOVED***,
+        },
         weekLabel: "Vika",
         allDayHtml: "Allan<br/>daginn",
         eventLimitText: "meira",
         noEventsMessage: "Engir viðburðir til að sýna"
-***REMOVED***;
+    };
 
     return is;
 
-***REMOVED***));
+}));

@@ -4,7 +4,7 @@ module.exports = AppStorePublishSuccess = {
   render(app, data) {
     document.querySelector(".email-appspace")
             .innerHTML = AppStorePublishSuccessTemplate();
-  ***REMOVED***,
+  },
 
-  attachEvents(app, data) {***REMOVED***,
-***REMOVED***
+  attachEvents(app, data) {},
+}

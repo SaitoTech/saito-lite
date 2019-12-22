@@ -26,7 +26,7 @@
         left: 'prev,next today',
         center: 'title',
         right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-  ***REMOVED***,
+      },
       defaultDate: '2019-08-12',
       navLinks: true, // can click day/week names to navigate views
       editable: true,
@@ -36,31 +36,31 @@
         url: 'php/get-events.php',
         failure: function() {
           document.getElementById('script-warning').style.display = 'inline'; // show
-    ***REMOVED***
-  ***REMOVED***,
+        }
+      },
       loading: function(bool) {
         if (bool) {
           loadingEl.style.display = 'inline'; // show
-    ***REMOVED*** else {
+        } else {
           loadingEl.style.display = 'none'; // hide
-    ***REMOVED***
-  ***REMOVED***,
+        }
+      },
 
-      eventTimeFormat: { hour: 'numeric', minute: '2-digit', timeZoneName: 'short' ***REMOVED***,
+      eventTimeFormat: { hour: 'numeric', minute: '2-digit', timeZoneName: 'short' },
 
       dateClick: function(arg) {
         console.log('dateClick', calendar.formatIso(arg.date));
-  ***REMOVED***,
+      },
       select: function(arg) {
         console.log('select', calendar.formatIso(arg.start), calendar.formatIso(arg.end));
-  ***REMOVED***
-***REMOVED***);
+      }
+    });
 
     calendar.render();
 
     // load the list of available timezones, build the <select> options
     // it's HIGHLY recommended to use a different library for network requests, not this internal util func
-    FullCalendar.requestJson('GET', 'php/get-time-zones.php', {***REMOVED***, function(timeZones) {
+    FullCalendar.requestJson('GET', 'php/get-time-zones.php', {}, function(timeZones) {
 
       timeZones.forEach(function(timeZone) {
         var optionEl;
@@ -70,17 +70,17 @@
           optionEl.value = timeZone;
           optionEl.innerText = timeZone;
           timeZoneSelectorEl.appendChild(optionEl);
-    ***REMOVED***
-  ***REMOVED***);
-***REMOVED***, function() {
+        }
+      });
+    }, function() {
       // TODO: handle error
-***REMOVED***);
+    });
 
     // when the timezone selector changes, dynamically change the calendar option
     timeZoneSelectorEl.addEventListener('change', function() {
       calendar.setOption('timeZone', this.value);
-***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
 </script>
 <style>
@@ -90,7 +90,7 @@
     padding: 0;
     font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
     font-size: 14px;
-  ***REMOVED***
+  }
 
   #top {
     background: #eee;
@@ -98,23 +98,23 @@
     padding: 0 10px;
     line-height: 40px;
     font-size: 12px;
-  ***REMOVED***
-  .left { float: left ***REMOVED***
-  .right { float: right ***REMOVED***
-  .clear { clear: both ***REMOVED***
+  }
+  .left { float: left }
+  .right { float: right }
+  .clear { clear: both }
 
-  #script-warning, #loading { display: none ***REMOVED***
-  #script-warning { font-weight: bold; color: red ***REMOVED***
+  #script-warning, #loading { display: none }
+  #script-warning { font-weight: bold; color: red }
 
   #calendar {
     max-width: 900px;
     margin: 40px auto;
     padding: 0 10px;
-  ***REMOVED***
+  }
 
   .tzo {
     color: #000;
-  ***REMOVED***
+  }
 
 </style>
 </head>

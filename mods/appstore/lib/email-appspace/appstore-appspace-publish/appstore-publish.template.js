@@ -13,4 +13,4 @@ module.exports = AppStorePublishTemplate = () => {
       </div>
     </form>
   `
-***REMOVED***
+}

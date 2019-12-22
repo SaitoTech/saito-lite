@@ -15,4 +15,4 @@ module.exports = EscrowSidebarTemplate = () => {
     </div>
 </div>
   `;
-***REMOVED***
+}

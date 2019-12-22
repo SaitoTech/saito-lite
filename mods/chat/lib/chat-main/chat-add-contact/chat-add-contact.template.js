@@ -20,4 +20,4 @@ module.exports = ChatAddContactTemplate = () => {
       <i class="icon-med fas fa-qrcode"></i>
     </button>
   `;
-***REMOVED***
+}
