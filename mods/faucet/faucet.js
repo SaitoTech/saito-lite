@@ -246,88 +246,8 @@ class Faucet extends ModTemplate {
 
       FaucetModalBackup.attachEvents(this.app, data);
 
-/****
-      if (document.querySelector('.tutorial-skip')) {
-
-        document.querySelector('.tutorial-skip').onclick = () => {
-        modal.destroy();
-
-    	let tx = this.app.wallet.createUnsignedTransaction();
-            tx.transaction.msg.module       = "Email";
-            tx.transaction.msg.title        = "Using Saito in Anonymous Mode - HOWTO";
-            tx.transaction.msg.message      = `
-Welcome Anonymous User!
-
-It is entirely possible to use Saito without backing up your wallet or registering a username. In privacy-mode, everyone will just know you by your address on the network.
-
-In order to prevent robots from abusing the network, we do not give tokens to anonymous accounts by default. So in privacy-mode your account will not automatically-earn tokens as you use the network. To fix this, purchase some tokens from someone in the community or ask a community member to send you some.
-
-If you change your mind and would like to backup your wallet, you can do so by clicking on the "gear" icon at the top-right of this page. We recommend that you do this periodically to avoid application-layer data loss.
-    `;
-
-	    tx = this.app.wallet.signTransaction(tx);
-	    let emailmod = this.app.modules.returnModule("Email");
-
-	    if (emailmod != null) {
-	      emailmod.addEmail(tx);
-	      this.app.storage.saveTransaction(tx);
-	    }
-          }
-        }
-
-
-        document.querySelector('#registry-input').onclick = () => {
-	  document.querySelector('#registry-input').setAttribute("placeholder", "");
-	}
-
-
-        document.querySelector('#registry-email-button').onclick = () => {
-
-	  document.querySelector(".welcome-modal-header").innerHTML = '<div>Almost Done!</div>';
-	  document.querySelector(".welcome-modal-main").innerHTML = '<div>Provide a password to encrypt your wallet before you send it to yourself for backup. This password will be known only to you.</div>';
-	  document.querySelector(".welcome-modal-footer").innerHTML = '<div>Provide a password to encrypt your wallet before you send it to yourself for backup. This password will be known only to you.</div>';
-
-          modal.destroy();
-
-
-
-    	  let tx = this.app.wallet.createUnsignedTransaction();
-              tx.transaction.msg.module       = "Email";
-              tx.transaction.msg.title        = "Wallet Backup Successful";
-              tx.transaction.msg.message      = `
-
-You will receive an encrypted copy of your wallet by email shortly. Another copy is attached to this email.
-
-If you ever need to restore your wallet, click on the "gear" icon at the top-right of this page and select "Restore Wallet".
-
-Although you can always restore your wallet from this file, we recommend manually backing up your wallet periodically to avoid application-layer data loss. You can do this anytime by clicking on the "gear" icon at the top-right of this page and selecting the appropriate option.
-
-Questions or comments? Contact us anytime.
-
--- The Saito Team
-
-            `;
-
-	      tx = this.app.wallet.signTransaction(tx);
-	      let emailmod = this.app.modules.returnModule("Email");
-
-	      if (emailmod != null) {
-		setTimeout(() => {
-	          emailmod.addEmail(tx);
-	          this.app.storage.saveTransaction(tx);
-	        }, 1500);
-	      }
-        }
-
-        //
-        // captcha rendering for first modal
-        //grecaptcha.render("recaptcha", {
-        //    sitekey: '6Lc18MYUAAAAAKb0_kFKkhA1ebdPu_hLmyyRo3Cd',
-        //    callback: captchaCallback
-        //});
-****/
-
     }
+
 
     shouldAffixCallbackToModule() { return 1; }
 
