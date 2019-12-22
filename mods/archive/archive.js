@@ -47,14 +47,21 @@ class Archive extends ModTemplate {
         this.deleteTransaction(req.data.tx, req.data.publickey, req.data.sig);
       }
       if (req.data.request === "save") {
+console.log("##########################");
+console.log("### SAVING TRANSACTION ###");
+console.log("##########################");
         this.saveTransaction(req.data.tx);
       }
       if (req.data.request === "load") {
+console.log("###########################");
+console.log("### LOADING TRANSACTION ###");
+console.log("###########################");
         let type = "";
         let num  = 50;
         if (req.data.num != "")  { num = req.data.num; }
         if (req.data.type != "") { type = req.data.type; }
         txs = await this.loadTransactions(req.data.publickey, req.data.sig, type, num);
+console.log("FOUND: " + JSON.stringify(txs));
         response.err = "";
         response.txs = txs;
         mycallback(response);
@@ -122,7 +129,7 @@ class Archive extends ModTemplate {
   }
 
 
-  async loadTransactions(publickey, type, num) {
+  async loadTransactions(publickey, sig, type, num) {
 
     let sql = "";
     let params = {};
