@@ -1,23 +1,20 @@
 module.exports = FaucetModalBackupPasswordTemplate = () => { 
  
   return `
-          <div style="margin-top:20px;">
+          <div style="margin: 1em 0;display:grid;grid-gap:1em;min-width:250px;width:33%;">
 
-	    <b>password:</b>
-            </br>
-	    <input type="text" id="password1" style="background-color:white;margin-right:10px;width:200px;height:30px;" />
+		  <div>
+            <label>Password</label>
+			<input type="text" id="password1" style="font-family:p-word;" />
+		  </div>
+		  <div>
+		    <label>Confirm</label>
+            <input type="text" id="password2" style="font-family:p-word;" />
+          </div>
 
-	    <p></p>
+          <button class="submit-encrypt-wallet-btn">Encrypt and Send</button>
 
-	    <b>confirm:</b>
-            </br>
-	    <input type="text" id="password2" style="background-color:white;margin-right:10px;width:200px;height:30px;" />
-
-	    <p></p>
-
-	    <button class="submit-encrypt-wallet-btn">Encrypt and Send</button>
-
-         </div>
+          </div>
 
   `;
 }
