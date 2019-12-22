@@ -2,6 +2,7 @@ const AppStoreAppspaceTemplate 	  = require('./appstore-appspace.template.js');
 const AppStoreAppspacePublish     = require('./appstore-appspace-publish/appstore-publish.js');
 const AppStoreAppBoxTemplate      = require('./appstore-app-box.template.js');
 const AppStoreAppCategoryTemplate = require('./appstore-app-category.template.js');
+const AppStoreAppDetails          = require('./appstore-app-details/appstore-app-details.js');
 
 
 module.exports = AppStoreAppspace = {
@@ -55,6 +56,10 @@ module.exports = AppStoreAppspace = {
 
         installbtn.onclick = (e) => {
 
+	AppStoreAppDetails.render(app, data);
+	AppStoreAppDetails.attachEvents(app, data);
+
+/*****
           let module_obj = JSON.parse(app.crypto.base64ToString(e.currentTarget.id));
 
           let module_list = [];
@@ -90,9 +95,9 @@ alert("LIST: " + module_list);
             </div>
           `;
 
+****/
         };
       });
-
     },
 
 

@@ -44,6 +44,8 @@ If you would like to backup your wallet manually, you can do so by clicking on t
 
 
 
+
+
     document.querySelector('#registry-input').onclick = () => {
       document.querySelector('#registry-input').setAttribute("placeholder", "");
     };
@@ -51,11 +53,24 @@ If you would like to backup your wallet manually, you can do so by clicking on t
 
 
 
+
+
     document.querySelector('#registry-email-button').onclick = () => {
 
+      let submitted_email = document.querySelector("#registry-input").value;
+
+      //
+      // regexp to identify email addresses
+      //
+      let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (!re.test(String(submitted_email).toLowerCase()) || submitted_email === "email@domain.com") {
+	salert("Invalid email address!");
+	return;
+      };
+
       document.querySelector(".welcome-modal-header").innerHTML = '<div>Almost Done!</div>';
-      document.querySelector(".welcome-modal-main").innerHTML = '<div>Provide a password to encrypt your wallet before you send it to yourself. You will need this password to recover your wallet:</div><div class="password-inputs"></div>';
-      document.querySelector(".welcome-modal-info").innerHTML = '<div>Provide a password to encrypt your wallet before you send it to yourself for backup. This password will be known only to you.</div>';
+      document.querySelector(".welcome-modal-main").innerHTML = '<div>We need to encrypt your wallet before it is sent over the network. You will need this password to recover your wallet:</div><div class="password-inputs"></div>';
+      document.querySelector(".welcome-modal-info").innerHTML = '';
       document.querySelector(".password-inputs").innerHTML += FaucetModalBackupPasswordTemplate();
       document.querySelector(".submit-encrypt-wallet-btn").onclick = () => {
 

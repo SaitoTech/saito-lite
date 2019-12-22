@@ -508,7 +508,7 @@ console.log("... still here... receive accept request!");
 	// alert us someone has accepted our game
 	//
         if (this.browser_active == 0) { 
-	  if (txmsg.module == "Arcade") {
+	  if (txmsg.module === "Arcade" && tx.isTo(app.wallet.returnPublicKey())) {
 	    this.showAlert(); 
 	  }
 	}

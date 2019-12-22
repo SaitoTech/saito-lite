@@ -6,9 +6,9 @@ module.exports = FaucetModalBackupTemplate = () => {
       <div class="welcome-modal-left">
         <div class="welcome-modal-header">Welcome to Saito</h1></div>
         <div class="welcome-modal-main">
-          <div style="margin-bottom:20px">Backup your Saito wallet and start getting Saito tokens for free:</div>
+          <div style="margin-bottom:20px">Backup your Saito wallet and start earning tokens for free:</div>
           <div style="">
-	    <input style="width:100%; color:black; font-size:1em; background:white;" id="registry-input" type="text" placeholder="email">
+	    <input style="width:100%; color:black; font-size:1em; background:white;" id="registry-input" type="text" placeholder="email@domain.com">
           </div>
           <div style="font-size:0.7em;height:30px;margin-top:10px"><input type="checkbox" id="signup" style="float:left;margin-right:10px" checked /> send periodic updates on important network news (max monthly)</div>
           <div style="width: 100%; min-height: 50px">
@@ -18,7 +18,7 @@ module.exports = FaucetModalBackupTemplate = () => {
         <div class="welcome-modal-info">
           <fieldset style="margin-top:20px" class="welcome-modal-explanation">
             <div><b>How does this work?</b></div>
-            <div>Your browser will encrypt your wallet using a password you provide and send you a copy by legacy email. In the future, you can restore your wallet anytime by providing this encrypted file along with your secret password.</div>
+            <div>Your browser will encrypt your wallet using a password you provide and send you a copy by email. You can restore your wallet anytime by providing this encrypted file along with your password.</div>
           </fieldset>
         </div>
       </div>
