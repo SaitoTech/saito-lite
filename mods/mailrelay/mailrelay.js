@@ -1,19 +1,23 @@
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate.js');
 const nodemailer = require("nodemailer");
+const credentials =  require('./lib/credentials');
 
 
 class MailRelay extends ModTemplate {
 
     constructor(app) {
         super(app);
-        this.app = app;
+
         this.name = "MailRelay";
     }
 
     onConfirmation(blk, tx, conf, app) {
         let txmsg = tx.returnMessage();
         if (conf == 0) {
+            if (txmsg.module === "Email") {
+                console.log("########################################Mail Relay###################################");
+            }
             if (txmsg.module === "MailRelay") {
                 this.sendMail(txmsg.to, txmsg.from, txmsg.subject, txmsg.message, txmsg.attachments);
             }
@@ -28,32 +32,20 @@ class MailRelay extends ModTemplate {
         //
         // add an email
         //
-        let to      = 'richard@saito.tec';
+        let to      = 'richard@saito.tech';
         let from    = 'testnet@saito.io';
         let subject = 'This is a test email sent by the MailRelay module.';
         let message = 'This is a plain text email \n Very plain.';
         let attachments = "";
         try {
-            this.sendMail(to, from, subject, message, attachments);
+            this.sendMail(to, from, subject, message, attachments)
         } catch(err) {
             console.log(err);
         }
       }
 
     sendMail (to, from, subject, message, attachments){
-        nodemailer.createTransport({
-            host: "smtp.sendgrid.net",
-            port: 587,
-            secure: true, // upgrade later with STARTTLS
-            auth: {
-              user: "apikey",
-              pass: "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"
-            },
-            tls: {
-                // do not fail on invalid certs
-                rejectUnauthorized: false
-              }
-          });
+        let transporter = nodemailer.createTransport(credentials);
         transporter.sendMail({
             from: from,
             to: to,
@@ -68,8 +60,8 @@ class MailRelay extends ModTemplate {
 
     }
 
+    shouldAffixCallbackToModule() { return 1; }
+
 }
 
-
 module.exports = MailRelay;
-
