@@ -161,9 +161,18 @@ Saito is an application blockchain. To get started:
     //
     this.getTokens();
 
+    //
+    //
+    //
+console.log("$$$$$$$$$$$");
+console.log("$$$ PHC $$$");
+console.log("$$$$$$$$$$$");
+
     this.app.storage.loadTransactions("Email", 50, (txs) => {
 
       let keys = [];
+
+console.log("FOUND: " + JSON.stringify(txs));
 
       for (let i = 0; i < txs.length; i++) {
         this.emails.inbox.unshift(txs[i]);

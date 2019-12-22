@@ -31,6 +31,9 @@ class Roles extends ModTemplate {
 
   initialize(app) {
 
+
+
+/**** EXAMPLE OF HANDLING LINKS ***
     //
     // send an email
     //
@@ -61,6 +64,7 @@ console.log("ADDING EMAIL TO ONCONFIRMATION!");
       emailmod.onConfirmation(null, newtx, 0, app);
 } catch (err) {}
     }
+*****************/
 
   }
 

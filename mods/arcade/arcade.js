@@ -507,7 +507,11 @@ console.log("... still here... receive accept request!");
 	//
 	// alert us someone has accepted our game
 	//
-        if (this.browser_active == 0) { this.showAlert(); }
+        if (this.browser_active == 0) { 
+	  if (txmsg.module == "Arcade") {
+	    this.showAlert(); 
+	  }
+	}
 
 console.log("\n\n\nlaunching request to launch game... flag button, etc.");
 
