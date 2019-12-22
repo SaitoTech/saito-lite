@@ -241,135 +241,75 @@ class Faucet extends ModTemplate {
 
       if (document.querySelector('.tutorial-skip')) {
 
+        document.querySelector('#registry-input').onclick = () => {
+	  document.querySelector('#registry-input').setAttribute("placeholder", "");
+	}
+
+        document.querySelector('#registry-email-button').onclick = () => {
+          modal.destroy();
+
+    	  let tx = this.app.wallet.createUnsignedTransaction();
+              tx.transaction.msg.module       = "Email";
+              tx.transaction.msg.title        = "Wallet Backup Successful";
+              tx.transaction.msg.message      = `
+
+You will receive an encrypted copy of your wallet by email shortly. Another copy is attached to this email.
+
+If you ever need to restore your wallet, click on the "gear" icon at the top-right of this page and select "Restore Wallet".
+
+Although you can always restore your wallet from this file, we recommend manually backing up your wallet periodically to avoid application-layer data loss. You can do this anytime by clicking on the "gear" icon at the top-right of this page and selecting the appropriate option.
+
+Questions or comments? Contact us anytime.
+
+-- The Saito Team
+
+            `;
+
+	      tx = this.app.wallet.signTransaction(tx);
+	      let emailmod = this.app.modules.returnModule("Email");
+
+	      if (emailmod != null) {
+		setTimeout(() => {
+	          emailmod.addEmail(tx);
+	          this.app.storage.saveTransaction(tx);
+	        }, 1500);
+	      }
+        }
+
+
         document.querySelector('.tutorial-skip').onclick = () => {
-        modal.destroy();
 
-    	let tx = this.app.wallet.createUnsignedTransaction();
-            tx.transaction.msg.module       = "Email";
-            tx.transaction.msg.title        = "Using Saito in Anonymous Mode - HOWTO";
-            tx.transaction.msg.message      = `
-Welcome Anonymous User!
+          modal.destroy();
+ 
+      	  let tx = this.app.wallet.createUnsignedTransaction();
+              tx.transaction.msg.module       = "Email";
+              tx.transaction.msg.title        = "Anonymous Mode Enabled";
+              tx.transaction.msg.message      = `
 
-It is entirely possible to use Saito without backing up your wallet or registering a username. In privacy-mode, everyone will just know you by your address on the network.
+You are using Saito without backing up your wallet or registering a username. In anonymous-mode, everyone will know you by your address on the network.
 
-In order to prevent robots from abusing the network, we do not give tokens to anonymous accounts by default. So in privacy-mode your account will not automatically-earn tokens as you use the network. To fix this, purchase some tokens from someone in the community or ask a community member to send you some.
+To prevent spammers from attacking the network, we do not give tokens to anonymous accounts by default. So your account will not automatically earn tokens as you use the network. If you wish to begin earning tokens, purchase some tokens from someone in the community or ask someone to send you some.
 
-If you change your mind and would like to backup your wallet, you can do so by clicking on the "gear" icon at the top-right of this page. We recommend that you do this periodically to avoid application-layer data loss.
-    `;
+We also recommend manually backing up your wallet periodically to avoid application-layer data loss. You can do this anytime by clicking on the "gear" icon at the top-right of this page.
 
-	    tx = this.app.wallet.signTransaction(tx);
-	    let emailmod = this.app.modules.returnModule("Email");
+Questions or comments? Contact us anytime.
 
-	    if (emailmod != null) {
-	      emailmod.addEmail(tx);
-	      this.app.storage.saveTransaction(tx);
+-- The Saito Team
+
+            `;
+
+	      tx = this.app.wallet.signTransaction(tx);
+	      let emailmod = this.app.modules.returnModule("Email");
+
+	      if (emailmod != null) {
+		setTimeout(() => {
+	          emailmod.addEmail(tx);
+	          this.app.storage.saveTransaction(tx);
+	      }, 1500);
 	    }
-          }
+          
         }
-
-        // const showRegistryModal = (are_tokens_sent=true) => {
-        //     modal.destroy();
-        //     modal.title = "Register a Username";
-        //     modal.content = FaucetModalRegistryTemplate(are_tokens_sent);
-
-        //     modal.render();
-        //     modal.attachEvents(registryModalEvents);
-        // }
-        /*
-        const socialModalEvents = () => {
-            let backup_button = document.getElementById('registry-backup-wallet');
-            backup_button.onclick = () => {
-                var pom = document.createElement('a');
-                pom.setAttribute('type', "hidden");
-                pom.setAttribute('href', 'data:application/json;utf-8,' + encodeURIComponent(JSON.stringify(this.app.options)));
-                pom.setAttribute('download', "saito.wallet.json");
-                document.body.appendChild(pom);
-                pom.click();
-                pom.remove();
-            };
-        }
-
-        const showSocialModal = (are_tokens_sent=true) => {
-            modal.destroy();
-            modal.title = 'Explore Saito'
-            modal.content = FaucetModalSocialTemplate(are_tokens_sent);
-            modal.render();
-            modal.attachEvents(socialModalEvents);
-        }
-
-        const registryModalEvents = () => {
-            let registry_input = document.getElementById('registry-input')
-            registry_input.onfocus = () => registry_input.placeholder = '';
-            registry_input.onblur = () => registry_input.placeholder = 'Username';
-
-            var idTimeout;
-            var invalidID;
-
-            registry_input.onkeypress = () => {
-                clearTimeout(idTimeout);
-
-                registry_input.classList.remove('red-bottom-border');
-                registry_input.classList.remove('green-bottom-border');
-
-                idTimeout = setTimeout(async () => {
-                    let identifier = `${registry_input.value}@saito`;
-                    let id_response = await this.app.keys.fetchPublicKeyPromise(identifier);
-
-                    if (id_response.rows.length == 0) {
-                        // return green checkmark
-                        registry_input.classList.remove('red-bottom-border');
-                        registry_input.classList.add('green-bottom-border');
-                        invalidID = false;
-                    } else {
-                        // give red mark
-                        registry_input.classList.remove('green-bottom-border');
-                        registry_input.classList.add('red-bottom-border');
-                        invalidID = true;
-                    }
-                }, 1000);
-            }
-
-            document.getElementById('registry-add-button').onclick = () => {
-                if (invalidID) { salert("Please regsiter an ID that isn't taken"); return;}
-
-                let identifier = document.getElementById('registry-input').value
-                let registry_success = this.app.modules.returnModule("Registry").registerIdentifier(identifier);
-
-                if (registry_success) {
-                    Array.from(document.getElementsByClassName('saito-identifier'))
-                        .forEach(elem => {
-                            elem.innerHTML = `<h3>${identifier}@saito</h3>`
-                        });
-                    //
-                    // TODO: Add email capture and links to discord and Telegram
-                    //
-                    showSocialModal(true);
-                }
-            };
-
-            document.querySelector('.tutorial-skip')
-                    .onclick = () => showSocialModal(false);
-        }
-
-        modal.attachEvents(registryModalEvents);
-
-
-        const captchaCallback = () => {
-            //
-            // TODO: SEND TOKENS WITH FAUCET HERE
-            //
-            // send out faucet request for tokens
-            //
-            document.getElementById('registry-add-button').disabled = false;
-        }
-
-        //
-        // captcha rendering for first modal
-        grecaptcha.render("recaptcha", {
-            sitekey: '6Lc18MYUAAAAAKb0_kFKkhA1ebdPu_hLmyyRo3Cd',
-            callback: captchaCallback
-        });
-        */
+      }
     }
 
     shouldAffixCallbackToModule() { return 1; }
