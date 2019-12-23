@@ -225,30 +225,6 @@ class Faucet extends ModTemplate {
 
 
 
-
-
-    tutorialModal() {
-
-      //
-      // initial modal state
-      //
-      let modal = new Modal(this.app, {
-            id: 'faucet',
-            title: 'Welcome to Saito',
-            content: FaucetModalBackupTemplate()
-      });
-
-      let data = {};
-          data.faucet = this;
-          data.modal = modal;
-
-      modal.render("blank");
-
-      FaucetModalBackup.attachEvents(this.app, data);
-
-    }
-
-
     shouldAffixCallbackToModule() { return 1; }
 
 }
