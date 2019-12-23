@@ -477,7 +477,6 @@ console.log(bundle_filename + " -- " + online_version);
     //
     // require inclusion of  module versions and paths for loading into the system
     //
-
     const fs = this.app.storage.returnFileSystem();
     const path = require('path');
     const unzipper = require('unzipper');
@@ -486,12 +485,17 @@ console.log(bundle_filename + " -- " + online_version);
     let hash = this.app.crypto.hash(modules.map(mod => mod.version).join(''));
 
     //
-    // first
+    // first provide a configuration file
     //
     let modules_config_filename = `modules.config-${ts}-${hash}.json`;
 
+
     let module_paths = modules.map(mod => {
+
       let mod_path = `mods/${mod.name.toLowerCase()}-${ts}-${hash}.zip`;
+
+console.log("mod path is: " + mod_path);
+
       fs.writeFileSync(path.resolve(__dirname, mod_path), mod.zip, { encoding: 'binary' });
       fs.createReadStream(path.resolve(__dirname, mod_path))
         .pipe(unzipper.Extract({
@@ -505,6 +509,7 @@ console.log(bundle_filename + " -- " + online_version);
 
       // return the path
       return `appstore/bundler/mods/${mod.name.toLowerCase()}-${ts}-${hash}/${mod.name.toLowerCase()}`;
+
     });
 
     //

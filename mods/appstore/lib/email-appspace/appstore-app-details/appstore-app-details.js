@@ -54,7 +54,7 @@ module.exports = AppstoreAppDetails = {
         let replacing_old = 0;
 
         for (let z = 0; z < module_list.length; z++) {
-          if (data.module.name != "" && module_list[z].name != app.options.modules[i].name) {
+          if (data.module.name != "" && module_list[z].name == app.options.modules[i].name) {
             replacing_old = 1;
           }
         }
@@ -63,6 +63,8 @@ module.exports = AppstoreAppDetails = {
           module_list.push({ name : app.options.modules[i].name , version : app.options.modules[i].version });
         }
       }
+
+console.log("HERE: " + JSON.stringify(module_list));
 
       //
       // READY TO SUBMIT
