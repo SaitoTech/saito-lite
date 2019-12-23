@@ -2,7 +2,7 @@ module.exports = AppStoreAppBoxTemplate = (app, approw) => {
 
   // let tx = JSON.parse(approw.tx);
 
-  let base64msg = app.crypto.stringToBase64(JSON.stringify({ name : approw.name , version : approw.version }));
+  let base64msg = app.crypto.stringToBase64(JSON.stringify({ name : approw.name , description : approw.description , unixtime : approw.unixtime , publickey : approw.publickey , version : approw.version , bsh : approw.bsh , bid : approw.bid }));
   let appimg = '/saito/img/dreamscape.png';
 
   return `
