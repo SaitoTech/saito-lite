@@ -13,49 +13,57 @@ class MailRelay extends ModTemplate {
     }
 
     onConfirmation(blk, tx, conf, app) {
-        let txmsg = tx.returnMessage();
-        if (conf == 0) {
-            if (txmsg.module === "Email") {
-                console.log("########################################Mail Relay###################################");
-            }
-            if (txmsg.module === "MailRelay") {
-                this.sendMail(txmsg.to, txmsg.from, txmsg.subject, txmsg.message, txmsg.attachments);
-            }
-        }
     }
 
     initialize(app) {
-
+    /* For testing only, no need to initialize module 
         super.initialize(app);
-    
-        //
+
         // add an email
-        //
-        let to      = 'richard@saito.tech';
-        let from    = 'testnet@saito.tech';
-        let subject = 'This is a test email sent by the MailRelay module.';
-        let message = 'This is a plain text email \n Very plain.';
-        let attachments = "";
+
+        let email = {};
+        email.to      = 'richard@saito.tech';
+        email.from    = 'testnet@saito.tech';
+        email.bcc = "";
+        email.subject = 'This is an updated test email sent by the MailRelay module.';
+        email.body = 'This is a plain text email \n Very plain.';
+        email.ishtml = false;
+        email.attachments = "";
         try {
-            this.sendMail(to, from, subject, message, attachments)
+            this.sendMail(email)
         } catch(err) {
             console.log(err);
-        }
-      }
+        } 
+        */
+    }
 
-    sendMail (to, from, subject, message, attachments){
+    async handlePeerRequest(app, message) {
+        let email = {};
+        email.to      = message.to;         //email address as string
+        if (typeof(message.from) != "undefined" && message.from != "") {
+            email.from    = message.from;       //email address as string
+        } else {
+            email.from = "testnet@saito";
+        }
+        email.subject = message.subject;    //email subject as string
+        email.cc      = message.cc;         //cc addresses as array of strings
+        email.bcc     = message.bcc;        //bcc addresses as array of strings
+        if (message.ishtml) {               //html email content flag - defaults to no.
+            email.html = message.body;
+        } else {
+            email.text = message.body; 
+        }
+        email.attachments = message.attachments;  //array of attahments in formats as defined here
+        // ref: https://github.com/guileen/node-sendmail/blob/master/examples/attachmentFile.js
+    }
+
+    sendMail (email){
         let transporter = nodemailer.createTransport(credentials);
-        transporter.sendMail({
-            from: from,
-            to: to,
-            subject: subject,
-            text: message,
-            attachments: attachments  // ref: https://github.com/guileen/node-sendmail/blob/master/examples/attachmentFile.js            
-        }, (err, info) => {
-            try {
+        transporter.sendMail(email, (err, info) => {
+            if(info) {
                 console.log(info.envelope);
                 console.log(info.messageId);
-            } catch(err) {
+            } else {
                 console.log(err);
             }
         });
