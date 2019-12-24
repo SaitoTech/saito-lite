@@ -3,17 +3,10 @@ var ModTemplate = require('../../lib/templates/modtemplate');
 
 
 const Modal = require('../../lib/ui/modal/modal');
-
 const WelcomeBackupTemplate = require('./lib/modal/welcome-backup.template');
 const WelcomeBackup = require('./lib/modal/welcome-backup.js');
-
 const RegisterUsernameTemplate = require('./lib/modal/register-username.template');
 const RegisterUsername = require('./lib/modal/register-username.js');
-
-const InviteFriendsTemplate = require('./lib/modal/invite-friends.template');
-const InviteFriends = require('./lib/modal/invite-friends.js');
-
-
 
 
 
@@ -55,26 +48,6 @@ class Tutorial extends ModTemplate {
 
 
 
-
-
-  inviteFriendsModal() {
-
-    let modal = new Modal(this.app, {
-      id: 'friends',
-      title: 'Invite Friends',
-      content: InviteFriendsTemplate()
-    });
-
-    let data = {};
-        data.modal = modal;
-
-    modal.render("blank");
-
-    InviteFriends.attachEvents(this.app, data);
-
-  }
-
-
   welcomeBackupModal() {
 
     let modal = new Modal(this.app, {
@@ -84,6 +57,7 @@ class Tutorial extends ModTemplate {
     });
 
     let data = {};
+        data.faucet = this;
         data.modal = modal;
 
     modal.render("blank");
@@ -93,7 +67,7 @@ class Tutorial extends ModTemplate {
   }
 
 
-  registerIdentifierModal() {
+  registerUsernameModal() {
 
     let modal = new Modal(this.app, {
       id: 'register-username',
@@ -102,6 +76,7 @@ class Tutorial extends ModTemplate {
     });
 
     let data = {};
+        data.faucet = this;
         data.modal = modal;
 
     modal.render("blank");

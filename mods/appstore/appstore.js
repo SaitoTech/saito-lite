@@ -473,13 +473,14 @@ console.log(bundle_filename + " -- " + online_version);
   async bundler(modules) {
 
     //
-    // modules has name, description, zip (helpful)
+    // modules has name, description, version, zip
     //
     // require inclusion of  module versions and paths for loading into the system
     //
     const fs = this.app.storage.returnFileSystem();
     const path = require('path');
     const unzipper = require('unzipper');
+
 
     let ts = new Date().getTime();
     let hash = this.app.crypto.hash(modules.map(mod => mod.version).join(''));
@@ -488,8 +489,6 @@ console.log(bundle_filename + " -- " + online_version);
     // first provide a configuration file
     //
     let modules_config_filename = `modules.config-${ts}-${hash}.json`;
-
-
     let module_paths = modules.map(mod => {
 
       let mod_path = `mods/${mod.name.toLowerCase()}-${ts}-${hash}.zip`;
