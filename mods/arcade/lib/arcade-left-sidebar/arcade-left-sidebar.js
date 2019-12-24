@@ -27,6 +27,18 @@ module.exports = ArcadeLeftSidebar = {
     attachEvents(app, data) {
 
       document.querySelector('#games-add-game').addEventListener('click', function() {
+
+	///////////////////////////////////////////
+	// TUTORIAL - REGISTER USERNAME OVERRIDE //
+	///////////////////////////////////////////
+	let tutorialmod = app.modules.returnModule("Tutorial");
+        if (tutorialmod) {
+	  if (!app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey())) {
+	    try { tutorialmod.registerIdentifierModal(); } catch (err) {};
+	    return;
+	  }
+	}
+
         ArcadeStartGameList.render(app,data);
         ArcadeStartGameList.attachEvents(app,data);
       });
@@ -34,6 +46,17 @@ module.exports = ArcadeLeftSidebar = {
 
       Array.from(document.getElementsByClassName('arcade-navigator-item')).forEach(game => {
         game.addEventListener('click', (e) => {
+
+	  ///////////////////////////////////////////
+	  // TUTORIAL - REGISTER USERNAME OVERRIDE //
+	  ///////////////////////////////////////////
+	  let tutorialmod = app.modules.returnModule("Tutorial");
+          if (tutorialmod) {
+	    if (!app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey())) {
+	      try { tutorialmod.registerIdentifierModal(); } catch (err) {};
+	      return;
+	    }
+	  }
 
           data.active_game = e.currentTarget.id;
 

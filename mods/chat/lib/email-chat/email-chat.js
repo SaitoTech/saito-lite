@@ -5,7 +5,7 @@ const AddContactModal = require('./modals/add-contact-modal');
 const EmailChatTemplate = require('./email-chat.template.js');
 
 module.exports = EmailChat = {
-    // add receive event in email
+
     initialize(app, data) {
       my_listener = (msg) => this.addMessageToDOM(app, data, msg);
       app.connection.removeAllListeners('chat_receive_message');
@@ -13,6 +13,7 @@ module.exports = EmailChat = {
     },
 
     render(app, data) {
+
       let email_chat = document.querySelector(".email-chat")
       email_chat.innerHTML = EmailChatTemplate();
 
