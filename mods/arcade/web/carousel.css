@@ -12,9 +12,14 @@
     position: relative;
 }
 
+.carousel-spacer {
+    width: 100%;
+    position: relative;
+}
+
 .arcade-game-carousel {
   width:100%;
-  min-height: 35%;
+  position: relative;
 }
 
 .arcade-carousel-wrapper {
@@ -23,7 +28,7 @@
     overflow: hidden;
     position: relative;
 
-    background-image: url(/arcade/img/8bit-Saito-Arcade.png);
+    background-image: url(/arcade/img/dreamscape-logo.png);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -35,7 +40,9 @@
    width: 100%;
    height: 100%;
    position: absolute;
+   top: 0;
    opacity: 0;
+   border: 1px solid darkorange;
 }
 
 .arcade-carousel-wrapper > div {

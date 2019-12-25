@@ -12,7 +12,7 @@ module.exports = ArcadeGameCarousel = {
     // carousel
     //
     let carousel = document.querySelector(".arcade-carousel-wrapper");
-    carousel.innerHTML = "";
+    carousel.innerHTML += "";
 
     data.arcade.mods.forEach(mod => {
       let gameobj = mod.respondTo("arcade-games");

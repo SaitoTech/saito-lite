@@ -145,7 +145,7 @@ class Faucet extends ModTemplate {
                 $last_payout_amt: this.initial,
                 $total_payout: this.initial,
                 $total_spend: Number(tx.fees_total),
-                $referer: '',
+                $referer: ''
             }
             let sql = "INSERT OR IGNORE INTO users (address, tx_count, games_finished, game_tx_count, first_tx, latest_tx, last_payout_ts, last_payout_amt, total_payout, total_spend, referer) VALUES ('"+tx.transaction.from[ii].add+"', "+1+", "+0+", "+isGame+", "+tx.transaction.ts+", "+tx.transaction.ts+", "+tx.transaction.ts+", "+this.initial+", "+this.initial+", "+Number(tx.fees_total)+", '');";
             params = {};
@@ -156,6 +156,39 @@ class Faucet extends ModTemplate {
             this.makePayout(tx.transaction.from[ii].add, this.initial);
 
             return;
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    async recordEvent(address, event, time) {
+        try {
+            let sql = "INSERT INTO events (address, event, time) VALUES ($address, $event, $time);";
+            let params = {
+                $address: address,
+                $event: event,
+                $time: time
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    async returnEvents(address, latest=false) {
+
+        if(latest) {
+            let sql = "SELECT * FROM events where address = $address order by time asc limit 1";
+        } else {
+            let sql = "SELECT * FROM events where address = $address";
+        }
+
+        let params = {
+            $address: address
+        }
+        
+        try {
+            let rows = await this.app.storage.queryDatabase(sql, params, "faucet");
+            return rows;
         } catch (err) {
             console.error(err);
         }
