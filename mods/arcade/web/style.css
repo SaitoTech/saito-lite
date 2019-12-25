@@ -79,11 +79,11 @@ input {
 }
 
 .background-shim {
-  position: absolute;
-  top: 4em;
+  position: fixed;
+  top: 80px;
   left: 0;
   width: 100%;
-  height: calc(100vh - 4em);
+  height: calc(100vh - 80px);
   background-size: cover;
   z-index: 0;
 }
@@ -204,11 +204,10 @@ button.add-games {
 /** MAIN **/
 
 .arcade-main {
-  /* display: grid;
-  justify-content: center; */
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 .arcade-gamelist {
@@ -295,13 +294,15 @@ button.add-games {
 .create-game-wizard, .escrow-game-wizard {
   display: flex;
   flex-direction: column;
-  position: absolute;
+  position: fixed;
   width: 80%;
   margin: 1em auto;
   background-color: #0009;
   padding: 1em;
   z-index: 5;
   max-width: 900px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .escrow-game-wizard div {
@@ -340,11 +341,9 @@ button.add-games {
 
 .return-to-arcade {
   position: absolute;
-  right: 25px;
+  right: -16px;
+  top: -16px;
   display: inline-block;
-  top: 0;
-  width: 0;
-  top: -20px;
 }
 
 .game-description {
