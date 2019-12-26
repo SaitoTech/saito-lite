@@ -1,6 +1,11 @@
 body {
   background-color: var(--saito-skyline-grey);
-  font-size: 1.4em;
+  font-size: 1em;
+  background-image: url('/saito/img/dreamscape.png');
+  background-repeat: no-repeat;
+  background-size: 100% 500px;
+  font-family: "visuelt-light";
+  overflow-x: hidden;
 }
 
 .header {
@@ -9,92 +14,75 @@ body {
   left: 0px;
   background-image: transparent;
   background: transparent;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
-.main {
-  padding:0;
-  margin:0;
-  width: 100%;
-  min-height: 1000px;
-  height: 100%;
-}
-
-.background-image {
-  background-image: url('/saito/img/dreamscape.png');
-  background-size: cover;
-  width: 100%;
-  min-height: 1000px;
-  height: 100%;
+.site-main {
+  margin: 100px 0 0 0;
 }
 
 .quote-container {
   width: 580px;
   color: #fff;
-  position: relative;
-  top: -1050px;
-  left: 70px;
+  justify-self: right;
+  text-align: center;
+  align-self: center;
 }
 
 .quote-content {
-  font: normal normal normal 36px/1.4em poppins-semibold,poppins,sans-serif;
-  margin-top: 15px;
+  margin: 15px 4px 0 4px;
+  font-size: 3em;
+  font-style: italic;
+  text-align: center;
   display: inline;
-  margin:0 4px;
 }
 
 .quote-author {
   clear: both;
-  font: normal normal normal 16px/1.4em spinnaker,sans-serif;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.075em;
   color: #fff;
   font-weight: 500;
-  margin:20px 0 0 45px;
+  margin: 20px 0 0 45px;
 }
 
 .fa-quote-left {
-  font-size:0.8em;
-  vertical-align: top;
+  font-size: 1.5em;
+  vertical-align: text-bottom;
+  height: 2.2em;
 }
 
 .fa-quote-right {
-  vertical-align: top;
-  font-size:0.8em;
+  font-size: 1.5em;
+  vertical-align: text-top;
 }
 
 .intro-box {
-  height: auto;
   width: 620px;
-  top: -750px;
-  left: 50%;
-  position: relative;
-  background-color: #f2f2f2;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
+  background-color: var(--saito-skyline-grey);
+  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2);
+  padding: 40px 37px 37px 37px;
 }
 
 .intro-title {
   color: #f71e3d;
-  padding:40px 37px 37px 37px;
-  left: 52px;
-  font: normal normal normal 40px/1.4em poppins-semibold,poppins,sans-serif;
+  font-size: 2.1em;
   font-weight: 700;
-}
-
-.border-box{
-  width:113px;
-  height: 5px;
-  border-radius: 2px;
-  margin-left: 52px;
-  box-sizing: border-box;
-  border-top: 3px solid #f71e3d;
+  margin: 0 0 1em 0;
 }
 
 .intro-content {
-  font: normal normal normal 16px/1.4em helvetica-w01-light,helvetica-w02-light,sans-serif;
-  font-size: 16px;
+  font-size: 1.2em;
   color: #000000;
-  line-height: 1.7em;
-  display: block;
-  padding: 20px 52px 37px 52px;
-  letter-spacing: 0.05em;
+  line-height: 1.5em;
+
 }
 
+.intro-content p {
+  letter-spacing: 0.05em;
+  margin: 0 0 1em 0;
+}
+
+.row {
+  grid-gap: 2em;
+}

@@ -22,24 +22,12 @@ class Website extends ModTemplate {
     Header.render(app, this.uidata);
     Header.attachEvents(app, this.uidata);
 
-/****
-    HeaderMenu.render(app);
-
-    // Use for Carousel
-   importGlide = async () => {
-     const Glide = await import('../../lib/helpers/glide.min.js');
-     this.glide = new Glide.default('.glide', {
-        type: 'carousel',
-        autoplay: 3000,
-        perView,
-      });
-      this.glide.mount();
-    } 
-    importGlide();
-****/
   }
 
+  shouldAffixCallbackToModule() { return 1; }
+
 }
+
 
 
 module.exports = Website;

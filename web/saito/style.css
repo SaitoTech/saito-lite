@@ -70,6 +70,14 @@ p {
     font-family: 'visuelt-light';
 }
 
+a {
+    color: var(--saito-red);
+}
+
+a:hover {
+    color: var(--saito-cyber-black);
+}
+
 body {
     /* width: 100vw;
     height: 100vh; */
