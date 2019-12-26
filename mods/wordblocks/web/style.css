@@ -37,8 +37,7 @@ body {
 .wb-main {
   border: 1px solid orange;
   max-width: 902px;
-  margin: auto;
-}
+ }
 
 .gameboard {
   display: grid;
@@ -65,19 +64,6 @@ body {
   cursor: pointer;
   text-align: center;
 }
-
-/* #controls {
-  margin: auto;
-  display: block;
-  overflow: hidden;
-  background-color: #555;
-  border: 2px solid #333;
-  color: #EEE;
-  height: 340px;
-  position: relative;
-  width: 100%;
-  max-width: 900px;
-} */
 
 #remainder, #lastmove {
   /* display: inline-block; */
@@ -150,7 +136,7 @@ body {
   border-style: solid;
   border-color: rgb(221, 221, 221);
   border-image: initial;
-  padding: 10px;
+  padding: 10px 0 0 0;
   background: rgb(70, 70, 70);
   font-size: 36px;
   color: #efefec;
@@ -478,6 +464,7 @@ body {
 .status {
   padding: 1em;
   overflow-y: auto;
+  overflow-x: hidden;
   border: none;
 }
 
