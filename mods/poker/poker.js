@@ -23,6 +23,26 @@ class Poker extends GameTemplate {
 
   }
 
+//
+  // manually announce arcade banner support
+  //
+  respondTo(type) {
+
+    if (super.respondTo(type) != null) {
+      return super.respondTo(type);
+    }
+
+    if (type == "arcade-carousel") {
+      let obj = {};
+      obj.background = "/poker/img/arcade/arcade-banner-background.png";
+      obj.title = "Poker";
+      return obj;
+    }
+   
+    return null;
+ 
+  }
+
 
   initializeQueue() {
 

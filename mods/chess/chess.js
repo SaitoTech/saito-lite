@@ -33,6 +33,26 @@ class Chessgame extends GameTemplate {
 
   }
 
+  //
+  // manually announce arcade banner support
+  //
+  respondTo(type) {
+
+    if (super.respondTo(type) != null) {
+      return super.respondTo(type);
+    }
+
+    if (type == "arcade-carousel") {
+      let obj = {};
+      obj.background = "/chess/img/arcade/arcade-banner-background.png";
+      obj.title = "Chess";
+      return obj;
+    }
+   
+    return null;
+ 
+  }
+
   async initializeGame(game_id) {
 
     console.log('######################################################');

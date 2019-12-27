@@ -1,5 +1,7 @@
+const saito = require('../../../../../../lib/saito/saito');
 const EmailFormTemplate = require('./email-form.template.js');
 const EmailFormHeader = require("../../email-header/email-form-header/email-form-header");
+const Big = require('big.js');
 
 module.exports = EmailForm = {
 
@@ -19,6 +21,12 @@ module.exports = EmailForm = {
     attachEvents(app, data) {
         document.querySelector('.email-submit')
             .addEventListener('click', (e) => this.sendEmailTransaction(app, data));
+
+        document.querySelector('.fa-dollar-sign')
+            .addEventListener('click', (e) => {
+            document.querySelector('.amount-value').toggleClass("hidden");
+            document.querySelector('.amount-label').toggleClass("hidden");
+        })
     },
 
 
@@ -32,6 +40,10 @@ module.exports = EmailForm = {
         let email_text = document.querySelector('.email-text').value;
         let email_to = document.getElementById('email-to-address').value;
         let email_from = this.saito.wallet.returnPublicKey();
+        let email_amount = 0;
+        if (document.querySelector('.email-amount').value > 0) {
+            email_amount = document.querySelector('.email-amount').value;
+        }
 
         email_to = await data.email.addrController.returnPublicKey(email_to);
 
@@ -44,6 +56,15 @@ module.exports = EmailForm = {
         newtx.transaction.msg.module   = "Email";
         newtx.transaction.msg.title    = email_title;
         newtx.transaction.msg.message  = email_text;
+        //need advice here
+        //newtx.transaction.from.push(new saito.slip(this.saito.wallet.returnPublicKey(), Big(email_amount)));
+        let slips = this.saito.wallet.returnAdequateInputs(email_amount.toString());
+        if(slips) {
+            newtx.transaction.from = slips;
+        } else {
+            console.log('You appear to be fresh out of slips?');
+        }
+        newtx.transaction.to.push(new saito.slip(email_to, Big(email_amount)));
         newtx = this.saito.wallet.signTransaction(newtx);
 
         app.network.propagateTransaction(newtx);
