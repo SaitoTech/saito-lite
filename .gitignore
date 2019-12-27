@@ -56,5 +56,6 @@ mods/registry/web/addresses.txt
 mods/reddit/web
 mods/reddit/web/*
 mods/mailrelay/lib/credentials.js
+mods/mailrelay/lib/template-credentials.js
 
 extras/shashmap/build
