@@ -1,12 +1,14 @@
 module.exports = {
     host: "smtp.sendgrid.net",
-    port: 2525,
-    secure: false, // upgrade later with STARTTLS
+    port: 465,
+    secure: true, // upgrade later with STARTTLS
     auth: {
+//      user: "YXBpa2V5",
+//      pass: "U0cuUDdKSHpYMGxSSVdHa2RuUlROSDJTQS5IZlNlVGpqR0pDbTNWbENOT0Y4R2lJRG52TDlvX1hBRWxpLUFWbXQ2a05V"
+//      user: "RichardParris",
+//      pass: "O@eFv^6OFfg3CnWZ98e1OE7frxwiSFt*W@",
       user: "apikey",
-      //user: "YXBpa2V5",
-      pass: "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"
-      //pass: "U0cuMWxubWJUYldTVFcxRlFrdTVqbFR6dy5vTkYzZGQ5cFhuQjBwUVQ3TnpiSkU0dUJDVC1MYVRxc0NGb1B3aGJZQW1z"
+      pass: "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"
     }/*,
       tls: {
          // do not fail on invalid certs

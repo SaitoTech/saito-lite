@@ -3,6 +3,7 @@ const ModTemplate = require('../../lib/templates/modtemplate.js');
 const Big = require('big.js');
 
 const Modal = require('../../lib/ui/modal/modal');
+/*
 const FaucetModalCaptchaTemplate = require('./lib/modal/faucet-modal-captcha.template');
 const FaucetModalRegistryTemplate = require('./lib/modal/faucet-modal-registry.template');
 const FaucetModalSocialTemplate = require('./lib/modal/faucet-modal-social.template');
@@ -10,6 +11,7 @@ const FaucetModalBackupTemplate = require('./lib/modal/faucet-modal-backup.templ
 const FaucetModalBackup = require('./lib/modal/faucet-modal-backup.js');
 
 const FaucetAppSpace = require('./lib/email-appspace/faucet-appspace');
+*/
 
 class Faucet extends ModTemplate {
 

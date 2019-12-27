@@ -34,24 +34,34 @@ module.exports = EmailDetailHeader = {
             });
 
     document.getElementById('email-detail-reply')
-            .addEventListener('click', (e) => {
-              let { from } = data.email.selected_email.transaction;
-              data.email.previous_state = data.email.active;
-              data.email.active = "email_form";
-              data.email.main.render(app, data);
-              data.email.main.attachEvents(app, data);
-              document.getElementById('email-to-address').value = from[0].add;
-            });
+      .addEventListener('click', (e) => {
+
+        data.email.previous_state = data.email.active;
+        data.email.active = "email_form";
+        data.email.main.render(app, data);
+        data.email.main.attachEvents(app, data);
+
+        let original = data.email.selected_email.transaction;
+        document.getElementById('email-to-address').value = original.from[0].add;
+        document.querySelector('.email-title').value = "Re: " + original.msg.title;
+        let body = "\n\n\n --Quoted Text-------------------------\n\n" + original.msg.message;
+        document.querySelector('.email-text').value = body;
+        document.querySelector('.email-text').focus();
+      });
 
     document.getElementById('email-detail-forward')
-            .addEventListener('click', (e) => {
-              let { msg } = data.email.selected_email.transaction;
-              data.email.previous_state = data.email.active;
-              data.email.active = "email_form";
-              data.email.main.render(app, data);
-              data.email.main.attachEvents(app, data);
-              document.querySelector('.email-title').value = msg.title;
-              document.querySelector('.email-text').value = msg.message;
-            });
+      .addEventListener('click', (e) => {
+        let original = data.email.selected_email.transaction;
+        data.email.previous_state = data.email.active;
+        data.email.active = "email_form";
+        data.email.main.render(app, data);
+        data.email.main.attachEvents(app, data);
+        document.querySelector('.email-title').value = "Re: " + original.msg.title;
+        document.querySelector('.email-text').value = original.msg.message;
+        let body = "-------------------------------------";
+        body += "\n\n\nForwarded from: " + original.from[0].add + "\n\n" + original.msg.message;
+        document.querySelector('.email-text').value = body;
+        document.getElementById('email-to-address').focus();
+      });
   }
 }
