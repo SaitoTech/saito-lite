@@ -3,7 +3,7 @@ body {
   font-size: 1em;
   background-image: url('/saito/img/dreamscape.png');
   background-repeat: no-repeat;
-  background-size: 100% 500px;
+  background-size: 100% 600px;
   font-family: "visuelt-light";
   overflow-x: hidden;
   width: 100vw;
@@ -15,12 +15,10 @@ body {
   left: 0px;
   background-image: transparent;
   background: transparent;
-  overflow-x: hidden;
-  overflow-y: hidden;
 }
 
 .site-main {
-  margin: 120px 0 0 0;
+  margin: 220px 0 0 0;
 }
 
 .quote-container {
@@ -55,10 +53,10 @@ body {
 }
 
 .intro-box {
-  width: 620px;
+  width: 580px;
   background-color: var(--saito-skyline-grey);
   box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2);
-  padding: 40px 37px 37px 37px;
+  padding: 2em 2em 0 2em;
 }
 
 .intro-title {
@@ -90,7 +88,7 @@ body {
 .arcade-text {
   margin: 4em 0;
   padding: 1em;
-  width: 630px;
+  width: 590px;
 }
 
 .upsize {
@@ -124,19 +122,53 @@ body {
 }
 
 .godeeper-row {
-  height: 26em;
+  height: 19em;
+}
+
+.godeeper h2 {
+  margin: 0 1em 2em 1em;
+  font-size: 2em;
 }
 
 .godeeper {
-  margin: 5px;
-  width: 580px;
-  justify-self: right;
-  padding: 1em 2em;
-  line-height: 1.4em;
-  font-size: 1.4em;
+  width: 100vw;
+  max-width: 1230px;
+  margin: auto;
+  padding: 0em 1em;
+  top: -80px;
   position: relative;
-  top: -120px;
-  background-color: var(--saito-skyline-grey);
+}
+
+.deeperboxes {
+  display: flex;
+  width: 100%;
+}
+
+.deeperbox {
+  margin: auto;
+  text-decoration: none;
+}
+
+.deeperbox i {
+  color: #fff;
+  background-color: var(--saito-red);
+  font-size: 6em;
+  line-height: 2em;
+  width: 2em;
+  text-align: center;
+}
+
+.deepertext {
+  text-align: center;
+  font-size: 2em;
+  line-height: 2em;
+  color: var(--saito-red);
+  text-shadow: 0 0 1px #0009;
+}
+
+.box-spacer {
+  width: 100%;
+  position: relative;
 }
 
 .godeeper li {
@@ -150,10 +182,13 @@ body {
   color: var(--saito-cyber-black);
 }
 
-.arcade-banner {
+.arcade-banner-link {
   justify-self: right;
-  width: 580px;
   margin: 4em 0;
+}
+
+.arcade-banner {
+  width: 590px;
 }
 
 .flowplayer video {
@@ -299,12 +334,33 @@ body {
   .quote-container, .slider, .intro-box, .flowplayer, .arcade-text, .godeeper {
     width: 100vw;
   }
+  .intro-box{
+    border-bottom: 10px solid orange;
+  }
   .godeeper {
-    margin: 1em 0;
-    padding: 0em 1em;
-    height: 425px;
     top: 0;
-    justify-self: auto;
+  }
+  .deeperboxes {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1em;
+  }
+  .godeeper h2 {
+    margin: 1em 0.5em;
+    font-size: 1.7em;
+  }
+  .deeperbox i {
+    color: #fff;
+    background-color: var(--saito-red);
+    font-size: 5em;
+    line-height: 2em;
+    width: 2em;
+    text-align: center;
+  }
+  .deepertext {
+    font-size: 1.5em;
+    line-height: 2em;
   }
   .arcade-text {
     margin: 1em 0;
@@ -312,11 +368,14 @@ body {
   .netstats {
     margin: 1em;
   }
-  .arcade-banner {
-    width: 90vw;
-    margin: 2em auto 0;
-    justify-self: auto;
+  .arcade-banner-link {
+    justify-self: center;
+    margin: 2em 0 0 0;
   }
+  .arcade-banner {
+    width: 100vw;
+    margin: 1em 0;
+}
   .godeeper-row {
     height: unset;
   }

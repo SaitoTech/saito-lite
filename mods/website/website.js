@@ -28,7 +28,15 @@ class Website extends ModTemplate {
   }
 
   onConfirmation(blk, tx, conf, app) {
-    Data.render(app)
+    if(this.browser_active == 1){
+      try {
+        if(document.querySelector('.netstats')) {
+          Data.render(app)
+        }
+      } catch(err) {
+        console.error(err);
+      }
+    }
   }
 
   shouldAffixCallbackToModule() { return 1; }
