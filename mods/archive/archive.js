@@ -164,7 +164,7 @@ console.log("FOUND: " + JSON.stringify(txs));
     let msgtype = "";
     if (tx.transaction.msg.module != "") { msgtype = tx.transaction.msg.module; }
 
-    let sql = "INSERTOR IGNORE INTO txs (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $type)";
+    let sql = "INSERT OR IGNORE INTO txs (sig, publickey, tx, ts, type) VALUES ($sig, $publickey, $tx, $ts, $type)";
     let params = {
       $sig:	tx.transaction.sig ,
       $publickey:	key,
