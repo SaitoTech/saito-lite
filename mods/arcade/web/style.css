@@ -12,33 +12,31 @@ body {
   background: var(--saito-nightscape);
 }
 
-
 .arcade-announcement {
-    cursor: pointer;
-    font-size: 0.9em;
-    width: 100%;
-    padding: 5px;
-    background: #66339910;
-    border: 2px dashed var(--saito-red);
-    color: var(--saito-skyline-grey);
-    letter-spacing: 1px;
-    margin: 0;
-    text-align: center;
+  cursor: pointer;
+  font-size: 0.9em;
+  width: 100%;
+  padding: 5px;
+  background: #66339910;
+  border: 2px dashed var(--saito-red);
+  color: var(--saito-skyline-grey);
+  letter-spacing: 1px;
+  margin: 0;
+  text-align: center;
 }
 
-
 .play-now {
-    cursor: pointer;
-    font-size: 1em;
-    width: 100%;
-    padding: 10px 6px;
-    background: var(--saito-jester);
-    border: 1px solid var(--saito-red);
-    border-bottom: 0px;
-    color: var(--saito-skyline-grey);
-    letter-spacing: 1px;
-    transition: transform .25s;
-    margin: 0;
+  cursor: pointer;
+  font-size: 1em;
+  width: 100%;
+  padding: 10px 6px;
+  background: var(--saito-jester);
+  border: 1px solid var(--saito-red);
+  border-bottom: 0px;
+  color: var(--saito-skyline-grey);
+  letter-spacing: 1px;
+  transition: transform .25s;
+  margin: 0;
 }
 
 button, .button, .file-label {
@@ -124,6 +122,10 @@ button.add-games {
   width: 100%;
 }
 
+.big-create-game {
+  display: none;
+}
+
 .arcade-leaderboard-row {
   display: grid;
   grid-template-columns: 5fr 1fr 1fr;
@@ -159,8 +161,7 @@ button.add-games {
   margin: unset;
 }
 
-.arcade-sidebar-active-games-body,
-.arcade-sidebar-active-leaderboard-body {
+.arcade-sidebar-active-games-body, .arcade-sidebar-active-leaderboard-body {
   border: 1px solid var(--saito-red);
   background: #1e1e1f50;
   height: 40vh;
@@ -215,8 +216,8 @@ button.add-games {
 }
 
 .game-options-html {
-    overflow-y: auto;
-    max-height: 4em;
+  overflow-y: auto;
+  max-height: 4em;
 }
 
 .pill {
@@ -452,6 +453,7 @@ button.add-games {
   min-width: 2em;
   margin: 0 3px;
 }
+
 .arcade-game-invitation {
   clear: both;
 }
@@ -626,7 +628,6 @@ option {
   font-size: 1.6em;
   padding: 0.5em;
   width: 100%;
-
   background: var(--saito-red);
   border-radius: 5px;
   text-align: center;
@@ -652,15 +653,29 @@ option {
   opacity: 0;
 }
 
+.start-game-list .return-to-arcade {
+  right: 90px;
+  top: 20px;
+}
+
 @media only screen and (max-width: 1000px) {
   .start-game-list {
     grid-template-columns: 1fr 1fr;
+  }
+  .big-create-game {
+    margin: 1em 0;
+    display: block;
+    width: 100%;
   }
 }
 
 @media only screen and (max-width: 750px) {
   .start-game-list {
     grid-template-columns: 1fr;
+  }
+  .start-game-list .return-to-arcade {
+    right: 10px;
+    top: 20px;
   }
 }
 
@@ -698,10 +713,6 @@ option {
   width: 100%;
 }
 
-.start-game-list .return-to-arcade {
-  right: 90px;
-  top: 20px;
-}
 
 .header {
   background: none;

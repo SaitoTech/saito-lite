@@ -80,7 +80,23 @@ module.exports = ArcadeMain = {
     // carousel
     //
     ArcadeGameCarousel.render(app, data);
+    
+    document.querySelector('.arcade-carousel-wrapper')
+              .addEventListener('click', (e) => {
+      ArcadeStartGameList.render(app, data);
+      ArcadeStartGameList.attachEvents(app, data);
+    });
 
+    //
+    // click the big button
+    //
+
+    document.querySelector('.big-create-game')
+              .addEventListener('click', (e) => {
+      ArcadeStartGameList.render(app, data);
+      ArcadeStartGameList.attachEvents(app, data);
+    });
+    
     //
     // Create Game
     //
