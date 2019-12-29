@@ -40,14 +40,16 @@ module.exports = EmailForm = {
         let email_text = document.querySelector('.email-text').value;
         let email_to = document.getElementById('email-to-address').value;
         let email_from = this.saito.wallet.returnPublicKey();
-        let email_amount = 0;
+        let email_amount = 0.0;
+
         if (document.querySelector('.email-amount').value > 0) {
             email_amount = document.querySelector('.email-amount').value;
         }
 
         email_to = await data.email.addrController.returnPublicKey(email_to);
 
-        let newtx = app.wallet.createUnsignedTransactionWithDefaultFee(email_to, 0.0);
+        // Add amt here
+        let newtx = app.wallet.createUnsignedTransaction(email_to, email_amount, 0.0);
         if (!newtx) {
           salert("Unable to send email. You appear to need more tokens");
 	      return;
@@ -56,15 +58,6 @@ module.exports = EmailForm = {
         newtx.transaction.msg.module   = "Email";
         newtx.transaction.msg.title    = email_title;
         newtx.transaction.msg.message  = email_text;
-        //need advice here
-        //newtx.transaction.from.push(new saito.slip(this.saito.wallet.returnPublicKey(), Big(email_amount)));
-        let slips = this.saito.wallet.returnAdequateInputs(email_amount.toString());
-        if(slips) {
-            newtx.transaction.from = slips;
-        } else {
-            console.log('You appear to be fresh out of slips?');
-        }
-        newtx.transaction.to.push(new saito.slip(email_to, Big(email_amount)));
         newtx = this.saito.wallet.signTransaction(newtx);
 
         app.network.propagateTransaction(newtx);

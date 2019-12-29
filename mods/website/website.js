@@ -28,7 +28,7 @@ class Website extends ModTemplate {
   }
 
   onConfirmation(blk, tx, conf, app) {
-    Data.render(app)
+    if (app.BROWSER == 1) Data.render(app)
   }
 
   shouldAffixCallbackToModule() { return 1; }
