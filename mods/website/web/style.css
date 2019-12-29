@@ -6,6 +6,7 @@ body {
   background-size: 100% 500px;
   font-family: "visuelt-light";
   overflow-x: hidden;
+  width: 100vw;
 }
 
 .header {
@@ -19,20 +20,18 @@ body {
 }
 
 .site-main {
-  margin: 100px 0 0 0;
+  margin: 120px 0 0 0;
 }
 
 .quote-container {
   width: 580px;
   color: #fff;
   justify-self: right;
-  text-align: center;
-  align-self: center;
 }
 
 .quote-content {
   margin: 15px 4px 0 4px;
-  font-size: 3em;
+  font-size: 2em;
   font-style: italic;
   text-align: center;
   display: inline;
@@ -46,15 +45,13 @@ body {
   margin: 20px 0 0 45px;
 }
 
-.fa-quote-left {
-  font-size: 1.5em;
-  vertical-align: text-bottom;
-  height: 2.2em;
+.quote-quote {
+  font-size: 3.5em;
+  display: inline-block;
 }
 
-.fa-quote-right {
-  font-size: 1.5em;
-  vertical-align: text-top;
+.close-quote {
+  transform: rotate(180deg);
 }
 
 .intro-box {
@@ -75,7 +72,6 @@ body {
   font-size: 1.2em;
   color: #000000;
   line-height: 1.5em;
-
 }
 
 .intro-content p {
@@ -83,6 +79,262 @@ body {
   margin: 0 0 1em 0;
 }
 
+.black {
+  background-color: var(--saito-cyber-black);
+}
+
+.white {
+  background-color: var(--saito-skyline-grey);
+}
+
+.arcade-text {
+  margin: 4em 0;
+  padding: 1em;
+  width: 630px;
+}
+
+.upsize {
+  font-size: 1.3em;
+  line-height: 1.3em;
+}
+
 .row {
   grid-gap: 2em;
+  margin: 0 0 3em 0;
+}
+
+#testimonials {
+  height: 100px;
+}
+
+.video-row {
+  padding: 5px;
+  width: 636px;
+}
+
+.flowplayer video {
+  box-shadow: 0 0 5px var(--saito-skyline-grey);
+  border: 1px solid var(--saito-skyline-grey);
+}
+
+.netstats {
+  margin: 3em 3em;
+  text-align: left;
+  font-size: 1.4em;
+}
+
+.godeeper-row {
+  height: 26em;
+}
+
+.godeeper {
+  margin: 5px;
+  width: 580px;
+  justify-self: right;
+  padding: 1em 2em;
+  line-height: 1.4em;
+  font-size: 1.4em;
+  position: relative;
+  top: -120px;
+  background-color: var(--saito-skyline-grey);
+}
+
+.godeeper li {
+  list-style: none;
+  margin: 0 0 0 1em;
+  font-size: 0.95em;
+  line-height: 1.5em;
+}
+
+.arcade {
+  color: var(--saito-cyber-black);
+}
+
+.arcade-banner {
+  justify-self: right;
+  width: 580px;
+  margin: 4em 0;
+}
+
+.flowplayer video {
+  box-shadow: 0 0 5px var(--saito-skyline-grey);
+  border: 1px solid var(--saito-skyline-grey);
+}
+
+/* --------------- SLIDER ---------------- */
+
+.slider {
+  width: 1100px;
+  padding: 2em;
+  margin: auto;
+  position: relative;
+  top: -45px;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.slider__inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.slider__contents {
+  height: 100%;
+  padding: 2rem;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.slider__txt {
+  margin: 0 0 1.5em 0;
+  position: relative;
+  text-align: center;
+  font-size: 1.2em;
+  display: block;
+}
+
+/*fadeInfadeOut Animation*/
+
+.slider__inner div span {
+  opacity: 0;
+  animation: fadeInfadeOut 15s linear infinite 0s;
+}
+
+.slider__inner div:nth-child(1) span {
+  animation-delay: 0s;
+}
+
+.slider__inner div:nth-child(2) span {
+  animation-delay: 5s;
+}
+
+.slider__inner div:nth-child(3) span {
+  animation-delay: 10s;
+}
+
+/*
+.slider__inner div:nth-child(2) {
+  animation-delay: 5s;
+}
+*/
+
+@keyframes fadeInfadeOut {
+  0% {
+    opacity: 0;
+  }
+  7% {
+    opacity: 1;
+  }
+  33% {
+    opacity: 1;
+  }
+  41% {
+    opacity: 0;
+  }
+  47% {
+    opacity: 0;
+  }
+  80% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Footer---------------------------------*/
+
+.footer {
+  background-image: url('/saito/img/dreamscape.png');
+  background-size: cover;
+  padding: 25px 0 25px;
+  background-position-y: 100%;
+}
+
+.footer-container {
+  max-width: 1100px;
+  width: 100vw;
+  margin: auto;
+}
+
+.footer-logo {
+  width: 128px;
+  float: left;
+}
+
+.light {
+  color: var(--saito-white);
+  font-size: 1.5em;
+}
+
+.copyright, .credits {
+  color: #cccccc;
+  font-size: 14px;
+  display: block;
+  text-align: center;
+}
+
+.copyright a:hover, .credits a:hover {
+  color: #fff;
+}
+
+@media only screen and (max-width: 1000px) {
+  .site-main {
+    margin: 80px 0 0 0;
+  }
+  .grid-2-columns {
+    grid-template-columns: auto;
+    width: 100vw;
+    margin: auto;
+  }
+  .quote-container, .slider, .intro-box, .flowplayer, .arcade-text, .godeeper {
+    width: 100vw;
+  }
+  .godeeper {
+    margin: 1em 0;
+    padding: 0em 1em;
+    height: 425px;
+    top: 0;
+    justify-self: auto;
+  }
+  .arcade-text {
+    margin: 1em 0;
+  }
+  .netstats {
+    margin: 1em;
+  }
+  .arcade-banner {
+    width: 90vw;
+    margin: 2em auto 0;
+    justify-self: auto;
+  }
+  .godeeper-row {
+    height: unset;
+  }
+  .quote-container {
+    margin: 0;
+  }
+  .video-row {
+    padding: 0;
+    width: unset;
+  }
+  .slider__contents {
+    padding: 1rem;
+  }
+  .quote-quote {
+    display: none;
+  }
+  .quote-content {
+    font-size: 1.5em;
+    margin: 0 0 5px 0;
+  }
 }
