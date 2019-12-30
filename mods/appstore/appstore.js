@@ -491,6 +491,8 @@ console.log(bundle_filename + " -- " + online_version);
     let modules_config_filename = `modules.config-${ts}-${hash}.json`;
     let module_paths = modules.map(mod => {
 
+      if (mod.name.toLowerCase() == "arcade") { return; }
+
       let mod_path = `mods/${mod.name.toLowerCase()}-${ts}-${hash}.zip`;
 
 console.log("mod path is: " + mod_path);
@@ -543,11 +545,13 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
     const util = require('util');
     const exec = util.promisify(require('child_process').exec);
 
+    let exec_command = `node webpack.js ${entry} ${output_path} ${bundle_filename}`;
+
+    /* */
     try {
-      const { stdout, stderr } = await exec(
-        `node webpack.js ${entry} ${output_path} ${bundle_filename}`
-      );
+      const { stdout, stderr } = await exec(exec_command);
     } catch (err) {
+      console.log(stderr);
       console.log(err);
     }
 

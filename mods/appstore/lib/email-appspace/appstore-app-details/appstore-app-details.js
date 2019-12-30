@@ -49,7 +49,8 @@ module.exports = AppstoreAppDetails = {
       let module_list = [];
           module_list.push(data.module);
 
-      for (let i = 0; i < app.options.modules.length; i++) {
+      // currently can't include a bunch of modules
+      for (let i = 0; i < app.options.modules.splice(0,5).length; i++) {
 
         let replacing_old = 0;
 

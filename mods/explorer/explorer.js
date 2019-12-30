@@ -15,7 +15,7 @@ class ExplorerCore extends ModTemplate {
     }
 
     onNewBlock(blk, lc) {
-        console.log('explorer - on new block');
+        // console.log('explorer - on new block');
     }
 
     async addTransactionsToDatabase(blk) {
