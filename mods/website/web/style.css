@@ -21,10 +21,14 @@ body {
   margin: 220px 0 0 0;
 }
 
-.quote-container {
+.title-container {
   width: 580px;
   color: #fff;
   justify-self: right;
+}
+
+.title-content {
+  display: none;
 }
 
 .quote-content {
@@ -32,7 +36,6 @@ body {
   font-size: 2em;
   font-style: italic;
   text-align: left;
-  display: none;
   padding: 1em;
 }
 
@@ -117,7 +120,7 @@ body {
 }
 
 .netstats {
-  margin: 3em 3em;
+  margin: 2em 2em;
   text-align: left;
   font-size: 1.4em;
 }
@@ -376,7 +379,7 @@ body {
     margin: 1em 0;
   }
   .netstats {
-    margin: 1em;
+    margin: 0 1em 1em 1em;
   }
   .netstats center {
     width: 100vw;
@@ -409,5 +412,15 @@ body {
     font-size: 2em;
     margin: 0 0 5px 0;
     display: inline;
+  }
+  .title-content {
+    display: inline-block;
+    font-size: 2em;
+    font-style: italic;
+    text-align: left;
+    padding: 1em;
+  }
+  .title-content blockquote {
+    text-align: center;
   }
 }
