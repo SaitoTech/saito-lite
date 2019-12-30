@@ -26,7 +26,7 @@ class MailRelay extends ModTemplate {
         email.from    = 'testnet@saito.tech';
         email.bcc = "";
         email.subject = 'Saito Testnet Initialised';
-        email.body = 'Just a quick note to let you know that test net just spun up.';
+        email.text = 'Just a quick note to let you know that test net just spun up.';
         email.ishtml = false;
         email.attachments = "";
         try {
