@@ -331,7 +331,7 @@ body {
   display: grid;
   grid-template-rows: 40px auto;
   grid-template-columns: 100px auto;
-  grid-template-areas: "hud-header hud-header" "hud-menu hud-body";
+  grid-template-areas: "hud-header hud-header" "hud-body hud-body";
   font-family: visuelt-light;
   position: fixed;
   left: 50%;
@@ -385,6 +385,7 @@ body {
 .hud-menu {
   grid-area: hud-menu;
   border-right: 1px solid var(--saito-skyline-grey);
+  display: none;
 }
 
 .status {

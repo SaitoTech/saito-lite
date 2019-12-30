@@ -55,7 +55,7 @@ body {
 
 .intro-box {
   width: 580px;
-  background-color: var(--saito-skyline-grey);
+  background-color: #f9f9f9;
   box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2);
   padding: 2em 2em 0 2em;
 }
