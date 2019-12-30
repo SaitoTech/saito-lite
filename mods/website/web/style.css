@@ -122,13 +122,18 @@ body {
   font-size: 1.4em;
 }
 
+.netstats center {
+  width: 530px;
+}
+
 .godeeper-row {
   height: 19em;
 }
 
 .godeeper h2 {
   margin: 0 1em 2em 2em;
-  font-size: 2em;e
+  font-size: 2em;
+  e
 }
 
 .godeeper {
@@ -335,7 +340,7 @@ body {
   .quote-container, .slider, .flowplayer, .arcade-text, .godeeper {
     width: 100%;
   }
-  .intro-box{
+  .intro-box {
     display: none;
   }
   .godeeper-row {
@@ -373,6 +378,9 @@ body {
   .netstats {
     margin: 1em;
   }
+  .netstats center {
+    width: 100vw;
+  }
   .arcade-banner-link {
     justify-self: center;
     margin: 2em 0 0 0;
@@ -380,7 +388,7 @@ body {
   .arcade-banner {
     width: 100%;
     margin: 1em 0;
-}
+  }
   .godeeper-row {
     height: unset;
   }
