@@ -81,34 +81,30 @@ module.exports = ArcadeMain = {
     //
     ArcadeGameCarousel.render(app, data);
     
-    document.querySelector('.arcade-carousel-wrapper')
-              .addEventListener('click', (e) => {
+    document.querySelector('.arcade-carousel-wrapper').addEventListener('click', (e) => {
       ArcadeStartGameList.render(app, data);
       ArcadeStartGameList.attachEvents(app, data);
     });
 
     //
-    // click the big button
+    // big button (removed)
     //
-
-    document.querySelector('.big-create-game')
-              .addEventListener('click', (e) => {
+    document.querySelector('.big-create-game').addEventListener('click', (e) => {
       ArcadeStartGameList.render(app, data);
       ArcadeStartGameList.attachEvents(app, data);
     });
     
     //
-    // Create Game
+    // create game
     //
     Array.from(document.getElementsByClassName('game')).forEach(game => {
       game.addEventListener('click', (e) => {
-
         data.active_game = e.currentTarget.id;
         ArcadeGameCreate.render(app, data);
         ArcadeGameCreate.attachEvents(app, data);
-
       });
     });
+
 
     //
     // join game
@@ -223,6 +219,7 @@ console.log("CHECKING TO SEE IF THERE IS STILL SPACE IN THE GAME: " + JSON.strin
       };
     });
 
+
     Array.from(document.getElementsByClassName('arcade-game-row-delete')).forEach(game => {
       game.onclick = (e) => {
         let game_id = e.currentTarget.id;
@@ -241,6 +238,26 @@ console.log("CHECKING TO SEE IF THERE IS STILL SPACE IN THE GAME: " + JSON.strin
         }
       };
     });
+
+
+    Array.from(document.getElementsByClassName('arcade-game-row-continue')).forEach(game => {
+      game.onclick = (e) => {
+        let game_id = e.currentTarget.id;
+        game_id = game_id.split('-').pop();
+
+        if (app.options.games) {
+	  for (let i = 0; i < app.options.games.length; i++) {
+	    if (app.options.games[i].id == game_id) {
+	      app.options.games[i].ts = new Date().getTime();
+	      app.storage.saveOptions();
+	      let thismod = app.modules.returnModule(app.options.games[i].module);
+              window.location = '/'+thismod.returnSlug();
+	    }
+          }
+        }
+      };
+    });
+
 
     Array.from(document.getElementsByClassName('arcade-game-row-cancel')).forEach(game => {
       game.onclick = (e) => {

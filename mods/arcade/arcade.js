@@ -1107,8 +1107,6 @@ console.log(JSON.stringify(game));
   //
   onNewBlock(blk, lc) {
 
-    this.showAlert();
-
     if (lc == 1) {
       this.accepted = [];
     }
@@ -1149,7 +1147,10 @@ console.log(JSON.stringify(game));
   shouldAffixCallbackToModule(modname) {
     if (modname == "Arcade") { return 1; }
     for (let i = 0; i < this.affix_callbacks_to.length; i++) {
-      if (this.affix_callbacks_to[i] == modname) { return 1; }
+      if (this.affix_callbacks_to[i] == modname) {
+	console.log("AFFIXING CALLBACKS TO: " + modname);
+	return 1; 
+      }
     }
     return 0;
   }

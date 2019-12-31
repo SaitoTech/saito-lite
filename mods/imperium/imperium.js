@@ -2567,7 +2567,7 @@ console.log("POST LAND WITH QUEUE: " + this.game.queue);
       html  = "<div class='terminal_header'>"+this.returnFaction(this.game.player) + ": select your strategy card:</div><p></p><ul>";
     }
     for (let z = 0; z < this.game.state.strategy_cards.length; z++) {
-      html += '<li class="cardchoice" id="'+this.game.state.strategy_cards[z]+'">' + this.returnStrategyCard(this.game.state.strategy_cards[z]) + '</li>';
+      html += '<li class="cardchoice" id="'+this.game.state.strategy_cards[z]+'">' + this.game.state.strategy_cards[z].name + '</li>';
     }
     html += '</ul>';
   
