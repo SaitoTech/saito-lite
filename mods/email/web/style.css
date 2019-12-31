@@ -1,13 +1,5 @@
 /** Email **/
 
-body {
-  max-width: 1500px;
-}
-
-/* .main {
-  height: 91vh;
-} */
-
 .footer {
   display: none;
 }
@@ -53,6 +45,7 @@ body {
 
 #email-compose-btn {
   margin: unset;
+  line-height: 0;
 }
 
 .email-balance {
@@ -66,6 +59,7 @@ body {
 .email-main {
   display: grid;
   grid-template-rows: 4em calc(100vh - 10.1em);
+  padding-right: 0.5em;
 }
 
 .email-body {
@@ -321,11 +315,19 @@ body {
 .email-detail-message {
   padding: 10px 0px;
   display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: auto 1em;
+  grid-template-areas: "m t";
 }
 
 .email-detail-timestamp {
   justify-self: right;
+  grid-area: t;
   color: grey;
+}
+
+.email-detail-text {
+  grid-area: m;
 }
 
 .email-detail-left-options {
@@ -371,6 +373,7 @@ body {
   }
   .email-main {
     grid-template-rows: 3em calc(100vh - 9.1em);
+    padding-right: unset;
   }
   .email-container {
     grid-template-columns: 1fr;

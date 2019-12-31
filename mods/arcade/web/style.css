@@ -723,6 +723,8 @@ option {
 .arcade-initialize-game-container {
   display: grid;
   grid-gap: 1em;
+  padding: 2em;
+  font-size: 1.3em;
 }
 
 /** CHAT STYLING **/

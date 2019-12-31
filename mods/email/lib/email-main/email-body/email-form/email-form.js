@@ -39,11 +39,14 @@ module.exports = EmailForm = {
         let email_title = document.querySelector('.email-title').value;
         let email_text = document.querySelector('.email-text').value;
         let email_to = document.getElementById('email-to-address').value;
+        let email_amount_elem = document.querySelector('.email-amount');
         let email_from = this.saito.wallet.returnPublicKey();
         let email_amount = 0.0;
 
-        if (document.querySelector('.email-amount').value > 0) {
-            email_amount = document.querySelector('.email-amount').value;
+        if (email_amount_elem)  {
+            if (email_amount_elem.value > 0) {
+                email_amount = email_amount_elem.value;
+            }
         }
 
         email_to = await data.email.addrController.returnPublicKey(email_to);

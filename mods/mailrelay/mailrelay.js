@@ -16,7 +16,7 @@ class MailRelay extends ModTemplate {
     }
 
     initialize(app) {
-    /* For testing only, no need to initialize module 
+     //For testing only, no need to initialize module 
         super.initialize(app);
 
         // add an email
@@ -25,8 +25,8 @@ class MailRelay extends ModTemplate {
         email.to      = 'richard@saito.tech';
         email.from    = 'testnet@saito.tech';
         email.bcc = "";
-        email.subject = 'This is an updated test email sent by the MailRelay module.';
-        email.body = 'This is a plain text email \n Very plain.';
+        email.subject = 'Saito Testnet Initialised';
+        email.text = 'Just a quick note to let you know that test net just spun up.';
         email.ishtml = false;
         email.attachments = "";
         try {
@@ -34,7 +34,7 @@ class MailRelay extends ModTemplate {
         } catch(err) {
             console.log(err);
         } 
-        */
+        
     }
 
     async handlePeerRequest(app, message) {

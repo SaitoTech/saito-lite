@@ -30,7 +30,7 @@ module.exports = EmailDetailTemplate = (app, data) => {
       </div>
       <div class="email-detail-message">
         <p class="email-detail-timestamp">${datetime.hours}:${datetime.minutes}</p>
-        <p>${message.message}</p>
+        <p class="email-detail-text">${message.message}</p>
       </div>
     </div>
   `;
