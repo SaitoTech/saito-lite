@@ -47,7 +47,7 @@ class Tutorial extends ModTemplate {
     window.onload = () => {
       if (typeof window.localStorage !== "undefined" && !localStorage.getItem('visited')) {
         localStorage.setItem('visited', true);
-        this.tutorialModal();
+        this.welcomeBackupModal();
       }
     }
 

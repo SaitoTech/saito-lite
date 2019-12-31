@@ -429,7 +429,11 @@ label.treated {
 }
 
 #alert-box button {
-    margin: 0;
+    margin: 0 0 0 1em;
+}
+
+#alert-ok {
+    margin: 0 0 0 1em;
 }
 
 #alert-box p {
@@ -933,4 +937,27 @@ label.treated {
 
 .welcome-modal-action button:hover {
     border-color: #fff;
+}
+
+/* mobile modals */
+@media only screen and (max-width: 900px) {
+  
+    .welcome-modal-wrapper {
+        grid-template-columns: 1fr;
+        width: 100%;
+    }
+    .modal-content-blank {
+        width: 100%;
+    }
+    .welcome-modal-exit .fa-arrow-right {
+        font-size: 100px;
+        bottom: 2px;
+    }
+    .welcome-modal-action {
+        padding: 0.81em;
+    }
+    i.fas.fa-arrow-right {
+        right: -1em;
+    }
+
 }

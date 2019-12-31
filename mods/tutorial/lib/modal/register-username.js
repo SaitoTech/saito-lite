@@ -20,7 +20,7 @@ module.exports = RegisterUsername = {
     }
 
 
-    document.querySelector('.register-username-btn').onclick = () => {
+    document.querySelector('#registry-modal-button').onclick = () => {
 
       data.modal.destroy();
 

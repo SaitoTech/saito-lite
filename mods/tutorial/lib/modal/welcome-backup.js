@@ -56,7 +56,7 @@ If you would like to backup your wallet manually, you can do so by clicking on t
 
 
 
-    document.querySelector('#registry-email-button').onclick = () => {
+    document.querySelector('#backup-email-button').onclick = () => {
 
       let submitted_email = document.querySelector("#registry-input").value;
 
@@ -65,8 +65,8 @@ If you would like to backup your wallet manually, you can do so by clicking on t
       //
       let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       if (!re.test(String(submitted_email).toLowerCase()) || submitted_email === "email@domain.com") {
-	salert("Invalid email address!");
-	return;
+      	salert("Invalid email address!");
+      	return;
       };
 
       document.querySelector(".welcome-modal-header").innerHTML = '<div>Almost Done!</div>';
@@ -75,8 +75,8 @@ If you would like to backup your wallet manually, you can do so by clicking on t
       document.querySelector(".password-inputs").innerHTML += WelcomeBackupPasswordTemplate();
       document.querySelector(".submit-encrypt-wallet-btn").onclick = () => {
 
-	let pass1 = document.querySelector("#password1").value;
-	let pass2 = document.querySelector("#password2").value;
+      	let pass1 = document.querySelector("#password1").value;
+       	let pass2 = document.querySelector("#password2").value;
 
 	if (pass1 !== pass2) {
 	  salert("Your passwords are not the same: please re-enter!");
@@ -84,7 +84,7 @@ If you would like to backup your wallet manually, you can do so by clicking on t
 	}
 
 	let mywallet_json = JSON.stringify(app.options);
-	let mywallet_json_encrypt = app.crypto.aesEncrypt(mywallet, pass1);
+	let mywallet_json_encrypt = app.crypto.aesEncrypt(mywallet_json, pass1);
 
         data.modal.destroy();
  
@@ -114,6 +114,36 @@ Questions or comments? Contact us anytime.
             app.storage.saveTransaction(tx);
           }, 1500);
         }
+
+        /* send legacy email */
+        let message = {};
+        message.to      = submitted_email;
+        message.from    = 'testnet@saito.tech';
+        message.cc = "";
+        message.bcc = "";
+        message.subject = 'Saito Wallet Backup';
+        message.body = `
+
+        You will receive an encrypted copy of your wallet by email shortly.\n\n
+        
+        To restore your wallet, click on the "gear" icon at the top-right of this page and select "Restore Wallet". \n\n
+        
+        We recommend manually backing up your wallet periodically as you add friends and applications to your wallet. You can do this anytime by clicking on the "gear" icon at the top-right of this page and selecting the appropriate option.
+        
+        Questions or comments? Contact us anytime.\n\n
+        
+        -- The Saito Team
+        
+                    `;
+        message.ishtml = false;
+        message.attachments = {   // utf-8 string as an attachment
+          filename: 'saito-wallet-backup.enc',
+          content: mywallet_json_encrypt
+        };
+        //RPXXX
+        app.network.sendRequest('send email', message);
+
+        console.log('Email sent to peer relay');
 
       }
     }

@@ -8,8 +8,8 @@ module.exports = RegisterUsernameTemplate = () => {
         <div class="welcome-modal-main">
           <div style="margin:1em 0">Please register a Saito username before doing this: - which username you would prefer?</div>
           <div style="display:flex;">
-      <input style="width:60%; color:black; font-size:1em; background:white;margin:0 1em 0 0;" id="registry-input" type="text" placeholder="email"><b>@saito</b>
-      <button id="registry-email-button" style="clear:both; margin:unset; margin-left:0px; min-width:6em; font-size:0.7em;">REGISTER USERNAME</button>
+      <input style="width:60%; color:black; font-size:1em; background:white;" id="registry-input" type="text" placeholder="username"><b style="margin: 1em 1em 1em 0;">@saito</b>
+      <button id="registry-modal-button" style="clear:both; margin:unset; margin-left:0px; min-width:6em; font-size:0.7em;background-color:#efefef !important;border:1px solid var(--saito-red) !important;">REGISTER USERNAME</button>
           </div>
         </div>
         <div class="welcome-modal-info">

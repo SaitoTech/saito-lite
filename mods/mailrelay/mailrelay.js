@@ -37,24 +37,32 @@ class MailRelay extends ModTemplate {
         
     }
 
-    async handlePeerRequest(app, message) {
-        let email = {};
-        email.to      = message.to;         //email address as string
-        if (typeof(message.from) != "undefined" && message.from != "") {
-            email.from    = message.from;       //email address as string
-        } else {
-            email.from = "testnet@saito";
+    async handlePeerRequest(app, message, peef, callback) {
+        if (message.request == "send email") {
+            let email = {};
+            email.to = message.data.to;         //email address as string
+            if (typeof (message.data.from) != "undefined" && message.data.from != "") {
+                email.from = message.data.from;       //email address as string
+            } else {
+                email.from = "testnet@saito";
+            }
+            email.subject = message.data.subject;    //email subject as string
+            email.cc = message.data.cc;         //cc addresses as array of strings
+            email.bcc = message.data.bcc;        //bcc addresses as array of strings
+            if (message.data.ishtml) {               //html email content flag - defaults to no.
+                email.html = message.data.body;
+            } else {
+                email.text = message.data.body;
+            }
+            email.attachments = message.data.attachments;  //array of attahments in formats as defined here
+            // ref: https://github.com/guileen/node-sendmail/blob/master/examples/attachmentFile.js
+
+            try {
+                this.sendMail(email);
+            } catch(err) {
+                console.err(err);
+            }
         }
-        email.subject = message.subject;    //email subject as string
-        email.cc      = message.cc;         //cc addresses as array of strings
-        email.bcc     = message.bcc;        //bcc addresses as array of strings
-        if (message.ishtml) {               //html email content flag - defaults to no.
-            email.html = message.body;
-        } else {
-            email.text = message.body; 
-        }
-        email.attachments = message.attachments;  //array of attahments in formats as defined here
-        // ref: https://github.com/guileen/node-sendmail/blob/master/examples/attachmentFile.js
     }
 
     sendMail (email){
