@@ -473,7 +473,6 @@ console.log("MSG: " + txmsg);
         // in which case we need to import game details including
         // options, etc.
         //
-
         if (this.app.BROWSER == 1) {
 
           if (this.app.options != undefined) {
@@ -515,7 +514,13 @@ console.log("... still here... receive accept request!");
 
 console.log("\n\n\nlaunching request to launch game... flag button, etc.");
 
-        this.launchGame(txmsg.game_id);
+	//
+	// only launch game if it is for us
+	//
+	if (tx.isTo(app.wallet.returnPublicKey()) {
+          this.launchGame(txmsg.game_id);
+	}
+
       }
 
       // game over
