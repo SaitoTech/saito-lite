@@ -517,7 +517,7 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
 	//
 	// only launch game if it is for us
 	//
-	if (tx.isTo(app.wallet.returnPublicKey()) {
+	if (tx.isTo(app.wallet.returnPublicKey())) {
           this.launchGame(txmsg.game_id);
 	}
 

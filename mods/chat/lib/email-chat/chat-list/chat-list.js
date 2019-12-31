@@ -25,6 +25,13 @@ module.exports = ChatList = {
                       let textareaobj = document.getElementById(`chat-box-new-message-input-${group_id}`);
                       textareaobj.focus();
                       textareaobj.select();
+
+		      //
+		      // maximize if minimized
+		      //
+                      let chatboxobj = document.getElementById(`chat-box-${group_id}`);
+console.log("removing hidden element css");
+		      chatboxobj.classList.remove("chat-box-hide");
                       return;
                     }
 
