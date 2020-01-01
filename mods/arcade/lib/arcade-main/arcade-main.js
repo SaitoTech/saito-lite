@@ -44,13 +44,24 @@ module.exports = ArcadeMain = {
       let button_text = {};
       button_text.join = "JOIN";
 
-      if (tx.isFrom(publickey))
+      if (tx.transaction.msg.players_array) {
+        if (tx.transaction.msg.players_array.includes(app.wallet.returnPublicKey())) {
+	  delete button_text.join;
+        }
+      }
+
+
+      if (tx.isFrom(publickey)) {
         button_text.cancel = "CANCEL";
+      }
 
       if (app.options.games) {
+
         let { games } = app.options;
 
+
         games.forEach(game => {
+
           if (game.initializing == 0 && game.id == game_id) {
             button_text.continue = "CONTINUE";
             delete button_text.join;

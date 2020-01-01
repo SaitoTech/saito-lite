@@ -518,6 +518,7 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
 	// only launch game if it is for us
 	//
 	if (tx.isTo(app.wallet.returnPublicKey())) {
+console.log("THIS GAMEIS FOR ME: " + tx.isTo(app.wallet.returnPublicKey()));
           this.launchGame(txmsg.game_id);
 	}
 
@@ -525,6 +526,7 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
 
       // game over
       if (txmsg.request == "gameover") {
+console.log("HERE -- receive gameover request!");
         this.receiveGameoverRequest(blk, tx, conf, app);
       }
     }
@@ -549,6 +551,7 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
 
   launchGame(game_id) {
 
+console.log("LAUNCH GAME TRIGGERED");
     if (this.browser_active == 0) { return; }
 
     let arcade_self = this;
@@ -575,6 +578,8 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
         let data = {};
             data.arcade   = arcade_self;
             data.game_id  = game_id;
+
+console.log("GAME IS INITIALIZING and launching LOADER!");
 
         ArcadeLoader.render(arcade_self.app, data);
         ArcadeLoader.attachEvents(arcade_self.app, data);
@@ -847,8 +852,10 @@ console.log("\n\n\nlaunching request to launch game... flag button, etc.");
     if (this.browser_active == 1) {
       let data = {};
       data.arcade = this;
-      ArcadeLoader.render(app, data);
-      ArcadeLoader.attachEvents(app, data);
+      if (tx.isTo(app.wallet.returnPublicKey())) {
+        ArcadeLoader.render(app, data);
+        ArcadeLoader.attachEvents(app, data);
+      }
     }
 
     let txmsg = tx.returnMessage();

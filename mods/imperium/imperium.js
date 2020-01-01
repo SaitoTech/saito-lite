@@ -2561,13 +2561,14 @@ console.log("POST LAND WITH QUEUE: " + this.game.queue);
   // are chosing to play the cards that they have already selected
   //
   playerSelectStrategyCards(mycallback) {
-  
+
+    let cards = this.returnStrategyCards();
     let html  = "<div class='terminal_header'>You are playing as " + this.returnFaction(this.game.player) + ". Select your strategy card:</div><p></p><ul>";
     if (this.game.state.round > 1) {
       html  = "<div class='terminal_header'>"+this.returnFaction(this.game.player) + ": select your strategy card:</div><p></p><ul>";
     }
     for (let z = 0; z < this.game.state.strategy_cards.length; z++) {
-      html += '<li class="cardchoice" id="'+this.game.state.strategy_cards[z]+'">' + this.game.state.strategy_cards[z].name + '</li>';
+      html += '<li class="cardchoice" id="'+this.game.state.strategy_cards[z]+'">' + cards[this.game.state.strategy_cards[z]].name + '</li>';
     }
     html += '</ul>';
   
@@ -3410,6 +3411,10 @@ console.log("\n\nLANDING 1 UNIT: ");
   };
   unloadUnitByJSONFromShip(player, sector, ship_idx, unitjson) {
     let sys = this.returnSystemAndPlanets(sector);
+console.log("PLAYER: " + player);
+console.log("SHIPS IN SECTOR: " + JSON.stringify(sys.s.units));
+console.log("UNLOADING: " + unitjson);
+console.log("FROM: " + sector + " -- " + ship_idx);
     for (let i = 0; i < sys.s.units[player - 1][ship_idx].length; i++) {
       if (JSON.stringify(sys.s.units[player - 1][ship_idx][i]) === unitjson) {
         sys.s.units[player-1][ship_idx].storage.splice(i, 1);
