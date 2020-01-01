@@ -2492,8 +2492,8 @@ console.log("POST LAND WITH QUEUE: " + this.game.queue);
     this.updateStatus(html);
     $('.cardchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showActionCard(s); } });
     $('.cardchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideActionCard(s); } });
-    $('.cardchoice').on('mouseover') 
     $('.cardchoice').on('click', function() {
+
       let action2 = $(this).attr("id");
 
       if (action2 === "cancel") {
@@ -2536,8 +2536,8 @@ console.log("POST LAND WITH QUEUE: " + this.game.queue);
     this.updateStatus(html);
     $('.cardchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showStrategyCard(s); } });
     $('.cardchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideStrategyCard(s); } });
-    $('.cardchoice').on('mouseover') 
     $('.cardchoice').on('click', function() {
+
       let action2 = $(this).attr("id");
 
       if (action2 === "cancel") {
@@ -2545,10 +2545,7 @@ console.log("POST LAND WITH QUEUE: " + this.game.queue);
 	return;
       }
 
-      $('.cardchoice').on('click', function() {
-        let action2 = $(this).attr("id");
-        mycallback(action2);
-      });
+      mycallback(action2);
 
     });
   }
