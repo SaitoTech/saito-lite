@@ -43,29 +43,44 @@ module.exports = AppstoreAppDetails = {
     }
 
 
+console.log("ATTACHING EVENTS WITH MODULE: " + data.module);
+console.log(JSON.stringify(data.module));
+
+    let dm = data.module;
 
     document.querySelector('.appstore-app-install-confirm-btn').onclick = () => {
 
       let module_list = [];
-          module_list.push(data.module);
+          module_list.push(dm);
 
+      let dmname = dm.name;
+
+console.log("MODULE LIST IS: " + JSON.stringify(module_list));
+
+      //let mods_to_include = app.options.modules.splice(0,5);
+      let mods_to_include = app.options.modules;
+
+      //
       // currently can't include a bunch of modules
-      for (let i = 0; i < app.options.modules.splice(0,5).length; i++) {
+      //
+      for (let i = 0; i < mods_to_include.length; i++) {
 
         let replacing_old = 0;
 
         for (let z = 0; z < module_list.length; z++) {
-          if (data.module.name != "" && module_list[z].name == app.options.modules[i].name) {
-            replacing_old = 1;
+
+          if (dmname != "") {
+	    if (module_list[z].name == mods_to_include[i].name) {
+              replacing_old = 1;
+            }
           }
         }
 
         if (replacing_old == 0) {
-          module_list.push({ name : app.options.modules[i].name , version : app.options.modules[i].version });
+          module_list.push({ name : mods_to_include[i].name , version : mods_to_include[i].version });
         }
       }
 
-console.log("HERE: " + JSON.stringify(module_list));
 
       //
       // READY TO SUBMIT
