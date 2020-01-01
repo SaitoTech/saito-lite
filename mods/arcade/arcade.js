@@ -495,16 +495,49 @@ console.log("MSG: " + txmsg);
                     }
                   }
                 }
+
+
+  console.log("HERE FOUND: " + JSON.stringify(this.app.options.games[i]));
+
               }
             }
           }
+
+
+	  //
+	  // remove games from open games list
+	  //
+	  for (let i = 0; i < this.games.length; i++) {
+	    if (this.games[i].transaction.sig === tx.transaction.msg.game_id) {
+	      //
+	      //
+	      //
+	      if (this.games[i].transaction.options) {
+	        if (this.games[i].transaction.options.players_needed === (this.games[i].transaction.players.length+1)) {
+  console.log("ACCEPT MESSAGE SENT ON GAME WAITING FOR ONE PLAYER! -- deleting");
+		  this.games.splice(i, 1);
+  console.log("RE-RENDER");
+		  this.render();
+  console.log("RE-RENDERED");
+		}
+	      }
+	    }
+	  }
+  console.log("OPEN GAMES AT THIS POINT: " + JSON.stringify(this.games));
+
         }
 
 console.log("... still here... receive accept request!");
         await this.receiveAcceptRequest(blk, tx, conf, app);
 
 	//
-	// alert us someone has accepted our game
+	// remove game from list of available games if full
+	//
+	
+
+
+	//
+	// alert us someone has accepted our game if elsewhere
 	//
         if (this.browser_active == 0) { 
 	  if (txmsg.module === "Arcade" && tx.isTo(app.wallet.returnPublicKey())) {
