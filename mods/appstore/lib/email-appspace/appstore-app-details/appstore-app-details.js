@@ -50,9 +50,18 @@ module.exports = AppstoreAppDetails = {
           module_list.push(data.module);
 
       // currently can't include a bunch of modules
-      for (let i = 0; i < app.options.modules.splice(0,5).length; i++) {
+      let bundle_list = app.options.modules;
+      for (let i = 0; i < bundle_list.length; i++) {
 
         let replacing_old = 0;
+
+        // hack to stop bundling from failing
+        if (
+          bundle_list[i].name.toLowerCase() == "qrscanner" ||
+          bundle_list[i].name.toLowerCase() == "red imperium"
+        ) {
+          replacing_old = 1;
+        }
 
         for (let z = 0; z < module_list.length; z++) {
           if (data.module.name != "" && module_list[z].name == app.options.modules[i].name) {

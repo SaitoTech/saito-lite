@@ -8,14 +8,11 @@ const AddContact = require('./lib/add-contact');
 class QRScanner extends ModTemplate {
   constructor(app) {
     super(app);
-
+    this.name = "qrscanner";
     this.events = ['encrypt-key-exchange-confirm'];
-
     this.video = null;
     this.canvas = null;
-
     this.canvas_context = null;
-
     this.isStreamInit = false;
 
     this.constraints = {
