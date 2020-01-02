@@ -20,7 +20,7 @@ module.exports = ArcadeMain = {
     ArcadeGameCarousel.render(app, data);
 
     //
-    // click-to-Create Games
+    // Carousel - click-to-create
     //
     //let carousel = document.getElementById("arcade-carousel-slides");
     //data.arcade.mods.forEach(mod => {
@@ -35,6 +35,8 @@ module.exports = ArcadeMain = {
     //
     data.arcade.games.forEach(tx => {
 
+console.log("TX GAME: " + JSON.stringify(tx));
+
       let txmsg = tx.returnMessage();
       let publickey = app.wallet.returnPublicKey();
       let { game_id, game } = txmsg;
@@ -47,6 +49,9 @@ module.exports = ArcadeMain = {
       //
       // eliminate "JOIN" button if I am in the game already
       //
+      if (txmsg.over == 1) {
+	delete button_text.join;
+      }
       if (tx.isFrom(app.wallet.returnPublicKey())) {
 	delete button_text.join;
       }
@@ -65,12 +70,15 @@ module.exports = ArcadeMain = {
 
         let { games } = app.options;
 
-
         games.forEach(game => {
 
           if (game.initializing == 0 && game.id == game_id) {
             button_text.continue = "CONTINUE";
             delete button_text.join;
+
+	    if (txmsg.over == 1) {
+	      delete button_text.continue;
+	    }
 
             if (game.players.some(player => publickey == player))
               button_text.delete = "DELETE";
@@ -197,7 +205,6 @@ module.exports = ArcadeMain = {
             null,
             (res) => {
 
-console.log("CHECKING TO SEE IF THERE IS STILL SPACE IN THE GAME: " + JSON.stringify(res.rows));
               if (res.rows == undefined) {
                 console.log("ERROR 458103: cannot fetch information on whether game already accepted!");
                 return;
@@ -222,8 +229,6 @@ console.log("CHECKING TO SEE IF THERE IS STILL SPACE IN THE GAME: " + JSON.strin
                   //
                   // sanity check
                   //
-  console.log("CHECKING OPTIONS WHEN INVITING: " + JSON.stringify(accepted_game));
-
                   data.arcade.sendInviteRequest(app, data, accepted_game);
                   ArcadeLoader.render(app, data);
                   ArcadeLoader.attachEvents(app, data);
@@ -237,20 +242,49 @@ console.log("CHECKING TO SEE IF THERE IS STILL SPACE IN THE GAME: " + JSON.strin
     });
 
 
+
     Array.from(document.getElementsByClassName('arcade-game-row-delete')).forEach(game => {
       game.onclick = (e) => {
+
         let game_id = e.currentTarget.id;
         game_id = game_id.split('-').pop();
         salert(`Delete game id: ${game_id}`);
 
         if (app.options.games) {
-          let { games } = app.options;
-          let resigned_game = games.find(game => game.id == game_id);
-          if (resigned_game != -1) {
-            let game_mod = app.modules.returnModule(resigned_game.module);
-            game_mod.resignGame(game_id);
-          }
 
+          let { games } = app.options;
+
+          for (let i = 0; i < app.options.games.length; i++) {
+
+console.log("CHECKING: " + app.options.games[i].id);
+
+	    if (app.options.games[i].id == game_id) {
+
+console.log("THE GAME IS THE SAME AS OUR GAME ID!");
+
+	      let resigned_game = app.options.games[i];
+
+              if (resigned_game.over == 0) {
+
+console.log("GETTING ASKED TO RESIGN, then deleting!");
+
+            	let game_mod = app.modules.returnModule(resigned_game.module);
+            	game_mod.resignGame(game_id);
+
+              } else {
+
+console.log("DELETING A GAME!");
+	        //
+	        // removing game someone else ended
+	        //
+		app.options.games[i].over = 1;
+		app.options.games[i].last_block = app.blockchain.last_bid;
+		app.storage.saveOptions();
+
+	      }
+	    }
+	  }
+console.log("REMOVE GAME FROM GAME LIST!");
           this.removeGameFromList(game_id);
         }
       };

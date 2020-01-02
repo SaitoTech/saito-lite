@@ -173,7 +173,12 @@ class Arcade extends ModTemplate {
         //
         // ignore games that are over
         //
-        if (game.over) return;
+
+console.log("GAME OVER + LAST BLOCK: " + game.over + " -- " + game.last_block + " -- " + game.id);
+
+        if (game.over) {
+	  if (game.last_block > 0) { return; }
+	}
 
         if (game.players) {
           game_tx.transaction.to = game.players.map(player => new saito.slip(player));
@@ -189,6 +194,8 @@ class Arcade extends ModTemplate {
           game_id: game.id,
           options: game.options,
           players_needed: game.players_needed,
+	  over: game.over,
+	  last_block: game.last_block,
         }
 
         game_tx.transaction.sig = game.id;
@@ -210,24 +217,6 @@ class Arcade extends ModTemplate {
 
     this.render(app, data);
 
-    // let perView = this.app.browser.isMobileBrowser(navigator.userAgent) ? 1 : 3;
-
-    // Use for Carousel
-    /*
-    if (typeof window !== "undefined") {
-      importGlide = async () => {
-        const Glide = await import('./lib/glide/glide.min.js');
-        this.glide = new Glide.default('.glide', {
-          type: 'carousel',
-          autoplay: 3000,
-          perView,
-        });
-
-        this.glide.mount();
-      }
-      importGlide();
-    }
-    */
   }
 
 

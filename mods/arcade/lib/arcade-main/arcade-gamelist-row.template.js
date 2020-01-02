@@ -2,6 +2,7 @@ module.exports = ArcadeGameListRowTemplate = (app, tx, button_map) => {
 
   let { sig, from, to, msg } = tx.transaction;
   let { players_array, options_html, game } = msg;
+  let txmsg = tx.returnMessage();
 
   if (players_array == undefined) {
     players_array = to.map(t => t.add).join('_');
@@ -11,6 +12,7 @@ module.exports = ArcadeGameListRowTemplate = (app, tx, button_map) => {
   let players = players_array.split("_");
 
   if (options_html == undefined) { options_html = ""; }
+  if (txmsg.over == 1) { options_html = "Opponent Resigned"; }
   if (msg.players_needed > 2) { players_needed = msg.players_needed; }
 
   let publickeys = [];
