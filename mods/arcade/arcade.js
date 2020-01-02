@@ -59,7 +59,6 @@ class Arcade extends ModTemplate {
     //
     if (this.app.options.games) {
       let { games } = this.app.options;
-
       for (let i = 0; i < games.length; i++) {
         if (games[i].id == game_id) {
           games[i].ts = new Date().getTime();
@@ -317,6 +316,7 @@ console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
     }
   }
 
+
   addWinnerToLeaderboard(msg) {
     this.leaderboard.push(msg);
 
@@ -333,49 +333,19 @@ console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
   addGameToOpenList(tx) {
 
     if (!tx.transaction.sig) { return; }
-    let txmsg = tx.returnMessage();
 
+    let txmsg = tx.returnMessage();
 
     for (let i = 0; i < this.games.length; i++) {
       if (this.games[i].transaction.sig == tx.transaction.sig) { 
-console.log("#");
-console.log("#");
-console.log("#");
-console.log("QUITTING A: " + this.games[i].transaction.options);
         return;
       }
       if (txmsg.game_id == this.games[i].transaction.sig) {
-console.log("#");
-console.log("#");
-console.log("#");
-console.log("QUITTING B: " + this.games[i].transaction.options);
         return;
       }
     }
 
-
-/****
-    //
-    // ensure not in options either
-    //
-    if (this.app.options != undefined) {
-      if (this.app.options.games != undefined) {
-        for (let i = 0; i < this.app.options.games.length; i++) {
-          if (this.app.options.games[i].id == txmsg.game_id) {
-console.log("#");
-console.log("#");
-console.log("#");
-console.log("QUITTING C: " + this.app.options.games[i].id);
-            return;
-          }
-        }
-      }
-    }
-****/
-console.log("ARCADE PROCESSING RECEIVE INVITE REQUEST");
-
-
-console.log("PUSHING BACK: " + JSON.stringify(tx.transaction));
+console.log("\n\n\nNEW GAME INVITE: " + JSON.stringify(tx.transaction));
 
     this.games.unshift(tx);
 
@@ -450,6 +420,7 @@ console.log("PUSHING BACK: " + JSON.stringify(tx.transaction));
             }
           }
         }
+console.log("\n\n\nINVITE REQUEST: " + JSON.stringify(tx));
         this.receiveInviteRequest(blk, tx, conf, app);
       }
 
@@ -528,6 +499,7 @@ console.log("MSG: " + txmsg);
         }
 
 console.log("... still here... receive accept request!");
+console.log("\n\n\nACCEPT REQUEST: " + JSON.stringify(tx));
         await this.receiveAcceptRequest(blk, tx, conf, app);
 
 	//
@@ -559,7 +531,7 @@ console.log("THIS GAMEIS FOR ME: " + tx.isTo(app.wallet.returnPublicKey()));
 
       // game over
       if (txmsg.request == "gameover") {
-console.log("HERE -- receive gameover request!");
+console.log("\n\n\nGAMEOVER REQUEST: " + JSON.stringify(tx));
         this.receiveGameoverRequest(blk, tx, conf, app);
       }
     }
@@ -998,10 +970,33 @@ console.log("LOADED THE GAME: " + txmsg.game);
   }
 
   async receiveGameoverRequest(blk, tx, conf, app) {
+
+    let txmsg = tx.returnMessage();
+
+    //
+    // update live game table
+    //
+    for (let i = 0; i < this.games.length; i++) {
+      if (this.games[i].transaction.msg.game_id == txmsg.game_id) {
+	let game_id = this.games[i].transaction.msg.game_id;
+	let divid = "arcade-game-options-"+game_id;
+	if (this.browser_active) {
+	  try {
+let testdiv = document.getElementById(divid);
+	    if (testdiv) {
+	      testdiv.innerHTML = "Opponent Resigned";
+	    }
+	  } catch (err) {
+console.log("ERROR UPDATING ARCADE BOX");
+	  }
+	}
+      }
+    }
+
+
     //
     // we want to update the game, and also give the winner points
     //
-    let txmsg = tx.returnMessage();
     let sql = "UPDATE games SET status = $status, winner = $winner WHERE game_id = $game_id";
     let params = {
       $status: 'over',

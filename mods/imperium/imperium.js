@@ -5808,14 +5808,14 @@ console.log("pushing player: " + (a+1));
   
     let strategy = {};
   
-    strategy['initiative']	= { order : 1 , img : "/imperium/img/card_template.jpg" , name : "Initiative" };
-    strategy['negotiation'] 	= { order : 2 , img : "/imperium/img/card_template.jpg" , name : "Negotiation" };
-    strategy['politics'] 	= { order : 3 , img : "/imperium/img/card_template.jpg" , name : "Politics" };
-    strategy['infrastructure'] 	= { order : 4 , img : "/imperium/img/card_template.jpg" , name : "Infrastructure" };
-    strategy['trade'] 	 	= { order : 5 , img : "/imperium/img/card_template.jpg" , name : "Trade" };
-    strategy['military'] 	= { order : 6 , img : "/imperium/img/card_template.jpg" , name : "Military" };
-    strategy['tech'] 		= { order : 7 , img : "/imperium/img/card_template.jpg" , name : "Tech Research" };
-    strategy['empire'] 	 	= { order : 8 , img : "/imperium/img/card_template.jpg" , name : "Imperial" };
+    strategy['initiative']	= { order : 1 , img : "/imperium/img/strategy/INITIATIVE.png" , name : "Initiative" };
+    strategy['diplomacy'] 	= { order : 2 , img : "/imperium/img/strategy/DIPLOMACY.png" , name : "Diplomacy" };
+    strategy['politics'] 	= { order : 3 , img : "/imperium/img/strategy/POLITICS.png" , name : "Politics" };
+    strategy['build'] 		= { order : 4 , img : "/imperium/img/strategy/BUILD.png" , name : "Build" };
+    strategy['trade'] 	 	= { order : 5 , img : "/imperium/img/strategy/TRADE.png" , name : "Trade" };
+    strategy['military'] 	= { order : 6 , img : "/imperium/img/strategy/MILITARY.png" , name : "Military" };
+    strategy['tech'] 		= { order : 7 , img : "/imperium/img/strategy/TECH.png" , name : "Tech Research" };
+    strategy['empire'] 	 	= { order : 8 , img : "/imperium/img/strategy/EMPIRE.png" , name : "Empire" };
   
     return strategy;
   

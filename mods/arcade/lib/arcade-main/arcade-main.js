@@ -44,6 +44,12 @@ module.exports = ArcadeMain = {
       let button_text = {};
       button_text.join = "JOIN";
 
+      //
+      // eliminate "JOIN" button if I am in the game already
+      //
+      if (tx.isFrom(app.wallet.returnPublicKey())) {
+	delete button_text.join;
+      }
       if (tx.transaction.msg.players_array) {
         if (tx.transaction.msg.players_array.includes(app.wallet.returnPublicKey())) {
 	  delete button_text.join;
