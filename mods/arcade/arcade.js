@@ -161,6 +161,17 @@ class Arcade extends ModTemplate {
     }
 
     //
+    // delete outdated games
+    //
+    if (this.app.options.games) {
+      for (let i = this.app.options.games.length-1; i >= 0; i--) {
+	if (this.app.options.games[i].over == 1 && this.app.options.games[i].last_block > 0 && this.app.options.games[i].last_block > (this.app.blockchain.last_bid-10)) {
+	  this.app.options.games.splice(i, 1);
+	}
+      }
+    }
+
+    //
     // add my own games (as fake txs)
     //
     if (this.app.options.games != null) {
