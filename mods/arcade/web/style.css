@@ -464,9 +464,10 @@ button.add-games {
 }
 
 .arcade-game-row-options {
-  margin-left: 30px;
+  margin-left: 10px;
   float: left;
   cursor: pointer;
+  padding-right: 5px;
 }
 
 .arcade-game-row-join {

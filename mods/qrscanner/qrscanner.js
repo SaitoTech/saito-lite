@@ -8,7 +8,8 @@ const AddContact = require('./lib/add-contact');
 class QRScanner extends ModTemplate {
   constructor(app) {
     super(app);
-    this.name = "qrscanner";
+
+    this.name = "QRScanner";
     this.events = ['encrypt-key-exchange-confirm'];
     this.video = null;
     this.canvas = null;
@@ -30,7 +31,6 @@ class QRScanner extends ModTemplate {
     // In milliseconds
     this.debounce_timeout = 750;
 
-    this.name = "QRScanner";
   }
 
   initialize(app) {
