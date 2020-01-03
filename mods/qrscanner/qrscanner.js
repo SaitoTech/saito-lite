@@ -11,12 +11,9 @@ class QRScanner extends ModTemplate {
 
     this.name = "QRScanner";
     this.events = ['encrypt-key-exchange-confirm'];
-
     this.video = null;
     this.canvas = null;
-
     this.canvas_context = null;
-
     this.isStreamInit = false;
 
     this.constraints = {

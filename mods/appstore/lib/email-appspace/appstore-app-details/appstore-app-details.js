@@ -67,6 +67,14 @@ console.log("MODULE LIST IS: " + JSON.stringify(module_list));
 
         let replacing_old = 0;
 
+        // hack to stop bundling from failing
+        if (
+          bundle_list[i].name.toLowerCase() == "qrscanner" ||
+          bundle_list[i].name.toLowerCase() == "red imperium"
+        ) {
+          replacing_old = 1;
+        }
+
         for (let z = 0; z < module_list.length; z++) {
 
           if (dmname != "") {

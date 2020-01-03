@@ -774,6 +774,10 @@ option {
   background: #426;
 }
 
+.chat-message-header {
+  color: #999;
+}
+
 #alert-box {
   background: var(--saito-nightscape);
 }

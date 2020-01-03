@@ -86,7 +86,7 @@ module.exports = ChatBox = {
       this.addTXToDOM(app, data, tx);
     },
 
-    addMessageToDOM(data, msg) {
+    addMessageToDOM(app, data, msg) {
       let chat_box_main = document.getElementById(`chat-box-main-${msg.group_id}`)
       if (!chat_box_main) { return; }
 
