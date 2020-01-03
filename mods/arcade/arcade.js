@@ -431,6 +431,15 @@ console.log("\n\n\nINVITE REQUEST: " + JSON.stringify(tx));
       // if (!tx.isTo(app.wallet.returnPublicKey())) { return; }
 
 
+
+      if (txmsg.request === "sorry") {
+        if (tx.isTo(app.wallet.returnPublicKey())) {
+	  arcade_self.receiveSorryAcceptedTransaction(blk, tx, conf, app);
+        }
+      }
+
+
+
       // acceptances
       if (txmsg.request === "accept") {
 
@@ -538,6 +547,7 @@ console.log("\n\n\nGAMEOVER REQUEST: " + JSON.stringify(tx));
   }
 
   async handlePeerRequest(app, message, peer, mycallback=null) {
+
     super.handlePeerRequest(app, message, peer, mycallback);
 
     switch(message.request) {
@@ -556,13 +566,11 @@ console.log("\n\n\nGAMEOVER REQUEST: " + JSON.stringify(tx));
 
   launchGame(game_id) {
 
-console.log("LAUNCH GAME TRIGGERED");
     if (this.browser_active == 0) { return; }
 
     let arcade_self = this;
 
     arcade_self.is_initializing = true;
-
     arcade_self.initialization_timer = setInterval(() => {
 
       let game_idx = -1;
@@ -583,8 +591,6 @@ console.log("LAUNCH GAME TRIGGERED");
         let data = {};
             data.arcade   = arcade_self;
             data.game_id  = game_id;
-
-console.log("GAME IS INITIALIZING and launching LOADER!");
 
         ArcadeLoader.render(arcade_self.app, data);
         ArcadeLoader.attachEvents(arcade_self.app, data);
@@ -673,10 +679,10 @@ console.log("GAME IS INITIALIZING and launching LOADER!");
     let players_array           = player;
 
     let sql = `INSERT INTO games (
-                  player ,
-                  players_needed ,
-                  players_accepted ,
-                  players_array ,
+                player ,
+                players_needed ,
+                players_accepted ,
+                players_array ,
                 module ,
                 game_id ,
                 status ,
@@ -688,8 +694,8 @@ console.log("GAME IS INITIALIZING and launching LOADER!");
               ) VALUES (
                 $player ,
                 $players_needed ,
-                  $players_accepted ,
-                  $players_array ,
+                $players_accepted ,
+                $players_array ,
                 $module ,
                 $game_id ,
                 $status ,
@@ -706,7 +712,7 @@ console.log("GAME IS INITIALIZING and launching LOADER!");
                 $players_array      : players_array ,
                 $module     : module ,
                 $game_id    : game_id ,
-                 $status	    : "open" ,
+                $status	    : "open" ,
                 $options    : options ,
                 $tx         : JSON.stringify(tx.transaction) ,
                 $start_bid  : blk.block.id ,
@@ -849,6 +855,47 @@ console.log("GAME IS INITIALIZING and launching LOADER!");
 
 
 
+  receiveSorryAcceptedTransaction(blk, tx, conf, app) {
+
+    let txmsg = tx.returnMessage();
+
+    try {
+
+
+      // 
+      // delete from local stores
+      //
+      if (app.options.games) {
+        for (let i = app.options.games.length-1; i >= 0; i--) {
+          if (app.options.games[i].id == txmsg.game_id) {
+console.log("########################");
+console.log("### SENDING SORRY TX ###");
+console.log("########################");
+console.log("\n\n\nSORRY -- RECEIVED: " + JSON.stringify(app.options.games[i]));
+  	    if (app.options.games[i].players.length == app.options.games[i].players_needed && !app.options.games[i].players.includes(tx.transaction.from[0].add)) {
+
+              if (this.browser_active == 1) {
+                salert("Opponent has responded claiming game already accepted :( -- returning to Arcade");
+              }
+
+              app.options.games.splice(i, 1);
+	      app.storage.saveOptions();
+            }
+          }
+        }
+      } 
+      
+      if (this.browser_active == 1) {
+	salert("Sorry! Your opponent has replied that has already accepted that game!");
+	window.location = "/arcade";
+        return;
+      }
+
+    } catch (err) {
+console.log("ERROR WITH SORRY ACCEPTED TRANSACTION: " + err);
+    }
+
+  }
 
 
 
@@ -1147,8 +1194,15 @@ console.log(JSON.stringify(game));
   //
   onNewBlock(blk, lc) {
 
+    //
+    // we notify clients via peer request if they
+    // should accept a game...
+    //
     if (lc == 1) {
-      this.accepted = [];
+      for (let i in this.accepted) {
+	this.accepted[i]++;
+	if (this.accepted[i] > 100) { delete this.accepted[i]; }
+      }
     }
   }
 
@@ -1165,7 +1219,11 @@ console.log(JSON.stringify(game));
       let res = {};
           res.rows = [];
 
-      if (this.accepted[game_id] == 1) { 
+      if (this.accepted[game_id] > 0) { 
+
+	//
+	// check required of players_needed vs. players_accepted
+	//
         res.rows.push({ game_still_open : 0 });
       } else {
         res.rows.push({ game_still_open : 1 });

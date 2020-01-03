@@ -954,6 +954,12 @@ console.log("GAME QUEUE: " + this.game.queue);
   	}
 
 
+	//
+	// DE-ACTIVATE SYSTEMS
+	//
+        this.deactivateSystems();
+	
+
 console.log("DECK FLIPPED: " + JSON.stringify(this.game.deck[2])); 
 
 /***
@@ -1571,7 +1577,21 @@ console.log("IN SECTOR: " + JSON.stringify(sys.s));
     }
   
   }
-  
+ 
+
+  deactivateSystems() {
+
+    //
+    // deactivate all systems
+    //
+    for (var sys in this.game.systems) {
+      for (let j = 0; j < this.totalPlayers; j++) {
+        this.game.systems[sys].activated[j] = 0;
+      }
+    }
+
+  }
+ 
 
 
   continuePlayerTurn(player, sector) {
@@ -3124,7 +3144,6 @@ console.log("\n\nLANDING 1 UNIT: ");
     return 1;
   
   }
-
 
 
   playerActivateSystem() {

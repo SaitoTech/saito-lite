@@ -312,9 +312,9 @@ console.log("REMOVE GAME FROM GAME LIST!");
 
     Array.from(document.getElementsByClassName('arcade-game-row-cancel')).forEach(game => {
       game.onclick = (e) => {
+
         let game_id = e.currentTarget.id;
         sig = game_id.split('-').pop();
-        salert(`Cancel game id: ${game_id}`);
 
         let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
         let msg = {
