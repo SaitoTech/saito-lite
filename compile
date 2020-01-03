@@ -21,6 +21,7 @@ if [ "$1" == "nuke" ]; then
   echo "  (resetting configuration)  "
   echo ""
   echo ""
+  
 
   rm -f ./data/appstore.sq3
   rm -f ./data/hospital.sq3
@@ -61,6 +62,12 @@ if [ "$1" == "nuke" ]; then
     cp config/modules.default.js config/modules.config.js
   fi
 
+fi
+
+
+
+if [ ! -f ./config/modules.config.js ]; then
+  cp ./config/modules.default.js ./config/modules.config.js
 fi
 
 
