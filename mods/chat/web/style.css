@@ -51,11 +51,18 @@ p {
     font-family: visuelt-light;
 }
 
-.chat-room-message-identicon {
+/* .chat-room-message-identicon {
   float: left;
   width: 2em;
   margin: 0 5px 0 0;
   border: 1px solid #8885;
+} */
+
+.chat-room-message-identicon {
+  border: 1px solid #8885;
+  width: 1.5em;
+  padding: 1px;
+  border-radius: 50px;
 }
 
 /** CHAT ADD **/
@@ -199,7 +206,7 @@ p {
 .chat-room-submit-button {
     justify-self: center;
     background: var(--saito-red);
-    padding: 9px 10px;
+    padding: 7px 10px;
     color: white;
     border-radius: 100px;
     cursor: pointer;

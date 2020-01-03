@@ -549,7 +549,7 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
 
     /* */
     try {
-      const { stdout, stderr } = await exec(exec_command);
+      const { stdout, stderr } = await exec(exec_command, {maxBuffer: 2048 * 1024});
     } catch (err) {
       console.log(stderr);
       console.log(err);
