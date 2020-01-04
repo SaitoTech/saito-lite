@@ -3,9 +3,6 @@ const webpack = require('webpack');
 
 let [entry_path, output_path, output_filename] = process.argv.slice(2);
 
-// let entry = path.resolve(__dirname, 'mods/appstore/bundler/templates/index.js');
-// let output_path = path.resolve(__dirname, 'mods/appstore/bundler/dist');
-
 webpack({
   target: 'web',
     node: {
@@ -72,8 +69,11 @@ webpack({
   devtool: "cheap-module-eval-source-map",
   }, (err, stats) => {
   if (err || stats.hasErrors()) {
-    let info = stats.toJson();
-    console.log(info.errors);
+    console.log(err);
+    if (stats) {
+      let info = stats.toJson();
+      console.log(info.errors);
+    }
   }
   //
   // Done processing
