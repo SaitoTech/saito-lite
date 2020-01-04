@@ -533,6 +533,7 @@ class AppStore extends ModTemplate {
 
     let bash_script = `mods/compile-${ts}-${hash}`;
     let bash_script_content = 'cd ' + __dirname + '/mods' + "\n";
+    let bash_script_delete = 'cd ' + __dirname + '/mods' + "\n";
 
     //
     // save MODS.zip and create bash script to unzip
@@ -540,37 +541,22 @@ class AppStore extends ModTemplate {
     let modules_config_filename = `modules.config-${ts}-${hash}.json`;
     let module_paths = modules.map(mod => {
       let mod_path = `mods/${returnSlug(mod.name)}-${ts}-${hash}.zip`;
-      //bash_script_content += `unzip ${returnSlug(mod.name)}-${ts}-${hash}.zip -d ${returnSlug(mod.name)}-${ts}-${hash} \*.js \*.css \*.html` + "\n";
-      bash_script_content += `unzip ${returnSlug(mod.name)}-${ts}-${hash}.zip -d ../../bundler/mods/${returnSlug(mod.name)}-${ts}-${hash} \*.js \*.css \*.html` + "\n";
+      bash_script_content += `unzip ${returnSlug(mod.name)}-${ts}-${hash}.zip -d ../bundler/mods/${returnSlug(mod.name)}-${ts}-${hash} \*.js \*.css \*.html` + "\n";
+      bash_script_delete += `rm -rf ../bundler/mods/${returnSlug(mod.name)}-${ts}-${hash}` + "\n";
       fs.writeFileSync(path.resolve(__dirname, mod_path), mod.zip, { encoding: 'binary' });
       return `appstore/bundler/mods/${mod.name.toLowerCase()}-${ts}-${hash}/${mod.name.toLowerCase()}`;
     });
+    bash_script_delete += `rm -f ./*-${hash}.zip`;
+    bash_script_delete += `rm -f ./*-${hash}`;
 
-    bash_script_content += `rm -f ./*-${hash}.zip`;
-    fs.writeFileSync(path.resolve(__dirname, bash_script), bash_script_content, { encoding: 'binary' });
 
-
-    //
-    // unzip our modules
-    //
-    try {
-      let cwdir = __dirname;
-      let unzip_command = 'sh ' + bash_script;
-      const { stdout, stderr } = await exec(unzip_command, {cwd : cwdir , maxBuffer : 4096 * 2048});
-    } catch (err) {
-      console.log(err);
-    }
 
     //
     // write our modules config file
     //
-console.log("444...");
-
     await fs.writeFile(path.resolve(__dirname, `../../bundler/${modules_config_filename}`),
       JSON.stringify({ mod_paths: module_paths })
     );
-
-console.log("Module Paths: " + JSON.stringify(module_paths));
 
 
 
@@ -594,20 +580,28 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
     let entry = path.resolve(__dirname, `../../bundler/${index_filename}`);
     let output_path = path.resolve(__dirname, 'bundler/dist');
 
+    bash_script_content += 'cd ' + __dirname + "\n";
+    bash_script_content += 'cd ../../' + "\n";
+    bash_script_content += `sh bundle.sh ${entry} ${output_path} ${bundle_filename}`;
+    bash_script_content += "\n";
+    bash_script_content += bash_script_delete;
 
+    fs.writeFileSync(path.resolve(__dirname, bash_script), bash_script_content, { encoding: 'binary' });
 
+process.exit();
 
-
-    let exec_command = `sh bundle.sh ${entry} ${output_path} ${bundle_filename}`;
-    // let exec_command = `sh bundle.sh ${entry} ${output_path}mods/appstore/bundler/dist ${bundle_filename}`;
-    // let exec_command = `node webpack.js ${entry} ${output_path} ${bundle_filename}`;
-
-    /* */
+    //
+    // execute bash script
+    //
     try {
-      const { stdout, stderr } = await exec(exec_command, {maxBuffer: 4096 * 2048});
+      let cwdir = __dirname;
+      let unzip_command = 'sh ' + bash_script;
+      const { stdout, stderr } = await exec(unzip_command, {cwd : cwdir , maxBuffer : 4096 * 2048});
     } catch (err) {
       console.log(err);
     }
+
+console.log("Module Paths: " + JSON.stringify(module_paths));
 
     //
     // cleanup
@@ -626,8 +620,12 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
+
+
+/***** NOW HANDLED BY BASH SCRIPT ****
     //
     // delete mods in bundler/mods
+    //
     module_paths.forEach(modpath => {
       if (!modpath) { return; }
       let mod_dir = modpath.split('/')[3];
@@ -647,6 +645,7 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
     } catch(err) {
       console.log(err);
     }
+***** NOW HANDLED BY BASH SCRIPT ****/
 
     return bundle_filename;
   }
