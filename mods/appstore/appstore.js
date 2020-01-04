@@ -22,6 +22,21 @@ function getFiles(dir) {
   return Array.prototype.concat(...files);
 }
 
+// pass an empty dir of files
+function deleteDirs(dir) {
+  const dirents = fs.readdirSync(dir, { withFileTypes: true });
+  dirents.forEach((dirent) => {
+    const res = path.resolve(dir, dirent.name);
+    if (dirent.isDirectory() && fs.readdirSync(res).length == 0) {
+      fs.rmdirSync(res, { maxRetries: 100, recursive: true });
+    } else {
+      deleteDirs(res);
+      // delete after children have been
+      fs.rmdirSync(res, { maxRetries: 100, recursive: true });
+    }
+  });
+}
+
 class AppStore extends ModTemplate {
 
   constructor(app) {
@@ -545,21 +560,22 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
     const util = require('util');
     const exec = util.promisify(require('child_process').exec);
 
-    let exec_command = `node webpack.js ${entry} ${output_path} ${bundle_filename}`;
+    let exec_command = `sh bundle.sh ${entry} ${output_path} ${bundle_filename}`;
+    // let exec_command = `sh bundle.sh ${entry} ${output_path}mods/appstore/bundler/dist ${bundle_filename}`;
+    // let exec_command = `node webpack.js ${entry} ${output_path} ${bundle_filename}`;
 
     /* */
     try {
-      const { stdout, stderr } = await exec(exec_command, {maxBuffer: 2048 * 1024});
+      const { stdout, stderr } = await exec(exec_command, {maxBuffer: 4096 * 1024});
     } catch (err) {
-      console.log(stderr);
       console.log(err);
     }
 
     //
     // cleanup
     //
-    fs.unlink(path.resolve(__dirname, `bundler/${index_filename}`));
-    fs.unlink(path.resolve(__dirname, `bundler/${modules_config_filename}`));
+    fs.unlink(path.resolve(__dirname, `../../bundler/${index_filename}`));
+    fs.unlink(path.resolve(__dirname, `../../bundler/${modules_config_filename}`));
 
 
     //
@@ -575,10 +591,13 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
     //
     // delete mods in bundler/mods
     module_paths.forEach(modpath => {
+      if (!modpath) { return; }
       let mod_dir = modpath.split('/')[3];
-      let files = getFiles(path.resolve(__dirname, `bundler/mods/${mod_dir}`));
-      files.forEach(file_path => fs.unlink(file_path));
-      fs.rmdir(path.resolve(__dirname, `bundler/mods/${mod_dir}`));
+      let full_mod_dir = path.resolve(__dirname, `bundler/mods/${mod_dir}`);
+      let files = getFiles(full_mod_dir);
+      files.forEach(file_path => fs.unlinkSync(file_path));
+      deleteDirs(full_mod_dir);
+      fs.rmdirSync(path.resolve(__dirname, `bundler/mods/${mod_dir}`));
     });
 
     //
