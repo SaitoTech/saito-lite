@@ -498,6 +498,7 @@ console.log(bundle_filename + " -- " + online_version);
 console.log("mod path is: " + mod_path);
 
       fs.writeFileSync(path.resolve(__dirname, mod_path), mod.zip, { encoding: 'binary' });
+console.log("111...");
       fs.createReadStream(path.resolve(__dirname, mod_path))
         .pipe(unzipper.Extract({
           path: path.resolve(__dirname, `bundler/mods/${mod.name.toLowerCase()}-${ts}-${hash}`)
@@ -506,9 +507,11 @@ console.log("mod path is: " + mod_path);
       //
       // delete the other files
       //
+console.log("222...");
       fs.unlink(path.resolve(__dirname, mod_path));
 
       // return the path
+console.log("333...");
       return `appstore/bundler/mods/${mod.name.toLowerCase()}-${ts}-${hash}/${mod.name.toLowerCase()}`;
 
     });
@@ -516,11 +519,18 @@ console.log("mod path is: " + mod_path);
     //
     // write our modules config file
     //
+console.log("444...");
+
     await fs.writeFile(path.resolve(__dirname, `../../bundler/${modules_config_filename}`),
       JSON.stringify({ mod_paths: module_paths })
     );
 
 console.log("Module Paths: " + JSON.stringify(module_paths));
+
+//
+// AND KICK OUT
+//
+return;
 
     //
     // other filenames
@@ -549,7 +559,7 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
 
     /* */
     try {
-      const { stdout, stderr } = await exec(exec_command, {maxBuffer: 2048 * 1024});
+      const { stdout, stderr } = await exec(exec_command, {maxBuffer: 4096 * 2048});
     } catch (err) {
       console.log(stderr);
       console.log(err);
