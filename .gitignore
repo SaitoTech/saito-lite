@@ -23,6 +23,9 @@ data/blocks/*.blk
 data/shashmaps/*.smap
 
 
+bundler
+bundler/*
+
 lib/saito/*.swp
 lib/saito/web/browser.js
 lib/saito/web/client.options
