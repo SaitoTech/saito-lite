@@ -45,8 +45,8 @@ module.exports = EmailDetailHeader = {
         document.getElementById('email-to-address').value = original.from[0].add;
         document.querySelector('.email-title').value = "Re: " + original.msg.title;
         let body = "\n\n\n --Quoted Text-------------------------\n\n" + original.msg.message;
-        document.querySelector('.email-text').value = body;
-        document.querySelector('.email-text').focus();
+        document.querySelector('#email-text').innerHTML = body;
+                document.querySelector('.email-text').focus();
       });
 
     document.getElementById('email-detail-forward')

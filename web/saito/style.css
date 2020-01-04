@@ -44,6 +44,7 @@ Generic Style Settings for Modules in the Saito App Suite
     --saito-red-wash: rgb(247, 31, 61, 0.3);
     --saito-cyber-black-wash: rgb(28, 28, 35, 0.3);
     --saito-cyber-black-cut: rgb(28, 28, 35, 0.5);
+    --saito-wu: none;
 }
 
 * {
@@ -103,6 +104,11 @@ hr {
 
 .monospace {
     font-family: monospace, 'Courier New', Courier;
+}
+
+.boldred {
+    color: var(--saito-red);
+    font-weight: bolder;
 }
 
 /* Forms and Inputs */
@@ -940,8 +946,8 @@ label.treated {
 }
 
 /* mobile modals */
+
 @media only screen and (max-width: 900px) {
-  
     .welcome-modal-wrapper {
         grid-template-columns: 1fr;
         width: 100%;
@@ -959,5 +965,104 @@ label.treated {
     i.fas.fa-arrow-right {
         right: -1em;
     }
+}
 
+/* medium editor */
+
+blockquote {
+    border-left: 2px solid var(--saito-red);
+    padding: 1em;
+}
+
+.medium-toolbar-arrow-under:after {
+    top: 60px;
+    border-color: var(--saito-red) transparent transparent
+}
+
+.medium-toolbar-arrow-over:before {
+    top: -8px;
+    border-color: transparent transparent var(--saito-red)
+}
+
+.medium-editor-toolbar {
+    background-color: var(--saito-red)
+}
+
+.medium-editor-toolbar-input {
+    height: 60px;
+    background: var(--saito-red);
+    color: #fff
+}
+
+.medium-editor-toolbar li {
+    padding: 0
+}
+
+.medium-editor-toolbar li button {
+    border-radius: 0;
+    min-width: 60px;
+    height: 60px;
+    border: none;
+    border-right: 1px solid #fb5e5e;
+    background-color: transparent;
+    color: #fff;
+    -webkit-transition: background-color .2s ease-in, color .2s ease-in;
+    transition: background-color .2s ease-in, color .2s ease-in
+}
+
+.medium-editor-toolbar li button:hover {
+    background-color: #aa1d0a;
+    color: #fff
+}
+
+.medium-editor-toolbar li .medium-editor-button-active {
+    background-color: #aa1d0a;
+    color: #fff
+}
+
+.medium-editor-toolbar li .medium-editor-button-last {
+    border-right: none
+}
+
+.medium-editor-toolbar-form .medium-editor-toolbar-form .medium-editor-toolbar-input::-webkit-input-placeholder {
+    color: #fff;
+    color: rgba(255, 255, 255, .8)
+}
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input:-moz-placeholder {
+    color: #fff;
+    color: rgba(255, 255, 255, .8)
+}
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input::-moz-placeholder {
+    color: #fff;
+    color: rgba(255, 255, 255, .8)
+}
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input:-ms-input-placeholder {
+    color: #fff;
+    color: rgba(255, 255, 255, .8)
+}
+
+.medium-editor-toolbar-form a {
+    color: #fff
+}
+
+.medium-editor-toolbar-anchor-preview {
+    background: var(--saito-red);
+    color: #fff
+}
+
+.medium-editor-placeholder:after {
+    color: #888888
+}
+
+.medium-editor-element {
+    outline: none;
+}
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input {
+    height: 60px;
+    background: #fb5e5e;
+    color: #fff;
 }

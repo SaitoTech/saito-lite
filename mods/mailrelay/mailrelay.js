@@ -37,7 +37,7 @@ class MailRelay extends ModTemplate {
         
     }
 
-    async handlePeerRequest(app, message, peef, callback) {
+    async handlePeerRequest(app, message, peer, callback) {
         if (message.request == "send email") {
             let email = {};
             email.to = message.data.to;         //email address as string

@@ -15,37 +15,51 @@ const FaucetAppSpace = require('./lib/email-appspace/faucet-appspace');
 
 class Faucet extends ModTemplate {
 
-  constructor(app) {
+    constructor(app) {
 
-    super(app);
+        super(app);
 
-    this.name = "Faucet";
-    this.initial = 10;
-    this.payoutRatio = 0.75;
+        this.name              = "Faucet";
+        this.initial           = 10;
+        this.payoutRatio       = 0.75;
 
-  }
+        this.backup_payout     = 50;
+        this.registry_payout   = 50;
 
-
-  respondTo(type) {
-    if (type == 'email-appspace') {
-      let obj = {};
-          obj.render = this.renderEmail;
-          obj.attachEvents = this.attachEventsEmail;
-      return obj;
     }
-    return null;
-  }
-  renderEmail(app, data) {
-     data.faucet = app.modules.returnModule("Faucet");
-     FaucetAppspace.render(app, data);
-  }
-  attachEventsEmail(app, data) {
-     data.faucet = app.modules.returnModule("Faucet");
-     FaucetAppspace.attachEvents(app, data);
-  }
 
 
+    respondTo(type) {
+        if (type == 'email-appspace') {
+            let obj = {};
+            obj.render = this.renderEmail;
+            obj.attachEvents = this.attachEventsEmail;
+            return obj;
+        }
+        return null;
+    }
+    renderEmail(app, data) {
+        data.faucet = app.modules.returnModule("Faucet");
+        FaucetAppspace.render(app, data);
+    }
+    attachEventsEmail(app, data) {
+        data.faucet = app.modules.returnModule("Faucet");
+        FaucetAppspace.attachEvents(app, data);
+    }
 
+    
+    async handlePeerRequest(app, message, peef, callback) {
+        if (message.request == "user wallet backup") {
+            this.payoutFirstInstance(message.data, message.request);
+        }
+    }
+
+    async payoutFirstInstance (address, event, payout) {
+        if (await this.checkEvent(address, event) == false){
+            this.makePayout(address, payout);
+        }
+        this.recordEvent(address, event);
+    }
 
     onConfirmation(blk, tx, conf, app) {
 
@@ -56,8 +70,12 @@ class Faucet extends ModTemplate {
                 if (this.app.BROWSER == 1) { return; }
                 this.updateUsers(tx);
             }
+            if (tx.transaction.msg.origin == "Registry") {
+                this.payoutFirstInstance(tx.transaction.to[0].add, "register identifier", this.registry_payout);
+            }
         }
     }
+
 
     async updateUsers(tx) {
         try {
@@ -92,7 +110,7 @@ class Faucet extends ModTemplate {
         let sql = "";
         let params = {};
         var payout = ((row.total_spend / (row.total_payout + 0.01)) >= this.payoutRatio);
-        var newPayout = Math.ceil( row.last_payout_amt / this.payoutRatio );
+        var newPayout = Math.ceil(row.last_payout_amt / this.payoutRatio);
         var isGame = 0;
         if (typeof tx.transaction.msg.game_id != "undefined") { isGame = 1 };
         var gameOver = 0;
@@ -132,7 +150,7 @@ class Faucet extends ModTemplate {
 
 
     async addUser(tx, ii) {
-        try{
+        try {
             //let sql = "INSERT OR IGNORE INTO users (address, tx_count, games_finished, game_tx_count, first_tx, latest_tx, last_payout_ts, last_payout_amt, total_payout, total_spend, referer) VALUES ($address, $tx_count, $games_finished, $game_tx_count, $first_tx, $latest_tx, $last_payout_ts, $last_payout_amt, $total_payout, $total_spend, $referer);"
             var isGame = 0;
             if (typeof tx.transaction.msg.game_id != undefined) { isGame = 1 };
@@ -149,13 +167,13 @@ class Faucet extends ModTemplate {
                 $total_spend: Number(tx.fees_total),
                 $referer: ''
             }
-            let sql = "INSERT OR IGNORE INTO users (address, tx_count, games_finished, game_tx_count, first_tx, latest_tx, last_payout_ts, last_payout_amt, total_payout, total_spend, referer) VALUES ('"+tx.transaction.from[ii].add+"', "+1+", "+0+", "+isGame+", "+tx.transaction.ts+", "+tx.transaction.ts+", "+tx.transaction.ts+", "+this.initial+", "+this.initial+", "+Number(tx.fees_total)+", '');";
+            let sql = "INSERT OR IGNORE INTO users (address, tx_count, games_finished, game_tx_count, first_tx, latest_tx, last_payout_ts, last_payout_amt, total_payout, total_spend, referer) VALUES ('" + tx.transaction.from[ii].add + "', " + 1 + ", " + 0 + ", " + isGame + ", " + tx.transaction.ts + ", " + tx.transaction.ts + ", " + tx.transaction.ts + ", " + this.initial + ", " + this.initial + ", " + Number(tx.fees_total) + ", '');";
             params = {};
 
             await this.app.storage.executeDatabase(sql, params, "faucet");
 
             //initial funds sent
-            this.makePayout(tx.transaction.from[ii].add, this.initial);
+            //this.makePayout(tx.transaction.from[ii].add, this.initial);
 
             return;
         } catch (err) {
@@ -163,22 +181,25 @@ class Faucet extends ModTemplate {
         }
     }
 
-    async recordEvent(address, event, time) {
+    async recordEvent(address, event, time = new Date().getTime()) {
+        let sql = "INSERT INTO events (address, event, time) VALUES ($address, $event, $time);";
+        let params = {
+            $address: address,
+            $event: event,
+            $time: time
+        }
         try {
-            let sql = "INSERT INTO events (address, event, time) VALUES ($address, $event, $time);";
-            let params = {
-                $address: address,
-                $event: event,
-                $time: time
-            }
+
+            await this.app.storage.executeDatabase(sql, params, "faucet");
+
         } catch (err) {
             console.error(err);
         }
     }
 
-    async returnEvents(address, latest=false) {
+    async returnEvents(address, latest = false) {
 
-        if(latest) {
+        if (latest) {
             let sql = "SELECT * FROM events where address = $address order by time asc limit 1";
         } else {
             let sql = "SELECT * FROM events where address = $address";
@@ -187,10 +208,31 @@ class Faucet extends ModTemplate {
         let params = {
             $address: address
         }
-        
+
         try {
             let rows = await this.app.storage.queryDatabase(sql, params, "faucet");
             return rows;
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    async checkEvent(address, event) {
+
+        let sql = "SELECT * FROM events where address = $address and $event = event";
+
+        let params = {
+            $address: address,
+            $event: event
+        }
+
+        try {
+            let rows = await this.app.storage.queryDatabase(sql, params, "faucet");
+            if (rows.length >= 1) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (err) {
             console.error(err);
         }
@@ -202,58 +244,60 @@ class Faucet extends ModTemplate {
         let wallet_balance = this.app.wallet.returnBalance();
 
         if (wallet_balance < amount) {
-          console.log("\n\n\n *******THE FAUCET IS POOR******* \n\n\n");
-          return;
+            console.log("\n\n\n *******THE FAUCET IS POOR******* \n\n\n");
+            return;
         }
 
         try {
 
-          let faucet_self = this;
-          let total_fees = Big(amount+2);
-          let newtx = new saito.transaction();
-          newtx.transaction.from = faucet_self.app.wallet.returnAdequateInputs(total_fees.toString());
-          newtx.transaction.ts   = new Date().getTime();
+            let faucet_self = this;
+            let total_fees = Big(amount + 2);
+            let newtx = new saito.transaction();
+            newtx.transaction.from = faucet_self.app.wallet.returnAdequateInputs(total_fees.toString());
+            newtx.transaction.ts = new Date().getTime();
 
-          //console.log("FAUCET INPUTS: " + JSON.stringify(faucet_self.app.wallet.wallet.inputs));
+            //console.log("FAUCET INPUTS: " + JSON.stringify(faucet_self.app.wallet.wallet.inputs));
 
-          // add change input
-          var total_inputs = Big(0.0);
-          for (let i = 0; i < newtx.transaction.from.length; i++) {
-            total_inputs = total_inputs.plus(Big(newtx.transaction.from[i].amt));
-          }
+            // add change input
+            var total_inputs = Big(0.0);
+            for (let i = 0; i < newtx.transaction.from.length; i++) {
+                total_inputs = total_inputs.plus(Big(newtx.transaction.from[i].amt));
+            }
 
-          //
-          // generate change address(es)
-          //
-          var change_amount = total_inputs.minus(total_fees);
+            //
+            // generate change address(es)
+            //
+            var change_amount = total_inputs.minus(total_fees);
 
-          // break up payment into many slips if large
-          var chunks = Math.floor(amount/100);
-          var remainder = amount % 100;
+            // break up payment into many slips if large
+            var chunks = Math.floor(amount / 100);
+            var remainder = amount % 100;
 
-          for (let i = 0; i < chunks; i++) {
-            newtx.transaction.to.push(new saito.slip(address, Big(100.0)));
-            newtx.transaction.to[newtx.transaction.to.length-1].type = 0;
-          }
-          newtx.transaction.to.push(new saito.slip(address, Big(remainder)));
-            newtx.transaction.to[newtx.transaction.to.length-1].type = 0;
+            for (let i = 0; i < chunks; i++) {
+                newtx.transaction.to.push(new saito.slip(address, Big(100.0)));
+                newtx.transaction.to[newtx.transaction.to.length - 1].type = 0;
+            }
+            newtx.transaction.to.push(new saito.slip(address, Big(remainder)));
+            newtx.transaction.to[newtx.transaction.to.length - 1].type = 0;
 
-          if (Big(change_amount).gt(0)) {
-            newtx.transaction.to.push(new saito.slip(faucet_self.app.wallet.returnPublicKey(), change_amount.toFixed(8)));
-            newtx.transaction.to[newtx.transaction.to.length-1].type = 0;
-          }
+            if (Big(change_amount).gt(0)) {
+                newtx.transaction.to.push(new saito.slip(faucet_self.app.wallet.returnPublicKey(), change_amount.toFixed(8)));
+                newtx.transaction.to[newtx.transaction.to.length - 1].type = 0;
+            }
 
-          newtx.transaction.msg.module    = "Email";
-          newtx.transaction.msg.title     = "Saito Faucet - You have been Rewarded";
-          newtx.transaction.msg.message   = 'You have received ' + amount + ' tokens from our Saito faucet.';
-          newtx = this.app.wallet.signTransaction(newtx);
+            newtx.transaction.msg.module = "Email";
+            newtx.transaction.msg.title = "Saito Faucet - You have been Rewarded";
+            newtx.transaction.msg.message = `
+            <p>You have received <span class="boldred">${amount} tokens</span> from our Saito faucet.</p>
+            `;
+            newtx = this.app.wallet.signTransaction(newtx);
 
-          this.app.network.propagateTransaction(newtx);
-          return;
+            this.app.network.propagateTransaction(newtx);
+            return;
 
-        } catch(err) {
-          console.log("ERROR CAUGHT IN FAUCET: ", err);
-          return;
+        } catch (err) {
+            console.log("ERROR CAUGHT IN FAUCET: ", err);
+            return;
         }
 
     }

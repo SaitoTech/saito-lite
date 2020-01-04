@@ -194,6 +194,7 @@
 @media only screen and (max-width: 1200px) {
   .email-message-content {
     grid-template-columns: 300px 1fr;
+    grid-gap: 0 1em;
   }
 }
 
@@ -201,6 +202,7 @@
   .email-message-content {
     grid-template-columns: 300px;
     grid-gap: 0.5em;
+    grid-gap: 0 1em;
   }
 }
 
@@ -232,6 +234,7 @@
   height: 200px;
   margin: 1em 0 0 0;
   padding: 0 5px;
+  overflow: auto;
 }
 
 .email-sidebar {
