@@ -1,0 +1,195 @@
+.appspace-appstore-container {
+	display: grid;
+    /* grid-template-rows: appstore-header-featured appstore-app-list appstore-app-viewmore-header appstore-header-browse appstore-browse; */
+	grid-column-gap: 15px;
+    grid-row-gap: 20px;
+    grid-auto-flow: row;
+    align-items: center;
+}
+
+.appstore-header-featured h3 {
+	margin-top: 10px;
+	width: 200px;
+	float: left;
+	display: block;
+}
+
+#appstore-search-box {
+    width: 460px;
+    height: 40px;
+    border:1px solid #eee;
+    box-shadow: 0 2px 5px rgba(0,0,0,.1);
+    border-radius: 40px;
+    padding:0 20px;
+    float: right;
+    margin-left: 20px;
+}
+
+.appstore-app-list {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 1fr;
+}
+
+
+
+
+
+
+
+.appstore-app-item {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 2fr 3fr;
+  cursor: pointer;
+  border: 1px solid var(--saito-red);
+  padding: 10px;
+}
+
+.appstore-app-item-image {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+.appstore-app-item-image img {
+  height: 100%;
+  width: 100%;
+}
+
+.appstore-app-item-name {
+    font-size: 16px;
+    color: #000;
+    font-weight: bold;
+}
+
+.appstore-app-item-rating{
+    font-size: 14px;
+    color: #605f5f;
+}
+
+.appstore-app-item-publisher {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 150px;
+}
+
+.appstore-app-install-btn {
+    padding: 5px 45px 5px 45px;
+    border-radius:20px;
+    color: var(--saito-red);
+    border: 1px solid var(--saito-red);
+    width: 100%;
+
+    /* margin:0 auto; */
+    /* margin-top: 10px;
+    margin-bottom: 15px; */
+}
+
+.appstore-app-viewmore-header{
+    justify-self: center;
+    align-self: center;
+}
+
+.appstore-browse-list{
+    display: grid;
+    grid-template-columns: repeat(4,auto);
+    justify-items: center;
+    grid-gap: 1em;
+}
+
+.appstore-bundler-install-notice {
+  font-size:1.2em;
+  margin-top: 30px;
+}
+
+.appstore-browse-item{
+    display: grid;
+    grid-template-areas:
+    "appstore-browse-header appstore-browse-icon"
+    "appstore-browse-content appstore-browse-content";
+
+    width: 100%;
+    height: 100%;
+    padding: 1em;
+    background-color: #fff;
+    border:1px solid #eee;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.2);
+    font-family: visuelt-medium;
+
+    /* margin-right: 15px;
+    margin-top: 20px; */
+}
+
+
+.appstore-sort-item-name {
+    grid-area: appstore-browse-header;
+    font-weight: bold;
+}
+
+.appstore-sort-item-icon {
+    /* position: relative; */
+    /* bottom: 60px;
+    left: 120px; */
+    justify-self: flex-end;
+    grid-area: appstore-browse-icon;
+    color: var(--saito-red);
+}
+
+.appstore-sort-item-amount {
+    /* margin-left: 15px; */
+    grid-area: appstore-browse-content;
+    font-size: 14px;
+    color: #868282;
+}
+
+/** APPSTORE PUBLISH **/
+
+.appstore-publish {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+
+.appstore-publish h3 {
+    margin-right: 1em;
+}
+#appstore-publish-moddrop{
+  width:400px;
+  height:220px;
+  border-style:dashed; 
+  border-width:2px;
+  position: relative; 
+  border-radius: 15px;
+  text-align: center;
+  line-height: 220px;
+  color: #414040;
+  font-family: visuelt-medium;
+  letter-spacing: 0.05em;
+  font-size: 20px;
+  border-color: #bbb;
+  margin:20px 0 20px 0;
+}
+#appstore-publish-moddrop-inside{
+  background-color: white;
+  border-radius: 15px;
+  width:404px;
+  height:224px;
+  position: absolute;
+  top:-2px;
+  left:-2px;
+}
+.submit-file-btn-box{
+    width: 400px;
+    height: auto;
+    margin-top: 20px;
+}
+#submit-file-btn{
+    display: block;
+    margin: 0 auto;
+}
+
+
+
+

@@ -1,0 +1,114 @@
+<div class="arcade-hero-wrapper">
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
+
+<style>
+
+body {
+	background: #444;
+}
+
+.arcade-hero-wrapper > div {
+  width: 80vw;
+  height: 50vw;
+  border:honeydew 1px solid;
+}
+
+.arcade-hero-wrapper div:nth-child(1) {
+  background-color: orange;
+}
+
+.arcade-hero-wrapper div:nth-child(2) {
+  background-color: orangered;
+}
+
+.arcade-hero-wrapper div:nth-child(3) {
+  background-color: hotpink;
+}
+
+.arcade-hero-wrapper div:nth-child(4) {
+  background-color: paleturquoise;
+}
+
+.arcade-hero-wrapper div:nth-child(5) {
+  background-color: purple;
+}
+
+.arcade-hero-wrapper{
+	display: inline-block;
+	text-indent: 8px;
+}
+.arcade-hero-wrapper div{
+	display: inline-block;
+	animation: rightToLeft 25s linear infinite 0s;
+	-ms-animation: rightToLeft 25s linear infinite 0s;
+	-webkit-animation: rightToLeft 25s linear infinite 0s;
+    opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	left: 0px;
+	margin: auto;
+	padding: 0 auto;
+	font-size: 4em;
+}
+.arcade-hero-wrapper div:nth-child(1){
+	animation-delay: 0s;
+	-ms-animation-delay: 0s;
+	-webkit-animation-delay: 0s;
+}
+
+.arcade-hero-wrapper div:nth-child(2){
+	animation-delay: 5s;
+	-ms-animation-delay: 5s;
+	-webkit-animation-delay: 5s;
+}
+.arcade-hero-wrapper div:nth-child(3){
+	animation-delay: 10s;
+	-ms-animation-delay: 10s;
+	-webkit-animation-delay: 10s;
+}
+.arcade-hero-wrapper div:nth-child(4){
+	animation-delay: 15s;
+	-ms-animation-delay: 15s;
+	-webkit-animation-delay: 15s;
+}
+.arcade-hero-wrapper div:nth-child(5){
+	animation-delay: 20s;
+	-ms-animation-delay: 20s;
+	-webkit-animation-delay: 20s;
+}
+
+/*rightToLeft Animation*/
+@-moz-keyframes rightToLeft{
+	0% { opacity: 0; }
+	5% { opacity: 0; -moz-transform: translateX(-100%); }
+	10% { opacity: 1; -moz-transform: translateX(0px); }
+	25% { opacity: 1; -moz-transform: translateX(0px); }
+	30% { opacity: 0; -moz-transform: translateX(100%); }
+	80% { opacity: 0; }
+	100% { opacity: 0; }
+}
+@-webkit-keyframes rightToLeft{
+	0% { opacity: 0; }
+	5% { opacity: 0; -webkit-transform: translateX(-100%); }
+	10% { opacity: 1; -webkit-transform: translateX(0px); }
+	25% { opacity: 1; -webkit-transform: translateX(0px); }
+	30% { opacity: 0; -webkit-transform: translateX(100%); }
+	80% { opacity: 0; }
+	100% { opacity: 0; }
+}
+@-ms-keyframes rightToLeft{
+	0% { opacity: 0; }
+	5% { opacity: 0; -ms-transform: translateX(-100%); }
+	10% { opacity: 1; -ms-transform: translateX(0px); }
+	25% { opacity: 1; -ms-transform: translateX(0px); }
+	30% { opacity: 0; -ms-transform: translateX(100%); }
+	80% { opacity: 0; }
+	100% { opacity: 0; }
+}
+
+</style>

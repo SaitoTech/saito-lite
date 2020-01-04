@@ -540,12 +540,10 @@ class AppStore extends ModTemplate {
     let modules_config_filename = `modules.config-${ts}-${hash}.json`;
     let module_paths = modules.map(mod => {
       let mod_path = `mods/${returnSlug(mod.name)}-${ts}-${hash}.zip`;
-      //bash_script_content += `unzip ${returnSlug(mod.name)}-${ts}-${hash}.zip -d ${returnSlug(mod.name)}-${ts}-${hash} \*.js \*.css \*.html` + "\n";
-      bash_script_content += `unzip ${returnSlug(mod.name)}-${ts}-${hash}.zip -d ../../bundler/mods/${returnSlug(mod.name)}-${ts}-${hash} \*.js \*.css \*.html` + "\n";
+      bash_script_content += `unzip ${returnSlug(mod.name)}-${ts}-${hash}.zip -d ${returnSlug(mod.name)}-${ts}-${hash} \*.js \*.css \*.html` + "\n";
       fs.writeFileSync(path.resolve(__dirname, mod_path), mod.zip, { encoding: 'binary' });
       return `appstore/bundler/mods/${mod.name.toLowerCase()}-${ts}-${hash}/${mod.name.toLowerCase()}`;
     });
-
     bash_script_content += `rm -f ./*-${hash}.zip`;
     fs.writeFileSync(path.resolve(__dirname, bash_script), bash_script_content, { encoding: 'binary' });
 

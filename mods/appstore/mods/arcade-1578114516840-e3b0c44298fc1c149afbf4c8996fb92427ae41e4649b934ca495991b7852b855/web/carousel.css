@@ -1,0 +1,86 @@
+.big {
+    padding: 5% 5%;
+    font-size: 5.5vw;
+    font-weight: 900;
+    background: #0005;
+    -webkit-text-fill-color: var(--saito-skyline-grey);
+    -webkit-text-stroke-width: 3px;
+    -webkit-text-stroke-color: #0003;
+    font-family: visuelt-medium;
+    text-shadow: 2px 2px 5px #9400d38f;
+    top: 25%;
+    position: relative;
+    letter-spacing: 0.07em;
+}
+
+.carousel-spacer {
+    width: 100%;
+    position: relative;
+}
+
+.arcade-game-carousel {
+  width:100%;
+  position: relative;
+}
+
+.arcade-carousel-wrapper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+
+    background-image: url(/arcade/img/dreamscape-logo.png);
+    background-size: cover;
+
+}
+
+.leaf {
+   background-size: cover;
+   width: 100%;
+   height: 100%;
+   position: absolute;
+   top: 0;
+   opacity: 0;
+   border: 1px solid darkorange;
+}
+
+.arcade-carousel-wrapper > div {
+    animation: rightToLeft 50s linear infinite 0s;
+}
+
+/*
+.arcade-carousel-wrapper div.leaf:nth-child(1) {
+    animation-delay: 0s;
+}
+*/
+
+.arcade-carousel-wrapper div.leaf:nth-child(2) {
+    animation-delay: 10s;
+}
+
+.arcade-carousel-wrapper div.leaf:nth-child(3) {
+    animation-delay: 20s;
+}
+
+.arcade-carousel-wrapper div.leaf:nth-child(4) {
+    animation-delay: 30s;
+}
+
+.arcade-carousel-wrapper div.leaf:nth-child(5) {
+    animation-delay: 40s;
+}
+
+
+
+/*rightToLeft Animation*/
+
+@keyframes rightToLeft {
+    0%   { opacity: 0; }
+    5%   { opacity: 0; transform: translateX(-100%) }
+    10%  { opacity: 1; transform: translateX(0px); }
+    25%  { opacity: 1; transform: translateX(0px); }
+    29%  { opacity: 0; }
+    30%  { transform: translateX(100%); }
+    80%  { opacity: 0; }
+    100% { opacity: 0; }
+}

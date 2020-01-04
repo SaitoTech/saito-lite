@@ -22,14 +22,6 @@ function getFiles(dir) {
   return Array.prototype.concat(...files);
 }
 
-
-function returnSlug(nme) {
-  nme = nme.toLowerCase();
-  nme = nme.replace(/\t/g, "_");
-  return nme;
-}
-
-
 //
 // pass an empty dir of files
 //
@@ -253,8 +245,6 @@ class AppStore extends ModTemplate {
   }
 
 
-
-
   async getNameAndDescriptionFromZip(zip_bin, zip_path) {
 
     const fs = this.app.storage.returnFileSystem();
@@ -319,7 +309,6 @@ class AppStore extends ModTemplate {
   }
 
 
-
   async submitModule(blk, tx) {
 
     if (this.app.BROWSER == 1) { return; }
@@ -379,10 +368,6 @@ class AppStore extends ModTemplate {
     let module_list = txmsg.list;
 
     //
-    // module_list consists of a list of the modules to bundle, these contain a name or 
-    // version number (or both) depending on how they were originally issued to the 
-    // client.
-    //
     // module list = [
     //   { name : "Email" , version : "" } ,
     //   { name : "", version : "1830591927-AE752CDF7529E0419C2E13ABCCD6ABCA252313" }
@@ -403,7 +388,7 @@ class AppStore extends ModTemplate {
     }
 
     //
-    // TO-DO reduce to single query, not loop
+    // TO-DO single query, not loop
     //
     for (let i = 0; i < module_versions.length; i++) {
       sql = `SELECT * FROM modules WHERE version = $version`;
@@ -490,6 +475,7 @@ class AppStore extends ModTemplate {
     //
     let online_version = "http://"+this.app.options.server.endpoint.host+":"+this.app.options.server.endpoint.port+"/appstore/bundle/"+bundle_filename;
 
+console.log(bundle_filename + " -- " + online_version);
 
     //
     // send our filename back at our person of interest
@@ -508,19 +494,12 @@ class AppStore extends ModTemplate {
 
 
 
-
-
   async bundler(modules) {
 
     //
-    // shell access
-    //
-    const util = require('util');
-    const exec = util.promisify(require('child_process').exec);
-
-
-    //
     // modules has name, description, version, zip
+    //
+    // require inclusion of  module versions and paths for loading into the system
     //
     const fs = this.app.storage.returnFileSystem();
     const path = require('path');
@@ -530,36 +509,36 @@ class AppStore extends ModTemplate {
     let ts = new Date().getTime();
     let hash = this.app.crypto.hash(modules.map(mod => mod.version).join(''));
 
-
-    let bash_script = `mods/compile-${ts}-${hash}`;
-    let bash_script_content = 'cd ' + __dirname + '/mods' + "\n";
-
     //
-    // save MODS.zip and create bash script to unzip
+    // first provide a configuration file
     //
     let modules_config_filename = `modules.config-${ts}-${hash}.json`;
     let module_paths = modules.map(mod => {
-      let mod_path = `mods/${returnSlug(mod.name)}-${ts}-${hash}.zip`;
-      //bash_script_content += `unzip ${returnSlug(mod.name)}-${ts}-${hash}.zip -d ${returnSlug(mod.name)}-${ts}-${hash} \*.js \*.css \*.html` + "\n";
-      bash_script_content += `unzip ${returnSlug(mod.name)}-${ts}-${hash}.zip -d ../../bundler/mods/${returnSlug(mod.name)}-${ts}-${hash} \*.js \*.css \*.html` + "\n";
+
+      if (mod.name.toLowerCase() == "arcade") { return; }
+
+      let mod_path = `mods/${mod.name.toLowerCase()}-${ts}-${hash}.zip`;
+
+console.log("mod path is: " + mod_path);
+
       fs.writeFileSync(path.resolve(__dirname, mod_path), mod.zip, { encoding: 'binary' });
+console.log("111...");
+      fs.createReadStream(path.resolve(__dirname, mod_path))
+        .pipe(unzipper.Extract({
+          path: path.resolve(__dirname, `bundler/mods/${mod.name.toLowerCase()}-${ts}-${hash}`)
+        }));
+
+      //
+      // delete the other files
+      //
+console.log("222...");
+      fs.unlink(path.resolve(__dirname, mod_path));
+
+      // return the path
+console.log("333...");
       return `appstore/bundler/mods/${mod.name.toLowerCase()}-${ts}-${hash}/${mod.name.toLowerCase()}`;
+
     });
-
-    bash_script_content += `rm -f ./*-${hash}.zip`;
-    fs.writeFileSync(path.resolve(__dirname, bash_script), bash_script_content, { encoding: 'binary' });
-
-
-    //
-    // unzip our modules
-    //
-    try {
-      let cwdir = __dirname;
-      let unzip_command = 'sh ' + bash_script;
-      const { stdout, stderr } = await exec(unzip_command, {cwd : cwdir , maxBuffer : 4096 * 2048});
-    } catch (err) {
-      console.log(err);
-    }
 
     //
     // write our modules config file
@@ -572,7 +551,10 @@ console.log("444...");
 
 console.log("Module Paths: " + JSON.stringify(module_paths));
 
-
+//
+// AND KICK OUT
+//
+return;
 
     //
     // other filenames
@@ -594,9 +576,8 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
     let entry = path.resolve(__dirname, `../../bundler/${index_filename}`);
     let output_path = path.resolve(__dirname, 'bundler/dist');
 
-
-
-
+    const util = require('util');
+    const exec = util.promisify(require('child_process').exec);
 
     let exec_command = `sh bundle.sh ${entry} ${output_path} ${bundle_filename}`;
     // let exec_command = `sh bundle.sh ${entry} ${output_path}mods/appstore/bundler/dist ${bundle_filename}`;
