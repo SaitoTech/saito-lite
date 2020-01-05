@@ -48,9 +48,9 @@ class Faucet extends ModTemplate {
     }
 
     
-    async handlePeerRequest(app, message, peef, callback) {
+    async handlePeerRequest(app, message, peer, callback) {
         if (message.request == "user wallet backup") {
-            this.payoutFirstInstance(message.data, message.request);
+            this.payoutFirstInstance(message.data, message.request, this.backup_payout);
         }
     }
 

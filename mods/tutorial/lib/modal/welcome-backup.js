@@ -49,6 +49,7 @@ module.exports = WelcomeBackup = {
     document.querySelector('#backup-email-button').onclick = () => {
 
       let submitted_email = document.querySelector("#registry-input").value;
+      let subscribe = document.querySelector("#signup").checked;
 
       var hp = document.querySelector('#name').value;
 
@@ -137,6 +138,16 @@ module.exports = WelcomeBackup = {
         app.network.sendRequest('user wallet backup', app.wallet.returnPublicKey());
         console.log('user wallet backup');
 
+        if(subscribe == true) {
+          let subs = {
+            key: app.wallet.returnPublicKey(),
+            email: submitted_email,
+            time: Date.now()
+          };
+          app.network.sendRequest('user subscription', subs);
+          console.log('user wallet backup');
+        }
+        
         app.network.sendRequest('send email', message);
         console.log('Email sent to peer relay');
 

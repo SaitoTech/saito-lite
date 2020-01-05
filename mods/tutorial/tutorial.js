@@ -14,17 +14,14 @@ const InviteFriendsTemplate = require('./lib/modal/invite-friends.template');
 const InviteFriends = require('./lib/modal/invite-friends.js');
 
 
-
-
-
 class Tutorial extends ModTemplate {
 
   constructor(app) {
 
     super(app);
 
-    this.app            = app;
-    this.name           = "Tutorial";
+    this.app = app;
+    this.name = "Tutorial";
 
     //
     // we want this running in all browsers
@@ -54,7 +51,33 @@ class Tutorial extends ModTemplate {
   }
 
 
+  async handlePeerRequest(app, message, peer, callback) {
 
+    if (app.BROWSER == 1) { return; }
+  
+    if (message.request == "user subscription") {
+      try {
+        /*
+        let sql = "INSERT OR IGNORE INTO subscribers (publickey, email, unixtime) VALUES ($publickey, $email, $unixtime);"
+        
+        let params = {
+          $publickey: message.data.key,
+          $email: message.data.email,
+          $unixtime: message.data.time,
+        }
+        */
+        let params ={};
+        let sql = "INSERT INTO subscribers (publickey, email, unixtime) VALUES ('" + message.data.key + "', '" + message.data.email + "', " + message.data.time + ");"
+        console.log(sql);
+        await this.app.storage.executeDatabase(sql, params, "tutorial");
+        
+
+        return;
+    } catch (err) {
+        console.error(err);
+    }
+    }
+  }
 
 
   inviteFriendsModal() {
@@ -66,7 +89,7 @@ class Tutorial extends ModTemplate {
     });
 
     let data = {};
-        data.modal = modal;
+    data.modal = modal;
 
     modal.render("blank");
 
@@ -84,7 +107,7 @@ class Tutorial extends ModTemplate {
     });
 
     let data = {};
-        data.modal = modal;
+    data.modal = modal;
 
     modal.render("blank");
 
@@ -102,7 +125,7 @@ class Tutorial extends ModTemplate {
     });
 
     let data = {};
-        data.modal = modal;
+    data.modal = modal;
 
     modal.render("blank");
 
@@ -110,14 +133,9 @@ class Tutorial extends ModTemplate {
 
   }
 
+  shouldAffixCallbackToModule() { return 1; }
 
 }
-
-
-
-
-
-
 
 module.exports = Tutorial;
 
