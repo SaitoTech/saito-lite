@@ -18,11 +18,12 @@ body {
   width: 100%;
   padding: 5px;
   background: #66339910;
-  border: 2px dashed var(--saito-red);
+  border: 2px solid var(--saito-red);
   color: var(--saito-skyline-grey);
   letter-spacing: 1px;
   margin: 0;
   text-align: center;
+  box-shadow: 0 0 2px #efefef;
 }
 
 .play-now {
@@ -787,4 +788,44 @@ option {
 
 .loader {
   margin: 25%;
+}
+
+
+/* achiecvments */
+
+.arcade-sidebar-row {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 4em auto;
+  margin: 1em;
+}
+
+.arcade-sidebar-row i {
+  font-size: 2em;
+}
+
+.arcade-sidebar-row span {
+  font-size: 1.2em;
+}
+
+.badge {
+  width: 2em;
+    border: 2px solid white;
+    border-radius: 1em;
+    display: inline-block;
+}
+
+.arcade-sidebar-row i span {
+  font-size: 0.7em;
+  line-height: 1.2em;
+  display: inline-block;
+}
+
+span.faucet-row-name {
+  align-self: center;
+}
+
+.arcade-sidebar-row span {
+  font-size: 1.2em;
+  text-align: left;
 }

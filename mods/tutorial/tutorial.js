@@ -53,11 +53,9 @@ class Tutorial extends ModTemplate {
 
   async handlePeerRequest(app, message, peer, callback) {
 
-    if (app.BROWSER == 1) { return; }
-  
     if (message.request == "user subscription") {
       try {
-        /*
+        
         let sql = "INSERT OR IGNORE INTO subscribers (publickey, email, unixtime) VALUES ($publickey, $email, $unixtime);"
         
         let params = {
@@ -65,17 +63,14 @@ class Tutorial extends ModTemplate {
           $email: message.data.email,
           $unixtime: message.data.time,
         }
-        */
-        let params ={};
-        let sql = "INSERT INTO subscribers (publickey, email, unixtime) VALUES ('" + message.data.key + "', '" + message.data.email + "', " + message.data.time + ");"
-        console.log(sql);
-        await this.app.storage.executeDatabase(sql, params, "tutorial");
         
+       await this.app.storage.executeDatabase(sql, params, "tutorial");
 
         return;
-    } catch (err) {
+
+      } catch (err) {
         console.error(err);
-    }
+      }
     }
   }
 

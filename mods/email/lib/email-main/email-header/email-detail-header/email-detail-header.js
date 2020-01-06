@@ -44,7 +44,7 @@ module.exports = EmailDetailHeader = {
         let original = data.email.selected_email.transaction;
         document.getElementById('email-to-address').value = original.from[0].add;
         document.querySelector('.email-title').value = "Re: " + original.msg.title;
-        let body = "\n\n\n --Quoted Text-------------------------\n\n" + original.msg.message;
+        let body = "Quoted Text<hr /><br />" + original.msg.message;
         document.querySelector('#email-text').innerHTML = body;
                 document.querySelector('.email-text').focus();
       });
@@ -58,8 +58,8 @@ module.exports = EmailDetailHeader = {
         data.email.main.attachEvents(app, data);
         document.querySelector('.email-title').value = "Re: " + original.msg.title;
         document.querySelector('.email-text').value = original.msg.message;
-        let body = "-------------------------------------";
-        body += "\n\n\nForwarded from: " + original.from[0].add + "\n\n" + original.msg.message;
+        let body = "<hr />";
+        body += "<br />Forwarded from: " + original.from[0].add + "\n\n" + original.msg.message;
         document.querySelector('.email-text').value = body;
         document.getElementById('email-to-address').focus();
       });

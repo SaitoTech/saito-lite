@@ -2,16 +2,19 @@ const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate.js');
 const Big = require('big.js');
 
-const Modal = require('../../lib/ui/modal/modal');
 /*
+
+const Modal = require('../../lib/ui/modal/modal');
 const FaucetModalCaptchaTemplate = require('./lib/modal/faucet-modal-captcha.template');
 const FaucetModalRegistryTemplate = require('./lib/modal/faucet-modal-registry.template');
 const FaucetModalSocialTemplate = require('./lib/modal/faucet-modal-social.template');
 const FaucetModalBackupTemplate = require('./lib/modal/faucet-modal-backup.template');
 const FaucetModalBackup = require('./lib/modal/faucet-modal-backup.js');
-
-const FaucetAppSpace = require('./lib/email-appspace/faucet-appspace');
 */
+const FaucetAppSpace = require('./lib/email-appspace/faucet-appspace');
+const FaucetSidebar = require('./lib/arcade-sidebar/arcade-right-sidebar')
+const FaucetSidebarRow = require('./lib/arcade-sidebar/arcade-sidebar-row.template')
+
 
 class Faucet extends ModTemplate {
 
@@ -19,12 +22,20 @@ class Faucet extends ModTemplate {
 
         super(app);
 
-        this.name              = "Faucet";
-        this.initial           = 10;
-        this.payoutRatio       = 0.75;
+        this.name = "Faucet";
 
-        this.backup_payout     = 50;
-        this.registry_payout   = 50;
+        this.initial = 10;
+        this.payoutRatio = 0.75;
+
+        this.backup_payout = 50;
+        this.registry_payout = 50;
+
+        //
+        // we want this running in all browsers
+        //
+        if (app.BROWSER == 1) {
+            this.browser_active = 1;
+        }
 
     }
 
@@ -36,8 +47,106 @@ class Faucet extends ModTemplate {
             obj.attachEvents = this.attachEventsEmail;
             return obj;
         }
+
+        if (type == 'arcade-sidebar') {
+            let obj = {};
+            obj.render = this.renderArcadeSidebar;
+            obj.attachEvents = this.attachEventsArcadeSidebar;
+            return obj;
+        }
         return null;
     }
+
+    async onPeerHandshakeComplete(app, peer) {
+        console.log('drawing achievements');
+        try {
+            if (document.querySelector(".arcade-sidebar-done")) {
+                await this.app.network.sendRequestWithCallback("get achievements", this.app.wallet.returnPublicKey(), (rows) => {
+                    rows.forEach(row => this.renderAchievmentRow(row));
+                  });
+            } 
+        } catch(err) {
+            console.error(err);
+        }
+    }
+
+    renderAchievmentRow(row){
+        document.querySelector(".arcade-sidebar-done").innerHTML += FaucetSidebarRow(row.label, row.icon, row.count);
+    }
+
+
+    async handlePeerRequest(app, message, peer, mycallback = null) {
+        if (message.request == "get achievements") {
+            var achievements = await this.returnAchievements(message.data)
+            mycallback(achievements);
+        }
+
+        if (message.request == "user wallet backup") {
+            this.payoutFirstInstance(message.data, message.request, this.backup_payout);
+        }
+
+    }
+
+    returnEventRow(event) {
+        let obj = {};
+        obj.count = "";
+        switch (event) {
+            case 'user wallet backup':
+                obj.label = "Wallet Backup";
+                obj.icon = "fas fa-download";
+                break;
+            case 'register identifier':
+                obj.label = "Name Yourself";
+                obj.icon = "fas fa-user-tag"
+                break;
+        }
+        return obj;
+    }
+
+    returnNumberBadge(x) {
+        let obj = {}
+          obj.count = x;
+        switch (true) {
+            case (x < 10):
+                obj.label = "Welcome!";
+                obj.icon = "1tx badge";
+                break;
+            case (x < 50):
+                obj.label = "Multiple Transactions - cool!";
+                obj.icon = "10tx badge";
+                break;
+            case (x < 100):
+                obj.label = "50 TX - a real user";
+                obj.icon = "50tx badge";
+                break;
+            case (x < 500):
+                obj.label = "100 TX - a regular!";
+                obj.icon = "100tx badge";
+                break;
+            case (x < 1000):
+                obj.label = "500 TX - hard core!";
+                obj.icon = "500tx badge";
+                break;
+        }
+        if (x >= 1000) {
+            obj.label = "Master";
+            obj.badge = "master badge";
+            obj.count = (Math.floor(x / 1000)).toString + "k";
+        }
+        return obj;
+    }
+
+    async returnAchievements(key) {
+        let achievements = [];
+        let rows = await this.returnEvents(key, false);
+        for (let i = 0; i < rows.length; i++) {
+            achievements.push(this.returnEventRow(rows[i].event));
+        }
+        let tx_count = await this.returnUserTxCount(key);
+        achievements.push(this.returnNumberBadge(tx_count));
+        return achievements;
+    }
+
     renderEmail(app, data) {
         data.faucet = app.modules.returnModule("Faucet");
         FaucetAppspace.render(app, data);
@@ -47,24 +156,27 @@ class Faucet extends ModTemplate {
         FaucetAppspace.attachEvents(app, data);
     }
 
-    
-    async handlePeerRequest(app, message, peer, callback) {
-        if (message.request == "user wallet backup") {
-            this.payoutFirstInstance(message.data, message.request, this.backup_payout);
-        }
+    renderArcadeSidebar(app, data) {
+        data.faucet = app.modules.returnModule("Faucet");
+        FaucetSidebar.render(app, data);
     }
 
-    async payoutFirstInstance (address, event, payout) {
-        if (await this.checkEvent(address, event) == false){
+    attachEventsArcadeSidebar(app, data) {
+        data.faucet = app.modules.returnModule("Faucet");
+        FaucetSidebar.attachEvents(app, data);
+    }
+
+    async payoutFirstInstance(address, event, payout) {
+        if (await this.checkEvent(address, event) == false) {
             this.makePayout(address, payout);
         }
         this.recordEvent(address, event);
     }
 
-    onConfirmation(blk, tx, conf, app) {
+    async onConfirmation(blk, tx, conf, app) {
 
-        if (app.BROWSER == 1) { return; }
-
+        if (app.BROWSER == 1) { return }
+           
         if (conf == 0) {
             if (tx.transaction.type == 0) {
                 if (this.app.BROWSER == 1) { return; }
@@ -197,12 +309,31 @@ class Faucet extends ModTemplate {
         }
     }
 
+    async returnUserTxCount(address, counted = "tx_count") {
+
+        let sql = "SELECT " + counted + " FROM users where address = $address limit 1";
+
+        let params = {
+            $address: address
+        }
+
+        try {
+            let rows = await this.app.storage.queryDatabase(sql, params, "faucet");
+            if (rows.length > 0){
+                return rows[0][counted];
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     async returnEvents(address, latest = false) {
 
+        var sql = "";
         if (latest) {
-            let sql = "SELECT * FROM events where address = $address order by time asc limit 1";
+            sql = "SELECT * FROM events where address = $address order by time asc limit 1";
         } else {
-            let sql = "SELECT * FROM events where address = $address";
+            sql = "SELECT * FROM events where address = $address group by event order by time desc";
         }
 
         let params = {
@@ -301,8 +432,6 @@ class Faucet extends ModTemplate {
         }
 
     }
-
-
 
     shouldAffixCallbackToModule() { return 1; }
 

@@ -1,7 +1,14 @@
 module.exports = ArcadeRightSidebarTemplate = (publickey, id) => {
 
-  let top_right_html = id ? `Hello <b>${id}</b> 👋<br> Click here to start earning SAITO tokens.` :
-    `<b>Welcome Anonymous!</b> Click here to register your Saito username and start earning SAITO tokens.`
+  let top_right_html = '<div class="arcade-sidebar-greeting">';
+  top_right_html += id ? `
+       <h2>Hello <b>${id}</b> 👋</h2>
+  ` :
+  `<b>Welcome Anonymous!</b>`;
+  top_right_html += ` 
+  <div class="arcade-sidebar-notices"></div>
+  </div>
+  `;
 
   return `
   <div class="arcade-announcement">${top_right_html}</div>
