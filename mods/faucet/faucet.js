@@ -2,15 +2,6 @@ const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate.js');
 const Big = require('big.js');
 
-/*
-
-const Modal = require('../../lib/ui/modal/modal');
-const FaucetModalCaptchaTemplate = require('./lib/modal/faucet-modal-captcha.template');
-const FaucetModalRegistryTemplate = require('./lib/modal/faucet-modal-registry.template');
-const FaucetModalSocialTemplate = require('./lib/modal/faucet-modal-social.template');
-const FaucetModalBackupTemplate = require('./lib/modal/faucet-modal-backup.template');
-const FaucetModalBackup = require('./lib/modal/faucet-modal-backup.js');
-*/
 const FaucetAppSpace = require('./lib/email-appspace/faucet-appspace');
 const FaucetSidebar = require('./lib/arcade-sidebar/arcade-right-sidebar')
 const FaucetSidebarRow = require('./lib/arcade-sidebar/arcade-sidebar-row.template')
@@ -68,10 +59,21 @@ class Faucet extends ModTemplate {
         } catch(err) {
             console.error(err);
         }
+        try {
+            if (document.querySelector(".faucet-grid")) {
+                await this.app.network.sendRequestWithCallback("update activities", this.app.wallet.returnPublicKey(), (rows) => {
+                    rows.forEach(row => this.updateFaucetGridRow(row));
+                  });
+            } 
+        } catch(err) {
+            console.error(err);
+        }
     }
 
     renderAchievmentRow(row){
-        document.querySelector(".arcade-sidebar-done").innerHTML += FaucetSidebarRow(row.label, row.icon, row.count);
+        if(typeof(row.label) != "undefined") {
+            document.querySelector(".arcade-sidebar-done").innerHTML += FaucetSidebarRow(row.label, row.icon, row.count);            
+        }
     }
 
 
@@ -83,6 +85,11 @@ class Faucet extends ModTemplate {
 
         if (message.request == "user wallet backup") {
             this.payoutFirstInstance(message.data, message.request, this.backup_payout);
+        }
+
+        if (message.request == "update activities") {
+            var activities = await this.returnActivities(message.data)
+            mycallback(activities);
         }
 
     }

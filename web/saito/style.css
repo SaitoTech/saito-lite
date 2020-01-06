@@ -1066,3 +1066,21 @@ blockquote {
     background: #fb5e5e;
     color: #fff;
 }
+
+.faucet-grid {
+    display: grid;
+    grid-gap: 1em;
+    grid-template-columns: 3em 3em auto 3em;
+  }
+  
+  .faucet-grid-icon i, .faucet-grid-reward {
+    font-size: 2em;
+  }
+  
+  .faucet-grid-icon {
+    margin: 0.6em auto;
+  }
+  
+  .faucet-grid-reward {
+    margin: 0.35em auto;
+  }
