@@ -4,12 +4,22 @@ module.exports = AppStoreAppspaceTemplate = () => {
 <link rel="stylesheet" type="text/css" href="/appstore/css/email-appspace.css">
 
 <div class="appspace-appstore-container">
+
   <div class="appstore-header-featured">
+
+    <h3>Your Applications:</h3>
+    <div class="searchbox">
+        <input type="text" placeholder="search for apps..." id="appstore-search-box">
+    </div>
+
     <h3>Install a New Application:</h3>
     <div class="searchbox">
         <input type="text" placeholder="search for apps..." id="appstore-search-box">
     </div>
+
   </div>
+
+  <div class="appstore-installed-apps"></div>
 
   <div class="appstore-app-list"></div>
 

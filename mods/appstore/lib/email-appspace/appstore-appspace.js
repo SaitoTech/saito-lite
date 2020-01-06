@@ -25,6 +25,14 @@ module.exports = AppStoreAppspace = {
 
       });
 
+
+      //
+      // show installed apps
+      //
+      for (let i = 0; i < app.modules.mods.length; i++) {
+        document.querySelector(".appstore-installed-apps").innerHTML += AppStoreInstalledAppsTemplate(app.modules.mods[i]);
+      }
+
       //
       // load some categories
       //

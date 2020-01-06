@@ -67,14 +67,6 @@ console.log("MODULE LIST IS: " + JSON.stringify(module_list));
 
         let replacing_old = 0;
 
-        // hack to stop bundling from failing
-        if (
-          // mods_to_include[i].name.toLowerCase() == "qrscanner" ||
-          mods_to_include[i].name.toLowerCase() == "red imperium"
-        ) {
-          replacing_old = 1;
-        }
-
         for (let z = 0; z < module_list.length; z++) {
 
           if (dmname != "") {
@@ -93,22 +85,41 @@ console.log("MODULE LIST IS: " + JSON.stringify(module_list));
       //
       // READY TO SUBMIT
       //
-      var newtx = app.wallet.createUnsignedTransactionWithDefaultFee(app.wallet.returnPublicKey(), 0);
-      if (newtx == null) { return; }
-      newtx.transaction.msg.module   = "AppStore";
-      newtx.transaction.msg.request  = "request bundle";
-      newtx.transaction.msg.list     = module_list;
-alert("LIST: " + JSON.stringify(module_list));
-      newtx = app.wallet.signTransaction(newtx);
-      app.network.propagateTransaction(newtx);
+      if (app.options.appstore) {
+	if (app.options.appstore.default != "") {
+          var newtx = app.wallet.createUnsignedTransactionWithDefaultFee(app.options.appstore.default, 0);
+          if (newtx == null) { return; }
+          newtx.transaction.msg.module   = "AppStore";
+          newtx.transaction.msg.request  = "request bundle";
+          newtx.transaction.msg.list     = module_list;
+          newtx = app.wallet.signTransaction(newtx);
+          app.network.propagateTransaction(newtx);
 
-      document.querySelector(".email-appspace").innerHTML = `
-        <div class="appstore-bundler-install-notice">
-          <center style="margin-bottom:20px">Your custom Saito bundle is being compiled. Please do not leave this page -- estimated time to completion 60 seconds.</center>
-          <center><div class="loader" id="game_spinner"></div></center>
-        </div>
-      `;
+          document.querySelector(".email-appspace").innerHTML = `
+            <div class="appstore-bundler-install-notice">
+              <center style="margin-bottom:20px">Your custom Saito bundle is being compiled. Please do not leave this page -- estimated time to completion 60 seconds.</center>
+              <center><div class="loader" id="game_spinner"></div></center>
+            </div>
+          `;
 
+        } else {
+
+          document.querySelector(".email-appspace").innerHTML = `
+            <div class="appstore-bundler-install-notice">
+              <center style="margin-bottom:20px">Your wallet does not specify a trusted party to compile your software for you. Please download and compile manually.
+            </div>
+          `;
+
+	}
+      } else {
+
+        document.querySelector(".email-appspace").innerHTML = `
+          <div class="appstore-bundler-install-notice">
+            <center style="margin-bottom:20px">Your wallet does not specify a trusted party to compile your software for you. Please download and compile manually.
+          </div>
+        `;
+
+      }
     }
   }
 }

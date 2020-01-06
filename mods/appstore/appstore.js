@@ -241,11 +241,32 @@ class AppStore extends ModTemplate {
           this.submitModule(blk, tx);
           break;
         case 'request bundle':
+	  //
+	  //
+	  //
+console.log("REQUEST BVUNDLE TX received...");
+	  if (tx.isFrom(app.wallet.returnPublicKey())) {
+	    try {
+	      document.getElementById("email-appspace").innerHTML = "Your request has been received by the network. Your upgrade should be completed within about 45 seconds.";
+	    } catch (err) {
+	    }
+	  }
+	  if (!tx.isTo(app.wallet.returnPublicKey())) { return; }
+console.log("i am going to produce a bundle...");
           this.requestBundle(blk, tx);
           break;
         case 'receive bundle':
           if (tx.isTo(app.wallet.returnPublicKey()) && !tx.isFrom(app.wallet.returnPublicKey())) {
-            this.receiveBundle(blk, tx);
+	    //
+	    //
+	    //
+	    if (app.options.appstore) {
+	      if (app.options.appstore.default != "") {
+		if (tx.isFrom(app.options.appstore.default)) {
+                  this.receiveBundle(blk, tx);
+		}
+	      }
+	    }
           }
           break;
       }
@@ -443,6 +464,8 @@ class AppStore extends ModTemplate {
       }
     }
 
+console.log("about to webpack this puppy!");
+
     //
     // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
     // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
@@ -463,6 +486,7 @@ class AppStore extends ModTemplate {
     //
     let bundle_filename = await this.bundler(modules_selected);
 
+console.log("done webpacking: " + bundle_filename);
 
     //
     // insert resulting JS into our bundles database
@@ -588,7 +612,6 @@ class AppStore extends ModTemplate {
 
     fs.writeFileSync(path.resolve(__dirname, bash_script), bash_script_content, { encoding: 'binary' });
 
-process.exit();
 
     //
     // execute bash script
@@ -622,6 +645,9 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
 
 
 
+
+
+
 /***** NOW HANDLED BY BASH SCRIPT ****
     //
     // delete mods in bundler/mods
@@ -649,6 +675,9 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
 
     return bundle_filename;
   }
+
+
+
 
   receiveBundle(blk, tx) {
 

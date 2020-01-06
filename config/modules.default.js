@@ -31,6 +31,7 @@ module.exports = {
     'qrscanner/qrscanner.js',
     'pandemic/pandemic.js',
     'poker/poker.js',
+    'profile/profile.js',
     'relay/relay.js',
     'registry/registry.js',
     'settings/settings.js',
