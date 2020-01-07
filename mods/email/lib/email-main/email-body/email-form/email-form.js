@@ -16,6 +16,28 @@ module.exports = EmailForm = {
         document.querySelector(".email-body").innerHTML = EmailFormTemplate();
 
         this.addData();
+
+        var editor = new MediumEditor('#email-text', {
+            placeholder: true,
+            buttonLabels: 'fontawesome',
+            toolbar: {
+                // These are the default options for the toolbar,
+                //   if nothing is passed this is what is used 
+                allowMultiParagraphSelection: true,
+                buttons: ['bold', 'italic', 'underline', 'anchor', 'h2', 'h3', 'quote'],
+                diffLeft: 0,
+                diffTop: -10,
+                firstButtonClass: 'medium-editor-button-first',
+                lastButtonClass: 'medium-editor-button-last',
+                relativeContainer: null,
+                standardizeSelectionStart: false,
+                static: false,
+                // options which only apply when static is true 
+                align: 'center',
+                sticky: false,
+                updateOnEmptySelection: false
+            }
+        });
     },
 
     attachEvents(app, data) {
@@ -37,7 +59,7 @@ module.exports = EmailForm = {
     async sendEmailTransaction(app, data) {
 
         let email_title = document.querySelector('.email-title').value;
-        let email_text = document.querySelector('.email-text').value;
+        let email_text = document.querySelector('#email-text').innerHTML;
         let email_to = document.getElementById('email-to-address').value;
         let email_amount_elem = document.querySelector('.email-amount');
         let email_from = this.saito.wallet.returnPublicKey();
