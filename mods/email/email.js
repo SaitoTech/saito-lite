@@ -160,7 +160,7 @@ class Email extends ModTemplate {
     // in the long-term, as the email client
     // should just handle emails
     //
-    this.getTokens();
+    // this.getTokens();
 
     //
     //
@@ -275,8 +275,10 @@ console.log("FOUND: " + JSON.stringify(txs));
 
   updateBalance() {
     if (this.browser_active) {
-      let balance = this.app.wallet.returnBalance();
-      document.querySelector('.email-balance').innerHTML = balance + " SAITO";
+      if (document.querySelector('.email-balance')){
+        let balance = this.app.wallet.returnBalance();
+        document.querySelector('.email-balance').innerHTML = balance + " SAITO";
+      }
     }
   }
 

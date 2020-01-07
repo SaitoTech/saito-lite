@@ -49,26 +49,21 @@ class Faucet extends ModTemplate {
     }
 
     async onPeerHandshakeComplete(app, peer) {
-        console.log('drawing achievements');
-        try {
-            if (document.querySelector(".arcade-sidebar-done")) {
-                await this.app.network.sendRequestWithCallback("get achievements", this.app.wallet.returnPublicKey(), (rows) => {
-                    rows.forEach(row => this.renderAchievmentRow(row));
-                  });
-            } 
-        } catch(err) {
-            console.error(err);
-        }
-        try {
-            if (document.querySelector(".faucet-grid")) {
-                await this.app.network.sendRequestWithCallback("update activities", this.app.wallet.returnPublicKey(), (rows) => {
-                    rows.forEach(row => this.updateFaucetGridRow(row));
-                  });
-            } 
-        } catch(err) {
-            console.error(err);
+        if(this.browser_active ==1) {
+            console.log('drawing achievements');
+            try {
+                if (document.querySelector(".arcade-sidebar-done")) {
+                    await this.app.network.sendRequestWithCallback("get achievements", this.app.wallet.returnPublicKey(), (rows) => {
+                        rows.forEach(row => this.renderAchievmentRow(row));
+                      });
+                } 
+            } catch(err) {
+                console.error(err);
+            }
         }
     }
+
+    
 
     renderAchievmentRow(row){
         if(typeof(row.label) != "undefined") {
@@ -88,8 +83,8 @@ class Faucet extends ModTemplate {
         }
 
         if (message.request == "update activities") {
-            var activities = await this.returnActivities(message.data)
-            mycallback(activities);
+            var completed = await this.returnEvents(message.data)
+            mycallback(completed);
         }
 
     }
@@ -114,8 +109,12 @@ class Faucet extends ModTemplate {
         let obj = {}
           obj.count = x;
         switch (true) {
+            case (x = 1):
+                obj.label = "Your first Transaction!";
+                obj.icon = "1tx badge";
+                break;                
             case (x < 10):
-                obj.label = "Welcome!";
+                obj.label = "Getting There";
                 obj.icon = "1tx badge";
                 break;
             case (x < 50):

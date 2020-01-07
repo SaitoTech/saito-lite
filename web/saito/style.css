@@ -1067,20 +1067,34 @@ blockquote {
     color: #fff;
 }
 
-.faucet-grid {
+.faucet-grid-row {
     display: grid;
     grid-gap: 1em;
     grid-template-columns: 3em 3em auto 3em;
-  }
-  
-  .faucet-grid-icon i, .faucet-grid-reward {
+    cursor: pointer;
+    padding: 1em;
+}
+
+.faucet-grid-row:hover {
+    background-color: #8888;
+}
+
+.faucet-grid-icon i, .faucet-grid-reward, .faucet-grid-completed {
     font-size: 2em;
-  }
-  
-  .faucet-grid-icon {
+}
+
+.faucet-grid-icon {
     margin: 0.6em auto;
-  }
-  
-  .faucet-grid-reward {
+}
+
+.faucet-grid-reward {
     margin: 0.35em auto;
-  }
+}
+
+i.fas.fa-check-circle {
+    color: #0a0;
+}
+
+i.fas.fa-times-circle {
+    color: #f22;
+}
