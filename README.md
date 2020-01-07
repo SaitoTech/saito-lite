@@ -9,9 +9,10 @@ If you need to get in touch with us, please reach out anytime.
 The Saito Team
 info@saito.tech
 
-## build
+## build (node version >= 12)
 
 ```
 npm install
+npm run nuke
 npm start
 ```
