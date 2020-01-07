@@ -69,6 +69,15 @@ If you would like to backup your wallet manually, you can do so by clicking on t
 	return;
       };
 
+
+      //
+      // update Profile Info
+      // 
+      if (!app.options.profile) { app.options.profile = {}; }
+      app.options.profile.email = submitted_email;
+
+     
+
       document.querySelector(".welcome-modal-header").innerHTML = '<div>Almost Done!</div>';
       document.querySelector(".welcome-modal-main").innerHTML = '<div>We need to encrypt your wallet before it is sent over the network. You will need this password to recover your wallet:</div><div class="password-inputs"></div>';
       document.querySelector(".welcome-modal-info").innerHTML = '';
@@ -83,8 +92,14 @@ If you would like to backup your wallet manually, you can do so by clicking on t
 	  return;
 	}
 
+	//
+	// salt / hash and store pssword
+	//
+        app.options.profile.pass = app.crypto.hash(pass1 + "SAITO-PASSWORD-HASHING-SALT");
+        app.storage.save();
+
 	let mywallet_json = JSON.stringify(app.options);
-	let mywallet_json_encrypt = app.crypto.aesEncrypt(mywallet, pass1);
+	let mywallet_json_encrypt = app.crypto.aesEncrypt(mywallet, app.options.profile.pass);
 
         data.modal.destroy();
  
