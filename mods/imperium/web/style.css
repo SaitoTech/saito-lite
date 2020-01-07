@@ -7,6 +7,8 @@
 
 
 
+
+
 .ship_graphic {
   filter: brightness(0) saturate(100%) invert(76%) sepia(0%) saturate(7455%) hue-rotate(66deg) brightness(66%) contrast(92%);
 }
@@ -19,6 +21,12 @@
   margin-left: 20px;  
 }
 .card {
+  cursor: pointer;
+}
+.cardchoice {
+  cursor: pointer;
+}
+.option {
   cursor: pointer;
 }
 

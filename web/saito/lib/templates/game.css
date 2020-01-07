@@ -137,6 +137,7 @@
   background-color: whitesmoke;
   /* width: unset !important; */
   overflow-y: scroll;
+  font-size: 0.8em;
 }
 
 /** HUD SIDEBAR **/

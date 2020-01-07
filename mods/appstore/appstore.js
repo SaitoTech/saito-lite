@@ -22,6 +22,37 @@ function getFiles(dir) {
   return Array.prototype.concat(...files);
 }
 
+
+function returnSlug(nme) {
+  nme = nme.toLowerCase();
+  nme = nme.replace(/\t/g, "_");
+  return nme;
+}
+
+
+//
+// pass an empty dir of files
+//
+function deleteDirs(dir) {
+  const dirents = fs.readdirSync(dir, { withFileTypes: true });
+  dirents.forEach((dirent) => {
+    const res = path.resolve(dir, dirent.name);
+    if (dirent.isDirectory() && fs.readdirSync(res).length == 0) {
+      fs.rmdirSync(res, { maxRetries: 100, recursive: true });
+    } else {
+      deleteDirs(res);
+      // delete after children have been
+      fs.rmdirSync(res, { maxRetries: 100, recursive: true });
+    }
+  });
+}
+
+
+
+
+
+
+
 class AppStore extends ModTemplate {
 
   constructor(app) {
@@ -33,8 +64,9 @@ class AppStore extends ModTemplate {
   }
 
 
-
-
+  //
+  // appstore displays in email
+  //
   respondTo(type) {
     if (type == 'email-appspace') {
       let obj = {};
@@ -209,16 +241,39 @@ class AppStore extends ModTemplate {
           this.submitModule(blk, tx);
           break;
         case 'request bundle':
+	  //
+	  //
+	  //
+console.log("REQUEST BVUNDLE TX received...");
+	  if (tx.isFrom(app.wallet.returnPublicKey())) {
+	    try {
+	      document.getElementById("email-appspace").innerHTML = "Your request has been received by the network. Your upgrade should be completed within about 45 seconds.";
+	    } catch (err) {
+	    }
+	  }
+	  if (!tx.isTo(app.wallet.returnPublicKey())) { return; }
+console.log("i am going to produce a bundle...");
           this.requestBundle(blk, tx);
           break;
         case 'receive bundle':
           if (tx.isTo(app.wallet.returnPublicKey()) && !tx.isFrom(app.wallet.returnPublicKey())) {
-            this.receiveBundle(blk, tx);
+	    //
+	    //
+	    //
+	    if (app.options.appstore) {
+	      if (app.options.appstore.default != "") {
+		if (tx.isFrom(app.options.appstore.default)) {
+                  this.receiveBundle(blk, tx);
+		}
+	      }
+	    }
           }
           break;
       }
     }
   }
+
+
 
 
   async getNameAndDescriptionFromZip(zip_bin, zip_path) {
@@ -285,6 +340,7 @@ class AppStore extends ModTemplate {
   }
 
 
+
   async submitModule(blk, tx) {
 
     if (this.app.BROWSER == 1) { return; }
@@ -344,6 +400,10 @@ class AppStore extends ModTemplate {
     let module_list = txmsg.list;
 
     //
+    // module_list consists of a list of the modules to bundle, these contain a name or 
+    // version number (or both) depending on how they were originally issued to the 
+    // client.
+    //
     // module list = [
     //   { name : "Email" , version : "" } ,
     //   { name : "", version : "1830591927-AE752CDF7529E0419C2E13ABCCD6ABCA252313" }
@@ -364,7 +424,7 @@ class AppStore extends ModTemplate {
     }
 
     //
-    // TO-DO single query, not loop
+    // TO-DO reduce to single query, not loop
     //
     for (let i = 0; i < module_versions.length; i++) {
       sql = `SELECT * FROM modules WHERE version = $version`;
@@ -404,6 +464,8 @@ class AppStore extends ModTemplate {
       }
     }
 
+console.log("about to webpack this puppy!");
+
     //
     // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
     // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
@@ -424,6 +486,7 @@ class AppStore extends ModTemplate {
     //
     let bundle_filename = await this.bundler(modules_selected);
 
+console.log("done webpacking: " + bundle_filename);
 
     //
     // insert resulting JS into our bundles database
@@ -451,7 +514,6 @@ class AppStore extends ModTemplate {
     //
     let online_version = "http://"+this.app.options.server.endpoint.host+":"+this.app.options.server.endpoint.port+"/appstore/bundle/"+bundle_filename;
 
-console.log(bundle_filename + " -- " + online_version);
 
     //
     // send our filename back at our person of interest
@@ -470,12 +532,19 @@ console.log(bundle_filename + " -- " + online_version);
 
 
 
+
+
   async bundler(modules) {
 
     //
-    // modules has name, description, version, zip
+    // shell access
     //
-    // require inclusion of  module versions and paths for loading into the system
+    const util = require('util');
+    const exec = util.promisify(require('child_process').exec);
+
+
+    //
+    // modules has name, description, version, zip
     //
     const fs = this.app.storage.returnFileSystem();
     const path = require('path');
@@ -485,33 +554,26 @@ console.log(bundle_filename + " -- " + online_version);
     let ts = new Date().getTime();
     let hash = this.app.crypto.hash(modules.map(mod => mod.version).join(''));
 
+
+    let bash_script = `mods/compile-${ts}-${hash}`;
+    let bash_script_content = 'cd ' + __dirname + '/mods' + "\n";
+    let bash_script_delete = 'cd ' + __dirname + '/mods' + "\n";
+
     //
-    // first provide a configuration file
+    // save MODS.zip and create bash script to unzip
     //
     let modules_config_filename = `modules.config-${ts}-${hash}.json`;
     let module_paths = modules.map(mod => {
-
-      if (mod.name.toLowerCase() == "arcade") { return; }
-
-      let mod_path = `mods/${mod.name.toLowerCase()}-${ts}-${hash}.zip`;
-
-console.log("mod path is: " + mod_path);
-
+      let mod_path = `mods/${returnSlug(mod.name)}-${ts}-${hash}.zip`;
+      bash_script_content += `unzip ${returnSlug(mod.name)}-${ts}-${hash}.zip -d ../bundler/mods/${returnSlug(mod.name)}-${ts}-${hash} \*.js \*.css \*.html` + "\n";
+      bash_script_delete += `rm -rf ../bundler/mods/${returnSlug(mod.name)}-${ts}-${hash}` + "\n";
       fs.writeFileSync(path.resolve(__dirname, mod_path), mod.zip, { encoding: 'binary' });
-      fs.createReadStream(path.resolve(__dirname, mod_path))
-        .pipe(unzipper.Extract({
-          path: path.resolve(__dirname, `bundler/mods/${mod.name.toLowerCase()}-${ts}-${hash}`)
-        }));
-
-      //
-      // delete the other files
-      //
-      fs.unlink(path.resolve(__dirname, mod_path));
-
-      // return the path
       return `appstore/bundler/mods/${mod.name.toLowerCase()}-${ts}-${hash}/${mod.name.toLowerCase()}`;
-
     });
+    bash_script_delete += `rm -f ./*-${hash}.zip`;
+    bash_script_delete += `rm -f ./*-${hash}`;
+
+
 
     //
     // write our modules config file
@@ -520,7 +582,7 @@ console.log("mod path is: " + mod_path);
       JSON.stringify({ mod_paths: module_paths })
     );
 
-console.log("Module Paths: " + JSON.stringify(module_paths));
+
 
     //
     // other filenames
@@ -542,24 +604,33 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
     let entry = path.resolve(__dirname, `../../bundler/${index_filename}`);
     let output_path = path.resolve(__dirname, 'bundler/dist');
 
-    const util = require('util');
-    const exec = util.promisify(require('child_process').exec);
+    bash_script_content += 'cd ' + __dirname + "\n";
+    bash_script_content += 'cd ../../' + "\n";
+    bash_script_content += `sh bundle.sh ${entry} ${output_path} ${bundle_filename}`;
+    bash_script_content += "\n";
+    bash_script_content += bash_script_delete;
 
-    let exec_command = `node webpack.js ${entry} ${output_path} ${bundle_filename}`;
+    fs.writeFileSync(path.resolve(__dirname, bash_script), bash_script_content, { encoding: 'binary' });
 
-    /* */
+
+    //
+    // execute bash script
+    //
     try {
-      const { stdout, stderr } = await exec(exec_command);
+      let cwdir = __dirname;
+      let unzip_command = 'sh ' + bash_script;
+      const { stdout, stderr } = await exec(unzip_command, {cwd : cwdir , maxBuffer : 4096 * 2048});
     } catch (err) {
-      console.log(stderr);
       console.log(err);
     }
+
+console.log("Module Paths: " + JSON.stringify(module_paths));
 
     //
     // cleanup
     //
-    fs.unlink(path.resolve(__dirname, `bundler/${index_filename}`));
-    fs.unlink(path.resolve(__dirname, `bundler/${modules_config_filename}`));
+    fs.unlink(path.resolve(__dirname, `../../bundler/${index_filename}`));
+    fs.unlink(path.resolve(__dirname, `../../bundler/${modules_config_filename}`));
 
 
     //
@@ -572,13 +643,23 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
+
+
+
+
+
+/***** NOW HANDLED BY BASH SCRIPT ****
     //
     // delete mods in bundler/mods
+    //
     module_paths.forEach(modpath => {
+      if (!modpath) { return; }
       let mod_dir = modpath.split('/')[3];
-      let files = getFiles(path.resolve(__dirname, `bundler/mods/${mod_dir}`));
-      files.forEach(file_path => fs.unlink(file_path));
-      fs.rmdir(path.resolve(__dirname, `bundler/mods/${mod_dir}`));
+      let full_mod_dir = path.resolve(__dirname, `bundler/mods/${mod_dir}`);
+      let files = getFiles(full_mod_dir);
+      files.forEach(file_path => fs.unlinkSync(file_path));
+      deleteDirs(full_mod_dir);
+      fs.rmdirSync(path.resolve(__dirname, `bundler/mods/${mod_dir}`));
     });
 
     //
@@ -590,9 +671,13 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
     } catch(err) {
       console.log(err);
     }
+***** NOW HANDLED BY BASH SCRIPT ****/
 
     return bundle_filename;
   }
+
+
+
 
   receiveBundle(blk, tx) {
 

@@ -3,36 +3,43 @@ const webpack = require('webpack');
 
 let [entry_path, output_path, output_filename] = process.argv.slice(2);
 
-// let entry = path.resolve(__dirname, 'mods/appstore/bundler/templates/index.js');
-// let output_path = path.resolve(__dirname, 'mods/appstore/bundler/dist');
-
 webpack({
   target: 'web',
-  node: {
-      fs: "empty",
-  },
-  externals: [
-      {
-          sqlite: 'sqlite'
-      },
-      {
-          child_process: 'child_process'
-      },
-      {
-          webpack: 'webpack'
-      },
-      /\.txt/,
-      /\.png$/,
-      /\.jpg$/,
-      /\.html$/,
-      /\.css$/,
-      /\.sql$/,
-      /\.md$/,
-      /\.pdf$/,
-      /\.sh$/,
-      /\/web\//,
-      /\/www\//
-  ],
+    node: {
+        fs: "empty",
+    },
+    externals: [
+        {
+            archiver: 'archiver'
+        },
+        {
+            child_process: 'child_process'
+        },
+        {
+            nodemailer: 'nodemailer'
+        },
+        {
+            sqlite: 'sqlite'
+        },
+        {
+            unzipper: 'unzipper'
+        },
+        {
+            webpack: 'webpack'
+        },
+        /\.txt/,
+        /\.png$/,
+        /\.jpg$/,
+        /\.html$/,
+        /\.css$/,
+        /\.sql$/,
+        /\.md$/,
+        /\.pdf$/,
+        /\.sh$/,
+        /\.zip$/,
+        /\/web\//,
+        /\/www\//
+    ],
   entry: ["babel-polyfill", entry_path],
   output: {
       path: output_path,
@@ -62,8 +69,11 @@ webpack({
   devtool: "cheap-module-eval-source-map",
   }, (err, stats) => {
   if (err || stats.hasErrors()) {
-    let info = stats.toJson();
-    console.log(info.errors);
+    console.log(err);
+    if (stats) {
+      let info = stats.toJson();
+      console.log(info.errors);
+    }
   }
   //
   // Done processing

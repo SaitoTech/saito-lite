@@ -11,7 +11,11 @@ module.exports = EmailBarsMenu = {
     let email_apps = document.querySelector(".email-apps");
     for (let i = 0; i < data.mods.length; i++) {
       if (data.mods[i].respondTo("email-appspace") != null) {
-        email_apps.innerHTML += `<li class="email-apps-item email-apps-item-${i}" id="${i}">${data.mods[i].name}</li>`;
+	if (data.mods[i].name === "MyQRCode") {
+          email_apps.innerHTML += `<li class="email-apps-item email-apps-item-${i}" style="display:none" id="${i}">${data.mods[i].name}</li>`;
+	} else {
+          email_apps.innerHTML += `<li class="email-apps-item email-apps-item-${i}" id="${i}">${data.mods[i].name}</li>`;
+	}
       }
     }
 
@@ -113,9 +117,9 @@ module.exports = EmailBarsMenu = {
 
           data.email.active = "email_appspace";
           data.email.previous_state = "email_list";
-          data.email.header_title = "Application";
           data.email.appspace_mod = data.email.mods[e.currentTarget.id];
           data.email.appspace_mod_idx = e.currentTarget.id;
+          data.email.header_title = data.email.appspace_mod.name;
 
           data.email.main.render(app, data)
           data.email.main.attachEvents(app, data)
@@ -133,19 +137,10 @@ module.exports = EmailBarsMenu = {
       this.module_application_loaded = 1; 
 
       if (app.browser.returnURLParameter("module") != "") {
-
 	let modname = app.browser.returnURLParameter("module"); 
         for (let i = 0; i < data.mods.length; i++) {
           if (data.mods[i].returnSlug() == modname) {
-
             let modobj = document.querySelector(`.email-apps-item-${i}`);
-
-// 	    data.email.active	    = "email_appspace";
-// 	    data.email.previous_state   = "email_list";
-//    	    data.email.header_title     = "Saito AppStore";
-//    	    data.email.appspace_mod     = data.email.mods[i];
-//   	    data.email.appspace_mod_idx = i;
-
 	    setTimeout(function () { 
 	      modobj.click();
             }, 500);

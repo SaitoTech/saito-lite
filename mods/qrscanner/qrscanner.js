@@ -9,13 +9,11 @@ class QRScanner extends ModTemplate {
   constructor(app) {
     super(app);
 
+    this.name = "QRScanner";
     this.events = ['encrypt-key-exchange-confirm'];
-
     this.video = null;
     this.canvas = null;
-
     this.canvas_context = null;
-
     this.isStreamInit = false;
 
     this.constraints = {
@@ -33,7 +31,6 @@ class QRScanner extends ModTemplate {
     // In milliseconds
     this.debounce_timeout = 750;
 
-    this.name = "QRScanner";
   }
 
   initialize(app) {

@@ -25,6 +25,14 @@ module.exports = AppStoreAppspace = {
 
       });
 
+
+      //
+      // show installed apps
+      //
+      for (let i = 0; i < app.modules.mods.length; i++) {
+        document.querySelector(".appstore-installed-apps").innerHTML += AppStoreInstalledAppsTemplate(app.modules.mods[i]);
+      }
+
       //
       // load some categories
       //
@@ -68,6 +76,7 @@ module.exports = AppStoreAppspace = {
 
     attachEvents(app, data) {
 
+
       //
       // publish apps
       //
@@ -76,6 +85,7 @@ module.exports = AppStoreAppspace = {
         AppStoreAppspacePublish.attachEvents(app, data);
       }
 
+
       //
       // search box
       //
@@ -83,6 +93,7 @@ module.exports = AppStoreAppspace = {
 	e.currentTarget.placeholder = "";
         e.currentTarget.value = "";
       });
+
 
       document.getElementById('appstore-search-box').addEventListener('keypress', (e) => {
         let key = e.which || e.keyCode;
@@ -95,8 +106,6 @@ module.exports = AppStoreAppspace = {
           message.data		  = e.currentTarget.value;
 
           app.network.sendRequestWithCallback(message.request, message.data, (res) => {
-alert("received data in return");
-console.log(JSON.stringify(res));
             if (res.rows != undefined) {
 	      this.populateAppsSpace(app, data, res.rows);
 	    }

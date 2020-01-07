@@ -23,6 +23,9 @@ data/blocks/*.blk
 data/shashmaps/*.smap
 
 
+bundler
+bundler/*
+
 lib/saito/*.swp
 lib/saito/web/browser.js
 lib/saito/web/client.options
@@ -33,7 +36,8 @@ web/saito/saito.js
 web/saito/saito.js.map
 web/saito/*.wasm
 
-
+mods/appstore/mods
+mods/appstore/mods/*
 mods/appstore/bundler
 mods/appstore/bundler/*
 mods/appstore/modules
