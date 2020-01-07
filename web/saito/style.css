@@ -495,7 +495,7 @@ label.treated {
     position: absolute;
     right: 0;
     right: -255px;
-    top: 90px;
+    top: 83px;
     color: var(--text-color-normal);
     padding: 15px;
     font-family: visuelt-light;
@@ -503,7 +503,7 @@ label.treated {
     border-radius: 5px 0 0 5px;
     width: 250px;
     font-size: 1.2em;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 87px);
     box-sizing: border-box;
     box-shadow: 0px 0px 3px 1px rgba(170, 170, 170, 0.75);
     background-color: #fcfcfc;
