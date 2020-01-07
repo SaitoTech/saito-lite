@@ -5882,7 +5882,7 @@ console.log("THE ACTION CARD: " + this.name + " is being played!");
         },
     };
     action['action4']	= { 
-  	name : "Space Olympics" ,
+  	name : "Diaspora Conflict" ,
   	type : "instant" ,
   	text : "Exhaust a planet card held by another player. Gain trade goods equal to resource value." ,
   	interactive : 1 ,

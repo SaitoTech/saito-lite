@@ -236,8 +236,9 @@
 .chat-room-message-identicon {
   border: 1px solid #8885;
   width: 1.5em;
+  height: 1.5em;
   padding: 1px;
-  border-radius: 50px;
+  border-radius: 0px;
 }
 
 .chat-box-input {

@@ -89,11 +89,8 @@ module.exports = ChatBox = {
     addMessageToDOM(app, data, msg) {
       let chat_box_main = document.getElementById(`chat-box-main-${msg.group_id}`)
       if (!chat_box_main) { return; }
-
-      msg.publickey = data.chat.addrController.returnAddressHTML(msg.publickey);
-
       msg.identicon = app.keys.returnIdenticon(msg.publickey);
-
+      msg.publickey = data.chat.addrController.returnAddressHTML(msg.publickey);
       if (document.getElementById(`chat-box-default-message-${msg.group_id}`)) { chat_box_main.innerHTML = '' }
 
       chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(msg, msg.sig, msg.type);

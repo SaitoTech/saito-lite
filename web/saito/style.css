@@ -542,6 +542,9 @@ label.treated {
     margin: 0 0 1em 0;
 }
 
+.settings-fas-icon {
+  min-width:40px;
+}
 .profile-photo {
     height: 75px;
     width: 75px;
@@ -549,13 +552,15 @@ label.treated {
 }
 
 .profile-register-link {
+    font-style: italic;
+    pointer: cursor;
     width: 250px;
-    padding: 10px 10px 5px 10px;
+    padding: 5px 0px 2px 0px;
 }
 
 .account-info {
     display: grid;
-    grid-gap: 0.5em;
+    grid-gap: 0em;
 }
 
 .account-info div {
@@ -570,6 +575,7 @@ label.treated {
     zoom: 1;
     font-family: visuelt-light;
     padding: 12px 0 8px 0;
+    margin: 0px;
 }
 
 .reset-wallet {
@@ -806,7 +812,7 @@ label.treated {
 }
 
 .profile-identifier {
-    padding: 0.6em 0;
+    padding: 0px;
 }
 
 .loader {
