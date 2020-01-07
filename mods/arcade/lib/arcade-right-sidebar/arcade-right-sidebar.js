@@ -74,7 +74,7 @@ module.exports = ArcadeRightSidebar = {
           data.arcade = this;
           data.faucet = faucetmod;
           faucetmod.renderEmail(app, data);
-          faucetmod.attachEvents(app, data);
+          faucetmod.attachEventsEmail(app, data);
         }
       }
 

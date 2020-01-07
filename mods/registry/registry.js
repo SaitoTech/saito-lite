@@ -117,10 +117,11 @@ class Registry extends ModTemplate {
           // send message
           if (res == 1) {
 
-            let newtx = registry_self.app.wallet.createUnsignedTransaction(tx.transaction.from[0].add, 50.0, fee);
+            let newtx = registry_self.app.wallet.createUnsignedTransaction(tx.transaction.from[0].add, 0, fee);
                 newtx.transaction.msg.module = "Email";
+                newtx.transaction.msg.origin = "Registry";
                 newtx.transaction.msg.title  = "Address Registration Success!";
-                    newtx.transaction.msg.message = "You have successfully registered the identifier: " + identifier;
+                newtx.transaction.msg.message = "<p>You have successfully registered the identifier: <span class='boldred'>" + identifier + "</span></p>";
                 newtx.transaction.msg.identifier = identifier;
                 newtx.transaction.msg.signed_message = signed_message;
                 newtx.transaction.msg.sig = sig;
@@ -133,7 +134,7 @@ class Registry extends ModTemplate {
             let newtx = registry_self.app.wallet.createUnsignedTransaction(tx.transaction.from[0].add, 0.0, fee);
                 newtx.transaction.msg.module = "Email";
                 newtx.transaction.msg.title  = "Address Registration Failed!";
-                newtx.transaction.msg.message = "The identifier you requested (" + identifier + ") has already been registered";
+                newtx.transaction.msg.message = "<p>The identifier you requested (<span class='boldred'>" + identifier + "</span>) has already been registered.</p>";
                 newtx.transaction.msg.identifier = identifier;
                 newtx.transaction.msg.signed_message = "";
                 newtx.transaction.msg.sig = "";

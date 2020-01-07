@@ -68,7 +68,7 @@ console.log("heading into INIT!");
     is running it will generate tokens automatically over time. The more transactions
     you process the greater the chance that you will be rewarded for the work.
 
-    For inquiries please visit our website: https://saito.tech
+    For inquiries please visit our website: https://saito.io
 
   `);
 
