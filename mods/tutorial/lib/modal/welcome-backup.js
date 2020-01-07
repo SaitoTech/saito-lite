@@ -93,10 +93,10 @@ module.exports = WelcomeBackup = {
 	// salt / hash and store pssword
 	//
         app.options.profile.pass = app.crypto.hash(pass1 + "SAITO-PASSWORD-HASHING-SALT");
-        app.storage.save();
+        app.storage.saveOptions();
 
 	let mywallet_json = JSON.stringify(app.options);
-	let mywallet_json_encrypt = app.crypto.aesEncrypt(mywallet, app.options.profile.pass);
+	let mywallet_json_encrypt = app.crypto.aesEncrypt(mywallet_json, app.options.profile.pass);
 
         data.modal.destroy();
 
