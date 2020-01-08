@@ -920,7 +920,7 @@ console.log("ERROR WITH SORRY ACCEPTED TRANSACTION: " + err);
     let sql = "UPDATE games SET players_accepted = (players_accepted+1), players_array = $players_array WHERE status = $status AND game_id = $game_id";
     let params = {
       $players_array : players_array ,
-      $state : 'open',
+      $status : 'open',
       $game_id : txmsg.game_id
     }
 
