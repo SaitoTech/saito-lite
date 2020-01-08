@@ -6,7 +6,9 @@ module.exports = ProfileAppspaceTemplate = (app) => {
     <div class="">     
 
         <div id="qrcode"></div>
-      
+ 
+        <div>${app.browser.returnInviteLink()}</div>
+     
         <div style="margin-top:15px;display:inline;width:100px;font-weight:bold;">Saito Address:</div>
         <div style="display:inline">unregistered</div>
         <div style="clear:both;margin-top:10px;font-size:0.9em;">Registering a Saito address allows others to send you messages using your Saito username instead of having to copy and paste your publickey.</div>
