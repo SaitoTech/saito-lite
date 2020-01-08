@@ -467,22 +467,7 @@ console.log("i am going to produce a bundle...");
 console.log("about to webpack this puppy!");
 
     //
-    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
-    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
-    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
-    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
-    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
-    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
-    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
-    // WEBPACK WEBPACK WEBPACK WEBPACK CANT GET ENOUGH OF THIS WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
-    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
-    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
-    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
-    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
-    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
-    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
-    // WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK WEBPACK
-    //
+    // WEBPACK
     //
     let bundle_filename = await this.bundler(modules_selected);
 
@@ -565,7 +550,34 @@ console.log("done webpacking: " + bundle_filename);
     let modules_config_filename = `modules.config-${ts}-${hash}.json`;
     let module_paths = modules.map(mod => {
       let mod_path = `mods/${returnSlug(mod.name)}-${ts}-${hash}.zip`;
-      bash_script_content += `unzip ${returnSlug(mod.name)}-${ts}-${hash}.zip -d ../bundler/mods/${returnSlug(mod.name)}-${ts}-${hash} \*.js \*.css \*.html` + "\n";
+      bash_script_content += `unzip ${returnSlug(mod.name)}-${ts}-${hash}.zip -d ../bundler/mods/${returnSlug(mod.name)}-${ts}-${hash} \\*.js \\*.css \\*.html \\*.wasm` + "\n";
+
+      //
+      // replace path saito dep
+      bash_script_content += `find ../bundler/mods/${returnSlug(mod.name)}-${ts}-${hash}/ -type f -exec sed -i -e '`;
+      // saito
+      bash_script_content += 's/..\\/..\\/lib\\/saito\\/saito/saito/g;';
+      // modtemplate
+      bash_script_content += 's/..\\/..\\/lib\\/templates\\/modtemplate/ModTemplate/g;';
+      // gametemplate
+      bash_script_content += 's/..\\/..\\/lib\\/templates\\/gametemplate/GameTemplate/g;';
+      // game-hud
+      bash_script_content += 's/..\\/..\\/lib\\/templates\\/lib\\/game-hud\\/game-hud/GameHud/g;';
+      // game-card-fan
+      bash_script_content += 's/..\\/..\\/lib\\/templates\\/lib\\/game-cardfan\\/game-cardfan/GameCardFan/g;';
+      // game card box
+      bash_script_content += 's/..\\/..\\/lib\\/templates\\/lib\\/game-cardbox\\/game-cardbox/GameCardBox/g;';
+      // address controller
+      bash_script_content += 's/..\\/..\\/lib\\/ui\\/menu\\/address-controller/AddressController/g;';
+      // header
+      bash_script_content += 's/..\\/..\\/lib\\/ui\\/header\\/header/Header/g;';
+      // modal
+      bash_script_content += 's/..\\/..\\/lib\\/ui\\/modal\\/modal/Modal/g';
+      // helpers
+      bash_script_content += 's/..\\/..\\/lib\\/helpers\\/index/Helpers/g;';
+
+      bash_script_content += `' {} \\;` + "\n";
+
       bash_script_delete += `rm -rf ../bundler/mods/${returnSlug(mod.name)}-${ts}-${hash}` + "\n";
       fs.writeFileSync(path.resolve(__dirname, mod_path), mod.zip, { encoding: 'binary' });
       return `appstore/bundler/mods/${mod.name.toLowerCase()}-${ts}-${hash}/${mod.name.toLowerCase()}`;

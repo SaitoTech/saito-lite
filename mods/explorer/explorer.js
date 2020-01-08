@@ -1,5 +1,4 @@
-const saito = require('../../lib/saito/saito');
-const ModTemplate = require('../../lib/templates/modtemplate.js');
+const ModTemplate = require('../../lib/templates/modtemplate');
 
 class ExplorerCore extends ModTemplate {
     constructor(app) {

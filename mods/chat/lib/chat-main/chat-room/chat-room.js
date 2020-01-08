@@ -19,7 +19,7 @@ module.exports = ChatRoom = {
             let { publickey, timestamp } = room_message;
             let type = app.wallet.returnPublicKey() == publickey ? 'myself' : 'others';
             document.querySelector('.chat-room-content').innerHTML
-                += ChatMessageContainerTemplate(room_message, timestamp, type);
+                += ChatMessageContainerTemplate(room_message, timestamp, type, data);
         });
 
         // let header = document.querySelector('.header');
@@ -147,14 +147,14 @@ module.exports = ChatRoom = {
         app.network.propagateTransaction(tx);
     },
 
-    addTXToDOM(tx) {
+    addTXToDOM(tx, data) {
         document.querySelector('.chat-room-content')
-                .innerHTML += ChatMessageContainerTemplate(tx.returnMessage(), tx.transaction.msg.sig, 'myself');
+                .innerHTML += ChatMessageContainerTemplate(tx.returnMessage(), tx.transaction.msg.sig, 'myself', data);
     },
 
-    addMessageToDOM(msg) {
+    addMessageToDOM(msg, data) {
         document.querySelector('.chat-room-content')
-                .innerHTML += ChatMessageContainerTemplate(msg, msg.sig, msg.type);
+                .innerHTML += ChatMessageContainerTemplate(msg, msg.sig, msg.type, data);
     },
 
     scrollToBottom() {

@@ -1,8 +1,7 @@
-const datetimeFormatter = require('../../../../../lib/helpers/datetime_formatter');
+module.exports = ChatRoomMessageTemplate = ({ message, publickey, timestamp, identicon }, sig, type, data) => {
+  let { datetime_formatter } = data.helpers;
+  let datetime = datetime_formatter(timestamp);
 
-module.exports = ChatRoomMessageTemplate = ({ message, publickey, timestamp, identicon }, sig, type) => {
-  let datetime = datetimeFormatter(timestamp);
-  
   return `
     <div id="${sig}" class="chat-room-message chat-room-message-${type}">
       <img src="${identicon}" class="chat-room-message-identicon"/>

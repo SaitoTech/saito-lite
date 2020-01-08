@@ -1,24 +1,17 @@
-const elParser = require('../../../../lib/helpers/el_parser');
 const RegisterUsernameTemplate = require('./register-username.template.js');
 
-
 module.exports = RegisterUsername = {
-
-
   render(app, data) {
     if (document.querySelector('.document-modal-content')) {
       document.querySelector('.document-modal-content').innerHTML = RegisterUsernameTemplate();
     }
   },
 
-
-
   attachEvents(app, data) {
 
     document.querySelector('.tutorial-skip').onclick = () => {
       data.modal.destroy();
     }
-
 
     document.querySelector('#registry-modal-button').onclick = () => {
 

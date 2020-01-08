@@ -1,5 +1,5 @@
 const saito = require('../../lib/saito/saito');
-const ModTemplate = require('../../lib/templates/modtemplate.js');
+const ModTemplate = require('../../lib/templates/modtemplate');
 const Big = require('big.js');
 
 const FaucetAppSpace = require('./lib/email-appspace/faucet-appspace');

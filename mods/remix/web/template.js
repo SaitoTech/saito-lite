@@ -1,4 +1,4 @@
-const saito = require('../../lib/saito/saito.js');
+const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const Header = require('../../lib/ui/header/header');
 

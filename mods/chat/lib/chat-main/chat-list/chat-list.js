@@ -1,9 +1,8 @@
 const ChatListTemplate = require('./chat-list.template');
 const ChatListRowTemplate = require('./chat-list-row.template');
-
-const ChatRoom = require('../chat-room/chat-room');
 const ChatNavTemplate = require('../chat-nav/chat-nav.template');
 
+// const ChatRoom = require('../chat-room/chat-room');
 // const ChatAdd = require('../chat-add/chatadd');
 
 module.exports = ChatList = {
@@ -34,7 +33,7 @@ module.exports = ChatList = {
             }
 
             document.querySelector('.chat').innerHTML
-                += ChatListRowTemplate(row);
+                += ChatListRowTemplate(row, data.helpers);
         });
 
     },

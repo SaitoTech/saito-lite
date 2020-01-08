@@ -1,4 +1,3 @@
-const elParser = require('../../../../lib/helpers/el_parser');
 const InviteFriendsTemplate = require('./invite-friends.template.js');
 
 module.exports = InviteFriends = {

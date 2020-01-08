@@ -1,4 +1,3 @@
-const saito = require('../../lib/saito/saito');
 const ChatCore = require('./chat-core.js')
 const EmailChat = require('./lib/email-chat/email-chat');
 
@@ -6,6 +5,7 @@ const Header = require('../../lib/ui/header/header');
 const ChatMain = require('./lib/chat-main/chat-main');
 
 const AddressController = require('../../lib/ui/menu/address-controller');
+const helpers = require('../../lib/helpers/index');
 
 class Chat extends ChatCore {
 
@@ -43,6 +43,8 @@ class Chat extends ChatCore {
     data.chat.groups = chat_self.groups;
     data.chat.active_groups = chat_self.active_groups;
     data.chat.addrController = chat_self.addrController;
+
+    data.helpers = helpers;
 
     EmailChat.initialize(app, data);
     EmailChat.render(app, data);

@@ -1,8 +1,9 @@
-var saito = require('../../lib/saito/saito');
-var ModTemplate = require('../../lib/templates/modtemplate');
+try {
+  var ModTemplate = require('../../lib/templates/modtemplate');
+} catch(err) {
+  var ModTemplate = require('ModTemplate');
+}
 var TestingAppspace = require('./lib/email-appspace/testing-appspace');
-
-
 
 //////////////////
 // CONSTRUCTOR  //
@@ -21,7 +22,6 @@ class Testing extends ModTemplate {
 
   }
 
-
   initialize(app) {
 
     console.log("########################");
@@ -29,7 +29,6 @@ class Testing extends ModTemplate {
     console.log("########################");
 
   }
-
 
   respondTo(type) {
 
@@ -48,9 +47,6 @@ class Testing extends ModTemplate {
   attachEventsEmail(app, data) {
      TestingAppspace.attachEvents(app, data);
   }
-
-
-
 
 }
 

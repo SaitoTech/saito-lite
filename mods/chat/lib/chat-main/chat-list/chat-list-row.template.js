@@ -1,8 +1,6 @@
-const datetimeFormatter = require('../../../../../lib/helpers/datetime_formatter');
-
-module.exports = ChatListRowTemplate = ({name, group_id, message, timestamp, is_encrypted}) => {
-
-  let datetime = datetimeFormatter(timestamp);
+module.exports = ChatListRowTemplate = ({name, group_id, message, timestamp, is_encrypted}, helpers) => {
+  let {datetime_formatter} = helpers;
+  let datetime = datetime_formatter(timestamp);
   let lock_icon_html = is_encrypted ? '<div style="justify-self: center;"><i class="fas fa-lock" style="color: black;"></i></div>' : '';
 
   return `

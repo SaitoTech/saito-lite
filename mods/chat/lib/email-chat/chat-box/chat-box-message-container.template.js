@@ -1,9 +1,9 @@
 const ChatRoomMessageTemplate = require('../../chat-main/chat-room/chat-room-message.template');
 
-module.exports = ChatBoxMessageContainerTemplate = (data, sig, type) => {
+module.exports = ChatBoxMessageContainerTemplate = (room_data, sig, type, data) => {
   return `
     <div class="chat-box-message-container chat-message-${type}">
-      ${ChatRoomMessageTemplate(data, sig, type)}
+      ${ChatRoomMessageTemplate(room_data, sig, type, data)}
     </div>
   `;
 }
