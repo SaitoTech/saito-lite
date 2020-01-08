@@ -10,12 +10,16 @@ module.exports = EmailListRowTemplate = (tx, addr_html) => {
 
   let datetime = datetimeFormatter(ts);
 
+  var tmp = document.createElement("DIV");
+  tmp.innerHTML = message;
+  message = tmp.innerText;
+
   message = message.length > 64 ? `${message.substring(0, 64)}...`: message;
 
   return `
   <div class="email-message" id="${sig}">
       <input class="email-selected" type="checkbox">
-      <div class="email-message-content"">
+      <div class="email-message-content">
           <div class="email-message-from">${addr_html}</div>
           <div class="email-message-title">${title}</div>
           <div class="email-message-message">${message}</div>

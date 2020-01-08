@@ -24,8 +24,8 @@ module.exports = ProfileAppspaceTemplate = (app) => {
         <div></div>
       </div>  
 
-        <div><img style="max-width:100px;max-height:100px" src="${app.keys.returnIdenticon(app.wallet.returnPublicKey())}" /></div>
-        <div class="upload-avatar-info">Upload an Avatar and your friends will see this instead of your standard image. It may take a bit of time until your new friends see it.</div>
+      <div><img style="max-width:100px;max-height:100px" src="${app.keys.returnIdenticon(app.wallet.returnPublicKey())}" /></div>
+      <div class="upload-avatar-info">Upload an Avatar and your friends will see this instead of your standard image. It may take a bit of time until your new friends see it.</div>
   
     <div style="display:none"><input id="profile-update-avatar" class="profile-update-avatar" style="" type="file" /></div>
 

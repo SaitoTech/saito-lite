@@ -1,9 +1,6 @@
 # Install Saito
 
-## Dependencies
-- Python 2.x
-
-## Server Configuration (pre-install)
+## Install NodeJS
 
 You should have a server with at least 2 GB of RAM and a reasonably 
 up-to-date version of NodeJS and NPM installed. If you are setting
@@ -12,7 +9,7 @@ to work out-of-the-box with Node v9 as follows:
 ```
 apt-get update
 apt-get install g++ make
-curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 sudo apt-get install -y nodejs
 ```
 
