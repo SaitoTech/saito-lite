@@ -1,4 +1,4 @@
-module.exports = ArcadeLoaderTemplate = (game_id) => {
+module.exports = ArcadeLoadedTemplate = (game_id) => {
   return `
       <div class="arcade-initialize-game-container">
         <center>Your game is ready to start!</center>
