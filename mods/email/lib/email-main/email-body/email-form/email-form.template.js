@@ -19,7 +19,7 @@ module.exports = EmailFormTemplate = () => {
       <input class="email-title" type="text" placeholder="Subject">
   </div>
 
-  <textarea class="email-text" placeholdre="Message"></textarea>
+  <div id="email-text" class="email-text markdown" placeholder="Message"></div>
   </div>
   <div>
       <button class="email-submit">Send</button>

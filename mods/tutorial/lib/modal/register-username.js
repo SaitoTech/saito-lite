@@ -20,25 +20,30 @@ module.exports = RegisterUsername = {
     }
 
 
-    document.querySelector('.register-username-btn').onclick = () => {
+    document.querySelector('#registry-modal-button').onclick = () => {
 
-      data.modal.destroy();
+      //check identifier taken
+      var identifier = document.querySelector('#registry-input').value;
+      var hp = document.querySelector('#name').value;
 
-      let tx = app.wallet.createUnsignedTransaction();
-          tx.transaction.msg.module       = "Email";
-          tx.transaction.msg.title        = "Address Registration Requested";
-          tx.transaction.msg.message      = `
-You have sent a request to register an address to the Saito DNS server. Please wait about a minute for the network to check your request and process it. We will update you once the registration attempt has succeeded (or failed).
-      `;
+      if (hp == "") {
+        app.modules.returnActiveModule().sendPeerDatabaseRequest("registry", "records", "*", "identifier = '" + identifier + "@saito'", null, (res) => {
+          if (res.rows.length > 0) {
+            salert("Identifier already in use. Please select another");
+            return;
+          } else {
+            //salert("Registration Submitted");
+            let register_success = app.modules.returnModule('Registry').registerIdentifier(identifier);
+            if (register_success) {
+              salert("Success! You are now: " + identifier + "@saito");
 
-     tx = app.wallet.signTransaction(tx);
-     let emailmod = app.modules.returnModule("Email");
+              data.modal.destroy();
 
-     if (emailmod != null) {
-	setTimeout(() => {
-          emailmod.addEmail(tx);
-          app.storage.saveTransaction(tx);
-	}, 1500);
+            } else {
+              salert("That's a bug, Jim.")
+            }
+          }
+        });
       }
     }
   }

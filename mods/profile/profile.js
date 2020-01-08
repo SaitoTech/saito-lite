@@ -24,6 +24,19 @@ class Profile extends ModTemplate {
 
   respondTo(type) {
 
+    if (type == 'settings-appspace') {
+      let obj = {};
+	  obj.render = function (app, data) {
+	    data.profile = app.modules.returnModule("Profile");
+     	    document.getElementById("settings-appspace").innerHTML += '<a href="">PROFILE PAGE HERE</a>';
+          }
+	  obj.attachEvents = function (app, data) {
+	    data.profile = app.modules.returnModule("Profile");
+     	    //ProfileSettingsAppspace.attachEvents(app, data);
+	  }
+      return obj;
+    }
+
     if (type == 'email-appspace') {
       let obj = {};
 	  obj.render = function (app, data) {

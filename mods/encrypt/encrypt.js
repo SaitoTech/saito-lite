@@ -31,6 +31,7 @@ class Encrypt extends ModTemplate {
 
     this.app            = app;
     this.name           = "Encrypt";
+    this.encrypt        = this.loadEncrypt(app);
 
     return this;
   }
@@ -55,6 +56,26 @@ class Encrypt extends ModTemplate {
      EncryptAppspace.attachEvents(app, data);
   }
 *******/
+
+
+
+  initialize(app) {
+
+    //
+    // try to connect with friends in pending list
+    //
+    if (this.encrypt) {
+      if (this.encrypt.pending) {
+        for (let i = 0; i < this.encrypt.pending.length; i++) {
+	  this.initiate_key_exchange(this.encrypt.pending[i]);
+        }
+        this.encrypt.pending = [];
+	this.saveEncrypt();
+      }
+    }
+
+  }
+
 
 
   //
@@ -100,32 +121,16 @@ class Encrypt extends ModTemplate {
 
     let txmsg = tx.returnMessage();
 
-/****
-    let recipients = [];
-    for (let z = 0; z < tx.transaction.to.length; z++) {
-      recipients.push(tx.transaction.to[z].add);
-    }
-    recipients.push(tx.transaction.from[0].add);
-
-    //
-    // make array unique
-    //
-    recipients = a.filter(function(item, pos) { return a.indexOf(item) == pos; })
-****/
     let remote_address  = tx.transaction.from[0].add;
     let our_address    	= tx.transaction.to[0].add;
     let alice_publickey	= txmsg.alice_publickey;
 
     let fee = tx.transaction.to[0].amt;
 
-console.log("ACCEPT KEY EXCHANGE 1");
-
     let bob              = this.app.crypto.createDiffieHellman();
     let bob_publickey    = bob.getPublicKey(null, "compressed").toString("hex");
     let bob_privatekey   = bob.getPrivateKey(null, "compressed").toString("hex");
     let bob_secret       = this.app.crypto.createDiffieHellmanSecret(bob, Buffer.from(alice_publickey, "hex"));
-
-console.log("ACCEPT KEY EXCHANGE 2");
 
     var newtx = this.app.wallet.createUnsignedTransaction(remote_address, 0, fee);  
     if (newtx == null) { return; }
@@ -135,16 +140,10 @@ console.log("ACCEPT KEY EXCHANGE 2");
     newtx.transaction.msg.bob      = bob_publickey;
     newtx = this.app.wallet.signTransaction(newtx);
 
-console.log("ACCEPT KEY EXCHANGE 3");
-
     this.app.network.propagateTransaction(newtx);
-
-console.log("\n\nUPDATE CRYPTO BY PUBLICKEY: ");
 
     this.app.keys.updateCryptoByPublicKey(remote_address, bob_publickey.toString("hex"), bob_privatekey.toString("hex"), bob_secret.toString("hex"));
     this.sendEvent('encrypt-key-exchange-confirm', { members : [remote_address, our_address] });
-
-console.log("ACCEPT KEY EXCHANGE 4");
 
   }
 
@@ -157,18 +156,10 @@ console.log("ACCEPT KEY EXCHANGE 4");
 
     if (conf == 0) {
 
-console.log("ENCRPYT TX: " + JSON.stringify(tx.transaction));
-
-console.log("encrypt onConfirmation 1: " + tx.transaction.to[0].add + " --- " + app.wallet.returnPublicKey());
-
-
       if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) {
-console.log("encrypt onConfirmation 2!");
 	encrypt_self.sendEvent('encrypt-key-exchange-confirm', { publickey : tx.transaction.to[0].add });
       }
       if (tx.transaction.to[0].add === app.wallet.returnPublicKey()) {
-
-console.log("encrypt onConfirmation 2!");
 
         let sender           = tx.transaction.from[0].add;
         let receiver         = tx.transaction.to[0].add;
@@ -194,8 +185,6 @@ console.log("encrypt onConfirmation 2!");
         //
         if (txmsg.request == "key exchange confirm") {
 
-console.log("encrypt onConfirmation 3!");
-
           let bob_publickey = Buffer.from(txmsg.bob, "hex");;
           var senderkeydata = app.keys.findByPublicKey(sender);
           if (senderkeydata == null) { 
@@ -219,6 +208,27 @@ console.log("encrypt onConfirmation 3!");
       }
     }
   }
+
+
+  saveEncrypt() {
+    this.app.options.encrypt = this.encrypt;
+    this.app.storage.saveOptions();
+  }
+
+
+  loadEncrypt() {
+
+    if (this.app.options.encrypt) { 
+      this.encrypt = this.app.options.encrypt;
+    } else {
+      this.encrypt        = {};
+      this.encrypt.pending = [];
+    }
+
+    return this.encrypt;
+
+  }
+
 }
 
 

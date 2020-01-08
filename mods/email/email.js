@@ -73,13 +73,14 @@ class Email extends ModTemplate {
         tx.transaction.msg.title 	= "Welcome to Saito";
         tx.transaction.msg.message	= `
 
-Saito is an application blockchain. To get started:
+<p>Saito is an application blockchain. To get started:<p>
+<ol>
+<li>Get some free Saito tokens.</li>
 
-1. Get some free Saito tokens.
+<li>Register an email address.</li>
 
-2. Register an email address.
-
-3. Earn more tokens as you use the network!
+<li>Earn more tokens as you use the network!</li>
+</ol>
 
     `;
     tx = this.app.wallet.signTransaction(tx);
@@ -159,7 +160,7 @@ Saito is an application blockchain. To get started:
     // in the long-term, as the email client
     // should just handle emails
     //
-    this.getTokens();
+    // this.getTokens();
 
     //
     //
@@ -274,8 +275,10 @@ console.log("FOUND: " + JSON.stringify(txs));
 
   updateBalance() {
     if (this.browser_active) {
-      let balance = this.app.wallet.returnBalance();
-      document.querySelector('.email-balance').innerHTML = balance + " SAITO";
+      if (document.querySelector('.email-balance')){
+        let balance = this.app.wallet.returnBalance();
+        document.querySelector('.email-balance').innerHTML = balance + " SAITO";
+      }
     }
   }
 

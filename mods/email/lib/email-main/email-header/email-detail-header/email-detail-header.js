@@ -44,9 +44,9 @@ module.exports = EmailDetailHeader = {
         let original = data.email.selected_email.transaction;
         document.getElementById('email-to-address').value = original.from[0].add;
         document.querySelector('.email-title').value = "Re: " + original.msg.title;
-        let body = "\n\n\n --Quoted Text-------------------------\n\n" + original.msg.message;
-        document.querySelector('.email-text').value = body;
-        document.querySelector('.email-text').focus();
+        let body = "<br /><hr /><i>Quoted Text</i><br />" + original.msg.message;
+        document.querySelector('#email-text').innerHTML = body;
+                document.querySelector('.email-text').focus();
       });
 
     document.getElementById('email-detail-forward')
@@ -58,8 +58,8 @@ module.exports = EmailDetailHeader = {
         data.email.main.attachEvents(app, data);
         document.querySelector('.email-title').value = "Re: " + original.msg.title;
         document.querySelector('.email-text').value = original.msg.message;
-        let body = "-------------------------------------";
-        body += "\n\n\nForwarded from: " + original.from[0].add + "\n\n" + original.msg.message;
+        let body = "<br /><hr /><i>Forwarded Text</i><br />";
+        body += "Forwarded from: " + original.from[0].add + "\n\n" + original.msg.message;
         document.querySelector('.email-text').value = body;
         document.getElementById('email-to-address').focus();
       });

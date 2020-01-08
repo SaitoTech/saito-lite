@@ -44,6 +44,7 @@ Generic Style Settings for Modules in the Saito App Suite
     --saito-red-wash: rgb(247, 31, 61, 0.3);
     --saito-cyber-black-wash: rgb(28, 28, 35, 0.3);
     --saito-cyber-black-cut: rgb(28, 28, 35, 0.5);
+    --saito-wu: none;
 }
 
 * {
@@ -103,6 +104,11 @@ hr {
 
 .monospace {
     font-family: monospace, 'Courier New', Courier;
+}
+
+.boldred {
+    color: var(--saito-red);
+    font-weight: bolder;
 }
 
 /* Forms and Inputs */
@@ -429,7 +435,11 @@ label.treated {
 }
 
 #alert-box button {
-    margin: 0;
+    margin: 0 0 0 1em;
+}
+
+#alert-ok {
+    margin: 0 0 0 1em;
 }
 
 #alert-box p {
@@ -495,7 +505,7 @@ label.treated {
     position: absolute;
     right: 0;
     right: -255px;
-    top: 90px;
+    top: 83px;
     color: var(--text-color-normal);
     padding: 15px;
     font-family: visuelt-light;
@@ -503,7 +513,7 @@ label.treated {
     border-radius: 5px 0 0 5px;
     width: 250px;
     font-size: 1.2em;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 87px);
     box-sizing: border-box;
     box-shadow: 0px 0px 3px 1px rgba(170, 170, 170, 0.75);
     background-color: #fcfcfc;
@@ -939,4 +949,158 @@ label.treated {
 
 .welcome-modal-action button:hover {
     border-color: #fff;
+}
+
+/* mobile modals */
+
+@media only screen and (max-width: 900px) {
+    .welcome-modal-wrapper {
+        grid-template-columns: 1fr;
+        width: 100%;
+    }
+    .modal-content-blank {
+        width: 100%;
+    }
+    .welcome-modal-exit .fa-arrow-right {
+        font-size: 100px;
+        bottom: 2px;
+    }
+    .welcome-modal-action {
+        padding: 0.81em;
+    }
+    i.fas.fa-arrow-right {
+        right: -1em;
+    }
+}
+
+/* medium editor */
+
+blockquote {
+    border-left: 2px solid var(--saito-red);
+    padding: 1em;
+}
+
+.medium-toolbar-arrow-under:after {
+    top: 60px;
+    border-color: var(--saito-red) transparent transparent
+}
+
+.medium-toolbar-arrow-over:before {
+    top: -8px;
+    border-color: transparent transparent var(--saito-red)
+}
+
+.medium-editor-toolbar {
+    background-color: var(--saito-red)
+}
+
+.medium-editor-toolbar-input {
+    height: 60px;
+    background: var(--saito-red);
+    color: #fff
+}
+
+.medium-editor-toolbar li {
+    padding: 0
+}
+
+.medium-editor-toolbar li button {
+    border-radius: 0;
+    min-width: 60px;
+    height: 60px;
+    border: none;
+    border-right: 1px solid #fb5e5e;
+    background-color: transparent;
+    color: #fff;
+    -webkit-transition: background-color .2s ease-in, color .2s ease-in;
+    transition: background-color .2s ease-in, color .2s ease-in
+}
+
+.medium-editor-toolbar li button:hover {
+    background-color: #aa1d0a;
+    color: #fff
+}
+
+.medium-editor-toolbar li .medium-editor-button-active {
+    background-color: #aa1d0a;
+    color: #fff
+}
+
+.medium-editor-toolbar li .medium-editor-button-last {
+    border-right: none
+}
+
+.medium-editor-toolbar-form .medium-editor-toolbar-form .medium-editor-toolbar-input::-webkit-input-placeholder {
+    color: #fff;
+    color: rgba(255, 255, 255, .8)
+}
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input:-moz-placeholder {
+    color: #fff;
+    color: rgba(255, 255, 255, .8)
+}
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input::-moz-placeholder {
+    color: #fff;
+    color: rgba(255, 255, 255, .8)
+}
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input:-ms-input-placeholder {
+    color: #fff;
+    color: rgba(255, 255, 255, .8)
+}
+
+.medium-editor-toolbar-form a {
+    color: #fff
+}
+
+.medium-editor-toolbar-anchor-preview {
+    background: var(--saito-red);
+    color: #fff
+}
+
+.medium-editor-placeholder:after {
+    color: #888888
+}
+
+.medium-editor-element {
+    outline: none;
+}
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input {
+    height: 60px;
+    background: #fb5e5e;
+    color: #fff;
+}
+
+.faucet-grid-row {
+    display: grid;
+    grid-gap: 1em;
+    grid-template-columns: 3em 3em auto 3em;
+    cursor: pointer;
+    padding: 1em;
+}
+
+.faucet-grid-row:hover {
+    background-color: #8888;
+}
+
+.faucet-grid-icon i, .faucet-grid-reward, .faucet-grid-completed {
+    font-size: 2em;
+}
+
+.faucet-grid-icon {
+    margin: 0.6em auto;
+}
+
+.faucet-grid-reward {
+    margin: 0.35em auto;
+}
+
+i.fas.fa-check-circle {
+    color: #0a0;
+}
+
+i.fas.fa-times-circle {
+    color: #f22;
 }
