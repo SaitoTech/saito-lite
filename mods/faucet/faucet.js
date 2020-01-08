@@ -66,7 +66,7 @@ class Faucet extends ModTemplate {
     
 
     renderAchievmentRow(row){
-        if(typeof(row.label) != "undefined") {
+        if(typeof(row.label) != "undefined" || typeof(row.icon) != "undefined") {
             document.querySelector(".arcade-sidebar-done").innerHTML += FaucetSidebarRow(row.label, row.icon, row.count);            
         }
     }
@@ -109,32 +109,36 @@ class Faucet extends ModTemplate {
         let obj = {}
           obj.count = x;
         switch (true) {
+            case (x = 0):
+                obj.label = "No transactions yet!";
+                obj.icon = "0tx badge";
+                break;
             case (x = 1):
                 obj.label = "Your first Transaction!";
                 obj.icon = "1tx badge";
                 break;                
-            case (x < 10):
-                obj.label = "Getting There";
+            case (x > 1 && x <= 10):
+                obj.label = x + " transactions!";
                 obj.icon = "1tx badge";
                 break;
-            case (x < 50):
+            case (x > 9 && x <= 50):
                 obj.label = "Multiple Transactions - cool!";
                 obj.icon = "10tx badge";
                 break;
-            case (x < 100):
+            case (x > 50 && x <= 100):
                 obj.label = "50 TX - a real user";
                 obj.icon = "50tx badge";
                 break;
-            case (x < 500):
+            case (x > 100 && x <= 500):
                 obj.label = "100 TX - a regular!";
                 obj.icon = "100tx badge";
                 break;
-            case (x < 1000):
+            case (x > 500 &&x <= 1000):
                 obj.label = "500 TX - hard core!";
                 obj.icon = "500tx badge";
                 break;
         }
-        if (x >= 1000) {
+        if (x > 1000) {
             obj.label = "Master";
             obj.badge = "master badge";
             obj.count = (Math.floor(x / 1000)).toString + "k";
@@ -327,6 +331,8 @@ class Faucet extends ModTemplate {
             let rows = await this.app.storage.queryDatabase(sql, params, "faucet");
             if (rows.length > 0){
                 return rows[0][counted];
+            } else {
+                return 0;
             }
         } catch (err) {
             console.error(err);
