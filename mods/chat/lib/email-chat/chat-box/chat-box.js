@@ -1,8 +1,6 @@
 const ChatBoxTemplate = require('./chat-box.template.js');
 const ChatBoxMessageContainerTemplate = require('./chat-box-message-container.template.js');
 
-const elParser = require('../../../../../lib/helpers/el_parser');
-
 module.exports = ChatBox = {
 
     group: {},
@@ -15,7 +13,8 @@ module.exports = ChatBox = {
         }
 
         if (!document.getElementById(`chat-box-${group.id}`)) {
-          document.querySelector('.chat-manager').append(elParser(ChatBoxTemplate(active_group_name, group.id)));
+          let {el_parser} = data.helpers;
+          document.querySelector('.chat-manager').append(el_parser(ChatBoxTemplate(active_group_name, group.id)));
 
           if (group != null) {
             if (group.messages.length == 0) {
@@ -29,7 +28,7 @@ module.exports = ChatBox = {
               let type = message.publickey == app.wallet.returnPublicKey() ? 'myself' : 'others';
               message.publickey = data.chat.addrController.returnAddressHTML(message.publickey);
               document.getElementById(`chat-box-main-${group.id}`).innerHTML +=
-                ChatBoxMessageContainerTemplate(message, message.sig, type);
+                ChatBoxMessageContainerTemplate(message, message.sig, type, data);
             });
           }
         }
@@ -93,7 +92,7 @@ module.exports = ChatBox = {
       msg.publickey = data.chat.addrController.returnAddressHTML(msg.publickey);
       if (document.getElementById(`chat-box-default-message-${msg.group_id}`)) { chat_box_main.innerHTML = '' }
 
-      chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(msg, msg.sig, msg.type);
+      chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(msg, msg.sig, msg.type, data);
       this.scrollToBottom(msg.group_id);
     },
 

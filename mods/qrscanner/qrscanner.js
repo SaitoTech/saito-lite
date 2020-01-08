@@ -1,9 +1,25 @@
 // const qrcode = require('./lib/scanner');
 const ModTemplate = require('../../lib/templates/modtemplate');
-
-const HeaderDropdownTemplate = require('../../lib/ui/header/header-dropdown.template');
+const Header = require('../../lib/ui/header/header');
 const QRScannerTemplate = require('./qrscanner.template');
 const AddContact = require('./lib/add-contact');
+
+const HeaderDropdownTemplate = (dropdownmods) => {
+  let html = `
+  <div id="modules-dropdown" class="header-dropdown">
+    <ul>
+  `;
+  for (let i = 0; i < dropdownmods.length; i++) {
+  if (dropdownmods[i].returnLink() != null) {
+    html += `<a href="${dropdownmods[i].returnLink()}"><li>${dropdownmods[i].name}</li></a>`;
+  }
+  }
+  html += `
+  </ul>
+  </div>
+`;
+return html;
+}
 
 class QRScanner extends ModTemplate {
   constructor(app) {
@@ -144,8 +160,8 @@ class QRScanner extends ModTemplate {
 
       this.decoder.terminate();
 
-      AddContact.render(this.app, {publickey: msg});
-      AddContact.attachEvents(this.app, {publickey: msg});
+      AddContact.render(this.app, {publickey: msg, header: Header});
+      AddContact.attachEvents(this.app, {publickey: msg, header: Header});
     } else {
       this.sendEvent('qrcode', a);
     }

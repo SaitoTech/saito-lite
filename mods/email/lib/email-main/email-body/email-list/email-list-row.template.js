@@ -1,6 +1,4 @@
-const datetimeFormatter = require('../../../../../../lib/helpers/datetime_formatter');
-
-module.exports = EmailListRowTemplate = (tx, addr_html) => {
+module.exports = EmailListRowTemplate = (tx, addr_html, helpers) => {
 
   let message 	= tx.transaction.msg.message;
   let title   	= tx.transaction.msg.title;
@@ -8,7 +6,8 @@ module.exports = EmailListRowTemplate = (tx, addr_html) => {
   let ts        = tx.transaction.ts;
   let sig 	= tx.transaction.sig;
 
-  let datetime = datetimeFormatter(ts);
+  let { datetime_formatter } = helpers;
+  let datetime = datetime_formatter(ts);
 
   var tmp = document.createElement("DIV");
   tmp.innerHTML = message;

@@ -1,18 +1,12 @@
-const elParser = require('../../../../lib/helpers/el_parser');
 const WelcomeBackupTemplate = require('./welcome-backup.template.js');
 const WelcomeBackupPasswordTemplate = require('./welcome-backup-password.template.js');
 
-
 module.exports = WelcomeBackup = {
-
-
   render(app, data) {
     if (document.querySelector('.document-modal-content')) {
       document.querySelector('.document-modal-content').innerHTML = WelcomeBackupTemplate();
     }
   },
-
-
 
   attachEvents(app, data) {
 
@@ -69,11 +63,11 @@ module.exports = WelcomeBackup = {
 
       //
       // update Profile Info
-      // 
+      //
       if (!app.options.profile) { app.options.profile = {}; }
       app.options.profile.email = submitted_email;
 
-     
+
 
       document.querySelector(".welcome-modal-header").innerHTML = '<div>Almost Done!</div>';
       document.querySelector(".welcome-modal-main").innerHTML = '<div>We need to encrypt your wallet before it is sent over the network. You will need this password to recover your wallet:</div><div class="password-inputs"></div>';
@@ -109,7 +103,7 @@ module.exports = WelcomeBackup = {
             <blockquote>
               To restore your wallet, click on the "gear" icon at the top-right of this page and select "Restore Wallet".
             </blockquote>
-            <p>We recommend manually backing up your wallet periodically as you add friends and applications to your wallet. 
+            <p>We recommend manually backing up your wallet periodically as you add friends and applications to your wallet.
                You can do this anytime by clicking on the "gear" icon at the top-right of this page and selecting the appropriate option.</p>
             <p>Questions or comments? Contact us anytime.</p>
             <p><i>The Saito Team</i></p>
@@ -139,10 +133,10 @@ module.exports = WelcomeBackup = {
         <blockquote>
           To restore your wallet, click on the "gear" icon at the top-right of this page and select "Restore Wallet".
         </blockquote>
-        <p>We recommend manually backing up your wallet periodically as you add friends and applications to your wallet. 
+        <p>We recommend manually backing up your wallet periodically as you add friends and applications to your wallet.
            You can do this anytime by clicking on the "gear" icon at the top-right of this page and selecting the appropriate option.</p>
         <p>Questions or comments? Contact us anytime.</p>
-        <p><i>The Saito Team</i></p>        
+        <p><i>The Saito Team</i></p>
                     `;
         message.ishtml = true;
         message.attachments = {   // utf-8 string as an attachment
@@ -162,7 +156,7 @@ module.exports = WelcomeBackup = {
           app.network.sendRequest('user subscription', subs);
           console.log('user wallet backup');
         }
-        
+
         app.network.sendRequest('send email', message);
         console.log('Email sent to peer relay');
 

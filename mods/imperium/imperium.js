@@ -1,4 +1,3 @@
-const saito = require('../../lib/saito/saito');
 const GameHud = require('../../lib/templates/lib/game-hud/game-hud'); 
 const GameTemplate = require('../../lib/templates/gametemplate');
   
@@ -8,7 +7,7 @@ class Imperium extends GameTemplate {
   
     super(app);
   
-    this.name            = "Red Imperium";
+    this.name            = "Imperium";
     this.slug		 = "imperium";
     this.description     = `Red Imperium is a multi-player space exploration and conquest simulator. Each player controls a unique faction vying for political control of the galaxy in the waning days of a dying Empire.`;
     this.minPlayers      = 2;

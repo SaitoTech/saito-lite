@@ -1,7 +1,4 @@
-const saito = require('../../../../../../lib/saito/saito');
 const EmailFormTemplate = require('./email-form.template.js');
-const EmailFormHeader = require("../../email-header/email-form-header/email-form-header");
-const Big = require('big.js');
 
 module.exports = EmailForm = {
 

@@ -1,10 +1,10 @@
-const saito = require('../../lib/saito/saito.js');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const Header = require('../../lib/ui/header/header');
 const EmailMain = require('./lib/email-main/email-main');
 const EmailSidebar = require('./lib/email-sidebar/email-sidebar');
 
 const AddressController = require('../../lib/ui/menu/address-controller');
+const helpers = require('../../lib/helpers/index');
 
 
 class Email extends ModTemplate {
@@ -126,6 +126,7 @@ class Email extends ModTemplate {
 
     this.uidata.mods	  = this.mods;
     this.uidata.email = this;
+    this.uidata.helpers = helpers;
 
     this.render(app, this.uidata);
 

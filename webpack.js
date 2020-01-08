@@ -63,6 +63,15 @@ webpack({
   resolve: {
     alias: {
       ModTemplate$: path.resolve(__dirname, 'lib/templates/modtemplate.js'),
+      GameTemplate$: path.resolve(__dirname, 'lib/templates/gametemplate.js'),
+      GameHud$: path.resolve(__dirname, 'lib/templates/lib/game-hud/game-hud.js'),
+      GameCardBox$: path.resolve(__dirname, 'lib/templates/lib/game-cardfan/game-cardfan.js'),
+      GameCardFan$: path.resolve(__dirname, 'lib/templates/lib/game-cardbox/game-cardbox.js'),
+      AddressController$: path.resolve(__dirname, 'lib/ui/menu/address-controller.js'),
+      Helpers$: path.resolve(__dirname, 'lib/helpers/index.js'),
+      Header$: path.resolve(__dirname, 'lib/ui/header/header.js'),
+      Modal$: path.resolve(__dirname, 'lib/ui/modal/modal.js'),
+      saito$: path.resolve(__dirname, 'lib/saito/saito.js')
     }
   },
   mode: 'development',

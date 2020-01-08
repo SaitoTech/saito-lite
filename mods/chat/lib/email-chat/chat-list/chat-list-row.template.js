@@ -1,6 +1,4 @@
-const datetimeFormatter = require('../../../../../lib/helpers/datetime_formatter');
-
-module.exports = ChatListRowTemplate = ({name, id, messages=[], identicon}) => {
+module.exports = ChatListRowTemplate = ({name, id, messages=[], identicon}, helpers) => {
 
   let ts = new Date().getTime();
   let msg = '';
@@ -11,7 +9,8 @@ module.exports = ChatListRowTemplate = ({name, id, messages=[], identicon}) => {
     msg = message.message.substring(0, 48);
   }
 
-  let datetime = datetimeFormatter(ts);
+  let {datetime_formatter} = helpers;
+  let datetime = datetime_formatter(ts);
 
   return `
     <div id="${id}" class="chat-row">

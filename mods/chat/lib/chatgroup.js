@@ -1,6 +1,4 @@
-const saito = require('../../../lib/saito/saito.js');
 const ModTemplate = require('../../../lib/templates/modtemplate');
-
 
 class ChatGroup extends ModTemplate {
 

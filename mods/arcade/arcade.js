@@ -1,5 +1,5 @@
 const axios = require('axios');
-const saito = require('../../lib/saito/saito.js');
+const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const ArcadeMain = require('./lib/arcade-main/arcade-main');
 const ArcadeLoader = require('./lib/arcade-main/arcade-loader');

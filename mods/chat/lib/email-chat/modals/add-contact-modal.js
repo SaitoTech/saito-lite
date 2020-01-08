@@ -1,10 +1,10 @@
 const AddContactModalTemplate = require('./add-contact-modal.template');
 const AddContactSuccessModalTemplate = require('./add-contact-modal-success.template');
-const elParser = require('../../../../../lib/helpers/el_parser');
 
 module.exports = AddContactModal = {
   render(app, data) {
-    document.querySelector(".email-chat").append(elParser(AddContactModalTemplate()));
+    let {el_parser} = data.helpers;
+    document.querySelector(".email-chat").append(el_parser(AddContactModalTemplate()));
   },
 
   attachEvents(app, data) {

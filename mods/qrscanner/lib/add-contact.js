@@ -1,12 +1,12 @@
-const Header = require('../../../lib/ui/header/header');
 const AddContactTemplate = require('./add-contact.template');
 const AddContactComplete = require('./add-contact-complete');
 
 module.exports = AddContact = {
   render(app, data) {
     document.querySelector('body').innerHTML = AddContactTemplate(data);
-    Header.render(app, data);
-    Header.attachEvents(app, data);
+
+    data.header.render(app, data);
+    data.header.attachEvents(app, data);
   },
 
   attachEvents(app, data) {

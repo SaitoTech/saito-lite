@@ -1,6 +1,4 @@
 const ArcadeLoaderTemplate = require('./arcade-loader.template');
-const ArcadeLoadedTemplate = require('./arcade-loaded.template');
-const elParser = require('../../../../lib/helpers/el_parser');
 
 module.exports = ArcadeLoader = {
 

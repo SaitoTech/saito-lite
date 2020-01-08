@@ -1,14 +1,13 @@
 const axios = require('axios');
-
 const RegistryModalTemplate = require('./registry-modal.template');
 const RegistrySuccessModalTemplate = require('./registry-modal-success.template');
-const elParser = require('../../../../lib/helpers/el_parser');
 
 module.exports = RegistryModal = {
   render(app, data) {
     if (!document.getElementById('registry-modal')) {
+      let {el_parser} = data.helpers;
       document.querySelector('body').append(
-        elParser(RegistryModalTemplate())
+        el_parser(RegistryModalTemplate())
       )
     }
     document.getElementById('registry-modal').style.display = "block";

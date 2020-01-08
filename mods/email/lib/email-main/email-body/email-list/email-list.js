@@ -1,5 +1,3 @@
-const EmailDetail       = require('../email-detail/email-detail');
-const EmailHeader       = require('../../email-header/email-header');
 const EmailListTemplate = require('./email-list.template.js');
 const EmailListRowTemplate = require('./email-list-row.template.js');
 
@@ -11,7 +9,7 @@ module.exports = EmailList = {
 
       data.email.emails[data.email.emails.active].forEach(tx => {
         document.querySelector('.email-list').innerHTML +=
-            EmailListRowTemplate(tx, data.email.addrController.returnAddressHTML(tx.transaction.from[0].add));
+            EmailListRowTemplate(tx, data.email.addrController.returnAddressHTML(tx.transaction.from[0].add), data.helpers);
       });
 
     },
