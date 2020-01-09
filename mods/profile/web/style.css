@@ -28,7 +28,7 @@
     width: 500px;
 }
 .grid-2 div{
-    padding: 0.5em 0em 0.25em 0;
+    padding: 0.5em 0em 0.2em 0;
     min-width: 120px;
     font-size: 18px;
 }
@@ -37,21 +37,21 @@
      margin-bottom: 1em;
 }
 .registering-saito-address-info{
-    font: normal normal normal 16px/1.4em avenir-lt-w01_35-light1475496;
-    color: #1C1C23;
+    -webkit-font-smoothing: antialiased;
+    font-size: 16px;
     line-height: 1.5em;
     padding: 16px 0 20px 0;
 }
 .registering-email-address-info{
-    font: normal normal normal 16px/1.4em avenir-lt-w01_35-light1475496;
+    -webkit-font-smoothing: antialiased;
+    font-size: 16px;
     line-height: 1.5em;
-    color: #1C1C23;
     padding: 16px 0 20px 0;
 } 
 .upload-avatar-info{
-    font: normal normal normal 16px/1.4em avenir-lt-w01_35-light1475496;
+    -webkit-font-smoothing: antialiased;
+    font-size: 16px;
     line-height: 1.5em;
-    color: #1C1C23;
     padding: 16px 0 20px 0;
 }
 
