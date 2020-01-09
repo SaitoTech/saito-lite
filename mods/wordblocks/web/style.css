@@ -407,8 +407,7 @@ body {
 /** HUD SIDEBAR **/
 
 .hud-menu {
-  display: flex;
-  color: black;
+  display: none;
 }
 
 .hud-menu ul {
@@ -435,6 +434,7 @@ body {
 .hud-menu ul li a {
   text-decoration: none;
   display: block;
+  color: black;
   transition: .3s background-color;
   font-size: 22px;
 }

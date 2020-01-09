@@ -99,6 +99,12 @@
   border-right: 1px solid var(--saito-skyline-grey);
 }
 
+.status-header {
+  display: grid;
+  grid-template-columns: 1em auto;
+  padding: 10px 5px;
+}
+
 .status {
   color: black;
   background-color: whitesmoke;
@@ -107,12 +113,18 @@
   overflow-y: scroll;
 }
 
+.status > span {
+  display: block;
+  margin: 0.5em;
+}
+
 .hud-menu-overlay {
   color: black;
   background-color: whitesmoke;
   width: unset !important;
   border-right: 1px solid var(--saito-skyline-grey);
   overflow-y: scroll;
+  padding: 5px;
 }
 
 .status ul {
@@ -120,8 +132,10 @@
 }
 
 .status ul li {
+  width: 100%;
   line-height: 2em;
   border-top: 1px solid var(--saito-skyline-grey);
+  cursor: pointer;
 }
 
 .status ul li:last-child {
@@ -171,12 +185,11 @@
 .hud-menu ul li a {
   text-decoration: none;
   display: block;
-  transition: .3s background-color;
+  color: black;
 }
 
 .hud-menu ul li a:hover {
-  border-bottom: 2px solid var(--saito-red);
-  border-radius: 0px;
+  background: var(--saito-skyline-grey);
 }
 
 .hud-menu ul li a:active {
@@ -187,13 +200,6 @@
 /** CARDFAN CSS **/
 
 .cardfan {
-  /* margin-left: auto;
-  margin-right: auto;
-  height: 300px;
-  width: auto;
-  margin-top: 50px;
-  width: 1000px; */
-
   position: absolute;
   bottom: 20vh;
 
@@ -219,6 +225,42 @@
 /* .card:nth-child(1n+2) {
   left: -130px;
 } */
+
+/** OPTIONAL MENU CONTAINER **/
+
+#menu-container {}
+
+#menu-container > div {
+  margin: 0.5em;
+  text-align: center;
+}
+
+#menu-container > ul {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+  list-style: none;
+}
+
+#menu-container > ul > li {
+  border-bottom: 1px solid var(--saito-skyline-grey);
+  width: 100%;
+  text-align: center;
+  padding: 5px;
+  cursor: pointer;
+  margin: 0;
+  transition: .3s background-color;
+  transition: .1s color;
+}
+
+#menu-container > ul > li:hover {
+  background: var(--saito-skyline-grey);
+}
+
+#menu-container > ul > li:first-child {
+  border-top: 1px solid var(--saito-skyline-grey);
+}
 
 .cardfan > .card:nth-child(1) {
   -webkit-transform: rotate(-20deg);
