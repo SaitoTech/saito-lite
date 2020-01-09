@@ -23,6 +23,8 @@ class Tutorial extends ModTemplate {
     this.app = app;
     this.name = "Tutorial";
 
+    this.username_registered = 0;
+
     //
     // we want this running in all browsers
     //
@@ -34,6 +36,13 @@ class Tutorial extends ModTemplate {
 
   }
 
+
+
+  initialize(app) {
+    if (app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey())) {
+      this.username_registered = 1;
+    }
+  }
 
 
   initializeHTML(app) {
@@ -84,6 +93,7 @@ class Tutorial extends ModTemplate {
     });
 
     let data = {};
+    data.tutorial = this;
     data.modal = modal;
 
     modal.render("blank");
@@ -102,6 +112,7 @@ class Tutorial extends ModTemplate {
     });
 
     let data = {};
+    data.tutorial = this;
     data.modal = modal;
 
     modal.render("blank");
@@ -120,6 +131,7 @@ class Tutorial extends ModTemplate {
     });
 
     let data = {};
+    data.tutorial = this;
     data.modal = modal;
 
     modal.render("blank");

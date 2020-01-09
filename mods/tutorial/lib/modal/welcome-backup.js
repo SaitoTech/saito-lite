@@ -19,11 +19,11 @@ module.exports = WelcomeBackup = {
       tx.transaction.msg.title = "Anonymous Mode Enabled";
       tx.transaction.msg.message = `
 
-          <p>You have started using Saito without backing up your wallet or registering a username. In anonymous-mode, your address is your public key on the network.</p>
-          <blockquote>Please note: to prevent spammers from abusing the network, we do not give tokens to anonymous accounts by default.
-          <span>So your account will not start automatically earning tokens as you use the network.&nbsp;</span></blockquote>
-          <p><span>To fix this, purchase some tokens from someone in the community or ask a community member to send you some. Once you have funds in your account the network faucet will start working.</span></p>
-          <p>If you would like to backup your wallet manually, you can do so by clicking on the "gear" icon at the top-right of this page. We recommend that you do this periodically to avoid application-layer data loss.</p>      `;
+          <p>You have started using Saito without backing up your wallet or registering a username.</p>
+          <blockquote>Please note: to prevent spammers from abusing the network, Saito does not give tokens to anonymous accounts by default.
+          </blockquote>
+          <p><span>To start earning tokens have someone in the community send you some. Once you have tokens in your account the network faucet will start working.</span></p>
+      `;
 
       tx = app.wallet.signTransaction(tx);
       let emailmod = app.modules.returnModule("Email");
@@ -99,12 +99,10 @@ module.exports = WelcomeBackup = {
         tx.transaction.msg.title = "Wallet Backup Successful";
         tx.transaction.msg.message = `
 
-            <p>You will receive an encrypted copy of your wallet by email shortly.</p>
+            <p>Our server will email you your encrypted wallet backup shortly.</p>
             <blockquote>
-              To restore your wallet, click on the "gear" icon at the top-right of this page and select "Restore Wallet".
+              You can restore your wallet anytime by clicking on Account Settings in the top-right menu.
             </blockquote>
-            <p>We recommend manually backing up your wallet periodically as you add friends and applications to your wallet.
-               You can do this anytime by clicking on the "gear" icon at the top-right of this page and selecting the appropriate option.</p>
             <p>Questions or comments? Contact us anytime.</p>
             <p><i>The Saito Team</i></p>
 
@@ -129,12 +127,9 @@ module.exports = WelcomeBackup = {
         message.subject = 'Saito Wallet Backup';
         message.body = `
 
-        <p>You will receive an encrypted copy of your wallet by email shortly.</p>
-        <blockquote>
-          To restore your wallet, click on the "gear" icon at the top-right of this page and select "Restore Wallet".
-        </blockquote>
-        <p>We recommend manually backing up your wallet periodically as you add friends and applications to your wallet.
-           You can do this anytime by clicking on the "gear" icon at the top-right of this page and selecting the appropriate option.</p>
+        <p>Here is an encrypted copy of your Saito wallet:</p>
+	<p>https://saito.io</p>
+        <p>To restore your wallet, visit any Saito server and click on Account Settings. Please note that you will need your password to decrypt your wallet during the import process. You are the only one who knows this password.</p>
         <p>Questions or comments? Contact us anytime.</p>
         <p><i>The Saito Team</i></p>
                     `;

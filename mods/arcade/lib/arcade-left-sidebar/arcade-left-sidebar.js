@@ -37,14 +37,17 @@ module.exports = ArcadeLeftSidebar = {
       ///////////////////////////////////////////
       let tutorialmod = app.modules.returnModule("Tutorial");
       if (tutorialmod) {
-        if (!app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey())) {
-          try { tutorialmod.registerIdentifierModal(); } catch (err) { };
-          return;
+        if (tutorialmod.username_registered == 0) {
+          if (!app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey())) {
+            try { tutorialmod.registerIdentifierModal(); } catch (err) { };
+            return;
+          }
         }
       }
 
       ArcadeStartGameList.render(app, data);
       ArcadeStartGameList.attachEvents(app, data);
+
     });
 
 
@@ -56,14 +59,15 @@ module.exports = ArcadeLeftSidebar = {
         ///////////////////////////////////////////
         let tutorialmod = app.modules.returnModule("Tutorial");
         if (tutorialmod) {
-          if (!app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey())) {
-            try { tutorialmod.registerIdentifierModal(); } catch (err) { };
-            return;
+	  if (tutorialmod.username_registered != 1) {
+            if (!app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey())) {
+              try { tutorialmod.registerIdentifierModal(); } catch (err) { };
+              return;
+            }
           }
         }
 
         data.active_game = e.currentTarget.id;
-
         ArcadeGameCreate.render(app, data);
         ArcadeGameCreate.attachEvents(app, data);
 
