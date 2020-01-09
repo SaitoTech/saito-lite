@@ -1,7 +1,4 @@
-//const DesignAppspace = require('./lib/email-appspace/design-appspace');
-var saito = require('../../lib/saito/saito');
 var ModTemplate = require('../../lib/templates/modtemplate');
-
 
 class Design extends ModTemplate {
 

@@ -572,7 +572,7 @@ console.log("done webpacking: " + bundle_filename);
       // header
       bash_script_content += 's/..\\/..\\/lib\\/ui\\/header\\/header/Header/g;';
       // modal
-      bash_script_content += 's/..\\/..\\/lib\\/ui\\/modal\\/modal/Modal/g';
+      bash_script_content += 's/..\\/..\\/lib\\/ui\\/modal\\/modal/Modal/g;';
       // helpers
       bash_script_content += 's/..\\/..\\/lib\\/helpers\\/index/Helpers/g;';
 
