@@ -9,6 +9,10 @@ module.exports = RegisterUsername = {
 
   attachEvents(app, data) {
 
+    document.querySelector('.username-registry-input').onclick = () => {
+      document.querySelector('.username-registry-input').setAttribute("placeholder", "");
+    }
+
     document.querySelector('.tutorial-skip').onclick = () => {
       data.modal.destroy();
     }
@@ -25,13 +29,11 @@ module.exports = RegisterUsername = {
             salert("Identifier already in use. Please select another");
             return;
           } else {
-            //salert("Registration Submitted");
             let register_success = app.modules.returnModule('Registry').registerIdentifier(identifier);
             if (register_success) {
-              salert("Success! You are now: " + identifier + "@saito");
-
+	      data.tutorial.username_registered = 1;
+              salert("Registering " + identifier + "@saito");
               data.modal.destroy();
-
             } else {
               salert("That's a bug, Jim.")
             }
