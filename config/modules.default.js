@@ -11,6 +11,7 @@ module.exports = {
     'imperium/imperium.js',
     'myqrcode/myqrcode.js',
     'pandemic/pandemic.js',
+    'profile/profile.js',
     'poker/poker.js',
     'qrscanner/qrscanner.js',
     'relay/relay.js',

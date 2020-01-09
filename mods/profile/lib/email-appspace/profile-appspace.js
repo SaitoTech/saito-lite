@@ -4,7 +4,6 @@ module.exports = ProfileAppspace = {
 
     render(app, data) {
       document.querySelector(".email-appspace").innerHTML = ProfileAppspaceTemplate(app);
-      this.generateQRCode(app.wallet.returnPublicKey());
     },
 
     attachEvents(app, data) {
@@ -44,14 +43,6 @@ alert("Not updating avatar");
 
     uploadNewAvatar(base64str) {
 alert("THIS IS OUR STRING!");
-    },
-
-    generateQRCode(data) {
-      const QRCode = require('../../../../lib/helpers/qrcode');
-      return new QRCode(
-        document.getElementById("qrcode"),
-        data
-      );
     },
 
 }
