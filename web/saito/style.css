@@ -1116,7 +1116,6 @@ i.fas.fa-times-circle {
 .tip .tiptext {
   visibility: hidden;
   color: #fff !important;
-  text-align: center;
   position: absolute;
   z-index: 1;
 }
@@ -1141,6 +1140,12 @@ i.fas.fa-times-circle {
     font-size: 0.8em;
     font-style: italic;
 }
-.tiptext.left {
-    left: 200px;
+
+.tip-left {
+    right: 0px;
+    top: 2em;
+    white-space: nowrap;
+    width: unset;
+    min-width: unset;
+
 }
