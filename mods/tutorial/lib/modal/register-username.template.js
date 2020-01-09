@@ -8,17 +8,16 @@ module.exports = RegisterUsernameTemplate = () => {
         <div class="welcome-modal-main">
           <div style="margin:1em 0">Please register a Saito username before doing this: - which username you would prefer?</div>
           <div style="display:flex;">
-      <input style="width:60%; color:black; font-size:1em; background:#efefef;" id="registry-input" type="text" placeholder="username"><b style="margin: 1em 1em 1em 0;">@saito</b>
+      <input style="width:60%; color:black; background:#efefef;" id="registry-input" type="text" placeholder="username"><b style="margin: 1em 1em 1em 10px;">@saito</b>
       <input style="display: var(--saito-wu);" id="name" name="name" type="text"></input>
       <button id="registry-modal-button" style="clear:both; margin:unset; margin-left:0px; min-width:6em; font-size:0.7em;background:#efefef;border:1px solid var(--saito-red);color: var(--saito-cyber-black);">REGISTER USERNAME</button>
           </div>
         </div>
         <div class="welcome-modal-info">
-          <fieldset style="margin-top:20px" class="welcome-modal-explanation">
-            <div><b>What is a Saito username?</b></div>
-            <div>Having a Saito username lets you send and receive messages using that instead of your publickey. It takes about a minute to register an address. You should do it as some applications need usernames to help keep the network spam-free.</div>
-          </fieldset>
-        </div>
+            <div class="tip"><b>What is a Saito username? <i class="fas fa-info-circle"></i></b>
+            <div class="tiptext">Having a Saito username lets you send and receive messages using that instead of your publickey. It takes about a minute to register an address. You should do it as some applications need usernames to help keep the network spam-free.</div>
+            </div>
+         </div>
       </div>
     </div>
   

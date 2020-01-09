@@ -887,7 +887,7 @@ label.treated {
 
 .welcome-modal-wrapper {
     display: grid;
-    grid-template-columns: 7fr 3fr;
+    grid-template-columns: 6fr 1fr;
     font-family: visuelt-light;
     background-image: url(/saito/img/dreamscape.png);
     background-position: 0em;
@@ -903,7 +903,7 @@ label.treated {
 
 .welcome-modal-exit .fa-arrow-right {
     margin: auto;
-    font-size: 200px;
+    font-size: 120px;
     position: absolute;
     bottom: 0px;
     width: 100%;
@@ -1103,4 +1103,41 @@ i.fas.fa-check-circle {
 
 i.fas.fa-times-circle {
     color: #f22;
+}
+
+/* tool tip */
+
+.tip {
+  position: relative;
+  display: inline-block;
+}
+
+/* tip text */
+.tip .tiptext {
+  visibility: hidden;
+  color: #fff;
+  text-align: center;
+  position: absolute;
+  z-index: 1;
+}
+
+.welcome-modal-info .tip {
+    margin: 1em 0;
+}
+
+.tip:hover .tiptext {
+  visibility: visible;
+}
+
+.tiptext {
+    width: 90%;
+    min-width: 400px;
+    max-width: 750px;
+    padding: 1em;
+    border-radius: 1em;
+    background-color: #444D;
+    border: 1px solid var(--saito-red);
+    line-height: 1.5em;
+    font-size: 0.8em;
+    font-style: italic;
 }

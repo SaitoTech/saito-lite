@@ -15,11 +15,10 @@ module.exports = WelcomeBackupTemplate = () => {
           <div style="font-size:0.9em;height:30px;margin-top:10px"><input type="checkbox" id="signup" style="float:left;width:2em;height:2em;margin-right:10px" checked /> send periodic updates on important network news (max monthly)</div>
         </div>
         <div class="welcome-modal-info">
-          <fieldset style="margin-top:20px" class="welcome-modal-explanation">
-            <div><b>How does this work?</b></div>
-            <div>Your browser will encrypt your wallet using a password you provide and send you a copy by email. You can restore your wallet anytime by providing this encrypted file along with your password.</div>
-          </fieldset>
-        </div>
+            <div class="tip"><b>How does this work? <i class="fas fa-info-circle"></i></b>
+              <div class="tiptext">Your browser will encrypt your wallet using a password you provide and send you a copy by email. You can restore your wallet anytime by providing this encrypted file along with your password.</div>
+            </div>
+          </div>
       </div>
     </div>
   

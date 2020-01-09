@@ -57,6 +57,18 @@ class ExplorerCore extends ModTemplate {
                                 $name,
                                 $module
                                 )`;
+ 			    let ttype = 0;
+			    let tname = "";
+			    let tmodule = "";
+			    if (blk.transactions[i].transaction.msg.type) { 
+			      ttype = blk.transactions[i].transaction.msg.type;
+			    }
+			    if (blk.transactions[i].transaction.msg.name) { 
+			      tname = blk.transactions[i].transaction.msg.name;
+			    }
+			    if (blk.transactions[i].transaction.msg.module) { 
+			      tmodule = blk.transactions[i].transaction.msg.module;
+			    }
                             let params = {
                                 $address: blk.transactions[i].transaction.to[ii].add,
                                 $amt: blk.transactions[i].transaction.to[ii].amt,
@@ -68,13 +80,13 @@ class ExplorerCore extends ModTemplate {
                                 $rebroadcast: 0,
                                 $sig: blk.transactions[i].transaction.sig,
                                 $ts: blk.transactions[i].transaction.ts,
-                                $type: blk.transactions[i].transaction.msg.type,
+                                $type: ttype,
                                 $tx_from: blk.transactions[i].transaction.from[0].add,
                                 $tx_to: blk.transactions[i].transaction.to[ii].add,
-                                $name: blk.transactions[i].transaction.msg.name,
-                                $module: blk.transactions[i].transaction.msg.module
+                                $name: tname,
+                                $module: tmodule
                             }
-			                await this.app.storage.executeDatabase(sql, params, "explorer");
+			    await this.app.storage.executeDatabase(sql, params, "explorer");
                         }
                     }
                 }
