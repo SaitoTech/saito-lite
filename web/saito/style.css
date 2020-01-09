@@ -894,6 +894,14 @@ label.treated {
     background-size: cover;
 }
 
+.welcome-invite-box {
+  display: block;
+  float: left;
+  min-width: 200px;
+  min-height: 120px;
+  padding: 10px;
+  border: 1px solid #444;
+}
 .welcome-modal-exit {
     padding: 1.5em;
     background: #333d;
@@ -917,11 +925,14 @@ label.treated {
 
 .welcome-modal-main {}
 
-.welcome-modal-info {}
+.welcome-modal-info {
+  clear:both;
+}
 
 .welcome-modal-action {
     padding: 1.5em;
     color: var(--saito-skyline-grey);
+    overflow: auto;
 }
 
 .welcome-modal-action p {

@@ -12,11 +12,6 @@ module.exports = AppStoreAppspaceTemplate = () => {
         <input type="text" placeholder="search for apps..." id="appstore-search-box">
     </div>
 
-    <h3>Install a New Application:</h3>
-    <div class="searchbox">
-        <input type="text" placeholder="search for apps..." id="appstore-search-box">
-    </div>
-
   </div>
 
   <div class="appstore-installed-apps"></div>

@@ -6,17 +6,18 @@ module.exports = InviteFriendsTemplate = () => {
       <div class="welcome-modal-left">
         <div class="welcome-modal-header">Invite Friends</h1></div>
         <div class="welcome-modal-main">
-          <div style="margin:1em 0">Adding a friend brings them into the Saito community:</div>
-          <div style="display:flex;">
-      <input style="width:60%; color:black; font-size:1em; background:white;margin:0 1em 0 0;" id="registry-input" type="text" placeholder="email"><b>@saito</b>
-      <button id="registry-email-button" style="clear:both; margin:unset; margin-left:0px; min-width:6em; font-size:0.7em;">REGISTER USERNAME</button>
+          <div style="margin:1em 0">How would you like to add a contact to Saito:</div>
+	  <div style="">
+	    <div class="welcome-invite-box generate-link-box">Generate Link</div>
+	    <div class="welcome-invite-box scanqr-link-box">Scan QR Code</div>
+	    <div class="welcome-invite-box address-link-box">Add by Saito address</div>
+	  </div>
+          <div class="welcome-modal-info">
+            <fieldset style="margin-top:20px" class="welcome-modal-explanation">
+              <div><b>What happens when I invite someone to Saito?</b></div>
+              <div>Users you invite will be given a copy of your javascript bundle (so they are running the same applications). The Saito faucet will give both you and your friends a bonus in Saito tokens for helping spread work.</div>
+            </fieldset>
           </div>
-        </div>
-        <div class="welcome-modal-info">
-          <fieldset style="margin-top:20px" class="welcome-modal-explanation">
-            <div><b>What is a Saito username?</b></div>
-            <div>As a thanks for helping spread the word, the Saito faucet will give both you and your friends a bonus in Saito tokens once they start using the network.</div>
-          </fieldset>
         </div>
       </div>
     </div>
@@ -32,6 +33,17 @@ module.exports = InviteFriendsTemplate = () => {
     </div>
   
   </div>
+
+<style type="text/stylesheet">
+
+.welcome-invite-box {
+  float: left;
+  height: 200px;
+  width: 200px;
+}
+
+
+</style>
 
   `;
 }

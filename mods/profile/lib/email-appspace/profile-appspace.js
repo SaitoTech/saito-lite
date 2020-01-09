@@ -41,8 +41,5 @@ alert("Not updating avatar");
     },
 
 
-    uploadNewAvatar(base64str) {
-alert("THIS IS OUR STRING!");
-    },
 
 }

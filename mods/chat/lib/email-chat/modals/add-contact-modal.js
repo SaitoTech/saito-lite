@@ -2,6 +2,7 @@ const AddContactModalTemplate = require('./add-contact-modal.template');
 const AddContactSuccessModalTemplate = require('./add-contact-modal-success.template');
 
 module.exports = AddContactModal = {
+
   render(app, data) {
     let {el_parser} = data.helpers;
     document.querySelector(".email-chat").append(el_parser(AddContactModalTemplate()));
@@ -10,8 +11,13 @@ module.exports = AddContactModal = {
   attachEvents(app, data) {
     var modal = document.getElementById('add-contact-modal');
 
-    document.getElementById('email-chat-add-contact')
-            .onclick = () => modal.style.display = "block";
+    document.getElementById('email-chat-add-contact').onclick = () => {
+      try {
+        app.modules.returnModule("Tutorial").inviteFriendsModal();
+      } catch (err) {
+        modal.style.display = "block";
+      }
+    }
 
     document.getElementsByClassName("close")[0]
             .onclick = () => modal.style.display = "none";
