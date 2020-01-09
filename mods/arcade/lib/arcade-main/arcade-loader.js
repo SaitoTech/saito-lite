@@ -1,4 +1,5 @@
 const ArcadeLoaderTemplate = require('./arcade-loader.template');
+const ArcadeLoadedTemplate = require('./arcade-loaded.template');
 
 module.exports = ArcadeLoader = {
 

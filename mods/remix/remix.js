@@ -1,5 +1,5 @@
 const ModTemplate = require('../../lib/templates/modtemplate');
-const AdmZip = require('adm-zip');
+// const AdmZip = require('adm-zip');
 
 
 class Remix extends ModTemplate {
@@ -67,30 +67,29 @@ class Remix extends ModTemplate {
 alert("Publishing this application!");
 
 
-   
-      // creating archives
-      var zip = new AdmZip();
-    
-      // add file directly
-      let content = "inner content of the file";
-      zip.addFile("test.txt", Buffer.alloc(content.length, content), "inner content comment here");
-      // add local file
-      //zip.addLocalFile("/home/me/some_picture.png");
-      // get everything as a buffer
-      var willSendthis = zip.toBuffer();
-      // or write everything to disk
-      //zip.writeZip(/*target file name*/"/home/me/files.zip");
+      // creating archives TODO: implement with archiver
+      // var zip = new AdmZip();
+
+      // // add file directly
+      // let content = "inner content of the file";
+      // zip.addFile("test.txt", Buffer.alloc(content.length, content), "inner content comment here");
+      // // add local file
+      // //zip.addLocalFile("/home/me/some_picture.png");
+      // // get everything as a buffer
+      // var willSendthis = zip.toBuffer();
+      // // or write everything to disk
+      // //zip.writeZip(/*target file name*/"/home/me/files.zip");
 
 
-      content    = app.crypto.stringToBase64("Binary data of zip file");
-      var pom = document.createElement('a');
-      pom.setAttribute('type', "hidden");
-      ////pom.setAttribute('href', 'data:application/zip;base64,' + willSendthiscontent);
-      pom.setAttribute('href', 'data:application/zip;base64,' + willSendthis.toString('base64'));
-      pom.setAttribute('download', "mynewmodule");
-      document.body.appendChild(pom);
-      pom.click();
-      pom.remove();
+      // content    = app.crypto.stringToBase64("Binary data of zip file");
+      // var pom = document.createElement('a');
+      // pom.setAttribute('type', "hidden");
+      // ////pom.setAttribute('href', 'data:application/zip;base64,' + willSendthiscontent);
+      // pom.setAttribute('href', 'data:application/zip;base64,' + willSendthis.toString('base64'));
+      // pom.setAttribute('download', "mynewmodule");
+      // document.body.appendChild(pom);
+      // pom.click();
+      // pom.remove();
 
     });
   }

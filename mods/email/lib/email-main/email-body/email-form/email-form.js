@@ -64,7 +64,7 @@ module.exports = EmailForm = {
 
         if (email_amount_elem)  {
             if (email_amount_elem.value > 0) {
-                email_amount = email_amount_elem.value;
+                email_amount = parseFloat(email_amount_elem.value);
             }
         }
 

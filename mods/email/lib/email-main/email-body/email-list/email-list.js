@@ -15,9 +15,6 @@ module.exports = EmailList = {
     },
 
     attachEvents(app, data) {
-
-        data.email.addrController.attachEvents();
-
         Array.from(document.getElementsByClassName('email-message')).forEach(message => {
             message.onclick = (e) => {
                 if (e.srcElement.nodeName == "INPUT") { return; }

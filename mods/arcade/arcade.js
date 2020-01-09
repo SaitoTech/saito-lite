@@ -292,8 +292,7 @@ console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
 
     this.app.network.sendRequestWithCallback(message.request, message.data, (res) => {
       res.rows.forEach(row => this.addWinnerToLeaderboard(row));
-    })
-
+    });
 
   }
 
