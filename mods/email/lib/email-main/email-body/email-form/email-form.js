@@ -45,7 +45,12 @@ module.exports = EmailForm = {
             .addEventListener('click', (e) => {
             document.querySelector('.amount-value').toggleClass("hidden");
             document.querySelector('.amount-label').toggleClass("hidden");
-        })
+        });
+        document.querySelector('#email-form-options span')
+            .addEventListener('click', (e) => {
+            document.querySelector('.amount-value').toggleClass("hidden");
+            document.querySelector('.amount-label').toggleClass("hidden");
+        });
     },
 
 
