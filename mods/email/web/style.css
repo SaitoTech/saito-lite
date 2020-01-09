@@ -129,7 +129,14 @@ hr {
   width: 5.5em;
   float: right;
   margin: 10px;
+  position: absolute;
+  top: 340px;
+  right: 40px;
+  cursor: pointer;
+
 }
+
+
 
 .email-title {
   border-top: 1px solid lightgrey;

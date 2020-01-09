@@ -133,7 +133,7 @@ class Faucet extends ModTemplate {
                 obj.label = "100 TX - a regular!";
                 obj.icon = "100tx badge";
                 break;
-            case (x > 500 &&x <= 1000):
+            case (x > 500 && x <= 1000):
                 obj.label = "500 TX - hard core!";
                 obj.icon = "500tx badge";
                 break;
