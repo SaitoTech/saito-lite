@@ -36,18 +36,14 @@
      border-bottom:none;
      margin-bottom: 1em;
 }
-.registering-saito-address-info{
+.profile-option-info {
     -webkit-font-smoothing: antialiased;
     font-size: 16px;
     line-height: 1.5em;
-    padding: 16px 0 20px 0;
+    padding: 6px 0 20px 0;
+    color: #444;
+    font-size:0.95em;
 }
-.registering-email-address-info{
-    -webkit-font-smoothing: antialiased;
-    font-size: 16px;
-    line-height: 1.5em;
-    padding: 16px 0 20px 0;
-} 
 .upload-avatar-info{
     -webkit-font-smoothing: antialiased;
     font-size: 16px;
