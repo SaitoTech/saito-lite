@@ -1,13 +1,28 @@
 module.exports = SettingsAppspaceTemplate = (app) => {
-  return `
+
+  html = `
   <link rel="stylesheet" href="/settings/style.css">
   <div class="email-appspace-settings">
 
-    <h3>Your Network Settings:</h3>
+    <h3>Activate / Disable Modules:</h3>
   
     <div class="grid-1-2-columns">
 
       <div class="">
+
+	<h3>Installed Applications</h3>
+  `;
+   
+  for (let i = 0; i < app.options.modules.length; i++) {
+    html += `
+	<div class="">
+	  <input type="checkbox" value="modules_mods_${i}" class="modules_mods_checkbox" name="modules_mods_${i}" id="${i}"`;
+    if (app.options.modules[i].active == 1) { html += ' CHECKED'; }
+    html += ` /> ${app.options.modules[i].name}
+	</div>
+   `;
+  }
+  html += `
 
         <div class="grid-2">
 
@@ -37,4 +52,6 @@ module.exports = SettingsAppspaceTemplate = (app) => {
 
   </div>
   `;
+
+  return html;
 }

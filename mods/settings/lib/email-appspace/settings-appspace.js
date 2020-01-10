@@ -31,7 +31,37 @@ module.exports = SettingsAppspace = {
       }
 
 
+      //
+      // install module (button)
+      //
+      Array.from(document.getElementsByClassName("modules_mods_checkbox")).forEach(ckbx => {
 
+        ckbx.onclick = async (e) => {
+
+	  let thisid = parseInt(e.currentTarget.id);
+
+	  if (e.currentTarget.checked == true) { 
+	    let sc = await sconfirm("Reactivate this module?");
+	    if (sc) {
+	      app.options.modules[thisid].active = 1;
+	      app.storage.saveOptions();
+	      window.location = window.location;
+	    } else {
+	      window.location = window.location;
+	    }
+	  } else {
+	    let sc = await sconfirm("Remove this module?");
+	    if (sc) {
+	      app.options.modules[thisid].active = 0;
+	      app.storage.saveOptions();
+	      window.location = window.location;
+	    } else {
+	      window.location = window.location;
+	    }
+	  }
+
+        };
+      });
 
 
 
