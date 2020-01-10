@@ -1,6 +1,7 @@
 module.exports = {
   core: [
     'appstore/appstore.js',
+    'arcade/arcade.js',
     'archive/archive.js',
     'chat/chat.js',
     'chess/chess.js',
@@ -21,11 +22,11 @@ module.exports = {
     'tutorial/tutorial.js',
     'twilight/twilight.js',
     'wordblocks/wordblocks.js',
-    'arcade/arcade.js',
     'website/website.js',
   ],
   lite: [
     'appstore/appstore.js',
+    'arcade/arcade.js',
     'archive/archive.js',
     'chess/chess.js',
     'chat/chat.js',
@@ -45,7 +46,6 @@ module.exports = {
     'twilight/twilight.js',
     'tutorial/tutorial.js',
     'wordblocks/wordblocks.js',
-    'arcade/arcade.js',
     'website/website.js',
   ]
 }

@@ -23,7 +23,7 @@ module.exports = InviteFriends = {
     }
 
     document.querySelector('.scanqr-link-box').onclick = () => {
-      alert("Loading Scanner!");
+      window.location = "/qrscanner";
     }
 
     document.querySelector('.address-link-box').onclick = () => {

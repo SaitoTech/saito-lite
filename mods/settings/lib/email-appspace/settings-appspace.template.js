@@ -10,7 +10,28 @@ module.exports = SettingsAppspaceTemplate = (app) => {
 
       <div class="">
 
-	<h3>Installed Applications</h3>
+	<h3>Wallet Management:</h3>
+
+        <div class="grid-2">
+
+          <div>public key:</div>
+          <div>${app.wallet.returnPublicKey()}</div>
+
+          <div>private key:</div>
+          <div><input id="privatekey" type="password" value="${app.wallet.returnPrivateKey()}" class="password" /></div>
+
+	</div>
+
+        <button id="reset-account-btn" class="reset-account-btn" style="float:left;margin-right:15px;">Reset Account</button>
+        <button id="backup-account-btn" class="backup-account-btn" style="float:left;margin-right:15px;">Manual Backup</button>
+        <button id="restore-account-btn" class="restore-account-btn" style="float:left;margin-right:15px">Restore Account</button>
+
+        </div>
+
+	<h3>Installed Applications:L</h3>
+
+	<div class="">
+
   `;
    
   for (let i = 0; i < app.options.modules.length; i++) {
@@ -23,25 +44,7 @@ module.exports = SettingsAppspaceTemplate = (app) => {
    `;
   }
   html += `
-
-        <div class="grid-2">
-
-          <div>public key:</div>
-          <div>${app.wallet.returnPublicKey()}</div>
-
-          <div>private key:</div>
-          <div><input id="privatekey" type="password" value="${app.wallet.returnPrivateKey()}" class="password" /></div>
-
-          <button id="reset-account-btn" class="reset-account-btn">Reset Account</button>
-	  <div></div>
-
-          <button id="backup-account-btn" class="backup-account-btn">Manual Backup</button>
-	  <div></div>
-
-          <button id="restore-account-btn" class="restore-account-btn">Restore Account</button>
-	  <div></div>
-
-        </div>
+	</div>
 
 	<div id="settings-appspace" class="settings-appspace" style="clear:both;margin-top:20px"></div>
 
