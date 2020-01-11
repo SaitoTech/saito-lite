@@ -9,10 +9,7 @@ module.exports = AppStoreAppspace = {
 
   render(app, data) {
 
-
     document.querySelector(".email-appspace").innerHTML = AppStoreAppspaceTemplate();
-
-
     //
     // fetch modules from appstore
     //
@@ -23,31 +20,25 @@ module.exports = AppStoreAppspace = {
       (res) => {
         if (res.rows != undefined) {
 
-let installed_apps = [];
-if (app.options.modules) {
-  for (let i = 0; i < app.options.modules.length; i++) {
-    installed_apps.push(app.options.modules[i].name);
-  }
-}
-for (let z = 0; z < res.rows.length; z++) {
-  if (installed_apps.includes(res.rows[z].name)) {
-    res.rows.splice(z, 1);
-    z--;
-  }
-}
+	  let installed_apps = [];
+	  if (app.options.modules) {
+	    for (let i = 0; i < app.options.modules.length; i++) {
+	      installed_apps.push(app.options.modules[i].name);
+	    }
+	  }
+	  for (let z = 0; z < res.rows.length; z++) {
+	    if (installed_apps.includes(res.rows[z].name)) {
+	      res.rows.splice(z, 1);
+	      z--;
+	    }
+	  }
 
           this.addCategories(app, data, res.rows);
           this.populateAppsSpace(app, data, res.rows);
         }
-
-      });
-
-    //
-    // load some categories
-    //
-    //document.querySelector(".appstore-browse-list").innerHTML += AppStoreAppCategoryTemplate({});
-
+    });
   },
+
 
   addCategories(app, data, rows) {
     var allCategories = [];
@@ -138,7 +129,6 @@ for (let z = 0; z < res.rows.length; z++) {
 
 
   attachEvents(app, data) {
-
 
     //
     // publish apps
