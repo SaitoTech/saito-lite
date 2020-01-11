@@ -22,6 +22,20 @@ module.exports = AppStoreAppspace = {
       null,
       (res) => {
         if (res.rows != undefined) {
+
+let installed_apps = [];
+if (app.options.modules) {
+  for (let i = 0; i < app.options.modules.length; i++) {
+    installed_apps.push(app.options.modules[i].name);
+  }
+}
+for (let z = 0; z < res.rows.length; z++) {
+  if (installed_apps.includes(res.rows[z].name)) {
+    res.rows.splice(z, 1);
+    z--;
+  }
+}
+
           this.addCategories(app, data, res.rows);
           this.populateAppsSpace(app, data, res.rows);
         }
@@ -87,19 +101,19 @@ module.exports = AppStoreAppspace = {
 
   populateAppsSpace(app, data, rows, categories = "") {
 
-  document.querySelector(".appstore-app-list").innerHTML = "";
-  for (let i = 0; i < rows.length; i++) {
-    if (!categories || categories.some(item => rows[i].categories.includes(item))) {
-      if (rows[i].categories) {
-        rows[i].categoriesHTML = rows[i].categories.split(" ").map((category) => {
-          return `<div class="category">${category}</div>`;
-        }).join("");
+    document.querySelector(".appstore-app-list").innerHTML = "";
+    for (let i = 0; i < rows.length; i++) {
+      if (!categories || categories.some(item => rows[i].categories.includes(item))) {
+        if (rows[i].categories) {
+          rows[i].categoriesHTML = rows[i].categories.split(" ").map((category) => {
+            return `<div class="category">${category}</div>`;
+          }).join("");
+        }
+        document.querySelector(".appstore-app-list").innerHTML += AppStoreAppBoxTemplate(app, rows[i]);
       }
-      document.querySelector(".appstore-app-list").innerHTML += AppStoreAppBoxTemplate(app, rows[i]);
     }
-  }
 
-  this.attachEventsToModules(app, data);
+    this.attachEventsToModules(app, data);
   
   },
 

@@ -10,8 +10,8 @@ class Roles extends ModTemplate {
     this.app            = app;
     this.name           = "Roles";
 
-    this.roles		= ['admin','staff','doctor'];
-    this.groups 	= ['Ministry of Health','Hospital','Department'];
+    this.roles		= [];
+    this.groups 	= [];
 
     return this;
 
@@ -20,18 +20,13 @@ class Roles extends ModTemplate {
 
 
   initializeHTML(app) {
-
     console.log("###########################");
     console.log("#### HEADLESS WEB APP #####");
     console.log("###########################");
-    //alert("WE HAVE DONE SOMETHING ON THE BACKEND!");
-    //window.location = '/email';
-
   }
 
+
   initialize(app) {
-
-
 
 /**** EXAMPLE OF HANDLING LINKS ***
     //

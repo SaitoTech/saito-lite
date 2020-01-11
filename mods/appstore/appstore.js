@@ -665,35 +665,6 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
     this.app.network.propagateTransaction(newtx);
 
 
-
-
-
-
-/***** NOW HANDLED BY BASH SCRIPT ****
-    //
-    // delete mods in bundler/mods
-    //
-    module_paths.forEach(modpath => {
-      if (!modpath) { return; }
-      let mod_dir = modpath.split('/')[3];
-      let full_mod_dir = path.resolve(__dirname, `bundler/mods/${mod_dir}`);
-      let files = getFiles(full_mod_dir);
-      files.forEach(file_path => fs.unlinkSync(file_path));
-      deleteDirs(full_mod_dir);
-      fs.rmdirSync(path.resolve(__dirname, `bundler/mods/${mod_dir}`));
-    });
-
-    //
-    // delete files in root bundler
-    try {
-      let bundler_dir = path.resolve(__dirname, `../../bundler`);
-      let files = getFiles(bundler_dir);
-      files.forEach(file_path => fs.unlink(file_path));
-    } catch(err) {
-      console.log(err);
-    }
-***** NOW HANDLED BY BASH SCRIPT ****/
-
     return bundle_filename;
   }
 
@@ -711,8 +682,8 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
           data.bundle_appstore_publickey = tx.transaction.from[0].add;
           data.appstore_bundle = txmsg.bundle;
 
-      AppStoreBundleConfirm.render(this.app, data);
-      AppStoreBundleConfirm.attachEvents(this.app, data);
+    AppStoreBundleConfirm.render(this.app, data);
+    AppStoreBundleConfirm.attachEvents(this.app, data);
 
   }
 
