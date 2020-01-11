@@ -31,6 +31,9 @@ class Email extends ModTemplate {
     this.active 		= "email_list";
     this.header_title		= "";
 
+    this.description = "A messaging tool and control panel for Saito";
+    this.categories  = "Messaging Admin Productivity Utilities";
+
     this.selected_email		= null;
 
     this.appspace		= 0;	// print email-body with appspace

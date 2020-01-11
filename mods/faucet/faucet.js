@@ -13,7 +13,7 @@ class Faucet extends ModTemplate {
 
       super(app);
 
-      this.name = "Faucet";
+        this.name = "Rewards";
 
       this.initial = 10;
       this.payoutRatio = 0.75;

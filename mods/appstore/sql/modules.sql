@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS modules (
   id INTEGER,
   name TEXT,
   description TEXT,
+  categories TEXT,
   version TEXT,
   publickey TEXT,
   unixtime INTEGER,
