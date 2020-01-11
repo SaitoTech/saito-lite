@@ -1,7 +1,4 @@
 const CalendarMainTemplate 	= require('./calendar-main.template.js');
-/** 
-const ScheduleListSidebar 	= require('./schedule-list-sidebar.js');
-**/
 
 
 module.exports = CalendarMain = {
@@ -16,60 +13,69 @@ module.exports = CalendarMain = {
     },
 
 
-    renderDayCalendar(renderDayInfo, app, data) {
-/***
-      document.querySelector(".calendar-main").innerHTML = CalendarMainTemplate();
+    renderDayCalendar(app, data, renderdaydate) {
+
+      //
+      // convert appoints to working format
+      //
+      let uevents = [];
+      for (let i = 0; i < data.calendar.appointments.length; i++) {
+	uevents.push(data.calendar.convertTransactionToEvent(data.calendar.appointments[i]));
+      }
+
       var calendarEl = document.getElementById('calendar-box');
+      calendarEl.innerHTML = "";
       var calendar = new FullCalendar.Calendar(calendarEl, {
         plugins: [ 'list' ],
-        defaultView: 'listWeek',
+        defaultView: 'listDay',
         views: {
           listDay: { buttonText: 'list day' },
           listWeek: { buttonText: 'list week' },
           listMonth: { buttonText: 'list month' },
         },
-        events: [],
+        events: uevents,
+
 	noEventsMessage: "No events to display",
+
       });
+
+
       calendar.render();
 
-      ScheduleListSidebar.render(app, data);
-      ScheduleListSidebar.attachEvents(app, data);
-***/
+//      CalendarAddEventSidebar.render(app, data);
+//      CalendarAddEventSidebar.attachEvents(app, data);
+
     },
 
 
     renderMonthCalendar(app, data) {
+
+      //
+      // convert appoints to working format
+      //
+      let uevents = [];
+      for (let i = 0; i < data.calendar.appointments.length; i++) {
+	uevents.push(data.calendar.convertTransactionToEvent(data.calendar.appointments[i]));
+      }
+
+console.log("APPOINTMENTS " + JSON.stringify(uevents));
       document.querySelector(".calendar-main").innerHTML = CalendarMainTemplate();
       var calendarEl = document.getElementById('calendar-box');
+      calendarEl.innerHTML = "";
       var calendar = new FullCalendar.Calendar(calendarEl, {
 
         plugins: [ 'dayGrid' ],
 
-	events: [
-   	  {
-      	    	title: 'Meeting',
-      		start: '2020-01-15T16:30:00',
-      		extendedProps: {
- 	      		status: 'done'
-          	}
-          },
-          {
-      		title: 'Birthday Party',
-      		start: '2020-01-16T10:00:00',
-      		backgroundColor: 'green',
-      		borderColor: 'green'
-    	  },
-        ],
+	events: uevents,
 
   	dayRender:(dayRenderInfo) => {
           dayRenderInfo.el.innerHTML = '<div class="calendar-day"><div class="calendar-day-appointment-num"></div></div>';
 	  console.log("DAY INFO: " + dayRenderInfo.date);
 	  dayRenderInfo.el.onclick = () => {
 
-alert("Clicked!");
+alert("Clicked: " + dayRenderInfo.date);
 
-            //this.renderDayCalendar(app, data, dayRenderInfo.date);
+            this.renderDayCalendar(app, data, dayRenderInfo.date);
 
           }
   	},
