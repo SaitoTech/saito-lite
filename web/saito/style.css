@@ -1027,7 +1027,6 @@ label.treated {
 .welcome-modal-action {
   padding: 1.5em;
   color: var(--saito-skyline-grey);
-  overflow: auto;
 }
 
 .welcome-modal-action p {
