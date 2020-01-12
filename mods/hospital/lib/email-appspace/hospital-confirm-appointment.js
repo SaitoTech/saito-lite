@@ -22,6 +22,13 @@ module.exports = HospitalConfirmAppointment = {
       document.querySelector('.confirm')
         .addEventListener('click', (e) => {
 
+	  //
+	  // create transaction
+	  //
+	  let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
+	      newtx.transaction.msg.module = "Booking";
+
+
           HospitalAwaitConfirmation.render(app, data);
           HospitalAwaitConfirmation.attachEvents(app, data);
 

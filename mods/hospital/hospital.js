@@ -24,7 +24,6 @@ class Hospital extends ModTemplate {
 	  obj.attachEvents = this.attachEventsEmail;
       return obj;
     }
-
     return null;
   }
   renderEmail(app, data) {
@@ -35,8 +34,6 @@ class Hospital extends ModTemplate {
      data.hospital = app.modules.returnModule("Hospital");;
      HospitalAppspace.attachEvents(app, data);
   }
-
-
 
 
 

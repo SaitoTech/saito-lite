@@ -3,7 +3,7 @@ module.exports = HospitalConfirmAppointmentTemplate = () => {
   <link rel="stylesheet" href="/hospital/css/email-appspace.css">
 
   <h3>Confirm Appointment</h3>
-<div class="confirm-appointment-box">
+  <div class="confirm-appointment-box">
   
   <ul class="hospital-appointments-box confirm-appointments">
     <li class="appointment">
@@ -13,20 +13,18 @@ module.exports = HospitalConfirmAppointmentTemplate = () => {
     </li>
   </ul>
 
-  <h4>Please confirm your 
+    N.B.: Clicking submit makes the booking request into the system. If you have
+    used this system before, bookings are usually automatic -- you will receive
+    confirmation within a few minutes.</h4>
 
-  N.B.: Clicking submit makes the booking request into the system. If you have
-  used this system before, bookings are usually automatic -- you will receive
-  confirmation within a few minutes.</h4>
-
-  <h4>Is this information correct?</h4>
+    <h4>Is this information correct?</h4>
   
-  <div class="confirm-btn-box">
-    <button class="reset sub"><i class="fas fa-redo"></i>Reset</button>
-    <button class="confirm sub" id="confirm-btn"><i class="far fa-calendar-check"></i>Confirm</button>
-   </div>
+    <div class="confirm-btn-box">
+      <button class="reselect sub"><i class="fas fa-redo"></i>Reset</button>
+      <button class="confirm sub" id="confirm-btn"><i class="far fa-calendar-check"></i>Confirm</button>
+    </div>
       
-</div>
+  </div>
   
     `;
 }
