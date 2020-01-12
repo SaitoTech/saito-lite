@@ -11,11 +11,11 @@ module.exports = AppStoreAppBoxTemplate = (app, approw) => {
         <div class="appstore-app-item-image" style="background-image: url(${appimg})"></div>
         <div class="appstore-app-list-details">
           <div class="appstore-app-item-name">${approw.name}</div>
-          <div class="appstore-app-item-categories">${approw.categoriesHTML}</div>
-          <div class="appstore-app-item-description">${approw.description}</div>
           <div class="appstore-app-item-publisher grid-2"><div>Publisher</div><div>${approw.publickey}</div></div>
           <button class="appstore-app-install-btn" id="${base64msg}">install</button>
         </div>
+        <div class="appstore-app-item-categories">${approw.categoriesHTML}</div>
+        <div class="appstore-app-item-description">${approw.description}</div>
       </div>
   `;
 }

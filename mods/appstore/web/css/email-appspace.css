@@ -28,14 +28,14 @@
   grid-template-columns: 1fr 1fr;
 }
 
-.appstore-app-list-details {
-  height: 150px;
-  display: grid;
-  grid-template-rows: 24px auto 24px 36px;
-}
+.appstore-app-list-details {}
 
 .appstore-app-item-description {
   overflow-y: auto;
+  grid-column: 1 / span 2;
+  height: 2em;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .appstore-app-item {
@@ -45,6 +45,15 @@
   cursor: pointer;
   border: 1px solid var(--saito-red);
   padding: 10px;
+}
+
+.appstore-app-item-categories {
+  grid-column: 1 / span 2;
+}
+
+.appstore-app-item-categories .category {
+  display: inline-block;
+  margin: 0 5px 0 0;
 }
 
 .appstore-app-item-image {
@@ -70,9 +79,20 @@
 }
 
 .appstore-app-item-publisher {
+  margin: 0;
+}
+
+.appstore-app-item-publisher div {
   text-overflow: ellipsis;
   overflow: hidden;
-  max-width: 150px;
+}
+
+.category {
+  border: 1px solid var(--saito-red);
+  padding: 5px 10px 3px;
+  border-radius: 20px;
+  color: #fff;
+  background: var(--saito-red);
 }
 
 .appstore-app-install-btn {
