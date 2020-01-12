@@ -4,7 +4,7 @@ const CalendarSidebarAddAppointmentTemplate 	= require('./calendar-sidebar-add-a
 module.exports = CalendarSidebar = {
 
     render(app, data) {
-      document.querySelector(".calendar-sidebar").innerHTML = CalendarSidebarTemplate();
+      document.querySelector(".calendar-sidebar").innerHTML = CalendarSidebarTemplate(app);
     },
 
 
