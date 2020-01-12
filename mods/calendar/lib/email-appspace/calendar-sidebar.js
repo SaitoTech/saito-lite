@@ -11,29 +11,24 @@ module.exports = CalendarSidebar = {
     attachEvents(app, data) {
 
       document.querySelector('.calendar-sidebar-select').addEventListener('change',(e) =>{
-        alert(e.currentTarget.value);
-      });
 
-      document.querySelector('.calendar-sidebar-new-appointment-button').addEventListener('click',(e) =>{
+        if (e.currentTarget.value == "all") { 
+	  document.querySelector('.calendar-sidebar-add-appointment').innerHTML = '';
+          return; 
+	} else {
 
-        let adiv = document.querySelector('.calendar-sidebar-add-appointment');
-	adiv.innerHTML = CalendarSidebarAddAppointmentTemplate(app);
+	  let mods = app.modules.respondTo("calendar-event");
+          for (let i = 0; i < mods.length; i++) {
+	    let modobj = mods[i].respondTo("calendar-event");
+	    if (modobj.type == e.currentTarget.value) {
+	      modobj.render(app, data);
+	      modobj.attachEvents(app, data);
+	      return;
+	    }
+          }
 
-        document.querySelector('.calendar-sidebar-submit-new-appointment-button').addEventListener('click',(e) =>{
-
-	  alert("adding new appointment");
-
-	  let evttype  = "event";
-          let evtstart = document.querySelector('.add-appointment-start').value;	
-          let evtend   = document.querySelector('.add-appointment-end').value;	
-          let evttitle = document.querySelector('.add-appointment-title').value;	
-          let evttext  = document.querySelector('.add-appointment-text').value;	
-
-	  let event_end   = "2020-01-12T13:00:00";
-	  data.calendar.addEvent("event",evtstart, evtend, evttitle, evttext);
-
-	});
-
+        }
+        
       });
     },
 

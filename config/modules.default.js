@@ -1,6 +1,7 @@
 module.exports = {
   core: [
-    'alaunius/appointments.js',
+    'appointments/appointments.js',
+    'hospital/hospital.js',
     'appstore/appstore.js',
     'arcade/arcade.js',
     'archive/archive.js',
@@ -27,7 +28,8 @@ module.exports = {
     'website/website.js',
   ],
   lite: [
-    'alaunius/appointments.js',
+    'appointments/appointments.js',
+    'hospital/hospital.js',
     'appstore/appstore.js',
     'arcade/arcade.js',
     'archive/archive.js',
