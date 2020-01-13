@@ -1,7 +1,6 @@
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const HospitalAppspace = require('./lib/email-appspace/hospital-appspace');
-const AdminAppspace = require('./lib/alaunius-appspace/admin-appspace');
 
 class Hospital extends ModTemplate {
 
@@ -12,9 +11,10 @@ class Hospital extends ModTemplate {
     this.name           = "Hospital";
     this.db_tables.push("hospitals JOIN appointments");
 
+    this.admin_pkey     = app.wallet.returnPublicKey();
+
     return this;
   }
-
 
 
   respondTo(type) {
@@ -34,9 +34,6 @@ class Hospital extends ModTemplate {
      data.hospital = app.modules.returnModule("Hospital");;
      HospitalAppspace.attachEvents(app, data);
   }
-
-
-
 
 
   async installModule(app) {
@@ -93,10 +90,146 @@ class Hospital extends ModTemplate {
 
 
 
+  initialize(app) {
+
+    if (this.app.BROWSER == 0) { return; }
+
+    // 
+    // url params
+    //
+    let decision = app.browser.returnURLParameter("decision");
+    let booking_id = app.browser.returnURLParameter("booking_id");
+
+console.log("DECISION: " + decision + " --- " + booking_id);
+
+    if (decision === "approve" && booking_id !== "") {
+console.log("MAKING APPOINTMENT CONFIRMATION!");
+      this.makeAppointmentConfirmation();
+    }
+
+  }
+
+
+
+
+  makeAppointmentRequest(appointment) {
+
+    //
+    // hospital_id
+    //
+    let hid = appointment.hospital_id.substring(24);
+
+    //
+    // create transaction
+    //
+    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
+        newtx.transaction.msg.module = this.name;
+        newtx.transaction.msg.request = "Booking Request";
+        newtx.transaction.msg.hid = hid;
+        newtx.transaction.msg.slot = appointment.slot_selected;
+    newtx = this.app.wallet.signTransaction(newtx);
+    this.app.network.propagateTransaction(newtx);
+
+
+    //
+    // create email
+    //
+        newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+        newtx.transaction.msg.module = "Email";
+        newtx.transaction.msg.title = "Hospital Booking Request";
+        newtx.transaction.msg.message = "You have requested an appointment at a certain hospital at a certain time. The hospital has received your request and will notify you shortly if the booking is successful.";
+    newtx = this.app.wallet.signTransaction(newtx);
+    this.app.network.propagateTransaction(newtx);
+
+  }
+
+
+  receiveAppointmentRequest() {
+
+    //
+    // create email
+    //
+    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+        newtx.transaction.msg.module = "Email";
+        newtx.transaction.msg.title = "ACTION REQUIRED: Hospital Booking Requested";
+        newtx.transaction.msg.message = "<a href='/email?decision=approve&booking_id=512'>click here to approve</a>";
+    newtx = this.app.wallet.signTransaction(newtx);
+    this.app.network.propagateTransaction(newtx);
+
+  }
+
+  makeAppointmentConfirmation(appointment) {
+
+    //
+    // create transaction
+    //
+    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
+        newtx.transaction.msg.module = this.name;
+        newtx.transaction.msg.request = "Booking Confirmation";
+        newtx.transaction.msg.hid = 31423;
+        newtx.transaction.msg.slot = 123123;
+    newtx = this.app.wallet.signTransaction(newtx);
+    this.app.network.propagateTransaction(newtx);
+
+alert("Propagating Booking COnfirmation!");
+    //
+    // create email
+    //
+        newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+        newtx.transaction.msg.module = "Email";
+        newtx.transaction.msg.title = "You have confirmed an appointment as administrator";
+        newtx.transaction.msg.message = "You have requested an appointment at a certain hospital at a certain time. The hospital has received your request and will notify you shortly if the booking is successful.";
+    newtx = this.app.wallet.signTransaction(newtx);
+    this.app.network.propagateTransaction(newtx);
+alert("And emailed myself!");
+  }
+
+
+  receiveAppointmentConfirmation() {
+
+    //
+    // create email
+    //
+        newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+        newtx.transaction.msg.module = "Email";
+        newtx.transaction.msg.title = "YOUR APPOINTMENT IS CONFIRMED!";
+        newtx.transaction.msg.message = "The hospital administrator has approved your booking. Please bring this application to the hospital.";
+    newtx = this.app.wallet.signTransaction(newtx);
+    this.app.network.propagateTransaction(newtx);
+
+
+  }
+
+  onConfirmation(blk, tx, conf, app) {
+
+    let txmsg = tx.returnMessage();
+    let email = app.modules.returnModule("Email");
+
+    if (conf == 0) {
+
+      //
+      // administrator receives transaction
+      //
+      if (tx.isTo(this.admin_pkey)) {
+	if (txmsg.request === "Booking Request") {
+	  this.receiveAppointmentRequest(tx);
+	}
+      }
+      if (tx.isTo(app.wallet.returnPublicKey())) {
+        if (txmsg.request === "Booking Confirmation") {
+	  this.receiveAppointmentConfirmation(tx);
+	}
+      }
+    }
+  }
+
+
   saveProfile() {
     this.app.options.profile = this.profile;
     this.app.storage.saveOptions();
   }
+
+
   newProfile() {
 
     let profile = {};
@@ -117,10 +250,11 @@ class Hospital extends ModTemplate {
 
   }
 
+
+
 }
 
-
-
-
 module.exports = Hospital;
+
+
 

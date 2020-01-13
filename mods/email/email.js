@@ -207,10 +207,6 @@ console.log("FOUND: " + JSON.stringify(txs));
     if (conf == 0) {
 
       let publickey = app.wallet.returnPublicKey();
-      //
-      // if the email is from ourselves, ignore
-      //
-      if (tx.isFrom(publickey)) return;
 
       //
       // if transaction is for me

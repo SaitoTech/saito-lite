@@ -1,5 +1,5 @@
 const HospitalAwaitConfirmationTemplate = require('./hospital-await-confirmation.template.js');
-let HospitalAppspace		 	= require('./hospital-appspace.js');
+const HospitalAppspace		 	= require('./hospital-appspace.js');
 
 
 module.exports = HospitalConfirmAppointment = {
