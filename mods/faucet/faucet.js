@@ -205,7 +205,7 @@ class Faucet extends ModTemplate {
                 let params = {
                   $address: tx.transaction.from[ii].add
                 };
-                let rows = await this.app.storage.queryDatabase(sql, params, "faucet");
+                let rows = await this.app.storage.queryDatabase(sql, params, "rewards");
                 if (rows.length == 0) {
                   this.addUser(tx, ii);
                 } else {
@@ -258,7 +258,7 @@ class Faucet extends ModTemplate {
         }
         sql = `UPDATE users SET last_payout_ts = $last_payout_ts, tx_count = $tx_count, games_finished = $games_finished, game_tx_count = $game_tx_count, latest_tx = $latest_tx, total_spend = $total_spend WHERE address = $address`
       }
-      let resp = await this.app.storage.executeDatabase(sql, params, "faucet");
+      let resp = await this.app.storage.executeDatabase(sql, params, "rewards");
 
       if (payout) {
         this.makePayout(row.address, newPayout);
@@ -287,7 +287,7 @@ class Faucet extends ModTemplate {
         let sql = "INSERT OR IGNORE INTO users (address, tx_count, games_finished, game_tx_count, first_tx, latest_tx, last_payout_ts, last_payout_amt, total_payout, total_spend, referer) VALUES ('" + tx.transaction.from[ii].add + "', " + 1 + ", " + 0 + ", " + isGame + ", " + tx.transaction.ts + ", " + tx.transaction.ts + ", " + tx.transaction.ts + ", " + this.initial + ", " + this.initial + ", " + Number(tx.fees_total) + ", '');";
         params = {};
 
-        await this.app.storage.executeDatabase(sql, params, "faucet");
+        await this.app.storage.executeDatabase(sql, params, "rewards");
 
         //initial funds sent
         //this.makePayout(tx.transaction.from[ii].add, this.initial);
@@ -306,7 +306,7 @@ class Faucet extends ModTemplate {
           $time: time
       }
       try {
-        await this.app.storage.executeDatabase(sql, params, "faucet");
+        await this.app.storage.executeDatabase(sql, params, "rewards");
       } catch (err) {
         console.error(err);
       }
@@ -320,7 +320,7 @@ class Faucet extends ModTemplate {
       }
 
       try {
-        let rows = await this.app.storage.queryDatabase(sql, params, "faucet");
+        let rows = await this.app.storage.queryDatabase(sql, params, "rewards");
         if (rows.length > 0){
           return rows[0][counted];
         } else {
@@ -344,7 +344,7 @@ class Faucet extends ModTemplate {
       }
 
       try {
-        let rows = await this.app.storage.queryDatabase(sql, params, "faucet");
+        let rows = await this.app.storage.queryDatabase(sql, params, "rewards");
         return rows;
       } catch (err) {
         console.error(err);
@@ -359,7 +359,7 @@ class Faucet extends ModTemplate {
       }
 
       try {
-        let rows = await this.app.storage.queryDatabase(sql, params, "faucet");
+        let rows = await this.app.storage.queryDatabase(sql, params, "rewards");
         if (rows.length >= 1) {
           return true;
         } else {
