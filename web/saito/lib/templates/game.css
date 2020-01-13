@@ -58,6 +58,11 @@
 
 }
 
+/** USED WHEN TOGGLING **/
+.hud-hidden {
+  height: 40px;
+}
+
 
 /** HUD HEADER **/
 
@@ -327,6 +332,10 @@
     height: 50vh;
   }
 
+  .hud-hidden {
+    height: 8vh;
+  }
+
   .hud-header {
     grid-area: hud-header;
     flex-flow: row;
@@ -385,7 +394,8 @@
   }
 
   .log {
-    height: 1em;
+    /* height: 1em; */
+    height: 3vh;
     /* bottom: 0; */
     padding: 0.2rem;
     /* position: fixed; */
@@ -497,9 +507,4 @@
     width: 0px;
     background: transparent;
   }
-}
-
-/** USED WHEN TOGGLING **/
-.hud-hidden {
-  height: 40px;
 }
