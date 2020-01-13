@@ -4,9 +4,9 @@ module.exports = AppstoreAppDetails = {
 
   render(app, data) {
     if (!document.querySelector('.appstore-appspace-install-overlay')) {
-      document.querySelector('.email-appspace').innerHTML += AppstoreAppDetailsTemplate();
+      document.querySelector('body').innerHTML += AppstoreAppDetailsTemplate();
     }
-    document.querySelector('.appspace-appstore-container').style.display = "none";
+    //document.querySelector('.appspace-appstore-container').style.display = "none";
     document.querySelector('.appstore-app-install-overlay').style.display = "block";
 
     document.querySelector('.appstore-app-install-name').innerHTML = data.module.name;

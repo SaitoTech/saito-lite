@@ -94,7 +94,7 @@ class AppStore extends ModTemplate {
 
     if (message.request === "appstore load modules") {
 
-      let sql = "SELECT name, description, version, publickey, unixtime, bid, bsh FROM modules WHERE featured = 1";
+      let sql = "SELECT name, description, version, categories, publickey, unixtime, bid, bsh FROM modules WHERE featured = 1";
       let params = {};
       let rows = await this.app.storage.queryDatabase(sql, params, message.data.dbname);
 
@@ -112,7 +112,7 @@ class AppStore extends ModTemplate {
       let squery1 = "%"+message.data+"%";
       let squery2 = message.data;
 
-      let sql = "SELECT name, description, version, publickey, unixtime, bid, bsh FROM modules WHERE description LIKE $squery1 OR name = $squery2";
+      let sql = "SELECT name, description, version, categories, publickey, unixtime, bid, bsh FROM modules WHERE description LIKE $squery1 OR name = $squery2";
       let params = {
 	$squery1	: squery1  ,
 	$squery2	: squery2  ,
@@ -286,6 +286,7 @@ console.log("i am going to produce a bundle...");
 
     let name = 'Unknown Module';
     let description = 'unknown';
+    let categories = 'unknown';
 
     try {
       const directory = await unzipper.Open.file(path.resolve(__dirname, zip_path));
@@ -298,10 +299,12 @@ console.log("i am going to produce a bundle...");
         // get name and description
         let getNameRegex = RegExp('[\n\r]*this.name\s*([^\n\r]*)');
         let getDescriptionRegex = RegExp('[\n\r]*this.description\s*([^\n\r]*)');
+        let getCategoriesRegex = RegExp('[\n\r]*this.categories\s*([^\n\r]*)');
         let cleanupRegex = RegExp('=(.*)');
 
         let nameMatch = zip_text.match(getNameRegex);
         let descriptionMatch = zip_text.match(getDescriptionRegex);
+        let categoriesMatch = zip_text.match(getCategoriesRegex);
 
         if (!nameMatch) { return; }
         if (nameMatch[1].length > 30) { return; }
@@ -324,6 +327,11 @@ console.log("i am going to produce a bundle...");
         if (!descriptionCleanup) { return; }
         description = cleanString(descriptionCleanup[1]);
 
+        if (!categoriesMatch) { return; }
+        let categoriesCleanup = categoriesMatch[1].match(cleanupRegex);
+        if (!categoriesCleanup) { return; }
+        categories = cleanString(categoriesCleanup[1]);
+
       });
 
       await Promise.all(promises);
@@ -336,7 +344,7 @@ console.log("i am going to produce a bundle...");
     //
     fs.unlink(path.resolve(__dirname, zip_path));
 
-    return { name, description };
+    return { name, description, categories };
   }
 
 
@@ -345,20 +353,21 @@ console.log("i am going to produce a bundle...");
 
     if (this.app.BROWSER == 1) { return; }
 
-    let sql = `INSERT INTO modules (name, description, version, publickey, unixtime, bid, bsh, tx, featured)
-    VALUES ($name, $description, $version, $publickey, $unixtime, $bid, $bsh, $tx, $featured)`;
+    let sql = `INSERT INTO modules (name, description, version, categories, publickey, unixtime, bid, bsh, tx, featured)
+    VALUES ($name, $description, $version, $categories, $publickey, $unixtime, $bid, $bsh, $tx, $featured)`;
 
     let { from, sig, ts } = tx.transaction;
 
     // should happen locally from ZIP
     let { zip } = tx.returnMessage();
 
-    let { name, description } = await this.getNameAndDescriptionFromZip(zip, `mods/module-${sig}-${ts}.zip`);
+    let { name, description, categories } = await this.getNameAndDescriptionFromZip(zip, `mods/module-${sig}-${ts}.zip`);
 
     let params = {
       $name: name,
       $description	: description || '',
       $version		: `${ts}-${sig}`,
+      $categories: categories,
       $publickey	: from[0].add,
       $unixtime		: ts,
       $bid		: blk.block.id,
@@ -656,35 +665,6 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
     this.app.network.propagateTransaction(newtx);
 
 
-
-
-
-
-/***** NOW HANDLED BY BASH SCRIPT ****
-    //
-    // delete mods in bundler/mods
-    //
-    module_paths.forEach(modpath => {
-      if (!modpath) { return; }
-      let mod_dir = modpath.split('/')[3];
-      let full_mod_dir = path.resolve(__dirname, `bundler/mods/${mod_dir}`);
-      let files = getFiles(full_mod_dir);
-      files.forEach(file_path => fs.unlinkSync(file_path));
-      deleteDirs(full_mod_dir);
-      fs.rmdirSync(path.resolve(__dirname, `bundler/mods/${mod_dir}`));
-    });
-
-    //
-    // delete files in root bundler
-    try {
-      let bundler_dir = path.resolve(__dirname, `../../bundler`);
-      let files = getFiles(bundler_dir);
-      files.forEach(file_path => fs.unlink(file_path));
-    } catch(err) {
-      console.log(err);
-    }
-***** NOW HANDLED BY BASH SCRIPT ****/
-
     return bundle_filename;
   }
 
@@ -702,8 +682,8 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
           data.bundle_appstore_publickey = tx.transaction.from[0].add;
           data.appstore_bundle = txmsg.bundle;
 
-      AppStoreBundleConfirm.render(this.app, data);
-      AppStoreBundleConfirm.attachEvents(this.app, data);
+    AppStoreBundleConfirm.render(this.app, data);
+    AppStoreBundleConfirm.attachEvents(this.app, data);
 
   }
 

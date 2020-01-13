@@ -5,14 +5,17 @@ module.exports = AppStorePublish = {
   render(app, data) {
     document.querySelector(".email-appspace")
             .innerHTML = AppStorePublishTemplate();
-    zip.workerScriptsPath = '/saito/lib/zip/';
+    //zip.workerScriptsPath = '/saito/lib/zip/';
   },
 
   attachEvents(app, data) {
+
+    data.publish = {};
+
     let appstore_self = this;
     document.getElementById('appstore-publish-module')
             .onchange = async function(e) {
-              data.publish = {};
+
 
               let selectedFile = this.files[0];
               //
@@ -60,7 +63,9 @@ module.exports = AppStorePublish = {
 
     document.getElementById('appstore-publish-form')
             .onsubmit = (e) => {
+
               e.preventDefault();
+
               if (data.publish.zip) {
 
                 //
@@ -77,7 +82,7 @@ module.exports = AppStorePublish = {
                 AppStorePublishSuccess.render();
                 AppStorePublishSuccess.attachEvents();
               } else {
-                salert("Please attach a zip file of your module");
+                alert("Please attach a zip file of your module");
               }
             }
   },

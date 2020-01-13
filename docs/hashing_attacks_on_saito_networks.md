@@ -134,6 +134,7 @@ Example 2.
 
 ![Example 2](https://raw.githubusercontent.com/trevelyan/saito-lite/master/docs/svgs/ex2.svg?sanitize=true)
 
+
 ---
 Example 3.
 | Parameter     | Value |

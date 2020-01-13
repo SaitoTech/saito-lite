@@ -17,6 +17,11 @@ class Escrow extends ModTemplate {
     this.escrow.balance	= 0.0;
     this.escrow.create_pending = 0;
 
+    this.description    = "A simple module to enable Escrow services";
+    this.categories     = "Finance";
+
+
+
     return this;
   }
 

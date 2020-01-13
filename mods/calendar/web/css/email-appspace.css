@@ -1,0 +1,12 @@
+
+.calendar-main {
+ max-width: 800px;
+}
+.calendar-sidebar {
+ float:right;
+ width:250px;
+ height: 40px;
+}
+
+
+
