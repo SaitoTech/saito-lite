@@ -141,7 +141,8 @@ p {
   display: grid;
   grid-template-columns: 2em auto;
   grid-gap: 0em 0.5em;
-  min-width: 420px;
+  /* min-width: 420px; */
+  min-width: 10vw;
 }
 
 .chat-message-text {

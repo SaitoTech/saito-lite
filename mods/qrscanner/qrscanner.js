@@ -5,20 +5,15 @@ const QRScannerTemplate = require('./qrscanner.template');
 const AddContact = require('./lib/add-contact');
 
 const HeaderDropdownTemplate = (dropdownmods) => {
-  let html = `
+  html = dropdownmods.map(mod => {
+    if (mod.returnLink() != null) {
+      return `<a href="${mod.returnLink()}"><li>${mod.name}</li></a>`;
+    }
+  })
+  return `
   <div id="modules-dropdown" class="header-dropdown">
-    <ul>
-  `;
-  for (let i = 0; i < dropdownmods.length; i++) {
-  if (dropdownmods[i].returnLink() != null) {
-    html += `<a href="${dropdownmods[i].returnLink()}"><li>${dropdownmods[i].name}</li></a>`;
-  }
-  }
-  html += `
-  </ul>
-  </div>
-`;
-return html;
+    <ul>${html}</ul>
+  </div>`;
 }
 
 class QRScanner extends ModTemplate {
@@ -53,9 +48,16 @@ class QRScanner extends ModTemplate {
     super.initialize(app);
   }
 
-  async initializeHTML(app) {
-    this.video = document.querySelector('video');
-    this.canvas = document.getElementById('qr-canvas');
+  initializeHTML(app) {
+    this.start(
+      document.querySelector('video'),
+      document.getElementById('qr-canvas')
+    );
+  }
+
+  async start(video, canvas) {
+    this.video = video
+    this.canvas = canvas;
 
     this.canvas_context = this.canvas.getContext("2d");
     this.decoder = new Worker('/qrscanner/quirc_worker.js');
