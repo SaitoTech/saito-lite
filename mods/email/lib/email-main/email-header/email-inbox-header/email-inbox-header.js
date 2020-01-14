@@ -52,9 +52,11 @@ module.exports = EmailInboxHeader = {
                     email_bars_menu.style.display = "block";
                     email_bars_menu.innerHTML = EmailBarsMenuTemplate();
                     for (let i = 0; i < data.mods.length; i++) {
+                      if (data.mods[i].respondTo("email-appspace") != null) {
                         let mobile_email_apps = email_bars_menu.querySelector(".email-apps")
                         mobile_email_apps.innerHTML
                             += `<li class="email-apps-item" id="${i}">${data.mods[i].name}</li>`;
+                      }
                     }
                     document.querySelector('body').append(email_bars_menu);
                     EmailBarsMenu.attachEvents(app, data);

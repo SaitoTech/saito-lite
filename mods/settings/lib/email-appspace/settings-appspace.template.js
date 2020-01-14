@@ -28,7 +28,7 @@ module.exports = SettingsAppspaceTemplate = (app) => {
 
         </div>
 
-	<h3>Installed Applications:L</h3>
+	<h3>Installed Applications:</h3>
 
 	<div class="">
 

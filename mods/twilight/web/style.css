@@ -587,6 +587,14 @@ body {
     margin: 0;
   }
 
+  .status {
+    padding-bottom: unset;
+  }
+
+  .hud-body {
+    height: unset;
+  }
+
   .hud_menu_overlay {
     display: grid;
     grid-template-rows: auto 1em;
@@ -655,14 +663,14 @@ body {
 
   .cardbox-status-container {
     display: grid;
-    grid-template-rows: 2em auto;
+    grid-template-rows: 5vh auto;
     grid-gap: 0.5em;
     /* height: 75%; */
   }
 
   .cardbox-hud-status {
-    width: calc(33vh * 0.7211);
-    min-width: calc(33vh * 0.7211);
+    width: calc(31vh * 0.7211);
+    min-width: calc(31vh * 0.7211);
     margin-right: 0.75em;
   }
 

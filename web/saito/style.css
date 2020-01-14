@@ -971,6 +971,7 @@ label.treated {
   }
   #alert-buttons button {
     width: 100%;
+    margin: unset;
   }
   .alert-prompt {
     padding: 0 1em;

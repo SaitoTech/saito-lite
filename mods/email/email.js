@@ -211,7 +211,7 @@ console.log("FOUND: " + JSON.stringify(txs));
       //
       // if transaction is for me
       //
-      if (tx.isTo(publickey)) {
+      if (tx.transaction.to[0].add == publickey) {
 
         //
         // great lets save this
