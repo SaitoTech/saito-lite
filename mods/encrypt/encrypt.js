@@ -89,22 +89,24 @@ class Encrypt extends ModTemplate {
     if (Array.isArray(recipients)) {
       if (recipients.length > 0) {
         recipients.sort();
-        recipient = recipients[0]; 
-	parties_to_exchange = recipients.length;
+        recipient = recipients[0];
+        parties_to_exchange = recipients.length;
       }
       else {
-	recipient = recipients;
-	parties_to_exchange = 2;
+        recipient = recipients;
+        parties_to_exchange = 2;
       }
+    } else {
+      recipient = recipients;
+      parties_to_exchange = 2;
     }
-
 
     if (recipient == "") { return; }
 
-    let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee(recipient, (parties_to_exchange * this.app.wallet.wallet.default_fee)); 
-        tx.transaction.msg.module	   = this.name;
-  	tx.transaction.msg.request 	   = "key exchange request";
-	tx.transaction.msg.alice_publickey = this.app.keys.initializeKeyExchange(recipient);
+    let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee(recipient, (parties_to_exchange * this.app.wallet.wallet.default_fee));
+    tx.transaction.msg.module	         = this.name;
+  	tx.transaction.msg.request 	       = "key exchange request";
+    tx.transaction.msg.alice_publickey = this.app.keys.initializeKeyExchange(recipient);
 
     if (parties_to_exchange > 2) {
       for (let i = 1; i < parties_to_exchange; i++) {
@@ -132,7 +134,7 @@ class Encrypt extends ModTemplate {
     let bob_privatekey   = bob.getPrivateKey(null, "compressed").toString("hex");
     let bob_secret       = this.app.crypto.createDiffieHellmanSecret(bob, Buffer.from(alice_publickey, "hex"));
 
-    var newtx = this.app.wallet.createUnsignedTransaction(remote_address, 0, fee);  
+    var newtx = this.app.wallet.createUnsignedTransaction(remote_address, 0, fee);
     if (newtx == null) { return; }
     newtx.transaction.msg.module   = "Encrypt";
     newtx.transaction.msg.request  = "key exchange confirm";

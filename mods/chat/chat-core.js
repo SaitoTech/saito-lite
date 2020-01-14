@@ -159,7 +159,7 @@ class ChatCore extends ModTemplate {
     if (conf == 0) {
       if (txmsg.request == "chat message") {
         if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) { return; }
-	this.receiveMessage(app, tx);
+        this.receiveMessage(app, tx);
       }
     }
 

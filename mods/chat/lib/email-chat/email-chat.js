@@ -17,6 +17,8 @@ module.exports = EmailChat = {
       let email_chat = document.querySelector(".email-chat")
       email_chat.innerHTML = EmailChatTemplate();
 
+      data.contact_view = 'qr';
+
       AddContactModal.render(app, data);
       ChatManager.render(app, data);
       ChatList.render(app, data);

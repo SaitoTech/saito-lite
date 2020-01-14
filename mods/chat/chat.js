@@ -82,6 +82,8 @@ class Chat extends ChatCore {
     this.uidata.chat.app = app;
     this.uidata.chat.groups = this.groups;
 
+    this.uidata.helpers = helpers;
+
     this.uidata.chatmod = this;
     this.uidata.chat.active = "chat_list";
 

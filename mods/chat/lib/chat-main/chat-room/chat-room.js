@@ -111,7 +111,7 @@ module.exports = ChatRoom = {
         });
 
         app.connection.on('chat_receive_message', (msg) => {
-            this.addMessageToDOM(data, msg);
+            this.addMessageToDOM(msg, data);
             this.scrollToBottom();
         });
     },
