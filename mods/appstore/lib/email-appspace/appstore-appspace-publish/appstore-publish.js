@@ -16,7 +16,6 @@ module.exports = AppStorePublish = {
     document.getElementById('appstore-publish-module')
             .onchange = async function(e) {
 
-
               let selectedFile = this.files[0];
               //
               // basic sanity check

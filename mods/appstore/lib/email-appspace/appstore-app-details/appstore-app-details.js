@@ -98,7 +98,7 @@ module.exports = AppstoreAppDetails = {
 
           document.querySelector('.appstore-app-install-overlay').innerHTML = `
             <div class="appstore-bundler-install-notice">
-              <center style="margin-bottom:20px">Your custom Saito bundle is being compiled. Please do not leave this page -- estimated time to completion 60 seconds.</center>
+              <center class="appstore-loading-text" style="margin-bottom:20px">Your custom Saito bundle is being compiled. Please do not leave this page -- estimated time to completion 60 seconds.</center>
               <center><div class="loader" id="game_spinner"></div></center>
             </div>
           `;
