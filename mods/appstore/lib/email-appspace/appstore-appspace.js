@@ -9,6 +9,7 @@ module.exports = AppStoreAppspace = {
 
   render(app, data) {
 
+    document.head.innerHTML += '<link rel="stylesheet" type="text/css" href="/appstore/css/email-appspace.css">';
     document.querySelector(".email-appspace").innerHTML = AppStoreAppspaceTemplate();
     //
     // fetch modules from appstore
@@ -55,7 +56,7 @@ module.exports = AppStoreAppspace = {
     let allCategoriesHTML = allCategories.map((category) => {
       return `<div class="app-category-checkbox app-category-${category}">
                 <label class="s-container">${category}
-                  <input type="checkbox" name="app-${category}" id="app-${category}" />
+                  <input type="checkbox" name="app-${category}" id="app-${category}" checked/>
                   <span class="s-checkmark"></span>
                 </label>
               </div>
