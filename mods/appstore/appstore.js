@@ -262,7 +262,7 @@ console.log("I AM: " + app.wallet.returnPublicKey());
           if (tx.isTo(app.wallet.returnPublicKey()) && !tx.isFrom(app.wallet.returnPublicKey())) {
             console.log("##### BUNDLE RECEIVED #####");
             //
-            // ALL GOOD UP TO HERE
+            // 
             //
             if (app.options.appstore) {
               if (app.options.appstore.default != "") {

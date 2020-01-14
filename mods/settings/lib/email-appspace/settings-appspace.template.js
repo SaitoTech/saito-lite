@@ -36,10 +36,12 @@ module.exports = SettingsAppspaceTemplate = (app) => {
    
   for (let i = 0; i < app.options.modules.length; i++) {
     html += `
-	<div class="">
+  <div class="settings-app-select">
+  <label class="s-container">${app.options.modules[i].name}
 	  <input type="checkbox" value="modules_mods_${i}" class="modules_mods_checkbox" name="modules_mods_${i}" id="${i}"`;
     if (app.options.modules[i].active == 1) { html += ' CHECKED'; }
-    html += ` /> ${app.options.modules[i].name}
+    html += ` /> <span class="s-checkmark"></span> 
+    </label>
 	</div>
    `;
   }
@@ -58,3 +60,4 @@ module.exports = SettingsAppspaceTemplate = (app) => {
 
   return html;
 }
+
