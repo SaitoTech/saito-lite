@@ -82,7 +82,7 @@ module.exports = AppStorePublish = {
                 AppStorePublishSuccess.render();
                 AppStorePublishSuccess.attachEvents();
               } else {
-                alert("Please attach a zip file of your module");
+                salert("Please attach a zip file of your module");
               }
             }
   },
