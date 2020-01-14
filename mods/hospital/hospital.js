@@ -99,10 +99,15 @@ class Hospital extends ModTemplate {
     //
     let decision = app.browser.returnURLParameter("decision");
     let booking_id = app.browser.returnURLParameter("booking_id");
+    let txjson = app.browser.returnURLParameter("tx");
+
 
 console.log("DECISION: " + decision + " --- " + booking_id);
 
-    if (decision === "approve" && booking_id !== "") {
+    if (decision === "approve" && booking_id !== "" && txjson != "") {
+      let tx = new saito.transaction(JSON.parse(txjson));
+console.log("TX: " + JSON.stringify(tx));
+alert("TX: " + JSON.stringify(tx));
 console.log("MAKING APPOINTMENT CONFIRMATION!");
       this.makeAppointmentConfirmation();
     }
@@ -144,7 +149,7 @@ console.log("MAKING APPOINTMENT CONFIRMATION!");
   }
 
 
-  receiveAppointmentRequest() {
+  receiveAppointmentRequest(tx) {
 
     //
     // create email
@@ -152,7 +157,7 @@ console.log("MAKING APPOINTMENT CONFIRMATION!");
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
         newtx.transaction.msg.module = "Email";
         newtx.transaction.msg.title = "ACTION REQUIRED: Hospital Booking Requested";
-        newtx.transaction.msg.message = "<a href='/email?decision=approve&booking_id=512'>click here to approve</a>";
+        newtx.transaction.msg.message = "<a href='/email?decision=approve&booking_id=512&tx='"+encodeURI(JSON.stringify(tx))+"'>click here to approve</a>";
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
