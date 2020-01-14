@@ -30,6 +30,14 @@ module.exports = SettingsAppspace = {
         }
       }
 
+      document.getElementById("privatekey").onclick = function(e) {
+        document.getElementById("privatekey").toggleClass("password");
+      }
+
+      document.getElementById("see-password").onclick = function(e) {
+        document.getElementById("privatekey").toggleClass("password");
+      }
+
 
       //
       // install module (button)

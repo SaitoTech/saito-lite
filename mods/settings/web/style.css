@@ -1,16 +1,13 @@
 .settings-grid {
-    display: grid;
-    grid-template-columns: 7em 1fr;
-    grid-gap: 10px;
-    margin: 10px 0;
+  
 }
 
 .settings-buttons {
-    display: grid;
-    grid-template-columns: 15em 15em;
-    grid-gap: 10px;
-    margin: 10px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 1em;
 }
+
 
 #privatekey {
     width: 95%;
@@ -18,4 +15,32 @@
 
 #qrcode {
     display: inline-block;
+}
+
+.password {
+  font-family: p-word;
+}
+
+.email-appspace-settings {
+  max-width: 900px;
+}
+
+.settings-wallet-management {
+  margin: 0 0 2em 0;
+}
+
+.settings-app-management {
+  margin: 1em 0;
+}
+
+.settings-app-list {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  border: 1px solid #8888;
+  padding: 1em;
+}
+
+.settings-app-select {
+  line-height: 24px;
 }

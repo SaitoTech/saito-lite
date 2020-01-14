@@ -2,15 +2,13 @@ module.exports = SettingsAppspaceTemplate = (app) => {
 
   html = `
   <link rel="stylesheet" href="/settings/style.css">
-  <div class="email-appspace-settings">
-
-    <h3>Activate / Disable Modules:</h3>
+  <div class="email-appspace-settings">    
   
-    <div class="grid-1-2-columns">
+    <div class="settings-grid">
 
-      <div class="">
+      <div class="settings-wallet-management">
 
-	<h3>Wallet Management:</h3>
+	      <h3>Wallet Management:</h3>
 
         <div class="grid-2">
 
@@ -18,20 +16,25 @@ module.exports = SettingsAppspaceTemplate = (app) => {
           <div>${app.wallet.returnPublicKey()}</div>
 
           <div>private key:</div>
-          <div><input id="privatekey" type="password" value="${app.wallet.returnPrivateKey()}" class="password" /></div>
+          <div>
+            <input id="privatekey" type="text" value="${app.wallet.returnPrivateKey()}" class="password" />
+            <i class="see-password fas fa-eye"></i>
+          </div>
 
-	</div>
+	      </div>
 
-        <button id="reset-account-btn" class="reset-account-btn" style="float:left;margin-right:15px;">Reset Account</button>
-        <button id="backup-account-btn" class="backup-account-btn" style="float:left;margin-right:15px;">Manual Backup</button>
-        <button id="restore-account-btn" class="restore-account-btn" style="float:left;margin-right:15px">Restore Account</button>
-
+        <div class="settings-buttons">
+          <button id="reset-account-btn" class="reset-account-btn"">Reset Account</button>
+          <button id="backup-account-btn" class="backup-account-btn"">Manual Backup</button>
+          <button id="restore-account-btn" class="restore-account-btn">Restore Account</button>
         </div>
+      </div>
 
-	<h3>Installed Applications:</h3>
+      <div class="settings-app-management">
 
-	<div class="">
-
+        <h3>Activate / Disable Modules:</h3>
+	      <h4>Installed Applications:</h4>
+        <div class="settings-app-list">
   `;
    
   for (let i = 0; i < app.options.modules.length; i++) {
@@ -46,16 +49,17 @@ module.exports = SettingsAppspaceTemplate = (app) => {
    `;
   }
   html += `
-	</div>
-
-	<div id="settings-appspace" class="settings-appspace" style="clear:both;margin-top:20px"></div>
-
+        </div>
       </div>
+
+	    <div id="settings-appspace" class="settings-appspace"></div>
+
     </div>
-
-    <div style="display:none"><input id="settings-restore-account" class="settings-restore-account" style="" type="file" /></div>
-
   </div>
+
+  <div style="display:none"><input id="settings-restore-account" class="settings-restore-account" type="file" /></div>
+
+</div>
   `;
 
   return html;
