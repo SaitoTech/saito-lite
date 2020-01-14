@@ -16,7 +16,6 @@ module.exports = AppStorePublish = {
     document.getElementById('appstore-publish-module')
             .onchange = async function(e) {
 
-
               let selectedFile = this.files[0];
               //
               // basic sanity check
@@ -82,7 +81,7 @@ module.exports = AppStorePublish = {
                 AppStorePublishSuccess.render();
                 AppStorePublishSuccess.attachEvents();
               } else {
-                alert("Please attach a zip file of your module");
+                salert("Please attach a zip file of your module");
               }
             }
   },

@@ -1,7 +1,8 @@
 module.exports = AppStoreAppspaceTemplate = () => {
 
   return `
-<link rel="stylesheet" type="text/css" href="/appstore/css/email-appspace.css">
+  
+
 
 <div class="appspace-appstore-container">
 
@@ -22,7 +23,7 @@ module.exports = AppStoreAppspaceTemplate = () => {
     <h4>Categories
         <div class="app-category-checkbox app-category-all">
           <label class="s-container">All
-            <input type="checkbox" name="app-all" id="app-all" />
+            <input type="checkbox" name="app-all" id="app-all" checked/>
             <span class="s-checkmark"></span>
           </label>
         </div>
