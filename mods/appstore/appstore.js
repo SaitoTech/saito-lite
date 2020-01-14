@@ -252,6 +252,8 @@ class AppStore extends ModTemplate {
             } catch (err) {
             }
           }
+console.log("TX IS REQUESTING WHOM: " + tx.transaction.to[0].add);
+console.log("I AM: " + app.wallet.returnPublicKey());
           if (!tx.isTo(app.wallet.returnPublicKey())) { return; }
           console.log("i am going to produce a bundle...");
           this.requestBundle(blk, tx);
