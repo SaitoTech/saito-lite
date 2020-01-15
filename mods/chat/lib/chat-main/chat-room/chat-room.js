@@ -1,5 +1,3 @@
-const Header = require('../../../../../lib/ui/header/header');
-
 const ChatRoomTemplate = require('./chat-room.template');
 const ChatRoomHeaderTemplate = require('./chat-room-header.template');
 const ChatRoomFooterTemplate = require('./chat-room-footer.template');

@@ -1,6 +1,6 @@
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
-const ChatGroup = require('./lib/chatgroup');
+const ChatGroup = require('./chatgroup');
 
 class ChatCore extends ModTemplate {
 

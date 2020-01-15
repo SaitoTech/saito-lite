@@ -334,12 +334,12 @@ console.log("I AM: " + app.wallet.returnPublicKey());
 
         if (!descriptionMatch) { return; }
         let descriptionCleanup = descriptionMatch[1].match(quotesRegex);
-        if (!descriptionCleanup)
+        if (descriptionCleanup != null)
           description = cleanString(descriptionCleanup[0]);
 
         if (!categoriesMatch) { return; }
         let categoriesCleanup = categoriesMatch[1].match(cleanupRegex);
-        if (!categoriesCleanup)
+        if (categoriesCleanup != null)
           categories = cleanString(categoriesCleanup[1]);
 
       });
