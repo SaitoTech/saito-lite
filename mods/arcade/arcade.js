@@ -271,7 +271,6 @@ console.log("ADDING OPEN GAME FROM SERVER: " + JSON.stringify(tx.transaction));
       null,
       (res) => {
       if (res.rows) {
-console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
         res.rows.forEach(row => {
           let { game_id, module, players_array, player } = row;
           this.addGameToObserverList({
@@ -284,18 +283,13 @@ console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
       }
     });
 
-    // select winner, sum(score), module from leaderboard group by winner
-    // SELECT winner, sum(score), module FROM leaderboard GROUP by winner ORDER BY score DESC LIMIT 10
     let message = {};
     message.request = "arcade leaderboard list";
     message.data = {};
 
-    this.app.network.sendRequestWithCallback(message.request, message.data, (res) => {
-      res.rows.forEach(row => this.addWinnerToLeaderboard(row));
-    });
-
+    let leaderboard_callback = (res) => res.rows.forEach(row => this.addWinnerToLeaderboard(row));
+    this.app.network.sendRequestWithCallback(message.request, message.data, leaderboard_callback);
   }
-
 
   addGameToObserverList(msg) {
 
@@ -317,6 +311,12 @@ console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
 
 
   addWinnerToLeaderboard(msg) {
+    if (this.app.crypto.isPublicKey(msg.winner)) {
+      this.addrController.returnAddressHTMLPromise(msg.winner)
+        .then(winner => msg.winner = winner)
+        .catch(err => console.err(err));
+    }
+
     this.leaderboard.push(msg);
 
     let data = {};
@@ -336,7 +336,7 @@ console.log("ACTIVE OBSERVER GAMES:" + JSON.stringify(res.rows));
     let txmsg = tx.returnMessage();
 
     for (let i = 0; i < this.games.length; i++) {
-      if (this.games[i].transaction.sig == tx.transaction.sig) { 
+      if (this.games[i].transaction.sig == tx.transaction.sig) {
         return;
       }
       if (txmsg.game_id == this.games[i].transaction.sig) {
