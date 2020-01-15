@@ -4,7 +4,7 @@ const LeaderboardRow = require('./arcade-right-sidebar-leaderboard-row.template.
 
 module.exports = ArcadeRightSidebar = {
 
-    render(app, data) {
+    async render(app, data) {
       let publickey = app.wallet.returnPublicKey();
       let id = app.keys.returnIdentifierByPublicKey(publickey);
 
@@ -22,13 +22,10 @@ module.exports = ArcadeRightSidebar = {
           += ObserverRow(data.arcade.observer[i], players, app.crypto.stringToBase64(JSON.stringify(data.arcade.observer[i])));
       }
 
-      data.arcade.leaderboard.forEach(async leader => {
-        if (app.crypto.isPublicKey(leader.winner)) {
-          leader.winner = await data.arcade.addrController.returnAddressHTMLPromise(leader.winner);
-        }
+      document.querySelector(".arcade-sidebar-active-leaderboard-body").innerHTML = '';
 
-        document.querySelector(".arcade-sidebar-active-leaderboard-body")
-                .innerHTML += LeaderboardRow(leader);
+      data.arcade.leaderboard.forEach(leader => {
+        document.querySelector(".arcade-sidebar-active-leaderboard-body").innerHTML += LeaderboardRow(leader);
       });
 
       //

@@ -976,6 +976,15 @@ label.treated {
   .alert-prompt {
     padding: 0 1em;
   }
+  #settings-dropdown {
+    width: 70vw;
+    font-size: 1em;
+  }
+  .profile-photo {
+    height: 2em;
+    width: 2em;
+    align-self: center;
+  }
 }
 
 /* modals */
