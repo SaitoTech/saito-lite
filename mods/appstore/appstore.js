@@ -247,7 +247,6 @@ class AppStore extends ModTemplate {
           console.log("REQUEST BUNDLE TX received...");
           if (tx.isFrom(app.wallet.returnPublicKey())) {
             try {
-              
               document.querySelector(".appstore-loading-text").innerHTML = "Your request has been received by the network. Your upgrade should be completed within about 45 seconds.";
             } catch (err) {
             }
