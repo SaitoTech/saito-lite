@@ -4,14 +4,15 @@ const FaucetActivities = require('./activities')
 
 module.exports = FaucetAppspace = {
 
-  async render(app, data) {
-    document.querySelector(".email-main").innerHTML = FaucetAppspaceTemplate(app);
+  render(app, data) {
+    document.querySelector(".email-appspace").innerHTML = FaucetAppspaceTemplate(app);
+
     for (let i = 0; i < FaucetActivities.length; i++) {
       document.querySelector(".faucet-grid").innerHTML += FaucetGridRow(FaucetActivities[i]);
     }
     try {
       if (document.querySelector(".faucet-grid")) {
-        await app.network.sendRequestWithCallback("update activities", app.wallet.returnPublicKey(), (rows) => {
+        app.network.sendRequestWithCallback("update activities", app.wallet.returnPublicKey(), (rows) => {
           rows.forEach(row => this.updateFaucetGridRow(row));
         });
       }

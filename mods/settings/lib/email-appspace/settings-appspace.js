@@ -46,7 +46,8 @@ module.exports = SettingsAppspace = {
 
         ckbx.onclick = async (e) => {
 
-	  let thisid = parseInt(e.currentTarget.id);
+    let thisid = parseInt(e.currentTarget.id);
+    let currentTarget = e.currentTarget;
 
 	  if (e.currentTarget.checked == true) { 
 	    let sc = await sconfirm("Reactivate this module?");
@@ -64,7 +65,7 @@ module.exports = SettingsAppspace = {
 	      app.storage.saveOptions();
 	      window.location = window.location;
 	    } else {
-	      window.location = window.location;
+        currentTarget.checked = true;
 	    }
 	  }
 

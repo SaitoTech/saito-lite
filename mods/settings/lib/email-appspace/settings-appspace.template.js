@@ -18,7 +18,7 @@ module.exports = SettingsAppspaceTemplate = (app) => {
           <div>private key:</div>
           <div>
             <input id="privatekey" type="text" value="${app.wallet.returnPrivateKey()}" class="password" />
-            <i class="see-password fas fa-eye"></i>
+            <i class="see-password fas fa-eye" id="see-password"></i>
           </div>
 
 	      </div>
