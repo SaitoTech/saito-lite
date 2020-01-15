@@ -92,7 +92,7 @@ h1 {
     margin-top: 15px;
     display: grid;
     grid-gap: 10px;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 1fr 1fr;
 }
 
 #promotion-choices {
@@ -190,17 +190,17 @@ img.captured {
     }
 
     .row {
-        grid-template-columns: 100%;
+        grid-template-columns: 1fr;
         grid-template-rows: auto 60%;
         position: absolute;
-        top: 4em; 
+        top: 4em;
     }
     .column{
         border-radius: 0;
     }
     .module_container {
-        height: 99%;
         margin-top: 0;
+        width: 93vw;
     }
     #board {
         max-width: 500px;

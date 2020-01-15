@@ -561,9 +561,6 @@ button.add-games {
     width: 100%;
   }
   .arcade-game-invitation {
-    /* grid-template-rows: 1fr 1fr;
-    grid-template-columns: 1fr 1fr; */
-
     grid-template-rows: 1fr auto 1fr;
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
@@ -572,11 +569,10 @@ button.add-games {
         "buttons buttons";
     grid-gap: 0.5em;
   }
-  .arcade-game-invitation div {
-    /* margin-left: unset; */
+  .arcade-game-row-options {
+    margin-left: unset;
   }
   .arcade-game-row-name {
-    /* text-align: center; */
     padding: unset;
     font-size: 1.5em;
   }
@@ -595,9 +591,6 @@ button.add-games {
   .identicon {
     float: right;
   }
-  /* .arcade-sidebar {
-    display: none;
-  } */
 }
 
 @media only screen and (min-width: 600px) {}
