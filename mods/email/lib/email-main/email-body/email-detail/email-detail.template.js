@@ -3,6 +3,7 @@ module.exports = EmailDetailTemplate = (app, data) => {
   let { selected_email, addrController }  = data.email;
   let { datetime_formatter } = data.helpers;
 
+  let subject = selected_email.transaction.msg.title;
   let from  	= selected_email.transaction.from[0].add;
   let to  	= selected_email.transaction.to[0].add;
   let ts  	= selected_email.transaction.ts;
@@ -19,6 +20,9 @@ module.exports = EmailDetailTemplate = (app, data) => {
   return `
     <div>
       <div class="email-detail-addresses">
+        <div>
+          <h4 class="email-detail-subject">${subject}</h4>
+        </div>
         <div class="email-detail-address-row">
           <p>FROM:</p>
           <p class="email-detail-address-id">${from}</p>

@@ -1,6 +1,6 @@
 module.exports = EmailAppspaceTemplate = (app) => {
   return `
-  <div class="email-appspace-design">
+  <div class="email-appspace-design" style="width: 98vw;">
 
   <h3>h3 - Module header</h3>
 
