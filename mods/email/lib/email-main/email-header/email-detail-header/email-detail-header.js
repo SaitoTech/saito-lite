@@ -10,7 +10,7 @@ module.exports = EmailDetailHeader = {
   attachEvents(app, data) {
 
     document.getElementById('email-form-back-button')
-            .addEventListener('click', (e) => {
+            .onclick = (e) => {
 
               // data.email.emails.active = "inbox";
               data.email.active = "email_list";
@@ -18,10 +18,10 @@ module.exports = EmailDetailHeader = {
 
               data.email.main.render(app, data);
               data.email.main.attachEvents(app, data);
-            });
+            };
 
     document.getElementById('email-delete-icon')
-            .addEventListener('click', (e) => {
+            .onclick = (e) => {
               // delete the email from the emaillist
               data.email.deleteTransaction(data.email.selected_email);
 
@@ -31,37 +31,38 @@ module.exports = EmailDetailHeader = {
 
               data.email.main.render(app, data);
               data.email.main.attachEvents(app, data);
-            });
+            };
 
     document.getElementById('email-detail-reply')
-      .addEventListener('click', (e) => {
+            .onclick = (e) => {
 
-        data.email.previous_state = data.email.active;
-        data.email.active = "email_form";
-        data.email.main.render(app, data);
-        data.email.main.attachEvents(app, data);
+              data.email.previous_state = data.email.active;
+              data.email.active = "email_form";
+              data.email.main.render(app, data);
+              data.email.main.attachEvents(app, data);
 
-        let original = data.email.selected_email.transaction;
-        document.getElementById('email-to-address').value = original.from[0].add;
-        document.querySelector('.email-title').value = "Re: " + original.msg.title;
-        let body = "<br /><hr /><i>Quoted Text: </i> <br />" + original.msg.message;
-        document.querySelector('#email-text').innerHTML = body;
-                document.querySelector('.email-text').focus();
-      });
+              let original = data.email.selected_email.transaction;
+              document.getElementById('email-to-address').value = original.from[0].add;
+              document.querySelector('.email-title').value = "Re: " + original.msg.title;
+              let body = "<br /><hr /><i>Quoted Text: </i> <br />" + original.msg.message;
+              document.getElementById('email-text').innerHTML = body;
+              document.querySelector('.email-text').focus();
+            };
 
     document.getElementById('email-detail-forward')
-      .addEventListener('click', (e) => {
-        let original = data.email.selected_email.transaction;
-        data.email.previous_state = data.email.active;
-        data.email.active = "email_form";
-        data.email.main.render(app, data);
-        data.email.main.attachEvents(app, data);
-        document.querySelector('.email-title').value = "Re: " + original.msg.title;
-        document.querySelector('.email-text').value = original.msg.message;
-        let body = "<br /><hr /><i>Forwarded Text: </i> <br />";
-        body += "Forwarded from: " + original.from[0].add + "\n\n" + original.msg.message;
-        document.querySelector('.email-text').value = body;
-        document.getElementById('email-to-address').focus();
-      });
+            .onclick = (e) => {
+              let original = data.email.selected_email.transaction;
+              data.email.previous_state = data.email.active;
+              data.email.active = "email_form";
+              data.email.main.render(app, data);
+              data.email.main.attachEvents(app, data);
+
+              document.querySelector('.email-title').value = `Fwd: ${original.msg.title}`;
+              document.querySelector('.email-text').value = original.msg.message;
+              let body = "<br/><hr/><i>Forwarded Text: </i><br/>\n";
+              body += `Forwarded from: ${original.from[0].add}\n\n${original.msg.message}`;
+              document.getElementById('email-text').innerHTML = body;
+              document.getElementById('email-to-address').focus();
+            };
   }
 }
