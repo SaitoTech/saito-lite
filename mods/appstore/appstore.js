@@ -59,7 +59,8 @@ class AppStore extends ModTemplate {
     super(app);
 
     this.app = app;
-    this.name = "AppStore";
+
+    this.name          = "AppStore";
     this.featured_apps = ['Email', 'Testing', 'Escrow', 'Design'];
   }
 
@@ -295,6 +296,9 @@ console.log("I AM: " + app.wallet.returnPublicKey());
       const directory = await unzipper.Open.file(path.resolve(__dirname, zip_path));
       // const file =
       let promises = directory.files.map(async file => {
+        if (file.path.substr(0,3) == "lib") return;
+        if (file.path.substr(-2) !== "js") return;
+
         let content = await file.buffer();
         let zip_text = content.toString('utf-8')
 
@@ -304,6 +308,7 @@ console.log("I AM: " + app.wallet.returnPublicKey());
         let getDescriptionRegex = RegExp('[\n\r]*this.description\s*([^\n\r]*)');
         let getCategoriesRegex = RegExp('[\n\r]*this.categories\s*([^\n\r]*)');
         let cleanupRegex = RegExp('=(.*)');
+        let quotesRegex = RegExp(`(?:'|").*(?:'|")`);
 
         let nameMatch = zip_text.match(getNameRegex);
         let descriptionMatch = zip_text.match(getDescriptionRegex);
@@ -311,7 +316,8 @@ console.log("I AM: " + app.wallet.returnPublicKey());
 
         if (!nameMatch) { return; }
         if (nameMatch[1].length > 30) { return; }
-        if (nameMatch[1] == "this.name\s*([^\n\r]*)');") { return; }
+        if (nameMatch[0] == "this.name\s*([^\n\r]*)');" || nameMatch[1] == "this.name\s*([^\n\r]*)');") { return; }
+        if (nameMatch[0] == "\s*([^\n\r]*)');" || nameMatch[1] == "\s*([^\n\r]*)');") { return; }
 
         function cleanString(str) {
           str = str.substring(1, str.length - 1);
@@ -321,19 +327,19 @@ console.log("I AM: " + app.wallet.returnPublicKey());
           }).join('');
         }
 
-        let nameCleanup = nameMatch[1].match(cleanupRegex);
-        if (!nameCleanup) { return; }
-        name = cleanString(nameCleanup[1]);
+        let nameCleanup = nameMatch[1].match(quotesRegex);
+        if (nameCleanup)
+          name = cleanString(nameCleanup[0]);
 
         if (!descriptionMatch) { return; }
-        let descriptionCleanup = descriptionMatch[1].match(cleanupRegex);
-        if (!descriptionCleanup) { return; }
-        description = cleanString(descriptionCleanup[1]);
+        let descriptionCleanup = descriptionMatch[1].match(quotesRegex);
+        if (descriptionCleanup != null)
+          description = cleanString(descriptionCleanup[0]);
 
         if (!categoriesMatch) { return; }
         let categoriesCleanup = categoriesMatch[1].match(cleanupRegex);
-        if (!categoriesCleanup) { return; }
-        categories = cleanString(categoriesCleanup[1]);
+        if (categoriesCleanup != null)
+          categories = cleanString(categoriesCleanup[1]);
 
       });
 

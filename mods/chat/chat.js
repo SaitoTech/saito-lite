@@ -12,11 +12,12 @@ class Chat extends ChatCore {
   constructor(app) {
     super(app);
 
-    this.name = "Chat";
+    this.app = app;
+
+    this.name        = "Chat";
     this.description = "Wechat-style chat application, combining on-chain and off-chain messaging and providing for encrypted communications if available.";
     this.uidata = {};
     this.icon_fa = "far fa-comments";
-
 
     this.addrController = new AddressController(app);
   }
