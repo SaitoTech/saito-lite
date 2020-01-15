@@ -7,7 +7,7 @@ class ChatCore extends ModTemplate {
   constructor(app) {
 
     super(app);
-    this.name = "Chat";
+    this.name   = "Chat";
     this.events = ['encrypt-key-exchange-confirm'];
     this.groups = [];
     this.active_groups = [];
