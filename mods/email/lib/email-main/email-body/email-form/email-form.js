@@ -12,6 +12,8 @@ module.exports = EmailForm = {
 
         document.querySelector(".email-body").innerHTML = EmailFormTemplate();
 
+        if (document.querySelector('.create-button')) { document.querySelector('.create-button').classList.add("mobile-hide"); }
+
         this.addData();
 
         var editor = new MediumEditor('#email-text', {

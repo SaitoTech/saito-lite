@@ -132,10 +132,7 @@ hr {
   top: 340px;
   right: 3em;
   cursor: pointer;
-
 }
-
-
 
 .email-title {
   border-top: 1px solid lightgrey;
@@ -368,12 +365,12 @@ hr {
   cursor: pointer;
 }
 
-@media only screen and (max-width: 600px) {
-  /* body {
-    zoom: 1.1;
-  } */
+@media only screen and (max-width: 900px) {
   input[type=checkbox] {
     margin: 0 0.65em;
+  }
+  .mobile-hide {
+    display: none;
   }
   .main {
     max-width: unset;
@@ -403,20 +400,34 @@ hr {
     font-size: 0.8em;
   }
   .email-header {
-    grid-template-columns: 1fr 1fr;
-    /* grid-template-columns: 30% 70%; */
+    grid-template-columns: 3em auto;
   }
   .email-balance, .email-header-title {
-    font-size: 1em;
+    font-size: 2em;
   }
   .email-balance.detail {
     display: none;
   }
   .email-text {
-    height: 85px;
+    height: unset;
+    min-height: 50vh;
+}
+  .grid-2 {
+    grid-gap: 0;
+    margin: 0;
   }
+  .grid-2 div {
+    padding: 0;
+  }
+  #email-form-back-button {
+    font-size: 2em;
+  }
+  button.email-submit {
+    position: fixed;
+    bottom: 0;
+    width: 97vw;
+}
   .email-detail-right-options {
-    display: flex;
     justify-self: end;
     flex-direction: column-reverse;
     padding: 0;
@@ -439,6 +450,7 @@ hr {
     justify-items: center;
     align-items: center;
     grid-gap: 0.3em;
+    font-size: 1.2em;
   }
   .email-bars-menu {
     position: absolute;
@@ -483,6 +495,13 @@ hr {
     width: 66%;
     margin: 0.5em 16.6% 1em;
   }
+  .email-compose {
+    padding: 0;
+    border: none;
+    box-shadow: none;
+  }
+  #email-form-options {
+    top: unset;
 }
 
 .email-appspace {
