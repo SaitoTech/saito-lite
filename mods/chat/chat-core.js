@@ -59,16 +59,18 @@ class ChatCore extends ModTemplate {
   async onPeerHandshakeComplete(app, peer) {
 
     // if (this.groups.length == 0) {
-    let { publickey } = peer.peer;
+    let { publickey, name } = peer.peer;
+
     //
     // create mastodon server
     //
     let members = [publickey];
     let newgroup = this.createChatGroup(members);
+
     if (newgroup) {
+      newgroup.name = name ? name : newgroup.name;
       this.addNewGroup(newgroup);
     }
-    // }
 
     let group_ids = this.groups.map(group => group.id);
 
