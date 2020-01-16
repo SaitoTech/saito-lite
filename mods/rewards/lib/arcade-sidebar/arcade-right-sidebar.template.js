@@ -1,5 +1,4 @@
 module.exports = FaucetSidebarTemplate = (publickey, id) => {
-
     return `
     <hr />
     <h3>Badges Earned</h3>

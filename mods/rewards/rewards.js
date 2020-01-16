@@ -2,12 +2,12 @@ const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const Big = require('big.js');
 
-const FaucetAppSpace = require('./lib/email-appspace/faucet-appspace');
-const FaucetSidebar = require('./lib/arcade-sidebar/arcade-right-sidebar')
-const FaucetSidebarRow = require('./lib/arcade-sidebar/arcade-sidebar-row.template')
+const RewardsAppSpace = require('./lib/email-appspace/rewards-appspace');
+const RewardsSidebar = require('./lib/arcade-sidebar/arcade-right-sidebar')
+const RewardsSidebarRow = require('./lib/arcade-sidebar/arcade-sidebar-row.template')
 
 
-class Faucet extends ModTemplate {
+class Rewards extends ModTemplate {
 
     constructor(app) {
 
@@ -65,7 +65,7 @@ class Faucet extends ModTemplate {
 
     renderAchievmentRow(row){
       if (typeof(row.label) != "undefined" || typeof(row.icon) != "undefined") {
-        document.querySelector(".arcade-sidebar-done").innerHTML += FaucetSidebarRow(row.label, row.icon, row.count);
+        document.querySelector(".arcade-sidebar-done").innerHTML += RewardsSidebarRow(row.label, row.icon, row.count);
       }
     }
 
@@ -155,22 +155,22 @@ class Faucet extends ModTemplate {
     }
 
     renderEmail(app, data) {
-      data.faucet = app.modules.returnModule("Faucet");
-      FaucetAppspace.render(app, data);
+      data.faucet = app.modules.returnModule("Rewards");
+      RewardsAppspace.render(app, data);
     }
     attachEventsEmail(app, data) {
-      data.faucet = app.modules.returnModule("Faucet");
-      FaucetAppspace.attachEvents(app, data);
+      data.faucet = app.modules.returnModule("Rewards");
+      RewardsAppspace.attachEvents(app, data);
     }
 
     renderArcadeSidebar(app, data) {
-      data.faucet = app.modules.returnModule("Faucet");
-      FaucetSidebar.render(app, data);
+      data.faucet = app.modules.returnModule("Rewards");
+      RewardsSidebar.render(app, data);
     }
 
     attachEventsArcadeSidebar(app, data) {
-      data.faucet = app.modules.returnModule("Faucet");
-      FaucetSidebar.attachEvents(app, data);
+      data.faucet = app.modules.returnModule("Rewards");
+      RewardsSidebar.attachEvents(app, data);
     }
 
     async payoutFirstInstance(address, event, payout) {
@@ -399,7 +399,7 @@ class Faucet extends ModTemplate {
         newtx.transaction.to = this.app.wallet.createToSlips(10, address, amount, change_amount);
 
         newtx.transaction.msg.module = "Email";
-        newtx.transaction.msg.title = "Saito Faucet - You have been Rewarded";
+        newtx.transaction.msg.title = "Saito Rewards - You have been Rewarded";
         newtx.transaction.msg.message = `
         <p>You have received <span class="boldred">${amount} tokens</span> from our Saito faucet.</p>
         `;
@@ -419,4 +419,4 @@ class Faucet extends ModTemplate {
 
 }
 
-module.exports = Faucet;
+module.exports = Rewards;
