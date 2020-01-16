@@ -4370,15 +4370,11 @@ console.log("pushing player: " + (a+1));
     planets['planet44'] = { type : "industrial" , img : "/imperium/img/planets/HEARTHSLOUGH.png" , name : "Hearthslough" , resources : 3 , influence : 0 , bonus : ""  }
     planets['planet45'] = { type : "hazardous" , img : "/imperium/img/planets/" , name : "Incarth" , resources : 2 , influence : 0 , bonus : ""  }
     planets['planet46'] = { type : "cultural" , img : "/imperium/img/planets/AANDOR.png" , name : "Aandor" , resources : 2 , influence : 1 , bonus : ""  }
-
-    //
-    // Planet Cards MISSING -- sector32.png / sector41.png / sector42.png / sector43.png / sector44.png
-    //
-    planets['planet39'] = { type : "cultural" , img : "/imperium/img/planets/" , name : "Yssari II" , resources : 0 , influence : 1 , bonus : ""  }
-    planets['planet40'] = { type : "industrial" , img : "/imperium/img/planets/" , name : "Hope's Lure" , resources : 3 , influence : 2 , bonus : ""  }
-    planets['planet47'] = { type : "hazardous" , img : "/imperium/img/planets/" , name : "Quandam" , resources : 1 , influence : 1 , bonus : ""  }
-    planets['planet48'] = { type : "cultural" , img : "/imperium/img/planets/" , name : "Brest" , resources : 3 , influence : 1 , bonus : ""  }
-    planets['planet49'] = { type : "hazardous" , img : "/imperium/img/planets/" , name : "Hiraeth" , resources : 1 , influence : 1 , bonus : ""  }
+    planets['planet39'] = { type : "cultural" , img : "/imperium/img/planets/YSSARI-II.png" , name : "Yssari II" , resources : 0 , influence : 1 , bonus : ""  }
+    planets['planet40'] = { type : "industrial" , img : "/imperium/img/planets/HOPES-LURE.png" , name : "Hope's Lure" , resources : 3 , influence : 2 , bonus : ""  }
+    planets['planet47'] = { type : "hazardous" , img : "/imperium/img/planets/QUANDAM.png" , name : "Quandam" , resources : 1 , influence : 1 , bonus : ""  }
+    planets['planet48'] = { type : "cultural" , img : "/imperium/img/planets/BREST.png" , name : "Brest" , resources : 3 , influence : 1 , bonus : ""  }
+    planets['planet49'] = { type : "hazardous" , img : "/imperium/img/planets/HIRAETH.png" , name : "Hiraeth" , resources : 1 , influence : 1 , bonus : ""  }
 
   
     for (var i in planets) {
