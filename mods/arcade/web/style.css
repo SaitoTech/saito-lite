@@ -804,17 +804,14 @@ option {
   border: 1px solid var(--saito-red);
 }
 
+.chat-box-main {
+  background: var(--saito-nightscape);
+  color: #ffffff;
+}
+
 .chat-box-header {
   border-bottom: 1px solid var(--saito-red);
   background: var(--saito-jester);
-}
-
-.chat-room-message-myself {
-  background: #565656;
-}
-
-.chat-room-message-others {
-  background: #426;
 }
 
 .chat-message-others {
@@ -835,7 +832,7 @@ option {
 }
 
 .chat-message-header {
-  color: #999;
+  color: #ffffff;
 }
 
 #alert-box {
