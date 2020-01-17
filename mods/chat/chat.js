@@ -30,7 +30,7 @@ class Chat extends ChatCore {
           obj.sendMessage = this.sendMessage;
       return obj;
     }
-    if (type == "header-dropdown") { 
+    if (type == "header-dropdown") {
       return {};
     }
     return null;

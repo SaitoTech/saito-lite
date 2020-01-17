@@ -1,5 +1,6 @@
 const ChatBoxTemplate = require('./chat-box.template.js');
 const ChatBoxMessageContainerTemplate = require('./chat-box-message-container.template.js');
+const ChatRoomMessageTemplate = require('../../chat-main/chat-room/chat-room-message.template');
 
 module.exports = ChatBox = {
 
@@ -24,11 +25,20 @@ module.exports = ChatBox = {
                 </p>`;
             }
 
+            var last_sender = "";
+            var last_sig = "";
             group.messages.forEach(message => {
               let type = message.publickey == app.wallet.returnPublicKey() ? 'myself' : 'others';
-              message.publickey = data.chat.addrController.returnAddressHTML(message.publickey);
-              document.getElementById(`chat-box-main-${group.id}`).innerHTML +=
+              message.keyHTML = data.chat.addrController.returnAddressHTML(message.publickey);
+              if (message.publickey != last_sender) {
+                document.getElementById(`chat-box-main-${group.id}`).innerHTML +=
                 ChatBoxMessageContainerTemplate(message, message.sig, type, data);
+                last_sig = message.sig;
+              } else {
+                document.getElementById(`chat-box-message-container-${last_sig}`).innerHTML 
+                   += ChatRoomMessageTemplate(message, message.sig, type, data);
+              }
+              last_sender = message.publickey;
             });
           }
         }
@@ -88,16 +98,30 @@ module.exports = ChatBox = {
     addMessageToDOM(app, data, msg) {
       let chat_box_main = document.getElementById(`chat-box-main-${msg.group_id}`)
       if (!chat_box_main) { return; }
-      msg.identicon = app.keys.returnIdenticon(msg.publickey);
-      msg.publickey = data.chat.addrController.returnAddressHTML(msg.publickey);
       if (document.getElementById(`chat-box-default-message-${msg.group_id}`)) { chat_box_main.innerHTML = '' }
 
-      chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(msg, msg.sig, msg.type, data);
+      msg.identicon = app.keys.returnIdenticon(msg.publickey);
+      msg.keyHTML = data.chat.addrController.returnAddressHTML(msg.publickey);
+      var messages = [];
+      data.chat.groups.forEach(group => {
+        if (group.id == msg.group_id) {messages = group.messages;}
+      });
+      var n = messages.length -1;
+      if (n == 0) {
+        chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(msg, msg.sig, msg.type, data);
+      } else {
+        if (messages[n-1].publickey != messages[n].publickey) {
+          chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(msg, msg.sig, msg.type, data);
+        } else {
+          chat_box_main.querySelectorAll('.chat-box-message-container')[chat_box_main.querySelectorAll('.chat-box-message-container').length-1].innerHTML 
+          += ChatRoomMessageTemplate(msg, msg.sig, msg.type, data);
+        }
+      }
       this.scrollToBottom(msg.group_id);
     },
 
     addTXToDOM(app, data, tx) {
-      //xxx undo?
+      
         let msg = Object.assign({}, tx.returnMessage(), { identicon: app.keys.returnIdenticon(tx.returnMessage().publickey), type: 'myself' });
         this.addMessageToDOM(app, data, msg);
     },
