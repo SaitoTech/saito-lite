@@ -54,12 +54,12 @@
   border-bottom: 0px;
 
   transform: translate(-50%, -0%);
-  transition: height 0.2s ease;
+  transition: height 0.2s ease, width 0.2s ease, right 0.2s ease;
 
 }
 
 /** USED WHEN TOGGLING **/
-.hud-hidden {
+.hud-hidden-vertical {
   height: 40px;
 }
 
@@ -332,7 +332,7 @@
     height: 50vh;
   }
 
-  .hud-hidden {
+  .hud-hidden-vertical {
     height: 8vh;
   }
 
@@ -412,13 +412,13 @@
 @media screen and (orientation: landscape) and (max-height: 700px) {
   .hud {
     grid-template-areas: "hud-header hud-menu hud-content";
-    grid-template-columns: 2em 5em auto;
-    grid-template-rows: unset;
+    grid-template-columns: 2em 4em auto;
+    grid-template-rows: 100%;
     min-width: unset;
     max-width: unset;
-    width: 50vw;
+    width: 40vw;
     height: 100vh;
-    right: -25vw;
+    right: -20vw;
     left: unset;
     cursor: unset;
     max-height: unset;
@@ -430,6 +430,11 @@
     width: unset;
     height: 100%;
     border-right: 1px solid grey;
+    cursor: initial;
+  }
+
+  #hud-home-button {
+    display: none;
   }
 
   .hud-menu ul {
@@ -437,19 +442,25 @@
     margin-bottom: 15px;
   }
 
+  .hud-hidden-horizontal {
+    width: 2em;
+    right: -1em;
+  }
+
   .hud-body {
     height: 100%;
     grid-template-columns: unset;
     grid-template-areas: unset;
+    grid-area: unset;
   }
 
   .status {
-    /* margin-bottom: 23px; */
     height: 100vh;
   }
 
   .controls {
-    width: 9%;
+    flex-direction: column;
+    margin-top: 5px;
   }
 
   #sizer {
