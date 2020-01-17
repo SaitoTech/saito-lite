@@ -151,6 +151,7 @@ module.exports = ChatRoom = {
     },
 
     addMessageToDOM(msg, data) {
+        msg.keyHTML = data.chat.addrController.returnAddressHTML(msg.publickey);
         document.querySelector('.chat-room-content')
                 .innerHTML += ChatMessageContainerTemplate(msg, msg.sig, msg.type, data);
     },

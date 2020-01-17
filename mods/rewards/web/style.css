@@ -1,0 +1,23 @@
+.rewards-grid-row {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 3em 3em auto 3em;
+  cursor: pointer;
+  padding: 1em;
+}
+
+.rewards-grid-row:hover {
+  background-color: #8888;
+}
+
+.rewards-grid-icon i, .rewards-grid-reward, .rewards-grid-completed {
+  font-size: 2em;
+}
+
+.rewards-grid-icon {
+  margin: 0.6em auto;
+}
+
+.rewards-grid-reward {
+  margin: 0.35em auto;
+}

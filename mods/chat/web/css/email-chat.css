@@ -36,7 +36,10 @@
   padding: 4px 0 0 0;
 }
 
-.chat-room-message {}
+.chat-room-message {
+  grid-template-columns: 2em auto;
+  min-width: 10vw;
+}
 
 .chat-message-text {
   margin: unset;
@@ -95,6 +98,7 @@
   font-weight: bold;
   letter-spacing: 1.1px;
   font-family: courier;
+  max-width: 15em;
 }
 
 .chat-message-timestamp {
@@ -234,8 +238,8 @@
 
 .chat-room-message-identicon {
   border: 1px solid #8885;
-  width: 3em;
-  height: 3em;
+  width: 2em;
+  height: 2em;
   padding: 1px;
   border-radius: 5px;
 }
@@ -303,7 +307,7 @@
 
 .chat-message-set-myself {
   flex-direction: row-reverse;
-  margin: 5px 0 5px 5px;
+  margin: 5px 5px 5px 0px;
 }
 
 .chat-box-message-others {
@@ -333,7 +337,7 @@
 .chat-box-message-container {
   border: solid;
   border-width: 0 0 2px 0;
-  margin: 3px 0;
+  padding: 3px 0;
 }
 
 @media only screen and (max-width: 600px) {

@@ -229,13 +229,16 @@ class ChatCore extends ModTemplate {
 
     this.groups.forEach(group => {
       if (group.id == txmsg.group_id) {
-        let msg_type = tx.transaction.from[0].add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
-        txmsg.identicon = this.app.keys.returnIdenticon(tx.transaction.from[0].add);
-        let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: msg_type });
-        group.messages.push(msg);
+        let from_add = tx.transaction.from[0].add;
+        let msg_type = from_add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
+        txmsg.identicon = this.app.keys.returnIdenticon();
+        this.addrController.fetchIdentifiers([from_add]);
+
+        let message = Object.assign(txmsg, { sig: tx.transaction.sig, type: msg_type });
+        group.messages.push(message);
 
         if (this.app.wallet.returnPublicKey() != txmsg.publickey) {
-          this.sendEvent('chat_receive_message', msg);
+          this.sendEvent('chat_receive_message', message);
         }
 
         this.sendEvent('chat-render-request', {});
