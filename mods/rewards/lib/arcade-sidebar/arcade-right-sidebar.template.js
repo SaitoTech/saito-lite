@@ -1,4 +1,4 @@
-module.exports = FaucetSidebarTemplate = (publickey, id) => {
+module.exports = RewardsSidebarTemplate = (publickey, id) => {
     return `
     <hr />
     <h3>Badges Earned</h3>

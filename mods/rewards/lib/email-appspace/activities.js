@@ -27,7 +27,7 @@ module.exports = [
         event: "user add contact",
         description:"Sharing is great. Don't keep Saito to your self - tell your friends.",
         completed: false,
-        action: function(app){app.modules.returnModule('Tutorial').welcomeBackupModal();},
+        action: function(app){app.modules.returnModule("Tutorial").inviteFriendsModal();},
     }
 ];
 

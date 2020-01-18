@@ -63,15 +63,15 @@ module.exports = ArcadeRightSidebar = {
           app.modules.returnModule("Registry").showModal();
         }
 
-      let faucetmod = app.modules.returnModule("Faucet");
-      if (faucetmod != null) {
+      let rewardsmod = app.modules.returnModule("Rewards");
+      if (rewardsmod != null) {
         document.querySelector('.arcade-announcement').onclick = (e) => {
           document.querySelector('.arcade-main').innerHTML = '<div class="email-main"><div class="email-appspace"></div></div>';
           data = {};
           data.arcade = this;
-          data.faucet = faucetmod;
-          faucetmod.renderEmail(app, data);
-          faucetmod.attachEventsEmail(app, data);
+          data.rewards = rewardsmod;
+          rewardsmod.renderEmail(app, data);
+          rewardsmod.attachEventsEmail(app, data);
         }
       }
 
