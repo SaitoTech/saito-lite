@@ -1,9 +1,27 @@
 module.exports = SettingsAppspaceTemplate = (app) => {
 
-  html = `
+  let modules_html = app.options.modules
+    .map((mod, i) => {
+      let CHECKED = mod.active ? 'CHECKED': '';
+      return `
+        <div class="settings-app-select">
+          <label class="s-container">${mod.name}
+            <input
+              type="checkbox"
+              value="modules_mods_${i}"
+              class="modules_mods_checkbox"
+              name="modules_mods_${i}" id="${i}" ${CHECKED}/>
+            <span class="s-checkmark"></span>
+          </label>
+         </div>
+      `;
+    })
+    .join('');
+
+  return `
   <link rel="stylesheet" href="/settings/style.css">
-  <div class="email-appspace-settings">    
-  
+  <div class="email-appspace-settings">
+
     <div class="settings-grid">
 
       <div class="settings-wallet-management">
@@ -35,20 +53,7 @@ module.exports = SettingsAppspaceTemplate = (app) => {
         <h3>Activate / Disable Modules:</h3>
 	      <h4>Installed Applications:</h4>
         <div class="settings-app-list">
-  `;
-   
-  for (let i = 0; i < app.options.modules.length; i++) {
-    html += `
-  <div class="settings-app-select">
-  <label class="s-container">${app.options.modules[i].name}
-	  <input type="checkbox" value="modules_mods_${i}" class="modules_mods_checkbox" name="modules_mods_${i}" id="${i}"`;
-    if (app.options.modules[i].active == 1) { html += ' CHECKED'; }
-    html += ` /> <span class="s-checkmark"></span> 
-    </label>
-	</div>
-   `;
-  }
-  html += `
+        ${modules_html}
         </div>
       </div>
 
@@ -61,7 +66,5 @@ module.exports = SettingsAppspaceTemplate = (app) => {
 
 </div>
   `;
-
-  return html;
 }
 

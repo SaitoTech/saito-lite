@@ -58,7 +58,7 @@ module.exports = RegistryModal = {
           // }
 
           //
-          // send token with faucet
+          // send token with reward
           //
         };
 

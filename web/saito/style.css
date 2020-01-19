@@ -129,7 +129,16 @@ button, .button, .file-label {
   min-width: 180px;
 }
 
-button:active, .button:active {
+i {
+  transition: all .25s;
+}
+
+i:hover {
+  transform: scale(.90);
+}
+
+
+button:active, .button:active, i:active {
   transform: scale(.96);
 }
 
@@ -138,6 +147,7 @@ button:hover, .button:hover {
   background: var(--saito-red);
   color: #ffffff;
 }
+
 
 button.super {
   padding: 14px 8px 8px 8px;
@@ -886,7 +896,7 @@ label.treated {
 .modal-content-blank {
   background-color: #fefefe;
   margin: 15% auto;
-  width: 80%;
+  width: 66%;
   font-size: 1.3em;
   transition: max-width linear .25s;
 }

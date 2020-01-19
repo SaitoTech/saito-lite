@@ -20,6 +20,11 @@ module.exports = InviteFriends = {
 
     document.querySelector('.generate-link-box').onclick = () => {
       document.querySelector('.welcome-modal-left').innerHTML = InviteFriendsLinkTemplate(app);
+      document.querySelector('.fa-copy').onclick = () => {
+        let text = document.querySelector('.share-link'); 
+        text.select();
+        document.execCommand('copy');
+      }
     }
 
     document.querySelector('.scanqr-link-box').onclick = () => {
@@ -28,17 +33,11 @@ module.exports = InviteFriends = {
 
     document.querySelector('.address-link-box').onclick = () => {
       document.querySelector('.welcome-modal-left').innerHTML = InviteFriendsPublickeyTemplate(app);
-
-
       document.querySelector('#add-contact-btn').onclick = () => {
-	alert("Adding Contact");
+	      salert("Adding Contact");
       }
-
     }
-
   }
 
 }
-
-
 

@@ -105,7 +105,7 @@ class Tutorial extends ModTemplate {
   welcomeBackupModal() {
 
     let modal = new Modal(this.app, {
-      id: 'faucet',
+      id: 'rewards',
       title: 'Welcome to Saito',
       content: WelcomeBackupTemplate()
     });

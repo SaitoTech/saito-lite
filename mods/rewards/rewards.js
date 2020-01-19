@@ -155,21 +155,21 @@ class Rewards extends ModTemplate {
     }
 
     renderEmail(app, data) {
-      data.faucet = app.modules.returnModule("Rewards");
+      data.rewards = app.modules.returnModule("Rewards");
       RewardsAppspace.render(app, data);
     }
     attachEventsEmail(app, data) {
-      data.faucet = app.modules.returnModule("Rewards");
+      data.rewards = app.modules.returnModule("Rewards");
       RewardsAppspace.attachEvents(app, data);
     }
 
     renderArcadeSidebar(app, data) {
-      data.faucet = app.modules.returnModule("Rewards");
+      data.rewards = app.modules.returnModule("Rewards");
       RewardsSidebar.render(app, data);
     }
 
     attachEventsArcadeSidebar(app, data) {
-      data.faucet = app.modules.returnModule("Rewards");
+      data.rewards = app.modules.returnModule("Rewards");
       RewardsSidebar.attachEvents(app, data);
     }
 
@@ -376,7 +376,7 @@ class Rewards extends ModTemplate {
       let wallet_balance = this.app.wallet.returnBalance();
 
       if (wallet_balance < amount) {
-        console.log("\n\n\n *******THE FAUCET IS POOR******* \n\n\n");
+        console.log("\n\n\n *******THE rewards IS POOR******* \n\n\n");
         return;
       }
 
@@ -401,7 +401,7 @@ class Rewards extends ModTemplate {
         newtx.transaction.msg.module = "Email";
         newtx.transaction.msg.title = "Saito Rewards - You have been Rewarded";
         newtx.transaction.msg.message = `
-        <p>You have received <span class="boldred">${amount} tokens</span> from our Saito faucet.</p>
+        <p>You have received <span class="boldred">${amount} tokens</span> from our Saito rewards.</p>
         `;
         newtx = this.app.wallet.signTransaction(newtx);
 
@@ -409,7 +409,7 @@ class Rewards extends ModTemplate {
         return;
 
       } catch (err) {
-        console.log("ERROR CAUGHT IN FAUCET: ", err);
+        console.log("ERROR CAUGHT IN rewards: ", err);
         return;
       }
 

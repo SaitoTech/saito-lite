@@ -1,11 +1,7 @@
 module.exports = {
   core: [
-    'appointments/appointments.js',
-    'hospital/hospital.js',
-    'appstore/appstore.js',
     'arcade/arcade.js',
     'archive/archive.js',
-    'calendar/calendar.js',
     'chat/chat.js',
     'chess/chess.js',
     'email/email.js',
@@ -28,12 +24,8 @@ module.exports = {
     'website/website.js',
   ],
   lite: [
-    'appointments/appointments.js',
-    'hospital/hospital.js',
-    'appstore/appstore.js',
     'arcade/arcade.js',
     'archive/archive.js',
-    'calendar/calendar.js',
     'chess/chess.js',
     'chat/chat.js',
     'email/email.js',

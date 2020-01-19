@@ -22,7 +22,7 @@ module.exports = WelcomeBackup = {
           <p>You have started using Saito without backing up your wallet or registering a username.</p>
           <blockquote>Please note: to prevent spammers from abusing the network, Saito does not give tokens to anonymous accounts by default.
           </blockquote>
-          <p><span>To start earning tokens have someone in the community send you some. Once you have tokens in your account the network faucet will start working.</span></p>
+          <p><span>To start earning tokens have someone in the community send you some. Once you have tokens in your account the network rewards module will start working.</span></p>
       `;
 
       tx = app.wallet.signTransaction(tx);
