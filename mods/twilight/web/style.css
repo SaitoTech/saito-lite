@@ -306,6 +306,7 @@ body {
   height: 100%;
   width: 100%;
   padding: 0.25em;
+  margin-top: 5px;
 }
 
 .display-cards-status {
@@ -435,8 +436,12 @@ body {
 
 .cardbox-hud {
   display: block;
-  width: calc(8.7em * 0.7211);
-  height: 8.7em;
+
+/* PREVIOUS - works but too small? */
+/*  width: calc(8.7em * 0.7211); */
+/*  height: 8.7em; */
+  width: calc(9em * 0.811);
+  height: 10em;
 
   background-image: url(/twilight/img/Base.svg);
   background-size: cover;

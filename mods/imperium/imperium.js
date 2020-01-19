@@ -4474,18 +4474,11 @@ console.log("pushing player: " + (a+1));
     systems['sector38']        = { img : "/imperium/img/sector38.png" , 	   name : "Sector 30" , hw : 1 , mr : 0 , planets : ['planet41','planet42'] }
     systems['sector39']        = { img : "/imperium/img/sector39.png" , 	   name : "Sector 31" , hw : 1 , mr : 0 , planets : ['planet43','planet44'] }
     systems['sector40']        = { img : "/imperium/img/sector40.png" , 	   name : "Sector 32" , hw : 1 , mr : 0 , planets : ['planet45','planet46'] }
-    systems['sector41']        = { img : "/imperium/img/sector41.png" , 	   name : "Sector 41" , hw : 1 , mr : 0 , planets : ['planet40'] }
-    systems['sector42']        = { img : "/imperium/img/sector42.png" , 	   name : "Sector 42" , hw : 1 , mr : 0 , planets : ['planet47'] }
-    systems['sector43']        = { img : "/imperium/img/sector43.png" , 	   name : "Sector 43" , hw : 1 , mr : 0 , planets : ['planet48'] }
-    systems['sector44']        = { img : "/imperium/img/sector44.png" , 	   name : "Sector 44" , hw : 1 , mr : 0 , planets : ['planet49'] }
+    systems['sector41']        = { img : "/imperium/img/sector41.png" , 	   name : "Sector 41" , hw : 0 , mr : 0 , planets : ['planet40'] }
+    systems['sector42']        = { img : "/imperium/img/sector42.png" , 	   name : "Sector 42" , hw : 0 , mr : 0 , planets : ['planet47'] }
+    systems['sector43']        = { img : "/imperium/img/sector43.png" , 	   name : "Sector 43" , hw : 0 , mr : 0 , planets : ['planet48'] }
+    systems['sector44']        = { img : "/imperium/img/sector44.png" , 	   name : "Sector 44" , hw : 0 , mr : 0 , planets : ['planet49'] }
 
-
-/*
-    systems['new-byzantium']   = { img : "/imperium/img/sector25.png" ,            name : "New Byzantium" , hw : 0 , mr : 1 , planets : ['planet33'] }
-    systems['homeworld1']      = { img : "/imperium/img/sector30.png" ,            name : "Sector 30" , hw : 1 , mr : 0 , planets : ['planet37'] }
-    systems['homeworld2']      = { img : "/imperium/img/sector31.png" ,            name : "Sector 31" , hw : 1 , mr : 0 , planets : ['planet38'] }
-    systems['homeworld3']      = { img : "/imperium/img/sector32.png" ,            name : "Sector 32" , hw : 1 , mr : 0 , planets : ['planet39'] }
-*/
 
 
     for (var i in systems) {
@@ -6241,15 +6234,15 @@ console.log("THE LAW FAILS!");
   returnFactions() {
     var factions = {};
     factions['faction1'] = {
-      homeworld: "homeworld1",
+      homeworld: "sector38",
       name: "Faction 1"
     };
     factions['faction2'] = {
-      homeworld: "homeworld2",
+      homeworld: "sector39",
       name: "Faction 2"
     };
     factions['faction3'] = {
-      homeworld: "homeworld3",
+      homeworld: "sector40",
       name: "Faction 3"
     };
   /**
