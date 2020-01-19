@@ -344,8 +344,6 @@ console.log("ADDING OPEN GAME FROM SERVER: " + JSON.stringify(tx.transaction));
       }
     }
 
-console.log("\n\n\nNEW GAME INVITE: " + JSON.stringify(tx.transaction));
-
     this.games.unshift(tx);
 
     let data = {};
@@ -358,7 +356,10 @@ console.log("\n\n\nNEW GAME INVITE: " + JSON.stringify(tx.transaction));
   }
 
   removeGameFromOpenList(tx) {
-    this.games = this.games.filter(game => game.transaction.sig == tx.transaction.sig);
+
+    this.games = this.games.filter(game => game.transaction.sig != tx.transaction.sig);
+
+console.log("THESE ARE THE GAMES LEFT: " + JSON.stringify(this.games));
 
     let data = {};
     data.arcade = this;
@@ -475,12 +476,38 @@ console.log("MSG: " + txmsg);
                   }
                 }
 
-
   console.log("HERE FOUND: " + JSON.stringify(this.app.options.games[i]));
 
               }
+
             }
           }
+
+
+	  //
+	  // also possible this is game in our displayed list
+	  //
+	  if (this.games.length > 0) { 
+
+console.log("\n\n\n\n\n\nSHOWING GAME HERE");
+console.log(JSON.stringify(this.games));
+	    for (let i = 0; i < this.games.length; i++) {
+	      if (this.games[i].transaction.sig == txmsg.game_id) {
+
+		//
+		// remove game (accepted players are equal to number needed)
+		//
+		if ((this.games[i].transaction.msg.players_needed) == (this.games[i].transaction.msg.players.length+1)) {
+alert("Removing Game!");
+		  this.removeGameFromOpenList(this.games[i]);
+alert("Removed Game!");
+		}
+
+	      }
+	    }
+
+
+	  }
 
 
 	  //

@@ -26,6 +26,7 @@ module.exports = ProfileAppspaceTemplate = (app) => {
 
       <div id="profile-avatar" class="profile-avatar"><img style="max-width:100px;max-height:100px" src="${app.keys.returnIdenticon(app.wallet.returnPublicKey())}" /></div>
       <div class="profile-option-info upload-avatar-info">Upload an Avatar and your friends will see this instead of your standard image. It may take a bit of time until your new friends see it.</div>
+      <div style="display:none"><input style="display:none" id="profile-upload-avatar" type="file" /></label></div>
 
   </div>
   `;
