@@ -53,13 +53,13 @@ module.exports = AddContactModal = {
       AddContactModalQR.render(app, data);
       AddContactModalQR.attachEvents(app, data);
       document.querySelector(".add-contact-modal-body")
-                .append(el_parser(
-                  `<div class="add-contact-toggle" id="key" style="
-                  text-align: right;
-                  text-decoration: underline;
-                  color: blue;
-                  cursor: pointer">Add By Key</div>`
-                ));
+              .append(el_parser(
+                `<div class="add-contact-toggle" id="key" style="
+                text-align: right;
+                text-decoration: underline;
+                color: blue;
+                cursor: pointer">Add By Key</div>`
+              ));
       document.querySelector('.add-contact-toggle')
         .onclick = () => {
           if (!document.querySelector('.add-contact-text')) {

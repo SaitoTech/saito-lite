@@ -7,9 +7,17 @@ const EmailChatTemplate = require('./email-chat.template.js');
 module.exports = EmailChat = {
 
     initialize(app, data) {
-      my_listener = (msg) => this.addMessageToDOM(app, data, msg);
+      const render_listener = () => {
+        this.render(app, data);
+        this.attachEvents(app, data);
+      };
+      const receive_msg_listener = (msg) => this.addMessageToDOM(app, data, msg);
+
+      app.connection.removeListener("chat-render-request", render_listener);
+      app.connection.on("chat-render-request", render_listener);
+
       app.connection.removeAllListeners('chat_receive_message');
-      app.connection.on('chat_receive_message', my_listener);
+      app.connection.on('chat_receive_message', receive_msg_listener);
     },
 
     render(app, data) {

@@ -30,8 +30,7 @@ module.exports = ChatList = {
 		      // maximize if minimized
 		      //
                       let chatboxobj = document.getElementById(`chat-box-${group_id}`);
-console.log("removing hidden element css");
-		      chatboxobj.classList.remove("chat-box-hide");
+                      chatboxobj.classList.remove("chat-box-hide");
                       return;
                     }
 
