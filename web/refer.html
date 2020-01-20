@@ -25,7 +25,7 @@
   <script type="text/javascript" src="/saito/lib/jquery/jquery-3.2.1.min.js"></script>
 
   <title>Saito.io</title>
-
+  
   <link rel="stylesheet" href="/saito/style.css" />
   <link rel="stylesheet" href="/website/style.css" />
 
@@ -50,16 +50,14 @@
 
   <script type="text/javascript">
 
+setTimeout(function() {
+
    // fetch referral string
    let urlParams = new URLSearchParams(location.search);
    let i = urlParams.get('i');
    let j = decodeURIComponent(escape(atob(i)));
    let robj = JSON.parse(j);
 
-console.log(JSON.stringify(robj));
-
-
-alert(JSON.stringify(robj));
    let data = null;
 
    ////////////////////////////
@@ -76,6 +74,7 @@ alert(JSON.stringify(robj));
      alert("Ok, updating your wallet!");
      data = null;
    }
+
 
    //////////////////////////
    // or fetch from server //
@@ -95,7 +94,7 @@ alert(JSON.stringify(robj));
 	 // update SAITO with our bundle
 	 //
          if (robj.bundle != "") {
-	   data.bundle = robj.bundle;
+	         data.bundle = robj.bundle;
          }
 
 	 //
@@ -104,7 +103,6 @@ alert(JSON.stringify(robj));
          if (robj.publickey != "") {
 	   data.encrypt   = {};
            data.encrypt.pending = [];
-alert("ADDING: " + robj.publickey);
 	   data.encrypt.pending.push(robj.publickey);
 	 }
 	
@@ -125,6 +123,8 @@ alert("ADDING: " + robj.publickey);
        }
      });
    }
+
+}, 1000);
 
   </script>
 
