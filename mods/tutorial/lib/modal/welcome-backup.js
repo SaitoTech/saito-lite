@@ -60,12 +60,17 @@ module.exports = WelcomeBackup = {
         return;
       };
 
-
       //
-      // update Profile Info
+      // update profile
       //
       if (!app.options.profile) { app.options.profile = {}; }
       app.options.profile.email = submitted_email;
+
+
+      //
+      // update keychain
+      //
+      app.keys.updateEmail(app.wallet.returnPublicKey(), submitted_email);     
 
 
 

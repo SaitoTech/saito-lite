@@ -8,6 +8,21 @@ module.exports = ProfileAppspace = {
 
     attachEvents(app, data) {
 
+
+      let tutmod = app.modules.returnModule("Tutorial");
+      if (tutmod) {
+
+        document.getElementById('registering-email-address-info').addEventListener('click', (e) => {
+          tutmod.welcomeBackupModal();
+        });
+
+        document.getElementById('registering-saito-address-info').addEventListener('click', (e) => {
+          tutmod.registerIdentifierModal();
+        });
+
+      }
+
+
       document.getElementById('profile-avatar')
         .addEventListener('click', (e) => {
           document.getElementById("profile-upload-avatar").click();
