@@ -29,7 +29,7 @@ module.exports = ProfileAppspace = {
             base64_reader.readAsDataURL(selectedFile);
 
 	  } else {
-alert("Not updating avatar");
+      salert("Not updating avatar");
 	  }
       };
 
