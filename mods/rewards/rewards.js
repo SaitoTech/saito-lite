@@ -268,6 +268,9 @@ class Rewards extends ModTemplate {
 
     async addUser(tx, ii) {
       try {
+        //if first transaction is an encrypt tx - the user was referred.
+        //add referal info.
+        //if()
         //let sql = "INSERT OR IGNORE INTO users (address, tx_count, games_finished, game_tx_count, first_tx, latest_tx, last_payout_ts, last_payout_amt, total_payout, total_spend, referer) VALUES ($address, $tx_count, $games_finished, $game_tx_count, $first_tx, $latest_tx, $last_payout_ts, $last_payout_amt, $total_payout, $total_spend, $referer);"
         var isGame = 0;
         if (typeof tx.transaction.msg.game_id != undefined) { isGame = 1 };
