@@ -332,6 +332,9 @@ body {
 }
 
 @media only screen and (max-width: 1000px) {
+  .title-container {
+    width: 100vw; 
+  }
   .site-main {
     margin: 80px 0 0 0;
   }
@@ -415,10 +418,10 @@ body {
   }
   .title-content {
     display: inline-block;
-    font-size: 2em;
+    font-size: 1.5em;
     font-style: italic;
     text-align: left;
-    padding: 1em;
+    padding: 0 1em;
   }
   .title-content blockquote {
     text-align: center;
