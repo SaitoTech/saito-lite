@@ -3,7 +3,7 @@ module.exports = InviteFriendsLinkTemplate = (app) => {
   return `
         <div class="welcome-modal-header">Your Invitation Link:</h1></div>
         <div class="welcome-modal-main">
-          <div style="margin:1em 0">Share this link with your friends. Anyone who clicks on it will be setup will be given an account on the network and add you on chat when they join:</div>
+          <div style="margin:1em 0">Share this link with your friends. Anyone who clicks on it will be setup with an account on the network and add you on chat when they join:</div>
     <div class="link-space">
       <input class="share-link" type="text" value="${app.browser.returnInviteLink()}"></input>
       <i class="fas fa-copy"></i>

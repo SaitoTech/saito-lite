@@ -63,6 +63,7 @@ class Chat extends ChatCore {
     if (type === "encrypt-key-exchange-confirm") {
       if (data.members === undefined) { return; }
       this.createChatGroup(data.members);
+alert("SENDING CHAT RENDER REQUEST!");
       this.sendEvent('chat-render-request', {});
       this.saveChat();
     }
