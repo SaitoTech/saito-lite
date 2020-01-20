@@ -8,16 +8,26 @@ module.exports = ProfileAppspace = {
 
     attachEvents(app, data) {
 
+      let email_registered = app.keys.returnEmail(app.wallet.returnPublicKey());
+      let identifier_registered = app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey());
 
       let tutmod = app.modules.returnModule("Tutorial");
       if (tutmod) {
 
-        document.getElementById('registering-email-address-info').addEventListener('click', (e) => {
-          tutmod.welcomeBackupModal();
+        document.querySelector('.registering-email-address-info').addEventListener('click', (e) => {
+	  if (email_registered != "") {
+	    salert("Identifier already registered!");
+	  } else {
+            tutmod.welcomeBackupModal();
+	  }
         });
 
-        document.getElementById('registering-saito-address-info').addEventListener('click', (e) => {
-          tutmod.registerIdentifierModal();
+        document.querySelector('.registering-saito-address-info').addEventListener('click', (e) => {
+	  if (email_registered != "") {
+	    salert("Legacy Email already registered");
+	  } else {
+            tutmod.registerIdentifierModal();
+	  }
         });
 
       }
