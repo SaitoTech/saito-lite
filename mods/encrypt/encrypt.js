@@ -27,6 +27,7 @@ const Big = require('big.js');
 class Encrypt extends ModTemplate {
 
   constructor(app) {
+
     super(app);
 
     this.app            = app;
@@ -59,7 +60,11 @@ class Encrypt extends ModTemplate {
 
 
 
-  initialize(app) {
+  onPeerHandshakeComplete(app, peer) {
+
+if (app.BROWSER == 0) { return; }
+
+alert("HERE WE ARE WITH: " + JSON.stringify(this.encrypt));
 
     //
     // try to connect with friends in pending list
@@ -108,6 +113,9 @@ class Encrypt extends ModTemplate {
   	tx.transaction.msg.request 	       = "key exchange request";
     tx.transaction.msg.alice_publickey = this.app.keys.initializeKeyExchange(recipient);
 
+    //
+    // does not currently support n > 2
+    //
     if (parties_to_exchange > 2) {
       for (let i = 1; i < parties_to_exchange; i++) {
         tx.transaction.to.push(new saito.slip(recipients[i], 0.0));

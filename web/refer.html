@@ -50,6 +50,8 @@
 
   <script type="text/javascript">
 
+setTimeout(function() {
+
    // fetch referral string
    let urlParams = new URLSearchParams(location.search);
    let i = urlParams.get('i');
@@ -76,6 +78,7 @@ alert(JSON.stringify(robj));
      alert("Ok, updating your wallet!");
      data = null;
    }
+
 
    //////////////////////////
    // or fetch from server //
@@ -106,6 +109,7 @@ alert(JSON.stringify(robj));
            data.encrypt.pending = [];
 alert("ADDING: " + robj.publickey);
 	   data.encrypt.pending.push(robj.publickey);
+alert("PENDING 1: " + JSON.stringify(data.encrypt));
 	 }
 	
 
@@ -114,6 +118,7 @@ alert("ADDING: " + robj.publickey);
 	 //
          localStorage.setItem("options", JSON.stringify(data));
 
+alert("PENDING 2: " + JSON.stringify(data.encrypt));
 	 //
 	 // and redirect to Saito
 	 //
@@ -125,6 +130,8 @@ alert("ADDING: " + robj.publickey);
        }
      });
    }
+
+}, 1000);
 
   </script>
 

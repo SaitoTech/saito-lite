@@ -34,7 +34,7 @@ module.exports = InviteFriends = {
     document.querySelector('.address-link-box').onclick = () => {
       document.querySelector('.welcome-modal-left').innerHTML = InviteFriendsPublickeyTemplate(app);
       document.querySelector('#add-contact-btn').onclick = () => {
-	      salert("Adding Contact");
+        salert("Adding Contact");
       }
     }
   }
