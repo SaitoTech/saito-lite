@@ -1,8 +1,4 @@
-try {
-  var ModTemplate = require('../../lib/templates/modtemplate');
-} catch(err) {
-  var ModTemplate = require('ModTemplate');
-}
+var ModTemplate = require('../../lib/templates/modtemplate');
 var TestingAppspace = require('./lib/email-appspace/testing-appspace');
 
 //////////////////

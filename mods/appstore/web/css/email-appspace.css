@@ -33,7 +33,7 @@
 .appstore-app-item-description {
   overflow-y: auto;
   grid-column: 1 / span 2;
-  height: 2em;
+  min-height: 2em;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -49,6 +49,7 @@
 
 .appstore-app-item-categories {
   grid-column: 1 / span 2;
+  display: none;
 }
 
 .appstore-app-item-categories .category {
