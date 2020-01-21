@@ -1046,7 +1046,7 @@ label.treated {
 
 .welcome-modal-exit .fa-arrow-right {
   margin: auto;
-  font-size: 120px;
+  font-size: 5vw;
   position: absolute;
   bottom: 0px;
   width: 100%;
@@ -1269,4 +1269,8 @@ i.fas.fa-times-circle {
   white-space: nowrap;
   width: unset;
   min-width: unset;
+}
+
+.share-link {
+  color: #555;
 }

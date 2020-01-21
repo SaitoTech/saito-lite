@@ -55,6 +55,20 @@ class Chat extends ChatCore {
     EmailChat.attachEvents(app, data);
   }
 
+  receiveEvent(type, data) {
+
+    //
+    // new encryption channel opened
+    //
+    if (type === "encrypt-key-exchange-confirm") {
+      if (data.members === undefined) { return; }
+      this.createChatGroup(data.members);
+      this.sendEvent('chat-render-request', {});
+      this.saveChat();
+    }
+
+  }
+
   initialize(app) {
     super.initialize(app);
   }
