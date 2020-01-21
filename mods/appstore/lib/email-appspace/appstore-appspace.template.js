@@ -2,8 +2,7 @@ module.exports = AppStoreAppspaceTemplate = () => {
 
   return `
   
-
-
+<link rel="stylesheet" href="/appstore/css/email-appspace.css" />
 <div class="appspace-appstore-container">
 
   <div class="appstore-header-featured grid-2">

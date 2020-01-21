@@ -74,6 +74,12 @@ module.exports = SettingsAppspace = {
 
 
 
+      document.getElementById('backup-account-btn')
+        .addEventListener('click', (e) => {
+	  app.wallet.backupWallet();
+      });
+
+
       document.getElementById('restore-account-btn')
         .addEventListener('click', (e) => {
           document.getElementById("settings-restore-account").click();
@@ -119,17 +125,6 @@ alert("Cancelling Wallet Restoration...");
       };
 
 
-
-
-
-      document.getElementById('restore-account-btn')
-        .addEventListener('click', (e) => {
-
-	  let pass = sprompt("Please provide your password to decrypt this wallet: ");
-
-	  alert("Provided: " + pass);
-
-      });
 
 
       document.getElementById('reset-account-btn')
