@@ -164,7 +164,7 @@ class Encrypt extends ModTemplate {
     if (conf == 0) {
 
       if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) {
-        encrypt_self.sendEvent('encrypt-key-exchange-confirm', { publickey: tx.transaction.to[0].add });
+        encrypt_self.sendEvent('encrypt-key-exchange-confirm', { members: [tx.transaction.to[0].add, tx.transaction.from[0].add] });
       }
       if (tx.transaction.to[0].add === app.wallet.returnPublicKey()) {
 
@@ -209,7 +209,7 @@ class Encrypt extends ModTemplate {
           //
           //
           //
-          encrypt_self.sendEvent('encrypt-key-exchange-confirm', { publickey: sender });
+          encrypt_self.sendEvent('encrypt-key-exchange-confirm', { members: [sender, app.wallet.returnPublicKey()] });
 
         }
       }

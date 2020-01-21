@@ -5,7 +5,7 @@ module.exports = [
         reward: 50,
         title: "Register Identifier",
         event: "register identifier",
-        description: "Not a robot? It's not that we don't like robots, but we can't afford to keep paying them money and still have tokens for numans that want.",
+        description: "Not a robot? You are eligible for tokens from the Saito faucet. Register an identifier to get started.",
         completed: false,
         action: function(app){app.modules.returnModule('Tutorial').registerIdentifierModal();},
     },

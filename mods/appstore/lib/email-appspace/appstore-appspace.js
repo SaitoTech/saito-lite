@@ -9,7 +9,6 @@ module.exports = AppStoreAppspace = {
 
   render(app, data) {
 
-    document.head.innerHTML += '<link rel="stylesheet" type="text/css" href="/appstore/css/email-appspace.css">';
     document.querySelector(".email-appspace").innerHTML = AppStoreAppspaceTemplate();
     //
     // fetch modules from appstore

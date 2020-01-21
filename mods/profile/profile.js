@@ -70,18 +70,13 @@ class Profile extends ModTemplate {
 	if (txmsg.request == "update identicon") {
 	  if (txmsg.identicon != "") {
 	    app.keys.updateIdenticon(tx.transaction.from[0].add, txmsg.identicon);
+	    try {
+	      document.querySelector("profile-avatar").innerHTML = '<img style="max-width:100px;max-height:100px" src="'+txmsg.identicon+'">';
+	    } catch (err) {
+	    }
 	  }
 	}
       }
-
-
-      //
-      //
-      //
-      if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) {
-
-      }
-
     }
   }
 

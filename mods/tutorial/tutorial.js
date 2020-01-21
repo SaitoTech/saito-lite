@@ -1,16 +1,16 @@
-var saito = require('../../lib/saito/saito');
-var ModTemplate = require('../../lib/templates/modtemplate');
+const ModTemplate = require('../../lib/templates/modtemplate');
 
 const Modal = require('../../lib/ui/modal/modal');
+const helpers = require('../../lib/helpers/index');
 
-const WelcomeBackupTemplate = require('./lib/modal/welcome-backup.template');
-const WelcomeBackup = require('./lib/modal/welcome-backup.js');
+const WelcomeBackupTemplate = require('./lib/modal/welcome/welcome-backup.template');
+const WelcomeBackup = require('./lib/modal/welcome/welcome-backup.js');
 
-const RegisterUsernameTemplate = require('./lib/modal/register-username.template');
-const RegisterUsername = require('./lib/modal/register-username.js');
+const RegisterUsernameTemplate = require('./lib/modal/register/register-username.template');
+const RegisterUsername = require('./lib/modal/register/register-username.js');
 
-const InviteFriendsTemplate = require('./lib/modal/invite-friends.template');
-const InviteFriends = require('./lib/modal/invite-friends.js');
+const InviteFriendsTemplate = require('./lib/modal/invite/invite-friends.template');
+const InviteFriends = require('./lib/modal/invite/invite-friends.js');
 
 
 class Tutorial extends ModTemplate {
@@ -63,15 +63,15 @@ class Tutorial extends ModTemplate {
 
     if (message.request == "user subscription") {
       try {
-        
+
         let sql = "INSERT OR IGNORE INTO subscribers (publickey, email, unixtime) VALUES ($publickey, $email, $unixtime);"
-        
+
         let params = {
           $publickey: message.data.key,
           $email: message.data.email,
           $unixtime: message.data.time,
         }
-        
+
        await this.app.storage.executeDatabase(sql, params, "tutorial");
 
         return;
@@ -94,6 +94,7 @@ class Tutorial extends ModTemplate {
     let data = {};
     data.tutorial = this;
     data.modal = modal;
+    data.helpers = helpers;
 
     modal.render("blank");
 
@@ -144,5 +145,4 @@ class Tutorial extends ModTemplate {
 }
 
 module.exports = Tutorial;
-
 

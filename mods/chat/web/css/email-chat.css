@@ -332,6 +332,7 @@
 
 .chat-message-set-content {
   padding: 1px;
+  max-width: 80%;
 }
 
 .chat-box-message-container {

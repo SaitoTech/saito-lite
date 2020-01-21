@@ -11,7 +11,7 @@ module.exports = InviteFriendsLinkTemplate = (app) => {
           <div class="welcome-modal-info">
             <div style="margin-top:20px" class="welcome-modal-explanation tip">
               <div><b>What happens when someone clicks on this link?</b> <i class="fas fa-info-circle"></i></div>
-              <div class="tiptext">Users you invite will be given a copy of your javascript bundle (so they are running the same applications and have guaranteed version-compatibility). The Saito rewards module will give both you and your friends a bonus in Saito tokens for helping spread work.</div>
+              <div class="tiptext">Users you invite will be given a copy of your javascript bundle (so they are running the same applications and have guaranteed version-compatibility). The Saito rewards module will give both you and your friends a bonus in Saito tokens for helping spread word.</div>
             </fieldset>
           </div>
         </div>

@@ -73,6 +73,7 @@ class AppStore extends ModTemplate {
       let obj = {};
       obj.render = this.renderEmail;
       obj.attachEvents = this.attachEventsEmail;
+      obj.script = '<link ref="stylesheet" href="/appstore/css/email-appspace.css" />';
       return obj;
     }
     return null;
