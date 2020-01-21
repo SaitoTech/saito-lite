@@ -8,7 +8,7 @@ module.exports = EmailMain = {
 
     let email_main = document.querySelector(".email-main");
     if (!email_main) { return; }
-    email_main.innerHTML = EmailMainTemplate();
+    email_main.innerHTML = EmailMainTemplate(app, data);
 
     data.email.main = this;
 

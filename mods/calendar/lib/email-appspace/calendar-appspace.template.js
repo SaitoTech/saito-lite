@@ -1,6 +1,5 @@
 module.exports = CalendarAppspaceTemplate = () => {
   return `
-    <link href='/calendar/css/email-appspace.css' rel='stylesheet' />
     
     <link href='/saito/lib/fullcalendar/packages/core/main.css' rel='stylesheet' />
     <link href='/saito/lib/fullcalendar/packages/daygrid/main.css' rel='stylesheet' />
