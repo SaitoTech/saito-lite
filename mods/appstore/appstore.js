@@ -1,9 +1,5 @@
-var ModTemplate;
-try {
-  ModTemplate = require('ModTemplate');
-} catch {
-  ModTemplate = require('../../lib/templates/modtemplate');
-}
+const helpers = require('../../lib/helpers/index');
+const ModTemplate = require('../../lib/templates/modtemplate');
 const AppStoreAppspace = require('./lib/email-appspace/appstore-appspace');
 const AppStoreBundleConfirm = require('./lib/email-appspace/appstore-bundle-confirm');
 
@@ -80,10 +76,12 @@ class AppStore extends ModTemplate {
   }
   renderEmail(app, data) {
     data.appstore = app.modules.returnModule("AppStore");
+    data.helpers = helpers;
     AppStoreAppspace.render(app, data);
   }
   attachEventsEmail(app, data) {
     data.appstore = app.modules.returnModule("AppStore");
+    data.helpers = helpers;
     AppStoreAppspace.attachEvents(app, data);
   }
 
@@ -247,6 +245,7 @@ class AppStore extends ModTemplate {
           //
           //
           console.log("REQUEST BUNDLE TX received...");
+          // TODO: This logic should stem from a callback
           if (tx.isFrom(app.wallet.returnPublicKey())) {
             try {
               document.querySelector(".appstore-loading-text").innerHTML = "Your request has been received by the network. Your upgrade should be completed within about 45 seconds.";
@@ -599,10 +598,11 @@ console.log("I AM: " + app.wallet.returnPublicKey());
 
       bash_script_delete += `rm -rf ../bundler/mods/${returnSlug(mod.name)}-${ts}-${hash}` + "\n";
       fs.writeFileSync(path.resolve(__dirname, mod_path), mod.zip, { encoding: 'binary' });
-      return `appstore/bundler/mods/${mod.name.toLowerCase()}-${ts}-${hash}/${mod.name.toLowerCase()}`;
+      return `appstore/bundler/mods/${returnSlug(mod.name)}-${ts}-${hash}/${returnSlug(mod.name)}`;
     });
-    bash_script_delete += `rm -f ./*-${hash}.zip`;
-    bash_script_delete += `rm -f ./*-${hash}`;
+
+    bash_script_delete += `rm -rf *-${hash}.zip \n`;
+    bash_script_delete += `rm -rf *-${hash} \n`;
 
 
 
