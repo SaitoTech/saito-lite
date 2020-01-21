@@ -3,9 +3,9 @@ const ModTemplate = require('../../lib/templates/modtemplate');
 const Big = require('big.js');
 
 const RewardsAppSpace = require('./lib/email-appspace/rewards-appspace');
-const RewardsSidebar = require('./lib/arcade-sidebar/arcade-right-sidebar')
-const RewardsSidebarRow = require('./lib/arcade-sidebar/arcade-sidebar-row.template')
-
+const RewardsSidebar = require('./lib/arcade-sidebar/arcade-right-sidebar');
+const RewardsSidebarRow = require('./lib/arcade-sidebar/arcade-sidebar-row.template');
+const activities = require('./lib/email-appspace/activities'); 
 
 class Rewards extends ModTemplate {
 
@@ -18,8 +18,10 @@ class Rewards extends ModTemplate {
       this.initial = 10;
       this.payoutRatio = 0.75;
 
-      this.backup_payout = 50;
-      this.registry_payout = 50;
+      this.backupPayout = 50;
+      this.registryPayout = 50;
+
+      this.referalBonus = 0.1;
 
       //
       // we want this running in all browsers
@@ -77,7 +79,7 @@ class Rewards extends ModTemplate {
       }
 
       if (message.request == "user wallet backup") {
-        this.payoutFirstInstance(message.data, message.request, this.backup_payout);
+        this.payoutFirstInstance(message.data, message.request, this.backupPayout);
       }
 
       if (message.request == "update activities") {
@@ -175,7 +177,7 @@ class Rewards extends ModTemplate {
 
     async payoutFirstInstance(address, event, payout) {
       if (await this.checkEvent(address, event) == false) {
-          this.makePayout(address, payout);
+          this.makePayout(address, payout, event);
       }
       this.recordEvent(address, event);
     }
@@ -189,7 +191,7 @@ class Rewards extends ModTemplate {
           this.updateUsers(tx);
         }
         if (tx.transaction.msg.origin == "Registry") {
-          this.payoutFirstInstance(tx.transaction.to[0].add, "register identifier", this.registry_payout);
+          this.payoutFirstInstance(tx.transaction.to[0].add, "register identifier", this.registryPayout);
         }
       }
     }
@@ -261,7 +263,7 @@ class Rewards extends ModTemplate {
       let resp = await this.app.storage.executeDatabase(sql, params, "rewards");
 
       if (payout) {
-        this.makePayout(row.address, newPayout);
+        this.makePayout(row.address, newPayout, "Usage");
       }
     }
 
@@ -274,6 +276,11 @@ class Rewards extends ModTemplate {
         //let sql = "INSERT OR IGNORE INTO users (address, tx_count, games_finished, game_tx_count, first_tx, latest_tx, last_payout_ts, last_payout_amt, total_payout, total_spend, referer) VALUES ($address, $tx_count, $games_finished, $game_tx_count, $first_tx, $latest_tx, $last_payout_ts, $last_payout_amt, $total_payout, $total_spend, $referer);"
         var isGame = 0;
         if (typeof tx.transaction.msg.game_id != undefined) { isGame = 1 };
+        var referer = ''
+        if (tx.transaction.msg.module == "Encrypt") {
+          referer = tx.transaction.to[ii].add;
+          this.recordEvent(referer, "user add contact");
+        }
         let params = {
           $address: tx.transaction.from[ii].add,
           $tx_count: 1,
@@ -285,9 +292,9 @@ class Rewards extends ModTemplate {
           $last_payout_amt: this.initial,
           $total_payout: this.initial,
           $total_spend: Number(tx.fees_total),
-          $referer: ''
+          $referer: referer
         }
-        let sql = "INSERT OR IGNORE INTO users (address, tx_count, games_finished, game_tx_count, first_tx, latest_tx, last_payout_ts, last_payout_amt, total_payout, total_spend, referer) VALUES ('" + tx.transaction.from[ii].add + "', " + 1 + ", " + 0 + ", " + isGame + ", " + tx.transaction.ts + ", " + tx.transaction.ts + ", " + tx.transaction.ts + ", " + this.initial + ", " + this.initial + ", " + Number(tx.fees_total) + ", '');";
+        let sql = "INSERT OR IGNORE INTO users (address, tx_count, games_finished, game_tx_count, first_tx, latest_tx, last_payout_ts, last_payout_amt, total_payout, total_spend, referer) VALUES ('" + tx.transaction.from[ii].add + "', " + 1 + ", " + 0 + ", " + isGame + ", " + tx.transaction.ts + ", " + tx.transaction.ts + ", " + tx.transaction.ts + ", " + this.initial + ", " + this.initial + ", " + Number(tx.fees_total) + ", '" + referer + "');";
         params = {};
 
         await this.app.storage.executeDatabase(sql, params, "rewards");
@@ -373,13 +380,37 @@ class Rewards extends ModTemplate {
       }
     }
 
-    async makePayout(address, amount) {
-        //send the user a little something.
+    async returnReferer(address) {
+      try {
+        let sql = "SELECT referer from users where address = $address";
+        let params = {
+            $address: address,
+        }
+        let rows = await this.app.storage.queryDatabase(sql, params, "rewards");
+        if (rows.length >= 1) {
+          return rows[0].referer;
+        } else {
+          return false;
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    makePayout(address, amount, event="") {
+      //send the user a little something.
+
+      //work out what for:
+      if(event != "") {
+        activities.forEach( (activity) => {
+          if(event == activity.event) {event = activity.title}
+        });
+      }
 
       let wallet_balance = this.app.wallet.returnBalance();
 
       if (wallet_balance < amount) {
-        console.log("\n\n\n *******THE rewards IS POOR******* \n\n\n");
+        console.log("\n\n\n *******THE REWARD SERVER IS POOR******* \n\n\n");
         return;
       }
 
@@ -399,16 +430,29 @@ class Rewards extends ModTemplate {
         // generate change address(es)
         //
         var change_amount = total_from_amt.minus(total_fees);
-        newtx.transaction.to = this.app.wallet.createToSlips(10, address, amount, change_amount);
+        newtx.transaction.to = this.app.wallet.createToSlips(10, address, Big(amount + 0), change_amount);
 
         newtx.transaction.msg.module = "Email";
-        newtx.transaction.msg.title = "Saito Rewards - You have been Rewarded";
+        if (event =="") {
+          newtx.transaction.msg.title = "Saito Rewards - You have been Rewarded";
+        } else {
+          newtx.transaction.msg.title = "Saito Rewards: " + event;
+        }
         newtx.transaction.msg.message = `
         <p>You have received <span class="boldred">${amount} tokens</span> from our Saito rewards.</p>
         `;
         newtx = this.app.wallet.signTransaction(newtx);
 
         this.app.network.propagateTransaction(newtx);
+
+        this.returnReferer(address)
+          .then((referer) => { 
+            if(amount >= 1) {
+              let referalPayment = amount * this.referalBonus;
+              this.makePayout(referer, referalPayment, "Referal: " + event);
+            }
+           });
+        
         return;
 
       } catch (err) {
