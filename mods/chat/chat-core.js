@@ -100,6 +100,8 @@ class ChatCore extends ModTemplate {
     }
 
     this.sendEvent('chat-render-request', {});
+    this.sendEvent('chat-render-box-request', {});
+
     this.saveChat();
   }
 

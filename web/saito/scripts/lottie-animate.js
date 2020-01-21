@@ -7,7 +7,7 @@ document.onreadystatechange = function () {
         document.getElementById('interactive');
         document.getElementById('lottie').style.display="none";
         document.getElementById('content').style.visibility="visible";
-      },1000);
+      },100);
   }
 }
 
