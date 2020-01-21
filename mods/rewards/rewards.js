@@ -430,7 +430,7 @@ class Rewards extends ModTemplate {
         // generate change address(es)
         //
         var change_amount = total_from_amt.minus(total_fees);
-        newtx.transaction.to = this.app.wallet.createToSlips(10, address, Big(amount + 0), change_amount);
+        newtx.transaction.to = this.app.wallet.createToSlips(10, address, amount, change_amount);
 
         newtx.transaction.msg.module = "Email";
         if (event =="") {
@@ -447,7 +447,7 @@ class Rewards extends ModTemplate {
 
         this.returnReferer(address)
           .then((referer) => { 
-            if(amount >= 1) {
+            if((amount * this.referalBonus) >= 1) {
               let referalPayment = amount * this.referalBonus;
               this.makePayout(referer, referalPayment, "Referal: " + event);
             }
