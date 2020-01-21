@@ -30,28 +30,38 @@
   <link rel="stylesheet" href="/chat/css/email-chat.css">
   <link rel="stylesheet" href="/arcade/style.css">
 
-  <!-- Glide Carousel CSS-->
-  <link rel="stylesheet" href="/saito/lib/glide/css/glide.core.min.css">
-  <!--script src="https://www.google.com/recaptcha/api.js" async defer>
-  </script-->
-
   <script type="text/javascript" src="/saito/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/saito/lib/fitty/fitty.min.js"></script>
+
+  <style>
+    #content {
+      visibility: visible;
+    }
+  </style>
 
 </head>
 
 <body>
-  <div class="header"><h2>Downloading Saito and Synching with the Chain</h2></div>
-  <div class="arcade-container main">
-    <div class="arcade-left-sidebar sidebar"></div>
-    <div class="arcade-middle">
-      <div class="arcade-game-carousel"></div>
-      <div class="arcade-main"></div>
-    </div>
-    <div class="arcade-right-sidebar sidebar"></div>
-  </div>
 
-  <div class="footer"></div>
+  <!-- saito load animation -->
+  <!-- TODO: white background doesn't mix well with saito red background -->
+  <!-- <script src="/saito/lib/lottie/lottie_light.min.js"></script>
+  <div id="lottie"></div> -->
+  <!-- <script src="/saito/scripts/lottie-animate.js"></script> -->
+
+  <!-- Saito content renders on load -->
+  <div id="content">
+    <div class="header"><h2>Downloading Saito...</h2></div>
+    <div class="arcade-container main">
+      <div class="arcade-left-sidebar sidebar"></div>
+      <div class="arcade-middle">
+        <div class="arcade-game-carousel"></div>
+        <div class="arcade-main"></div>
+      </div>
+      <div class="arcade-right-sidebar sidebar"></div>
+    </div>
+    <div class="footer"></div>
+  </div>
 
   <script id="saito" type="text/javascript" src="/saito/saito.js"></script>
 

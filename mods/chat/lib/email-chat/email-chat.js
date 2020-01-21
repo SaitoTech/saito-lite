@@ -13,7 +13,7 @@ module.exports = EmailChat = {
       };
       const receive_msg_listener = (msg) => this.addMessageToDOM(app, data, msg);
 
-      app.connection.removeListener("chat-render-request", render_listener);
+      app.connection.removeAllListeners("chat-render-request");
       app.connection.on("chat-render-request", render_listener);
 
       app.connection.removeAllListeners('chat_receive_message');
