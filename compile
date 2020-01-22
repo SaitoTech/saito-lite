@@ -21,9 +21,12 @@ if [ "$1" == "nuke" ]; then
   echo "  (resetting configuration)  "
   echo ""
   echo ""
-  
-  rm -f ./bundler
-  mkdir ./bundler
+
+  if [ ! -d "./bundler" ]; then
+    mkdir bundler/
+  fi
+
+  rm -f ./bundler/*
   rm -f ./data/appstore.sq3
   rm -f ./data/hospital.sq3
   rm -f ./data/records.sq3
@@ -91,6 +94,7 @@ echo ""
 echo "///////////////"
 echo "// IMPORTANT //"
 echo "///////////////"
+echo ""
 echo "Saito will default to running on a local, private network for "
 echo "development and testing unless you create a configuration file"
 echo "specifying a connection point to the public network.          "

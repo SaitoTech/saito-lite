@@ -100,6 +100,8 @@ class ChatCore extends ModTemplate {
     }
 
     this.sendEvent('chat-render-request', {});
+    this.sendEvent('chat-render-box-request', {});
+
     this.saveChat();
   }
 
@@ -231,13 +233,19 @@ class ChatCore extends ModTemplate {
       if (group.id == txmsg.group_id) {
         let from_add = tx.transaction.from[0].add;
         let msg_type = from_add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
-        txmsg.identicon = this.app.keys.returnIdenticon();
-        this.addrController.fetchIdentifiers([from_add]);
 
-        let message = Object.assign(txmsg, { sig: tx.transaction.sig, type: msg_type });
+        this.addrController.fetchIdentifiers([from_add]);
+        let message = Object.assign(txmsg, {
+          sig: tx.transaction.sig,
+          type: msg_type,
+          identicon: this.app.keys.returnIdenticon()
+        });
+
         group.messages.push(message);
 
         if (this.app.wallet.returnPublicKey() != txmsg.publickey) {
+          // /saito/img/logo-color.svg
+          this.app.browser.sendNotification(message.publickey, message.message, 'chat-message-notification');
           this.sendEvent('chat_receive_message', message);
         }
 

@@ -3,11 +3,12 @@ let AppstoreAppDetailsTemplate = require('./appstore-app-details.template.js');
 module.exports = AppstoreAppDetails = {
 
   render(app, data) {
-    if (!document.querySelector('.appstore-app-install-overlay')) {
-      document.querySelector('body').innerHTML += '<div class="appstore-app-install-overlay"></div>'; 
-    }
-        document.querySelector('.appstore-app-install-overlay').innerHTML = AppstoreAppDetailsTemplate(app, data);
-        document.querySelector('.appstore-app-install-overlay').style.display = "block";
+    const {el_parser} = data.helpers;
+    if (!document.querySelector('.appstore-app-install-overlay'))
+      document.querySelector('body').append(el_parser('<div class="appstore-app-install-overlay"></div>'));
+
+    document.querySelector('.appstore-app-install-overlay').innerHTML = AppstoreAppDetailsTemplate(app, data);
+    document.querySelector('.appstore-app-install-overlay').style.display = "block";
 
     //this should not be here - but - it works.
     fitty('.appstore-app-install-name');

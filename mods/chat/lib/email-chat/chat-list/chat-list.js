@@ -12,7 +12,7 @@ module.exports = ChatList = {
         chat_list.innerHTML = "";
         data.chat.groups.forEach(group => chat_list.innerHTML += ChatListRowTemplate(group, data.helpers));
 
-        if (data.chat.groups.length > 0 && data.chat.active_groups == 0) this.openChatBox(app, data, data.chat.groups[0]);
+        // if (data.chat.groups.length > 0 && data.chat.active_groups == 0) this.openChatBox(app, data, data.chat.groups[0]);
     },
 
     attachEvents(app, data) {
