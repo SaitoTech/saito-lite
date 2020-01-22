@@ -5,7 +5,9 @@ module.exports = ChatBoxMessageContainerTemplate = ({ message, publickey, keyHTM
   let { datetime_formatter } = data.helpers;
   let datetime = datetime_formatter(timestamp);
 
-  let line_color = data.chat.app.crypto.base64ToString(identicon.split(",")[1]).split("fill:")[1].split(";")[0];
+  let line_color = "#FF5500";
+
+  //let line_color = data.chat.app.crypto.base64ToString(identicon.split(",")[1]).split("fill:")[1].split(";")[0];
 
   return `
     <div class="chat-message-set chat-message-set-${type}">

@@ -60,6 +60,15 @@ module.exports = EmailAppspaceTemplate = (app) => {
     <div><input type="radio" checked></input><input type="radio"></input><input type="radio"></input><input type="radio"></input></div>
 </div>
 
+<hr/>
+
+<div class="tip">
+  This is text with a tooltip
+  <div class="tiptext">Content of the tool tip. <i>can be html!</i></div>
+</div>
+
+<hr/>
+
 <p>Text Area</p>
 <textarea>
     Bacon ipsum dolor amet meatloaf ribeye pork loin corned beef strip steak filet mignon shank chicken shankle cupim hamburger bacon kielbasa biltong. Alcatra pork belly ball tip kielbasa t-bone drumstick turducken, boudin porchetta landjaeger. Short ribs chuck frankfurter pork belly spare ribs meatloaf. Pig tri-tip meatloaf picanha, sirloin strip steak shoulder cow porchetta pork chop filet mignon swine burgdoggen bacon.
