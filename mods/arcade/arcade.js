@@ -504,9 +504,9 @@ class Arcade extends ModTemplate {
                 // remove game (accepted players are equal to number needed)
                 //
                 if ((this.games[i].transaction.msg.players_needed) == (this.games[i].transaction.msg.players.length + 1)) {
-                  alert("Removing Game!");
+
                   this.removeGameFromOpenList(this.games[i]);
-                  alert("Removed Game!");
+
                 }
 
               }
