@@ -13,6 +13,18 @@ module.exports = AppStorePublish = {
     data.publish = {};
 
     let appstore_self = this;
+
+
+    document.getElementById('appstore-publish-moddrop-inside').ondrop = function(evt) {
+    		  evt.stopPropagation()
+    		  evt.preventDefault()
+    		  var files = evt.dataTransfer.files  // FileList object.
+    		  var file = files[0]                 // File     object.
+    		  alert(file.name)
+    };
+
+
+
     document.getElementById('appstore-publish-module')
             .onchange = async function(e) {
 
@@ -25,39 +37,21 @@ module.exports = AppStorePublish = {
                 return;
               } else {
                 var base64_reader = new FileReader();
-                var zip_reader = new FileReader();
-                let indexFileBlob = await appstore_self.unzipBlob(selectedFile);
-
-                zip_reader.readAsText(indexFileBlob);
                 base64_reader.readAsDataURL(selectedFile);
+
               }
 
-              zip_reader.onload = function() {
-                let text = zip_reader.result;
-                //
-                // get name and description
-                let getNameRegex = RegExp('[\n\r]*this.name\s*([^\n\r]*)');
-                let getDescriptionRegex = RegExp('[\n\r]*this.description\s*([^\n\r]*)');
-                let cleanupRegex = RegExp('=(.*)');
-
-                let nameMatch = text.match(getNameRegex);
-                let descriptionMatch = text.match(getDescriptionRegex);
-
-                data.publish = {
-                  name: cleanString(nameMatch[0].match(cleanupRegex)[1]),
-                  description: cleanString(descriptionMatch[0].match(cleanupRegex)[1])
-                };
-
-                function cleanString(str) {
-                  str = str.substring(0, str.length - 1);
-                  return [...str].map(char => {
-                    if (char == "\'" || char == "\"" || char == ";") return ''
-                    return char
-                  }).join('');
-                }
+              base64_reader.onload = function() {
+		data.publish.zip = base64_reader.result;
+		// remove "data:application/zip;base64," from head of string
+		data.publish.zip = data.publish.zip.substring(28);
+		try {
+		  document.querySelector(".submit-file-btn-box").style.display = "block";
+		} catch (err) {
+		  alert("Error making submit button visible!");
+		}
               }
 
-              base64_reader.onload = () => data.publish.zip = base64_reader.result;
             }
 
     document.getElementById('appstore-publish-form')
@@ -92,27 +86,9 @@ module.exports = AppStorePublish = {
     newtx.transaction.msg = {
       module: "AppStore",
       request: "submit module",
-      name: name,
-      description: description,
       module_zip: zip,
     };
     return app.wallet.signTransaction(newtx);
   },
 
-  unzipBlob(selected_file) {
-    return new Promise((resolve, reject) => {
-      // use a zip.BlobReader object to read zipped data stored into blob variable
-      zip.createReader(new zip.BlobReader(selected_file), function(zipReader) {
-        // get entries from the zip file
-        zipReader.getEntries(function(entries) {
-          // get data from the first file
-          entries[1].getData(new zip.BlobWriter("text/plain"), function(data) {
-            // close the reader and calls callback function with uncompressed data as parameter
-            zipReader.close();
-            resolve(data);
-          });
-        });
-      }, onerror);
-    });
-  }
 }

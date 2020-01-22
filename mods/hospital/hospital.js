@@ -9,6 +9,8 @@ class Hospital extends ModTemplate {
 
     this.app            = app;
     this.name           = "Hospital";
+    this.description	= "BETA open source hospital management system appointment bookings and biobank";
+    this.categories	= "Health NGO";
     this.db_tables.push("hospitals JOIN appointments");
 
     this.admin_pkey     = app.wallet.returnPublicKey();

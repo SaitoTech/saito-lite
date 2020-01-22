@@ -39,7 +39,7 @@ module.exports = AppStoreAppspaceTemplate = () => {
   <fieldset class="appstore-publish">
     <h3>Are you a Developer?</h3>
     <p>
-      It takes about five minutes to code your first Saito Application: <a href="https://org.saito.tech/developers" target="_saito">click here to learn how</a>.
+      It takes about five minutes to code your first Saito Application: <a href="https://org.saito.tech/introduction-to-saito-development" target="_saito">click here to learn how</a>.
     </p>
     <p>
       When you are done, publish your applications to the network for anyone to install and use:

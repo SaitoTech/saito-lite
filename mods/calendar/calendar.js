@@ -12,7 +12,7 @@ class Calendar extends ModTemplate {
     this.app            = app;
     this.name           = "Calendar";
     this.description    = "Calendar for viewing and making appointments";
-    this.categories     = "Admin Productivity Utilities";
+    this.categories     = "Utilities";
 
     this.appointments   = [];
 

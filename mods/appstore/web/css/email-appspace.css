@@ -33,7 +33,7 @@
 .appstore-app-item-description {
   overflow-y: auto;
   grid-column: 1 / span 2;
-  height: 2em;
+  min-height: 2em;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -49,6 +49,7 @@
 
 .appstore-app-item-categories {
   grid-column: 1 / span 2;
+  display: none;
 }
 
 .appstore-app-item-categories .category {
@@ -175,7 +176,12 @@
   margin-right: 1em;
 }
 
+#appstore-publish-form {
+  margin-top: 10px;
+}
+
 #appstore-publish-moddrop {
+  display: none;
   width: 400px;
   height: 220px;
   border-style: dashed;
@@ -193,7 +199,7 @@
 }
 
 #appstore-publish-moddrop-inside {
-  background-color: white;
+  background-color: transparent;
   border-radius: 15px;
   width: 404px;
   height: 224px;

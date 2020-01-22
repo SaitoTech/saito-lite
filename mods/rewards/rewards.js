@@ -13,7 +13,9 @@ class Rewards extends ModTemplate {
 
       super(app);
 
-        this.name = "Rewards";
+      this.name = "Rewards";
+      this.description = "Quick reference for earning Saito tokens from the Saito faucet.";
+      this.categories = "Core Utilities Finance";
 
       this.initial = 10;
       this.payoutRatio = 0.75;

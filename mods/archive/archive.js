@@ -6,6 +6,9 @@ class Archive extends ModTemplate {
 
     super(app);
     this.name = "Archive";
+    this.description = "Supports the saving and serving of network transactions";
+    this.categories = "Utilities Core";
+
     this.events = [];
 
     this.description = "A tool for storing transactions for asynchronous retreival.";

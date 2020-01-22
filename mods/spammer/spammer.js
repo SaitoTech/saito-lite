@@ -17,7 +17,6 @@ class Spammer extends ModTemplate {
   constructor(app) {
     this.app  = app;
     this.name = "Spammer"
-
     this.description = "A module that spams the network with junk traffic for testing. As bad as it sounds.";
     this.categories  = "Dev Utilities";
 
