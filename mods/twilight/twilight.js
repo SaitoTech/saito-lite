@@ -56,6 +56,7 @@ class Twilight extends GameTemplate {
     this.minPlayers = 2;
     this.maxPlayers = 2;
     this.type       = "Strategy Boardgame";
+    this.categories = "Bordgame Game"
 
     this.hud = new GameHud(this.app, this.menuItems());
 

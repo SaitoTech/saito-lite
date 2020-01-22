@@ -23,6 +23,9 @@ class Rewards extends ModTemplate {
 
       this.referalBonus = 0.1;
 
+      this.description = "User activity reward program module.";
+      this.categories  = "UI Promotions";
+
       //
       // we want this running in all browsers
       //

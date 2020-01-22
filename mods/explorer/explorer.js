@@ -5,6 +5,9 @@ class ExplorerCore extends ModTemplate {
         super(app);
         this.app = app;
         this.name = "Explorer";
+
+        this.description = "A block and transaction explorer for Saito";
+        this.categories  = "Dev Data Utilities";
     }
 
     onConfirmation(blk, tx, conf, app) {

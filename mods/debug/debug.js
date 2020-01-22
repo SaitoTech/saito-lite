@@ -11,6 +11,9 @@ class Debug extends ModTemplate {
     this.app            = app;
     this.name           = "Debug";
 
+    this.description = "A debug configuration dump for Saito";
+    this.categories  = "Dev Utilities";
+
     return this;
   }
 
