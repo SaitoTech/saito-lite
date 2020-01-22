@@ -14,6 +14,10 @@ class Website extends ModTemplate {
     this.description    = "Adds the front-page Saito website to core Saito servers";
     this.categories     = "Core Web Dev"; 
 
+    this.description = "Module that creates a root website on a Saito node.";
+    this.categories  = "Utilities Communications";
+
+
     return this;
   }
 

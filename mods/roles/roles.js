@@ -16,6 +16,10 @@ class Roles extends ModTemplate {
     this.roles		= [];
     this.groups 	= [];
 
+    this.description = "Simple user identity and role management system for Saito";
+    this.categories  = "Admin Users";
+
+
     return this;
 
   }

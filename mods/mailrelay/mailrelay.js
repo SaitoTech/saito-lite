@@ -8,6 +8,9 @@ class MailRelay extends ModTemplate {
     constructor(app) {
         super(app);
 
+        this.description = "Module to relay saito email messages onto the legacy email system."
+        this.categories  = "Communications Utilities";
+
         this.name = "MailRelay";
 	this.deascription = "Adds support for integrating on-chain messages with legacy off-chain email notifications";
 	this.categories = "Core Utilities";

@@ -36,6 +36,9 @@ class Encrypt extends ModTemplate {
     this.categories = "Core Security Dev";
     this.encrypt = this.loadEncrypt(app);
 
+    this.description = "A Diffie-Hellman encryption tool for Saito";
+    this.categories  = "Crpyto Utilities";
+
     return this;
   }
 

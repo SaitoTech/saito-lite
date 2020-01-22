@@ -21,6 +21,8 @@ class Chat extends ChatCore {
     this.uidata = {};
     this.icon_fa = "far fa-comments";
 
+    this.categories  = "Messaging Communication";
+
     this.addrController = new AddressController(app);
   }
 

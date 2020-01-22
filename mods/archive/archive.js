@@ -11,6 +11,9 @@ class Archive extends ModTemplate {
 
     this.events = [];
 
+    this.description = "A tool for storing transactions for asynchronous retreival.";
+    this.categories  = "Utilities";
+
   }
 
 

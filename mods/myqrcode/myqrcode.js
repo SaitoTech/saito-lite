@@ -15,6 +15,9 @@ class MyQRCodes extends ModTemplate {
 
     this.link           = "/email?module=myqrcode";
 
+    this.description = "QR Code display utility for Saito"
+    this.categories  = "UI Utilities";
+
     return this;
   }
 

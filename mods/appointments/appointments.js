@@ -13,6 +13,9 @@ class Appointments extends ModTemplate {
     this.description = "BETA Supporting module for use with the Calendar module - permits scheduling appointments";
     this.categories = "Utilities";
 
+    this.description = "Appointment booking helper module.";
+    this.categories  = "Admin Productivity Utilities";
+
     return this;
 
   }

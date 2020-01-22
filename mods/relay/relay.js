@@ -15,6 +15,9 @@ class Relay extends ModTemplate {
     this.categories     = "Utilities Core";
 
 
+    this.description    = "Simple Message Relay for Saito";
+    this.categories     = "Utilities Communications";
+
     return this;
   }
 
