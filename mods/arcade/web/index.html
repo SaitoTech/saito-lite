@@ -34,8 +34,11 @@
   <script type="text/javascript" src="/saito/lib/fitty/fitty.min.js"></script>
 
   <style>
-    #content {
+    /* #content {
       visibility: visible;
+    } */
+    #lottie {
+      background-color: var(--saito-red);
     }
   </style>
 
@@ -45,13 +48,14 @@
 
   <!-- saito load animation -->
   <!-- TODO: white background doesn't mix well with saito red background -->
-  <!-- <script src="/saito/lib/lottie/lottie_light.min.js"></script>
-  <div id="lottie"></div> -->
-  <!-- <script src="/saito/scripts/lottie-animate.js"></script> -->
+  <script src="/saito/lib/lottie/lottie_light.min.js"></script>
+  <div id="lottie"></div>
+  <script src="/saito/scripts/lottie-animate.js"></script>
 
   <!-- Saito content renders on load -->
   <div id="content">
-    <div class="header"><h2>Downloading Saito...</h2></div>
+    <!-- <div class="header"><h2>Downloading Saito...</h2></div> -->
+    <div class="header"></div>
     <div class="arcade-container main">
       <div class="arcade-left-sidebar sidebar"></div>
       <div class="arcade-middle">
