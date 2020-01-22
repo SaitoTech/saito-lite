@@ -94,19 +94,7 @@ class AppStore extends ModTemplate {
   //
   async handlePeerRequest(app, message, peer, mycallback = null) {
 
-    if (message.request === "appstore load modules") {
-
-      let sql = "SELECT name, description, version, categories, publickey, unixtime, bid, bsh FROM modules WHERE featured = 1";
-      let params = {};
-      let rows = await this.app.storage.queryDatabase(sql, params, message.data.dbname);
-
-      let res = {};
-      res.err = "";
-      res.rows = rows;
-
-      mycallback(res);
-
-    }
+    super.handlePeerRequest(app, message, peer, mycallback);
 
 
     if (message.request === "appstore search modules") {
@@ -209,12 +197,15 @@ class AppStore extends ModTemplate {
           // read in the zip file as base64 and propagate it to the network
           //
           let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
-          let zip = fs.readFileSync(mod_path, { encoding: 'binary' });
+//          let zip = fs.readFileSync(mod_path, { encoding: 'binary' });
+          let zip = fs.readFileSync(mod_path, { encoding: 'base64' });
+
+console.log("THIS IS THE START OF THE MOD: " + zip.substring(0, 50));
 
           newtx.transaction.msg = {
             module: "AppStore",
             request: "submit module",
-            zip,
+            module_zip: zip,
             name: dir,
           };
 
@@ -287,7 +278,15 @@ console.log("I AM: " + app.wallet.returnPublicKey());
     const path = require('path');
     const unzipper = require('unzipper');
 
-    fs.writeFileSync(path.resolve(__dirname, zip_path), zip_bin, { encoding: 'binary' });
+    //
+    // convert base64 to vinary
+    //
+console.log("about to convert base64 to binary...");
+    //zip_bin = atob(zip_bin);
+//console.log("successfully converted base64 to binary...");
+    let zip_bin2 = Buffer.from(zip_bin, 'base64').toString('binary');
+
+    fs.writeFileSync(path.resolve(__dirname, zip_path), zip_bin2, { encoding: 'binary' });
 
     let name = 'Unknown Module';
     let description = 'unknown';
@@ -361,7 +360,44 @@ console.log("I AM: " + app.wallet.returnPublicKey());
 
   async submitModule(blk, tx) {
 
-    if (this.app.BROWSER == 1) { return; }
+    if (this.app.BROWSER == 1) { 
+
+      if (tx.isFrom(this.app.wallet.returnPublicKey())) {
+
+        let newtx = this.app.wallet.createUnsignedTransaction();
+            newtx.transaction.msg.module       = "Email";
+            newtx.transaction.msg.title        = "Saito Application Published";
+            newtx.transaction.msg.message      = `Your application has been published to the App Stores on the network.
+
+	    <p></p>
+
+	    You can find it at the following link:
+
+	    <p></p>
+
+	    http://saito.io/email?module=appstore&app=${tx.transaction.ts}-${tx.transaction.sig}
+
+	    <p></p>
+
+	    or by searching on your preferred AppStore for APP-ID ${tx.transaction.ts}-${tx.transaction.sig}
+
+            <p></p>
+
+	    If your application does not appear shortly, it means there is a bug in the code preventing AppStores from compiling it successfully. We recommend that you <a href="https://org.saito.tech/developers">install Saito locally</a> and compile your module directly to eliminate any errors before uploading.
+
+        `;
+        newtx = this.app.wallet.signTransaction(newtx);
+	let emailmod = this.app.modules.returnModule("Email");
+	if (emailmod) {
+          emailmod.emails.inbox.push(newtx);
+	}
+        this.app.storage.saveTransaction(newtx);
+
+      }
+
+      return; 
+
+    }
 
     let sql = `INSERT INTO modules (name, description, version, categories, publickey, unixtime, bid, bsh, tx, featured)
     VALUES ($name, $description, $version, $categories, $publickey, $unixtime, $bid, $bsh, $tx, $featured)`;
@@ -369,9 +405,9 @@ console.log("I AM: " + app.wallet.returnPublicKey());
     let { from, sig, ts } = tx.transaction;
 
     // should happen locally from ZIP
-    let { zip } = tx.returnMessage();
+    let { module_zip } = tx.returnMessage();
 
-    let { name, description, categories } = await this.getNameAndDescriptionFromZip(zip, `mods/module-${sig}-${ts}.zip`);
+    let { name, description, categories } = await this.getNameAndDescriptionFromZip(module_zip, `mods/module-${sig}-${ts}.zip`);
 
     let params = {
       $name: name,

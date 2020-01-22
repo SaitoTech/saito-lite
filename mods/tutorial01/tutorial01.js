@@ -9,10 +9,9 @@ class Tutorial01 extends ModTemplate {
 
     super(app);
 
-    this.app             = app;
     this.name            = "Tutorial01";
-    this.description     = "Demo application with a clickable button - intended as guide for developers";
-    this.categories      = "Dev Utilities";
+    this.description     = "Email module with a clickable button - creating simple transactions";
+    this.categories      = "Dev Tutorials";
 
     return this;
 

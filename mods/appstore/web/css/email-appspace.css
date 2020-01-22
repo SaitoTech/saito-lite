@@ -176,7 +176,12 @@
   margin-right: 1em;
 }
 
+#appstore-publish-form {
+  margin-top: 10px;
+}
+
 #appstore-publish-moddrop {
+  display: none;
   width: 400px;
   height: 220px;
   border-style: dashed;
@@ -194,7 +199,7 @@
 }
 
 #appstore-publish-moddrop-inside {
-  background-color: white;
+  background-color: transparent;
   border-radius: 15px;
   width: 404px;
   height: 224px;
