@@ -58,10 +58,9 @@ module.exports = EmailForm = {
     async sendEmailTransaction(app, data) {
 
         let email_title = document.querySelector('.email-title').value;
-        let email_text = document.querySelector('#email-text').innerHTML;
         let email_to = document.getElementById('email-to-address').value;
+        let email_text = document.getElementById('email-text').innerHTML;
         let email_amount_elem = document.querySelector('.email-amount');
-        let email_from = this.saito.wallet.returnPublicKey();
         let email_amount = 0.0;
 
         if (email_amount_elem)  {
@@ -72,8 +71,10 @@ module.exports = EmailForm = {
 
         email_to = await data.email.addrController.returnPublicKey(email_to);
 
-        // Add amt here
-        let newtx = app.wallet.createUnsignedTransaction(email_to, email_amount, 0.0);
+        let newtx = app.wallet.returnBalance() > 0 ?
+            app.wallet.createUnsignedTransactionWithDefaultFee(email_to, email_amount) :
+            app.wallet.createUnsignedTransaction(email_to, email_amount, 0.0);
+
         if (!newtx) {
           salert("Unable to send email. You appear to need more tokens");
 	      return;
@@ -82,7 +83,7 @@ module.exports = EmailForm = {
         newtx.transaction.msg.module   = "Email";
         newtx.transaction.msg.title    = email_title;
         newtx.transaction.msg.message  = email_text;
-        newtx = this.saito.wallet.signTransaction(newtx);
+        newtx = app.wallet.signTransaction(newtx);
 
         app.network.propagateTransaction(newtx);
 
