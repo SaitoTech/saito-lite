@@ -17,6 +17,7 @@ class Spammer extends ModTemplate {
   constructor(app) {
     this.app  = app;
     this.name = "Spammer"
+    this.description = "Network load-testing tool for use in research and development";
   }
 
   onNewBlock(blk) {

@@ -9,6 +9,9 @@ class Roles extends ModTemplate {
 
     this.app            = app;
     this.name           = "Roles";
+    this.description    = "BETA application allowing users to organize publickeys into roles and hierarchies, such as staff in an institution";
+    this.utilities      = "Utilities Admin";
+
 
     this.roles		= [];
     this.groups 	= [];

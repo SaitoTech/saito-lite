@@ -10,6 +10,8 @@ class Appointments extends ModTemplate {
 
     this.app = app;
     this.name = "Appointments";
+    this.description = "BETA Supporting module for use with the Calendar module - permits scheduling appointments";
+    this.categories = "Utilities";
 
     return this;
 

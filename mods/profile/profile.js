@@ -10,6 +10,10 @@ class Profile extends ModTemplate {
 
     this.app            = app;
     this.name           = "Profile";
+    this.description    = "BETA module uses circulating transactions on the blockchain to keep profile information publicly circulating";
+    this.categories     = "Utilities";
+
+
     this.link           = "/email?module=settings";
 
     this.profile        = this.loadProfile(this.app);

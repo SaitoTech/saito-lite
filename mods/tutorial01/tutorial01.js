@@ -11,7 +11,7 @@ class Tutorial01 extends ModTemplate {
 
     this.name            = "Tutorial01";
     this.description     = "Email module with a clickable button - creating simple transactions";
-    this.categories      = "Dev Tutorials";
+    this.categories      = "Tutorials";
 
     return this;
 

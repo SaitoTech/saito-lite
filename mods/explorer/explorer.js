@@ -5,6 +5,8 @@ class ExplorerCore extends ModTemplate {
         super(app);
         this.app = app;
         this.name = "Explorer";
+	this.description = "Block explorer for the Saito blockchain. Not suitable for lite-clients";
+	this.categories = "Utilities Dev";
     }
 
     onConfirmation(blk, tx, conf, app) {

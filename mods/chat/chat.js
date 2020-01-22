@@ -15,7 +15,9 @@ class Chat extends ChatCore {
     this.app = app;
 
     this.name        = "Chat";
-    this.description = "Wechat-style chat application, combining on-chain and off-chain messaging and providing for encrypted communications if available.";
+    this.description = "Chat application providing on-chain and off-chain messaging supporting encrypted communication channels.";
+    this.categories = "Utilities Core";
+
     this.uidata = {};
     this.icon_fa = "far fa-comments";
 
