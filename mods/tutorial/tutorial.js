@@ -22,6 +22,10 @@ class Tutorial extends ModTemplate {
     this.app = app;
     this.name = "Tutorial";
 
+    this.description = "User introduction and help system.";
+    this.categories  = "UX Users";
+
+
     this.username_registered = 0;
 
     //

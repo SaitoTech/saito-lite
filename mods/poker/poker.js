@@ -13,6 +13,7 @@ class Poker extends GameTemplate {
     this.app             = app;
     this.name            = "Poker";
     this.description     = 'In this version of Texas Hold\'em Poker for the Saito Arcade, with five cards on the table and two in your hand, can you bet and bluff your way to victory? This game is a playable demo under active development!';
+    this.categories      = "Game Cardgame"
 
     this.card_img_dir    = '/poker/img/cards';
 
