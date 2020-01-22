@@ -244,8 +244,9 @@ class ChatCore extends ModTemplate {
         group.messages.push(message);
 
         if (this.app.wallet.returnPublicKey() != txmsg.publickey) {
-          // /saito/img/logo-color.svg
-          this.app.browser.sendNotification(message.publickey, message.message, 'chat-message-notification');
+          let identifier = app.keys.returnIdentifierByPublicKey(message.publickey);
+          let title =  identifier ? identifier : message.publickey;
+          app.browser.sendNotification(title, message.message, 'chat-message-notification');
           this.sendEvent('chat_receive_message', message);
         }
 

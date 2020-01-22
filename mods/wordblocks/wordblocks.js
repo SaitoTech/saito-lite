@@ -17,7 +17,7 @@ class Wordblocks extends GameTemplate {
     this.app = app;
     this.name = "Wordblocks";
     this.description = `Wordblocks is a word game in which two to four players score points by placing tiles bearing a single letter onto a board divided into a 15×15 grid of squares. The tiles must form words that, in crossword fashion, read left to right in rows or downward in columns, and be included in a standard dictionary or lexicon.`;
-    this.categories  = "Game Wordgame Bordgame";
+    this.categories = "Game Arcade Entertainment";
 
     //
     // Game Class VARS

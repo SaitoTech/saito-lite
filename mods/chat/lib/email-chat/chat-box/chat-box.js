@@ -34,16 +34,22 @@ module.exports = ChatBox = {
           var last_sig = "";
 
           group.messages.forEach(message => {
-            let type = message.publickey == app.wallet.returnPublicKey() ? 'myself' : 'others';
-            message.keyHTML = data.chat.addrController.returnAddressHTML(message.publickey);
-            if (message.publickey != last_sender) {
-              chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(message, message.sig, type, data);
+            let { publickey } = message;
+
+            message = Object.assign({}, message, {
+              type : publickey == app.wallet.returnPublicKey() ? 'myself' : 'others',
+              keyHTML : data.chat.addrController.returnAddressHTML(publickey),
+              identicon_color : app.keys.returnIdenticonColor(publickey),
+            });
+
+            if (publickey != last_sender) {
+              chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(message, data);
               last_sig = message.sig;
             } else {
               document.getElementById(`chat-box-message-container-${last_sig}`).innerHTML
-                  += ChatRoomMessageTemplate(message, message.sig, type, data);
+                  += ChatRoomMessageTemplate(message, data);
             }
-            last_sender = message.publickey;
+            last_sender = publickey;
           });
         }
 
@@ -99,34 +105,41 @@ module.exports = ChatBox = {
       this.addTXToDOM(app, data, tx);
     },
 
-    addMessageToDOM(app, data, msg) {
-      let chat_box_main = document.getElementById(`chat-box-main-${msg.group_id}`)
-      if (!chat_box_main) { return; }
-      this.removeDefaultMessage(msg.group_id);
+    addMessageToDOM(app, data, message) {
+      let { group_id, publickey } = message;
 
-      msg.identicon = app.keys.returnIdenticon(msg.publickey);
-      msg.keyHTML = data.chat.addrController.returnAddressHTML(msg.publickey);
+      let chat_box_main = document.getElementById(`chat-box-main-${group_id}`)
+      if (!chat_box_main) { return; }
+      this.removeDefaultMessage(group_id);
+
+      message = Object.assign({}, message, {
+        type : publickey == app.wallet.returnPublicKey() ? 'myself' : 'others',
+        keyHTML : data.chat.addrController.returnAddressHTML(publickey),
+        identicon : app.keys.returnIdenticon(publickey),
+        identicon_color : app.keys.returnIdenticonColor(publickey),
+      });
+
       var messages = [];
       data.chat.groups.forEach(group => {
-        if (group.id == msg.group_id) {messages = group.messages;}
+        if (group.id == group_id) {messages = group.messages;}
       });
       var n = messages.length -1;
       if (n == 0) {
-        chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(msg, msg.sig, msg.type, data);
+        chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(message, data);
       } else {
         if (messages[n-1].publickey != messages[n].publickey) {
-          chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(msg, msg.sig, msg.type, data);
+          chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(message, data);
         } else {
-          chat_box_main.querySelectorAll('.chat-box-message-container')[chat_box_main.querySelectorAll('.chat-box-message-container').length-1].innerHTML 
-          += ChatRoomMessageTemplate(msg, msg.sig, msg.type, data);
+          let chat_box_message_container = chat_box_main.querySelectorAll('.chat-box-message-container');
+          chat_box_message_container[chat_box_message_container.length-1].innerHTML += ChatRoomMessageTemplate(message, data);
         }
       }
-      this.scrollToBottom(msg.group_id);
+      this.scrollToBottom(group_id);
     },
 
     addTXToDOM(app, data, tx) {
-      let msg = Object.assign({}, tx.returnMessage(), { identicon: app.keys.returnIdenticon(tx.returnMessage().publickey), type: 'myself' });
-      this.addMessageToDOM(app, data, msg);
+      let message = Object.assign({}, tx.returnMessage());
+      this.addMessageToDOM(app, data, message);
     },
 
     createMessage(app, data, msg_data) {

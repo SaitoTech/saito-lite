@@ -13,6 +13,9 @@ class Email extends ModTemplate {
     super(app);
 
     this.name 			= "Email";
+    this.description = "Essential wallet, messaging platform and extensible control panel for Saito applications";
+    this.categories  = "Core Messaging Admin Productivity Utilities";
+
     this.chat 			= null;
     this.events			= ['chat-render-request'];
     this.icon_fa		= "fas fa-envelope";
@@ -22,17 +25,15 @@ class Email extends ModTemplate {
     this.emails.sent 		= [];
     this.emails.trash 		= [];
     this.emails.active  	= "inbox";
-					// inbox
-					// outbox
-					// trash
+                                        // inbox
+                                        // outbox
+                                        // trash
 
     this.mods   		= [];
 
     this.active 		= "email_list";
     this.header_title		= "";
 
-    this.description = "A messaging tool and control panel for Saito";
-    this.categories  = "Messaging Admin Productivity Utilities";
 
     this.selected_email		= null;
 
@@ -169,15 +170,10 @@ class Email extends ModTemplate {
     //
     //
     //
-console.log("$$$$$$$$$$$");
-console.log("$$$ PHC $$$");
-console.log("$$$$$$$$$$$");
 
     this.app.storage.loadTransactions("Email", 50, (txs) => {
 
       let keys = [];
-
-console.log("FOUND: " + JSON.stringify(txs));
 
       for (let i = 0; i < txs.length; i++) {
         this.emails.inbox.unshift(txs[i]);

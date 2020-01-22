@@ -2,13 +2,13 @@ const helpers = require('../../lib/helpers/index');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const AppStoreAppspace = require('./lib/email-appspace/appstore-appspace');
 const AppStoreBundleConfirm = require('./lib/email-appspace/appstore-bundle-confirm');
-
 const fs = require('fs');
 const path = require('path');
 
 //
-// recursively go through and find all files in dir
+// supporting utility functions
 //
+// recursively go through and find all files in dir
 function getFiles(dir) {
   const dirents = fs.readdirSync(dir, { withFileTypes: true });
   const files = dirents.map((dirent) => {
@@ -17,18 +17,11 @@ function getFiles(dir) {
   });
   return Array.prototype.concat(...files);
 }
-
-
 function returnSlug(nme) {
   nme = nme.toLowerCase();
   nme = nme.replace(/\t/g, "_");
   return nme;
 }
-
-
-//
-// pass an empty dir of files
-//
 function deleteDirs(dir) {
   const dirents = fs.readdirSync(dir, { withFileTypes: true });
   dirents.forEach((dirent) => {
@@ -44,11 +37,6 @@ function deleteDirs(dir) {
 }
 
 
-
-
-
-
-
 class AppStore extends ModTemplate {
 
   constructor(app) {
@@ -57,6 +45,9 @@ class AppStore extends ModTemplate {
     this.app = app;
 
     this.name          = "AppStore";
+    this.description   = "Application manages installing, indexing, compiling and serving Saito modules.";
+    this.categories    = "Utilities Dev";
+
     this.featured_apps = ['Email', 'Testing', 'Escrow', 'Design'];
   }
 
@@ -92,19 +83,7 @@ class AppStore extends ModTemplate {
   //
   async handlePeerRequest(app, message, peer, mycallback = null) {
 
-    if (message.request === "appstore load modules") {
-
-      let sql = "SELECT name, description, version, categories, publickey, unixtime, bid, bsh FROM modules WHERE featured = 1";
-      let params = {};
-      let rows = await this.app.storage.queryDatabase(sql, params, message.data.dbname);
-
-      let res = {};
-      res.err = "";
-      res.rows = rows;
-
-      mycallback(res);
-
-    }
+    super.handlePeerRequest(app, message, peer, mycallback);
 
 
     if (message.request === "appstore search modules") {
@@ -207,12 +186,13 @@ class AppStore extends ModTemplate {
           // read in the zip file as base64 and propagate it to the network
           //
           let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
-          let zip = fs.readFileSync(mod_path, { encoding: 'binary' });
+//          let zip = fs.readFileSync(mod_path, { encoding: 'binary' });
+          let zip = fs.readFileSync(mod_path, { encoding: 'base64' });
 
           newtx.transaction.msg = {
             module: "AppStore",
             request: "submit module",
-            zip,
+            module_zip: zip,
             name: dir,
           };
 
@@ -241,21 +221,13 @@ class AppStore extends ModTemplate {
           this.submitModule(blk, tx);
           break;
         case 'request bundle':
-          //
-          //
-          //
-          console.log("REQUEST BUNDLE TX received...");
-          // TODO: This logic should stem from a callback
           if (tx.isFrom(app.wallet.returnPublicKey())) {
             try {
               document.querySelector(".appstore-loading-text").innerHTML = "Your request has been received by the network. Your upgrade should be completed within about 45 seconds.";
             } catch (err) {
             }
           }
-console.log("TX IS REQUESTING WHOM: " + tx.transaction.to[0].add);
-console.log("I AM: " + app.wallet.returnPublicKey());
           if (!tx.isTo(app.wallet.returnPublicKey())) { return; }
-          console.log("i am going to produce a bundle...");
           this.requestBundle(blk, tx);
           break;
         case 'receive bundle':
@@ -286,7 +258,12 @@ console.log("I AM: " + app.wallet.returnPublicKey());
     const path = require('path');
     const unzipper = require('unzipper');
 
-    fs.writeFileSync(path.resolve(__dirname, zip_path), zip_bin, { encoding: 'binary' });
+    //
+    // convert base64 to vinary
+    //
+    let zip_bin2 = Buffer.from(zip_bin, 'base64').toString('binary');
+
+    fs.writeFileSync(path.resolve(__dirname, zip_path), zip_bin2, { encoding: 'binary' });
 
     let name = 'Unknown Module';
     let description = 'unknown';
@@ -294,53 +271,68 @@ console.log("I AM: " + app.wallet.returnPublicKey());
 
     try {
       const directory = await unzipper.Open.file(path.resolve(__dirname, zip_path));
-      // const file =
+
       let promises = directory.files.map(async file => {
         if (file.path.substr(0,3) == "lib") return;
         if (file.path.substr(-2) !== "js") return;
 
         let content = await file.buffer();
         let zip_text = content.toString('utf-8')
+	let zip_lines = zip_text.split("\n");
 
-        //
-        // get name and description
-        let getNameRegex = RegExp('[\n\r]*this.name\s*([^\n\r]*)');
-        let getDescriptionRegex = RegExp('[\n\r]*this.description\s*([^\n\r]*)');
-        let getCategoriesRegex = RegExp('[\n\r]*this.categories\s*([^\n\r]*)');
-        let cleanupRegex = RegExp('=(.*)');
-        let quotesRegex = RegExp(`(?:'|").*(?:'|")`);
+	let found_name = 0;
+	let found_description = 0;
+	let found_categories = 0;	
 
-        let nameMatch = zip_text.match(getNameRegex);
-        let descriptionMatch = zip_text.match(getDescriptionRegex);
-        let categoriesMatch = zip_text.match(getCategoriesRegex);
+	for (let i = 0; i < zip_lines.length && i < 50 && (found_name == 0 || found_description == 0 || found_categories == 0); i++) {
 
-        if (!nameMatch) { return; }
-        if (nameMatch[1].length > 30) { return; }
-        if (nameMatch[0] == "this.name\s*([^\n\r]*)');" || nameMatch[1] == "this.name\s*([^\n\r]*)');") { return; }
-        if (nameMatch[0] == "\s*([^\n\r]*)');" || nameMatch[1] == "\s*([^\n\r]*)');") { return; }
+	  //
+	  // get name
+	  //
+	  if (/this.name/.test(zip_lines[i])) {
+	    found_name = 1;
+	    if (zip_lines[i].indexOf("=") > 0) {
+	      name = zip_lines[i].substring(zip_lines[i].indexOf("="))    
+	      name = cleanString(name);
+	    }
+	  }
+
+	  //
+	  // get description
+	  //
+	  if (/this.description/.test(zip_lines[i])) {
+	    found_description = 1;
+	    if (zip_lines[i].indexOf("=") > 0) {
+	      description = zip_lines[i].substring(zip_lines[i].indexOf("="))    
+	      description = cleanString(description);
+	    }
+	  }
+
+	  //
+	  // get categories
+	  //
+	  if (/this.categories/.test(zip_lines[i])) {
+	    found_categories = 1;
+	    if (zip_lines[i].indexOf("=") > 0) {
+	      categories = zip_lines[i].substring(zip_lines[i].indexOf("="))    
+	      categories = cleanString(categories);
+	    }
+	  }
+
+	}
 
         function cleanString(str) {
           str = str.substring(1, str.length - 1);
           return [...str].map(char => {
-            if (char == "\'" || char == "\"" || char == ";") return ''
-            return char
+            if (char == ' ') { return ' '; }
+            if (char == '.') { return '.'; }
+            if (char == ',') { return ','; }
+            if (char == '!') { return '!'; }
+            if (char == "\\" || char == "\'" || char == "\"" || char == ";") { return ''; }
+            if (! (/[a-zA-Z0-9_-]/.test(char))) { return ''; }
+            return char;
           }).join('');
         }
-
-        let nameCleanup = nameMatch[1].match(quotesRegex);
-        if (nameCleanup)
-          name = cleanString(nameCleanup[0]);
-
-        if (!descriptionMatch) { return; }
-        let descriptionCleanup = descriptionMatch[1].match(quotesRegex);
-        if (descriptionCleanup != null)
-          description = cleanString(descriptionCleanup[0]);
-
-        if (!categoriesMatch) { return; }
-        let categoriesCleanup = categoriesMatch[1].match(cleanupRegex);
-        if (categoriesCleanup != null)
-          categories = cleanString(categoriesCleanup[1]);
-
       });
 
       await Promise.all(promises);
@@ -360,7 +352,44 @@ console.log("I AM: " + app.wallet.returnPublicKey());
 
   async submitModule(blk, tx) {
 
-    if (this.app.BROWSER == 1) { return; }
+    if (this.app.BROWSER == 1) { 
+
+      if (tx.isFrom(this.app.wallet.returnPublicKey())) {
+
+        let newtx = this.app.wallet.createUnsignedTransaction();
+            newtx.transaction.msg.module       = "Email";
+            newtx.transaction.msg.title        = "Saito Application Published";
+            newtx.transaction.msg.message      = `Your application has been published to the App Stores on the network.
+
+	    <p></p>
+
+	    You can find it at the following link:
+
+	    <p></p>
+
+	    http://saito.io/email?module=appstore&app=${tx.transaction.ts}-${tx.transaction.sig}
+
+	    <p></p>
+
+	    or by searching on your preferred AppStore for APP-ID ${tx.transaction.ts}-${tx.transaction.sig}
+
+            <p></p>
+
+	    If your application does not appear shortly, it means there is a bug in the code preventing AppStores from compiling it successfully. We recommend that you <a href="https://org.saito.tech/developers">install Saito locally</a> and compile your module directly to eliminate any errors before uploading.
+
+        `;
+        newtx = this.app.wallet.signTransaction(newtx);
+	let emailmod = this.app.modules.returnModule("Email");
+	if (emailmod) {
+          emailmod.emails.inbox.push(newtx);
+	}
+        this.app.storage.saveTransaction(newtx);
+
+      }
+
+      return; 
+
+    }
 
     let sql = `INSERT INTO modules (name, description, version, categories, publickey, unixtime, bid, bsh, tx, featured)
     VALUES ($name, $description, $version, $categories, $publickey, $unixtime, $bid, $bsh, $tx, $featured)`;
@@ -368,9 +397,9 @@ console.log("I AM: " + app.wallet.returnPublicKey());
     let { from, sig, ts } = tx.transaction;
 
     // should happen locally from ZIP
-    let { zip } = tx.returnMessage();
+    let { module_zip } = tx.returnMessage();
 
-    let { name, description, categories } = await this.getNameAndDescriptionFromZip(zip, `mods/module-${sig}-${ts}.zip`);
+    let { name, description, categories } = await this.getNameAndDescriptionFromZip(module_zip, `mods/module-${sig}-${ts}.zip`);
 
     let params = {
       $name: name,
@@ -455,7 +484,7 @@ console.log("I AM: " + app.wallet.returnPublicKey());
           {
             name: rows[i].name,
             description: rows[i].description,
-            zip: tx.msg.zip
+            zip: tx.msg.module_zip
           }
         );
       }
@@ -476,13 +505,11 @@ console.log("I AM: " + app.wallet.returnPublicKey());
           {
             name: rows[i].name,
             description: rows[i].description,
-            zip: tx.msg.zip
+            zip: tx.msg.module_zip
           }
         );
       }
     }
-
-    console.log("about to webpack this puppy!");
 
     //
     // WEBPACK
@@ -597,7 +624,9 @@ console.log("I AM: " + app.wallet.returnPublicKey());
       bash_script_content += `' {} \\;` + "\n";
 
       bash_script_delete += `rm -rf ../bundler/mods/${returnSlug(mod.name)}-${ts}-${hash}` + "\n";
-      fs.writeFileSync(path.resolve(__dirname, mod_path), mod.zip, { encoding: 'binary' });
+      let zip_bin2 = Buffer.from(mod.zip, 'base64').toString('binary');
+      //fs.writeFileSync(path.resolve(__dirname, mod_path), mod.zip, { encoding: 'binary' });
+      fs.writeFileSync(path.resolve(__dirname, mod_path), zip_bin2, { encoding: 'binary' });
       return `appstore/bundler/mods/${returnSlug(mod.name)}-${ts}-${hash}/${returnSlug(mod.name)}`;
     });
 
@@ -711,18 +740,13 @@ console.log("I AM: " + app.wallet.returnPublicKey());
       expressapp.use('/' + encodeURI(this.name), express.static(__dirname + "/web"));
       expressapp.get('/appstore/bundle/:filename', async (req, res) => {
 
-        console.log("\n\n\nscriptname!");
         let scriptname = req.params.filename;
-
-        console.log("REQUEST FOR SCRIPTNAME: " + scriptname);
 
         let sql = "SELECT script FROM bundles WHERE name = $scriptname";
         let params = {
           $scriptname: scriptname
         }
         let rows = await app.storage.queryDatabase(sql, params, "appstore");
-
-        // console.log("ROWS: " + JSON.stringify(rows));
 
         if (rows) {
           if (rows.length > 0) {
