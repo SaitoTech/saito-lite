@@ -251,8 +251,6 @@ console.log("WE RECEIVED MSG: " + JSON.stringify(txmsg));
 
         group.messages.push(message);
 
-console.log("PUSHED MESSAGE ONTO GROUP MESSAGES!");
-
         if (this.app.wallet.returnPublicKey() != txmsg.publickey) {
           let identifier = app.keys.returnIdentifierByPublicKey(message.publickey);
           let title =  identifier ? identifier : message.publickey;
@@ -260,7 +258,6 @@ console.log("PUSHED MESSAGE ONTO GROUP MESSAGES!");
           this.sendEvent('chat_receive_message', message);
         }
 
-console.log("\n\n--------CHAT RENDER REQUEST----------\n\n");
         this.sendEvent('chat-render-request', {});
       }
     });
