@@ -10,7 +10,7 @@ module.exports = ChatBoxMessageContainerTemplate = ({
   type
 }, data) => {
 
-  let { datetime_formatter } = data.helpers;
+  let { datetime_formatter } = data.chat.helpers;
   let datetime = datetime_formatter(timestamp);
 
   return `

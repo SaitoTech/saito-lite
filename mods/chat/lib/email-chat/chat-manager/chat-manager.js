@@ -3,7 +3,7 @@ const ChatBox = require('../chat-box/chat-box');
 module.exports = ChatManager = {
   render(app, data) {
     if (!document.querySelector('.chat-manager')) {
-      let {el_parser} = data.helpers;
+      let {el_parser} = data.chat.helpers;
       document.getElementById('content').append(el_parser('<div class="chat-manager"></div>'));
     }
     data.chat.active_groups.forEach(group => this.addChatBox(app, data, group));

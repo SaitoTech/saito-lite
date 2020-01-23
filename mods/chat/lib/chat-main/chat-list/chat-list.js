@@ -33,7 +33,7 @@ module.exports = ChatList = {
             }
 
             document.querySelector('.chat').innerHTML
-                += ChatListRowTemplate(row, data.helpers);
+                += ChatListRowTemplate(row, data.chat.helpers);
         });
 
     },

@@ -10,6 +10,7 @@ const helpers = require('../../lib/helpers/index');
 class Chat extends ChatCore {
 
   constructor(app) {
+
     super(app);
 
     this.app = app;
@@ -23,8 +24,14 @@ class Chat extends ChatCore {
 
     this.categories  = "Messaging Communication";
 
+    // defined in parent
+    //this.active_groups = [];
+    //this.groups = [];
     this.addrController = new AddressController(app);
+    this.helpers = helpers;
+
   }
+
 
   respondTo(type) {
     if (type == 'email-chat') {
@@ -43,13 +50,12 @@ class Chat extends ChatCore {
 
   renderEmailChat(app, data) {
     let chat_self = app.modules.returnModule("Chat");
-    data.chat = {};
-    data.chat.app = app;
-    data.chat.groups = chat_self.groups;
-    data.chat.active_groups = chat_self.active_groups;
-    data.chat.addrController = chat_self.addrController;
-
-    data.helpers = helpers;
+    data.chat = chat_self;
+//    data.chat.app = app;
+//    data.chat.groups = chat_self.groups;
+//    data.chat.active_groups = chat_self.active_groups;
+//    data.chat.addrController = chat_self.addrController;
+//    data.helpers = helpers;
 
     EmailChat.initialize(app, data);
     EmailChat.render(app, data);
@@ -83,11 +89,11 @@ class Chat extends ChatCore {
     Header.render(app, this.uidata);
     Header.attachEvents(app, this.uidata);
 
-    this.uidata.chat = {};
-    this.uidata.chat.app = app;
-    this.uidata.chat.groups = this.groups;
+    this.uidata.chat = this;
 
-    this.uidata.helpers = helpers;
+    //this.uidata.chat.app = app;
+    //this.uidata.chat.groups = this.groups;
+    //this.uidata.helpers = helpers;
 
     this.uidata.chatmod = this;
     this.uidata.chat.active = "chat_list";
