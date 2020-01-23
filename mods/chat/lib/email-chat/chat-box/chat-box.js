@@ -14,7 +14,7 @@ module.exports = ChatBox = {
         }
 
         if (!document.getElementById(`chat-box-${group.id}`)) {
-          let {el_parser} = data.helpers;
+          let {el_parser} = data.chat.helpers;
           document.querySelector('.chat-manager').append(el_parser(ChatBoxTemplate(active_group_name, group.id)));
         }
 

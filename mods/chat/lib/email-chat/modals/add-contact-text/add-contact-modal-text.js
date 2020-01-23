@@ -2,7 +2,7 @@ const AddContactModalTextTemplate = require('./add-contact-modal-text.template')
 
 module.exports = AddContactModalText = {
   async render(app, data) {
-    let {el_parser} = data.helpers;
+    let {el_parser} = data.chat.helpers;
     document.querySelector(".add-contact-modal-body").append(el_parser(AddContactModalTextTemplate(data)));
   },
 

@@ -12,13 +12,13 @@ function stopVideo() {
 module.exports = AddContactModal = {
 
   render(app, data) {
-    let {el_parser} = data.helpers;
+    let {el_parser} = data.chat.helpers;
     document.querySelector(".email-chat").append(el_parser(AddContactModalTemplate()));
     data.renderView = this.renderView;
   },
 
   attachEvents(app, data) {
-    let {el_parser} = data.helpers;
+    let {el_parser} = data.chat.helpers;
     var modal = document.getElementById('add-contact-modal');
 
     document.getElementById('email-chat-add-contact').onclick = () => {
@@ -45,7 +45,7 @@ module.exports = AddContactModal = {
   },
 
   renderView(app, data) {
-    let {el_parser} = data.helpers;
+    let {el_parser} = data.chat.helpers;
     stopVideo();
     document.querySelector(".add-contact-modal-body").innerHTML = '';
 
