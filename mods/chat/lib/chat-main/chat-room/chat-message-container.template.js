@@ -2,7 +2,7 @@ const ChatRoomMessageBubbleTemplate = require('./chat-room-message-bubble.templa
 
 module.exports = ChatMessageContainerTemplate = (message_block, data) => {
   let { identicon, messages, publickey, keyHTML, last_message_timestamp, type } = message_block;
-  let { datetime_formatter } = data.helpers;
+  let { datetime_formatter } = data.chat.helpers;
 
   let datetime = datetime_formatter(last_message_timestamp);
   let messages_html = messages.map(message => ChatRoomMessageBubbleTemplate(message, data)).join('');
