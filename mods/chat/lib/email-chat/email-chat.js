@@ -7,7 +7,13 @@ const EmailChatTemplate = require('./email-chat.template.js');
 module.exports = EmailChat = {
 
     initialize(app, data) {
+
       const render_chatlist_listener = () => {
+
+	let data = {};
+	let chat = app.modules.returnModule("Chat");
+	data.chat = chat;
+
         ChatList.render(app, data);
         ChatList.attachEvents(app, data);
         if (data.chat.groups.length > 0 && data.chat.active_groups == 0) ChatList.openChatBox(app, data, data.chat.groups[0]);
@@ -28,6 +34,7 @@ module.exports = EmailChat = {
 
       app.connection.removeAllListeners('chat_receive_message');
       app.connection.on('chat_receive_message', receive_msg_listener);
+
     },
 
     render(app, data) {

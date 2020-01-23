@@ -2,7 +2,7 @@ const AddContactModalQRTemplate = require('./add-contact-modal-qr.template');
 
 module.exports = AddContactModalQR = {
   async render(app, data) {
-    let {el_parser} = data.helpers;
+    let {el_parser} = data.chat.helpers;
     if (!document.querySelector('.add-contact-modal-qr'))
       document.querySelector(".add-contact-modal-body").append(el_parser(AddContactModalQRTemplate()));
 

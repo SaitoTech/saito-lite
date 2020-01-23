@@ -180,13 +180,7 @@ class AppStore extends ModTemplate {
 
           let mod_zip_filename = path.basename(this.path);
           let mod_path = path.resolve(__dirname, `mods/${mod_zip_filename}`);
-          // let zip_text = fs.readFileSync(mod_path, 'utf-8');
-          // let name, description = this.getNameAndDescriptionFromZip(zip_text);
-          //
-          // read in the zip file as base64 and propagate it to the network
-          //
           let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
-//          let zip = fs.readFileSync(mod_path, { encoding: 'binary' });
           let zip = fs.readFileSync(mod_path, { encoding: 'base64' });
 
           newtx.transaction.msg = {
@@ -270,11 +264,13 @@ class AppStore extends ModTemplate {
     let categories = 'unknown';
 
     try {
+
       const directory = await unzipper.Open.file(path.resolve(__dirname, zip_path));
 
       let promises = directory.files.map(async file => {
-        if (file.path.substr(0,3) == "lib") return;
-        if (file.path.substr(-2) !== "js") return;
+
+        if (file.path.substr(0,3) == "lib") { return; }
+        if (file.path.substr(-2) !== "js") { return; }
 
         let content = await file.buffer();
         let zip_text = content.toString('utf-8')
@@ -292,8 +288,9 @@ class AppStore extends ModTemplate {
 	  if (/this.name/.test(zip_lines[i])) {
 	    found_name = 1;
 	    if (zip_lines[i].indexOf("=") > 0) {
-	      name = zip_lines[i].substring(zip_lines[i].indexOf("="))    
+	      name = zip_lines[i].substring(zip_lines[i].indexOf("="));
 	      name = cleanString(name);
+	      if (name.length > 40) { name = "Unknown"; }
 	    }
 	  }
 
@@ -401,6 +398,9 @@ class AppStore extends ModTemplate {
 
     let { name, description, categories } = await this.getNameAndDescriptionFromZip(module_zip, `mods/module-${sig}-${ts}.zip`);
 
+    let featured_app = 0;
+    if (tx.transaction.from[0].add == this.app.wallet.returnPublicKey()) { featured_app = 1; }
+
     let params = {
       $name: name,
       $description: description || '',
@@ -411,7 +411,7 @@ class AppStore extends ModTemplate {
       $bid: blk.block.id,
       $bsh: blk.returnHash(),
       $tx: JSON.stringify(tx.transaction),
-      $featured: 0,
+      $featured: featured_app,
     };
     await this.app.storage.executeDatabase(sql, params, "appstore");
 

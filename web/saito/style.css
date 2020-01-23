@@ -1032,6 +1032,9 @@ label.treated {
     width: 2em;
     align-self: center;
   }
+  .header h2 {
+    font-size: 1em;
+  }
 }
 
 /* modals */

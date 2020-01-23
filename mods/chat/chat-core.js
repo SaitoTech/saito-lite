@@ -11,6 +11,7 @@ class ChatCore extends ModTemplate {
     this.events = ['encrypt-key-exchange-confirm'];
     this.groups = [];
     this.active_groups = [];
+
   }
 
   receiveEvent(type, data) {
@@ -177,16 +178,19 @@ class ChatCore extends ModTemplate {
   //
   handlePeerRequest(app, req, peer, mycallback) {
 
+console.log("REQUEST DETAILS: " + JSON.stringify(req));
+
     if (req.request == null) { return; }
     if (req.data == null) { return; }
 
-    let tx = req.data //new saito.transaction(JSON.parse(req.data));
+    let tx = req.data;
 
     try {
 
       switch (req.request) {
 
         case "chat message":
+console.log("RECEIVED A CHAT MESSAGE!");
           this.receiveMessage(app, new saito.transaction(tx.transaction));
           if (mycallback) { mycallback({ "payload": "success", "error": {} }); };
           break;
@@ -221,6 +225,8 @@ class ChatCore extends ModTemplate {
 
     let txmsg = tx.returnMessage();
 
+console.log("WE RECEIVED MSG: " + JSON.stringify(txmsg));
+
     //
     // add alert if we are not in a chat-positive application
     //
@@ -232,7 +238,9 @@ class ChatCore extends ModTemplate {
 
 
     this.groups.forEach(group => {
+
       if (group.id == txmsg.group_id) {
+
         let from_add = tx.transaction.from[0].add;
         let msg_type = from_add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
 
@@ -245,6 +253,8 @@ class ChatCore extends ModTemplate {
 
         group.messages.push(message);
 
+console.log("PUSHED MESSAGE ONTO GROUP MESSAGES!");
+
         if (this.app.wallet.returnPublicKey() != txmsg.publickey) {
           let identifier = app.keys.returnIdentifierByPublicKey(message.publickey);
           let title =  identifier ? identifier : message.publickey;
@@ -252,6 +262,7 @@ class ChatCore extends ModTemplate {
           this.sendEvent('chat_receive_message', message);
         }
 
+console.log("\n\n--------CHAT RENDER REQUEST----------\n\n");
         this.sendEvent('chat-render-request', {});
       }
     });

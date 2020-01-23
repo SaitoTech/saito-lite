@@ -248,6 +248,10 @@
   border-radius: 5px;
 }
 
+.chat-message-text img {
+  max-width: 100%;
+}
+
 .chat-message-set img {
   margin: 0 5px 0 0;
 }
