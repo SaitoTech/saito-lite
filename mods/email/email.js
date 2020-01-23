@@ -25,9 +25,9 @@ class Email extends ModTemplate {
     this.emails.sent 		= [];
     this.emails.trash 		= [];
     this.emails.active  	= "inbox";
-					// inbox
-					// outbox
-					// trash
+                                        // inbox
+                                        // outbox
+                                        // trash
 
     this.mods   		= [];
 
@@ -170,15 +170,10 @@ class Email extends ModTemplate {
     //
     //
     //
-console.log("$$$$$$$$$$$");
-console.log("$$$ PHC $$$");
-console.log("$$$$$$$$$$$");
 
     this.app.storage.loadTransactions("Email", 50, (txs) => {
 
       let keys = [];
-
-console.log("FOUND: " + JSON.stringify(txs));
 
       for (let i = 0; i < txs.length; i++) {
         this.emails.inbox.unshift(txs[i]);

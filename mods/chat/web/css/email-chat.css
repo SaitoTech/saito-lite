@@ -236,12 +236,20 @@
   flex-flow: row-reverse;
 }
 
+.chat-room-message-myself .chat-message-text {
+  text-align: right;
+}
+
 .chat-room-message-identicon {
   border: 1px solid #8885;
   width: 2em;
   height: 2em;
   padding: 1px;
   border-radius: 5px;
+}
+
+.chat-message-text img {
+  max-width: 100%;
 }
 
 .chat-message-set img {

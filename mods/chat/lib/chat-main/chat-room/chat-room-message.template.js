@@ -1,4 +1,4 @@
-module.exports = ChatRoomMessageTemplate = ({ message, publickey, timestamp, identicon }, sig, type, data) => {
+module.exports = ChatRoomMessageTemplate = ({ message, sig, type }, data) => {
   
 
   return `

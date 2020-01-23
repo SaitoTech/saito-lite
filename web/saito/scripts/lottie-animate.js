@@ -1,12 +1,13 @@
 document.onreadystatechange = function () {
   var state = document.readyState
   if (state == 'interactive') {
-      document.getElementById('content').style.visibility="hidden";
+      document.getElementById('content').style.display="none";
   } else if (state == 'complete') {
       setTimeout(function(){
         document.getElementById('interactive');
         document.getElementById('lottie').style.display="none";
-        document.getElementById('content').style.visibility="visible";
+        document.getElementById('content').style.visibility="unset";
+        document.getElementById('content').style.display="unset";
       },100);
   }
 }
