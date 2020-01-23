@@ -186,7 +186,6 @@ class AppStore extends ModTemplate {
           // read in the zip file as base64 and propagate it to the network
           //
           let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
-//          let zip = fs.readFileSync(mod_path, { encoding: 'binary' });
           let zip = fs.readFileSync(mod_path, { encoding: 'base64' });
 
           newtx.transaction.msg = {
@@ -401,6 +400,9 @@ class AppStore extends ModTemplate {
 
     let { name, description, categories } = await this.getNameAndDescriptionFromZip(module_zip, `mods/module-${sig}-${ts}.zip`);
 
+    let featured_app = 0;
+    if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) { featured_app = 1; }
+
     let params = {
       $name: name,
       $description: description || '',
@@ -411,7 +413,7 @@ class AppStore extends ModTemplate {
       $bid: blk.block.id,
       $bsh: blk.returnHash(),
       $tx: JSON.stringify(tx.transaction),
-      $featured: 0,
+      $featured: featured_app,
     };
     await this.app.storage.executeDatabase(sql, params, "appstore");
 
