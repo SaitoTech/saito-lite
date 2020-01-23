@@ -401,7 +401,7 @@ class AppStore extends ModTemplate {
     let { name, description, categories } = await this.getNameAndDescriptionFromZip(module_zip, `mods/module-${sig}-${ts}.zip`);
 
     let featured_app = 0;
-    if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) { featured_app = 1; }
+    if (tx.transaction.from[0].add == this.app.wallet.returnPublicKey()) { featured_app = 1; }
 
     let params = {
       $name: name,
