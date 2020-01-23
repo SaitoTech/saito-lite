@@ -7,31 +7,25 @@ const ChatMessageContainerTemplate = require('./chat-message-container.template'
 
 module.exports = ChatRoom = {
     group: {},
+    room_message_blocks: [],
     render(app, data) {
-        let main = document.querySelector('.main');
-        main.innerHTML = ChatRoomTemplate();
-
         this.group = data.chat.groups.filter(group => data.chat.active_group_id === `chat-row-${group.id}`);
 
-        this.group[0].messages.forEach(room_message => {
-            let { publickey, timestamp } = room_message;
-            let type = app.wallet.returnPublicKey() == publickey ? 'myself' : 'others';
-            document.querySelector('.chat-room-content').innerHTML
-                += ChatMessageContainerTemplate(room_message, timestamp, type, data);
-        });
+        let { id, name, messages } = this.group[0];
+        let main = document.querySelector('.main');
 
-        // let header = document.querySelector('.header');
-        // header.classList.remove("header-home");
-        // header.classList.add("chat-room-header");
-        // header.innerHTML = ChatRoomHeaderTemplate(this.group[0].name);
-        document.querySelector('.chat-room-header').innerHTML = ChatRoomHeaderTemplate(this.group[0].name);
-
-        // let footer = document.querySelector('.footer');
-        // footer.classList.remove("nav-bar");
-        // footer.classList.add("chat-room-footer");
-        // footer.innerHTML = ChatRoomFooterTemplate();
-        // footer.style.display = 'flex';
+        main.innerHTML = ChatRoomTemplate(id);
+        document.querySelector('.chat-room-header').innerHTML = ChatRoomHeaderTemplate(name);
         document.querySelector('.chat-room-footer').innerHTML = ChatRoomFooterTemplate();
+
+        this.room_message_blocks = this.createRoomMessageBlocks(app, data, messages);
+
+        this.room_message_blocks.forEach(message_block => {
+            message_block = Object.assign({}, message_block, {
+                type : app.wallet.returnPublicKey() == message_block.publickey ? 'myself' : 'others'
+            });
+            document.querySelector('.chat-room-content').innerHTML += ChatMessageContainerTemplate(message_block, data);
+        });
 
         this.scrollToBottom();
         this.attachEvents(app, data);
@@ -39,22 +33,6 @@ module.exports = ChatRoom = {
 
     attachEvents(app, data) {
         let fired = false;
-
-        console.log("NEW GROUP: ", this.group);
-
-        // let renderDefaultHeaderAndFooter = (app) => {
-        //     // header
-        //     let header = document.querySelector('.header');
-        //     header.classList.remove("chat-room-header");
-        //     Header.render(app);
-
-        //     // footer
-        //     let footer = document.querySelector('.footer');
-        //     footer.classList.remove("chat-room-footer");
-        //     footer.innerHTML = '';
-        //     footer.style.display = 'none';
-        //     // NavBar.render(chat.app);
-        // }
 
         let submitMessage = () => {
             let message_input = document.querySelector('#input.chat-room-input');
@@ -108,10 +86,13 @@ module.exports = ChatRoom = {
             if (e.keyCode == '13') { fired = false; }
         });
 
-        app.connection.on('chat_receive_message', (msg) => {
-            this.addMessageToDOM(msg, data);
+        const receiveMessageListener = (msg) => {
+            this.addMessageToDOM(app, msg, data);
             this.scrollToBottom();
-        });
+        }
+
+        app.connection.removeAllListeners('chat_receive_message');
+        app.connection.on('chat_receive_message', receiveMessageListener);
     },
 
     createMessage(app, group_id, msg) {
@@ -137,7 +118,6 @@ module.exports = ChatRoom = {
 
     addMessage(app, data, tx) {
       data.chatmod.receiveMessage(app, tx);
-      //this.addTXToDOM(tx);
       this.scrollToBottom();
     },
 
@@ -145,20 +125,102 @@ module.exports = ChatRoom = {
         app.network.propagateTransaction(tx);
     },
 
-    addTXToDOM(tx, data) {
-        document.querySelector('.chat-room-content')
-                .innerHTML += ChatMessageContainerTemplate(tx.returnMessage(), tx.transaction.msg.sig, 'myself', data);
+    addTXToDOM(app, tx, data) {
+        let message = Object.assign({}, tx.returnMessage(), {
+            type: 'myself',
+        });
+        this.addMessageToDOM(app, message, data);
     },
 
-    addMessageToDOM(msg, data) {
-        msg.keyHTML = data.chat.addrController.returnAddressHTML(msg.publickey);
-        document.querySelector('.chat-room-content')
-                .innerHTML += ChatMessageContainerTemplate(msg, msg.sig, msg.type, data);
+    addMessageToDOM(app, msg, data) {
+        let message = Object.assign({}, msg, {
+            keyHTML: data.chatmod.addrController.returnAddressHTML(msg.publickey),
+            identicon : app.keys.returnIdenticon(msg.publickey),
+            identicon_color : app.keys.returnIdenticonColor(msg.publickey),
+        });
+
+        let last_message_block = this.room_message_blocks[this.room_message_blocks.length - 1];
+        let last_message = last_message_block.messages[last_message_block.messages.length - 1];
+
+        if (last_message.publickey == message.publickey) {
+            last_message_block = Object.assign({}, last_message_block, {
+                last_message_timestamp: message.timestamp,
+                last_message_sig: message.sig,
+                messages: [...last_message_block.messages, message],
+            });
+            document.querySelector('.chat-room-content')
+                .innerHTML += ChatMessageContainerTemplate(last_message_block, data);
+        } else {
+            let new_message_block = Object.assign({}, {
+                publickey: message.publickey,
+                group_id: message.group_id,
+                last_message_timestamp: message.timestamp,
+                last_message_sig: message.sig,
+                keyHTML: message.keyHTML,
+                identicon : message.identicon,
+                identicon_color : message.identicon_color,
+                type: 'others',
+                messages: [message]
+            });
+            this.room_message_blocks.push(new_message_block);
+            document.querySelector('.chat-room-content')
+                .innerHTML += ChatMessageContainerTemplate(new_message_block, data);
+        }
     },
 
     scrollToBottom() {
         let chat_room_content = document.querySelector(".chat-room-content");
         chat_room_content.scrollTop = chat_room_content.scrollHeight;
         // chat_room_content.scrollIntoView(false);
+    },
+
+    createRoomMessageBlocks(app, data, messages) {
+        let idx = 0;
+        let room_message_blocks = [];
+
+        while (idx < messages.length) {
+            let message = Object.assign({}, messages[idx], {
+                keyHTML: data.chatmod.addrController.returnAddressHTML(messages[idx].publickey),
+                identicon : app.keys.returnIdenticon(messages[idx].publickey),
+                identicon_color : app.keys.returnIdenticonColor(messages[idx].publickey),
+            });
+            if (idx == 0) {
+                let new_message_block = Object.assign({}, {
+                    publickey: message.publickey,
+                    group_id: message.group_id,
+                    last_message_timestamp: message.timestamp,
+                    last_message_sig: message.sig,
+                    keyHTML: message.keyHTML,
+                    identicon : message.identicon,
+                    identicon_color : message.identicon_color,
+                    messages: [message]
+                });
+                room_message_blocks.push(new_message_block);
+            } else {
+                if (messages[idx - 1].publickey == message.publickey) {
+                    let latest_message_block = room_message_blocks[room_message_blocks.length - 1];
+                    let updated_message_block = Object.assign({}, latest_message_block, {
+                        last_message_timestamp: message.timestamp,
+                        last_message_sig: message.sig,
+                        messages: [...latest_message_block.messages, message],
+                    });
+                    room_message_blocks[room_message_blocks.length - 1] = updated_message_block;
+                } else {
+                    let new_message_block = Object.assign({}, {
+                        publickey: message.publickey,
+                        group_id: message.group_id,
+                        last_message_timestamp: message.timestamp,
+                        last_message_sig: message.sig,
+                        keyHTML: message.keyHTML,
+                        identicon : message.identicon,
+                        identicon_color : message.identicon_color,
+                        messages: [message]
+                    });
+                    room_message_blocks.push(new_message_block);
+                }
+            }
+            idx++;
+        }
+        return room_message_blocks;
     }
 }

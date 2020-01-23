@@ -21,9 +21,11 @@ class ChatCore extends ModTemplate {
     if (type === "encrypt-key-exchange-confirm") {
       if (data.members === undefined) { return; }
       let newgroup = this.createChatGroup(data.members);
-      this.addNewGroup(newgroup);
-      this.sendEvent('chat-render-request', {});
-      this.saveChat();
+      if (newgroup) {
+        this.addNewGroup(newgroup);
+        this.sendEvent('chat-render-request', {});
+        this.saveChat();
+      }
     }
 
   }
@@ -124,7 +126,7 @@ class ChatCore extends ModTemplate {
     identicon = this.app.keys.returnIdenticon(address);
 
     for (let i = 0; i < this.groups.length; i++) {
-      if (this.groups[i].id == id) { return; }
+      if (this.groups[i].id == id) { return null; }
     }
 
     return {
