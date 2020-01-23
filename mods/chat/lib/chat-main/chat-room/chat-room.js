@@ -42,7 +42,7 @@ module.exports = ChatRoom = {
             message_input.value = '';
 
             let newtx = this.createMessage(app, this.group[0].id, msg);
-            data.chatmod.sendMessage(app, newtx);
+            data.chat.sendMessage(app, newtx);
             this.addMessage(app, data, newtx);
             this.scrollToBottom();
         }
@@ -117,7 +117,7 @@ module.exports = ChatRoom = {
     },
 
     addMessage(app, data, tx) {
-      data.chatmod.receiveMessage(app, tx);
+      data.chat.receiveMessage(app, tx);
       this.scrollToBottom();
     },
 
@@ -134,7 +134,7 @@ module.exports = ChatRoom = {
 
     addMessageToDOM(app, msg, data) {
         let message = Object.assign({}, msg, {
-            keyHTML: data.chatmod.addrController.returnAddressHTML(msg.publickey),
+            keyHTML: data.chat.addrController.returnAddressHTML(msg.publickey),
             identicon : app.keys.returnIdenticon(msg.publickey),
             identicon_color : app.keys.returnIdenticonColor(msg.publickey),
         });
@@ -180,7 +180,7 @@ module.exports = ChatRoom = {
 
         while (idx < messages.length) {
             let message = Object.assign({}, messages[idx], {
-                keyHTML: data.chatmod.addrController.returnAddressHTML(messages[idx].publickey),
+                keyHTML: data.chat.addrController.returnAddressHTML(messages[idx].publickey),
                 identicon : app.keys.returnIdenticon(messages[idx].publickey),
                 identicon_color : app.keys.returnIdenticonColor(messages[idx].publickey),
             });
