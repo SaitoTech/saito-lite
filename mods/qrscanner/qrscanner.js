@@ -79,6 +79,12 @@ class QRScanner extends ModTemplate {
     setTimeout(() => { this.attemptQRDecode() }, 500);
   }
 
+  stop() {
+    this.decoder.terminate();
+    if (this.video)
+      this.video.srcObject.getTracks().forEach(track => track.stop());
+  }
+
   render() {
     document.querySelector('body').innerHTML = QRScannerTemplate();
 

@@ -13,7 +13,7 @@ module.exports = ChatList = {
         chat_main.innerHTML = ChatListTemplate();
         chat_main.append(elParser(ChatNavTemplate()));
 
-        data.chat.groups.forEach((group) => {
+        data.chatmod.groups.forEach((group) => {
             let last_message = group.messages[group.messages.length - 1];
 
             let message = '';

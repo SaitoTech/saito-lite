@@ -23,5 +23,11 @@ module.exports = ChatAddContact = {
               data.chat.active = 'chat_list';
               data.chat.main.render(app, data);
             }
+
+    document.querySelector('#chat-add.create-button')
+            .onclick = () => {
+              data.chat.active = 'chat_qr';
+              data.chat.main.render(app, data);
+            }
   },
 }

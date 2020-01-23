@@ -25,13 +25,4 @@ module.exports = InviteFriendsQR = {
       data.stopVideo();
     }
   },
-
-  handleSuccess(stream) {
-    window.stream = stream;
-    document.querySelector('video').srcObject = stream;
-  },
-
-  handleError(error) {
-    console.log('navigator.MediaDevices.getUserMedia error: ', error.message, error.name);
-  }
 }
