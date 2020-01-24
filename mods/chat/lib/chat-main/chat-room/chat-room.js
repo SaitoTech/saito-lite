@@ -117,7 +117,8 @@ module.exports = ChatRoom = {
     },
 
     addMessage(app, data, tx) {
-      data.chat.receiveMessage(app, tx);
+    //   data.chat.receiveMessage(app, tx);
+      this.addTXToDOM(app, tx, data);
       this.scrollToBottom();
     },
 
@@ -143,17 +144,20 @@ module.exports = ChatRoom = {
         let last_message = last_message_block.messages[last_message_block.messages.length - 1];
 
         if (last_message.publickey == message.publickey) {
-            last_message_block = Object.assign({}, last_message_block, {
+            let updated_message_block = Object.assign({}, last_message_block, {
                 last_message_timestamp: message.timestamp,
                 last_message_sig: message.sig,
                 messages: [...last_message_block.messages, message],
             });
-            document.querySelector('.chat-room-content')
-                .innerHTML += ChatMessageContainerTemplate(last_message_block, data);
+            this.room_message_blocks[this.room_message_blocks.length - 1] = updated_message_block;
+            let {publickey, timestamp} = updated_message_block;
+            document.getElementById(`chat-message-container-${publickey}-${timestamp}`)
+                    .innerHTML = ChatMessageContainerTemplate(updated_message_block, data);
         } else {
             let new_message_block = Object.assign({}, {
                 publickey: message.publickey,
                 group_id: message.group_id,
+                timestamp: message.timestamp,
                 last_message_timestamp: message.timestamp,
                 last_message_sig: message.sig,
                 keyHTML: message.keyHTML,
@@ -188,6 +192,7 @@ module.exports = ChatRoom = {
                 let new_message_block = Object.assign({}, {
                     publickey: message.publickey,
                     group_id: message.group_id,
+                    timestamp: message.timestamp,
                     last_message_timestamp: message.timestamp,
                     last_message_sig: message.sig,
                     keyHTML: message.keyHTML,
@@ -209,6 +214,7 @@ module.exports = ChatRoom = {
                     let new_message_block = Object.assign({}, {
                         publickey: message.publickey,
                         group_id: message.group_id,
+                        timestamp: message.timestamp,
                         last_message_timestamp: message.timestamp,
                         last_message_sig: message.sig,
                         keyHTML: message.keyHTML,
