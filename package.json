@@ -7,6 +7,7 @@
     "start": "NODE_ENV=dev node start.js",
     "serve": "NODE_ENV=prod node --max_old_space_size=4144 start.js",
     "nuke": " ./compile nuke",
+    "reset": " ./compile reset",
     "compile": " ./compile",
     "test": "NODE_ENV=test mocha 'tests/*.spec.js'",
     "build": "webpack --config ./webpack/webpack.config.js",
