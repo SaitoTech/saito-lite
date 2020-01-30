@@ -117,7 +117,7 @@ module.exports = SettingsAppspace = {
 
 
       document.getElementById('reset-account-btn')
-        .addEventListener('click', (e) => {
+        .onclick = (e) => {
 
           app.wallet.resetWallet();
           salert("Wallet reset!");
@@ -129,7 +129,23 @@ module.exports = SettingsAppspace = {
           data.email.body.render(app, data);
           data.email.body.attachEvents(app, data);
 
-      });
+      };
+
+      document.getElementById('delete-account-btn')
+        .onclick = async (e) => {
+
+          await app.storage.resetOptions();
+          await salert("Account deleted!");
+
+          data.email.emails.inbox = [];
+          data.email.emails.sent = [];
+          data.email.emails.trash = [];
+
+          // data.email.body.render(app, data);
+          // data.email.body.attachEvents(app, data);
+
+          window.location = window.location;
+      };
     },
 
 }

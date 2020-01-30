@@ -367,7 +367,8 @@ class Arcade extends ModTemplate {
 
   removeGameFromOpenList(tx) {
 
-    this.games = this.games.filter(game => game.transaction.sig != tx.transaction.sig);
+    let game_sig = tx.returnMessage().sig;
+    this.games = this.games.filter(game => game.transaction.sig != game_sig);
 
     ////console.info("THESE ARE THE GAMES LEFT: " + JSON.stringify(this.games));
 
@@ -380,9 +381,9 @@ class Arcade extends ModTemplate {
     if (this.browser_active == 1) {
       //ArcadeMain.render(this.app, data);
       //ArcadeMain.attachEvents(this.app, data);
-      if(document.getElementById(`arcade-game-${tx.transaction.sig}`)) {
+      if(document.getElementById(`arcade-game-${game_sig}`)) {
         document.getElementById(`arcade-gamelist`)
-        .removeChild(document.getElementById(`arcade-game-${tx.transaction.sig}`));
+          .removeChild(document.getElementById(`arcade-game-${game_sig}`));
       }
     }
   }
