@@ -365,7 +365,7 @@ class Arcade extends ModTemplate {
 
     this.games = this.games.filter(game => game.transaction.sig != tx.transaction.sig);
 
-    // console.log("THESE ARE THE GAMES LEFT: " + JSON.stringify(this.games));
+    console.log("THESE ARE THE GAMES LEFT: " + JSON.stringify(this.games));
 
     let data = {};
     data.arcade = this;

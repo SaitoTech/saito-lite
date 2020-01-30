@@ -324,7 +324,7 @@ class ExplorerCore extends ModTemplate {
         html += this.returnHeader() 
         html += '<div class="explorer-main">'
         html += '<a class="button" href="/explorer/block?hash=' + blk.returnHash() + '"><i class="fas fa-cubes"></i> back to block</a>'
-        html += '<h3>Block Source:</h3><h4>' +blk.returnHash('hex') + '</h4><div data-json="' + encodeURI(JSON.stringify(blk.block, null, 4)) + '" class="json">' + JSON.stringify(blk.block, null, 4) + '</div></div>' 
+        html += '<h3>Block Source:</h3><h4>' +blk.returnHash('hex') + '</h4><div class="json">' + JSON.stringify(blk.block, null, 4) + '</div></div>' 
         html += this.returnInvokeJSONTree();
         html += this.returnPageClose();
         return html;

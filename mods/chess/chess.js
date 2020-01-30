@@ -136,7 +136,7 @@ class Chessgame extends GameTemplate {
   handleGameLoop(msg={}) {
 
     msg = {};
-// console.log("QUEUE: " + this.game.queue);
+console.log("QUEUE: " + this.game.queue);
     if (this.game.queue.length > 0) {
       msg.extra = JSON.parse(this.app.crypto.base64ToString(this.game.queue[this.game.queue.length-1]));
     } else {

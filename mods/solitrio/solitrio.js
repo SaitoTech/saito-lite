@@ -248,7 +248,7 @@ console.log(precessor_value_num + " -- " + card_value_num);
     ///////////
     if (this.game.queue.length > 0) {
 
-// console.log("QUEUE: " + JSON.stringify(this.game.queue));
+console.log("QUEUE: " + JSON.stringify(this.game.queue));
 
       let qe = this.game.queue.length-1;
       let mv = this.game.queue[qe].split("\t");

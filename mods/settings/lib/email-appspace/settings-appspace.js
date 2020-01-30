@@ -49,25 +49,25 @@ module.exports = SettingsAppspace = {
     let thisid = parseInt(e.currentTarget.id);
     let currentTarget = e.currentTarget;
 
-          if (e.currentTarget.checked == true) { 
-            let sc = await sconfirm("Reactivate this module?");
-            if (sc) {
-              app.options.modules[thisid].active = 1;
-              app.storage.saveOptions();
-              window.location = window.location;
-            } else {
-              window.location = window.location;
-            }
-          } else {
-            let sc = await sconfirm("Remove this module?");
-            if (sc) {
-              app.options.modules[thisid].active = 0;
-              app.storage.saveOptions();
-              window.location = window.location;
-            } else {
+	  if (e.currentTarget.checked == true) { 
+	    let sc = await sconfirm("Reactivate this module?");
+	    if (sc) {
+	      app.options.modules[thisid].active = 1;
+	      app.storage.saveOptions();
+	      window.location = window.location;
+	    } else {
+	      window.location = window.location;
+	    }
+	  } else {
+	    let sc = await sconfirm("Remove this module?");
+	    if (sc) {
+	      app.options.modules[thisid].active = 0;
+	      app.storage.saveOptions();
+	      window.location = window.location;
+	    } else {
         currentTarget.checked = true;
-            }
-          }
+	    }
+	  }
 
         };
       });
@@ -76,7 +76,7 @@ module.exports = SettingsAppspace = {
 
       document.getElementById('backup-account-btn')
         .addEventListener('click', (e) => {
-          app.wallet.backupWallet();
+	  app.wallet.backupWallet();
       });
 
 
@@ -87,29 +87,40 @@ module.exports = SettingsAppspace = {
 
 
       document.getElementById('settings-restore-account')
-        .onchange = function(e) {
-          let selectedFile = this.files[0];
-          var wallet_reader = new FileReader();
-          wallet_reader.readAsBinaryString(selectedFile);
+        .onchange = async function(e) {
 
-          wallet_reader.onloadend = async function() {
-            let file_payload = wallet_reader.result;
-            let password_prompt = await sprompt("Please provide the password you used to encrypt this backup:");
+          let password_prompt = sprompt("Please provide the password you used to encrypt this backup:");
+          if (password_prompt) {
 
-            if (password_prompt && password_prompt != "") {
+            let selectedFile = this.files[0];
+            var wallet_reader = new FileReader();
+            wallet_reader.onloadend = function() {
+alert("RESULT: " + wallet_reader.result);
+console.log(wallet_reader.result);
+
               let decryption_secret = app.crypto.hash(password_prompt + "SAITO-PASSWORD-HASHING-SALT");
-              file_payload = app.crypt.aesDecrypt(wallet_reader.result, decryption_secret);
-            }
+	      let decrypted_wallet = app.crypt.aesDecrypt(wallet_reader.result, decryption_secret);
+console.log(decrypted_wallet);
+	      try {
+  	        let wobj = JSON.parse(decrypted_wallet);
+console.log(JSON.stringify(wobj));
+		app.options = wobj;
+		app.storage.saveOptions();
+		//
+		// and reload
+		//
+alert("Restoration Complete ... click to reload Saito");
+		window.location = window.location;
+	      } catch (err) {
+alert("Error decrypting wallet file. Password incorrect");
+alert(JSON.stringify(err));
+	      }
 
-            try {
-              app.options = JSON.parse(file_payload);
-              app.storage.saveOptions();
-              alert("Wallet Import Success!");
-              window.location = window.location;
-            } catch (err) {
-              console.error("Error decrypting wallet file. Password incorrect");
-              console.error(err);
             }
+            wallet_reader.readAsBinaryString(selectedFile);
+
+          } else {
+alert("Cancelling Wallet Restoration...");
           }
       };
 
@@ -122,12 +133,12 @@ module.exports = SettingsAppspace = {
           app.wallet.resetWallet();
           salert("Wallet reset!");
 
-          data.email.emails.inbox = [];
-          data.email.emails.sent = [];
-          data.email.emails.trash = [];
+	  data.email.emails.inbox = [];
+	  data.email.emails.sent = [];
+	  data.email.emails.trash = [];
 
-          data.email.body.render(app, data);
-          data.email.body.attachEvents(app, data);
+	  data.email.body.render(app, data);
+	  data.email.body.attachEvents(app, data);
 
       });
     },

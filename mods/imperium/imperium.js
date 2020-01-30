@@ -533,7 +533,7 @@ console.log("hitting queue management!");
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
   
-// console.log("GAME QUEUE: " + this.game.queue);
+console.log("GAME QUEUE: " + this.game.queue);
 
       if (mv[0] === "gameover") {
   	if (imperium_self.browser_active == 1) {
@@ -1175,7 +1175,7 @@ console.log("DECK FLIPPED: " + JSON.stringify(this.game.deck[2]));
         this.saveSystemAndPlanets(sys);
         this.updateSectorGraphics(sector);
         this.game.queue.splice(qe, 1);
-// console.log("POST LAND WITH QUEUE: " + this.game.queue);
+console.log("POST LAND WITH QUEUE: " + this.game.queue);
         return 1;
   
       }

@@ -1354,7 +1354,7 @@ class Pandemic extends GameTemplate {
     ///////////
     if (this.game.queue.length > 0) {
   
-  // console.log("QUEUE: " + this.game.queue);
+  console.log("QUEUE: " + this.game.queue);
   
       pandemic_self.saveGame(pandemic_self.game.id);
   
