@@ -202,8 +202,8 @@ module.exports = ArcadeMain = {
                   let game_tx = Object.assign({ msg: { players_array: null } }, transaction);
 
                   if (game_tx.msg.players_array) {
-                    let players = transaction.msg.players_array.split("_");
-                    if (players.length >= 2) {
+                    if (game_tx.msg.players.length >= 2) {
+                      // let players = transaction.msg.players_array.split("_");
                       data.arcade.sendMultiplayerAcceptRequest(app, data, accepted_game);
                       return;
                     }
@@ -320,14 +320,14 @@ module.exports = ArcadeMain = {
         newtx = app.wallet.signTransaction(newtx);
         app.network.propagateTransaction(newtx);
 
-        this.removeGameFromList(game_id);
+        this.removeGameFromList(sig);
       }
     });
   },
 
   removeGameFromList(game_id) {
     document.getElementById(`arcade-gamelist`)
-      .removeChild(document.getElementById(`arcade-game-${sig}`));  
+      .removeChild(document.getElementById(`arcade-game-${game_id}`));
   }
 
 }

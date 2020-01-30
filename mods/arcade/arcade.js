@@ -365,10 +365,14 @@ class Arcade extends ModTemplate {
     }
   }
 
-  removeGameFromOpenList(tx) {
+  // just receive the sig of the game to remove
+  removeGameFromOpenList(game_sig) {
 
-    let game_sig = tx.returnMessage().sig;
-    this.games = this.games.filter(game => game.transaction.sig != game_sig);
+    // let game_sig = tx.returnMessage().sig;
+    this.games = this.games.filter(game => {
+      let tx = Object.assign({sig: ""}, game.transaction);
+      tx.sig != game_sig;
+    });
 
     ////console.info("THESE ARE THE GAMES LEFT: " + JSON.stringify(this.games));
 
@@ -411,7 +415,7 @@ class Arcade extends ModTemplate {
       //console.info(txmsg.module);
       //console.info(txmsg.request);
       if (txmsg.module == "Arcade" && txmsg.request == "close") {
-        this.removeGameFromOpenList(tx);
+        this.removeGameFromOpenList(tx.returnMessage().sig);
         this.receiveCloseRequest(blk, tx, conf, app);
       }
 
@@ -488,7 +492,7 @@ class Arcade extends ModTemplate {
                     //
                     let currentTime = new Date().getTime();
                     if ((currentTime - this.app.options.games[i].ts) > 2000) {
-                      //console.info(currentTime + " ------- " + this.app.options.games[i].ts);
+                      console.log(`${currentTime} ------- ${this.app.options.games[i].ts}`);
                       return;
                     }
                   }
@@ -510,14 +514,15 @@ class Arcade extends ModTemplate {
             //console.info("\n\n\n\n\n\nSHOWING GAME HERE");
             //console.info(JSON.stringify(this.games));
             for (let i = 0; i < this.games.length; i++) {
-              if (this.games[i].transaction.sig == txmsg.game_id) {
+              let transaction = Object.assign({sig: ""}, this.games[i].transaction);
+              if (transaction.sig == txmsg.game_id) {
 
                 //
                 // remove game (accepted players are equal to number needed)
                 //
-                if ((this.games[i].transaction.msg.players_needed) == (this.games[i].transaction.msg.players.length + 1)) {
+                if ((transaction.msg.players_needed) == (transaction.msg.players.length + 1)) {
 
-                  this.removeGameFromOpenList(this.games[i]);
+                  this.removeGameFromOpenList(txmsg.game_id);
 
                 }
 
@@ -532,12 +537,13 @@ class Arcade extends ModTemplate {
           // remove games from open games list
           //
           for (let i = 0; i < this.games.length; i++) {
-            if (this.games[i].transaction.sig === tx.transaction.msg.game_id) {
+            let transaction = Object.assign({sig: ""}, this.games[i].transaction);
+            if (transaction.sig === tx.transaction.msg.game_id) {
               //
               //
               //
-              if (this.games[i].transaction.options) {
-                if (this.games[i].transaction.options.players_needed === (this.games[i].transaction.players.length + 1)) {
+              if (transaction.options) {
+                if (transaction.options.players_needed === (transaction.players.length + 1)) {
                   //console.info("ACCEPT MESSAGE SENT ON GAME WAITING FOR ONE PLAYER! -- deleting");
                   this.games.splice(i, 1);
                   //console.info("RE-RENDER");
