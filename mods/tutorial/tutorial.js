@@ -21,11 +21,11 @@ class Tutorial extends ModTemplate {
 
     this.app = app;
     this.name = "Tutorial";
-    this.description = "Adds easy-to-use modal popups to the Saito system to help users get started creating accounts and earning tokens"; 
+    this.description = "Adds easy-to-use modal popups to the Saito system to help users get started creating accounts and earning tokens";
     this.categories = "Core Dev Utilities";
 
     this.description = "User introduction and help system.";
-    this.categories  = "UX Users";
+    this.categories = "UX Users";
 
 
     this.username_registered = 0;
@@ -55,13 +55,11 @@ class Tutorial extends ModTemplate {
     //
     // run on load (or dom ready)
     //
-    window.onload = () => {
-      if (!localStorage.getItem('visited')) {
-        localStorage.setItem('visited', true);
-        this.welcomeBackupModal();
-      }
+    
+    if (!localStorage.getItem('visited')) {
+      localStorage.setItem('visited', true);
+      this.welcomeBackupModal();
     }
-
   }
 
 
@@ -78,7 +76,7 @@ class Tutorial extends ModTemplate {
           $unixtime: message.data.time,
         }
 
-       await this.app.storage.executeDatabase(sql, params, "tutorial");
+        await this.app.storage.executeDatabase(sql, params, "tutorial");
 
         return;
 
