@@ -17,25 +17,9 @@ module.exports = ArcadeMain = {
     if (!arcade_main) { return; }
     arcade_main.innerHTML = ArcadeMainTemplate();
 
-    ArcadeGameCarousel.render(app, data);
-
-    //
-    // Carousel - click-to-create
-    //
-    //let carousel = document.getElementById("arcade-carousel-slides");
-    //data.arcade.mods.forEach(mod => {
-    //  let gameobj = mod.respondTo("arcade-games");
-    //  if (gameobj != null) {
-    //    carousel.innerHTML += ArcadeGameTemplate(mod, gameobj);
-    //  }
-    //});
-
-    //
-    // click-to-join
-    //
     data.arcade.games.forEach(tx => {
 
-console.log("TX GAME: " + JSON.stringify(tx));
+      console.log("TX GAME: " + JSON.stringify(tx));
 
       let txmsg = tx.returnMessage();
       let publickey = app.wallet.returnPublicKey();
@@ -50,14 +34,14 @@ console.log("TX GAME: " + JSON.stringify(tx));
       // eliminate "JOIN" button if I am in the game already
       //
       if (txmsg.over == 1) {
-	delete button_text.join;
+        delete button_text.join;
       }
       if (tx.isFrom(app.wallet.returnPublicKey())) {
-	delete button_text.join;
+        delete button_text.join;
       }
       if (tx.transaction.msg.players_array) {
         if (tx.transaction.msg.players_array.includes(app.wallet.returnPublicKey())) {
-	  delete button_text.join;
+          delete button_text.join;
         }
       }
 
@@ -76,19 +60,19 @@ console.log("TX GAME: " + JSON.stringify(tx));
             button_text.continue = "CONTINUE";
             delete button_text.join;
 
-	    if (txmsg.over == 1) {
-	      delete button_text.continue;
-	    }
+            if (txmsg.over == 1) {
+              delete button_text.continue;
+            }
 
             if (game.players.some(player => publickey == player))
               button_text.delete = "DELETE";
-              delete button_text.cancel;
+            delete button_text.cancel;
           }
         });
       }
 
       document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(app, tx, button_text);
-      console.log(button_text);
+      
     });
 
   },
@@ -104,12 +88,11 @@ console.log("TX GAME: " + JSON.stringify(tx));
     //
     // carousel
     //
-    ArcadeGameCarousel.render(app, data);
     
-    document.querySelector('.arcade-carousel-wrapper').addEventListener('click', (e) => {
-      ArcadeStartGameList.render(app, data);
-      ArcadeStartGameList.attachEvents(app, data);
-    });
+    //document.querySelector('.arcade-carousel-wrapper').addEventListener('click', (e) => {
+    //  ArcadeStartGameList.render(app, data);
+    //  ArcadeStartGameList.attachEvents(app, data);
+    //});
 
     //
     // big button (removed)
@@ -118,7 +101,7 @@ console.log("TX GAME: " + JSON.stringify(tx));
       ArcadeStartGameList.render(app, data);
       ArcadeStartGameList.attachEvents(app, data);
     });
-    
+
     //
     // create game
     //
@@ -256,35 +239,35 @@ console.log("TX GAME: " + JSON.stringify(tx));
 
           for (let i = 0; i < app.options.games.length; i++) {
 
-console.log("CHECKING: " + app.options.games[i].id);
+            console.log("CHECKING: " + app.options.games[i].id);
 
-	    if (app.options.games[i].id == game_id) {
+            if (app.options.games[i].id == game_id) {
 
-console.log("THE GAME IS THE SAME AS OUR GAME ID!");
+              console.log("THE GAME IS THE SAME AS OUR GAME ID!");
 
-	      let resigned_game = app.options.games[i];
+              let resigned_game = app.options.games[i];
 
               if (resigned_game.over == 0) {
 
-console.log("GETTING ASKED TO RESIGN, then deleting!");
+                console.log("GETTING ASKED TO RESIGN, then deleting!");
 
-            	let game_mod = app.modules.returnModule(resigned_game.module);
-            	game_mod.resignGame(game_id);
+                let game_mod = app.modules.returnModule(resigned_game.module);
+                game_mod.resignGame(game_id);
 
               } else {
 
-console.log("DELETING A GAME!");
-	        //
-	        // removing game someone else ended
-	        //
-		app.options.games[i].over = 1;
-		app.options.games[i].last_block = app.blockchain.last_bid;
-		app.storage.saveOptions();
+                console.log("DELETING A GAME!");
+                //
+                // removing game someone else ended
+                //
+                app.options.games[i].over = 1;
+                app.options.games[i].last_block = app.blockchain.last_bid;
+                app.storage.saveOptions();
 
-	      }
-	    }
-	  }
-console.log("REMOVE GAME FROM GAME LIST!");
+              }
+            }
+          }
+          console.log("REMOVE GAME FROM GAME LIST!");
           this.removeGameFromList(game_id);
         }
       };
@@ -297,13 +280,13 @@ console.log("REMOVE GAME FROM GAME LIST!");
         game_id = game_id.split('-').pop();
 
         if (app.options.games) {
-	  for (let i = 0; i < app.options.games.length; i++) {
-	    if (app.options.games[i].id == game_id) {
-	      app.options.games[i].ts = new Date().getTime();
-	      app.storage.saveOptions();
-	      let thismod = app.modules.returnModule(app.options.games[i].module);
-              window.location = '/'+thismod.returnSlug();
-	    }
+          for (let i = 0; i < app.options.games.length; i++) {
+            if (app.options.games[i].id == game_id) {
+              app.options.games[i].ts = new Date().getTime();
+              app.storage.saveOptions();
+              let thismod = app.modules.returnModule(app.options.games[i].module);
+              window.location = '/' + thismod.returnSlug();
+            }
           }
         }
       };
@@ -315,6 +298,15 @@ console.log("REMOVE GAME FROM GAME LIST!");
 
         let game_id = e.currentTarget.id;
         sig = game_id.split('-').pop();
+
+        if (app.options.games) {
+          for (let i = 0; i < app.options.games.length; i++) {
+            if (app.options.games[i].transaction.sig == sig) {
+              app.options.games.splice(i, 1);
+              app.storage.saveOptions();
+            }
+          }
+        }
 
         let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
         let msg = {
@@ -335,7 +327,7 @@ console.log("REMOVE GAME FROM GAME LIST!");
 
   removeGameFromList(game_id) {
     document.getElementById(`arcade-gamelist`)
-                  .removeChild(document.getElementById(`arcade-game-${game_id}`));
+      .removeChild(document.getElementById(`arcade-game-${sig}`));  
   }
 
 }

@@ -5,7 +5,8 @@ const ArcadeMain = require('./lib/arcade-main/arcade-main');
 const ArcadeLoader = require('./lib/arcade-main/arcade-loader');
 const ArcadeLeftSidebar = require('./lib/arcade-left-sidebar/arcade-left-sidebar');
 const ArcadeRightSidebar = require('./lib/arcade-right-sidebar/arcade-right-sidebar');
-const ArcadeStartGameList = require('./lib/arcade-start-game-list/arcade-start-game-list');
+//const ArcadeStartGameList = require('./lib/arcade-start-game-list/arcade-start-game-list');
+const ArcadeGameCarousel = require('./lib/arcade-main/arcade-game-carousel/arcade-game-carousel');
 
 const Header = require('../../lib/ui/header/header');
 const AddressController = require('../../lib/ui/menu/address-controller');
@@ -105,12 +106,15 @@ class Arcade extends ModTemplate {
         //
         window.location = '/' + arcade_self.app.options.games[arcade_self.app.options.games.length - 1].module.toLowerCase().replace(/\w/, '_');
       })
-      .catch(err => console.log("ERROR 418019: error fetching game for observer mode", err));
+      .catch(err => console.info("ERROR 418019: error fetching game for observer mode", err));
   }
 
   render(app, data) {
 
     if (this.browser_active == 0) { return; }
+    
+    
+    ArcadeGameCarousel.render(app, data);
 
     ArcadeMain.render(app, data);
     ArcadeMain.attachEvents(app, data);
@@ -191,7 +195,7 @@ class Arcade extends ModTemplate {
         // ignore games that are over
         //
 
-        console.log("GAME OVER + LAST BLOCK: " + game.over + " -- " + game.last_block + " -- " + game.id);
+        //console.info("GAME OVER + LAST BLOCK: " + game.over + " -- " + game.last_block + " -- " + game.id);
 
         if (game.over) {
           if (game.last_block > 0) { return; }
@@ -258,7 +262,7 @@ class Arcade extends ModTemplate {
           tx.transaction.msg.players_available = row.players_available;
           tx.transaction.msg.players_array = row.players_array;
 
-          console.log("ADDING OPEN GAME FROM SERVER: " + JSON.stringify(tx.transaction));
+          //console.info("ADDING OPEN GAME FROM SERVER: " + JSON.stringify(tx.transaction));
           this.addGameToOpenList(tx);
         });
 
@@ -365,14 +369,21 @@ class Arcade extends ModTemplate {
 
     this.games = this.games.filter(game => game.transaction.sig != tx.transaction.sig);
 
-    console.log("THESE ARE THE GAMES LEFT: " + JSON.stringify(this.games));
+    ////console.info("THESE ARE THE GAMES LEFT: " + JSON.stringify(this.games));
+
+    this.app.options.games = this.games;
+    this.app.storage.saveOptions();
 
     let data = {};
     data.arcade = this;
 
     if (this.browser_active == 1) {
-      ArcadeMain.render(this.app, data);
-      ArcadeMain.attachEvents(this.app, data);
+      //ArcadeMain.render(this.app, data);
+      //ArcadeMain.attachEvents(this.app, data);
+      if(document.getElementById(`arcade-game-${tx.transaction.sig}`)) {
+        document.getElementById(`arcade-gamelist`)
+        .removeChild(document.getElementById(`arcade-game-${tx.transaction.sig}`));
+      }
     }
   }
 
@@ -396,6 +407,8 @@ class Arcade extends ModTemplate {
       //
       // cancel open games
       //
+      //console.info(txmsg.module);
+      //console.info(txmsg.request);
       if (txmsg.module == "Arcade" && txmsg.request == "close") {
         this.removeGameFromOpenList(tx);
         this.receiveCloseRequest(blk, tx, conf, app);
@@ -407,8 +420,6 @@ class Arcade extends ModTemplate {
       if (txmsg.game_state != undefined && txmsg.game_id != "") {
         this.saveGameState(blk, tx, conf, app);
       }
-
-
 
 
       // invites
@@ -426,7 +437,7 @@ class Arcade extends ModTemplate {
             }
           }
         }
-        console.log("\n\n\nINVITE REQUEST: " + JSON.stringify(tx));
+        //console.info("\n\n\nINVITE REQUEST: " + JSON.stringify(tx));
         this.receiveInviteRequest(blk, tx, conf, app);
       }
 
@@ -449,10 +460,10 @@ class Arcade extends ModTemplate {
       // acceptances
       if (txmsg.request === "accept") {
 
-        console.log("ARCADE GETS ACCEPT MESSAGE: " + txmsg.request);
-        console.log("i am " + app.wallet.returnPublicKey());
-        console.log("TX: " + JSON.stringify(tx.transaction));
-        console.log("MSG: " + txmsg);
+        //console.info("ARCADE GETS ACCEPT MESSAGE: " + txmsg.request);
+        //console.info("i am " + app.wallet.returnPublicKey());
+        //console.info("TX: " + JSON.stringify(tx.transaction));
+        //console.info("MSG: " + txmsg);
 
         //
         // multiplayer games might hit here without options.games
@@ -467,7 +478,7 @@ class Arcade extends ModTemplate {
               for (let i = 0; i < this.app.options.games.length; i++) {
                 if (this.app.options.games[i].id == txmsg.game_id) {
 
-                  console.log("GAME NO LONGER INITIALIZING! ---> " + this.app.options.games[i].initializing);
+                  //console.info("GAME NO LONGER INITIALIZING! ---> " + this.app.options.games[i].initializing);
 
                   if (this.app.options.games[i].initializing == 0) {
 
@@ -476,13 +487,13 @@ class Arcade extends ModTemplate {
                     //
                     let currentTime = new Date().getTime();
                     if ((currentTime - this.app.options.games[i].ts) > 2000) {
-                      console.log(currentTime + " ------- " + this.app.options.games[i].ts);
+                      //console.info(currentTime + " ------- " + this.app.options.games[i].ts);
                       return;
                     }
                   }
                 }
 
-                console.log("HERE FOUND: " + JSON.stringify(this.app.options.games[i]));
+                //console.info("HERE FOUND: " + JSON.stringify(this.app.options.games[i]));
 
               }
 
@@ -495,8 +506,8 @@ class Arcade extends ModTemplate {
           //
           if (this.games.length > 0) {
 
-            console.log("\n\n\n\n\n\nSHOWING GAME HERE");
-            console.log(JSON.stringify(this.games));
+            //console.info("\n\n\n\n\n\nSHOWING GAME HERE");
+            //console.info(JSON.stringify(this.games));
             for (let i = 0; i < this.games.length; i++) {
               if (this.games[i].transaction.sig == txmsg.game_id) {
 
@@ -526,21 +537,21 @@ class Arcade extends ModTemplate {
               //
               if (this.games[i].transaction.options) {
                 if (this.games[i].transaction.options.players_needed === (this.games[i].transaction.players.length + 1)) {
-                  console.log("ACCEPT MESSAGE SENT ON GAME WAITING FOR ONE PLAYER! -- deleting");
+                  //console.info("ACCEPT MESSAGE SENT ON GAME WAITING FOR ONE PLAYER! -- deleting");
                   this.games.splice(i, 1);
-                  console.log("RE-RENDER");
+                  //console.info("RE-RENDER");
                   this.render();
-                  console.log("RE-RENDERED");
+                  //console.info("RE-RENDERED");
                 }
               }
             }
           }
-          console.log("OPEN GAMES AT THIS POINT: " + JSON.stringify(this.games));
+          //console.info("OPEN GAMES AT THIS POINT: " + JSON.stringify(this.games));
 
         }
 
-        console.log("... still here... receive accept request!");
-        console.log("\n\n\nACCEPT REQUEST: " + JSON.stringify(tx));
+        //console.info("... still here... receive accept request!");
+        //console.info("\n\n\nACCEPT REQUEST: " + JSON.stringify(tx));
         await this.receiveAcceptRequest(blk, tx, conf, app);
 
         //
@@ -558,13 +569,13 @@ class Arcade extends ModTemplate {
           }
         }
 
-        console.log("\n\n\nlaunching request to launch game... flag button, etc.");
+        //console.info("\n\n\nlaunching request to launch game... flag button, etc.");
 
         //
         // only launch game if it is for us
         //
         if (tx.isTo(app.wallet.returnPublicKey())) {
-          console.log("THIS GAMEIS FOR ME: " + tx.isTo(app.wallet.returnPublicKey()));
+          //console.info("THIS GAMEIS FOR ME: " + tx.isTo(app.wallet.returnPublicKey()));
           this.launchGame(txmsg.game_id);
         }
 
@@ -572,7 +583,7 @@ class Arcade extends ModTemplate {
 
       // game over
       if (txmsg.request == "gameover") {
-        console.log("\n\n\nGAMEOVER REQUEST: " + JSON.stringify(tx));
+        //console.info("\n\n\nGAMEOVER REQUEST: " + JSON.stringify(tx));
         this.receiveGameoverRequest(blk, tx, conf, app);
       }
     }
@@ -900,10 +911,10 @@ class Arcade extends ModTemplate {
       if (app.options.games) {
         for (let i = app.options.games.length - 1; i >= 0; i--) {
           if (app.options.games[i].id == txmsg.game_id) {
-            console.log("########################");
-            console.log("### SENDING SORRY TX ###");
-            console.log("########################");
-            console.log("\n\n\nSORRY -- RECEIVED: " + JSON.stringify(app.options.games[i]));
+            //console.info("########################");
+            //console.info("### SENDING SORRY TX ###");
+            //console.info("########################");
+            //console.info("\n\n\nSORRY -- RECEIVED: " + JSON.stringify(app.options.games[i]));
             if (app.options.games[i].players.length == app.options.games[i].players_needed && !app.options.games[i].players.includes(tx.transaction.from[0].add)) {
 
               if (this.browser_active == 1) {
@@ -924,7 +935,7 @@ class Arcade extends ModTemplate {
       }
 
     } catch (err) {
-      console.log("ERROR WITH SORRY ACCEPTED TRANSACTION: " + err);
+      //console.info("ERROR WITH SORRY ACCEPTED TRANSACTION: " + err);
     }
 
   }
@@ -959,7 +970,7 @@ class Arcade extends ModTemplate {
     try {
       let resp = await this.app.storage.executeDatabase(sql, params, "arcade");
     } catch (err) {
-      console.log(err);
+      //console.info(err);
     }
 
     sql = "UPDATE games SET status = 'active' WHERE status = $status AND players_accepted >= players_needed AND game_id = $game_id";
@@ -968,17 +979,17 @@ class Arcade extends ModTemplate {
       $game_id: txmsg.game_id
     }
 
-    console.log("about to await execut db");
-    console.log(sql);
-    console.log(params);
+    //console.info("about to await execut db");
+    //console.info(sql);
+    //console.info(params);
 
     try {
       let resp = await this.app.storage.executeDatabase(sql, params, "arcade");
     } catch (err) {
-      console.log(err);
+      //console.info(err);
     }
 
-    console.log("done now...");
+    //console.info("done now...");
 
   }
 
@@ -995,7 +1006,7 @@ class Arcade extends ModTemplate {
 
   sendMultiplayerAcceptRequest(app, data, gameobj) {
 
-    console.log("SEND MULTIPLE ACCEPT: " + JSON.stringify(gameobj));
+    //console.info("SEND MULTIPLE ACCEPT: " + JSON.stringify(gameobj));
 
     let txmsg = gameobj.transaction.msg;
     let players_array = txmsg.players_array;
@@ -1005,7 +1016,7 @@ class Arcade extends ModTemplate {
     let opponents = players_array.split("_");
     let game_self = app.modules.returnModule(txmsg.game);
 
-    console.log("LOADED THE GAME: " + txmsg.game);
+    //console.info("LOADED THE GAME: " + txmsg.game);
 
     //
     // create the game
@@ -1066,7 +1077,7 @@ class Arcade extends ModTemplate {
               testdiv.innerHTML = "Opponent Resigned";
             }
           } catch (err) {
-            console.log("ERROR UPDATING ARCADE BOX");
+            //console.info("ERROR UPDATING ARCADE BOX");
           }
         }
       }
@@ -1144,7 +1155,7 @@ class Arcade extends ModTemplate {
 
       expressapp.get('/arcade/observer/:game_id', async (req, res) => {
 
-        console.log("\n\n\n\nHERE WE ARE!");
+        //console.info("\n\n\n\nHERE WE ARE!");
 
         let sql = "SELECT * FROM gamestate WHERE game_id = $game_id ORDER BY id DESC LIMIT 1";
         let params = { $game_id: req.params.game_id }
@@ -1154,7 +1165,7 @@ class Arcade extends ModTemplate {
           let game = games[0];
           res.setHeader('Content-type', 'text/html');
           res.charset = 'UTF-8';
-          console.log(JSON.stringify(game));
+          //console.info(JSON.stringify(game));
           res.write(game.game_state);
           res.end();
           return;
@@ -1278,7 +1289,7 @@ class Arcade extends ModTemplate {
     if (modname == "Arcade") { return 1; }
     for (let i = 0; i < this.affix_callbacks_to.length; i++) {
       if (this.affix_callbacks_to[i] == modname) {
-        console.log("AFFIXING CALLBACKS TO: " + modname);
+        //console.info("AFFIXING CALLBACKS TO: " + modname);
         return 1;
       }
     }
