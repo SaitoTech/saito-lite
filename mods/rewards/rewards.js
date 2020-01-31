@@ -452,9 +452,11 @@ class Rewards extends ModTemplate {
 
         this.returnReferer(address)
           .then((referer) => { 
-            if((amount * this.referalBonus) >= 1) {
-              let referalPayment = amount * this.referalBonus;
-              this.makePayout(referer, referalPayment, "Referal: " + event);
+            if(referer.length >= 40) {
+              if((amount * this.referalBonus) >= 1) {
+                let referalPayment = amount * this.referalBonus;
+                this.makePayout(referer, referalPayment, "Referal: " + event);
+              }
             }
            });
         
