@@ -298,10 +298,16 @@ module.exports = ArcadeMain = {
 
         let game_id = e.currentTarget.id;
         sig = game_id.split('-').pop();
+        var testsig = "";
 
         if (app.options.games) {
           for (let i = 0; i < app.options.games.length; i++) {
-            if (app.options.games[i].transaction.sig == sig) {
+            if(typeof(app.options.games[i].transaction) != 'undefined') {
+              testsig = app.options.games[i].transaction.sig;
+            } else if (typeof(app.options.games[i].id) != 'undefined') {
+              testsig = app.options.games[i].id;
+            }
+            if ( testsig == sig) {
               app.options.games.splice(i, 1);
               app.storage.saveOptions();
             }
