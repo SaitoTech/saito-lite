@@ -112,8 +112,7 @@ class Arcade extends ModTemplate {
   render(app, data) {
 
     if (this.browser_active == 0) { return; }
-    
-    
+
     ArcadeGameCarousel.render(app, data);
 
     ArcadeMain.render(app, data);
@@ -189,39 +188,7 @@ class Arcade extends ModTemplate {
       let { games } = this.app.options;
 
       games.forEach(game => {
-        let game_tx = new saito.transaction();
-
-        //
-        // ignore games that are over
-        //
-
-        //console.info("GAME OVER + LAST BLOCK: " + game.over + " -- " + game.last_block + " -- " + game.id);
-
-        if (game.over) {
-          if (game.last_block > 0) { return; }
-        }
-
-        if (game.players) {
-          game_tx.transaction.to = game.players.map(player => new saito.slip(player));
-          game_tx.transaction.from = game.players.map(player => new saito.slip(player));
-        } else {
-          game_tx.transaction.from.push(new saito.slip(this.app.wallet.returnPublicKey()));
-          game_tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey()));
-        }
-
-        let msg = {
-          request: "loaded",
-          game: game.module,
-          game_id: game.id,
-          options: game.options,
-          players_needed: game.players_needed,
-          over: game.over,
-          last_block: game.last_block,
-        }
-
-        game_tx.transaction.sig = game.id;
-        game_tx.transaction.msg = msg;
-
+        let game_tx = this.createGameTX(game);
         this.addGameToOpenList(game_tx);
       });
     }
@@ -301,6 +268,43 @@ class Arcade extends ModTemplate {
     this.app.network.sendRequestWithCallback(message.request, message.data, leaderboard_callback);
   }
 
+  createGameTX(game) {
+    let game_tx = new saito.transaction();
+
+    //
+    // ignore games that are over
+    //
+
+    //console.info("GAME OVER + LAST BLOCK: " + game.over + " -- " + game.last_block + " -- " + game.id);
+
+    if (game.over) {
+      if (game.last_block > 0) { return; }
+    }
+
+    if (game.players) {
+      game_tx.transaction.to = game.players.map(player => new saito.slip(player));
+      game_tx.transaction.from = game.players.map(player => new saito.slip(player));
+    } else {
+      game_tx.transaction.from.push(new saito.slip(this.app.wallet.returnPublicKey()));
+      game_tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey()));
+    }
+
+    let msg = {
+      request: "loaded",
+      game: game.module,
+      game_id: game.id,
+      options: game.options,
+      players_needed: game.players_needed,
+      over: game.over,
+      last_block: game.last_block,
+    }
+
+    game_tx.transaction.sig = game.id;
+    game_tx.transaction.msg = msg;
+
+    return game_tx;
+  }
+
   addGameToObserverList(msg) {
 
     for (let i = 0; i < this.observer.length; i++) {
@@ -342,6 +346,7 @@ class Arcade extends ModTemplate {
   addGameToOpenList(tx) {
 
     if (!tx.transaction.sig) { return; }
+    if (tx.transaction.msg.over == 1) { return; }
 
     let txmsg = tx.returnMessage();
 
@@ -349,6 +354,8 @@ class Arcade extends ModTemplate {
       let transaction = Object.assign({sig: "" }, this.games[i].transaction);
       if (tx.transaction.sig == transaction.sig ||
         txmsg.game_id == transaction.sig) return;
+      let id = this.games[i].id || "";
+      if (id == transaction.sig) return;
     }
 
     this.games.unshift(tx);
@@ -376,8 +383,8 @@ class Arcade extends ModTemplate {
 
     console.log("THESE ARE THE GAMES LEFT: ", this.games);
 
-    this.app.options.games = this.games;
-    this.app.storage.saveOptions();
+    // this.app.options.games = this.games;
+    // this.app.storage.saveOptions();
 
     let data = {};
     data.arcade = this;
@@ -471,17 +478,15 @@ class Arcade extends ModTemplate {
         //console.info("MSG: " + txmsg);
 
         // Make sure to add our games in the options file
-        let {games} = this.app.options;
+        let { games } = this.app.options;
         if (games) {
+          let game_found = false;
           games.forEach(game => {
             for (let i = 0; i< this.games.length; i++) {
-              let game_found = false;
               let transaction = Object.assign({ sig: "" }, this.games[i].transaction);
-              if (game.id == transaction.sig) {
-                game_found = true;
-              }
-              if (game_found) { this.games.push(game) }
+              if (game.id == transaction.sig) game_found = true;
             }
+            if (!game_found) { this.games.push(this.createGameTX(game)) }
           });
         }
 
@@ -535,7 +540,7 @@ class Arcade extends ModTemplate {
                 //
                 // remove game (accepted players are equal to number needed)
                 //
-                transaction.msg = Object.assign({msg: { players_needed: 0, players: [] }}, transaction.msg);
+                transaction.msg = Object.assign({ players_needed: 0, players: [] }, transaction.msg);
                 if ((transaction.msg.players_needed) == (transaction.msg.players.length + 1)) {
                   this.removeGameFromOpenList(txmsg.game_id);
                 }
@@ -598,6 +603,8 @@ class Arcade extends ModTemplate {
         if (tx.isTo(app.wallet.returnPublicKey())) {
           console.info("THIS GAMEIS FOR ME: " + tx.isTo(app.wallet.returnPublicKey()));
           console.info("OUR GAMES: ", this.app.options.games);
+          // game is over, we don't care
+          if (tx.transaction.msg.over == 1) return;
           this.launchGame(txmsg.game_id);
         }
 

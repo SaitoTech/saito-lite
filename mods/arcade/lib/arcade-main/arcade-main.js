@@ -21,9 +21,14 @@ module.exports = ArcadeMain = {
 
       console.log("TX GAME: " + JSON.stringify(tx));
 
-      let txmsg = tx.returnMessage();
+      let transaction = Object.assign({ msg: {} }, tx.transaction);
+
       let publickey = app.wallet.returnPublicKey();
-      let { game_id, game } = txmsg;
+      // let { game_id, game } = txmsg;
+
+      let game_id = transaction.msg.game_id || tx.id;
+      let game = transaction.msg.game || tx;
+      let players_array = transaction.msg.players_array || tx.players_array;
 
       if (game == '') return;
 
@@ -33,14 +38,14 @@ module.exports = ArcadeMain = {
       //
       // eliminate "JOIN" button if I am in the game already
       //
-      if (txmsg.over == 1) {
+      if (transaction.msg.over == 1) {
         delete button_text.join;
       }
       if (tx.isFrom(app.wallet.returnPublicKey())) {
         delete button_text.join;
       }
-      if (tx.transaction.msg.players_array) {
-        if (tx.transaction.msg.players_array.includes(app.wallet.returnPublicKey())) {
+      if (players_array) {
+        if (players_array.includes(app.wallet.returnPublicKey())) {
           delete button_text.join;
         }
       }
@@ -60,7 +65,7 @@ module.exports = ArcadeMain = {
             button_text.continue = "CONTINUE";
             delete button_text.join;
 
-            if (txmsg.over == 1) {
+            if (transaction.msg.over == 1) {
               delete button_text.continue;
             }
 
@@ -72,7 +77,6 @@ module.exports = ArcadeMain = {
       }
 
       document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(app, tx, button_text);
-      
     });
 
   },
