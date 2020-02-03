@@ -327,7 +327,7 @@ class AppStore extends ModTemplate {
             if (char == '!') { return '!'; }
             if (char == "\\" || char == "\'" || char == "\"" || char == ";") { return ''; }
             if (! (/[a-zA-Z0-9_-]/.test(char))) { return ''; }
-            return char.trim();
+            return char;
           }).join('');
         }
       });

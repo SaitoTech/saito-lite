@@ -178,7 +178,7 @@ class ChatCore extends ModTemplate {
   //
   handlePeerRequest(app, req, peer, mycallback) {
 
-console.log("REQUEST DETAILS: " + JSON.stringify(req));
+//console.log("REQUEST DETAILS: " + JSON.stringify(req));
 
     if (req.request == null) { return; }
     if (req.data == null) { return; }
@@ -190,7 +190,7 @@ console.log("REQUEST DETAILS: " + JSON.stringify(req));
       switch (req.request) {
 
         case "chat message":
-console.log("RECEIVED A CHAT MESSAGE!");
+//console.log("RECEIVED A CHAT MESSAGE!");
           this.receiveMessage(app, new saito.transaction(tx.transaction));
           if (mycallback) { mycallback({ "payload": "success", "error": {} }); };
           break;
@@ -225,7 +225,7 @@ console.log("RECEIVED A CHAT MESSAGE!");
 
     let txmsg = tx.returnMessage();
 
-console.log("WE RECEIVED MSG: " + JSON.stringify(txmsg));
+//console.log("WE RECEIVED MSG: " + JSON.stringify(txmsg));
 
     //
     // add alert if we are not in a chat-positive application

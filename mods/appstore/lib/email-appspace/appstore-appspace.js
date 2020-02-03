@@ -15,7 +15,7 @@ module.exports = AppStoreAppspace = {
     //
     let db_database = "appstore";
     let db_table    = "modules";
-    let db_select   = "name, description, categories, version, publickey, unixtime, bid, bsh";
+    let db_select   = "name, description, version, publickey, unixtime, bid, bsh";
     let db_where    = "featured = 1";
 
     if (app.browser.returnURLParameter("app") != "") {
@@ -56,7 +56,7 @@ module.exports = AppStoreAppspace = {
     var allCategories = [];
     for (let i = 0; i < rows.length; i++) {
       if (rows[i].categories) {
-        let categories = rows[i].categories.trim().split(" ")
+        let categories = rows[i].categories.split(" ")
         categories.forEach((item) => {
           if (!allCategories.includes(item)) {
             allCategories.push(item);
