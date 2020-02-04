@@ -19,6 +19,7 @@ module.exports = ArcadeMain = {
 
     data.arcade.games.forEach(tx => {
 
+      console.log("\n\n\nSHOWING GAMES: ");
       console.log("TX GAME: " + JSON.stringify(tx));
 
       let transaction = Object.assign({ msg: {} }, tx.transaction);
@@ -134,10 +135,25 @@ module.exports = ArcadeMain = {
         let accepted_game = null;
 
         games.forEach((g) => {
-          if (g.transaction.sig === game_id) accepted_game = g;
+          if (g.transaction.sig === game_id) { accepted_game = g; }
         });
 
         if (!accepted_game) return;
+
+	//
+	// if there are not enough players, we will join not accept
+	//
+        let players_needed = accepted_game.transaction.msg.players_needed;
+        let players_available = accepted_game.transaction.msg.players.length;
+        if ( players_needed > (players_available+1) ) {
+          let newtx = data.arcade.createJoinTransaction(app, data, accepted_game);
+          data.arcade.app.network.propagateTransaction(newtx);
+	  data.arcade.joinGameOnOpenList(newtx);
+          salert("You have broadcast a message asking to join this game! It may take a minute or so for your icon to appear next to the game.");
+	  return;
+	}
+
+
 
         //
         // check that we're not accepting our own game
@@ -216,7 +232,7 @@ module.exports = ArcadeMain = {
                   //
                   // sanity check
                   //
-                  data.arcade.sendInviteRequest(app, data, accepted_game);
+                  data.arcade.app.network.propagateTransaction(data.arcade.createInviteTransaction(app, data, accepted_game));
                   ArcadeLoader.render(app, data);
                   ArcadeLoader.attachEvents(app, data);
                 } else {

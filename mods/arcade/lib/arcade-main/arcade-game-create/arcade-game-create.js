@@ -117,10 +117,10 @@ setTimeout(() => {
 	      return;
             }
 
-            data.arcade.sendOpenRequest(app, data, gamedata);
+            let newtx = data.arcade.createOpenTransaction(gamedata);
+            data.arcade.app.network.propagateTransaction(newtx);
             document.querySelector('.arcade-main').innerHTML = '';
             data.arcade.render(app, data);
-
 
           });
 

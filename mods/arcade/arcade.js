@@ -268,13 +268,14 @@ class Arcade extends ModTemplate {
     this.app.network.sendRequestWithCallback(message.request, message.data, leaderboard_callback);
   }
 
+
+
   createGameTX(game) {
     let game_tx = new saito.transaction();
 
     //
     // ignore games that are over
     //
-
     //console.info("GAME OVER + LAST BLOCK: " + game.over + " -- " + game.last_block + " -- " + game.id);
 
     if (game.over) {
@@ -369,6 +370,39 @@ class Arcade extends ModTemplate {
     }
   }
 
+
+
+  joinGameOnOpenList(tx) {
+
+    if (!tx.transaction.sig) { return; }
+    if (tx.transaction.msg.over == 1) { return; }
+
+    let txmsg = tx.returnMessage();
+
+    for (let i = 0; i < this.games.length; i++) {
+      if (! this.games[i].transaction.msg.players.includes(tx.transaction.from[0].add) ) {
+
+	//
+	// TODO is validate accept sig
+	//
+	if (tx.transaction.msg.accept_sig != "") {
+	  this.games[i].transaction.msg.players.push(tx.transaction.from[0].add);
+	  this.games[i].transaction.msg.players_sigs.push(txmsg.accept_sig);
+	}
+      }
+    }
+
+    let data = {};
+    data.arcade = this;
+
+    if (this.browser_active == 1) {
+      ArcadeMain.render(this.app, data);
+      ArcadeMain.attachEvents(this.app, data);
+    }
+  }
+
+
+
   // just receive the sig of the game to remove
   removeGameFromOpenList(game_sig) {
 
@@ -417,10 +451,16 @@ class Arcade extends ModTemplate {
       }
 
       //
+      // join msgs -- add myself to game list
+      //
+      if (txmsg.request == "join") {
+        this.joinGameOnOpenList(tx);
+        this.receiveJoinRequest(blk, tx, conf, app);
+      }
+
+      //
       // cancel open games
       //
-      //console.info(txmsg.module);
-      //console.info(txmsg.request);
       if (txmsg.module == "Arcade" && txmsg.request == "close") {
         this.removeGameFromOpenList(tx.returnMessage().sig);
         this.receiveCloseRequest(blk, tx, conf, app);
@@ -620,20 +660,54 @@ class Arcade extends ModTemplate {
 
   async handlePeerRequest(app, message, peer, mycallback = null) {
 
-    super.handlePeerRequest(app, message, peer, mycallback);
-
-    switch (message.request) {
-      case 'arcade leaderboard list':
-        let sql = `
+    if (message.request == 'arcade leaderboard list') {
+      let sql = `
         SELECT winner, sum(score) as highscore, module FROM leaderboard
         GROUP by winner, module
         ORDER BY highscore
-        DESC LIMIT 10`;
-
-        let rows = await this.app.storage.queryDatabase(sql, {}, 'arcade');
-        mycallback({ rows });
-        break;
+        DESC LIMIT 10
+      `;
+      let rows = await this.app.storage.queryDatabase(sql, {}, 'arcade');
+      mycallback({ rows });
+      return;
     }
+
+    if (message.request == 'arcade load games') {
+
+      let sql = `SELECT * FROM games WHERE status = "open"`;
+      let rows = await this.app.storage.queryDatabase(sql, {}, 'arcade');
+
+      for (let i = 0; i < rows.length; i++) {
+
+        let gametx = JSON.parse(rows[i].tx);
+
+        let sql2 = `SELECT * FROM invites WHERE game_id = "${gametx.sig}"`;
+        let rows2 = await this.app.storage.queryDatabase(sql2, {}, 'arcade');
+
+	gametx.players = [];
+	gametx.players_sigs = [];
+	for (let z = 0; z < rows2.length; z++) {
+	  gametx.players.push(rows2[z].player);
+	  gametx.players_sigs.push(rows2[z].acceptance_sig);
+	}
+
+        rows[i].tx = JSON.stringify(gametx);
+      }
+
+
+console.log("\n\n\n");
+console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+console.log("WE HAVE BEEN ASKED TO LOAD: " + JSON.stringify(rows));
+
+
+      mycallback({ rows });
+      return;
+    }
+
+    super.handlePeerRequest(app, message, peer, mycallback);
   }
 
   launchGame(game_id) {
@@ -737,26 +811,30 @@ class Arcade extends ModTemplate {
 
     let txmsg = tx.returnMessage();
 
-    let module = txmsg.game;
-    let player = tx.transaction.from[0].add;
+    //
+    // add to games table
+    //
     let game_id = tx.transaction.sig;
     let players_needed = 2;
     if (txmsg.players_needed > 2) { players_needed = txmsg.players_needed; }
+    let module = txmsg.game;
     let options = {};
     if (txmsg.options != undefined) { options = txmsg.options; }
+    let game_status = "open";
+    let player = tx.transaction.from[0].add;
+    let players_array = player;
     let start_bid = blk.block.id;
     let valid_for_minutes = 60;
     let created_at = parseInt(tx.transaction.ts);
     let expires_at = created_at + (60000 * parseInt(valid_for_minutes));
-    let players_array = player;
+    let acceptance_sig = "";
+    if (txmsg.players_sigs.length > 0) { acceptance_sig = txmsg.players_sigs[0]; }
 
     let sql = `INSERT INTO games (
-                player ,
-                players_needed ,
-                players_accepted ,
-                players_array ,
-                module ,
                 game_id ,
+                players_needed ,
+		players_array ,
+                module ,
                 status ,
                 options ,
                 tx ,
@@ -764,12 +842,10 @@ class Arcade extends ModTemplate {
                 created_at ,
                 expires_at
               ) VALUES (
-                $player ,
+                $game_id ,
                 $players_needed ,
-                $players_accepted ,
                 $players_array ,
                 $module ,
-                $game_id ,
                 $status ,
                 $options ,
                 $tx,
@@ -778,13 +854,11 @@ class Arcade extends ModTemplate {
                 $expires_at
               )`;
     let params = {
-      $player: player,
+      $game_id: game_id,
       $players_needed: players_needed,
-      $players_accepted: 0,
       $players_array: players_array,
       $module: module,
-      $game_id: game_id,
-      $status: "open",
+      $status: game_status,
       $options: options,
       $tx: JSON.stringify(tx.transaction),
       $start_bid: blk.block.id,
@@ -792,14 +866,103 @@ class Arcade extends ModTemplate {
       $expires_at: expires_at
     };
     await app.storage.executeDatabase(sql, params, "arcade");
+
+
+
+    //
+    // insert into invites
+    //
+    let sql2 = `INSERT INTO invites (
+                game_id ,
+		player ,
+                acceptance_sig ,
+                module ,
+                created_at ,
+                expires_at
+              ) VALUES (
+                $game_id ,
+                $player ,
+                $acceptance_sig ,
+                $module ,
+                $created_at ,
+                $expires_at
+              )`;
+    let params2 = {
+      $game_id: game_id,
+      $player : player ,
+      $acceptance_sig : acceptance_sig ,
+      $module : module ,
+      $created_at: created_at,
+      $expires_at: expires_at
+    };
+    await app.storage.executeDatabase(sql2, params2, "arcade");
+
     return;
 
   }
 
-  sendOpenRequest(app, data, gamedata) {
-    let tx = this.createOpenTransaction(gamedata);
-    this.app.network.propagateTransaction(tx);
+
+
+
+  async receiveJoinRequest(blk, tx, conf, app) {
+
+console.log("RECEIVED A JOIN REQUEST!");
+
+    let txmsg = tx.returnMessage();
+
+    //
+    // add to invite table
+    //
+    let game_id = tx.transaction.sig;
+    let players_needed = 2;
+    if (txmsg.players_needed > 2) { players_needed = txmsg.players_needed; }
+    let module = txmsg.game;
+    let options = {};
+    if (txmsg.options != undefined) { options = txmsg.options; }
+    let game_status = "open";
+    let player = tx.transaction.from[0].add;
+    let players_array = player;
+    let start_bid = blk.block.id;
+    let valid_for_minutes = 60;
+    let created_at = parseInt(tx.transaction.ts);
+    let expires_at = created_at + (60000 * parseInt(valid_for_minutes));
+    let acceptance_sig = "";
+    if (txmsg.players_sigs.length > 0) { acceptance_sig = txmsg.players_sigs[0]; }
+
+    //
+    // insert into invites
+    //
+    let sql2 = `INSERT INTO invites (
+                game_id ,
+		player ,
+                acceptance_sig ,
+                module ,
+                created_at ,
+                expires_at
+              ) VALUES (
+                $game_id ,
+                $player ,
+                $acceptance_sig ,
+                $module ,
+                $created_at ,
+                $expires_at
+              )`;
+    let params2 = {
+      $game_id: game_id,
+      $player : player ,
+      $acceptance_sig : acceptance_sig ,
+      $module : module ,
+      $created_at: created_at,
+      $expires_at: expires_at
+    };
+    await app.storage.executeDatabase(sql2, params2, "arcade");
+
+console.log("\n\n\n\n\n\n\nINSERTING NEW JOIN INTO GAME!");
+
+    return;
+
   }
+
 
   createOpenTransaction(gamedata) {
 
@@ -808,16 +971,16 @@ class Arcade extends ModTemplate {
 
     let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
     tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey(), 0.0));
-    tx.transaction.msg.ts = ts;
-    tx.transaction.msg.module = "Arcade";
-    tx.transaction.msg.request = "open";
-    tx.transaction.msg.game = gamedata.name;
-    tx.transaction.msg.options = gamedata.options;
-    tx.transaction.msg.options_html = gamedata.options_html;
-    tx.transaction.msg.players_needed = gamedata.players_needed;
-    tx.transaction.msg.accept_sig = accept_sig;
-    tx.transaction.msg.players = [];
+    tx.transaction.msg.ts 		= ts;
+    tx.transaction.msg.module 		= "Arcade";
+    tx.transaction.msg.request 		= "open";
+    tx.transaction.msg.game 		= gamedata.name;
+    tx.transaction.msg.options 		= gamedata.options;
+    tx.transaction.msg.options_html 	= gamedata.options_html;
+    tx.transaction.msg.players_needed 	= gamedata.players_needed;
+    tx.transaction.msg.players 		= [];
     tx.transaction.msg.players.push(this.app.wallet.returnPublicKey());
+    tx.transaction.msg.players_sigs 	= [ accept_sig ];
     tx = this.app.wallet.signTransaction(tx);
 
     return tx;
@@ -892,10 +1055,6 @@ class Arcade extends ModTemplate {
 
   }
 
-  sendInviteRequest(app, data, opentx) {
-    let tx = this.createInviteTransaction(app, data, opentx);
-    this.app.network.propagateTransaction(tx);
-  }
 
   createInviteTransaction(app, data, gametx) {
 
@@ -907,6 +1066,36 @@ class Arcade extends ModTemplate {
     tx.transaction.msg.ts = "";
     tx.transaction.msg.module = txmsg.game;
     tx.transaction.msg.request = "invite";
+    tx.transaction.msg.game_id = gametx.transaction.sig;
+    tx.transaction.msg.players_needed = txmsg.players_needed;
+    tx.transaction.msg.options = txmsg.options;
+    tx.transaction.msg.accept_sig = "";
+    if (gametx.transaction.msg.accept_sig != "") {
+      tx.transaction.msg.accept_sig = gametx.transaction.msg.accept_sig;
+    }
+    if (gametx.transaction.msg.ts != "") {
+      tx.transaction.msg.ts = gametx.transaction.msg.ts;
+    }
+    tx.transaction.msg.invite_sig = app.crypto.signMessage(("invite_game_" + tx.transaction.msg.ts), app.wallet.returnPrivateKey());
+    tx = this.app.wallet.signTransaction(tx);
+
+    return tx;
+
+  }
+
+
+
+
+  createJoinTransaction(app, data, gametx) {
+
+    let txmsg = gametx.returnMessage();
+
+    let tx = app.wallet.createUnsignedTransactionWithDefaultFee();
+    tx.transaction.to.push(new saito.slip(gametx.transaction.from[0].add, 0.0));
+    tx.transaction.to.push(new saito.slip(app.wallet.returnPublicKey(), 0.0));
+    tx.transaction.msg.ts = "";
+    tx.transaction.msg.module = txmsg.game;
+    tx.transaction.msg.request = "join";
     tx.transaction.msg.game_id = gametx.transaction.sig;
     tx.transaction.msg.players_needed = txmsg.players_needed;
     tx.transaction.msg.options = txmsg.options;
