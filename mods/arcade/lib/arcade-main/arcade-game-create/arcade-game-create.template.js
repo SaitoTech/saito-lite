@@ -27,9 +27,21 @@ module.exports = ArcadeGameCreate = (game) => {
             </select>
         </div>
 
-        <button id="game-create-btn" class="game-create-btn">GO</button>
+        <button id="game-invite-btn" class="game-invite-btn">Go</button>
+        
+      </div>
+      <div id="game-invite-controls">
+        <div id="public-invite">
+          <button id="game-create-btn" class="game-create-btn">Public Invitation</button>
+        </div>  
+        <div id="friend-invite">
+        <button id="friend-invite-btn" class="friend-invite-btn">Invite Friends</button>
+      </div>
+      <div id="link-invite">
+          <button id="link-invite-btn" class="link-invite-btn">Share a link</button>
         </div>
-        <div id="game-publisher-message" class="game-publisher-message"></div>
+      </div>
+      <div id="game-publisher-message" class="game-publisher-message"></div>
     </div>
   </div>
 </div>
