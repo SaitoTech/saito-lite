@@ -696,18 +696,8 @@ console.log("ACCEPTED A GAME... but it does not exist!");
 
         let gametx = JSON.parse(rows[i].tx);
 
-console.log("^^^^^^^");
-console.log("^^^^^^^");
-console.log("^^^^^^^");
-console.log(JSON.stringify(gametx));
-console.log("^^^^^^^");
-console.log("^^^^^^^");
-console.log("^^^^^^^");
-
-
         let sql2 = `SELECT * FROM invites WHERE game_id = "${gametx.sig}"`;
         let rows2 = await this.app.storage.queryDatabase(sql2, {}, 'arcade');
-
 
 	gametx.msg.players = [];
 	gametx.msg.players_sigs = [];
@@ -720,15 +710,22 @@ console.log("^^^^^^^");
       }
 
 
-console.log("\n\n\n");
-console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-console.log("WE HAVE BEEN ASKED TO LOAD: " + JSON.stringify(rows));
-
-
       mycallback({ rows });
+
+      if (Math.random < 0.05) { 
+
+        let current_timestamp = new Date().getTime() - 1200000;
+
+        let sql3 = "DELETE FROM games WHERE status = 'open' AND created_at < "+current_timestamp;
+        let params3 = {}
+        await this.app.storage.executeDatabase(sql3, params3, 'arcade');
+
+        let sql4 = "DELETE FROM invites WHERE created_at < "+current_timestamp;
+        let params4 = {}
+        await this.app.storage.executeDatabase(sql4, params4, 'arcade');
+
+      }
+
       return;
     }
 
