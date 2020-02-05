@@ -188,7 +188,7 @@ class Arcade extends ModTemplate {
       let { games } = this.app.options;
 
       games.forEach(game => {
-        let game_tx = this.createGameTX(game);
+        let game_tx = this.createGameTXFromOptionsGame(game);
         this.addGameToOpenList(game_tx);
       });
     }
@@ -224,12 +224,7 @@ class Arcade extends ModTemplate {
       if (res.rows) {
         res.rows.forEach(row => {
           let tx = new saito.transaction(JSON.parse(row.tx));
-
-          tx.transaction.msg.players_needed = row.players_needed;
-          tx.transaction.msg.players_available = row.players_available;
-          tx.transaction.msg.players_array = row.players_array;
-
-          //console.info("ADDING OPEN GAME FROM SERVER: " + JSON.stringify(tx.transaction));
+          console.info("ADDING OPEN GAME FROM SERVER: " + JSON.stringify(tx.transaction));
           this.addGameToOpenList(tx);
         });
 
@@ -270,7 +265,7 @@ class Arcade extends ModTemplate {
 
 
 
-  createGameTX(game) {
+  createGameTXFromOptionsGame(game) {
     let game_tx = new saito.transaction();
 
     //
@@ -385,9 +380,9 @@ class Arcade extends ModTemplate {
 	//
 	// TODO is validate accept sig
 	//
-	if (tx.transaction.msg.accept_sig != "") {
+	if (tx.transaction.msg.invite_sig != "") {
 	  this.games[i].transaction.msg.players.push(tx.transaction.from[0].add);
-	  this.games[i].transaction.msg.players_sigs.push(txmsg.accept_sig);
+	  this.games[i].transaction.msg.players_sigs.push(txmsg.invite_sig);
 	}
       }
     }
@@ -474,6 +469,8 @@ class Arcade extends ModTemplate {
       }
 
 
+
+/*********
       // invites
       if (txmsg.request == "invite") {
 
@@ -492,7 +489,7 @@ class Arcade extends ModTemplate {
         //console.info("\n\n\nINVITE REQUEST: " + JSON.stringify(tx));
         this.receiveInviteRequest(blk, tx, conf, app);
       }
-
+**********/
 
       //
       // ignore msgs for others
@@ -512,23 +509,43 @@ class Arcade extends ModTemplate {
       // acceptances
       if (txmsg.request === "accept") {
 
-        //console.info("ARCADE GETS ACCEPT MESSAGE: " + txmsg.request);
-        //console.info("i am " + app.wallet.returnPublicKey());
-        //console.info("TX: " + JSON.stringify(tx.transaction));
-        //console.info("MSG: " + txmsg);
+        console.info("\n\n\nARCADE GETS ACCEPT MESSAGE: " + txmsg.request);
+        console.info("i am " + app.wallet.returnPublicKey());
+        console.info("TX: " + JSON.stringify(tx.transaction));
+        console.info("MSG: " + txmsg);
 
-        // Make sure to add our games in the options file
-        let { games } = this.app.options;
-        if (games) {
-          let game_found = false;
-          games.forEach(game => {
-            for (let i = 0; i< this.games.length; i++) {
-              let transaction = Object.assign({ sig: "" }, this.games[i].transaction);
-              if (game.id == transaction.sig) game_found = true;
-            }
-            if (!game_found) { this.games.push(this.createGameTX(game)) }
-          });
-        }
+        //
+        // make sure game in options file
+        //
+	if (this.app.options) {
+
+	  if (!this.app.options.games) {
+	    this.app.options.games = [];
+	  }
+
+	  if (this.app.options.games) {
+
+	    let game_found = false;
+
+	    for (let i = 0; i < this.app.options.games.length; i++) {
+	      if (this.app.options.games[i].game_id == txmsg.game_id) {
+		game_found = true;
+	      }
+	    }
+
+	    if (game_found == false) {
+console.log("GAME SHOULD BE: "+tx.transaction.msg.game);
+	      let gamemod = this.app.modules.returnModule(tx.transaction.msg.game);
+	      if (gamemod) {
+console.log("CREATING GAME!");
+	        gamemod.loadGame(tx.transaction.msg.game_id);
+	      }
+console.log("ACCEPTED A GAME... but it does not exist!");
+	    }
+	  }
+	}	
+
+
 
         //
         // multiplayer games might hit here without options.games
@@ -635,8 +652,6 @@ class Arcade extends ModTemplate {
           }
         }
 
-        //console.info("\n\n\nlaunching request to launch game... flag button, etc.");
-
         //
         // only launch game if it is for us
         //
@@ -681,14 +696,24 @@ class Arcade extends ModTemplate {
 
         let gametx = JSON.parse(rows[i].tx);
 
+console.log("^^^^^^^");
+console.log("^^^^^^^");
+console.log("^^^^^^^");
+console.log(JSON.stringify(gametx));
+console.log("^^^^^^^");
+console.log("^^^^^^^");
+console.log("^^^^^^^");
+
+
         let sql2 = `SELECT * FROM invites WHERE game_id = "${gametx.sig}"`;
         let rows2 = await this.app.storage.queryDatabase(sql2, {}, 'arcade');
 
-	gametx.players = [];
-	gametx.players_sigs = [];
+
+	gametx.msg.players = [];
+	gametx.msg.players_sigs = [];
 	for (let z = 0; z < rows2.length; z++) {
-	  gametx.players.push(rows2[z].player);
-	  gametx.players_sigs.push(rows2[z].acceptance_sig);
+	  gametx.msg.players.push(rows2[z].player);
+	  gametx.msg.players_sigs.push(rows2[z].acceptance_sig);
 	}
 
         rows[i].tx = JSON.stringify(gametx);
@@ -913,7 +938,7 @@ console.log("RECEIVED A JOIN REQUEST!");
     //
     // add to invite table
     //
-    let game_id = tx.transaction.sig;
+    let game_id = tx.transaction.msg.game_id;
     let players_needed = 2;
     if (txmsg.players_needed > 2) { players_needed = txmsg.players_needed; }
     let module = txmsg.game;
@@ -927,7 +952,7 @@ console.log("RECEIVED A JOIN REQUEST!");
     let created_at = parseInt(tx.transaction.ts);
     let expires_at = created_at + (60000 * parseInt(valid_for_minutes));
     let acceptance_sig = "";
-    if (txmsg.players_sigs.length > 0) { acceptance_sig = txmsg.players_sigs[0]; }
+    if (txmsg.invite_sig != "") { acceptance_sig = txmsg.invite_sig; }
 
     //
     // insert into invites
@@ -967,7 +992,7 @@ console.log("\n\n\n\n\n\n\nINSERTING NEW JOIN INTO GAME!");
   createOpenTransaction(gamedata) {
 
     let ts = new Date().getTime();
-    let accept_sig = this.app.crypto.signMessage(("create_game_" + ts), this.app.wallet.returnPrivateKey());
+    let accept_sig = this.app.crypto.signMessage(("invite_game_" + ts), this.app.wallet.returnPrivateKey());
 
     let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
     tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey(), 0.0));
@@ -997,7 +1022,8 @@ console.log("\n\n\n\n\n\n\nINSERTING NEW JOIN INTO GAME!");
 
 
   async receiveInviteRequest(blk, tx, conf, app) {
-
+console.log("RECEIVE INVITE REQUEST!");
+/******
     //
     // servers
     //
@@ -1052,7 +1078,7 @@ console.log("\n\n\n\n\n\n\nINSERTING NEW JOIN INTO GAME!");
 
     data = {};
     data.arcade = this;
-
+******/
   }
 
 
@@ -1099,14 +1125,8 @@ console.log("\n\n\n\n\n\n\nINSERTING NEW JOIN INTO GAME!");
     tx.transaction.msg.game_id = gametx.transaction.sig;
     tx.transaction.msg.players_needed = txmsg.players_needed;
     tx.transaction.msg.options = txmsg.options;
-    tx.transaction.msg.accept_sig = "";
-    if (gametx.transaction.msg.accept_sig != "") {
-      tx.transaction.msg.accept_sig = gametx.transaction.msg.accept_sig;
-    }
-    if (gametx.transaction.msg.ts != "") {
-      tx.transaction.msg.ts = gametx.transaction.msg.ts;
-    }
-    tx.transaction.msg.invite_sig = app.crypto.signMessage(("invite_game_" + tx.transaction.msg.ts), app.wallet.returnPrivateKey());
+    tx.transaction.msg.invite_sig = app.crypto.signMessage(("invite_game_" + gametx.transaction.msg.ts), app.wallet.returnPrivateKey());
+    if (gametx.transaction.msg.ts != "") { tx.transaction.msg.ts = gametx.transaction.msg.ts; }
     tx = this.app.wallet.signTransaction(tx);
 
     return tx;
@@ -1222,58 +1242,29 @@ console.log("\n\n\n\n\n\n\nINSERTING NEW JOIN INTO GAME!");
 
   }
 
-  sendMultiplayerAcceptRequest(app, data, gameobj) {
-
-    //console.info("SEND MULTIPLE ACCEPT: " + JSON.stringify(gameobj));
+  createAcceptTransaction(app, data, gameobj) {
 
     let txmsg = gameobj.transaction.msg;
-    let players_array = txmsg.players_array;
-    let players_needed = txmsg.players_needed;
-    let game_id = gameobj.transaction.sig;
-    let options = txmsg.options;
-    let opponents = players_array.split("_");
-    let game_self = app.modules.returnModule(txmsg.game);
 
-    //console.info("LOADED THE GAME: " + txmsg.game);
-
-    //
-    // create the game
-    //
-    game_self.loadGame(game_id);
-    for (let i = 0; i < opponents.length; i++) {
-      game_self.addPlayer(opponents[i]);
-    }
-    game_self.game.players_needed = players_needed;
-
-    //
-    // GAME LIBRARY ACCEPT CREATES GAMES AS WELL
-    // if this code is updated, update the 
-    // SAGE receiveInvite code
-    //
-    game_self.game.module = txmsg.module;
-    game_self.game.options = options;
-    game_self.game.id = game_id;
-    game_self.game.accept = 1;
-    game_self.saveGame(game_id);
-
+    let accept_sig = this.app.crypto.signMessage(("invite_game_" + txmsg.ts), this.app.wallet.returnPrivateKey());
+    txmsg.players.push(this.app.wallet.returnPublicKey());
+    txmsg.players_sigs.push(accept_sig);
+    txmsg.request = "accept";
 
     let tx = app.wallet.createUnsignedTransactionWithDefaultFee();
-    for (let i = 0; i < opponents.length; i++) { tx.transaction.to.push(new saito.slip(opponents[i], 0.0)); }
+    for (let i = 0; i < txmsg.players.length; i++) { tx.transaction.to.push(new saito.slip(txmsg.players[i], 0.0)); }
     tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey(), 0.0));
+
     //
     // arcade will listen, but we need game engine to receive to start initialization
     //
-    tx.transaction.msg.module = txmsg.game;
+    tx.transaction.msg = txmsg;
+    tx.transaction.msg.game_id = gameobj.transaction.sig;
     tx.transaction.msg.request = "accept";
-    tx.transaction.msg.multiple = 1;
-    tx.transaction.msg.game = txmsg.game;
-    tx.transaction.msg.options = options;
-    tx.transaction.msg.game_id = game_id;
-    opponents.push(this.app.wallet.returnPublicKey());
-    tx.transaction.msg.players_array = opponents.join("_");
-    tx.transaction.msg.players_needed = players_needed;
+    tx.transaction.msg.module = txmsg.game;
     tx = this.app.wallet.signTransaction(tx);
-    this.app.network.propagateTransaction(tx);
+
+    return tx;
 
   }
 

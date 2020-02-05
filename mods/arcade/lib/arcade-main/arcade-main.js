@@ -22,16 +22,12 @@ module.exports = ArcadeMain = {
       console.log("\n\n\nSHOWING GAMES: ");
       console.log("TX GAME: " + JSON.stringify(tx));
 
-      let transaction = Object.assign({ msg: {} }, tx.transaction);
+      let game_id = tx.transaction.msg.game_id;
+      let game = tx.transaction.msg.game;
+      let players = tx.transaction.msg.players;
+      let players_sigs = tx.transaction.msg.players_sigs;
 
-      let publickey = app.wallet.returnPublicKey();
-      // let { game_id, game } = txmsg;
-
-      let game_id = transaction.msg.game_id || tx.id;
-      let game = transaction.msg.game || tx;
-      let players_array = transaction.msg.players_array || tx.players_array;
-
-      if (game == '') return;
+      if (game == '') { return; }
 
       let button_text = {};
       button_text.join = "JOIN";
@@ -39,20 +35,20 @@ module.exports = ArcadeMain = {
       //
       // eliminate "JOIN" button if I am in the game already
       //
-      if (transaction.msg.over == 1) {
+      if (tx.transaction.msg.over == 1) {
         delete button_text.join;
       }
-      if (tx.isFrom(app.wallet.returnPublicKey())) {
+      if (players.includes(app.wallet.returnPublicKey())) {
         delete button_text.join;
       }
-      if (players_array) {
-        if (players_array.includes(app.wallet.returnPublicKey())) {
+      if (players) {
+        if (players.includes(app.wallet.returnPublicKey())) {
           delete button_text.join;
         }
       }
 
 
-      if (tx.isFrom(publickey)) {
+      if (players.includes(app.wallet.returnPublicKey())) {
         button_text.cancel = "CANCEL";
       }
 
@@ -66,13 +62,10 @@ module.exports = ArcadeMain = {
             button_text.continue = "CONTINUE";
             delete button_text.join;
 
-            if (transaction.msg.over == 1) {
+            if (tx.transaction.msg.over == 1) {
               delete button_text.continue;
             }
 
-            if (game.players.some(player => publickey == player))
-              button_text.delete = "DELETE";
-            delete button_text.cancel;
           }
         });
       }
@@ -153,11 +146,9 @@ module.exports = ArcadeMain = {
 	  return;
 	}
 
-
-
-        //
-        // check that we're not accepting our own game
-        //
+	//
+	// we are the final player, but first check we're not accepting our own game
+	//
         if (accepted_game.transaction.from[0].add == app.wallet.returnPublicKey()) {
           let { players } = accepted_game.returnMessage();
           if (players.length > 1) {
@@ -170,11 +161,15 @@ module.exports = ArcadeMain = {
           } else {
             salert("You cannot accept your own game!");
           }
+
         } else {
+
           //
-          // check if we've already accepted game and have it locally
+          // we are going to send a message to accept this game, but first check if we have
+	  // already done this, in which case we will have the game loaded in our local games list
           //
           if (app.options.games) {
+
             let existing_game = app.options.games.find(g => g.id == game_id);
 
             if (existing_game != -1 && existing_game) {
@@ -184,7 +179,9 @@ module.exports = ArcadeMain = {
                 ArcadeLoader.render(app, data);
                 ArcadeLoader.attachEvents(app, data);
                 return;
+
               } else {
+
                 //
                 // solid game already created
                 //
@@ -215,30 +212,24 @@ module.exports = ArcadeMain = {
 
               if (res.rows.length > 0) {
                 if (res.rows[0].game_still_open == 1) {
+
                   //
                   // data re: game in form of tx
                   //
                   let { transaction } = accepted_game;
                   let game_tx = Object.assign({ msg: { players_array: null } }, transaction);
 
-                  if (game_tx.msg.players_array) {
-                    if (game_tx.msg.players.length >= 2) {
-                      // let players = transaction.msg.players_array.split("_");
-                      data.arcade.sendMultiplayerAcceptRequest(app, data, accepted_game);
-                      return;
-                    }
-                  }
+salert("Accepting this game!");
+                  let newtx = data.arcade.createAcceptTransaction(app, data, accepted_game);
+		  data.arcade.app.network.propagateTransaction(newtx);
+                  return;
 
-                  //
-                  // sanity check
-                  //
-                  data.arcade.app.network.propagateTransaction(data.arcade.createInviteTransaction(app, data, accepted_game));
-                  ArcadeLoader.render(app, data);
-                  ArcadeLoader.attachEvents(app, data);
                 } else {
-                  salert("Sorry... game already accepted. Your list of open games will update shortly on next block!");
-                }
-              }
+		  salert("Sorry, this game has been accepted already!");
+	        }
+              } else {
+                salert("Sorry... game already accepted. Your list of open games will update shortly on next block!");
+	      }
             });
         }
       };
