@@ -505,8 +505,9 @@ class Arcade extends ModTemplate {
       }
 
 
-
+      //
       // acceptances
+      //
       if (txmsg.request === "accept") {
 
         console.info("\n\n\nARCADE GETS ACCEPT MESSAGE: " + txmsg.request);
@@ -614,23 +615,12 @@ class Arcade extends ModTemplate {
                   this.games.splice(i, 1);
                   console.info("RE-RENDER");
                   this.render();
-                  //console.info("RE-RENDERED");
                 }
               }
             }
           }
-          //console.info("OPEN GAMES AT THIS POINT: " + JSON.stringify(this.games));
-
         }
-
-        //console.info("... still here... receive accept request!");
-        //console.info("\n\n\nACCEPT REQUEST: " + JSON.stringify(tx));
         await this.receiveAcceptRequest(blk, tx, conf, app);
-
-        //
-        // remove game from list of available games if full
-        //
-
 
 
         //
@@ -652,14 +642,13 @@ class Arcade extends ModTemplate {
           if (tx.transaction.msg.over == 1) return;
           this.launchGame(txmsg.game_id);
         }
-
       }
 
       // game over
       if (txmsg.request == "gameover") {
-        //console.info("\n\n\nGAMEOVER REQUEST: " + JSON.stringify(tx));
         this.receiveGameoverRequest(blk, tx, conf, app);
       }
+
     }
   }
 
