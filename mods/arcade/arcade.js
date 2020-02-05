@@ -514,6 +514,17 @@ class Arcade extends ModTemplate {
         console.info("TX: " + JSON.stringify(tx.transaction));
         console.info("MSG: " + txmsg);
 
+	//
+	// remove game from server
+	//
+        let players_array = txmsg.players.join("_");;
+        let sql = `UPDATE games SET status = "active" WHERE game_id = $game_id`;
+        let params = {
+	  $game_id : tx.transaction.msg.game_id ,
+	  $players_array : players_array
+        }
+        this.app.storage.executeDatabase(sql, params, 'arcade');
+
         //
         // make sure game in options file
         //
@@ -534,18 +545,13 @@ class Arcade extends ModTemplate {
 	    }
 
 	    if (game_found == false) {
-console.log("GAME SHOULD BE: "+tx.transaction.msg.game);
 	      let gamemod = this.app.modules.returnModule(tx.transaction.msg.game);
 	      if (gamemod) {
-console.log("CREATING GAME!");
 	        gamemod.loadGame(tx.transaction.msg.game_id);
 	      }
-console.log("ACCEPTED A GAME... but it does not exist!");
 	    }
 	  }
 	}	
-
-
 
         //
         // multiplayer games might hit here without options.games
@@ -556,12 +562,8 @@ console.log("ACCEPTED A GAME... but it does not exist!");
 
           if (this.app.options != undefined) {
             if (this.app.options.games != undefined) {
-
               for (let i = 0; i < this.app.options.games.length; i++) {
                 if (this.app.options.games[i].id == txmsg.game_id) {
-
-                  //console.info("GAME NO LONGER INITIALIZING! ---> " + this.app.options.games[i].initializing);
-
                   if (this.app.options.games[i].initializing == 0) {
 
                     //
@@ -574,26 +576,17 @@ console.log("ACCEPTED A GAME... but it does not exist!");
                     }
                   }
                 }
-
-                //console.info("HERE FOUND: " + JSON.stringify(this.app.options.games[i]));
-
               }
-
             }
           }
-
 
           //
           // also possible this is game in our displayed list
           //
           if (this.games.length > 0) {
-
-            //console.info("\n\n\n\n\n\nSHOWING GAME HERE");
-            //console.info(JSON.stringify(this.games));
             for (let i = 0; i < this.games.length; i++) {
               let transaction = Object.assign({ sig: "" }, this.games[i].transaction);
               if (transaction.sig == txmsg.game_id) {
-
                 //
                 // remove game (accepted players are equal to number needed)
                 //
@@ -601,11 +594,8 @@ console.log("ACCEPTED A GAME... but it does not exist!");
                 if ((transaction.msg.players_needed) == (transaction.msg.players.length + 1)) {
                   this.removeGameFromOpenList(txmsg.game_id);
                 }
-
               }
             }
-
-
           }
 
 

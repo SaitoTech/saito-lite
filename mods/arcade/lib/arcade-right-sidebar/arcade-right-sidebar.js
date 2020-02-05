@@ -28,6 +28,7 @@ module.exports = ArcadeRightSidebar = {
         document.querySelector(".arcade-sidebar-active-leaderboard-body").innerHTML += LeaderboardRow(leader);
       });
 
+
       //
       // arcade sidebar
       //
