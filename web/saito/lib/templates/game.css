@@ -415,7 +415,7 @@
     grid-template-columns: 2em 4em auto;
     grid-template-rows: 100%;
     min-width: unset;
-    max-width: unset;
+    max-width: 15em;
     width: 40vw;
     height: 100vh;
     right: -20vw;

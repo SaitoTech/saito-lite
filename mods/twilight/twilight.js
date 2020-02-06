@@ -1,8 +1,7 @@
 
 const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
 const GameTemplate = require('../../lib/templates/gametemplate');
-
-// const addHammerListeners = require('../../lib/helpers/hammer');
+const helpers = require('../../lib/helpers');
 
 
 //
@@ -417,7 +416,7 @@ console.log("5");
 
 console.log("1");
   var element = document.getElementById('gameboard');
-  // if (element !== null) { addHammerListeners(element); }
+  if (element !== null) { helpers.hammer(element); }
 
 console.log("1");
 
