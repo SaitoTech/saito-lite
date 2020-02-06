@@ -34,7 +34,7 @@ class Arcade extends ModTemplate {
     this.accepted = [];
 
     this.description = "A place to find, play and manage games!";
-    this.categories  = "Games Utilities";
+    this.categories = "Games Utilities";
 
     this.addrController = new AddressController(app);
 
@@ -347,7 +347,7 @@ class Arcade extends ModTemplate {
     let txmsg = tx.returnMessage();
 
     for (let i = 0; i < this.games.length; i++) {
-      let transaction = Object.assign({sig: "" }, this.games[i].transaction);
+      let transaction = Object.assign({ sig: "" }, this.games[i].transaction);
       if (tx.transaction.sig == transaction.sig ||
         txmsg.game_id == transaction.sig) return;
       let id = this.games[i].id || "";
@@ -375,15 +375,15 @@ class Arcade extends ModTemplate {
     let txmsg = tx.returnMessage();
 
     for (let i = 0; i < this.games.length; i++) {
-      if (! this.games[i].transaction.msg.players.includes(tx.transaction.from[0].add) ) {
+      if (!this.games[i].transaction.msg.players.includes(tx.transaction.from[0].add)) {
 
-	//
-	// TODO is validate accept sig
-	//
-	if (tx.transaction.msg.invite_sig != "") {
-	  this.games[i].transaction.msg.players.push(tx.transaction.from[0].add);
-	  this.games[i].transaction.msg.players_sigs.push(txmsg.invite_sig);
-	}
+        //
+        // TODO is validate accept sig
+        //
+        if (tx.transaction.msg.invite_sig != "") {
+          this.games[i].transaction.msg.players.push(tx.transaction.from[0].add);
+          this.games[i].transaction.msg.players_sigs.push(txmsg.invite_sig);
+        }
       }
     }
 
@@ -421,7 +421,7 @@ class Arcade extends ModTemplate {
     if (this.browser_active == 1) {
       //ArcadeMain.render(this.app, data);
       //ArcadeMain.attachEvents(this.app, data);
-      if(document.getElementById(`arcade-game-${game_sig}`)) {
+      if (document.getElementById(`arcade-game-${game_sig}`)) {
         document.getElementById(`arcade-gamelist`)
           .removeChild(document.getElementById(`arcade-game-${game_sig}`));
       }
@@ -440,8 +440,27 @@ class Arcade extends ModTemplate {
       //
       // open msgs -- prolifigate
       //
-      if (txmsg.module == "Arcade" && txmsg.request == "open") {
-        this.addGameToOpenList(tx);
+      // Check if this is a public or invitee game - or if I created it.
+      if (txmmodule == "Arcade" && txmsg.request == "open") {
+        //If this is an invite game
+        if (tx.msg.options.players_invited) {
+          //If I did the inviting - show
+          if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) {
+            this.addGameToOpenList(tx);
+          } else {
+            //If I am in the invitees list - show
+            txmsg.options.players_invited.forEach(player => {
+              //or player inviting is me.
+              if (player == app.wallet.returnPublicKey() || player == app.keychain.returnIdentifier(app.wallet.returnPublicKey())) {
+                this.addGameToOpenList(tx);
+              }
+            });
+          }
+        } else {
+          // This is not an invitee only game - show
+          this.addGameToOpenList(tx);
+        }
+        //No matter what add the game to the db.
         this.receiveOpenRequest(blk, tx, conf, app);
       }
 
@@ -470,26 +489,26 @@ class Arcade extends ModTemplate {
 
 
 
-/*********
-      // invites
-      if (txmsg.request == "invite") {
-
-        //
-        // this might be a server, in which cse it doesn't have options.games
-        //
-        if (this.app.options != undefined) {
-          if (this.app.options.games != undefined) {
-            for (let i = 0; i < this.app.options.games.length; i++) {
-              if (this.app.options.games[i].id == txmsg.game_id) {
-                if (this.app.options.games[i].initializing == 0) { return; }
+      /*********
+            // invites
+            if (txmsg.request == "invite") {
+      
+              //
+              // this might be a server, in which cse it doesn't have options.games
+              //
+              if (this.app.options != undefined) {
+                if (this.app.options.games != undefined) {
+                  for (let i = 0; i < this.app.options.games.length; i++) {
+                    if (this.app.options.games[i].id == txmsg.game_id) {
+                      if (this.app.options.games[i].initializing == 0) { return; }
+                    }
+                  }
+                }
               }
+              //console.info("\n\n\nINVITE REQUEST: " + JSON.stringify(tx));
+              this.receiveInviteRequest(blk, tx, conf, app);
             }
-          }
-        }
-        //console.info("\n\n\nINVITE REQUEST: " + JSON.stringify(tx));
-        this.receiveInviteRequest(blk, tx, conf, app);
-      }
-**********/
+      **********/
 
       //
       // ignore msgs for others
@@ -517,33 +536,33 @@ class Arcade extends ModTemplate {
         //
         // make sure game in options file
         //
-	if (this.app.options) {
+        if (this.app.options) {
 
-	  if (!this.app.options.games) {
-	    this.app.options.games = [];
-	  }
+          if (!this.app.options.games) {
+            this.app.options.games = [];
+          }
 
-	  if (this.app.options.games) {
+          if (this.app.options.games) {
 
-	    let game_found = false;
+            let game_found = false;
 
-	    for (let i = 0; i < this.app.options.games.length; i++) {
-	      if (this.app.options.games[i].game_id == txmsg.game_id) {
-		game_found = true;
-	      }
-	    }
+            for (let i = 0; i < this.app.options.games.length; i++) {
+              if (this.app.options.games[i].game_id == txmsg.game_id) {
+                game_found = true;
+              }
+            }
 
-	    if (game_found == false) {
-console.log("GAME SHOULD BE: "+tx.transaction.msg.game);
-	      let gamemod = this.app.modules.returnModule(tx.transaction.msg.game);
-	      if (gamemod) {
-console.log("CREATING GAME!");
-	        gamemod.loadGame(tx.transaction.msg.game_id);
-	      }
-console.log("ACCEPTED A GAME... but it does not exist!");
-	    }
-	  }
-	}	
+            if (game_found == false) {
+              console.log("GAME SHOULD BE: " + tx.transaction.msg.game);
+              let gamemod = this.app.modules.returnModule(tx.transaction.msg.game);
+              if (gamemod) {
+                console.log("CREATING GAME!");
+                gamemod.loadGame(tx.transaction.msg.game_id);
+              }
+              console.log("ACCEPTED A GAME... but it does not exist!");
+            }
+          }
+        }
 
 
 
@@ -613,7 +632,7 @@ console.log("ACCEPTED A GAME... but it does not exist!");
           // remove games from open games list
           //
           for (let i = 0; i < this.games.length; i++) {
-            let transaction = Object.assign({sig: ""}, this.games[i].transaction);
+            let transaction = Object.assign({ sig: "" }, this.games[i].transaction);
             if (transaction.sig === tx.transaction.msg.game_id) {
               //
               //
@@ -696,36 +715,36 @@ console.log("ACCEPTED A GAME... but it does not exist!");
 
         let gametx = JSON.parse(rows[i].tx);
 
-console.log("^^^^^^^");
-console.log("^^^^^^^");
-console.log("^^^^^^^");
-console.log(JSON.stringify(gametx));
-console.log("^^^^^^^");
-console.log("^^^^^^^");
-console.log("^^^^^^^");
+        console.log("^^^^^^^");
+        console.log("^^^^^^^");
+        console.log("^^^^^^^");
+        console.log(JSON.stringify(gametx));
+        console.log("^^^^^^^");
+        console.log("^^^^^^^");
+        console.log("^^^^^^^");
 
 
         let sql2 = `SELECT * FROM invites WHERE game_id = "${gametx.sig}"`;
         let rows2 = await this.app.storage.queryDatabase(sql2, {}, 'arcade');
 
 
-	gametx.msg.players = [];
-	gametx.msg.players_sigs = [];
-	for (let z = 0; z < rows2.length; z++) {
-	  gametx.msg.players.push(rows2[z].player);
-	  gametx.msg.players_sigs.push(rows2[z].acceptance_sig);
-	}
+        gametx.msg.players = [];
+        gametx.msg.players_sigs = [];
+        for (let z = 0; z < rows2.length; z++) {
+          gametx.msg.players.push(rows2[z].player);
+          gametx.msg.players_sigs.push(rows2[z].acceptance_sig);
+        }
 
         rows[i].tx = JSON.stringify(gametx);
       }
 
 
-console.log("\n\n\n");
-console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-console.log("WE HAVE BEEN ASKED TO LOAD: " + JSON.stringify(rows));
+      console.log("\n\n\n");
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      console.log("WE HAVE BEEN ASKED TO LOAD: " + JSON.stringify(rows));
 
 
       mycallback({ rows });
@@ -914,9 +933,9 @@ console.log("WE HAVE BEEN ASKED TO LOAD: " + JSON.stringify(rows));
               )`;
     let params2 = {
       $game_id: game_id,
-      $player : player ,
-      $acceptance_sig : acceptance_sig ,
-      $module : module ,
+      $player: player,
+      $acceptance_sig: acceptance_sig,
+      $module: module,
       $created_at: created_at,
       $expires_at: expires_at
     };
@@ -931,7 +950,7 @@ console.log("WE HAVE BEEN ASKED TO LOAD: " + JSON.stringify(rows));
 
   async receiveJoinRequest(blk, tx, conf, app) {
 
-console.log("RECEIVED A JOIN REQUEST!");
+    console.log("RECEIVED A JOIN REQUEST!");
 
     let txmsg = tx.returnMessage();
 
@@ -974,15 +993,15 @@ console.log("RECEIVED A JOIN REQUEST!");
               )`;
     let params2 = {
       $game_id: game_id,
-      $player : player ,
-      $acceptance_sig : acceptance_sig ,
-      $module : module ,
+      $player: player,
+      $acceptance_sig: acceptance_sig,
+      $module: module,
       $created_at: created_at,
       $expires_at: expires_at
     };
     await app.storage.executeDatabase(sql2, params2, "arcade");
 
-console.log("\n\n\n\n\n\n\nINSERTING NEW JOIN INTO GAME!");
+    console.log("\n\n\n\n\n\n\nINSERTING NEW JOIN INTO GAME!");
 
     return;
 
@@ -996,16 +1015,16 @@ console.log("\n\n\n\n\n\n\nINSERTING NEW JOIN INTO GAME!");
 
     let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
     tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey(), 0.0));
-    tx.transaction.msg.ts 		= ts;
-    tx.transaction.msg.module 		= "Arcade";
-    tx.transaction.msg.request 		= "open";
-    tx.transaction.msg.game 		= gamedata.name;
-    tx.transaction.msg.options 		= gamedata.options;
-    tx.transaction.msg.options_html 	= gamedata.options_html;
-    tx.transaction.msg.players_needed 	= gamedata.players_needed;
-    tx.transaction.msg.players 		= [];
+    tx.transaction.msg.ts = ts;
+    tx.transaction.msg.module = "Arcade";
+    tx.transaction.msg.request = "open";
+    tx.transaction.msg.game = gamedata.name;
+    tx.transaction.msg.options = gamedata.options;
+    tx.transaction.msg.options_html = gamedata.options_html;
+    tx.transaction.msg.players_needed = gamedata.players_needed;
+    tx.transaction.msg.players = [];
     tx.transaction.msg.players.push(this.app.wallet.returnPublicKey());
-    tx.transaction.msg.players_sigs 	= [ accept_sig ];
+    tx.transaction.msg.players_sigs = [accept_sig];
     tx = this.app.wallet.signTransaction(tx);
 
     return tx;
@@ -1022,63 +1041,63 @@ console.log("\n\n\n\n\n\n\nINSERTING NEW JOIN INTO GAME!");
 
 
   async receiveInviteRequest(blk, tx, conf, app) {
-console.log("RECEIVE INVITE REQUEST!");
-/******
-    //
-    // servers
-    //
-    let txmsg = tx.returnMessage();
-
-    let unique_keys = [];
-    for (let i = 0; i < tx.transaction.to.length; i++) {
-      if (!unique_keys.includes(tx.transaction.to[i].add)) {
-        unique_keys.push(tx.transaction.to[i].add);
-      }
-    }
-    unique_keys.sort();
-    let players_array = unique_keys.join("_");
-    let sql = "UPDATE games SET players_accepted = " + unique_keys.length + ", players_array = $players_array WHERE status = $status AND game_id = $game_id";
-    let params = {
-      $players_array: players_array,
-      $status: 'open',
-      $game_id: txmsg.game_id
-    }
-    await this.app.storage.executeDatabase(sql, params, "arcade");
-
-
-    //
-    // servers nope out
-    //
-    if (this.browser_active == 0) { return; }
-
-    //
-    // auto-accept
-    //
-    this.accepted[txmsg.sig] = 1;
-
-
-    //
-    // browsers
-    //
-    let opponent = tx.transaction.from[0].add;
-    let invitee = tx.transaction.to[0].add;
-
-    //
-    //
-    //
-    if (this.app.options.games != undefined) {
-      for (let i = 0; i < this.app.options.games.length; i++) {
-        if (this.app.options.games[i].id == txmsg.game_id) {
-          this.app.options.games[i].options = txmsg.options;
-          this.app.storage.saveOptions();
+    console.log("RECEIVE INVITE REQUEST!");
+    /******
+        //
+        // servers
+        //
+        let txmsg = tx.returnMessage();
+    
+        let unique_keys = [];
+        for (let i = 0; i < tx.transaction.to.length; i++) {
+          if (!unique_keys.includes(tx.transaction.to[i].add)) {
+            unique_keys.push(tx.transaction.to[i].add);
+          }
         }
-      }
-    }
-
-
-    data = {};
-    data.arcade = this;
-******/
+        unique_keys.sort();
+        let players_array = unique_keys.join("_");
+        let sql = "UPDATE games SET players_accepted = " + unique_keys.length + ", players_array = $players_array WHERE status = $status AND game_id = $game_id";
+        let params = {
+          $players_array: players_array,
+          $status: 'open',
+          $game_id: txmsg.game_id
+        }
+        await this.app.storage.executeDatabase(sql, params, "arcade");
+    
+    
+        //
+        // servers nope out
+        //
+        if (this.browser_active == 0) { return; }
+    
+        //
+        // auto-accept
+        //
+        this.accepted[txmsg.sig] = 1;
+    
+    
+        //
+        // browsers
+        //
+        let opponent = tx.transaction.from[0].add;
+        let invitee = tx.transaction.to[0].add;
+    
+        //
+        //
+        //
+        if (this.app.options.games != undefined) {
+          for (let i = 0; i < this.app.options.games.length; i++) {
+            if (this.app.options.games[i].id == txmsg.game_id) {
+              this.app.options.games[i].options = txmsg.options;
+              this.app.storage.saveOptions();
+            }
+          }
+        }
+    
+    
+        data = {};
+        data.arcade = this;
+    ******/
   }
 
 
@@ -1276,7 +1295,7 @@ console.log("RECEIVE INVITE REQUEST!");
     // update live game table
     //
     for (let i = 0; i < this.games.length; i++) {
-      let transaction = Object.assign({ msg: { game_id: "" }}, this.games[i].transaction);
+      let transaction = Object.assign({ msg: { game_id: "" } }, this.games[i].transaction);
       if (transaction.msg.game_id == txmsg.game_id) {
         let game_id = transaction.msg.game_id;
         let divid = "arcade-game-options-" + game_id;
