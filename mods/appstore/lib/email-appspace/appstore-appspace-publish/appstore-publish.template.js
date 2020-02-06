@@ -1,7 +1,7 @@
 module.exports = AppStorePublishTemplate = () => {
   return `
     <link rel="stylesheet" href="/appstore/css/email-appspace.css" />
-    <div class="appstore-publish-moddrop" id="appstore-publish-moddrop">
+    <div class="appstore-publish-moddrop" id="appstore-publish-moddrop" style="display:none">
       <div id="appstore-publish-moddrop-inside">
        Drag ZIP File Here
       </div>
