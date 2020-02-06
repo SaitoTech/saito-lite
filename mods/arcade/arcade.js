@@ -2,6 +2,7 @@ const axios = require('axios');
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const ArcadeMain = require('./lib/arcade-main/arcade-main');
+const ArcadeInvite = require('./lib/arcade-invite/arcade-invite');
 const ArcadeLoader = require('./lib/arcade-main/arcade-loader');
 const ArcadeLeftSidebar = require('./lib/arcade-left-sidebar/arcade-left-sidebar');
 const ArcadeRightSidebar = require('./lib/arcade-right-sidebar/arcade-right-sidebar');
@@ -126,7 +127,16 @@ class Arcade extends ModTemplate {
 
   }
 
-
+  renderInvite(app, data) {
+    let inviteBase64 = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
+    try {
+      data.arcade.invite_payload = JSON.parse(app.crypto.base64ToString(inviteBase64));
+    } catch(err) {
+      console.log(err);
+    }
+    ArcadeInvite.render(app, data);
+    ArcadeInvite.attachEvents(app, data);
+  }
 
 
   respondTo(type = "") {
@@ -203,7 +213,11 @@ class Arcade extends ModTemplate {
     Header.render(app, data);
     Header.attachEvents(app, data);
 
-    this.render(app, data);
+    if (window.location.pathname.split('/')[2] == "invite") {
+      this.renderInvite(app, data);
+    } else {
+      this.render(app, data);
+    }
 
   }
 
@@ -803,7 +817,7 @@ class Arcade extends ModTemplate {
     if (txmsg.key_state != "") { key_state = txmsg.key_state; }
 
     let sql = `INSERT INTO gamestate (
-                game_id , 
+                game_id ,
                 player ,
                 players_array ,
                 module ,
@@ -882,7 +896,7 @@ class Arcade extends ModTemplate {
                 status ,
                 options ,
                 tx ,
-                start_bid ,  
+                start_bid ,
                 created_at ,
                 expires_at
               ) VALUES (
@@ -1162,7 +1176,7 @@ class Arcade extends ModTemplate {
     try {
 
 
-      // 
+      //
       // delete from local stores
       //
       if (app.options.games) {
@@ -1379,7 +1393,9 @@ class Arcade extends ModTemplate {
 
     super.webServer(app, expressapp, express);
 
-    let fs = app.storage.returnFileSystem();
+    const fs = app.storage.returnFileSystem();
+    const path = require('path');
+
     if (fs != null) {
 
       expressapp.get('/arcade/observer/:game_id', async (req, res) => {
@@ -1453,6 +1469,11 @@ class Arcade extends ModTemplate {
           return;
         }
 
+      });
+
+      expressapp.get('/arcade/invite/:gameinvite', async (req, res) => {
+        res.setHeader('Content-type', 'text/html');
+        res.sendFile(path.resolve(__dirname + '/web/invite.html'));
       });
 
     }
