@@ -1,6 +1,18 @@
 let ArcadeGameCreateTemplate = require('./arcade-game-create.template.js');
-let ArcadeMain2 = require('./../arcade-main.js');
 
+const getOptions = () => {
+  let options = {};
+  document.querySelectorAll('form input, form select').forEach(element => {
+    if (element.type == "checkbox") {
+      if (element.prop("checked")) {
+        options[element.name] = 1;
+      }
+    } else {
+      options[element.name] = element.value;
+    }
+  });
+  return options;
+}
 
 module.exports = ArcadeGameDreate = {
 
@@ -22,10 +34,12 @@ module.exports = ArcadeGameDreate = {
         document.querySelector('.game-publisher-message').innerHTML = gamemod.publisher_message;
         document.querySelector('.game-details').innerHTML = gamemod.returnGameOptionsHTML();
 
-
         setTimeout(() => {
 
-          let current_sel = document.querySelector('.game-players-select').value;
+          //
+          // TODO: is this value supposed to be used?
+          //
+          // let current_sel = document.querySelector('.game-players-select').value;
 
           for (let p = gamemod.minPlayers; p <= gamemod.maxPlayers; p++) {
             var option = document.createElement("option");
@@ -39,25 +53,15 @@ module.exports = ArcadeGameDreate = {
 
         document.getElementById('game-create-btn')
           .addEventListener('click', (e) => {
+            let options = getOptions();
 
-            let options = {};
-
-            document.querySelectorAll('form input, form select').forEach(element => {
-              if (element.type == "checkbox") {
-                if (element.prop("checked")) {
-                  options[element.name] = 1;
-                }
-              } else {
-                options[element.name] = element.value;
-              }
-            });
-
-            let gamedata = {};
-            gamedata.name = gamemod.name;
-            gamedata.slug = gamemod.returnSlug();
-            gamedata.options = gamemod.returnFormattedGameOptions(options);
-            gamedata.options_html = gamemod.returnGameRowOptionsHTML(options);
-            gamedata.players_needed = document.querySelector('.game-players-select').value;
+            let gamedata = {
+              name: gamemod.name,
+              slug: gamemod.returnSlug(),
+              options: gamemod.returnFormattedGameOptions(options),
+              options_html: gamemod.returnGameRowOptionsHTML(options),
+              players_needed: document.querySelector('.game-players-select').value,
+            };
 
             if (gamedata.players_needed == 1) {
               // 1 player games just launch
@@ -85,26 +89,16 @@ module.exports = ArcadeGameDreate = {
             }
 
             if (players_invited.length >= players_needed - 1) {
-
-              let options = {};
-
-              document.querySelectorAll('form input, form select').forEach(element => {
-                if (element.type == "checkbox") {
-                  if (element.prop("checked")) {
-                    options[element.name] = 1;
-                  }
-                } else {
-                  options[element.name] = element.value;
-                }
-              });
+              let options = getOptions();
               options['players_invited'] = players_invited;
 
-              let gamedata = {};
-              gamedata.name = gamemod.name;
-              gamedata.slug = gamemod.returnSlug();
-              gamedata.options = gamemod.returnFormattedGameOptions(options);
-              gamedata.options_html = gamemod.returnGameRowOptionsHTML(options);
-              gamedata.players_needed = players_needed;
+              let gamedata = {
+                name: gamemod.name,
+                slug: gamemod.returnSlug(),
+                options: gamemod.returnFormattedGameOptions(options),
+                options_html: gamemod.returnGameRowOptionsHTML(options),
+                players_needed: document.querySelector('.game-players-select').value,
+              };
 
 
               let newtx = data.arcade.createOpenTransaction(gamedata);
@@ -139,6 +133,28 @@ module.exports = ArcadeGameDreate = {
         data.arcade.render(app, data);
       }
 
+
+    document.getElementById('link-invite-btn')
+      .onclick = () => {
+        let { active_game } = data;
+        let game_module = app.modules.returnModule(active_game);
+        let options = game_module.returnFormattedGameOptions(getOptions());
+        let current_datetime = new Date().getTime();
+
+        let payload = {
+          module: active_game,
+          publickey: app.wallet.returnPublicKey(),
+          options,
+          ts: current_datetime,
+          sig: app.wallet.signMessage(current_datetime.toString(), app.wallet.returnPrivateKey()),
+        }
+
+        let base64str = app.crypto.stringToBase64(JSON.stringify(payload));
+
+        //
+        // TODO: include additional html for copy to clipboard functionality
+        console.log(base64str);
+      }
   }
 
 }
