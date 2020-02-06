@@ -5,13 +5,13 @@ module.exports = EscrowSidebarTemplate = () => {
 
     <h3>Escrow Service</h3>
     <div class="escrow-sidebar-inner">
-        <div>
+        <div style="margin-bottom:10px">
 
             Play a charity game with your favourite crypto. Loser donates staked amount from escrow:
 
         </div>
 
-        <button id="escrow-sidebar-btn">Create Game</button>
+        <button class="escrow-sidebar-btn" id="escrow-sidebar-btn">Create Game</button>
     </div>
 </div>
   `;

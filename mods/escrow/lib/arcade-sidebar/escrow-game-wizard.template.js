@@ -29,10 +29,10 @@ module.exports = EscrowGameWizardTemplate = () => {
       <div>
           <h4>Amount to Stake:</h4>
           <select id="escrow_stake" name="stake" style="margin-top:10px;clear:both">
-              <option value="0.005">0.005 BSV</option>
-              <option value="0.01">0.01 BSV</option>
-              <option value="0.05">0.05 BSV</option>
-              <option value="0.1">0.1 BSV</option>
+              <option value="0.005">0.005 BCH</option>
+              <option value="0.01">0.01 BCH</option>
+              <option value="0.05">0.05 BCH</option>
+              <option value="0.1">0.1 BCH</option>
           </select>
       </div>
       <div>

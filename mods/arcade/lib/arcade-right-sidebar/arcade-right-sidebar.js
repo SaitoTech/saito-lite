@@ -45,9 +45,14 @@ console.log("LOADING SIDEBAR: " + gameobj.module);
             document.querySelector(".arcade-right-sidebar").innerHTML += `<div class="${modname}"></div>`;
           }
 
+        }
+      });
+      data.arcade.mods.forEach(mod => {
+        let gameobj = mod.respondTo("arcade-sidebar");
+        if (gameobj != null) {
           gameobj.render(app, data);
           gameobj.attachEvents(app, data);
-        }
+	}
       });
 
     },
