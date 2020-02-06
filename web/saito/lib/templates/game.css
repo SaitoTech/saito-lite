@@ -442,6 +442,10 @@
     margin-bottom: 15px;
   }
 
+  .hud-menu-overlay {
+    height: 100vh;
+  }
+
   .hud-hidden-horizontal {
     width: 2em;
     right: -1em;
