@@ -5,7 +5,9 @@ module.exports = ArcadeLeftSidebar = {
 
   render(app, data) {
 
-    document.querySelector(".arcade-left-sidebar").innerHTML = ArcadeLeftSidebarTemplate();
+    let arcade_sidebar = document.querySelector(".arcade-left-sidebar")
+    if (!arcade_sidebar) return;
+    arcade_sidebar.innerHTML = ArcadeLeftSidebarTemplate();
 
     for (let i = 0; i < data.arcade.mods.length; i++) {
       if (data.arcade.mods[i].respondTo('email-chat') != null) {
@@ -26,7 +28,9 @@ module.exports = ArcadeLeftSidebar = {
 
   attachEvents(app, data) {
 
-    document.querySelector('#games-add-game').addEventListener('click', function () {
+    let add_game = document.querySelector('#games-add-game')
+    if (!add_game) return;
+    add_game.onclick = () => {
 
     // Check if have have identifier and money - bug out
 
@@ -48,7 +52,7 @@ module.exports = ArcadeLeftSidebar = {
       ArcadeStartGameList.render(app, data);
       ArcadeStartGameList.attachEvents(app, data);
 
-    });
+    };
 
 
     Array.from(document.getElementsByClassName('arcade-navigator-item')).forEach(game => {

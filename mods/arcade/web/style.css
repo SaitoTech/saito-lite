@@ -788,6 +788,28 @@ option {
   font-size: 1.3em;
 }
 
+/** ARCADE INVITATION **/
+
+.arcade-invite-container {
+  grid-gap: 1em;
+  grid-template-rows: 4em 4em auto;
+  padding: 0 20%;
+  text-align: center;
+}
+
+.arcade-invite-initializer {
+  display: grid;
+  grid-template-rows: 4em 4em;
+}
+
+#invite-game-spinner {
+  margin: unset;
+  display: none;
+  justify-self: center;
+  width: 6em;
+  height: 6em;
+}
+
 /** CHAT STYLING **/
 
 .chat-row {
