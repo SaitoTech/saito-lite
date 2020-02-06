@@ -131,7 +131,7 @@ class Arcade extends ModTemplate {
     let inviteBase64 = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
     try {
       data.arcade.invite_payload = JSON.parse(app.crypto.base64ToString(inviteBase64));
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
     ArcadeInvite.render(app, data);
@@ -238,7 +238,7 @@ class Arcade extends ModTemplate {
       if (res.rows) {
         res.rows.forEach(row => {
           let tx = new saito.transaction(JSON.parse(row.tx));
-          console.info("ADDING OPEN GAME FROM SERVER: " + JSON.stringify(tx.transaction));
+          //console.info("ADDING OPEN GAME FROM SERVER: " + JSON.stringify(tx.transaction));
           this.addGameToOpenList(tx);
         });
 
@@ -360,6 +360,9 @@ class Arcade extends ModTemplate {
 
     let txmsg = tx.returnMessage();
 
+    //Have we got this game in our list.
+    //Check sig against objects in storages.
+    //Return out if we have.
     for (let i = 0; i < this.games.length; i++) {
       let transaction = Object.assign({ sig: "" }, this.games[i].transaction);
       if (tx.transaction.sig == transaction.sig ||
@@ -368,14 +371,41 @@ class Arcade extends ModTemplate {
       if (id == transaction.sig) return;
     }
 
-    this.games.unshift(tx);
+    //Check if this is an invite game for us.
+    var for_us = true;
 
-    let data = {};
-    data.arcade = this;
+    //If this is an invite game
+    // Check if this is a public or invitee game - or if I created it.
+    if (txmsg.options.players_invited) {
+      //if this is an invite game - presume it's not for us.
+      for_us = false;
 
-    if (this.browser_active == 1) {
-      ArcadeMain.render(this.app, data);
-      ArcadeMain.attachEvents(this.app, data);
+      //If I did the inviting - show
+      if (tx.transaction.from[0].add == this.app.wallet.returnPublicKey()) {
+        for_us = true;
+      } else {
+
+        //If I am in the invitees list - show
+        txmsg.options.players_invited.forEach(player => {
+          //or we are invited.
+
+          if (player == this.app.wallet.returnPublicKey() || player == this.app.keys.returnIdentifierByPublicKey(this.app.wallet.returnPublicKey())) {
+            for_us = true;
+          }
+        });
+      }
+    }
+
+    if (for_us) {
+      this.games.unshift(tx);
+
+      let data = {};
+      data.arcade = this;
+
+      if (this.browser_active == 1) {
+        ArcadeMain.render(this.app, data);
+        ArcadeMain.attachEvents(this.app, data);
+      }
     }
   }
 
@@ -451,30 +481,14 @@ class Arcade extends ModTemplate {
 
     if (conf == 0) {
 
+      var txmmodule = txmsg.mod
+
       //
       // open msgs -- prolifigate
       //
-      // Check if this is a public or invitee game - or if I created it.
-      if (txmmodule == "Arcade" && txmsg.request == "open") {
-        //If this is an invite game
-        if (tx.msg.options.players_invited) {
-          //If I did the inviting - show
-          if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) {
-            this.addGameToOpenList(tx);
-          } else {
-            //If I am in the invitees list - show
-            txmsg.options.players_invited.forEach(player => {
-              //or player inviting is me.
-              if (player == app.wallet.returnPublicKey() || player == app.keychain.returnIdentifier(app.wallet.returnPublicKey())) {
-                this.addGameToOpenList(tx);
-              }
-            });
-          }
-        } else {
-          // This is not an invitee only game - show
-          this.addGameToOpenList(tx);
-        }
+      if (txmsg.module == "Arcade" && txmsg.request == "open") {
         //No matter what add the game to the db.
+        this.addGameToOpenList(tx);
         this.receiveOpenRequest(blk, tx, conf, app);
       }
 

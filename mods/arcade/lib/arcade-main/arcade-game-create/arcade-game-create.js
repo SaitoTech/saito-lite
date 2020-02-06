@@ -120,33 +120,12 @@ module.exports = ArcadeGameDreate = {
 
           });
 
-        document.querySelector('.game-players-select').addEventListener('change', (e) => {
-          let players = parseInt(e.currentTarget.value);
-
-          for (let i = 0; i < 10; i++) {
-            let classhit = ".game-players-options-" + (i + 1) + "p";
-            let classhit2 = "#game-players-select-" + (i + 1) + "p";
-            if (i < players) {
-              $(classhit).css('display', "flex");
-              $(classhit2).parent('.saito-select').css('display', 'flex');
-            } else {
-              $(classhit).css('display', "none");
-              $(classhit2).parent('.saito-select').css('display', 'none');
-            }
-          }
-        })
-
-
-
-
         return;
       }
     }
   },
 
-
   attachEvents(app, data) {
-
 
     document.querySelector('#return-to-arcade')
       .onclick = (e) => {
