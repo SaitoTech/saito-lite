@@ -38,12 +38,16 @@ module.exports = AppStoreAppspace = {
 	      installed_apps.push(app.options.modules[i].name);
 	    }
 	  }
+
 	  for (let z = 0; z < res.rows.length; z++) {
-	    if (installed_apps.includes(res.rows[z].name)) {
+	    if (installed_apps.includes(res.rows[z].name) || res.rows[z].name == "name" || res.rows[z].name == "Unknown") {
 	      res.rows.splice(z, 1);
 	      z--;
+	    } else {
 	    }
 	  }
+
+console.log("RES ROWS: " + JSON.stringify(res.rows));
 
           this.addCategories(app, data, res.rows);
           this.populateAppsSpace(app, data, res.rows);

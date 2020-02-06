@@ -290,7 +290,10 @@ class AppStore extends ModTemplate {
 	    if (zip_lines[i].indexOf("=") > 0) {
 	      name = zip_lines[i].substring(zip_lines[i].indexOf("="));
 	      name = cleanString(name);
-	      if (name.length > 40) { name = "Unknown"; }
+	      name = name.replace(/^\s+|\s+$/gm,'');
+	      if (name.length > 50) { name = "Unknown"; }
+console.log("NAME: " + name);
+
 	    }
 	  }
 
@@ -302,6 +305,7 @@ class AppStore extends ModTemplate {
 	    if (zip_lines[i].indexOf("=") > 0) {
 	      description = zip_lines[i].substring(zip_lines[i].indexOf("="))    
 	      description = cleanString(description);
+	      description = description.replace(/^\s+|\s+$/gm,'');
 	    }
 	  }
 
@@ -313,18 +317,21 @@ class AppStore extends ModTemplate {
 	    if (zip_lines[i].indexOf("=") > 0) {
 	      categories = zip_lines[i].substring(zip_lines[i].indexOf("="))    
 	      categories = cleanString(categories);
+	      categories = categories.replace(/^\s+|\s+$/gm,'');
 	    }
 	  }
 
 	}
 
         function cleanString(str) {
+	  str = str.replace(/^\s+|\s+$/gm,'');
           str = str.substring(1, str.length - 1);
           return [...str].map(char => {
             if (char == ' ') { return ' '; }
             if (char == '.') { return '.'; }
             if (char == ',') { return ','; }
             if (char == '!') { return '!'; }
+            if (char == '`') { return ''; }
             if (char == "\\" || char == "\'" || char == "\"" || char == ";") { return ''; }
             if (! (/[a-zA-Z0-9_-]/.test(char))) { return ''; }
             return char;
@@ -402,7 +409,7 @@ class AppStore extends ModTemplate {
     if (tx.transaction.from[0].add == this.app.wallet.returnPublicKey()) { featured_app = 1; }
 
     let params = {
-      $name: name,
+      $name:name,
       $description: description || '',
       $version: `${ts}-${sig}`,
       $categories: categories,
