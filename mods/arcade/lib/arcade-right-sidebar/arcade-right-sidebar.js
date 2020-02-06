@@ -36,6 +36,8 @@ module.exports = ArcadeRightSidebar = {
         let gameobj = mod.respondTo("arcade-sidebar");
         if (gameobj != null) {
 
+console.log("LOADING SIDEBAR: " + gameobj.module);
+
           let modname = "arcade-sidebar-"+mod.slug;
           let x = document.querySelector(("."+modname));
 

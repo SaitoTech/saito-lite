@@ -21,7 +21,6 @@ module.exports = ArcadeGameListRowTemplate = (app, tx, button_map) => {
   return `
     <div class="arcade-game-invitation" id="arcade-game-${sig}">
       <div class="arcade-game-row-name" id="arcade-game-name-${sig}">${game}</div>
-
       <div class="arcade-game-row-avi">${identicons}</div>
       <div class="arcade-game-row-options" id="arcade-game-options-${sig}">
       <div class="game-options-html">${options_html}</div>

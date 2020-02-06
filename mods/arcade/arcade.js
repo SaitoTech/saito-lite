@@ -266,6 +266,7 @@ class Arcade extends ModTemplate {
 
 
   createGameTXFromOptionsGame(game) {
+
     let game_tx = new saito.transaction();
 
     //
@@ -273,9 +274,7 @@ class Arcade extends ModTemplate {
     //
     //console.info("GAME OVER + LAST BLOCK: " + game.over + " -- " + game.last_block + " -- " + game.id);
 
-    if (game.over) {
-      if (game.last_block > 0) { return; }
-    }
+    if (game.over) { if (game.last_block > 0) { return; } }
 
     if (game.players) {
       game_tx.transaction.to = game.players.map(player => new saito.slip(player));
@@ -290,10 +289,12 @@ class Arcade extends ModTemplate {
       game: game.module,
       game_id: game.id,
       options: game.options,
+      players: game.players ,
       players_needed: game.players_needed,
       over: game.over,
       last_block: game.last_block,
     }
+    if (game.status === "Opponent Resigned") { msg.options_html = "Opponent Resigned"; }
 
     game_tx.transaction.sig = game.id;
     game_tx.transaction.msg = msg;
@@ -348,10 +349,9 @@ class Arcade extends ModTemplate {
 
     for (let i = 0; i < this.games.length; i++) {
       let transaction = Object.assign({sig: "" }, this.games[i].transaction);
-      if (tx.transaction.sig == transaction.sig ||
-        txmsg.game_id == transaction.sig) return;
+      if (tx.transaction.sig == transaction.sig || txmsg.game_id == transaction.sig) { return; }
       let id = this.games[i].id || "";
-      if (id == transaction.sig) return;
+      if (id == transaction.sig) { return; }
     }
 
     this.games.unshift(tx);
@@ -412,19 +412,24 @@ class Arcade extends ModTemplate {
 
     console.log("THESE ARE THE GAMES LEFT: ", this.games);
 
-    // this.app.options.games = this.games;
-    // this.app.storage.saveOptions();
+    //
+    // save to delete for good
+    //
+    this.app.options.games = this.games;
+    this.app.storage.saveOptions();
 
     let data = {};
     data.arcade = this;
 
     if (this.browser_active == 1) {
+
       //ArcadeMain.render(this.app, data);
       //ArcadeMain.attachEvents(this.app, data);
-      if(document.getElementById(`arcade-game-${game_sig}`)) {
-        document.getElementById(`arcade-gamelist`)
-          .removeChild(document.getElementById(`arcade-game-${game_sig}`));
+
+      if (document.getElementById(`arcade-game-${game_sig}`)) {
+        document.getElementById(`arcade-gamelist`).removeChild(document.getElementById(`arcade-game-${game_sig}`));
       }
+
     }
   }
 
@@ -457,7 +462,40 @@ class Arcade extends ModTemplate {
       // cancel open games
       //
       if (txmsg.module == "Arcade" && txmsg.request == "close") {
-        this.removeGameFromOpenList(tx.returnMessage().sig);
+        if (tx.isFrom(this.app.wallet.returnPublicKey())) {
+console.log("Cancelling Open Game 1");
+	  this.removeGameFromOpenList(tx.returnMessage().sig);
+	} else {
+console.log("Cancelling Open Game 2");
+	  if (this.app.options) {
+console.log("Cancelling Open Game 3");
+	    if (this.app.options.games) {
+console.log("Cancelling Open Game 4");
+	      for (let i = 0; i < this.app.options.games.length; i++) {
+console.log("Cancelling Open Game 5");
+	        if (this.app.options.games[i].id == tx.returnMessage().sig) {
+console.log("Cancelling Open Game 6");
+
+		  console.log("%%%%%%%%%%%%%%%%");
+		  console.log("%%%%%%%%%%%%%%%%");
+		  console.log("%%%% DELETED %%%");
+		  console.log("%%%%%%%%%%%%%%%%");
+		  console.log("%%%%%%%%%%%%%%%%");
+		  this.app.options.games[i].status = "Opponent Resigned";
+
+	          let gamemod = this.app.modules.returnModule(this.app.options.games[i].module);
+	          if (gamemod) {
+	            gamemod.loadGame(tx.returnMessage().sig);
+	            gamemod.updateStatus("Opponent Resigned");
+	            gamemod.updateLog("Opponent Resigned");
+	          }
+
+		}
+	      }
+	    }
+	  }
+	  // HACK
+	}
         this.receiveCloseRequest(blk, tx, conf, app);
       }
 
