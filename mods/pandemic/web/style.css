@@ -1,4 +1,7 @@
 
+.hud {
+  z-index: 200000;
+}
 .vial {
   position: absolute;
   background-size: cover;
