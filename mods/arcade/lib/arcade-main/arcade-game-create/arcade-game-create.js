@@ -28,30 +28,34 @@ setTimeout(() => {
         let current_sel = $('.game-players-select').val();
 
 
-	if (gamemod.maxPlayers == 1) {
+	if (gamemod.maxPlayers < 2) {
 	  document.querySelector('.game-players-select').value = 1;
           content_sel = 1;
 	  $('#game-players-select-2p').css('display','none');
 	  $('.game-players-options-2p').parent('.saito-select').css('display', 'none');
 	  $('.game-players-options-2p').css('display','none');
-
+	}
+        if (gamemod.maxPlayers < 3) {
 	  $('#game-players-select-3p').css('display','none');
 	  $('.game-players-options-3p').parent('.saito-select').css('display', 'none');
 	  $('.game-players-options-3p').css('display','none');
-
+	}
+        if (gamemod.maxPlayers < 4) {
 	  $('#game-players-select-4p').css('display','none');
 	  $('.game-players-options-4p').parent('.saito-select').css('display', 'none');
 	  $('.game-players-options-4p').css('display','none');
+	}
+        if (gamemod.maxPlayers < 5) {
 
 	  $('#game-players-select-5p').css('display','none');
 	  $('.game-players-options-5p').parent('.saito-select').css('display', 'none');
 	  $('.game-players-options-5p').css('display','none');
-
+	}
+        if (gamemod.maxPlayers < 6) {
 	  $('#game-players-select-6p').css('display','none');
 	  $('.game-players-options-6p').parent('.saito-select').css('display', 'none');
 	  $('.game-players-options-6p').css('display','none');
         }
-
 	if (gamemod.minPlayers > 1) {
           for (let z = 1; z < gamemod.minPlayers; z++) {
 	    $(('#game-players-select-'+z+'p')).css('display','none');
