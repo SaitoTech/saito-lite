@@ -4,7 +4,7 @@ const getOptions = () => {
   let options = {};
   document.querySelectorAll('form input, form select').forEach(element => {
     if (element.type == "checkbox") {
-      if (element.prop("checked")) {
+      if (element.checked) {
         options[element.name] = 1;
       }
     } else {
