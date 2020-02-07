@@ -13730,7 +13730,7 @@ console.log("1");
     let twilight_self = this;
 
     twilight_self.hideCard();
-    twilight_self.showCard(card);
+    twilight_self.showPlayableCard(card);
 
     $('.cardbox_menu_playcard').css('display','block');
     $('.cardbox_menu_playcard').off();
@@ -13812,23 +13812,29 @@ console.log("1");
   }
 
   showCard(cardname) {
+    let card_html = this.returnCardImage(cardname);
+    let cardbox_html = this.app.browser.isMobileBrowser(navigator.userAgent) ?
+      `${card_html}
+        <div id="cardbox-exit-background">
+          <div class="cardbox-exit" id="cardbox-exit">×</div>
+        </div>` : card_html;
 
-    let url = this.returnCardImage(cardname);
+    $('#cardbox').html(cardbox_html);
+    $('#cardbox').show();
+  }
 
-    //
-    // mobile needs recentering
-    //
-    if (this.app.browser.isMobileBrowser(navigator.userAgent)) {
-      // add additional html
-      url += `
+  showPlayableCard(cardname) {
+    let card_html = this.returnCardImage(cardname);
+    let cardbox_html = this.app.browser.isMobileBrowser(navigator.userAgent) ?
+      `${card_html}
       <div id="cardbox-exit-background">
-      <div class="cardbox-exit" id="cardbox-exit">×</div>
+        <div class="cardbox-exit" id="cardbox-exit">×</div>
       </div>
-      <div class="cardbox_menu_playcard cardbox_menu_btn" id="cardbox_menu_playcard">PLAY</div>`
-      $('.cardbox-exit').show();
-    }
+      <div class="cardbox_menu_playcard cardbox_menu_btn" id="cardbox_menu_playcard">
+        PLAY
+      </div>` : card_html;
 
-    $('#cardbox').html(url);
+    $('#cardbox').html(cardbox_html);
     $('#cardbox').show();
   }
 
@@ -14054,10 +14060,11 @@ console.log("1");
 
     this.hud.status_callback = () => {
       let twilight_self = this;
+      let isMobile = this.app.browser.isMobileBrowser(navigator.userAgent);
 
       $('.card').off();
 
-      if (!this.app.browser.isMobileBrowser(navigator.userAgent)) {
+      if (!isMobile) {
 
         $('.showcard').off();
         $('.showcard').mouseover(function() {
@@ -14072,7 +14079,20 @@ console.log("1");
 
       $('.card').on('click', function() {
         // pass our click option
-        onCardClickFunction(this);
+        if (onCardClickFunction) onCardClickFunction(this);
+        else {
+          if (isMobile) {
+            let card = $(this).attr("id");
+            twilight_self.showCard(card);
+
+            $('.cardbox-exit').off();
+            $('.cardbox-exit').on('click', function () {
+              twilight_self.hideCard();
+              $('.cardbox_menu_playcard').css('display','none');
+              $(this).css('display', 'none');
+            });
+          }
+        }
       });
     }
 
