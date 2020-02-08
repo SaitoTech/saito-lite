@@ -560,7 +560,6 @@ console.log("Cancelling Open Game 6");
         let sql = `UPDATE games SET status = "active" WHERE game_id = $game_id`;
         let params = {
 	  $game_id : tx.transaction.msg.game_id ,
-	  $players_array : players_array
         }
         this.app.storage.executeDatabase(sql, params, 'arcade');
 
@@ -1051,7 +1050,7 @@ console.log("RECEIVE INVITE REQUEST!");
     }
     unique_keys.sort();
     let players_array = unique_keys.join("_");
-    let sql = "UPDATE games SET players_accepted = " + unique_keys.length + ", players_array = $players_array WHERE status = $status AND game_id = $game_id";
+    let sql = "UPDATE games SET players_array = $players_array WHERE status = $status AND game_id = $game_id";
     let params = {
       $players_array: players_array,
       $status: 'open',
@@ -1212,7 +1211,7 @@ console.log("RECEIVE INVITE REQUEST!");
     unique_keys.sort();
     let players_array = unique_keys.join("_");
 
-    let sql = "UPDATE games SET players_accepted = (players_accepted+1), players_array = $players_array WHERE status = $status AND game_id = $game_id";
+    let sql = "UPDATE games SET players_array = $players_array WHERE status = $status AND game_id = $game_id";
     let params = {
       $players_array: players_array,
       $status: 'open',
@@ -1225,9 +1224,8 @@ console.log("RECEIVE INVITE REQUEST!");
       //console.info(err);
     }
 
-    sql = "UPDATE games SET status = 'active' WHERE status = $status AND players_accepted >= players_needed AND game_id = $game_id";
+    sql = "UPDATE games SET status = 'active' WHERE game_id = $game_id";
     params = {
-      $status: 'open',
       $game_id: txmsg.game_id
     }
 
@@ -1236,6 +1234,7 @@ console.log("RECEIVE INVITE REQUEST!");
     //console.info(params);
 
     try {
+console.log(sql + " -- " + params);
       let resp = await this.app.storage.executeDatabase(sql, params, "arcade");
     } catch (err) {
       //console.info(err);
