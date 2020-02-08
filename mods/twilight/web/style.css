@@ -760,8 +760,8 @@ body {
   .cardbox-hud {
     /* width: 10em;
     min-height: 14em; */
-    width: calc(25vw * 0.7211);
-    min-height: 25vw;
+    width: calc(22vw * 0.7211);
+    min-height: 22vw;
     margin-top: 0;
     margin-bottom: 0.5em;
   }
