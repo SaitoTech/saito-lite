@@ -240,9 +240,22 @@ class AppStore extends ModTemplate {
           }
           break;
       }
+    } else {
+
+      //
+      // create a transaction to trigger block producrtion
+      //
+      if (blk.block.id < 15) {
+
+        let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+        newtx.transaction.msg.module = "Debugging";
+        newtx.transaction.msg.description = "Producing a quick block to push our App Modules off the recent blockchain";
+        newtx = this.app.wallet.signTransaction(newtx);
+        this.app.network.propagateTransaction(newtx);
+
+      }
     }
   }
-
 
 
 
