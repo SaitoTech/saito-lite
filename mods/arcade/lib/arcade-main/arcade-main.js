@@ -38,18 +38,15 @@ module.exports = ArcadeMain = {
       if (tx.transaction.msg.over == 1) {
         delete button_text.join;
       }
-      if (players.includes(app.wallet.returnPublicKey())) {
-        delete button_text.join;
-      }
+
       if (players) {
         if (players.includes(app.wallet.returnPublicKey())) {
           delete button_text.join;
         }
-      }
 
-
-      if (players.includes(app.wallet.returnPublicKey())) {
-        button_text.cancel = "CANCEL";
+        if (players.includes(app.wallet.returnPublicKey())) {
+          button_text.cancel = "CANCEL";
+        }
       }
 
       if (app.options.games) {

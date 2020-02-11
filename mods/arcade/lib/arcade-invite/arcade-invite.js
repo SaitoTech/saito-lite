@@ -1,4 +1,5 @@
 const ArcadeInviteTemplate = require('./arcade-invite.template');
+const saito = require('../../../../lib/saito/saito');
 
 module.exports = ArcadeInvite = {
   render(app, data) {
@@ -36,60 +37,82 @@ module.exports = ArcadeInvite = {
         let players_available = accepted_game.transaction.msg.players.length;
       */
 
-      let game_id = invite_payload.game_id;
-      let open_game_tx = data.arcade.createOpenTransaction(invite_payload);
-      open_game_tx.transaction.to = [invite_payload.publickey]
+      let { game_id, players_needed } = invite_payload;
+      // let open_game_tx = data.arcade.createOpenTransaction(invite_payload);
+
+      if (players_needed == 2) {
+
+        // let invite_tx = data.arcade.createInviteTransaction(app, data, open_game_tx);
+        // let {ts, game, players_needed, options, accept_sig} = invite_payload
+        // let txmsg = open_game_tx.returnMessage();
+        let tx = app.wallet.createUnsignedTransactionWithDefaultFee();
+        tx.transaction.to = [new saito.slip(invite_payload.publickey), new saito.slip(app.wallet.returnPublicKey())];
+        tx.transaction.msg = {
+          ts: Object.is(invite_payload.ts, undefined) ? "" : invite_payload.ts,
+          module: invite_payload.name,
+          request: "invite",
+          game_id,
+          players_needed: invite_payload.players_needed,
+          // players: [invite_payload.publickey, app.wallet.returnPublicKey()],
+          options: invite_payload.options,
+          accept_sig: Object.is(invite_payload.accept_sig, undefined) ? "" : invite_payload.accept_sig,
+          invite_sig: app.crypto.signMessage(`invite_game_${tx.transaction.msg.ts}`,app.wallet.returnPrivateKey()),
+        }
+
+        tx = app.wallet.signTransaction(tx);
+        data.arcade.app.network.propagateTransaction(tx);
+      }
 
 
       // we're joining if we don't have everyone yet
-      if (players_needed > open_game_tx.transaction.to.length + 1) {
-        //
-        // add open_game_tx to list of our games
-        //
-        // data.arcade.addGameToOpenList(open_game_tx);
-        let join_tx = data.arcade.createJoinTransaction(app, data, open_game_tx);
-        join_tx.transaction.to = [invite_payload.publickey, app.wallet.returnPublicKey()];
-        join_tx.transaction.msg.game_id = game_id;
-        data.arcade.joinGameToOpenList(join_tx);
-        console.log(join_tx);
+      // if (players_needed > open_game_tx.transaction.to.length + 1) {
+      //   //
+      //   // add open_game_tx to list of our games
+      //   //
+      //   // data.arcade.addGameToOpenList(open_game_tx);
+      //   let join_tx = data.arcade.createJoinTransaction(app, data, open_game_tx);
+      //   join_tx.transaction.to = [invite_payload.publickey, app.wallet.returnPublicKey()];
+      //   join_tx.transaction.msg.game_id = game_id;
+      //   data.arcade.joinGameToOpenList(join_tx);
+      //   console.log(join_tx);
 
-      } else {
-        data.arcade.sendPeerDatabaseRequest(
-          "arcade",
-          "games",
-          "is_game_already_accepted",
-          game_id,
-          null,
-          (res) => {
+      // } else {
+        // data.arcade.sendPeerDatabaseRequest(
+        //   "arcade",
+        //   "games",
+        //   "is_game_already_accepted",
+        //   game_id,
+        //   null,
+        //   (res) => {
 
-            if (res.rows == undefined) {
-              console.log("ERROR 458103: cannot fetch information on whether game already accepted!");
-              return;
-            }
+        //     if (res.rows == undefined) {
+        //       console.log("ERROR 458103: cannot fetch information on whether game already accepted!");
+        //       return;
+        //     }
 
-            if (res.rows.length > 0) {
-              if (res.rows[0].game_still_open == 1) {
+        //     if (res.rows.length > 0) {
+        //       if (res.rows[0].game_still_open == 1) {
 
-                //
-                // data re: game in form of tx
-                //
-                let { transaction } = open_game_tx;
-                // let game_tx = Object.assign({ msg: { players_array: null } }, transaction);
+        //         //
+        //         // data re: game in form of tx
+        //         //
+        //         let { transaction } = open_game_tx;
+        //         // let game_tx = Object.assign({ msg: { players_array: null } }, transaction);
 
-                salert("Accepting this game!");
-                open_game_tx.transaction.msg.players = [invite_payload.publickey];
-                let newtx = data.arcade.createAcceptTransaction(app, data, open_game_tx);
-                data.arcade.app.network.propagateTransaction(newtx);
-                return;
+        //         salert("Accepting this game!");
+        //         open_game_tx.transaction.msg.players = [invite_payload.publickey];
+        //         let newtx = data.arcade.createAcceptTransaction(app, data, open_game_tx);
+        //         data.arcade.app.network.propagateTransaction(newtx);
+        //         return;
 
-              } else {
-                salert("Sorry, this game has been accepted already!");
-              }
-            } else {
-              salert("Sorry... game already accepted. Your list of open games will update shortly on next block!");
-            }
-          });
-      }
+        //       } else {
+        //         salert("Sorry, this game has been accepted already!");
+        //       }
+        //     } else {
+        //       salert("Sorry... game already accepted. Your list of open games will update shortly on next block!");
+        //     }
+        //   });
+      // }
 
       return;
 
@@ -105,6 +128,12 @@ module.exports = ArcadeInvite = {
         //
         // find our accepted game
         //
+        
+        
+        /*
+
+
+
         let { games } = data.arcade;
         let accepted_game = null;
 
@@ -174,7 +203,9 @@ module.exports = ArcadeInvite = {
               }
             }
           }
-      }
+      } 
+      
+      */
     }
   }
 }

@@ -146,8 +146,9 @@ module.exports = ArcadeGameDreate = {
           publickey: app.wallet.returnPublicKey(),
           options,
           ts: current_datetime,
-          game_id: app.wallet.signMessage(current_datetime.toString(), app.wallet.returnPrivateKey()),
           players_needed: document.querySelector('.game-players-select').value,
+          game_id: app.wallet.signMessage(current_datetime.toString(), app.wallet.returnPrivateKey()),
+          accept_sig: app.wallet.signMessage(`create_game_${current_datetime.toString()}`, app.wallet.returnPrivateKey()),
         };
 
         let newtx = data.arcade.createOpenTransaction(payload);
