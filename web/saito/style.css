@@ -1062,6 +1062,7 @@ label.treated {
   background: #333d;
   color: var(--saito-skyline-grey);
   position: relative;
+  cursor: pointer;
 }
 
 .welcome-modal-exit .fa-arrow-right {
