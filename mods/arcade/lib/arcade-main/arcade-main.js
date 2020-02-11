@@ -95,10 +95,13 @@ module.exports = ArcadeMain = {
     //
     // big button (removed)
     //
-    document.querySelector('.big-create-game').addEventListener('click', (e) => {
-      ArcadeStartGameList.render(app, data);
-      ArcadeStartGameList.attachEvents(app, data);
-    });
+    let big_create_button = document.querySelector('.big-create-game');
+    if (big_create_button) {
+      big_create_button.onclick = (e) => {
+        ArcadeStartGameList.render(app, data);
+        ArcadeStartGameList.attachEvents(app, data);
+      };
+    }
 
     //
     // create game

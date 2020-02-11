@@ -575,7 +575,7 @@ class Arcade extends ModTemplate {
             let game_found = false;
 
             for (let i = 0; i < this.app.options.games.length; i++) {
-              if (this.app.options.games[i].game_id == txmsg.game_id) {
+              if (this.app.options.games[i].game_id == txmsg.game_id || this.app.options.games[i].id == txmsg.game_id) {
                 game_found = true;
               }
             }
@@ -1043,16 +1043,17 @@ class Arcade extends ModTemplate {
 
     let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
     tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey(), 0.0));
-    tx.transaction.msg.ts = ts;
-    tx.transaction.msg.module = "Arcade";
-    tx.transaction.msg.request = "open";
-    tx.transaction.msg.game = gamedata.name;
-    tx.transaction.msg.options = gamedata.options;
-    tx.transaction.msg.options_html = gamedata.options_html;
-    tx.transaction.msg.players_needed = gamedata.players_needed;
-    tx.transaction.msg.players = [];
-    tx.transaction.msg.players.push(this.app.wallet.returnPublicKey());
-    tx.transaction.msg.players_sigs = [accept_sig];
+    tx.transaction.msg = {
+      ts: ts,
+      module: "Arcade",
+      request: "open",
+      game: gamedata.name,
+      options: gamedata.options,
+      options_html: gamedata.options_html || "",
+      players_needed: gamedata.players_needed,
+      players: [this.app.wallet.returnPublicKey()],
+      players_sigs: [accept_sig],
+    };
     tx = this.app.wallet.signTransaction(tx);
 
     return tx;

@@ -142,12 +142,16 @@ module.exports = ArcadeGameDreate = {
         let current_datetime = new Date().getTime();
 
         let payload = {
-          module: active_game,
+          name: active_game,
           publickey: app.wallet.returnPublicKey(),
           options,
           ts: current_datetime,
-          sig: app.wallet.signMessage(current_datetime.toString(), app.wallet.returnPrivateKey()),
-        }
+          game_id: app.wallet.signMessage(current_datetime.toString(), app.wallet.returnPrivateKey()),
+          players_needed: document.querySelector('.game-players-select').value,
+        };
+
+        let newtx = data.arcade.createOpenTransaction(payload);
+        data.arcade.addGameToOpenList(newtx);
 
         let base64str = app.crypto.stringToBase64(JSON.stringify(payload));
 
