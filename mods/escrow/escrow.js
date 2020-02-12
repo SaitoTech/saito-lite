@@ -165,7 +165,6 @@ console.log("ESCROW ON CONF 0: " + JSON.stringify(tx.transaction));
 
       if (txmsg.module == escrow_self.name) {
 
-
         //
 	// START MONITORING IF BALANCE EXISTS
 	//
@@ -174,7 +173,6 @@ console.log("--------------------------------");
 console.log(JSON.stringify(txmsg));
 console.log("--------------------------------");
 	}
-
 
 
 	//

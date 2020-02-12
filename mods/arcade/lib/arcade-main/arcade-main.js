@@ -2,6 +2,8 @@ const ArcadeMainTemplate = require('./arcade-main.template');
 
 const ArcadeGameCarousel = require('./arcade-game-carousel/arcade-game-carousel');
 
+const ArcadeStartGameList = require('./../arcade-start-game-list/arcade-start-game-list');
+
 const ArcadeGameTemplate = require('./arcade-game.template');
 const ArcadeGameListRowTemplate = require('./arcade-gamelist-row.template');
 
@@ -319,6 +321,7 @@ salert("Accepting this game!");
               testsig = app.options.games[i].id;
             }
             if ( testsig == sig) {
+              app.options.games[i].over = 1;
               app.options.games.splice(i, 1);
               app.storage.saveOptions();
             }

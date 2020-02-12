@@ -315,21 +315,14 @@
 }
 @media screen and (orientation:portrait) and (max-width: 700px) {
   .hud {
-    /* position: absolute; */
     bottom: 0;
     width: 100%;
-    /* grid-template-areas: "hud-header" "hud-content"; */
-    grid-template-areas: "hud-menu hud-header"
-    "hud-content hud-content";
-    /* grid-template-columns: 1fr; */
-    /* grid-template-rows: 2vh auto; */
+    height: 50vh;
+    grid-template-areas: "hud-menu hud-header" "hud-content hud-content";
     grid-template-columns: 87vw 13vw;
     grid-template-rows: 8vh auto;
-    /* font-size: 1.3em; */
     max-width: unset;
     min-width: unset;
-
-    height: 50vh;
   }
 
   .hud-hidden-vertical {
@@ -530,6 +523,20 @@
     background: transparent;
   }
 
+  .hud-hidden-horizontal {
+    width: 2em;
+    right: -1em;
+  }
+}
+
+@media screen and (max-height: 700px) and (min-width: 800px) {
+  .hud {
+    width: 18em;
+    right: -9em;
+  }
+}
+
+@media screen and (orientation: landscape) and (max-height: 700px) {
   .hud-hidden-horizontal {
     width: 2em;
     right: -1em;

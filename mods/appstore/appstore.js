@@ -240,9 +240,22 @@ class AppStore extends ModTemplate {
           }
           break;
       }
+    } else {
+
+      //
+      // create a transaction to trigger block producrtion
+      //
+      if (blk.block.id < 15 && conf == 0) {
+
+        let newtx = app.wallet.createUnsignedTransactionWithDefaultFee(app.wallet.returnPublicKey());
+        newtx.transaction.msg.module = "Debugging";
+        newtx.transaction.msg.description = "Producing a quick block to push our App Modules off the recent blockchain";
+        newtx = app.wallet.signTransaction(newtx);
+        app.network.propagateTransaction(newtx);
+
+      }
     }
   }
-
 
 
 
@@ -290,7 +303,8 @@ class AppStore extends ModTemplate {
 	    if (zip_lines[i].indexOf("=") > 0) {
 	      name = zip_lines[i].substring(zip_lines[i].indexOf("="));
 	      name = cleanString(name);
-	      if (name.length > 40) { name = "Unknown"; }
+	      name = name.replace(/^\s+|\s+$/gm,'');
+	      if (name.length > 50) { name = "Unknown"; }
 	    }
 	  }
 
@@ -302,6 +316,7 @@ class AppStore extends ModTemplate {
 	    if (zip_lines[i].indexOf("=") > 0) {
 	      description = zip_lines[i].substring(zip_lines[i].indexOf("="))    
 	      description = cleanString(description);
+	      description = description.replace(/^\s+|\s+$/gm,'');
 	    }
 	  }
 
@@ -313,18 +328,21 @@ class AppStore extends ModTemplate {
 	    if (zip_lines[i].indexOf("=") > 0) {
 	      categories = zip_lines[i].substring(zip_lines[i].indexOf("="))    
 	      categories = cleanString(categories);
+	      categories = categories.replace(/^\s+|\s+$/gm,'');
 	    }
 	  }
 
 	}
 
         function cleanString(str) {
+	  str = str.replace(/^\s+|\s+$/gm,'');
           str = str.substring(1, str.length - 1);
           return [...str].map(char => {
             if (char == ' ') { return ' '; }
             if (char == '.') { return '.'; }
             if (char == ',') { return ','; }
             if (char == '!') { return '!'; }
+            if (char == '`') { return ''; }
             if (char == "\\" || char == "\'" || char == "\"" || char == ";") { return ''; }
             if (! (/[a-zA-Z0-9_-]/.test(char))) { return ''; }
             return char;
@@ -356,23 +374,25 @@ class AppStore extends ModTemplate {
         let newtx = this.app.wallet.createUnsignedTransaction();
             newtx.transaction.msg.module       = "Email";
             newtx.transaction.msg.title        = "Saito Application Published";
-            newtx.transaction.msg.message      = `Your application has been published to the App Stores on the network.
+            newtx.transaction.msg.message      = `
+
+	    Your application is now available at the following link:
 
 	    <p></p>
 
-	    You can find it at the following link:
+	    <a href="http://saito.io/email?module=appstore&app=${tx.transaction.ts}-${tx.transaction.sig}">http://saito.io/email?module=appstore&app=${tx.transaction.ts}-${tx.transaction.sig}</a>
 
 	    <p></p>
 
-	    http://saito.io/email?module=appstore&app=${tx.transaction.ts}-${tx.transaction.sig}
+	    or by searching on your preferred AppStore for the following APP-ID:
 
 	    <p></p>
 
-	    or by searching on your preferred AppStore for APP-ID ${tx.transaction.ts}-${tx.transaction.sig}
+	     ${tx.transaction.ts}-${tx.transaction.sig}
 
             <p></p>
 
-	    If your application does not appear shortly, it means there is a bug in the code preventing AppStores from compiling it successfully. We recommend that you <a href="https://org.saito.tech/developers">install Saito locally</a> and compile your module directly to eliminate any errors before uploading.
+	    If your application does not appear shortly, it means there is a bug in the code preventing AppStores from compiling it successfully. We recommend that you <a href="https://org.saito.tech/developers">install Saito locally</a> and compile and test your module locally to eliminate any errors before uploading in this case.
 
         `;
         newtx = this.app.wallet.signTransaction(newtx);
@@ -402,7 +422,7 @@ class AppStore extends ModTemplate {
     if (tx.transaction.from[0].add == this.app.wallet.returnPublicKey()) { featured_app = 1; }
 
     let params = {
-      $name: name,
+      $name:name,
       $description: description || '',
       $version: `${ts}-${sig}`,
       $categories: categories,
