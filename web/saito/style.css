@@ -1263,6 +1263,14 @@ i.fas.fa-times-circle {
   z-index: 1;
 }
 
+.tiptext.headertip {
+  width: unset;
+  min-width: unset;
+  white-space: nowrap;
+  top: 3em;
+  right: 1em;
+}
+
 .welcome-modal-info .tip {
   margin: 1em 0;
 }
