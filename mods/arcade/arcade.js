@@ -496,7 +496,6 @@ class Arcade extends ModTemplate {
 	      }
 	    }
 	  }
-	  // HACK
 	}
         this.receiveCloseRequest(blk, tx, conf, app);
       }
@@ -509,27 +508,6 @@ class Arcade extends ModTemplate {
       }
 
 
-
-/*********
-      // invites
-      if (txmsg.request == "invite") {
-
-        //
-        // this might be a server, in which cse it doesn't have options.games
-        //
-        if (this.app.options != undefined) {
-          if (this.app.options.games != undefined) {
-            for (let i = 0; i < this.app.options.games.length; i++) {
-              if (this.app.options.games[i].id == txmsg.game_id) {
-                if (this.app.options.games[i].initializing == 0) { return; }
-              }
-            }
-          }
-        }
-        //console.info("\n\n\nINVITE REQUEST: " + JSON.stringify(tx));
-        this.receiveInviteRequest(blk, tx, conf, app);
-      }
-**********/
 
       //
       // ignore msgs for others
@@ -681,11 +659,6 @@ class Arcade extends ModTemplate {
           if (tx.transaction.msg.over == 1) return;
           this.launchGame(txmsg.game_id);
         }
-      }
-
-      // game over
-      if (txmsg.request == "gameover") {
-        this.receiveGameoverRequest(blk, tx, conf, app);
       }
 
     }
