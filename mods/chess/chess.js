@@ -203,6 +203,7 @@ console.log("QUEUE: " + this.game.queue);
 
     // $('#move_accept').off();
     let move_accept = document.getElementById('move_accept');
+    if (!move_accept) return;
     move_accept.onclick = () => {
       console.log('send move transaction and wait for reply.');
 
@@ -232,7 +233,6 @@ console.log("QUEUE: " + this.game.queue);
       data.position = this.engine.fen();
       data.move = this.game.move;
       this.endTurn(data);
-    
 
       $('#move_accept').prop('disabled', true);
       $('#move_accept').removeClass('green');
