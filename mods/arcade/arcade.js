@@ -434,7 +434,6 @@ class Arcade extends ModTemplate {
   }
 
 
-
   async onConfirmation(blk, tx, conf, app) {
 
     let txmsg = tx.returnMessage();
@@ -443,7 +442,7 @@ class Arcade extends ModTemplate {
     if (conf == 0) {
 
       //
-      // open msgs -- prolifigate
+      // open msgs -- public invitations
       //
       if (txmsg.module === "Arcade" && txmsg.request == "open") {
         this.addGameToOpenList(tx);
@@ -453,7 +452,7 @@ class Arcade extends ModTemplate {
       //
       // open msgs -- private invitations
       //
-      if (txmsg.module === "Arcade" && txmsg.request == "open" && tx.isTo(app.wallet.returnPublicKey())) {
+      if (txmsg.module === "ArcadeInvite" && txmsg.request == "open" && tx.isTo(app.wallet.returnPublicKey())) {
         this.addGameToOpenList(tx);
       }
 
