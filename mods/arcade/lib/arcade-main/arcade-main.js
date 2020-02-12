@@ -321,6 +321,7 @@ salert("Accepting this game!");
               testsig = app.options.games[i].id;
             }
             if ( testsig == sig) {
+              app.options.games[i].over = 1;
               app.options.games.splice(i, 1);
               app.storage.saveOptions();
             }

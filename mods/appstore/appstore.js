@@ -245,7 +245,7 @@ class AppStore extends ModTemplate {
       //
       // create a transaction to trigger block producrtion
       //
-      if (blk.block.id < 15) {
+      if (blk.block.id < 15 && conf == 0) {
 
         let newtx = app.wallet.createUnsignedTransactionWithDefaultFee(app.wallet.returnPublicKey());
         newtx.transaction.msg.module = "Debugging";
@@ -305,8 +305,6 @@ class AppStore extends ModTemplate {
 	      name = cleanString(name);
 	      name = name.replace(/^\s+|\s+$/gm,'');
 	      if (name.length > 50) { name = "Unknown"; }
-console.log("NAME: " + name);
-
 	    }
 	  }
 

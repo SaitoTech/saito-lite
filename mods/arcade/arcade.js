@@ -463,18 +463,12 @@ class Arcade extends ModTemplate {
       //
       if (txmsg.module == "Arcade" && txmsg.request == "close") {
         if (tx.isFrom(this.app.wallet.returnPublicKey())) {
-console.log("Cancelling Open Game 1");
 	  this.removeGameFromOpenList(tx.returnMessage().sig);
 	} else {
-console.log("Cancelling Open Game 2");
 	  if (this.app.options) {
-console.log("Cancelling Open Game 3");
 	    if (this.app.options.games) {
-console.log("Cancelling Open Game 4");
 	      for (let i = 0; i < this.app.options.games.length; i++) {
-console.log("Cancelling Open Game 5");
 	        if (this.app.options.games[i].id == tx.returnMessage().sig) {
-console.log("Cancelling Open Game 6");
 
 		  console.log("%%%%%%%%%%%%%%%%");
 		  console.log("%%%%%%%%%%%%%%%%");
@@ -482,6 +476,8 @@ console.log("Cancelling Open Game 6");
 		  console.log("%%%%%%%%%%%%%%%%");
 		  console.log("%%%%%%%%%%%%%%%%");
 		  this.app.options.games[i].status = "Opponent Resigned";
+		  this.app.options.games[i].over = 1;
+		  this.storage.saveOptions();
 
 	          let gamemod = this.app.modules.returnModule(this.app.options.games[i].module);
 	          if (gamemod) {
