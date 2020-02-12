@@ -445,9 +445,16 @@ class Arcade extends ModTemplate {
       //
       // open msgs -- prolifigate
       //
-      if (txmsg.module == "Arcade" && txmsg.request == "open") {
+      if (txmsg.module === "Arcade" && txmsg.request == "open") {
         this.addGameToOpenList(tx);
         this.receiveOpenRequest(blk, tx, conf, app);
+      }
+
+      //
+      // open msgs -- private invitations
+      //
+      if (txmsg.module === "Arcade" && txmsg.request == "open" && tx.isTo(app.wallet.returnPublicKey())) {
+        this.addGameToOpenList(tx);
       }
 
       //
@@ -998,15 +1005,23 @@ console.log("\n\n\n\n\n\n\nINSERTING NEW JOIN INTO GAME!");
   }
 
 
-  createOpenTransaction(gamedata) {
+  createOpenTransaction(gamedata, recipient="") {
+
+    let sendto = this.app.wallet.returnPublicKey();
+    let moduletype = "Arcade";
+
+    if (recipient != "") {
+      sendto = recipient; 
+      moduletype = "ArcadeInvite";
+    }
 
     let ts = new Date().getTime();
     let accept_sig = this.app.crypto.signMessage(("invite_game_" + ts), this.app.wallet.returnPrivateKey());
 
     let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
-    tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey(), 0.0));
+    tx.transaction.to.push(new saito.slip(recipient, 0.0));
     tx.transaction.msg.ts 		= ts;
-    tx.transaction.msg.module 		= "Arcade";
+    tx.transaction.msg.module 		= "Arc;
     tx.transaction.msg.request 		= "open";
     tx.transaction.msg.game 		= gamedata.name;
     tx.transaction.msg.options 		= gamedata.options;
@@ -1505,6 +1520,7 @@ console.log(sql + " -- " + params);
   }
 
   shouldAffixCallbackToModule(modname) {
+    if (modname == "ArcadeInvite") { return 1; }
     if (modname == "Arcade") { return 1; }
     for (let i = 0; i < this.affix_callbacks_to.length; i++) {
       if (this.affix_callbacks_to[i] == modname) {
