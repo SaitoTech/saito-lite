@@ -139,22 +139,22 @@ module.exports = ArcadeGameDreate = {
         let { active_game } = data;
         let game_module = app.modules.returnModule(active_game);
         let options = game_module.returnFormattedGameOptions(getOptions());
-        let current_datetime = new Date().getTime();
+        let ts = new Date().getTime();
 
         let payload = {
           name: active_game,
           publickey: app.wallet.returnPublicKey(),
           options,
-          ts: current_datetime,
           players_needed: document.querySelector('.game-players-select').value,
-          game_id: app.wallet.signMessage(current_datetime.toString(), app.wallet.returnPrivateKey()),
-          accept_sig: app.wallet.signMessage(`create_game_${current_datetime.toString()}`, app.wallet.returnPrivateKey()),
+          ts,
         };
 
         let newtx = data.arcade.createOpenTransaction(payload);
         data.arcade.addGameToOpenList(newtx);
 
-        let base64str = app.crypto.stringToBase64(JSON.stringify(payload));
+        let base64str = app.crypto.stringToBase64(JSON.stringify({
+          tx: newtx.transaction
+        }));
 
         //
         // TODO: include additional html for copy to clipboard functionality

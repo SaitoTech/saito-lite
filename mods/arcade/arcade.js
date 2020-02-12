@@ -810,8 +810,13 @@ class Arcade extends ModTemplate {
         data.arcade = arcade_self;
         data.game_id = game_id;
 
-        ArcadeLoader.render(arcade_self.app, data);
-        ArcadeLoader.attachEvents(arcade_self.app, data);
+        if (window.location.pathname.split('/')[2] == "invite") {
+          ArcadeInvite.render(this.app, data);
+          ArcadeLoader.attachEvents(this.app, data);
+        } else {
+          ArcadeLoader.render(arcade_self.app, data);
+          ArcadeLoader.attachEvents(arcade_self.app, data);
+        }
 
       }
     }, 1000);
@@ -1038,19 +1043,19 @@ class Arcade extends ModTemplate {
 
   createOpenTransaction(gamedata) {
 
-    let ts = new Date().getTime();
-    let accept_sig = this.app.crypto.signMessage(("invite_game_" + ts), this.app.wallet.returnPrivateKey());
+    let { ts, name, options, options_html, players_needed } = gamedata;
+    let accept_sig = this.app.crypto.signMessage(`invite_game_${ts}`, this.app.wallet.returnPrivateKey());
 
     let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
     tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey(), 0.0));
     tx.transaction.msg = {
-      ts: ts,
+      ts,
       module: "Arcade",
       request: "open",
-      game: gamedata.name,
-      options: gamedata.options,
-      options_html: gamedata.options_html || "",
-      players_needed: gamedata.players_needed,
+      game: name,
+      options,
+      options_html: options_html || "",
+      players_needed,
       players: [this.app.wallet.returnPublicKey()],
       players_sigs: [accept_sig],
     };
@@ -1290,16 +1295,16 @@ class Arcade extends ModTemplate {
 
   }
 
-  createAcceptTransaction(app, data, gameobj) {
+  createAcceptTransaction(gametx) {
 
-    let txmsg = gameobj.transaction.msg;
+    let txmsg = gametx.returnMessage();
 
     let accept_sig = this.app.crypto.signMessage(("invite_game_" + txmsg.ts), this.app.wallet.returnPrivateKey());
     txmsg.players.push(this.app.wallet.returnPublicKey());
     txmsg.players_sigs.push(accept_sig);
     txmsg.request = "accept";
 
-    let tx = app.wallet.createUnsignedTransactionWithDefaultFee();
+    let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
     for (let i = 0; i < txmsg.players.length; i++) { tx.transaction.to.push(new saito.slip(txmsg.players[i], 0.0)); }
     tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey(), 0.0));
 
@@ -1307,7 +1312,7 @@ class Arcade extends ModTemplate {
     // arcade will listen, but we need game engine to receive to start initialization
     //
     tx.transaction.msg = txmsg;
-    tx.transaction.msg.game_id = gameobj.transaction.sig;
+    tx.transaction.msg.game_id = gametx.transaction.sig;
     tx.transaction.msg.request = "accept";
     tx.transaction.msg.module = txmsg.game;
     tx = this.app.wallet.signTransaction(tx);

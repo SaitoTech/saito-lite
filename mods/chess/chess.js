@@ -122,7 +122,10 @@ class Chessgame extends GameTemplate {
         }
       }
 
-      $('#opponent_id').html(opponent);
+      // $('#opponent_id').html(opponent);
+      let opponent_elem = document.getElementById('opponent_id');
+      if (opponent_elem) opponent_elem.innerHTML = opponent;
+
       this.updateStatusMessage();
       this.attachEvents();
 
@@ -198,7 +201,26 @@ console.log("QUEUE: " + this.game.queue);
 
   attachEvents() {
 
-    $('#move_accept').off();
+    // $('#move_accept').off();
+    let move_accept = document.getElementById('move_accept');
+    move_accept.onclick = () => {
+      console.log('send move transaction and wait for reply.');
+
+      var data = {};
+      data.white = this.game.white;
+      data.black = this.game.black;
+      data.id = this.game.id;
+      data.position = this.engine.fen();
+      data.move = this.game.move;
+      this.endTurn(data);
+
+      $('#move_accept').prop('disabled', true);
+      $('#move_accept').removeClass('green');
+
+      $('#move_reject').prop('disabled', true);
+      $('#move_reject').removeClass('red');
+    };
+
     $('#move_accept').on('click', () => {
 
       console.log('send move transaction and wait for reply.');

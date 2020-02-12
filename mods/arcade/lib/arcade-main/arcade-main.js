@@ -220,7 +220,7 @@ module.exports = ArcadeMain = {
                   let game_tx = Object.assign({ msg: { players_array: null } }, transaction);
 
 salert("Accepting this game!");
-                  let newtx = data.arcade.createAcceptTransaction(app, data, accepted_game);
+                  let newtx = data.arcade.createAcceptTransaction(accepted_game);
 		  data.arcade.app.network.propagateTransaction(newtx);
                   return;
 
