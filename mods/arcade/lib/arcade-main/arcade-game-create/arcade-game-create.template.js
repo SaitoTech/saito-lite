@@ -1,47 +1,51 @@
 module.exports = ArcadeGameCreate = (game) => {
   return `
   <div class="create-game-wizard">
-  <div class="return-to-arcade" id="return-to-arcade">
+    <div class="return-to-arcade" id="return-to-arcade">
         <i class="icon-large fas fa-times-circle"></i>
-      </div>
-  <div class="game-wizard-content">
-    <div class="game-wizard-form">
-        <div class="game-info-container">
-            <img class="game-image game-image-wizard" src="">
-            <div class="game-detail-text">
-              <h2 class="game-title"></h2>
-              <div class="game-description"></div>
+    </div>
+    <div class="game-wizard-content">
+        <div class="game-wizard-form">
+            <div class="game-wizard-main">
+                <div class="game-info-container">
+                    <img class="game-image game-image-wizard" src="">
+                    <div class="game-detail-text">
+                        <h2 class="game-title"></h2>
+                        <div class="game-description"></div>
+                    </div>
+                </div>
+
+                <div class="game-details"></div>
+                <div class="game-start-controls">
+                    <div id="game-players-select-container">
+                        <select class="game-players-select" name="game-players-select">
+                        </select>
+                    </div>
+
+                    <button id="game-invite-btn" class="game-invite-btn">Go</button>
+
+                </div>
+                <div id="game-publisher-message" class="game-publisher-message"></div>
+            </div>
+            <div id="game-invite-controls" class="game-invite-controls hidden">
+                <div id="public-invite">
+                    <button id="game-create-btn" class="game-create-btn">Public Invitation</button>
+                    <div>Anyone can take your invitation.</div>
+                </div>
+                <div id="friend-invite">
+                <button id="friend-invite-btn" class="friend-invite-btn">Invite Friends</button>
+                <input type="text" id="game-invitees" class="game-invitees" placeholder="Enter names or addresses, comma separated" />
+                </div>
+                <div id="link-invite">
+                    <button id="link-invite-btn" class="link-invite-btn">Share a link</button>
+                    <div>Stephen - you decide what goes here.</div>
+                </div>
             </div>
         </div>
-
-        <div class="game-details"></div>
-      <div class="game-start-controls">
-        <div id="game-players-select-container">
-            <select class="game-players-select" name="game-players-select">
-                        </select>
-        </div>
-
-        <button id="game-invite-btn" class="game-invite-btn">Go</button>
-        
-      </div>
-      <div id="game-invite-controls">
-        <div id="public-invite">
-          <button id="game-create-btn" class="game-create-btn">Public Invitation</button>
-        </div>  
-        <div id="friend-invite">
-        <input type="text" id="game-invitees" class="game-invitees" placeholder="Enter names or addresses, comma separated"/>
-        <button id="friend-invite-btn" class="friend-invite-btn">Invite Friends</button>
-      </div>
-      <div id="link-invite">
-          <button id="link-invite-btn" class="link-invite-btn">Share a link</button>
-        </div>
-      </div>
-      <div id="game-publisher-message" class="game-publisher-message"></div>
     </div>
-  </div>
 </div>
 <div id="background-shim" class="background-shim">
-  <div id="background-shim-cover" class="background-shim-cover"></div>
+    <div id="background-shim-cover" class="background-shim-cover"></div>
 </div>
   `;
 }

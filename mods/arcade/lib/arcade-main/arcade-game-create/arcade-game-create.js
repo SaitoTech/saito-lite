@@ -50,6 +50,41 @@ module.exports = ArcadeGameDreate = {
 
         }, 100);
 
+        //game-invite-btn
+
+        document.getElementById('game-invite-btn')
+          .addEventListener('click', (e) => {
+
+            let options = getOptions();
+
+            let gamedata = {
+              name: gamemod.name,
+              slug: gamemod.returnSlug(),
+              options: gamemod.returnFormattedGameOptions(options),
+              options_html: gamemod.returnGameRowOptionsHTML(options),
+              players_needed: document.querySelector('.game-players-select').value,
+            };
+
+
+            var players_needed = document.querySelector('.game-players-select').value;
+
+            if (players_needed == 1) {
+              // 1 player games just launch
+              data.arcade.launchSinglePlayerGame(app, data, gamedata);
+              return;
+            } else {
+              document.querySelector('.game-details').toggleClass('hidden');
+              document.querySelector('.game-start-controls').toggleClass('hidden');
+              document.querySelector('.game-invite-controls').toggleClass('hidden');
+
+              if (players_needed >= 3) {
+                document.querySelector('#link-invite').toggleClass('hidden');
+              }
+            }
+
+
+
+          });
 
         document.getElementById('game-create-btn')
           .addEventListener('click', (e) => {
@@ -62,12 +97,6 @@ module.exports = ArcadeGameDreate = {
               options_html: gamemod.returnGameRowOptionsHTML(options),
               players_needed: document.querySelector('.game-players-select').value,
             };
-
-            if (gamedata.players_needed == 1) {
-              // 1 player games just launch
-              data.arcade.launchSinglePlayerGame(app, data, gamedata);
-              return;
-            }
 
             let newtx = data.arcade.createOpenTransaction(gamedata);
             data.arcade.app.network.propagateTransaction(newtx);
@@ -112,6 +141,13 @@ module.exports = ArcadeGameDreate = {
 
             }
 
+          });
+
+          //link-invite-btn
+          document.getElementById('link-invite-btn')
+          .addEventListener('click', (e) => {
+            document.querySelector('.game-players-select').value = 2;
+            // and then SP's amazing code.
           });
 
         return;
