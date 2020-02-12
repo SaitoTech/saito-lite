@@ -991,9 +991,9 @@ console.log("\n\n\n\n\n\n\nINSERTING NEW JOIN INTO GAME!");
     let accept_sig = this.app.crypto.signMessage(("invite_game_" + ts), this.app.wallet.returnPrivateKey());
 
     let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
-    tx.transaction.to.push(new saito.slip(recipient, 0.0));
+    tx.transaction.to.push(new saito.slip(sendto, 0.0));
     tx.transaction.msg.ts 		= ts;
-    tx.transaction.msg.module 		= "Arc;
+    tx.transaction.msg.module 		= moduletype;
     tx.transaction.msg.request 		= "open";
     tx.transaction.msg.game 		= gamedata.name;
     tx.transaction.msg.options 		= gamedata.options;
