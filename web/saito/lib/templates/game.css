@@ -483,6 +483,13 @@
   }
 }
 
+@media screen and (orientation: landscape) and (max-height: 700px) and (min-width: 800px) {
+  .hud {
+    width: 18em;
+    right: -9em;
+  }
+}
+
 
 .hud {
   scrollbar-face-color: #868686;
@@ -514,6 +521,11 @@
   ::-webkit-scrollbar {
     width: 0px;
     background: transparent;
+  }
+
+  .hud-hidden-horizontal {
+    width: 2em;
+    right: -1em;
   }
 }
 

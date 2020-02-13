@@ -2,6 +2,7 @@ const axios = require('axios');
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const ArcadeMain = require('./lib/arcade-main/arcade-main');
+const ArcadeInvite = require('./lib/arcade-invite/arcade-invite');
 const ArcadeLoader = require('./lib/arcade-main/arcade-loader');
 const ArcadeLeftSidebar = require('./lib/arcade-left-sidebar/arcade-left-sidebar');
 const ArcadeRightSidebar = require('./lib/arcade-right-sidebar/arcade-right-sidebar');
@@ -34,7 +35,7 @@ class Arcade extends ModTemplate {
     this.accepted = [];
 
     this.description = "A place to find, play and manage games!";
-    this.categories  = "Games Utilities";
+    this.categories = "Games Utilities";
 
     this.addrController = new AddressController(app);
 
@@ -126,7 +127,16 @@ class Arcade extends ModTemplate {
 
   }
 
-
+  renderInvite(app, data) {
+    let inviteBase64 = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
+    try {
+      data.arcade.invite_payload = JSON.parse(app.crypto.base64ToString(inviteBase64));
+    } catch (err) {
+      console.log(err);
+    }
+    ArcadeInvite.render(app, data);
+    ArcadeInvite.attachEvents(app, data);
+  }
 
 
   respondTo(type = "") {
@@ -203,7 +213,11 @@ class Arcade extends ModTemplate {
     Header.render(app, data);
     Header.attachEvents(app, data);
 
-    this.render(app, data);
+    if (window.location.pathname.split('/')[2] == "invite") {
+      this.renderInvite(app, data);
+    } else {
+      this.render(app, data);
+    }
 
   }
 
@@ -224,7 +238,7 @@ class Arcade extends ModTemplate {
       if (res.rows) {
         res.rows.forEach(row => {
           let tx = new saito.transaction(JSON.parse(row.tx));
-          console.info("ADDING OPEN GAME FROM SERVER: " + JSON.stringify(tx.transaction));
+          //console.info("ADDING OPEN GAME FROM SERVER: " + JSON.stringify(tx.transaction));
           this.addGameToOpenList(tx);
         });
 
@@ -347,6 +361,9 @@ class Arcade extends ModTemplate {
 
     let txmsg = tx.returnMessage();
 
+    //Have we got this game in our list.
+    //Check sig against objects in storages.
+    //Return out if we have.
     for (let i = 0; i < this.games.length; i++) {
       let transaction = Object.assign({sig: "" }, this.games[i].transaction);
       if (tx.transaction.sig == transaction.sig || (txmsg.game_id != "" && txmsg.game_id == transaction.sig)) { return; }
@@ -354,14 +371,41 @@ class Arcade extends ModTemplate {
       if (id == transaction.sig) { return; }
     }
 
-    this.games.unshift(tx);
+    //Check if this is an invite game for us.
+    var for_us = true;
 
-    let data = {};
-    data.arcade = this;
+    //If this is an invite game
+    // Check if this is a public or invitee game - or if I created it.
+    if (txmsg.options.players_invited) {
+      //if this is an invite game - presume it's not for us.
+      for_us = false;
 
-    if (this.browser_active == 1) {
-      ArcadeMain.render(this.app, data);
-      ArcadeMain.attachEvents(this.app, data);
+      //If I did the inviting - show
+      if (tx.transaction.from[0].add == this.app.wallet.returnPublicKey()) {
+        for_us = true;
+      } else {
+
+        //If I am in the invitees list - show
+        txmsg.options.players_invited.forEach(player => {
+          //or we are invited.
+
+          if (player == this.app.wallet.returnPublicKey() || player == this.app.keys.returnIdentifierByPublicKey(this.app.wallet.returnPublicKey())) {
+            for_us = true;
+          }
+        });
+      }
+    }
+
+    if (for_us) {
+      this.games.unshift(tx);
+
+      let data = {};
+      data.arcade = this;
+
+      if (this.browser_active == 1) {
+        ArcadeMain.render(this.app, data);
+        ArcadeMain.attachEvents(this.app, data);
+      }
     }
   }
 
@@ -375,15 +419,15 @@ class Arcade extends ModTemplate {
     let txmsg = tx.returnMessage();
 
     for (let i = 0; i < this.games.length; i++) {
-      if (! this.games[i].transaction.msg.players.includes(tx.transaction.from[0].add) ) {
+      if (!this.games[i].transaction.msg.players.includes(tx.transaction.from[0].add)) {
 
-	//
-	// TODO is validate accept sig
-	//
-	if (tx.transaction.msg.invite_sig != "") {
-	  this.games[i].transaction.msg.players.push(tx.transaction.from[0].add);
-	  this.games[i].transaction.msg.players_sigs.push(txmsg.invite_sig);
-	}
+        //
+        // TODO is validate accept sig
+        //
+        if (tx.transaction.msg.invite_sig != "") {
+          this.games[i].transaction.msg.players.push(tx.transaction.from[0].add);
+          this.games[i].transaction.msg.players_sigs.push(txmsg.invite_sig);
+        }
       }
     }
 
@@ -447,6 +491,8 @@ class Arcade extends ModTemplate {
 
     if (conf == 0) {
 
+      var txmmodule = txmsg.mod
+
       //
       // open msgs -- public invitations
       //
@@ -489,7 +535,7 @@ class Arcade extends ModTemplate {
 		  console.log("%%%%%%%%%%%%%%%%");
 		  this.app.options.games[i].status = "Opponent Resigned";
 		  this.app.options.games[i].over = 1;
-		  this.storage.saveOptions();
+		  this.app.storage.saveOptions();
 
 	          let gamemod = this.app.modules.returnModule(this.app.options.games[i].module);
 	          if (gamemod) {
@@ -552,15 +598,15 @@ class Arcade extends ModTemplate {
         //
         // make sure game in options file
         //
-	if (this.app.options) {
+        if (this.app.options) {
 
-	  if (!this.app.options.games) {
-	    this.app.options.games = [];
-	  }
+          if (!this.app.options.games) {
+            this.app.options.games = [];
+          }
 
-	  if (this.app.options.games) {
+          if (this.app.options.games) {
 
-	    let game_found = false;
+            let game_found = false;
 
 	    for (let i = 0; i < this.app.options.games.length; i++) {
 	      if (this.app.options.games[i].id == txmsg.game_id) {
@@ -627,7 +673,7 @@ class Arcade extends ModTemplate {
           // remove games from open games list
           //
           for (let i = 0; i < this.games.length; i++) {
-            let transaction = Object.assign({sig: ""}, this.games[i].transaction);
+            let transaction = Object.assign({ sig: "" }, this.games[i].transaction);
             if (transaction.sig === tx.transaction.msg.game_id) {
               //
               //
@@ -662,7 +708,9 @@ class Arcade extends ModTemplate {
           console.info("THIS GAMEIS FOR ME: " + tx.isTo(app.wallet.returnPublicKey()));
           console.info("OUR GAMES: ", this.app.options.games);
           // game is over, we don't care
-          if (tx.transaction.msg.over == 1) return;
+          if (tx.transaction.msg.over) {
+            if (tx.transaction.msg.over == 1) return;
+          }
           this.launchGame(txmsg.game_id);
         }
       }
@@ -695,21 +743,20 @@ class Arcade extends ModTemplate {
 
         let sql2 = `SELECT * FROM invites WHERE game_id = "${gametx.sig}"`;
         let rows2 = await this.app.storage.queryDatabase(sql2, {}, 'arcade');
+        gametx.msg.players = [];
+        gametx.msg.players_sigs = [];
 
-	gametx.msg.players = [];
-	gametx.msg.players_sigs = [];
-	for (let z = 0; z < rows2.length; z++) {
-	  gametx.msg.players.push(rows2[z].player);
-	  gametx.msg.players_sigs.push(rows2[z].acceptance_sig);
-	}
+        for (let z = 0; z < rows2.length; z++) {
+          gametx.msg.players.push(rows2[z].player);
+          gametx.msg.players_sigs.push(rows2[z].acceptance_sig);
+        }
 
         rows[i].tx = JSON.stringify(gametx);
       }
 
-
       mycallback({ rows });
 
-      if (Math.random < 0.05) { 
+      if (Math.random < 0.05) {
 
         let current_timestamp = new Date().getTime() - 1200000;
 
@@ -757,8 +804,13 @@ class Arcade extends ModTemplate {
         data.arcade = arcade_self;
         data.game_id = game_id;
 
-        ArcadeLoader.render(arcade_self.app, data);
-        ArcadeLoader.attachEvents(arcade_self.app, data);
+        if (window.location.pathname.split('/')[2] == "invite") {
+          ArcadeInvite.render(this.app, data);
+          ArcadeLoader.attachEvents(this.app, data);
+        } else {
+          ArcadeLoader.render(arcade_self.app, data);
+          ArcadeLoader.attachEvents(arcade_self.app, data);
+        }
 
       }
     }, 1000);
@@ -778,7 +830,7 @@ class Arcade extends ModTemplate {
     if (txmsg.key_state != "") { key_state = txmsg.key_state; }
 
     let sql = `INSERT INTO gamestate (
-                game_id , 
+                game_id ,
                 player ,
                 players_array ,
                 module ,
@@ -857,7 +909,7 @@ class Arcade extends ModTemplate {
                 status ,
                 options ,
                 tx ,
-                start_bid ,  
+                start_bid ,
                 created_at ,
                 expires_at
               ) VALUES (
@@ -908,9 +960,9 @@ class Arcade extends ModTemplate {
               )`;
     let params2 = {
       $game_id: game_id,
-      $player : player ,
-      $acceptance_sig : acceptance_sig ,
-      $module : module ,
+      $player: player,
+      $acceptance_sig: acceptance_sig,
+      $module: module,
       $created_at: created_at,
       $expires_at: expires_at
     };
@@ -925,7 +977,7 @@ class Arcade extends ModTemplate {
 
   async receiveJoinRequest(blk, tx, conf, app) {
 
-console.log("RECEIVED A JOIN REQUEST!");
+    console.log("RECEIVED A JOIN REQUEST!");
 
     let txmsg = tx.returnMessage();
 
@@ -968,15 +1020,15 @@ console.log("RECEIVED A JOIN REQUEST!");
               )`;
     let params2 = {
       $game_id: game_id,
-      $player : player ,
-      $acceptance_sig : acceptance_sig ,
-      $module : module ,
+      $player: player,
+      $acceptance_sig: acceptance_sig,
+      $module: module,
       $created_at: created_at,
       $expires_at: expires_at
     };
     await app.storage.executeDatabase(sql2, params2, "arcade");
 
-console.log("\n\n\n\n\n\n\nINSERTING NEW JOIN INTO GAME!");
+    console.log("\n\n\n\n\n\n\nINSERTING NEW JOIN INTO GAME!");
 
     return;
 
@@ -993,21 +1045,22 @@ console.log("\n\n\n\n\n\n\nINSERTING NEW JOIN INTO GAME!");
       moduletype = "ArcadeInvite";
     }
 
-    let ts = new Date().getTime();
-    let accept_sig = this.app.crypto.signMessage(("invite_game_" + ts), this.app.wallet.returnPrivateKey());
+    let { ts, name, options, options_html, players_needed } = gamedata;
+    let accept_sig = this.app.crypto.signMessage(`invite_game_${ts}`, this.app.wallet.returnPrivateKey());
 
     let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
     tx.transaction.to.push(new saito.slip(sendto, 0.0));
-    tx.transaction.msg.ts 		= ts;
-    tx.transaction.msg.module 		= moduletype;
-    tx.transaction.msg.request 		= "open";
-    tx.transaction.msg.game 		= gamedata.name;
-    tx.transaction.msg.options 		= gamedata.options;
-    tx.transaction.msg.options_html 	= gamedata.options_html;
-    tx.transaction.msg.players_needed 	= gamedata.players_needed;
-    tx.transaction.msg.players 		= [];
-    tx.transaction.msg.players.push(this.app.wallet.returnPublicKey());
-    tx.transaction.msg.players_sigs 	= [ accept_sig ];
+    tx.transaction.msg = {
+      ts,
+      module: moduletype,
+      request: "open",
+      game: name,
+      options,
+      options_html: options_html || "",
+      players_needed,
+      players: [this.app.wallet.returnPublicKey()],
+      players_sigs: [accept_sig],
+    };
     tx = this.app.wallet.signTransaction(tx);
 
     return tx;
@@ -1019,68 +1072,6 @@ console.log("\n\n\n\n\n\n\nINSERTING NEW JOIN INTO GAME!");
     let sql = `UPDATE games SET status = $status WHERE game_id = $game_id`
     let params = { $status: 'close', $game_id: txmsg.sig };
     let resp = await app.storage.executeDatabase(sql, params, "arcade");
-  }
-
-
-
-  async receiveInviteRequest(blk, tx, conf, app) {
-console.log("RECEIVE INVITE REQUEST!");
-/******
-    //
-    // servers
-    //
-    let txmsg = tx.returnMessage();
-
-    let unique_keys = [];
-    for (let i = 0; i < tx.transaction.to.length; i++) {
-      if (!unique_keys.includes(tx.transaction.to[i].add)) {
-        unique_keys.push(tx.transaction.to[i].add);
-      }
-    }
-    unique_keys.sort();
-    let players_array = unique_keys.join("_");
-    let sql = "UPDATE games SET players_array = $players_array WHERE status = $status AND game_id = $game_id";
-    let params = {
-      $players_array: players_array,
-      $status: 'open',
-      $game_id: txmsg.game_id
-    }
-    await this.app.storage.executeDatabase(sql, params, "arcade");
-
-
-    //
-    // servers nope out
-    //
-    if (this.browser_active == 0) { return; }
-
-    //
-    // auto-accept
-    //
-    this.accepted[txmsg.sig] = 1;
-
-
-    //
-    // browsers
-    //
-    let opponent = tx.transaction.from[0].add;
-    let invitee = tx.transaction.to[0].add;
-
-    //
-    //
-    //
-    if (this.app.options.games != undefined) {
-      for (let i = 0; i < this.app.options.games.length; i++) {
-        if (this.app.options.games[i].id == txmsg.game_id) {
-          this.app.options.games[i].options = txmsg.options;
-          this.app.storage.saveOptions();
-        }
-      }
-    }
-
-
-    data = {};
-    data.arcade = this;
-******/
   }
 
 
@@ -1145,7 +1136,7 @@ console.log("RECEIVE INVITE REQUEST!");
     try {
 
 
-      // 
+      //
       // delete from local stores
       //
       if (app.options.games) {
@@ -1218,19 +1209,11 @@ console.log("RECEIVE INVITE REQUEST!");
       $game_id: txmsg.game_id
     }
 
-    //console.info("about to await execut db");
-    //console.info(sql);
-    //console.info(params);
-
     try {
-console.log(sql + " -- " + params);
       let resp = await this.app.storage.executeDatabase(sql, params, "arcade");
     } catch (err) {
-      //console.info(err);
+      console.log(err);
     }
-
-    //console.info("done now...");
-
   }
 
 
@@ -1244,16 +1227,16 @@ console.log(sql + " -- " + params);
 
   }
 
-  createAcceptTransaction(app, data, gameobj) {
+  createAcceptTransaction(gametx) {
 
-    let txmsg = gameobj.transaction.msg;
+    let txmsg = gametx.returnMessage();
 
     let accept_sig = this.app.crypto.signMessage(("invite_game_" + txmsg.ts), this.app.wallet.returnPrivateKey());
     txmsg.players.push(this.app.wallet.returnPublicKey());
     txmsg.players_sigs.push(accept_sig);
     txmsg.request = "accept";
 
-    let tx = app.wallet.createUnsignedTransactionWithDefaultFee();
+    let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
     for (let i = 0; i < txmsg.players.length; i++) { tx.transaction.to.push(new saito.slip(txmsg.players[i], 0.0)); }
     tx.transaction.to.push(new saito.slip(this.app.wallet.returnPublicKey(), 0.0));
 
@@ -1261,7 +1244,7 @@ console.log(sql + " -- " + params);
     // arcade will listen, but we need game engine to receive to start initialization
     //
     tx.transaction.msg = txmsg;
-    tx.transaction.msg.game_id = gameobj.transaction.sig;
+    tx.transaction.msg.game_id = gametx.transaction.sig;
     tx.transaction.msg.request = "accept";
     tx.transaction.msg.module = txmsg.game;
     tx = this.app.wallet.signTransaction(tx);
@@ -1278,7 +1261,7 @@ console.log(sql + " -- " + params);
     // update live game table
     //
     for (let i = 0; i < this.games.length; i++) {
-      let transaction = Object.assign({ msg: { game_id: "" }}, this.games[i].transaction);
+      let transaction = Object.assign({ msg: { game_id: "" } }, this.games[i].transaction);
       if (transaction.msg.game_id == txmsg.game_id) {
         let game_id = transaction.msg.game_id;
         let divid = "arcade-game-options-" + game_id;
@@ -1362,7 +1345,9 @@ console.log(sql + " -- " + params);
 
     super.webServer(app, expressapp, express);
 
-    let fs = app.storage.returnFileSystem();
+    const fs = app.storage.returnFileSystem();
+    const path = require('path');
+
     if (fs != null) {
 
       expressapp.get('/arcade/observer/:game_id', async (req, res) => {
@@ -1436,6 +1421,11 @@ console.log(sql + " -- " + params);
           return;
         }
 
+      });
+
+      expressapp.get('/arcade/invite/:gameinvite', async (req, res) => {
+        res.setHeader('Content-type', 'text/html');
+        res.sendFile(path.resolve(__dirname + '/web/invite.html'));
       });
 
     }
