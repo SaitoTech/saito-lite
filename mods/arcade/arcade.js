@@ -529,7 +529,7 @@ class Arcade extends ModTemplate {
 		  console.log("%%%%%%%%%%%%%%%%");
 		  this.app.options.games[i].status = "Opponent Resigned";
 		  this.app.options.games[i].over = 1;
-		  this.storage.saveOptions();
+		  this.app.storage.saveOptions();
 
 	          let gamemod = this.app.modules.returnModule(this.app.options.games[i].module);
 	          if (gamemod) {
@@ -702,7 +702,9 @@ class Arcade extends ModTemplate {
           console.info("THIS GAMEIS FOR ME: " + tx.isTo(app.wallet.returnPublicKey()));
           console.info("OUR GAMES: ", this.app.options.games);
           // game is over, we don't care
-          if (tx.transaction.msg.over == 1) return;
+          if (tx.transaction.msg.over) {
+            if (tx.transaction.msg.over == 1) return;
+          }
           this.launchGame(txmsg.game_id);
         }
       }

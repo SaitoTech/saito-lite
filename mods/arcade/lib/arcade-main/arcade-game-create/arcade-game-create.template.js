@@ -38,7 +38,7 @@ module.exports = ArcadeGameCreate = (game) => {
                 </div>
                 <div id="link-invite">
                     <button id="link-invite-btn" class="link-invite-btn">Share a link</button>
-                    <div>Stephen - you decide what goes here.</div>
+                    <input id="link-invite-input" style="display:none" />
                 </div>
             </div>
         </div>

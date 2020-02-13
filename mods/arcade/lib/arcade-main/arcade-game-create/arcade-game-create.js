@@ -186,8 +186,6 @@ module.exports = ArcadeGameDreate = {
         };
 
         let newtx = data.arcade.createOpenTransaction(payload);
-        data.arcade.addGameToOpenList(newtx);
-
         let base64str = app.crypto.stringToBase64(JSON.stringify({
           tx: newtx.transaction
         }));
@@ -195,6 +193,15 @@ module.exports = ArcadeGameDreate = {
         //
         // TODO: include additional html for copy to clipboard functionality
         console.log(base64str);
+
+        var inviteInput = document.getElementById("link-invite-input");
+        inviteInput.value = `${window.location}invite/${base64str}`;
+        inviteInput.select()
+        inviteInput.setSelectionRange(0, 99999); /* for mobile */
+        document.execCommand("copy");
+        salert(`Link copied to clipboard`);
+
+        data.arcade.addGameToOpenList(newtx);
       }
   }
 
