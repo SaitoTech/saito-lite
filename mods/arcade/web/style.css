@@ -108,7 +108,7 @@ input {
   grid-column-gap: 1.5em;
   grid-template-columns: 15em auto 20em;
   grid-template-areas: "arcade-left-sidebar arcade-main arcade-right-sidebar";
-  font-size: 0.9em;
+  font-size: 1em;
 }
 
 .arcade-sidebar {
@@ -787,6 +787,28 @@ option {
   font-size: 1.3em;
 }
 
+/** ARCADE INVITATION **/
+
+.arcade-invite-container {
+  grid-gap: 1em;
+  grid-template-rows: 4em 4em auto;
+  padding: 0 20%;
+  text-align: center;
+}
+
+.arcade-invite-initializer {
+  display: grid;
+  grid-template-rows: 4em 4em;
+}
+
+#invite-game-spinner {
+  margin: unset;
+  display: none;
+  justify-self: center;
+  width: 6em;
+  height: 6em;
+}
+
 /** CHAT STYLING **/
 
 .chat-row {
@@ -883,4 +905,23 @@ span.rewards-row-name {
 .arcade-sidebar-row span {
   font-size: 1.2em;
   text-align: left;
+}
+
+.game-details {
+  margin: 2em 0;
+}
+
+#game-invite-controls div {
+  margin: 1em 0;
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 20em 1fr;
+}
+
+#game-invite-controls button {
+  width: 100%;
+}
+
+#game-publisher-message {
+  margin: 2em 1em 0;
 }

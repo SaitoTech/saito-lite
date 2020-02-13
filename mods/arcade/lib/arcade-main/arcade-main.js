@@ -40,18 +40,15 @@ module.exports = ArcadeMain = {
       if (tx.transaction.msg.over == 1) {
         delete button_text.join;
       }
-      if (players.includes(app.wallet.returnPublicKey())) {
-        delete button_text.join;
-      }
+
       if (players) {
         if (players.includes(app.wallet.returnPublicKey())) {
           delete button_text.join;
         }
-      }
 
-
-      if (players.includes(app.wallet.returnPublicKey())) {
-        button_text.cancel = "CANCEL";
+        if (players.includes(app.wallet.returnPublicKey())) {
+          button_text.cancel = "CANCEL";
+        }
       }
 
       if (app.options.games) {
@@ -97,10 +94,13 @@ module.exports = ArcadeMain = {
     //
     // big button (removed)
     //
-    document.querySelector('.big-create-game').addEventListener('click', (e) => {
-      ArcadeStartGameList.render(app, data);
-      ArcadeStartGameList.attachEvents(app, data);
-    });
+    let big_create_button = document.querySelector('.big-create-game');
+    if (big_create_button) {
+      big_create_button.onclick = (e) => {
+        ArcadeStartGameList.render(app, data);
+        ArcadeStartGameList.attachEvents(app, data);
+      };
+    }
 
     //
     // create game
@@ -222,7 +222,7 @@ module.exports = ArcadeMain = {
                   let game_tx = Object.assign({ msg: { players_array: null } }, transaction);
 
 salert("Accepting this game!");
-                  let newtx = data.arcade.createAcceptTransaction(app, data, accepted_game);
+                  let newtx = data.arcade.createAcceptTransaction(accepted_game);
 		  data.arcade.app.network.propagateTransaction(newtx);
                   return;
 
