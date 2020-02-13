@@ -925,3 +925,11 @@ span.rewards-row-name {
 #game-publisher-message {
   margin: 2em 1em 0;
 }
+
+@media only screen and (max-width: 600px) {
+  #game-invite-controls div {
+    grid-template-columns: 1fr;
+    grid-gap: 5px;
+    margin: 2em 0;
+  }
+}
