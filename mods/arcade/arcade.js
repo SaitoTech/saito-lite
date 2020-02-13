@@ -410,13 +410,19 @@ class Arcade extends ModTemplate {
       }
     });
 
+
+    for (let i = 0; i < this.app.options.games.length; i++) {
+      if (this.app.options.games[i].id == game_sig) {
+	this.app.options.games.splice(i, 1);
+        this.app.storage.saveOptions();
+      }
+    }
+
     console.log("THESE ARE THE GAMES LEFT: ", this.games);
 
     //
     // save to delete for good
     //
-    this.app.options.games = this.games;
-    this.app.storage.saveOptions();
 
     let data = {};
     data.arcade = this;
@@ -557,7 +563,7 @@ class Arcade extends ModTemplate {
 	    let game_found = false;
 
 	    for (let i = 0; i < this.app.options.games.length; i++) {
-	      if (this.app.options.games[i].game_id == txmsg.game_id) {
+	      if (this.app.options.games[i].id == txmsg.game_id) {
 		game_found = true;
 	      }
 	    }
