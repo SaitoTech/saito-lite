@@ -301,15 +301,12 @@ console.log("\n\n\n\n");
 
     this.updateStatus("Generating the Game");
 
-console.log("1");
-
     this.game.queue.push("round");
     if (this.game.options.usbonus != undefined) {
       if (this.game.options.usbonus > 0) {
         this.game.queue.push("placement_bonus\t2\t"+this.game.options.usbonus);
       }
     }
-console.log("2");
     this.game.queue.push("placement\t2");
     this.game.queue.push("placement\t1");
     this.game.queue.push("READY");
@@ -320,7 +317,6 @@ console.log("2");
     this.game.queue.push("DECKXOR\t1\t2");
     this.game.queue.push("DECKXOR\t1\t1");
 
-console.log("3");
     //
     // TESTING
     //
@@ -343,17 +339,14 @@ console.log("3");
     } else {
       this.game.queue.push("DECK\t1\t"+JSON.stringify(this.returnEarlyWarCards()));
     }
-console.log("4");
     this.game.queue.push("init");
 
     if (this.game.dice === "") {
       this.initializeDice();
     }
-console.log("5");
 
   }
 
-console.log("6");
   this.countries = this.game.countries;
 
   // this.hud = new GameHud(this.app, 0, 0, this.menuItems());
@@ -368,7 +361,6 @@ console.log("6");
   $('.ussr').css('width', this.scale(100)+"px");
   $('.us').css('height', this.scale(100)+"px");
   $('.ussr').css('height', this.scale(100)+"px");
-console.log("7");
 
   //
   $('.formosan_resolution').css('width', this.scale(202)+"px");
@@ -379,19 +371,12 @@ console.log("7");
   //
   // update defcon and milops and stuff
   //
-console.log("8");
   this.updateDefcon();
-console.log("9");
   this.updateActionRound();
-console.log("1");
   this.updateSpaceRace();
-console.log("2");
   this.updateVictoryPoints();
-console.log("3");
   this.updateMilitaryOperations();
-console.log("4");
   this.updateRound();
-console.log("5");
 
   //
   // initialize interface
@@ -418,7 +403,6 @@ console.log("1");
   var element = document.getElementById('gameboard');
   if (element !== null) { helpers.hammer(element); }
 
-console.log("1");
 
 /*****
   let twilight_self = this;
