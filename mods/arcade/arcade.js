@@ -608,20 +608,20 @@ class Arcade extends ModTemplate {
 
             let game_found = false;
 
-	    for (let i = 0; i < this.app.options.games.length; i++) {
-	      if (this.app.options.games[i].id == txmsg.game_id) {
-		game_found = true;
-	      }
-	    }
+            for (let i = 0; i < this.app.options.games.length; i++) {
+              if (this.app.options.games[i].id == txmsg.game_id) {
+                game_found = true;
+              }
+            }
 
-	    if (game_found == false) {
-	      let gamemod = this.app.modules.returnModule(tx.transaction.msg.game);
-	      if (gamemod) {
-	        gamemod.loadGame(tx.transaction.msg.game_id);
-	      }
-	    }
-	  }
-	}	
+            if (game_found == false) {
+              let gamemod = this.app.modules.returnModule(tx.transaction.msg.game);
+              if (gamemod) {
+                gamemod.loadGame(tx.transaction.msg.game_id);
+              }
+            }
+          }
+        }
 
         //
         // multiplayer games might hit here without options.games
@@ -653,16 +653,18 @@ class Arcade extends ModTemplate {
           //
           // also possible this is game in our displayed list
           //
-          if (this.games.length > 0) {
-            for (let i = 0; i < this.games.length; i++) {
-              let transaction = Object.assign({ sig: "" }, this.games[i].transaction);
-              if (transaction.sig == txmsg.game_id) {
-                //
-                // remove game (accepted players are equal to number needed)
-                //
-                transaction.msg = Object.assign({ players_needed: 0, players: [] }, transaction.msg);
-                if ((transaction.msg.players_needed) == (transaction.msg.players.length + 1)) {
-                  this.removeGameFromOpenList(txmsg.game_id);
+          if (!tx.isTo(app.wallet.returnPublicKey())) {
+            if (this.games.length > 0) {
+              for (let i = 0; i < this.games.length; i++) {
+                let transaction = Object.assign({ sig: "" }, this.games[i].transaction);
+                if (transaction.sig == txmsg.game_id) {
+                  //
+                  // remove game (accepted players are equal to number needed)
+                  //
+                  transaction.msg = Object.assign({ players_needed: 0, players: [] }, transaction.msg);
+                  if ((transaction.msg.players_needed) == (transaction.msg.players.length + 1)) {
+                    this.removeGameFromOpenList(txmsg.game_id);
+                  }
                 }
               }
             }
@@ -1041,7 +1043,7 @@ class Arcade extends ModTemplate {
     let moduletype = "Arcade";
 
     if (recipient != "") {
-      sendto = recipient; 
+      sendto = recipient;
       moduletype = "ArcadeInvite";
     }
 
