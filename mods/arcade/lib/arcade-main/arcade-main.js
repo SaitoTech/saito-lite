@@ -144,7 +144,7 @@ module.exports = ArcadeMain = {
           let newtx = data.arcade.createJoinTransaction(app, data, accepted_game);
           data.arcade.app.network.propagateTransaction(newtx);
 	  data.arcade.joinGameOnOpenList(newtx);
-          salert("You have broadcast a message asking to join this game! It may take a minute or so for your icon to appear next to the game.");
+          salert("Joining game! Please wait a moment");
 	  return;
 	}
 

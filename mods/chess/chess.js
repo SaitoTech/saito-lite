@@ -452,7 +452,8 @@ console.log("QUEUE: " + this.game.queue);
   };
 
   removeGreySquares() {
-    document.querySelector('#board .square-55d63').style.background = '';
+    let grey_squares = document.querySelectorAll('#board .square-55d63');
+    Array.from(grey_squares).forEach(square => square.style.background = '');
   };
 
   greySquare(square) {
