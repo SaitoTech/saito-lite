@@ -821,6 +821,7 @@ class Arcade extends ModTemplate {
 
 
 
+
   async saveGameState(blk, tx, conf, app) {
 
     let txmsg = tx.returnMessage();

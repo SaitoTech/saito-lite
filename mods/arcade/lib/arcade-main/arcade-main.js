@@ -176,7 +176,7 @@ module.exports = ArcadeMain = {
 
             if (existing_game != -1 && existing_game) {
               if (existing_game.initializing == 1) {
-                salert("This game is initializing!");
+                salert("This game is initializing! It may take a minute for your browser to update -- please be patient");
 
                 ArcadeLoader.render(app, data);
                 ArcadeLoader.attachEvents(app, data);
@@ -221,10 +221,14 @@ module.exports = ArcadeMain = {
                   let { transaction } = accepted_game;
                   let game_tx = Object.assign({ msg: { players_array: null } }, transaction);
 
-salert("Accepting this game!");
+salert("Accepting this game - it may take a minute for your browser to start initializing -- please be patient!");
                   let newtx = data.arcade.createAcceptTransaction(accepted_game);
 		  data.arcade.app.network.propagateTransaction(newtx);
-                  return;
+
+                  ArcadeLoader.render(app, data);
+                  ArcadeLoader.attachEvents(app, data);
+ 
+                 return;
 
                 } else {
 		  salert("Sorry, this game has been accepted already!");
