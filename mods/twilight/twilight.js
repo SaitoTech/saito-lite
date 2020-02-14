@@ -31,7 +31,7 @@ class Twilight extends GameTemplate {
 
     this.app             = app;
 
-    this.name    = "Twilight";
+    this.name  		 = "Twilight";
     this.slug		 = "twilight";
     this.description     = `Twilight Struggle is a card-driven strategy game for two players, with its theme taken from the Cold War.
       One player plays the United States (US), and the other plays the Soviet Union (USSR).`;
@@ -47,6 +47,7 @@ class Twilight extends GameTemplate {
     this.moves           = [];
     this.is_testing = 0;
 
+    this.log_length = 150;
     this.interface = 1;
     this.dont_show_confirm = 0;
 
@@ -2317,9 +2318,9 @@ console.log("1");
           //
           this.game.state.events.china_card_eligible = 0;
 
-    //
-    // back button functions again
-    //
+          //
+          // back button functions again
+          //
           this.game.state.back_button_cancelled = 0;
 
           //
@@ -4456,7 +4457,7 @@ console.log("1");
       this.countries[country].ussr = parseInt(this.countries[country].ussr) + parseInt(inf);
     }
 
-    this.updateLog(player.toUpperCase() + "</span> <span>places</span> " + inf + " <span>in</span> <span>" + this.countries[country].name);
+    this.updateLog(player.toUpperCase() + "</span> <span>places</span> " + inf + " <span>in</span> <span>" + this.countries[country].name, this.log_length, 1);
 
     this.showInfluence(country, player, mycallback);
 
@@ -13833,8 +13834,8 @@ console.log("1");
   //
   // OVERWRITES GAME.JS MODULE TO ADD CARD HOVERING
   //
-  updateLog(str, length = 150) {
-    this.hud.updateLog(str, this.addLogCardEvents.bind(this));
+  updateLog(str, length = 150, force=0) {
+    this.hud.updateLog(str, this.addLogCardEvents.bind(this), force);
   }
 
 

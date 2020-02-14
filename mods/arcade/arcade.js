@@ -426,6 +426,7 @@ class Arcade extends ModTemplate {
         //
         if (tx.transaction.msg.invite_sig != "") {
           this.games[i].transaction.msg.players.push(tx.transaction.from[0].add);
+	  if (!this.games[i].transaction.msg.players_sigs) { this.games[i].transaction.msg.players_sigs = []; }
           this.games[i].transaction.msg.players_sigs.push(txmsg.invite_sig);
         }
       }
@@ -615,9 +616,14 @@ class Arcade extends ModTemplate {
             }
 
             if (game_found == false) {
-              let gamemod = this.app.modules.returnModule(tx.transaction.msg.game);
-              if (gamemod) {
-                gamemod.loadGame(tx.transaction.msg.game_id);
+	      //
+	      // only load games that are for us
+	      //
+              if (tx.isTo(app.wallet.returnPublicKey())) {
+	        let gamemod = this.app.modules.returnModule(tx.transaction.msg.game);
+                if (gamemod) {
+                  gamemod.loadGame(tx.transaction.msg.game_id);
+                }
               }
             }
           }
@@ -681,7 +687,7 @@ class Arcade extends ModTemplate {
               //
               //
               if (transaction.options) {
-                if (transaction.options.players_needed === (transaction.players.length + 1)) {
+                if (transaction.options.players_needed <= (transaction.players.length + 1)) {
                   console.info("ACCEPT MESSAGE SENT ON GAME WAITING FOR ONE PLAYER! -- deleting");
                   this.games.splice(i, 1);
                   console.info("RE-RENDER");

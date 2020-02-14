@@ -9,9 +9,11 @@ module.exports = RegisterUsername = {
 
   attachEvents(app, data) {
 
-    document.querySelector('.username-registry-input').onclick = () => {
-      document.querySelector('.username-registry-input').setAttribute("placeholder", "");
-    }
+    //document.querySelector('.username-registry-input').onclick = () => {
+    //}
+
+    document.querySelector('.username-registry-input').select();
+    document.querySelector('.username-registry-input').setAttribute("placeholder", "");
 
     document.querySelector('.tutorial-skip').onclick = () => {
       data.modal.destroy();

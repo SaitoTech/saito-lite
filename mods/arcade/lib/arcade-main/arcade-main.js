@@ -68,7 +68,7 @@ module.exports = ArcadeMain = {
           }
         });
       }
-
+console.log("LISTING GAME: " + JSON.stringify(tx.transaction));
       document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(app, tx, button_text);
     });
 
