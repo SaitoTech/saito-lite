@@ -12,7 +12,7 @@ module.exports = ArcadeGameListRowTemplate = (app, tx, button_map) => {
   if (txmsg.over == 1) { options_html = "Opponent Resigned"; }
 
   let publickeys = players;
-  let identicons = publickeys.map(publickey => `<img class="identicon" src="${app.keys.returnIdenticon(publickey)}">`).join("");
+  let identicons = publickeys.map(publickey => `<span class="tip"><img class="identicon" src="${app.keys.returnIdenticon(publickey)}"><div class="tiptext">${app.keys.returnIdentifierByPublicKey(publickey)}</div></span>`).join("");
 
   var button_html = Object.entries(button_map).map(([key, value]) => {
     return `<button class="arcade-game-row-${key}" id="arcade-game-${key}-row-${sig}">${value}</button>`
