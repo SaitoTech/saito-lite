@@ -14107,14 +14107,19 @@ console.log("1");
     let new_options = {};
     for (var index in options) {
       if (index == "player1") {
-        new_options[index] = options[index] == "ussr" ? "us" : "ussr";
+        if (options[index] == "random") {
+          new_options[index] = options[index];
+        } else {
+          new_options[index] = options[index] == "ussr" ? "ussr" : "us";
+        }
       } else {
         new_options[index] = options[index]
       }
     }
-
     return new_options;
   }
+
+
 
 
 

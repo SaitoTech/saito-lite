@@ -63,6 +63,14 @@ module.exports = EmailForm = {
         let email_amount_elem = document.querySelector('.email-amount');
         let email_amount = 0.0;
 
+	//
+	// easy copy and paste error
+	//
+	if (email_to.indexOf(' (me)') > 0) {
+	  email_to = email_to.substring(0, email_to.indexOf(' (me)'));
+	}
+
+
         if (email_amount_elem)  {
             if (email_amount_elem.value > 0) {
                 email_amount = parseFloat(email_amount_elem.value);
