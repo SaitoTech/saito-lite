@@ -138,7 +138,7 @@ console.log("LISTING GAME: " + JSON.stringify(tx.transaction));
 	//
 	// if there are not enough players, we will join not accept
 	//
-        let players_needed = parseInt(aaccepted_game.transaction.msg.players_needed);
+        let players_needed = parseInt(accepted_game.transaction.msg.players_needed);
         let players_available = accepted_game.transaction.msg.players.length;
         if ( players_needed > (players_available+1) ) {
           let newtx = data.arcade.createJoinTransaction(app, data, accepted_game);
