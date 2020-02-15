@@ -133,12 +133,12 @@ console.log("LISTING GAME: " + JSON.stringify(tx.transaction));
           if (g.transaction.sig === game_id) { accepted_game = g; }
         });
 
-        if (!accepted_game) return;
+        if (!accepted_game) { return; }
 
 	//
 	// if there are not enough players, we will join not accept
 	//
-        let players_needed = accepted_game.transaction.msg.players_needed;
+        let players_needed = parseInt(aaccepted_game.transaction.msg.players_needed);
         let players_available = accepted_game.transaction.msg.players.length;
         if ( players_needed > (players_available+1) ) {
           let newtx = data.arcade.createJoinTransaction(app, data, accepted_game);
@@ -176,7 +176,8 @@ console.log("LISTING GAME: " + JSON.stringify(tx.transaction));
 
             if (existing_game != -1 && existing_game) {
               if (existing_game.initializing == 1) {
-                salert("This game is initializing! It may take a minute for your browser to update -- please be patient");
+
+                salert("Accepted Game! It may take a minute for your browser to update -- please be patient!");
 
                 ArcadeLoader.render(app, data);
                 ArcadeLoader.attachEvents(app, data);

@@ -29,6 +29,7 @@ class Arcade extends ModTemplate {
     this.games = [];
     this.observer = [];
     this.leaderboard = [];
+    this.viewing_arcade_initialization_page = 0;
 
     this.icon_fa = "fas fa-gamepad";
 
@@ -403,8 +404,10 @@ class Arcade extends ModTemplate {
       data.arcade = this;
 
       if (this.browser_active == 1) {
-        ArcadeMain.render(this.app, data);
-        ArcadeMain.attachEvents(this.app, data);
+	if (this.viewing_arcade_initialization_page == 0) {
+          ArcadeMain.render(this.app, data);
+          ArcadeMain.attachEvents(this.app, data);
+        }
       }
     }
   }
@@ -436,8 +439,10 @@ class Arcade extends ModTemplate {
     data.arcade = this;
 
     if (this.browser_active == 1) {
-      ArcadeMain.render(this.app, data);
-      ArcadeMain.attachEvents(this.app, data);
+      if (this.viewing_arcade_initialization_page == 0) {
+        ArcadeMain.render(this.app, data);
+        ArcadeMain.attachEvents(this.app, data);
+      }
     }
   }
 
@@ -668,7 +673,7 @@ class Arcade extends ModTemplate {
                   // remove game (accepted players are equal to number needed)
                   //
                   transaction.msg = Object.assign({ players_needed: 0, players: [] }, transaction.msg);
-                  if ((transaction.msg.players_needed) == (transaction.msg.players.length + 1)) {
+                  if (parseInt(transaction.msg.players_needed) == (transaction.msg.players.length + 1)) {
                     this.removeGameFromOpenList(txmsg.game_id);
                   }
                 }
@@ -691,7 +696,9 @@ class Arcade extends ModTemplate {
                   console.info("ACCEPT MESSAGE SENT ON GAME WAITING FOR ONE PLAYER! -- deleting");
                   this.games.splice(i, 1);
                   console.info("RE-RENDER");
-                  this.render();
+	          if (this.viewing_arcade_initialization_page == 0) {
+                    this.render();
+	          }
                 }
               }
             }
@@ -717,7 +724,7 @@ class Arcade extends ModTemplate {
           console.info("OUR GAMES: ", this.app.options.games);
           // game is over, we don't care
           if (tx.transaction.msg.over) {
-            if (tx.transaction.msg.over == 1) return;
+            if (tx.transaction.msg.over == 1) { return; }
           }
           this.launchGame(txmsg.game_id);
         }
@@ -815,9 +822,11 @@ class Arcade extends ModTemplate {
         if (window.location.pathname.split('/')[2] == "invite") {
           ArcadeInvite.render(this.app, data);
           ArcadeLoader.attachEvents(this.app, data);
+	  this.viewing_arcade_initialization_page = 1;
         } else {
           ArcadeLoader.render(arcade_self.app, data);
           ArcadeLoader.attachEvents(arcade_self.app, data);
+	  this.viewing_arcade_initialization_page = 1;
         }
 
       }
@@ -896,7 +905,7 @@ class Arcade extends ModTemplate {
     //
     let game_id = tx.transaction.sig;
     let players_needed = 2;
-    if (txmsg.players_needed > 2) { players_needed = txmsg.players_needed; }
+    if (parseInt(txmsg.players_needed) > 2) { players_needed = txmsg.players_needed; }
     let module = txmsg.game;
     let options = {};
     if (txmsg.options != undefined) { options = txmsg.options; }
@@ -995,7 +1004,7 @@ class Arcade extends ModTemplate {
     //
     let game_id = tx.transaction.msg.game_id;
     let players_needed = 2;
-    if (txmsg.players_needed > 2) { players_needed = txmsg.players_needed; }
+    if (parseInt(txmsg.players_needed) > 2) { players_needed = parseInt(txmsg.players_needed); }
     let module = txmsg.game;
     let options = {};
     if (txmsg.options != undefined) { options = txmsg.options; }
@@ -1095,7 +1104,7 @@ class Arcade extends ModTemplate {
     tx.transaction.msg.module = txmsg.game;
     tx.transaction.msg.request = "invite";
     tx.transaction.msg.game_id = gametx.transaction.sig;
-    tx.transaction.msg.players_needed = txmsg.players_needed;
+    tx.transaction.msg.players_needed = parseInt(txmsg.players_needed);
     tx.transaction.msg.options = txmsg.options;
     tx.transaction.msg.accept_sig = "";
     if (gametx.transaction.msg.accept_sig != "") {
@@ -1125,7 +1134,7 @@ class Arcade extends ModTemplate {
     tx.transaction.msg.module = txmsg.game;
     tx.transaction.msg.request = "join";
     tx.transaction.msg.game_id = gametx.transaction.sig;
-    tx.transaction.msg.players_needed = txmsg.players_needed;
+    tx.transaction.msg.players_needed = parseInt(txmsg.players_needed);
     tx.transaction.msg.options = txmsg.options;
     tx.transaction.msg.invite_sig = app.crypto.signMessage(("invite_game_" + gametx.transaction.msg.ts), app.wallet.returnPrivateKey());
     if (gametx.transaction.msg.ts != "") { tx.transaction.msg.ts = gametx.transaction.msg.ts; }
@@ -1155,7 +1164,7 @@ class Arcade extends ModTemplate {
             //console.info("### SENDING SORRY TX ###");
             //console.info("########################");
             //console.info("\n\n\nSORRY -- RECEIVED: " + JSON.stringify(app.options.games[i]));
-            if (app.options.games[i].players.length == app.options.games[i].players_needed && !app.options.games[i].players.includes(tx.transaction.from[0].add)) {
+            if (app.options.games[i].players.length == parseInt(app.options.games[i].players_needed) && !app.options.games[i].players.includes(tx.transaction.from[0].add)) {
 
               if (this.browser_active == 1) {
                 salert("Opponent has responded claiming game already accepted :( -- returning to Arcade");
@@ -1190,6 +1199,7 @@ class Arcade extends ModTemplate {
       if (tx.isTo(app.wallet.returnPublicKey())) {
         ArcadeLoader.render(app, data);
         ArcadeLoader.attachEvents(app, data);
+	this.viewing_arcade_initialization_page = 1;
       }
     }
 
