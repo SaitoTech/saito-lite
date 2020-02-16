@@ -944,7 +944,7 @@ class Arcade extends ModTemplate {
               )`;
     let params = {
       $game_id: game_id,
-      $players_needed: players_needed,
+      $players_needed: parseInt(players_needed),
       $players_array: players_array,
       $module: module,
       $status: game_status,
@@ -1075,7 +1075,7 @@ class Arcade extends ModTemplate {
       game: name,
       options,
       options_html: options_html || "",
-      players_needed,
+      players_needed : parseInt(players_needed),
       players: [this.app.wallet.returnPublicKey()],
       players_sigs: [accept_sig],
     };
