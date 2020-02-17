@@ -19,7 +19,7 @@ function reset {
   rm -f ./data/bank.sq3
   # rm -f ./data/registry.sq3
   rm -f ./data/escrow.sq3
-  rm -f ./data/rewards.sq3
+  # rm -f ./data/rewards.sq3
   rm -f ./data/forum.sq3
   rm -f ./data/tutorial.sq3
   rm -f ./data/log.txt
