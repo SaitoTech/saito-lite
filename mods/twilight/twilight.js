@@ -4703,8 +4703,6 @@ console.log("1");
 
       if (restricted_country == 1) {
 
-  alert("restricted COUNTRY == 1: " + divname);
-
         $(divname).off();
         $(divname).on('click', function() {
           twilight_self.displayModal("Invalid Target");
