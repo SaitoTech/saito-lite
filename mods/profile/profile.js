@@ -34,7 +34,7 @@ class Profile extends ModTemplate {
       let obj = {};
 	  obj.render = function (app, data) {
 	    data.profile = app.modules.returnModule("Profile");
-     	    document.getElementById("settings-appspace").innerHTML += '<a href="">PROFILE PAGE HERE</a>';
+     	    document.getElementById("settings-appspace").innerHTML += '<a class="button" href="/email/?module=profile">View/Edit Profile</a>';
           }
 	  obj.attachEvents = function (app, data) {
 	    data.profile = app.modules.returnModule("Profile");
