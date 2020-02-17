@@ -94,7 +94,7 @@ a.button {
 
 .blockchain-table {
     display: grid;
-    grid-template-columns: 0.5em 3.5em 11fr 1.5em 5fr;
+    grid-template-columns: 0.5em 3.5em 11fr auto 5fr;
     grid-gap: 10px;
     max-width: 850px;
 }
