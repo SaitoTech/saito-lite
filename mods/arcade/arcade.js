@@ -599,7 +599,7 @@ class Arcade extends ModTemplate {
         let params = {
 	  $game_id : tx.transaction.msg.game_id ,
         }
-        this.app.storage.executeDatabase(sql, params, 'arcade');
+        await this.app.storage.executeDatabase(sql, params, 'arcade');
 
         //
         // make sure game in options file

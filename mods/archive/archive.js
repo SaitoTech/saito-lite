@@ -96,7 +96,7 @@ class Archive extends ModTemplate {
         $ts		:	tx.transaction.ts ,
         $type		:	msgtype
       };
-      this.app.storage.executeDatabase(sql, params, "archive");
+      await this.app.storage.executeDatabase(sql, params, "archive");
     }
 
   }
@@ -120,7 +120,7 @@ class Archive extends ModTemplate {
         $publickey	:	authorizing_publickey
       };
 
-      this.app.storage.executeDatabase(sql, params, "archive");
+      await this.app.storage.executeDatabase(sql, params, "archive");
 
     }
   }
@@ -169,7 +169,7 @@ class Archive extends ModTemplate {
       $ts:	tx.transaction.ts,
       $type:	msgtype
     };
-    this.app.storage.executeDatabase(sql, params, "archive");
+    await this.app.storage.executeDatabase(sql, params, "archive");
 
   }
 
