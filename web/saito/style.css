@@ -146,6 +146,10 @@ button, .button, .file-label {
   min-width: 180px;
 }
 
+a.button {
+  text-decoration: none;
+}
+
 i {
   transition: all .25s;
 }
@@ -1301,4 +1305,8 @@ i.fas.fa-times-circle {
 
 .share-link {
   color: #555;
+}
+
+a.header-icon-fullscreen.tip {
+  color: transparent;
 }
