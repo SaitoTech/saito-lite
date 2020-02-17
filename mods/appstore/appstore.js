@@ -114,11 +114,11 @@ class AppStore extends ModTemplate {
   //
   // publish modules into database on module install
   //
-  installModule(app) {
+  async installModule(app) {
 
     if (this.app.BROWSER == 1) { return; }
 
-    super.installModule(app);
+    await super.installModule(app);
 
     let fs = app.storage.returnFileSystem();
 
