@@ -758,13 +758,18 @@ class Arcade extends ModTemplate {
 
         let sql2 = `SELECT * FROM invites WHERE game_id = "${gametx.sig}"`;
         let rows2 = await this.app.storage.queryDatabase(sql2, {}, 'arcade');
-        gametx.msg.players = [];
-        gametx.msg.players_sigs = [];
 
-        for (let z = 0; z < rows2.length; z++) {
-          gametx.msg.players.push(rows2[z].player);
-          gametx.msg.players_sigs.push(rows2[z].acceptance_sig);
-        }
+
+	if (rows2.length > 0) {
+	  // only do if invites exist
+          gametx.msg.players = [];
+          gametx.msg.players_sigs = [];
+          for (let z = 0; z < rows2.length; z++) {
+            gametx.msg.players.push(rows2[z].player);
+            gametx.msg.players_sigs.push(rows2[z].acceptance_sig);
+          }
+
+	}
 
         rows[i].tx = JSON.stringify(gametx);
       }
