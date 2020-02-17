@@ -34,29 +34,35 @@ class Chat extends ChatCore {
 
 
   respondTo(type) {
-    if (type == 'email-chat') {
-      let obj = {};
-          obj.render = this.renderEmailChat;
-          obj.attachEvents = this.attachEventsEmailChat;
-          obj.sendMessage = this.sendMessage;
-      return obj;
+    switch (type) {
+      case 'email-chat':
+        return {
+          render: this.renderEmailChat,
+          attachEvents: this.attachEventsEmailChat,
+          sendMessage: this.sendMessage,
+        }
+      case 'chat-manager':
+        return {
+          render : (app, data) => {
+            data.chat = app.modules.returnModule("Chat");
+            ChatManager.initialize(app, data);
+            ChatManager.render(app, data);
+          },
+          attachEvents: (app, data) => {
+            ChatManager.attachEvents(app, data);
+          },
+          sendMessage: this.sendMessage,
+        }
+      case 'header-dropdown':
+        return {}
+      default:
+        return null;
     }
-    if (type == "header-dropdown") {
-      return {};
-    }
-    return null;
   }
-
 
   renderEmailChat(app, data) {
     let chat_self = app.modules.returnModule("Chat");
     data.chat = chat_self;
-//    data.chat.app = app;
-//    data.chat.groups = chat_self.groups;
-//    data.chat.active_groups = chat_self.active_groups;
-//    data.chat.addrController = chat_self.addrController;
-//    data.helpers = helpers;
-
     EmailChat.initialize(app, data);
     EmailChat.render(app, data);
   }

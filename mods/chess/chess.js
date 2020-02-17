@@ -1,15 +1,9 @@
-const saito = require('../../lib/saito/saito');
-const Header = require('../../lib/ui/header/header');
 const GameTemplate = require('../../lib/templates/gametemplate');
+
 var this_chess = null;
 var chess = null;
 var chessboard = null;
 
-
-
-//////////////////
-// CONSTRUCTOR  //
-//////////////////
 class Chessgame extends GameTemplate {
 
   constructor(app) {
@@ -50,9 +44,16 @@ class Chessgame extends GameTemplate {
       obj.title = "Chess";
       return obj;
     }
-   
+
     return null;
- 
+
+  }
+
+  initialize(app) {
+    this.app.modules.respondTo("chat-manager").forEach(mod => {
+      mod.respondTo('chat-manager').render(this_chess.app, this_chess);
+    });
+    super.initialize(app);
   }
 
   async initializeGame(game_id) {
@@ -233,6 +234,16 @@ console.log("QUEUE: " + this.game.queue);
     }
 
     window.onresize = () => this.board.resize();
+
+    // for (let i = 0; i < this.app.mods.length; i++) {
+    //   if (data.arcade.mods[i].respondTo('email-chat') != null) {
+    //     data.arcade.mods[i].respondTo('email-chat').attachEvents();
+    //   }
+    // }
+
+    this.app.modules.respondTo('chat-manager').forEach(mod => {
+      mod.respondTo('chat-manager').attachEvents(this_chess.app, this_chess);
+    })
   }
 
   updateStatusMessage(str = "") {

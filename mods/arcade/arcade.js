@@ -153,16 +153,15 @@ class Arcade extends ModTemplate {
   initialize(app) {
 
     super.initialize(app);
+    let { modules } = this.app;
 
     //
     // main-panel games
     //
-    let x = [];
-    x = this.app.modules.respondTo("arcade-games");
-    for (let i = 0; i < x.length; i++) {
-      this.mods.push(x[i]);
-      this.affix_callbacks_to.push(x[i].name);
-    }
+    modules.respondTo("arcade-games").forEach(mod => {
+      this.mods.push(mod);
+      this.affix_callbacks_to.push(mod.name);
+    });
 
     //
     // left-panel chat

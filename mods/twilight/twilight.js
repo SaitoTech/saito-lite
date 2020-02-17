@@ -245,6 +245,13 @@ class Twilight extends GameTemplate {
     twilight_self.addLogCardEvents();
   }
 
+  initialize(app) {
+    this.app.modules.respondTo("chat-manager").forEach(mod => {
+      mod.respondTo('chat-manager').render(app, this);
+      mod.respondTo('chat-manager').attachEvents(app, this);
+    });
+    super.initialize(app);
+  }
 
 
   ////////////////
