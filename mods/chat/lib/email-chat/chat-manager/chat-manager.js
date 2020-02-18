@@ -21,20 +21,21 @@ module.exports = ChatManager = {
       if (!document.querySelector('.chat-manager')) {
         let {el_parser} = data.chat.helpers;
         let parent_ids = ['content', 'container', 'main'];
-  
+
         parent_ids.forEach(id => {
           if (document.getElementById(id)) {
             parent_elem = document.getElementById(id);
           }
         });
-  
+
+        if (!parent_elem) return;
         parent_elem.append(el_parser('<div class="chat-manager"></div>'));
       }
       if (data.chat.active_groups == 0 && data.chat.groups.length > 0) data.chat.active_groups = [data.chat.groups[0]];
       data.chat.active_groups.forEach(group => this.addChatBox(app, data, group));
     }
   },
-  
+
   attachEvents(app, data) {},
 
   addChatBox(app, data, group) {

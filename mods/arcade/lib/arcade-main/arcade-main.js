@@ -231,7 +231,7 @@ salert("Accepting this game - it may take a minute for your browser to start ini
 
                   ArcadeLoader.render(app, data);
                   ArcadeLoader.attachEvents(app, data);
- 
+
                  return;
 
                 } else {
