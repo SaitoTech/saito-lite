@@ -166,7 +166,7 @@ class Arcade extends ModTemplate {
     //
     // left-panel chat
     //
-    x = this.app.modules.respondTo("email-chat");
+    let x = this.app.modules.respondTo("email-chat");
     for (let i = 0; i < x.length; i++) {
       this.mods.push(x[i]);
     }
@@ -174,9 +174,9 @@ class Arcade extends ModTemplate {
     //
     // right-panel sidebar
     //
-    x = this.app.modules.respondTo("arcade-sidebar");
-    for (let i = 0; i < x.length; i++) {
-      this.mods.push(x[i]);
+    let y = this.app.modules.respondTo("arcade-sidebar");
+    for (let i = 0; i < y.length; i++) {
+      this.mods.push(y[i]);
     }
 
     //
@@ -356,8 +356,12 @@ class Arcade extends ModTemplate {
 
   addGameToOpenList(tx) {
 
-    if (!tx.transaction.sig) { return; }
-    if (tx.transaction.msg.over == 1) { return; }
+    if(!tx.transaction) {
+      return;
+    } else {
+      if (!tx.transaction.sig) { return; }
+      if (tx.transaction.msg.over == 1) { return; }
+    }
 
     let txmsg = tx.returnMessage();
 
@@ -415,8 +419,12 @@ class Arcade extends ModTemplate {
 
   joinGameOnOpenList(tx) {
 
-    if (!tx.transaction.sig) { return; }
-    if (tx.transaction.msg.over == 1) { return; }
+    if(!tx.transaction) {
+      return;
+    } else {
+      if (!tx.transaction.sig) { return; }
+      if (tx.transaction.msg.over == 1) { return; }
+    }
 
     let txmsg = tx.returnMessage();
 
