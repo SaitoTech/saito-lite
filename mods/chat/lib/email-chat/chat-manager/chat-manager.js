@@ -21,6 +21,7 @@ module.exports = ChatManager = {
       if (!document.querySelector('.chat-manager')) {
         let {el_parser} = data.chat.helpers;
         let parent_ids = ['content', 'container', 'main'];
+        let parent_elem;
 
         parent_ids.forEach(id => {
           if (document.getElementById(id)) {
