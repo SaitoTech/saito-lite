@@ -1,4 +1,6 @@
+
 /** CHAT CSS **/
+
 .main {
   padding: unset;
 }
@@ -399,3 +401,7 @@ p {
     font-size: 0.9em;
   }
 }
+
+
+/* generic things we want */
+
