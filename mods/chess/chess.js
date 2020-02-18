@@ -235,12 +235,6 @@ console.log("QUEUE: " + this.game.queue);
 
     window.onresize = () => this.board.resize();
 
-    // for (let i = 0; i < this.app.mods.length; i++) {
-    //   if (data.arcade.mods[i].respondTo('email-chat') != null) {
-    //     data.arcade.mods[i].respondTo('email-chat').attachEvents();
-    //   }
-    // }
-
     this.app.modules.respondTo('chat-manager').forEach(mod => {
       mod.respondTo('chat-manager').attachEvents(this_chess.app, this_chess);
     })
