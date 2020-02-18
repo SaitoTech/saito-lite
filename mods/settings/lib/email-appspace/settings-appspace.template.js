@@ -1,60 +1,71 @@
 module.exports = SettingsAppspaceTemplate = (app) => {
 
-  html = `
+  let modules_html = app.options.modules
+    .map((mod, i) => {
+      let CHECKED = mod.active ? 'CHECKED': '';
+      return `
+        <div class="settings-app-select">
+          <label class="s-container">${mod.name}
+            <input
+              type="checkbox"
+              value="modules_mods_${i}"
+              class="modules_mods_checkbox"
+              name="modules_mods_${i}" id="${i}" ${CHECKED}/>
+            <span class="s-checkmark"></span>
+          </label>
+         </div>
+      `;
+    })
+    .join('');
+
+  return `
   <link rel="stylesheet" href="/settings/style.css">
   <div class="email-appspace-settings">
 
-    <h3>Activate / Disable Modules:</h3>
-  
-    <div class="grid-1-2-columns">
+    <div class="settings-grid">
 
-      <div class="">
+      <div class="settings-wallet-management">
 
-	<h3>Wallet Management:</h3>
+	      <h3>Wallet Management:</h3>
 
         <div class="grid-2">
 
-          <div>public key:</div>
+          <div class="public-key">public key:</div>
           <div>${app.wallet.returnPublicKey()}</div>
 
           <div>private key:</div>
-          <div><input id="privatekey" type="password" value="${app.wallet.returnPrivateKey()}" class="password" /></div>
+          <div class="private-key">
+            <input id="privatekey" type="text" value="${app.wallet.returnPrivateKey()}" class="password" />
+            <i class="see-password fas fa-eye" id="see-password"></i>
+          </div>
 
-	</div>
+	      </div>
 
-        <button id="reset-account-btn" class="reset-account-btn" style="float:left;margin-right:15px;">Reset Account</button>
-        <button id="backup-account-btn" class="backup-account-btn" style="float:left;margin-right:15px;">Manual Backup</button>
-        <button id="restore-account-btn" class="restore-account-btn" style="float:left;margin-right:15px">Restore Account</button>
-
+        <div class="settings-buttons">
+          <button id="reset-account-btn" class="reset-account-btn"">Reset Account</button>
+          <button id="backup-account-btn" class="backup-account-btn"">Manual Backup</button>
+          <button id="restore-account-btn" class="restore-account-btn">Restore Account</button>
+          <button id="delete-account-btn" class="delete-account-btn">Delete Account</button>
         </div>
-
-	<h3>Installed Applications:L</h3>
-
-	<div class="">
-
-  `;
-   
-  for (let i = 0; i < app.options.modules.length; i++) {
-    html += `
-	<div class="">
-	  <input type="checkbox" value="modules_mods_${i}" class="modules_mods_checkbox" name="modules_mods_${i}" id="${i}"`;
-    if (app.options.modules[i].active == 1) { html += ' CHECKED'; }
-    html += ` /> ${app.options.modules[i].name}
-	</div>
-   `;
-  }
-  html += `
-	</div>
-
-	<div id="settings-appspace" class="settings-appspace" style="clear:both;margin-top:20px"></div>
-
       </div>
+
+      <div class="settings-app-management">
+
+        <h3>Activate / Disable Modules:</h3>
+	      <h4>Installed Applications:</h4>
+        <div class="settings-app-list">
+        ${modules_html}
+        </div>
+      </div>
+
+	    <div id="settings-appspace" class="settings-appspace"></div>
+
     </div>
-
-    <div style="display:none"><input id="settings-restore-account" class="settings-restore-account" style="" type="file" /></div>
-
   </div>
-  `;
 
-  return html;
+  <div style="display:none"><input id="settings-restore-account" class="settings-restore-account" type="file" /></div>
+
+</div>
+  `;
 }
+

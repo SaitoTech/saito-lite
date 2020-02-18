@@ -6,7 +6,13 @@ class Archive extends ModTemplate {
 
     super(app);
     this.name = "Archive";
+    this.description = "Supports the saving and serving of network transactions";
+    this.categories = "Utilities Core";
+
     this.events = [];
+
+    this.description = "A tool for storing transactions for asynchronous retreival.";
+    this.categories  = "Utilities";
 
   }
 
@@ -90,7 +96,7 @@ class Archive extends ModTemplate {
         $ts		:	tx.transaction.ts ,
         $type		:	msgtype
       };
-      this.app.storage.executeDatabase(sql, params, "archive");
+      await this.app.storage.executeDatabase(sql, params, "archive");
     }
 
   }
@@ -114,7 +120,7 @@ class Archive extends ModTemplate {
         $publickey	:	authorizing_publickey
       };
 
-      this.app.storage.executeDatabase(sql, params, "archive");
+      await this.app.storage.executeDatabase(sql, params, "archive");
 
     }
   }
@@ -163,7 +169,7 @@ class Archive extends ModTemplate {
       $ts:	tx.transaction.ts,
       $type:	msgtype
     };
-    this.app.storage.executeDatabase(sql, params, "archive");
+    await this.app.storage.executeDatabase(sql, params, "archive");
 
   }
 

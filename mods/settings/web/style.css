@@ -1,21 +1,58 @@
-.settings-grid {
-    display: grid;
-    grid-template-columns: 7em 1fr;
-    grid-gap: 10px;
-    margin: 10px 0;
-}
+.settings-grid {}
 
 .settings-buttons {
-    display: grid;
-    grid-template-columns: 15em 15em;
-    grid-gap: 10px;
-    margin: 10px 0;
-}
-
-#privatekey {
-    width: 95%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 1em;
 }
 
 #qrcode {
-    display: inline-block;
+  display: inline-block;
+}
+
+#see-password {
+  line-height: 40px;
+}
+
+.password {
+  font-family: p-word;
+}
+
+.email-appspace-settings {
+  max-width: 900px;
+}
+
+.settings-wallet-management {
+  margin: 0 0 2em 0;
+}
+
+.settings-app-management {
+  margin: 1em 0;
+}
+
+.private-key {
+  display: grid;
+    grid-template-columns: auto 1.2em;
+}
+
+.settings-app-list {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  border: 1px solid #8888;
+  padding: 1em;
+}
+
+.settings-app-select {
+  line-height: 24px;
+}
+
+@media only screen and (max-width: 600px) {
+  .settings-buttons {
+    grid-template-columns: 1fr;
+    grid-gap: 3px;
+  }
+  .settings-app-list {
+    grid-template-columns: 1fr 1fr;
+  }
 }

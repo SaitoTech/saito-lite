@@ -1,16 +1,17 @@
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
-const ChatGroup = require('./lib/chatgroup');
+const ChatGroup = require('./chatgroup');
 
 class ChatCore extends ModTemplate {
 
   constructor(app) {
 
     super(app);
-    this.name = "Chat";
+    this.name   = "Chat";
     this.events = ['encrypt-key-exchange-confirm'];
     this.groups = [];
     this.active_groups = [];
+
   }
 
   receiveEvent(type, data) {
@@ -21,9 +22,11 @@ class ChatCore extends ModTemplate {
     if (type === "encrypt-key-exchange-confirm") {
       if (data.members === undefined) { return; }
       let newgroup = this.createChatGroup(data.members);
-      this.addNewGroup(newgroup);
-      this.sendEvent('chat-render-request', {});
-      this.saveChat();
+      if (newgroup) {
+        this.addNewGroup(newgroup);
+        this.sendEvent('chat-render-request', {});
+        this.saveChat();
+      }
     }
 
   }
@@ -59,16 +62,18 @@ class ChatCore extends ModTemplate {
   async onPeerHandshakeComplete(app, peer) {
 
     // if (this.groups.length == 0) {
-    let { publickey } = peer.peer;
+    let { publickey, name } = peer.peer;
+
     //
     // create mastodon server
     //
     let members = [publickey];
     let newgroup = this.createChatGroup(members);
+
     if (newgroup) {
+      newgroup.name = name ? name : newgroup.name;
       this.addNewGroup(newgroup);
     }
-    // }
 
     let group_ids = this.groups.map(group => group.id);
 
@@ -98,6 +103,8 @@ class ChatCore extends ModTemplate {
     }
 
     this.sendEvent('chat-render-request', {});
+    this.sendEvent('chat-render-box-request', {});
+
     this.saveChat();
   }
 
@@ -120,7 +127,7 @@ class ChatCore extends ModTemplate {
     identicon = this.app.keys.returnIdenticon(address);
 
     for (let i = 0; i < this.groups.length; i++) {
-      if (this.groups[i].id == id) { return; }
+      if (this.groups[i].id == id) { return null; }
     }
 
     return {
@@ -159,7 +166,7 @@ class ChatCore extends ModTemplate {
     if (conf == 0) {
       if (txmsg.request == "chat message") {
         if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) { return; }
-	this.receiveMessage(app, tx);
+        this.receiveMessage(app, tx);
       }
     }
 
@@ -171,16 +178,19 @@ class ChatCore extends ModTemplate {
   //
   handlePeerRequest(app, req, peer, mycallback) {
 
+//console.log("REQUEST DETAILS: " + JSON.stringify(req));
+
     if (req.request == null) { return; }
     if (req.data == null) { return; }
 
-    let tx = req.data //new saito.transaction(JSON.parse(req.data));
+    let tx = req.data;
 
     try {
 
       switch (req.request) {
 
         case "chat message":
+//console.log("RECEIVED A CHAT MESSAGE!");
           this.receiveMessage(app, new saito.transaction(tx.transaction));
           if (mycallback) { mycallback({ "payload": "success", "error": {} }); };
           break;
@@ -215,6 +225,8 @@ class ChatCore extends ModTemplate {
 
     let txmsg = tx.returnMessage();
 
+//console.log("WE RECEIVED MSG: " + JSON.stringify(txmsg));
+
     //
     // add alert if we are not in a chat-positive application
     //
@@ -226,14 +238,26 @@ class ChatCore extends ModTemplate {
 
 
     this.groups.forEach(group => {
+
       if (group.id == txmsg.group_id) {
-        let msg_type = tx.transaction.from[0].add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
-        txmsg.identicon = this.app.keys.returnIdenticon(tx.transaction.from[0].add);
-        let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: msg_type });
-        group.messages.push(msg);
+
+        let from_add = tx.transaction.from[0].add;
+        let msg_type = from_add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
+
+        this.addrController.fetchIdentifiers([from_add]);
+        let message = Object.assign(txmsg, {
+          sig: tx.transaction.sig,
+          type: msg_type,
+          identicon: this.app.keys.returnIdenticon()
+        });
+
+        group.messages.push(message);
 
         if (this.app.wallet.returnPublicKey() != txmsg.publickey) {
-          this.sendEvent('chat_receive_message', msg);
+          let identifier = app.keys.returnIdentifierByPublicKey(message.publickey);
+          let title =  identifier ? identifier : message.publickey;
+          app.browser.sendNotification(title, message.message, 'chat-message-notification');
+          this.sendEvent('chat_receive_message', message);
         }
 
         this.sendEvent('chat-render-request', {});

@@ -11,11 +11,11 @@ module.exports = EmailBarsMenu = {
     let email_apps = document.querySelector(".email-apps");
     for (let i = 0; i < data.mods.length; i++) {
       if (data.mods[i].respondTo("email-appspace") != null) {
-	if (data.mods[i].name === "MyQRCode") {
+        if (data.mods[i].name === "MyQRCode") {
           email_apps.innerHTML += `<li class="email-apps-item email-apps-item-${i}" style="display:none" id="${i}">${data.mods[i].name}</li>`;
-	} else {
+        } else {
           email_apps.innerHTML += `<li class="email-apps-item email-apps-item-${i}" id="${i}">${data.mods[i].name}</li>`;
-	}
+        }
       }
     }
 

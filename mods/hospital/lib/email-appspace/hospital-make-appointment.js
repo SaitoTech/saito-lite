@@ -10,6 +10,7 @@ module.exports = HospitalMakeAppointment = {
       document.querySelector(".email-appspace").innerHTML = HospitalMakeAppointmentTemplate();
     },
 
+
     attachEvents(app, data) {
 
       document.getElementById('appointment-date')
@@ -22,8 +23,6 @@ module.exports = HospitalMakeAppointment = {
 	  let appointments_obj = document.querySelector(".appointments");	
 	      appointments_obj.innerHTML = "";
 
-alert("MAKING APPOINTMENT FOR: " + jsdate.getTime());
-
 	  //
 	  // query MOF servers
 	  //
@@ -32,10 +31,9 @@ alert("MAKING APPOINTMENT FOR: " + jsdate.getTime());
 
           data.hospital.sendPeerDatabaseRequest("hospital", "hospitals JOIN appointments", "*", "appointments.hospital_id = hospitals.id ORDER BY hospitals.id", null, function(res) {
 
+//
 //	  appointmentsmod.sendPeerDatabaseRequest("appointments", "appointments", "*", "", null, function(res) {
-
-
-alert(JSON.stringify(res.rows));
+//
 	    let appointments = [];
             if (res.rows == undefined) {
 	      alert("No appointments available at this time.");
@@ -45,7 +43,7 @@ alert(JSON.stringify(res.rows));
             }
 
             Array.from(document.getElementsByClassName('appointment-time-select')).forEach(appointment => {
-              appointment.addEventListener('change', (e) => {
+              appointment.addEventListener('change', async (e) => {
 
 		let value = e.currentTarget.value;
 		if (value === "select") { return; }
@@ -54,9 +52,13 @@ alert(JSON.stringify(res.rows));
 
 		let div_selected	= "appointment-time-select-"+id;
 		let slot_selected 	= value;
-	
-		let sc = sconfirm("Do you want to make an appointment at this hospital for "+value);
+
+		let sc = await sconfirm("Do you want to make an appointment at this hospital for "+value);
 		if (sc) {
+
+		  data.appointment = {};
+		  data.appointment.hospital_id = id;
+		  data.appointment.slot_selected = slot_selected;
 
 	          HospitalConfirmAppointment.render(app, data);
 	          HospitalConfirmAppointment.attachEvents(app, data);
@@ -65,9 +67,11 @@ alert(JSON.stringify(res.rows));
 
 	      })
 	    });
-
           })
       })
     }
-
 }
+
+
+
+

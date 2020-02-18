@@ -10,6 +10,11 @@ class Debug extends ModTemplate {
 
     this.app            = app;
     this.name           = "Debug";
+    this.description    = "Email plugin that allows visual exploration and debugging of the Saito wallet.";
+    this.categories     = "Utilities Core";
+
+    this.description = "A debug configuration dump for Saito";
+    this.categories  = "Dev Utilities";
 
     return this;
   }

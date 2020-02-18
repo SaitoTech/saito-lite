@@ -1,8 +1,8 @@
 module.exports = AppStoreAppspaceTemplate = () => {
 
   return `
-<link rel="stylesheet" type="text/css" href="/appstore/css/email-appspace.css">
-
+  
+<link rel="stylesheet" href="/appstore/css/email-appspace.css" />
 <div class="appspace-appstore-container">
 
   <div class="appstore-header-featured grid-2">
@@ -22,7 +22,7 @@ module.exports = AppStoreAppspaceTemplate = () => {
     <h4>Categories
         <div class="app-category-checkbox app-category-all">
           <label class="s-container">All
-            <input type="checkbox" name="app-all" id="app-all" />
+            <input type="checkbox" name="app-all" id="app-all" checked/>
             <span class="s-checkmark"></span>
           </label>
         </div>
@@ -39,7 +39,7 @@ module.exports = AppStoreAppspaceTemplate = () => {
   <fieldset class="appstore-publish">
     <h3>Are you a Developer?</h3>
     <p>
-      It takes about five minutes to code your first Saito Application: <a href="https://org.saito.tech/developers" target="_saito">click here to learn how</a>.
+      It takes about five minutes to code your first Saito Application: <a href="https://org.saito.tech/introduction-to-saito-development" target="_saito">click here to learn how</a>.
     </p>
     <p>
       When you are done, publish your applications to the network for anyone to install and use:

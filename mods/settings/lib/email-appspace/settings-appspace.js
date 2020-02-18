@@ -30,6 +30,14 @@ module.exports = SettingsAppspace = {
         }
       }
 
+      document.getElementById("privatekey").onclick = function(e) {
+        document.getElementById("privatekey").toggleClass("password");
+      }
+
+      document.getElementById("see-password").onclick = function(e) {
+        document.getElementById("privatekey").toggleClass("password");
+      }
+
 
       //
       // install module (button)
@@ -38,7 +46,8 @@ module.exports = SettingsAppspace = {
 
         ckbx.onclick = async (e) => {
 
-	  let thisid = parseInt(e.currentTarget.id);
+    let thisid = parseInt(e.currentTarget.id);
+    let currentTarget = e.currentTarget;
 
 	  if (e.currentTarget.checked == true) { 
 	    let sc = await sconfirm("Reactivate this module?");
@@ -56,13 +65,19 @@ module.exports = SettingsAppspace = {
 	      app.storage.saveOptions();
 	      window.location = window.location;
 	    } else {
-	      window.location = window.location;
+        currentTarget.checked = true;
 	    }
 	  }
 
         };
       });
 
+
+
+      document.getElementById('backup-account-btn')
+        .addEventListener('click', (e) => {
+	  app.wallet.backupWallet();
+      });
 
 
       document.getElementById('restore-account-btn')
@@ -112,19 +127,8 @@ alert("Cancelling Wallet Restoration...");
 
 
 
-
-      document.getElementById('restore-account-btn')
-        .addEventListener('click', (e) => {
-
-	  let pass = sprompt("Please provide your password to decrypt this wallet: ");
-
-	  alert("Provided: " + pass);
-
-      });
-
-
       document.getElementById('reset-account-btn')
-        .addEventListener('click', (e) => {
+        .onclick = (e) => {
 
           app.wallet.resetWallet();
           salert("Wallet reset!");
@@ -136,7 +140,23 @@ alert("Cancelling Wallet Restoration...");
 	  data.email.body.render(app, data);
 	  data.email.body.attachEvents(app, data);
 
-      });
+      };
+
+      document.getElementById('delete-account-btn')
+        .onclick = async (e) => {
+
+          await app.storage.resetOptions();
+          await salert("Account deleted!");
+
+          data.email.emails.inbox = [];
+          data.email.emails.sent = [];
+          data.email.emails.trash = [];
+
+          // data.email.body.render(app, data);
+          // data.email.body.attachEvents(app, data);
+
+          window.location = window.location;
+      };
     },
 
 }

@@ -1,7 +1,7 @@
 module.exports = AppStoreBundleConfirmTemplate = (publickey) => {
 
   return `
-<link rel="stylesheet" type="text/css" href="/appstore/css/email-appspace.css">
+
 
   The AppStore identified by publickey ${publickey} has generated a new Saito bundle for you.
 

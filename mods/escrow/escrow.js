@@ -10,6 +10,9 @@ class Escrow extends ModTemplate {
 
     this.app            = app;
     this.name           = "Escrow";
+    this.description    = "BETA - a simple module with integrated Escrow services in non-Saito crypto channels";
+    this.categories     = "Utility Finance";
+
     this.publickey      = app.wallet.returnPublicKey();
 
     this.escrow         = {};
@@ -17,8 +20,6 @@ class Escrow extends ModTemplate {
     this.escrow.balance	= 0.0;
     this.escrow.create_pending = 0;
 
-    this.description    = "A simple module to enable Escrow services";
-    this.categories     = "Finance";
 
 
 
@@ -164,7 +165,6 @@ console.log("ESCROW ON CONF 0: " + JSON.stringify(tx.transaction));
 
       if (txmsg.module == escrow_self.name) {
 
-
         //
 	// START MONITORING IF BALANCE EXISTS
 	//
@@ -173,7 +173,6 @@ console.log("--------------------------------");
 console.log(JSON.stringify(txmsg));
 console.log("--------------------------------");
 	}
-
 
 
 	//

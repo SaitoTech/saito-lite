@@ -8,33 +8,53 @@ module.exports = ProfileAppspace = {
 
     attachEvents(app, data) {
 
+      let email_registered = app.keys.returnEmail(app.wallet.returnPublicKey());
+      let identifier_registered = app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey());
+
+      let tutmod = app.modules.returnModule("Tutorial");
+      if (tutmod) {
+
+        document.querySelector('.registering-email-address-info').addEventListener('click', (e) => {
+	  if (email_registered != "") {
+	    salert("Identifier already registered!");
+	  } else {
+            tutmod.welcomeBackupModal();
+	  }
+        });
+
+        document.querySelector('.registering-saito-address-info').addEventListener('click', (e) => {
+	  if (email_registered != "") {
+	    salert("Legacy Email already registered");
+	  } else {
+            tutmod.registerIdentifierModal();
+	  }
+        });
+
+      }
+
+
       document.getElementById('profile-avatar')
         .addEventListener('click', (e) => {
-          document.getElementById("profile-update-avatar").click();
+          document.getElementById("profile-upload-avatar").click();
       });
 
 
-      document.getElementById('profile-update-avatar')
+      document.getElementById('profile-upload-avatar')
 	.onchange = async function(e) {
 
 	  let update_avatar = confirm("Do you want to use this new avatar?");
 	  if (update_avatar) {
 
             let selectedFile = this.files[0];
-            //if (selectedFile.type !== "application/zip") {
-            //  salert('Incorrect File Type, please submit a zip file');
-            //  return;
-            //}
 
             var base64_reader = new FileReader();
 	    base64_reader.onloadend = function() {
-alert("RESULT: " + base64_reader.result);
 	      data.profile.updatePublicIdenticon(app, base64_reader.result);
             }
             base64_reader.readAsDataURL(selectedFile);
 
 	  } else {
-alert("Not updating avatar");
+      salert("Not updating avatar");
 	  }
       };
 

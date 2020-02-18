@@ -10,7 +10,13 @@ class Profile extends ModTemplate {
 
     this.app            = app;
     this.name           = "Profile";
+    this.description    = "BETA module uses circulating transactions on the blockchain to keep profile information publicly circulating";
+    this.categories     = "Utilities";
+
+
     this.link           = "/email?module=settings";
+    this.categories     = "UI Admin Utilities";
+    this.description    = "User profile module for Saito";
 
     this.profile        = this.loadProfile(this.app);
     this.profile_utxo   = "";
@@ -28,7 +34,7 @@ class Profile extends ModTemplate {
       let obj = {};
 	  obj.render = function (app, data) {
 	    data.profile = app.modules.returnModule("Profile");
-     	    document.getElementById("settings-appspace").innerHTML += '<a href="">PROFILE PAGE HERE</a>';
+     	    document.getElementById("settings-appspace").innerHTML += '<a class="button" href="/email/?module=profile">View/Edit Profile</a>';
           }
 	  obj.attachEvents = function (app, data) {
 	    data.profile = app.modules.returnModule("Profile");
@@ -70,18 +76,13 @@ class Profile extends ModTemplate {
 	if (txmsg.request == "update identicon") {
 	  if (txmsg.identicon != "") {
 	    app.keys.updateIdenticon(tx.transaction.from[0].add, txmsg.identicon);
+	    try {
+	      document.querySelector("profile-avatar").innerHTML = '<img style="max-width:100px;max-height:100px" src="'+txmsg.identicon+'">';
+	    } catch (err) {
+	    }
 	  }
 	}
       }
-
-
-      //
-      //
-      //
-      if (tx.transaction.from[0].add == app.wallet.returnPublicKey()) {
-
-      }
-
     }
   }
 

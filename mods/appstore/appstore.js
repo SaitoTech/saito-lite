@@ -1,18 +1,14 @@
-var ModTemplate;
-try {
-  ModTemplate = require('ModTemplate');
-} catch {
-  ModTemplate = require('../../lib/templates/modtemplate');
-}
+const helpers = require('../../lib/helpers/index');
+const ModTemplate = require('../../lib/templates/modtemplate');
 const AppStoreAppspace = require('./lib/email-appspace/appstore-appspace');
 const AppStoreBundleConfirm = require('./lib/email-appspace/appstore-bundle-confirm');
-
 const fs = require('fs');
 const path = require('path');
 
 //
-// recursively go through and find all files in dir
+// supporting utility functions
 //
+// recursively go through and find all files in dir
 function getFiles(dir) {
   const dirents = fs.readdirSync(dir, { withFileTypes: true });
   const files = dirents.map((dirent) => {
@@ -21,18 +17,11 @@ function getFiles(dir) {
   });
   return Array.prototype.concat(...files);
 }
-
-
 function returnSlug(nme) {
   nme = nme.toLowerCase();
   nme = nme.replace(/\t/g, "_");
   return nme;
 }
-
-
-//
-// pass an empty dir of files
-//
 function deleteDirs(dir) {
   const dirents = fs.readdirSync(dir, { withFileTypes: true });
   dirents.forEach((dirent) => {
@@ -48,19 +37,18 @@ function deleteDirs(dir) {
 }
 
 
-
-
-
-
-
 class AppStore extends ModTemplate {
 
   constructor(app) {
     super(app);
 
     this.app = app;
-    this.name = "AppStore";
-    this.featured_apps = ['Email','Testing','Escrow','Design'];
+
+    this.name          = "AppStore";
+    this.description   = "Application manages installing, indexing, compiling and serving Saito modules.";
+    this.categories    = "Utilities Dev";
+
+    this.featured_apps = ['Email', 'Testing', 'Escrow', 'Design'];
   }
 
 
@@ -70,19 +58,22 @@ class AppStore extends ModTemplate {
   respondTo(type) {
     if (type == 'email-appspace') {
       let obj = {};
-          obj.render = this.renderEmail;
-          obj.attachEvents = this.attachEventsEmail;
+      obj.render = this.renderEmail;
+      obj.attachEvents = this.attachEventsEmail;
+      obj.script = '<link ref="stylesheet" href="/appstore/css/email-appspace.css" />';
       return obj;
     }
     return null;
   }
   renderEmail(app, data) {
-     data.appstore = app.modules.returnModule("AppStore");
-     AppStoreAppspace.render(app, data);
+    data.appstore = app.modules.returnModule("AppStore");
+    data.helpers = helpers;
+    AppStoreAppspace.render(app, data);
   }
   attachEventsEmail(app, data) {
-     data.appstore = app.modules.returnModule("AppStore");
-     AppStoreAppspace.attachEvents(app, data);
+    data.appstore = app.modules.returnModule("AppStore");
+    data.helpers = helpers;
+    AppStoreAppspace.attachEvents(app, data);
   }
 
 
@@ -90,39 +81,27 @@ class AppStore extends ModTemplate {
   //
   // database queries inbound here
   //
-  async handlePeerRequest(app, message, peer, mycallback=null) {
+  async handlePeerRequest(app, message, peer, mycallback = null) {
 
-    if (message.request === "appstore load modules") {
-
-      let sql = "SELECT name, description, version, categories, publickey, unixtime, bid, bsh FROM modules WHERE featured = 1";
-      let params = {};
-      let rows = await this.app.storage.queryDatabase(sql, params, message.data.dbname);
-
-      let res = {};
-          res.err = "";
-          res.rows = rows;
-
-      mycallback(res);
-
-    }
+    super.handlePeerRequest(app, message, peer, mycallback);
 
 
     if (message.request === "appstore search modules") {
 
-      let squery1 = "%"+message.data+"%";
+      let squery1 = "%" + message.data + "%";
       let squery2 = message.data;
 
       let sql = "SELECT name, description, version, categories, publickey, unixtime, bid, bsh FROM modules WHERE description LIKE $squery1 OR name = $squery2";
       let params = {
-	$squery1	: squery1  ,
-	$squery2	: squery2  ,
+        $squery1: squery1,
+        $squery2: squery2,
       };
 
       let rows = await this.app.storage.queryDatabase(sql, params, "appstore");
 
       let res = {};
-          res.err = "";
-          res.rows = rows;
+      res.err = "";
+      res.rows = rows;
 
       mycallback(res);
 
@@ -135,11 +114,11 @@ class AppStore extends ModTemplate {
   //
   // publish modules into database on module install
   //
-  installModule(app) {
+  async installModule(app) {
 
     if (this.app.BROWSER == 1) { return; }
 
-    super.installModule(app);
+    await super.installModule(app);
 
     let fs = app.storage.returnFileSystem();
 
@@ -159,7 +138,7 @@ class AppStore extends ModTemplate {
       let mods_dir_path = path.resolve(__dirname, '../');
       let dirs = getDirectories(mods_dir_path);
 
-      if (!fs.existsSync(path.resolve(__dirname, `mods`))){
+      if (!fs.existsSync(path.resolve(__dirname, `mods`))) {
         fs.mkdirSync(path.resolve(__dirname, `mods`));
       }
 
@@ -175,7 +154,7 @@ class AppStore extends ModTemplate {
           zlib: { level: 9 } // Sets the compression level.
         });
 
-        archive.on('error', function(err) {
+        archive.on('error', function (err) {
           throw err;
         });
 
@@ -189,7 +168,7 @@ class AppStore extends ModTemplate {
         file_array.forEach(file => {
           let fileReadStream = fs.createReadStream(file);
           var fileArray = path.relative(process.cwd(), file).split('/');
-          fileArray.splice(0,2);
+          fileArray.splice(0, 2);
           let filename = fileArray.join('/');
           // let pathBasename = path.basename(file);
           archive.append(fileReadStream, { name: filename });
@@ -197,22 +176,17 @@ class AppStore extends ModTemplate {
 
         // listen for all archive data to be written
         // 'close' event is fired only when a file descriptor is involved
-        output.on('close', function() {
+        output.on('close', function () {
 
           let mod_zip_filename = path.basename(this.path);
           let mod_path = path.resolve(__dirname, `mods/${mod_zip_filename}`);
-          // let zip_text = fs.readFileSync(mod_path, 'utf-8');
-          // let name, description = this.getNameAndDescriptionFromZip(zip_text);
-          //
-          // read in the zip file as base64 and propagate it to the network
-          //
           let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
-          let zip = fs.readFileSync(mod_path, { encoding: 'binary' });
+          let zip = fs.readFileSync(mod_path, { encoding: 'base64' });
 
           newtx.transaction.msg = {
             module: "AppStore",
             request: "submit module",
-            zip,
+            module_zip: zip,
             name: dir,
           };
 
@@ -236,43 +210,52 @@ class AppStore extends ModTemplate {
     let txmsg = tx.returnMessage();
     if (conf == 0) {
 
-      switch(txmsg.request) {
+      switch (txmsg.request) {
         case 'submit module':
           this.submitModule(blk, tx);
           break;
         case 'request bundle':
-	  //
-	  //
-	  //
-console.log("REQUEST BVUNDLE TX received...");
-	  if (tx.isFrom(app.wallet.returnPublicKey())) {
-	    try {
-	      document.getElementById("email-appspace").innerHTML = "Your request has been received by the network. Your upgrade should be completed within about 45 seconds.";
-	    } catch (err) {
-	    }
-	  }
-	  if (!tx.isTo(app.wallet.returnPublicKey())) { return; }
-console.log("i am going to produce a bundle...");
+          if (tx.isFrom(app.wallet.returnPublicKey())) {
+            try {
+              document.querySelector(".appstore-loading-text").innerHTML = "Your request has been received by the network. Your upgrade should be completed within about 45 seconds.";
+            } catch (err) {
+            }
+          }
+          if (!tx.isTo(app.wallet.returnPublicKey())) { return; }
           this.requestBundle(blk, tx);
           break;
         case 'receive bundle':
           if (tx.isTo(app.wallet.returnPublicKey()) && !tx.isFrom(app.wallet.returnPublicKey())) {
-	    //
-	    //
-	    //
-	    if (app.options.appstore) {
-	      if (app.options.appstore.default != "") {
-		if (tx.isFrom(app.options.appstore.default)) {
+            console.log("##### BUNDLE RECEIVED #####");
+            //
+            // 
+            //
+            if (app.options.appstore) {
+              if (app.options.appstore.default != "") {
+                if (tx.isFrom(app.options.appstore.default)) {
                   this.receiveBundle(blk, tx);
-		}
-	      }
-	    }
+                }
+              }
+            }
           }
           break;
       }
+    } else {
+
+      //
+      // create a transaction to trigger block producrtion
+      //
+      if (blk.block.id < 15 && conf == 0) {
+
+        let newtx = app.wallet.createUnsignedTransactionWithDefaultFee(app.wallet.returnPublicKey());
+        newtx.transaction.msg.module = "Debugging";
+        newtx.transaction.msg.description = "Producing a quick block to push our App Modules off the recent blockchain";
+        newtx = app.wallet.signTransaction(newtx);
+        app.network.propagateTransaction(newtx);
+
+      }
     }
   }
-
 
 
 
@@ -282,60 +265,93 @@ console.log("i am going to produce a bundle...");
     const path = require('path');
     const unzipper = require('unzipper');
 
-    fs.writeFileSync(path.resolve(__dirname, zip_path), zip_bin, { encoding: 'binary' });
+    //
+    // convert base64 to vinary
+    //
+    let zip_bin2 = Buffer.from(zip_bin, 'base64').toString('binary');
+
+    fs.writeFileSync(path.resolve(__dirname, zip_path), zip_bin2, { encoding: 'binary' });
 
     let name = 'Unknown Module';
     let description = 'unknown';
     let categories = 'unknown';
 
     try {
+
       const directory = await unzipper.Open.file(path.resolve(__dirname, zip_path));
-      // const file =
+
       let promises = directory.files.map(async file => {
+
+        if (file.path.substr(0,3) == "lib") { return; }
+        if (file.path.substr(-2) !== "js") { return; }
+
         let content = await file.buffer();
         let zip_text = content.toString('utf-8')
+	let zip_lines = zip_text.split("\n");
 
-        //
-        // get name and description
-        let getNameRegex = RegExp('[\n\r]*this.name\s*([^\n\r]*)');
-        let getDescriptionRegex = RegExp('[\n\r]*this.description\s*([^\n\r]*)');
-        let getCategoriesRegex = RegExp('[\n\r]*this.categories\s*([^\n\r]*)');
-        let cleanupRegex = RegExp('=(.*)');
+	let found_name = 0;
+	let found_description = 0;
+	let found_categories = 0;	
 
-        let nameMatch = zip_text.match(getNameRegex);
-        let descriptionMatch = zip_text.match(getDescriptionRegex);
-        let categoriesMatch = zip_text.match(getCategoriesRegex);
+	for (let i = 0; i < zip_lines.length && i < 50 && (found_name == 0 || found_description == 0 || found_categories == 0); i++) {
 
-        if (!nameMatch) { return; }
-        if (nameMatch[1].length > 30) { return; }
-        if (nameMatch[1] == "this.name\s*([^\n\r]*)');") { return; }
+	  //
+	  // get name
+	  //
+	  if (/this.name/.test(zip_lines[i])) {
+	    found_name = 1;
+	    if (zip_lines[i].indexOf("=") > 0) {
+	      name = zip_lines[i].substring(zip_lines[i].indexOf("="));
+	      name = cleanString(name);
+	      name = name.replace(/^\s+|\s+$/gm,'');
+	      if (name.length > 50) { name = "Unknown"; }
+	    }
+	  }
+
+	  //
+	  // get description
+	  //
+	  if (/this.description/.test(zip_lines[i])) {
+	    found_description = 1;
+	    if (zip_lines[i].indexOf("=") > 0) {
+	      description = zip_lines[i].substring(zip_lines[i].indexOf("="))    
+	      description = cleanString(description);
+	      description = description.replace(/^\s+|\s+$/gm,'');
+	    }
+	  }
+
+	  //
+	  // get categories
+	  //
+	  if (/this.categories/.test(zip_lines[i])) {
+	    found_categories = 1;
+	    if (zip_lines[i].indexOf("=") > 0) {
+	      categories = zip_lines[i].substring(zip_lines[i].indexOf("="))    
+	      categories = cleanString(categories);
+	      categories = categories.replace(/^\s+|\s+$/gm,'');
+	    }
+	  }
+
+	}
 
         function cleanString(str) {
+	  str = str.replace(/^\s+|\s+$/gm,'');
           str = str.substring(1, str.length - 1);
           return [...str].map(char => {
-            if (char == "\'" || char == "\"" || char == ";") return ''
-            return char
+            if (char == ' ') { return ' '; }
+            if (char == '.') { return '.'; }
+            if (char == ',') { return ','; }
+            if (char == '!') { return '!'; }
+            if (char == '`') { return ''; }
+            if (char == "\\" || char == "\'" || char == "\"" || char == ";") { return ''; }
+            if (! (/[a-zA-Z0-9_-]/.test(char))) { return ''; }
+            return char;
           }).join('');
         }
-
-        let nameCleanup = nameMatch[1].match(cleanupRegex);
-        if (!nameCleanup) { return; }
-        name = cleanString(nameCleanup[1]);
-
-        if (!descriptionMatch) { return; }
-        let descriptionCleanup = descriptionMatch[1].match(cleanupRegex);
-        if (!descriptionCleanup) { return; }
-        description = cleanString(descriptionCleanup[1]);
-
-        if (!categoriesMatch) { return; }
-        let categoriesCleanup = categoriesMatch[1].match(cleanupRegex);
-        if (!categoriesCleanup) { return; }
-        categories = cleanString(categoriesCleanup[1]);
-
       });
 
       await Promise.all(promises);
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
 
@@ -351,7 +367,46 @@ console.log("i am going to produce a bundle...");
 
   async submitModule(blk, tx) {
 
-    if (this.app.BROWSER == 1) { return; }
+    if (this.app.BROWSER == 1) { 
+
+      if (tx.isFrom(this.app.wallet.returnPublicKey())) {
+
+        let newtx = this.app.wallet.createUnsignedTransaction();
+            newtx.transaction.msg.module       = "Email";
+            newtx.transaction.msg.title        = "Saito Application Published";
+            newtx.transaction.msg.message      = `
+
+	    Your application is now available at the following link:
+
+	    <p></p>
+
+	    <a href="http://saito.io/email?module=appstore&app=${tx.transaction.ts}-${tx.transaction.sig}">http://saito.io/email?module=appstore&app=${tx.transaction.ts}-${tx.transaction.sig}</a>
+
+	    <p></p>
+
+	    or by searching on your preferred AppStore for the following APP-ID:
+
+	    <p></p>
+
+	     ${tx.transaction.ts}-${tx.transaction.sig}
+
+            <p></p>
+
+	    If your application does not appear shortly, it means there is a bug in the code preventing AppStores from compiling it successfully. We recommend that you <a href="https://org.saito.tech/developers">install Saito locally</a> and compile and test your module locally to eliminate any errors before uploading in this case.
+
+        `;
+        newtx = this.app.wallet.signTransaction(newtx);
+	let emailmod = this.app.modules.returnModule("Email");
+	if (emailmod) {
+          emailmod.emails.inbox.push(newtx);
+	}
+        this.app.storage.saveTransaction(newtx);
+
+      }
+
+      return; 
+
+    }
 
     let sql = `INSERT INTO modules (name, description, version, categories, publickey, unixtime, bid, bsh, tx, featured)
     VALUES ($name, $description, $version, $categories, $publickey, $unixtime, $bid, $bsh, $tx, $featured)`;
@@ -359,21 +414,24 @@ console.log("i am going to produce a bundle...");
     let { from, sig, ts } = tx.transaction;
 
     // should happen locally from ZIP
-    let { zip } = tx.returnMessage();
+    let { module_zip } = tx.returnMessage();
 
-    let { name, description, categories } = await this.getNameAndDescriptionFromZip(zip, `mods/module-${sig}-${ts}.zip`);
+    let { name, description, categories } = await this.getNameAndDescriptionFromZip(module_zip, `mods/module-${sig}-${ts}.zip`);
+
+    let featured_app = 0;
+    if (tx.transaction.from[0].add == this.app.wallet.returnPublicKey()) { featured_app = 1; }
 
     let params = {
-      $name: name,
-      $description	: description || '',
-      $version		: `${ts}-${sig}`,
+      $name:name,
+      $description: description || '',
+      $version: `${ts}-${sig}`,
       $categories: categories,
-      $publickey	: from[0].add,
-      $unixtime		: ts,
-      $bid		: blk.block.id,
-      $bsh		: blk.returnHash(),
-      $tx		: JSON.stringify(tx.transaction),
-      $featured		: 0,
+      $publickey: from[0].add,
+      $unixtime: ts,
+      $bid: blk.block.id,
+      $bsh: blk.returnHash(),
+      $tx: JSON.stringify(tx.transaction),
+      $featured: featured_app,
     };
     await this.app.storage.executeDatabase(sql, params, "appstore");
 
@@ -381,13 +439,13 @@ console.log("i am going to produce a bundle...");
     if (this.featured_apps.includes(name) && tx.isFrom(this.app.wallet.returnPublicKey())) {
 
       sql = "UPDATE modules SET featured = 0 WHERE name = $name";
-      params = { $name : name };
+      params = { $name: name };
       await this.app.storage.executeDatabase(sql, params, "appstore");
 
       sql = "UPDATE modules SET featured = 1 WHERE name = $name AND version = $version";
       params = {
-        $name : name,
-        $version : `${ts}-${sig}`,
+        $name: name,
+        $version: `${ts}-${sig}`,
       };
       await this.app.storage.executeDatabase(sql, params, "appstore");
 
@@ -437,16 +495,16 @@ console.log("i am going to produce a bundle...");
     //
     for (let i = 0; i < module_versions.length; i++) {
       sql = `SELECT * FROM modules WHERE version = $version`;
-      params = { $version : module_versions[i] };
+      params = { $version: module_versions[i] };
       let rows = await this.app.storage.queryDatabase(sql, params, "appstore");
 
       for (let i = 0; i < rows.length; i++) {
         let tx = JSON.parse(rows[i].tx);
         modules_selected.push(
           {
-            name : rows[i].name ,
-            description : rows[i].description ,
-            zip : tx.msg.zip
+            name: rows[i].name,
+            description: rows[i].description,
+            zip: tx.msg.module_zip
           }
         );
       }
@@ -458,29 +516,27 @@ console.log("i am going to produce a bundle...");
     //
     for (let i = 0; i < module_names.length; i++) {
       sql = `SELECT * FROM modules WHERE name = $name`;
-      params = { $name : module_names[i] };
+      params = { $name: module_names[i] };
       let rows = await this.app.storage.queryDatabase(sql, params, "appstore");
 
       for (let i = 0; i < rows.length; i++) {
         let tx = JSON.parse(rows[i].tx);
         modules_selected.push(
           {
-            name : rows[i].name ,
-            description : rows[i].description ,
-            zip : tx.msg.zip
+            name: rows[i].name,
+            description: rows[i].description,
+            zip: tx.msg.module_zip
           }
         );
       }
     }
-
-console.log("about to webpack this puppy!");
 
     //
     // WEBPACK
     //
     let bundle_filename = await this.bundler(modules_selected);
 
-console.log("done webpacking: " + bundle_filename);
+    console.log("done webpacking: " + bundle_filename);
 
     //
     // insert resulting JS into our bundles database
@@ -493,20 +549,20 @@ console.log("done webpacking: " + bundle_filename);
     sql = `INSERT INTO bundles (version, publickey, unixtime, bid, bsh, name, script) VALUES ($version, $publickey, $unixtime, $bid, $bsh, $name, $script)`;
     let { from, sig, ts } = tx.transaction;
     params = {
-      $version		:	`${ts}-${sig}`,
-      $publickey	:	from[0].add,
-      $unixtime		:	ts,
-      $bid		:	blk.block.id ,
-      $bsh		:	blk.returnHash(),
-      $name		: 	bundle_filename,
-      $script 		: 	bundle_binary,
+      $version: `${ts}-${sig}`,
+      $publickey: from[0].add,
+      $unixtime: ts,
+      $bid: blk.block.id,
+      $bsh: blk.returnHash(),
+      $name: bundle_filename,
+      $script: bundle_binary,
     }
     await this.app.storage.executeDatabase(sql, params, "appstore");
 
     //
     //
     //
-    let online_version = "http://"+this.app.options.server.endpoint.host+":"+this.app.options.server.endpoint.port+"/appstore/bundle/"+bundle_filename;
+    let online_version = "http://" + this.app.options.server.endpoint.host + ":" + this.app.options.server.endpoint.port + "/appstore/bundle/" + bundle_filename;
 
 
     //
@@ -588,11 +644,14 @@ console.log("done webpacking: " + bundle_filename);
       bash_script_content += `' {} \\;` + "\n";
 
       bash_script_delete += `rm -rf ../bundler/mods/${returnSlug(mod.name)}-${ts}-${hash}` + "\n";
-      fs.writeFileSync(path.resolve(__dirname, mod_path), mod.zip, { encoding: 'binary' });
-      return `appstore/bundler/mods/${mod.name.toLowerCase()}-${ts}-${hash}/${mod.name.toLowerCase()}`;
+      let zip_bin2 = Buffer.from(mod.zip, 'base64').toString('binary');
+      //fs.writeFileSync(path.resolve(__dirname, mod_path), mod.zip, { encoding: 'binary' });
+      fs.writeFileSync(path.resolve(__dirname, mod_path), zip_bin2, { encoding: 'binary' });
+      return `appstore/bundler/mods/${returnSlug(mod.name)}-${ts}-${hash}/${returnSlug(mod.name)}`;
     });
-    bash_script_delete += `rm -f ./*-${hash}.zip`;
-    bash_script_delete += `rm -f ./*-${hash}`;
+
+    bash_script_delete += `rm -rf *-${hash}.zip \n`;
+    bash_script_delete += `rm -rf *-${hash} \n`;
 
 
 
@@ -609,7 +668,7 @@ console.log("done webpacking: " + bundle_filename);
     // other filenames
     //
     let bundle_filename = `saito-${ts}-${hash}.js`;
-    let index_filename  = `index-${ts}-${hash}.js`;
+    let index_filename = `index-${ts}-${hash}.js`;
 
     //
     // write our index file for bundling
@@ -640,12 +699,12 @@ console.log("done webpacking: " + bundle_filename);
     try {
       let cwdir = __dirname;
       let unzip_command = 'sh ' + bash_script;
-      const { stdout, stderr } = await exec(unzip_command, {cwd : cwdir , maxBuffer : 4096 * 2048});
+      const { stdout, stderr } = await exec(unzip_command, { cwd: cwdir, maxBuffer: 4096 * 2048 });
     } catch (err) {
       console.log(err);
     }
 
-console.log("Module Paths: " + JSON.stringify(module_paths));
+    console.log("Module Paths: " + JSON.stringify(module_paths));
 
     //
     // cleanup
@@ -677,10 +736,10 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
 
     let txmsg = tx.returnMessage();
 
-      let data = {};
-          data.appstore = this;
-          data.bundle_appstore_publickey = tx.transaction.from[0].add;
-          data.appstore_bundle = txmsg.bundle;
+    let data = {};
+    data.appstore = this;
+    data.bundle_appstore_publickey = tx.transaction.from[0].add;
+    data.appstore_bundle = txmsg.bundle;
 
     AppStoreBundleConfirm.render(this.app, data);
     AppStoreBundleConfirm.attachEvents(this.app, data);
@@ -698,21 +757,16 @@ console.log("Module Paths: " + JSON.stringify(module_paths));
     let fs = app.storage.returnFileSystem();
     if (fs != null) {
 
-      expressapp.use('/'+encodeURI(this.name), express.static(__dirname + "/web"));
+      expressapp.use('/' + encodeURI(this.name), express.static(__dirname + "/web"));
       expressapp.get('/appstore/bundle/:filename', async (req, res) => {
 
-console.log("\n\n\nscriptname!");
         let scriptname = req.params.filename;
-
-console.log("REQUEST FOR SCRIPTNAME: " + scriptname);
 
         let sql = "SELECT script FROM bundles WHERE name = $scriptname";
         let params = {
-          $scriptname	:	scriptname
+          $scriptname: scriptname
         }
         let rows = await app.storage.queryDatabase(sql, params, "appstore");
-
-// console.log("ROWS: " + JSON.stringify(rows));
 
         if (rows) {
           if (rows.length > 0) {

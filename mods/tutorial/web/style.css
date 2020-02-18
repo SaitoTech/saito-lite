@@ -19,3 +19,7 @@
 #qrcode {
     display: inline-block;
 }
+
+i.installed.fas.fa-check-circle {
+  font-size: 3em;
+}

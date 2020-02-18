@@ -4,7 +4,7 @@ const LeaderboardRow = require('./arcade-right-sidebar-leaderboard-row.template.
 
 module.exports = ArcadeRightSidebar = {
 
-    render(app, data) {
+    async render(app, data) {
       let publickey = app.wallet.returnPublicKey();
       let id = app.keys.returnIdentifierByPublicKey(publickey);
 
@@ -22,14 +22,12 @@ module.exports = ArcadeRightSidebar = {
           += ObserverRow(data.arcade.observer[i], players, app.crypto.stringToBase64(JSON.stringify(data.arcade.observer[i])));
       }
 
-      data.arcade.leaderboard.forEach(async leader => {
-        if (app.crypto.isPublicKey(leader.winner)) {
-          leader.winner = await data.arcade.addrController.returnAddressHTMLPromise(leader.winner);
-        }
+      document.querySelector(".arcade-sidebar-active-leaderboard-body").innerHTML = '';
 
-        document.querySelector(".arcade-sidebar-active-leaderboard-body")
-                .innerHTML += LeaderboardRow(leader);
+      data.arcade.leaderboard.forEach(leader => {
+        document.querySelector(".arcade-sidebar-active-leaderboard-body").innerHTML += LeaderboardRow(leader);
       });
+
 
       //
       // arcade sidebar
@@ -38,6 +36,8 @@ module.exports = ArcadeRightSidebar = {
         let gameobj = mod.respondTo("arcade-sidebar");
         if (gameobj != null) {
 
+console.log("LOADING SIDEBAR: " + gameobj.module);
+
           let modname = "arcade-sidebar-"+mod.slug;
           let x = document.querySelector(("."+modname));
 
@@ -45,9 +45,14 @@ module.exports = ArcadeRightSidebar = {
             document.querySelector(".arcade-right-sidebar").innerHTML += `<div class="${modname}"></div>`;
           }
 
+        }
+      });
+      data.arcade.mods.forEach(mod => {
+        let gameobj = mod.respondTo("arcade-sidebar");
+        if (gameobj != null) {
           gameobj.render(app, data);
           gameobj.attachEvents(app, data);
-        }
+	}
       });
 
     },
@@ -66,15 +71,15 @@ module.exports = ArcadeRightSidebar = {
           app.modules.returnModule("Registry").showModal();
         }
 
-      let faucetmod = app.modules.returnModule("Faucet");
-      if (faucetmod != null) {
+      let rewardsmod = app.modules.returnModule("Rewards");
+      if (rewardsmod != null) {
         document.querySelector('.arcade-announcement').onclick = (e) => {
           document.querySelector('.arcade-main').innerHTML = '<div class="email-main"><div class="email-appspace"></div></div>';
           data = {};
           data.arcade = this;
-          data.faucet = faucetmod;
-          faucetmod.renderEmail(app, data);
-          faucetmod.attachEventsEmail(app, data);
+          data.rewards = rewardsmod;
+          rewardsmod.renderEmail(app, data);
+          rewardsmod.attachEventsEmail(app, data);
         }
       }
 

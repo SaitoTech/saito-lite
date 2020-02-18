@@ -12,36 +12,37 @@ class Email extends ModTemplate {
   constructor(app) {
     super(app);
 
-    this.name 			= "Email";
-    this.chat 			= null;
-    this.events			= ['chat-render-request'];
-    this.icon_fa		= "fas fa-envelope";
+    this.name = "Email";
+    this.description = "Essential wallet, messaging platform and extensible control panel for Saito applications";
+    this.categories = "Core Messaging Admin Productivity Utilities";
 
-    this.emails 		= {};
-    this.emails.inbox 		= [];
-    this.emails.sent 		= [];
-    this.emails.trash 		= [];
-    this.emails.active  	= "inbox";
-					// inbox
-					// outbox
-					// trash
+    this.chat = null;
+    this.events = ['chat-render-request'];
+    this.icon_fa = "fas fa-envelope";
 
-    this.mods   		= [];
+    this.emails = {};
+    this.emails.inbox = [];
+    this.emails.sent = [];
+    this.emails.trash = [];
+    this.emails.active = "inbox";
+    // inbox
+    // outbox
+    // trash
 
-    this.active 		= "email_list";
-    this.header_title		= "";
+    this.mods = [];
 
-    this.description = "A messaging tool and control panel for Saito";
-    this.categories  = "Messaging Admin Productivity Utilities";
+    this.active = "email_list";
+    this.header_title = "";
 
-    this.selected_email		= null;
 
-    this.appspace		= 0;	// print email-body with appspace
-    this.appspace_mod		= null;
-    this.appspace_mod_idx 	= -1; // index in mods of appspace module
+    this.selected_email = null;
 
-    this.uidata			= {};
-    this.uidata.mods		= [];
+    this.appspace = 0;	// print email-body with appspace
+    this.appspace_mod = null;
+    this.appspace_mod_idx = -1; // index in mods of appspace module
+
+    this.uidata = {};
+    this.uidata.mods = [];
     this.count = 0;
 
     // add our address controller
@@ -71,12 +72,15 @@ class Email extends ModTemplate {
     //
     // add an email
     //
+    
     let tx = app.wallet.createUnsignedTransaction();
-        tx.transaction.msg.module 	= "Email";
-        tx.transaction.msg.title 	= "Welcome to Saito";
-        tx.transaction.msg.message	= `
+    /*
+    tx.transaction.msg.module = "Email";
+    tx.transaction.msg.title = "Welcome to Saito";
+    tx.transaction.msg.message = `
 
 <p>Saito is an application blockchain. To get started:<p>
+<blockquote>
 <ol>
 <li>Get some free Saito tokens.</li>
 
@@ -84,15 +88,18 @@ class Email extends ModTemplate {
 
 <li>Earn more tokens as you use the network!</li>
 </ol>
+</blockquote>
 
     `;
     tx = this.app.wallet.signTransaction(tx);
-    this.emails.inbox.push(tx);
+    this.emails.inbox.unshift(tx);
 
-        tx = app.wallet.createUnsignedTransaction();
-        tx.transaction.msg.module 	= "Email";
-        tx.transaction.msg.title 	= "Sent Message Folder";
-        tx.transaction.msg.message	= "This folder is where your sent messages are stored...";
+    */
+
+    tx = app.wallet.createUnsignedTransaction();
+    tx.transaction.msg.module = "Email";
+    tx.transaction.msg.title = "Sent Message Folder";
+    tx.transaction.msg.message = "This folder is where your sent messages are stored...";
     tx = this.app.wallet.signTransaction(tx);
     this.emails.sent.push(tx);
 
@@ -100,9 +107,9 @@ class Email extends ModTemplate {
 
 
 
-  respondTo(type="") {
-    if (type == "header-dropdown") { 
-      return {}; 
+  respondTo(type = "") {
+    if (type == "header-dropdown") {
+      return {};
     }
     return null;
   }
@@ -127,7 +134,7 @@ class Email extends ModTemplate {
       this.mods.push(x[i]);
     }
 
-    this.uidata.mods	  = this.mods;
+    this.uidata.mods = this.mods;
     this.uidata.email = this;
     this.uidata.helpers = helpers;
 
@@ -169,19 +176,22 @@ class Email extends ModTemplate {
     //
     //
     //
-console.log("$$$$$$$$$$$");
-console.log("$$$ PHC $$$");
-console.log("$$$$$$$$$$$");
 
     this.app.storage.loadTransactions("Email", 50, (txs) => {
 
       let keys = [];
 
-console.log("FOUND: " + JSON.stringify(txs));
-
       for (let i = 0; i < txs.length; i++) {
-        this.emails.inbox.unshift(txs[i]);
-        keys.push(txs[i].transaction.from[0].add);
+        let addtx = true;
+        for (let k = 0; k < this.emails.inbox.length; k++) {
+          if (txs[i].returnSignature() == this.emails.inbox[k].returnSignature()) {
+            addtx = false;
+          }
+        }
+        if (addtx) {
+          this.emails.inbox.push(txs[i]);
+          keys.push(txs[i].transaction.from[0].add);
+        }
       }
 
       EmailList.render(this.app, this.uidata);
@@ -192,8 +202,8 @@ console.log("FOUND: " + JSON.stringify(txs));
     });
 
 
-    EmailList.render(this.app, this.uidata);
-    EmailList.attachEvents(this.app, this.uidata);
+    //EmailList.render(this.app, this.uidata);
+    //EmailList.attachEvents(this.app, this.uidata);
 
   }
 
@@ -207,15 +217,11 @@ console.log("FOUND: " + JSON.stringify(txs));
     if (conf == 0) {
 
       let publickey = app.wallet.returnPublicKey();
-      //
-      // if the email is from ourselves, ignore
-      //
-      if (tx.isFrom(publickey)) return;
 
       //
       // if transaction is for me
       //
-      if (tx.isTo(publickey)) {
+      if (tx.transaction.to[0].add == publickey) {
 
         //
         // great lets save this
@@ -234,10 +240,19 @@ console.log("FOUND: " + JSON.stringify(txs));
   addEmail(tx) {
     try {
       if (this.browser_active == 0) { this.showAlert(); }
-      this.emails.inbox.unshift(tx);
-      this.addrController.fetchIdentifiers([tx.transaction.from[0].add]);
-      if (this.browser_active) { this.renderMain(this.app, this.uidata); }
+      let addtx = true;
+      for (let k = 0; k < this.emails.inbox.length; k++) {
+        if (this.emails.inbox[k].returnSignature() == tx.returnSignature()) {
+          addtx = false;
+        }
+      }
+      if (addtx) {
+        this.emails.inbox.unshift(tx);
+        this.addrController.fetchIdentifiers([tx.transaction.from[0].add]);
+        if (this.browser_active) { this.renderMain(this.app, this.uidata); }
+      }
     } catch (err) {
+      console.error(err);
     }
   }
 
@@ -275,17 +290,17 @@ console.log("FOUND: " + JSON.stringify(txs));
   getTokens() {
 
     let msg = {};
-    msg.data = {address: this.app.wallet.returnPublicKey()};
+    msg.data = { address: this.app.wallet.returnPublicKey() };
     msg.request = 'get tokens';
     setTimeout(() => {
-        console.log("sending request for funds...");
-        this.app.network.sendRequest(msg.request, msg.data);
+      console.log("sending request for funds...");
+      this.app.network.sendRequest(msg.request, msg.data);
     }, 1000);
   }
 
   updateBalance() {
     if (this.browser_active) {
-      if (document.querySelector('.email-balance')){
+      if (document.querySelector('.email-balance')) {
         let balance = this.app.wallet.returnBalance();
         document.querySelector('.email-balance').innerHTML = balance + " SAITO";
       }

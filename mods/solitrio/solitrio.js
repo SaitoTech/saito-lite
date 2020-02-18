@@ -13,10 +13,15 @@ class Solitrio extends GameTemplate {
 
     this.name            = "Solitrio";
     this.description     = 'Once you\'ve started playing Solitrio, how can you go back to old-fashioned Solitaire? This one-player card game is the perfect way to pass a flight from Hong Kong to pretty much anywhere. Arrange the cards on the table from 2-10 ordered by suite. Harder than it looks.';
+    this.categories      = "Arcade Games Entertainment";
 
     this.maxPlayers      = 1;
     this.minPlayers      = 1;
     this.type            = "Solitaire Cardgame";
+
+    this.description = "Solitaire card game made famous by the good folks at Cathay Pacific Information Technology Services.";
+    this.categories  = "Cardgame Game Solitaire";
+
 
     //
     // this sets the ratio used for determining

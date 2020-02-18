@@ -1,4 +1,7 @@
 
+.hud {
+  z-index: 200000;
+}
 .vial {
   position: absolute;
   background-size: cover;
@@ -73,7 +76,7 @@
   max-height: 520px;
   width: 100vw;
   max-width: 375px;
-  background-image: url("/twilight/img/Base.svg");
+  background-image: url("/pandemic/img/Base.svg");
   background-size: cover;
   z-index: 2;
   display: none;
@@ -189,7 +192,7 @@ body {
 }
 .research_station {
   position: absolute;
-  background-image: url("/img/Marker%20Research%20Station.png");
+  background-image: url("/pandemic/img/Marker%20Research%20Station.png");
   background-size: cover;
   width: 45px;
   height: 51px;
@@ -215,35 +218,35 @@ body {
 }
 .marker_infection_rate {
   position: absolute;
-  background-image: url("/img/Marker%20Infection%20Rate.png");
+  background-image: url("/pandemic/img/Marker%20Infection%20Rate.png");
   background-size: cover;
   width: 86px;
   height: 84px;
 }
 .marker_outbreak {
   position: absolute;
-  background-image: url("/img/Marker%20Outbreak.png");
+  background-image: url("/pandemic/img/Marker%20Outbreak.png");
   background-size: cover;
   width: 87px;
   height: 88px;
 }
 .back_player_card {
   position: absolute;
-  background-image: url("/img/Back%20Player%20Card.gif");
+  background-image: url("/pandemic/img/Back%20Player%20Card.gif");
   background-size: cover;
   width: 243px;
   height: 341px;
 }
 .player_discard_pile {
   position: absolute;
-  background-image: url("/img/Back%20Player%20Card.gif");
+  background-image: url("/pandemic/img/Back%20Player%20Card.gif");
   background-size: cover;
   width: 243px;
   height: 341px;
 }
 .back_infection_card {
   position: absolute;
-  background-image: url("/img/Back%20Infection.gif");
+  background-image: url("/pandemic/img/Back%20Infection.gif");
   background-size: cover;
   width: 340px;
   height: 243px;
@@ -256,14 +259,14 @@ body {
 }
 .infection_discard_pile {
   position: absolute;
-  background-image: url("/img/Back%20Infection.gif");
+  background-image: url("/pandemic/img/Back%20Infection.gif");
   background-size: cover;
   width: 340px;
   height: 243px;
 }
 .gameboard {
   position: absolute;
-  background-image: url("/img/Board.jpg");
+  background-image: url("/pandemic/img/Board.jpg");
   background-size: cover;
   width: 2602px;
   height: 1812px;

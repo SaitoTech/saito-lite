@@ -1,15 +1,9 @@
-const saito = require('../../lib/saito/saito');
-const Header = require('../../lib/ui/header/header');
 const GameTemplate = require('../../lib/templates/gametemplate');
+
 var this_chess = null;
 var chess = null;
 var chessboard = null;
 
-
-
-//////////////////
-// CONSTRUCTOR  //
-//////////////////
 class Chessgame extends GameTemplate {
 
   constructor(app) {
@@ -28,6 +22,8 @@ class Chessgame extends GameTemplate {
     this.minPlayers = 2;
     this.maxPlayers = 2;
     this.type       = "Classic Boardgame";
+    this.description = "An implimentation of Chess for the Saito Blockchain";
+    this.categories  = "Boardgame Game";
 
     return this;
 
@@ -48,9 +44,16 @@ class Chessgame extends GameTemplate {
       obj.title = "Chess";
       return obj;
     }
-   
+
     return null;
- 
+
+  }
+
+  initialize(app) {
+    this.app.modules.respondTo("chat-manager").forEach(mod => {
+      mod.respondTo('chat-manager').render(this_chess.app, this_chess);
+    });
+    super.initialize(app);
   }
 
   async initializeGame(game_id) {
@@ -112,7 +115,7 @@ class Chessgame extends GameTemplate {
         }
         else {
           try {
-            opponent = await this.app.keychain.fetchIdentifierPromise(opponent);
+            opponent = await this.app.keys.fetchIdentifierPromise(opponent);
           }
           catch (err) {
             console.log(err);
@@ -120,7 +123,9 @@ class Chessgame extends GameTemplate {
         }
       }
 
-      $('#opponent_id').html(opponent);
+      let opponent_elem = document.getElementById('opponent_id');
+      if (opponent_elem) opponent_elem.innerHTML = opponent;
+
       this.updateStatusMessage();
       this.attachEvents();
 
@@ -196,9 +201,11 @@ console.log("QUEUE: " + this.game.queue);
 
   attachEvents() {
 
-    $('#move_accept').off();
-    $('#move_accept').on('click', () => {
+    let move_accept = document.getElementById('move_accept');
+    let move_reject = document.getElementById('move_reject');
+    if (!move_accept) return;
 
+    move_accept.onclick = () => {
       console.log('send move transaction and wait for reply.');
 
       var data = {};
@@ -208,46 +215,48 @@ console.log("QUEUE: " + this.game.queue);
       data.position = this.engine.fen();
       data.move = this.game.move;
       this.endTurn(data);
-    
 
-      $('#move_accept').prop('disabled', true);
-      $('#move_accept').removeClass('green');
+      move_accept.disabled = true;
+      move_accept.classList.remove('green');
 
-      $('#move_reject').prop('disabled', true);
-      $('#move_reject').removeClass('red');
+      move_reject.disabled = true;
+      move_reject.classList.remove('red');
+    };
 
-    });
-
-
-    $('#move_reject').off();
-    $('#move_reject').on('click', () => {
-
+    move_reject.onclick = () => {
       this.setBoard(this.game.position);
-      $('#move_accept').prop('disabled', true);
-      $('#move_accept').removeClass('green');
 
-      $('#move_reject').prop('disabled', true);
-      $('#move_reject').removeClass('red');
+      move_accept.disabled = true;
+      move_accept.classList.remove('green');
 
-    });
+      move_reject.disabled = true;
+      move_reject.classList.remove('red');
+    }
 
-    $(window).resize(() => {
-      if(this) {
-        this.board.resize();
-      }
-    });
+    window.onresize = () => this.board.resize();
+
+    // for (let i = 0; i < this.app.mods.length; i++) {
+    //   if (data.arcade.mods[i].respondTo('email-chat') != null) {
+    //     data.arcade.mods[i].respondTo('email-chat').attachEvents();
+    //   }
+    // }
+
+    this.app.modules.respondTo('chat-manager').forEach(mod => {
+      mod.respondTo('chat-manager').attachEvents(this_chess.app, this_chess);
+    })
   }
 
   updateStatusMessage(str = "") {
 
     if (this.browser_active != 1) { return; }
 
+    let statusEl = document.getElementById('status');
+
     //
     // print message if provided
     //
     if (str != "") {
-      var statusEl = $('#status');
-      statusEl.html(str);
+      statusEl.innerHTML = str;
       return;
     }
 
@@ -280,16 +289,12 @@ console.log("QUEUE: " + this.game.queue);
 
     }
 
-
-    var statusEl = $('#status');
-    statusEl.html(status);
-    var capturedEL = $('#captured');
+    statusEl.innerHTML = status;
     console.log(this.game.position);
     console.log(this.engine.fen());
     console.log(this.returnCaptured(this.engine.fen()));
     console.log(this.returnCapturedHTML(this.returnCaptured(this.engine.fen())));
-    //capturedEL.html(this.game.captured.white + "</br>" + this.game.captured.black);
-    capturedEL.html(this.returnCapturedHTML(this.returnCaptured(this.engine.fen())));
+    document.getElementById('captured').innerHTML = this.returnCapturedHTML(this.returnCaptured(this.engine.fen()));
     this.updateLog();
 
   };
@@ -398,39 +403,35 @@ console.log("QUEUE: " + this.game.queue);
       to: target,
       promotion: piece
     });
-    $('#promotion').hide();
-    $('#buttons').show();
+
+    document.getElementById('promotion').style.display = "none";
+    document.getElementById('buttons').style.display = "grid";
 
     this_chess.updateStatusMessage("Confirm Move to Send!");
 
     // legal move - make it
-
-    this_chess.game.move += this_chess.pieces(move.piece) + " ";
-
-    this_chess.game.move += " - " + move.san;
-
+    this_chess.game.move += `${this_chess.pieces(move.piece)} - ${move.san}`;
     this_chess.updateStatusMessage('Pawn promoted to ' + this_chess.pieces(piece) + '.');
 
   };
 
   checkPromotion(source, target, color) {
-    $('#buttons').hide();
-    let html = "";
-    html += this.piecehtml('q', color);
-    html += this.piecehtml('r', color);
-    html += this.piecehtml('b', color);
-    html += this.piecehtml('n', color);
-    $('#promotion-choices').html(html);
-    $('#promotion-choices').children().each(function (i) {
-      var $this = $(this);
-      $this.click(function () {
-        $('#promotion').hide();
-        $('#buttons').show();
-        this_chess.promoteAfterDrop(source, target, $this.attr('alt'));
-      });
+    let promotion = document.getElementById('promotion');
+    let promotion_choices = document.getElementById('promotion-choices');
+    let buttons = document.getElementById('buttons');
+    buttons.style.display = "none";
+
+    let html = ['q', 'r', 'b', 'n'].map(n => this.piecehtml(n, color)).join('');
+    promotion_choices.innerHTML = html;
+    promotion_choices.childNodes.forEach(node => {
+      node.onclick = () => {
+        promotion.style.display = "none";
+        buttons.style.display = "grid";
+        this_chess.promoteAfterDrop(source, target, node.alt);
+      }
     });
-    this_chess.updateStatusMessage('Chose promotion piece');
-    $('#promotion').show();
+    this.updateStatusMessage('Chose promotion piece');
+    promotion.style.display = "block";
   }
 
   onMouseoverSquare(square, piece) {
@@ -462,35 +463,34 @@ console.log("QUEUE: " + this.game.queue);
   };
 
   removeGreySquares() {
-    $('#board .square-55d63').css('background', '');
+    let grey_squares = document.querySelectorAll('#board .square-55d63');
+    Array.from(grey_squares).forEach(square => square.style.background = '');
   };
 
   greySquare(square) {
 
-    var squareEl = $('#board .square-' + square);
+    var squareEl = document.querySelector(`#board .square-${square}`);
 
     var background = '#a9a9a9';
-    if (squareEl.hasClass('black-3c85d') === true) {
+    if (squareEl.classList.contains('black-3c85d') === true) {
       background = '#696969';
     }
 
-    squareEl.css('background', background);
+    squareEl.style.background = background;
 
   };
 
   onChange(oldPos, newPos) {
 
     this_chess.lockBoard(this_chess.engine.fen(newPos));
+    let move_accept = document.getElementById('move_accept');
+    let move_reject = document.getElementById('move_reject');
 
-    $('#move_accept').prop('disabled', false);
-    $('#move_accept').addClass('green');
+    move_accept.disabled = false;
+    move_accept.classList.add('green');
 
-    $('#move_reject').prop('disabled', false);
-    $('#move_reject').addClass('red');
-
-    if ($('#buttons').is("vissible")) {
-      this_chess.updateStatusMessage("Confirm Move to Send!");
-    }
+    move_reject.disabled = false;
+    move_reject.classList.add('red');
 
   };
 
@@ -564,5 +564,6 @@ console.log("QUEUE: " + this.game.queue);
     `;
   }
 }
+
 module.exports = Chessgame;
 

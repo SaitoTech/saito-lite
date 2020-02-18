@@ -13,11 +13,16 @@ class Registry extends ModTemplate {
 
     this.app            = app;
     this.name           = "Registry";
+    this.description    = "Adds support for the Saito DNS system, so that users can register user-generated names. Runs DNS server on core nodes.";
+    this.categories     = "Core Utilities Messaging";
 
     //
     // master DNS publickey for this module
     //
-    this.publickey = '23ykRYbjvAzHLRaTYPcqjkQ2LnFYeMkg9cJgXPbrWcHmr'
+    this.publickey = '23ykRYbjvAzHLRaTYPcqjkQ2LnFYeMkg9cJgXPbrWcHmr';
+
+    this.description = "A naming service for Saito Addresses";
+    this.categories  = "Utilities Communications";
 
     return this;
   }

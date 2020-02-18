@@ -1,5 +1,6 @@
 const ChatBoxTemplate = require('./chat-box.template.js');
 const ChatBoxMessageContainerTemplate = require('./chat-box-message-container.template.js');
+const ChatRoomMessageTemplate = require('../../chat-main/chat-room/chat-room-message.template');
 
 module.exports = ChatBox = {
 
@@ -13,24 +14,43 @@ module.exports = ChatBox = {
         }
 
         if (!document.getElementById(`chat-box-${group.id}`)) {
-          let {el_parser} = data.helpers;
+          let {el_parser} = data.chat.helpers;
           document.querySelector('.chat-manager').append(el_parser(ChatBoxTemplate(active_group_name, group.id)));
+        }
 
-          if (group != null) {
-            if (group.messages.length == 0) {
-              document.getElementById(`chat-box-main-${group.id}`).innerHTML =
-                `<p id="chat-box-default-message-${group.id}" style="text-align:center">
-                  No messages in this group :(
-                </p>`;
-            }
-
-            group.messages.forEach(message => {
-              let type = message.publickey == app.wallet.returnPublicKey() ? 'myself' : 'others';
-              message.publickey = data.chat.addrController.returnAddressHTML(message.publickey);
-              document.getElementById(`chat-box-main-${group.id}`).innerHTML +=
-                ChatBoxMessageContainerTemplate(message, message.sig, type, data);
-            });
+        let chat_box_main = document.getElementById(`chat-box-main-${group.id}`);
+        if (group != null) {
+          chat_box_main.innerHTML = '';
+          if (group.messages.length == 0) {
+            chat_box_main.innerHTML =
+              `<p id="chat-box-default-message-${group.id}" style="text-align:center">
+                No messages in this group :(
+              </p>`;
+          } else {
+            this.removeDefaultMessage(group.id);
           }
+
+          var last_sender = "";
+          var last_sig = "";
+
+          group.messages.forEach(message => {
+            let { publickey } = message;
+
+            message = Object.assign({}, message, {
+              type : publickey == app.wallet.returnPublicKey() ? 'myself' : 'others',
+              keyHTML : data.chat.addrController.returnAddressHTML(publickey),
+              identicon_color : app.keys.returnIdenticonColor(publickey),
+            });
+
+            if (publickey != last_sender) {
+              chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(message, data);
+              last_sig = message.sig;
+            } else {
+              document.getElementById(`chat-box-message-container-${last_sig}`).innerHTML
+                  += ChatRoomMessageTemplate(message, data);
+            }
+            last_sender = publickey;
+          });
         }
 
         this.scrollToBottom(group.id);
@@ -66,16 +86,16 @@ module.exports = ChatBox = {
       };
 
       document.getElementById(`chat-box-close-${group.id}`)
-              .addEventListener('click', (e) => {
+              .onclick = (e) => {
                 e.stopPropagation();
 
                 let group_id = e.currentTarget.id.split('-')[3];
                 data.chat.active_groups = data.chat.active_groups.filter(group => group.id != group_id);
 
-                let chat_manager = document.querySelector('.chat-manager');
+                // let chat_manager = document.querySelector('.chat-manager');
                 let chat_box_to_delete = document.getElementById(`chat-box-${group_id}`);
-                chat_manager.removeChild(chat_box_to_delete);
-              });
+                chat_box_to_delete.parentNode.removeChild(chat_box_to_delete);
+              };
 
     },
 
@@ -85,21 +105,41 @@ module.exports = ChatBox = {
       this.addTXToDOM(app, data, tx);
     },
 
-    addMessageToDOM(app, data, msg) {
-      let chat_box_main = document.getElementById(`chat-box-main-${msg.group_id}`)
-      if (!chat_box_main) { return; }
-      msg.identicon = app.keys.returnIdenticon(msg.publickey);
-      msg.publickey = data.chat.addrController.returnAddressHTML(msg.publickey);
-      if (document.getElementById(`chat-box-default-message-${msg.group_id}`)) { chat_box_main.innerHTML = '' }
+    addMessageToDOM(app, data, message) {
+      let { group_id, publickey } = message;
 
-      chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(msg, msg.sig, msg.type, data);
-      this.scrollToBottom(msg.group_id);
+      let chat_box_main = document.getElementById(`chat-box-main-${group_id}`)
+      if (!chat_box_main) { return; }
+      this.removeDefaultMessage(group_id);
+
+      message = Object.assign({}, message, {
+        type : publickey == app.wallet.returnPublicKey() ? 'myself' : 'others',
+        keyHTML : data.chat.addrController.returnAddressHTML(publickey),
+        identicon : app.keys.returnIdenticon(publickey),
+        identicon_color : app.keys.returnIdenticonColor(publickey),
+      });
+
+      var messages = [];
+      data.chat.groups.forEach(group => {
+        if (group.id == group_id) {messages = group.messages;}
+      });
+      var n = messages.length -1;
+      if (n == 0) {
+        chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(message, data);
+      } else {
+        if (messages[n-1].publickey != messages[n].publickey) {
+          chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(message, data);
+        } else {
+          let chat_box_message_container = chat_box_main.querySelectorAll('.chat-box-message-container');
+          chat_box_message_container[chat_box_message_container.length-1].innerHTML += ChatRoomMessageTemplate(message, data);
+        }
+      }
+      this.scrollToBottom(group_id);
     },
 
     addTXToDOM(app, data, tx) {
-      //xxx undo?
-        let msg = Object.assign({}, tx.returnMessage(), { identicon: app.keys.returnIdenticon(tx.returnMessage().publickey), type: 'myself' });
-        this.addMessageToDOM(app, data, msg);
+      let message = Object.assign({}, tx.returnMessage());
+      this.addMessageToDOM(app, data, message);
     },
 
     createMessage(app, data, msg_data) {
@@ -128,6 +168,12 @@ module.exports = ChatBox = {
         newtx.transaction.msg.sig = app.wallet.signMessage(JSON.stringify(newtx.transaction.msg));
         newtx = app.wallet.signTransaction(newtx);
         return newtx;
+    },
+
+    removeDefaultMessage(group_id) {
+      let default_message = document.getElementById(`chat-box-default-message-${group_id}`)
+      if (default_message)
+        default_message.parentNode.removeChild(default_message);
     },
 
     scrollToBottom(group_id) {

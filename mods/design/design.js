@@ -7,8 +7,7 @@ class Design extends ModTemplate {
 
     this.app            = app;
     this.name           = "Design";
-
-    this.description    = "This module sets out Satio's standard design elements";
+    this.description    = "Visual exploration and reference guide to Saito's standard design elements";
     this.categories     = "Dev Utilities"
 
     return this;

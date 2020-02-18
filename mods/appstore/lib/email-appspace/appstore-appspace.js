@@ -13,11 +13,23 @@ module.exports = AppStoreAppspace = {
     //
     // fetch modules from appstore
     //
-    data.appstore.sendPeerDatabaseRequest(
-      "appstore", "modules", "name, description, version, publickey, unixtime, bid, bsh",
-      "featured = 1",
-      null,
-      (res) => {
+    let db_database = "appstore";
+    let db_table    = "modules";
+    let db_select   = "name, description, version, publickey, unixtime, bid, bsh";
+    let db_where    = "featured = 1";
+
+    if (app.browser.returnURLParameter("app") != "") {
+
+      let app_id = app.browser.returnURLParameter("app");
+      if (/[a-zA-Z0-9_-]/.test(app_id)) {
+        db_where = "version = '"+ app.browser.returnURLParameter("app") + "'";
+      } else {
+        salert("Bad APP-ID Provided");
+      }
+
+    }
+
+    data.appstore.sendPeerDatabaseRequest(db_database, db_table, db_select, db_where, null, (res) => {
         if (res.rows != undefined) {
 
 	  let installed_apps = [];
@@ -26,12 +38,16 @@ module.exports = AppStoreAppspace = {
 	      installed_apps.push(app.options.modules[i].name);
 	    }
 	  }
+
 	  for (let z = 0; z < res.rows.length; z++) {
-	    if (installed_apps.includes(res.rows[z].name)) {
+	    if (installed_apps.includes(res.rows[z].name) || res.rows[z].name == "name" || res.rows[z].name == "Unknown") {
 	      res.rows.splice(z, 1);
 	      z--;
+	    } else {
 	    }
 	  }
+
+console.log("RES ROWS: " + JSON.stringify(res.rows));
 
           this.addCategories(app, data, res.rows);
           this.populateAppsSpace(app, data, res.rows);
@@ -55,7 +71,7 @@ module.exports = AppStoreAppspace = {
     let allCategoriesHTML = allCategories.map((category) => {
       return `<div class="app-category-checkbox app-category-${category}">
                 <label class="s-container">${category}
-                  <input type="checkbox" name="app-${category}" id="app-${category}" />
+                  <input type="checkbox" name="app-${category}" id="app-${category}" checked/>
                   <span class="s-checkmark"></span>
                 </label>
               </div>

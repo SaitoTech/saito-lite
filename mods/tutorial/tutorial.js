@@ -1,16 +1,16 @@
-var saito = require('../../lib/saito/saito');
-var ModTemplate = require('../../lib/templates/modtemplate');
+const ModTemplate = require('../../lib/templates/modtemplate');
 
 const Modal = require('../../lib/ui/modal/modal');
+const helpers = require('../../lib/helpers/index');
 
-const WelcomeBackupTemplate = require('./lib/modal/welcome-backup.template');
-const WelcomeBackup = require('./lib/modal/welcome-backup.js');
+const WelcomeBackupTemplate = require('./lib/modal/welcome/welcome-backup.template');
+const WelcomeBackup = require('./lib/modal/welcome/welcome-backup.js');
 
-const RegisterUsernameTemplate = require('./lib/modal/register-username.template');
-const RegisterUsername = require('./lib/modal/register-username.js');
+const RegisterUsernameTemplate = require('./lib/modal/register/register-username.template');
+const RegisterUsername = require('./lib/modal/register/register-username.js');
 
-const InviteFriendsTemplate = require('./lib/modal/invite-friends.template');
-const InviteFriends = require('./lib/modal/invite-friends.js');
+const InviteFriendsTemplate = require('./lib/modal/invite/invite-friends.template');
+const InviteFriends = require('./lib/modal/invite/invite-friends.js');
 
 
 class Tutorial extends ModTemplate {
@@ -21,6 +21,12 @@ class Tutorial extends ModTemplate {
 
     this.app = app;
     this.name = "Tutorial";
+    this.description = "Adds easy-to-use modal popups to the Saito system to help users get started creating accounts and earning tokens";
+    this.categories = "Core Dev Utilities";
+
+    this.description = "User introduction and help system.";
+    this.categories = "UX Users";
+
 
     this.username_registered = 0;
 
@@ -49,13 +55,11 @@ class Tutorial extends ModTemplate {
     //
     // run on load (or dom ready)
     //
-    window.onload = () => {
-      if (typeof window.localStorage !== "undefined" && !localStorage.getItem('visited')) {
-        localStorage.setItem('visited', true);
-        this.welcomeBackupModal();
-      }
+    
+    if (!localStorage.getItem('visited')) {
+      localStorage.setItem('visited', true);
+      this.welcomeBackupModal();
     }
-
   }
 
 
@@ -63,16 +67,16 @@ class Tutorial extends ModTemplate {
 
     if (message.request == "user subscription") {
       try {
-        
+
         let sql = "INSERT OR IGNORE INTO subscribers (publickey, email, unixtime) VALUES ($publickey, $email, $unixtime);"
-        
+
         let params = {
           $publickey: message.data.key,
           $email: message.data.email,
           $unixtime: message.data.time,
         }
-        
-       await this.app.storage.executeDatabase(sql, params, "tutorial");
+
+        await this.app.storage.executeDatabase(sql, params, "tutorial");
 
         return;
 
@@ -94,6 +98,7 @@ class Tutorial extends ModTemplate {
     let data = {};
     data.tutorial = this;
     data.modal = modal;
+    data.helpers = helpers;
 
     modal.render("blank");
 
@@ -105,7 +110,7 @@ class Tutorial extends ModTemplate {
   welcomeBackupModal() {
 
     let modal = new Modal(this.app, {
-      id: 'faucet',
+      id: 'rewards',
       title: 'Welcome to Saito',
       content: WelcomeBackupTemplate()
     });
@@ -144,5 +149,4 @@ class Tutorial extends ModTemplate {
 }
 
 module.exports = Tutorial;
-
 

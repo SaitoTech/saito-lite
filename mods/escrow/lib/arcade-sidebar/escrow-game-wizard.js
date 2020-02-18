@@ -1,12 +1,12 @@
 const EscrowGameWizardTemplate	 	= require('./escrow-game-wizard.template.js');
 
 
-module.exports = EscrowGameWizardT = {
+module.exports = EscrowGameWizard = {
 
   render(app, data) {
 
     document.querySelector(".arcade-main").innerHTML = EscrowGameWizardTemplate();
-
+alert("Rendered!");
   },
 
 

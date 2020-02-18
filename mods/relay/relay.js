@@ -11,6 +11,12 @@ class Relay extends ModTemplate {
 
     this.app            = app;
     this.name           = "Relay";
+    this.description    = "Adds support for off-chain, realtime communications channels through relay servers, for mobile users and real-time gaming needs.";
+    this.categories     = "Utilities Core";
+
+
+    this.description    = "Simple Message Relay for Saito";
+    this.categories     = "Utilities Communications";
 
     return this;
   }

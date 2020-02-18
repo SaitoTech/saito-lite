@@ -1,6 +1,6 @@
 module.exports = EmailAppspaceTemplate = (app) => {
   return `
-  <div class="email-appspace-design">
+  <div class="email-appspace-design" style="width: 98vw;">
 
   <h3>h3 - Module header</h3>
 
@@ -59,6 +59,15 @@ module.exports = EmailAppspaceTemplate = (app) => {
     <div>Radio Buttons</div>
     <div><input type="radio" checked></input><input type="radio"></input><input type="radio"></input><input type="radio"></input></div>
 </div>
+
+<hr/>
+
+<div class="tip">
+  This is text with a tooltip
+  <div class="tiptext">Content of the tool tip. <i>can be html!</i></div>
+</div>
+
+<hr/>
 
 <p>Text Area</p>
 <textarea>

@@ -10,7 +10,14 @@ class Settings extends ModTemplate {
 
     this.app            = app;
     this.name           = "Settings";
+    this.description    = "Convenient Email plugin for managing Saito account settings";
+    this.utilities      = "Core Utilities";
+
     this.link           = "/email?module=settings";
+
+    this.description = "User settings module.";
+    this.categories  = "Admin Users";
+
 
 //    if (app.modules.returnModule("Email") != null) { this.link = "/email?module=settings"; }
 

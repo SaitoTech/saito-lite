@@ -13,9 +13,16 @@ class Wallet extends ModTemplate {
 
     this.app             = app;
     this.name            = "Wallet";
+    this.description     = "BETA application intended to provide wallet integration with the Saito chat interface";
+    this.categories      = "Core Utilities";
+
     this.handlesEmail    = 1;
 
     this.publickey       = app.wallet.returnPublicKey();
+
+    this.description = "Saito Wallet";
+    this.categories  = "Finance Admin";
+
     // this.balance         = app.wallet.returnBalance();
 
     if (app.BROWSER == 1) {

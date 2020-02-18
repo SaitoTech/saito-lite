@@ -10,62 +10,65 @@ const helpers = require('../../lib/helpers/index');
 class Chat extends ChatCore {
 
   constructor(app) {
+
     super(app);
 
-    this.name = "Chat";
-    this.description = "Wechat-style chat application, combining on-chain and off-chain messaging and providing for encrypted communications if available.";
+    this.app = app;
+
+    this.name        = "Chat";
+    this.description = "Chat application providing on-chain and off-chain messaging supporting encrypted communication channels.";
+    this.categories = "Utilities Core";
+
     this.uidata = {};
     this.icon_fa = "far fa-comments";
 
+    this.categories  = "Messaging Communication";
 
+    // defined in parent
+    //this.active_groups = [];
+    //this.groups = [];
     this.addrController = new AddressController(app);
+    this.helpers = helpers;
+
   }
+
 
   respondTo(type) {
-    if (type == 'email-chat') {
-      let obj = {};
-          obj.render = this.renderEmailChat;
-          obj.attachEvents = this.attachEventsEmailChat;
-          obj.sendMessage = this.sendMessage;
-      return obj;
+    switch (type) {
+      case 'email-chat':
+        return {
+          render: this.renderEmailChat,
+          attachEvents: this.attachEventsEmailChat,
+          sendMessage: this.sendMessage,
+        }
+      case 'chat-manager':
+        return {
+          render : (app, data) => {
+            data.chat = app.modules.returnModule("Chat");
+            ChatManager.initialize(app, data);
+            ChatManager.render(app, data);
+          },
+          attachEvents: (app, data) => {
+            ChatManager.attachEvents(app, data);
+          },
+          sendMessage: this.sendMessage,
+        }
+      case 'header-dropdown':
+        return {}
+      default:
+        return null;
     }
-    if (type == "header-dropdown") { 
-      return {};
-    }
-    return null;
   }
-
 
   renderEmailChat(app, data) {
     let chat_self = app.modules.returnModule("Chat");
-    data.chat = {};
-    data.chat.app = app;
-    data.chat.groups = chat_self.groups;
-    data.chat.active_groups = chat_self.active_groups;
-    data.chat.addrController = chat_self.addrController;
-
-    data.helpers = helpers;
-
+    data.chat = chat_self;
     EmailChat.initialize(app, data);
     EmailChat.render(app, data);
   }
 
   attachEventsEmailChat(app, data) {
     EmailChat.attachEvents(app, data);
-  }
-
-  receiveEvent(type, data) {
-
-    //
-    // new encryption channel opened
-    //
-    if (type === "encrypt-key-exchange-confirm") {
-      if (data.members === undefined) { return; }
-      this.createChatGroup(data.members);
-      this.sendEvent('chat-render-request', {});
-      this.saveChat();
-    }
-
   }
 
   initialize(app) {
@@ -78,11 +81,13 @@ class Chat extends ChatCore {
     Header.render(app, this.uidata);
     Header.attachEvents(app, this.uidata);
 
-    this.uidata.chat = {};
-    this.uidata.chat.app = app;
-    this.uidata.chat.groups = this.groups;
+    this.uidata.chat = this;
 
-    this.uidata.chatmod = this;
+    //this.uidata.chat.app = app;
+    //this.uidata.chat.groups = this.groups;
+    //this.uidata.helpers = helpers;
+
+    // this.uidata.chatmod = this;
     this.uidata.chat.active = "chat_list";
 
     ChatMain.initialize(app, this.uidata);

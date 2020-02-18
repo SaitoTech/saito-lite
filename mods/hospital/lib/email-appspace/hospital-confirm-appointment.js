@@ -5,14 +5,21 @@ const HospitalAwaitConfirmation				= require('./hospital-await-confirmation.js')
 
 module.exports = HospitalConfirmAppointment = {
 
+    my_appointment : null,
+
     render(app, data) {
-      document.querySelector(".email-appspace").innerHTML = HospitalConfirmAppointmentTemplate();
+
+      this.my_appointment = data.appointment;
+ 
+      document.querySelector(".email-appspace").innerHTML = HospitalConfirmAppointmentTemplate(app, data);
     },
 
     attachEvents(app, data) {
 
       document.querySelector('.reselect')
         .addEventListener('click', (e) => {
+
+	  this.my_appointment = null;
 
           HospitalMakeAppointment.render(app, data);
           HospitalMakeAppointment.attachEvents(app, data);
@@ -22,12 +29,7 @@ module.exports = HospitalConfirmAppointment = {
       document.querySelector('.confirm')
         .addEventListener('click', (e) => {
 
-	  //
-	  // create transaction
-	  //
-	  let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
-	      newtx.transaction.msg.module = "Booking";
-
+	  data.hospital.makeAppointmentRequest(this.my_appointment);
 
           HospitalAwaitConfirmation.render(app, data);
           HospitalAwaitConfirmation.attachEvents(app, data);

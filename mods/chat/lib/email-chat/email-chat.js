@@ -5,17 +5,17 @@ const AddContactModal = require('./modals/add-contact-modal');
 const EmailChatTemplate = require('./email-chat.template.js');
 
 module.exports = EmailChat = {
-
     initialize(app, data) {
-      my_listener = (msg) => this.addMessageToDOM(app, data, msg);
-      app.connection.removeAllListeners('chat_receive_message');
-      app.connection.on('chat_receive_message', my_listener);
+      ChatList.initialize(app, data);
+      ChatManager.initialize(app, data);
     },
 
     render(app, data) {
 
       let email_chat = document.querySelector(".email-chat")
       email_chat.innerHTML = EmailChatTemplate();
+
+      data.contact_view = 'qr';
 
       AddContactModal.render(app, data);
       ChatManager.render(app, data);
@@ -26,9 +26,4 @@ module.exports = EmailChat = {
       AddContactModal.attachEvents(app, data);
       ChatList.attachEvents(app, data);
     },
-
-    addMessageToDOM(app, data, msg) {
-      ChatBox.addMessageToDOM(app, data, msg);
-    },
-
 }

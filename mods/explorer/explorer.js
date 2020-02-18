@@ -5,6 +5,8 @@ class ExplorerCore extends ModTemplate {
         super(app);
         this.app = app;
         this.name = "Explorer";
+	this.description = "Block explorer for the Saito blockchain. Not suitable for lite-clients";
+	this.categories = "Utilities Dev";
     }
 
     onConfirmation(blk, tx, conf, app) {
@@ -331,7 +333,7 @@ class ExplorerCore extends ModTemplate {
     returnInvokeJSONTree() {
     var jstxt = '\n <script> \n \
     var jsonObj = document.querySelector(".json"); \n \
-    var jsonTxt = jsonObj.innerText.trim(); \n \
+    var jsonTxt = decodeURI(jsonObj.dataset.json); \n \
     jsonObj.innerHTML = ""; \n \
     var tree = jsonTree.create(JSON.parse(jsonTxt), jsonObj); \n \
     </script> \n'
@@ -343,7 +345,7 @@ class ExplorerCore extends ModTemplate {
         var explorer_self = this;
 
         var html = '<div class="blockchain-table">';
-        html += '<div class="table-header"></div><div class="table-header">id</div><div class="table-header">block hash</div><div class="table-header">previous block</div>';
+        html += '<div class="table-header"></div><div class="table-header">id</div><div class="table-header">block hash</div><div class="table-header">tx</div><div class="table-header">previous block</div>';
         for (var mb = explorer_self.app.blockchain.index.blocks.length - 1; mb >= 0 && mb > explorer_self.app.blockchain.index.blocks.length - 200; mb--) {
             if(explorer_self.app.blockchain.lc_pos == mb){
                 html += '<div>*</div>';
@@ -352,13 +354,13 @@ class ExplorerCore extends ModTemplate {
             }
             html += '<div><a href="/explorer/block?hash=' + explorer_self.app.blockchain.index.blocks[mb].returnHash('hex') + '">' + explorer_self.app.blockchain.index.blocks[mb].block.id + '</a></div>';
             html += '<div><a href="/explorer/block?hash=' + explorer_self.app.blockchain.index.blocks[mb].returnHash('hex') + '">' + explorer_self.app.blockchain.index.blocks[mb].returnHash() + '</a></div>';
+            html += '<div>' + explorer_self.app.blockchain.index.blocks[mb].transactions.length + '</div>';
             html += '<div class="elipsis">' + explorer_self.app.blockchain.index.blocks[mb].block.prevbsh + '</div>';
             //html += '</tr>';
         }
         html += '</div>';
         return html;
     }
-
 
     ////////////////////////
     // Single Block Page  //
@@ -433,7 +435,7 @@ class ExplorerCore extends ModTemplate {
       <a class="button" href="/explorer/block?hash=' + blk.returnHash() + '"><i class="fas fa-list"></i> back to transactions</a> \
       </div> \
       <h3>Transaction Explorer:</h3> \
-      <div class="json"> \
+      <div data-json="' + encodeURI(JSON.stringify(tmptx, null, 4)) + '" class="json"> \
         '+ JSON.stringify(tmptx, null, 4) + ' \
       </div></div> '
         html += this.returnInvokeJSONTree();

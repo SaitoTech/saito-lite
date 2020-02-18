@@ -1,6 +1,18 @@
 let ArcadeGameCreateTemplate = require('./arcade-game-create.template.js');
-let ArcadeMain2 = require('./../arcade-main.js');
 
+const getOptions = () => {
+  let options = {};
+  document.querySelectorAll('form input, form select').forEach(element => {
+    if (element.type == "checkbox") {
+      if (element.checked) {
+        options[element.name] = 1;
+      }
+    } else {
+      options[element.name] = element.value;
+    }
+  });
+  return options;
+}
 
 module.exports = ArcadeGameDreate = {
 
@@ -22,137 +34,128 @@ module.exports = ArcadeGameDreate = {
         document.querySelector('.game-publisher-message').innerHTML = gamemod.publisher_message;
         document.querySelector('.game-details').innerHTML = gamemod.returnGameOptionsHTML();
 
+        setTimeout(() => {
 
-setTimeout(() => {
+          //
+          // TODO: is this value supposed to be used?
+          //
+          // let current_sel = document.querySelector('.game-players-select').value;
 
-        let current_sel = $('.game-players-select').val();
-
-
-	if (gamemod.maxPlayers == 1) {
-	  document.querySelector('.game-players-select').value = 1;
-          content_sel = 1;
-	  $('#game-players-select-2p').css('display','none');
-	  $('.game-players-options-2p').parent('.saito-select').css('display', 'none');
-	  $('.game-players-options-2p').css('display','none');
-
-	  $('#game-players-select-3p').css('display','none');
-	  $('.game-players-options-3p').parent('.saito-select').css('display', 'none');
-	  $('.game-players-options-3p').css('display','none');
-
-	  $('#game-players-select-4p').css('display','none');
-	  $('.game-players-options-4p').parent('.saito-select').css('display', 'none');
-	  $('.game-players-options-4p').css('display','none');
-
-	  $('#game-players-select-5p').css('display','none');
-	  $('.game-players-options-5p').parent('.saito-select').css('display', 'none');
-	  $('.game-players-options-5p').css('display','none');
-
-	  $('#game-players-select-6p').css('display','none');
-	  $('.game-players-options-6p').parent('.saito-select').css('display', 'none');
-	  $('.game-players-options-6p').css('display','none');
-        }
-
-	if (gamemod.minPlayers > 1) {
-          for (let z = 1; z < gamemod.minPlayers; z++) {
-	    $(('#game-players-select-'+z+'p')).css('display','none');
-	    $(('.game-players-options-'+z+'p')).parent('.saito-select').css('display', 'none');
-	    $(('.game-players-options-'+z+'p')).css('display','none');
+          for (let p = gamemod.minPlayers; p <= gamemod.maxPlayers; p++) {
+            var option = document.createElement("option");
+            option.text = p + " player";
+            option.value = p;
+            document.querySelector('.game-players-select').add(option);
           }
-        }
 
-	if (gamemod.maxPlayers > 2) {
-          $('.game-players-select').css('display', "flex");
-	  if (gamemod.maxPlayers < 6 || current_sel < 6) {
-	    $('#game-players-select-6p').css('display','none');
-	    $('.game-players-options-6p').parent('.saito-select').css('display', 'none');
-	    $('.game-players-options-6p').css('display','none');
-	  }
-	  if (gamemod.maxPlayers < 5 || current_sel < 5) {
-	    $('#game-players-select-5p').css('display','none');
-	    $('.game-players-options-5p').parent('.saito-select').css('display', 'none');
-	    $('.game-players-options-5p').css('display','none');
-	  }
-	  if (gamemod.maxPlayers < 4 || current_sel < 4) {
-	    $('#game-players-select-4p').css('display','none');
-	    $('#game-players-select-4p').parent('.saito-select').css('display', 'none');
-	    $('.game-players-options-4p').css('display','none');
-	  }
-	  if (gamemod.maxPlayers < 3 || current_sel < 3) {
-	    $('#game-players-select-3p').css('display','none');
-	    $('#game-players-select-3p').parent('.saito-select').css('display', 'none');
-	    $('.game-players-options-3p').css('display','none');
-	  }
-	}
-}, 100);
+        }, 100);
 
+        //game-invite-btn
 
-        document.getElementById('game-create-btn')
+        document.getElementById('game-invite-btn')
           .addEventListener('click', (e) => {
 
-            let options  = {};
+            let options = getOptions();
 
-            $('form input, form select').each(
-              function(index) {
-                var input = $(this);
-                if (input.is(":checkbox")) {
-                  if (input.prop("checked")) {
-                    options[input.attr('name')] = 1;
-                  }
-                } else {
-                  options[input.attr('name')] = input.val();
-                }
-              }
-            );
+            let gamedata = {
+              name: gamemod.name,
+              slug: gamemod.returnSlug(),
+              options: gamemod.returnFormattedGameOptions(options),
+              options_html: gamemod.returnGameRowOptionsHTML(options),
+              players_needed: document.querySelector('.game-players-select').value,
+            };
 
-            let gamedata = {};
-                gamedata.name = gamemod.name;
-                gamedata.slug = gamemod.returnSlug();
-                gamedata.options = gamemod.returnFormattedGameOptions(options);
-                gamedata.options_html = gamemod.returnGameRowOptionsHTML(options);
-                gamedata.players_needed = $('.game-players-select').val();
 
-	    if (gamedata.players_needed == 1) {
-	      // 1 player games just launch
+            var players_needed = document.querySelector('.game-players-select').value;
+
+            if (players_needed == 1) {
+              // 1 player games just launch
               data.arcade.launchSinglePlayerGame(app, data, gamedata);
-	      return;
+              return;
+            } else {
+              document.querySelector('.game-details').toggleClass('hidden');
+              document.querySelector('.game-start-controls').toggleClass('hidden');
+              document.querySelector('.game-invite-controls').toggleClass('hidden');
+
+              if (players_needed >= 3) {
+                document.querySelector('#link-invite').toggleClass('hidden');
+              }
             }
 
-            data.arcade.sendOpenRequest(app, data, gamedata);
-            document.querySelector('.arcade-main').innerHTML = '';
-            data.arcade.render(app, data);
 
 
           });
 
+        document.getElementById('game-create-btn')
+          .addEventListener('click', (e) => {
+            let options = getOptions();
 
+            let gamedata = {
+              name: gamemod.name,
+              slug: gamemod.returnSlug(),
+              options: gamemod.returnFormattedGameOptions(options),
+              options_html: gamemod.returnGameRowOptionsHTML(options),
+              players_needed: document.querySelector('.game-players-select').value,
+            };
 
-          document.querySelector('.game-players-select').addEventListener('change',(e) =>{
-            let players = parseInt(e.currentTarget.value);
+            let newtx = data.arcade.createOpenTransaction(gamedata);
+            data.arcade.app.network.propagateTransaction(newtx);
+            document.querySelector('.arcade-main').innerHTML = '';
+            data.arcade.render(app, data);
 
-            for (let i = 0; i < 10; i++) {
-	      let classhit = ".game-players-options-"+(i+1)+"p";
-	      let classhit2 = "#game-players-select-"+(i+1)+"p";
-              if (i < players) {
-                $(classhit).css('display', "flex");
-		$(classhit2).parent('.saito-select').css('display', 'flex');
-              } else {
-                $(classhit).css('display', "none");
-		$(classhit2).parent('.saito-select').css('display', 'none');
-              }
+          });
+
+        document.getElementById('friend-invite-btn')
+          .addEventListener('click', (e) => {
+
+            var players_needed = document.querySelector('.game-players-select').value;
+            var players_invited = document.querySelector('#game-invitees').value.split(/[ ,]+/);
+
+            if (players_needed == 1) {
+              // 1 player games just launch
+              data.arcade.launchSinglePlayerGame(app, data, gamedata);
+              return;
             }
-          })
+
+            if (players_invited.length >= players_needed - 1) {
+              let options = getOptions();
+              options['players_invited'] = players_invited;
+
+              let gamedata = {
+                name: gamemod.name,
+                slug: gamemod.returnSlug(),
+                options: gamemod.returnFormattedGameOptions(options),
+                options_html: gamemod.returnGameRowOptionsHTML(options),
+                players_needed: document.querySelector('.game-players-select').value,
+              };
 
 
+              let newtx = data.arcade.createOpenTransaction(gamedata);
+              data.arcade.app.network.propagateTransaction(newtx);
+              document.querySelector('.arcade-main').innerHTML = '';
+              data.arcade.render(app, data);
+            } else {
 
+              salert('More players needed. Add a comma separated list of their names or addresses.');
+              document.querySelector('#game-invitees').focus();
+
+            }
+
+          });
+
+          //link-invite-btn
+          document.getElementById('link-invite-btn')
+          .addEventListener('click', (e) => {
+            document.querySelector('.game-players-select').value = 2;
+            // and then SP's amazing code.
+          });
 
         return;
       }
     }
   },
 
-
   attachEvents(app, data) {
-
 
     document.querySelector('#return-to-arcade')
       .onclick = (e) => {
@@ -160,12 +163,46 @@ setTimeout(() => {
         data.arcade.render(app, data);
       }
 
-      document.querySelector('.background-shim-cover')
+    document.querySelector('.background-shim-cover')
       .onclick = (e) => {
         document.querySelector('.arcade-main').innerHTML = '';
         data.arcade.render(app, data);
       }
 
+
+    document.getElementById('link-invite-btn')
+      .onclick = () => {
+        let { active_game } = data;
+        let game_module = app.modules.returnModule(active_game);
+        let options = game_module.returnFormattedGameOptions(getOptions());
+        let ts = new Date().getTime();
+
+        let payload = {
+          name: active_game,
+          publickey: app.wallet.returnPublicKey(),
+          options,
+          players_needed: document.querySelector('.game-players-select').value,
+          ts,
+        };
+
+        let newtx = data.arcade.createOpenTransaction(payload);
+        let base64str = app.crypto.stringToBase64(JSON.stringify({
+          tx: newtx.transaction
+        }));
+
+        //
+        // TODO: include additional html for copy to clipboard functionality
+        console.log(base64str);
+
+        var inviteInput = document.getElementById("link-invite-input");
+        inviteInput.value = `${window.location}invite/${base64str}`;
+        inviteInput.select()
+        inviteInput.setSelectionRange(0, 99999); /* for mobile */
+        document.execCommand("copy");
+        salert(`Link copied to clipboard`);
+
+        data.arcade.addGameToOpenList(newtx);
+      }
   }
 
 }

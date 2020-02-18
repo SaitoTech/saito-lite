@@ -2,6 +2,8 @@ const ArcadeMainTemplate = require('./arcade-main.template');
 
 const ArcadeGameCarousel = require('./arcade-game-carousel/arcade-game-carousel');
 
+const ArcadeStartGameList = require('./../arcade-start-game-list/arcade-start-game-list');
+
 const ArcadeGameTemplate = require('./arcade-game.template');
 const ArcadeGameListRowTemplate = require('./arcade-gamelist-row.template');
 
@@ -17,31 +19,20 @@ module.exports = ArcadeMain = {
     if (!arcade_main) { return; }
     arcade_main.innerHTML = ArcadeMainTemplate();
 
-    ArcadeGameCarousel.render(app, data);
-
-    //
-    // Carousel - click-to-create
-    //
-    //let carousel = document.getElementById("arcade-carousel-slides");
-    //data.arcade.mods.forEach(mod => {
-    //  let gameobj = mod.respondTo("arcade-games");
-    //  if (gameobj != null) {
-    //    carousel.innerHTML += ArcadeGameTemplate(mod, gameobj);
-    //  }
-    //});
-
-    //
-    // click-to-join
-    //
     data.arcade.games.forEach(tx => {
 
-console.log("TX GAME: " + JSON.stringify(tx));
+      console.log("\n\n\nSHOWING GAMES: ");
+      console.log("TX: " + JSON.stringify(tx));
 
-      let txmsg = tx.returnMessage();
-      let publickey = app.wallet.returnPublicKey();
-      let { game_id, game } = txmsg;
+      let game_id = tx.transaction.msg.game_id;
+      let game = tx.transaction.msg.game;
+      let players = tx.transaction.msg.players;
+      let players_sigs = tx.transaction.msg.players_sigs;
 
-      if (game == '') return;
+      console.log("PLAYERS: " + players);
+      console.log("PLAYER SIGS: " + players_sigs);
+
+      if (game == '') { return; }
 
       let button_text = {};
       button_text.join = "JOIN";
@@ -49,21 +40,18 @@ console.log("TX GAME: " + JSON.stringify(tx));
       //
       // eliminate "JOIN" button if I am in the game already
       //
-      if (txmsg.over == 1) {
-	delete button_text.join;
+      if (tx.transaction.msg.over == 1) {
+        delete button_text.join;
       }
-      if (tx.isFrom(app.wallet.returnPublicKey())) {
-	delete button_text.join;
-      }
-      if (tx.transaction.msg.players_array) {
-        if (tx.transaction.msg.players_array.includes(app.wallet.returnPublicKey())) {
-	  delete button_text.join;
+
+      if (players) {
+        if (players.includes(app.wallet.returnPublicKey())) {
+          delete button_text.join;
         }
-      }
 
-
-      if (tx.isFrom(publickey)) {
-        button_text.cancel = "CANCEL";
+        if (players.includes(app.wallet.returnPublicKey())) {
+          button_text.cancel = "CANCEL";
+        }
       }
 
       if (app.options.games) {
@@ -76,19 +64,15 @@ console.log("TX GAME: " + JSON.stringify(tx));
             button_text.continue = "CONTINUE";
             delete button_text.join;
 
-	    if (txmsg.over == 1) {
-	      delete button_text.continue;
-	    }
+            if (tx.transaction.msg.over == 1) {
+              delete button_text.continue;
+            }
 
-            if (game.players.some(player => publickey == player))
-              button_text.delete = "DELETE";
-              delete button_text.cancel;
           }
         });
       }
-
+console.log("LISTING GAME: " + JSON.stringify(tx.transaction));
       document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(app, tx, button_text);
-      console.log(button_text);
     });
 
   },
@@ -104,21 +88,23 @@ console.log("TX GAME: " + JSON.stringify(tx));
     //
     // carousel
     //
-    ArcadeGameCarousel.render(app, data);
     
-    document.querySelector('.arcade-carousel-wrapper').addEventListener('click', (e) => {
-      ArcadeStartGameList.render(app, data);
-      ArcadeStartGameList.attachEvents(app, data);
-    });
+    //document.querySelector('.arcade-carousel-wrapper').addEventListener('click', (e) => {
+    //  ArcadeStartGameList.render(app, data);
+    //  ArcadeStartGameList.attachEvents(app, data);
+    //});
 
     //
     // big button (removed)
     //
-    document.querySelector('.big-create-game').addEventListener('click', (e) => {
-      ArcadeStartGameList.render(app, data);
-      ArcadeStartGameList.attachEvents(app, data);
-    });
-    
+    let big_create_button = document.querySelector('.big-create-game');
+    if (big_create_button) {
+      big_create_button.onclick = (e) => {
+        ArcadeStartGameList.render(app, data);
+        ArcadeStartGameList.attachEvents(app, data);
+      };
+    }
+
     //
     // create game
     //
@@ -147,14 +133,27 @@ console.log("TX GAME: " + JSON.stringify(tx));
         let accepted_game = null;
 
         games.forEach((g) => {
-          if (g.transaction.sig === game_id) accepted_game = g;
+          if (g.transaction.sig === game_id) { accepted_game = g; }
         });
 
-        if (!accepted_game) return;
+        if (!accepted_game) { return; }
 
-        //
-        // check that we're not accepting our own game
-        //
+	//
+	// if there are not enough players, we will join not accept
+	//
+        let players_needed = parseInt(accepted_game.transaction.msg.players_needed);
+        let players_available = accepted_game.transaction.msg.players.length;
+        if ( players_needed > (players_available+1) ) {
+          let newtx = data.arcade.createJoinTransaction(app, data, accepted_game);
+          data.arcade.app.network.propagateTransaction(newtx);
+	  data.arcade.joinGameOnOpenList(newtx);
+          salert("Joining game! Please wait a moment");
+	  return;
+	}
+
+	//
+	// we are the final player, but first check we're not accepting our own game
+	//
         if (accepted_game.transaction.from[0].add == app.wallet.returnPublicKey()) {
           let { players } = accepted_game.returnMessage();
           if (players.length > 1) {
@@ -167,21 +166,28 @@ console.log("TX GAME: " + JSON.stringify(tx));
           } else {
             salert("You cannot accept your own game!");
           }
+
         } else {
+
           //
-          // check if we've already accepted game and have it locally
+          // we are going to send a message to accept this game, but first check if we have
+	  // already done this, in which case we will have the game loaded in our local games list
           //
           if (app.options.games) {
+
             let existing_game = app.options.games.find(g => g.id == game_id);
 
             if (existing_game != -1 && existing_game) {
               if (existing_game.initializing == 1) {
-                salert("This game is initializing!");
+
+                salert("Accepted Game! It may take a minute for your browser to update -- please be patient!");
 
                 ArcadeLoader.render(app, data);
                 ArcadeLoader.attachEvents(app, data);
                 return;
+
               } else {
+
                 //
                 // solid game already created
                 //
@@ -212,30 +218,28 @@ console.log("TX GAME: " + JSON.stringify(tx));
 
               if (res.rows.length > 0) {
                 if (res.rows[0].game_still_open == 1) {
+
                   //
                   // data re: game in form of tx
                   //
                   let { transaction } = accepted_game;
                   let game_tx = Object.assign({ msg: { players_array: null } }, transaction);
 
-                  if (game_tx.msg.players_array) {
-                    let players = transaction.msg.players_array.split("_");
-                    if (players.length >= 2) {
-                      data.arcade.sendMultiplayerAcceptRequest(app, data, accepted_game);
-                      return;
-                    }
-                  }
+salert("Accepting this game - it may take a minute for your browser to start initializing -- please be patient!");
+                  let newtx = data.arcade.createAcceptTransaction(accepted_game);
+		  data.arcade.app.network.propagateTransaction(newtx);
 
-                  //
-                  // sanity check
-                  //
-                  data.arcade.sendInviteRequest(app, data, accepted_game);
                   ArcadeLoader.render(app, data);
                   ArcadeLoader.attachEvents(app, data);
+ 
+                 return;
+
                 } else {
-                  salert("Sorry... game already accepted. Your list of open games will update shortly on next block!");
-                }
-              }
+		  salert("Sorry, this game has been accepted already!");
+	        }
+              } else {
+                salert("Sorry... game already accepted. Your list of open games will update shortly on next block!");
+	      }
             });
         }
       };
@@ -256,35 +260,35 @@ console.log("TX GAME: " + JSON.stringify(tx));
 
           for (let i = 0; i < app.options.games.length; i++) {
 
-console.log("CHECKING: " + app.options.games[i].id);
+            console.log("CHECKING: " + app.options.games[i].id);
 
-	    if (app.options.games[i].id == game_id) {
+            if (app.options.games[i].id == game_id) {
 
-console.log("THE GAME IS THE SAME AS OUR GAME ID!");
+              console.log("THE GAME IS THE SAME AS OUR GAME ID!");
 
-	      let resigned_game = app.options.games[i];
+              let resigned_game = app.options.games[i];
 
               if (resigned_game.over == 0) {
 
-console.log("GETTING ASKED TO RESIGN, then deleting!");
+                console.log("GETTING ASKED TO RESIGN, then deleting!");
 
-            	let game_mod = app.modules.returnModule(resigned_game.module);
-            	game_mod.resignGame(game_id);
+                let game_mod = app.modules.returnModule(resigned_game.module);
+                game_mod.resignGame(game_id);
 
               } else {
 
-console.log("DELETING A GAME!");
-	        //
-	        // removing game someone else ended
-	        //
-		app.options.games[i].over = 1;
-		app.options.games[i].last_block = app.blockchain.last_bid;
-		app.storage.saveOptions();
+                console.log("DELETING A GAME!");
+                //
+                // removing game someone else ended
+                //
+                app.options.games[i].over = 1;
+                app.options.games[i].last_block = app.blockchain.last_bid;
+                app.storage.saveOptions();
 
-	      }
-	    }
-	  }
-console.log("REMOVE GAME FROM GAME LIST!");
+              }
+            }
+          }
+          console.log("REMOVE GAME FROM GAME LIST!");
           this.removeGameFromList(game_id);
         }
       };
@@ -297,13 +301,13 @@ console.log("REMOVE GAME FROM GAME LIST!");
         game_id = game_id.split('-').pop();
 
         if (app.options.games) {
-	  for (let i = 0; i < app.options.games.length; i++) {
-	    if (app.options.games[i].id == game_id) {
-	      app.options.games[i].ts = new Date().getTime();
-	      app.storage.saveOptions();
-	      let thismod = app.modules.returnModule(app.options.games[i].module);
-              window.location = '/'+thismod.returnSlug();
-	    }
+          for (let i = 0; i < app.options.games.length; i++) {
+            if (app.options.games[i].id == game_id) {
+              app.options.games[i].ts = new Date().getTime();
+              app.storage.saveOptions();
+              let thismod = app.modules.returnModule(app.options.games[i].module);
+              window.location = '/' + thismod.returnSlug();
+            }
           }
         }
       };
@@ -315,6 +319,22 @@ console.log("REMOVE GAME FROM GAME LIST!");
 
         let game_id = e.currentTarget.id;
         sig = game_id.split('-').pop();
+        var testsig = "";
+
+        if (app.options.games) {
+          for (let i = 0; i < app.options.games.length; i++) {
+            if(typeof(app.options.games[i].transaction) != 'undefined') {
+              testsig = app.options.games[i].transaction.sig;
+            } else if (typeof(app.options.games[i].id) != 'undefined') {
+              testsig = app.options.games[i].id;
+            }
+            if ( testsig == sig) {
+              app.options.games[i].over = 1;
+              app.options.games.splice(i, 1);
+              app.storage.saveOptions();
+            }
+          }
+        }
 
         let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
         let msg = {
@@ -328,14 +348,14 @@ console.log("REMOVE GAME FROM GAME LIST!");
         newtx = app.wallet.signTransaction(newtx);
         app.network.propagateTransaction(newtx);
 
-        this.removeGameFromList(game_id);
+        this.removeGameFromList(sig);
       }
     });
   },
 
   removeGameFromList(game_id) {
     document.getElementById(`arcade-gamelist`)
-                  .removeChild(document.getElementById(`arcade-game-${game_id}`));
+      .removeChild(document.getElementById(`arcade-game-${game_id}`));
   }
 
 }

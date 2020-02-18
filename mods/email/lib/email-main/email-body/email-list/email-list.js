@@ -6,8 +6,8 @@ module.exports = EmailList = {
     render(app, data) {
 
       document.querySelector('.email-body').innerHTML = EmailListTemplate();
-
-      data.email.emails[data.email.emails.active].forEach(tx => {
+      let inbox_emails = data.email.emails[data.email.emails.active]; //.reverse();
+      inbox_emails.forEach(tx => {
         document.querySelector('.email-list').innerHTML +=
             EmailListRowTemplate(tx, data.email.addrController.returnAddressHTML(tx.transaction.from[0].add), data.helpers);
       });
