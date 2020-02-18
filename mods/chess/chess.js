@@ -255,7 +255,7 @@ console.log("QUEUE: " + this.game.queue);
     }
 
     var status = '';
-
+;
     var moveColor = 'White';
     if (this.engine.turn() === 'b') {
       moveColor = 'Black';
