@@ -768,9 +768,13 @@ class Arcade extends ModTemplate {
 
 
 	if (rows2.length > 0) {
+
 	  // only do if invites exist
-          gametx.msg.players = [];
-          gametx.msg.players_sigs = [];
+	  if (!gametx.msg.players ) {
+            gametx.msg.players = [];
+            gametx.msg.players_sigs = [];
+          }
+
           for (let z = 0; z < rows2.length; z++) {
             gametx.msg.players.push(rows2[z].player);
             gametx.msg.players_sigs.push(rows2[z].acceptance_sig);
@@ -917,7 +921,7 @@ class Arcade extends ModTemplate {
     //
     let game_id = tx.transaction.sig;
     let players_needed = 2;
-    if (parseInt(txmsg.players_needed) > 2) { players_needed = txmsg.players_needed; }
+    if (parseInt(txmsg.players_needed) > 2) { players_needed = parseInt(txmsg.players_needed); }
     let module = txmsg.game;
     let options = {};
     if (txmsg.options != undefined) { options = txmsg.options; }
