@@ -6479,12 +6479,23 @@ console.log("1");
       }
       if (this.game.player == 2) {
 
-        this.updateStatus("Place 1 influence in each of 7 non USSR-controlled countries in Western Europe");
+	var countries_where_i_can_place = 0;
+        for (var i in this.countries) {
+          if (i == "canada" || i == "uk" || i == "sweden" || i == "france" || i == "benelux" || i == "westgermany" || i == "spain" ||  i == "italy" || i == "greece" || i == "turkey" || i == "denmark" || i == "norway" || i == "sweden" ||  i == "finland" || i == "austria") {
+            if (twilight_self.isControlled("ussr", countryname) != 1) {
+	      countries_where_i_can_place++;
+	    }
+	  }
+        }
+
+        var ops_to_place = countries_where_i_can_place;
+	if (ops_to_place > 7) { ops_to_place = 7; }
+
+        this.updateStatus("Place 1 influence in each of "+ops_to_place+" non USSR-controlled countries in Western Europe");
 
         var twilight_self = this;
         twilight_self.playerFinishedPlacingInfluence();
 
-        var ops_to_place = 7;
         twilight_self.addMove("resolve\tmarshall");
         for (var i in this.countries) {
 
@@ -10990,8 +11001,8 @@ console.log("1");
       }
 
       if (this.game.state.events.cubanmissilecrisis == 1) {
-	this updateStatus("USSR is under Cuban Missile Crisis and cannot coup. Skipping Ortega coup.");
-	this updateLog("USSR is under Cuban Missile Crisis and cannot coup. Skipping Ortega coup.");
+	this.updateStatus("USSR is under Cuban Missile Crisis and cannot coup. Skipping Ortega coup.");
+	this.updateLog("USSR is under Cuban Missile Crisis and cannot coup. Skipping Ortega coup.");
 	return 1;
       }
 
