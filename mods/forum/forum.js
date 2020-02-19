@@ -2,15 +2,17 @@ const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 
 const ForumMain = require('./lib/forum-main/forum-main');
-const ForumPost = require('./lib/forum-main/forum-post');
+const ForumRightSidebar = require('./lib/forum-right-sidebar/forum-right-sidebar');
+const ForumLeftSidebar = require('./lib/forum-left-sidebar/forum-left-sidebar');
 const ForumTeaser = require('./lib/forum-main/forum-teaser');
+const ForumPost = require('./lib/forum-main/forum-post');
 const ForumComment = require('./lib/forum-main/forum-comment');
 
+const Header = require('../../lib/ui/header/header');
+const AddressController = require('../../lib/ui/menu/address-controller');
 
 /**
 const h2m = require('h2m');
-const fs   = require('fs');
-const util = require('util');
 const URL  = require('url-parse');
 const path = require('path');
 const markdown = require( "markdown" ).markdown;
@@ -64,6 +66,57 @@ class Forum extends ModTemplate {
 
 
 
+  createPostTransaction(title, content, link="", forum="", post_id="", comment_id="", parent_id="") {
+
+    let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+
+    //
+    // arcade will listen, but we need game engine to receive to start initialization
+    //
+    tx.transaction.msg.module     = "Forum";
+    tx.transaction.msg.type       = "post";
+
+    tx.transaction.msg.post_id    = post_id;
+    tx.transaction.msg.comment_id = comment_id;
+    tx.transaction.msg.parent_id  = parent_id;
+    tx.transaction.msg.forum      = forum;
+    tx.transaction.msg.title      = title;
+    tx.transaction.msg.content    = content;
+    tx.transaction.msg.link       = link;
+
+    tx = this.app.wallet.signTransaction(tx);
+
+    return tx;
+ 
+  }
+  async receivePostTransaction(tx) {
+
+    if (this.app.BROWSER == 1) { return; }
+
+    let txmsg = tx.returnMessage();
+
+    let sql = "INSERT INTO posts (post_id, comment_id, parent_id, forum, title, content, tx, link, unixtime, rank, votes, comments) VALUES ($post_id, $comment_id, $parent_id, $forum, $title, $content, $tx, $link, $unixtime, $rank, $votes, $comments)";
+    let params = {
+      $post_id 		: tx.transaction.sig,
+      $comment_id 	: txmsg.comment_id,
+      $parent_id 	: txmsg.parent_id,
+      $forum 		: txmsg.forum,
+      $title		: txmsg.title,
+      $content		: txmsg.content,
+      $tx		: JSON.stringify(tx.transaction),
+      $link		: txmsg.link,
+      $unixtime		: tx.transaction.ts,
+      $rank             : tx.transaction.ts,
+      $votes		: 0,
+      $comments		: 0,
+    }
+    await this.app.storage.executeDatabase(sql, params, "forum");
+
+  }
+
+
+
+
 
   onPeerHandshakeComplete(app, peer) {
 
@@ -76,19 +129,21 @@ class Forum extends ModTemplate {
     //
     this.sendPeerDatabaseRequest("forum", "teasers", "*", "", null, (res, data) => {
       if (res.rows) {
+
         res.rows.forEach(row => {
-console.log("ROW is: " + JSON.stringify(row));
-	  let txobj = JSON.parse(row.tx);
-          let tx = new saito.transaction(txobj.transaction);
-console.log("TX is: " + JSON.stringify(tx));
-          forum_self.forum.teasers.push(tx);
+	  try {
+            let tx = new saito.transaction(row.tx);
+            forum_self.forum.teasers.push(tx);
+            console.log("H: " + tx.transaction.msg.title);
+          } catch (err) {
+	    console.log("Error fetching posts!: " + err);
+	  }
         });
-
-console.log("TEASERS is: " + JSON.stringify(forum_self.forum.teasers));
-
 
 	data = {};
 	data.forum = forum_self;
+
+console.log("RENDING WIDTH: " + JSON.stringify(data.forum.forum.teasers));
 
         ForumMain.render(this.app, data);
         ForumMain.attachEvents(this.app, data);
@@ -99,15 +154,34 @@ console.log("TEASERS is: " + JSON.stringify(forum_self.forum.teasers));
 
 
 
+  render(app, data) {
+
+    data = {};
+    data.forum = this;
+
+    ForumMain.render(this.app, data);
+    ForumMain.attachEvents(this.app, data);
+
+    ForumRightSidebar.render(this.app, data);
+    ForumRightSidebar.attachEvents(this.app, data);
+
+    ForumLeftSidebar.render(this.app, data);
+    ForumLeftSidebar.attachEvents(this.app, data);
+
+
+  }
 
 
   initializeHTML(app) {
+  
+    Header.render(app, data);
+    Header.attachEvents(app, data);
+
 
     let data = {};
         data.forum = this;
 
-    ForumMain.render(this.app, data);
-    ForumMain.attachEvents(this.app, data);
+    this.render(this.app, data);
 
   }
 
@@ -141,23 +215,46 @@ console.log("TEASERS is: " + JSON.stringify(forum_self.forum.teasers));
       //
       // create fake post
       //
-      let newtx = app.wallet.createUnsignedTransaction();
-          newtx.transaction.msg.module = "Forum";
-          newtx.transaction.msg.type = "post";
-          newtx.transaction.msg.post_id = "1";
-          newtx.transaction.msg.parent_id = "1";
-          newtx.transaction.msg.title = "This is our title";
-          newtx.transaction.msg.content = "This is our content";
-      newtx = app.wallet.signTransaction(newtx);
+      let newtx = this.createPostTransaction(
+	"This is our title",
+	"This is our text"
+      );
+      newtx.transaction.votes = 123;
+      newtx.transaction.comments = 2;
+
+      let newtx2 = this.createPostTransaction(
+	"This is another title",
+	"This is another text "
+      );
+      newtx2.transaction.votes = 33;
+      newtx.transaction.comments = 22;
 
       let res = {};
 	  res.err = "";
 	  res.rows = [];
 
-      res.rows.push({ tx : newtx });
+      res.rows.push({ tx : newtx.transaction });
+      res.rows.push({ tx : newtx2.transaction });
 
-console.log("SENDING: " + JSON.stringify(res.rows));
 
+      let sql = `
+        SELECT tx, votes FROM posts
+        WHERE parent_id = ""
+        ORDER BY id
+        DESC LIMIT 10
+      `;
+      let rows2 = await this.app.storage.queryDatabase(sql, {}, 'forum'); 
+
+      if (rows2) {
+	for (let i = 0; i < rows2.length; i++) {
+console.log(rows2[i].tx);
+          let txobj = JSON.parse(rows2[i].tx);
+	  let newtx = new saito.transaction(txobj);
+	  newtx.transaction.votes = rows2[i].votes;
+	  newtx.transaction.comments = rows2[i].comments;
+	  res.rows.push({ tx : newtx.transaction });
+        }
+      }
       mycallback(res);
 
       return;
@@ -177,9 +274,14 @@ console.log("SENDING: " + JSON.stringify(res.rows));
 
     if (app.BROWSER == 0) {
       if (conf == 0) {
+
         let forum_self = app.modules.returnModule("Forum");
-        if (tx.transaction.msg.type == "comment") { forum_self.saveComment(tx); }
-        if (tx.transaction.msg.type == "post") { myforum.savePost(tx); }
+
+        if (tx.transaction.msg.type == "post") {
+console.log("RECEIVE POST TX");
+	  forum_self.receivePostTransaction(tx); 
+	}
+
       }
     }
 

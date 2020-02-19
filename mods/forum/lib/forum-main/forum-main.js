@@ -9,7 +9,6 @@ module.exports = ForumMain = {
     if (!forum_main) { return; }
     forum_main.innerHTML = ForumMainTemplate();
 
-console.log(JSON.stringify(data.forum.forum));
 
     //
     // all posts / comments

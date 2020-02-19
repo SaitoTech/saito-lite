@@ -4,12 +4,16 @@ CREATE TABLE IF NOT EXISTS posts (
 	comment_id TEXT,
 	parent_id TEXT,
         forum TEXT,
+        title TEXT,
+        content TEXT,
         tx TEXT,
-        url TEXT,
+        link TEXT,
         unixtime INTEGER,
         rank INTEGER,
+        votes INTEGER,
+        comments INTEGER,
         UNIQUE (tx),
         PRIMARY KEY(id ASC)
-)
+);
 
 

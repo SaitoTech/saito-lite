@@ -1,3 +1,4 @@
+/**
 
 1. webpage snapshots are handled by wkhtmltopdf in concert with phantomJS
 
@@ -20,7 +21,7 @@ If necessary, run this command and then `sudo dpkg -i...` again
 sudo apt-get -f install
 
 
-
+***/
 
 
 

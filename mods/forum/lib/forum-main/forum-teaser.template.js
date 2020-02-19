@@ -1,28 +1,59 @@
-module.exports = ForumTeaserTemplate = (tx) => {
+module.exports = ForumTeaserTemplate = (app, tx) => {
 
-  return `
-      <div class="post" id="${tx.transaction.sig}">
+  let link = tx.transaction.msg.link;
+  let subforum = "/f/main";
+  let comments_text = "read comments";
+  let votes = tx.transaction.votes || 0;
+  let comments = tx.transaction.comments || 0;
+  if (comments > 0) {
+    if (comments == 1) {
+      comments_text = "1 comment"; 
+    } else {
+      comments_text = comments + " comments"; 
+    }
+  }
+  if (tx.transaction.msg.forum) { subforum = "/f/"+tx.transaction.msg.forum; }
 
-        <div class="post-author">david</div>
+  if (link == "") {
+    link = "/f/"+subforum+"/"+tx.transaction.sig;
+  }
 
-        <div class="post-votes">
-          <div class="upvote-wrapper"></div>
-          <div class="votes-total">12</div>
-          <div class="downvote-wrapper"></div>
+
+  let html = `
+      <div class="teaser" id="${tx.transaction.sig}">
+
+        <div class="teaser-author">david</div>
+
+        <div class="teaser-votes">
+          <div class="upvote-wrapper" id="post_upvote_${tx.transaction.sig}" >
+            <i class="fa fa-arrow-up upvote post_upvote" aria-hidden="true"></i>
+          </div>
+          <div class="votes-total">${tx.transaction.votes}</div>
+          <div class="downvote-wrapper" id="post_downvote_${tx.transaction.sig}" >
+            <i class="fa fa-arrow-down downvote post_downvote" aria-hidden="true"></i>
+	  </div>
         </div>
 
-        <div class="post-thumbnail"></div>
+        <div class="teaser-thumbnail"></div>
 
-        <div class="post-content">
-          <div class="post-content-title">Team Saito working from Thailand -- update!</div>
-          <div class="post-content-details">submitted by david</div>
-          <div class="post-content-links">
-            <div class="post-content-links-comments">2 comments</div>
-            <div class="post-content-links-edit">edit</div>
-            <div class="post-content-links-report">report</div>
+        <div class="teaser-content">
+          <div class="teaser-content-title"><a href="${link}">${tx.transaction.msg.title}</a> 
+	    <div class="teaser-site">(<a href="">heavy.com</a>)</div>
+	  </div>
+          <div class="teaser-content-details">submitted by <span class="post_author_clickable" id="post_author_clickable_${tx.transaction.sig}">david</span> to <a href="/f/${subforum}">/f/${subforum}</a><span class="post_author_address" id="${tx.transaction.from[0].add}" style="display:none"></span></div>
+          <div class="teaser-content-links">
+            <div class="teaser-content-links-comments">${comments_text}</div>
+  `;
+  if (app.wallet.returnPublicKey() == tx.transaction.from[0].add) {
+    html += `<div class="teaser-content-links-edit">edit</div>`;
+  }
+  html += `
+            <div class="teaser-content-links-report">report</div>
           </div>
         </div>
 
       </div>
   `;
+
+  return html;
 }

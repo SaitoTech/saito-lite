@@ -7,7 +7,7 @@ module.exports = ForumTeaser = {
     let teasers = document.querySelector(".teasers");
     if (!teasers) { return; }
 console.log("ADDING THIS TEASER: " + JSON.stringify(data.forum.forum.teaser));
-    teasers.innerHTML += ForumTeaserTemplate(data.forum.forum.teaser);
+    teasers.innerHTML += ForumTeaserTemplate(app, data.forum.forum.teaser);
 
   },
 
