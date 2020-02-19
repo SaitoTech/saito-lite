@@ -10989,6 +10989,13 @@ console.log("1");
         return 1;
       }
 
+      if (this.game.state.events.cubanmissilecrisis == 1) {
+	this updateStatus("USSR is under Cuban Missile Crisis and cannot coup. Skipping Ortega coup.");
+	this updateLog("USSR is under Cuban Missile Crisis and cannot coup. Skipping Ortega coup.");
+	return 1;
+      }
+
+
       if (this.game.player == 1) {
         this.updateStatus("Pick a country adjacent to Nicaragua to coup: ");
       } else {
