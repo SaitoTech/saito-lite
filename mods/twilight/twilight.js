@@ -48,7 +48,7 @@ class Twilight extends GameTemplate {
     this.is_testing = 0;
 
     this.log_length = 150;
-    this.interface = 1;
+    this.interface = 0;
     this.dont_show_confirm = 0;
 
     this.gameboardZoom  = 0.90;
@@ -96,7 +96,7 @@ class Twilight extends GameTemplate {
         callback: this.handleCardsMenuItem.bind(this)
       },
       'game-lang': {
-        name: 'Lang',
+        name: 'Display',
         callback: this.handleLangMenuItem.bind(this)
       },
       'game-player': {
@@ -187,6 +187,11 @@ class Twilight extends GameTemplate {
           <li class="menu-item" id="english">English</li>
           <li class="menu-item" id="chinese">简体中文</li>
         </ul>
+        <div style="margin-top:20px">Card Display:</div>
+       <ul>
+          <li class="menu-item" id="text">Text Menu</li>
+          <li class="menu-item" id="graphics">Graphical Menu</li>
+        </ul>
       </div>`;
 
     $('.hud-menu-overlay').html(user_message);
@@ -198,6 +203,17 @@ class Twilight extends GameTemplate {
     $('.menu-item').on('click', function() {
 
       let action2 = $(this).attr("id");
+
+      if (action2 === "text") {
+        twilight_self.displayModal("Card Menu options changed to text-mode. Please reload.");
+        twilight_self.interface = 0;
+        twilight_self.saveGamePreference("interface", 0);
+      }
+      if (action2 === "graphics") {
+        twilight_self.displayModal("Card Menu options changed to graphical mode. Please reload.");
+        twilight_self.interface = 1;
+        twilight_self.saveGamePreference("interface", 1);
+      }
 
       if (action2 === "english") {
         twilight_self.displayModal("Language Settings", "Card settings changed to English");
@@ -276,6 +292,9 @@ class Twilight extends GameTemplate {
     if (this.app.options.gameprefs != undefined) {
       if (this.app.options.gameprefs.interface == 0) {
         this.interface = 0;
+      }
+      if (this.app.options.gameprefs.interface == 1) {
+        this.interface = 1;
       }
       if (this.app.options.gameprefs.dont_show_confirm == 1) {
         this.dont_show_confirm = 1;
@@ -3337,7 +3356,10 @@ console.log("1");
     let opponent = "us";
     let playable_cards = [];
 
-    if (this.game.player == 2) { player = "us"; opponent = "ussr"; }
+    if (this.game.player == 2) {
+      player = "us";
+      opponent = "ussr"; 
+    }
 
     is_this_missile_envy_noneventable = this.game.state.events.missileenvy;
 
@@ -4727,9 +4749,10 @@ console.log("1");
             if (twilight_self.countries[countryname].place == 1) {
 
               //
-              // vietnam revolts and china card
+              // vietnam revolts and china card - US never eligible for former
               //
-              if (twilight_self.countries[countryname].region !== "seasia") { twilight_self.game.state.events.vietnam_revolts_eligible = 0; }
+              twilight_self.game.state.events.vietnam_revolts_eligible = 0;
+              //if (twilight_self.countries[countryname].region !== "seasia") { twilight_self.game.state.events.vietnam_revolts_eligible = 0; }
               if (twilight_self.countries[countryname].region.indexOf("asia") < 0) { twilight_self.game.state.events.china_card_eligible = 0; }
 
               if (twilight_self.isControlled("ussr", countryname) == 1) { twilight_self.game.break_control = 1; }
@@ -6460,12 +6483,23 @@ console.log("1");
       }
       if (this.game.player == 2) {
 
-        this.updateStatus("Place 1 influence in each of 7 non USSR-controlled countries in Western Europe");
+	var countries_where_i_can_place = 0;
+        for (var i in this.countries) {
+          if (i == "canada" || i == "uk" || i == "sweden" || i == "france" || i == "benelux" || i == "westgermany" || i == "spain" ||  i == "italy" || i == "greece" || i == "turkey" || i == "denmark" || i == "norway" || i == "sweden" ||  i == "finland" || i == "austria") {
+            if (twilight_self.isControlled("ussr", countryname) != 1) {
+	      countries_where_i_can_place++;
+	    }
+	  }
+        }
+
+        var ops_to_place = countries_where_i_can_place;
+	if (ops_to_place > 7) { ops_to_place = 7; }
+
+        this.updateStatus("Place 1 influence in each of "+ops_to_place+" non USSR-controlled countries in Western Europe");
 
         var twilight_self = this;
         twilight_self.playerFinishedPlacingInfluence();
 
-        var ops_to_place = 7;
         twilight_self.addMove("resolve\tmarshall");
         for (var i in this.countries) {
 
@@ -10970,6 +11004,13 @@ console.log("1");
         return 1;
       }
 
+      if (this.game.state.events.cubanmissilecrisis == 1) {
+	this.updateStatus("USSR is under Cuban Missile Crisis and cannot coup. Skipping Ortega coup.");
+	this.updateLog("USSR is under Cuban Missile Crisis and cannot coup. Skipping Ortega coup.");
+	return 1;
+      }
+
+
       if (this.game.player == 1) {
         this.updateStatus("Pick a country adjacent to Nicaragua to coup: ");
       } else {
@@ -12687,9 +12728,9 @@ console.log("1");
       return `<div id="${card.replace(/ /g,'')}" class="card showcard cardbox-hud cardbox-hud-status">${this.returnCardImage(card)}</div>`;
     } else {
       if (this.game.deck[0].cards[card] == undefined) {
-        return '<li class="card" id="'+card+'">'+this.game.deck[0].cards[card].name+'</li>';
+        return '<li class="card showcard" id="'+card+'">'+this.game.deck[0].cards[card].name+'</li>';
       }
-      return '<li class="card" id="'+card+'">'+this.game.deck[0].cards[card].name+'</li>';
+      return '<li class="card showcard" id="'+card+'">'+this.game.deck[0].cards[card].name+'</li>';
     }
 
   }

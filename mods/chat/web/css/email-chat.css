@@ -1,3 +1,115 @@
+/* Visuelt fonts */
+
+@font-face {
+  font-family: 'visuelt-black';
+  src: url('/saito/fonts/visuelt-black.eot');
+  src: url('/saito/fonts/visuelt-black.eot?#iefix') format('embedded-opentype'), url('/saito/fonts/visuelt-black.woff2') format('woff2'), url('/saito/fonts/visuelt-black.woff') format('woff'), url('/saito/fonts/visuelt-black.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'visuelt-light';
+  src: url('/saito/fonts/visuelt-light.eot');
+  src: url('/saito/fonts/visuelt-light.eot?#iefix') format('embedded-opentype'), url('/saito/fonts/visuelt-light.woff2') format('woff2'), url('/saito/fonts/visuelt-light.woff') format('woff'), url('/saito/fonts/visuelt-light.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'visuelt-medium';
+  src: url('/saito/fonts/visuelt-medium.eot');
+  src: url('/saito/fonts/visuelt-medium.eot?#iefix') format('embedded-opentype'), url('/saito/fonts/visuelt-medium.woff2') format('woff2'), url('/saito/fonts/visuelt-medium.woff') format('woff'), url('/saito/fonts/visuelt-medium.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'p-word';
+  src: url('/saito/fonts/password.ttf') format('truetype');
+}
+
+/* HTML and Page Structure */
+
+:root {
+  --saito-red: rgb(247, 31, 61);
+  --saito-orange: #ff8235;
+  --saito-skyline-grey: rgb(234, 234, 239);
+  --saito-cyber-black: rgb(28, 28, 35);
+  --saito-white: #ffffff;
+  --saito-red-wash: rgb(247, 31, 61, 0.3);
+  --saito-cyber-black-wash: rgb(28, 28, 35, 0.3);
+  --saito-cyber-black-cut: rgb(28, 28, 35, 0.5);
+  --saito-wu: none;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  --text-color-normal: var(--saito-cyber-black);
+  --backround-general: var(--saito-white);
+  --text-color-highlight: var(--saito-red);
+}
+
+html[data-theme='dark'] {
+  --text-color-normal: var(--saito-skyline-grey);
+  --backround-general: var(--saito-cyber-black);
+  --text-color-highlight: var(--saito-red);
+}
+
+p {
+  font-family: 'visuelt-light';
+}
+
+a {
+  color: var(--saito-red);
+}
+
+a:hover {
+  color: var(--saito-cyber-black);
+}
+
+body {
+  /* width: 100vw;
+    height: 100vh; */
+  background-color: var(--backround-general);
+  color: var(--text-color-normal);
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0.5em 0;
+}
+
+hr {
+  margin: 1em 0;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.spacer {
+  margin-bottom: 2.5em;
+}
+
+.monospace {
+  font-family: monospace, 'Courier New', Courier;
+}
+
+.boldred {
+  color: var(--saito-red);
+  font-weight: bolder;
+}
+
+
+/* chat CSS proper */
+
 .chat-row {
   display: grid;
   grid-column-gap: 1em;
