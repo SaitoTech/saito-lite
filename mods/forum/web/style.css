@@ -66,17 +66,21 @@
 }
 .teaser-votes {
  float:left;
- padding-left:8px;
+ padding-left:5px;
  padding-top:3px;
  width: 28px;
  height: 72px;
  font-size: 1.1em;
 }
 .upvote-wrapper {
+ padding-left:4px;
 }
 .votes-total {
+ text-align:center;
+ width:100%;
 }
 .downvote-wrapper {
+ padding-left:4px;
 }
 .teaser-thumbnail {
  float:left;
@@ -87,10 +91,14 @@
  border: 1px solid blue;
  background-color: #e7e7e7;
 }
+.teaser-thumbnail-image {
+ width: 72px;
+ height: 72px;
+}
 .teaser-content {
   float:left;
   max-width: 500px;
-  margin-left: 15px;
+  margin-left: 5px;
   margin-bottom: 20px;
 }
 .teaser-site {
@@ -119,20 +127,22 @@
  color: #373737;
  font-size:0.85em;
  font-weight: bold;
- padding-top: 4px;
  clear:all;
 }
 .teaser-content-links-comments {
  float: left;
  margin-right: 15px;
+ cursor:pointer;
 }
 .teaser-content-links-edit {
  float: left;
  margin-right: 15px;
+ cursor:pointer;
 }
 .teaser-content-links-report {
  float: left;
  margin-right: 15px;
+ cursor:pointer;
 }
 
 

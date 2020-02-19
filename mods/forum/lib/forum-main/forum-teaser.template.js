@@ -12,11 +12,10 @@ module.exports = ForumTeaserTemplate = (app, tx) => {
       comments_text = comments + " comments"; 
     }
   }
-  if (tx.transaction.msg.forum) { subforum = "/f/"+tx.transaction.msg.forum; }
+  let thumbnail = "/forum/img/saito-logo-blue.png";
 
-  if (link == "") {
-    link = "/f/"+subforum+"/"+tx.transaction.sig;
-  }
+  if (tx.transaction.msg.forum) { subforum = "/f/"+tx.transaction.msg.forum; }
+  if (link == "") { link = subforum+"/"+tx.transaction.sig; }
 
 
   let html = `
@@ -34,13 +33,13 @@ module.exports = ForumTeaserTemplate = (app, tx) => {
 	  </div>
         </div>
 
-        <div class="teaser-thumbnail"></div>
+        <div class="teaser-thumbnail"><img src="${thumbnail}" class="teaser-thumbnail-image" /></div>
 
         <div class="teaser-content">
           <div class="teaser-content-title"><a href="${link}">${tx.transaction.msg.title}</a> 
 	    <div class="teaser-site">(<a href="">heavy.com</a>)</div>
 	  </div>
-          <div class="teaser-content-details">submitted by <span class="post_author_clickable" id="post_author_clickable_${tx.transaction.sig}">david</span> to <a href="/f/${subforum}">/f/${subforum}</a><span class="post_author_address" id="${tx.transaction.from[0].add}" style="display:none"></span></div>
+          <div class="teaser-content-details">submitted by <span class="post_author_clickable" id="post_author_clickable_${tx.transaction.sig}">david</span> to <a href="${subforum}">${subforum}</a><span class="post_author_address" id="${tx.transaction.from[0].add}" style="display:none"></span></div>
           <div class="teaser-content-links">
             <div class="teaser-content-links-comments">${comments_text}</div>
   `;
