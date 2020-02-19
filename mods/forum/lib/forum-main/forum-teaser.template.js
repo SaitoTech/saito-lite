@@ -12,7 +12,7 @@ module.exports = ForumTeaserTemplate = (app, tx) => {
       comments_text = comments + " comments"; 
     }
   }
-  let thumbnail = "/forum/img/saito-logo-blue.png";
+  let thumbnail = "/forum/img/forum-logo.png";
 
   if (tx.transaction.msg.forum) { subforum = "/f/"+tx.transaction.msg.forum; }
   if (link == "") { link = subforum+"/"+tx.transaction.sig; }

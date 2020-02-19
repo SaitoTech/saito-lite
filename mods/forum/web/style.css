@@ -90,6 +90,7 @@
  margin-right:10px;
  border: 1px solid blue;
  background-color: #e7e7e7;
+ cursor:pointer;
 }
 .teaser-thumbnail-image {
  width: 72px;
