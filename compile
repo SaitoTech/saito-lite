@@ -45,7 +45,9 @@ function reset {
   rm -f ./mods/appstore/bundler/*.json
   rm -f ./logs/*
 
-
+  #let the system know that users pre-existed a reset.
+  echo "update users set latest_tx = -1;" | sqlite3 ./data/rewards.sq3
+  
   if [ -f config/options.conf ]; then
     cp config/options.conf config/options
   fi
