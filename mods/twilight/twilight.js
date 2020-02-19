@@ -3356,7 +3356,10 @@ console.log("1");
     let opponent = "us";
     let playable_cards = [];
 
-    if (this.game.player == 2) { player = "us"; opponent = "ussr"; }
+    if (this.game.player == 2) {
+      player = "us";
+      opponent = "ussr"; 
+    }
 
     is_this_missile_envy_noneventable = this.game.state.events.missileenvy;
 
@@ -4746,9 +4749,10 @@ console.log("1");
             if (twilight_self.countries[countryname].place == 1) {
 
               //
-              // vietnam revolts and china card
+              // vietnam revolts and china card - US never eligible for former
               //
-              if (twilight_self.countries[countryname].region !== "seasia") { twilight_self.game.state.events.vietnam_revolts_eligible = 0; }
+              twilight_self.game.state.events.vietnam_revolts_eligible = 0;
+              //if (twilight_self.countries[countryname].region !== "seasia") { twilight_self.game.state.events.vietnam_revolts_eligible = 0; }
               if (twilight_self.countries[countryname].region.indexOf("asia") < 0) { twilight_self.game.state.events.china_card_eligible = 0; }
 
               if (twilight_self.isControlled("ussr", countryname) == 1) { twilight_self.game.break_control = 1; }
