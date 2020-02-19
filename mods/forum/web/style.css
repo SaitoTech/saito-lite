@@ -1,0 +1,31 @@
+
+
+.forum-container {
+
+  display: grid;
+  margin: 0.75em;
+  margin-top: 100px;
+  grid-row-gap: 1em;
+  grid-column-gap: 1em;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-areas:
+    "forum-left-sidebar forum-main forum-right-sidebar";
+  font-size: 1.0em;
+}
+
+.forum-left-sidebar {
+  grid-area: forum-left-sidebar;
+  border: 1px solid blue;
+}
+
+.forum-main {
+  grid-area: forum-main;
+  border: 1px solid red;
+}
+
+.forum-right-sidebar {
+  grid-area: forum-right-sidebar;
+  border: 1px solid green;
+}
+
