@@ -6,7 +6,6 @@ const ArcadeInvite = require('./lib/arcade-invite/arcade-invite');
 const ArcadeLoader = require('./lib/arcade-main/arcade-loader');
 const ArcadeLeftSidebar = require('./lib/arcade-left-sidebar/arcade-left-sidebar');
 const ArcadeRightSidebar = require('./lib/arcade-right-sidebar/arcade-right-sidebar');
-//const ArcadeStartGameList = require('./lib/arcade-start-game-list/arcade-start-game-list');
 const ArcadeGameCarousel = require('./lib/arcade-main/arcade-game-carousel/arcade-game-carousel');
 
 const Header = require('../../lib/ui/header/header');

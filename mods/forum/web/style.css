@@ -1,0 +1,151 @@
+
+
+.forum-container {
+  display: grid;
+  margin: 0.75em;
+  margin-top: 100px;
+  grid-row-gap: 1em;
+  grid-column-gap: 1em;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-areas:
+    "forum-left-sidebar forum-main forum-right-sidebar";
+  font-size: 1.0em;
+}
+
+.forum-left-sidebar {
+  grid-area: forum-left-sidebar;
+  border: 1px solid blue;
+}
+
+.forum-main {
+  grid-area: forum-main;
+  border: 1px solid red;
+}
+
+.forum-right-sidebar {
+  grid-area: forum-right-sidebar;
+  border: 1px solid green;
+}
+
+
+
+
+
+.post-create-container {
+  padding: 10px;
+}
+.post-create-label {
+  margin-top: 20px;
+}
+.post-create-title {
+}
+.post-create-link {
+}
+.post-create-textarea {
+}
+.post-create-forum {
+}
+.post-submit-btn {
+  margin-top:20px;
+}
+
+
+
+
+
+
+.teaser {
+  width:600px;
+  padding-bottom:10px;
+  padding-top:10px;
+  clear:both;
+}
+.teaser-author {
+  display:none;
+}
+.teaser-votes {
+ float:left;
+ padding-left:5px;
+ padding-top:3px;
+ width: 28px;
+ height: 72px;
+ font-size: 1.1em;
+}
+.upvote-wrapper {
+ padding-left:4px;
+}
+.votes-total {
+ text-align:center;
+ width:100%;
+}
+.downvote-wrapper {
+ padding-left:4px;
+}
+.teaser-thumbnail {
+ float:left;
+ width: 72px;
+ height: 72px;
+ margin-left:5px;
+ margin-right:10px;
+ border: 1px solid blue;
+ background-color: #e7e7e7;
+ cursor:pointer;
+}
+.teaser-thumbnail-image {
+ width: 72px;
+ height: 72px;
+}
+.teaser-content {
+  float:left;
+  max-width: 500px;
+  margin-left: 5px;
+  margin-bottom: 20px;
+}
+.teaser-site {
+  display: inline;
+  color: #474747;
+  font-size: 0.8em;
+  padding-top: 5px;
+  margin-left: 10px;
+}
+.teaser-site a {
+  color: #474747;
+  font-size: 0.8em;
+}
+.teaser-content {
+}
+.teaser-content-title {
+ float:left;
+ clear:all;
+}
+.teaser-content-details {
+ max-width: 500px;
+ margin-bottom: 2px;
+ clear:both;
+}
+.teaser-content-links {
+ color: #373737;
+ font-size:0.85em;
+ font-weight: bold;
+ clear:all;
+}
+.teaser-content-links-comments {
+ float: left;
+ margin-right: 15px;
+ cursor:pointer;
+}
+.teaser-content-links-edit {
+ float: left;
+ margin-right: 15px;
+ cursor:pointer;
+}
+.teaser-content-links-report {
+ float: left;
+ margin-right: 15px;
+ cursor:pointer;
+}
+
+
+
+
