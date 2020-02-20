@@ -508,15 +508,17 @@ max-width: 95vw;
   .hud {
     font-size: 22px;
     width: 100vw;
-    position: absolute;
-    top: 100vw;
+    position: fixed;
+    bottom: 0;
     left: 0;
     height: calc(100vh - 100vw);
     min-height: 350px;
     min-width: 100vw;
     transform: none;
     display: block;
+    z-index: -1;
   }
+  
   .hud-header, .hud-menu {
     display: none;
   }
