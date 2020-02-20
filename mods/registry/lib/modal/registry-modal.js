@@ -1,4 +1,3 @@
-const axios = require('axios');
 const RegistryModalTemplate = require('./registry-modal.template');
 const RegistrySuccessModalTemplate = require('./registry-modal-success.template');
 
@@ -54,7 +53,7 @@ module.exports = RegistryModal = {
         email_button.onclick = async () => {
           // let email_addr = document.getElementById('registry-input').value;
           // if (email_addr) {
-          //   let resp = await axios.get(`http://saito.tech/success.php?email=${email}`);
+          //   let resp = await fetch(`http://saito.tech/success.php?email=${email}`);
           // }
 
           //
