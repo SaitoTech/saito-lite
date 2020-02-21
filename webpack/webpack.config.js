@@ -78,6 +78,15 @@ module.exports = {
                 options: {
                     publicPath: "dist/"
                 }
+            },
+
+            // exludes the zip files in appstore
+            {
+                test: /\.zip$/,
+                exclude: [
+                    path.resolve(__dirname, '../mods/appstore/bundler'),
+                    path.resolve(__dirname, '../mods/appstore/mods'),
+                ]
             }
         ]
     },

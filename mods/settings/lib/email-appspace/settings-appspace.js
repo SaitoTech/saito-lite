@@ -120,7 +120,7 @@ alert(JSON.stringify(err));
             wallet_reader.readAsBinaryString(selectedFile);
 
           } else {
-alert("Cancelling Wallet Restoration...");
+            alert("Cancelling Wallet Restoration...");
           }
       };
 
@@ -133,12 +133,12 @@ alert("Cancelling Wallet Restoration...");
           app.wallet.resetWallet();
           salert("Wallet reset!");
 
-	  data.email.emails.inbox = [];
-	  data.email.emails.sent = [];
-	  data.email.emails.trash = [];
+          data.email.emails.inbox = [];
+          data.email.emails.sent = [];
+          data.email.emails.trash = [];
 
-	  data.email.body.render(app, data);
-	  data.email.body.attachEvents(app, data);
+          data.email.body.render(app, data);
+          data.email.body.attachEvents(app, data);
 
       };
 

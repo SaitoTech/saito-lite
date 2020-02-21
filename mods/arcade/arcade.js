@@ -1,4 +1,3 @@
-const axios = require('axios');
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const ArcadeMain = require('./lib/arcade-main/arcade-main');
@@ -77,35 +76,38 @@ class Arcade extends ModTemplate {
       }
     }
 
-    axios.get(`/arcade/observer/${game_id}`)
+    fetch(`/arcade/observer/${game_id}`)
       .then(response => {
-        let game = response.data;
-        //
-        // tell peers to forward this address transactions
-        //
-        this.app.keys.addWatchedPublicKey(address_to_watch);
+        response.json().then(data => {
+          let game = data;
+          //
+          // tell peers to forward this address transactions
+          //
+          this.app.keys.addWatchedPublicKey(address_to_watch);
+          let { games } = this.app.options;
 
-        //
-        // specify observer mode only
-        //
-        game.player = 0;
-        if (this.app.options.games == undefined) {
-          this.app.options.games = [];
-        }
-
-        for (let i = 0; i < this.app.options.games.length; i++) {
-          if (this.app.options.games[i].id == game.id) {
-            this.app.options.games.splice(i, 1);
+          //
+          // specify observer mode only
+          //
+          game.player = 0;
+          if (games == undefined) {
+            games = [];
           }
-        }
 
-        this.app.options.games.push(game);
-        this.app.storage.saveOptions();
+          for (let i = 0; i < games.length; i++) {
+            if (games[i].id == game.id) {
+              games.splice(i, 1);
+            }
+          }
 
-        //
-        // move into game
-        //
-        window.location = '/' + arcade_self.app.options.games[arcade_self.app.options.games.length - 1].module.toLowerCase().replace(/\w/, '_');
+          games.push(game);
+          this.app.storage.saveOptions();
+
+          //
+          // move into game
+          //
+          window.location = '/' + games[games.length - 1].module.toLowerCase().replace(/\w/, '_');
+        })
       })
       .catch(err => console.info("ERROR 418019: error fetching game for observer mode", err));
   }

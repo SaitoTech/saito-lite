@@ -55,9 +55,9 @@ class Wordblocks extends GameTemplate {
       obj.title = "Wordblocks";
       return obj;
     }
-   
+
     return null;
- 
+
   }
 
 
@@ -77,6 +77,11 @@ class Wordblocks extends GameTemplate {
 
   }
 
+  initializeHTML(app) {
+    this.app.modules.respondTo("chat-manager").forEach(mod => {
+      mod.respondTo('chat-manager').render(this.app, this);
+    });
+  }
 
   initializeGame(game_id) {
 
@@ -86,6 +91,8 @@ console.log("INITIALIZE GAME");
 //      const chat = this.app.modules.returnModule("Chat");
 //      chat.addPopUpChat();
 //    }
+
+
     this.updateStatus("loading game...");
     this.loadGame(game_id);
 
@@ -103,17 +110,17 @@ console.log("INITIALIZE GAME");
       if (xhr.status != 200) {
         salert(`Network issues downloading dictionary -- ${durl}`);
       } else {
-	//
-	// TODO -- dictionary should be JSON
-	//
-	eval(xhr.response);
+        //
+        // TODO -- dictionary should be JSON
+        //
+        eval(xhr.response);
         this.wordlist = wordlist;
       }
-    } catch(err) { // instead of onerror
+    } catch (err) { // instead of onerror
       salert("Network issues downloading dictionary");
     }
 
-console.log("\n\n\nDOWNLOADED WORDLIST: " + JSON.stringify(this.wordlist));
+    console.log("\n\n\nDOWNLOADED WORDLIST: " + JSON.stringify(this.wordlist));
 
     //
     // deal cards 

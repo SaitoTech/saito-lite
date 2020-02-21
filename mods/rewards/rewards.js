@@ -449,7 +449,7 @@ class Rewards extends ModTemplate {
         newtx.transaction.msg.title = "Saito Rewards: " + event;
       }
       newtx.transaction.msg.message = `
-        <p>You have received <span class="boldred">${amount} tokens</span> from our Saito rewards.</p>
+        <p>You have received <span class="boldred">${amount} tokens</span> from the Saito rewards system.</p>
         `;
       newtx = this.app.wallet.signTransaction(newtx);
 

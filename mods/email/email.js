@@ -176,6 +176,8 @@ class Email extends ModTemplate {
     //
     //
     //
+    url = new URL(window.location.href);
+    if (url.searchParams.get('module') != null) { return; }
 
     this.app.storage.loadTransactions("Email", 50, (txs) => {
 

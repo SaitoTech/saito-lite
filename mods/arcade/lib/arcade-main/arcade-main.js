@@ -225,9 +225,9 @@ console.log("LISTING GAME: " + JSON.stringify(tx.transaction));
                   let { transaction } = accepted_game;
                   let game_tx = Object.assign({ msg: { players_array: null } }, transaction);
 
-salert("Accepting this game - it may take a minute for your browser to start initializing -- please be patient!");
+                  salert("Game accepted - please wait");
                   let newtx = data.arcade.createAcceptTransaction(accepted_game);
-		  data.arcade.app.network.propagateTransaction(newtx);
+                  data.arcade.app.network.propagateTransaction(newtx);
 
                   ArcadeLoader.render(app, data);
                   ArcadeLoader.attachEvents(app, data);
@@ -235,11 +235,11 @@ salert("Accepting this game - it may take a minute for your browser to start ini
                  return;
 
                 } else {
-		  salert("Sorry, this game has been accepted already!");
-	        }
+                  salert("Sorry, this game has been accepted already!");
+                }
               } else {
                 salert("Sorry... game already accepted. Your list of open games will update shortly on next block!");
-	      }
+              }
             });
         }
       };

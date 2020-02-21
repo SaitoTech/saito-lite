@@ -56,7 +56,7 @@ module.exports = ChatRoom = {
         document.querySelector('.chat-room-submit-button')
                 .onclick = (e) =>  submitMessage();
 
-        document.addEventListener('keydown', (e) => {
+        document.onkeydown = (e) => {
             if (e.keyCode == '13') {
                 if (!fired) {
                     fired = true;
@@ -64,7 +64,8 @@ module.exports = ChatRoom = {
                     submitMessage();
                 }
             }
-        });
+        }
+        document.onkeyup = (e) => { if (e.keyCode == '13') fired = false; }
 
         let chat_room_input = document.querySelector('#input.chat-room-input')
 
@@ -81,10 +82,6 @@ module.exports = ChatRoom = {
                 setTimeout(() => this.scrollToBottom(), 100);
             });
         }
-
-        document.addEventListener('keyup', (e) => {
-            if (e.keyCode == '13') { fired = false; }
-        });
 
         const receiveMessageListener = (msg) => {
             this.addMessageToDOM(app, msg, data);
@@ -147,6 +144,7 @@ module.exports = ChatRoom = {
                 last_message_timestamp: message.timestamp,
                 last_message_sig: message.sig,
                 messages: [...last_message_block.messages, message],
+                type : app.wallet.returnPublicKey() == message.publickey ? 'myself' : 'others'
             });
             document.querySelector('.chat-room-content')
                 .innerHTML += ChatMessageContainerTemplate(last_message_block, data);
@@ -159,7 +157,7 @@ module.exports = ChatRoom = {
                 keyHTML: message.keyHTML,
                 identicon : message.identicon,
                 identicon_color : message.identicon_color,
-                type: 'others',
+                type : app.wallet.returnPublicKey() == message.publickey ? 'myself' : 'others',
                 messages: [message]
             });
             this.room_message_blocks.push(new_message_block);
