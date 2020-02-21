@@ -468,11 +468,14 @@ class Arcade extends ModTemplate {
       }
     });
 
-
-    for (let i = 0; i < this.app.options.games.length; i++) {
-      if (this.app.options.games[i].id == game_sig) {
-	this.app.options.games.splice(i, 1);
-        this.app.storage.saveOptions();
+    if (this.app.options) {
+      if (this.app.options.games) {
+        for (let i = 0; i < this.app.options.games.length; i++) {
+          if (this.app.options.games[i].id == game_sig) {
+  	    this.app.options.games.splice(i, 1);
+            this.app.storage.saveOptions();
+          }
+        }
       }
     }
 
