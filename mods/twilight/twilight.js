@@ -6476,6 +6476,7 @@ console.log("1");
     if (card == "marshall") {
 
       this.game.state.events.marshall = 1;
+      var twilight_self = this;
 
       if (this.game.player == 1) {
         this.updateStatus("US is playing Marshall Plan");
@@ -6486,7 +6487,7 @@ console.log("1");
 	var countries_where_i_can_place = 0;
         for (var i in this.countries) {
           if (i == "canada" || i == "uk" || i == "sweden" || i == "france" || i == "benelux" || i == "westgermany" || i == "spain" ||  i == "italy" || i == "greece" || i == "turkey" || i == "denmark" || i == "norway" || i == "sweden" ||  i == "finland" || i == "austria") {
-            if (twilight_self.isControlled("ussr", countryname) != 1) {
+            if (this.isControlled("ussr", countryname) != 1) {
 	      countries_where_i_can_place++;
 	    }
 	  }
@@ -6497,7 +6498,6 @@ console.log("1");
 
         this.updateStatus("Place 1 influence in each of "+ops_to_place+" non USSR-controlled countries in Western Europe");
 
-        var twilight_self = this;
         twilight_self.playerFinishedPlacingInfluence();
 
         twilight_self.addMove("resolve\tmarshall");
