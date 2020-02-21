@@ -45,10 +45,10 @@ class Twilight extends GameTemplate {
     this.boardgameWidth  = 5100;
 
     this.moves           = [];
-    this.is_testing = 0;
+    this.is_testing = 1;
 
     this.log_length = 150;
-    this.interface = 0;
+    this.interface = 1;
     this.dont_show_confirm = 0;
 
     this.gameboardZoom  = 0.90;
@@ -1807,10 +1807,10 @@ console.log("1");
 
           if (this.is_testing == 1) {
             if (this.game.player == 1) {
-              this.game.deck[0].hand = ["aldrichames","fiveyearplan", "berlinagreement", "junta", "che","degaulle","nato","naziscientist","missileenvy","formosan"];
+              this.game.deck[0].hand = ["decolonization","fiveyearplan", "berlinagreement", "junta", "che","degaulle","nato","naziscientist","missileenvy","formosan"];
             } else {
-              //this.game.deck[0].hand = ["duckandcover","degaulle","lonegunman","cubanmissile","handshake","lonegunman","asia","nasser","sadat"];
-              this.game.deck[0].hand = ["duckandcover","degaulle"];
+              this.game.deck[0].hand = ["duckandcover","degaulle","lonegunman","cubanmissile","handshake","lonegunman","asia","nasser","sadat"];
+              //this.game.deck[0].hand = ["duckandcover","degaulle"];
             }
           }
 
@@ -3363,8 +3363,6 @@ console.log("1");
 
     is_this_missile_envy_noneventable = this.game.state.events.missileenvy;
 
-  console.log("IS_THIS_MISSILE_ENVY_NONEVENTABLE: " + is_this_missile_envy_noneventable);
-
     let user_message = "";
     if (selected_card == null) {
 
@@ -4191,12 +4189,16 @@ console.log("1");
 
   }
 
+
+
   prePlayerPlaceInfluence(player) {
+
+
 
     //
     // reset
     //
-    for (var i in this.pountries) { this.game.countries[i].place = 0; }
+    for (var i in this.countries) { this.game.countries[i].place = 0; }
 
     //
     // ussr
@@ -4856,14 +4858,11 @@ console.log("1");
 
 
   playerFinishedPlacingInfluence(player, mycallback=null) {
-
     for (var i in this.countries) {
       let divname      = '#'+i;
       $(divname).off();
     }
-
     if (mycallback != null) { mycallback(); }
-
   }
 
 
@@ -6478,23 +6477,28 @@ console.log("1");
       this.game.state.events.marshall = 1;
       var twilight_self = this;
 
+console.log("1");
+
       if (this.game.player == 1) {
         this.updateStatus("US is playing Marshall Plan");
         return 0;
       }
       if (this.game.player == 2) {
+console.log("2");
 
 	var countries_where_i_can_place = 0;
         for (var i in this.countries) {
           if (i == "canada" || i == "uk" || i == "sweden" || i == "france" || i == "benelux" || i == "westgermany" || i == "spain" ||  i == "italy" || i == "greece" || i == "turkey" || i == "denmark" || i == "norway" || i == "sweden" ||  i == "finland" || i == "austria") {
-            if (this.isControlled("ussr", countryname) != 1) {
+            if (this.isControlled("ussr", i) != 1) {
 	      countries_where_i_can_place++;
 	    }
 	  }
         }
+console.log("3");
 
         var ops_to_place = countries_where_i_can_place;
 	if (ops_to_place > 7) { ops_to_place = 7; }
+console.log("4");
 
         this.updateStatus("Place 1 influence in each of "+ops_to_place+" non USSR-controlled countries in Western Europe");
 
