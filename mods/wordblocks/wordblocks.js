@@ -55,9 +55,9 @@ class Wordblocks extends GameTemplate {
       obj.title = "Wordblocks";
       return obj;
     }
-   
+
     return null;
- 
+
   }
 
 
@@ -77,13 +77,11 @@ class Wordblocks extends GameTemplate {
 
   }
 
-  initialize(app) {
+  initializeHTML(app) {
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(this.app, this);
     });
-    super.initialize(app);
   }
-
 
   initializeGame(game_id) {
 

@@ -49,11 +49,10 @@ class Chessgame extends GameTemplate {
 
   }
 
-  initialize(app) {
+  initializeHTML(app) {
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(this_chess.app, this_chess);
     });
-    super.initialize(app);
   }
 
   async initializeGame(game_id) {
