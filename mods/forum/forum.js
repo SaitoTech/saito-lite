@@ -49,7 +49,7 @@ class Forum extends ModTemplate {
 
 
     this.icon_fa = "fab fa-reddit-alien";
-
+    this.mods                 = [];
 
     this.view_forum        = "main";
     this.view_post_id      = "";
@@ -114,6 +114,11 @@ class Forum extends ModTemplate {
     if (this.app.BROWSER == 1) { return; }
 
     let txmsg = tx.returnMessage();
+
+    let check_sql = "SELECT id FROM posts where post_id = $post_id";
+    let check_params = { $post_id : tx.transaction.sig }
+    let rows = await this.app.storage.queryDatabase(check_sql, check_params, "forum"); 
+    if (rows) { if (rows.length > 0) { return;} }
 
     let sql = "INSERT INTO posts (post_id, comment_id, parent_id, forum, title, content, tx, link, unixtime, rank, votes, comments) VALUES ($post_id, $comment_id, $parent_id, $forum, $title, $content, $tx, $link, $unixtime, $rank, $votes, $comments)";
     let params = {
@@ -231,6 +236,19 @@ class Forum extends ModTemplate {
   }
 
 
+  initialize(app) {
+
+    if (this.browser_active == 0) { return; }
+
+    // left-panel chat
+    //
+    let x = this.app.modules.respondTo("email-chat");
+    for (let i = 0; i < x.length; i++) {
+      this.mods.push(x[i]);
+    }
+
+  }
+
   initializeHTML(app) {
   
     Header.render(app, data);
@@ -264,12 +282,33 @@ class Forum extends ModTemplate {
 
     let forum_self = this;
 
-    expressapp.get('/forum/:subforum/:post_id', async (req, res) => {
-      let subforum = req.params.subforum;
-      let post_id  = req.params.post_id;
+    expressapp.get('/forum/:subforum', async (req, res) => {
+
+      let subforum = "";
+
+      if (req.params.subforum) { subforum = req.params.subforum; }
+
       let data = fs.readFileSync(__dirname + '/web/index.html', 'utf8', (err, data) => {});
-          data = data.replace('POST_ID', post_id);
-          data = data.replace('SUBFORUM', subforum);
+          if (subforum != "") { data = data.replace('SUBFORUM', subforum); }
+          data = data.replace('"OFFSET"', 0);
+      res.setHeader('Content-type', 'text/html');
+      res.charset = 'UTF-8';
+      res.write(data);
+      res.end();
+      return;
+    });
+
+    expressapp.get('/forum/:subforum/:post_id', async (req, res) => {
+
+      let subforum = "";
+      let post_id = "";
+
+      if (req.params.subforum) { subforum = req.params.subforum; }
+      if (req.params.post_id) { post_id = req.params.post_id; }
+
+      let data = fs.readFileSync(__dirname + '/web/index.html', 'utf8', (err, data) => {});
+          if (post_id != "") { data = data.replace('POST_ID', post_id); }
+          if (subforum != "") { data = data.replace('SUBFORUM', subforum); }
           data = data.replace('"OFFSET"', 0);
       res.setHeader('Content-type', 'text/html');
       res.charset = 'UTF-8';
@@ -310,7 +349,7 @@ class Forum extends ModTemplate {
       if (where_clause.toString().indexOf('INDEX') > -1) { return; }
       if (where_clause.toString().indexOf('DELETE') > -1) { return; }
 
-      let sql = "SELECT tx, votes FROM posts WHERE " + where_clause + " ORDER BY id DESC LIMIT 100";
+      let sql = "SELECT tx, votes, comments FROM posts WHERE " + where_clause + " ORDER BY id DESC LIMIT 100";
 
 console.log(sql);
 
@@ -338,34 +377,7 @@ console.log(i + ": " + rows2[i].tx);
         }
       }
       mycallback(res);
-
       return;
-
-
-/****
-      //
-      // create fake post
-      //
-      let newtx = this.createPostTransaction(
-	"This is our title",
-	"This is our text"
-      );
-      newtx.transaction.votes = 123;
-      newtx.transaction.comments = 2;
-      newtx.transaction.domain = "harding.com";
-
-      let newtx2 = this.createPostTransaction(
-	"This is another title",
-	"This is another text "
-      );
-      newtx2.transaction.votes = 33;
-      newtx2.transaction.comments = 22;
-      newtx2.transaction.domain = "jobs.com";
-
-      res.rows.push({ tx : newtx.transaction });
-      res.rows.push({ tx : newtx2.transaction });
-***/
-
 
     }
 

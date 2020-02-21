@@ -15,17 +15,14 @@
 
 .forum-left-sidebar {
   grid-area: forum-left-sidebar;
-  border: 1px solid blue;
 }
 
 .forum-main {
   grid-area: forum-main;
-  border: 1px solid red;
 }
 
 .forum-right-sidebar {
   grid-area: forum-right-sidebar;
-  border: 1px solid green;
 }
 
 
