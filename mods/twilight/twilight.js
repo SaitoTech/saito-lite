@@ -45,7 +45,7 @@ class Twilight extends GameTemplate {
     this.boardgameWidth  = 5100;
 
     this.moves           = [];
-    this.is_testing = 1;
+    this.is_testing = 0;
 
     this.log_length = 150;
     this.interface = 1;
@@ -6477,14 +6477,11 @@ console.log("1");
       this.game.state.events.marshall = 1;
       var twilight_self = this;
 
-console.log("1");
-
       if (this.game.player == 1) {
         this.updateStatus("US is playing Marshall Plan");
         return 0;
       }
       if (this.game.player == 2) {
-console.log("2");
 
 	var countries_where_i_can_place = 0;
         for (var i in this.countries) {
@@ -6494,11 +6491,9 @@ console.log("2");
 	    }
 	  }
         }
-console.log("3");
 
         var ops_to_place = countries_where_i_can_place;
 	if (ops_to_place > 7) { ops_to_place = 7; }
-console.log("4");
 
         this.updateStatus("Place 1 influence in each of "+ops_to_place+" non USSR-controlled countries in Western Europe");
 
@@ -6598,10 +6593,23 @@ console.log("4");
 
         var twilight_self = this;
         twilight_self.playerFinishedPlacingInfluence();
-        twilight_self.updateStatus("Place four influence in non-US controlled countries in Eastern Europe (1 per country)");
 
-        var ops_to_place = 4;
+        var countries_where_i_can_place = 0;
+        for (var i in this.countries) {
+          if (i == "finland" || i == "poland" || i == "eastgermany" || i == "austria" || i == "czechoslovakia" || i == "bulgaria" || i == "hungary" || i == "romania" || i == "yugoslavia") {
+            if (this.isControlled("us", i) != 1) {
+              countries_where_i_can_place++;
+            }
+          }
+        }
+
+        var ops_to_place = countries_where_i_can_place;
+        if (ops_to_place > 4) { ops_to_place = 4; }
+
+        twilight_self.updateStatus("Place "+ops_to_place+" influence in non-US controlled countries in Eastern Europe (1 per country)");
+
         twilight_self.addMove("resolve\tcomecon");
+
         for (var i in this.countries) {
 
           let countryname  = i;
