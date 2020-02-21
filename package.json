@@ -32,7 +32,6 @@
     "fs-extra": "^8.1.0",
     "identicon.js": "^2.3.3",
     "json-tree-viewer": "0.0.2",
-    "jsonpipe": "^2.2.0",
     "merkle-tree-gen": "^1.1.0",
     "node-cryptojs-aes": "^0.4.0",
     "node-fetch": "^2.6.0",
