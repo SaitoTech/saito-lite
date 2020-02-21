@@ -1,25 +1,13 @@
-const ForumMainTemplate = require('./forum-main.template');
+const ForumCommentTemplate = require('./forum-comment.template');
 
-module.exports = ForumMain = {
+module.exports = ForumComment = {
 
 
   render(app, data) {
 
-    let forum_main = document.querySelector(".forum-main");
-    if (!forum_main) { return; }
-    forum_main.innerHTML = ForumMainTemplate();
-
-
-    //
-    // create fake post
-    //
-    let newtx = app.wallet.createUnsignedTransaction();
-        newtx.transaction.msg.post_id = "1";
-        newtx.transaction.msg.title = "This is our title";
-        newtx.transaction.msg.content = "This is our content";
-    newtx = app.wallet.signTransaction(newtx);
-
-    data.forum.addPost(newtx);
+    let forum_comments = document.querySelector(".comments");
+    if (!forum_comments) { return; }
+    forum_comments.innerHTML += ForumCommentTemplate(data.forum.forum.comment);
 
   },
 

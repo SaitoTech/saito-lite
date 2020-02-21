@@ -1,25 +1,13 @@
-const ForumMainTemplate = require('./forum-main.template');
+const ForumPostTemplate = require('./forum-post.template');
 
-module.exports = ForumMain = {
+module.exports = ForumPost = {
 
 
   render(app, data) {
 
-    let forum_main = document.querySelector(".forum-main");
-    if (!forum_main) { return; }
-    forum_main.innerHTML = ForumMainTemplate();
-
-
-    //
-    // create fake post
-    //
-    let newtx = app.wallet.createUnsignedTransaction();
-        newtx.transaction.msg.post_id = "1";
-        newtx.transaction.msg.title = "This is our title";
-        newtx.transaction.msg.content = "This is our content";
-    newtx = app.wallet.signTransaction(newtx);
-
-    data.forum.addPost(newtx);
+    let forum_post = document.querySelector(".post");
+    if (!forum_post) { return; }
+    forum_post.innerHTML = ForumPostTemplate(data.forum.forum.post);
 
   },
 
@@ -28,6 +16,22 @@ module.exports = ForumMain = {
   attachEvents(app, data) {
 
     console.log("Add Events!");
+
+    document.querySelector('.post-add-comment-btn').addEventListener('click', (e) => {
+
+      let parent_id = document.querySelector('.post-parent-id').value;
+      let post_id   = document.querySelector('.post-post-id').value;
+      let content   = document.querySelector('.post-add-comment-textarea').value;
+      let forum     = document.querySelector('.post-forum').value;
+      let newtx     = data.forum.createPostTransaction("", content, "", forum, post_id, "", parent_id);
+ 
+      app.network.propagateTransaction(newtx);
+
+salert("Comment Posted!");
+
+    });
+
+
 
   },
 

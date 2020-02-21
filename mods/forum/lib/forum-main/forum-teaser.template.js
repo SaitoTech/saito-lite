@@ -1,7 +1,8 @@
 module.exports = ForumTeaserTemplate = (app, tx) => {
 
   let link = tx.transaction.msg.link;
-  let subforum = "/f/main";
+  let domain = tx.transaction.domain || "";
+  let subforum = "/forum/main";
   let comments_text = "read comments";
   let votes = tx.transaction.votes || 0;
   let comments = tx.transaction.comments || 0;
@@ -14,9 +15,9 @@ module.exports = ForumTeaserTemplate = (app, tx) => {
   }
   let thumbnail = "/forum/img/forum-logo.png";
 
-  if (tx.transaction.msg.forum) { subforum = "/f/"+tx.transaction.msg.forum; }
+  if (tx.transaction.msg.forum) { subforum = "/forum/"+tx.transaction.msg.forum; }
   if (link == "") { link = subforum+"/"+tx.transaction.sig; }
-
+  let discussion_link = subforum + "/" + tx.transaction.sig;
 
   let html = `
       <div class="teaser" id="${tx.transaction.sig}">
@@ -37,11 +38,15 @@ module.exports = ForumTeaserTemplate = (app, tx) => {
 
         <div class="teaser-content">
           <div class="teaser-content-title"><a href="${link}">${tx.transaction.msg.title}</a> 
-	    <div class="teaser-site">(<a href="">heavy.com</a>)</div>
+  `;
+   if (domain != "") {
+     html += `<div class="teaser-site">(<a href="${link}">${domain}</a>)</div>`;
+   }
+   html += `
 	  </div>
           <div class="teaser-content-details">submitted by <span class="post_author_clickable" id="post_author_clickable_${tx.transaction.sig}">david</span> to <a href="${subforum}">${subforum}</a><span class="post_author_address" id="${tx.transaction.from[0].add}" style="display:none"></span></div>
           <div class="teaser-content-links">
-            <div class="teaser-content-links-comments">${comments_text}</div>
+            <div class="teaser-content-links-comments"><a href="${discussion_link}">${comments_text}</a></div>
   `;
   if (app.wallet.returnPublicKey() == tx.transaction.from[0].add) {
     html += `<div class="teaser-content-links-edit">edit</div>`;
