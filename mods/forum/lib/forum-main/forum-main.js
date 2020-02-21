@@ -1,5 +1,8 @@
 const ForumMainTemplate = require('./forum-main.template');
 const ForumTeaser = require('./forum-teaser');
+const ForumPost = require('./forum-post');
+const ForumComment = require('./forum-comment');
+
 
 module.exports = ForumMain = {
 
@@ -11,7 +14,7 @@ module.exports = ForumMain = {
 
 
     //
-    // all posts / comments
+    // all teasers
     // 
     if (data.forum) {
       if (data.forum.forum.teasers) {
@@ -24,15 +27,42 @@ module.exports = ForumMain = {
       }
     }
 
+
+    //
+    // post
+    // 
+    if (data.forum) {
+      if (data.forum.forum.post) {
+	ForumPost.render(app, data);
+      }
+    }
+
+
+    //
+    // comments
+    // 
+    if (data.forum) {
+      if (data.forum.forum.comments) {
+        if (data.forum.forum.comments.length > 0) {
+  	  for (let i = 0; i < data.forum.forum.comments.length; i++) {
+	    data.forum.forum.comment = data.forum.forum.comments[i];
+	    ForumComment.render(app, data);
+	  }
+        }
+      }
+    }
+
+
+
+
   },
 
 
 
   attachEvents(app, data) {
 
-    console.log("Add Events!");
     //
-    // all posts / comments
+    // all teasers
     // 
     if (data.forum) {
       if (data.forum.forum.teasers) {
@@ -44,6 +74,31 @@ module.exports = ForumMain = {
         }
       }
     }
+
+    //
+    // post
+    // 
+    if (data.forum) {
+      if (data.forum.forum.post) {
+	ForumPost.attachEvents(app, data);
+      }
+    }
+
+
+    //
+    // comments
+    // 
+    if (data.forum) {
+      if (data.forum.forum.comments) {
+        if (data.forum.forum.comments.length > 0) {
+  	  for (let i = 0; i < data.forum.forum.comments.length; i++) {
+	    data.forum.forum.comment = data.forum.forum.comments[i];
+	    ForumComment.attachEvents(app, data);
+	  }
+        }
+      }
+    }
+
 
   },
 

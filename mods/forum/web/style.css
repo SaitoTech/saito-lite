@@ -15,17 +15,14 @@
 
 .forum-left-sidebar {
   grid-area: forum-left-sidebar;
-  border: 1px solid blue;
 }
 
 .forum-main {
   grid-area: forum-main;
-  border: 1px solid red;
 }
 
 .forum-right-sidebar {
   grid-area: forum-right-sidebar;
-  border: 1px solid green;
 }
 
 
@@ -50,6 +47,12 @@
   margin-top:20px;
 }
 
+
+.post-content {
+  clear:both;
+  line-height: 1.6em;
+  padding: 15px;
+}
 
 
 
@@ -112,6 +115,7 @@
 .teaser-site a {
   color: #474747;
   font-size: 0.8em;
+  text-decoration: none;
 }
 .teaser-content {
 }
@@ -135,17 +139,48 @@
  margin-right: 15px;
  cursor:pointer;
 }
+.teaser-content-links-comments a {
+ text-decoration: none;
+}
 .teaser-content-links-edit {
  float: left;
  margin-right: 15px;
  cursor:pointer;
+}
+.teaser-content-links-edit a {
+ text-decoration: none;
 }
 .teaser-content-links-report {
  float: left;
  margin-right: 15px;
  cursor:pointer;
 }
+.teaser-content-links-report a {
+ text-decoration: none;
+}
 
 
 
+
+.comment {
+  width: 100%;
+  min-height: 60px;
+  padding: 10px;
+}
+.comment-author {
+
+}
+.comment-text {
+
+}
+.comment-links {
+  clear:both;
+}
+.comment-links-reply {
+  float:left;
+}
+.comment-links-report {
+  margin-left: 10px;
+  float:left;
+}
 

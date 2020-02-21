@@ -1,5 +1,5 @@
-module.exports = ForumRightSidebarTemplate = () => {
+module.exports = ForumLeftSidebarTemplate = () => {
   return `
-    Left Sidebar
+    <div class="email-chat" id="email-chat"></div>
   `;
 }
