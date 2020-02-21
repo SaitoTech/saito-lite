@@ -1,6 +1,5 @@
 const ChatBoxTemplate = require('./chat-box.template.js');
-const ChatBoxMessageContainerTemplate = require('./chat-box-message-container.template.js');
-const ChatRoomMessageTemplate = require('../../chat-main/chat-room/chat-room-message.template');
+const ChatBoxMessageBlockTemplate = require('./chat-box-message-block.template.js');
 
 module.exports = ChatBox = {
 
@@ -8,10 +7,10 @@ module.exports = ChatBox = {
 
     render(app, data, group=null) {
 
+        if (!group) return;
+
         let active_group_name = "";
-        if (group != null) {
-          active_group_name = group.name;
-        }
+        active_group_name = group.name;
 
         if (!document.getElementById(`chat-box-${group.id}`)) {
           let {el_parser} = data.chat.helpers;
@@ -19,39 +18,23 @@ module.exports = ChatBox = {
         }
 
         let chat_box_main = document.getElementById(`chat-box-main-${group.id}`);
-        if (group != null) {
-          chat_box_main.innerHTML = '';
-          if (group.messages.length == 0) {
-            chat_box_main.innerHTML =
-              `<p id="chat-box-default-message-${group.id}" style="text-align:center">
-                No messages in this group :(
-              </p>`;
-          } else {
-            this.removeDefaultMessage(group.id);
-          }
 
-          var last_sender = "";
-          var last_sig = "";
-
-          group.messages.forEach(message => {
-            let { publickey } = message;
-
-            message = Object.assign({}, message, {
-              type : publickey == app.wallet.returnPublicKey() ? 'myself' : 'others',
-              keyHTML : data.chat.addrController.returnAddressHTML(publickey),
-              identicon_color : app.keys.returnIdenticonColor(publickey),
-            });
-
-            if (publickey != last_sender) {
-              chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(message, data);
-              last_sig = message.sig;
-            } else {
-              document.getElementById(`chat-box-message-container-${last_sig}`).innerHTML
-                  += ChatRoomMessageTemplate(message, data);
-            }
-            last_sender = publickey;
-          });
+        this.message_blocks = this.createMessageBlocks(app, data, group.messages);
+        if (this.message_blocks.length == 0) {
+          chat_box_main.innerHTML =
+            `<p id="chat-box-default-message-${group.id}" style="text-align:center">
+              No messages in this group :(
+            </p>`;
+        } else {
+          this.removeDefaultMessage(group.id);
         }
+
+        this.message_blocks.forEach(message_block => {
+          message_block = Object.assign({}, message_block, {
+            type : app.wallet.returnPublicKey() == message_block.publickey ? 'myself' : 'others'
+          });
+          chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(message_block, data);
+        });
 
         this.scrollToBottom(group.id);
     },
@@ -105,41 +88,50 @@ module.exports = ChatBox = {
       this.addTXToDOM(app, data, tx);
     },
 
-    addMessageToDOM(app, data, message) {
-      let { group_id, publickey } = message;
-
-      let chat_box_main = document.getElementById(`chat-box-main-${group_id}`)
-      if (!chat_box_main) { return; }
-      this.removeDefaultMessage(group_id);
-
-      message = Object.assign({}, message, {
-        type : publickey == app.wallet.returnPublicKey() ? 'myself' : 'others',
-        keyHTML : data.chat.addrController.returnAddressHTML(publickey),
-        identicon : app.keys.returnIdenticon(publickey),
-        identicon_color : app.keys.returnIdenticonColor(publickey),
-      });
-
-      var messages = [];
-      data.chat.groups.forEach(group => {
-        if (group.id == group_id) {messages = group.messages;}
-      });
-      var n = messages.length -1;
-      if (n == 0) {
-        chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(message, data);
-      } else {
-        if (messages[n-1].publickey != messages[n].publickey) {
-          chat_box_main.innerHTML += ChatBoxMessageContainerTemplate(message, data);
-        } else {
-          let chat_box_message_container = chat_box_main.querySelectorAll('.chat-box-message-container');
-          chat_box_message_container[chat_box_message_container.length-1].innerHTML += ChatRoomMessageTemplate(message, data);
-        }
-      }
-      this.scrollToBottom(group_id);
+    addTXToDOM(app, data, tx) {
+      let message = Object.assign({}, tx.returnMessage(), { type: 'myself' });
+      this.addMessageToDOM(app, data, message);
     },
 
-    addTXToDOM(app, data, tx) {
-      let message = Object.assign({}, tx.returnMessage());
-      this.addMessageToDOM(app, data, message);
+    addMessageToDOM(app, data, msg) {
+      let message = Object.assign({}, msg, {
+          keyHTML: data.chat.addrController.returnAddressHTML(msg.publickey),
+          identicon : app.keys.returnIdenticon(msg.publickey),
+          identicon_color : app.keys.returnIdenticonColor(msg.publickey),
+      });
+
+      let chat_box_main = document.getElementById(`chat-box-main-${message.group_id}`);
+
+      let last_message_block = this.message_blocks[this.message_blocks.length - 1];
+      let last_message = last_message_block.messages[last_message_block.messages.length - 1];
+
+      if (last_message.publickey == message.publickey) {
+          last_message_block = Object.assign({}, last_message_block, {
+              last_message_timestamp: message.timestamp,
+              last_message_sig: message.sig,
+              messages: [...last_message_block.messages, message],
+              type : app.wallet.returnPublicKey() == message.publickey ? 'myself' : 'others',
+          });
+          chat_box_main.removeChild(chat_box_main.lastElementChild);
+          chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(last_message_block, data);
+          this.message_blocks[this.message_blocks.length - 1] = last_message_block;
+      } else {
+          let new_message_block = Object.assign({}, {
+              publickey: message.publickey,
+              group_id: message.group_id,
+              last_message_timestamp: message.timestamp,
+              last_message_sig: message.sig,
+              keyHTML: message.keyHTML,
+              identicon : message.identicon,
+              identicon_color : message.identicon_color,
+              type : app.wallet.returnPublicKey() == message.publickey ? 'myself' : 'others',
+              messages: [message]
+          });
+          this.message_blocks.push(new_message_block);
+          chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(new_message_block, data);
+      }
+
+      this.scrollToBottom(message.group_id);
     },
 
     createMessage(app, data, msg_data) {
@@ -172,8 +164,7 @@ module.exports = ChatBox = {
 
     removeDefaultMessage(group_id) {
       let default_message = document.getElementById(`chat-box-default-message-${group_id}`)
-      if (default_message)
-        default_message.parentNode.removeChild(default_message);
+      if (default_message) default_message.parentNode.removeChild(default_message);
     },
 
     scrollToBottom(group_id) {
@@ -181,6 +172,56 @@ module.exports = ChatBox = {
         if (chat_box_main) {
           chat_box_main.scrollTop = chat_box_main.scrollHeight;
         }
-    }
+    },
+
+    createMessageBlocks(app, data, messages) {
+      let idx = 0;
+      let message_blocks = [];
+
+      while (idx < messages.length) {
+          let message = Object.assign({}, messages[idx], {
+              keyHTML: data.chat.addrController.returnAddressHTML(messages[idx].publickey),
+              identicon : app.keys.returnIdenticon(messages[idx].publickey),
+              identicon_color : app.keys.returnIdenticonColor(messages[idx].publickey),
+          });
+          if (idx == 0) {
+              let new_message_block = Object.assign({}, {
+                  publickey: message.publickey,
+                  group_id: message.group_id,
+                  last_message_timestamp: message.timestamp,
+                  last_message_sig: message.sig,
+                  keyHTML: message.keyHTML,
+                  identicon : message.identicon,
+                  identicon_color : message.identicon_color,
+                  messages: [message]
+              });
+              message_blocks.push(new_message_block);
+          } else {
+              if (messages[idx - 1].publickey == message.publickey) {
+                  let latest_message_block = message_blocks[message_blocks.length - 1];
+                  let updated_message_block = Object.assign({}, latest_message_block, {
+                      last_message_timestamp: message.timestamp,
+                      last_message_sig: message.sig,
+                      messages: [...latest_message_block.messages, message],
+                  });
+                  message_blocks[message_blocks.length - 1] = updated_message_block;
+              } else {
+                  let new_message_block = Object.assign({}, {
+                      publickey: message.publickey,
+                      group_id: message.group_id,
+                      last_message_timestamp: message.timestamp,
+                      last_message_sig: message.sig,
+                      keyHTML: message.keyHTML,
+                      identicon : message.identicon,
+                      identicon_color : message.identicon_color,
+                      messages: [message]
+                  });
+                  message_blocks.push(new_message_block);
+              }
+          }
+          idx++;
+      }
+      return message_blocks;
+  }
 }
 
