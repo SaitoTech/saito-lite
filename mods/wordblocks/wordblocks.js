@@ -78,6 +78,7 @@ class Wordblocks extends GameTemplate {
   }
 
   initializeHTML(app) {
+    super.initializeHTML(app);
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(this.app, this);
     });
