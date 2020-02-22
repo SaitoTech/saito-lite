@@ -23,11 +23,11 @@ module.exports = ForumPostTemplate = (tx) => {
   let html = `
       <div class="post" id="${tx.transaction.sig}">
         <div class="teaser-votes">
-          <div class="upvote-wrapper" id="post_upvote_${tx.transaction.sig}" >
+          <div class="post-upvote upvote-wrapper" id="${tx.transaction.sig}" >
             <i class="fa fa-arrow-up upvote post_upvote" aria-hidden="true"></i>
           </div>
           <div class="votes-total">${tx.transaction.votes}</div>
-          <div class="downvote-wrapper" id="post_downvote_${tx.transaction.sig}" >
+          <div class="post-downvote downvote-wrapper" id="${tx.transaction.sig}" >
             <i class="fa fa-arrow-down downvote post_downvote" aria-hidden="true"></i>
           </div>
         </div>

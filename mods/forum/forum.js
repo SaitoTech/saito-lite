@@ -149,6 +149,92 @@ class Forum extends ModTemplate {
 
 
 
+  createVoteTransaction(post_id, vote="upvote") {
+
+    let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+
+    //
+    // arcade will listen, but we need game engine to receive to start initialization
+    //
+    tx.transaction.msg.module     = "Forum";
+    tx.transaction.msg.type       = vote;
+    tx.transaction.msg.post_id    = post_id;
+
+    tx = this.app.wallet.signTransaction(tx);
+
+    return tx;
+ 
+  }
+
+  async receiveVoteTransaction(tx) {
+    if (this.app.BROWSER == 1) { return; }
+
+    let txmsg = tx.returnMessage();
+
+    let already_voted = 0;
+    let vote_type = "";
+
+    let sql = "";
+    let params = {};
+
+    let check_sql = "SELECT type FROM votes where post_id = $post_id AND publickey = $publickey";
+    let check_params = {
+      $post_id : tx.transaction.msg.post_id ,
+      $publickey : tx.transaction.from[0].add
+    }
+    let rows = await this.app.storage.queryDatabase(check_sql, check_params, "forum"); 
+    if (rows) { if (rows.length > 0) { already_voted = 1; vote_type = rows[0].type; } }
+
+
+    //
+    // we have an existing vote
+    //
+    if (already_voted == 1) {
+
+      if (tx.transaction.msg.type == vote_type) { return; }
+
+      sql = "UPDATE votes SET type = $vote WHERE publickey = $publickey AND post_id = $post_id";
+      params = {
+        $vote : tx.transaction.msg.type ,
+        $publickey : tx.transaction.from[0].add ,
+        $post_id : tx.transaction.msg.post_id
+      }
+      await this.app.storage.executeDatabase(sql, params, "forum");
+
+      sql = "UPDATE posts SET votes = votes+1 WHERE post_id = $post_id";
+      if (vote_type == "downvote") {
+        sql = "UPDATE posts SET votes = votes+1 WHERE post_id = $post_id";
+      }
+      params = { 
+        $post_id : tx.transaction.msg.post_id
+      }
+      await this.app.storage.executeDatabase(sql, params, "forum");
+
+    } else {
+
+      sql = "INSERT INTO votes (type, publickey, post_id) VALUES ($type, $publickey, $post_id)";
+      params = {
+        $vote : tx.transaction.msg.type ,
+        $publickey : tx.transaction.from[0].add ,
+        $post_id : tx.transaction.msg.post_id
+      }
+      await this.app.storage.executeDatabase(sql, params, "forum");
+
+      sql = "UPDATE posts SET votes = votes+1 WHERE post_id = $post_id";
+      if (vote_type == "downvote") {
+        sql = "UPDATE posts SET votes = votes+1 WHERE post_id = $post_id";
+      }
+      params = { 
+        $post_id : tx.transaction.msg.post_id
+      }
+      await this.app.storage.executeDatabase(sql, params, "forum");
+
+    }
+  }
+
+
+
+
 
 
   onPeerHandshakeComplete(app, peer) {
@@ -400,6 +486,14 @@ console.log(i + ": " + rows2[i].tx);
 
         if (tx.transaction.msg.type == "post") {
 	  forum_self.receivePostTransaction(tx); 
+	}
+
+        if (tx.transaction.msg.type == "upvote") {
+	  forum_self.receiveVoteTransaction(tx); 
+	}
+
+        if (tx.transaction.msg.type == "downvote") {
+	  forum_self.receiveVoteTransaction(tx); 
 	}
 
       }

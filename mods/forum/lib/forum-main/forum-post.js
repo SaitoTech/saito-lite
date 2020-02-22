@@ -27,7 +27,12 @@ module.exports = ForumPost = {
  
       app.network.propagateTransaction(newtx);
 
-salert("Comment Posted!");
+      newtx.transaction.comments = 0;
+      newtx.transaction.votes = 0;
+
+      data.forum.forum.comments.unshift(newtx);
+      data.forum.render(app, data);
+
 
     });
 

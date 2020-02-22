@@ -6,7 +6,6 @@ module.exports = ForumTeaser = {
 
     let teasers = document.querySelector(".teasers");
     if (!teasers) { return; }
-console.log("ADDING THIS TEASER: " + JSON.stringify(data.forum.forum.teaser));
     teasers.innerHTML += ForumTeaserTemplate(app, data.forum.forum.teaser);
 
   },
@@ -14,6 +13,27 @@ console.log("ADDING THIS TEASER: " + JSON.stringify(data.forum.forum.teaser));
 
   attachEvents(app, data) {
     console.log("Add Events to Teaser!");
+
+    //
+    // upvotes
+    //
+    Array.from(document.getElementsByClassName('post_upvote')).forEach(upvote => {
+      upvote.addEventListener('click', (e) => {
+        let newtx = data.forum.createVoteTransaction(e.currentTarget.id, "upvote");
+	app.network.propagateTransaction(newtx);
+      });
+    });
+
+    //
+    // downvotes
+    //
+    Array.from(document.getElementsByClassName('post_downvote')).forEach(downvote => {
+      downvote.addEventListener('click', (e) => {
+        let newtx = data.forum.createVoteTransaction(e.currentTarget.id, "downvote");
+	app.network.propagateTransaction(newtx);
+      });
+    });
+
   },
 
 }

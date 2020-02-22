@@ -23,6 +23,10 @@ module.exports = PostCreate = {
 
       data.forum.app.network.propagateTransaction(newtx);
 
+      newtx.transaction.comments = 0;
+      newtx.transaction.votes = 0;
+
+      data.forum.forum.teasers.unshift(newtx);
       data.forum.render(data.forum.app, data);
 
     });
