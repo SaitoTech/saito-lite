@@ -185,8 +185,6 @@ class Forum extends ModTemplate {
     let rows = await this.app.storage.queryDatabase(check_sql, check_params, "forum"); 
     if (rows) { if (rows.length > 0) { already_voted = 1; vote_type = rows[0].type; } }
 
-console.log("POST 1");
-
     //
     // we have an existing vote
     //
@@ -201,7 +199,6 @@ console.log("POST 1");
         $post_id : tx.transaction.msg.post_id
       }
       await this.app.storage.executeDatabase(sql, params, "forum");
-console.log("POST 2");
 
       sql = "UPDATE posts SET votes = votes+1 WHERE post_id = $post_id";
       if (vote_type == "downvote") {
@@ -211,7 +208,6 @@ console.log("POST 2");
         $post_id : tx.transaction.msg.post_id
       }
       await this.app.storage.executeDatabase(sql, params, "forum");
-console.log("POST 3");
 
     } else {
 
@@ -222,7 +218,6 @@ console.log("POST 3");
         $post_id : tx.transaction.msg.post_id
       }
       await this.app.storage.executeDatabase(sql, params, "forum");
-console.log("POST 4");
 
       sql = "UPDATE posts SET votes = votes+1 WHERE post_id = $post_id";
       if (vote_type == "downvote") {
@@ -232,9 +227,21 @@ console.log("POST 4");
         $post_id : tx.transaction.msg.post_id
       }
       await this.app.storage.executeDatabase(sql, params, "forum");
-console.log("POST 5");
 
     }
+
+
+    let current_time = new Date().getTime();
+    let vote_bonus   = 1000000;
+    let sql_rank = "UPDATE posts SET rank = cast((rank + ($vote_bonus * (2000000/($current_time-unixtime)))) as INTEGER) WHERE post_id = $pid";
+    let params_rank = { $pid : tx.transaction.msg.post_id , $vote_bonus : vote_bonus , $current_time : current_time };
+
+    if (vote_type == "downvote") {
+      sql_rank = "UPDATE posts SET rank = cast((rank - ($vote_bonus * (2000000/($current_time-unixtime)))) as INTEGER) WHERE post_id = $pid";
+    }
+console.log("UPDATING RANK: " + sql_rank);
+    await this.app.storage.executeDatabase(sql_rank, params_rank, "forum");
+
   }
 
 
@@ -267,14 +274,18 @@ console.log("POST 5");
       loading = "post";
     }
 
-
     this.sendPeerDatabaseRequest("forum", "teasers", "*", where_clause, null, (res, data) => {
       if (res.rows) {
+ 
+        let post_ids = [];
+
         res.rows.forEach(row => {
+
+          let tx = new saito.transaction(row.tx);
+	  post_ids.push(tx.transaction.sig);
 
 	  if (loading == "main" || loading == "forum") {
 	    try {
-              let tx = new saito.transaction(row.tx);
               forum_self.forum.teasers.push(tx);
             } catch (err) {
 	      console.log("Error fetching posts!: " + err);
@@ -284,7 +295,6 @@ console.log("POST 5");
 
 	  if (loading == "post") {
 	    try {
-              let tx = new saito.transaction(row.tx);
 	      if (tx.transaction.msg.parent_id == "") {
                 forum_self.forum.post = tx;
 	      } else {
@@ -302,6 +312,57 @@ console.log("POST 5");
 
         ForumMain.render(this.app, data);
         ForumMain.attachEvents(this.app, data);
+
+
+	//
+	// fetch upvotes
+	//
+        where_clause = "publickey = '"+app.wallet.returnPublicKey()+"' AND post_id IN (";
+        for (let i = 0; i < post_ids.length; i++) {
+	  where_clause += '"'+post_ids[i]+'"';
+	  if (i < post_ids.length-1) { where_clause += ","; } else { where_clause += ") "; }
+        }
+        this.sendPeerDatabaseRequest("forum", "votes", "*", where_clause, null, (res, data) => {
+          if (res.rows) {
+
+	    for (let i = 0; i < res.rows.length; i++) {
+
+	      let this_post_id = res.rows[i].post_id;
+	      let this_vote_type = res.rows[i].type;
+
+console.log(this_post_id + " -- " + this_vote_type);
+
+	      //
+	      // upvotes
+	      //
+              if (this_vote_type == "upvote") {
+	        Array.from(document.getElementsByClassName('post_upvote')).forEach(upvote => {
+	          let post_id = upvote.getAttribute("id");
+	          if (post_id == this_post_id) {
+console.log("A");
+  		    upvote.getElementsByClassName("post_upvote_arrow")[0].style.color = "#ff8235";
+	  	  }
+	        });
+	      }
+
+	      //
+	      // downvotes
+	      //
+              if (this_vote_type == "downvote") {
+	        Array.from(document.getElementsByClassName('post_downvote')).forEach(upvote => {
+	          let post_id = upvote.getAttribute("id");
+	          if (post_id == this_post_id) {
+console.log("B");
+  		    upvote.getElementsByClassName("post_downvote_arrow")[0].style.color = "#ff8235";
+	  	  }
+	        });
+	      }
+
+
+	    }
+	  }
+	});
+
 
       }
     });
@@ -416,6 +477,43 @@ console.log("POST 5");
 
   async handlePeerRequest(app, msg, peer, mycallback) {
 
+    if (msg.request === "forum load votes") {
+
+      let res = {};
+	  res.err = "";
+	  res.rows = [];
+
+      let select              = msg.data.select;
+      let dbname              = msg.data.dbname;
+      let tablename           = msg.data.tablename;
+      let where_clause        = 1;
+      let query_type          = "main";
+      let limit               = 30;
+
+      //
+      // TODO improve sanitization
+      //
+      if (where_clause.toString().indexOf(';') > -1) { return; }
+      if (where_clause.toString().indexOf('`') > -1) { return; }
+      if (where_clause.toString().indexOf('INDEX') > -1) { return; }
+      if (where_clause.toString().indexOf('DELETE') > -1) { return; }
+
+      let sql = "SELECT post_id , type FROM votes WHERE " + where_clause + " ORDER BY id DESC LIMIT 100";
+      let rows2 = await this.app.storage.queryDatabase(sql, {}, 'forum'); 
+
+      if (rows2) {
+	for (let i = 0; i < rows2.length; i++) {
+	  res.rows.push({ post_id : rows2[i].post_id , type : rows2[i].type });
+        }
+      }
+      mycallback(res);
+      return;
+
+    }
+
+
+
+
     if (msg.request === "forum load teasers") {
 
       let res = {};
@@ -440,16 +538,11 @@ console.log("POST 5");
       if (where_clause.toString().indexOf('INDEX') > -1) { return; }
       if (where_clause.toString().indexOf('DELETE') > -1) { return; }
 
-      let sql = "SELECT tx, votes, comments FROM posts WHERE " + where_clause + " ORDER BY id DESC LIMIT 100";
-
-console.log(sql);
-
+      let sql = "SELECT tx, votes, comments FROM posts WHERE " + where_clause + " ORDER BY rank DESC LIMIT 100";
       let rows2 = await this.app.storage.queryDatabase(sql, {}, 'forum'); 
 
       if (rows2) {
 	for (let i = 0; i < rows2.length; i++) {
-
-console.log(i + ": " + rows2[i].tx);
 
           let txobj = JSON.parse(rows2[i].tx);
 	  let newtx = new saito.transaction(txobj);

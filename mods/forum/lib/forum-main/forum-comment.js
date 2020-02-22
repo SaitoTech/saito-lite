@@ -7,7 +7,7 @@ module.exports = ForumComment = {
 
     let forum_comments = document.querySelector(".comments");
     if (!forum_comments) { return; }
-    forum_comments.innerHTML += ForumCommentTemplate(data.forum.forum.comment);
+    forum_comments.innerHTML += ForumCommentTemplate(app, data, data.forum.forum.comment);
 
   },
 

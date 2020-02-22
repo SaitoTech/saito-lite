@@ -100,6 +100,44 @@ module.exports = ForumMain = {
     }
 
 
+    //
+    // upvotes and downvotes
+    //
+    Array.from(document.getElementsByClassName('post_upvote')).forEach(upvote => {
+      upvote.addEventListener('click', (e) => {
+        e.currentTarget.style.color = "#ff8235";
+
+	let downvote_arrow = ".post_downvote_arrow_"+e.currentTarget.id;
+	document.querySelector(downvote_arrow).style.color = "#444";
+
+        let newtx = data.forum.createVoteTransaction(e.currentTarget.id, "upvote");
+        app.network.propagateTransaction(newtx);
+
+        let current_votes = parseInt(document.getElementById("votes-total-"+e.currentTarget.id).innerHTML);
+        document.getElementById("votes-total-"+e.currentTarget.id).innerHTML = current_votes+1;
+      });
+    });
+
+    //
+    // downvotes
+    //
+    Array.from(document.getElementsByClassName('post_downvote')).forEach(downvote => {
+      downvote.addEventListener('click', (e) => {
+        e.currentTarget.style.color = "#ff8235";
+
+	let upvote_arrow = ".post_upvote_arrow_"+e.currentTarget.id;
+	document.querySelector(upvote_arrow).style.color = "#444";
+
+        let newtx = data.forum.createVoteTransaction(e.currentTarget.id, "downvote");
+        app.network.propagateTransaction(newtx);
+
+        let current_votes = parseInt(document.getElementById("votes-total-"+e.currentTarget.id).innerHTML);
+        document.getElementById("votes-total-"+e.currentTarget.id).innerHTML = current_votes-1;
+
+      });
+    });
+
+
   },
 
 }

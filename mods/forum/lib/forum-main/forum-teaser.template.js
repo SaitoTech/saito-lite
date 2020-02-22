@@ -25,12 +25,12 @@ module.exports = ForumTeaserTemplate = (app, tx) => {
         <div class="teaser-author">david</div>
 
         <div class="teaser-votes">
-          <div class="post_upvote upvote-wrapper" id="${tx.transaction.sig}" >
-            <i class="fa fa-arrow-up upvote post_upvote_arrow" aria-hidden="true"></i>
+          <div class="post_upvote post_upvote_${tx.transaction.sig} upvote-wrapper" id="${tx.transaction.sig}" >
+            <i class="fa fa-arrow-up upvote post_upvote_arrow post_upvote_arrow_${tx.transaction.sig}" aria-hidden="true"></i>
           </div>
-          <div class="votes-total">${tx.transaction.votes}</div>
-          <div class="post_downvote downvote-wrapper" id="${tx.transaction.sig}" >
-            <i class="fa fa-arrow-down downvote post_downvote_arrow" aria-hidden="true"></i>
+          <div class="votes-total" id="votes-total-${tx.transaction.sig}">${tx.transaction.votes}</div>
+          <div class="post_downvote post_downvote_${tx.transaction.sig} downvote-wrapper" id="${tx.transaction.sig}" >
+            <i class="fa fa-arrow-down downvote post_downvote_arrow post_downvote_arrow_${tx.transaction.sig}" aria-hidden="true"></i>
 	  </div>
         </div>
 
