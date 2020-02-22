@@ -19,6 +19,7 @@ module.exports = ForumTeaser = {
     //
     Array.from(document.getElementsByClassName('post_upvote')).forEach(upvote => {
       upvote.addEventListener('click', (e) => {
+	e.currentTarget.style.color = "#ff8235";
         let newtx = data.forum.createVoteTransaction(e.currentTarget.id, "upvote");
 	app.network.propagateTransaction(newtx);
       });
@@ -29,6 +30,7 @@ module.exports = ForumTeaser = {
     //
     Array.from(document.getElementsByClassName('post_downvote')).forEach(downvote => {
       downvote.addEventListener('click', (e) => {
+	e.currentTarget.style.color = "#ff8235";
         let newtx = data.forum.createVoteTransaction(e.currentTarget.id, "downvote");
 	app.network.propagateTransaction(newtx);
       });

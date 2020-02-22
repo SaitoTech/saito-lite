@@ -185,6 +185,7 @@ class Forum extends ModTemplate {
     let rows = await this.app.storage.queryDatabase(check_sql, check_params, "forum"); 
     if (rows) { if (rows.length > 0) { already_voted = 1; vote_type = rows[0].type; } }
 
+console.log("POST 1");
 
     //
     // we have an existing vote
@@ -193,13 +194,14 @@ class Forum extends ModTemplate {
 
       if (tx.transaction.msg.type == vote_type) { return; }
 
-      sql = "UPDATE votes SET type = $vote WHERE publickey = $publickey AND post_id = $post_id";
+      sql = "UPDATE votes SET type = $type WHERE publickey = $publickey AND post_id = $post_id";
       params = {
-        $vote : tx.transaction.msg.type ,
+        $type : tx.transaction.msg.type ,
         $publickey : tx.transaction.from[0].add ,
         $post_id : tx.transaction.msg.post_id
       }
       await this.app.storage.executeDatabase(sql, params, "forum");
+console.log("POST 2");
 
       sql = "UPDATE posts SET votes = votes+1 WHERE post_id = $post_id";
       if (vote_type == "downvote") {
@@ -209,16 +211,18 @@ class Forum extends ModTemplate {
         $post_id : tx.transaction.msg.post_id
       }
       await this.app.storage.executeDatabase(sql, params, "forum");
+console.log("POST 3");
 
     } else {
 
       sql = "INSERT INTO votes (type, publickey, post_id) VALUES ($type, $publickey, $post_id)";
       params = {
-        $vote : tx.transaction.msg.type ,
+        $type : tx.transaction.msg.type ,
         $publickey : tx.transaction.from[0].add ,
         $post_id : tx.transaction.msg.post_id
       }
       await this.app.storage.executeDatabase(sql, params, "forum");
+console.log("POST 4");
 
       sql = "UPDATE posts SET votes = votes+1 WHERE post_id = $post_id";
       if (vote_type == "downvote") {
@@ -228,6 +232,7 @@ class Forum extends ModTemplate {
         $post_id : tx.transaction.msg.post_id
       }
       await this.app.storage.executeDatabase(sql, params, "forum");
+console.log("POST 5");
 
     }
   }
