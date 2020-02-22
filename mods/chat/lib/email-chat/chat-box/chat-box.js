@@ -102,8 +102,8 @@ module.exports = ChatBox = {
 
       let chat_box_main = document.getElementById(`chat-box-main-${message.group_id}`);
 
-      let last_message_block = this.message_blocks[this.message_blocks.length - 1];
-      let last_message = last_message_block.messages[last_message_block.messages.length - 1];
+      let last_message_block = Object.assign({ messages: [] }, this.message_blocks[this.message_blocks.length - 1]);
+      let last_message = Object.assign({}, last_message_block.messages[last_message_block.messages.length - 1]);
 
       if (last_message.publickey == message.publickey) {
           last_message_block = Object.assign({}, last_message_block, {
