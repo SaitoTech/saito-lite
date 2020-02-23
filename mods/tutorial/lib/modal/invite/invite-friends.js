@@ -20,8 +20,11 @@ module.exports = InviteFriends = {
   attachEvents(app, data) {
     var modal = document.getElementById('friends-modal');
 
-    const startKeyExchange = (publickey) => {
+    const startKeyExchange = async (publickey) => {
       salert("Adding Contact");
+      if (!app.crypto.isPublicKey(publickey)) {
+        publickey = await data.tutorial.addrController.returnPublicKey(publickey);
+      }
       let encrypt_mod = app.modules.returnModule('Encrypt');
       encrypt_mod.initiate_key_exchange(publickey);
       modal.style.display = "none";
