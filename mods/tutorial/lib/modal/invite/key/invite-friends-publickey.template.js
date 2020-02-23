@@ -11,8 +11,8 @@ module.exports = InviteFriendsPublickeyTemplate = (app) => {
       </div>
       <div class="welcome-modal-info">
         <div style="margin-top:20px" class="welcome-modal-explanation tip">
-          <div class="tiptext"><b>What happens when I do this?</b></div>
-          <div>Your computer will send a request to connect over the blockchain. This will result in your two computers creating a secure encryption key and both of your accounts showing up in the account list (chat-box, etc.) of the other user.</div>
+          <div><b>What happens when I do this?</b></div>
+          <div class="tiptext">Your computer will send a request to connect over the blockchain. This will result in your two computers creating a secure encryption key and both of your accounts showing up in the account list (chat-box, etc.) of the other user.</div>
         </div>
       </div>
     </div>
