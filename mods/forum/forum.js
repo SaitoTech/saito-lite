@@ -114,6 +114,8 @@ class Forum extends ModTemplate {
     if (this.app.BROWSER == 1) { return; }
 
     let txmsg = tx.returnMessage();
+    let post_id = tx.transaction.sig;
+    if (tx.transaction.msg.post_id != "") { post_id = tx.transaction.msg.post_id; }
 
     let check_sql = "SELECT id FROM posts where post_id = $post_id";
     let check_params = { $post_id : tx.transaction.sig }
@@ -122,7 +124,7 @@ class Forum extends ModTemplate {
 
     let sql = "INSERT INTO posts (post_id, comment_id, parent_id, forum, title, content, tx, link, unixtime, rank, votes, comments) VALUES ($post_id, $comment_id, $parent_id, $forum, $title, $content, $tx, $link, $unixtime, $rank, $votes, $comments)";
     let params = {
-      $post_id 		: tx.transaction.sig,
+      $post_id 		: post_id,
       $comment_id 	: txmsg.comment_id,
       $parent_id 	: txmsg.parent_id,
       $forum 		: txmsg.forum,
@@ -539,6 +541,9 @@ console.log("B");
       if (where_clause.toString().indexOf('DELETE') > -1) { return; }
 
       let sql = "SELECT tx, votes, comments FROM posts WHERE " + where_clause + " ORDER BY rank DESC LIMIT 100";
+
+console.log(sql);
+
       let rows2 = await this.app.storage.queryDatabase(sql, {}, 'forum'); 
 
       if (rows2) {

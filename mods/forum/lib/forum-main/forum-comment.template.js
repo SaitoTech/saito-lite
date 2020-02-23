@@ -1,9 +1,10 @@
 module.exports = ForumCommentTemplate = (app, data, tx) => {
 
   let cauthor = data.forum.formatAuthor(tx.transaction.from[0].add);
+  let post_id = tx.transaction.msg.post_id || tx.transaction.sig;
 
   return `
-    <div class="comment">
+    <div class="comment" style="margin-left: ${data.forum.forum.comment_indent}px">
 
 
       <div class="comment-votes teaser-votes">
@@ -19,8 +20,17 @@ module.exports = ForumCommentTemplate = (app, data, tx) => {
 
       <div class="comment-author">posted by <span class="comment-author">${cauthor}</span></div>
       <div class="comment-text">${tx.transaction.msg.content}</div>
+
+      <div class="comment-add-comment comment-add-comment-${tx.transaction.sig}" id="comment-add-comment">
+        <textarea class="comment-add-comment-textarea-${tx.transaction.sig}" id="comment-add-comment-textarea"></textarea>
+        <button class="comment-add-comment-btn comment-add-comment-btn-${tx.transaction.sig}">comment</button>
+
+        <input type="hidden" class="comment-parent-id-${tx.transaction.sig}" value="${tx.transaction.sig}" />
+        <input type="hidden" class="comment-post-id-${tx.transaction.sig}" value="${post_id}" />
+      </div>
+
       <div class="comment-links">
-	<div class="comment-links-reply">reply</div>
+	<div class="comment-links-reply" id="${tx.transaction.sig}">reply</div>
 	<div class="comment-links-report">report</div>
       </div>
     </div>

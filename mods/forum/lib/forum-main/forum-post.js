@@ -5,9 +5,9 @@ module.exports = ForumPost = {
 
   render(app, data) {
 
-    let forum_post = document.querySelector(".post");
+    let forum_post = document.querySelector(".post-container");
     if (!forum_post) { return; }
-    forum_post.innerHTML = ForumPostTemplate(data.forum.forum.post);
+    forum_post.innerHTML = ForumPostTemplate(app, data, data.forum.forum.post);
 
   },
 

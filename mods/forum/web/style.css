@@ -178,9 +178,22 @@
 }
 .comment-links-reply {
   float:left;
+  cursor:pointer;
 }
 .comment-links-report {
   margin-left: 10px;
   float:left;
+  cursor:pointer;
 }
+
+.comment-add-comment {
+  display:none;
+}
+.comment-add-comment-textarea {
+}
+.comment-add-comment-btn {
+}
+
+
+
 
