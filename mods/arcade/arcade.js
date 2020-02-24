@@ -612,6 +612,13 @@ class Arcade extends ModTemplate {
         }
         await this.app.storage.executeDatabase(sql, params, 'arcade');
 
+
+	//
+	// do not process if transaction is not for us
+	//
+ 	if (!tx.isTo(app.wallet.returnPublicKey())) { return; }
+
+
         //
         // make sure game in options file
         //
@@ -628,19 +635,41 @@ class Arcade extends ModTemplate {
             for (let i = 0; i < this.app.options.games.length; i++) {
               if (this.app.options.games[i].id == txmsg.game_id) {
                 game_found = true;
+
+		if (this.app.options.games[i].players.length >= this.app.options.games[i].players_needed) {
+alert("We are trying to join a game that already has enough players....");
+return;
+		}
+
               }
             }
 
             if (game_found == false) {
+
+
 	      //
 	      // only load games that are for us
 	      //
               if (tx.isTo(app.wallet.returnPublicKey())) {
+
+//
+// check we do not have too many players
+//
+if (tx.transaction.msg.players_needed < tx.transacftion.msg.players.length) {
+  alert("We are trying to join a game with too many players...");
+  return;
+}
+
+
 	        let gamemod = this.app.modules.returnModule(tx.transaction.msg.game);
                 if (gamemod) {
                   gamemod.loadGame(tx.transaction.msg.game_id);
                 }
               }
+
+
+
+
             }
           }
         }
