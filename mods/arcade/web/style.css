@@ -930,6 +930,6 @@ span.rewards-row-name {
   #game-invite-controls div {
     grid-template-columns: 1fr;
     grid-gap: 5px;
-    margin: 2em 0;
+    margin: 0 0 1em 0;
   }
 }
