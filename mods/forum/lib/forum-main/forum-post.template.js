@@ -48,27 +48,7 @@ module.exports = ForumPostTemplate = (app, data, tx) => {
         <div class="teaser-content-details">submitted by <span class="post_author_clickable" id="post_author_clickable_${tx.transaction.sig}">${pauthor}</span> to <a href="${subforum}">${subforum}</a><span class="post_author_address" id="${tx.transaction.from[0].add}" style="display:none"></span></div>
       </div>
 
-      <div class="post-content">
-This is where our post content goes
-This is where our post content goes
-This is where our post content goes
-This is where our post content goes
-This is where our post content goes
-This is where our post content goes
-This is where our post content goes
-This is where our post content goes
-This is where our post content goes
-This is where our post content goes
-This is where our post content goes
-This is where our post content goes
-This is where our post content goes
-This is where our post content goes
-This is where our post content goes
-This is where our post content goes
-This is where our post content goes
-This is where our post content goes
-
-      </div>
+      <div class="post-content"></div>
 
       <div class="post-add-comment" id="post-add-comment">
 	<textarea class="post-add-comment-textarea" id="post-add-comment-textarea"></textarea>

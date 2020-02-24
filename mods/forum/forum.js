@@ -48,7 +48,7 @@ class Forum extends ModTemplate {
     this.forum.filter         = 0;   // 0 = all comments / only from ppl i follow
 
 
-    this.icon_fa = "fab fa-reddit-alien";
+    this.icon_fa = "far fa-comment-alt";
     this.mods                 = [];
 
     this.view_forum        = "main";

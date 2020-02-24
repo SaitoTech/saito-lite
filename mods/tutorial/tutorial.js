@@ -2,6 +2,7 @@ const ModTemplate = require('../../lib/templates/modtemplate');
 
 const Modal = require('../../lib/ui/modal/modal');
 const helpers = require('../../lib/helpers/index');
+const AddressController = require('../../lib/ui/menu/address-controller');
 
 const WelcomeBackupTemplate = require('./lib/modal/welcome/welcome-backup.template');
 const WelcomeBackup = require('./lib/modal/welcome/welcome-backup.js');
@@ -30,6 +31,8 @@ class Tutorial extends ModTemplate {
 
     this.username_registered = 0;
 
+    this.addrController = new AddressController(app);
+
     //
     // we want this running in all browsers
     //
@@ -55,7 +58,6 @@ class Tutorial extends ModTemplate {
     //
     // run on load (or dom ready)
     //
-    
     if (!localStorage.getItem('visited')) {
       localStorage.setItem('visited', true);
       this.welcomeBackupModal();
