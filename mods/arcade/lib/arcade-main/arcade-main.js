@@ -22,6 +22,7 @@ module.exports = ArcadeMain = {
     data.arcade.games.forEach(tx => {
 
       console.log("\n\n\nSHOWING GAMES: ");
+      console.log("PLAYERS: " + JSON.stringify(tx.transaction.msg.players));
       console.log("TX: " + JSON.stringify(tx));
 
       let game_id = tx.transaction.msg.game_id;

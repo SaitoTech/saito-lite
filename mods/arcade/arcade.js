@@ -430,15 +430,16 @@ class Arcade extends ModTemplate {
     let txmsg = tx.returnMessage();
 
     for (let i = 0; i < this.games.length; i++) {
-      if (!this.games[i].transaction.msg.players.includes(tx.transaction.from[0].add)) {
-
-        //
-        // TODO is validate accept sig
-        //
-        if (tx.transaction.msg.invite_sig != "") {
-          this.games[i].transaction.msg.players.push(tx.transaction.from[0].add);
-	  if (!this.games[i].transaction.msg.players_sigs) { this.games[i].transaction.msg.players_sigs = []; }
-          this.games[i].transaction.msg.players_sigs.push(txmsg.invite_sig);
+      if (this.games[i].transaction.sig == txmsg.game_id) {
+        if (!this.games[i].transaction.msg.players.includes(tx.transaction.from[0].add)) {
+          //
+          // TODO is validate accept sig
+          //
+          if (tx.transaction.msg.invite_sig != "") {
+            this.games[i].transaction.msg.players.push(tx.transaction.from[0].add);
+	    if (!this.games[i].transaction.msg.players_sigs) { this.games[i].transaction.msg.players_sigs = []; }
+            this.games[i].transaction.msg.players_sigs.push(txmsg.invite_sig);
+          }
         }
       }
     }
@@ -629,9 +630,7 @@ class Arcade extends ModTemplate {
           }
 
           if (this.app.options.games) {
-
             let game_found = false;
-
             for (let i = 0; i < this.app.options.games.length; i++) {
               if (this.app.options.games[i].id == txmsg.game_id) {
                 game_found = true;
@@ -640,12 +639,10 @@ class Arcade extends ModTemplate {
 
             if (game_found == false) {
 
-
 	      //
 	      // only load games that are for us
 	      //
               if (tx.isTo(app.wallet.returnPublicKey())) {
-
 	        let gamemod = this.app.modules.returnModule(tx.transaction.msg.game);
                 if (gamemod) {
                   gamemod.loadGame(tx.transaction.msg.game_id);
@@ -688,6 +685,7 @@ class Arcade extends ModTemplate {
           if (!tx.isTo(app.wallet.returnPublicKey())) {
             if (this.games.length > 0) {
               for (let i = 0; i < this.games.length; i++) {
+
                 let transaction = Object.assign({ sig: "" }, this.games[i].transaction);
                 if (transaction.sig == txmsg.game_id) {
                   //
@@ -1210,7 +1208,6 @@ class Arcade extends ModTemplate {
 
     try {
 
-
       //
       // delete from local stores
       //
@@ -1261,9 +1258,13 @@ class Arcade extends ModTemplate {
     }
 
     let txmsg = tx.returnMessage();
-    let publickeys = tx.transaction.to.map(slip => slip.add);
-    let removeDuplicates = (names) => names.filter((v, i) => names.indexOf(v) === i)
-    let unique_keys = removeDuplicates(publickeys);
+    let publickeys = [];
+    for (let i = 0; i < tx.transaction.to.length; i++) {
+      if (!publickeys.includes(tx.transaction.to[i].add)) {
+	publickeys.push(tx.transaction.to[i].add);
+      }
+    }
+    let unique_keys = publickeys;
     unique_keys.sort();
     let players_array = unique_keys.join("_");
 

@@ -15,6 +15,7 @@ module.exports = ArcadeGameListRowTemplate = (app, tx, button_map) => {
 
   let added_identicons = [];
   let identicons = "";
+
   for (let i = 0; i < publickeys.length; i++) {
     if (!added_identicons.includes(publickeys[i])) {
       identicons += `<span class="tip"><img class="identicon" src="${app.keys.returnIdenticon(publickeys[i])}"><div class="tiptext">${app.keys.returnIdentifierByPublicKey(publickeys[i], true)}</div></span>`;
