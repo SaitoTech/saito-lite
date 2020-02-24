@@ -779,6 +779,10 @@ class Arcade extends ModTemplate {
         let res = {};
         res.rows = [];
 
+console.log("MSG: " + JSON.stringify(message));
+
+console.log("ASKED TO CHECK: " + game_id);
+
         if (this.accepted[game_id] > 0) {
           //
           // check required of players_needed vs. players_accepted

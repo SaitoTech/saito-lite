@@ -207,7 +207,7 @@ module.exports = ArcadeMain = {
             "arcade",
             "games",
             "is_game_already_accepted",
-            accepted_game.id,
+            game_id,
             null,
             (res) => {
 
@@ -216,9 +216,11 @@ module.exports = ArcadeMain = {
                 return;
               }
 
-	//
-	// n > 2 player or game not accepted
-	//
+console.log("ACCEPTED GID: " + accepted_game.id + " -- " + game_id);
+
+	      //
+	      // n > 2 player or game not accepted
+	      //
               if (res.rows.length > 0) {
                 if (res.rows[0].game_still_open == 1 || (res.rows[0].game_still_open == 0 && players_needed > 2)) {
 
@@ -242,6 +244,7 @@ module.exports = ArcadeMain = {
                   salert("Sorry, this game has been accepted already!");
                 }
               } else {
+console.log(res.rows[i].game_still_open + "---" + players_needed);
                 salert("Sorry... game already accepted. Your list of open games will update shortly on next block!");
               }
             });
