@@ -782,7 +782,6 @@ class Arcade extends ModTemplate {
         res.rows = [];
 
         if (this.accepted[game_id] > 0) {
-
           //
           // check required of players_needed vs. players_accepted
           //
