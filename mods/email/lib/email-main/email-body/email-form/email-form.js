@@ -17,26 +17,30 @@ module.exports = EmailForm = {
         this.addData();
 
         var editor = new MediumEditor('#email-text', {
-            placeholder: true,
-            buttonLabels: 'fontawesome',
-            toolbar: {
-                // These are the default options for the toolbar,
-                //   if nothing is passed this is what is used 
-                allowMultiParagraphSelection: true,
-                buttons: ['bold', 'italic', 'underline', 'anchor', 'h2', 'h3', 'quote'],
-                diffLeft: 0,
-                diffTop: -10,
-                firstButtonClass: 'medium-editor-button-first',
-                lastButtonClass: 'medium-editor-button-last',
-                relativeContainer: null,
-                standardizeSelectionStart: false,
-                static: false,
-                // options which only apply when static is true 
-                align: 'center',
-                sticky: false,
-                updateOnEmptySelection: false
+          placeholder: false,
+          buttonLabels: 'fontawesome',
+          toolbar: {
+            allowMultiParagraphSelection: true,
+            buttons: ['bold', 'italic', 'underline', 'anchor', 'h2', 'h3', 'quote'],
+            diffLeft: 0,
+            diffTop: -10,
+            firstButtonClass: 'medium-editor-button-first',
+            lastButtonClass: 'medium-editor-button-last',
+            relativeContainer: null,
+            standardizeSelectionStart: false,
+            static: false,
+            updateOnEmptySelection: true,
+            anchor: {
+              customClassOption: null,
+              customClassOptionText: 'Button',
+              linkValidation: true,
+              placeholderText: 'Paste or type a link',
+              targetCheckbox: true,
+              targetCheckboxText: 'Open in new window'
             }
+          }
         });
+    
     },
 
     attachEvents(app, data) {

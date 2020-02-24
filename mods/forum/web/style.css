@@ -41,6 +41,13 @@
 }
 .post-create-textarea {
 }
+
+.post-create-textarea, .post-add-comment-textarea {
+  border: 1px solid var(--saito-cyber-black-wash);
+  padding: 1em;
+  min-height: 12em;
+}
+
 .post-create-forum {
 }
 .post-submit-btn {
