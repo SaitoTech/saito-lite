@@ -210,6 +210,8 @@ module.exports = ArcadeMain = {
             null,
             (res) => {
 
+console.log("WE GOT THIS REPLY: " + JSON.stringify(res.rows));
+
               if (res.rows == undefined) {
                 console.log("ERROR 458103: cannot fetch information on whether game already accepted!");
                 return;
@@ -217,6 +219,8 @@ module.exports = ArcadeMain = {
 
               if (res.rows.length > 0) {
                 if (res.rows[0].game_still_open == 1) {
+
+alert("GAME IS STILL OPEN!");
 
                   //
                   // data re: game in form of tx

@@ -635,12 +635,6 @@ class Arcade extends ModTemplate {
             for (let i = 0; i < this.app.options.games.length; i++) {
               if (this.app.options.games[i].id == txmsg.game_id) {
                 game_found = true;
-
-		if (this.app.options.games[i].players.length >= this.app.options.games[i].players_needed) {
-alert("We are trying to join a game that already has enough players....");
-return;
-		}
-
               }
             }
 
@@ -652,24 +646,11 @@ return;
 	      //
               if (tx.isTo(app.wallet.returnPublicKey())) {
 
-//
-// check we do not have too many players
-//
-if (tx.transaction.msg.players_needed < tx.transacftion.msg.players.length) {
-  alert("We are trying to join a game with too many players...");
-  return;
-}
-
-
 	        let gamemod = this.app.modules.returnModule(tx.transaction.msg.game);
                 if (gamemod) {
                   gamemod.loadGame(tx.transaction.msg.game_id);
                 }
               }
-
-
-
-
             }
           }
         }
@@ -775,6 +756,7 @@ if (tx.transaction.msg.players_needed < tx.transacftion.msg.players.length) {
 
   async handlePeerRequest(app, message, peer, mycallback = null) {
 
+
     if (message.request == 'arcade leaderboard list') {
       let sql = `
         SELECT winner, sum(score) as highscore, module FROM leaderboard
@@ -788,6 +770,33 @@ if (tx.transaction.msg.players_needed < tx.transacftion.msg.players.length) {
     }
 
     if (message.request == 'arcade load games') {
+
+      //
+      // is this a sanity check 
+      //
+      if (message.data.select == "is_game_already_accepted") {
+
+        let game_id = message.data.where;
+
+        let res = {};
+        res.rows = [];
+
+        if (this.accepted[game_id] > 0) {
+
+          //
+          // check required of players_needed vs. players_accepted
+          //
+          res.rows.push({ game_still_open: 0 });
+        } else {
+          this.accepted[game_id] = 1;
+          res.rows.push({ game_still_open: 1 });
+        }
+
+        mycallback(res);
+        return;
+
+      }
+
 
       let sql = `SELECT * FROM games WHERE status = "open"`;
       let rows = await this.app.storage.queryDatabase(sql, {}, 'arcade');
@@ -1523,6 +1532,7 @@ if (tx.transaction.msg.players_needed < tx.transacftion.msg.players.length) {
 
   async sendPeerDatabaseRequest(dbname, tablename, select = "", where = "", peer = null, mycallback = null) {
 
+/****
     //
     // if someone is trying to accept a game, check no-one else has taken it yet
     //
@@ -1534,19 +1544,23 @@ if (tx.transaction.msg.players_needed < tx.transacftion.msg.players.length) {
 
       if (this.accepted[game_id] > 0) {
 
+console.log("REPORTING BACK WITH NO!");
+
         //
         // check required of players_needed vs. players_accepted
         //
         res.rows.push({ game_still_open: 0 });
       } else {
-        res.rows.push({ game_still_open: 1 });
+console.log("REPORTING BACK WITH YES!");
         this.accepted[game_id] = 1;
+        res.rows.push({ game_still_open: 1 });
       }
 
       mycallback(res);
       return;
 
     }
+*****/
 
     //
     // otherwise kick into parent
