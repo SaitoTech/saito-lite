@@ -1310,3 +1310,7 @@ i.fas.fa-times-circle {
 a.header-icon-fullscreen.tip {
   color: transparent;
 }
+
+.align-top {
+  align-self: auto !important;
+}

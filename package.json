@@ -29,6 +29,7 @@
     "exports-loader": "^0.7.0",
     "express": "^4.17.1",
     "fastest-stable-stringify": "^2.0.2",
+    "forever-agent": "^0.6.1",
     "fs-extra": "^8.1.0",
     "identicon.js": "^2.3.3",
     "image-resolver": "^0.6.1",
@@ -45,7 +46,9 @@
     "socket.io": "^2.3.0",
     "sqlite": "^3.0.3",
     "svg-captcha": "^1.4.0",
+    "tls": "0.0.1",
     "tui-editor": "^1.4.10",
+    "tunnel-agent": "^0.6.0",
     "unzipper": "^0.10.5",
     "url": "^0.11.0"
   },

@@ -13,6 +13,8 @@ const RegisterUsername = require('./lib/modal/register/register-username.js');
 const InviteFriendsTemplate = require('./lib/modal/invite/invite-friends.template');
 const InviteFriends = require('./lib/modal/invite/invite-friends.js');
 
+const SurveyTemplate = require('./lib/modal/survey/survey.template.js');
+const Survey = require('./lib/modal/survey/survey.js');
 
 class Tutorial extends ModTemplate {
 
@@ -86,6 +88,26 @@ class Tutorial extends ModTemplate {
         console.error(err);
       }
     }
+
+    if (message.request == "user survey") {
+      try {
+
+        let sql = "INSERT OR IGNORE INTO surveys (publickey, survey_data, unixtime) VALUES ($publickey, $survey_data, $unixtime);"
+
+        let params = {
+          $publickey: message.data.key,
+          $survey_data: message.data.survey_data,
+          $unixtime: message.data.time,
+        }
+
+        await this.app.storage.executeDatabase(sql, params, "tutorial");
+
+        return;
+
+      } catch (err) {
+        console.error(err);
+      }
+    }
   }
 
 
@@ -143,6 +165,24 @@ class Tutorial extends ModTemplate {
     modal.render("blank");
 
     RegisterUsername.attachEvents(this.app, data);
+
+  }
+
+  surveyModal() {
+
+    let modal = new Modal(this.app, {
+      id: 'survey',
+      title: 'Tell us about you.',
+      content: SurveyTemplate()
+    });
+
+    let data = {};
+    data.tutorial = this;
+    data.modal = modal;
+
+    modal.render("blank");
+
+    Survey.attachEvents(this.app, data);
 
   }
 
