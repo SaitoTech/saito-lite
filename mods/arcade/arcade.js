@@ -639,6 +639,30 @@ class Arcade extends ModTemplate {
 
             if (game_found == false) {
 
+
+              //
+              // copied above reject all tx not to us NEW
+              //
+              if (!tx.isTo(app.wallet.returnPublicKey())) {
+                if (this.games.length > 0) {
+                  for (let i = 0; i < this.games.length; i++) {
+
+                    let transaction = Object.assign({ sig: "" }, this.games[i].transaction);
+                    if (transaction.sig == txmsg.game_id) {
+                      //
+                      // remove game (accepted players are equal to number needed)
+                      //
+                      transaction.msg = Object.assign({ players_needed: 0, players: [] }, transaction.msg);
+                      if (parseInt(transaction.msg.players_needed) >= (transaction.msg.players.length + 1)) {
+                        this.removeGameFromOpenList(txmsg.game_id);
+                      }
+                    }
+                  }
+                }
+              }
+
+
+
 	      //
 	      // only load games that are for us
 	      //
