@@ -10,20 +10,12 @@ const ForumComment = require('./lib/forum-main/forum-comment');
 
 const Header = require('../../lib/ui/header/header');
 const AddressController = require('../../lib/ui/menu/address-controller');
+
 const fs = require('fs');
-
-/**
-const h2m = require('h2m');
-const URL  = require('url-parse');
-const path = require('path');
-const markdown = require( "markdown" ).markdown;
-const { exec } = require('child_process');
-const linkifyHtml = require('linkifyjs/html');
-
 const request = require('request');
 const ImageResolver = require('image-resolver');
 const Jimp = require('jimp');
-**/
+
 
 
 
@@ -146,6 +138,61 @@ class Forum extends ModTemplate {
       await this.app.storage.executeDatabase(sql2, params2, "forum");
     }
 
+
+    if (txmsg.link != "") {
+      this.downloadThumbnailImage(tx.transactiobn.sig, txmsg.link);
+    }
+
+  }
+
+
+  downloadThumbnailImage(filename, link) {
+
+    if (this.app.BROWSER == 1) { return; }
+
+    let snapshot_width     = 100;
+    let snapshot_height    = 100;
+    let snapshot_target    = link;
+    let snapshot_localfile = filename + ".png";
+    let snapshot_dir       = __dirname + "/web/img/thumbnails/";
+    let snapshot_filepath  = snapshot_dir + "/" + snapshot_localfile;
+
+    var resolver = new ImageResolver();
+        resolver.register(new ImageResolver.FileExtension());
+        resolver.register(new ImageResolver.MimeType());
+        resolver.register(new ImageResolver.Opengraph());
+        resolver.register(new ImageResolver.Webpage());
+
+    try {
+      resolver.resolve(snapshot_target, (result) => {
+        if ( result ) {
+          snapshot_target = result.image;
+          request.head(snapshot_target, (err, res, body) => {
+            if (!err) {
+              request(snapshot_target).pipe(fs.createWriteStream(snapshot_filepath)).on('close', async () => {
+                let image;
+                try {
+                  image = await Jimp.read(snapshot_filepath);
+                } catch(error1) {
+                  let temp = await new Promise(resolve => setTimeout(resolve, 600));
+                  try {
+                    image = await Jimp.read(snapshot_filepath);
+                    debug('Success reading file on second attempt!');
+                  } catch (error2) {
+                    console.log(error2)
+                    return;
+                  }
+                }
+                image.resize(snapshot_width, snapshot_height).quality(60).write(snapshot_filepath); 
+              });
+            } else {
+            }
+          });
+        } else {
+        }
+      });
+    } catch(err) {
+    }
   }
 
 

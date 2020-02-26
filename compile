@@ -38,6 +38,7 @@ function reset {
   rm -f ./mods/appstore/bundler/dist/*
 
 
+  rm -f ./mods/forum/web/img/thumbnails/*.png
   rm -f ./mods/registry/web/addresses.txt
   rm -f ./mods/appstore/mods/*
   rm -rf ./mods/appstore/bundler/mods/*
