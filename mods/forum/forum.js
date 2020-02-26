@@ -12,7 +12,7 @@ const Header = require('../../lib/ui/header/header');
 const AddressController = require('../../lib/ui/menu/address-controller');
 
 const fs = require('fs');
-const request = require('request');
+//const request = require('request');
 const ImageResolver = require('image-resolver');
 const Jimp = require('jimp');
 
@@ -167,6 +167,7 @@ class Forum extends ModTemplate {
       resolver.resolve(snapshot_target, (result) => {
         if ( result ) {
           snapshot_target = result.image;
+/***
           request.head(snapshot_target, (err, res, body) => {
             if (!err) {
               request(snapshot_target).pipe(fs.createWriteStream(snapshot_filepath)).on('close', async () => {
@@ -188,6 +189,7 @@ class Forum extends ModTemplate {
             } else {
             }
           });
+***/
         } else {
         }
       });
