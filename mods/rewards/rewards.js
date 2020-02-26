@@ -22,6 +22,7 @@ class Rewards extends ModTemplate {
 
     this.backupPayout = 50;
     this.registryPayout = 50;
+    this.surveyPayout = 50;
 
     this.referalBonus = 0.1;
 
@@ -86,6 +87,10 @@ class Rewards extends ModTemplate {
     if (message.request == "user wallet backup") {
       this.payoutFirstInstance(message.data, message.request, this.backupPayout);
     }
+
+    if (message.request == "user survey") {
+      this.payoutFirstInstance(message.data, message.request, this.surveyPayout);
+    }    
 
     if (message.request == "update activities") {
       var completed = await this.returnEvents(message.data)

@@ -28,6 +28,16 @@ module.exports = [
         description:"Sharing is great. Don't keep Saito to your self - tell your friends.",
         completed: false,
         action: function(app){app.modules.returnModule("Tutorial").inviteFriendsModal();},
+    },
+    {
+        id: "survey",
+        icon: "<i class='far fa-clipboard'></i>",
+        reward: 50,
+        title: "Take Survey",
+        event: "user survey",
+        description:"Let us know what you think. Use an anonymous acount if you like - we are not tracking you.",
+        completed: false,
+        action: function(app){app.modules.returnModule("Tutorial").surveyModal();},
     }
 ];
 
