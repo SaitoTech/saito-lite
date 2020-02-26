@@ -89,7 +89,7 @@ class Rewards extends ModTemplate {
     }
 
     if (message.request == "user survey") {
-      this.payoutFirstInstance(message.data, message.request, this.surveyPayout);
+      this.payoutFirstInstance(message.data.key, message.request, this.surveyPayout);
     }    
 
     if (message.request == "update activities") {
@@ -101,15 +101,14 @@ class Rewards extends ModTemplate {
   returnEventRow(event) {
     let obj = {};
     obj.count = "";
-    switch (event) {
-      case 'user wallet backup':
-        obj.label = "Wallet Backup";
-        obj.icon = "fas fa-download";
-        break;
-      case 'register identifier':
-        obj.label = "Name Yourself";
-        obj.icon = "fas fa-user-tag"
-        break;
+    if (event != "") {
+      activities.forEach((activity) => {
+        if (event == activity.event) { 
+          obj.label = activity.title ;
+          obj.icon = activity.icon;
+        }
+      });
+      console.info('Event not identified.')
     }
     return obj;
   }
@@ -118,39 +117,39 @@ class Rewards extends ModTemplate {
     let obj = {}
     obj.count = x;
     switch (true) {
-      case (x = 0):
+      case x == 0:
         obj.label = "No transactions yet!";
-        obj.icon = "0tx badge";
+        obj.icon = "<i class='0tx badge'><span>" + x + "</span></i>";
         break;
-      case (x = 1):
+      case x == 1:
         obj.label = "Your first Transaction!";
-        obj.icon = "1tx badge";
+        obj.icon = "<i class='1tx badge'><span>" + x + "</span></i>";
         break;
-      case (x > 1 && x <= 10):
+      case x > 1 && x <= 10:
         obj.label = x + " transactions!";
-        obj.icon = "1tx badge";
+        obj.icon = "<i class='1tx badge'><span>" + x + "</span></i>";
         break;
-      case (x > 9 && x <= 50):
-        obj.label = "Multiple Transactions - cool!";
-        obj.icon = "10tx badge";
+      case x > 9 && x <= 50:
+        obj.label = "10+ Transactions - cool!";
+        obj.icon = "<i class='10tx badge'><span>" + x + "</span></i>";
         break;
-      case (x > 50 && x <= 100):
-        obj.label = "50 TX - a real user";
-        obj.icon = "50tx badge";
+      case x > 50 && x <= 100:
+        obj.label = "50+ TX - a real user";
+        obj.icon = "<i class='50tx badge'><span>" + x + "</span></i>";
         break;
-      case (x > 100 && x <= 500):
-        obj.label = "100 TX - a regular!";
-        obj.icon = "100tx badge";
+      case x > 100 && x <= 500:
+        obj.label = "100+ TX - a regular!";
+        obj.icon = "<i class='100tx badge'><span>" + x + "</span></i>";
         break;
-      case (x > 500 && x <= 1000):
+      case x > 500 && x <= 1000:
         obj.label = "500 TX - hard core!";
-        obj.icon = "500tx badge";
+        obj.icon = "<i class='500tx badge'><span>" + x + "</span></i>";
         break;
     }
     if (x > 1000) {
       obj.label = "Master";
-      obj.badge = "master badge";
       obj.count = (Math.floor(x / 1000)).toString + "k";
+      obj.badge = "<i class='master badge'><span>" + obj.count + "</span></i>";
     }
     return obj;
   }

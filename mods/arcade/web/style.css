@@ -904,7 +904,11 @@ span.rewards-row-name {
 
 .arcade-sidebar-row span {
   font-size: 1.2em;
+}
+
+.rewards-row-name {
   text-align: left;
+  padding: 0 5px;
 }
 
 .game-details {
