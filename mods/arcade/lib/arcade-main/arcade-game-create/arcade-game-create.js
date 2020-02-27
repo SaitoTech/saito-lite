@@ -91,6 +91,7 @@ module.exports = ArcadeGameDreate = {
             let options = getOptions();
 
             let gamedata = {
+              ts: new Date().getTime(),
               name: gamemod.name,
               slug: gamemod.returnSlug(),
               options: gamemod.returnFormattedGameOptions(options),
