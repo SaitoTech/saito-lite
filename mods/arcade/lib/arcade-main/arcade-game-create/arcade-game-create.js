@@ -123,6 +123,7 @@ module.exports = ArcadeGameDreate = {
               options['players_invited'] = players_invited;
 
               let gamedata = {
+	        ts: new Date().getTime(),
                 name: gamemod.name,
                 slug: gamemod.returnSlug(),
                 options: gamemod.returnFormattedGameOptions(options),
@@ -176,14 +177,14 @@ module.exports = ArcadeGameDreate = {
         let { active_game } = data;
         let game_module = app.modules.returnModule(active_game);
         let options = game_module.returnFormattedGameOptions(getOptions());
-        let ts = new Date().getTime();
 
         let payload = {
+          ts: new Date().getTime(),
           name: active_game,
+	  slug: game_module.returnSlug(),
           publickey: app.wallet.returnPublicKey(),
           options,
           players_needed: document.querySelector('.game-players-select').value,
-          ts,
         };
 
         let newtx = data.arcade.createOpenTransaction(payload);
