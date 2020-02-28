@@ -61,6 +61,7 @@ class Rewards extends ModTemplate {
       console.log('drawing achievements');
       try {
         if (document.querySelector(".arcade-sidebar-done")) {
+          document.querySelector(".arcade-sidebar-done").innerHTML = "";
           await this.app.network.sendRequestWithCallback("get achievements", this.app.wallet.returnPublicKey(), (rows) => {
             rows.forEach(row => this.renderAchievmentRow(row));
           });
