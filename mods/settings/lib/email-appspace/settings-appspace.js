@@ -89,39 +89,50 @@ module.exports = SettingsAppspace = {
       document.getElementById('settings-restore-account')
         .onchange = async function(e) {
 
-          let password_prompt = sprompt("Please provide the password you used to encrypt this backup:");
-          if (password_prompt) {
+          let confirm_password = await sconfirm("Did you encrypt this backup with a password. "Cancel" for no:");
+          let password_prompt = "";
 
-            let selectedFile = this.files[0];
-            var wallet_reader = new FileReader();
-            wallet_reader.onloadend = function() {
-alert("RESULT: " + wallet_reader.result);
-console.log(wallet_reader.result);
+          if (confirm_password) {
 
-              let decryption_secret = app.crypto.hash(password_prompt + "SAITO-PASSWORD-HASHING-SALT");
-	      let decrypted_wallet = app.crypt.aesDecrypt(wallet_reader.result, decryption_secret);
-console.log(decrypted_wallet);
-	      try {
-  	        let wobj = JSON.parse(decrypted_wallet);
-console.log(JSON.stringify(wobj));
-		app.options = wobj;
-		app.storage.saveOptions();
-		//
-		// and reload
-		//
-alert("Restoration Complete ... click to reload Saito");
-		window.location = window.location;
-	      } catch (err) {
-alert("Error decrypting wallet file. Password incorrect");
-alert(JSON.stringify(err));
-	      }
-
+            password_prompt = await sprompt("Please provide the password you used to encrypt this backup:");
+            if (!password_prompt) {
+	      alert("Wallet Restore Cancelled");
+              return;
             }
-            wallet_reader.readAsBinaryString(selectedFile);
-
           } else {
-            alert("Cancelling Wallet Restoration...");
+            password_prompt = "";
           }
+
+          let selectedFile = this.files[0];
+          var wallet_reader = new FileReader();
+          wallet_reader.onloadend = function() {
+
+            let decryption_secret = "";
+            let decrypted_wallet = "";
+
+            if (password_prompt != "") {
+              decryption_secret = app.crypto.hash(password_prompt + "SAITO-PASSWORD-HASHING-SALT");
+              decrypted_wallet = app.crypto.aesDecrypt(wallet_reader.result, decryption_secret);
+            } else {
+              decrypted_wallet = wallet_reader.result;
+            }
+
+            try {
+                let wobj = JSON.parse(decrypted_wallet);
+                app.options = wobj;
+                app.storage.saveOptions();
+                //
+                // and reload
+                //
+		alert("Restoration Complete ... click to reload Saito");
+                window.location = window.location;
+            } catch (err) {
+		alert("Error decrypting wallet file. Password incorrect");
+            }
+          };
+
+          wallet_reader.readAsBinaryString(selectedFile);
+
       };
 
 
