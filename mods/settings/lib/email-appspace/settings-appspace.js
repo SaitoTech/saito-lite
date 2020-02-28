@@ -89,7 +89,7 @@ module.exports = SettingsAppspace = {
       document.getElementById('settings-restore-account')
         .onchange = async function(e) {
 
-          let confirm_password = await sconfirm("Did you encrypt this backup with a password. "Cancel" for no:");
+          let confirm_password = await sconfirm("Did you encrypt this backup with a password. Click cancel if not:");
           let password_prompt = "";
 
           if (confirm_password) {
