@@ -426,12 +426,11 @@ console.log("\n\n\n\n");
     if (this.countries[i].ussr > 0) { this.showInfluence(i, "ussr"); }
   }
 
-console.log("1");
   var element = document.getElementById('gameboard');
   if (element !== null) { helpers.hammer(element); }
 
 
-/*****
+
   let twilight_self = this;
   $('.scoring_card').off();
   $('.scoring_card')
@@ -455,7 +454,6 @@ console.log("1");
       let region = this.id;
       $(`.display_card#${region}`).hide();
     })
-*****/
 
 }
 

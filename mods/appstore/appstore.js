@@ -191,6 +191,7 @@ class AppStore extends ModTemplate {
           };
 
           newtx = app.wallet.signTransaction(newtx);
+
           app.network.propagateTransaction(newtx);
         });
 
@@ -239,20 +240,6 @@ class AppStore extends ModTemplate {
             }
           }
           break;
-      }
-    } else {
-
-      //
-      // create a transaction to trigger block producrtion
-      //
-      if (blk.block.id < 15 && conf == 0) {
-
-        let newtx = app.wallet.createUnsignedTransactionWithDefaultFee(app.wallet.returnPublicKey());
-        newtx.transaction.msg.module = "Debugging";
-        newtx.transaction.msg.description = "Producing a quick block to push our App Modules off the recent blockchain";
-        newtx = app.wallet.signTransaction(newtx);
-        app.network.propagateTransaction(newtx);
-
       }
     }
   }
@@ -408,8 +395,7 @@ class AppStore extends ModTemplate {
 
     }
 
-    let sql = `INSERT INTO modules (name, description, version, categories, publickey, unixtime, bid, bsh, tx, featured)
-    VALUES ($name, $description, $version, $categories, $publickey, $unixtime, $bid, $bsh, $tx, $featured)`;
+    let sql = `INSERT INTO modules (name, description, version, categories, publickey, unixtime, bid, bsh, tx, featured) VALUES ($name, $description, $version, $categories, $publickey, $unixtime, $bid, $bsh, $tx, $featured)`;
 
     let { from, sig, ts } = tx.transaction;
 
@@ -451,6 +437,7 @@ class AppStore extends ModTemplate {
 
     }
 
+console.log("done with that function...");
 
   }
 
