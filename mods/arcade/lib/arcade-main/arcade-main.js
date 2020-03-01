@@ -327,6 +327,7 @@ console.log(res.rows[i].game_still_open + "---" + players_needed);
         let game_id = e.currentTarget.id;
         sig = game_id.split('-').pop();
         var testsig = "";
+	let players = [];
 
         if (app.options.games) {
           for (let i = 0; i < app.options.games.length; i++) {
@@ -337,6 +338,7 @@ console.log(res.rows[i].game_still_open + "---" + players_needed);
             }
             if ( testsig == sig) {
               app.options.games[i].over = 1;
+	      players = app.options.games[i].players;
               app.options.games.splice(i, 1);
               app.storage.saveOptions();
             }
@@ -344,6 +346,11 @@ console.log(res.rows[i].game_still_open + "---" + players_needed);
         }
 
         let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
+        for (let i = 0; i < players.length; i++) {
+	  if (players[i] != app.wallet.returnPublicKey()) {
+	    newtx.transaction.to.push(new saito.slip(players[i], 0.0));
+	  }
+	}
         let msg = {
           sig: sig,
           status: 'close',
