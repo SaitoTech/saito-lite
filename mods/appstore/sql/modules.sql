@@ -12,6 +12,6 @@ CREATE TABLE IF NOT EXISTS modules (
   featured INTEGER DEFAULT 0,
   UNIQUE (version),
   UNIQUE (tx),
-  PRIMARY KEY(id ASC)
+  PRIMARY KEY (id ASC)
 );
 

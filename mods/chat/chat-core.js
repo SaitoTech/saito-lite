@@ -12,6 +12,7 @@ class ChatCore extends ModTemplate {
     this.groups = [];
     this.active_groups = [];
 
+    this.relay_moves_onchain_if_possible = 1;
   }
 
   receiveEvent(type, data) {
@@ -218,6 +219,12 @@ class ChatCore extends ModTemplate {
   sendMessage (app, tx) {
     let recipient = app.network.peers[0].peer.publickey;
     let relay_mod = app.modules.returnModule('Relay');
+
+    if (this.relay_moves_onchain_if_possible == 1) {
+console.log("ONCHAIN SEND THIS TX: " + JSON.stringify(tx.transaction));
+      tx = this.app.wallet.signTransaction(tx);
+      this.app.network.propagateTransaction(tx);
+    }
     relay_mod.sendRelayMessage(recipient, 'chat broadcast message', tx);
   }
 
@@ -225,16 +232,15 @@ class ChatCore extends ModTemplate {
 
     let txmsg = tx.returnMessage();
 
-//console.log("WE RECEIVED MSG: " + JSON.stringify(txmsg));
-
     //
     // add alert if we are not in a chat-positive application
     //
-    let m = app.modules.returnActiveModule();
-    if (!m.events.includes("chat-render-request")) {
-      this.showAlert();
+    if (app.BROWSER == 1) {
+      let m = app.modules.returnActiveModule();
+      if (!m.events.includes("chat-render-request")) {
+        this.showAlert();
+      }
     }
-
 
 
     this.groups.forEach(group => {

@@ -803,14 +803,25 @@ class Arcade extends ModTemplate {
         let res = {};
         res.rows = [];
 
-console.log("MSG: " + JSON.stringify(message));
-
-console.log("ASKED TO CHECK: " + game_id);
-
         if (this.accepted[game_id] > 0) {
           //
           // check required of players_needed vs. players_accepted
           //
+          let sql3 = `SELECT status FROM games WHERE game_id = $game_id`;
+          let params3 = { $game_id : game_id }
+          let rows3 = await this.app.storage.queryDatabase(sql3, params3, 'arcade');
+          if (rows3) {
+            if (rows3.length > 0) {
+              if (rows3[0].status === "open") {
+	        this.accepted[game_id] = 0;
+                res.rows.push({ game_still_open: 1 });
+                mycallback(res);
+                return;
+	      }
+	    }
+	  }
+          
+	  this.accepted[game_id] = 1;
           res.rows.push({ game_still_open: 0 });
         } else {
           this.accepted[game_id] = 1;

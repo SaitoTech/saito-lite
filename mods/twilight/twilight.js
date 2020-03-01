@@ -426,12 +426,11 @@ console.log("\n\n\n\n");
     if (this.countries[i].ussr > 0) { this.showInfluence(i, "ussr"); }
   }
 
-console.log("1");
   var element = document.getElementById('gameboard');
   if (element !== null) { helpers.hammer(element); }
 
 
-/*****
+
   let twilight_self = this;
   $('.scoring_card').off();
   $('.scoring_card')
@@ -455,7 +454,6 @@ console.log("1");
       let region = this.id;
       $(`.display_card#${region}`).hide();
     })
-*****/
 
 }
 
@@ -5056,9 +5054,11 @@ console.log("1");
           }
         }
         if (player == "us")   {
-          this.updateLog("US gets -1 coup penalty");
-          this.updateLog("Latin American Death Squads trigger");
-          roll--;
+          if (this.countries[countryname].region == "camerica" || this.countries[countryname].region == "samerica") {
+            this.updateLog("US gets -1 coup penalty");
+            this.updateLog("Latin American Death Squads trigger");
+            roll--;
+          }
         }
       }
       if (this.game.state.events.deathsquads == 2) {
@@ -5998,7 +5998,7 @@ console.log("1");
     deck['puppet']            = { img : "TNRnTS-66" , name : "Puppet Governments", scoring : 0 , player : "us" , recurring : 0 , ops : 2 };
     deck['grainsales']        = { img : "TNRnTS-67" , name : "Grain Sales to Soviets", scoring : 0 , player : "us" , recurring : 1 , ops : 2 };
     deck['johnpaul']          = { img : "TNRnTS-68" , name : "John Paul II Elected Pope", scoring : 0 , player : "us" , recurring : 0 , ops : 2 };
-    deck['deathsquads']       = { img : "TNRnTS-69" , name : "Latin American Death Squads", scoring : 0 , player : "both" , recurring : 1 , ops : 2 };
+    deck['deathsquads']       = { img : "TNRnTS-69png" , name : "Latin American Death Squads", scoring : 0 , player : "both" , recurring : 1 , ops : 2 };
     deck['oas']               = { img : "TNRnTS-70" , name : "OAS Founded", scoring : 0 , player : "us" , recurring : 0 , ops : 1 };
     deck['nixon']             = { img : "TNRnTS-71" , name : "Nixon Plays the China Card", scoring : 0 , player : "us" , recurring : 0 , ops : 2 };
     deck['sadat']             = { img : "TNRnTS-72" , name : "Sadat Expels Soviets", scoring : 0 , player : "us" , recurring : 0 , ops : 1 };
