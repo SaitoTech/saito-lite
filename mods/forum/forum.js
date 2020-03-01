@@ -164,10 +164,10 @@ class Forum extends ModTemplate {
         resolver.register(new ImageResolver.Webpage());
 
     try {
+/*
       resolver.resolve(snapshot_target, (result) => {
         if ( result ) {
           snapshot_target = result.image;
-/***
           request.head(snapshot_target, (err, res, body) => {
             if (!err) {
               request(snapshot_target).pipe(fs.createWriteStream(snapshot_filepath)).on('close', async () => {
@@ -189,10 +189,10 @@ class Forum extends ModTemplate {
             } else {
             }
           });
-***/
         } else {
         }
       });
+*/  
     } catch(err) {
     }
   }
