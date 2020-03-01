@@ -26,7 +26,15 @@ module.exports = SettingsAppspaceTemplate = (app) => {
 
       <div class="settings-wallet-management">
 
-	      <h3>Wallet Management:</h3>
+        <h3>Wallet Management:</h3>
+        
+        <div class="grid-4">
+        <div>Code Version:</div>
+        <div>${app.wallet.wallet.version}</div>
+        <div>Wallet Version:</div>
+        <div>${app.options.wallet.version}</div>
+
+        </div>
 
         <div class="grid-2">
 
