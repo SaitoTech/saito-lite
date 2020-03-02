@@ -6,7 +6,7 @@ module.exports = ForumTeaser = {
 
     let teasers = document.querySelector(".teasers");
     if (!teasers) { return; }
-    teasers.innerHTML += ForumTeaserTemplate(app, data.forum.forum.teaser);
+    teasers.innerHTML += ForumTeaserTemplate(app, data, data.forum.forum.teaser);
 
   },
 

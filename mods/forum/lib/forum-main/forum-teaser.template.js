@@ -1,4 +1,4 @@
-module.exports = ForumTeaserTemplate = (app, tx) => {
+module.exports = ForumTeaserTemplate = (app, data, tx) => {
 
   let link = tx.transaction.msg.link;
   let domain = tx.transaction.domain || "";
@@ -22,7 +22,7 @@ module.exports = ForumTeaserTemplate = (app, tx) => {
   let html = `
       <div class="teaser" id="${tx.transaction.sig}">
 
-        <div class="teaser-author">david</div>
+        <div class="teaser-author">${data.forum.formatAuthor(tx.transaction.from[0].add)}</div>
 
         <div class="teaser-votes">
           <div class="post_upvote post_upvote_${tx.transaction.sig} upvote-wrapper" id="${tx.transaction.sig}" >
