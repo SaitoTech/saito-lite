@@ -764,7 +764,7 @@ console.log("express app is trying to process the file...");
 console.log(sql + " ---- " + params);
 
         if (rows) {
-console.log("ROWS: " + JSON.stringify(rows));
+// console.log("ROWS: " + JSON.stringify(rows));
 
           if (rows.length > 0) {
 

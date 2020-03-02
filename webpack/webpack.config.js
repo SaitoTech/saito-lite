@@ -19,6 +19,9 @@ module.exports = {
             nodemailer: 'nodemailer'
         },
         {
+            jimp: 'jimp'
+        },
+        {
             sqlite: 'sqlite'
         },
         {
@@ -27,6 +30,7 @@ module.exports = {
         {
             webpack: 'webpack'
         },
+        /^(image-resolver|\$)$/i,
         /\.txt/,
         /\.png$/,
         /\.jpg$/,

@@ -224,7 +224,7 @@ class Registry extends ModTemplate {
 console.log(sql);
 console.log(params);
 console.log("\n\n\nRES: " + JSON.stringify(rows));
-console.log("ROWS: " + rows.length);
+// console.log("ROWS: " + rows.length);
     if (rows.length == 0) {
       return 0;
     } else {

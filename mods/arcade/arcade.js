@@ -527,21 +527,21 @@ class Arcade extends ModTemplate {
       //
       if (app.BROWSER == 0 && txmsg.request == "open" || txmsg.request == "join" || txmsg.request == "close") {
         for (let i = 0; i < arcade_self.app.network.peers.length; i++) {
-	  if (arcade_self.app.network.peers[i].peer.synctype == "lite") {
+          if (arcade_self.app.network.peers[i].peer.synctype == "lite") {
 
-	    //
-	    // fwd tx to peer
-	    //
-	    let message = {};
+          //
+          // fwd tx to peer
+          //
+          let message = {};
     	    message.request = "arcade spv update";
-    	    message.data = {};
-	    message.data.tx = tx;
+          message.data = {};
+          message.data.tx = tx;
 
-            arcade_self.app.network.peers[i].sendRequest(message.request, message.data);
+          arcade_self.app.network.peers[i].sendRequest(message.request, message.data);
+        }
 
-	  }
-	}
       }
+    }
 
 
       //
@@ -571,36 +571,8 @@ class Arcade extends ModTemplate {
       // cancel open games
       //
       if (txmsg.module == "Arcade" && txmsg.request == "close") {
-        if (tx.isFrom(this.app.wallet.returnPublicKey())) {
-	  this.removeGameFromOpenList(tx.returnMessage().sig);
-	} else {
-	  if (this.app.options) {
-	    if (this.app.options.games) {
-	      for (let i = 0; i < this.app.options.games.length; i++) {
-	        if (this.app.options.games[i].id == tx.returnMessage().sig) {
-
-		  console.log("%%%%%%%%%%%%%%%%");
-		  console.log("%%%%%%%%%%%%%%%%");
-		  console.log("%%%% DELETED %%%");
-		  console.log("%%%%%%%%%%%%%%%%");
-		  console.log("%%%%%%%%%%%%%%%%");
-		  this.app.options.games[i].status = "Opponent Resigned";
-		  this.app.options.games[i].over = 1;
-		  this.app.storage.saveOptions();
-
-	          let gamemod = this.app.modules.returnModule(this.app.options.games[i].module);
-	          if (gamemod) {
-	            gamemod.loadGame(tx.returnMessage().sig);
-	            gamemod.updateStatus("Opponent Resigned");
-	            gamemod.updateLog("Opponent Resigned");
-	          }
-
-		}
-	      }
-	    }
-	  }
-	}
         this.receiveCloseRequest(blk, tx, conf, app);
+        this.receiveGameoverRequest(blk, tx, conf, app);
       }
 
       //
@@ -609,7 +581,6 @@ class Arcade extends ModTemplate {
       if (txmsg.game_state != undefined && txmsg.game_id != "") {
         this.saveGameState(blk, tx, conf, app);
       }
-
 
 
       //
@@ -848,6 +819,39 @@ class Arcade extends ModTemplate {
       // cancel open games
       //
       if (txmsg.module == "Arcade" && txmsg.request == "close") {
+        // try to give game over message
+        // this.receiveGameoverRequest();
+
+        if (tx.isFrom(this.app.wallet.returnPublicKey())) {
+          this.removeGameFromOpenList(tx.returnMessage().sig);
+        } else {
+          if (this.app.options) {
+            if (this.app.options.games) {
+              for (let i = 0; i < this.app.options.games.length; i++) {
+                if (this.app.options.games[i].id == tx.returnMessage().sig) {
+
+                  console.log("%%%%%%%%%%%%%%%%");
+                  console.log("%%%%%%%%%%%%%%%%");
+                  console.log("%%%% DELETED %%%");
+                  console.log("%%%%%%%%%%%%%%%%");
+                  console.log("%%%%%%%%%%%%%%%%");
+
+                  this.app.options.games[i].status = "Opponent Resigned";
+                  this.app.options.games[i].over = 1;
+                  this.app.storage.saveOptions();
+
+                  let gamemod = this.app.modules.returnModule(this.app.options.games[i].module);
+                  if (gamemod) {
+                    gamemod.loadGame(tx.returnMessage().sig);
+                    gamemod.updateStatus("Opponent Resigned");
+                    gamemod.updateLog("Opponent Resigned");
+                  }
+                }
+              }
+            }
+          }
+        }
+
         this.removeGameFromOpenList(txmsg.sig);
         if (this.viewing_arcade_initialization_page == 0 && this.browser_active == 1) {
           this.render(this.app);
@@ -1460,23 +1464,23 @@ class Arcade extends ModTemplate {
     //
     // update live game table
     //
-    for (let i = 0; i < this.games.length; i++) {
-      let transaction = Object.assign({ msg: { game_id: "" } }, this.games[i].transaction);
-      if (transaction.msg.game_id == txmsg.game_id) {
-        let game_id = transaction.msg.game_id;
-        let divid = "arcade-game-options-" + game_id;
-        if (this.browser_active) {
-          try {
-            let testdiv = document.getElementById(divid);
-            if (testdiv) {
-              testdiv.innerHTML = "Opponent Resigned";
-            }
-          } catch (err) {
-            //console.info("ERROR UPDATING ARCADE BOX");
-          }
-        }
-      }
-    }
+    // for (let i = 0; i < this.games.length; i++) {
+    //   let transaction = Object.assign({ msg: { game_id: "" } }, this.games[i].transaction);
+    //   if (transaction.msg.game_id == txmsg.game_id) {
+    //     let game_id = transaction.msg.game_id;
+    //     let divid = "arcade-game-options-" + game_id;
+    //     if (this.browser_active) {
+    //       try {
+    //         let testdiv = document.getElementById(divid);
+    //         if (testdiv) {
+    //           testdiv.innerHTML = "Opponent Resigned";
+    //         }
+    //       } catch (err) {
+    //         //console.info("ERROR UPDATING ARCADE BOX");
+    //       }
+    //     }
+    //   }
+    // }
 
 
     //

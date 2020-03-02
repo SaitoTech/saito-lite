@@ -47,7 +47,7 @@ module.exports = AppStoreAppspace = {
 	    }
 	  }
 
-console.log("RES ROWS: " + JSON.stringify(res.rows));
+// console.log("RES ROWS: " + JSON.stringify(res.rows));
 
           this.addCategories(app, data, res.rows);
           this.populateAppsSpace(app, data, res.rows);

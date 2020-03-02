@@ -317,7 +317,7 @@ module.exports = ArcadeMain = {
         let game_id = e.currentTarget.id;
         sig = game_id.split('-').pop();
         var testsig = "";
-	let players = [];
+        let players = [];
 
         if (app.options.games) {
           for (let i = 0; i < app.options.games.length; i++) {
@@ -328,7 +328,7 @@ module.exports = ArcadeMain = {
             }
             if ( testsig == sig) {
               app.options.games[i].over = 1;
-	      players = app.options.games[i].players;
+              players = app.options.games[i].players;
               app.options.games.splice(i, 1);
               app.storage.saveOptions();
             }
@@ -336,15 +336,17 @@ module.exports = ArcadeMain = {
         }
 
         let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
+        let my_publickey = app.wallet.returnPublicKey();
+
         for (let i = 0; i < players.length; i++) {
-	  if (players[i] != app.wallet.returnPublicKey()) {
-	    newtx.transaction.to.push(new saito.slip(players[i], 0.0));
-	  }
-	}
+	        if (players[i] != my_publickey) newtx.transaction.to.push(app.wallet.createSlip(players[i]));
+        }
+
         let msg = {
           sig: sig,
           status: 'close',
           request: 'close',
+          winner: players[0] == my_publickey ? players[1] : players[0],
           module: 'Arcade'
         }
 

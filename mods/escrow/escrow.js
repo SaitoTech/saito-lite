@@ -253,7 +253,7 @@ console.log("RECEIVED ESCROW INVITATION: " + JSON.stringify(txmsg));
 	        $publickey	:	tx.transaction.from[0].add
 	    }
 	    let rows = await escrow_self.app.storage.queryDatabase(sql, params, "escrow");
-console.log("ROWS: " + rows);
+// console.log("ROWS: " + rows);
 	    if (rows == null) { return; }
 	    if (rows.length <= 0) { return; }
 	    let user_id = rows[0].id;
