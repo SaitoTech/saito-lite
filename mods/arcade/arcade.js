@@ -123,9 +123,11 @@ class Arcade extends ModTemplate {
       .catch(err => console.info("ERROR 418019: error fetching game for observer mode", err));
   }
 
-  render(app, data) {
+  render(app, data=null) {
 
     if (this.browser_active == 0) { return; }
+
+    if (data == null) { data = {}; data.arcade = this; }
 
     ArcadeGameCarousel.render(app, data);
 
@@ -471,6 +473,8 @@ class Arcade extends ModTemplate {
   // just receive the sig of the game to remove
   removeGameFromOpenList(game_sig) {
 
+console.log("1");
+
     console.log("THESE ARE THE GAMES BEFORE: ", this.games);
     this.games = this.games.filter(game => {
       if (game.transaction) {
@@ -479,6 +483,8 @@ class Arcade extends ModTemplate {
         return true;
       }
     });
+
+console.log("2");
 
     if (this.app.options) {
       if (this.app.options.games) {
@@ -520,7 +526,27 @@ class Arcade extends ModTemplate {
 
     if (conf == 0) {
 
-      var txmmodule = txmsg.mod
+      //
+      // notify SPV clients of "open", "join" and "close" messages
+      //
+      if (app.BROWSER == 0 && txmsg.request == "open" || txmsg.request == "join" || txmsg.request == "close") {
+        for (let i = 0; i < arcade_self.app.network.peers.length; i++) {
+	  if (arcade_self.app.network.peers[i].peer.synctype == "lite") {
+
+	    //
+	    // fwd tx to peer
+	    //
+	    let message = {};
+    	    message.request = "arcade spv update";
+    	    message.data = {};
+	    message.data.tx = tx;
+
+            arcade_self.app.network.peers[i].sendRequest(message.request, message.data);
+
+	  }
+	}
+      }
+
 
       //
       // open msgs -- public invitations
@@ -789,6 +815,57 @@ class Arcade extends ModTemplate {
 
   async handlePeerRequest(app, message, peer, mycallback = null) {
 
+    //
+    // this code doubles onConfirmation
+    //
+    if (message.request == 'arcade spv update') {
+
+console.log(message.data.tx);
+console.log(JSON.stringify(message.data.tx));
+
+      let tx = new saito.transaction(message.data.tx.transaction);
+      let txmsg = tx.returnMessage();
+      let conf = 0;
+      let blk = null;
+
+      //
+      // open msgs -- public invitations
+      //
+      if (txmsg.module === "Arcade" && txmsg.request == "open") {
+        this.addGameToOpenList(tx);
+        this.receiveOpenRequest(blk, tx, conf, app);
+      }
+
+      //
+      // open msgs -- private invitations
+      //
+      if (txmsg.module === "ArcadeInvite" && txmsg.request == "open" && tx.isTo(app.wallet.returnPublicKey())) {
+        this.addGameToOpenList(tx);
+      }
+
+      //
+      // join msgs -- add myself to game list
+      //
+      if (txmsg.request == "join") {
+        this.joinGameOnOpenList(tx);
+        this.receiveJoinRequest(blk, tx, conf, app);
+      }
+
+      //
+      // cancel open games
+      //
+      if (txmsg.module == "Arcade" && txmsg.request == "close") {
+console.log("trying to remove game from open list!");
+        this.removeGameFromOpenList(txmsg.sig);
+        if (this.viewing_arcade_initialization_page == 0 && this.browser_active == 1) {
+console.log("trying to render page again...");
+          this.render();
+        }
+      }
+      this.receiveCloseRequest(blk, tx, conf, app);
+    } // end peer relayed txs
+
+
 
     if (message.request == 'arcade leaderboard list') {
       let sql = `
@@ -1021,7 +1098,8 @@ class Arcade extends ModTemplate {
     let game_status = "open";
     let player = tx.transaction.from[0].add;
     let players_array = player;
-    let start_bid = blk.block.id;
+    let start_bid = 1;
+    if (blk != null) { start_bid = blk.block.id; }
     let valid_for_minutes = 60;
     let created_at = parseInt(tx.transaction.ts);
     let expires_at = created_at + (60000 * parseInt(valid_for_minutes));
@@ -1059,7 +1137,7 @@ class Arcade extends ModTemplate {
       $status: game_status,
       $options: options,
       $tx: JSON.stringify(tx.transaction),
-      $start_bid: blk.block.id,
+      $start_bid: start_bid,
       $created_at: created_at,
       $expires_at: expires_at
     };
