@@ -1,5 +1,6 @@
 module.exports = ForumTeaserTemplate = (app, data, tx) => {
 
+  let author = data.forum.formatAuthor(tx.transaction.from[0].add);
   let link = tx.transaction.msg.link;
   let domain = tx.transaction.domain || "";
   let subforum = "/forum/main";
@@ -44,7 +45,7 @@ module.exports = ForumTeaserTemplate = (app, data, tx) => {
    }
    html += `
 	  </div>
-          <div class="teaser-content-details">submitted by <span class="post_author_clickable" id="post_author_clickable_${tx.transaction.sig}">david</span> to <a href="${subforum}">${subforum}</a><span class="post_author_address" id="${tx.transaction.from[0].add}" style="display:none"></span></div>
+          <div class="teaser-content-details">submitted by <span class="post_author_clickable" id="post_author_clickable_${tx.transaction.sig}">${author}</span> to <a href="${subforum}">${subforum}</a><span class="post_author_address" id="${tx.transaction.from[0].add}" style="display:none"></span></div>
           <div class="teaser-content-links">
             <div class="teaser-content-links-comments"><a href="${discussion_link}">${comments_text}</a></div>
   `;
