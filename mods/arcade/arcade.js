@@ -773,7 +773,7 @@ class Arcade extends ModTemplate {
                   this.games.splice(i, 1);
                   console.info("RE-RENDER");
 	          if (this.viewing_arcade_initialization_page == 0) {
-                    this.render();
+                    this.render(this.app);
 	          }
                 }
               }
