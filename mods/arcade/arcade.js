@@ -850,7 +850,7 @@ class Arcade extends ModTemplate {
       if (txmsg.module == "Arcade" && txmsg.request == "close") {
         this.removeGameFromOpenList(txmsg.sig);
         if (this.viewing_arcade_initialization_page == 0 && this.browser_active == 1) {
-          this.render();
+          this.render(this.app);
         }
       }
       this.receiveCloseRequest(blk, tx, conf, app);
