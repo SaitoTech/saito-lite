@@ -25,7 +25,9 @@ module.exports = ArcadeGameListRowTemplate = (app, tx, button_map) => {
 
 
   var button_html = Object.entries(button_map).map(([key, value]) => {
-    return `<button class="arcade-game-row-${key}" id="arcade-game-${key}-row-${sig}">${value}</button>`
+    return `
+    <input style="display: var(--saito-wu);" id="arcade-game-${key}-row-${sig}-pass" type="text"></input>
+    <button class="arcade-game-row-${key}" id="arcade-game-${key}-row-${sig}">${value}</button>`
   }).join('');
 
   return `

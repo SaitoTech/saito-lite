@@ -123,6 +123,8 @@ module.exports = ArcadeMain = {
     Array.from(document.getElementsByClassName('arcade-game-row-join')).forEach(game => {
       game.onclick = (e) => {
 
+        if (document.getElementById(e.toElement.id+"-pass").value != "") { return; }
+
         let game_id = e.currentTarget.id;
         game_id = game_id.split('-').pop();
 
