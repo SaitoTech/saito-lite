@@ -437,7 +437,6 @@ class AppStore extends ModTemplate {
 
     }
 
-console.log("done with that function...");
 
   }
 
