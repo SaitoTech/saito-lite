@@ -544,12 +544,16 @@ console.log("done with that function...");
       $name: bundle_filename,
       $script: bundle_binary,
     }
+
+console.log('SQL: ' + sql);
+console.log('params: ' + params);
+
     await this.app.storage.executeDatabase(sql, params, "appstore");
 
     //
     //
     //
-    let online_version = "http://" + this.app.options.server.endpoint.host + ":" + this.app.options.server.endpoint.port + "/appstore/bundle/" + bundle_filename;
+    let online_version = this.app.options.server.endpoint.protocol + "://" + this.app.options.server.endpoint.host + ":" + this.app.options.server.endpoint.port + "/appstore/bundle/" + bundle_filename;
 
 
     //
@@ -747,6 +751,8 @@ console.log("done with that function...");
       expressapp.use('/' + encodeURI(this.name), express.static(__dirname + "/web"));
       expressapp.get('/appstore/bundle/:filename', async (req, res) => {
 
+console.log("express app is trying to process the file...");
+
         let scriptname = req.params.filename;
 
         let sql = "SELECT script FROM bundles WHERE name = $scriptname";
@@ -755,7 +761,11 @@ console.log("done with that function...");
         }
         let rows = await app.storage.queryDatabase(sql, params, "appstore");
 
+console.log(sql + " ---- " + params);
+
         if (rows) {
+console.log("ROWS: " + JSON.stringify(rows));
+
           if (rows.length > 0) {
 
             res.setHeader('Content-type', 'text/javascript');
