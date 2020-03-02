@@ -120,6 +120,8 @@ module.exports = SettingsAppspace = {
             try {
                 let wobj = JSON.parse(decrypted_wallet);
                 app.options = wobj;
+
+	        app.modules.onResetWallet();
                 app.storage.saveOptions();
                 //
                 // and reload
@@ -142,6 +144,9 @@ module.exports = SettingsAppspace = {
         .onclick = (e) => {
 
           app.wallet.resetWallet();
+	  app.modules.onResetWallet();
+	  app.storage.saveOptions();
+
           salert("Wallet reset!");
 
           data.email.emails.inbox = [];

@@ -54,6 +54,17 @@ class Arcade extends ModTemplate {
   }
 
 
+  onResetWallet() {
+    if (this.app.options) {
+      if (this.app.options.games) {
+        if (this.app.options.games.length > 0) {
+	  this.app.options.games = [];
+        }
+      }
+    }
+  }
+
+
   observeGame(msg) {
 
     let msgobj = JSON.parse(this.app.crypto.base64ToString(msg));

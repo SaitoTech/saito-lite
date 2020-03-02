@@ -216,8 +216,6 @@ module.exports = ArcadeMain = {
                 return;
               }
 
-console.log("ACCEPTED GID: " + accepted_game.id + " -- " + game_id);
-
 	      //
 	      // n > 2 player or game not accepted
 	      //
@@ -244,7 +242,6 @@ console.log("ACCEPTED GID: " + accepted_game.id + " -- " + game_id);
                   salert("Sorry, this game has been accepted already!");
                 }
               } else {
-console.log(res.rows[i].game_still_open + "---" + players_needed);
                 salert("Sorry... game already accepted. Your list of open games will update shortly on next block!");
               }
             });
@@ -266,25 +263,17 @@ console.log(res.rows[i].game_still_open + "---" + players_needed);
           let { games } = app.options;
 
           for (let i = 0; i < app.options.games.length; i++) {
-
-            console.log("CHECKING: " + app.options.games[i].id);
-
             if (app.options.games[i].id == game_id) {
-
-              console.log("THE GAME IS THE SAME AS OUR GAME ID!");
 
               let resigned_game = app.options.games[i];
 
               if (resigned_game.over == 0) {
-
-                console.log("GETTING ASKED TO RESIGN, then deleting!");
 
                 let game_mod = app.modules.returnModule(resigned_game.module);
                 game_mod.resignGame(game_id);
 
               } else {
 
-                console.log("DELETING A GAME!");
                 //
                 // removing game someone else ended
                 //
@@ -295,7 +284,6 @@ console.log(res.rows[i].game_still_open + "---" + players_needed);
               }
             }
           }
-          console.log("REMOVE GAME FROM GAME LIST!");
           this.removeGameFromList(game_id);
         }
       };
