@@ -473,8 +473,6 @@ class Arcade extends ModTemplate {
   // just receive the sig of the game to remove
   removeGameFromOpenList(game_sig) {
 
-console.log("1");
-
     console.log("THESE ARE THE GAMES BEFORE: ", this.games);
     this.games = this.games.filter(game => {
       if (game.transaction) {
@@ -483,8 +481,6 @@ console.log("1");
         return true;
       }
     });
-
-console.log("2");
 
     if (this.app.options) {
       if (this.app.options.games) {
@@ -820,9 +816,6 @@ console.log("2");
     //
     if (message.request == 'arcade spv update') {
 
-console.log(message.data.tx);
-console.log(JSON.stringify(message.data.tx));
-
       let tx = new saito.transaction(message.data.tx.transaction);
       let txmsg = tx.returnMessage();
       let conf = 0;
@@ -855,10 +848,8 @@ console.log(JSON.stringify(message.data.tx));
       // cancel open games
       //
       if (txmsg.module == "Arcade" && txmsg.request == "close") {
-console.log("trying to remove game from open list!");
         this.removeGameFromOpenList(txmsg.sig);
         if (this.viewing_arcade_initialization_page == 0 && this.browser_active == 1) {
-console.log("trying to render page again...");
           this.render();
         }
       }
