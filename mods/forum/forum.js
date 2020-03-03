@@ -13,8 +13,6 @@ const AddressController = require('../../lib/ui/menu/address-controller');
 
 const fs = require('fs');
 //const request = require('request');
-const ImageResolver = require('image-resolver');
-const Jimp = require('jimp');
 
 
 
@@ -156,6 +154,9 @@ class Forum extends ModTemplate {
     let snapshot_localfile = filename + ".png";
     let snapshot_dir       = __dirname + "/web/img/thumbnails/";
     let snapshot_filepath  = snapshot_dir + "/" + snapshot_localfile;
+
+    const ImageResolver = require('image-resolver');
+    const Jimp = require('jimp');
 
     var resolver = new ImageResolver();
         resolver.register(new ImageResolver.FileExtension());

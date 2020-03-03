@@ -22,6 +22,9 @@ module.exports = {
             jimp: 'jimp'
         },
         {
+            "image-resolve": "image-resolver"
+        },
+        {
             sqlite: 'sqlite'
         },
         {
@@ -30,7 +33,7 @@ module.exports = {
         {
             webpack: 'webpack'
         },
-        /^(image-resolver|\$)$/i,
+        // /^(image-resolver|\$)$/i,
         /\.txt/,
         /\.png$/,
         /\.jpg$/,
