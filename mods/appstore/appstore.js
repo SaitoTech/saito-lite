@@ -690,6 +690,8 @@ console.log('params: ' + params);
       let cwdir = __dirname;
       let unzip_command = 'sh ' + bash_script;
       const { stdout, stderr } = await exec(unzip_command, { cwd: cwdir, maxBuffer: 4096 * 2048 });
+      console.log(stdout);
+      console.log(stderr);
     } catch (err) {
       console.log(err);
     }
