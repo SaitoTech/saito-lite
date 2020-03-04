@@ -6,12 +6,20 @@ const ChatNavTemplate = require('../chat-nav/chat-nav.template');
 // const ChatAdd = require('../chat-add/chatadd');
 
 module.exports = ChatList = {
+
     render(app, data) {
         let chat_main = document.querySelector('.chat-main')
 
         if (!chat_main) { return; }
         chat_main.innerHTML = ChatListTemplate();
         chat_main.append(elParser(ChatNavTemplate()));
+
+	for (let i = 0; i < data.chat.mods.length; i++) {
+	  let cmod = data.chat.mods[i].respondTo("chat-navbar");
+          if (cmod != null) {
+	    cmod.render(app, data);
+          }
+        }
 
         data.chat.groups.forEach((group) => {
             let last_message = group.messages[group.messages.length - 1];
@@ -60,6 +68,14 @@ module.exports = ChatList = {
             data.chat.active = 'chat_add_contact';
             data.chat.main.render(app, data);
         };
+
+	for (let i = 0; i < data.chat.mods.length; i++) {
+	  let cmod = data.chat.mods[i].respondTo("chat-navbar");
+          if (cmod != null) {
+	    cmod.attachEvents(app, data);
+          }
+        }
+
     },
 
     toggleChatNav() {

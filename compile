@@ -1,12 +1,8 @@
 #!/bin/bash
 
 function reset {
-  if [ ! -d "./bundler" ]; then
-    mkdir bundler/
-  fi
 
   # we explicitly don't delete registry database
-  rm -f ./bundler/*
   rm -f ./data/appstore.sq3
   rm -f ./data/hospital.sq3
   rm -f ./data/records.sq3
@@ -46,6 +42,26 @@ function reset {
   rm -f ./mods/appstore/bundler/*.js
   rm -f ./mods/appstore/bundler/*.json
   rm -f ./logs/*
+
+
+  rm -rf ./bundler
+  if [ ! -d "./bundler" ]; then
+    mkdir -p bundler/default/mods
+    cp -rf ./lib bundler/default/lib    
+    cp -rf ./config bundler/default/config    
+    cp -rf ./mods/* bundler/default/mods/    
+    for md in bundler/default/mods/* ; do
+      rm -rf "$md/web"
+      rm -rf "$md/sql"
+      rm -rf "$md/www"
+      rm -rf "$md/DESCRIPTION.txt"
+      rm -rf "$md/BUGS.txt"
+      rm -rf "$md/README.txt"
+      rm -rf "$md/README.md"
+      rm -rf "$md/install.sh"
+      rm -rf "$md/license"
+    done
+  fi
 
   #let the system know that users pre-existed a reset.
   echo "update users set latest_tx = -1;" | sqlite3 ./data/rewards.sq3
@@ -100,6 +116,7 @@ if [[ $2 == "prod" ]]; then
 else
   npm run build
 fi
+
 
 cat ./lib/saito/boot.js ./web/saito/saito.js > ./web/saito/saito2.js
 mv -f ./web/saito/saito2.js ./web/saito/saito.js

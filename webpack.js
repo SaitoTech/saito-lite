@@ -4,6 +4,9 @@ const webpack = require('webpack');
 let [entry_path, output_path, output_filename] = process.argv.slice(2);
 
 webpack({
+//  optimization: {
+//    minimize: false,
+//  },
   target: 'web',
     node: {
         fs: "empty",
@@ -74,8 +77,8 @@ webpack({
       saito$: path.resolve(__dirname, 'lib/saito/saito.js')
     }
   },
-  mode: 'development',
-  devtool: "cheap-module-eval-source-map",
+  mode: 'production',
+  devtool: false,
   }, (err, stats) => {
   if (err || stats.hasErrors()) {
     console.log(err);

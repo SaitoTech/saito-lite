@@ -2,7 +2,7 @@ const ChatBox = require('../chat-box/chat-box');
 
 module.exports = ChatManager = {
   initialize(app, data) {
-    const render_manager_listner = () => {
+    const render_manager_listener = () => {
       this.render(app, data);
       this.attachEvents(app, data);
     }
@@ -10,7 +10,7 @@ module.exports = ChatManager = {
     const receive_msg_listener = (msg) => this.addMessageToDOM(app, data, msg);
 
     app.connection.removeAllListeners("chat-render-box-request");
-    app.connection.on("chat-render-box-request", render_manager_listner);
+    app.connection.on("chat-render-box-request", render_manager_listener);
 
     app.connection.removeAllListeners('chat_receive_message');
     app.connection.on('chat_receive_message', receive_msg_listener);

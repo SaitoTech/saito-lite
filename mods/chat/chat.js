@@ -24,6 +24,9 @@ class Chat extends ChatCore {
 
     this.categories  = "Messaging Communication";
 
+
+    this.mods = [];
+
     // defined in parent
     //this.active_groups = [];
     //this.groups = [];
@@ -76,18 +79,19 @@ class Chat extends ChatCore {
   }
 
   initializeHTML(app) {
+
+    let x = this.app.modules.respondTo("chat-navbar");
+    for (let i = 0; i < x.length; i++) {
+      this.mods.push(x[i]);
+    }
+
     super.initializeHTML(app);
+
+    this.uidata.chat = this;
 
     Header.render(app, this.uidata);
     Header.attachEvents(app, this.uidata);
 
-    this.uidata.chat = this;
-
-    //this.uidata.chat.app = app;
-    //this.uidata.chat.groups = this.groups;
-    //this.uidata.helpers = helpers;
-
-    // this.uidata.chatmod = this;
     this.uidata.chat.active = "chat_list";
 
     ChatMain.initialize(app, this.uidata);
