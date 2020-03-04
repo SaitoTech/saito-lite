@@ -6849,6 +6849,7 @@ console.log("\n\n\n\n");
 
       if (this.isControlled("us", "japan") == 1) { target++; }
       if (this.isControlled("us", "taiwan") == 1) { target++; }
+      if (this.isControlled("us", "northkorea") == 1) { target++; }
 
       let roll = this.rollDice(6);
 

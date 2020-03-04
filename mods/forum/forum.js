@@ -201,7 +201,7 @@ class Forum extends ModTemplate {
 
 
 
-  createVoteTransaction(post_id, vote="upvote") {
+  createVoteTransaction(post_id, vote) {
 
     let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
 
@@ -254,15 +254,15 @@ class Forum extends ModTemplate {
 
       sql = "UPDATE posts SET votes = votes+1 WHERE post_id = $post_id";
       if (vote_type == "downvote") {
-        sql = "UPDATE posts SET votes = votes+1 WHERE post_id = $post_id";
+        sql = "UPDATE posts SET votes = votes-1 WHERE post_id = $post_id";
       }
       params = { 
         $post_id : tx.transaction.msg.post_id
-      }
+      } 
       await this.app.storage.executeDatabase(sql, params, "forum");
 
     } else {
-
+      vote_type = tx.transaction.msg.type;
       sql = "INSERT INTO votes (type, publickey, post_id) VALUES ($type, $publickey, $post_id)";
       params = {
         $type : tx.transaction.msg.type ,
@@ -273,7 +273,7 @@ class Forum extends ModTemplate {
 
       sql = "UPDATE posts SET votes = votes+1 WHERE post_id = $post_id";
       if (vote_type == "downvote") {
-        sql = "UPDATE posts SET votes = votes+1 WHERE post_id = $post_id";
+        sql = "UPDATE posts SET votes = votes-1 WHERE post_id = $post_id";
       }
       params = { 
         $post_id : tx.transaction.msg.post_id

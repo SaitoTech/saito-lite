@@ -58,7 +58,7 @@ class Arcade extends ModTemplate {
     if (this.app.options) {
       if (this.app.options.games) {
         if (this.app.options.games.length > 0) {
-	  this.app.options.games = [];
+          this.app.options.games = [];
         }
       }
     }
