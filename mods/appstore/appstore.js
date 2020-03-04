@@ -582,7 +582,6 @@ console.log('params: ' + params);
     const util = require('util');
     const exec = util.promisify(require('child_process').exec);
 
-
     //
     // modules has name, description, version, zip
     //
@@ -594,65 +593,42 @@ console.log('params: ' + params);
     let ts = new Date().getTime();
     let hash = this.app.crypto.hash(modules.map(mod => mod.version).join(''));
 
-
     let bash_script = `mods/compile-${ts}-${hash}`;
-    let bash_script_content = 'cd ' + __dirname + '/mods' + "\n";
-    let bash_script_delete = 'cd ' + __dirname + '/mods' + "\n";
+    
+    let newappdir = `${ts}-${hash}`;
+
+    let bash_script_content = '';
+    let bash_script_delete = '';
+
+    bash_script_content = 'cp -rf ' + __dirname + "/../../bundler/default " + __dirname + "/../../bundler/" + newappdir;
+    bash_script_content += 'rm -rf ' + newappdir + "/mods";
+    bash_script_content += 'mkdir  ' + newappdir + "/mods";
+    bash_script_content += 'mkdir  ' + newappdir + "/dist";
+
+    bash_script_content += 'cd ' + __dirname + '/mods' + "\n";
+    bash_script_delete  += 'cd ' + __dirname + '/mods' + "\n";
 
     //
     // save MODS.zip and create bash script to unzip
     //
     let modules_config_filename = `modules.config-${ts}-${hash}.json`;
     let module_paths = modules.map(mod => {
+
       let mod_path = `mods/${returnSlug(mod.name)}-${ts}-${hash}.zip`;
-      bash_script_content += `unzip ${returnSlug(mod.name)}-${ts}-${hash}.zip -d ../bundler/mods/${returnSlug(mod.name)}-${ts}-${hash} \\*.js \\*.css \\*.html \\*.wasm` + "\n";
 
-      //
-      // replace path saito dep
-      bash_script_content += `find ../bundler/mods/${returnSlug(mod.name)}-${ts}-${hash}/ -type f -exec sed -i -e '`;
-      // saito
-      bash_script_content += 's/..\\/..\\/lib\\/saito\\/saito/saito/g;';
-      // modtemplate
-      bash_script_content += 's/..\\/..\\/lib\\/templates\\/modtemplate/ModTemplate/g;';
-      // gametemplate
-      bash_script_content += 's/..\\/..\\/lib\\/templates\\/gametemplate/GameTemplate/g;';
-      // game-hud
-      bash_script_content += 's/..\\/..\\/lib\\/templates\\/lib\\/game-hud\\/game-hud/GameHud/g;';
-      // game-card-fan
-      bash_script_content += 's/..\\/..\\/lib\\/templates\\/lib\\/game-cardfan\\/game-cardfan/GameCardFan/g;';
-      // game card box
-      bash_script_content += 's/..\\/..\\/lib\\/templates\\/lib\\/game-cardbox\\/game-cardbox/GameCardBox/g;';
-      // address controller
-      bash_script_content += 's/..\\/..\\/lib\\/ui\\/menu\\/address-controller/AddressController/g;';
-      // header
-      bash_script_content += 's/..\\/..\\/lib\\/ui\\/header\\/header/Header/g;';
-      // modal
-      bash_script_content += 's/..\\/..\\/lib\\/ui\\/modal\\/modal/Modal/g;';
-      // helpers
-      bash_script_content += 's/..\\/..\\/lib\\/helpers\\/index/Helpers/g;';
+      bash_script_content += `unzip ${returnSlug(mod.name)}-${ts}-${hash}.zip -d ../../bundler/${newappdir}/mods/${returnSlug(mod.name)} \\*.js \\*.css \\*.html \\*.wasm` + "\n";
+      bash_script_delete += `rm -rf ${returnSlug(mod.name)}-${ts}-${hash}.zip`;
+      bash_script_delete += `rm -rf ../../bundler/${newappdir}/mods/${returnSlug(mod.name)}`;
 
-      bash_script_content += `' {} \\;` + "\n";
-
-      bash_script_delete += `rm -rf ../bundler/mods/${returnSlug(mod.name)}-${ts}-${hash}` + "\n";
-      let zip_bin2 = Buffer.from(mod.zip, 'base64').toString('binary');
-      //fs.writeFileSync(path.resolve(__dirname, mod_path), mod.zip, { encoding: 'binary' });
-      fs.writeFileSync(path.resolve(__dirname, mod_path), zip_bin2, { encoding: 'binary' });
-      return `appstore/bundler/mods/${returnSlug(mod.name)}-${ts}-${hash}/${returnSlug(mod.name)}`;
     });
-
-    bash_script_delete += `rm -rf *-${hash}.zip \n`;
-    bash_script_delete += `rm -rf *-${hash} \n`;
-
 
 
     //
     // write our modules config file
     //
-    await fs.writeFile(path.resolve(__dirname, `../../bundler/${modules_config_filename}`),
+    await fs.writeFile(path.resolve(__dirname, `../../bundler/${newappdir}/config/${modules_config_filename}`),
       JSON.stringify({ mod_paths: module_paths })
     );
-
-
 
     //
     // other filenames
@@ -664,15 +640,15 @@ console.log('params: ' + params);
     // write our index file for bundling
     //
     let IndexTemplate = require('./bundler/templates/index.template.js');
-    await fs.writeFile(path.resolve(__dirname, `../../bundler/${index_filename}`),
+    await fs.writeFile(path.resolve(__dirname, `../../bundler/${newappdir}/config/${index_filename}`),
       IndexTemplate(modules_config_filename)
     );
 
     //
     // execute bundling process
     //
-    let entry = path.resolve(__dirname, `../../bundler/${index_filename}`);
-    let output_path = path.resolve(__dirname, 'bundler/dist');
+    let entry = path.resolve(__dirname, `../../bundler/${newappdir}/config/${index_filename}`);
+    let output_path = path.resolve(__dirname, 'bundler/${newappdir}/dist');
 
     bash_script_content += 'cd ' + __dirname + "\n";
     bash_script_content += 'cd ../../' + "\n";
@@ -686,32 +662,33 @@ console.log('params: ' + params);
     //
     // execute bash script
     //
-    try {
-      let cwdir = __dirname;
-      let unzip_command = 'sh ' + bash_script;
-      const { stdout, stderr } = await exec(unzip_command, { cwd: cwdir, maxBuffer: 4096 * 2048 });
-    } catch (err) {
-      console.log(err);
-    }
+//    try {
+//      let cwdir = __dirname;
+//      let unzip_command = 'sh ' + bash_script;
+//      const { stdout, stderr } = await exec(unzip_command, { cwd: cwdir, maxBuffer: 4096 * 2048 });
+//    } catch (err) {
+//      console.log(err);
+//    }
 
     console.log("Module Paths: " + JSON.stringify(module_paths));
 
     //
     // cleanup
     //
-    fs.unlink(path.resolve(__dirname, `../../bundler/${index_filename}`));
-    fs.unlink(path.resolve(__dirname, `../../bundler/${modules_config_filename}`));
+//    fs.unlink(path.resolve(__dirname, `../../bundler/${newappdir}/config/${index_filename}`));
+//    fs.unlink(path.resolve(__dirname, `../../bundler/${newappdir}/config/${modules_config_filename}`));
+
 
 
     //
     // create tx
     //
-    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
-    let bundle_bin = "";
-    if (fs) { bundle_bin = fs.readFileSync(path.resolve(__dirname, `bundler/dist/${bundle_filename}`), { encoding: 'binary' }); }
-    newtx.transaction.msg = { module: "AppStore", request: "add bundle", bundle: bundle_bin };
-    newtx = this.app.wallet.signTransaction(newtx);
-    this.app.network.propagateTransaction(newtx);
+//    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+//    let bundle_bin = "";
+//    if (fs) { bundle_bin = fs.readFileSync(path.resolve(__dirname, `bundler/dist/${bundle_filename}`), { encoding: 'binary' }); }
+//    newtx.transaction.msg = { module: "AppStore", request: "add bundle", bundle: bundle_bin };
+//    newtx = this.app.wallet.signTransaction(newtx);
+//    this.app.network.propagateTransaction(newtx);
 
 
     return bundle_filename;
