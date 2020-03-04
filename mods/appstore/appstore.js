@@ -599,11 +599,15 @@ console.log('params: ' + params);
 
     let bash_script_content = '';
     let bash_script_delete = '';
+    let bash_script_create_dirs = '';
 
-    bash_script_content = 'cp -rf ' + __dirname + "/../../bundler/default " + __dirname + "/../../bundler/" + newappdir;
-    bash_script_content += 'rm -rf ' + newappdir + "/mods";
-    bash_script_content += 'mkdir  ' + newappdir + "/mods";
-    bash_script_content += 'mkdir  ' + newappdir + "/dist";
+    bash_script_create_dirs = 'cp -rf ' + __dirname + "/../../bundler/default " + __dirname + "/../../bundler/" + newappdir;
+    bash_script_create_dirs += 'rm -rf ' + newappdir + "/mods";
+    bash_script_create_dirs += 'mkdir  ' + newappdir + "/mods";
+    bash_script_create_dirs += 'mkdir  ' + newappdir + "/dist";
+
+console.log(bash_script_create_dirs);
+process.exit();
 
     bash_script_content += 'cd ' + __dirname + '/mods' + "\n";
     bash_script_delete  += 'cd ' + __dirname + '/mods' + "\n";
@@ -619,6 +623,10 @@ console.log('params: ' + params);
       bash_script_content += `unzip ${returnSlug(mod.name)}-${ts}-${hash}.zip -d ../../bundler/${newappdir}/mods/${returnSlug(mod.name)} \\*.js \\*.css \\*.html \\*.wasm` + "\n";
       bash_script_delete += `rm -rf ${returnSlug(mod.name)}-${ts}-${hash}.zip`;
       bash_script_delete += `rm -rf ../../bundler/${newappdir}/mods/${returnSlug(mod.name)}`;
+
+      let zip_bin2 = Buffer.from(mod.zip, 'base64').toString('binary');
+      fs.writeFileSync(path.resolve(__dirname, mod_path), zip_bin2, { encoding: 'binary' });
+      return `appstore/bundler/mods/${returnSlug(mod.name)}-${ts}-${hash}/${returnSlug(mod.name)}`;
 
     });
 
