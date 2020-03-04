@@ -4,6 +4,9 @@ const path = require('path');
 // This is main configuration object.
 // Here you write different options and tell Webpack what to do
 module.exports = {
+//    optimization: {
+//      minimize: false,
+//    },
     target: 'web',
     node: {
         fs: "empty",
@@ -48,7 +51,7 @@ module.exports = {
         /\/www\//
     ],
     // Path to your entry point. From this file Webpack will begin his work
-    entry: ["babel-polyfill", path.resolve(__dirname, '../lib/saito/lite/index.js')],
+    entry: ["babel-polyfill", path.resolve(__dirname, '../bundler/default/lib/saito/lite/index.js')],
 
     // Webpack will bundle all JavaScript into this file
     output: {
@@ -59,6 +62,10 @@ module.exports = {
     // rules that we're governed by
     module: {
         rules: [
+            {
+                test: /html$/,
+                exclude: [ /(mods)/, /(email)/ ],
+            },
             {
                 test: /\.js$/,
                 exclude: /(node_modules)/,
@@ -86,15 +93,13 @@ module.exports = {
                     publicPath: "dist/"
                 }
             },
-
-            // exludes the zip files in appstore
-            {
+	    {
                 test: /\.zip$/,
                 exclude: [
                     path.resolve(__dirname, '../mods/appstore/bundler'),
                     path.resolve(__dirname, '../mods/appstore/mods'),
                 ]
-            }
+            },
         ]
     },
 

@@ -1,12 +1,31 @@
 #!/bin/bash
 
 function reset {
+
+  rm -rf ./bundler
+
   if [ ! -d "./bundler" ]; then
-    mkdir bundler/
+    mkdir -p bundler/default/mods
+    cp -rf ./lib bundler/default/lib    
+    cp -rf ./config bundler/default/config    
+    cp -rf ./webpack bundler/default/webpack    
+    cp -rf ./mods/* bundler/default/mods/    
+
+    for md in bundler/default/mods/* ; do
+      rm -rf "$md/web"
+      rm -rf "$md/sql"
+      rm -rf "$md/www"
+      rm -rf "$md/DESCRIPTION.txt"
+      rm -rf "$md/BUGS.txt"
+      rm -rf "$md/README.txt"
+      rm -rf "$md/README.md"
+      rm -rf "$md/install.sh"
+      rm -rf "$md/license"
+    done
+
   fi
 
   # we explicitly don't delete registry database
-  rm -f ./bundler/*
   rm -f ./data/appstore.sq3
   rm -f ./data/hospital.sq3
   rm -f ./data/records.sq3
