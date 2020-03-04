@@ -11633,8 +11633,7 @@ console.log("\n\n\n\n");
           if (scoring.ussr.bg > 0) {
             scoring.ussr.bg--;
             scoring.ussr.total--;
-          }
-         // this.game.state.events.shuttlediplomacy = 0;
+          }         
         }
 
         scoring = this.determineRegionVictor(scoring, me_scoring_range, me_bg_countries.length);
@@ -11815,8 +11814,7 @@ console.log("\n\n\n\n");
           if (scoring.ussr.bg > 0) {
             scoring.ussr.bg--;
             scoring.ussr.total--;
-          }
-          //this.game.state.events.shuttlediplomacy = 0;
+          }          
         }
 
         if (this.game.state.events.formosan == 1) {
