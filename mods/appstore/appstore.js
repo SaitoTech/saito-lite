@@ -631,14 +631,25 @@ console.log('params: ' + params);
 
       let mod_path = `mods/${returnSlug(mod.name)}-${ts}-${hash}.zip`;
 
-      bash_script_content += `unzip mods/${returnSlug(mod.name)}-${ts}-${hash}.zip -d ../../bundler/${newappdir}/mods/${returnSlug(mod.name)} \\*.js \\*.css \\*.html \\*.wasm` + "\n";
+
+      bash_script_content += `unzip ${returnSlug(mod.name)}-${ts}-${hash}.zip -d ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)} \\*.js \\*.css \\*.html \\*.wasm` + "\n";
+      bash_script_content += `rm -rf ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)}/web` + "\n";
+      bash_script_content += `rm -rf ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)}/www` + "\n";
+      bash_script_content += `rm -rf ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)}/sql` + "\n";
+      bash_script_content += `rm -rf ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)}/DESCRIPTION.txt` + "\n";
+      bash_script_content += `rm -rf ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)}/BUGS.txt` + "\n";
+      bash_script_content += `rm -rf ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)}/README.txt` + "\n";
+      bash_script_content += `rm -rf ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)}/README.md` + "\n";
+      bash_script_content += `rm -rf ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)}/install.sh` + "\n";
+      bash_script_content += `rm -rf ../../../bundler/${newappdir}/mods/${returnSlug(mod.name)}/license` + "\n";
+
       bash_script_delete += `rm -rf ${returnSlug(mod.name)}-${ts}-${hash}.zip` + "\n";
       bash_script_delete += `rm -rf ../../bundler/${newappdir}/mods/${returnSlug(mod.name)}` + "\n";
 
       let zip_bin2 = Buffer.from(mod.zip, 'base64').toString('binary');
       fs.writeFileSync(path.resolve(__dirname, mod_path), zip_bin2, { encoding: 'binary' });
-      return `appstore/bundler/mods/${returnSlug(mod.name)}-${ts}-${hash}/${returnSlug(mod.name)}`;
-
+      //return `${returnSlug(mod.name)}-${ts}-${hash}/${returnSlug(mod.name)}`;
+      return `${returnSlug(mod.name)}/${returnSlug(mod.name)}.js`;
     });
 
 
@@ -686,6 +697,8 @@ console.log('params: ' + params);
     try {
       let cwdir = __dirname;
       let bash_command = 'sh ' + bash_script;
+//console.log("running bash command: " + bash_command);
+//console.log(" with: " + bash_script_content);
       const { stdout, stderr } = await exec(bash_command, { cwd: cwdir, maxBuffer: 4096 * 2048 });
     } catch (err) {
       console.log(err);
@@ -708,7 +721,7 @@ console.log('params: ' + params);
     // cleanup
     //
     await fs.rmdir(path.resolve(__dirname, `../../bundler/${newappdir}/`), function () {
-      console.log("File Removed!");
+      console.log("Appstore Compilation Files Removed!");
     });
 //    fs.unlink(path.resolve(__dirname, `../../bundler/${newappdir}/config/${index_filename}`));
 //    fs.unlink(path.resolve(__dirname, `../../bundler/${newappdir}/config/${modules_config_filename}`));
