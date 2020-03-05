@@ -243,7 +243,7 @@ class Forum extends ModTemplate {
     if (already_voted == 1) {
 
       if (tx.transaction.msg.type == vote_type) { return; }
-
+      vote_type = tx.transaction.msg.type;
       sql = "UPDATE votes SET type = $type WHERE publickey = $publickey AND post_id = $post_id";
       params = {
         $type : tx.transaction.msg.type ,
