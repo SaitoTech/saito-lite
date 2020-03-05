@@ -3,13 +3,11 @@
 function reset {
 
   rm -rf ./bundler
-
   if [ ! -d "./bundler" ]; then
     mkdir -p bundler/default/mods
     cp -rf ./lib bundler/default/lib    
     cp -rf ./config bundler/default/config    
     cp -rf ./mods/* bundler/default/mods/    
-
     for md in bundler/default/mods/* ; do
       rm -rf "$md/web"
       rm -rf "$md/sql"
@@ -21,7 +19,6 @@ function reset {
       rm -rf "$md/install.sh"
       rm -rf "$md/license"
     done
-
   fi
 
   # we explicitly don't delete registry database

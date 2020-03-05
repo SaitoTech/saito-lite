@@ -477,27 +477,7 @@ class AppStore extends ModTemplate {
     }
 
     //
-    // TO-DO reduce to single query, not loop
-    //
-    for (let i = 0; i < module_versions.length; i++) {
-      sql = `SELECT * FROM modules WHERE version = $version`;
-      params = { $version: module_versions[i] };
-      let rows = await this.app.storage.queryDatabase(sql, params, "appstore");
-
-      for (let i = 0; i < rows.length; i++) {
-        let tx = JSON.parse(rows[i].tx);
-        modules_selected.push(
-          {
-            name: rows[i].name,
-            description: rows[i].description,
-            zip: tx.msg.module_zip
-          }
-        );
-      }
-    }
-
-    //
-    // supplement with preferred versions of unversioned apps
+    // unversioned apps (first as default)
     //
     //
     for (let i = 0; i < module_names.length; i++) {
@@ -516,6 +496,27 @@ class AppStore extends ModTemplate {
         );
       }
     }
+
+    //
+    // versioned apps (second as overrules default)
+    //
+    for (let i = 0; i < module_versions.length; i++) {
+      sql = `SELECT * FROM modules WHERE version = $version`;
+      params = { $version: module_versions[i] };
+      let rows = await this.app.storage.queryDatabase(sql, params, "appstore");
+
+      for (let i = 0; i < rows.length; i++) {
+        let tx = JSON.parse(rows[i].tx);
+        modules_selected.push(
+          {
+            name: rows[i].name,
+            description: rows[i].description,
+            zip: tx.msg.module_zip
+          }
+        );
+      }
+    }
+
 
     //
     // WEBPACK
