@@ -2,7 +2,6 @@
 
 function reset {
 
-
   # we explicitly don't delete registry database
   rm -f ./data/appstore.sq3
   rm -f ./data/hospital.sq3
@@ -117,6 +116,7 @@ if [[ $2 == "prod" ]]; then
 else
   npm run build
 fi
+
 
 cat ./lib/saito/boot.js ./web/saito/saito.js > ./web/saito/saito2.js
 mv -f ./web/saito/saito2.js ./web/saito/saito.js
