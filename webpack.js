@@ -79,9 +79,6 @@ webpack({
   },
   mode: 'production',
   devtool: false,
-  //devtool: "eval",
-  //mode: 'development',
-  //devtool: "cheap-module-eval-source-map",
   }, (err, stats) => {
   if (err || stats.hasErrors()) {
     console.log(err);
