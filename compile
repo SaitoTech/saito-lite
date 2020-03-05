@@ -8,7 +8,6 @@ function reset {
     mkdir -p bundler/default/mods
     cp -rf ./lib bundler/default/lib    
     cp -rf ./config bundler/default/config    
-    cp -rf ./webpack bundler/default/webpack    
     cp -rf ./mods/* bundler/default/mods/    
 
     for md in bundler/default/mods/* ; do

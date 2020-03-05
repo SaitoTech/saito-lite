@@ -5,8 +5,8 @@ let [entry_path, output_path, output_filename] = process.argv.slice(2);
 
 webpack({
   optimization: {
-    minimize: false;
-  }
+    minimize: false,
+  },
   target: 'web',
     node: {
         fs: "empty",
