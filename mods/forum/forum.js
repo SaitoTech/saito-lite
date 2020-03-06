@@ -201,7 +201,7 @@ class Forum extends ModTemplate {
 
 
 
-  createVoteTransaction(post_id, vote) {
+  createVoteTransaction(post_id, vote="upvote") {
 
     let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
 
