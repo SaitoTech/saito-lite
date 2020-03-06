@@ -700,7 +700,7 @@ console.log("success");
     //bash_script_content += bash_script_delete;
 
 console.log("\n\n2. ABOUT TO RUN BASH SCRIPT TO UNZIP etc.");
-console.log(bash_script_content_dirs);
+console.log(bash_script_content);
 
 
     fs.writeFileSync(path.resolve(__dirname, bash_script), bash_script_content, { encoding: 'binary' });
