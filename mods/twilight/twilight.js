@@ -5062,12 +5062,12 @@ console.log("\n\n\n\n");
         }
       }
       if (this.game.state.events.deathsquads == 2) {
-        if (player == "ussr") {
-          this.updateLog("USSR gets -1 coup penalty");
-          this.updateLog("Latin American Death Squads trigger");
-          roll--;
-        }
         if (this.countries[countryname].region == "camerica" || this.countries[countryname].region == "samerica") {
+          if (player == "ussr") {
+            this.updateLog("USSR gets -1 coup penalty");
+            this.updateLog("Latin American Death Squads trigger");
+            roll--;
+          }
           if (player == "us")   {
             this.updateLog("US gets +1 coup bonus");
             this.updateLog("Latin American Death Squads trigger");

@@ -225,7 +225,6 @@ class Forum extends ModTemplate {
 
     let already_voted = 0;
     let vote_type = "";
-
     let sql = "";
     let params = {};
 
