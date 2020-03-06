@@ -116,6 +116,7 @@ a.button {
 
 .block-table div {
     overflow: hidden;
+    align-self: center;
 }
 
 .block-transactions-table {
