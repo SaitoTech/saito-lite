@@ -96,6 +96,7 @@ case $1 in
     echo "  (resetting configuration)  "
     echo ""
     echo ""
+    rm -f ./bundler
     rm -f ./data/registry.sq3
     reset
     ;;
@@ -111,11 +112,7 @@ if [ ! -f ./config/modules.config.js ]; then
 fi
 
 
-if [[ $2 == "prod" ]]; then
-  npm run prod
-else
-  npm run build
-fi
+npm run build
 
 
 cat ./lib/saito/boot.js ./web/saito/saito.js > ./web/saito/saito2.js

@@ -437,7 +437,7 @@ console.log("\n\n\n\n");
     .mouseover(function() {
 
       let region = this.id;
-      let scoring = twilight_self.calculateScoring(region);
+      let scoring = twilight_self.calculateScoring(region, 1);
       let total_vp = scoring.us.vp - scoring.ussr.vp;
       let vp_color = "white";
 
@@ -11549,7 +11549,7 @@ console.log("\n\n\n\n");
     return scoring;
   }
 
-  calculateScoring(region) {
+  calculateScoring(region, mouseover_preview=0) {
 
     var scoring = {
       us: {total: 0, bg: 0, vp: 0},
@@ -11634,6 +11634,9 @@ console.log("\n\n\n\n");
             scoring.ussr.bg--;
             scoring.ussr.total--;
           }         
+        }
+        if (mouseover_preview == 0) {
+          this.game.state.events.shuttlediplomacy = 0;
         }
 
         scoring = this.determineRegionVictor(scoring, me_scoring_range, me_bg_countries.length);
@@ -11816,6 +11819,9 @@ console.log("\n\n\n\n");
             scoring.ussr.total--;
           }          
         }
+	if (mouseover_preview == 0) {
+          this.game.state.events.shuttlediplomacy = 0;
+	}
 
         if (this.game.state.events.formosan == 1) {
           if (scoring.us.bg == 7 && scoring.us.total > scoring.ussr.total) { scoring.us.vp = 9; }

@@ -1,6 +1,8 @@
 var ModTemplate = require('../../lib/templates/modtemplate');
 const Header = require('../../lib/ui/header/header');
 
+const TransferManager = require('./lib/chat-navbar/transfer-manager.js');
+
 
 //////////////////
 // CONSTRUCTOR  //
@@ -32,11 +34,20 @@ class Tutorial05 extends ModTemplate {
 
   renderChatPlugin(app, data) {
     let htmlobj = document.querySelector('.chat-navbar');
-console.log("HTML: " + htmlobj.innerHTML);
-    htmlobj.innerHTML += '<li id="chat-nav-add-contact" class="chat-nav-row"><i class="fas fa-user-plus"></i>Transfer Item 2</li>';
+    htmlobj.innerHTML += '<li id="chat-nav-transfer-out" class="chat-nav-row"><i class="fas fa-user-plus"></i>Make Transfer</li>';
+    htmlobj.innerHTML += '<li id="chat-nav-transfer-in" class="chat-nav-row"><i class="fas fa-user-plus"></i>Receive Transfer</li>';
   }
 
   attachEventsChatPlugin(app, data) {
+
+    document.getElementById('chat-nav-transfer-out').onclick = () => {
+      TransferManager.render(app, data);
+      TransferManager.attachEvents(app, data);
+    };
+
+    document.getElementById('chat-nav-transfer-in').onclick = () => {
+      TransferManager.attachEvents(app, data);
+    };
 
   }
 

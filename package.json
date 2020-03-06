@@ -12,7 +12,7 @@
     "compile": " ./compile",
     "test": "NODE_ENV=test mocha 'tests/*.spec.js'",
     "build": "webpack --config ./webpack/webpack.config.js",
-    "prod": "webpack --config ./webpack/webpack.prod.js",
+    "prod": "webpack --config ./webpack/webpack.prod.js ; cat ./lib/saito/boot.js ./web/saito/saito.js > ./web/saito/saito2.js ; mv ./web/saito/saito2.js ./web/saito/saito.js ",
     "analyze": "webpack --config ./webpack/webpack.analyze.js"
   },
   "author": "Team Saito",

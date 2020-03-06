@@ -3,8 +3,7 @@ const InviteFriendsQRTemplate = require('./invite-friends-qr.template');
 module.exports = InviteFriendsQR = {
   render(app, data) {
     let {el_parser} = data.helpers;
-    if (!document.querySelector('.add-contact-modal-qr'))
-      document.querySelector(".welcome-modal-left").innerHTML = InviteFriendsQRTemplate();
+    if (!document.querySelector('.add-contact-modal-qr')) { document.querySelector(".welcome-modal-left").innerHTML = InviteFriendsQRTemplate(); }
 
     let qrscanner = app.modules.returnModule("QRScanner");
     qrscanner.handleDecodedMessage = (msg) => this.handleDecodedMessage(msg, app, data);
