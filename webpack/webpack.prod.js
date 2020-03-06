@@ -28,7 +28,7 @@ webpack({
     ],
   entry: ["babel-polyfill", path.resolve(__dirname, './../bundler/default/lib/index.js')],
   output: {
-      path: path.resolve(__dirname, '../../web/saito/'),
+      path: path.resolve(__dirname, '../web/saito/'),
       filename: 'saito.js'
   },
   module: {
