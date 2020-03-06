@@ -4,16 +4,12 @@
   "description": "scalable blockchain with proper economics",
   "main": "start.js",
   "scripts": {
-    "start": "NODE_ENV=dev node start.js",
-    "serve": "NODE_ENV=prod node --max_old_space_size=4144 start.js",
+    "start": "NODE_ENV=prod node --max_old_space_size=4144 start.js",
     "nuke": " ./compile nuke",
     "reset": " ./compile reset",
-    "reset:prod": "./compile reset prod",
-    "compile": " ./compile",
+    "compile": " ./compile compile",
     "test": "NODE_ENV=test mocha 'tests/*.spec.js'",
-    "build": "webpack --config ./webpack/webpack.config.js",
-    "prod": "webpack --config ./webpack/webpack.prod.js ; cat ./lib/saito/boot.js ./web/saito/saito.js > ./web/saito/saito2.js ; mv ./web/saito/saito2.js ./web/saito/saito.js ",
-    "analyze": "webpack --config ./webpack/webpack.analyze.js"
+    "analyze": "webpack --config ./webpack/old/webpack.analyze.js"
   },
   "author": "Team Saito",
   "license": "SAITO",

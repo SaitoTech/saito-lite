@@ -45,8 +45,8 @@ webpack({
         },
     ]
   },
-  mode: 'production',
-  devtool: false,
+  mode: 'development',
+  devtool: 'eval',
   }, (err, stats) => {
   if (err || stats.hasErrors()) {
     console.log(err);

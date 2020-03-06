@@ -1,6 +1,42 @@
 #!/bin/bash
 
-function reset {
+
+
+
+function post_compile {
+
+  cat ./lib/saito/boot.js ./web/saito/saito.js > ./web/saito/saito2.js
+  mv -f ./web/saito/saito2.js ./web/saito/saito.js
+
+}
+
+function reset_bundler {
+
+  rm -rf ./bundler
+  if [ ! -d "./bundler" ]; then
+    mkdir -p bundler/default/mods
+    cp -rf ./lib bundler/default/lib
+    cp -rf ./config bundler/default/config
+    cp -rf ./mods/* bundler/default/mods/
+    for md in bundler/default/mods/* ; do
+      rm -rf "$md/web"
+      rm -rf "$md/sql"
+      rm -rf "$md/www"
+      rm -rf "$md/DESCRIPTION.txt"
+      rm -rf "$md/BUGS.txt"
+      rm -rf "$md/README.txt"
+      rm -rf "$md/README.md"
+      rm -rf "$md/install.sh"
+      rm -rf "$md/license"
+    done
+  fi
+
+}
+
+function reset_nonpersistent {
+
+  # ensure deleted
+  rm -f ./web/saito/saito.js
 
   # we explicitly don't delete registry database
   rm -f ./data/appstore.sq3
@@ -13,12 +49,7 @@ function reset {
   rm -f ./data/chat.sq3
   rm -f ./data/database.sq3
   rm -f ./data/bank.sq3
-  # rm -f ./data/forum.sq3
-  # rm -f ./data/registry.sq3
   rm -f ./data/escrow.sq3
-  # rm -f ./data/rewards.sq3
-  # rm -f ./data/forum.sq3
-  # rm -f ./data/tutorial.sq3
   rm -f ./data/log.txt
   rm -f ./data/*.sq3-journal
   find ./data/blocks/ -name '*.blk' | xargs rm -r
@@ -33,7 +64,6 @@ function reset {
   mkdir ./mods/appstore/mods
   rm -f ./mods/appstore/bundler/dist/*
 
-
   rm -f ./mods/forum/web/img/thumbnails/*.png
   rm -f ./mods/registry/web/addresses.txt
   rm -f ./mods/appstore/mods/*
@@ -43,92 +73,115 @@ function reset {
   rm -f ./mods/appstore/bundler/*.json
   rm -f ./logs/*
 
-
-  rm -rf ./bundler
-  if [ ! -d "./bundler" ]; then
-    mkdir -p bundler/default/mods
-    cp -rf ./lib bundler/default/lib    
-    cp -rf ./config bundler/default/config    
-    cp -rf ./mods/* bundler/default/mods/    
-    for md in bundler/default/mods/* ; do
-      rm -rf "$md/web"
-      rm -rf "$md/sql"
-      rm -rf "$md/www"
-      rm -rf "$md/DESCRIPTION.txt"
-      rm -rf "$md/BUGS.txt"
-      rm -rf "$md/README.txt"
-      rm -rf "$md/README.md"
-      rm -rf "$md/install.sh"
-      rm -rf "$md/license"
-    done
-  fi
-
   #let the system know that users pre-existed a reset.
   echo "update users set latest_tx = -1;" | sqlite3 ./data/rewards.sq3
   
+  if [ ! -f ./config/modules.config.js ]; then
+    cp ./config/modules.default.js ./config/modules.config.js
+  fi
   if [ -f config/options.conf ]; then
     cp config/options.conf config/options
   fi
 
-  if [ ! -f config/modules.config.js ]; then
-    cp config/modules.default.js config/modules.config.js
-  fi
 }
 
-case $1 in
-  "nuke")
-    echo ""
-    echo ""
-    echo "     _.-^^---....,,--        "
-    echo " _--                  --_    "
-    echo " <                        >) "
-    echo " |                         | "
-    echo "  \._                   _./  "
-    echo "     '''--. . , ; .--'''     "
-    echo "          | |   |            "
-    echo "       .-=||  | |=-.         "
-    echo "        -=#$%&%$#=-'         "
-    echo "          | ;  :|            "
-    echo "      .,-#%&$@%#&#~,         "
-    echo "  -------------------------  "
-    echo "  NUKING YOUR SAITO INSTALL  "
-    echo "  -------------------------  "
-    echo "  (resetting configuration)  "
-    echo ""
-    echo ""
-    rm -f ./bundler
-    rm -f ./data/registry.sq3
-    reset
-    ;;
-  "reset")
-    reset
-    ;;
-  *)
-    ;;
-esac
+function reset_persistent {
 
-if [ ! -f ./config/modules.config.js ]; then
-  cp ./config/modules.default.js ./config/modules.config.js
+  rm -f ./data/forum.sq3
+  rm -f ./data/registry.sq3
+  rm -f ./data/rewards.sq3
+  rm -f ./data/forum.sq3
+  rm -f ./data/tutorial.sq3
+
+}
+
+
+
+
+
+
+
+if [ "$1" == "nuke" ]; then
+
+  echo ""
+  echo ""
+  echo "     _.-^^---....,,--        "
+  echo " _--                  --_    "
+  echo " <                        >) "
+  echo " |                         | "
+  echo "  \._                   _./  "
+  echo "     '''--. . , ; .--'''     "
+  echo "          | |   |            "
+  echo "       .-=||  | |=-.         "
+  echo "        -=#$%&%$#=-'         "
+  echo "          | ;  :|            "
+  echo "      .,-#%&$@%#&#~,         "
+  echo "  -------------------------  "
+  echo "  NUKING YOUR SAITO INSTALL  "
+  echo "  -------------------------  "
+  echo "  (resetting configuration)  "
+  echo ""
+  echo ""
+
+  reset_nonpersistent
+  reset_persistent
+  reset_bundler
+
+  if [ "$2" == "dev" ]; then 
+    node webpack/webpack.dev.js
+  else
+    node webpack/webpack.prod.js
+  fi
+
+  post_compile
+
+fi
+
+if [ "$1" == "reset" ]; then
+
+  echo ""
+  echo ""
+  echo "  --------------------------  "
+  echo "  RESETTING ALL BUT CORE DATA "
+  echo "  --------------------------  "
+  echo "   (resetting blockchain)  "
+  echo ""
+  echo ""
+
+  reset_nonpersistent
+  reset_bundler
+
+  if [ "$2" == "dev" ]; then 
+    node webpack/webpack.dev.js
+  else
+    node webpack/webpack.prod.js
+  fi
+
+  post_compile
+
+fi
+
+if [ "$1" == "recompile" ]; then
+
+  echo ""
+  echo "  -------------------------  "
+  echo "   RE-COMPILING JAVASCRIPT   "
+  echo "  -------------------------  "
+  echo "  (resetting configuration)  "
+  echo ""
+  echo ""
+
+  reset_bundler
+
+  if [ "$2" == "dev" ]; then 
+    node webpack/webpack.dev.js
+  else
+    node webpack/webpack.prod.js
+  fi
+
+  post_compile
+
 fi
 
 
-npm run build
 
-
-cat ./lib/saito/boot.js ./web/saito/saito.js > ./web/saito/saito2.js
-mv -f ./web/saito/saito2.js ./web/saito/saito.js
-
-echo ""
-echo "///////////////"
-echo "// IMPORTANT //"
-echo "///////////////"
-echo ""
-echo "Saito will default to running on a local, private network for "
-echo "development and testing unless you create a configuration file"
-echo "specifying a connection point to the public network.          "
-echo ""
-echo "You can start Saito by running: "
-echo ""
-echo "$> npm start "
-echo ""
-echo ""
