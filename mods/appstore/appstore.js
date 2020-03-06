@@ -612,6 +612,10 @@ console.log('params: ' + params);
     bash_script_create_dirs += 'mkdir  ' + __dirname + "/../../bundler/" + newappdir + "/mods" + "\n";
     bash_script_create_dirs += 'mkdir  ' + __dirname + "/../../bundler/" + newappdir + "/dist" + "\n";
 
+
+console.log("\n\n1. ABOUT TO RUN BASH_FOLDER_CREATION_SCRIPT");
+console.log(bash_script_create_dirs);
+
     fs.writeFileSync(path.resolve(__dirname, bash_script_create), bash_script_create_dirs, { encoding: 'binary' });
     try {
       let cwdir = __dirname;
@@ -621,6 +625,7 @@ console.log('params: ' + params);
       console.log(err);
     }
 
+console.log("success");
 
     bash_script_content += 'cd ' + __dirname + '/mods' + "\n";
     bash_script_delete  += 'cd ' + __dirname + '/mods' + "\n";
@@ -692,7 +697,11 @@ console.log('params: ' + params);
     bash_script_content += 'cd ../../' + "\n";
     bash_script_content += `sh bundle.sh ${entry} ${output_path} ${bundle_filename}`;
     bash_script_content += "\n";
-    bash_script_content += bash_script_delete;
+    //bash_script_content += bash_script_delete;
+
+console.log("\n\n2. ABOUT TO RUN BASH SCRIPT TO UNZIP etc.");
+console.log(bash_script_content_dirs);
+
 
     fs.writeFileSync(path.resolve(__dirname, bash_script), bash_script_content, { encoding: 'binary' });
     try {
@@ -705,6 +714,7 @@ console.log('params: ' + params);
       console.log(err);
     }
 
+console.log("success");
 
     //
     // create tx
@@ -721,11 +731,12 @@ console.log('params: ' + params);
     //
     // cleanup
     //
-    await fs.rmdir(path.resolve(__dirname, `../../bundler/${newappdir}/`), function () {
-      console.log("Appstore Compilation Files Removed!");
-    });
-//    fs.unlink(path.resolve(__dirname, `../../bundler/${newappdir}/config/${index_filename}`));
-//    fs.unlink(path.resolve(__dirname, `../../bundler/${newappdir}/config/${modules_config_filename}`));
+// tmp disabled
+//    await fs.rmdir(path.resolve(__dirname, `../../bundler/${newappdir}/`), function () {
+//      console.log("Appstore Compilation Files Removed!");
+//    });
+
+console.log("leaving bundler...");
 
     return bundle_filename;
   }
