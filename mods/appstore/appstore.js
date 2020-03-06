@@ -727,7 +727,6 @@ console.log('params: ' + params);
 //    fs.unlink(path.resolve(__dirname, `../../bundler/${newappdir}/config/${index_filename}`));
 //    fs.unlink(path.resolve(__dirname, `../../bundler/${newappdir}/config/${modules_config_filename}`));
 
-
     return bundle_filename;
   }
 

@@ -49,7 +49,7 @@ class Tutorial01 extends ModTemplate {
 	let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
             newtx.transaction.msg.module  = "Email";
             newtx.transaction.msg.title   = "Tutorial button clicked!";
-            newtx.transaction.msg.message = "Your computer attached this email to a transaction and sent it to the blockchain. If this arrived, your message is not on the blockchain.";
+            newtx.transaction.msg.message = "Your computer attached this email to a transaction and sent it to the blockchain. If this arrived, your message is now on the blockchain.";
 	newtx = app.wallet.signTransaction(newtx);
         app.network.propagateTransaction(newtx);
 

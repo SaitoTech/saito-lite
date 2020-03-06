@@ -3,10 +3,15 @@ const webpack = require('webpack');
 
 let [entry_path, output_path, output_filename] = process.argv.slice(2);
 
+//entry_path = "/Users/david/Programming/saito-lite/bundler/default/lib/index.js";
+//output_path = "/Users/david/Programming/saito-lite/web/saito";
+//output_filename = "saito.js";
+
+
 webpack({
-//  optimization: {
-//    minimize: false,
-//  },
+  optimization: {
+    minimize: false,
+  },
   target: 'web',
     node: {
         fs: "empty",

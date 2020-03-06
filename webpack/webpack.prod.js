@@ -1,17 +1,16 @@
 const path = require('path');
 const webpack = require('webpack');
 
-console.log("DR: " + __dirname);
 
 webpack({
-  optimization: {
-    minimize: false
-  },
+//  optimization: {
+//    minimize: false
+//  },
   target: 'web',
-    node: {
-        fs: "empty",
-    },
-    externals: [
+  node: {
+    fs: "empty",
+  },
+  externals: [
         {
             archiver: 'archiver'
         },
@@ -22,6 +21,12 @@ webpack({
             nodemailer: 'nodemailer'
         },
         {
+            jimp: 'jimp'
+        },
+        {
+            "image-resolve": "image-resolver"
+        },
+        {
             sqlite: 'sqlite'
         },
         {
@@ -30,6 +35,8 @@ webpack({
         {
             webpack: 'webpack'
         },
+        // /^(image-resolver|\$)$/i,
+        /\.txt/,
         /\.png$/,
         /\.jpg$/,
         /\.html$/,
@@ -40,16 +47,16 @@ webpack({
         /\.sh$/,
         /\.zip$/,
         /\/web\//,
-        /\/www\//,
-        /\.txt/
-     ],
-  entry: ["babel-polyfill", path.resolve(__dirname, './../bundler/default/lib/index.js')],
+        /\/www\//
+  ],
+  // Path to your entry point. From this file Webpack will begin his work
+  entry: ["babel-polyfill", path.resolve(__dirname, './../bundler/default/lib/saito/lite/index.js')],
   output: {
-      path: path.resolve(__dirname, './../web/saito/'),
-      filename: 'saito.js'
+    path: path.resolve(__dirname, './../web/saito'),
+    filename: 'saito.js'
   },
   module: {
-    rules: [
+        rules: [
             {
                 test: /html$/,
                 exclude: [ /(mods)/, /(email)/ ],
@@ -81,17 +88,21 @@ webpack({
                     publicPath: "dist/"
                 }
             },
-            {
+	    {
                 test: /\.zip$/,
                 exclude: [
                     path.resolve(__dirname, '../mods/appstore/bundler'),
                     path.resolve(__dirname, '../mods/appstore/mods'),
                 ]
             },
-    ]
+        ]
   },
+
   mode: 'production',
-  devtool: "eval",
+  //devtool: "cheap-module-eval-source-map",
+  devtool: false,
+  //devtool: "eval",
+
   }, (err, stats) => {
   if (err || stats.hasErrors()) {
     console.log(err);
@@ -105,3 +116,5 @@ webpack({
   //
   console.log("Bundle Success!");
 });
+
+
