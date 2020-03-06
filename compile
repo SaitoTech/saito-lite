@@ -134,7 +134,6 @@ if [ "$1" == "nuke" ]; then
     node webpack/webpack.prod.js
   fi
 
-  post_compile
 
 fi
 

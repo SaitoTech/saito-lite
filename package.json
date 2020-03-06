@@ -8,6 +8,7 @@
     "nuke": " ./compile nuke",
     "reset": " ./compile reset",
     "compile": " ./compile compile",
+    "old": " webpack --config ./webpack/webpack.old.js",
     "test": "NODE_ENV=test mocha 'tests/*.spec.js'",
     "analyze": "webpack --config ./webpack/old/webpack.analyze.js"
   },
