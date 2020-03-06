@@ -7910,7 +7910,9 @@ console.log("\n\n\n\n");
       let usinf = parseInt(this.countries['japan'].us);
       let ussrinf = parseInt(this.countries['japan'].ussr);
       let targetinf = ussrinf + 4;
-      this.placeInfluence("japan", (targetinf - usinf), "us");
+      if (usinf < (ussrinf +4)){
+        this.placeInfluence("japan", (targetinf - usinf), "us");
+      }      
       return 1;
     }
 
