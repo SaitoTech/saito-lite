@@ -211,7 +211,6 @@ module.exports = SettingsAppspace = {
             await app.wallet.saveWallet();
 
             window.location = window.location;
-            console.log(app);
           }
         } catch (e) {
           salert("Restore Private Key ERROR: " + e);
