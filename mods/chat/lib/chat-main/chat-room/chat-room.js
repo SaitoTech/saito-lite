@@ -13,10 +13,12 @@ module.exports = ChatRoom = {
 
         let { id, name, messages } = this.group[0];
         let main = document.querySelector('.main');
+        let message_input = document.querySelector('#input.chat-room-input');
+        let msg = message_input == null ? '' : message_input.value;
 
         main.innerHTML = ChatRoomTemplate(id);
         document.querySelector('.chat-room-header').innerHTML = ChatRoomHeaderTemplate(name);
-        document.querySelector('.chat-room-footer').innerHTML = ChatRoomFooterTemplate();
+        document.querySelector('.chat-room-footer').innerHTML = ChatRoomFooterTemplate(msg);
 
         this.room_message_blocks = this.createRoomMessageBlocks(app, data, messages);
 
