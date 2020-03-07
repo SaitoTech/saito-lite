@@ -3962,7 +3962,7 @@ console.log("\n\n\n\n");
               // Flower Power
               //
               if (twilight_self.game.state.events.flowerpower == 1) {
-                if (card == "arabisraeli" || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
+                if (card == "arabisraeli" && state.events.campdavid == 0 || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
                   if (player === "us") {
                     twilight_self.addMove("notify\tFlower Power triggered by "+card);
                     twilight_self.addMove("vp\tussr\t2\t1");
@@ -3983,7 +3983,7 @@ console.log("\n\n\n\n");
               // Flower Power
               //
               if (twilight_self.game.state.events.flowerpower == 1) {
-                if (card == "arabisraeli" || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
+                if (card == "arabisraeli" && state.events.campdavid == 0 || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
                   if (player === "us") {
                     twilight_self.addMove("notify\tFlower Power triggered by "+card);
                     twilight_self.addMove("vp\tussr\t2\t1");
@@ -4683,6 +4683,20 @@ console.log("\n\n\n\n");
           }
 
           //
+          // Nato
+          //
+
+        //  if (twilight_self.game.state.events.nato == 1 && twilight_self.countries[countryname].region == "europe" && player == "ussr") {
+         //  if (twilight_self.isControlled("us", countryname) == 1) {
+           //   if ( (countryname == "westgermany" && twilight_self.game.state.events.nato_westgermany == 0) || (countryname == "france" && twilight_self.game.state.events.nato_france == 0) ) {} else {
+           //      twilight_self.displayModal("Invalid Realignment", `Nato prevents realignments in US Controlled countries in Europe`);
+          //  valid_target = 0;
+          //    }
+        //  }
+       // }
+     
+
+          //
           // vietnam revolts and china card bonuses
           //
           if (twilight_self.countries[c].region !== "seasia") { twilight_self.game.state.events.vietnam_revolts_eligible = 0; }
@@ -4982,13 +4996,19 @@ console.log("\n\n\n\n");
             valid_target = 0;
           }
         }
-        if (valid_target == 1 && twilight_self.countries[countryname].region == "europe" && twilight_self.game.state.events.nato == 1) {
+        if (valid_target == 1 && twilight_self.countries[countryname].region == "europe" && twilight_self.game.state.events.nato == 1 && player == "ussr") {
           if (twilight_self.isControlled("us", countryname) == 1) {
             if ( (countryname == "westgermany" && twilight_self.game.state.events.nato_westgermany == 0) || (countryname == "france" && twilight_self.game.state.events.nato_france == 0) ) {} else {
               twilight_self.displayModal("NATO prevents coups of US-controlled countries in Europe");
               valid_target = 0;
             }
           }
+        }
+
+        // The Reformer Coup Restriction
+        if (valid_target == 1 && twilight_self.countries[countryname].region == "europe" && twilight_self.game.state.events.reformer == 1 && player == "ussr") {
+          twilight_self.displayModal("The Reformer prevents USSR coup attempts in Europe");
+          valid_target = 0;
         }
 
         if (valid_target == 1) {
@@ -6890,8 +6910,14 @@ console.log("\n\n\n\n");
     if (card == "nato") {
       if (this.game.state.events.marshall == 1 || this.game.state.events.warsawpact == 1) {
         this.game.state.events.nato = 1;
+
+        if (this.game.state.events.willybrandt == 0){
         this.game.state.events.nato_westgermany = 1;
-        this.game.state.events.nato_france = 1;
+        }
+        if (this.game.state.events.degaulle == 0){
+          this.game.state.events.nato_france = 1;
+        }
+        
       } else {
         this.updateLog("NATO cannot trigger before Warsaw Pact of Marshall Plan. Moving to discard pile.");
       }
@@ -7882,6 +7908,7 @@ console.log("\n\n\n\n");
     ///////////////////////////
     if (card == "degaulle") {
       this.game.state.events.degaulle = 1;
+      this.game.state.events.nato_france = 0;
       this.removeInfluence("france", 2, "us");
       this.placeInfluence("france", 1, "ussr");
       return 1;
@@ -10464,6 +10491,13 @@ console.log("\n\n\n\n");
 
         this.addMove("resolve\taldrichames");
 
+
+        if (this.game.deck[0].hand.length < 1) {
+          
+          this.addMove("notify\tUS has no cards to reveal");
+          this.endTurn();
+        } else {
+
         let cards_to_reveal = this.game.deck[0].hand.length;
         for (let i = 0; i < this.game.deck[0].hand.length; i++) {
           if (this.game.deck[0].hand[i] === "china") { cards_to_reveal--; }
@@ -10471,9 +10505,11 @@ console.log("\n\n\n\n");
             this.addMove(this.game.deck[0].hand[i]);
           }
         }
+        //this.addMove("notify\tUS holds: "+cards_to_reveal);
         this.addMove("aldrich\tus\t"+cards_to_reveal);
-        this.endTurn();
-
+        this.endTurn();        
+         
+        }
       }
       return 0;
     }
@@ -13964,7 +14000,7 @@ console.log("\n\n\n\n");
               <li><input class="remove_card" type="checkbox" name="comecon" /> Comecon</li>
               <li><input class="remove_card" type="checkbox" name="nasser" /> Nasser</li>
               <li><input class="remove_card" type="checkbox" name="warsawpact" /> Warsaw Pact</li>
-              <li><input class="remove_card" type="checkbox" name="degualle" /> De Gualle Leads France</li>
+              <li><input class="remove_card" type="checkbox" name="degaulle" /> De Gaulle Leads France</li>
               <li><input class="remove_card" type="checkbox" name="naziscientist" /> Nazi Scientists Captured</li>
               <li><input class="remove_card" type="checkbox" name="truman" /> Truman</li>
               <li><input class="remove_card saito_edition" type="checkbox" name="olympic" checked /> Olympic Games</li>
