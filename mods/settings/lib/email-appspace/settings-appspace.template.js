@@ -53,6 +53,7 @@ module.exports = SettingsAppspaceTemplate = (app) => {
           <button id="reset-account-btn" class="reset-account-btn"">Reset Account</button>
           <button id="backup-account-btn" class="backup-account-btn"">Manual Backup</button>
           <button id="restore-account-btn" class="restore-account-btn">Restore Account</button>
+          <button id="restore-privatekey-btn" class="restore-privatekey-btn">Restore Private Key</button>
           <button id="delete-account-btn" class="delete-account-btn">Delete Account</button>
         </div>
       </div>
