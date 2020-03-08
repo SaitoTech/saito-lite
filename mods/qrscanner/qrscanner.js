@@ -3,6 +3,8 @@ const ModTemplate = require('../../lib/templates/modtemplate');
 const Header = require('../../lib/ui/header/header');
 const QRScannerTemplate = require('./qrscanner.template');
 const AddContact = require('./lib/add-contact');
+const quirc = require("node-quirc");
+
 
 const HeaderDropdownTemplate = (dropdownmods) => {
   html = dropdownmods.map(mod => {
@@ -17,6 +19,7 @@ const HeaderDropdownTemplate = (dropdownmods) => {
 }
 
 class QRScanner extends ModTemplate {
+
   constructor(app) {
     super(app);
 
@@ -24,7 +27,6 @@ class QRScanner extends ModTemplate {
     this.description = "Adds QRCode scanning functionality to Saito";
     this.categories = "Core";
 
-    this.events = ['encrypt-key-exchange-confirm'];
     this.video = null;
     this.canvas = null;
     this.canvas_context = null;
@@ -48,6 +50,8 @@ class QRScanner extends ModTemplate {
     // In milliseconds
     this.debounce_timeout = 750;
 
+    this.events = ['encrypt-key-exchange-confirm'];
+
   }
 
   initialize(app) {
@@ -55,20 +59,77 @@ class QRScanner extends ModTemplate {
   }
 
   initializeHTML(app) {
-    this.start(
-      document.querySelector('video'),
-      document.getElementById('qr-canvas')
-    );
   }
 
+  attachEvents(app) {
+    let scanner_self = this;
+    document.querySelector('.launch-scanner').addEventListener('click', function(e) {
+      scanner_self.startScanner();
+    });
+  }
+
+
+
+  startScanner() {
+
+    if (this.app.BROWSER == 0) { return; }
+    if (!document) { return; }
+    if (document.querySelector('.qrscanner-container')) { return; }
+
+    document.body.innerHTML = this.returnScannerHTML();
+
+    let scanner_self = this;
+
+    scanner_self.start(
+      document.getElementById("qr-video"),
+      document.getElementById("qr-canvas")
+    );
+
+  }
+
+  returnScannerHTML() {
+    return `
+      <div class="qrscanner-container">
+        <div id="qr-target" style="
+          position: fixed;
+	  left: 50%;
+	  top: 40%;
+	  transform: translate(-50%, -40%);
+          width: 14em;
+          height: 14em;
+          z-index: 999999;
+          border: 4px solid orange;"></div>
+        <div class="video-container">
+          <video playsinline autoplay id="qr-video" style="width: 100%; max-width: 26em"></video>
+        </div>
+        <canvas style="display: none" id="qr-canvas"></canvas>
+      </div>
+
+    `;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
   async start(video, canvas) {
+
     this.video = video
     this.canvas = canvas;
 
     this.canvas_context = this.canvas.getContext("2d");
+
     this.decoder = new Worker('/qrscanner/quirc_worker.js');
 
     this.decoder.onmessage = (msg) => { this.onDecoderMessage(msg) };
+
 
     try {
       let stream = await navigator.mediaDevices.getUserMedia(this.constraints);
@@ -76,7 +137,15 @@ class QRScanner extends ModTemplate {
     } catch (err) {
       this.handleError(err);
     }
-    setTimeout(() => { this.attemptQRDecode() }, 500);
+    //
+    // delay gives video time to work before trying to decode
+    //
+    try {
+      setTimeout(() => { this.attemptQRDecode() }, 10);
+    } catch (err) {
+console.log("second error");
+      setTimeout(() => { this.attemptQRDecode() }, 2000);
+    }
   }
 
   stop() {
@@ -94,25 +163,6 @@ class QRScanner extends ModTemplate {
     );
   }
 
-  attachEvents() {
-    // document.querySelector('.file-button')
-    //      .addEventListener('click', (e) => {
-    //         let inputFile  = document.getElementById('file-input');
-    //          inputFile.addEventListener('change', (e) => {
-    //             let file = e.target.files[0];
-    //             if (!file) { return; }
-    //             this.decodeFromFile(file);
-    //          });
-    //          inputFile.click();
-    //      });
-
-    document.querySelector('#navigator')
-        .addEventListener('click', (e) => {
-          let header_dropdown = document.querySelector('.header-dropdown');
-          header_dropdown.style.display = header_dropdown.style.display == "none" ? "block" : "none";
-        });
-  }
-
 
   //
   // main loop sending messages to quirc_worker to detect qrcodes on the page
@@ -123,16 +173,15 @@ class QRScanner extends ModTemplate {
         this.canvas.width = this.video.videoWidth;
         this.canvas.height = this.video.videoHeight;
         this.canvas_context.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
-
         var imgData = this.canvas_context.getImageData(0, 0, this.canvas.width, this.canvas.height);
 
         if (imgData.data) {
           this.decoder.postMessage(imgData);
         }
       } catch (err) {
-        if (err.name == 'NS_ERROR_NOT_AVAILABLE') setTimeout(() => { this.attemptQRDecode() }, 0);
-          console.log("Error");
-          console.log(err);
+        if (err.name == 'NS_ERROR_NOT_AVAILABLE') { setTimeout(() => { this.attemptQRDecode() }, 0); return; }
+
+        setTimeout(() => { this.attemptQRDecode() }, 500);
       }
     }
   }
@@ -212,27 +261,6 @@ class QRScanner extends ModTemplate {
 
 
 
-  returnHTML() {
-    return `
-      <div class="qrscanner-container">
-        <div id="qr-hud-target" style="
-          position: absolute;
-          width: 10em;
-          height: 10em;
-          border: 2px solid red;
-          background-color: transparent;
-          margin: 2em 8.5em;"></div>
-        <div class="video-container">
-          <video playsinline autoplay style="width: 100%; max-width: 26em"></video>
-        </div>
-        <canvas style="display: none" id="qr-canvas"></canvas>
-      </div>
-    `;
-  }
-
-  attachEventsToHTML() {
-
-  }
 
 
 }
