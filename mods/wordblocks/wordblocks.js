@@ -171,10 +171,6 @@ console.log("INITIALIZE GAME");
       let tmp_json = JSON.stringify(this.returnDeck());
       this.game.queue.push("DECK\t1\t" + tmp_json);
     };
-
-console.log("INITIALIZE GAME 2");
-
-
     //
     // stop here if initializing
     //
@@ -186,55 +182,7 @@ console.log("INITIALIZE GAME 2");
 
 
 
-    resizeBoard = function resizeBoard(app) {
-
-    /*  if (this.window && !app.browser.isMobileBrowser(navigator.userAgent)) {
-
-        let height = this.screen.height;
-        let width = this.screen.width;
-
-        if (width < 900) {
-          if (width > 500) {
-            $('.main').css('zoom', (width / 905));
-            $('.rack').css('zoom', (width / 905));
-            $('h').css('zoom', (width / 905));
-          } else {
-            $('.main').css('zoom', 500 / 900);
-            $('.rack').css('zoom', 500 / 900);
-            $('#tiles > div.tile').css('zoom', 500 / 900);
-          }
-        }
-
-        if (height < 900) {
-          if (height > 500) {
-            $('.main').css('zoom', (height / 905));
-            $('.rack').css('zoom', (height / 905));
-            $('#tiles > div.tile').css('zoom', (height / 905));
-          } else {
-            $('.main').css('zoom', 500 / 900);
-            $('.rack').css('zoom', 500 / 900);
-            $('#tiles > div.tile').css('zoom', 500 / 900);
-          }
-        }
-
-        if (height > 900 && width > 900) {
-          $('.main').css('zoom', 1);
-          $('.rack').css('zoom', 1);
-          $('#tiles > div.tile').css('zoom', 1);
-        }
-
-        if (height < 1125) {
-          $('#controls').addClass('fixedbottom');
-          $('.main').addClass('mainfixedbottom');
-        } else {
-          $('#controls').removeClass('fixedbottom');
-          $('.main').removeClass('mainfixedbottom');
-        }
-      } */
-    };
-
-
-
+    resizeBoard = function resizeBoard(app) {}
     responsive = function responsive() {};
 
     //
@@ -276,6 +224,8 @@ console.log("INITIALIZE GAME 2");
         `;
       } else {
         let opponent = this.game.opponents[op];
+        // we do this here
+        opponent = this.app.keys.returnIdentifierByPublicKey(opponent, true);
         op++;
         html += `
           <div class="player">
@@ -611,8 +561,8 @@ console.log("INITIALIZE GAME 2");
           </div>
         `;
       } else {
-        //let opponent = await this.app.dns.fetchIdentifierPromise(this.game.opponents[op]);
         let opponent = this.game.opponents[op];
+        opponent = this.app.keys.returnIdentifierByPublicKey(opponent, true);
         op++;
         html += `
           <div class="player">
