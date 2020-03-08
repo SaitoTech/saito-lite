@@ -172,7 +172,7 @@ module.exports = SettingsAppspace = {
         data.email.body.render(app, data);
         data.email.body.attachEvents(app, data);
 
-      };
+    };
 
     document.getElementById('delete-account-btn')
       .onclick = async (e) => {
@@ -184,41 +184,37 @@ module.exports = SettingsAppspace = {
         data.email.emails.sent = [];
         data.email.emails.trash = [];
 
-        // data.email.body.render(app, data);
-        // data.email.body.attachEvents(app, data);
-
         window.location = window.location;
-      };
+    };
 
-    document.getElementById('restore-privatekey-btn')
-      .onclick = async (e) => {
+    document.getElementById('restore-privatekey-btn').onclick = async (e) => {
 
-        let prikey = ""; // eb6d0696f64aa52dfb18f6804d1bc5cbe3a6f0ab0a9190c8ea17c47ddc27b6dd
-        try {
-          prikey = await sprompt("Enter Private Key:");
-          if (prikey != "") {
-            let pubkey = app.crypto.returnPublicKey(prikey); // xJ8azqxaco6PQFHCM14qAUErRUPCYZUS2WArrghVtK6x
-            // Not sure here.
-            app.keys.keys[0].publickey = pubkey;
-            // Wallet restore + blanking
-            app.wallet.wallet.privatekey = prikey;
-            app.wallet.wallet.publickey = pubkey;
-            app.wallet.wallet.inputs = [];
-            app.wallet.wallet.outputs = [];
-            app.wallet.wallet.spends = [];
-            app.wallet.wallet.pending = [];
+      let privatekey = "";
+      let publickey = "";
 
-            await app.wallet.saveWallet();
+      try {
 
-            window.location = window.location;
-          }
-        } catch (e) {
-          salert("Restore Private Key ERROR: " + e);
-          console.log("Restore Private Key ERROR: " + e);
+        privatekey = await sprompt("Enter Private Key:");
+
+        if (privatekey != "") {
+
+          let publickey = app.crypto.returnPublicKey(privatekey);
+
+          app.wallet.wallet.privatekey = privatekey;
+          app.wallet.wallet.publickey = publickey;
+          app.wallet.wallet.inputs = [];
+          app.wallet.wallet.outputs = [];
+          app.wallet.wallet.spends = [];
+          app.wallet.wallet.pending = [];
+
+          await app.wallet.saveWallet();
+          window.location = window.location;
         }
-
-      };
-
+      } catch (e) {
+        salert("Restore Private Key ERROR: " + e);
+        console.log("Restore Private Key ERROR: " + e);
+      }
+    };
 
   },
 
