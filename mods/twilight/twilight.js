@@ -4676,7 +4676,7 @@ console.log("\n\n\n\n");
           //
           // US / Japan Alliance
           //
-          if (twilight_self.game.state.events.usjapan == 1 && c == "japan" && this.game.player == 1) {
+           if (twilight_self.game.state.events.usjapan == 1 && c == "japan" && player == "ussr") {
             // twilight_self.displayModal("US / Japan Alliance prevents realignments in Japan");
             twilight_self.displayModal("Invalid Realignment", `US / Japan Alliance prevents realignments in Japan`);
             valid_target = 0;
@@ -4686,25 +4686,26 @@ console.log("\n\n\n\n");
           // Nato
           //
 
-        //  if (twilight_self.game.state.events.nato == 1 && twilight_self.countries[countryname].region == "europe" && player == "ussr") {
-         //  if (twilight_self.isControlled("us", countryname) == 1) {
-           //   if ( (countryname == "westgermany" && twilight_self.game.state.events.nato_westgermany == 0) || (countryname == "france" && twilight_self.game.state.events.nato_france == 0) ) {} else {
-           //      twilight_self.displayModal("Invalid Realignment", `Nato prevents realignments in US Controlled countries in Europe`);
-          //  valid_target = 0;
-          //    }
-        //  }
-       // }
-     
+         //  if (twilight_self.game.state.events.nato == 1 && twilight_self.countries[c].region == "europe" && player == "ussr") {
+          //  if (twilight_self.isControlled("us", c) == 1) {
+            //   if ( (c == "westgermany" && twilight_self.game.state.events.nato_westgermany == 0) || (c == "france" && twilight_self.game.state.events.nato_france == 0) ) {} else {
+            //      twilight_self.displayModal("Invalid Realignment", `Nato prevents realignments in US Controlled countries in Europe`);
+           //  valid_target = 0;
+            //    }
+           //   }
+          // }
+
 
           //
           // vietnam revolts and china card bonuses
           //
           if (twilight_self.countries[c].region !== "seasia") { twilight_self.game.state.events.vietnam_revolts_eligible = 0; }
           if (twilight_self.countries[c].region !== "seasia" && twilight_self.countries[c].region !== "asia") { twilight_self.game.state.events.china_card_eligible = 0; }
-
-          var result = twilight_self.playRealign(c);
-          twilight_self.addMove("realign\t"+player+"\t"+c);
-          mycallback();
+          if (valid_target == 1) {
+            var result = twilight_self.playRealign(c);
+            twilight_self.addMove("realign\t"+player+"\t"+c);
+            mycallback();
+          }          
         });
 
       } else {
@@ -9943,9 +9944,9 @@ console.log("\n\n\n\n");
             let play_brush_war = 1;
             let divname = "#" + i;
 
-            if (i === "italy") {
+            if (i === "italy" || i === "greece" || i === "spain") {
               if (twilight_self.game.state.events.nato == 1) {
-                if (twilight_self.isControlled("us", "italy") == 1) {
+                if (twilight_self.isControlled("us", i) == 1) {
                   play_brush_war = 0;
                 }
               }
@@ -9971,17 +9972,17 @@ console.log("\n\n\n\n");
 
                 if (twilight_self.game.player == 1) {
                   if (c == "mexico") { modify++; }
-                  if (c == "cuba") { modify++; }
-                  if (c == "japan") { modify++; }
-                  if (c == "canada") { modify++; }
+                //  if (c == "cuba") { modify++; }
+                //  if (c == "japan") { modify++; }
+                //  if (c == "canada") { modify++; }
                 }
                 if (twilight_self.game.player == 2) {
-                  if (c == "finland") { modify++; }
-                  if (c == "romania") { modify++; }
+                //  if (c == "finland") { modify++; }
+                //  if (c == "romania") { modify++; }
                   if (c == "afghanistan") { modify++; }
-                  if (c == "northkorea") { modify++; }
+                //  if (c == "northkorea") { modify++; }
                 }
-
+                
                 dieroll = dieroll - modify;
 
                 if (dieroll >= 3) {
@@ -10000,7 +10001,7 @@ console.log("\n\n\n\n");
                     } else {
                       twilight_self.addMove("vp\tus\t1");
                     }
-                    twilight_self.endTurn();
+                     twilight_self.endTurn();
                   } else {
                     twilight_self.removeInfluence(c, usinf, "us");
                     twilight_self.placeInfluence(c, usinf, "ussr");
@@ -10014,7 +10015,7 @@ console.log("\n\n\n\n");
                     }
                   }
                   twilight_self.addMove("notify\tBrush War in "+twilight_self.countries[c].name+" succeeded.");
-                  twilight_self.addMove("notify\tBrush War rolls "+dieroll);
+                  twilight_self.addMove("notify\tBrush War rolls "+dieroll +" (Opponent bonus: -"+modifier);
                   twilight_self.endTurn();
 
                 } else {
@@ -10024,7 +10025,7 @@ console.log("\n\n\n\n");
                     twilight_self.addMove("milops\tussr\t3");
                   }
                   twilight_self.addMove("notify\tBrush War in "+twilight_self.countries[c].name+" failed.");
-                  twilight_self.addMove("notify\tBrush War rolls "+dieroll);
+                  twilight_self.addMove("notify\tBrush War rolls "+dieroll +" (Opponent bonus: -"+modifier);
                   twilight_self.endTurn();
                 }
               });
