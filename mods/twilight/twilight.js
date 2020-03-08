@@ -4739,7 +4739,9 @@ console.log("\n\n\n\n");
       //
       if (this.game.player == 1 && this.game.state.events.chernobyl != "") {
         if (this.countries[i].region == this.game.state.events.chernobyl) { restricted_country = 1;
-
+          if (this.game.state.events.chernobyl =="asia") {
+            if (this.countries[i].region == "seasia" ){restricted_country = 1;}
+          }
         }
       }
 
