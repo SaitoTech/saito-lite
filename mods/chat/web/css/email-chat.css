@@ -349,7 +349,7 @@ hr {
 }
 
 .chat-room-message-myself .chat-message-text {
-  text-align: right;
+  width: 100%;
 }
 
 .chat-room-message-identicon {
