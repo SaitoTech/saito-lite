@@ -291,7 +291,7 @@ class Arcade extends ModTemplate {
     this.app.network.sendRequestWithCallback(message.request, message.data, leaderboard_callback);
  
     */
-
+   
   }
 
 
