@@ -149,8 +149,8 @@ class Rewards extends ModTemplate {
     }
     if (x > 1000) {
       obj.label = "Master";
-      obj.count = (Math.floor(x / 1000)).toString + "k";
-      obj.badge = "<i class='master badge'><span>" + obj.count + "</span></i>";
+      obj.count = (Math.floor(x / 100)/10).toString() + "k";
+      obj.icon = "<i class='master badge'><span>" + obj.count + "</span></i>";
     }
     return obj;
   }

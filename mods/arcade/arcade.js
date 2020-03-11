@@ -259,7 +259,7 @@ class Arcade extends ModTemplate {
       }
     });
 
-
+    /* removed both observer and leaderboard code when not in use
     //
     // load active games for observer mode
     //
@@ -289,6 +289,9 @@ class Arcade extends ModTemplate {
 
     let leaderboard_callback = (res) => res.rows.forEach(row => this.addWinnerToLeaderboard(row));
     this.app.network.sendRequestWithCallback(message.request, message.data, leaderboard_callback);
+ 
+    */
+   
   }
 
 

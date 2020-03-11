@@ -13,33 +13,31 @@ Block producers rebroadcast UTXO by creating special "automatic transaction rebr
 
 ## 2. PRODUCING BLOCKS
 
-Saito adds cryptographic signatures to the network layer. Each transaction contains an unforgeable record of the path it takes into the network. This allows u to measure the "routing work" provided by the nodes in the network.
+Saito adds cryptographic signatures to the network layer. Each transaction contains an unforgeable record of the path it takes into the network. This allows us to measure the "routing work" provided by any transaction. This is the value of the transaction fee halved with each additional hop beyond the first that the transaction has taken into the network.
 
-The blockchain sets a "difficulty" for block production. This difficulty is met by producing a block containing adequate "routing work" in its included transactions. The amount of "work" embedded in any transaction is the value of its fee halved by each additional hop beyond the first that the transaction has taken into the network.
-
-Consensus rules specify that nodes cannot use "routing work" from transactions that do not include them on their routing path. Any surplus value of "routing work" may be taken by the block producer in immediate payment for block production and deducted from the block reward.
+The blockchain sets a "difficulty" for block production. This difficulty is met by incl;uding transactions containing adequate "routing work" in the block. Consensus rules specify that nodes cannot use "routing work" from transactions if they are not included in their routing path. Any surplus of "routing work" over amount required may be taken by the block producer in immediate payment for block production and deducted from the block reward.
 
 
 ## 3. THE PAYMENT LOTTERY
 
-Each block contains a proof-of-work challenge in the form of its block hash. If a miner finds a random hash that "solves" this challenge it broadcasts it in a fee-paying transaction we call the "golden ticket".
+Each block contains a proof-of-work challenge in the form of its block hash. Miners solve these challenges and broadcast their solutions in the form of normal fee-paying transactions.
+`
+If a solution is not found, the funds fall off the chain and are eventually passed into a future block reward. But if exactly one solution is included in the very next block the network splits the block reward between the lucky miner and a routing node selected randomly from the previous block. Each routing node has a chance of winning proportional to the amount of work it contributed to that block. 
 
-If one valid golden ticket is included in the very next block the network will split the block reward for the previous block between the miner that found the solution and a lucky routing node. The winning routing node is selected using a random variable included in the miner solution. The "paysplit" of the network is 50-50 by default (half to miners, half to routers). Tickets are distributed so that each node has a chance of winning proportional to the amount of routing work it contributed to the block. If a solution is not found, the payment eventually falls off the chain whereupon it is returned to the network "treasury" and eventually passed into a future block reward.
+Mining difficulty auto-adjusts until the network produces one golden ticket on average per block. 
 
-Mining difficulty auto-adjusts until the network produces one golden ticket on average per block. This eliminates the fifty-one percent attack completely: unless attackers match one hundred percent of the mining and routing work done by the honest network, they either cannot produce blocks as quickly as honest nodes, or are able to produce blocks but not collect payments.
 
 
 ## 4. THE DEADWEIGHT LOSS MECHANISM
 
-Saito increases attack costs further through a POWSPLIT mechanism. Mining difficulty is increased so that one solution is found every N blocks on average. When a golden ticket is found, if the previous block did not contain a golden ticket, the random variable used to select the winning routing node is hashed again to select a winning routing node from the previous (unpaid) block. This hash is used to pick a winner from a table of stakers. This process is repeated until all unsolved preceding blocks have had their payments issued. An upper limit to backwards recusion may be applied for practical purposes, beyond which point any uncollected funds are simply apportioned to the treasury.
+The system above eliminates the fifty-one percent attack: attackers must match 100 percent of all routing work to produce the longest-chain. This can only be done by spending their own money. Unless they also match one hundred percent of mining they are unable to get any funds back. This provides a quantifiable cost-of-attack that does not disappear under majoritarian conditions.
 
-To become stakers in the network, users broadcast a transaction containing a specially-formatted UTXO. The UTXO are added to a list of "pending stakers" on their inclusion in a block. Once the current staking table has been fully paid-out, all pending UTXO stakers are moved into the current staking table. Stakers may not withdraw or spend their UTXO until they have received payment.
+It is possible to increase attack costs beyond 100 percent by modifying the POWSPLIT mechanism. This can be done by increasing mining difficulty so that one solution is found every N blocks on average. When issuing payments, if the previous block did not contain a golden ticket solution, hash the random variable used to select the winning routing node and use it to select a winner from a table of stakers. Repeat this process until all unsolved blocks have been processed. An upper limit to backwards recusion may be applied for practical purposes. Mining difficulty adjust upwards if N blocks containing golden tickets are found in a row and downwards if N blocks without golden tickets are found in a row. 
 
-The amount paid to staking nodes with each payment is the average of the amount paid into the treasury by the staking reward during the *previous* genesis period, normalized to their percentage of the staking table. Limits may be put on the size of the staking pool to induce competition between stakers if desirable. 
+Users stake by broadcasting a specially-formatted transaction that adds their UTXO to a list of "pending stakers". Once the current staking table has been fully paid-out, all pending UTXO are moved into the "current stakers" table. Stakers may not withdraw or spend their UTXO until they have received payment. The payment to stakers is the average of the average of the amount not paid out in staking blocks during the *previous* genesis period, normalized to the winner UTXO's percentage of staking work. Limits may be put on the size of the staking pool to induce competition between stakers if desirable.
 
-Block producers who rebroadcast UTXO which are in the staking table must now indicate in their ATR transactions whether the outputs are in the current or pending pool. While a hash representation of the state of the staking table is included in every block in the form of a commitment allowing initial nodes to verify the accuracy of off-chain data, this modification of the ATR rebroadcast mechanism permits all nodes to reconstruct the state of the staking pool within one genesis period at most.
+This system requires modifications to Automatic Transaction Rebroadcasting. Block producers who rebroadcast UTXO must now indicate whether specific outputs are in the current or pending pool. This modification permits all nodes to reconstruct the state of both staking pools within one genesis period at most.
 
-In order to drive up attack costs further in case of attack, mining difficulty is adjusted upwards if two blocks containing golden tickets are found in a row and slightly downwards if two blocks without golden tickets are found in a row. A similarly punitive cost applies if two blocks without golden tickets are found consecutively, applied by withholding an ever-increasing amount of the staking revenue being paid out of the network treasury. The network treasury expands in times of attack, eliminating any economic incentives for attacking the network and ensuring that censors constantly lose money.
 
 
 ## 5. NETWORK CONSENSUS

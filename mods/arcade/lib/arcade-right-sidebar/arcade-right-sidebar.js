@@ -22,12 +22,13 @@ module.exports = ArcadeRightSidebar = {
           += ObserverRow(data.arcade.observer[i], players, app.crypto.stringToBase64(JSON.stringify(data.arcade.observer[i])));
       }
 
+      /*
       document.querySelector(".arcade-sidebar-active-leaderboard-body").innerHTML = '';
 
       data.arcade.leaderboard.forEach(leader => {
         document.querySelector(".arcade-sidebar-active-leaderboard-body").innerHTML += LeaderboardRow(leader);
       });
-
+      */
 
       //
       // arcade sidebar
@@ -35,8 +36,6 @@ module.exports = ArcadeRightSidebar = {
       data.arcade.mods.forEach(mod => {
         let gameobj = mod.respondTo("arcade-sidebar");
         if (gameobj != null) {
-
-console.log("LOADING SIDEBAR: " + gameobj.module);
 
           let modname = "arcade-sidebar-"+mod.slug;
           let x = document.querySelector(("."+modname));
