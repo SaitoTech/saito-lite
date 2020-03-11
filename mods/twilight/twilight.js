@@ -2022,12 +2022,16 @@ console.log("\n\n\n\n");
 
             if (this.game.player != bonus_player) {
               this.updateStatus(this.game.state.eagle_has_landed.toUpperCase() + " </span> <span>is deciding whether to discard a card");
-        //
-        // commented-out 2019-09-18
-        //
-              //this.saveGame(this.game.id);
               return 0;
             }
+
+	    //
+            // if we have no cards, skip
+	    //
+            if (twilight_self.game.deck[0].hand.length == 0) {
+	      this.updateLog("No cards in hand, skipping end-of-turn discard");
+	      return 1;
+  	    }
 
             //
             // DISCARD CARD
@@ -2068,10 +2072,6 @@ console.log("\n\n\n\n");
                   twilight_self.updateStatus("<span>No cards available to discard! Please wait for next turn...</span>");
                   twilight_self.addMove("notify\tUS has no cards available to discard");
                   twilight_self.endTurn(1);
-            //
-            // commented-out 2019-09-18
-            //
-                  //twilight_self.saveGame(twilight_self.game.id);
                   return;
                 }
 
@@ -11507,6 +11507,10 @@ console.log("\n\n\n\n");
 
     this.updateVictoryPoints();
 
+    if (this.game.state.vp == 0) {
+      this.endGame("tie game", "final scoring");
+      return 1;
+    }
     if (this.game.state.vp < 0) {
       this.endGame("ussr", "final scoring");
     } else {
@@ -11834,7 +11838,7 @@ console.log("\n\n\n\n");
           if (scoring.ussr.bg == 6 && scoring.ussr.total > scoring.us.total) { vp_ussr = 9; }
         }
 
-
+	
         if (scoring.us.vp >= 9 && scoring.us.total > scoring.ussr.total) {}
         else if (scoring.us.bg > scoring.ussr.bg && scoring.us.total > scoring.us.bg && scoring.us.total > scoring.ussr.total) { scoring.us.vp = as_scoring_range.domination; }
         else if (scoring.us.total > 0) { scoring.us.vp = as_scoring_range.presence; }
@@ -11851,7 +11855,18 @@ console.log("\n\n\n\n");
         //
         if (this.isControlled("us", "afghanistan") == 1) { scoring.us.vp++; }
         if (this.isControlled("us", "northkorea") == 1) { scoring.us.vp++; }
-        if (this.isControlled("ussr", "japan") == 1) { scoring.ussr.vp++; }
+        if (this.isControlled("ussr", "japan") == 1) { 
+
+	  //
+	  // Shuttle Diplomacy also removes adjacency of Japan if controlled
+	  //
+          if (this.game.state.events.shuttlediplomacy == 1) {
+	    console.log("Shuttle Diplomacy removes USSR control of Japan, which also eliminates adjacency while scoring.");
+          } else {
+	    scoring.ussr.vp++; 
+	  }
+
+	}
 
         break;
       }
