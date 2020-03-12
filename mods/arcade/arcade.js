@@ -528,10 +528,14 @@ class Arcade extends ModTemplate {
       //
       // purge any bad games from options file
       //
-      for (let i = app.options.games.length; i >= 0; i++) {
-        if (app.options.games[i].module === "" && app.options.games[i].id.length > 25) {
-	  app.options.games.splice(i, 1);
-	}
+      if (app.options) {
+        if (app.options.games) {
+          for (let i = app.options.games.length; i >= 0; i--) {
+            if (app.options.games[i].module === "" && app.options.games[i].id.length > 25) {
+	      app.options.games.splice(i, 1);
+  	    }
+  	  }
+        }
       }
 
       //
