@@ -83,11 +83,11 @@ module.exports = ArcadeRightSidebar = {
           rewardsmod.attachEventsEmail(app, data);
 
           // Back button
-          let btn = document.createElement("BUTTON");
-          btn.innerHTML = "Back";
-          btn.classList.add("back-btn");
-          document.querySelector('.arcade-main').appendChild(btn);
-          document.querySelector('.back-btn').onclick = () => {
+          let btn = document.createElement("DIV");
+          btn.innerHTML = '<i class="rewards-back fas fa-arrow-circle-left"></i> Back';
+          btn.classList.add("arcade-main-back-button");
+          document.querySelector('.arcade-main').prepend(btn);
+          document.querySelector('.arcade-main-back-button').onclick = () => {
             ArcadeMain.render(app, predata);
             ArcadeMain.attachEvents(app, predata);
           }

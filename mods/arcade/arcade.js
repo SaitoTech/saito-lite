@@ -424,7 +424,7 @@ class Arcade extends ModTemplate {
       data.arcade = this;
 
       if (this.browser_active == 1) {
-	if (this.viewing_arcade_initialization_page == 0) {
+        if (this.viewing_arcade_initialization_page == 0) {
           ArcadeMain.render(this.app, data);
           ArcadeMain.attachEvents(this.app, data);
         }
@@ -453,7 +453,7 @@ class Arcade extends ModTemplate {
           //
           if (tx.transaction.msg.invite_sig != "") {
             this.games[i].transaction.msg.players.push(tx.transaction.from[0].add);
-	    if (!this.games[i].transaction.msg.players_sigs) { this.games[i].transaction.msg.players_sigs = []; }
+            if (!this.games[i].transaction.msg.players_sigs) { this.games[i].transaction.msg.players_sigs = []; }
             this.games[i].transaction.msg.players_sigs.push(txmsg.invite_sig);
           }
         }
@@ -489,7 +489,7 @@ class Arcade extends ModTemplate {
       if (this.app.options.games) {
         for (let i = 0; i < this.app.options.games.length; i++) {
           if (this.app.options.games[i].id == game_sig) {
-  	    this.app.options.games.splice(i, 1);
+              this.app.options.games.splice(i, 1);
             this.app.storage.saveOptions();
           }
         }
@@ -536,7 +536,7 @@ class Arcade extends ModTemplate {
           // fwd tx to peer
           //
           let message = {};
-    	    message.request = "arcade spv update";
+                message.request = "arcade spv update";
           message.data = {};
           message.data.tx = tx;
 
@@ -610,21 +610,21 @@ class Arcade extends ModTemplate {
         console.info("TX: " + JSON.stringify(tx.transaction));
         console.info("MSG: " + txmsg);
 
-	//
-	// remove game from server
-	//
+        //
+        // remove game from server
+        //
         let players_array = txmsg.players.join("_");;
         let sql = `UPDATE games SET status = "active" WHERE game_id = $game_id`;
         let params = {
-	  $game_id : tx.transaction.msg.game_id ,
+          $game_id : tx.transaction.msg.game_id ,
         }
         await this.app.storage.executeDatabase(sql, params, 'arcade');
 
 
-	//
-	// do not process if transaction is not for us
-	//
- 	if (!tx.isTo(app.wallet.returnPublicKey())) { return; }
+        //
+        // do not process if transaction is not for us
+        //
+         if (!tx.isTo(app.wallet.returnPublicKey())) { return; }
 
 
         //
@@ -670,11 +670,11 @@ class Arcade extends ModTemplate {
 
 
 
-	      //
-	      // only load games that are for us
-	      //
+              //
+              // only load games that are for us
+              //
               if (tx.isTo(app.wallet.returnPublicKey())) {
-	        let gamemod = this.app.modules.returnModule(tx.transaction.msg.game);
+                let gamemod = this.app.modules.returnModule(tx.transaction.msg.game);
                 if (gamemod) {
                   gamemod.loadGame(tx.transaction.msg.game_id);
                 }
@@ -746,9 +746,9 @@ class Arcade extends ModTemplate {
                   console.info("ACCEPT MESSAGE SENT ON GAME WAITING FOR ONE PLAYER! -- deleting");
                   this.games.splice(i, 1);
                   console.info("RE-RENDER");
-	          if (this.viewing_arcade_initialization_page == 0) {
+                  if (this.viewing_arcade_initialization_page == 0) {
                     this.render(this.app);
-	          }
+                  }
                 }
               }
             }
@@ -891,7 +891,7 @@ class Arcade extends ModTemplate {
 
         if (this.accepted[game_id] > 0) {
 
-	  if (this.accepted[game_id] > 2) {
+          if (this.accepted[game_id] > 2) {
 
             //
             // check required of players_needed vs. players_accepted
@@ -902,16 +902,16 @@ class Arcade extends ModTemplate {
             if (rows3) {
               if (rows3.length > 0) {
                 if (rows3[0].status === "open") {
-	          this.accepted[game_id] = 0;
+                  this.accepted[game_id] = 0;
                   res.rows.push({ game_still_open: 1 });
                   mycallback(res);
                   return;
-	        }
-	      }
-	    }
-	  }
+                }
+              }
+            }
+          }
           
-	  this.accepted[game_id]++;
+          this.accepted[game_id]++;
           res.rows.push({ game_still_open: 0 });
         } else {
           this.accepted[game_id] = 1;
@@ -935,10 +935,10 @@ class Arcade extends ModTemplate {
         let rows2 = await this.app.storage.queryDatabase(sql2, {}, 'arcade');
 
 
-	if (rows2.length > 0) {
+        if (rows2.length > 0) {
 
-	  // only do if invites exist
-	  if (!gametx.msg.players ) {
+          // only do if invites exist
+          if (!gametx.msg.players ) {
             gametx.msg.players = [];
             gametx.msg.players_sigs = [];
           }
@@ -948,7 +948,7 @@ class Arcade extends ModTemplate {
             gametx.msg.players_sigs.push(rows2[z].acceptance_sig);
           }
 
-	}
+        }
 
         rows[i].tx = JSON.stringify(gametx);
       }
@@ -1006,11 +1006,11 @@ class Arcade extends ModTemplate {
         if (window.location.pathname.split('/')[2] == "invite") {
           ArcadeInvite.render(this.app, data);
           ArcadeLoader.attachEvents(this.app, data);
-	  this.viewing_arcade_initialization_page = 1;
+          this.viewing_arcade_initialization_page = 1;
         } else {
           ArcadeLoader.render(arcade_self.app, data);
           ArcadeLoader.attachEvents(arcade_self.app, data);
-	  this.viewing_arcade_initialization_page = 1;
+          this.viewing_arcade_initialization_page = 1;
         }
 
       }
@@ -1107,7 +1107,7 @@ class Arcade extends ModTemplate {
     let sql = `INSERT INTO games (
                 game_id ,
                 players_needed ,
-		players_array ,
+                players_array ,
                 module ,
                 status ,
                 options ,
@@ -1148,7 +1148,7 @@ class Arcade extends ModTemplate {
     //
     let sql2 = `INSERT INTO invites (
                 game_id ,
-		player ,
+                player ,
                 acceptance_sig ,
                 module ,
                 created_at ,
@@ -1208,7 +1208,7 @@ class Arcade extends ModTemplate {
     //
     let sql2 = `INSERT INTO invites (
                 game_id ,
-		player ,
+                player ,
                 acceptance_sig ,
                 module ,
                 created_at ,
@@ -1383,7 +1383,7 @@ class Arcade extends ModTemplate {
       if (tx.isTo(app.wallet.returnPublicKey())) {
         ArcadeLoader.render(app, data);
         ArcadeLoader.attachEvents(app, data);
-	this.viewing_arcade_initialization_page = 1;
+        this.viewing_arcade_initialization_page = 1;
       }
     }
 
@@ -1391,7 +1391,7 @@ class Arcade extends ModTemplate {
     let publickeys = [];
     for (let i = 0; i < tx.transaction.to.length; i++) {
       if (!publickeys.includes(tx.transaction.to[i].add)) {
-	publickeys.push(tx.transaction.to[i].add);
+        publickeys.push(tx.transaction.to[i].add);
       }
     }
     let unique_keys = publickeys;
@@ -1497,14 +1497,14 @@ class Arcade extends ModTemplate {
     }
     await this.app.storage.executeDatabase(sql, params, "arcade");
 
-    // module	TEXT,
-    // game_id	TEXT,
-    // tx		TEXT,
-    // bid	INTEGER,
+    // module        TEXT,
+    // game_id        TEXT,
+    // tx                TEXT,
+    // bid        INTEGER,
     // bsh TEXT,
-    // created_at 	INTEGER,
-    // expires_at 	INTEGER,
-    // winner 	TEXT,
+    // created_at         INTEGER,
+    // expires_at         INTEGER,
+    // winner         TEXT,
 
     sql = `INSERT INTO leaderboard (module, game_id, winner, score, tx, bid, bsh, timestamp, sig)
     VALUES ($module, $game_id, $winner, $score, $tx, $bid, $bsh, $timestamp, $sig)`;

@@ -106,8 +106,8 @@ class Solitrio extends GameTemplate {
   attachEventsToBoard() {
 
     let solitrio_self = this;
-    let selected = "";		// prev selected
-    let card = "";		// slot to swap
+    let selected = "";                // prev selected
+    let card = "";                // slot to swap
 
     $('.slot').off();
     $('.slot').on('click', function() {
@@ -126,7 +126,7 @@ class Solitrio extends GameTemplate {
 
           selected = card;
           solitrio_self.toggleCard(card);
-  	  return;
+            return;
         }
 
 
@@ -146,23 +146,29 @@ class Solitrio extends GameTemplate {
 
           solitrio_self.untoggleCard(card);
           solitrio_self.untoggleCard(selected);
-  	  selected = "";
+            selected = "";
 
           solitrio_self.displayBoard();
 
-	  let winning_state = solitrio_self.isWinningState();
-	  if (winning_state == 1) {
-	    alert("Congratulations! You win!");
-	  }
+          /*
 
-	  return;
+          let winning_state = solitrio_self.isWinningState();
+
+          if (winning_state == 1) {
+            alert("Congratulations! You win!");
+          }
+          */
+
+          console.log(card + " can send move now " + selected);
+
+          return;
 
         } else {
-	  alert("Cannot Card Place in Slot...");
-	  solitrio_self.untoggleCard(selected);
-	  selected = "";
-	  solitrio_self.displayBoard();
-	  return;
+          alert("Cannot Card Place in Slot...");
+          solitrio_self.untoggleCard(selected);
+          selected = "";
+          solitrio_self.displayBoard();
+          return;
         }
       }
     });
@@ -263,15 +269,15 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
       //
       if (mv[0] === "turn") {
         this.game.queue.splice(qe, 1);
-	if (parseInt(mv[1]) == this.game.player) {
-	  this.playerTurn();
-	}
-	shd_continue = 0;
+        if (parseInt(mv[1]) == this.game.player) {
+          this.playerTurn();
+        }
+        shd_continue = 0;
 console.log("HERE WE ARE!");
       }
       if (mv[0] === "round") {
 
-	this.displayUserInterface();
+        this.displayUserInterface();
 
         this.game.board['row1_slot1'] = this.game.deck[0].cards[this.game.deck[0].hand[0]];
         this.game.board['row1_slot2'] = this.game.deck[0].cards[this.game.deck[0].hand[1]];
@@ -317,8 +323,9 @@ console.log("HERE WE ARE!");
         this.game.board['row4_slot9'] = this.game.deck[0].cards[this.game.deck[0].hand[38]];
         this.game.board['row4_slot10'] = this.game.deck[0].cards[this.game.deck[0].hand[39]];
 
-	this.displayBoard();
-	shd_continue = 0;
+  this.displayBoard();
+  
+        shd_continue = 0;
       }
       if (mv[0] === "play") {
         this.game.queue.splice(qe, 1);
@@ -376,46 +383,46 @@ console.log("HERE WE ARE!");
 
     var deck = {};
 
-    deck['2']		    = { name : "S2" }
-    deck['3']		    = { name : "S3" }
-    deck['4']		    = { name : "S4" }
-    deck['5']		    = { name : "S5" }
-    deck['6']		    = { name : "S6" }
-    deck['7']		    = { name : "S7" }
-    deck['8']		    = { name : "S8" }
-    deck['9']		    = { name : "S9" }
-    deck['10']		    = { name : "S10" }
-    deck['12']		    = { name : "C2" }
-    deck['13']		    = { name : "C3" }
-    deck['14']		    = { name : "C4" }
-    deck['15']		    = { name : "C5" }
-    deck['16']		    = { name : "C6" }
-    deck['17']		    = { name : "C7" }
-    deck['18']		    = { name : "C8" }
-    deck['19']		    = { name : "C9" }
-    deck['20']		    = { name : "C10" }
-    deck['22']		    = { name : "H2" }
-    deck['23']		    = { name : "H3" }
-    deck['24']		    = { name : "H4" }
-    deck['25']		    = { name : "H5" }
-    deck['26']		    = { name : "H6" }
-    deck['27']		    = { name : "H7" }
-    deck['28']		    = { name : "H8" }
-    deck['29']		    = { name : "H9" }
-    deck['30']		    = { name : "H10" }
-    deck['32']		    = { name : "D2" }
-    deck['33']		    = { name : "D3" }
-    deck['34']		    = { name : "D4" }
-    deck['35']		    = { name : "D5" }
-    deck['36']		    = { name : "D6" }
-    deck['37']		    = { name : "D7" }
-    deck['38']		    = { name : "D8" }
-    deck['39']		    = { name : "D9" }
-    deck['40']		    = { name : "D10" }
-    deck['41']		    = { name : "E1" }
-    deck['42']		    = { name : "E2" }
-    deck['43']		    = { name : "E3" }
-    deck['44']		    = { name : "E4" }
+    deck['2']                    = { name : "S2" }
+    deck['3']                    = { name : "S3" }
+    deck['4']                    = { name : "S4" }
+    deck['5']                    = { name : "S5" }
+    deck['6']                    = { name : "S6" }
+    deck['7']                    = { name : "S7" }
+    deck['8']                    = { name : "S8" }
+    deck['9']                    = { name : "S9" }
+    deck['10']                    = { name : "S10" }
+    deck['12']                    = { name : "C2" }
+    deck['13']                    = { name : "C3" }
+    deck['14']                    = { name : "C4" }
+    deck['15']                    = { name : "C5" }
+    deck['16']                    = { name : "C6" }
+    deck['17']                    = { name : "C7" }
+    deck['18']                    = { name : "C8" }
+    deck['19']                    = { name : "C9" }
+    deck['20']                    = { name : "C10" }
+    deck['22']                    = { name : "H2" }
+    deck['23']                    = { name : "H3" }
+    deck['24']                    = { name : "H4" }
+    deck['25']                    = { name : "H5" }
+    deck['26']                    = { name : "H6" }
+    deck['27']                    = { name : "H7" }
+    deck['28']                    = { name : "H8" }
+    deck['29']                    = { name : "H9" }
+    deck['30']                    = { name : "H10" }
+    deck['32']                    = { name : "D2" }
+    deck['33']                    = { name : "D3" }
+    deck['34']                    = { name : "D4" }
+    deck['35']                    = { name : "D5" }
+    deck['36']                    = { name : "D6" }
+    deck['37']                    = { name : "D7" }
+    deck['38']                    = { name : "D8" }
+    deck['39']                    = { name : "D9" }
+    deck['40']                    = { name : "D10" }
+    deck['41']                    = { name : "E1" }
+    deck['42']                    = { name : "E2" }
+    deck['43']                    = { name : "E3" }
+    deck['44']                    = { name : "E4" }
 
     return deck;
 
@@ -465,7 +472,7 @@ console.log("HERE WE ARE!");
     if (this.game.state.recycles_remaining > 0) {
       html += ' <p></p><div id="recycles_remaining">click here to cycle the board</div>';
     }
-    this.updateStatus(html);	
+    this.updateStatus(html);        
 
     $('.logobox').off();
     $('.logobox').on('click', function() {
@@ -506,20 +513,20 @@ console.log("HERE WE ARE!");
         if (j == 1 && num == 2) {
           rowsuite = suite;
         } else {
-  	  if (rowsuite !== suite) { continuous = 0; }
+            if (rowsuite !== suite) { continuous = 0; }
         }
 
         if (rowsuite == suite && continuous == 1) {
-	  if (num == j+1) {
-  	    if (i == 1) { row1 = j; }
-	    if (i == 2) { row2 = j; }
-	    if (i == 3) { row3 = j; }
-	    if (i == 4) { row4 = j; }
-	  } else {
-	    continuous = 0;
-	  }
+          if (num == j+1) {
+              if (i == 1) { row1 = j; }
+            if (i == 2) { row2 = j; }
+            if (i == 3) { row3 = j; }
+            if (i == 4) { row4 = j; }
+          } else {
+            continuous = 0;
+          }
         } else {
-  	  continuous = 0;
+            continuous = 0;
         }
       }
     }

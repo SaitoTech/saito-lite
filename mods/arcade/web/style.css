@@ -247,6 +247,14 @@ button.add-games {
   margin-top: 10px;
 }
 
+.arcade-main-back-button {
+  font-size: 2em;
+  display: block;
+  align-self: normal;
+  margin: 0.5em 0;
+  cursor: pointer;
+}
+
 /** Game Carousel **/
 
 #arcade-carousel {

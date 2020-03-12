@@ -23,6 +23,7 @@ module.exports = RewardsAppspace = {
   },
 
   attachEvents(app, data) {
+    //document.querySelector('.rewards-back').onclick = () => {data.render}
     for (let i = 0; i < RewardsActivities.length; i++) {
       document.getElementById(`${RewardsActivities[i].id}-row`)
         .onclick = ()  => RewardsActivities[i].action(app);
