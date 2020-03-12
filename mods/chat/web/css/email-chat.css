@@ -349,7 +349,7 @@ hr {
 }
 
 .chat-room-message-myself .chat-message-text {
-  text-align: right;
+  width: 100%;
 }
 
 .chat-room-message-identicon {
@@ -358,7 +358,14 @@ hr {
   height: 2em;
   padding: 1px;
   border-radius: 5px;
+  transition: all 0.5s ease-in-out;
 }
+
+.chat-room-message-identicon:hover {
+  width: 60px;
+  height: 60px;
+}
+
 
 .chat-message-text img {
   max-width: 100%;

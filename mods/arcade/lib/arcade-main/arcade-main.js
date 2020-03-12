@@ -100,6 +100,18 @@ module.exports = ArcadeMain = {
     let big_create_button = document.querySelector('.big-create-game');
     if (big_create_button) {
       big_create_button.onclick = (e) => {
+        ///////////////////////////////////////////
+        // TUTORIAL - REGISTER USERNAME OVERRIDE //
+        ///////////////////////////////////////////
+        let tutorialmod = app.modules.returnModule("Tutorial");
+        if (tutorialmod) {
+          if (tutorialmod.username_registered == 0) {
+            if (!app.keys.returnIdentifierByPublicKey(app.wallet.returnPublicKey())) {
+              try { tutorialmod.registerIdentifierModal(); } catch (err) { };
+              return;
+            }
+          }
+        }
         ArcadeStartGameList.render(app, data);
         ArcadeStartGameList.attachEvents(app, data);
       };

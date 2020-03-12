@@ -1,6 +1,7 @@
 const ArcadeRightSidebarTemplate 	= require('./arcade-right-sidebar.template.js');
 const ObserverRow = require('./arcade-right-sidebar-observer-game-row.template.js');
 const LeaderboardRow = require('./arcade-right-sidebar-leaderboard-row.template.js');
+const ArcadeMain = require('../arcade-main/arcade-main.js'); // Just for the back button
 
 module.exports = ArcadeRightSidebar = {
 
@@ -22,12 +23,13 @@ module.exports = ArcadeRightSidebar = {
           += ObserverRow(data.arcade.observer[i], players, app.crypto.stringToBase64(JSON.stringify(data.arcade.observer[i])));
       }
 
+      /*
       document.querySelector(".arcade-sidebar-active-leaderboard-body").innerHTML = '';
 
       data.arcade.leaderboard.forEach(leader => {
         document.querySelector(".arcade-sidebar-active-leaderboard-body").innerHTML += LeaderboardRow(leader);
       });
-
+      */
 
       //
       // arcade sidebar
@@ -35,8 +37,6 @@ module.exports = ArcadeRightSidebar = {
       data.arcade.mods.forEach(mod => {
         let gameobj = mod.respondTo("arcade-sidebar");
         if (gameobj != null) {
-
-console.log("LOADING SIDEBAR: " + gameobj.module);
 
           let modname = "arcade-sidebar-"+mod.slug;
           let x = document.querySelector(("."+modname));
@@ -73,6 +73,7 @@ console.log("LOADING SIDEBAR: " + gameobj.module);
 
       let rewardsmod = app.modules.returnModule("Rewards");
       if (rewardsmod != null) {
+        let predata = data;
         document.querySelector('.arcade-announcement').onclick = (e) => {
           document.querySelector('.arcade-main').innerHTML = '<div class="email-main"><div class="email-appspace"></div></div>';
           data = {};
@@ -80,6 +81,16 @@ console.log("LOADING SIDEBAR: " + gameobj.module);
           data.rewards = rewardsmod;
           rewardsmod.renderEmail(app, data);
           rewardsmod.attachEventsEmail(app, data);
+
+          // Back button
+          let btn = document.createElement("DIV");
+          btn.innerHTML = '<i class="rewards-back fas fa-arrow-circle-left"></i> Back';
+          btn.classList.add("arcade-main-back-button");
+          document.querySelector('.arcade-main').prepend(btn);
+          document.querySelector('.arcade-main-back-button').onclick = () => {
+            ArcadeMain.render(app, predata);
+            ArcadeMain.attachEvents(app, predata);
+          }
         }
       }
 
