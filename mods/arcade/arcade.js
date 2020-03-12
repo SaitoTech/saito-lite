@@ -523,6 +523,15 @@ class Arcade extends ModTemplate {
     if (conf == 0) {
 
       //
+      // purge any bad games from options file
+      //
+      for (let i = app.options.games.length; i >= 0; i++) {
+        if (app.options.games[i].module === "" && app.options.games[i].id.length > 25) {
+	  app.options.games.splice(i, 1);
+	}
+      }
+
+      //
       // notify SPV clients of "open", "join" and "close" messages
       //
       if (app.BROWSER == 0 && txmsg.request == "open" || txmsg.request == "join" || txmsg.request == "close") {
