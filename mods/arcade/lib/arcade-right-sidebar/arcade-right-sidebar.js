@@ -1,6 +1,7 @@
 const ArcadeRightSidebarTemplate 	= require('./arcade-right-sidebar.template.js');
 const ObserverRow = require('./arcade-right-sidebar-observer-game-row.template.js');
 const LeaderboardRow = require('./arcade-right-sidebar-leaderboard-row.template.js');
+const ArcadeMain = require('../arcade-main/arcade-main.js'); // Just for the back button
 
 module.exports = ArcadeRightSidebar = {
 
@@ -72,6 +73,7 @@ module.exports = ArcadeRightSidebar = {
 
       let rewardsmod = app.modules.returnModule("Rewards");
       if (rewardsmod != null) {
+        let predata = data;
         document.querySelector('.arcade-announcement').onclick = (e) => {
           document.querySelector('.arcade-main').innerHTML = '<div class="email-main"><div class="email-appspace"></div></div>';
           data = {};
@@ -79,6 +81,16 @@ module.exports = ArcadeRightSidebar = {
           data.rewards = rewardsmod;
           rewardsmod.renderEmail(app, data);
           rewardsmod.attachEventsEmail(app, data);
+
+          // Back button
+          let btn = document.createElement("BUTTON");
+          btn.innerHTML = "Back";
+          btn.classList.add("back-btn");
+          document.querySelector('.arcade-main').appendChild(btn);
+          document.querySelector('.back-btn').onclick = () => {
+            ArcadeMain.render(app, predata);
+            ArcadeMain.attachEvents(app, predata);
+          }
         }
       }
 
