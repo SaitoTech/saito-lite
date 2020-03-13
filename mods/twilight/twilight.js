@@ -1800,7 +1800,7 @@ console.log("\n\n\n\n");
           //
           // if you want to hardcode the hands of the players, you can set
           // them manually here. Be sure that all of the cards have been
-          // dealt into the DECK during the setup phase though.
+          // dealt ento the DECK during the setup phase though.
           //
 
           if (this.is_testing == 1) {
@@ -8057,7 +8057,7 @@ console.log("\n\n\n\n");
       if (this.game.player == 2) { this.updateStatus("USSR is playing Muslim Revolution"); return 0; }
       if (this.game.player == 1) {
 
-        this.updateStatus("Remove All US influence from 2 countries among: Sudan, Egypt, Iran, Iraq, Libya, Saudi Arabia, Syria, Joran.");
+        this.updateStatus("Remove All US influence from 2 countries among: Sudan, Egypt, Iran, Iraq, Libya, Saudi Arabia, Syria, Jordan.");
 
         var twilight_self = this;
         twilight_self.playerFinishedPlacingInfluence();
