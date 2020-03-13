@@ -525,6 +525,10 @@ class Arcade extends ModTemplate {
 
     if (conf == 0) {
       //
+      // purge any bad games from options file
+      //
+      this.gameSanityCheck(app);
+      //
       // notify SPV clients of "open", "join" and "close" messages
       //
       if (app.BROWSER == 0 && txmsg.request == "open" || txmsg.request == "join" || txmsg.request == "close") {
@@ -782,10 +786,7 @@ class Arcade extends ModTemplate {
 
       }
 
-      //
-      // purge any bad games from options file
-      //
-      this.gameSanityCheck(app);
+      
     }
   }
 
@@ -805,7 +806,7 @@ class Arcade extends ModTemplate {
 
           try {
             // cases confirmed:
-            //    "id" : "0.025376674338313032" 20... 
+            //    "id" : "0.025376674338313032"
             //    "module": ""
             // ONLY this element: "issued_keys_deleted": 0
 
