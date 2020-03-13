@@ -524,20 +524,6 @@ class Arcade extends ModTemplate {
     let arcade_self = app.modules.returnModule("Arcade");
 
     if (conf == 0) {
-
-      //
-      // purge any bad games from options file
-      //
-      if (app.options) {
-        if (app.options.games) {
-          for (let i = app.options.games.length; i >= 0; i--) {
-            if (app.options.games[i].module === "" && app.options.games[i].id.length > 25) {
-	      app.options.games.splice(i, 1);
-  	    }
-  	  }
-        }
-      }
-
       //
       // notify SPV clients of "open", "join" and "close" messages
       //
@@ -791,11 +777,66 @@ class Arcade extends ModTemplate {
           }
           this.launchGame(txmsg.game_id);
         }
+
+
+
       }
 
+      //
+      // purge any bad games from options file
+      //
+      this.gameSanityCheck(app);
     }
   }
 
+  gameSanityCheck(app) {
+    // This will try to purge any game that have invalid information.
+
+    let games = app.options.games;
+    let game = {};
+
+    if (games != undefined) {
+
+      for (let i = 0; i < games.length; i++) {
+
+        game = app.options.games[i];
+
+        if (game != undefined) {
+
+          try {
+
+            if (game.module === "" || game.id.length < 20) {
+
+              console.log(game);
+              app.options.games.splice(i, 1);
+              console.log('====== gameSanityCheck Deleted a game =======');
+              
+            }
+
+          } catch (e) {
+
+            // if anything - splice that element.
+            console.log("Game - SanityCheck: " + e);
+            app.options.games.splice(i, 1);
+
+          }
+        }
+      }
+    }
+    //
+    // Original
+    //
+
+    // if (app.options) {
+    //   if (app.options.games) {
+    //     for (let i = app.options.games.length; i >= 0; i--) {
+    //       if (app.options.games[i].module === "" && app.options.games[i].id.length > 25) {
+    //         app.options.games.splice(i, 1);
+    //       }
+    //     }
+    //   }
+    // }
+  }
   async handlePeerRequest(app, message, peer, mycallback = null) {
 
     //
