@@ -9985,16 +9985,16 @@ console.log("\n\n\n\n");
               }
 
               if (twilight_self.game.player == 1) {
-                if (c == "mexico") { modify++; }
-                if (c == "cuba") { modify++; }
-                if (c == "japan") { modify++; }
-                if (c == "canada") { modify++; }
+                if (c === "mexico") { modify++; }
+                if (c === "cuba") { modify++; }
+                if (c === "japan") { modify++; }
+                if (c === "canada") { modify++; }
               }
               if (twilight_self.game.player == 2) {
-                if (c == "finland") { modify++; }
-                if (c == "romania") { modify++; }
-                if (c == "afghanistan") { modify++; }
-                if (c == "northkorea") { modify++; }
+                if (c === "finland") { modify++; }
+                if (c === "romania") { modify++; }
+                if (c === "afghanistan") { modify++; }
+                if (c === "northkorea") { modify++; }
               }
                 
               dieroll = dieroll - modify;
@@ -10029,7 +10029,7 @@ console.log("\n\n\n\n");
                   }
                 }
                 twilight_self.addMove("notify\tBrush War in "+twilight_self.countries[c].name+" succeeded.");
-                twilight_self.addMove("notify\tBrush War rolls "+dieroll +" (bonus: -"+modifier);
+                twilight_self.addMove("notify\tBrush War rolls "+ (dieroll+modifier) +" (bonus: -"+modifier);
                 twilight_self.endTurn();
 
               } else {
@@ -10039,7 +10039,7 @@ console.log("\n\n\n\n");
                   twilight_self.addMove("milops\tussr\t3");
                 }
                 twilight_self.addMove("notify\tBrush War in "+twilight_self.countries[c].name+" failed.");
-                twilight_self.addMove("notify\tBrush War rolls "+dieroll +" (bonus: -"+modifier);
+                twilight_self.addMove("notify\tBrush War rolls "+ (dieroll+modifier) +" (bonus: -"+modifier);
                 twilight_self.endTurn();
               }
             });
