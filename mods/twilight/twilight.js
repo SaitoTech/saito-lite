@@ -4680,7 +4680,7 @@ console.log("\n\n\n\n");
            if (twilight_self.game.state.events.usjapan == 1 && c == "japan" && player == "ussr") {
             // twilight_self.displayModal("US / Japan Alliance prevents realignments in Japan");
             twilight_self.displayModal("Invalid Realignment", `US / Japan Alliance prevents realignments in Japan`);
-            valid_target = 0;
+	    return;
           }
 
           //
@@ -4690,7 +4690,7 @@ console.log("\n\n\n\n");
             if (twilight_self.isControlled("us", c) == 1) {
               if ( (c == "westgermany" && twilight_self.game.state.events.nato_westgermany == 0) || (c == "france" && twilight_self.game.state.events.nato_france == 0) ) {} else {
                 twilight_self.displayModal("Invalid Realignment", `Nato prevents realignments in US Controlled countries in Europe`);
-                valid_target = 0;
+	        return;
               }
             }
           }
@@ -4702,9 +4702,9 @@ console.log("\n\n\n\n");
           if (twilight_self.countries[c].region !== "seasia") { twilight_self.game.state.events.vietnam_revolts_eligible = 0; }
           if (twilight_self.countries[c].region !== "seasia" && twilight_self.countries[c].region !== "asia") { twilight_self.game.state.events.china_card_eligible = 0; }
          
-            var result = twilight_self.playRealign(c);
-            twilight_self.addMove("realign\t"+player+"\t"+c);
-            mycallback();
+          var result = twilight_self.playRealign(c);
+          twilight_self.addMove("realign\t"+player+"\t"+c);
+          mycallback();
                   
         });
 
