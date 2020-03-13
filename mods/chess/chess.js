@@ -263,11 +263,13 @@ console.log("QUEUE: " + this.game.queue);
     // checkmate?
     if (this.engine.in_checkmate() === true) {
       status = 'Game over, ' + moveColor + ' is in checkmate.';
+      this.game.over = 1;
     }
 
     // draw?
     else if (this.engine.in_draw() === true) {
       status = 'Game over, drawn position';
+      this.game.over = 1;
     }
 
     // game still on
