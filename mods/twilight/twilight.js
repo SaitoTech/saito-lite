@@ -10015,6 +10015,7 @@ console.log("\n\n\n\n");
                   } else {
                     twilight_self.addMove("vp\tus\t1");
                   }
+                  twilight_self.endTurn();
                 } else {
                   twilight_self.removeInfluence(c, usinf, "us");
                   twilight_self.placeInfluence(c, usinf, "ussr");
