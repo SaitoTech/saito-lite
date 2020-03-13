@@ -3962,7 +3962,7 @@ console.log("\n\n\n\n");
               // Flower Power
               //
               if (twilight_self.game.state.events.flowerpower == 1) {
-                if ((card == "arabisraeli" && state.events.campdavid == 0) || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
+                if ((card == "arabisraeli" && twilight_self.game.state.events.campdavid == 0) || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
                   if (player === "us") {
                     twilight_self.addMove("notify\tFlower Power triggered by "+card);
                     twilight_self.addMove("vp\tussr\t2\t1");
@@ -3983,7 +3983,7 @@ console.log("\n\n\n\n");
               // Flower Power
               //
               if (twilight_self.game.state.events.flowerpower == 1) {
-                if ((card == "arabisraeli" && state.events.campdavid == 0) || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
+                if ((card == "arabisraeli" && twilight_self.game.state.events.campdavid == 0) || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
                   if (player === "us") {
                     twilight_self.addMove("notify\tFlower Power triggered by "+card);
                     twilight_self.addMove("vp\tussr\t2\t1");
@@ -6989,8 +6989,8 @@ console.log("\n\n\n\n");
     if (card == "truman") {
 
       var twilight_self = this;
-      twilight_self.playerFinishedPlacingInfluence();
 
+      twilight_self.playerFinishedPlacingInfluence();
       twilight_self.addMove("resolve\ttruman");
 
       var options_purge = [];
@@ -7001,12 +7001,10 @@ console.log("\n\n\n\n");
         }
       }
 
-      
-      if (options_purge.length == 0) {
 
+      if (options_purge.length == 0) {
         this.updateLog("USSR has no influence that can be removed by Truman");
         return 1;
-
       }
 
       if (options_purge.length == 1) {     
@@ -8027,96 +8025,72 @@ console.log("\n\n\n\n");
 
       var countries_to_purge = 2;
       let countries_with_us_influence = 0;
-      if (this.countries["sudan"].us > 0) { countries_with_us_influence++; }
-      if (this.countries["egypt"].us > 0) { countries_with_us_influence++; }
-      if (this.countries["libya"].us > 0) { countries_with_us_influence++; }
-      if (this.countries["syria"].us > 0) { countries_with_us_influence++; }
-      if (this.countries["iran"].us > 0) { countries_with_us_influence++; }
-      if (this.countries["iraq"].us > 0) { countries_with_us_influence++; }
-      if (this.countries["jordan"].us > 0) { countries_with_us_influence++; }
-      if (this.countries["saudiarabia"].us > 0) { countries_with_us_influence++; }
-      if (countries_with_us_influence < countries_to_purge) { countries_to_purge = countries_with_us_influence; }
+
+      for (var i in this.countries) {
+        if (i == "sudan" || i == "egypt" || i == "libya" || i == "syria" || i == "iran" || i == "iraq" || i == "jordan" || i == "saudiarabia") {
+          if (this.countries[i].us > 0) {
+	    countries_with_us_influence++;
+          }
+        }
+      }
+
       if (countries_with_us_influence == 0) {
-        this.updateLog("No countries with US influence to remove");
+        this.updateLog("Muslim Revolutions targets no countries with US influence.");
         return 1;
-      }else{
+      }
+
       if (countries_with_us_influence <= 2) {
-        
-        if (this.countries["sudan"].us > 0) { 
-          twilight_self.removeInfluence("sudan", twilight_self.countries['sudan'].ussr, "us");
-          twilight_self.addMove("remove\tussr\tus\tsudan\t"+twilight_self.countries['sudan'].us);
+        for (var i in this.countries) {
+          if (i == "sudan" || i == "egypt" || i == "libya" || i == "syria" || i == "iran" || i == "iraq" || i == "jordan" || i == "saudiarabia") {
+            if (this.countries[i].us > 0) {
+              this.updateLog("Muslim Revolutions removes all US influence in "+i);
+              this.removeInfluence(i, twilight_self.countries[i].ussr, "us");
+            }
+          }
         }
-        if (this.countries["egypt"].us > 0) { 
-          twilight_self.removeInfluence("egypt", twilight_self.countries['egypt'].ussr, "us");
-          twilight_self.addMove("remove\tussr\tus\tegypt\t"+twilight_self.countries['egypt'].us);
-        }
-        if (this.countries["libya"].us > 0) { 
-          twilight_self.removeInfluence("libya", twilight_self.countries['libya'].ussr, "us");
-          twilight_self.addMove("remove\tussr\tus\tlibya\t"+twilight_self.countries['libya'].us);
-        }
-        if (this.countries["syria"].us > 0) { 
-          twilight_self.removeInfluence("syria", twilight_self.countries['syria'].ussr, "us");
-          twilight_self.addMove("remove\tussr\tus\tsyria\t"+twilight_self.countries['syria'].us);
-        }
-        if (this.countries["iran"].us > 0) { 
-          twilight_self.removeInfluence("iran", twilight_self.countries['iran'].ussr, "us");
-          twilight_self.addMove("remove\tussr\tus\tiran\t"+twilight_self.countries['iran'].us);
-        }
-        if (this.countries["iraq"].us > 0) { 
-          twilight_self.removeInfluence("iraq", twilight_self.countries['iraq'].ussr, "us");
-          twilight_self.addMove("remove\tussr\tus\tiraq\t"+twilight_self.countries['iraq'].us);
-        }
-        if (this.countries["jordan"].us > 0) { 
-          twilight_self.removeInfluence("jordan", twilight_self.countries['jordan'].ussr, "us");
-          twilight_self.addMove("remove\tussr\tus\tjordan\t"+twilight_self.countries['jordan'].us);
-        }
-        if (this.countries["saudiarabia"].us > 0) { 
-          twilight_self.removeInfluence("saudiarabia", twilight_self.countries['saudiarabia'].ussr, "us");
-          twilight_self.addMove("remove\tussr\tus\tsaudiarabia\t"+twilight_self.countries['saudiarabia'].us);
-        }           
-          this.updateLog("Muslim Revolution automatically removed US influence");
-          return 0;
-        }else{
+        return 1;
+      }
 
-          if (this.game.player == 2) { this.updateStatus("USSR is playing Muslim Revolution"); return 0; }
-          if (this.game.player == 1) {
+      //
+      // or ask the USSR to choose
+      //
+      if (this.game.player == 2) { this.updateStatus("USSR is playing Muslim Revolution"); return 0; }
+      if (this.game.player == 1) {
 
-            this.updateStatus("Remove All US influence from 2 countries among: Sudan, Egypt, Iran, Iraq, Libya, Saudi Arabia, Syria, Joran.");
+        this.updateStatus("Remove All US influence from 2 countries among: Sudan, Egypt, Iran, Iraq, Libya, Saudi Arabia, Syria, Joran.");
 
-            var twilight_self = this;
-            twilight_self.playerFinishedPlacingInfluence();
-            twilight_self.addMove("resolve\tmuslimrevolution");
+        var twilight_self = this;
+        twilight_self.playerFinishedPlacingInfluence();
+        twilight_self.addMove("resolve\tmuslimrevolution");
 
-            for (var i in this.countries) {
+        for (var i in this.countries) {
 
-              let countryname  = i;
-              let divname      = '#'+i;
+          let countryname  = i;
+          let divname      = '#'+i;
 
-              if (i == "sudan" || i == "egypt" || i == "iran" || i == "iraq" || i == "libya" || i == "saudiarabia" || i == "syria" || i == "jordan") {
+          if (i == "sudan" || i == "egypt" || i == "iran" || i == "iraq" || i == "libya" || i == "saudiarabia" || i == "syria" || i == "jordan") {
 
-                if (this.countries[i].us > 0) { countries_with_us_influence++; }
+            if (this.countries[i].us > 0) { countries_with_us_influence++; }
 
-                $(divname).off();
-                $(divname).on('click', function() {
+            $(divname).off();
+            $(divname).on('click', function() {
 
-                  let c = $(this).attr('id');
+              let c = $(this).attr('id');
 
-                  if (twilight_self.countries[c].us <= 0) {
-                    twilight_self.displayModal("Invalid Country");
-                  } else {
-                    let purginf = twilight_self.countries[c].us;
-                    twilight_self.removeInfluence(c, purginf, "us", function() {
-                      twilight_self.addMove("remove\tussr\tus\t"+c+"\t"+purginf);
-                      countries_to_purge--;
-                      if (countries_to_purge == 0) {
-                        twilight_self.playerFinishedPlacingInfluence();
-                        twilight_self.endTurn();
-                      }
-                    });
+              if (twilight_self.countries[c].us <= 0) {
+                twilight_self.displayModal("Invalid Country");
+              } else {
+                let purginf = twilight_self.countries[c].us;
+                twilight_self.removeInfluence(c, purginf, "us", function() {
+                  twilight_self.addMove("remove\tussr\tus\t"+c+"\t"+purginf);
+                  countries_to_purge--;
+                  if (countries_to_purge == 0) {
+                    twilight_self.playerFinishedPlacingInfluence();
+                    twilight_self.endTurn();
                   }
                 });
               }
-            }
+            });
           }
         }
       }
@@ -9979,7 +9953,6 @@ console.log("\n\n\n\n");
         twilight_self.updateStatus('Pick target for Brush War');
 
 
-
         for (var i in twilight_self.countries) {
 
           if (twilight_self.countries[i].control <= 2) {
@@ -9987,7 +9960,7 @@ console.log("\n\n\n\n");
             let play_brush_war = 1;
             let divname = "#" + i;
 
-            if (i === "italy" || i === "greece" || i === "spain") {
+            if (i === "italy" || i === "greece" || i === "spain" || i == "turkey") {
               if (twilight_self.game.state.events.nato == 1) {
                 if (twilight_self.isControlled("us", i) == 1) {
                   play_brush_war = 0;
@@ -10015,15 +9988,15 @@ console.log("\n\n\n\n");
 
                 if (twilight_self.game.player == 1) {
                   if (c == "mexico") { modify++; }
-                //  if (c == "cuba") { modify++; }
-                //  if (c == "japan") { modify++; }
-                //  if (c == "canada") { modify++; }
+                  if (c == "cuba") { modify++; }
+                  if (c == "japan") { modify++; }
+                  if (c == "canada") { modify++; }
                 }
                 if (twilight_self.game.player == 2) {
-                //  if (c == "finland") { modify++; }
-                //  if (c == "romania") { modify++; }
+                  if (c == "finland") { modify++; }
+                  if (c == "romania") { modify++; }
                   if (c == "afghanistan") { modify++; }
-                //  if (c == "northkorea") { modify++; }
+                  if (c == "northkorea") { modify++; }
                 }
                 
                 dieroll = dieroll - modify;
@@ -10058,7 +10031,7 @@ console.log("\n\n\n\n");
                     }
                   }
                   twilight_self.addMove("notify\tBrush War in "+twilight_self.countries[c].name+" succeeded.");
-                  twilight_self.addMove("notify\tBrush War rolls "+dieroll +" (Opponent bonus: -"+modifier);
+                  twilight_self.addMove("notify\tBrush War rolls "+dieroll +" (bonus: -"+modifier);
                   twilight_self.endTurn();
 
                 } else {
@@ -10068,7 +10041,7 @@ console.log("\n\n\n\n");
                     twilight_self.addMove("milops\tussr\t3");
                   }
                   twilight_self.addMove("notify\tBrush War in "+twilight_self.countries[c].name+" failed.");
-                  twilight_self.addMove("notify\tBrush War rolls "+dieroll +" (Opponent bonus: -"+modifier);
+                  twilight_self.addMove("notify\tBrush War rolls "+dieroll +" (bonus: -"+modifier);
                   twilight_self.endTurn();
                 }
               });
@@ -10535,23 +10508,23 @@ console.log("\n\n\n\n");
 
         this.addMove("resolve\taldrichames");
 
-
         if (this.game.deck[0].hand.length < 1) {
           
           this.addMove("notify\tUS has no cards to reveal");
           this.endTurn();
+
         } else {
 
-        let cards_to_reveal = this.game.deck[0].hand.length;
-        for (let i = 0; i < this.game.deck[0].hand.length; i++) {
-          if (this.game.deck[0].hand[i] === "china") { cards_to_reveal--; }
-          else {
-            this.addMove(this.game.deck[0].hand[i]);
+          let cards_to_reveal = this.game.deck[0].hand.length;
+          for (let i = 0; i < this.game.deck[0].hand.length; i++) {
+            if (this.game.deck[0].hand[i] === "china") { cards_to_reveal--; }
+            else {
+              this.addMove(this.game.deck[0].hand[i]);
+            }
           }
-        }
-        //this.addMove("notify\tUS holds: "+cards_to_reveal);
-        this.addMove("aldrich\tus\t"+cards_to_reveal);
-        this.endTurn();        
+          //this.addMove("notify\tUS holds: "+cards_to_reveal);
+          this.addMove("aldrich\tus\t"+cards_to_reveal);
+          this.endTurn();        
          
         }
       }
