@@ -37,6 +37,11 @@ class Block {
 
 
     //
+    // universal scope var to prevent messing with tx internals when calculating payouts
+    //
+    this.current_rvalue_for_block_payout_calculation = "";
+
+    //
     // block transactions
     //
     this.transactions = [];
@@ -108,7 +113,7 @@ class Block {
     if (prevblk != null) {
 
       this.block.id 		= prevblk.block.id + 1;
-      this.block.treasury 	= Big(prevblk.block.treasury).plus(Big(prevblk.block.reclaimed));
+      this.block.treasury 	= Big(prevblk.block.treasury);
       this.block.coinbase 	= Big(this.block.treasury).div(this.app.blockchain.genesis_period).toFixed(8);
       this.block.treasury 	= this.block.treasury.minus(Big(this.block.coinbase)).toFixed(8);
       this.block.prevbsh 	= prevblk.returnHash();
@@ -261,6 +266,8 @@ console.log("GOLDEN TICKET: " + this.containsGoldenTicket());
       this.transactions.push(eblkd.rebroadcast[i]);
     }
 
+console.log("before we check txs: " + this.transactions.length);
+
 
     //
     // now check transactions
@@ -294,12 +301,23 @@ console.log("GOLDEN TICKET: " + this.containsGoldenTicket());
 	  //
 	  // pass golden ticket into previous block 
 	  //
-console.log("pre payments...");
+console.log("pre return bp");
           let payments = prevblk.returnBlockPayouts(this.transactions[i].transaction.msg);
-console.log("post payments...");
+console.log("post return bp");
           let slips = [];
 
+console.log("DATA RETURNED: ");
+console.log(payments);
+
           if (payments) {
+
+	    //
+	    // monetary policy
+   	    //
+      	    this.block.treasury 	= Big(prevblk.block.treasury).plus(Big(payments.reclaimed));
+      	    this.block.coinbase 	= Big(this.block.treasury).div(this.app.blockchain.genesis_period).toFixed(8);
+            this.block.treasury 	= this.block.treasury.minus(Big(this.block.coinbase)).toFixed(8);
+
 
             //
             // reset pending on staking slips so block will validate
@@ -308,27 +326,26 @@ console.log("post payments...");
 	      this.app.blockchain.index.staking[payments.staker_pos][payments.staker_sid].pending = 1;
 	    }
 
+
             //
-            // add reclaimed from block - Deleted Fri March 13
+            // add reclaimed from block
             //
-            //this.block.reclaimed = Big(this.block.reclaimed).plus(Big(payments.reclaimed)).toFixed(8);
+            this.block.reclaimed = Big(this.block.reclaimed).plus(Big(payments.reclaimed)).toFixed(8);
+console.log("reclaimed issue...");
 
             if (payments.producer_share > 0) {
               slips.push(new saito.slip(payments.producer_publickey, payments.producer_share, 2));
             }
             if (payments.miner_share > 0) {
+console.log("pushing slip for miner: " + payments.miner_publickey + " -- " + payments.miner_share);
               slips.push(new saito.slip(payments.miner_publickey, payments.miner_share, 2));
             }
             if (payments.router_share > 0) {
               slips.push(new saito.slip(payments.router_publickey, payments.router_share, 2));
             }
             if (payments.staker_share > 0) {
-	      //
-	      // TODO -- small percentage chance of slip being sent as normal transaction - preventing 
-	      // build-up of stake forever in the event that the staker is unable to move or liquidate
-	      // their tokens? Note that blockchain.validate will insert 4 slips for both 2/4 type txs.
-	      //
-              slips.push(new saito.slip(payments.staker_publickey, payments.staker_share, 4));
+console.log("pushing slip for staker: " + payments.staker_publickey + " -- " + payments.staker_share);
+              slips.push(new saito.slip(payments.staker_publickey, payments.staker_share, 2));
             }
 
           }
@@ -708,9 +725,9 @@ console.log("post payments...");
             //
             // prevblk is not null here
             //
-console.log("rbp 1");
+
+	    this.current_rvalue_for_block_payout_calculation = this.transactions[i].transaction.msg.random;
             let payments = prevblk.returnBlockPayouts(this.transactions[i].transaction.msg);
-console.log("rbp 2");
 
 
 console.log("reclaimed happening...");
@@ -726,10 +743,8 @@ console.log("reclaimed happening...");
               slips.push(new saito.slip(payments.router_publickey, payments.router_share, 2));
             }
             if (payments.staker_share > 0) {
-              slips.push(new saito.slip(payments.staker_publickey, payments.staker_share, 4)); // staking
-console.log("A");
-	      this.app.shashmap.spend_slipidx(payments.staker_slip, this.block.id);
-console.log("B");
+              slips.push(new saito.slip(payments.staker_publickey, payments.staker_share, 2));
+	      this.app.blockchain.addPending();
             }
 
             for (let x = 0; x < slips.length; x++) { slips[x].sid = x; }
@@ -746,6 +761,7 @@ console.log("B");
           console.log("ERROR 581029: two block paymeet (type=2) transactions in block");
           return 0;
         }
+console.log("iobp set to: " + i);
         index_of_block_payment = i;
       }
 
@@ -921,7 +937,6 @@ console.log("hash of txs to: " + this.app.crypto.hash(JSON.stringify(this.transa
         payments.staker_bid 		= -1;
         payments.staker_sid 		= -1;
         payments.staker_pos 		= -1;
-        payments.staker_slip 		= null;
 
         payments.bsh			= this.returnHash();
         payments.bid			= this.block.id;
@@ -967,9 +982,7 @@ console.log("hash of txs to: " + this.app.crypto.hash(JSON.stringify(this.transa
     var staker_bid			= -1;
     var staker_sid			= -1;
     var staker_pos			= -1;
-    var staker_slip			= null;
 
-console.log("PICK THE MINER");
 
     //
     let winnerHash = this.app.crypto.hash(gt.random).slice(0,12);
@@ -1063,16 +1076,12 @@ console.log("PICK THE MINER");
     }
 
 
-console.log("PRE RWS");
     let x = this.app.blockchain.returnWinningStaker(gt, winnerHash3);
-console.log("POST RWS");
     staker_publickey = x.publickey;
     staker_share = miner_share;
     staker_bid = x.staker_bid;
     staker_sid = x.staker_sid;
     staker_pos = x.staker_pos;
-console.log("about to hit staker_slip");
-    staker_slip = x.staker_slip;
     miner_share = "0.0";
 
 console.log("#############################");
@@ -1097,7 +1106,6 @@ console.log("#############################");
     payments.staker_bid         = staker_bid;
     payments.staker_sid         = staker_sid;
     payments.staker_share	= staker_share;
-    payments.staker_slip	= staker_slip;
     payments.router_share	= router_share;
 
     payments.total_fees_in_block      	= total_fees_in_block;
