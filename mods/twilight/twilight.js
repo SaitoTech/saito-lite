@@ -3962,7 +3962,7 @@ console.log("\n\n\n\n");
               // Flower Power
               //
               if (twilight_self.game.state.events.flowerpower == 1) {
-                if (card == "arabisraeli" && state.events.campdavid == 0 || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
+                if ((card == "arabisraeli" && state.events.campdavid == 0) || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
                   if (player === "us") {
                     twilight_self.addMove("notify\tFlower Power triggered by "+card);
                     twilight_self.addMove("vp\tussr\t2\t1");
@@ -3983,7 +3983,7 @@ console.log("\n\n\n\n");
               // Flower Power
               //
               if (twilight_self.game.state.events.flowerpower == 1) {
-                if (card == "arabisraeli" && state.events.campdavid == 0 || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
+                if ((card == "arabisraeli" && state.events.campdavid == 0) || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
                   if (player === "us") {
                     twilight_self.addMove("notify\tFlower Power triggered by "+card);
                     twilight_self.addMove("vp\tussr\t2\t1");
@@ -4686,15 +4686,14 @@ console.log("\n\n\n\n");
           //
           // Nato
           //
-
-         //  if (twilight_self.game.state.events.nato == 1 && twilight_self.countries[c].region == "europe" && player == "ussr") {
-          //  if (twilight_self.isControlled("us", c) == 1) {
-            //   if ( (c == "westgermany" && twilight_self.game.state.events.nato_westgermany == 0) || (c == "france" && twilight_self.game.state.events.nato_france == 0) ) {} else {
-            //      twilight_self.displayModal("Invalid Realignment", `Nato prevents realignments in US Controlled countries in Europe`);
-           //  valid_target = 0;
-            //    }
-           //   }
-          // }
+          if (twilight_self.game.state.events.nato == 1 && twilight_self.countries[c].region == "europe" && player == "ussr") {
+            if (twilight_self.isControlled("us", c) == 1) {
+              if ( (c == "westgermany" && twilight_self.game.state.events.nato_westgermany == 0) || (c == "france" && twilight_self.game.state.events.nato_france == 0) ) {} else {
+                twilight_self.displayModal("Invalid Realignment", `Nato prevents realignments in US Controlled countries in Europe`);
+                valid_target = 0;
+              }
+            }
+          }
 
 
           //
@@ -4739,9 +4738,12 @@ console.log("\n\n\n\n");
       // Chernobyl
       //
       if (this.game.player == 1 && this.game.state.events.chernobyl != "") {
-        if (this.countries[i].region == this.game.state.events.chernobyl) { restricted_country = 1;
-          if (this.game.state.events.chernobyl =="asia") {
-            if (this.countries[i].region == "seasia" ){restricted_country = 1;}
+        if (this.countries[i].region == this.game.state.events.chernobyl) { 
+	  restricted_country = 1;
+          if (this.game.state.events.chernobyl == "asia") {
+            if (this.countries[i].region == "seasia") { 
+	      restricted_country = 1;
+	    }
           }
         }
       }
@@ -5000,6 +5002,8 @@ console.log("\n\n\n\n");
             valid_target = 0;
           }
         }
+
+        // Nato Coup Restriction
         if (valid_target == 1 && twilight_self.countries[countryname].region == "europe" && twilight_self.game.state.events.nato == 1 && player == "ussr") {
           if (twilight_self.isControlled("us", countryname) == 1) {
             if ( (countryname == "westgermany" && twilight_self.game.state.events.nato_westgermany == 0) || (countryname == "france" && twilight_self.game.state.events.nato_france == 0) ) {} else {
@@ -6912,11 +6916,12 @@ console.log("\n\n\n\n");
     // NATO //
     //////////
     if (card == "nato") {
+
       if (this.game.state.events.marshall == 1 || this.game.state.events.warsawpact == 1) {
         this.game.state.events.nato = 1;
 
         if (this.game.state.events.willybrandt == 0){
-        this.game.state.events.nato_westgermany = 1;
+          this.game.state.events.nato_westgermany = 1;
         }
         if (this.game.state.events.degaulle == 0){
           this.game.state.events.nato_france = 1;
@@ -6990,114 +6995,34 @@ console.log("\n\n\n\n");
 
       var options_purge = [];
 
-      if (twilight_self.countries['canada'].ussr > 0 && twilight_self.isControlled('ussr', 'canada') != 1 && twilight_self.isControlled('us', 'canada') != 1) { options_purge.push('canada'); }
-      if (twilight_self.countries['uk'].ussr > 0 && twilight_self.isControlled('ussr', 'uk') != 1 && twilight_self.isControlled('us', 'uk') != 1) { options_purge.push('uk'); }
-      if (twilight_self.countries['france'].ussr > 0 && twilight_self.isControlled('ussr', 'france') != 1 && twilight_self.isControlled('us', 'france') != 1) { options_purge.push('france'); }
-      if (twilight_self.countries['spain'].ussr > 0 && twilight_self.isControlled('ussr', 'spain') != 1 && twilight_self.isControlled('us', 'spain') != 1) { options_purge.push('spain'); }
-      if (twilight_self.countries['greece'].ussr > 0 && twilight_self.isControlled('ussr', 'greece') != 1 && twilight_self.isControlled('us', 'greece') != 1) { options_purge.push('greece'); }
-      if (twilight_self.countries['turkey'].ussr > 0 && twilight_self.isControlled('ussr', 'turkey') != 1 && twilight_self.isControlled('us', 'turkey') != 1) { options_purge.push('turkey'); }
-      if (twilight_self.countries['italy'].ussr > 0 && twilight_self.isControlled('ussr', 'italy') != 1 && twilight_self.isControlled('us', 'italy') != 1) { options_purge.push('italy'); }
-      if (twilight_self.countries['westgermany'].ussr > 0 && twilight_self.isControlled('ussr', 'westgermany') != 1 && twilight_self.isControlled('us', 'westgermany') != 1) { options_purge.push('westgermany'); }
-      if (twilight_self.countries['eastgermany'].ussr > 0 && twilight_self.isControlled('ussr', 'eastgermany') != 1 && twilight_self.isControlled('us', 'eastgermany') != 1) { options_purge.push('eastgermany'); }
-      if (twilight_self.countries['poland'].ussr > 0 && twilight_self.isControlled('ussr', 'poland') != 1 && twilight_self.isControlled('us', 'poland') != 1) { options_purge.push('poland'); }
-      if (twilight_self.countries['benelux'].ussr > 0 && twilight_self.isControlled('ussr', 'benelux') != 1 && twilight_self.isControlled('us', 'benelux') != 1) { options_purge.push('benelux'); }
-      if (twilight_self.countries['denmark'].ussr > 0 && twilight_self.isControlled('ussr', 'denmark') != 1 && twilight_self.isControlled('us', 'denmark') != 1) { options_purge.push('denmark'); }
-      if (twilight_self.countries['norway'].ussr > 0 && twilight_self.isControlled('ussr', 'norway') != 1 && twilight_self.isControlled('us', 'norway') != 1) { options_purge.push('norway'); }
-      if (twilight_self.countries['finland'].ussr > 0 && twilight_self.isControlled('ussr', 'finland') != 1 && twilight_self.isControlled('us', 'finland') != 1) { options_purge.push('finland'); }
-      if (twilight_self.countries['sweden'].ussr > 0 && twilight_self.isControlled('ussr', 'sweden') != 1 && twilight_self.isControlled('us', 'sweden') != 1) { options_purge.push('sweden'); }
-      if (twilight_self.countries['yugoslavia'].ussr > 0 && twilight_self.isControlled('ussr', 'yugoslavia') != 1 && twilight_self.isControlled('us', 'yugoslavia') != 1) { options_purge.push('yugoslavia'); }
-      if (twilight_self.countries['czechoslovakia'].ussr > 0 && twilight_self.isControlled('ussr', 'czechoslovakia') != 1 && twilight_self.isControlled('us', 'czechoslovakia') != 1) { options_purge.push('czechoslovakia'); }
-      if (twilight_self.countries['bulgaria'].ussr > 0 && twilight_self.isControlled('ussr', 'bulgaria') != 1 && twilight_self.isControlled('us', 'bulgaria') != 1) { options_purge.push('bulgaria'); }
-      if (twilight_self.countries['hungary'].ussr > 0 && twilight_self.isControlled('ussr', 'hungary') != 1 && twilight_self.isControlled('us', 'hungary') != 1) { options_purge.push('hungary'); }
-      if (twilight_self.countries['romania'].ussr > 0 && twilight_self.isControlled('ussr', 'romania') != 1 && twilight_self.isControlled('us', 'romania') != 1) { options_purge.push('romania'); }
-      if (twilight_self.countries['austria'].ussr > 0 && twilight_self.isControlled('ussr', 'austria') != 1 && twilight_self.isControlled('us', 'austria') != 1) { options_purge.push('austria'); }
+      for (var i in this.countries) {
+        if (i == "canada" || i == "uk" || i == "france" || i == "spain" || i == "greece" || i == "turkey" || i == "italy" || i == "westgermany" || i == "eastgermany" || i == "poland" || i == "benelux" || i == "denmark" || i == "norway" || i == "finland" || i == "sweden" || i == "yugoslavia" || i == "czechoslovakia" || i == "bulgaria" || i == "hungary" || i == "romania" || i == "austria") {
+          if (twilight_self.countries[i].ussr > 0 && twilight_self.isControlled('ussr', i) != 1 && twilight_self.isControlled('us', i) != 1) { options_purge.push(i); }
+        }
+      }
 
+      
       if (options_purge.length == 0) {
-        this.updateLog("USSR has no influence that can be removed");
-        twilight_self.endTurn();
-  return 0;
-      }else{
+
+        this.updateLog("USSR has no influence that can be removed by Truman");
+        return 1;
+
+      }
 
       if (options_purge.length == 1) {     
-         
-  if (twilight_self.countries['canada'].ussr > 0 && twilight_self.isControlled('ussr', 'canada') != 1 && twilight_self.isControlled('us', 'canada') != 1) { 
-    twilight_self.removeInfluence("canada", twilight_self.countries['canada'].ussr, "ussr");
-    twilight_self.addMove("remove\tus\tussr\tcanada\t"+twilight_self.countries['canada'].ussr); }
-  if (twilight_self.countries['uk'].ussr > 0 && twilight_self.isControlled('ussr', 'uk') != 1 && twilight_self.isControlled('us', 'uk') != 1) {
-    twilight_self.removeInfluence("uk", twilight_self.countries['uk'].ussr, "ussr");
-    twilight_self.addMove("remove\tus\tussr\tuk\t"+twilight_self.countries['uk'].ussr); }
-  if (twilight_self.countries['france'].ussr > 0 && twilight_self.isControlled('ussr', 'france') != 1 && twilight_self.isControlled('us', 'france') != 1) { 
-    twilight_self.removeInfluence("france", twilight_self.countries['france'].ussr, "ussr");
-    twilight_self.addMove("remove\tus\tussr\tfrance\t"+twilight_self.countries['france'].ussr); }
-  if (twilight_self.countries['spain'].ussr > 0 && twilight_self.isControlled('ussr', 'spain') != 1 && twilight_self.isControlled('us', 'spain') != 1) { 
-    twilight_self.removeInfluence("spain", twilight_self.countries['spain'].ussr, "ussr");
-    twilight_self.addMove("remove\tus\tussr\tspain\t"+twilight_self.countries['spain'].ussr); }
-  if (twilight_self.countries['greece'].ussr > 0 && twilight_self.isControlled('ussr', 'greece') != 1 && twilight_self.isControlled('us', 'greece') != 1) {
-    twilight_self.removeInfluence("greece", twilight_self.countries['greece'].ussr, "ussr");
-    twilight_self.addMove("remove\tus\tussr\tgreece\t"+twilight_self.countries['greece'].ussr); }
-  if (twilight_self.countries['turkey'].ussr > 0 && twilight_self.isControlled('ussr', 'turkey') != 1 && twilight_self.isControlled('us', 'turkey') != 1) { 
-    twilight_self.removeInfluence("turkey", twilight_self.countries['turkey'].ussr, "ussr");
-    twilight_self.addMove("remove\tus\tussr\tturkey\t"+twilight_self.countries['turkey'].ussr); }
-  if (twilight_self.countries['italy'].ussr > 0 && twilight_self.isControlled('ussr', 'italy') != 1 && twilight_self.isControlled('us', 'italy') != 1) { 
-    twilight_self.removeInfluence("italy", twilight_self.countries['italy'].ussr, "ussr");
-    twilight_self.addMove("remove\tus\tussr\titaly\t"+twilight_self.countries['italy'].ussr); }
-  if (twilight_self.countries['westgermany'].ussr > 0 && twilight_self.isControlled('ussr', 'westgermany') != 1 && twilight_self.isControlled('us', 'westgermany') != 1) { 
-    twilight_self.removeInfluence("westgermany", twilight_self.countries['westgermany'].ussr, "ussr");
-    twilight_self.addMove("remove\tus\tussr\twestgermany\t"+twilight_self.countries['westgermany'].ussr); }
-  if (twilight_self.countries['eastgermany'].ussr > 0 && twilight_self.isControlled('ussr', 'eastgermany') != 1 && twilight_self.isControlled('us', 'eastgermany') != 1) { 
-    twilight_self.removeInfluence("eastgermany", twilight_self.countries['eastgermany'].ussr, "ussr");
-    twilight_self.addMove("remove\tus\tussr\teastgermany\t"+twilight_self.countries['eastgermany'].ussr); }
-  if (twilight_self.countries['poland'].ussr > 0 && twilight_self.isControlled('ussr', 'poland') != 1 && twilight_self.isControlled('us', 'poland') != 1) { 
-    twilight_self.removeInfluence("poland", twilight_self.countries['poland'].ussr, "ussr");
-    twilight_self.addMove("remove\tus\tussr\tpoland\t"+twilight_self.countries['poland'].ussr); }
-  if (twilight_self.countries['benelux'].ussr > 0 && twilight_self.isControlled('ussr', 'benelux') != 1 && twilight_self.isControlled('us', 'benelux') != 1) { 
-    twilight_self.removeInfluence("benelux", twilight_self.countries['benelux'].ussr, "ussr");
-    twilight_self.addMove("remove\tus\tussr\tbenelux\t"+twilight_self.countries['benelux'].ussr); }
-  if (twilight_self.countries['denmark'].ussr > 0 && twilight_self.isControlled('ussr', 'denmark') != 1 && twilight_self.isControlled('us', 'denmark') != 1) { 
-    twilight_self.removeInfluence("denmark", twilight_self.countries['denmark'].ussr, "ussr");
-    twilight_self.addMove("remove\tus\tussr\tdenmark\t"+twilight_self.countries['denmark'].ussr); }
-  if (twilight_self.countries['norway'].ussr > 0 && twilight_self.isControlled('ussr', 'norway') != 1 && twilight_self.isControlled('us', 'norway') != 1) { 
-    twilight_self.removeInfluence("norway", twilight_self.countries['norway'].ussr, "ussr");
-    twilight_self.addMove("remove\tus\tussr\tnorway\t"+twilight_self.countries['norway'].ussr); }
-  if (twilight_self.countries['finland'].ussr > 0 && twilight_self.isControlled('ussr', 'finland') != 1 && twilight_self.isControlled('us', 'finland') != 1) { 
-    twilight_self.removeInfluence("finland", twilight_self.countries['finland'].ussr, "ussr");
-    twilight_self.addMove("remove\tus\tussr\tfinland\t"+twilight_self.countries['finland'].ussr); }
-  if (twilight_self.countries['sweden'].ussr > 0 && twilight_self.isControlled('ussr', 'sweden') != 1 && twilight_self.isControlled('us', 'sweden') != 1) { 
-    twilight_self.removeInfluence("sweden", twilight_self.countries['sweden'].ussr, "ussr");
-    twilight_self.addMove("remove\tus\tussr\tsweden\t"+twilight_self.countries['sweden'].ussr); }
-  if (twilight_self.countries['yugoslavia'].ussr > 0 && twilight_self.isControlled('ussr', 'yugoslavia') != 1 && twilight_self.isControlled('us', 'yugoslavia') != 1) { 
-    twilight_self.removeInfluence("yugoslavia", twilight_self.countries['yugoslavia'].ussr, "ussr");
-    twilight_self.addMove("remove\tus\tussr\tyugoslavia\t"+twilight_self.countries['yugoslavia'].ussr); }
-  if (twilight_self.countries['czechoslovakia'].ussr > 0 && twilight_self.isControlled('ussr', 'czechoslovakia') != 1 && twilight_self.isControlled('us', 'czechoslovakia') != 1) { 
-    twilight_self.removeInfluence("czechoslovakia", twilight_self.countries['czechoslovakia'].ussr, "ussr");
-    twilight_self.addMove("remove\tus\tussr\tczechoslovakia\t"+twilight_self.countries['czechoslovakia'].ussr); }
-  if (twilight_self.countries['bulgaria'].ussr > 0 && twilight_self.isControlled('ussr', 'bulgaria') != 1 && twilight_self.isControlled('us', 'bulgaria') != 1) { 
-    twilight_self.removeInfluence("bulgaria", twilight_self.countries['bulgaria'].ussr, "ussr");
-    twilight_self.addMove("remove\tus\tussr\tbulgaria\t"+twilight_self.countries['bulgaria'].ussr); }
-  if (twilight_self.countries['hungary'].ussr > 0 && twilight_self.isControlled('ussr', 'hungary') != 1 && twilight_self.isControlled('us', 'hungary') != 1) { 
-    twilight_self.removeInfluence("hungary", twilight_self.countries['hungary'].ussr, "ussr");
-    twilight_self.addMove("remove\tus\tussr\thungary\t"+twilight_self.countries['hungary'].ussr); }
-  if (twilight_self.countries['romania'].ussr > 0 && twilight_self.isControlled('ussr', 'romania') != 1 && twilight_self.isControlled('us', 'romania') != 1) { 
-    twilight_self.removeInfluence("romania", twilight_self.countries['romania'].ussr, "ussr");
-    twilight_self.addMove("remove\tus\tussr\tromania\t"+twilight_self.countries['romania'].ussr); }
-  if (twilight_self.countries['austria'].ussr > 0 && twilight_self.isControlled('ussr', 'austria') != 1 && twilight_self.isControlled('us', 'austria') != 1) { 
-    twilight_self.removeInfluence("austria", twilight_self.countries['austria'].ussr, "ussr");
-    twilight_self.addMove("remove\tus\tussr\taustria\t"+twilight_self.countries['austria'].ussr); }
-    
 
-    this.updateLog("Truman removed influence automatically");
-    twilight_self.endTurn();
-    //return 0;
-  }else{
+        twilight_self.removeInfluence(options_purge[0], twilight_self.countries[options_purge[0]].ussr, "ussr");
+        this.updateLog("Truman removes all USSR influence from " + options_purge[0]);
+        return 1;
 
-      if (this.game.player == 1) {
-        this.updateStatus("US is selecting target for Truman");
-        return 0;
-      }
-      if (this.game.player == 2) {
+      } else {
 
+        if (this.game.player == 1) {
+          this.updateStatus("US is selecting target for Truman");
+          return 0;
+        }
 
-
+        if (this.game.player == 2) {
 
           twilight_self.updateStatus("Select a non-controlled country in Europe to remove all USSR influence: ");
 
@@ -7124,7 +7049,7 @@ console.log("\n\n\n\n");
           }
         }
       }
-    }
+
       return 0;
     }
 
