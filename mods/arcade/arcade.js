@@ -809,7 +809,7 @@ class Arcade extends ModTemplate {
             //    "module": ""
             // ONLY this element: "issued_keys_deleted": 0
 
-            if ((game.module === "" && game.initialize != 1) || game.id.length < 25)  {
+            if ((game.module === "" && game.initializing != 1) || game.id.length < 25)  {
 
               console.log(game);
               app.options.games.splice(i, 1);
