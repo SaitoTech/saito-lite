@@ -805,11 +805,11 @@ class Arcade extends ModTemplate {
 
           try {
             // cases confirmed:
-            //    "id" : "0.08150078158997065"
+            //    "id" : "0.025376674338313032" 20... 
             //    "module": ""
             // ONLY this element: "issued_keys_deleted": 0
 
-            if ((game.module === "" && game.initialize != 1) || game.id.length < 20)  {
+            if ((game.module === "" && game.initialize != 1) || game.id.length < 25)  {
 
               console.log(game);
               app.options.games.splice(i, 1);
