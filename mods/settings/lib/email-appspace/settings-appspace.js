@@ -139,6 +139,7 @@ module.exports = SettingsAppspace = {
 
             app.modules.returnModule('Arcade').onResetWallet();
             app.storage.saveOptions();
+
             //
             // and reload
             //
