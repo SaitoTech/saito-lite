@@ -10015,7 +10015,6 @@ console.log("\n\n\n\n");
                   } else {
                     twilight_self.addMove("vp\tus\t1");
                   }
-                  twilight_self.endTurn();
                 } else {
                   twilight_self.removeInfluence(c, usinf, "us");
                   twilight_self.placeInfluence(c, usinf, "ussr");
@@ -10029,7 +10028,7 @@ console.log("\n\n\n\n");
                   }
                 }
                 twilight_self.addMove("notify\tBrush War in "+twilight_self.countries[c].name+" succeeded.");
-                twilight_self.addMove("notify\tBrush War rolls "+ (dieroll+modifier) +" (bonus: -"+modifier);
+                twilight_self.addMove("notify\tBrush War rolls "+ (dieroll+modify) +" / -"+modifier);
                 twilight_self.endTurn();
 
               } else {
@@ -10039,7 +10038,7 @@ console.log("\n\n\n\n");
                   twilight_self.addMove("milops\tussr\t3");
                 }
                 twilight_self.addMove("notify\tBrush War in "+twilight_self.countries[c].name+" failed.");
-                twilight_self.addMove("notify\tBrush War rolls "+ (dieroll+modifier) +" (bonus: -"+modifier);
+                twilight_self.addMove("notify\tBrush War rolls "+ (dieroll+modify) +" / -"+modify);
                 twilight_self.endTurn();
               }
             });
