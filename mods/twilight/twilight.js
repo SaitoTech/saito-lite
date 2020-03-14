@@ -9959,19 +9959,19 @@ console.log("\n\n\n\n");
 
             let divname = "#" + i;
 
-            if (i === "italy" || i === "greece" || i === "spain" || i == "turkey") {
-              if (twilight_self.game.state.events.nato == 1) {
-                if (twilight_self.isControlled("us", i) == 1) {
-                  twilight_self.displayModal("NATO prevents Brush War in Europe");
-                  return;
-                }
-              }
-            }
-
             $(divname).off();
             $(divname).on('click', function() {
 
               let c = $(this).attr('id');
+
+              if (c === "italy" || c === "greece" || c === "spain" || c === "turkey") {
+                if (twilight_self.game.state.events.nato == 1) {
+                  if (twilight_self.isControlled("us", c) == 1) {
+                    twilight_self.displayModal("NATO prevents Brush War in Europe");
+                    return;
+                  }
+                }
+              }
 
               twilight_self.displayModal("Launching Brush War in "+twilight_self.countries[c].name);
 
