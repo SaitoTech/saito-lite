@@ -527,7 +527,7 @@ class Arcade extends ModTemplate {
       //
       // purge any bad games from options file
       //
-      this.gameSanityCheck(app);
+
       //
       // notify SPV clients of "open", "join" and "close" messages
       //

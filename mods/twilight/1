@@ -8035,13 +8035,14 @@ console.log("\n\n\n\n");
         return 1;
       }
 
+console.log("US INF: " + countries_with_us_influence);
 
       if (countries_with_us_influence <= 2) {
         for (var i in this.countries) {
           if (i == "sudan" || i == "egypt" || i == "libya" || i == "syria" || i == "iran" || i == "iraq" || i == "jordan" || i == "saudiarabia") {
             if (this.countries[i].us > 0) {
               this.updateLog("Muslim Revolutions removes all US influence in "+i);
-              this.removeInfluence(i, this.countries[i].us, "us");
+              this.removeInfluence(i, this.countries[i].ussr, "us");
             }
           }
         }
