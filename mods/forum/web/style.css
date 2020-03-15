@@ -59,6 +59,7 @@
   clear:both;
   line-height: 1.6em;
   padding: 15px;
+  max-height: 50vh;
 }
 
 
