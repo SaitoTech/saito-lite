@@ -242,6 +242,16 @@ console.log("CMT: " + JSON.stringify(data.forum.forum.comments));
       });
     });
 
+    // delete
+    Array.from(document.getElementsByClassName('teaser-content-links-delete')).forEach(del => {
+      del.addEventListener('click', (e) => {
+
+        let newtx = data.forum.createDeleteTransaction(e.currentTarget.id);
+        app.network.propagateTransaction(newtx);
+        
+      });
+    });
+
 
   },
 

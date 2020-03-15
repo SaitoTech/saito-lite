@@ -295,14 +295,61 @@ console.log("UPDATING RANK: " + sql_rank);
 
   }
 
+  createDeleteTransaction(post_id) {
 
+    let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+
+    tx.transaction.msg.module = "Forum";
+    tx.transaction.msg.type = "delete";
+    tx.transaction.msg.post_id = post_id;
+
+    tx = this.app.wallet.signTransaction(tx);
+
+    return tx;
+  }
+
+  async receiveDeleteTransaction(tx) {
+
+    try {
+      let post_id = tx.transaction.msg.post_id;
+      console.log("post_id: " + post_id);
+      let sql = "SELECT * FROM posts where post_id = $post_id";
+      let params = { $post_id: post_id }
+      let rows = await this.app.storage.queryDatabase(sql, params, "forum");
+      sql = "SELECT * FROM votes where post_id = $post_id";
+      let rows2 = await this.app.storage.queryDatabase(sql, params, "forum");
+      if (rows) {
+        if (rows.length > 0) {
+          for (let i = 0; i < rows.length; i++) {
+            params = { $id: rows[i].id }
+            sql = "DELETE FROM posts where id = $id";
+            await this.app.storage.executeDatabase(sql, params, "forum");
+            // console.log("POST DELETED");
+          }
+        }
+      }
+      if (rows2) {
+        if (rows2.length > 0) {
+          for (let i = 0; i < rows2.length; i++) {
+            params = { $id: rows2[i].id }
+            sql = "DELETE FROM votes where id = $id";
+            await this.app.storage.executeDatabase(sql, params, "forum");
+            // console.log("VOTES DELETED");
+          }
+        }
+      }
+    } catch (e) {
+      console.log('ERROR - receiveDeleteTransaction: ' + e);
+    }
+
+  }
 
 
 
 
   onPeerHandshakeComplete(app, peer) {
 
-    if (this.browser_active == 0) { return; }
+      if (this.browser_active == 0) { return; }
 
     let forum_self = this;
 
@@ -630,26 +677,29 @@ console.log(sql);
 
   onConfirmation(blk, tx, conf, app) {
 
-    if (app.BROWSER == 0) {
+      if (app.BROWSER == 0) {
 
-      if (conf == 0) {
+        if (conf == 0) {
 
-        let forum_self = app.modules.returnModule("Forum");
+          let forum_self = app.modules.returnModule("Forum");
 
-        if (tx.transaction.msg.type == "post") {
-	  forum_self.receivePostTransaction(tx); 
-	}
+          if (tx.transaction.msg.type == "post") {
+            forum_self.receivePostTransaction(tx);
+          }
 
-        if (tx.transaction.msg.type == "upvote") {
-	  forum_self.receiveVoteTransaction(tx); 
-	}
+          if (tx.transaction.msg.type == "upvote") {
+            forum_self.receiveVoteTransaction(tx);
+          }
 
-        if (tx.transaction.msg.type == "downvote") {
-	  forum_self.receiveVoteTransaction(tx); 
-	}
+          if (tx.transaction.msg.type == "downvote") {
+            forum_self.receiveVoteTransaction(tx);
+          }
 
+          if (tx.transaction.msg.type == "delete") {
+            forum_self.receiveDeleteTransaction(tx);
+          }
+        }
       }
-    }
 
   }
 
