@@ -8040,7 +8040,7 @@ console.log("\n\n\n\n");
           if (i == "sudan" || i == "egypt" || i == "libya" || i == "syria" || i == "iran" || i == "iraq" || i == "jordan" || i == "saudiarabia") {
             if (this.countries[i].us > 0) {
               this.updateLog("Muslim Revolutions removes all US influence in "+i);
-              this.removeInfluence(i, twilight_self.countries[i].ussr, "us");
+              this.removeInfluence(i, this.countries[i].ussr, "us");
             }
           }
         }
