@@ -282,11 +282,9 @@ class Arcade extends ModTemplate {
           });
         }
       });
-
     let message = {};
     message.request = "arcade leaderboard list";
     message.data = {};
-
     let leaderboard_callback = (res) => res.rows.forEach(row => this.addWinnerToLeaderboard(row));
     this.app.network.sendRequestWithCallback(message.request, message.data, leaderboard_callback);
  
@@ -524,9 +522,19 @@ class Arcade extends ModTemplate {
     let arcade_self = app.modules.returnModule("Arcade");
 
     if (conf == 0) {
+
       //
       // purge any bad games from options file
       //
+      if (app.options) {
+        if (app.options.games) {
+          for (let i = app.options.games.length-1; i >= 0; i--) {
+            if (app.options.games[i].module === "" && app.options.games[i].id.length > 25) {
+        app.options.games.splice(i, 1);
+        }
+      }
+        }
+      }
 
       //
       // notify SPV clients of "open", "join" and "close" messages
@@ -781,67 +789,11 @@ class Arcade extends ModTemplate {
           }
           this.launchGame(txmsg.game_id);
         }
-
-
-
       }
 
-      
     }
   }
 
-  gameSanityCheck(app) {
-    // This will try to purge any game that have invalid information.
-
-    let games = app.options.games;
-    let game = {};
-
-    if (games != undefined) {
-
-      for (let i = 0; i < games.length; i++) {
-
-        game = app.options.games[i];
-
-        if (game != undefined) {
-
-          try {
-            // cases confirmed:
-            //    "id" : "0.025376674338313032"
-            //    "module": ""
-            // ONLY this element: "issued_keys_deleted": 0
-
-            if ((game.module === "" && game.initializing != 1) || game.id.length < 25)  {
-
-              console.log(game);
-              app.options.games.splice(i, 1);
-              console.log('====== gameSanityCheck Deleted a game =======');
-              
-            }
-
-          } catch (e) {
-
-            // if anything - splice that element.
-            console.log("Game - SanityCheck: " + e);
-            app.options.games.splice(i, 1);
-
-          }
-        }
-      }
-    }
-    //
-    // Original
-    //
-
-    // if (app.options) {
-    //   if (app.options.games) {
-    //     for (let i = app.options.games.length; i >= 0; i--) {
-    //       if (app.options.games[i].module === "" && app.options.games[i].id.length > 25) {
-    //         app.options.games.splice(i, 1);
-    //       }
-    //     }
-    //   }
-    // }
-  }
   async handlePeerRequest(app, message, peer, mycallback = null) {
 
     //
@@ -1726,15 +1678,11 @@ class Arcade extends ModTemplate {
     // if someone is trying to accept a game, check no-one else has taken it yet
     //
     if (dbname == "arcade" && tablename == "games" && select == "is_game_already_accepted") {
-
       let game_id = where;
       let res = {};
       res.rows = [];
-
       if (this.accepted[game_id] > 0) {
-
 console.log("REPORTING BACK WITH NO!");
-
         //
         // check required of players_needed vs. players_accepted
         //
@@ -1744,10 +1692,8 @@ console.log("REPORTING BACK WITH YES!");
         this.accepted[game_id] = 1;
         res.rows.push({ game_still_open: 1 });
       }
-
       mycallback(res);
       return;
-
     }
 *****/
 
@@ -1790,4 +1736,3 @@ console.log("REPORTING BACK WITH YES!");
 }
 
 module.exports = Arcade;
-
