@@ -10315,7 +10315,7 @@ console.log("\n\n\n\n");
             if (twilight_self.isControlled(opponent, "afghanistan") == 1) { target++; }
 
             let die = twilight_self.rollDice(6);
-            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls "+die);
+            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls "+die+" / -"+(target -4));
 
             if (die >= target) {
 
@@ -10371,6 +10371,7 @@ console.log("\n\n\n\n");
             if (twilight_self.isControlled(opponent, "saudiarabia") == 1) { target++; }
 
             let die = twilight_self.rollDice(6);
+            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls "+die+" / -"+(target -4));
 
             if (die >= target) {
 
