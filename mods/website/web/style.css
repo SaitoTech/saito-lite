@@ -164,6 +164,7 @@ body {
   line-height: 2em;
   width: 2em;
   text-align: center;
+  border: 1px solid #FFF;
 }
 
 .deepertext {
@@ -172,6 +173,7 @@ body {
   line-height: 2em;
   color: var(--saito-red);
   text-shadow: 0 0 1px #0009;
+  background: #fff;
 }
 
 .box-spacer {

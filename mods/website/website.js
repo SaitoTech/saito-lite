@@ -22,6 +22,16 @@ class Website extends ModTemplate {
   }
 
 
+/*
+  initialize(app){
+
+    x = this.app.modules.respondTo("email-chat");
+    for (let i = 0; i < x.length; i++) {
+      this.mods.push(x[i]);
+    }
+  }
+*/
+
   initializeHTML(app) {
 
     super.initializeHTML(app);
@@ -31,6 +41,9 @@ class Website extends ModTemplate {
 
     Data.render(app);
 
+    this.app.modules.respondTo("chat-manager").forEach(mod => {
+      mod.respondTo('chat-manager').render(this.app, this);
+    });
   }
 
   onConfirmation(blk, tx, conf, app) {
