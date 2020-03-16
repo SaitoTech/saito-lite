@@ -6843,7 +6843,7 @@ console.log("\n\n\n\n");
       if (this.isControlled("us", "syria") == 1) { target++; }
 
       let roll = this.rollDice(6);
-      this.updateLog("<span>" + player.toUpperCase()+"</span> <span>rolls</span> "+roll);
+      this.updateLog("<span>" + player.toUpperCase()+"</span> <span>rolls</span> "+roll+" / -"+(target -4));
 
       if (roll >= target) {
         this.updateLog("USSR wins the Arab-Israeli War");
