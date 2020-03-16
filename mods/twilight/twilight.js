@@ -1805,7 +1805,7 @@ console.log("\n\n\n\n");
 
           if (this.is_testing == 1) {
             if (this.game.player == 1) {
-              this.game.deck[0].hand = ["fiveyearplan", "berlinagreement", "junta", "che","degaulle","nato","naziscientist","missileenvy","formosan"];
+              this.game.deck[0].hand = ["fiveyearplan", "indopaki", "junta", "che","degaulle","nato","naziscientist","missileenvy","formosan"];
             } else {
               this.game.deck[0].hand = ["china","aldrichames","containment"];
               //this.game.deck[0].hand = ["aldrichames","degaulle","lonegunman","cubanmissile","handshake","lonegunman","asia","nasser","sadat"];
@@ -6742,7 +6742,7 @@ console.log("\n\n\n\n");
             if (twilight_self.isControlled(opponent, "afghanistan") == 1) { target++; }
 
             let die = twilight_self.rollDice(6);
-            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls "+die);
+            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls "+die+" / -"+(target -4));
 
             if (die >= target) {
 
@@ -6782,7 +6782,7 @@ console.log("\n\n\n\n");
             if (twilight_self.isControlled(opponent, "burma") == 1) { target++; }
 
             let die = twilight_self.rollDice(6);
-            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls "+die);
+            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls "+die+" / -"+(target -4));
 
             if (die >= target) {
 
