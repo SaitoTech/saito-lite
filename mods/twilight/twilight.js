@@ -6882,7 +6882,7 @@ console.log("\n\n\n\n");
 
       let roll = this.rollDice(6);
 
-      this.updateLog("<span>Korean War happens (roll:</span> " + roll + ")");
+      this.updateLog("<span>Korean War happens (roll:</span> " + roll+" / -"+(target -4) + ")");
 
       if (roll >= target) {
         this.updateLog("North Korea wins the Korean War");
