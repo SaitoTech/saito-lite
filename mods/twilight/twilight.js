@@ -1805,9 +1805,10 @@ console.log("\n\n\n\n");
 
           if (this.is_testing == 1) {
             if (this.game.player == 1) {
-              this.game.deck[0].hand = ["decolonization","fiveyearplan", "berlinagreement", "junta", "che","degaulle","nato","naziscientist","missileenvy","formosan"];
+              this.game.deck[0].hand = ["fiveyearplan", "berlinagreement", "junta", "che","degaulle","nato","naziscientist","missileenvy","formosan"];
             } else {
-              this.game.deck[0].hand = ["duckandcover","degaulle","lonegunman","cubanmissile","handshake","lonegunman","asia","nasser","sadat"];
+              this.game.deck[0].hand = ["china","aldrichames","containment"];
+              //this.game.deck[0].hand = ["aldrichames","degaulle","lonegunman","cubanmissile","handshake","lonegunman","asia","nasser","sadat"];
               //this.game.deck[0].hand = ["duckandcover","degaulle"];
             }
           }
@@ -10506,20 +10507,28 @@ console.log("\n\n\n\n");
           this.addMove("notify\tUS has no cards to reveal");
           this.endTurn();
 
-        } else {
+        }
 
-          let cards_to_reveal = this.game.deck[0].hand.length;
-          for (let i = 0; i < this.game.deck[0].hand.length; i++) {
-            if (this.game.deck[0].hand[i] === "china") { cards_to_reveal--; }
-            else {
-              this.addMove(this.game.deck[0].hand[i]);
-            }
+        let cards_to_reveal = this.game.deck[0].hand.length;
+        for (let i = 0; i < this.game.deck[0].hand.length; i++) {
+          if (this.game.deck[0].hand[i] === "china") { cards_to_reveal--; }
+          else {
+            this.addMove(this.game.deck[0].hand[i]);
           }
+        }
+        if (cards_to_reveal =="") {
+          
+          this.addMove("notify\tUS has no cards to reveal");
+          this.endTurn();
+
+        }else{
+       
           //this.addMove("notify\tUS holds: "+cards_to_reveal);
           this.addMove("aldrich\tus\t"+cards_to_reveal);
-          this.endTurn();        
+          this.endTurn();  
+        }      
          
-        }
+        
       }
       return 0;
     }
