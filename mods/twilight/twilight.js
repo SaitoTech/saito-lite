@@ -1807,7 +1807,7 @@ console.log("\n\n\n\n");
             if (this.game.player == 1) {
               this.game.deck[0].hand = ["fiveyearplan", "indopaki", "junta", "che","degaulle","nato","naziscientist","missileenvy","formosan"];
             } else {
-              this.game.deck[0].hand = ["china","aldrichames","containment"];
+              this.game.deck[0].hand = ["china","aldrichames","containment","olympic"];
               //this.game.deck[0].hand = ["aldrichames","degaulle","lonegunman","cubanmissile","handshake","lonegunman","asia","nasser","sadat"];
               //this.game.deck[0].hand = ["duckandcover","degaulle"];
             }
@@ -7399,26 +7399,32 @@ console.log("\n\n\n\n");
 
                 let usroll   = twilight_self.rollDice(6);
               let ussrroll = twilight_self.rollDice(6);
+              let usbase = usroll;
+              let ussrbase = ussrroll;
+              let usmod = 0;
+              let ussrmod = 0;
 
               twilight_self.addMove("dice\tburn\t"+player);
               twilight_self.addMove("dice\tburn\t"+player);
 
               if (opponent == "us") {
                 usroll += 2;
+                usmod = 2;
               } else {
                 ussrroll += 2;
+                ussrmod = 2;
               }
 
               if (ussrroll > usroll) {
                 twilight_self.addMove("vp\tussr\t2");
-                twilight_self.addMove("notify\tUSSR rolls "+ussrroll+" / US rolls "+usroll);
+                twilight_self.addMove("notify\tUSSR rolls "+ussrbase+" (+"+ussrmod+ ") / US rolls "+usbase+" (+"+usmod+ ")");
                 twilight_self.addMove("notify\t"+me.toUpperCase()+" participates in the Olympics");
                 twilight_self.endTurn();
                 winner = 1;
               }
               if (usroll > ussrroll) {
                 twilight_self.addMove("vp\tus\t2");
-                twilight_self.addMove("notify\tUSSR rolls "+ussrroll+" / US rolls "+usroll);
+                twilight_self.addMove("notify\tUSSR rolls "+ussrbase+" (+"+ussrmod+ ") / US rolls "+usbase+" (+"+usmod+ ")");
                 twilight_self.addMove("notify\t"+me.toUpperCase()+" participates in the Olympics");
                 twilight_self.endTurn();
                 winner = 2;
