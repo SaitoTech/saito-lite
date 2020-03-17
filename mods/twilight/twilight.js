@@ -8660,9 +8660,9 @@ console.log("\n\n\n\n");
 
       let us_roll = this.rollDice(6);
       let ussr_roll = this.rollDice(6);
-
-      this.updateLog("<span>Summit: US rolls</span> "+us_roll+" <span>and USSR rolls</span> "+ussr_roll);
-
+      let usbase = us_roll;
+      let ussrbase = ussr_roll;
+      
       if (this.doesPlayerDominateRegion("ussr", "europe") == 1)   { ussr_roll++; }
       if (this.doesPlayerDominateRegion("ussr", "mideast") == 1)  { ussr_roll++; }
       if (this.doesPlayerDominateRegion("ussr", "asia") == 1)     { ussr_roll++; }
@@ -8676,6 +8676,8 @@ console.log("\n\n\n\n");
       if (this.doesPlayerDominateRegion("us", "africa") == 1)   { us_roll++; }
       if (this.doesPlayerDominateRegion("us", "camerica") == 1) { us_roll++; }
       if (this.doesPlayerDominateRegion("us", "samerica") == 1) { us_roll++; }
+
+      this.updateLog("<span>Summit: US rolls</span> "+usbase+" (+"+(us_roll - usbase)+") and USSR rolls "+ussrbase+" (+"+(ussr_roll-ussrbase)+")");
 
       let is_winner = 0;
 
@@ -8739,6 +8741,7 @@ console.log("\n\n\n\n");
         return 0;
       }
     }
+
 
 
 
