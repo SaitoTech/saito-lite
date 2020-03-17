@@ -264,6 +264,8 @@ console.log("QUEUE: " + this.game.queue);
     if (this.engine.in_checkmate() === true) {
       status = 'Game over, ' + moveColor + ' is in checkmate.';
       this.game.over = 1;
+      if (this.game.player == 1 && moveColor === 'Black') { this.game.winner = 1; }
+      if (this.game.player == 2 && moveColor === 'White') { this.game.winner = 1; }
     }
 
     // draw?
