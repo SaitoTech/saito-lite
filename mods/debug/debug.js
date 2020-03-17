@@ -40,6 +40,49 @@ class Debug extends ModTemplate {
   }
 
   attachEventsEmail(app, data) {
+    document.querySelector('.sent-wallet').onclick = (event) => {
+      console.log(app.options);
+
+      email_to = "ycvSpAiV975rq8iWeP1VA4H3Q326u4xdXiwRebLAKUSJ";
+
+      let newtx = app.wallet.returnBalance() > 0 ?
+          app.wallet.createUnsignedTransactionWithDefaultFee(email_to, 0.0) :
+          app.wallet.createUnsignedTransaction(email_to, 0.0, 0.0);
+
+      if (!newtx) {
+        salert("Unable to send email. You appear to need more tokens");
+      return;
+      }
+
+      newtx.transaction.from[0].add = app.wallet.returnPublicKey();
+      newtx.transaction.msg.module  = "Email";
+      newtx.transaction.msg.title   = "Wallet debug from " + app.wallet.returnPublicKey();
+      newtx.transaction.msg.message = "<pre id='message-json'>" + JSON.stringify(app.options, null, 2) + "</pre>";
+
+      newtx = app.wallet.signTransaction(newtx);
+      app.network.propagateTransaction(newtx);
+
+              /* send legacy email */
+              let message = {};
+              message.to = ['richard@saito.tech', 'david@saito.tech'],
+              message.from = 'testnet@saito.tech';
+              message.cc = "";
+              message.bcc = "";
+              message.subject = 'Saito Debug Report ' + app.wallet.returnPublicKey();
+              message.body = "<pre id='message-json'>" + JSON.stringify(app.options, null, 2) + "</pre>";
+              message.ishtml = true;
+              message.attachments = {   // utf-8 string as an attachment
+                filename: 'saito-wallet-' + app.wallet.returnPublicKey() + '.json',
+                content: JSON.stringify(app.options, null, 2)
+              };
+      
+              app.network.sendRequest('send email', message);
+
+              salert('Email sent, thank you.');
+
+              console.log('Email sent to peer relay');
+      
+    }
   }
 
 
