@@ -51,6 +51,7 @@ module.exports = ForumTeaserTemplate = (app, data, tx) => {
   `;
   if (app.wallet.returnPublicKey() == tx.transaction.from[0].add) {
     html += `<div class="teaser-content-links-edit">edit</div>`;
+    html += `<div class="teaser-content-links-delete" id="${tx.transaction.sig}">delete</div>`;
   }
   html += `
             <div class="teaser-content-links-report">report</div>

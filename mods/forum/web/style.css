@@ -165,6 +165,11 @@
 .teaser-content-links-report a {
  text-decoration: none;
 }
+.teaser-content-links-delete {
+ float: left;
+ margin-right: 15px;
+ cursor:pointer;
+}
 
 
 

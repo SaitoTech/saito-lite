@@ -295,7 +295,54 @@ console.log("UPDATING RANK: " + sql_rank);
 
   }
 
+  createDeleteTransaction(post_id) {
 
+    let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+
+    tx.transaction.msg.module = "Forum";
+    tx.transaction.msg.type = "delete";
+    tx.transaction.msg.post_id = post_id;
+
+    tx = this.app.wallet.signTransaction(tx);
+
+    return tx;
+  }
+
+  async receiveDeleteTransaction(tx) {
+
+    try {
+      let post_id = tx.transaction.msg.post_id;
+      // console.log("post_id: " + post_id);
+      let sql = "SELECT * FROM posts where post_id = $post_id";
+      let params = { $post_id: post_id }
+      let rows = await this.app.storage.queryDatabase(sql, params, "forum");
+      sql = "SELECT * FROM votes where post_id = $post_id";
+      let rows2 = await this.app.storage.queryDatabase(sql, params, "forum");
+      if (rows) {
+        if (rows.length > 0) {
+          for (let i = 0; i < rows.length; i++) {
+            params = { $id: rows[i].id }
+            sql = "DELETE FROM posts where id = $id";
+            await this.app.storage.executeDatabase(sql, params, "forum");
+            // console.log("POST DELETED");
+          }
+        }
+      }
+      if (rows2) {
+        if (rows2.length > 0) {
+          for (let i = 0; i < rows2.length; i++) {
+            params = { $id: rows2[i].id }
+            sql = "DELETE FROM votes where id = $id";
+            await this.app.storage.executeDatabase(sql, params, "forum");
+            // console.log("VOTES DELETED");
+          }
+        }
+      }
+    } catch (e) {
+      console.log('ERROR - receiveDeleteTransaction: ' + e);
+    }
+
+  }
 
 
 
@@ -648,6 +695,9 @@ console.log(sql);
 	  forum_self.receiveVoteTransaction(tx); 
 	}
 
+        if (tx.transaction.msg.type == "delete") {
+          forum_self.receiveDeleteTransaction(tx);
+        }
       }
     }
 
