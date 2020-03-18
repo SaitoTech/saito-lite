@@ -5,6 +5,11 @@ const ChatRoomMessageTemplate = require('./chat-room-message.template');
 
 const ChatMessageContainerTemplate = require('./chat-message-container.template');
 
+var marked = require('marked');
+var sanitizeHtml = require('sanitize-html');
+const linkifyHtml = require('linkifyjs/html');
+const emoji = require('node-emoji');
+
 module.exports = ChatRoom = {
     group: {},
     room_message_blocks: [],
@@ -98,7 +103,7 @@ module.exports = ChatRoom = {
         let publickey = app.network.peers[0].peer.publickey;
         let newtx = app.wallet.createUnsignedTransaction(publickey, 0.0, 0.0);
         if (newtx == null) { return; }
-
+        msg = this.formatMessage(msg);
         newtx.transaction.msg = {
             module: "Chat",
             request: "chat message",
@@ -184,6 +189,7 @@ module.exports = ChatRoom = {
                 identicon : app.keys.returnIdenticon(messages[idx].publickey),
                 identicon_color : app.keys.returnIdenticonColor(messages[idx].publickey),
             });
+            message.message = this.formatMessage(message.message);
             if (idx == 0) {
                 let new_message_block = Object.assign({}, {
                     publickey: message.publickey,
@@ -222,5 +228,37 @@ module.exports = ChatRoom = {
             idx++;
         }
         return room_message_blocks;
+    },
+
+    formatMessage(msg) {
+      msg = marked(msg);
+      msg = sanitizeHtml(msg, {
+        allowedTags: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
+          'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
+          'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'img', 'marquee', 'pre'
+        ],
+        allowedAttributes: {
+          div: ['class', 'id'],
+          a: ['href', 'name', 'target', 'class', 'id'],
+          img: ['src', 'class']
+        },
+        selfClosing: ['img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta'],
+        allowedSchemes: ['http', 'https', 'ftp', 'mailto'],
+        allowedSchemesByTag: {},
+        allowedSchemesAppliedToAttributes: ['href', 'src', 'cite'],
+        allowProtocolRelative: true,
+        transformTags: {
+          'img': function(tagName, attribs) {
+            attribs.class = 'chat-message-markdown';
+            return {
+              tagName: 'img',
+              attribs
+            };
+          }
+        }
+      });
+      msg = emoji.emojify(msg);
+      msg = linkifyHtml(msg, { target: { url: '_self' } });
+      return msg;
     }
 }
