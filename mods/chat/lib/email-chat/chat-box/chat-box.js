@@ -147,7 +147,9 @@ module.exports = ChatBox = {
         let identicon = app.keys.returnIdenticon(msg_data.publickey);
         let newtx = app.wallet.createUnsignedTransaction(publickey, 0.0, 0.0);
         if (newtx == null) { return; }
-        //msg_data.message = this.formatMessage(msg_data.message, "input");
+        // format
+        msg_data.message = this.formatMessage(msg_data.message);
+        // encode to base64
         msg_data.message = app.crypto.stringToBase64(msg_data.message);
         newtx.transaction.msg = {
             module: "Chat",
@@ -192,8 +194,9 @@ module.exports = ChatBox = {
               identicon : app.keys.returnIdenticon(messages[idx].publickey),
               identicon_color : app.keys.returnIdenticonColor(messages[idx].publickey),
           });
+          // decode
           message.message = app.crypto.base64ToString(message.message);
-          message.message = this.formatMessage(message.message, "output");
+          // message.message = this.formatMessage(message.message);
           if (idx == 0) {
               let new_message_block = Object.assign({}, {
                   publickey: message.publickey,
@@ -262,6 +265,7 @@ module.exports = ChatBox = {
         }
       });
       //msg = type === "input" ? emoji.unemojify(msg) : emoji.emojify(msg);
+      msg = emoji.emojify(msg);
       msg = linkifyHtml(msg, { target: { url: '_self' } });
       return msg;
     }

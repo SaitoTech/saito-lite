@@ -103,7 +103,10 @@ module.exports = ChatRoom = {
         let publickey = app.network.peers[0].peer.publickey;
         let newtx = app.wallet.createUnsignedTransaction(publickey, 0.0, 0.0);
         if (newtx == null) { return; }
-        msg = this.formatMessage(msg, "input");
+        // format
+        msg = this.formatMessage(msg);
+        // encode to base64
+        msg = app.crypto.stringToBase64(msg);
         newtx.transaction.msg = {
             module: "Chat",
             request: "chat message",
@@ -189,7 +192,9 @@ module.exports = ChatRoom = {
                 identicon : app.keys.returnIdenticon(messages[idx].publickey),
                 identicon_color : app.keys.returnIdenticonColor(messages[idx].publickey),
             });
-            message.message = this.formatMessage(message.message, "output");
+            // decode
+            message.message = app.crypto.base64ToString(message.message);
+            // message.message = this.formatMessage(message.message);
             if (idx == 0) {
                 let new_message_block = Object.assign({}, {
                     publickey: message.publickey,
@@ -257,7 +262,8 @@ module.exports = ChatRoom = {
           }
         }
       });
-      msg = type === "input" ? emoji.unemojify(msg) : emoji.emojify(msg);
+      // msg = type === "input" ? emoji.unemojify(msg) : emoji.emojify(msg);
+      msg = emoji.emojify(msg);
       msg = linkifyHtml(msg, { target: { url: '_self' } });
       return msg;
     }
