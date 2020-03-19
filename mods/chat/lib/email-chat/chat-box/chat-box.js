@@ -145,7 +145,7 @@ module.exports = ChatBox = {
         let identicon = app.keys.returnIdenticon(msg_data.publickey);
         let newtx = app.wallet.createUnsignedTransaction(publickey, 0.0, 0.0);
         if (newtx == null) { return; }
-        msg_data.message = this.formatMessage(msg_data.message);
+        msg_data.message = this.formatMessage(msg_data.message, "input");
         newtx.transaction.msg = {
             module: "Chat",
             request: "chat message",
@@ -189,7 +189,7 @@ module.exports = ChatBox = {
               identicon : app.keys.returnIdenticon(messages[idx].publickey),
               identicon_color : app.keys.returnIdenticonColor(messages[idx].publickey),
           });
-          message.message = this.formatMessage(message.message);
+          message.message = this.formatMessage(message.message, "output");
           if (idx == 0) {
               let new_message_block = Object.assign({}, {
                   publickey: message.publickey,
@@ -230,7 +230,7 @@ module.exports = ChatBox = {
       return message_blocks;
     },
 
-    formatMessage(msg) {
+    formatMessage(msg, type = "input") {
       msg = marked(msg);
       msg = sanitizeHtml(msg, {
         allowedTags: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
@@ -257,7 +257,7 @@ module.exports = ChatBox = {
           }
         }
       });
-      msg = emoji.emojify(msg);
+      msg = type === "input" ? emoji.unemojify(msg) : emoji.emojify(msg);
       msg = linkifyHtml(msg, { target: { url: '_self' } });
       return msg;
     }
