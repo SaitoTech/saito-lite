@@ -576,6 +576,18 @@ label.treated {
   overflow-wrap: break-word;
 }
 
+div#message-wrapper {
+  border: 2px solid var(--saito-red);
+  min-width: 500px;
+  padding: 1em;
+  font-size: 2em;
+  background: var(--saito-red);
+  position: fixed;
+  bottom: 1em;
+  left: 1em;
+  color: #FFF;
+}
+
 .promptval {
   margin: 0 0 1em 0;
 }
