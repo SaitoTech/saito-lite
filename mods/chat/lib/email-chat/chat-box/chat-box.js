@@ -104,6 +104,8 @@ module.exports = ChatBox = {
           identicon : app.keys.returnIdenticon(msg.publickey),
           identicon_color : app.keys.returnIdenticonColor(msg.publickey),
       });
+      //remove safety base64 encoding.
+      message.message = app.crypto.base64ToString(message.message);
 
       let chat_box_main = document.getElementById(`chat-box-main-${message.group_id}`);
 
@@ -145,7 +147,8 @@ module.exports = ChatBox = {
         let identicon = app.keys.returnIdenticon(msg_data.publickey);
         let newtx = app.wallet.createUnsignedTransaction(publickey, 0.0, 0.0);
         if (newtx == null) { return; }
-        msg_data.message = this.formatMessage(msg_data.message, "input");
+        //msg_data.message = this.formatMessage(msg_data.message, "input");
+        msg_data.message = app.crypto.stringToBase64(msg_data.message);
         newtx.transaction.msg = {
             module: "Chat",
             request: "chat message",
@@ -189,6 +192,7 @@ module.exports = ChatBox = {
               identicon : app.keys.returnIdenticon(messages[idx].publickey),
               identicon_color : app.keys.returnIdenticonColor(messages[idx].publickey),
           });
+          message.message = app.crypto.base64ToString(message.message);
           message.message = this.formatMessage(message.message, "output");
           if (idx == 0) {
               let new_message_block = Object.assign({}, {
@@ -257,7 +261,7 @@ module.exports = ChatBox = {
           }
         }
       });
-      msg = type === "input" ? emoji.unemojify(msg) : emoji.emojify(msg);
+      //msg = type === "input" ? emoji.unemojify(msg) : emoji.emojify(msg);
       msg = linkifyHtml(msg, { target: { url: '_self' } });
       return msg;
     }
