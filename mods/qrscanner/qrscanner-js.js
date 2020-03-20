@@ -19,7 +19,7 @@ class QRScanner extends ModTemplate {
     this.constraints = {
       audio: false,
       video: {
-          facingMode: 'environment'
+        facingMode: 'environment'
       }
     };
 

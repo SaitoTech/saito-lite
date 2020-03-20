@@ -162,6 +162,7 @@ class QRScanner extends ModTemplate {
   // Else, the message is broadcast for other modules to utilize
   //
   handleDecodedMessage(msg) {
+    alert(msg);
     if (this.app.crypto.isPublicKey(msg)) {
       // let encrypt_mod = this.app.modules.returnModule('Encrypt');
 
