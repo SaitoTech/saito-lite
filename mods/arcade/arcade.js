@@ -213,7 +213,9 @@ class Arcade extends ModTemplate {
 
       games.forEach(game => {
         let game_tx = this.createGameTXFromOptionsGame(game);
-        this.addGameToOpenList(game_tx);
+        if(game_tx) {
+          this.addGameToOpenList(game_tx);
+        }
       });
     }
   }
