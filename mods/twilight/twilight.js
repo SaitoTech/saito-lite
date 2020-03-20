@@ -9976,7 +9976,7 @@ console.log("\n\n\n\n");
               let modify = 0;
 
               for (let v = 0; v < twilight_self.countries[c].neighbours.length; v++) {
-                if (twilight_self.isControlled(opponent, v) == 1) {
+                if (twilight_self.isControlled(opponent, twilight_self.countries[i].neighbours[v]) == 1) {
                   modify++;
                 }
               }
