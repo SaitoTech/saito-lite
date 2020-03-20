@@ -40,10 +40,7 @@ class Block {
     // 
     this.mc		        = "0.0";		// mining coinbase
     this.sc		        = "0.0";		// staking coinbase
-    this.staker_pos		= -1;
-    this.staker_bid		= -1;
-    this.staker_sis		= -1;
-    this.staker.slip		= "";
+
 
     //
     // hashmaps
@@ -127,9 +124,6 @@ class Block {
       this.block.st 		= Big(prevblk.block.st);
       this.sc	 		= Big(prevblk.block.st).div(this.app.blockchain.genesis_period).toFixed(8);
       this.block.st	 	= this.block.st.minus(Big(this.sc)).toFixed(8);
-
-      this.block.ss             = prevblk.block.ss;
-      this.block.sa             = prevblk.block.sa;
 
       this.block.prevbsh 	= prevblk.returnHash();
       this.block.difficulty 	= prevblk.block.difficulty;
@@ -264,8 +258,9 @@ console.log("GOLDEN TICKET: " + this.containsGoldenTicket());
     //
     // remove expired staking slips and number (track staked)
     //
-    this.block.ss -= eblkd.ss;		// integer
-    this.block.sa = Big(this.block.sa).minus(Big(eblkd.sa)).toFixed(8); // big
+    this.block.ss -= eblk.ss;		// integer
+    this.block.sa = Big(this.block.sa).minus(Big(eblk.sa)).toFixed(8); // big
+
 
 
     //
@@ -316,22 +311,6 @@ console.log("GOLDEN TICKET: " + this.containsGoldenTicket());
 
       }
 
-
-      //
-      // staking transactions
-      //
-      if (this.transactions[i].transaction.type == 4) {
-	for (let ii = 0; ii < this.transactions[i].transaction.to.length; ii++) {
-	  if (this.transactions[i].transaction.to[ii].isNonZeroAmount()) {
-	    if (this.transactions[i].transaction.to[ii].type == 4) {
-	      this.block.ss++;
-	      this.block.sa = Big(this.block.sa).plus(Big(this.transactions[i].transaction.to[ii].amt)).toFixed(8);
-	    }
-	  }
-	}
-      }
-
-
       //
       // hashmap of txs
       //
@@ -339,6 +318,7 @@ console.log("GOLDEN TICKET: " + this.containsGoldenTicket());
       for (let ii = 0; ii < this.transactions[i].transaction.to.length; ii++) { this.txs_hmap[this.transactions[i].transaction.to[ii].add] = 1; }
 
     }
+
 
 
     //
@@ -350,28 +330,18 @@ console.log("GOLDEN TICKET: " + this.containsGoldenTicket());
       // pass golden ticket into previous block 
       //
       let payments = prevblk.calculateBlockPayments(golden_ticket_solution);
-      let normalized_staker_payout = this.sc;
 
       //
       // reset staking slip to unspent as calculateBlockPayments does not
       //
       if (payments.staker_pos != -1) { 
         this.app.blockchain.stakers_current++;
-	let staker_slip = this.app.blockchain.index.stakers[payments.staker_pos][payments.staker_sid];
-	staker_slip.pending = 1; 
-	normalized_staker_payout = this.returnNormalizedStakerPayment(staker_slip.slip.amt);
-
-console.log("\n\n\n");
-console.log(staker_slip.amt + " -- " + this.block.sa + " -- " + this.block.ss);
-console.log("CALCULATED NORMAL STAKER PAYOUT AS: " + normalized_staker_payout);
-
+        this.app.blockchain.index.stakers[payments.staker_pos][payments.staker_sid].pending = 1; 
       }
-
 
       let slips = [];
 
       if (payments) {
-
         if (payments.producer_share > 0) {
           slips.push(new saito.slip(payments.producer_publickey, payments.producer_share, 2));
         }
@@ -381,11 +351,24 @@ console.log("CALCULATED NORMAL STAKER PAYOUT AS: " + normalized_staker_payout);
         if (payments.router_share > 0) {
           slips.push(new saito.slip(payments.router_publickey, payments.router_share, 2));
         }
+        if (payments.sproducer_share > 0) {
+          slips.push(new saito.slip(payments.sproducer_publickey, payments.sproducer_share, 2));
+        }
 
         //
 	// handle staker payments
 	//
 	if (this.containsGoldenTicket() == 1) {
+
+          //
+          // reclaim payment to staking treasury
+          //
+	  this.block.st = Big(this.block.st).plus(Big(payments.staker_share));
+
+	  //
+	  // calculate ACTUAL staker payout
+	  //
+	  let adjusted_staker_payout = payments.staker_share;
 
 	  //
   	  // now issue payments
@@ -397,12 +380,6 @@ console.log("CALCULATED NORMAL STAKER PAYOUT AS: " + normalized_staker_payout);
             slips.push(new saito.slip(payments.srouter_publickey, payments.srouter_share, 2));
           }
           if (payments.staker_share > 0) {
-
-            //
-            // reclaim payment to staking treasury
-            //
-	    this.block.st = Big(this.block.st).plus(Big(payments.staker_share));
-
   	    //
 	    // TODO -- add small percentage chance of slip being sent as normal transaction - preventing 
 	    // build-up of stake forever in the event that the staker is unable to move or liquidate
@@ -410,13 +387,13 @@ console.log("CALCULATED NORMAL STAKER PAYOUT AS: " + normalized_staker_payout);
             // blockchain.validate() will insert type=4 (staking) slips for both 2/4 type txs. So fees will
 	    // be paid to stakers as more staking.
 	    //
-            slips.push(new saito.slip(payments.staker_publickey, normalized_staker_payout, 4));
-	    this.block.ss++;
-	    this.block.sa = Big(this.block.sa).plus(Big(payments.staker_share)).toFixed(8);
-	  }
-	}
-      }
+            slips.push(new saito.slip(payments.staker_publickey, payments.staker_share, 4));
+          }
 
+	}
+	
+	
+      }
 
       if (slips.length > 0) {
 
@@ -435,7 +412,6 @@ console.log("CALCULATED NORMAL STAKER PAYOUT AS: " + normalized_staker_payout);
 
       }
     }
-
 
     //
     // merkle root
@@ -632,10 +608,6 @@ console.log("CALCULATED NORMAL STAKER PAYOUT AS: " + normalized_staker_payout);
     return JSON.stringify(this.block);
   };
 
-  returnNormalizedStakerPayment(amt) {
-    return Big(this.sc).times(Big(amt).div(Big(this.block.sa).div(Big(this.block.ss)))).toFixed(8);
-  }
-
   returnTreasury() {
     return this.block.mt;
   }
@@ -706,13 +678,16 @@ console.log("CALCULATED NORMAL STAKER PAYOUT AS: " + normalized_staker_payout);
     }
 
 
-console.log("\n\n\n");
-console.log("ss: " + this.block.ss);
-console.log("sa: " + this.block.sa);
-
     let mt = Big(prevblk.block.mt).plus(Big(prevblk.block.reclaimed));
     let mc = Big(mt).div(this.app.blockchain.genesis_period).toFixed(8);
         mt = mt.minus(Big(mc)).toFixed(8);
+
+    //
+    // calculate when staking happens
+    //
+    //let st = Big(prevblk.block.st).plus(Big(prevblk.block.reclaimed));
+    //let sc = Big(bt).div(this.app.blockchain.genesis_period).toFixed(8);
+    //    st = bt.minus(Big(cb)).toFixed(8);
 
     if (this.block.mt != mt) {
       console.log("ERROR 410829: block treasury does not validate in new block");
@@ -752,10 +727,6 @@ console.log("sa: " + this.block.sa);
     let index_of_block_payment = -1;
     let index_of_golden_ticket = -1;
     let block_contains_spv_tx = 0;
-
-    let block_st = prevblk.block.st;
-    let block_ss = prevblk.block.ss;
-    let block_sa = prevblk.block.sa;
 
     let staking_slips_added = 0;
     let staking_amount_added = "0.0";
@@ -826,24 +797,8 @@ console.log("sa: " + this.block.sa);
                 slips.push(new saito.slip(payments.srouter_publickey, payments.srouter_share, 2));
               }
               if (payments.staker_share > 0) {
-
-                //
-                // check payment to staking treasury
-                //
-		let winning_slip = this.app.blockchain.index.stakers[payments.staker_pos][payments.staker_sid].slip;
-console.log("PAYMENTS: " + JSON.stringify(payments));
-console.log("WINNING SLIP: " + JSON.stringify(winning_slip));
-		let normalized_staker_payout = this.returnNormalizedStakerPayment(winning_slip.amt);
-                let blk_st = Big(prevblk.block.st).plus(Big(payments.staker_share)).minus(normalized_staker_payout).toFixed(8);
-
-console.log("WE THINK BLK_ST IS: " + blk_st + " ( it is ---> " + (this.block.st) + ")");
-
-                block_ss++;
-                block_sa = Big(block_sa).plus(Big(payments.staker_share)).toFixed(8);
-                slips.push(new saito.slip(payments.staker_publickey, normalized_staker_payout, 4));
+                slips.push(new saito.slip(payments.staker_publickey, payments.staker_share, 4));
   	        this.app.shashmap.spend_slipidx(payments.staker_slip, this.block.id);
-
-
               }
             }
 
@@ -857,7 +812,6 @@ console.log("WE THINK BLK_ST IS: " + blk_st + " ( it is ---> " + (this.block.st)
       // transaction type 2 == fee transaction always follows golden ticket (if exists)
       //
       if (this.transactions[i].transaction.type == 2) {
-
         if (index_of_block_payment != -1) {
           console.log("ERROR 581029: two block paymeet (type=2) transactions in block");
           return 0;
@@ -869,32 +823,19 @@ console.log("WE THINK BLK_ST IS: " + blk_st + " ( it is ---> " + (this.block.st)
 	//
 	for (let ii = 0; ii < this.transactions[i].transaction.to.length; ii++) {
 	  if (this.transactions[i].transaction.to[ii].type == 4) {
-	    if (this.transactions[i].transaction.to[ii].isNonZeroAmount()) {
-console.log("New Staking Slip counted going in!");
-              staking_slips_added++;
-    	      staking_amount_added = Big(staking_amount_added).plus(Big(this.transactions[i].transaction.to[ii].amt));
-	    }
+	    if (this.transactions[i].transaction.to[ii].isNonZero
+
+
+            staking_slips_added++;
+    	    staking_amount_added = "0.0";
+
+
+
 	  }
 	}
+
+
       }
-
-
-      //
-      // transaction type 4 == staking transactions (track slips)
-      //
-      if (this.transactions[i].transaction.type == 4) {
-	for (let ii = 0; ii < this.transactions[i].transaction.to.length; ii++) {
-	  if (this.transactions[i].transaction.to[ii].type == 4) {
-	    if (this.transactions[i].transaction.to[ii].isNonZeroAmount()) {
-console.log("New Staking Slip counted going in!");
-              staking_slips_added++;
-    	      staking_amount_added = Big(staking_amount_added).plus(Big(this.transactions[i].transaction.to[ii].amt));
-	    }
-	  }
-	}
-      }
-console.log("Here");
-
 
       //
       // no duplicate inputs slips
@@ -962,18 +903,12 @@ console.log("hash of txs to: " + this.app.crypto.hash(JSON.stringify(this.transa
 
         let eblkd	= await this.calculateRebroadcasts(this.transactions);
 
-	let removed_staking_slips = eblkd.ss;
-	let removed_staking_amount = eblkd.sa;
-	let adjusted_ss = prevblk.block.ss + staking_slips_added - removed_staking_slips;
-	let adjusted_sa = Big(prevblk.block.sa).plus(staking_amount_added).minus(removed_staking_amount).toFixed(8);
-
+	let removed_staking_slips = eblk.ss;
+	let removed_staking_amount = eblk.sa;
 
 	//
-	// staking data 
+	// prevblk staking data = this minus removed plus added
 	//
-	console.log(adjusted_ss + " --SS-- " + this.block.ss); 
-	console.log(adjusted_sa + " --SA-- " + this.block.sa); 
-
 
         //
         // reclaimed txs
