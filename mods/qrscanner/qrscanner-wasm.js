@@ -124,6 +124,8 @@ class QRScanner extends ModTemplate {
         this.canvas.height = this.video.videoHeight;
         this.canvas_context.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
 
+        if (this.canvas.width == 0) return;
+
         var imgData = this.canvas_context.getImageData(0, 0, this.canvas.width, this.canvas.height);
 
         if (imgData.data) {
