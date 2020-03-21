@@ -61,6 +61,24 @@ class QRScanner extends ModTemplate {
     );
   }
 
+  startQRDecoder() {
+
+    x = this.attemptQRDecode();
+
+    if (x == 1) {
+console.log("working...");
+    } else {
+console.log("wait 100....");
+      setTimeout(() => {
+	this.startQRDecoder();
+      }, 100);
+    }
+
+  }
+
+
+
+
   async start(video, canvas) {
     this.video = video
     this.canvas = canvas;
@@ -76,7 +94,11 @@ class QRScanner extends ModTemplate {
     } catch (err) {
       this.handleError(err);
     }
-    setTimeout(() => { this.attemptQRDecode() }, 500);
+    //setTimeout(() => { 
+    //  try {
+    this.startQRDecoder();
+    //  } catch (err) {}
+    //}, 400);
   }
 
   stop() {
@@ -124,16 +146,24 @@ class QRScanner extends ModTemplate {
         this.canvas.height = this.video.videoHeight;
         this.canvas_context.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
 
+        if (this.canvas.width == 0) return;
+
         var imgData = this.canvas_context.getImageData(0, 0, this.canvas.width, this.canvas.height);
 
         if (imgData.data) {
           this.decoder.postMessage(imgData);
         }
+        return 1;
       } catch (err) {
+        return 0;
+/**
         if (err.name == 'NS_ERROR_NOT_AVAILABLE') setTimeout(() => { this.attemptQRDecode() }, 0);
           console.log("Error");
           console.log(err);
+**/
       }
+    } else {
+      return 0;
     }
   }
 
@@ -162,6 +192,7 @@ class QRScanner extends ModTemplate {
   // Else, the message is broadcast for other modules to utilize
   //
   handleDecodedMessage(msg) {
+    alert(msg);
     if (this.app.crypto.isPublicKey(msg)) {
       // let encrypt_mod = this.app.modules.returnModule('Encrypt');
 
@@ -177,7 +208,7 @@ class QRScanner extends ModTemplate {
       AddContact.render(this.app, {publickey: msg, header: Header});
       AddContact.attachEvents(this.app, {publickey: msg, header: Header});
     } else {
-      this.sendEvent('qrcode', a);
+      this.sendEvent('qrcode', msg);
     }
   }
 
@@ -230,10 +261,7 @@ class QRScanner extends ModTemplate {
     `;
   }
 
-  attachEventsToHTML() {
-
-  }
-
+  attachEventsToHTML() {}
 
 }
 
