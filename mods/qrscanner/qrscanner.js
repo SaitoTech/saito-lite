@@ -137,7 +137,7 @@ class QRScanner extends ModTemplate {
           z-index: 999999;
           border: 4px solid orange;"></div>
         <div class="video-container">
-          <video playsinline autoplay id="qr-video" style="height: 100vh;"></video>
+          <video playsinline autoplay id="qr-video" style="height: 100vh;width: 100vw;"></video>
         </div>
         <canvas style="display: none" id="qr-canvas"></canvas>
       </div>
