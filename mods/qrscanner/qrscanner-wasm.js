@@ -61,6 +61,24 @@ class QRScanner extends ModTemplate {
     );
   }
 
+  startQRDecoder() {
+
+    x = this.attemptQRDecode();
+
+    if (x == 1) {
+console.log("working...");
+    } else {
+console.log("wait 100....");
+      setTimeout(() => {
+	this.startQRDecoder();
+      }, 100);
+    }
+
+  }
+
+
+
+
   async start(video, canvas) {
     this.video = video
     this.canvas = canvas;
@@ -76,7 +94,11 @@ class QRScanner extends ModTemplate {
     } catch (err) {
       this.handleError(err);
     }
-    setTimeout(() => { this.attemptQRDecode() }, 500);
+    //setTimeout(() => { 
+    //  try {
+    this.startQRDecoder();
+    //  } catch (err) {}
+    //}, 400);
   }
 
   stop() {
@@ -131,11 +153,17 @@ class QRScanner extends ModTemplate {
         if (imgData.data) {
           this.decoder.postMessage(imgData);
         }
+        return 1;
       } catch (err) {
+        return 0;
+/**
         if (err.name == 'NS_ERROR_NOT_AVAILABLE') setTimeout(() => { this.attemptQRDecode() }, 0);
           console.log("Error");
           console.log(err);
+**/
       }
+    } else {
+      return 0;
     }
   }
 
