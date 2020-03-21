@@ -3,7 +3,7 @@ const ModTemplate = require('../../lib/templates/modtemplate');
 const Header = require('../../lib/ui/header/header');
 const QRScannerTemplate = require('./qrscanner.template');
 const AddContact = require('./lib/add-contact');
-const quirc = require("node-quirc");
+
 
 
 const HeaderDropdownTemplate = (dropdownmods) => {
@@ -17,6 +17,7 @@ const HeaderDropdownTemplate = (dropdownmods) => {
     <ul>${html}</ul>
   </div>`;
 }
+
 
 class QRScanner extends ModTemplate {
 
@@ -70,6 +71,28 @@ class QRScanner extends ModTemplate {
 
 
 
+  startQRDecoderInitializationLoop() {
+
+    x = this.attemptQRDecode();
+
+    if (x == 1) {
+      console.log("working...");
+    } else {
+      console.log("wait 100....");
+      setTimeout(() => {
+        this.startQRDecoderInitializationLoop();
+      }, 100);
+    }
+
+  }
+
+
+
+
+
+
+
+
   startScanner() {
 
     if (this.app.BROWSER == 0) { return; }
@@ -91,7 +114,7 @@ class QRScanner extends ModTemplate {
     return `
       <div class="qrscanner-container">
         <div id="qr-target" style="
-          position: fixed;
+          position: absolute;
 	  left: 50%;
 	  top: 40%;
 	  transform: translate(-50%, -40%);
@@ -100,7 +123,7 @@ class QRScanner extends ModTemplate {
           z-index: 999999;
           border: 4px solid orange;"></div>
         <div class="video-container">
-          <video playsinline autoplay id="qr-video" style="width: 100%; max-width: 26em"></video>
+          <video playsinline autoplay id="qr-video" style="height: 100vh;"></video>
         </div>
         <canvas style="display: none" id="qr-canvas"></canvas>
       </div>
@@ -125,11 +148,8 @@ class QRScanner extends ModTemplate {
     this.canvas = canvas;
 
     this.canvas_context = this.canvas.getContext("2d");
-
     this.decoder = new Worker('/qrscanner/quirc_worker.js');
-
     this.decoder.onmessage = (msg) => { this.onDecoderMessage(msg) };
-
 
     try {
       let stream = await navigator.mediaDevices.getUserMedia(this.constraints);
@@ -137,16 +157,9 @@ class QRScanner extends ModTemplate {
     } catch (err) {
       this.handleError(err);
     }
-    //
-    // delay gives video time to work before trying to decode
-    //
-    try {
-      setTimeout(() => { this.attemptQRDecode() }, 10);
-    } catch (err) {
-console.log("second error");
-      setTimeout(() => { this.attemptQRDecode() }, 2000);
-    }
+    this.startQRDecoderInitializationLoop();
   }
+
 
   stop() {
     this.decoder.terminate();
@@ -156,7 +169,6 @@ console.log("second error");
 
   render() {
     document.querySelector('body').innerHTML = QRScannerTemplate();
-
     let header = document.getElementsById('qr-hud-header');
     header.append(
         elParser(HeaderDropdownTemplate())
@@ -178,12 +190,16 @@ console.log("second error");
         if (imgData.data) {
           this.decoder.postMessage(imgData);
         }
-      } catch (err) {
-        if (err.name == 'NS_ERROR_NOT_AVAILABLE') { setTimeout(() => { this.attemptQRDecode() }, 0); return; }
 
-        setTimeout(() => { this.attemptQRDecode() }, 500);
+        return 1;
+      } catch (err) {
+	return 0;
+
+        //if (err.name == 'NS_ERROR_NOT_AVAILABLE') { setTimeout(() => { this.attemptQRDecode() }, 0); return; }
+        //setTimeout(() => { this.attemptQRDecode() }, 500);
       }
     }
+    return 0;
   }
 
   //
@@ -212,8 +228,8 @@ console.log("second error");
   //
   handleDecodedMessage(msg) {
     if (this.app.crypto.isPublicKey(msg)) {
-      // let encrypt_mod = this.app.modules.returnModule('Encrypt');
 
+      // let encrypt_mod = this.app.modules.returnModule('Encrypt');
       // this.initializing_key = true;
       // encrypt_mod.initiate_key_exchange(msg);
 
@@ -225,6 +241,7 @@ console.log("second error");
 
       AddContact.render(this.app, {publickey: msg, header: Header});
       AddContact.attachEvents(this.app, {publickey: msg, header: Header});
+
     } else {
       this.sendEvent('qrcode', a);
     }
