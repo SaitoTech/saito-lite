@@ -28,50 +28,21 @@
 </head>
 
 <body>
-  <div id="qr-hud">
-    <div class="opaque-black" id="qr-hud-header">
-      <h2>QR Code</h2>
-      <i id="navigator" class="header-icon icon-med fas fa-bars"></i>
-      <div class="header-dropdown" style="display: none">
-        <div class="header-dropdown-modules">
-          <ul>
-            <a href="/arcade"><li>Arcade</li></a>
-            <a href="/chat"><li>Chat</li></a>
-            <a href="/email"><li>Email</li></a>
-            <a href="/forum"><li>Forum</li></a>
-          </ul>
-        </div>
-        <div class="header-dropdown-settings">
-          <ul>
-            <li id="header-dropdown-reset-wallet">Reset Wallet</li>
-            <li id="header-dropdown-load-wallet">Load Wallet</li>
-            <li>Settings</li>
-            <a href="/qrscanner"><li>Scan QR</li></a>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div id="qr-hud-body">
-      <div class="opaque-black" id="qr-hud-top"></div>
-      <div id="qr-hud-mid">
-        <div class="opaque-black"></div>
-        <div id="qr-hud-target"></div>
-        <div class="opaque-black"></div>
-      </div>
-      <div class="opaque-black" id="qr-hud-bot"></div>
-    </div>
-    <!-- <div id="qr-hud-footer">
-    </div> -->
-  </div>
-  <div class="video-container">
-    <video playsinline autoplay></video>
-  </div>
-  <canvas style="display: none" id="qr-canvas"></canvas>
-  <input style="display: none" id="file-input" type="file">
-  <button id="qr-scanner-button" class="create-button">
-    <i class="icon-med far fa-image"></i>
-  </button>
-  <script type="text/javascript" src="/saito/saito.js"></script>
-</body>
 
+  <div class="header"></div>
+  <div class="container main">
+
+    QR Scanner Container
+
+    <p></p>
+
+    <div class="button launch-scanner">launch scanner</div>
+
+  </div>
+
+  <div class="footer"></div>
+
+  <script type="text/javascript" src="/saito/saito.js"></script>
+
+</body>
 </html>
