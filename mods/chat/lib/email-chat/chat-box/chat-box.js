@@ -3,7 +3,7 @@ const ChatBoxMessageBlockTemplate = require('./chat-box-message-block.template.j
 
 var marked = require('marked');
 var sanitizeHtml = require('sanitize-html');
-const linkifyHtml = require('linkifyjs/html');
+const linkifyHtml = require('markdown-linkify');
 const emoji = require('node-emoji');
 
 module.exports = ChatBox = {
@@ -238,6 +238,7 @@ module.exports = ChatBox = {
     },
 
     formatMessage(msg, type = "input") {
+      msg = linkifyHtml(msg, { target: { url: '_self' } });
       msg = marked(msg);
       msg = sanitizeHtml(msg, {
         allowedTags: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
@@ -266,7 +267,7 @@ module.exports = ChatBox = {
       });
       //msg = type === "input" ? emoji.unemojify(msg) : emoji.emojify(msg);
       msg = emoji.emojify(msg);
-      msg = linkifyHtml(msg, { target: { url: '_self' } });
+      
       return msg;
     }
 

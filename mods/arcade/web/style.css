@@ -12,6 +12,10 @@ body {
   background: var(--saito-nightscape);
 }
 
+a {
+  color: #BCF;
+}
+
 .arcade-announcement {
   cursor: pointer;
   font-size: 0.9em;

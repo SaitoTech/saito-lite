@@ -33,7 +33,7 @@
     "image-resolver": "^0.6.1",
     "jimp": "^0.9.3",
     "json-tree-viewer": "0.0.2",
-    "linkifyjs": "^2.1.9",
+    "markdown-linkify": "^1.0.3",
     "marked": "^0.8.0",
     "merkle-tree-gen": "^1.1.0",
     "net": "^1.0.2",
