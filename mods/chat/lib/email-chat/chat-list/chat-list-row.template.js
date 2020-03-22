@@ -1,4 +1,4 @@
-module.exports = ChatListRowTemplate = ({name, id, messages=[], identicon}, helpers) => {
+module.exports = ChatListRowTemplate = (app,{name, id, messages=[], identicon}, helpers) => {
 
   let ts = new Date().getTime();
   let msg = '';
@@ -6,7 +6,8 @@ module.exports = ChatListRowTemplate = ({name, id, messages=[], identicon}, help
 
   if (message) {
     ts = message.timestamp;
-    msg = message.message.substring(0, 48);
+    msg = app.crypto.base64ToString(message.message);
+    msg = msg.substring(0, 48);
   }
 
   let {datetime_formatter} = helpers;
