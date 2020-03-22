@@ -12,16 +12,19 @@ module.exports = TransferManager = {
     // create a transaction the other person can broadcast
     //
     let newtx = app.wallet.createUnsignedTransaction(app.wallet.returnPublicKey(), 0.0, 0.0); 
-        newtx.transaction.msg.module   = "Contact Tracing";
-        newtx.transaction.msg.time     = new Date().getTime();
-        newtx.transaction.msg.location = "GPS/GNSS/BDS data"; 
-        newtx.transaction.msg.data     = "whatever data we want can be included in the transaction";
+        newtx.transaction.msg.module   = "Contact";
+        newtx.transaction.msg.data     = "additional data";
     newtx = app.wallet.signTransaction(newtx); 
 
     //
     // display the transaction in the QR Code
     //
-    this.generateQRCode(JSON.stringify(newtx.transaction));
+    //this.generateQRCode(app.crypto.stringToBase64(JSON.stringify(newtx.transaction)));
+
+    //
+    // or send arbitrary data
+    //
+    this.generateQRCode("QRCode data");
 
   },
 
@@ -55,7 +58,7 @@ module.exports = TransferManager = {
   handleDecodedMessage(msg) {
 
     try {
-      document.body.innerHTML = `You have scanned a transaction signed by your counterparty. In a non-tutorial application, you could broadcast to network or sign and return to them: <p></p> ${msg} `;
+      document.body.innerHTML = `This is the data in the QR Code: <p></p> ${msg} <p></p>In a production system, this could be a signed transaction which the receiver could broadcast onto the network, or sign themselves and then return to the originator.`;
     } catch (err) {
     }
   },
