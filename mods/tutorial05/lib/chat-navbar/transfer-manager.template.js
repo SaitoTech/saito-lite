@@ -1,15 +1,19 @@
-module.exports = TransferManagerTemplate = (app) => {
+module.exports = TransferManagerTemplate = (mode) => {
 
-  return `
-
-  <div class="transfer-manager-container">
-    <h3>Transfer Manager</h3>
-    <div id="qrcode" class="qrcode"></div>
-
-    <div class="button launch-scanner">launch scanner</div>
-
-  </div>
-
-  `;
+  if (mode == "scanner") {
+    return `
+      <div class="transfer-manager-container">
+        <h3>Click Button to Scan:</h3>
+        <div class="button launch-scanner">launch scanner</div>
+      </div>
+    `;
+  } else {
+    return `
+      <div class="transfer-manager-container">
+        <h3>Your QRCode:</h3>
+        <div id="qrcode" class="qrcode"></div>
+      </div>
+    `;
+  }
 }
 

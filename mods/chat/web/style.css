@@ -338,7 +338,7 @@ p {
   display: grid;
   grid-template-columns: 1em auto;
   grid-gap: 10px;
-
+  cursor: pointer;
   border-bottom: 1px solid lightgrey;
   padding-bottom: 5px;
 }

@@ -39,16 +39,26 @@ class Tutorial05 extends ModTemplate {
   }
 
   attachEventsChatPlugin(app, data) {
+ 
+    try {
+      document.getElementById('chat-nav-transfer-out').onclick = () => {
+        data.transfer_mode = "scanner";
+	document.getElementById('chat-nav').style.display = 'none';
+        TransferManager.render(app, data);
+        TransferManager.attachEvents(app, data);
+      };
+    } catch (err) {
+    }
 
-    document.getElementById('chat-nav-transfer-out').onclick = () => {
-      TransferManager.render(app, data);
-      TransferManager.attachEvents(app, data);
-    };
-
-    document.getElementById('chat-nav-transfer-in').onclick = () => {
-      TransferManager.attachEvents(app, data);
-    };
-
+    try {
+      document.getElementById('chat-nav-transfer-in').onclick = () => {
+        data.transfer_mode = "qrcode";
+	document.getElementById('chat-nav').style.display = 'none';
+        TransferManager.render(app, data);
+        TransferManager.attachEvents(app, data);
+      };
+    } catch (err) {
+    }
   }
 
 

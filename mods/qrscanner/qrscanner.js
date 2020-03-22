@@ -33,6 +33,8 @@ class QRScanner extends ModTemplate {
     this.canvas_context = null;
     this.isStreamInit = false;
 
+    this.scanner_callback = null;
+
     this.description = "Helper module with QR code scanning functionality."
     this.categories  = "Dev Data Utilities";
 
@@ -93,11 +95,14 @@ class QRScanner extends ModTemplate {
 
 
 
-  startScanner() {
+  startScanner(mycallback=null) {
 
     if (this.app.BROWSER == 0) { return; }
     if (!document) { return; }
     if (document.querySelector('.qrscanner-container')) { return; }
+
+    this.scanner_callback = null;
+    if (mycallback) { this.scanner_callback = mycallback; }
 
     document.body.innerHTML = this.returnScannerHTML();
 
@@ -240,7 +245,13 @@ class QRScanner extends ModTemplate {
   // Else, the message is broadcast for other modules to utilize
   //
   handleDecodedMessage(msg) {
-    alert(msg);
+
+    if (this.scanner_callback != null) {
+      this.decoder.terminate();
+      this.scanner_callback(msg);
+      return;
+    }
+
     if (this.app.crypto.isPublicKey(msg)) {
 
       // let encrypt_mod = this.app.modules.returnModule('Encrypt');
