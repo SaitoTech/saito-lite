@@ -47,10 +47,13 @@ module.exports = AppStoreAppspace = {
 	    }
 	  }
 
-// console.log("RES ROWS: " + JSON.stringify(res.rows));
-
-          this.addCategories(app, data, res.rows);
-          this.populateAppsSpace(app, data, res.rows);
+	  try {
+            this.addCategories(app, data, res.rows);
+            this.populateAppsSpace(app, data, res.rows);
+	  } catch (err) {
+	    console.log("________________\nissuing fetching rows from server in appstore\n");
+//console.log("RES ROWS: " + JSON.stringify(res.rows));
+	  }
         }
     });
   },
@@ -58,6 +61,7 @@ module.exports = AppStoreAppspace = {
 
   addCategories(app, data, rows) {
     var allCategories = [];
+    var allCategoriesHYML = "";
     for (let i = 0; i < rows.length; i++) {
       if (rows[i].categories) {
         let categories = rows[i].categories.split(" ")
@@ -68,17 +72,21 @@ module.exports = AppStoreAppspace = {
         });
       }
     }
-    let allCategoriesHTML = allCategories.map((category) => {
-      return `<div class="app-category-checkbox app-category-${category}">
+    if (allCategories.length > 0) {
+      allCategoriesHTML = allCategories.map((category) => {
+        return `<div class="app-category-checkbox app-category-${category}">
                 <label class="s-container">${category}
                   <input type="checkbox" name="app-${category}" id="app-${category}" checked/>
                   <span class="s-checkmark"></span>
                 </label>
               </div>
                 `;
-    }).sort().join("");
-    document.querySelector(".appstore-categories").innerHTML = allCategoriesHTML;
-    this.attachEventstoCategories(app, data, rows);
+      }).sort().join("");
+    }
+    try {
+      document.querySelector(".appstore-categories").innerHTML = allCategoriesHTML;
+      this.attachEventstoCategories(app, data, rows);
+    } catch (err) {}
   },
 
   attachEventstoCategories(app, data, rows) {
