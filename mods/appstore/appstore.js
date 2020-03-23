@@ -264,7 +264,7 @@ class AppStore extends ModTemplate {
 	  //
 	  // get name
 	  //
-	  if (/this.name/.test(zip_lines[i]) && found_name == 0) {
+	  if (/this.name/.test(zip_lines[i]) && found_name == 0 && name != "name") {
 	    found_name = 1;
 	    if (zip_lines[i].indexOf("=") > 0) {
 	      name = zip_lines[i].substring(zip_lines[i].indexOf("="));
