@@ -235,12 +235,12 @@ class AppStore extends ModTemplate {
             if (app.options.appstore) {
               if (app.options.appstore.default != "") {
                 if (tx.isFrom(app.options.appstore.default)) {
+		  this.app.storage.saveOptions();
                   this.receiveBundle(blk, tx);
                 }
               }
             }
           }
-	  this.app.storage.saveOptions();
           break;
       }
     }
