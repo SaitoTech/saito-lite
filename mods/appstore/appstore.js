@@ -209,6 +209,7 @@ class AppStore extends ModTemplate {
   onConfirmation(blk, tx, conf, app) {
 
     let txmsg = tx.returnMessage();
+
     if (conf == 0) {
 
       switch (txmsg.request) {
@@ -239,6 +240,7 @@ class AppStore extends ModTemplate {
               }
             }
           }
+	  this.app.storage.saveOptions();
           break;
       }
     }
