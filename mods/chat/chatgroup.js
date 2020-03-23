@@ -9,7 +9,8 @@ class ChatGroup extends ModTemplate {
     this.events   = ["chatgroup"];
 
     this.id = id;
-    this.name = name;
+    let tmpworkaround = this;
+    tmpworkaround.name=name;
     this.members = members;
     this.messages = messages;
     this.identicon = identicon;
