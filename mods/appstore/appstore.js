@@ -5,36 +5,6 @@ const AppStoreBundleConfirm = require('./lib/email-appspace/appstore-bundle-conf
 const fs = require('fs');
 const path = require('path');
 
-//
-// supporting utility functions
-//
-// recursively go through and find all files in dir
-function getFiles(dir) {
-  const dirents = fs.readdirSync(dir, { withFileTypes: true });
-  const files = dirents.map((dirent) => {
-    const res = path.resolve(dir, dirent.name);
-    return dirent.isDirectory() ? getFiles(res) : res;
-  });
-  return Array.prototype.concat(...files);
-}
-function returnSlug(nme) {
-  nme = nme.toLowerCase();
-  nme = nme.replace(/\t/g, "_");
-  return nme;
-}
-function deleteDirs(dir) {
-  const dirents = fs.readdirSync(dir, { withFileTypes: true });
-  dirents.forEach((dirent) => {
-    const res = path.resolve(dir, dirent.name);
-    if (dirent.isDirectory() && fs.readdirSync(res).length == 0) {
-      fs.rmdirSync(res, { maxRetries: 100, recursive: true });
-    } else {
-      deleteDirs(res);
-      // delete after children have been
-      fs.rmdirSync(res, { maxRetries: 100, recursive: true });
-    }
-  });
-}
 
 
 class AppStore extends ModTemplate {
@@ -430,24 +400,25 @@ console.log("MODULE: " + name + " -- " + description + " -- " + categories);
       $tx: JSON.stringify(tx.transaction),
       $featured: featured_app,
     };
-    await this.app.storage.executeDatabase(sql, params, "appstore");
-
-
-    if (this.featured_apps.includes(name) && tx.isFrom(this.app.wallet.returnPublicKey())) {
-
-      sql = "UPDATE modules SET featured = 0 WHERE name = $name";
-      params = { $name: name };
+    if (name) {
       await this.app.storage.executeDatabase(sql, params, "appstore");
 
-      sql = "UPDATE modules SET featured = 1 WHERE name = $name AND version = $version";
-      params = {
-        $name: name,
-        $version: `${ts}-${sig}`,
-      };
-      await this.app.storage.executeDatabase(sql, params, "appstore");
+      if (this.featured_apps.includes(name) && tx.isFrom(this.app.wallet.returnPublicKey())) {
+
+        sql = "UPDATE modules SET featured = 0 WHERE name = $name";
+        params = { $name: name };
+        await this.app.storage.executeDatabase(sql, params, "appstore");
+
+        sql = "UPDATE modules SET featured = 1 WHERE name = $name AND version = $version";
+        params = {
+          $name: name,
+          $version: `${ts}-${sig}`,
+        };
+        await this.app.storage.executeDatabase(sql, params, "appstore");
+
+      }
 
     }
-
 
   }
 
@@ -825,3 +796,37 @@ console.log(sql + " ---- " + params);
 
 
 module.exports = AppStore;
+
+
+
+//
+// supporting utility functions
+//
+// recursively go through and find all files in dir
+function getFiles(dir) {
+  const dirents = fs.readdirSync(dir, { withFileTypes: true });
+  const files = dirents.map((dirent) => {
+    const res = path.resolve(dir, dirent.name);
+    return dirent.isDirectory() ? getFiles(res) : res;
+  });
+  return Array.prototype.concat(...files);
+}
+function returnSlug(nme) {
+  nme = nme.toLowerCase();
+  nme = nme.replace(/\t/g, "_");
+  return nme;
+}
+function deleteDirs(dir) {
+  const dirents = fs.readdirSync(dir, { withFileTypes: true });
+  dirents.forEach((dirent) => {
+    const res = path.resolve(dir, dirent.name);
+    if (dirent.isDirectory() && fs.readdirSync(res).length == 0) {
+      fs.rmdirSync(res, { maxRetries: 100, recursive: true });
+    } else {
+      deleteDirs(res);
+      // delete after children have been
+      fs.rmdirSync(res, { maxRetries: 100, recursive: true });
+    }
+  });
+}
+
