@@ -264,13 +264,14 @@ class AppStore extends ModTemplate {
 	  //
 	  // get name
 	  //
-	  if (/this.name/.test(zip_lines[i]) && found_name == 0 && name != "name") {
+	  if (/this.name/.test(zip_lines[i]) && found_name == 0) {
 	    found_name = 1;
 	    if (zip_lines[i].indexOf("=") > 0) {
 	      name = zip_lines[i].substring(zip_lines[i].indexOf("="));
 	      name = cleanString(name);
 	      name = name.replace(/^\s+|\s+$/gm,'');
-	      if (name.length > 50) { name = "Unknown"; }
+	      if (name.length > 50) { name = "Unknown"; found_name = 0; }
+	      if (name === "name") { name = "Unknown"; found_name = 0; }
 	    }
 	  }
 
