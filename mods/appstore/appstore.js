@@ -272,6 +272,14 @@ class AppStore extends ModTemplate {
 
         if (file.path.substr(0,3) == "lib") { return; }
         if (file.path.substr(-2) !== "js") { return; }
+        if (file.path.substr(-2) !== "js") { return; }
+        if (file.path.indexOf("/") > -1) { return; }
+        if (file.path.indexOf("/web/") > -1) { return; }
+        if (file.path.indexOf("/www/") > -1) { return; }
+        if (file.path.indexOf("/lib/") > -1) { return; }
+        if (file.path.indexOf("/license/") > -1) { return; }
+        if (file.path.indexOf("/docs/") > -1) { return; }
+        if (file.path.indexOf("/sql/") > -1) { return; }
 
         let content = await file.buffer();
         let zip_text = content.toString('utf-8')
@@ -286,7 +294,7 @@ class AppStore extends ModTemplate {
 	  //
 	  // get name
 	  //
-	  if (/this.name/.test(zip_lines[i])) {
+	  if (/this.name/.test(zip_lines[i]) && found_name == 0) {
 	    found_name = 1;
 	    if (zip_lines[i].indexOf("=") > 0) {
 	      name = zip_lines[i].substring(zip_lines[i].indexOf("="));
@@ -299,7 +307,7 @@ class AppStore extends ModTemplate {
 	  //
 	  // get description
 	  //
-	  if (/this.description/.test(zip_lines[i])) {
+	  if (/this.description/.test(zip_lines[i]) && found_description == 0) {
 	    found_description = 1;
 	    if (zip_lines[i].indexOf("=") > 0) {
 	      description = zip_lines[i].substring(zip_lines[i].indexOf("="))    
@@ -311,7 +319,7 @@ class AppStore extends ModTemplate {
 	  //
 	  // get categories
 	  //
-	  if (/this.categories/.test(zip_lines[i])) {
+	  if (/this.categories/.test(zip_lines[i]) && found_categories == 0) {
 	    found_categories = 1;
 	    if (zip_lines[i].indexOf("=") > 0) {
 	      categories = zip_lines[i].substring(zip_lines[i].indexOf("="))    
@@ -321,6 +329,8 @@ class AppStore extends ModTemplate {
 	  }
 
 	}
+
+console.log("MODULE: " + name + " -- " + description + " -- " + categories);
 
         function cleanString(str) {
 	  str = str.replace(/^\s+|\s+$/gm,'');
