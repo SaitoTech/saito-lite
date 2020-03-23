@@ -400,7 +400,7 @@ console.log("MODULE: " + name + " -- " + description + " -- " + categories);
       $tx: JSON.stringify(tx.transaction),
       $featured: featured_app,
     };
-    if (name != "unknown") {
+    if (name != "unknown" && name != "name") {
       await this.app.storage.executeDatabase(sql, params, "appstore");
 
       if (this.featured_apps.includes(name) && tx.isFrom(this.app.wallet.returnPublicKey())) {
