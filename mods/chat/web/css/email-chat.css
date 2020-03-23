@@ -90,6 +90,10 @@ hr {
   margin: 1em 0;
 }
 
+p {
+  margin: 1px 0;
+}
+
 .hidden {
   display: none !important;
 }
