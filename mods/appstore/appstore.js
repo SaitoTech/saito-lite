@@ -259,8 +259,6 @@ class AppStore extends ModTemplate {
 	let found_description = 0;
 	let found_categories = 0;	
 
-console.log("FILE: " + file.path);
-
 	for (let i = 0; i < zip_lines.length && i < 50 && (found_name == 0 || found_description == 0 || found_categories == 0); i++) {
 
 	  //
