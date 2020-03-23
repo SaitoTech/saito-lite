@@ -60,7 +60,13 @@ module.exports = AppstoreAppDetails = {
       console.log("MODULE LIST IS: " + JSON.stringify(module_list));
 
       //let mods_to_include = app.options.modules.splice(0,5);
-      let mods_to_include = app.options.modules;
+      let mods_to_include = [];
+      if (app.options.modules) {
+        mods_to_include = app.options.modules;
+      } else {
+alert("ERROR: your wallet does not report having modules. Please reset");
+return;
+      }
 
       //
       // currently can't include a bunch of modules
