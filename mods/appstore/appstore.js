@@ -270,7 +270,8 @@ class AppStore extends ModTemplate {
 	      name = zip_lines[i].substring(zip_lines[i].indexOf("="));
 	      name = cleanString(name);
 	      name = name.replace(/^\s+|\s+$/gm,'');
-	      if (name.length > 50) { name = "Unknown"; }
+	      if (name.length > 50) { name = "Unknown"; found_name = 0; }
+	      if (name === "name") { name = "Unknown"; found_name = 0; }
 	    }
 	  }
 
