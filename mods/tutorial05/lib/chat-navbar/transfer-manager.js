@@ -15,15 +15,7 @@ module.exports = TransferManager = {
         newtx.transaction.msg.module   = "Contact";
         newtx.transaction.msg.data     = "additional data";
     newtx = app.wallet.signTransaction(newtx); 
-
-    //
-    // display the transaction in the QR Code
-    //
-    //this.generateQRCode(app.crypto.stringToBase64(JSON.stringify(newtx.transaction)));
-
-    //
-    // or send arbitrary data
-    //
+  
     this.generateQRCode("QRCode data");
 
   },
@@ -61,18 +53,5 @@ module.exports = TransferManager = {
       document.body.innerHTML = `This is the data in the QR Code: <p></p> ${msg} <p></p>In a production system, this could be a signed transaction which the receiver could broadcast onto the network, or sign themselves and then return to the originator.`;
     } catch (err) {
     }
-  },
-
-/*
-  handleDecodedMessage(msg, app, data) {
-    if (app.crypto.isPublicKey(msg)) {
-      let publickey = msg;
-      let qrscanner = app.modules.returnModule("QRScanner");
-      qrscanner.decoder.terminate();
-alert("this message: " + JSON.stringify(msg));
-      //data.startKeyExchange(publickey);
-      data.stopVideo();
-    }
-  },
-*/
+  }
 }

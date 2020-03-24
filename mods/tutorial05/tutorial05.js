@@ -34,8 +34,8 @@ class Tutorial05 extends ModTemplate {
 
   renderChatPlugin(app, data) {
     let htmlobj = document.querySelector('.chat-navbar');
-    htmlobj.innerHTML += '<li id="chat-nav-transfer-out" class="chat-nav-row"><i class="fas fa-user-plus"></i>Make Transfer</li>';
-    htmlobj.innerHTML += '<li id="chat-nav-transfer-in" class="chat-nav-row"><i class="fas fa-user-plus"></i>Receive Transfer</li>';
+    htmlobj.innerHTML += '<li id="chat-nav-transfer-out" class="chat-nav-row"><i class="fas fa-sign-out-alt"></i></i>Make Transfer</li>';
+    htmlobj.innerHTML += '<li id="chat-nav-transfer-in" class="chat-nav-row"><i class="fas fa-sign-in-alt"></i></i>Receive Transfer</li>';
   }
 
   attachEventsChatPlugin(app, data) {

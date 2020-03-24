@@ -131,15 +131,8 @@ class QRScanner extends ModTemplate {
   returnScannerHTML() {
     return `
       <div class="qrscanner-container">
-        <div id="qr-target" style="
-          position: absolute;
-	  left: 50%;
-	  top: 40%;
-	  transform: translate(-50%, -40%);
-          width: 14em;
-          height: 14em;
-          z-index: 999999;
-          border: 4px solid orange;"></div>
+        <div id="qr-target" class="qr-target"></div>
+        <div id="scanline" class="scanline"></div>
         <div class="video-container">
           <video playsinline autoplay id="qr-video" style="height: 100vh;width: 100vw;"></video>
         </div>

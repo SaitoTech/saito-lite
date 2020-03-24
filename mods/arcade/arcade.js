@@ -628,7 +628,7 @@ class Arcade extends ModTemplate {
         //
         // remove game from server
         //
-        let players_array = txmsg.players.join("_");;
+        // let players_array = txmsg.players.join("_");;
         let sql = `UPDATE games SET status = "active" WHERE game_id = $game_id`;
         let params = {
           $game_id : tx.transaction.msg.game_id ,
