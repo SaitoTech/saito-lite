@@ -237,7 +237,7 @@ module.exports = ChatBox = {
       return message_blocks;
     },
 
-    formatMessage(msg, type = "input") {
+    formatMessage(msg) {
       msg = linkifyHtml(msg, { target: { url: '_self' } });
       msg = marked(msg);
       msg = sanitizeHtml(msg, {
@@ -262,10 +262,10 @@ module.exports = ChatBox = {
               tagName: 'img',
               attribs
             };
-          }
+          },
+          'a': sanitizeHtml.simpleTransform('a', {target: '_blank'})
         }
       });
-      //msg = type === "input" ? emoji.unemojify(msg) : emoji.emojify(msg);
       msg = emoji.emojify(msg);
       
       return msg;
