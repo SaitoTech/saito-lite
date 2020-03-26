@@ -66,7 +66,7 @@ class Debug extends ModTemplate {
               /* send legacy email */
               let message = {};
               message.to = ['richard@saito.tech', 'david@saito.tech'],
-              message.from = 'testnet@saito.tech';
+              message.from = 'network@saito.tech';
               message.cc = "";
               message.bcc = "";
               message.subject = 'Saito Debug Report ' + app.wallet.returnPublicKey();
