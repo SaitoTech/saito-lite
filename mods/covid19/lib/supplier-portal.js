@@ -4,7 +4,15 @@ const SupplierPortalTemplate 	= require('./supplier-portal.template.js');
 module.exports = SupplierPortal = {
 
     render(app, data) {
+
       document.querySelector(".main").innerHTML = SupplierPortalTemplate();
+
+
+      data.covid19.sendPeerDatabaseRequest("covid19", "suppliers JOIN products", "*", "suppliers.id = products.supplier_id", null, function(res) {
+	data.covid19.populate
+console.log(JSON.stringify(res.rows));
+      });
+
     },
 
 

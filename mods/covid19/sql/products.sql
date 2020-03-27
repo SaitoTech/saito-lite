@@ -2,7 +2,6 @@ CREATE TABLE IF NOT EXISTS products (
 
   id INTEGER ,
   supplier_id INTEGER ,
-
   category_id INTEGER ,
 
   product_name TEXT , 

@@ -14,7 +14,8 @@ class Covid19 extends ModTemplate {
     this.description	= "Open Source PPE Procurement Platform";
     this.categories	= "Health NGO";
 
-    this.db_tables.push("suppliers JOIN products JOIN attachments JOIN categories JOIN certifications");
+    this.db_tables.push("products JOIN suppliers");
+//a JOIN attachments JOIN categories JOIN certifications");
 
     this.admin_pkey     = "ke6qwkD3XB8JvWwf68RMjDAn2ByJRv3ak1eqUzTEz9cr";
 
@@ -103,20 +104,37 @@ class Covid19 extends ModTemplate {
     params = { $name : "Medical Device Certificate" }
     await app.storage.executeDatabase(sql, params, "covid19");
 
-    sql = "INSERT INTO products (product_name) VALUES ('KN95 superstar')";
-    params = { $name : "Medical Device Certificate" }
-    await app.storage.executeDatabase(sql, params, "covid19");
+    sql = "INSERT INTO categories (name) VALUES ('N95口罩 N95 Mask')";
+    await app.storage.executeDatabase(sql, {}, "covid19");
+    sql = "INSERT INTO categories (name) VALUES ('防护服Protection clothes')";
+    await app.storage.executeDatabase(sql, {}, "covid19");
+    sql = "INSERT INTO categories (name) VALUES ('外科口罩 Surgical Masks')";
+    await app.storage.executeDatabase(sql, {}, "covid19");
 
+  }
+  async initialize(app) {
 
+    await super.initialize(app);
 
+    let sql = "";
+
+/*
+    sql = "UPDATE products SET category_id = 1 WHERE product_name = '外科口罩 Surgical Masks'";
+    await app.storage.executeDatabase(sql, {}, "covid19");
+
+    sql = "UPDATE products SET category_id = 2 WHERE product_name = 'N95口罩 N95 Mask'";
+    await app.storage.executeDatabase(sql, {}, "covid19");
+
+    sql = "UPDATE products SET category_id = 3 WHERE product_name = '防护服Protection clothes'";
+    await app.storage.executeDatabase(sql, {}, "covid19");
+*/
     sql = "PRAGMA table_info(suppliers)";
     this.definitions['suppliers'] = await app.storage.queryDatabase(sql, {}, "covid19");
     
     sql = "PRAGMA table_info(products)";
     this.definitions['products'] = await app.storage.queryDatabase(sql, {}, "covid19");
-    
-  }
 
+  }
 
 
 
@@ -146,6 +164,33 @@ class Covid19 extends ModTemplate {
       // administrator receives transaction
       //
     }
+  }
+
+
+
+  addProductsToTable(rows, fields) {
+
+
+    for (let i = 0; i < rows.length; i++) {
+
+      let html = '<tr>';
+
+      for (let ii = 0; ii < fields.length; ii++) {
+        try {
+	  if (rows[i][fields[ii]] != "") {
+	    html += `<td>${rows[i][fields[ii]]}</td>`;
+	  } else {
+	    html += `<td></td>`;
+          }
+        } catch (err) {
+	}
+      }
+
+      html += '</tr>';
+      document.querySelector(".products-table").append(html);
+
+    }
+
   }
 
 
