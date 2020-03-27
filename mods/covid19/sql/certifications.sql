@@ -1,5 +1,8 @@
 CREATE TABLE IF NOT EXISTS certifications (
+
   id INTEGER ,
-  name VARCHAR(255) ,
+  name TEXT ,
+ 
+  PRIMARY KEY(id ASC)
 );
 
