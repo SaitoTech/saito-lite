@@ -17,10 +17,6 @@ module.exports = SupplierPortalTemplate = () => {
 
     <div class="portal" style="display:none">
 
-      <select id="select-product-type" name="select-product-type">
-        <option value=0>select product category</option>
-      </select>
-
       <table id="products-table" class="products-table" style="display:none;">
         <tr>
           <th>Category</th>

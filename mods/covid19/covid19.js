@@ -15,7 +15,7 @@ class Covid19 extends ModTemplate {
     this.categories	= "Health NGO";
 
     this.db_tables.push("products JOIN suppliers");
-//a JOIN attachments JOIN categories JOIN certifications");
+    this.db_tables.push("products JOIN suppliers LEFT JOIN categories");
 
     this.admin_pkey     = "ke6qwkD3XB8JvWwf68RMjDAn2ByJRv3ak1eqUzTEz9cr";
 
