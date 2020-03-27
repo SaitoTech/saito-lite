@@ -200,7 +200,17 @@ class Covid19 extends ModTemplate {
 	    }
 
 	    if (fields[ii] == "edit") {
-  	      html += `<td>edit | delete</td>`;
+  	      html += `<td><span class="edit_product" id="${rows[i].id}">edit</a> | <span class="delete_product" id="${rows[i].id}">delete</span></td>`;
+	      added = 1;
+	    }
+
+	    if (fields[ii] == "fullview") {
+  	      html += `<td><span class="fullview_product" id="${rows[i].id}">view full details</span></td>`;
+	      added = 1;
+	    }
+
+	    if (fields[ii] == "admin") {
+  	      html += `<td><span class="fullview_product" id="${rows[i].id}">view full details</span> | <span class="edit_product" id="${rows[i].id}">edit</a> | <span class="delete_product" id="${rows[i].id}">delete</span></td>`;
 	      added = 1;
 	    }
 
