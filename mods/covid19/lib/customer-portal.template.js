@@ -19,18 +19,16 @@ module.exports = CustomerPortalTemplate = () => {
         <option value=0>select product category</option>
       </select>
 
-      <table id="products-table" class="products-table" style="display:none;">
-        <tr>
-          <th>Supplier</th>
-          <th>Specification</th>
-          <th>Photo</th>
-          <th>Unit Cost</th>
-          <th>Daily Volume</th>
-          <th>Certifications</th>
-          <th>Lead Time</th>
-          <th></th>
-        </tr>
-      </table>
+      <div id="products-table" class="products-table" style="display:none;grid-gap: 1em;grid-template-columns: repeat(8, auto);">
+          <div class="table-head">Supplier</div>
+          <div class="table-head">Specification</div>
+          <div class="table-head">Photo</div>
+          <div class="table-head">Unit Cost</div>
+          <div class="table-head">Daily Volume</div>
+          <div class="table-head">Certifications</div>
+          <div class="table-head">Lead Time</div>
+          <div class="table-head"></div>
+      </div>
 
     </div>
   </div>
