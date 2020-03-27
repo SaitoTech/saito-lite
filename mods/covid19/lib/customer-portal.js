@@ -39,7 +39,7 @@ console.log(whereclause);
           data.covid19.sendPeerDatabaseRequest("covid19", "products JOIN suppliers", "*", whereclause, null, function(res) {
 console.log(JSON.stringify(res));
 	    data.covid19.addProductsToTable(res.rows, ['Update', 'standard', 'production_daily_capacity', 'production_minimum_order', 'cost', 'product_specification', 'product_minimum_order']);
-	    document.querySelector(".products-table").style.display = "block";
+	    document.querySelector(".products-table").style.display = "grid";
           });
 
 	}

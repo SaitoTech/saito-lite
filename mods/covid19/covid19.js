@@ -173,20 +173,21 @@ class Covid19 extends ModTemplate {
 
     for (let i = 0; i < rows.length; i++) {
 
-      let html = '<tr>';
+      let html = '';
+      //html += `      `;
 
       for (let ii = 0; ii < fields.length; ii++) {
         try {
-	  if (rows[i][fields[ii]] != "") {
-	    html += `<td>${rows[i][fields[ii]]}</td>`;
+	  if (rows[i][fields[ii]] != "" && typeof rows[i][fields[ii]] != 'undefined') {
+	    html += `<div>${rows[i][fields[ii]]}</div>`;
 	  } else {
-	    html += `<td></td>`;
+	    html += `<div></div>`;
           }
         } catch (err) {
 	}
       }
 
-      html += '</tr>';
+      //html += '</div>';
       document.querySelector(".products-table").innerHTML += html;
 
     }
