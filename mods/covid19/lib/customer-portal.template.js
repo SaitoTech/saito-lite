@@ -21,13 +21,14 @@ module.exports = CustomerPortalTemplate = () => {
 
       <table id="products-table" class="products-table" style="display:none;">
         <tr>
-          <th>UPDATE</th>
-          <th>Standard</th>
-          <th>Daily Capacity</th>
-          <th>Minimum Order</th>
-          <th>USD Cost (FOB)</th>
+          <th>Supplier</th>
+          <th>Specification</th>
+          <th>Photo</th>
+          <th>Unit Cost</th>
+          <th>Daily Volume</th>
           <th>Certifications</th>
-          <th>Verified</th>
+          <th>Lead Time</th>
+          <th></th>
         </tr>
       </table>
 

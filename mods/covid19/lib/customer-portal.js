@@ -38,7 +38,7 @@ alert("current id: " + category_id);
 console.log(whereclause);
           data.covid19.sendPeerDatabaseRequest("covid19", "products JOIN suppliers", "*", whereclause, null, function(res) {
 console.log(JSON.stringify(res));
-	    data.covid19.addProductsToTable(res.rows, ['Update', 'standard', 'production_daily_capacity', 'production_minimum_order', 'cost', 'product_specification', 'product_minimum_order']);
+	    data.covid19.addProductsToTable(res.rows, [ 'name', 'product_specification', 'product_photo', 'pricing_unit_cost', 'production_daily_capacity', 'certifications', 'June 24', 'edit']);
 	    document.querySelector(".products-table").style.display = "block";
           });
 

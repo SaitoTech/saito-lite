@@ -9,29 +9,33 @@ module.exports = SupplierPortalTemplate = () => {
 
     <p></p>
 
-    <table>
-      <tr>
-        <th>UPDATE</th>
-        <th>Standard</th>
-        <th>Daily Capacity</th>
-        <th>Minimum Order</th>
-        <th>USD Cost (FOB)</th>
-        <th>Certifications</th>
-        <th>Verified</th>
-      </tr>
-      <tr>
-        <td class="update-product-btn" id="product-id">UPDATE PRODUCT</td>
-        <td>GB2626-2006 civilian</td>
-        <td>250,000</td>
-        <td>10,000</td>
-        <td>1.29</td>
-        <td>CE certified, FDA certified, test report, medical device license</td>
-        <td>yes</td>
-      </tr>
-    </table>
+    <div class="loading">
 
+      Currently loading your products....
+
+    </div>
+
+    <div class="portal" style="display:none">
+
+      <select id="select-product-type" name="select-product-type">
+        <option value=0>select product category</option>
+      </select>
+
+      <table id="products-table" class="products-table" style="display:none;">
+        <tr>
+          <th>Category</th>
+          <th>Specification</th>
+          <th>Photo</th>
+          <th>Unit Cost</th>
+          <th>Daily Volume</th>
+          <th>Certifications</th>
+          <th>Lead Time</th>
+          <th></th>
+        </tr>
+      </table>
+
+    </div>
   </div>
-
   `;
 
   return html;
