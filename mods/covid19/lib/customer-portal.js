@@ -28,18 +28,15 @@ module.exports = CustomerPortal = {
 
       document.getElementById('select-product-type').addEventListener('change', (e) => {
         let category_id = e.currentTarget.value;
-alert("current id: " + category_id);
 	if (category_id > 0) {
 
           //
           // populate table
           //
           let whereclause = "suppliers.id = products.supplier_id AND products.category_id = "+category_id;
-console.log(whereclause);
           data.covid19.sendPeerDatabaseRequest("covid19", "products JOIN suppliers", "*", whereclause, null, function(res) {
-console.log(JSON.stringify(res));
 	    data.covid19.addProductsToTable(res.rows, [ 'name', 'product_specification', 'product_photo', 'pricing_unit_cost', 'production_daily_capacity', 'certifications', 'June 24', 'edit']);
-	    document.querySelector(".products-table").style.display = "block";
+	    document.querySelector(".products-table").style.display = "grid";
           });
 
 	}

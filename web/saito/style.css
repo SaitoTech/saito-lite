@@ -128,6 +128,10 @@ hr {
   font-weight: bolder;
 }
 
+.table-head {
+  font-weight: bolder;
+}
+
 /* Forms and Inputs */
 
 button, .button, .file-label {

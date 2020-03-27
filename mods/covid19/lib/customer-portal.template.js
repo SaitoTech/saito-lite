@@ -32,6 +32,8 @@ module.exports = CustomerPortalTemplate = () => {
         </tr>
       </table>
 
+    </div>
+  </div>
   `;
 
   return html;

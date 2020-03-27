@@ -182,7 +182,8 @@ class Covid19 extends ModTemplate {
 
     for (let i = 0; i < rows.length; i++) {
 
-      let html = '<tr>';
+      let html = '';
+      //html += `      `;
 
       for (let ii = 0; ii < fields.length; ii++) {
 
@@ -221,7 +222,7 @@ console.log("err: " + err);
 
       }
 
-      html += '</tr>';
+      //html += '</div>';
       document.querySelector(".products-table").innerHTML += html;
 
     }
