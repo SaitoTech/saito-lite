@@ -11,8 +11,8 @@ class Covid19 extends ModTemplate {
 
     this.app            = app;
     this.name           = "Covid19";
-    this.description	= "Open Source PPE Procurement Platform";
-    this.categories	= "Health NGO";
+    this.description  = "Open Source PPE Procurement Platform";
+    this.categories  = "Health NGO";
 
     this.db_tables.push("products JOIN suppliers");
     this.db_tables.push("products JOIN suppliers LEFT JOIN categories");
@@ -53,8 +53,8 @@ class Covid19 extends ModTemplate {
         Update your Product Information:
         <p></p>
         <pre>${JSON.stringify(product)}</pre>
-	<p></p>
-	<div class="update-product-btn button">update</div>
+  <p></p>
+  <div class="update-product-btn button">update</div>
       `;
     } catch (err) {
       console.log("Error rendering covid19 email plugin: " + err);
@@ -65,8 +65,8 @@ class Covid19 extends ModTemplate {
 
       document.querySelector('.update-product-btn').addEventListener('click', function(e) {
 
-	alert("Sending Transaction to Update Product");
-	window.href = "/covid19";
+  alert("Sending Transaction to Update Product");
+  window.href = "/covid19";
 
       });
     } catch (err) {
@@ -175,9 +175,9 @@ class Covid19 extends ModTemplate {
           <th>Daily Volume</th>
           <th>Cost</th>
           <th>Next Shipping Date</th>
- 	  <div>click for details</th>
+     <div>click for details</th>
 */
-  addProductsToTable(rows, fields) {
+  addProductsToTable(rows, fields, data) {
 
 
     for (let i = 0; i < rows.length; i++) {
@@ -190,45 +190,45 @@ class Covid19 extends ModTemplate {
         let added = 0;
 
         try {
-	  if (rows[i][fields[ii]] != "") {
+    if (rows[i][fields[ii]] != "") {
 
-	    if (fields[ii] == "product_photo") {
-	      if (rows[i][fields[ii]] != null) {
-  	        html += `<div><img style="max-width:200px;max-height:200px" src="${rows[i][fields[ii]]}" /></div>`;
-	        added = 1;
-	      }
-	    }
+      if (fields[ii] == "product_photo") {
+        if (rows[i][fields[ii]] != null) {
+            html += `<div><img style="max-width:200px;max-height:200px" src="${rows[i][fields[ii]]}" /></div>`;
+          added = 1;
+        }
+      }
 
-	    if (fields[ii] == "edit") {
-  	      html += `<td><span class="edit_product" id="${rows[i].id}">edit</a> | <span class="delete_product" id="${rows[i].id}">delete</span></td>`;
-	      added = 1;
-	    }
+      if (fields[ii] == "edit") {
+          html += `<div><span class="edit_product" id="${rows[i].id}">edit</a> | <span class="delete_product" id="${rows[i].id}">delete</span></div>`;
+        added = 1;
+      }
 
-	    if (fields[ii] == "fullview") {
-  	      html += `<td><span class="fullview_product" id="${rows[i].id}">full details</span></td>`;
-	      added = 1;
-	    }
+      if (fields[ii] == "fullview") {
+          html += `<div><span class="fullview_product" id="${rows[i].id}">full details</span></div>`;
+        added = 1;
+      }
 
-	    if (fields[ii] == "admin") {
-  	      html += `<td><span class="fullview_product" id="${rows[i].id}">full details</span> | <span class="edit_product" id="${rows[i].id}">edit</a> | <span class="delete_product" id="${rows[i].id}">delete</span></td>`;
-	      added = 1;
-	    }
+      if (fields[ii] == "admin") {
+          html += `<div><span class="fullview_product" id="${rows[i].id}">full details</span> | <span class="edit_product" id="${rows[i].id}">edit</a> | <span class="delete_product" id="${rows[i].id}">delete</span></div>`;
+        added = 1;
+      }
 
-	    if (added == 0) {
-  	      html += `<div>${rows[i][fields[ii]]}</div>`;
-	      added = 1;
-	    }
+      if (added == 0) {
+          html += `<div>${rows[i][fields[ii]]}</div>`;
+        added = 1;
+      }
 
 
-	  } else {
+    } else {
           }
         } catch (err) {
 console.log("err: " + err);
-	}
+  }
 
-	if (added == 0) {
-	  html += `<div></div>`;
-	}
+  if (added == 0) {
+    html += `<div></div>`;
+  }
 
       }
 
@@ -237,8 +237,80 @@ console.log("err: " + err);
 
     }
 
+    document.querySelector('.fullview_product').addEventListener('click', (e) => {
+      data.id = e.toElement.id;
+      ProductPage.render(data);
+    });
+
   }
 
+  renderProduct(prod) {
+    var html = "";
+    Object.entries(prod).forEach(field => {
+      switch(field[0]) {
+        case 'id':
+        case 'supplier_id':
+        case 'category_id':
+          break;
+        case 'product_name':
+          html += "<div>Name</div>";
+          html += "<div>" + field[1] + "</div>";
+          break;
+        case 'product_specification':
+          html += "<div>Name</div>";
+          html += "<div>" + field[1] + "</div>";
+          break;
+        case 'product_description':
+            html += "<div>Description</div>";
+            html += "<div>" + field[1] + "</div>";
+            break;
+        case 'product_dimensions':
+          html += "<div>Package Dimensions</div>";
+          html += "<div>" + field[1] + "</div>";
+          break;
+        case 'product_weight':
+          html += "<div>Weight</div>";
+          html += "<div>" + field[1] + "</div>";
+          break;
+        case 'product_quantities':
+          html += "<div>Package Contents</div>";
+          html += "<div>" + field[1] + "</div>";
+          break;
+        case 'product_photo':
+          html += "<div>Product Image</div>";
+          html += "<div><img style='max-width:200px;max-height:200px' src=" + field[1] + " /></div>";
+          break;
+        case 'pricing_per_unit_rmb':
+          html += "<div>Price (RMB)</div>";
+          html += "<div>" + field[1] + "</div>";
+          break;
+        case 'pricing_notes':
+          html += "<div>Pricing Notes</div>";
+          html += "<div>" + field[1] + "</div>";
+          break;
+        case 'pricing_payment_terms':
+          html += "<div>Payment Terms</div>";
+          html += "<div>" + field[1] + "</div>";
+          break;
+        case 'production_stock':
+          html += "<div>Stock</div>";
+          html += "<div>" + field[1] + "</div>";
+          break;
+        case 'production_daily_capacity':
+          html += "<div>Daily Production</div>";
+          html += "<div>" + field[1] + "</div>";
+          break;
+        case 'production_minimum_order':
+          html += "<div>Payment Terms</div>";
+          html += "<div>" + field[1] + "</div>";
+          break;
+        default: 
+        html += "<div>" + field[0].split("_").join(" ") + "</div>";
+        html += "<div>" + field[1] + "</div>";
+      }
+    });
+    document.querySelector('.product-grid').innerHTML = html;
+  }
 
   isAdmin() {
     return 1;
