@@ -24,4 +24,3 @@ CREATE TABLE IF NOT EXISTS products (
  
   PRIMARY KEY(id ASC)
 );
-

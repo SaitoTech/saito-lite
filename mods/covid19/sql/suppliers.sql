@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS suppliers (
   id INTEGER ,
   publickey TEXT ,
-  name INTEGER ,
+  name TEXT ,
   address TEXT ,
   phone INTEGER , 
   email VARCHAR(255) ,
