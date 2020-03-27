@@ -1,0 +1,22 @@
+
+.main {
+  display: block;
+}
+
+.saito-select {
+  max-width: 300px;
+  margin-bottom: 40px;
+}
+
+table {
+  
+}
+th {
+  text-align: left;
+  padding-right: 10px;
+}
+td {
+  text-align: left;
+  padding-right: 10px;
+}
+
