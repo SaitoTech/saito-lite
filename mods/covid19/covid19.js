@@ -187,7 +187,7 @@ class Covid19 extends ModTemplate {
       }
 
       html += '</tr>';
-      document.querySelector(".products-table").append(html);
+      document.querySelector(".products-table").innerHTML += html;
 
     }
 
