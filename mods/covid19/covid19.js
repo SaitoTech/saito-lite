@@ -167,7 +167,16 @@ class Covid19 extends ModTemplate {
   }
 
 
-
+/*
+          <th>Photo</th>
+          <th>Product</th>
+          <th>Producer</th>
+          <th>Certifications</th>
+          <th>Daily Volume</th>
+          <th>Cost</th>
+          <th>Next Shipping Date</th>
+ 	  <td>click for details</th>
+*/
   addProductsToTable(rows, fields) {
 
 
@@ -176,14 +185,40 @@ class Covid19 extends ModTemplate {
       let html = '<tr>';
 
       for (let ii = 0; ii < fields.length; ii++) {
+
+        let added = 0;
+
         try {
 	  if (rows[i][fields[ii]] != "") {
-	    html += `<td>${rows[i][fields[ii]]}</td>`;
+
+	    if (fields[ii] == "product_photo") {
+	      if (rows[i][fields[ii]] != null) {
+  	        html += `<td><img style="max-width:200px;max-height:200px" src="${rows[i][fields[ii]]}" /></td>`;
+	        added = 1;
+	      }
+	    }
+
+	    if (fields[ii] == "edit") {
+  	      html += `<td>edit | delete</td>`;
+	      added = 1;
+	    }
+
+	    if (added == 0) {
+  	      html += `<td>${rows[i][fields[ii]]}</td>`;
+	      added = 1;
+	    }
+
+
 	  } else {
-	    html += `<td></td>`;
           }
         } catch (err) {
+console.log("err: " + err);
 	}
+
+	if (added == 0) {
+	  html += `<td></td>`;
+	}
+
       }
 
       html += '</tr>';
