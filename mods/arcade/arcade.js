@@ -814,6 +814,7 @@ class Arcade extends ModTemplate {
       // open msgs -- public invitations
       //
       if (txmsg.module === "Arcade" && txmsg.request == "open") {
+        siteMessage(txmsg.game + ' invite created.', 3000);
         this.addGameToOpenList(tx);
         this.receiveOpenRequest(blk, tx, conf, app);
       }
@@ -822,6 +823,7 @@ class Arcade extends ModTemplate {
       // open msgs -- private invitations
       //
       if (txmsg.module === "ArcadeInvite" && txmsg.request == "open" && tx.isTo(app.wallet.returnPublicKey())) {
+        siteMessage('Private ' + txmsg.game + ' invite created.', 3000);
         this.addGameToOpenList(tx);
       }
 

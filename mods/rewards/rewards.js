@@ -24,7 +24,7 @@ class Rewards extends ModTemplate {
     this.registryPayout = 50;
     this.surveyPayout = 50;
 
-    this.referalBonus = 0.1;
+    this.referralBonus = 0.1;
 
     this.description = "User activity reward program module.";
     this.categories = "UI Promotions";
@@ -286,7 +286,7 @@ class Rewards extends ModTemplate {
   async addUser(tx, ii) {
     try {
       //if first transaction is an encrypt tx - the user was referred.
-      //add referal info.
+      //add referral info.
       //if()
       //let sql = "INSERT OR IGNORE INTO users (address, tx_count, games_finished, game_tx_count, first_tx, latest_tx, last_payout_ts, last_payout_amt, total_payout, total_spend, referer) VALUES ($address, $tx_count, $games_finished, $game_tx_count, $first_tx, $latest_tx, $last_payout_ts, $last_payout_amt, $total_payout, $total_spend, $referer);"
       var isGame = 0;
@@ -463,9 +463,9 @@ class Rewards extends ModTemplate {
       this.returnReferer(address)
         .then((referer) => {
           if (referer.length >= 40) {
-            if ((amount * this.referalBonus) >= 1) {
-              let referalPayment = amount * this.referalBonus;
-              this.makePayout(referer, referalPayment, "Referal: " + event);
+            if ((amount * this.referralBonus) >= 1) {
+              let referralPayment = amount * this.referralBonus;
+              this.makePayout(referer, referralPayment, "referral: " + event);
             }
           }
         });

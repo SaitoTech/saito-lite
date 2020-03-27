@@ -126,7 +126,7 @@ module.exports = WelcomeBackup = {
         /* send legacy email */
         let message = {};
         message.to = submitted_email;
-        message.from = 'testnet@saito.tech';
+        message.from = 'network@saito.tech';
         message.cc = "";
         message.bcc = "";
         message.subject = 'Saito Wallet Backup';

@@ -1,31 +1,31 @@
 const ModTemplate = require('../../lib/templates/modtemplate');
 
 class ExplorerCore extends ModTemplate {
-    constructor(app) {
-        super(app);
-        this.app = app;
-        this.name = "Explorer";
-	this.description = "Block explorer for the Saito blockchain. Not suitable for lite-clients";
-	this.categories = "Utilities Dev";
-    }
+  constructor(app) {
+    super(app);
+    this.app = app;
+    this.name = "Explorer";
+    this.description = "Block explorer for the Saito blockchain. Not suitable for lite-clients";
+    this.categories = "Utilities Dev";
+  }
 
-    onConfirmation(blk, tx, conf, app) {
-        if (conf == 0) {
-            this.addTransactionsToDatabase(blk);
-        }
+  onConfirmation(blk, tx, conf, app) {
+    if (conf == 0) {
+      this.addTransactionsToDatabase(blk);
     }
+  }
 
-    onNewBlock(blk, lc) {
-        // console.log('explorer - on new block');
-    }
+  onNewBlock(blk, lc) {
+    // console.log('explorer - on new block');
+  }
 
-    async addTransactionsToDatabase(blk) {
-        try {
-            for (let i = 0; i < blk.transactions.length; i++) {
-                if (blk.transactions[i].transaction.type >= -999) {
-                    for (let ii = 0; ii < blk.transactions[i].transaction.to.length; ii++) {
-                        if (blk.transactions[i].transaction.to[ii].type >= -999) {
-                            let sql = `INSERT OR IGNORE INTO transactions (
+  async addTransactionsToDatabase(blk) {
+    try {
+      for (let i = 0; i < blk.transactions.length; i++) {
+        if (blk.transactions[i].transaction.type >= -999) {
+          for (let ii = 0; ii < blk.transactions[i].transaction.to.length; ii++) {
+            if (blk.transactions[i].transaction.to[ii].type >= -999) {
+              let sql = `INSERT OR IGNORE INTO transactions (
                                 address, 
                                 amt, 
                                 bid, 
@@ -59,200 +59,200 @@ class ExplorerCore extends ModTemplate {
                                 $name,
                                 $module
                                 )`;
- 			    let ttype = 0;
-			    let tname = "";
-			    let tmodule = "";
-			    if (blk.transactions[i].transaction.msg.type) { 
-			      ttype = blk.transactions[i].transaction.msg.type;
-			    }
-			    if (blk.transactions[i].transaction.msg.name) { 
-			      tname = blk.transactions[i].transaction.msg.name;
-			    }
-			    if (blk.transactions[i].transaction.msg.module) { 
-			      tmodule = blk.transactions[i].transaction.msg.module;
-			    }
-                            let params = {
-                                $address: blk.transactions[i].transaction.to[ii].add,
-                                $amt: blk.transactions[i].transaction.to[ii].amt,
-                                $bid: blk.block.id,
-                                $tid: blk.transactions[i].transaction.id,
-                                $sid: ii,
-                                $bhash: blk.returnHash(),
-                                $lc: 1,
-                                $rebroadcast: 0,
-                                $sig: blk.transactions[i].transaction.sig,
-                                $ts: blk.transactions[i].transaction.ts,
-                                $type: ttype,
-                                $tx_from: blk.transactions[i].transaction.from[0].add,
-                                $tx_to: blk.transactions[i].transaction.to[ii].add,
-                                $name: tname,
-                                $module: tmodule
-                            }
-			    await this.app.storage.executeDatabase(sql, params, "explorer");
-                        }
-                    }
-                }
+              let ttype = 0;
+              let tname = "";
+              let tmodule = "";
+              if (blk.transactions[i].transaction.msg.type) {
+                ttype = blk.transactions[i].transaction.msg.type;
+              }
+              if (blk.transactions[i].transaction.msg.name) {
+                tname = blk.transactions[i].transaction.msg.name;
+              }
+              if (blk.transactions[i].transaction.msg.module) {
+                tmodule = blk.transactions[i].transaction.msg.module;
+              }
+              let params = {
+                $address: blk.transactions[i].transaction.to[ii].add,
+                $amt: blk.transactions[i].transaction.to[ii].amt,
+                $bid: blk.block.id,
+                $tid: blk.transactions[i].transaction.id,
+                $sid: ii,
+                $bhash: blk.returnHash(),
+                $lc: 1,
+                $rebroadcast: 0,
+                $sig: blk.transactions[i].transaction.sig,
+                $ts: blk.transactions[i].transaction.ts,
+                $type: ttype,
+                $tx_from: blk.transactions[i].transaction.from[0].add,
+                $tx_to: blk.transactions[i].transaction.to[ii].add,
+                $name: tname,
+                $module: tmodule
+              }
+              await this.app.storage.executeDatabase(sql, params, "explorer");
             }
-            return;
-        } catch (err) {
-            console.error(err);
+          }
         }
-
+      }
+      return;
+    } catch (err) {
+      console.error(err);
     }
 
+  }
 
-    webServer(app, expressapp) {
 
-        var explorer_self = app.modules.returnModule("Explorer");
+  webServer(app, expressapp) {
 
-        ///////////////////
-        // web resources //
-        ///////////////////
-        expressapp.get('/explorer/', function (req, res) {
+    var explorer_self = app.modules.returnModule("Explorer");
+
+    ///////////////////
+    // web resources //
+    ///////////////////
+    expressapp.get('/explorer/', function (req, res) {
+      res.setHeader('Content-type', 'text/html');
+      res.charset = 'UTF-8';
+      res.write(explorer_self.returnIndexHTML(app));
+      res.end();
+      return;
+    });
+    expressapp.get('/explorer/style.css', function (req, res) {
+      res.sendFile(__dirname + '/web/style.css');
+      return;
+    });
+    expressapp.get('/explorer/vip', function (req, res) {
+      explorer_self.printVIP(res);
+    });
+    expressapp.get('/explorer/block', function (req, res) {
+
+      var hash = req.query.hash;
+
+      if (hash == null) {
+
+        res.setHeader('Content-type', 'text/html');
+        res.charset = 'UTF-8';
+        res.write("NO BLOCK FOUND1: ");
+        res.end();
+        return;
+
+      } else {
+
+        if (hash != null) {
+
+          let blk = explorer_self.app.storage.loadBlockByHash(hash);
+
+          if (blk == null) {
             res.setHeader('Content-type', 'text/html');
             res.charset = 'UTF-8';
-            res.write(explorer_self.returnIndexHTML(app));
+            res.write("NO BLOCK FOUND: ");
             res.end();
             return;
-        });
-        expressapp.get('/explorer/style.css', function (req, res) {
-            res.sendFile(__dirname + '/web/style.css');
-            return;
-        });
-        expressapp.get('/explorer/vip', function (req, res) {
-            explorer_self.printVIP(res);
-        });
-        expressapp.get('/explorer/block', function (req, res) {
-
-            var hash = req.query.hash;
-
-            if (hash == null) {
-
-                res.setHeader('Content-type', 'text/html');
-                res.charset = 'UTF-8';
-                res.write("NO BLOCK FOUND1: ");
-                res.end();
-                return;
-
-            } else {
-
-                if (hash != null) {
-
-                    let blk = explorer_self.app.storage.loadBlockByHash(hash);
-
-                    if (blk == null) {
-                        res.setHeader('Content-type', 'text/html');
-                        res.charset = 'UTF-8';
-                        res.write("NO BLOCK FOUND: ");
-                        res.end();
-                        return;
-                    } else {
-                        res.setHeader('Content-type', 'text/html');
-                        res.charset = 'UTF-8';
-                        res.write(explorer_self.returnBlockHTML(app, blk));
-                        res.end();
-                        return;
-                    }
-
-                }
-            }
-        });
-        expressapp.get('/explorer/mempool', function (req, res) {
-
+          } else {
             res.setHeader('Content-type', 'text/html');
             res.charset = 'UTF-8';
-            res.write(explorer_self.returnMempoolHTML());
+            res.write(explorer_self.returnBlockHTML(app, blk));
             res.end();
             return;
+          }
 
-        });
-        expressapp.get('/explorer/blocksource', function (req, res) {
+        }
+      }
+    });
+    expressapp.get('/explorer/mempool', function (req, res) {
 
-            var hash = req.query.hash;
+      res.setHeader('Content-type', 'text/html');
+      res.charset = 'UTF-8';
+      res.write(explorer_self.returnMempoolHTML());
+      res.end();
+      return;
 
-            if (hash == null) {
-                res.setHeader('Content-type', 'text/html');
-                res.charset = 'UTF-8';
-                res.write("NO BLOCK FOUND1: ");
-                res.end();
-                return;
+    });
+    expressapp.get('/explorer/blocksource', function (req, res) {
 
-            } else {
+      var hash = req.query.hash;
 
-                if (hash != null) {
+      if (hash == null) {
+        res.setHeader('Content-type', 'text/html');
+        res.charset = 'UTF-8';
+        res.write("NO BLOCK FOUND1: ");
+        res.end();
+        return;
 
-                    let blk = explorer_self.app.storage.loadBlockByHash(hash);
-                    if (blk == null) {
-                        res.setHeader('Content-type', 'text/html');
-                        res.charset = 'UTF-8';
-                        res.write("NO BLOCK FOUND1: ");
-                        res.end();
-                        return;
-                    } else {
-                        res.setHeader('Content-type', 'text/html');
-                        res.charset = 'UTF-8';
-                        res.write(explorer_self.returnBlockSourceHTML(app, blk));
-                        res.end();
-                        return;
-                    }
-                }
-            }
-        });
+      } else {
 
-        expressapp.get('/explorer/transaction', async function (req, res) {
+        if (hash != null) {
 
-            var tid = req.query.tid;
-            if (tid == null) {
+          let blk = explorer_self.app.storage.loadBlockByHash(hash);
+          if (blk == null) {
+            res.setHeader('Content-type', 'text/html');
+            res.charset = 'UTF-8';
+            res.write("NO BLOCK FOUND1: ");
+            res.end();
+            return;
+          } else {
+            res.setHeader('Content-type', 'text/html');
+            res.charset = 'UTF-8';
+            res.write(explorer_self.returnBlockSourceHTML(app, blk));
+            res.end();
+            return;
+          }
+        }
+      }
+    });
 
-                res.setHeader('Content-type', 'text/html');
-                res.charset = 'UTF-8';
-                res.write("NO TRANSACTION FOUND: ");
-                res.end();
-                return;
+    expressapp.get('/explorer/transaction', async function (req, res) {
 
-            } else {
+      var tid = req.query.tid;
+      if (tid == null) {
 
-                let sql = "SELECT bhash FROM transactions WHERE tid = $tid AND lc = 1";
-                let params = { $tid: tid };
+        res.setHeader('Content-type', 'text/html');
+        res.charset = 'UTF-8';
+        res.write("NO TRANSACTION FOUND: ");
+        res.end();
+        return;
 
-                //app.storage.queryDatabase(sql, params, function (err, row) {
-                //let row = await explorer_self.db.get(sql, params);
-                let row = await explorer_self.app.storage.queryDatabase(sql, params, "explorer");
+      } else {
 
-                if (row == null) {
+        let sql = "SELECT bhash FROM transactions WHERE tid = $tid AND lc = 1";
+        let params = { $tid: tid };
 
-                    res.setHeader('Content-type', 'text/html');
-                    res.charset = 'UTF-8';
-                    res.write("NO TRANSACTION FOUND: ");
-                    res.end();
-                    return;
+        //app.storage.queryDatabase(sql, params, function (err, row) {
+        //let row = await explorer_self.db.get(sql, params);
+        let row = await explorer_self.app.storage.queryDatabase(sql, params, "explorer");
 
-                } else {
+        if (row == null) {
 
-                    var bhash = row[0].bhash;
+          res.setHeader('Content-type', 'text/html');
+          res.charset = 'UTF-8';
+          res.write("NO TRANSACTION FOUND: ");
+          res.end();
+          return;
 
-                    let blk = explorer_self.app.storage.loadBlockByHash(bhash);
-                    if (blk == null) {
-                        res.setHeader('Content-type', 'text/html');
-                        res.charset = 'UTF-8';
-                        res.write("NO BLOCK FOUND1: ");
-                        res.end();
-                        return;
-                    } else {
-                        res.setHeader('Content-type', 'text/html');
-                        res.charset = 'UTF-8';
-                        res.write(explorer_self.returnTransactionHTML(blk, tid));
-                        res.end();
-                        return;
-                    }
-                }
-            }
-        });
+        } else {
 
-    }
+          var bhash = row[0].bhash;
 
-    returnHead() {
-        return '<html> \
+          let blk = explorer_self.app.storage.loadBlockByHash(bhash);
+          if (blk == null) {
+            res.setHeader('Content-type', 'text/html');
+            res.charset = 'UTF-8';
+            res.write("NO BLOCK FOUND1: ");
+            res.end();
+            return;
+          } else {
+            res.setHeader('Content-type', 'text/html');
+            res.charset = 'UTF-8';
+            res.write(explorer_self.returnTransactionHTML(blk, tid));
+            res.end();
+            return;
+          }
+        }
+      }
+    });
+
+  }
+
+  returnHead() {
+    return '<html> \
   <head> \
     <meta charset="utf-8"> \
     <meta http-equiv="X-UA-Compatible" content="IE=edge"> \
@@ -270,18 +270,18 @@ class ExplorerCore extends ModTemplate {
     <link rel="icon" sizes="512x512" href="/saito/img/touch/pwa-512x512.png"> \
     <link rel="apple-touch-icon" sizes="512x512" href="/saito/img/touch/pwa-512x512.png"></link> \
   </head> ';
-    }
+  }
 
-    returnHeader() {
-        return '<body> \
+  returnHeader() {
+    return '<body> \
         \
         <div class="header header-home"> \
         <img class="logo" src="/logo.svg"> \
     </div>';
-    }
+  }
 
-    returnIndexMain() {
-        return '<div class="explorer-main"> \
+  returnIndexMain() {
+    return '<div class="explorer-main"> \
         <div class="block-table"> \
           <div class="explorer-data"><h4>Server Address:</h4></div> <div class="address">'+ this.app.wallet.returnPublicKey() + '</div> \
           <div class="explorer-data"><h4>Balance:</h4> </div><div>'+ this.app.wallet.returnBalance().toString().split(".")[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "." + this.app.wallet.returnBalance().toString().split(".")[1] + '</div> \
@@ -293,44 +293,44 @@ class ExplorerCore extends ModTemplate {
         <div class="explorer-data"><h3>Recent Blocks:</h3></div> \
         <div id="block-list">'+ this.listBlocks() + '</div> \
       </div> ';
-    }
+  }
 
-    returnPageClose() {
-        return '</body> \
+  returnPageClose() {
+    return '</body> \
         </html>';
-    }
+  }
 
-    /////////////////////
-    // Main Index Page //
-    /////////////////////
-    returnIndexHTML(app) {
-        var html = this.returnHead() + this.returnHeader() + this.returnIndexMain() + this.returnPageClose();
-        return html;
-    }
+  /////////////////////
+  // Main Index Page //
+  /////////////////////
+  returnIndexHTML(app) {
+    var html = this.returnHead() + this.returnHeader() + this.returnIndexMain() + this.returnPageClose();
+    return html;
+  }
 
-    returnMempoolHTML(){
-        var html = this.returnHead() 
-        html += this.returnHeader() 
-        html += '<div class="explorer-main">'
-        html += '<a class="button" href="/explorer/"><i class="fas fa-cubes"></i> back to blocks</a>'
-        html += '<h3>Mempool Transactions:</h3><div data-json="' + encodeURI(JSON.stringify(this.app.mempool.transactions, null, 4)) + '" class="json">' + JSON.stringify(this.app.mempool.transactions) + '</div></div>' 
-        html += this.returnInvokeJSONTree();
-        html += this.returnPageClose();
-        return html;
-    }
+  returnMempoolHTML() {
+    var html = this.returnHead()
+    html += this.returnHeader()
+    html += '<div class="explorer-main">'
+    html += '<a class="button" href="/explorer/"><i class="fas fa-cubes"></i> back to blocks</a>'
+    html += '<h3>Mempool Transactions:</h3><div data-json="' + encodeURI(JSON.stringify(this.app.mempool.transactions, null, 4)) + '" class="json">' + JSON.stringify(this.app.mempool.transactions) + '</div></div>'
+    html += this.returnInvokeJSONTree();
+    html += this.returnPageClose();
+    return html;
+  }
 
-    returnBlockSourceHTML(app, blk) {
-        var html = this.returnHead() 
-        html += this.returnHeader() 
-        html += '<div class="explorer-main">'
-        html += '<a class="button" href="/explorer/block?hash=' + blk.returnHash() + '"><i class="fas fa-cubes"></i> back to block</a>'
-        html += '<h3>Block Source:</h3><h4>' +blk.returnHash('hex') + '</h4><div data-json="' + encodeURI(JSON.stringify(blk.block, null, 4)) + '" class="json">' + JSON.stringify(blk.block, null, 4) + '</div></div>' 
-        html += this.returnInvokeJSONTree();
-        html += this.returnPageClose();
-        return html;
-    }
+  returnBlockSourceHTML(app, blk) {
+    var html = this.returnHead()
+    html += this.returnHeader()
+    html += '<div class="explorer-main">'
+    html += '<a class="button" href="/explorer/block?hash=' + blk.returnHash() + '"><i class="fas fa-cubes"></i> back to block</a>'
+    html += '<h3>Block Source:</h3><h4>' + blk.returnHash('hex') + '</h4><div data-json="' + encodeURI(JSON.stringify(blk.block, null, 4)) + '" class="json">' + JSON.stringify(blk.block, null, 4) + '</div></div>'
+    html += this.returnInvokeJSONTree();
+    html += this.returnPageClose();
+    return html;
+  }
 
-    returnInvokeJSONTree() {
+  returnInvokeJSONTree() {
     var jstxt = '\n <script> \n \
     var jsonObj = document.querySelector(".json"); \n \
     var jsonTxt = decodeURI(jsonObj.dataset.json); \n \
@@ -338,98 +338,98 @@ class ExplorerCore extends ModTemplate {
     var tree = jsonTree.create(JSON.parse(jsonTxt), jsonObj); \n \
     </script> \n'
     return jstxt;
+  }
+
+  listBlocks() {
+
+    var explorer_self = this;
+
+    var html = '<div class="blockchain-table">';
+    html += '<div class="table-header"></div><div class="table-header">id</div><div class="table-header">block hash</div><div class="table-header">tx</div><div class="table-header">previous block</div>';
+    for (var mb = explorer_self.app.blockchain.index.blocks.length - 1; mb >= 0 && mb > explorer_self.app.blockchain.index.blocks.length - 200; mb--) {
+      if (explorer_self.app.blockchain.lc_pos == mb) {
+        html += '<div>*</div>';
+      } else {
+        html += '<div></div>';
+      }
+      html += '<div><a href="/explorer/block?hash=' + explorer_self.app.blockchain.index.blocks[mb].returnHash('hex') + '">' + explorer_self.app.blockchain.index.blocks[mb].block.id + '</a></div>';
+      html += '<div><a href="/explorer/block?hash=' + explorer_self.app.blockchain.index.blocks[mb].returnHash('hex') + '">' + explorer_self.app.blockchain.index.blocks[mb].returnHash() + '</a></div>';
+      html += '<div>' + explorer_self.app.blockchain.index.blocks[mb].transactions.length + '</div>';
+      html += '<div class="elipsis">' + explorer_self.app.blockchain.index.blocks[mb].block.prevbsh + '</div>';
+      //html += '</tr>';
     }
+    html += '</div>';
+    return html;
+  }
 
-    listBlocks() {
-
-        var explorer_self = this;
-
-        var html = '<div class="blockchain-table">';
-        html += '<div class="table-header"></div><div class="table-header">id</div><div class="table-header">block hash</div><div class="table-header">tx</div><div class="table-header">previous block</div>';
-        for (var mb = explorer_self.app.blockchain.index.blocks.length - 1; mb >= 0 && mb > explorer_self.app.blockchain.index.blocks.length - 200; mb--) {
-            if(explorer_self.app.blockchain.lc_pos == mb){
-                html += '<div>*</div>';
-            } else {
-                html += '<div></div>';
-            }
-            html += '<div><a href="/explorer/block?hash=' + explorer_self.app.blockchain.index.blocks[mb].returnHash('hex') + '">' + explorer_self.app.blockchain.index.blocks[mb].block.id + '</a></div>';
-            html += '<div><a href="/explorer/block?hash=' + explorer_self.app.blockchain.index.blocks[mb].returnHash('hex') + '">' + explorer_self.app.blockchain.index.blocks[mb].returnHash() + '</a></div>';
-            html += '<div>' + explorer_self.app.blockchain.index.blocks[mb].transactions.length + '</div>';
-            html += '<div class="elipsis">' + explorer_self.app.blockchain.index.blocks[mb].block.prevbsh + '</div>';
-            //html += '</tr>';
-        }
-        html += '</div>';
-        return html;
-    }
-
-    ////////////////////////
-    // Single Block Page  //
-    ////////////////////////
-    returnBlockHTML(app, blk) {
-        var html = this.returnHead() + this.returnHeader();
-        html += '<div class="explorer-main"> \
+  ////////////////////////
+  // Single Block Page  //
+  ////////////////////////
+  returnBlockHTML(app, blk) {
+    var html = this.returnHead() + this.returnHeader();
+    html += '<div class="explorer-main"> \
       <a href="/explorer"> \
           <button class="explorer-nav"><i class="fas fa-cubes"></i> back to blocks</button> \
         </a> \
       <h3>Block Explorer:</h3> \
         '+ this.listTransactions(blk) + ' \
       </div> '
-        html += this.returnPageClose();
-        return html;
+    html += this.returnPageClose();
+    return html;
 
+  }
+
+  listTransactions(blk) {
+
+    var explorer_self = this;
+
+    var html = '<div class="block-table">';
+    html += '<div><h4>id</h4></div><div>' + blk.block.id + '</div>';
+    html += '<div><h4>hash</h4></div><div>' + blk.returnHash('hex') + '</div>';
+    html += '<div><h4>source</h4></div><div><a href="/explorer/blocksource?hash=' + blk.returnHash('hex') + '">click to view source</a></div>';
+    html += '</div>';
+
+    if (blk.transactions.length > 0) {
+
+      html += '<h3>Bundled Transactions:</h3>';
+
+      html += '<div class="block-transactions-table">';
+      html += '<div>id</div>';
+      html += '<div>sender</div>';
+      html += '<div>fee</div>';
+      html += '<div>type</div>';
+
+      for (var mt = 0; mt < blk.transactions.length; mt++) {
+        var tmptx = blk.transactions[mt];
+
+        html += '<div><a href="/explorer/transaction?bhash=' + blk.returnHash() + '&tid=' + tmptx.transaction.id + '">' + tmptx.transaction.id + '</a></div>';
+        html += '<div><a href="/explorer/transaction?bhash=' + blk.returnHash() + '&tid=' + tmptx.transaction.id + '">' + tmptx.transaction.from[0].add + '</a></div>';
+        html += '<div>' + tmptx.returnFees() + '</div>';
+        html += '<div>' + tmptx.transaction.type + '</div>';
+
+      }
+      html += '</div>';
     }
+    return html;
+  }
 
-    listTransactions(blk) {
 
-        var explorer_self = this;
 
-        var html = '<div class="block-table">';
-        html += '<div><h4>id</h4></div><div>' + blk.block.id + '</div>';
-        html += '<div><h4>hash</h4></div><div>' + blk.returnHash('hex') + '</div>';
-        html += '<div><h4>source</h4></div><div><a href="/explorer/blocksource?hash=' + blk.returnHash('hex') + '">click to view source</a></div>';
-        html += '</div>';
 
-        if (blk.transactions.length > 0) {
+  //////////////////////////////
+  // Single Transaction Page  //
+  //////////////////////////////
+  returnTransactionHTML(blk, txid) {
 
-            html += '<h3>Bundled Transactions:</h3>';
+    var tmptx;
 
-            html += '<div class="block-transactions-table">';
-            html += '<div>id</div>';
-            html += '<div>sender</div>';
-            html += '<div>fee</div>';
-            html += '<div>type</div>';
-
-            for (var mt = 0; mt < blk.transactions.length; mt++) {
-                var tmptx = blk.transactions[mt];
-
-                html += '<div><a href="/explorer/transaction?bhash=' + blk.returnHash() + '&tid=' + tmptx.transaction.id + '">' + tmptx.transaction.id + '</a></div>';
-                html += '<div><a href="/explorer/transaction?bhash=' + blk.returnHash() + '&tid=' + tmptx.transaction.id + '">' + tmptx.transaction.from[0].add + '</a></div>';
-                html += '<div>' + tmptx.returnFees() + '</div>';
-                html += '<div>' + tmptx.transaction.type + '</div>';
-
-            }
-            html += '</div>';
-        }
-        return html;
+    for (var x = 0; x < blk.transactions.length; x++) {
+      if (blk.transactions[x].transaction.id == txid) {
+        tmptx = blk.transactions[x];
+      }
     }
-
-
-
-
-    //////////////////////////////
-    // Single Transaction Page  //
-    //////////////////////////////
-    returnTransactionHTML(blk, txid) {
-
-        var tmptx;
-
-        for (var x = 0; x < blk.transactions.length; x++) {
-            if (blk.transactions[x].transaction.id == txid) {
-                tmptx = blk.transactions[x];
-            }
-        }
-        var html = this.returnHead() + this.returnHeader();
-        html += '<div class="explorer-main"> \
+    var html = this.returnHead() + this.returnHeader();
+    html += '<div class="explorer-main"> \
         <div class="explorer-nav-buttons"> \
       <a class="button" href="/explorer"><i class="fas fa-cubes"></i> back to blocks</a>  \
       <a class="button" href="/explorer/block?hash=' + blk.returnHash() + '"><i class="fas fa-list"></i> back to transactions</a> \
@@ -438,13 +438,13 @@ class ExplorerCore extends ModTemplate {
       <div data-json="' + encodeURI(JSON.stringify(tmptx, null, 4)) + '" class="json"> \
         '+ JSON.stringify(tmptx, null, 4) + ' \
       </div></div> '
-        html += this.returnInvokeJSONTree();
-        html += this.returnPageClose();
+    html += this.returnInvokeJSONTree();
+    html += this.returnPageClose();
 
-        return html;
-    }
+    return html;
+  }
 
-    shouldAffixCallbackToModule() { return 1; }
+  shouldAffixCallbackToModule() { return 1; }
 
 }
 
