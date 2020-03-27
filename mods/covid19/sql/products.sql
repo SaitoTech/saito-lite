@@ -14,15 +14,13 @@ CREATE TABLE IF NOT EXISTS products (
 
   product_photo TEXT , 
 
-  product_cost_rmb INTEGER ,
-  product_cost_notes TEXT ,
-  product_cost_payment_terms VARCHAR(255) ,
+  pricing_per_unit_rmb INTEGER ,
+  pricing_notes TEXT ,
+  pricing_payment_terms VARCHAR(255) ,
 
   production_stock INTEGER ,
   production_daily_capacity INTEGER ,
   production_minimum_order INTEGER ,
-
-  product_specification TEXT ,
  
   PRIMARY KEY(id ASC)
 );
