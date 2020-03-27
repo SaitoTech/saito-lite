@@ -175,7 +175,7 @@ class Covid19 extends ModTemplate {
           <th>Daily Volume</th>
           <th>Cost</th>
           <th>Next Shipping Date</th>
- 	  <td>click for details</th>
+ 	  <div>click for details</th>
 */
   addProductsToTable(rows, fields) {
 
@@ -194,18 +194,18 @@ class Covid19 extends ModTemplate {
 
 	    if (fields[ii] == "product_photo") {
 	      if (rows[i][fields[ii]] != null) {
-  	        html += `<td><img style="max-width:200px;max-height:200px" src="${rows[i][fields[ii]]}" /></td>`;
+  	        html += `<div><img style="max-width:200px;max-height:200px" src="${rows[i][fields[ii]]}" /></div>`;
 	        added = 1;
 	      }
 	    }
 
 	    if (fields[ii] == "edit") {
-  	      html += `<td>edit | delete</td>`;
+  	      html += `<div>edit | delete</div>`;
 	      added = 1;
 	    }
 
 	    if (added == 0) {
-  	      html += `<td>${rows[i][fields[ii]]}</td>`;
+  	      html += `<div>${rows[i][fields[ii]]}</div>`;
 	      added = 1;
 	    }
 
@@ -217,7 +217,7 @@ console.log("err: " + err);
 	}
 
 	if (added == 0) {
-	  html += `<td></td>`;
+	  html += `<div></div>`;
 	}
 
       }
