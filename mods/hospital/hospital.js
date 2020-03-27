@@ -106,14 +106,8 @@ class Hospital extends ModTemplate {
     let booking_id = app.browser.returnURLParameter("booking_id");
     let txjson = app.browser.returnURLParameter("tx");
 
-
-console.log("DECISION: " + decision + " --- " + booking_id);
-
     if (decision === "approve" && booking_id !== "" && txjson != "") {
       let tx = new saito.transaction(JSON.parse(txjson));
-console.log("TX: " + JSON.stringify(tx));
-alert("TX: " + JSON.stringify(tx));
-console.log("MAKING APPOINTMENT CONFIRMATION!");
       this.makeAppointmentConfirmation();
     }
 

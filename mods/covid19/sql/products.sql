@@ -1,4 +1,5 @@
 CREATE TABLE IF NOT EXISTS products (
+
   id INTEGER ,
   supplier_id INTEGER ,
 
@@ -13,11 +14,6 @@ CREATE TABLE IF NOT EXISTS products (
 
   product_photo TEXT , 
 
-  //
-  // suggestion - price is provided in single form, with a TEXT field 
-  // to provide additional notes such as volume discounts / tranches 
-  // or details on additional cost FOB etc.
-  //
   product_cost_rmb INTEGER ,
   product_cost_notes TEXT ,
   product_cost_payment_terms VARCHAR(255) ,

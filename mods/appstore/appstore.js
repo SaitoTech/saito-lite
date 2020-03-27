@@ -298,10 +298,8 @@ class AppStore extends ModTemplate {
 	      categories = categories.replace(/^\s+|\s+$/gm,'');
 	    }
 	  }
-
 	}
 
-console.log("MODULE: " + name + " -- " + description + " -- " + categories);
 
         function cleanString(str) {
 	  str = str.replace(/^\s+|\s+$/gm,'');
@@ -757,8 +755,6 @@ console.log("leaving bundler...");
       expressapp.use('/' + encodeURI(this.name), express.static(__dirname + "/web"));
       expressapp.get('/appstore/bundle/:filename', async (req, res) => {
 
-console.log("express app is trying to process the file...");
-
         let scriptname = req.params.filename;
 
         let sql = "SELECT script FROM bundles WHERE name = $scriptname";
@@ -767,11 +763,7 @@ console.log("express app is trying to process the file...");
         }
         let rows = await app.storage.queryDatabase(sql, params, "appstore");
 
-console.log(sql + " ---- " + params);
-
         if (rows) {
-// console.log("ROWS: " + JSON.stringify(rows));
-
           if (rows.length > 0) {
 
             res.setHeader('Content-type', 'text/javascript');
@@ -790,13 +782,9 @@ console.log(sql + " ---- " + params);
       });
     }
   }
-
 }
-
-
-
-
 module.exports = AppStore;
+
 
 
 

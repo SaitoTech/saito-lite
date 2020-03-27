@@ -20,6 +20,7 @@ class Covid19 extends ModTemplate {
 
     this.description = "A covid19 management framework for Saito";
     this.categories  = "Admin Healthcare Productivity";    
+    this.definitions =  {};
 
     return this;
   }
@@ -106,6 +107,14 @@ class Covid19 extends ModTemplate {
     params = { $name : "Medical Device Certificate" }
     await app.storage.executeDatabase(sql, params, "covid19");
 
+
+
+    sql = "PRAGMA table_info(suppliers)";
+    this.definitions['suppliers'] = await app.storage.queryDatabase(sql, {}, "covid19");
+    
+    sql = "PRAGMA table_info(products)";
+    this.definitions['products'] = await app.storage.queryDatabase(sql, {}, "covid19");
+    
   }
 
 
@@ -139,6 +148,12 @@ class Covid19 extends ModTemplate {
     }
   }
 
+
+  isAdmin() {
+    return 1;
+    if (this.app.wallet.returnPublicKey() == this.admin_publickey) { return 1; }
+    return 0;
+  }
 
 }
 

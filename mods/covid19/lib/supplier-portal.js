@@ -19,7 +19,7 @@ alert("click!");
 	let product_json = JSON.stringify(product);
         let product_json_base64 = app.crypto.stringToBase64(product_json);
 
-	let url = "/email?module=email&product="+product_json_base64;
+	let url = "/email?module=covid19&product="+product_json_base64;
 
 	window.location = url;
 
