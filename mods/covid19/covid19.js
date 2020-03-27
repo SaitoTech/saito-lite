@@ -14,6 +14,8 @@ class Covid19 extends ModTemplate {
     this.description	= "Open Source PPE Procurement Platform";
     this.categories	= "Health NGO";
 
+    this.db_tables.push("suppliers JOIN products JOIN attachments JOIN categories JOIN certifications");
+
     this.admin_pkey     = "ke6qwkD3XB8JvWwf68RMjDAn2ByJRv3ak1eqUzTEz9cr";
 
     this.description = "A covid19 management framework for Saito";
@@ -25,6 +27,10 @@ class Covid19 extends ModTemplate {
 
 
 
+
+  //
+  // email plugin handles product updates
+  //
   respondTo(type) {
     if (type == 'email-appspace') {
       let obj = {};
@@ -34,7 +40,6 @@ class Covid19 extends ModTemplate {
     }
     return null;
   }
-
   renderEmailPlugin(app, data) {
     try {
 
@@ -53,7 +58,6 @@ class Covid19 extends ModTemplate {
       console.log("Error rendering covid19 email plugin: " + err);
     }
   }
-
   attachEventsEmailPlugin(app, data) {
     try {
 
@@ -95,6 +99,10 @@ class Covid19 extends ModTemplate {
     await app.storage.executeDatabase(sql, params, "covid19");
 
     sql = "INSERT INTO certifications (name) VALUES ($name)";
+    params = { $name : "Medical Device Certificate" }
+    await app.storage.executeDatabase(sql, params, "covid19");
+
+    sql = "INSERT INTO products (product_name) VALUES ('KN95 superstar')";
     params = { $name : "Medical Device Certificate" }
     await app.storage.executeDatabase(sql, params, "covid19");
 
