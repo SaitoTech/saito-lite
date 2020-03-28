@@ -11,13 +11,13 @@ module.exports = UpdateProductTemplate = () => {
 
     <div id="product-grid" class="product-grid grid-4"></div>
 
-    <h3>Certifications</h3>
+    <!--h3>Certifications</h3>
 
     <div id="cert-grid" class="cert-grid"></div>
 
     <h3>Supplier Details</h3>
 
-    <div id="supplier-grid" class="supplier-grid grid-4"></div>
+    <div id="supplier-grid" class="supplier-grid grid-4"></div1-->
 
 
     <div class="update-product-btn button">Update Public Listing</div>
