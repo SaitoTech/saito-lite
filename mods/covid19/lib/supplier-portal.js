@@ -1,4 +1,5 @@
 const SupplierPortalTemplate 	= require('./supplier-portal.template.js');
+const UpdateProduct	 	= require('./update-product.js');
 
 
 module.exports = SupplierPortal = {
@@ -15,12 +16,18 @@ module.exports = SupplierPortal = {
         data.covid19.addProductsToTable(res.rows, [ 'name', 'product_specification', 'product_photo', 'pricing_unit_cost', 'production_daily_capacity', 'certifications', 'June 24', 'admin']);
         document.querySelector(".loading").style.display = "none";
         document.querySelector(".portal").style.display = "block";
-        document.querySelector(".products-table").style.display = "block";
+        document.querySelector(".products-table").style.display = "grid";
       });
 
     },
 
     attachEvents(app, data) {
+
+      document.querySelector('.add-or-update-product-btn').addEventListener('click', (e) => {
+        data.product_id = e.currentTarget.id;
+        UpdateProduct.render(app, data);
+        UpdateProduct.attachEvents(app, data);
+      });
 
     }
 

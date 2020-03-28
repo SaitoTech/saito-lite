@@ -28,6 +28,7 @@ module.exports = SupplierPortalTemplate = () => {
           <div class="table-head"></div>
       </div>
 
+     <div class="add-or-update-product-btn button">Add New Product</div>
 
     </div>
   </div>
