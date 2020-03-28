@@ -5,34 +5,25 @@ module.exports = UpdateProductTemplate = () => {
   html = `
   <div class="supplier-information">
 
-    <h2>Company Information:</h2>
+    <div class="portal" style="display:none">
 
-    <p></p>
+    <h3>Product Details:</h3>
 
-    <div class="grid-2">
+    <div id="product-grid" class="product-grid grid-4"></div>
 
-      <div>Company Name:</div>
-      <div><input type="text" id="" value="Company Name" /></div>
+    <h3>Certifications</h3>
 
-      <div>Company Address:</div>
-      <div><input type="text" id="" value="Company Address" /></div>
+    <div id="cert-grid" class="cert-grid"></div>
 
-    </div>
+    <h3>Supplier Details</h3>
 
-
-    <h2>Product Details:</h2>
-
-    <div class="grid-2">
-
-      <div>Specification:</div>
-      <div><input type="text" id="" value="Specification" /></div>
-
-    </div>
+    <div id="supplier-grid" class="supplier-grid grid-4"></div>
 
 
     <div class="update-product-btn button">Update Public Listing</div>
-
   </div>
+
+
   `;
 
   return html;
