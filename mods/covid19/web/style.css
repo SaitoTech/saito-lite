@@ -20,3 +20,17 @@ td {
   padding-right: 10px;
 }
 
+
+.cert-grid {
+  display: flex;
+}
+
+.cert {
+  margin: 5px;
+  padding: 5px 10px;
+  background: #eee;
+}
+
+.grid-4 div, .grid-2 div {
+  align-self: auto;
+}

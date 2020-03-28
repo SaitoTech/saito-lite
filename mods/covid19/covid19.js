@@ -251,65 +251,15 @@ class Covid19 extends ModTemplate {
     var html = "";
     Object.entries(prod).forEach(field => {
       switch (field[0]) {
-        case 'id':
         case 'supplier_id':
-        case 'category_id':
           break;
-        case 'product_name':
-          html += "<div>Name</div>";
-          html += "<div>" + field[1] + "</div>";
-          break;
-        case 'product_specification':
-          html += "<div>Name</div>";
-          html += "<div>" + field[1] + "</div>";
-          break;
-        case 'product_description':
-          html += "<div>Description</div>";
-          html += "<div>" + field[1] + "</div>";
-          break;
-        case 'product_dimensions':
-          html += "<div>Package Dimensions</div>";
-          html += "<div>" + field[1] + "</div>";
-          break;
-        case 'product_weight':
-          html += "<div>Weight</div>";
-          html += "<div>" + field[1] + "</div>";
-          break;
-        case 'product_quantities':
-          html += "<div>Package Contents</div>";
-          html += "<div>" + field[1] + "</div>";
-          break;
-        case 'product_photo':
+        case 'Product Image':
           html += "<div>Product Image</div>";
           html += "<div><img style='max-width:200px;max-height:200px' src=" + field[1] + " /></div>";
           break;
-        case 'pricing_per_unit_rmb':
-          html += "<div>Price (RMB)</div>";
-          html += "<div>" + field[1] + "</div>";
-          break;
-        case 'pricing_notes':
-          html += "<div>Pricing Notes</div>";
-          html += "<div>" + field[1] + "</div>";
-          break;
-        case 'pricing_payment_terms':
-          html += "<div>Payment Terms</div>";
-          html += "<div>" + field[1] + "</div>";
-          break;
-        case 'production_stock':
-          html += "<div>Stock</div>";
-          html += "<div>" + field[1] + "</div>";
-          break;
-        case 'production_daily_capacity':
-          html += "<div>Daily Production</div>";
-          html += "<div>" + field[1] + "</div>";
-          break;
-        case 'production_minimum_order':
-          html += "<div>Payment Terms</div>";
-          html += "<div>" + field[1] + "</div>";
-          break;
         default:
-          html += "<div>" + field[0].split("_").join(" ") + "</div>";
-          html += "<div>" + field[1] + "</div>";
+          html += "<div>" + field[0] + "</div>";
+          html += ("<div>" + field[1] + "</div>").replace(">null<", "><");
       }
     });
     document.querySelector('.product-grid').innerHTML = html;
@@ -329,7 +279,7 @@ class Covid19 extends ModTemplate {
     var html = "";
     rows.forEach(row => {
       if (row["attachment_id"] != null) {
-        html += "<div class='cert attach-" + row["attachment_id"] + "'>" + row["Name"] + "</div>";
+        html += "<div class='cert'><a class='attach-" + row["attachment_id"] + "'>" + row["Name"] + "</a></div>";
       } else {
         html += "<div class='cert'>" + row["Name"] + "</div>";
       }
@@ -339,11 +289,29 @@ class Covid19 extends ModTemplate {
     rows.forEach(row => {
       if (row["attachment_id"] != null) {
         document.querySelector('.attach-' + row["attachment_id"]).addEventListener('click', (e) => {
-          salert("Download attchment: " + row["attachment_id"]);
+          this.returnAttachment(row["attachment_id"]);
         });
       }
     });
 
+  }
+
+  returnAttachment(id) {
+    this.sendPeerDatabaseRequest("covid19", "attachments", "*", "id= " + id, null, function (res) {
+      if (res.rows.length > 0) {
+        var blob = new Blob([res.rows[0]["attachment_data"]], {type: res.rows[0]["attachment_type"]});
+        var url = window.URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
+        a.href = url;
+        a.download = res.rows[0]["attachment_filename"];
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.destroy();
+        salert("Download attchment: " + res.rows[0]["attachment_filename"]);
+      }
+    });
   }
 
   isAdmin() {

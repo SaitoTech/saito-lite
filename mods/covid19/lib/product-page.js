@@ -13,14 +13,28 @@ module.exports = ProductPage = {
     //
     // load product
     //
-    let fields = "";
-    data.covid19.sendPeerDatabaseRequest("covid19", "products", "*", "id= " + data.id, null, function (res) {
+    let fields = `product_name as 'Name', \
+      product_description as 'Description', \
+      product_photo as 'Product Image', \
+      product_specification as 'Specification', \
+      production_stock as 'Stock', \
+      production_daily_capacity as 'Daily Production', \
+      pricing_per_unit_rmb as 'Price (RMB)', \ 
+      pricing_notes as 'Pricing Notes', \
+      product_dimensions as 'Package Dimensions', \
+      product_weight as 'Weight', \
+      product_quantities as 'Package Contents', \
+      pricing_payment_terms as 'Payment Terms', \
+      production_minimum_order as 'Payment Terms',
+      supplier_id
+    `;
+    data.covid19.sendPeerDatabaseRequest("covid19", "products", fields, "id= " + data.id, null, function (res) {
 
       if (res.rows.length > 0) {
 
         data.covid19.renderProduct(res.rows[0]);
         supplier_id = res.rows[0]["supplier_id"];
-        document.querySelector(".product-name").innerHTML = res.rows[0]["product_name"];
+        document.querySelector(".product-name").innerHTML = res.rows[0]["Name"];
 
         //
         // load certificates
@@ -75,7 +89,7 @@ module.exports = ProductPage = {
 
   },
 
-
+/*
   renderProduct(prod) {
     var html = "";
     Object.entries(prod).forEach(field => {
@@ -143,5 +157,6 @@ module.exports = ProductPage = {
     });
     document.querySelector('.product-grid').innerHTML = html;
   }
+  */
 
 }
