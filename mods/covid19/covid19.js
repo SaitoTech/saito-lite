@@ -9,19 +9,20 @@ class Covid19 extends ModTemplate {
   constructor(app) {
     super(app);
 
-    this.app            = app;
-    this.name           = "Covid19";
-    this.description  = "Open Source PPE Procurement Platform";
-    this.categories  = "Health NGO";
+    this.app = app;
+    this.name = "Covid19";
+    this.description = "Open Source PPE Procurement Platform";
+    this.categories = "Health NGO";
 
     this.db_tables.push("products JOIN suppliers");
     this.db_tables.push("products JOIN suppliers LEFT JOIN categories");
+    this.db_tables.push("certifications as 'c' JOIN products_certifications as 'pc'");
 
-    this.admin_pkey     = "ke6qwkD3XB8JvWwf68RMjDAn2ByJRv3ak1eqUzTEz9cr";
+    this.admin_pkey = "ke6qwkD3XB8JvWwf68RMjDAn2ByJRv3ak1eqUzTEz9cr";
 
     this.description = "A covid19 management framework for Saito";
-    this.categories  = "Admin Healthcare Productivity";    
-    this.definitions =  {};
+    this.categories = "Admin Healthcare Productivity";
+    this.definitions = {};
 
     return this;
   }
@@ -36,8 +37,8 @@ class Covid19 extends ModTemplate {
   respondTo(type) {
     if (type == 'email-appspace') {
       let obj = {};
-          obj.render = this.renderEmailPlugin;
-          obj.attachEvents = this.attachEventsEmailPlugin;
+      obj.render = this.renderEmailPlugin;
+      obj.attachEvents = this.attachEventsEmailPlugin;
       return obj;
     }
     return null;
@@ -46,8 +47,8 @@ class Covid19 extends ModTemplate {
     try {
 
       let product_json_base64 = app.browser.returnURLParameter("product");
-      let product_json        = app.crypto.base64ToString(product_json_base64);
-      let product             = JSON.parse(product_json);
+      let product_json = app.crypto.base64ToString(product_json_base64);
+      let product = JSON.parse(product_json);
 
       document.querySelector('.email-appspace').innerHTML = `
         Update your Product Information:
@@ -63,10 +64,10 @@ class Covid19 extends ModTemplate {
   attachEventsEmailPlugin(app, data) {
     try {
 
-      document.querySelector('.update-product-btn').addEventListener('click', function(e) {
+      document.querySelector('.update-product-btn').addEventListener('click', function (e) {
 
-  alert("Sending Transaction to Update Product");
-  window.href = "/covid19";
+        alert("Sending Transaction to Update Product");
+        window.href = "/covid19";
 
       });
     } catch (err) {
@@ -85,23 +86,23 @@ class Covid19 extends ModTemplate {
     let params = {};
 
     sql = "INSERT INTO certifications (name) VALUES ($name)";
-    params = { $name : "CE Authentication" }
+    params = { $name: "CE Authentication" }
     await app.storage.executeDatabase(sql, params, "covid19");
 
     sql = "INSERT INTO certifications (name) VALUES ($name)";
-    params = { $name : "FDA Authentication" }
+    params = { $name: "FDA Authentication" }
     await app.storage.executeDatabase(sql, params, "covid19");
 
     sql = "INSERT INTO certifications (name) VALUES ($name)";
-    params = { $name : "Test Report" }
+    params = { $name: "Test Report" }
     await app.storage.executeDatabase(sql, params, "covid19");
 
     sql = "INSERT INTO certifications (name) VALUES ($name)";
-    params = { $name : "Business License" }
+    params = { $name: "Business License" }
     await app.storage.executeDatabase(sql, params, "covid19");
 
     sql = "INSERT INTO certifications (name) VALUES ($name)";
-    params = { $name : "Medical Device Certificate" }
+    params = { $name: "Medical Device Certificate" }
     await app.storage.executeDatabase(sql, params, "covid19");
 
     sql = "INSERT INTO categories (name) VALUES ('N95口罩 N95 Mask')";
@@ -118,19 +119,19 @@ class Covid19 extends ModTemplate {
 
     let sql = "";
 
-/*
-    sql = "UPDATE products SET category_id = 1 WHERE product_name = '外科口罩 Surgical Masks'";
-    await app.storage.executeDatabase(sql, {}, "covid19");
-
-    sql = "UPDATE products SET category_id = 2 WHERE product_name = 'N95口罩 N95 Mask'";
-    await app.storage.executeDatabase(sql, {}, "covid19");
-
-    sql = "UPDATE products SET category_id = 3 WHERE product_name = '防护服Protection clothes'";
-    await app.storage.executeDatabase(sql, {}, "covid19");
-*/
+    /*
+        sql = "UPDATE products SET category_id = 1 WHERE product_name = '外科口罩 Surgical Masks'";
+        await app.storage.executeDatabase(sql, {}, "covid19");
+    
+        sql = "UPDATE products SET category_id = 2 WHERE product_name = 'N95口罩 N95 Mask'";
+        await app.storage.executeDatabase(sql, {}, "covid19");
+    
+        sql = "UPDATE products SET category_id = 3 WHERE product_name = '防护服Protection clothes'";
+        await app.storage.executeDatabase(sql, {}, "covid19");
+    */
     sql = "PRAGMA table_info(suppliers)";
     this.definitions['suppliers'] = await app.storage.queryDatabase(sql, {}, "covid19");
-    
+
     sql = "PRAGMA table_info(products)";
     this.definitions['products'] = await app.storage.queryDatabase(sql, {}, "covid19");
 
@@ -143,7 +144,7 @@ class Covid19 extends ModTemplate {
     if (this.app.BROWSER == 0) { return; }
 
     let data = {};
-        data.covid19 = this;
+    data.covid19 = this;
 
     SplashPage.render(app, data);
     SplashPage.attachEvents(app, data);
@@ -167,16 +168,16 @@ class Covid19 extends ModTemplate {
   }
 
 
-/*
-          <th>Photo</th>
-          <th>Product</th>
-          <th>Producer</th>
-          <th>Certifications</th>
-          <th>Daily Volume</th>
-          <th>Cost</th>
-          <th>Next Shipping Date</th>
-     <div>click for details</th>
-*/
+  /*
+            <th>Photo</th>
+            <th>Product</th>
+            <th>Producer</th>
+            <th>Certifications</th>
+            <th>Daily Volume</th>
+            <th>Cost</th>
+            <th>Next Shipping Date</th>
+       <div>click for details</th>
+  */
   addProductsToTable(rows, fields, data) {
 
 
@@ -190,45 +191,45 @@ class Covid19 extends ModTemplate {
         let added = 0;
 
         try {
-    if (rows[i][fields[ii]] != "") {
+          if (rows[i][fields[ii]] != "") {
 
-      if (fields[ii] == "product_photo") {
-        if (rows[i][fields[ii]] != null) {
-            html += `<div><img style="max-width:200px;max-height:200px" src="${rows[i][fields[ii]]}" /></div>`;
-          added = 1;
-        }
-      }
+            if (fields[ii] == "product_photo") {
+              if (rows[i][fields[ii]] != null) {
+                html += `<div><img style="max-width:200px;max-height:200px" src="${rows[i][fields[ii]]}" /></div>`;
+                added = 1;
+              }
+            }
 
-      if (fields[ii] == "edit") {
-          html += `<div><span class="edit_product" id="${rows[i].id}">edit</a> | <span class="delete_product" id="${rows[i].id}">delete</span></div>`;
-        added = 1;
-      }
+            if (fields[ii] == "edit") {
+              html += `<div><span class="edit_product" id="${rows[i].id}">edit</a> | <span class="delete_product" id="${rows[i].id}">delete</span></div>`;
+              added = 1;
+            }
 
-      if (fields[ii] == "fullview") {
-          html += `<div><span class="fullview_product" id="${rows[i].id}">full details</span></div>`;
-        added = 1;
-      }
+            if (fields[ii] == "fullview") {
+              html += `<div><span class="fullview_product" id="${rows[i].id}">full details</span></div>`;
+              added = 1;
+            }
 
-      if (fields[ii] == "admin") {
-          html += `<div><span class="fullview_product" id="${rows[i].id}">full details</span> | <span class="edit_product" id="${rows[i].id}">edit</a> | <span class="delete_product" id="${rows[i].id}">delete</span></div>`;
-        added = 1;
-      }
+            if (fields[ii] == "admin") {
+              html += `<div><span class="fullview_product" id="${rows[i].id}">full details</span> | <span class="edit_product" id="${rows[i].id}">edit</a> | <span class="delete_product" id="${rows[i].id}">delete</span></div>`;
+              added = 1;
+            }
 
-      if (added == 0) {
-          html += `<div>${rows[i][fields[ii]]}</div>`;
-        added = 1;
-      }
+            if (added == 0) {
+              html += `<div>${rows[i][fields[ii]]}</div>`;
+              added = 1;
+            }
 
 
-    } else {
+          } else {
           }
         } catch (err) {
-console.log("err: " + err);
-  }
+          console.log("err: " + err);
+        }
 
-  if (added == 0) {
-    html += `<div></div>`;
-  }
+        if (added == 0) {
+          html += `<div></div>`;
+        }
 
       }
 
@@ -237,9 +238,11 @@ console.log("err: " + err);
 
     }
 
-    document.querySelector('.fullview_product').addEventListener('click', (e) => {
-      data.id = e.toElement.id;
-      ProductPage.render(data);
+    document.querySelectorAll('.fullview_product').forEach(elem => {
+      elem.addEventListener('click', (e) => {
+        data.id = e.toElement.id;
+        ProductPage.render(data);
+      })
     });
 
   }
@@ -247,7 +250,7 @@ console.log("err: " + err);
   renderProduct(prod) {
     var html = "";
     Object.entries(prod).forEach(field => {
-      switch(field[0]) {
+      switch (field[0]) {
         case 'id':
         case 'supplier_id':
         case 'category_id':
@@ -261,9 +264,9 @@ console.log("err: " + err);
           html += "<div>" + field[1] + "</div>";
           break;
         case 'product_description':
-            html += "<div>Description</div>";
-            html += "<div>" + field[1] + "</div>";
-            break;
+          html += "<div>Description</div>";
+          html += "<div>" + field[1] + "</div>";
+          break;
         case 'product_dimensions':
           html += "<div>Package Dimensions</div>";
           html += "<div>" + field[1] + "</div>";
@@ -304,12 +307,43 @@ console.log("err: " + err);
           html += "<div>Payment Terms</div>";
           html += "<div>" + field[1] + "</div>";
           break;
-        default: 
-        html += "<div>" + field[0].split("_").join(" ") + "</div>";
-        html += "<div>" + field[1] + "</div>";
+        default:
+          html += "<div>" + field[0].split("_").join(" ") + "</div>";
+          html += "<div>" + field[1] + "</div>";
       }
     });
     document.querySelector('.product-grid').innerHTML = html;
+  }
+
+  renderSupplier(supplier) {
+    var html = "";
+    Object.entries(supplier).forEach(field => {
+      html += "<div>" + field[0] + "</div>";
+      html += ("<div>" + field[1] + "</div>").replace(">null<", "><");
+    });
+    document.querySelector('.supplier-grid').innerHTML = html;
+  }
+
+
+  renderCerts(rows) {
+    var html = "";
+    rows.forEach(row => {
+      if (row["attachment_id"] != null) {
+        html += "<div class='cert attach-" + row["attachment_id"] + "'>" + row["Name"] + "</div>";
+      } else {
+        html += "<div class='cert'>" + row["Name"] + "</div>";
+      }
+      document.querySelector('.cert-grid').innerHTML = html;
+    });
+
+    rows.forEach(row => {
+      if (row["attachment_id"] != null) {
+        document.querySelector('.attach-' + row["attachment_id"]).addEventListener('click', (e) => {
+          salert("Download attchment: " + row["attachment_id"]);
+        });
+      }
+    });
+
   }
 
   isAdmin() {

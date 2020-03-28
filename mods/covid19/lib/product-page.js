@@ -6,34 +6,80 @@ module.exports = ProductPage = {
 
   render(data) {
 
+    var supplier_id = 0;
+    var certifications = [];
     document.querySelector(".main").innerHTML = ProductPageTemplate();
 
     //
     // load product
     //
+    let fields = "";
     data.covid19.sendPeerDatabaseRequest("covid19", "products", "*", "id= " + data.id, null, function (res) {
 
       if (res.rows.length > 0) {
+
         data.covid19.renderProduct(res.rows[0]);
+        supplier_id = res.rows[0]["supplier_id"];
         document.querySelector(".product-name").innerHTML = res.rows[0]["product_name"];
+
+        //
+        // load certificates
+        fields = "name as 'Name', address as 'Province', phone as 'Phone', email as 'Email', wechat as 'WeChat Id', notes as 'Notes'";
+        //fields = "*";
+
+        data.covid19.sendPeerDatabaseRequest("covid19", "suppliers", fields, "id= " + supplier_id, null, function (res) {
+
+          if (res.rows.length > 0) {
+
+            data.covid19.renderSupplier(res.rows[0]);
+
+          }
+        });
+
+        //
+        // load certifications
+        //
+        fields = "c.name as 'Name', (select id from attachments where id = pc.id ) as attachment_id";
+        var from = "certifications as 'c' JOIN products_certifications as 'pc'";
+        var where = "c.id = pc.certification_id and pc.product_id =";
+        data.covid19.sendPeerDatabaseRequest("covid19", from, fields, where + data.id, null, function (res) {
+
+          if (res.rows.length > 0) {
+
+            data.covid19.renderCerts(res.rows);
+
+          }
+        });
+        //
+        // load supplier
+        fields = "name as 'Name', address as 'Province', phone as 'Phone', email as 'Email', wechat as 'WeChat Id', notes as 'Notes'";
+        //fields = "*";
+
+        data.covid19.sendPeerDatabaseRequest("covid19", "suppliers", fields, "id= " + supplier_id, null, function (res) {
+
+          if (res.rows.length > 0) {
+
+            data.covid19.renderSupplier(res.rows[0]);
+
+          }
+        });
+
       }
-
-      document.querySelector(".loading").style.display = "none";
-      document.querySelector(".portal").style.display = "block";
     });
-
+    document.querySelector(".loading").style.display = "none";
+    document.querySelector(".portal").style.display = "block";
   },
 
 
   attachEvents(app, data) {
-  
+
   },
 
 
   renderProduct(prod) {
     var html = "";
     Object.entries(prod).forEach(field => {
-      switch(field[0]) {
+      switch (field[0]) {
         case 'id':
         case 'supplier_id':
         case 'category_id':
@@ -90,9 +136,9 @@ module.exports = ProductPage = {
           html += "<div>Payment Terms</div>";
           html += "<div>" + field[1] + "</div>";
           break;
-        default: 
-        html += "<div>" + field[0].split("_").join(" ") + "</div>";
-        html += "<div>" + field[1] + "</div>";
+        default:
+          html += "<div>" + field[0].split("_").join(" ") + "</div>";
+          html += "<div>" + field[1] + "</div>";
       }
     });
     document.querySelector('.product-grid').innerHTML = html;
