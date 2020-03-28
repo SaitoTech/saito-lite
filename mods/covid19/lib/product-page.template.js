@@ -21,11 +21,15 @@ module.exports = ProductPageTemplate = () => {
 
       </div>
 
+      <hr />
+
     <h3>Certifications</h3>
 
       <div id="cert-grid" class="cert-grid">
 
       </div>
+
+      <hr />
 
       <h3>Supplier Details</h3>
 
