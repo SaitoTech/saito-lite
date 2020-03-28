@@ -7,7 +7,7 @@ module.exports = UpdateProduct = {
       document.querySelector(".main").innerHTML = UpdateProductTemplate();
 
       let fields = "";
-      data.covid19.sendPeerDatabaseRequest("covid19", "products JOIN suppliers", "*", "products.supplier_id = suppliers.id AND id= " + data.id, null, function (res) {
+      data.covid19.sendPeerDatabaseRequest("covid19", "products JOIN suppliers", "*", "products.supplier_id = suppliers.id AND products.id = " + data.id, null, function (res) {
 
 	if (res.rows.length > 0) {
         

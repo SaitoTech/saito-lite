@@ -36,6 +36,12 @@ module.exports = CustomerPortal = {
         let whereclause = "suppliers.id = products.supplier_id AND products.category_id = " + category_id;
         data.covid19.sendPeerDatabaseRequest("covid19", "products JOIN suppliers", "*", whereclause, null, function (res) {
           data.covid19.addProductsToTable(res.rows, ['name', 'product_specification', 'product_photo', 'pricing_unit_cost', 'production_daily_capacity', 'certifications', 'June 24', 'fullview'], data);
+          
+          document.querySelector('.fullview_product').addEventListener('click', (e) => {	
+            data.id = e.toElement.id;	
+            ProductPage.render(data);	
+          });
+          
           document.querySelector(".products-table").style.display = "grid";
         });
 

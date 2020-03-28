@@ -11,7 +11,7 @@ function post_compile {
 
 
   # DELETE 
-  cp ./../covid19.sq3 ./data/covid19.sq3
+  # cp ./../covid19.sq3 ./data/covid19.sq3
 
 }
 
