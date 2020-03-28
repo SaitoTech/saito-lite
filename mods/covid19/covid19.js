@@ -83,7 +83,7 @@ class Covid19 extends ModTemplate {
 
     let sql = "";
     let params = {};
-
+/*
     sql = "INSERT INTO certifications (name) VALUES ($name)";
     params = { $name : "CE Authentication" }
     await app.storage.executeDatabase(sql, params, "covid19");
@@ -110,6 +110,7 @@ class Covid19 extends ModTemplate {
     await app.storage.executeDatabase(sql, {}, "covid19");
     sql = "INSERT INTO categories (name) VALUES ('外科口罩 Surgical Masks')";
     await app.storage.executeDatabase(sql, {}, "covid19");
+*/
 
   }
   async initialize(app) {

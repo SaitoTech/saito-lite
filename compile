@@ -9,6 +9,10 @@ function post_compile {
   cat ./web/saito/saito.js >> ./web/saito/saito2.js
   mv -f ./web/saito/saito2.js ./web/saito/saito.js
 
+
+  # DELETE 
+  cp ./../covid19.sq3 ./data/covid19.sq3
+
 }
 
 function reset_bundler {
