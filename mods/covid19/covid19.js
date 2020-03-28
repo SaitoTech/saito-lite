@@ -226,6 +226,11 @@ console.log("TEST: " + rows[i][fields[ii]]);
       document.querySelector(".products-table").innerHTML += html;
 
     }
+    
+    document.querySelector('.fullview_product').addEventListener('click', (e) => {	
+      data.id = e.toElement.id;	
+      ProductPage.render(data);	
+    });
 
   }
 
