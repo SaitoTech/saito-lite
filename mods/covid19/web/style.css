@@ -55,3 +55,7 @@ td {
   font-family: visuelt;
   min-width: 250px;
 }
+
+.product-image {
+  max-width: 250px;
+}
