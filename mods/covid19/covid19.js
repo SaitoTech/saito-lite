@@ -257,55 +257,55 @@ console.log("TEST: " + rows[i][fields[ii]]);
           break;
         case 'product_name':
           html += "<div>Name</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + "' />";
+          html += "<input class='input' id='product' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'product_specification':
           html += "<div>Specification</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + "' />";
+          html += "<input class='input' id='product' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'product_description':
           html += "<div>Description</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + " '/>";
+          html += "<input class='input' id='product' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'product_dimensions':
           html += "<div>Package Dimensions</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + " '/>";
+          html += "<input class='input' id='product' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'product_weight':
           html += "<div>Weight</div>";
-          html += "<input type='text' name='product_description' value='" + field[1] + " '/>";
+          html += "<input class='input' id='product' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'product_quantities':
           html += "<div>Package Contents</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + " '/>";
+          html += "<input class='input' id='product' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'product_photo':
           html += "<div>Product Image</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + " '/>";
+          html += "<input class='input' id='product' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'pricing_per_unit_rmb':
           html += "<div>Price (RMB)</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + " '/>";
+          html += "<input class='input' id='product' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'pricing_notes':
           html += "<div>Pricing Notes</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + " '/>";
+          html += "<input class='input' id='product' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'pricing_payment_terms':
           html += "<div>Payment Terms</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + " '/>";
+          html += "<input class='input' id='product' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'production_stock':
           html += "<div>Stock</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + " '/>";
+          html += "<input class='input' id='product' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'production_daily_capacity':
           html += "<div>Daily Production</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + " '/>";
+          html += "<input class='input' id='product' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'production_minimum_order':
           html += "<div>Payment Terms</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + " '/>";
+          html += "<input class='input' id='product' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         default:
           break;

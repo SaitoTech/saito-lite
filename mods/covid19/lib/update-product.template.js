@@ -5,6 +5,10 @@ module.exports = UpdateProductTemplate = () => {
   html = `
   <div class="supplier-information">
 
+    <div class="loading">
+      Loading Product Editing Page....
+    </div>
+
     <div class="portal" style="display:none">
 
     <h3>Product Details:</h3>
