@@ -113,30 +113,28 @@ class Covid19 extends ModTemplate {
       // insert supplier if non-existent
       //
       let supplier_id = 0;
-console.log(conf + " --- running here");
 
       if (txmsg.request == "Supplier Update") {
 
         sql = `SELECT id FROM suppliers WHERE publickey = "${tx.transaction.from[0].add}"`;
-  let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
-  if (rows.length == 0) { 
-    sql = `SELECT max(id) AS maxid FROM "suppliers"`;
-    let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
-    if (rows.length == 0) {
-      supplier_id = 1;
-    } else {
-      supplier_id = rows[0].maxid+1;;
-    }
+        let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
+        if (rows.length == 0) { 
+          sql = `SELECT max(id) AS maxid FROM "suppliers"`;
+          let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
+          if (rows.length == 0) {
+            supplier_id = 1;
+          } else {
+            supplier_id = rows[0].maxid+1;;
+          }
 
-    sql = `INSERT INTO suppliers (id) VALUES (${supplier_id})`;
-    await this.app.storage.executeDatabase(sql, {}, "covid19");
+          sql = `INSERT INTO suppliers (id , publickey) VALUES (${supplier_id} , '${tx.transaction.from[0].add}')`;
+          await this.app.storage.executeDatabase(sql, {}, "covid19");
 
         } else {
           supplier_id = rows[0].id;
         }
 
 console.log("SUPPLIER ID IS: " + supplier_id);
-
 
         let fields = txmsg.fields;
         let id = 0;
@@ -147,6 +145,9 @@ console.log("SUPPLIER ID IS: " + supplier_id);
           let column = fields[i].column;
           let value = fields[i].value;
           if (fields[i].id > 0) { id = fields[i].id; }
+          if (fields[i].id == "supplier") { id = supplier_id; }
+
+console.log(table + " -- " + column + " -- " + value);
 
           if (id == 0) {
 
@@ -410,6 +411,41 @@ console.log("SUPPLIER ID IS: " + supplier_id);
     document.querySelector('.supplier-grid').innerHTML = html;
   }
 
+
+  renderSupplierForm(prod) {
+    var html = "";
+    Object.entries(prod).forEach(field => {
+      switch (field[0]) {
+        case 'id':
+          break;
+        case 'name':
+          html += "<div>Name</div>";
+          html += "<input class='input' id='suppliers' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          break;
+        case 'address':
+          html += "<div>Address</div>";
+          html += "<input class='input' id='suppliers' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          break;
+        case 'phone':
+          html += "<div>Phone</div>";
+          html += "<input class='input' id='suppliers' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          break;
+        case 'email':
+          html += "<div>Email</div>";
+          html += "<input class='input' id='suppliers' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          break;
+        case 'wechat':
+          html += "<div>Wechat</div>";
+          html += "<input class='input' id='suppliers' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          break;
+        default:
+          break;
+      }
+    });
+
+    document.querySelector('.supplier-grid').innerHTML = html;
+
+  }
 
   renderCerts(rows) {
     var html = "";
