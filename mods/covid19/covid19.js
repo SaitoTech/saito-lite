@@ -118,18 +118,18 @@ console.log(conf + " --- running here");
       if (txmsg.request == "Supplier Update") {
 
         sql = `SELECT id FROM suppliers WHERE publickey = "${tx.transaction.from[0].add}"`;
-	let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
-	if (rows.length == 0) { 
-	  sql = `SELECT max(id) AS maxid FROM "suppliers"`;
-	  let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
-	  if (rows.length == 0) {
-	    supplier_id = 1;
-	  } else {
-	    supplier_id = rows[0].maxid+1;;
-	  }
+  let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
+  if (rows.length == 0) { 
+    sql = `SELECT max(id) AS maxid FROM "suppliers"`;
+    let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
+    if (rows.length == 0) {
+      supplier_id = 1;
+    } else {
+      supplier_id = rows[0].maxid+1;;
+    }
 
-	  sql = `INSERT INTO suppliers (id) VALUES (${supplier_id})`;
-	  await this.app.storage.executeDatabase(sql, {}, "covid19");
+    sql = `INSERT INTO suppliers (id) VALUES (${supplier_id})`;
+    await this.app.storage.executeDatabase(sql, {}, "covid19");
 
         } else {
           supplier_id = rows[0].id;
@@ -326,12 +326,9 @@ console.log("SUPPLIER ID IS: " + supplier_id);
         case 'category_id':
           break;
         case 'product_name':
-<<<<<<< HEAD
           html += "<div>Name</div>";
           html += "<input class='input' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
-=======
           html += "<input class='input category_id_input' id='products' type='hidden' name='category_id' value='1' />";
->>>>>>> afd9b8cea1be9d20fb1da992e4075ebb337e8844
           break;
         case 'product_specification':
           html += "<div>Specification</div>";
