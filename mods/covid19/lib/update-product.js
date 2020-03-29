@@ -89,6 +89,9 @@ module.exports = UpdateProduct = {
 
       data.covid19.updateServerDatabase(values);
 
+      salert("You have send a cryptographically-signed message updating your records. It will take approximately 30 seconds before the network updates to reflect your new information. Please be patient and reload in a minute if your information is not immediately updated.");
+      window.location.reload();
+
     });
 
     document.querySelector('.attach-cert-btn').addEventListener('click', (e) => {

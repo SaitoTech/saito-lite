@@ -21,7 +21,11 @@
 
   <link rel="stylesheet" href="/saito/lib/font-awesome-5/css/all.css" type="text/css" media="screen" />
 
-  <title>Saito Web Application</title>
+    <link rel="stylesheet" href="/saito/style.css">
+    <link rel="stylesheet" href="/covid19/style.css">
+    <link rel="stylesheet" href="/chat/css/email-chat.css">
+
+    <title>On-Chain Medical Procurement Hub</title>
 
   <link rel="stylesheet" href="/saito/style.css">
   <link rel="stylesheet" href="/covid19/style.css">
@@ -30,10 +34,13 @@
 
 <body>
 
+
   <!-- saito load animation -->
   <script src="/saito/lib/lottie/lottie_light.min.js"></script>
   <div id="lottie"></div>
   <script src="/saito/scripts/lottie-animate.js"></script>
+
+  <div style="display:none" class="email-chat" id="email-chat"></div>
 
 
   <!-- Renders once saito.js loads-->
@@ -56,6 +63,8 @@
       Covid19 On-Chain Producement Center
     </div>
     <div class="footer"></div>
+
+
 
     <script id="saito" type="text/javascript" src="/saito/saito.js"></script>
 
