@@ -33,60 +33,13 @@ class Covid19 extends ModTemplate {
 
 
 
-
-  //
-  // email plugin handles product updates
-  //
-  respondTo(type) {
-    if (type == 'email-appspace') {
-      let obj = {};
-      obj.render = this.renderEmailPlugin;
-      obj.attachEvents = this.attachEventsEmailPlugin;
-      return obj;
-    }
-    return null;
-  }
-  renderEmailPlugin(app, data) {
-    try {
-
-      let product_json_base64 = app.browser.returnURLParameter("product");
-      let product_json = app.crypto.base64ToString(product_json_base64);
-      let product = JSON.parse(product_json);
-
-      document.querySelector('.email-appspace').innerHTML = `
-        Update your Product Information:
-        <p></p>
-        <pre>${JSON.stringify(product)}</pre>
-  <p></p>
-  <div class="update-product-btn button">update</div>
-      `;
-    } catch (err) {
-      console.log("Error rendering covid19 email plugin: " + err);
-    }
-  }
-  attachEventsEmailPlugin(app, data) {
-    try {
-
-      document.querySelector('.update-product-btn').addEventListener('click', function (e) {
-
-        alert("Sending Transaction to Update Product");
-        window.href = "/covid19";
-
-      });
-    } catch (err) {
-      console.log("Error attaching events to Covid19 email");
-    }
-  }
-
-
-
-
   async installModule(app) {
 
     await super.installModule(app);
 
     let sql = "";
     let params = {};
+<<<<<<< HEAD
     /*
         sql = "INSERT INTO certifications (name) VALUES ($name)";
         params = { $name: "CE Authentication" }
@@ -115,6 +68,37 @@ class Covid19 extends ModTemplate {
         sql = "INSERT INTO categories (name) VALUES ('外科口罩 Surgical Masks')";
         await app.storage.executeDatabase(sql, {}, "covid19");
     */
+=======
+
+
+    sql = "INSERT INTO certifications (name) VALUES ($name)";
+    params = { $name: "CE Authentication" }
+    await app.storage.executeDatabase(sql, params, "covid19");
+
+    sql = "INSERT INTO certifications (name) VALUES ($name)";
+    params = { $name: "FDA Authentication" }
+    await app.storage.executeDatabase(sql, params, "covid19");
+
+    sql = "INSERT INTO certifications (name) VALUES ($name)";
+    params = { $name: "Test Report" }
+    await app.storage.executeDatabase(sql, params, "covid19");
+
+    sql = "INSERT INTO certifications (name) VALUES ($name)";
+    params = { $name: "Business License" }
+    await app.storage.executeDatabase(sql, params, "covid19");
+
+    sql = "INSERT INTO certifications (name) VALUES ($name)";
+    params = { $name: "Medical Device Certificate" }
+    await app.storage.executeDatabase(sql, params, "covid19");
+
+    sql = "INSERT INTO categories (name) VALUES ('N95口罩 N95 Mask')";
+    await app.storage.executeDatabase(sql, {}, "covid19");
+    sql = "INSERT INTO categories (name) VALUES ('防护服Protection clothes')";
+    await app.storage.executeDatabase(sql, {}, "covid19");
+    sql = "INSERT INTO categories (name) VALUES ('外科口罩 Surgical Masks')";
+    await app.storage.executeDatabase(sql, {}, "covid19");
+
+>>>>>>> afd9b8cea1be9d20fb1da992e4075ebb337e8844
 
   }
   async initialize(app) {
@@ -123,16 +107,15 @@ class Covid19 extends ModTemplate {
 
     let sql = "";
 
-    /*
-        sql = "UPDATE products SET category_id = 1 WHERE product_name = '外科口罩 Surgical Masks'";
-        await app.storage.executeDatabase(sql, {}, "covid19");
-    
-        sql = "UPDATE products SET category_id = 2 WHERE product_name = 'N95口罩 N95 Mask'";
-        await app.storage.executeDatabase(sql, {}, "covid19");
-    
-        sql = "UPDATE products SET category_id = 3 WHERE product_name = '防护服Protection clothes'";
-        await app.storage.executeDatabase(sql, {}, "covid19");
-    */
+    sql = "UPDATE products SET category_id = 1 WHERE product_name = '外科口罩 Surgical Masks'";
+    await app.storage.executeDatabase(sql, {}, "covid19");
+
+    sql = "UPDATE products SET category_id = 2 WHERE product_name = 'N95口罩 N95 Mask'";
+    await app.storage.executeDatabase(sql, {}, "covid19");
+
+    sql = "UPDATE products SET category_id = 3 WHERE product_name = '防护服Protection clothes'";
+    await app.storage.executeDatabase(sql, {}, "covid19");
+
     sql = "PRAGMA table_info(suppliers)";
     this.definitions['suppliers'] = await app.storage.queryDatabase(sql, {}, "covid19");
 
@@ -152,21 +135,71 @@ class Covid19 extends ModTemplate {
     let txmsg = tx.returnMessage();
     let covid19_self = app.modules.returnModule("Covid19");
 
+    let sql = '';
+    let params = {};
+
     if (conf == 0) {
 
       let product_id = txmsg.product_id;
       let fields = txmsg.fields;
+      //
+      // insert supplier if non-existent
+      //
+      let supplier_id = 0;
 
-      for (let i = 0; i < fields.length; i++) {
+      if (txmsg.request == "Supplier Update") {
 
-        let table = fields[i].table;
-        let column = fields[i].column;
-        let value = fields[i].value;
-        let id = fields[i].id;
+        sql = `SELECT id FROM suppliers WHERE publickey = "${tx.transaction.from[0].add}"`;
+        let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
+        if (rows.length == 0) {
+          sql = `SELECT max(id) AS maxid FROM "suppliers"`;
+          let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
+          if (rows.length == 0) {
+            supplier_id = 1;
+          } else {
+            supplier_id = rows[0].maxid + 1;;
+          }
+        } else {
+          supplier_id = rows[0].id;
+        }
 
-        let sql = `UPDATE ${table} SET ${column} = "${value}" WHERE id = ${id}`;
-        await this.app.storage.executeDatabase(sql, {}, "covid19");
+        let fields = txmsg.fields;
+        let id = 0;
 
+        for (let i = 0; i < fields.length; i++) {
+
+          let table = fields[i].table;
+          let column = fields[i].column;
+          let value = fields[i].value;
+          if (fields[i].id > 0) { id = fields[i].id; }
+
+          if (id == 0) {
+
+            sql = `SELECT max(id) AS maxid FROM ${table}`;
+            let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
+            if (rows.length == 0) {
+              id = 1;
+            } else {
+              id = rows[0].maxid + 1;
+            }
+
+            let table = fields[i].table;
+            let column = fields[i].column;
+            let value = fields[i].value;
+            let id = fields[i].id;
+
+            let sql = `UPDATE ${table} SET ${column} = "${value}" WHERE id = ${id}`;
+            await this.app.storage.executeDatabase(sql, {}, "covid19");
+            sql = `INSERT INTO ${table} (id, supplier_id) VALUES (${id}, ${supplier_id})`;
+            await this.app.storage.executeDatabase(sql, {}, "covid19");
+          }
+
+          if (id > 0) {
+            sql = `UPDATE ${table} SET ${column} = "${value}" WHERE id = ${id}`;
+            await this.app.storage.executeDatabase(sql, {}, "covid19");
+          }
+
+        }
       }
 
     }
@@ -285,7 +318,9 @@ class Covid19 extends ModTemplate {
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
-    alert("Transaction Sent to Network");
+    setTimeout(function () {
+      window.href = "/covid19";
+    }, 500);
 
   }
 
@@ -316,8 +351,12 @@ class Covid19 extends ModTemplate {
         case 'category_id':
           break;
         case 'product_name':
+<<<<<<< HEAD
           html += "<div>Name</div>";
           html += "<input class='input' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+=======
+          html += "<input class='input category_id_input' id='products' type='hidden' name='category_id' value='1' />";
+>>>>>>> afd9b8cea1be9d20fb1da992e4075ebb337e8844
           break;
         case 'product_specification':
           html += "<div>Specification</div>";
@@ -372,6 +411,20 @@ class Covid19 extends ModTemplate {
       }
     });
     document.querySelector('.product-grid').innerHTML = html;
+    document.getElementById('select-product-type').addEventListener('change', (e) => {
+      let category_id = e.currentTarget.value;
+      if (category_id > 0) {
+
+        //
+        // populate table
+        //
+        document.querySelector('.category_id_input').value = category_id;
+
+      }
+    });
+
+
+
   }
 
   renderSupplier(supplier) {

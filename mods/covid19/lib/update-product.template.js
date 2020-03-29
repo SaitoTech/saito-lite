@@ -11,20 +11,28 @@ module.exports = UpdateProductTemplate = (app, data) => {
 
     <div class="portal" style="display:none">
 
-    <h3>Product Details:</h3>
+      <h3>Product Details:</h3>
 
-    <div id="product-grid" class="product-grid grid-4"></div>
+      <select id="select-product-type" name="select-product-type">
+        <option value=0>select product category</option>
+      </select>
 
-    <!--h3>Certifications</h3>
+ 
+      <div id="product-grid" class="product-grid grid-4"></div>
 
-    <div id="cert-grid" class="cert-grid"></div>
+<!--
+      <h3>Certifications</h3>
 
-    <h3>Supplier Details</h3>
+      <div id="cert-grid" class="cert-grid"></div>
+      <h3>Supplier Details</h3>
 
-    <div id="supplier-grid" class="supplier-grid grid-4"></div1-->
+      <div id="supplier-grid" class="supplier-grid grid-4"></div>
 
+-->
 
-    <div id=${data.product_id} class="update-product-btn button">Update Public Listing</div>
+      <div id="${data.product_id}" class="update-product-btn button">Update Public Listing</div>
+
+    </div>
   </div>
 
 
