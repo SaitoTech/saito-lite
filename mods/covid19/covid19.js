@@ -1,6 +1,9 @@
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const SplashPage = require('./lib/splash-page');
+const CustomerPortal = require('./lib/customer-portal');
+const SupplierPortal = require('./lib/supplier-portal');
+
 
 
 
@@ -36,8 +39,7 @@ class Covid19 extends ModTemplate {
 
     let sql = "";
     let params = {};
-
-
+  
     sql = "INSERT INTO certifications (name) VALUES ($name)";
     params = { $name: "CE Authentication" }
     await app.storage.executeDatabase(sql, params, "covid19");
@@ -65,7 +67,6 @@ class Covid19 extends ModTemplate {
     sql = "INSERT INTO categories (name) VALUES ('外科口罩 Surgical Masks')";
     await app.storage.executeDatabase(sql, {}, "covid19");
 
-
   }
   async initialize(app) {
 
@@ -73,14 +74,14 @@ class Covid19 extends ModTemplate {
 
     let sql = "";
 
-        sql = "UPDATE products SET category_id = 1 WHERE product_name = '外科口罩 Surgical Masks'";
-        await app.storage.executeDatabase(sql, {}, "covid19");
-    
-        sql = "UPDATE products SET category_id = 2 WHERE product_name = 'N95口罩 N95 Mask'";
-        await app.storage.executeDatabase(sql, {}, "covid19");
-    
-        sql = "UPDATE products SET category_id = 3 WHERE product_name = '防护服Protection clothes'";
-        await app.storage.executeDatabase(sql, {}, "covid19");
+    sql = "UPDATE products SET category_id = 1 WHERE product_name = '外科口罩 Surgical Masks'";
+    await app.storage.executeDatabase(sql, {}, "covid19");
+
+    sql = "UPDATE products SET category_id = 2 WHERE product_name = 'N95口罩 N95 Mask'";
+    await app.storage.executeDatabase(sql, {}, "covid19");
+
+    sql = "UPDATE products SET category_id = 3 WHERE product_name = '防护服Protection clothes'";
+    await app.storage.executeDatabase(sql, {}, "covid19");
 
     sql = "PRAGMA table_info(suppliers)";
     this.definitions['suppliers'] = await app.storage.queryDatabase(sql, {}, "covid19");
@@ -106,6 +107,8 @@ class Covid19 extends ModTemplate {
 
     if (conf == 0) {
 
+      let product_id = txmsg.product_id;
+      let fields = txmsg.fields;
       //
       // insert supplier if non-existent
       //
@@ -129,7 +132,7 @@ console.log(conf + " --- running here");
 	  await this.app.storage.executeDatabase(sql, {}, "covid19");
 
         } else {
-	    supplier_id = rows[0].id;
+          supplier_id = rows[0].id;
         }
 
 console.log("SUPPLIER ID IS: " + supplier_id);
@@ -140,32 +143,40 @@ console.log("SUPPLIER ID IS: " + supplier_id);
 
         for (let i = 0; i < fields.length; i++) {
 
-	  let table  = fields[i].table;
-	  let column = fields[i].column;
-	  let value  = fields[i].value;
-	  if ( fields[i].id > 0 ) { id = fields[i].id; }
+          let table = fields[i].table;
+          let column = fields[i].column;
+          let value = fields[i].value;
+          if (fields[i].id > 0) { id = fields[i].id; }
 
-	  if (id == 0) {
+          if (id == 0) {
 
-	    sql = `SELECT max(id) AS maxid FROM ${table}`;
-	    let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
-	    if (rows.length == 0) { 
-	      id = 1;
-	    } else {
- 	      id = rows[0].maxid+1;
-	    }
+            sql = `SELECT max(id) AS maxid FROM ${table}`;
+            let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
+            if (rows.length == 0) {
+              id = 1;
+            } else {
+              id = rows[0].maxid + 1;
+            }
 
-	    sql = `INSERT INTO ${table} (id, supplier_id) VALUES (${id}, ${supplier_id})`;
-	    await this.app.storage.executeDatabase(sql, {}, "covid19");
-	  }
+            let table = fields[i].table;
+            let column = fields[i].column;
+            let value = fields[i].value;
+            let id = fields[i].id;
 
-	  if (id > 0) {
-  	    sql = `UPDATE ${table} SET ${column} = "${value}" WHERE id = ${id}`;
-	    await this.app.storage.executeDatabase(sql, {}, "covid19");
-	  }
+            let sql = `UPDATE ${table} SET ${column} = "${value}" WHERE id = ${id}`;
+            await this.app.storage.executeDatabase(sql, {}, "covid19");
+            sql = `INSERT INTO ${table} (id, supplier_id) VALUES (${id}, ${supplier_id})`;
+            await this.app.storage.executeDatabase(sql, {}, "covid19");
+          }
+
+          if (id > 0) {
+            sql = `UPDATE ${table} SET ${column} = "${value}" WHERE id = ${id}`;
+            await this.app.storage.executeDatabase(sql, {}, "covid19");
+          }
 
         }
       }
+
     }
   }
 
@@ -185,7 +196,27 @@ console.log("SUPPLIER ID IS: " + supplier_id);
   }
 
 
+  attachEvents(app) {
 
+    let data = {};
+    data.covid19 = this;
+
+    document.querySelector('.covid_home').addEventListener('click', (e) => {
+      SplashPage.render(app, data);
+      SplashPage.attachEvents(app, data);
+    });
+
+    document.querySelector('.covid_buyer').addEventListener('click', (e) => {
+      CustomerPortal.render(app, data);
+      CustomerPortal.attachEvents(app, data);
+    });
+
+    document.querySelector('.covid_supplier').addEventListener('click', (e) => {
+      SupplierPortal.render(app, data);
+      SupplierPortal.attachEvents(app, data);
+    });
+
+  }
 
 
 
@@ -202,7 +233,7 @@ console.log("SUPPLIER ID IS: " + supplier_id);
 
         try {
           if (rows[i][fields[ii]] != "") {
-console.log("TEST: " + rows[i][fields[ii]]);
+            console.log("TEST: " + rows[i][fields[ii]]);
             if (fields[ii] == "product_photo") {
               if (rows[i][fields[ii]] != null) {
                 html += `<div><img style="max-width:200px;max-height:200px" src="${rows[i][fields[ii]]}" /></div>`;
@@ -256,13 +287,13 @@ console.log("TEST: " + rows[i][fields[ii]]);
   updateServerDatabase(data_array) {
 
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
-        newtx.transaction.msg.module = this.name;
-        newtx.transaction.msg.request = "Supplier Update";
-        newtx.transaction.msg.fields = data_array;
+    newtx.transaction.msg.module = this.name;
+    newtx.transaction.msg.request = "Supplier Update";
+    newtx.transaction.msg.fields = data_array;
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
-    setTimeout(function() {
+    setTimeout(function () {
       window.href = "/covid19";
     }, 500);
 
@@ -295,55 +326,60 @@ console.log("TEST: " + rows[i][fields[ii]]);
         case 'category_id':
           break;
         case 'product_name':
+<<<<<<< HEAD
+          html += "<div>Name</div>";
+          html += "<input class='input' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+=======
           html += "<input class='input category_id_input' id='products' type='hidden' name='category_id' value='1' />";
+>>>>>>> afd9b8cea1be9d20fb1da992e4075ebb337e8844
           break;
         case 'product_specification':
           html += "<div>Specification</div>";
-          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
+          html += "<input class='input' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'product_description':
           html += "<div>Description</div>";
-          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
+          html += "<input class='input' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'product_dimensions':
           html += "<div>Package Dimensions</div>";
-          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
+          html += "<input class='input' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'product_weight':
           html += "<div>Weight</div>";
-          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
+          html += "<input class='input' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'product_quantities':
           html += "<div>Package Contents</div>";
-          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
+          html += "<input class='input' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'product_photo':
           html += "<div>Product Image</div>";
-          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
+          html += "<input class='input' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'pricing_per_unit_rmb':
           html += "<div>Price (RMB)</div>";
-          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
+          html += "<input class='input' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'pricing_notes':
           html += "<div>Pricing Notes</div>";
-          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
+          html += "<input class='input' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'pricing_payment_terms':
           html += "<div>Payment Terms</div>";
-          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
+          html += "<input class='input' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'production_stock':
           html += "<div>Stock</div>";
-          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
+          html += "<input class='input' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'production_daily_capacity':
           html += "<div>Daily Production</div>";
-          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
+          html += "<input class='input' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'production_minimum_order':
           html += "<div>Payment Terms</div>";
-          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
+          html += "<input class='input' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         default:
           break;
@@ -400,7 +436,7 @@ console.log("TEST: " + rows[i][fields[ii]]);
   returnAttachment(id) {
     this.sendPeerDatabaseRequest("covid19", "attachments", "*", "id= " + id, null, function (res) {
       if (res.rows.length > 0) {
-        var blob = new Blob([res.rows[0]["attachment_data"]], {type: res.rows[0]["attachment_type"]});
+        var blob = new Blob([res.rows[0]["attachment_data"]], { type: res.rows[0]["attachment_type"] });
         var url = window.URL.createObjectURL(blob);
         var a = document.createElement("a");
         document.body.appendChild(a);

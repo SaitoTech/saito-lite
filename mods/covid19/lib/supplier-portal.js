@@ -1,13 +1,13 @@
-const SupplierPortalTemplate 	= require('./supplier-portal.template.js');
-const ProductPage 		= require('./product-page.js');
-const UpdateProduct	 	= require('./update-product.js');
+const SupplierPortalTemplate = require('./supplier-portal.template.js');
+const ProductPage = require('./product-page.js');
+const UpdateProduct = require('./update-product.js');
 
 
 module.exports = SupplierPortal = {
 
-    render(app, data) {
+  render(app, data) {
 
-      document.querySelector(".main").innerHTML = SupplierPortalTemplate();
+    document.querySelector(".main").innerHTML = SupplierPortalTemplate();
 
       //
       // load products
@@ -17,41 +17,38 @@ module.exports = SupplierPortal = {
 
         data.covid19.addProductsToTable(res.rows, [ 'name', 'product_specification', 'product_photo', 'pricing_per_unit_rmb', 'production_daily_capacity', 'certifications', 'June 24', 'admin']);
 
-        document.querySelector(".loading").style.display = "none";
-        document.querySelector(".portal").style.display = "block";
-        document.querySelector(".products-table").style.display = "grid";
+      document.querySelector(".loading").style.display = "none";
+      document.querySelector(".portal").style.display = "block";
+      document.querySelector(".products-table").style.display = "grid";
 
-  
-	try {
-
-         Array.from(document.getElementsByClassName('edit_product')).forEach(product => {
-            product.addEventListener('click', (e) => {
-              data.product_id = e.currentTarget.id;
-              UpdateProduct.render(app, data);
-              UpdateProduct.attachEvents(app, data);
-            });
-          });
-
-        } catch (err) {
-	}
-
-
+      document.querySelectorAll('.fullview_product').forEach(el => {
+        el.addEventListener('click', (e) => {
+          data.id = e.toElement.id;
+          ProductPage.render(data);
+        });
       });
 
-      
-
-
-console.log("done");
-    },
-
-    attachEvents(app, data) {
-
-      document.querySelector('.add-or-update-product-btn').addEventListener('click', (e) => {
-        data.product_id = e.currentTarget.id;
-        UpdateProduct.render(app, data);
-        UpdateProduct.attachEvents(app, data);
+      document.querySelectorAll('.edit_product').forEach(el => {
+        el.addEventListener('click', (e) => {
+          data.product_id = e.toElement.id;
+          UpdateProduct.render(app, data);
+          UpdateProduct.attachEvents(app, data);
+        });
       });
+    });
 
-    }
+
+    console.log("done");
+  },
+
+  attachEvents(app, data) {
+
+    document.querySelector('.add-or-update-product-btn').addEventListener('click', (e) => {
+      data.product_id = e.currentTarget.id;
+      UpdateProduct.render(app, data);
+      UpdateProduct.attachEvents(app, data);
+    });
+
+  }
 
 }

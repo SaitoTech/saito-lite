@@ -34,3 +34,19 @@ td {
 .grid-4 div, .grid-2 div {
   align-self: auto;
 }
+
+.navigation {
+  margin: 1em;
+  top: 80px;
+  position: relative;
+  font-size: 1.3em;
+  display: flex;
+}
+
+.navlink {
+  color: var(--saito-red);
+  text-shadow: 1px 1px #999;
+  margin: 0 1em 0 0;
+  font-family: visuelt;
+  min-width: 250px;
+}
