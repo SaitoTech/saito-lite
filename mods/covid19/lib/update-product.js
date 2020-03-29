@@ -36,10 +36,7 @@ console.log(JSON.stringify(res.rows));
 	values.push(field);
       });
 
-      console.log(JSON.stringify(values));
-
-
-      
+      data.covid19.updateServerDatabase(values);
 
     });
 

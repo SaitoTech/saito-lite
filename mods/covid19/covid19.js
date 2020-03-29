@@ -140,6 +140,43 @@ class Covid19 extends ModTemplate {
 
 
 
+
+
+  async onConfirmation(blk, tx, conf, app) {
+
+
+    if (app.BROWSER == 0) { return; }
+
+    let txmsg = tx.returnMessage();
+    let email = app.modules.returnModule("Email");
+
+    if (conf == 0) {
+
+      let product_id = txmsg.product_id;
+      let fields     = txmsg.fields;
+
+      for (let i = 0; i < fields.length; i++) {
+
+	let db     = fields[i].db;
+	let column = fields[i].column;
+	let value  = fields[i].value;
+
+	let sql = "UPDATE products SET $column = $value WHERE id = $product_id";
+	let params = {
+	  $column	: column ,
+	  $value	: value ,
+	  $product_id	: product_id
+	}
+	await this.app.storage.executeDatabase(sql, params, db);
+
+      }
+      
+    }
+  }
+
+
+
+
   initializeHTML(app) {
 
     if (this.app.BROWSER == 0) { return; }
@@ -226,6 +263,23 @@ console.log("TEST: " + rows[i][fields[ii]]);
       document.querySelector(".products-table").innerHTML += html;
 
     }
+
+  }
+
+
+  //
+  // array of objects with { database, column, value }
+  //
+  updateServerDatabase(data_array) {
+
+    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
+        newtx.transaction.msg.module = this.name;
+        newtx.transaction.msg.request = "Supplier Update";
+        newtx.transaction.msg.fields = data_array;
+    newtx = this.app.wallet.signTransaction(newtx);
+    this.app.network.propagateTransaction(newtx);
+
+    alert("Transaction Sent to Network");
 
   }
 
