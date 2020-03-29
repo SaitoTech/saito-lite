@@ -11,7 +11,7 @@ module.exports = UpdateSupplier = {
     //
     // load categories
     //
-    data.covid19.sendPeerDatabaseRequest("covid19", "suppliers", "*", "suppliers.publickey = "+${app.wallet.returnPublicKey()}, null, function (res) {
+    data.covid19.sendPeerDatabaseRequest("covid19", "suppliers", "*", "suppliers.publickey = '"+app.wallet.returnPublicKey()+"'", null, function (res) {
 
         if (res.rows.length > 0) {
           data.covid19.renderSupplierForm(res.rows[0]);
@@ -27,7 +27,8 @@ module.exports = UpdateSupplier = {
 	  }
          data.covid19.renderSupplierForm(row);
         }
-      });
+
+        document.querySelector('.portal').style.display = "block";
     });
   },
 
@@ -37,22 +38,16 @@ module.exports = UpdateSupplier = {
 
     document.querySelector('.update-supplier-btn').addEventListener('click', (e) => {
 
-alert("updating supplier info");
-/***
-      let product_id = e.currentTarget.id;
-      let values     = [];
-
       Array.from(document.getElementsByClassName('input')).forEach(input => {
-	let field = {};
-	    field.table  = input.getAttribute("id");
-	    field.column = input.getAttribute("name");
-	    field.value  = input.value;
-	    field.id     = product_id;
-	values.push(field);
+        let field = {};
+            field.table  = input.getAttribute("id");
+            field.column = input.getAttribute("name");
+            field.value  = input.value;
+            field.id     = 0;
+        values.push(field);
       });
 
       data.covid19.updateServerDatabase(values);
-***/
 
     });
 

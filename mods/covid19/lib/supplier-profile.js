@@ -1,5 +1,6 @@
 const SupplierProfileTemplate = require('./supplier-profile.template.js');
 const SupplierPortal = require('./supplier-portal.js');
+const UpdateSupplier = require('./update-supplier.js');
 
 
 module.exports = SupplierProfile = {
@@ -21,7 +22,6 @@ module.exports = SupplierProfile = {
         // new supplier
         //
 	document.querySelector('.profile-information').innerHTML = `You are using a different browser than normal or have not yet created an account. Please either create a new company account, or restore your wallet.`;
-	document.querySelector('.confirm-supplier-btn').style.display = 'block';
 	document.querySelector('.new-supplier-btn').style.display = 'block';
 	document.querySelector('.profile').style.display = 'block';
 	document.querySelector('.loading').style.display = 'none';
@@ -55,6 +55,7 @@ Welcome Back!
 
 	`;
 
+        document.querySelector('.new-supplier-btn').style.display = 'none';
         document.querySelector('.confirm-supplier-btn').style.display = 'block';
         document.querySelector('.edit-supplier-btn').style.display = 'block';
 
@@ -73,14 +74,14 @@ Welcome Back!
 
     document.querySelector('.edit-supplier-btn').addEventListener('click', (e) => {
       data.supplier_id = document.querySelector("supplier-id").value;
-      SupplierPortal.render(app, data);
-      SupplierPortal.attachEvents(app, data);
+      UpdateSupplier.render(app, data);
+      UpdateSupplier.attachEvents(app, data);
     });
 
     document.querySelector('.new-supplier-btn').addEventListener('click', (e) => {
       data.supplier_id = 0;
-      SupplierPortal.render(app, data);
-      SupplierPortal.attachEvents(app, data);
+      UpdateSupplier.render(app, data);
+      UpdateSupplier.attachEvents(app, data);
     });
 
   }
