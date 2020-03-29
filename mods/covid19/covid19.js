@@ -4,6 +4,9 @@ const SplashPage = require('./lib/splash-page');
 const CustomerPortal = require('./lib/customer-portal');
 const SupplierPortal = require('./lib/supplier-portal');
 
+const Header = require('../../lib/ui/header/header');
+const AddressController = require('../../lib/ui/menu/address-controller');
+
 
 
 
@@ -23,6 +26,8 @@ class Covid19 extends ModTemplate {
 
     this.admin_pkey = "ke6qwkD3XB8JvWwf68RMjDAn2ByJRv3ak1eqUzTEz9cr";
 
+    this.events['chat-render-request'];
+
     this.description = "A covid19 management framework for Saito";
     this.categories = "Admin Healthcare Productivity";
     this.definitions = {};
@@ -30,6 +35,20 @@ class Covid19 extends ModTemplate {
     return this;
   }
 
+
+
+
+  receiveEvent(type, data) {
+    if (type == 'chat-render-request') {
+      if (this.browser_active) {
+        let chatmod = this.app.modules.returnModule("Chat");
+        let uidata = {}
+            uidata.chat = this;
+	chatmod.respondTo('email-chat').render(this.app, uidata);
+        chatmod.respondTo('email-chat').attachEvents(this.app, uidata);
+      }
+    }
+  }
 
 
 
@@ -188,11 +207,29 @@ console.log(table + " -- " + column + " -- " + value);
 
     if (this.app.BROWSER == 0) { return; }
 
+    this.app.modules.respondTo("chat-manager").forEach(mod => {
+      mod.respondTo('chat-manager').render(app, this);
+      mod.respondTo('chat-manager').attachEvents(app, this);
+    });
+
+
     let data = {};
     data.covid19 = this;
 
+    Header.render(app, data);
+    Header.attachEvents(app, data);
+
     SplashPage.render(app, data);
     SplashPage.attachEvents(app, data);
+
+    //
+    let chatmod = this.app.modules.returnModule("Chat");
+    if (chatmod) {
+      data.chat = chatmod;
+      chatmod.respondTo('email-chat').render(app, data);
+      chatmod.respondTo('email-chat').attachEvents(app, data);
+    }
+
 
   }
 

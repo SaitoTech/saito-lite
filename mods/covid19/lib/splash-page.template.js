@@ -18,7 +18,7 @@ module.exports = SplashPageTemplate = () => {
     <p></p>
 
     <div style="float:left"><button id="customer-search-btn" class="button">I want to purchase medical supplies</button></div>
-    <div style="float:left;margin-left:30px"><button id="supplier-portal-btn" class="button">I can provide medical supplies</button></div>
+    <div style="float:left;margin-left:0px"><button id="supplier-portal-btn" class="button">I can provide medical supplies</button></div>
   </div>
   `;
 

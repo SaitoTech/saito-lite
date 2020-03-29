@@ -50,6 +50,8 @@ module.exports = UpdateSupplier = {
       });
 
       data.covid19.updateServerDatabase(values);
+      salert("You have sent a cryptographically-secure message updating your company information. It may take up to a minute for the network to update its records to reflect your update. If your information is not updated immediately, please reload the site in a minute.");
+      window.location.reload();
 
     });
 
