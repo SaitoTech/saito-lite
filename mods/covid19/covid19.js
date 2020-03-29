@@ -326,12 +326,7 @@ console.log("SUPPLIER ID IS: " + supplier_id);
         case 'category_id':
           break;
         case 'product_name':
-<<<<<<< HEAD
-          html += "<div>Name</div>";
-          html += "<input class='input' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
-=======
           html += "<input class='input category_id_input' id='products' type='hidden' name='category_id' value='1' />";
->>>>>>> afd9b8cea1be9d20fb1da992e4075ebb337e8844
           break;
         case 'product_specification':
           html += "<div>Specification</div>";
