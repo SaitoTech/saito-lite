@@ -1,4 +1,5 @@
 const UpdateProductTemplate = require('./update-product.template');
+const Certification = require('./certification');
 
 
 module.exports = UpdateProduct = {
@@ -95,7 +96,9 @@ module.exports = UpdateProduct = {
     });
 
     document.querySelector('.attach-cert-btn').addEventListener('click', (e) => {
-      document.createElement('<div>')
+      data.id = e.toElement.id.split("-")[1];
+      Certification.render(app, data);
+      Certification.attachEvents(app, data);
     });
 
 
