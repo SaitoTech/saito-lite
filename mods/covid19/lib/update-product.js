@@ -22,7 +22,7 @@ module.exports = UpdateProduct = {
   attachEvents(app, data) {
 
     document.querySelector('.update-product-btn').addEventListener('click', (e) => {
-      data.product_id = e.currentTarget.id;
+      
     });
 
 
