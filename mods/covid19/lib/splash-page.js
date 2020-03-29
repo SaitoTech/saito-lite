@@ -1,6 +1,6 @@
 const SplashPageTemplate 	= require('./splash-page.template.js');
 const CustomerPortal            = require('./customer-portal');
-const SupplierPortal            = require('./supplier-portal');
+const SupplierProfile           = require('./supplier-profile');
 
 
 module.exports = SplashPageAppspace = {
@@ -18,8 +18,8 @@ module.exports = SplashPageAppspace = {
       });
 
       document.getElementById('supplier-portal-btn').addEventListener('click', (e) => {
-        SupplierPortal.render(app, data);
-        SupplierPortal.attachEvents(app, data);
+        SupplierProfile.render(app, data);
+        SupplierProfile.attachEvents(app, data);
       });
 
     }
