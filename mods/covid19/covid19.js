@@ -110,6 +110,7 @@ class Covid19 extends ModTemplate {
       // insert supplier if non-existent
       //
       let supplier_id = 0;
+console.log(conf + " --- running here");
 
       if (txmsg.request == "Supplier Update") {
 
@@ -123,9 +124,16 @@ class Covid19 extends ModTemplate {
 	  } else {
 	    supplier_id = rows[0].maxid+1;;
 	  }
+
+	  sql = `INSERT INTO suppliers (id) VALUES (${supplier_id})`;
+	  await this.app.storage.executeDatabase(sql, {}, "covid19");
+
         } else {
 	    supplier_id = rows[0].id;
         }
+
+console.log("SUPPLIER ID IS: " + supplier_id);
+
 
         let fields = txmsg.fields;
         let id = 0;
@@ -213,7 +221,7 @@ console.log("TEST: " + rows[i][fields[ii]]);
             }
 
             if (fields[ii] == "admin") {
-              html += `<div><div class="fullview_product" id="${rows[i].id}">full details</div> | <div class="edit_product" id="${rows[i].id}">edit</div> | <div class="delete_product" id="${rows[i].id}">delete</div></div>`;
+              html += `<div><div class="edit_product" id="${rows[i].id}">edit</div> | <div class="delete_product" id="${rows[i].id}">delete</div></div>`;
               added = 1;
             }
 
