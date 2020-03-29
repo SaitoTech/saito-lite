@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS suppliers (
   publickey TEXT ,
   name TEXT ,
   address TEXT ,
-  phone INTEGER , 
+  phone VARCHAR(255) ,
   email VARCHAR(255) ,
   wechat VARCHAR(255) ,
   notes TEXT , 

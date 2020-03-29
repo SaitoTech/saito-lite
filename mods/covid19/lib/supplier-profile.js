@@ -13,7 +13,7 @@ module.exports = SupplierProfile = {
     //
     // load products
     //
-    let whereclause = "";
+    let whereclause = "publickey = '"+app.wallet.returnPublicKey() + "'";
     data.covid19.sendPeerDatabaseRequest("covid19", "suppliers", "*", whereclause, null, function(res) {
 
       if (res.rows.length == 0) {
@@ -37,6 +37,8 @@ Welcome Back!
 
 <p></p>
 
+  <inpur type="hidden" name="supplier_id" class="supplier_id" value="${res.rows[0].id}" />
+
   <div class="grid-2">
 
     <div>Company Name:</div>
@@ -55,6 +57,8 @@ Welcome Back!
 
 	`;
 
+	document.querySelector('.profile').style.display = 'block';
+	document.querySelector('.loading').style.display = 'none';
         document.querySelector('.new-supplier-btn').style.display = 'none';
         document.querySelector('.confirm-supplier-btn').style.display = 'block';
         document.querySelector('.edit-supplier-btn').style.display = 'block';
@@ -67,13 +71,13 @@ Welcome Back!
   attachEvents(app, data) {
 
     document.querySelector('.confirm-supplier-btn').addEventListener('click', (e) => {
-      data.supplier_id = document.querySelector("supplier-id").value;
+      data.supplier_id = document.querySelector(".supplier_id").value;
       SupplierPortal.render(app, data);
       SupplierPortal.attachEvents(app, data);
     });
 
     document.querySelector('.edit-supplier-btn').addEventListener('click', (e) => {
-      data.supplier_id = document.querySelector("supplier-id").value;
+      data.supplier_id = document.querySelector(".supplier_id").value;
       UpdateSupplier.render(app, data);
       UpdateSupplier.attachEvents(app, data);
     });

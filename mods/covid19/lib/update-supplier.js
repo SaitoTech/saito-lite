@@ -38,12 +38,14 @@ module.exports = UpdateSupplier = {
 
     document.querySelector('.update-supplier-btn').addEventListener('click', (e) => {
 
+      let values = [];
+
       Array.from(document.getElementsByClassName('input')).forEach(input => {
         let field = {};
             field.table  = input.getAttribute("id");
             field.column = input.getAttribute("name");
             field.value  = input.value;
-            field.id     = 0;
+            field.id     = "supplier";
         values.push(field);
       });
 
