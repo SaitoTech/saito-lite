@@ -140,6 +140,38 @@ class Covid19 extends ModTemplate {
 
 
 
+
+
+  async onConfirmation(blk, tx, conf, app) {
+
+    if (app.BROWSER == 1) { return; }
+
+    let txmsg = tx.returnMessage();
+    let covid19_self = app.modules.returnModule("Covid19");
+
+    if (conf == 0) {
+
+      let product_id = txmsg.product_id;
+      let fields     = txmsg.fields;
+
+      for (let i = 0; i < fields.length; i++) {
+
+	let table  = fields[i].table;
+	let column = fields[i].column;
+	let value  = fields[i].value;
+	let id     = fields[i].id;
+
+	let sql = `UPDATE ${table} SET ${column} = "${value}" WHERE id = ${id}`;
+	await this.app.storage.executeDatabase(sql, {}, "covid19");
+
+      }
+      
+    }
+  }
+
+
+
+
   initializeHTML(app) {
 
     if (this.app.BROWSER == 0) { return; }
@@ -155,18 +187,6 @@ class Covid19 extends ModTemplate {
 
 
 
-  onConfirmation(blk, tx, conf, app) {
-
-    let txmsg = tx.returnMessage();
-    let email = app.modules.returnModule("Email");
-
-    if (conf == 0) {
-
-      //
-      // administrator receives transaction
-      //
-    }
-  }
 
 
   addProductsToTable(rows, fields, data) {
@@ -229,6 +249,23 @@ console.log("TEST: " + rows[i][fields[ii]]);
 
   }
 
+
+  //
+  // array of objects with { database, column, value }
+  //
+  updateServerDatabase(data_array) {
+
+    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
+        newtx.transaction.msg.module = this.name;
+        newtx.transaction.msg.request = "Supplier Update";
+        newtx.transaction.msg.fields = data_array;
+    newtx = this.app.wallet.signTransaction(newtx);
+    this.app.network.propagateTransaction(newtx);
+
+    alert("Transaction Sent to Network");
+
+  }
+
   renderProduct(prod) {
     var html = "";
     Object.entries(prod).forEach(field => {
@@ -257,55 +294,55 @@ console.log("TEST: " + rows[i][fields[ii]]);
           break;
         case 'product_name':
           html += "<div>Name</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + "' />";
+          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'product_specification':
           html += "<div>Specification</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + "' />";
+          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'product_description':
           html += "<div>Description</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + " '/>";
+          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'product_dimensions':
           html += "<div>Package Dimensions</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + " '/>";
+          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'product_weight':
           html += "<div>Weight</div>";
-          html += "<input type='text' name='product_description' value='" + field[1] + " '/>";
+          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'product_quantities':
           html += "<div>Package Contents</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + " '/>";
+          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'product_photo':
           html += "<div>Product Image</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + " '/>";
+          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'pricing_per_unit_rmb':
           html += "<div>Price (RMB)</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + " '/>";
+          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'pricing_notes':
           html += "<div>Pricing Notes</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + " '/>";
+          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'pricing_payment_terms':
           html += "<div>Payment Terms</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + " '/>";
+          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'production_stock':
           html += "<div>Stock</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + " '/>";
+          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'production_daily_capacity':
           html += "<div>Daily Production</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + " '/>";
+          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         case 'production_minimum_order':
           html += "<div>Payment Terms</div>";
-          html += "<input type='text' name='"+field[0]+"' value='" + field[1] + " '/>";
+          html += "<input class='input' id='products' type='text' name='"+field[0]+"' value='" + field[1] + "' />";
           break;
         default:
           break;

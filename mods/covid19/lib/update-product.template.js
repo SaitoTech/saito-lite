@@ -1,9 +1,13 @@
-module.exports = UpdateProductTemplate = () => {
+module.exports = UpdateProductTemplate = (app, data) => {
 
   let html = '';
 
   html = `
   <div class="supplier-information">
+
+    <div class="loading">
+      Loading Product Editing Page....
+    </div>
 
     <div class="portal" style="display:none">
 
@@ -20,7 +24,7 @@ module.exports = UpdateProductTemplate = () => {
     <div id="supplier-grid" class="supplier-grid grid-4"></div1-->
 
 
-    <div class="update-product-btn button">Update Public Listing</div>
+    <div id=${data.product_id} class="update-product-btn button">Update Public Listing</div>
   </div>
 
 

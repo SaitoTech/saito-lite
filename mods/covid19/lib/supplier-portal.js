@@ -21,34 +21,21 @@ module.exports = SupplierPortal = {
         document.querySelector(".portal").style.display = "block";
         document.querySelector(".products-table").style.display = "grid";
 
-        document.querySelector('.fullview_product').addEventListener('click', (e) => {	
-          data.id = e.toElement.id;	
-          ProductPage.render(data);	
-        });
-
-        document.querySelector('.edit_product').addEventListener('click', (e) => {	
-          data.id = e.toElement.id;	
-          UpdateProduct.render(app, data);
-          UpdateProduct.attachEvents(app, data);
-        });
-
-
   
-/*	try {
-alert("trying something...");
-         Array.from(document.querySelector('.edit_product')).forEach(product => {
-alert("edit product");
+	try {
+
+         Array.from(document.getElementsByClassName('edit_product')).forEach(product => {
             product.addEventListener('click', (e) => {
-alert("click!");
               data.product_id = e.currentTarget.id;
               UpdateProduct.render(app, data);
               UpdateProduct.attachEvents(app, data);
             });
           });
+
         } catch (err) {
-console.log("issue: " +err);
-}
-*/
+	}
+
+
       });
 
       
