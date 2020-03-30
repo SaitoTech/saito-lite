@@ -325,7 +325,7 @@ console.log(table + " -- " + column + " -- " + value);
 
       }
 
-      document.querySelector(".products-table").innerHTML += html;
+      document.querySelector(".products-table").innerHTML.replace(/null/g, "").replace(/undefined/g, "") += html;
       this.returnCerts(rows[i].product_id, "certsfor-");
       
     }
