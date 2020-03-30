@@ -28,7 +28,6 @@ module.exports = UpdateProduct = {
           data.covid19.renderProductForm(res.rows[0]);
         } else {
 
-
           let row = {
             id: 0,
             supplier_id: "",
@@ -50,10 +49,10 @@ module.exports = UpdateProduct = {
         }
 
         document.querySelectorAll('.product-image').forEach(img => {
-          document.getElementById("products-" + img.id.split('-')[1]).addEventListener('change', (e) => {
+          document.getElementByClassName("products-" + img.id.split('-')[1]).addEventListener('change', (e) => {
             var reader = new FileReader();
             var file = e.target.files[0];
-            var fileEl = document.getElementById("products-text-" + img.id.split('-')[1]);
+            var fileEl = document.getElementByClassName("products-text-" + img.id.split('-')[1]);
             reader.addEventListener("load", function () {
               img.src = reader.result;
               fileEl.value = reader.result;
