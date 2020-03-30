@@ -63,3 +63,20 @@
   background: #FFF;
   box-shadow: 0 0 3px 3px #ccc;
 }
+
+.fullview_product {
+  cursor: pointer;
+  border: 1px solid var(--saito-red);
+  width: 100px;
+  text-align: center;
+  padding: 5px;
+  border-radius: 5px;
+  color: var(--saito-red);
+}
+
+
+.fullview_product:hover {
+  background: var(--saito-red);
+  color: #FFF;
+  
+}
