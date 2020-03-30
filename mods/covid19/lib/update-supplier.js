@@ -29,6 +29,7 @@ module.exports = UpdateSupplier = {
          data.covid19.renderSupplierForm(row);
         }
 
+        document.querySelector('.loading').style.display = "none";
         document.querySelector('.portal').style.display = "block";
     });
   },
