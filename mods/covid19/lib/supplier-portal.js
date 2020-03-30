@@ -13,7 +13,7 @@ module.exports = SupplierPortal = {
       // load products
       //
       let whereclause = "suppliers.id = products.supplier_id AND products.category_id = categories.id";
-      data.covid19.sendPeerDatabaseRequest("covid19", "products JOIN suppliers LEFT JOIN categories", "categories.name, products.product_specification, products.product_photo, products.pricing_per_unit_rmb, products.production_daily_capacity, products.id", whereclause, null, function(res) {
+      data.covid19.sendPeerDatabaseRequest("covid19", "products JOIN suppliers LEFT JOIN categories", "products.id as 'product_id', categories.name, products.product_specification, products.product_photo, products.pricing_per_unit_rmb, products.production_daily_capacity, products.id", whereclause, null, function(res) {
 
         data.covid19.addProductsToTable(res.rows, [ 'name', 'product_specification', 'product_photo', 'pricing_per_unit_rmb', 'production_daily_capacity', 'certifications', 'id', 'admin']);
 
@@ -39,9 +39,7 @@ module.exports = SupplierPortal = {
 
     var grid = document.querySelector(".products-table");
         
-    data.covid19.addCertsToGrid(grid);
-
-
+    
     console.log("done");
   },
 
