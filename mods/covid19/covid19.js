@@ -180,14 +180,8 @@ console.log(table + " -- " + column + " -- " + value);
               id = rows[0].maxid + 1;
             }
 
-            let table = fields[i].table;
-            let column = fields[i].column;
-            let value = fields[i].value;
-            let id = fields[i].id;
-
-            let sql = `UPDATE ${table} SET ${column} = "${value}" WHERE id = ${id}`;
-            await this.app.storage.executeDatabase(sql, {}, "covid19");
             sql = `INSERT INTO ${table} (id, supplier_id) VALUES (${id}, ${supplier_id})`;
+console.log("INSERT: " + sql);
             await this.app.storage.executeDatabase(sql, {}, "covid19");
           }
 
