@@ -84,6 +84,10 @@ a {
 
 .product-image {
   max-width: 250px;
+  min-width: 50px;
+  min-height: 50px;
+  border: 1px solid #ddd;
+  cursor: pointer;
 }
 
 .certification {
@@ -102,7 +106,7 @@ a {
   box-shadow: 0 0 3px 3px #ccc;
 }
 
-.fullview_product {
+.fullview_product, .edit_product, .delete_product {
   cursor: pointer;
   border: 1px solid var(--saito-red);
   width: 100px;
@@ -113,7 +117,7 @@ a {
 }
 
 
-.fullview_product:hover {
+.fullview_product:hover, .edit_product:hover, .delete_product:hover {
   background: var(--saito-red);
   color: #FFF;
 }

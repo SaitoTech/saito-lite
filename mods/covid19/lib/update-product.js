@@ -49,10 +49,10 @@ module.exports = UpdateProduct = {
         }
 
         document.querySelectorAll('.product-image').forEach(img => {
-          document.getElementByClassName("products-" + img.id.split('-')[1]).addEventListener('change', (e) => {
+          document.querySelector(".products-" + img.id.split('-')[1]).addEventListener('change', (e) => {
             var reader = new FileReader();
             var file = e.target.files[0];
-            var fileEl = document.getElementByClassName("products-text-" + img.id.split('-')[1]);
+            var fileEl = document.querySelector(".products-text-" + img.id.split('-')[1]);
             reader.addEventListener("load", function () {
               img.src = reader.result;
               fileEl.value = reader.result;
@@ -62,9 +62,9 @@ module.exports = UpdateProduct = {
             //e.target.value = reader.result;
           });
           img.addEventListener('click', e => {
-            var item = e.toElement.id.split("-")[1];
+            //var item = e.toElement.id.split("-")[1];
             //salert(e.toElement.id);
-            document.getElementById("products-" + item).click();
+            document.querySelector(".products-" + img.id.split('-')[1]).click();
           });
         });
       });
