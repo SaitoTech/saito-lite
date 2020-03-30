@@ -282,19 +282,24 @@ console.log(table + " -- " + column + " -- " + value);
             }
 
             if (fields[ii] == "edit") {
-              html += `<div><div class="edit_product" id="${rows[i].id}">edit</div> | <div class="delete_product" id="${rows[i].id}">delete</div></div>`;
+              html += `<div><div class="edit_product" id="${rows[i].product_id}">edit</div> | <div class="delete_product" id="${rows[i].id}">delete</div></div>`;
               added = 1;
             }
 
             if (fields[ii] == "fullview") {
-              html += `<div><div class="fullview_product" id="${rows[i].id}">full details</div></div>`;
+              html += `<div><div class="fullview_product" id="${rows[i].product_id}">full details</div></div>`;
               added = 1;
             }
 
             if (fields[ii] == "admin") {
-              html += `<div><div class="edit_product" id="${rows[i].id}">edit</div> | <div class="delete_product" id="${rows[i].id}">delete</div></div>`;
+              html += `<div><div class="edit_product" id="${rows[i].product_id}">edit</div> | <div class="delete_product" id="${rows[i].id}">delete</div></div>`;
               added = 1;
             }
+
+            if (fields[ii] == "certifications") {
+              html += `<div class="product_certificates" id="certsfor-${rows[i].product_id}"></div>`;
+              added = 1;
+            }            
 
             if (added == 0) {
               html += `<div>${rows[i][fields[ii]]}</div>`;
@@ -315,9 +320,15 @@ console.log(table + " -- " + column + " -- " + value);
       }
 
       document.querySelector(".products-table").innerHTML += html;
-
+      this.returnCerts(rows[i].product_id, "certsfor-");
+      
     }
-
+    document.querySelectorAll('.fullview_product').forEach(el => {
+      el.addEventListener('click', (e) => {
+        data.id = e.toElement.id;
+        ProductPage.render(data);
+      });
+    });
   }
 
 
@@ -486,7 +497,30 @@ console.log(table + " -- " + column + " -- " + value);
 
   }
 
-  renderCerts(rows) {
+  /*addCertsToGrid(grid) {
+     grid.querySelectorAll('.product_certificates').forEach(div => { 
+       this.returnCerts(div.id.split("-")[1]);
+     });
+  }*/
+
+  returnCerts(id, prefix) {
+    // should this be generalised to module wide?
+    var me = this;
+    
+    fields = "pc.product_id as 'product_id', c.name as 'Name', (select id from attachments where id = pc.id ) as attachment_id";
+    var from = "certifications as 'c' JOIN products_certifications as 'pc'";
+    var where = "c.id = pc.certification_id and pc.product_id = " + id;
+    this.sendPeerDatabaseRequest("covid19", from, fields, where, null, function (res) {
+  
+      if (res.rows.length > 0) {
+        var el = document.getElementById(prefix + res.rows[0].product_id);
+        me.renderCerts(res.rows, el);
+  
+      }
+    });
+  }
+
+  renderCerts(rows, el) {
     var html = "";
     rows.forEach(row => {
       if (row["attachment_id"] != null) {
@@ -494,17 +528,16 @@ console.log(table + " -- " + column + " -- " + value);
       } else {
         html += "<div class='cert'>" + row["Name"] + "</div>";
       }
-      document.querySelector('.cert-grid').innerHTML = html;
+      el.innerHTML = html;
     });
 
     rows.forEach(row => {
       if (row["attachment_id"] != null) {
-        document.querySelector('.attach-' + row["attachment_id"]).addEventListener('click', (e) => {
+        el.querySelector('.attach-' + row["attachment_id"]).addEventListener('click', (e) => {
           this.returnAttachment(row["attachment_id"]);
         });
       }
     });
-
   }
 
   returnAttachment(id) {

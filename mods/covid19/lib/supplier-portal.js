@@ -37,6 +37,10 @@ module.exports = SupplierPortal = {
       });
     });
 
+    var grid = document.querySelector(".products-table");
+        
+    data.covid19.addCertsToGrid(grid);
+
 
     console.log("done");
   },
