@@ -71,10 +71,35 @@ Welcome Back!
 
   attachEvents(app, data) {
 
-      document.querySelector('.covid_back').addEventListener('click', (e) => {
-	data.covid19.renderPage("home", app, data);
-      });
+    try {
+    document.querySelector('.covid_back').addEventListener('click', (e) => {
+      data.covid19.renderPage("home", app, data);
+    });
+    } catch (err) {}
 
+    try {
+    document.querySelector('.confirm-supplier-btn').addEventListener('click', (e) => {
+      data.supplier_id = document.querySelector(".supplier_id").value;
+      SupplierPortal.render(app, data);
+      SupplierPortal.attachEvents(app, data);
+    });
+    } catch (err) {}
+
+    try {
+    document.querySelector('.edit-supplier-btn').addEventListener('click', (e) => {
+      data.supplier_id = document.querySelector(".supplier_id").value;
+      UpdateSupplier.render(app, data);
+      UpdateSupplier.attachEvents(app, data);
+    });
+    } catch (err) {}
+
+    try {
+    document.querySelector('.new-supplier-btn').addEventListener('click', (e) => {
+      data.supplier_id = 0;
+      UpdateSupplier.render(app, data);
+      UpdateSupplier.attachEvents(app, data);
+    });
+    } catch (err) {}
 
   }
 

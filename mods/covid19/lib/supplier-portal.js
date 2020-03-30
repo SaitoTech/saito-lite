@@ -8,6 +8,7 @@ module.exports = SupplierPortal = {
   render(app, data) {
 
     document.querySelector(".main").innerHTML = SupplierPortalTemplate();
+    document.querySelector(".navigation").innerHTML = "";
 
       //
       // load products
