@@ -4,7 +4,7 @@ const SplashPage = require('./lib/splash-page');
 const CustomerPortal = require('./lib/customer-portal');
 const SupplierPortal = require('./lib/supplier-portal');
 
-const Header = require('../../lib/ui/header/header');
+const Header = require('../../lib/ui/header/covid_header');
 const AddressController = require('../../lib/ui/menu/address-controller');
 
 
