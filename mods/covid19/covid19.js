@@ -345,9 +345,7 @@ console.log("INSERT: " + sql);
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
-    setTimeout(function () {
-      window.href = "/covid19";
-    }, 500);
+console.log("SENT TO SERVER");
 
   }
 
@@ -378,59 +376,59 @@ console.log("INSERT: " + sql);
         case 'category_id':
           break;
         case 'product_name':
-          html += "<div></div><div><input class='input category_id_input products-" + field[0] + "' id="products" type='hidden' name='category_id' value='1' /></div><div></div><div></div>";
+          html += "<div></div><div><input class='input category_id_input products-" + field[0] + "' id='products' type='hidden' name='category_id' value='1' /></div><div></div><div></div>";
           break;
         case 'product_specification':
           html += "<div>Specification</div>";
-          html += "<input class='input products-" + field[0] + "' id="products" type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'product_description':
           html += "<div>Description</div>";
-          html += "<input class='input products-" + field[0] + "' id="products" type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'product_dimensions':
           html += "<div>Package Dimensions</div>";
-          html += "<input class='input products-" + field[0] + "' id="products" type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'product_weight':
           html += "<div>Weight</div>";
-          html += "<input class='input products-" + field[0] + "' id="products" type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'product_quantities':
           html += "<div>Package Contents</div>";
-          html += "<input class='input products-" + field[0] + "' id="products" type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'product_photo':
           html += "<div>Product Image</div>";
           html += "<div>";
           html += "<img class='product-image' id='img-" + field[0] + "' src='" + field[1] + "' />";
           html += "<input class='input products-" + field[0] + "' type='file' />";
-          html += "<input style='display:none;' class='input products-text-" + field[0] + "' id="products" type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input style='display:none;' class='input products-text-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           html += "</div>";
           break;
         case 'pricing_per_unit_rmb':
           html += "<div>Price (RMB)</div>";
-          html += "<input class='input products-" + field[0] + "' id="products" type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'pricing_notes':
           html += "<div>Pricing Notes</div>";
-          html += "<input class='input products-" + field[0] + "' id="products" type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'pricing_payment_terms':
           html += "<div>Payment Terms</div>";
-          html += "<input class='input products-" + field[0] + "' id="products" type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'production_stock':
           html += "<div>Stock</div>";
-          html += "<input class='input products-" + field[0] + "' id="products" type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'production_daily_capacity':
           html += "<div>Daily Production</div>";
-          html += "<input class='input products-" + field[0] + "' id="products" type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'production_minimum_order':
           html += "<div>Payment Terms</div>";
-          html += "<input class='input products-" + field[0] + "' id="products" type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         default:
           break;
