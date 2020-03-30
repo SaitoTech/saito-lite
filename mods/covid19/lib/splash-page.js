@@ -7,6 +7,7 @@ module.exports = SplashPageAppspace = {
 
     render(app, data) {
       document.querySelector(".main").innerHTML = SplashPageTemplate();
+      document.querySelector(".navigation").innerHTML = "";
     },
 
 

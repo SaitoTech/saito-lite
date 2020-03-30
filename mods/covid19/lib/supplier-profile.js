@@ -1,14 +1,15 @@
 const SupplierProfileTemplate = require('./supplier-profile.template.js');
 const SupplierPortal = require('./supplier-portal.js');
 const UpdateSupplier = require('./update-supplier.js');
-
+const Navigation = require('./navigation.js');
+const SplashPage2 = require('./splash-page.js');
 
 module.exports = SupplierProfile = {
 
   render(app, data) {
 
     document.querySelector(".main").innerHTML = SupplierProfileTemplate();
-
+    document.querySelector(".navigation").innerHTML = '<div class="button navlink covid_back"><i class="fas fa-back"></i> Back</div>';
 
     //
     // load products
@@ -21,7 +22,7 @@ module.exports = SupplierProfile = {
         //
         // new supplier
         //
-	document.querySelector('.profile-information').innerHTML = `You are using a different browser than normal or have not yet created an account. Please either create a new company account, or restore your wallet.`;
+	document.querySelector('.profile-information').innerHTML = `You are using a different browser than normal or have not yet created an account. <p></p>Please either create a new account, or click on the gear icon at the top-right of this page to restore your wallet and regain secure control over your account.`;
 	document.querySelector('.new-supplier-btn').style.display = 'block';
 	document.querySelector('.profile').style.display = 'block';
 	document.querySelector('.loading').style.display = 'none';
@@ -70,23 +71,10 @@ Welcome Back!
 
   attachEvents(app, data) {
 
-    document.querySelector('.confirm-supplier-btn').addEventListener('click', (e) => {
-      data.supplier_id = document.querySelector(".supplier_id").value;
-      SupplierPortal.render(app, data);
-      SupplierPortal.attachEvents(app, data);
-    });
+      document.querySelector('.covid_back').addEventListener('click', (e) => {
+	data.covid19.renderPage("home", app, data);
+      });
 
-    document.querySelector('.edit-supplier-btn').addEventListener('click', (e) => {
-      data.supplier_id = document.querySelector(".supplier_id").value;
-      UpdateSupplier.render(app, data);
-      UpdateSupplier.attachEvents(app, data);
-    });
-
-    document.querySelector('.new-supplier-btn').addEventListener('click', (e) => {
-      data.supplier_id = 0;
-      UpdateSupplier.render(app, data);
-      UpdateSupplier.attachEvents(app, data);
-    });
 
   }
 
