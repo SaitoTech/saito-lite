@@ -30,7 +30,16 @@ module.exports = CustomerPortal = {
       let category_id = e.currentTarget.value;
       if (category_id > 0) {
         //clear grid
-        document.querySelector(".products-table").innerHTML = "";
+        document.querySelector(".products-table").innerHTML = `
+        <div class="table-head">Supplier</div>
+        <div class="table-head">Specification</div>
+        <div class="table-head">Photo</div>
+        <div class="table-head">Unit Cost</div>
+        <div class="table-head">Daily Volume</div>
+        <div class="table-head">Certifications</div>
+        <div class="table-head">Lead Time</div>
+        <div class="table-head"></div>
+        `;
 
         //
         // populate grid
@@ -49,8 +58,6 @@ module.exports = CustomerPortal = {
       }
     });
 
-
-
   }
-
 }
+

@@ -95,12 +95,12 @@ class Covid19 extends ModTemplate {
 
     let sql = "";
 
-    sql = "UPDATE products SET category_id = 1 WHERE product_name = '外科口罩 Surgical Masks'";
+    sql = "UPDATE products SET category_id = 1 WHERE product_name = 'N95口罩 N95 Mask'";
     await app.storage.executeDatabase(sql, {}, "covid19");
 
-    sql = "UPDATE products SET category_id = 2 WHERE product_name = 'N95口罩 N95 Mask'";
+    sql = "UPDATE products SET category_id = 2 WHERE product_name = '外科口罩 Surgical Masks'";
     await app.storage.executeDatabase(sql, {}, "covid19");
-
+    
     sql = "UPDATE products SET category_id = 3 WHERE product_name = '防护服Protection clothes'";
     await app.storage.executeDatabase(sql, {}, "covid19");
 
@@ -292,7 +292,7 @@ console.log(table + " -- " + column + " -- " + value);
             }
 
             if (fields[ii] == "admin") {
-              html += `<div><div class="edit_product" id="${rows[i].product_id}">edit</div> | <div class="delete_product" id="${rows[i].id}">delete</div></div>`;
+              html += `<div><div class="edit_product" id="${rows[i].product_id}">edit</div> | <div class="delete_product" id="${rows[i].product_id}">delete</div></div>`;
               added = 1;
             }
 
