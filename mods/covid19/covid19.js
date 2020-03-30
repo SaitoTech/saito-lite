@@ -20,6 +20,8 @@ class Covid19 extends ModTemplate {
     this.description = "Open Source PPE Procurement Platform";
     this.categories = "Health NGO";
 
+    this.icon_fa = "fas fa-shipping-cart";
+
     this.db_tables.push("products JOIN suppliers");
     this.db_tables.push("products JOIN suppliers LEFT JOIN categories");
     this.db_tables.push("certifications as 'c' JOIN products_certifications as 'pc'");

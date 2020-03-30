@@ -661,7 +661,6 @@ class Arcade extends ModTemplate {
 
             if (game_found == false) {
 
-
               //
               // copied above reject all tx not to us NEW
               //
@@ -682,8 +681,6 @@ class Arcade extends ModTemplate {
                   }
                 }
               }
-
-
 
               //
               // only load games that are for us

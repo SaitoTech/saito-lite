@@ -267,17 +267,7 @@ class Twilight extends GameTemplate {
   ////////////////
   // initialize //
   ////////////////
-  initializeGame(game_id) {
-
-  //
-  // enable chat
-  //
-  //if (this.browser_active == 1) {
-  //  if (!this.app.browser.isMobileBrowser(navigator.userAgent)) {
-  //    const chat = this.app.modules.returnModule("Chat");
-  //    chat.addPopUpChat();
-  //  }
-  //}
+initializeGame(game_id) {
 
   //
   // check user preferences to update interface, if text
