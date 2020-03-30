@@ -1,6 +1,6 @@
 const UpdateProductTemplate = require('./update-product.template');
 const Certification = require('./certification');
-
+const UpdateSuccess = require('./update-success');
 
 module.exports = UpdateProduct = {
 
@@ -89,10 +89,10 @@ module.exports = UpdateProduct = {
       });
 
       data.covid19.updateServerDatabase(values);
-
-      salert("You have send a cryptographically-signed message updating your records. It will take approximately 30 seconds before the network updates to reflect your new information. Please be patient and reload in a minute if your information is not immediately updated.");
-      window.location.reload();
-
+      
+      UpdateSuccess.render(app, data);
+      UpdateSuccess.attachEvents(app, data);
+      
     });
 
     document.querySelector('.attach-cert-btn').addEventListener('click', (e) => {
