@@ -60,20 +60,7 @@ module.exports = ProductPage = {
 
             if (res.rows.length > 0) {
 
-              data.covid19.renderCerts(res.rows);
-
-            }
-          });
-          //
-          // load supplier
-          fields = "name as 'Name', address as 'Province', phone as 'Phone', email as 'Email', wechat as 'WeChat Id', notes as 'Notes'";
-          //fields = "*";
-
-          data.covid19.sendPeerDatabaseRequest("covid19", "suppliers", fields, "id= " + supplier_id, null, function (res) {
-
-            if (res.rows.length > 0) {
-
-              data.covid19.renderSupplier(res.rows[0]);
+              data.covid19.renderCerts(res.rows, document.querySelector('.cert-grid'));
 
             }
           });
