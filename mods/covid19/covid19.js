@@ -236,25 +236,31 @@ console.log(table + " -- " + column + " -- " + value);
   }
 
 
+  renderPage(page="home", app, data) {
+
+    data.covid19 = this;
+
+    if (page == "home") {
+      SplashPage.render(app, data);
+      SplashPage.attachEvents(app, data);
+    };
+
+    if (page == "supplier") {
+      SupplierPortal.render(app, data);
+      SupplierPortal.attachEvents(app, data);
+    };
+
+    if (page == "customer") {
+      CustomerPortal.render(app, data);
+      CustomerPortal.attachEvents(app, data);
+    }
+
+  }
+
   attachEvents(app) {
 
     let data = {};
     data.covid19 = this;
-
-    document.querySelector('.covid_home').addEventListener('click', (e) => {
-      SplashPage.render(app, data);
-      SplashPage.attachEvents(app, data);
-    });
-
-    document.querySelector('.covid_buyer').addEventListener('click', (e) => {
-      CustomerPortal.render(app, data);
-      CustomerPortal.attachEvents(app, data);
-    });
-
-    document.querySelector('.covid_supplier').addEventListener('click', (e) => {
-      SupplierPortal.render(app, data);
-      SupplierPortal.attachEvents(app, data);
-    });
 
   }
 

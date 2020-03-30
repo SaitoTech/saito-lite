@@ -3,6 +3,10 @@
   display: block;
 }
 
+.profile-information {
+  margin-bottom: 20px;
+}
+
 .fullview_product {
   cursor: pointer;
 }
@@ -15,13 +19,26 @@
   cursor: pointer;
 }
 
+.profile-information {
+  max-width: 700px;
+  line-height: 1.6em;
+}
+
+
 .splash-introduction {
  max-width: 700px;
+ line-height: 1.6em;
+}
+
+.splash-introduction p {
+ padding-bottom: 10px;
 }
 
 .button {
   max-width:400px;
   margin-right: 15px;
+  float: left;
+  text-align: center;
 }
 
 .category-select {
