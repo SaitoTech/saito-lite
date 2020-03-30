@@ -3,6 +3,10 @@
   display: block;
 }
 
+.products-table {
+  margin-bottom:20px;
+}
+
 .profile-information {
   margin-bottom: 20px;
 }
