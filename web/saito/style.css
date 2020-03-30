@@ -80,10 +80,10 @@ a:hover {
 }
 
 body {
-  /* width: 100vw;
-    height: 100vh; */
+  
   background-color: var(--backround-general);
   color: var(--text-color-normal);
+  font-family: visuelt-light;
 }
 
 /* SAITO ANIMATION CSS */

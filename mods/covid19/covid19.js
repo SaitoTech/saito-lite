@@ -366,7 +366,7 @@ console.log(table + " -- " + column + " -- " + value);
         case 'category_id':
           break;
         case 'product_name':
-          html += "<input class='input category_id_input' id='products-" + field[0] + "' type='hidden' name='category_id' value='1' />";
+          html += "<div></div><div><input class='input category_id_input' id='products-" + field[0] + "' type='hidden' name='category_id' value='1' /></div><div></div><div></div>";
           break;
         case 'product_specification':
           html += "<div>Specification</div>";
