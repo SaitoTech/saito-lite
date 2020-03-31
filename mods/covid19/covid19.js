@@ -26,7 +26,8 @@ class Covid19 extends ModTemplate {
     this.db_tables.push("products JOIN suppliers LEFT JOIN categories");
     this.db_tables.push("certifications as 'c' JOIN products_certifications as 'pc'");
 
-    this.admin_pkey = "ke6qwkD3XB8JvWwf68RMjDAn2ByJRv3ak1eqUzTEz9cr";
+    this.admin_pkey = app.wallet.returnPublicKey();
+//"ke6qwkD3XB8JvWwf68RMjDAn2ByJRv3ak1eqUzTEz9cr";
 
     this.events['chat-render-request'];
 
@@ -120,6 +121,7 @@ class Covid19 extends ModTemplate {
 
     if (app.BROWSER == 1) { return; }
 
+
     let txmsg = tx.returnMessage();
     let covid19_self = app.modules.returnModule("Covid19");
 
@@ -155,8 +157,6 @@ class Covid19 extends ModTemplate {
           supplier_id = rows[0].id;
         }
 
-console.log("SUPPLIER ID IS: " + supplier_id);
-
         let fields = txmsg.fields;
         let id = 0;
 
@@ -167,8 +167,6 @@ console.log("SUPPLIER ID IS: " + supplier_id);
           let value = fields[i].value;
           if (fields[i].id > 0) { id = fields[i].id; }
           if (fields[i].id == "supplier") { id = supplier_id; }
-
-console.log(table + " -- " + column + " -- " + value);
 
           if (id == 0) {
 
@@ -181,21 +179,15 @@ console.log(table + " -- " + column + " -- " + value);
             }
 
             sql = `INSERT INTO ${table} (id, supplier_id) VALUES (${id}, ${supplier_id})`;
-console.log("INSERT: " + sql);
             await this.app.storage.executeDatabase(sql, {}, "covid19");
-console.log("DONE!");
           }
 
           if (id > 0) {
             sql = `UPDATE ${table} SET ${column} = "${value}" WHERE id = ${id}`;
-console.log(sql);
             await this.app.storage.executeDatabase(sql, {}, "covid19");
-console.log("DONE");
           }
-
         }
       }
-
     }
   }
 
@@ -285,6 +277,7 @@ console.log("DONE");
             }
 
             if (fields[ii] == "edit") {
+	      if (app.wallet.returnPublicKey() == this.admin_pkey) { fields[ii] = "admin"; }
               html += `<div><div class="edit_product" id="${rows[i].product_id}">edit</div><div class="delete_product" id="${rows[i].id}">delete</div></div>`;
               added = 1;
             }
@@ -339,12 +332,13 @@ console.log("DONE");
   //
   // array of objects with { database, column, value }
   //
-  updateServerDatabase(data_array) {
+  updateServerDatabase(data_array, publickey) {
 
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
     newtx.transaction.msg.module = this.name;
     newtx.transaction.msg.request = "Supplier Update";
     newtx.transaction.msg.fields = data_array;
+    newtx.transaction.msg.publickey = publickey;
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
