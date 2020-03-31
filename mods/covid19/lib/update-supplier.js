@@ -44,8 +44,8 @@ module.exports = UpdateSupplier = {
 
       Array.from(document.getElementsByClassName('input')).forEach(input => {
         let field = {};
-            field.table  = input.getAttribute("id");
-            field.column = input.getAttribute("name");
+            field.table  = input.dataset.table;
+            field.column = input.dataset.column;
             field.value  = input.value;
             field.id     = "supplier";
         values.push(field);

@@ -22,7 +22,7 @@ module.exports = Certification = {
         });
         var option = document.createElement("option");
         option.text = 'Add New';
-        option.value = res.rows.length + 1;
+        option.value = "new";
         select.add(option);
       }
     });
@@ -31,14 +31,16 @@ module.exports = Certification = {
     select.addEventListener("change", (e) => {
       var opt = select.options[select.selectedIndex];
       document.getElementById("pc_certification_id").value = opt.value;
-      document.getElementById("certification_id").value = opt.value;
-      document.getElementById("certification_name").value = opt.text;
       if (opt.text == 'Add New') {
         document.getElementById("certification_name").value = "";
         document.getElementById("certification_name").style.display = "block";
+        document.getElementById("certification_name").dataset.id = opt.value;
       } else {
         document.getElementById("certification_name").style.display = "none";
+        document.getElementById("certification_name").value = opt.text;
+        document.getElementById("certification_name").dataset.id = opt.value;
       }
+
     });
 
   },
@@ -50,18 +52,19 @@ module.exports = Certification = {
       document.querySelector('.certification').querySelectorAll('input').forEach(input => {
         if(input.dataset.ignore != "true") {
           let field = {};
-          field.table = input.dataset.table;
+          field.table  = input.dataset.table;
           field.column = input.dataset.column;
-          field.value = input.value;
-          field.id = "Supplier";
-          values.push(field);        }
+          field.value  = input.value;
+          field.id     = input.dataset.id;
+          values.push(field);
+        }
       });
 
       console.log("Updating Values: " + JSON.stringify(values));
 
-      data.covid19.updateServerDatabase(values);
+      data.covid19.updateServerDatabase(values, "Table Update");
 
-      alert("HERE WE ARE");
+      //alert("HERE WE ARE");
 
       UpdateSuccess.render(app, data);
       UpdateSuccess.attachEvents(app, data);

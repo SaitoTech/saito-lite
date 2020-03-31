@@ -31,7 +31,7 @@ module.exports = UpdateProductTemplate = (app, data) => {
 -->
     <div style="display:flex;">
       <div id="${data.product_id}" class="update-product-btn button" style="display:none"><i class="fas fa-save"></i> Update Public Listing</div>
-      <div id=attachto-"${data.product_id}" class="attach-cert-btn button" style="display:none"><i class="fas fa-certificate"></i> Attach Certificate</div>
+      <div id="attachto-${data.product_id}" class="attach-cert-btn button" style="display:none"><i class="fas fa-certificate"></i> Attach Certificate</div>
       </div>
     </div>
   </div>

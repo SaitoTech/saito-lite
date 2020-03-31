@@ -27,7 +27,9 @@ module.exports = UpdateProduct = {
         if (res.rows.length > 0) {
           data.covid19.renderProductForm(res.rows[0]);
           document.getElementById("product-grid").style.display = "grid";
-          document.querySelector(".button").style.display = "block";
+          document.querySelector(".update-product-btn").style.display = "block";
+          document.querySelector(".attach-cert-btn").style.display = "block";
+
         } else {
 
           let row = {
@@ -83,16 +85,16 @@ module.exports = UpdateProduct = {
 
       Array.from(document.getElementsByClassName('input')).forEach(input => {
         let field = {};
-        field.table = input.getAttribute("id");
-        field.column = input.getAttribute("name");
+        field.table = input.dataset.table; 
+        field.column = input.dataset.column;
         field.value = input.value;
         field.id = product_id;
         values.push(field);
       });
       Array.from(document.getElementsByClassName('textarea')).forEach(input => {
         let field = {};
-        field.table = input.getAttribute("id");
-        field.column = input.getAttribute("name");
+        field.table = input.dataset.table;
+        field.column = input.dataset.column;
         field.value = input.value;
         field.id = product_id;
         values.push(field);

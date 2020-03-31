@@ -114,11 +114,10 @@ class Covid19 extends ModTemplate {
 
 
 
-
-
   async onConfirmation(blk, tx, conf, app) {
 
     if (app.BROWSER == 1) { return; }
+
 
     let txmsg = tx.returnMessage();
     let covid19_self = app.modules.returnModule("Covid19");
@@ -155,8 +154,6 @@ class Covid19 extends ModTemplate {
           supplier_id = rows[0].id;
         }
 
-console.log("SUPPLIER ID IS: " + supplier_id);
-
         let fields = txmsg.fields;
         let id = 0;
 
@@ -167,8 +164,6 @@ console.log("SUPPLIER ID IS: " + supplier_id);
           let value = fields[i].value;
           if (fields[i].id > 0) { id = fields[i].id; }
           if (fields[i].id == "supplier") { id = supplier_id; }
-
-console.log(table + " -- " + column + " -- " + value);
 
           if (id == 0) {
 
@@ -181,21 +176,95 @@ console.log(table + " -- " + column + " -- " + value);
             }
 
             sql = `INSERT INTO ${table} (id, supplier_id) VALUES (${id}, ${supplier_id})`;
-console.log("INSERT: " + sql);
             await this.app.storage.executeDatabase(sql, {}, "covid19");
-console.log("DONE!");
           }
 
           if (id > 0) {
             sql = `UPDATE ${table} SET ${column} = "${value}" WHERE id = ${id}`;
-console.log(sql);
             await this.app.storage.executeDatabase(sql, {}, "covid19");
-console.log("DONE");
           }
-
         }
       }
 
+      if (txmsg.request == "Table Update") {
+
+        let fields = txmsg.fields;
+
+        //sort the incoming fields to process table by table.
+        //we need to do this to differentiate the first INSERT
+        //from subsequent updates as we are processing 
+        fields.sort((a, b) => a.table.localeCompare(b.table));
+
+        let table = "";
+        let columns   = "";
+        let values   = "";
+        let sqls        = [];
+        let id       = -1;
+        let push       = false;
+        
+        let mode = "";
+
+        for (let i = 0; i < fields.length; i++) {
+
+            if (i == fields.length - 1) {
+              push = true;
+            } else if (fields[i].table != fields[i+1].table) {
+              push = true;
+            }
+
+
+
+          //let table  = fields[i].table;
+          let column = fields[i].column;
+          let value  = "'" + fields[i].value + "'";
+          
+          //we are dealing with a new table
+          if (fields[i].table != table) {
+            table = fields[i].table; 
+            //we don't have an id yet
+            if (fields[i].id == "new") {
+              sql = `SELECT max(id) AS maxid FROM ${table}`;
+              let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
+              if (rows.length == 0) {
+                id = 1;
+              } else {
+                id = rows[0].maxid + 1;
+              }
+              mode = "INSERT";
+            } else {
+              mode = "UPDATE";
+            }
+            columns = column;
+            if (value == "'new'") { value = id};
+            values = value;
+          } else {
+            columns += ", " + column;
+            if (value == "'new'") { value = id};
+            values += ", " + value;
+          }
+          
+
+          if (push) {
+              if (mode = 'INSERT') {
+                sql = `INSERT INTO ${table} (id, ${columns}) VALUES (${id}, ${values});`
+              } else {
+                sql = `UDATE ${table} SET (${columns}) = (${values}) WHERE id = ${id};`
+              }
+              sqls.push(sql);
+              push = false;
+            }
+        }
+        sqls.forEach(sql => {
+          try {
+            console.log(sql);
+            this.app.storage.executeDatabase(sql, {}, "covid19");
+          } catch (err) {
+            console.log("SQL ERROR -----------------------");
+            console.log(err);
+            console.log("---------------------------------");
+          }
+        });
+      }
     }
   }
 
@@ -339,11 +408,11 @@ console.log("DONE");
   //
   // array of objects with { database, column, value }
   //
-  updateServerDatabase(data_array) {
+  updateServerDatabase(data_array, type="Supplier Update") {
 
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
     newtx.transaction.msg.module = this.name;
-    newtx.transaction.msg.request = "Supplier Update";
+    newtx.transaction.msg.request = type;
     newtx.transaction.msg.fields = data_array;
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
@@ -351,6 +420,7 @@ console.log("DONE");
 console.log("SENT TO SERVER");
 
   }
+
 
   renderProduct(prod) {
     var html = "";
@@ -381,59 +451,59 @@ console.log("SENT TO SERVER");
         case 'category_id':
           break;
         case 'product_name':
-          html += "<input class='input category_id_input products-" + field[0] + "' id='products' type='hidden' name='category_id' value='1' />";
+          html += "<input class='input category_id_input products-" + field[0] + "' data-table='products' type='hidden' data-column='category_id' value='1' />";
           break;
         case 'product_specification':
           html += "<div>Specification</div>";
-          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'product_description':
           html += "<div>Description</div>";
-          html += "<textarea class='input products-" + field[0] + "' id='products' name='" + field[0] + "'>"+field[1]+"</textarea>";
+          html += "<textarea class='input products-" + field[0] + "' id='products' data-column='" + field[0] + "'>"+field[1]+"</textarea>";
           break;
         case 'product_dimensions':
           html += "<div>Package Size</div>";
-          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'product_weight':
           html += "<div>Package Weight</div>";
-          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'product_quantities':
           html += "<div>Package Contents</div>";
-          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'product_photo':
           html += "<div>Product Image</div>";
           html += "<div>";
           html += "<img class='product-image' id='img-" + field[0] + "' src='" + field[1] + "' />";
           html += "<input class='input products-" + field[0] + "' type='file' />";
-          html += "<input style='display:none;' class='input products-text-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input style='display:none;' class='input products-text-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           html += "</div>";
           break;
         case 'pricing_per_unit_rmb':
           html += "<div>Price (RMB)</div>";
-          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'pricing_notes':
           html += "<div>Pricing Notes</div>";
-          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'pricing_payment_terms':
           html += "<div>Payment Terms</div>";
-          html += "<textarea class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "'>"+field[1]+"</textarea>";
+          html += "<textarea class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "'>"+field[1]+"</textarea>";
           break;
         case 'production_stock':
           html += "<div>In Stock</div>";
-          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'production_daily_capacity':
           html += "<div>Daily Production</div>";
-          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'production_minimum_order':
           html += "<div>Minimum Order</div>";
-          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         default:
           break;
@@ -474,23 +544,23 @@ console.log("SENT TO SERVER");
           break;
         case 'name':
           html += "<div>Name</div>";
-          html += "<input class='input' id='suppliers' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input' data-table='suppliers' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'address':
           html += "<div>Address</div>";
-          html += "<input class='input' id='suppliers' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input' data-table='suppliers' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'phone':
           html += "<div>Phone</div>";
-          html += "<input class='input' id='suppliers' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input' data-table='suppliers' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'email':
           html += "<div>Email</div>";
-          html += "<input class='input' id='suppliers' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input' data-table='suppliers' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'wechat':
           html += "<div>Wechat</div>";
-          html += "<input class='input' id='suppliers' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input' data-table='suppliers' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         default:
           break;
