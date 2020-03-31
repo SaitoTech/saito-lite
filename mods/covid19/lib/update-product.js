@@ -25,6 +25,8 @@ module.exports = UpdateProduct = {
       data.covid19.sendPeerDatabaseRequest("covid19", "products JOIN suppliers", "*", "products.supplier_id = suppliers.id AND products.id = " + data.product_id, null, function (res) {
 
         if (res.rows.length > 0) {
+          document.getElementById("product-grid").style.display = "grid";
+
           data.covid19.renderProductForm(res.rows[0]);
         } else {
 
@@ -49,10 +51,10 @@ module.exports = UpdateProduct = {
         }
 
         document.querySelectorAll('.product-image').forEach(img => {
-          document.getElementByClassName("products-" + img.id.split('-')[1]).addEventListener('change', (e) => {
+          document.querySelector(".products-" + img.id.split('-')[1]).addEventListener('change', (e) => {
             var reader = new FileReader();
             var file = e.target.files[0];
-            var fileEl = document.getElementByClassName("products-text-" + img.id.split('-')[1]);
+            var fileEl = document.querySelector(".products-text-" + img.id.split('-')[1]);
             reader.addEventListener("load", function () {
               img.src = reader.result;
               fileEl.value = reader.result;
@@ -99,6 +101,14 @@ module.exports = UpdateProduct = {
       Certification.render(app, data);
       Certification.attachEvents(app, data);
     });
+
+
+
+    document.getElementById('select-product-type').addEventListener('change', (e) => {
+      let category_id = e.currentTarget.value;
+      document.getElementById("product-grid").style.display = "grid";
+    });
+
 
 
   }

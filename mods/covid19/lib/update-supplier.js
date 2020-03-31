@@ -51,11 +51,7 @@ module.exports = UpdateSupplier = {
         values.push(field);
       });
 
-console.log("Updating VAlues: " + JSON.stringify(values));
-
       data.covid19.updateServerDatabase(values);
-
-alert("HERE WE ARE");
 
       UpdateSuccess.render(app, data);
       UpdateSuccess.attachEvents(app, data);
