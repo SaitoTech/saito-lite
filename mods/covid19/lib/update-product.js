@@ -25,9 +25,9 @@ module.exports = UpdateProduct = {
       data.covid19.sendPeerDatabaseRequest("covid19", "products JOIN suppliers", "*", "products.supplier_id = suppliers.id AND products.id = " + data.product_id, null, function (res) {
 
         if (res.rows.length > 0) {
-          document.getElementById("product-grid").style.display = "grid";
-
           data.covid19.renderProductForm(res.rows[0]);
+          document.getElementById("product-grid").style.display = "grid";
+          document.querySelector(".button").style.display = "block";
         } else {
 
           let row = {
@@ -107,6 +107,7 @@ module.exports = UpdateProduct = {
     document.getElementById('select-product-type').addEventListener('change', (e) => {
       let category_id = e.currentTarget.value;
       document.getElementById("product-grid").style.display = "grid";
+      document.querySelector(".button").style.display = "block";
     });
 
 

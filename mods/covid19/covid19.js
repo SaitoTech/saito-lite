@@ -372,11 +372,13 @@ console.log("SENT TO SERVER");
     Object.entries(prod).forEach(field => {
       switch (field[0]) {
         case 'id':
+	  break;
         case 'supplier_id':
+	  break;
         case 'category_id':
           break;
         case 'product_name':
-          html += "<div></div><div><input class='input category_id_input products-" + field[0] + "' id='products' type='hidden' name='category_id' value='1' /></div><div></div><div></div>";
+          html += "<input class='input category_id_input products-" + field[0] + "' id='products' type='hidden' name='category_id' value='1' />";
           break;
         case 'product_specification':
           html += "<div>Specification</div>";
