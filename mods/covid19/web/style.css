@@ -83,7 +83,7 @@ a {
 }
 
 .product-image {
-  max-width: 250px;
+  max-width: 200px;
   min-width: 50px;
   min-height: 50px;
   border: 1px solid #ddd;
@@ -120,4 +120,16 @@ a {
 .fullview_product:hover, .edit_product:hover, .delete_product:hover {
   background: var(--saito-red);
   color: #FFF;
+}
+
+#certification_display {
+  min-height: 60px;
+  border: 1px solid var(--saito-red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button, .button {
+  max-width: 400px;
 }

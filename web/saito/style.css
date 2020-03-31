@@ -382,6 +382,11 @@ fieldset {
   padding: 0.5em 0;
 }
 
+.flex-around {
+  display: flex;
+  justify-content: space-around;
+}
+
 #navigator {
   display: none;
 }

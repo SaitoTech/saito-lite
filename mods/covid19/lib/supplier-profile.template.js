@@ -19,10 +19,11 @@ module.exports = SupplierProfileTemplate = () => {
 
      <div class="profile-information"></div> 
     
-     <div class="edit-supplier-btn button" style="display:none" >Edit Information</div>
-     <div class="confirm-supplier-btn button" style="display:none" >View Products</div>
-     <div class="new-supplier-btn button" style="display:none" >Create Account</div>
-
+     <div class="flex-around">
+       <div class="edit-supplier-btn button" style="display:none" >Edit Information</div>
+       <div class="confirm-supplier-btn button" style="display:none" >View Products</div>
+       <div class="new-supplier-btn button" style="display:none" >Create Account</div>
+     </div>
     </div>
   </div>
   `;

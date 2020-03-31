@@ -19,7 +19,7 @@ module.exports = SplashPageTemplate = () => {
     </p>
     <p>
 
-    <div class="grid-2-colums">
+    <div class="flex-around">
       <button id="customer-search-btn" class="button">For Purchasers</button>
       <button id="supplier-portal-btn" class="button">For Suppliers</button>
     </div>

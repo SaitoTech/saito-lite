@@ -29,10 +29,14 @@ module.exports = UpdateProductTemplate = (app, data) => {
       <div id="supplier-grid" class="supplier-grid grid-4"></div>
 
 -->
-
+    <div style="display:flex;">
       <div id="${data.product_id}" class="update-product-btn button" style="display:none"><i class="fas fa-save"></i> Update Public Listing</div>
       <div id=attachto-"${data.product_id}" class="attach-cert-btn button" style="display:none"><i class="fas fa-certificate"></i> Attach Certificate</div>
+<<<<<<< HEAD
       <input class="supplier_publickey" style="display:none" type="hidden" value="${app.wallet.returnPublicKey()}" />
+=======
+      </div>
+>>>>>>> 701b064b493e3c2fe2933aff79d97782bc49dcd8
     </div>
   </div>
 
