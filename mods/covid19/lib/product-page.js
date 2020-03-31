@@ -4,7 +4,7 @@ const this_productPage = this;
 
 module.exports = ProductPage = {
 
-  render(data) {
+  render(app, data) {
 
     var supplier_id = 0;
     document.querySelector(".main").innerHTML = ProductPageTemplate();

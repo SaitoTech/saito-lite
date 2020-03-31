@@ -29,6 +29,9 @@ module.exports = CustomerPortal = {
 
     document.getElementById('select-product-type').addEventListener('change', (e) => {
       let category_id = e.currentTarget.value;
+
+      data.category_id = category_id;
+
       if (category_id > 0) {
         //clear grid
         document.querySelector(".products-table").innerHTML = `

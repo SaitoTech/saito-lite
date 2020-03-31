@@ -327,7 +327,8 @@ console.log("INSERT: " + sql);
     document.querySelectorAll('.fullview_product').forEach(el => {
       el.addEventListener('click', (e) => {
         data.id = e.toElement.id;
-        ProductPage.render(data);
+        ProductPage.render(this.app, data);
+        ProductPage.attachEvents(this.app, data);
       });
     });
   }

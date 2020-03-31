@@ -48,6 +48,7 @@
     "socket.io": "^2.3.0",
     "sqlite": "^3.0.3",
     "svg-captcha": "^1.4.0",
+    "terser": "^4.6.9",
     "tls": "0.0.1",
     "tui-editor": "^1.4.10",
     "tunnel-agent": "^0.6.0",
