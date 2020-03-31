@@ -32,14 +32,15 @@ module.exports = UpdateProduct = {
 
           let row = {
             id: 0,
+	    name: "",
             supplier_id: "",
             category_id: "",
-            product_name: "",
             product_specification: "",
-            product_dimensions: "",
-            product_weight: "",
-            product_quantities: "",
             product_photo: "",
+            product_description: "",
+            product_dimensions: "",
+            product_quantities: "",
+            product_weight: "",
             pricing_per_unit_rmb: "",
             pricing_notes: "",
             pricing_payment_terms: "",
@@ -81,6 +82,14 @@ module.exports = UpdateProduct = {
       let values = [];
 
       Array.from(document.getElementsByClassName('input')).forEach(input => {
+        let field = {};
+        field.table = input.getAttribute("id");
+        field.column = input.getAttribute("name");
+        field.value = input.value;
+        field.id = product_id;
+        values.push(field);
+      });
+      Array.from(document.getElementsByClassName('textarea')).forEach(input => {
         let field = {};
         field.table = input.getAttribute("id");
         field.column = input.getAttribute("name");

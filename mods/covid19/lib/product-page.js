@@ -16,20 +16,21 @@ module.exports = ProductPage = {
     //
     data.covid19.sendPeerDatabaseRequest("covid19", "products", "*", "id= " + data.id, null, function (res) {
       let fields = `product_name as 'Name', \
-      product_description as 'Description', \
-      product_photo as 'Product Image', \
-      product_specification as 'Specification', \
-      production_stock as 'Stock', \
-      production_daily_capacity as 'Daily Production', \
-      pricing_per_unit_rmb as 'Price (RMB)', \ 
-      pricing_notes as 'Pricing Notes', \
-      product_dimensions as 'Package Dimensions', \
-      product_weight as 'Weight', \
-      product_quantities as 'Package Contents', \
-      pricing_payment_terms as 'Payment Terms', \
-      production_minimum_order as 'Payment Terms',
-      supplier_id
-    `;
+        product_description as 'Description', \
+        product_photo as 'Product Image', \
+        product_specification as 'Specification', \
+        production_stock as 'Stock', \
+        production_daily_capacity as 'Daily Production', \
+        pricing_per_unit_rmb as 'Price (RMB)', \ 
+        pricing_notes as 'Pricing Notes', \
+        product_dimensions as 'Package Dimensions', \
+        product_weight as 'Weight', \
+        product_quantities as 'Units per Package', \
+        pricing_payment_terms as 'Payment Terms', \
+        production_minimum_order as 'Minimum Order',
+        supplier_id
+      `;
+
       data.covid19.sendPeerDatabaseRequest("covid19", "products", fields, "id= " + data.id, null, function (res) {
 
         if (res.rows.length > 0) {
@@ -40,15 +41,13 @@ module.exports = ProductPage = {
 
           //
           // load certificates
-          fields = "name as 'Name', address as 'Province', phone as 'Phone', email as 'Email', wechat as 'WeChat Id', notes as 'Notes'";
+          fields = "name as 'Name', address as 'Province', notes as 'Notes'";
           //fields = "*";
 
           data.covid19.sendPeerDatabaseRequest("covid19", "suppliers", fields, "id= " + supplier_id, null, function (res) {
 
             if (res.rows.length > 0) {
-
               data.covid19.renderSupplier(res.rows[0]);
-
             }
           });
 

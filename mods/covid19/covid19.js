@@ -387,14 +387,14 @@ console.log("SENT TO SERVER");
           break;
         case 'product_description':
           html += "<div>Description</div>";
-          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<textarea class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "'>"+field[1]+"</textarea>";
           break;
         case 'product_dimensions':
-          html += "<div>Package Dimensions</div>";
+          html += "<div>Package Size</div>";
           html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'product_weight':
-          html += "<div>Weight</div>";
+          html += "<div>Package Weight</div>";
           html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'product_quantities':
@@ -419,10 +419,10 @@ console.log("SENT TO SERVER");
           break;
         case 'pricing_payment_terms':
           html += "<div>Payment Terms</div>";
-          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<textarea class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "'>"+field[1]+"</textarea>";
           break;
         case 'production_stock':
-          html += "<div>Stock</div>";
+          html += "<div>In Stock</div>";
           html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'production_daily_capacity':
@@ -430,7 +430,7 @@ console.log("SENT TO SERVER");
           html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'production_minimum_order':
-          html += "<div>Payment Terms</div>";
+          html += "<div>Minimum Order</div>";
           html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
           break;
         default:

@@ -41,7 +41,6 @@ module.exports = CustomerPortal = {
         <div class="table-head">Unit Cost</div>
         <div class="table-head">Daily Volume</div>
         <div class="table-head">Certifications</div>
-        <div class="table-head">Lead Time</div>
         <div class="table-head"></div>
         `;
 
@@ -50,7 +49,7 @@ module.exports = CustomerPortal = {
         //
         let whereclause = "suppliers.id = products.supplier_id AND products.category_id = " + category_id;
         data.covid19.sendPeerDatabaseRequest("covid19", "products JOIN suppliers", "products.id as 'product_id', *", whereclause, null, function (res) {
-          data.covid19.addProductsToTable(res.rows, ['name', 'product_specification', 'product_photo', 'pricing_unit_cost', 'production_daily_capacity', 'certifications', 'June 24', 'fullview'], data);
+          data.covid19.addProductsToTable(res.rows, ['name', 'product_specification', 'product_photo', 'pricing_unit_cost', 'production_daily_capacity', 'certifications', 'fullview'], data);
 
         });
 
