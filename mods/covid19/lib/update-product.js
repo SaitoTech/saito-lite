@@ -32,7 +32,7 @@ module.exports = UpdateProduct = {
 
           let row = {
             id: 0,
-	    name: "",
+	    product_name: "",
             supplier_id: "",
             category_id: "",
             product_specification: "",

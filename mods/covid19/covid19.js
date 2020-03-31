@@ -183,12 +183,14 @@ console.log(table + " -- " + column + " -- " + value);
             sql = `INSERT INTO ${table} (id, supplier_id) VALUES (${id}, ${supplier_id})`;
 console.log("INSERT: " + sql);
             await this.app.storage.executeDatabase(sql, {}, "covid19");
-
+console.log("DONE!");
           }
 
           if (id > 0) {
             sql = `UPDATE ${table} SET ${column} = "${value}" WHERE id = ${id}`;
+console.log(sql);
             await this.app.storage.executeDatabase(sql, {}, "covid19");
+console.log("DONE");
           }
 
         }
@@ -387,7 +389,7 @@ console.log("SENT TO SERVER");
           break;
         case 'product_description':
           html += "<div>Description</div>";
-          html += "<textarea class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "'>"+field[1]+"</textarea>";
+          html += "<textarea class='input products-" + field[0] + "' id='products' name='" + field[0] + "'>"+field[1]+"</textarea>";
           break;
         case 'product_dimensions':
           html += "<div>Package Size</div>";
