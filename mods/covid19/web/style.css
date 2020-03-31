@@ -3,6 +3,7 @@ a {
   cursor: pointer;
 }
 
+
 .main {
   display: block;
   width: 75vw;
@@ -133,3 +134,11 @@ a {
 button, .button {
   max-width: 400px;
 }
+
+.covid_back {
+  width: 80px;
+  max-width: 100px;
+  min-width: 80px;
+  text-align: center;
+}
+

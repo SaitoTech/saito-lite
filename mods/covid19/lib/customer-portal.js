@@ -1,5 +1,6 @@
 const CustomerPortalTemplate = require('./customer-portal.template.js');
 const ProductPage = require('./product-page');
+const UpdateProduct = require('./update-product');
 
 module.exports = CustomerPortal = {
 
@@ -33,6 +34,7 @@ module.exports = CustomerPortal = {
       data.category_id = category_id;
 
       if (category_id > 0) {
+
         //clear grid
         document.querySelector(".products-table").innerHTML = `
         <div class="table-head">Supplier</div>
@@ -57,8 +59,35 @@ module.exports = CustomerPortal = {
         //
         document.querySelector(".products-table").style.display = "grid";
 
+
+	//
+	// activate buttons
+	//
+setTimeout(() => {
+        try {
+          document.querySelectorAll('.edit_product').forEach(el => {
+            el.addEventListener('click', (e) => {
+              data.product_id = e.toElement.id;
+              UpdateProduct.render(app, data);
+              UpdateProduct.attachEvents(app, data);
+            });
+          });
+        } catch (err) {
+	}
+
+        try {
+          document.querySelectorAll('.delete_product').forEach(el => {
+            el.addEventListener('click', (e) => {
+              alert("Product Deletion functionality coming soon!");
+            });
+          });
+        } catch (err) {
+	}
+}, 250);
+
       }
     });
+
 
     try {
     document.querySelector('.covid_back').addEventListener('click', (e) => {

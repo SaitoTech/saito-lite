@@ -23,13 +23,16 @@ module.exports = SupplierPortal = {
       document.querySelector(".portal").style.display = "block";
       document.querySelector(".products-table").style.display = "grid";
 
+      try { 
       document.querySelectorAll('.fullview_product').forEach(el => {
         el.addEventListener('click', (e) => {
           data.id = e.toElement.id;
           ProductPage.render(data);
         });
       });
+      } catch (err) {}
 
+      try {
       document.querySelectorAll('.edit_product').forEach(el => {
         el.addEventListener('click', (e) => {
           data.product_id = e.toElement.id;
@@ -37,6 +40,18 @@ module.exports = SupplierPortal = {
           UpdateProduct.attachEvents(app, data);
         });
       });
+      } catch (err) {}
+
+      try {
+      document.querySelectorAll('.delete_product').forEach(el => {
+        el.addEventListener('click', (e) => {
+	  alert("Product Deletion functionality coming soon!");
+        });
+      });
+      } catch (err) {}
+
+
+
     });
 
     var grid = document.querySelector(".products-table");
