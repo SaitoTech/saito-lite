@@ -18,7 +18,7 @@ module.exports = UpdateProductTemplate = (app, data) => {
         </select>
       </div>
  
-      <div id="product-grid" class="product-grid grid-4"></div>
+      <div id="product-grid" class="product-grid grid-4" style="display:none"></div>
 
 <!--
       <h3>Certifications</h3>
@@ -29,10 +29,10 @@ module.exports = UpdateProductTemplate = (app, data) => {
       <div id="supplier-grid" class="supplier-grid grid-4"></div>
 
 -->
-      <div style="display:flex;">
-        <div id="${data.product_id}" class="update-product-btn button"><i class="fas fa-save"></i> Update Public Listing</div>
-        <div id="attachto-${data.product_id}" class="attach-cert-btn button"><i class="fas fa-certificate"></i> Add Certification</div>
-      </div> 
+    <div style="display:flex;">
+      <div id="${data.product_id}" class="update-product-btn button" style="display:none"><i class="fas fa-save"></i> Update Public Listing</div>
+      <div id=attachto-"${data.product_id}" class="attach-cert-btn button" style="display:none"><i class="fas fa-certificate"></i> Attach Certificate</div>
+      </div>
     </div>
   </div>
 

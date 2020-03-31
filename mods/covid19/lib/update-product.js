@@ -26,18 +26,21 @@ module.exports = UpdateProduct = {
 
         if (res.rows.length > 0) {
           data.covid19.renderProductForm(res.rows[0]);
+          document.getElementById("product-grid").style.display = "grid";
+          document.querySelector(".button").style.display = "block";
         } else {
 
           let row = {
             id: 0,
+	    product_name: "",
             supplier_id: "",
             category_id: "",
-            product_name: "",
             product_specification: "",
-            product_dimensions: "",
-            product_weight: "",
-            product_quantities: "",
             product_photo: "",
+            product_description: "",
+            product_dimensions: "",
+            product_quantities: "",
+            product_weight: "",
             pricing_per_unit_rmb: "",
             pricing_notes: "",
             pricing_payment_terms: "",
@@ -86,6 +89,14 @@ module.exports = UpdateProduct = {
         field.id = product_id;
         values.push(field);
       });
+      Array.from(document.getElementsByClassName('textarea')).forEach(input => {
+        let field = {};
+        field.table = input.getAttribute("id");
+        field.column = input.getAttribute("name");
+        field.value = input.value;
+        field.id = product_id;
+        values.push(field);
+      });
 
       data.covid19.updateServerDatabase(values);
       
@@ -99,6 +110,15 @@ module.exports = UpdateProduct = {
       Certification.render(app, data);
       Certification.attachEvents(app, data);
     });
+
+
+
+    document.getElementById('select-product-type').addEventListener('change', (e) => {
+      let category_id = e.currentTarget.value;
+      document.getElementById("product-grid").style.display = "grid";
+      document.querySelector(".button").style.display = "block";
+    });
+
 
 
   }

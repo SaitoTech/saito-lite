@@ -4,22 +4,23 @@ CREATE TABLE IF NOT EXISTS products (
   supplier_id INTEGER ,
   category_id INTEGER ,
 
-  product_name TEXT , 
-  product_specification TEXT ,
+  product_name VARCHAR(255) , 
+  product_specification VARCHAR(255) ,
   product_description TEXT ,
-  product_dimensions TEXT ,
-  product_weight TEXT ,
-  product_quantities TEXT ,
-
+  product_dimensions VARCHAR(255) ,
+  product_weight VARCHAR(255) ,
+  product_quantities VARCHAR(255) ,
   product_photo TEXT , 
 
-  pricing_per_unit_rmb INTEGER ,
+  pricing_per_unit_rmb VARCHAR(255) ,
+  pricing_per_unit_public VARCHAR(255) ,
   pricing_notes TEXT ,
+  pricing_notes_public TEXT ,
   pricing_payment_terms VARCHAR(255) ,
 
-  production_stock INTEGER ,
-  production_daily_capacity INTEGER ,
-  production_minimum_order INTEGER ,
+  production_stock VARCHAR(255) ,
+  production_daily_capacity VARCHAR(255) ,
+  production_minimum_order VARCHAR(255) ,
  
   PRIMARY KEY(id ASC)
 );

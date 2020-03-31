@@ -6,6 +6,7 @@ module.exports = CustomerPortal = {
   render(app, data) {
 
     document.querySelector(".main").innerHTML = CustomerPortalTemplate();
+    document.querySelector(".navigation").innerHTML = '<div class="button navlink covid_back"><i class="fas fa-back"></i> Back</div>';
 
     //
     // load categories
@@ -28,6 +29,9 @@ module.exports = CustomerPortal = {
 
     document.getElementById('select-product-type').addEventListener('change', (e) => {
       let category_id = e.currentTarget.value;
+
+      data.category_id = category_id;
+
       if (category_id > 0) {
         //clear grid
         document.querySelector(".products-table").innerHTML = `
@@ -37,7 +41,6 @@ module.exports = CustomerPortal = {
         <div class="table-head">Unit Cost</div>
         <div class="table-head">Daily Volume</div>
         <div class="table-head">Certifications</div>
-        <div class="table-head">Lead Time</div>
         <div class="table-head"></div>
         `;
 
@@ -46,7 +49,7 @@ module.exports = CustomerPortal = {
         //
         let whereclause = "suppliers.id = products.supplier_id AND products.category_id = " + category_id;
         data.covid19.sendPeerDatabaseRequest("covid19", "products JOIN suppliers", "products.id as 'product_id', *", whereclause, null, function (res) {
-          data.covid19.addProductsToTable(res.rows, ['name', 'product_specification', 'product_photo', 'pricing_unit_cost', 'production_daily_capacity', 'certifications', 'June 24', 'fullview'], data);
+          data.covid19.addProductsToTable(res.rows, ['name', 'product_specification', 'product_photo', 'pricing_unit_cost', 'production_daily_capacity', 'certifications', 'fullview'], data);
 
         });
 
@@ -57,6 +60,14 @@ module.exports = CustomerPortal = {
 
       }
     });
+
+    try {
+    document.querySelector('.covid_back').addEventListener('click', (e) => {
+      data.covid19.renderPage("home", app, data);
+    });
+    } catch (err) {}
+
+
 
   }
 }
