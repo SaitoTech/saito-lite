@@ -283,17 +283,17 @@ console.log("INSERT: " + sql);
             }
 
             if (fields[ii] == "edit") {
-              html += `<div><div class="edit_product" id="${rows[i].product_id}">edit</div><div class="delete_product" id="${rows[i].id}">delete</div></div>`;
+              html += `<div class="grid-buttons"><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].id}">Delete</div></div>`;
               added = 1;
             }
 
             if (fields[ii] == "fullview") {
-              html += `<div><div class="fullview_product" id="${rows[i].product_id}">full details</div></div>`;
+              html += `<div class="grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div></div>`;
               added = 1;
             }
 
             if (fields[ii] == "admin") {
-              html += `<div><div class="edit_product" id="${rows[i].product_id}">edit</div><div class="delete_product" id="${rows[i].product_id}">delete</div></div>`;
+              html += `<div class="grid-buttons"><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].product_id}">Delete</div></div>`;
               added = 1;
             }
 
