@@ -283,7 +283,7 @@ console.log("INSERT: " + sql);
             }
 
             if (fields[ii] == "edit") {
-              html += `<div><div class="edit_product" id="${rows[i].product_id}">edit</div> | <div class="delete_product" id="${rows[i].id}">delete</div></div>`;
+              html += `<div><div class="edit_product" id="${rows[i].product_id}">edit</div><div class="delete_product" id="${rows[i].id}">delete</div></div>`;
               added = 1;
             }
 
@@ -293,7 +293,7 @@ console.log("INSERT: " + sql);
             }
 
             if (fields[ii] == "admin") {
-              html += `<div><div class="edit_product" id="${rows[i].product_id}">edit</div> | <div class="delete_product" id="${rows[i].product_id}">delete</div></div>`;
+              html += `<div><div class="edit_product" id="${rows[i].product_id}">edit</div><div class="delete_product" id="${rows[i].product_id}">delete</div></div>`;
               added = 1;
             }
 
@@ -320,7 +320,7 @@ console.log("INSERT: " + sql);
 
       }
 
-      document.querySelector(".products-table").innerHTML += html;
+      document.querySelector(".products-table").innerHTML += html.replace(/null/g, "").replace(/undefined/g, "");
       this.returnCerts(rows[i].product_id, "certsfor-");
       
     }

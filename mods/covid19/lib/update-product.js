@@ -64,9 +64,9 @@ module.exports = UpdateProduct = {
             //e.target.value = reader.result;
           });
           img.addEventListener('click', e => {
-            var item = e.toElement.id.split("-")[1];
+            //var item = e.toElement.id.split("-")[1];
             //salert(e.toElement.id);
-            document.getElementById("products-" + item).click();
+            document.querySelector(".products-" + img.id.split('-')[1]).click();
           });
         });
       });
