@@ -8,6 +8,8 @@ module.exports = ProductPage = {
 
     var supplier_id = 0;
     document.querySelector(".main").innerHTML = ProductPageTemplate();
+    document.querySelector(".navigation").innerHTML = '<div class="button navlink covid_back"><i class="fas fa-back"></i> Back</div>';
+
 
     //
     // load product
@@ -67,14 +69,22 @@ module.exports = ProductPage = {
         }
       });
     });
-      document.querySelector(".loading").style.display = "none";
-      document.querySelector(".portal").style.display = "block";
+    document.querySelector(".loading").style.display = "none";
+    document.querySelector(".portal").style.display = "block";
     
     
   },
 
   attachEvents(app, data) {
-    // no events here
+
+    try {
+    document.querySelector('.covid_back').addEventListener('click', (e) => {
+      data.covid19.renderPage("home", app, data);
+    });
+    } catch (err) {}
+
+
+
   }
 
 }

@@ -6,6 +6,7 @@ module.exports = CustomerPortal = {
   render(app, data) {
 
     document.querySelector(".main").innerHTML = CustomerPortalTemplate();
+    document.querySelector(".navigation").innerHTML = '<div class="button navlink covid_back"><i class="fas fa-back"></i> Back</div>';
 
     //
     // load categories
@@ -57,6 +58,14 @@ module.exports = CustomerPortal = {
 
       }
     });
+
+    try {
+    document.querySelector('.covid_back').addEventListener('click', (e) => {
+      data.covid19.renderPage("home", app, data);
+    });
+    } catch (err) {}
+
+
 
   }
 }
