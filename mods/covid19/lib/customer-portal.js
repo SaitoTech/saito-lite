@@ -1,5 +1,6 @@
 const CustomerPortalTemplate = require('./customer-portal.template.js');
 const ProductPage = require('./product-page');
+const UpdateProduct = require('./update-product');
 
 module.exports = CustomerPortal = {
 
@@ -33,6 +34,7 @@ module.exports = CustomerPortal = {
       data.category_id = category_id;
 
       if (category_id > 0) {
+
         //clear grid
         document.querySelector(".products-table").innerHTML = `
         <div class="table-head">Supplier</div>
@@ -49,8 +51,7 @@ module.exports = CustomerPortal = {
         //
         let whereclause = "suppliers.id = products.supplier_id AND products.category_id = " + category_id;
         data.covid19.sendPeerDatabaseRequest("covid19", "products JOIN suppliers", "products.id as 'product_id', *", whereclause, null, function (res) {
-          data.covid19.addProductsToTable(res.rows, ['name', 'product_specification', 'product_photo', 'pricing_unit_cost', 'production_daily_capacity', 'certifications', 'fullview'], data);
-
+          data.covid19.addProductsToTable(res.rows, [ 'name', 'product_specification', 'product_photo', 'pricing_per_unit_rmb', 'production_daily_capacity', 'certifications', 'id', 'admin'], data);
         });
 
         //
@@ -58,8 +59,35 @@ module.exports = CustomerPortal = {
         //
         document.querySelector(".products-table").style.display = "grid";
 
+
+	//
+	// activate buttons
+	//
+setTimeout(() => {
+        try {
+          document.querySelectorAll('.edit_product').forEach(el => {
+            el.addEventListener('click', (e) => {
+              data.product_id = e.toElement.id;
+              UpdateProduct.render(app, data);
+              UpdateProduct.attachEvents(app, data);
+            });
+          });
+        } catch (err) {
+	}
+
+        try {
+          document.querySelectorAll('.delete_product').forEach(el => {
+            el.addEventListener('click', (e) => {
+              alert("Product Deletion functionality coming soon!");
+            });
+          });
+        } catch (err) {
+	}
+}, 250);
+
       }
     });
+
 
     try {
     document.querySelector('.covid_back').addEventListener('click', (e) => {
@@ -67,7 +95,13 @@ module.exports = CustomerPortal = {
     });
     } catch (err) {}
 
-
+    try {
+      document.querySelector('.add-or-update-product-btn').addEventListener('click', (e) => {
+        data.product_id = e.currentTarget.id;
+        UpdateProduct.render(app, data);
+        UpdateProduct.attachEvents(app, data);
+      });
+    } catch (err) {}
 
   }
 }

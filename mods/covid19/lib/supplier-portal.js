@@ -16,19 +16,23 @@ module.exports = SupplierPortal = {
       let whereclause = "suppliers.id = products.supplier_id AND products.category_id = categories.id";
       data.covid19.sendPeerDatabaseRequest("covid19", "products JOIN suppliers LEFT JOIN categories", "products.id as 'product_id', categories.name, products.product_specification, products.product_photo, products.pricing_per_unit_rmb, products.production_daily_capacity, products.id", whereclause, null, function(res) {
 
+        // no 'name' on supplier page
         data.covid19.addProductsToTable(res.rows, [ 'name', 'product_specification', 'product_photo', 'pricing_per_unit_rmb', 'production_daily_capacity', 'certifications', 'id', 'admin']);
 
       document.querySelector(".loading").style.display = "none";
       document.querySelector(".portal").style.display = "block";
       document.querySelector(".products-table").style.display = "grid";
 
+      try { 
       document.querySelectorAll('.fullview_product').forEach(el => {
         el.addEventListener('click', (e) => {
           data.id = e.toElement.id;
           ProductPage.render(data);
         });
       });
+      } catch (err) {}
 
+      try {
       document.querySelectorAll('.edit_product').forEach(el => {
         el.addEventListener('click', (e) => {
           data.product_id = e.toElement.id;
@@ -36,6 +40,18 @@ module.exports = SupplierPortal = {
           UpdateProduct.attachEvents(app, data);
         });
       });
+      } catch (err) {}
+
+      try {
+      document.querySelectorAll('.delete_product').forEach(el => {
+        el.addEventListener('click', (e) => {
+	  alert("Product Deletion functionality coming soon!");
+        });
+      });
+      } catch (err) {}
+
+
+
     });
 
     var grid = document.querySelector(".products-table");

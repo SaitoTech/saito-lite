@@ -25,6 +25,13 @@ module.exports = UpdateProduct = {
       data.covid19.sendPeerDatabaseRequest("covid19", "products JOIN suppliers", "*", "products.supplier_id = suppliers.id AND products.id = " + data.product_id, null, function (res) {
 
         if (res.rows.length > 0) {
+
+          try {
+alert("SUPPLIER PUZBLICKZEY!");
+ 	    document.querySelector(".supplier_publickey").value = res.rows[0].publickey;
+alert("SUPPLIER PUZBLICKZEY: " + res.rows[0][publickey]);
+	  } catch (err) {}
+
           data.covid19.renderProductForm(res.rows[0]);
           document.getElementById("product-grid").style.display = "grid";
           document.querySelector(".update-product-btn").style.display = "block";
@@ -81,6 +88,15 @@ module.exports = UpdateProduct = {
     document.querySelector('.update-product-btn').addEventListener('click', (e) => {
 
       let product_id = e.currentTarget.id;
+      let supplier_publickey = app.wallet.returnPublicKey();
+
+      try {
+	let pkeyobj = document.querySelector(".supplier_publickey");
+	if (pkeyobj) {
+	  supplier_publickey = pkeyobj.value;
+	}
+      } catch (err) {}
+
       let values = [];
 
       Array.from(document.getElementsByClassName('input')).forEach(input => {
@@ -100,8 +116,8 @@ module.exports = UpdateProduct = {
         values.push(field);
       });
 
-      data.covid19.updateServerDatabase(values);
-      
+      data.covid19.updateServerDatabase(values, supplier_publickey);
+
       UpdateSuccess.render(app, data);
       UpdateSuccess.attachEvents(app, data);
       

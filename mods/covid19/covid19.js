@@ -26,7 +26,8 @@ class Covid19 extends ModTemplate {
     this.db_tables.push("products JOIN suppliers LEFT JOIN categories");
     this.db_tables.push("certifications as 'c' JOIN products_certifications as 'pc'");
 
-    this.admin_pkey = "ke6qwkD3XB8JvWwf68RMjDAn2ByJRv3ak1eqUzTEz9cr";
+    this.admin_pkey = app.wallet.returnPublicKey();
+//"ke6qwkD3XB8JvWwf68RMjDAn2ByJRv3ak1eqUzTEz9cr";
 
     this.events['chat-render-request'];
 
@@ -129,14 +130,16 @@ class Covid19 extends ModTemplate {
 
       let product_id = txmsg.product_id;
       let fields = txmsg.fields;
-      //
-      // insert supplier if non-existent
-      //
       let supplier_id = 0;
 
+      //
+      // updating supplier or product
+      //
       if (txmsg.request == "Supplier Update") {
 
-        sql = `SELECT id FROM suppliers WHERE publickey = "${tx.transaction.from[0].add}"`;
+console.log("RECEIVED: " + JSON.stringify(txmsg));
+
+        sql = `SELECT id FROM suppliers WHERE publickey = "${txmsg.publickey}"`;
         let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
         if (rows.length == 0) { 
           sql = `SELECT max(id) AS maxid FROM "suppliers"`;
@@ -146,10 +149,8 @@ class Covid19 extends ModTemplate {
           } else {
             supplier_id = rows[0].maxid+1;;
           }
-
           sql = `INSERT INTO suppliers (id , publickey) VALUES (${supplier_id} , '${tx.transaction.from[0].add}')`;
           await this.app.storage.executeDatabase(sql, {}, "covid19");
-
         } else {
           supplier_id = rows[0].id;
         }
@@ -344,8 +345,12 @@ class Covid19 extends ModTemplate {
         let added = 0;
 
         try {
+
+
           if (rows[i][fields[ii]] != "") {
-            //console.log("TEST: " + rows[i][fields[ii]]);
+
+            if (fields[ii] == "id") { added = 1; }
+
             if (fields[ii] == "product_photo") {
               if (rows[i][fields[ii]] != null) {
                 html += `<div><img style="max-width:200px;max-height:200px" src="${rows[i][fields[ii]]}" /></div>`;
@@ -354,13 +359,17 @@ class Covid19 extends ModTemplate {
             }
 
             if (fields[ii] == "edit") {
-              html += `<div class="grid-buttons"><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].id}">Delete</div></div>`;
-              added = 1;
+	      if (this.app.wallet.returnPublicKey() == this.admin_pkey) { fields[ii] = "admin"; } else {
+                html += `<div class="grid-buttons"><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].id}">Delete</div></div>`;
+                added = 1;
+	      }
             }
 
             if (fields[ii] == "fullview") {
-              html += `<div class="grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div></div>`;
-              added = 1;
+	      if (this.app.wallet.returnPublicKey() == this.admin_pkey) { fields[ii] = "admin"; } else {
+                html += `<div class="grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div></div>`;
+                added = 1;
+              }
             }
 
             if (fields[ii] == "admin") {
@@ -374,7 +383,7 @@ class Covid19 extends ModTemplate {
             }            
 
             if (added == 0) {
-              html += `<div>${rows[i][fields[ii]]}</div>`;
+              html += `<div data-table="${ii}">${rows[i][fields[ii]]}</div>`;
               added = 1;
             }
 
@@ -408,12 +417,14 @@ class Covid19 extends ModTemplate {
   //
   // array of objects with { database, column, value }
   //
-  updateServerDatabase(data_array, type="Supplier Update") {
+
+  updateServerDatabase(data_array, publickey, type="Supplier Update") {
 
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
     newtx.transaction.msg.module = this.name;
     newtx.transaction.msg.request = type;
     newtx.transaction.msg.fields = data_array;
+    newtx.transaction.msg.publickey = publickey;
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 

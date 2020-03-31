@@ -36,6 +36,7 @@ module.exports = UpdateProductTemplate = (app, data) => {
     </div>
   </div>
 
+  <input class="supplier_publickey" style="display:none" type="hidden" value="${app.wallet.returnPublicKey()}" />
 
   `;
 
