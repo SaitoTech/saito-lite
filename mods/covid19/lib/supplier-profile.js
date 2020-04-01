@@ -57,7 +57,7 @@ This is the information your have published concerning your company. If it is no
     <div>${res.rows[0].address}</div>
 
     <div>Notes:</div>
-    <div>${res.rows[0].wechat}</div>
+    <div>${res.rows[0].notes}</div>
 
     <div>Phone:</div>
     <div>${res.rows[0].phone}</div>
