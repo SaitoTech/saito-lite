@@ -7,7 +7,7 @@ module.exports = CustomerPortal = {
   render(app, data) {
 
     document.querySelector(".main").innerHTML = CustomerPortalTemplate();
-    document.querySelector(".navigation").innerHTML = '<div class="button navlink covid_back"><i class="fas fa-back"></i> Back</div>';
+    document.querySelector(".navigation").innerHTML = '<div class="button navlink covid_back"><i class="fas fa-back"></i>back</div>';
 
     //
     // load categories

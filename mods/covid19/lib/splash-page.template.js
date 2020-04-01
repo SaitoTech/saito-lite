@@ -9,12 +9,12 @@ module.exports = SplashPageTemplate = () => {
 
     <p>
 
-    This platform connects purchasers of COVID-19 response equipment with suppliers to streamline the procurement of supplies for governments and large enterprises. It puts an emphasis on ensuring the quality of goods continue to meet required medical standards. 
+    This platform connects suppliers of COVID-19 response equipment with governments and large enterprise procurers. Its emphasis is on ensuring goods continue to meet required medical standards. Strong cryptographic tools and blockchain technology is used to reinforce transparency on who is producing supplies under what production standards.
 
     </p>
     <p>
 
-    The data here offers a real-time view into the market supply and price and quality of COVID-19 response equipment. Our team is working around the clock to provide this up-to-date information. We track real-time information on product availability, production capacity and lead times and keep records of supplier production certifications and more.
+    The resulting data offers a real-time view into the supply and price and quality of COVID-19 response equipment. Our team is working around the clock to keep this information up-to-date. All information on product availability, production capacity and supplier certifications are cryptographically-signed and publicly viewable.
 
     </p>
     <p>
@@ -27,7 +27,7 @@ module.exports = SplashPageTemplate = () => {
     </p>
     
     
-    <h3>Who are the people behind this site?</h3>
+    <h3>Who are the people behind this datahub?</h3>
 
     <p>
 
