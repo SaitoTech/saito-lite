@@ -62,7 +62,7 @@ class Covid19 extends ModTemplate {
 
     let sql = "";
     let params = {};
-  
+
     sql = "INSERT INTO certifications (name) VALUES ($name)";
     params = { $name: "CE Authentication" }
     await app.storage.executeDatabase(sql, params, "covid19");
@@ -83,14 +83,35 @@ class Covid19 extends ModTemplate {
     params = { $name: "Medical Device Certificate" }
     await app.storage.executeDatabase(sql, params, "covid19");
 
-    sql = "INSERT INTO categories (name) VALUES ('N95口罩 N95 Mask')";
-    await app.storage.executeDatabase(sql, {}, "covid19");
-    sql = "INSERT INTO categories (name) VALUES ('防护服Protection clothes')";
-    await app.storage.executeDatabase(sql, {}, "covid19");
-    sql = "INSERT INTO categories (name) VALUES ('外科口罩 Surgical Masks')";
-    await app.storage.executeDatabase(sql, {}, "covid19");
+    sql = `INSERT INTO categories (name) VALUES ('N95口罩 N95 Mask')`;
+    app.storage.executeDatabase(sql, {}, "covid19");
+    sql = `INSERT INTO categories (name) VALUES ('外科口罩 Surgical Masks')`;
+    app.storage.executeDatabase(sql, {}, "covid19");
+    sql = `INSERT INTO categories (name) VALUES ('防护面罩Face shield')`;
+    app.storage.executeDatabase(sql, {}, "covid19");
+    sql = `INSERT INTO categories (name) VALUES ('防护服Protection clothes')`;
+    app.storage.executeDatabase(sql, {}, "covid19");
+    sql = `INSERT INTO categories (name) VALUES ('医疗器械 medical instruments')`;
+    app.storage.executeDatabase(sql, {}, "covid19");
+    sql = `INSERT INTO categories (name) VALUES ('防护眼镜 goggles')`;
+    app.storage.executeDatabase(sql, {}, "covid19");
+    sql = `INSERT INTO categories (name) VALUES ('手套 gloves')`;
+    app.storage.executeDatabase(sql, {}, "covid19");
+    sql = `INSERT INTO categories (name) VALUES ('鞋套 shoe covers')`;
+    app.storage.executeDatabase(sql, {}, "covid19");
+    sql = `INSERT INTO categories (name) VALUES ('防护头罩 medical hoods')`;
+    app.storage.executeDatabase(sql, {}, "covid19");
+    sql = `INSERT INTO categories (name) VALUES ('洗手液 Sanitizers')`;
+    app.storage.executeDatabase(sql, {}, "covid19");
+    sql = `INSERT INTO categories (name) VALUES ('医疗垃圾袋 Clinical waste bags')`;
+    app.storage.executeDatabase(sql, {}, "covid19");
+    sql = `INSERT INTO categories (name) VALUES ('医疗围裙 Plastic Aprons')`;
+    app.storage.executeDatabase(sql, {}, "covid19");
+    sql = `INSERT INTO categories (name) VALUES ('手术服 surgical gown')`;
+    app.storage.executeDatabase(sql, {}, "covid19");
 
   }
+
   async initialize(app) {
 
     await super.initialize(app);
