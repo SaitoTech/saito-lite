@@ -28,9 +28,7 @@ module.exports = UpdateProduct = {
         if (res.rows.length > 0) {
 
           try {
-            //alert("SUPPLIER PUZBLICKZEY!");
             document.querySelector(".supplier_publickey").value = res.rows[0].publickey;
-            //alert("SUPPLIER PUZBLICKZEY: " + res.rows[0][publickey]);
           } catch (err) { }
 
           data.covid19.renderProductForm(res.rows[0]);
@@ -79,6 +77,7 @@ module.exports = UpdateProduct = {
             production_minimum_order: "",
           }
           data.covid19.renderProductForm(row);
+
         }
 
         document.querySelectorAll('.product-image').forEach(img => {
