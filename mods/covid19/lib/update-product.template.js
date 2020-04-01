@@ -20,13 +20,15 @@ module.exports = UpdateProductTemplate = (app, data) => {
  
       <div id="product-grid" class="product-grid grid-2" style="display:none"></div>
 
-      <hr >
-      
-      <h3>Certifications</h3>
+      <div class="certification-space" style="display:none">
 
-      <div id="cert-grid" class="cert-grid"></div>
+        <hr >     
+        <h3>Certifications</h3>
+        <div id="cert-grid" class="cert-grid"></div>
+        <hr />
 
-      <hr />
+      </div>
+
 
       <div style="display:flex;">
       <div id="${data.product_id}" class="update-product-btn button" style="display:none"><i class="fas fa-save"></i> Update Public Listing</div>

@@ -28,6 +28,7 @@ module.exports = UpdateProduct = {
         if (res.rows.length > 0) {
 
           document.querySelector(".update-product-btn").style.display = "block";
+          document.querySelector(".certification-space").style.display = "block";
           document.querySelector(".attach-cert-btn").style.display = "block";
 
           try {
@@ -73,6 +74,7 @@ module.exports = UpdateProduct = {
             production_minimum_order: "",
           }
           data.covid19.renderProductForm(row);
+          document.querySelector(".certification-space").style.display = "block";
 
         }
 

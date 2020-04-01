@@ -152,6 +152,8 @@ console.log("RECEIVED: " + JSON.stringify(txmsg));
           }
           sql = `INSERT INTO suppliers (id , publickey) VALUES (${supplier_id} , '${tx.transaction.from[0].add}')`;
           await this.app.storage.executeDatabase(sql, {}, "covid19");
+	  // add so things work
+	  txmsg.publickey = tx.transaction.from[0].add;
         } else {
           supplier_id = rows[0].id;
         }
@@ -177,13 +179,17 @@ console.log("RECEIVED: " + JSON.stringify(txmsg));
               id = rows[0].maxid + 1;
             }
 
-            sql = `INSERT INTO ${table} (id, supplier_id) VALUES (${id}, ${supplier_id})`;
-            await this.app.storage.executeDatabase(sql, {}, "covid19");
+	    if (tx.transaction.from[0].add == txmsg.publickey || tx.transaction.from[0].add == this.admin_pkey) {
+              sql = `INSERT INTO ${table} (id, supplier_id) VALUES (${id}, ${supplier_id})`;
+              await this.app.storage.executeDatabase(sql, {}, "covid19");
+            }
           }
 
           if (id > 0) {
-            sql = `UPDATE ${table} SET ${column} = "${value}" WHERE id = ${id}`;
-            await this.app.storage.executeDatabase(sql, {}, "covid19");
+	    if (tx.transaction.from[0].add == txmsg.publickey || tx.transaction.from[0].add == this.admin_pkey) {
+              sql = `UPDATE ${table} SET ${column} = "${value}" WHERE id = ${id}`;
+              await this.app.storage.executeDatabase(sql, {}, "covid19");
+	    }
           }
         }
       }

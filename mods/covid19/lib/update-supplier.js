@@ -16,8 +16,7 @@ module.exports = UpdateSupplier = {
 
         if (res.rows.length > 0) {
           data.covid19.renderSupplierForm(res.rows[0]);
-console.log("EDITING: " + rew.rows[0].category_id);
-//	  document.getElementById("select-product-type").value = rew.rows[0].category_id;
+//	  document.getElementById("select-product-type").value = row.rows[0].category_id;
         } else {
 	  let row = { 
 	 	id : 0 , 
