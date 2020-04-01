@@ -7,6 +7,7 @@ module.exports = UpdateProduct = {
   render(app, data) {
 
     document.querySelector(".main").innerHTML = UpdateProductTemplate(app, data);
+    document.querySelector(".navigation").innerHTML = '<div class="button navlink covid_back"><i class="fas fa-back"></i> Back</div>';
 
     //
     // load categories
@@ -27,21 +28,41 @@ module.exports = UpdateProduct = {
         if (res.rows.length > 0) {
 
           try {
-alert("SUPPLIER PUZBLICKZEY!");
- 	    document.querySelector(".supplier_publickey").value = res.rows[0].publickey;
-alert("SUPPLIER PUZBLICKZEY: " + res.rows[0][publickey]);
-	  } catch (err) {}
+            //alert("SUPPLIER PUZBLICKZEY!");
+            document.querySelector(".supplier_publickey").value = res.rows[0].publickey;
+            //alert("SUPPLIER PUZBLICKZEY: " + res.rows[0][publickey]);
+          } catch (err) { }
 
           data.covid19.renderProductForm(res.rows[0]);
           document.getElementById("product-grid").style.display = "grid";
           document.querySelector(".update-product-btn").style.display = "block";
           document.querySelector(".attach-cert-btn").style.display = "block";
 
+
+          //
+          // load certifications
+          //
+          //fields = "c.name as 'Name', (select id from attachments where id = pc.id ) as attachment_id";
+          //var from = "certifications as 'c' JOIN products_certifications as 'pc'";
+          //var where = "c.id = pc.certification_id and pc.product_id =";
+          //data.covid19.sendPeerDatabaseRequest("covid19", from, fields, where + data.id, null, function (res) {
+          fields = "pc.product_id as 'product_id', c.name as 'Name', pc.id as cert_id";
+          var from = "certifications as 'c' JOIN products_certifications as 'pc'";
+          var where = "c.id = pc.certification_id and pc.product_id = " + data.product_id;
+          data.covid19.sendPeerDatabaseRequest("covid19", from, fields, where, null, function (res) {
+            if (res.rows.length > 0) {
+
+              data.covid19.renderCerts(res.rows, document.querySelector('.cert-grid'));
+
+            }
+          });
+
+
         } else {
 
           let row = {
             id: 0,
-	    product_name: "",
+            product_name: "",
             supplier_id: "",
             category_id: "",
             product_specification: "",
@@ -91,17 +112,17 @@ alert("SUPPLIER PUZBLICKZEY: " + res.rows[0][publickey]);
       let supplier_publickey = app.wallet.returnPublicKey();
 
       try {
-	let pkeyobj = document.querySelector(".supplier_publickey");
-	if (pkeyobj) {
-	  supplier_publickey = pkeyobj.value;
-	}
-      } catch (err) {}
+        let pkeyobj = document.querySelector(".supplier_publickey");
+        if (pkeyobj) {
+          supplier_publickey = pkeyobj.value;
+        }
+      } catch (err) { }
 
       let values = [];
 
       Array.from(document.getElementsByClassName('input')).forEach(input => {
         let field = {};
-        field.table = input.dataset.table; 
+        field.table = input.dataset.table;
         field.column = input.dataset.column;
         field.value = input.value;
         field.id = product_id;
@@ -120,8 +141,14 @@ alert("SUPPLIER PUZBLICKZEY: " + res.rows[0][publickey]);
 
       UpdateSuccess.render(app, data);
       UpdateSuccess.attachEvents(app, data);
-      
+
     });
+
+    try {
+      document.querySelector('.covid_back').addEventListener('click', (e) => {
+        data.covid19.renderPage("home", app, data);
+      });
+    } catch (err) { }
 
     document.querySelector('.attach-cert-btn').addEventListener('click', (e) => {
       data.id = e.toElement.id.split("-")[1];

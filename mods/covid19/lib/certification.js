@@ -21,8 +21,8 @@ module.exports = Certification = {
           select.add(option);
         });
         var option = document.createElement("option");
-        option.text = 'Add New';
-        option.value = "new";
+        option.text = "Add New"
+        option.value = res.rows.length + 1;
         select.add(option);
       }
     });
@@ -34,11 +34,11 @@ module.exports = Certification = {
       if (opt.text == 'Add New') {
         document.getElementById("certification_name").value = "";
         document.getElementById("certification_name").style.display = "block";
-        document.getElementById("certification_name").dataset.id = opt.value;
-      } else {
+        document.getElementById("certification_name").dataset.id = "new";
+        document.getElementById("certification_name").dataset.ignore = false;
+        } else {
         document.getElementById("certification_name").style.display = "none";
-        document.getElementById("certification_name").value = opt.text;
-        document.getElementById("certification_name").dataset.id = opt.value;
+        document.getElementById("certification_name").dataset.ignore = true;
       }
 
     });
@@ -91,7 +91,9 @@ module.exports = Certification = {
           } else {
             displayEl.innerHTML = file.type.split("/")[1].toUpperCase();
           }
-          fileEl.value = reader.result;
+          document.querySelector("#certification_file_data").value = reader.result;
+          document.querySelector("#certification_file_name").value = file.name;
+          document.querySelector("#certification_file_type").value = file.type;
         }, false);
         reader.readAsDataURL(file);
       });

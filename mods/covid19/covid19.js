@@ -23,6 +23,7 @@ class Covid19 extends ModTemplate {
     this.icon_fa = "fas fa-shipping-cart";
 
     this.db_tables.push("products JOIN suppliers");
+    this.db_tables.push("products_certifications");
     this.db_tables.push("products JOIN suppliers LEFT JOIN categories");
     this.db_tables.push("certifications as 'c' JOIN products_certifications as 'pc'");
 
@@ -366,10 +367,11 @@ console.log("RECEIVED: " + JSON.stringify(txmsg));
             }
 
             if (fields[ii] == "fullview") {
-	      if (this.app.wallet.returnPublicKey() == this.admin_pkey) { fields[ii] = "admin"; } else {
+              //quoted out check as it is meaning the admin buttons are always displayed.
+              //	      if (this.app.wallet.returnPublicKey() == this.admin_pkey) { fields[ii] = "admin"; } else {
                 html += `<div class="grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div></div>`;
                 added = 1;
-              }
+//              }
             }
 
             if (fields[ii] == "admin") {
@@ -440,6 +442,7 @@ console.log("SENT TO SERVER");
         case 'supplier_id':
           break;
         case 'Product Image':
+          if (field[1].length == 0) { field[1] = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="; }
           html += "<div>Product Image</div>";
           html += "<div><img style='max-width:200px;max-height:200px' src=" + field[1] + " /></div>";
           break;
@@ -462,7 +465,9 @@ console.log("SENT TO SERVER");
         case 'category_id':
           break;
         case 'product_name':
-          html += "<input class='input category_id_input products-" + field[0] + "' data-table='products' type='hidden' data-column='category_id' value='1' />";
+          //these extra empty divs ensure that each row of the grid has four elements.
+          html += "<div></div><div></div><div></div>"
+          html += "<div><input class='input category_id_input products-" + field[0] + "' data-table='products' type='hidden' data-column='category_id' value='1' /></div>";
           break;
         case 'product_specification':
           html += "<div>Specification</div>";
@@ -590,26 +595,28 @@ console.log("SENT TO SERVER");
 
   returnCerts(id, prefix) {
     // should this be generalised to module wide?
-    var me = this;
+    var module_self = this;
     
-    fields = "pc.product_id as 'product_id', c.name as 'Name', (select id from attachments where id = pc.id ) as attachment_id";
+    fields = "pc.product_id as 'product_id', c.name as 'Name', pc.id as cert_id";
     var from = "certifications as 'c' JOIN products_certifications as 'pc'";
     var where = "c.id = pc.certification_id and pc.product_id = " + id;
     this.sendPeerDatabaseRequest("covid19", from, fields, where, null, function (res) {
   
       if (res.rows.length > 0) {
         var el = document.getElementById(prefix + res.rows[0].product_id);
-        me.renderCerts(res.rows, el);
+        module_self.renderCerts(res.rows, el);
   
       }
     });
   }
 
   renderCerts(rows, el) {
+    // should this be generalised to module wide?
+    var module_self = this;
     var html = "";
     rows.forEach(row => {
-      if (row["attachment_id"] != null) {
-        html += "<div class='cert'><a class='attach-" + row["attachment_id"] + "'>" + row["Name"] + "</a></div>";
+      if (row["cert_id"] != null) {
+        html += "<div class='cert'><a class='attach-" + row["cert_id"] + "'>" + row["Name"] + "</a></div>";
       } else {
         html += "<div class='cert'>" + row["Name"] + "</div>";
       }
@@ -617,13 +624,29 @@ console.log("SENT TO SERVER");
     });
 
     rows.forEach(row => {
-      if (row["attachment_id"] != null) {
-        el.querySelector('.attach-' + row["attachment_id"]).addEventListener('click', (e) => {
-          this.returnAttachment(row["attachment_id"]);
+      if (row["cert_id"] != null) {
+        el.querySelector('.attach-' + row["cert_id"]).addEventListener('click', (e) => {
+          module_self.returnCertFile(row["cert_id"]);
         });
       }
     });
   }
+
+  returnCertFile(id) {
+    this.sendPeerDatabaseRequest("covid19", "products_certifications", "*", "id = " + id, null, function (res) {
+      if (res.rows.length > 0) {
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style.display = "none";
+        a.href = [res.rows[0]["file"]];
+        a.download = res.rows[0]["file_filename"];
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.destroy();
+        salert("Download attchment: " + res.rows[0]["file_filename"]);
+      }
+    });
+  }  
 
   returnAttachment(id) {
     this.sendPeerDatabaseRequest("covid19", "attachments", "*", "id= " + id, null, function (res) {
@@ -632,7 +655,7 @@ console.log("SENT TO SERVER");
         var url = window.URL.createObjectURL(blob);
         var a = document.createElement("a");
         document.body.appendChild(a);
-        a.style = "display: none";
+        a.style.display = "none";
         a.href = url;
         a.download = res.rows[0]["attachment_filename"];
         a.click();

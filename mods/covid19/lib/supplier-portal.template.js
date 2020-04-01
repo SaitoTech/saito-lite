@@ -17,7 +17,7 @@ module.exports = SupplierPortalTemplate = () => {
 
     <div class="portal" style="display:none">
 
-      <div id="products-table" class="products-table" style="display:none;grid-gap: 1em;grid-template-columns: repeat(7, auto);">
+      <div id="products-table" class="products-table" style="display:none; grid-template-columns: repeat(7, auto);">
           <div class="table-head">Category</div>
           <div class="table-head">Specification</div>
           <div class="table-head">Photo</div>

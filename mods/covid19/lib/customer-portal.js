@@ -51,7 +51,7 @@ module.exports = CustomerPortal = {
         //
         let whereclause = "suppliers.id = products.supplier_id AND products.category_id = " + category_id;
         data.covid19.sendPeerDatabaseRequest("covid19", "products JOIN suppliers", "products.id as 'product_id', *", whereclause, null, function (res) {
-          data.covid19.addProductsToTable(res.rows, [ 'name', 'product_specification', 'product_photo', 'pricing_per_unit_rmb', 'production_daily_capacity', 'certifications', 'id', 'admin'], data);
+          data.covid19.addProductsToTable(res.rows, [ 'name', 'product_specification', 'product_photo', 'pricing_per_unit_rmb', 'production_daily_capacity', 'certifications', 'id', 'fullview'], data);
         });
 
         //
@@ -62,7 +62,8 @@ module.exports = CustomerPortal = {
 
 	//
 	// activate buttons
-	//
+  //
+  /*
 setTimeout(() => {
         try {
           document.querySelectorAll('.edit_product').forEach(el => {
@@ -84,7 +85,7 @@ setTimeout(() => {
         } catch (err) {
 	}
 }, 250);
-
+*/
       }
     });
 
