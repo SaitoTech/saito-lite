@@ -134,11 +134,41 @@ class Covid19 extends ModTemplate {
       let supplier_id = 0;
 
       //
+      // 
+      //
+      if (txmsg.request == "Product Delete") {
+
+        sql = `SELECT id FROM suppliers WHERE publickey = "${txmsg.publickey}"`;
+        let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
+        if (rows.length == 0) {
+          return;
+        } else {
+          supplier_id = rows[0].id;
+        }
+
+        let table = "products";
+
+        sql = "DELETE FROM products WHERE supplier_id = $supplier_id AND id = $product_id";
+	params = {
+	  $supplier_id:	supplier_id ,
+	  $product_id:  product_id ,
+	};
+
+	if (tx.transaction.from[0].add == txmsg.publickey || tx.transaction.from[0].add == this.admin_pkey) {
+          await this.app.storage.executeDatabase(sql, params, "covid19");
+	}
+
+	return;
+      }
+
+
+
+
+
+      //
       // updating supplier or product
       //
       if (txmsg.request == "Supplier Update") {
-
-console.log("RECEIVED: " + JSON.stringify(txmsg));
 
         sql = `SELECT id FROM suppliers WHERE publickey = "${txmsg.publickey}"`;
         let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
@@ -150,15 +180,25 @@ console.log("RECEIVED: " + JSON.stringify(txmsg));
           } else {
             supplier_id = rows[0].maxid+1;;
           }
-          sql = `INSERT INTO suppliers (id , publickey) VALUES (${supplier_id} , '${tx.transaction.from[0].add}')`;
-          await this.app.storage.executeDatabase(sql, {}, "covid19");
+
+	  //
+	  // insert supplier if non-existent
+	  //
+          sql = `SELECT id FROM suppliers WHERE publickey = "${tx.transaction.from[0].add}"`;
+          let rows2 = await this.app.storage.queryDatabase(sql, {}, "covid19");
+	  if (rows2.length == 0) {
+            sql = `INSERT INTO suppliers (id , publickey) VALUES (${supplier_id} , '${tx.transaction.from[0].add}')`;
+            await this.app.storage.executeDatabase(sql, {}, "covid19");
+	  }
+
 	  // add so things work
 	  txmsg.publickey = tx.transaction.from[0].add;
+
         } else {
           supplier_id = rows[0].id;
         }
 
-        let fields = txmsg.fields;
+        fields = txmsg.fields;
         let id = 0;
 
         for (let i = 0; i < fields.length; i++) {
@@ -181,6 +221,7 @@ console.log("RECEIVED: " + JSON.stringify(txmsg));
 
 	    if (tx.transaction.from[0].add == txmsg.publickey || tx.transaction.from[0].add == this.admin_pkey) {
               sql = `INSERT INTO ${table} (id, supplier_id) VALUES (${id}, ${supplier_id})`;
+console.log("HERE: " + sql);
               await this.app.storage.executeDatabase(sql, {}, "covid19");
             }
           }
@@ -214,15 +255,12 @@ console.log("RECEIVED: " + JSON.stringify(txmsg));
 
         for (let i = 0; i < fields.length; i++) {
 
-            if (i == fields.length - 1) {
-              push = true;
-            } else if (fields[i].table != fields[i+1].table) {
-              push = true;
-            }
+          if (i == fields.length - 1) {
+            push = true;
+          } else if (fields[i].table != fields[i+1].table) {
+            push = true;
+          }
 
-
-
-          //let table  = fields[i].table;
           let column = fields[i].column;
           let value  = "'" + fields[i].value + "'";
           
@@ -425,6 +463,20 @@ console.log("RECEIVED: " + JSON.stringify(txmsg));
   //
   // array of objects with { database, column, value }
   //
+
+  deleteProduct(product_id, publickey) {
+
+    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
+    newtx.transaction.msg.module = this.name;
+    newtx.transaction.msg.request = "Product Delete";
+    newtx.transaction.msg.product_id = product_id;
+    newtx.transaction.msg.publickey = publickey;
+    newtx = this.app.wallet.signTransaction(newtx);
+    this.app.network.propagateTransaction(newtx);
+
+console.log("SENT TO SERVER");
+
+  }
 
   updateServerDatabase(data_array, publickey, type="Supplier Update") {
 

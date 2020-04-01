@@ -74,7 +74,6 @@ module.exports = UpdateProduct = {
             production_minimum_order: "",
           }
           data.covid19.renderProductForm(row);
-          document.querySelector(".certification-space").style.display = "block";
 
         }
 
@@ -157,6 +156,7 @@ module.exports = UpdateProduct = {
       let category_id = e.currentTarget.value;
       document.getElementById("product-grid").style.display = "grid";
       document.querySelector(".button").style.display = "block";
+      document.querySelector(".certification-space").style.display = "block";
     });
 
 

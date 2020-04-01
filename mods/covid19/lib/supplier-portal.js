@@ -46,6 +46,11 @@ module.exports = SupplierPortal = {
       document.querySelectorAll('.delete_product').forEach(el => {
         el.addEventListener('click', (e) => {
 	  alert("Product Deletion functionality coming soon!");
+	  data.product_id = e.toElement.id;
+	  data.covid19.deleteProduct(data.product_id, app.wallet.returnPublicKey());
+	  alert("Product Deleted!");
+	  window.location.reload();
+
         });
       });
       } catch (err) {}
