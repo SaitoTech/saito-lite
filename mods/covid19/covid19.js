@@ -141,25 +141,32 @@ class Covid19 extends ModTemplate {
 
     if (app.BROWSER == 1) { return; }
 
-
+    //
+    // only handle our stuff
+    //
     let txmsg = tx.returnMessage();
+    if (txmsg.module != this.name) { return; }
+
+
     let covid19_self = app.modules.returnModule("Covid19");
 
     let sql = '';
     let params = {};
+
 
     if (conf == 0) {
 
       let product_id = txmsg.product_id;
       let fields = txmsg.fields;
       let supplier_id = 0;
+      let supplier_publickey = txmsg.publickey;
 
       //
       // 
       //
       if (txmsg.request == "Product Delete") {
 
-        sql = `SELECT id FROM suppliers WHERE publickey = "${txmsg.publickey}"`;
+        sql = `SELECT id FROM suppliers WHERE publickey = "${supplier_publickey}"`;
         let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
         if (rows.length == 0) {
           return;
@@ -175,7 +182,7 @@ class Covid19 extends ModTemplate {
 	  $product_id:  product_id ,
 	};
 
-	if (tx.transaction.from[0].add == txmsg.publickey || tx.transaction.from[0].add == this.admin_pkey) {
+	if (tx.transaction.from[0].add == supplier_publickey || tx.transaction.from[0].add == this.admin_pkey) {
           await this.app.storage.executeDatabase(sql, params, "covid19");
 	}
 
@@ -184,14 +191,12 @@ class Covid19 extends ModTemplate {
 
 
 
-
-
       //
       // updating supplier or product
       //
       if (txmsg.request == "Supplier Update") {
 
-        sql = `SELECT id FROM suppliers WHERE publickey = "${txmsg.publickey}"`;
+        sql = `SELECT id FROM suppliers WHERE publickey = "${supplier_publickey}"`;
         let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
         if (rows.length == 0) { 
           sql = `SELECT max(id) AS maxid FROM "suppliers"`;
@@ -213,7 +218,7 @@ class Covid19 extends ModTemplate {
 	  }
 
 	  // add so things work
-	  txmsg.publickey = tx.transaction.from[0].add;
+	  supplier_publickey = tx.transaction.from[0].add;
 
         } else {
           supplier_id = rows[0].id;
@@ -240,7 +245,7 @@ class Covid19 extends ModTemplate {
               id = rows[0].maxid + 1;
             }
 
-	    if (tx.transaction.from[0].add == txmsg.publickey || tx.transaction.from[0].add == this.admin_pkey) {
+	    if (tx.transaction.from[0].add == supplier_publickey || tx.transaction.from[0].add == this.admin_pkey) {
               sql = `INSERT INTO ${table} (id, supplier_id) VALUES (${id}, ${supplier_id})`;
 console.log("HERE: " + sql);
               await this.app.storage.executeDatabase(sql, {}, "covid19");
@@ -248,7 +253,7 @@ console.log("HERE: " + sql);
           }
 
           if (id > 0) {
-	    if (tx.transaction.from[0].add == txmsg.publickey || tx.transaction.from[0].add == this.admin_pkey) {
+	    if (tx.transaction.from[0].add == supplier_publickey || tx.transaction.from[0].add == this.admin_pkey) {
               sql = `UPDATE ${table} SET ${column} = "${value}" WHERE id = ${id}`;
               await this.app.storage.executeDatabase(sql, {}, "covid19");
 	    }
