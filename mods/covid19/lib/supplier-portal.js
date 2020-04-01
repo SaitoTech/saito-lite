@@ -8,7 +8,7 @@ module.exports = SupplierPortal = {
   render(app, data) {
 
     document.querySelector(".main").innerHTML = SupplierPortalTemplate();
-    document.querySelector(".navigation").innerHTML = "";
+    document.querySelector(".navigation").innerHTML = '<div class="button navlink covid_back"><i class="fas fa-back"></i> Back</div>';
 
       //
       // load products
@@ -68,6 +68,10 @@ module.exports = SupplierPortal = {
       UpdateProduct.attachEvents(app, data);
     });
 
+    try {
+      document.querySelector('.covid_back').addEventListener('click', (e) => {
+        data.covid19.renderPage("home", app, data);
+      });
+    } catch (err) { }
   }
-
 }

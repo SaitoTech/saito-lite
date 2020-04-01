@@ -20,7 +20,7 @@ module.exports = CustomerPortalTemplate = () => {
           <option value=0>select product category</option>
         </select>
       </div>
-      <div id="products-table" class="products-table" style="display:none;grid-gap: 1em;grid-template-columns: repeat(7, auto);"> 
+      <div id="products-table" class="products-table" style="display:none;grid-template-columns: repeat(7, auto);"> 
       </div>
 
     </div>

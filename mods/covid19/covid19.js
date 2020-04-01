@@ -23,6 +23,7 @@ class Covid19 extends ModTemplate {
     this.icon_fa = "fas fa-shipping-cart";
 
     this.db_tables.push("products JOIN suppliers");
+    this.db_tables.push("products_certifications");
     this.db_tables.push("products JOIN suppliers LEFT JOIN categories");
     this.db_tables.push("certifications as 'c' JOIN products_certifications as 'pc'");
 
@@ -115,8 +116,6 @@ class Covid19 extends ModTemplate {
 
 
 
-
-
   async onConfirmation(blk, tx, conf, app) {
 
     if (app.BROWSER == 1) { return; }
@@ -187,6 +186,86 @@ console.log("RECEIVED: " + JSON.stringify(txmsg));
             await this.app.storage.executeDatabase(sql, {}, "covid19");
           }
         }
+      }
+
+      if (txmsg.request == "Table Update") {
+
+        let fields = txmsg.fields;
+
+        //sort the incoming fields to process table by table.
+        //we need to do this to differentiate the first INSERT
+        //from subsequent updates as we are processing 
+        fields.sort((a, b) => a.table.localeCompare(b.table));
+
+        let table = "";
+        let columns   = "";
+        let values   = "";
+        let sqls        = [];
+        let id       = -1;
+        let push       = false;
+        
+        let mode = "";
+
+        for (let i = 0; i < fields.length; i++) {
+
+            if (i == fields.length - 1) {
+              push = true;
+            } else if (fields[i].table != fields[i+1].table) {
+              push = true;
+            }
+
+
+
+          //let table  = fields[i].table;
+          let column = fields[i].column;
+          let value  = "'" + fields[i].value + "'";
+          
+          //we are dealing with a new table
+          if (fields[i].table != table) {
+            table = fields[i].table; 
+            //we don't have an id yet
+            if (fields[i].id == "new") {
+              sql = `SELECT max(id) AS maxid FROM ${table}`;
+              let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
+              if (rows.length == 0) {
+                id = 1;
+              } else {
+                id = rows[0].maxid + 1;
+              }
+              mode = "INSERT";
+            } else {
+              mode = "UPDATE";
+            }
+            columns = column;
+            if (value == "'new'") { value = id};
+            values = value;
+          } else {
+            columns += ", " + column;
+            if (value == "'new'") { value = id};
+            values += ", " + value;
+          }
+          
+
+          if (push) {
+              if (mode = 'INSERT') {
+                sql = `INSERT INTO ${table} (id, ${columns}) VALUES (${id}, ${values});`
+              } else {
+                sql = `UDATE ${table} SET (${columns}) = (${values}) WHERE id = ${id};`
+              }
+              sqls.push(sql);
+              push = false;
+            }
+        }
+        sqls.forEach(sql => {
+          try {
+            console.log(sql);
+            this.app.storage.executeDatabase(sql, {}, "covid19");
+          } catch (err) {
+            console.log("SQL ERROR -----------------------");
+            console.log(err);
+            console.log("---------------------------------");
+          }
+        });
       }
     }
   }
@@ -288,10 +367,11 @@ console.log("RECEIVED: " + JSON.stringify(txmsg));
             }
 
             if (fields[ii] == "fullview") {
-	      if (this.app.wallet.returnPublicKey() == this.admin_pkey) { fields[ii] = "admin"; } else {
+              //quoted out check as it is meaning the admin buttons are always displayed.
+              //	      if (this.app.wallet.returnPublicKey() == this.admin_pkey) { fields[ii] = "admin"; } else {
                 html += `<div class="grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div></div>`;
                 added = 1;
-              }
+//              }
             }
 
             if (fields[ii] == "admin") {
@@ -339,11 +419,12 @@ console.log("RECEIVED: " + JSON.stringify(txmsg));
   //
   // array of objects with { database, column, value }
   //
-  updateServerDatabase(data_array, publickey) {
+
+  updateServerDatabase(data_array, publickey, type="Supplier Update") {
 
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
     newtx.transaction.msg.module = this.name;
-    newtx.transaction.msg.request = "Supplier Update";
+    newtx.transaction.msg.request = type;
     newtx.transaction.msg.fields = data_array;
     newtx.transaction.msg.publickey = publickey;
     newtx = this.app.wallet.signTransaction(newtx);
@@ -353,6 +434,7 @@ console.log("SENT TO SERVER");
 
   }
 
+
   renderProduct(prod) {
     var html = "";
     Object.entries(prod).forEach(field => {
@@ -360,6 +442,7 @@ console.log("SENT TO SERVER");
         case 'supplier_id':
           break;
         case 'Product Image':
+          if (field[1].length == 0) { field[1] = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="; }
           html += "<div>Product Image</div>";
           html += "<div><img style='max-width:200px;max-height:200px' src=" + field[1] + " /></div>";
           break;
@@ -382,59 +465,61 @@ console.log("SENT TO SERVER");
         case 'category_id':
           break;
         case 'product_name':
-          html += "<input class='input category_id_input products-" + field[0] + "' id='products' type='hidden' name='category_id' value='1' />";
+          //these extra empty divs ensure that each row of the grid has four elements.
+          html += "<div></div><div></div><div></div>"
+          html += "<div><input class='input category_id_input products-" + field[0] + "' data-table='products' type='hidden' data-column='category_id' value='1' /></div>";
           break;
         case 'product_specification':
           html += "<div>Specification</div>";
-          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'product_description':
           html += "<div>Description</div>";
-          html += "<textarea class='input products-" + field[0] + "' id='products' name='" + field[0] + "'>"+field[1]+"</textarea>";
+          html += "<textarea class='input products-" + field[0] + "' id='products' data-column='" + field[0] + "'>"+field[1]+"</textarea>";
           break;
         case 'product_dimensions':
           html += "<div>Package Size</div>";
-          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'product_weight':
           html += "<div>Package Weight</div>";
-          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'product_quantities':
           html += "<div>Package Contents</div>";
-          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'product_photo':
           html += "<div>Product Image</div>";
           html += "<div>";
           html += "<img class='product-image' id='img-" + field[0] + "' src='" + field[1] + "' />";
           html += "<input class='input products-" + field[0] + "' type='file' />";
-          html += "<input style='display:none;' class='input products-text-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input style='display:none;' class='input products-text-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           html += "</div>";
           break;
         case 'pricing_per_unit_rmb':
           html += "<div>Price (RMB)</div>";
-          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'pricing_notes':
           html += "<div>Pricing Notes</div>";
-          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'pricing_payment_terms':
           html += "<div>Payment Terms</div>";
-          html += "<textarea class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "'>"+field[1]+"</textarea>";
+          html += "<textarea class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "'>"+field[1]+"</textarea>";
           break;
         case 'production_stock':
           html += "<div>In Stock</div>";
-          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'production_daily_capacity':
           html += "<div>Daily Production</div>";
-          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'production_minimum_order':
           html += "<div>Minimum Order</div>";
-          html += "<input class='input products-" + field[0] + "' id='products' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         default:
           break;
@@ -475,23 +560,23 @@ console.log("SENT TO SERVER");
           break;
         case 'name':
           html += "<div>Name</div>";
-          html += "<input class='input' id='suppliers' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input' data-table='suppliers' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'address':
           html += "<div>Address</div>";
-          html += "<input class='input' id='suppliers' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input' data-table='suppliers' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'phone':
           html += "<div>Phone</div>";
-          html += "<input class='input' id='suppliers' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input' data-table='suppliers' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'email':
           html += "<div>Email</div>";
-          html += "<input class='input' id='suppliers' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input' data-table='suppliers' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'wechat':
           html += "<div>Wechat</div>";
-          html += "<input class='input' id='suppliers' type='text' name='" + field[0] + "' value='" + field[1] + "' />";
+          html += "<input class='input' data-table='suppliers' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         default:
           break;
@@ -510,26 +595,28 @@ console.log("SENT TO SERVER");
 
   returnCerts(id, prefix) {
     // should this be generalised to module wide?
-    var me = this;
+    var module_self = this;
     
-    fields = "pc.product_id as 'product_id', c.name as 'Name', (select id from attachments where id = pc.id ) as attachment_id";
+    fields = "pc.product_id as 'product_id', c.name as 'Name', pc.id as cert_id";
     var from = "certifications as 'c' JOIN products_certifications as 'pc'";
     var where = "c.id = pc.certification_id and pc.product_id = " + id;
     this.sendPeerDatabaseRequest("covid19", from, fields, where, null, function (res) {
   
       if (res.rows.length > 0) {
         var el = document.getElementById(prefix + res.rows[0].product_id);
-        me.renderCerts(res.rows, el);
+        module_self.renderCerts(res.rows, el);
   
       }
     });
   }
 
   renderCerts(rows, el) {
+    // should this be generalised to module wide?
+    var module_self = this;
     var html = "";
     rows.forEach(row => {
-      if (row["attachment_id"] != null) {
-        html += "<div class='cert'><a class='attach-" + row["attachment_id"] + "'>" + row["Name"] + "</a></div>";
+      if (row["cert_id"] != null) {
+        html += "<div class='cert'><a class='attach-" + row["cert_id"] + "'>" + row["Name"] + "</a></div>";
       } else {
         html += "<div class='cert'>" + row["Name"] + "</div>";
       }
@@ -537,13 +624,29 @@ console.log("SENT TO SERVER");
     });
 
     rows.forEach(row => {
-      if (row["attachment_id"] != null) {
-        el.querySelector('.attach-' + row["attachment_id"]).addEventListener('click', (e) => {
-          this.returnAttachment(row["attachment_id"]);
+      if (row["cert_id"] != null) {
+        el.querySelector('.attach-' + row["cert_id"]).addEventListener('click', (e) => {
+          module_self.returnCertFile(row["cert_id"]);
         });
       }
     });
   }
+
+  returnCertFile(id) {
+    this.sendPeerDatabaseRequest("covid19", "products_certifications", "*", "id = " + id, null, function (res) {
+      if (res.rows.length > 0) {
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style.display = "none";
+        a.href = [res.rows[0]["file"]];
+        a.download = res.rows[0]["file_filename"];
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.destroy();
+        salert("Download attchment: " + res.rows[0]["file_filename"]);
+      }
+    });
+  }  
 
   returnAttachment(id) {
     this.sendPeerDatabaseRequest("covid19", "attachments", "*", "id= " + id, null, function (res) {
@@ -552,7 +655,7 @@ console.log("SENT TO SERVER");
         var url = window.URL.createObjectURL(blob);
         var a = document.createElement("a");
         document.body.appendChild(a);
-        a.style = "display: none";
+        a.style.display = "none";
         a.href = url;
         a.download = res.rows[0]["attachment_filename"];
         a.click();

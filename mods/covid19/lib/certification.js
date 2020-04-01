@@ -21,7 +21,7 @@ module.exports = Certification = {
           select.add(option);
         });
         var option = document.createElement("option");
-        option.text = 'Add New';
+        option.text = "Add New"
         option.value = res.rows.length + 1;
         select.add(option);
       }
@@ -31,63 +31,76 @@ module.exports = Certification = {
     select.addEventListener("change", (e) => {
       var opt = select.options[select.selectedIndex];
       document.getElementById("pc_certification_id").value = opt.value;
-      document.getElementById("certification_id").value = opt.value;
-      document.getElementById("certification_name").value = opt.text;
       if (opt.text == 'Add New') {
         document.getElementById("certification_name").value = "";
         document.getElementById("certification_name").style.display = "block";
-      } else {
+        document.getElementById("certification_name").dataset.id = "new";
+        document.getElementById("certification_name").dataset.ignore = false;
+        } else {
         document.getElementById("certification_name").style.display = "none";
+        document.getElementById("certification_name").dataset.ignore = true;
       }
+
     });
 
   },
 
   attachEvents(app, data) {
-    document.getElementById('save-certification').addEventListener('click', (e) => {
-      let values = [];
+    let supplier_publickey = app.wallet.returnPublicKey();
 
-      document.querySelector('.certification').querySelectorAll('input').forEach(input => {
-        if(input.dataset.ignore != "true") {
-          let field = {};
-          field.table = input.dataset.table;
-          field.column = input.dataset.column;
-          field.value = input.value;
-          field.id = "Supplier";
-          values.push(field);        }
+    try {
+      let pkeyobj = document.querySelector(".supplier_publickey");
+      if (pkeyobj) {
+        supplier_publickey = pkeyobj.value;
+      }
+    } catch (err) {}
+      document.getElementById('save-certification').addEventListener('click', (e) => {
+        let values = [];
+
+        document.querySelector('.certification').querySelectorAll('input').forEach(input => {
+          if (input.dataset.ignore != "true") {
+            let field = {};
+            field.table = input.dataset.table;
+            field.column = input.dataset.column;
+            field.value = input.value;
+            field.id = input.dataset.id;
+            values.push(field);
+          }
+        });
+
+        console.log("Updating Values: " + JSON.stringify(values));
+
+        data.covid19.updateServerDatabase(values, supplier_publickey, "Table Update");
+
+        //alert("HERE WE ARE");
+
+        UpdateSuccess.render(app, data);
+        UpdateSuccess.attachEvents(app, data);
+        //document.querySelector('.certification').destroy();
       });
 
-      console.log("Updating Values: " + JSON.stringify(values));
 
-      data.covid19.updateServerDatabase(values);
+      document.querySelector("#certification_file").addEventListener('change', (e) => {
+        var reader = new FileReader();
+        var file = e.target.files[0];
+        var fileEl = document.querySelector("#certification_file_data");
+        reader.addEventListener("load", function () {
+          var displayEl = document.querySelector("#certification_display");
+          if (file.type.split("/")[0] == "image") {
+            displayEl.innerHTML = "<img class='product-image' alt='certification file' src='" + reader.result + "'/>";
+          } else {
+            displayEl.innerHTML = file.type.split("/")[1].toUpperCase();
+          }
+          document.querySelector("#certification_file_data").value = reader.result;
+          document.querySelector("#certification_file_name").value = file.name;
+          document.querySelector("#certification_file_type").value = file.type;
+        }, false);
+        reader.readAsDataURL(file);
+      });
+      document.querySelector("#certification_display").addEventListener('click', e => {
+        document.querySelector("#certification_file").click();
+      });
 
-      alert("HERE WE ARE");
-
-      UpdateSuccess.render(app, data);
-      UpdateSuccess.attachEvents(app, data);
-      //document.querySelector('.certification').destroy();
-    });
-
-
-    document.querySelector("#certification_file").addEventListener('change', (e) => {
-      var reader = new FileReader();
-      var file = e.target.files[0];
-      var fileEl = document.querySelector("#certification_file_data");
-      reader.addEventListener("load", function () {
-        var displayEl = document.querySelector("#certification_display");
-        if (file.type.split("/")[0] == "image") {
-          displayEl.innerHTML = "<img class='product-image' alt='certification file' src='" + reader.result + "'/>";
-        } else {
-          displayEl.innerHTML = file.type.split("/")[1].toUpperCase();
-        }
-        fileEl.value = reader.result;
-      }, false);
-      reader.readAsDataURL(file);
-    });
-    document.querySelector("#certification_display").addEventListener('click', e => {
-      document.querySelector("#certification_file").click();
-    });
-
-  }
+    }
 }
 
