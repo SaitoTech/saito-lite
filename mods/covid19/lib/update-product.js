@@ -27,14 +27,16 @@ module.exports = UpdateProduct = {
 
         if (res.rows.length > 0) {
 
+          document.querySelector(".update-product-btn").style.display = "block";
+          document.querySelector(".attach-cert-btn").style.display = "block";
+
           try {
             document.querySelector(".supplier_publickey").value = res.rows[0].publickey;
           } catch (err) { }
 
           data.covid19.renderProductForm(res.rows[0]);
           document.getElementById("product-grid").style.display = "grid";
-          document.querySelector(".update-product-btn").style.display = "block";
-          document.querySelector(".attach-cert-btn").style.display = "block";
+
 
 
           //
@@ -154,8 +156,6 @@ module.exports = UpdateProduct = {
       Certification.render(app, data);
       Certification.attachEvents(app, data);
     });
-
-
 
     document.getElementById('select-product-type').addEventListener('change', (e) => {
       let category_id = e.currentTarget.value;

@@ -527,6 +527,11 @@ console.log("SENT TO SERVER");
     });
     document.querySelector('.product-grid').innerHTML = html;
     document.getElementById('select-product-type').addEventListener('change', (e) => {
+ 
+      try {
+        document.querySelector(".update-product-btn").style.display = "block";
+      } catch (err) {}
+      
       let category_id = e.currentTarget.value;
       if (category_id > 0) {
 

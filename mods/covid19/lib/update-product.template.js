@@ -18,7 +18,7 @@ module.exports = UpdateProductTemplate = (app, data) => {
         </select>
       </div>
  
-      <div id="product-grid" class="product-grid grid-4" style="display:none"></div>
+      <div id="product-grid" class="product-grid grid-2" style="display:none"></div>
 
       <hr >
       
