@@ -533,7 +533,7 @@ console.log("SENT TO SERVER");
           break;
         case 'product_description':
           html += "<div>Description</div>";
-          html += "<textarea class='input products-" + field[0] + "' id='products' data-column='" + field[0] + "'>"+field[1]+"</textarea>";
+          html += "<textarea class='input products-" + field[0] + "' data-table='products' data-column='" + field[0] + "'>"+field[1]+"</textarea>";
           break;
         case 'product_dimensions':
           html += "<div>Package Size</div>";
@@ -565,7 +565,7 @@ console.log("SENT TO SERVER");
           break;
         case 'pricing_payment_terms':
           html += "<div>Payment Terms</div>";
-          html += "<textarea class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "'>"+field[1]+"</textarea>";
+          html += "<textarea class='input products-" + field[0] + "' data-table='products' data-column='" + field[0] + "'>"+field[1]+"</textarea>";
           break;
         case 'production_stock':
           html += "<div>In Stock</div>";
