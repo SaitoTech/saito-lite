@@ -22,7 +22,15 @@ module.exports = SupplierProfile = {
         //
         // new supplier
         //
-	document.querySelector('.profile-information').innerHTML = `You are using a different browser than normal or have not yet created an account. <p></p>Please either create a new account, or click on the gear icon at the top-right of this page to restore your wallet and regain secure control over your account.`;
+	document.querySelector('.profile-information').innerHTML = `
+
+Once you have created an account our team will contact you to verify your listed information. If you are a new foundry or white-label partner of an existing supplier that is already certified, please be ready to provide this information for us to assist with your certification process. If you have any questions, contact us anytime at <i>info@dhb.global</i>.
+
+<p></p>
+
+If you have previously created an account and it is not loading, restore access by clicking on the gear icon at the top-right of this page and selecting the "Restore Access Keys" option.
+
+`;
 	document.querySelector('.new-supplier-btn').style.display = 'block';
 	document.querySelector('.profile').style.display = 'block';
 	document.querySelector('.loading').style.display = 'none';
@@ -34,7 +42,7 @@ module.exports = SupplierProfile = {
 	//
 	document.querySelector('.profile-information').innerHTML = `
 
-Welcome Back!
+This is the information your have published concerning your company. If it is not accurate, please update it. 
 
 <p></p>
 
@@ -42,16 +50,22 @@ Welcome Back!
 
   <div class="grid-2">
 
-    <div>Company Name:</div>
+    <div>Name:</div>
     <div>${res.rows[0].name}</div>
 
-    <div>Company Phone:</div>
+    <div>Address:</div>
+    <div>${res.rows[0].address}</div>
+
+    <div>Notes:</div>
+    <div>${res.rows[0].wechat}</div>
+
+    <div>Phone:</div>
     <div>${res.rows[0].phone}</div>
 
-    <div>Company Email:</div>
+    <div>Email:</div>
     <div>${res.rows[0].email}</div>
 
-    <div>Company Wechat:</div>
+    <div>Wechat:</div>
     <div>${res.rows[0].wechat}</div>
 
   </div>

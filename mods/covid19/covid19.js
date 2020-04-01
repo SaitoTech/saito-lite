@@ -662,6 +662,10 @@ console.log("SENT TO SERVER");
           html += "<div>Wechat</div>";
           html += "<input class='input' data-table='suppliers' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
+        case 'notes':
+          html += "<div>Notes</div>";
+          html += "<textarea class='input' data-table='suppliers' data-column='" + field[0] + "'>" + field[1] + "</textarea>";
+          break;
         default:
           break;
       }

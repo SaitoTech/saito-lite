@@ -5,13 +5,21 @@ module.exports = SupplierProfileTemplate = () => {
   html = `
   <div class="supplier-information">
 
-    <h2>Supplier Profile:</h2>
+    <h2>Welcome Supplier!</h2>
 
     <p></p>
 
     <div class="loading">
 
-      Please wait while we confirm your identity....
+      Please be patient while we load your account. 
+
+      <p></p>
+
+      Your browser is performing a series of cryptographic checks with our server to confirm your identity.
+
+      <p></p>
+
+      This process normally takes about 10 seconds. 
 
     </div>
 

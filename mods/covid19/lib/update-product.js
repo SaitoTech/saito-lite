@@ -124,14 +124,6 @@ module.exports = UpdateProduct = {
         field.id = product_id;
         values.push(field);
       });
-      Array.from(document.getElementsByClassName('textarea')).forEach(input => {
-        let field = {};
-        field.table = input.dataset.table;
-        field.column = input.dataset.column;
-        field.value = input.value;
-        field.id = product_id;
-        values.push(field);
-      });
 
       data.covid19.updateServerDatabase(values, supplier_publickey);
 
