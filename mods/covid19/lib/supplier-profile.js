@@ -9,7 +9,7 @@ module.exports = SupplierProfile = {
   render(app, data) {
 
     document.querySelector(".main").innerHTML = SupplierProfileTemplate();
-    document.querySelector(".navigation").innerHTML = '<div class="button navlink covid_back"><i class="fas fa-back"></i> Back</div>';
+    document.querySelector(".navigation").innerHTML = '<div class="button navlink covid_back"><i class="fas fa-back"></i>back</div>';
 
     //
     // load products
