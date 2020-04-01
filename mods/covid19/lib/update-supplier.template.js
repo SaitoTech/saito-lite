@@ -13,7 +13,7 @@ module.exports = UpdateSupplierTemplate = (app, data) => {
 
       <h3>Supplier Profile:</h3>
 
-      <div id="supplier-grid" class="supplier-grid grid-4"></div>
+      <div id="supplier-grid" class="supplier-grid grid-2"></div>
 
       <div id="${data.supplier_id}" class="update-supplier-btn button">Update Account</div>
 
