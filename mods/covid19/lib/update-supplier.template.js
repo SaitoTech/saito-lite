@@ -19,7 +19,7 @@ module.exports = UpdateSupplierTemplate = (app, data) => {
 
       <h3>Your Supplier Profile:</h3>
 
-      Please ensure your company name and contact information is correct. Your company name will be listed publicly, but your contact information will be kept private. If you are creating a new account we will contact you by email, phone or wechat shortly to confirm your information and assist with reputational certification for white-label foundries and/or partners of larger, certified medical equipment providers.
+      Please ensure your company name and contact information is correct. If you are creating a new account we will contact you by email, phone or wechat shortly to confirm your information and assist with the certification process.
 
       <p></p>
 
