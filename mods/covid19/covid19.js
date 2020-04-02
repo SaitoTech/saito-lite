@@ -35,6 +35,8 @@ class Covid19 extends ModTemplate {
     this.categories = "Admin Healthcare Productivity";
     this.definitions = {};
 
+    this.active_category_id = 0;  // for back button
+
     return this;
   }
 
@@ -378,11 +380,13 @@ class Covid19 extends ModTemplate {
     data.covid19 = this;
 
     if (page == "home") {
+      data.covid19.active_category_id = 0;
       SplashPage.render(app, data);
       SplashPage.attachEvents(app, data);
     };
 
     if (page == "supplier") {
+      data.covid19.active_category_id = 0;
       SupplierPortal.render(app, data);
       SupplierPortal.attachEvents(app, data);
     };
@@ -738,7 +742,7 @@ class Covid19 extends ModTemplate {
         a.click();
         window.URL.revokeObjectURL(url);
         a.destroy();
-        salert("Download attchment: " + res.rows[0]["file_filename"]);
+        salert("Download attachment: " + res.rows[0]["file_filename"]);
       }
     });
   }  
@@ -756,7 +760,7 @@ class Covid19 extends ModTemplate {
         a.click();
         window.URL.revokeObjectURL(url);
         a.destroy();
-        salert("Download attchment: " + res.rows[0]["attachment_filename"]);
+        salert("Download attachment: " + res.rows[0]["attachment_filename"]);
       }
     });
   }
