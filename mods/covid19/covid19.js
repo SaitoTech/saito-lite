@@ -437,10 +437,13 @@ console.log("HERE: " + sql);
 
             if (fields[ii] == "fullview") {
               //quoted out check as it is meaning the admin buttons are always displayed.
-              //	      if (this.app.wallet.returnPublicKey() == this.admin_pkey) { fields[ii] = "admin"; } else {
+              if (this.app.wallet.returnPublicKey() == this.admin_pkey) {
+                html += `<div class="grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].product_id}">Delete</div></div>`;
+                added = 1;
+	      } else {
                 html += `<div class="grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div></div>`;
                 added = 1;
-//              }
+              }
             }
 
             if (fields[ii] == "admin") {
