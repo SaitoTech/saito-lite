@@ -63,7 +63,6 @@ module.exports = CustomerPortal = {
 	//
 	// activate buttons
   //
-  /*
 setTimeout(() => {
         try {
           document.querySelectorAll('.edit_product').forEach(el => {
@@ -85,8 +84,8 @@ setTimeout(() => {
         } catch (err) {
 	}
 }, 250);
-*/
       }
+
     });
 
 
