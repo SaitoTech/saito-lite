@@ -27,8 +27,7 @@ class Covid19 extends ModTemplate {
     this.db_tables.push("products JOIN suppliers LEFT JOIN categories");
     this.db_tables.push("certifications as 'c' JOIN products_certifications as 'pc'");
 
-    this.admin_pkey = app.wallet.returnPublicKey();
-//"ke6qwkD3XB8JvWwf68RMjDAn2ByJRv3ak1eqUzTEz9cr";
+    this.admin_pkey = "29GH5F9HCNfWKPPXA4cPtPkaFzJat1ewCZozgyKFSVLHM";
 
     this.events['chat-render-request'];
 
