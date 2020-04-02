@@ -246,7 +246,7 @@ class Covid19 extends ModTemplate {
 
 	    if (tx.transaction.from[0].add == supplier_publickey || tx.transaction.from[0].add == this.admin_pkey) {
               sql = `INSERT INTO ${table} (id, supplier_id) VALUES (${id}, ${supplier_id})`;
-console.log("HERE: " + sql);
+//console.log("HERE: " + sql);
               await this.app.storage.executeDatabase(sql, {}, "covid19");
             }
           }
@@ -327,7 +327,7 @@ console.log("HERE: " + sql);
         }
         sqls.forEach(sql => {
           try {
-            console.log(sql);
+            //console.log(sql);
             this.app.storage.executeDatabase(sql, {}, "covid19");
           } catch (err) {
             console.log("SQL ERROR -----------------------");
@@ -499,7 +499,7 @@ console.log("HERE: " + sql);
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
-console.log("SENT TO SERVER");
+//console.log("SENT TO SERVER");
 
   }
 
@@ -513,7 +513,7 @@ console.log("SENT TO SERVER");
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
-console.log("SENT TO SERVER");
+//console.log("SENT TO SERVER");
 
   }
 
