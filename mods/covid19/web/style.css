@@ -1,8 +1,6 @@
-
 a {
   cursor: pointer;
 }
-
 
 .main {
   display: block;
@@ -10,7 +8,7 @@ a {
 }
 
 .products-table {
-  margin-bottom:20px;
+  margin-bottom: 20px;
 }
 
 .profile-information {
@@ -39,12 +37,12 @@ a {
 }
 
 .splash-introduction {
- max-width: 1200px;
- line-height: 1.6em;
+  max-width: 1200px;
+  line-height: 1.6em;
 }
 
 .splash-introduction p {
- padding-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 .category-select {
@@ -75,7 +73,7 @@ a {
   font-size: 1.3em;
   display: flex;
   max-width: 10vw;
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .navlink {
@@ -86,12 +84,16 @@ a {
   min-width: 250px;
 }
 
-.product-image {
-  max-width: 200px;
-  min-width: 50px;
-  min-height: 50px;
+.product-image-holder {
+  display: inline-block;
+  min-width: 150px;
+  min-height: 100px;
   border: 1px solid #ddd;
   cursor: pointer;
+}
+
+label.treated {
+  display: none;
 }
 
 .certification {
@@ -126,7 +128,6 @@ a {
   margin: 0 5px 0 0;
 }
 
-
 .fullview_product:hover, .edit_product:hover, .delete_product:hover {
   background: var(--saito-red);
   color: #FFF;
@@ -154,19 +155,10 @@ button, .button {
   text-align: center;
 }
 
-.products-table > div {
+.products-table>div {
   padding: 1em;
 }
 
-.products-table > div:nth-child(14n+8),
-.products-table > div:nth-child(14n+9),
-.products-table > div:nth-child(14n+10),
-.products-table > div:nth-child(14n+11),
-.products-table > div:nth-child(14n+12),
-.products-table > div:nth-child(14n+13),
-.products-table > div:nth-child(14n+14)
-{
+.products-table>div:nth-child(14n+8), .products-table>div:nth-child(14n+9), .products-table>div:nth-child(14n+10), .products-table>div:nth-child(14n+11), .products-table>div:nth-child(14n+12), .products-table>div:nth-child(14n+13), .products-table>div:nth-child(14n+14) {
   background-color: #f9f9f9;
 }
-
-

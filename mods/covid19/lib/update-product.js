@@ -82,19 +82,42 @@ module.exports = UpdateProduct = {
             var reader = new FileReader();
             var file = e.target.files[0];
             var fileEl = document.querySelector(".products-text-" + img.id.split('-')[1]);
+            var original = new Image();
+            original.onload = function() {
+              var w = 0;
+              var h = 0;
+              var r = 1;
+         
+              var canvas = document.createElement('canvas');
+
+              if (original.width > 450) {
+                r = 450 / original.width;
+              } if (r * original.height > 300) {
+                r = 300 / original.height;
+              }
+              w = original.width * r;
+              h = original.height * r;
+
+              canvas.width = w;
+              canvas.height = h;
+              canvas.getContext('2d').drawImage(original, 0, 0, w, h);
+              var result = canvas.toDataURL(file.type);
+              img.src = result;
+              fileEl.value = result;
+            }
             reader.addEventListener("load", function () {
-              img.src = reader.result;
-              fileEl.value = reader.result;
+
+              original.src = reader.result;
+
             }, false);
             reader.readAsDataURL(file);
-            //img.src = reader.result;
-            //e.target.value = reader.result;
           });
-          img.addEventListener('click', e => {
-            //var item = e.toElement.id.split("-")[1];
-            //salert(e.toElement.id);
+          document.querySelector('.product-image-holder').addEventListener('click', e => {
             document.querySelector(".products-" + img.id.split('-')[1]).click();
           });
+          /*img.addEventListener('click', e => {
+            document.querySelector(".products-" + img.id.split('-')[1]).click();
+          });*/
         });
       });
     });

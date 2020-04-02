@@ -578,7 +578,7 @@ class Covid19 extends ModTemplate {
         case 'product_photo':
           html += "<div>Product Image</div>";
           html += "<div>";
-          html += "<img class='product-image' id='img-" + field[0] + "' src='" + field[1] + "' />";
+          html += "<div class='product-image-holder'><img class='product-image' id='img-" + field[0] + "' src='" + field[1] + "' /></div>";
           html += "<input class='input products-" + field[0] + "' type='file' />";
           html += "<input style='display:none;' class='input products-text-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           html += "</div>";

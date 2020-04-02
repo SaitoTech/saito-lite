@@ -87,7 +87,7 @@ module.exports = Certification = {
         reader.addEventListener("load", function () {
           var displayEl = document.querySelector("#certification_display");
           if (file.type.split("/")[0] == "image") {
-            displayEl.innerHTML = "<img class='product-image' alt='certification file' src='" + reader.result + "'/>";
+            displayEl.innerHTML = "<div class='product-image-holder'><img class='product-image' alt='certification file' src='" + reader.result + "'/></div>";
           } else {
             displayEl.innerHTML = file.type.split("/")[1].toUpperCase();
           }
