@@ -17,6 +17,7 @@ module.exports = UpdateProduct = {
       document.querySelector(".loading").style.display = "none";
       for (let i = 0; i < res.rows.length; i++) {
         let opt = document.createElement('option');
+
         opt.value = res.rows[i].id;
         opt.innerHTML = res.rows[i].name;
         document.getElementById('select-product-type').appendChild(opt);
@@ -36,6 +37,7 @@ module.exports = UpdateProduct = {
           } catch (err) { }
 
           data.covid19.renderProductForm(res.rows[0]);
+          document.getElementById('select-product-type')[res.rows[0].category_id].selected = true;
           document.getElementById("product-grid").style.display = "grid";
 
 
