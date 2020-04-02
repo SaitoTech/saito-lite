@@ -68,7 +68,7 @@ module.exports = Certification = {
           }
         });
 
-        console.log("Updating Values: " + JSON.stringify(values));
+        //console.log("Updating Values: " + JSON.stringify(values));
 
         data.covid19.updateServerDatabase(values, supplier_publickey, "Table Update");
 
