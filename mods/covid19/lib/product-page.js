@@ -15,10 +15,10 @@ module.exports = ProductPage = {
     // load product
     //
     data.covid19.sendPeerDatabaseRequest("covid19", "products", "*", "id= " + data.id, null, function (res) {
-      let fields = `product_name as 'Name', \
+      let fields = `
+        product_specification as 'Specification', \
         product_description as 'Description', \
         product_photo as 'Product Image', \
-        product_specification as 'Specification', \
         production_stock as 'Stock', \
         production_daily_capacity as 'Daily Production', \
         pricing_per_unit_rmb as 'Price (RMB)', \ 
@@ -37,7 +37,7 @@ module.exports = ProductPage = {
 
           data.covid19.renderProduct(res.rows[0]);
           supplier_id = res.rows[0]["supplier_id"];
-          document.querySelector(".product-name").innerHTML = res.rows[0]["Name"];
+          document.querySelector(".product-name").innerHTML = res.rows[0]["Specification"];
 
           //
           // load certificates
@@ -54,10 +54,7 @@ module.exports = ProductPage = {
           //
           // load certifications
           //
-          //fields = "c.name as 'Name', (select id from attachments where id = pc.id ) as attachment_id";
-          //var from = "certifications as 'c' JOIN products_certifications as 'pc'";
-          //var where = "c.id = pc.certification_id and pc.product_id =";
-          //data.covid19.sendPeerDatabaseRequest("covid19", from, fields, where + data.id, null, function (res) {
+         
             fields = "pc.product_id as 'product_id', c.name as 'Name', pc.id as cert_id";
             var from = "certifications as 'c' JOIN products_certifications as 'pc'";
             var where = "c.id = pc.certification_id and pc.product_id = " + data.id;
