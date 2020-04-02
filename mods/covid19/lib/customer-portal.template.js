@@ -5,11 +5,19 @@ module.exports = CustomerPortalTemplate = () => {
   html = `
   <div class="splash-introduction">
 
-    <h2>Browse Available Suppliers:</h2>
+    <h2>Browse Products and Suppliers by Category:</h2>
 
     <div class="loading">
 
-      Currently loading available products....
+      We are currently loading available products...
+
+      <p></p>
+
+      This may take a minute.
+
+      <p></p>
+
+      Please be patient.
 
     </div>
 
