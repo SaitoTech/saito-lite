@@ -157,7 +157,11 @@ module.exports = UpdateProduct = {
 
     try {
       document.querySelector('.covid_back').addEventListener('click', (e) => {
-        data.covid19.renderPage("home", app, data);
+	if (data.covid19.active_category_id > 0) {
+          data.covid19.renderPage("customer", app, data);
+	} else {
+          data.covid19.renderPage("home", app, data);
+	}
       });
     } catch (err) { }
 

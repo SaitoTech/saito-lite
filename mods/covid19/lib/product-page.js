@@ -4,12 +4,15 @@ const this_productPage = this;
 
 module.exports = ProductPage = {
 
+  active_category_id : 0,
+
   render(app, data) {
 
     var supplier_id = 0;
     document.querySelector(".main").innerHTML = ProductPageTemplate();
     document.querySelector(".navigation").innerHTML = '<div class="button navlink covid_back"><i class="fas fa-back"></i>back</div>';
 
+    this.active_category_id = data.covid19.active_category_id;
 
     //
     // load product
@@ -38,12 +41,11 @@ module.exports = ProductPage = {
           data.covid19.renderProduct(res.rows[0]);
           supplier_id = res.rows[0]["supplier_id"];
           document.querySelector(".product-name").innerHTML = res.rows[0]["Name"];
+          data.covid19.active_category_id = res.rows[0]["category_id"];
 
           //
           // load certificates
           fields = "name as 'Name', address as 'Province', notes as 'Notes'";
-          //fields = "*";
-
           data.covid19.sendPeerDatabaseRequest("covid19", "suppliers", fields, "id= " + supplier_id, null, function (res) {
 
             if (res.rows.length > 0) {
@@ -54,18 +56,12 @@ module.exports = ProductPage = {
           //
           // load certifications
           //
-          //fields = "c.name as 'Name', (select id from attachments where id = pc.id ) as attachment_id";
-          //var from = "certifications as 'c' JOIN products_certifications as 'pc'";
-          //var where = "c.id = pc.certification_id and pc.product_id =";
-          //data.covid19.sendPeerDatabaseRequest("covid19", from, fields, where + data.id, null, function (res) {
-            fields = "pc.product_id as 'product_id', c.name as 'Name', pc.id as cert_id";
-            var from = "certifications as 'c' JOIN products_certifications as 'pc'";
-            var where = "c.id = pc.certification_id and pc.product_id = " + data.id;
-            data.covid19.sendPeerDatabaseRequest("covid19", from, fields, where, null, function (res) {
+          fields = "pc.product_id as 'product_id', c.name as 'Name', pc.id as cert_id";
+          var from = "certifications as 'c' JOIN products_certifications as 'pc'";
+          var where = "c.id = pc.certification_id and pc.product_id = " + data.id;
+          data.covid19.sendPeerDatabaseRequest("covid19", from, fields, where, null, function (res) {
             if (res.rows.length > 0) {
-
               data.covid19.renderCerts(res.rows, document.querySelector('.cert-grid'));
-
             }
           });
         }
@@ -79,10 +75,19 @@ module.exports = ProductPage = {
 
   attachEvents(app, data) {
 
+    let aci = this.active_category_id;
+
     try {
-    document.querySelector('.covid_back').addEventListener('click', (e) => {
-      data.covid19.renderPage("home", app, data);
-    });
+      document.querySelector('.covid_back').addEventListener('click', (e) => {
+        data.covid19.active_category_id = aci;
+
+        if (data.covid19.active_category_id > 0) {
+          data.covid19.renderPage("customer", app, data);
+        } else {
+          data.covid19.renderPage("home", app, data);
+        }
+
+      });
     } catch (err) {}
 
 

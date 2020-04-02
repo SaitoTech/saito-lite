@@ -28,10 +28,41 @@ module.exports = CustomerPortal = {
 
   attachEvents(app, data) {
 
-    document.getElementById('select-product-type').addEventListener('change', (e) => {
-      let category_id = e.currentTarget.value;
+    let portal_self = this;
 
-      data.category_id = category_id;
+    document.getElementById('select-product-type').addEventListener('change', (e) => {
+      portal_self.updateProductGrid(app, data, e.currentTarget.value);
+    });
+
+
+    if (data.covid19.active_category_id > 0) {
+      setTimeout(() => {
+        document.getElementById("select-product-type").value = data.covid19.active_category_id;
+	portal_self.updateProductGrid(app, data, data.covid19.active_category_id);
+      }, 300);
+    }
+
+    try {
+    document.querySelector('.covid_back').addEventListener('click', (e) => {
+      data.covid19.renderPage("home", app, data);
+    });
+    } catch (err) {}
+
+    try {
+      document.querySelector('.add-or-update-product-btn').addEventListener('click', (e) => {
+        data.product_id = e.currentTarget.id;
+        UpdateProduct.render(app, data);
+        UpdateProduct.attachEvents(app, data);
+      });
+    } catch (err) {}
+
+  },
+
+
+
+  updateProductGrid(app, data, category_id) {
+
+      data.covid19.active_category_id = category_id;
 
       if (category_id > 0) {
 
@@ -62,7 +93,7 @@ module.exports = CustomerPortal = {
 
 	//
 	// activate buttons
-  //
+        //
 setTimeout(() => {
         try {
           document.querySelectorAll('.edit_product').forEach(el => {
@@ -86,23 +117,7 @@ setTimeout(() => {
 }, 250);
       }
 
-    });
-
-
-    try {
-    document.querySelector('.covid_back').addEventListener('click', (e) => {
-      data.covid19.renderPage("home", app, data);
-    });
-    } catch (err) {}
-
-    try {
-      document.querySelector('.add-or-update-product-btn').addEventListener('click', (e) => {
-        data.product_id = e.currentTarget.id;
-        UpdateProduct.render(app, data);
-        UpdateProduct.attachEvents(app, data);
-      });
-    } catch (err) {}
-
   }
+
 }
 
