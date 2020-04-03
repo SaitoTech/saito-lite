@@ -1679,7 +1679,7 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
         }
         if (this.game.player !== parseInt(mv[1])) {
           pandemic_self.game.players_info[(parseInt(mv[1])-1)].city = mv[3];
-  	pandemic_self.showBoard();
+  	  pandemic_self.showBoard();
         }
         this.game.queue.splice(qe, 1);
       }
