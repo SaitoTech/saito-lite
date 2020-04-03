@@ -39,6 +39,14 @@ module.exports = UpdateSupplier = {
   attachEvents(app, data) {
 
     document.querySelector('.update-supplier-btn').addEventListener('click', (e) => {
+      let supplier_publickey = app.wallet.returnPublicKey();
+
+      try {
+        let pkeyobj = document.querySelector(".supplier_publickey");
+        if (pkeyobj) {
+          supplier_publickey = pkeyobj.value;
+        }
+      } catch (err) { }
 
       let values = [];
 
@@ -51,7 +59,7 @@ module.exports = UpdateSupplier = {
         values.push(field);
       });
 
-      data.covid19.updateServerDatabase(values);
+      data.covid19.updateServerDatabase(values, supplier_publickey);
 
       UpdateSuccess.render(app, data);
       UpdateSuccess.attachEvents(app, data);

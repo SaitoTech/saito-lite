@@ -48,8 +48,8 @@ class Covid19 extends ModTemplate {
       if (this.browser_active) {
         let chatmod = this.app.modules.returnModule("Chat");
         let uidata = {}
-            uidata.chat = this;
-	chatmod.respondTo('email-chat').render(this.app, uidata);
+        uidata.chat = this;
+        chatmod.respondTo('email-chat').render(this.app, uidata);
         chatmod.respondTo('email-chat').attachEvents(this.app, uidata);
       }
     }
@@ -124,7 +124,7 @@ class Covid19 extends ModTemplate {
 
     sql = "UPDATE products SET category_id = 2 WHERE product_name = '外科口罩 Surgical Masks'";
     await app.storage.executeDatabase(sql, {}, "covid19");
-    
+
     sql = "UPDATE products SET category_id = 3 WHERE product_name = '防护服Protection clothes'";
     await app.storage.executeDatabase(sql, {}, "covid19");
 
@@ -178,16 +178,16 @@ class Covid19 extends ModTemplate {
         let table = "products";
 
         sql = "DELETE FROM products WHERE supplier_id = $supplier_id AND id = $product_id";
-	params = {
-	  $supplier_id:	supplier_id ,
-	  $product_id:  product_id ,
-	};
+        params = {
+          $supplier_id: supplier_id,
+          $product_id: product_id,
+        };
 
-	if (tx.transaction.from[0].add == supplier_publickey || tx.transaction.from[0].add == this.admin_pkey) {
+        if (tx.transaction.from[0].add == supplier_publickey || tx.transaction.from[0].add == this.admin_pkey) {
           await this.app.storage.executeDatabase(sql, params, "covid19");
-	}
+        }
 
-	return;
+        return;
       }
 
 
@@ -199,27 +199,27 @@ class Covid19 extends ModTemplate {
 
         sql = `SELECT id FROM suppliers WHERE publickey = "${supplier_publickey}"`;
         let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
-        if (rows.length == 0) { 
+        if (rows.length == 0) {
           sql = `SELECT max(id) AS maxid FROM "suppliers"`;
           let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
           if (rows.length == 0) {
             supplier_id = 1;
           } else {
-            supplier_id = rows[0].maxid+1;;
+            supplier_id = rows[0].maxid + 1;;
           }
 
-	  //
-	  // insert supplier if non-existent
-	  //
+          //
+          // insert supplier if non-existent
+          //
           sql = `SELECT id FROM suppliers WHERE publickey = "${tx.transaction.from[0].add}"`;
           let rows2 = await this.app.storage.queryDatabase(sql, {}, "covid19");
-	  if (rows2.length == 0) {
+          if (rows2.length == 0) {
             sql = `INSERT INTO suppliers (id , publickey) VALUES (${supplier_id} , '${tx.transaction.from[0].add}')`;
             await this.app.storage.executeDatabase(sql, {}, "covid19");
-	  }
+          }
 
-	  // add so things work
-	  supplier_publickey = tx.transaction.from[0].add;
+          // add so things work
+          supplier_publickey = tx.transaction.from[0].add;
 
         } else {
           supplier_id = rows[0].id;
@@ -246,18 +246,18 @@ class Covid19 extends ModTemplate {
               id = rows[0].maxid + 1;
             }
 
-	    if (tx.transaction.from[0].add == supplier_publickey || tx.transaction.from[0].add == this.admin_pkey) {
+            if (tx.transaction.from[0].add == supplier_publickey || tx.transaction.from[0].add == this.admin_pkey) {
               sql = `INSERT INTO ${table} (id, supplier_id) VALUES (${id}, ${supplier_id})`;
-//console.log("HERE: " + sql);
+              //console.log("HERE: " + sql);
               await this.app.storage.executeDatabase(sql, {}, "covid19");
             }
           }
 
           if (id > 0) {
-	    if (tx.transaction.from[0].add == supplier_publickey || tx.transaction.from[0].add == this.admin_pkey) {
+            if (tx.transaction.from[0].add == supplier_publickey || tx.transaction.from[0].add == this.admin_pkey) {
               sql = `UPDATE ${table} SET ${column} = "${value}" WHERE id = ${id}`;
               await this.app.storage.executeDatabase(sql, {}, "covid19");
-	    }
+            }
           }
         }
       }
@@ -272,28 +272,28 @@ class Covid19 extends ModTemplate {
         fields.sort((a, b) => a.table.localeCompare(b.table));
 
         let table = "";
-        let columns   = "";
-        let values   = "";
-        let sqls        = [];
-        let id       = -1;
-        let push       = false;
-        
+        let columns = "";
+        let values = "";
+        let sqls = [];
+        let id = -1;
+        let push = false;
+
         let mode = "";
 
         for (let i = 0; i < fields.length; i++) {
 
           if (i == fields.length - 1) {
             push = true;
-          } else if (fields[i].table != fields[i+1].table) {
+          } else if (fields[i].table != fields[i + 1].table) {
             push = true;
           }
 
           let column = fields[i].column;
-          let value  = "'" + fields[i].value + "'";
-          
+          let value = "'" + fields[i].value + "'";
+
           //we are dealing with a new table
           if (fields[i].table != table) {
-            table = fields[i].table; 
+            table = fields[i].table;
             //we don't have an id yet
             if (fields[i].id == "new") {
               sql = `SELECT max(id) AS maxid FROM ${table}`;
@@ -308,24 +308,24 @@ class Covid19 extends ModTemplate {
               mode = "UPDATE";
             }
             columns = column;
-            if (value == "'new'") { value = id};
+            if (value == "'new'") { value = id };
             values = value;
           } else {
             columns += ", " + column;
-            if (value == "'new'") { value = id};
+            if (value == "'new'") { value = id };
             values += ", " + value;
           }
-          
+
 
           if (push) {
-              if (mode = 'INSERT') {
-                sql = `INSERT INTO ${table} (id, ${columns}) VALUES (${id}, ${values});`
-              } else {
-                sql = `UDATE ${table} SET (${columns}) = (${values}) WHERE id = ${id};`
-              }
-              sqls.push(sql);
-              push = false;
+            if (mode = 'INSERT') {
+              sql = `INSERT INTO ${table} (id, ${columns}) VALUES (${id}, ${values});`
+            } else {
+              sql = `UDATE ${table} SET (${columns}) = (${values}) WHERE id = ${id};`
             }
+            sqls.push(sql);
+            push = false;
+          }
         }
         sqls.forEach(sql => {
           try {
@@ -375,7 +375,7 @@ class Covid19 extends ModTemplate {
   }
 
 
-  renderPage(page="home", app, data) {
+  renderPage(page = "home", app, data) {
 
     data.covid19 = this;
 
@@ -433,10 +433,10 @@ class Covid19 extends ModTemplate {
             }
 
             if (fields[ii] == "edit") {
-	      if (this.app.wallet.returnPublicKey() == this.admin_pkey) { fields[ii] = "admin"; } else {
+              if (this.app.wallet.returnPublicKey() == this.admin_pkey) { fields[ii] = "admin"; } else {
                 html += `<div class="grid-buttons"><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].id}">Delete</div></div>`;
                 added = 1;
-	      }
+              }
             }
 
             if (fields[ii] == "fullview") {
@@ -444,7 +444,7 @@ class Covid19 extends ModTemplate {
               if (this.app.wallet.returnPublicKey() == this.admin_pkey) {
                 html += `<div class="grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].product_id}">Delete</div></div>`;
                 added = 1;
-	      } else {
+              } else {
                 html += `<div class="grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div></div>`;
                 added = 1;
               }
@@ -458,7 +458,7 @@ class Covid19 extends ModTemplate {
             if (fields[ii] == "certifications") {
               html += `<div class="product_certificates" id="certsfor-${rows[i].product_id}"></div>`;
               added = 1;
-            }            
+            }
 
             if (added == 0) {
               html += `<div data-table="${ii}">${rows[i][fields[ii]]}</div>`;
@@ -480,7 +480,7 @@ class Covid19 extends ModTemplate {
 
       document.querySelector(".products-table").innerHTML += html.replace(/null/g, "").replace(/undefined/g, "");
       this.returnCerts(rows[i].product_id, "certsfor-");
-      
+
     }
     document.querySelectorAll('.fullview_product').forEach(el => {
       el.addEventListener('click', (e) => {
@@ -506,11 +506,11 @@ class Covid19 extends ModTemplate {
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
-//console.log("SENT TO SERVER");
+    //console.log("SENT TO SERVER");
 
   }
 
-  updateServerDatabase(data_array, publickey, type="Supplier Update") {
+  updateServerDatabase(data_array, publickey, type = "Supplier Update") {
 
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
     newtx.transaction.msg.module = this.name;
@@ -520,7 +520,7 @@ class Covid19 extends ModTemplate {
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
-//console.log("SENT TO SERVER");
+    //console.log("SENT TO SERVER");
 
   }
 
@@ -549,9 +549,9 @@ class Covid19 extends ModTemplate {
     Object.entries(prod).forEach(field => {
       switch (field[0]) {
         case 'id':
-	  break;
+          break;
         case 'supplier_id':
-	  break;
+          break;
         case 'category_id':
           break;
         case 'product_name':
@@ -565,7 +565,7 @@ class Covid19 extends ModTemplate {
           break;
         case 'product_description':
           html += "<div>Description</div>";
-          html += "<textarea class='input products-" + field[0] + "' data-table='products' data-column='" + field[0] + "'>"+field[1]+"</textarea>";
+          html += "<textarea class='input products-" + field[0] + "' data-table='products' data-column='" + field[0] + "'>" + field[1] + "</textarea>";
           break;
         case 'product_dimensions':
           html += "<div>Package Size</div>";
@@ -597,7 +597,7 @@ class Covid19 extends ModTemplate {
           break;
         case 'pricing_payment_terms':
           html += "<div>Payment Terms</div>";
-          html += "<textarea class='input products-" + field[0] + "' data-table='products' data-column='" + field[0] + "'>"+field[1]+"</textarea>";
+          html += "<textarea class='input products-" + field[0] + "' data-table='products' data-column='" + field[0] + "'>" + field[1] + "</textarea>";
           break;
         case 'production_stock':
           html += "<div>In Stock</div>";
@@ -617,11 +617,11 @@ class Covid19 extends ModTemplate {
     });
     document.querySelector('.product-grid').innerHTML = html;
     document.getElementById('select-product-type').addEventListener('change', (e) => {
- 
+
       try {
         document.querySelector(".update-product-btn").style.display = "block";
-      } catch (err) {}
-      
+      } catch (err) { }
+
       let category_id = e.currentTarget.value;
       if (category_id > 0) {
 
@@ -695,16 +695,16 @@ class Covid19 extends ModTemplate {
   returnCerts(id, prefix) {
     // should this be generalised to module wide?
     var module_self = this;
-    
+
     fields = "pc.product_id as 'product_id', c.name as 'Name', pc.id as cert_id";
     var from = "certifications as 'c' JOIN products_certifications as 'pc'";
     var where = "c.id = pc.certification_id and pc.product_id = " + id;
     this.sendPeerDatabaseRequest("covid19", from, fields, where, null, function (res) {
-  
+
       if (res.rows.length > 0) {
         var el = document.getElementById(prefix + res.rows[0].product_id);
         module_self.renderCerts(res.rows, el);
-  
+
       }
     });
   }
@@ -745,7 +745,7 @@ class Covid19 extends ModTemplate {
         salert("Download attachment: " + res.rows[0]["file_filename"]);
       }
     });
-  }  
+  }
 
   returnAttachment(id) {
     this.sendPeerDatabaseRequest("covid19", "attachments", "*", "id= " + id, null, function (res) {
