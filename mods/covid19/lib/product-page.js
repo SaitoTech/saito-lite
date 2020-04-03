@@ -18,10 +18,10 @@ module.exports = ProductPage = {
     // load product
     //
     data.covid19.sendPeerDatabaseRequest("covid19", "products", "*", "id= " + data.id, null, function (res) {
-      let fields = `product_name as 'Name', \
+      let fields = `
+        product_specification as 'Specification', \
         product_description as 'Description', \
         product_photo as 'Product Image', \
-        product_specification as 'Specification', \
         production_stock as 'Stock', \
         production_daily_capacity as 'Daily Production', \
         pricing_per_unit_rmb as 'Price (RMB)', \ 
@@ -40,7 +40,7 @@ module.exports = ProductPage = {
 
           data.covid19.renderProduct(res.rows[0]);
           supplier_id = res.rows[0]["supplier_id"];
-          document.querySelector(".product-name").innerHTML = res.rows[0]["Name"];
+          document.querySelector(".product-name").innerHTML = res.rows[0]["Specification"];
           data.covid19.active_category_id = res.rows[0]["category_id"];
 
           //

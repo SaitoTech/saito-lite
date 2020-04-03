@@ -17,7 +17,7 @@ module.exports = ProductPageTemplate = () => {
 
     <h3>Product Details:</h3>
 
-      <div id="product-grid" class="product-grid grid-2">
+      <div id="product-grid" class="product-grid grid-4">
 
       </div>
 
