@@ -1773,9 +1773,10 @@ console.log("\n\n\n\n");
 
           if (this.is_testing == 1) {
             if (this.game.player == 1) {
-              this.game.deck[0].hand = ["decolonization","fiveyearplan", "berlinagreement", "junta", "che","degaulle","nato","naziscientist","missileenvy","formosan"];
+              this.game.deck[0].hand = ["fiveyearplan", "indopaki", "junta", "che","degaulle","nato","naziscientist","missileenvy","formosan"];
             } else {
-              this.game.deck[0].hand = ["duckandcover","degaulle","lonegunman","cubanmissile","handshake","lonegunman","asia","nasser","sadat"];
+              this.game.deck[0].hand = ["china","aldrichames","containment"];
+              //this.game.deck[0].hand = ["aldrichames","degaulle","lonegunman","cubanmissile","handshake","lonegunman","asia","nasser","sadat"];
               //this.game.deck[0].hand = ["duckandcover","degaulle"];
             }
           }
@@ -6692,7 +6693,7 @@ console.log("\n\n\n\n");
             if (twilight_self.isControlled(opponent, "afghanistan") == 1) { target++; }
 
             let die = twilight_self.rollDice(6);
-            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls "+die);
+            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls "+die+" / -"+(target -4));
 
             if (die >= target) {
 
@@ -6732,7 +6733,7 @@ console.log("\n\n\n\n");
             if (twilight_self.isControlled(opponent, "burma") == 1) { target++; }
 
             let die = twilight_self.rollDice(6);
-            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls "+die);
+            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls "+die+" / -"+(target -4));
 
             if (die >= target) {
 
@@ -6793,7 +6794,7 @@ console.log("\n\n\n\n");
       if (this.isControlled("us", "syria") == 1) { target++; }
 
       let roll = this.rollDice(6);
-      this.updateLog("<span>" + player.toUpperCase()+"</span> <span>rolls</span> "+roll);
+      this.updateLog("<span>" + player.toUpperCase()+"</span> <span>rolls</span> "+roll+" / -"+(target -4));
 
       if (roll >= target) {
         this.updateLog("USSR wins the Arab-Israeli War");
@@ -6832,7 +6833,7 @@ console.log("\n\n\n\n");
 
       let roll = this.rollDice(6);
 
-      this.updateLog("<span>Korean War happens (roll:</span> " + roll + ")");
+      this.updateLog("<span>Korean War happens (roll:</span> " + roll+" / -"+(target -4) + ")");
 
       if (roll >= target) {
         this.updateLog("North Korea wins the Korean War");
@@ -8610,9 +8611,9 @@ console.log("\n\n\n\n");
 
       let us_roll = this.rollDice(6);
       let ussr_roll = this.rollDice(6);
-
-      this.updateLog("<span>Summit: US rolls</span> "+us_roll+" <span>and USSR rolls</span> "+ussr_roll);
-
+      let usbase = us_roll;
+      let ussrbase = ussr_roll;
+      
       if (this.doesPlayerDominateRegion("ussr", "europe") == 1)   { ussr_roll++; }
       if (this.doesPlayerDominateRegion("ussr", "mideast") == 1)  { ussr_roll++; }
       if (this.doesPlayerDominateRegion("ussr", "asia") == 1)     { ussr_roll++; }
@@ -8626,6 +8627,8 @@ console.log("\n\n\n\n");
       if (this.doesPlayerDominateRegion("us", "africa") == 1)   { us_roll++; }
       if (this.doesPlayerDominateRegion("us", "camerica") == 1) { us_roll++; }
       if (this.doesPlayerDominateRegion("us", "samerica") == 1) { us_roll++; }
+
+      this.updateLog("<span>Summit: US rolls</span> "+usbase+" (+"+(us_roll - usbase)+") and USSR rolls "+ussrbase+" (+"+(ussr_roll-ussrbase)+")");
 
       let is_winner = 0;
 
@@ -8689,6 +8692,7 @@ console.log("\n\n\n\n");
         return 0;
       }
     }
+
 
 
 
@@ -10265,7 +10269,7 @@ console.log("\n\n\n\n");
             if (twilight_self.isControlled(opponent, "afghanistan") == 1) { target++; }
 
             let die = twilight_self.rollDice(6);
-            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls "+die);
+            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls "+die+" / -"+(target -4));
 
             if (die >= target) {
 
@@ -10321,7 +10325,7 @@ console.log("\n\n\n\n");
             if (twilight_self.isControlled(opponent, "saudiarabia") == 1) { target++; }
 
             let die = twilight_self.rollDice(6);
-            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls "+die);
+            twilight_self.addMove("notify\t"+player.toUpperCase()+" rolls "+die+" / -"+(target -4));
 
             if (die >= target) {
 
@@ -10458,20 +10462,28 @@ console.log("\n\n\n\n");
           this.addMove("notify\tUS has no cards to reveal");
           this.endTurn();
 
-        } else {
+        }
 
-          let cards_to_reveal = this.game.deck[0].hand.length;
-          for (let i = 0; i < this.game.deck[0].hand.length; i++) {
-            if (this.game.deck[0].hand[i] === "china") { cards_to_reveal--; }
-            else {
-              this.addMove(this.game.deck[0].hand[i]);
-            }
+        let cards_to_reveal = this.game.deck[0].hand.length;
+        for (let i = 0; i < this.game.deck[0].hand.length; i++) {
+          if (this.game.deck[0].hand[i] === "china") { cards_to_reveal--; }
+          else {
+            this.addMove(this.game.deck[0].hand[i]);
           }
+        }
+        if (cards_to_reveal =="") {
+          
+          this.addMove("notify\tUS has no cards to reveal");
+          this.endTurn();
+
+        }else{
+       
           //this.addMove("notify\tUS holds: "+cards_to_reveal);
           this.addMove("aldrich\tus\t"+cards_to_reveal);
-          this.endTurn();        
+          this.endTurn();  
+        }      
          
-        }
+        
       }
       return 0;
     }
