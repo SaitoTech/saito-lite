@@ -1773,9 +1773,9 @@ console.log("\n\n\n\n");
 
           if (this.is_testing == 1) {
             if (this.game.player == 1) {
-              this.game.deck[0].hand = ["fiveyearplan", "indopaki", "junta", "che","degaulle","nato","naziscientist","missileenvy","formosan"];
+              this.game.deck[0].hand = ["fiveyearplan", "indopaki", "junta", "che","degaulle","nato","cubanmissile","missileenvy","formosan"];
             } else {
-              this.game.deck[0].hand = ["china","aldrichames","containment"];
+              this.game.deck[0].hand = ["china","aldrichames","containment","ortega"];
               //this.game.deck[0].hand = ["aldrichames","degaulle","lonegunman","cubanmissile","handshake","lonegunman","asia","nasser","sadat"];
               //this.game.deck[0].hand = ["duckandcover","degaulle"];
             }
@@ -11037,7 +11037,21 @@ console.log("\n\n\n\n");
 
 
       if (this.game.player == 1) {
-        this.updateStatus("Pick a country adjacent to Nicaragua to coup: ");
+        //this.updateStatus("Pick a country adjacent to Nicaragua to coup: ");
+        let user_message = "Pick a country adjacent to Nicaragua to coup:<ul>";
+        user_message += '<li class="card" id="skiportega">or skip coup</li>';
+        user_message += '</ul>';
+        twilight_self.updateStatus(user_message);
+
+    $('.card').off();
+    $('.card').on('click', function() {
+      let action2 = $(this).attr("id");
+      if (action2 == "skiportega") {
+        twilight_self.updateStatus("Skipping Ortega coup...");
+        twilight_self.addMove("resolve\tortega");
+        twilight_self.endTurn();
+      }})
+        
       } else {
         this.updateStatus("USSR is selecting a country for its free coup");
         return 0;
