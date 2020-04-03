@@ -3,9 +3,9 @@ const webpack = require('webpack');
 
 
 webpack({
-//  optimization: {
-//    minimize: false
-//  },
+  //optimization: {
+  //  minimize: false
+  //},
   target: 'web',
   node: {
     fs: "empty",
@@ -100,8 +100,9 @@ webpack({
 
   mode: 'production',
   //devtool: "cheap-module-eval-source-map",
-  //devtool: false,
-  devtool: "eval",
+  devtool: false,
+  //devtool: "eval",
+
 
   }, (err, stats) => {
   if (err || stats.hasErrors()) {

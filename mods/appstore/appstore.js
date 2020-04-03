@@ -5,36 +5,6 @@ const AppStoreBundleConfirm = require('./lib/email-appspace/appstore-bundle-conf
 const fs = require('fs');
 const path = require('path');
 
-//
-// supporting utility functions
-//
-// recursively go through and find all files in dir
-function getFiles(dir) {
-  const dirents = fs.readdirSync(dir, { withFileTypes: true });
-  const files = dirents.map((dirent) => {
-    const res = path.resolve(dir, dirent.name);
-    return dirent.isDirectory() ? getFiles(res) : res;
-  });
-  return Array.prototype.concat(...files);
-}
-function returnSlug(nme) {
-  nme = nme.toLowerCase();
-  nme = nme.replace(/\t/g, "_");
-  return nme;
-}
-function deleteDirs(dir) {
-  const dirents = fs.readdirSync(dir, { withFileTypes: true });
-  dirents.forEach((dirent) => {
-    const res = path.resolve(dir, dirent.name);
-    if (dirent.isDirectory() && fs.readdirSync(res).length == 0) {
-      fs.rmdirSync(res, { maxRetries: 100, recursive: true });
-    } else {
-      deleteDirs(res);
-      // delete after children have been
-      fs.rmdirSync(res, { maxRetries: 100, recursive: true });
-    }
-  });
-}
 
 
 class AppStore extends ModTemplate {
@@ -209,6 +179,7 @@ class AppStore extends ModTemplate {
   onConfirmation(blk, tx, conf, app) {
 
     let txmsg = tx.returnMessage();
+
     if (conf == 0) {
 
       switch (txmsg.request) {
@@ -271,6 +242,14 @@ class AppStore extends ModTemplate {
 
         if (file.path.substr(0,3) == "lib") { return; }
         if (file.path.substr(-2) !== "js") { return; }
+        if (file.path.substr(-2) !== "js") { return; }
+        if (file.path.indexOf("/") > -1) { return; }
+        if (file.path.indexOf("/web/") > -1) { return; }
+        if (file.path.indexOf("/www/") > -1) { return; }
+        if (file.path.indexOf("/lib/") > -1) { return; }
+        if (file.path.indexOf("/license/") > -1) { return; }
+        if (file.path.indexOf("/docs/") > -1) { return; }
+        if (file.path.indexOf("/sql/") > -1) { return; }
 
         let content = await file.buffer();
         let zip_text = content.toString('utf-8')
@@ -285,20 +264,21 @@ class AppStore extends ModTemplate {
 	  //
 	  // get name
 	  //
-	  if (/this.name/.test(zip_lines[i])) {
+	  if (/this.name/.test(zip_lines[i]) && found_name == 0) {
 	    found_name = 1;
 	    if (zip_lines[i].indexOf("=") > 0) {
 	      name = zip_lines[i].substring(zip_lines[i].indexOf("="));
 	      name = cleanString(name);
 	      name = name.replace(/^\s+|\s+$/gm,'');
-	      if (name.length > 50) { name = "Unknown"; }
+	      if (name.length > 50) { name = "Unknown"; found_name = 0; }
+	      if (name === "name") { name = "Unknown"; found_name = 0; }
 	    }
 	  }
 
 	  //
 	  // get description
 	  //
-	  if (/this.description/.test(zip_lines[i])) {
+	  if (/this.description/.test(zip_lines[i]) && found_description == 0) {
 	    found_description = 1;
 	    if (zip_lines[i].indexOf("=") > 0) {
 	      description = zip_lines[i].substring(zip_lines[i].indexOf("="))    
@@ -310,7 +290,7 @@ class AppStore extends ModTemplate {
 	  //
 	  // get categories
 	  //
-	  if (/this.categories/.test(zip_lines[i])) {
+	  if (/this.categories/.test(zip_lines[i]) && found_categories == 0) {
 	    found_categories = 1;
 	    if (zip_lines[i].indexOf("=") > 0) {
 	      categories = zip_lines[i].substring(zip_lines[i].indexOf("="))    
@@ -318,8 +298,8 @@ class AppStore extends ModTemplate {
 	      categories = categories.replace(/^\s+|\s+$/gm,'');
 	    }
 	  }
-
 	}
+
 
         function cleanString(str) {
 	  str = str.replace(/^\s+|\s+$/gm,'');
@@ -419,24 +399,25 @@ class AppStore extends ModTemplate {
       $tx: JSON.stringify(tx.transaction),
       $featured: featured_app,
     };
-    await this.app.storage.executeDatabase(sql, params, "appstore");
-
-
-    if (this.featured_apps.includes(name) && tx.isFrom(this.app.wallet.returnPublicKey())) {
-
-      sql = "UPDATE modules SET featured = 0 WHERE name = $name";
-      params = { $name: name };
+    if (name != "unknown") {
       await this.app.storage.executeDatabase(sql, params, "appstore");
 
-      sql = "UPDATE modules SET featured = 1 WHERE name = $name AND version = $version";
-      params = {
-        $name: name,
-        $version: `${ts}-${sig}`,
-      };
-      await this.app.storage.executeDatabase(sql, params, "appstore");
+      if (this.featured_apps.includes(name) && tx.isFrom(this.app.wallet.returnPublicKey())) {
+
+        sql = "UPDATE modules SET featured = 0 WHERE name = $name";
+        params = { $name: name };
+        await this.app.storage.executeDatabase(sql, params, "appstore");
+
+        sql = "UPDATE modules SET featured = 1 WHERE name = $name AND version = $version";
+        params = {
+          $name: name,
+          $version: `${ts}-${sig}`,
+        };
+        await this.app.storage.executeDatabase(sql, params, "appstore");
+
+      }
 
     }
-
 
   }
 
@@ -774,8 +755,6 @@ console.log("leaving bundler...");
       expressapp.use('/' + encodeURI(this.name), express.static(__dirname + "/web"));
       expressapp.get('/appstore/bundle/:filename', async (req, res) => {
 
-console.log("express app is trying to process the file...");
-
         let scriptname = req.params.filename;
 
         let sql = "SELECT script FROM bundles WHERE name = $scriptname";
@@ -784,11 +763,7 @@ console.log("express app is trying to process the file...");
         }
         let rows = await app.storage.queryDatabase(sql, params, "appstore");
 
-console.log(sql + " ---- " + params);
-
         if (rows) {
-// console.log("ROWS: " + JSON.stringify(rows));
-
           if (rows.length > 0) {
 
             res.setHeader('Content-type', 'text/javascript');
@@ -807,10 +782,40 @@ console.log(sql + " ---- " + params);
       });
     }
   }
+}
+module.exports = AppStore;
 
+
+
+
+//
+// supporting utility functions
+//
+// recursively go through and find all files in dir
+function getFiles(dir) {
+  const dirents = fs.readdirSync(dir, { withFileTypes: true });
+  const files = dirents.map((dirent) => {
+    const res = path.resolve(dir, dirent.name);
+    return dirent.isDirectory() ? getFiles(res) : res;
+  });
+  return Array.prototype.concat(...files);
+}
+function returnSlug(nme) {
+  nme = nme.toLowerCase();
+  nme = nme.replace(/\t/g, "_");
+  return nme;
+}
+function deleteDirs(dir) {
+  const dirents = fs.readdirSync(dir, { withFileTypes: true });
+  dirents.forEach((dirent) => {
+    const res = path.resolve(dir, dirent.name);
+    if (dirent.isDirectory() && fs.readdirSync(res).length == 0) {
+      fs.rmdirSync(res, { maxRetries: 100, recursive: true });
+    } else {
+      deleteDirs(res);
+      // delete after children have been
+      fs.rmdirSync(res, { maxRetries: 100, recursive: true });
+    }
+  });
 }
 
-
-
-
-module.exports = AppStore;

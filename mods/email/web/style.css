@@ -343,6 +343,8 @@ hr {
 
 .email-detail-text {
   grid-area: m;
+  max-height: calc(100vh - 400px);
+  overflow: auto;
 }
 
 .email-detail-left-options {
@@ -415,7 +417,7 @@ hr {
   .email-text {
     height: unset;
     min-height: 50vh;
-}
+  }
   .grid-2 {
     grid-gap: 0;
     margin: 0;
@@ -430,7 +432,7 @@ hr {
     position: fixed;
     bottom: 0;
     width: 97vw;
-}
+  }
   .email-detail-right-options {
     justify-self: end;
     flex-direction: column-reverse;
@@ -506,21 +508,18 @@ hr {
   }
   #email-form-options {
     top: unset;
-}
-
-.email-appspace {
-  padding-top: 10px;
-}
-
-.email-header h3 {
-  padding-top: 7px;
-}
-
-@media only screen and (min-width: 600px) {
-  #email.create-button {
-    display: none;
   }
-  #email-bars-icon {
-    display: none;
+  .email-appspace {
+    padding-top: 10px;
   }
-}
+  .email-header h3 {
+    padding-top: 7px;
+  }
+  @media only screen and (min-width: 600px) {
+    #email.create-button {
+      display: none;
+    }
+    #email-bars-icon {
+      display: none;
+    }
+  }

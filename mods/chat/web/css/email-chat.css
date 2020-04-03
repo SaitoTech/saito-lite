@@ -90,6 +90,10 @@ hr {
   margin: 1em 0;
 }
 
+p {
+  margin: 1px 0;
+}
+
 .hidden {
   display: none !important;
 }
@@ -337,6 +341,7 @@ hr {
   height: 32em;
   grid-area: chat_main;
   overflow-y: scroll;
+overflow-x: hidden;
   background: linear-gradient(135deg, #ffffff, #eaeaea);
 }
 

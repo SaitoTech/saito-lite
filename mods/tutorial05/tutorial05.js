@@ -34,21 +34,31 @@ class Tutorial05 extends ModTemplate {
 
   renderChatPlugin(app, data) {
     let htmlobj = document.querySelector('.chat-navbar');
-    htmlobj.innerHTML += '<li id="chat-nav-transfer-out" class="chat-nav-row"><i class="fas fa-user-plus"></i>Make Transfer</li>';
-    htmlobj.innerHTML += '<li id="chat-nav-transfer-in" class="chat-nav-row"><i class="fas fa-user-plus"></i>Receive Transfer</li>';
+    htmlobj.innerHTML += '<li id="chat-nav-transfer-out" class="chat-nav-row"><i class="fas fa-sign-out-alt"></i></i>Make Transfer</li>';
+    htmlobj.innerHTML += '<li id="chat-nav-transfer-in" class="chat-nav-row"><i class="fas fa-sign-in-alt"></i></i>Receive Transfer</li>';
   }
 
   attachEventsChatPlugin(app, data) {
+ 
+    try {
+      document.getElementById('chat-nav-transfer-out').onclick = () => {
+        data.transfer_mode = "scanner";
+	document.getElementById('chat-nav').style.display = 'none';
+        TransferManager.render(app, data);
+        TransferManager.attachEvents(app, data);
+      };
+    } catch (err) {
+    }
 
-    document.getElementById('chat-nav-transfer-out').onclick = () => {
-      TransferManager.render(app, data);
-      TransferManager.attachEvents(app, data);
-    };
-
-    document.getElementById('chat-nav-transfer-in').onclick = () => {
-      TransferManager.attachEvents(app, data);
-    };
-
+    try {
+      document.getElementById('chat-nav-transfer-in').onclick = () => {
+        data.transfer_mode = "qrcode";
+	document.getElementById('chat-nav').style.display = 'none';
+        TransferManager.render(app, data);
+        TransferManager.attachEvents(app, data);
+      };
+    } catch (err) {
+    }
   }
 
 

@@ -80,10 +80,10 @@ a:hover {
 }
 
 body {
-  /* width: 100vw;
-    height: 100vh; */
+  
   background-color: var(--backround-general);
   color: var(--text-color-normal);
+  font-family: visuelt-light;
 }
 
 /* SAITO ANIMATION CSS */
@@ -125,6 +125,10 @@ hr {
 
 .boldred {
   color: var(--saito-red);
+  font-weight: bolder;
+}
+
+.table-head {
   font-weight: bolder;
 }
 
@@ -574,6 +578,18 @@ label.treated {
   display: block;
   margin: 1em 0;
   overflow-wrap: break-word;
+}
+
+div#message-wrapper {
+  border: 2px solid var(--saito-red);
+  min-width: 500px;
+  padding: 1em;
+  font-size: 2em;
+  background: var(--saito-red);
+  position: fixed;
+  bottom: 1em;
+  left: 1em;
+  color: #FFF;
 }
 
 .promptval {

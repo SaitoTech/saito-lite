@@ -1,8 +1,9 @@
 // const qrcode = require('./lib/scanner');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const Header = require('../../lib/ui/header/header');
-const QRScannerTemplate = require('./qrscanner.template');
 const AddContact = require('./lib/add-contact');
+
+
 
 const HeaderDropdownTemplate = (dropdownmods) => {
   html = dropdownmods.map(mod => {
@@ -16,7 +17,9 @@ const HeaderDropdownTemplate = (dropdownmods) => {
   </div>`;
 }
 
+
 class QRScanner extends ModTemplate {
+
   constructor(app) {
     super(app);
 
@@ -24,11 +27,12 @@ class QRScanner extends ModTemplate {
     this.description = "Adds QRCode scanning functionality to Saito";
     this.categories = "Core";
 
-    this.events = ['encrypt-key-exchange-confirm'];
     this.video = null;
     this.canvas = null;
     this.canvas_context = null;
     this.isStreamInit = false;
+
+    this.scanner_callback = null;
 
     this.description = "Helper module with QR code scanning functionality."
     this.categories  = "Dev Data Utilities";
@@ -48,6 +52,8 @@ class QRScanner extends ModTemplate {
     // In milliseconds
     this.debounce_timeout = 750;
 
+    this.events = ['encrypt-key-exchange-confirm'];
+
   }
 
   initialize(app) {
@@ -55,19 +61,102 @@ class QRScanner extends ModTemplate {
   }
 
   initializeHTML(app) {
-    this.start(
-      document.querySelector('video'),
-      document.getElementById('qr-canvas')
-    );
   }
 
+  attachEvents(app) {
+    let scanner_self = this;
+    document.querySelector('.launch-scanner').addEventListener('click', function(e) {
+      scanner_self.startScanner();
+    });
+  }
+
+
+
+  startQRDecoderInitializationLoop() {
+
+    x = this.attemptQRDecode();
+
+    if (x == 1) {
+      console.log("working...");
+    } else {
+      console.log("wait 100....");
+      setTimeout(() => {
+        this.startQRDecoderInitializationLoop();
+      }, 100);
+    }
+
+  }
+
+
+
+
+
+
+
+
+  startScanner(mycallback=null) {
+
+    if (this.app.BROWSER == 0) { return; }
+    if (!document) { return; }
+    if (document.querySelector('.qrscanner-container')) { return; }
+
+    this.scanner_callback = null;
+    if (mycallback) { this.scanner_callback = mycallback; }
+
+    document.body.innerHTML = this.returnScannerHTML();
+
+    let scanner_self = this;
+
+    scanner_self.start(
+      document.getElementById("qr-video"),
+      document.getElementById("qr-canvas")
+    );
+
+  }
+
+
+  startQRDecoder() {
+
+    x = this.attemptQRDecode();
+
+    if (x == 1) {
+    } else {
+      setTimeout(() => {
+	this.startQRDecoder();
+      }, 100);
+    }
+
+  }
+
+  returnScannerHTML() {
+    return `
+      <div class="qrscanner-container">
+        <div id="qr-target" class="qr-target"></div>
+        <div id="scanline" class="scanline"></div>
+        <div class="video-container">
+          <video playsinline autoplay id="qr-video" style="height: 100vh;width: 100vw;"></video>
+        </div>
+        <canvas style="display: none" id="qr-canvas"></canvas>
+      </div>
+
+    `;
+  }
+
+
+
+
+
+
+
+
+
   async start(video, canvas) {
+
     this.video = video
     this.canvas = canvas;
 
     this.canvas_context = this.canvas.getContext("2d");
     this.decoder = new Worker('/qrscanner/quirc_worker.js');
-
     this.decoder.onmessage = (msg) => { this.onDecoderMessage(msg) };
 
     try {
@@ -76,8 +165,9 @@ class QRScanner extends ModTemplate {
     } catch (err) {
       this.handleError(err);
     }
-    setTimeout(() => { this.attemptQRDecode() }, 500);
+    this.startQRDecoderInitializationLoop();
   }
+
 
   stop() {
     this.decoder.terminate();
@@ -86,31 +176,11 @@ class QRScanner extends ModTemplate {
   }
 
   render() {
-    document.querySelector('body').innerHTML = QRScannerTemplate();
-
-    let header = document.getElementsById('qr-hud-header');
-    header.append(
-        elParser(HeaderDropdownTemplate())
-    );
-  }
-
-  attachEvents() {
-    // document.querySelector('.file-button')
-    //      .addEventListener('click', (e) => {
-    //         let inputFile  = document.getElementById('file-input');
-    //          inputFile.addEventListener('change', (e) => {
-    //             let file = e.target.files[0];
-    //             if (!file) { return; }
-    //             this.decodeFromFile(file);
-    //          });
-    //          inputFile.click();
-    //      });
-
-    document.querySelector('#navigator')
-        .addEventListener('click', (e) => {
-          let header_dropdown = document.querySelector('.header-dropdown');
-          header_dropdown.style.display = header_dropdown.style.display == "none" ? "block" : "none";
-        });
+//    document.querySelector('body').innerHTML = QRScannerTemplate();
+//    let header = document.getElementsById('qr-hud-header');
+//    header.append(
+//        elParser(HeaderDropdownTemplate())
+//    );
   }
 
 
@@ -123,18 +193,23 @@ class QRScanner extends ModTemplate {
         this.canvas.width = this.video.videoWidth;
         this.canvas.height = this.video.videoHeight;
         this.canvas_context.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
+        if (this.canvas.width == 0) return;
 
         var imgData = this.canvas_context.getImageData(0, 0, this.canvas.width, this.canvas.height);
 
         if (imgData.data) {
           this.decoder.postMessage(imgData);
         }
+        return 1;
       } catch (err) {
-        if (err.name == 'NS_ERROR_NOT_AVAILABLE') setTimeout(() => { this.attemptQRDecode() }, 0);
-          console.log("Error");
-          console.log(err);
+        return 0;
+        //if (err.name == 'NS_ERROR_NOT_AVAILABLE') { setTimeout(() => { this.attemptQRDecode() }, 0); return; }
+        //setTimeout(() => { this.attemptQRDecode() }, 500);
       }
+    } else {
+      return 0;
     }
+    return 0;
   }
 
   //
@@ -162,9 +237,16 @@ class QRScanner extends ModTemplate {
   // Else, the message is broadcast for other modules to utilize
   //
   handleDecodedMessage(msg) {
-    if (this.app.crypto.isPublicKey(msg)) {
-      // let encrypt_mod = this.app.modules.returnModule('Encrypt');
 
+    if (this.scanner_callback != null) {
+      this.decoder.terminate();
+      this.scanner_callback(msg);
+      return;
+    }
+
+    if (this.app.crypto.isPublicKey(msg)) {
+
+      // let encrypt_mod = this.app.modules.returnModule('Encrypt');
       // this.initializing_key = true;
       // encrypt_mod.initiate_key_exchange(msg);
 
@@ -176,8 +258,9 @@ class QRScanner extends ModTemplate {
 
       AddContact.render(this.app, {publickey: msg, header: Header});
       AddContact.attachEvents(this.app, {publickey: msg, header: Header});
+
     } else {
-      this.sendEvent('qrcode', a);
+      this.sendEvent('qrcode', msg);
     }
   }
 
@@ -210,29 +293,6 @@ class QRScanner extends ModTemplate {
     }
   }
 
-
-
-  returnHTML() {
-    return `
-      <div class="qrscanner-container">
-        <div id="qr-hud-target" style="
-          position: absolute;
-          width: 10em;
-          height: 10em;
-          border: 2px solid red;
-          background-color: transparent;
-          margin: 2em 8.5em;"></div>
-        <div class="video-container">
-          <video playsinline autoplay style="width: 100%; max-width: 26em"></video>
-        </div>
-        <canvas style="display: none" id="qr-canvas"></canvas>
-      </div>
-    `;
-  }
-
-  attachEventsToHTML() {
-
-  }
 
 
 }

@@ -31,7 +31,8 @@ module.exports = ChatList = {
                 message = last_message.message
                 timestamp = last_message.timestamp;
             }
-
+            // decode
+            message = app.crypto.base64ToString(message);
             let row = {
                 name: group.name,
                 group_id: group.id,

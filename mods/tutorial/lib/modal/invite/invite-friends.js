@@ -5,8 +5,7 @@ const InviteFriendsPublickeyTemplate = require('./key/invite-friends-publickey.t
 
 function stopVideo() {
   let video = document.querySelector('video')
-  if (video)
-    video.srcObject.getTracks().forEach(track => track.stop());
+  if (video) { video.srcObject.getTracks().forEach(track => track.stop()); }
 }
 
 module.exports = InviteFriends = {
@@ -45,10 +44,12 @@ module.exports = InviteFriends = {
     }
 
     document.querySelector('.scanqr-link-box').onclick = () => {
-      data.stopVideo = stopVideo;
-      data.startKeyExchange = startKeyExchange;
-      InviteFriendsQR.render(app, data);
-      InviteFriendsQR.attachEvents(app, data);
+      let qrscanner = app.modules.returnModule("QRScanner");
+      if (qrscanner) { qrscanner.startScanner(); }
+//      data.stopVideo = stopVideo;
+//      data.startKeyExchange = startKeyExchange;
+//      InviteFriendsQR.render(app, data);
+//      InviteFriendsQR.attachEvents(app, data);
     }
 
     document.querySelector('.address-link-box').onclick = () => {

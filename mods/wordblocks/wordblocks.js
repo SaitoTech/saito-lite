@@ -121,7 +121,7 @@ console.log("INITIALIZE GAME");
       salert("Network issues downloading dictionary");
     }
 
-    console.log("\n\n\nDOWNLOADED WORDLIST: " + JSON.stringify(this.wordlist));
+    //console.log("\n\n\nDOWNLOADED WORDLIST: " + JSON.stringify(this.wordlist));
 
     //
     // deal cards 

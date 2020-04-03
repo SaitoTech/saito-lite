@@ -262,7 +262,10 @@ console.log("ONCHAIN SEND THIS TX: " + JSON.stringify(tx.transaction));
         if (this.app.wallet.returnPublicKey() != txmsg.publickey) {
           let identifier = app.keys.returnIdentifierByPublicKey(message.publickey);
           let title =  identifier ? identifier : message.publickey;
-          app.browser.sendNotification(title, message.message, 'chat-message-notification');
+          let tmp = document.createElement("DIV");
+          tmp.innerHTML = this.app.crypto.base64ToString(message.message);
+          let clean_message = tmp.innerText;
+          app.browser.sendNotification(title, clean_message, 'chat-message-notification');
           this.sendEvent('chat_receive_message', message);
         }
 

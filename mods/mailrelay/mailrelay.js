@@ -27,9 +27,9 @@ class MailRelay extends ModTemplate {
 
         let email = {};
         email.to      = 'richard@saito.tech';
-        email.from    = 'testnet@saito.tech';
+        email.from    = 'network@saito.tech';
         email.bcc = "";
-        email.subject = 'Saito Testnet Initialised';
+        email.subject = 'Saito Network Initialised';
         email.text = 'Just a quick note to let you know that test net just spun up.';
         email.ishtml = false;
         email.attachments = "";
@@ -48,7 +48,7 @@ class MailRelay extends ModTemplate {
             if (typeof (message.data.from) != "undefined" && message.data.from != "") {
                 email.from = message.data.from;       //email address as string
             } else {
-                email.from = "testnet@saito";
+                email.from = "network@saito";
             }
             email.subject = message.data.subject;    //email subject as string
             email.cc = message.data.cc;         //cc addresses as array of strings

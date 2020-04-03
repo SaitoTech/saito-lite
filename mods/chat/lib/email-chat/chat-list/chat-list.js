@@ -18,7 +18,7 @@ module.exports = ChatList = {
         let chat_list = document.querySelector('.chat-list');
         chat_list.innerHTML = "";
         data.chat.groups.forEach(group => {
-            chat_list.innerHTML += ChatListRowTemplate(group, data.chat.helpers);
+            chat_list.innerHTML += ChatListRowTemplate(app, group, data.chat.helpers);
         });
     },
 

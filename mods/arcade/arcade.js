@@ -213,7 +213,9 @@ class Arcade extends ModTemplate {
 
       games.forEach(game => {
         let game_tx = this.createGameTXFromOptionsGame(game);
-        this.addGameToOpenList(game_tx);
+        if(game_tx) {
+          this.addGameToOpenList(game_tx);
+        }
       });
     }
   }
@@ -626,7 +628,7 @@ class Arcade extends ModTemplate {
         //
         // remove game from server
         //
-        let players_array = txmsg.players.join("_");;
+        // let players_array = txmsg.players.join("_");;
         let sql = `UPDATE games SET status = "active" WHERE game_id = $game_id`;
         let params = {
           $game_id : tx.transaction.msg.game_id ,
@@ -659,7 +661,6 @@ class Arcade extends ModTemplate {
 
             if (game_found == false) {
 
-
               //
               // copied above reject all tx not to us NEW
               //
@@ -680,8 +681,6 @@ class Arcade extends ModTemplate {
                   }
                 }
               }
-
-
 
               //
               // only load games that are for us
@@ -812,6 +811,7 @@ class Arcade extends ModTemplate {
       // open msgs -- public invitations
       //
       if (txmsg.module === "Arcade" && txmsg.request == "open") {
+        siteMessage(txmsg.game + ' invite created.', 3000);
         this.addGameToOpenList(tx);
         this.receiveOpenRequest(blk, tx, conf, app);
       }
@@ -820,6 +820,7 @@ class Arcade extends ModTemplate {
       // open msgs -- private invitations
       //
       if (txmsg.module === "ArcadeInvite" && txmsg.request == "open" && tx.isTo(app.wallet.returnPublicKey())) {
+        siteMessage('Private ' + txmsg.game + ' invite created.', 3000);
         this.addGameToOpenList(tx);
       }
 
