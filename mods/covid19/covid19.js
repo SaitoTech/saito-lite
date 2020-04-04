@@ -3,6 +3,7 @@ const ModTemplate = require('../../lib/templates/modtemplate');
 const SplashPage = require('./lib/splash-page');
 const CustomerPortal = require('./lib/customer-portal');
 const SupplierPortal = require('./lib/supplier-portal');
+const Certification = require('./lib/certification');
 
 const Header = require('../../lib/ui/header/covid_header');
 const AddressController = require('../../lib/ui/menu/address-controller');
@@ -84,31 +85,35 @@ class Covid19 extends ModTemplate {
     params = { $name: "Medical Device Certificate" }
     await app.storage.executeDatabase(sql, params, "covid19");
 
-    sql = `INSERT INTO categories (name) VALUES ('N95口罩 N95 Mask')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (1, 'N95口罩 N95 Mask')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('外科口罩 Surgical Masks')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (2, '外科口罩 Surgical Masks')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('防护面罩Face shield')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (3, '防护面罩Face shield')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('防护服Protection clothes')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (4, '防护服Protection clothes')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('医疗器械 medical instruments')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (5, '医疗器械 medical instruments')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('防护眼镜 goggles')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (6, '防护眼镜 goggles')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('手套 gloves')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (7, '手套 gloves')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('鞋套 shoe covers')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (8, '鞋套 shoe covers')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('防护头罩 medical hoods')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (9, '防护头罩 medical hoods')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('洗手液 Sanitizers')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (10, '洗手液 Sanitizers')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('医疗垃圾袋 Clinical waste bags')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (11, '医疗垃圾袋 Clinical waste bags')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('医疗围裙 Plastic Aprons')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (12, '医疗围裙 Plastic Aprons')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('手术服 surgical gown')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (13, '手术服 surgical gown')`;
+    app.storage.executeDatabase(sql, {}, "covid19");
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (14, 'KN95口罩 KN95 Mask')`;
+    app.storage.executeDatabase(sql, {}, "covid19");
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (15, 'Disposable Medical Masks')`;
     app.storage.executeDatabase(sql, {}, "covid19");
 
   }
@@ -407,7 +412,7 @@ class Covid19 extends ModTemplate {
 
 
 
-  addProductsToTable(rows, fields, data) {
+  addProductsToTable(rows, fields, app, data) {
 
     for (let i = 0; i < rows.length; i++) {
 
@@ -434,15 +439,14 @@ class Covid19 extends ModTemplate {
 
             if (fields[ii] == "edit") {
               if (this.app.wallet.returnPublicKey() == this.admin_pkey) { fields[ii] = "admin"; } else {
-                html += `<div class="grid-buttons"><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].id}">Delete</div></div>`;
+                html += `<div class="grid-buttons"><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].id}">Delete</div><div class="add_cert" id="add-certs-${rows[i].id}">Add Cert</div></div>`;
                 added = 1;
               }
             }
 
             if (fields[ii] == "fullview") {
-              //quoted out check as it is meaning the admin buttons are always displayed.
               if (this.app.wallet.returnPublicKey() == this.admin_pkey) {
-                html += `<div class="grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].product_id}">Delete</div></div>`;
+                html += `<div class="grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].product_id}">Delete</div><div class="add_cert" id="add-certs-${rows[i].id}">Add Cert</div></div>`;
                 added = 1;
               } else {
                 html += `<div class="grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div></div>`;
@@ -451,7 +455,7 @@ class Covid19 extends ModTemplate {
             }
 
             if (fields[ii] == "admin") {
-              html += `<div class="grid-buttons"><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].product_id}">Delete</div></div>`;
+              html += `<div class="grid-buttons"><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].product_id}">Delete</div><div class="add_cert" id="add-certs-${rows[i].id}">Add Cert</div></div>`;
               added = 1;
             }
 
@@ -481,10 +485,18 @@ class Covid19 extends ModTemplate {
       document.querySelector(".products-table").innerHTML += html.replace(/null/g, "").replace(/undefined/g, "");
       this.returnCerts(rows[i].product_id, "certsfor-");
 
+      document.querySelector(".products-table").querySelector('#add-certs-' + rows[i].product_id).addEventListener('click', (e) => {
+        data.id = e.target.id.split("-")[2];
+        Certification.render(app, data);
+        Certification.attachEvents(app, data);
+      });
+      
+
     }
+    document.querySelector(".products-table").style.display = "grid";
     document.querySelectorAll('.fullview_product').forEach(el => {
       el.addEventListener('click', (e) => {
-        data.id = e.toElement.id;
+        data.id = e.target.id;
         ProductPage.render(this.app, data);
         ProductPage.attachEvents(this.app, data);
       });
@@ -591,6 +603,12 @@ class Covid19 extends ModTemplate {
           html += "<div>Price (RMB)</div>";
           html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
+        case 'pricing_per_unit_public':
+          if (this.isAdmin()) {
+            html += "<div>Price (USD)</div>";
+            html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
+          }
+          break;
         case 'pricing_notes':
           html += "<div>Pricing Notes</div>";
           html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
@@ -674,8 +692,10 @@ class Covid19 extends ModTemplate {
           html += "<input class='input' data-table='suppliers' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'notes':
-          html += "<div>Notes</div>";
-          html += "<textarea class='input' data-table='suppliers' data-column='" + field[0] + "'>" + field[1] + "</textarea>";
+          if(this.isAdmin()) {
+            html += "<div>Notes</div>";
+            html += "<textarea class='input' data-table='suppliers' data-column='" + field[0] + "'>" + field[1] + "</textarea>";
+          }
           break;
         default:
           break;
@@ -686,17 +706,12 @@ class Covid19 extends ModTemplate {
 
   }
 
-  /*addCertsToGrid(grid) {
-     grid.querySelectorAll('.product_certificates').forEach(div => { 
-       this.returnCerts(div.id.split("-")[1]);
-     });
-  }*/
 
   returnCerts(id, prefix) {
     // should this be generalised to module wide?
     var module_self = this;
 
-    fields = "pc.product_id as 'product_id', c.name as 'Name', pc.id as cert_id";
+    fields = "pc.product_id as 'product_id', c.name as 'Name', note, pc.id as cert_id";
     var from = "certifications as 'c' JOIN products_certifications as 'pc'";
     var where = "c.id = pc.certification_id and pc.product_id = " + id;
     this.sendPeerDatabaseRequest("covid19", from, fields, where, null, function (res) {
@@ -704,20 +719,24 @@ class Covid19 extends ModTemplate {
       if (res.rows.length > 0) {
         var el = document.getElementById(prefix + res.rows[0].product_id);
         module_self.renderCerts(res.rows, el);
-
       }
     });
   }
 
+ 
   renderCerts(rows, el) {
     // should this be generalised to module wide?
     var module_self = this;
     var html = "";
     rows.forEach(row => {
+      var note = "";
+      if (row["note"].length > 0) {
+        note = "<div class='tiptext'>" + row["note"] + "</div>"
+      }
       if (row["cert_id"] != null) {
-        html += "<div class='cert'><a class='attach-" + row["cert_id"] + "'>" + row["Name"] + "</a></div>";
+        html += "<div class='cert tip'><a class='attach-" + row["cert_id"] + "'>" + row["Name"] + "</a>" + note + "</div>";
       } else {
-        html += "<div class='cert'>" + row["Name"] + "</div>";
+        html += "<div class='cert tip'>" + row["Name"] + note + "</div>";
       }
       el.innerHTML = html;
     });
@@ -766,9 +785,9 @@ class Covid19 extends ModTemplate {
   }
 
   isAdmin() {
-    return 1;
-    if (this.app.wallet.returnPublicKey() == this.admin_publickey) { return 1; }
-    return 0;
+    //return 1;
+    if (this.app.wallet.returnPublicKey() == this.admin_pkey) { return true; }
+    return false;
   }
 
 }

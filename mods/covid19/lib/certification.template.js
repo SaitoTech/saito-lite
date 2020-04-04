@@ -21,7 +21,9 @@ module.exports = CertificationTemplate = () => {
         <input data-ignore="true" id="certification_file" type="file" />
       </div>
 
+      <div>Note</div>
       <div>
+        <input data-id="new" id="certification_notes" data-table="products_certifications" data-column="note" type="text" />      
         <input data-id="new" style="display:none;" id="certification_file_data" data-table="products_certifications" data-column="file" style="display:block;" />
         <input data-id="new" style="display:none;" id="certification_file_name" data-table="products_certifications" data-column="file_filename" style="display:block;" />
         <input data-id="new" style="display:none;" id="certification_file_type" data-table="products_certifications" data-column="file_type" style="display:block;" />

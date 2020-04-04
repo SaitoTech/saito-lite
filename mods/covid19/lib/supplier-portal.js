@@ -18,7 +18,7 @@ module.exports = SupplierPortal = {
       data.covid19.sendPeerDatabaseRequest("covid19", "products JOIN suppliers LEFT JOIN categories", "products.id as 'product_id', categories.name, products.product_specification, products.product_photo, products.pricing_per_unit_rmb, products.production_daily_capacity, products.id", whereclause, null, function(res) {
 
         // no 'name' on supplier page
-        data.covid19.addProductsToTable(res.rows, [ 'name', 'product_specification', 'product_photo', 'pricing_per_unit_rmb', 'production_daily_capacity', 'certifications', 'id', 'admin']);
+        data.covid19.addProductsToTable(res.rows, [ 'name', 'product_specification', 'product_photo', 'pricing_per_unit_rmb', 'production_daily_capacity', 'certifications', 'id', 'admin'], app, data);
 
       document.querySelector(".loading").style.display = "none";
       document.querySelector(".portal").style.display = "block";
@@ -27,7 +27,7 @@ module.exports = SupplierPortal = {
       try { 
       document.querySelectorAll('.fullview_product').forEach(el => {
         el.addEventListener('click', (e) => {
-          data.id = e.toElement.id;
+          data.id = e.target.id;
           ProductPage.render(data);
         });
       });
@@ -36,7 +36,7 @@ module.exports = SupplierPortal = {
       try {
       document.querySelectorAll('.edit_product').forEach(el => {
         el.addEventListener('click', (e) => {
-          data.product_id = e.toElement.id;
+          data.product_id = e.target.id;
           UpdateProduct.render(app, data);
           UpdateProduct.attachEvents(app, data);
         });
@@ -47,7 +47,7 @@ module.exports = SupplierPortal = {
       document.querySelectorAll('.delete_product').forEach(el => {
         el.addEventListener('click', (e) => {
 	  alert("Product Deletion functionality coming soon!");
-	  data.product_id = e.toElement.id;
+	  data.product_id = e.target.id;
 	  data.covid19.deleteProduct(data.product_id, app.wallet.returnPublicKey());
 	  alert("Product Deleted!");
 	  window.location.reload();

@@ -31,9 +31,11 @@ module.exports = ProductPageTemplate = () => {
 
       <hr />
 
-      <h3>Supplier Details</h3>
+      <div class="supplier-profile">
 
-      <div id="supplier-grid" class="supplier-grid grid-4">
+        <h3>Supplier Details</h3>
+
+        <div id="supplier-grid" class="supplier-grid grid-4"></div>
 
       </div>
 

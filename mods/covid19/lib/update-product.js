@@ -45,7 +45,7 @@ module.exports = UpdateProduct = {
           //
           // load certifications
           //
-          fields = "pc.product_id as 'product_id', c.name as 'Name', pc.id as cert_id";
+          fields = "pc.product_id as 'product_id', c.name as 'Name', note, pc.id as cert_id";
           var from = "certifications as 'c' JOIN products_certifications as 'pc'";
           var where = "c.id = pc.certification_id and pc.product_id = " + data.product_id;
           data.covid19.sendPeerDatabaseRequest("covid19", from, fields, where, null, function (res) {
@@ -69,6 +69,7 @@ module.exports = UpdateProduct = {
             product_quantities: "",
             product_weight: "",
             pricing_per_unit_rmb: "",
+            pricing_per_unit_public: "",
             pricing_notes: "",
             pricing_payment_terms: "",
             production_stock: "",
@@ -168,7 +169,7 @@ module.exports = UpdateProduct = {
     } catch (err) { }
 
     document.querySelector('.attach-cert-btn').addEventListener('click', (e) => {
-      data.id = e.toElement.id.split("-")[1];
+      data.id = e.target.id.split("-")[1];
       Certification.render(app, data);
       Certification.attachEvents(app, data);
     });
