@@ -439,14 +439,14 @@ class Covid19 extends ModTemplate {
 
             if (fields[ii] == "edit") {
               if (this.app.wallet.returnPublicKey() == this.admin_pkey) { fields[ii] = "admin"; } else {
-                html += `<div class="grid-buttons"><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].id}">Delete</div><div class="add_cert" id="add-certs-${rows[i].id}">Add Cert</div></div>`;
+                html += `<div class="grid-buttons"><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].product_id}">Delete</div><div class="add_cert" id="add-certs-${rows[i].product_id}">Add Cert</div></div>`;
                 added = 1;
               }
             }
 
             if (fields[ii] == "fullview") {
               if (this.app.wallet.returnPublicKey() == this.admin_pkey) {
-                html += `<div class="grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].product_id}">Delete</div><div class="add_cert" id="add-certs-${rows[i].id}">Add Cert</div></div>`;
+                html += `<div class="grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].product_id}">Delete</div><div class="add_cert" id="add-certs-${rows[i].product_id}">Add Cert</div></div>`;
                 added = 1;
               } else {
                 html += `<div class="grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div></div>`;
@@ -455,7 +455,7 @@ class Covid19 extends ModTemplate {
             }
 
             if (fields[ii] == "admin") {
-              html += `<div class="grid-buttons"><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].product_id}">Delete</div><div class="add_cert" id="add-certs-${rows[i].id}">Add Cert</div></div>`;
+              html += `<div class="grid-buttons"><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].product_id}">Delete</div><div class="add_cert" id="add-certs-${rows[i].product_id}">Add Cert</div></div>`;
               added = 1;
             }
 
