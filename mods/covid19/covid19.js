@@ -491,7 +491,7 @@ class Covid19 extends ModTemplate {
           Certification.render(app, data);
           Certification.attachEvents(app, data);
         });
-      } catch {err}
+      } catch (err) {}
       
 
     }
