@@ -485,11 +485,13 @@ class Covid19 extends ModTemplate {
       document.querySelector(".products-table").innerHTML += html.replace(/null/g, "").replace(/undefined/g, "");
       this.returnCerts(rows[i].product_id, "certsfor-");
 
-      document.querySelector(".products-table").querySelector('#add-certs-' + rows[i].product_id).addEventListener('click', (e) => {
-        data.id = e.target.id.split("-")[2];
-        Certification.render(app, data);
-        Certification.attachEvents(app, data);
-      });
+      try {
+        document.querySelector(".products-table").querySelector('#add-certs-' + rows[i].product_id).addEventListener('click', (e) => {
+          data.id = e.target.id.split("-")[2];
+          Certification.render(app, data);
+          Certification.attachEvents(app, data);
+        });
+      } catch {err}
       
 
     }
@@ -730,7 +732,7 @@ class Covid19 extends ModTemplate {
     var html = "";
     rows.forEach(row => {
       var note = "";
-      if (row["note"].length > 0) {
+      if (row["note"]) {
         note = "<div class='tiptext'>" + row["note"] + "</div>"
       }
       if (row["cert_id"] != null) {
