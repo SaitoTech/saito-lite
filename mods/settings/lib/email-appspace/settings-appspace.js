@@ -190,6 +190,8 @@ module.exports = SettingsAppspace = {
 
     document.getElementById('restore-privatekey-btn').onclick = async (e) => {
 
+      await app.storage.resetOptions();
+
       let privatekey = "";
       let publickey = "";
 
