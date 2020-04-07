@@ -371,8 +371,7 @@ class Covid19 extends ModTemplate {
 
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('mode') && urlParams.get('mode') == 'buy') {
-      CustomerPortal.render(app, data);
-      CustomerPortal.attachEvents(app, data);
+      data.covid19.renderPage("customer", app, data);
     } else {
       SplashPage.render(app, data);
       SplashPage.attachEvents(app, data);
@@ -443,7 +442,8 @@ class Covid19 extends ModTemplate {
 
             if (fields[ii] == "product_photo") {
               if (rows[i][fields[ii]] != null) {
-                html += `<div><img style="max-width:200px;max-height:200px" src="${rows[i][fields[ii]]}" /></div>`;
+                //html += `<div><img style="max-width:200px;max-height:200px" src="${rows[i][fields[ii]]}" /></div>`;
+                html += `<div class="product-img-cell" id="product-img-${rows[i].product_id}">Loading...</div>`;
                 added = 1;
               }
             }
@@ -552,6 +552,19 @@ class Covid19 extends ModTemplate {
           InquirePage.attachEvents(this.app, data);
         });
       });
+    } catch (err) { }
+    try {
+      document.querySelectorAll('.product-img-cell').forEach(el => {
+        var product_id = el.id.split("-")[2];
+        data.covid19.sendPeerDatabaseRequest("covid19", "products", 'product_photo', "id = " + product_id, null, function (res) {
+          if(res.rows.length > 0 ) {
+            if(res.rows[0].product_photo.length > 0) {
+              var html = "<img style='max-width:200px;max-height:200px' src='" + res.rows[0].product_photo + "'/>";
+              document.getElementById('product-img-' + product_id).innerHTML = html;
+            }
+          }
+        });
+      }); 
     } catch (err) { }
   }
 

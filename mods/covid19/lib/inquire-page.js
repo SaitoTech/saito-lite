@@ -33,6 +33,12 @@ module.exports = InquirePage = {
 
   },
 
-  attachEvents(app, data) { }
+  attachEvents(app, data) {
+
+    document.getElementById('keep-shopping').addEventListener('click', () => {
+      data.covid19.renderPage("customer", app, data);
+    });
+
+   }
 
 }
