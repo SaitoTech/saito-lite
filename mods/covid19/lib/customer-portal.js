@@ -68,12 +68,12 @@ module.exports = CustomerPortal = {
 
       //clear grid
       document.querySelector(".products-table").innerHTML = `
-        <div class="table-head">Supplier</div>
-        <div class="table-head">Specification</div>
+        <div class="table-head">Product</div>
+        <div class="table-head">Daily Capacity</div>
         <div class="table-head">Photo</div>
-        <div class="table-head">Unit Cost</div>
-        <div class="table-head">Daily Volume</div>
         <div class="table-head">Certifications</div>
+        <div class="table-head">Unit Cost</div>
+        <div class="table-head"></div>
         <div class="table-head"></div>
         `;
 
@@ -82,7 +82,7 @@ module.exports = CustomerPortal = {
       //
       let whereclause = "suppliers.id = products.supplier_id AND products.category_id = " + category_id;
       data.covid19.sendPeerDatabaseRequest("covid19", "products JOIN suppliers", "products.id as 'product_id', *", whereclause, null, function (res) {
-        data.covid19.addProductsToTable(res.rows, ['name', 'product_specification', 'product_photo', 'pricing_per_unit_public', 'production_daily_capacity', 'certifications', 'id', 'fullview'], app, data);
+        data.covid19.addProductsToTable(res.rows, ['product_specification', 'production_daily_capacity','product_photo', 'certifications', 'pricing_per_unit_public', 'id', 'fullview'], app, data);
       });
 
       //

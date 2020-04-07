@@ -20,18 +20,6 @@ a {
   margin-bottom: 20px;
 }
 
-.fullview_product {
-  cursor: pointer;
-}
-
-.edit_product {
-  cursor: pointer;
-}
-
-.delete_product {
-  cursor: pointer;
-}
-
 .profile-information {
   max-width: 1200px;
   line-height: 1.6em;
@@ -115,8 +103,6 @@ label.treated {
 
 .certification {
   border: 1px solid var(--saito-red);
-  width: 600px;
-  max-width: 100vw;
   position: absolute;
   /* margin: 5vh auto; */
   padding: 1em;
@@ -133,7 +119,7 @@ label.treated {
   width: 250px;
 }
 
-.fullview_product, .edit_product, .delete_product, .add_cert {
+.fullview_product, .edit_product, .delete_product, .add_cert, .inquire_product {
   cursor: pointer;
   border: 1px solid var(--saito-red);
   width: 100px;
@@ -145,7 +131,7 @@ label.treated {
   margin: 0 5px 5px 0;
 }
 
-.fullview_product:hover, .edit_product:hover, .delete_product:hover, .add_cert:hover {
+.fullview_product:hover, .edit_product:hover, .delete_product:hover, .add_cert:hover, .inquire_product:hover {
   background: var(--saito-red);
   color: #FFF;
 }
@@ -178,4 +164,17 @@ button, .button {
 
 .products-table>div:nth-child(14n+8), .products-table>div:nth-child(14n+9), .products-table>div:nth-child(14n+10), .products-table>div:nth-child(14n+11), .products-table>div:nth-child(14n+12), .products-table>div:nth-child(14n+13), .products-table>div:nth-child(14n+14) {
   background-color: #f9f9f9;
+}
+
+.inq-grid {
+  margin: 2em 0;
+  width: 25em;
+}
+
+.contact-grid {
+  width: 25em;
+}
+
+.inq-product-name {
+  font-weight: bold;
 }

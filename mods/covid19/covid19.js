@@ -3,6 +3,7 @@ const ModTemplate = require('../../lib/templates/modtemplate');
 const SplashPage = require('./lib/splash-page');
 const CustomerPortal = require('./lib/customer-portal');
 const SupplierPortal = require('./lib/supplier-portal');
+const InquirePage = require('./lib/inquire-page'); 
 const Certification = require('./lib/certification');
 
 const Header = require('../../lib/ui/header/covid_header');
@@ -353,6 +354,9 @@ class Covid19 extends ModTemplate {
 
     if (this.app.BROWSER == 0) { return; }
 
+    data = {};
+    data.covid19 = this;
+
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
@@ -365,8 +369,15 @@ class Covid19 extends ModTemplate {
     Header.render(app, data);
     Header.attachEvents(app, data);
 
-    SplashPage.render(app, data);
-    SplashPage.attachEvents(app, data);
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('mode') && urlParams.get('mode') == 'buy') {
+      CustomerPortal.render(app, data);
+      CustomerPortal.attachEvents(app, data);
+    } else {
+      SplashPage.render(app, data);
+      SplashPage.attachEvents(app, data);
+    }
+
 
     //
     let chatmod = this.app.modules.returnModule("Chat");
@@ -439,23 +450,24 @@ class Covid19 extends ModTemplate {
 
             if (fields[ii] == "edit") {
               if (this.app.wallet.returnPublicKey() == this.admin_pkey) { fields[ii] = "admin"; } else {
-                html += `<div class="grid-buttons"><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].product_id}">Delete</div><div class="add_cert" id="add-certs-${rows[i].product_id}">Add Cert</div></div>`;
+                html += `<div class="grid-buttons"><div class="grid-action edit_product" id="edit-${rows[i].product_id}">Edit</div><div class="delete_product" id="delete-${rows[i].product_id}">Delete</div><div class="add_cert" id="add-certs-${rows[i].product_id}">Add Cert</div></div>`;
                 added = 1;
               }
             }
 
             if (fields[ii] == "fullview") {
               if (this.app.wallet.returnPublicKey() == this.admin_pkey) {
-                html += `<div class="grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].product_id}">Delete</div><div class="add_cert" id="add-certs-${rows[i].product_id}">Add Cert</div></div>`;
+                html += `<div class="grid-buttons"><div class="grid-action fullview_product" id="view-${rows[i].product_id}">View</div><div class="grid-action edit_product" id="edit-${rows[i].product_id}">Edit</div><div class="grid-action delete_product" id="delete-${rows[i].product_id}">Delete</div><!--div class="grid-action add_cert" id="add-certs-${rows[i].product_id}">Add Cert</div--></div>`;
                 added = 1;
               } else {
-                html += `<div class="grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div></div>`;
+//                html += `<div class="grid-action grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div></div>`;
+                html += `<div class="grid-buttons"><div class="grid-action inquire_product" id="inquire-${rows[i].product_id}">Buy</div></div>`;
                 added = 1;
               }
             }
 
             if (fields[ii] == "admin") {
-              html += `<div class="grid-buttons"><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].product_id}">Delete</div><div class="add_cert" id="add-certs-${rows[i].product_id}">Add Cert</div></div>`;
+              html += `<div class="grid-buttons"><div class="grid-action edit_product" id="edit-${rows[i].product_id}">Edit</div><div class="grid-action delete_product" id="delete-${rows[i].product_id}">Delete</div><div class="grid-action add_cert" id="add-certs-${rows[i].product_id}">Add Cert</div></div>`;
               added = 1;
             }
 
@@ -482,44 +494,65 @@ class Covid19 extends ModTemplate {
 
       }
 
+      html += "<div style='visibility:hidden;'></div>";
       document.querySelector(".products-table").innerHTML += html.replace(/null/g, "").replace(/undefined/g, "");
       this.returnCerts(rows[i].product_id, "certsfor-");
 
-      try {
-        document.querySelector(".products-table").querySelector('#add-certs-' + rows[i].product_id).addEventListener('click', (e) => {
+
+
+    }
+    document.querySelector(".products-table").style.display = "grid";
+    try {
+      document.querySelectorAll('.add_cert').forEach(el => {
+        el.addEventListener('click', (e) => {
           data.id = e.target.id.split("-")[2];
           Certification.render(app, data);
           Certification.attachEvents(app, data);
         });
-      } catch (err) {}
-      try {
-        document.querySelectorAll('.edit_product').forEach(el => {
-          el.addEventListener('click', (e) => {
-            data.product_id = e.target.id;
-            UpdateProduct.render(app, data);
-            UpdateProduct.attachEvents(app, data);
-          });
+      });
+    } catch (err) { }
+    try {
+      document.querySelectorAll('.edit_product').forEach(el => {
+        el.addEventListener('click', (e) => {
+          data.product_id = e.target.id.split("-")[1];
+          UpdateProduct.render(app, data);
+          UpdateProduct.attachEvents(app, data);
         });
-      } catch (err) {}
-      try {
+      });
+    } catch (err) { }
+    try {
       document.querySelectorAll('.delete_product').forEach(el => {
         el.addEventListener('click', (e) => {
           alert("Product Deletion functionality coming soon!");
         });
       });
-    } catch (err) {
-    }
-      
-
-    }
-    document.querySelector(".products-table").style.display = "grid";
-    document.querySelectorAll('.fullview_product').forEach(el => {
-      el.addEventListener('click', (e) => {
-        data.id = e.target.id;
-        ProductPage.render(this.app, data);
-        ProductPage.attachEvents(this.app, data);
+    } catch (err) { }
+    try {
+      document.querySelectorAll('.fullview_product').forEach(el => {
+        el.addEventListener('click', (e) => {
+          data.id = e.target.id.split("-")[1];
+          ProductPage.render(this.app, data);
+          ProductPage.attachEvents(this.app, data);
+        });
       });
-    });
+    } catch (err) { }
+    try {
+      document.querySelectorAll('.inquire_product').forEach(el => {
+        el.addEventListener('click', (e) => {
+          data.product_id = e.target.id.split("-")[1];
+          if(typeof localStorage.cart == 'undefined') {
+            localStorage.cart = "";
+          }
+          if(!localStorage.cart.split("|").includes(data.product_id)){
+            localStorage.cart += "|" + data.product_id;
+          }
+
+          //salert('gimme - product id:' + e.target.id)
+          InquirePage.render(this.app, data);
+          InquirePage.attachEvents(this.app, data);
+        });
+      });
+    } catch (err) { }
   }
 
 
@@ -711,7 +744,7 @@ class Covid19 extends ModTemplate {
           html += "<input class='input' data-table='suppliers' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'notes':
-          if(this.isAdmin()) {
+          if (this.isAdmin()) {
             html += "<div>Notes</div>";
             html += "<textarea class='input' data-table='suppliers' data-column='" + field[0] + "'>" + field[1] + "</textarea>";
           }
@@ -742,7 +775,7 @@ class Covid19 extends ModTemplate {
     });
   }
 
- 
+
   renderCerts(rows, el) {
     // should this be generalised to module wide?
     var module_self = this;
