@@ -443,7 +443,7 @@ class Covid19 extends ModTemplate {
             if (fields[ii] == "product_photo") {
               if (rows[i][fields[ii]] != null) {
                 //html += `<div><img style="max-width:200px;max-height:200px" src="${rows[i][fields[ii]]}" /></div>`;
-                html += `<div class="product-img-cell" id="product-img-${rows[i].product_id}">Loading...</div>`;
+                html += `<div class="product-img-cell" id="product-img-${rows[i].product_id}"><i class="far fa-images"></i></div>`;
                 added = 1;
               }
             }
