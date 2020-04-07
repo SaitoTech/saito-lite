@@ -45,6 +45,12 @@ class Thirteen extends GameTemplate {
     this.menuItems = ['lang'];
     //this.hud = new GameHud(this.app, this.menuItems());
 
+
+    //
+    //
+    //
+    this.opponent_cards_in_hand = 0;
+
   }
 
 
@@ -193,12 +199,17 @@ console.log("\n\n\n\n");
       this.game.queue.push("round");
       this.game.queue.push("READY");
 
-      this.game.queue.push("DEAL\t1\t1\t8");
-      this.game.queue.push("SHUFFLE\t1");
+      this.game.queue.push("DECKENCRYPT\t1\t2");
+      this.game.queue.push("DECKENCRYPT\t1\t1");
+      this.game.queue.push("DECKXOR\t1\t2");
+      this.game.queue.push("DECKXOR\t1\t1");
       this.game.queue.push("DECK\t1\t"+JSON.stringify(this.returnAgendaCards()));
 
-//      this.game.queue.push("DEAL\t1\t1\t8");
-      this.game.queue.push("SHUFFLE\t2");
+      
+      this.game.queue.push("DECKENCRYPT\t2\t2");
+      this.game.queue.push("DECKENCRYPT\t2\t1");
+      this.game.queue.push("DECKXOR\t2\t2");
+      this.game.queue.push("DECKXOR\t2\t1");
       this.game.queue.push("DECK\t2\t"+JSON.stringify(this.returnStrategyCards()));
 
 
@@ -400,29 +411,284 @@ console.log("PLAYER SET TO: " + this.game.player);
         this.game.queue.splice(qe, 1);
 
       }
-      if (mv[0] == "round") {
+      if (mv[0] == "reshuffle_discarded_agenda_cards") {
 
-console.log("printing dealt cards: ");
-console.log(JSON.stringify(this.game.deck[0].hand));
+	let discarded_cards = this.returnDiscardedCards(1);
 
-        for (let i = 0; i < this.rounds_in_turn; i++) {
-          this.game.queue.push("turn");
-          this.game.queue.push("play\t2");
-          this.game.queue.push("play\t1");
+        if (Object.keys(discarded_cards).length > 0) {
+
+          //
+          // shuffle in discarded cards
+          //
+          thirteen_self.addMove("SHUFFLE\t1");
+          thirteen_self.addMove("DECKRESTORE\t1");
+          thirteen_self.addMove("DECKENCRYPT\t1\t2");
+          thirteen_self.addMove("DECKENCRYPT\t1\t1");
+          thirteen_self.addMove("DECKXOR\t1\t2");
+          thirteen_self.addMove("DECKXOR\t1\t1");
+          thirteen_self.addMove("flush\tdiscards"); // opponent should know to flush discards as we have
+          thirteen_self.addMove("DECK\t1\t"+JSON.stringify(discarded_cards));
+          thirteen_self.addMove("DECKBACKUP\t1");
+          thirteen_self.updateLog("cards remaining: " + thirteen_self.game.deck[0].crypt.length);
+          thirteen_self.updateLog("Shuffling discarded agenda cards back into the deck...");
+
+        }
+
+	this.game.queue.splice(qe, 1);
+
+      }
+      if (mv[0] == "pick_agenda_card") {
+
+	let player = parseInt(mv[1]);
+
+	console.log("player_to_go: " + player);
+	console.log("I am " + this.game.player);
+
+console.log("CARDS: " + JSON.stringify(this.game.deck[0].hand));
+	if (this.game.player == player)  {
+
+          this.updateStatusAndListCards("Pick one Agenda Card to keep: ", this.game.deck[0].hand, function(card) {
+
+alert("clicked on card: " + card);
+
+	    thirteen_self.addMove("RESOLVE");
+	    for (let i = 0; i < thirteen_self.game.deck[0].hand.length; i++) {
+	      thirteen_self.addMove("flag\t"+thirteen_self.game.player+"\t" + thirteen_self.game.deck[0].hand[i]);
+	      if (thirteen_self.game.deck[0].hand[i] !== card) {
+	        thirteen_self.addMove("discard\t"+thirteen_self.game.player+"\t" + "1" + "\t" + thirteen_self.game.deck[0].hand[i]);
+	      }
+	    }
+
+	    thirteen_self.endTurn();
+
+	  });
+	} else {
+
+	  if (player == 1) {
+	    this.updateStatusAndListCards("Your Agenda Card: ", this.game.deck[0].hand, function(card) {
+	      alert("picked card: " + card);
+	    }); 
+	  } else {
+	    this.updateStatusAndListCards("Waiting for USSR to pick its Agenda Card: ", this.game.deck[0].hand, function(card) {
+	      alert("picked card: " + card);
+	    });
+	  }
+	}
+
+	return 0;
+      }
+      if (mv[0] == "discard") {
+
+	let player = parseInt(mv[1]);
+	let deck = parseInt(mv[2])-1;
+	let cardname = mv[3];
+	let player_country = "USSR";
+	if (player == 2) { player_country = "US"; }
+
+console.log("here in discard!");
+
+        this.updateLog("<span>" + player_country + " discards</span> <span class=\"logcard\" id=\""+cardname+"\">" + this.game.deck[deck].cards[cardname].name + "</span>");
+
+console.log(JSON.stringify(this.game.deck[deck].hand));
+
+        for (let i = 0; i < this.game.deck[deck].hand.length; i++) {
+console.log("checking: " + cardname + " against " + this.game.deck[deck].hand[i]);
+          if (cardname == this.game.deck[deck].hand[i]) {
+console.log("REMOVING CARD!");
+            this.game.deck[deck].discards[cardname] = this.game.deck[deck].hand[cardname];
+  	    this.removeCardFromHand(cardname);
+          }
+        }
+
+        this.game.queue.splice(qe, 1);
+
+      }
+
+      if (mv[0] == "setvar") {
+
+	if (mv[1] == "opponent_cards_in_hand") {
+	  this.opponent_cards_in_hand = parseInt(mv[2]);
+	}
+
+        this.game.queue.splice(qe, 1);
+
+      }
+
+      if (mv[0] == "flush") {
+
+	let deckidx = parseInt(mv[2])-1;
+
+        if (mv[1] == "discards") {
+          this.game.deck[deckidx].discards = {};
         }
 
         this.game.queue.splice(qe, 1);
       }
+
+      if (mv[0] == "flag") {
+
+	let player = parseInt(mv[1]);
+	let slot = mv[2];
+
+	if (player == 1) {
+	  this.game.state.us_agendas.push(slot);
+	} else {
+	  this.game.state.ussr_agendas.push(slot);
+	}
+
+        this.game.queue.splice(qe, 1);
+      }
+      if (mv[0] == "move_strategy_card_into_alliances") {
+
+	if (this.game.player == 1) {
+	  this.game.state.ussr_alliances.push(this.game.deck[0].hand[0]);
+	  this.removeCardFromHand(this.game.deck[0].hand[0]);
+	} else {
+	  this.game.state.us_alliances.push(this.game.deck[0].hand[0]);
+	  this.removeCardFromHand(this.game.deck[0].hand[0]);
+	}
+
+	this.game.queue.splice(qe, 1);
+
+      }
+      if (mv[0] == "defcon_check") {
+
+console.log("Checking DEFCON to see if anyone loses....");
+
+	this.game.queue.splice(qe, 1);
+
+      }
+      if (mv[0] == "tally_alliances") {
+
+console.log("Tallying Alliances Before Scoring");
+
+	this.game.queue.splice(qe, 1);
+
+      }
+      if (mv[0] == "scoring_phase") {
+
+console.log("Scoring Phase");
+
+	this.game.queue.splice(qe, 1);
+
+      }
+      if (mv[0] == "world_opinion_phase") {
+
+console.log("World Opinion Phase");
+
+	this.game.queue.splice(qe, 1);
+
+      }
+      if (mv[0] == "round") {
+
+	//
+	// round 3? tally alliances
+	//
+        if (this.game.state.round == 3) {
+	  this.addMove("tally_alliances");
+	}
+
+	//
+	// DEFCON check
+	//
+	this.addMove("defcon_check");
+
+
+	//
+	// Scoring Phase
+	//
+	this.addMove("scoring_phase");
+
+
+	//
+	// World Opinion Phase
+	//
+	this.addMove("world_opinion_phase");
+
+
+	this.addMove("move_strategy_card_into_alliances");
+
+	//
+	// pick five strategy cards
+	//
+        if (this.returnInitiative() === "ussr") {
+	  this.addMove("play\t1");
+	  this.addMove("play\t2");
+	  this.addMove("play\t1");
+	  this.addMove("play\t2");
+	  this.addMove("play\t1");
+	  this.addMove("play\t2");
+	  this.addMove("play\t1");
+	  this.addMove("play\t2");
+        } else {
+	  this.addMove("play\t2");
+	  this.addMove("play\t1");
+	  this.addMove("play\t2");
+	  this.addMove("play\t1");
+	  this.addMove("play\t2");
+	  this.addMove("play\t1");
+	  this.addMove("play\t2");
+	  this.addMove("play\t1");
+        }
+
+        this.game.queue.push("DEAL\t2\t1\t3");
+        this.game.queue.push("DEAL\t2\t2\t3");
+        this.game.queue.push("SHUFFLE\t2");
+
+
+	this.game.state.us_agendas = [];
+	this.game.state.ussr_agendas = [];
+
+        this.game.queue.push("reshuffle_discarded_agenda_cards\t2");
+        this.game.queue.push("pick_agenda_card\t2");
+        this.game.queue.push("pick_agenda_card\t1");
+
+
+        //
+        // phase 2 - deal agenda cards
+        //
+        this.updateLog("3 Agenda Cards dealt to each player");
+        this.game.queue.push("DEAL\t1\t1\t3");
+        this.game.queue.push("DEAL\t1\t2\t3");
+        this.game.queue.push("SHUFFLE\t1");
+
+
+        //
+        // phase 1 - escalate DEFCON markets
+        //
+        this.updateLog("all DEFCON tracks increased by 1");
+        this.game.state.defcon1_us++;
+        this.game.state.defcon1_ussr++;
+        this.game.state.defcon2_us++;
+        this.game.state.defcon2_ussr++;
+        this.game.state.defcon3_us++;
+        this.game.state.defcon3_ussr++;
+        this.showDefconTracks();
+
+        this.game.queue.splice(qe, 1);
+      }
+
       if (mv[0] == "play") {
 
-return 0;
+        this.game.queue.splice(qe, 1);
+
+	return 0;
+
       }
+
     }
 
 
     return 1;
 
   }
+
+
+
+
+
+  
+
 
 
 
@@ -443,13 +709,23 @@ return 0;
   removeCardFromHand(card) {
 
     for (i = 0; i < this.game.deck[0].hand.length; i++) {
-      if (this.game.deck[0].hand[i] == card) {
+      if (this.game.deck[0].hand[i] === card) {
         this.game.deck[0].hand.splice(i, 1);
+      }
+    }
+    for (i = 0; i < this.game.deck[1].hand.length; i++) {
+      if (this.game.deck[1].hand[i] === card) {
+        this.game.deck[1].hand.splice(i, 1);
       }
     }
 
   }
 
+
+
+  returnInitiative() {
+    return "ussr";
+  }
 
 
 
@@ -536,6 +812,22 @@ return 0;
     this.showRoundTrack();
     this.showPrestigeTrack();
     this.showDefconTracks();
+
+  }
+  showAgendaFlags() {
+
+    $('.flags').remove();
+
+    for (let i in this.game.state.us_agendas) {
+      let ushtml = '<img class="flags" src="/thirteen/img/nUS%20Tile%20with%20bleed.png" style="position:relative;top:-'+this.scale(20)+'px;left:'+this.scale(0)+'px;" />';
+    console.log("PLACING FLAG ON: " + i);
+
+    }
+    for (let i in this.game.state.ussr_agendas) {
+      let ussrhtml = '<img class="flags" src="/thirteen/img/nUSSR%20Tile%20with%20bleed.png" style="position:relative;top:-'+this.scale(20)+'px;left:'+this.scale(0)+'px;" />';
+    console.log("PLACING FLAG ON: " + i);
+    }
+
 
   }
   showInfluence(arena_id) {
@@ -646,6 +938,15 @@ return 0;
     state.defcon2_ussr = 1;
     state.defcon3_us   = 1;
     state.defcon3_ussr = 1;
+
+    state.us_agendas   = [];
+    state.ussr_agendas = [];
+
+    state.us_alliances = [];
+    state.ussr_alliances = [];
+
+
+    state.initiative   = "ussr";
 
     return state;
 
@@ -1161,21 +1462,6 @@ return 0;
 
 
 
-  returnDiscardedCards() {
-
-    var discarded = {};
-
-    for (var i in this.game.deck[0].discards) {
-      discarded[i] = this.game.deck[0].cards[i];
-      delete this.game.deck[0].cards[i];
-    }
-
-    this.game.deck[0].discards = {};
-
-    return discarded;
-
-  }
-
 
 
 
@@ -1218,24 +1504,6 @@ return 0;
 
 
 
-
-  returnCardImage(cardname) {
-
-    var c = this.game.deck[0].cards[cardname];
-    if (c == undefined) { c = this.game.deck[0].discards[cardname]; }
-    if (c == undefined) { c = this.game.deck[0].removed[cardname]; }
-    if (c == undefined) {
-
-      //
-      // this is not a card, it is something like "skip turn" or cancel
-      //
-      return '<div class="noncard">'+cardname+'</div>';
-
-    }
-
-    return `<img class="cardimg" src="/thirteen/img/${c.img}.svg" />`;
-
-  }
 
   showCard(cardname) {
     let card_html = this.returnCardImage(cardname);
@@ -1332,6 +1600,126 @@ return 0;
   }
 
 
+
+
+  returnCardList(cardarray=[]) {
+
+    let html = "";
+
+    for (i = 0; i < cardarray.length; i++) {
+      html += this.returnCardItem(cardarray[i]);
+    }
+
+    return html;
+
+  }
+
+
+  returnCardItem(card) {
+
+    if (this.game.deck[0].cards[card] != undefined) {
+      return `<div id="${card.replace(/ /g,'')}" class="card cardbox-hud cardbox-hud-status">${this.returnCardImage(card)}</div>`;
+    }
+    if (this.game.deck[1].cards[card] != undefined) {
+      return `<div id="${card.replace(/ /g,'')}" class="card cardbox-hud cardbox-hud-status">${this.returnCardImage(card)}</div>`;
+    }
+    return '<li class="card showcard" id="'+card+'">'+this.game.deck[0].cards[card].name+'</li>';
+
+  }
+
+
+  returnCardImage(cardname) {
+
+    var c = this.game.deck[0].cards[cardname];
+    if (c == undefined) { c = this.game.deck[1].cards[cardname]; }
+    if (c == undefined) { c = this.game.deck[0].discards[cardname]; }
+    if (c == undefined) { c = this.game.deck[0].removed[cardname]; }
+    if (c == undefined) { c = this.game.deck[1].discards[cardname]; }
+    if (c == undefined) { c = this.game.deck[1].removed[cardname]; }
+    if (c == undefined) {
+
+      //
+      // this is not a card, it is something like "skip turn" or cancel
+      //
+      return '<div class="noncard">'+cardname+'</div>';
+
+    }
+
+    return `<img class="cardimg showcard" id="${cardname}" src="/thirteen/img/${c.img}" />`;
+
+  }
+
+
+
+
+  updateStatusAndListCards(message, cards=[], mycallback=null) {
+
+    html = `
+      <div class="cardbox-status-container">
+        <div>${message}</div>
+        ${this.returnCardList(cards)}
+      </div>
+    `
+
+    this.updateStatus(html);
+    this.addShowCardEvents(mycallback);
+  }
+
+
+
+  addShowCardEvents(onCardClickFunction) {
+
+    let thirteen_self = this;
+
+    this.hud.status_callback = () => {
+      let thirteen_self = this;
+      let isMobile = this.app.browser.isMobileBrowser(navigator.userAgent);
+
+      $('.card').off();
+
+      if (!isMobile) {
+
+        $('.showcard').off();
+        $('.showcard').mouseover(function() {
+          let card = $(this).attr("id");
+          thirteen_self.showCard(card);
+        }).mouseout(function() {
+          let card = $(this).attr("id");
+          thirteen_self.hideCard(card);
+        });
+
+      }
+
+      $('.card').on('click', function() {
+        // pass our click option
+        let card = $(this).attr("id");
+        if (onCardClickFunction) { onCardClickFunction(card); }
+        else {
+          if (isMobile) {
+            let card = $(this).attr("id");
+            thirteen_self.showCard(card);
+
+            $('.cardbox-exit').off();
+            $('.cardbox-exit').on('click', function () {
+              thirteen_self.hideCard();
+              $('.cardbox_menu_playcard').css('display','none');
+              $(this).css('display', 'none');
+            });
+          }
+        }
+      });
+    }
+
+    this.hud.status_callback();
+
+  }
+
+
+
+
+
+
+
   addLogCardEvents() {
 
     let thirteen_self = this;
@@ -1351,6 +1739,26 @@ return 0;
 
   }
 
+
+
+  //
+  //
+  //
+  returnDiscardedCards(deckidx) {
+
+    var discarded = {};
+    deckidx = parseInt(deckidx-1);
+
+    for (var i in this.game.deck[deckidx].discards) {
+      discarded[i] = this.game.deck[0].cards[i];
+      delete this.game.deck[0].cards[i];
+    }
+
+    this.game.deck[0].discards = {};
+
+    return discarded;
+
+  }
 
 
 } // end Thirteen class
