@@ -24,6 +24,7 @@
     "body-parser": "^1.19.0",
     "chess.js": "^0.10.2",
     "crypto": "^1.0.1",
+    "elo-rank": "^1.0.4",
     "exports-loader": "^0.7.0",
     "express": "^4.17.1",
     "fastest-stable-stringify": "^2.0.2",

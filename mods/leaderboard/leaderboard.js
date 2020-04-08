@@ -6,6 +6,8 @@ const LeaderboardSidebar = require('./lib/arcade-sidebar/leaderboard');
 const Header = require('../../lib/ui/header/header');
 const AddressController = require('../../lib/ui/menu/address-controller');
 
+const Elo = require('elo-rank');
+
 
 class Leaderboard extends ModTemplate {
 
@@ -45,27 +47,27 @@ class Leaderboard extends ModTemplate {
 
     if (conf == 0) {
 
-      let winner = "";
+      let winner = {};
       let module = "";
       let reason = "";
-      let loser  = "";
+      let loser = {};
 
       //
       // cancel open games
       //
       if (txmsg.request == "gameover") {
 
-	winner = txmsg.winner;
-	module = txmsg.module;
-	for (let i = 0; i < tx.transaction.to.length; i++) {
-	  if (tx.transaction.to[i].add != winner) {
-	    loser = tx.transaction.to[i].add;
-	  }
-	}
+        winner.publickey = txmsg.winner;
+        module = txmsg.module;
+        for (let i = 0; i < tx.transaction.to.length; i++) {
+          if (tx.transaction.to[i].add != winner) {
+            loser.publickey = tx.transaction.to[i].add;
+          }
+        }
 
         if (winner != loser && winner != "" && loser != "") {
-	  leaderboard_self.updateRankingAlgorithm(module, winner, loser);
-	}
+          leaderboard_self.updateRankingAlgorithm(module, winner, loser);
+        }
       }
     }
   }
@@ -76,9 +78,57 @@ class Leaderboard extends ModTemplate {
     //
     // Richard, the magic goes here
     //
+    var elo = new Elo(15);
+
+    //initialise winner and loser objects
+    winner.ranking = 1000;
+    winner.games = 0;
+    winner.module = module;
+
+    loser.ranking = 1000;
+    loser.games = 0;
+    loser.module = module;
+
+    //load any database rows that match the winner and loser
+    var where = "('" + winner.publickey + "', '" + loser.publickey + "')";
+
+    this.sendPeerDatabaseRequest("leaderboard", "leaderboard", "*", where, null, function (res) {
+      res.rows.forEach(row => {
+        if (row.publickey == winner.publickey) {
+          winner = row;
+        }
+        if (row.publickey == loser.publickey) {
+          loser = row;
+        }
+      });
+    });
+
+    //update rankngs 
+    var wr = winner.ranking;
+    var lr = loser.ranking;
+
+    winner.ranking = elo.updateRating(elo.getExpected(wr, lr), 1, wr);
+    loser.ranking = elo.updateRating(elo.getExpected(lr, wr), 0, lr);
+
+    //incriment games played
+    winner.games ++;
+    loser.games ++;
+
+    //update database, or insert new players
+    this.updatePlayer(winner);
+    this.updatePlayer(loser);
+
   }
 
+  updatePlayer(player) {
+    var sql = `
+      INSERT OR REPLACE INTO leaderboard (module, publickey, ranking, games) 
+      VALUES (${player.module}, ${player.publickey}, ${player.ranking}, ${player.games});
+      `;
 
+      this.app.storage.executeDatabase(sql, {}, "leaderboard");
+
+  }
 
   respondTo(type = "") {
     if (type == "arcade-sidebar") {
