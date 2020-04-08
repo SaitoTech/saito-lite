@@ -510,6 +510,33 @@ console.log("REMOVING CARD!");
 	  this.opponent_cards_in_hand = parseInt(mv[2]);
 	}
 
+	if (mv[1] == "add_command_token_bonus") {
+	  let player = parseInt(mv[2]);
+	  if (player == 1) {
+	    this.game.state.ussr_command_token_bonus++;
+	  } else {
+	    this.game.state.us_command_token_bonus++;
+	  }
+	}
+
+	if (mv[1] == "remove_command_token_bonus") {
+	  let player = parseInt(mv[2]);
+	  if (player == 1) {
+	    this.game.state.ussr_command_token_bonus--;
+	  } else {
+	    this.game.state.us_command_token_bonus--;
+	  }
+	}
+
+	if (mv[1] == "cannot_deflate_defcon_from_events") {
+	  let player = parseInt(mv[2]);
+	  if (player == 1) {
+	    this.game.state.ussr_cannot_deflate_defcon_from_events = 1;
+	  } else {
+	    this.game.state.us_cannot_deflate_defcon_from_events = 1;
+	  }
+	}
+
         this.game.queue.splice(qe, 1);
 
       }
@@ -582,57 +609,65 @@ console.log("World Opinion Phase");
       if (mv[0] == "round") {
 
 	//
+	// reset round vars
+	//
+        this.game.state.ussr_command_token_bonus = 0;
+        this.game.state.us_command_token_bonus = 0;
+        this.game.state.ussr_cannot_deflate_defcon_from_events = 0;
+        this.game.state.us_cannot_deflate_defcon_from_events = 0;
+
+	//
 	// round 3? tally alliances
 	//
         if (this.game.state.round == 3) {
-	  this.addMove("tally_alliances");
+	  this.game.queue.push("tally_alliances");
 	}
 
 	//
 	// DEFCON check
 	//
-	this.addMove("defcon_check");
+	this.game.queue.push("defcon_check");
 
 
 	//
 	// Scoring Phase
 	//
-	this.addMove("scoring_phase");
+	this.game.queue.push("scoring_phase");
 
 
 	//
 	// World Opinion Phase
 	//
-	this.addMove("world_opinion_phase");
+	this.game.queue.push("world_opinion_phase");
 
 
-	this.addMove("move_strategy_card_into_alliances");
+	this.game.queue.push("move_strategy_card_into_alliances");
 
 	//
 	// pick five strategy cards
 	//
         if (this.returnInitiative() === "ussr") {
-	  this.addMove("play\t1");
-	  this.addMove("play\t2");
-	  this.addMove("play\t1");
-	  this.addMove("play\t2");
-	  this.addMove("play\t1");
-	  this.addMove("play\t2");
-	  this.addMove("play\t1");
-	  this.addMove("play\t2");
+	  this.game.queue.push("play\t1");
+	  this.game.queue.push("play\t2");
+	  this.game.queue.push("play\t1");
+	  this.game.queue.push("play\t2");
+	  this.game.queue.push("play\t1");
+	  this.game.queue.push("play\t2");
+	  this.game.queue.push("play\t1");
+	  this.game.queue.push("play\t2");
         } else {
-	  this.addMove("play\t2");
-	  this.addMove("play\t1");
-	  this.addMove("play\t2");
-	  this.addMove("play\t1");
-	  this.addMove("play\t2");
-	  this.addMove("play\t1");
-	  this.addMove("play\t2");
-	  this.addMove("play\t1");
+	  this.game.queue.push("play\t2");
+	  this.game.queue.push("play\t1");
+	  this.game.queue.push("play\t2");
+	  this.game.queue.push("play\t1");
+	  this.game.queue.push("play\t2");
+	  this.game.queue.push("play\t1");
+	  this.game.queue.push("play\t2");
+	  this.game.queue.push("play\t1");
         }
 
-        this.game.queue.push("DEAL\t2\t1\t3");
-        this.game.queue.push("DEAL\t2\t2\t3");
+        this.game.queue.push("DEAL\t2\t1\t5");
+        this.game.queue.push("DEAL\t2\t2\t5");
         this.game.queue.push("SHUFFLE\t2");
 
 
@@ -665,12 +700,59 @@ console.log("World Opinion Phase");
         this.game.state.defcon3_ussr++;
         this.showDefconTracks();
 
-        this.game.queue.splice(qe, 1);
       }
+
+      if (mv[0] == "add_influence") {
+
+	let player = parseInt(mv[1]);
+	let arena_id = mv[2];
+	let num = parseInt(mv[3]);
+
+	if (player == 1) {
+	  if (player != this.game.player) {
+	    this.game.arenas[arena_id].ussr += num;
+	    if (this.game.arenas[arena_id].ussr > 5) { this.game.arenas[arena_id].ussr = 5; }
+	  }
+	} else {
+	  if (player != this.game.player) {
+	    this.game.arenas[arena_id].us += num;
+	    if (this.game.arenas[arena_id].us > 5) { this.game.arenas[arena_id].us = 5; }
+	  }
+	}
+
+      }
+
+      if (mv[0] == "remove_influence") {
+
+	let player = parseInt(mv[1]);
+	let arena_id = mv[2];
+	let num = parseInt(mv[3]);
+
+	if (player == 1) {
+	  if (player != this.game.player) {
+	    this.game.arenas[arena_id].ussr -= num;
+	    if (this.game.arenas[arena_id].ussr < 0) { this.game.arenas[arena_id].ussr = 0; }
+	  }
+	} else {
+	  if (player != this.game.player) {
+	    this.game.arenas[arena_id].us -= num;
+	    if (this.game.arenas[arena_id].us < 0) { this.game.arenas[arena_id].us = 0; }
+	  }
+	}
+
+	this.showBoard();
+
+      }
+
 
       if (mv[0] == "play") {
 
+	this.game.state.turn = parseInt(mv[1]);
         this.game.queue.splice(qe, 1);
+
+console.log("PLAYER: " + this.game.player);
+
+	this.playerTurn();
 
 	return 0;
 
@@ -694,16 +776,297 @@ console.log("World Opinion Phase");
 
 
 
+  removeEventsFromBoard() {
+    //
+    // remove active events
+    //
+    $('.country').off();
 
+  }
 
 
   playerTurn(selected_card=null) {
 
+    let thirteen_self = this;
+
     //
     // prep the board
     //
+    this.removeEventsFromBoard();
+
+console.log("TURN: " + this.game.state.turn);
+
+    //
+    //
+    //
+    if (this.game.state.turn != this.game.player) {
+      this.updateStatusAndListCards(`Waiting for Opponent to move...`);
+    } else {
+      this.updateStatusAndListCards(`Pick a card to play:`, this.game.deck[1].hand, function(card) {
+	alert("clicked on: " + card);
+	thirteen_self.playerPlayStrategyCard(card);
+      });
+    }
 
   }
+
+
+  playerPlayStrategyCard(card) {
+
+    let thirteen_self  = this;
+    let strategy_cards = this.returnStrategyCards(); 
+    let this_card      = strategy_cards[card];
+
+    let html = '';
+
+    let me = "ussr";
+    if (this.game.player == 2) { me = "us"; }
+
+
+    //
+    // my card
+    //
+    if (this_card.side == "un" || this_card.side == me) {
+
+      html = 'How would you like to play this card: <p></p><ul>';
+      html += '<li class="card" id="playevent">Play for Event</li>';
+      html += '<li class="card" id="playcommand">Play for Command</li>';
+      html += '</ul>';
+
+    //
+    // opponent card
+    //
+    } else {
+
+      html = 'How would you like to play this card: <p></p><ul>';
+      html += '<li class="card" id="playcommand">Play for Command</li>';
+      html += '</ul>';
+
+    }
+
+    thirteen_self.updateStatus(html);
+
+    $('.card').off();
+    $('.card').on('click', function() {
+
+      let action = $(this).attr("id");
+      $('.card').off();
+
+      if (action == "playevent") {
+        thirteen_self.playerTriggerEvent(this.game.player, card);
+        return;
+      }
+      if (action == "playcommand") {
+        thirteen_self.playerPlaceCommandTokens(this.game.player, card);
+        return;
+      }
+
+    });
+
+
+  }
+
+
+  addInfluence(player, arena_id, num) {
+
+    if (player == 1) {
+      this.game.arenas[arena_id].ussr += num;
+      if (this.game.arenas[arena_id].ussr > 5) { this.game.arenas[arena_id].ussr = 5; return false; }
+      this.updateLog("USSR gains influence in "+this.game.arenas[arena_id].name);
+    } else {
+      this.game.arenas[arena_id].us += num;
+      if (this.game.arenas[arena_id].us > 5) { this.game.arenas[arena_id].us = 5; return false; }
+      this.updateLog("US gains influence in "+this.game.arenas[arena_id].name);
+    }
+
+    return true;
+
+  }
+
+  removeInfluence(player, arena_id, num) {
+
+    if (player == 1) {
+      this.game.arenas[arena_id].ussr -= num;
+      if (this.game.arenas[arena_id].ussr < 0) { this.game.arenas[arena_id].ussr = 0; return false; }
+      this.updateLog("USSR removes influence in "+this.game.arenas[arena_id].name);
+    } else {
+      this.game.arenas[arena_id].us -= num;
+      if (this.game.arenas[arena_id].us < 0) { this.game.arenas[arena_id].us = 0; return false; }
+      this.updateLog("US removes influence in "+this.game.arenas[arena_id].name);
+    }
+
+    return true;
+
+  }
+
+  eventAddInfluence(player, options, number, max_per_arena, mycallback=null) {
+
+    let args = {};
+
+    $(".done").off();
+    $(".done").on('click', function() {
+      if (mycallback != null) { mycallback(args); }
+    });
+
+    let placed = [];
+    let total_placed = 0;
+
+    this.removeEventsFromBoard();
+
+    for (let i = 0; i < options.length; i++) {
+
+      placed[options[i]] = 0;
+      let divname = "." + options[i];
+
+      $(divname).off();
+      $(divname).on('click', function() {
+
+	let arena_id = $(this).attr.id;
+
+	if (placed[arena_id] > max_per_arena) {
+	  salert("You cannot place more influence there.");
+	} else {
+
+	  if (thirteen_self.addInfluence(player, arena_id, 1)) {
+	    total_placed++;
+	    placed[arena_id]++;
+	    thirteen.addMove("add_influence\t"+player+"\t"+arena_id+"\t"+"1");
+
+	    if (total_placed == max) {
+	      if (mycallback != null) { mycallback(args); }
+	    }
+
+	  } else {
+	    salert("You cannot place more influence there.");
+	  }
+
+	}
+
+      });
+    }   
+
+console.log(eventAddInfluence);
+
+
+  }
+
+  eventRemoveInfluence(player, options, number, max_per_arena, mycallback=null) {
+
+console.log(eventAddInfluence);
+    if (mycallback != null) { mycallback(args); }
+
+  }
+
+
+  playerTriggerEvent(player, card) {
+
+    let strategy_cards = this.returnStrategyCards();
+    strategy_cards.event(player);
+
+  }
+
+  playerPlaceCommandTokens(player, card) {
+
+    let thirteen_self = this;
+
+    let html = '';
+        html = 'Pick an area to add or remove command tokens:';
+
+    this.updateStatus(html);
+
+    $('.country').off();
+    $('.country').on('click', function() {
+
+      let arena_id = $(this).attr('id');
+
+      html = 'Do you wish to add or remove command tokens? <p></p><ul>';
+      html += '<li class="card" id="addtokens">Add Command Tokens</li>';
+      html += '<li class="card" id="removetokens">Remove Command Tokens</li>';
+      html += '</ul>';
+
+      thirteen_self.updateStatus(html);
+
+      $('.card').off();
+      $('.card').on('click', function() {
+
+        let action = $(this).attr("id");
+
+        if (action == "addtokens") {
+
+          html = 'How many command tokens do you wish to add? <p></p><ul>';
+          html += '<li class="card" id="1">one</li>';
+          html += '<li class="card" id="2">two</li>';
+          html += '<li class="card" id="3">three</li>';
+          html += '<li class="card" id="4">four</li>';
+          html += '<li class="card" id="5">five</li>';
+          html += '</ul>';
+
+          thirteen_self.updateStatus(html);
+
+	  $('.card').off();
+	  $('.card').on('click', function() {
+
+	    let action = parseInt($(this).attr("id"));
+
+	    if (this.game.player == 1) {
+	      this.game.arenas[arena_id].ussr += action;
+	      if (this.game.arenas[arena_id].ussr > 5) { this.game.arenas[arena_id].ussr = 5; }
+	      thirteen_self.addMove("add_influence\t"+this.game.player+"\t"+arena_id+"\t"+action);
+	      return 0;
+	    } else {
+	      this.game.arenas[arena_id].us += action;
+	      if (this.game.arenas[arena_id].us > 5) { this.game.arenas[arena_id].us = 5; }
+	      thirteen_self.addMove("add_influence\t"+this.game.player+"\t"+arena_id+"\t"+action);
+	      return 0;
+	    }
+
+	  });
+
+        }
+
+        if (action == "removetokens") {
+
+          html = 'How many command tokens do you wish to remove? <p></p><ul>';
+          html += '<li class="card" id="1">one</li>';
+          html += '<li class="card" id="2">two</li>';
+          html += '<li class="card" id="3">three</li>';
+          html += '<li class="card" id="4">four</li>';
+          html += '<li class="card" id="5">five</li>';
+          html += '</ul>';
+
+          thirteen_self.updateStatus(html);
+
+	  $('.card').off();
+	  $('.card').on('click', function() {
+
+	    let action = parseInt($(this).attr("id"));
+
+	    if (this.game.player == 1) {
+	      this.game.arenas[arena_id].ussr -= action;
+	      if (this.game.arenas[arena_id].ussr < 0) { this.game.arenas[arena_id].ussr = 0; }
+	      thirteen_self.addMove("remove_influence\t"+this.game.player+"\t"+arena_id+"\t"+action);
+	      thirteen_self.endTurn();
+	      return 0;
+	    } else {
+	      this.game.arenas[arena_id].us -= action;
+	      if (this.game.arenas[arena_id].us < 0) { this.game.arenas[arena_id].us = 0; }
+	      thirteen_self.addMove("remove_influence\t"+this.game.player+"\t"+arena_id+"\t"+action);
+	      thirteen_self.endTurn();
+	      return 0;
+	    }
+
+	  });
+
+        }
+      });
+    });
+  }
+
+
+
+
+
+
 
 
   removeCardFromHand(card) {
@@ -945,6 +1308,10 @@ console.log("World Opinion Phase");
     state.us_alliances = [];
     state.ussr_alliances = [];
 
+    state.ussr_command_token_bonus = 0;
+    state.us_command_token_bonus = 0;
+    state.ussr_cannot_deflate_defcon_from_events = 0;
+    state.us_cannot_deflate_defcon_from_events = 0;
 
     state.initiative   = "ussr";
 
@@ -1234,55 +1601,55 @@ console.log("World Opinion Phase");
 
     var deck = {};
 
-    deck['01b']            = { 
+    deck['a01b']            = { 
 	img : "Agenda Card 01b.png" , 
 	name : "Military", 
     }
-    deck['02b']            = { 
+    deck['a02b']            = { 
 	img : "Agenda Card 02b.png" , 
 	name : "Military", 
     }
-    deck['03b']            = { 
+    deck['a03b']            = { 
 	img : "Agenda Card 03b.png" , 
 	name : "Political", 
     }
-    deck['04b']            = { 
+    deck['a04b']            = { 
 	img : "Agenda Card 04b.png" , 
 	name : "Political", 
     }
-    deck['05b']            = { 
+    deck['a05b']            = { 
 	img : "Agenda Card 05b.png" , 
 	name : "World Opinion", 
     }
-    deck['06b']            = { 
+    deck['a06b']            = { 
 	img : "Agenda Card 06b.png" , 
 	name : "World Opinion", 
     }
-    deck['07b']            = { 
+    deck['a07b']            = { 
 	img : "Agenda Card 07b.png" , 
 	name : "Turkey", 
     }
-    deck['08b']            = { 
+    deck['a08b']            = { 
 	img : "Agenda Card 08b.png" , 
 	name : "Berlin", 
     }
-    deck['09b']            = { 
+    deck['a09b']            = { 
 	img : "Agenda Card 09b.png" , 
 	name : "Italy", 
     }
-    deck['10b']            = { 
+    deck['a10b']            = { 
 	img : "Agenda Card 10b.png" , 
 	name : "Cuba", 
     }
-    deck['11b']            = { 
+    deck['a11b']            = { 
 	img : "Agenda Card 11b.png" , 
 	name : "Cuba", 
     }
-    deck['12b']            = { 
+    deck['a12b']            = { 
 	img : "Agenda Card 12b.png" , 
 	name : "Atlantic", 
     }
-    deck['13b']            = { 
+    deck['a13b']            = { 
 	img : "Agenda Card 13b.png" , 
 	name : "Personal Letter", 
     }
@@ -1296,163 +1663,469 @@ console.log("World Opinion Phase");
 
   returnStrategyCards() {
 
-    var deck = {};
+    let thirteen_self = this;
+    let deck = {};
 
-    deck['01b']            = { 
+
+    deck['s01b']            = { 
 	img : "Strategy Card 01b.png" ,
 	side : "neutral",
+	tokens : 3 ,
+	event : function(player) {
+
+	  if (thirteen_self.game.player == 1) {
+	    // place up to three on one or more world opinion battlegrounds
+	    thirteen_self.updateStatus("Place up to three influence one or more World Opinion battlegrounds: <p></p><ul><li class='card done'>click here when done</li></ul>");
+	    thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+	      thirteen_self.endTurn();
+	    }); 
+          }
+
+	},
     }
-    deck['02b']            = { 
+    deck['s02b']            = { 
 	img : "Strategy Card 02b.png" , 
 	side : "neutral",
+	tokens : 3 ,
+	event : function(player) {
+
+ 
+	},
     }
-    deck['03b']            = { 
+    deck['s03b']            = { 
 	img : "Strategy Card 03b.png" , 
 	side : "neutral",
+	tokens : 3 ,
+	event : function(player) {
+
+ 
+	},
     }
-    deck['04b']            = { 
+    deck['s04b']            = { 
 	img : "Strategy Card 04b.png" , 
 	side : "neutral",
+	tokens : 3 ,
+	event : function(player) {
+
+	  // all your command actions have +1 influence cube this round
+	  if (player == 1) {
+  	    thirteen_self.addMove("setvar\tadd_command_token_bonus\t1"); 
+	  } else {
+  	    thirteen_self.addMove("setvar\tadd_command_token_bonus\t2"); 
+	  }
+	  thirteen_self.endTurn();
+
+	},
     }
-    deck['05b']            = { 
+    deck['s05b']            = { 
 	img : "Strategy Card 05b.png" , 
 	side : "neutral",
+	tokens : 3 ,
+	event : function(player) {
+
+	  // place up to 2 influence cubes in total on one or more political battlegrounds
+	  thirteen_self.updateStatus("Place up to two influence cubes in total on one or more political battlegrounds: <p></p><ul><li class='card done'>click here when done</li></ul>");
+	  thirteen_self.eventAddInfluence(player, ['cuba_pol','italy','turkey'], 2, 2, function(args) {
+	    thirteen_self.endTurn();
+	  }); 
+
+
+	},
     }
-    deck['06b']            = { 
+    deck['s06b']            = { 
 	img : "Strategy Card 06b.png" , 
 	side : "neutral",
+	tokens : 3 ,
+	event : function(player) {
+
+ 
+	},
     }
-    deck['07b']            = { 
+    deck['s07b']            = { 
 	img : "Strategy Card 07b.png" , 
 	side : "neutral",
+	tokens : 3 ,
+	event : function(player) {
+
+	  // place up to three on one or more world opinion battlegrounds
+ 
+	},
     }
-    deck['08b']            = { 
+    deck['s08b']            = { 
 	img : "Strategy Card 08b.png" , 
 	side : "neutral",
+	tokens : 3 ,
+	event : function(player) {
+
+	  // all your opponent's command actions have -1 influence cube this round
+	  if (player == 1) {
+  	    thirteen_self.addMove("setvar\tremove_command_token_bonus\t1"); 
+	  } else {
+  	    thirteen_self.addMove("setvar\tremove_command_token_bonus\t2"); 
+	  }
+	  thirteen_self.endTurn();
+ 
+	},
     }
-    deck['09b']            = { 
+    deck['s09b']            = { 
 	img : "Strategy Card 09b.png" , 
 	side : "neutral",
+	tokens : 3 ,
+	event : function(player) {
+
+	  if (thirteen_self.game.player == 1) {
+	    // place up to 2 influence cubes in total on one or more military battlegrounds
+	    thirteen_self.updateStatus("Place up to two influence cubes in total on one or more military battlegrounds: <p></p><ul><li class='card done'>click here when done</li></ul>");
+	    thirteen_self.eventAddInfluence(player, ['cuba_mil','atlantic','berlin'], 2, 2, function(args) {
+	      thirteen_self.endTurn();
+	    }); 
+	  }
+	},
     }
-    deck['10b']            = { 
+    deck['s10b']            = { 
 	img : "Strategy Card 10b.png" , 
 	side : "neutral",
+	tokens : 3 ,
+	event : function(player) {
+
+	  // deflate all your DEFCON tracks by 1
+	  if (player == 1) {
+            thirteen_self.game.state.defcon1_ussr--;
+            thirteen_self.game.state.defcon2_ussr--;
+            thirteen_self.game.state.defcon3_ussr--;
+            if (thirteen_self.game.state.defcon1_ussr < 1) { thirteen_self.game.state.defcon1_ussr = 1; }
+            if (thirteen_self.game.state.defcon2_ussr < 1) { thirteen_self.game.state.defcon2_ussr = 1; }
+            if (thirteen_self.game.state.defcon3_ussr < 1) { thirteen_self.game.state.defcon3_ussr = 1; }
+	  }
+
+	  if (player == 2) {
+
+            thirteen_self.game.state.defcon1_us--;
+            thirteen_self.game.state.defcon2_us--;
+            thirteen_self.game.state.defcon3_us--;
+            if (thirteen_self.game.state.defcon1_us < 1) { thirteen_self.game.state.defcon1_us = 1; }
+            if (thirteen_self.game.state.defcon2_us < 1) { thirteen_self.game.state.defcon2_us = 1; }
+            if (thirteen_self.game.state.defcon3_us < 1) { thirteen_self.game.state.defcon3_us = 1; }
+
+	  }
+
+	},
     }
-    deck['11b']            = { 
+    deck['s11b']            = { 
 	img : "Strategy Card 11b.png" , 
 	side : "neutral",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['12b']            = { 
+    deck['s12b']            = { 
 	img : "Strategy Card 12b.png" , 
 	side : "neutral",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['13b']            = { 
+    deck['s13b']            = { 
 	img : "Strategy Card 13b.png" , 
 	side : "neutral",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['14b']            = { 
+    deck['s14b']            = { 
 	img : "Strategy Card 14b.png" , 
 	side : "us",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['15b']            = { 
+    deck['s15b']            = { 
 	img : "Strategy Card 15b.png" , 
 	side : "us",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['16b']            = { 
+    deck['s16b']            = { 
 	img : "Strategy Card 16b.png" , 
 	side : "us",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['17b']            = { 
+    deck['s17b']            = { 
 	img : "Strategy Card 17b.png" , 
 	side : "us",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['18b']            = { 
+    deck['s18b']            = { 
 	img : "Strategy Card 18b.png" , 
 	side : "us",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['19b']            = { 
+    deck['s19b']            = { 
 	img : "Strategy Card 19b.png" , 
 	side : "us",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['20b']            = { 
+    deck['s20b']            = { 
 	img : "Strategy Card 20b.png" , 
 	side : "us",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['21b']            = { 
+    deck['s21b']            = { 
 	img : "Strategy Card 21b.png" , 
 	side : "us",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['22b']            = { 
+    deck['s22b']            = { 
 	img : "Strategy Card 22b.png" , 
 	side : "us",
+	tokens : 3 ,
+	event : function(player) {
+
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+	},
     }
-    deck['23b']            = { 
+    deck['s23b']            = { 
 	img : "Strategy Card 23b.png" , 
 	side : "us",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['24b']            = { 
+    deck['s24b']            = { 
 	img : "Strategy Card 24b.png" , 
 	side : "us",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['25b']            = { 
+    deck['s25b']            = { 
 	img : "Strategy Card 25b.png" , 
 	side : "us",
+	tokens : 3 ,
+	event : function(player) {
+
+	},
     }
-    deck['26b']            = { 
+    deck['s26b']            = { 
 	img : "Strategy Card 26b.png" , 
 	side : "us",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['27b']            = { 
+    deck['s27b']            = { 
 	img : "Strategy Card 27b.png" , 
 	side : "ussr",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['28b']            = { 
+    deck['s28b']            = { 
 	img : "Strategy Card 28b.png" , 
 	side : "ussr",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['29b']            = { 
+    deck['s29b']            = { 
 	img : "Strategy Card 29b.png" , 
 	side : "ussr",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['30b']            = { 
+    deck['s30b']            = { 
 	img : "Strategy Card 30b.png" , 
 	side : "ussr",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['31b']            = { 
+    deck['s31b']            = { 
 	img : "Strategy Card 31b.png" , 
 	side : "ussr",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['32b']            = { 
+    deck['s32b']            = { 
 	img : "Strategy Card 32b.png" , 
 	side : "ussr",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['33b']            = { 
+    deck['s33b']            = { 
 	img : "Strategy Card 33b.png" , 
 	side : "ussr",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['34b']            = { 
+    deck['s34b']            = { 
 	img : "Strategy Card 34b.png" , 
 	side : "ussr",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['35b']            = { 
+    deck['s35b']            = { 
 	img : "Strategy Card 35b.png" , 
 	side : "ussr",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['36b']            = { 
+    deck['s36b']            = { 
 	img : "Strategy Card 36b.png" , 
 	side : "ussr",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['37b']            = { 
+    deck['s37b']            = { 
 	img : "Strategy Card 37b.png" , 
 	side : "ussr",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['38b']            = { 
+    deck['s38b']            = { 
 	img : "Strategy Card 38b.png" , 
 	side : "ussr",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
-    deck['39b']            = { 
+    deck['s39b']            = { 
 	img : "Strategy Card 39b.png" , 
 	side : "ussr",
+	tokens : 3 ,
+	event : function(player) {
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+
+	  }); 
+
+	},
     }
 
     return deck;
