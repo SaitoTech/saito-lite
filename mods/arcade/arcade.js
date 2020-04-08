@@ -508,9 +508,9 @@ class Arcade extends ModTemplate {
         if (app.options.games) {
           for (let i = app.options.games.length-1; i >= 0; i--) {
             if (app.options.games[i].module === "" && app.options.games[i].id.length < 25) {
-console.log"########################");
-console.log"### PURGING BAD GAME ###");
-console.log"########################");
+console.log("########################");
+console.log("### PURGING BAD GAME ###");
+console.log)"########################");
 console.log(app.options.games[i].id);
 	      app.options.games.splice(i, 1);
   	    }
