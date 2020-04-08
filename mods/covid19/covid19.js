@@ -66,23 +66,23 @@ class Covid19 extends ModTemplate {
     let sql = "";
     let params = {};
 
-    sql = "INSERT INTO certifications (name) VALUES ($name)";
+    sql = "INSERT OR IGNORE INTO certifications (id, name) VALUES (1, $name)";
     params = { $name: "CE Authentication" }
     await app.storage.executeDatabase(sql, params, "covid19");
 
-    sql = "INSERT INTO certifications (name) VALUES ($name)";
+    sql = "INSERTOR IGNORE INTO certifications (id, name) VALUES (2, $name)";
     params = { $name: "FDA Authentication" }
     await app.storage.executeDatabase(sql, params, "covid19");
 
-    sql = "INSERT INTO certifications (name) VALUES ($name)";
+    sql = "INSERT OR IGNORE INTO certifications (id, name) VALUES (3, $name)";
     params = { $name: "Test Report" }
     await app.storage.executeDatabase(sql, params, "covid19");
 
-    sql = "INSERT INTO certifications (name) VALUES ($name)";
+    sql = "INSERT OR IGNORE INTO certifications (id, name) VALUES (4, $name)";
     params = { $name: "Business License" }
     await app.storage.executeDatabase(sql, params, "covid19");
 
-    sql = "INSERT INTO certifications (name) VALUES ($name)";
+    sql = "INSERT OR IGNORE INTO certifications (id, name) VALUES (5, $name)";
     params = { $name: "Medical Device Certificate" }
     await app.storage.executeDatabase(sql, params, "covid19");
 
