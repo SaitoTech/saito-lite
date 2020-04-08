@@ -24,6 +24,8 @@ module.exports = SupplierPortal = {
       document.querySelector(".portal").style.display = "block";
       document.querySelector(".products-table").style.display = "grid";
 
+      // This code now in the product grid render function
+      /* 
       try { 
       document.querySelectorAll('.fullview_product').forEach(el => {
         el.addEventListener('click', (e) => {
@@ -42,6 +44,8 @@ module.exports = SupplierPortal = {
         });
       });
       } catch (err) {}
+
+      */
 
       try {
       document.querySelectorAll('.delete_product').forEach(el => {
