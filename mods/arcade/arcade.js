@@ -384,13 +384,15 @@ class Arcade extends ModTemplate {
 
     let txmsg = tx.returnMessage();
 
-    //Have we got this game in our list.
-    //Check sig against objects in storages.
-    //Return out if we have.
     for (let i = 0; i < this.games.length; i++) {
       let transaction = Object.assign({sig: "" }, this.games[i].transaction);
       if (tx.transaction.sig == transaction.sig || (txmsg.game_id != "" && txmsg.game_id == transaction.sig)) { return; }
-      let id = this.games[i].id || "";
+      let id = "";
+      if (this.games[i].id != "") { id = this.games[i].id; };
+      if (id.length < 25) { 
+	console.log("Game Invitation has ID of less than 25 - exiting");
+	return;
+      }
       if (id == transaction.sig) { return; }
     }
 
@@ -400,7 +402,6 @@ class Arcade extends ModTemplate {
     //If this is an invite game
     // Check if this is a public or invitee game - or if I created it.
     if (txmsg.options.players_invited) {
-      //if this is an invite game - presume it's not for us.
       for_us = false;
 
       //If I did the inviting - show
@@ -533,12 +534,17 @@ class Arcade extends ModTemplate {
       if (app.options) {
         if (app.options.games) {
           for (let i = app.options.games.length-1; i >= 0; i--) {
-            if (app.options.games[i].module === "" && app.options.games[i].id.length > 25) {
+            if (app.options.games[i].module === "" && app.options.games[i].id.length < 25) {
+console.log"########################");
+console.log"### PURGING BAD GAME ###");
+console.log"########################");
+console.log(app.options.games[i].id);
 	      app.options.games.splice(i, 1);
   	    }
   	  }
         }
       }
+
 
       //
       // notify SPV clients of "open", "join" and "close" messages
@@ -547,19 +553,17 @@ class Arcade extends ModTemplate {
         for (let i = 0; i < arcade_self.app.network.peers.length; i++) {
           if (arcade_self.app.network.peers[i].peer.synctype == "lite") {
 
-          //
-          // fwd tx to peer
-          //
-          let message = {};
-                message.request = "arcade spv update";
-          message.data = {};
-          message.data.tx = tx;
-
-          arcade_self.app.network.peers[i].sendRequest(message.request, message.data);
+            //
+            // fwd tx to peer
+            //
+            let message = {};
+              message.request = "arcade spv update";
+              message.data = {};
+              message.data.tx = tx;
+            arcade_self.app.network.peers[i].sendRequest(message.request, message.data);
+          }
         }
-
       }
-    }
 
 
       //

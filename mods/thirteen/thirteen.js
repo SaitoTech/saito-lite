@@ -702,6 +702,99 @@ console.log("World Opinion Phase");
 
       }
 
+      if (mv[0] == "increase_defcon") {
+
+	let player = parseInt(mv[1]);
+	let defcon_track = parseInt(mv[2]);
+	let num = parseInt(mv[3]);
+
+	if (player == 1) {
+	  if (defcon_track == 1) {
+            this.game.state.defcon1_ussr += num;;
+	    if (this.game.state.defcon1_ussr > 8) { this.game.state.defcon1_ussr = 8; }
+	  }
+	  if (defcon_track == 2) {
+            this.game.state.defcon2_ussr += num;
+	    if (this.game.state.defcon2_ussr > 8) { this.game.state.defcon2_ussr = 8; }
+	  }
+	  if (defcon_track == 3) {
+            this.game.state.defcon3_ussr += num;
+	    if (this.game.state.defcon3_ussr > 8) { this.game.state.defcon3_ussr = 8; }
+	  }
+	}
+
+	if (player == 2) {
+	  if (defcon_track == 1) {
+            this.game.state.defcon1_us += num;;
+	    if (this.game.state.defcon1_us > 8) { this.game.state.defcon1_us = 8; }
+	  }
+	  if (defcon_track == 2) {
+            this.game.state.defcon2_us += num;
+	    if (this.game.state.defcon2_us > 8) { this.game.state.defcon2_us = 8; }
+	  }
+	  if (defcon_track == 3) {
+            this.game.state.defcon3_us += num;
+	    if (this.game.state.defcon3_us > 8) { this.game.state.defcon3_us = 8; }
+	  }
+	}
+
+        this.game.queue.splice(qe, 1);
+ 
+      }
+
+      if (mv[0] == "decrease_defcon") {
+
+	let player = parseInt(mv[1]);
+	let defcon_track = parseInt(mv[2]);
+	let num = parseInt(mv[3]);
+
+	if (player == 1) {
+	  if (defcon_track == 1) {
+            this.game.state.defcon1_ussr -= num;;
+	    if (this.game.state.defcon1_ussr < 1) { this.game.state.defcon1_ussr = 1; }
+	  }
+	  if (defcon_track == 2) {
+            this.game.state.defcon2_ussr -= num;
+	    if (this.game.state.defcon2_ussr < 1) { this.game.state.defcon2_ussr = 1; }
+	  }
+	  if (defcon_track == 3) {
+            this.game.state.defcon3_ussr -= num;
+	    if (this.game.state.defcon3_ussr < 1) { this.game.state.defcon3_ussr = 1; }
+	  }
+	}
+
+	if (player == 2) {
+	  if (defcon_track == 1) {
+            this.game.state.defcon1_us -= num;;
+	    if (this.game.state.defcon1_us < 1) { this.game.state.defcon1_us = 1; }
+	  }
+	  if (defcon_track == 2) {
+            this.game.state.defcon2_us -= num;
+	    if (this.game.state.defcon2_us < 1) { this.game.state.defcon2_us = 1; }
+	  }
+	  if (defcon_track == 3) {
+            this.game.state.defcon3_us -= num;
+	    if (this.game.state.defcon3_us < 1) { this.game.state.defcon3_us = 1; }
+	  }
+	}
+
+        this.game.queue.splice(qe, 1);
+ 
+      }
+      if (mv[0] == "event_add_influence") {
+
+	let player = parseInt(mv[1]);
+	let options = JSON.parse(this.app.crypto.base64ToString(parseInt(mv[2]));
+	let number = parseInt(mv[3]);
+	let max_per_arena = parseInt(mv[4]);
+	
+	if (this.game.player == player) {
+          this.eventAddInfluence(player, options, number, max_per_arena, function() {
+	    thirteen_self.endTurn();
+	  });
+	}
+      }
+
       if (mv[0] == "add_influence") {
 
 	let player = parseInt(mv[1]);
@@ -719,6 +812,8 @@ console.log("World Opinion Phase");
 	    if (this.game.arenas[arena_id].us > 5) { this.game.arenas[arena_id].us = 5; }
 	  }
 	}
+
+        this.game.queue.splice(qe, 1);
 
       }
 
@@ -739,6 +834,8 @@ console.log("World Opinion Phase");
 	    if (this.game.arenas[arena_id].us < 0) { this.game.arenas[arena_id].us = 0; }
 	  }
 	}
+
+        this.game.queue.splice(qe, 1);
 
 	this.showBoard();
 
@@ -1673,13 +1770,11 @@ console.log(eventAddInfluence);
 	tokens : 3 ,
 	event : function(player) {
 
-	  if (thirteen_self.game.player == 1) {
-	    // place up to three on one or more world opinion battlegrounds
-	    thirteen_self.updateStatus("Place up to three influence one or more World Opinion battlegrounds: <p></p><ul><li class='card done'>click here when done</li></ul>");
-	    thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
-	      thirteen_self.endTurn();
-	    }); 
-          }
+	  // place up to three on one or more world opinion battlegrounds
+	  thirteen_self.updateStatus("Place up to three influence one or more World Opinion battlegrounds: <p></p><ul><li class='card done'>click here when done</li></ul>");
+	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
+	    thirteen_self.endTurn();
+	  }); 
 
 	},
     }
@@ -1773,13 +1868,11 @@ console.log(eventAddInfluence);
 	tokens : 3 ,
 	event : function(player) {
 
-	  if (thirteen_self.game.player == 1) {
 	    // place up to 2 influence cubes in total on one or more military battlegrounds
 	    thirteen_self.updateStatus("Place up to two influence cubes in total on one or more military battlegrounds: <p></p><ul><li class='card done'>click here when done</li></ul>");
 	    thirteen_self.eventAddInfluence(player, ['cuba_mil','atlantic','berlin'], 2, 2, function(args) {
 	      thirteen_self.endTurn();
 	    }); 
-	  }
 	},
     }
     deck['s10b']            = { 
@@ -1789,25 +1882,9 @@ console.log(eventAddInfluence);
 	event : function(player) {
 
 	  // deflate all your DEFCON tracks by 1
-	  if (player == 1) {
-            thirteen_self.game.state.defcon1_ussr--;
-            thirteen_self.game.state.defcon2_ussr--;
-            thirteen_self.game.state.defcon3_ussr--;
-            if (thirteen_self.game.state.defcon1_ussr < 1) { thirteen_self.game.state.defcon1_ussr = 1; }
-            if (thirteen_self.game.state.defcon2_ussr < 1) { thirteen_self.game.state.defcon2_ussr = 1; }
-            if (thirteen_self.game.state.defcon3_ussr < 1) { thirteen_self.game.state.defcon3_ussr = 1; }
-	  }
-
-	  if (player == 2) {
-
-            thirteen_self.game.state.defcon1_us--;
-            thirteen_self.game.state.defcon2_us--;
-            thirteen_self.game.state.defcon3_us--;
-            if (thirteen_self.game.state.defcon1_us < 1) { thirteen_self.game.state.defcon1_us = 1; }
-            if (thirteen_self.game.state.defcon2_us < 1) { thirteen_self.game.state.defcon2_us = 1; }
-            if (thirteen_self.game.state.defcon3_us < 1) { thirteen_self.game.state.defcon3_us = 1; }
-
-	  }
+          thirteen_self.addMove("decrease_defcon\t"+player+"\t1\t1");
+          thirteen_self.addMove("decrease_defcon\t"+player+"\t2\t1");
+          thirteen_self.addMove("decrease_defcon\t"+player+"\t3\t1");
 
 	},
     }
@@ -1816,10 +1893,15 @@ console.log(eventAddInfluence);
 	side : "neutral",
 	tokens : 3 ,
 	event : function(player) {
-	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
 
-	  }); 
-
+	  // your opponent cannot use events to reduce DEFCON
+	  if (player == 1) {
+  	    thirteen_self.addMove("setvar\tcannot_deflate_defcon_from_events\t1"); 
+	  } else {
+  	    thirteen_self.addMove("setvar\tcannot_deflate_defcon_from_events\t2"); 
+	  }
+	  thirteen_self.endTurn();
+ 
 	},
     }
     deck['s12b']            = { 
@@ -1827,6 +1909,9 @@ console.log(eventAddInfluence);
 	side : "neutral",
 	tokens : 3 ,
 	event : function(player) {
+
+	  // command three influence, then opponent may command 1 influence
+	  // HACK
 	  thirteen_self.eventAddInfluence(player, ['un','television','alliance'], 3, 2, function(args) {
 
 	  }); 
