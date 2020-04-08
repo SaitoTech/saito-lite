@@ -26,7 +26,6 @@ class Arcade extends ModTemplate {
     this.affix_callbacks_to = [];
     this.games = [];
     this.observer = [];
-    this.leaderboard = [];
     this.viewing_arcade_initialization_page = 0;
 
     this.icon_fa = "fas fa-gamepad";
@@ -261,7 +260,7 @@ class Arcade extends ModTemplate {
       }
     });
 
-    /* removed both observer and leaderboard code when not in use
+    /* removed both observer code when not in use
     //
     // load active games for observer mode
     //
@@ -284,14 +283,6 @@ class Arcade extends ModTemplate {
           });
         }
       });
-
-    let message = {};
-    message.request = "arcade leaderboard list";
-    message.data = {};
-
-    let leaderboard_callback = (res) => res.rows.forEach(row => this.addWinnerToLeaderboard(row));
-    this.app.network.sendRequestWithCallback(message.request, message.data, leaderboard_callback);
- 
     */
    
   }
@@ -353,24 +344,6 @@ class Arcade extends ModTemplate {
     }
   }
 
-
-  addWinnerToLeaderboard(msg) {
-    if (this.app.crypto.isPublicKey(msg.winner)) {
-      this.addrController.returnAddressHTMLPromise(msg.winner)
-        .then(winner => msg.winner = winner)
-        .catch(err => console.err(err));
-    }
-
-    this.leaderboard.push(msg);
-
-    let data = {};
-    data.arcade = this;
-
-    if (this.browser_active == 1) {
-      ArcadeRightSidebar.render(this.app, data);
-      ArcadeRightSidebar.attachEvents(this.app, data);
-    }
-  }
 
 
   addGameToOpenList(tx) {
@@ -882,18 +855,6 @@ console.log(app.options.games[i].id);
     } // end peer relayed txs
 
 
-
-    if (message.request == 'arcade leaderboard list') {
-      let sql = `
-        SELECT winner, sum(score) as highscore, module FROM leaderboard
-        GROUP by winner, module
-        ORDER BY highscore
-        DESC LIMIT 10
-      `;
-      let rows = await this.app.storage.queryDatabase(sql, {}, 'arcade');
-      mycallback({ rows });
-      return;
-    }
 
     if (message.request == 'arcade load games') {
 
@@ -1483,28 +1444,6 @@ console.log(app.options.games[i].id);
     let txmsg = tx.returnMessage();
 
     //
-    // update live game table
-    //
-    // for (let i = 0; i < this.games.length; i++) {
-    //   let transaction = Object.assign({ msg: { game_id: "" } }, this.games[i].transaction);
-    //   if (transaction.msg.game_id == txmsg.game_id) {
-    //     let game_id = transaction.msg.game_id;
-    //     let divid = "arcade-game-options-" + game_id;
-    //     if (this.browser_active) {
-    //       try {
-    //         let testdiv = document.getElementById(divid);
-    //         if (testdiv) {
-    //           testdiv.innerHTML = "Opponent Resigned";
-    //         }
-    //       } catch (err) {
-    //         //console.info("ERROR UPDATING ARCADE BOX");
-    //       }
-    //     }
-    //   }
-    // }
-
-
-    //
     // we want to update the game, and also give the winner points
     //
     let sql = "UPDATE games SET status = $status, winner = $winner WHERE game_id = $game_id";
@@ -1514,54 +1453,6 @@ console.log(app.options.games[i].id);
       $winner: txmsg.winner
     }
     await this.app.storage.executeDatabase(sql, params, "arcade");
-
-    // module        TEXT,
-    // game_id        TEXT,
-    // tx                TEXT,
-    // bid        INTEGER,
-    // bsh TEXT,
-    // created_at         INTEGER,
-    // expires_at         INTEGER,
-    // winner         TEXT,
-
-    sql = `INSERT INTO leaderboard (module, game_id, winner, score, tx, bid, bsh, timestamp, sig)
-    VALUES ($module, $game_id, $winner, $score, $tx, $bid, $bsh, $timestamp, $sig)`;
-    params = {
-      $module: txmsg.module,
-      $game_id: txmsg.game_id,
-      $winner: txmsg.winner,
-      $score: 50,
-      $tx: JSON.stringify(tx.transaction),
-      $bid: blk.block.id,
-      $bsh: blk.returnHash(),
-      $timestamp: tx.transaction.ts,
-      $sig: tx.transaction.sig
-    }
-
-    await this.app.storage.executeDatabase(sql, params, "arcade");
-
-  }
-
-  //
-  // ????
-  //
-  sendGameoverRequest(app, data) {
-
-    let game_module = "Wordblocks";
-    let options = "";
-    let sig = "";
-    let created_at = "";
-    let player = app.wallet.returnPublicKey();
-
-    let tx = app.wallet.createUnsignedTransactionWithDefaultFee();
-    tx.transaction.to.push(new saito.slip(player, 0.0));
-    tx.transaction.msg.module = game_module;
-    tx.transaction.msg.request = "invite";
-    tx.transaction.msg.options = {};
-    tx.transaction.msg.ts = created_at;
-    tx.transaction.msg.sig = sig;
-    tx = this.app.wallet.signTransaction(tx);
-    this.app.network.propagateTransaction(tx);
 
   }
 
