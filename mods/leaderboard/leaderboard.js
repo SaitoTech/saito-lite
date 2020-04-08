@@ -1,6 +1,8 @@
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 
+const LeaderboardSidebar = require('./lib/arcade-sidebar/leaderboard');
+
 const Header = require('../../lib/ui/header/header');
 const AddressController = require('../../lib/ui/menu/address-controller');
 
@@ -14,23 +16,9 @@ class Leaderboard extends ModTemplate {
     this.name = "Leaderboard";
     this.description = "Objective ranking of player-skill based on public gaming information";
     this.categories = "Games Entertainment";
+    this.affix_callbacks_to = [];
 
   }
-
-
-
-  respondTo(type = "") {
-    if (type == "arcade-sidebar") {
-      let obj = {};
-      obj.render(app, data) {
-	document.querySelector(".arcade-sidebar-leaderboard").innerHTML = "Testing Sidebar";
-      }
-      obj.attachEvents(app, data) {
-      }
-    }
-    return null;
-  }
-
 
 
 
@@ -57,42 +45,57 @@ class Leaderboard extends ModTemplate {
 
     if (conf == 0) {
 
+      let winner = "";
+      let module = "";
+      let reason = "";
+      let loser  = "";
+
       //
       // cancel open games
       //
-      if (txmsg.module == "Arcade" && txmsg.request == "close") {
-        this.receiveCloseRequest(blk, tx, conf, app);
-        this.receiveGameoverRequest(blk, tx, conf, app);
+      if (txmsg.request == "gameover") {
+
+	winner = txmsg.winner;
+	module = txmsg.module;
+	for (let i = 0; i < tx.transaction.to.length; i++) {
+	  if (tx.transaction.to[i].add != winner) {
+	    loser = tx.transaction.to[i].add;
+	  }
+	}
+
+        if (winner != loser && winner != "" && loser != "") {
+	  leaderboard_self.updateRankingAlgorithm(module, winner, loser);
+	}
       }
-
     }
   }
 
 
-  async receiveCloseRequest(blk, tx, conf, app) {
-    let txmsg = tx.returnMessage();
-    let sql = `UPDATE games SET status = $status WHERE game_id = $game_id`
-    let params = { $status: 'close', $game_id: txmsg.sig };
-    let resp = await app.storage.executeDatabase(sql, params, "leaderboard");
+  async updateRankingAlgorithm(module, winner, loser) {
+
+    //
+    // Richard, the magic goes here
+    //
   }
 
 
 
-  async receiveGameoverRequest(blk, tx, conf, app) {
-
-    let txmsg = tx.returnMessage();
-
-    //
-    // we want to update the game, and also give the winner points
-    //
-    let sql = "UPDATE games SET status = $status, winner = $winner WHERE game_id = $game_id";
-    let params = {
-      $status: 'over',
-      $game_id: txmsg.game_id,
-      $winner: txmsg.winner
+  respondTo(type = "") {
+    if (type == "arcade-sidebar") {
+      let obj = {};
+      obj.render = this.renderSidebar;
+      obj.attachEvents = this.attachEventsSidebar;
+      return obj;
     }
-    await this.app.storage.executeDatabase(sql, params, "leaderboard");
-
+    return null;
+  }
+  renderSidebar(app, data) {
+    data.leaderboard = this;
+    LeaderboardSidebar.render(app, data);
+  }
+  attachEventsSidebar(app, data) {
+    data.leaderboard = this;
+    LeaderboardSidebar.attachEvents(app, data);
   }
 
 

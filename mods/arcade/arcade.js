@@ -189,6 +189,7 @@ class Arcade extends ModTemplate {
     //
     let y = this.app.modules.respondTo("arcade-sidebar");
     for (let i = 0; i < y.length; i++) {
+console.log("loading into Arcade: " + y[i].name);
       this.mods.push(y[i]);
     }
 
