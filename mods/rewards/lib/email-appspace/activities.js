@@ -38,6 +38,15 @@ module.exports = [
         description:"Let us know what you think. Use an anonymous acount if you like - we are not tracking you.",
         completed: false,
         action: function(app){app.modules.returnModule("Tutorial").surveyModal();},
+    },{
+        id: "suggest",
+        icon: "<i class='far fa-clipboard'></i>",
+        reward: 10,
+        title: "Got a suggestion?",
+        event: "user suggest",
+        description:"Let us know your feedback, get involved with the project!",
+        completed: false,
+        action: function(app){app.modules.returnModule("Tutorial").suggestModal();},
     }
 ];
 
