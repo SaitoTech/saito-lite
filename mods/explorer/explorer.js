@@ -219,7 +219,7 @@ class ExplorerCore extends ModTemplate {
         //let row = await explorer_self.db.get(sql, params);
         let row = await explorer_self.app.storage.queryDatabase(sql, params, "explorer");
 
-        if (row == null) {
+        if (row == null || row.length == 0) {
 
           res.setHeader('Content-type', 'text/html');
           res.charset = 'UTF-8';

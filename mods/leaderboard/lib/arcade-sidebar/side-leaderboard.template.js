@@ -5,6 +5,6 @@ module.exports = LeaderboardTemplate = (app, data) => {
     <h3>Leaderboard</h3>
     <div class="leaderboard-rankings">Loading Rankings...</div>
     
-    </hr>
+    <hr />
     `;
   }
