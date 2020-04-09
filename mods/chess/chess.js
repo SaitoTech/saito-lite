@@ -170,6 +170,9 @@ console.log("QUEUE: " + this.game.queue);
         this.setBoard(this.game.position);
         this.updateLog(data.move, 999);
         this.updateStatusMessage();
+        if (this.engine.in_checkmate() === true) {
+          this.resignGame();
+        }
       }
     } else {
       if (this.browser_active == 1) {
@@ -196,9 +199,7 @@ console.log("QUEUE: " + this.game.queue);
     this.sendMessage("game", extra);
     this.updateLog(data.move, 999);
     this.updateStatusMessage();
-    if (this.engine.in_checkmate() === true) {
-      this.resignGame();
-    }
+    
   }
 
   attachEvents() {

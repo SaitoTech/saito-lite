@@ -77,6 +77,10 @@ class Leaderboard extends ModTemplate {
       //
       if (txmsg.request == "gameover") {
 
+        console.log('+++++++++++++++++++++++++++++++++++++++');
+        console.log('++++++' + tx.transaction.sig);
+        console.log('+++++++++++++++++++++++++++++++++++++++');
+
         winner.publickey = txmsg.winner;
         module = txmsg.module;
         for (let i = 0; i < tx.transaction.to.length; i++) {
@@ -104,11 +108,11 @@ class Leaderboard extends ModTemplate {
     var elo = new Elo(15);
 
     //initialise winner and loser objects
-    winner.ranking = 1000;
+    winner.ranking = 1500;
     winner.games = 0;
     winner.module = module;
 
-    loser.ranking = 1000;
+    loser.ranking = 1500;
     loser.games = 0;
     loser.module = module;
 
