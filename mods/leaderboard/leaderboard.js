@@ -1,7 +1,7 @@
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 
-const LeaderboardSidebar = require('./lib/arcade-sidebar/leaderboard');
+const LeaderboardSidebar = require('./lib/arcade-sidebar/side-leaderboard');
 
 const Header = require('../../lib/ui/header/header');
 const AddressController = require('../../lib/ui/menu/address-controller');
@@ -35,6 +35,15 @@ class Leaderboard extends ModTemplate {
       this.mods.push(mod);
       this.affix_callbacks_to.push(mod.name);
     });
+
+  }
+
+  initializeHTML(app) {
+
+    if (this.app.BROWSER == 0) { return; }
+
+    let data = {};
+    data.leaderboard = this;
 
   }
 
@@ -121,10 +130,7 @@ class Leaderboard extends ModTemplate {
   }
 
   updatePlayer(player) {
-    var sql = `
-      INSERT OR REPLACE INTO leaderboard (module, publickey, ranking, games) 
-      VALUES (${player.module}, ${player.publickey}, ${player.ranking}, ${player.games});
-      `;
+    var sql = `INSERT OR REPLACE INTO leaderboard (module, publickey, ranking, games) VALUES ('${player.module}', '${player.publickey}', ${player.ranking}, ${player.games});`;
 
       this.app.storage.executeDatabase(sql, {}, "leaderboard");
 
@@ -150,7 +156,8 @@ class Leaderboard extends ModTemplate {
 
 
 
-
+  shouldAffixCallbackToModule() { return 1; }
+  /*
   shouldAffixCallbackToModule(modname) {
     if (modname == "LeaderboardInvite") { return 1; }
     if (modname == "Leaderboard") { return 1; }
@@ -161,6 +168,7 @@ class Leaderboard extends ModTemplate {
     }
     return 0;
   }
+  */
 
 }
 

@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS leaderboard (
-  module, TEXT,
+  module TEXT,
   publickey TEXT,
   ranking INTEGER,
   games INTEGER,
-  UNIQUE (module, player_id)
+  UNIQUE (module, publickey)
 );
