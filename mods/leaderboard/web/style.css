@@ -1,0 +1,16 @@
+.leaderboard-rankings {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 10em;
+  grid-gap: 3px;
+}
+
+
+.leaderboard-rankings div {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.leaderboard-rankings div:nth-child(-n+4) {
+  font-weight: bolder;
+}

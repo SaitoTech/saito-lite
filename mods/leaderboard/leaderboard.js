@@ -47,7 +47,18 @@ class Leaderboard extends ModTemplate {
 
   }
 
-
+  onPeerHandshakeComplete(app, peer) {
+    if (app.modules.returnModule('Arcade').browser_active == 1) {
+      var where = "1 = 1 ORDER BY ranking desc, games desc LIMIT 100"
+      app.modules.returnModule("Leaderboard").sendPeerDatabaseRequest("leaderboard", "leaderboard", "*", where, null, function (res) {
+        var html = `<div>Game</div> <div>Rank</div> <div>Played</div> <div>Player</div>`;
+        res.rows.forEach(row => {
+          html += `<div>${row.module}</div><div>${row.ranking}</div><div>${row.games}</div><div>${row.publickey}</div>`
+        });
+        document.querySelector(".leaderboard-rankings").innerHTML = html;
+      });
+    }
+  }
 
   async onConfirmation(blk, tx, conf, app) {
 
@@ -69,7 +80,7 @@ class Leaderboard extends ModTemplate {
         winner.publickey = txmsg.winner;
         module = txmsg.module;
         for (let i = 0; i < tx.transaction.to.length; i++) {
-          if (tx.transaction.to[i].add != winner) {
+          if (tx.transaction.to[i].add != winner.publickey) {
             loser.publickey = tx.transaction.to[i].add;
           }
         }
@@ -81,10 +92,11 @@ class Leaderboard extends ModTemplate {
     }
   }
 
-
   async updateRankingAlgorithm(module, winner, loser) {
 
     if (this.app.BROWSER == 1) { return; }
+
+    if (winner.publickey == loser.publickey) {console.log("Winner and Loser are the Same Player"); return;}
 
     //
     // Richard, the magic goes here
@@ -121,8 +133,8 @@ class Leaderboard extends ModTemplate {
     loser.ranking = elo.updateRating(elo.getExpected(lr, wr), 0, lr);
 
     //incriment games played
-    winner.games ++;
-    loser.games ++;
+    winner.games++;
+    loser.games++;
 
     //update database, or insert new players
     this.updatePlayer(winner);
@@ -130,7 +142,7 @@ class Leaderboard extends ModTemplate {
 
   }
 
-  updatePlayer(player) {
+  async updatePlayer(player) {
     var sql = `INSERT OR REPLACE INTO leaderboard (module, publickey, ranking, games) VALUES ('${player.module}', '${player.publickey}', ${player.ranking}, ${player.games});`;
     await this.app.storage.executeDatabase(sql, {}, "leaderboard");
   }
@@ -153,18 +165,21 @@ class Leaderboard extends ModTemplate {
     LeaderboardSidebar.attachEvents(app, data);
   }
 
-
-
+  shouldAffixCallbackToModule() { return 1; }
+  /*
   shouldAffixCallbackToModule(modname) {
+
     if (modname == "Leaderboard") { return 1; }
+    
     for (let i = 0; i < this.affix_callbacks_to.length; i++) {
       if (this.affix_callbacks_to[i] == modname) {
         return 1;
       }
     }
     return 0;
-  }
 
+  }
+  */
 }
 
 module.exports = Leaderboard;
