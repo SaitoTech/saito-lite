@@ -358,17 +358,19 @@ console.log("loading into Arcade: " + y[i].name);
 
     let txmsg = tx.returnMessage();
 
+
     for (let i = 0; i < this.games.length; i++) {
       let transaction = Object.assign({sig: "" }, this.games[i].transaction);
       if (tx.transaction.sig == transaction.sig || (txmsg.game_id != "" && txmsg.game_id == transaction.sig)) { return; }
-      let id = "";
-      if (this.games[i].id != "") { id = this.games[i].id; };
-      if (id.length < 25) { 
-	console.log("Game Invitation has ID of less than 25 - exiting");
-	return;
-      }
-      if (id == transaction.sig) { return; }
+//      let id = "unknown";
+//      if (this.games[i].id !== "") { id = String(this.games[i].id); };
+//      if (id.length < 25) { 
+//	console.log("Game Invitation has ID of less than 25 - exiting");
+//	return;
+//      }
+//      if (id == transaction.sig) { return; }
     }
+
 
     //Check if this is an invite game for us.
     var for_us = true;
