@@ -62,7 +62,7 @@ class Leaderboard extends ModTemplate {
       let loser = {};
 
       //
-      // cancel open games
+      // on gameover
       //
       if (txmsg.request == "gameover") {
 
@@ -84,6 +84,8 @@ class Leaderboard extends ModTemplate {
 
   async updateRankingAlgorithm(module, winner, loser) {
 
+    if (this.app.BROWSER == 1) { return; }
+
     //
     // Richard, the magic goes here
     //
@@ -99,18 +101,17 @@ class Leaderboard extends ModTemplate {
     loser.module = module;
 
     //load any database rows that match the winner and loser
-    var where = "('" + winner.publickey + "', '" + loser.publickey + "')";
-
-    this.sendPeerDatabaseRequest("leaderboard", "leaderboard", "*", where, null, function (res) {
-      res.rows.forEach(row => {
-        if (row.publickey == winner.publickey) {
-          winner = row;
-        }
-        if (row.publickey == loser.publickey) {
-          loser = row;
-        }
-      });
-    });
+    let sql = "SELECT * FROM leaderboard WHERE publickey IN ('" + winner.publickey + "', '" + loser.publickey + "')";
+    let rows = await this.app.storage.queryDatabase(sql, {}, "leaderboard");
+    if (rows == null) { return; }
+    for (let i = 0; i < rows.length; i++) {
+      if (rows[i].publickey == winner.publickey) {
+        winner = rows[i];
+      }
+      if (rows[i].publickey == loser.publickey) {
+        loser = rows[i];
+      }
+    }
 
     //update rankngs 
     var wr = winner.ranking;
@@ -131,9 +132,7 @@ class Leaderboard extends ModTemplate {
 
   updatePlayer(player) {
     var sql = `INSERT OR REPLACE INTO leaderboard (module, publickey, ranking, games) VALUES ('${player.module}', '${player.publickey}', ${player.ranking}, ${player.games});`;
-
-      this.app.storage.executeDatabase(sql, {}, "leaderboard");
-
+    await this.app.storage.executeDatabase(sql, {}, "leaderboard");
   }
 
   respondTo(type = "") {
@@ -146,20 +145,17 @@ class Leaderboard extends ModTemplate {
     return null;
   }
   renderSidebar(app, data) {
-    data.leaderboard = this;
+    data.leaderboard = app.modules.returnModule("Leaderboard");
     LeaderboardSidebar.render(app, data);
   }
   attachEventsSidebar(app, data) {
-    data.leaderboard = this;
+    data.leaderboard = app.modules.returnModule("Leaderboard");
     LeaderboardSidebar.attachEvents(app, data);
   }
 
 
 
-  shouldAffixCallbackToModule() { return 1; }
-  /*
   shouldAffixCallbackToModule(modname) {
-    if (modname == "LeaderboardInvite") { return 1; }
     if (modname == "Leaderboard") { return 1; }
     for (let i = 0; i < this.affix_callbacks_to.length; i++) {
       if (this.affix_callbacks_to[i] == modname) {
@@ -168,7 +164,6 @@ class Leaderboard extends ModTemplate {
     }
     return 0;
   }
-  */
 
 }
 
