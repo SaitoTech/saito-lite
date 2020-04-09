@@ -9,8 +9,7 @@ a {
   border-bottom: 1em solid #FFF;
 }
 
-.content {
-}
+.content {}
 
 .products-table {
   margin-bottom: 20px;
@@ -60,9 +59,9 @@ a {
 }
 
 .tiptext {
-    width: unset;
-    min-width: unset;
-    max-width: unset;
+  width: unset;
+  min-width: unset;
+  max-width: unset;
 }
 
 .navigation {
@@ -84,14 +83,14 @@ a {
 }
 
 .product-image {
-  width:100%;
+  width: 100%;
 }
 
 .product-image-holder {
   display: inline-block;
   min-width: 150px;
   min-height: 100px;
-  max-width:300px;
+  max-width: 300px;
   max-height: 250px;
   border: 1px solid #ddd;
   cursor: pointer;
@@ -177,4 +176,10 @@ button, .button {
 
 .inq-product-name {
   font-weight: bold;
+}
+
+.product-img-cell i {
+  margin: 24px 42px;
+  font-size: 32px;
+  color: #888;
 }

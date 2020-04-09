@@ -629,12 +629,12 @@ class Covid19 extends ModTemplate {
           break;
         case 'supplier_id':
           break;
-        case 'category_id':
-          break;
         case 'product_name':
+          break;
+        case 'category_id':
           //these extra empty divs ensure that each row of the grid has four elements.
           html += "<div></div><div></div><div></div>"
-          html += "<div><input class='input category_id_input products-" + field[0] + "' data-table='products' type='hidden' data-column='category_id' value='1' /></div>";
+          html += "<div><input class='input category_id_input products-" + field[0] + "' data-table='products' type='hidden' data-column='category_id' value='" + field[1] + "' /></div>";
           break;
         case 'product_specification':
           html += "<div>Specification</div>";
