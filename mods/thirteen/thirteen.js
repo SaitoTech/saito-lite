@@ -17,7 +17,7 @@ class Thirteen extends GameTemplate {
 
     this.name  		 = "Thirteen";
     this.slug		 = "thirteen";
-    this.description     = `Thirteen Days is a mid-length simulation of the Cuban Missile Crisis. One player players the United States (US) while the other plays the SOciet Union (USSR).`;
+    this.description     = `Thirteen Days is a mid-length simulation of the Cuban Missile Crisis. One player players the United States (US) while the other plays the Soviet Union (USSR).`;
     this.publisher_message = "Thirteen Days is owned by Jolly Roger Games. The materials in this module come from an open source VASSAL license authorized by the publisher. Vassal module requirements are that at least one player per game has purchased a copy of the game.";
     this.categories      = "Games Arcade Entertainment";
 
@@ -1207,9 +1207,9 @@ console.log(eventAddInfluence);
         $(divname).html('');
       }
     }
-    
 
   }
+
   showDefconTracks() {
 
     for (let i = 1; i < 4; i++) {
