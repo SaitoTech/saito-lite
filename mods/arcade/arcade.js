@@ -466,7 +466,6 @@ console.log("EXISTING GAMES: " + JSON.stringify(this.games));
   // just receive the sig of the game to remove
   removeGameFromOpenList(game_sig) {
 
-    console.log("THESE ARE THE GAMES BEFORE: ", this.games);
     this.games = this.games.filter(game => {
       if (game.transaction) {
         return game.transaction.sig != game_sig;
@@ -485,8 +484,6 @@ console.log("EXISTING GAMES: " + JSON.stringify(this.games));
         }
       }
     }
-
-    console.log("THESE ARE THE GAMES LEFT: ", this.games);
 
     //
     // save to delete for good
