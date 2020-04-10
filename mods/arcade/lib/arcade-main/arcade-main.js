@@ -18,7 +18,9 @@ module.exports = ArcadeMain = {
     let arcade_main = document.querySelector(".arcade-main");
     if (!arcade_main) { return; }
     arcade_main.innerHTML = ArcadeMainTemplate();
+    console.log("Arcade Render");
 
+    console.log("Arcade Games to Process: " + data.arcade.games.length);
     data.arcade.games.forEach(tx => {
 
       console.log("\n\n\nSHOWING GAMES: ");
