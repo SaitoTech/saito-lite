@@ -349,7 +349,8 @@ console.log("loading into Arcade: " + y[i].name);
 
   addGameToOpenList(tx) {
 
-    if(!tx.transaction) {
+
+    if (!tx.transaction) {
       return;
     } else {
       if (!tx.transaction.sig) { return; }
@@ -358,10 +359,22 @@ console.log("loading into Arcade: " + y[i].name);
 
     let txmsg = tx.returnMessage();
 
+console.log("REQUEST TO add: " + JSON.stringify(txmsg));
+console.log("EXISTING GAMES: " + JSON.stringify(this.games));
 
     for (let i = 0; i < this.games.length; i++) {
       let transaction = Object.assign({sig: "" }, this.games[i].transaction);
-      if (tx.transaction.sig == transaction.sig || (txmsg.game_id != "" && txmsg.game_id == transaction.sig)) { return; }
+      if (tx.transaction.sig == transaction.sig) { return; }
+      if (txmsg.game_id != "" && txmsg.game_id == transaction.sig) { return; }
+//
+// testing
+//
+      if (txmsg.game_id === this.games[i].transaction.sig) { 
+	console.log("ERROR 480394: not re-adding existing game to list");
+	return; 
+      }
+
+
 //      let id = "unknown";
 //      if (this.games[i].id !== "") { id = String(this.games[i].id); };
 //      if (id.length < 25) { 
@@ -372,23 +385,19 @@ console.log("loading into Arcade: " + y[i].name);
     }
 
 
-    //Check if this is an invite game for us.
     var for_us = true;
 
-    //If this is an invite game
-    // Check if this is a public or invitee game - or if I created it.
     if (txmsg.options.players_invited) {
+
       for_us = false;
 
-      //If I did the inviting - show
       if (tx.transaction.from[0].add == this.app.wallet.returnPublicKey()) {
+
         for_us = true;
+
       } else {
 
-        //If I am in the invitees list - show
         txmsg.options.players_invited.forEach(player => {
-          //or we are invited.
-
           if (player == this.app.wallet.returnPublicKey() || player == this.app.keys.returnIdentifierByPublicKey(this.app.wallet.returnPublicKey())) {
             for_us = true;
           }
@@ -396,7 +405,9 @@ console.log("loading into Arcade: " + y[i].name);
       }
     }
 
+
     if (for_us) {
+
       this.games.unshift(tx);
 
       let data = {};
