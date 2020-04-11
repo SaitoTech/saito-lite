@@ -137,6 +137,8 @@ module.exports = SettingsAppspace = {
             let wobj = JSON.parse(decrypted_wallet);
             app.options = wobj;
 
+            app.wallet.blockchain.resetBlockchain();
+
             app.modules.returnModule('Arcade').onResetWallet();
             app.storage.saveOptions();
 
@@ -173,6 +175,8 @@ module.exports = SettingsAppspace = {
         data.email.body.render(app, data);
         data.email.body.attachEvents(app, data);
 
+        app.wallet.blockchain.resetBlockchain();
+
     };
 
     document.getElementById('delete-account-btn')
@@ -184,6 +188,8 @@ module.exports = SettingsAppspace = {
         data.email.emails.inbox = [];
         data.email.emails.sent = [];
         data.email.emails.trash = [];
+
+        app.wallet.blockchain.resetBlockchain();
 
         window.location = window.location;
     };
@@ -206,6 +212,8 @@ module.exports = SettingsAppspace = {
           app.wallet.wallet.outputs = [];
           app.wallet.wallet.spends = [];
           app.wallet.wallet.pending = [];
+
+          app.blockchain.resetBlockchain();
 
           await app.wallet.saveWallet();
           window.location = window.location;

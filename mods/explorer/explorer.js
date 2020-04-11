@@ -219,7 +219,7 @@ class ExplorerCore extends ModTemplate {
         //let row = await explorer_self.db.get(sql, params);
         let row = await explorer_self.app.storage.queryDatabase(sql, params, "explorer");
 
-        if (row == null) {
+        if (row == null || row.length == 0) {
 
           res.setHeader('Content-type', 'text/html');
           res.charset = 'UTF-8';
@@ -398,6 +398,7 @@ class ExplorerCore extends ModTemplate {
       html += '<div>sender</div>';
       html += '<div>fee</div>';
       html += '<div>type</div>';
+      html += '<div>module</div>';
 
       for (var mt = 0; mt < blk.transactions.length; mt++) {
         var tmptx = blk.transactions[mt];
@@ -406,6 +407,15 @@ class ExplorerCore extends ModTemplate {
         html += '<div><a href="/explorer/transaction?bhash=' + blk.returnHash() + '&tid=' + tmptx.transaction.id + '">' + tmptx.transaction.from[0].add + '</a></div>';
         html += '<div>' + tmptx.returnFees() + '</div>';
         html += '<div>' + tmptx.transaction.type + '</div>';
+        if (tmptx.transaction.type == 0) {
+          html += '<div>' + tmptx.transaction.msg.module + '</div>';
+        }
+        if (tmptx.transaction.type == 1) {
+          html += '<div>' + tmptx.transaction.msg.name + '</div>';
+        }
+        if (tmptx.transaction.type > 1) {
+          html += '<div> </div>';
+        }
 
       }
       html += '</div>';

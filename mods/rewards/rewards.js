@@ -158,8 +158,12 @@ class Rewards extends ModTemplate {
   async returnAchievements(key) {
     let achievements = [];
     let rows = await this.returnEvents(key, false);
-    for (let i = 0; i < rows.length; i++) {
-      achievements.push(this.returnEventRow(rows[i].event));
+    if (rows) {
+      for (let i = 0; i < rows.length; i++) {
+        achievements.push(this.returnEventRow(rows[i].event));
+      }
+    } else {
+      return null;
     }
     let tx_count = await this.returnUserTxCount(key);
     achievements.push(this.returnNumberBadge(tx_count));

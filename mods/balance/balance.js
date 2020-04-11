@@ -19,14 +19,14 @@ class Balance extends ModTemplate {
   updateSlips(blk) {
     blk.transactions.forEach(tx => {
       tx.transaction.to.forEach(slip => {
-        console.log(JSON.stringify(slip));
-        console.log(this.app.crypto.hash(JSON.stringify(slip)));
+        //console.log(JSON.stringify(slip));
+        //console.log(this.app.crypto.hash(JSON.stringify(slip)));
         if (slip.amt > 0) {
           this.addSlipToDatabase(slip, 1);
         }
       });
       tx.transaction.from.forEach(slip => {
-        console.log(JSON.stringify(slip));
+        //console.log(JSON.stringify(slip));
         if (slip.amt > 0) {
           this.addSlipToDatabase(slip, -1);
         }
