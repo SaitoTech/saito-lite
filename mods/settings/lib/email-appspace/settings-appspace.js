@@ -213,7 +213,7 @@ module.exports = SettingsAppspace = {
           app.wallet.wallet.spends = [];
           app.wallet.wallet.pending = [];
 
-          app.wallet.blockchain.resetBlockchain();
+          app.blockchain.resetBlockchain();
 
           await app.wallet.saveWallet();
           window.location = window.location;
