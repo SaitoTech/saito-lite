@@ -1773,9 +1773,9 @@ console.log("\n\n\n\n");
 
           if (this.is_testing == 1) {
             if (this.game.player == 1) {
-              this.game.deck[0].hand = ["fiveyearplan", "indopaki", "junta", "che","degaulle","nato","cubanmissile","missileenvy","formosan"];
+              this.game.deck[0].hand = ["degaulle","missileenvy","brushwar"];
             } else {
-              this.game.deck[0].hand = ["china","aldrichames","containment","ortega"];
+              this.game.deck[0].hand = ["naziscientist","cubanmissile"];
               //this.game.deck[0].hand = ["aldrichames","degaulle","lonegunman","cubanmissile","handshake","lonegunman","asia","nasser","sadat"];
               //this.game.deck[0].hand = ["duckandcover","degaulle"];
             }
@@ -9931,7 +9931,7 @@ console.log("\n\n\n\n");
               let modify = 0;
 
               for (let v = 0; v < twilight_self.countries[c].neighbours.length; v++) {
-                if (twilight_self.isControlled(opponent, twilight_self.countries[i].neighbours[v]) == 1) {
+                if (twilight_self.isControlled(opponent, twilight_self.countries[c].neighbours[v]) == 1) {
                   modify++;
                 }
               }
