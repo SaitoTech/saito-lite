@@ -1773,9 +1773,9 @@ console.log("\n\n\n\n");
 
           if (this.is_testing == 1) {
             if (this.game.player == 1) {
-              this.game.deck[0].hand = ["degaulle","missileenvy","brushwar"];
+              this.game.deck[0].hand = ["degaulle","missileenvy","brushwar","duckandcover"];
             } else {
-              this.game.deck[0].hand = ["naziscientist","cubanmissile"];
+              this.game.deck[0].hand = ["naziscientist","cubanmissile","junta","nato"];
               //this.game.deck[0].hand = ["aldrichames","degaulle","lonegunman","cubanmissile","handshake","lonegunman","asia","nasser","sadat"];
               //this.game.deck[0].hand = ["duckandcover","degaulle"];
             }
@@ -4613,9 +4613,9 @@ console.log("\n\n\n\n");
       //
       // Junta
       //
-      if (card == "junta" && (this.countries[i].region != "camerica" && this.countries[i].region != "samerica")) {
+      /*if (card == "junta" && (this.countries[i].region != "camerica" && this.countries[i].region != "samerica")) {
         valid_target = 0;
-      }
+      }*/
 
       let divname      = '#'+i;
 
