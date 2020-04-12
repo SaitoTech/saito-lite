@@ -5,6 +5,13 @@ body {
   margin: 0px;
 }
 
+.flag {
+ position: absolute;
+ background-color: red;
+ height: 60px;
+ width: 60px;
+}
+
 .cardimg {
   position: absolute;
   left: 0;
