@@ -45,7 +45,7 @@ class Twilight extends GameTemplate {
     this.boardgameWidth  = 5100;
 
     this.moves           = [];
-    this.is_testing = 0;
+    this.is_testing = 1;
 
     this.log_length = 150;
     this.interface = 1;
@@ -1775,8 +1775,8 @@ console.log("\n\n\n\n");
             if (this.game.player == 1) {
               this.game.deck[0].hand = ["fiveyearplan", "indopaki", "junta", "che","degaulle","nato","naziscientist","missileenvy","formosan"];
             } else {
-              this.game.deck[0].hand = ["china","aldrichames","containment"];
-              //this.game.deck[0].hand = ["aldrichames","degaulle","lonegunman","cubanmissile","handshake","lonegunman","asia","nasser","sadat"];
+              //this.game.deck[0].hand = ["china","aldrichames","containment"];
+              this.game.deck[0].hand = ["aldrichames","degaulle","lonegunman","cubanmissile","handshake","lonegunman","asia","nasser","sadat"];
               //this.game.deck[0].hand = ["duckandcover","degaulle"];
             }
           }
@@ -5562,7 +5562,7 @@ console.log("\n\n\n\n");
 
     state.animal_in_space = "";
     state.man_in_earth_orbit = "";
-    state.eagle_has_landed = "";
+    state.eagle_has_landed = "ussr";
     state.eagle_has_landed_bonus_taken = 0;
     state.space_shuttle = "";
     state.space_shuttle_bonus_taken = 0;
