@@ -1773,7 +1773,7 @@ console.log("\n\n\n\n");
 
           if (this.is_testing == 1) {
             if (this.game.player == 1) {
-              this.game.deck[0].hand = ["degaulle","missileenvy","brushwar","duckandcover"];
+              this.game.deck[0].hand = ["degaulle","missileenvy","brushwar","duckandcover","chernobyl"];
             } else {
               this.game.deck[0].hand = ["naziscientist","cubanmissile","junta","nato"];
               //this.game.deck[0].hand = ["aldrichames","degaulle","lonegunman","cubanmissile","handshake","lonegunman","asia","nasser","sadat"];
@@ -8780,7 +8780,7 @@ console.log("\n\n\n\n");
                     twilight_self.addMove("limit\tregion\tafrica");
                     twilight_self.addMove("limit\tregion\tmideast");
                     twilight_self.addMove("limit\tregion\tasia");
-                    twilight_self.addMove("limit\tregion\tseaasia");
+                    twilight_self.addMove("limit\tregion\tseasia");
                     twilight_self.addMove("limit\tmilops");
                     twilight_self.addMove("limit\tplacement");
                     twilight_self.addMove("place\t"+player+"\t"+player+"\t"+c+"\t2");
