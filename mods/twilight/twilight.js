@@ -4857,7 +4857,7 @@ console.log("\n\n\n\n");
     if (next_box == 5) { if (roll < 4) { successful = 1; } }
     if (next_box == 6) { if (roll < 5) { successful = 1; } }
     if (next_box == 7) { if (roll < 4) { successful = 1; } }
-    if (next_box == 8) { if (roll < 2) { successful = 1; } }
+    if (next_box == 8) { if (roll < 3) { successful = 1; } }
 
     this.updateLog("<span>" + player.toUpperCase() + "</span> <span>attempts space race (rolls</span> " + roll + ")");
 
