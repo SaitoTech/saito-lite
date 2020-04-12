@@ -525,7 +525,7 @@ console.log(app.options.games[i].id);
       //
       // notify SPV clients of "open", "join" and "close" messages
       //
-      if (app.BROWSER == 0 && txmsg.request == "open" || txmsg.request == "join" || txmsg.request == "close") {
+      if (app.BROWSER == 0 && txmsg.request == "open" || txmsg.request == "join" || txmsg.request == "accept" || txmsg.request == "close") {
         for (let i = 0; i < arcade_self.app.network.peers.length; i++) {
           if (arcade_self.app.network.peers[i].peer.synctype == "lite") {
 
@@ -655,7 +655,7 @@ console.log(app.options.games[i].id);
                       //
                       transaction.msg = Object.assign({ players_needed: 0, players: [] }, transaction.msg);
                       if (parseInt(transaction.msg.players_needed) >= (transaction.msg.players.length + 1)) {
-                        this.removeGameFromOpenList(txmsg.game_id);
+                        this.removeGameFromOpenList(txmsg.game_id); //on confirmation
                       }
                     }
                   }
@@ -716,7 +716,7 @@ console.log(app.options.games[i].id);
                   //
                   transaction.msg = Object.assign({ players_needed: 0, players: [] }, transaction.msg);
                   if (parseInt(transaction.msg.players_needed) == (transaction.msg.players.length + 1)) {
-                    this.removeGameFromOpenList(txmsg.game_id);
+                    this.removeGameFromOpenList(txmsg.game_id); // handle peer
                   }
                 }
               }
@@ -810,6 +810,13 @@ console.log(app.options.games[i].id);
       if (txmsg.request == "join") {
         this.joinGameOnOpenList(tx);
         this.receiveJoinRequest(blk, tx, conf, app);
+      }
+
+      //
+      // accept msgs -- remove games from list
+      //
+      if (txmsg.request == "accept") {
+          this.removeGameFromOpenList(txmsg.game_id);
       }
 
       //
