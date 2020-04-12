@@ -494,7 +494,7 @@ class Covid19 extends ModTemplate {
 
       }
 
-      html += "<div style='visibility:hidden;'></div>";
+      html += "";
       document.querySelector(".products-table").innerHTML += html.replace(/null/g, "").replace(/undefined/g, "");
       this.returnCerts(rows[i].product_id, "certsfor-");
 
