@@ -1995,7 +1995,7 @@ console.log("\n\n\n\n");
 	    //
             // if we have no cards, skip
 	    //
-            if (twilight_self.game.deck[0].hand.length == 0) {
+            if (this.game.deck[0].hand.length == 0) {
 	      this.updateLog("No cards in hand, skipping end-of-turn discard");
 	      return 1;
   	    }
