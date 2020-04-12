@@ -4692,10 +4692,8 @@ console.log("\n\n\n\n");
       if (this.game.player == 1 && this.game.state.events.chernobyl != "") {
         if (this.countries[i].region == this.game.state.events.chernobyl) { 
 	  restricted_country = 1;
-          if (this.game.state.events.chernobyl == "asia") {
-            if (this.countries[i].region == "seasia") { 
-	      restricted_country = 1;
-	    }
+          if (this.countries[i].region == "seasia" && this.game.state.events.chernobyl == "asia") {
+            restricted_country = 1;	    
           }
         }
       }
@@ -8782,6 +8780,7 @@ console.log("\n\n\n\n");
                     twilight_self.addMove("limit\tregion\tafrica");
                     twilight_self.addMove("limit\tregion\tmideast");
                     twilight_self.addMove("limit\tregion\tasia");
+                    twilight_self.addMove("limit\tregion\tseaasia");
                     twilight_self.addMove("limit\tmilops");
                     twilight_self.addMove("limit\tplacement");
                     twilight_self.addMove("place\t"+player+"\t"+player+"\t"+c+"\t2");
