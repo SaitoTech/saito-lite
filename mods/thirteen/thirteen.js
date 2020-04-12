@@ -1234,11 +1234,11 @@ console.log("TURN: " + this.game.state.turn);
 
     if (player == 1) {
       this.game.arenas[arena_id].ussr += num;
-      if (this.game.arenas[arena_id].ussr > 5) { this.game.arenas[arena_id].ussr = 5; return false; }
+      if (this.game.arenas[arena_id].ussr > 5) { this.game.arenas[arena_id].ussr = 5; return true; }
       this.updateLog("USSR gains influence in "+this.game.arenas[arena_id].name);
     } else {
       this.game.arenas[arena_id].us += num;
-      if (this.game.arenas[arena_id].us > 5) { this.game.arenas[arena_id].us = 5; return false; }
+      if (this.game.arenas[arena_id].us > 5) { this.game.arenas[arena_id].us = 5; return true; }
       this.updateLog("US gains influence in "+this.game.arenas[arena_id].name);
     }
 
@@ -1250,11 +1250,11 @@ console.log("TURN: " + this.game.state.turn);
 
     if (player == 1) {
       this.game.arenas[arena_id].ussr -= num;
-      if (this.game.arenas[arena_id].ussr < 0) { this.game.arenas[arena_id].ussr = 0; return false; }
+      if (this.game.arenas[arena_id].ussr < 0) { this.game.arenas[arena_id].ussr = 0; return true; }
       this.updateLog("USSR removes influence in "+this.game.arenas[arena_id].name);
     } else {
       this.game.arenas[arena_id].us -= num;
-      if (this.game.arenas[arena_id].us < 0) { this.game.arenas[arena_id].us = 0; return false; }
+      if (this.game.arenas[arena_id].us < 0) { this.game.arenas[arena_id].us = 0; return true; }
       this.updateLog("US removes influence in "+this.game.arenas[arena_id].name);
     }
 
@@ -1534,6 +1534,11 @@ console.log("playing event 2: " + card);
 
     let html = '';
         html = 'Pick an area to add or remove command tokens:';
+    let sc   = thirteen_self.returnStrategyCards();
+//    let max_tokens = sc[card].
+
+// HACK
+
 
     this.updateStatus(html);
 
@@ -1571,16 +1576,9 @@ console.log("playing event 2: " + card);
 
 	    let action = parseInt($(this).attr("id"));
 
-	    if (thirteen_self.game.player == 1) {
-	      thirteen_self.game.arenas[arena_id].ussr += action;
-	      if (thirteen_self.game.arenas[arena_id].ussr > 5) { thirteen_self.game.arenas[arena_id].ussr = 5; }
+	    if (thirteen_self.addInfluence(thirteen_self.game.player, arena_id, action)) {
 	      thirteen_self.addMove("add_influence\t"+thirteen_self.game.player+"\t"+arena_id+"\t"+action + "\t" + thirteen_self.game.player);
-	      return 0;
-	    } else {
-	      thirteen_self.game.arenas[arena_id].us += action;
-	      if (thirteen_self.game.arenas[arena_id].us > 5) { thirteen_self.game.arenas[arena_id].us = 5; }
-	      thirteen_self.addMove("add_influence\t"+thirteen_self.game.player+"\t"+arena_id+"\t"+action + "\t" + thirteen_self.game.player);
-	      return 0;
+	      thirteen_self.endTurn();
 	    }
 
 	  });
@@ -1604,18 +1602,9 @@ console.log("playing event 2: " + card);
 
 	    let action = parseInt($(this).attr("id"));
 
-	    if (thirteen_self.game.player == 1) {
-	      thirteen_self.game.arenas[arena_id].ussr -= action;
-	      if (thirteen_self.game.arenas[arena_id].ussr < 0) { thirteen_self.game.arenas[arena_id].ussr = 0; }
-	      thirteen_self.addMove("remove_influence\t"+thirteen_self.game.player+"\t"+arena_id+"\t"+action);
+	    if (thirteen_self.removeInfluence(thirteen_self.game.player, arena_id, action)) {
+	      thirteen_self.addMove("add_influence\t"+thirteen_self.game.player+"\t"+arena_id+"\t"+action + "\t" + thirteen_self.game.player);
 	      thirteen_self.endTurn();
-	      return 0;
-	    } else {
-	      thirteen_self.game.arenas[arena_id].us -= action;
-	      if (thirteen_self.game.arenas[arena_id].us < 0) { thirteen_self.game.arenas[arena_id].us = 0; }
-	      thirteen_self.addMove("remove_influence\t"+thirteen_self.game.player+"\t"+arena_id+"\t"+action);
-	      thirteen_self.endTurn();
-	      return 0;
 	    }
 
 	  });
@@ -2339,6 +2328,7 @@ console.log("USSR has: " + cubes + " in " + arena_id);
 	img : "Strategy Card 01b.png" ,
 	side : "neutral",
 	tokens : 3 ,
+	defcon : 0 ,
 	event : function(player) {
 
 	  // place up to three on one or more world opinion battlegrounds
@@ -2353,6 +2343,7 @@ console.log("USSR has: " + cubes + " in " + arena_id);
 	img : "Strategy Card 02b.png" , 
 	side : "neutral",
 	tokens : 3 ,
+	defcon : 1 ,
 	event : function(player) {
 
 	  // escalate / de-escalate DEFCON tracks by up to 2 steps
@@ -2369,6 +2360,7 @@ console.log("USSR has: " + cubes + " in " + arena_id);
 	img : "Strategy Card 03b.png" , 
 	side : "neutral",
 	tokens : 3 ,
+	defcon : 0 ,
 	event : function(player) {
 
 	  // escalate / de-escalate up to 2 DEFCON tracks by up to 1 steps
@@ -2383,7 +2375,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s04b']            = { 
 	img : "Strategy Card 04b.png" , 
 	side : "neutral",
-	tokens : 3 ,
+	tokens : 1 ,
+	defcon : 0 ,
 	event : function(player) {
 
 	  let playern = "USSR";
@@ -2404,7 +2397,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s05b']            = { 
 	img : "Strategy Card 05b.png" , 
 	side : "neutral",
-	tokens : 3 ,
+	tokens : 2 ,
+	defcon : 0 ,
 	event : function(player) {
 
 	  // place up to 2 influence cubes in total on one or more political battlegrounds
@@ -2418,7 +2412,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s06b']            = { 
 	img : "Strategy Card 06b.png" , 
 	side : "neutral",
-	tokens : 3 ,
+	tokens : 2 ,
+	defcon : 1 ,
 	event : function(player) {
 
           thirteen_self.addMove("DEAL\t2\t2\t5");
@@ -2430,7 +2425,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s07b']            = { 
 	img : "Strategy Card 07b.png" , 
 	side : "neutral",
-	tokens : 3 ,
+	tokens : 2 ,
+	defcon : 0 ,
 	event : function(player) {
 
 	  let cards_discard = 0;
@@ -2485,7 +2481,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s08b']            = { 
 	img : "Strategy Card 08b.png" , 
 	side : "neutral",
-	tokens : 3 ,
+	tokens : 2 ,
+	defcon : 0 ,
 	event : function(player) {
 
 	  // all your opponent's command actions have -1 influence cube this round
@@ -2501,7 +2498,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s09b']            = { 
 	img : "Strategy Card 09b.png" , 
 	side : "neutral",
-	tokens : 3 ,
+	tokens : 1 ,
+	defcon : 0 ,
 	event : function(player) {
 
 	    // place up to 2 influence cubes in total on one or more military battlegrounds
@@ -2514,7 +2512,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s10b']            = { 
 	img : "Strategy Card 10b.png" , 
 	side : "neutral",
-	tokens : 3 ,
+	tokens : 1 ,
+	defcon : 0 ,
 	event : function(player) {
 
 	  // deflate all your DEFCON tracks by 1
@@ -2528,7 +2527,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s11b']            = { 
 	img : "Strategy Card 11b.png" , 
 	side : "neutral",
-	tokens : 3 ,
+	tokens : 2 ,
+	defcon : 0 ,
 	event : function(player) {
 
 	  // your opponent cannot use events to reduce DEFCON
@@ -2544,7 +2544,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s12b']            = { 
 	img : "Strategy Card 12b.png" , 
 	side : "neutral",
-	tokens : 3 ,
+	tokens : 1 ,
+	defcon : 1 ,
 	event : function(player) {
 
 	  let opponent = 1;
@@ -2561,6 +2562,7 @@ console.log("USSR has: " + cubes + " in " + arena_id);
 	img : "Strategy Card 13b.png" , 
 	side : "neutral",
 	tokens : 3 ,
+	defcon : 0 ,
 	event : function(player) {
 	  thirteen_self.updateStatus("Place up to three influence cubes on up to three battlegrounds (1 each): <p></p><ul><li class='card done'>click here when done</li></ul>");
 	  thirteen_self.eventAddInfluence(player, player, ['un','television','alliance'], 3, 1, function(args) {
@@ -2573,6 +2575,7 @@ console.log("USSR has: " + cubes + " in " + arena_id);
 	img : "Strategy Card 14b.png" , 
 	side : "us",
 	tokens : 3 ,
+	defcon : 1 ,
 	event : function(player) {
 
 	  thirteen_self.eventIncreaseDefcon(player, player, ['political'], 2, 2, function(args) {
@@ -2587,6 +2590,7 @@ console.log("USSR has: " + cubes + " in " + arena_id);
 	img : "Strategy Card 15b.png" , 
 	side : "us",
 	tokens : 3 ,
+	defcon : 1 ,
 	event : function(player) {
 
 	  let options = [];
@@ -2605,6 +2609,7 @@ console.log("USSR has: " + cubes + " in " + arena_id);
 	img : "Strategy Card 16b.png" , 
 	side : "us",
 	tokens : 3 ,
+	defcon : 0 ,
 	event : function(player) {
 
 	  let options = [];
@@ -2640,6 +2645,7 @@ console.log("USSR has: " + cubes + " in " + arena_id);
 	img : "Strategy Card 17b.png" , 
 	side : "us",
 	tokens : 3 ,
+	defcon : 0 ,
 	event : function(player) {
 	  thirteen_self.eventAddInfluence(player, player, ['berlin','italy','turkey'], 4, 2, function(args) {
 	    thirteen_self.endTurn();
@@ -2650,7 +2656,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s18b']            = { 
 	img : "Strategy Card 18b.png" , 
 	side : "us",
-	tokens : 3 ,
+	tokens : 2 ,
+	defcon : 0 ,
 	event : function(player) {
 
 	  let opponent = 1;
@@ -2668,7 +2675,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s19b']            = { 
 	img : "Strategy Card 19b.png" , 
 	side : "us",
-	tokens : 3 ,
+	tokens : 2 ,
+	defcon : 0 ,
 	event : function(player) {
 
           let html  = "Which would you like to do, remove half of USSR influence from one Cuban battleground (rounded up) or place up to 2 Influence on the Alliances battleground? <p></p><ul>";
@@ -2699,7 +2707,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s20b']            = { 
 	img : "Strategy Card 20b.png" , 
 	side : "us",
-	tokens : 3 ,
+	tokens : 2 ,
+	defcon : 0 ,
 	event : function(player) {
 
 	  thirteen_self.eventRemoveInfluence(player, 1, ['turkey'], 2, 2, function(args) {
@@ -2713,7 +2722,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s21b']            = { 
 	img : "Strategy Card 21b.png" , 
 	side : "us",
-	tokens : 3 ,
+	tokens : 2 ,
+	defcon : 0 ,
 	event : function(player) {
 
 	  let options = thirteen_self.app.crypto.stringToBase64(JSON.stringify(['cuba_pol', 'italy', 'turkey']));
@@ -2731,7 +2741,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s22b']            = { 
 	img : "Strategy Card 22b.png" , 
 	side : "us",
-	tokens : 3 ,
+	tokens : 1 ,
+	defcon : 0 ,
 	event : function(player) {
 
 	    let options1 = thirteen_self.app.crypto.stringToBase64(JSON.stringify([1]));
@@ -2745,7 +2756,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s23b']            = { 
 	img : "Strategy Card 23b.png" , 
 	side : "us",
-	tokens : 3 ,
+	tokens : 1 ,
+	defcon : 0 ,
 	event : function(player) {
 	  thirteen_self.updateStatus("Place up to 2 Influence on the Atlantic battleground: <p></p><ul><li class='card done'>click here when done</li></ul>");
 	  thirteen_self.eventAddInfluence(player, player, ['atlantic'], 2, 2, function(args) {
@@ -2757,7 +2769,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s24b']            = { 
 	img : "Strategy Card 24b.png" , 
 	side : "us",
-	tokens : 3 ,
+	tokens : 1 ,
+	defcon : 1 ,
 	event : function(player) {
 	  thirteen_self.eventAddInfluence(player, player, ['cuba_mil','berlin','atlantic'], 3, 3, function(args) {
 	    thirteen_self.endTurn();
@@ -2768,7 +2781,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s25b']            = { 
 	img : "Strategy Card 25b.png" , 
 	side : "us",
-	tokens : 3 ,
+	tokens : 2 ,
+	defcon : 0 ,
 	event : function(player) {
 
 	  let options1 = thirteen_self.app.crypto.stringToBase64(JSON.stringify(thirteen_self.all_battlegrounds));
@@ -2782,7 +2796,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s26b']            = { 
 	img : "Strategy Card 26b.png" , 
 	side : "us",
-	tokens : 3 ,
+	tokens : 1 ,
+	defcon : 1 ,
 	event : function(player) {
 
 	  if (thirteen_self.game.state.defcon1_us > thirteen_self.game.state.defcon1_ussr) {
@@ -2799,6 +2814,7 @@ console.log("USSR has: " + cubes + " in " + arena_id);
 	img : "Strategy Card 27b.png" , 
 	side : "ussr",
 	tokens : 3 ,
+	defcon : 1 ,
 	event : function(player) {
 
 	  thirteen_self.eventShiftDefcon(1, 1, [1, 2, 3], 1, 1, function(args) {
@@ -2814,6 +2830,7 @@ console.log("USSR has: " + cubes + " in " + arena_id);
 	img : "Strategy Card 28b.png" , 
 	side : "ussr",
 	tokens : 3 ,
+	defcon : 1 ,
 	event : function(player) {
 
 	  thirteen_self.updateStatus('Place up to 4 Influence cubes in total on battlegrounds where the USSR player currently has Influence cubes. Max 2 per battleground: <p></p><ul><li class="card done" id="done">done</li></ul>');
@@ -2834,6 +2851,7 @@ console.log("USSR has: " + cubes + " in " + arena_id);
 	img : "Strategy Card 29b.png" , 
 	side : "ussr",
 	tokens : 3 ,
+	defcon : 1 ,
 	event : function(player) {
 	  thirteen_self.eventRemoveInfluence(1, 1, thirteen_self.all_battlegrounds, 3, 3, function(args) {
 	    thirteen_self.endTurn();
@@ -2844,6 +2862,7 @@ console.log("USSR has: " + cubes + " in " + arena_id);
 	img : "Strategy Card 30b.png" , 
 	side : "ussr",
 	tokens : 3 ,
+	defcon : 0 ,
 	event : function(player) {
 	  thirteen_self.eventAddInfluence(player, player, ['cuba_mil','cuba_pol'], 3, 3, function(args) {
 	    thirteen_self.endTurn();
@@ -2853,7 +2872,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s31b']            = { 
 	img : "Strategy Card 31b.png" , 
 	side : "ussr",
-	tokens : 3 ,
+	tokens : 2 ,
+	defcon : 0 ,
 	event : function(player) {
 
 	  let opponent = 2;
@@ -2870,7 +2890,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s32b']            = { 
 	img : "Strategy Card 32b.png" , 
 	side : "ussr",
-	tokens : 3 ,
+	tokens : 2 ,
+	defcon : 0 ,
 	event : function(player) {
 
 	  thirteen_self.updateLog("USSR plays Suez-Hungary");
@@ -2893,7 +2914,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s33b']            = { 
 	img : "Strategy Card 33b.png" , 
 	side : "ussr",
-	tokens : 3 ,
+	tokens : 2 ,
+	defcon : 0 ,
 	event : function(player) {
 
 	  let options = thirteen_self.app.crypto.stringToBase64(JSON.stringify(['cuba_mil', 'atlantic', 'berlin']));
@@ -2910,7 +2932,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s34b']            = { 
 	img : "Strategy Card 34b.png" , 
 	side : "ussr",
-	tokens : 3 ,
+	tokens : 2 ,
+	defcon : 0 ,
 	event : function(player) {
 	  thirteen_self.addMove("bayofpigs");
 	  thirteen_self.endTurn();
@@ -2919,7 +2942,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s35b']            = { 
 	img : "Strategy Card 35b.png" , 
 	side : "ussr",
-	tokens : 3 ,
+	tokens : 1 ,
+	defcon : 0 ,
 	event : function(player) {
 
 	  let max_defcon = 0;
@@ -2940,7 +2964,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s36b']            = { 
 	img : "Strategy Card 36b.png" , 
 	side : "ussr",
-	tokens : 3 ,
+	tokens : 1 ,
+	defcon : 1 ,
 	event : function(player) {
 	  thirteen_self.eventAddInfluence(player, player, ['atlantic'], 3, 3, function(args) {
 	    thirteen_self.endTurn();
@@ -2951,7 +2976,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s37b']            = { 
 	img : "Strategy Card 37b.png" , 
 	side : "ussr",
-	tokens : 3 ,
+	tokens : 1 ,
+	defcon : 1 ,
 	event : function(player) {
 	  thirteen_self.eventAddInfluence(player, player, ['cuba_pol','italy','turkey'], 3, 3, function(args) {
 	    thirteen_self.endTurn();
@@ -2961,7 +2987,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s38b']            = { 
 	img : "Strategy Card 38b.png" , 
 	side : "ussr",
-	tokens : 3 ,
+	tokens : 2 ,
+	defcon : 0 ,
 	event : function(player) {
 	  thirteen_self.eventAddInfluence(player, player, ['turkey'], 2, 2, function(args) {
 
@@ -2975,7 +3002,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
     deck['s39b']            = { 
 	img : "Strategy Card 39b.png" , 
 	side : "ussr",
-	tokens : 3 ,
+	tokens : 1 ,
+	defcon : 1 ,
 	event : function(player) {
 	  thirteen_self.eventAddInfluence(player, player, ['un','television'], 2, 2, function(args) {
 	    thirteen_self.endTurn();
