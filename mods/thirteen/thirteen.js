@@ -486,11 +486,9 @@ console.log("PLAYER SET TO: " + this.game.player);
 
 	  if (player == 1) {
 	    this.updateStatusAndListCards("Your Agenda Card: ", this.game.deck[0].hand, function(card) {
-	      alert("picked card: " + card);
 	    }); 
 	  } else {
 	    this.updateStatusAndListCards("Waiting for USSR to pick its Agenda Card: ", this.game.deck[0].hand, function(card) {
-	      alert("picked card: " + card);
 	    });
 	  }
 	}
@@ -886,18 +884,25 @@ console.log("World Opinion Phase");
 	let player = parseInt(mv[1]);
 	let arena_id = mv[2];
 	let num = parseInt(mv[3]);
+	let already_updated = mv[4];
 
-	if (player == 1) {
-	  if (player != this.game.player) {
-	    this.game.arenas[arena_id].ussr += num;
-	    if (this.game.arenas[arena_id].ussr > 5) { this.game.arenas[arena_id].ussr = 5; }
-	  }
-	} else {
-	  if (player != this.game.player) {
-	    this.game.arenas[arena_id].us += num;
-	    if (this.game.arenas[arena_id].us > 5) { this.game.arenas[arena_id].us = 5; }
+
+	if (already_updated != this.game.player) {
+
+  	  if (player == 1) {
+	    if (player != this.game.player) {
+	      this.game.arenas[arena_id].ussr += num;
+	      if (this.game.arenas[arena_id].ussr > 5) { this.game.arenas[arena_id].ussr = 5; }
+	    }
+	  } else {
+	    if (player != this.game.player) {
+	      this.game.arenas[arena_id].us += num;
+	      if (this.game.arenas[arena_id].us > 5) { this.game.arenas[arena_id].us = 5; }
+	    }
 	  }
 	}
+
+	this.showBoard();
 
         this.game.queue.splice(qe, 1);
 
@@ -923,16 +928,21 @@ console.log("World Opinion Phase");
 	let player = parseInt(mv[1]);
 	let arena_id = mv[2];
 	let num = parseInt(mv[3]);
+	let already_updated = mv[4];
 
-	if (player == 1) {
-	  if (player != this.game.player) {
-	    this.game.arenas[arena_id].ussr -= num;
-	    if (this.game.arenas[arena_id].ussr < 0) { this.game.arenas[arena_id].ussr = 0; }
-	  }
-	} else {
-	  if (player != this.game.player) {
-	    this.game.arenas[arena_id].us -= num;
-	    if (this.game.arenas[arena_id].us < 0) { this.game.arenas[arena_id].us = 0; }
+
+	if (already_updated != this.game.player) {
+
+	  if (player == 1) {
+	    if (player != this.game.player) {
+	      this.game.arenas[arena_id].ussr -= num;
+	      if (this.game.arenas[arena_id].ussr < 0) { this.game.arenas[arena_id].ussr = 0; }
+	    }
+  	  } else {
+	    if (player != this.game.player) {
+	      this.game.arenas[arena_id].us -= num;
+	      if (this.game.arenas[arena_id].us < 0) { this.game.arenas[arena_id].us = 0; }
+	    }
 	  }
 	}
 
@@ -1252,8 +1262,6 @@ alert("placing command tokens... ");
     let thirteen_self = this;
     let args = {};
 
-console.log("1");
-
     $(".done").off();
     $(".done").on('click', function() {
       if (mycallback != null) { mycallback(args); }
@@ -1264,8 +1272,6 @@ console.log("1");
 
     this.removeEventsFromBoard();
 
-console.log("2: " + JSON.stringify(options));
-
     for (let i = 0; i < options.length; i++) {
 
       placed[options[i]] = 0;
@@ -1273,22 +1279,22 @@ console.log("2: " + JSON.stringify(options));
 
       $(divname).off();
       $(divname).on('click', function() {
-alert("X");
+
 	let arena_id = $(this).attr("id");
-alert("X: " + arena_id);
 
 	if (placed[arena_id] > max_per_arena) {
 	  salert("You cannot place more influence there.");
 	} else {
 
 	  if (thirteen_self.addInfluence(player, arena_id, 1)) {
+
 	    total_placed++;
 	    placed[arena_id]++;
-	    thirteen_self.addMove("add_influence\t"+player+"\t"+arena_id+"\t"+"1");
 
+	    thirteen_self.addMove("add_influence\t"+player+"\t"+arena_id+"\t"+"1"+"\t"+thirteen_self.game.player);
 	    thirteen_self.showBoard();
 
-	    if (total_placed == max_per_arena) {
+	    if (total_placed >= number) {
 	      if (mycallback != null) { mycallback(args); }
 	    }
 
@@ -1328,10 +1334,10 @@ alert("X: " + arena_id);
           if (thirteen_self.removeInfluence(player, arena_id, 1)) {
             total_placed++;
             placed[arena_id]++;
-            thirteen_self.addMove("remove_influence\t"+player+"\t"+arena_id+"\t"+"1");
+            thirteen_self.addMove("remove_influence\t"+player+"\t"+arena_id+"\t"+"1" + "\t" + thirteen_self.game.player);
 	    thirteen_self.showBoard();
 
-            if (total_placed == max_per_arena) {
+            if (total_placed >= number) {
               if (mycallback != null) { mycallback(args); }
             }
 
@@ -1401,12 +1407,12 @@ console.log("playing event 2: " + card);
 	    if (thirteen_self.game.player == 1) {
 	      thirteen_self.game.arenas[arena_id].ussr += action;
 	      if (thirteen_self.game.arenas[arena_id].ussr > 5) { thirteen_self.game.arenas[arena_id].ussr = 5; }
-	      thirteen_self.addMove("add_influence\t"+thirteen_self.game.player+"\t"+arena_id+"\t"+action);
+	      thirteen_self.addMove("add_influence\t"+thirteen_self.game.player+"\t"+arena_id+"\t"+action + "\t" + thirteen_self.game.player);
 	      return 0;
 	    } else {
 	      thirteen_self.game.arenas[arena_id].us += action;
 	      if (thirteen_self.game.arenas[arena_id].us > 5) { thirteen_self.game.arenas[arena_id].us = 5; }
-	      thirteen_self.addMove("add_influence\t"+thirteen_self.game.player+"\t"+arena_id+"\t"+action);
+	      thirteen_self.addMove("add_influence\t"+thirteen_self.game.player+"\t"+arena_id+"\t"+action + "\t" + thirteen_self.game.player);
 	      return 0;
 	    }
 
@@ -1479,6 +1485,8 @@ console.log("playing event 2: " + card);
   returnInitiative() {
     return "ussr";
   }
+
+
 
 
 
@@ -1560,8 +1568,14 @@ console.log("playing event 2: " + card);
     
 
   }
+  showArenas() {
+    for (var i in this.game.arenas) {
+      this.showInfluence(i);
+    }
+  }
   showBoard() {
 
+    this.showArenas();
     this.showRoundTrack();
     this.showPrestigeTrack();
     this.showDefconTracks();
@@ -1585,6 +1599,8 @@ console.log("playing event 2: " + card);
   }
   showInfluence(arena_id) {
 
+console.log("SHOWING INFLUENCE FUNCTION!");
+
     let divname = "#"+arena_id;
     let divname_us = "#"+arena_id + " > .us";
     let divname_ussr = "#"+arena_id + " > .ussr"
@@ -1597,6 +1613,7 @@ console.log("playing event 2: " + card);
     // US Cubes
     //
     cubes = this.game.arenas[arena_id].us;
+console.log("US has: " + cubes + " in " + arena_id);
     if (cubes > 0) {
  
       let starting_point = width / 2;
@@ -1617,6 +1634,7 @@ console.log("playing event 2: " + card);
     // USSR Cubes
     //
     cubes = this.game.arenas[arena_id].ussr;
+console.log("USSR has: " + cubes + " in " + arena_id);
     if (cubes > 0) {
  
       let starting_point = width / 2;
@@ -2064,7 +2082,7 @@ console.log("playing event 2: " + card);
 	event : function(player) {
 
 	  // place up to three on one or more world opinion battlegrounds
-	  thirteen_self.updateStatus("Place up to three influence one or more World Opinion battlegrounds: <p></p><ul><li class='card done'>click here when done</li></ul>");
+	  thirteen_self.updateStatus("Escalate or de-escalate one of your DEFCON tracks by up to two steps, then Command 1 influence cube.");
 	  thirteen_self.eventAddInfluence(player, player, ['un','television','alliance'], 3, 2, function(args) {
 	    thirteen_self.endTurn();
 	  }); 
@@ -2078,6 +2096,7 @@ console.log("playing event 2: " + card);
 	event : function(player) {
 
 	  // escalate / de-escalate DEFCON tracks by up to 2 steps
+	  thirteen_self.updateStatus('Select a battleground from which to remove US influence: <p></p><ul><li class="card done" id="done">done</li></ul>');
 	  thirteen_self.eventShiftDefcon(player, player, [1, 2, 3], 2, function(args) {
 	    thirteen_self.updateStatus("Place up to one influence one or more battlegrounds: <p></p><ul><li class='card done'>click here when done</li></ul>");
 	    thirteen_self.eventAddInfluence(player, player, ['cuba_pol', 'cuba_mil', 'atlantic', 'turkey', 'berlin', 'italy', 'un','television','alliance'], 3, 2, function(args) {
@@ -2108,12 +2127,17 @@ console.log("playing event 2: " + card);
 	tokens : 3 ,
 	event : function(player) {
 
+	  let playern = "USSR";
+	  if (this.game.player == 2) { playern = "US"; }
+
 	  // all your command actions have +1 influence cube this round
+	  thirteen_self.updateLog("You get +1 bonus to your command tokens for remainder of turn");
 	  if (player == 1) {
   	    thirteen_self.addMove("setvar\tadd_command_token_bonus\t1"); 
 	  } else {
   	    thirteen_self.addMove("setvar\tadd_command_token_bonus\t2"); 
 	  }
+  	  thirteen_self.addMove("notify\t"+playern+" adds +1 bonus to command tokens this turn");
 	  thirteen_self.endTurn();
 
 	},
@@ -2235,10 +2259,11 @@ console.log("playing event 2: " + card);
 	event : function(player) {
 
 	  // deflate all your DEFCON tracks by 1
+	  thirteen_self.updateLog("Decreasing all of your DEFCON tracks by 1");
           thirteen_self.addMove("decrease_defcon\t"+player+"\t1\t1");
           thirteen_self.addMove("decrease_defcon\t"+player+"\t2\t1");
           thirteen_self.addMove("decrease_defcon\t"+player+"\t3\t1");
-
+	  thirteen_self.endTurn();
 	},
     }
     deck['s11b']            = { 
@@ -2306,7 +2331,7 @@ console.log("playing event 2: " + card);
 	event : function(player) {
 
 	  let options = [];
-	  for (i = 0; i < thirteen_self.game.arenas.length; i++) {
+	  for (var i in thirteen_self.game.arenas) {
 	    if (thirteen_self.game.arenas[i].us == 0) {
 	      options.push(i);
 	    }
@@ -2324,7 +2349,7 @@ console.log("playing event 2: " + card);
 	event : function(player) {
 
 	  let options = [];
-	  for (i = 0; i < thirteen_self.game.arenas.length; i++) {
+	  for (var i in thirteen_self.game.arenas) {
 	    if (thirteen_self.game.arenas[i].us > 0) {
 	      options.push(i);
 	    }
@@ -2463,8 +2488,7 @@ console.log("playing event 2: " + card);
 	side : "us",
 	tokens : 3 ,
 	event : function(player) {
-alert("playing event add influence!");
-	  thirteen_self.updateStatus("Place up to 2 Influence on the Atlantic battleground.");
+	  thirteen_self.updateStatus("Place up to 2 Influence on the Atlantic battleground: <p></p><ul><li class='card done'>click here when done</li></ul>");
 	  thirteen_self.eventAddInfluence(player, player, ['atlantic'], 2, 2, function(args) {
 	    thirteen_self.endTurn();
 	  }); 
@@ -2527,13 +2551,16 @@ alert("playing event add influence!");
 	},
     }
     deck['s28b']            = { 
+
 	img : "Strategy Card 28b.png" , 
 	side : "ussr",
 	tokens : 3 ,
 	event : function(player) {
 
+	  thirteen_self.updateStatus('Place up to 4 Influence cubes in total on battlegrounds where the USSR player currently has Influence cubes. Max 2 per battleground: <p></p><ul><li class="card done" id="done">done</li></ul>');
 	  let options = [];
-	  for (let i = 0; i < thirteen_self.game.arenas.length; i++) {
+
+	  for (var i in thirteen_self.game.arenas) {
 	    if (thirteen_self.game.arenas[i].ussr > 0) {
 	      options.push(i);
 	    }
@@ -2587,6 +2614,7 @@ alert("playing event add influence!");
 	tokens : 3 ,
 	event : function(player) {
 
+	  thirteen_self.updateLog("USSR plays Suez-Hungary");
 	  let us = thirteen_self.game.arenas['italy'].us;
 	  let ussr = thirteen_self.game.arenas['italy'].ussr;
 
@@ -2596,7 +2624,7 @@ alert("playing event add influence!");
 	  let total_to_add = total_needed-ussr;
 
 	  if (total_to_add > 0) {
-	    thirteen_self.addMove("add_influence\t1\t"+total_to_add);
+	    thirteen_self.addMove("add_influence\t1\titaly\t"+total_to_add + "\t" + "-1");
 	    thirteen_self.addMove("notify\tUSSR adds "+total_to_add+" in Italy");
 	  }
 	  thirteen_self.endTurn();
