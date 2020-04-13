@@ -1475,22 +1475,25 @@ alert("total moves: " + total_shifted + " - " + direction );
 	      // manipulate DEFCON
 	      //
 	      if (defcon_trigger == 1) {
-	        let defcon_adjustment = total_placed-1;
-		if (defcon_adjustment > 0) {
+	        for (var z in placed) {
 
-	          let defcon_track = 1;
+	          let defcon_adjustment = placed[z]-1;
+	  	  if (defcon_adjustment > 0) {
 
-	          if (arena_id == "cuba_mil")   { defcon_track = 1; }
-	          if (arena_id == "atlantic")   { defcon_track = 1; }
-	          if (arena_id == "berlin")     { defcon_track = 1; }
-	          if (arena_id == "cuba_pol")   { defcon_track = 2; }
-	          if (arena_id == "turkey")     { defcon_track = 2; }
-	          if (arena_id == "italy")      { defcon_track = 2; }
-	          if (arena_id == "un")         { defcon_track = 3; }
-	          if (arena_id == "television") { defcon_track = 3; }
-	          if (arena_id == "alliances")  { defcon_track = 3; }
+	            let defcon_track = 1;
 
-	          thirteen_self.addMove("increase_defcon\t"+thirteen_self.game.player+"\t"+defcon_track+"\t"+defcon_decrease");
+	            if (z == "cuba_mil")   { defcon_track = 1; }
+	            if (z == "atlantic")   { defcon_track = 1; }
+	            if (z == "berlin")     { defcon_track = 1; }
+	            if (z == "cuba_pol")   { defcon_track = 2; }
+	            if (z == "turkey")     { defcon_track = 2; }
+	            if (z == "italy")      { defcon_track = 2; }
+	            if (z == "un")         { defcon_track = 3; }
+	            if (z == "television") { defcon_track = 3; }
+	            if (z == "alliances")  { defcon_track = 3; }
+
+	            thirteen_self.addMove("increase_defcon\t"+thirteen_self.game.player+"\t"+defcon_track+"\t"+defcon_adjustment);
+	          }
 	        }
 	      }
 
@@ -1530,6 +1533,32 @@ alert("total moves: " + total_shifted + " - " + direction );
 
         let arena_id = $(this).attr("id");
 
+	//
+	// remove half
+	//
+	if (number == 101) {
+
+	  //
+	  // remove half
+	  //
+	  let x = 0;
+	  if (player_removed == 1) { x = thirteen_self.game.arenas[arena_id].ussr; }
+	  if (player_removed == 2) { x = thirteen_self.game.arenas[arena_id].us; }
+	  let total_to_remove = 0;
+	  for (let y = x; y > 0; y -= 2) {
+	    total_to_remove++;
+	  }
+
+          if (thirteen_self.removeInfluence(player_removed, arena_id, total_to_remove)) {
+            thirteen_self.addMove("remove_influence\t"+player+"\t"+arena_id+"\t"+total_to_remove + "\t" + thirteen_self.game.player);
+	    thirteen_self.showBoard();
+	    mycallback();
+	    return;
+	  }
+	}
+
+
+
 	if (number == 100 && battleground_selected != "") {
 	  if (arena_id != battleground_selected) {
 	    salert("You can only remove from one country. Click done when done.");
@@ -1550,12 +1579,12 @@ alert("total moves: " + total_shifted + " - " + direction );
           salert("You cannot remove more influence there.");
         } else {
 
-          if (thirteen_self.removeInfluence(player, arena_id, 1)) {
+          if (thirteen_self.removeInfluence(player_removed, arena_id, 1)) {
 
             total_placed++;
             placed[arena_id]++;
 
-            thirteen_self.addMove("remove_influence\t"+player+"\t"+arena_id+"\t"+"1" + "\t" + thirteen_self.game.player);
+            thirteen_self.addMove("remove_influence\t"+player_removed+"\t"+arena_id+"\t"+"1" + "\t" + thirteen_self.game.player);
 	    thirteen_self.showBoard();
 
             if (total_placed >= number) {
@@ -1564,22 +1593,24 @@ alert("total moves: " + total_shifted + " - " + direction );
 	      // manipulate DEFCON
 	      //
 	      if (defcon_trigger == 1) {
-	        let defcon_adjustment = total_placed-1;
+	        for (var z in placed) {
+
+	        let defcon_adjustment = placed[z]-1;
 		if (defcon_adjustment > 0) {
 
 	          let defcon_track = 1;
 
-	          if (arena_id == "cuba_mil")   { defcon_track = 1; }
-	          if (arena_id == "atlantic")   { defcon_track = 1; }
-	          if (arena_id == "berlin")     { defcon_track = 1; }
-	          if (arena_id == "cuba_pol")   { defcon_track = 2; }
-	          if (arena_id == "turkey")     { defcon_track = 2; }
-	          if (arena_id == "italy")      { defcon_track = 2; }
-	          if (arena_id == "un")         { defcon_track = 3; }
-	          if (arena_id == "television") { defcon_track = 3; }
-	          if (arena_id == "alliances")  { defcon_track = 3; }
+	          if (z == "cuba_mil")   { defcon_track = 1; }
+	          if (z == "atlantic")   { defcon_track = 1; }
+	          if (z == "berlin")     { defcon_track = 1; }
+	          if (z == "cuba_pol")   { defcon_track = 2; }
+	          if (z == "turkey")     { defcon_track = 2; }
+	          if (z == "italy")      { defcon_track = 2; }
+	          if (z == "un")         { defcon_track = 3; }
+	          if (z == "television") { defcon_track = 3; }
+	          if (z == "alliances")  { defcon_track = 3; }
 
-	          thirteen_self.addMove("decrease_defcon\t"+thirteen_self.game.player+"\t"+defcon_track+"\t"+defcon_decrease");
+	          thirteen_self.addMove("decrease_defcon\t"+thirteen_self.game.player+"\t"+defcon_track+"\t"+defcon_adjustment);
 	        }
 	      }
               if (mycallback != null) { mycallback(args); }
@@ -1684,7 +1715,7 @@ console.log("playing event 2: " + card);
 	    if (thirteen_self.addInfluence(thirteen_self.game.player, arena_id, action)) {
 	      thirteen_self.addMove("add_influence\t"+thirteen_self.game.player+"\t"+arena_id+"\t"+action + "\t" + thirteen_self.game.player);
 	      if (defcon_increase > 0) {
-	        thirteen_self.addMove("increase_defcon\t"+thirteen_self.game.player+"\t"+defcon_track+"\t"+defcon_increase");
+	        thirteen_self.addMove("increase_defcon\t"+thirteen_self.game.player+"\t"+defcon_track+"\t"+defcon_increase);
 	      }
 	      thirteen_self.endTurn();
 	    }
@@ -1736,7 +1767,7 @@ console.log("playing event 2: " + card);
 	    if (thirteen_self.removeInfluence(thirteen_self.game.player, arena_id, action)) {
 	      thirteen_self.addMove("remove_influence\t"+thirteen_self.game.player+"\t"+arena_id+"\t"+action + "\t" + thirteen_self.game.player);
 	      if (defcon_increase > 0) {
-	        thirteen_self.addMove("decrease_defcon\t"+thirteen_self.game.player+"\t"+defcon_track+"\t"+defcon_decrease");
+	        thirteen_self.addMove("decrease_defcon\t"+thirteen_self.game.player+"\t"+defcon_track+"\t"+defcon_decrease);
 	      }
 	      thirteen_self.endTurn();
 	    }
@@ -1875,11 +1906,11 @@ console.log("playing event 2: " + card);
     }
     for (let i = 0; i < this.game.state.us_agendas.length; i++) {
       let divname = "#"+this.game.state.us_agendas[i];
-      $(divname).append('<img src="/thirteen/img/nUS%20Tile%20with%20bleed.png" style="left:5px;position:fixed;top:5px;/>');
+      $(divname).append('<img src="/thirteen/img/nUS%20Tile%20with%20bleed.png" style="z-index:12;left:5px;position:relative;top:5px;/>');
     }
     for (let i = 0; i < this.game.state.ussr_agendas.length; i++) {
       let divname = "#"+this.game.state.ussr_agendas[i];
-      $(divname).append('<img src="/thirteen/img/nUSSR%20Tile%20with%20bleed.png" style="left:-5px;position:fixed;top:-5px;" />');
+      $(divname).append('<img src="/thirteen/img/nUSSR%20Tile%20with%20bleed.png" style="z-index:10;left:-5px;position:relative;top:-5px;" />');
     }
 
   }
@@ -1890,22 +1921,6 @@ console.log("playing event 2: " + card);
     this.showRoundTrack();
     this.showPrestigeTrack();
     this.showDefconTracks();
-
-  }
-  showAgendaFlags() {
-
-    $('.flags').remove();
-
-    for (let i in this.game.state.us_agendas) {
-      let ushtml = '<img class="flags" src="/thirteen/img/nUS%20Tile%20with%20bleed.png" style="position:relative;top:-'+this.scale(20)+'px;left:'+this.scale(0)+'px;" />';
-    console.log("PLACING FLAG ON: " + i);
-
-    }
-    for (let i in this.game.state.ussr_agendas) {
-      let ussrhtml = '<img class="flags" src="/thirteen/img/nUSSR%20Tile%20with%20bleed.png" style="position:relative;top:-'+this.scale(20)+'px;left:'+this.scale(0)+'px;" />';
-    console.log("PLACING FLAG ON: " + i);
-    }
-
 
   }
   showInfluence(arena_id) {
@@ -2856,7 +2871,7 @@ console.log("USSR has: " + cubes + " in " + arena_id);
 	defcon : 0 ,
 	event : function(player) {
 
-	  thirteen_self.eventRemoveInfluence(player, 1, ['turkey'], 2, 2, 0, function(args) {
+	  thirteen_self.eventRemoveInfluence(player, 2, ['turkey'], 2, 2, 0, function(args) {
 	    thirteen_self.eventDecreaseDefcon(player, player, ['political'], 2, 2, function(args) {
 	      thirteen_self.endTurn();
 	    });
