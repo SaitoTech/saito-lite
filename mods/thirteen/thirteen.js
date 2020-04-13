@@ -201,26 +201,26 @@ console.log("\n\n\n\n");
       this.updateStatus("generating the game");
 
       this.game.queue.push("round");
-      this.game.queue.push("ready");
+      this.game.queue.push("READY");
 
-      this.game.queue.push("deckencrypt\t1\t2");
-      this.game.queue.push("deckencrypt\t1\t1");
-      this.game.queue.push("deckxor\t1\t2");
-      this.game.queue.push("deckxor\t1\t1");
-      this.game.queue.push("deck\t1\t"+JSON.stringify(this.returnAgendaCards()));
+      this.game.queue.push("DECKENCRYPT\t1\t2");
+      this.game.queue.push("DECKENCRYPT\t1\t1");
+      this.game.queue.push("DECKXOR\t1\t2");
+      this.game.queue.push("DECKXOR\t1\t1");
+      this.game.queue.push("DECK\t1\t"+JSON.stringify(this.returnAgendaCards()));
 
       
-      this.game.queue.push("deckencrypt\t2\t2");
-      this.game.queue.push("deckencrypt\t2\t1");
-      this.game.queue.push("deckxor\t2\t2");
-      this.game.queue.push("deckxor\t2\t1");
-      this.game.queue.push("deck\t2\t"+JSON.stringify(this.returnStrategyCards()));
+      this.game.queue.push("DECKENCRYPT\t2\t2");
+      this.game.queue.push("DECKENCRYPT\t2\t1");
+      this.game.queue.push("DECKXOR\t2\t2");
+      this.game.queue.push("DECKXOR\t2\t1");
+      this.game.queue.push("DECK\t2\t"+JSON.stringify(this.returnStrategyCards()));
 
 
       this.game.queue.push("init");
 
       if (this.game.dice === "") {
-        this.initializedice();
+        this.initializeDice();
       }
 
     }
@@ -394,7 +394,7 @@ console.log("divname: " + divname);
       // init
       // setvar
       // pick_agenda_card
-      // reshuffle_discarded_agenda_cards
+      // reSHUFFLE_discarded_agenda_cards
       // round
       // discard 
       // flush
@@ -430,7 +430,7 @@ console.log("divname: " + divname);
           // random pick
           //
           if (this.game.options.player1 == "random") {
-            let roll = this.rolldice(6);
+            let roll = this.rollDice(6);
             if (roll <= 3) {
               this.game.options.player1 = "us";
             } else {
@@ -438,7 +438,7 @@ console.log("divname: " + divname);
             }
           }
 
-          if (this.game.players[0] === this.app.wallet.returnpublickey()) {
+          if (this.game.players[0] === this.app.wallet.returnPublicKey()) {
             if (this.game.options.player1 == "us") {
               this.game.player = 2;
             } else {
@@ -458,24 +458,24 @@ console.log("player set to: " + this.game.player);
         this.game.queue.splice(qe, 1);
 
       }
-      if (mv[0] == "reshuffle_discarded_agenda_cards") {
+      if (mv[0] == "reSHUFFLE_discarded_agenda_cards") {
 
 	let discarded_cards = this.returndiscardedcards(1);
 
         if (object.keys(discarded_cards).length > 0) {
 
           //
-          // shuffle in discarded cards
+          // SHUFFLE in discarded cards
           //
-          thirteen_self.addMove("shuffle\t1");
-          thirteen_self.addMove("deckrestore\t1");
-          thirteen_self.addMove("deckencrypt\t1\t2");
-          thirteen_self.addMove("deckencrypt\t1\t1");
-          thirteen_self.addMove("deckxor\t1\t2");
-          thirteen_self.addMove("deckxor\t1\t1");
+          thirteen_self.addMove("SHUFFLE\t1");
+          thirteen_self.addMove("DECKRESTORE\t1");
+          thirteen_self.addMove("DECKENCRYPT\t1\t2");
+          thirteen_self.addMove("DECKENCRYPT\t1\t1");
+          thirteen_self.addMove("DECKXOR\t1\t2");
+          thirteen_self.addMove("DECKXOR\t1\t1");
           thirteen_self.addMove("flush\tdiscards\t1"); // opponent should know to flush discards as we have
-          thirteen_self.addMove("deck\t1\t"+JSON.stringify(discarded_cards));
-          thirteen_self.addMove("deckbackup\t1");
+          thirteen_self.addMove("DECK\t1\t"+JSON.stringify(discarded_cards));
+          thirteen_self.addMove("DECKBACKUP\t1");
           thirteen_self.updateLog("cards remaining: " + thirteen_self.game.deck[0].crypt.length);
           thirteen_self.updateLog("shuffling discarded agenda cards back into the deck...");
 
@@ -657,7 +657,7 @@ console.log("world opinion phase");
 
 	if (this.game.player != pullee) {
 
-	  this.rolldice(this.game.deck[1].hand.length, function(roll) {
+	  this.rollDice(this.game.deck[1].hand.length, function(roll) {
 
             let dieroll = parseInt(roll)-1;
 
@@ -681,7 +681,7 @@ console.log("world opinion phase");
 
         } else {
 	
-	  this.rolldice();
+	  this.rollDice();
 	  return 0;
 
         }
@@ -787,15 +787,15 @@ console.log("world opinion phase");
 	  this.game.queue.push("play\t1");
         }
 
-        this.game.queue.push("deal\t2\t1\t5");
-        this.game.queue.push("deal\t2\t2\t5");
-        this.game.queue.push("shuffle\t2");
+        this.game.queue.push("DEAL\t2\t1\t5");
+        this.game.queue.push("DEAL\t2\t2\t5");
+        this.game.queue.push("SHUFFLE\t2");
 
 
 	this.game.state.us_agendas = [];
 	this.game.state.ussr_agendas = [];
 
-        this.game.queue.push("reshuffle_discarded_agenda_cards\t2");
+        this.game.queue.push("reSHUFFLE_discarded_agenda_cards\t2");
         this.game.queue.push("pick_agenda_card\t2");
         this.game.queue.push("pick_agenda_card\t1");
 
@@ -804,9 +804,9 @@ console.log("world opinion phase");
         // phase 2 - deal agenda cards
         //
         this.updateLog("3 agenda cards dealt to each player");
-        this.game.queue.push("deal\t1\t1\t3");
-        this.game.queue.push("deal\t1\t2\t3");
-        this.game.queue.push("shuffle\t1");
+        this.game.queue.push("DEAL\t1\t1\t3");
+        this.game.queue.push("DEAL\t1\t2\t3");
+        this.game.queue.push("SHUFFLE\t1");
 
 
         //
@@ -2679,7 +2679,7 @@ console.log("ussr has: " + cubes + " in " + arena_id);
               thirteen_self.addMove("DEAL\t2\t"+thirteen_self.game.player+"\t"+cards_discarded);
 
               //
-              // are there enough cards available, if not, reshuffle
+              // are there enough cards available, if not, reSHUFFLE
               //
               if (cards_discarded > thirteen_self.game.deck[1].crypt.length) {
 
@@ -2687,7 +2687,7 @@ console.log("ussr has: " + cubes + " in " + arena_id);
                 if (Object.keys(discarded_cards).length > 0) {
 
                   //
-                  // shuffle in discarded cards
+                  // SHUFFLE in discarded cards
                   //
                   thirteen_self.addMove("SHUFFLE\t2");
                   thirteen_self.addMove("DECKRESTORE\t2");
