@@ -4,24 +4,31 @@ module.exports = ProductPageTemplate = () => {
 
   html = `
 
+<div class="inq-form">
+
   <h3>Product Inquiry</h3>
 
   <p>
 
-  DHB is a concierge service - more message here.
+  DHB is a concierge service - contact us at info@dhb.global and we will wil be right with you.
 
   Let us know you are interested in:
 
-  <div class="inq-grid grid-2-columns" id="inq-grid"></div>
+  <table class="inq-grid" id="inq-grid"></table>
+  <div id="copy-product-list"><i class="far fa-copy"></i> Copy</div>
 
-  <h4>Contact Methods</h4>
+  <hr />
+
+  <h4>Contact</h4>
 
   <div class="contact-grid grid-2-columns">
-    <div><i class="far fa-envelope"></i> Email:</div><div>dangerD@theDouggPound.com</div>
-    <div><i class="fas fa-phone-alt"></i> Phone:</div><div>+123 4567 8910</div>
+    <div><i class="far fa-envelope"></i> Email:</div><div>info@dhb.global</div>
+    <!--div><i class="fas fa-phone-alt"></i> Phone:</div><div>+123 4567 8910</div-->
   </div>
 
-  <button id="keep-shopping">Go back to list</button>
+  <button id="keep-shopping">Find More Goods</button>
+
+</div>
   `;
 
   return html;

@@ -17,15 +17,19 @@ module.exports = InquirePage = {
     data.covid19.sendPeerDatabaseRequest("covid19", "products", fields, "id in " + ids, null, function (res) {
 
       if (res.rows.length > 0) {
-        var html = "";
+        var html = "<tr>";
 
         Object.entries(res.rows[0]).forEach(field => {
-          html += `<div class="inq-product-name">${field[0]}</div>`;
+          html += `<td class="inq-product-name">${field[0]}</td>`;
         });
+        html += "</tr>";
+
         res.rows.forEach(row => {
+          html += "<tr>";
           Object.entries(row).forEach(field => {
-            html += `<div class="inq-product-id">${field[1]}</div>`;
+            html += `<td class="inq-product-id">${field[1]}</td>`;
           });
+          html += "</tr>";
         });
         document.querySelector('.inq-grid').innerHTML = html;
       }
@@ -39,6 +43,18 @@ module.exports = InquirePage = {
       data.covid19.renderPage("customer", app, data);
     });
 
-   }
+    document.getElementById('copy-product-list').addEventListener('click', () => {
+      function listener(e) {
+        e.clipboardData.setData("text/html", document.getElementById('inq-grid').innerHTML);
+       e.clipboardData.setData("text/plain", document.getElementById('inq-grid').innerHTML);
+        e.preventDefault();
+      }
+      document.addEventListener("copy", listener);
+      document.execCommand("copy");
+      document.removeEventListener("copy", listener);
+    });
+
+  }
 
 }
+

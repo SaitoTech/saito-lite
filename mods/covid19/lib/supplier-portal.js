@@ -22,14 +22,15 @@ module.exports = SupplierPortal = {
           <div class="table-head">Unit Cost</div>
           <div class="table-head">Certifications</div>
           <div class="table-head">Daily Volume</div>
+          <div class="table-head">ID</div>
           <div class="table-head"></div>
-          <div class="table-head"></div>
+          
         `;
         document.querySelector(".products-table").innerHTML = html;
 
 
         // no 'name' on supplier page
-        data.covid19.addProductsToTable(res.rows, [ 'product_specification', 'product_photo', 'pricing_per_unit_rmb', 'certifications', 'production_daily_capacity', 'id', 'admin'], app, data);
+        data.covid19.addProductsToTable(res.rows, [ 'product_specification', 'product_photo', 'pricing_per_unit_rmb', 'certifications', 'production_daily_capacity', 'show_id', 'admin'], app, data);
 
       document.querySelector(".loading").style.display = "none";
       document.querySelector(".portal").style.display = "block";

@@ -166,7 +166,7 @@ button, .button {
 }
 
 .inq-grid {
-  margin: 2em 0;
+  margin: 2em 0 7px 0;
   width: 25em;
 }
 
@@ -182,4 +182,22 @@ button, .button {
   margin: 24px 42px;
   font-size: 32px;
   color: #888;
+}
+
+#inq-grid td {
+  padding: 5px 0;
+}
+
+table#inq-grid {
+  background: var(--saito-skyline-grey);
+  padding: 5px;
+}
+
+#copy-product-list:hover {
+  color: var(--saito-red);
+  cursor: pointer;
+}
+
+.inq-form {
+  font-size: 1.2em;
 }

@@ -476,6 +476,11 @@ class Covid19 extends ModTemplate {
               added = 1;
             }
 
+            if (fields[ii] == "show_id") {
+              html += `<div>${rows[i].product_id}</div>`;
+              added = 1;
+            }
+
             if (added == 0) {
               html += `<div data-table="${ii}">${rows[i][fields[ii]]}</div>`;
               added = 1;
