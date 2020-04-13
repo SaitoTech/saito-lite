@@ -2695,7 +2695,7 @@ console.log("USSR has: " + cubes + " in " + arena_id);
 	  if (thirteen_self.game.player == 1) { opponent = 2; }
 
 	  // command three influence, then opponent may command 1 influence
-	  this.addMove("event_add_influence" + "\t" + opponent + "\t" + opponent + "\t" + thirteen_self.app.crypto.stringToBase64(JSON.stringify(['cuba_pol', 'cuba_mil', 'atlantic', 'turkey', 'berlin', 'italy', 'un','television','alliance'])) + "\t" + "1" + "\t" + 1);
+	  this.addMove("event_add_influence" + "\t" + opponent + "\t" + opponent + "\t" + thirteen_self.app.crypto.stringToBase64(JSON.stringify(['cuba_pol', 'cuba_mil', 'atlantic', 'turkey', 'berlin', 'italy', 'un','television','alliance'])) + "\t" + "1" + "\t" + 1 + "\t1");
 	  thirteen_self.eventAddInfluence(player, player, ['cuba_pol', 'cuba_mil', 'atlantic', 'turkey', 'berlin', 'italy', 'un','television','alliance'], 3, 3, 1, function(args) {
 	    thirteen_self.endTurn();
 	  });
@@ -2935,8 +2935,8 @@ console.log("USSR has: " + cubes + " in " + arena_id);
 
 	  let options1 = thirteen_self.app.crypto.stringToBase64(JSON.stringify(thirteen_self.all_battlegrounds));
 	  let options2 = thirteen_self.app.crypto.stringToBase64(JSON.stringify(thirteen_self.all_battlegrounds));
-	  thirteen_self.addMove("event_add_influence\t2\t2\t"+options2+"\t2\t2");
-	  thirteen_self.addMove("event_remove_influence\t2\t2\t"+options1+"\t2\t2");
+	  thirteen_self.addMove("event_add_influence\t2\t2\t"+options2+"\t2\t2\t0");
+	  thirteen_self.addMove("event_remove_influence\t2\t2\t"+options1+"\t2\t2\t0");
 	  thirteen_self.endTurn();
 
 	},
@@ -2950,7 +2950,7 @@ console.log("USSR has: " + cubes + " in " + arena_id);
 
 	  if (thirteen_self.game.state.defcon1_us > thirteen_self.game.state.defcon1_ussr) {
 	    let options = thirteen_self.app.crypto.stringToBase64(JSON.stringify(['cuba_mil', 'cuba_pol']));
-	    thirteen_self.addMove("event_add_influence\t2\t2\t"+options+"\t3\t3");
+	    thirteen_self.addMove("event_add_influence\t2\t2\t"+options+"\t3\t3\t1");
 	  } else {
 	    thirteen_self.addMove("notify\tUS is not higher than USSR on military defcon track. Skipping event");
 	  }
@@ -2967,7 +2967,7 @@ console.log("USSR has: " + cubes + " in " + arena_id);
 
 	  thirteen_self.eventShiftDefcon(1, 1, [1, 2, 3], 1, 1, function(args) {
 	    let options = thirteen_self.app.crypto.stringToBase64(JSON.stringify(thirteen_self.all_battlegrounds));
-	    thirteen_self.addMove("event_add_influence\t1\t1\t"+options+"\t1\t1");
+	    thirteen_self.addMove("event_add_influence\t1\t1\t"+options+"\t1\t1\t1");
 	    thirteen_self.endTurn();
 	  });
 
@@ -3069,7 +3069,7 @@ console.log("USSR has: " + cubes + " in " + arena_id);
 	  let options = thirteen_self.app.crypto.stringToBase64(JSON.stringify(['cuba_mil', 'atlantic', 'berlin']));
 
 	  if (thirteen_self.game.state.defcon1_ussr < 4) {
-	    thirteen_self.addMove("event_add_influence\t1\t1\t"+options+"\t3\t1");
+	    thirteen_self.addMove("event_add_influence\t1\t1\t"+options+"\t3\t1\t0");
 	    thirteen_self.addMove("notify\tUSSR places influence in military battlegrounds");
 	  } else {
 	    thirteen_self.addMove("notify\tUSSR military defcon track is higher than 3.");
