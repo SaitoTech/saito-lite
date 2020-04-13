@@ -207,14 +207,14 @@ console.log("\n\n\n\n");
       this.game.queue.push("deckencrypt\t1\t1");
       this.game.queue.push("deckxor\t1\t2");
       this.game.queue.push("deckxor\t1\t1");
-      this.game.queue.push("deck\t1\t"+json.stringify(this.returnAgendaCards()));
+      this.game.queue.push("deck\t1\t"+JSON.stringify(this.returnAgendaCards()));
 
       
       this.game.queue.push("deckencrypt\t2\t2");
       this.game.queue.push("deckencrypt\t2\t1");
       this.game.queue.push("deckxor\t2\t2");
       this.game.queue.push("deckxor\t2\t1");
-      this.game.queue.push("deck\t2\t"+json.stringify(this.returnStrategyCards()));
+      this.game.queue.push("deck\t2\t"+JSON.stringify(this.returnStrategyCards()));
 
 
       this.game.queue.push("init");
@@ -345,7 +345,7 @@ console.log("divname: " + divname);
     //
     // make board draggable
     //
-    var element = document.getelementbyid('gameboard');
+    var element = document.getElementById('gameboard');
     if (element !== null) { helpers.hammer(element); }
 
   }
@@ -384,7 +384,7 @@ console.log("divname: " + divname);
     ///////////
     if (this.game.queue.length > 0) {
 
-      console.log("queue: " + json.stringify(this.game.queue));
+      console.log("queue: " + JSON.stringify(this.game.queue));
 
       let qe = this.game.queue.length-1;
       let mv = this.game.queue[qe].split("\t");
@@ -474,7 +474,7 @@ console.log("player set to: " + this.game.player);
           thirteen_self.addMove("deckxor\t1\t2");
           thirteen_self.addMove("deckxor\t1\t1");
           thirteen_self.addMove("flush\tdiscards\t1"); // opponent should know to flush discards as we have
-          thirteen_self.addMove("deck\t1\t"+json.stringify(discarded_cards));
+          thirteen_self.addMove("deck\t1\t"+JSON.stringify(discarded_cards));
           thirteen_self.addMove("deckbackup\t1");
           thirteen_self.updateLog("cards remaining: " + thirteen_self.game.deck[0].crypt.length);
           thirteen_self.updateLog("shuffling discarded agenda cards back into the deck...");
@@ -491,7 +491,7 @@ console.log("player set to: " + this.game.player);
 	
 	if (this.game.player == player)  {
 
-          this.updateStatusandlistcards("pick one agenda card to keep: ", this.game.deck[0].hand, function(card) {
+          this.updateStatusAndListCards("pick one agenda card to keep: ", this.game.deck[0].hand, function(card) {
 
 	    thirteen_self.addMove("resolve");
 	    for (let i = 0; i < thirteen_self.game.deck[0].hand.length; i++) {
@@ -507,10 +507,10 @@ console.log("player set to: " + this.game.player);
 	} else {
 
 	  if (player == 1) {
-	    this.updateStatusandlistcards("your agenda card: ", this.game.deck[0].hand, function(card) {
+	    this.updateStatusAndListCards("your agenda card: ", this.game.deck[0].hand, function(card) {
 	    }); 
 	  } else {
-	    this.updateStatusandlistcards("waiting for ussr to pick its agenda card: ", this.game.deck[0].hand, function(card) {
+	    this.updateStatusAndListCards("waiting for ussr to pick its agenda card: ", this.game.deck[0].hand, function(card) {
 	    });
 	  }
 	}
@@ -529,7 +529,7 @@ console.log("here in discard!");
 
         this.updateLog("<span>" + player_country + " discards</span> <span class=\"logcard\" id=\""+cardname+"\">" + this.game.deck[deck].cards[cardname].name + "</span>");
 
-console.log(json.stringify(this.game.deck[deck].hand));
+console.log(JSON.stringify(this.game.deck[deck].hand));
 
         for (let i = 0; i < this.game.deck[deck].hand.length; i++) {
 console.log("checking: " + cardname + " against " + this.game.deck[deck].hand[i]);
@@ -954,7 +954,7 @@ console.log("world opinion phase");
 
 	let player = parseInt(mv[1]);
 	let player_to_add = parseInt(mv[2]);
-	let options = json.parse(this.app.crypto.base64tostring(mv[3]));
+	let options = JSON.parse(this.app.crypto.base64ToString(mv[3]));
 	let number = parseInt(mv[4]);
 	let max_per_arena = parseInt(mv[5]);
 	let defcon_trigger = parseInt(mv[6]);
@@ -1003,7 +1003,7 @@ console.log("world opinion phase");
 
 	let player = parseInt(mv[1]);
 	let player_to_remove = parseInt(mv[2]);
-	let options = json.parse(this.app.crypto.base64tostring(mv[3]));
+	let options = JSON.parse(this.app.crypto.base64ToString(mv[3]));
 	let number = parseInt(mv[4]);
 	let max_per_arena = parseInt(mv[5]);
 	let defcon_trigger = parseInt(mv[6]);
@@ -1050,7 +1050,7 @@ console.log("world opinion phase");
 
 	let player = parseInt(mv[1]);
 	let player_getting_moved = parseInt(mv[2]);
-	let options = json.parse(this.app.crypto.base64tostring(mv[3]));
+	let options = JSON.parse(this.app.crypto.base64ToString(mv[3]));
 	let number = parseInt(mv[4]);
 	let max_per_arena = parseInt(mv[5]);	
 
@@ -1171,9 +1171,9 @@ console.log("turn: " + this.game.state.turn);
     //
     //
     if (this.game.state.turn != this.game.player) {
-      this.updateStatusandlistcards(`waiting for opponent to move...`);
+      this.updateStatusAndListCards(`waiting for opponent to move...`);
     } else {
-      this.updateStatusandlistcards(`pick a card to play:`, this.game.deck[1].hand, function(card) {
+      this.updateStatusAndListCards(`pick a card to play:`, this.game.deck[1].hand, function(card) {
 	thirteen_self.playerPlayStrategyCard(card);
       });
     }
