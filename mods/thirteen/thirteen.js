@@ -884,9 +884,10 @@ console.log("world opinion phase");
 	let do_not_adjust_for_player = -1;
 	if (mv[4] != undefined) { do_not_adjust_for_player = parseInt(mv[4]); };
 
+        this.game.queue.splice(qe, 1);
+
         if (this.game.player == do_not_adjust_for_player) {
-          this.game.queue.splice(qe, 1);
-	  return;
+	  return 1;
 	}
 
 	if (player == 1) {
@@ -920,7 +921,6 @@ console.log("world opinion phase");
 	}
 
         this.showBoard();
-        this.game.queue.splice(qe, 1);
  
       }
       if (mv[0] == "place_command_tokens") {
@@ -977,6 +977,8 @@ console.log("world opinion phase");
 	return 0;
 
       }
+
+
       if (mv[0] == "event_add_influence") {
 
 	let player = parseInt(mv[1]);
@@ -1076,9 +1078,46 @@ console.log("world opinion phase");
 
       }
 
-      if (mv[0] == "event_shift_defcon") {
+      if (mv[0] == "event_increase_defcon") {
+
+	let player = parseInt(mv[1]);
+	let player_to_increase = parseInt(mv[2]);
+	let options = JSON.parse(this.app.crypto.base64ToString(mv[3]));
+	let number = parseInt(mv[4]);
+	let max_per_arena = parseInt(mv[5]);
+
+	if (this.game.player != player) {
+          this.eventShiftDefcon(player, player_to_add, options, number, max_per_arena, defcon_trigger, function() {
+	    thirteen_self.endTurn();
+	  }, "increase");
+	}
 
         this.game.queue.splice(qe, 1);
+	return 0;
+
+      }
+
+
+      if (mv[0] == "event_decrease_defcon") {
+
+	let player = parseInt(mv[1]);
+	let player_to_increase = parseInt(mv[2]);
+	let options = JSON.parse(this.app.crypto.base64ToString(mv[3]));
+	let number = parseInt(mv[4]);
+	let max_per_arena = parseInt(mv[5]);
+
+	if (this.game.player != player) {
+          this.eventShiftDefcon(player, player_to_add, options, number, max_per_arena, defcon_trigger, function() {
+	    thirteen_self.endTurn();
+	  }, "decrease");
+	}
+
+        this.game.queue.splice(qe, 1);
+	return 0;
+
+      }
+
+      if (mv[0] == "event_shift_defcon") {
 
 	let player = parseInt(mv[1]);
 	let player_getting_moved = parseInt(mv[2]);
@@ -1091,6 +1130,9 @@ console.log("world opinion phase");
 	    thirteen_self.endTurn();
 	  });
 	}
+
+        this.game.queue.splice(qe, 1);
+	return 0;
       }
 
       if (mv[0] == "prestige") {
@@ -1354,10 +1396,16 @@ console.log("turn: " + this.game.state.turn);
     let action = -1;
     let action2 = -1;
 
-    let defcon_tracks = [1, 2, 3];;
+    let defcon_tracks = [1, 2, 3];
     let only_one_defcon_track = 0;
     let selected_defcon_track = 0;
-    if (number == 100) { only_one_defcon_track = 1; number = max_per_arena; }
+    if (number == 100) { 
+      if (options.length > 1) {
+	selected_defcon_track  = -1;
+      }
+      only_one_defcon_track = 1;
+      number = max_per_arena; 
+    }
 
     args.choosetrack = function() {
 
@@ -1372,14 +1420,26 @@ console.log("turn: " + this.game.state.turn);
           html2 += '<li class="card" id="2">military</li>';
           html2 += '<li class="card" id="3">world opinion</li>';
         } else {
-	  if (selected_defcon_track == 1) {
-            html2 += '<li class="card" id="1">military</li>';
-	  }
-	  if (selected_defcon_track == 2) {
-            html2 += '<li class="card" id="2">political</li>';
-	  }
-	  if (selected_defcon_track == 3) {
-            html2 += '<li class="card" id="3">world opinion</li>';
+	  if (selected_defcon_track < 0) {
+	    if (options.includes(1)) {
+              html2 += '<li class="card" id="1">military</li>';
+	    }
+	    if (options.includes(2)) {
+              html2 += '<li class="card" id="2">political</li>';
+	    }
+	    if (options.includes(3)) {
+              html2 += '<li class="card" id="3">world opinion</li>';
+            }
+	  } else {
+	    if (selected_defcon_track == 1) {
+              html2 += '<li class="card" id="1">military</li>';
+	    }
+	    if (selected_defcon_track == 2) {
+              html2 += '<li class="card" id="2">political</li>';
+	    }
+	    if (selected_defcon_track == 3) {
+              html2 += '<li class="card" id="3">world opinion</li>';
+            }
           }
         }
       } else {
@@ -1443,10 +1503,9 @@ console.log("turn: " + this.game.state.turn);
 	let direction = $(this).attr("id");
 
 	total_shifted++;
-alert("total moves: " + total_shifted + " - " + direction );
 
         if (direction == "increase") {
-	  if (thirteen_self.game.player == 1) {
+	  if (player_getting_moved == 1) {
   	    if (action2 == 1) { thirteen_self.game.state.defcon1_ussr++; }
 	    if (action2 == 2) { thirteen_self.game.state.defcon2_ussr++; }
 	    if (action2 == 3) { thirteen_self.game.state.defcon3_ussr++; }
@@ -1455,11 +1514,11 @@ alert("total moves: " + total_shifted + " - " + direction );
 	    if (action2 == 2) { thirteen_self.game.state.defcon2_us++; }
 	    if (action2 == 3) { thirteen_self.game.state.defcon3_us++; }
 	  }
-	  thirteen_self.addMove("increase_defcon\t"+thirteen_self.game.player+"\t"+action2+"\t"+"1"+"\t"+thirteen_self.game.player);
+	  thirteen_self.addMove("increase_defcon\t"+player_getting_moved+"\t"+action2+"\t"+"1"+"\t"+thirteen_self.game.player);
 	}
 
 	if (direction == "decrease") {
-	  if (thirteen_self.game.player == 1) {
+	  if (player_getting_moved == 1) {
   	    if (action2 == 1) { thirteen_self.game.state.defcon1_ussr--; }
 	    if (action2 == 2) { thirteen_self.game.state.defcon1_ussr--; }
 	    if (action2 == 3) { thirteen_self.game.state.defcon1_ussr--; }
@@ -1468,7 +1527,7 @@ alert("total moves: " + total_shifted + " - " + direction );
 	    if (action2 == 2) { thirteen_self.game.state.defcon1_us--; }
 	    if (action2 == 3) { thirteen_self.game.state.defcon1_us--; }
 	  }
-	  thirteen_self.addMove("decrease_defcon\t"+thirteen_self.game.player+"\t"+action2+"\t"+"1"+"\t"+thirteen_self.game.player);
+	  thirteen_self.addMove("decrease_defcon\t"+player_getting_moved+"\t"+action2+"\t"+"1"+"\t"+thirteen_self.game.player);
 	}
 
 	thirteen_self.showBoard();
@@ -1494,8 +1553,6 @@ alert("total moves: " + total_shifted + " - " + direction );
   //
   eventAddInfluence(player, player_added, options, number, max_per_arena, defcon_trigger=0, mycallback=null) {
 
-alert("HERE WE ARE!");
-
     //
     // Print Usage Message if not already one existing
     //
@@ -1505,9 +1562,6 @@ alert("HERE WE ARE!");
        if (number == 100) { num_to_announce = max_per_arena; }
 	this.updateStatus('Add ' + num_to_announce + ' Influence: <p></p><ul><li class="card done" id="done">finish turn</li>');
     }
-
-alert("HERE WE ARE!");
-
 
     let thirteen_self = this;
     let args = {};
@@ -1526,7 +1580,6 @@ alert("HERE WE ARE!");
     for (let i = 0; i < options.length; i++) {
 
       placed[options[i]] = 0;
-console.log("O: " + options[i]);
       let divname = "#" + options[i];
 
       $(divname).off();
@@ -2992,7 +3045,7 @@ console.log("ussr has: " + cubes + " in " + arena_id);
 	  let options = thirteen_self.app.crypto.stringToBase64(JSON.stringify([1,2,3]));
 
 	  thirteen_self.updateLog("US gains 1 prestige, USSR may shift 1 US DEFCON track");
-	  thirteen_self.addMove("event_shift_defcon\t"+opponent+"\t"+player+"\t" + options + "\t1\t1");
+	  thirteen_self.addMove("event_shift_defcon\t"+opponent+"\t"+"2"+"\t" + options + "\t1\t1");
 	  thirteen_self.addMove("prestige\t2\t1");
 	  thirteen_self.endTurn();
 	},
@@ -3077,7 +3130,7 @@ console.log("ussr has: " + cubes + " in " + arena_id);
 
 	    let options1 = thirteen_self.app.crypto.stringToBase64(JSON.stringify([1]));
 	    let options2 = thirteen_self.app.crypto.stringToBase64(JSON.stringify([2,3]));
-	    thirteen_self.addMove("event_decrease_defcon\t2\t2\t"+options2+"\t2\t2");
+	    thirteen_self.addMove("event_decrease_defcon\t2\t2\t"+options2+"\t100\t2");
 	    thirteen_self.addMove("event_increase_defcon\t2\t2\t"+options1+"\t2\t2");
 	    thirteen_self.endTurn();
 
@@ -3282,9 +3335,9 @@ console.log("ussr has: " + cubes + " in " + arena_id);
 	  if (thirteen_self.game.state.defcon1_ussr > max_defcon) { max_defcon = thirteen_self.game.state.defcon1_ussr; }
 	  if (thirteen_self.game.state.defcon2_ussr > max_defcon) { max_defcon = thirteen_self.game.state.defcon2_ussr; }
 	  if (thirteen_self.game.state.defcon3_ussr > max_defcon) { max_defcon = thirteen_self.game.state.defcon3_ussr; }
-	  if (thirteen_self.game.state.defcon1_ussr > max_defcon) { options.push(1); }
-	  if (thirteen_self.game.state.defcon2_ussr > max_defcon) { options.push(2); }
-	  if (thirteen_self.game.state.defcon3_ussr > max_defcon) { options.push(3); }
+	  if (thirteen_self.game.state.defcon1_ussr >= max_defcon) { options.push(1); }
+	  if (thirteen_self.game.state.defcon2_ussr >= max_defcon) { options.push(2); }
+	  if (thirteen_self.game.state.defcon3_ussr >= max_defcon) { options.push(3); }
 
 	  thirteen_self.eventDecreaseDefcon(player, player, options, 2, 2, function(args) {
 	    thirteen_self.endTurn();

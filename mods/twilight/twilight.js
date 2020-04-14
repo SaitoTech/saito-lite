@@ -4858,7 +4858,7 @@ console.log("\n\n\n\n");
     if (next_box == 5) { if (roll < 4) { successful = 1; } }
     if (next_box == 6) { if (roll < 5) { successful = 1; } }
     if (next_box == 7) { if (roll < 4) { successful = 1; } }
-    if (next_box == 8) { if (roll < 2) { successful = 1; } }
+    if (next_box == 8) { if (roll < 3) { successful = 1; } }
 
     this.updateLog("<span>" + player.toUpperCase() + "</span> <span>attempts space race (rolls</span> " + roll + ")");
 
@@ -9930,7 +9930,7 @@ console.log("\n\n\n\n");
               let modify = 0;
 
               for (let v = 0; v < twilight_self.countries[c].neighbours.length; v++) {
-                if (twilight_self.isControlled(opponent, twilight_self.countries[i].neighbours[v]) == 1) {
+                if (twilight_self.isControlled(opponent, twilight_self.countries[c].neighbours[v]) == 1) {
                   modify++;
                 }
               }
@@ -11036,7 +11036,22 @@ console.log("\n\n\n\n");
 
 
       if (this.game.player == 1) {
-        this.updateStatus("Pick a country adjacent to Nicaragua to coup: ");
+
+        let user_message = "Pick a country adjacent to Nicaragua to coup:<ul>";
+        user_message += '<li class="card" id="skiportega">or skip coup</li>';
+        user_message += '</ul>';
+        twilight_self.updateStatus(user_message);
+
+        $('.card').off();
+        $('.card').on('click', function() {
+
+          let action2 = $(this).attr("id");
+          if (action2 == "skiportega") {
+            twilight_self.updateStatus("Skipping Ortega coup...");
+            twilight_self.addMove("resolve\tortega");
+            twilight_self.endTurn();
+          }})
+
       } else {
         this.updateStatus("USSR is selecting a country for its free coup");
         return 0;
