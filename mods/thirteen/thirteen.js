@@ -1040,6 +1040,11 @@ console.log("world opinion phase");
 	    thirteen_self.endTurn();
 	  });
 	}
+
+	this.showBoard();
+
+        this.game.queue.splice(qe, 1);
+
       }
 
       if (mv[0] == "remove_influence") {
