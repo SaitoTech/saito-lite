@@ -531,7 +531,7 @@ console.log(app.options.games[i].id);
 
 
       //
-      // notify SPV clients of "open", "join" and "close" messages
+      // notify SPV clients of "open", "join" and "close"(, and "accept") messages
       //
       if (app.BROWSER == 0 && txmsg.request == "open" || txmsg.request == "join" || txmsg.request == "accept" || txmsg.request == "close") {
         for (let i = 0; i < arcade_self.app.network.peers.length; i++) {
@@ -825,6 +825,10 @@ console.log(app.options.games[i].id);
       //
       if (txmsg.request == "accept") {
           this.removeGameFromOpenList(txmsg.game_id);
+          if(txmsg.players.includes(app.wallet.returnPublicKey())) {
+            siteMessage('Your ' + txmsg.game + ' invite accepted.', 20000);
+            app.browser.sendNotification('Game Accepted', 'Your ' + txmsg.game + ' invite accepted.', 'game-acceptance-notification');
+          }
       }
 
       //
