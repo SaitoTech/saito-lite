@@ -4,13 +4,13 @@ module.exports = SuggestTemplate = () => {
 <div class="welcome-modal-wrapper">
   <div class="welcome-modal-action">
     <div class="welcome-modal-left">
-      <div class="welcome-modal-header">Got a suggestion?</h1>
+      <div class="welcome-modal-header">Make a Suggestion</h1>
       </div>
       <div class="welcome-modal-main">
         <div style="margin:1em 0">Don't be shy - We listen to you!</div>
         <form name="suggest_form" id="suggest_form">
           <div style="display:flex;">
-            <input type="text" style="background-color:#EEE;color:black;" id="suggestion" name="suggestion" placeholder="Leave your suggestion here."></input>
+            <textarea type="text" style="background-color:#EEE;color:black;" id="suggestion" name="suggestion" placeholder="Leave your suggestion here."></textarea>
           </div>
         </form>
         <div id="empty_form_data" class="hidden"></div>
@@ -19,7 +19,7 @@ module.exports = SuggestTemplate = () => {
       </div>
       <div class="welcome-modal-info">
         <div class="tip"><b>Why get involved? <i class="fas fa-info-circle"></i></b>
-          <div class="tiptext">Saito is a community - we take everyone.</div>
+          <div class="tiptext">Saito is a community - we welcome everyone and their contributions. Help us make Saito.io better.</div>
         </div>
       </div>
     </div>

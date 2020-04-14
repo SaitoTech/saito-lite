@@ -40,9 +40,9 @@ module.exports = [
         action: function(app){app.modules.returnModule("Tutorial").surveyModal();},
     },{
         id: "suggest",
-        icon: "<i class='far fa-clipboard'></i>",
-        reward: 10,
-        title: "Got a suggestion?",
+        icon: "<i class='fas fa-vote-yea'></i>",
+        reward: 25,
+        title: "Make a Suggestion",
         event: "user suggest",
         description:"Let us know your feedback, get involved with the project!",
         completed: false,
