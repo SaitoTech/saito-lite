@@ -1,6 +1,5 @@
 const ArcadeRightSidebarTemplate 	= require('./arcade-right-sidebar.template.js');
 const ObserverRow = require('./arcade-right-sidebar-observer-game-row.template.js');
-const LeaderboardRow = require('./arcade-right-sidebar-leaderboard-row.template.js');
 const ArcadeMain = require('../arcade-main/arcade-main.js'); // Just for the back button
 
 module.exports = ArcadeRightSidebar = {
@@ -23,13 +22,6 @@ module.exports = ArcadeRightSidebar = {
           += ObserverRow(data.arcade.observer[i], players, app.crypto.stringToBase64(JSON.stringify(data.arcade.observer[i])));
       }
 
-      /*
-      document.querySelector(".arcade-sidebar-active-leaderboard-body").innerHTML = '';
-
-      data.arcade.leaderboard.forEach(leader => {
-        document.querySelector(".arcade-sidebar-active-leaderboard-body").innerHTML += LeaderboardRow(leader);
-      });
-      */
 
       //
       // arcade sidebar

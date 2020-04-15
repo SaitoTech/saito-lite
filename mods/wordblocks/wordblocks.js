@@ -612,6 +612,7 @@ console.log("INITIALIZE GAME");
 
 
   async addEventsToBoard() {
+    if (this.browser_active == 0) { return; }
     let wordblocks_self = this;
     $('.tosstiles').off();
     $('.tosstiles').on('click', async function () {
