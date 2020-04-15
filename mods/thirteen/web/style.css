@@ -7,7 +7,6 @@ body {
 
 .flag {
  position: absolute;
- background-color: red;
  height: 60px;
  width: 60px;
 }
