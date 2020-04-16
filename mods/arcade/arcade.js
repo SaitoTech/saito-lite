@@ -818,8 +818,8 @@ console.log(app.options.games[i].id);
       if (txmsg.request == "accept") {
           this.removeGameFromOpenList(txmsg.game_id);
           if(txmsg.players.includes(app.wallet.returnPublicKey())) {
-            siteMessage('Your ' + txmsg.game + ' invite accepted.', 20000);
-            app.browser.sendNotification('Game Accepted', 'Your ' + txmsg.game + ' invite accepted.', 'game-acceptance-notification');
+            siteMessage(txmsg.game + ' invite accepted.', 20000);
+            app.browser.sendNotification('Game Accepted', + txmsg.game + ' invite accepted.', 'game-acceptance-notification');
           }
       }
 
