@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS products (
 
-  id VARCHAR(100) ,
+  id INTEGER ,
+  uuid VARCHAR(100) ,
   admin VARCHAR(100) ,
 
   supplier_id INTEGER ,
