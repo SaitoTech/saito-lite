@@ -703,7 +703,7 @@ console.log("tallying alliances before scoring");
 	}
 
         this.game.state.prestige_track += this.total_scoring_this_round;
-        this.updateLog("prestige changes: " + this.total_scoring_this_round);
+        this.updateLog("VP CHANGE: " + this.total_scoring_this_round + " Prestige");
 
 	this.game.queue.splice(qe, 1);
 
@@ -723,10 +723,12 @@ console.log("scoring phase");
 	  if (scorer == 1) {
 	    this.total_scoring_this_round = 0;
 	    this.addMove("scoring_result\t1\t" + ac[this.game.state.ussr_agenda_selected].score());
+	    this.addMove("notify\tUSSR choses to score "+ac[this.game.state.ussr_agenda_selected].name);
 	    this.endTurn();
 	  }
 	  if (scorer == 2) {
 	    this.addMove("scoring_result\t2\t" + ac[this.game.state.us_agenda_selected].score());
+	    this.addMove("notify\tUS choses to score "+ac[this.game.state.ussr_agenda_selected].name);
 	    this.endTurn();
 	  }
 	}
@@ -2353,7 +2355,7 @@ console.log("playing event 2: " + card);
       let divname = ".round_"+i;
 
       if (this.game.state.round == i) {
-        $(divname).html('<img src="/thirteen/img/round%20marker.png" />');
+        $(divname).html('<img src="/thirteen/img/Round%20Marker.png" />');
       } else {
         $(divname).html('');
       }
@@ -2374,7 +2376,7 @@ console.log("playing event 2: " + card);
             html += '<img src="/thirteen/img/Blue%20Disc.png" class="defcon_disc_us" />';
           }
           if (this.game.state.defcon1_ussr == ii) {
-            html += '<img src="/thirteen/img/red%20disc.png" class="defcon_disc_ussr" />';
+            html += '<img src="/thirteen/img/Red%20Disc.png" class="defcon_disc_ussr" />';
           }
         }
 
@@ -2383,7 +2385,7 @@ console.log("playing event 2: " + card);
             html += '<img src="/thirteen/img/Blue%20Disc.png" class="defcon_disc_us" />';
           }
           if (this.game.state.defcon2_ussr == ii) {
-            html += '<img src="/thirteen/img/red%20disc.png" class="defcon_disc_ussr" />';
+            html += '<img src="/thirteen/img/Red%20Disc.png" class="defcon_disc_ussr" />';
           }
         }
 
@@ -2392,7 +2394,7 @@ console.log("playing event 2: " + card);
             html += '<img src="/thirteen/img/Blue%20Disc.png" class="defcon_disc_us" />';
           }
           if (this.game.state.defcon3_ussr == ii) {
-            html += '<img src="/thirteen/img/red%20disc.png" class="defcon_disc_ussr" />';
+            html += '<img src="/thirteen/img/Red%20Disc.png" class="defcon_disc_ussr" />';
           }
         }
 
@@ -2429,14 +2431,11 @@ console.log("playing event 2: " + card);
   }
   showFlags() {
 
-    for (let i = 0; i < this.game.state.us_agendas.length; i++) {
-      let divname = "#"+this.game.state.us_agendas[i];
+    for (var i in this.game.flags) {
+      let divname      = '#'+i;
       $(divname).html('');
     }
-    for (let i = 0; i < this.game.state.ussr_agendas.length; i++) {
-      let divname = "#"+this.game.state.ussr_agendas[i];
-      $(divname).html('');
-    }
+
     for (let i = 0; i < this.game.state.us_agendas.length; i++) {
       let divname = "#"+this.game.state.us_agendas[i];
       $(divname).append('<img src="/thirteen/img/nUS%20Tile%20with%20bleed.png" style="z-index:12;left:0px;position:relative;top:0px;"/>');
@@ -2976,6 +2975,7 @@ console.log("playing event 2: " + card);
 	    winner = 1;
 	    difference = thirteen_self.game.state.defcon1_ussr - thirteen_self.game.state.defcon1_us;
 	  }
+
 
 	  if (winner == 0) { return 0; }
 	  if (winner == 1) { return (difference+1); }
