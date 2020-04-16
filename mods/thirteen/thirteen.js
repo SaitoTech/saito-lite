@@ -1851,8 +1851,8 @@ console.log("scoring phase");
     let args = {};
     let battleground_selected = "";
 
-    $(".done").off();
-    $(".done").on('click', function() {
+    $("#done").off();
+    $("#done").on('click', function() {
       if (mycallback != null) { mycallback(args); }
     });
 
@@ -1978,7 +1978,7 @@ console.log("scoring phase");
     //
     // Print Usage Message if not already one existing
     //
-    let testdone = $(".done");
+    let testdone = $("#done");
     if (!testdone) {
        let num_to_announced = number;
        if (number == 100) { num_to_announce = max_per_arena; }
@@ -1990,6 +1990,12 @@ console.log("scoring phase");
     let max_to_remove = -1;
     let placed = {};
     let total_placed = 0;
+
+    $("#done").off();
+    $("#done").on('click', function() {
+      if (mycallback != null) { mycallback(args); }
+    });
+
 
     for (let i = 0; i < options.length; i++) {
 
