@@ -1556,6 +1556,7 @@ console.log("scoring phase");
     if (this.game.player == 2) { me = "us"; }
 
 
+
     //
     // my card
     //
@@ -1587,6 +1588,10 @@ console.log("scoring phase");
 
       if (action == "playevent") {
 	thirteen_self.hideCard();
+
+        if (this.game.player == 1) { this.addMove("notify\tUSSR plays <span class='logcard' id='"+card+"'>"+strategy_cards[card].name+"</span> for event"); }
+        if (this.game.player == 2) { this.addMove("notify\tUS plays <span class='logcard' id='"+card+"'>"+strategy_cards[card].name+"</span> for event"); }
+
         thirteen_self.playerTriggerEvent(thirteen_self.game.player, card);
         return;
       }
@@ -1607,6 +1612,10 @@ console.log("scoring phase");
 	  thirteen_self.updateLog("opponent playing event first...");
 	  thirteen_self.addMove("place_command_tokens\t" + thirteen_self.game.player + "\t"+card);
 	  thirteen_self.addMove("trigger_opponent_event\t"+opponent+"\t"+card);
+
+          if (this.game.player == 1) { this.addMove("notify\tUSSR plays <span class='logcard' id='"+card+"'>"+strategy_cards[card].name+"</span> for command"); }
+          if (this.game.player == 2) { this.addMove("notify\tUS plays <span class='logcard' id='"+card+"'>"+strategy_cards[card].name+"</span> for command"); }
+
 	  thirteen_self.endTurn();
 	}
         return;
