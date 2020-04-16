@@ -2874,13 +2874,13 @@ console.log("playing event 2: " + card);
 	top : 570, 
 	left : 520 , 
 	us : 2 , 
-	ussr : 5,
+	ussr : 0,
 	name : "Cuba (political)",
     }
     arenas['cuba_mil'] = { 
 	top : 915, 
 	left : 620 , 
-	us : 5 , 
+	us : 0 , 
 	ussr : 1,
 	name : "Cuba (military)",
     }
