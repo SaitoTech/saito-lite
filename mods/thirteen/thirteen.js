@@ -1248,17 +1248,20 @@ console.log("scoring phase");
   	  if (player == 1) {
 	    if (already_updated != this.game.player) {
 
-              if (this.game.state.influence_on_board_ussr+num > 17) { num = 17-this.game.state.influence_on_board_ussr; }
-              this.updateLog("USSR can only have 17 influence on the board at any time. Reducing placement");
-
+              if (this.game.state.influence_on_board_ussr+num > 17) { 
+		num = 17-this.game.state.influence_on_board_ussr;
+                this.updateLog("USSR can only have 17 influence on the board at any time. Reducing placement");
+              }
 	      this.game.arenas[arena_id].ussr += num;
 	      if (this.game.arenas[arena_id].ussr > 5) { this.game.arenas[arena_id].ussr = 5; }
 	    }
 	  } else {
 	    if (already_updated != this.game.player) {
 
-              if (this.game.state.influence_on_board_us+num > 17) { num = 17-this.game.state.influence_on_board_us; }
-              this.updateLog("USSR can only have 17 influence on the board at any time. Reducing placement");
+              if (this.game.state.influence_on_board_us+num > 17) { 
+		num = 17-this.game.state.influence_on_board_us;
+                this.updateLog("USSR can only have 17 influence on the board at any time. Reducing placement");
+	      }
 
 	      this.game.arenas[arena_id].us += num;
 	      if (this.game.arenas[arena_id].us > 5) { this.game.arenas[arena_id].us = 5; }
@@ -1389,10 +1392,10 @@ console.log("scoring phase");
 
 	if (player == 1) {
           this.game.state.prestige_track += num;
-	  this.updateLog("ussr gains " + num + " prestige");
+	  this.updateLog("USSR gains " + num + " prestige");
 	} else {
           this.game.state.prestige_track += num;
-	  this.updateLog("us gains " + num + " prestige");
+	  this.updateLog("US gains " + num + " prestige");
 	}
 
         this.game.queue.splice(qe, 1);
@@ -1609,11 +1612,11 @@ console.log("scoring phase");
     if (player == 1) {
       this.game.arenas[arena_id].ussr += num;
       if (this.game.arenas[arena_id].ussr > 5) { this.game.arenas[arena_id].ussr = 5; return true; }
-      this.updateLog("USSR gains influence in "+this.game.arenas[arena_id].name);
+      this.updateLog("USSR gains "+num+" influence in "+this.game.arenas[arena_id].name);
     } else {
       this.game.arenas[arena_id].us += num;
       if (this.game.arenas[arena_id].us > 5) { this.game.arenas[arena_id].us = 5; return true; }
-      this.updateLog("US gains influence in "+this.game.arenas[arena_id].name);
+      this.updateLog("US gains "+num+" influence in "+this.game.arenas[arena_id].name);
     }
 
     return true;
@@ -1625,11 +1628,11 @@ console.log("scoring phase");
     if (player == 1) {
       this.game.arenas[arena_id].ussr -= num;
       if (this.game.arenas[arena_id].ussr < 0) { this.game.arenas[arena_id].ussr = 0; return true; }
-      this.updateLog("ussr removes influence in "+this.game.arenas[arena_id].name);
+      this.updateLog("USSR removes "+num+" influence in "+this.game.arenas[arena_id].name);
     } else {
       this.game.arenas[arena_id].us -= num;
       if (this.game.arenas[arena_id].us < 0) { this.game.arenas[arena_id].us = 0; return true; }
-      this.updateLog("us removes influence in "+this.game.arenas[arena_id].name);
+      this.updateLog("US removes "+num+" influence in "+this.game.arenas[arena_id].name);
     }
 
     return true;
@@ -1903,8 +1906,8 @@ console.log("scoring phase");
 	    // have we hit our influence limit?
     	    //
 	    let hit_influence_limit = 0;
-	    if (player == 1 && this.game.state.influence_on_board_ussr == 16) { hit_influence_limit = 1; }
-	    if (player == 2 && this.game.state.influence_on_board_us == 16) { hit_influence_limit = 1; }
+	    if (player == 1 && thirteen_self.game.state.influence_on_board_ussr == 16) { hit_influence_limit = 1; }
+	    if (player == 2 && thirteen_self.game.state.influence_on_board_us == 16) { hit_influence_limit = 1; }
 
 
 	    if (total_placed >= number || hit_influence_limit == 1) {
