@@ -17,9 +17,11 @@ class Thirteen extends GameTemplate {
 
     this.name  		 = "Thirteen";
     this.slug		 = "thirteen";
-    this.description     = `Thirteen Days is a mid-length simulation of the cuban missile crisis. one player players the united states (us) while the other plays the soviet union (ussr).`;
-    this.publisher_message = "thirteen days is owned by jolly roger games. the materials in this module come from an open source vassal license authorized by the publisher. vassal module requirements are that at least one player per game has purchased a copy of the game.";
-    this.categories      = "games arcade entertainment";
+    this.description     = `Thirteen Days is a mid-length simulation of the Cuban Missile Crisis created by Asger Granerud and Daniel Skjold Pedersenmade.`;
+    this.publisher_message = `Thirteen Days is owned by <a href="http://jollyrogergames.com/game/13-days/">Jolly Roger Games</a>. This module includes the open source Vassal module explicitly authorized by the publisher. Vassal module requirements are that at least one player per game has purchased a copy of the game. Please support Jolly Roger Games and purchase your copy <a href="http://jollyrogergames.com/game/13-days/">here</a>`;
+    this.type       = "strategy boardgame";
+    this.categories      = "Games Arcade Entertainment";
+
 
     //
     // this sets the ratio used for determining
@@ -36,8 +38,6 @@ class Thirteen extends GameTemplate {
 
     this.minPlayers = 2;
     this.maxPlayers = 2;
-    this.type       = "strategy boardgame";
-    this.categories = "bordgame game"
 
 
     this.rounds_in_turn = 1;
@@ -948,6 +948,11 @@ console.log("scoring phase");
 	  }
 	}
 
+	//
+	// reset for next turn
+	//
+	this.game.deck[1].hand = [];
+
 
 	//
 	// reset round vars
@@ -1186,9 +1191,9 @@ console.log("scoring phase");
 	if (player == 2) { 
 	  log_update = 'US';
 	}
-	log_update += ' plays ' + sc[card].name;
-
+	log_update += ' plays <span class="logcard" id="'+card+'">' + sc[card].name + '</span>';
 	this.updateLog(log_update);
+
 	if (this.game.player == player) {
 	  let status_update = sc[card].title + ": "+sc[card].text+' <p></p><ul><li class="card" id="done">finish turn</li>'
 	  this.updateStatus(status_update);
@@ -1495,6 +1500,7 @@ console.log("scoring phase");
     //
     //
     if (this.game.state.turn != this.game.player) {
+      this.hideCard();
       if (this.game.player == 1) { this.updateStatusAndListCards(`waiting for US to move...`); }
       if (this.game.player == 2) { this.updateStatusAndListCards(`waiting for USSR to move...`); }
     } else {
@@ -1512,9 +1518,17 @@ console.log("scoring phase");
 
       this.updateStatusAndListCards(html, cards, function(card) {
 	if (card == "personal_letter") {
-	  this.game.state.personal_letter_bonus = 1; 
+	  thirteen_self.game.state.personal_letter_bonus = 1; 
+	  let cards2 = [];
+	  for (let z = 0; z < cards.length; z++) {
+	    if (cards[z] != "personal_letter") {
+	      cards2.push(cards[z]);
+	    }
+	  }
+          if (thirteen_self.game.player == 1) { html = "USSR pick a card to play (+1 bonus): "; }
+          if (thirteen_self.game.player == 2) { html = "US pick a card to play (+1 bonus): "; }
   	  thirteen_self.addMove("setvar\tpersonal_letter\t"+thirteen_self.game.player);
-          this.updateStatusAndListCards(html, cards, function(card) {
+          thirteen_self.updateStatusAndListCards(html, cards2, function(card) {
   	    thirteen_self.addMove("discard\t"+thirteen_self.game.player+"\t2\t"+card+"\t1");
 	    thirteen_self.playerPlayStrategyCard(card);
 	  });
@@ -1570,6 +1584,7 @@ console.log("scoring phase");
       $('.card').off();
 
       if (action == "playevent") {
+	thirteen_self.hideCard();
         thirteen_self.playerTriggerEvent(thirteen_self.game.player, card);
         return;
       }
@@ -1577,6 +1592,9 @@ console.log("scoring phase");
 
 	let myside = "us";
         let opponent = 1;
+
+	thirteen_self.hideCard();
+
 	if (thirteen_self.game.player == 1) { myside = "ussr"; opponent = 2; }
 
 	let sc = thirteen_self.returnStrategyCards();
@@ -1601,12 +1619,16 @@ console.log("scoring phase");
   addInfluence(player, arena_id, num) {
 
     if (player == 1) {
-      if (this.game.state.influence_on_board_ussr+num > 17) { num = 17-this.game.state.influence_on_board_ussr; }
-      this.updateLog("USSR can only have 17 influence on the board at any time. Reducing placement");
+      if (this.game.state.influence_on_board_ussr+num > 17) { 
+	num = 17-this.game.state.influence_on_board_ussr;
+        this.updateLog("USSR can only have 17 influence on the board at any time. Reducing placement");
+      }
     }
     if (player == 2) {
-      if (this.game.state.influence_on_board_us+num > 17) { num = 17-this.game.state.influence_on_board_us; }
-      this.updateLog("US can only have 17 influence on the board at any time. Reducing placement");
+      if (this.game.state.influence_on_board_us+num > 17) { 
+	num = 17-this.game.state.influence_on_board_us; 
+	this.updateLog("US can only have 17 influence on the board at any time. Reducing placement");
+      }
     }
 
     if (player == 1) {
@@ -2145,22 +2167,21 @@ console.log("playing event 2: " + card);
 
     let thirteen_self = this;
 
-    let html = '';
-        html = 'pick an area to add or remove command tokens:';
     let sc   = thirteen_self.returnStrategyCards();
     if (tokens == -1) { tokens = sc[card].tokens; }
-
     //
     // personal letter bonus if played
     //
     tokens += this.game.state.personal_letter_bonus;
-
-
-console.log("TOKENS: " + tokens + " -- " + this.game.state.ussr_command_token_bonus + " -- " + this.game.state.us_command_token_bonus + " -- " + this.game.player);
-
+    if (tokens < 1) { tokens = 1; }
     if (player == 1) { tokens += this.game.state.ussr_command_token_bonus; }
     if (player == 2) { tokens += this.game.state.us_command_token_bonus; }
-    if (tokens < 1) { tokens = 1; }
+
+    let html = '';
+    if (player == 1) { html += 'USSR '; }
+    if (player == 2) { html += 'US '; }
+        html += 'pick an area to add/remove up to '+tokens+' cubes:';
+
 
     this.updateStatus(html);
 
@@ -2418,11 +2439,11 @@ console.log("TOKENS: " + tokens + " -- " + this.game.state.ussr_command_token_bo
     }
     for (let i = 0; i < this.game.state.us_agendas.length; i++) {
       let divname = "#"+this.game.state.us_agendas[i];
-      $(divname).append('<img src="/thirteen/img/nUS%20Tile%20with%20bleed.png" style="z-index:12;left:5px;position:relative;top:5px;"/>');
+      $(divname).append('<img src="/thirteen/img/nUS%20Tile%20with%20bleed.png" style="z-index:12;left:0px;position:relative;top:0px;"/>');
     }
     for (let i = 0; i < this.game.state.ussr_agendas.length; i++) {
       let divname = "#"+this.game.state.ussr_agendas[i];
-      $(divname).append('<img src="/thirteen/img/nUSSR%20Tile%20with%20bleed.png" style="z-index:10;left:-5px;position:relative;top:-5px;" />');
+      $(divname).append('<img src="/thirteen/img/nUSSR%20Tile%20with%20bleed.png" style="z-index:10;left:0px;position:relative;top:0px;" />');
     }
 
   }
@@ -2832,7 +2853,7 @@ console.log("TOKENS: " + tokens + " -- " + this.game.state.ussr_command_token_bo
 	left : 1877 , 
     }
     flags['world_opinion_flag'] = { 
-	top : 955, 
+	top : 566, 
 	left : 1940 , 
     }
     flags['personal_letter_flag'] = { 
@@ -2854,63 +2875,63 @@ console.log("TOKENS: " + tokens + " -- " + this.game.state.ussr_command_token_bo
 	left : 520 , 
 	us : 2 , 
 	ussr : 5,
-	name : "cuba",
+	name : "Cuba (political)",
     }
     arenas['cuba_mil'] = { 
 	top : 915, 
 	left : 620 , 
 	us : 5 , 
 	ussr : 1,
-	name : "cuba",
+	name : "Cuba (military)",
     }
     arenas['atlantic'] = { 
 	top : 580, 
 	left : 850 , 
 	us : 0 , 
 	ussr : 0,
-	name : "berlin",
+	name : "Atlantic",
     }
     arenas['berlin'] = { 
 	top : 360, 
 	left : 1150 , 
 	us : 0 , 
 	ussr : 1,
-	name : "berlin",
+	name : "Berlin",
     }
     arenas['turkey'] = { 
 	top : 360, 
 	left : 1470 , 
 	us : 1 , 
 	ussr : 0,
-	name : "cuba",
+	name : "Turkey",
     }
     arenas['italy'] = { 
 	top : 600, 
 	left : 1425 , 
 	us : 1 , 
 	ussr : 0,
-	name : "cuba",
+	name : "Italy",
     }
     arenas['un'] = { 
 	top : 780, 
 	left : 1110 , 
 	us : 0 , 
 	ussr : 0,
-	name : "cuba",
+	name : "United Nations",
     }
     arenas['television'] = { 
 	top : 1035, 
 	left : 1000 , 
 	us : 0 , 
 	ussr : 0,
-	name : "cuba",
+	name : "Television",
     }
     arenas['alliances'] = { 
 	top : 955, 
 	left : 1440 , 
 	us : 0 , 
 	ussr : 0,
-	name : "cuba",
+	name : "Alliances",
     }
 
     return arenas;
@@ -3479,7 +3500,7 @@ console.log("TOKENS: " + tokens + " -- " + this.game.state.ussr_command_token_bo
 	event : function(player) {
 
 	  let playern = "USSR";
-	  if (this.game.player == 2) { playern = "US"; }
+	  if (thirteen_self.game.player == 2) { playern = "US"; }
 
 	  // all your command actions have +1 influence cube this round
 	  thirteen_self.updateLog("You get +1 bonus to your command tokens for remainder of turn");
@@ -4525,6 +4546,37 @@ console.log("TOKENS: " + tokens + " -- " + this.game.state.ussr_command_token_bo
       this.updateStatus("<span>The Game is Over</span> - <span>" + winner.toUpperCase() + "</span> <span>wins by</span> <span>" + method + "<span>");
     }
   }
+
+
+
+  addLogCardEvents() {
+
+    let thirteen_self = this;
+
+    if (!this.app.browser.isMobileBrowser(navigator.userAgent)) {
+
+      $('.logcard').off();
+      $('.logcard').mouseover(function() {
+        let card = $(this).attr("id");
+        thirteen_self.showCard(card);
+      }).mouseout(function() {
+        let card = $(this).attr("id");
+        thirteen_self.hideCard(card);
+      });
+
+    }
+
+  }
+
+  //
+  // OVERWRITES GAME.JS MODULE TO ADD CARD HOVERING
+  //
+  updateLog(str, length = 150, force=0) {
+    this.hud.updateLog(str, this.addLogCardEvents.bind(this), force);
+  }
+
+
+
 
 
 

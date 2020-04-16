@@ -275,7 +275,7 @@ body {
   max-width: 375px;
   background-image: url("/twilight/img/Base.svg");
   background-size: cover;
-  z-index: 2;
+  z-index: 20;
   display: none;
   /* top: 30%; */
   top: 27%;
@@ -291,7 +291,7 @@ body {
 
   background-image: url(/twilight/img/Base.svg);
   background-size: cover;
-  z-index: 2;
+  z-index: 20;
   transform: translate(0%, 0%);
 
   justify-self: center;
@@ -366,7 +366,7 @@ body {
   .cardbox {
     position: fixed;
     float: none;
-    z-index: 2;
+    z-index: 20;
   }
 }
 
