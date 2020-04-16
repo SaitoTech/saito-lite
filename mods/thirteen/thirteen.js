@@ -3462,10 +3462,10 @@ alert(thirteen_self.game.state.ussr_cannot_deflate_defcon_from_events + " --- " 
 	defcon : 0 ,
 	event : function(player) {
 
-	  let cards_discard = 0;
+	  let cards_discarded = 0;
           let html = "Select cards to discard:<ul>";
-          for (let i = 0; i < this.game.deck[1].hand.length; i++) {
-            html += '<li class="card showcard" id="'+this.game.deck[1].hand[i]+'">'+this.game.deck[1].cards[this.game.deck[1].hand[i]].name+'</li>';
+          for (let i = 0; i < thirteen_self.game.deck[1].hand.length; i++) {
+            html += '<li class="card showcard" id="'+thirteen_self.game.deck[1].hand[i]+'">'+thirteen_self.game.deck[1].cards[thirteen_self.game.deck[1].hand[i]].name+'</li>';
           }
           html += '</ul> When you are done discarding <span class="card dashed" id="finished">click here</span>.';
           thirteen_self.updateStatus(html);
