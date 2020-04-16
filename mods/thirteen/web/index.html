@@ -1,0 +1,132 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Thirteen Days</title>
+
+  <script type="text/javascript" src="/saito/lib/jquery/jquery-3.2.1.min.js"></script>
+  <link rel="stylesheet" href="/saito/lib/jquery/jquery-ui.min.css" type="text/css" media="screen" />
+  <script type="text/javascript" src="/saito/lib/jquery/jquery-ui.min.js"></script>
+
+  <script type="text/javascript" src="/saito/lib/hammer/hammer.min.js"></script>
+
+  <link rel="stylesheet" href="/saito/lib/font-awesome/css/font-awesome.min.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/saito/lib/font-awesome-5/css/all.css" type="text/css" media="screen" />
+
+  <link rel="stylesheet" type="text/css" href="/saito/style.css" />
+  <link rel="stylesheet" type="text/css" href="/saito/lib/templates/game.css" />
+  <link rel="stylesheet" type="text/css" href="/thirteen/style.css" />
+
+  <link rel="stylesheet" type="text/css" href="/chat/css/email-chat.css">
+
+  <link rel="icon" media="all" type="image/x-icon" href="/favicon.ico?v=2"/>
+
+</head>
+<body>
+
+  <div id="main" class="main" style="display:all">
+
+    <div class="connection_monitor" id="connection_monitor">CONNECTION UNSTABLE (refresh your browser) ...</div>
+
+    <div class="cardbox" id="cardbox" style="display:none">
+      <div class="cardbox-exit" id="cardbox-exit" style="display:none">×</div>
+      <div class="cardbox_menu_playcard cardbox_menu_btn" id="cardbox_menu_playcard" style="display:none">PLAY</div>
+    </div>
+
+    <div class="gameboard" id="gameboard">
+
+      <div class="agenda_deck" id="agenda_deck"></div>
+      <div class="strategy_deck" id="strategy_deck"></div>
+      <div class="personal_letter" id="personal_letter"></div>
+      <div class="discard" id="discard"></div>
+
+      <div class="defcon_track" id="defcon_track">
+	<div class="defcon_track_slot defcon_track_1_1"></div>
+	<div class="defcon_track_slot defcon_track_1_2"></div>
+	<div class="defcon_track_slot defcon_track_1_3"></div>
+	<div class="defcon_track_slot defcon_track_1_4"></div>
+	<div class="defcon_track_slot defcon_track_1_5"></div>
+	<div class="defcon_track_slot defcon_track_1_6"></div>
+	<div class="defcon_track_slot defcon_track_1_7"></div>
+	<div class="defcon_track_slot defcon_track_1_8"></div>
+
+	<div class="defcon_track_slot defcon_track_2_1"></div>
+	<div class="defcon_track_slot defcon_track_2_2"></div>
+	<div class="defcon_track_slot defcon_track_2_3"></div>
+	<div class="defcon_track_slot defcon_track_2_4"></div>
+	<div class="defcon_track_slot defcon_track_2_5"></div>
+	<div class="defcon_track_slot defcon_track_2_6"></div>
+	<div class="defcon_track_slot defcon_track_2_7"></div>
+	<div class="defcon_track_slot defcon_track_2_8"></div>
+
+	<div class="defcon_track_slot defcon_track_3_1"></div>
+	<div class="defcon_track_slot defcon_track_3_2"></div>
+	<div class="defcon_track_slot defcon_track_3_3"></div>
+	<div class="defcon_track_slot defcon_track_3_4"></div>
+	<div class="defcon_track_slot defcon_track_3_5"></div>
+	<div class="defcon_track_slot defcon_track_3_6"></div>
+	<div class="defcon_track_slot defcon_track_3_7"></div>
+	<div class="defcon_track_slot defcon_track_3_8"></div>
+      </div>
+
+      <div class="prestige_track" id="prestige_track">
+        <div class="prestige_slot prestige_slot_1"></div>
+        <div class="prestige_slot prestige_slot_2"></div>
+        <div class="prestige_slot prestige_slot_3"></div>
+        <div class="prestige_slot prestige_slot_4"></div>
+        <div class="prestige_slot prestige_slot_5"></div>
+        <div class="prestige_slot prestige_slot_6"></div>
+        <div class="prestige_slot prestige_slot_7"></div>
+        <div class="prestige_slot prestige_slot_8"></div>
+        <div class="prestige_slot prestige_slot_9"></div>
+        <div class="prestige_slot prestige_slot_10"></div>
+        <div class="prestige_slot prestige_slot_11"></div>
+        <div class="prestige_slot prestige_slot_12"></div>
+        <div class="prestige_slot prestige_slot_13"></div>
+      </div>
+
+      <div class="round_track" id="round_track">
+        <div class="round_slot round_1"></div>
+        <div class="round_slot round_2"></div>
+        <div class="round_slot round_3"></div>
+        <div class="round_slot round_4"></div>
+      </div>
+
+      <div class="country" id="cuba_mil"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="cuba_pol"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="atlantic"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="berlin"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="turkey"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="italy"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="un"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="television"><div class="us"></div><div class="ussr"></div></div>
+      <div class="country" id="alliances"><div class="us"></div><div class="ussr"></div></div>
+
+      <div class="flag_track" id="flag_track">
+        <div class="flag" id="cuba_pol_flag"></div>
+        <div class="flag" id="cuba_mil_flag"></div>
+        <div class="flag" id="atlantic_flag"></div>
+        <div class="flag" id="italy_flag"></div>
+        <div class="flag" id="berlin_flag"></div>
+        <div class="flag" id="turkey_flag"></div>
+        <div class="flag" id="un_flag"></div>
+        <div class="flag" id="television_flag"></div>
+        <div class="flag" id="alliances_flag"></div>
+        <div class="flag" id="military_flag"></div>
+        <div class="flag" id="political_flag"></div>
+        <div class="flag" id="world_opinion_flag"></div>
+        <div class="flag" id="personal_letter_flag"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/saito/saito.js"></script>
+
+</body>
+</html>
+

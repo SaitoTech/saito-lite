@@ -374,14 +374,6 @@ console.log("EXISTING GAMES: " + JSON.stringify(this.games));
 	return; 
       }
 
-
-//      let id = "unknown";
-//      if (this.games[i].id !== "") { id = String(this.games[i].id); };
-//      if (id.length < 25) { 
-//	console.log("Game Invitation has ID of less than 25 - exiting");
-//	return;
-//      }
-//      if (id == transaction.sig) { return; }
     }
 
 
