@@ -565,6 +565,15 @@ console.log("player set to: " + this.game.player);
 	  this.opponent_cards_in_hand = parseInt(mv[2]);
 	}
 
+	if (mv[1] == "personal_letter") {
+	  if (parseInt(mv[2]) == 2) {
+	    this.game.state.personal_letter = 1;
+	  }
+	  if (parseInt(mv[2]) == 1) {
+	    this.game.state.personal_letter = 2;
+	  }
+	}
+
 	if (mv[1] == "add_command_token_bonus") {
 	  let player = parseInt(mv[2]);
 	  if (player == 1) {
@@ -636,7 +645,27 @@ console.log("player set to: " + this.game.player);
       }
       if (mv[0] == "defcon_check") {
 
-console.log("checking defcon to see if anyone loses....");
+	let us_loses = 0;
+	let ussr_loses = 0;
+
+	if (this.game.state.defcon1_us > 6 || this.game.state.defcon2_us > 6 && this.game.state.defcon3_us > 6) { us_loses = 1; }
+	if (this.game.state.defcon1_us > 3 && this.game.state.defcon2_us > 3 && this.game.state.defcon3_us > 3) { us_loses = 1; }
+
+	if (this.game.state.defcon1_ussr > 6 || this.game.state.defcon2_ussr > 6 && this.game.state.defcon3_ussr > 6) { ussr_loses = 1; }
+	if (this.game.state.defcon1_ussr > 3 && this.game.state.defcon2_ussr > 3 && this.game.state.defcon3_ussr > 3) { ussr_loses = 1; }
+
+	if (us_loses == 1 && ussr_loses == 1) {
+	  this.updateStatus("US and USSR both lose from DEFCON");
+	  return 0;
+	}
+	if (us_loses == 1) {
+	  this.endGame("ussr", "US DEFCON too high");
+	  return 0;
+	}
+	if (ussr_loses == 1) {
+	  this.endGame("us", "US DEFCON too high");
+	  return 0;
+	}
 
 	this.game.queue.splice(qe, 1);
 	return 1;
@@ -705,9 +734,95 @@ console.log("scoring phase");
       }
       if (mv[0] == "world_opinion_phase") {
 
-console.log("world opinion phase");
+	this.game.queue.splice(qe, 1);
+
+	let segment = mv[1];
+
+	if (segment == "television") {
+  	  let television_bonus = 0;
+	  if (this.game.arenas['television'].us > this.game.arenas['television'].ussr) { television_bonus = 2; }
+	  if (this.game.arenas['television'].us < this.game.arenas['television'].ussr) { television_bonus = 1; }
+	  if (television_bonus == 0) { return 1; }
+
+	  if (this.game.player == television_bonus) {
+	    this.updateStatus("Television Battleground bonus: ");
+            this.eventShiftDefcon(this.game.player, this.game.player, [1,2,3], 1, 1, function() {
+	      thirteen_self.endTurn();
+	    });
+	    return 0;
+	  } else {
+	    this.updateStatus("Opponent is taking Television Battleground bonus");
+	    return 0;
+	  }
+	}
+
+	if (segment == "un") {
+  	  let un_bonus = 0;
+	  if (this.game.arenas['un'].us > this.game.arenas['un'].ussr) { un_bonus = 2; }
+	  if (this.game.arenas['un'].us < this.game.arenas['un'].ussr) { un_bonus = 1; }
+	  if (un_bonus == 0) { return 1; }
+	  if (un_bonus == 1) { this.updateLog("USSR secures the Personal Letter"); }
+	  if (un_bonus == 2) { this.updateLog("US secures the Personal Letter"); }
+	  this.game.state.personal_letter = un_bonus;
+	  return 1;
+	}
+
+	if (segment == "alliances") {
+	  let alliances_bonus = 0;
+	  if (this.game.arenas['alliances'].us > this.game.arenas['alliances'].ussr) { alliances_bonus = 2; }
+	  if (this.game.arenas['alliances'].us < this.game.arenas['alliances'].ussr) { alliances_bonus = 1; }
+	  if (alliances_bonus == 0) { return 1; }
+
+	  if (this.game.player == television_bonus) {
+	    this.updateLog("Alliances battleground bonus requires implementation");
+            this.addMove("aftermath_or_discard\t"+this.game.player);
+            this.addMove("DEAL\t2\t1\t1"); // deck 2, player 1, 1 card
+            this.endTurn();
+	    return 0;
+	  } else {
+	    this.updateLog("Alliances battleground bonus requires implementation");
+	    return 0;
+	  }
+	}
+
+      }
+      if (mv[0] == "aftermath_or_discard") {
+
+	let player = parseInt(mv[1]);
+        let sc = this.returnStrategyCards();
 
 	this.game.queue.splice(qe, 1);
+
+	if (this.game.player == player) {
+	
+	  let card = this.game.deck[1].hand[0];
+
+          let html = 'You have pulled <span class="showcard" id="'+card+'"' + sc[card].name + '</span> as Aftermath bonus card:<ul>';
+              html += '<li class="card" id="discard">discard card</li>';
+              html += '<li class="card" id="'+card+'">put in aftermath</li>';
+          thirteen_self.updateStatus(html);
+          thirteen_self.addShowCardEvents(function(card) {
+
+            let action2 = $(card).attr("id");
+	
+	    if (action2 == "discard") {
+	      this.addMove("discard\t"+this.game.player+"\t"+"1"+"\t"+card+"\t"+"1");
+	      this.addMove("notify\tWorld Opinion bonus card is discarded");
+	      this.endTurn();
+	      return;
+	    }
+
+	    if (this.game.player == 1) {
+	      this.aftermath_ussr.push(card);
+	    }
+	    if (this.game.player == 2) {
+	      this.aftermath_us.push(card);
+	    }
+	    thirteen_self.endTurn();
+	  });
+
+        }
+	return 0;
 
       }
       if (mv[0] == "pullcard") {
@@ -810,6 +925,21 @@ console.log("world opinion phase");
 
 
 	//
+	// push remaining card into aftermath queue
+	//
+	if (this.game.state.round > 1) {
+	  if (this.game.player == 1) {
+	    this.game.state.aftermath_ussr.push(this.game.deck[1].hand[0]);
+	    this.removeCardFromHand(this.game.deck[1].hand[0]);
+	  }
+	  if (this.game.player == 2) {
+	    this.game.state.aftermath_us.push(this.game.deck[1].hand[0]);
+	    this.removeCardFromHand(this.game.deck[1].hand[0]);
+	  }
+	}
+
+
+	//
 	// reset round vars
 	//
         this.game.state.ussr_command_token_bonus = 0;
@@ -840,7 +970,9 @@ console.log("world opinion phase");
 	//
 	// world opinion phase
 	//
-	this.game.queue.push("world_opinion_phase");
+	this.game.queue.push("world_opinion_phase\talliances");
+	this.game.queue.push("world_opinion_phase\tun");
+	this.game.queue.push("world_opinion_phase\ttelevision");
 
 
 	this.game.queue.push("move_strategy_card_into_alliances");
@@ -1316,6 +1448,8 @@ console.log("world opinion phase");
 
     let thirteen_self = this;
 
+    this.game.state.personal_letter_bonus = 0;
+
     //
     // prep the board
     //
@@ -1330,9 +1464,27 @@ console.log("world opinion phase");
       let html = "";
       if (this.game.player == 1) { html = "USSR pick a card to play: "; }
       if (this.game.player == 2) { html = "US pick a card to play: "; }
-      this.updateStatusAndListCards(html, this.game.deck[1].hand, function(card) {
-	thirteen_self.addMove("discard\t"+thirteen_self.game.player+"\t2\t"+card+"\t1");
-	thirteen_self.playerPlayStrategyCard(card);
+
+      let cards = [];
+      for (let i = 0; i < this.game.deck[1].hand.length; i++) {
+	cards.push(this.game.deck[1].hand[i]);
+	if (this.game.player == this.game.state.personal_letter) {
+	  cards.push("personal_letter");
+	}
+      }
+
+      this.updateStatusAndListCards(html, cards, function(card) {
+	if (card == "personal_letter") {
+	  this.game.state.personal_letter_bonus = 1; 
+  	  thirteen_self.addMove("setvar\tpersonal_letter\t"+thirteen_self.game.player);
+          this.updateStatusAndListCards(html, cards, function(card) {
+  	    thirteen_self.addMove("discard\t"+thirteen_self.game.player+"\t2\t"+card+"\t1");
+	    thirteen_self.playerPlayStrategyCard(card);
+	  });
+	} else {
+  	  thirteen_self.addMove("discard\t"+thirteen_self.game.player+"\t2\t"+card+"\t1");
+	  thirteen_self.playerPlayStrategyCard(card);
+	}
       });
     }
 
@@ -1934,6 +2086,12 @@ console.log("playing event 2: " + card);
     let sc   = thirteen_self.returnStrategyCards();
     if (tokens == -1) { tokens = sc[card].tokens; }
 
+    //
+    // personal letter bonus if played
+    //
+    tokens += this.game.state.personal_letter_bonus;
+
+
 console.log("TOKENS: " + tokens + " -- " + this.game.state.ussr_command_token_bonus + " -- " + this.game.state.us_command_token_bonus + " -- " + this.game.player);
 
     if (player == 1) { tokens += this.game.state.ussr_command_token_bonus; }
@@ -2313,6 +2471,9 @@ console.log("ussr has: " + cubes + " in " + arena_id);
 
     var state = {};
 
+    state.aftermath_us   = [];
+    state.aftermath_ussr = [];
+
     state.prestige_track = 7;
     state.round = 1;
     state.defcon1_us   = 1;
@@ -2323,6 +2484,7 @@ console.log("ussr has: " + cubes + " in " + arena_id);
     state.defcon3_ussr = 1;
 
     state.personal_letter = 1;
+    state.personal_letter_bonus = 0;
 
     state.us_agendas   = [];
     state.ussr_agendas = [];
@@ -4077,8 +4239,6 @@ alert(thirteen_self.game.state.ussr_cannot_deflate_defcon_from_events + " --- " 
 
   returnCardList(cardarray=[]) {
 
-    let hand = this.game.deck[0].hand;
-
     let html = "";
 
     for (i = 0; i < cardarray.length; i++) {
@@ -4092,6 +4252,9 @@ alert(thirteen_self.game.state.ussr_cannot_deflate_defcon_from_events + " --- " 
 
   returnCardItem(card) {
 
+    if (card == "personal_letter") {
+      return '<li class="card showcard" id="personal_letter"><img class="cardimg showcard" id="${cardname}" src="/thirteen/img/Agenda%20Card%2013b.png" /></li>';
+    }
     if (this.game.deck[0].cards[card] != undefined) {
       return `<div id="${card.replace(/ /g,'')}" class="card cardbox-hud cardbox-hud-status">${this.returnCardImage(card)}</div>`;
     }
