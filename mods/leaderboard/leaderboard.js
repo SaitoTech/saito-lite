@@ -53,7 +53,8 @@ class Leaderboard extends ModTemplate {
       app.modules.returnModule("Leaderboard").sendPeerDatabaseRequest("leaderboard", "leaderboard", "*", where, null, function (res) {
         var html = `<div>Game</div> <div>Rank</div> <div>Played</div> <div>Player</div>`;
         res.rows.forEach(row => {
-          html += `<div>${row.module}</div><div>${row.ranking}</div><div>${row.games}</div><div>${row.publickey}</div>`
+          var name = app.keys.returnIdentifierByPublicKey(row.publickey, true);
+          html += `<div>${row.module}</div><div>${row.ranking}</div><div>${row.games}</div><div>${name}</div>`
         });
         document.querySelector(".leaderboard-rankings").innerHTML = html;
       });
