@@ -155,6 +155,15 @@ class Thirteen extends GameTemplate {
 
 
 
+  initializeHTML(app) {
+    super.initializeHTML(app);
+    this.app.modules.respondTo("chat-manager").forEach(mod => {
+      mod.respondTo('chat-manager').render(app, this);
+      mod.respondTo('chat-manager').attachEvents(app, this);
+    });
+  }
+
+
 
 
 
@@ -162,6 +171,7 @@ class Thirteen extends GameTemplate {
   // initialize //
   ////////////////
   initializeGame(game_id) {
+
 
     if (this.game.status != "") { this.updateStatus(this.game.status); }
 
@@ -890,18 +900,18 @@ console.log("scoring phase");
 	  //
 	  // play or discard
 	  //
-          let html = 'you have pulled <span class="showcard" id="'+card+'"' + sc[card].name + '</span><ul>';
+          let html = 'you have pulled <span class="showcard" id="'+card+'">' + sc[card].name + '</span><ul>';
               html += '<li class="card" id="discard">discard card</li>';
               html += '<li class="card" id="'+card+'">play card</li>';
           thirteen_self.updateStatus(html);
           thirteen_self.addShowCardEvents(function(card) {
 
-            let action2 = $(card).attr("id");
+            let action2 = $(this).attr("id");
 	
 	    if (action2 == "discard") {
 	      thirteen_self.endTurn();
 	    } else {
-	      thirteen_self.playerPlayStrategyCard(action2);
+	      thirteen_self.playerPlayStrategyCard(card);
 	    }
 
 	  });
@@ -1546,6 +1556,8 @@ console.log("scoring phase");
 
   playerPlayStrategyCard(card) {
 
+console.log("SC is: " + card);
+
     let thirteen_self  = this;
     let strategy_cards = this.returnStrategyCards(); 
     let this_card      = strategy_cards[card];
@@ -1589,8 +1601,8 @@ console.log("scoring phase");
       if (action == "playevent") {
 	thirteen_self.hideCard();
 
-        if (this.game.player == 1) { this.addMove("notify\tUSSR plays <span class='logcard' id='"+card+"'>"+strategy_cards[card].name+"</span> for event"); }
-        if (this.game.player == 2) { this.addMove("notify\tUS plays <span class='logcard' id='"+card+"'>"+strategy_cards[card].name+"</span> for event"); }
+        if (thirteen_self.game.player == 1) { thirteen_self.addMove("notify\tUSSR plays <span class='logcard' id='"+card+"'>"+strategy_cards[card].name+"</span> for event"); }
+        if (thirteen_self.game.player == 2) { thirteen_self.addMove("notify\tUS plays <span class='logcard' id='"+card+"'>"+strategy_cards[card].name+"</span> for event"); }
 
         thirteen_self.playerTriggerEvent(thirteen_self.game.player, card);
         return;
@@ -1613,8 +1625,8 @@ console.log("scoring phase");
 	  thirteen_self.addMove("place_command_tokens\t" + thirteen_self.game.player + "\t"+card);
 	  thirteen_self.addMove("trigger_opponent_event\t"+opponent+"\t"+card);
 
-          if (this.game.player == 1) { this.addMove("notify\tUSSR plays <span class='logcard' id='"+card+"'>"+strategy_cards[card].name+"</span> for command"); }
-          if (this.game.player == 2) { this.addMove("notify\tUS plays <span class='logcard' id='"+card+"'>"+strategy_cards[card].name+"</span> for command"); }
+          if (thirteen_self.game.player == 1) { thirteen_self.addMove("notify\tUSSR plays <span class='logcard' id='"+card+"'>"+strategy_cards[card].name+"</span> for command"); }
+          if (thirteen_self.game.player == 2) { thirteen_self.addMove("notify\tUS plays <span class='logcard' id='"+card+"'>"+strategy_cards[card].name+"</span> for command"); }
 
 	  thirteen_self.endTurn();
 	}
@@ -3570,15 +3582,13 @@ console.log("playing event 2: " + card);
 	  let cards_discarded = 0;
           let html = "Select cards to discard:<ul>";
           for (let i = 0; i < thirteen_self.game.deck[1].hand.length; i++) {
-            html += '<li class="card showcard" id="'+thirteen_self.game.deck[1].hand[i]+'">'+thirteen_self.game.deck[1].cards[thirteen_self.game.deck[1].hand[i]].name+'</li>';
+            html += '<li class="card showcard '+thirteen_self.game.deck[1].hand[i]+'" id="'+thirteen_self.game.deck[1].hand[i]+'">'+thirteen_self.game.deck[1].cards[thirteen_self.game.deck[1].hand[i]].name+'</li>';
           }
           html += '</ul> When you are done discarding <span class="card dashed" id="finished">click here</span>.';
           thirteen_self.updateStatus(html);
           thirteen_self.addShowCardEvents(function(card) {
 
-            let action2 = $(card).attr("id");
- 
-            if (action2 == "finished") {
+            if (card == "finished") {
               thirteen_self.addMove("DEAL\t2\t"+thirteen_self.game.player+"\t"+cards_discarded);
 
               //
@@ -3606,11 +3616,17 @@ console.log("playing event 2: " + card);
                   thirteen_self.updateLog("Shuffling discarded cards back into the deck...");
 		}
 	      }
+	
+	      thirteen_self.endTurn();
+
 	    } else {
 
               cards_discarded++;
-              thirteen_self.removeCardFromHand(action2);
-              thirteen_self.addMove("discard\t"+thirteen_self.game.player+"\t"+ "2" + "\t"+action2);
+              let divname = "."+card;
+	      $(divname).remove();
+
+              thirteen_self.removeCardFromHand(card);
+              thirteen_self.addMove("discard\t"+thirteen_self.game.player+"\t"+ "2" + "\t"+card);
 
 	    }
 	  });

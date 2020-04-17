@@ -5561,7 +5561,7 @@ console.log("\n\n\n\n");
 
     state.animal_in_space = "";
     state.man_in_earth_orbit = "";
-    state.eagle_has_landed = "ussr";
+    state.eagle_has_landed = "";
     state.eagle_has_landed_bonus_taken = 0;
     state.space_shuttle = "";
     state.space_shuttle_bonus_taken = 0;

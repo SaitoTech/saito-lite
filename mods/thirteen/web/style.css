@@ -5,6 +5,13 @@ body {
   margin: 0px;
 }
 
+.logcard {
+  font-weight: bold;
+  cursor: pointer;
+  border-bottom: 1px dashed;
+}
+
+
 .flag {
  position: absolute;
  height: 60px;
