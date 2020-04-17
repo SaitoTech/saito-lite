@@ -695,6 +695,7 @@ console.log("tallying alliances before scoring");
 
 	let player = parseInt(mv[1]);
 	let prestige_shift = parseInt(mv[2]);
+	this.updateLog("VP change: " + prestige_shift);
 
 	if (player == 1) {
 	  this.total_scoring_this_round = 0;
@@ -720,7 +721,6 @@ console.log("tallying alliances before scoring");
       }
       if (mv[0] == "scoring_phase") {
 
-console.log("scoring phase");
 	let scorer = parseInt(mv[1]);
 	let ac = this.returnAgendaCards();
 
@@ -826,9 +826,7 @@ console.log("scoring phase");
           thirteen_self.updateStatus(html);
           thirteen_self.addShowCardEvents(function(card) {
 
-            let action2 = $(card).attr("id");
-	
-	    if (action2 == "discard") {
+	    if (card == "discard") {
 	      thirteen_self.addMove("discard\t"+thirteen_self.game.player+"\t"+"1"+"\t"+card+"\t"+"1");
 	      thirteen_self.addMove("notify\tWorld Opinion bonus card is discarded");
 	      thirteen_self.endTurn();
@@ -906,9 +904,7 @@ console.log("scoring phase");
           thirteen_self.updateStatus(html);
           thirteen_self.addShowCardEvents(function(card) {
 
-            let action2 = $(this).attr("id");
-	
-	    if (action2 == "discard") {
+	    if (card == "discard") {
 	      thirteen_self.endTurn();
 	    } else {
 	      thirteen_self.playerPlayStrategyCard(card);
@@ -1556,8 +1552,6 @@ console.log("scoring phase");
 
   playerPlayStrategyCard(card) {
 
-console.log("SC is: " + card);
-
     let thirteen_self  = this;
     let strategy_cards = this.returnStrategyCards(); 
     let this_card      = strategy_cards[card];
@@ -1566,7 +1560,6 @@ console.log("SC is: " + card);
 
     let me = "ussr";
     if (this.game.player == 2) { me = "us"; }
-
 
 
     //
@@ -2265,8 +2258,24 @@ console.log("playing event 2: " + card);
 	    if (arena_id == "alliances")  { defcon_track = 3; }
 
 	    if (thirteen_self.addInfluence(thirteen_self.game.player, arena_id, action)) {
+
+	      if (thirteen_self.game.player == 1) {
+  	        thirteen_self.addMove("notify\tUSSR adds "+action+" cubes to "+arena_id+"\t1");
+	      }
+	      if (thirteen_self.game.player == 2) {
+  	        thirteen_self.addMove("notify\tUS adds "+action+" cubes to "+arena_id+"\t2");
+	      }
+
 	      thirteen_self.addMove("add_influence\t"+thirteen_self.game.player+"\t"+arena_id+"\t"+action + "\t" + thirteen_self.game.player);
 	      if (defcon_increase > 0) {
+
+  	        if (thirteen_self.game.player == 1) {
+  	          thirteen_self.addMove("notify\tUSSR increase DEFCON in "+defcon_track+"\t1");
+	        }
+	        if (thirteen_self.game.player == 2) {
+  	          thirteen_self.addMove("notify\tUS increase DEFCON in "+defcon_track+"\t1");
+	        }
+
 	        thirteen_self.addMove("increase_defcon\t"+thirteen_self.game.player+"\t"+defcon_track+"\t"+defcon_increase);
 	      }
 	      thirteen_self.endTurn();
@@ -2968,7 +2977,7 @@ console.log("playing event 2: " + card);
 
     deck['a01b']            = { 
 	img : "Agenda Card 01b.png" , 
-	name : "military", 
+	name : "Military Track", 
 	flag : "military_flag", 
 	score : function() {
 
@@ -3006,7 +3015,7 @@ console.log("playing event 2: " + card);
     }
     deck['a02b']            = { 
 	img : "Agenda Card 02b.png" , 
-	name : "military", 
+	name : "Military Track", 
 	flag : "military_flag", 
 	score : function() {
 
@@ -3043,7 +3052,7 @@ console.log("playing event 2: " + card);
     }
     deck['a03b']            = { 
 	img : "Agenda Card 03b.png" , 
-	name : "political", 
+	name : "Political Track", 
 	flag : "political_flag", 
 	score : function() {
 
@@ -3080,7 +3089,7 @@ console.log("playing event 2: " + card);
     }
     deck['a04b']            = { 
 	img : "Agenda Card 04b.png" , 
-	name : "political", 
+	name : "Political Track", 
 	flag : "political_flag", 
 	score : function() {
 
@@ -3117,7 +3126,7 @@ console.log("playing event 2: " + card);
     }
     deck['a05b']            = { 
 	img : "Agenda Card 05b.png" , 
-	name : "world opinion", 
+	name : "World Opinion Track", 
 	flag : "world_opinion_flag", 
 	score : function() {
 
@@ -3154,7 +3163,7 @@ console.log("playing event 2: " + card);
     }
     deck['a06b']            = { 
 	img : "Agenda Card 06b.png" , 
-	name : "world opinion", 
+	name : "World Opinion Track", 
 	flag : "world_opinion_flag", 
 	score : function() {
 
@@ -3191,7 +3200,7 @@ console.log("playing event 2: " + card);
     }
     deck['a07b']            = { 
 	img : "Agenda Card 07b.png" , 
-	name : "turkey", 
+	name : "Turkey", 
 	flag : "turkey_flag", 
 	score : function() {
 
@@ -3218,7 +3227,7 @@ console.log("playing event 2: " + card);
     }
     deck['a08b']            = { 
 	img : "Agenda Card 08b.png" , 
-	name : "berlin", 
+	name : "Berlin", 
 	flag : "berlin_flag", 
 	score : function() {
 
@@ -3245,7 +3254,7 @@ console.log("playing event 2: " + card);
     }
     deck['a09b']            = { 
 	img : "Agenda Card 09b.png" , 
-	name : "italy", 
+	name : "Italy", 
 	flag : "italy_flag", 
 	score : function() {
 
@@ -3272,7 +3281,7 @@ console.log("playing event 2: " + card);
     }
     deck['a10b']            = { 
 	img : "Agenda Card 10b.png" , 
-	name : "cuba", 
+	name : "Cuba (pol)", 
 	flag : "cuba_pol_flag", 
 	score : function() {
 
@@ -3318,7 +3327,7 @@ console.log("playing event 2: " + card);
     }
     deck['a11b']            = { 
 	img : "Agenda Card 11b.png" , 
-	name : "cuba", 
+	name : "Cuba (mil)", 
 	flag : "cuba_mil_flag", 
 	score : function() {
 
@@ -3365,7 +3374,7 @@ console.log("playing event 2: " + card);
     }
     deck['a12b']            = { 
 	img : "Agenda Card 12b.png" , 
-	name : "atlantic", 
+	name : "Atlantic", 
 	flag : "atlantic_flag", 
 	score : function() {
 
@@ -3411,7 +3420,7 @@ console.log("playing event 2: " + card);
     }
     deck['a13b']            = { 
 	img : "Agenda Card 13b.png" , 
-	name : "personal letter", 
+	name : "Personal Letter", 
 	flag : "personal_letter_flag", 
 	score : function() {
 
@@ -3840,13 +3849,10 @@ console.log("playing event 2: " + card);
 	defcon : 0 ,
 	event : function(player) {
 
-	  let opponent = 1;
-	  if (player == 1) { opponent = 2; }
-
 	  let options = thirteen_self.app.crypto.stringToBase64(JSON.stringify([1,2,3]));
 
 	  thirteen_self.updateLog("US gains 1 prestige, USSR may shift 1 US DEFCON track");
-	  thirteen_self.addMove("event_shift_defcon\t"+opponent+"\t"+"2"+"\t" + options + "\t1\t1");
+	  thirteen_self.addMove("event_shift_defcon\t1\t2\t" + options + "\t1\t1");
 	  thirteen_self.addMove("prestige\t2\t1");
 	  thirteen_self.endTurn();
 	},
@@ -4087,11 +4093,8 @@ console.log("playing event 2: " + card);
 	defcon : 0 ,
 	event : function(player) {
 
-	  let opponent = 2;
-          if (thirteen_self.game.player == 2) { opponent = 1; }
-
 	  let options = thirteen_self.app.crypto.stringToBase64(JSON.stringify([1,2,3]));
-	  thirteen_self.addMove("event_shift_defcon\t"+opponent+"\t"+player+"\t" + options + "\t2\t2");
+	  thirteen_self.addMove("event_shift_defcon\t2\t1\t" + options + "\t2\t2");
 	  thirteen_self.addMove("prestige\t2\t1");
 	  thirteen_self.addMove("notify\tUSSR gains 2 prestige");
 	  thirteen_self.endTurn();
