@@ -5,10 +5,9 @@ module.exports = onlineSidebar = {
 
 
   render(app, data) {
-    document.querySelector(".arcade-sidebar-online").innerHTML = onlineTemplate(app);
-
-   
-
+    document.body.innerHTML += `<link rel="stylesheet" type="text/css" href="/online/style.css" />`;
+    document.querySelector(".arcade-left-sidebar").prepend(elParser(onlineTemplate(app)));
+    //document.querySelector(".arcade-left-sidebar").innerHTML = onlineTemplate(app);
   },
 
   attachEvents(app, data) {
