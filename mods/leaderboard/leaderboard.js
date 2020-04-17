@@ -73,7 +73,7 @@ class Leaderboard extends ModTemplate {
 
         res.rows.forEach(row => {
   	  leaderboard_self.rankings[row.module].push({
-	    "publickey" : row.publickey ,
+	    "publickey" : app.keys.returnIdentifierByPublicKey(row.publickey, true) ,
 	    "games"  : row.games ,
 	    "ranking"   : row.ranking ,
 	  });
