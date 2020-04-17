@@ -2195,9 +2195,9 @@ console.log("playing event 2: " + card);
     // personal letter bonus if played
     //
     tokens += this.game.state.personal_letter_bonus;
-    if (tokens < 1) { tokens = 1; }
     if (player == 1) { tokens += this.game.state.ussr_command_token_bonus; }
     if (player == 2) { tokens += this.game.state.us_command_token_bonus; }
+    if (tokens < 1) { tokens = 1; }
 
     let html = '';
     if (player == 1) { html += 'USSR '; }
