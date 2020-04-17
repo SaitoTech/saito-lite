@@ -4514,6 +4514,10 @@ console.log("playing event 2: " + card);
 
   returnCardImage(cardname) {
 
+    if (cardname === "personal_letter") { 
+      return `<img class="cardimg showcard" id="personal_letter" src="/thirteen/img/Agenda%20Card%2013b.png" />`;
+    }
+
     var c = this.game.deck[0].cards[cardname];
     if (c == undefined) { c = this.game.deck[1].cards[cardname]; }
     if (c == undefined) { c = this.game.deck[0].discards[cardname]; }
