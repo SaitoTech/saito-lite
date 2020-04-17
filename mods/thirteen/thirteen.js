@@ -1737,7 +1737,7 @@ console.log("tallying alliances before scoring");
       action = $(this).attr("id");
       if (action == "done") { mycallback(args); }
 
-      let html2 = 'which defcon track: <p></p><ul>';
+      let html2 = 'Adjust which DEFCON track: <p></p><ul>';
       if (only_one_defcon_track == 1) {
 	if (selected_defcon_track == 0) {
           html2 += '<li class="card" id="1">political</li>';
