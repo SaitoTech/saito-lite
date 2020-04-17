@@ -6,7 +6,7 @@ module.exports = NewsletterTemplate = () => {
       <div class="welcome-modal-left">
         <div class="welcome-modal-header">Sign up for the Newsletter</h1></div>
         <div class="welcome-modal-main">
-          <div style="margin:1em 0">Please provide with an email:</div>
+          <div style="margin:1em 0">Please provide an email:</div>
           <form name="newsletter_form" id="newsletter_form">
             <div style="display:flex;">
               <input style="width:100%; color:black; font-size:1em; background:white;margin:0 1em 0 0;" id="registry-input" type="text" placeholder="email@domain.com">
@@ -19,7 +19,7 @@ module.exports = NewsletterTemplate = () => {
         <div class="welcome-modal-info">
             <div class="tip">
               <b>How does this work? <i class="fas fa-info-circle"></i></b>
-              <div class="tiptext">You will recieve periodic updates on important network news (max monthly).</div>
+              <div class="tiptext">You will recieve periodic updates on important network news.</div>
             </div>
           </div>
       </div>
@@ -27,10 +27,7 @@ module.exports = NewsletterTemplate = () => {
   
     <div class="welcome-modal-exit tutorial-skip">
       <p>
-          I know about the newsletter...
-      </p>
-      <p>
-          ... will think about it later.
+          I know about the newsletter, will think about it later.
       </p>
       <i class="fas fa-arrow-right"></i>
     </div>
