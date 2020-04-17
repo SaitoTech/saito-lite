@@ -2991,8 +2991,8 @@ console.log("playing event 2: " + card);
     arenas['cuba_pol'] = { 
 	top : 570, 
 	left : 520 , 
-	us : 5 , 
-	ussr : 5,
+	us : 0 , 
+	ussr : 0,
 	name : "Cuba (political)",
     }
     arenas['cuba_mil'] = { 
