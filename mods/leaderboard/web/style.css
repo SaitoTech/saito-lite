@@ -1,6 +1,6 @@
 .leaderboard-rankings {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 10em;
+  grid-template-columns: 3fr 1fr 1fr;
   grid-gap: 3px;
 }
 
@@ -11,6 +11,13 @@
   text-overflow: ellipsis;
 }
 
-.leaderboard-rankings div:nth-child(-n+4) {
-  font-weight: bolder;
+.leaderboard-rankings div:nth-child(3n+1) {
+  text-align: left;
 }
+.leaderboard-rankings div:nth-child(3n+2) {
+  text-align: right;
+}
+.leaderboard-rankings div:nth-child(3n+0) {
+  text-align: right;
+}
+

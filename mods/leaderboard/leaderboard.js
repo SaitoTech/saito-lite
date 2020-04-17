@@ -1,8 +1,6 @@
 const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
-
 const LeaderboardSidebar = require('./lib/arcade-sidebar/side-leaderboard');
-
 const Header = require('../../lib/ui/header/header');
 const AddressController = require('../../lib/ui/menu/address-controller');
 
@@ -20,6 +18,14 @@ class Leaderboard extends ModTemplate {
     this.categories = "Games Entertainment";
     this.affix_callbacks_to = [];
 
+    this.rankings = {};
+    this.mods = [];
+
+    this.carousel_idx = 0;
+    this.carousel_active = 0;
+    this.carousel_timer = null;
+    this.carousel_speed = 10000;
+
   }
 
 
@@ -31,7 +37,7 @@ class Leaderboard extends ModTemplate {
     //
     // main-panel games
     //
-    this.app.modules.respondTo("leaderboard-games").forEach(mod => {
+    this.app.modules.respondTo("arcade-games").forEach(mod => {
       this.mods.push(mod);
       this.affix_callbacks_to.push(mod.name);
     });
@@ -48,17 +54,58 @@ class Leaderboard extends ModTemplate {
   }
 
   onPeerHandshakeComplete(app, peer) {
+
+    let leaderboard_self = app.modules.returnModule("Leaderboard");
+
     if (app.modules.returnModule('Arcade').browser_active == 1) {
-      var where = "1 = 1 ORDER BY ranking desc, games desc LIMIT 100"
+
+      let installed_games = "(";
+      for (let i = 0; i < this.mods.length; i++) {
+	this.rankings[this.mods[i].name] = [];
+	installed_games += "'" + this.mods[i].name + "'";
+	if (i < this.mods.length-1) { installed_games += ","; }
+      }
+      installed_games += ")";
+      var where = "module IN "+installed_games+" ORDER BY ranking desc, games desc LIMIT 100"
+
+
       app.modules.returnModule("Leaderboard").sendPeerDatabaseRequest("leaderboard", "leaderboard", "*", where, null, function (res) {
-        var html = `<div>Game</div> <div>Rank</div> <div>Played</div> <div>Player</div>`;
+
         res.rows.forEach(row => {
-          html += `<div>${row.module}</div><div>${row.ranking}</div><div>${row.games}</div><div>${row.publickey}</div>`
+  	  leaderboard_self.rankings[row.module].push({
+	    "publickey" : row.publickey ,
+	    "games"  : row.games ,
+	    "ranking"   : row.ranking ,
+	  });
         });
-        document.querySelector(".leaderboard-rankings").innerHTML = html;
+
+	let html = '';
+        let shown = 0;
+        let loop = 0;
+        let styledata = "display:grid";
+	for (var z in leaderboard_self.rankings) {
+	  if (leaderboard_self.rankings[z].length > 0) {
+            html += `<div style="${styledata}" class="leaderboard-rankings leaderboard_${z}" id="leaderboard_${z}">`;
+  	    for (let i = 0; i < leaderboard_self.rankings[z].length; i++) {
+ 	      let entry = leaderboard_self.rankings[z][i];
+              html += `<div>${entry.publickey}</div><div>${entry.games}</div><div>${entry.ranking}</div>`;
+	    }
+            if (shown == 0) {
+	      document.querySelector('.leaderboard-game-module').innerHTML = (leaderboard_self.mods[loop].name + ' Leaderboard:');
+	    }
+	    shown = 1;
+	    this.carousel_idx = loop;
+	    styledata = "display:none";
+	    html += '</div>';
+	  }
+	  loop++;
+	}
+        document.querySelector(".leaderboard-container").innerHTML = html;
+	leaderboard_self.startCarousel(leaderboard_self.mods);
       });
     }
   }
+
 
   async onConfirmation(blk, tx, conf, app) {
 
@@ -96,6 +143,7 @@ class Leaderboard extends ModTemplate {
     }
   }
 
+
   async updateRankingAlgorithm(module, winner, loser) {
 
     if (this.app.BROWSER == 1) { return; }
@@ -103,7 +151,7 @@ class Leaderboard extends ModTemplate {
     if (winner.publickey == loser.publickey) {console.log("Winner and Loser are the Same Player"); return;}
 
     //
-    // Richard, the magic goes here
+    // magic ranking system
     //
     var elo = new Elo(15);
 
@@ -169,8 +217,6 @@ class Leaderboard extends ModTemplate {
     LeaderboardSidebar.attachEvents(app, data);
   }
 
-  shouldAffixCallbackToModule() { return 1; }
-  /*
   shouldAffixCallbackToModule(modname) {
 
     if (modname == "Leaderboard") { return 1; }
@@ -183,8 +229,65 @@ class Leaderboard extends ModTemplate {
     return 0;
 
   }
-  */
+
+
+
+  startCarousel(mods) {
+
+    if (this.carousel_active == 1) { return; }
+
+    let leaderboard_presentable = 0;
+    for (let i in this.rankings) {
+      if (this.rankings[i] != null) {
+	if (this.rankings[i].length > 0) {
+	  leaderboard_presentable = 1;
+	}
+      }
+    }
+
+    if (leaderboard_presentable == 0) { return; }
+
+    this.carousel_timer = setInterval(() => {
+
+      let x = this.carousel_idx+1;
+      let y = this.carousel_idx;      
+      let found = 0;
+
+      for (; x < this.mods.length; x++) {
+	if (this.rankings[this.mods[x].name].length > 0) {
+	  this.carousel_idx = x;
+          found = 1;
+	  y = x;
+	  x = this.mods.length + 100;
+        }
+      }
+      if (found == 0) {
+        for (x = 0; x < this.carousel_idx; x++) {
+	  if (this.rankings[this.mods[x].name].length > 0) {
+	    this.carousel_idx = x;
+	    found = 1;
+	    y = x;
+	    x = this.mods.length + 100;
+          }
+	}
+      }
+
+      //
+      // update leaderboard with mod at this.carousel_idx
+      //
+      for (let i = 0; i < this.mods.length; i++) {
+        let classn = '.leaderboard_'+this.mods[i].name;
+	let obj = document.querySelector(classn);
+        if (obj) { obj.style.display = 'none'; }
+      }
+      let classn = '.leaderboard_'+this.mods[this.carousel_idx].name;
+      document.querySelector(classn).style.display = 'grid';
+      document.querySelector('.leaderboard-game-module').innerHTML = (this.mods[this.carousel_idx].name + ' Leaderboard:');
+
+    }, this.carousel_speed);
+  }
 }
 
 module.exports = Leaderboard;
+
 
