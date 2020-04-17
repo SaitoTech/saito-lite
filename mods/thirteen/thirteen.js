@@ -905,6 +905,12 @@ console.log("tallying alliances before scoring");
           thirteen_self.addShowCardEvents(function(card) {
 
 	    if (card == "discard") {
+	      if (thirteen_self.game.player == 1) {
+	        thirteen_self.notify("notify\tUSSR discards the card without triggering the event");
+	      }
+	      if (thirteen_self.game.player == 2) {
+	        thirteen_self.notify("notify\tUS discards the card without triggering the event");
+	      }
 	      thirteen_self.endTurn();
 	    } else {
 	      thirteen_self.playerPlayStrategyCard(card);
@@ -2563,7 +2569,12 @@ console.log("playing event 2: " + card);
 
   endTurn(nexttarget=0) {
 
-    this.updateStatus("waiting for information from peers....");
+    if (this.game.player == 1) {
+      this.updateStatus("Waiting for US to move...");
+    } 
+    if (this.game.player == 2) {
+      this.updateStatus("Waiting for USSR to move...");
+    } 
 
     let cards_in_hand = this.game.deck[0].hand.length;
 
