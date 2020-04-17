@@ -1950,9 +1950,8 @@ console.log("tallying alliances before scoring");
 	    // have we hit our influence limit?
     	    //
 	    let hit_influence_limit = 0;
-	    if (player == 1 && thirteen_self.game.state.influence_on_board_ussr == 16) { hit_influence_limit = 1; }
-	    if (player == 2 && thirteen_self.game.state.influence_on_board_us == 16) { hit_influence_limit = 1; }
-
+	    if (player == 1 && thirteen_self.game.state.influence_on_board_ussr == 17) { hit_influence_limit = 1; }
+	    if (player == 2 && thirteen_self.game.state.influence_on_board_us == 17) { hit_influence_limit = 1; }
 
 	    if (total_placed >= number || hit_influence_limit == 1) {
 
@@ -3740,7 +3739,7 @@ console.log("playing event 2: " + card);
 	  // command three influence, then opponent may command 1 influence
 	  thirteen_self.addMove("event_command_influence" + "\t" + opponent + "\t" + "s12b" + "\t" + "1");
 	  thirteen_self.updateStatus('Command 3 Influence cubes, then opponent may command 1 Influence cube: <p></p><ul><li class="card" id="done" id="done">finish turn</li>');
-          thirteen_self.playerPlaceCommandTokens(thirteen_self.game.player, 's12b');
+          thirteen_self.playerPlaceCommandTokens(thirteen_self.game.player, 's12b', 3);
 
 	}
     }
@@ -3880,23 +3879,24 @@ console.log("playing event 2: " + card);
 	event : function(player) {
 
           let html  = "Which would you like to do, remove half of USSR influence from one Cuban battleground (rounded up) or place up to 2 Influence on the Alliances battleground? <p></p><ul>";
-              html += '<li class="card" id="cuba">remove from cuba</li>';
-              html += '<li class="card" id="alliances">place in alliances</li>';
+              html += '<li class="card" id="remove_from_cuba">remove from cuba</li>';
+              html += '<li class="card" id="add_alliances">place in alliances</li>';
           html += '</ul>';
           thirteen_self.updateStatus(html);
-
 
           $('.card').off();
           $('.card').on('click', function() {
 
 	    let action = $(this).attr("id");
 
-	    if (action == "cuba") {
+	    if (action == "remove_from_cuba") {
+	      thirteen_self.updateStatus("Click on a Cuban battleground to remove half of the USSR influence: ");
 	      thirteen_self.eventRemoveInfluence(2, 1, ['cuba_pol', 'cuba_mil'], 101, 1, 0, function() {
 	        thirteen_self.endTurn();
 	      });
 	    }
-	    if (action == "alliances") {
+	    if (action == "add_alliances") {
+	      thirteen_self.updateStatus("Add two influence to the Alliances battleground");
 	      thirteen_self.eventAddInfluence(2, 2, ['alliances'], 2, 2, 0, function() {
 	        thirteen_self.endTurn();
 	      }); 
