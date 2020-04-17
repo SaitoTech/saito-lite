@@ -513,16 +513,17 @@ console.log("player set to: " + this.game.player);
 	      thirteen_self.addMove("flag\t"+thirteen_self.game.player+"\t" + ac[thirteen_self.game.deck[0].hand[i]].flag);
 	      if (thirteen_self.game.deck[0].hand[i] == card) {
 		if (player == 1) {
+console.log("setting ussr_agenda_selected to " + card);
 		  thirteen_self.game.state.ussr_agenda_selected = card;
 	        }
 		if (player == 2) {
+console.log("setting us_agenda_selected to " + card);
 		  thirteen_self.game.state.us_agenda_selected = card;
 		}
 	      }
 
 	      thirteen_self.addMove("discard\t"+thirteen_self.game.player+"\t" + "1" + "\t" + thirteen_self.game.deck[0].hand[i] + "\t" + "0"); // 0 = do not announce - TODO actually prevent info sharing
 	    }
-
 	    thirteen_self.endTurn();
 
 	  });
@@ -695,7 +696,7 @@ console.log("tallying alliances before scoring");
 
 	let player = parseInt(mv[1]);
 	let prestige_shift = parseInt(mv[2]);
-	this.updateLog("VP change: " + prestige_shift);
+	this.updateLog("vp change: " + prestige_shift);
 
 	if (player == 1) {
 	  this.total_scoring_this_round = 0;
@@ -711,10 +712,24 @@ console.log("tallying alliances before scoring");
 	    this.total_scoring_this_round = -5;
 	    this.addMove("notify\tUS restricted to 5 prestige gain this round");
 	  }
-	}
 
-        this.game.state.prestige_track += this.total_scoring_this_round;
-        this.updateLog("VP CHANGE: " + this.total_scoring_this_round + " Prestige");
+	  //
+	  // only update track on second time
+	  //
+          if (this.total_scoring_this_round < 0) { 
+	    this.updateLog("US gains " + (this.total_scoring_this_round * -1) + " Prestige");
+	  }
+          if (this.total_scoring_this_round > 0) { 
+	    this.updateLog("USSR gains " + this.total_scoring_this_round + " Prestige");
+	  }
+          if (this.total_scoring_this_round == 0) { 
+	    this.updateLog("US and USSR tie for Prestige...");
+	  }
+          this.game.state.prestige_track += this.total_scoring_this_round;
+  	  if (this.game.state.prestige_track > 12) { this.game.state.prestige_track = 12; }
+	  if (this.game.state.prestige_track < 2) { this.game.state.prestige_track = 2; }
+
+	}
 
 	this.game.queue.splice(qe, 1);
 
@@ -724,21 +739,15 @@ console.log("tallying alliances before scoring");
 	let scorer = parseInt(mv[1]);
 	let ac = this.returnAgendaCards();
 
-	//
-	// USSR scores first, so we reset total scoring amount to respect 5 max limit
-	//
-	this.total_scoring_this_round = 0;
-
 	if (this.game.player == scorer) {
 	  if (scorer == 1) {
-	    this.total_scoring_this_round = 0;
 	    this.addMove("scoring_result\t1\t" + ac[this.game.state.ussr_agenda_selected].score());
 	    this.addMove("notify\tUSSR choses to score "+ac[this.game.state.ussr_agenda_selected].name);
 	    this.endTurn();
 	  }
 	  if (scorer == 2) {
 	    this.addMove("scoring_result\t2\t" + ac[this.game.state.us_agenda_selected].score());
-	    this.addMove("notify\tUS choses to score "+ac[this.game.state.ussr_agenda_selected].name);
+	    this.addMove("notify\tUS choses to score "+ac[this.game.state.us_agenda_selected].name);
 	    this.endTurn();
 	  }
 	}
@@ -758,11 +767,13 @@ console.log("tallying alliances before scoring");
 	  if (this.game.arenas['television'].us > this.game.arenas['television'].ussr) { television_bonus = 2; }
 	  if (this.game.arenas['television'].us < this.game.arenas['television'].ussr) { television_bonus = 1; }
 	  if (television_bonus == 0) { 
+	    this.updateLog("no-one gets the Television  bonus this turn");
 	    return 1; 
 	  }
 
 	  if (this.game.player == television_bonus) {
-	    this.updateStatus("Television Battleground bonus: ");
+	    if (this.game.player == 1) { this.updateStatus("USSR receives Television Battleground bonus: adjust one DEFCON track one level."); }
+	    if (this.game.player == 2) { this.updateStatus("USSR receives Television Battleground bonus: adjust one DEFCON track one level."); }
             this.eventShiftDefcon(this.game.player, this.game.player, [1,2,3], 1, 1, function() {
 	      thirteen_self.endTurn();
 	    });
@@ -778,7 +789,10 @@ console.log("tallying alliances before scoring");
   	  let un_bonus = 0;
 	  if (this.game.arenas['un'].us > this.game.arenas['un'].ussr) { un_bonus = 2; }
 	  if (this.game.arenas['un'].us < this.game.arenas['un'].ussr) { un_bonus = 1; }
-	  if (un_bonus == 0) { return 1; }
+	  if (un_bonus == 0) { 
+	    this.updateLog("no-one gets the United Nations bonus this turn");
+	    return 1; 
+	  }
 	  if (un_bonus == 1) { this.updateLog("USSR secures the Personal Letter"); }
 	  if (un_bonus == 2) { this.updateLog("US secures the Personal Letter"); }
 	  this.game.state.personal_letter = un_bonus;
@@ -790,7 +804,7 @@ console.log("tallying alliances before scoring");
 	  if (this.game.arenas['alliances'].us > this.game.arenas['alliances'].ussr) { alliances_bonus = 2; }
 	  if (this.game.arenas['alliances'].us < this.game.arenas['alliances'].ussr) { alliances_bonus = 1; }
 	  if (alliances_bonus == 0) { 
-	    this.updateLog("No-one gets the Alliances bonus this turn");
+	    this.updateLog("no-one gets the Alliances bonus this turn");
 	    return 1; 
 	  }
 
@@ -930,6 +944,11 @@ console.log("tallying alliances before scoring");
       }
 
       if (mv[0] == "round") {
+
+	//
+	// next round
+	//
+	this.game.state.round++;
 
 	//
 	// if end of game
@@ -1416,6 +1435,9 @@ console.log("tallying alliances before scoring");
           this.game.state.prestige_track += num;
 	  this.updateLog("US gains " + num + " prestige");
 	}
+
+	if (this.game.state.prestige_track > 12) { this.game.state.prestige_track = 12; }
+	if (this.game.state.prestige_track < 2) { this.game.state.prestige_track = 2; }
 
         this.game.queue.splice(qe, 1);
 	this.showBoard();
@@ -2370,7 +2392,15 @@ console.log("playing event 2: " + card);
 
 
   returnInitiative() {
-    return "ussr";
+    if (this.game.state.prestige_track == 7) {
+      return "ussr";
+    }
+    if (this.game.state.prestige_track < 7) {
+      return "us";
+    }
+    if (this.game.state.prestige_track > 7) {
+      return "ussr";
+    }
   }
 
 
@@ -2515,7 +2545,31 @@ console.log("playing event 2: " + card);
       }
 
       for (let z = 0; z < cubes; z++) {
-        ushtml += '<img class="cube" src="/thirteen/img/Blue%20Cube.png" style="position:relative;top:-'+this.scale(20)+'px;left:'+this.scale(starting_point)+'px;" />';
+
+	let y = 0;
+	let x = 0;
+
+	if (z == 0) {
+  	  y = -10;
+  	  x = 15;
+        }
+	if (z == 1) {
+  	  y = 0;
+  	  x = 14;
+        }
+	if (z == 2) {
+  	  y = -34;
+  	  x = 12;
+        }
+	if (z == 3) {
+  	  y = -25;
+  	  x = 10;
+        }
+	if (z == 4) {
+  	  y = -135;
+  	  x = 44;
+        }
+        ushtml += '<img class="cube" src="/thirteen/img/Blue%20Cube.png" style="position:relative;top:'+this.scale(y)+'px;left:'+this.scale(x)+'px;" />';
         starting_point += cube_gap;
       }
 
@@ -2535,8 +2589,33 @@ console.log("playing event 2: " + card);
         cube_gap = (width / cubes) - 10;
       }
 
+      let x = 0;
+      let y = 0;
+
       for (let z = 0; z < cubes; z++) {
-        ussrhtml += '<img class="cube" src="/thirteen/img/Red%20Cube.png" style="position:relative;top:-'+this.scale(20)+'px;left:'+this.scale(starting_point)+'px;" />';
+
+	if (z == 0) {
+  	  y = -10;
+  	  x = 15;
+        }
+	if (z == 1) {
+  	  y = 0;
+  	  x = 14;
+        }
+	if (z == 2) {
+  	  y = -34;
+  	  x = 12;
+        }
+	if (z == 3) {
+  	  y = -25;
+  	  x = 10;
+        }
+	if (z == 4) {
+  	  y = -135;
+  	  x = 44;
+        }
+
+        ussrhtml += '<img class="cube" src="/thirteen/img/Red%20Cube.png" style="-webkit-transform:scaleX(-1);transform: scaleX(-1);position:relative;top:'+this.scale(y)+'px;left:'+this.scale(x)+'px;" />';
         starting_point += cube_gap;
       }
 
@@ -2601,7 +2680,7 @@ console.log("playing event 2: " + card);
     state.aftermath_ussr = [];
 
     state.prestige_track = 7;
-    state.round = 1;
+    state.round = 0;
 
     state.influence_on_board_us = 2;
     state.influence_on_board_ussr = 2;
@@ -2912,8 +2991,8 @@ console.log("playing event 2: " + card);
     arenas['cuba_pol'] = { 
 	top : 570, 
 	left : 520 , 
-	us : 2 , 
-	ussr : 0,
+	us : 5 , 
+	ussr : 5,
 	name : "Cuba (political)",
     }
     arenas['cuba_mil'] = { 
@@ -3257,8 +3336,8 @@ console.log("playing event 2: " + card);
 	  }
 
 	  if (winner == 0) { return 0; }
-	  if (winner == 1) { return (difference+1)+1; }
-	  if (winner == 2) { return ((difference+1) * -1)-1; }
+	  if (winner == 1) { return (difference+1); }
+	  if (winner == 2) { return ((difference+1) * -1); }
 
 	},
     }
