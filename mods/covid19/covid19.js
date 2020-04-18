@@ -3,7 +3,7 @@ const ModTemplate = require('../../lib/templates/modtemplate');
 const SplashPage = require('./lib/splash-page');
 const CustomerPortal = require('./lib/customer-portal');
 const SupplierPortal = require('./lib/supplier-portal');
-const InquirePage = require('./lib/inquire-page'); 
+const InquirePage = require('./lib/inquire-page');
 const Certification = require('./lib/certification');
 
 const Header = require('../../lib/ui/header/covid_header');
@@ -389,6 +389,22 @@ class Covid19 extends ModTemplate {
 
   }
 
+  onPeerHandshakeComplete(app, peer) {
+
+    let data = {};
+    data.covid19 = this;
+
+    if (this.browser_active == 1) {
+
+      if (document.querySelector('.product-summary')) {
+        SplashPage.postrender(app, data);
+      };
+
+    }
+
+  }
+
+
 
   renderPage(page = "home", app, data) {
 
@@ -460,7 +476,7 @@ class Covid19 extends ModTemplate {
                 html += `<div class="grid-buttons"><div class="grid-action fullview_product" id="view-${rows[i].product_id}">View</div><div class="grid-action edit_product" id="edit-${rows[i].product_id}">Edit</div><div class="grid-action delete_product" id="delete-${rows[i].product_id}">Delete</div><!--div class="grid-action add_cert" id="add-certs-${rows[i].product_id}">Add Cert</div--></div>`;
                 added = 1;
               } else {
-//                html += `<div class="grid-action grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div></div>`;
+                //                html += `<div class="grid-action grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div></div>`;
                 html += `<div class="grid-buttons"><div class="grid-action inquire_product" id="inquire-${rows[i].product_id}">Buy</div></div>`;
                 added = 1;
               }
@@ -545,10 +561,10 @@ class Covid19 extends ModTemplate {
       document.querySelectorAll('.inquire_product').forEach(el => {
         el.addEventListener('click', (e) => {
           data.product_id = e.target.id.split("-")[1];
-          if(typeof localStorage.cart == 'undefined') {
+          if (typeof localStorage.cart == 'undefined') {
             localStorage.cart = "";
           }
-          if(!localStorage.cart.split("|").includes(data.product_id)){
+          if (!localStorage.cart.split("|").includes(data.product_id)) {
             localStorage.cart += "|" + data.product_id;
           }
 
@@ -562,14 +578,14 @@ class Covid19 extends ModTemplate {
       document.querySelectorAll('.product-img-cell').forEach(el => {
         var product_id = el.id.split("-")[2];
         data.covid19.sendPeerDatabaseRequest("covid19", "products", 'product_photo', "id = " + product_id, null, function (res) {
-          if(res.rows.length > 0 ) {
-            if(res.rows[0].product_photo.length > 0) {
+          if (res.rows.length > 0) {
+            if (res.rows[0].product_photo.length > 0) {
               var html = "<img style='max-width:200px;max-height:200px' src='" + res.rows[0].product_photo + "'/>";
               document.getElementById('product-img-' + product_id).innerHTML = html;
             }
           }
         });
-      }); 
+      });
     } catch (err) { }
   }
 
