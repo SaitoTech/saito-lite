@@ -17,5 +17,6 @@ module.exports = ArcadeRightSidebarTemplate = (publickey, id) => {
   </div>
 
   <div class="arcade-sidebar-respondees"></div>
+  <div class="arcade-sidebar-active-games-body"></div>
   `;
 }

@@ -405,13 +405,16 @@ button.add-games {
 }
 
 .arcade-observer-game-players-identicon {
-  height: 60px;
-  width: 60px;
+  height: 24px;
+  width: 24px;
   float: right;
   margin-left: 8px;
 }
 
-.arcade-observer-game-name {}
+.arcade-observer-game-name {
+  color: black;
+  font-size:1.1em;
+}
 
 .arcade-observer-game-row {}
 

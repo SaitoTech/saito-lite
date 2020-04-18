@@ -80,7 +80,9 @@ class Arcade extends ModTemplate {
         if (games[i].id == game_id) {
           games[i].ts = new Date().getTime();
           this.app.storage.saveOptions();
-          window.location = '/' + games[i].module.returnSlug();
+          let slug = this.app.modules.returnModule(msgobj.module).returnSlug();
+console.log("existing game in options:");
+          window.location = '/' + slug;
           return;
         }
       }
@@ -111,12 +113,16 @@ class Arcade extends ModTemplate {
           }
 
           games.push(game);
+
+console.log("OPENING: "+JSON.stringify(game)); 
+
           this.app.storage.saveOptions();
 
           //
           // move into game
           //
-          window.location = '/' + games[games.length - 1].module.toLowerCase().replace(/\w/, '_');
+          let slug = this.app.modules.returnModule(msgobj.module).returnSlug();
+//          window.location = '/' + slug;
         })
       })
       .catch(err => console.info("ERROR 418019: error fetching game for observer mode", err));
@@ -261,7 +267,6 @@ console.log("loading into Arcade: " + y[i].name);
       }
     });
 
-    /* removed both observer code when not in use
     //
     // load active games for observer mode
     //
@@ -279,12 +284,11 @@ console.log("loading into Arcade: " + y[i].name);
               game_id,
               module,
               players_array,
-              publickey,
+              player,
             });
           });
         }
       });
-    */
    
   }
 
