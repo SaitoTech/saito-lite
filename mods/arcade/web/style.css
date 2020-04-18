@@ -332,8 +332,7 @@ button.add-games {
 }
 
 .game-wizard-content::-webkit-scrollbar { /* WebKit */
-  width: 0;
-  height: 0;
+  width: 3;
 }
 
 .game-wizard-form {
