@@ -19,10 +19,9 @@ module.exports = SplashPageTemplate = () => {
     </p>
     <p>
 
-    <div class="flex-around">
-      <button id="customer-search-btn" class="button">For Purchasers</button>
-      <button id="supplier-portal-btn" class="button">For Suppliers</button>
-    </div>
+
+    <div id="product-rollup" class="product-rollup">Loading...</div>
+    
 
     </p>
     
@@ -42,6 +41,15 @@ module.exports = SplashPageTemplate = () => {
     <p>
 
     We have access to all major personal protection equipments, including face shields, goggles, masks (N94/N95/Surgical). All of the factories we source from directly have verified certifications and test results. We are working hard to make this information transparent and help bring additional production capacity online as possible.
+
+    </p>
+
+    <p>
+
+    <div class="flex-around">
+      <button id="customer-search-btn" class="button">For Purchasers</button>
+      <button id="supplier-portal-btn" class="button">For Suppliers</button>
+    </div>
 
     </p>
 
