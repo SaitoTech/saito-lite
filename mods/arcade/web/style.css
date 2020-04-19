@@ -177,15 +177,6 @@ button.add-games {
   height: 25vh;
 }
 
-.arcade-observer-game-row {
-  /* border: 1px solid grey;
-  padding: 10px;
-  margin-top: 10px; */
-  /* border: 1px solid grey; */
-  padding: 10px;
-  margin-bottom: 10px;
-  background: whitesmoke;
-}
 
 #arcade-play-btn {
   padding-bottom: 1.7em;
@@ -411,8 +402,13 @@ button.add-games {
 }
 
 .arcade-observer-game-name {
-  color: black;
-  font-size:1.1em;
+  font-size:1.2em;
+  padding: 3px 0 0 0;
+}
+
+.arcade-observer-game-row {
+  padding: 3px;
+  margin: 3px 0;
 }
 
 .arcade-observer-game-row {}
