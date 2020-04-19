@@ -27,7 +27,7 @@ module.exports = SplashPageAppspace = {
       sum(products.production_daily_capacity) as 'capacity', 
       count(products.id) as 'product_count', 
       group_concat( distinct (" " || certifications.name)) as 'certs', 
-      min(products.pricing_per_unit_public) || ' ~ ' ||  min(products.pricing_per_unit_public) as 'cost' 
+      min(products.pricing_per_unit_public) || ' ~ ' ||  max(products.pricing_per_unit_public) as 'cost' 
     from 
       products JOIN 
       suppliers JOIN 
