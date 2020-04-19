@@ -271,7 +271,7 @@ console.log("loading into Arcade: " + y[i].name);
       "arcade",
       "gamestate",
       "DISTINCT game_id, module, player, players_array",
-      "1 = 1 GROUP BY game_id ORDER BY last_move DESC LIMIT 50",
+      "1 = 1 GROUP BY game_id ORDER BY last_move DESC LIMIT 5",
       null,
       (res) => {
         if (res.rows) {
