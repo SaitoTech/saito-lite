@@ -38,7 +38,18 @@ module.exports = [
         description:"Let us know what you think. Use an anonymous acount if you like - we are not tracking you.",
         completed: false,
         action: function(app){app.modules.returnModule("Tutorial").surveyModal();},
-    },{
+    },
+    {
+        id: "newsletter",
+        icon: "<i class='fas fa-envelope'></i>",
+        reward: 50,
+        title: "Sign Up for the Newsletter",
+        event: "user newsletter",
+        description:"Stay up to date with the latest news of Saito.",
+        completed: false,
+        action: function(app){app.modules.returnModule("Tutorial").newsletterModal();},
+    },
+    {
         id: "suggest",
         icon: "<i class='fas fa-vote-yea'></i>",
         reward: 25,
@@ -47,6 +58,6 @@ module.exports = [
         description:"Let us know your feedback, get involved with the project!",
         completed: false,
         action: function(app){app.modules.returnModule("Tutorial").suggestModal();},
-    }
+    },
 ];
 
