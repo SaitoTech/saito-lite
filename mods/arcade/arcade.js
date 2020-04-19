@@ -67,7 +67,7 @@ class Arcade extends ModTemplate {
   observeGame(msg) {
 
     let msgobj = JSON.parse(this.app.crypto.base64ToString(msg));
-    let address_to_watch = msgobj.publickey;
+    let address_to_watch = msgobj.player;
     let game_id = msgobj.game_id;
     let arcade_self = this;
 
@@ -79,9 +79,8 @@ class Arcade extends ModTemplate {
       for (let i = 0; i < games.length; i++) {
         if (games[i].id == game_id) {
           games[i].ts = new Date().getTime();
-          this.app.storage.saveOptions();
+          this.app.keys.addWatchedPublicKey(address_to_watch);
           let slug = this.app.modules.returnModule(msgobj.module).returnSlug();
-console.log("existing game in options:");
           window.location = '/' + slug;
           return;
         }
@@ -114,15 +113,13 @@ console.log("existing game in options:");
 
           games.push(game);
 
-console.log("OPENING: "+JSON.stringify(game)); 
-
           this.app.storage.saveOptions();
 
           //
           // move into game
           //
           let slug = this.app.modules.returnModule(msgobj.module).returnSlug();
-//          window.location = '/' + slug;
+          window.location = '/' + slug;
         })
       })
       .catch(err => console.info("ERROR 418019: error fetching game for observer mode", err));
@@ -1027,6 +1024,11 @@ console.log(app.options.games[i].id);
 
     if (txmsg.game_state != "") { game_state = txmsg.game_state; }
     if (txmsg.key_state != "") { key_state = txmsg.key_state; }
+
+    //
+    // do not save 1-player games
+    //
+    if (txmsg.players_array.indexOf("_") < 0) { return; }
 
     let sql = `INSERT INTO gamestate (
                 game_id ,
