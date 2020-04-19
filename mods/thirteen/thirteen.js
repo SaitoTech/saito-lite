@@ -1,5 +1,5 @@
 const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
-const GameTemplate = require('../../lib/templates/gametemplate');
+const Gamev2Template = require('../../lib/templates/gamev2template');
 const helpers = require('../../lib/helpers/index');
 
 
@@ -7,7 +7,7 @@ const helpers = require('../../lib/helpers/index');
 //////////////////
 // constructor  //
 //////////////////
-class Thirteen extends GameTemplate {
+class Thirteen extends Gamev2Template {
 
   constructor(app) {
 
@@ -235,8 +235,6 @@ class Thirteen extends GameTemplate {
     }
 
 
-console.log("\n\n\n\nwidth: " + this.boardgamewidth);
-console.log("\n\n\n\nscreen ratio: " + this.screenratio);
     //
     // adjust screen ratio
     //
@@ -290,9 +288,6 @@ console.log("\n\n\n\nscreen ratio: " + this.screenratio);
     for (var i in this.game.flags) {
     
       let divname      = '#'+i;
-
-console.log("divname: " + divname);
-
       $(divname).css('top', this.scale(this.game.flags[i].top)+"px");
       $(divname).css('left', this.scale(this.game.flags[i].left)+"px");
 
@@ -464,8 +459,6 @@ console.log("divname: " + divname);
           }
         }
 
-console.log("player set to: " + this.game.player);
-
         this.game.queue.splice(qe, 1);
 
       }
@@ -513,11 +506,9 @@ console.log("player set to: " + this.game.player);
 	      thirteen_self.addMove("flag\t"+thirteen_self.game.player+"\t" + ac[thirteen_self.game.deck[0].hand[i]].flag);
 	      if (thirteen_self.game.deck[0].hand[i] == card) {
 		if (player == 1) {
-console.log("setting ussr_agenda_selected to " + card);
 		  thirteen_self.game.state.ussr_agenda_selected = card;
 	        }
 		if (player == 2) {
-console.log("setting us_agenda_selected to " + card);
 		  thirteen_self.game.state.us_agenda_selected = card;
 		}
 	      }
@@ -1026,7 +1017,7 @@ console.log("tallying alliances before scoring");
 	this.game.queue.push("move_strategy_card_into_alliances");
 
 	//
-	// pick five Strategy Card s
+	// pick five Strategy Cards
 	//
         if (this.returnInitiative() === "ussr") {
 	  this.game.queue.push("play\t1");
@@ -1506,8 +1497,6 @@ console.log("tallying alliances before scoring");
 
 
   
-
-
 
 
 
@@ -2133,10 +2122,7 @@ console.log("tallying alliances before scoring");
 	      number = max_per_arena;
 	    }
 
-console.log(total_placed + " -- " + number);
-
             if (total_placed >= number) {
-
 	      //
 	      // manipulate defcon
 	      //
@@ -2199,12 +2185,10 @@ console.log(total_placed + " -- " + number);
 
 
   playerTriggerEvent(player, card) {
-
     let strategy_cards = this.returnStrategyCards();
-console.log("playing event 2: " + card);
     strategy_cards[card].event(player);
-
   }
+
 
   playerPlaceCommandTokens(player, card, tokens=-1) {
 
@@ -2370,27 +2354,6 @@ console.log("playing event 2: " + card);
 
 
 
-
-
-
-
-  removeCardFromHand(card) {
-
-    for (i = 0; i < this.game.deck[0].hand.length; i++) {
-      if (this.game.deck[0].hand[i] === card) {
-        this.game.deck[0].hand.splice(i, 1);
-      }
-    }
-    for (i = 0; i < this.game.deck[1].hand.length; i++) {
-      if (this.game.deck[1].hand[i] === card) {
-        this.game.deck[1].hand.splice(i, 1);
-      }
-    }
-
-  }
-
-
-
   returnInitiative() {
     if (this.game.state.prestige_track == 7) {
       return "ussr";
@@ -2520,6 +2483,8 @@ console.log("playing event 2: " + card);
     this.showDefconTracks();
 
   }
+
+
   showInfluence(arena_id) {
 
     let divname = "#"+arena_id;
@@ -2631,41 +2596,6 @@ console.log("playing event 2: " + card);
 
 
  
-
-
-
-  ////////////////////////////
-  // thirteen days specific //
-  ////////////////////////////
-  addMove(mv) {
-    this.moves.push(mv);
-  }
-
-  removeMove() {
-    return this.moves.pop();
-  }
-
-  endTurn(nexttarget=0) {
-
-    if (this.game.player == 1) {
-      this.updateStatus("Waiting for US to move...");
-    } 
-    if (this.game.player == 2) {
-      this.updateStatus("Waiting for USSR to move...");
-    } 
-
-    let cards_in_hand = this.game.deck[0].hand.length;
-
-    let extra = {};
-    this.addMove("setvar\topponent_cards_in_hand\t"+cards_in_hand);
-    this.game.turn = this.moves;
-    this.moves = [];
-    this.sendMessage("game", extra);
-
-    console.log("message sent: " + this.game.queue);
-
-  }
-
 
 
 
@@ -4384,50 +4314,6 @@ console.log("playing event 2: " + card);
 
 
 
-  showCard(cardname) {
-    let card_html = this.returnCardImage(cardname);
-    let cardbox_html = this.app.browser.isMobileBrowser(navigator.userAgent) ?
-      `${card_html}
-        <div id="cardbox-exit-background">
-          <div class="cardbox-exit" id="cardbox-exit">×</div>
-        </div>` : card_html;
-
-    $('#cardbox').html(cardbox_html);
-    $('#cardbox').show();
-  }
-
-  showPlayableCard(cardname) {
-    let card_html = this.returnCardImage(cardname);
-    let cardbox_html = this.app.browser.isMobileBrowser(navigator.userAgent) ?
-      `${card_html}
-      <div id="cardbox-exit-background">
-        <div class="cardbox-exit" id="cardbox-exit">×</div>
-      </div>
-      <div class="cardbox_menu_playcard cardbox_menu_btn" id="cardbox_menu_playcard">
-        PLAY
-      </div>` : card_html;
-
-    $('#cardbox').html(cardbox_html);
-    $('#cardbox').show();
-  }
-
-  hideCard() {
-    $('#cardbox').hide();
-    //$('.cardbox_event_blocker').css('height','0px');
-    //$('.cardbox_event_blocker').css('width','0px');
-    //$('.cardbox_event_blocker').css('display','none');
-  }
-
-
-
-  //
-  // OVERWRITES GAME.JS MODULE TO ADD CARD HOVERING
-  //
-  updateLog(str, length = 150, force=0) {
-    this.hud.updateLog(str, this.addLogCardEvents.bind(this), force);
-  }
-
-
 
   returnGameOptionsHTML() {
 
@@ -4458,7 +4344,7 @@ console.log("playing event 2: " + card);
           new_options[index] = options[index] == "ussr" ? "ussr" : "us";
         }
       } else {
-        new_options[index] = options[index]
+        new_options[index] = options[index];
       }
     }
     return new_options;
@@ -4482,173 +4368,27 @@ console.log("playing event 2: " + card);
 
 
 
-
-  returnCardList(cardarray=[]) {
-
-    let html = "";
-
-    for (i = 0; i < cardarray.length; i++) {
-      html += this.returnCardItem(cardarray[i]);
-    }
-
-    return `<div class="display-cards display-cards-status">${html}</div>`;
-
-  }
-
-
+  //
+  // OVERWRITE Game Library to add personal letter card
+  //
   returnCardItem(card) {
 
     if (card == "personal_letter") {
       return `<div id="personal_letter" class="card cardbox-hud cardbox-hud-status">${this.returnCardImage(card)}<img class="cardimg showcard" id="personal_letter" src="/thirteen/img/Agenda%20Card%2013b.png" /></div>`;
     }
-    if (this.game.deck[0].cards[card] != undefined) {
-      return `<div id="${card.replace(/ /g,'')}" class="card cardbox-hud cardbox-hud-status">${this.returnCardImage(card)}</div>`;
-    }
-    if (this.game.deck[1].cards[card] != undefined) {
-      return `<div id="${card.replace(/ /g,'')}" class="card cardbox-hud cardbox-hud-status">${this.returnCardImage(card)}</div>`;
+    for (let z = 0; z < this.game.deck.length; z++) {
+      if (this.game.deck[0].cards[card] != undefined) {
+        return `<div id="${card.replace(/ /g,'')}" class="card cardbox-hud cardbox-hud-status">${this.returnCardImage(card)}</div>`;
+      }
     }
     return '<li class="card showcard" id="'+card+'">'+this.game.deck[0].cards[card].name+'</li>';
 
   }
 
 
-  returnCardImage(cardname) {
-
-    if (cardname === "personal_letter") { 
-      return `<img class="cardimg showcard" id="personal_letter" src="/thirteen/img/Agenda%20Card%2013b.png" />`;
-    }
-
-    var c = this.game.deck[0].cards[cardname];
-    if (c == undefined) { c = this.game.deck[1].cards[cardname]; }
-    if (c == undefined) { c = this.game.deck[0].discards[cardname]; }
-    if (c == undefined) { c = this.game.deck[0].removed[cardname]; }
-    if (c == undefined) { c = this.game.deck[1].discards[cardname]; }
-    if (c == undefined) { c = this.game.deck[1].removed[cardname]; }
-    if (c == undefined) {
-
-      //
-      // this is not a card, it is something like "skip turn" or cancel
-      //
-      return '<div class="noncard">'+cardname+'</div>';
-
-    }
-
-    return `<img class="cardimg showcard" id="${cardname}" src="/thirteen/img/${c.img}" />`;
-
-  }
-
-
-
-
-  updateStatusAndListCards(message, cards=[], mycallback=null) {
-
-    html = `
-      <div class="cardbox-status-container">
-        <div>${message}</div>
-        ${this.returnCardList(cards)}
-      </div>
-    `
-
-    this.updateStatus(html);
-    this.addShowCardEvents(mycallback);
-  }
-
-
-
-  addShowCardEvents(onCardClickFunction) {
-
-    let thirteen_self = this;
-
-    this.hud.status_callback = () => {
-      let thirteen_self = this;
-      let isMobile = this.app.browser.isMobileBrowser(navigator.userAgent);
-
-      $('.card').off();
-
-      if (!isMobile) {
-
-        $('.showcard').off();
-        $('.showcard').mouseover(function() {
-          let card = $(this).attr("id");
-          thirteen_self.showCard(card);
-        }).mouseout(function() {
-          let card = $(this).attr("id");
-          thirteen_self.hideCard(card);
-        });
-
-      }
-
-      $('.card').on('click', function() {
-        // pass our click option
-        let card = $(this).attr("id");
-        if (onCardClickFunction) { onCardClickFunction(card); }
-        else {
-          if (isMobile) {
-            let card = $(this).attr("id");
-            thirteen_self.showCard(card);
-
-            $('.cardbox-exit').off();
-            $('.cardbox-exit').on('click', function () {
-              thirteen_self.hideCard();
-              $('.cardbox_menu_playcard').css('display','none');
-              $(this).css('display', 'none');
-            });
-          }
-        }
-      });
-    }
-
-    this.hud.status_callback();
-
-  }
-
-
-
-
-
-
-
-  addLogCardEvents() {
-
-    let thirteen_self = this;
-
-    if (!this.app.browser.isMobileBrowser(navigator.userAgent)) {
-
-      $('.logcard').off();
-      $('.logcard').mouseover(function() {
-        let card = $(this).attr("id");
-        thirteen_self.showCard(card);
-      }).mouseout(function() {
-        let card = $(this).attr("id");
-        thirteen_self.hideCard(card);
-      });
-
-    }
-
-  }
-
-
-
   //
+  // OVERWRITE -- to take "us" and "ussr" instead of player_id
   //
-  //
-  returnDiscardedCards(deckidx) {
-
-    var discarded = {};
-    deckidx = parseInt(deckidx-1);
-
-    for (var i in this.game.deck[deckidx].discards) {
-      discarded[i] = this.game.deck[0].cards[i];
-      delete this.game.deck[0].cards[i];
-    }
-
-    this.game.deck[0].discards = {};
-
-    return discarded;
-
-  }
-
-
   endGame(winner, method) {
 
     this.game.over = 1;
@@ -4668,38 +4408,6 @@ console.log("playing event 2: " + card);
       this.updateStatus("<span>The Game is Over</span> - <span>" + winner.toUpperCase() + "</span> <span>wins by</span> <span>" + method + "<span>");
     }
   }
-
-
-
-  addLogCardEvents() {
-
-    let thirteen_self = this;
-
-    if (!this.app.browser.isMobileBrowser(navigator.userAgent)) {
-
-      $('.logcard').off();
-      $('.logcard').mouseover(function() {
-        let card = $(this).attr("id");
-        thirteen_self.showCard(card);
-      }).mouseout(function() {
-        let card = $(this).attr("id");
-        thirteen_self.hideCard(card);
-      });
-
-    }
-
-  }
-
-  //
-  // OVERWRITES GAME.JS MODULE TO ADD CARD HOVERING
-  //
-  updateLog(str, length = 150, force=0) {
-    this.hud.updateLog(str, this.addLogCardEvents.bind(this), force);
-  }
-
-
-
-
 
 
 } // end Thirteen class
