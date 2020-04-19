@@ -4377,11 +4377,11 @@ console.log("tallying alliances before scoring");
       return `<div id="personal_letter" class="card cardbox-hud cardbox-hud-status">${this.returnCardImage(card)}<img class="cardimg showcard" id="personal_letter" src="/thirteen/img/Agenda%20Card%2013b.png" /></div>`;
     }
     for (let z = 0; z < this.game.deck.length; z++) {
-      if (this.game.deck[0].cards[card] != undefined) {
+      if (this.game.deck[z].cards[card] != undefined) {
         return `<div id="${card.replace(/ /g,'')}" class="card cardbox-hud cardbox-hud-status">${this.returnCardImage(card)}</div>`;
       }
     }
-    return '<li class="card showcard" id="'+card+'">'+this.game.deck[0].cards[card].name+'</li>';
+    return '<li class="card showcard" id="'+card+'">'+card+'</li>';
 
   }
 

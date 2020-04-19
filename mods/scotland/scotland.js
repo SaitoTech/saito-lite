@@ -140,11 +140,7 @@ class Scotland extends Gamev2Template {
     //
     // scale graphics
     //
-    $('.location').css('width', this.scale(260)+"px");
-    $('.us').css('width', this.scale(130)+"px");
-    $('.ussr').css('width', this.scale(130)+"px");
-    $('.us').css('height', this.scale(100)+"px");
-    $('.ussr').css('height', this.scale(100)+"px");
+    $('.location').css('width', this.scale(75)+"px");
 
 
 
