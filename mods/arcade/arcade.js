@@ -1025,10 +1025,6 @@ console.log(app.options.games[i].id);
     if (txmsg.game_state != "") { game_state = txmsg.game_state; }
     if (txmsg.key_state != "") { key_state = txmsg.key_state; }
 
-    //
-    // do not save 1-player games
-    //
-    if (txmsg.players_array.indexOf("_") < 0) { return; }
 
     let sql = `INSERT INTO gamestate (
                 game_id ,
@@ -1058,7 +1054,14 @@ console.log(app.options.games[i].id);
     for (let z = 0; z < txto.length; z++) {
       if (!x.includes(txto[z].add)) { x.push(txto[z].add); }
     }
+
+    //
+    // do not save 1-player games
+    //
+    if (x.length == 1) { return; }
+
     let players_array = x.join("_");
+
     let params = {
       $game_id: txmsg.game_id,
       $player: tx.transaction.from[0].add,
@@ -1071,6 +1074,7 @@ console.log(app.options.games[i].id);
       $game_state: JSON.stringify(game_state),
       $last_move: (new Date().getTime())
     };
+
     await app.storage.executeDatabase(sql, params, "arcade");
 
   }
