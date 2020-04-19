@@ -18,16 +18,19 @@ module.exports = SplashPageTemplate = () => {
 
     </p>
 
-    <h3>Product Availability</h3>
+    <div class="summary-section">
 
-    <hr />
+      <h3>Product Availability</h3>
 
-    <div class="product-summary">
-      Loading...
+      <hr />
+
+      <div class="product-summary">
+        Loading...
+      </div>
+
+      <hr />
+  
     </div>
-
-    <hr />
-    
     
     <h3>Who are the people behind this datahub?</h3>
 

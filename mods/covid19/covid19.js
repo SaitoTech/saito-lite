@@ -398,6 +398,7 @@ class Covid19 extends ModTemplate {
 
       if (document.querySelector('.product-summary')) {
         SplashPage.postrender(app, data);
+        SplashPage.attachEvents(app, data);
       };
 
     }
