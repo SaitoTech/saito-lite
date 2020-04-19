@@ -289,7 +289,9 @@ class Leaderboard extends ModTemplate {
         if (obj) { obj.style.display = 'none'; }
       }
       let classn = '.leaderboard_' + this.mods[this.carousel_idx].name;
-      document.querySelector(classn).style.display = 'grid';
+      if(document.querySelector(classn)){
+        document.querySelector(classn).style.display = 'grid';
+      }
       document.querySelector('.leaderboard-game-module').innerHTML = (this.mods[this.carousel_idx].name + ' Leaderboard:');
 
     }, this.carousel_speed);
