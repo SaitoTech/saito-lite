@@ -229,7 +229,7 @@ class Scotland extends Gamev2Template {
 	  //
 	  // Mister X now picks his location (secretly)
 	  //
-          if (this.game.state.player_location[this.game.state.x] = -1;
+          this.game.state.player_location[this.game.state.x] = -1;
 
 	  if (this.game.player == x) {
 
@@ -237,43 +237,22 @@ class Scotland extends Gamev2Template {
 	    // TODO hide Mister X plaement cryptographically
 	    //
 	    let start_pos = this.rollDice(this.game.state.starting_positions.length)-1;
-	    this.game.state.player_location(this.game.state.x] = this.game.state.starting_positions[start_pos];
+	    this.game.state.player_location[this.game.state.x] = this.game.state.starting_positions[start_pos];
 
 	  } else {
 
 	    //
 	    // TODO hide Mister X placement cryptographically
 	    //
-	    this.rollDIce(6);
+	    this.rollDice(6);
 
 	  }
 
         }
 
-	
-	//
-	// pick detective starting positions
-	//
-	for (let i = 0; i < thi
-
 console.log("STARTING STATE: " + JSON.stringify(this.game.state));
 
         this.game.queue.splice(qe, 1);
-
-      }
-
-      if (mv[0] === "request_location") {
-
-        let player = mv[1];
-	let location = mv[2];
-
-      }
-
-
-      if (mv[0] === "location") {
-
-        let player = mv[1];
-	let location = mv[2];
 
       }
 
@@ -429,6 +408,7 @@ console.log("STARTING STATE: " + JSON.stringify(this.game.state));
 
     var state = {};
         state.starting_positions = [13, 26, 29, 34, 50, 53, 91, 94, 103, 112, 117, 132, 138, 141, 155, 174, 197, 198];
+        state.player_location = [];
 	state.roles = [];
 	state.tickets = [];
 	state.x = 0;        // who is Mister X
@@ -449,7 +429,7 @@ console.log("STARTING STATE: " + JSON.stringify(this.game.state));
 
     var locations = {};
 
-    locations['1'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
+    locations['1'] = { top : 570 , left : 520 , taxi : [] , underground : ['46'] , bus : [] , ferry : [] }
     locations['2'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['3'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['4'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
@@ -461,7 +441,7 @@ console.log("STARTING STATE: " + JSON.stringify(this.game.state));
     locations['10'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['11'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['12'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['13'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
+    locations['13'] = { top : 570 , left : 520 , taxi : [] , underground : ['46','67','89'] , bus : [] , ferry : [] }
     locations['14'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['15'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['16'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
@@ -494,7 +474,7 @@ console.log("STARTING STATE: " + JSON.stringify(this.game.state));
     locations['43'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['44'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['45'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['46'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
+    locations['46'] = { top : 570 , left : 520 , taxi : [] , underground : ['1','74','79','13'] , bus : [] , ferry : [] }
     locations['47'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['48'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['49'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
@@ -515,19 +495,19 @@ console.log("STARTING STATE: " + JSON.stringify(this.game.state));
     locations['64'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['65'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['66'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['67'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
+    locations['67'] = { top : 570 , left : 520 , taxi : [] , underground : ['13','89','111','79'] , bus : [] , ferry : [] }
     locations['68'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['69'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['70'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['71'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['72'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['73'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['74'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
+    locations['74'] = { top : 570 , left : 520 , taxi : [] , underground : ['46'] , bus : [] , ferry : [] }
     locations['75'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['76'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['77'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['78'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['79'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
+    locations['79'] = { top : 570 , left : 520 , taxi : [] , underground : ['46','93','67','111'] , bus : [] , ferry : [] }
     locations['80'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['81'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['82'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
@@ -541,7 +521,7 @@ console.log("STARTING STATE: " + JSON.stringify(this.game.state));
     locations['90'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['91'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['92'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['93'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
+    locations['93'] = { top : 570 , left : 520 , taxi : [] , underground : ['79'] , bus : [] , ferry : [] }
     locations['94'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['95'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['96'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
@@ -556,14 +536,14 @@ console.log("STARTING STATE: " + JSON.stringify(this.game.state));
     locations['105'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['106'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['107'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['108'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
+    locations['108'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : ['115'] }
     locations['109'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['110'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['111'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
+    locations['111'] = { top : 570 , left : 520 , taxi : [] , underground : ['79','67','153','163'] , bus : [] , ferry : [] }
     locations['112'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['113'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['114'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['115'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
+    locations['115'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : ['108','157'] }
     locations['116'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['117'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['118'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
@@ -576,7 +556,7 @@ console.log("STARTING STATE: " + JSON.stringify(this.game.state));
     locations['125'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['126'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['127'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['128'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
+    locations['128'] = { top : 570 , left : 520 , taxi : [] , underground : ['185','140','89'] , bus : [] , ferry : [] }
     locations['129'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['130'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['131'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
@@ -588,7 +568,7 @@ console.log("STARTING STATE: " + JSON.stringify(this.game.state));
     locations['137'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['138'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['139'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['140'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
+    locations['140'] = { top : 570 , left : 520 , taxi : [] , underground : ['153','128','89'] , bus : [] , ferry : [] }
     locations['141'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['142'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['143'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
@@ -601,17 +581,17 @@ console.log("STARTING STATE: " + JSON.stringify(this.game.state));
     locations['150'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['151'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['152'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['153'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
+    locations['153'] = { top : 570 , left : 520 , taxi : [] , underground : ['163','111','140','185'] , bus : [] , ferry : [] }
     locations['154'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['155'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['156'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['157'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
+    locations['157'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : ['115','194'] }
     locations['158'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['159'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['160'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['161'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['162'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['163'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
+    locations['163'] = { top : 570 , left : 520 , taxi : [] , underground : ['111','153'] , bus : [] , ferry : [] }
     locations['164'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['165'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['166'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
@@ -633,7 +613,7 @@ console.log("STARTING STATE: " + JSON.stringify(this.game.state));
     locations['182'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['183'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['184'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['185'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
+    locations['185'] = { top : 570 , left : 520 , taxi : [] , underground : ['153','128'] , bus : [] , ferry : [] }
     locations['186'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['187'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['188'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
@@ -642,7 +622,7 @@ console.log("STARTING STATE: " + JSON.stringify(this.game.state));
     locations['191'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['192'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['193'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['194'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
+    locations['194'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : ['157'] }
     locations['195'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['196'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
     locations['197'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
