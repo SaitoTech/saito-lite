@@ -196,8 +196,7 @@ class Scotland extends Gamev2Template {
 	let x = this.rollDice(this.game.players.length);
 
 	for (let i = 0; i < this.game.players.length; i++) {
-	  if (this.game.player == (i+1)) {
-	    if (x == (i+1)) {
+	  if (x == (i+1)) {
 
 	      this.game.state.roles[i] = "Mister X";
 	      this.game.state.x = x;
@@ -209,7 +208,9 @@ class Scotland extends Gamev2Template {
 	      this.game.state.tickets[i]['double'] = 2;
 	      this.game.state.tickets[i]['x'] = this.game.players.length-1;
 
-	    } else {
+	      this.game.state.player_location[i] = -1;
+
+	  } else {
 
 	      this.game.state.roles[i] = "Detective";
 
@@ -223,21 +224,21 @@ class Scotland extends Gamev2Template {
 	      this.game.state.player_location[i] = this.game.state.starting_positions[start_pos];
 	      this.game.state.starting_positions.splice(start_pos, 1);
 
-	    }
 	  }
+
+console.log("PLAHER: " + this.game.player);
+console.log("X: " + x);
 
 	  //
 	  // Mister X now picks his location (secretly)
 	  //
-          this.game.state.player_location[this.game.state.x] = -1;
-
 	  if (this.game.player == x) {
 
 	    //
 	    // TODO hide Mister X plaement cryptographically
 	    //
 	    let start_pos = this.rollDice(this.game.state.starting_positions.length)-1;
-	    this.game.state.player_location[this.game.state.x] = this.game.state.starting_positions[start_pos];
+	    this.game.state.player_location[this.game.state.x-1] = this.game.state.starting_positions[start_pos];
 
 	  } else {
 
