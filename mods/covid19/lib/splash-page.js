@@ -6,7 +6,6 @@ const SupplierProfile = require('./supplier-profile');
 module.exports = SplashPageAppspace = {
 
   render(app, data) {
-
     var this_portal = this;
 
     document.querySelector(".main").innerHTML = SplashPageTemplate();
@@ -86,24 +85,3 @@ module.exports = SplashPageAppspace = {
   }
 
 }
-/*
-select categories.name as 'product', sum(products.production_daily_capacity) as 'capacity', (select group_concat (name) from 
-certifications where id in (1, 3, 5)) as 'Certificates', min(products.pricing_per_unit_public) || ' ~ ' ||  min(products.pricing_per_
-unit_public) as 'cost' from products JOIN suppliers JOIN products_certifications LEFT JOIN categories where suppliers.id = products.s
-upplier_id AND products.category_id = categories.id AND products.id = products_certifications.product_id group by products.category_i
-d
-
-
-
-select categories.name as 'product', sum(products.production_daily_capacity) as 'capacity', group_concat(products_certifications.certification_id) as 'cert_ids', (select group_concat (name) from certifications where id in (select group_concat(products_certifications.certification_id)) as 'Certificates', min(products.pricing_per_unit_public) || ' ~ ' ||  min(products.pricing_per_unit_public) as 'cost' from products JOIN suppliers JOIN products_certifications LEFT JOIN categories where suppliers.id = products.supplier_id AND products.category_id = categories.id AND products.id = products_certifications.product_id group by products.category_id;
-
-
-select categories.name as 'product', sum(products.production_daily_capacity) as 'capacity', (select'certs', min(products.pricing_per_unit_public) || ' ~ ' ||  min(products.pricing_per_unit_public) as 'cost' from products JOIN suppliers LEFT JOIN categories where suppliers.id = products.supplier_id AND products.category_id = categories.id group by products.category_id;
-
-
-select categories.name as 'product', sum(products.production_daily_capacity) as 'capacity', group_concat(products_certifications.certification_id) as 'cert_ids', (select group_concat (name) from certifications where id in (select group_concat(products_certifications.certification_id)) as 'Certificates', min(products.pricing_per_unit_public) || ' ~ ' ||  min(products.pricing_per_unit_public) as 'cost' from products JOIN suppliers JOIN products_certifications JOIN certifications LEFT JOIN categories where suppliers.id = products.supplier_id AND products.category_id = categories.id AND products.id = products_certifications.product_id AND products_certifications.certification_id = certifications.id group by products.category_id;
-
-
-
-select categories.name as 'product', sum(products.production_daily_capacity) as 'capacity', group_concat(distinct(certifications.name)) as 'certs', min(products.pricing_per_unit_public) || ' ~ ' ||  min(products.pricing_per_unit_public) as 'cost' from products JOIN suppliers JOIN products_certifications JOIN certifications LEFT JOIN categories where suppliers.id = products.supplier_id AND products.category_id = categories.id AND products.id = products_certifications.product_id AND products_certifications.certification_id = certifications.id group by products.category_id;
-*/

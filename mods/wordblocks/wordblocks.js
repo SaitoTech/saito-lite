@@ -612,6 +612,7 @@ console.log("INITIALIZE GAME");
 
 
   async addEventsToBoard() {
+    if (this.browser_active == 0) { return; }
     let wordblocks_self = this;
     $('.tosstiles').off();
     $('.tosstiles').on('click', async function () {
@@ -1667,7 +1668,7 @@ console.log("INITIALIZE GAME");
         }
 
         wordblocks_self.game.winner = idx + 1;
-        wordblocks_self.game.over = 1;
+        //wordblocks_self.game.over = 1;
         wordblocks_self.saveGame(wordblocks_self.game.id);
 
         if (wordblocks_self.browser_active == 1) {
@@ -1678,8 +1679,12 @@ console.log("INITIALIZE GAME");
             result = "It's a tie! Well done everyone!";
           }
 
-          wordblocks_self.updateStatus(result);
+          wordblocks_self.updateStatusWithTiles(result);
           wordblocks_self.updateLog(result);
+
+          if(this.game.winner != this.game.player) {
+            this.resignGame();
+          }
         }
 
         this.game.queue.splice(this.game.queue.length - 1, 1);
@@ -1687,7 +1692,6 @@ console.log("INITIALIZE GAME");
       }
 
       if (mv[0] === "endgame") {
-        //this.moves;
         this.game.queue.splice(this.game.queue.length - 1, 1);
         this.addMove("gameover");
         return 1;

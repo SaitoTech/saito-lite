@@ -18,7 +18,9 @@ module.exports = ArcadeMain = {
     let arcade_main = document.querySelector(".arcade-main");
     if (!arcade_main) { return; }
     arcade_main.innerHTML = ArcadeMainTemplate();
+    console.log("Arcade Render");
 
+    console.log("Arcade Games to Process: " + data.arcade.games.length);
     data.arcade.games.forEach(tx => {
 
       console.log("\n\n\nSHOWING GAMES: ");
@@ -152,22 +154,22 @@ module.exports = ArcadeMain = {
 
         if (!accepted_game) { return; }
 
-	//
-	// if there are not enough players, we will join not accept
-	//
+  //
+  // if there are not enough players, we will join not accept
+  //
         let players_needed = parseInt(accepted_game.transaction.msg.players_needed);
         let players_available = accepted_game.transaction.msg.players.length;
         if ( players_needed > (players_available+1) ) {
           let newtx = data.arcade.createJoinTransaction(app, data, accepted_game);
           data.arcade.app.network.propagateTransaction(newtx);
-	  data.arcade.joinGameOnOpenList(newtx);
+          data.arcade.joinGameOnOpenList(newtx);
           salert("Joining game! Please wait a moment");
-	  return;
-	}
+    return;
+  }
 
-	//
-	// we are the final player, but first check we're not accepting our own game
-	//
+  //
+  // we are the final player, but first check we're not accepting our own game
+  //
         if (accepted_game.transaction.from[0].add == app.wallet.returnPublicKey()) {
           let { players } = accepted_game.returnMessage();
           if (players.length > 1) {
@@ -185,7 +187,7 @@ module.exports = ArcadeMain = {
 
           //
           // we are going to send a message to accept this game, but first check if we have
-	  // already done this, in which case we will have the game loaded in our local games list
+          // already done this, in which case we will have the game loaded in our local games list
           //
           if (app.options.games) {
 
@@ -230,9 +232,9 @@ module.exports = ArcadeMain = {
                 return;
               }
 
-	      //
-	      // n > 2 player or game not accepted
-	      //
+        //
+        // n > 2 player or game not accepted
+        //
               if (res.rows.length > 0) {
                 if (res.rows[0].game_still_open == 1 || (res.rows[0].game_still_open == 0 && players_needed > 2)) {
 
@@ -351,7 +353,7 @@ module.exports = ArcadeMain = {
         let my_publickey = app.wallet.returnPublicKey();
 
         for (let i = 0; i < players.length; i++) {
-	        if (players[i] != my_publickey) newtx.transaction.to.push(app.wallet.createSlip(players[i]));
+          if (players[i] != my_publickey) newtx.transaction.to.push(app.wallet.createSlip(players[i]));
         }
 
         let msg = {

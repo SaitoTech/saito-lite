@@ -23,6 +23,8 @@ class Rewards extends ModTemplate {
     this.backupPayout = 50;
     this.registryPayout = 50;
     this.surveyPayout = 50;
+    this.suggestPayout = 25;
+    this.newsletterPayout = 50;
 
     this.referralBonus = 0.1;
 
@@ -91,7 +93,15 @@ class Rewards extends ModTemplate {
 
     if (message.request == "user survey") {
       this.payoutFirstInstance(message.data.key, message.request, this.surveyPayout);
-    }    
+    }
+
+    if (message.request == "user suggest") {
+      this.payoutFirstInstance(message.data.key, message.request, this.suggestPayout);
+    }
+
+    if (message.request == "user newsletter") {
+      this.payoutFirstInstance(message.data.key, message.request, this.newsletterPayout);
+    }
 
     if (message.request == "update activities") {
       var completed = await this.returnEvents(message.data)
@@ -158,8 +168,12 @@ class Rewards extends ModTemplate {
   async returnAchievements(key) {
     let achievements = [];
     let rows = await this.returnEvents(key, false);
-    for (let i = 0; i < rows.length; i++) {
-      achievements.push(this.returnEventRow(rows[i].event));
+    if (rows) {
+      for (let i = 0; i < rows.length; i++) {
+        achievements.push(this.returnEventRow(rows[i].event));
+      }
+    } else {
+      return null;
     }
     let tx_count = await this.returnUserTxCount(key);
     achievements.push(this.returnNumberBadge(tx_count));

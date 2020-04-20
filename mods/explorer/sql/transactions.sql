@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS transactions (
     rebroadcast INTEGER, 
     sig TEXT,
     ts INTEGER,
+    block_ts INTEGER,
     type TEXT,
     tx_from TEXT,
     tx_to TEXT,

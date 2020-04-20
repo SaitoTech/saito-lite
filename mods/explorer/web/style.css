@@ -120,10 +120,9 @@ a.button {
 }
 
 .block-transactions-table {
-    display: grid;
-    grid-template-columns: 1.5em 30em 8em 1.5em;
-    grid-gap: 10px;
-    max-width: 625px;
+  display: grid;
+  grid-template-columns: 2.5em 30em 8em 3em 10em;
+  grid-gap: 10px;
 }
 
 h1, h2, h3, h4, h5 {

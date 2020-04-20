@@ -155,7 +155,7 @@ module.exports = ChatBox = {
             module: "Chat",
             request: "chat message",
             publickey: msg_data.publickey,
-            identicon: identicon,
+            //identicon: identicon,
             group_id: msg_data.group_id,
             message:  msg_data.message,
 

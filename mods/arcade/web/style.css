@@ -177,15 +177,6 @@ button.add-games {
   height: 25vh;
 }
 
-.arcade-observer-game-row {
-  /* border: 1px solid grey;
-  padding: 10px;
-  margin-top: 10px; */
-  /* border: 1px solid grey; */
-  padding: 10px;
-  margin-bottom: 10px;
-  background: whitesmoke;
-}
 
 #arcade-play-btn {
   padding-bottom: 1.7em;
@@ -332,8 +323,7 @@ button.add-games {
 }
 
 .game-wizard-content::-webkit-scrollbar { /* WebKit */
-  width: 0;
-  height: 0;
+  width: 3;
 }
 
 .game-wizard-form {
@@ -405,13 +395,21 @@ button.add-games {
 }
 
 .arcade-observer-game-players-identicon {
-  height: 60px;
-  width: 60px;
+  height: 24px;
+  width: 24px;
   float: right;
   margin-left: 8px;
 }
 
-.arcade-observer-game-name {}
+.arcade-observer-game-name {
+  font-size:1.2em;
+  padding: 3px 0 0 0;
+}
+
+.arcade-observer-game-row {
+  padding: 3px;
+  margin: 3px 0;
+}
 
 .arcade-observer-game-row {}
 
