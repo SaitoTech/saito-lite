@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS suppliers (
   email VARCHAR(255) ,
   wechat VARCHAR(255) ,
   notes TEXT , 
+  deleted INTEGER default 0,
   PRIMARY KEY(id ASC)
 );
 

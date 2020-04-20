@@ -24,6 +24,8 @@ CREATE TABLE IF NOT EXISTS products (
   production_stock VARCHAR(255) ,
   production_daily_capacity VARCHAR(255) ,
   production_minimum_order VARCHAR(255) ,
+
+  deleted INTEGER default 0,
  
   PRIMARY KEY(id ASC)
 );

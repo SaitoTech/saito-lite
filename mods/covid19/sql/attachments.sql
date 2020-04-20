@@ -8,6 +8,8 @@ CREATE TABLE IF NOT EXISTS attachments (
   attachment_type VARCHAR(255) DEFAULT "",
   attachment_data BLOB DEFAULT "",
 
+  deleted INTEGER default 0,
+
   PRIMARY KEY(id ASC)
 );
 
