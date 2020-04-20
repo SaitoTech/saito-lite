@@ -25,6 +25,7 @@
 
 .location {
  position: absolute;
+ opacity: 0.6;
  background-color: red;
  height: 75px;
  width: 75px;
