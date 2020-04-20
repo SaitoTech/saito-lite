@@ -190,7 +190,6 @@ class Scotland extends Gamev2Template {
       //
       // init
       // round
-      // notify
       // move
       //
       if (mv[0] == "init") {
@@ -287,12 +286,6 @@ class Scotland extends Gamev2Template {
       }
 
 
-      if (mv[0] === "notify") {
-        this.updateLog(mv[1]);
-        this.game.queue.splice(qe, 1);
-      }
-
-
       if (mv[0] == "round") {
 
 	this.updateLog("Starting Round");
@@ -355,8 +348,29 @@ class Scotland extends Gamev2Template {
   }
 
 
-  returnInstructions(player) {
 
+
+  playerTurn(player) {
+
+    let scotland_self = this;
+
+    //
+    // prep the board
+    //
+    this.removeEventsFromBoard();
+
+    //
+    // inactive player
+    //
+    if (player != this.game.player) {
+      this.updateStatus("Waiting for Player " + this.game.player);
+      return 0;
+    }
+
+
+    //
+    // generate instructions and print to HUD
+    //
     let html = 'You have ';
 
     let comma = 0;
@@ -391,29 +405,8 @@ class Scotland extends Gamev2Template {
     } else {
       html += '<p></p>Click on the location in the city to which you would like to head!';
     }
+    this.updateStatus(html);
 
-    return html;
-  }
-
-
-  playerTurn(player) {
-
-    let scotland_self = this;
-
-    //
-    // prep the board
-    //
-    this.removeEventsFromBoard();
-
-    //
-    // inactive player
-    //
-    if (player != this.game.player) {
-      this.updateStatus("Waiting for Player " + this.game.player);
-      return 0;
-    }
-
-    this.updateStatus(this.returnInstructions(player));
 
     //
     // attach events
@@ -421,15 +414,13 @@ class Scotland extends Gamev2Template {
     $('.location').off();
     let mylocation = this.game.state.locations[this.game.state.player_location[this.game.player-1]];
 
-console.log(JSON.stringify(mylocation));
-
     if (this.game.state.tickets[player-1]['taxi'] > 0) {
       for (let z = 0; z < mylocation.taxi.length; z++) {
 	let divname = '#' + mylocation.taxi[z];
 	$(divname).on('click', function() {
 	  let target_id = $(this).attr("id");
 	  scotland_self.movePlayer(player, target_id, "taxi");
-        }
+        });
       }
     }
 
@@ -439,7 +430,7 @@ console.log(JSON.stringify(mylocation));
 	$(divname).on('click', function() {
 	  let target_id = $(this).attr("id");
 	  scotland_self.movePlayer(player, target_id, "bus");
-        }
+        });
       }
     }
 
@@ -449,7 +440,7 @@ console.log(JSON.stringify(mylocation));
 	$(divname).on('click', function() {
 	  let target_id = $(this).attr("id");
 	  scotland_self.movePlayer(player, target_id, "underground");
-        }
+        });
       }
     }
 
@@ -459,7 +450,7 @@ console.log(JSON.stringify(mylocation));
 	$(divname).on('click', function() {
 	  let target_id = $(this).attr("id");
 	  scotland_self.movePlayer(player, target_id, "ferry");
-        }
+        });
       }
     }
   }
@@ -543,240 +534,207 @@ console.log(JSON.stringify(mylocation));
 
     var locations = {};
 
-    locations['1'] = { top : 570 , left : 520 , taxi : [] , underground : ['46'] , bus : ['58','46'] , ferry : [] }
-    locations['2'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['3'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['4'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['5'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['6'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['7'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['42'] , ferry : [] }
-    locations['8'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['9'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['10'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['11'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['12'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['13'] = { top : 570 , left : 520 , taxi : [] , underground : ['46','67','89'] , bus : ['23','14','52'] , ferry : [] }
-    locations['14'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['13','15'] , ferry : [] }
-    locations['15'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['14','41'] , ferry : [] }
-    locations['16'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['17'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['18'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['19'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['20'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['21'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['22'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['23','3','34','65'] , ferry : [] }
-    locations['23'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['3','13','22','67'] , ferry : [] }
-    locations['24'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['25'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['26'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['27'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['28'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['29'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['42','55','41','15'] , ferry : [] }
-    locations['30'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['31'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['32'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['33'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['34'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['22','63','46'] , ferry : [] }
-    locations['35'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['36'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['37'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['38'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['39'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['40'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['41'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['42'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['72','7','29'] , ferry : [] }
-    locations['43'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['44'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['45'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['46'] = { top : 570 , left : 520 , taxi : [] , underground : ['1','74','79','13'] , bus : [] , ferry : [] }
-    locations['47'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['48'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['49'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['50'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['51'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['52'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['41','13','86','67'] , ferry : [] }
-    locations['53'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['54'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['55'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['29','89'] , ferry : [] }
-    locations['56'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['57'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['58'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['1','46','74','77'] , ferry : [] }
-    locations['59'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['60'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['61'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['62'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['63'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['65','34','79','100'] , ferry : [] }
-    locations['64'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['65'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['22','67','82','63'] , ferry : [] }
-    locations['66'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['67'] = { top : 570 , left : 520 , taxi : [] , underground : ['13','89','111','79'] , bus : [] , ferry : [] }
-    locations['68'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['69'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['70'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['71'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['72'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['107','105','42'] , ferry : [] }
-    locations['73'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['74'] = { top : 570 , left : 520 , taxi : [] , underground : ['46'] , bus : ['58','94'] , ferry : [] }
-    locations['75'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['76'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['77'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['58','94','78','124'] , ferry : [] }
-    locations['78'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['77','46','79''] , ferry : [] }
-    locations['79'] = { top : 570 , left : 520 , taxi : [] , underground : ['46','93','67','111'] , bus : ['78','63'] , ferry : [] }
-    locations['80'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['81'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['82'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['65','67','100','140'] , ferry : [] }
-    locations['83'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['84'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['85'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['86'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['52','87','116','102'] , ferry : [] }
-    locations['87'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['105,'41','86'] , ferry : [] }
-    locations['88'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['89'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['55','105'] , ferry : [] }
-    locations['90'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['91'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['92'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['93'] = { top : 570 , left : 520 , taxi : [] , underground : ['79'] , bus : ['94'] , ferry : [] }
-    locations['94'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['74','93','77'] , ferry : [] }
-    locations['95'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['96'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['97'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['98'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['99'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['100'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['111','63','82'] , ferry : [] }
-    locations['101'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['102'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['103'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['104'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['105'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['108','107','87','89','72'] , ferry : [] }
-    locations['106'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['107'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['105','72','161'] , ferry : [] }
-    locations['108'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['116','135','105'] , ferry : ['115'] }
-    locations['109'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['110'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['111'] = { top : 570 , left : 520 , taxi : [] , underground : ['79','67','153','163'] , bus : ['124','100'] , ferry : [] }
-    locations['112'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['113'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['114'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['115'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : ['108','157'] }
-    locations['116'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['127','86','142','108'] , ferry : [] }
-    locations['117'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['118'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['119'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['120'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['121'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['122'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['123','144'] , ferry : [] }
-    locations['123'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['124','122','185','144'] , ferry : [] }
-    locations['124'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['77','111','123','153'] , ferry : [] }
-    locations['125'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['126'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['127'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['133','116','102''] , ferry : [] }
-    locations['128'] = { top : 570 , left : 520 , taxi : [] , underground : ['185','140','89'] , bus : ['142','135','161','187','199'] , ferry : [] }
-    locations['129'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['130'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['131'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['132'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['133'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['140','157','127'] , ferry : [] }
-    locations['134'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['135'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['108','161','128'] , ferry : [] }
-    locations['136'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['137'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['138'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['139'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['140'] = { top : 570 , left : 520 , taxi : [] , underground : ['153','128','89'] , bus : ['82','133','154','156'] , ferry : [] }
-    locations['141'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['142'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['157','128','116'] , ferry : [] }
-    locations['143'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['144'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['122','123','163'] , ferry : [] }
-    locations['145'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['146'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['147'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['148'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['149'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['150'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['151'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['152'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['153'] = { top : 570 , left : 520 , taxi : [] , underground : ['163','111','140','185'] , bus : ['124','165','154','184','180'] , ferry : [] }
-    locations['154'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['153','140','156'] , ferry : [] }
-    locations['155'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['156'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['154','140','157','184'] , ferry : [] }
-    locations['157'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['156','133','142','185'] , ferry : ['115','194'] }
-    locations['158'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['159'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['160'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['161'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['128','199','135','107'] , ferry : [] }
-    locations['162'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['163'] = { top : 570 , left : 520 , taxi : [] , underground : ['111','153'] , bus : ['144','176','191'] , ferry : [] }
-    locations['164'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['165'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['191','180','123'] , ferry : [] }
-    locations['166'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['167'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['168'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['169'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['170'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['171'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['172'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['173'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['174'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['175'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['176'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['163','190'] , ferry : [] }
-    locations['177'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['178'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['179'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['180'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['165','190','184','153'] , ferry : [] }
-    locations['181'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['182'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['183'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['184'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['180','153','156','185'] , ferry : [] }
-    locations['185'] = { top : 570 , left : 520 , taxi : [] , underground : ['153','128'] , bus : ['184','157','187'] , ferry : [] }
-    locations['186'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['187'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['185','128'] , ferry : [] }
-    locations['188'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['189'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['190'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['176','191','180'] , ferry : [] }
-    locations['191'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['190','163','165'] , ferry : [] }
-    locations['192'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['193'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['194'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : ['157'] }
-    locations['195'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['196'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['197'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['198'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : [] , ferry : [] }
-    locations['199'] = { top : 570 , left : 520 , taxi : [] , underground : [] , bus : ['161','128'] , ferry : [] }
+    locations['1'] = { top : 570 , left : 520 , taxi : ['8','9'] , underground : ['46'] , bus : ['58','46'] , ferry : [] }
+    locations['2'] = { top : 570 , left : 520 , taxi : ['20','10'] , underground : [] , bus : [] , ferry : [] }
+    locations['3'] = { top : 570 , left : 520 , taxi : ['11','12','4'] , underground : [] , bus : [] , ferry : [] }
+    locations['4'] = { top : 570 , left : 520 , taxi : ['3','13'] , underground : [] , bus : [] , ferry : [] }
+    locations['5'] = { top : 570 , left : 520 , taxi : ['15','16'] , underground : [] , bus : [] , ferry : [] }
+    locations['6'] = { top : 570 , left : 520 , taxi : ['29','7'] , underground : [] , bus : [] , ferry : [] }
+    locations['7'] = { top : 570 , left : 520 , taxi : ['6','17'] , underground : [] , bus : ['42'] , ferry : [] }
+    locations['8'] = { top : 570 , left : 520 , taxi : ['1','18','19'] , underground : [] , bus : [] , ferry : [] }
+    locations['9'] = { top : 570 , left : 520 , taxi : ['1','19','20'] , underground : [] , bus : [] , ferry : [] }
+    locations['10'] = { top : 570 , left : 520 , taxi : ['2','24',31','11'] , underground : [] , bus : [] , ferry : [] }
+    locations['11'] = { top : 570 , left : 520 , taxi : ['10','3','22'] , underground : [] , bus : [] , ferry : [] }
+    locations['12'] = { top : 570 , left : 520 , taxi : ['3','23'] , underground : [] , bus : [] , ferry : [] }
+    locations['13'] = { top : 570 , left : 520 , taxi : ['4','23'] , underground : ['46','67','89'] , bus : ['23','14','52'] , ferry : [] }
+    locations['14'] = { top : 570 , left : 520 , taxi : ['15','25'] , underground : [] , bus : ['13','15'] , ferry : [] }
+    locations['15'] = { top : 570 , left : 520 , taxi : ['14','5','16','28','26'] , underground : [] , bus : ['14','41'] , ferry : [] }
+    locations['16'] = { top : 570 , left : 520 , taxi : ['15','5','28','29'] , underground : [] , bus : [] , ferry : [] }
+    locations['17'] = { top : 570 , left : 520 , taxi : ['29','7','30'] , underground : [] , bus : [] , ferry : [] }
+    locations['18'] = { top : 570 , left : 520 , taxi : ['43','31','8'] , underground : [] , bus : [] , ferry : [] }
+    locations['19'] = { top : 570 , left : 520 , taxi : ['8','9','32'] , underground : [] , bus : [] , ferry : [] }
+    locations['20'] = { top : 570 , left : 520 , taxi : ['2','9','33'] , underground : [] , bus : [] , ferry : [] }
+    locations['21'] = { top : 570 , left : 520 , taxi : ['33','10'] , underground : [] , bus : [] , ferry : [] }
+    locations['22'] = { top : 570 , left : 520 , taxi : ['34','11','23','35'] , underground : [] , bus : ['23','3','34','65'] , ferry : [] }
+    locations['23'] = { top : 570 , left : 520 , taxi : ['22','12','13','37'] , underground : [] , bus : ['3','13','22','67'] , ferry : [] }
+    locations['24'] = { top : 570 , left : 520 , taxi : ['13','37','38'] , underground : [] , bus : [] , ferry : [] }
+    locations['25'] = { top : 570 , left : 520 , taxi : ['14','38','39'] , underground : [] , bus : [] , ferry : [] }
+    locations['26'] = { top : 570 , left : 520 , taxi : ['15','27','39'] , underground : [] , bus : [] , ferry : [] }
+    locations['27'] = { top : 570 , left : 520 , taxi : ['26','28','40'] , underground : [] , bus : [] , ferry : [] }
+    locations['28'] = { top : 570 , left : 520 , taxi : ['15','16','27','41'] , underground : [] , bus : [] , ferry : [] }
+    locations['29'] = { top : 570 , left : 520 , taxi : ['6','16','17','41','42'] , underground : [] , bus : ['42','55','41','15'] , ferry : [] }
+    locations['30'] = { top : 570 , left : 520 , taxi : ['17','42'] , underground : [] , bus : [] , ferry : [] }
+    locations['31'] = { top : 570 , left : 520 , taxi : ['18','43','44'] , underground : [] , bus : [] , ferry : [] }
+    locations['32'] = { top : 570 , left : 520 , taxi : ['19','33','44','45'] , underground : [] , bus : [] , ferry : [] }
+    locations['33'] = { top : 570 , left : 520 , taxi : ['20','32','46','21'] , underground : [] , bus : [] , ferry : [] }
+    locations['34'] = { top : 570 , left : 520 , taxi : ['10','22','47','48'] , underground : [] , bus : ['22','63','46'] , ferry : [] }
+    locations['35'] = { top : 570 , left : 520 , taxi : ['22','48','36','65'] , underground : [] , bus : [] , ferry : [] }
+    locations['36'] = { top : 570 , left : 520 , taxi : ['35','37','49'] , underground : [] , bus : [] , ferry : [] }
+    locations['37'] = { top : 570 , left : 520 , taxi : ['23','24','36','50'] , underground : [] , bus : [] , ferry : [] }
+    locations['38'] = { top : 570 , left : 520 , taxi : ['24','25',50','51'] , underground : [] , bus : [] , ferry : [] }
+    locations['39'] = { top : 570 , left : 520 , taxi : ['25','26','51','52'] , underground : [] , bus : [] , ferry : [] }
+    locations['40'] = { top : 570 , left : 520 , taxi : ['27','41','52','53'] , underground : [] , bus : [] , ferry : [] }
+    locations['41'] = { top : 570 , left : 520 , taxi : ['28','29','40','54'] , underground : [] , bus : [] , ferry : [] }
+    locations['42'] = { top : 570 , left : 520 , taxi : ['29','30','56','72'] , underground : [] , bus : ['72','7','29'] , ferry : [] }
+    locations['43'] = { top : 570 , left : 520 , taxi : ['18','31','57'] , underground : [] , bus : [] , ferry : [] }
+    locations['44'] = { top : 570 , left : 520 , taxi : ['31','32','58'] , underground : [] , bus : [] , ferry : [] }
+    locations['45'] = { top : 570 , left : 520 , taxi : ['32','46','60','58','59'] , underground : [] , bus : [] , ferry : [] }
+    locations['46'] = { top : 570 , left : 520 , taxi : ['33','47',''61','45'] , underground : ['1','74','79','13'] , bus : [] , ferry : [] }
+    locations['47'] = { top : 570 , left : 520 , taxi : ['46','34','62'] , underground : [] , bus : [] , ferry : [] }
+    locations['48'] = { top : 570 , left : 520 , taxi : ['34','35','63','62'] , underground : [] , bus : [] , ferry : [] }
+    locations['49'] = { top : 570 , left : 520 , taxi : ['36','50','66'] , underground : [] , bus : [] , ferry : [] }
+    locations['50'] = { top : 570 , left : 520 , taxi : ['49','37','38'] , underground : [] , bus : [] , ferry : [] }
+    locations['51'] = { top : 570 , left : 520 , taxi : ['67','38','39','52','66'] , underground : [] , bus : [] , ferry : [] }
+    locations['52'] = { top : 570 , left : 520 , taxi : ['51','39','40','69'] , underground : [] , bus : ['41','13','86','67'] , ferry : [] }
+    locations['53'] = { top : 570 , left : 520 , taxi : ['69','40','54'] , underground : [] , bus : [] , ferry : [] }
+    locations['54'] = { top : 570 , left : 520 , taxi : ['53','41','55','70'] , underground : [] , bus : [] , ferry : [] }
+    locations['55'] = { top : 570 , left : 520 , taxi : ['54','71'] , underground : [] , bus : ['29','89'] , ferry : [] }
+    locations['56'] = { top : 570 , left : 520 , taxi : ['42','91'] , underground : [] , bus : [] , ferry : [] }
+    locations['57'] = { top : 570 , left : 520 , taxi : ['43','73','58'] , underground : [] , bus : [] , ferry : [] }
+    locations['58'] = { top : 570 , left : 520 , taxi : ['57','44','45','59'] , underground : [] , bus : ['1','46','74','77'] , ferry : [] }
+    locations['59'] = { top : 570 , left : 520 , taxi : ['75','58','45','76'] , underground : [] , bus : [] , ferry : [] }
+    locations['60'] = { top : 570 , left : 520 , taxi : ['45'.'76'.'61'] , underground : [] , bus : [] , ferry : [] }
+    locations['61'] = { top : 570 , left : 520 , taxi : ['76','60','78','46','62'] , underground : [] , bus : [] , ferry : [] }
+    locations['62'] = { top : 570 , left : 520 , taxi : ['61','47','48','79'] , underground : [] , bus : [] , ferry : [] }
+    locations['63'] = { top : 570 , left : 520 , taxi : ['79','80','64','48'] , underground : [] , bus : ['65','34','79','100'] , ferry : [] }
+    locations['64'] = { top : 570 , left : 520 , taxi : ['63','65',81'] , underground : [] , bus : [] , ferry : [] }
+    locations['65'] = { top : 570 , left : 520 , taxi : ['35','82','64','66'] , underground : [] , bus : ['22','67','82','63'] , ferry : [] }
+    locations['66'] = { top : 570 , left : 520 , taxi : ['65','67','49','82'] , underground : [] , bus : [] , ferry : [] }
+    locations['67'] = { top : 570 , left : 520 , taxi : ['66','68','51','84'] , underground : ['13','89','111','79'] , bus : [] , ferry : [] }
+    locations['68'] = { top : 570 , left : 520 , taxi : ['51','67','68','85'] , underground : [] , bus : [] , ferry : [] }
+    locations['69'] = { top : 570 , left : 520 , taxi : ['68','53','52','86'] , underground : [] , bus : [] , ferry : [] }
+    locations['70'] = { top : 570 , left : 520 , taxi : ['54','71','87'] , underground : [] , bus : [] , ferry : [] }
+    locations['71'] = { top : 570 , left : 520 , taxi : ['70'.'55'.'89'.'72'] , underground : [] , bus : [] , ferry : [] }
+    locations['72'] = { top : 570 , left : 520 , taxi : ['71','42','90','91'] , underground : [] , bus : ['107','105','42'] , ferry : [] }
+    locations['73'] = { top : 570 , left : 520 , taxi : ['57','92','74'] , underground : [] , bus : [] , ferry : [] }
+    locations['74'] = { top : 570 , left : 520 , taxi : ['73','92','58','75'] , underground : ['46'] , bus : ['58','94'] , ferry : [] }
+    locations['75'] = { top : 570 , left : 520 , taxi : ['74','58','59','94'] , underground : [] , bus : [] , ferry : [] }
+    locations['76'] = { top : 570 , left : 520 , taxi : ['59','77','60','61'] , underground : [] , bus : [] , ferry : [] }
+    locations['77'] = { top : 570 , left : 520 , taxi : ['95','76','78','96'] , underground : [] , bus : ['58','94','78','124'] , ferry : [] }
+    locations['78'] = { top : 570 , left : 520 , taxi : ['77','61','79','97'] , underground : [] , bus : ['77','46','79''] , ferry : [] }
+    locations['79'] = { top : 570 , left : 520 , taxi : ['78','62','63','98'] , underground : ['46','93','67','111'] , bus : ['78','63'] , ferry : [] }
+    locations['80'] = { top : 570 , left : 520 , taxi : ['63','99','100'] , underground : [] , bus : [] , ferry : [] }
+    locations['81'] = { top : 570 , left : 520 , taxi : ['64','100','82'] , underground : [] , bus : [] , ferry : [] }
+    locations['82'] = { top : 570 , left : 520 , taxi : ['81','65','66','101'] , underground : [] , bus : ['65','67','100','140'] , ferry : [] }
+    locations['83'] = { top : 570 , left : 520 , taxi : ['101','102'] , underground : [] , bus : [] , ferry : [] }
+    locations['84'] = { top : 570 , left : 520 , taxi : ['67','85'] , underground : [] , bus : [] , ferry : [] }
+    locations['85'] = { top : 570 , left : 520 , taxi : ['84','68','103'] , underground : [] , bus : [] , ferry : [] }
+    locations['86'] = { top : 570 , left : 520 , taxi : ['69','103','104'] , underground : [] , bus : ['52','87','116','102'] , ferry : [] }
+    locations['87'] = { top : 570 , left : 520 , taxi : ['70','88'] , underground : [] , bus : ['105,'41','86'] , ferry : [] }
+    locations['88'] = { top : 570 , left : 520 , taxi : ['87','89','117'] , underground : [] , bus : [] , ferry : [] }
+    locations['89'] = { top : 570 , left : 520 , taxi : ['88','71','105'] , underground : [] , bus : ['55','105'] , ferry : [] }
+    locations['90'] = { top : 570 , left : 520 , taxi : ['72','91','105'] , underground : [] , bus : [] , ferry : [] }
+    locations['91'] = { top : 570 , left : 520 , taxi : ['56','72','90','105','107'] , underground : [] , bus : [] , ferry : [] }
+    locations['92'] = { top : 570 , left : 520 , taxi : ['73','74','93'] , underground : [] , bus : [] , ferry : [] }
+    locations['93'] = { top : 570 , left : 520 , taxi : ['92','94'] , underground : ['79'] , bus : ['94'] , ferry : [] }
+    locations['94'] = { top : 570 , left : 520 , taxi : ['75','93','95'] , underground : [] , bus : ['74','93','77'] , ferry : [] }
+    locations['95'] = { top : 570 , left : 520 , taxi : ['94','77','122'] , underground : [] , bus : [] , ferry : [] }
+    locations['96'] = { top : 570 , left : 520 , taxi : ['77','97','109'] , underground : [] , bus : [] , ferry : [] }
+    locations['97'] = { top : 570 , left : 520 , taxi : ['78','96','98','109'] , underground : [] , bus : [] , ferry : [] }
+    locations['98'] = { top : 570 , left : 520 , taxi : ['97','79','99','110'] , underground : [] , bus : [] , ferry : [] }
+    locations['99'] = { top : 570 , left : 520 , taxi : ['80','98','110','112'] , underground : [] , bus : [] , ferry : [] }
+    locations['100'] = { top : 570 , left : 520 , taxi : ['80','81','101','112','113'] , underground : [] , bus : ['111','63','82'] , ferry : [] }
+    locations['101'] = { top : 570 , left : 520 , taxi : ['100','82','83','114'] , underground : [] , bus : [] , ferry : [] }
+    locations['102'] = { top : 570 , left : 520 , taxi : ['83','115','103'] , underground : [] , bus : [] , ferry : [] }
+    locations['103'] = { top : 570 , left : 520 , taxi : ['102','85','86'] , underground : [] , bus : [] , ferry : [] }
+    locations['104'] = { top : 570 , left : 520 , taxi : ['86','116'] , underground : [] , bus : [] , ferry : [] }
+    locations['105'] = { top : 570 , left : 520 , taxi : ['89','90','106','108','91'] , underground : [] , bus : ['108','107','87','89','72'] , ferry : [] }
+    locations['106'] = { top : 570 , left : 520 , taxi : ['105','107'] , underground : [] , bus : [] , ferry : [] }
+    locations['107'] = { top : 570 , left : 520 , taxi : ['91','106','119'] , underground : [] , bus : ['105','72','161'] , ferry : [] }
+    locations['108'] = { top : 570 , left : 520 , taxi : ['105','117','119'] , underground : [] , bus : ['116','135','105'] , ferry : ['115'] }
+    locations['109'] = { top : 570 , left : 520 , taxi : ['96','97','110','124'] , underground : [] , bus : [] , ferry : [] }
+    locations['110'] = { top : 570 , left : 520 , taxi : ['98','99','109','111'] , underground : [] , bus : [] , ferry : [] }
+    locations['111'] = { top : 570 , left : 520 , taxi : ['124','110','112'] , underground : ['79','67','153','163'] , bus : ['124','100'] , ferry : [] }
+    locations['112'] = { top : 570 , left : 520 , taxi : ['111','99','100','125'] , underground : [] , bus : [] , ferry : [] }
+    locations['113'] = { top : 570 , left : 520 , taxi : ['100','114','125'] , underground : [] , bus : [] , ferry : [] }
+    locations['114'] = { top : 570 , left : 520 , taxi : ['113','101','115','126','132'] , underground : [] , bus : [] , ferry : [] }
+    locations['115'] = { top : 570 , left : 520 , taxi : ['114','102',126','127'] , underground : [] , bus : [] , ferry : ['108','157'] }
+    locations['116'] = { top : 570 , left : 520 , taxi : ['104','117','118',127] , underground : [] , bus : ['127','86','142','108'] , ferry : [] }
+    locations['117'] = { top : 570 , left : 520 , taxi : ['88','116','108','129'] , underground : [] , bus : [] , ferry : [] }
+    locations['118'] = { top : 570 , left : 520 , taxi : ['116','134','129','142'] , underground : [] , bus : [] , ferry : [] }
+    locations['119'] = { top : 570 , left : 520 , taxi : ['108','107','136'] , underground : [] , bus : [] , ferry : [] }
+    locations['120'] = { top : 570 , left : 520 , taxi : ['121','144'] , underground : [] , bus : [] , ferry : [] }
+    locations['121'] = { top : 570 , left : 520 , taxi : ['120','122','145'] , underground : [] , bus : [] , ferry : [] }
+    locations['122'] = { top : 570 , left : 520 , taxi : ['95','121','123','146'] , underground : [] , bus : ['123','144'] , ferry : [] }
+    locations['123'] = { top : 570 , left : 520 , taxi : ['122','124','137','148',149'] , underground : [] , bus : ['124','122','185','144'] , ferry : [] }
+    locations['124'] = { top : 570 , left : 520 , taxi : ['109','123','138','111','130'] , underground : [] , bus : ['77','111','123','153'] , ferry : [] }
+    locations['125'] = { top : 570 , left : 520 , taxi : ['112','113','131'] , underground : [] , bus : [] , ferry : [] }
+    locations['126'] = { top : 570 , left : 520 , taxi : ['114','132','115','127','140'] , underground : [] , bus : [] , ferry : [] }
+    locations['127'] = { top : 570 , left : 520 , taxi : ['126','117','116','133','134'] , underground : [] , bus : ['133','116','102''] , ferry : [] }
+    locations['128'] = { top : 570 , left : 520 , taxi : ['172','188','160','142','143'] , underground : ['185','140','89'] , bus : ['142','135','161','187','199'] , ferry : [] }
+    locations['129'] = { top : 570 , left : 520 , taxi : ['117','118','142','143','135'] , underground : [] , bus : [] , ferry : [] }
+    locations['130'] = { top : 570 , left : 520 , taxi : ['124','131','139'] , underground : [] , bus : [] , ferry : [] }
+    locations['131'] = { top : 570 , left : 520 , taxi : ['125','130','114'] , underground : [] , bus : [] , ferry : [] }
+    locations['132'] = { top : 570 , left : 520 , taxi : ['140','114','126'] , underground : [] , bus : [] , ferry : [] }
+    locations['133'] = { top : 570 , left : 520 , taxi : ['140','141','127'] , underground : [] , bus : ['140','157','127'] , ferry : [] }
+    locations['134'] = { top : 570 , left : 520 , taxi : ['141','142','127','118'] , underground : [] , bus : [] , ferry : [] }
+    locations['135'] = { top : 570 , left : 520 , taxi : ['129','143','161','136'] , underground : [] , bus : ['108','161','128'] , ferry : [] }
+    locations['136'] = { top : 570 , left : 520 , taxi : ['135','119','162'] , underground : [] , bus : [] , ferry : [] }
+    locations['137'] = { top : 570 , left : 520 , taxi : ['123','147'] , underground : [] , bus : [] , ferry : [] }
+    locations['138'] = { top : 570 , left : 520 , taxi : ['124','150','152'] , underground : [] , bus : [] , ferry : [] }
+    locations['139'] = { top : 570 , left : 520 , taxi : ['130','154','153'] , underground : [] , bus : [] , ferry : [] }
+    locations['140'] = { top : 570 , left : 520 , taxi : ['139','132','133','126','154','156'] , underground : ['153','128','89'] , bus : ['82','133','154','156'] , ferry : [] }
+    locations['141'] = { top : 570 , left : 520 , taxi : ['133','134','142','158'] , underground : [] , bus : [] , ferry : [] }
+    locations['142'] = { top : 570 , left : 520 , taxi : ['141','134','118','129','143','128','158'] , underground : [] , bus : ['157','128','116'] , ferry : [] }
+    locations['143'] = { top : 570 , left : 520 , taxi : ['142','129','135','160','128'] , underground : [] , bus : [] , ferry : [] }
+    locations['144'] = { top : 570 , left : 520 , taxi : ['120','145','177'] , underground : [] , bus : ['122','123','163'] , ferry : [] }
+    locations['145'] = { top : 570 , left : 520 , taxi : ['121','144','146'] , underground : [] , bus : [] , ferry : [] }
+    locations['146'] = { top : 570 , left : 520 , taxi : ['122','145','147','163'] , underground : [] , bus : [] , ferry : [] }
+    locations['147'] = { top : 570 , left : 520 , taxi : ['146','137','164'] , underground : [] , bus : [] , ferry : [] }
+    locations['148'] = { top : 570 , left : 520 , taxi : ['123','149','164'] , underground : [] , bus : [] , ferry : [] }
+    locations['149'] = { top : 570 , left : 520 , taxi : ['123','150','165','148'] , underground : [] , bus : [] , ferry : [] }
+    locations['150'] = { top : 570 , left : 520 , taxi : ['138','149','151'] , underground : [] , bus : [] , ferry : [] }
+    locations['151'] = { top : 570 , left : 520 , taxi : ['150','152','166'] , underground : [] , bus : [] , ferry : [] }
+    locations['152'] = { top : 570 , left : 520 , taxi : ['151','138','153'] , underground : [] , bus : [] , ferry : [] }
+    locations['153'] = { top : 570 , left : 520 , taxi : ['166','152','139','154','167'] , underground : ['163','111','140','185'] , bus : ['124','165','154','184','180'] , ferry : [] }
+    locations['154'] = { top : 570 , left : 520 , taxi : ['153','139','140','155'] , underground : [] , bus : ['153','140','156'] , ferry : [] }
+    locations['155'] = { top : 570 , left : 520 , taxi : ['154','156','167','168'] , underground : [] , bus : [] , ferry : [] }
+    locations['156'] = { top : 570 , left : 520 , taxi : ['155','140','157','169'] , underground : [] , bus : ['154','140','157','184'] , ferry : [] }
+    locations['157'] = { top : 570 , left : 520 , taxi : ['156','170','158'] , underground : [] , bus : ['156','133','142','185'] , ferry : ['115','194'] }
+    locations['158'] = { top : 570 , left : 520 , taxi : ['141','142','157','159'] , underground : [] , bus : [] , ferry : [] }
+    locations['159'] = { top : 570 , left : 520 , taxi : ['158','172','198','186','170'] , underground : [] , bus : [] , ferry : [] }
+    locations['160'] = { top : 570 , left : 520 , taxi : ['128','143','161','173'] , underground : [] , bus : [] , ferry : [] }
+    locations['161'] = { top : 570 , left : 520 , taxi : ['135','174','160'] , underground : [] , bus : ['128','199','135','107'] , ferry : [] }
+    locations['162'] = { top : 570 , left : 520 , taxi : ['136','175'] , underground : [] , bus : [] , ferry : [] }
+    locations['163'] = { top : 570 , left : 520 , taxi : ['146','177'] , underground : ['111','153'] , bus : ['144','176','191'] , ferry : [] }
+    locations['164'] = { top : 570 , left : 520 , taxi : ['147','178','148','179'] , underground : [] , bus : [] , ferry : [] }
+    locations['165'] = { top : 570 , left : 520 , taxi : ['179','149','151','180'] , underground : [] , bus : ['191','180','123'] , ferry : [] }
+    locations['166'] = { top : 570 , left : 520 , taxi : ['151','153','183','181'] , underground : [] , bus : [] , ferry : [] }
+    locations['167'] = { top : 570 , left : 520 , taxi : ['153','183','155','168'] , underground : [] , bus : [] , ferry : [] }
+    locations['168'] = { top : 570 , left : 520 , taxi : ['167','155''184'] , underground : [] , bus : [] , ferry : [] }
+    locations['169'] = { top : 570 , left : 520 , taxi : ['156','184'] , underground : [] , bus : [] , ferry : [] }
+    locations['170'] = { top : 570 , left : 520 , taxi : ['157','185','159'] , underground : [] , bus : [] , ferry : [] }
+    locations['171'] = { top : 570 , left : 520 , taxi : ['199','173','175'] , underground : [] , bus : [] , ferry : [] }
+    locations['172'] = { top : 570 , left : 520 , taxi : ['159','187','128''] , underground : [] , bus : [] , ferry : [] }
+    locations['173'] = { top : 570 , left : 520 , taxi : ['160','174','171','188'] , underground : [] , bus : [] , ferry : [] }
+    locations['174'] = { top : 570 , left : 520 , taxi : ['161','173','175'] , underground : [] , bus : [] , ferry : [] }
+    locations['175'] = { top : 570 , left : 520 , taxi : ['171','174','162'] , underground : [] , bus : [] , ferry : [] }
+    locations['176'] = { top : 570 , left : 520 , taxi : ['177','189'] , underground : [] , bus : ['163','190'] , ferry : [] }
+    locations['177'] = { top : 570 , left : 520 , taxi : ['175','144','163'] , underground : [] , bus : [] , ferry : [] }
+    locations['178'] = { top : 570 , left : 520 , taxi : ['163','164','191','189'] , underground : [] , bus : [] , ferry : [] }
+    locations['179'] = { top : 570 , left : 520 , taxi : ['164','165','191'] , underground : [] , bus : [] , ferry : [] }
+    locations['180'] = { top : 570 , left : 520 , taxi : ['165','181','193'] , underground : [] , bus : ['165','190','184','153'] , ferry : [] }
+    locations['181'] = { top : 570 , left : 520 , taxi : ['193','180','166','182'] , underground : [] , bus : [] , ferry : [] }
+    locations['182'] = { top : 570 , left : 520 , taxi : ['195','181','183'] , underground : [] , bus : [] , ferry : [] }
+    locations['183'] = { top : 570 , left : 520 , taxi : ['167','166','182','195'] , underground : [] , bus : [] , ferry : [] }
+    locations['184'] = { top : 570 , left : 520 , taxi : ['197','196','168','169','185'] , underground : [] , bus : ['180','153','156','185'] , ferry : [] }
+    locations['185'] = { top : 570 , left : 520 , taxi : ['184','170','186'] , underground : ['153','128'] , bus : ['184','157','187'] , ferry : [] }
+    locations['186'] = { top : 570 , left : 520 , taxi : ['185','159','198'] , underground : [] , bus : [] , ferry : [] }
+    locations['187'] = { top : 570 , left : 520 , taxi : ['172','198','188'] , underground : [] , bus : ['185','128'] , ferry : [] }
+    locations['188'] = { top : 570 , left : 520 , taxi : ['187','128','173','199'] , underground : [] , bus : [] , ferry : [] }
+    locations['189'] = { top : 570 , left : 520 , taxi : ['176','178','190'] , underground : [] , bus : [] , ferry : [] }
+    locations['190'] = { top : 570 , left : 520 , taxi : ['189',''191','192'] , underground : [] , bus : ['176','191','180'] , ferry : [] }
+    locations['191'] = { top : 570 , left : 520 , taxi : ['178','179','190','192'] , underground : [] , bus : ['190','163','165'] , ferry : [] }
+    locations['192'] = { top : 570 , left : 520 , taxi : ['190','191','194'] , underground : [] , bus : [] , ferry : [] }
+    locations['193'] = { top : 570 , left : 520 , taxi : ['180','181','194'] , underground : [] , bus : [] , ferry : [] }
+    locations['194'] = { top : 570 , left : 520 , taxi : ['192','193','195'] , underground : [] , bus : [] , ferry : ['157'] }
+    locations['195'] = { top : 570 , left : 520 , taxi : ['182','194','197'] , underground : [] , bus : [] , ferry : [] }
+    locations['196'] = { top : 570 , left : 520 , taxi : ['183','184','197'] , underground : [] , bus : [] , ferry : [] }
+    locations['197'] = { top : 570 , left : 520 , taxi : ['184','195','196'] , underground : [] , bus : [] , ferry : [] }
+    locations['198'] = { top : 570 , left : 520 , taxi : ['186','187','199'] , underground : [] , bus : [] , ferry : [] }
+    locations['199'] = { top : 570 , left : 520 , taxi : ['198','188','171'] , underground : [] , bus : ['161','128'] , ferry : [] }
 
     return locations;
-
-  }
-
-
-
-
-  returnStartingDeck() {
-
-    let deck = {};
-
-
-/***
-    deck['13'] = { pos : 13 }
-    deck['26'] = { pos : 26 }
-    deck['29'] = { pos : 29 }
-    deck['34'] = { pos : 34 }
-    deck['50'] = { pos : 50 }
-    deck['53'] = { pos : 53 }
-    deck['91'] = { pos : 91 }
-    deck['94'] = { pos : 94 }
-    deck['103'] = { pos : 103 }
-    deck['112'] = { pos : 112 }
-    deck['117'] = { pos : 117 }
-    deck['132'] = { pos : 132 }
-    deck['138'] = { pos : 138 }
-    deck['141'] = { pos : 141 }
-    deck['155'] = { pos : 155 }
-    deck['174'] = { pos : 174 }
-    deck['197'] = { pos : 197 }
-    deck['198'] = { pos : 198 }
-
-    return deck;
-***/
 
   }
 
@@ -819,23 +777,7 @@ console.log(JSON.stringify(mylocation));
   }
 
 
-
-  formatStatusHeader(status_header, include_back_button=false) {
-    let back_button_html = `<i class="fa fa-arrow-left" id="back_button"></i>`;
-    return `
-    <div class="status-header">
-      ${include_back_button ? back_button_html : ""}
-      <div style="text-align: center;">
-        ${status_header}
-      </div>
-    </div>
-    `
-  }
-
-
-} // end Scotland Yard class
+}
 
 module.exports = Scotland;
-
-
 
