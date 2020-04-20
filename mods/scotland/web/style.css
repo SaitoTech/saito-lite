@@ -7,6 +7,14 @@
   height: 3829px;
 }
 
+
+.pawn {
+  width: 75px;
+  top: -55px;
+  position: relative;
+  background-color: yellow;
+}
+
 .cardbox {
   position: absolute;
   height: 48vh;
@@ -26,7 +34,6 @@
 .location {
  position: absolute;
  opacity: 0.6;
- background-color: red;
  height: 75px;
  width: 75px;
  top: 120px;

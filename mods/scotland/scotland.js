@@ -21,7 +21,6 @@ class Scotland extends Gamev2Template {
     this.type       	 = "strategy boardgame";
     this.categories      = "Games Arcade Entertainment";
 
-
     //
     // this sets the ratio used for determining
     // the size of the original pieces
@@ -31,15 +30,14 @@ class Scotland extends Gamev2Template {
     this.moves           = [];
 
     this.log_length = 150;
-    this.gameboardZoom  = 0.90;
-    this.gameboardMobileZoom = 0.67;
+    this.gameboardZoom  = 0.67;
+    this.gameboardMobileZoom = 0.57;
 
     this.minPlayers = 2;
     this.maxPlayers = 5; // need extra pawn color for 6
 
     this.menuItems = ['lang'];
 
-    //this.hud = new gamehud(this.app, this.menuItems());
     //
     //
     //
@@ -114,6 +112,14 @@ class Scotland extends Gamev2Template {
 
       this.updateStatus("generating the game");
 
+      //
+      // keys are not backed-up when saved, so "deck"
+      // is re-used here to provide a way for MisterX
+      // to publish location info, while keeping keys
+      // secret when making moves.
+      //
+      this.addDeck(0); 
+
       this.game.queue.push("round");
       this.game.queue.push("init");
       this.game.queue.push("READY");
@@ -125,7 +131,6 @@ class Scotland extends Gamev2Template {
     // scale graphics
     //
     $('.location').css('width', this.scale(75)+"px");
-
 
 
     //
@@ -223,6 +228,7 @@ class Scotland extends Gamev2Template {
 	      let start_pos = this.rollDice(this.game.state.starting_positions.length)-1;
 
 	      this.game.state.player_location[i] = this.game.state.starting_positions[start_pos];
+console.log("\nDETECTIVE SPOS: " + this.game.state.player_location[i]);
 	      this.game.state.starting_positions.splice(start_pos, 1);
 
 	  }
@@ -254,11 +260,25 @@ class Scotland extends Gamev2Template {
       }
 
 
+      if (mv[0] === "double") {
+
+	let player = parseInt(mv[1]);
+
+	this.game.queue.push("move\t"+player);
+	this.game.queue.push("move\t"+player);
+        this.game.state.double_in_action = 1;
+        this.game.queue.splice(qe, 1);
+
+	return 1;
+
+      }
+
       if (mv[0] === "move") {
 
 	let player = parseInt(mv[1]);
         let target_id = mv[2];
 	let ticket = mv[3];
+
 
 	if (ticket === "taxi") {
 	  this.game.state.tickets[player-1]['taxi']--;
@@ -276,7 +296,36 @@ class Scotland extends Gamev2Template {
 	  this.game.state.tickets[player-1]['double']--;
  	}
 
-	this.game.state.player_location[player-1] = target_id;
+	if (this.game.state.x != player) {
+
+	  this.game.state.player_location[player-1] = target_id;
+
+	  //
+	  // Mister X gets the tickets
+	  //
+	  if (ticket === "taxi") { this.game.state.tickets[this.game.state.x-1]['taxi']++; }
+	  if (ticket === "bus") { this.game.state.tickets[this.game.state.x-1]['underground']++; }
+	  if (ticket === "underground") { this.game.state.tickets[this.game.state.x-1]['underground']++; }
+
+	} else {
+
+	  if (this.game.state.round == 3 || this.game.state.round == 8 || this.game.state.round == 13 || this.game.state.round == 8) {
+	    this.game.state.player_location[player-1] = target_id;
+	  } else {
+	    this.game.state.player_location[player-1] = target_id;
+	  }
+
+	  //
+	  // Mister X needs to get his decrypted move
+	  //
+          if (this.game.player == this.game.state.x) {
+	    this.game.state.player_location[player-1] = this.game.deck[0].keys[this.game.deck[0].keys.length-1].location;
+	  }
+
+	}
+
+	this.game.state.rounds[this.game.state.round].tickets[this.game.player-1] = ticket;
+	this.game.state.rounds[this.game.state.round].location[this.game.player-1] = target_id;
 
 	this.showBoard();
 
@@ -287,6 +336,14 @@ class Scotland extends Gamev2Template {
 
 
       if (mv[0] == "round") {
+	//
+	// update the round, and create a place to store locations
+	//
+	this.game.state.round++;
+	this.game.state.rounds[this.game.state.round] = {};
+	this.game.state.rounds[this.game.state.round].location = [];
+	this.game.state.rounds[this.game.state.round].tickets = [];
+        this.game.state.double_in_action = 0; // reset ability to play double
 
 	this.updateLog("Starting Round");
 
@@ -318,7 +375,17 @@ class Scotland extends Gamev2Template {
 
       if (mv[0] == "play") {
 
-	this.playerTurn(parseInt(mv[1]));
+	let player = parseInt(mv[1]);
+
+	//
+	// check for end-game conditions
+	//
+        if (this.isGameOver(player)) {
+	  this.updateStatus("Gameover");
+	  return 0;
+	}
+
+	this.playerTurn(player);
         this.game.queue.splice(qe, 1);
 	return 0;
 
@@ -331,9 +398,44 @@ class Scotland extends Gamev2Template {
 
 
 
+  isGameOver(player) {
 
+    if (this.game.deck.length == 0) { return 0; }
+    if (this.game.deck[0].keys.length == 0) { return 0; }
 
-  
+    //
+    //
+    //
+console.log(this.game.player + " -- " + this.game.state.x);
+    if (this.game.player == this.game.state.x) {
+console.log("A");
+      let x_location = this.game.deck[0].keys[this.game.deck[0].keys.length-1].location;
+console.log("X Location: " + x_location);
+      for (let i = 0; i < this.game.state.player_location.length; i++) {
+	if (this.game.state.player_location[i] == x_location) {
+console.log("PLAYER AT: " + this.game.state.player_location[i] + " is " + (i+1));
+	  if (this.game.player != (i+1)) {
+console.log(this.game.player + " -- " + (i+1));
+	    this.updateLog("1. Mr.X has been caught at " + x_location);
+	    return 1;
+	  }
+	}
+      }
+    } else {
+console.log("B");
+      for (let i = 0; i < this.game.state.player_location.length; i++) {
+	if (i != this.game.state.x-1) {
+	  if (this.game.state.player_location[i] == this.game.state.player_location[this.game.state.x-1]) {
+	    this.updateLog("2. Mr.X has been caught at " + this.game.state.player_location[i]);
+	    return 1;
+	  }
+	}
+      }
+    }
+
+    return 0;
+  }
+
 
 
 
@@ -374,8 +476,17 @@ class Scotland extends Gamev2Template {
     //
     let html = '';
 
-    html += 'You are at Location '+this.game.state.player_location[this.game.player-1]+'.<p></p>';
+    if (this.game.player == this.game.state.x) {
+      html += 'You are Mister X<p style="margin-bottom:20px"></p>';
+    } else {
+      html += 'You are a Detective!<p style="margin-bottom:20px"><p>';
+    }
 
+    if (this.game.state.round > 1 && this.game.player == this.game.state.x) { 
+      html += 'You are at Location '+this.game.deck[0].keys[this.game.deck[0].keys.length-1].location + '.<p style="margin-bottom:20px"></p>';
+    } else {
+      html += 'You are at Location '+this.game.state.player_location[this.game.player-1]+'.<p style="margin-bottom:20px"></p>';
+    }
     html += 'You have ';
 
     let comma = 0;
@@ -398,40 +509,39 @@ class Scotland extends Gamev2Template {
       html += this.game.state.tickets[player-1]['x'] + " ferry or mystery rides";      
       comma = 1;
     }
-    if (this.game.state.tickets[player-1]['double'] > 0) {
+    if (this.game.state.tickets[player-1]['double'] > 0 && this.game.state.double_in_action == 0) {
       if (comma == 1) { html += ', and '; }
-      html += this.game.state.tickets[player-1]['double'] + " double moves";      
+      html += this.game.state.tickets[player-1]['double'] + " <span class='double' style='display:inline; cursor:pointer; border-bottom: 1px dashed #444'>double moves</span>";      
       comma = 1;
     }
     html += '.';
-
-    if (this.game.state.tickets[player-1]['double'] > 0) {
-      html += '<p></p>If you would like to make a double move <span class="double">click here</span>, otherwise click on your next destination on the city map';
-    } else {
-      html += '<p></p>Click on your next destination on the city map!';
-    }
     this.updateStatus(html);
 
+
+    
 
     //
     // attach events
     //
     $('.double').off();
     $('.double').on('click', function() {
-      this.addMove("move\t"+player+"\t"+this.game.state.player_location[this.game.player-1]+"\t"+"double");
-      this.addMove("NOTIFY\tMister X chooses to make a double move.");
+      this.addMove("double\t"+player);
       this.endTurn();
     });
 
-
+    $('.location').css('background-color', 'transparent');
+    $('.location').css('opacity', 1);
     $('.location').off();
     let mylocation = this.game.state.locations[this.game.state.player_location[this.game.player-1]];
 
     if (this.game.state.tickets[player-1]['taxi'] > 0) {
       for (let z = 0; z < mylocation.taxi.length; z++) {
 	let divname = '#' + mylocation.taxi[z];
+	$(divname).css('background-color','yellow');
+	$(divname).css('opacity', 0.4);
 	$(divname).on('click', function() {
 	  let target_id = $(this).attr("id");
+console.log("success...");
 	  scotland_self.movePlayer(player, target_id, "taxi");
         });
       }
@@ -440,8 +550,11 @@ class Scotland extends Gamev2Template {
     if (this.game.state.tickets[player-1]['bus'] > 0) {
       for (let z = 0; z < mylocation.bus.length; z++) {
 	let divname = '#' + mylocation.bus[z];
+	$(divname).css('background-color','yellow');
+	$(divname).css('opacity', 0.4);
 	$(divname).on('click', function() {
 	  let target_id = $(this).attr("id");
+console.log("success...");
 	  scotland_self.movePlayer(player, target_id, "bus");
         });
       }
@@ -450,8 +563,11 @@ class Scotland extends Gamev2Template {
     if (this.game.state.tickets[player-1]['underground'] > 0) {
       for (let z = 0; z < mylocation.underground.length; z++) {
 	let divname = '#' + mylocation.underground[z];
+	$(divname).css('background-color','yellow');
+	$(divname).css('opacity', 0.4);
 	$(divname).on('click', function() {
 	  let target_id = $(this).attr("id");
+console.log("success...");
 	  scotland_self.movePlayer(player, target_id, "underground");
         });
       }
@@ -460,8 +576,11 @@ class Scotland extends Gamev2Template {
     if (this.game.state.tickets[player-1]['ferry'] > 0) {
       for (let z = 0; z < mylocation.underground.length; z++) {
 	let divname = '#' + mylocation.ferry[z];
+	$(divname).css('background-color','yellow');
+	$(divname).css('opacity', 0.4);
 	$(divname).on('click', function() {
 	  let target_id = $(this).attr("id");
+console.log("success...");
 	  scotland_self.movePlayer(player, target_id, "ferry");
         });
       }
@@ -471,9 +590,54 @@ class Scotland extends Gamev2Template {
 
   movePlayer(player, target_id, ticket) {
 
+    //
+    // 
+    //
+    this.removeEventsFromBoard();
+
+    //
+    //
+    //
+    if (player == this.game.state.x) {
+      if (this.game.state.player_location.length > 0) {
+        for (let i = 0; i < this.game.state.player_location.length; i++) {
+	  if ((i+1) != this.game.state.x) {
+	    if (this.game.state.player_location[i] == target_id) {
+	      this.updateLog("Mr.X has been captured at "+target_id);
+	      $('.location').off();
+	      this.addMove("NOTIFY\tMr.X has been captured at "+target_id);
+	      this.endTurn();
+console.log("GAME IS OVER");
+	      return 0;
+	    }
+   	  }
+        } 
+      } 
+    }
+
+    //
+    // Mister X disguises his moves
+    //
+    let visible_move = 1;
+    let visible_location = target_id;
+
+console.log("move player 2");
+
+    if (this.game.state.round == 3 || this.game.state.round == 8 || this.game.state.round == 13 || this.game.state.round == 18) {
+    } else {
+      if (this.game.player == this.game.state.x) {
+	let secret_decrypt = this.app.crypto.hash(Math.random()+"MISTERXSECRETHASH");
+	this.game.deck[0].keys.push({ "location" : target_id , "hash" : secret_decrypt});
+	target_id = this.app.crypto.hash(secret_decrypt + target_id);
+      }
+    }
+
+
+    this.updateStatus("Sending your move...");
+console.log("move player 3");
     this.addMove("move\t"+player+"\t"+target_id+"\t"+ticket);
     this.endTurn();
-
+    
   }
 
 
@@ -495,7 +659,7 @@ class Scotland extends Gamev2Template {
       }
     }
 
-    $('.pawn').css('width', this.scale(200)+"px");
+    $('.pawn').css('width', this.scale(75)+"px");
 
   }
 
@@ -504,6 +668,7 @@ class Scotland extends Gamev2Template {
     if (player_id == this.game.state.x) {
       return '<img src="/scotland/img/XPawn.png" class="pawn" />';
     } else {
+      return '<img src="/scotland/img/DetectivePawn.png" class="pawn" />';
 
       if (player_id == 1) { return '<img src="/scotland/img/Red%20Pawn.png" class="pawn" />'; }
       if (player_id == 2) { return '<img src="/scotland/img/Yellow%20Pawn.png" class="pawn" />'; }
@@ -529,6 +694,10 @@ class Scotland extends Gamev2Template {
         state.player_location = [];
 	state.roles = [];
 	state.tickets = [];
+
+        state.round = 0;
+        state.rounds = [];
+
 	state.x = 0;        // who is Mister X
 
 
