@@ -45,7 +45,7 @@ module.exports = [
         reward: 50,
         title: "Sign Up for the Newsletter",
         event: "user newsletter",
-        description:"Stay up to date with the latest news of Saito.",
+        description:"Stay up to date with the latest Saito news.",
         completed: false,
         action: function(app){app.modules.returnModule("Tutorial").newsletterModal();},
     },
