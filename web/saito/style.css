@@ -362,6 +362,10 @@ fieldset {
 
 .grid-4 div:nth-child(2n-1), .grid-2 div:nth-child(2n-1) {
   font-family: visuelt-medium;
+  text-transform: capitalize;
+  padding: 10px 0;
+    font-size: 20px;
+    line-height: 38px;
 }
 
 .grid-4 div, .grid-2 div {

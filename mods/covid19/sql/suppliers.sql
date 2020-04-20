@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS suppliers (
   id INTEGER ,
-  uuid VARCHAR(100) ,
+  uuid VARCHAR(100) UNIQUE,
   admin VARCHAR(100) ,
   publickey TEXT ,
   name TEXT ,

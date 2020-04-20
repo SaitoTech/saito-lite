@@ -55,7 +55,7 @@ class Covid19 extends DBModTemplate {
         uidata.chat = this;
         chatmod.respondTo('email-chat').render(this.app, uidata);
         chatmod.respondTo('email-chat').attachEvents(this.app, uidata);
-   
+      }
     }
   }
 
@@ -699,6 +699,3 @@ console.log("\n\n\n\n\n\n\nHERE 2: ");
 }
 
 module.exports = Covid19;
-
-
-
