@@ -118,7 +118,8 @@ label.treated {
   width: 250px;
 }
 
-.fullview_product, .edit_product, .delete_product, .add_cert, .inquire_product, .grid-action {
+.fullview_product, .edit_product, .delete_product, .add_cert, .inquire_product {
+
   cursor: pointer;
   border: 1px solid var(--saito-red);
   width: 100px;
@@ -129,6 +130,7 @@ label.treated {
   display: inline-block;
   margin: 0 5px 5px 0;
 }
+
 
 .fullview_product:hover, .edit_product:hover, .delete_product:hover, .add_cert:hover, .inquire_product:hover, .grid-action:hover {
   background: var(--saito-red);

@@ -1,9 +1,11 @@
 const saito = require('../../lib/saito/saito');
-const ModTemplate = require('../../lib/templates/modtemplate');
+const DBModTemplate = require('../../lib/templates/dbmodtemplate');
 const SplashPage = require('./lib/splash-page');
 const CustomerPortal = require('./lib/customer-portal');
 const SupplierPortal = require('./lib/supplier-portal');
-const InquirePage = require('./lib/inquire-page');
+
+const InquirePage = require('./lib/inquire-page'); 
+
 const Certification = require('./lib/certification');
 
 const Header = require('../../lib/ui/header/covid_header');
@@ -12,7 +14,7 @@ const AddressController = require('../../lib/ui/menu/address-controller');
 
 
 
-class Covid19 extends ModTemplate {
+class Covid19 extends DBModTemplate {
 
   constructor(app) {
     super(app);
@@ -53,7 +55,7 @@ class Covid19 extends ModTemplate {
         uidata.chat = this;
         chatmod.respondTo('email-chat').render(this.app, uidata);
         chatmod.respondTo('email-chat').attachEvents(this.app, uidata);
-      }
+   
     }
   }
 
@@ -152,199 +154,16 @@ class Covid19 extends ModTemplate {
     // only handle our stuff
     //
     let txmsg = tx.returnMessage();
-    if (txmsg.module != this.name) { return; }
-
-
     let covid19_self = app.modules.returnModule("Covid19");
-
-    let sql = '';
-    let params = {};
-
-
-    if (conf == 0) {
-
-      let product_id = txmsg.product_id;
-      let fields = txmsg.fields;
-      let supplier_id = 0;
-      let supplier_publickey = txmsg.publickey;
-
-      //
-      // 
-      //
-      if (txmsg.request == "Product Delete") {
-
-        sql = `SELECT id FROM suppliers WHERE publickey = "${supplier_publickey}"`;
-        let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
-        if (rows.length == 0) {
-          return;
-        } else {
-          supplier_id = rows[0].id;
-        }
-
-        let table = "products";
-
-        sql = "DELETE FROM products WHERE supplier_id = $supplier_id AND id = $product_id";
-        params = {
-          $supplier_id: supplier_id,
-          $product_id: product_id,
-        };
-
-        if (tx.transaction.from[0].add == supplier_publickey || tx.transaction.from[0].add == this.admin_pkey) {
-          await this.app.storage.executeDatabase(sql, params, "covid19");
-        }
-
-        return;
-      }
+console.log("\n\n\n\n\n\n\nHERE 1: ");
+    if (txmsg.module != covid19_self.name) { return; }
+console.log("\n\n\n\n\n\n\nHERE 2: ");
 
 
-
-      //
-      // updating supplier or product
-      //
-      if (txmsg.request == "Supplier Update") {
-
-        sql = `SELECT id FROM suppliers WHERE publickey = "${supplier_publickey}"`;
-        let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
-        if (rows.length == 0) {
-          sql = `SELECT max(id) AS maxid FROM "suppliers"`;
-          let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
-          if (rows.length == 0) {
-            supplier_id = 1;
-          } else {
-            supplier_id = rows[0].maxid + 1;;
-          }
-
-          //
-          // insert supplier if non-existent
-          //
-          sql = `SELECT id FROM suppliers WHERE publickey = "${tx.transaction.from[0].add}"`;
-          let rows2 = await this.app.storage.queryDatabase(sql, {}, "covid19");
-          if (rows2.length == 0) {
-            sql = `INSERT INTO suppliers (id , publickey) VALUES (${supplier_id} , '${tx.transaction.from[0].add}')`;
-            await this.app.storage.executeDatabase(sql, {}, "covid19");
-          }
-
-          // add so things work
-          supplier_publickey = tx.transaction.from[0].add;
-
-        } else {
-          supplier_id = rows[0].id;
-        }
-
-        fields = txmsg.fields;
-        let id = 0;
-
-        for (let i = 0; i < fields.length; i++) {
-
-          let table = fields[i].table;
-          let column = fields[i].column;
-          let value = fields[i].value;
-          if (fields[i].id > 0) { id = fields[i].id; }
-          if (fields[i].id == "supplier") { id = supplier_id; }
-
-          if (id == 0) {
-
-            sql = `SELECT max(id) AS maxid FROM ${table}`;
-            let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
-            if (rows.length == 0) {
-              id = 1;
-            } else {
-              id = rows[0].maxid + 1;
-            }
-
-            if (tx.transaction.from[0].add == supplier_publickey || tx.transaction.from[0].add == this.admin_pkey) {
-              sql = `INSERT INTO ${table} (id, supplier_id) VALUES (${id}, ${supplier_id})`;
-              //console.log("HERE: " + sql);
-              await this.app.storage.executeDatabase(sql, {}, "covid19");
-            }
-          }
-
-          if (id > 0) {
-            if (tx.transaction.from[0].add == supplier_publickey || tx.transaction.from[0].add == this.admin_pkey) {
-              sql = `UPDATE ${table} SET ${column} = "${value}" WHERE id = ${id}`;
-              await this.app.storage.executeDatabase(sql, {}, "covid19");
-            }
-          }
-        }
-      }
-
-      if (txmsg.request == "Table Update") {
-
-        let fields = txmsg.fields;
-
-        //sort the incoming fields to process table by table.
-        //we need to do this to differentiate the first INSERT
-        //from subsequent updates as we are processing 
-        fields.sort((a, b) => a.table.localeCompare(b.table));
-
-        let table = "";
-        let columns = "";
-        let values = "";
-        let sqls = [];
-        let id = -1;
-        let push = false;
-
-        let mode = "";
-
-        for (let i = 0; i < fields.length; i++) {
-
-          if (i == fields.length - 1) {
-            push = true;
-          } else if (fields[i].table != fields[i + 1].table) {
-            push = true;
-          }
-
-          let column = fields[i].column;
-          let value = "'" + fields[i].value + "'";
-
-          //we are dealing with a new table
-          if (fields[i].table != table) {
-            table = fields[i].table;
-            //we don't have an id yet
-            if (fields[i].id == "new") {
-              sql = `SELECT max(id) AS maxid FROM ${table}`;
-              let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
-              if (rows.length == 0) {
-                id = 1;
-              } else {
-                id = rows[0].maxid + 1;
-              }
-              mode = "INSERT";
-            } else {
-              mode = "UPDATE";
-            }
-            columns = column;
-            if (value == "'new'") { value = id };
-            values = value;
-          } else {
-            columns += ", " + column;
-            if (value == "'new'") { value = id };
-            values += ", " + value;
-          }
-
-
-          if (push) {
-            if (mode = 'INSERT') {
-              sql = `INSERT INTO ${table} (id, ${columns}) VALUES (${id}, ${values});`
-            } else {
-              sql = `UDATE ${table} SET (${columns}) = (${values}) WHERE id = ${id};`
-            }
-            sqls.push(sql);
-            push = false;
-          }
-        }
-        sqls.forEach(sql => {
-          try {
-            //console.log(sql);
-            this.app.storage.executeDatabase(sql, {}, "covid19");
-          } catch (err) {
-            console.log("SQL ERROR -----------------------");
-            console.log(err);
-            console.log("---------------------------------");
-          }
-        });
-      }
-    }
+    //
+    // add super for auto-DB update features
+    //
+    super.onConfirmation(blk, tx, conf, app);
   }
 
 
@@ -406,7 +225,6 @@ class Covid19 extends ModTemplate {
   }
 
 
-
   renderPage(page = "home", app, data) {
 
     data.covid19 = this;
@@ -436,7 +254,6 @@ class Covid19 extends ModTemplate {
     data.covid19 = this;
 
   }
-
 
 
   addProductsToTable(rows, fields, app, data) {
@@ -477,7 +294,8 @@ class Covid19 extends ModTemplate {
                 html += `<div class="grid-buttons"><div class="grid-action fullview_product" id="view-${rows[i].product_id}">View</div><div class="grid-action edit_product" id="edit-${rows[i].product_id}">Edit</div><div class="grid-action delete_product" id="delete-${rows[i].product_id}">Delete</div><!--div class="grid-action add_cert" id="add-certs-${rows[i].product_id}">Add Cert</div--></div>`;
                 added = 1;
               } else {
-                //                html += `<div class="grid-action grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div></div>`;
+            //html += `<div class="grid-action grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div></div>`;
+
                 html += `<div class="grid-buttons"><div class="grid-action inquire_product" id="inquire-${rows[i].product_id}">Buy</div></div>`;
                 added = 1;
               }
@@ -520,8 +338,6 @@ class Covid19 extends ModTemplate {
       document.querySelector(".products-table").innerHTML += html.replace(/null/g, "").replace(/undefined/g, "");
       this.returnCerts(rows[i].product_id, "certsfor-");
 
-
-
     }
     document.querySelector(".products-table").style.display = "grid";
     try {
@@ -562,10 +378,12 @@ class Covid19 extends ModTemplate {
       document.querySelectorAll('.inquire_product').forEach(el => {
         el.addEventListener('click', (e) => {
           data.product_id = e.target.id.split("-")[1];
+
           if (typeof localStorage.cart == 'undefined') {
             localStorage.cart = "";
           }
           if (!localStorage.cart.split("|").includes(data.product_id)) {
+
             localStorage.cart += "|" + data.product_id;
           }
 
@@ -579,6 +397,7 @@ class Covid19 extends ModTemplate {
       document.querySelectorAll('.product-img-cell').forEach(el => {
         var product_id = el.id.split("-")[2];
         data.covid19.sendPeerDatabaseRequest("covid19", "products", 'product_photo', "id = " + product_id, null, function (res) {
+
           if (res.rows.length > 0) {
             if (res.rows[0].product_photo.length > 0) {
               var html = "<img style='max-width:200px;max-height:200px' src='" + res.rows[0].product_photo + "'/>";

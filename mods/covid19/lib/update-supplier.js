@@ -19,11 +19,11 @@ module.exports = UpdateSupplier = {
     //
     data.covid19.sendPeerDatabaseRequest("covid19", "suppliers", "*", "suppliers.publickey = '" + supplier_publickey + "'", null, function (res) {
 
+	let html = "";
         if (res.rows.length > 0) {
-          data.covid19.renderSupplierForm(res.rows[0]);
+          html = data.covid19.returnForm("covid19", "suppliers", res.rows[0].id, res.rows[0]);
         } else {
 	  let row = { 
-	 	id : 0 , 
 		name : "" ,
 		email : "" ,	  
 		phone : "" ,	  
@@ -31,9 +31,10 @@ module.exports = UpdateSupplier = {
 		wechat : "" ,
 		notes : "" 
 	  }
-         data.covid19.renderSupplierForm(row);
+         html = data.covid19.returnForm("covid19", "suppliers", "", row);
         }
 
+	document.querySelector(".supplier-grid").innerHTML = html;
         document.querySelector('.loading').style.display = "none";
         document.querySelector('.portal').style.display = "block";
     });
@@ -48,7 +49,6 @@ module.exports = UpdateSupplier = {
       supplier_publickey = data.supplier_publickey;
     }
 
-
     document.querySelector('.update-supplier-btn').addEventListener('click', (e) => {
       try {
         let pkeyobj = document.querySelector(".supplier_publickey");
@@ -57,21 +57,19 @@ module.exports = UpdateSupplier = {
         }
       } catch (err) { }
 
-      let values = [];
+        let values = data.covid19.returnFormToArray();
+	let insert = 0;
+	let id = "";
+	for (let i = 0; i < values.length; i++) { if (values[i].id == "") { insert = 1; }  }
 
-      Array.from(document.getElementsByClassName('input')).forEach(input => {
-        let field = {};
-            field.table  = input.dataset.table;
-            field.column = input.dataset.column;
-            field.value  = input.value;
-            field.id     = "supplier";
-        values.push(field);
-      });
 
-      data.covid19.updateServerDatabase(values, supplier_publickey);
-
-      UpdateSuccess.render(app, data);
-      UpdateSuccess.attachEvents(app, data);
+	if (insert == 1) {
+          id = data.covid19.insertDatabase(values);
+	}
+	for (let i = 0; i < values.length; i++) { if (values[i].id == "") { values[i].id = id; }  }
+        data.covid19.updateDatabase(values);
+        UpdateSuccess.render(app, data);
+        UpdateSuccess.attachEvents(app, data);
 
     });
 
