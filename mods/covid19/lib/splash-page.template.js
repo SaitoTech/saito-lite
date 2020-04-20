@@ -17,14 +17,20 @@ module.exports = SplashPageTemplate = () => {
     The resulting data offers a real-time view into the supply and price and quality of COVID-19 response equipment. Our team is working around the clock to keep this information up-to-date. All information on product availability, production capacity and supplier certifications are cryptographically-signed and publicly viewable.
 
     </p>
-    <p>
 
+    <div class="summary-section">
 
-    <div id="product-rollup" class="product-rollup">Loading...</div>
-    
+      <h3>Product Availability</h3>
 
-    </p>
-    
+      <hr />
+
+      <div class="product-summary">
+        Loading...
+      </div>
+
+      <hr />
+  
+    </div>
     
     <h3>Who are the people behind this datahub?</h3>
 

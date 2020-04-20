@@ -36,7 +36,7 @@ module.exports = Certification = {
         document.getElementById("certification_name").style.display = "block";
         document.getElementById("certification_name").dataset.id = "new";
         document.getElementById("certification_name").dataset.ignore = false;
-        } else {
+      } else {
         document.getElementById("certification_name").style.display = "none";
         document.getElementById("certification_name").dataset.ignore = true;
       }
@@ -53,54 +53,57 @@ module.exports = Certification = {
       if (pkeyobj) {
         supplier_publickey = pkeyobj.value;
       }
-    } catch (err) {}
-      document.getElementById('save-certification').addEventListener('click', (e) => {
-        let values = [];
+    } catch (err) { }
 
-        document.querySelector('.certification').querySelectorAll('input').forEach(input => {
-          if (input.dataset.ignore != "true") {
-            let field = {};
-            field.table = input.dataset.table;
-            field.column = input.dataset.column;
-            field.value = input.value;
-            field.id = input.dataset.id;
-            values.push(field);
-          }
-        });
+    
+    document.getElementById('save-certification').addEventListener('click', (e) => {
+      let values = [];
 
-        //console.log("Updating Values: " + JSON.stringify(values));
-
-        data.covid19.updateServerDatabase(values, supplier_publickey, "Table Update");
-
-        //alert("HERE WE ARE");
-
-        UpdateSuccess.render(app, data);
-        UpdateSuccess.attachEvents(app, data);
-        //document.querySelector('.certification').destroy();
+      document.querySelector('.certification').querySelectorAll('input').forEach(input => {
+        if (input.dataset.ignore != "true") {
+          let field = {};
+          field.table = input.dataset.table;
+          field.column = input.dataset.column;
+          field.value = input.value;
+          field.id = input.dataset.id;
+          values.push(field);
+        }
       });
 
+      data.covid19.updateServerDatabase(values, supplier_publickey, "Table Update");
+      UpdateSuccess.render(app, data);
+      UpdateSuccess.attachEvents(app, data);
 
-      document.querySelector("#certification_file").addEventListener('change', (e) => {
-        var reader = new FileReader();
-        var file = e.target.files[0];
-        var fileEl = document.querySelector("#certification_file_data");
-        reader.addEventListener("load", function () {
-          var displayEl = document.querySelector("#certification_display");
-          if (file.type.split("/")[0] == "image") {
-            displayEl.innerHTML = "<div class='product-image-holder'><img class='product-image' alt='certification file' src='" + reader.result + "'/></div>";
-          } else {
-            displayEl.innerHTML = file.type.split("/")[1].toUpperCase();
-          }
-          document.querySelector("#certification_file_data").value = reader.result;
-          document.querySelector("#certification_file_name").value = file.name;
-          document.querySelector("#certification_file_type").value = file.type;
-        }, false);
-        reader.readAsDataURL(file);
-      });
-      document.querySelector("#certification_display").addEventListener('click', e => {
-        document.querySelector("#certification_file").click();
-      });
+    });
 
-    }
+    document.getElementById('cancel-certification').addEventListener('click', (e) => {
+      //document.querySelector('.certification').destroy();
+      //document.querySelector('.certification').parentNode.removeChild(document.querySelector('.certification'));
+      document.querySelector('.certification').style.display = "none";
+    });
+
+
+    document.querySelector("#certification_file").addEventListener('change', (e) => {
+      var reader = new FileReader();
+      var file = e.target.files[0];
+      var fileEl = document.querySelector("#certification_file_data");
+      reader.addEventListener("load", function () {
+        var displayEl = document.querySelector("#certification_display");
+        if (file.type.split("/")[0] == "image") {
+          displayEl.innerHTML = "<div class='product-image-holder'><img class='product-image' alt='certification file' src='" + reader.result + "'/></div>";
+        } else {
+          displayEl.innerHTML = file.type.split("/")[1].toUpperCase();
+        }
+        document.querySelector("#certification_file_data").value = reader.result;
+        document.querySelector("#certification_file_name").value = file.name;
+        document.querySelector("#certification_file_type").value = file.type;
+      }, false);
+      reader.readAsDataURL(file);
+    });
+    document.querySelector("#certification_display").addEventListener('click', e => {
+      document.querySelector("#certification_file").click();
+    });
+
+  }
 }
 

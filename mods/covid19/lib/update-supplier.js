@@ -5,14 +5,19 @@ const UpdateSuccess = require('./update-success');
 
 module.exports = UpdateSupplier = {
 
-  render(app, data) {
+  async render(app, data) {
+    
+    var supplier_publickey = app.wallet.returnPublicKey();
+    if (data.covid19.isAdmin()) {
+      supplier_publickey = data.supplier_publickey;
+    }
 
     document.querySelector(".main").innerHTML = UpdateSupplierTemplate(app, data);
 
     //
     // load categories
     //
-    data.covid19.sendPeerDatabaseRequest("covid19", "suppliers", "*", "suppliers.publickey = '"+app.wallet.returnPublicKey()+"'", null, function (res) {
+    data.covid19.sendPeerDatabaseRequest("covid19", "suppliers", "*", "suppliers.publickey = '" + supplier_publickey + "'", null, function (res) {
 
         if (res.rows.length > 0) {
           data.covid19.renderSupplierForm(res.rows[0]);
@@ -38,7 +43,19 @@ module.exports = UpdateSupplier = {
 
   attachEvents(app, data) {
 
+    var supplier_publickey = app.wallet.returnPublicKey();
+    if (data.covid19.isAdmin()) {
+      supplier_publickey = data.supplier_publickey;
+    }
+
+
     document.querySelector('.update-supplier-btn').addEventListener('click', (e) => {
+      try {
+        let pkeyobj = document.querySelector(".supplier_publickey");
+        if (pkeyobj) {
+          supplier_publickey = pkeyobj.value;
+        }
+      } catch (err) { }
 
       let values = [];
 
@@ -51,7 +68,7 @@ module.exports = UpdateSupplier = {
         values.push(field);
       });
 
-      data.covid19.updateServerDatabase(values);
+      data.covid19.updateServerDatabase(values, supplier_publickey);
 
       UpdateSuccess.render(app, data);
       UpdateSuccess.attachEvents(app, data);

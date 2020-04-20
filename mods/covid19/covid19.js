@@ -3,6 +3,8 @@ const ModTemplate = require('../../lib/templates/modtemplate');
 const SplashPage = require('./lib/splash-page');
 const CustomerPortal = require('./lib/customer-portal');
 const SupplierPortal = require('./lib/supplier-portal');
+const InquirePage = require('./lib/inquire-page');
+const Certification = require('./lib/certification');
 
 const Header = require('../../lib/ui/header/covid_header');
 const AddressController = require('../../lib/ui/menu/address-controller');
@@ -48,8 +50,8 @@ class Covid19 extends ModTemplate {
       if (this.browser_active) {
         let chatmod = this.app.modules.returnModule("Chat");
         let uidata = {}
-            uidata.chat = this;
-	chatmod.respondTo('email-chat').render(this.app, uidata);
+        uidata.chat = this;
+        chatmod.respondTo('email-chat').render(this.app, uidata);
         chatmod.respondTo('email-chat').attachEvents(this.app, uidata);
       }
     }
@@ -64,51 +66,55 @@ class Covid19 extends ModTemplate {
     let sql = "";
     let params = {};
 
-    sql = "INSERT INTO certifications (name) VALUES ($name)";
+    sql = "INSERT OR IGNORE INTO certifications (id, name) VALUES (1, $name)";
     params = { $name: "CE Authentication" }
     await app.storage.executeDatabase(sql, params, "covid19");
 
-    sql = "INSERT INTO certifications (name) VALUES ($name)";
+    sql = "INSERTOR IGNORE INTO certifications (id, name) VALUES (2, $name)";
     params = { $name: "FDA Authentication" }
     await app.storage.executeDatabase(sql, params, "covid19");
 
-    sql = "INSERT INTO certifications (name) VALUES ($name)";
+    sql = "INSERT OR IGNORE INTO certifications (id, name) VALUES (3, $name)";
     params = { $name: "Test Report" }
     await app.storage.executeDatabase(sql, params, "covid19");
 
-    sql = "INSERT INTO certifications (name) VALUES ($name)";
+    sql = "INSERT OR IGNORE INTO certifications (id, name) VALUES (4, $name)";
     params = { $name: "Business License" }
     await app.storage.executeDatabase(sql, params, "covid19");
 
-    sql = "INSERT INTO certifications (name) VALUES ($name)";
+    sql = "INSERT OR IGNORE INTO certifications (id, name) VALUES (5, $name)";
     params = { $name: "Medical Device Certificate" }
     await app.storage.executeDatabase(sql, params, "covid19");
 
-    sql = `INSERT INTO categories (name) VALUES ('N95口罩 N95 Mask')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (1, 'N95口罩 N95 Mask')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('外科口罩 Surgical Masks')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (2, '外科口罩 Surgical Masks')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('防护面罩Face shield')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (3, '防护面罩Face shield')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('防护服Protection clothes')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (4, '防护服Protection clothes')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('医疗器械 medical instruments')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (5, '医疗器械 medical instruments')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('防护眼镜 goggles')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (6, '防护眼镜 goggles')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('手套 gloves')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (7, '手套 gloves')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('鞋套 shoe covers')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (8, '鞋套 shoe covers')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('防护头罩 medical hoods')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (9, '防护头罩 medical hoods')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('洗手液 Sanitizers')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (10, '洗手液 Sanitizers')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('医疗垃圾袋 Clinical waste bags')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (11, '医疗垃圾袋 Clinical waste bags')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('医疗围裙 Plastic Aprons')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (12, '医疗围裙 Plastic Aprons')`;
     app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT INTO categories (name) VALUES ('手术服 surgical gown')`;
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (13, '手术服 surgical gown')`;
+    app.storage.executeDatabase(sql, {}, "covid19");
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (14, 'KN95口罩 KN95 Mask')`;
+    app.storage.executeDatabase(sql, {}, "covid19");
+    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (15, 'Disposable Medical Masks')`;
     app.storage.executeDatabase(sql, {}, "covid19");
 
   }
@@ -124,7 +130,7 @@ class Covid19 extends ModTemplate {
 
     sql = "UPDATE products SET category_id = 2 WHERE product_name = '外科口罩 Surgical Masks'";
     await app.storage.executeDatabase(sql, {}, "covid19");
-    
+
     sql = "UPDATE products SET category_id = 3 WHERE product_name = '防护服Protection clothes'";
     await app.storage.executeDatabase(sql, {}, "covid19");
 
@@ -178,16 +184,16 @@ class Covid19 extends ModTemplate {
         let table = "products";
 
         sql = "DELETE FROM products WHERE supplier_id = $supplier_id AND id = $product_id";
-	params = {
-	  $supplier_id:	supplier_id ,
-	  $product_id:  product_id ,
-	};
+        params = {
+          $supplier_id: supplier_id,
+          $product_id: product_id,
+        };
 
-	if (tx.transaction.from[0].add == supplier_publickey || tx.transaction.from[0].add == this.admin_pkey) {
+        if (tx.transaction.from[0].add == supplier_publickey || tx.transaction.from[0].add == this.admin_pkey) {
           await this.app.storage.executeDatabase(sql, params, "covid19");
-	}
+        }
 
-	return;
+        return;
       }
 
 
@@ -199,27 +205,27 @@ class Covid19 extends ModTemplate {
 
         sql = `SELECT id FROM suppliers WHERE publickey = "${supplier_publickey}"`;
         let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
-        if (rows.length == 0) { 
+        if (rows.length == 0) {
           sql = `SELECT max(id) AS maxid FROM "suppliers"`;
           let rows = await this.app.storage.queryDatabase(sql, {}, "covid19");
           if (rows.length == 0) {
             supplier_id = 1;
           } else {
-            supplier_id = rows[0].maxid+1;;
+            supplier_id = rows[0].maxid + 1;;
           }
 
-	  //
-	  // insert supplier if non-existent
-	  //
+          //
+          // insert supplier if non-existent
+          //
           sql = `SELECT id FROM suppliers WHERE publickey = "${tx.transaction.from[0].add}"`;
           let rows2 = await this.app.storage.queryDatabase(sql, {}, "covid19");
-	  if (rows2.length == 0) {
+          if (rows2.length == 0) {
             sql = `INSERT INTO suppliers (id , publickey) VALUES (${supplier_id} , '${tx.transaction.from[0].add}')`;
             await this.app.storage.executeDatabase(sql, {}, "covid19");
-	  }
+          }
 
-	  // add so things work
-	  supplier_publickey = tx.transaction.from[0].add;
+          // add so things work
+          supplier_publickey = tx.transaction.from[0].add;
 
         } else {
           supplier_id = rows[0].id;
@@ -246,18 +252,18 @@ class Covid19 extends ModTemplate {
               id = rows[0].maxid + 1;
             }
 
-	    if (tx.transaction.from[0].add == supplier_publickey || tx.transaction.from[0].add == this.admin_pkey) {
+            if (tx.transaction.from[0].add == supplier_publickey || tx.transaction.from[0].add == this.admin_pkey) {
               sql = `INSERT INTO ${table} (id, supplier_id) VALUES (${id}, ${supplier_id})`;
-//console.log("HERE: " + sql);
+              //console.log("HERE: " + sql);
               await this.app.storage.executeDatabase(sql, {}, "covid19");
             }
           }
 
           if (id > 0) {
-	    if (tx.transaction.from[0].add == supplier_publickey || tx.transaction.from[0].add == this.admin_pkey) {
+            if (tx.transaction.from[0].add == supplier_publickey || tx.transaction.from[0].add == this.admin_pkey) {
               sql = `UPDATE ${table} SET ${column} = "${value}" WHERE id = ${id}`;
               await this.app.storage.executeDatabase(sql, {}, "covid19");
-	    }
+            }
           }
         }
       }
@@ -272,28 +278,28 @@ class Covid19 extends ModTemplate {
         fields.sort((a, b) => a.table.localeCompare(b.table));
 
         let table = "";
-        let columns   = "";
-        let values   = "";
-        let sqls        = [];
-        let id       = -1;
-        let push       = false;
-        
+        let columns = "";
+        let values = "";
+        let sqls = [];
+        let id = -1;
+        let push = false;
+
         let mode = "";
 
         for (let i = 0; i < fields.length; i++) {
 
           if (i == fields.length - 1) {
             push = true;
-          } else if (fields[i].table != fields[i+1].table) {
+          } else if (fields[i].table != fields[i + 1].table) {
             push = true;
           }
 
           let column = fields[i].column;
-          let value  = "'" + fields[i].value + "'";
-          
+          let value = "'" + fields[i].value + "'";
+
           //we are dealing with a new table
           if (fields[i].table != table) {
-            table = fields[i].table; 
+            table = fields[i].table;
             //we don't have an id yet
             if (fields[i].id == "new") {
               sql = `SELECT max(id) AS maxid FROM ${table}`;
@@ -308,24 +314,24 @@ class Covid19 extends ModTemplate {
               mode = "UPDATE";
             }
             columns = column;
-            if (value == "'new'") { value = id};
+            if (value == "'new'") { value = id };
             values = value;
           } else {
             columns += ", " + column;
-            if (value == "'new'") { value = id};
+            if (value == "'new'") { value = id };
             values += ", " + value;
           }
-          
+
 
           if (push) {
-              if (mode = 'INSERT') {
-                sql = `INSERT INTO ${table} (id, ${columns}) VALUES (${id}, ${values});`
-              } else {
-                sql = `UDATE ${table} SET (${columns}) = (${values}) WHERE id = ${id};`
-              }
-              sqls.push(sql);
-              push = false;
+            if (mode = 'INSERT') {
+              sql = `INSERT INTO ${table} (id, ${columns}) VALUES (${id}, ${values});`
+            } else {
+              sql = `UDATE ${table} SET (${columns}) = (${values}) WHERE id = ${id};`
             }
+            sqls.push(sql);
+            push = false;
+          }
         }
         sqls.forEach(sql => {
           try {
@@ -348,6 +354,9 @@ class Covid19 extends ModTemplate {
 
     if (this.app.BROWSER == 0) { return; }
 
+    data = {};
+    data.covid19 = this;
+
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
@@ -360,8 +369,14 @@ class Covid19 extends ModTemplate {
     Header.render(app, data);
     Header.attachEvents(app, data);
 
-    SplashPage.render(app, data);
-    SplashPage.attachEvents(app, data);
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('mode') && urlParams.get('mode') == 'buy') {
+      data.covid19.renderPage("customer", app, data);
+    } else {
+      SplashPage.render(app, data);
+      SplashPage.attachEvents(app, data);
+    }
+
 
     //
     let chatmod = this.app.modules.returnModule("Chat");
@@ -374,8 +389,25 @@ class Covid19 extends ModTemplate {
 
   }
 
+  onPeerHandshakeComplete(app, peer) {
 
-  renderPage(page="home", app, data) {
+    let data = {};
+    data.covid19 = this;
+
+    if (this.browser_active == 1) {
+
+      if (document.querySelector('.product-summary')) {
+        SplashPage.postrender(app, data);
+        SplashPage.attachEvents(app, data);
+      };
+
+    }
+
+  }
+
+
+
+  renderPage(page = "home", app, data) {
 
     data.covid19 = this;
 
@@ -407,7 +439,7 @@ class Covid19 extends ModTemplate {
 
 
 
-  addProductsToTable(rows, fields, data) {
+  addProductsToTable(rows, fields, app, data) {
 
     for (let i = 0; i < rows.length; i++) {
 
@@ -427,38 +459,44 @@ class Covid19 extends ModTemplate {
 
             if (fields[ii] == "product_photo") {
               if (rows[i][fields[ii]] != null) {
-                html += `<div><img style="max-width:200px;max-height:200px" src="${rows[i][fields[ii]]}" /></div>`;
+                //html += `<div><img style="max-width:200px;max-height:200px" src="${rows[i][fields[ii]]}" /></div>`;
+                html += `<div class="product-img-cell" id="product-img-${rows[i].product_id}"><i class="far fa-images"></i></div>`;
                 added = 1;
               }
             }
 
             if (fields[ii] == "edit") {
-	      if (this.app.wallet.returnPublicKey() == this.admin_pkey) { fields[ii] = "admin"; } else {
-                html += `<div class="grid-buttons"><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].id}">Delete</div></div>`;
+              if (this.app.wallet.returnPublicKey() == this.admin_pkey) { fields[ii] = "admin"; } else {
+                html += `<div class="grid-buttons"><div class="grid-action edit_product" id="edit-${rows[i].product_id}">Edit</div><div class="delete_product" id="delete-${rows[i].product_id}">Delete</div><div class="add_cert" id="add-certs-${rows[i].product_id}">Add Cert</div></div>`;
                 added = 1;
-	      }
+              }
             }
 
             if (fields[ii] == "fullview") {
-              //quoted out check as it is meaning the admin buttons are always displayed.
               if (this.app.wallet.returnPublicKey() == this.admin_pkey) {
-                html += `<div class="grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].product_id}">Delete</div></div>`;
+                html += `<div class="grid-buttons"><div class="grid-action fullview_product" id="view-${rows[i].product_id}">View</div><div class="grid-action edit_product" id="edit-${rows[i].product_id}">Edit</div><div class="grid-action delete_product" id="delete-${rows[i].product_id}">Delete</div><!--div class="grid-action add_cert" id="add-certs-${rows[i].product_id}">Add Cert</div--></div>`;
                 added = 1;
-	      } else {
-                html += `<div class="grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div></div>`;
+              } else {
+                //                html += `<div class="grid-action grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div></div>`;
+                html += `<div class="grid-buttons"><div class="grid-action inquire_product" id="inquire-${rows[i].product_id}">Buy</div></div>`;
                 added = 1;
               }
             }
 
             if (fields[ii] == "admin") {
-              html += `<div class="grid-buttons"><div class="edit_product" id="${rows[i].product_id}">Edit</div><div class="delete_product" id="${rows[i].product_id}">Delete</div></div>`;
+              html += `<div class="grid-buttons"><div class="grid-action edit_product" id="edit-${rows[i].product_id}">Edit</div><div class="grid-action delete_product" id="delete-${rows[i].product_id}">Delete</div><div class="grid-action add_cert" id="add-certs-${rows[i].product_id}">Add Cert</div></div>`;
               added = 1;
             }
 
             if (fields[ii] == "certifications") {
               html += `<div class="product_certificates" id="certsfor-${rows[i].product_id}"></div>`;
               added = 1;
-            }            
+            }
+
+            if (fields[ii] == "show_id") {
+              html += `<div>${rows[i].product_id}</div>`;
+              added = 1;
+            }
 
             if (added == 0) {
               html += `<div data-table="${ii}">${rows[i][fields[ii]]}</div>`;
@@ -478,17 +516,78 @@ class Covid19 extends ModTemplate {
 
       }
 
+      html += "";
       document.querySelector(".products-table").innerHTML += html.replace(/null/g, "").replace(/undefined/g, "");
       this.returnCerts(rows[i].product_id, "certsfor-");
-      
+
+
+
     }
-    document.querySelectorAll('.fullview_product').forEach(el => {
-      el.addEventListener('click', (e) => {
-        data.id = e.toElement.id;
-        ProductPage.render(this.app, data);
-        ProductPage.attachEvents(this.app, data);
+    document.querySelector(".products-table").style.display = "grid";
+    try {
+      document.querySelectorAll('.add_cert').forEach(el => {
+        el.addEventListener('click', (e) => {
+          data.id = e.target.id.split("-")[2];
+          Certification.render(app, data);
+          Certification.attachEvents(app, data);
+        });
       });
-    });
+    } catch (err) { }
+    try {
+      document.querySelectorAll('.edit_product').forEach(el => {
+        el.addEventListener('click', (e) => {
+          data.product_id = e.target.id.split("-")[1];
+          UpdateProduct.render(app, data);
+          UpdateProduct.attachEvents(app, data);
+        });
+      });
+    } catch (err) { }
+    try {
+      document.querySelectorAll('.delete_product').forEach(el => {
+        el.addEventListener('click', (e) => {
+          alert("Product Deletion functionality coming soon!");
+        });
+      });
+    } catch (err) { }
+    try {
+      document.querySelectorAll('.fullview_product').forEach(el => {
+        el.addEventListener('click', (e) => {
+          data.id = e.target.id.split("-")[1];
+          ProductPage.render(this.app, data);
+          ProductPage.attachEvents(this.app, data);
+        });
+      });
+    } catch (err) { }
+    try {
+      document.querySelectorAll('.inquire_product').forEach(el => {
+        el.addEventListener('click', (e) => {
+          data.product_id = e.target.id.split("-")[1];
+          if (typeof localStorage.cart == 'undefined') {
+            localStorage.cart = "";
+          }
+          if (!localStorage.cart.split("|").includes(data.product_id)) {
+            localStorage.cart += "|" + data.product_id;
+          }
+
+          //salert('gimme - product id:' + e.target.id)
+          InquirePage.render(this.app, data);
+          InquirePage.attachEvents(this.app, data);
+        });
+      });
+    } catch (err) { }
+    try {
+      document.querySelectorAll('.product-img-cell').forEach(el => {
+        var product_id = el.id.split("-")[2];
+        data.covid19.sendPeerDatabaseRequest("covid19", "products", 'product_photo', "id = " + product_id, null, function (res) {
+          if (res.rows.length > 0) {
+            if (res.rows[0].product_photo.length > 0) {
+              var html = "<img style='max-width:200px;max-height:200px' src='" + res.rows[0].product_photo + "'/>";
+              document.getElementById('product-img-' + product_id).innerHTML = html;
+            }
+          }
+        });
+      });
+    } catch (err) { }
   }
 
 
@@ -506,11 +605,11 @@ class Covid19 extends ModTemplate {
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
-//console.log("SENT TO SERVER");
+    //console.log("SENT TO SERVER");
 
   }
 
-  updateServerDatabase(data_array, publickey, type="Supplier Update") {
+  updateServerDatabase(data_array, publickey, type = "Supplier Update") {
 
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
     newtx.transaction.msg.module = this.name;
@@ -520,7 +619,7 @@ class Covid19 extends ModTemplate {
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
-//console.log("SENT TO SERVER");
+    //console.log("SENT TO SERVER");
 
   }
 
@@ -549,15 +648,15 @@ class Covid19 extends ModTemplate {
     Object.entries(prod).forEach(field => {
       switch (field[0]) {
         case 'id':
-	  break;
+          break;
         case 'supplier_id':
-	  break;
-        case 'category_id':
           break;
         case 'product_name':
+          break;
+        case 'category_id':
           //these extra empty divs ensure that each row of the grid has four elements.
           html += "<div></div><div></div><div></div>"
-          html += "<div><input class='input category_id_input products-" + field[0] + "' data-table='products' type='hidden' data-column='category_id' value='1' /></div>";
+          html += "<div><input class='input category_id_input products-" + field[0] + "' data-table='products' type='hidden' data-column='category_id' value='" + field[1] + "' /></div>";
           break;
         case 'product_specification':
           html += "<div>Specification</div>";
@@ -565,7 +664,7 @@ class Covid19 extends ModTemplate {
           break;
         case 'product_description':
           html += "<div>Description</div>";
-          html += "<textarea class='input products-" + field[0] + "' data-table='products' data-column='" + field[0] + "'>"+field[1]+"</textarea>";
+          html += "<textarea class='input products-" + field[0] + "' data-table='products' data-column='" + field[0] + "'>" + field[1] + "</textarea>";
           break;
         case 'product_dimensions':
           html += "<div>Package Size</div>";
@@ -591,13 +690,19 @@ class Covid19 extends ModTemplate {
           html += "<div>Price (RMB)</div>";
           html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
+        case 'pricing_per_unit_public':
+          if (this.isAdmin()) {
+            html += "<div>Price (USD)</div>";
+            html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
+          }
+          break;
         case 'pricing_notes':
           html += "<div>Pricing Notes</div>";
           html += "<input class='input products-" + field[0] + "' data-table='products' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'pricing_payment_terms':
           html += "<div>Payment Terms</div>";
-          html += "<textarea class='input products-" + field[0] + "' data-table='products' data-column='" + field[0] + "'>"+field[1]+"</textarea>";
+          html += "<textarea class='input products-" + field[0] + "' data-table='products' data-column='" + field[0] + "'>" + field[1] + "</textarea>";
           break;
         case 'production_stock':
           html += "<div>In Stock</div>";
@@ -617,11 +722,11 @@ class Covid19 extends ModTemplate {
     });
     document.querySelector('.product-grid').innerHTML = html;
     document.getElementById('select-product-type').addEventListener('change', (e) => {
- 
+
       try {
         document.querySelector(".update-product-btn").style.display = "block";
-      } catch (err) {}
-      
+      } catch (err) { }
+
       let category_id = e.currentTarget.value;
       if (category_id > 0) {
 
@@ -674,8 +779,10 @@ class Covid19 extends ModTemplate {
           html += "<input class='input' data-table='suppliers' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
           break;
         case 'notes':
-          html += "<div>Notes</div>";
-          html += "<textarea class='input' data-table='suppliers' data-column='" + field[0] + "'>" + field[1] + "</textarea>";
+          if (this.isAdmin()) {
+            html += "<div>Notes</div>";
+            html += "<textarea class='input' data-table='suppliers' data-column='" + field[0] + "'>" + field[1] + "</textarea>";
+          }
           break;
         default:
           break;
@@ -686,38 +793,37 @@ class Covid19 extends ModTemplate {
 
   }
 
-  /*addCertsToGrid(grid) {
-     grid.querySelectorAll('.product_certificates').forEach(div => { 
-       this.returnCerts(div.id.split("-")[1]);
-     });
-  }*/
 
   returnCerts(id, prefix) {
     // should this be generalised to module wide?
     var module_self = this;
-    
-    fields = "pc.product_id as 'product_id', c.name as 'Name', pc.id as cert_id";
+
+    fields = "pc.product_id as 'product_id', c.name as 'Name', note, pc.id as cert_id";
     var from = "certifications as 'c' JOIN products_certifications as 'pc'";
     var where = "c.id = pc.certification_id and pc.product_id = " + id;
     this.sendPeerDatabaseRequest("covid19", from, fields, where, null, function (res) {
-  
+
       if (res.rows.length > 0) {
         var el = document.getElementById(prefix + res.rows[0].product_id);
         module_self.renderCerts(res.rows, el);
-  
       }
     });
   }
+
 
   renderCerts(rows, el) {
     // should this be generalised to module wide?
     var module_self = this;
     var html = "";
     rows.forEach(row => {
+      var note = "";
+      if (row["note"]) {
+        note = "<div class='tiptext'>" + row["note"] + "</div>"
+      }
       if (row["cert_id"] != null) {
-        html += "<div class='cert'><a class='attach-" + row["cert_id"] + "'>" + row["Name"] + "</a></div>";
+        html += "<div class='cert tip'><a class='attach-" + row["cert_id"] + "'>" + row["Name"] + "</a>" + note + "</div>";
       } else {
-        html += "<div class='cert'>" + row["Name"] + "</div>";
+        html += "<div class='cert tip'>" + row["Name"] + note + "</div>";
       }
       el.innerHTML = html;
     });
@@ -745,7 +851,7 @@ class Covid19 extends ModTemplate {
         salert("Download attachment: " + res.rows[0]["file_filename"]);
       }
     });
-  }  
+  }
 
   returnAttachment(id) {
     this.sendPeerDatabaseRequest("covid19", "attachments", "*", "id= " + id, null, function (res) {
@@ -766,9 +872,9 @@ class Covid19 extends ModTemplate {
   }
 
   isAdmin() {
-    return 1;
-    if (this.app.wallet.returnPublicKey() == this.admin_publickey) { return 1; }
-    return 0;
+    //return 1;
+    if (this.app.wallet.returnPublicKey() == this.admin_pkey) { return true; }
+    return false;
   }
 
 }

@@ -1,4 +1,5 @@
 const ProductPageTemplate = require('./product-page.template');
+const UpdateSupplier = require('./update-supplier.js');
 
 const this_productPage = this;
 
@@ -24,7 +25,7 @@ module.exports = ProductPage = {
         product_photo as 'Product Image', \
         production_stock as 'Stock', \
         production_daily_capacity as 'Daily Production', \
-        pricing_per_unit_rmb as 'Price (RMB)', \ 
+        pricing_per_unit_public as 'Price (USD)', \ 
         pricing_notes as 'Pricing Notes', \
         product_dimensions as 'Package Dimensions', \
         product_weight as 'Weight', \
@@ -43,28 +44,49 @@ module.exports = ProductPage = {
           document.querySelector(".product-name").innerHTML = res.rows[0]["Specification"];
           data.covid19.active_category_id = res.rows[0]["category_id"];
 
-          //
-          // load certificates
-          fields = "name as 'Name', address as 'Province', notes as 'Notes'";
-          data.covid19.sendPeerDatabaseRequest("covid19", "suppliers", fields, "id= " + supplier_id, null, function (res) {
 
-            if (res.rows.length > 0) {
-              data.covid19.renderSupplier(res.rows[0]);
-            }
-          });
+          if (data.covid19.isAdmin()) {
+            var html = "<div></div><div class='edit-button-holder'><button id='edit-supplier'>Edit</button></div>";
+            document.querySelector('.supplier-profile').innerHTML += html;
+            //
+            // load supplier admin
+            fields = "name as 'Name', address as 'Province', phone as 'Phone', email as 'Email', wechat as 'WeChat', notes as 'Notes', publickey";
+            data.covid19.sendPeerDatabaseRequest("covid19", "suppliers", fields, "id= " + supplier_id, null, function (res) {
+              if (res.rows.length > 0) {
+                data.covid19.renderSupplier(res.rows[0]);
+                data.supplier_publickey = res.rows[0].publickey;
+                document.getElementById('edit-supplier').addEventListener('click', (e) => {
+                  data.supplier_id = supplier_id;
+                  UpdateSupplier.render(app, data);
+                  UpdateSupplier.attachEvents(app, data);
+                });
+              }
+            });
 
-          //
-          // load certifications
-          //
-          fields = "pc.product_id as 'product_id', c.name as 'Name', pc.id as cert_id";
-          var from = "certifications as 'c' JOIN products_certifications as 'pc'";
-          var where = "c.id = pc.certification_id and pc.product_id = " + data.id;
-          data.covid19.sendPeerDatabaseRequest("covid19", from, fields, where, null, function (res) {
-            if (res.rows.length > 0) {
-              data.covid19.renderCerts(res.rows, document.querySelector('.cert-grid'));
-            }
-          });
-        }
+          } else {
+            //
+            // load supplier supplier
+            fields = "address as 'Province'";
+            data.covid19.sendPeerDatabaseRequest("covid19", "suppliers", fields, "id= " + supplier_id, null, function (res) {
+              if (res.rows.length > 0) {
+                data.covid19.renderSupplier(res.rows[0]);
+              }
+            });
+          }
+
+
+        //
+        // load certifications
+        //
+        fields = "pc.product_id as 'product_id', c.name as 'Name', note, pc.id as cert_id";
+        var from = "certifications as 'c' JOIN products_certifications as 'pc'";
+        var where = "c.id = pc.certification_id and pc.product_id = " + data.id;
+        data.covid19.sendPeerDatabaseRequest("covid19", from, fields, where, null, function (res) {
+          if (res.rows.length > 0) {
+            data.covid19.renderCerts(res.rows, document.querySelector('.cert-grid'));
+          }
+        });
+      }
       });
     });
     document.querySelector(".loading").style.display = "none";
