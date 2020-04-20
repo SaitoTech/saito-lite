@@ -17,15 +17,20 @@ module.exports = SplashPageTemplate = () => {
     The resulting data offers a real-time view into the supply and price and quality of COVID-19 response equipment. Our team is working around the clock to keep this information up-to-date. All information on product availability, production capacity and supplier certifications are cryptographically-signed and publicly viewable.
 
     </p>
-    <p>
 
-    <div class="flex-around">
-      <button id="customer-search-btn" class="button">For Purchasers</button>
-      <button id="supplier-portal-btn" class="button">For Suppliers</button>
+    <div class="summary-section">
+
+      <h3>Product Availability</h3>
+
+      <hr />
+
+      <div class="product-summary">
+        Loading...
+      </div>
+
+      <hr />
+  
     </div>
-
-    </p>
-    
     
     <h3>Who are the people behind this datahub?</h3>
 
@@ -42,6 +47,15 @@ module.exports = SplashPageTemplate = () => {
     <p>
 
     We have access to all major personal protection equipments, including face shields, goggles, masks (N94/N95/Surgical). All of the factories we source from directly have verified certifications and test results. We are working hard to make this information transparent and help bring additional production capacity online as possible.
+
+    </p>
+
+    <p>
+
+    <div class="flex-around">
+      <button id="customer-search-btn" class="button">For Purchasers</button>
+      <button id="supplier-portal-btn" class="button">For Suppliers</button>
+    </div>
 
     </p>
 

@@ -19,6 +19,9 @@ const Survey = require('./lib/modal/survey/survey.js');
 const SuggestTemplate = require('./lib/modal/suggest/suggest.template.js');
 const Suggest = require('./lib/modal/suggest/suggest.js');
 
+const NewsletterTemplate = require('./lib/modal/newsletter/newsletter.template.js');
+const Newsletter = require('./lib/modal/newsletter/newsletter.js');
+
 class Tutorial extends ModTemplate {
 
   constructor(app) {
@@ -131,6 +134,24 @@ class Tutorial extends ModTemplate {
         console.error(err);
       }
     }
+
+    if (message.request == "user newsletter") {
+      try {
+        let sql = "INSERT OR IGNORE INTO newsletter (publickey, email_data, unixtime) VALUES ($publickey, $email_data, $unixtime);";
+        let params = {
+          $publickey:   message.data.key,
+          $email_data:  message.data.email_data,
+          $unixtime:    message.data.time
+        }
+
+        await this.app.storage.executeDatabase(sql, params, "tutorial");
+
+        return;
+
+      } catch (err){
+        console.log(err);
+      }
+    }
   }
 
 
@@ -224,6 +245,24 @@ class Tutorial extends ModTemplate {
     modal.render("blank");
 
     Suggest.attachEvents(this.app, data);
+
+  }
+
+  newsletterModal() {
+
+    let modal = new Modal(this.app, {
+      id: 'newsletter',
+      title: 'Sign up for Newsletter',
+      content: NewsletterTemplate()
+    });
+
+    let data = {};
+    data.tutorial = this;
+    data.modal = modal;
+
+    modal.render("blank");
+
+    Newsletter.attachEvents(this.app, data);
 
   }
 

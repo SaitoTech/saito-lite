@@ -169,23 +169,15 @@ button.add-games {
 .arcade-sidebar-active-games-body, .arcade-sidebar-active-leaderboard-body {
   border: 1px solid var(--saito-red);
   background: #1e1e1f50;
-  height: 40vh;
+  max-height: 30vh;
   overflow-y: auto;
+  padding: 0 3px;
 }
 
 .arcade-sidebar-active-leaderboard-body {
   height: 25vh;
 }
 
-.arcade-observer-game-row {
-  /* border: 1px solid grey;
-  padding: 10px;
-  margin-top: 10px; */
-  /* border: 1px solid grey; */
-  padding: 10px;
-  margin-bottom: 10px;
-  background: whitesmoke;
-}
 
 #arcade-play-btn {
   padding-bottom: 1.7em;
@@ -332,8 +324,7 @@ button.add-games {
 }
 
 .game-wizard-content::-webkit-scrollbar { /* WebKit */
-  width: 0;
-  height: 0;
+  width: 3;
 }
 
 .game-wizard-form {
@@ -405,13 +396,32 @@ button.add-games {
 }
 
 .arcade-observer-game-players-identicon {
-  height: 60px;
-  width: 60px;
+  height: 24px;
+  width: 24px;
   float: right;
   margin-left: 8px;
 }
 
-.arcade-observer-game-name {}
+.arcade-observer-game-name {
+  font-size:1.2em;
+  padding: 3px 0 0 0;
+}
+
+.arcade-observer-game-row {
+  padding: 3px;
+  margin: 3px 0;
+  display: grid;
+  grid-template-columns: 3fr 2fr 3fr;
+  grid-gap: 1em;
+}
+
+.arcade-observer-game-btn {
+  width: 3em;
+  min-width: unset;
+  margin: 0;
+  padding: 2px;
+  font-size: small;
+}
 
 .arcade-observer-game-row {}
 

@@ -6,15 +6,14 @@ module.exports = ArcadeRightSidebarTemplate = (publickey, id) => {
   ` :
   `<b>Welcome Anonymous!</b>`;
   top_right_html += ` 
+  <div class="arcade-sidebar-balance"></div>
   <div class="arcade-sidebar-notices"></div>
   </div>
   `;
 
   return `
   <div class="arcade-announcement">${top_right_html}</div>
-  <div class="arcade-sidebar-box">
-  </div>
-
   <div class="arcade-sidebar-respondees"></div>
+  <div class="arcade-sidebar-active-games-body"></div>
   `;
 }

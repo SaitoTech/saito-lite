@@ -67,7 +67,7 @@ class Arcade extends ModTemplate {
   observeGame(msg) {
 
     let msgobj = JSON.parse(this.app.crypto.base64ToString(msg));
-    let address_to_watch = msgobj.publickey;
+    let address_to_watch = msgobj.player;
     let game_id = msgobj.game_id;
     let arcade_self = this;
 
@@ -79,8 +79,9 @@ class Arcade extends ModTemplate {
       for (let i = 0; i < games.length; i++) {
         if (games[i].id == game_id) {
           games[i].ts = new Date().getTime();
-          this.app.storage.saveOptions();
-          window.location = '/' + games[i].module.returnSlug();
+          this.app.keys.addWatchedPublicKey(address_to_watch);
+          let slug = this.app.modules.returnModule(msgobj.module).returnSlug();
+          window.location = '/' + slug;
           return;
         }
       }
@@ -111,12 +112,14 @@ class Arcade extends ModTemplate {
           }
 
           games.push(game);
+
           this.app.storage.saveOptions();
 
           //
           // move into game
           //
-          window.location = '/' + games[games.length - 1].module.toLowerCase().replace(/\w/, '_');
+          let slug = this.app.modules.returnModule(msgobj.module).returnSlug();
+          window.location = '/' + slug;
         })
       })
       .catch(err => console.info("ERROR 418019: error fetching game for observer mode", err));
@@ -261,7 +264,6 @@ console.log("loading into Arcade: " + y[i].name);
       }
     });
 
-    /* removed both observer code when not in use
     //
     // load active games for observer mode
     //
@@ -269,7 +271,7 @@ console.log("loading into Arcade: " + y[i].name);
       "arcade",
       "gamestate",
       "DISTINCT game_id, module, player, players_array",
-      "1 = 1 GROUP BY game_id ORDER BY last_move DESC LIMIT 50",
+      "1 = 1 GROUP BY game_id ORDER BY last_move DESC LIMIT 5",
       null,
       (res) => {
         if (res.rows) {
@@ -279,12 +281,11 @@ console.log("loading into Arcade: " + y[i].name);
               game_id,
               module,
               players_array,
-              publickey,
+              player,
             });
           });
         }
       });
-    */
    
   }
 
@@ -374,14 +375,6 @@ console.log("EXISTING GAMES: " + JSON.stringify(this.games));
 	return; 
       }
 
-
-//      let id = "unknown";
-//      if (this.games[i].id !== "") { id = String(this.games[i].id); };
-//      if (id.length < 25) { 
-//	console.log("Game Invitation has ID of less than 25 - exiting");
-//	return;
-//      }
-//      if (id == transaction.sig) { return; }
     }
 
 
@@ -826,8 +819,8 @@ console.log(app.options.games[i].id);
       if (txmsg.request == "accept") {
           this.removeGameFromOpenList(txmsg.game_id);
           if(txmsg.players.includes(app.wallet.returnPublicKey())) {
-            siteMessage('Your ' + txmsg.game + ' invite accepted.', 20000);
-            app.browser.sendNotification('Game Accepted', 'Your ' + txmsg.game + ' invite accepted.', 'game-acceptance-notification');
+            siteMessage(txmsg.game + ' invite accepted.', 20000);
+            app.browser.sendNotification('Game Accepted', + txmsg.game + ' invite accepted.', 'game-acceptance-notification');
           }
       }
 
@@ -1032,6 +1025,7 @@ console.log(app.options.games[i].id);
     if (txmsg.game_state != "") { game_state = txmsg.game_state; }
     if (txmsg.key_state != "") { key_state = txmsg.key_state; }
 
+
     let sql = `INSERT INTO gamestate (
                 game_id ,
                 player ,
@@ -1060,7 +1054,14 @@ console.log(app.options.games[i].id);
     for (let z = 0; z < txto.length; z++) {
       if (!x.includes(txto[z].add)) { x.push(txto[z].add); }
     }
+
+    //
+    // do not save 1-player games
+    //
+    if (x.length == 1) { return; }
+
     let players_array = x.join("_");
+
     let params = {
       $game_id: txmsg.game_id,
       $player: tx.transaction.from[0].add,
@@ -1073,6 +1074,7 @@ console.log(app.options.games[i].id);
       $game_state: JSON.stringify(game_state),
       $last_move: (new Date().getTime())
     };
+
     await app.storage.executeDatabase(sql, params, "arcade");
 
   }

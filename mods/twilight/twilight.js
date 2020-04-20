@@ -1703,7 +1703,7 @@ console.log("\n\n\n\n");
                 this.game.queue.splice(le, 2);
                 rmvd = 1;
               }
-        if (lmv[0] == "deal" && mv[1] == "deal") {
+              if (lmv[0] == "deal" && mv[1] == "deal") {
                 this.game.queue.splice(le, 2);
                 rmvd = 1;
               }
@@ -1723,7 +1723,7 @@ console.log("\n\n\n\n");
                 this.game.queue.splice(qe, 1);
 
                 //
-                // go back through the queue and remove any event tht matches this one
+                // go back through the queue and remove the first event that matches this one
                 //
                 for (let z = le, zz = 1; z >= 0 && zz == 1; z--) {
                   let tmplmv = this.game.queue[z].split("\t");
@@ -1737,6 +1737,14 @@ console.log("\n\n\n\n");
                         }
                       }
                     }
+
+		    //
+ 		    // may need to remove deal
+		    //
+                    if (tmplmv[0] === "deal" && mv[1] == "deal") {
+                      this.game.queue.splice(z);
+                      zz = 0;
+		    }
                   }
                 }
               }

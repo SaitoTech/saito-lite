@@ -20,7 +20,6 @@ module.exports = UpdateSupplier = {
     data.covid19.sendPeerDatabaseRequest("covid19", "suppliers", "*", "suppliers.publickey = '" + supplier_publickey + "'", null, function (res) {
 
 	let html = "";
-
         if (res.rows.length > 0) {
           html = data.covid19.returnForm("covid19", "suppliers", res.rows[0].id, res.rows[0]);
         } else {
@@ -50,7 +49,6 @@ module.exports = UpdateSupplier = {
       supplier_publickey = data.supplier_publickey;
     }
 
-
     document.querySelector('.update-supplier-btn').addEventListener('click', (e) => {
       try {
         let pkeyobj = document.querySelector(".supplier_publickey");
@@ -64,12 +62,12 @@ module.exports = UpdateSupplier = {
 	let id = "";
 	for (let i = 0; i < values.length; i++) { if (values[i].id == "") { insert = 1; }  }
 
+
 	if (insert == 1) {
           id = data.covid19.insertDatabase(values);
 	}
 	for (let i = 0; i < values.length; i++) { if (values[i].id == "") { values[i].id = id; }  }
         data.covid19.updateDatabase(values);
-
         UpdateSuccess.render(app, data);
         UpdateSuccess.attachEvents(app, data);
 

@@ -23,7 +23,8 @@ class Rewards extends ModTemplate {
     this.backupPayout = 50;
     this.registryPayout = 50;
     this.surveyPayout = 50;
-    this.suggestPayout = 10;
+    this.suggestPayout = 25;
+    this.newsletterPayout = 50;
 
     this.referralBonus = 0.1;
 
@@ -96,7 +97,11 @@ class Rewards extends ModTemplate {
 
     if (message.request == "user suggest") {
       this.payoutFirstInstance(message.data.key, message.request, this.suggestPayout);
-    }  
+    }
+
+    if (message.request == "user newsletter") {
+      this.payoutFirstInstance(message.data.key, message.request, this.newsletterPayout);
+    }
 
     if (message.request == "update activities") {
       var completed = await this.returnEvents(message.data)
