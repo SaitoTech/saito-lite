@@ -1,0 +1,249 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Scotland Yard</title>
+
+  <script type="text/javascript" src="/saito/lib/jquery/jquery-3.2.1.min.js"></script>
+  <link rel="stylesheet" href="/saito/lib/jquery/jquery-ui.min.css" type="text/css" media="screen" />
+  <script type="text/javascript" src="/saito/lib/jquery/jquery-ui.min.js"></script>
+
+  <script type="text/javascript" src="/saito/lib/hammer/hammer.min.js"></script>
+
+  <link rel="stylesheet" href="/saito/lib/font-awesome-5/css/font-awesome.min.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/saito/lib/font-awesome-5/css/all.css" type="text/css" media="screen" />
+
+  <link rel="stylesheet" type="text/css" href="/saito/style.css" />
+  <link rel="stylesheet" type="text/css" href="/saito/lib/templates/game.css" />
+  <link rel="stylesheet" type="text/css" href="/scotland/style.css" />
+
+  <link rel="stylesheet" type="text/css" href="/chat/css/email-chat.css">
+
+  <link rel="icon" media="all" type="image/x-icon" href="/favicon.ico?v=2"/>
+
+</head>
+<body>
+
+  <div id="main" class="main" style="display:all">
+
+    <div class="cardbox" id="cardbox" style="display:none">
+      <div class="cardbox-exit" id="cardbox-exit" style="display:none">×</div>
+      <div class="cardbox_menu_playcard cardbox_menu_btn" id="cardbox_menu_playcard" style="display:none">PLAY</div>
+    </div>
+
+    <div class="gameboard" id="gameboard">
+
+      <div class="locations" id="locations">
+	<div class="location" id="1"></div>
+	<div class="location" id="2"></div>
+	<div class="location" id="3"></div>
+	<div class="location" id="4"></div>
+	<div class="location" id="5"></div>
+	<div class="location" id="6"></div>
+	<div class="location" id="7"></div>
+	<div class="location" id="8"></div>
+	<div class="location" id="8"></div>
+	<div class="location" id="9"></div>
+	<div class="location" id="10"></div>
+	<div class="location" id="11"></div>
+	<div class="location" id="12"></div>
+	<div class="location" id="13"></div>
+	<div class="location" id="14"></div>
+	<div class="location" id="15"></div>
+	<div class="location" id="16"></div>
+	<div class="location" id="17"></div>
+	<div class="location" id="18"></div>
+	<div class="location" id="19"></div>
+	<div class="location" id="20"></div>
+	<div class="location" id="21"></div>
+	<div class="location" id="22"></div>
+	<div class="location" id="23"></div>
+	<div class="location" id="24"></div>
+	<div class="location" id="25"></div>
+	<div class="location" id="26"></div>
+	<div class="location" id="27"></div>
+	<div class="location" id="28"></div>
+	<div class="location" id="29"></div>
+	<div class="location" id="30"></div>
+	<div class="location" id="31"></div>
+	<div class="location" id="32"></div>
+	<div class="location" id="33"></div>
+	<div class="location" id="34"></div>
+	<div class="location" id="35"></div>
+	<div class="location" id="36"></div>
+	<div class="location" id="37"></div>
+	<div class="location" id="38"></div>
+	<div class="location" id="39"></div>
+	<div class="location" id="40"></div>
+	<div class="location" id="41"></div>
+	<div class="location" id="42"></div>
+	<div class="location" id="43"></div>
+	<div class="location" id="44"></div>
+	<div class="location" id="45"></div>
+	<div class="location" id="46"></div>
+	<div class="location" id="47"></div>
+	<div class="location" id="48"></div>
+	<div class="location" id="49"></div>
+	<div class="location" id="50"></div>
+	<div class="location" id="51"></div>
+	<div class="location" id="52"></div>
+	<div class="location" id="53"></div>
+	<div class="location" id="54"></div>
+	<div class="location" id="55"></div>
+	<div class="location" id="56"></div>
+	<div class="location" id="57"></div>
+	<div class="location" id="58"></div>
+	<div class="location" id="59"></div>
+	<div class="location" id="60"></div>
+	<div class="location" id="61"></div>
+	<div class="location" id="62"></div>
+	<div class="location" id="63"></div>
+	<div class="location" id="64"></div>
+	<div class="location" id="65"></div>
+	<div class="location" id="66"></div>
+	<div class="location" id="67"></div>
+	<div class="location" id="68"></div>
+	<div class="location" id="69"></div>
+	<div class="location" id="70"></div>
+	<div class="location" id="71"></div>
+	<div class="location" id="72"></div>
+	<div class="location" id="73"></div>
+	<div class="location" id="74"></div>
+	<div class="location" id="75"></div>
+	<div class="location" id="76"></div>
+	<div class="location" id="77"></div>
+	<div class="location" id="78"></div>
+	<div class="location" id="79"></div>
+	<div class="location" id="80"></div>
+	<div class="location" id="81"></div>
+	<div class="location" id="82"></div>
+	<div class="location" id="83"></div>
+	<div class="location" id="84"></div>
+	<div class="location" id="85"></div>
+	<div class="location" id="86"></div>
+	<div class="location" id="87"></div>
+	<div class="location" id="88"></div>
+	<div class="location" id="89"></div>
+	<div class="location" id="90"></div>
+	<div class="location" id="91"></div>
+	<div class="location" id="92"></div>
+	<div class="location" id="93"></div>
+	<div class="location" id="94"></div>
+	<div class="location" id="95"></div>
+	<div class="location" id="96"></div>
+	<div class="location" id="97"></div>
+	<div class="location" id="98"></div>
+	<div class="location" id="99"></div>
+	<div class="location" id="100"></div>
+	<div class="location" id="101"></div>
+	<div class="location" id="102"></div>
+	<div class="location" id="103"></div>
+	<div class="location" id="104"></div>
+	<div class="location" id="105"></div>
+	<div class="location" id="106"></div>
+	<div class="location" id="107"></div>
+	<div class="location" id="108"></div>
+	<div class="location" id="110"></div>
+	<div class="location" id="111"></div>
+	<div class="location" id="112"></div>
+	<div class="location" id="113"></div>
+	<div class="location" id="114"></div>
+	<div class="location" id="115"></div>
+	<div class="location" id="116"></div>
+	<div class="location" id="117"></div>
+	<div class="location" id="118"></div>
+	<div class="location" id="119"></div>
+	<div class="location" id="120"></div>
+	<div class="location" id="121"></div>
+	<div class="location" id="122"></div>
+	<div class="location" id="123"></div>
+	<div class="location" id="124"></div>
+	<div class="location" id="125"></div>
+	<div class="location" id="126"></div>
+	<div class="location" id="127"></div>
+	<div class="location" id="128"></div>
+	<div class="location" id="129"></div>
+	<div class="location" id="130"></div>
+	<div class="location" id="131"></div>
+	<div class="location" id="132"></div>
+	<div class="location" id="133"></div>
+	<div class="location" id="134"></div>
+	<div class="location" id="135"></div>
+	<div class="location" id="136"></div>
+	<div class="location" id="137"></div>
+	<div class="location" id="138"></div>
+	<div class="location" id="139"></div>
+	<div class="location" id="140"></div>
+	<div class="location" id="141"></div>
+	<div class="location" id="142"></div>
+	<div class="location" id="143"></div>
+	<div class="location" id="144"></div>
+	<div class="location" id="145"></div>
+	<div class="location" id="146"></div>
+	<div class="location" id="147"></div>
+	<div class="location" id="148"></div>
+	<div class="location" id="149"></div>
+	<div class="location" id="150"></div>
+	<div class="location" id="151"></div>
+	<div class="location" id="152"></div>
+	<div class="location" id="153"></div>
+	<div class="location" id="154"></div>
+	<div class="location" id="155"></div>
+	<div class="location" id="156"></div>
+	<div class="location" id="157"></div>
+	<div class="location" id="158"></div>
+	<div class="location" id="159"></div>
+	<div class="location" id="160"></div>
+	<div class="location" id="161"></div>
+	<div class="location" id="162"></div>
+	<div class="location" id="163"></div>
+	<div class="location" id="164"></div>
+	<div class="location" id="165"></div>
+	<div class="location" id="166"></div>
+	<div class="location" id="167"></div>
+	<div class="location" id="168"></div>
+	<div class="location" id="169"></div>
+	<div class="location" id="170"></div>
+	<div class="location" id="171"></div>
+	<div class="location" id="172"></div>
+	<div class="location" id="173"></div>
+	<div class="location" id="174"></div>
+	<div class="location" id="175"></div>
+	<div class="location" id="176"></div>
+	<div class="location" id="177"></div>
+	<div class="location" id="178"></div>
+	<div class="location" id="179"></div>
+	<div class="location" id="180"></div>
+	<div class="location" id="181"></div>
+	<div class="location" id="182"></div>
+	<div class="location" id="183"></div>
+	<div class="location" id="184"></div>
+	<div class="location" id="185"></div>
+	<div class="location" id="186"></div>
+	<div class="location" id="187"></div>
+	<div class="location" id="188"></div>
+	<div class="location" id="189"></div>
+	<div class="location" id="190"></div>
+	<div class="location" id="191"></div>
+	<div class="location" id="192"></div>
+	<div class="location" id="193"></div>
+	<div class="location" id="194"></div>
+	<div class="location" id="195"></div>
+	<div class="location" id="196"></div>
+	<div class="location" id="197"></div>
+	<div class="location" id="198"></div>
+	<div class="location" id="199"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/saito/saito.js"></script>
+
+</body>
+</html>
+

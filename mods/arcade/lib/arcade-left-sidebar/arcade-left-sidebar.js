@@ -20,7 +20,13 @@ module.exports = ArcadeLeftSidebar = {
 
     for (let i = 0; i < gamemods.length; i++) {
       if (gamemods[i].respondTo("arcade-games")) {
-        games_menu.innerHTML += `<li class="arcade-navigator-item" id="${gamemods[i].name}">${gamemods[i].name}</li>`;
+	let title = gamemods[i].name;
+	if (gamemods[i].respondTo("arcade-carousel") != null) {
+	  if (gamemods[i].respondTo("arcade-carousel").title) {
+  	    title = gamemods[i].respondTo("arcade-carousel").title;
+	  }
+	}
+        games_menu.innerHTML += `<li class="arcade-navigator-item" id="${gamemods[i].name}">${title}</li>`;
       }
     }
 

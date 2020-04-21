@@ -1,0 +1,59 @@
+
+.gameboard {
+  position: relative;
+  background-image: url("/scotland/img/gameboard-large.jpg");
+  background-size: cover;
+  width: 5135px;
+  height: 3829px;
+}
+
+
+.pawn {
+  width: 75px;
+  top: -55px;
+  position: relative;
+  background-color: yellow;
+}
+
+.cardbox {
+  position: absolute;
+  height: 48vh;
+  max-height: 520px;
+  width: calc(48vh * 0.72110);
+  max-width: 375px;
+  background-size: cover;
+  z-index: 20;
+  display: none;
+  top: 27%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+
+.location {
+ position: absolute;
+ opacity: 0.6;
+ height: 75px;
+ width: 75px;
+ top: 120px;
+ left: 570px;
+}
+
+@media only screen and (min-width: 750px) {
+}
+
+@media only screen and (orientation: portrait) and (max-width: 750px) {
+}
+
+@media only screen and (orientation: portrait) and (max-height: 700px) {
+}
+
+@media only screen and (orientation: landscape) and (max-height: 700px) {
+}
+
+@media (min-width: 481px) and (max-width: 850px) and (max-height: 500px) {
+}
+
+
+
