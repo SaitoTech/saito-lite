@@ -17,7 +17,7 @@ class Scotland extends Gamev2Template {
 
     this.name  		 = "Scotland";
     this.slug		 = "scotland";
-    this.description     = `Scotland Yard is a cat-and-mouse detective game set in London, England. Mister X must hide from the Detectives hot on his trail while finding a safe path through a crowded public transit system and avoiding detection`;
+    this.description     = `Scotland Yard is a cat-and-mouse detective game set in London, England. Criminal mastermind Mister X must wind his way through the city while hiding from Scotland Yard.<p></p>The Saito edition of Scotland Yard is modified slightly to improve the balance of gameplay over the traditional version. If played with less than six players, the players controlling the detectives will control multiple detectives to increase the effectiveness of surround-and-capture strategies.`;
     this.type       	 = "strategy boardgame";
     this.categories      = "Games Arcade Entertainment";
 
@@ -36,14 +36,45 @@ class Scotland extends Gamev2Template {
     this.minPlayers = 2;
     this.maxPlayers = 5; // need extra pawn color for 6
 
-    this.menuItems = ['lang'];
+
+    this.number_of_detectives = 5;
+
 
     //
     //
     //
+    this.hud = new GameHud(this.app, this.menuItems());
 
   }
 
+
+
+
+  menuItems() {
+    return {
+      'game-x': {
+        name: 'Clues',
+        callback: this.handleCluesMenuItem.bind(this)
+      },
+    }
+  }
+
+
+  handleCluesMenuItem() {
+    let scotland_self = this;
+
+    let html = `<div id="game-clues">`;
+    for (let i = 0; i < this.game.state.clues.length; i++) {
+      html += '<div class="game-clues-row">'+this.game.state.clues[i]+'</div>';
+    }
+    html += `</div>`;
+
+
+    $('.hud-menu-overlay').html(html);
+    $('.status').hide();
+    $('.hud-menu-overlay').show();
+
+  }
 
 
 
@@ -201,7 +232,11 @@ class Scotland extends Gamev2Template {
 
 	let x = this.rollDice(this.game.players.length);
 
-	for (let i = 0; i < this.game.players.length; i++) {
+//
+//
+//
+//	for (let i = 0; i < this.game.players.length; i++) {
+	for (let i = 0; i < (this.number_of_detectives+1); i++) {
 	  if (x == (i+1)) {
 
 	      this.game.state.roles[i] = "Mister X";
@@ -228,10 +263,7 @@ class Scotland extends Gamev2Template {
 	      let start_pos = this.rollDice(this.game.state.starting_positions.length)-1;
 
 	      this.game.state.player_location[i] = this.game.state.starting_positions[start_pos];
-console.log("\nDETECTIVE SPOS: " + this.game.state.player_location[i]);
 	      this.game.state.starting_positions.splice(start_pos, 1);
-
-
 
 	  }
 
@@ -266,8 +298,8 @@ console.log("\nDETECTIVE SPOS: " + this.game.state.player_location[i]);
 
 	let player = parseInt(mv[1]);
 
-	this.game.queue.push("move\t"+player);
-	this.game.queue.push("move\t"+player);
+	this.game.queue.push("play\t"+player+"\t"+gamer);
+	this.game.queue.push("play\t"+player+"\t"+gamer);
         this.game.state.double_in_action = 1;
         this.game.queue.splice(qe, 1);
 
@@ -278,25 +310,69 @@ console.log("\nDETECTIVE SPOS: " + this.game.state.player_location[i]);
       if (mv[0] === "move") {
 
 	let player = parseInt(mv[1]);
-        let target_id = mv[2];
-	let ticket = mv[3];
+        let source_id = mv[2];
+        let target_id = mv[3];
+	let ticket = mv[4];
+	let ticket_spent = 0;
 
-
-	if (ticket === "taxi") {
+	if (ticket === "double") {
+	  if (player == this.game.state.x) {
+	    this.updateLog("Mr. X has taken a double turn...");
+	  }
+	  this.game.state.tickets[player-1]['double']--;
+          ticket_spent = 1;
+ 	}
+	if (ticket === "taxi" && this.game.state.tickets[player-1]['taxi'] > 0) {
+	  if (player == this.game.state.x) {
+	    this.updateLog("Mr. X was spotted in a taxi...");
+	    this.game.state.clues.push(this.game.state.round + " - Mr. X was spotted in a taxi...");
+	  }
 	  this.game.state.tickets[player-1]['taxi']--;
+	  ticket_spent = 1;
  	}
-	if (ticket === "bus") {
+	if (ticket === "bus" && this.game.state.tickets[player-1]['bus'] > 0) {
+	  if (player == this.game.state.x) {
+	    this.updateLog("Mr. X was spotted in a bus...");
+	    this.game.state.clues.push(this.game.state.round + " - Mr. X was spotted in a bus...");
+	  }
 	  this.game.state.tickets[player-1]['bus']--;
+	  ticket_spent = 1;
  	}
-	if (ticket === "underground") {
+	if (ticket === "underground" && this.game.state.tickets[player-1]['underground'] > 0) {
+	  if (player == this.game.state.x) {
+	    this.updateLog("Mr. X was spotted on the subway...");
+	    this.game.state.clues.push(this.game.state.round + " - Mr. X was spotted on the subway...");
+	  }
 	  this.game.state.tickets[player-1]['underground']--;
+	  ticket_spent = 1;
  	}
 	if (ticket === "x") {
+	  if (player == this.game.state.x) {
+	    this.updateLog("Mr. X evaded detection this turn...");
+	    this.game.state.clues.push(this.game.state.round + " - Mr. X  moved in an unknown fashion...");
+	  }
 	  this.game.state.tickets[player-1]['x']--;
+	  ticket_spent = 1;
  	}
-	if (ticket === "double") {
-	  this.game.state.tickets[player-1]['double']--;
+	if (ticket_spent == 0 && this.game.state.tickets[player-1]['x'] > 0) {
+	  if (player == this.game.state.x) {
+	    this.updateLog("Mr. X evaded detection this turn...");
+	    this.game.state.clues.push(this.game.state.round + " - Mr. X  moved in an unknown fashion...");
+	  }
+	  this.game.state.tickets[player-1]['x']--;
+	  ticket_spent = 1;
  	}
+
+
+	//
+	// announce his location if we know it
+	//
+	if (this.game.state.x == player) {
+	  if (parseInt(target_id) > 0 && parseInt(target_id) < 200) {
+	     this.game.state.clues.push("Mr. X spotted at "+target_id);
+	  }
+	}
+
 
 	if (this.game.state.x != player) {
 
@@ -379,6 +455,7 @@ console.log("TRANSPARENCY 4: " + this.game.state.player_location[player-1]);
 	//
         this.showBoard();
 
+
 	//
 	// Mister X goes first...
 	//
@@ -386,15 +463,206 @@ console.log("TRANSPARENCY 4: " + this.game.state.player_location[player-1]);
 	for (let i = 0; i < this.game.players.length; i++) {
 	  if ((i+1) != this.game.state.x) {
 	    this.game.queue.push("play\t"+(i+1)+"\t"+(i+1));
+
+	    //
+	    // two players
+	    //
 	    if (this.game.players.length == 2) {
-	      this.game.queue.push("play\t"+(this.game.players.length+fake_detectives)+"\t"+(i+1));
-	      fake_detectives++;
-	      this.game.queue.push("play\t"+(this.game.players.length+fake_detectives)+"\t"+(i+1));
-	      fake_detectives++;
-	      this.game.queue.push("play\t"+(this.game.players.length+fake_detectives)+"\t"+(i+1));
-	      fake_detectives++;
-	      this.game.queue.push("play\t"+(this.game.players.length+fake_detectives)+"\t"+(i+1));
-	      fake_detectives++;
+
+	      let skip_x_bonus = 0;
+
+	      for (let z = 1; z < this.number_of_detectives; z++) {
+	        if ((this.game.players.length+fake_detectives) == this.game.state.x) { skip_x_bonus = 1; }
+	        this.game.queue.push("play\t"+(this.game.players.length+skip_x_bonus+fake_detectives)+"\t"+(i+1));
+	        fake_detectives++;
+              }
+
+	    }
+
+	    //
+	    // three players
+	    //
+	    if (this.game.players.length == 3) {
+
+	      let skip_x_bonus = 0;
+	      let detective1 = -1;
+	      let detective2 = -1;
+
+	      if (this.game.state.x == 1) {
+	        detective1 = 2;
+		detective2 = 3;
+	      }
+	      if (this.game.state.x == 2) {
+	        detective1 = 1;
+		detective2 = 3;
+	      }
+	      if (this.game.state.x == 3) {
+	        detective1 = 1;
+		detective2 = 2;
+	      }
+
+	      this.game.queue.push("play\t"+(detective1)+"\t"+(detective1));
+	      this.game.queue.push("play\t"+(this.game.players.length+1)+"\t"+(detective1));
+	      this.game.queue.push("play\t"+(this.game.players.length+3)+"\t"+(detective1));
+	      this.game.queue.push("play\t"+(detective2)+"\t"+(detective2));
+	      this.game.queue.push("play\t"+(this.game.players.length+2)+"\t"+(detective2));
+
+	    }
+
+
+
+	    //
+	    // four players
+	    //
+	    if (this.game.players.length == 4) {
+
+	      let skip_x_bonus = 0;
+	      let detective1 = -1;
+	      let detective2 = -1;
+	      let detective3 = -1;
+
+	      if (this.game.state.x == 1) {
+	        detective1 = 2;
+		detective2 = 3;
+		detective3 = 4;
+	      }
+	      if (this.game.state.x == 2) {
+	        detective1 = 1;
+		detective2 = 3;
+		detective3 = 4;
+	      }
+	      if (this.game.state.x == 3) {
+	        detective1 = 1;
+		detective2 = 2;
+		detective3 = 4;
+	      }
+	      if (this.game.state.x == 4) {
+	        detective1 = 1;
+		detective2 = 2;
+		detective3 = 3;
+	      }
+
+	      this.game.queue.push("play\t"+(detective1)+"\t"+(detective1));
+	      this.game.queue.push("play\t"+(this.game.players.length+1)+"\t"+(detective1));
+	      this.game.queue.push("play\t"+(detective2)+"\t"+(detective2));
+	      this.game.queue.push("play\t"+(this.game.players.length+2)+"\t"+(detective2));
+	      this.game.queue.push("play\t"+(detective3)+"\t"+(detective3));
+
+	    }
+
+	    //
+	    // five players
+	    //
+	    if (this.game.players.length == 5) {
+
+	      let skip_x_bonus = 0;
+	      let detective1 = -1;
+	      let detective2 = -1;
+	      let detective3 = -1;
+	      let detective4 = -1;
+
+	      if (this.game.state.x == 1) {
+	        detective1 = 2;
+		detective2 = 3;
+		detective3 = 4;
+		detective4 = 5;
+	      }
+	      if (this.game.state.x == 2) {
+	        detective1 = 1;
+		detective2 = 3;
+		detective3 = 4;
+		detective4 = 5;
+	      }
+	      if (this.game.state.x == 3) {
+	        detective1 = 1;
+		detective2 = 2;
+		detective3 = 4;
+		detective4 = 5;
+	      }
+	      if (this.game.state.x == 4) {
+	        detective1 = 1;
+		detective2 = 2;
+		detective3 = 3;
+		detective4 = 5;
+	      }
+	      if (this.game.state.x == 5) {
+	        detective1 = 1;
+		detective2 = 2;
+		detective3 = 3;
+		detective4 = 4;
+	      }
+
+              this.game.queue.push("play\t"+(detective1)+"\t"+(detective1));
+              this.game.queue.push("play\t"+(this.game.players.length+1)+"\t"+(detective1));
+              this.game.queue.push("play\t"+(detective2)+"\t"+(detective2));
+              this.game.queue.push("play\t"+(detective3)+"\t"+(detective3));
+              this.game.queue.push("play\t"+(detective4)+"\t"+(detective4));
+
+	    }
+
+
+
+	    //
+	    // six players
+	    //
+	    if (this.game.players.length == 6) {
+
+	      let skip_x_bonus = 0;
+	      let detective1 = -1;
+	      let detective2 = -1;
+	      let detective3 = -1;
+	      let detective4 = -1;
+	      let detective5 = -1;
+
+	      if (this.game.state.x == 1) {
+	        detective1 = 2;
+		detective2 = 3;
+		detective3 = 4;
+		detective4 = 5;
+		detective5 = 6;
+	      }
+	      if (this.game.state.x == 2) {
+	        detective1 = 1;
+		detective2 = 3;
+		detective3 = 4;
+		detective4 = 5;
+		detective5 = 4;
+	      }
+	      if (this.game.state.x == 3) {
+	        detective1 = 1;
+		detective2 = 2;
+		detective3 = 4;
+		detective4 = 5;
+		detective5 = 6;
+	      }
+	      if (this.game.state.x == 4) {
+	        detective1 = 1;
+		detective2 = 2;
+		detective3 = 3;
+		detective4 = 5;
+		detective5 = 6;
+	      }
+	      if (this.game.state.x == 5) {
+	        detective1 = 1;
+		detective2 = 2;
+		detective3 = 3;
+		detective4 = 4;
+		detective5 = 6;
+	      }
+	      if (this.game.state.x == 6) {
+	        detective1 = 1;
+		detective2 = 2;
+		detective3 = 3;
+		detective4 = 4;
+		detective5 = 5;
+	      }
+
+	      this.game.queue.push("play\t"+(detective1)+"\t"+(detective1));
+	      this.game.queue.push("play\t"+(detective2)+"\t"+(detective2));
+	      this.game.queue.push("play\t"+(detective3)+"\t"+(detective3));
+	      this.game.queue.push("play\t"+(detective4)+"\t"+(detective4));
+	      this.game.queue.push("play\t"+(detective5)+"\t"+(detective5));
+
 	    }
 	  }
 	}
@@ -485,14 +753,22 @@ console.log("TRANSPARENCY 4: " + this.game.state.player_location[player-1]);
     $('.location').off();
     $('.double').off();
 
+    $('.location').css('background-color', 'transparent');
+
+    this.showBoard();
+
   }
 
 
 
-
-  playerTurn(player) {
+  //
+  // player is the unique detective or Mr. X in arrays
+  // gamer is the player (may only be 2)
+  //
+  playerTurn(player, gamer) {
 
     let scotland_self = this;
+    let can_player_move = 0;
 
     //
     // refresh board
@@ -502,7 +778,7 @@ console.log("TRANSPARENCY 4: " + this.game.state.player_location[player-1]);
     //
     // inactive player nopes out
     //
-    if (player != this.game.player) {
+    if (gamer != this.game.player) {
       this.updateStatus("Waiting for Player " + this.game.player);
       return 0;
     }
@@ -513,16 +789,16 @@ console.log("TRANSPARENCY 4: " + this.game.state.player_location[player-1]);
     //
     let html = '';
 
-    if (this.game.player == this.game.state.x) {
+    if (player == this.game.state.x) {
       html += 'You are Mister X<p style="margin-bottom:20px"></p>';
     } else {
       html += 'You are a Detective!<p style="margin-bottom:20px"><p>';
     }
 
-    if (this.game.state.round > 1 && this.game.player == this.game.state.x) { 
+    if (this.game.state.round > 1 && player == this.game.state.x) { 
       html += 'You are at Location '+this.game.deck[0].keys[this.game.deck[0].keys.length-1].location + '.<p style="margin-bottom:20px"></p>';
     } else {
-      html += 'You are at Location '+this.game.state.player_location[this.game.player-1]+'.<p style="margin-bottom:20px"></p>';
+      html += 'You are at Location '+this.game.state.player_location[player-1]+'.<p style="margin-bottom:20px"></p>';
     }
     html += 'You have ';
 
@@ -570,63 +846,75 @@ console.log("TRANSPARENCY 4: " + this.game.state.player_location[player-1]);
     $('.location').css('background-color', 'transparent');
     $('.location').off();
 
-    let mylocation = this.game.state.locations[this.game.state.player_location[this.game.player-1]];
+    let source_id = this.game.state.player_location[player-1];
+    let mylocation = this.game.state.locations[source_id];
 
-    if (this.game.state.tickets[player-1]['taxi'] > 0) {
+    if (this.game.state.tickets[player-1]['taxi'] > 0 || this.game.state.tickets[player-1]['x'] > 0) {
       for (let z = 0; z < mylocation.taxi.length; z++) {
+	can_player_move = 1;
 	let divname = '#' + mylocation.taxi[z];
 	$(divname).css('background-color','yellow');
 	$(divname).css('opacity', 0.4);
 	$(divname).on('click', function() {
 	  let target_id = $(this).attr("id");
 console.log("success...");
-	  scotland_self.movePlayer(player, target_id, "taxi");
+	  scotland_self.movePlayer(player, source_id, target_id, "taxi");
         });
       }
     }
 
-    if (this.game.state.tickets[player-1]['bus'] > 0) {
+    if (this.game.state.tickets[player-1]['bus'] > 0 || this.game.state.tickets[player-1]['x'] > 0) {
       for (let z = 0; z < mylocation.bus.length; z++) {
+	can_player_move = 1;
 	let divname = '#' + mylocation.bus[z];
 	$(divname).css('background-color','yellow');
 	$(divname).css('opacity', 0.4);
 	$(divname).on('click', function() {
 	  let target_id = $(this).attr("id");
 console.log("success...");
-	  scotland_self.movePlayer(player, target_id, "bus");
+	  scotland_self.movePlayer(player, source_id, target_id, "bus");
         });
       }
     }
 
-    if (this.game.state.tickets[player-1]['underground'] > 0) {
+    if (this.game.state.tickets[player-1]['underground'] > 0 || this.game.state.tickets[player-1]['x'] > 0) {
       for (let z = 0; z < mylocation.underground.length; z++) {
+	can_player_move = 1;
 	let divname = '#' + mylocation.underground[z];
 	$(divname).css('background-color','yellow');
 	$(divname).css('opacity', 0.4);
 	$(divname).on('click', function() {
 	  let target_id = $(this).attr("id");
 console.log("success...");
-	  scotland_self.movePlayer(player, target_id, "underground");
+	  scotland_self.movePlayer(player, source_id, target_id, "underground");
         });
       }
     }
 
-    if (this.game.state.tickets[player-1]['ferry'] > 0) {
+    if (this.game.state.tickets[player-1]['x'] > 0) {
       for (let z = 0; z < mylocation.underground.length; z++) {
+	can_player_move = 1;
 	let divname = '#' + mylocation.ferry[z];
 	$(divname).css('background-color','yellow');
 	$(divname).css('opacity', 0.4);
 	$(divname).on('click', function() {
 	  let target_id = $(this).attr("id");
 console.log("success...");
-	  scotland_self.movePlayer(player, target_id, "ferry");
+	  scotland_self.movePlayer(player, source_id, target_id, "ferry");
         });
       }
     }
+
+
+    if (can_player_move == 0) {
+      this.addMove("Detective "+player+" immobile... skipping turn");
+      this.endMove();
+    }
+
   }
 
 
-  movePlayer(player, target_id, ticket) {
+  movePlayer(player, source_id, target_id, ticket) {
 
     //
     // 
@@ -677,7 +965,7 @@ console.log("move player 2");
 
     this.updateStatus("Sending your move...");
 console.log("move player 3");
-    this.addMove("move\t"+player+"\t"+target_id+"\t"+ticket);
+    this.addMove("move\t"+player+"\t"+source_id+"\t"+target_id+"\t"+ticket);
     this.endTurn();
     
   }
@@ -686,6 +974,18 @@ console.log("move player 3");
   showBoard() {
 
     this.showPlayers();
+
+    //
+    // round 1? detectives see starting points
+    //
+    if (this.game.player != this.game.state.x) {
+
+      for (let i = 0; i < this.game.state.starting_positions.length; i++) {
+        let divname = "#" + this.game.state.starting_positions[i];
+        $(divname).css('background-color','red');
+        $(divname).css('opacity', 0.4);
+      }
+    }
 
   }
 
@@ -734,10 +1034,11 @@ console.log("move player 3");
 
     var state = {};
 	state.locations = this.returnLocations();
-        state.starting_positions = [13, 26, 29, 34, 50, 53, 91, 94, 103, 112, 117, 132, 138, 141, 155, 174, 197, 198];
+        state.starting_positions = this.returnStartingPositions();
         state.player_location = [];
 	state.roles = [];
 	state.tickets = [];
+	state.clues = [];
 
         state.round = 0;
         state.rounds = [];
@@ -752,7 +1053,9 @@ console.log("move player 3");
 
     return state;
   }
-
+  returnStartingPositions() {
+    return [13, 26, 29, 34, 50, 53, 91, 94, 103, 112, 117, 132, 138, 141, 155, 174, 197, 198];
+  }
 
 
 
@@ -969,7 +1272,7 @@ console.log("move player 3");
     locations['195'] = { top : 3488 , left : 1885 , taxi : ['182','194','197'] , underground : [] , bus : [] , ferry : [] }
     locations['196'] = { top : 3325 , left : 2190 , taxi : ['183','184','197'] , underground : [] , bus : [] , ferry : [] }
     locations['197'] = { top : 3535 , left : 2235 , taxi : ['184','195','196'] , underground : [] , bus : [] , ferry : [] }
-    locations['198'] = { top : 3370 , left : 3385 , taxi : ['186','187','199'] , underground : [] , bus : [] , ferry : [] }
+    locations['198'] = { top : 3670 , left : 3385 , taxi : ['186','187','199'] , underground : [] , bus : [] , ferry : [] }
     locations['199'] = { top : 3667 , left : 4160 , taxi : ['198','188','171'] , underground : [] , bus : ['161','128'] , ferry : [] }
 
     return locations;
@@ -1013,7 +1316,6 @@ console.log("move player 3");
     }
     return new_options;
   }
-
 
 }
 
