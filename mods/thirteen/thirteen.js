@@ -67,7 +67,7 @@ class Thirteen extends Gamev2Template {
     if (type == "arcade-carousel") {
       let obj = {};
       obj.background = "/thirteen/img/arcade/arcade-banner-background.png";
-      obj.title = "thirteen days";
+      obj.title = "Thirteen Days";
       return obj;
     }
    

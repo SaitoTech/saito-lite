@@ -231,6 +231,8 @@ class Scotland extends Gamev2Template {
 console.log("\nDETECTIVE SPOS: " + this.game.state.player_location[i]);
 	      this.game.state.starting_positions.splice(start_pos, 1);
 
+
+
 	  }
 
 
@@ -310,16 +312,19 @@ console.log("\nDETECTIVE SPOS: " + this.game.state.player_location[i]);
 	} else {
 
 	  if (this.game.state.round == 3 || this.game.state.round == 8 || this.game.state.round == 13 || this.game.state.round == 8) {
+console.log("TRANSPARENCY 1: " + target_id);
 	    this.game.state.player_location[player-1] = target_id;
 	  } else {
+console.log("TRANSPARENCY 2: " + target_id);
 	    this.game.state.player_location[player-1] = target_id;
 	  }
 
 	  //
 	  // Mister X needs to get his decrypted move
 	  //
-          if (this.game.player == this.game.state.x) {
+          if (player == this.game.state.x && this.game.player == this.game.state.x) {
 	    this.game.state.player_location[player-1] = this.game.deck[0].keys[this.game.deck[0].keys.length-1].location;
+console.log("TRANSPARENCY 4: " + this.game.state.player_location[player-1]);
 	  }
 
 	}
@@ -336,6 +341,7 @@ console.log("\nDETECTIVE SPOS: " + this.game.state.player_location[i]);
 
 
       if (mv[0] == "round") {
+
 	//
 	// update the round, and create a place to store locations
 	//
@@ -345,7 +351,28 @@ console.log("\nDETECTIVE SPOS: " + this.game.state.player_location[i]);
 	this.game.state.rounds[this.game.state.round].tickets = [];
         this.game.state.double_in_action = 0; // reset ability to play double
 
-	this.updateLog("Starting Round");
+	if (this.game.state.round == 3 || this.game.state.round == 8 || this.game.state.round == 13 || this.game.state.roujnd == 18) {
+	  this.updateLog("Mister X will be visible this turn...");
+	}
+
+	//
+	// check game is ongoing
+	//
+	let turns_remaining = 23 - this.game.state.round;
+	this.updateLog(turns_remaining + " turns remaining!");
+	if (turns_remaining == 0) {
+
+          this.showBoard();
+
+	  if (isGameOver()) {
+	    this.updateStatus("Mister X is caught at the last moment!");
+	  } else {
+	    this.updateStatus("Mister X escapes!");
+	  }
+	  
+	  return 0;
+	}
+
 
 	//
 	// show the board
@@ -355,14 +382,25 @@ console.log("\nDETECTIVE SPOS: " + this.game.state.player_location[i]);
 	//
 	// Mister X goes first...
 	//
+	let fake_detectives = 0;
 	for (let i = 0; i < this.game.players.length; i++) {
 	  if ((i+1) != this.game.state.x) {
-	    this.game.queue.push("play\t"+(i+1));
+	    this.game.queue.push("play\t"+(i+1)+"\t"+(i+1));
+	    if (this.game.players.length == 2) {
+	      this.game.queue.push("play\t"+(this.game.players.length+fake_detectives)+"\t"+(i+1));
+	      fake_detectives++;
+	      this.game.queue.push("play\t"+(this.game.players.length+fake_detectives)+"\t"+(i+1));
+	      fake_detectives++;
+	      this.game.queue.push("play\t"+(this.game.players.length+fake_detectives)+"\t"+(i+1));
+	      fake_detectives++;
+	      this.game.queue.push("play\t"+(this.game.players.length+fake_detectives)+"\t"+(i+1));
+	      fake_detectives++;
+	    }
 	  }
 	}
 	for (let i = 0; i < this.game.players.length; i++) {
 	  if ((i+1) == this.game.state.x) {
-	    this.game.queue.push("play\t"+(i+1));
+	    this.game.queue.push("play\t"+(i+1)+"\t"+(i+1));
 	  }
 	}
 
@@ -376,6 +414,7 @@ console.log("\nDETECTIVE SPOS: " + this.game.state.player_location[i]);
       if (mv[0] == "play") {
 
 	let player = parseInt(mv[1]);
+	let gamer = parseInt(mv[2]);
 
 	//
 	// check for end-game conditions
@@ -385,7 +424,7 @@ console.log("\nDETECTIVE SPOS: " + this.game.state.player_location[i]);
 	  return 0;
 	}
 
-	this.playerTurn(player);
+	this.playerTurn(player, gamer);  // gamer is the player, player is the detective #1, #2, #3 etc.
         this.game.queue.splice(qe, 1);
 	return 0;
 
@@ -406,27 +445,25 @@ console.log("\nDETECTIVE SPOS: " + this.game.state.player_location[i]);
     //
     //
     //
-console.log(this.game.player + " -- " + this.game.state.x);
     if (this.game.player == this.game.state.x) {
-console.log("A");
       let x_location = this.game.deck[0].keys[this.game.deck[0].keys.length-1].location;
-console.log("X Location: " + x_location);
       for (let i = 0; i < this.game.state.player_location.length; i++) {
 	if (this.game.state.player_location[i] == x_location) {
-console.log("PLAYER AT: " + this.game.state.player_location[i] + " is " + (i+1));
 	  if (this.game.player != (i+1)) {
-console.log(this.game.player + " -- " + (i+1));
 	    this.updateLog("1. Mr.X has been caught at " + x_location);
+	    this.addMove("NOTIFY\tMister X has been caught at " + x_location);
+	    this.endTurn();
 	    return 1;
 	  }
 	}
       }
     } else {
-console.log("B");
       for (let i = 0; i < this.game.state.player_location.length; i++) {
 	if (i != this.game.state.x-1) {
 	  if (this.game.state.player_location[i] == this.game.state.player_location[this.game.state.x-1]) {
 	    this.updateLog("2. Mr.X has been caught at " + this.game.state.player_location[i]);
+	    this.addMove("NOTIFY\tMister X has been caught at " + this.game.state.player_location[i]);
+	    this.endTurn();
 	    return 1;
 	  }
 	}
@@ -515,6 +552,7 @@ console.log("B");
       comma = 1;
     }
     html += '.';
+
     this.updateStatus(html);
 
 
@@ -530,8 +568,8 @@ console.log("B");
     });
 
     $('.location').css('background-color', 'transparent');
-    $('.location').css('opacity', 1);
     $('.location').off();
+
     let mylocation = this.game.state.locations[this.game.state.player_location[this.game.player-1]];
 
     if (this.game.state.tickets[player-1]['taxi'] > 0) {
@@ -624,6 +662,10 @@ console.log("GAME IS OVER");
 console.log("move player 2");
 
     if (this.game.state.round == 3 || this.game.state.round == 8 || this.game.state.round == 13 || this.game.state.round == 18) {
+      if (this.game.player == this.game.state.x) {
+	let secret_decrypt = this.app.crypto.hash(Math.random()+"MISTERXSECRETHASH");
+	this.game.deck[0].keys.push({ "location" : target_id , "hash" : secret_decrypt});
+      }
     } else {
       if (this.game.player == this.game.state.x) {
 	let secret_decrypt = this.app.crypto.hash(Math.random()+"MISTERXSECRETHASH");
@@ -651,10 +693,12 @@ console.log("move player 3");
   showPlayers() {
 
     $('.location').html('');
+    $('.location').css('opacity',0.6);
 
     for (let i = 0; i < this.game.state.player_location.length; i++) {
       if (this.game.state.player_location[i] != -1) {
         let divname = "#" + this.game.state.player_location[i];
+	$(divname).css('opacity',1);
 	$(divname).html(this.returnPawn(i+1));
       }
     }
@@ -812,7 +856,7 @@ console.log("move player 3");
     locations['86'] = { top : 1405 , left : 3640 , taxi : ['69','103','104'] , underground : [] , bus : ['52','87','116','102'] , ferry : [] }
     locations['87'] = { top : 1495 , left : 4000 , taxi : ['70','88'] , underground : [] , bus : ['105','41','86'] , ferry : [] }
     locations['88'] = { top : 1525 , left : 4175 , taxi : ['87','89','117'] , underground : [] , bus : [] , ferry : [] }
-    locations['89'] = { top : 1403 , left : 4316 , taxi : ['88','71','105'] , underground : [] , bus : ['55','105'] , ferry : [] }
+    locations['89'] = { top : 1403 , left : 4316 , taxi : ['88','71','105'] , underground : ['67','140','128','13'] , bus : ['55','105'] , ferry : [] }
 
     locations['90'] = { top : 1406 , left : 4563 , taxi : ['72','91','105'] , underground : [] , bus : [] , ferry : [] }
     locations['91'] = { top : 1417 , left : 4926 , taxi : ['56','72','90','105','107'] , underground : [] , bus : [] , ferry : [] }
