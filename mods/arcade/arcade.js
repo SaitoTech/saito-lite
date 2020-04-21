@@ -192,7 +192,6 @@ class Arcade extends ModTemplate {
     //
     let y = this.app.modules.respondTo("arcade-sidebar");
     for (let i = 0; i < y.length; i++) {
-console.log("loading into Arcade: " + y[i].name);
       this.mods.push(y[i]);
     }
 
@@ -527,6 +526,7 @@ console.log(app.options.games[i].id);
       // notify SPV clients of "open", "join" and "close"(, and "accept") messages
       //
       if (app.BROWSER == 0 && txmsg.request == "open" || txmsg.request == "join" || txmsg.request == "accept" || txmsg.request == "close") {
+
         for (let i = 0; i < arcade_self.app.network.peers.length; i++) {
           if (arcade_self.app.network.peers[i].peer.synctype == "lite") {
 
@@ -837,7 +837,8 @@ console.log(app.options.games[i].id);
           if (this.app.options) {
             if (this.app.options.games) {
               for (let i = 0; i < this.app.options.games.length; i++) {
-                if (this.app.options.games[i].id == tx.returnMessage().sig) {
+
+                if (this.app.options.games[i].id === tx.returnMessage().sig) {
 
                   console.log("%%%%%%%%%%%%%%%%");
                   console.log("%%%%%%%%%%%%%%%%");
