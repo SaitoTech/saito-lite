@@ -3522,8 +3522,8 @@ console.log("SHOULD PLACE: " + player);
 
 	      // escalate / de-escalate up to 2 DEFCON tracks by up to 1 steps
 	      thirteen_self.updateStatus("You may escalate or de-escalate up to 2 DEFCON tracks by up to 1 step each");
-	      thirteen_self.eventShiftDefcon(player, player, [1, 2, 3], 1, function(args) {
-	        thirteen_self.eventShiftDefcon(player, player, [1, 2, 3], 1, function(args) {
+	      thirteen_self.eventShiftDefcon(player, player, [1, 2, 3], 1, 1, function(args) {
+	        thirteen_self.eventShiftDefcon(player, player, [1, 2, 3], 1, 1, function(args) {
 	          thirteen_self.endTurn();
 	        }); 
 	      });
