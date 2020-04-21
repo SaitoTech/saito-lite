@@ -30,7 +30,7 @@ class Scotland extends Gamev2Template {
     this.moves           = [];
 
     this.log_length = 150;
-    this.gameboardZoom  = 0.67;
+    this.gameboardZoom  = 0.4;
     this.gameboardMobileZoom = 0.57;
 
     this.minPlayers = 2;
@@ -109,6 +109,7 @@ class Scotland extends Gamev2Template {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
+    $('.gameboard').css('zoom',this.gameboardZoom);
   }
 
 
@@ -1277,44 +1278,6 @@ console.log("move player 3");
 
     return locations;
 
-  }
-
-
-
-
-  returnGameOptionsHTML() {
-
-    return `
-          <h3>Scotland Yard: </h3>
-
-          <form id="options" class="options">
-
-            <label for="player1">Play as:</label>
-            <select name="player1">
-              <option value="random">random</option>
-              <option value="detective" default>Detective</option>
-              <option value="misterx">Mister X</option>
-            </select>
-
-          `;
-
-  }
-
-
-  returnFormattedGameOptions(options) {
-    let new_options = {};
-    for (var index in options) {
-      if (index == "player1") {
-        if (options[index] == "random") {
-          new_options[index] = options[index];
-        } else {
-          new_options[index] = options[index] == "detective" ? "detective" : "misterx";
-        }
-      } else {
-        new_options[index] = options[index];
-      }
-    }
-    return new_options;
   }
 
 }
