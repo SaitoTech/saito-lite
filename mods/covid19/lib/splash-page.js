@@ -15,11 +15,7 @@ module.exports = SplashPageAppspace = {
   },
 
   postrender(app, data) {
-    let whereclause = "suppliers.id = products.supplier_id AND products.category_id = categories.id group by products.category_id";
-    let select = "categories.name as 'product', count(products.id) as 'count', sum(products.production_daily_capacity) as 'capacity', 'certs', min(products.pricing_per_unit_public) || ' ~ ' ||  max(products.pricing_per_unit_public) as 'cost'";
-    let from = "products JOIN suppliers LEFT JOIN categories";
-    var sql = "select " + select + " from " + from + " where " + whereclause + ";";
-    sql = `
+  sql = `
     select 
       categories.name as 'product', 
       categories.id as 'category_id',
@@ -48,7 +44,7 @@ module.exports = SplashPageAppspace = {
     html += `<div class="grid-header">Cost USD</div>`;
     html += `<div class="grid-header">Certifications</div>`;
     html += `<div class="grid-header"></div>`;
-    //data.covid19.sendPeerDatabaseRequest("covid19", from, select, whereclause, null, function (res) {
+    
     data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function(res) {
       res.rows.forEach(row => {
         html += `<div data-category_id="${row.category_id}" class="active_category tip"><a>${row.product}</a><div class="tiptext">View All</div></div>`;

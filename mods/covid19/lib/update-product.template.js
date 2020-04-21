@@ -12,11 +12,11 @@ module.exports = UpdateProductTemplate = (app, data) => {
     <div class="portal" style="display:none">
 
       <h3>Product Details:</h3>
-      <div class="category-select">
+      <!--div class="category-select">
         <select id="select-product-type" name="select-product-type">
           <option value=0>select product category</option>
         </select>
-      </div>
+      </div-->
  
       <div id="product-grid" class="product-grid grid-2" style="display:none"></div>
 

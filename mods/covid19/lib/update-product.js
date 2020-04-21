@@ -9,150 +9,165 @@ module.exports = UpdateProduct = {
     document.querySelector(".main").innerHTML = UpdateProductTemplate(app, data);
     document.querySelector(".navigation").innerHTML = '<div class="button navlink covid_back"><i class="fas fa-back"></i> Back</div>';
 
-    //
-    // load categories
-    //
-    data.covid19.sendPeerDatabaseRequest("covid19", "categories", "*", "", null, function (res) {
+    var html = "";
+    
+      data.covid19.sendPeerDatabaseRequest("covid19", "products", "*", "deleted <> 1 AND products.id = " + data.product_id, null, function (res) {
 
       document.querySelector(".loading").style.display = "none";
-      for (let i = 0; i < res.rows.length; i++) {
-        let opt = document.createElement('option');
-
-        opt.value = res.rows[i].id;
-        opt.innerHTML = res.rows[i].name;
-        document.getElementById('select-product-type').appendChild(opt);
-      }
       document.querySelector(".portal").style.display = "block";
 
-      data.covid19.sendPeerDatabaseRequest("covid19", "products JOIN suppliers", "*", "products.supplier_id = suppliers.id AND products.id = " + data.product_id, null, function (res) {
+      if (res.rows.length > 0) {
 
-        if (res.rows.length > 0) {
+        document.querySelector(".update-product-btn").style.display = "block";
+        document.querySelector(".certification-space").style.display = "block";
+        document.querySelector(".attach-cert-btn").style.display = "block";
 
-          document.querySelector(".update-product-btn").style.display = "block";
-          document.querySelector(".certification-space").style.display = "block";
-          document.querySelector(".attach-cert-btn").style.display = "block";
+        html = data.covid19.returnForm("covid19", "products", "", res.rows[0]);
+        document.getElementById("product-grid").style.display = "grid";
 
-          try {
-            document.querySelector(".supplier_publickey").value = res.rows[0].publickey;
-          } catch (err) { }
+        //
+        // load certifications
+        // need to add supplier?
 
-          data.covid19.renderProductForm(res.rows[0]);
-          document.getElementById('select-product-type')[res.rows[0].category_id].selected = true;
-          document.getElementById("product-grid").style.display = "grid";
-
-
-
-          //
-          // load certifications
-          //
-          fields = "pc.product_id as 'product_id', c.name as 'Name', note, pc.id as cert_id";
-          var from = "certifications as 'c' JOIN products_certifications as 'pc'";
-          var where = "c.id = pc.certification_id and pc.product_id = " + data.product_id;
-          data.covid19.sendPeerDatabaseRequest("covid19", from, fields, where, null, function (res) {
-            if (res.rows.length > 0) {
-              data.covid19.renderCerts(res.rows, document.querySelector('.cert-grid'));
-            }
-          });
-
-
-        } else {
-
-          let row = {
-            id: 0,
-            product_name: "",
-            supplier_id: "",
-            category_id: "",
-            product_specification: "",
-            product_photo: "",
-            product_description: "",
-            product_dimensions: "",
-            product_quantities: "",
-            product_weight: "",
-            pricing_per_unit_rmb: "",
-            pricing_per_unit_public: "",
-            pricing_notes: "",
-            pricing_payment_terms: "",
-            production_stock: "",
-            production_daily_capacity: "",
-            production_minimum_order: "",
+        fields = "pc.product_id as 'product_id', c.name as 'Name', note, pc.id as cert_id";
+        var from = "certifications as 'c' JOIN products_certifications as 'pc'";
+        var where = "c.id = pc.certification_id and pc.product_id = " + data.product_id;
+        data.covid19.sendPeerDatabaseRequest("covid19", from, fields, where, null, function (res) {
+          if (res.rows.length > 0) {
+            data.covid19.renderCerts(res.rows, document.querySelector('.cert-grid'));
           }
-          data.covid19.renderProductForm(row);
+        });
 
+
+      } else {
+
+        let row = {
+          product_name: "",
+          supplier_id: "",
+          category_id: "",
+          product_specification: "",
+          product_photo: "",
+          product_description: "",
+          product_dimensions: "",
+          product_quantities: "",
+          product_weight: "",
+          pricing_per_unit_rmb: "",
+          pricing_per_unit_public: "",
+          pricing_notes: "",
+          pricing_payment_terms: "",
+          production_stock: "",
+          production_daily_capacity: "",
+          production_minimum_order: "",
         }
 
-        document.querySelectorAll('.product-image').forEach(img => {
-          document.querySelector(".products-" + img.id.split('-')[1]).addEventListener('change', (e) => {
-            var reader = new FileReader();
-            var file = e.target.files[0];
-            var fileEl = document.querySelector(".products-text-" + img.id.split('-')[1]);
-            var original = new Image();
-            original.onload = function() {
-              var w = 0;
-              var h = 0;
-              var r = 1;
-         
-              var canvas = document.createElement('canvas');
+        html = data.covid19.returnForm("covid19", "products", "", row);
+      }
 
-              if (original.width > 450) {
-                r = 450 / original.width;
-              } if (r * original.height > 300) {
-                r = 300 / original.height;
-              }
-              w = original.width * r;
-              h = original.height * r;
+      document.querySelector('.product-grid').innerHTML = html;
 
-              canvas.width = w;
-              canvas.height = h;
-              canvas.getContext('2d').drawImage(original, 0, 0, w, h);
-              var result = canvas.toDataURL(file.type);
-              img.src = result;
-              fileEl.value = result;
+
+      function treatPhoto(el) {
+
+        let cell = el.id;
+        let html = `
+              <div class="product-image-holder" id="img-holder-${cell}">
+                <img class="product-image" id="img-${cell}" src="${el.value}" />
+              </div>
+              <input class="products-${cell}" id="file-${cell}" type="file">
+              `;
+        el.parentNode.innerHTML += html;
+        //when rewriting the partent innerhtml - the element reference is lost.
+        el = document.getElementById(el.id);
+        el.classList.add('hidden');
+
+        document.getElementById(`file-${cell}`).addEventListener('change', (e) => {
+          var img = document.getElementById(`img-${cell}`);
+          var reader = new FileReader();
+          var file = e.target.files[0];
+          var original = new Image();
+          original.onload = function () {
+            var w = 0;
+            var h = 0;
+            var r = 1;
+
+            var canvas = document.createElement('canvas');
+
+            if (original.width > 450) {
+              r = 450 / original.width;
+            } if (r * original.height > 300) {
+              r = 300 / original.height;
             }
-            reader.addEventListener("load", function () {
+            w = original.width * r;
+            h = original.height * r;
 
-              original.src = reader.result;
+            canvas.width = w;
+            canvas.height = h;
+            canvas.getContext('2d').drawImage(original, 0, 0, w, h);
+            var result = canvas.toDataURL(file.type);
+            img.src = result;
+            el.value = result;
+          }
+          reader.addEventListener("load", function () {
 
-            }, false);
-            reader.readAsDataURL(file);
-          });
-          document.querySelector('.product-image-holder').addEventListener('click', e => {
-            document.querySelector(".products-" + img.id.split('-')[1]).click();
-          });
-          /*img.addEventListener('click', e => {
-            document.querySelector(".products-" + img.id.split('-')[1]).click();
-          });*/
+            original.src = reader.result;
+
+          }, false);
+          reader.readAsDataURL(file);
         });
-      });
+
+        document.getElementById(`img-holder-${cell}`).addEventListener('click', e => {
+          document.getElementById(`file-${cell}`).click();
+        });
+
+      }
+      treatPhoto(document.getElementById("product_photo"));
+
+      function treatACDropDown(el, dbtable, idcol, valuecol) {
+
+        let cell = el.id;
+        let html = "";
+        var options = "";
+        data.covid19.sendPeerDatabaseRequest("covid19", dbtable, idcol + " as 'id', " + valuecol + " as 'value'", "deleted <> 1", null, function (res) {
+          res.rows.forEach(opt => {
+            options += `<option data-value="${opt.id}" value="${opt.value}"></option>`
+          });
+          html += `
+              <input type="text" id="${dbtable}-display" list="${dbtable}-options" placeholder="Click or type...">
+              <datalist id="${dbtable}-options">${options}</datalist>
+            `;
+          el.parentNode.innerHTML += html;
+          el = document.getElementById(el.id);
+          el.classList.add('hidden');
+
+          if (el.value.length > 0) {
+            document.getElementById(`${dbtable}-display`).value = document.querySelector(`#${dbtable}-options [data-value='${el.value}']`).value;
+          }
+
+          document.getElementById(`${dbtable}-display`).addEventListener("change", (e) => {
+            el.value = document.querySelector(`'#${dbtable}-options [value='${e.target.value}']`).dataset.value;
+          });
+
+          document.getElementById(`${dbtable}-display`).addEventListener("focus", (e) => {
+            e.target.value = "";
+            e.target.click();
+            e.target.keyup();
+          });
+
+        });
+
+      }
+
+      treatACDropDown(document.getElementById("supplier_id"), "suppliers", "id", "name");
+      treatACDropDown(document.getElementById("category_id"), "categories", "id", "name");
     });
+    
   },
 
   attachEvents(app, data) {
 
     document.querySelector('.update-product-btn').addEventListener('click', (e) => {
 
-      let product_id = e.currentTarget.id;
-      let supplier_publickey = app.wallet.returnPublicKey();
-
-      try {
-        let pkeyobj = document.querySelector(".supplier_publickey");
-        if (pkeyobj) {
-          supplier_publickey = pkeyobj.value;
-        }
-      } catch (err) { }
-
-      let values = [];
-
-      Array.from(document.getElementsByClassName('input')).forEach(input => {
-        let field = {};
-        field.table = input.dataset.table;
-        field.column = input.dataset.column;
-        field.value = input.value;
-        field.id = product_id;
-        values.push(field);
-      });
-
-      data.covid19.updateServerDatabase(values, supplier_publickey);
-
+      data.covid19.submitForm();
       UpdateSuccess.render(app, data);
       UpdateSuccess.attachEvents(app, data);
 
@@ -160,11 +175,11 @@ module.exports = UpdateProduct = {
 
     try {
       document.querySelector('.covid_back').addEventListener('click', (e) => {
-	if (data.covid19.active_category_id > 0) {
+        if (data.covid19.active_category_id > 0) {
           data.covid19.renderPage("customer", app, data);
-	} else {
+        } else {
           data.covid19.renderPage("home", app, data);
-	}
+        }
       });
     } catch (err) { }
 
@@ -174,16 +189,7 @@ module.exports = UpdateProduct = {
       Certification.attachEvents(app, data);
     });
 
-    document.getElementById('select-product-type').addEventListener('change', (e) => {
-      let category_id = e.currentTarget.value;
-      document.getElementById("product-grid").style.display = "grid";
-      document.querySelector(".button").style.display = "block";
-      document.querySelector(".certification-space").style.display = "block";
-    });
-
-
-
-  }
+   }
 
 }
 
