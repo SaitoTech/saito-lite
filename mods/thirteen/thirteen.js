@@ -1184,6 +1184,8 @@ console.log("tallying alliances before scoring");
 
 	let player = parseInt(mv[1]);
 	let card = mv[2];
+
+console.log("SHOULD PLACE: " + player);
 	
 	if (this.game.player == player) {
 	  this.playerPlaceCommandTokens(player, card);
@@ -1748,7 +1750,7 @@ console.log("tallying alliances before scoring");
 
       thirteen_self.removeEventsFromBoard();
       action = $(this).attr("id");
-      if (action == "done") { mycallback(args); }
+      if (action == "done") { mycallback(); }
 
       let html2 = 'Adjust which DEFCON track: <p></p><ul>';
       if (only_one_defcon_track == 1) {
@@ -1801,7 +1803,7 @@ console.log("tallying alliances before scoring");
         action2 = $(this).attr("id");
 
 	if (action2 == "done") {
-	  mycallback(args);
+	  mycallback();
 	  return;
 	}
 	
@@ -1833,7 +1835,7 @@ console.log("tallying alliances before scoring");
 
 	$('.done').off();
 	$('.done').on('click', function() {
-	  if (mycallback != null) { mycallback(args); }
+	  if (mycallback != null) { mycallback(); }
 	  return;
 	});
 
@@ -1871,13 +1873,13 @@ console.log("tallying alliances before scoring");
 
 	if (number == 100) {
 	  if (total_shifted >= max_per_arena) {
-            mycallback(args);
+            mycallback();
 	    return;
 	  }
 	}
 
 	if (total_shifted >= number) {
-          if (mycallback != null) { mycallback(args); }
+          if (mycallback != null) { mycallback(); }
 	  return;
 	} else {
           args.choosetrack();
@@ -1913,7 +1915,7 @@ console.log("tallying alliances before scoring");
 
     $("#done").off();
     $("#done").on('click', function() {
-      if (mycallback != null) { mycallback(args); }
+      if (mycallback != null) { mycallback(); }
     });
 
     let placed = [];
@@ -2014,7 +2016,7 @@ console.log("tallying alliances before scoring");
 	        }
 	      }
 
-	      if (mycallback != null) { mycallback(args); }
+	      if (mycallback != null) { mycallback(); }
 	    }
 
 	  } else {
@@ -2052,7 +2054,7 @@ console.log("tallying alliances before scoring");
 
     $("#done").off();
     $("#done").on('click', function() {
-      if (mycallback != null) { mycallback(args); }
+      if (mycallback != null) { mycallback(); }
     });
 
 
