@@ -45,7 +45,7 @@ class Twilight extends GameTemplate {
     this.boardgameWidth  = 5100;
 
     this.moves           = [];
-    this.is_testing = 1;
+    this.is_testing = 0;
 
     this.log_length = 150;
     this.interface = 1;
@@ -1778,10 +1778,10 @@ console.log("\n\n\n\n");
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["fiveyearplan", "indopaki", "junta", "che","degaulle","nato","naziscientist","missileenvy","formosan"];
+              this.game.deck[0].hand = ["fiveyearplan", "indopaki"];
             } else {
-              //this.game.deck[0].hand = ["aldrichames","degaulle","lonegunman","cubanmissile","handshake","lonegunman","asia","nasser","sadat"];
-              this.game.deck[0].hand = ["aldrichames","degaulle"];
+              this.game.deck[0].hand = ["aldrichames","grainsales","lonegunman"];
+              //this.game.deck[0].hand = ["aldrichames","degaulle"];
             }
           }
 
@@ -6282,7 +6282,7 @@ console.log("\n\n\n\n");
         for (let i = 0; i < this.game.deck[0].hand.length; i++) {
           if (this.game.deck[0].cards[this.game.deck[0].hand[i]] != undefined) {
             if (this.game.deck[0].cards[this.game.deck[0].hand[i]].scoring == 1) {
-	      if (this.game.deck[0].hand[i] != this.game.state.headline_opponent_card && this.game.deck[0].hand[i] != this.game.state.headline_card)))) {
+	      if (this.game.deck[0].hand[i] != this.game.state.headline_opponent_card && this.game.deck[0].hand[i] != this.game.state.headline_card) {
                 if (scoring_cards.length > 0) { scoring_cards += ", "; scoring_alert += "\t"; }
                 scoring_cards += '<span>' + this.game.deck[0].hand[i] + '</span>';
                 scoring_alert += this.game.deck[0].hand[i];
@@ -8079,6 +8079,8 @@ console.log("\n\n\n\n");
     //
     if (card == "grainsales") {
 
+      let twilight_self = this;
+
       //
       // US has to wait for Soviets to execute
       // burn 1 roll
@@ -8095,13 +8097,14 @@ console.log("\n\n\n\n");
       //
       if (this.game.player == 1) {
 
-        this.updateStatus("Sending random card to USSR");
+        this.updateStatus("Sending random card to US");
         this.addMove("resolve\tgrainsales");
 
 	let available_cards = [];
 	for (let i = 0; i < twilight_self.game.deck[0].hand.length; i++) {
 	  let thiscard = twilight_self.game.deck[0].hand[i];
 	  if (thiscard != "china" && (!(this.game.state.headline == 1 && (thiscard == this.game.state.headline_opponent_card || thiscard == this.game.state.headline_card)))) {
+console.log("PUSHING: " + thiscard);
 	    available_cards.push(thiscard);
 	  }
 	}
@@ -8114,12 +8117,14 @@ console.log("\n\n\n\n");
           return 0;
         } else {
 
-          let twilight_self = this;
-
           twilight_self.rollDice(available_cards.length, function(roll) {
+
+console.log("ROLL: " + roll);
 
             roll = parseInt(roll)-1;
             let card = available_cards[roll];
+
+console.log("card: " + card);
 
             twilight_self.removeCardFromHand(card);
             twilight_self.addMove("grainsales\tussr\t"+card);
@@ -8138,6 +8143,8 @@ console.log("\n\n\n\n");
     // Missile Envy
     //
     if (card == "missileenvy") {
+
+      let twilight_self = this;
 
       let instigator = 1;
       let opponent = "us";
@@ -8221,8 +8228,6 @@ console.log("\n\n\n\n");
           }
           user_message += '</ul>';
           this.updateStatus(user_message);
-
-          let twilight_self = this;
 
           $('.card').off();
           $('.card').on('click', function() {
