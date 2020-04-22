@@ -1625,13 +1625,10 @@ console.log("\n\n\n\n");
           this.game.queue.splice(qe, 1);
         }
         if (mv[0] === "setvar") {
-
           if (mv[1] == "opponent_cards_in_hand") {
-      this.game.state.opponent_cards_in_hand = parseInt(mv[2]);
-    }
-
+            this.game.state.opponent_cards_in_hand = parseInt(mv[2]);
+          }
           this.game.queue.splice(qe, 1);
-
         }
         if (mv[0] === "remove") {
           if (player != mv[1]) { this.removeInfluence(mv[3], parseInt(mv[4]), mv[2]); }
@@ -1780,16 +1777,14 @@ console.log("\n\n\n\n");
           //
 
           if (this.is_testing == 1) {
-            if (this.game.player == 1) {
-              this.game.deck[0].hand = ["fiveyearplan", "indopaki", "junta", "che","degaulle","nato","naziscientist","missileenvy","formosan"];
+            if (this.game.player == 2) {
+              this.game.deck[0].hand = ["fiveyearplan", "indopaki"];
             } else {
-              //this.game.deck[0].hand = ["china","aldrichames","containment"];
-              this.game.deck[0].hand = ["aldrichames","degaulle","lonegunman","cubanmissile","handshake","lonegunman","asia","nasser","sadat"];
-              //this.game.deck[0].hand = ["duckandcover","degaulle"];
+              this.game.deck[0].hand = ["aldrichames","grainsales","lonegunman"];
+              //this.game.deck[0].hand = ["aldrichames","degaulle"];
             }
           }
 
-  console.log("IN PLACEMENT");
 
           //
           // add china card
@@ -5252,8 +5247,6 @@ console.log("\n\n\n\n");
     //
     this.game.state.back_button_cancelled = 1;
 
-  console.log("\n\n\nHERE WE ARE AT END TURN: " + JSON.stringify(this.game.queue));
-
     //
     // show active events
     //
@@ -6289,9 +6282,11 @@ console.log("\n\n\n\n");
         for (let i = 0; i < this.game.deck[0].hand.length; i++) {
           if (this.game.deck[0].cards[this.game.deck[0].hand[i]] != undefined) {
             if (this.game.deck[0].cards[this.game.deck[0].hand[i]].scoring == 1) {
-              if (scoring_cards.length > 0) { scoring_cards += ", "; scoring_alert += "\t"; }
-              scoring_cards += '<span>' + this.game.deck[0].hand[i] + '</span>';
-              scoring_alert += this.game.deck[0].hand[i];
+	      if (this.game.deck[0].hand[i] != this.game.state.headline_opponent_card && this.game.deck[0].hand[i] != this.game.state.headline_card) {
+                if (scoring_cards.length > 0) { scoring_cards += ", "; scoring_alert += "\t"; }
+                scoring_cards += '<span>' + this.game.deck[0].hand[i] + '</span>';
+                scoring_alert += this.game.deck[0].hand[i];
+              }
             }
           }
         }
@@ -7814,32 +7809,29 @@ console.log("\n\n\n\n");
 
         twilight_self.addMove("resolve\tfiveyearplan");
 
-        let size_of_hand_minus_china_card = this.game.deck[0].hand.length;
-        for (let i = 0; i < this.game.deck[0].hand.length; i++) {
-          if (this.game.deck[0].hand == "china") { size_of_hand_minus_china_card--; }
-        }
+	let available_cards = [];
+	for (let i = 0; i < twilight_self.game.deck[0].hand.length; i++) {
+	  let thiscard = twilight_self.game.deck[0].hand[i];
+	  if (thiscard != "china" && (!(this.game.state.headline == 1 && (thiscard == this.game.state.headline_opponent_card || thiscard == this.game.state.headline_card)))) {
+	    available_cards.push(thiscard);
+	  }
+	}
 
-
-        if (size_of_hand_minus_china_card < 1) {
+        if (available_cards.length == 0) {
           // burn roll anyway as US will burn
           let burnrand = this.rollDice();
           twilight_self.displayModal("No cards left to discard");
-            this.addMove("notify\tUSSR has no cards to discard");
+          this.addMove("notify\tUSSR has no cards to discard");
           this.endTurn();
           return 0;
         } else {
 
           let twilight_self = this;
 
-          twilight_self.rollDice(twilight_self.game.deck[0].hand.length, function(roll) {
+          twilight_self.rollDice(available_cards.length, function(roll) {
             roll = parseInt(roll)-1;
-            let card = twilight_self.game.deck[0].hand[roll];
 
-            if (card == "china") {
-              if (roll-1 >= 0) { card = twilight_self.game.deck[0].hand[roll-1]; } else {
-                  card = twilight_self.game.deck[0].hand[roll+1];
-              }
-            }
+            let card = available_cards[roll];
 
             twilight_self.removeCardFromHand(card);
             if (twilight_self.game.deck[0].cards[card].player == "us") {
@@ -8087,6 +8079,8 @@ console.log("\n\n\n\n");
     //
     if (card == "grainsales") {
 
+      let twilight_self = this;
+
       //
       // US has to wait for Soviets to execute
       // burn 1 roll
@@ -8103,10 +8097,19 @@ console.log("\n\n\n\n");
       //
       if (this.game.player == 1) {
 
-        this.updateStatus("Sending random card to USSR");
+        this.updateStatus("Sending random card to US");
         this.addMove("resolve\tgrainsales");
 
-        if (this.game.deck[0].hand.length < 1) {
+	let available_cards = [];
+	for (let i = 0; i < twilight_self.game.deck[0].hand.length; i++) {
+	  let thiscard = twilight_self.game.deck[0].hand[i];
+	  if (thiscard != "china" && (!(this.game.state.headline == 1 && (thiscard == this.game.state.headline_opponent_card || thiscard == this.game.state.headline_card)))) {
+console.log("PUSHING: " + thiscard);
+	    available_cards.push(thiscard);
+	  }
+	}
+
+        if (available_cards.length == 0) {
           let burnrand = this.rollDice();
           this.addMove("ops\tus\tgrainsales\t2");
           this.addMove("notify\tUSSR has no cards to discard");
@@ -8114,24 +8117,14 @@ console.log("\n\n\n\n");
           return 0;
         } else {
 
-          let twilight_self = this;
+          twilight_self.rollDice(available_cards.length, function(roll) {
 
-          if (this.game.deck[0].hand.length == 1 && this.game.deck[0].hand[0] == "china") {
-            let burnrand = this.rollDice();
-            this.addMove("ops\tus\tgrainsales\t2");
-            this.addMove("notify\tUSSR has no cards to discard");
-            this.endTurn();
-            return 0;
-          }
+console.log("ROLL: " + roll);
 
-          twilight_self.rollDice(twilight_self.game.deck[0].hand.length, function(roll) {
             roll = parseInt(roll)-1;
-            let card = twilight_self.game.deck[0].hand[roll];
+            let card = available_cards[roll];
 
-            if (card == "china") {
-              if (roll > 0) { roll--; } else { roll++; }
-              card = twilight_self.game.deck[0].hand[roll];
-            }
+console.log("card: " + card);
 
             twilight_self.removeCardFromHand(card);
             twilight_self.addMove("grainsales\tussr\t"+card);
@@ -8150,6 +8143,8 @@ console.log("\n\n\n\n");
     // Missile Envy
     //
     if (card == "missileenvy") {
+
+      let twilight_self = this;
 
       let instigator = 1;
       let opponent = "us";
@@ -8233,8 +8228,6 @@ console.log("\n\n\n\n");
           }
           user_message += '</ul>';
           this.updateStatus(user_message);
-
-          let twilight_self = this;
 
           $('.card').off();
           $('.card').on('click', function() {
@@ -8361,7 +8354,7 @@ console.log("\n\n\n\n");
         let cards_to_discard = 0;
         let user_message = "Select cards to discard:<ul>";
         for (let i = 0; i < this.game.deck[0].hand.length; i++) {
-          if (this.game.deck[0].hand[i] != "china") {
+          if (this.game.deck[0].hand[i] != "china" && this.game.deck[0].hand[i] != this.game.state.headline_opponent_card && this.game.deck[0].hand != this.game.state.headline_card) {
             user_message += '<li class="card showcard" id="'+this.game.deck[0].hand[i]+'">'+this.game.deck[0].cards[this.game.deck[0].hand[i]].name+'</li>';
             cards_to_discard++;
           }
@@ -8423,7 +8416,7 @@ console.log("\n\n\n\n");
 
           } else {
 
-                if (twilight_self.app.browser.isMobileBrowser(navigator.userAgent)) {
+            if (twilight_self.app.browser.isMobileBrowser(navigator.userAgent)) {
               twilight_self.mobileCardSelect(card, player, function() {
                 $(card).hide();
                 cards_discarded++;
@@ -8432,7 +8425,7 @@ console.log("\n\n\n\n");
               }, "discard");
             } else {
               $(card).hide();
-                cards_discarded++;
+              cards_discarded++;
               twilight_self.removeCardFromHand(action2);
               twilight_self.addMove("discard\tus\t"+action2);
             }
