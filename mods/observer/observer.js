@@ -80,6 +80,25 @@ console.log(sql + " -- " + params);
 
 
 
+  onNewBlock(app) {
+
+    let rando = Math.random();
+
+    //
+    // 10% of blocks clear old game data
+    //
+    if (rando < 0.1) {
+
+      let current_timestamp = new Date().getTime() - 3600000;
+      let sql = "DELETE FROM gamestate WHERE last_move < $ts";
+      let params = { $ts : current_timestamp }
+      app.storage.executeDatabase(sql, params, "arcade");
+
+    }
+
+
+  }
+
 
 
 
