@@ -266,15 +266,19 @@ class Arcade extends ModTemplate {
     //
     // load active games for observer mode
     //
+    let current_timestamp = new Date().getTime() - 1200000;
+    console.log('WHERE 1 = 1 AND last_move > '+current_timestamp+' GROUP BY game_id ORDER BY last_move DESC LIMIT 5');
+
     this.sendPeerDatabaseRequest(
       "arcade",
       "gamestate",
       "DISTINCT game_id, module, player, players_array",
-      "1 = 1 GROUP BY game_id ORDER BY last_move DESC LIMIT 5",
+      ('1 = 1 AND last_move > '+current_timestamp+' GROUP BY game_id ORDER BY last_move DESC LIMIT 5'),
       null,
       (res) => {
         if (res.rows) {
           res.rows.forEach(row => {
+console.log("ROW WE GOT RETURNED: " + JSON.stringify(row));
             let { game_id, module, players_array, player } = row;
             this.addGameToObserverList({
               game_id,
@@ -284,8 +288,9 @@ class Arcade extends ModTemplate {
             });
           });
         }
-      });
+    });
    
+
   }
 
 

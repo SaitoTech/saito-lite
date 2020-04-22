@@ -68,7 +68,6 @@ class Leaderboard extends ModTemplate {
       installed_games += ")";
       var where = "module IN " + installed_games + " ORDER BY ranking desc, games desc LIMIT 100"
 
-
       app.modules.returnModule("Leaderboard").sendPeerDatabaseRequest("leaderboard", "leaderboard", "*", where, null, function (res) {
 
         res.rows.forEach(row => {
@@ -144,7 +143,13 @@ class Leaderboard extends ModTemplate {
           }
         }
 
-        if (winner != loser && winner != "" && loser != "") {
+console.log("\n\n\nUPDATING LEADERBOARD: ");
+console.log("WINNER: " + winner.publickey);
+console.log("LOWER:  " + loser.publickey);
+console.log("MODULE:  " + module);
+
+        if (winner.publickey != loser.publickey && winner.publickey != "" && loser.publickey != "") {
+console.log(" ... update ranking");
           leaderboard_self.updateRankingAlgorithm(module, winner, loser);
         }
       }
@@ -173,8 +178,8 @@ class Leaderboard extends ModTemplate {
     loser.module = module;
 
     //load any database rows that match the winner and loser
-    let sql = "SELECT * FROM leaderboard WHERE publickey IN ('" + winner.publickey + "', '" + loser.publickey + "')";
-    let rows = await this.app.storage.queryDatabase(sql, {}, "leaderboard");
+    let sql = "SELECT * FROM leaderboard WHERE publickey IN ('" + winner.publickey + "', '" + loser.publickey + "') AND module = $mod";
+    let rows = await this.app.storage.queryDatabase(sql, { $mod : module }, "leaderboard");
     if (rows == null) { return; }
     for (let i = 0; i < rows.length; i++) {
       if (rows[i].publickey == winner.publickey) {

@@ -2,7 +2,11 @@ const saito = require('../../lib/saito/saito');
 const ModTemplate = require('../../lib/templates/modtemplate');
 const ObserverSidebar = require('./lib/arcade-sidebar/observer');
 
-
+//
+// The arcade maintains an array of games that are elegible.
+//
+//
+//
 class Observer extends ModTemplate {
 
   constructor(app) {
@@ -25,7 +29,7 @@ class Observer extends ModTemplate {
     //
     // main-panel games
     //
-    this.app.modules.respondTo("leaderboard-games").forEach(mod => {
+    this.app.modules.respondTo("arcade-games").forEach(mod => {
       this.mods.push(mod);
       this.affix_callbacks_to.push(mod.name);
     });
@@ -54,6 +58,23 @@ class Observer extends ModTemplate {
 
     if (conf == 0) {
 
+      //
+      // on gameover
+      //
+      if (txmsg.request == "gameover") {
+
+        let game_id = txmsg.game_id;
+	let sql = "UPDATE gamestate SET status = 'closed' WHERE game_id = $gid";
+	let params = { $gid : game_id }
+
+console.log("\n\n\n*****************");
+console.log("   GAME OVER ");
+console.log("*****************");
+console.log(sql + " -- " + params);
+
+	app.storage.updateDatabase(sql, params, "arcade");
+
+      }
     }
   }
 
