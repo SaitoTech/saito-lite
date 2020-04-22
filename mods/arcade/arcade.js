@@ -278,7 +278,6 @@ class Arcade extends ModTemplate {
       (res) => {
         if (res.rows) {
           res.rows.forEach(row => {
-console.log("ROW WE GOT RETURNED: " + JSON.stringify(row));
             let { game_id, module, players_array, player } = row;
             this.addGameToObserverList({
               game_id,
@@ -363,9 +362,6 @@ console.log("ROW WE GOT RETURNED: " + JSON.stringify(row));
     }
 
     let txmsg = tx.returnMessage();
-
-console.log("REQUEST TO add: " + JSON.stringify(txmsg));
-console.log("EXISTING GAMES: " + JSON.stringify(this.games));
 
     for (let i = 0; i < this.games.length; i++) {
       let transaction = Object.assign({sig: "" }, this.games[i].transaction);
@@ -516,10 +512,6 @@ console.log("EXISTING GAMES: " + JSON.stringify(this.games));
         if (app.options.games) {
           for (let i = app.options.games.length-1; i >= 0; i--) {
             if (app.options.games[i].module === "" && app.options.games[i].id.length < 25) {
-console.log("########################");
-console.log("### PURGING BAD GAME ###");
-console.log("########################");
-console.log(app.options.games[i].id);
 	      app.options.games.splice(i, 1);
   	    }
   	  }
