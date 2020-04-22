@@ -22,7 +22,7 @@ module.exports = UpdateProduct = {
         document.querySelector(".certification-space").style.display = "block";
         document.querySelector(".attach-cert-btn").style.display = "block";
 
-        html = data.covid19.returnForm("covid19", "products", "", res.rows[0]);
+        html = data.covid19.returnForm("covid19", "products", data.product_id, res.rows[0]);
         document.getElementById("product-grid").style.display = "grid";
 
         //
@@ -64,101 +64,12 @@ module.exports = UpdateProduct = {
       }
 
       document.querySelector('.product-grid').innerHTML = html;
+      document.querySelector('.product-grid').style.display = 'grid';
+      document.querySelector('.update-product-btn').style.display = 'block';
 
-
-      function treatPhoto(el) {
-
-        let cell = el.id;
-        let html = `
-              <div class="product-image-holder" id="img-holder-${cell}">
-                <img class="product-image" id="img-${cell}" src="${el.value}" />
-              </div>
-              <input class="products-${cell}" id="file-${cell}" type="file">
-              `;
-        el.parentNode.innerHTML += html;
-        //when rewriting the partent innerhtml - the element reference is lost.
-        el = document.getElementById(el.id);
-        el.classList.add('hidden');
-
-        document.getElementById(`file-${cell}`).addEventListener('change', (e) => {
-          var img = document.getElementById(`img-${cell}`);
-          var reader = new FileReader();
-          var file = e.target.files[0];
-          var original = new Image();
-          original.onload = function () {
-            var w = 0;
-            var h = 0;
-            var r = 1;
-
-            var canvas = document.createElement('canvas');
-
-            if (original.width > 450) {
-              r = 450 / original.width;
-            } if (r * original.height > 300) {
-              r = 300 / original.height;
-            }
-            w = original.width * r;
-            h = original.height * r;
-
-            canvas.width = w;
-            canvas.height = h;
-            canvas.getContext('2d').drawImage(original, 0, 0, w, h);
-            var result = canvas.toDataURL(file.type);
-            img.src = result;
-            el.value = result;
-          }
-          reader.addEventListener("load", function () {
-
-            original.src = reader.result;
-
-          }, false);
-          reader.readAsDataURL(file);
-        });
-
-        document.getElementById(`img-holder-${cell}`).addEventListener('click', e => {
-          document.getElementById(`file-${cell}`).click();
-        });
-
-      }
-      treatPhoto(document.getElementById("product_photo"));
-
-      function treatACDropDown(el, dbtable, idcol, valuecol) {
-
-        let cell = el.id;
-        let html = "";
-        var options = "";
-        data.covid19.sendPeerDatabaseRequest("covid19", dbtable, idcol + " as 'id', " + valuecol + " as 'value'", "deleted <> 1", null, function (res) {
-          res.rows.forEach(opt => {
-            options += `<option data-value="${opt.id}" value="${opt.value}"></option>`
-          });
-          html += `
-              <input type="text" id="${dbtable}-display" list="${dbtable}-options" placeholder="Click or type...">
-              <datalist id="${dbtable}-options">${options}</datalist>
-            `;
-          el.parentNode.innerHTML += html;
-          el = document.getElementById(el.id);
-          el.classList.add('hidden');
-
-          if (el.value.length > 0) {
-            document.getElementById(`${dbtable}-display`).value = document.querySelector(`#${dbtable}-options [data-value='${el.value}']`).value;
-          }
-
-          document.getElementById(`${dbtable}-display`).addEventListener("change", (e) => {
-            el.value = document.querySelector(`'#${dbtable}-options [value='${e.target.value}']`).dataset.value;
-          });
-
-          document.getElementById(`${dbtable}-display`).addEventListener("focus", (e) => {
-            e.target.value = "";
-            e.target.click();
-            e.target.keyup();
-          });
-
-        });
-
-      }
-
-      treatACDropDown(document.getElementById("supplier_id"), "suppliers", "id", "name");
-      treatACDropDown(document.getElementById("category_id"), "categories", "id", "name");
+      data.covid19.treatPhoto(document.getElementById("product_photo"));
+      data.covid19.treatACDropDown(document.getElementById("supplier_id"), "suppliers", "id", "name");
+      data.covid19.treatACDropDown(document.getElementById("category_id"), "categories", "id", "name");
     });
     
   },
@@ -184,7 +95,7 @@ module.exports = UpdateProduct = {
     } catch (err) { }
 
     document.querySelector('.attach-cert-btn').addEventListener('click', (e) => {
-      data.id = e.target.id.split("-")[1];
+      data.product_id = e.target.id.split("-")[1];
       Certification.render(app, data);
       Certification.attachEvents(app, data);
     });

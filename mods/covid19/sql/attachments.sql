@@ -1,5 +1,7 @@
 CREATE TABLE IF NOT EXISTS attachments (
   id INTEGER ,
+  uuid VARCHAR(100) ,
+  admin VARCHAR(100) ,
   supplier_id INTEGER DEFAULT 0 ,
   product_id INTEGER DEFAULT 0 ,
   certification_id INTEGER DEFAULT 0 ,

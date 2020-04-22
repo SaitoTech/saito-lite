@@ -93,79 +93,7 @@ module.exports = CustomerPortal = {
       //
       document.querySelector(".products-table").style.display = "grid";
 
-      //
-      // activate buttons
-      //
 
-      // this should be moved to the addProductToGridFunction 
-      // so it does not break on slow loads.
-      /*
-      setTimeout(() => {
-        try {
-          document.querySelectorAll('.edit_product').forEach(el => {
-            el.addEventListener('click', (e) => {
-              data.product_id = e.target.id;
-              UpdateProduct.render(app, data);
-              UpdateProduct.attachEvents(app, data);
-            });
-          });
-        } catch (err) {
-        }
-
-        try {
-          document.querySelectorAll('.delete_product').forEach(el => {
-            el.addEventListener('click', (e) => {
-              alert("Product Deletion functionality coming soon!");
-            });
-          });
-        } catch (err) {
-        }
-      }, 250);
-
-      setTimeout(() => {
-        try {
-          document.querySelectorAll('.edit_product').forEach(el => {
-            el.addEventListener('click', (e) => {
-              data.product_id = e.target.id;
-              UpdateProduct.render(app, data);
-              UpdateProduct.attachEvents(app, data);
-            });
-          });
-        } catch (err) {
-        }
-
-        try {
-          document.querySelectorAll('.delete_product').forEach(el => {
-            el.addEventListener('click', (e) => {
-              alert("Product Deletion functionality coming soon!");
-            });
-          });
-        } catch (err) {
-        }
-      }, 1250);
-
-      setTimeout(() => {
-        try {
-          document.querySelectorAll('.edit_product').forEach(el => {
-            el.addEventListener('click', (e) => {
-              data.product_id = e.target.id;
-              UpdateProduct.render(app, data);
-              UpdateProduct.attachEvents(app, data);
-            });
-          });
-        } catch (err) {
-        }
-
-        try {
-          document.querySelectorAll('.delete_product').forEach(el => {
-            el.addEventListener('click', (e) => {
-              alert("Product Deletion functionality coming soon!");
-            });
-          });
-        } catch (err) {
-        }
-      }, 3250);
-    */
     }
 
   }

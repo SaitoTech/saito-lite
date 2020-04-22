@@ -24,16 +24,18 @@ module.exports = SplashPageAppspace = {
       group_concat( distinct (" " || certifications.name)) as 'certs', 
       min(products.pricing_per_unit_public) || ' ~ ' ||  max(products.pricing_per_unit_public) as 'cost' 
     from 
-      products JOIN 
-      suppliers JOIN 
-      products_certifications JOIN 
-      certifications LEFT JOIN 
-      categories 
+      products 
+    JOIN 
+      suppliers ON suppliers.id = products.supplier_id
+    JOIN 
+      categories ON products.category_id = categories.id
+    LEFT JOIN 
+      products_certifications ON products.id = products_certifications.product_id
+    LEFT JOIN 
+      certifications ON products_certifications.certification_id = certifications.id
     where 
-      suppliers.id = products.supplier_id AND 
-      products.category_id = categories.id AND 
-      products.id = products_certifications.product_id AND 
-      products_certifications.certification_id = certifications.id 
+      products.deleted <> 1 AND 
+      suppliers.deleted <> 1
     group by 
       products.category_id;
     `;
