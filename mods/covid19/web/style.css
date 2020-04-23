@@ -1,3 +1,42 @@
+
+:root {
+  --saito-red: #036;
+  --saito-orange: #369;
+  --saito-skyline-grey: rgb(252, 252, 252);
+  --saito-dhb: linear-gradient(-45deg, #369 50%, #036 100%);
+}
+
+
+body {
+  background-color: var(--saito-skyline-grey);
+}
+
+.header {
+  background-image: none;
+  background: var(--saito-dhb);
+}
+
+.chat-header, .chat-box-header {
+  background-image: none;
+  background: var(--saito-dhb);
+}
+
+.header-home {
+  grid-template-columns: 30em auto;
+  align-items: center;
+}
+
+.powered-by {
+  width: 96px;
+  padding: 20px 0 0 0;
+}
+
+.powered-by::after {
+  content: "Built On";
+  color: #fff;
+  display: block;
+}
+
 a {
   cursor: pointer;
 }
@@ -56,6 +95,7 @@ a {
 
 .grid-4 div, .grid-2 div {
   align-self: auto;
+  line-height: 42px;
 }
 
 .tiptext {
@@ -94,6 +134,12 @@ a {
   max-height: 250px;
   border: 1px solid #ddd;
   cursor: pointer;
+  overflow: auto;
+}
+
+.grid-image-holder img {
+  max-width: 200px;
+  max-height: 200px;
 }
 
 label.treated {
@@ -118,7 +164,7 @@ label.treated {
   width: 250px;
 }
 
-.fullview_product, .edit_product, .delete_product, .add_cert, .inquire_product {
+.fullview_product, .edit_product, .delete_product, .add_cert, .inquire_product, .grid-action {
 
   cursor: pointer;
   border: 1px solid var(--saito-red);
@@ -159,12 +205,20 @@ button, .button {
   text-align: center;
 }
 
-.products-table>div {
+.products-table>div, .supplier-products-table>div {
   padding: 1em;
 }
 
 .products-table>div:nth-child(14n+8), .products-table>div:nth-child(14n+9), .products-table>div:nth-child(14n+10), .products-table>div:nth-child(14n+11), .products-table>div:nth-child(14n+12), .products-table>div:nth-child(14n+13), .products-table>div:nth-child(14n+14) {
   background-color: #f9f9f9;
+}
+
+.supplier-products-table>div:nth-child(12n+7), .supplier-products-table>div:nth-child(12n+8), .supplier-products-table>div:nth-child(12n+9), .supplier-products-table>div:nth-child(12n+10), .supplier-products-table>div:nth-child(12n+11), .supplier-products-table>div:nth-child(12n+12) {
+  background-color: #f9f9f9;
+}
+
+.supplier-products-table {
+  margin: 2em 0;
 }
 
 .inq-grid {

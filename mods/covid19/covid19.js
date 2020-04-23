@@ -4,11 +4,11 @@ const SplashPage = require('./lib/splash-page');
 const CustomerPortal = require('./lib/customer-portal');
 const SupplierPortal = require('./lib/supplier-portal');
 
-const InquirePage = require('./lib/inquire-page'); 
+const InquirePage = require('./lib/inquire-page');
 
 const Certification = require('./lib/certification');
 
-const Header = require('../../lib/ui/header/covid_header');
+const Header = require('./lib/header/covid_header');
 const AddressController = require('../../lib/ui/menu/address-controller');
 
 
@@ -155,9 +155,9 @@ class Covid19 extends DBModTemplate {
     //
     let txmsg = tx.returnMessage();
     let covid19_self = app.modules.returnModule("Covid19");
-console.log("\n\n\n\n\n\n\nHERE 1: ");
+    console.log("\n\n\n\n\n\n\nHERE 1: ");
     if (txmsg.module != covid19_self.name) { return; }
-console.log("\n\n\n\n\n\n\nHERE 2: ");
+    console.log("\n\n\n\n\n\n\nHERE 2: ");
 
 
     //
@@ -294,9 +294,13 @@ console.log("\n\n\n\n\n\n\nHERE 2: ");
                 html += `<div class="grid-buttons"><div class="grid-action fullview_product" id="view-${rows[i].product_id}">View</div><div class="grid-action edit_product" id="edit-${rows[i].product_id}">Edit</div><div class="grid-action delete_product" id="delete-${rows[i].product_id}">Delete</div><!--div class="grid-action add_cert" id="add-certs-${rows[i].product_id}">Add Cert</div--></div>`;
                 added = 1;
               } else {
-            //html += `<div class="grid-action grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div></div>`;
+                //html += `<div class="grid-action grid-buttons"><div class="fullview_product" id="${rows[i].product_id}">View</div></div>`;
 
-                html += `<div class="grid-buttons"><div class="grid-action inquire_product" id="inquire-${rows[i].product_id}">Buy</div></div>`;
+                html += `
+                <div class="grid-buttons">
+                  <div class="grid-action fullview_product" id="view-${rows[i].product_id}">View</div>
+                  <div class="grid-action inquire_product" id="inquire-${rows[i].product_id}">Buy</div>
+                </div>`;
                 added = 1;
               }
             }
@@ -368,7 +372,7 @@ console.log("\n\n\n\n\n\n\nHERE 2: ");
     try {
       document.querySelectorAll('.fullview_product').forEach(el => {
         el.addEventListener('click', (e) => {
-          data.id = e.target.id.split("-")[1];
+          data.product_id = e.target.id.split("-")[1];
           ProductPage.render(this.app, data);
           ProductPage.attachEvents(this.app, data);
         });
@@ -571,49 +575,7 @@ console.log("\n\n\n\n\n\n\nHERE 2: ");
   }
 
 
-  renderSupplierForm(prod) {
-    var html = "";
-    Object.entries(prod).forEach(field => {
-      switch (field[0]) {
-        case 'id':
-          break;
-        case 'name':
-          html += "<div>Name</div>";
-          html += "<input class='input' data-table='suppliers' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
-          break;
-        case 'address':
-          html += "<div>Address</div>";
-          html += "<input class='input' data-table='suppliers' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
-          break;
-        case 'phone':
-          html += "<div>Phone</div>";
-          html += "<input class='input' data-table='suppliers' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
-          break;
-        case 'email':
-          html += "<div>Email</div>";
-          html += "<input class='input' data-table='suppliers' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
-          break;
-        case 'wechat':
-          html += "<div>Wechat</div>";
-          html += "<input class='input' data-table='suppliers' type='text' data-column='" + field[0] + "' value='" + field[1] + "' />";
-          break;
-        case 'notes':
-          if (this.isAdmin()) {
-            html += "<div>Notes</div>";
-            html += "<textarea class='input' data-table='suppliers' data-column='" + field[0] + "'>" + field[1] + "</textarea>";
-          }
-          break;
-        default:
-          break;
-      }
-    });
-
-    document.querySelector('.supplier-grid').innerHTML = html;
-
-  }
-
-
-  returnCerts(id, prefix) {
+    returnCerts(id, prefix) {
     // should this be generalised to module wide?
     var module_self = this;
 
@@ -689,6 +651,135 @@ console.log("\n\n\n\n\n\n\nHERE 2: ");
       }
     });
   }
+
+  treatPhoto(el) {
+
+    let cell = el.id;
+    let html = `
+          <div class="product-image-holder" id="img-holder-${cell}">
+            <img class="product-image" id="img-${cell}" src="${el.value}" />
+          </div>
+          <input class="products-${cell}" id="file-${cell}" type="file">
+          `;
+    el.parentNode.innerHTML += html;
+    //when rewriting the partent innerhtml - the element reference is lost.
+    el = document.getElementById(el.id);
+    el.classList.add('hidden');
+
+    document.getElementById(`file-${cell}`).addEventListener('change', (e) => {
+      var img = document.getElementById(`img-${cell}`);
+      var reader = new FileReader();
+      var file = e.target.files[0];
+      var original = new Image();
+      original.onload = function () {
+        var w = 0;
+        var h = 0;
+        var r = 1;
+
+        var canvas = document.createElement('canvas');
+
+        if (original.width > 450) {
+          r = 450 / original.width;
+        } if (r * original.height > 300) {
+          r = 300 / original.height;
+        }
+        w = original.width * r;
+        h = original.height * r;
+
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext('2d').drawImage(original, 0, 0, w, h);
+        var result = canvas.toDataURL(file.type);
+        img.src = result;
+        el.value = result;
+      }
+      reader.addEventListener("load", function () {
+
+        original.src = reader.result;
+
+      }, false);
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById(`img-holder-${cell}`).addEventListener('click', e => {
+      document.getElementById(`file-${cell}`).click();
+    });
+
+  }
+
+  treatACDropDown(el, dbtable, idcol, valuecol) {
+
+    let cell = el.id;
+    let html = "";
+    var options = "";
+    this.sendPeerDatabaseRequest("covid19", dbtable, idcol + " as 'id', " + valuecol + " as 'value'", "deleted <> 1", null, function (res) {
+      res.rows.forEach(opt => {
+        options += `<option data-value="${opt.id}" value="${opt.value}"></option>`
+      });
+      html += `
+          <input type="text" id="${dbtable}-display" list="${dbtable}-options" placeholder="Click or type...">
+          <datalist id="${dbtable}-options">${options}</datalist>
+        `;
+      el.parentNode.innerHTML += html;
+      el = document.getElementById(el.id);
+      el.classList.add('hidden');
+
+      if (el.value.length > 0) {
+        document.getElementById(`${dbtable}-display`).value = document.querySelector(`#${dbtable}-options [data-value='${el.value}']`).value;
+      }
+
+      document.getElementById(`${dbtable}-display`).addEventListener("change", (e) => {
+        el.value = document.querySelector(`#${dbtable}-options [value='${e.target.value}']`).dataset.value;
+      });
+
+      document.getElementById(`${dbtable}-display`).addEventListener("focus", (e) => {
+        e.target.value = "";
+        e.target.click();
+        e.target.click();
+      });
+
+    });
+
+  }
+
+  treatHide(el) {
+    el.parentNode.previousSibling.classList.add('hidden');
+    el.parentNode.classList.add('hidden');
+  }
+
+  treatFile(el, typeel = null, nameel = null) {
+    let cell = el.id;
+    let html = `
+         <div id="certification_display" class="file-display">No file Selected</div>
+         <input class="file-${cell}" id="file-${cell}" type="file">
+          `;
+    el.parentNode.innerHTML += html;
+    //when rewriting the partent innerhtml - the element reference is lost.
+    el = document.getElementById(el.id);
+    el.classList.add('hidden');
+    var input = document.getElementById(`file-${cell}`);
+    input.addEventListener('change', (e) => {
+      var reader = new FileReader();
+      var file = e.target.files[0];
+      
+      reader.addEventListener("load", function () {
+        var displayEl = document.querySelector("#certification_display");
+        if (file.type.split("/")[0] == "image") {
+          displayEl.innerHTML = "<div class='product-image-holder'><img class='product-image' alt='certification file' src='" + reader.result + "'/></div>";
+        } else {
+          displayEl.innerHTML = file.type.split("/")[1].toUpperCase();
+        }
+        el.value = reader.result;
+        if(nameel) {nameel.value = file.name};
+        if(typeel) {typeel.value = file.type};
+      }, false);
+      reader.readAsDataURL(file);
+    });
+    document.querySelector("#certification_display").addEventListener('click', e => {
+      input.click();
+    });
+
+  };
 
   isAdmin() {
     //return 1;

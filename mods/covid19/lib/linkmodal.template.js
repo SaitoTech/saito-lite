@@ -1,13 +1,11 @@
-module.exports = CertificationTemplate = () => {
+module.exports = LinkModalTemplate = () => {
 
   let html = '';
 
   html = `
   <div class="certification">
-    
-    <h2>Add Certification</h2>
-    <div class="modal-form grid-2"></div>
-    <div class="modal-form-buttons">
+   <div class="object-link-form-wrapper">
+      <div id="form" class="object-link-form"></div>  
       <button id='cancel-certification' class='cancel-certification'>  Cancel</button>
       <button id='save-certification' class='save-certification'><i class="fas fa-link"></i>  Add/Update Certification</button>
     </div>

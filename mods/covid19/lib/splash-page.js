@@ -15,11 +15,7 @@ module.exports = SplashPageAppspace = {
   },
 
   postrender(app, data) {
-    let whereclause = "suppliers.id = products.supplier_id AND products.category_id = categories.id group by products.category_id";
-    let select = "categories.name as 'product', count(products.id) as 'count', sum(products.production_daily_capacity) as 'capacity', 'certs', min(products.pricing_per_unit_public) || ' ~ ' ||  max(products.pricing_per_unit_public) as 'cost'";
-    let from = "products JOIN suppliers LEFT JOIN categories";
-    var sql = "select " + select + " from " + from + " where " + whereclause + ";";
-    sql = `
+  sql = `
     select 
       categories.name as 'product', 
       categories.id as 'category_id',
@@ -28,16 +24,18 @@ module.exports = SplashPageAppspace = {
       group_concat( distinct (" " || certifications.name)) as 'certs', 
       min(products.pricing_per_unit_public) || ' ~ ' ||  max(products.pricing_per_unit_public) as 'cost' 
     from 
-      products JOIN 
-      suppliers JOIN 
-      products_certifications JOIN 
-      certifications LEFT JOIN 
-      categories 
+      products 
+    JOIN 
+      suppliers ON suppliers.id = products.supplier_id
+    JOIN 
+      categories ON products.category_id = categories.id
+    LEFT JOIN 
+      products_certifications ON products.id = products_certifications.product_id
+    LEFT JOIN 
+      certifications ON products_certifications.certification_id = certifications.id
     where 
-      suppliers.id = products.supplier_id AND 
-      products.category_id = categories.id AND 
-      products.id = products_certifications.product_id AND 
-      products_certifications.certification_id = certifications.id 
+      products.deleted <> 1 AND 
+      suppliers.deleted <> 1
     group by 
       products.category_id;
     `;
@@ -48,7 +46,7 @@ module.exports = SplashPageAppspace = {
     html += `<div class="grid-header">Cost USD</div>`;
     html += `<div class="grid-header">Certifications</div>`;
     html += `<div class="grid-header"></div>`;
-    //data.covid19.sendPeerDatabaseRequest("covid19", from, select, whereclause, null, function (res) {
+    
     data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function(res) {
       res.rows.forEach(row => {
         html += `<div data-category_id="${row.category_id}" class="active_category tip"><a>${row.product}</a><div class="tiptext">View All</div></div>`;
