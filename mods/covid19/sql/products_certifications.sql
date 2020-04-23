@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS products_certifications (
 
 id INTEGER ,
-uuid VARCHAR(100) ,
+uuid VARCHAR(100) UNIQUE,
 admin VARCHAR(100) ,
 product_id INTEGER , 
 certification_id INTEGER ,

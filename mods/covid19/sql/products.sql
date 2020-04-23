@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS products (
 
   id INTEGER ,
-  uuid VARCHAR(100) ,
+  uuid VARCHAR(100) UNIQUE,
   
   admin VARCHAR(100) ,
 

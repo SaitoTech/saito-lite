@@ -2,7 +2,7 @@ const HomeHeaderTemplate = require('./covid_header.template.js');
 const HeaderDropdownTemplate = require('./covid_header-dropdown.template');
 const HeaderSettingsDropdownTemplate = require('./covid_header-settings-dropdown.template');
 
-const elParser = require('../../helpers/el_parser');
+const elParser = require('../../../../lib/helpers/el_parser');
 
 module.exports = HomeHeader = {
 

@@ -8,7 +8,7 @@ const InquirePage = require('./lib/inquire-page');
 
 const Certification = require('./lib/certification');
 
-const Header = require('../../lib/ui/header/covid_header');
+const Header = require('./lib/header/covid_header');
 const AddressController = require('../../lib/ui/menu/address-controller');
 
 

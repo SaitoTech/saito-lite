@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS certifications (
 
   id INTEGER ,
-  uuid VARCHAR(100) ,
+  uuid VARCHAR(100) UNIQUE,
   name TEXT ,
 
   deleted INTEGER default 0,
