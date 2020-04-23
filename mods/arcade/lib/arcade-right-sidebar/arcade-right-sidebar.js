@@ -4,11 +4,16 @@ const ArcadeMain = require('../arcade-main/arcade-main.js'); // Just for the bac
 
 module.exports = ArcadeRightSidebar = {
 
+  loaded_right_sidebar : 0,
+
   async render(app, data) {
     let publickey = app.wallet.returnPublicKey();
     let id = app.keys.returnIdentifierByPublicKey(publickey);
-
-    document.querySelector(".arcade-right-sidebar").innerHTML = ArcadeRightSidebarTemplate(publickey, id);
+ 
+    if (this.loaded_right_sidebar == 0) {
+      document.querySelector(".arcade-right-sidebar").innerHTML = ArcadeRightSidebarTemplate(publickey, id);
+      this.loaded_right_sidebar = 1;
+    }
 
     if (document.querySelector('.arcade-sidebar-balance')) {
       let balance = app.wallet.returnBalance();
