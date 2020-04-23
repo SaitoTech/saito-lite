@@ -10,6 +10,8 @@ module.exports = SplashPageAppspace = {
 
     document.querySelector(".main").innerHTML = SplashPageTemplate();
     document.querySelector(".navigation").innerHTML = "";
+
+
     
     this.postrender(app, data);    
   },
@@ -75,10 +77,12 @@ module.exports = SplashPageAppspace = {
       CustomerPortal.attachEvents(app, data);
     });
 
+    /*
     document.getElementById('supplier-portal-btn').addEventListener('click', (e) => {
       SupplierProfile.render(app, data);
       SupplierProfile.attachEvents(app, data);
     });
+    */
 
   }
 

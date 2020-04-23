@@ -31,6 +31,17 @@ module.exports = SplashPageTemplate = () => {
       <hr />
   
     </div>
+
+    <div class="splash-actions">
+      <button id="customer-search-btn" class="button">View Products by Category</button>
+    </div>
+
+    <h3>Pricing</h3>
+
+    <p>
+
+    Prices on this platform are indicative only. Prices change daily at the factory gate. We provide indicative pricing here - as best we can. Contact us to discuss the quoting, purchase and logistics processes.
+    </p>
     
     <h3>Who are the people behind this datahub?</h3>
 
@@ -52,12 +63,11 @@ module.exports = SplashPageTemplate = () => {
 
     <p>
 
-    <div class="flex-around">
-      <button id="customer-search-btn" class="button">For Purchasers</button>
-      <button id="supplier-portal-btn" class="button">For Suppliers</button>
-    </div>
+ 
 
     </p>
+
+    <hr />
 
 
   </div>

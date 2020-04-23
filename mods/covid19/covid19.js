@@ -155,9 +155,9 @@ class Covid19 extends DBModTemplate {
     //
     let txmsg = tx.returnMessage();
     let covid19_self = app.modules.returnModule("Covid19");
-    console.log("\n\n\n\n\n\n\nHERE 1: ");
+
     if (txmsg.module != covid19_self.name) { return; }
-    console.log("\n\n\n\n\n\n\nHERE 2: ");
+
 
 
     //
@@ -188,16 +188,6 @@ class Covid19 extends DBModTemplate {
     Header.render(app, data);
     Header.attachEvents(app, data);
 
-    var urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('mode') && urlParams.get('mode') == 'buy') {
-      data.covid19.renderPage("customer", app, data);
-    } else {
-      SplashPage.render(app, data);
-      SplashPage.attachEvents(app, data);
-    }
-
-
-    //
     let chatmod = this.app.modules.returnModule("Chat");
     if (chatmod) {
       data.chat = chatmod;
@@ -215,13 +205,30 @@ class Covid19 extends DBModTemplate {
 
     if (this.browser_active == 1) {
 
-      if (document.querySelector('.product-summary')) {
+      var urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('mode')) {
+        var mode = urlParams.get('mode');
+        switch (mode) {
+          case 'customer':
+            data.covid19.renderPage("customer", app, data);
+            break;
+          case 'supplier':
+            data.covid19.renderPage("supplier", app, data);
+            break;
+          case 'supplier-profile':
+            data.covid19.renderPage("supplier-profile", app, data);
+            break;
+          case 'default':
+            SplashPage.render(app, data);
+            SplashPage.postrender(app, data);
+            SplashPage.attachEvents(app, data);
+        }
+      } else {
+        SplashPage.render(app, data);
         SplashPage.postrender(app, data);
         SplashPage.attachEvents(app, data);
-      };
-
+      }
     }
-
   }
 
 
@@ -239,6 +246,12 @@ class Covid19 extends DBModTemplate {
       data.covid19.active_category_id = 0;
       SupplierPortal.render(app, data);
       SupplierPortal.attachEvents(app, data);
+    };
+
+    if (page == "supplier-profile") {
+      data.covid19.active_category_id = 0;
+      SupplierProfile.render(app, data);
+      SupplierProfile.attachEvents(app, data);
     };
 
     if (page == "customer") {
@@ -575,7 +588,7 @@ class Covid19 extends DBModTemplate {
   }
 
 
-    returnCerts(id, prefix) {
+  returnCerts(id, prefix) {
     // should this be generalised to module wide?
     var module_self = this;
 
@@ -761,7 +774,7 @@ class Covid19 extends DBModTemplate {
     input.addEventListener('change', (e) => {
       var reader = new FileReader();
       var file = e.target.files[0];
-      
+
       reader.addEventListener("load", function () {
         var displayEl = document.querySelector("#certification_display");
         if (file.type.split("/")[0] == "image") {
@@ -770,8 +783,8 @@ class Covid19 extends DBModTemplate {
           displayEl.innerHTML = file.type.split("/")[1].toUpperCase();
         }
         el.value = reader.result;
-        if(nameel) {nameel.value = file.name};
-        if(typeel) {typeel.value = file.type};
+        if (nameel) { nameel.value = file.name };
+        if (typeel) { typeel.value = file.type };
       }, false);
       reader.readAsDataURL(file);
     });
