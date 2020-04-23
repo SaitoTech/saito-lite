@@ -68,7 +68,11 @@ class Leaderboard extends ModTemplate {
       installed_games += ")";
       var where = "module IN " + installed_games + " ORDER BY ranking desc, games desc LIMIT 100"
 
+console.log("\n\n\n\n\n\n\n\n"+where);
+
       app.modules.returnModule("Leaderboard").sendPeerDatabaseRequest("leaderboard", "leaderboard", "*", where, null, function (res) {
+
+console.log(JSON.stringify(res));
 
         res.rows.forEach(row => {
           var player = "other";
@@ -83,11 +87,14 @@ class Leaderboard extends ModTemplate {
           });
         });
 
+console.log("RANKINGS: " + JSON.stringify(leaderboard_self.rankings));
+
         let html = '';
         let shown = 0;
         let loop = 0;
         let styledata = "display:grid";
         for (var z in leaderboard_self.rankings) {
+console.log(z + " ---> " + leaderboard_self.rankings[z].length);
           if (leaderboard_self.rankings[z].length > 0) {
             html += `<div style="${styledata}" class="leaderboard-rankings leaderboard_${z}" id="leaderboard_${z}">`;
             for (let i = 0; i < leaderboard_self.rankings[z].length; i++) {
@@ -104,10 +111,13 @@ class Leaderboard extends ModTemplate {
           }
           loop++;
         }
+console.log("replace html");
+console.log(html);
         document.querySelector(".leaderboard-container").innerHTML = html;
         document.querySelectorAll('.me.playername').forEach(el => {
           el.scrollIntoView();
         });
+console.log("start carousel");
         leaderboard_self.startCarousel(leaderboard_self.mods);
       });
     }
