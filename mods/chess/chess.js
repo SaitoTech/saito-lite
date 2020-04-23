@@ -296,7 +296,8 @@ console.log("QUEUE: " + this.game.queue);
     console.log(this.returnCaptured(this.engine.fen()));
     console.log(this.returnCapturedHTML(this.returnCaptured(this.engine.fen())));
     document.getElementById('captured').innerHTML = this.returnCapturedHTML(this.returnCaptured(this.engine.fen()));
-    this.updateLog();
+    // test - no blank update
+    //this.updateLog();
 
   };
 

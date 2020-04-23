@@ -1,7 +1,7 @@
-
 const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
 const GameTemplate = require('../../lib/templates/gametemplate');
 const helpers = require('../../lib/helpers/index');
+
 
 
 //
@@ -1480,22 +1480,22 @@ console.log("\n\n\n\n");
         }
         if (mv[0] === "defcon") {
           if (mv[1] == "lower") {
-              this.lowerDefcon();
+            this.lowerDefcon();
             if (this.game.state.defcon <= 0) {
               if (this.game.state.headline == 1) {
-          if (this.game.state.player_to_go == 1) {
-      this.endGame("us", "headline defcon suicide!");
-          } else {
-      this.endGame("ussr", "headline defcon suicide!");
-          }
-          return;
-        }
+                if (this.game.state.player_to_go == 1) {
+                  this.endGame("us", "headline defcon suicide!");
+                } else {
+                  this.endGame("ussr", "headline defcon suicide!");
+                }
+                return;
+              }
               if (this.game.state.turn == 0) {
                 this.endGame("ussr", "defcon");
               } else {
                 this.endGame("us", "defcon");
               }
-        return;
+              return;
             }
           }
           if (mv[1] == "raise") {
@@ -5331,12 +5331,12 @@ console.log("\n\n\n\n");
     if (winner == "us") { this.game.winner = 2; }
     if (winner == "ussr") { this.game.winner = 1; }
 
-    if (this.game.winner == this.game.player) {
+    if (this.game.winner != this.game.player) {
       //
       // share wonderful news
       //
       this.game.over = 0;
-      this.resignGame();
+      this.resignGame(this.game.id);
     }
 
     if (this.browser_active == 1) {
@@ -5364,7 +5364,6 @@ console.log("\n\n\n\n");
           let player = "us";
           let winner = "ussr";
           if (this.game.player == 1) { player = "ussr"; winner = "us"; this.game.winner = 2; }
-          this.resignGame(player.toUpperCase() + " held scoring card");
           this.endGame(winner, "opponent held scoring card");
         }
       }

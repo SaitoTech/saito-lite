@@ -4,7 +4,6 @@ module.exports = LeaderboardTemplate = (app, data) => {
     <hr />
     <h3 class="leaderboard-game-module">Leaderboard</h3>
     <div class="leaderboard-container">Loading Rankings...</div>
-    
     <hr />
     `;
   }

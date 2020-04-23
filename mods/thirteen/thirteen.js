@@ -1,5 +1,5 @@
 const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
-const Gamev2Template = require('../../lib/templates/gamev2template');
+const GameTemplate = require('../../lib/templates/gametemplate');
 const helpers = require('../../lib/helpers/index');
 
 
@@ -9,7 +9,7 @@ const helpers = require('../../lib/helpers/index');
 //////////////////
 // constructor  //
 //////////////////
-class Thirteen extends Gamev2Template {
+class Thirteen extends GameTemplate {
 
   constructor(app) {
 
