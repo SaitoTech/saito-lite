@@ -1351,6 +1351,7 @@ console.log("\n\n\n\n");
               twilight_self.addMove("limit\tmilops");
               twilight_self.addMove("limit\tplacement");
               twilight_self.addMove("limit\tregion\tasia");
+              twilight_self.addMove("limit\tregion\tseasia");
               twilight_self.addMove("limit\tregion\tmideast");
               twilight_self.addMove("limit\tregion\tsamerica");
               twilight_self.addMove("limit\tregion\tcamerica");
