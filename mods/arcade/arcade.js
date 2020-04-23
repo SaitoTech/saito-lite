@@ -817,7 +817,7 @@ class Arcade extends ModTemplate {
           this.removeGameFromOpenList(txmsg.game_id);
           if(txmsg.players.includes(app.wallet.returnPublicKey())) {
             siteMessage(txmsg.module + ' invite accepted.', 20000);
-            app.browser.sendNotification('Game Accepted', + txmsg.module + ' invite accepted.', 'game-acceptance-notification');
+            app.browser.sendNotification('Game Accepted', txmsg.module + ' invite accepted.', 'game-acceptance-notification');
           }
       }
 
