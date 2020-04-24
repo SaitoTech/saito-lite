@@ -821,6 +821,8 @@ console.log("\n\n\n\n");
           let discarder = "ussr";
           if (sender == 2) { receiver = "ussr"; discarder = "us"; }
 
+console.log("CARD: " + card);
+
           this.game.state.events.missile_envy = sender;
 
           let opponent_card = 0;
@@ -1778,9 +1780,9 @@ console.log("\n\n\n\n");
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["fiveyearplan", "indopaki"];
+              this.game.deck[0].hand = ["missileenvy", "fiveyearplan", "indopaki"];
             } else {
-              this.game.deck[0].hand = ["aldrichames","grainsales","lonegunman"];
+              this.game.deck[0].hand = ["glasnost", "glasnost", "glasnost", "glasnost", "glasnost", "asia"];
               //this.game.deck[0].hand = ["aldrichames","degaulle"];
             }
           }
@@ -7828,6 +7830,7 @@ console.log("\n\n\n\n");
           let twilight_self = this;
 
           twilight_self.rollDice(available_cards.length, function(roll) {
+
             roll = parseInt(roll)-1;
 
             let card = available_cards[roll];
@@ -8167,8 +8170,11 @@ console.log("card: " + card);
         this.addMove("resolve\tmissileenvy");
 
         let selected_card  = "";
-        let selected_ops   = 0;
+        let selected_ops   = -1;
         let multiple_cards = 0;
+	let available_cards = [];
+
+console.log("RESOLVING ME!");
 
         if (this.game.deck[0].hand.length == 0) {
           this.addMove("notify\t"+opponent.toUpperCase()+" hand contains no cards.");
@@ -8176,37 +8182,37 @@ console.log("card: " + card);
           return 0;
         }
 
+	for (let i = 0; i < twilight_self.game.deck[0].hand.length; i++) {
+	  let thiscard = twilight_self.game.deck[0].hand[i];
+	  if (thiscard != "china" && (!(this.game.state.headline == 1 && (thiscard == this.game.state.headline_opponent_card || thiscard == this.game.state.headline_card)))) {
+	    available_cards.push(thiscard);
+	  }
+	}
 
-        for (let i = 0; i < this.game.deck[0].hand.length; i++) {
+console.log("RESOLVING ME 2!");
+        if (available_cards.length == 0) {
+          this.addMove("notify\t"+opponent.toUpperCase()+" hand has no eligible cards.");
+          this.endTurn();
+          return 0;
+        }
+console.log("RESOLVING ME 3!");
 
-          if (this.game.deck[0].hand[i] == "china") {
-            i++;
-            if (this.game.deck[0].hand.length < 2) {
-              this.addMove("notify\t"+opponent.toUpperCase()+" hand contains only the China card.");
-              this.endTurn();
-              return 0;
-            }
-          }
+	for (let i = 0; i < available_cards.length; i++) {
 
-          if (i < this.game.deck[0].hand.length) {
+          let card = this.game.deck[0].cards[available_cards[i]];
 
-            let card = this.game.deck[0].cards[this.game.deck[0].hand[i]];
-
-            if (card != "china") {
-              if (card.ops == selected_ops) {
-                multiple_cards++;
-              }
-              if (card.ops > selected_ops) {
-                selected_ops  = card.ops;
-                selected_card = this.game.deck[0].hand[i];
-                multiple_cards = 0;
-              }
-            }
+          if (card.ops > selected_ops) {
+            selected_ops  = card.ops;
+            selected_card = available_cards[i];
+            multiple_cards = 0;
           }
         }
 
+console.log("RESOLVING ME 4!");
 
         if (multiple_cards == 0) {
+
+console.log("RESOLVING ME 5!");
 
           //
           // offer highest card
@@ -8216,13 +8222,15 @@ console.log("card: " + card);
 
         } else {
 
+console.log("RESOLVING ME 6!");
+
           //
           // select highest card
           //
           let user_message = "<span>Select card to give opponent:</span><ul>";
-          for (let i = 0; i < this.game.deck[0].hand.length; i++) {
-            if (this.game.deck[0].cards[this.game.deck[0].hand[i]].ops == selected_ops && this.game.deck[0].hand[i] != "china") {
-              user_message += '<li class="card showcard" id="'+this.game.deck[0].hand[i]+'">'+this.game.deck[0].cards[this.game.deck[0].hand[i]].name+'</li>';
+          for (let i = 0; i < available_cards.length; i++) {
+            if (this.game.deck[0].cards[available_cards[i]].ops == selected_ops && this.game.deck[0].hand[i] != "china") {
+              user_message += '<li class="card showcard" id="'+available_cards[i]+'">'+this.game.deck[0].cards[available_cards[i]].name+'</li>';
             }
           }
           user_message += '</ul>';
