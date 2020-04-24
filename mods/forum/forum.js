@@ -332,7 +332,7 @@ console.log("UPDATING RANK: " + sql_rank);
 console.log("SUBMITTING REQUEST!");
 
 
-      let where = "1 = 1 ORDER BY rank DESC LIMIT 100";
+      let where = "1 = 1 ORDER BY rank DESC LIMIT 3";
       forum_self.sendPeerDatabaseRequest("forum", "posts", "*", where, null, function (res) {
         res.rows.forEach(row => {
 
