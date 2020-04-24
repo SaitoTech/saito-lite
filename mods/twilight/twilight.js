@@ -1996,10 +1996,19 @@ console.log("CARD: " + card);
               return 0;
             }
 
+	    // HACK
+	    let available_cards = [];
+	    for (let i = 0; i < twilight_self.game.deck[0].hand.length; i++) {
+	      let thiscard = twilight_self.game.deck[0].hand[i];
+	      if (thiscard != "europe" && thiscard != "asia" && thiscard != "mideast" && thiscard != "seasia" && thiscard != "centralamerica" && thiscard != "southamerica" && thiscard != "africa" && thiscard != "china") {
+	        available_cards.push(thiscard);
+	      }
+	    }
+
 	    //
             // if we have no cards, skip
 	    //
-            if (this.game.deck[0].hand.length == 0) {
+            if (available_cards.length == 0) {
 	      this.updateLog("No cards in hand, skipping end-of-turn discard");
 	      return 1;
   	    }
@@ -2032,9 +2041,9 @@ console.log("CARD: " + card);
 
                 let cards_to_discard = 0;
                 let user_message = "<span>Select card to discard:</span><ul>";
-                for (let i = 0; i < twilight_self.game.deck[0].hand.length; i++) {
+                for (let i = 0; i < available_cards.length; i++) {
                   if (twilight_self.game.deck[0].hand[i] != "china") {
-                    user_message += '<li class="card showcard" id="'+twilight_self.game.deck[0].hand[i]+'">'+twilight_self.game.deck[0].cards[twilight_self.game.deck[0].hand[i]].name+'</li>';
+                    user_message += '<li class="card showcard" id="'+available_cards[i]+'">'+twilight_self.game.deck[0].cards[available_cards[i]].name+'</li>';
                     cards_to_discard++;
                   }
                 }
