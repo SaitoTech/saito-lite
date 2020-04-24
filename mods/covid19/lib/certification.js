@@ -4,7 +4,7 @@ module.exports = Certification = {
 
   async render(app, data) {
 
-    document.querySelector('.main').innerHTML += CertificationTemplate();
+    document.querySelector('.footer').innerHTML += CertificationTemplate();
 
     data.covid19.returnFormFromPragma("covid19", "products_certifications", function(res) {
       document.querySelector('.modal-form').innerHTML = res;
@@ -35,13 +35,14 @@ module.exports = Certification = {
     
     document.getElementById('save-certification').addEventListener('click', (e) => {
       data.covid19.submitForm(document.querySelector('.modal-form'));
+      document.querySelector('.certification').destroy();
       UpdateSuccess.render(app, data);
       UpdateSuccess.attachEvents(app, data);
 
     });
 
     document.getElementById('cancel-certification').addEventListener('click', (e) => {
-     document.querySelector('.certification').style.display = "none";
+     document.querySelector('.certification').destroy();
     });
 
   }

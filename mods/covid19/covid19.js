@@ -3,6 +3,7 @@ const DBModTemplate = require('../../lib/templates/dbmodtemplate');
 const SplashPage = require('./lib/splash-page');
 const CustomerPortal = require('./lib/customer-portal');
 const SupplierPortal = require('./lib/supplier-portal');
+const FileManager = require('./lib/file-manager');
 
 const InquirePage = require('./lib/inquire-page');
 
@@ -218,6 +219,9 @@ class Covid19 extends DBModTemplate {
           case 'supplier-profile':
             data.covid19.renderPage("supplier-profile", app, data);
             break;
+          case 'file-manager':
+            data.covid19.renderPage("file-manager", app, data);
+            break;
           case 'default':
             SplashPage.render(app, data);
             SplashPage.postrender(app, data);
@@ -258,6 +262,11 @@ class Covid19 extends DBModTemplate {
       CustomerPortal.render(app, data);
       CustomerPortal.attachEvents(app, data);
     }
+
+    if (page == "file-manager") {
+      FileManager.render(app, data);
+      FileManager.attachEvents(app, data);
+    };
 
   }
 
@@ -446,15 +455,12 @@ class Covid19 extends DBModTemplate {
 
   }
 
-  deleteItem(id, dbtable, publickey)
-
-  {
+  deleteItem(id, dbtable) {
 
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
     newtx.transaction.msg.module = this.name;
     newtx.transaction.msg.request = "Delete Item";
-    newtx.transaction.msg.product_id = product_id;
-    newtx.transaction.msg.publickey = publickey;
+    newtx.transaction.msg.item_id = item_id;
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
@@ -853,7 +859,7 @@ class Covid19 extends DBModTemplate {
       pdf.fromHTML(html, 15, 15, {
         'width': width,
         'elementHandlers': specialElementHandlers
-    });
+      });
       //pdf.addImage(img, 'JPEG', 0, 0, width, height);
       pdf.save(filename);
     })

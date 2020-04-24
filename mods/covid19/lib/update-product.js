@@ -1,5 +1,6 @@
 const UpdateProductTemplate = require('./update-product.template');
 const Certification = require('./certification');
+const AttachFile = require('./attach-file');
 const UpdateSuccess = require('./update-success');
 
 module.exports = UpdateProduct = {
@@ -21,6 +22,7 @@ module.exports = UpdateProduct = {
         document.querySelector(".update-product-btn").style.display = "block";
         document.querySelector(".certification-space").style.display = "block";
         document.querySelector(".attach-cert-btn").style.display = "block";
+        document.querySelector(".attach-file-btn").style.display = "block";
 
         html = data.covid19.returnForm("covid19", "products", data.product_id, res.rows[0]);
         document.getElementById("product-grid").style.display = "grid";
@@ -74,6 +76,7 @@ module.exports = UpdateProduct = {
         data.covid19.treatACDropDown(document.getElementById("supplier_id"), "suppliers", "id", "name");
       }else{
         data.covid19.treatHide(document.getElementById("supplier_id"));
+        document.getElementById("supplier_id").value = data.supplier_id;
       }
     });
     
@@ -103,6 +106,13 @@ module.exports = UpdateProduct = {
       data.product_id = e.target.id.split("-")[1];
       Certification.render(app, data);
       Certification.attachEvents(app, data);
+    });
+
+    document.querySelector('.attach-file-btn').addEventListener('click', (e) => {
+      data.product_id = e.target.id.split("-")[1];
+      data.target_object = 'products';
+      AttachFile.render(app, data);
+      AttachFile.attachEvents(app, data);
     });
 
    }

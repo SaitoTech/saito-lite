@@ -15,6 +15,13 @@ module.exports = SupplierPortal = {
     // load products
     //
 
+    var sql = `select id from suppliers where publickey = "${app.wallet.returnPublicKey()}"`;
+    data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
+      res.rows.forEach(row => {
+        data.supplier_id = row.id;
+      });
+    });
+
     var sql = `
       select 
         products.id as 'product_id', 
@@ -83,7 +90,7 @@ module.exports = SupplierPortal = {
   attachEvents(app, data) {
 
     document.querySelector('.add-or-update-product-btn').addEventListener('click', (e) => {
-      data.product_id = e.currentTarget.id;
+      data.product_id = "";
       UpdateProduct.render(app, data);
       UpdateProduct.attachEvents(app, data);
     });

@@ -150,7 +150,7 @@ label.treated {
   display: none;
 }
 
-.certification {
+.certification, .file-template {
   border: 1px solid var(--saito-red);
   position: absolute;
   /* margin: 5vh auto; */
@@ -166,6 +166,11 @@ label.treated {
 
 .grid-buttons {
   width: 250px;
+}
+
+.file-table {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 2fr;
 }
 
 .fullview_product, .edit_product, .delete_product, .add_cert, .inquire_product, .grid-action {
