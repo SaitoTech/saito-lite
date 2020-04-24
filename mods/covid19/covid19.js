@@ -125,6 +125,9 @@ class Covid19 extends DBModTemplate {
 
     await super.initialize(app);
 
+    this.generateProcurementBundle(null);
+
+
     let sql = "";
 
     sql = "UPDATE products SET category_id = 1 WHERE product_name = 'N95口罩 N95 Mask'";
@@ -864,6 +867,163 @@ class Covid19 extends DBModTemplate {
     if (this.app.wallet.returnPublicKey() == this.admin_pkey) { return true; }
     return false;
   }
+
+
+
+
+  //
+  //
+  //
+  async generateProcurementBundle(tx=null) {
+
+    if (this.app.BROWSER == 1) { console.log("Non-Browser Function"); }
+
+    tx = new saito.transaction();
+    tx = this.app.wallet.signTransaction(tx);
+
+    let txmsg = tx.returnMessage();
+    let uuid = tx.transaction.ts + "-" + tx.transaction.sig;
+
+    
+    //
+    // shell access
+    //
+    const util = require('util');
+    const exec = util.promisify(require('child_process').exec);
+    const fs = this.app.storage.returnFileSystem();
+    const path = require('path');
+    const unzipper = require('unzipper');
+
+
+    let bash_script_name   	= "bundler/" + uuid + ".sh";
+    let bash_script_create 	= '';
+
+    let bash_script_del_name   	= "bundler/" + uuid + "_del.sh";
+    let bash_script_delete 	= '';
+
+    let bash_script_zip_name    = 'bundler/' + uuid + "_zip.sh";
+    let bash_script_zip    	= '';
+
+    //
+    // script that creates directories
+    //
+    bash_script_create += 'mkdir  ' + __dirname + "/bundler/" + uuid + "/" + "\n";
+    bash_script_create += 'mkdir  ' + __dirname + "/bundler/" + uuid + "/package" + "\n";
+    bash_script_create += 'mkdir  ' + __dirname + "/bundler/" + uuid + "/package/category" + "\n";
+    bash_script_create += 'echo "\n\n\n\n\n\n\n\nEXECUTED IN THIS BUNDLE!!!!!\n\n\n"' + "\n";
+
+    //
+    // script that zips directory
+    //
+    bash_script_zip += 'zip -r "./bundler/'+uuid+'.zip" "'+__dirname + "/bundler/" + uuid +'"';
+    console.log("ZIP: " + bash_script_zip);
+
+    //
+    // script to delete stuff
+    //
+    bash_script_delete += 'rm -f "'+__dirname + "/bundler/" + uuid +'.sh"' + "\n";
+    bash_script_delete += 'rm -f "'+__dirname + "/bundler/" + uuid +'_zip.sh"' + "\n";
+    bash_script_delete += 'rm -f "'+__dirname + "/bundler/" + uuid +'_del.sh"' + "\n";
+
+
+
+    //
+    // create file "bash_script_name" and then execute the 
+    //
+    fs.writeFileSync(path.resolve(__dirname, bash_script_name), bash_script_create, { encoding: 'binary' });
+    try {
+      let cwdir = __dirname;
+      let createdir_command = 'sh ' + bash_script_name;
+      const { stdout, stderr } = await exec(createdir_command, { cwd: cwdir, maxBuffer: 4096 * 2048 });
+    } catch (err) {
+      console.log(err);
+    }
+
+
+    //
+    // write files
+    //
+    let sql = "SELECT * FROM products";
+    let params = {};
+    let rows = await this.app.storage.queryDatabase(sql, params, "covid19");
+    let files = {};
+        files.path = [];
+        files.name = [];
+        files.content = [];
+
+    if (rows) {
+      if (rows.length > 0) {
+        for (let i = 0; i < rows.length; i++) {
+
+	  let product_id = rows[i].id;
+          let file_content = "What a fascinating document";
+
+	  files.name.push(product_id+".txt");
+	  files.path.push("bundler/"+uuid+"/package/");
+	  files.content.push(file_content);
+
+	}
+      }
+    }
+    
+    //
+    // pretend database found stuff
+    //
+    files.name.push("12.txt");
+    files.path.push("bundler/"+uuid+"/package/");
+    files.content.push("Sample Content");
+
+console.log("\n\n\n\n\n\n");
+
+
+    //
+    // now write the file array to the bundle directory
+    //
+    //
+    for (let i = 0; i < files.path.length; i++) {
+
+      let file_path = files.path[i] + files.name[i];
+      let file_content = files.content[i];
+
+      fs.writeFileSync(path.resolve(__dirname, file_path), file_content, { encoding: 'binary' });
+
+    }
+
+
+    //
+    // basically done
+    //
+    console.log("This is where we can zip stuff...");
+
+
+    //
+    // write zip script
+    //
+    fs.writeFileSync(path.resolve(__dirname, bash_script_zip_name), bash_script_zip, { encoding: 'binary' });
+    try {
+      let cwdir = __dirname;
+      let createdir_command = 'sh ' + bash_script_zip_name;
+      const { stdout, stderr } = await exec(createdir_command, { cwd: cwdir, maxBuffer: 4096 * 2048 });
+    } catch (err) {
+      console.log(err);
+    }
+
+    //
+    // now delete stuff
+    //
+    fs.writeFileSync(path.resolve(__dirname, bash_script_del_name), bash_script_delete, { encoding: 'binary' });
+    try {
+      let cwdir = __dirname;
+      let createdir_command = 'sh ' + bash_script_del_name;
+      const { stdout, stderr } = await exec(createdir_command, { cwd: cwdir, maxBuffer: 4096 * 2048 });
+    } catch (err) {
+      console.log(err);
+    }
+
+  }
+
+
+
 
 }
 
