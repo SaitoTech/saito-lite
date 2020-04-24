@@ -1353,6 +1353,7 @@ console.log("CARD: " + card);
               twilight_self.addMove("limit\tmilops");
               twilight_self.addMove("limit\tplacement");
               twilight_self.addMove("limit\tregion\tasia");
+              twilight_self.addMove("limit\tregion\tseasia");
               twilight_self.addMove("limit\tregion\tmideast");
               twilight_self.addMove("limit\tregion\tsamerica");
               twilight_self.addMove("limit\tregion\tcamerica");
@@ -4623,10 +4624,11 @@ console.log("CARD: " + card);
       //
       // Junta
       //
+      /*
       if (card == "junta" && (this.countries[i].region != "camerica" && this.countries[i].region != "samerica")) {
         valid_target = 0;
       }
-
+      */
       let divname      = '#'+i;
 
       if (valid_target == 1) {
@@ -8795,6 +8797,7 @@ console.log("RESOLVING ME 6!");
                     twilight_self.addMove("limit\tregion\tafrica");
                     twilight_self.addMove("limit\tregion\tmideast");
                     twilight_self.addMove("limit\tregion\tasia");
+                    twilight_self.addMove("limit\tregion\tseasia");
                     twilight_self.addMove("limit\tmilops");
                     twilight_self.addMove("limit\tplacement");
                     twilight_self.addMove("place\t"+player+"\t"+player+"\t"+c+"\t2");
