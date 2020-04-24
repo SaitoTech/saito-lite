@@ -1996,7 +1996,6 @@ console.log("CARD: " + card);
               return 0;
             }
 
-	    // HACK
 	    let available_cards = [];
 	    for (let i = 0; i < twilight_self.game.deck[0].hand.length; i++) {
 	      let thiscard = twilight_self.game.deck[0].hand[i];
@@ -2042,10 +2041,8 @@ console.log("CARD: " + card);
                 let cards_to_discard = 0;
                 let user_message = "<span>Select card to discard:</span><ul>";
                 for (let i = 0; i < available_cards.length; i++) {
-                  if (twilight_self.game.deck[0].hand[i] != "china") {
-                    user_message += '<li class="card showcard" id="'+available_cards[i]+'">'+twilight_self.game.deck[0].cards[available_cards[i]].name+'</li>';
-                    cards_to_discard++;
-                  }
+                  user_message += '<li class="card showcard" id="'+available_cards[i]+'">'+twilight_self.game.deck[0].cards[available_cards[i]].name+'</li>';
+                  cards_to_discard++;
                 }
 
                 if (cards_to_discard == 0) {
