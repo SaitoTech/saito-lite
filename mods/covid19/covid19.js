@@ -882,7 +882,7 @@ class Covid19 extends DBModTemplate {
   //
   async generateProcurementBundle(tx=null) {
 
-    if (this.app.BROWSER == 1) { console.log("Non-Browser Function"); }
+    if (this.app.BROWSER == 1) { console.log("Non-Browser Function"); return; }
 
     tx = new saito.transaction();
     tx = this.app.wallet.signTransaction(tx);

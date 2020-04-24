@@ -8,6 +8,9 @@ const ForumTeaser = require('./lib/forum-main/forum-teaser');
 const ForumPost = require('./lib/forum-main/forum-post');
 const ForumComment = require('./lib/forum-main/forum-comment');
 
+const ArcadeSidebar = require('./lib/arcade-sidebar/forum-sidebar');
+
+
 const Header = require('../../lib/ui/header/header');
 const AddressController = require('../../lib/ui/menu/address-controller');
 
@@ -53,8 +56,25 @@ class Forum extends ModTemplate {
     if (type == "header-dropdown") {
       return {};
     }
+    if (type == "arcade-sidebar") {
+      let obj = {};
+      obj.render = this.renderArcadeSidebar;
+      obj.attachEvents = this.attachEventsArcadeSidebar;
+      return obj;
+    }
     return null;
   }
+
+
+  renderArcadeSidebar(app, data) {
+    data.forum = app.modules.returnModule("Forum");
+    ArcadeSidebar.render(app, data);
+  }
+  attachEventsArcadeSidebar(app, data) {
+    data.forum = app.modules.returnModule("Forum");
+    ArcadeSidebar.attachEvents(app, data);
+  }
+
 
 
 
@@ -302,6 +322,52 @@ console.log("UPDATING RANK: " + sql_rank);
 
   onPeerHandshakeComplete(app, peer) {
 
+    //
+    // Arcade Sidebar?
+    //
+    if (app.modules.returnModule('Arcade').browser_active == 1) {
+
+      let forum_self = app.modules.returnModule('Forum');
+
+console.log("SUBMITTING REQUEST!");
+
+
+      let where = "1 = 1 ORDER BY rank DESC LIMIT 100";
+      forum_self.sendPeerDatabaseRequest("forum", "posts", "*", where, null, function (res) {
+        res.rows.forEach(row => {
+
+	  let tx = new saito.transaction(JSON.parse(row.tx));
+	
+	  let txmsg = tx.returnMessage();
+
+	  let title = txmsg.title;
+	  let author = forum_self.formatAuthor(tx.transaction.from[0].add);
+	  let date = forum_self.formatDate(tx.transaction.ts);
+	  let votes = row.votes;
+	  let comments = row.comments;
+	  let forum = "/forum/"+txmsg.forum;
+	  let link = "/forum/"+txmsg.forum+"/"+tx.transaction.sig;
+	  
+	  ArcadeSidebar.addPost(title, author, date, forum, link, votes, comments);
+console.log(title);
+console.log(author);
+console.log(date);
+console.log(votes);
+console.log(comments);
+console.log(forum);
+console.log(link);
+
+console.log("FETCHED: " + JSON.stringify(row));
+
+        });
+
+	let html = "This is our replacement for the Forum";
+
+      });
+
+      return;
+    }
+
     if (this.browser_active == 0) { return; }
 
     let forum_self = this;
@@ -440,6 +506,8 @@ console.log("B");
 
 
   initialize(app) {
+
+    super.initialize(app);
 
     if (this.browser_active == 0) { return; }
 
@@ -674,7 +742,7 @@ console.log(sql);
 
 
 
-  formateDate(unixtime) {
+  formatDate(unixtime) {
 
     if (unixtime.toString().length < 13) { return unixtime; }
 
