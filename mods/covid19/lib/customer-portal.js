@@ -18,13 +18,17 @@ module.exports = CustomerPortal = {
         let opt = document.createElement('option');
         opt.value = res.rows[i].id;
         opt.innerHTML = res.rows[i].name;
-        if(res.rows[i].id == data.covid19.active_category_id){
+        if (res.rows[i].id == data.covid19.active_category_id) {
           opt.selected = true;
         }
         document.getElementById('select-product-type').appendChild(opt);
       }
       document.querySelector(".portal").style.display = "block";
     });
+
+    if (data.covid19.isAdmin()) {
+      document.getElementById('products-table-controls').style.display = 'block';
+    }
 
   },
 
@@ -35,6 +39,12 @@ module.exports = CustomerPortal = {
 
     document.getElementById('select-product-type').addEventListener('change', (e) => {
       portal_self.updateProductGrid(app, data, e.currentTarget.value);
+    });
+
+    document.getElementById('add-product').addEventListener('click', (e) => {
+      data.product_id = "";
+      UpdateProduct.render(app, data);
+      UpdateProduct.attachEvents(app, data);
     });
 
 

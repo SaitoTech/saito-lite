@@ -30,6 +30,9 @@ module.exports = CustomerPortalTemplate = () => {
       </div>
       <div id="products-table" class="products-table" style="display:none;grid-template-columns: repeat(7, auto);"> 
       </div>
+      <div id="products-table-controls" class="products-table-controls" style="display:none;">
+        <button id="add-product">Add</button>
+      </div>
 
     </div>
   </div>

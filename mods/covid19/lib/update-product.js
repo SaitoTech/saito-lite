@@ -68,8 +68,13 @@ module.exports = UpdateProduct = {
       document.querySelector('.update-product-btn').style.display = 'block';
 
       data.covid19.treatPhoto(document.getElementById("product_photo"));
-      data.covid19.treatACDropDown(document.getElementById("supplier_id"), "suppliers", "id", "name");
+     
       data.covid19.treatACDropDown(document.getElementById("category_id"), "categories", "id", "name");
+      if (data.covid19.isAdmin()) {
+        data.covid19.treatACDropDown(document.getElementById("supplier_id"), "suppliers", "id", "name");
+      }else{
+        data.covid19.treatHide(document.getElementById("supplier_id"));
+      }
     });
     
   },

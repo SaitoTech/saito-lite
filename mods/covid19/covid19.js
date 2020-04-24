@@ -431,11 +431,28 @@ class Covid19 extends DBModTemplate {
   // array of objects with { database, column, value }
   //
 
+
   deleteProduct(product_id, publickey) {
 
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
     newtx.transaction.msg.module = this.name;
     newtx.transaction.msg.request = "Product Delete";
+    newtx.transaction.msg.product_id = product_id;
+    newtx.transaction.msg.publickey = publickey;
+    newtx = this.app.wallet.signTransaction(newtx);
+    this.app.network.propagateTransaction(newtx);
+
+    //console.log("SENT TO SERVER");
+
+  }
+
+  deleteItem(id, dbtable, publickey)
+
+  {
+
+    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
+    newtx.transaction.msg.module = this.name;
+    newtx.transaction.msg.request = "Delete Item";
     newtx.transaction.msg.product_id = product_id;
     newtx.transaction.msg.publickey = publickey;
     newtx = this.app.wallet.signTransaction(newtx);
@@ -793,6 +810,54 @@ class Covid19 extends DBModTemplate {
     });
 
   };
+
+  pdfCapture(triggerel, targetel, width, height, filename) {
+    triggerel.addEventListener('click', function printPDF(e) {
+      const html2canvas = require('html2canvas');
+      const jsPdf = require('jspdf');
+      const domElement = targetel;
+      html2canvas(domElement, {
+        onclone: (document) => {
+          //document.getElementById('print-button').style.visibility = 'hidden';
+        }
+      })
+        .then((canvas) => {
+          const img = canvas.toDataURL('image/png');
+          const pdf = new jsPdf({
+            orientation: 'landscape',
+            unit: 'mm',
+            format: [297, 210]
+          });
+          pdf.addImage(img, 'JPEG', 0, 0, width, height);
+          pdf.save(filename);
+        })
+    });
+  }
+
+  pdfCaptureHTML(triggerel, targetel, width = 0, height = 0, filename) {
+    triggerel.addEventListener('click', function printPDF(e) {
+      //const html2canvas = require('html2canvas');
+      const jsPdf = require('jspdf');
+      const pdf = new jsPdf({
+        orientation: 'landscape',
+        unit: 'mm',
+        format: [297, 210]
+      });
+      var elid = '#' + targetel.id
+      var html = targetel.innerHTML;
+      var specialElementHandlers = {
+        elid: function (element, renderer) {
+          return true;
+        }
+      };
+      pdf.fromHTML(html, 15, 15, {
+        'width': width,
+        'elementHandlers': specialElementHandlers
+    });
+      //pdf.addImage(img, 'JPEG', 0, 0, width, height);
+      pdf.save(filename);
+    })
+  }
 
   isAdmin() {
     //return 1;

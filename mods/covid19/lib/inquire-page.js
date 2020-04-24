@@ -1,6 +1,5 @@
 const InquirePageTemplate = require('./inquire-page.template');
 
-
 module.exports = InquirePage = {
 
   render(app, data) {
@@ -42,19 +41,7 @@ module.exports = InquirePage = {
     document.getElementById('keep-shopping').addEventListener('click', () => {
       data.covid19.renderPage("customer", app, data);
     });
-
-    document.getElementById('copy-product-list').addEventListener('click', () => {
-      function listener(e) {
-        e.clipboardData.setData("text/html", document.getElementById('inq-grid').innerHTML);
-       e.clipboardData.setData("text/plain", document.getElementById('inq-grid').innerHTML);
-        e.preventDefault();
-      }
-      document.addEventListener("copy", listener);
-      document.execCommand("copy");
-      document.removeEventListener("copy", listener);
-    });
-
+    data.covid19.pdfCapture(document.getElementById('copy-product-list'),document.getElementById('inq-grid'),100,200,'inquiry.pdf')
   }
-
 }
 

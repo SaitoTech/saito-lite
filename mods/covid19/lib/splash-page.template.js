@@ -18,13 +18,13 @@ module.exports = SplashPageTemplate = () => {
 
     </p>
 
-    <div class="summary-section">
+    <div class="summary-section" id="summary-section">
 
       <h3>Product Availability</h3>
 
       <hr />
 
-      <div class="product-summary">
+      <div class="product-summary" id="product-summary">
         Loading...
       </div>
 
@@ -34,6 +34,7 @@ module.exports = SplashPageTemplate = () => {
 
     <div class="splash-actions">
       <button id="customer-search-btn" class="button">View Products by Category</button>
+      <button id="list2pdf-btn" class="button">Download List as PDF</button>
     </div>
 
     <h3>Pricing</h3>

@@ -12,12 +12,12 @@ module.exports = SplashPageAppspace = {
     document.querySelector(".navigation").innerHTML = "";
 
 
-    
-    this.postrender(app, data);    
+
+    this.postrender(app, data);
   },
 
   postrender(app, data) {
-  sql = `
+    sql = `
     select 
       categories.name as 'product', 
       categories.id as 'category_id',
@@ -48,16 +48,16 @@ module.exports = SplashPageAppspace = {
     html += `<div class="grid-header">Cost USD</div>`;
     html += `<div class="grid-header">Certifications</div>`;
     html += `<div class="grid-header"></div>`;
-    
-    data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function(res) {
+
+    data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
       res.rows.forEach(row => {
         html += `<div data-category_id="${row.category_id}" class="active_category tip"><a>${row.product}</a><div class="tiptext">View All</div></div>`;
         html += `<div>${row.capacity}</div>`;
         html += `<div>${row.product_count}</div>`;
         html += `<div>${row.cost}</div>`;
         html += `<div>${row.certs}</div>`
-        html += `<div data-category_id="${row.category_id}"><div class="active_category grid-action"><i class="fas fa-external-link-alt"></i> View All</div></div>`        
-      ;
+        html += `<div data-category_id="${row.category_id}"><div class="active_category grid-action"><i class="fas fa-external-link-alt"></i> View All</div></div>`
+          ;
       });
       document.querySelector('.product-summary').innerHTML = html;
       document.querySelectorAll('.active_category').forEach(el => {
@@ -66,6 +66,11 @@ module.exports = SplashPageAppspace = {
           data.covid19.renderPage("customer", app, data);
         });
       });
+
+      //      data.covid19.pdfCapture(document.getElementById('list2pdf-btn'), document.querySelector('.summary-section'), 297, 210,'product-list.pdf');
+      data.covid19.pdfCaptureHTML(document.getElementById('list2pdf-btn'), document.querySelector('.summary-section'), 297, 210, 'product-list.pdf');
+
+
     });
   },
 

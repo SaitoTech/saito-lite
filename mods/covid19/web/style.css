@@ -27,9 +27,12 @@ body {
 }
 
 .powered-by {
-  width: 96px;
+  width: 120px;
+  height: 60px;
   padding: 20px 0 0 0;
-  display: none;
+  position: fixed;
+  bottom: 5px;
+  left: 5px;
 }
 
 .powered-by::after {
