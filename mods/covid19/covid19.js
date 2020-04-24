@@ -4,6 +4,7 @@ const SplashPage = require('./lib/splash-page');
 const CustomerPortal = require('./lib/customer-portal');
 const SupplierPortal = require('./lib/supplier-portal');
 const FileManager = require('./lib/file-manager');
+const BundleManager = require('./lib/bundle-manager');
 
 const InquirePage = require('./lib/inquire-page');
 
@@ -41,6 +42,7 @@ class Covid19 extends DBModTemplate {
     this.definitions = {};
 
     this.active_category_id = 0;  // for back button
+
 
     return this;
   }
@@ -126,7 +128,7 @@ class Covid19 extends DBModTemplate {
 
     await super.initialize(app);
 
-    this.generateProcurementBundle(null);
+    //this.generateProcurementBundle(null);
 
 
     let sql = "";
@@ -225,6 +227,9 @@ class Covid19 extends DBModTemplate {
           case 'file-manager':
             data.covid19.renderPage("file-manager", app, data);
             break;
+          case 'bundle-manager':
+            data.covid19.renderPage("bundle-manager", app, data);
+            break;
           case 'default':
             SplashPage.render(app, data);
             SplashPage.postrender(app, data);
@@ -269,6 +274,11 @@ class Covid19 extends DBModTemplate {
     if (page == "file-manager") {
       FileManager.render(app, data);
       FileManager.attachEvents(app, data);
+    };
+
+    if (page == "bundle-manager") {
+      BundleManager.render(app, data);
+      BundleManager.attachEvents(app, data);
     };
 
   }
@@ -796,13 +806,21 @@ class Covid19 extends DBModTemplate {
     //when rewriting the partent innerhtml - the element reference is lost.
     el = document.getElementById(el.id);
     el.classList.add('hidden');
+    var displayEl = document.querySelector("#certification_display");
+    if (el.value != "") {
+      if (typeel.value.split("/")[0] == "image") {
+        displayEl.innerHTML = "<div class='product-image-holder'><img class='product-image' alt='certification file' src='" + el.value + "'/></div>";
+      } else {
+        displayEl.innerHTML = typeel.split("/")[1].toUpperCase();
+      }
+    }
+
     var input = document.getElementById(`file-${cell}`);
     input.addEventListener('change', (e) => {
       var reader = new FileReader();
       var file = e.target.files[0];
-
       reader.addEventListener("load", function () {
-        var displayEl = document.querySelector("#certification_display");
+
         if (file.type.split("/")[0] == "image") {
           displayEl.innerHTML = "<div class='product-image-holder'><img class='product-image' alt='certification file' src='" + reader.result + "'/></div>";
         } else {
@@ -880,7 +898,7 @@ class Covid19 extends DBModTemplate {
   //
   //
   //
-  async generateProcurementBundle(tx=null) {
+  async generateProcurementBundle(tx = null) {
 
     if (this.app.BROWSER == 1) { console.log("Non-Browser Function"); }
 
@@ -890,7 +908,7 @@ class Covid19 extends DBModTemplate {
     let txmsg = tx.returnMessage();
     let uuid = tx.transaction.ts + "-" + tx.transaction.sig;
 
-    
+
     //
     // shell access
     //
@@ -901,14 +919,14 @@ class Covid19 extends DBModTemplate {
     const unzipper = require('unzipper');
 
 
-    let bash_script_name   	= "bundler/" + uuid + ".sh";
-    let bash_script_create 	= '';
+    let bash_script_name = "bundler/" + uuid + ".sh";
+    let bash_script_create = '';
 
-    let bash_script_del_name   	= "bundler/" + uuid + "_del.sh";
-    let bash_script_delete 	= '';
+    let bash_script_del_name = "bundler/" + uuid + "_del.sh";
+    let bash_script_delete = '';
 
-    let bash_script_zip_name    = 'bundler/' + uuid + "_zip.sh";
-    let bash_script_zip    	= '';
+    let bash_script_zip_name = 'bundler/' + uuid + "_zip.sh";
+    let bash_script_zip = '';
 
     //
     // script that creates directories
@@ -921,15 +939,15 @@ class Covid19 extends DBModTemplate {
     //
     // script that zips directory
     //
-    bash_script_zip += 'zip -r "./bundler/'+uuid+'.zip" "'+__dirname + "/bundler/" + uuid +'"';
+    bash_script_zip += 'zip -r "./bundler/' + uuid + '.zip" "' + __dirname + "/bundler/" + uuid + '"';
     console.log("ZIP: " + bash_script_zip);
 
     //
     // script to delete stuff
     //
-    bash_script_delete += 'rm -f "'+__dirname + "/bundler/" + uuid +'.sh"' + "\n";
-    bash_script_delete += 'rm -f "'+__dirname + "/bundler/" + uuid +'_zip.sh"' + "\n";
-    bash_script_delete += 'rm -f "'+__dirname + "/bundler/" + uuid +'_del.sh"' + "\n";
+    bash_script_delete += 'rm -f "' + __dirname + "/bundler/" + uuid + '.sh"' + "\n";
+    bash_script_delete += 'rm -f "' + __dirname + "/bundler/" + uuid + '_zip.sh"' + "\n";
+    bash_script_delete += 'rm -f "' + __dirname + "/bundler/" + uuid + '_del.sh"' + "\n";
 
 
 
@@ -953,33 +971,33 @@ class Covid19 extends DBModTemplate {
     let params = {};
     let rows = await this.app.storage.queryDatabase(sql, params, "covid19");
     let files = {};
-        files.path = [];
-        files.name = [];
-        files.content = [];
+    files.path = [];
+    files.name = [];
+    files.content = [];
 
     if (rows) {
       if (rows.length > 0) {
         for (let i = 0; i < rows.length; i++) {
 
-	  let product_id = rows[i].id;
+          let product_id = rows[i].id;
           let file_content = "What a fascinating document";
 
-	  files.name.push(product_id+".txt");
-	  files.path.push("bundler/"+uuid+"/package/");
-	  files.content.push(file_content);
+          files.name.push(product_id + ".txt");
+          files.path.push("bundler/" + uuid + "/package/");
+          files.content.push(file_content);
 
-	}
+        }
       }
     }
-    
+
     //
     // pretend database found stuff
     //
     files.name.push("12.txt");
-    files.path.push("bundler/"+uuid+"/package/");
+    files.path.push("bundler/" + uuid + "/package/");
     files.content.push("Sample Content");
 
-console.log("\n\n\n\n\n\n");
+    console.log("\n\n\n\n\n\n");
 
 
     //

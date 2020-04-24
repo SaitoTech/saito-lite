@@ -1,4 +1,5 @@
 const SplashPageTemplate = require('./splash-page.template.js');
+const SplashPageAdminTemplate = require('./splash-page-admin.template.js');
 const CustomerPortal = require('./customer-portal');
 const SupplierProfile = require('./supplier-profile');
 
@@ -8,7 +9,13 @@ module.exports = SplashPageAppspace = {
   render(app, data) {
     var this_portal = this;
 
-    document.querySelector(".main").innerHTML = SplashPageTemplate();
+    if(data.covid19.isAdmin()) {
+      document.querySelector(".main").innerHTML = SplashPageAdminTemplate();
+    } else {
+      document.querySelector(".main").innerHTML = SplashPageTemplate();
+    }
+
+    
     document.querySelector(".navigation").innerHTML = "";
 
 

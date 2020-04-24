@@ -5,21 +5,26 @@ module.exports = UpdateFile = {
   async render(app, data) {
 
     document.querySelector('.footer').innerHTML += UpdateFileTemplate();
+   
+    if (typeof data.file_id == 'undefined' || data.file_id == "") {
+      data.covid19.returnFormFromPragma("covid19", "files", function(res) {
+        document.querySelector('.modal-form').innerHTML = res;
+        let fileel = document.getElementById('file_data');
+        let typeel = document.getElementById('file_type');
+        let nameel = document.getElementById('file_filename');
+        data.covid19.treatFile(fileel, typeel, nameel);
+      });
+    } else {
+      data.covid19.sendPeerDatabaseRequest("covid19", "files", "*", "deleted <> 1 AND files.id = " + data.file_id, null, function (res) {
+        html = data.covid19.returnForm("covid19", "files", data.bunlde_id, res.rows[0]);
+        document.querySelector('.modal-form').innerHTML += html;
+        let fileel = document.getElementById('file_data');
+        let typeel = document.getElementById('file_type');
+        let nameel = document.getElementById('file_filename');
+        data.covid19.treatFile(fileel, typeel, nameel);
+      });
+    }
 
-    data.covid19.returnFormFromPragma("covid19", "files", function(res) {
-      document.querySelector('.modal-form').innerHTML = res;
-
-      //data.covid19.treatACDropDown(document.getElementById('file_id'), 'files', 'id', 'name');
-      //data.covid19.treatHide(document.getElementById('product_id'));
-      //document.getElementById('product_id').value = data.product_id;
-      let fileel = document.getElementById('file_data');
-      let typeel = document.getElementById('file_type');
-      let nameel = document.getElementById('file_filename');
-      data.covid19.treatFile(fileel, typeel, nameel);
-      //document.getElementById('admin').value = this.app.wallet.returnPublicKey();
-
-    });
-    
    
   },
 
@@ -37,8 +42,8 @@ module.exports = UpdateFile = {
     document.getElementById('save-file').addEventListener('click', (e) => {
       data.covid19.submitForm(document.querySelector('.modal-form'));
       document.querySelector('.file-template').destroy();
-      FileManager.render(app, data);
-      FileManager.attachEvents(app, data);
+      UpdateSuccess.render(app, data);
+      UpdateSuccess.attachEvents(app, data);
 
     });
 

@@ -150,7 +150,7 @@ label.treated {
   display: none;
 }
 
-.certification, .file-template {
+.certification, .file-template, .modal-form-wrapper {
   border: 1px solid var(--saito-red);
   position: absolute;
   /* margin: 5vh auto; */
@@ -168,10 +168,16 @@ label.treated {
   width: 250px;
 }
 
-.file-table {
+.file-table, .bundle-table {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 2fr;
 }
+
+.attachments-grid {
+  display: grid;
+  grid-template-columns: 2fr 2fr 2fr 2fr 1fr 6fr;
+}
+
 
 .fullview_product, .edit_product, .delete_product, .add_cert, .inquire_product, .grid-action {
 
@@ -226,6 +232,15 @@ button, .button {
   background-color: #f9f9f9;
 }
 
+.product-buttons .button {
+  width: 200px;
+  margin: 0 1em 1em 0;
+}
+
+.product-buttons {
+  flex-wrap: wrap;
+}
+
 .supplier-products-table {
   margin: 2em 0;
 }
@@ -258,6 +273,10 @@ table#inq-grid {
   padding: 5px;
 }
 
+.table-head {
+  margin: 0 0 10px 0;
+}
+
 #copy-product-list:hover {
   color: var(--saito-red);
   cursor: pointer;
@@ -275,6 +294,7 @@ table#inq-grid {
 
 .grid-header {
   font-weight: bolder;
+  margin: 0 0 10px 0;
 }
 
 .summary-section {
