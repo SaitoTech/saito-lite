@@ -4620,13 +4620,6 @@ console.log("CARD: " + card);
         }
       }
 
-      //
-      // Junta
-      //
-      if (card == "junta" && (this.countries[i].region != "camerica" && this.countries[i].region != "samerica")) {
-        valid_target = 0;
-      }
-
       let divname      = '#'+i;
 
       if (valid_target == 1) {
