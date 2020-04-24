@@ -3,7 +3,7 @@ module.exports = UpdateFileTemplate = (app, data) => {
   let html = '';
 
   html = `
-  <div class="file-template form-modal-wrapper">
+  <div class="file-template modal-form-wrapper">
     
   <h2>Attach File</h2>
   <div class="modal-form grid-2"></div>

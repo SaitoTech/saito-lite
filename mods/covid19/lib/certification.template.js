@@ -3,7 +3,7 @@ module.exports = CertificationTemplate = () => {
   let html = '';
 
   html = `
-  <div class="certification">
+  <div class="certification modal-form-wrapper">
     
     <h2>Add Certification</h2>
     <div class="modal-form grid-2"></div>

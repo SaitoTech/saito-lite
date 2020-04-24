@@ -112,6 +112,13 @@ module.exports = ProductPage = {
       });
     } catch (err) { }
 
+    document.querySelector('.attachments-btn').addEventListener('click', (e) => {
+      data.product_id = e.target.id.split("-")[1];
+      Attachments.render(app, data);
+      Attachments.attachEvents(app, data);
+    });
+
+
 
 
   }

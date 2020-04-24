@@ -24,7 +24,7 @@ module.exports = FileManager = {
       where
         (admin = "${app.wallet.returnPublicKey()}"
       OR
-         admin = "${data.covid19.admin_pkey}") 
+        "${app.wallet.returnPublicKey()}" = "${data.covid19.admin_pkey}") 
 `;
     var html = `
           <div class="table-head">Name</div>

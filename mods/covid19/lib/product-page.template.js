@@ -39,6 +39,13 @@ module.exports = ProductPageTemplate = () => {
 
       </div>
 
+      <hr />
+
+      <div style="display:flex;" class="product-buttons">
+      
+        <div id="attachments-${data.product_id}" class="attachments-btn button"><i class="fas fa-list"></i> View Attachments</div>
+      </div>
+
     </div>
   </div>
   `;
