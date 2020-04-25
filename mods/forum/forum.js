@@ -332,7 +332,7 @@ console.log("UPDATING RANK: " + sql_rank);
 console.log("SUBMITTING REQUEST!");
 
 
-      let where = "1 = 1 ORDER BY rank DESC LIMIT 3";
+      let where = "1 = 1 ORDER BY rank DESC LIMIT 10";
       forum_self.sendPeerDatabaseRequest("forum", "posts", "*", where, null, function (res) {
         res.rows.forEach(row => {
 
@@ -348,16 +348,10 @@ console.log("SUBMITTING REQUEST!");
 	  let forum = "/forum/"+txmsg.forum;
 	  let link = "/forum/"+txmsg.forum+"/"+tx.transaction.sig;
 	  
-	  ArcadeSidebar.addPost(title, author, date, forum, link, votes, comments);
-console.log(title);
-console.log(author);
-console.log(date);
-console.log(votes);
-console.log(comments);
-console.log(forum);
-console.log(link);
+	  ArcadeSidebar.addPost(app, title, author, date, forum, link, votes, comments);
 
-console.log("FETCHED: " + JSON.stringify(row));
+
+//console.log("FETCHED: " + JSON.stringify(row));
 
         });
 

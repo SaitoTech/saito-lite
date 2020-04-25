@@ -1682,7 +1682,8 @@ console.log("INITIALIZE GAME");
           wordblocks_self.updateStatusWithTiles(result);
           wordblocks_self.updateLog(result);
 
-          if(this.game.winner != this.game.player) {
+          if(this.game.winner == this.game.player) {
+            //not resigning as game.winner is set.
             this.resignGame();
           }
         }

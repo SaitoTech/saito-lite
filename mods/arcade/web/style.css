@@ -18,9 +18,9 @@ a {
 
 .arcade-announcement {
   cursor: pointer;
-  font-size: 0.9em;
+  font-size: 1em;
   width: 100%;
-  padding: 5px;
+  padding: 10px 5px 5px;
   background: #66339910;
   border: 2px solid var(--saito-red);
   color: var(--saito-skyline-grey);
@@ -178,7 +178,6 @@ button.add-games {
   height: 25vh;
 }
 
-
 #arcade-play-btn {
   padding-bottom: 1.7em;
 }
@@ -323,7 +322,8 @@ button.add-games {
   -ms-overflow-style: none;
 }
 
-.game-wizard-content::-webkit-scrollbar { /* WebKit */
+.game-wizard-content::-webkit-scrollbar {
+  /* WebKit */
   width: 3;
 }
 
@@ -345,7 +345,6 @@ button.add-games {
 }
 
 @media only screen and (max-width: 650px) {
-  
   .create-game-wizard, .escrow-game-wizard {
     width: 85%;
     height: 70%;
@@ -403,7 +402,7 @@ button.add-games {
 }
 
 .arcade-observer-game-name {
-  font-size:1.2em;
+  font-size: 1.2em;
   padding: 3px 0 0 0;
 }
 
@@ -522,12 +521,10 @@ button.add-games {
   grid-template-columns: 1fr 1fr;
   grid-gap: 0.5em;
   grid-area: buttons; */
-
   display: grid;
   grid-template-columns: auto 1fr;
   grid-gap: 0.5em;
 }
-
 
 .arcade-game-row-join {
   margin-left: 30px;
@@ -584,10 +581,7 @@ button.add-games {
   .arcade-game-invitation {
     grid-template-rows: 1fr auto 1fr;
     grid-template-columns: 1fr 1fr;
-    grid-template-areas:
-        "id title"
-        "options options"
-        "buttons buttons";
+    grid-template-areas: "id title" "options options" "buttons buttons";
     grid-gap: 0.5em;
   }
   .arcade-game-row-options {
@@ -795,7 +789,6 @@ option {
   width: 100%;
 }
 
-
 .header {
   background: none;
 }
@@ -892,6 +885,20 @@ option {
 
 /* achiecvments */
 
+.badges {
+  display: grid;
+  grid-gap: 5px;
+  grid-template-columns: auto auto auto;
+}
+
+.arcade-sidebar-notices {
+  margin: 5px 0 0 0;
+}
+
+.arcade-sidebar-done, .achievments-cta {
+  align-self: center;
+}
+
 .arcade-sidebar-row {
   display: grid;
   grid-gap: 1em;
@@ -908,10 +915,10 @@ option {
 }
 
 .badge {
-  width: 2em;
-    border: 2px solid white;
-    border-radius: 1em;
-    display: inline-block;
+  border: 2px solid white;
+  border-radius: 1em;
+  display: inline-block;
+  padding: 5px 10px 2px;
 }
 
 .arcade-sidebar-row i span {

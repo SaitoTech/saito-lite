@@ -59,12 +59,12 @@ class Rewards extends ModTemplate {
   }
 
   async onPeerHandshakeComplete(app, peer) {
-   if(this.app.modules.mods.arcade && this.app.modules.mods.arcade.browser_active == 1) {
+   if(this.app.modules.returnActiveModule().name = "Arcade") {
       console.log('drawing achievements');
       try {
         if (document.querySelector(".arcade-sidebar-done")) {
           document.querySelector(".arcade-sidebar-done").innerHTML = "";
-          await this.app.network.sendRequestWithCallback("get achievements", this.app.wallet.returnPublicKey(), (rows) => {
+          this.app.network.sendRequestWithCallback("get achievements", this.app.wallet.returnPublicKey(), (rows) => {
             rows.forEach(row => this.renderAchievmentRow(row));
           });
         }

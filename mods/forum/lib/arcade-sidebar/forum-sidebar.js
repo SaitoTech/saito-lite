@@ -15,15 +15,30 @@ module.exports = ForumSidebar = {
 
   },
 
-  addPost(title, author, date, forum, link, votes, comments) {
+  addPost(app, title, author, date, forum, link, votes, comments) {
 
-    let html = `<div class="arcade-forum-post">
-		  <div class="forum-title" style=""><a href="${link}" class="forum-title-link">${title}</a>`;
-    if (comments == 1) { html += ` (1 comment) `; } else { html += ` (${comments} comments) `; } 
-        html += `</div>
-		  <div class="forum-author" style="font-size:0.9em"><span>${author}</span> in <a href="/forum/${forum}">${forum}</a></div>
-		</div>
-   `;
+    let html = `
+    
+    <div class="arcade-forum-post">
+      <div class="poster-id">
+        <div class="tip">
+          <img class="sidebar-forum-identicon" src="${app.keys.returnIdenticon(author)}" alt="${app.keys.returnIdentifierByPublicKey(author, true)}">
+          <div class="tiptext">${app.keys.returnIdentifierByPublicKey(author, true)}"</div>
+        </div>
+      </div>
+      <div class="about-post">
+        <div class="forum-title" style="">
+          <a href="${link}" class="forum-title-link">${title}</a>
+        </div>
+        <div class="post-details">
+          <div class="comment-count"><i class="far fa-comment-alt"></i>&nbsp;<b>${comments}</b></div>
+          <div class="vote-count"><i class="fas fa-vote-yea"></i>&nbsp;<b>${votes}</b></div>          
+          <div class="sub-forum"> in <a href="${forum}">${forum}</a></div>
+        </div>
+      </div>
+    </div>
+        `;
+
     document.querySelector('.arcade-forum-posts').innerHTML += html;
 
   }
