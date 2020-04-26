@@ -289,7 +289,7 @@ table#inq-grid {
 .product-summary {
   display: grid;
   grid-gap: 1em;
-  grid-template-columns: 3fr 2fr 1fr 2fr 8fr 1fr;
+  grid-template-columns: 4fr 2fr 1fr 2fr 8fr;
 }
 
 .grid-header {

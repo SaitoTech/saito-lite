@@ -838,52 +838,42 @@ class Covid19 extends DBModTemplate {
 
   };
 
-  pdfCapture(triggerel, targetel, width, height, filename) {
+  pdfCap(triggerel, inputHTML, filename) {
     triggerel.addEventListener('click', function printPDF(e) {
+      var shim = document.createElement('div');
+      shim.style.width = "1120px";
+      shim.style.height = "1475px";
+      shim.style.padding = "100px"
+      shim.style.position = "absolute";
+      shim.style.top = "-2000px;"
+      //shim.appendChild(targetel.cloneNode(true));
+      shim.classList.add('toprint');
+      shim.innerHTML = inputHTML;
+      document.querySelector('.footer').appendChild(shim);
       const html2canvas = require('html2canvas');
-      const jsPdf = require('jspdf');
-      const domElement = targetel;
+      const jsPDF = require('jspdf');
+      const domElement = shim;
       html2canvas(domElement, {
         onclone: (document) => {
           //document.getElementById('print-button').style.visibility = 'hidden';
         }
       })
         .then((canvas) => {
-          const img = canvas.toDataURL('image/png');
-          const pdf = new jsPdf({
-            orientation: 'landscape',
-            unit: 'mm',
-            format: [297, 210]
-          });
-          pdf.addImage(img, 'JPEG', 0, 0, width, height);
-          pdf.save(filename);
+          console.log(canvas.width + " " + canvas.height);
+          var imgData = canvas.toDataURL('image/jpeg', 0.9);
+
+          // console.log('Report Image URL: ' + imgData);
+          var doc = new jsPDF('p', 'mm', "a4");
+          const imgProps = doc.getImageProperties(imgData);
+          const pdfWidth = doc.internal.pageSize.getWidth();
+          const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+          doc.addImage(imgData, 'jpeg', 0, 0, pdfWidth, pdfHeight);    
+
+          doc.save(filename);
+          shim.destroy();
         })
     });
-  }
-
-  pdfCaptureHTML(triggerel, targetel, width = 0, height = 0, filename) {
-    triggerel.addEventListener('click', function printPDF(e) {
-      //const html2canvas = require('html2canvas');
-      const jsPdf = require('jspdf');
-      const pdf = new jsPdf({
-        orientation: 'landscape',
-        unit: 'mm',
-        format: [297, 210]
-      });
-      var elid = '#' + targetel.id
-      var html = targetel.innerHTML;
-      var specialElementHandlers = {
-        elid: function (element, renderer) {
-          return true;
-        }
-      };
-      pdf.fromHTML(html, 15, 15, {
-        'width': width,
-        'elementHandlers': specialElementHandlers
-      });
-      //pdf.addImage(img, 'JPEG', 0, 0, width, height);
-      pdf.save(filename);
-    })
   }
 
   isAdmin() {

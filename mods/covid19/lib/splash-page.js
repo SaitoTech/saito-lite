@@ -9,13 +9,13 @@ module.exports = SplashPageAppspace = {
   render(app, data) {
     var this_portal = this;
 
-    if(data.covid19.isAdmin()) {
+    if (data.covid19.isAdmin()) {
       document.querySelector(".main").innerHTML = SplashPageAdminTemplate();
     } else {
       document.querySelector(".main").innerHTML = SplashPageTemplate();
     }
 
-    
+
     document.querySelector(".navigation").innerHTML = "";
 
 
@@ -51,10 +51,10 @@ module.exports = SplashPageAppspace = {
     var html = "";
     html += `<div class="grid-header">Product</div>`;
     html += `<div class="grid-header">Daily Capacity</div>`;
-    html += `<div class="grid-header">Count</div>`;
-    html += `<div class="grid-header">Cost USD</div>`;
+    html += `<div class="grid-header">Sources</div>`;
+    html += `<div class="grid-header">Cost USD*</div>`;
     html += `<div class="grid-header">Certifications</div>`;
-    html += `<div class="grid-header"></div>`;
+    //html += `<div class="grid-header"></div>`;
 
     data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
       res.rows.forEach(row => {
@@ -63,7 +63,7 @@ module.exports = SplashPageAppspace = {
         html += `<div>${row.product_count}</div>`;
         html += `<div>${row.cost}</div>`;
         html += `<div>${row.certs}</div>`
-        html += `<div data-category_id="${row.category_id}"><div class="active_category grid-action"><i class="fas fa-external-link-alt"></i> View All</div></div>`
+          //html += `<div data-category_id="${row.category_id}"><div class="active_category grid-action"><i class="fas fa-external-link-alt"></i> View All</div></div>`
           ;
       });
       document.querySelector('.product-summary').innerHTML = html;
@@ -74,9 +74,16 @@ module.exports = SplashPageAppspace = {
         });
       });
 
-      //      data.covid19.pdfCapture(document.getElementById('list2pdf-btn'), document.querySelector('.summary-section'), 297, 210,'product-list.pdf');
-      data.covid19.pdfCaptureHTML(document.getElementById('list2pdf-btn'), document.querySelector('.summary-section'), 297, 210, 'product-list.pdf');
-
+      //      data.covid19.pdfCap(document.getElementById('list2pdf-btn'), document.querySelector('.summary-section'), 297, 210, 'product-list.pdf');
+      var pdfHTML = `
+        <div style="padding: 15px; background: var(--saito-dhb);">
+          <img class="logo major-logo" src="/covid19/dhbgloballogo.png">
+        </div>
+      `;
+      pdfHTML += document.querySelector('.summary-section').innerHTML;
+      pdfHTML += `<p>For questions or purchase inquiries, please contact us at <a href="mailto:kevin@dhb.global">kevin@dhb.global</a>.</p><hr />`;
+    
+      data.covid19.pdfCap(document.getElementById('list2pdf-btn'), pdfHTML, 'product-list.pdf');
 
     });
   },

@@ -59,7 +59,7 @@ class Rewards extends ModTemplate {
   }
 
   async onPeerHandshakeComplete(app, peer) {
-   if(this.app.modules.returnActiveModule().name = "Arcade") {
+   if(this.app.modules.returnActiveModule().name == "Arcade") {
       console.log('drawing achievements');
       try {
         if (document.querySelector(".arcade-sidebar-done")) {

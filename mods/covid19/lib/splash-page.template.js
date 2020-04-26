@@ -21,12 +21,18 @@ module.exports = SplashPageTemplate = () => {
         Loading...
       </div>
 
+      <p>
+        * Prices are indicative from previous purchases.
+      </P>
       <hr />
+
+
   
     </div>
 
     <div class="splash-actions">
       <button id="customer-search-btn" class="button">View Products by Category</button>
+      <button id="list2pdf-btn" class="button">Download List as PDF</button>
     </div>
 
 
