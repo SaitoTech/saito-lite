@@ -42,8 +42,8 @@ module.exports = UpdateFile = {
     document.getElementById('save-file').addEventListener('click', (e) => {
       data.covid19.submitForm(document.querySelector('.modal-form'));
       document.querySelector('.file-template').destroy();
-      UpdateSuccess.render(app, data);
-      UpdateSuccess.attachEvents(app, data);
+//      UpdateSuccess.render(app, data);
+//      UpdateSuccess.attachEvents(app, data);
 
     });
 

@@ -35,16 +35,24 @@ module.exports = FileManager = {
 
     data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
       res.rows.forEach(row => {
-        if(typeof row.file_data == 'null') {row.file_data = ""}
+
+        if (typeof row.file_data == 'null') { row.file_data = ""; }
+
+	let filelen = 0;
+        if (row.file_data != "") { 
+	  filelen = parseInt((row.file_data).replace(/=/g,"").length * 0.00075);
+        }
+
         html += `<div>${row.file_filename}</div>`;
         html += `<div>${row.file_type}</div>`;
-        html += `<div>${parseInt((row.file_data).replace(/=/g,"").length * 0.00075)}KB</div>`;
+        html += `<div>${filelen} KB</div>`;
         html += `
         <div class="grid-buttons ${row.id}">
           <div class="grid-action edit" data-id="${row.id}">Edit</div>
           <div class="grid-action delete" data-id="${row.id}">Delete</div>
         </div>`;
       });
+
       document.querySelector(".loading").style.display = "none";
       document.querySelector("#file-table").style.display = "grid";
       document.querySelector("#file-table").innerHTML = html;
