@@ -40,7 +40,8 @@ module.exports = FileManager = {
 
 	let filelen = 0;
         if (row.file_data != "") { 
-	  filelen = parseInt((row.file_data).replace(/=/g,"").length * 0.00075);
+	  let filed = row.filedata;
+	  if (filed) { filelen = parseInt((filed).replace(/=/g,"").length * 0.00075); }
         }
 
         html += `<div>${row.file_filename}</div>`;
