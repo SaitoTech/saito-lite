@@ -322,16 +322,19 @@ class Forum extends ModTemplate {
     newtx.transaction.msg.module = "Forum";
     newtx.transaction.msg.type = "delete";
     newtx.transaction.msg.post_id = post_id;
-    newtx = this.app.wallet.signTransaction(tx);
+    newtx = this.app.wallet.signTransaction(newtx);
 
     return newtx;
   }
 
   async receiveDeleteTransaction(tx) {
 
+console.log("DELETING TX: ");
+
     try {
 
       let txmsg = tx.returnMessage();
+console.log("DELETING TX: " + JSON.stringify(txmsg));
       let post_id = txmsg.post_id;
 
       let sql = "SELECT * FROM posts where post_id = $post_id AND parent_id = \"\"";
@@ -347,7 +350,7 @@ class Forum extends ModTemplate {
           }
 
           sql = "DELETE FROM posts where post_id = $post_id";
-          await this.app.storage.executeDatabase(sql,params, "forum");
+          await this.app.storage.executeDatabase(sql, params, "forum");
 
           sql = "DELETE FROM votes where post_id = $post_id";
           await this.app.storage.executeDatabase(sql, params, "forum");
@@ -736,6 +739,8 @@ class Forum extends ModTemplate {
     if (app.BROWSER == 0) {
 
       if (conf == 0) {
+
+console.log(tx.returnMessage());
 
         let forum_self = app.modules.returnModule("Forum");
 

@@ -59,17 +59,24 @@ class Rewards extends ModTemplate {
   }
 
   async onPeerHandshakeComplete(app, peer) {
-   if(this.app.modules.returnActiveModule().name == "Arcade") {
-      console.log('drawing achievements');
-      try {
-        if (document.querySelector(".arcade-sidebar-done")) {
-          document.querySelector(".arcade-sidebar-done").innerHTML = "";
-          this.app.network.sendRequestWithCallback("get achievements", this.app.wallet.returnPublicKey(), (rows) => {
-            rows.forEach(row => this.renderAchievmentRow(row));
-          });
+    if (app.BROWSER == 1) {
+      let active_mod = this.app.modules.returnActiveModule();
+      if (active_mod) {
+	if (active_mod.name == "Arcade") {
+          if (this.app.modules.returnActiveModule().name == "Arcade") {
+            console.log('drawing achievements');
+            try {
+              if (document.querySelector(".arcade-sidebar-done")) {
+                document.querySelector(".arcade-sidebar-done").innerHTML = "";
+                this.app.network.sendRequestWithCallback("get achievements", this.app.wallet.returnPublicKey(), (rows) => {
+                  rows.forEach(row => this.renderAchievmentRow(row));
+                });
+              }
+            } catch (err) {
+              console.error(err);
+            }
+          }
         }
-      } catch (err) {
-        console.error(err);
       }
     }
   }

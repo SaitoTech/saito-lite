@@ -21,7 +21,7 @@ module.exports = ForumTeaserTemplate = (app, data, tx) => {
   let discussion_link = subforum + "/" + tx.transaction.sig;
 
   let html = `
-      <div class="teaser" id="${tx.transaction.sig}">
+      <div class="teaser teaser_${tx.transaction.sig}" id="${tx.transaction.sig}">
 
         <div class="teaser-author">${data.forum.formatAuthor(tx.transaction.from[0].add)}</div>
 

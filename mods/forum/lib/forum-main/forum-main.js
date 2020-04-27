@@ -248,7 +248,13 @@ console.log("CMT: " + JSON.stringify(data.forum.forum.comments));
 
         let newtx = data.forum.createDeleteTransaction(e.currentTarget.id);
         app.network.propagateTransaction(newtx);
-        
+
+	let divid = ".teaser_"+e.currentTarget.id;
+	let elem = document.querySelector(divid);
+	elem.parentNode.removeChild(elem);
+
+	salert("Delete Requested: it may take a minute for this to update");       
+ 
       });
     });
 
