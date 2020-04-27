@@ -43,20 +43,31 @@ module.exports = FileManager = {
 console.log("SETTING FILE_DATA TO BAD FOR: " + row.id);
 row.file_data = ""; }
 
-	let filelen = 0;
+	let filelen = 0.0;
         if (row.file_data != "") { 
+
 	  let filed = row.file_data;
-	  if (filed != "" && filed != null) { filelen = parseInt((filed).replace(/=/g,"").length * 0.00075); }
+	  if (filed != "" && filed != null) { filelen = parseFloat((filed).replace(/=/g,"").length * 0.00075); }
+	  if (filed != "" && filed != null) { 
+	    filelen = parseInt((filed).replace(/=/g,"").length * 0.00075); 
+	    if (filelen == 0) { filelen = parseFloat((filed).replace(/=/g,"").length * 0.00075); }
+          }
+
+console.log("---->" + filelen);
+if (length == 0) {
+  console.log("--2-->" + filed);
+}
+
+          html += `<div>${row.file_filename}</div>`;
+          html += `<div>${row.file_type}</div>`;
+          html += `<div>${filelen} KB</div>`;
+          html += `
+          <div class="grid-buttons ${row.id}">
+            <div class="grid-action edit" data-id="${row.id}">Edit</div>
+            <div class="grid-action delete" data-id="${row.id}">Delete</div>
+          </div>`;
+
         }
-	
-        html += `<div>${row.file_filename}</div>`;
-        html += `<div>${row.file_type}</div>`;
-        html += `<div>${filelen} KB</div>`;
-        html += `
-        <div class="grid-buttons ${row.id}">
-          <div class="grid-action edit" data-id="${row.id}">Edit</div>
-          <div class="grid-action delete" data-id="${row.id}">Delete</div>
-        </div>`;
       });
 
       document.querySelector(".loading").style.display = "none";
