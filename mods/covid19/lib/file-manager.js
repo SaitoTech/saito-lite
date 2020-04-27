@@ -43,22 +43,29 @@ module.exports = FileManager = {
       res.rows.forEach(row => {
 
         if (typeof row.file_data == 'null') { row.file_data = ""; }
+	let filelen = 0.0;
+        if (row.file_data != "") { 
 
-        let filelen = 0;
-        if(Number.isNaN(Number(row.file_size))) {
-          filelen = "";
-        } else {
-          filelen = parseInt(row.file_size * 0.00075);
+	  let filed = row.file_data;
+	  if (filed != "" && filed != null) { filelen = parseFloat((filed).replace(/=/g,"").length * 0.00075); }
+	  if (filed != "" && filed != null) { 
+	    filelen = parseInt((filed).replace(/=/g,"").length * 0.00075); 
+	    if (filelen == 0) { filelen = parseFloat((filed).replace(/=/g,"").length * 0.00075); }
+          }
+
+	  if (filelen > 0) {
+
+            html += `<div>${row.file_filename}</div>`;
+            html += `<div>${row.file_type}</div>`;
+            html += `<div>${filelen} KB</div>`;
+            html += `
+            <div class="grid-buttons ${row.id}">
+              <div class="grid-action edit" data-id="${row.id}">Edit</div>
+              <div class="grid-action delete" data-id="${row.id}">Delete</div>
+            </div>`;
+
+	  }
         }
-
-        html += `<div>${row.file_filename}</div>`;
-        html += `<div>${row.file_type}</div>`;
-        html += `<div>${filelen} KB</div>`;
-        html += `
-        <div class="grid-buttons ${row.id}">
-          <div class="grid-action edit" data-id="${row.id}">Edit</div>
-          <div class="grid-action delete" data-id="${row.id}">Delete</div>
-        </div>`;
       });
 
       document.querySelector(".loading").style.display = "none";
@@ -76,11 +83,29 @@ module.exports = FileManager = {
       });
 
       document.querySelectorAll('.grid-action.delete').forEach(el => {
-        el.addEventListener('click', (e) => {
-          salert("Delete - coming soon!");
+        el.addEventListener('click', async (e) => {
+
+          data.file_id = e.target.dataset.id;
+          data.covid19.sendPeerDatabaseRequest("covid19", "files", "uuid", "files.id = " + data.file_id, null, async (res) => {
+
+	    let c = confirm("Are you sure you want to delete this file?");
+	    if (c) {
+	
+	      let values = [];
+		  values[0] = {};
+	          values[0].dbname = "covid19";
+	          values[0].table  = "files";
+	          values[0].column = "uuid";
+	          values[0].value = res.rows[0].uuid;
+
+	      data.covid19.deleteDatabase(values);
+
+              await salert("Delete Requested - please reload in 30 seconds");
+
+	    }
+          });
         });
       });
-
     });
 
   },
