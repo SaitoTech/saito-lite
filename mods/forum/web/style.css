@@ -59,6 +59,8 @@
   clear:both;
   line-height: 1.6em;
   padding: 15px;
+  max-height: 50vh;
+  overflow: auto;
 }
 
 
@@ -162,6 +164,11 @@
 }
 .teaser-content-links-report a {
  text-decoration: none;
+}
+.teaser-content-links-delete {
+ float: left;
+ margin-right: 15px;
+ cursor:pointer;
 }
 
 
