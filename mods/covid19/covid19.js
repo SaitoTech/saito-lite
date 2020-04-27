@@ -155,6 +155,8 @@ class Covid19 extends DBModTemplate {
   async onConfirmation(blk, tx, conf, app) {
 
     if (app.BROWSER == 1) { return; }
+    if (conf > 0) { return; }
+
 
     //
     // only handle our stuff
@@ -163,8 +165,6 @@ class Covid19 extends DBModTemplate {
     let covid19_self = app.modules.returnModule("Covid19");
 
     if (txmsg.module != covid19_self.name) { return; }
-
-
 
     //
     // add super for auto-DB update features
