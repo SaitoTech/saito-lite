@@ -53,20 +53,18 @@ row.file_data = ""; }
 	    if (filelen == 0) { filelen = parseFloat((filed).replace(/=/g,"").length * 0.00075); }
           }
 
-console.log("---->" + filelen);
-if (length == 0) {
-  console.log("--2-->" + filed);
-}
+	  if (filelen > 0) {
 
-          html += `<div>${row.file_filename}</div>`;
-          html += `<div>${row.file_type}</div>`;
-          html += `<div>${filelen} KB</div>`;
-          html += `
-          <div class="grid-buttons ${row.id}">
-            <div class="grid-action edit" data-id="${row.id}">Edit</div>
-            <div class="grid-action delete" data-id="${row.id}">Delete</div>
-          </div>`;
+            html += `<div>${row.file_filename}</div>`;
+            html += `<div>${row.file_type}</div>`;
+            html += `<div>${filelen} KB</div>`;
+            html += `
+            <div class="grid-buttons ${row.id}">
+              <div class="grid-action edit" data-id="${row.id}">Edit</div>
+              <div class="grid-action delete" data-id="${row.id}">Delete</div>
+            </div>`;
 
+	  }
         }
       });
 
