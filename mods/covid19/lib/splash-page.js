@@ -44,7 +44,8 @@ module.exports = SplashPageAppspace = {
       certifications ON products_certifications.certification_id = certifications.id
     where 
       products.deleted <> 1 AND 
-      suppliers.deleted <> 1
+      suppliers.deleted <> 1 AND
+      products_certifications.deleted <> 1
     group by 
       products.category_id;
     `;
@@ -59,9 +60,9 @@ module.exports = SplashPageAppspace = {
     data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
       res.rows.forEach(row => {
         html += `<div data-category_id="${row.category_id}" class="active_category tip"><a>${row.product}</a><div class="tiptext">View All</div></div>`;
-        html += `<div>${row.capacity}</div>`;
-        html += `<div>${row.product_count}</div>`;
-        html += `<div>${row.cost}</div>`;
+        html += `<div class="rightj">${s2Number(row.capacity)}</div>`;
+        html += `<div class="rightj">${s2Number(row.product_count)}</div>`;
+        html += `<div class="rightj">${row.cost}</div>`;
         html += `<div>${row.certs}</div>`
           //html += `<div data-category_id="${row.category_id}"><div class="active_category grid-action"><i class="fas fa-external-link-alt"></i> View All</div></div>`
           ;

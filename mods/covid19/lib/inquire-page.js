@@ -8,31 +8,36 @@ module.exports = InquirePage = {
 
     document.querySelector(".main").innerHTML = ProductPageTemplate();
 
-    let fields = `
-        product_specification as 'Product', \
-        id as 'Product ID'
+    let cart = JSON.parse(localStorage.cart);
+
+    var html = `
+    <tr>
+      <td class="inq-product-name">Category</td>
+      <td class="inq-product-name">Budget</td>
+      <td class="inq-product-name">Quantity</td>
+      <td class="inq-product-name">Requirements</td>
+      <td class="inq-product-name"></td>
+      </td>
       `;
 
-    data.covid19.sendPeerDatabaseRequest("covid19", "products", fields, "id in " + ids, null, function (res) {
-
-      if (res.rows.length > 0) {
-        var html = "<tr>";
-
-        Object.entries(res.rows[0]).forEach(field => {
-          html += `<td class="inq-product-name">${field[0]}</td>`;
-        });
-        html += "</tr>";
-
-        res.rows.forEach(row => {
-          html += "<tr>";
-          Object.entries(row).forEach(field => {
-            html += `<td class="inq-product-id">${field[1]}</td>`;
-          });
-          html += "</tr>";
-        });
+    cart.products.forEach(product, () => {
+      html += "<tr>";
+        html += `
+        <td class="inq-product-id">${product.category}</td>
+        <td class="inq-product-id">${product.budget}</td>
+        <td class="inq-product-id">${product.quantity}</td>
+        <td class="inq-product-id">${product.requirements}</td>
+        <td class="inq-product-id">
+        <td class="grid-buttons ${product.id}">
+          <div class="grid-action edit" data-id="${product.id}">Edit</div>
+          <div class="grid-action delete" data-id="${product.id}">Delete</div>
+        </td>
+        </tr>`;
         document.querySelector('.inq-grid').innerHTML = html;
-      }
     });
+    
+    
+
 
   },
 

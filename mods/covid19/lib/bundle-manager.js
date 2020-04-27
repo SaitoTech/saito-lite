@@ -22,9 +22,12 @@ module.exports = BundleManager = {
       from 
         bundles
       where
-        (admin = "${app.wallet.returnPublicKey()}"
-      OR
-        "${app.wallet.returnPublicKey()}" = "${data.covid19.admin_pkey}") 
+        bundles.deleted <> 1 AND
+        (
+          (admin = "${app.wallet.returnPublicKey()}"
+        OR
+          "${app.wallet.returnPublicKey()}" = "${data.covid19.admin_pkey}") 
+        )
 `;
     var html = `
           <div class="table-head">Name</div>
