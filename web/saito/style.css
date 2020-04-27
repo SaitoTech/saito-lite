@@ -81,6 +81,19 @@ a:hover {
   color: var(--saito-cyber-black);
 }
 
+rightj {
+  text-align: right;
+}
+
+centerj {
+  text-align: center;
+}
+
+justifyj {
+  text-align: justify;
+}
+
+
 body {
   
   background-color: var(--backround-general);

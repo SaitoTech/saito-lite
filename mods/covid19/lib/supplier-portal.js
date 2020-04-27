@@ -38,6 +38,8 @@ module.exports = SupplierPortal = {
       where
         suppliers.id = products.supplier_id AND 
         products.category_id = categories.id AND 
+        products.deleted <> 1 AND 
+        suppliers.deleted <> 1 AND
         suppliers.publickey = "${app.wallet.returnPublicKey()}"
 `;
     var html = `

@@ -419,12 +419,26 @@ class Covid19 extends DBModTemplate {
           data.product_id = e.target.id.split("-")[1];
 
           if (typeof localStorage.cart == 'undefined') {
-            localStorage.cart = "";
+            localStorage.cart = JSON.stringify({"products":[]});
           }
-          if (!localStorage.cart.split("|").includes(data.product_id)) {
+          var cart = JSON.parse(localStorage.cart);
+          var add = true;
+          cart.products.forEach(product => {
+            if(data.product_id == product.id) {
+              add = false;
+            }
+          });
 
-            localStorage.cart += "|" + data.product_id;
+          if(add) {
+            cart.products.push({
+              id: data.product_id,
+              category: data.active_category_id,
+              budget: "",
+              quantity: "",
+              requirements: ""
+            })
           }
+          localStorage.cart = JSON.stringify(cart);
 
           //salert('gimme - product id:' + e.target.id)
           InquirePage.render(this.app, data);
@@ -838,6 +852,7 @@ class Covid19 extends DBModTemplate {
 
   };
 
+  
   pdfCap(triggerel, inputHTML, filename) {
     triggerel.addEventListener('click', function printPDF(e) {
       var shim = document.createElement('div');
@@ -860,7 +875,7 @@ class Covid19 extends DBModTemplate {
       })
         .then((canvas) => {
           console.log(canvas.width + " " + canvas.height);
-          var imgData = canvas.toDataURL('image/jpeg', 0.9);
+          var imgData = canvas.toDataURL('image/jpeg', 1);
 
           // console.log('Report Image URL: ' + imgData);
           var doc = new jsPDF('p', 'mm', "a4");
