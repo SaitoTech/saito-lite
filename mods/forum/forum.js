@@ -317,47 +317,44 @@ class Forum extends ModTemplate {
 
   createDeleteTransaction(post_id) {
 
-    let tx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
 
-    tx.transaction.msg.module = "Forum";
-    tx.transaction.msg.type = "delete";
-    tx.transaction.msg.post_id = post_id;
+    newtx.transaction.msg.module = "Forum";
+    newtx.transaction.msg.type = "delete";
+    newtx.transaction.msg.post_id = post_id;
+    newtx = this.app.wallet.signTransaction(tx);
 
-    tx = this.app.wallet.signTransaction(tx);
-
-    return tx;
+    return newtx;
   }
 
   async receiveDeleteTransaction(tx) {
 
     try {
-      let post_id = tx.transaction.msg.post_id;
-      // console.log("post_id: " + post_id);
-      let sql = "SELECT * FROM posts where post_id = $post_id";
+
+      let txmsg = tx.returnMessage();
+      let post_id = txmsg.post_id;
+
+      let sql = "SELECT * FROM posts where post_id = $post_id AND parent_id = \"\"";
       let params = { $post_id: post_id }
       let rows = await this.app.storage.queryDatabase(sql, params, "forum");
-      sql = "SELECT * FROM votes where post_id = $post_id";
-      let rows2 = await this.app.storage.queryDatabase(sql, params, "forum");
+
       if (rows) {
         if (rows.length > 0) {
-          for (let i = 0; i < rows.length; i++) {
-            params = { $id: rows[i].id }
-            sql = "DELETE FROM posts where id = $id";
-            await this.app.storage.executeDatabase(sql, params, "forum");
-            // console.log("POST DELETED");
+
+	  let oldtx = new saito.transaction(JSON.parse(rows[0].tx));
+	  if (oldtx.transaction.from[0].add !== tx.transaction.from[0].add) {
+	    return;
           }
+
+          sql = "DELETE FROM posts where post_id = $post_id";
+          await this.app.storage.executeDatabase(sql,params, "forum");
+
+          sql = "DELETE FROM votes where post_id = $post_id";
+          await this.app.storage.executeDatabase(sql, params, "forum");
+
         }
       }
-      if (rows2) {
-        if (rows2.length > 0) {
-          for (let i = 0; i < rows2.length; i++) {
-            params = { $id: rows2[i].id }
-            sql = "DELETE FROM votes where id = $id";
-            await this.app.storage.executeDatabase(sql, params, "forum");
-            // console.log("VOTES DELETED");
-          }
-        }
-      }
+
     } catch (e) {
       console.log('ERROR - receiveDeleteTransaction: ' + e);
     }
