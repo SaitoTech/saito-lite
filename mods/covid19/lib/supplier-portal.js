@@ -81,7 +81,26 @@ module.exports = SupplierPortal = {
 
       document.querySelectorAll('.grid-action.delete').forEach(el => {
         el.addEventListener('click', (e) => {
-          salert("Delete - coming soon!");
+
+          data.supplier_id = e.target.dataset.id;
+          data.covid19.sendPeerDatabaseRequest("covid19", "suppliers", "uuid", "suppliers.id = " + data.supplier_id, null, async (res) => {
+
+            let c = confirm("Are you sure you want to delete this supplier?");
+            if (c) {
+
+              let values = [];
+                  values[0] = {};
+                  values[0].dbname = "covid19";
+                  values[0].table  = "suppliers";
+                  values[0].column = "uuid";
+                  values[0].value = res.rows[0].uuid;
+
+              data.covid19.deleteDatabase(values);
+
+              await salert("Delete Requested - please reload in 30 seconds");
+
+            }
+          });
         });
       });
 
