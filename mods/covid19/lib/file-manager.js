@@ -18,7 +18,10 @@ module.exports = FileManager = {
 
     var sql = `
       select 
-        *
+        id,
+        file_filename,
+        file_type,
+        length(file_data) as 'file_size'
       from 
         files
       where
@@ -41,10 +44,11 @@ module.exports = FileManager = {
 
         if (typeof row.file_data == 'null') { row.file_data = ""; }
 
-	let filelen = 0;
-        if (row.file_data != "") { 
-	  let filed = row.filedata;
-	  if (filed) { filelen = parseInt((filed).replace(/=/g,"").length * 0.00075); }
+        let filelen = 0;
+        if(Number.isNaN(Number(row.file_size))) {
+          filelen = "";
+        } else {
+          filelen = parseInt(row.file_size * 0.00075);
         }
 
         html += `<div>${row.file_filename}</div>`;

@@ -70,7 +70,7 @@ module.exports = WelcomeBackup = {
       //
       // update keychain
       //
-      app.keys.updateEmail(app.wallet.returnPublicKey(), submitted_email);     
+      app.keys.updateEmail(app.wallet.returnPublicKey(), submitted_email);
 
 
 
@@ -88,14 +88,14 @@ module.exports = WelcomeBackup = {
           return;
         }
 
-	//
-	// salt / hash and store pssword
-	//
+        //
+        // salt / hash and store pssword
+        //
         app.options.profile.pass = app.crypto.hash(pass1 + "SAITO-PASSWORD-HASHING-SALT");
         app.storage.saveOptions();
 
-	let mywallet_json = JSON.stringify(app.options);
-	let mywallet_json_encrypt = app.crypto.aesEncrypt(mywallet_json, app.options.profile.pass);
+        let mywallet_json = JSON.stringify(app.options);
+        let mywallet_json_encrypt = app.crypto.aesEncrypt(mywallet_json, app.options.profile.pass);
 
         data.modal.destroy();
 
@@ -133,7 +133,7 @@ module.exports = WelcomeBackup = {
         message.body = `
 
         <p>Here is an encrypted copy of your Saito wallet:</p>
-	<p>https://saito.io</p>
+        <p>https://saito.io</p>
         <p>To restore your wallet, visit any Saito server and click on Account Settings. Please note that you will need your password to decrypt your wallet during the import process. You are the only one who knows this password.</p>
         <p>Questions or comments? Contact us anytime.</p>
         <p><i>The Saito Team</i></p>
@@ -147,7 +147,7 @@ module.exports = WelcomeBackup = {
         app.network.sendRequest('user wallet backup', app.wallet.returnPublicKey());
         console.log('user wallet backup');
 
-        if(subscribe == true) {
+        if (subscribe == true) {
           let subs = {
             key: app.wallet.returnPublicKey(),
             email: submitted_email,

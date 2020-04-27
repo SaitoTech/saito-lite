@@ -432,7 +432,7 @@ class Covid19 extends DBModTemplate {
           if(add) {
             cart.products.push({
               id: data.product_id,
-              category: data.active_category_id,
+              category: document.getElementById('select-product-type')[document.getElementById('select-product-type').selectedIndex].text,
               budget: "",
               quantity: "",
               requirements: ""
@@ -440,7 +440,6 @@ class Covid19 extends DBModTemplate {
           }
           localStorage.cart = JSON.stringify(cart);
 
-          //salert('gimme - product id:' + e.target.id)
           InquirePage.render(this.app, data);
           InquirePage.attachEvents(this.app, data);
         });
@@ -467,7 +466,10 @@ class Covid19 extends DBModTemplate {
   // array of objects with { database, column, value }
   //
 
+  //deprecated in favour of deleting at the template level.
 
+
+/*
   deleteProduct(product_id, publickey) {
 
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
@@ -494,6 +496,7 @@ class Covid19 extends DBModTemplate {
     //console.log("SENT TO SERVER");
 
   }
+*/
 
   updateServerDatabase(data_array, publickey, type = "Supplier Update") {
 

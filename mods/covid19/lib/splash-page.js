@@ -84,7 +84,7 @@ module.exports = SplashPageAppspace = {
       pdfHTML += document.querySelector('.summary-section').innerHTML;
       pdfHTML += `<p>For questions or purchase inquiries, please contact us at <a href="mailto:kevin@dhb.global">kevin@dhb.global</a>.</p><hr />`;
     
-      data.covid19.pdfCap(document.getElementById('list2pdf-btn'), pdfHTML, 'product-list.pdf');
+      data.covid19.pdfCap(document.getElementById('list2pdf-btn'), pdfHTML, 'DHB-product-list.pdf');
 
     });
   },
