@@ -36,14 +36,16 @@ module.exports = FileManager = {
     data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
       res.rows.forEach(row => {
 
-        if (typeof row.file_data == 'null') { row.file_data = ""; }
+        if (typeof row.file_data == 'null') { 
+console.log("SETTING FILE_DATA TO BAD FOR: " + row.id);
+row.file_data = ""; }
 
 	let filelen = 0;
         if (row.file_data != "") { 
-	  let filed = row.filedata;
-	  if (filed) { filelen = parseInt((filed).replace(/=/g,"").length * 0.00075); }
+	  let filed = row.file_data;
+	  if (filed != "" && filed != null) { filelen = parseInt((filed).replace(/=/g,"").length * 0.00075); }
         }
-
+	
         html += `<div>${row.file_filename}</div>`;
         html += `<div>${row.file_type}</div>`;
         html += `<div>${filelen} KB</div>`;
