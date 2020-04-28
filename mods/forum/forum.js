@@ -48,6 +48,8 @@ class Forum extends ModTemplate {
     this.view_post_id = "";
     this.view_offset = 0;
 
+    this.addrController = new AddressController(app);
+
   }
 
 
@@ -329,12 +331,9 @@ class Forum extends ModTemplate {
 
   async receiveDeleteTransaction(tx) {
 
-console.log("DELETING TX: ");
-
     try {
 
       let txmsg = tx.returnMessage();
-console.log("DELETING TX: " + JSON.stringify(txmsg));
       let post_id = txmsg.post_id;
 
       let sql = "SELECT * FROM posts where post_id = $post_id AND parent_id = \"\"";
@@ -369,13 +368,14 @@ console.log("DELETING TX: " + JSON.stringify(txmsg));
 
   onPeerHandshakeComplete(app, peer) {
 
+    let identifiers_to_fetch = [];
+
     //
     // Arcade Sidebar?
     //
     if (this.browser_active == 1 && this.app.modules.returnActiveModule().name == "Arcade") {
 
       let forum_self = app.modules.returnModule('Forum');
-
 
       let where = "1 = 1 ORDER BY rank DESC LIMIT 10";
       forum_self.sendPeerDatabaseRequest("forum", "posts", "*", where, null, function (res) {
@@ -393,14 +393,12 @@ console.log("DELETING TX: " + JSON.stringify(txmsg));
           let forum = "/forum/" + txmsg.forum;
           let link = "/forum/" + txmsg.forum + "/" + tx.transaction.sig;
 
+	  identifiers_to_fetch.push(tx.transaction.from[0].add);
+ 
           ArcadeSidebar.addPost(app, title, author, date, forum, link, votes, comments);
 
-
-
         });
-
-        let html = "This is our replacement for the Forum";
-
+	forum_self.fetchIdentifiers(identifiers_to_fetch);
       });
 
       return;
@@ -438,6 +436,7 @@ console.log("DELETING TX: " + JSON.stringify(txmsg));
 
           let tx = new saito.transaction(row.tx);
           post_ids.push(tx.transaction.sig);
+	  identifiers_to_fetch.push(tx.transaction.from[0].add);
 
           if (loading == "main" || loading == "forum") {
             try {
@@ -517,6 +516,13 @@ console.log("DELETING TX: " + JSON.stringify(txmsg));
             }
           }
         });
+
+	//
+	// fetch identifiers
+	//
+        forum_self.addrController.fetchIdentifiers(identifiers_to_fetch);
+
+
 
 
       }
@@ -843,9 +849,9 @@ console.log(tx.returnMessage());
     let id = this.app.keys.returnIdentifierByPublicKey(author);
 
     if (id == "") {
-      return author.substring(0, 8) + "...";
+      return '<span class="saito-address saito-address-'+author+'">'+author.substring(0, 8)+"...</span>";
     } else {
-      return id;
+      return '<span class="">'+id+'</span>';
     }
   }
 

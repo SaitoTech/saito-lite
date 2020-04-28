@@ -50,10 +50,12 @@ class Registry extends ModTemplate {
   }
 *******/
 
+
   showModal() {
     RegistryModal.render(this.app, this);
     RegistryModal.attachEvents(this.app, this);
   }
+
 
   registerIdentifier(identifier, domain="@saito") {
 

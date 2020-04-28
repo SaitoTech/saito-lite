@@ -26,6 +26,8 @@ class Leaderboard extends ModTemplate {
     this.carousel_timer = null;
     this.carousel_speed = 10000;
 
+    this.addrController = new AddressController(app);
+
   }
 
 
@@ -57,9 +59,13 @@ class Leaderboard extends ModTemplate {
 
     let leaderboard_self = app.modules.returnModule("Leaderboard");
 
+    
+
+
     if (app.modules.returnModule('Arcade').browser_active == 1) {
 
       let installed_games = "(";
+      let identifiers_to_fetch = [];
       for (let i = 0; i < this.mods.length; i++) {
         this.rankings[this.mods[i].name] = [];
         installed_games += "'" + this.mods[i].name + "'";
@@ -75,7 +81,12 @@ class Leaderboard extends ModTemplate {
           if (row.publickey == app.wallet.returnPublicKey()) {
             player = "me";
           }
+
+	  let player_identifier = app.keys.returnIdentifierByPublicKey(row.publickey, true);
+	  if (app.crypto.isPublicKey(player_identifier)) { identifiers_to_fetch.push(player_identifier); }
+
           leaderboard_self.rankings[row.module].push({
+            "address": row.publickey ,
             "publickey": app.keys.returnIdentifierByPublicKey(row.publickey, true),
             "player": player,
             "games": row.games,
@@ -92,7 +103,7 @@ class Leaderboard extends ModTemplate {
             html += `<div style="${styledata}" class="leaderboard-rankings leaderboard_${z}" id="leaderboard_${z}">`;
             for (let i = 0; i < leaderboard_self.rankings[z].length; i++) {
               let entry = leaderboard_self.rankings[z][i];
-              html += `<div class="${entry.player} playername">${entry.publickey}</div><div class="${entry.player}">${entry.games}</div><div class="${entry.player}">${entry.ranking}</div>`;
+              html += `<div class="${entry.player} playername saito-address saito-address-${entry.address}">${entry.publickey}</div><div class="${entry.player}">${entry.games}</div><div class="${entry.player}">${entry.ranking}</div>`;
             }
             if (shown == 0) {
               document.querySelector('.leaderboard-game-module').innerHTML = (leaderboard_self.mods[loop].name + ' Leaderboard:');
@@ -104,6 +115,9 @@ class Leaderboard extends ModTemplate {
           }
           loop++;
         }
+
+        leaderboard_self.addrController.fetchIdentifiers(identifiers_to_fetch);
+
         document.querySelector(".leaderboard-container").innerHTML = html;
         document.querySelectorAll('.me.playername').forEach(el => {
           el.scrollIntoView();
