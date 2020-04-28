@@ -847,7 +847,7 @@ class Forum extends ModTemplate {
     let id = this.app.keys.returnIdentifierByPublicKey(author);
 
     if (id == "") {
-      return '<span class="saito-address saito-address-'+author+'">'+author.substring(0, 8)+"...</span>";
+      return '<span class="saito-address saito-address-'+author+'">'+author.substring(0, 8)+'...</span>';
     } else {
       return '<span class="">'+id+'</span>';
     }
