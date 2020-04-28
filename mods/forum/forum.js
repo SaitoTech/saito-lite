@@ -376,7 +376,7 @@ class Forum extends ModTemplate {
     if (this.app.modules.isModuleActive("Arcade")) {
 
       let forum_self = app.modules.returnModule('Forum');
-      let where = "1 = 1 ORDER BY rank DESC LIMIT 10";
+      let where = "1 = 1 AND parent_id = "" ORDER BY rank DESC LIMIT 10";
 
       forum_self.sendPeerDatabaseRequest("forum", "posts", "*", where, null, function (res) {
         res.rows.forEach(row => {
