@@ -28,7 +28,7 @@ a {
   margin: 0;
   text-align: center;
   box-shadow: 0 0 2px #efefef;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 
 .play-now {
