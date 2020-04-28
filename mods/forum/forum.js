@@ -398,7 +398,7 @@ class Forum extends ModTemplate {
           ArcadeSidebar.addPost(app, title, author, date, forum, link, votes, comments);
 
         });
-	forum_self.fetchIdentifiers(identifiers_to_fetch);
+	forum_self.addrController.fetchIdentifiers(identifiers_to_fetch);
       });
 
       return;
