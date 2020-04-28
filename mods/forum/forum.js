@@ -376,8 +376,8 @@ class Forum extends ModTemplate {
     if (this.app.modules.isModuleActive("Arcade")) {
 
       let forum_self = app.modules.returnModule('Forum');
-
       let where = "1 = 1 ORDER BY rank DESC LIMIT 10";
+
       forum_self.sendPeerDatabaseRequest("forum", "posts", "*", where, null, function (res) {
         res.rows.forEach(row => {
 
@@ -386,6 +386,7 @@ class Forum extends ModTemplate {
           let txmsg = tx.returnMessage();
 
           let title = txmsg.title;
+          let address = tx.transaction.from[0].add;
           let author = forum_self.formatAuthor(tx.transaction.from[0].add);
           let date = forum_self.formatDate(tx.transaction.ts);
           let votes = row.votes;
@@ -395,10 +396,10 @@ class Forum extends ModTemplate {
 
 	  identifiers_to_fetch.push(tx.transaction.from[0].add);
  
-          ArcadeSidebar.addPost(app, title, author, date, forum, link, votes, comments);
+          ArcadeSidebar.addPost(app, title, author, address, date, forum, link, votes, comments);
 
         });
-	forum_self.addrController.fetchIdentifiers(identifiers_to_fetch);
+	//forum_self.addrController.fetchIdentifiers(identifiers_to_fetch);
       });
 
       return;

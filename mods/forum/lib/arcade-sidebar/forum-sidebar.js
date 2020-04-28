@@ -15,14 +15,14 @@ module.exports = ForumSidebar = {
 
   },
 
-  addPost(app, title, author, date, forum, link, votes, comments) {
+  addPost(app, title, author, address, date, forum, link, votes, comments) {
 
     let html = `
     
     <div class="arcade-forum-post">
       <div class="poster-id">
         <div class="tip">
-          <img class="sidebar-forum-identicon" src="${app.keys.returnIdenticon(author)}" alt="${app.keys.returnIdentifierByPublicKey(author, true)}">
+          <img class="sidebar-forum-identicon" src="${app.keys.returnIdenticon(author)}" alt="${address}">
           <div class="tiptext">${app.keys.returnIdentifierByPublicKey(author, true)}"</div>
         </div>
       </div>
