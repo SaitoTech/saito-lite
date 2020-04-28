@@ -81,15 +81,15 @@ a:hover {
   color: var(--saito-cyber-black);
 }
 
-rightj {
+.rightj {
   text-align: right;
 }
 
-centerj {
+.centerj {
   text-align: center;
 }
 
-justifyj {
+.justifyj {
   text-align: justify;
 }
 
