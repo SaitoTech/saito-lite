@@ -373,7 +373,7 @@ class Forum extends ModTemplate {
     //
     // Arcade Sidebar?
     //
-    if (this.browser_active == 1 && this.app.modules.returnActiveModule().name == "Arcade") {
+    if (this.app.modules.isModuleActive("Arcade")) {
 
       let forum_self = app.modules.returnModule('Forum');
 
@@ -745,8 +745,6 @@ class Forum extends ModTemplate {
     if (app.BROWSER == 0) {
 
       if (conf == 0) {
-
-console.log(tx.returnMessage());
 
         let forum_self = app.modules.returnModule("Forum");
 
