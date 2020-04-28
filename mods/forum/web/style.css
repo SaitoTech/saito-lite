@@ -181,12 +181,13 @@
   margin-bottom: 25px;
 }
 .comment-author {
-
+  margin-left: 35px;
 }
 .comment-text {
-
+  margin-left: 35px;
 }
 .comment-links {
+  margin-left: 35px;
   clear:both;
 }
 .comment-links-reply {
