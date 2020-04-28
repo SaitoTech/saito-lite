@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS bundles (
   id INTEGER ,
+
   uuid VARCHAR(100) UNIQUE,
   admin VARCHAR(100) ,
  

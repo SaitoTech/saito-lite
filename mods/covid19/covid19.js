@@ -170,6 +170,7 @@ class Covid19 extends DBModTemplate {
     // add super for auto-DB update features
     //
     super.onConfirmation(blk, tx, conf, app);
+
   }
 
 

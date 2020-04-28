@@ -35,8 +35,8 @@ module.exports = UpdateBundle = {
     document.getElementById('save-bundle').addEventListener('click', (e) => {
       data.covid19.submitForm(document.querySelector('.modal-form'));
       document.querySelector('.bundle-template').destroy();
-      UpdateSuccess.render(app, data);
-      UpdateSuccess.attachEvents(app, data);
+//      UpdateSuccess.render(app, data);
+//      UpdateSuccess.attachEvents(app, data);
 
     });
 
