@@ -175,7 +175,7 @@ label.treated {
 
 .attachments-grid {
   display: grid;
-  grid-template-columns: 2fr 2fr 2fr 2fr 1fr 6fr;
+  grid-template-columns: 2fr 2fr 2fr 2fr 1fr;
 }
 
 

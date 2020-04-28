@@ -8,9 +8,45 @@ module.exports = Attachments = {
 
     var sql = `
       select 
+        distinct(certifications.name), 
+        products_certifications.file_type,
+        length(products_certifications.file) as 'file_length',
+        products_certifications.id,
+        'select'
+      from 
+        certifications JOIN products_certifications 
+          on  certifications.id = products_certifications.certification_id
+      where
+      products_certifications.product_id = ${data.product_id}
+        `;
+    var html = `
+          <div class="table-head">Type</div>
+          <div class="table-head">Name/s</div>
+          <div class="table-head">Types</div>
+          <div class="table-head">Size</div>
+          <div class="table-head">Select</div>
+        `;
+
+    data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
+      res.rows.forEach(row => {
+        if(typeof row.file_data == 'null') {row.file_data = ""}
+        html += `<div>Cert.</div>`;
+        html += `<div>${row.file_filename}</div>`;
+        html += `<div>${row.file_type}</div>`;
+        html += `<div>${parseInt(row.file_length * 0.00075)} KB</div>`;
+        html += `
+        <div class="grid-select ${row.id}">
+          <input class="select" data-table-id="products_certifications" data-id="${row.id}" type="checkbox" />
+        </div>`;
+       });
+      });       
+
+      var sql = `
+      select 
         distinct(files.file_filename), 
         files.file_type,
         length(files.file_data) as 'file_length',
+        files.id,
         'select'
       from 
         files JOIN file_attachments 
@@ -19,39 +55,28 @@ module.exports = Attachments = {
         file_attachments.object_table = 'products' and 
         file_attachments.object_id = ${data.product_id}
         `;
-    var html = `
-          <div class="table-head">Bundle</div>
-          <div class="table-head">Name/s</div>
-          <div class="table-head">Types</div>
-          <div class="table-head">Size</div>
-          <div class="table-head">Select</div>
-          <div class="table-head"></div>
-        `;
-
+  
     data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
       res.rows.forEach(row => {
         if(typeof row.file_data == 'null') {row.file_data = ""}
-        html += `<div>      -</div>`;
+        html += `<div>File</div>`;
         html += `<div>${row.file_filename}</div>`;
         html += `<div>${row.file_type}</div>`;
-        html += `<div>${row.file_length * 0.00075}KB</div>`;
+        html += `<div>${parseInt(row.file_length * 0.00075)} KB</div>`;
         html += `
         <div class="grid-select ${row.id}">
-          <input class="select" data-id="${row.id}" type="checkbox" />
-        </div>`;
-        html += `
-        <div class="grid-buttons ${row.id}">
-          <div class="grid-action edit" data-id="${row.id}">Edit</div>
-          <div class="grid-action delete" data-id="${row.id}">Delete</div>
+          <input class="select" data-table-id="products_certifications" data-id="${row.id}" type="checkbox" />
         </div>`;
       });
+    });
 
       sql = `
       select 
         distinct(bundles.name), 
         group_concat(files.file_filename) as 'filenames',
-        'zip' as 'file_type' ,
+        'application/zip' as 'file_type' ,
         length(group_concat(files.file_data)) as 'file_length',
+        bundles.id,
         'select'
       from 
         bundles 
@@ -69,18 +94,13 @@ module.exports = Attachments = {
       data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
         res.rows.forEach(row => {
           if(typeof row.file_data == 'null') {row.file_data = ""}
-          html += `<div>${row.name}</div>`;
-          html += `<div>${row.filenames}</div>`;
+          html += `<div>Bundle:<br/ >${row.name}</div>`;
+          html += `<div>${row.filenames.split(',').join('<br />')}</div>`;
           html += `<div>${row.file_type}</div>`;
-          html += `<div>${row.file_length * 0.00075}KB</div>`;
+          html += `<div>${parseInt(row.file_length * 0.00075)} KB</div>`;
           html += `
           <div class="grid-select ${row.id}">
             <input class="select" data-id="${row.id}" type="checkbox" />
-          </div>`;
-          html += `
-          <div class="grid-buttons ${row.id}">
-            <div class="grid-action edit" data-id="${row.id}">Edit</div>
-            <div class="grid-action delete" data-id="${row.id}">Delete</div>
           </div>`;
         });
         document.querySelector("#attachments-grid").innerHTML = html;
@@ -103,8 +123,6 @@ module.exports = Attachments = {
         });
       });
 
-    });
-
 
   },
 
@@ -114,6 +132,7 @@ module.exports = Attachments = {
 
 
     document.getElementById('attach-download').addEventListener('click', (e) => {
+      salert('Coming Soon to a Blockchain Near You')
       document.querySelector('.file-template').destroy();
       //UpdateSuccess.render(app, data);
       //UpdateSuccess.attachEvents(app, data);
