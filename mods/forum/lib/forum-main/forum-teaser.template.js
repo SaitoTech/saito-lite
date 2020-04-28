@@ -47,7 +47,7 @@ module.exports = ForumTeaserTemplate = (app, data, tx) => {
    }
    html += `
 	  </div>
-          <div class="teaser-content-details">submitted by <span class="post_author_clickable" id="post_author_clickable_${tx.transaction.sig}">${author}</span>`;
+          <div class="teaser-content-details">submitted by <span class="post_author_clickable" id="post_author_clickable_${tx.transaction.sig}">${author}</span>
           <div class="teaser-content-links">
             <div class="teaser-content-links-comments"><a href="${discussion_link}">${comments_text}</a></div>
   `;
