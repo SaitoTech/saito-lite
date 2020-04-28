@@ -303,12 +303,17 @@
     grid-area: forum-right-sidebar;
   }
 
+
+  .teasers {
+    overflow:scroll;
+  }
+
   .teaser {
-    width: 460px;
+    width: 480px;
   }
 
   .teaser-content {
-    width: 380px;
+    width: 340px;
     margin-left:15px;
   }
 
