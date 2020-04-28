@@ -15,7 +15,6 @@ module.exports = FileManager = {
     //
     // load products
     //
-
     var sql = `
       select 
         id,
@@ -40,7 +39,10 @@ module.exports = FileManager = {
         `;
 
     data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
+
       res.rows.forEach(row => {
+
+console.log("RECEIVED: " + JSON.stringify(row));
 
         if (typeof row.file_data == 'null') { row.file_data = ""; }
 	let filelen = 0.0;
@@ -52,6 +54,8 @@ module.exports = FileManager = {
 	    filelen = parseInt((filed).replace(/=/g,"").length * 0.00075); 
 	    if (filelen == 0) { filelen = parseFloat((filed).replace(/=/g,"").length * 0.00075); }
           }
+
+	  if (filelen == 0 && row.file_size > 0) {  filelen = row.file_size; }
 
 	  if (filelen > 0) {
 
