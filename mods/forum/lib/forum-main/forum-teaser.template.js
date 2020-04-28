@@ -41,11 +41,13 @@ module.exports = ForumTeaserTemplate = (app, data, tx) => {
           <div class="teaser-content-title"><a href="${link}">${tx.transaction.msg.title}</a> 
   `;
    if (domain != "") {
-     html += `<div class="teaser-site">(<a href="${link}">${domain}</a>)</div>`;
+     html += `<div class="teaser-site" alt="${subforum}">(<a href="${link}">${domain}</a>)</div>`;
+   } else {
+     html += `<div class="teaser-site">(<a href="${subforum}">${subforum}</a>)</div>`;
    }
    html += `
 	  </div>
-          <div class="teaser-content-details">submitted by <span class="post_author_clickable" id="post_author_clickable_${tx.transaction.sig}">${author}</span> to <a href="${subforum}">${subforum}</a><span class="post_author_address" id="${tx.transaction.from[0].add}" style="display:none"></span></div>
+          <div class="teaser-content-details">submitted by <span class="post_author_clickable" id="post_author_clickable_${tx.transaction.sig}">${author}</span>`;
           <div class="teaser-content-links">
             <div class="teaser-content-links-comments"><a href="${discussion_link}">${comments_text}</a></div>
   `;
