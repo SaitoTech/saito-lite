@@ -1998,8 +1998,8 @@ console.log("CARD: " + card);
             }
 
 	    let available_cards = [];
-	    for (let i = 0; i < twilight_self.game.deck[0].hand.length; i++) {
-	      let thiscard = twilight_self.game.deck[0].hand[i];
+	    for (let i = 0; i < this.game.deck[0].hand.length; i++) {
+	      let thiscard = this.game.deck[0].hand[i];
 	      if (thiscard != "europe" && thiscard != "asia" && thiscard != "mideast" && thiscard != "seasia" && thiscard != "centralamerica" && thiscard != "southamerica" && thiscard != "africa" && thiscard != "china") {
 	        available_cards.push(thiscard);
 	      }
