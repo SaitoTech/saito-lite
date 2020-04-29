@@ -56,7 +56,7 @@ module.exports = InquirePage = {
 
     document.getElementById('send-product-list').addEventListener('click', () => {
       document.querySelector('.footer').innerHTML = this_page.emailRender(app, data);
-      this_page.emailEvents(app, data, this_page);
+      this_page.emailAttachEvents(app, data, this_page);
     });
 
     document.querySelectorAll('div.grid-go.delete').forEach(el => {

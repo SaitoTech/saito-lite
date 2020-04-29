@@ -50,7 +50,7 @@ module.exports = SplashPageAppspace = {
     html += `<div class="grid-header" style="text-align:right">Sources</div>`;
     html += `<div class="grid-header" style="text-align:right">Cost USD*</div>`;
     html += `<div class="grid-header" style="text-align:left">Certifications</div>`;
-    //html += `<div class="grid-header"></div>`;
+    
 
     data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
       res.rows.forEach(row => {
@@ -62,7 +62,7 @@ module.exports = SplashPageAppspace = {
         html += `<div class="rightj">${s2Number(row.product_count)}</div>`;
         html += `<div class="rightj">${row.cost}</div>`;
         html += `<div>${row.certs}</div>`
-          //html += `<div data-category_id="${row.category_id}"><div class="active_category grid-action"><i class="fas fa-external-link-alt"></i> View All</div></div>`
+         
           ;
       });
       document.querySelector('.product-summary').innerHTML = html;
