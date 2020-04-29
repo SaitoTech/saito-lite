@@ -660,6 +660,9 @@ class Covid19 extends DBModTemplate {
     var module_self = this;
     var html = "";
     rows.forEach(row => {
+
+console.log("ROW: " + JSON.stringify(row));
+
       var note = "";
       if (row["note"]) {
         note = "<div class='tiptext'>" + row["note"] + "</div>"
@@ -669,7 +672,7 @@ class Covid19 extends DBModTemplate {
       } else {
         html += "<div class='cert tip'>" + row["Name"] + note + "</div>";
       }
-      el.innerHTML = html;
+      el.innerHTML += html;
     });
 
     rows.forEach(row => {
@@ -1051,6 +1054,26 @@ class Covid19 extends DBModTemplate {
 
   }
 
+
+
+  hideEmptyContent(tabledivs) {
+
+    //
+    // hide useless content
+    //
+    let content_fields = [];
+    document.querySelectorAll(tabledivs).forEach(el => {
+      content_fields.push(el);
+    });
+
+    for (let i = 1; i < content_fields.length; i+=2) {
+      if (content_fields[i].innerHTML === '') {
+        content_fields[i-1].remove();
+        content_fields[i].remove();
+      }
+    }
+
+  }
 
 
 
