@@ -294,6 +294,8 @@ class Covid19 extends DBModTemplate {
 
   addProductsToTable(rows, fields, app, data) {
 
+    let covid_self = this;
+
     for (let i = 0; i < rows.length; i++) {
 
       let html = '';
@@ -320,7 +322,7 @@ class Covid19 extends DBModTemplate {
 
             if (fields[ii] == "edit") {
               if (this.app.wallet.returnPublicKey() == this.admin_pkey) { fields[ii] = "admin"; } else {
-                html += `<div class="grid-buttons"><div class="grid-action edit_product" id="edit-${rows[i].product_id}">Edit</div><div class="delete_product" id="delete-${rows[i].product_id}">Delete</div><div class="add_cert" id="add-certs-${rows[i].product_id}">Add Cert</div></div>`;
+                html += `<div class="grid-buttons"><div class="grid-action edit_product" id="edit-${rows[i].product_id}">Edit</div><div class="delete_product" id="delete-${rows[i].uuid}">Delete</div><div class="add_cert" id="add-certs-${rows[i].product_id}">Add Cert</div></div>`;
                 added = 1;
               }
             }
@@ -401,7 +403,27 @@ class Covid19 extends DBModTemplate {
     try {
       document.querySelectorAll('.delete_product').forEach(el => {
         el.addEventListener('click', (e) => {
-          alert("Product Deletion functionality coming soon!");
+
+          data.product_id = e.target.id.split("-")[1];
+          data.covid19.sendPeerDatabaseRequest("covid19", "products", 'uuid', "id = " + data.product_id, null, function (res) {
+	    if (res.rows.length > 0) {
+
+              let c = confirm("Are you sure you want to delete this product?");
+              if (c) {
+
+                let values = [];
+                    values[0] = {};
+                    values[0].dbname = "covid19";
+                    values[0].table  = "products";
+                    values[0].column = "uuid";
+                    values[0].value = res.rows[0].uuid;
+
+                covid_self.deleteDatabase(values);
+                salert("Delete Requested - please reload in 30 seconds");
+  
+              }
+	    }
+	  });
         });
       });
     } catch (err) { }
