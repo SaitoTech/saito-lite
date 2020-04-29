@@ -109,11 +109,12 @@ module.exports = ProductPage = {
 ***/
 
         //
-        // certifications and attachments
+        // certifications
         //
         var sql = `
           select
             distinct(certifications.name) as Name,
+	    "certifications" as source,
             products_certifications.file_type,
             length(products_certifications.file) as 'file_length',
             products_certifications.id,
@@ -131,13 +132,42 @@ console.log("FINDING ATTACHMENTS");
 
         data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
 
+console.log("RESULTS: " + JSON.stringify(res));
+
           if (res.rows.length > 0) {
-console.log("SENDING ROWS TO renderCerts");
-console.log(JSON.stringify(res.rows));
             data.covid19.renderCerts(res.rows, document.querySelector('.cert-grid'));
           }
 
         });
+
+
+	//
+	// files
+	//
+        sql = `
+          select
+            distinct(files.file_filename) as Name,
+	    "files" as source,
+            files.file_type,
+            length(files.file_data) as 'file_length',
+            files.id,
+            'select'
+          from
+            files JOIN file_attachments
+              on  files.id = file_attachments.file_id
+          where
+            file_attachments.object_table = 'products' and
+            file_attachments.object_id = ${data.product_id}
+        `;
+
+        data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
+console.log("FILES: " + JSON.stringify(res.rows));
+          if (res.rows.length > 0) {
+            data.covid19.renderCerts(res.rows, document.querySelector('.cert-grid'));
+          }
+        });
+
+
       }
     });
 

@@ -667,27 +667,58 @@ class Covid19 extends DBModTemplate {
   renderCerts(rows, el) {
     // should this be generalised to module wide?
     var module_self = this;
-    var html = "";
+
     rows.forEach(row => {
 
-//console.log("ROW: " + JSON.stringify(row));
+      var html = "";
 
-      var note = "";
-      if (row["note"]) {
-        note = "<div class='tiptext'>" + row["note"] + "</div>"
+      //
+      // certifications
+      //
+      if (row["source"] == "certifications") {
+
+        var note = "";
+        if (row["note"]) { note = "<div class='tiptext'>" + row["note"] + "</div>"; }
+        if (row["id"] != null) {
+          html += "<div class='cert tip'><a class='attach-cert-" + row["id"] + "'>" + row["Name"] + "</a>" + note + "</div>";
+        } else {
+          html += "<div class='cert tip'>" + row["Name"] + note + "</div>";
+        }
+
+        el.append(elParser(html));
+g
       }
-      if (row["cert_id"] != null) {
-        html += "<div class='cert tip'><a class='attach-" + row["cert_id"] + "'>" + row["Name"] + "</a>" + note + "</div>";
-      } else {
-        html += "<div class='cert tip'>" + row["Name"] + note + "</div>";
+
+
+      //
+      // bundles
+      //
+      if (row["source"] == "files") {
+
+console.log("FILE: " + JSON.stringify(row));
+
+        var note = "";
+        if (row["note"]) { note = "<div class='tiptext'>supplementary file</div>"; }
+        if (row["id"] != null) {
+          html += "<div class='cert tip'><a class='attach-file-" + row["id"] + "'>" + row["Name"] + "</a></div>";
+        } else {
+          html += "<div class='cert tip'>" + row["Name"] + "</div>";
+        }
+        el.append(elParser(html));
       }
-      el.innerHTML += html;
+
+
     });
 
     rows.forEach(row => {
-      if (row["cert_id"] != null) {
-        el.querySelector('.attach-' + row["cert_id"]).addEventListener('click', (e) => {
-          module_self.returnCertFile(row["cert_id"]);
+      if (row["source"] == "certifications") {
+        el.querySelector('.attach-cert-' + row["id"]).addEventListener('click', (e) => {
+          module_self.returnCertFile(row["id"]);
+        });
+      }
+      if (row["source"] == "files") {
+        el.querySelector('.attach-file-' + row["id"]).addEventListener('click', (e) => {
+          module_self.returnFile(row["id"]);
         });
       }
     });
@@ -702,12 +733,31 @@ class Covid19 extends DBModTemplate {
         a.href = [res.rows[0]["file"]];
         a.download = res.rows[0]["file_filename"];
         a.click();
+        //window.URL.revokeObjectURL(url);
+        a.destroy();
+        salert("Download attachment: " + res.rows[0]["file_filename"]);
+      }
+    });
+  }
+
+  returnFile(id) {
+    this.sendPeerDatabaseRequest("covid19", "files", "*", "id= " + id, null, function (res) {
+      if (res.rows.length > 0) {
+        var blob = new Blob([res.rows[0]["file_data"]], { type: res.rows[0]["file_type"] });
+        var url = window.URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style.display = "none";
+        a.href = url;
+        a.download = res.rows[0]["file_filename"];
+        a.click();
         window.URL.revokeObjectURL(url);
         a.destroy();
         salert("Download attachment: " + res.rows[0]["file_filename"]);
       }
     });
   }
+
 
   returnAttachment(id) {
     this.sendPeerDatabaseRequest("covid19", "attachments", "*", "id= " + id, null, function (res) {

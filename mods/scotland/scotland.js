@@ -389,10 +389,8 @@ class Scotland extends GameTemplate {
 	} else {
 
 	  if (this.game.state.round == 3 || this.game.state.round == 8 || this.game.state.round == 13 || this.game.state.round == 8) {
-console.log("TRANSPARENCY 1: " + target_id);
 	    this.game.state.player_location[player-1] = target_id;
 	  } else {
-console.log("TRANSPARENCY 2: " + target_id);
 	    this.game.state.player_location[player-1] = target_id;
 	  }
 
@@ -401,7 +399,6 @@ console.log("TRANSPARENCY 2: " + target_id);
 	  //
           if (player == this.game.state.x && this.game.player == this.game.state.x) {
 	    this.game.state.player_location[player-1] = this.game.deck[0].keys[this.game.deck[0].keys.length-1].location;
-console.log("TRANSPARENCY 4: " + this.game.state.player_location[player-1]);
 	  }
 
 	}
