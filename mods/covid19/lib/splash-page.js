@@ -63,14 +63,13 @@ module.exports = SplashPageAppspace = {
           ;
       });
       document.querySelector('.product-summary').innerHTML = html;
-      document.querySelectorAll('.active_category').forEach(el => {
+      document.querySelectorAll('.active_category a').forEach(el => {
         el.addEventListener('click', (e) => {
           data.covid19.active_category_id = e.target.parentElement.dataset.category_id;
           data.covid19.renderPage("customer", app, data);
         });
       });
 
-      //      data.covid19.pdfCap(document.getElementById('list2pdf-btn'), document.querySelector('.summary-section'), 297, 210, 'product-list.pdf');
       var pdfHTML = `
         <div style="padding: 15px; background: var(--saito-dhb);">
           <img class="logo major-logo" src="/covid19/dhbgloballogo.png">
@@ -78,8 +77,10 @@ module.exports = SplashPageAppspace = {
       `;
       pdfHTML += document.querySelector('.summary-section').innerHTML;
       pdfHTML += `<p>For questions or purchase inquiries, please contact us at <a href="mailto:kevin@dhb.global">kevin@dhb.global</a>.</p><hr />`;
-    
-      data.covid19.pdfCap(document.getElementById('list2pdf-btn'), pdfHTML, 'DHB-product-list.pdf');
+
+      document.getElementById('list2pdf-btn').addEventListener('click', (e) => {
+        data.covid19.pdfCap(pdfHTML, 'DHB-product-list.pdf');
+      });
 
     });
   },
@@ -91,13 +92,6 @@ module.exports = SplashPageAppspace = {
       CustomerPortal.render(app, data);
       CustomerPortal.attachEvents(app, data);
     });
-
-    /*
-    document.getElementById('supplier-portal-btn').addEventListener('click', (e) => {
-      SupplierProfile.render(app, data);
-      SupplierProfile.attachEvents(app, data);
-    });
-    */
 
   }
 

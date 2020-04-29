@@ -51,6 +51,7 @@ class Covid19 extends DBModTemplate {
 
 
   receiveEvent(type, data) {
+    /*
     if (type == 'chat-render-request') {
       if (this.browser_active) {
         let chatmod = this.app.modules.returnModule("Chat");
@@ -59,7 +60,7 @@ class Covid19 extends DBModTemplate {
         chatmod.respondTo('email-chat').render(this.app, uidata);
         chatmod.respondTo('email-chat').attachEvents(this.app, uidata);
       }
-    }
+    }*/
   }
 
 
@@ -183,11 +184,12 @@ class Covid19 extends DBModTemplate {
     data = {};
     data.covid19 = this;
 
+    /*
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
-
+    */
 
     let data = {};
     data.covid19 = this;
@@ -195,13 +197,14 @@ class Covid19 extends DBModTemplate {
     Header.render(app, data);
     Header.attachEvents(app, data);
 
+    /*
     let chatmod = this.app.modules.returnModule("Chat");
     if (chatmod) {
       data.chat = chatmod;
       chatmod.respondTo('email-chat').render(app, data);
       chatmod.respondTo('email-chat').attachEvents(app, data);
     }
-
+    */
 
   }
 
@@ -312,8 +315,14 @@ class Covid19 extends DBModTemplate {
 
             if (fields[ii] == "product_photo") {
               if (rows[i][fields[ii]] != null) {
-                //html += `<div><img style="max-width:200px;max-height:200px" src="${rows[i][fields[ii]]}" /></div>`;
                 html += `<div class="product-img-cell" id="product-img-${rows[i].product_id}"><i class="far fa-images"></i></div>`;
+                added = 1;
+              }
+            }
+
+            if (fields[ii] == "production_daily_capacity") {
+              if (rows[i][fields[ii]] != null) {
+                html += `<div class="rightj" data-table="${ii}">${s2Number(rows[i][fields[ii]])}</div>`;
                 added = 1;
               }
             }
@@ -420,17 +429,17 @@ class Covid19 extends DBModTemplate {
           data.product_id = e.target.id.split("-")[1];
 
           if (typeof localStorage.cart == 'undefined') {
-            localStorage.cart = JSON.stringify({"products":[]});
+            localStorage.cart = JSON.stringify({ "products": [] });
           }
           var cart = JSON.parse(localStorage.cart);
           var add = true;
           cart.products.forEach(product => {
-            if(data.product_id == product.id) {
+            if (data.product_id == product.id) {
               add = false;
             }
           });
 
-          if(add) {
+          if (add) {
             cart.products.push({
               id: data.product_id,
               category: document.getElementById('select-product-type')[document.getElementById('select-product-type').selectedIndex].text,
@@ -466,34 +475,34 @@ class Covid19 extends DBModTemplate {
   //
   // array of objects with { database, column, value }
   //
-/****
-  deleteProduct(product_id, publickey) {
-
-    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
-    newtx.transaction.msg.module = this.name;
-    newtx.transaction.msg.request = "Product Delete";
-    newtx.transaction.msg.product_id = product_id;
-    newtx.transaction.msg.publickey = publickey;
-    newtx = this.app.wallet.signTransaction(newtx);
-    this.app.network.propagateTransaction(newtx);
-
-    //console.log("SENT TO SERVER");
-
-  }
-
-  deleteItem(id, dbtable) {
-
-    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
-    newtx.transaction.msg.module = this.name;
-    newtx.transaction.msg.request = "Delete Item";
-    newtx.transaction.msg.item_id = item_id;
-    newtx = this.app.wallet.signTransaction(newtx);
-    this.app.network.propagateTransaction(newtx);
-
-    //console.log("SENT TO SERVER");
-
-  }
-***/
+  /****
+    deleteProduct(product_id, publickey) {
+  
+      let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
+      newtx.transaction.msg.module = this.name;
+      newtx.transaction.msg.request = "Product Delete";
+      newtx.transaction.msg.product_id = product_id;
+      newtx.transaction.msg.publickey = publickey;
+      newtx = this.app.wallet.signTransaction(newtx);
+      this.app.network.propagateTransaction(newtx);
+  
+      //console.log("SENT TO SERVER");
+  
+    }
+  
+    deleteItem(id, dbtable) {
+  
+      let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
+      newtx.transaction.msg.module = this.name;
+      newtx.transaction.msg.request = "Delete Item";
+      newtx.transaction.msg.item_id = item_id;
+      newtx = this.app.wallet.signTransaction(newtx);
+      this.app.network.propagateTransaction(newtx);
+  
+      //console.log("SENT TO SERVER");
+  
+    }
+  ***/
 
   updateServerDatabase(data_array, publickey, type = "Supplier Update") {
 
@@ -715,6 +724,30 @@ class Covid19 extends DBModTemplate {
     });
   }
 
+  treatBoolean(el) {
+    let cell = el.id;
+    let html = `
+          <input class="check-${cell}" id="check-${cell}" type="checkbox">
+          `;
+    el.parentNode.innerHTML += html;
+    //when rewriting the partent innerhtml - the element reference is lost.
+    el = document.getElementById(el.id);
+    el.classList.add('hidden');
+
+    if(el.value ==1) {
+      document.getElementById(`check-${cell}`).checked = true;
+    }
+    
+    document.getElementById(`check-${cell}`).addEventListener('change', (e) => {
+      if(e.target.checked) {
+        el.value = 1;
+      } else {
+        el.value = 0;
+      }
+    });
+
+  }
+
   treatPhoto(el) {
 
     let cell = el.id;
@@ -852,43 +885,41 @@ class Covid19 extends DBModTemplate {
 
   };
 
-  
-  pdfCap(triggerel, inputHTML, filename) {
-    triggerel.addEventListener('click', function printPDF(e) {
-      var shim = document.createElement('div');
-      shim.style.width = "1120px";
-      shim.style.height = "1475px";
-      shim.style.padding = "100px"
-      shim.style.position = "absolute";
-      shim.style.top = "-2000px;"
-      //shim.appendChild(targetel.cloneNode(true));
-      shim.classList.add('toprint');
-      shim.innerHTML = inputHTML;
-      document.querySelector('.footer').appendChild(shim);
-      const html2canvas = require('html2canvas');
-      const jsPDF = require('jspdf');
-      const domElement = shim;
-      html2canvas(domElement, {
-        onclone: (document) => {
-          //document.getElementById('print-button').style.visibility = 'hidden';
-        }
-      })
-        .then((canvas) => {
-          console.log(canvas.width + " " + canvas.height);
-          var imgData = canvas.toDataURL('image/jpeg', 1);
 
-          // console.log('Report Image URL: ' + imgData);
-          var doc = new jsPDF('p', 'mm', "a4");
-          const imgProps = doc.getImageProperties(imgData);
-          const pdfWidth = doc.internal.pageSize.getWidth();
-          const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+  pdfCap(inputHTML, filename) {
+    var shim = document.createElement('div');
+    shim.style.width = "1120px";
+    shim.style.height = "1475px";
+    shim.style.padding = "100px"
+    shim.style.position = "absolute";
+    shim.style.top = "-2000px;"
+    //shim.appendChild(targetel.cloneNode(true));
+    shim.classList.add('toprint');
+    shim.innerHTML = inputHTML;
+    document.querySelector('.footer').appendChild(shim);
+    const html2canvas = require('html2canvas');
+    const jsPDF = require('jspdf');
+    const domElement = shim;
+    html2canvas(domElement, {
+      onclone: (document) => {
+        //document.getElementById('print-button').style.visibility = 'hidden';
+      }
+    })
+      .then((canvas) => {
+        console.log(canvas.width + " " + canvas.height);
+        var imgData = canvas.toDataURL('image/jpeg', 1);
 
-          doc.addImage(imgData, 'jpeg', 0, 0, pdfWidth, pdfHeight);    
+        // console.log('Report Image URL: ' + imgData);
+        var doc = new jsPDF('p', 'mm', "a4");
+        const imgProps = doc.getImageProperties(imgData);
+        const pdfWidth = doc.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-          doc.save(filename);
-          shim.destroy();
-        })
-    });
+        doc.addImage(imgData, 'jpeg', 0, 0, pdfWidth, pdfHeight);
+
+        doc.save(filename);
+        shim.destroy();
+      });
   }
 
   isAdmin() {

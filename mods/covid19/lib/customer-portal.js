@@ -93,7 +93,12 @@ module.exports = CustomerPortal = {
       //
       // populate grid
       //
-      let whereclause = "suppliers.id = products.supplier_id AND products.deleted <> 1 AND products.category_id = " + category_id;
+      var whereclause = "";
+      if(data.covid19.isAdmin()) {
+        whereclause = "suppliers.id = products.supplier_id AND products.deleted <> 1 AND products.category_id = " + category_id;
+      } else {
+        whereclause = "suppliers.id = products.supplier_id AND products.deleted <> 1 AND products.published = 1 AND products.category_id = " + category_id;        
+      }
       data.covid19.sendPeerDatabaseRequest("covid19", "products JOIN suppliers", "products.id as 'product_id', product_specification, production_daily_capacity, suppliers.address as 'Location', 'Loading' as 'product_photo', pricing_per_unit_rmb, 'certifications' as 'certifications', pricing_per_unit_public, products.id", whereclause, null, function (res) {
         data.covid19.addProductsToTable(res.rows, ['product_specification', 'production_daily_capacity', 'Location', 'product_photo', 'certifications', 'pricing_per_unit_public', 'fullview'], app, data);
       });
