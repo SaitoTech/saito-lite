@@ -774,7 +774,7 @@ returnCertFile(id) {
       a.click();
       //window.URL.revokeObjectURL(url);
       a.destroy();
-      salert("Download attachment: " + res.rows[0]["file_filename"]);
+      //salert("Download certificate attachment: " + res.rows[0]["file_filename"]);
     }
   });
 }
@@ -782,17 +782,18 @@ returnCertFile(id) {
 returnFile(id) {
   this.sendPeerDatabaseRequest("covid19", "files", "*", "id= " + id, null, function (res) {
     if (res.rows.length > 0) {
-      var blob = new Blob([res.rows[0]["file_data"]], { type: res.rows[0]["file_type"] });
-      var url = window.URL.createObjectURL(blob);
+      //var blob = new Blob([res.rows[0]["file_data"]], { type: res.rows[0]["file_type"] });
+      //var url = window.URL.createObjectURL(blob);
+
       var a = document.createElement("a");
       document.body.appendChild(a);
       a.style.display = "none";
-      a.href = url;
+      a.href = res.rows[0]["file_data"];
       a.download = res.rows[0]["file_filename"];
       a.click();
-      window.URL.revokeObjectURL(url);
+      //window.URL.revokeObjectURL(url);
       a.destroy();
-      salert("Download attachment: " + res.rows[0]["file_filename"]);
+      //salert("Download file attachment: " + res.rows[0]["file_filename"]);
     }
   });
 }
