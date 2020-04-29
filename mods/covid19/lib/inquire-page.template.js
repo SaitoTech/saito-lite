@@ -15,7 +15,7 @@ module.exports = ProductPageTemplate = () => {
   Let us know you are interested in:
 
   <table class="inq-grid" id="inq-grid"></table>
-
+  <hr />
   <div class="contact-grid grid-3-columns">
     <div id="copy-product-list"><i class="fas fa-print"></i> Download as PDF</div>
     <div id="clear-product-list"><i class="fas fa-backspace"></i> Clear List</div>

@@ -30,7 +30,7 @@ module.exports = SplashPageAppspace = {
       categories.id as 'category_id',
       sum(products.production_daily_capacity) as 'capacity', 
       count(products.id) as 'product_count', 
-      (select group_concat( distinct (" " || certifications.name)) from certifications, products_certifications where products_certifications.certification_id = certifications.id AND products_certifications.deleted <> 1 AND products.id = products_certifications.product_id) as 'certs',
+      (select group_concat( distinct (" " || certifications.name)) from certifications, products_certifications, products as p where products_certifications.certification_id = certifications.id AND products_certifications.deleted <> 1 AND products_certifications.product_id = p.id AND p.category_id = categories.id) as 'certs',
       min(products.pricing_per_unit_public) || ' ~ ' ||  max(products.pricing_per_unit_public) as 'cost' 
     from 
       products 
@@ -42,7 +42,7 @@ module.exports = SplashPageAppspace = {
       products.deleted <> 1 AND 
       suppliers.deleted <> 1 
     group by 
-      products.category_id;
+      categories.id;
     `;
     var html = "";
     html += `<div class="grid-header">Product</div>`;

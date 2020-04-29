@@ -253,6 +253,7 @@ button, .button {
 .contact-grid {
   width: 50em;
   cursor: pointer;
+  padding: 10px 10px 0;
 }
 
 .inq-product-name {
@@ -270,8 +271,8 @@ button, .button {
 }
 
 table#inq-grid {
-  background: var(--saito-skyline-grey);
-  padding: 5px;
+  background: rgb(240, 240, 240, 1);
+  padding: 20px 5px;
   width: 100%;
 }
 
@@ -315,5 +316,5 @@ td.inq-product-id div.editable {
   margin: 2px 5px;
   border-bottom: 1px solid var(--saito-red);
   overflow-y: scroll;
-
+  background-color: var(--saito-skyline-grey);
 }
