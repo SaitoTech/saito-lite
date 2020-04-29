@@ -1,4 +1,4 @@
-module.exports = ProductPageTemplate = () => {
+module.exports = ProductPageTemplate = (app, data) => {
 
   let html = '';
 
@@ -15,9 +15,7 @@ module.exports = ProductPageTemplate = () => {
 
     <div class="portal" style="display:none">
 
-    <h3>Product Details:</h3>
-
-      <div id="product-grid" class="product-grid grid-4">
+      <div id="product-grid" class="product-grid grid-2">
 
       </div>
 
@@ -35,7 +33,7 @@ module.exports = ProductPageTemplate = () => {
 
         <h3>Supplier Details</h3>
 
-        <div id="supplier-grid" class="supplier-grid grid-4"></div>
+        <div id="supplier-grid" class="supplier-grid grid-2"></div>
 
       </div>
 

@@ -45,15 +45,18 @@ module.exports = SplashPageAppspace = {
       categories.id;
     `;
     var html = "";
-    html += `<div class="grid-header">Product</div>`;
-    html += `<div class="grid-header">Daily Capacity</div>`;
-    html += `<div class="grid-header">Sources</div>`;
-    html += `<div class="grid-header">Cost USD*</div>`;
-    html += `<div class="grid-header">Certifications</div>`;
+    html += `<div class="grid-header" style="text-align:left">Product</div>`;
+    html += `<div class="grid-header" style="text-align:right">Daily Capacity</div>`;
+    html += `<div class="grid-header" style="text-align:right">Sources</div>`;
+    html += `<div class="grid-header" style="text-align:right">Cost USD*</div>`;
+    html += `<div class="grid-header" style="text-align:left">Certifications</div>`;
     //html += `<div class="grid-header"></div>`;
 
     data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
       res.rows.forEach(row => {
+
+	if (row.certs == 'null' || row.certs == null) { row.certs = ""; }
+
         html += `<div data-category_id="${row.category_id}" class="active_category tip"><a>${row.product}</a><div class="tiptext">View All</div></div>`;
         html += `<div class="rightj">${s2Number(row.capacity)}</div>`;
         html += `<div class="rightj">${s2Number(row.product_count)}</div>`;

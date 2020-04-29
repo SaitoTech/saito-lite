@@ -10,7 +10,8 @@ module.exports = ProductPage = {
   render(app, data) {
 
     var supplier_id = 0;
-    document.querySelector(".main").innerHTML = ProductPageTemplate();
+    document.querySelector(".main").innerHTML = ProductPageTemplate(app, data);
+
     document.querySelector(".navigation").innerHTML = '<div class="button navlink covid_back"><i class="fas fa-back"></i>back</div>';
 
     this.active_category_id = data.covid19.active_category_id;
@@ -18,7 +19,6 @@ module.exports = ProductPage = {
     //
     // load product
     //
-
     let fields = `
         product_specification as 'Specification',
         product_description as 'Description', 
@@ -35,6 +35,7 @@ module.exports = ProductPage = {
         supplier_id
       `;
 
+
     data.covid19.sendPeerDatabaseRequest("covid19", "products", fields, "id= " + data.product_id, null, function (res) {
 
       if (res.rows.length > 0) {
@@ -43,6 +44,13 @@ module.exports = ProductPage = {
         supplier_id = res.rows[0]["supplier_id"];
         document.querySelector(".product-name").innerHTML = res.rows[0]["Specification"];
         data.covid19.active_category_id = res.rows[0]["category_id"];
+
+	//
+	// hide useless content
+	//
+        data.covid19.hideEmptyContent(".product-grid div");
+
+
 
 
         if (data.covid19.isAdmin()) {
@@ -60,6 +68,12 @@ module.exports = ProductPage = {
                 UpdateSupplier.render(app, data);
                 UpdateSupplier.attachEvents(app, data);
               });
+
+	      //
+	      // hide useless content
+	      //
+              data.covid19.hideEmptyContent(".supplier-grid div");
+
             }
           });
 
@@ -70,11 +84,17 @@ module.exports = ProductPage = {
           data.covid19.sendPeerDatabaseRequest("covid19", "suppliers", fields, "id= " + supplier_id, null, function (res) {
             if (res.rows.length > 0) {
               data.covid19.renderSupplier(res.rows[0]);
+
+	      //
+	      // hide useless content
+	      //
+              data.covid19.hideEmptyContent(".supplier-grid div");
+
             }
           });
         }
 
-
+/***
         //
         // load certifications
         //
@@ -86,8 +106,41 @@ module.exports = ProductPage = {
             data.covid19.renderCerts(res.rows, document.querySelector('.cert-grid'));
           }
         });
+***/
+
+        //
+        // certifications and attachments
+        //
+        var sql = `
+          select
+            distinct(certifications.name) as Name,
+            products_certifications.file_type,
+            length(products_certifications.file) as 'file_length',
+            products_certifications.id,
+            'select'
+          from
+            certifications JOIN products_certifications
+          on 
+            certifications.id = products_certifications.certification_id
+          where
+            products_certifications.product_id = ${data.product_id}
+       `;
+
+console.log(sql);
+console.log("FINDING ATTACHMENTS");
+
+        data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
+
+          if (res.rows.length > 0) {
+console.log("SENDING ROWS TO renderCerts");
+console.log(JSON.stringify(res.rows));
+            data.covid19.renderCerts(res.rows, document.querySelector('.cert-grid'));
+          }
+
+        });
       }
     });
+
 
     document.querySelector(".loading").style.display = "none";
     document.querySelector(".portal").style.display = "block";

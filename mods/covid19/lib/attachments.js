@@ -27,7 +27,11 @@ module.exports = Attachments = {
           <div class="table-head">Select</div>
         `;
 
+console.log(sql);
+console.log("FINDING ATTACHMENTS");
+
     data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
+
       res.rows.forEach(row => {
         if(typeof row.file_data == 'null') {row.file_data = ""}
         html += `<div>Cert.</div>`;

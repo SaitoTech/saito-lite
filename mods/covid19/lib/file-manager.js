@@ -42,26 +42,23 @@ module.exports = FileManager = {
 
       res.rows.forEach(row => {
 
-console.log("RECEIVED: " + JSON.stringify(row));
-
         if (typeof row.file_data == 'null') { row.file_data = ""; }
+	let sizetype = "KB";
 	let filelen = 0.0;
         if (row.file_data != "") { 
 
 	  let filed = row.file_data;
-	  if (filed != "" && filed != null) { filelen = parseFloat((filed).replace(/=/g,"").length * 0.00075); }
 	  if (filed != "" && filed != null) { 
 	    filelen = parseInt((filed).replace(/=/g,"").length * 0.00075); 
-	    if (filelen == 0) { filelen = parseFloat((filed).replace(/=/g,"").length * 0.00075); }
+	    if (filelen == 0) { filelen = parseFloat((filed).replace(/=/g,"").length * 0.00075); sizetype = "b";}
           }
-
-	  if (filelen == 0 && row.file_size > 0) {  filelen = row.file_size; }
+	  if (filelen == 0 && row.file_size > 0) { filelen = row.file_size; sizetype = "b"; if (filelen > 1000) { sizetype = "KB";  filelen = parseInt(filelen * 0.00075); } }
 
 	  if (filelen > 0) {
 
             html += `<div>${row.file_filename}</div>`;
             html += `<div>${row.file_type}</div>`;
-            html += `<div>${filelen} KB</div>`;
+            html += `<div>${filelen} ${sizetype}</div>`;
             html += `
             <div class="grid-buttons ${row.id}">
               <div class="grid-action edit" data-id="${row.id}">Edit</div>
