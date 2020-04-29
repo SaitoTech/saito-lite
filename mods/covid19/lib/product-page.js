@@ -45,9 +45,9 @@ module.exports = ProductPage = {
         document.querySelector(".product-name").innerHTML = res.rows[0]["Specification"];
         data.covid19.active_category_id = res.rows[0]["category_id"];
 
-	//
-	// hide useless content
-	//
+        //
+        // hide useless content
+        //
         data.covid19.hideEmptyContent(".product-grid div");
 
 
@@ -69,9 +69,9 @@ module.exports = ProductPage = {
                 UpdateSupplier.attachEvents(app, data);
               });
 
-	      //
-	      // hide useless content
-	      //
+              //
+              // hide useless content
+              //
               data.covid19.hideEmptyContent(".supplier-grid div");
 
             }
@@ -85,28 +85,28 @@ module.exports = ProductPage = {
             if (res.rows.length > 0) {
               data.covid19.renderSupplier(res.rows[0]);
 
-	      //
-	      // hide useless content
-	      //
+              //
+              // hide useless content
+              //
               data.covid19.hideEmptyContent(".supplier-grid div");
 
             }
           });
         }
 
-/***
-        //
-        // load certifications
-        //
-        fields = "pc.product_id as 'product_id', c.name as 'Name', note, pc.id as cert_id";
-        var from = "certifications as 'c' JOIN products_certifications as 'pc'";
-        var where = "c.id = pc.certification_id and pc.product_id = " + data.product_id;
-        data.covid19.sendPeerDatabaseRequest("covid19", from, fields, where, null, function (res) {
-          if (res.rows.length > 0) {
-            data.covid19.renderCerts(res.rows, document.querySelector('.cert-grid'));
-          }
-        });
-***/
+        /***
+                //
+                // load certifications
+                //
+                fields = "pc.product_id as 'product_id', c.name as 'Name', note, pc.id as cert_id";
+                var from = "certifications as 'c' JOIN products_certifications as 'pc'";
+                var where = "c.id = pc.certification_id and pc.product_id = " + data.product_id;
+                data.covid19.sendPeerDatabaseRequest("covid19", from, fields, where, null, function (res) {
+                  if (res.rows.length > 0) {
+                    data.covid19.renderCerts(res.rows, document.querySelector('.cert-grid'));
+                  }
+                });
+        ***/
 
         //
         // certifications
@@ -114,7 +114,7 @@ module.exports = ProductPage = {
         var sql = `
           select
             distinct(certifications.name) as Name,
-	    "certifications" as source,
+            "certifications" as source,
             products_certifications.file_type,
             length(products_certifications.file) as 'file_length',
             products_certifications.id,
@@ -127,12 +127,7 @@ module.exports = ProductPage = {
             products_certifications.product_id = ${data.product_id}
        `;
 
-console.log(sql);
-console.log("FINDING ATTACHMENTS");
-
         data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
-
-console.log("RESULTS: " + JSON.stringify(res));
 
           if (res.rows.length > 0) {
             data.covid19.renderCerts(res.rows, document.querySelector('.cert-grid'));
@@ -141,13 +136,13 @@ console.log("RESULTS: " + JSON.stringify(res));
         });
 
 
-	//
-	// files
-	//
+        //
+        // files
+        //
         sql = `
           select
             distinct(files.file_filename) as Name,
-	    "files" as source,
+            "files" as source,
             files.file_type,
             length(files.file_data) as 'file_length',
             files.id,
@@ -161,7 +156,7 @@ console.log("RESULTS: " + JSON.stringify(res));
         `;
 
         data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
-console.log("FILES: " + JSON.stringify(res.rows));
+
           if (res.rows.length > 0) {
             data.covid19.renderCerts(res.rows, document.querySelector('.cert-grid'));
           }

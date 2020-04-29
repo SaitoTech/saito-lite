@@ -55,7 +55,7 @@ module.exports = InquirePage = {
     });
 
     document.getElementById('send-product-list').addEventListener('click', () => {
-      document.querySelector('.footer').innerHTML = this_page.renderEmail(app, data);
+      document.querySelector('.footer').innerHTML = this_page.emailRender(app, data);
       this_page.emailEvents(app, data, this_page);
     });
 
@@ -66,7 +66,9 @@ module.exports = InquirePage = {
       });
     });
 
-    data.covid19.pdfCap(document.getElementById('copy-product-list'), this_page.returnPrintHTML(), 'DHB-product-list.pdf');
+    document.getElementById('copy-product-list').addEventListener('click', (e) => {
+      data.covid19.pdfCap(this_page.returnPrintHTML(), 'DHB-Request-For-Offer.pdf');
+    });
 
     document.querySelectorAll('.inq-product-id div.editable').forEach(el => {
       el.addEventListener('blur', function () {
@@ -139,7 +141,7 @@ module.exports = InquirePage = {
     return pdfHTML;
   },
 
-  renderEmail() {
+  emailRender() {
     var html = `
     <div class="bundle-template modal-form-wrapper">
     
@@ -161,7 +163,7 @@ module.exports = InquirePage = {
     return html;
   },
 
-  emailEvents(app, data, this_page) {
+  emailAttachEvents(app, data, this_page) {
     document.getElementById('cancel-email').addEventListener('click', () => {
       document.querySelector('.modal-form-wrapper').destroy();
     });
