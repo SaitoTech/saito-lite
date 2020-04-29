@@ -318,3 +318,7 @@ td.inq-product-id div.editable {
   overflow-y: scroll;
   background-color: var(--saito-skyline-grey);
 }
+
+.grid-go.delete {
+  cursor: pointer;
+}

@@ -59,9 +59,9 @@ module.exports = InquirePage = {
       this_page.emailAttachEvents(app, data, this_page);
     });
 
-    document.querySelectorAll('div.grid-go.delete').forEach(el => {
+    document.querySelectorAll('div.grid-go.delete i').forEach(el => {
       el.addEventListener('click', (e) => {
-        document.getElementById('row-' + e.target.dataset.id).destroy();
+        document.getElementById('row-' + e.target.parentNode.dataset.id).destroy();
         this_page.saveCart();
       });
     });
