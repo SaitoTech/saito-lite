@@ -651,7 +651,7 @@ class Covid19 extends DBModTemplate {
     // should this be generalised to module wide?
     var module_self = this;
 
-    fields = "pc.product_id as 'product_id', c.name as 'Name', note, pc.id as cert_id";
+    var fields = "pc.product_id as 'product_id', c.name as 'Name', note, pc.id as cert_id";
     var from = "certifications as 'c' JOIN products_certifications as 'pc'";
     var where = "c.id = pc.certification_id and pc.product_id = " + id;
     this.sendPeerDatabaseRequest("covid19", from, fields, where, null, function (res) {
@@ -670,7 +670,7 @@ class Covid19 extends DBModTemplate {
     var html = "";
     rows.forEach(row => {
 
-console.log("ROW: " + JSON.stringify(row));
+//console.log("ROW: " + JSON.stringify(row));
 
       var note = "";
       if (row["note"]) {
