@@ -5,11 +5,7 @@ module.exports = SplashPageTemplate = () => {
   html = `
   <div class="splash-introduction">
 
-    <h2>COVID-19 Equipment Available:</h2>
-
-    <p>
-
-    The table below contains the real-cost of COVID-19 response equipment from certified factories in Asia. Our team is working around the clock to compile and publish this data. Purchasers should note that prices are indicative only as they change daily. If you are a purchaser contact us - we can usually get you a quote that is good for 48 hours.
+    The table below contains the real-cost of COVID-19 response equipment from certified factories in Asia. Please note that pricing is changing daily at this point. If you are a purchaser contact us - we can usually get you a quote that is good for 48 hours.
 
     </p>
 
