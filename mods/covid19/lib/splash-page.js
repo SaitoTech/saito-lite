@@ -82,7 +82,7 @@ module.exports = SplashPageAppspace = {
       pdfHTML += `<p>For questions or purchase inquiries, please contact us at <a href="mailto:kevin@dhb.global">kevin@dhb.global</a>.</p><hr />`;
 
       document.getElementById('list2pdf-btn').addEventListener('click', (e) => {
-        data.covid19.pdfCap(pdfHTML, 'DHB-product-list.pdf');
+        data.covid19.pdfCap(pdfHTML, 'DHB-product-list-' + new Date().toISOString().split('T')[0].replace(/-/g,'') + '.pdf');
       });
 
     });

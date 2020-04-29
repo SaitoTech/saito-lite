@@ -67,7 +67,7 @@ module.exports = InquirePage = {
     });
 
     document.getElementById('copy-product-list').addEventListener('click', (e) => {
-      data.covid19.pdfCap(this_page.returnPrintHTML(), 'DHB-Request-For-Offer.pdf');
+      data.covid19.pdfCap(this_page.returnPrintHTML(), 'DHB-Request-For-Offer-' + new Date().toISOString().split('T')[0].replace(/-/g,'') + '.pdf');
     });
 
     document.querySelectorAll('.inq-product-id div.editable').forEach(el => {
