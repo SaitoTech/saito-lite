@@ -9,8 +9,11 @@ module.exports = ProductPage = {
 
   render(app, data) {
 
+alert("product: " + data.product_id);
+
     var supplier_id = 0;
-    document.querySelector(".main").innerHTML = ProductPageTemplate();
+    document.querySelector(".main").innerHTML = ProductPageTemplate(app, data);
+
     document.querySelector(".navigation").innerHTML = '<div class="button navlink covid_back"><i class="fas fa-back"></i>back</div>';
 
     this.active_category_id = data.covid19.active_category_id;

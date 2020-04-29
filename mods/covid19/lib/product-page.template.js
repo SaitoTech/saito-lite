@@ -1,4 +1,4 @@
-module.exports = ProductPageTemplate = () => {
+module.exports = ProductPageTemplate = (app, data) => {
 
   let html = '';
 
