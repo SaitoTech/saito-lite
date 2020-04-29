@@ -373,11 +373,11 @@ class Forum extends ModTemplate {
     //
     // Arcade Sidebar?
     //
-    if (this.browser_active == 1 && this.app.modules.returnActiveModule().name == "Arcade") {
+    if (this.app.modules.isModuleActive("Arcade")) {
 
       let forum_self = app.modules.returnModule('Forum');
+      let where = "1 = 1 AND parent_id = \"\" ORDER BY rank DESC LIMIT 10";
 
-      let where = "1 = 1 ORDER BY rank DESC LIMIT 10";
       forum_self.sendPeerDatabaseRequest("forum", "posts", "*", where, null, function (res) {
         res.rows.forEach(row => {
 
@@ -386,6 +386,7 @@ class Forum extends ModTemplate {
           let txmsg = tx.returnMessage();
 
           let title = txmsg.title;
+          let address = tx.transaction.from[0].add;
           let author = forum_self.formatAuthor(tx.transaction.from[0].add);
           let date = forum_self.formatDate(tx.transaction.ts);
           let votes = row.votes;
@@ -395,10 +396,10 @@ class Forum extends ModTemplate {
 
 	  identifiers_to_fetch.push(tx.transaction.from[0].add);
  
-          ArcadeSidebar.addPost(app, title, author, date, forum, link, votes, comments);
+          ArcadeSidebar.addPost(app, title, author, address, date, forum, link, votes, comments);
 
         });
-	forum_self.fetchIdentifiers(identifiers_to_fetch);
+	//forum_self.addrController.fetchIdentifiers(identifiers_to_fetch);
       });
 
       return;
@@ -746,8 +747,6 @@ class Forum extends ModTemplate {
 
       if (conf == 0) {
 
-console.log(tx.returnMessage());
-
         let forum_self = app.modules.returnModule("Forum");
 
         if (tx.transaction.msg.type == "post") {
@@ -849,7 +848,7 @@ console.log(tx.returnMessage());
     let id = this.app.keys.returnIdentifierByPublicKey(author);
 
     if (id == "") {
-      return '<span class="saito-address saito-address-'+author+'">'+author.substring(0, 8)+"...</span>";
+      return '<span class="saito-address saito-address-'+author+'">'+author.substring(0, 8)+'...</span>';
     } else {
       return '<span class="">'+id+'</span>';
     }
