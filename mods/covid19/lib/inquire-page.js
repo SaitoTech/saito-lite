@@ -15,7 +15,7 @@ module.exports = InquirePage = {
     var html = `
     <tr>
     <td class="inq-product-name" style="width:15%">Category</td>
-    <td class="inq-product-name" style="width:20%">Budget</td>
+    <td class="inq-product-name" style="width:20%">Budget/item</td>
     <td class="inq-product-name" style="width:20%">Quantity</td>
     <td class="inq-product-name" style="width:43%">Requirements</td>
     <td class="inq-product-name" style="width:2%"></td>
@@ -46,12 +46,12 @@ module.exports = InquirePage = {
     var this_page = this;
 
     document.getElementById('keep-shopping').addEventListener('click', () => {
-      data.covid19.renderPage("customer", app, data);
+      data.covid19.renderPage("home", app, data);
     });
 
     document.getElementById('clear-product-list').addEventListener('click', () => {
       localStorage.cart = JSON.stringify({ "products": [] });
-      data.covid19.renderPage("customer", app, data);
+      data.covid19.renderPage("home", app, data);
     });
 
     document.getElementById('send-product-list').addEventListener('click', () => {
@@ -111,7 +111,7 @@ module.exports = InquirePage = {
     pdfHTML += `
     <tr>
       <td class="inq-product-name" style="width:15%">Category</td>
-      <td class="inq-product-name" style="width:20%">Budget</td>
+      <td class="inq-product-name" style="width:20%">Budget/item</td>
       <td class="inq-product-name" style="width:20%">Quantity</td>
       <td class="inq-product-name" style="width:45%">Requirements</td>
     </tr>
@@ -133,7 +133,7 @@ module.exports = InquirePage = {
       <hr />
       <h4>Contact</h4>
       <div class="contact-grid grid-2-columns">
-        <div><i class="far fa-envelope"></i> Email:</div><div>kevin@dhb.global</div>
+        <div><i class="far fa-envelope"></i> Email:</div><div>e.yeung@dhb.global</div>
       </div>
       <hr />
      `;

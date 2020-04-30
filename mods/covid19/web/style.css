@@ -1,11 +1,9 @@
-
 :root {
   --saito-red: #036;
   --saito-orange: #369;
   --saito-skyline-grey: rgb(252, 252, 252);
   --saito-dhb: linear-gradient(-45deg, #369 50%, #036 100%);
 }
-
 
 body {
   background-color: var(--saito-skyline-grey);
@@ -168,7 +166,7 @@ label.treated {
   width: 250px;
 }
 
-.file-table, .bundle-table {
+.file-table, .bundle-table, .category-table {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 2fr;
 }
@@ -178,9 +176,7 @@ label.treated {
   grid-template-columns: 2fr 2fr 2fr 2fr 1fr;
 }
 
-
 .fullview_product, .edit_product, .delete_product, .add_cert, .inquire_product, .grid-action {
-
   cursor: pointer;
   border: 1px solid var(--saito-red);
   width: 100px;
@@ -191,7 +187,6 @@ label.treated {
   display: inline-block;
   margin: 0 5px 5px 0;
 }
-
 
 .fullview_product:hover, .edit_product:hover, .delete_product:hover, .add_cert:hover, .inquire_product:hover, .grid-action:hover {
   background: var(--saito-red);
@@ -224,7 +219,7 @@ button, .button {
   padding: 1em;
 }
 
-.products-table>div:nth-child(14n+8), .products-table>div:nth-child(14n+9), .products-table>div:nth-child(14n+10), .products-table>div:nth-child(14n+11), .products-table>div:nth-child(14n+12), .products-table>div:nth-child(14n+13), .products-table>div:nth-child(14n+14) {
+.products-table>div:nth-child(12n+7), .products-table>div:nth-child(12n+8), .products-table>div:nth-child(12n+9), .products-table>div:nth-child(12n+10), .products-table>div:nth-child(12n+11), .products-table>div:nth-child(12n+12) {
   background-color: #f9f9f9;
 }
 
@@ -251,7 +246,8 @@ button, .button {
 }
 
 .contact-grid {
-  width: 50em;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   cursor: pointer;
   padding: 10px 10px 0;
 }
@@ -321,4 +317,10 @@ td.inq-product-id div.editable {
 
 .grid-go.delete {
   cursor: pointer;
+}
+.fright {
+  margin-left: 5px;
+  position: absolute;
+  top: 8px;
+  right: 3px;
 }

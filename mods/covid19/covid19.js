@@ -5,6 +5,7 @@ const CustomerPortal = require('./lib/customer-portal');
 const SupplierPortal = require('./lib/supplier-portal');
 const FileManager = require('./lib/file-manager');
 const BundleManager = require('./lib/bundle-manager');
+const CategoryManager = require('./lib/category-manager')
 
 const InquirePage = require('./lib/inquire-page');
 
@@ -219,6 +220,9 @@ class Covid19 extends DBModTemplate {
       if (urlParams.get('mode')) {
         var mode = urlParams.get('mode');
         switch (mode) {
+          case 'home':
+            data.covid19.renderPage("home", app, data);
+            break;
           case 'customer':
             data.covid19.renderPage("customer", app, data);
             break;
@@ -233,6 +237,9 @@ class Covid19 extends DBModTemplate {
             break;
           case 'bundle-manager':
             data.covid19.renderPage("bundle-manager", app, data);
+            break;
+          case 'category-manager':
+            data.covid19.renderPage("category-manager", app, data);
             break;
           case 'default':
             SplashPage.render(app, data);
@@ -283,6 +290,11 @@ class Covid19 extends DBModTemplate {
     if (page == "bundle-manager") {
       BundleManager.render(app, data);
       BundleManager.attachEvents(app, data);
+    };
+
+    if (page == "category-manager") {
+      CategoryManager.render(app, data);
+      CategoryManager.attachEvents(app, data);
     };
 
   }
@@ -678,7 +690,7 @@ class Covid19 extends DBModTemplate {
         pc.product_id as 'product_id', 
         c.name as 'Name', 
         note, 
-        pc.id as cert_id,
+        pc.id as 'id',
         'certifications' as 'source'
       from 
         certifications as 'c' 
@@ -695,506 +707,513 @@ class Covid19 extends DBModTemplate {
     */
     this.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
 
-    if (res.rows.length > 0) {
-      var el = document.getElementById(prefix + res.rows[0].product_id);
-      module_self.renderCerts(res.rows, el);
-    }
-  });
-}
-
-
-renderCerts(rows, el) {
-  // should this be generalised to module wide?
-  var module_self = this;
-
-  rows.forEach(row => {
-
-    var html = "";
-
-    //
-    // certifications
-    //
-    if (row["source"] == "certifications") {
-
-      var note = "";
-      if (row["note"]) { note = "<div class='tiptext'>" + row["note"] + "</div>"; }
-      if (row["id"] != null) {
-        html += "<div class='cert tip'><a class='attach-cert-" + row["id"] + "'>" + row["Name"] + "</a>" + note + "</div>";
-      } else {
-        html += "<div class='cert tip'>" + row["Name"] + note + "</div>";
+      if (res.rows.length > 0) {
+        var el = document.getElementById(prefix + res.rows[0].product_id);
+        module_self.renderCerts(res.rows, el);
       }
-
-      el.append(elParser(html));
-
-    }
-
-
-    //
-    // bundles
-    //
-    if (row["source"] == "files") {
-
-      console.log("FILE: " + JSON.stringify(row));
-
-      var note = "";
-      if (row["note"]) { note = "<div class='tiptext'>supplementary file</div>"; }
-      if (row["id"] != null) {
-        html += "<div class='cert tip'><a class='attach-file-" + row["id"] + "'>" + row["Name"] + "</a></div>";
-      } else {
-        html += "<div class='cert tip'>" + row["Name"] + "</div>";
-      }
-      el.append(elParser(html));
-    }
-
-
-  });
-
-  rows.forEach(row => {
-    if (row["source"] == "certifications") {
-      el.querySelector('.attach-cert-' + row["id"]).addEventListener('click', (e) => {
-        module_self.returnCertFile(row["id"]);
-      });
-    }
-    if (row["source"] == "files") {
-      el.querySelector('.attach-file-' + row["id"]).addEventListener('click', (e) => {
-        module_self.returnFile(row["id"]);
-      });
-    }
-  });
-}
-
-returnCertFile(id) {
-  this.sendPeerDatabaseRequest("covid19", "products_certifications", "*", "id = " + id, null, function (res) {
-    if (res.rows.length > 0) {
-      var a = document.createElement("a");
-      document.body.appendChild(a);
-      a.style.display = "none";
-      a.href = [res.rows[0]["file"]];
-      a.download = res.rows[0]["file_filename"];
-      a.click();
-      //window.URL.revokeObjectURL(url);
-      a.destroy();
-      //salert("Download certificate attachment: " + res.rows[0]["file_filename"]);
-    }
-  });
-}
-
-returnFile(id) {
-  this.sendPeerDatabaseRequest("covid19", "files", "*", "id= " + id, null, function (res) {
-    if (res.rows.length > 0) {
-      //var blob = new Blob([res.rows[0]["file_data"]], { type: res.rows[0]["file_type"] });
-      //var url = window.URL.createObjectURL(blob);
-
-      var a = document.createElement("a");
-      document.body.appendChild(a);
-      a.style.display = "none";
-      a.href = res.rows[0]["file_data"];
-      a.download = res.rows[0]["file_filename"];
-      a.click();
-      //window.URL.revokeObjectURL(url);
-      a.destroy();
-      //salert("Download file attachment: " + res.rows[0]["file_filename"]);
-    }
-  });
-}
-
-
-returnAttachment(id) {
-  this.sendPeerDatabaseRequest("covid19", "attachments", "*", "id= " + id, null, function (res) {
-    if (res.rows.length > 0) {
-      var blob = new Blob([res.rows[0]["attachment_data"]], { type: res.rows[0]["attachment_type"] });
-      var url = window.URL.createObjectURL(blob);
-      var a = document.createElement("a");
-      document.body.appendChild(a);
-      a.style.display = "none";
-      a.href = url;
-      a.download = res.rows[0]["attachment_filename"];
-      a.click();
-      window.URL.revokeObjectURL(url);
-      a.destroy();
-      salert("Download attachment: " + res.rows[0]["attachment_filename"]);
-    }
-  });
-}
-
-treatBoolean(el) {
-  let cell = el.id;
-  let html = `
-          <input class="check-${cell}" id="check-${cell}" type="checkbox">
-          `;
-  el.parentNode.innerHTML += html;
-  //when rewriting the partent innerhtml - the element reference is lost.
-  el = document.getElementById(el.id);
-  el.classList.add('hidden');
-
-  if (el.value == 1) {
-    document.getElementById(`check-${cell}`).checked = true;
+    });
   }
 
-  document.getElementById(`check-${cell}`).addEventListener('change', (e) => {
-    if (e.target.checked) {
-      el.value = 1;
-    } else {
-      el.value = 0;
+
+  renderCerts(rows, el) {
+    // should this be generalised to module wide?
+    var module_self = this;
+
+    rows.forEach(row => {
+
+      var html = "";
+
+      //
+      // certifications
+      //
+      if (row["source"] == "certifications") {
+
+        var note = "";
+        if (row["note"]) { note = "<div class='tiptext'>" + row["note"] + "</div>"; }
+        if (row["id"] != null && module_self.isAdmin()) {
+          html += "<div class='cert tip'><a class='attach-cert-" + row["id"] + "'>" + row["Name"] + "</a>" + note;
+          html += " <i data-id='" + row["id"] + "' id='delete-cert-" + row["id"] + "' class='fright far fa-times-circle'></i></div>";
+        } else {
+          //html += "<div class='cert tip'>" + row["Name"] + note + "</div>";
+          html += "<div class='cert tip'>" + row["Name"] + "<div class='tiptext'> Certification available on recipet of formal purchase order. </div></div>";
+        }
+
+        el.append(elParser(html));
+
+      }
+
+
+      //
+      // bundles
+      // this may not work right now.
+      if (row["source"] == "files") {
+
+        console.log("FILE: " + JSON.stringify(row));
+
+        var note = "";
+        if (row["note"]) { note = "<div class='tiptext'>supplementary file</div>"; }
+        if (row["product_id"] != null) {
+          html += "<div class='cert tip'><a class='attach-file-" + row["id"] + "'>" + row["Name"] + "</a></div>";
+        } else {
+          html += "<div class='cert tip'>" + row["Name"] + "</div>";
+        }
+        el.append(elParser(html));
+      }
+
+
+    });
+
+    rows.forEach(row => {
+      if (row["source"] == "certifications") {
+        el.querySelector('.attach-cert-' + row["id"]).addEventListener('click', (e) => {
+          module_self.returnCertFile(row["id"]);
+        });
+        if (module_self.isAdmin()) {
+          el.querySelector('#delete-cert-' + row["id"]).addEventListener('click', (e) => {
+            module_self.returnCertFile(row["id"]);
+          });
+        }
+      }
+      if (row["source"] == "files") {
+        el.querySelector('.attach-file-' + row["id"]).addEventListener('click', (e) => {
+          module_self.returnFile(row["id"]);
+        });
+      }
+    });
+  }
+
+  returnCertFile(id) {
+    this.sendPeerDatabaseRequest("covid19", "products_certifications", "*", "id = " + id, null, function (res) {
+      if (res.rows.length > 0) {
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style.display = "none";
+        a.href = [res.rows[0]["file"]];
+        a.download = res.rows[0]["file_filename"];
+        a.click();
+        //window.URL.revokeObjectURL(url);
+        a.destroy();
+        //salert("Download certificate attachment: " + res.rows[0]["file_filename"]);
+      }
+    });
+  }
+
+  returnFile(id) {
+    this.sendPeerDatabaseRequest("covid19", "files", "*", "id= " + id, null, function (res) {
+      if (res.rows.length > 0) {
+        //var blob = new Blob([res.rows[0]["file_data"]], { type: res.rows[0]["file_type"] });
+        //var url = window.URL.createObjectURL(blob);
+
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style.display = "none";
+        a.href = res.rows[0]["file_data"];
+        a.download = res.rows[0]["file_filename"];
+        a.click();
+        //window.URL.revokeObjectURL(url);
+        a.destroy();
+        //salert("Download file attachment: " + res.rows[0]["file_filename"]);
+      }
+    });
+  }
+
+
+  returnAttachment(id) {
+    this.sendPeerDatabaseRequest("covid19", "attachments", "*", "id= " + id, null, function (res) {
+      if (res.rows.length > 0) {
+        var blob = new Blob([res.rows[0]["attachment_data"]], { type: res.rows[0]["attachment_type"] });
+        var url = window.URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style.display = "none";
+        a.href = url;
+        a.download = res.rows[0]["attachment_filename"];
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.destroy();
+        salert("Download attachment: " + res.rows[0]["attachment_filename"]);
+      }
+    });
+  }
+
+  treatBoolean(el) {
+    let cell = el.id;
+    let html = `
+          <input class="check-${cell}" id="check-${cell}" type="checkbox">
+          `;
+    el.parentNode.innerHTML += html;
+    //when rewriting the partent innerhtml - the element reference is lost.
+    el = document.getElementById(el.id);
+    el.classList.add('hidden');
+
+    if (el.value == 1) {
+      document.getElementById(`check-${cell}`).checked = true;
     }
-  });
 
-}
+    document.getElementById(`check-${cell}`).addEventListener('change', (e) => {
+      if (e.target.checked) {
+        el.value = 1;
+      } else {
+        el.value = 0;
+      }
+    });
 
-treatPhoto(el) {
+  }
 
-  let cell = el.id;
-  let html = `
+  treatPhoto(el) {
+
+    let cell = el.id;
+    let html = `
           <div class="product-image-holder" id="img-holder-${cell}">
             <img class="product-image" id="img-${cell}" src="${el.value}" />
           </div>
           <input class="products-${cell}" id="file-${cell}" type="file">
           `;
-  el.parentNode.innerHTML += html;
-  //when rewriting the partent innerhtml - the element reference is lost.
-  el = document.getElementById(el.id);
-  el.classList.add('hidden');
-
-  document.getElementById(`file-${cell}`).addEventListener('change', (e) => {
-    var img = document.getElementById(`img-${cell}`);
-    var reader = new FileReader();
-    var file = e.target.files[0];
-    var original = new Image();
-    original.onload = function () {
-      var w = 0;
-      var h = 0;
-      var r = 1;
-
-      var canvas = document.createElement('canvas');
-
-      if (original.width > 450) {
-        r = 450 / original.width;
-      } if (r * original.height > 300) {
-        r = 300 / original.height;
-      }
-      w = original.width * r;
-      h = original.height * r;
-
-      canvas.width = w;
-      canvas.height = h;
-      canvas.getContext('2d').drawImage(original, 0, 0, w, h);
-      var result = canvas.toDataURL(file.type);
-      img.src = result;
-      el.value = result;
-    }
-    reader.addEventListener("load", function () {
-
-      original.src = reader.result;
-
-    }, false);
-    reader.readAsDataURL(file);
-  });
-
-  document.getElementById(`img-holder-${cell}`).addEventListener('click', e => {
-    document.getElementById(`file-${cell}`).click();
-  });
-
-}
-
-treatACDropDown(el, dbtable, idcol, valuecol) {
-
-  let cell = el.id;
-  let html = "";
-  var options = "";
-  this.sendPeerDatabaseRequest("covid19", dbtable, idcol + " as 'id', " + valuecol + " as 'value'", "deleted <> 1", null, function (res) {
-    res.rows.forEach(opt => {
-      options += `<option data-value="${opt.id}" value="${opt.value}"></option>`
-    });
-    html += `
-          <input type="text" id="${dbtable}-display" list="${dbtable}-options" placeholder="Click or type...">
-          <datalist id="${dbtable}-options">${options}</datalist>
-        `;
     el.parentNode.innerHTML += html;
+    //when rewriting the partent innerhtml - the element reference is lost.
     el = document.getElementById(el.id);
     el.classList.add('hidden');
 
-    if (el.value.length > 0) {
-      document.getElementById(`${dbtable}-display`).value = document.querySelector(`#${dbtable}-options [data-value='${el.value}']`).value;
-    }
+    document.getElementById(`file-${cell}`).addEventListener('change', (e) => {
+      var img = document.getElementById(`img-${cell}`);
+      var reader = new FileReader();
+      var file = e.target.files[0];
+      var original = new Image();
+      original.onload = function () {
+        var w = 0;
+        var h = 0;
+        var r = 1;
 
-    document.getElementById(`${dbtable}-display`).addEventListener("change", (e) => {
-      el.value = document.querySelector(`#${dbtable}-options [value='${e.target.value}']`).dataset.value;
+        var canvas = document.createElement('canvas');
+
+        if (original.width > 450) {
+          r = 450 / original.width;
+        } if (r * original.height > 300) {
+          r = 300 / original.height;
+        }
+        w = original.width * r;
+        h = original.height * r;
+
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext('2d').drawImage(original, 0, 0, w, h);
+        var result = canvas.toDataURL(file.type);
+        img.src = result;
+        el.value = result;
+      }
+      reader.addEventListener("load", function () {
+
+        original.src = reader.result;
+
+      }, false);
+      reader.readAsDataURL(file);
     });
 
-    document.getElementById(`${dbtable}-display`).addEventListener("focus", (e) => {
-      e.target.value = "";
-      e.target.click();
-      e.target.click();
+    document.getElementById(`img-holder-${cell}`).addEventListener('click', e => {
+      document.getElementById(`file-${cell}`).click();
     });
 
-  });
+  }
 
-}
+  treatACDropDown(el, dbtable, idcol, valuecol) {
 
-treatHide(el) {
-  el.parentNode.previousSibling.classList.add('hidden');
-  el.parentNode.classList.add('hidden');
-}
+    let cell = el.id;
+    let html = "";
+    var options = "";
+    this.sendPeerDatabaseRequest("covid19", dbtable, idcol + " as 'id', " + valuecol + " as 'value'", "deleted <> 1", null, function (res) {
+      res.rows.forEach(opt => {
+        options += `<option data-value="${opt.id}" value="${opt.value}"></option>`
+      });
+      html += `
+          <input type="text" id="${dbtable}-display" list="${dbtable}-options" placeholder="Click or type...">
+          <datalist id="${dbtable}-options">${options}</datalist>
+        `;
+      el.parentNode.innerHTML += html;
+      el = document.getElementById(el.id);
+      el.classList.add('hidden');
 
-treatFile(el, typeel = null, nameel = null) {
-  let cell = el.id;
-  let html = `
+      if (el.value.length > 0) {
+        document.getElementById(`${dbtable}-display`).value = document.querySelector(`#${dbtable}-options [data-value='${el.value}']`).value;
+      }
+
+      document.getElementById(`${dbtable}-display`).addEventListener("change", (e) => {
+        el.value = document.querySelector(`#${dbtable}-options [value='${e.target.value}']`).dataset.value;
+      });
+
+      document.getElementById(`${dbtable}-display`).addEventListener("focus", (e) => {
+        e.target.value = "";
+        e.target.click();
+        e.target.click();
+      });
+
+    });
+
+  }
+
+  treatHide(el) {
+    el.parentNode.previousSibling.classList.add('hidden');
+    el.parentNode.classList.add('hidden');
+  }
+
+  treatFile(el, typeel = null, nameel = null) {
+    let cell = el.id;
+    let html = `
          <div id="certification_display" class="file-display">No file Selected</div>
          <input class="file-${cell}" id="file-${cell}" type="file">
           `;
-  el.parentNode.innerHTML += html;
-  //when rewriting the partent innerhtml - the element reference is lost.
-  el = document.getElementById(el.id);
-  el.classList.add('hidden');
-  var displayEl = document.querySelector("#certification_display");
-  if (el.value != "") {
-    if (typeel.value.split("/")[0] == "image") {
-      displayEl.innerHTML = "<div class='product-image-holder'><img class='product-image' alt='certification file' src='" + el.value + "'/></div>";
-    } else {
-      displayEl.innerHTML = typeel.split("/")[1].toUpperCase();
-    }
-  }
-
-  var input = document.getElementById(`file-${cell}`);
-  input.addEventListener('change', (e) => {
-    var reader = new FileReader();
-    var file = e.target.files[0];
-    reader.addEventListener("load", function () {
-
-      if (file.type.split("/")[0] == "image") {
-        displayEl.innerHTML = "<div class='product-image-holder'><img class='product-image' alt='certification file' src='" + reader.result + "'/></div>";
+    el.parentNode.innerHTML += html;
+    //when rewriting the partent innerhtml - the element reference is lost.
+    el = document.getElementById(el.id);
+    el.classList.add('hidden');
+    var displayEl = document.querySelector("#certification_display");
+    if (el.value != "") {
+      if (typeel.value.split("/")[0] == "image") {
+        displayEl.innerHTML = "<div class='product-image-holder'><img class='product-image' alt='certification file' src='" + el.value + "'/></div>";
       } else {
-        displayEl.innerHTML = file.type.split("/")[1].toUpperCase();
+        displayEl.innerHTML = typeel.split("/")[1].toUpperCase();
       }
-      el.value = reader.result;
-      if (nameel) { nameel.value = file.name };
-      if (typeel) { typeel.value = file.type };
-    }, false);
-    reader.readAsDataURL(file);
-  });
-  document.querySelector("#certification_display").addEventListener('click', e => {
-    input.click();
-  });
-
-};
-
-
-pdfCap(inputHTML, filename) {
-  var shim = document.createElement('div');
-  shim.style.width = "1120px";
-  shim.style.height = "1475px";
-  shim.style.padding = "100px"
-  shim.style.position = "absolute";
-  shim.style.top = "-2000px;"
-  //shim.appendChild(targetel.cloneNode(true));
-  shim.classList.add('toprint');
-  shim.innerHTML = inputHTML;
-  document.querySelector('.footer').appendChild(shim);
-  const html2canvas = require('html2canvas');
-  const jsPDF = require('jspdf');
-  const domElement = shim;
-  html2canvas(domElement, {
-    onclone: (document) => {
-      //document.getElementById('print-button').style.visibility = 'hidden';
     }
-  })
-    .then((canvas) => {
-      console.log(canvas.width + " " + canvas.height);
-      var imgData = canvas.toDataURL('image/jpeg', 1);
 
-      // console.log('Report Image URL: ' + imgData);
-      var doc = new jsPDF('p', 'mm', "a4");
-      const imgProps = doc.getImageProperties(imgData);
-      const pdfWidth = doc.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    var input = document.getElementById(`file-${cell}`);
+    input.addEventListener('change', (e) => {
+      var reader = new FileReader();
+      var file = e.target.files[0];
+      reader.addEventListener("load", function () {
 
-      doc.addImage(imgData, 'jpeg', 0, 0, pdfWidth, pdfHeight);
-
-      doc.save(filename);
-      shim.destroy();
+        if (file.type.split("/")[0] == "image") {
+          displayEl.innerHTML = "<div class='product-image-holder'><img class='product-image' alt='certification file' src='" + reader.result + "'/></div>";
+        } else {
+          displayEl.innerHTML = file.type.split("/")[1].toUpperCase();
+        }
+        el.value = reader.result;
+        if (nameel) { nameel.value = file.name };
+        if (typeel) { typeel.value = file.type };
+      }, false);
+      reader.readAsDataURL(file);
     });
-}
+    document.querySelector("#certification_display").addEventListener('click', e => {
+      input.click();
+    });
 
-isAdmin() {
-  //return 1;
-  if (this.app.wallet.returnPublicKey() == this.admin_pkey) { return true; }
-  return false;
-}
+  };
 
 
+  pdfCap(inputHTML, filename) {
+    var shim = document.createElement('div');
+    shim.style.width = "1120px";
+    shim.style.height = "1475px";
+    shim.style.padding = "100px"
+    shim.style.position = "absolute";
+    shim.style.top = "-2000px;"
+    //shim.appendChild(targetel.cloneNode(true));
+    shim.classList.add('toprint');
+    shim.innerHTML = inputHTML;
+    document.querySelector('.footer').appendChild(shim);
+    const html2canvas = require('html2canvas');
+    const jsPDF = require('jspdf');
+    const domElement = shim;
+    html2canvas(domElement, {
+      onclone: (document) => {
+        //document.getElementById('print-button').style.visibility = 'hidden';
+      }
+    })
+      .then((canvas) => {
+        console.log(canvas.width + " " + canvas.height);
+        var imgData = canvas.toDataURL('image/jpeg', 1);
 
+        // console.log('Report Image URL: ' + imgData);
+        var doc = new jsPDF('p', 'mm', "a4");
+        const imgProps = doc.getImageProperties(imgData);
+        const pdfWidth = doc.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-//
-//
-//
-async generateProcurementBundle(tx = null) {
+        doc.addImage(imgData, 'jpeg', 0, 0, pdfWidth, pdfHeight);
 
-  if (this.app.BROWSER == 1) { console.log("Non-Browser Function"); return; }
+        doc.save(filename);
+        shim.destroy();
+      });
+  }
 
-  tx = new saito.transaction();
-  tx = this.app.wallet.signTransaction(tx);
-
-  let txmsg = tx.returnMessage();
-  let uuid = tx.transaction.ts + "-" + tx.transaction.sig;
-
-
-  //
-  // shell access
-  //
-  const util = require('util');
-  const exec = util.promisify(require('child_process').exec);
-  const fs = this.app.storage.returnFileSystem();
-  const path = require('path');
-  const unzipper = require('unzipper');
-
-
-  let bash_script_name = "bundler/" + uuid + ".sh";
-  let bash_script_create = '';
-
-  let bash_script_del_name = "bundler/" + uuid + "_del.sh";
-  let bash_script_delete = '';
-
-  let bash_script_zip_name = 'bundler/' + uuid + "_zip.sh";
-  let bash_script_zip = '';
-
-  //
-  // script that creates directories
-  //
-  bash_script_create += 'mkdir  ' + __dirname + "/bundler/" + uuid + "/" + "\n";
-  bash_script_create += 'mkdir  ' + __dirname + "/bundler/" + uuid + "/package" + "\n";
-  bash_script_create += 'mkdir  ' + __dirname + "/bundler/" + uuid + "/package/category" + "\n";
-  bash_script_create += 'echo "\n\n\n\n\n\n\n\nEXECUTED IN THIS BUNDLE!!!!!\n\n\n"' + "\n";
-
-  //
-  // script that zips directory
-  //
-  bash_script_zip += 'zip -r "./bundler/' + uuid + '.zip" "' + __dirname + "/bundler/" + uuid + '"';
-  console.log("ZIP: " + bash_script_zip);
-
-  //
-  // script to delete stuff
-  //
-  bash_script_delete += 'rm -f "' + __dirname + "/bundler/" + uuid + '.sh"' + "\n";
-  bash_script_delete += 'rm -f "' + __dirname + "/bundler/" + uuid + '_zip.sh"' + "\n";
-  bash_script_delete += 'rm -f "' + __dirname + "/bundler/" + uuid + '_del.sh"' + "\n";
-
-
-
-  //
-  // create file "bash_script_name" and then execute the 
-  //
-  fs.writeFileSync(path.resolve(__dirname, bash_script_name), bash_script_create, { encoding: 'binary' });
-  try {
-    let cwdir = __dirname;
-    let createdir_command = 'sh ' + bash_script_name;
-    const { stdout, stderr } = await exec(createdir_command, { cwd: cwdir, maxBuffer: 4096 * 2048 });
-  } catch (err) {
-    console.log(err);
+  isAdmin() {
+    //return 1;
+    if (this.app.wallet.returnPublicKey() == this.admin_pkey) { return true; }
+    return false;
   }
 
 
+
+
   //
-  // write files
   //
-  let sql = "SELECT * FROM products";
-  let params = {};
-  let rows = await this.app.storage.queryDatabase(sql, params, "covid19");
-  let files = {};
-  files.path = [];
-  files.name = [];
-  files.content = [];
+  //
+  async generateProcurementBundle(tx = null) {
 
-  if (rows) {
-    if (rows.length > 0) {
-      for (let i = 0; i < rows.length; i++) {
+    if (this.app.BROWSER == 1) { console.log("Non-Browser Function"); return; }
 
-        let product_id = rows[i].id;
-        let file_content = "What a fascinating document";
+    tx = new saito.transaction();
+    tx = this.app.wallet.signTransaction(tx);
 
-        files.name.push(product_id + ".txt");
-        files.path.push("bundler/" + uuid + "/package/");
-        files.content.push(file_content);
+    let txmsg = tx.returnMessage();
+    let uuid = tx.transaction.ts + "-" + tx.transaction.sig;
 
+
+    //
+    // shell access
+    //
+    const util = require('util');
+    const exec = util.promisify(require('child_process').exec);
+    const fs = this.app.storage.returnFileSystem();
+    const path = require('path');
+    const unzipper = require('unzipper');
+
+
+    let bash_script_name = "bundler/" + uuid + ".sh";
+    let bash_script_create = '';
+
+    let bash_script_del_name = "bundler/" + uuid + "_del.sh";
+    let bash_script_delete = '';
+
+    let bash_script_zip_name = 'bundler/' + uuid + "_zip.sh";
+    let bash_script_zip = '';
+
+    //
+    // script that creates directories
+    //
+    bash_script_create += 'mkdir  ' + __dirname + "/bundler/" + uuid + "/" + "\n";
+    bash_script_create += 'mkdir  ' + __dirname + "/bundler/" + uuid + "/package" + "\n";
+    bash_script_create += 'mkdir  ' + __dirname + "/bundler/" + uuid + "/package/category" + "\n";
+    bash_script_create += 'echo "\n\n\n\n\n\n\n\nEXECUTED IN THIS BUNDLE!!!!!\n\n\n"' + "\n";
+
+    //
+    // script that zips directory
+    //
+    bash_script_zip += 'zip -r "./bundler/' + uuid + '.zip" "' + __dirname + "/bundler/" + uuid + '"';
+    console.log("ZIP: " + bash_script_zip);
+
+    //
+    // script to delete stuff
+    //
+    bash_script_delete += 'rm -f "' + __dirname + "/bundler/" + uuid + '.sh"' + "\n";
+    bash_script_delete += 'rm -f "' + __dirname + "/bundler/" + uuid + '_zip.sh"' + "\n";
+    bash_script_delete += 'rm -f "' + __dirname + "/bundler/" + uuid + '_del.sh"' + "\n";
+
+
+
+    //
+    // create file "bash_script_name" and then execute the 
+    //
+    fs.writeFileSync(path.resolve(__dirname, bash_script_name), bash_script_create, { encoding: 'binary' });
+    try {
+      let cwdir = __dirname;
+      let createdir_command = 'sh ' + bash_script_name;
+      const { stdout, stderr } = await exec(createdir_command, { cwd: cwdir, maxBuffer: 4096 * 2048 });
+    } catch (err) {
+      console.log(err);
+    }
+
+
+    //
+    // write files
+    //
+    let sql = "SELECT * FROM products";
+    let params = {};
+    let rows = await this.app.storage.queryDatabase(sql, params, "covid19");
+    let files = {};
+    files.path = [];
+    files.name = [];
+    files.content = [];
+
+    if (rows) {
+      if (rows.length > 0) {
+        for (let i = 0; i < rows.length; i++) {
+
+          let product_id = rows[i].id;
+          let file_content = "What a fascinating document";
+
+          files.name.push(product_id + ".txt");
+          files.path.push("bundler/" + uuid + "/package/");
+          files.content.push(file_content);
+
+        }
       }
     }
-  }
 
-  //
-  // pretend database found stuff
-  //
-  files.name.push("12.txt");
-  files.path.push("bundler/" + uuid + "/package/");
-  files.content.push("Sample Content");
+    //
+    // pretend database found stuff
+    //
+    files.name.push("12.txt");
+    files.path.push("bundler/" + uuid + "/package/");
+    files.content.push("Sample Content");
 
-  console.log("\n\n\n\n\n\n");
-
-
-  //
-  // now write the file array to the bundle directory
-  //
-  //
-  for (let i = 0; i < files.path.length; i++) {
-
-    let file_path = files.path[i] + files.name[i];
-    let file_content = files.content[i];
-
-    fs.writeFileSync(path.resolve(__dirname, file_path), file_content, { encoding: 'binary' });
-
-  }
+    console.log("\n\n\n\n\n\n");
 
 
-  //
-  // basically done
-  //
-  console.log("This is where we can zip stuff...");
+    //
+    // now write the file array to the bundle directory
+    //
+    //
+    for (let i = 0; i < files.path.length; i++) {
 
+      let file_path = files.path[i] + files.name[i];
+      let file_content = files.content[i];
 
-  //
-  // write zip script
-  //
-  fs.writeFileSync(path.resolve(__dirname, bash_script_zip_name), bash_script_zip, { encoding: 'binary' });
-  try {
-    let cwdir = __dirname;
-    let createdir_command = 'sh ' + bash_script_zip_name;
-    const { stdout, stderr } = await exec(createdir_command, { cwd: cwdir, maxBuffer: 4096 * 2048 });
-  } catch (err) {
-    console.log(err);
-  }
+      fs.writeFileSync(path.resolve(__dirname, file_path), file_content, { encoding: 'binary' });
 
-  //
-  // now delete stuff
-  //
-  fs.writeFileSync(path.resolve(__dirname, bash_script_del_name), bash_script_delete, { encoding: 'binary' });
-  try {
-    let cwdir = __dirname;
-    let createdir_command = 'sh ' + bash_script_del_name;
-    const { stdout, stderr } = await exec(createdir_command, { cwd: cwdir, maxBuffer: 4096 * 2048 });
-  } catch (err) {
-    console.log(err);
-  }
-
-}
-
-
-
-hideEmptyContent(tabledivs) {
-
-  //
-  // hide useless content
-  //
-  let content_fields = [];
-  document.querySelectorAll(tabledivs).forEach(el => {
-    content_fields.push(el);
-  });
-
-  for (let i = 1; i < content_fields.length; i += 2) {
-    if (content_fields[i].innerHTML === '') {
-      content_fields[i - 1].remove();
-      content_fields[i].remove();
     }
+
+
+    //
+    // basically done
+    //
+    console.log("This is where we can zip stuff...");
+
+
+    //
+    // write zip script
+    //
+    fs.writeFileSync(path.resolve(__dirname, bash_script_zip_name), bash_script_zip, { encoding: 'binary' });
+    try {
+      let cwdir = __dirname;
+      let createdir_command = 'sh ' + bash_script_zip_name;
+      const { stdout, stderr } = await exec(createdir_command, { cwd: cwdir, maxBuffer: 4096 * 2048 });
+    } catch (err) {
+      console.log(err);
+    }
+
+    //
+    // now delete stuff
+    //
+    fs.writeFileSync(path.resolve(__dirname, bash_script_del_name), bash_script_delete, { encoding: 'binary' });
+    try {
+      let cwdir = __dirname;
+      let createdir_command = 'sh ' + bash_script_del_name;
+      const { stdout, stderr } = await exec(createdir_command, { cwd: cwdir, maxBuffer: 4096 * 2048 });
+    } catch (err) {
+      console.log(err);
+    }
+
   }
 
-}
+
+
+  hideEmptyContent(tabledivs) {
+
+    //
+    // hide useless content
+    //
+    let content_fields = [];
+    document.querySelectorAll(tabledivs).forEach(el => {
+      content_fields.push(el);
+    });
+
+    for (let i = 1; i < content_fields.length; i += 2) {
+      if (content_fields[i].innerHTML === '') {
+        content_fields[i - 1].remove();
+        content_fields[i].remove();
+      }
+    }
+
+  }
 
 
 
