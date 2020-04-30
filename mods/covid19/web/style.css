@@ -291,8 +291,11 @@ table#inq-grid {
 
 .product-summary {
   display: grid;
-  grid-gap: 1em;
   grid-template-columns: 5fr 2fr 1fr 2fr 8fr;
+}
+
+.product-summary div {
+  padding: 5px;
 }
 
 .grid-header {
