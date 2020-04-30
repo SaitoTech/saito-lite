@@ -191,6 +191,11 @@
 }
 .comment-text {
   margin-left: 35px;
+  line-height: 1.6em;
+  padding: 0px;
+  max-height: 50vh;
+  overflow: auto;
+  margin-top: 15px;
 }
 .comment-links {
   margin-left: 35px;

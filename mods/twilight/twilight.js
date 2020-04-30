@@ -1673,7 +1673,7 @@ console.log("CARD: " + card);
             // we can remove the event if it is immediately above us in the queue
             //
             if (le <= 0) {
-              this.game.queue = [];
+              this.game.queue = ["round"]; // shd be first
             } else {
 
               let lmv = this.game.queue[le].split("\t");
@@ -1721,7 +1721,6 @@ console.log("CARD: " + card);
                 // remove the event
                 //
                 this.game.queue.splice(qe, 1);
-
                 //
                 // go back through the queue and remove the first event that matches this one
                 //
@@ -1981,7 +1980,6 @@ console.log("CARD: " + card);
 
           }
 
-
           //
           // Eagle Has Landed
           //
@@ -2010,7 +2008,9 @@ console.log("CARD: " + card);
 	    //
             if (available_cards.length == 0) {
 	      this.updateLog("No cards in hand, skipping end-of-turn discard");
-	      return 1;
+	      this.addMove("notify\tSkipping Eagle / Bear has Landed");
+	      this.endTurn();
+	      return 0;
   	    }
 
             //
@@ -2024,7 +2024,7 @@ console.log("CARD: " + card);
             this.updateStatus(html);
 
             let twilight_self = this;
-
+	    
             $('.card').off();
             $('.card').on('click', function() {
 
@@ -2077,7 +2077,6 @@ console.log("CARD: " + card);
               return 0;
 
             });
-
             return 0;
 
           }
@@ -8175,8 +8174,6 @@ console.log("card: " + card);
         let multiple_cards = 0;
 	let available_cards = [];
 
-console.log("RESOLVING ME!");
-
         if (this.game.deck[0].hand.length == 0) {
           this.addMove("notify\t"+opponent.toUpperCase()+" hand contains no cards.");
           this.endTurn();
@@ -8190,17 +8187,19 @@ console.log("RESOLVING ME!");
 	  }
 	}
 
-console.log("RESOLVING ME 2!");
         if (available_cards.length == 0) {
           this.addMove("notify\t"+opponent.toUpperCase()+" hand has no eligible cards.");
           this.endTurn();
           return 0;
         }
-console.log("RESOLVING ME 3!");
 
 	for (let i = 0; i < available_cards.length; i++) {
 
           let card = this.game.deck[0].cards[available_cards[i]];
+
+          if (card.ops == selected_ops) {
+	    multiple_cards = 1;
+	  }
 
           if (card.ops > selected_ops) {
             selected_ops  = card.ops;
@@ -8209,11 +8208,8 @@ console.log("RESOLVING ME 3!");
           }
         }
 
-console.log("RESOLVING ME 4!");
 
         if (multiple_cards == 0) {
-
-console.log("RESOLVING ME 5!");
 
           //
           // offer highest card
@@ -8222,8 +8218,6 @@ console.log("RESOLVING ME 5!");
           this.endTurn();
 
         } else {
-
-console.log("RESOLVING ME 6!");
 
           //
           // select highest card
