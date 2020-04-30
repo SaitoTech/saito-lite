@@ -227,6 +227,10 @@ button, .button {
   background-color: #f9f9f9;
 }
 
+.product-summary>div:nth-child(10n+6), .product-summary>div:nth-child(10n+7), .product-summary>div:nth-child(10n+8), .product-summary>div:nth-child(10n+9), .product-summary>div:nth-child(10n+10) {
+  background-color: #f9f9f9;
+}
+
 .product-buttons .button {
   width: 200px;
   margin: 0 1em 1em 0;
