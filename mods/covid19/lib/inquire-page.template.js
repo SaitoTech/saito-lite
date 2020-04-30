@@ -10,9 +10,14 @@ module.exports = ProductPageTemplate = () => {
 
   <p>
 
-  DHB is a concierge service - contact us at kevin@dhb.global and we will wil be right with you.
+  Fill in the following form to keep track of the products in which you are interested. You can submit the form by email (click below) or by downloading it as a PDF and contact us at kevin@dhb.global.
+  </p>
 
-  Let us know you are interested in:
+  <p>
+
+  This form will auto-save as you change it. To add new items just click on the "Find More Goods" button. Your existing list will be available here the next time you return to this page.
+
+  </p>
 
   <table class="inq-grid" id="inq-grid"></table>
   <hr />
