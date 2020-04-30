@@ -10,7 +10,14 @@ module.exports = ProductPageTemplate = () => {
 
   <p>
 
-  Please let us know which product you are looking for and your budget per item, target quantity and requirement. Contact us at e.yeung@dhb.global and we will get back to you.” Instead of “DHB is a concierge service - contact us at kevin@dhb.global and we will wil be right with you. Let us know you are interested in::
+  Please let us know which product you are looking for and your budget per item, target quantity and requirement. Contact us at e.yeung@dhb.global and we will get back to you.” Instead of “DHB is a concierge service - contact us at kevin@dhb.global and we will wil be right with you. Let us know you are interested in:
+  </p>
+
+  <p>
+
+  This form will auto-save as you change it. To add new items just click on the "Find More Goods" button. Your existing list will be available here the next time you return to this page.
+
+  </p>
 
   <table class="inq-grid" id="inq-grid"></table>
   <hr />
