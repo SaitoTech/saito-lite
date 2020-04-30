@@ -31,7 +31,7 @@ module.exports = SplashPageAppspace = {
       sum(products.production_daily_capacity) as 'capacity', 
       count(products.id) as 'product_count', 
       (select group_concat( distinct (" " || certifications.name)) from certifications, products_certifications, products as p where products_certifications.certification_id = certifications.id AND products_certifications.deleted <> 1 AND products_certifications.product_id = p.id AND p.category_id = categories.id) as 'certs',
-      min(products.pricing_per_unit_public) || ' ~ ' ||  max(products.pricing_per_unit_public) as 'cost' 
+      ifnull((select price from categories_prices WHERE categories_prices.category_id = categories.id order by ts desc limit 1),0) as 'cost' 
     from 
       products 
     JOIN 
@@ -48,7 +48,7 @@ module.exports = SplashPageAppspace = {
     html += `<div class="grid-header" style="text-align:left">Product</div>`;
     html += `<div class="grid-header" style="text-align:right">Daily Capacity</div>`;
     html += `<div class="grid-header" style="text-align:right">Sources</div>`;
-    html += `<div class="grid-header" style="text-align:right">Cost USD*</div>`;
+    html += `<div class="grid-header" style="text-align:right">Latest USD Price</div>`;
     html += `<div class="grid-header" style="text-align:left">Certifications</div>`;
     
 
@@ -60,7 +60,7 @@ module.exports = SplashPageAppspace = {
         html += `<div data-category_id="${row.category_id}" class="active_category tip"><a>${row.product}</a><div class="tiptext">View All</div></div>`;
         html += `<div class="rightj">${s2Number(row.capacity)}</div>`;
         html += `<div class="rightj">${s2Number(row.product_count)}</div>`;
-        html += `<div class="rightj">${row.cost}</div>`;
+        html += `<div class="rightj">${row.cost.toFixed(2)}</div>`;
         html += `<div>${row.certs}</div>`
          
           ;

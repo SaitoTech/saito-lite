@@ -7,4 +7,3 @@ CREATE TABLE IF NOT EXISTS categories (
 
   PRIMARY KEY(id ASC)
 );
-

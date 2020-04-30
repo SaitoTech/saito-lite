@@ -19,24 +19,27 @@ module.exports = ProductPage = {
     //
     // load product
     //
-    let fields = `
-        product_specification as 'Specification',
-        product_description as 'Description', 
-        product_photo as 'Product Image', 
-        production_stock as 'Stock', 
-        production_daily_capacity as 'Daily Production', 
-        pricing_per_unit_public as 'Price (USD)', 
-        pricing_notes as 'Pricing Notes', 
-        product_dimensions as 'Package Dimensions', 
-        product_weight as 'Weight', 
-        product_quantities as 'Units per Package', 
-        pricing_payment_terms as 'Payment Terms', 
-        production_minimum_order as 'Minimum Order',
-        supplier_id
+
+//    let fields = `
+  
+      let sql = `
+        SELECT
+          categories.name as 'Category',
+          product_specification as 'Specification',
+          product_description as 'Description', 
+          product_photo as 'Product Image', 
+          production_daily_capacity as 'Daily Production', 
+          production_minimum_order as 'Minimum Order',
+          supplier_id
+        FROM
+          products 
+        JOIN
+          categories ON products.category_id = categories.id
+        WHERE
+          products.id = ${data.product_id};
       `;
-
-
-    data.covid19.sendPeerDatabaseRequest("covid19", "products", fields, "id= " + data.product_id, null, function (res) {
+      data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
+    //data.covid19.sendPeerDatabaseRequest("covid19", "products", fields, "id= " + data.product_id, null, function (res) {
 
       if (res.rows.length > 0) {
 
@@ -44,7 +47,7 @@ module.exports = ProductPage = {
         supplier_id = res.rows[0]["supplier_id"];
         document.querySelector(".product-name").innerHTML = res.rows[0]["Specification"];
         data.covid19.active_category_id = res.rows[0]["category_id"];
-
+        data.covid19.active_category_name = res.rows[0]["Category"];
         //
         // hide useless content
         //
@@ -189,16 +192,48 @@ module.exports = ProductPage = {
 
       });
     } catch (err) { }
+    
 
+    // remove attachements button for now
+    /*
     document.querySelector('.attachments-btn').addEventListener('click', (e) => {
       data.product_id = e.target.id.split("-")[1];
       Attachments.render(app, data);
       Attachments.attachEvents(app, data);
     });
+    */
 
+    document.querySelector('.buy-btn').addEventListener('click', (e) => {
+      data.product_id = e.target.dataset.product_id;
 
+      if (typeof localStorage.cart == 'undefined') {
+        localStorage.cart = JSON.stringify({ "products": [] });
+      }
+      var cart = JSON.parse(localStorage.cart);
+      var add = true;
+      cart.products.forEach(product => {
+        if (data.product_id == product.id) {
+          add = false;
+        }
+      });
 
+      if (add) {
+        cart.products.push({
+          id: data.product_id,
+          category: data.covid19.active_category_name,
+          budget: "",
+          quantity: "",
+          requirements: ""
+        })
+      }
+      localStorage.cart = JSON.stringify(cart);
 
+      InquirePage.render(this.app, data);
+      InquirePage.attachEvents(this.app, data);
+
+    });
+
+    
   }
 
 }
