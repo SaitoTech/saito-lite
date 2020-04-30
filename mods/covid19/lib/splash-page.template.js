@@ -5,6 +5,8 @@ module.exports = SplashPageTemplate = () => {
   html = `
   <div class="splash-introduction">
 
+  <h2>DHB COVID Response PPE Procurement Portal</h2>
+
   The table below contains the latest prices, daily capacity and certifications of COVID-19 response equipment from our certified factories in Asia. Please note that pricing is changing daily. If you are procuring PPE, please contact us.
 
     </p>
