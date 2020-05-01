@@ -69,61 +69,7 @@ class Covid19 extends DBModTemplate {
   async installModule(app) {
 
     await super.installModule(app);
-
-    let sql = "";
-    let params = {};
-
-    sql = "INSERT OR IGNORE INTO certifications (id, name) VALUES (1, $name)";
-    params = { $name: "CE Authentication" }
-    await app.storage.executeDatabase(sql, params, "covid19");
-
-    sql = "INSERTOR IGNORE INTO certifications (id, name) VALUES (2, $name)";
-    params = { $name: "FDA Authentication" }
-    await app.storage.executeDatabase(sql, params, "covid19");
-
-    sql = "INSERT OR IGNORE INTO certifications (id, name) VALUES (3, $name)";
-    params = { $name: "Test Report" }
-    await app.storage.executeDatabase(sql, params, "covid19");
-
-    sql = "INSERT OR IGNORE INTO certifications (id, name) VALUES (4, $name)";
-    params = { $name: "Business License" }
-    await app.storage.executeDatabase(sql, params, "covid19");
-
-    sql = "INSERT OR IGNORE INTO certifications (id, name) VALUES (5, $name)";
-    params = { $name: "Medical Device Certificate" }
-    await app.storage.executeDatabase(sql, params, "covid19");
-
-    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (1, 'N95口罩 N95 Mask')`;
-    app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (2, '外科口罩 Surgical Masks')`;
-    app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (3, '防护面罩Face shield')`;
-    app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (4, '防护服Protection clothes')`;
-    app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (5, '医疗器械 medical instruments')`;
-    app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (6, '防护眼镜 goggles')`;
-    app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (7, '手套 gloves')`;
-    app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (8, '鞋套 shoe covers')`;
-    app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (9, '防护头罩 medical hoods')`;
-    app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (10, '洗手液 Sanitizers')`;
-    app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (11, '医疗垃圾袋 Clinical waste bags')`;
-    app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (12, '医疗围裙 Plastic Aprons')`;
-    app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (13, '手术服 surgical gown')`;
-    app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (14, 'KN95口罩 KN95 Mask')`;
-    app.storage.executeDatabase(sql, {}, "covid19");
-    sql = `INSERT OR IGNORE INTO categories (id, name) VALUES (15, 'Disposable Medical Masks')`;
-    app.storage.executeDatabase(sql, {}, "covid19");
-
+   
   }
 
   async initialize(app) {
@@ -134,15 +80,6 @@ class Covid19 extends DBModTemplate {
 
 
     let sql = "";
-
-    sql = "UPDATE products SET category_id = 1 WHERE product_name = 'N95口罩 N95 Mask'";
-    await app.storage.executeDatabase(sql, {}, "covid19");
-
-    sql = "UPDATE products SET category_id = 2 WHERE product_name = '外科口罩 Surgical Masks'";
-    await app.storage.executeDatabase(sql, {}, "covid19");
-
-    sql = "UPDATE products SET category_id = 3 WHERE product_name = '防护服Protection clothes'";
-    await app.storage.executeDatabase(sql, {}, "covid19");
 
     sql = "PRAGMA table_info(suppliers)";
     this.definitions['suppliers'] = await app.storage.queryDatabase(sql, {}, "covid19");
