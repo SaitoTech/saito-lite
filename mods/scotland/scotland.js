@@ -975,10 +975,12 @@ console.log("move player 3");
     //
     if (this.game.player != this.game.state.x) {
 
-      for (let i = 0; i < this.game.state.starting_positions.length; i++) {
-        let divname = "#" + this.game.state.starting_positions[i];
-        $(divname).css('background-color','red');
-        $(divname).css('opacity', 0.4);
+      if (this.game.state.round < 2) {
+        for (let i = 0; i < this.game.state.starting_positions.length; i++) {
+          let divname = "#" + this.game.state.starting_positions[i];
+          $(divname).css('background-color','red');
+          $(divname).css('opacity', 0.4);
+        }
       }
     }
 
