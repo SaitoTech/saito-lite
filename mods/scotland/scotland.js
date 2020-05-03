@@ -1070,7 +1070,7 @@ console.log("move player 3");
     locations['8'] = { top : 338 , left : 362 , taxi : ['1','18','19'] , underground : [] , bus : [] , ferry : [] }
     locations['9'] = { top : 342 , left : 741 , taxi : ['1','19','20'] , underground : [] , bus : [] , ferry : [] }
 
-    locations['10'] = { top : 308 , left : 1805 , taxi : ['2','21','31','11'] , underground : [] , bus : [] , ferry : [] }
+    locations['10'] = { top : 308 , left : 1805 , taxi : ['2','21','34','11'] , underground : [] , bus : [] , ferry : [] }
     locations['11'] = { top : 355 , left : 2085 , taxi : ['10','3','22'] , underground : [] , bus : [] , ferry : [] }
     locations['12'] = { top : 307 , left : 2312 , taxi : ['3','23'] , underground : [] , bus : [] , ferry : [] }
     locations['13'] = { top : 288 , left : 2733 , taxi : ['4','23'] , underground : ['46','67','89'] , bus : ['23','14','52'] , ferry : [] }
@@ -1186,7 +1186,7 @@ console.log("move player 3");
     locations['113'] = { top : 1933 , left : 2413 , taxi : ['100','114','125'] , underground : [] , bus : [] , ferry : [] }
     locations['114'] = { top : 1840 , left : 2654 , taxi : ['113','101','115','126','132'] , underground : [] , bus : [] , ferry : [] }
     locations['115'] = { top : 1710 , left : 3058 , taxi : ['114','102','126','127'] , underground : [] , bus : [] , ferry : ['108','157'] }
-    locations['116'] = { top : 1925 , left : 3645 , taxi : ['104','117','118',127] , underground : [] , bus : ['127','86','142','108'] , ferry : [] }
+    locations['116'] = { top : 1925 , left : 3645 , taxi : ['104','117','118','127'] , underground : [] , bus : ['127','86','142','108'] , ferry : [] }
     locations['117'] = { top : 2078 , left : 4060 , taxi : ['88','116','108','129'] , underground : [] , bus : [] , ferry : [] }
     locations['118'] = { top : 2167 , left : 3652 , taxi : ['116','134','129','142'] , underground : [] , bus : [] , ferry : [] }
     locations['119'] = { top : 2233 , left : 4895 , taxi : ['108','107','136'] , underground : [] , bus : [] , ferry : [] }
@@ -1197,13 +1197,13 @@ console.log("move player 3");
     locations['123'] = { top : 2380 , left : 1175 , taxi : ['122','124','137','148','149'] , underground : [] , bus : ['124','122','185','144'] , ferry : [] }
     locations['124'] = { top : 2295 , left : 1525 , taxi : ['109','123','138','111','130'] , underground : [] , bus : ['77','111','123','153'] , ferry : [] }
     locations['125'] = { top : 2080 , left : 2185 , taxi : ['112','113','131'] , underground : [] , bus : [] , ferry : [] }
-    locations['126'] = { top : 1969 , left : 2825 , taxi : ['114','132','115','127','140'] , underground : [] , bus : [] , ferry : [] }
+    locations['126'] = { top : 1969 , left : 2825 , taxi : ['114','115','127','140'] , underground : [] , bus : [] , ferry : [] }
     locations['127'] = { top : 2077 , left : 3293 , taxi : ['126','117','116','133','134'] , underground : [] , bus : ['133','116','102'] , ferry : [] }
     locations['128'] = { top : 2770 , left : 3895 , taxi : ['172','188','160','142','143'] , underground : ['185','140','89'] , bus : ['142','135','161','187','199'] , ferry : [] }
     locations['129'] = { top : 2215 , left : 4028 , taxi : ['117','118','142','143','135'] , underground : [] , bus : [] , ferry : [] }
     locations['130'] = { top : 2329 , left : 2073 , taxi : ['124','131','139'] , underground : [] , bus : [] , ferry : [] }
     locations['131'] = { top : 2185 , left : 2269 , taxi : ['125','130','114'] , underground : [] , bus : [] , ferry : [] }
-    locations['132'] = { top : 2178 , left : 2670 , taxi : ['140','114','126'] , underground : [] , bus : [] , ferry : [] }
+    locations['132'] = { top : 2178 , left : 2670 , taxi : ['140','114'] , underground : [] , bus : [] , ferry : [] }
     locations['133'] = { top : 2390 , left : 3115 , taxi : ['140','141','127'] , underground : [] , bus : ['140','157','127'] , ferry : [] }
     locations['134'] = { top : 2280 , left : 3433 , taxi : ['141','142','127','118'] , underground : [] , bus : [] , ferry : [] }
     locations['135'] = { top : 2353 , left : 4185 , taxi : ['129','143','161','136'] , underground : [] , bus : ['108','161','128'] , ferry : [] }
