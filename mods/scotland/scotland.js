@@ -457,9 +457,12 @@ class Scotland extends GameTemplate {
 	//
 	// Mister X goes first...
 	//
+        let player_moves_added = 0;
 	let fake_detectives = 0;
 	for (let i = 0; i < this.game.players.length; i++) {
-	  if ((i+1) != this.game.state.x) {
+	  if ((i+1) != this.game.state.x && player_moves_added == 0) {
+
+	    player_moves_added = 1;
 
 	    //this.game.queue.push("play\t"+(i+1)+"\t"+(i+1));
 
@@ -471,8 +474,8 @@ class Scotland extends GameTemplate {
 	      let skip_x_bonus = 0;
 
 	      for (let z = 1; z <= this.number_of_detectives; z++) {
-	        if ((this.game.players.length+fake_detectives) == this.game.state.x) { skip_x_bonus = 1; }
-	        this.game.queue.push("play\t"+(this.game.players.length+skip_x_bonus+fake_detectives)+"\t"+(i+1));
+	        if ((i+1) > this.game.state.x) { skip_x_gamer = 1+fake_detectives; }
+	        this.game.queue.push("play\t"+(i+1)+skip_x_gamer)+"\t"+(i+1));
 	        fake_detectives++;
               }
 
@@ -665,6 +668,7 @@ class Scotland extends GameTemplate {
 	    }
 	  }
 	}
+
 	for (let i = 0; i < this.game.players.length; i++) {
 	  if ((i+1) == this.game.state.x) {
 	    this.game.queue.push("play\t"+(i+1)+"\t"+(i+1));
@@ -721,6 +725,7 @@ class Scotland extends GameTemplate {
 	    this.updateLog("1. Mr.X has been caught at " + x_location);
 	    this.addMove("NOTIFY\tMister X has been caught at " + x_location);
 	    this.endTurn();
+	    this.resignGame();
 	    return 1;
 	  }
 	}
