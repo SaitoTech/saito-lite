@@ -457,9 +457,12 @@ class Scotland extends GameTemplate {
 	//
 	// Mister X goes first...
 	//
+        let player_moves_added = 0;
 	let fake_detectives = 0;
 	for (let i = 0; i < this.game.players.length; i++) {
-	  if ((i+1) != this.game.state.x) {
+	  if ((i+1) != this.game.state.x && player_moves_added == 0) {
+
+	    player_moves_added = 1;
 
 	    //this.game.queue.push("play\t"+(i+1)+"\t"+(i+1));
 
@@ -471,8 +474,8 @@ class Scotland extends GameTemplate {
 	      let skip_x_bonus = 0;
 
 	      for (let z = 1; z <= this.number_of_detectives; z++) {
-	        if ((this.game.players.length+fake_detectives) == this.game.state.x) { skip_x_bonus = 1; }
-	        this.game.queue.push("play\t"+(this.game.players.length+skip_x_bonus+fake_detectives)+"\t"+(i+1));
+	        if ((i+1) > this.game.state.x) { skip_x_gamer = 1+fake_detectives; }
+	        this.game.queue.push("play\t"+(i+1)+skip_x_gamer)+"\t"+(i+1));
 	        fake_detectives++;
               }
 
@@ -665,6 +668,7 @@ class Scotland extends GameTemplate {
 	    }
 	  }
 	}
+
 	for (let i = 0; i < this.game.players.length; i++) {
 	  if ((i+1) == this.game.state.x) {
 	    this.game.queue.push("play\t"+(i+1)+"\t"+(i+1));
@@ -721,6 +725,7 @@ class Scotland extends GameTemplate {
 	    this.updateLog("1. Mr.X has been caught at " + x_location);
 	    this.addMove("NOTIFY\tMister X has been caught at " + x_location);
 	    this.endTurn();
+	    this.resignGame();
 	    return 1;
 	  }
 	}
@@ -1070,7 +1075,7 @@ console.log("move player 3");
     locations['8'] = { top : 338 , left : 362 , taxi : ['1','18','19'] , underground : [] , bus : [] , ferry : [] }
     locations['9'] = { top : 342 , left : 741 , taxi : ['1','19','20'] , underground : [] , bus : [] , ferry : [] }
 
-    locations['10'] = { top : 308 , left : 1805 , taxi : ['2','21','31','11'] , underground : [] , bus : [] , ferry : [] }
+    locations['10'] = { top : 308 , left : 1805 , taxi : ['2','21','34','11'] , underground : [] , bus : [] , ferry : [] }
     locations['11'] = { top : 355 , left : 2085 , taxi : ['10','3','22'] , underground : [] , bus : [] , ferry : [] }
     locations['12'] = { top : 307 , left : 2312 , taxi : ['3','23'] , underground : [] , bus : [] , ferry : [] }
     locations['13'] = { top : 288 , left : 2733 , taxi : ['4','23'] , underground : ['46','67','89'] , bus : ['23','14','52'] , ferry : [] }
