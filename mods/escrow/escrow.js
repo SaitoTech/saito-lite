@@ -170,7 +170,7 @@ console.log("ESCROW ON CONF 0: " + JSON.stringify(tx.transaction));
 	//
 	if (txmsg.escrow != "") {
 console.log("--------------------------------");
-console.log(JSON.stringify(txmsg));
+//console.log(JSON.stringify(txmsg));
 console.log("--------------------------------");
 	}
 
