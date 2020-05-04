@@ -48,7 +48,7 @@ module.exports = SplashPageTemplate = () => {
     </p>
 
     <p>
-    For questions or purchase inquiries, please contact us at kevin@dhb.global.
+    For questions or purchase inquiries, please contact us at e.yeung@dhb.global.
     </p>
 
     <hr />
