@@ -475,7 +475,7 @@ class Scotland extends GameTemplate {
 
 	      for (let z = 1; z <= this.number_of_detectives; z++) {
 	        if ((i+1) > this.game.state.x) { skip_x_gamer = 1+fake_detectives; }
-	        this.game.queue.push("play\t"+(i+1)+skip_x_gamer)+"\t"+(i+1));
+	        this.game.queue.push(("play\t"+(i+1)+skip_x_gamer)+"\t"+(i+1));
 	        fake_detectives++;
               }
 
