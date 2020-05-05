@@ -114,8 +114,16 @@ class Twilight extends GameTemplate {
 
   handleChinaMenuItem() {
     let twilight_self = this;
-    console.log(this.game.state.events.china_card_eligible);
     console.log(this.game.state.events.china_card); 
+    console.log(this.whoHasTheChinaCard())
+    if (this.game.state.events.china_card == 0){
+      if (this.whoHasTheChinaCard()== "us"){
+        confirm("The US has the China Card");
+      }
+      if (this.whoHasTheChinaCard()== "ussr"){
+        confirm("The USSR Has the China Card");
+      }
+    }
     if (this.game.state.events.china_card == 2){
     confirm("The US has the China Card");
     }
