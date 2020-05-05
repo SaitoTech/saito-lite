@@ -49,7 +49,9 @@ class Twilight extends GameTemplate {
 
     this.log_length = 150;
     this.interface = 1;
-    this.dont_show_confirm = 0;
+    this.dont_show_confirm_event = 0;
+    this.dont_show_confirm_ops = 0;
+    this.dont_show_confirm_space = 0;
 
     this.gameboardZoom  = 0.90;
     this.gameboardMobileZoom = 0.67;
@@ -280,8 +282,14 @@ initializeGame(game_id) {
       if (this.app.options.gameprefs.interface == 1) {
         this.interface = 1;
       }
-      if (this.app.options.gameprefs.dont_show_confirm == 1) {
-        this.dont_show_confirm = 1;
+      if (this.app.options.gameprefs.dont_show_confirm_event == 1) {
+        this.dont_show_confirm_event = 1;
+      }
+      if (this.app.options.gameprefs.dont_show_confirm_ops == 1) {
+        this.dont_show_confirm_ops = 1;
+      }
+      if (this.app.options.gameprefs.dont_show_confirm_space == 1) {
+        this.dont_show_confirm_space = 1;
       }
     }
   }
@@ -3862,7 +3870,7 @@ console.log("\n\n\n\n");
 
           // our event or both
           //
-          if (twilight_self.dont_show_confirm == 0) {
+          if (twilight_self.dont_show_confirm_event == 0) {
             let fr =
               `
               <div>Confirm you want to play this event</div>
@@ -3894,8 +3902,8 @@ console.log("\n\n\n\n");
 
             $('input:checkbox').change(function() {
               if ($(this).is(':checked')) {
-                twilight_self.dont_show_confirm = 1;
-                twilight_self.saveGamePreference('dont_show_confirm', 1);
+                twilight_self.dont_show_confirm_event = 1;
+                twilight_self.saveGamePreference('dont_show_confirm_event', 1);
               }
             })
 
@@ -3909,36 +3917,229 @@ console.log("\n\n\n\n");
         }
 
         if (action == "ops") {
+          if (twilight_self.dont_show_confirm_ops == 0) {
+            let fr =
+              `
+              <div>Confirm you want to play this card for ops</div>
+             <ul>
+              <li class="card" id="playops">play for ops</li>
+              <li class="card" id="pickagain">pick again</li>
+              </ul>
+              <input type="checkbox" name="dontshowme" value="true" style="width: 20px;height: 1.5em;"> Don't show me this again
+              `;
 
-          if (twilight_self.game.deck[0].cards[card].player == opponent) {
-            if (twilight_self.game.state.events.unintervention == 1) {
+            twilight_self.updateStatus(fr);
 
-              //
-              // Flower Power
-              //
-              if (twilight_self.game.state.events.flowerpower == 1) {
-                if ((card == "arabisraeli" && twilight_self.game.state.events.campdavid == 0) || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
-                  if (player === "us") {
-                    twilight_self.addMove("notify\tFlower Power triggered by "+card);
-                    twilight_self.addMove("vp\tussr\t2\t1");
+            $('.card').off();
+            $('.card').on('click', function() {
+
+              let action = $(this).attr("id");
+              $('.card').off();
+
+              if (action == "playops") {
+                
+                    if (twilight_self.game.deck[0].cards[card].player == opponent) {
+                      if (twilight_self.game.state.events.unintervention == 1) {
+
+                        //
+                        // Flower Power
+                        //
+                        if (twilight_self.game.state.events.flowerpower == 1) {
+                          if ((card == "arabisraeli" && twilight_self.game.state.events.campdavid == 0) || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
+                            if (player === "us") {
+                              twilight_self.addMove("notify\tFlower Power triggered by "+card);
+                              twilight_self.addMove("vp\tussr\t2\t1");
+                            }
+                          }
+                        }
+
+                        // resolve added
+                        twilight_self.addMove("notify\t"+player.toUpperCase()+" plays "+card+" with UN Intervention");
+                        twilight_self.addMove("ops\t"+player+"\t"+card+"\t"+twilight_self.game.deck[0].cards[card].ops);
+                        twilight_self.removeCardFromHand(card);
+                        twilight_self.endTurn();
+                        return;
+
+                      } else {
+
+                        //
+                        // Flower Power
+                        //
+                        if (twilight_self.game.state.events.flowerpower == 1) {
+                          if ((card == "arabisraeli" && twilight_self.game.state.events.campdavid == 0) || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
+                            if (player === "us") {
+                              twilight_self.addMove("notify\tFlower Power triggered by "+card);
+                              twilight_self.addMove("vp\tussr\t2\t1");
+                            }
+                          }
+                        }
+
+                        let html = twilight_self.formatStatusHeader('Playing opponent card:', true);
+                            html += '<ul><li class="card" id="before">event before ops</li><li class="card" id="after">event after ops</li></ul>';
+                        twilight_self.updateStatus(html);
+                        twilight_self.bindBackButtonFunction(() => {
+                    twilight_self.playerTurnCardSelected(card, player);
+                        });
+
+                        $('.card').off();
+                        $('.card').on('click', function() {
+
+                          let action2 = $(this).attr("id");
+
+                          twilight_self.game.state.event_before_ops = 0;
+                          twilight_self.game.state.event_name = "";
+
+                          if (action2 === "before") {
+                            twilight_self.game.state.event_before_ops = 1;
+                            twilight_self.game.state.event_name = twilight_self.game.deck[0].cards[card].name;
+                            twilight_self.addMove("ops\t"+player+"\t"+card+"\t"+twilight_self.game.deck[0].cards[card].ops);
+                            twilight_self.addMove("event\t"+player+"\t"+card);
+                            twilight_self.removeCardFromHand(card);
+                            twilight_self.endTurn();
+                            return;
+                          }
+                          if (action2 === "after") {
+                            twilight_self.game.state.event_name = twilight_self.game.deck[0].cards[card].name;
+                            twilight_self.addMove("event\t"+player+"\t"+card);
+                            twilight_self.addMove("ops\t"+player+"\t"+card+"\t"+twilight_self.game.deck[0].cards[card].ops);
+                            twilight_self.removeCardFromHand(card);
+                            twilight_self.endTurn();
+                            return;
+                          }
+
+                        });
+                    }
+
+                    return;
+
+                  } else {
+
+                    twilight_self.addMove("ops\t"+player+"\t"+card+"\t"+twilight_self.game.deck[0].cards[card].ops);
+                    if (card == "china") { twilight_self.addMove("limit\tchina"); }
+                    twilight_self.removeCardFromHand(card);
+
+                    //
+                    // Flower Power
+                    //
+                    if (twilight_self.game.state.events.flowerpower == 1) {
+                      if (card == "arabisraeli" || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
+                        if (player === "us") {
+                          twilight_self.addMove("notify\tFlower Power triggered by "+card);
+                          twilight_self.addMove("vp\tussr\t2\t1");
+                        }
+                      }
+                    }
+
+                    twilight_self.endTurn();
+                    return;
+
                   }
                 }
-              }
-
-              // resolve added
-              twilight_self.addMove("notify\t"+player.toUpperCase()+" plays "+card+" with UN Intervention");
-              twilight_self.addMove("ops\t"+player+"\t"+card+"\t"+twilight_self.game.deck[0].cards[card].ops);
-              twilight_self.removeCardFromHand(card);
-              twilight_self.endTurn();
+                if (action == "pickagain") {
+                  twilight_self.playerTurn(original_selected_card);
+                  return;
+                }
+  
+              });
+  
+              $('input:checkbox').change(function() {
+                if ($(this).is(':checked')) {
+                  twilight_self.dont_show_confirm_ops = 1;
+                  twilight_self.saveGamePreference('dont_show_confirm_ops', 1);
+                }
+              })
+  
               return;
+            }
+            // play for ops normally when not confirmed
+
+
+                            
+            if (twilight_self.game.deck[0].cards[card].player == opponent) {
+              if (twilight_self.game.state.events.unintervention == 1) {
+
+                //
+                // Flower Power
+                //
+                if (twilight_self.game.state.events.flowerpower == 1) {
+                  if ((card == "arabisraeli" && twilight_self.game.state.events.campdavid == 0) || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
+                    if (player === "us") {
+                      twilight_self.addMove("notify\tFlower Power triggered by "+card);
+                      twilight_self.addMove("vp\tussr\t2\t1");
+                    }
+                  }
+                }
+
+                // resolve added
+                twilight_self.addMove("notify\t"+player.toUpperCase()+" plays "+card+" with UN Intervention");
+                twilight_self.addMove("ops\t"+player+"\t"+card+"\t"+twilight_self.game.deck[0].cards[card].ops);
+                twilight_self.removeCardFromHand(card);
+                twilight_self.endTurn();
+                return;
+
+              } else {
+
+                //
+                // Flower Power
+                //
+                if (twilight_self.game.state.events.flowerpower == 1) {
+                  if ((card == "arabisraeli" && twilight_self.game.state.events.campdavid == 0) || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
+                    if (player === "us") {
+                      twilight_self.addMove("notify\tFlower Power triggered by "+card);
+                      twilight_self.addMove("vp\tussr\t2\t1");
+                    }
+                  }
+                }
+
+                let html = twilight_self.formatStatusHeader('Playing opponent card:', true);
+                    html += '<ul><li class="card" id="before">event before ops</li><li class="card" id="after">event after ops</li></ul>';
+                twilight_self.updateStatus(html);
+                twilight_self.bindBackButtonFunction(() => {
+            twilight_self.playerTurnCardSelected(card, player);
+                });
+
+                $('.card').off();
+                $('.card').on('click', function() {
+
+                  let action2 = $(this).attr("id");
+
+                  twilight_self.game.state.event_before_ops = 0;
+                  twilight_self.game.state.event_name = "";
+
+                  if (action2 === "before") {
+                    twilight_self.game.state.event_before_ops = 1;
+                    twilight_self.game.state.event_name = twilight_self.game.deck[0].cards[card].name;
+                    twilight_self.addMove("ops\t"+player+"\t"+card+"\t"+twilight_self.game.deck[0].cards[card].ops);
+                    twilight_self.addMove("event\t"+player+"\t"+card);
+                    twilight_self.removeCardFromHand(card);
+                    twilight_self.endTurn();
+                    return;
+                  }
+                  if (action2 === "after") {
+                    twilight_self.game.state.event_name = twilight_self.game.deck[0].cards[card].name;
+                    twilight_self.addMove("event\t"+player+"\t"+card);
+                    twilight_self.addMove("ops\t"+player+"\t"+card+"\t"+twilight_self.game.deck[0].cards[card].ops);
+                    twilight_self.removeCardFromHand(card);
+                    twilight_self.endTurn();
+                    return;
+                  }
+
+                });
+            }
+
+            return;
 
             } else {
 
+              twilight_self.addMove("ops\t"+player+"\t"+card+"\t"+twilight_self.game.deck[0].cards[card].ops);
+              if (card == "china") { twilight_self.addMove("limit\tchina"); }
+              twilight_self.removeCardFromHand(card);
+
               //
               // Flower Power
               //
               if (twilight_self.game.state.events.flowerpower == 1) {
-                if ((card == "arabisraeli" && twilight_self.game.state.events.campdavid == 0) || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
+                if (card == "arabisraeli" || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
                   if (player === "us") {
                     twilight_self.addMove("notify\tFlower Power triggered by "+card);
                     twilight_self.addMove("vp\tussr\t2\t1");
@@ -3946,69 +4147,59 @@ console.log("\n\n\n\n");
                 }
               }
 
-              let html = twilight_self.formatStatusHeader('Playing opponent card:', true);
-                  html += '<ul><li class="card" id="before">event before ops</li><li class="card" id="after">event after ops</li></ul>';
-              twilight_self.updateStatus(html);
-              twilight_self.bindBackButtonFunction(() => {
-          twilight_self.playerTurnCardSelected(card, player);
-              });
+              twilight_self.endTurn();
+              return;
 
-              $('.card').off();
-              $('.card').on('click', function() {
-
-                let action2 = $(this).attr("id");
-
-                twilight_self.game.state.event_before_ops = 0;
-                twilight_self.game.state.event_name = "";
-
-                if (action2 === "before") {
-                  twilight_self.game.state.event_before_ops = 1;
-                  twilight_self.game.state.event_name = twilight_self.game.deck[0].cards[card].name;
-                  twilight_self.addMove("ops\t"+player+"\t"+card+"\t"+twilight_self.game.deck[0].cards[card].ops);
-                  twilight_self.addMove("event\t"+player+"\t"+card);
-                  twilight_self.removeCardFromHand(card);
-                  twilight_self.endTurn();
-                  return;
-                }
-                if (action2 === "after") {
-                  twilight_self.game.state.event_name = twilight_self.game.deck[0].cards[card].name;
-                  twilight_self.addMove("event\t"+player+"\t"+card);
-                  twilight_self.addMove("ops\t"+player+"\t"+card+"\t"+twilight_self.game.deck[0].cards[card].ops);
-                  twilight_self.removeCardFromHand(card);
-                  twilight_self.endTurn();
-                  return;
-                }
-
-              });
             }
 
-            return;
-
-          } else {
-
-            twilight_self.addMove("ops\t"+player+"\t"+card+"\t"+twilight_self.game.deck[0].cards[card].ops);
-            if (card == "china") { twilight_self.addMove("limit\tchina"); }
-            twilight_self.removeCardFromHand(card);
-
-            //
-            // Flower Power
-            //
-            if (twilight_self.game.state.events.flowerpower == 1) {
-              if (card == "arabisraeli" || card == "koreanwar" || card == "brushwar" || card == "indopaki" || card == "iraniraq") {
-                if (player === "us") {
-                  twilight_self.addMove("notify\tFlower Power triggered by "+card);
-                  twilight_self.addMove("vp\tussr\t2\t1");
-                }
-              }
-            }
-
-            twilight_self.endTurn();
-            return;
-
-          }
         }
 
         if (action == "space") {
+
+          if (twilight_self.dont_show_confirm_space == 0) {
+            let fr =
+              `
+              <div>Confirm you want to Space this card</div>
+             <ul>
+              <li class="card" id="space">Space</li>
+              <li class="card" id="pickagain">pick again</li>
+              </ul>
+              <input type="checkbox" name="dontshowme" value="true" style="width: 20px;height: 1.5em;"> Don't show me this again
+              `;
+
+            twilight_self.updateStatus(fr);
+
+            $('.card').off();
+            $('.card').on('click', function() {
+
+              let action = $(this).attr("id");
+              $('.card').off();
+
+              if (action == "space") {
+                twilight_self.addMove("space\t"+player+"\t"+card);
+                twilight_self.removeCardFromHand(card);
+                twilight_self.endTurn();
+                return;
+              }
+              if (action == "pickagain") {
+                twilight_self.playerTurn(original_selected_card);
+                return;
+              }
+
+            });
+
+            $('input:checkbox').change(function() {
+              if ($(this).is(':checked')) {
+                twilight_self.dont_show_confirm_space = 1;
+                twilight_self.saveGamePreference('dont_show_confirm_space', 1);
+              }
+            })
+
+            return;
+          }
+
+          // space normally when not confirmed
+
           twilight_self.addMove("space\t"+player+"\t"+card);
           twilight_self.removeCardFromHand(card);
           twilight_self.endTurn();
