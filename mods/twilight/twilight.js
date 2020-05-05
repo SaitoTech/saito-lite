@@ -1787,9 +1787,9 @@ console.log("\n\n\n\n");
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["fiveyearplan", "indopaki"];
+              this.game.deck[0].hand = ["fiveyearplan", "indopaki","cubanmissile","nato","fidel"];
             } else {
-              this.game.deck[0].hand = ["aldrichames","grainsales","lonegunman"];
+              this.game.deck[0].hand = ["aldrichames","grainsales","lonegunman","missileenvy","glasnost","marshall"];
               //this.game.deck[0].hand = ["aldrichames","degaulle"];
             }
           }
@@ -3768,7 +3768,7 @@ console.log("\n\n\n\n");
           if (twilight_self.game.player == 1 && twilight_self.countries['cuba'].ussr >= 2) { can_remove = 1; }
           if (twilight_self.game.player == 2 && twilight_self.countries['turkey'].us >= 2) { can_remove = 1; }
           if (can_remove == 1) {
-            announcement += '<li class="card" id="cancel_cmc">cancel cuban missile crisis</li>';
+            //announcement += '<li class="card" id="cancel_cmc">cancel cuban missile crisis</li>';
           }
         }
 
@@ -3917,6 +3917,7 @@ console.log("\n\n\n\n");
         }
 
         if (action == "ops") {
+
           if (twilight_self.dont_show_confirm_ops == 0) {
             let fr =
               `
@@ -4944,12 +4945,14 @@ console.log("\n\n\n\n");
                           twilight_self.addMove("remove\tus\tus\tturkey\t2");
                           twilight_self.addMove("unlimit\tcmc");
                           twilight_self.addMove("notify\tUS has cancelled the Cuban Missile Crisis");
+                          twilight_self.game.state.events.cubanmissilecrisis = 0;
                         }
                         if (countryname === "westgermany") {
                           twilight_self.removeInfluence("westgermany", 2, "us");
                           twilight_self.addMove("remove\tus\tus\twestgermany\t2");
                           twilight_self.addMove("unlimit\tcmc");
                           twilight_self.addMove("notify\tUS has cancelled the Cuban Missile Crisis");
+                          twilight_self.game.state.events.cubanmissilecrisis = 0;
                         }
                       }
                     }
@@ -5001,6 +5004,7 @@ console.log("\n\n\n\n");
                           twilight_self.addMove("remove\tussr\tussr\tcuba\t2");
                           twilight_self.addMove("unlimit\tcmc");
                           twilight_self.addMove("notify\tUSSR has cancelled the Cuban Missile Crisis");
+                          twilight_self.game.state.events.cubanmissilecrisis = 0;
                         }
                       }
                     }
