@@ -97,6 +97,10 @@ class Twilight extends GameTemplate {
         name: 'Cards',
         callback: this.handleCardsMenuItem.bind(this)
       },
+      'game-china': {
+        name: 'China',
+        callback: this.handleChinaMenuItem.bind(this)
+      },
       'game-lang': {
         name: 'Display',
         callback: this.handleLangMenuItem.bind(this)
@@ -107,6 +111,20 @@ class Twilight extends GameTemplate {
       },
     }
   }
+
+  handleChinaMenuItem() {
+    let twilight_self = this;
+    console.log(this.game.state.events.china_card_eligible);
+    console.log(this.game.state.events.china_card); 
+    if (this.game.state.events.china_card == 2){
+    confirm("The US has the China Card");
+    }
+    if (this.game.state.events.china_card == 1) {
+    confirm("The USSR Has the China Card");
+    }
+  }
+      
+ 
 
   handleCardsMenuItem() {
     let twilight_self = this;
