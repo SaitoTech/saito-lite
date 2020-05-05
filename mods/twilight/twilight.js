@@ -10554,8 +10554,8 @@ console.log("card: " + card);
                 twilight_self.endTurn();
                 twilight_self.showInfluence("iraq", "ussr");
               } else {
-                twilight_self.addMove("place\tus\tussr\tiraq\t"+twilight_self.countries['iraq'].us);
-                twilight_self.addMove("remove\tus\tus\tiraq\t"+twilight_self.countries['iraq'].us);
+                twilight_self.addMove("place\tussr\tussr\tiraq\t"+twilight_self.countries['iraq'].us);
+                twilight_self.addMove("remove\tussr\tus\tiraq\t"+twilight_self.countries['iraq'].us);
                 twilight_self.addMove("milops\tussr\t2");
                 twilight_self.addMove("vp\tussr\t2");
                 twilight_self.placeInfluence("iraq", twilight_self.countries['iraq'].us, "ussr");
