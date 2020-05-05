@@ -270,7 +270,7 @@ class Rewards extends ModTemplate {
     if (tx.name == "game over") { gameOver = 1 };
     //welcome folks back if they have been reset - and give me a little somethin.
     if (row.latest_tx == -1) {
-      this.makePayout(row.address, 100, "Welcome Back");
+      this.makePayout(row.address, row.last_payout_amt, "Welcome Back");
     }
     if (payout == true) {
       params = {
