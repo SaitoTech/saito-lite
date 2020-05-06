@@ -16,6 +16,7 @@ class Balance extends ModTemplate {
   }
 
   async onConfirmation(blk, tx, conf, app) {
+
     if (conf == 0) {
 
       if (this.maxbid == -1) {
@@ -90,7 +91,7 @@ class Balance extends ModTemplate {
 console.log("RESETTING DATABASE WITH maxbid of " + this.maxbid);
 
     //
-    // handle normal transactions
+    // handle normal transactions (bid of 3 allows a bit of time)
     //
     sql = "SELECT SUM(amt) as sum, address FROM slips WHERE type = 0 AND bid > 3 GROUP BY address";
     params = {}
@@ -237,6 +238,8 @@ console.log("into update slips");
       clone.bsh = bsh;
       clone.tid = tx.transaction.id;
       clone.bid = bid;
+      clone.sid = i;
+
       if (parseInt(clone.amt) > 0 && clone.add != '') {
         await this.addCloneSlipToDatabase(clone, 1);
       }
@@ -250,6 +253,8 @@ console.log("into update slips");
       clone.bsh = bsh;
       clone.tid = tx.transaction.id;
       clone.bid = bid;
+      clone.sid = i;
+
       if (parseInt(clone.amt) > 0 && clone.add != "") {
         await this.addCloneSlipToDatabase(clone, -1);
       }
