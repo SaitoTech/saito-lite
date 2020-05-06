@@ -76,17 +76,36 @@ class Balance extends ModTemplate {
     } 
 
     //
+    // if there is a bid greater, than is our maxbid
+    //
+    sql = "SELECT max(bid) as maxbid FROM slips WHERE lc = 1";
+    params = {}
+    rows = await this.app.storage.queryDatabase(sql, params, "balance");
+    if (rows.length) {
+      if (rows[0].maxbid > this.maxbid) {
+        this.maxbid = rows[0].maxbid;
+      }
+    } 
+
+console.log("RESETTING DATABASE WITH maxbid of " + this.maxbid);
+
+    //
     // handle normal transactions
     //
     sql = "SELECT SUM(amt) as sum, address FROM slips WHERE type = 0 AND bid > 3 GROUP BY address";
     params = {}
     rows = await this.app.storage.queryDatabase(sql, params, "balance");
-    db = await app.storage.returnDatabaseByName("balance");
+
+console.log("here...");
+
+console.log(JSON.stringify(rows));
 
     for (let i = 0; i < rows.length; i++) {
 
       let sum = rows[i].sum;
       let address = rows[i].address;
+
+console.log("here 2...");
 
       let sql2_1 = "BEGIN";
       let sql2_2 = "DELETE FROM slips WHERE address = '"+address+"' AND type != 4";
@@ -116,15 +135,15 @@ class Balance extends ModTemplate {
         $shash);`
       let params2 = {
         $address: address,
-        $bid:   0,
+        $bid:   this.maxbid,
         $tid:   0,
         $sid:   0,
         $bsh:   "",
         $amt:   sum,
         $type:  0,
         $lc:    1,
-        $paid:  0,
         $spent: this.maxbid,
+        $paid:  0,
         $shash: "",
       }
       let sql2_4 = "COMMIT";
@@ -137,8 +156,6 @@ class Balance extends ModTemplate {
       console.log("UPDATED RECORDS FOR: " + address);
 
     } 
-
-
 
     //
     // handle staking transactions
@@ -179,7 +196,7 @@ class Balance extends ModTemplate {
         $shash);`
       let params2 = {
         $address: address,
-        $bid:   0,
+        $bid:   this.maxbid,
         $tid:   0,
         $sid:   0,
         $bsh:   "",

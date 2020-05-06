@@ -39,7 +39,7 @@ function reset_nonpersistent {
   # ensure deleted
   rm -f ./web/saito/saito.js
 
-  # we explicitly don't delete registry database
+  # we explicitly don't delete registry/balance databases
   rm -f ./data/appstore.sq3
   #rm -f ./data/covid19.sq3
   rm -f ./data/hospital.sq3
@@ -53,7 +53,6 @@ function reset_nonpersistent {
   rm -f ./data/bank.sq3
   rm -f ./data/escrow.sq3
   rm -f ./data/log.txt
-  rm -f ./data/balance.sq3
   rm -f ./data/*.sq3-journal
   find ./data/blocks/ -name '*.blk' | xargs rm -r
   rm -f ./data/shashmaps/*.smap
