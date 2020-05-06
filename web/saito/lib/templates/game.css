@@ -12,6 +12,7 @@ body {
   font-size: 13px;
   padding: 0px;
   margin: 0px;
+  background-color: #4e4e4e !important;
 }
 
 .logcard {
@@ -156,6 +157,8 @@ body {
 
   transform: translate(-50%, -0%);
   transition: height 0.2s ease, width 0.2s ease, right 0.2s ease;
+
+  box-shadow: 0 0 3px 3px #BBB;
 
 }
 
