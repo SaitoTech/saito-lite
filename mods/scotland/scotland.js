@@ -454,33 +454,32 @@ class Scotland extends GameTemplate {
         this.showBoard();
 
 
-	//
-	// Mister X goes first...
-	//
+        //
+        // Mister X goes first...
+        //
         let player_moves_added = 0;
-	let fake_detectives = 0;
-	for (let i = 0; i < this.game.players.length; i++) {
-	  if ((i+1) != this.game.state.x && player_moves_added == 0) {
+        for (let i = 0; i < this.game.players.length; i++) {
+          if ((i + 1) != this.game.state.x && player_moves_added == 0) {
 
-	    player_moves_added = 1;
+            player_moves_added = 1;
 
-	    //this.game.queue.push("play\t"+(i+1)+"\t"+(i+1));
+            //this.game.queue.push("play\t"+(i+1)+"\t"+(i+1));
 
-	    //
-	    // two players
-      //
-      var skip_x_gamer = 0;
-	    if (this.game.players.length == 2) {
+            //
+            // two players
+            //
+            var skip_x_gamer = 0;
+            if (this.game.players.length == 2) {
 
-	      let skip_x_bonus = 0;
+              let skip_x_bonus = 0;
 
-	      for (let z = 1; z <= this.number_of_detectives; z++) {
-	        if (z == this.game.state.x) { skip_x_bonus = 1; }
-	        this.game.queue.push(("play\t"+(z+skip_x_bonus))+"\t"+(i+1));
-	        // fake_detectives++;
+              for (let z = 1; z <= this.number_of_detectives; z++) {
+                if (z == this.game.state.x) { skip_x_bonus = 1; }
+                this.game.queue.push(("play\t" + (z + skip_x_bonus)) + "\t" + (i + 1));
+                // fake_detectives++;
               }
 
-	    }
+            }
 
 	    //
 	    // three players
