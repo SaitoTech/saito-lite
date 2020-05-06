@@ -468,7 +468,8 @@ class Scotland extends GameTemplate {
 
 	    //
 	    // two players
-	    //
+      //
+      var skip_x_gamer = 0;
 	    if (this.game.players.length == 2) {
 
 	      let skip_x_bonus = 0;
