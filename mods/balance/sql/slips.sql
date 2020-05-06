@@ -10,5 +10,6 @@ CREATE TABLE IF NOT EXISTS slips (
   lc INTEGER,
   spent INTEGER,
   paid INTEGER DEFAULT 1,
-  shash TEXT
+  shash TEXT,
+  UNIQUE(address, bid, tid, sid, bsh)
 );

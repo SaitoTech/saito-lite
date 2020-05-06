@@ -12,11 +12,32 @@ class Balance extends ModTemplate {
     this.name = "Balance";
     this.description = "Ensures token persistance";
     this.categories = "Utilities Dev";
+    this.maxbid = -1;
   }
 
-  onConfirmation(blk, tx, conf, app) {
+  async onConfirmation(blk, tx, conf, app) {
     if (conf == 0) {
-      await this.updateSlips(blk, tx);
+
+      if (this.maxbid == -1) {
+        let sql = "SELECT max(spent) as maxbid FROM slips WHERE lc = 1";
+        let params = {}
+        let rows = await this.app.storage.queryDatabase(sql, params, "balance");
+        if (rows.length) { this.maxbid = rows[0].maxbid; } 
+      }
+
+      if (this.maxbid == 0) {
+        let sql = "SELECT max(bid) as maxbid FROM slips WHERE lc = 1";
+        let params = {}
+        let rows = await this.app.storage.queryDatabase(sql, params, "balance");
+        if (rows.length) { this.maxbid = rows[0].maxbid; } 
+      }
+
+      if (this.maxbid <= 0) { this.maxbid = 1; }
+
+      if (blk.block.id > this.maxbid) {
+        await this.updateSlips(blk, tx);
+      }
+
     }
   }
 
@@ -28,31 +49,47 @@ class Balance extends ModTemplate {
       $bid : bid,
     }
     await this.app.storage.executeDatabase(sql, params, "balance");
+    return;
   }
 
 
   async initialize(app) { 
     await super.initialize(app);
-    this.resetDatabase(app);
+    await this.resetDatabase(app);
+    return;
   }
 
   async resetDatabase(app) {
 
+    if (app.BROWSER == 1) { return; }
+
+    let db = await app.storage.returnDatabaseByName("balance");
+
+    //
+    // maxbid written into SPENT field, which is set to 0 once paid out
+    //
+    let sql = "SELECT max(spent) as maxbid FROM slips WHERE lc = 1";
+    let params = {}
+    let rows = await this.app.storage.queryDatabase(sql, params, "balance");
+    if (rows.length) {
+      this.maxbid = rows[0].maxbid;
+    } 
+
     //
     // handle normal transactions
     //
-    let sql = "SELECT SUM(amt) as sum, address FROM slips WHERE type = 0 AND bid > 3 GROUP BY address";
-    let params = {}
-    let db = await app.storage.returnDatabaseByName("balance");
+    sql = "SELECT SUM(amt) as sum, address FROM slips WHERE type = 0 AND bid > 3 GROUP BY address";
+    params = {}
+    rows = await this.app.storage.queryDatabase(sql, params, "balance");
+    db = await app.storage.returnDatabaseByName("balance");
 
-    let rows = await this.app.storage.queryDatabase(sql, params, "balance");
     for (let i = 0; i < rows.length; i++) {
 
       let sum = rows[i].sum;
       let address = rows[i].address;
 
       let sql2_1 = "BEGIN";
-      let sql2_2 = "DELETE FROM slips WHERE address LIKE '^"+address+"$' AND type != 4";
+      let sql2_2 = "DELETE FROM slips WHERE address = '"+address+"' AND type != 4";
       let sql2_3 = `INSERT INTO slips (
         address,
         bid,
@@ -79,7 +116,7 @@ class Balance extends ModTemplate {
         $shash);`
       let params2 = {
         $address: address,
-        $bid:   5,
+        $bid:   0,
         $tid:   0,
         $sid:   0,
         $bsh:   "",
@@ -87,14 +124,14 @@ class Balance extends ModTemplate {
         $type:  0,
         $lc:    1,
         $paid:  0,
-        $spent: 0,
+        $spent: this.maxbid,
         $shash: "",
       }
       let sql2_4 = "COMMIT";
 
       await db.run(sql2_1, {});
       await db.run(sql2_2, {});
-      await db.run(sql2_3, params);
+      await db.run(sql2_3, params2);
       await db.run(sql2_4, {});
 
       console.log("UPDATED RECORDS FOR: " + address);
@@ -115,7 +152,7 @@ class Balance extends ModTemplate {
       let address = rows[i].address;
 
       let sql2_1 = "BEGIN";
-      let sql2_2 = "DELETE FROM slips WHERE address LIKE '^"+address+"$'";
+      let sql2_2 = "DELETE FROM slips WHERE address = '"+address+"' AND type = 4";
       let sql2_3 = `INSERT INTO slips (
         address,
         bid,
@@ -142,7 +179,7 @@ class Balance extends ModTemplate {
         $shash);`
       let params2 = {
         $address: address,
-        $bid:   5,
+        $bid:   0,
         $tid:   0,
         $sid:   0,
         $bsh:   "",
@@ -150,23 +187,23 @@ class Balance extends ModTemplate {
         $type:  4,
         $lc:    1,
         $spent: 0,
-        $paid:  0,
+        $paid:  this.maxbid,
         $shash: "",
       }
       let sql2_4 = "COMMIT";
 
       await db.run(sql2_1, {});
       await db.run(sql2_2, {});
-      await db.run(sql2_3, params);
+      await db.run(sql2_3, params2);
       await db.run(sql2_4, {});
 
-      console.log("UPDATED RECORDS FOR: " + address);
+      console.log("UPDATED STAKING RECORDS FOR: " + address);
 
     } 
 
-
-
+    return;
   }
+
 
 
   async updateSlips(blk, tx) {
@@ -176,31 +213,32 @@ console.log("into update slips");
     let bsh = blk.returnHash();
     let bid = blk.block.id;
 
-    tx.transaction.to.forEach(slip => {
+    for (let i = 0; i < tx.transaction.to.length; i++) {
 
-      let clone = Object. assign({}, slip)
+      let clone = Object. assign({}, tx.transaction.to[i]);
 
       clone.bsh = bsh;
       clone.tid = tx.transaction.id;
       clone.bid = bid;
       if (parseInt(clone.amt) > 0 && clone.add != '') {
-console.log("ADDING INCOMING SLIP: " + JSON.stringify(clone));
         await this.addCloneSlipToDatabase(clone, 1);
       }
 
-    });
-    tx.transaction.from.forEach(slip => {
+    }
 
-      let clone = Object. assign({}, slip)
+    for (let i = 0; i < tx.transaction.from.length; i++) {
+
+      let clone = Object. assign({}, tx.transaction.from[i]);
 
       clone.bsh = bsh;
       clone.tid = tx.transaction.id;
       clone.bid = bid;
       if (parseInt(clone.amt) > 0 && clone.add != "") {
-console.log("ADDING SPENT SLIP: " + JSON.stringify(clone));
         await this.addCloneSlipToDatabase(clone, -1);
       }
-    });
+    }
+
+    return;
   }
 
 
@@ -215,6 +253,14 @@ console.log("ADDING SPENT SLIP: " + JSON.stringify(clone));
       slip.amt = "-"+slip.amt; 
       slip.spent = 1;
     }
+
+if (slip.add === "") { 
+console.log("\n\n\n\n\n\n\n\n\n\n");
+console.log("####################");
+console.log("INSERTING EMPTY SLIP");
+console.log("####################");
+console.log(JSON.stringify(slip) + " ---> " + p);
+}
     let sql = `INSERT OR IGNORE INTO slips (
       address,
       bid,
@@ -253,6 +299,7 @@ console.log("ADDING SPENT SLIP: " + JSON.stringify(clone));
       $shash: this.app.crypto.hash(JSON.stringify(slip))
     }
 
+console.log("Adding clone slip to DB");
     await this.app.storage.executeDatabase(sql, params, "balance");
 
   }
