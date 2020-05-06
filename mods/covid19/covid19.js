@@ -69,7 +69,7 @@ class Covid19 extends DBModTemplate {
   async installModule(app) {
 
     await super.installModule(app);
-   
+
   }
 
   async initialize(app) {
@@ -700,23 +700,26 @@ class Covid19 extends DBModTemplate {
 
     });
 
-    rows.forEach(row => {
-      if (row["source"] == "certifications") {
-        el.querySelector('.attach-cert-' + row["id"]).addEventListener('click', (e) => {
-          module_self.returnCertFile(row["id"]);
-        });
-        if (module_self.isAdmin()) {
-          el.querySelector('#delete-cert-' + row["id"]).addEventListener('click', (e) => {
+    //add actions - limited to admins right now
+    if (module_self.isAdmin()) {
+      rows.forEach(row => {
+        if (row["source"] == "certifications") {
+          el.querySelector('.attach-cert-' + row["id"]).addEventListener('click', (e) => {
             module_self.returnCertFile(row["id"]);
           });
+          if (module_self.isAdmin()) {
+            el.querySelector('#delete-cert-' + row["id"]).addEventListener('click', (e) => {
+              module_self.returnCertFile(row["id"]);
+            });
+          }
         }
-      }
-      if (row["source"] == "files") {
-        el.querySelector('.attach-file-' + row["id"]).addEventListener('click', (e) => {
-          module_self.returnFile(row["id"]);
-        });
-      }
-    });
+        if (row["source"] == "files") {
+          el.querySelector('.attach-file-' + row["id"]).addEventListener('click', (e) => {
+            module_self.returnFile(row["id"]);
+          });
+        }
+      });
+    }
   }
 
   returnCertFile(id) {

@@ -89,7 +89,7 @@ input {
   width: 100%;
   height: calc(100vh - 80px);
   background-size: cover;
-  z-index: 0;
+  z-index: 1;
 }
 
 .background-shim-cover {
