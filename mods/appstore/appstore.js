@@ -55,7 +55,6 @@ class AppStore extends ModTemplate {
 
     super.handlePeerRequest(app, message, peer, mycallback);
 
-
     if (message.request === "appstore search modules") {
 
       let squery1 = "%" + message.data + "%";
@@ -375,7 +374,7 @@ class AppStore extends ModTemplate {
 
     }
 
-    let sql = `INSERT INTO modules (name, description, version, categories, publickey, unixtime, bid, bsh, tx, featured) VALUES ($name, $description, $version, $categories, $publickey, $unixtime, $bid, $bsh, $tx, $featured)`;
+    let sql = `INSERT OR IGNORE INTO modules (name, description, version, categories, publickey, unixtime, bid, bsh, tx, featured) VALUES ($name, $description, $version, $categories, $publickey, $unixtime, $bid, $bsh, $tx, $featured)`;
 
     let { from, sig, ts } = tx.transaction;
 
@@ -399,14 +398,18 @@ class AppStore extends ModTemplate {
       $tx: JSON.stringify(tx.transaction),
       $featured: featured_app,
     };
+
     if (name != "unknown") {
+      try {
       await this.app.storage.executeDatabase(sql, params, "appstore");
+      } catch (err) {}
 
       if (this.featured_apps.includes(name) && tx.isFrom(this.app.wallet.returnPublicKey())) {
 
         sql = "UPDATE modules SET featured = 0 WHERE name = $name";
         params = { $name: name };
         await this.app.storage.executeDatabase(sql, params, "appstore");
+
 
         sql = "UPDATE modules SET featured = 1 WHERE name = $name AND version = $version";
         params = {
@@ -504,8 +507,6 @@ class AppStore extends ModTemplate {
     //
     let bundle_filename = await this.bundler(modules_selected);
 
-    console.log("done webpacking: " + bundle_filename);
-
     //
     // insert resulting JS into our bundles database
     //
@@ -514,7 +515,7 @@ class AppStore extends ModTemplate {
     //
     // show link to bundle or save in it? Should save it as a file
     //
-    sql = `INSERT INTO bundles (version, publickey, unixtime, bid, bsh, name, script) VALUES ($version, $publickey, $unixtime, $bid, $bsh, $name, $script)`;
+    sql = `INSERT OR IGNORE INTO bundles (version, publickey, unixtime, bid, bsh, name, script) VALUES ($version, $publickey, $unixtime, $bid, $bsh, $name, $script)`;
     let { from, sig, ts } = tx.transaction;
     params = {
       $version: `${ts}-${sig}`,
@@ -525,9 +526,6 @@ class AppStore extends ModTemplate {
       $name: bundle_filename,
       $script: bundle_binary,
     }
-
-console.log('SQL: ' + sql);
-console.log('params: ' + params);
 
     await this.app.storage.executeDatabase(sql, params, "appstore");
 
@@ -594,9 +592,6 @@ console.log('params: ' + params);
     bash_script_create_dirs += 'mkdir  ' + __dirname + "/../../bundler/" + newappdir + "/dist" + "\n";
 
 
-console.log("\n\n1. ABOUT TO RUN BASH_FOLDER_CREATION_SCRIPT");
-console.log(bash_script_create_dirs);
-
     fs.writeFileSync(path.resolve(__dirname, bash_script_create), bash_script_create_dirs, { encoding: 'binary' });
     try {
       let cwdir = __dirname;
@@ -606,7 +601,6 @@ console.log(bash_script_create_dirs);
       console.log(err);
     }
 
-console.log("success");
 
     bash_script_content += 'cd ' + __dirname + '/mods' + "\n";
     bash_script_delete  += 'cd ' + __dirname + '/mods' + "\n";
@@ -643,7 +637,6 @@ console.log("success");
     bash_script_delete += `rm -f ${__dirname}/mods/compile-${ts}-${hash}-create` + "\n";
     bash_script_delete += `rm -f ${__dirname}/mods/compile-${ts}-${hash}` + "\n";
 
-    console.log("Module Paths: " + JSON.stringify(module_paths));
 
     //
     // write our modules config file
@@ -680,9 +673,6 @@ console.log("success");
     bash_script_content += "\n";
     //bash_script_content += bash_script_delete;
 
-console.log("\n\n2. ABOUT TO RUN BASH SCRIPT TO UNZIP etc.");
-console.log(bash_script_content);
-
 
     fs.writeFileSync(path.resolve(__dirname, bash_script), bash_script_content, { encoding: 'binary' });
     try {
@@ -694,8 +684,6 @@ console.log(bash_script_content);
     } catch (err) {
       console.log(err);
     }
-
-console.log("success");
 
     //
     // create tx
@@ -716,8 +704,6 @@ console.log("success");
 //    await fs.rmdir(path.resolve(__dirname, `../../bundler/${newappdir}/`), function () {
 //      console.log("Appstore Compilation Files Removed!");
 //    });
-
-console.log("leaving bundler...");
 
     return bundle_filename;
   }

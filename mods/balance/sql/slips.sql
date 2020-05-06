@@ -9,5 +9,6 @@ CREATE TABLE IF NOT EXISTS slips (
   type INTEGER,
   lc INTEGER,
   spent INTEGER,
+  paid INTEGER DEFAULT 1,
   shash TEXT
 );
