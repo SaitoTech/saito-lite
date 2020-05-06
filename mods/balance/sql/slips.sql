@@ -1,12 +1,13 @@
 CREATE TABLE IF NOT EXISTS slips (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   address TEXT,
   bid INTEGER,
   tid INTEGER,
   sid INTEGER,
   bsh TEXT,
-  amt REAL,
+  amt VARCHAR(30),
   type INTEGER,
   lc INTEGER,
-  shash TEXT,
-  PRIMARY KEY (shash asc)
+  spent INTEGER,
+  shash TEXT
 );

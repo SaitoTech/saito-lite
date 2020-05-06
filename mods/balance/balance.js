@@ -1,7 +1,11 @@
 var saito = require('../../lib/saito/saito');
 var ModTemplate = require('../../lib/templates/modtemplate');
+const Big = require('big.js');
+const path = require('path');
+const fs = require('fs');
 
 class Balance extends ModTemplate {
+
   constructor(app) {
     super(app);
     this.app = app;
@@ -16,19 +20,123 @@ class Balance extends ModTemplate {
     }
   }
 
+  async onChainReorganization(bid, bsh, lc) {
+    let sql = "UPDATE slips SET lc = $lc WHERE bsh = $bsh AND bid = $bid";
+    let params = { 
+      $lc  : lc,
+      $bsh : bsh,
+      $bid : bid,
+    }
+    await this.app.storage.executeDatabase(sql, params, "balance");
+  }
+
+
+  async initialize(app) { 
+console.log("initializing!");
+    await super.initialize(app);
+    this.resetDatabase(app);
+  }
+
+  async resetDatabase(app) {
+
+console.log("Creating Balance New!");
+
+    let sql = "SELECT SUM(amt) as sum, address FROM slips where bid > 3 GROUP BY address";
+    let params = {}
+
+    let rows = await this.app.storage.queryDatabase(sql, params, "balance");
+
+console.log("ROWS: "+ JSON.stringify(rows));
+    for (let i = 0; i < rows.length; i++) {
+
+console.log("Merging Row: " + i);
+
+      let sum = rows[i].sum;
+      let address = rows[i].address;
+
+console.log(address + " + " + sum);
+
+      let sql2_1 = "BEGIN TRANSACTION";
+          sql2_1 += ";DELETE FROM slips WHERE address LIKE '^"+address+"$'";
+          sql2_1 += `;INSERT INTO slips (
+        address,
+        bid,
+        tid,
+        sid,
+        bsh,
+        amt,
+        type,
+        lc,
+        spent,
+        shash)
+      VALUES (
+        $address,
+        $bid,
+        $tid,
+        $sid,
+        $bsh,
+        $amt,
+        $type,
+        $lc,
+        $spent,
+        $shash);`
+      let params2 = {
+        $address: address,
+        $bid:   5,
+        $tid:   0,
+        $sid:   0,
+        $bsh:   "",
+        $amt:   sum,
+        $type:  0,
+        $lc:    1,
+        $spent: 0,
+        $shash: "",
+      }
+      sql2_1 += ";COMMIT;";
+
+console.log("1");
+      await app.storage.executeDatabase(sql2_1, params, "balance");
+      //await app.storage.executeDatabase(sql2_1, {}, "balance");
+console.log("2");
+      //await app.storage.executeDatabase(sql2_2, {}, "balance");
+console.log("3");
+      //await app.storage.executeDatabase(sql2_3, params2, "balance");
+console.log("4");
+      //await app.storage.executeDatabase(sql2_4, {}, "balance");
+
+console.log("UPDATED RECORDS FOR: " + address);
+
+    } 
+  }
+
+
   updateSlips(blk) {
+
+    let bsh = blk.returnHash();
+    let bid = blk.block.id;
+
     blk.transactions.forEach(tx => {
       tx.transaction.to.forEach(slip => {
-        //console.log(JSON.stringify(slip));
-        //console.log(this.app.crypto.hash(JSON.stringify(slip)));
-        if (slip.amt > 0) {
-          this.addSlipToDatabase(slip, 1);
+
+        var clone = Object. assign({}, slip)
+
+	clone.bsh = bsh;
+	clone.tid = tx.transaction.id;
+	clone.bid = bid;
+        if (parseInt(clone.amt) > 0 && clone.add != '') {
+          this.addCloneSlipToDatabase(clone, 1);
         }
+
       });
       tx.transaction.from.forEach(slip => {
-        //console.log(JSON.stringify(slip));
-        if (slip.amt > 0) {
-          this.addSlipToDatabase(slip, -1);
+
+        var clone = Object. assign({}, slip)
+
+	clone.bsh = bsh;
+	clone.tid = tx.transaction.id;
+	clone.bid = bid;
+        if (parseInt(clone.amt) > 0 && clone.add != "") {
+          this.addCloneSlipToDatabase(clone, -1);
         }
       });
     });
@@ -39,7 +147,18 @@ class Balance extends ModTemplate {
 
   }
 
-  async addSlipToDatabase(slip, p) {
+
+  //
+  // slip object must be CLONE of actual slip, as otherwise adjusting values 
+  // breaks SPV mode
+  //
+  async addCloneSlipToDatabase(slip, p) {
+    let revised_amt = slip.amt;
+    slip.spent = 0;
+    if (p == -1) {
+      slip.amt = "-"+slip.amt; 
+      slip.spent = 1;
+    }
     let sql = `INSERT OR IGNORE INTO slips (
       address,
       bid,
@@ -49,6 +168,7 @@ class Balance extends ModTemplate {
       amt,
       type,
       lc,
+      spent,
       shash)
     VALUES (
       $address,
@@ -59,6 +179,7 @@ class Balance extends ModTemplate {
       $amt,
       $type,
       $lc,
+      $spent,
       $shash);`
 
     let params = {
@@ -67,9 +188,10 @@ class Balance extends ModTemplate {
       $tid: slip.tid,
       $sid: slip.sid,
       $bsh: slip.bsh,
-      $amt: slip.amt * p,
+      $amt: slip.amt,
       $type: slip.type,
       $lc: slip.lc,
+      $spent: slip.spent,
       $shash: this.app.crypto.hash(JSON.stringify(slip))
     }
 
@@ -167,3 +289,5 @@ class Balance extends ModTemplate {
 }
 
 module.exports = Balance;
+
+
