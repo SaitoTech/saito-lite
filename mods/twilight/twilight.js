@@ -45,7 +45,7 @@ class Twilight extends GameTemplate {
     this.boardgameWidth  = 5100;
 
     this.moves           = [];
-    this.is_testing = 0;
+    this.is_testing = 1;
 
     this.log_length = 150;
     this.interface = 1;
@@ -1807,9 +1807,9 @@ console.log("CARD: " + card);
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["cubanmissilecrisis","europe","asknot","missileenvy", "fiveyearplan", "indopaki"];
+              this.game.deck[0].hand = ["naziscientist", "glasnost", "asia", "glasnost", "glasnost", "glasnost", "glasnost", "asia"];
             } else {
-              this.game.deck[0].hand = ["glasnost", "glasnost", "glasnost", "glasnost", "glasnost", "asia"];
+              this.game.deck[0].hand = ["saltnegotiations", "shuttlediplomacy", "starwars", "cubanmissilecrisis","europe","asknot","missileenvy", "fiveyearplan", "indopaki"];
             }
           }
 
@@ -4046,7 +4046,7 @@ console.log("CARD: " + card);
           //
           // our event or both
           //
-          if (twilight_self.dont_show_confirm == 0) {
+          if (twilight_self.dont_show_confirm == 0 && (card == "missileenvy" && is_this_missile_envy_noneventable == 1)) {
 
             let fr =
               `
