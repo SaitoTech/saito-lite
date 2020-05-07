@@ -1810,7 +1810,7 @@ console.log("CARD: " + card);
             if (this.game.player == 2) {
               this.game.deck[0].hand = ["naziscientist", "glasnost", "asia", "glasnost", "glasnost", "glasnost", "glasnost", "asia"];
             } else {
-              this.game.deck[0].hand = ["saltnegotiations", "shuttlediplomacy", "starwars", "cubanmissilecrisis","china"];
+              this.game.deck[0].hand = ["saltnegotiations", "shuttle", "starwars", "cubanmissile","china"];
             }
           }
 
