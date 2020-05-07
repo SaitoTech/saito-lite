@@ -46,7 +46,7 @@ class Twilight extends GameTemplate {
     this.boardgameWidth  = 5100;
 
     this.moves           = [];
-    this.is_testing = 1;
+    this.is_testing = 0;
 
     this.log_length = 150;
     this.interface = 1;
@@ -1808,9 +1808,9 @@ console.log("CARD: " + card);
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["naziscientist", "glasnost", "europe", "glasnost", "glasnost", "glasnost", "glasnost", "asia"];
+              this.game.deck[0].hand = ["naziscientist", "redscare", "europe", "saltnegotiations", "glasnost", "asia"];
             } else {
-              this.game.deck[0].hand = ["saltnegotiations", "shuttle", "starwars", "cubanmissile","china"];
+              this.game.deck[0].hand = ["onesmallstep", "shuttle", "starwars", "nato", "cubanmissile","china"];
             }
           }
 
@@ -2897,7 +2897,7 @@ console.log("CARD: " + card);
             //
             // if cannot sacrifice missile envy to bear trap because red purged
             //
-            if (this.game.state.events.beartrap == 1 && this.game.state.events.redscare_player1 == 1) {
+            if (this.game.state.events.beartrap == 1 && this.game.state.events.redscare_player1 >= 1) {
               this.playerTurn();
             } else {
               this.playerTurn("missileenvy");
@@ -2939,7 +2939,7 @@ console.log("CARD: " + card);
             //
             // if cannot sacrifice missile envy to quagmire because red scare
             //
-            if (this.game.state.events.quagmire == 1 && this.game.state.events.redscare_player2 == 1) {
+            if (this.game.state.events.quagmire == 1 && this.game.state.events.redscare_player2 >= 1) {
               this.playerTurn();
             } else {
               this.playerTurn("missileenvy");
@@ -8007,8 +8007,8 @@ console.log("CARD: " + card);
     // Red Scare //
     ///////////////
     if (card == "redscare") {
-      if (player == "ussr") { this.game.state.events.redscare_player2 = 1; }
-      if (player == "us") { this.game.state.events.redscare_player1 = 1; }
+      if (player == "ussr") { this.game.state.events.redscare_player2 += 1; }
+      if (player == "us") { this.game.state.events.redscare_player1 += 1; }
       return 1;
     }
 
@@ -11671,7 +11671,7 @@ console.log("card: " + card);
       // https://boardgamegeek.com/thread/1136951/red-scarepurge-and-vietnam-revolts
       let pushme = 1;
       if (card != "") {
-        if (this.game.state.events.redscare_player1 == 1) {
+        if (this.game.state.events.redscare_player1 >= 1) {
           if (this.returnOpsOfCard(card) == 1) { pushme = 0; }
         }
       }
@@ -11703,7 +11703,7 @@ console.log("card: " + card);
       //
       // Vietnam Revolts does not give bonus to 1 OP card in SEA if USSR Red Purged
       // https://boardgamegeek.com/thread/1136951/red-scarepurge-and-vietnam-revolts
-      if (card != "") { if (this.returnOpsOfCard(card) == 1 && this.game.state.events.redscare_player1 == 1) { return 0; } }
+      if (card != "") { if (this.returnOpsOfCard(card) == 1 && this.game.state.events.redscare_player1 >= 1) { return 0; } }
 
       this.updateStatus("Extra 1 OP Available for Southeast Asia");
       this.game.state.events.region_bonus = "seasia";
@@ -11794,17 +11794,25 @@ console.log("card: " + card);
       }
       ops++;
     }
-    if (this.game.state.events.redscare_player1 == 1 && playernum == 1) {
+    if (this.game.state.events.redscare_player1 >= 1 && playernum == 1) {
       if (updatelog == 1) {
-        this.updateLog("USSR is affected by Red Purge");
+	if (this.game.state.events.redscare_player1 == 1) {
+          this.updateLog("USSR is affected by Red Purge");
+	} else {
+          this.updateLog("USSR is really affected by Red Purge");
+	}
       }
-      ops--;
+      ops-=this.game.state.events.redscare_player1;
     }
-    if (this.game.state.events.redscare_player2 == 1 && playernum == 2) {
+    if (this.game.state.events.redscare_player2 >= 1 && playernum == 2) {
       if (updatelog == 1) {
-        this.updateLog("US is affected by Red Scare");
+	if (this.game.state.events.redscare_player1 == 1) {
+          this.updateLog("US is affected by Red Scare");
+        } else {
+          this.updateLog("US is really affected by Red Scare");
+        }
       }
-      ops--;
+      ops-=this.game.state.events.redscare_player2;
     }
     if (ops <= 0) { return 1; }
     if (ops >= 4) { return 4; }
