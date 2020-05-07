@@ -281,7 +281,7 @@ console.log("we need to pay: " + faucet_payment + " -- " + address);
         //
         app.wallet.calculateBalance();
 console.log("our wallet balance is: " + app.wallet.returnBalance());
-        if (Big(faucet_payment).gt(app.wallet.returnBalance())) {
+        if (Big(faucet_payment).lte(app.wallet.returnBalance()) && Big(faucet_payment).gt(0)) {
 
 console.log("Sending our " + i + "th payment...");
 
@@ -308,6 +308,8 @@ console.log("AND SENDING PAYMENT: " + newtx);
 
 	  if (Big(faucet_payment).lte(0)) {
 
+console.log("telling this address to fuck off, it should send us cash if anything...");
+
             //
             // issue payment
             //
@@ -320,6 +322,7 @@ console.log("AND SENDING PAYMENT: " + newtx);
       } 
     } else {
 
+console.log("remembering we are fully paid out...");
       this.fully_paid = 1;
     } 
   }
