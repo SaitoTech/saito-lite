@@ -8,6 +8,7 @@ const helpers = require('../../lib/helpers/index');
 // Missile Envy is a bit messy
 //
 var is_this_missile_envy_noneventable = 0;
+var is_player_skipping_playing_china_card = 0;
 
 //
 // allows cancellation of pick "pickagain"
@@ -1809,7 +1810,7 @@ console.log("CARD: " + card);
             if (this.game.player == 2) {
               this.game.deck[0].hand = ["naziscientist", "glasnost", "asia", "glasnost", "glasnost", "glasnost", "glasnost", "asia"];
             } else {
-              this.game.deck[0].hand = ["saltnegotiations", "shuttlediplomacy", "starwars", "cubanmissilecrisis","europe","asknot","missileenvy", "fiveyearplan", "indopaki"];
+              this.game.deck[0].hand = ["saltnegotiations", "shuttlediplomacy", "starwars", "cubanmissilecrisis","china"];
             }
           }
 
@@ -3418,6 +3419,46 @@ console.log("CARD: " + card);
     //
     this.updateEventTiles();
 
+    //
+    // if player only has the China Card, they are allowed to skip
+    //
+    if (selected_card == null && is_player_skipping_playing_china_card == 0) {
+      if (this.game.deck[0].hand.length == 1) {
+	if (this.game.deck[0].hand[0] == "china") {
+
+	  is_player_skipping_playing_china_card = 1;
+
+          let html = twilight_self.formatStatusHeader('You only have the China Card remaining. Do you wish to play it this turn?');
+              html += '<ul><li class="card" id="play">play card</li><li class="card" id="skipturn">skip turn</li></ul>';
+          twilight_self.updateStatus(html);
+
+          $('.card').off();
+          $('.card').on('click', function() {
+
+	    let action = $(this).attr("id");
+
+	    if (action === "play") {
+	      twilight_self.playerTurn(selected_card);
+	    }
+	    if (action === "skipturn") {
+	      twilight_self.addMove("resolve\tplay");
+	      if (this.game.player == 1) {
+	        twilight_self.addMove("notify\tUSSR chooses not to play the China Card");
+	      } else {
+	        twilight_self.addMove("notify\tUS chooses not to play the China Card");
+	      }
+	      this.endTurn();
+	    }
+
+          });
+
+	  return;
+	}
+      }
+    }
+    is_player_skipping_playing_china_card = 0;
+
+
 
     original_selected_card = selected_card;
 
@@ -4046,7 +4087,7 @@ console.log("CARD: " + card);
           //
           // our event or both
           //
-          if (twilight_self.dont_show_confirm == 0 && (card == "missileenvy" && is_this_missile_envy_noneventable == 1)) {
+          if (twilight_self.dont_show_confirm == 0 && (card != "missileenvy" || is_this_missile_envy_noneventable == 1)) {
 
             let fr =
               `
@@ -8652,8 +8693,8 @@ console.log("card: " + card);
 	      // shuttle diplomacy
 	      //
        	      if (this.game.state.events.shuttlediplomacy == 1) {
-	        if (discarded_cards['shuttlediplomacy'] != undefined) {
-	          delete discarded_cards['shuttlediplomacy'];
+	        if (discarded_cards['shuttle'] != undefined) {
+	          delete discarded_cards['shuttle'];
 	        }
 	      }
 
@@ -11945,7 +11986,7 @@ console.log("card: " + card);
 	    //
 	    // and move into discard pile... finally
 	    //
-	    this.game.deck[0].discards['shuttlediplomacy'] = this.game.deck[0].cards['shuttlediplomacy'];
+	    this.game.deck[0].discards['shuttle'] = this.game.deck[0].cards['shuttle'];
 
           }
         }
@@ -12135,7 +12176,7 @@ console.log("card: " + card);
 	    //
 	    // and move into discard pile... finally
 	    //
-	    this.game.deck[0].discards['shuttlediplomacy'] = this.game.deck[0].cards['shuttlediplomacy'];
+	    this.game.deck[0].discards['shuttle'] = this.game.deck[0].cards['shuttle'];
 
           }
 	}
@@ -12329,7 +12370,7 @@ console.log("card: " + card);
 	//
 	// and move into discard pile... finally
 	//
-	this.game.deck[0].discards['shuttlediplomacy'] = this.game.deck.cards['shuttlediplomacy'];
+	this.game.deck[0].discards['shuttle'] = this.game.deck.cards['shuttle'];
 
       }
 
@@ -12637,7 +12678,7 @@ console.log("card: " + card);
         //
         // and move into discard pile... finally
         //
-        this.game.deck[0].discards['shuttlediplomacy'] = this.game.deck.cards['shuttlediplomacy'];
+        this.game.deck[0].discards['shuttle'] = this.game.deck.cards['shuttle'];
 
       }
 
