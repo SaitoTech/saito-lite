@@ -10382,9 +10382,6 @@ console.log("card: " + card);
                 twilight_self.addMove("place\tus\tus\tiran\t"+twilight_self.countries['iran'].ussr);
                 twilight_self.addMove("remove\tus\tussr\tiran\t"+twilight_self.countries['iran'].ussr);
                 twilight_self.addMove("milops\tus\t2");
-                if (twilight_self.game.state.events.flowerpower == 1) {
-                  twilight_self.addMove("vp\tussr\t2\t1");
-                }
                 twilight_self.addMove("vp\tus\t2");
                 twilight_self.placeInfluence("iran", twilight_self.countries['iran'].ussr, "us");
                 twilight_self.removeInfluence("iran", twilight_self.countries['iran'].ussr, "ussr");
@@ -10394,9 +10391,6 @@ console.log("card: " + card);
                 twilight_self.addMove("place\tussr\tussr\tiran\t"+twilight_self.countries['iran'].us);
                 twilight_self.addMove("remove\tussr\tus\tiran\t"+twilight_self.countries['iran'].us);
                 twilight_self.addMove("milops\tussr\t2");
-                if (twilight_self.game.state.events.flowerpower == 1) {
-                  twilight_self.addMove("vp\tussr\t2\t1");
-                }
                 twilight_self.addMove("vp\tussr\t2");
                 twilight_self.placeInfluence("iran", twilight_self.countries['iran'].us, "ussr");
                 twilight_self.removeInfluence("iran", twilight_self.countries['iran'].us, "us");
@@ -10444,8 +10438,8 @@ console.log("card: " + card);
                 twilight_self.endTurn();
                 twilight_self.showInfluence("iraq", "ussr");
               } else {
-                twilight_self.addMove("place\tus\tussr\tiraq\t"+twilight_self.countries['iraq'].us);
-                twilight_self.addMove("remove\tus\tus\tiraq\t"+twilight_self.countries['iraq'].us);
+                twilight_self.addMove("place\tussr\tussr\tiraq\t"+twilight_self.countries['iraq'].us);
+                twilight_self.addMove("remove\tussr\tus\tiraq\t"+twilight_self.countries['iraq'].us);
                 twilight_self.addMove("milops\tussr\t2");
                 twilight_self.addMove("vp\tussr\t2");
                 twilight_self.placeInfluence("iraq", twilight_self.countries['iraq'].us, "ussr");
