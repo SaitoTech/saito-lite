@@ -4139,6 +4139,8 @@ console.log("CARD: " + card);
   playerTriggerOps(player, card) {
 
     let twilight_self = this;
+    let opponent = "us";
+    if (this.game.player == 2) { opponent = "ussr"; }
 
     if (twilight_self.game.deck[0].cards[card].player == opponent) {
       if (twilight_self.game.state.events.unintervention == 1) {
@@ -10773,7 +10775,6 @@ console.log("card: " + card);
       var twilight_self = this;
 
       this.addMove("resolve\tstarwars");
-
 
       let user_message = "Choose card to reclaim: <ul>";
       for (var i in this.game.deck[0].discards) {

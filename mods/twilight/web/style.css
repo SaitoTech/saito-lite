@@ -3,6 +3,30 @@
   padding: 10px;
 }
 
+.china_card_status_us_faceup {
+ background-color: #3277de;
+}
+.china_card_status_us_facedown {
+ background-color: #063b8a;
+}
+.china_card_status_ussr_faceup {
+ background-color: #8a0612;
+}
+.china_card_status_ussr_facedown {
+ background-color: ##ea3041;
+}
+.china_card_status {
+  position: absolute;
+  width: 130px;
+  height: 100px;
+  background-color: red;
+  left: 2040px;
+  top: 570px;
+  color: white;
+  font-weight: heavy;
+  font-size: 2em;
+}
+
 .formosan_resolution {
   display: none;
   position: absolute;
