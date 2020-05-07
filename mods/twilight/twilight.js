@@ -562,13 +562,13 @@ console.log("\n\n\n\n");
               this.updateLog("China Card passes to US face down");
               this.game.state.events.china_card = 2;
               this.game.state.events.china_card_facedown = 1;
-	      this.updateChinaCardDisplay();
+	      this.displayChinaCard();
             }
             if (mv[1] == "us") {
               this.updateLog("China Card passes to USSR face down");
               this.game.state.events.china_card = 1;
               this.game.state.events.china_card_facedown = 1;
-	      this.updateChinaCardDisplay();
+	      this.displayChinaCard();
             }
           } else {
 
@@ -1903,7 +1903,11 @@ console.log("CARD: " + card);
         }
         if (mv[0] === "round") {
 
-	
+	  //
+	  //
+	  //
+	  this.displayChinaCard();
+
 
           //
           // NORAD
@@ -2359,6 +2363,7 @@ console.log("CARD: " + card);
           //
           this.game.state.events.china_card_eligible = 0;
 	  this.game.state.events.china_card_facedown = 0;
+	  this.displayChinaCard();
 
           //
           // back button functions again
@@ -7137,8 +7142,12 @@ console.log("CARD: " + card);
       this.game.state.events.formosan = 0;
       if (player == "ussr") {
         this.game.state.events.china_card = 2;
+	this.game.state.events.china_card_facedown = 1;
+	this.displayChinaCard();
       } else {
         this.game.state.events.china_card = 1;
+	this.game.state.events.china_card_facedown = 1;
+	this.displayChinaCard();
       }
       return 1;
     }
@@ -9121,6 +9130,7 @@ console.log("card: " + card);
             this.game.deck[0].hand.push("china");
           }
           this.game.state.events.china_card = 0;
+	  this.displayChinaCard();
 
         } else {
 
@@ -9145,15 +9155,16 @@ console.log("card: " + card);
                 this.game.deck[0].hand.push("china");
               }
               this.game.state.events.china_card = 0;
+	      this.displayChinaCard();
             }
 
           }
           if (this.game.player == 2) {
 
-              let do_i_have_cc = 0;
+            let do_i_have_cc = 0;
 
             for (let i = 0; i < this.game.deck[0].hand.length; i++) {
-                  if (this.game.deck[0].hand[i] == "china") {
+              if (this.game.deck[0].hand[i] == "china") {
                 do_i_have_cc = 1;
               }
             }
@@ -9162,6 +9173,7 @@ console.log("card: " + card);
               for (let i = 0; i < this.game.deck[0].hand.length; i++) {
                 if (this.game.deck[0].hand[i] == "china") {
                   this.game.deck[0].hand.splice(i, 1);
+	          this.displayChinaCard();
                   return 1;
                 }
               }
@@ -9194,6 +9206,8 @@ console.log("card: " + card);
 
         if (this.game.state.events.china_card == 1) {
           this.game.state.events.china_card = 2;
+	  this.game.state.events.china_card_facedown = 1;
+	  this.displayChinaCard();
         } else {
 
           if (this.game.player == 2) {
@@ -9228,6 +9242,8 @@ console.log("card: " + card);
           }
         }
         this.game.state.events.china_card = 2;
+	this.game.state.events.china_card_facedown = 1;
+	this.displayChinaCard();
       }
 
       return 1;
@@ -14519,9 +14535,29 @@ console.log("card: " + card);
   }
 
 
-  updateChinaCardDisplay() {
+  displayChinaCard() {
 
-// HACK
+    $('.china_card_status').removeClass('china_card_status_us_facedown');
+    $('.china_card_status').removeClass('china_card_status_us_faceup');
+    $('.china_card_status').removeClass('china_card_status_ussr_facedown');
+    $('.china_card_status').removeClass('china_card_status_ussr_faceup');
+
+    let x = this.whoHasTheChinaCard();
+
+    if (x == "ussr") {
+      if (this.game.state.events.china_card_facedown == 0) {
+        $('.china_card_status').addClass('china_card_status_ussr_faceup');
+      } else {
+        $('.china_card_status').addClass('china_card_status_ussr_facedown');
+      }
+    } else {
+      if (this.game.state.events.china_card_facedown == 0) {
+        $('.china_card_status').addClass('china_card_status_ussr_faceup');
+      } else {
+        $('.china_card_status').addClass('china_card_status_ussr_facedown');
+      }
+    }
+
   }
 
 } // end Twilight class

@@ -4,16 +4,16 @@
 }
 
 .china_card_status_us_faceup {
- background-color: #3277de;
+  background-color: #3277de;
 }
 .china_card_status_us_facedown {
- background-color: #063b8a;
+  background-color: #063b8a;
 }
 .china_card_status_ussr_faceup {
- background-color: #8a0612;
+  background-color: #8a0612;
 }
 .china_card_status_ussr_facedown {
- background-color: ##ea3041;
+  background-color: ##ea3041;
 }
 .china_card_status {
   position: absolute;
