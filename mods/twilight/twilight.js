@@ -561,10 +561,14 @@ console.log("\n\n\n\n");
             if (mv[1] == "ussr") {
               this.updateLog("China Card passes to US face down");
               this.game.state.events.china_card = 2;
+              this.game.state.events.china_card_facedown = 1;
+	      this.updateChinaCardDisplay();
             }
             if (mv[1] == "us") {
               this.updateLog("China Card passes to USSR face down");
               this.game.state.events.china_card = 1;
+              this.game.state.events.china_card_facedown = 1;
+	      this.updateChinaCardDisplay();
             }
           } else {
 
@@ -1899,6 +1903,8 @@ console.log("CARD: " + card);
         }
         if (mv[0] === "round") {
 
+	
+
           //
           // NORAD
           //
@@ -2352,6 +2358,7 @@ console.log("CARD: " + card);
           // deactivate cards
           //
           this.game.state.events.china_card_eligible = 0;
+	  this.game.state.events.china_card_facedown = 0;
 
           //
           // back button functions again
@@ -2990,7 +2997,7 @@ console.log("CARD: " + card);
         //
         // Cuban Missile Crisis
         //
-        if (action == "cancel_cmc") {
+        if (action2 == "cancel_cmc") {
 
           this.moves = [];
 
@@ -5933,10 +5940,11 @@ console.log("CARD: " + card);
     state.events.norad              = 0;
 
     // regional bonus events
-    state.events.vietnam_revolts = 0;
+    state.events.vietnam_revolts     = 0;
     state.events.vietnam_revolts_eligible = 0;
-    state.events.china_card         = 0;
-    state.events.china_card_in_play = 0;
+    state.events.china_card          = 0;
+    state.events.china_card_facedown = 0;
+    state.events.china_card_in_play  = 0;
     state.events.china_card_eligible = 0;
 
     // events - mid-war
@@ -14510,6 +14518,11 @@ console.log("card: " + card);
     `
   }
 
+
+  updateChinaCardDisplay() {
+
+// HACK
+  }
 
 } // end Twilight class
 
