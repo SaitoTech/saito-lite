@@ -1904,8 +1904,9 @@ console.log("CARD: " + card);
         if (mv[0] === "round") {
 
 	  //
+	  // china card is face-up
 	  //
-	  //
+          this.game.state.events.china_card_facedown = 0;
 	  this.displayChinaCard();
 
 
@@ -2362,7 +2363,6 @@ console.log("CARD: " + card);
           // deactivate cards
           //
           this.game.state.events.china_card_eligible = 0;
-	  this.game.state.events.china_card_facedown = 0;
 	  this.displayChinaCard();
 
           //
@@ -3408,6 +3408,10 @@ console.log("CARD: " + card);
     //
     if (selected_card != null) { this.game.state.back_button_cancelled = 1; }
 
+    //
+    // check who has China Card
+    //
+    this.displayChinaCard();
 
     //
     // show active events
@@ -14544,17 +14548,23 @@ console.log("card: " + card);
 
     let x = this.whoHasTheChinaCard();
 
-    if (x == "ussr") {
+console.log("who has it: " + x);
+console.log(this.game.state.events.china_card);
+console.log(this.game.state.events.china_card_facedown);
+
+    if (x === "ussr") {
       if (this.game.state.events.china_card_facedown == 0) {
         $('.china_card_status').addClass('china_card_status_ussr_faceup');
       } else {
+console.log("facedown: ");
         $('.china_card_status').addClass('china_card_status_ussr_facedown');
       }
     } else {
       if (this.game.state.events.china_card_facedown == 0) {
-        $('.china_card_status').addClass('china_card_status_ussr_faceup');
+        $('.china_card_status').addClass('china_card_status_us_faceup');
       } else {
-        $('.china_card_status').addClass('china_card_status_ussr_facedown');
+console.log("facedown: ");
+        $('.china_card_status').addClass('china_card_status_us_facedown');
       }
     }
 

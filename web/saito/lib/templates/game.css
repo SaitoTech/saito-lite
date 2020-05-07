@@ -240,11 +240,13 @@ body {
 
 .status ul {
   list-style: none;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 .status ul li {
   width: 100%;
-  line-height: 2em;
+  line-height: 3.5em;
   border-top: 1px solid var(--saito-skyline-grey);
   cursor: pointer;
 }
