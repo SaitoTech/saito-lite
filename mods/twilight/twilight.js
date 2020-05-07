@@ -4087,7 +4087,7 @@ console.log("CARD: " + card);
           //
           // our event or both
           //
-          if (twilight_self.dont_show_confirm == 0 && (card != "missileenvy" || is_this_missile_envy_noneventable == 1)) {
+          if (twilight_self.dont_show_confirm == 0 && (card != "missileenvy" || is_this_missile_envy_noneventable == 0)) {
 
             let fr =
               `
