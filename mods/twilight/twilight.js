@@ -568,18 +568,18 @@ console.log("\n\n\n\n");
             }
           } else {
 
-      //
-      // remove from hand if present
-      //
-      this.removeCardFromHand(mv[2]);
+            //
+            // remove from hand if present
+            //
+            this.removeCardFromHand(mv[2]);
 
-      //
-      // missile envy is an exception, non-player triggers
-      //
-      if (mv[2] == "missileenvy" && this.game.state.events.missile_envy != this.game.player) {
-        this.game.state.events.missile_envy = 0;
-        this.game.state.events.missileenvy = 0;
-      }
+            //
+            // missile envy is an exception, non-player triggers
+            //
+            if (mv[2] == "missileenvy" && this.game.state.events.missile_envy != this.game.player) {
+              this.game.state.events.missile_envy = 0;
+              this.game.state.events.missileenvy = 0;
+            }
 
             for (var i in this.game.deck[0].cards) {
               if (mv[2] == i) {
@@ -2228,6 +2228,18 @@ console.log("CARD: " + card);
                 // this resets discards = {} so that DECKBACKUP will not retain
                 //
                 let discarded_cards = this.returnDiscardedCards();
+
+
+		//
+		// shuttle diplomacy
+		//
+       		if (this.game.state.events.shuttlediplomacy == 1) {
+		  if (discarded_cards['shuttlediplomacy'] != undefined) {
+		    delete discarded_cards['shuttlediplomacy'];
+		  }
+		}
+
+
                 if (Object.keys(discarded_cards).length > 0) {
 
                   //
@@ -4262,6 +4274,17 @@ console.log("CARD: " + card);
       if (5 > twilight_self.game.deck[0].crypt.length) {
 
         let discarded_cards = twilight_self.returnDiscardedCards();
+
+	//
+	// shuttle diplomacy
+	//
+       	if (this.game.state.events.shuttlediplomacy == 1) {
+	  if (discarded_cards['shuttlediplomacy'] != undefined) {
+	    delete discarded_cards['shuttlediplomacy'];
+	  }
+	}
+
+
         if (Object.keys(discarded_cards).length > 0) {
 
           //
@@ -8601,6 +8624,17 @@ console.log("card: " + card);
             if (cards_discarded > twilight_self.game.deck[0].crypt.length) {
 
               let discarded_cards = twilight_self.returnDiscardedCards();
+
+	      //
+	      // shuttle diplomacy
+	      //
+       	      if (this.game.state.events.shuttlediplomacy == 1) {
+	        if (discarded_cards['shuttlediplomacy'] != undefined) {
+	          delete discarded_cards['shuttlediplomacy'];
+	        }
+	      }
+
+
               if (Object.keys(discarded_cards).length > 0) {
 
                 //
@@ -8684,10 +8718,12 @@ console.log("card: " + card);
       // pick discarded card
       var twilight_self = this;
 
-      let user_message = "Pick Card to Reclaim:<ul>";
+      let user_message = "Choose Card to Reclaim:<ul>";
       for (var i in this.game.deck[0].discards) {
         if (this.game.deck[0].discards[i].scoring == 0) {
-          user_message += '<li class="card showcard" id="'+i+'">'+this.game.deck[0].discards[i].name+'</li>';
+          if (this.game.state.events.shuttlediplomacy == 0 || (this.game.state.events.shuttlediplomacy == 1 && i != "shuttlediplomacy")) {
+            user_message += '<li class="card showcard" id="'+i+'">'+this.game.deck[0].discards[i].name+'</li>';
+          }
         }
       }
       user_message += '<li class="card showcard" id="nocard">do not reclaim card...</li>';
@@ -10722,6 +10758,7 @@ console.log("card: " + card);
       // otherwise sort through discards
       let discardlength = 0;
       for (var i in this.game.deck[0].discards) { discardlength++; }
+
       if (discardlength == 0) {
         this.updateLog("No cards in discard pile");
         return 1;
@@ -10744,7 +10781,9 @@ console.log("card: " + card);
           if (this.game.deck[0].cards[i] != undefined) {
             if (this.game.deck[0].cards[i].name != undefined) {
               if (this.game.deck[0].cards[i].scoring != 1) {
-                user_message += '<li class="card showcard" id="'+i+'">'+this.game.deck[0].cards[i].name+'</li>';
+                if (this.game.state.events.shuttlediplomacy == 0 || (this.game.state.events.shuttlediplomacy == 1 && i != "shuttlediplomacy")) {
+                  user_message += '<li class="card showcard" id="'+i+'">'+this.game.deck[0].cards[i].name+'</li>';
+                }
               }
             }
           }
@@ -11784,6 +11823,7 @@ console.log("card: " + card);
     return scoring;
   }
 
+
   calculateScoring(region, mouseover_preview=0) {
 
     var scoring = {
@@ -11869,9 +11909,16 @@ console.log("card: " + card);
             scoring.ussr.bg--;
             scoring.ussr.total--;
           }         
-        }
-        if (mouseover_preview == 0) {
-          this.game.state.events.shuttlediplomacy = 0;
+          if (mouseover_preview == 0) {
+
+            this.game.state.events.shuttlediplomacy = 0;
+
+	    //
+	    // and move into discard pile... finally
+	    //
+	    this.game.deck[0].discards['shuttlediplomacy'] = this.game.deck[0].cards['shuttlediplomacy'];
+
+          }
         }
 
         scoring = this.determineRegionVictor(scoring, me_scoring_range, me_bg_countries.length);
@@ -12053,9 +12100,15 @@ console.log("card: " + card);
             scoring.ussr.bg--;
             scoring.ussr.total--;
           }          
-        }
-	if (mouseover_preview == 0) {
-          this.game.state.events.shuttlediplomacy = 0;
+	  if (mouseover_preview == 0) {
+            this.game.state.events.shuttlediplomacy = 0;
+
+	    //
+	    // and move into discard pile... finally
+	    //
+	    this.game.deck[0].discards['shuttlediplomacy'] = this.game.deck[0].cards['shuttlediplomacy'];
+
+          }
 	}
 
         if (this.game.state.events.formosan == 1) {
@@ -12243,6 +12296,12 @@ console.log("card: " + card);
           total_ussr--;
         }
         this.game.state.events.shuttlediplomacy = 0;
+
+	//
+	// and move into discard pile... finally
+	//
+	this.game.deck[0].discards['shuttlediplomacy'] = this.game.deck.cards['shuttlediplomacy'];
+
       }
 
 
@@ -12545,6 +12604,12 @@ console.log("card: " + card);
           total_ussr--;
         }
         this.game.state.events.shuttlediplomacy = 0;
+
+        //
+        // and move into discard pile... finally
+        //
+        this.game.deck[0].discards['shuttlediplomacy'] = this.game.deck.cards['shuttlediplomacy'];
+
       }
 
       if (total_us > 0) { vp_us = 3; }
