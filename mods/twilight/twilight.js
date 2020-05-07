@@ -1808,7 +1808,7 @@ console.log("CARD: " + card);
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["naziscientist", "glasnost", "asia", "glasnost", "glasnost", "glasnost", "glasnost", "asia"];
+              this.game.deck[0].hand = ["naziscientist", "glasnost", "europe", "glasnost", "glasnost", "glasnost", "glasnost", "asia"];
             } else {
               this.game.deck[0].hand = ["saltnegotiations", "shuttle", "starwars", "cubanmissile","china"];
             }
@@ -3404,6 +3404,8 @@ console.log("CARD: " + card);
 
   playerTurn(selected_card=null) {
 
+    let twilight_self = this;
+
     //
     // remove back button from forced gameplay
     //
@@ -3428,9 +3430,9 @@ console.log("CARD: " + card);
 
 	  is_player_skipping_playing_china_card = 1;
 
-          let html = twilight_self.formatStatusHeader('You only have the China Card remaining. Do you wish to play it this turn?');
+          let html = 'You only have the China Card remaining. Do you wish to play it this turn?';
               html += '<ul><li class="card" id="play">play card</li><li class="card" id="skipturn">skip turn</li></ul>';
-          twilight_self.updateStatus(html);
+          this.updateStatus(html);
 
           $('.card').off();
           $('.card').on('click', function() {
@@ -3442,12 +3444,12 @@ console.log("CARD: " + card);
 	    }
 	    if (action === "skipturn") {
 	      twilight_self.addMove("resolve\tplay");
-	      if (this.game.player == 1) {
+	      if (twilight_self.game.player == 1) {
 	        twilight_self.addMove("notify\tUSSR chooses not to play the China Card");
 	      } else {
 	        twilight_self.addMove("notify\tUS chooses not to play the China Card");
 	      }
-	      this.endTurn();
+	      twilight_self.endTurn();
 	    }
 
           });
@@ -3629,8 +3631,6 @@ console.log("CARD: " + card);
       this.updateStatusAndListCards(user_message, this.game.deck[0].hand);
     }
 
-
-    let twilight_self = this;
 
     if (this.game.state.events.unintervention != 1 && selected_card != "grainsales") {
       this.moves = [];
@@ -8785,7 +8785,7 @@ console.log("card: " + card);
       let user_message = "Choose Card to Reclaim:<ul>";
       for (var i in this.game.deck[0].discards) {
         if (this.game.deck[0].discards[i].scoring == 0) {
-          if (this.game.state.events.shuttlediplomacy == 0 || (this.game.state.events.shuttlediplomacy == 1 && i != "shuttlediplomacy")) {
+          if (this.game.state.events.shuttlediplomacy == 0 || (this.game.state.events.shuttlediplomacy == 1 && i != "shuttle")) {
             user_message += '<li class="card showcard" id="'+i+'">'+this.game.deck[0].discards[i].name+'</li>';
           }
         }
@@ -10830,11 +10830,6 @@ console.log("card: " + card);
       let discardlength = 0;
       for (var i in this.game.deck[0].discards) { discardlength++; }
 
-      if (discardlength == 0) {
-        this.updateLog("No cards in discard pile");
-        return 1;
-      }
-
       if (this.game.player == 1) {
         this.updateStatus("Opponent retrieving event from discard pile");
         return 0;
@@ -10851,14 +10846,24 @@ console.log("card: " + card);
           if (this.game.deck[0].cards[i] != undefined) {
             if (this.game.deck[0].cards[i].name != undefined) {
               if (this.game.deck[0].cards[i].scoring != 1) {
-                if (this.game.state.events.shuttlediplomacy == 0 || (this.game.state.events.shuttlediplomacy == 1 && i != "shuttlediplomacy")) {
+                if (this.game.state.events.shuttlediplomacy == 0 || (this.game.state.events.shuttlediplomacy == 1 && i != "shuttle")) {
                   user_message += '<li class="card showcard" id="'+i+'">'+this.game.deck[0].cards[i].name+'</li>';
-                }
+                } else {
+		  discardlength--;
+	        }
               }
             }
           }
         }
       }
+
+      if (discardlength == 0) {
+        this.updateLog("No cards in discard pile");
+        twilight_self.addMove("notify\tUS cannot use Star Wars as no cards to retrieve");
+        twilight_self.endTurn();
+        return 1;
+      }
+
       user_message += '</li>';
       twilight_self.updateStatus(user_message);
 
@@ -12370,7 +12375,7 @@ console.log("card: " + card);
 	//
 	// and move into discard pile... finally
 	//
-	this.game.deck[0].discards['shuttle'] = this.game.deck.cards['shuttle'];
+	this.game.deck[0].discards['shuttle'] = this.game.deck[0].cards['shuttle'];
 
       }
 
@@ -12678,7 +12683,7 @@ console.log("card: " + card);
         //
         // and move into discard pile... finally
         //
-        this.game.deck[0].discards['shuttle'] = this.game.deck.cards['shuttle'];
+        this.game.deck[0].discards['shuttle'] = this.game.deck[0].cards['shuttle'];
 
       }
 
