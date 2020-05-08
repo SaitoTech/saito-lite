@@ -1435,14 +1435,18 @@ console.log("CARD: " + card);
           this.updateStatus(player.toUpperCase() + "</span> <span>is fetching new cards</span>");
           return 0;
         }
+
         if (mv[0] === "ops") {
+
           if (this.game.deck[0].cards[mv[2]] != undefined) { this.game.state.event_name = this.game.deck[0].cards[mv[2]].name; }
           this.updateLog("<span>" + mv[1].toUpperCase() + " plays </span><span class=\"logcard\" id=\""+mv[2]+"\">" + this.game.state.event_name + "</span> <span>for " + mv[3] + " OPS</span>");
+
           // unset formosan if China card played by US
           if (mv[1] == "us" && mv[2] == "china") {
             this.game.state.events.formosan = 0;
             $('.formosan').hide();
           }
+
           this.playOps(mv[1], mv[3], mv[2]);
           shd_continue = 0;
         }
