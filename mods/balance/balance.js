@@ -113,9 +113,11 @@ class Balance extends ModTemplate {
     let sql = "SELECT max(spent) as maxbid FROM slips WHERE lc = 1";
     let params = {}
     let rows = await this.app.storage.queryDatabase(sql, params, "balance");
-    if (rows.length) {
-      this.maxbid = rows[0].maxbid;
-    } 
+    if (rows) {
+      if (rows.length) {
+        this.maxbid = rows[0].maxbid;
+      } 
+    }
 
     //
     // if there is a bid greater, than is our maxbid
