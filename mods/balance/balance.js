@@ -61,11 +61,11 @@ console.log("stepping into issue payments...");
       }
 
       //try just dropping this check
-      //if (this.maxbid <= 0) { this.maxbid = 1; }
+      if (this.maxbid <= 0) { this.maxbid = 1; }
 
-      if (blk.block.id > this.maxbid) {
+      //if (blk.block.id > this.maxbid) {
         await this.updateSlips(blk, tx);
-      }
+      //}
 
     }
   }
