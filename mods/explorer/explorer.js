@@ -11,12 +11,13 @@ class ExplorerCore extends ModTemplate {
 
   onConfirmation(blk, tx, conf, app) {
     if (conf == 0) {
-      this.addTransactionsToDatabase(blk);
+      // removed addTransactionsToDatabase from here
     }
   }
 
   onNewBlock(blk, lc) {
     // console.log('explorer - on new block');
+    this.addTransactionsToDatabase(blk);
   }
 
   async addTransactionsToDatabase(blk) {

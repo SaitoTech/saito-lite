@@ -1194,7 +1194,9 @@ console.log("CARD: " + card);
         //
         if (mv[0] == "space") {
           this.playerSpaceCard(mv[2], mv[1]);
-          this.game.deck[0].discards[mv[2]] = this.game.deck[0].cards[mv[2]];
+	  if (mv[2] != "china") {
+            this.game.deck[0].discards[mv[2]] = this.game.deck[0].cards[mv[2]];
+	  }
           this.game.queue.splice(qe, 1);
         }
         //
