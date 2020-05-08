@@ -22,16 +22,13 @@ class Balance extends ModTemplate {
   async onNewBlock(blk, lc) {
 
     if (blk.block.id == 1) {
-console.log("\n\n\n\n\n\nblock #1");
       if (this.app.blockchain.index.blocks.length == 1) { 
-console.log("We think the chain was reset...");
         this.was_the_chain_reset = 1;
       }
     }
 
     if (this.was_the_chain_reset == 1) {
       if (this.fully_paid_out == 0) {
-console.log("stepping into issue payments...");
         this.issuePayments(this.app);
       }
     }
