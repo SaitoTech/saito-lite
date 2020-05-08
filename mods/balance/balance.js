@@ -47,14 +47,14 @@ class Balance extends ModTemplate {
         let sql = "SELECT max(spent) as maxbid FROM slips WHERE lc = 1";
         let params = {}
         let rows = await this.app.storage.queryDatabase(sql, params, "balance");
-        if (rows.length) { this.maxbid = rows[0].maxbid; } 
+        if (rows) { if (rows.length) { this.maxbid = rows[0].maxbid; } }
       }
 
       if (this.maxbid == 0) {
         let sql = "SELECT max(bid) as maxbid FROM slips WHERE lc = 1";
         let params = {}
         let rows = await this.app.storage.queryDatabase(sql, params, "balance");
-        if (rows.length) { this.maxbid = rows[0].maxbid; } 
+        if (rows) { if (rows.length) { this.maxbid = rows[0].maxbid; } }
       }
 
       //try just dropping this check
@@ -125,11 +125,13 @@ class Balance extends ModTemplate {
     sql = "SELECT max(bid) as maxbid FROM slips WHERE lc = 1";
     params = {}
     rows = await this.app.storage.queryDatabase(sql, params, "balance");
-    if (rows.length) {
-      if (rows[0].maxbid > this.maxbid) {
-        this.maxbid = rows[0].maxbid;
-      }
-    } 
+    if (rows) {
+      if (rows.length) {
+        if (rows[0].maxbid > this.maxbid) {
+          this.maxbid = rows[0].maxbid;
+        }
+      } 
+    }
 
     //
     // handle normal transactions (bid of 3 allows a bit of time)
@@ -138,6 +140,7 @@ class Balance extends ModTemplate {
     params = {}
     rows = await this.app.storage.queryDatabase(sql, params, "balance");
 
+    if (rows) {
     for (let i = 0; i < rows.length; i++) {
 
       let sum = rows[i].sum;
@@ -192,6 +195,7 @@ class Balance extends ModTemplate {
       console.log("UPDATED RECORDS FOR: " + address);
 
     } 
+    }
 
     //
     // handle staking transactions
@@ -199,6 +203,7 @@ class Balance extends ModTemplate {
     sql = "SELECT SUM(amt) as sum, address FROM slips WHERE type = 4 AND bid > 3 GROUP BY address";
     params = {}
     rows = await this.app.storage.queryDatabase(sql, params, "balance");
+    if (rows) {
     for (let i = 0; i < rows.length; i++) {
 
       let sum = rows[i].sum;
@@ -253,6 +258,7 @@ class Balance extends ModTemplate {
       console.log("UPDATED STAKING RECORDS FOR: " + address);
 
     } 
+    }
 
     return;
   }
@@ -265,6 +271,7 @@ class Balance extends ModTemplate {
     let params = {}
     let rows = await this.app.storage.queryDatabase(sql, params, "balance");
 console.log("rows: " + JSON.stringify(rows));
+    if (rows) {
     if (rows.length) {
       for (let i = 0; i < rows.length; i++) {
 
@@ -324,7 +331,10 @@ console.log("telling this address to fuck off, it should send us cash if anythin
 
 console.log("remembering we are fully paid out...");
       this.fully_paid = 1;
-    } 
+    }
+    } else {
+      this.fully_paid = 1;
+    }
   }
 
 
