@@ -60,7 +60,8 @@ console.log("stepping into issue payments...");
         if (rows.length) { this.maxbid = rows[0].maxbid; } 
       }
 
-      if (this.maxbid <= 0) { this.maxbid = 1; }
+      //try just dropping this check
+      //if (this.maxbid <= 0) { this.maxbid = 1; }
 
       if (blk.block.id > this.maxbid) {
         await this.updateSlips(blk, tx);

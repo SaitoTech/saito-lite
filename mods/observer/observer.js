@@ -92,8 +92,11 @@ console.log(sql + " -- " + params);
       let current_timestamp = new Date().getTime() - 3600000;
       let sql = "DELETE FROM gamestate WHERE last_move < $ts";
       let params = { $ts : current_timestamp }
-      app.storage.executeDatabase(sql, params, "arcade");
-
+      try {
+        app.storage.executeDatabase(sql, params, "arcade");
+      } catch(err) {
+        console.log("ERROR: #3098424: " + err);
+      }
     }
 
 
