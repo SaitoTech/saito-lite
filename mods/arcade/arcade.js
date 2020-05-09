@@ -945,7 +945,7 @@ class Arcade extends ModTemplate {
 
       mycallback({ rows });
 
-      if (Math.random < 0.05) {
+      if (Math.random() < 0.05) {
 
         let current_timestamp = new Date().getTime() - 1200000;
 
