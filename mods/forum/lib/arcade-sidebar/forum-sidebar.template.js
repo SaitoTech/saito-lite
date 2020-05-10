@@ -1,6 +1,9 @@
 module.exports = ForumSidebarTemplate = (app, data) => {
   return `
-    <h3>Community Discussions:</h3>
+  <div class="arcade-forum-sidebar">
+    <div class="arcade-forum-header" style="display: flex; align-items: center; justify-content: space-between;">
+      <h3>Community Discussions:</h3>
+    </div>
     <div class="arcade-forum-posts"></div>
     <style>
 
@@ -8,11 +11,11 @@ module.exports = ForumSidebarTemplate = (app, data) => {
 .arcade-forum-posts {
   color: var(--saito-skyline-grey);
   font-family: 'visuelt-light';
-  margin-bottom:10px;
   display: grid;
-  grid-gap: 1em;
+  grid-gap: 0.7em;
   overflow-x: hidden;
-  height: 20vh;
+  padding-left: 0.5em;
+  padding-top: 0.5em;
 }
 
 .forum-title {
@@ -59,6 +62,20 @@ module.exports = ForumSidebarTemplate = (app, data) => {
   grid-gap: 5px;
 }
 
+.arcade-forum-sidebar {
+  border: 1px solid #663399;
+  width: 100%;
+  height: auto;
+  font-size: 0.9em;
+}
+.arcade-forum-header {
+  padding-left: 15px;
+  padding-right: 15px;
+  border-bottom: 1px solid var(--saito-red);
+  background: var(--saito-jester);
+}
+
     </style>
+  </div>
     `;
 }
