@@ -6,7 +6,7 @@ module.exports = ForumSidebar = {
 
   render(app, data) {
     if (this.loaded == 0) {
-      document.querySelector(".arcade-left-sidebar").innerHTML += ForumSidebarTemplate(app);
+      document.querySelector(".arcade-left-sidebar-apps").innerHTML += ForumSidebarTemplate(app);
     }
     this.loaded = 1;
   },
