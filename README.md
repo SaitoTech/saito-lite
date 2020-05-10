@@ -1,7 +1,7 @@
 # Welcome to Saito
 
-Please see the documents in the /docs directory for instructions on how to 
-install Saito, learn how the network works, or just get started building 
+Please see the documents in the [/docs directory](docs) for [instructions on how to 
+install Saito](docs/INSTALL.md), learn how the network works, or just get started building 
 applications on the network.
 
 If you need to get in touch with us, please reach out anytime. 
@@ -11,8 +11,17 @@ info@saito.tech
 
 ## build (node version >= 12)
 
-```
-npm install
-npm run nuke
-npm start
-```
+1. install deps
+    ```
+    npm install
+    ```
+1.  compile saito
+    ```
+    npm run nuke 
+    ```
+    Might take a while. Wait till `Bundle Success!`
+1.  run local dev
+    ```
+    npm start
+    ```
+    http://localhost:12101/
