@@ -28,6 +28,8 @@ class Profile extends ModTemplate {
   initialize(app) {
   }
 
+ 
+
   respondTo(type) {
 
     if (type == 'settings-appspace') {

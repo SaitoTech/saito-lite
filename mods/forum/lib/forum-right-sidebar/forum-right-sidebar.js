@@ -20,7 +20,11 @@ module.exports = ForumRightSidebare = {
       PostCreate.attachEvents(app, data);
     });
 
-
+    document.querySelector('.forum-back').addEventListener('click', (e) => {
+      var path = window.location.href.split("/");
+      path.pop();
+      window.location.href = path.join("/");
+    });
   },
 
 }

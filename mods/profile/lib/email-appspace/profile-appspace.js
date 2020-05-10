@@ -58,6 +58,27 @@ module.exports = ProfileAppspace = {
         }
       };
 
+      document.querySelector('.darkmode').addEventListener('click', (e) => {
+
+        if(getPreference('darkmode')) {
+          document.querySelector('.darkmode i').classList.remove('fa-moon');
+          document.querySelector('.darkmode i').classList.add('fa-sun');
+          setPreference('darkmode', false);
+        } else {
+          document.querySelector('.darkmode i').classList.remove('fa-sun');
+          document.querySelector('.darkmode i').classList.add('fa-moon');
+          setPreference('darkmode', true);
+        }
+
+      });
+
+      if(getPreference('darkmode')) {
+        document.querySelector('.darkmode i').classList.add('fa-moon');
+      } else {
+        document.querySelector('.darkmode i').classList.add('fa-sun');
+      }
+
+
   },
 }
 

@@ -16,36 +16,43 @@ module.exports = ForumPostTemplate = (app, data, tx) => {
     }
   }
   let thumbnail = "/forum/img/forum-logo.png";
+  if(tx.transaction.img) {
+    if(tx.transaction.img.length > 0) {thumbnail = tx.transaction.img}
+  }
 
   if (tx.transaction.msg.forum) { subforum = "/forum/"+tx.transaction.msg.forum; }
   if (link == "") { link = subforum+"/"+tx.transaction.sig; }
   let discussion_link = subforum + "/" + tx.transaction.sig;
 
   let html = `
-      <div class="post" id="${tx.transaction.sig}">
-
-        <div class="teaser-votes">
-          <div class="post_upvote post_upvote_${tx.transaction.sig} upvote-wrapper" id="${tx.transaction.sig}" >
-            <i class="fa fa-arrow-up upvote post_upvote_arrow post_upvote_arrow_${tx.transaction.sig}" aria-hidden="true"></i>
+      <div class="post_bk" style="background-image: url('${thumbnail}');">
+      
+      <div class="post" id="${tx.transaction.sig}" >
+        <div class="post-head">
+          <div class="teaser-votes">
+            <div class="post_upvote post_upvote_${tx.transaction.sig} upvote-wrapper" id="${tx.transaction.sig}" >
+              <i class="fa fa-arrow-up upvote post_upvote_arrow post_upvote_arrow_${tx.transaction.sig}" aria-hidden="true"></i>
+            </div>
+            <div class="votes-total" id="votes-total-${tx.transaction.sig}">${tx.transaction.votes}</div>
+            <div class="post_downvote post_downvote_${tx.transaction.sig} downvote-wrapper" id="${tx.transaction.sig}" >
+              <i class="fa fa-arrow-down downvote post_downvote_arrow post_downvote_arrow_${tx.transaction.sig}" aria-hidden="true"></i>
+            </div>
           </div>
-          <div class="votes-total" id="votes-total-${tx.transaction.sig}">${tx.transaction.votes}</div>
-          <div class="post_downvote post_downvote_${tx.transaction.sig} downvote-wrapper" id="${tx.transaction.sig}" >
-            <i class="fa fa-arrow-down downvote post_downvote_arrow post_downvote_arrow_${tx.transaction.sig}" aria-hidden="true"></i>
-          </div>
-        </div>
 
-        <div class="teaser-thumbnail"><img src="${thumbnail}" class="teaser-thumbnail-image" /></div>
+          <div class="teaser-thumbnail" style="background-image: url('${thumbnail}');"></div>
 
-        <div class="teaser-content">
-          <div class="teaser-content-title"><a href="${link}">${tx.transaction.msg.title}</a>
+          <div class="teaser-content">
+            <div class="teaser-content-title"><a href="${link}">${tx.transaction.msg.title}</a></div>
   `;
    if (domain != "") {
-     html += `<div class="teaser-site">(<a href="${link}">${domain}</a>)</div>`;
+     html += `<div class="teaser-site"><a href="${link}">${domain}</a></div>`;
    }
    html += `
+          
+
+          <div class="teaser-content-details">submitted by <span class="post_author_clickable" id="post_author_clickable_${tx.transaction.sig}">${pauthor}</span> to <a href="${subforum}">${subforum}</a><span class="post_author_address" id="${tx.transaction.from[0].add}" style="display:none"></span></div>
         </div>
 
-        <div class="teaser-content-details">submitted by <span class="post_author_clickable" id="post_author_clickable_${tx.transaction.sig}">${pauthor}</span> to <a href="${subforum}">${subforum}</a><span class="post_author_address" id="${tx.transaction.from[0].add}" style="display:none"></span></div>
       </div>
 
       <div class="post-content">${tx.transaction.msg.content}</div>
@@ -60,7 +67,7 @@ module.exports = ForumPostTemplate = (app, data, tx) => {
 	<input type="hidden" class="post-forum" id="post-forum" value="${tx.transaction.msg.forum}" />
 
       </div>
-
+      </div>
   `;
 
   return html;
