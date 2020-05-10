@@ -12,9 +12,10 @@ module.exports = ForumSidebarTemplate = (app, data) => {
   color: var(--saito-skyline-grey);
   font-family: 'visuelt-light';
   display: grid;
-  grid-gap: 1em;
+  grid-gap: 0.7em;
   overflow-x: hidden;
   padding-left: 0.5em;
+  padding-top: 0.5em;
 }
 
 .forum-title {
