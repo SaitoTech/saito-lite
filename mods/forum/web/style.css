@@ -223,7 +223,9 @@
   padding: 0px;
   max-height: 50vh;
   overflow: auto;
-  margin-top: 15px;
+  /* margin-top: 15px; */
+  margin-top: 5px;
+  border-top: 1px solid #CCC;
 }
 
 .comment-links {
