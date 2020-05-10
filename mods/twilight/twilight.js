@@ -1814,7 +1814,7 @@ console.log("CARD: " + card);
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["naziscientist", "redscare", "europe", "saltnegotiations", "glasnost", "asia"];
+              this.game.deck[0].hand = ["marine", "redscare", "europe", "saltnegotiations", "glasnost", "asia"];
             } else {
               this.game.deck[0].hand = ["onesmallstep", "shuttle", "starwars", "nato", "cubanmissile","china"];
             }
@@ -10456,24 +10456,29 @@ console.log("card: " + card);
           if (this.countries[i].region == "mideast") {
 
             twilight_self.countries[countryname].place = 1;
-            $(divname).off();
-            $(divname).on('click', function() {
 
-              let c = $(this).attr('id');
+            if (twilight_self.countries[countryname].us > 0){
 
-              if (twilight_self.countries[c].place != 1) {
-                twilight_self.displayModal("Invalid Country");
-              } else {
-                twilight_self.removeInfluence(c, 1, "us", function() {
-                  twilight_self.addMove("remove\tussr\tus\t"+c+"\t1");
-                  ops_to_purge--;
-                  if (ops_to_purge == 0) {
-                    twilight_self.playerFinishedPlacingInfluence();
-                    twilight_self.endTurn();
-                  }
-                });
-              }
-            });
+              
+              $(divname).off();
+              $(divname).on('click', function() {
+
+                let c = $(this).attr('id');
+
+                if (twilight_self.countries[c].place != 1 || twilight_self.countries[c].us == 0) {
+                  twilight_self.displayModal("Invalid Country");
+                } else {
+                  twilight_self.removeInfluence(c, 1, "us", function() {
+                    twilight_self.addMove("remove\tussr\tus\t"+c+"\t1");
+                    ops_to_purge--;
+                    if (ops_to_purge == 0) {
+                      twilight_self.playerFinishedPlacingInfluence();
+                      twilight_self.endTurn();
+                    }
+                  });
+                }
+              });
+            }
           }
         }
         return 0;
