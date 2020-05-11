@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS posts (
       rank INTEGER,
       votes INTEGER,
       comments INTEGER,
+      reported INTEGER,
       UNIQUE (tx),
       PRIMARY KEY(id ASC)
 );

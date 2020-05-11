@@ -60,7 +60,7 @@ module.exports = ForumTeaserTemplate = (app, data, tx) => {
     html += `<div class="teaser-content-links-delete" id="${tx.transaction.sig}">delete</div>`;
   }
   html += `
-            <div class="teaser-content-links-report">report</div>
+            <div class="teaser-content-links-report" id="${tx.transaction.sig}">report</div>
           
           </div>
         </div>
