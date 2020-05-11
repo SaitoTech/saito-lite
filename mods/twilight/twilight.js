@@ -2286,8 +2286,6 @@ console.log("CARD: " + card);
                 let player2_cards = Math.floor(cards_available / 2);
                 let player1_cards = cards_available - player2_cards;;
 
-this.updateLog("adjusting distribution of cards: " + player2_cards + " -- " + us_cards_needed);
-
                 //
                 // adjust distribution of cards
                 //
@@ -2296,15 +2294,12 @@ this.updateLog("adjusting distribution of cards: " + player2_cards + " -- " + us
                   player2_cards = us_cards_needed;
                   player1_cards += surplus_cards;
                 }
-this.updateLog("adjusting distribution of cards: 2" + player1_cards + " -- " + ussr_cards_needed);
 
                 if (player1_cards > ussr_cards_needed) {
                   let surplus_cards = player1_cards - ussr_cards_needed;
                   player1_cards = ussr_cards_needed;
                   player2_cards += surplus_cards;
                 }
-
-this.updateLog("adjusting distribution of cards 3: " + player1_cards + " -- " + player2_cards);
 
                 if (player1_cards > 0) {
                   this.game.queue.push("DEAL\t1\t2\t"+player2_cards);
@@ -2332,8 +2327,6 @@ this.updateLog("adjusting distribution of cards 3: " + player1_cards + " -- " + 
 
             }
 
-this.updateLog("entering round: " + this.game.state.round);
-
             if (this.game.state.round == 8) {
 
               this.game.queue.push("SHUFFLE\t1");
@@ -2349,7 +2342,6 @@ this.updateLog("entering round: " + this.game.state.round);
             }
           }
 
-this.updateLog("and returning 1...");
           return 1;
         }
         if (mv[0] === "play") {
