@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS posts (
       votes INTEGER,
       comments INTEGER,
       reported INTEGER,
+      approved INTEGER,
       UNIQUE (tx),
       PRIMARY KEY(id ASC)
 );
