@@ -724,7 +724,7 @@ class Forum extends ModTemplate {
     Header.attachEvents(app, data);
 
     if(getPreference('darkmode')) {
-      addStyleSheet("/forum/dark.css")
+      addStyleSheet("/forum/dark.css");
     }
 
     let data = {};

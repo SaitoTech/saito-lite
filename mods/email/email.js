@@ -121,6 +121,10 @@ class Email extends ModTemplate {
 
     super.initializeHTML(app);
 
+    if(getPreference('darkmode')) {
+      addStyleSheet("/forum/dark.css");
+    }
+
     Header.render(app, this.uidata);
     Header.attachEvents(app, this.uidata);
 

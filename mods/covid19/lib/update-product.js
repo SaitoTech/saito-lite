@@ -120,6 +120,7 @@ module.exports = UpdateProduct = {
           production_stock: "",
           production_daily_capacity: "",
           production_minimum_order: "",
+          published: "",
         }
 
         html = data.covid19.returnForm("covid19", "products", "", row);

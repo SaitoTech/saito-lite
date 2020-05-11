@@ -80,6 +80,10 @@ class Chat extends ChatCore {
 
   initializeHTML(app) {
 
+    if(getPreference('darkmode')) {
+      addStyleSheet("/forum/dark.css");
+    }
+
     let x = this.app.modules.respondTo("chat-navbar");
     for (let i = 0; i < x.length; i++) {
       this.mods.push(x[i]);
