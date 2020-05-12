@@ -548,11 +548,7 @@ console.log("INCREMENTING TURN!")
 
       if (mv[0] === "round") {
 
-console.log("start round");
-
           this.displayBoard();
-
-
 
           if (this.game.state.turn == 0) {
 
