@@ -255,7 +255,9 @@ module.exports = ForumMain = {
       });
     });
 
+    //
     // delete
+    //
     Array.from(document.getElementsByClassName('teaser-content-links-delete')).forEach(del => {
       del.addEventListener('click', (e) => {
 
@@ -267,6 +269,25 @@ module.exports = ForumMain = {
         elem.parentNode.removeChild(elem);
 
         salert("Delete Requested: it may take a minute for this to update");
+
+      });
+    });
+
+
+    //
+    // report 
+    //
+    Array.from(document.getElementsByClassName('teaser-content-links-report')).forEach(del => {
+      del.addEventListener('click', (e) => {
+
+        let newtx = data.forum.createReportTransaction(e.currentTarget.id);
+        app.network.propagateTransaction(newtx);
+
+        let divid = ".teaser_" + e.currentTarget.id;
+        let elem = document.querySelector(divid);
+        elem.parentNode.removeChild(elem);
+
+        salert("Post Reported: admin should review.");
 
       });
     });

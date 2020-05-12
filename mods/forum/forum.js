@@ -6,6 +6,7 @@ const request = require('request');
 //const http = require('http');
 
 const ForumMain = require('./lib/forum-main/forum-main');
+const ForumMod = require('./lib/forum-main/forum-mod');
 const ForumRightSidebar = require('./lib/forum-right-sidebar/forum-right-sidebar');
 const ForumLeftSidebar = require('./lib/forum-left-sidebar/forum-left-sidebar');
 const ForumTeaser = require('./lib/forum-main/forum-teaser');
@@ -345,6 +346,42 @@ class Forum extends ModTemplate {
 
   }
 
+  createReportTransaction(post_id) {
+
+    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+
+    newtx.transaction.msg.module = "Forum";
+    newtx.transaction.msg.type = "report";
+    newtx.transaction.msg.post_id = post_id;
+    newtx = this.app.wallet.signTransaction(newtx);
+
+    return newtx;
+  }
+
+  createModApproveTransaction(post_id) {
+
+    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+
+    newtx.transaction.msg.module = "Forum";
+    newtx.transaction.msg.type = "modapprove";
+    newtx.transaction.msg.post_id = post_id;
+    newtx = this.app.wallet.signTransaction(newtx);
+
+    return newtx;
+  }
+
+  createModDeleteTransaction(post_id) {
+
+    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
+
+    newtx.transaction.msg.module = "Forum";
+    newtx.transaction.msg.type = "moddelete";
+    newtx.transaction.msg.post_id = post_id;
+    newtx = this.app.wallet.signTransaction(newtx);
+
+    return newtx;
+  }
+
   createDeleteTransaction(post_id) {
 
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
@@ -356,6 +393,26 @@ class Forum extends ModTemplate {
 
     return newtx;
   }
+
+  async receiveReportTransaction(tx) {
+
+    try {
+
+      let txmsg = tx.returnMessage();
+      let post_id = txmsg.post_id;
+
+      let sql = "UPDATE posts SET reported = 1 WHERE post_id = $post_id";
+      let params = { $post_id: post_id }
+      await this.app.storage.executeDatabase(sql, params, "forum");
+
+    } catch (err) {
+
+    }
+
+    return;
+
+  }
+
 
   async receiveDeleteTransaction(tx) {
 
@@ -384,6 +441,42 @@ class Forum extends ModTemplate {
 
         }
       }
+
+    } catch (e) {
+      console.log('ERROR - receiveDeleteTransaction: ' + e);
+    }
+
+  }
+
+
+  async receiveModDeleteTransaction(tx) {
+
+    try {
+
+      let txmsg = tx.returnMessage();
+      let post_id = txmsg.post_id;
+
+      let sql = "DELETE FROM posts WHERE post_id = $post_id";
+      let params = { $post_id: post_id }
+      await this.app.storage.executeDatabase(sql, params, "forum");
+
+    } catch (e) {
+      console.log('ERROR - receiveModDeleteTransaction: ' + e);
+    }
+
+  }
+
+
+  async receiveModApproveTransaction(tx) {
+
+    try {
+
+      let txmsg = tx.returnMessage();
+      let post_id = txmsg.post_id;
+
+      let sql = "UPDATE posts SET reported = 0 WHERE post_id = $post_id";
+      let params = { $post_id: post_id }
+      await this.app.storage.executeDatabase(sql, params, "forum");
 
     } catch (e) {
       console.log('ERROR - receiveDeleteTransaction: ' + e);
@@ -435,12 +528,44 @@ class Forum extends ModTemplate {
 
     if (this.browser_active == 0) { return; }
 
+    //
+    // moderation
+    //
+    if (this.view_post_id == "mod") {
+      where_clause = "reported = 1";
+
+      this.sendPeerDatabaseRequest("forum", "teasers", "*", where_clause, null, (res, data) => {
+
+	let forum_self = this;
+	forum_self.forum.mods = [];
+
+        if (res.rows) {
+
+          res.rows.forEach(row => {
+            let tx = new saito.transaction(row.tx);
+            forum_self.forum.mods.push(tx);
+          });
+
+	  let data = {};
+	  data.forum = forum_self;
+          ForumMod.render(this.app, data);
+          ForumMod.attachEvents(this.app, data);
+
+        }
+
+
+      });
+
+      return;
+    }
+
+
     let forum_self = this;
 
     let loading = "main";
 
     //
-    // load teasers from server
+    // load posts
     //
     where_clause = "";
     if (this.view_forum != 'main') {
@@ -630,13 +755,31 @@ class Forum extends ModTemplate {
 
     let forum_self = this;
 
+
+    expressapp.get('/forum/mod', async (req, res) => {
+
+      let image = req.protocol + '://' + req.get('host') + "/forum/img/forum-logo.png";
+      let title = "Saito Forum";
+      let description = "The Saito forum is an open place to share ideas, information and links.";
+
+      let data = fs.readFileSync(__dirname + '/web/pages.html', 'utf8', (err, data) => { });
+      data = data.replace('POST_ID', "mod");
+      res.setHeader('Content-type', 'text/html');
+      res.charset = 'UTF-8';
+      res.write(data);
+      res.end();
+      return;
+
+    });
+
+
+
     expressapp.get('/forum/:subforum', async (req, res) => {
 
       let image = req.protocol + '://' + req.get('host') + "/forum/img/forum-logo.png";
       let title = "Saito Forum";
       let description = "The Saito forum is an open place to share ideas, information and links.";
       let url = req.protocol + '://' + req.get('host') + "/forum/";
-
       let subforum = "";
 
       if (req.params.subforum) { subforum = req.params.subforum; }
@@ -668,11 +811,7 @@ class Forum extends ModTemplate {
       if (req.params.subforum) { subforum = req.params.subforum; }
       if (req.params.post_id) { post_id = req.params.post_id; }
 
-
       let sql = "SELECT img, title, content FROM posts WHERE post_id = '" + post_id + "' LIMIT 1";
-
-      console.log(sql);
-
       let rows = await this.app.storage.queryDatabase(sql, {}, 'forum');
 
       if (rows) {
@@ -684,7 +823,6 @@ class Forum extends ModTemplate {
           description = clip(row.content, 300)
         });
       }
-
 
       let data = fs.readFileSync(__dirname + '/web/pages.html', 'utf8', (err, data) => { });
       if (post_id != "") { data = data.replace('POST_ID', post_id); }
@@ -700,6 +838,7 @@ class Forum extends ModTemplate {
       res.end();
       return;
     });
+
 
   }
 
@@ -832,6 +971,18 @@ class Forum extends ModTemplate {
 
         if (tx.transaction.msg.type == "delete") {
           forum_self.receiveDeleteTransaction(tx);
+        }
+
+        if (tx.transaction.msg.type == "moddelete") {
+          forum_self.receiveModDeleteTransaction(tx);
+        }
+
+        if (tx.transaction.msg.type == "modapprove") {
+          forum_self.receiveModApproveTransaction(tx);
+        }
+
+        if (tx.transaction.msg.type == "report") {
+          forum_self.receiveReportTransaction(tx);
         }
       }
     }

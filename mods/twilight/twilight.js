@@ -1662,8 +1662,10 @@ console.log("CARD: " + card);
           this.game.queue.splice(qe, 1);
         }
         if (mv[0] === "setvar") {
-          if (mv[1] == "opponent_cards_in_hand") {
-            this.game.state.opponent_cards_in_hand = parseInt(mv[2]);
+          if (this.game.player != mv[1]) {
+	    if (mv[2] == "opponent_cards_in_hand") {
+              this.game.state.opponent_cards_in_hand = parseInt(mv[3]);
+	    }
           }
           this.game.queue.splice(qe, 1);
         }
@@ -2292,6 +2294,7 @@ console.log("CARD: " + card);
                   player2_cards = us_cards_needed;
                   player1_cards += surplus_cards;
                 }
+
                 if (player1_cards > ussr_cards_needed) {
                   let surplus_cards = player1_cards - ussr_cards_needed;
                   player1_cards = ussr_cards_needed;
@@ -2310,7 +2313,6 @@ console.log("CARD: " + card);
             }
 
 
-
             if (this.game.state.round == 4) {
 
               this.game.queue.push("SHUFFLE\t1");
@@ -2324,7 +2326,6 @@ console.log("CARD: " + card);
               this.updateLog("Adding Mid War cards to the deck...");
 
             }
-
 
             if (this.game.state.round == 8) {
 
@@ -5575,7 +5576,7 @@ console.log("CARD: " + card);
     }
 
     let extra = {};
-    this.addMove("setvar\topponent_cards_in_hand\t"+cards_in_hand);
+    this.addMove("setvar\t"+this.game.player+"\topponent_cards_in_hand\t"+cards_in_hand);
     this.game.turn = this.moves;
     this.moves = [];
     this.sendMessage("game", extra);
