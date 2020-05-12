@@ -36,7 +36,7 @@ module.exports = ForumSidebar = {
       </div>
     </div>`;
 
-    document.querySelector('.arcade-forum-posts').innerHTML = html;
+    document.querySelector('.arcade-forum-posts').innerHTML += html;
 
   }
 

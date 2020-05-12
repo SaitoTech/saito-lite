@@ -5576,7 +5576,7 @@ console.log("CARD: " + card);
     }
 
     let extra = {};
-    this.addMove("setvar\t"+this.game.player+"\t"opponent_cards_in_hand\t"+cards_in_hand);
+    this.addMove("setvar\t"+this.game.player+"\topponent_cards_in_hand\t"+cards_in_hand);
     this.game.turn = this.moves;
     this.moves = [];
     this.sendMessage("game", extra);
