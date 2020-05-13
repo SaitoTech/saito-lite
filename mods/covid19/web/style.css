@@ -162,13 +162,33 @@ label.treated {
   box-shadow: 0 0 3px 3px #ccc;
 }
 
+.modal-form.attach-product {
+  display: grid;
+  grid-template-columns: 2fr 4fr 2fr 1fr;
+}
+
 .grid-buttons {
   width: 250px;
 }
 
-.file-table, .bundle-table, .category-table {
+.form-section-buttons {
+  display: flex;
+}
+
+.file-table, .bundle-table, .category-table, .order-table {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 2fr;
+}
+
+.item-table {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 3fr 1fr;
+}
+
+.item-table .fullrow {
+  grid-column: 1 / 6;
+  border: 1px solid #369;
+  padding: 1em;
 }
 
 .attachments-grid {
@@ -205,7 +225,8 @@ button, .button {
   min-width: 300px;
   max-width: 400px;
   margin: 0 1em 0 0;
-  text-align: center;
+  text-align: center; 
+  padding: 5px;
 }
 
 .covid_back {
@@ -330,4 +351,11 @@ td.inq-product-id div.editable {
   position: absolute;
   top: 8px;
   right: 3px;
+}
+
+
+
+.item-product-block {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
 }
