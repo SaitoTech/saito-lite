@@ -19,7 +19,7 @@ body {
 }
 
 .hud {
-  height: 220px;
+  height: 400px;
 }
 
 .hand {
@@ -45,6 +45,7 @@ body {
 .deal {
  margin-left: auto;
  margin-right: auto;
+ margin-top: 20px;
  width: 1000px;
 }
 

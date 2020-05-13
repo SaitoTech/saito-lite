@@ -1,5 +1,9 @@
-var saito = require('../../lib/saito/saito');
-var GameTemplate = require('../../lib/templates/gametemplate');
+const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
+const GameTemplate = require('../../lib/templates/gametemplate');
+const saito = require('../../lib/saito/saito');
+
+
+
 
 //////////////////
 // CONSTRUCTOR  //
@@ -20,9 +24,47 @@ class Poker extends GameTemplate {
     this.interface       = 1;
     this.boardgameWidth  = 5100;
 
+    this.hud = new GameHud(this.app, this.menuItems());
+
     return this;
 
   }
+
+
+
+
+
+  menuItems() {
+    return {
+      'game-player': {
+        name: 'Players',
+        callback: this.handlePlayersMenuItem.bind(this)
+      },
+    }
+  }
+
+  handlePlayersMenuItem() {
+
+    let twilight_self = this;
+    let html = `
+      <div id="menu-container">
+        <div>Players:</div>
+       <ul>
+          <li class="menu-item" id="">Player 1</li>
+        </ul>
+      </div>
+    `;
+
+    $('.hud-menu-overlay').html(html);
+    $('.status').hide();
+    $('.hud-menu-overlay').show();
+
+    //$('.menu-item').on('click', function() {
+    //+);
+
+  }
+
+
 
 //
   // manually announce arcade banner support
@@ -775,6 +817,7 @@ console.log("QUEUE CREATED: " + this.game.queue);
         html += '</ul>';
         this.updateStatus(html);
       } else {
+alert(this.game.state.required_pot + " --- " + this.game.state.player_pot[this.game.player-1]);
 	this.updateStatus("ERROR 257293: logic error in poker module, please report");
       }
     }
@@ -808,26 +851,32 @@ console.log("QUEUE CREATED: " + this.game.queue);
 	let all_in_remaining = poker_self.game.state.player_credit[poker_self.game.player-1] - raise_required;
 
         html  = 'Please select an option below: <p></p><ul>';
-        if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
-	  html += '<li class="menu_option" id="'+(raise_required)+'">'+(raise_required)+'</li>';
+
+alert(credit_remaining + " -- " + raise_required + " -- " + poker_self.game.state.last_raise);
+
+        if (credit_remaining < (raise_required)) {
+	  html += '<li class="menu_option" id="0">cancel raise</li>';
+        }
+        if (credit_remaining > (raise_required)) {
+	  html += '<li class="menu_option" id="'+(raise_required)+'">raise '+(raise_required)+'</li>';
         }
         if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
-	  html += '<li class="menu_option" id="'+(raise_required + (1 * poker_self.game.state.last_raise))+'">'+(raise_required + (1 * poker_self.game.state.last_raise))+'</li>';
+	  html += '<li class="menu_option" id="'+(raise_required + (1 * poker_self.game.state.last_raise))+'">raise '+(raise_required + (1 * poker_self.game.state.last_raise))+'</li>';
         }
         if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
-	  html += '<li class="menu_option" id="'+(raise_required + (2 * poker_self.game.state.last_raise))+'">'+(raise_required + (2 * poker_self.game.state.last_raise))+'</li>';
+	  html += '<li class="menu_option" id="'+(raise_required + (2 * poker_self.game.state.last_raise))+'">raise '+(raise_required + (2 * poker_self.game.state.last_raise))+'</li>';
         }
         if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
-	  html += '<li class="menu_option" id="'+(raise_required + (3 * poker_self.game.state.last_raise))+'">'+(raise_required + (3 * poker_self.game.state.last_raise))+'</li>';
+	  html += '<li class="menu_option" id="'+(raise_required + (3 * poker_self.game.state.last_raise))+'">raise '+(raise_required + (3 * poker_self.game.state.last_raise))+'</li>';
         }
         if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
-	  html += '<li class="menu_option" id="'+(raise_required + (4 * poker_self.game.state.last_raise))+'">'+(raise_required + (4 * poker_self.game.state.last_raise))+'</li>';
+	  html += '<li class="menu_option" id="'+(raise_required + (4 * poker_self.game.state.last_raise))+'">raise '+(raise_required + (4 * poker_self.game.state.last_raise))+'</li>';
         }
         if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
-	  html += '<li class="menu_option" id="'+(raise_required + (5 * poker_self.game.state.last_raise))+'">'+(raise_required + (5 * poker_self.game.state.last_raise))+'</li>';
+	  html += '<li class="menu_option" id="'+(raise_required + (5 * poker_self.game.state.last_raise))+'">raise '+(raise_required + (5 * poker_self.game.state.last_raise))+'</li>';
         }
         if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
-	  html += '<li class="menu_option" id="'+(all_in_remaining)+'">'+(all_in_remaining)+'</li>';
+	  html += '<li class="menu_option" id="'+(all_in_remaining)+'">raise '+(all_in_remaining)+' (all in)</li>';
         }
 
         html += '</ul>';
@@ -837,7 +886,12 @@ console.log("QUEUE CREATED: " + this.game.queue);
           $('.menu_option').on('click', function() {
 
           let raise = $(this).attr("id");
-          poker_self.addMove("raise\t"+poker_self.game.player+"\t"+raise);
+
+	  if (raise == 0) {
+            poker_self.addMove("check\t"+poker_self.game.player);
+	  } else {
+            poker_self.addMove("raise\t"+poker_self.game.player+"\t"+raise);
+	  }
           poker_self.endTurn();
 
         });
