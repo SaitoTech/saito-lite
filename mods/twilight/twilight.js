@@ -271,6 +271,12 @@ class Twilight extends GameTemplate {
 initializeGame(game_id) {
 
   //
+  // HACK - END OF HISTORY
+  // 
+  this.game.options.deck ="end_of_history";
+
+
+  //
   // check user preferences to update interface, if text
   //
   if (this.app.options != undefined) {
@@ -11656,6 +11662,52 @@ console.log("card: " + card);
     // END OF HISTORY //
     ////////////////////
     if (card == "peronism") {
+
+      let twilight_self = this;
+      let me = "ussr";
+      let opponent = "us";
+      if (this.game.player == 2) { opponent = "ussr"; me = "us"; }
+
+      this.placeInfluence("argentina", 1, "us");
+      this.placeInfluence("argentina", 1, "ussr");
+
+      if ((this.game.player == 2 && player == "ussr") || (this.game.player == 1 && player == "us")) {
+	this.updateStatus("Opponent deciding to add influence to or coup or realign Argentina");
+        return 0;
+      } else {
+
+        let html = `<span>Do you choose to:</span>
+	  <ul>
+	    <li class="card" id="place">place 1 influence in Argentina</li>
+	    <li class="card" id="couporrealign">coup or realign Argentina</li>
+          </ul>';
+
+          this.updateStatus(html);
+
+          $('.card').off();
+          $('.card').on('click', function() {
+            let action2 = $(this).attr("id");
+            if (action2 == "place") {
+              twilight_self.addMove("resolve\twargames");
+          twilight_self.addMove("wargames\t"+player+"\t1");
+          twilight_self.endTurn();
+        }
+        if (action2 == "cont") {
+          twilight_self.updateStatus("Discarding Wargames...");
+          twilight_self.addMove("resolve\twargames");
+          twilight_self.addMove("wargames\t"+player+"\t0");
+          twilight_self.endTurn();
+        }
+      });
+
+      return 0;
+    }
+
+
+      }
+
+
+
       return 1;
     }
     if (card == "manwhosavedtheworld") {
