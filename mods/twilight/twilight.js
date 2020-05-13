@@ -6210,6 +6210,13 @@ console.log("CARD: " + card);
       deck['norad']           = { img : "TNRnTS-106" ,name : "NORAD", scoring : 0 , player : "us"   , recurring : 0 , ops : 3 };
     }
 
+    //
+    // END OF HISTORY - we default to the expanded deck
+    //
+    if (this.game.options.deck == "end_of_history" ) {
+      deck['peronism']       = { img : "TNRnTS-307png" ,name : "Peronism", scoring : 0 , player : "both"   , recurring : 0 , ops : 1 };
+    }
+
 
     //
     // remove any cards specified
@@ -6299,6 +6306,18 @@ console.log("CARD: " + card);
     }
 
     //
+    // END OF HISTORY
+    //
+    if (this.game.options.deck == "end_of_history" ) {
+      deck['manwhosavedtheworld']       = { img : "TNRnTS-301png" ,name : "The Man Who Saved the World", scoring : 0 , player : "both"   , recurring : 0 , ops : 4 };
+      deck['breakthroughatlopnor']      = { img : "TNRnTS-302png" ,name : "Breakthrough at Lop Nor", scoring : 0 , player : "ussr"   , recurring : 0 , ops : 2 };
+      deck['greatsociety']              = { img : "TNRnTS-303png" ,name : "Great Society", scoring : 0 , player : "us"   , recurring : 0 , ops : 2 };
+      deck['nationbuilding']            = { img : "TNRnTS-304png" ,name : "Nation Building", scoring : 0 , player : "both"   , recurring : 0 , ops : 2 };
+      deck['eurocommunism']             = { img : "TNRnTS-306png" ,name : "Eurocommunism", scoring : 0 , player : "us"   , recurring : 0 , ops : 3 };
+    }
+
+
+    //
     // remove any cards specified
     //
     if (this.game.options != undefined) {
@@ -6359,6 +6378,15 @@ console.log("CARD: " + card);
       deck['yuri']              = { img : "TNRnTS-109" , name : "Yuri and Samantha", scoring : 0 , player : "ussr" , recurring : 0 , ops : 2 };
       deck['awacs']             = { img : "TNRnTS-110" , name : "AWACS Sale to Saudis", scoring : 0 , player : "us" , recurring : 0 , ops : 3 };
     }
+
+    //
+    // END OF HISTORY
+    //
+    if (this.game.options.deck == "end_of_history" ) {
+      deck['perestroika']       = { img : "TNRnTS-301png" ,name : "Perestroika", scoring : 0 , player : "ussr"   , recurring : 0 , ops : 3 };
+      deck['inftreaty']         = { img : "TNRnTS-302png" ,name : "INF Treaty", scoring : 0 , player : "both"   , recurring : 0 , ops : 3 };
+    }
+
 
     //
     // remove any cards specified
@@ -11624,6 +11652,38 @@ console.log("card: " + card);
 
 
 
+    ////////////////////
+    // END OF HISTORY //
+    ////////////////////
+    if (card == "peronism") {
+      return 1;
+    }
+    if (card == "manwhosavedtheworld") {
+      return 1;
+    }
+    if (card == "breakthroughatlopnor") {
+      return 1;
+    }
+    if (card == "greatsociety") {
+      return 1;
+    }
+    if (card == "nationbuilding") {
+      return 1;
+    }
+    if (card == "eurocommunism") {
+      return 1;
+    }
+    if (card == "perestroika") {
+      return 1;
+    }
+    if (card == "inftreaty") {
+      return 1;
+    }
+
+
+
+
+
     //
     // return 0 so other cards do not trigger infinite loop
     //
@@ -12171,7 +12231,6 @@ console.log("card: " + card);
 
         scoring = this.calculateControlledBattlegroundCountries(scoring, as_bg_countries);
 
-
         if (this.game.state.events.formosan == 1) {
           if (this.isControlled("us", "taiwan") == 1) { scoring.us.bg++; }
         }
@@ -12184,6 +12243,8 @@ console.log("card: " + card);
 
         if (this.game.state.events.formosan == 0) {
           if (this.isControlled("us", "taiwan") == 1) { scoring.us.total++; }
+          if (this.isControlled("ussr", "taiwan") == 1) { scoring.ussr.total++; }
+        } else {
           if (this.isControlled("ussr", "taiwan") == 1) { scoring.ussr.total++; }
         }
 
@@ -14327,10 +14388,11 @@ console.log("card: " + card);
 
             <label for="deck">Deck:</label>
             <select name="deck" id="deckselect" onchange='
-  if ($("#deckselect").val() == "saito") { $(".saito_edition").prop("checked",true); } else { $(".saito_edition").prop("checked", false); if ($("#deckselect").val() == "optional") { $(".optional_edition").prop("checked", false); } else { $(".optional_edition").prop("checked", true); } }  '>
+  if ($("#deckselect").val() == "saito") { $(".saito_edition").prop("checked",true); } else { $(".saito_edition").prop("checked", false); if ($("#deckselect").val() == "optional") { $(".optional_edition").prop("checked", false); } else { $(".optional_edition").prop("checked", true); if ($("#deckselect").val() == "endofhistory") { $(".endofhistory_edition").prop("checked",true); } else { $(".endofhistory_edition").prop("checked", false); } } } '>
             <option value="original">original</option>
-              <option value="optional">optional</option>
-              <option value="saito" selected>saito edition</option>
+              <option value="optional" selected>optional</option>
+              <option value="saito">saito edition</option>
+              <option value="endofhistory">end of history</option>
             </select>
 
             <label for="usbonus">US bonus: </label>
@@ -14495,21 +14557,6 @@ console.log("card: " + card);
   addShowCardEvents(onCardClickFunction) {
 
     // let twilight_self = this;
-
-    // $('.card').off();
-
-    // if (!this.app.browser.isMobileBrowser(navigator.userAgent)) {
-
-    //   $('.showcard').off();
-    //   $('.showcard').mouseover(function() {
-    //     let card = $(this).attr("id");
-    //     twilight_self.showCard(card);
-    //   }).mouseout(function() {
-    //     let card = $(this).attr("id");
-    //     twilight_self.hideCard(card);
-    //   });
-
-    // }
 
     this.hud.status_callback = () => {
       let twilight_self = this;
