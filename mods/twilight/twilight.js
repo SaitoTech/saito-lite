@@ -1919,6 +1919,11 @@ console.log("CARD: " + card);
           this.game.state.events.china_card_facedown = 0;
 	  this.displayChinaCard();
 
+          //
+          // END OF HISTORY
+          //
+          this.game.state.events.inftreaty = 0;
+
 
           //
           // NORAD
@@ -4912,6 +4917,15 @@ console.log("CARD: " + card);
       }
 
 
+
+      //
+      // END OF HISTORY
+      //
+      if (twilight_self.game.state.events.inftreaty == 1){
+        valid_target = 1;
+      }    
+
+
       let divname      = '#'+i;
 
       if (valid_target == 1) {
@@ -5303,6 +5317,8 @@ console.log("CARD: " + card);
 
     let roll    = this.rollDice(6);
 
+
+
     //
     // Yuri and Samantha
     //
@@ -5357,6 +5373,15 @@ console.log("CARD: " + card);
         }
       }
     }
+
+    //
+    // INF Treaty (END OF HISTORY)
+    //
+    if (this.game.state.events.inftreaty == 1) {
+        this.updateLog("INF Treaty -1 modifier on coups");
+        roll--;
+    }
+
 
     let control = this.countries[countryname].control;
     let winning = parseInt(roll) + parseInt(ops) - parseInt(control * 2);
@@ -6038,6 +6063,10 @@ console.log("CARD: " + card);
     state.events.yuri               = 0;
     state.events.aldrich            = 0;
 
+
+    // events END OF HISTORY
+    state.events.inftreaty          = 0;
+
     return state;
 
   }
@@ -6384,8 +6413,8 @@ console.log("CARD: " + card);
     // END OF HISTORY
     //
     if (this.game.options.deck == "end_of_history" ) {
-      deck['perestroika']       = { img : "TNRnTS-301png" ,name : "Perestroika", scoring : 0 , player : "ussr"   , recurring : 0 , ops : 3 };
-      deck['inftreaty']         = { img : "TNRnTS-302png" ,name : "INF Treaty", scoring : 0 , player : "both"   , recurring : 0 , ops : 3 };
+      deck['perestroika']       = { img : "TNRnTS-305png" ,name : "Perestroika", scoring : 0 , player : "ussr"   , recurring : 0 , ops : 3 };
+      deck['inftreaty']         = { img : "TNRnTS-308png" ,name : "INF Treaty", scoring : 0 , player : "both"   , recurring : 0 , ops : 3 };
     }
 
 
@@ -11838,10 +11867,101 @@ console.log("card: " + card);
     }
 
     if (card == "perestroika") {
-      return 1;
+
+      if (this.game.player == 2) {
+        this.updateStatus("USSR is playing Perestroika");
+        return 0;
+      }
+      if (this.game.player == 1) {
+
+        var twilight_self = this;
+        twilight_self.playerFinishedPlacingInfluence();
+
+        twilight_self.addMove("resolve\tperestroika");
+
+        twilight_self.updateStatus('Remove four USSR influence from existing countries. You will receive 1 VP per influence removed from battleground countries, and 1 VP for every 2 influence removed from non-battleground countries controlled by the USSR:<ul><li class="card" id="skip">or skip...</li></ul>');
+
+        $('.card').off();
+        $('.card').on('click', function() {
+          twilight_self.playerFinishedPlacingInfluence();
+	  twilight_self.endTurn();
+	});
+
+
+        let ops_to_purge = 4;
+	let bginf = 0;
+	let nonbginf = 0;
+
+        for (var i in this.countries) {
+
+          let countryname  = i;
+          let divname      = '#'+i;
+
+          $(divname).off();
+          $(divname).on('click', function() {
+
+            let c = $(this).attr('id');
+
+            if (twilight_self.isControlled("ussr", c) != 1) {
+
+              twilight_self.displayModal("Invalid Option");
+              return;
+
+            } else {
+
+	      if (twilight_self.countries[c].bg == 1) {
+                twilight_self.removeInfluence(c, 1, "ussr");
+		twilight_self.addMove("vp\tussr\t1")
+                twilight_self.addMove("remove\tussr\tussr\t"+c+"\t1");
+	      } else {
+                twilight_self.removeInfluence(c, 1, "ussr");
+		nonbginf++;
+		if (nonbginf == 2) {
+  		  twilight_self.addMove("vp\tussr\t1")
+		  nonbginf = 0;
+                }
+		twilight_self.addMove("remove\tussr\tussr\t"+c+"\t1");
+	      }
+
+              ops_to_purge--;
+              if (ops_to_purge == 0) {
+                twilight_self.playerFinishedPlacingInfluence();
+		twilight_self.endTurn();
+              }
+
+            }
+          });
+        }
+      }
+      return 0;
     }
     if (card == "inftreaty") {
-      return 1;
+
+      // update defcon
+      this.game.state.defcon += 2;
+      if (this.game.state.defcon > 5) { this.game.state.defcon = 5; }
+      this.updateDefcon();
+
+      // affect coups
+      this.game.state.events.inftreaty = 1;
+
+      let my_go = 0;
+      if (player === "ussr" && this.game.player == 1) { my_go = 1; }
+      if (player === "us" && this.game.player == 2) { my_go = 1; }
+      if (my_go == 0) {
+        this.updateStatus("Opponent is playing INF Treaty");
+        console.log("HERE: " + my_go + " --- " + this.game.player + " --- " + player);
+        return 0;
+      }
+
+      this.addMove("resolve\tinftreaty");
+      this.addMove("unlimit\tcoups");
+      this.addMove("ops\t"+player+"\tinftreaty\t3");
+      this.addMove("limit\tcoups");
+      this.addMove("notify\t"+player+" plays 3 OPS for influence or realignments");
+      this.endTurn();
+
+      return 0;
     }
 
 
