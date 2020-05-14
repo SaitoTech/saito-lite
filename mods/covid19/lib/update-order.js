@@ -39,8 +39,8 @@ module.exports = UpdateOrder = {
     document.getElementById('save-order').addEventListener('click', (e) => {
       data.covid19.submitForm(document.querySelector('.main-form'));
       document.querySelector('.order-template').destroy();
-//      UpdateSuccess.render(app, data);
-//      UpdateSuccess.attachEvents(app, data);
+      UpdateSuccess.render(app, data);
+      UpdateSuccess.attachEvents(app, data);
 
     });
 

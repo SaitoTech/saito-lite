@@ -38,29 +38,27 @@ module.exports = ItemManager = {
           "${app.wallet.returnPublicKey()}" = "${data.covid19.admin_pkey}") 
         )
 `;
-    var html = `
-          <div class="table-head">Category</div>
-          <div class="table-head">Status</div>
-          <div class="table-head">Number</div>
-          <div class="table-head">Requirments</div>
-          <div class="table-head"></div>
-        `;
+    var html = ``;
 
     data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
       res.rows.forEach(row => {
 
-        html += `<div>${row.category}</div>`;
-        html += `<div>${row.status}</div>`;
-        html += `<div>${row.number}</div>`;
-        html += `<div>${row.requirements}</div>`;
         html += `
-        <div class="grid-buttons ${row.id}">
+        <div class="item-deails grid-2-columns">
+          <div class="table-head">Category</div><div>${row.category}</div>
+          <div class="table-head">Status</div><div>${row.status}</div>
+          <div class="table-head">Number</div><div>${row.number}</div>
+        </div>
+        <div class="item-requirements">
+          <div class="table-head">Requirments</div>
+          <div>${row.requirements}</div>
+        </div>
+        <div data-id="${row.id}" class="item-product"></div>
+        <div class="grid-buttons fullrow hr ${row.id}">
           <div class="grid-action edit" data-id="${row.id}">Edit</div>
           <div class="grid-action delete" data-id="${row.id}">Delete</div>
           <div class="grid-action attach-product" data-category_id="${row.category_id}" data-id="${row.id}">Add&nbspProduct</div>          
-          
         </div>
-        <div data-id="${row.id}" class="item-product fullrow"></div>
         `;
       });
       document.querySelector(".loading").style.display = "none";
@@ -134,7 +132,7 @@ module.exports = ItemManager = {
     var this_products = this;
 
     document.querySelector('.new-item-btn').addEventListener('click', (e) => {
-      //data.product_id = e.currentTarget.id;
+      data.item_id = "";
       UpdateItem.render(app, data);
       UpdateItem.attachEvents(app, data);
     });

@@ -6,7 +6,7 @@ module.exports = ItemManagerTemplate = () => {
   <div class="item-information">
     <hr />
     <p>
-    <h2>Items</h2>
+    <h2>Required Items</h2>
     </p>
 
     <p><hr /></p>
@@ -21,14 +21,11 @@ module.exports = ItemManagerTemplate = () => {
 
     <div id="item-table" class="item-table" style="display:none"></div>
 
-    <p><hr /></p>
-
     <div class="form-section-buttons">
        <div class="new-item-btn button">Add Item</div>
-       <i class="items-refresh fas fa-sync-alt"></i>
-       <div>|</div>
        <div class="create-product-btn button">Create New Product</div>
-    </div>
+       <i class="items-refresh fas fa-sync-alt"></i>
+       </div>
     
   </div>
   `;

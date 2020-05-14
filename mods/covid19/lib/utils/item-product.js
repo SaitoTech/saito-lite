@@ -33,21 +33,24 @@ module.exports = ItemProduct = {
       html += `
         <div class="item-product-block" data-product_id="${row.id}">
           <div class="item-product-title">
-            <h3>Product </h3><i data-product_id="${row.id}" class="remove far fa-times-circle"></i>
+            <h3>Sourced Product </h3><i data-product_id="${row.id}" class="remove far fa-times-circle"></i>
           </div>
-          <div class="item-product-details grid-2">
-            <div>Specifiction</div><div>${row.product_specifictions}</div>
-            <div>Location</div><div>${row.address}</div>
-            <div>Daily Capacity</div><div>${row.producton_daily_capacity}</div>
-          </div>
-          <div class="product-image">
-           <img src="${row.product_photo}">
-          </div>
-          <div class="item-product-certificates" data-product_id ="${row.id}"></div>
+          <div class="item-product-block-grid">
+            <div class="item-product-details grid-2-columns">
+              <div class="label">Specifiction:</div><div>${row.product_specification}</div>
+              <div class="label">Location:</div><div>${row.address}</div>
+              <div class="label">Daily Capacity:</div><div>${row.production_daily_capacity}</div>
+            </div>
+            <div class="product-image">
+             <img src="${row.product_photo}">
+            </div>
+            <div class="item-product-certificates" data-product_id ="${row.id}"></div>
         </div>
+      </div>
       `;
 
       el.innerHTML += html;
+      el.querySelectorAll('img').forEach(img => { imgPop(img) });
 
       });
       
