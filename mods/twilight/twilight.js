@@ -1827,9 +1827,9 @@ console.log("CARD: " + card);
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["peronism", "marine", "redscare", "europe", "saltnegotiations", "glasnost", "asia"];
+              this.game.deck[0].hand = ["peronism", "breakthroughatlopnor", "manwhosavedtheworld", "europe", "greatsociety", "nationbuilding", "asia"];
             } else {
-              this.game.deck[0].hand = ["eurocommunism", "shuttle", "starwars", "nato", "cubanmissile","china"];
+              this.game.deck[0].hand = ["eurocommunism", "perestroika", "missileenvy", "inftreaty", "cubanmissile","china","vietnamrevolts"];
             }
           }
 
@@ -2952,7 +2952,28 @@ console.log("CARD: " + card);
         this.game.state.events.greatsociety = 0;
 	if (this.game.player == 2) {
 
-	  let html = "Great Society is active. US may earn a VP for either skipping its turn or playing a scoring card:<ul><li class='card' id='select'>select card</li><li class='card' id='skip'>skip turn</li></ul>";
+	  let scoring_cards = [];
+          for (let i = 0; i < this.game.deck[0].hand.length; i++) {
+	    if (this.game.deck[0].cards[this.game.deck[0].hand[i]].scoring == 1) {
+	      scoring_cards.push(this.game.deck[0].hand[i]);
+	    }
+	  }
+
+	  let html = `Great Society is active. US may earn a VP for either skipping its turn or playing a scoring card:<ul>`;
+	  if (scoring_cards.length > 0) { 
+	    html += `
+		<li class='card' id='scoring'>play scoring card</li>
+	    `;
+	  }
+	  html += `
+		<li class='card' id='skip'>skip turn</li></ul>
+	  `;
+	  if (this.game.deck[0].hand.length > 0) {
+	    html += `
+		<li class='card' id='select'>select card</li>
+	    `;
+	  }
+	  html += '</ul>';
 	  this.updateStatus(html);
 
           $('.card').off();
@@ -2970,8 +2991,12 @@ console.log("CARD: " + card);
               twilight_self.addMove("notify\tUS skips a turn for 1 VP as a Great Society");
               twilight_self.endTurn();
             }
+            if (action2 === "scoring") {
+              twilight_self.addMove("vp\tus\t1\t0");
+              twilight_self.addMove("notify\tUS plays a scoring card as a Great Society");
+              twilight_self.playerTurn("scoringcard");
+            }
 	  });
-
 	}
       }
 
@@ -11963,6 +11988,7 @@ console.log("card: " + card);
                   twilight_self.addMove("notify\t"+player.toUpperCase()+" discards <span class=\"logcard\" id=\""+card+"\">"+twilight_self.game.deck[0].cards[card].name + "</span>");
                   twilight_self.endTurn(1);
 
+	        });
 	      });
 	    });
 
