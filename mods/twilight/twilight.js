@@ -46,19 +46,19 @@ class Twilight extends GameTemplate {
     this.boardgameWidth  = 5100;
 
     this.moves           = [];
-    this.is_testing = 1;
+    this.is_testing 	 = 0;
 
-    this.log_length = 150;
-    this.interface = 1;
+    this.log_length 	 = 150;
+    this.interface 	 = 1;
     this.dont_show_confirm = 0;
 
-    this.gameboardZoom  = 0.90;
+    this.gameboardZoom   = 0.90;
     this.gameboardMobileZoom = 0.67;
 
-    this.minPlayers = 2;
-    this.maxPlayers = 2;
-    this.type       = "Strategy Boardgame";
-    this.categories = "Bordgame Game"
+    this.minPlayers 	 = 2;
+    this.maxPlayers 	 = 2;
+    this.type       	 = "Strategy Boardgame";
+    this.categories 	 = "Bordgame Game"
 
     this.hud = new GameHud(this.app, this.menuItems());
 
@@ -2950,8 +2950,6 @@ console.log("CARD: " + card);
       //
       if (this.game.state.events.greatsociety == 1) {
 
-console.log("GREAT SOCIETY!");
-
         this.game.state.events.greatsociety = 0;
 	if (this.game.player == 2) {
 
@@ -2969,7 +2967,7 @@ console.log("GREAT SOCIETY!");
 	    `;
 	  }
 	  html += `
-		<li class='card' id='skip'>skip turn</li></ul>
+		<li class='card' id='skip'>skip turn</li>
 	  `;
 	  if (this.game.deck[0].hand.length > 0) {
 	    html += `
@@ -2978,6 +2976,8 @@ console.log("GREAT SOCIETY!");
 	  }
 	  html += '</ul>';
 	  this.updateStatus(html);
+
+	  let twilight_self = this;
 
           $('.card').off();
           $('.card').on('click', function() {
@@ -2997,7 +2997,7 @@ console.log("GREAT SOCIETY!");
             if (action2 === "scoring") {
               twilight_self.addMove("vp\tus\t1\t0");
               twilight_self.addMove("notify\tUS plays a scoring card as a Great Society");
-              twilight_self.playerTurn("scoringcard");
+              twilight_self.playerTurn("greatsociety");
             }
 	  });
 
@@ -3492,6 +3492,15 @@ console.log("GREAT SOCIETY!");
     let twilight_self = this;
 
     //
+    // END OF HISTORY
+    //
+    let greatsociety = 0;
+    if (selected_card == "greatsociety") {
+      greatsociety = 1;
+      selected_card = "scoringcard";
+    }
+
+    //
     // remove back button from forced gameplay
     //
     if (selected_card != null) { this.game.state.back_button_cancelled = 1; }
@@ -3718,7 +3727,16 @@ console.log("GREAT SOCIETY!");
 
 
     if (this.game.state.events.unintervention != 1 && selected_card != "grainsales") {
-      this.moves = [];
+
+      //
+      // END OF HISTORY
+      //
+      // note - do not remove the clearing of the moves array if removing greatsociety
+      //
+      if (greatsociety != 1) {
+        this.moves = [];
+      }
+
     }
 
     twilight_self.playerFinishedPlacingInfluence();
