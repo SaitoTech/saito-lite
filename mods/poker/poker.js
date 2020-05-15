@@ -725,23 +725,24 @@ class Poker extends GameTemplate {
 	    raise_portion = raise - call_portion;
 
 	    this.game.state.player_credit[player-1] -= call_portion;
+	    this.game.state.player_pot[player-1] += call_portion;
 	    this.game.state.required_pot += call_portion;
 	    this.game.state.pot += call_portion;
 
 	    this.game.state.player_credit[player-1] -= raise_portion;
+	    this.game.state.player_pot[player-1] += raise_portion;
 	    this.game.state.required_pot += raise_portion;
 	    this.game.state.pot += raise_portion;
 
-console.log("RAISE PORTION: " + raise_portion);
-console.log("CALL PORTION: " + call_portion);
-
 	    this.game.state.last_raise = raise_portion;
 
+	    this.updateLog("Player " + player + " calls " + call_portion + ".");
 	    this.updateLog("Player " + player + " raises " + raise_portion + ".");
 
 	  } else {
 
 	    this.game.state.player_credit[player-1] -= raise;
+	    this.game.state.player_pot[player-1] += raise;
 	    this.game.state.required_pot += raise;
 	    this.game.state.pot += raise;
 	    this.game.state.last_raise = raise;
@@ -1931,6 +1932,8 @@ console.log("CALL PORTION: " + call_portion);
 
   
 
+  
+
 
   isStraight(suite, val, low=1) {
 
@@ -1949,3 +1952,80 @@ console.log("CALL PORTION: " + call_portion);
 	  val.includes(1)
         ) { 
 	  return 10;
+        }
+	return 0;
+      };
+
+      if (
+	val.includes((i+1)) &&
+        val.includes((i+2)) &&
+        val.includes((i+3)) &&
+        val.includes((i+4)) &&
+        val.includes((i+5))
+      ) {
+	return (i+1);
+      }
+
+    }
+
+    return 0;
+
+  }
+
+
+  isCardSuite(suite, val, card, s) {
+    for (let i = 0; i < val.length ; i++) {
+      if (val[i] == card) {
+        if (suite[i] == s) {
+          return 1;
+        }
+      }
+    }
+    return 0;
+  }
+
+
+
+
+
+
+
+  returnGameOptionsHTML() {
+
+    return `
+          <h3>Poker: </h3>
+          <form id="options" class="options">
+            <label for="stake">Initial Stake:</label>
+            <select name="stake">
+              <option value="100">100</option>
+              <option value="500">500</option>
+              <option value="1000">1000</option>
+              <option value="5000" default>5000</option>
+              <option value="10000">10000</option>
+              <option value="100">100</option>
+	    </select>
+	  </form>
+    `;
+
+  }
+
+
+  returnFormattedGameOptions(options) {
+    let new_options = {};
+    for (var index in options) {
+      if (index == "stake") {
+        new_options[index] = options[index];
+      }
+    }
+    return new_options;
+  }
+
+
+
+
+
+}
+
+
+module.exports = Poker;
+
