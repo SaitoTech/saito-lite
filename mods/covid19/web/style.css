@@ -162,13 +162,32 @@ label.treated {
   box-shadow: 0 0 3px 3px #ccc;
 }
 
+.modal-form.attach-product {
+  display: grid;
+  grid-template-columns: 2fr 4fr 2fr 1fr;
+}
+
 .grid-buttons {
   width: 250px;
 }
 
-.file-table, .bundle-table, .category-table {
+.form-section-buttons {
+  display: flex;
+}
+
+.file-table, .bundle-table, .category-table, .order-table {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 2fr;
+}
+
+.item-table {
+  display: grid;
+  grid-template-columns: 1fr 2fr 3fr;
+}
+
+.item-table .fullrow {
+  grid-column: 1 / 6;
+  padding: 1em;
 }
 
 .attachments-grid {
@@ -205,7 +224,8 @@ button, .button {
   min-width: 300px;
   max-width: 400px;
   margin: 0 1em 0 0;
-  text-align: center;
+  text-align: center; 
+  padding: 5px;
 }
 
 .covid_back {
@@ -330,4 +350,59 @@ td.inq-product-id div.editable {
   position: absolute;
   top: 8px;
   right: 3px;
+}
+
+.item-product-block {
+  padding: 0 1em 1em;
+  
+}
+
+.item-product-block-grid {
+  display: grid;
+  grid-template-columns: 20em 110px auto;
+}
+
+.item-deails.grid-2-columns {
+  grid-template-rows: 2em 2em 2em;
+}
+
+.item-table .grid-buttons {
+  width: unset;
+  display: flex;
+}
+
+.item-product-title {
+  display: flex;
+  align-items: center;
+  font-size: 0.8em;
+}
+
+.item-product-title i {
+  margin: 0px 1em;
+}
+
+.item-product-details div {
+  font-size: 0.9em;
+}
+
+.item-product-details {
+  grid-template-rows: 1em 1em 1em 1em;
+  grid-template-columns: 7em auto;
+}
+
+.item-product-block {
+  background: #eee6;
+}
+
+.product-image img {
+  max-width: 120px;
+}
+
+.hr {
+  border-bottom: 1px solid var(--saito-red);
+  margin: 0 0 2em;
+}
+
+.label {
+  font-weight: bolder;
 }

@@ -6,6 +6,7 @@ const SupplierPortal = require('./lib/supplier-portal');
 const FileManager = require('./lib/file-manager');
 const BundleManager = require('./lib/bundle-manager');
 const CategoryManager = require('./lib/category-manager')
+const OrderManager = require('./lib/order-manager')
 
 const InquirePage = require('./lib/inquire-page');
 
@@ -156,7 +157,8 @@ class Covid19 extends DBModTemplate {
       var urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('mode')) {
         var mode = urlParams.get('mode');
-        switch (mode) {
+        data.covid19.renderPage(mode, app, data);
+        /*switch (mode) {
           case 'home':
             data.covid19.renderPage("home", app, data);
             break;
@@ -182,7 +184,7 @@ class Covid19 extends DBModTemplate {
             SplashPage.render(app, data);
             SplashPage.postrender(app, data);
             SplashPage.attachEvents(app, data);
-        }
+        }*/
       } else {
         SplashPage.render(app, data);
         SplashPage.postrender(app, data);
@@ -232,6 +234,11 @@ class Covid19 extends DBModTemplate {
     if (page == "category-manager") {
       CategoryManager.render(app, data);
       CategoryManager.attachEvents(app, data);
+    };
+
+    if (page == "order-manager") {
+      OrderManager.render(app, data);
+      OrderManager.attachEvents(app, data);
     };
 
   }
