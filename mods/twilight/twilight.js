@@ -14958,7 +14958,7 @@ console.log("card: " + card);
             <option value="original">original</option>
               <option value="optional" selected>optional</option>
               <option value="saito">saito edition</option>
-              <option value="endofhistory">end of history</option>
+              <option value="end_of_history">end of history</option>
             </select>
 
             <label for="usbonus">US bonus: </label>
@@ -15019,6 +15019,7 @@ console.log("card: " + card);
               <li><input class="remove_card optional_edition " type="checkbox" name="specialrelation" /> Special Relationship</li>
               <li><input class="remove_card optional_edition" type="checkbox" name="cambridge" /> The Cambridge Five</li>
               <li><input class="remove_card optional_edition" type="checkbox" name="norad" /> NORAD</li>
+              <li><input class="remove_card end_of_history" type="checkbox" name="peronism" /> Peronism</li>
             </ul>
            <ul class="removecards" style="clear:both;margin-top:13px">
               <li><input class="remove_card" type="checkbox" name="brushwar" /> Brush War</li>
@@ -15069,6 +15070,11 @@ console.log("card: " + card);
               <li><input class="remove_card" type="checkbox" name="southamerica" /> South America</li>
               <li><input class="remove_card optional_edition" type="checkbox" name="che" /> Che</li>
               <li><input class="remove_card optional_edition" type="checkbox" name="tehran" /> Our Man in Tehran</li>
+              <li><input class="remove_card end_of_history" type="checkbox" name="manwhosavedtheworld" /> The Man Who Saved the World</li>
+              <li><input class="remove_card end_of_history" type="checkbox" name="breakthroughatlopnor" /> Breakthrough at Lop Nor</li>
+              <li><input class="remove_card end_of_history" type="checkbox" name="greatsociety" /> Great Society</li>
+              <li><input class="remove_card end_of_history" type="checkbox" name="nationbuilding" /> Nation Building</li>
+              <li><input class="remove_card end_of_history" type="checkbox" name="eurocommunism" /> Eurocommunism</li>
             </ul>
            <ul class="removecards" style="clear:both;margin-top:13px">
               <li><input class="remove_card" type="checkbox" name="iranianhostage" /> Iranian Hostage Crisis</li>
@@ -15094,6 +15100,8 @@ console.log("card: " + card);
               <li><input class="remove_card optional_edition" type="checkbox" name="iraniraq" /> Iran-Iraq War</li>
               <li><input class="remove_card optional_edition" type="checkbox" name="yuri" /> Yuri and Samantha</li>
               <li><input class="remove_card optional_edition" type="checkbox" name="awacs" /> AWACS Sale to Saudis</li>
+              <li><input class="remove_card end_of_history" type="checkbox" name="perestroika" /> Perestroika</li>
+              <li><input class="remove_card end_of_history" type="checkbox" name="inftreaty" /> INF Treaty</li>
             </ul>
 
             <div style="font-size:0.85em;font-weight:bold;clear:both;margin-top:10px;">add cards to game: </div>
