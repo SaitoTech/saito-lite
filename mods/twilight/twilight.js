@@ -14952,7 +14952,7 @@ console.log("card: " + card);
 
             <label for="deck">Deck:</label>
             <select name="deck" id="deckselect" onchange='
-  if ($("#deckselect").val() == "saito") { $(".saito_edition").prop("checked",true); } else { $(".saito_edition").prop("checked", false); if ($("#deckselect").val() == "optional") { $(".optional_edition").prop("checked", false); } else { $(".optional_edition").prop("checked", true); if ($("#deckselect").val() == "endofhistory") { $(".endofhistory_edition").prop("checked",true); } else { $(".endofhistory_edition").prop("checked", false); } } } '>
+  if ($("#deckselect").val() == "saito") { $(".saito_edition").prop("checked",true); } else { $(".saito_edition").prop("checked", false); if ($("#deckselect").val() == "optional") { $(".optional_edition").prop("checked", false); } else { $(".optional_edition").prop("checked", true); if ($("#deckselect").val() == "endofhistory") { $(".endofhistory_edition").prop("checked",true); $(".optional_edition").prop("checked", true); } else { $(".endofhistory_edition").prop("checked", false); } } } '>
             <option value="original">original</option>
               <option value="optional" selected>optional</option>
               <option value="saito">saito edition</option>
@@ -15101,6 +15101,14 @@ console.log("card: " + card);
               <li><input class="remove_card saito_edition" type="checkbox" name="rustinredsquare" checked /> Rust Lands in Red Square (Late-War)</li>
               <li><input class="remove_card" type="checkbox" name="gouzenkoaffair" /> Gouzenko Affair (Early-War)</li>
               <li><input class="remove_card saito_edition" type="checkbox" name="berlinagreement" checked /> 1971 Berlin Agreement (Mid-War)</li>
+              <li><input class="remove_card endofhistory_edition" type="checkbox" name="peronism" checked /> Peronism (Early-War)</li>
+              <li><input class="remove_card endofhistory_edition" type="checkbox" name="manwhosavedtheworld" checked /> The Man Who Saved the World (Mid-War)</li>
+              <li><input class="remove_card endofhistory_edition" type="checkbox" name="breakthroughatlopnor" checked /> Breakthrough at Lop Nor (Mid-War)</li>
+              <li><input class="remove_card endofhistory_edition" type="checkbox" name="nationbuilding" checked /> Nation Building (Mid-War)</li>
+              <li><input class="remove_card endofhistory_edition" type="checkbox" name="greatsociety" checked /> Great Society (Mid-War)</li>
+              <li><input class="remove_card endofhistory_edition" type="checkbox" name="perestroika" checked /> Perestroika (Late-War)</li>
+              <li><input class="remove_card endofhistory_edition" type="checkbox" name="eurocommunism" checked /> Eurocommunism (Mid-War)</li>
+              <li><input class="remove_card endofhistory_edition" type="checkbox" name="inftreaty" checked /> INF Treaty (Latey-War)</li>
             </div>
           </form>
 
