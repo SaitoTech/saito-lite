@@ -9413,15 +9413,15 @@ console.log("card: " + card);
 
           if (this.game.player == 2) {
             for (let i = 0; i < this.game.deck[0].hand.length; i++) {
-                  if (this.game.deck[0].hand[i] == "china") {
+              if (this.game.deck[0].hand[i] == "china") {
                 does_us_get_vp = 1;
               }
             }
           }
           if (this.game.player == 1) {
-              does_us_get_vp = 1;
+            does_us_get_vp = 1;
             for (let i = 0; i < this.game.deck[0].hand.length; i++) {
-                  if (this.game.deck[0].hand[i] == "china") {
+              if (this.game.deck[0].hand[i] == "china") {
                 does_us_get_vp = 0;
               }
             }
@@ -11884,6 +11884,30 @@ console.log("card: " + card);
       //
       // flip china card or handle VP -- TODO
       //
+      let who_has_the_china_card = this.whoHasTheChinaCard();
+      for (let i = 0; i < this.game.deck[0].hand.length; i++) {
+        if (this.game.deck[0].hand[i] == "china") {
+          this.game.deck[0].hand.splice(i, 1);
+        }
+      }
+      if (who_has_the_china_card == "us") {
+        if (this.game.state.events.china_card_facedown == 1) {
+	  this.game.state.vp -= 1;
+	  this.updateLog("US loses 1 VP for Lop Nor");
+          this.updateVictoryPoints();
+	}
+        this.game.state.events.china_card = 2;
+        this.game.state.events.china_card_facedown = 1;
+      } else {
+        if (this.game.state.events.china_card_facedown == 1) {
+	  this.game.state.vp += 1;
+	  this.updateLog("USSR loses 1 VP for Lop Nor");
+          this.updateVictoryPoints();
+	}
+        this.game.state.events.china_card = 1;
+        this.game.state.events.china_card_facedown = 1;
+      }
+      this.displayChinaCard();
 
       var ops_to_purge = 3;
       var ops_removable = 0;
@@ -11941,6 +11965,8 @@ console.log("card: " + card);
       }
       return 0;
     }
+
+
     if (card == "greatsociety") {
 
       this.game.state.events.greatsociety = 1;
