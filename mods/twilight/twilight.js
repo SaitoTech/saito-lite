@@ -1464,7 +1464,7 @@ console.log("CARD: " + card);
         if (mv[0] === "vp") {
           if (mv.length > 3) {
             if (parseInt(mv[3]) == 1) {
-              this.updateLog(mv[1].toUpperCase() + "</span> <span>receives</span> " + mv[2] + " <span>VP");
+              this.updateLog(mv[1].toUpperCase() + "</span> <span>receives</span> " + mv[2] + " <span>VP", this.log_length, 1);
               if (mv[1] === "us") {
                 this.game.state.vp_outstanding += parseInt(mv[2]);
               } else {
@@ -2949,6 +2949,9 @@ console.log("CARD: " + card);
       // END OF HISTORY
       //
       if (this.game.state.events.greatsociety == 1) {
+
+console.log("GREAT SOCIETY!");
+
         this.game.state.events.greatsociety = 0;
 	if (this.game.player == 2) {
 
@@ -2997,6 +3000,8 @@ console.log("CARD: " + card);
               twilight_self.playerTurn("scoringcard");
             }
 	  });
+
+	  return 0;
 	}
       }
 
@@ -5439,13 +5444,19 @@ console.log("CARD: " + card);
       }
     }
 
+
+
     //
-    // INF Treaty (END OF HISTORY)
+    // END OF HISTORY (INF Treaty and CMC)
     //
     if (this.game.state.events.inftreaty == 1) {
         this.updateLog("INF Treaty -1 modifier on coups");
         roll--;
     }
+    if ((player == "ussr" && this.game.state.events.cubanmissilecrisis == 1) || (player == "us" && this.game.state.events.cubanmissilecrisis == 2)) {
+	this.game.state.events.cubanmissilecrisis = 0;
+    }
+
 
 
     let control = this.countries[countryname].control;
@@ -11892,7 +11903,7 @@ console.log("card: " + card);
 
               let c = $(this).attr('id');
 
-              if (twilight_self.countries[c].place != 1 || twilight_self.countries[c].ussr == 0) {
+              if (twilight_self.countries[c].place != 1 || twilight_self.countries[c].us == 0) {
                 twilight_self.displayModal("Invalid Country");
               } else {
                 ops_purged[c]++;
@@ -11938,8 +11949,8 @@ console.log("card: " + card);
 	let eligible_cards = [];
 
 	for (let i = 0; i < this.game.deck[0].hand.length; i++) {
-	  if (me === "ussr" && this.game.deck[0].hand[i].side === "ussr") { eligible_cards.push(this.game.deck[0].hand[i]); }
-	  if (me === "us" && this.game.deck[0].hand[i].side === "us") { eligible_cards.push(this.game.deck[0].hand[i]); }
+	  if (me === "ussr" && this.game.deck[0].cards[this.game.deck[0].hand[i]].side === "ussr") { eligible_cards.push(this.game.deck[0].hand[i]); }
+	  if (me === "us" && this.game.deck[0].cards[this.game.deck[0].hand[i]].side === "us") { eligible_cards.push(this.game.deck[0].hand[i]); }
 	}
 
 	if (eligible_cards.length == 0) {
