@@ -19,8 +19,6 @@ class Poker extends GameTemplate {
     this.description     = 'BETA version of Texas Hold\'em Poker for the Saito Arcade. With five cards on the table and two in your hand, can you bet and bluff your way to victory? This game is a playable demo under active development!';
     this.categories      = "Games Arcade Entertainment";
 
-    this.minPlayers      = 2;
-    this.maxPlayers      = 4;
     this.card_img_dir    = '/poker/img/cards';
 
     this.interface       = 1;
@@ -128,6 +126,8 @@ class Poker extends GameTemplate {
         this.game.queue.push("DECKENCRYPT\t1\t2");
         this.game.queue.push("DECKENCRYPT\t1\t1");
         this.game.queue.push("DECKXOR\t1\t4");
+        this.game.queue.push("DECKXOR\t1\t3");
+        this.game.queue.push("DECKXOR\t1\t2");
         this.game.queue.push("DECKXOR\t1\t3");
         this.game.queue.push("DECKXOR\t1\t2");
         this.game.queue.push("DECKXOR\t1\t1");
@@ -731,6 +731,10 @@ class Poker extends GameTemplate {
 	    this.game.state.player_credit[player-1] -= raise_portion;
 	    this.game.state.required_pot += raise_portion;
 	    this.game.state.pot += raise_portion;
+
+console.log("RAISE PORTION: " + raise_portion);
+console.log("CALL PORTION: " + call_portion);
+
 	    this.game.state.last_raise = raise_portion;
 
 	    this.updateLog("Player " + player + " raises " + raise_portion + ".");
@@ -874,7 +878,10 @@ class Poker extends GameTemplate {
 	let credit_remaining = poker_self.game.state.player_credit[poker_self.game.player-1];
 	let all_in_remaining = poker_self.game.state.player_credit[poker_self.game.player-1] - raise_required;
 
-        let cost_to_call = poker_self.game.state.required_pot - poker_self.game.state.player_pot[this.game.player-1];
+	raise_required = parseInt(raise_required);
+	poker_self.game.state.last_raise = parseInt(poker_self.game.state.last_raise);
+
+        let cost_to_call = poker_self.game.state.required_pot - poker_self.game.state.player_pot[poker_self.game.player-1];
         if (cost_to_call < 0) { cost_to_call = 0; }
 
 	if (cost_to_call > 0) {
@@ -916,7 +923,7 @@ class Poker extends GameTemplate {
 
           let raise = $(this).attr("id");
 
-	  if (cost_to_call > 0) { raise += cost_to_call; }
+	  if (cost_to_call > 0) { raise = parseInt(raise) + parseInt(cost_to_call); }
 
 	  if (raise == 0) {
             poker_self.addMove("check\t"+poker_self.game.player);
@@ -1942,83 +1949,3 @@ class Poker extends GameTemplate {
 	  val.includes(1)
         ) { 
 	  return 10;
-        }
-	return 0;
-      };
-
-      if (
-	val.includes((i+1)) &&
-        val.includes((i+2)) &&
-        val.includes((i+3)) &&
-        val.includes((i+4)) &&
-        val.includes((i+5))
-      ) {
-	return (i+1);
-      }
-
-    }
-
-    return 0;
-
-  }
-
-
-  isCardSuite(suite, val, card, s) {
-    for (let i = 0; i < val.length ; i++) {
-      if (val[i] == card) {
-        if (suite[i] == s) {
-          return 1;
-        }
-      }
-    }
-    return 0;
-  }
-
-
-
-
-
-
-
-  returnGameOptionsHTML() {
-
-    return `
-          <h3>Poker: </h3>
-
-          <form id="options" class="options">
-
-            <label for="stake">Initial Stake:</label>
-            <select name="stake">
-              <option value="100">100</option>
-              <option value="500">500</option>
-              <option value="1000">1000</option>
-              <option value="5000" default>5000</option>
-              <option value="10000">10000</option>
-              <option value="100">100</option>
-	    </select>
-	  </form>
-    `;
-
-  }
-
-
-  returnFormattedGameOptions(options) {
-    let new_options = {};
-    for (var index in options) {
-      if (index == "stake") {
-        new_options[index] = options[index];
-      }
-    }
-    return new_options;
-  }
-
-
-
-
-
-}
-
-
-module.exports = Poker;
-
- 
