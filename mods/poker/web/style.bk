@@ -27,6 +27,10 @@ body {
   margin-bottom:15px;
 }
 
+.hud {
+  height: 400px;
+}
+
 .hand {
   /* margin-left: auto;
   margin-right: auto;
