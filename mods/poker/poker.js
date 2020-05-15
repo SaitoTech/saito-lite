@@ -21,6 +21,8 @@ class Poker extends GameTemplate {
 
     this.card_img_dir    = '/poker/img/cards';
 
+    this.minPlayers      = 2;
+    this.maxPlayers      = 2;
     this.interface       = 1;
     this.boardgameWidth  = 5100;
 
@@ -287,6 +289,7 @@ class Poker extends GameTemplate {
       }
     }
 
+    this.updateLog("New Round...");
 
     this.initializeQueue();
 
@@ -363,7 +366,7 @@ class Poker extends GameTemplate {
 	  if (active_players == 1) {
 	    for (let i = 0; i < this.game.state.passed.length; i++) {
 	      if (this.game.state.passed[i] == 0) {
-	        this.updateLog("Player: " + i+1 + " wins " + this.game.state.pot);
+	        this.updateLog("Player " + i+1 + " wins " + this.game.state.pot);
                 this.game.state.player_credit[i] += this.game.state.pot;
 	      }
 	    }
@@ -452,9 +455,9 @@ class Poker extends GameTemplate {
 	let scorer = parseInt(mv[1]);
 	let card1  = mv[2];
 	let card2  = mv[3];
+
         this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(card1));
         this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(card2));
-
 	this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[0]));
 	this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[1]));
 	this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[2]));
@@ -661,10 +664,11 @@ class Poker extends GameTemplate {
 	  let player = parseInt(mv[1]);
 	  let amount_to_call = 0;
 
-	  this.updateLog("Player " + player + " calls " + this.game.state.required_pot + " -- " + this.game.state.player_pot[player-1]);
+	  this.updateLog("Player " + player + " calls");
 	  if (this.game.state.required_pot > this.game.state.player_pot[player-1]) {
 	    amount_to_call = this.game.state.required_pot - this.game.state.player_pot[player-1];
 	  }
+ 	  this.updateLog("Player " + player + " deposits " + amount_to_call);
 
 	  this.game.state.player_credit[player-1] -= amount_to_call;
 	  this.game.state.player_pot[player-1]  += amount_to_call;
@@ -726,7 +730,7 @@ class Poker extends GameTemplate {
 
 	    this.game.state.player_credit[player-1] -= call_portion;
 	    this.game.state.player_pot[player-1] += call_portion;
-	    this.game.state.required_pot += call_portion;
+	    //this.game.state.required_pot += call_portion;
 	    this.game.state.pot += call_portion;
 
 	    this.game.state.player_credit[player-1] -= raise_portion;
@@ -813,6 +817,7 @@ class Poker extends GameTemplate {
 	
     html += '<ul>';
 
+console.log(this.game.state.required_pot + " == " + JSON.stringify(this.game.state.player_pot));
     let cost_to_call = this.game.state.required_pot - this.game.state.player_pot[this.game.player-1];
     if (cost_to_call < 0) { cost_to_call = 0; }
 
