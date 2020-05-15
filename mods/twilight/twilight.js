@@ -4964,18 +4964,7 @@ console.log("CARD: " + card);
       valid_target = 1;
 
 
-      //
-      // Can Only Realign Countries with Opponent Influence
-      //
-      if (twilight_self.game.player == 1) {
-        if (twilight_self.countries[countryname].us < 1) {
-          valid_target = 0;
-        }
-      } else {
-        if (twilight_self.countries[countryname].ussr < 1) {
-          valid_target = 0;
-        }
-      }
+
 
 
       //
@@ -5011,6 +5000,19 @@ console.log("CARD: " + card);
       if (twilight_self.game.state.events.inftreaty == 1){
         valid_target = 1;
       }    
+
+      //
+      // Can Only Realign Countries with Opponent Influence
+      //
+      if (twilight_self.game.player == 1) {
+        if (twilight_self.countries[countryname].us < 1) {
+          valid_target = 0;
+        }
+      } else {
+        if (twilight_self.countries[countryname].ussr < 1) {
+          valid_target = 0;
+        }
+      }
 
 
       let divname      = '#'+i;
