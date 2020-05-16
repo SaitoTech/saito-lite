@@ -340,7 +340,8 @@ console.log("\n\n\n\n");
       this.game.options.berlinagreement = 1;
       this.game.options.handshake = 1;
       this.game.options.rustinredsquare = 1;
-      this.game.options.deck = "end_of_history";
+      this.game.options.deck = "optional";
+      //this.game.options.deck = "end_of_history";
 
       let a = this.returnEarlyWarCards();
       let b = this.returnMidWarCards();
@@ -1824,7 +1825,7 @@ console.log("CARD: " + card);
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["peronism", "breakthroughatlopnor", "manwhosavedtheworld", "europe", "greatsociety", "nationbuilding", "asia"];
+              this.game.deck[0].hand = ["polio", "nato", "norad", "europe", "fidel", "glasnost", "asia"];
             } else {
               this.game.deck[0].hand = ["eurocommunism", "perestroika", "missileenvy", "inftreaty", "cubanmissile","china","vietnamrevolts"];
             }
@@ -6340,6 +6341,9 @@ console.log("CARD: " + card);
       deck['peronism']       = { img : "TNRnTS-307png" ,name : "Peronism", scoring : 0 , player : "both"   , recurring : 0 , ops : 1 };
     }
 
+    if (this.game.options.deck == "optional") {
+      deck['polio']          = { img : "TNRnTS-401png" , name : "Polio Vaccine", scoring : 0 , player : "both" , recurring : 0 , ops : 3 }; 
+    }
 
     //
     // remove any cards specified
@@ -6350,7 +6354,7 @@ console.log("CARD: " + card);
         if (deck[key] != undefined) { delete deck[key]; }
 
         //
-        // optional midwar cards
+        // optional early-war cards
         //
         if (key === "culturaldiplomacy") { deck['culturaldiplomacy'] = { img : "TNRnTS-202png" , name : "Cultural Diplomacy", scoring : 0 , player : "both" , recurring : 1 , ops : 2 }; }
         if (key === "gouzenkoaffair") { deck['gouzenkoaffair'] = { img : "TNRnTS-204png" , name : "Gouzenko Affair", scoring : 0 , player : "ussr" , recurring : 0 , ops : 2 }; }
@@ -11772,6 +11776,114 @@ console.log("card: " + card);
       return 0;
     }
 
+    //
+    // Polio Vaccine
+    //
+    if (card == "polio") {
+
+
+
+      let my_go = 0;
+      if (player == "ussr" && this.game.player == 1) { my_go = 1; }
+      if (player == "us" && this.game.player == 2) { my_go = 1; }
+
+      if (my_go == 0) {
+        this.updateStatus("Waiting for Opponent to play Polio Vaccine");
+        return 0;
+      }
+      if (my_go == 1) {
+       
+  
+        var twilight_self = this;
+        let cards_discarded = 0;
+
+        let cards_to_discard = 0;
+        let user_message = "Select cards to discard:<ul>";
+        for (let i = 0; i < this.game.deck[0].hand.length; i++) {
+          if (this.game.deck[0].hand[i] != "china") {
+            user_message += '<li class="card showcard" id="'+this.game.deck[0].hand[i]+'">'+this.game.deck[0].cards[this.game.deck[0].hand[i]].name+'</li>';
+            cards_to_discard++;
+          }
+        }
+
+        if (cards_to_discard == 0) {
+          twilight_self.addMove("notify\tPlayer has no cards available to discard");
+          twilight_self.endTurn();
+          return;
+        }
+
+        user_message += '</ul> When you are done discarding <span class="card dashed" id="finished">click here</span>.';
+
+        twilight_self.updateStatus(user_message);
+        twilight_self.addMove("resolve\tpolio");
+
+        twilight_self.addShowCardEvents(function(card) {
+
+          let action2 = $(card).attr("id");
+
+
+
+                if (twilight_self.app.browser.isMobileBrowser(navigator.userAgent)) {
+              twilight_self.mobileCardSelect(card, player, function() {
+                $(card).hide();
+                cards_discarded++;
+                twilight_self.removeCardFromHand(action2);
+                twilight_self.addMove("discard\tus\t"+action2);
+              }, "discard");
+            } else {
+              $(card).hide();
+                cards_discarded++;
+              twilight_self.removeCardFromHand(action2);
+              twilight_self.addMove("discard\tus\t"+action2);
+            }
+
+            console.log (cards_discarded);
+            if (action2 == "finished" || cards_discarded == 3) {
+
+              //
+              // if Aldrich Ames is active, US must reveal cards
+              //
+
+  
+              twilight_self.addMove("DEAL\t1\t2\t"+cards_discarded);
+  
+              //
+              // are there enough cards available, if not, reshuffle
+              //
+              if (cards_discarded > twilight_self.game.deck[0].crypt.length) {
+  
+                let discarded_cards = twilight_self.returnDiscardedCards();
+                if (Object.keys(discarded_cards).length > 0) {
+  
+                  //
+                  // shuffle in discarded cards
+                  //
+                  twilight_self.addMove("SHUFFLE\t1");
+                  twilight_self.addMove("DECKRESTORE\t1");
+                  twilight_self.addMove("DECKENCRYPT\t1\t2");
+                  twilight_self.addMove("DECKENCRYPT\t1\t1");
+                  twilight_self.addMove("DECKXOR\t1\t2");
+                  twilight_self.addMove("DECKXOR\t1\t1");
+                  twilight_self.addMove("flush\tdiscards"); // opponent should know to flush discards as we have
+                  twilight_self.addMove("DECK\t1\t"+JSON.stringify(discarded_cards));
+                  twilight_self.addMove("DECKBACKUP\t1");
+                  twilight_self.updateLog("cards remaining: " + twilight_self.game.deck[0].crypt.length);
+                  twilight_self.updateLog("Shuffling discarded cards back into the deck...");
+  
+                }
+              }
+  
+              twilight_self.endTurn();
+  
+            } 
+          
+        });
+
+        }
+  
+        return 0;
+      }
+
 
 
 
@@ -15020,6 +15132,7 @@ console.log("card: " + card);
               <li><input class="remove_card optional_edition" type="checkbox" name="cambridge" /> The Cambridge Five</li>
               <li><input class="remove_card optional_edition" type="checkbox" name="norad" /> NORAD</li>
               <li><input class="remove_card end_of_history" type="checkbox" name="peronism" /> Peronism</li>
+              <li><input class="remove_card optional_edition" type="checkbox" name="polio" /> Polio Vaccine</li>
             </ul>
            <ul class="removecards" style="clear:both;margin-top:13px">
               <li><input class="remove_card" type="checkbox" name="brushwar" /> Brush War</li>
