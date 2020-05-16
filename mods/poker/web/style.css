@@ -18,8 +18,13 @@ body {
   height: 1000px;
 }
 
-.hud {
-  height: 400px;
+
+.menu-player {
+  font-size:1.1em;
+}
+.menu-table {
+  margin-top: 15px;
+  margin-bottom:15px;
 }
 
 .hand {

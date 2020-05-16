@@ -21,6 +21,8 @@ class Poker extends GameTemplate {
 
     this.card_img_dir    = '/poker/img/cards';
 
+    this.minPlayers      = 2;
+    this.maxPlayers      = 2;
     this.interface       = 1;
     this.boardgameWidth  = 5100;
 
@@ -126,6 +128,8 @@ class Poker extends GameTemplate {
         this.game.queue.push("DECKENCRYPT\t1\t2");
         this.game.queue.push("DECKENCRYPT\t1\t1");
         this.game.queue.push("DECKXOR\t1\t4");
+        this.game.queue.push("DECKXOR\t1\t3");
+        this.game.queue.push("DECKXOR\t1\t2");
         this.game.queue.push("DECKXOR\t1\t3");
         this.game.queue.push("DECKXOR\t1\t2");
         this.game.queue.push("DECKXOR\t1\t1");
@@ -285,6 +289,7 @@ class Poker extends GameTemplate {
       }
     }
 
+    this.updateLog("New Round...");
 
     this.initializeQueue();
 
@@ -361,7 +366,7 @@ class Poker extends GameTemplate {
 	  if (active_players == 1) {
 	    for (let i = 0; i < this.game.state.passed.length; i++) {
 	      if (this.game.state.passed[i] == 0) {
-	        this.updateLog("Player: " + i+1 + " wins " + this.game.state.pot);
+	        this.updateLog("Player " + i+1 + " wins " + this.game.state.pot);
                 this.game.state.player_credit[i] += this.game.state.pot;
 	      }
 	    }
@@ -423,7 +428,6 @@ class Poker extends GameTemplate {
 	  if (this.game.state.plays_since_last_raise == 0) {
 	    this.game.state.plays_since_last_raise++;
 	  }
-console.log("INCREMENTING TURN!")
 	  this.game.state.turn++;
 
 	  if (this.game.state.passed[this.game.player-1] == 1) {
@@ -451,9 +455,9 @@ console.log("INCREMENTING TURN!")
 	let scorer = parseInt(mv[1]);
 	let card1  = mv[2];
 	let card2  = mv[3];
+
         this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(card1));
         this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(card2));
-
 	this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[0]));
 	this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[1]));
 	this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[2]));
@@ -608,7 +612,7 @@ console.log("INCREMENTING TURN!")
 	      this.game.state.player_credit[this.game.state.big_blind_player-1] = -1;
 	      this.game.state.passed[this.game.state.big_blind_player-1] = 1;
 	    } else {
-	      this.updateLog("Player "+this.game.state.big_blind_player+" deposits the big blind ("+this.game.state.big_blind+")");
+	      this.updateLog("Player "+this.game.state.big_blind_player+" deposits "+this.game.state.big_blind);
 	      this.game.state.player_pot[this.game.state.big_blind_player-1] += this.game.state.big_blind;
 	      this.game.state.pot += this.game.state.big_blind;
 	      this.game.state.player_credit[this.game.state.big_blind_player-1] -= this.game.state.big_blind;
@@ -628,7 +632,7 @@ console.log("INCREMENTING TURN!")
 	      this.game.state.player_credit[this.game.state.small_blind_player-1] = -1;
 	      this.game.state.passed[this.game.state.small_blind_player-1] = 1;
 	    } else {
-	      this.updateLog("Player "+this.game.state.small_blind_player+" deposits the small blind ("+this.game.state.small_blind+")");
+	      this.updateLog("Player "+this.game.state.small_blind_player+" deposits "+this.game.state.small_blind);
 	      this.game.state.player_pot[this.game.state.small_blind_player-1] += this.game.state.small_blind;
 	      this.game.state.pot += this.game.state.small_blind;
 	      this.game.state.player_credit[this.game.state.small_blind_player-1] -= this.game.state.small_blind;
@@ -641,7 +645,6 @@ console.log("INCREMENTING TURN!")
 	  // update game state
 	  //
 	  this.game.state.round++;
-console.log("INCREMENTING TURN 2!")
 	  this.game.state.turn++;
 
 	  this.game.state.required_pot = this.game.state.big_blind;
@@ -654,11 +657,6 @@ console.log("INCREMENTING TURN 2!")
 	    if (player_to_go <= 0) { player_to_go += this.game.players.length; }
 	    this.game.queue.push("turn\t"+player_to_go);
 	  }
-
-
-console.log("QUEUE CREATED: " + this.game.queue);
-
-
       }
 
       if (mv[0] === "call") {
@@ -666,10 +664,11 @@ console.log("QUEUE CREATED: " + this.game.queue);
 	  let player = parseInt(mv[1]);
 	  let amount_to_call = 0;
 
-	  this.updateLog("Player " + player + " calls " + this.game.state.required_pot + " -- " + this.game.state.player_pot[player-1]);
+	  this.updateLog("Player " + player + " calls");
 	  if (this.game.state.required_pot > this.game.state.player_pot[player-1]) {
 	    amount_to_call = this.game.state.required_pot - this.game.state.player_pot[player-1];
 	  }
+ 	  this.updateLog("Player " + player + " deposits " + amount_to_call);
 
 	  this.game.state.player_credit[player-1] -= amount_to_call;
 	  this.game.state.player_pot[player-1]  += amount_to_call;
@@ -730,19 +729,24 @@ console.log("QUEUE CREATED: " + this.game.queue);
 	    raise_portion = raise - call_portion;
 
 	    this.game.state.player_credit[player-1] -= call_portion;
-	    this.game.state.required_pot += call_portion;
+	    this.game.state.player_pot[player-1] += call_portion;
+	    //this.game.state.required_pot += call_portion;
 	    this.game.state.pot += call_portion;
 
 	    this.game.state.player_credit[player-1] -= raise_portion;
+	    this.game.state.player_pot[player-1] += raise_portion;
 	    this.game.state.required_pot += raise_portion;
 	    this.game.state.pot += raise_portion;
+
 	    this.game.state.last_raise = raise_portion;
 
+	    this.updateLog("Player " + player + " calls " + call_portion + ".");
 	    this.updateLog("Player " + player + " raises " + raise_portion + ".");
 
 	  } else {
 
 	    this.game.state.player_credit[player-1] -= raise;
+	    this.game.state.player_pot[player-1] += raise;
 	    this.game.state.required_pot += raise;
 	    this.game.state.pot += raise;
 	    this.game.state.last_raise = raise;
@@ -794,31 +798,61 @@ console.log("QUEUE CREATED: " + this.game.queue);
       return;
     }
 
-    html += 'You are Player '+this.game.player+'. ';
+    html += '<div class="menu-player">Player '+this.game.player;
     if (this.game.player == this.game.state.big_blind_player) {
-      html += "You are the big blind. ";
+      html += " (big blind)";
     }
     if (this.game.player == this.game.state.small_blind_player) {
-      html += "You are the small blind. ";
+      html += " (small blind)";
     }
-    html += 'You have '+this.game.state.player_pot[this.game.player-1]+' in the pot and '+this.game.state.player_credit[this.game.player-1]+' in chips. Calling requires an additional '+match_required+'. Total pot has '+this.game.state.pot+'. Please select an option below: <p></p><ul>';
+    html += '</div>';
+
+    html += `<table class="menu-table" style="width:100%;text-align:center;">
+	       <tr>
+		 <td style="width:33%">${this.game.state.pot} pot</td></td>
+		 <td style="width:33%">${this.game.state.player_pot[this.game.player-1]} raised</td></td>
+		 <td style="width:33%">${this.game.state.player_credit[this.game.player-1]} in chips</td></td>
+	       </tr>
+	     </table>`;
+	
+    html += '<ul>';
+
+console.log(this.game.state.required_pot + " == " + JSON.stringify(this.game.state.player_pot));
+    let cost_to_call = this.game.state.required_pot - this.game.state.player_pot[this.game.player-1];
+    if (cost_to_call < 0) { cost_to_call = 0; }
+
+
+    //
+    // if we need to raise
+    //
     if (this.game.state.required_pot > this.game.state.player_pot[this.game.player-1]) {
       if (can_fold == 1)  { html += '<li class="menu_option" id="fold">fold</li>'; }
-      if (can_call == 1)  { html += '<li class="menu_option" id="call">call</li>'; }
-      if (can_raise == 1) { html += '<li class="menu_option" id="raise">raise</li>'; }
+      if (can_call == 1 && cost_to_call <= 0)  { html += '<li class="menu_option" id="call">call</li>'; }
+      if (can_call == 1 && cost_to_call > 0)  { html += '<li class="menu_option" id="call">call ('+cost_to_call+')</li>'; }
+      if (can_raise == 1 && cost_to_call <= 0) { html += '<li class="menu_option" id="raise">raise</li>'; }
+      if (can_raise == 1 && cost_to_call > 0) { html += '<li class="menu_option" id="raise">raise ('+cost_to_call+'+)</li>'; }
       html += '</ul>';
       this.updateStatus(html);
     } else {
 
-      if (this.game.state.required_pot > this.game.state.player_pot[this.game.player-1] || this.game.state.required_pot == this.game.state.player_pot[this.game.player-1]) {
+      //
+      // we don't NEED to raise
+      //
+      if (this.game.state.required_pot <= this.game.state.player_credit[this.game.player-1]) {
+
         if (can_fold == 1)  { html += '<li class="menu_option" id="fold">fold</li>'; }
         if (can_fold == 1)  { html += '<li class="menu_option" id="check">check</li>'; }
         if (can_raise == 1) { html += '<li class="menu_option" id="raise">raise</li>'; }
         html += '</ul>';
         this.updateStatus(html);
+
       } else {
-alert(this.game.state.required_pot + " --- " + this.game.state.player_pot[this.game.player-1]);
-	this.updateStatus("ERROR 257293: logic error in poker module, please report");
+
+        if (can_fold == 1)  { html += '<li class="menu_option" id="fold">fold</li>'; }
+        if (can_fold == 1)  { html += '<li class="menu_option" id="check">check</li>'; }
+        html += '</ul>';
+        this.updateStatus(html);
+
       }
     }
 
@@ -850,9 +884,17 @@ alert(this.game.state.required_pot + " --- " + this.game.state.player_pot[this.g
 	let credit_remaining = poker_self.game.state.player_credit[poker_self.game.player-1];
 	let all_in_remaining = poker_self.game.state.player_credit[poker_self.game.player-1] - raise_required;
 
-        html  = 'Please select an option below: <p></p><ul>';
+	raise_required = parseInt(raise_required);
+	poker_self.game.state.last_raise = parseInt(poker_self.game.state.last_raise);
 
-alert(credit_remaining + " -- " + raise_required + " -- " + poker_self.game.state.last_raise);
+        let cost_to_call = poker_self.game.state.required_pot - poker_self.game.state.player_pot[poker_self.game.player-1];
+        if (cost_to_call < 0) { cost_to_call = 0; }
+
+	if (cost_to_call > 0) {
+          html  = 'Match '+cost_to_call+' and raise: <p></p><ul>';
+	} else {
+          html  = 'Please select an option below: <p></p><ul>';
+	}
 
         if (credit_remaining < (raise_required)) {
 	  html += '<li class="menu_option" id="0">cancel raise</li>';
@@ -886,6 +928,8 @@ alert(credit_remaining + " -- " + raise_required + " -- " + poker_self.game.stat
           $('.menu_option').on('click', function() {
 
           let raise = $(this).attr("id");
+
+	  if (cost_to_call > 0) { raise = parseInt(raise) + parseInt(cost_to_call); }
 
 	  if (raise == 0) {
             poker_self.addMove("check\t"+poker_self.game.player);
@@ -954,6 +998,7 @@ alert(credit_remaining + " -- " + raise_required + " -- " + poker_self.game.stat
     }
     for (let i = 0; i < num_of_players; i++) {
       state.player_credit[i] = 100;
+      if (this.game.options.stake != undefined) { state.player_credit[i] = this.game.options.stake; }
     }
 
     return state;
@@ -1892,6 +1937,8 @@ alert(credit_remaining + " -- " + raise_required + " -- " + poker_self.game.stat
 
   
 
+  
+
 
   isStraight(suite, val, low=1) {
 
@@ -1934,9 +1981,9 @@ alert(credit_remaining + " -- " + raise_required + " -- " + poker_self.game.stat
   isCardSuite(suite, val, card, s) {
     for (let i = 0; i < val.length ; i++) {
       if (val[i] == card) {
-	if (suite[i] == s) {
-	  return 1;
-	}
+        if (suite[i] == s) {
+          return 1;
+        }
       }
     }
     return 0;
@@ -1944,9 +1991,46 @@ alert(credit_remaining + " -- " + raise_required + " -- " + poker_self.game.stat
 
 
 
+
+
+
+
+  returnGameOptionsHTML() {
+
+    return `
+          <h3>Poker: </h3>
+          <form id="options" class="options">
+            <label for="stake">Initial Stake:</label>
+            <select name="stake">
+              <option value="100">100</option>
+              <option value="500">500</option>
+              <option value="1000">1000</option>
+              <option value="5000" default>5000</option>
+              <option value="10000">10000</option>
+              <option value="100">100</option>
+	    </select>
+	  </form>
+    `;
+
+  }
+
+
+  returnFormattedGameOptions(options) {
+    let new_options = {};
+    for (var index in options) {
+      if (index == "stake") {
+        new_options[index] = options[index];
+      }
+    }
+    return new_options;
+  }
+
+
+
+
+
 }
 
 
 module.exports = Poker;
-
 
