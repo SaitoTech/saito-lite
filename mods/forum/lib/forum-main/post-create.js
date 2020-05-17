@@ -48,7 +48,7 @@ module.exports = PostCreate = {
       let format = this.validateInput(title, content, link, forum);
 
       if (format){
-        let newtx = data.forum.createPostTransaction(title, content, link, forum);
+        let newtx = data.forum.createPostTransaction(format.title, format.content, format.link, format.forum);
 
         data.forum.app.network.propagateTransaction(newtx);
 
