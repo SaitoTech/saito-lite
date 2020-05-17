@@ -44,7 +44,7 @@ module.exports = ForumTeaserTemplate = (app, data, tx) => {
               <div class="teaser-content-title"><a href="${discussion_link}">${tx.transaction.msg.title}</a></div>
   `;
    if (domain != "") {
-     html += `<div class="teaser-site" alt="${subforum}"><a href="${link}"><i class="fas fa-external-link-square-alt"></i> ${domain}</a></div>`;
+     html += `<div class="teaser-site" alt="${subforum}"><a href="${link}" target="_blank"><i class="fas fa-external-link-square-alt"></i> ${domain}</a></div>`;
    } else {
      html += `<div class="teaser-site">(<a href="${subforum}"><i class="fas fa-external-link-square-alt"></i> ${subforum}</a>)</div>`;
    }

@@ -42,10 +42,10 @@ module.exports = ForumPostTemplate = (app, data, tx) => {
           <div class="teaser-thumbnail" style="background-image: url('${thumbnail}');"></div>
 
           <div class="teaser-content">
-            <div class="teaser-content-title"><a href="${link}">${tx.transaction.msg.title}</a></div>
+            <div class="teaser-content-title"><a href="${discussion_link}">${tx.transaction.msg.title}</a></div>
   `;
    if (domain != "") {
-     html += `<div class="teaser-site"><a href="${link}">${domain}</a></div>`;
+     html += `<div class="teaser-site"><a href="${link}" target="_blank">${domain}</a></div>`;
    }
    html += `
           
