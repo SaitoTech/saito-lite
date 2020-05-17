@@ -44,16 +44,19 @@ module.exports = PostCreate = {
       let content = document.querySelector('.post-create-textarea').innerHTML;
       let link = document.querySelector('.post-create-link').value;
       let forum = document.querySelector('.post-create-forum').value;
-      if (this.validateInput(title, content, link, forum)) {
-        let newtx = data.forum.createPostTransaction(title, content, link, forum);
+      
+      let format = this.validateInput(title, content, link, forum);
+      console.log(format);
+      if (format){
+        // let newtx = data.forum.createPostTransaction(title, content, link, forum);
 
-        data.forum.app.network.propagateTransaction(newtx);
+        // data.forum.app.network.propagateTransaction(newtx);
 
-        newtx.transaction.comments = 0;
-        newtx.transaction.votes = 0;
+        // newtx.transaction.comments = 0;
+        // newtx.transaction.votes = 0;
 
-        data.forum.forum.teasers.unshift(newtx);
-        data.forum.render(data.forum.app, data);
+        // data.forum.forum.teasers.unshift(newtx);
+        // data.forum.render(data.forum.app, data);
       }
     });
 
@@ -66,40 +69,56 @@ module.exports = PostCreate = {
     try {
       let msg = "";
       if (title != "") {
-        title = this.stripHtml(title);
+        /* TODO: Title format + sanitation */
+
+        title = this.formatHtml(title);
+
         console.log("title: [" + title + "]");
       } else {
-        msg += "Title can't be empty.\n";
+        msg += "Title can't be empty. ";
       }
       if (link != "") {
-        link = this.stripHtml(link);
-        console.log("link: [" + link + "] valid?" + this.isValidLink(link));
-        if (!this.isValidLink(link)) { msg += "Not a valid link.\n"; }
+        /* TODO link format + sanitation */
+
+        link = this.formatUrl(link);
+        if (!this.isValidLink(link)) { msg += "Not a valid link. (don't forget http:// or https://) "; }
+
+        console.log('link: [' + link + ']');
       }
       if (content != "") {
+        /* Already formated by MediumEditor */
+
         console.log("content: [" + content + "]");
       }
       if (forum != "") {
-        forum = this.stripHtml(forum);
-        console.log("forum: [" + forum + "] valid?" + this.isValidForum(forum));
-        if (!this.isValidForum(forum)) { msg += "Not a valid forum\n"; }
+        /* TODO forum format + sanitation */
+
+        forum = this.formatHtml(forum);
+        if (!this.isValidForum(forum)) { msg += "Not a valid forum "; }
+
+        console.log("forum: [" + forum + "]");
       }
       if (msg !== "") { 
         salert(msg);
         return false;
       }
-      return true;
+      return {
+        title: title,
+        content: content,
+        link: link,
+        forum: forum
+      };
     } catch (err) {
-      console.log("err: " + err);
+      console.log("[ERROR] validateInput: " + err);
     }
     return false;
   },
-  noFrontSpace(str){
+  formatFrontSpace(str){
     let newstr = str.match(/[^ ].*/)[0];
     return newstr;
   },
-  stripHtml(html) {
-    let str = this.noFrontSpace(html);
+  formatHtml(html) {
+    let str = this.formatFrontSpace(html);
     str = str.replace(/[<>&'"]/gi, function(e) {
       // if (e === "<") { return "&lt"; } else { return "&gt"; }
       switch (e) {
@@ -123,9 +142,25 @@ module.exports = PostCreate = {
     });
     return str;
   },
-  isValidLink(str){
-    let regexp = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/i;
-    return regexp.test(str);
+  formatUrl(url){
+    let regexp =  /^(https?:\/\/)?/; /* Check for http:// or https:// */
+    if (!regexp.test(url)){
+      let new_url = `https://` + url;
+      return new_url;
+    }
+    return url;
+  },
+  isValidLink(str) {
+    try {
+      let url = new URL(str);
+      return true;
+    } catch (err) {
+      console.log('[ERROR] isValidLink: ' + err);
+    }
+    return false;
+    // let regexp =  `^(https?:\/\/)?`; /*check for http:// or https:// */
+    // let regexp = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/i;
+    // return regexp.test(str);
   },
   isValidForum(str){
     let regexp = /[^a-z0-9/_-]/i;

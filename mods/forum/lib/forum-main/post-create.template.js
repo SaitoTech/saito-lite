@@ -6,7 +6,7 @@ module.exports = PostCreateTemplate = () => {
       <input type="text" class="post-create-title" name="post-create-title" placeholder="Post Title" />
 
       <div class="post-create-label">URL: <i>(optional)</i></div>
-      <input type="text" class="post-create-link" name="post-create-link" placeholder="link from post" />
+      <input type="text" class="post-create-link" name="post-create-link" placeholder="https://www.example.com" />
 
       <div class="post-create-label">Discussion:</div>
       <!--textarea class="post-create-textarea"></textarea-->
