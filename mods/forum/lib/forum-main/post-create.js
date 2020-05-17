@@ -46,7 +46,7 @@ module.exports = PostCreate = {
       let forum = document.querySelector('.post-create-forum').value;
       
       let format = this.validateInput(title, content, link, forum);
-      // console.log(format);
+
       if (format){
         let newtx = data.forum.createPostTransaction(title, content, link, forum);
 
@@ -120,7 +120,6 @@ module.exports = PostCreate = {
   formatHtml(html) {
     let str = this.formatFrontSpace(html);
     str = str.replace(/[<>&'"]/gi, function(e) {
-      // if (e === "<") { return "&lt"; } else { return "&gt"; }
       switch (e) {
         case "<":
           return "&lt;";
@@ -143,7 +142,7 @@ module.exports = PostCreate = {
     return str;
   },
   formatUrl(url){
-    let regexp =  /^(https?:\/\/)?/; /* Check for http:// or https:// */
+    let regexp = /^(https?:\/\/)/; /* Check for http:// or https:// */
     if (!regexp.test(url)){
       let new_url = `https://` + url;
       return new_url;
@@ -158,9 +157,6 @@ module.exports = PostCreate = {
       console.log('[ERROR] isValidLink: ' + err);
     }
     return false;
-    // let regexp =  `^(https?:\/\/)?`; /*check for http:// or https:// */
-    // let regexp = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/i;
-    // return regexp.test(str);
   },
   isValidForum(str){
     let regexp = /[^a-z0-9/_-]/i;
