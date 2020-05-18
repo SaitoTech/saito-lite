@@ -148,5 +148,9 @@ module.exports = ItemManager = {
       this_products.attachEvents(app, data);
     });
 
+    document.querySelector('.download-all-btn').addEventListener('click', (e) => {
+      data.covid19.returnZipForOrder(data.order_id);
+    });
+
   }
 }

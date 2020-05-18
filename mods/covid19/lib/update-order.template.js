@@ -15,6 +15,7 @@ module.exports = UpdateOrderTemplate = (app, data) => {
   
   <div class="order-items"></div>
 
+  
 </div>
 
 

@@ -24,6 +24,7 @@ module.exports = ItemManagerTemplate = () => {
     <div class="form-section-buttons">
        <div class="new-item-btn button">Add Item</div>
        <div class="create-product-btn button">Create New Product</div>
+       <div class="download-all-btn button">Download all Files/Certs</div>
        <i class="items-refresh fas fa-sync-alt"></i>
        </div>
     

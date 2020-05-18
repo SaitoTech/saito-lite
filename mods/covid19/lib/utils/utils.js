@@ -1,12 +1,177 @@
+const jsZip = require('jszip');
+const FileSaver = require('file-saver');
+
+
 module.exports = utils = {
 
+  renderDocs(product_id, el) {
+    var _this = this;
+    var target = el;
+    var allrows = []
+    var sql = `
+          select 
+            c.name as 'Name', 
+            note, 
+            pc.id as 'id',
+            'certifications' as 'source'
+          from 
+            certifications as 'c' 
+          JOIN 
+            products_certifications as 'pc'
+          where 
+            c.id = pc.certification_id and pc.product_id = ${product_id};
+    
+          UNION ALL
+
+          select
+            distinct(files.file_filename) as Name,
+            files.file_type as 'note',
+            files.id,
+            "files" as source,
+          from
+            files JOIN file_attachments
+              on  files.id = file_attachments.file_id
+          where
+            file_attachments.object_table = 'products' and
+            file_attachments.object_id = ${product_id}
+        `;
+
+        this.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
+
+          if (res.rows.length > 0) {
+            _this.renderCerts(res.rows, target);
+          }
+          if (res.rows.length >1) {
+            _this.renderDownloadAll(product_id, target);
+          }
+        });
+  },
+
+  async returnZipForProduct(product_id) {
+    var _this = this;
+    var sql = `
+      select
+        pc.file_filename as 'filename',
+        pc.file as 'data'
+     from 
+        products_certifications as pc
+     where pc.product_id = ${product_id}
+
+     UNION ALL
+     
+     select
+        files.file_filename as 'filename',
+        files.file_data as 'data' 
+      from 
+        files 
+      join 
+        file_attachments on files.id = file_attachments.file_id
+      where 
+        file_attachments.object_table = 'products'
+      and
+        file_attachments.object_id = ${product_id}
+    `;
+
+    var result = [];
+
+    await this.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
+
+      if (res.rows.length > 0) {
+       _this.zipRows(res.rows);
+      }
+    });
+
+  },
+
+  zipRows(rows) {
+   
+    var zip = new jsZip();
+    
+    rows.forEach(row => {
+      zip.file(row.filename, row.data.split(',')[1], {base64: true});
+    });
+    zip.generateAsync({ type: 'blob' }).then(function (content) {
+      FileSaver.saveAs(content, 'certificates.zip');
+    });
+
+  },
+
+  returnZipForOrder(order_id) {
+    var zip = new jsZip();
+
+    var sql = `
+select * from
+(select
+  categories.name || "-" || products_certifications.product_id as 'folder',
+  certifications.name || "-" || products_certifications.file_filename as 'file_name',
+  products_certifications.file as 'file_data'
+ FROM
+  categories
+  JOIN 
+  items ON (items.category_id = categories.id and items.order_id = ${order_id})
+  JOIN 
+  products_items on items.id = products_items.item_id
+  JOIN 
+  products_certifications on products_items.product_id = products_certifications.product_id
+  JOIN
+  certifications on certifications.id = products_certifications.certification_id
+  
+  UNION ALL
+  
+  select
+  categories.name || "-" || products_items.product_id as 'folder',
+  files.file_filename as 'file_name',
+  files.file_data as 'file_data'
+ FROM
+  categories
+  JOIN 
+  items ON (items.category_id = categories.id and items.order_id = ${order_id})
+  JOIN 
+  products_items on items.id = products_items.item_id
+  JOIN 
+  file_attachments on (file_attachments.object_id = products_items.product_id and file_attachments.object_table = 'products') 
+  JOIN
+  files on files.id = file_attachments.file_id)
+  order by folder asc, file_name asc
+    `;
+
+    this.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
+
+      if (res.rows.length > 0) {
+        res.rows.forEach(row => {
+          let filename = row.folder + "/" + row.file_name.replace(/\ /, "_");
+          let filedata = row.file_data;
+          if(filedata.includes(",")) { filedata = filedata.split(","[1]);}
+          zip.file(filename, filedata, {base64: true});
+        });
+        zip.generateAsync({ type: 'blob' }).then(function (content) {
+          FileSaver.saveAs(content, 'dhb_order_files.zip');
+        });
+      }
+    });
+
+
+  },
+
+  renderDownloadAll(product_id, el) {
+    //if(el.childNodes.length > 1) {
+      var _this = this;
+      var id = product_id;
+      var button = document.createElement('button');
+      button.innerHTML = "Download All"
+      button.classList.add('cert');
+      button.classList.add('download_all');
+      button.addEventListener('click', (e) => {
+        _this.returnZipForProduct(id);
+      });
+      el.appendChild(button);
+    //}
+  },
 
   
-
-
   renderCerts(rows, el) {
     // should this be generalised to module wide?
-    var module_self = this;
+    var _this = this;
 
     rows.forEach(row => {
 
@@ -19,18 +184,16 @@ module.exports = utils = {
 
         var note = "";
         if (row["note"]) { note = "<div class='tiptext'>" + row["note"] + "</div>"; }
-        if (row["id"] != null && module_self.isAdmin()) {
+        if (row["id"] != null && _this.isAdmin()) {
           html += "<div class='cert tip'><a class='attach-cert-" + row["id"] + "'>" + row["Name"] + "</a>" + note;
           html += " <i data-id='" + row["id"] + "' id='delete-cert-" + row["id"] + "' class='fright far fa-times-circle'></i></div>";
         } else {
-          //html += "<div class='cert tip'>" + row["Name"] + note + "</div>";
-          html += "<div class='cert tip'>" + row["Name"] + "<div class='tiptext'> Certification available on recipet of formal purchase order. </div></div>";
+          html += "<div class='cert tip'><a target='_blank' href='/covid19/dummy.pdf'>" + row["Name"] + "</a><div class='tiptext'> Certification available on recipet of formal purchase order. </div></div>";
         }
 
         el.append(elParser(html));
 
       }
-
 
       //
       // bundles
@@ -44,30 +207,28 @@ module.exports = utils = {
         if (row["product_id"] != null) {
           html += "<div class='cert tip'><a class='attach-file-" + row["id"] + "'>" + row["Name"] + "</a></div>";
         } else {
-          html += "<div class='cert tip'>" + row["Name"] + "</div>";
+          html += "<div class='cert tip'><a target='_blank' href='/covid19/dummy.pdf'>" + row["Name"] + "</a></div>";
         }
         el.append(elParser(html));
       }
-
-
     });
 
     //add actions - limited to admins right now
-    if (module_self.isAdmin()) {
+    if (_this.isAdmin()) {
       rows.forEach(row => {
         if (row["source"] == "certifications") {
           el.querySelector('.attach-cert-' + row["id"]).addEventListener('click', (e) => {
-            module_self.returnCertFile(row["id"]);
+            _this.returnCertFile(row["id"]);
           });
-          if (module_self.isAdmin()) {
+          if (_this.isAdmin()) {
             el.querySelector('#delete-cert-' + row["id"]).addEventListener('click', (e) => {
-              module_self.returnCertFile(row["id"]);
+              _this.returnCertFile(row["id"]);
             });
           }
         }
         if (row["source"] == "files") {
           el.querySelector('.attach-file-' + row["id"]).addEventListener('click', (e) => {
-            module_self.returnFile(row["id"]);
+            _this.returnFile(row["id"]);
           });
         }
       });
@@ -83,9 +244,7 @@ module.exports = utils = {
         a.href = [res.rows[0]["file"]];
         a.download = res.rows[0]["file_filename"];
         a.click();
-        //window.URL.revokeObjectURL(url);
         a.destroy();
-        //salert("Download certificate attachment: " + res.rows[0]["file_filename"]);
       }
     });
   },
@@ -93,22 +252,16 @@ module.exports = utils = {
   returnFile(id) {
     this.sendPeerDatabaseRequest("covid19", "files", "*", "id= " + id, null, function (res) {
       if (res.rows.length > 0) {
-        //var blob = new Blob([res.rows[0]["file_data"]], { type: res.rows[0]["file_type"] });
-        //var url = window.URL.createObjectURL(blob);
-
         var a = document.createElement("a");
         document.body.appendChild(a);
         a.style.display = "none";
         a.href = res.rows[0]["file_data"];
         a.download = res.rows[0]["file_filename"];
         a.click();
-        //window.URL.revokeObjectURL(url);
         a.destroy();
-        //salert("Download file attachment: " + res.rows[0]["file_filename"]);
-      }
+       }
     });
   },
-
 
   returnAttachment(id) {
     this.sendPeerDatabaseRequest("covid19", "attachments", "*", "id= " + id, null, function (res) {
@@ -134,7 +287,6 @@ module.exports = utils = {
           <input class="check-${cell}" id="check-${cell}" type="checkbox">
           `;
     el.parentNode.innerHTML += html;
-    //when rewriting the partent innerhtml - the element reference is lost.
     el = document.getElementById(el.id);
     el.classList.add('hidden');
 

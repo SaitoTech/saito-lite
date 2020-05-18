@@ -21,6 +21,7 @@ const utils = require('./lib/utils/utils');
 
 
 
+
 class Covid19 extends DBModTemplate {
 
   constructor(app) {
