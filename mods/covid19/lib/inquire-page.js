@@ -14,7 +14,7 @@ module.exports = InquirePage = {
 
     var html = `
     <tr>
-    <td class="inq-product-name" style="width:15%">Category</td>
+    <td class="inq-product-name" style="width:15%">Product</td>
     <td class="inq-product-name" style="width:20%">Budget/item</td>
     <td class="inq-product-name" style="width:20%">Quantity</td>
     <td class="inq-product-name" style="width:43%">Requirements</td>
@@ -99,7 +99,7 @@ module.exports = InquirePage = {
   returnPrintHTML() {
     var pdfHTML = `
     <div style="padding: 15px; background: linear-gradient(-45deg, #369 50%, #036 100%);">
-      <img class="logo major-logo" style="width: 150px" src="https://staging.saito.io/covid19/dhbgloballogo.png">
+      <img class="logo major-logo" src="/covid19/dhbgloballogo.png">
     </div>
     <p><h2>Request for Proposal</h2></p>
     <hr />

@@ -5,6 +5,7 @@ const AttachBundle = require('./attach-bundle');
 const Attachments = require('./attachments');
 const UpdateSuccess = require('./update-success');
 
+
 module.exports = UpdateProduct = {
 
   render(app, data) {

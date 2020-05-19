@@ -2,7 +2,10 @@ const ItemProductTemplate = require('./item-product.template');
 
 module.exports = ItemProduct = {
 
+
   render(app, data, el) {
+
+    var this_item_product = this;
 
     //el.innerHTML = ItemProductTemplate();
     //
@@ -30,7 +33,7 @@ module.exports = ItemProduct = {
 
     data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
       res.rows.forEach(row => {
-      html += `
+        html += `
         <div class="item-product-block" data-product_id="${row.id}">
           <div class="item-product-title">
             <h3>Sourced Product </h3><i data-product_id="${row.id}" class="remove far fa-times-circle"></i>
@@ -49,33 +52,36 @@ module.exports = ItemProduct = {
       </div>
       `;
 
-      el.innerHTML += html;
-      el.querySelectorAll('img').forEach(img => { imgPop(img) });
+        el.innerHTML += html;
+        el.querySelectorAll('img').forEach(img => { imgPop(img) });
+        el.querySelectorAll('.item-product-certificates').forEach(product_row => {
+          data.covid19.renderDocs(product_row.dataset.product_id, product_row);
+        });
 
       });
-      
+
       //treat buttons
 
-      document.querySelectorAll('.remove').forEach(el => {
+        document.querySelectorAll('.remove').forEach(el => {
         el.addEventListener('click', (e) => {
 
           data.item_product_id = e.target.dataset.id;
           data.covid19.sendPeerDatabaseRequest("covid19", "products-items", "uuid", "products_items.id = " + data.item_product_id, null, async (res) => {
-            
+
             let c = confirm("Are you sure you want to remove this item-product?");
             if (c) {
-              
+
               let values = [];
-                  values[0] = {};
-                  values[0].dbname = "covid19";
-                  values[0].table  = "products_items";
-                  values[0].column = "uuid";
-                  values[0].value = res.rows[0].uuid;
-              
+              values[0] = {};
+              values[0].dbname = "covid19";
+              values[0].table = "products_items";
+              values[0].column = "uuid";
+              values[0].value = res.rows[0].uuid;
+
               data.covid19.deleteDatabase(values);
-              
+
               await salert("Delete Requested - please reload in 30 seconds");
-            
+
             }
           });
         });

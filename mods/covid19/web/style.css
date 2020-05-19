@@ -359,7 +359,8 @@ td.inq-product-id div.editable {
 
 .item-product-block-grid {
   display: grid;
-  grid-template-columns: 20em 110px auto;
+  grid-template-columns: 22em 120px auto;
+  grid-gap: 1em;
 }
 
 .item-deails.grid-2-columns {

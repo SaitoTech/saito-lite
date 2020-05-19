@@ -44,6 +44,8 @@ module.exports = UpdateOrder = {
 
     });
 
+  
+
     /* no cancel button in full view
     document.getElementById('cancel-order').addEventListener('click', (e) => {
       //document.querySelector('.order').style.display = "none";
