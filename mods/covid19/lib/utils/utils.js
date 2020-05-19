@@ -36,15 +36,15 @@ module.exports = utils = {
             file_attachments.object_id = ${product_id}
         `;
 
-        this.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
+    this.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
 
-          if (res.rows.length > 0) {
-            _this.renderCerts(res.rows, target);
-          }
-          if (res.rows.length >1) {
-            _this.renderDownloadAll(product_id, target);
-          }
-        });
+      if (res.rows.length > 0) {
+        _this.renderCerts(res.rows, target);
+      }
+      if (res.rows.length > 1) {
+        _this.renderDownloadAll(product_id, target);
+      }
+    });
   },
 
   async returnZipForProduct(product_id) {
@@ -77,18 +77,18 @@ module.exports = utils = {
     await this.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
 
       if (res.rows.length > 0) {
-       _this.zipRows(res.rows);
+        _this.zipRows(res.rows);
       }
     });
 
   },
 
   zipRows(rows) {
-   
+
     var zip = new jsZip();
-    
+
     rows.forEach(row => {
-      zip.file(row.filename, row.data.split(',')[1], {base64: true});
+      zip.file(row.filename, row.data.split(',')[1], { base64: true });
     });
     zip.generateAsync({ type: 'blob' }).then(function (content) {
       FileSaver.saveAs(content, 'certificates.zip');
@@ -98,7 +98,9 @@ module.exports = utils = {
 
   returnZipForOrder(order_id) {
     var zip = new jsZip();
-
+    document.getElementById('downloader').classList.remove('fa-download');
+    document.getElementById('downloader').classList.add('fa-spinner');
+    document.getElementById('downloader').classList.add('fa-spin');
     var sql = `
 select * from
 (select
@@ -141,12 +143,15 @@ select * from
         res.rows.forEach(row => {
           let filename = row.folder + "/" + row.file_name.replace(/\ /, "_");
           let filedata = row.file_data;
-          if(filedata.includes(",")) { filedata = filedata.split(","[1]);}
-          zip.file(filename, filedata, {base64: true});
+          if (filedata.includes(",")) { filedata = filedata.split(",")[1]; }
+          zip.file(filename, filedata, { base64: true });
         });
         zip.generateAsync({ type: 'blob' }).then(function (content) {
           FileSaver.saveAs(content, 'dhb_order_files.zip');
         });
+        document.getElementById('downloader').classList.remove('fa-spinner');
+        document.getElementById('downloader').classList.remove('fa-spin');
+        document.getElementById('downloader').classList.add('fa-download');
       }
     });
 
@@ -155,20 +160,20 @@ select * from
 
   renderDownloadAll(product_id, el) {
     //if(el.childNodes.length > 1) {
-      var _this = this;
-      var id = product_id;
-      var button = document.createElement('button');
-      button.innerHTML = "Download All"
-      button.classList.add('cert');
-      button.classList.add('download_all');
-      button.addEventListener('click', (e) => {
-        _this.returnZipForProduct(id);
-      });
-      el.appendChild(button);
+    var _this = this;
+    var id = product_id;
+    var button = document.createElement('button');
+    button.innerHTML = "Download All"
+    button.classList.add('cert');
+    button.classList.add('download_all');
+    button.addEventListener('click', (e) => {
+      _this.returnZipForProduct(id);
+    });
+    el.appendChild(button);
     //}
   },
 
-  
+
   renderCerts(rows, el) {
     // should this be generalised to module wide?
     var _this = this;
@@ -259,7 +264,7 @@ select * from
         a.download = res.rows[0]["file_filename"];
         a.click();
         a.destroy();
-       }
+      }
     });
   },
 
@@ -300,6 +305,48 @@ select * from
       } else {
         el.value = 0;
       }
+    });
+
+  },
+
+  treatTextArea(el) {
+    let cell = el.id;
+    let html = `
+          <textarea class="text-${cell}" id="text-${cell}"></textarea>
+          `;
+    el.parentNode.innerHTML += html;
+    el = document.getElementById(el.id);
+    el.classList.add('hidden');
+
+    document.getElementById(`text-${cell}`).value = el.value;
+
+    var editor = new MediumEditor(`#text-${cell}`, {
+      placeholder: false,
+      buttonLabels: 'fontawesome',
+      toolbar: {
+        allowMultiParagraphSelection: true,
+        buttons: ['bold', 'italic', 'underline', 'anchor', 'h2', 'h3', 'quote', 'li'],
+        diffLeft: 0,
+        diffTop: -10,
+        firstButtonClass: 'medium-editor-button-first',
+        lastButtonClass: 'medium-editor-button-last',
+        relativeContainer: null,
+        standardizeSelectionStart: false,
+        static: false,
+        updateOnEmptySelection: true,
+        anchor: {
+          customClassOption: null,
+          customClassOptionText: 'Button',
+          linkValidation: true,
+          placeholderText: 'Paste or type a link',
+          targetCheckbox: true,
+          targetCheckboxText: 'Open in new window'
+        }
+      }
+    });
+
+    document.querySelector(`div.text-${cell}`).addEventListener('blur', (e) => {
+      el.value = document.querySelector(`div.text-${cell}`).innerHTML;
     });
 
   },
@@ -477,6 +524,6 @@ select * from
         shim.destroy();
       });
   }
-  
+
 
 }

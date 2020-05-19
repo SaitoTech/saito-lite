@@ -34,15 +34,18 @@ module.exports = OrderManager = {
           <div class="table-head">Key Requirments</div>
           <div class="table-head"></div>
         `;
+    var rownum = 0;
+    var rowclass = "";
 
     data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
       res.rows.forEach(row => {
-
-        html += `<div>${row.order_name}</div>`;
-        html += `<div>${row.details}</div>`;
-        html += `<div>${row.requirements}</div>`;
+        rownum ++;
+        if(rownum %2) { rowclass = "even"} else { rowclass = "odd"};
+        html += `<div class="${rowclass}">${row.order_name}</div>`;
+        html += `<div class="${rowclass}">${row.details}</div>`;
+        html += `<div class="${rowclass}">${row.requirements}</div>`;
         html += `
-        <div class="grid-buttons ${row.id}">
+        <div class="grid-buttons ${row.id} rowclass">
           <div class="grid-action edit" data-id="${row.id}">Edit</div>
           <div class="grid-action delete" data-id="${row.id}">Delete</div>          
         </div>`;
@@ -50,6 +53,7 @@ module.exports = OrderManager = {
       document.querySelector(".loading").style.display = "none";
       document.querySelector("#order-table").style.display = "grid";
       document.querySelector("#order-table").innerHTML = html;
+     
 
 
       //treat buttons
