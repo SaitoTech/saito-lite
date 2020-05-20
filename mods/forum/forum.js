@@ -505,6 +505,8 @@ class Forum extends ModTemplate {
           let tx = new saito.transaction(JSON.parse(row.tx));
 
           let txmsg = tx.returnMessage();
+	  let subforum = txmsg.forum;
+	  if (subforum == "") { subforum = "main"; }
 
           let title = txmsg.title;
           let address = tx.transaction.from[0].add;
@@ -512,8 +514,8 @@ class Forum extends ModTemplate {
           let date = forum_self.formatDate(tx.transaction.ts);
           let votes = row.votes;
           let comments = row.comments;
-          let forum = "/forum/" + txmsg.forum;
-          let link = "/forum/" + txmsg.forum + "/" + tx.transaction.sig;
+          let forum = "/forum/" + subforum;
+          let link = "/forum/" + subforum + "/" + tx.transaction.sig;
 
           identifiers_to_fetch.push(tx.transaction.from[0].add);
 
