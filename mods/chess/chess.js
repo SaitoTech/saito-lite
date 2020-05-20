@@ -566,11 +566,21 @@ console.log("QUEUE: " + this.game.queue);
     return `
       <h3>Chess: </h3>
       <form id="options" class="options">
+
         <label for="color">Pick Your Color:</label>
         <select name="color">
           <option value="black" default>Black</option>
           <option value="white">White</option>
         </select>
+
+        <label for="clock">Time Limit:</label>
+        <select name="clock">
+          <option value="0" default>no limit</option>
+          <option value="30">30 minutes</option>
+          <option value="60">60 minutes</option>
+          <option value="90">90 minutes</option>
+        </select>
+
       </form>
     `;
   }
