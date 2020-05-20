@@ -42,7 +42,7 @@ module.exports = ItemProduct = {
             <div class="item-product-details grid-2-columns">
               <div class="label">Specifiction:</div><div>${row.product_specification}</div>
               <div class="label">Location:</div><div>${row.address}</div>
-              <div class="label">Daily Capacity:</div><div>${row.production_daily_capacity}</div>
+              <div class="label">Daily Capacity:</div><div>${s2Number(row.production_daily_capacity)}</div>
             </div>
             <div class="product-image">
              <img src="${row.product_photo}">

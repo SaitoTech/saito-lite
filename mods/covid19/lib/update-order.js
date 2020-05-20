@@ -12,16 +12,18 @@ module.exports = UpdateOrder = {
     if (typeof data.order_id == 'undefined' || data.order_id == "") {
       data.covid19.returnFormFromPragma("covid19", "orders", function (res) {
         document.querySelector('.main-form').innerHTML = res;
+        data.covid19.treatTextArea(document.getElementById('requirements'));
       });
     } else {
       data.covid19.sendPeerDatabaseRequest("covid19", "orders", "*", "deleted <> 1 AND orders.id = " + data.order_id, null, function (res) {
         html = data.covid19.returnForm("covid19", "orders", data.order_id, res.rows[0]);
         document.querySelector('.main-form').innerHTML += html;
+        data.covid19.treatTextArea(document.getElementById('requirements'));
+
+        ItemManager.render(app, data);
+        ItemManager.attachEvents(app, data);
       });
     }
-
-    ItemManager.render(app, data);
-    ItemManager.attachEvents(app, data);
 
   },
 

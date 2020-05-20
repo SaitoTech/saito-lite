@@ -21,6 +21,7 @@ module.exports = ItemManager = {
         categories.name as 'category',
         categories.id as 'category_id',
         statuses.status_name as 'status',
+        items.id as 'item_id',
         *
       from 
         items 
@@ -47,17 +48,17 @@ module.exports = ItemManager = {
         <div class="item-deails grid-2-columns">
           <div class="table-head">Category</div><div>${row.category}</div>
           <div class="table-head">Status</div><div>${row.status}</div>
-          <div class="table-head">Number</div><div>${row.number}</div>
+          <div class="table-head">Number</div><div>${s2Number(row.number)}</div>
         </div>
         <div class="item-requirements">
           <div class="table-head">Requirments</div>
           <div>${row.requirements}</div>
         </div>
-        <div data-id="${row.id}" class="item-product"></div>
-        <div class="grid-buttons fullrow hr ${row.id}">
-          <div class="grid-action edit" data-id="${row.id}">Edit</div>
-          <div class="grid-action delete" data-id="${row.id}">Delete</div>
-          <div class="grid-action attach-product" data-category_id="${row.category_id}" data-id="${row.id}">Add&nbspProduct</div>          
+        <div data-item_id="${row.item_id}" class="item-product"></div>
+        <div class="grid-buttons fullrow hr ${row.item_id}">
+          <div class="grid-action edit" data-item_id="${row.item_id}">Edit</div>
+          <div class="grid-action delete" data-item_id="${row.item_id}">Delete</div>
+          <div class="grid-action attach-product" data-category_id="${row.category_id}" data-item_id="${row.item_id}">Add&nbspProduct</div>          
         </div>
         `;
       });
@@ -66,7 +67,7 @@ module.exports = ItemManager = {
       document.querySelector("#item-table").innerHTML = html;
 
       document.querySelectorAll('.item-product').forEach(el => {
-        data.item_id = el.dataset.id;
+        data.item_id = el.dataset.item_id;
         ItemProduct.render(app, data, el);
         ItemProduct.attachEvents(app, data, el);
       });
@@ -75,7 +76,7 @@ module.exports = ItemManager = {
       //treat buttons
       document.querySelectorAll('.grid-action.edit').forEach(el => {
         el.addEventListener('click', (e) => {
-          data.item_id = e.target.dataset.id;
+          data.item_id = e.target.dataset.item_id;
           UpdateItem.render(app, data);
           UpdateItem.attachEvents(app, data);
         });
@@ -83,7 +84,7 @@ module.exports = ItemManager = {
 
       document.querySelectorAll('.grid-action.attach-product').forEach(el => {
         el.addEventListener('click', (e) => {
-          data.item_id = e.target.dataset.id;
+          data.item_id = e.target.dataset.item_id;
           data.category_id = e.target.dataset.category_id;
           AttachProduct.render(app, data);
           AttachProduct.attachEvents(app, data);
@@ -93,7 +94,7 @@ module.exports = ItemManager = {
       document.querySelectorAll('.grid-action.delete').forEach(el => {
         el.addEventListener('click', (e) => {
 
-          data.item_id = e.target.dataset.id;
+          data.item_id = e.target.dataset.item_id;
           data.covid19.sendPeerDatabaseRequest("covid19", "items", "uuid", "item.id = " + data.item_id, null, async (res) => {
             
             let c = confirm("Are you sure you want to delete this item?");
