@@ -15092,6 +15092,15 @@ console.log("card: " + card);
               <option value="10">10</option>
             </select>
 
+            <label for="clock">Player Time Limit:</label>
+            <select name="clock">
+              <option value="0" default>no limit</option>
+              <option value="30">30 minutes</option>
+              <option value="60">60 minutes</option>
+              <option value="90">90 minutes</option>
+              <option value="120">120 minutes</option>
+            </select>
+
 
             <div onclick='$(".remove_cards_box").show();$(this).html(" ");' style="font-size:0.80em;cursor:pointer;">&gt; advanced...</div>
             <div id="remove_cards_box" class="remove_cards_box" style="display:none">
