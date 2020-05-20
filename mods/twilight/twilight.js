@@ -203,22 +203,34 @@ class Twilight extends GameTemplate {
         twilight_self.displayModal("Card Menu options changed to text-mode. Please reload.");
         twilight_self.interface = 0;
         twilight_self.saveGamePreference("interface", 0);
+	setTimeout(function() {
+          window.location.reload();
+	}, 1000);
       }
       if (action2 === "graphics") {
         twilight_self.displayModal("Card Menu options changed to graphical mode. Please reload.");
         twilight_self.interface = 1;
         twilight_self.saveGamePreference("interface", 1);
+	setTimeout(function() {
+          window.location.reload();
+	}, 1000);
       }
 
       if (action2 === "english") {
         twilight_self.displayModal("Language Settings", "Card settings changed to English");
         twilight_self.lang = "en";
         twilight_self.saveGamePreference("lang", "en");
+	setTimeout(function() {
+          window.location.reload();
+	}, 1000);
       }
       if (action2 === "chinese") {
         twilight_self.displayModal("语言设定", "卡牌语言改成简体中文");
         twilight_self.lang = "zh";
         twilight_self.saveGamePreference("lang", "zh");
+	setTimeout(function() {
+          window.location.reload();
+	}, 1000);
       }
 
     });
