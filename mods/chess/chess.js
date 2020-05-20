@@ -19,6 +19,12 @@ class Chessgame extends GameTemplate {
     this.engine = null;
     this_chess = this;
 
+    //
+    // USE THE TOURNAMENT CLOCK -- testing
+    //
+    this.useHUD = 0;
+    this.useClock = 1;
+
     this.minPlayers = 2;
     this.maxPlayers = 2;
     this.type       = "Classic Boardgame";
@@ -50,6 +56,9 @@ class Chessgame extends GameTemplate {
   }
 
   initializeHTML(app) {
+
+    super.initializeHTML(app);
+
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(this_chess.app, this_chess);
     });
