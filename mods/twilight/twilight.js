@@ -15098,7 +15098,7 @@ console.log("card: " + card);
               <li><input class="remove_card" type="checkbox" name="degaulle" /> De Gaulle Leads France</li>
               <li><input class="remove_card" type="checkbox" name="naziscientist" /> Nazi Scientists Captured</li>
               <li><input class="remove_card" type="checkbox" name="truman" /> Truman</li>
-              <li><input class="remove_card saito_edition" type="checkbox" name="olympic" checked /> Olympic Games</li>
+              <li><input class="remove_card saito_edition" type="checkbox" name="olympic" /> Olympic Games</li>
               <li><input class="remove_card" type="checkbox" name="nato" /> NATO</li>
               <li><input class="remove_card" type="checkbox" name="indreds" /> Independent Reds</li>
               <li><input class="remove_card" type="checkbox" name="marshall" /> Marshall Plan</li>
@@ -15129,7 +15129,7 @@ console.log("card: " + card);
               <li><input class="remove_card" type="checkbox" name="quagmire" /> Quagmire</li>
               <li><input class="remove_card" type="checkbox" name="saltnegotiations" /> Salt Negotiations</li>
               <li><input class="remove_card" type="checkbox" name="beartrap" /> Bear Trap</li>
-              <li><input class="remove_card saito_edition" type="checkbox" name="summit" checked /> Summit</li>
+              <li><input class="remove_card saito_edition" type="checkbox" name="summit" /> Summit</li>
               <li><input class="remove_card" type="checkbox" name="howilearned" /> How I Learned to Stop Worrying</li>
               <li><input class="remove_card" type="checkbox" name="junta" /> Junta</li>
               <li><input class="remove_card" type="checkbox" name="kitchendebates" /> Kitchen Debates</li>
@@ -15197,20 +15197,20 @@ console.log("card: " + card);
 
             <div style="font-size:0.85em;font-weight:bold;clear:both;margin-top:10px;">add cards to game: </div>
            <ul id="removecards" class="removecards">
-              <li><input class="remove_card saito_edition" type="checkbox" name="culturaldiplomacy" checked /> Cultural Diplomacy (Early-War)</li>
-              <li><input class="remove_card saito_edition" type="checkbox" name="handshake" checked /> Handshake in Space (Mid-War)</li>
-              <li><input class="remove_card saito_edition" type="checkbox" name="rustinredsquare" checked /> Rust Lands in Red Square (Late-War)</li>
+              <li><input class="remove_card saito_edition" type="checkbox" name="culturaldiplomacy" /> Cultural Diplomacy (Early-War)</li>
+              <li><input class="remove_card saito_edition" type="checkbox" name="handshake" /> Handshake in Space (Mid-War)</li>
+              <li><input class="remove_card saito_edition" type="checkbox" name="rustinredsquare" /> Rust Lands in Red Square (Late-War)</li>
               <li><input class="remove_card" type="checkbox" name="gouzenkoaffair" /> Gouzenko Affair (Early-War)</li>
               <li><input class="remove_card" type="checkbox" name="poliovaccine" /> Polio Vaccine (Early-War)</li>
-              <li><input class="remove_card saito_edition" type="checkbox" name="berlinagreement" checked /> 1971 Berlin Agreement (Mid-War)</li>
-              <li><input class="remove_card endofhistory_edition" type="checkbox" name="peronism" checked /> Peronism (Early-War)</li>
-              <li><input class="remove_card endofhistory_edition" type="checkbox" name="manwhosavedtheworld" checked /> The Man Who Saved the World (Mid-War)</li>
-              <li><input class="remove_card endofhistory_edition" type="checkbox" name="breakthroughatlopnor" checked /> Breakthrough at Lop Nor (Mid-War)</li>
-              <li><input class="remove_card endofhistory_edition" type="checkbox" name="nationbuilding" checked /> Nation Building (Mid-War)</li>
-              <li><input class="remove_card endofhistory_edition" type="checkbox" name="greatsociety" checked /> Great Society (Mid-War)</li>
-              <li><input class="remove_card endofhistory_edition" type="checkbox" name="perestroika" checked /> Perestroika (Late-War)</li>
-              <li><input class="remove_card endofhistory_edition" type="checkbox" name="eurocommunism" checked /> Eurocommunism (Mid-War)</li>
-              <li><input class="remove_card endofhistory_edition" type="checkbox" name="inftreaty" checked /> INF Treaty (Latey-War)</li>
+              <li><input class="remove_card saito_edition" type="checkbox" name="berlinagreement" /> 1971 Berlin Agreement (Mid-War)</li>
+              <li><input class="remove_card endofhistory_edition" type="checkbox" name="peronism" /> Peronism (Early-War)</li>
+              <li><input class="remove_card endofhistory_edition" type="checkbox" name="manwhosavedtheworld" /> The Man Who Saved the World (Mid-War)</li>
+              <li><input class="remove_card endofhistory_edition" type="checkbox" name="breakthroughatlopnor" /> Breakthrough at Lop Nor (Mid-War)</li>
+              <li><input class="remove_card endofhistory_edition" type="checkbox" name="nationbuilding" /> Nation Building (Mid-War)</li>
+              <li><input class="remove_card endofhistory_edition" type="checkbox" name="greatsociety" /> Great Society (Mid-War)</li>
+              <li><input class="remove_card endofhistory_edition" type="checkbox" name="perestroika"  /> Perestroika (Late-War)</li>
+              <li><input class="remove_card endofhistory_edition" type="checkbox" name="eurocommunism" /> Eurocommunism (Mid-War)</li>
+              <li><input class="remove_card endofhistory_edition" type="checkbox" name="inftreaty" /> INF Treaty (Latey-War)</li>
             </div>
           </form>
 
