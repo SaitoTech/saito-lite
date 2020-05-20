@@ -11771,7 +11771,12 @@ console.log("card: " + card);
             //
             // if Aldrich Ames is active, US must reveal cards
             //
-            twilight_self.addMove("DEAL\t1\t2\t"+cards_discarded);
+	    if (this.game.player == 1) {
+              twilight_self.addMove("DEAL\t1\t1\t"+cards_discarded);
+	    }
+	    if (this.game.player == 2) {
+              twilight_self.addMove("DEAL\t1\t2\t"+cards_discarded);
+	    }
 
             //
             // are there enough cards available, if not, reshuffle
