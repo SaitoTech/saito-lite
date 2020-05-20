@@ -105,7 +105,7 @@ module.exports = ForumMain = {
                 } else {
                   for (let z = i - 1; z >= 0; z--) {
                     if (data.forum.forum.comments[i].transaction.msg.parent_id != data.forum.forum.comments[z].transaction.msg.post_id) {
-                      margin_index -= 20;
+                      margin_indent -= 20;
                     } else {
                       z = -2;
                     }
