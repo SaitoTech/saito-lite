@@ -12223,6 +12223,11 @@ console.log("card: " + card);
             if (twilight_self.countries[i].ussr > 1) { available_targets += 2; }
           }
         }
+        if (available_targets == 0) {
+          this.addMove("notify\tUSSR has no influence in Western Europe to remove");
+	  this.endTurn();
+          return 0;
+        }
         if (available_targets < 4) {
           ops_to_purge = available_targets;
           this.updateStatus("Remove " + ops_to_purge + " USSR influence from Western Europe (max 2 per country)");
@@ -14028,9 +14033,11 @@ console.log("card: " + card);
     // END OF HISTORY
     //
     if ((this.game.state.events.manwhosavedtheworld === "us" && this.game.state.turn == 1) || (this.game.state.events.manwhosavedtheworld === "ussr" && this.game.state.turn == 0)) {
-      this.game.state.events.manwhosavedtheworld = "";
-      this.updateLog("<span>Man Who Saved the World prevents thermonuclear war</span>");
-      return;
+      if (this.game.state.defcon == 2) {
+        this.game.state.events.manwhosavedtheworld = "";
+        this.updateLog("<span>Man Who Saved the World prevents thermonuclear war</span>");
+        return;
+      }
     }
 
 
