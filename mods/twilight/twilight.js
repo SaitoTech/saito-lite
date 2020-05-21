@@ -46,7 +46,7 @@ class Twilight extends GameTemplate {
     this.boardgameWidth  = 5100;
 
     this.moves           = [];
-    this.is_testing 	 = 0;
+    this.is_testing 	 = 1;
 
     this.log_length 	 = 150;
     this.interface 	 = 1;
@@ -12122,8 +12122,8 @@ console.log("card: " + card);
 	let eligible_cards = [];
 
 	for (let i = 0; i < this.game.deck[0].hand.length; i++) {
-	  if (me === "ussr" && this.game.deck[0].cards[this.game.deck[0].hand[i]].side === "ussr") { eligible_cards.push(this.game.deck[0].hand[i]); }
-	  if (me === "us" && this.game.deck[0].cards[this.game.deck[0].hand[i]].side === "us") { eligible_cards.push(this.game.deck[0].hand[i]); }
+	  if (me === "ussr" && this.game.deck[0].cards[this.game.deck[0].hand[i]].player === "ussr") { eligible_cards.push(this.game.deck[0].hand[i]); }
+	  if (me === "us" && this.game.deck[0].cards[this.game.deck[0].hand[i]].player === "us") { eligible_cards.push(this.game.deck[0].hand[i]); }
 	}
 
 	if (eligible_cards.length == 0) {
