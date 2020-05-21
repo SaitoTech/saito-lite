@@ -111,6 +111,7 @@ class Chessgame extends GameTemplate {
 
       if (this.game.target == this.game.player) {
         this.setBoard(this.engine.fen());
+	if (this.useClock) { this.startClock(); }
       } else {
         this.lockBoard(this.engine.fen());
       }
@@ -147,7 +148,7 @@ class Chessgame extends GameTemplate {
   handleGameLoop(msg={}) {
 
     msg = {};
-console.log("QUEUE: " + this.game.queue);
+    console.log("QUEUE 123123: " + this.game.queue);
     if (this.game.queue.length > 0) {
       msg.extra = JSON.parse(this.app.crypto.base64ToString(this.game.queue[this.game.queue.length-1]));
     } else {
@@ -174,9 +175,12 @@ console.log("QUEUE: " + this.game.queue);
     this.game.position = data.position;
     this.game.target = msg.extra.target;
 
+
     if (msg.extra.target == this.game.player) {
+
       if (this.browser_active == 1) {
         this.setBoard(this.game.position);
+        if (this.useClock) { this.startClock(); }
         this.updateLog(data.move, 999);
         this.updateStatusMessage();
         if (this.engine.in_checkmate() === true) {

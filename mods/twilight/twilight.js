@@ -3369,6 +3369,8 @@ console.log("CARD: " + card);
 
   playerPickHeadlineCard() {
 
+this.startClock();
+
     let twilight_self = this;
 
     if (this.browser_active == 0) { return; }
@@ -3442,6 +3444,8 @@ console.log("CARD: " + card);
 
   playerTurnHeadlineSelected(card, player) {
 
+this.startClock();
+
     let twilight_self = this;
 
     // cannot pick china card or UN intervention
@@ -3498,6 +3502,8 @@ console.log("CARD: " + card);
 
 
   playerTurn(selected_card=null) {
+
+this.startClock();
 
     let twilight_self = this;
 
@@ -3799,6 +3805,8 @@ console.log("CARD: " + card);
 
 
   playerTurnCardSelected(card, player) {
+
+this.startClock();
 
     let twilight_self = this;
     let opponent = "us";
@@ -4617,6 +4625,8 @@ console.log("CARD: " + card);
 
   playerPlaceInitialInfluence(player) {
 
+this.startClock();
+
     let twilight_self = this;
 
     if (player == "ussr") {
@@ -4726,6 +4736,8 @@ console.log("CARD: " + card);
 
 
   playerPlaceBonusInfluence(player, bonus) {
+
+this.startClock();
 
     let twilight_self = this;
 
@@ -5084,6 +5096,8 @@ console.log("CARD: " + card);
   }
 
   playerPlaceInfluence(player, mycallback=null) {
+
+this.startClock();
 
     // reset off
     this.playerFinishedPlacingInfluence();
