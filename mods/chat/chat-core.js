@@ -179,8 +179,6 @@ class ChatCore extends ModTemplate {
   //
   handlePeerRequest(app, req, peer, mycallback) {
 
-//console.log("REQUEST DETAILS: " + JSON.stringify(req));
-
     if (req.request == null) { return; }
     if (req.data == null) { return; }
 
@@ -191,7 +189,6 @@ class ChatCore extends ModTemplate {
       switch (req.request) {
 
         case "chat message":
-//console.log("RECEIVED A CHAT MESSAGE!");
           this.receiveMessage(app, new saito.transaction(tx.transaction));
           if (mycallback) { mycallback({ "payload": "success", "error": {} }); };
           break;
@@ -221,7 +218,6 @@ class ChatCore extends ModTemplate {
     let relay_mod = app.modules.returnModule('Relay');
 
     if (this.relay_moves_onchain_if_possible == 1) {
-console.log("ONCHAIN SEND THIS TX: " + JSON.stringify(tx.transaction));
       tx = this.app.wallet.signTransaction(tx);
       this.app.network.propagateTransaction(tx);
     }

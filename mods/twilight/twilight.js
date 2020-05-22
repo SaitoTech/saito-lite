@@ -972,6 +972,7 @@ console.log("CARD: " + card);
                 this.game.queue.splice(this.game.queue.length-1, 1);
               }
 
+
               let user_message = "Select cards to discard:<ul>";
               for (let i = 0; i < cardoptions.length; i++) {
                 user_message += '<li class="card" id="'+this.game.deck[0].crypt[i]+'_'+cardoptions[i]+'">'+this.game.deck[0].cards[cardoptions[i]].name+'</li>';
@@ -999,7 +1000,7 @@ console.log("CARD: " + card);
 
                   let tmpar = action2.split("_");
 
-                      if (twilight_self.app.browser.isMobileBrowser(navigator.userAgent)) {
+                  if (twilight_self.app.browser.isMobileBrowser(navigator.userAgent)) {
                     twilight_self.mobileCardSelect(card, player, function() {
 
                       $(this).hide();
@@ -1014,7 +1015,7 @@ console.log("CARD: " + card);
                   } else {
 
                     $(this).hide();
-                      pos_to_discard.push(tmpar[0]);
+                    pos_to_discard.push(tmpar[0]);
                     cards_discarded++;
                     twilight_self.addMove("discard\tus\t"+tmpar[1]);
                     twilight_self.addMove("notify\tUS discards <span class=\"logcard\" id=\""+tmpar[1]+"\">"+twilight_self.game.deck[0].cards[tmpar[1]].name +"</span>");

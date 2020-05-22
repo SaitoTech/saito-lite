@@ -504,6 +504,38 @@ class Poker extends GameTemplate {
 	      deck1 = this.game.state.player_cards[key];
 	      player1 = parseInt(key)+1;
 
+	      //
+	      // report hands
+	      //
+	      if (i == 1) {
+
+		let html = "";
+		let hand1 = this.returnHand(deck1);
+		let hand2 = this.returnHand(deck2);
+
+	        html  = hand1.val[0] + hand1.suite[0];
+	        html += ", ";
+	        html += hand1.val[0] + hand1.suite[0];
+		this.updateLog("Player "+(i)+" holds: " + html);
+
+	        html  = hand2.val[0] + hand2.suite[0];
+	        html += ", ";
+	        html += hand2.val[0] + hand2.suite[0];
+		this.updateLog("Player "+(i+1)+" holds: " + html);
+
+	      } else {
+
+		let html = "";
+		let hand1 = this.returnHand(deck1);
+
+	        html  = hand1.val[0] + hand1.suite[0];
+	        html += ", ";
+	        html += hand1.val[0] + hand1.suite[0];
+		this.updateLog("Player "+(i+1)+" holds: " + html);
+
+	      }
+
+
 	      let h1score = this.scoreHand(deck1);
 	      let h2score = this.scoreHand(deck2);
 
@@ -533,7 +565,6 @@ class Poker extends GameTemplate {
 		  winners.push(player1);
 		  winning_deck = deck1;
 	        } else {
-
 	  	  deck2 = deck2;
 		  player2 = player2;
 		  winning_player = player2;
