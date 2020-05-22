@@ -1195,7 +1195,8 @@ class Arcade extends ModTemplate {
     let game_status = "open";
     let player = tx.transaction.from[0].add;
     let players_array = player;
-    let start_bid = blk.block.id;
+    let start_bid = 0;
+    if (blk != null) { start_bid = blk.block.id; }
     let valid_for_minutes = 60;
     let created_at = parseInt(tx.transaction.ts);
     let expires_at = created_at + (60000 * parseInt(valid_for_minutes));

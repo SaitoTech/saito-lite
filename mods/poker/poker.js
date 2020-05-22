@@ -309,6 +309,8 @@ class Poker extends GameTemplate {
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
 
+console.log("POKER QUEUE: " + JSON.stringify(this.game.queue));
+
       if (mv[0] == "notify") {
 
           this.updateLog(mv[1]);
@@ -379,6 +381,8 @@ class Poker extends GameTemplate {
 	  //
 	  // CHECK TO SEE IF WE NEED TO FLIP CARDS
 	  //
+console.log("plays since last raise: " + this.game.state.plays_since_last_raise + " --- " + this.game.players.length);
+
 	  if (this.game.state.plays_since_last_raise >= this.game.players.length) {
 
 	    //
@@ -413,6 +417,7 @@ class Poker extends GameTemplate {
 	    if (this.game.state.flipped == 0) { 
 	      cards_to_flip = 3; 
 	    }
+
 	    this.game.state.flipped += cards_to_flip;
 	    for (let z = 0; z < cards_to_flip; z++) {
       	      for (let i = this.game.players.length-1; i >= 0; i--) {
@@ -701,6 +706,14 @@ class Poker extends GameTemplate {
 	  }
  	  this.updateLog("Player " + player + " deposits " + amount_to_call);
 
+
+          if (this.game.state.small_blind_player == this.game.player) {
+	    if (this.game.state.flipped == 0) {
+alert("I am the small blind and flipped is zero on call!");	 
+	   }
+	  }
+
+
 	  this.game.state.player_credit[player-1] -= amount_to_call;
 	  this.game.state.player_pot[player-1]  += amount_to_call;
 	  this.game.state.pot += amount_to_call;
@@ -711,6 +724,7 @@ class Poker extends GameTemplate {
 
 
       if (mv[0] === "fold") {
+
 	  let player = parseInt(mv[1]);
 	  this.updateLog("Player " + player + " folds.");
 	  this.game.state.passed[player-1] = 1;
