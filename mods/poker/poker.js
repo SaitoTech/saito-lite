@@ -519,12 +519,12 @@ class Poker extends GameTemplate {
 	        html  = hand1.val[0] + hand1.suite[0];
 	        html += ", ";
 	        html += hand1.val[1] + hand1.suite[1];
-		this.updateLog("Player "+(i)+": " + h1score.cards_to_score + " " + h1score.hand_description);
+		this.updateLog("Player "+(i+1)+": " + h1score.hand_description + " ("+h1score.cards_to_score+")");
 
 	        html  = hand2.val[0] + hand2.suite[0];
 	        html += ", ";
 	        html += hand2.val[1] + hand2.suite[1];
-		this.updateLog("Player "+(i+1)+" holds: " + h1score.cards_to_score + " " + h1score.hand_description);
+		this.updateLog("Player "+(i+1)+": " + h2score.hand_description + " ("+h2score.cards_to_score+")");
 
 	      } else {
 
@@ -534,7 +534,7 @@ class Poker extends GameTemplate {
 	        html  = hand1.val[0] + hand1.suite[0];
 	        html += ", ";
 	        html += hand1.val[1] + hand1.suite[1];
-		this.updateLog("Player "+(i+1)+" holds: " + h1score.cards_to_score + " " + h1score.hand_description);
+		this.updateLog("Player "+(i+1)+": " + h1score.hand_description + " ("+h1score.cards_to_score+")");
 
 	      }
 
