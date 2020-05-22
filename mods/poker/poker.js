@@ -22,7 +22,7 @@ class Poker extends GameTemplate {
     this.card_img_dir    = '/poker/img/cards';
 
     this.minPlayers      = 2;
-    this.maxPlayers      = 2;
+    this.maxPlayers      = 4;
     this.interface       = 1;
     this.boardgameWidth  = 5100;
 
@@ -504,40 +504,40 @@ class Poker extends GameTemplate {
 	      deck1 = this.game.state.player_cards[key];
 	      player1 = parseInt(key)+1;
 
+	      let h1score = this.scoreHand(deck1);
+	      let h2score = this.scoreHand(deck2);
+
 	      //
 	      // report hands
 	      //
 	      if (i == 1) {
 
 		let html = "";
-		let hand1 = this.returnHand(deck1);
-		let hand2 = this.returnHand(deck2);
+		let hand1 = this.convertHand(deck1);
+		let hand2 = this.convertHand(deck2);
 
 	        html  = hand1.val[0] + hand1.suite[0];
 	        html += ", ";
-	        html += hand1.val[0] + hand1.suite[0];
-		this.updateLog("Player "+(i)+" holds: " + html);
+	        html += hand1.val[1] + hand1.suite[1];
+		this.updateLog("Player "+(i)+": " + h1score.cards_to_score + " " + h1score.hand_description);
 
 	        html  = hand2.val[0] + hand2.suite[0];
 	        html += ", ";
-	        html += hand2.val[0] + hand2.suite[0];
-		this.updateLog("Player "+(i+1)+" holds: " + html);
+	        html += hand2.val[1] + hand2.suite[1];
+		this.updateLog("Player "+(i+1)+" holds: " + h1score.cards_to_score + " " + h1score.hand_description);
 
 	      } else {
 
 		let html = "";
-		let hand1 = this.returnHand(deck1);
+		let hand1 = this.convertHand(deck1);
 
 	        html  = hand1.val[0] + hand1.suite[0];
 	        html += ", ";
-	        html += hand1.val[0] + hand1.suite[0];
-		this.updateLog("Player "+(i+1)+" holds: " + html);
+	        html += hand1.val[1] + hand1.suite[1];
+		this.updateLog("Player "+(i+1)+" holds: " + h1score.cards_to_score + " " + h1score.hand_description);
 
 	      }
 
-
-	      let h1score = this.scoreHand(deck1);
-	      let h2score = this.scoreHand(deck2);
 
 	      let winner = this.pickWinner(h1score, h2score);
 
