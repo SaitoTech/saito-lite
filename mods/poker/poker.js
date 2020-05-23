@@ -727,8 +727,7 @@ console.log("---------> " + this.game.state.plays_since_last_raise);
 
           if (this.game.state.small_blind_player == player) {
 	    if (this.game.state.flipped == 0) {
-alert("small blind calls so plays_since_last_raise is flipped to -1");
-              this.game.state.plays_since_last_raise = -1;
+              this.game.state.plays_since_last_raise = this.game.players.length-1;
 	    }
 	  }
 
