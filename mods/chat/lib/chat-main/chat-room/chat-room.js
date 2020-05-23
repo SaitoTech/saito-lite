@@ -8,7 +8,7 @@ const ChatMessageContainerTemplate = require('./chat-message-container.template'
 var marked = require('marked');
 var sanitizeHtml = require('sanitize-html');
 const linkifyHtml = require('markdown-linkify');
-const emoji = require('node-emoji');
+//const emoji = require('node-emoji');
 
 module.exports = ChatRoom = {
     group: {},
@@ -264,7 +264,7 @@ module.exports = ChatRoom = {
           'a': sanitizeHtml.simpleTransform('a', {target: '_blank'})
         }
       });
-      msg = emoji.emojify(msg);
+      //msg = emoji.emojify(msg);
       
       return msg;
     }

@@ -1,7 +1,10 @@
 
-  let x = "oh fuck me, it also is affecting my FF browser, since i send the email to my FF's wallet.:thumbsup:";
-  
+  let x = "quick test of encoding";
+  let y = 
   let z = Buffer.from(x, 'utf16le').toString('utf8');
+
+transaction.msg = "BASE64STRING";
+
 
 console.log(z);
 

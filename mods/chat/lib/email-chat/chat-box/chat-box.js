@@ -4,7 +4,7 @@ const ChatBoxMessageBlockTemplate = require('./chat-box-message-block.template.j
 var marked = require('marked');
 var sanitizeHtml = require('sanitize-html');
 const linkifyHtml = require('markdown-linkify');
-const emoji = require('node-emoji');
+//const emoji = require('node-emoji');
 
 module.exports = ChatBox = {
 
@@ -88,8 +88,7 @@ module.exports = ChatBox = {
     },
 
     addMessage(app, data, tx) {
-      app.modules.returnModule("Chat")
-                      .receiveMessage(app, tx);
+      app.modules.returnModule("Chat").receiveMessage(app, tx);
       this.addTXToDOM(app, data, tx);
     },
 
@@ -266,7 +265,7 @@ module.exports = ChatBox = {
           'a': sanitizeHtml.simpleTransform('a', {target: '_blank'})
         }
       });
-      msg = emoji.emojify(msg);
+      //msg = emoji.emojify(msg);
       
       return msg;
     }

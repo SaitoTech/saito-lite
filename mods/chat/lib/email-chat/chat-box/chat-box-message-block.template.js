@@ -1,5 +1,6 @@
 //const ChatRoomMessageBubbleTemplate = require('./chat-room-message-bubble.template');
 const ChatRoomMessageTemplate = require('../../chat-main/chat-room/chat-room-message.template');
+const emoji = require('node-emoji');
 
 module.exports = ChatBoxMessageBlockTemplate = (message_block, data) => {
   let { identicon, identicon_color, messages, publickey, keyHTML, last_message_timestamp, type } = message_block;
@@ -17,7 +18,7 @@ module.exports = ChatBoxMessageBlockTemplate = (message_block, data) => {
               <p class="chat-message-timestamp">${datetime.hours}:${datetime.minutes}</p>
       </div>
       <div class="chat-box-message-container chat-box-message-container-${type}" style="border-color:${identicon_color};">
-        ${messages_html}
+        ${emoji.emojify(messages_html)}
       </div>
     </div>
   </div>
