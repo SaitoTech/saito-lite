@@ -328,6 +328,8 @@ console.log("POKER QUEUE: " + JSON.stringify(this.game.queue));
 
       if (mv[0] === "turn") {
 
+	let player_to_go = parseInt(mv[1]);
+
           this.displayBoard();
 
 	  //
@@ -365,6 +367,7 @@ console.log("POKER QUEUE: " + JSON.stringify(this.game.queue));
 	  for (let i = 0; i < this.game.state.passed.length; i++) {
 	    if (this.game.state.passed[i] == 0) { active_players++; }
 	  }
+console.log("active players: " + active_players);
 	  if (active_players == 1) {
 	    for (let i = 0; i < this.game.state.passed.length; i++) {
 	      if (this.game.state.passed[i] == 0) {
@@ -435,9 +438,18 @@ console.log("plays since last raise: " + this.game.state.plays_since_last_raise 
 	  }
 	  this.game.state.turn++;
 
-	  if (this.game.state.passed[this.game.player-1] == 1) {
+
+
+
+console.log("---------> " + this.game.state.plays_since_last_raise);
+
+	  if (this.game.state.passed[player_to_go-1] == 1) {
+
             this.game.queue.splice(qe, 1);
+	    return 1;
+
 	  } else {
+
             this.game.queue.splice(qe, 1);
 
 	    //
@@ -445,13 +457,16 @@ console.log("plays since last raise: " + this.game.state.plays_since_last_raise 
 	    // 
             if (parseInt(mv[1]) == this.game.player) {
               this.playerTurn();
+	      return 0;
             } else {
               this.updateStatus("Waiting for Player " + mv[1]);
+	      return 0;
             }
-            shd_continue = 0;
+
+	    shd_continue = 0;
+
           }
       }
-
 
 
 
@@ -688,11 +703,14 @@ console.log("plays since last raise: " + this.game.state.plays_since_last_raise 
           this.updateStatus("Your opponent is making the first move.");
 	  // not -1 to start with small blind
 
-          for (let i = 0; i < this.game.players.length; i++) {
-	    let player_to_go = this.game.state.big_blind_player-i;
-	    if (player_to_go <= 0) { player_to_go += this.game.players.length; }
+
+          for (let i = this.game.state.big_blind_player; i <= (this.game.state.big_blind_player+this.game.players.length-1); i++) {
+//          for (let i = (this.game.state.big_blind_player+this.game.players.length-1); i >= this.game.state.big_blind_player; i--) {
+	    let player_to_go = (i%this.game.players.length);
+            if (player_to_go == 0) { player_to_go = this.game.players.length; }
 	    this.game.queue.push("turn\t"+player_to_go);
 	  }
+
       }
 
       if (mv[0] === "call") {
@@ -707,12 +725,16 @@ console.log("plays since last raise: " + this.game.state.plays_since_last_raise 
  	  this.updateLog("Player " + player + " deposits " + amount_to_call);
 
 
-          if (this.game.state.small_blind_player == this.game.player) {
+          if (this.game.state.small_blind_player == player) {
 	    if (this.game.state.flipped == 0) {
-alert("I am the small blind and flipped is zero on call!");	 
-	   }
+alert("small blind calls so plays_since_last_raise is flipped to -1");
+              this.game.state.plays_since_last_raise = -1;
+	    }
 	  }
 
+          //
+          // reset plays since last raise
+          //
 
 	  this.game.state.player_credit[player-1] -= amount_to_call;
 	  this.game.state.player_pot[player-1]  += amount_to_call;
