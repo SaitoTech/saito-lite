@@ -40,7 +40,7 @@ class Escrow extends ModTemplate {
     app.network.oldPropagateTransactionWithCallback = app.network.propagateTransactionWithCallback;
     app.network.propagateTransactionWithCallback = function newPropagateTransactionWithCallback(newtx, mycallback) {
 console.log("\n\nESCROW HAS OVERWRITTEN THIS FUNCTION TO DO SOME STUFF FIRST!\n\n");
-      newtx.transaction.msg.escrow = this.publickey;
+      newtx.msg.escrow = this.publickey;
       newtx = app.wallet.signTransaction(newtx);
       app.network.oldPropagateTransactionWithCallback(newtx, mycallback);
     }
@@ -55,8 +55,8 @@ console.log("\n\nESCROW HAS OVERWRITTEN THIS FUNCTION TO DO SOME STUFF FIRST!\n\
       console.log("NULL TX CREATED IN REGISTRY MODULE")
       return 0;
     }
-    newtx.transaction.msg.module        = this.name;
-    newtx.transaction.msg.request       = "register account";
+    newtx.msg.module        = this.name;
+    newtx.msg.request       = "register account";
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 
@@ -111,17 +111,17 @@ console.log("\n\nESCROW HAS OVERWRITTEN THIS FUNCTION TO DO SOME STUFF FIRST!\n\
 console.log("THIS IS THE TX CREATED BY DEFAULT: " + JSON.stringify(tx.transaction));
 console.log("GDOPP: " +gamedata.opponent);
 
-        tx.transaction.msg.ts                   = ts;
-        tx.transaction.msg.module               = this.name;
-        tx.transaction.msg.request              = "open";
-        tx.transaction.msg.stake                = gamedata.stake;
-        tx.transaction.msg.game                 = gamedata.name;
-        tx.transaction.msg.options              = gamedata.options;
-        tx.transaction.msg.options_html 	= gamedata.options_html;
-        tx.transaction.msg.players_needed       = gamedata.players_needed;
-        tx.transaction.msg.accept_sig           = accept_sig;
-        tx.transaction.msg.players              = [];
-        tx.transaction.msg.players.push(this.app.wallet.returnPublicKey());
+        tx.msg.ts                   = ts;
+        tx.msg.module               = this.name;
+        tx.msg.request              = "open";
+        tx.msg.stake                = gamedata.stake;
+        tx.msg.game                 = gamedata.name;
+        tx.msg.options              = gamedata.options;
+        tx.msg.options_html 	= gamedata.options_html;
+        tx.msg.players_needed       = gamedata.players_needed;
+        tx.msg.accept_sig           = accept_sig;
+        tx.msg.players              = [];
+        tx.msg.players.push(this.app.wallet.returnPublicKey());
     tx = app.wallet.signTransaction(tx);
 
 console.log("TESTING ESCROW: " + JSON.stringify(tx.transaction));
@@ -204,8 +204,8 @@ console.log("RECEIVED ESCROW INVITATION: " + JSON.stringify(txmsg));
 	    //
 	    // change arcade info
 	    //
-	    tx.transaction.msg.module = "Arcade";
-	    tx.transaction.msg.options_html = '<div class="pill" style="background-color:yellow;color:black">CHARITY GAME: '+txmsg.stake+'</div>'+tx.transaction.msg.options_html;
+	    tx.msg.module = "Arcade";
+	    tx.msg.options_html = '<div class="pill" style="background-color:yellow;color:black">CHARITY GAME: '+txmsg.stake+'</div>'+tx.msg.options_html;
 
 	    let arcade_self = app.modules.returnModule("Arcade");
 	    if (arcade_self != null) {
@@ -295,10 +295,10 @@ console.log("INSERT KEYS INTO USERBASE: ");
       return;
     }
 
-    newtx.transaction.msg.module        = this.name;
-    newtx.transaction.msg.request       = "account balance";
-    newtx.transaction.msg.address	= address;
-    newtx.transaction.msg.balance	= balance;
+    newtx.msg.module        = this.name;
+    newtx.msg.request       = "account balance";
+    newtx.msg.address	= address;
+    newtx.msg.balance	= balance;
 
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);

@@ -90,7 +90,7 @@ class ChatCore extends ModTemplate {
 
     if (txs.length > 0) {
       txs.forEach(tx => {
-        let { group_id } = tx.transaction.msg;
+        let { group_id } = tx.msg;
         let txmsg = tx.returnMessage();
         let msg_type = tx.transaction.from[0].add == app.wallet.returnPublicKey() ? 'myself' : 'others';
         let msg = Object.assign(txmsg, { sig: tx.transaction.sig, type: msg_type });
@@ -197,7 +197,7 @@ class ChatCore extends ModTemplate {
 
           // save state of message
           let archive = this.app.modules.returnModule("Archive");
-          archive.saveTransactionByKey(tx.transaction.msg.group_id, tx);
+          archive.saveTransactionByKey(tx.msg.group_id, tx);
 
           this.app.network.peers.forEach(p => {
             if (p.peer.publickey !== peer.peer.publickey) {

@@ -170,19 +170,6 @@ module.exports = InquirePage = {
 
     document.getElementById('send-email').addEventListener('click', () => {
 
-      //todo - send saito mail
-      /*
-      let tx = app.wallet.createUnsignedTransaction();
-      tx.transaction.msg.module = "Email";
-      tx.transaction.msg.title = "Customer Enquiry";
-      tx.transaction.msg.message = this_page.returnPrintHTML();
-      
-      tx = app.wallet.signTransaction(tx);
-      let emailmod = app.modules.returnModule("Email");
-      emailmod.addEmail(tx);
-      app.storage.saveTransaction(tx);
-      */  
-      
       /* send legacy email */
       let message = {};
       message.to = 'richard@saito.tech';

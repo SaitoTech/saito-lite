@@ -150,7 +150,7 @@ module.exports = ChatBox = {
         msg_data.message = this.formatMessage(msg_data.message);
         // encode to base64
         msg_data.message = app.crypto.stringToBase64(msg_data.message);
-        newtx.transaction.msg = {
+        newtx.msg = {
             module: "Chat",
             request: "chat message",
             publickey: msg_data.publickey,
@@ -165,8 +165,7 @@ module.exports = ChatBox = {
             timestamp: msg_data.timestamp,
         };
 
-        // newtx.transaction.msg = this.app.keys.encryptMessage(this.app.wallet.returnPublicKey(), newtx.transaction.msg);
-        newtx.transaction.msg.sig = app.wallet.signMessage(JSON.stringify(newtx.transaction.msg));
+        newtx.msg.sig = app.wallet.signMessage(JSON.stringify(newtx.msg));
         newtx = app.wallet.signTransaction(newtx);
         return newtx;
     },

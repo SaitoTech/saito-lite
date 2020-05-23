@@ -65,14 +65,14 @@ class ExplorerCore extends ModTemplate {
               let ttype = 0;
               let tname = "";
               let tmodule = "";
-              if (blk.transactions[i].transaction.msg.type) {
-                ttype = blk.transactions[i].transaction.msg.type;
+              if (blk.transactions[i].msg.type) {
+                ttype = blk.transactions[i].msg.type;
               }
-              if (blk.transactions[i].transaction.msg.name) {
-                tname = blk.transactions[i].transaction.msg.name;
+              if (blk.transactions[i].msg.name) {
+                tname = blk.transactions[i].msg.name;
               }
-              if (blk.transactions[i].transaction.msg.module) {
-                tmodule = blk.transactions[i].transaction.msg.module;
+              if (blk.transactions[i].msg.module) {
+                tmodule = blk.transactions[i].msg.module;
               }
               let params = {
                 $address: blk.transactions[i].transaction.to[ii].add,
@@ -412,10 +412,10 @@ class ExplorerCore extends ModTemplate {
         html += '<div>' + tmptx.returnFees() + '</div>';
         html += '<div>' + tmptx.transaction.type + '</div>';
         if (tmptx.transaction.type == 0) {
-          html += '<div>' + tmptx.transaction.msg.module + '</div>';
+          html += '<div>' + tmptx.msg.module + '</div>';
         }
         if (tmptx.transaction.type == 1) {
-          html += '<div>' + tmptx.transaction.msg.name + '</div>';
+          html += '<div>' + tmptx.msg.name + '</div>';
         }
         if (tmptx.transaction.type > 1) {
           html += '<div> </div>';

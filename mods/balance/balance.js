@@ -294,7 +294,7 @@ console.log("Sending our " + i + "th payment...");
 
           let newtx = this.app.wallet.createUnsignedTransaction(address, faucet_payment, 0.0);
           newtx.transaction.ts                = new Date().getTime();
-          newtx.transaction.msg.module        = "Balance";
+          newtx.msg.module        = "Balance";
           newtx = this.app.wallet.signTransaction(newtx);
 
           //

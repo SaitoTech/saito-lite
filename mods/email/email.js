@@ -74,32 +74,9 @@ class Email extends ModTemplate {
     //
     
     let tx = app.wallet.createUnsignedTransaction();
-    /*
-    tx.transaction.msg.module = "Email";
-    tx.transaction.msg.title = "Welcome to Saito";
-    tx.transaction.msg.message = `
-
-<p>Saito is an application blockchain. To get started:<p>
-<blockquote>
-<ol>
-<li>Get some free Saito tokens.</li>
-
-<li>Register an email address.</li>
-
-<li>Earn more tokens as you use the network!</li>
-</ol>
-</blockquote>
-
-    `;
-    tx = this.app.wallet.signTransaction(tx);
-    this.emails.inbox.unshift(tx);
-
-    */
-
-    tx = app.wallet.createUnsignedTransaction();
-    tx.transaction.msg.module = "Email";
-    tx.transaction.msg.title = "Sent Message Folder";
-    tx.transaction.msg.message = "This folder is where your sent messages are stored...";
+    tx.msg.module = "Email";
+    tx.msg.title = "Sent Message Folder";
+    tx.msg.message = "This folder is where your sent messages are stored...";
     tx = this.app.wallet.signTransaction(tx);
     this.emails.sent.push(tx);
 

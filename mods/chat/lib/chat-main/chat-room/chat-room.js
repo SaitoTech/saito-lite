@@ -107,7 +107,7 @@ module.exports = ChatRoom = {
         msg = this.formatMessage(msg);
         // encode to base64
         msg = app.crypto.stringToBase64(msg);
-        newtx.transaction.msg = {
+        newtx.msg = {
             module: "Chat",
             request: "chat message",
             publickey: app.wallet.returnPublicKey(),
@@ -117,8 +117,7 @@ module.exports = ChatRoom = {
             timestamp: new Date().getTime(),
         };
 
-        // newtx.transaction.msg = this.app.keys.encryptMessage(this.app.wallet.returnPublicKey(), newtx.transaction.msg);
-        newtx.transaction.msg.sig = app.wallet.signMessage(JSON.stringify(newtx.transaction.msg));
+        newtx.msg.sig = app.wallet.signMessage(JSON.stringify(newtx.msg));
         newtx = app.wallet.signTransaction(newtx);
         return newtx;
     },
