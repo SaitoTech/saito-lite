@@ -29,8 +29,6 @@ class Relay extends ModTemplate {
   //
   sendRelayMessage(recipients, message_request, message_data) {
 
-console.log("in sendRelayMessage");
-
     //
     // recipient can be an array
     //
@@ -85,8 +83,6 @@ console.log("in sendRelayMessage");
           tx2 = this.app.wallet.signTransaction(tx2);
 
         }
-
-console.log("SRM FWD: " + JSON.stringify(tx2.transaction));
 
         //
         // forward to peer
