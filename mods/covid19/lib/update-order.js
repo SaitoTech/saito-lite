@@ -1,6 +1,7 @@
 const UpdateOrderTemplate = require('./update-order.template');
 const ItemManager = require('./item-manager');
 
+
 module.exports = UpdateOrder = {
 
   async render(app, data) {
@@ -46,7 +47,34 @@ module.exports = UpdateOrder = {
 
     });
 
-  
+    document.getElementById('create-po').addEventListener('click', (e) => {
+      //const htmlDocx = require('html-docx');
+      const fs = require('fs');
+      const htmlDocx = require('pt-html-docx-js')
+      const FileSaver = require('file-saver');
+      var converted = htmlDocx.asBlob(document.querySelector('.main').innerHTML);
+      FileSaver.saveAs(converted, 'gree.docx');
+      /*var style = "<style>body {padding: 20px; font-family: Helvetica; font-size: 25px;}";
+      style += "td { background-color: #20262e; color: #fff; border-radius: 3px; padding: 20px; font-size: 14px; }";
+      style += '</style>';
+
+      var prehtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'>";
+      prehtml += "<title>Export HTML To Doc</title>";
+    
+      prehtml += style;
+      prehtml += "</head><body>";
+      var posthtml = "</body></html>";
+ 
+      sWord(document.querySelector('.order-template'), 'test.docx', prehtml, posthtml);
+      */
+    });
+
+    document.getElementById('copy-po').addEventListener('click', (e) => {
+
+     scopy(document.querySelector('#page-content'));
+      
+    });
+
 
     /* no cancel button in full view
     document.getElementById('cancel-order').addEventListener('click', (e) => {
