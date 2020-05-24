@@ -255,8 +255,10 @@ class Arcade extends ModTemplate {
     this.sendPeerDatabaseRequest("arcade", "games", "*", "status = 'open'", null, (res, data) => {
       if (res.rows) {
         res.rows.forEach(row => {
-          let tx = new saito.transaction(JSON.parse(row.tx));
-          //console.info("ADDING OPEN GAME FROM SERVER: " + JSON.stringify(tx.transaction));
+console.log("ROW: " + JSON.stringify(row));
+          let gametx = JSON.parse(row.tx);
+          let tx = new saito.transaction(gametx.transaction);
+          console.info("ADDING OPEN GAME FROM SERVER: " + JSON.stringify(tx.transaction));
           this.addGameToOpenList(tx);
         });
 
@@ -351,20 +353,31 @@ class Arcade extends ModTemplate {
 
   addGameToOpenList(tx) {
 
-
+console.log("0");
     if (!tx.transaction) {
+console.log("1");
       return;
     } else {
+console.log("11");
+console.log(JSON.stringify(tx));
       if (!tx.transaction.sig) { return; }
+console.log("2");
       if (tx.msg.over == 1) { return; }
+console.log("3");
     }
 
+console.log("Trying to return txmsg");
     let txmsg = tx.returnMessage();
 
+console.log("Adding Game to Open List");
+console.log(JSON.stringify(txmsg));
+
     for (let i = 0; i < this.games.length; i++) {
+
       let transaction = Object.assign({sig: "" }, this.games[i].transaction);
       if (tx.transaction.sig == transaction.sig) { return; }
       if (txmsg.game_id != "" && txmsg.game_id == transaction.sig) { return; }
+
 //
 // testing
 //
@@ -375,6 +388,8 @@ class Arcade extends ModTemplate {
 
     }
 
+
+console.log("Testing");
 
     var for_us = true;
 
@@ -406,6 +421,7 @@ class Arcade extends ModTemplate {
 
       if (this.browser_active == 1) {
         if (this.viewing_arcade_initialization_page == 0) {
+alert("rending Arcade Main");
           ArcadeMain.render(this.app, data);
           ArcadeMain.attachEvents(this.app, data);
         }
@@ -707,7 +723,7 @@ class Arcade extends ModTemplate {
 
                 let transaction = Object.assign({ sig: "" }, this.games[i].transaction);
                 if (transaction.sig == txmsg.game_id) {
-                  /
+                  //
                   // remove game (accepted players are equal to number needed)
                   //
                   transaction.msg = Object.assign({ players_needed: 0, players: [] }, this.games[i].msg);
@@ -919,16 +935,15 @@ class Arcade extends ModTemplate {
 
       for (let i = 0; i < rows.length; i++) {
 
-        let gametx = JSON.parse(rows[i].tx);
+        let gametx = new saito.transaction(JSON.parse(rows[i].tx));
 
         let sql2 = `SELECT * FROM invites WHERE game_id = "${gametx.sig}"`;
         let rows2 = await this.app.storage.queryDatabase(sql2, {}, 'arcade');
 
-
         if (rows2.length > 0) {
 
           // only do if invites exist
-          if (!gametx.msg.players ) {
+          if (! gametx.msg.players ) {
             gametx.msg.players = [];
             gametx.msg.players_sigs = [];
           }

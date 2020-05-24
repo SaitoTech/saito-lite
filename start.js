@@ -22,16 +22,7 @@ async function initSaito() {
   //
   global.__webdir = __dirname + "/lib/saito/web/";
 
-console.log("heading into INIT!");
-
   await app.init();
-
-/***
-  let blk = app.storage.loadBlockByFilename("21dprWb1rBYj4GseqovPZVGuRwxL5NhYKPuE8LyCS6aj4.lblk");
-console.log("DONE!");
-console.log(blk.returnMerkleRoot());
-shutdownSaito();
-***/
 
   console.log(`
 
