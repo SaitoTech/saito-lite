@@ -588,6 +588,8 @@ body {
     grid-template-rows: 8vh auto;
     max-width: unset;
     min-width: unset;
+    /* scrollable menus */
+    overflow-y: scroll;
   }
 
   .hud-hidden-vertical {
@@ -657,6 +659,9 @@ body {
     overflow: hidden;
     margin-bottom: 0px;
     width: 100%;
+    /** hide in portrait mode **/
+    background: whitesmoke;
+    color: whitesmoke;
   }
 
     .status {

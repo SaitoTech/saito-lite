@@ -15298,13 +15298,10 @@ console.log("card: " + card);
           twilight_self.hideCard(card);
         });
 
-	return;
-
       }
 
       $('.card').on('click', function() {
-        // pass our click option
-        if (onCardClickFunction) onCardClickFunction(this);
+        if (onCardClickFunction) { onCardClickFunction(this); }
         else {
           if (isMobile) {
             let card = $(this).attr("id");
