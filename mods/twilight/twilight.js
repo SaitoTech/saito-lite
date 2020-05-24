@@ -11064,7 +11064,7 @@ console.log("card: " + card);
         let action2 = $(card).attr("id");
 
         if (twilight_self.app.browser.isMobileBrowser(navigator.userAgent)) {
-          twilight_self.mobileCardSelect(card, player, function() {
+          twilight_self.mobileCardSelect(action2, player, function() {
             twilight_self.addMove("event\tus\t"+action2);
             twilight_self.addMove("notify\t"+player+" retrieved "+twilight_self.game.deck[0].cards[action2].name);
             twilight_self.endTurn();
@@ -11648,30 +11648,29 @@ console.log("card: " + card);
             let is_this_two_hops = 0;
             let selected_countryname = $(this).attr('id');
 
-        let neighbours = twilight_self.countries[selected_countryname].neighbours;
-      for (let z = 0; z < neighbours.length; z++) {
+            let neighbours = twilight_self.countries[selected_countryname].neighbours;
+            for (let z = 0; z < neighbours.length; z++) {
 
-        let this_country = twilight_self.countries[selected_countryname].neighbours[z];
-          let neighbours2  = twilight_self.countries[this_country].neighbours;
+              let this_country = twilight_self.countries[selected_countryname].neighbours[z];
+              let neighbours2  = twilight_self.countries[this_country].neighbours;
 
-        for (let zz = 0; zz < neighbours2.length; zz++) {
-          let two_hopper = neighbours2[zz];
-          if (player == "us") { if ( twilight_self.countries[two_hopper].us > 0) { is_this_two_hops = 1; } }
-          if (player == "ussr") { if ( twilight_self.countries[two_hopper].ussr > 0) { is_this_two_hops = 1; } }
-          if (is_this_two_hops == 1) { z = 100; zz = 100; }
-        }
-      }
+              for (let zz = 0; zz < neighbours2.length; zz++) {
+                let two_hopper = neighbours2[zz];
+                if (player == "us") { if ( twilight_self.countries[two_hopper].us > 0) { is_this_two_hops = 1; } }
+                if (player == "ussr") { if ( twilight_self.countries[two_hopper].ussr > 0) { is_this_two_hops = 1; } }
+                if (is_this_two_hops == 1) { z = 100; zz = 100; }
+              }
+            }
 
-      if (is_this_two_hops == 1) {
+            if (is_this_two_hops == 1) {
               twilight_self.addMove("place\t"+player+"\t"+player+"\t"+selected_countryname+"\t1");
               twilight_self.placeInfluence(selected_countryname, 1, player, function() {
                 twilight_self.playerFinishedPlacingInfluence();
                 twilight_self.endTurn();
               });
             } else {
-        // alert("invalid target");
-        twilight_self.displayModal("Invalid Target");
-      }
+              twilight_self.displayModal("Invalid Target");
+            }
           });
         }
       } else {
@@ -12148,7 +12147,7 @@ console.log("card: " + card);
 	    if (me == "us") { if (this.countries[i].us > 0) { is_eligible = 1; } }
 	  }
 
-	  if (is_eligible != 1) {
+	  if (is_eligible == 1) {
 
 	    eligible_countries++;
 
@@ -12164,7 +12163,7 @@ console.log("card: " + card);
 
 	        card = $(card).attr("id");
 
-                twilight_self.placeInfluence(c, 2, player, function() {
+                twilight_self.placeInfluence(c, 1, player, function() {
                   twilight_self.removeCardFromHand(card);
 
                   twilight_self.addMove("place\t"+player+"\t"+player+"\t"+c+"\t1");
