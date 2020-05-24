@@ -479,3 +479,13 @@ overflow-x: hidden;
     display: none;
   }
 }
+
+
+/*** Hide in Landscape Mode Small Screens ***/
+
+@media screen and (orientation:portrait) and (max-width: 700px) {
+  .chat-manager {
+    display: none;
+  }
+}
+
