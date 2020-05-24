@@ -242,9 +242,6 @@ class Email extends ModTemplate {
 
 
   receiveEvent(type, data) {
-
-    console.log("EVENT RECEIVED: ");
-
     if (type == 'chat-render-request') {
       if (this.browser_active) {
         this.renderSidebar(this.app, this.uidata);
