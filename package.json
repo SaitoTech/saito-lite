@@ -8,9 +8,9 @@
     "nuke": " ./compile nuke",
     "reset": " ./compile reset",
     "compile": " ./compile recompile",
-    "old": " webpack --config ./webpack/old/webpack.config.js",
     "test": "NODE_ENV=test mocha 'tests/*.spec.js'",
-    "analyze": "webpack --config ./webpack/old/webpack.analyze.js"
+    "client": "webpack-dev-server --hot --config ./webpack/webpack.dev.js",
+    "build": "webpack --env development --color -p --config ./webpack/webpack.dev.js"
   },
   "author": "Team Saito",
   "license": "SAITO",
@@ -69,6 +69,7 @@
     "webpack": "^4.40.2",
     "webpack-bundle-analyzer": "^3.5.2",
     "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^4.2.2",
     "worker-plugin": "^3.2.0"
   }
