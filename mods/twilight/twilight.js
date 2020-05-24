@@ -13947,13 +13947,14 @@ console.log("card: " + card);
 
   updateStatusAndListCards(message, cards=null) {
 
+
     if (cards == null) {
       cards = this.game.deck[0].hand;
     }
 
     html = `
       <div class="cardbox-status-container">
-        <div>${message}</div>
+        <div class="cardbox-message">${message}</div>
         ${this.returnCardList(cards)}
       </div>
     `
