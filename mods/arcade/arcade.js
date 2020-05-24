@@ -255,7 +255,6 @@ class Arcade extends ModTemplate {
     this.sendPeerDatabaseRequest("arcade", "games", "*", "status = 'open'", null, (res, data) => {
       if (res.rows) {
         res.rows.forEach(row => {
-console.log("ROW: " + JSON.stringify(row));
           let gametx = JSON.parse(row.tx);
           let tx = new saito.transaction(gametx.transaction);
           console.info("ADDING OPEN GAME FROM SERVER: " + JSON.stringify(tx.transaction));

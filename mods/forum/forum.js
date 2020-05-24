@@ -505,6 +505,7 @@ class Forum extends ModTemplate {
           let tx = new saito.transaction(JSON.parse(row.tx));
 
           let txmsg = tx.returnMessage();
+
 	  let subforum = txmsg.forum;
 	  if (subforum == "") { subforum = "main"; }
 
