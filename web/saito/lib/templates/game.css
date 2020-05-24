@@ -588,8 +588,11 @@ body {
     grid-template-rows: 8vh auto;
     max-width: unset;
     min-width: unset;
+
     /* scrollable menus */
     overflow-y: scroll;
+    transform: translate(-50%, 8%);
+
   }
 
   .hud-hidden-vertical {
