@@ -744,7 +744,7 @@ body {
 
   .cardbox-status-container {
     display: grid;
-    grid-template-rows: 5vh auto;
+    grid-template-rows: 3vh auto;
     grid-gap: 0.5em;
     /* height: 75%; */
   }
