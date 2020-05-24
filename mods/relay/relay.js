@@ -29,6 +29,8 @@ class Relay extends ModTemplate {
   //
   sendRelayMessage(recipients, message_request, message_data) {
 
+console.log("in sendRelayMessage");
+
     //
     // recipient can be an array
     //
@@ -84,6 +86,8 @@ class Relay extends ModTemplate {
 
         }
 
+console.log("SRM FWD: " + JSON.stringify(tx2.transaction));
+
         //
         // forward to peer
         //
@@ -109,6 +113,9 @@ class Relay extends ModTemplate {
 
       if (message.request === "relay peer message") {
 
+console.log("received request to relay: ");
+
+
         //
         // sanity check on tx
         //
@@ -127,7 +134,6 @@ class Relay extends ModTemplate {
         //
         // is original tx addressed to me
         //
-
         if (tx.isTo(app.wallet.returnPublicKey()) && txmsg.request != undefined) {
 
           app.modules.handlePeerRequest(txmsg, peer, mycallback);
@@ -140,6 +146,9 @@ class Relay extends ModTemplate {
           for (let i = 0; i < app.network.peers.length; i++) {
             if (tx2.isTo(app.network.peers[i].peer.publickey)) {
               peer_found = 1;
+
+console.log("about to relay!");
+
               app.network.peers[i].sendRequest("relay peer message", tx2.msg, function() {
 	        if (mycallback != null) {
                   mycallback({ err : "" , success : 1 });

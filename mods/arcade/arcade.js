@@ -353,24 +353,14 @@ console.log("ROW: " + JSON.stringify(row));
 
   addGameToOpenList(tx) {
 
-console.log("0");
     if (!tx.transaction) {
-console.log("1");
       return;
     } else {
-console.log("11");
-console.log(JSON.stringify(tx));
       if (!tx.transaction.sig) { return; }
-console.log("2");
       if (tx.msg.over == 1) { return; }
-console.log("3");
     }
 
-console.log("Trying to return txmsg");
     let txmsg = tx.returnMessage();
-
-console.log("Adding Game to Open List");
-console.log(JSON.stringify(txmsg));
 
     for (let i = 0; i < this.games.length; i++) {
 
@@ -378,9 +368,6 @@ console.log(JSON.stringify(txmsg));
       if (tx.transaction.sig == transaction.sig) { return; }
       if (txmsg.game_id != "" && txmsg.game_id == transaction.sig) { return; }
 
-//
-// testing
-//
       if (txmsg.game_id === this.games[i].transaction.sig) { 
 	console.log("ERROR 480394: not re-adding existing game to list");
 	return; 
@@ -388,8 +375,6 @@ console.log(JSON.stringify(txmsg));
 
     }
 
-
-console.log("Testing");
 
     var for_us = true;
 
@@ -421,7 +406,6 @@ console.log("Testing");
 
       if (this.browser_active == 1) {
         if (this.viewing_arcade_initialization_page == 0) {
-alert("rending Arcade Main");
           ArcadeMain.render(this.app, data);
           ArcadeMain.attachEvents(this.app, data);
         }
@@ -788,6 +772,10 @@ alert("rending Arcade Main");
   }
 
   async handlePeerRequest(app, message, peer, mycallback = null) {
+
+console.log("####################");
+console.log("received peer request");
+console.log(message.request);
 
     //
     // this code doubles onConfirmation
