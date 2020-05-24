@@ -265,7 +265,7 @@ class Twilight extends GameTemplate {
     // we explicitly add this in the mobile version
     //
     $('.hud-menu-overlay').html(`<div style="padding: 0.5em">${$('.log').html()}</div>`);
-    twilight_self.addLogCardEvents();
+    this.addLogCardEvents();
   }
 
   initializeHTML(app) {
@@ -1001,9 +1001,10 @@ console.log("CARD: " + card);
                   let tmpar = action2.split("_");
 
                   if (twilight_self.app.browser.isMobileBrowser(navigator.userAgent)) {
-                    twilight_self.mobileCardSelect(card, player, function() {
+                    twilight_self.mobileCardSelect(tmpar[1], player, function() {
 
-                      $(this).hide();
+		      let menu_choice = "#"+action2;
+                      $(menu_choice).hide();
                       pos_to_discard.push(tmpar[0]);
                       cards_discarded++;
                       twilight_self.addMove("discard\tus\t"+tmpar[1]);
@@ -1838,9 +1839,9 @@ console.log("CARD: " + card);
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["peronism", "poliovaccine", "manwhosavedtheworld", "europe", "greatsociety", "nationbuilding", "asia"];
+              this.game.deck[0].hand = ["tehran","starwars","saltnegotiations","peronism", "manwhosavedtheworld", "europe", "greatsociety", "nationbuilding", "asia"];
             } else {
-              this.game.deck[0].hand = ["eurocommunism", "perestroika", "missileenvy", "inftreaty", "cubanmissile","china","vietnamrevolts"];
+              this.game.deck[0].hand = ["eurocommunism", "perestroika", "missileenvy", "redscare", "cubanmissile","china","vietnamrevolts"];
             }
           }
 
@@ -8983,14 +8984,13 @@ console.log("card: " + card);
 
       twilight_self.addMove("resolve\tsaltnegotiations");
 
-
       $('.card').off();
       $('.card').on('click', function() {
 
         let action2 = $(this).attr("id");
 
         if (twilight_self.app.browser.isMobileBrowser(navigator.userAgent)) {
-          twilight_self.mobileCardSelect(card, player, function() {
+          twilight_self.mobileCardSelect(action2, player, function() {
 
             if (action2 != "nocard") {
               twilight_self.game.deck[0].hand.push(action2);
@@ -14950,6 +14950,7 @@ console.log("card: " + card);
     twilight_self.hideCard();
     twilight_self.showPlayableCard(card);
 
+    $('.cardbox_menu_playcard').html(prompttext);
     $('.cardbox_menu_playcard').css('display','block');
     $('.cardbox_menu_playcard').off();
     $('.cardbox_menu_playcard').on('click', function () {
@@ -14959,7 +14960,6 @@ console.log("card: " + card);
       $(this).hide();
       $('.cardbox-exit').hide();
     });
-    // HERE WE ARE
     $('.cardbox-exit').off();
     $('.cardbox-exit').on('click', function () {
       twilight_self.hideCard();
@@ -15023,7 +15023,9 @@ console.log("card: " + card);
     if (c.scoring == 1) {
       html +='<img class="cardimg" src="/twilight/img/MayNotBeHeld.svg" />';
     } else if (c.recurring == 0) {
-      html +='<img class="cardimg" src="/twilight/img/RemoveFromPlay.svg" />';
+      if (c.img.indexOf("png") > -1) {} else {
+        html +='<img class="cardimg" src="/twilight/img/RemoveFromPlay.svg" />';
+      }
     }
 
     return html
@@ -15297,6 +15299,8 @@ console.log("card: " + card);
           twilight_self.hideCard(card);
         });
 
+	return;
+
       }
 
       $('.card').on('click', function() {
@@ -15335,6 +15339,24 @@ console.log("card: " + card);
       }).mouseout(function() {
         let card = $(this).attr("id");
         twilight_self.hideCard(card);
+      });
+
+    } else {
+
+      $('.logcard').off();
+      $('.logcard').on('click', function() {
+
+        let card = $(this).attr("id");
+
+alert(card);
+
+        twilight_self.showCard(card);
+        $('.cardbox-exit').off();
+        $('.cardbox-exit').on('click', function () {
+          twilight_self.hideCard();
+          $('.cardbox_menu_playcard').css('display','none');
+          $(this).css('display', 'none');
+        });
       });
 
     }
