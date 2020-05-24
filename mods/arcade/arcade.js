@@ -257,7 +257,6 @@ class Arcade extends ModTemplate {
         res.rows.forEach(row => {
           let gametx = JSON.parse(row.tx);
           let tx = new saito.transaction(gametx.transaction);
-          console.info("ADDING OPEN GAME FROM SERVER: " + JSON.stringify(tx.transaction));
           this.addGameToOpenList(tx);
         });
 
@@ -771,10 +770,6 @@ class Arcade extends ModTemplate {
   }
 
   async handlePeerRequest(app, message, peer, mycallback = null) {
-
-console.log("####################");
-console.log("received peer request");
-console.log(message.request);
 
     //
     // this code doubles onConfirmation
