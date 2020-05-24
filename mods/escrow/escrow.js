@@ -124,8 +124,6 @@ console.log("GDOPP: " +gamedata.opponent);
         tx.msg.players.push(this.app.wallet.returnPublicKey());
     tx = app.wallet.signTransaction(tx);
 
-console.log("TESTING ESCROW: " + JSON.stringify(tx.transaction));
-
     app.network.propagateTransaction(tx);
 
   }
@@ -186,8 +184,6 @@ console.log("--------------------------------");
 	    escrow_self.escrow.balance = txmsg.balance;
 	    escrow_self.escrow.create_pending = 0;
 	    escrow_self.saveEscrow();
-
-alert("SAVING ESCROW: " + txmsg.address);
 
 	  }
 	}
