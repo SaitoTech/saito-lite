@@ -3,11 +3,11 @@ module.exports = EmailDetailTemplate = (app, data) => {
   let { selected_email, addrController }  = data.email;
   let { datetime_formatter } = data.helpers;
 
-  let subject = selected_email.transaction.msg.title;
   let from  	= selected_email.transaction.from[0].add;
   let to  	= selected_email.transaction.to[0].add;
   let ts  	= selected_email.transaction.ts;
   let message	= selected_email.returnMessage();
+  let subject   = message.title;
 
   let hr_from = addrController.returnAddressHTML(from);
   let hr_to   = addrController.returnAddressHTML(to);

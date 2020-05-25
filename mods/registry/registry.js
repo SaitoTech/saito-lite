@@ -69,9 +69,9 @@ class Registry extends ModTemplate {
       var regex=/^[0-9A-Za-z]+$/;
       if (!regex.test(identifier)) { salert("Alphanumeric Characters only"); return false; }
 
-      newtx.transaction.msg.module   	= "Registry";
-      newtx.transaction.msg.request	= "register";
-      newtx.transaction.msg.identifier	= identifier + domain;
+      newtx.msg.module   	= "Registry";
+      newtx.msg.request	= "register";
+      newtx.msg.identifier	= identifier + domain;
 
       newtx = this.app.wallet.signTransaction(newtx);
       this.app.network.propagateTransaction(newtx);
@@ -125,13 +125,13 @@ class Registry extends ModTemplate {
           if (res == 1) {
 
             let newtx = registry_self.app.wallet.createUnsignedTransaction(tx.transaction.from[0].add, 0, fee);
-                newtx.transaction.msg.module = "Email";
-                newtx.transaction.msg.origin = "Registry";
-                newtx.transaction.msg.title  = "Address Registration Success!";
-                newtx.transaction.msg.message = "<p>You have successfully registered the identifier: <span class='boldred'>" + identifier + "</span></p>";
-                newtx.transaction.msg.identifier = identifier;
-                newtx.transaction.msg.signed_message = signed_message;
-                newtx.transaction.msg.sig = sig;
+                newtx.msg.module = "Email";
+                newtx.msg.origin = "Registry";
+                newtx.msg.title  = "Address Registration Success!";
+                newtx.msg.message = "<p>You have successfully registered the identifier: <span class='boldred'>" + identifier + "</span></p>";
+                newtx.msg.identifier = identifier;
+                newtx.msg.signed_message = signed_message;
+                newtx.msg.sig = sig;
 
             newtx = registry_self.app.wallet.signTransaction(newtx);
             registry_self.app.network.propagateTransaction(newtx);
@@ -139,12 +139,12 @@ class Registry extends ModTemplate {
           } else {
 
             let newtx = registry_self.app.wallet.createUnsignedTransaction(tx.transaction.from[0].add, 0.0, fee);
-                newtx.transaction.msg.module = "Email";
-                newtx.transaction.msg.title  = "Address Registration Failed!";
-                newtx.transaction.msg.message = "<p>The identifier you requested (<span class='boldred'>" + identifier + "</span>) has already been registered.</p>";
-                newtx.transaction.msg.identifier = identifier;
-                newtx.transaction.msg.signed_message = "";
-                newtx.transaction.msg.sig = "";
+                newtx.msg.module = "Email";
+                newtx.msg.title  = "Address Registration Failed!";
+                newtx.msg.message = "<p>The identifier you requested (<span class='boldred'>" + identifier + "</span>) has already been registered.</p>";
+                newtx.msg.identifier = identifier;
+                newtx.msg.signed_message = "";
+                newtx.msg.sig = "";
 
             newtx = registry_self.app.wallet.signTransaction(newtx);
             registry_self.app.network.propagateTransaction(newtx);
@@ -164,14 +164,14 @@ class Registry extends ModTemplate {
       if (txmsg.module == "Email") {
         if (tx.transaction.from[0].add == registry_self.publickey) {
           if (tx.transaction.to[0].add == registry_self.app.wallet.returnPublicKey()) {
-            if (tx.transaction.msg.identifier != undefined && tx.transaction.msg.signed_message != undefined && tx.transaction.msg.sig != undefined) {
+            if (tx.msg.identifier != undefined && tx.msg.signed_message != undefined && tx.msg.sig != undefined) {
 
               //
               // am email? for us? from the DNS registrar?
               //
-              let identifier 	 = tx.transaction.msg.identifier;
-              let signed_message = tx.transaction.msg.signed_message;
-              let sig		 = tx.transaction.msg.sig;
+              let identifier 	 = tx.msg.identifier;
+              let signed_message = tx.msg.signed_message;
+              let sig		 = tx.msg.sig;
 
               if (registry_self.app.crypto.verifyMessage(signed_message, sig, registry_self.publickey)) {
                 registry_self.app.keys.addKey(tx.transaction.to[0].add, identifier, true, "", blk.block.id, blk.returnHash(), 1);
@@ -268,9 +268,9 @@ console.log("\n\n\nRES: " + JSON.stringify(rows));
       return;
     }
 
-    newtx.transaction.msg.module   = "Email";
-    newtx.transaction.msg.data     = "You have successfully registered your address";
-    newtx.transaction.msg.title    = "Address Registration Success!";
+    newtx.msg.module   = "Email";
+    newtx.msg.data     = "You have successfully registered your address";
+    newtx.msg.title    = "Address Registration Success!";
 
     newtx = this.app.wallet.signTransaction(tx);
     this.app.network.propagateTransaction(newtx); 
@@ -290,9 +290,9 @@ console.log("\n\n\nRES: " + JSON.stringify(rows));
       return;
     }
 
-    newtx.transaction.msg.module   = "Email";
-    newtx.transaction.msg.data     = "You have successfully registered your address";
-    newtx.transaction.msg.title    = "Address Registration Success!";
+    newtx.msg.module   = "Email";
+    newtx.msg.data     = "You have successfully registered your address";
+    newtx.msg.title    = "Address Registration Success!";
 
     newtx = this.app.wallet.signTransaction(tx);
     this.app.network.propagateTransaction(newtx); 

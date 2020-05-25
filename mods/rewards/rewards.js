@@ -225,19 +225,16 @@ class Rewards extends ModTemplate {
   }
 
   async onConfirmation(blk, tx, conf, app) {
-    if (app.BROWSER == 1) {
-//      if (typeof data == 'undefined') { var data = {} };
-//      this.renderBadges(app, data);
-      return;
-    } else {
-      if (conf == 0) {
-        if (tx.transaction.type == 0) {
-          if (this.app.BROWSER == 1) { return; }
-          this.updateUsers(tx);
-        }
-        if (tx.transaction.msg.origin == "Registry") {
-          this.payoutFirstInstance(tx.transaction.to[0].add, "register identifier", this.registryPayout);
-        }
+    if (app.BROWSER == 1) { return }
+
+    if (conf == 0) {
+      if (tx.transaction.type == 0) {
+        if (this.app.BROWSER == 1) { return; }
+        this.updateUsers(tx);
+      }
+
+      if (tx.returnMessage().origin == "Registry") {
+        this.payoutFirstInstance(tx.transaction.to[0].add, "register identifier", this.registryPayout);
       }
     }
   }
@@ -277,7 +274,7 @@ class Rewards extends ModTemplate {
     var payout = ((row.total_spend / (row.total_payout + 0.01)) >= this.payoutRatio);
     var newPayout = Math.ceil(row.last_payout_amt / this.payoutRatio);
     var isGame = 0;
-    if (typeof tx.transaction.msg.game_id != "undefined") { isGame = 1 };
+    if (typeof tx.msg.game_id != "undefined") { isGame = 1 };
     var gameOver = 0;
     if (tx.name == "game over") { gameOver = 1 };
     //welcome folks back if they have been reset - and give me a little somethin.
@@ -325,9 +322,9 @@ class Rewards extends ModTemplate {
       //if()
       //let sql = "INSERT OR IGNORE INTO users (address, tx_count, games_finished, game_tx_count, first_tx, latest_tx, last_payout_ts, last_payout_amt, total_payout, total_spend, referer) VALUES ($address, $tx_count, $games_finished, $game_tx_count, $first_tx, $latest_tx, $last_payout_ts, $last_payout_amt, $total_payout, $total_spend, $referer);"
       var isGame = 0;
-      if (typeof tx.transaction.msg.game_id != undefined) { isGame = 1 };
+      if (typeof tx.msg.game_id != undefined) { isGame = 1 };
       var referer = ''
-      if (tx.transaction.msg.module == "Encrypt") {
+      if (tx.msg.module == "Encrypt") {
         referer = tx.transaction.to[ii].add;
         this.recordEvent(referer, "user add contact");
       }
@@ -482,13 +479,13 @@ class Rewards extends ModTemplate {
       var change_amount = total_from_amt.minus(total_fees);
       newtx.transaction.to = this.app.wallet.createToSlips(10, address, amount, change_amount);
 
-      newtx.transaction.msg.module = "Email";
+      newtx.msg.module = "Email";
       if (event == "") {
-        newtx.transaction.msg.title = "Saito Rewards - You have been Rewarded";
+        newtx.msg.title = "Saito Rewards - You have been Rewarded";
       } else {
-        newtx.transaction.msg.title = "Saito Rewards: " + event;
+        newtx.msg.title = "Saito Rewards: " + event;
       }
-      newtx.transaction.msg.message = `
+      newtx.msg.message = `
         <p>You have received <span class="boldred">${amount} tokens</span> from the Saito rewards system.</p>
         `;
       newtx = this.app.wallet.signTransaction(newtx);

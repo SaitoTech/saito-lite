@@ -4,7 +4,7 @@ const ChatBoxMessageBlockTemplate = require('./chat-box-message-block.template.j
 var marked = require('marked');
 var sanitizeHtml = require('sanitize-html');
 const linkifyHtml = require('markdown-linkify');
-const emoji = require('node-emoji');
+//const emoji = require('node-emoji');
 
 module.exports = ChatBox = {
 
@@ -88,8 +88,7 @@ module.exports = ChatBox = {
     },
 
     addMessage(app, data, tx) {
-      app.modules.returnModule("Chat")
-                      .receiveMessage(app, tx);
+      app.modules.returnModule("Chat").receiveMessage(app, tx);
       this.addTXToDOM(app, data, tx);
     },
 
@@ -151,7 +150,7 @@ module.exports = ChatBox = {
         msg_data.message = this.formatMessage(msg_data.message);
         // encode to base64
         msg_data.message = app.crypto.stringToBase64(msg_data.message);
-        newtx.transaction.msg = {
+        newtx.msg = {
             module: "Chat",
             request: "chat message",
             publickey: msg_data.publickey,
@@ -166,8 +165,7 @@ module.exports = ChatBox = {
             timestamp: msg_data.timestamp,
         };
 
-        // newtx.transaction.msg = this.app.keys.encryptMessage(this.app.wallet.returnPublicKey(), newtx.transaction.msg);
-        newtx.transaction.msg.sig = app.wallet.signMessage(JSON.stringify(newtx.transaction.msg));
+        newtx.msg.sig = app.wallet.signMessage(JSON.stringify(newtx.msg));
         newtx = app.wallet.signTransaction(newtx);
         return newtx;
     },
@@ -266,7 +264,7 @@ module.exports = ChatBox = {
           'a': sanitizeHtml.simpleTransform('a', {target: '_blank'})
         }
       });
-      msg = emoji.emojify(msg);
+      //msg = emoji.emojify(msg);
       
       return msg;
     }

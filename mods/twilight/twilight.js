@@ -265,7 +265,7 @@ class Twilight extends GameTemplate {
     // we explicitly add this in the mobile version
     //
     $('.hud-menu-overlay').html(`<div style="padding: 0.5em">${$('.log').html()}</div>`);
-    twilight_self.addLogCardEvents();
+    this.addLogCardEvents();
   }
 
   initializeHTML(app) {
@@ -1001,9 +1001,10 @@ console.log("CARD: " + card);
                   let tmpar = action2.split("_");
 
                   if (twilight_self.app.browser.isMobileBrowser(navigator.userAgent)) {
-                    twilight_self.mobileCardSelect(card, player, function() {
+                    twilight_self.mobileCardSelect(tmpar[1], player, function() {
 
-                      $(this).hide();
+		      let menu_choice = "#"+action2;
+                      $(menu_choice).hide();
                       pos_to_discard.push(tmpar[0]);
                       cards_discarded++;
                       twilight_self.addMove("discard\tus\t"+tmpar[1]);
@@ -1838,9 +1839,9 @@ console.log("CARD: " + card);
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["peronism", "poliovaccine", "manwhosavedtheworld", "europe", "greatsociety", "nationbuilding", "asia"];
+              this.game.deck[0].hand = ["tehran","starwars","saltnegotiations","peronism", "manwhosavedtheworld", "europe", "greatsociety", "nationbuilding", "asia"];
             } else {
-              this.game.deck[0].hand = ["eurocommunism", "perestroika", "missileenvy", "inftreaty", "cubanmissile","china","vietnamrevolts"];
+              this.game.deck[0].hand = ["eurocommunism", "perestroika", "missileenvy", "redscare", "cubanmissile","china","vietnamrevolts"];
             }
           }
 
@@ -8983,14 +8984,13 @@ console.log("card: " + card);
 
       twilight_self.addMove("resolve\tsaltnegotiations");
 
-
       $('.card').off();
       $('.card').on('click', function() {
 
         let action2 = $(this).attr("id");
 
         if (twilight_self.app.browser.isMobileBrowser(navigator.userAgent)) {
-          twilight_self.mobileCardSelect(card, player, function() {
+          twilight_self.mobileCardSelect(action2, player, function() {
 
             if (action2 != "nocard") {
               twilight_self.game.deck[0].hand.push(action2);
@@ -11064,7 +11064,7 @@ console.log("card: " + card);
         let action2 = $(card).attr("id");
 
         if (twilight_self.app.browser.isMobileBrowser(navigator.userAgent)) {
-          twilight_self.mobileCardSelect(card, player, function() {
+          twilight_self.mobileCardSelect(action2, player, function() {
             twilight_self.addMove("event\tus\t"+action2);
             twilight_self.addMove("notify\t"+player+" retrieved "+twilight_self.game.deck[0].cards[action2].name);
             twilight_self.endTurn();
@@ -11648,30 +11648,29 @@ console.log("card: " + card);
             let is_this_two_hops = 0;
             let selected_countryname = $(this).attr('id');
 
-        let neighbours = twilight_self.countries[selected_countryname].neighbours;
-      for (let z = 0; z < neighbours.length; z++) {
+            let neighbours = twilight_self.countries[selected_countryname].neighbours;
+            for (let z = 0; z < neighbours.length; z++) {
 
-        let this_country = twilight_self.countries[selected_countryname].neighbours[z];
-          let neighbours2  = twilight_self.countries[this_country].neighbours;
+              let this_country = twilight_self.countries[selected_countryname].neighbours[z];
+              let neighbours2  = twilight_self.countries[this_country].neighbours;
 
-        for (let zz = 0; zz < neighbours2.length; zz++) {
-          let two_hopper = neighbours2[zz];
-          if (player == "us") { if ( twilight_self.countries[two_hopper].us > 0) { is_this_two_hops = 1; } }
-          if (player == "ussr") { if ( twilight_self.countries[two_hopper].ussr > 0) { is_this_two_hops = 1; } }
-          if (is_this_two_hops == 1) { z = 100; zz = 100; }
-        }
-      }
+              for (let zz = 0; zz < neighbours2.length; zz++) {
+                let two_hopper = neighbours2[zz];
+                if (player == "us") { if ( twilight_self.countries[two_hopper].us > 0) { is_this_two_hops = 1; } }
+                if (player == "ussr") { if ( twilight_self.countries[two_hopper].ussr > 0) { is_this_two_hops = 1; } }
+                if (is_this_two_hops == 1) { z = 100; zz = 100; }
+              }
+            }
 
-      if (is_this_two_hops == 1) {
+            if (is_this_two_hops == 1) {
               twilight_self.addMove("place\t"+player+"\t"+player+"\t"+selected_countryname+"\t1");
               twilight_self.placeInfluence(selected_countryname, 1, player, function() {
                 twilight_self.playerFinishedPlacingInfluence();
                 twilight_self.endTurn();
               });
             } else {
-        // alert("invalid target");
-        twilight_self.displayModal("Invalid Target");
-      }
+              twilight_self.displayModal("Invalid Target");
+            }
           });
         }
       } else {
@@ -12148,7 +12147,7 @@ console.log("card: " + card);
 	    if (me == "us") { if (this.countries[i].us > 0) { is_eligible = 1; } }
 	  }
 
-	  if (is_eligible != 1) {
+	  if (is_eligible == 1) {
 
 	    eligible_countries++;
 
@@ -12164,7 +12163,7 @@ console.log("card: " + card);
 
 	        card = $(card).attr("id");
 
-                twilight_self.placeInfluence(c, 2, player, function() {
+                twilight_self.placeInfluence(c, 1, player, function() {
                   twilight_self.removeCardFromHand(card);
 
                   twilight_self.addMove("place\t"+player+"\t"+player+"\t"+c+"\t1");
@@ -13948,13 +13947,14 @@ console.log("card: " + card);
 
   updateStatusAndListCards(message, cards=null) {
 
+
     if (cards == null) {
       cards = this.game.deck[0].hand;
     }
 
     html = `
       <div class="cardbox-status-container">
-        <div>${message}</div>
+        <div class="cardbox-message">${message}</div>
         ${this.returnCardList(cards)}
       </div>
     `
@@ -14950,6 +14950,7 @@ console.log("card: " + card);
     twilight_self.hideCard();
     twilight_self.showPlayableCard(card);
 
+    $('.cardbox_menu_playcard').html(prompttext);
     $('.cardbox_menu_playcard').css('display','block');
     $('.cardbox_menu_playcard').off();
     $('.cardbox_menu_playcard').on('click', function () {
@@ -14959,7 +14960,6 @@ console.log("card: " + card);
       $(this).hide();
       $('.cardbox-exit').hide();
     });
-    // HERE WE ARE
     $('.cardbox-exit').off();
     $('.cardbox-exit').on('click', function () {
       twilight_self.hideCard();
@@ -15023,7 +15023,9 @@ console.log("card: " + card);
     if (c.scoring == 1) {
       html +='<img class="cardimg" src="/twilight/img/MayNotBeHeld.svg" />';
     } else if (c.recurring == 0) {
-      html +='<img class="cardimg" src="/twilight/img/RemoveFromPlay.svg" />';
+      if (c.img.indexOf("png") > -1) {} else {
+        html +='<img class="cardimg" src="/twilight/img/RemoveFromPlay.svg" />';
+      }
     }
 
     return html
@@ -15300,8 +15302,7 @@ console.log("card: " + card);
       }
 
       $('.card').on('click', function() {
-        // pass our click option
-        if (onCardClickFunction) onCardClickFunction(this);
+        if (onCardClickFunction) { onCardClickFunction(this); }
         else {
           if (isMobile) {
             let card = $(this).attr("id");
@@ -15335,6 +15336,24 @@ console.log("card: " + card);
       }).mouseout(function() {
         let card = $(this).attr("id");
         twilight_self.hideCard(card);
+      });
+
+    } else {
+
+      $('.logcard').off();
+      $('.logcard').on('click', function() {
+
+        let card = $(this).attr("id");
+
+alert(card);
+
+        twilight_self.showCard(card);
+        $('.cardbox-exit').off();
+        $('.cardbox-exit').on('click', function () {
+          twilight_self.hideCard();
+          $('.cardbox_menu_playcard').css('display','none');
+          $(this).css('display', 'none');
+        });
       });
 
     }

@@ -22,8 +22,8 @@ module.exports = ForumMod = {
 
 	    let html = '';
 	        html += `<div class="forum-moderation-post" style="border:1px solid black;padding 5px; margin-bottom:15px;">`;
-	        html += `<div style="font-size:1.2em">${reported_tx.transaction.msg.title}</div>`;
-	        html += `<div style="font-size:0.9em">${reported_tx.transaction.msg.content}</div>`;
+	        html += `<div style="font-size:1.2em">${reported_tx.msg.title}</div>`;
+	        html += `<div style="font-size:0.9em">${reported_tx.msg.content}</div>`;
 	        html += `<div style="cursor:pointer; display:inline" class="delete" id="${reported_tx.transaction.sig}">delete</div> `;
 	        html += `<div style="cursor:pointer; display:inline;" class="approve" id="${reported_tx.transaction.sig}">approve</div>`;
 	        html += `</div>`;

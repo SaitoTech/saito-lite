@@ -490,45 +490,13 @@ class Covid19 extends DBModTemplate {
   }
 
 
-  //
-  // array of objects with { database, column, value }
-  //
-  /****
-    deleteProduct(product_id, publickey) {
-  
-      let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
-      newtx.transaction.msg.module = this.name;
-      newtx.transaction.msg.request = "Product Delete";
-      newtx.transaction.msg.product_id = product_id;
-      newtx.transaction.msg.publickey = publickey;
-      newtx = this.app.wallet.signTransaction(newtx);
-      this.app.network.propagateTransaction(newtx);
-  
-      //console.log("SENT TO SERVER");
-  
-    }
-  
-    deleteItem(id, dbtable) {
-  
-      let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
-      newtx.transaction.msg.module = this.name;
-      newtx.transaction.msg.request = "Delete Item";
-      newtx.transaction.msg.item_id = item_id;
-      newtx = this.app.wallet.signTransaction(newtx);
-      this.app.network.propagateTransaction(newtx);
-  
-      //console.log("SENT TO SERVER");
-  
-    }
-  ***/
-
   updateServerDatabase(data_array, publickey, type = "Supplier Update") {
 
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.admin_pkey);
-    newtx.transaction.msg.module = this.name;
-    newtx.transaction.msg.request = type;
-    newtx.transaction.msg.fields = data_array;
-    newtx.transaction.msg.publickey = publickey;
+    newtx.msg.module = this.name;
+    newtx.msg.request = type;
+    newtx.msg.fields = data_array;
+    newtx.msg.publickey = publickey;
     newtx = this.app.wallet.signTransaction(newtx);
     this.app.network.propagateTransaction(newtx);
 

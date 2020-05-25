@@ -109,16 +109,16 @@ class Forum extends ModTemplate {
     //
     // arcade will listen, but we need game engine to receive to start initialization
     //
-    tx.transaction.msg.module = "Forum";
-    tx.transaction.msg.type = "post";
+    tx.msg.module = "Forum";
+    tx.msg.type = "post";
 
-    tx.transaction.msg.post_id = post_id;
-    tx.transaction.msg.comment_id = comment_id;
-    tx.transaction.msg.parent_id = parent_id;
-    tx.transaction.msg.forum = forum;
-    tx.transaction.msg.title = title;
-    tx.transaction.msg.content = content;
-    tx.transaction.msg.link = link;
+    tx.msg.post_id = post_id;
+    tx.msg.comment_id = comment_id;
+    tx.msg.parent_id = parent_id;
+    tx.msg.forum = forum;
+    tx.msg.title = title;
+    tx.msg.content = content;
+    tx.msg.link = link;
 
     tx = this.app.wallet.signTransaction(tx);
 
@@ -132,7 +132,7 @@ class Forum extends ModTemplate {
 
     let txmsg = tx.returnMessage();
     let post_id = tx.transaction.sig;
-    if (tx.transaction.msg.post_id != "") { post_id = tx.transaction.msg.post_id; }
+    if (tx.msg.post_id != "") { post_id = tx.msg.post_id; }
 
     let check_sql = "SELECT id FROM posts where post_id = $post_id";
     let check_params = { $post_id: tx.transaction.sig }
@@ -259,9 +259,9 @@ class Forum extends ModTemplate {
     //
     // arcade will listen, but we need game engine to receive to start initialization
     //
-    tx.transaction.msg.module = "Forum";
-    tx.transaction.msg.type = vote;
-    tx.transaction.msg.post_id = post_id;
+    tx.msg.module = "Forum";
+    tx.msg.type = vote;
+    tx.msg.post_id = post_id;
 
     tx = this.app.wallet.signTransaction(tx);
 
@@ -281,7 +281,7 @@ class Forum extends ModTemplate {
 
     let check_sql = "SELECT type FROM votes where post_id = $post_id AND publickey = $publickey";
     let check_params = {
-      $post_id: tx.transaction.msg.post_id,
+      $post_id: tx.msg.post_id,
       $publickey: tx.transaction.from[0].add
     }
     let rows = await this.app.storage.queryDatabase(check_sql, check_params, "forum");
@@ -292,13 +292,13 @@ class Forum extends ModTemplate {
     //
     if (already_voted == 1) {
 
-      if (tx.transaction.msg.type == vote_type) { return; }
-      vote_type = tx.transaction.msg.type;
+      if (tx.msg.type == vote_type) { return; }
+      vote_type = tx.msg.type;
       sql = "UPDATE votes SET type = $type WHERE publickey = $publickey AND post_id = $post_id";
       params = {
-        $type: tx.transaction.msg.type,
+        $type: tx.msg.type,
         $publickey: tx.transaction.from[0].add,
-        $post_id: tx.transaction.msg.post_id
+        $post_id: tx.msg.post_id
       }
       await this.app.storage.executeDatabase(sql, params, "forum");
 
@@ -307,17 +307,17 @@ class Forum extends ModTemplate {
         sql = "UPDATE posts SET votes = votes-1 WHERE post_id = $post_id";
       }
       params = {
-        $post_id: tx.transaction.msg.post_id
+        $post_id: tx.msg.post_id
       }
       await this.app.storage.executeDatabase(sql, params, "forum");
 
     } else {
-      vote_type = tx.transaction.msg.type;
+      vote_type = tx.msg.type;
       sql = "INSERT INTO votes (type, publickey, post_id) VALUES ($type, $publickey, $post_id)";
       params = {
-        $type: tx.transaction.msg.type,
+        $type: tx.msg.type,
         $publickey: tx.transaction.from[0].add,
-        $post_id: tx.transaction.msg.post_id
+        $post_id: tx.msg.post_id
       }
       await this.app.storage.executeDatabase(sql, params, "forum");
 
@@ -326,7 +326,7 @@ class Forum extends ModTemplate {
         sql = "UPDATE posts SET votes = votes-1 WHERE post_id = $post_id";
       }
       params = {
-        $post_id: tx.transaction.msg.post_id
+        $post_id: tx.msg.post_id
       }
       await this.app.storage.executeDatabase(sql, params, "forum");
 
@@ -336,7 +336,7 @@ class Forum extends ModTemplate {
     let current_time = new Date().getTime();
     let vote_bonus = 1000000;
     let sql_rank = "UPDATE posts SET rank = cast((rank + ($vote_bonus * (2000000/($current_time-unixtime)))) as INTEGER) WHERE post_id = $pid";
-    let params_rank = { $pid: tx.transaction.msg.post_id, $vote_bonus: vote_bonus, $current_time: current_time };
+    let params_rank = { $pid: tx.msg.post_id, $vote_bonus: vote_bonus, $current_time: current_time };
 
     if (vote_type == "downvote") {
       sql_rank = "UPDATE posts SET rank = cast((rank - ($vote_bonus * (2000000/($current_time-unixtime)))) as INTEGER) WHERE post_id = $pid";
@@ -350,9 +350,9 @@ class Forum extends ModTemplate {
 
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
 
-    newtx.transaction.msg.module = "Forum";
-    newtx.transaction.msg.type = "report";
-    newtx.transaction.msg.post_id = post_id;
+    newtx.msg.module = "Forum";
+    newtx.msg.type = "report";
+    newtx.msg.post_id = post_id;
     newtx = this.app.wallet.signTransaction(newtx);
 
     return newtx;
@@ -362,9 +362,9 @@ class Forum extends ModTemplate {
 
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
 
-    newtx.transaction.msg.module = "Forum";
-    newtx.transaction.msg.type = "modapprove";
-    newtx.transaction.msg.post_id = post_id;
+    newtx.msg.module = "Forum";
+    newtx.msg.type = "modapprove";
+    newtx.msg.post_id = post_id;
     newtx = this.app.wallet.signTransaction(newtx);
 
     return newtx;
@@ -374,9 +374,9 @@ class Forum extends ModTemplate {
 
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
 
-    newtx.transaction.msg.module = "Forum";
-    newtx.transaction.msg.type = "moddelete";
-    newtx.transaction.msg.post_id = post_id;
+    newtx.msg.module = "Forum";
+    newtx.msg.type = "moddelete";
+    newtx.msg.post_id = post_id;
     newtx = this.app.wallet.signTransaction(newtx);
 
     return newtx;
@@ -386,9 +386,9 @@ class Forum extends ModTemplate {
 
     let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee();
 
-    newtx.transaction.msg.module = "Forum";
-    newtx.transaction.msg.type = "delete";
-    newtx.transaction.msg.post_id = post_id;
+    newtx.msg.module = "Forum";
+    newtx.msg.type = "delete";
+    newtx.msg.post_id = post_id;
     newtx = this.app.wallet.signTransaction(newtx);
 
     return newtx;
@@ -505,6 +505,7 @@ class Forum extends ModTemplate {
           let tx = new saito.transaction(JSON.parse(row.tx));
 
           let txmsg = tx.returnMessage();
+
 	  let subforum = txmsg.forum;
 	  if (subforum == "") { subforum = "main"; }
 
@@ -605,7 +606,7 @@ class Forum extends ModTemplate {
 
           if (loading == "post") {
             try {
-              if (tx.transaction.msg.parent_id == "") {
+              if (tx.msg.parent_id == "") {
                 forum_self.forum.post = tx;
               } else {
                 forum_self.forum.comments.push(tx);
@@ -922,7 +923,7 @@ class Forum extends ModTemplate {
 
           let txobj = JSON.parse(rows2[i].tx);
           let newtx = new saito.transaction(txobj);
-          let thisurl = newtx.transaction.msg.link;
+          let thisurl = newtx.msg.link;
           if (thisurl.indexOf("ttp") == -1) { thisurl = "http://" + thisurl; }
           try {
             let linkurl = new URL(thisurl);
@@ -959,31 +960,31 @@ class Forum extends ModTemplate {
 
         let forum_self = app.modules.returnModule("Forum");
 
-        if (tx.transaction.msg.type == "post") {
+        if (tx.msg.type == "post") {
           forum_self.receivePostTransaction(tx);
         }
 
-        if (tx.transaction.msg.type == "upvote") {
+        if (tx.msg.type == "upvote") {
           forum_self.receiveVoteTransaction(tx);
         }
 
-        if (tx.transaction.msg.type == "downvote") {
+        if (tx.msg.type == "downvote") {
           forum_self.receiveVoteTransaction(tx);
         }
 
-        if (tx.transaction.msg.type == "delete") {
+        if (tx.msg.type == "delete") {
           forum_self.receiveDeleteTransaction(tx);
         }
 
-        if (tx.transaction.msg.type == "moddelete") {
+        if (tx.msg.type == "moddelete") {
           forum_self.receiveModDeleteTransaction(tx);
         }
 
-        if (tx.transaction.msg.type == "modapprove") {
+        if (tx.msg.type == "modapprove") {
           forum_self.receiveModApproveTransaction(tx);
         }
 
-        if (tx.transaction.msg.type == "report") {
+        if (tx.msg.type == "report") {
           forum_self.receiveReportTransaction(tx);
         }
       }

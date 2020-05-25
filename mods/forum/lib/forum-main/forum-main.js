@@ -56,7 +56,7 @@ module.exports = ForumMain = {
       if (data.forum.forum.comments) {
         if (data.forum.forum.comments.length > 0) {
           for (let i = 0; i < data.forum.forum.comments.length; i++) {
-            if (data.forum.forum.comments[i].transaction.msg.parent_id == data.forum.forum.comments[i].transaction.msg.post_id) {
+            if (data.forum.forum.comments[i].msg.parent_id == data.forum.forum.comments[i].msg.post_id) {
               base_comments.push(data.forum.forum.comments[i]);
               data.forum.forum.comments.splice(i, 1);
               i = -1;
@@ -72,7 +72,7 @@ module.exports = ForumMain = {
         let acomment = data.forum.forum.comments[z];
         for (let y = 0; y < base_comments.length; y++) {
           let bcomment = base_comments[y];
-          if (bcomment.transaction.sig == acomment.transaction.msg.parent_id) {
+          if (bcomment.transaction.sig == acomment.msg.parent_id) {
             base_comments.splice(y + 1, 0, acomment);
             data.forum.forum.comments.splice(z, 1);
             y = base_comments.length + 2;
@@ -97,14 +97,14 @@ module.exports = ForumMain = {
         if (data.forum.forum.comments.length > 0) {
           for (let i = 0; i < data.forum.forum.comments.length; i++) {
             if (i > 0) {
-              if (data.forum.forum.comments[i].transaction.msg.parent_id == data.forum.forum.comments[i - 1].transaction.sig) {
+              if (data.forum.forum.comments[i].msg.parent_id == data.forum.forum.comments[i - 1].transaction.sig) {
                 margin_indent += 20;
               } else {
-                if (data.forum.forum.comments[i].transaction.msg.parent_id == data.forum.forum.comments[i - 1].transaction.msg.post_id) {
+                if (data.forum.forum.comments[i].msg.parent_id == data.forum.forum.comments[i - 1].msg.post_id) {
                   margin_indent = 0;
                 } else {
                   for (let z = i - 1; z >= 0; z--) {
-                    if (data.forum.forum.comments[i].transaction.msg.parent_id != data.forum.forum.comments[z].transaction.msg.post_id) {
+                    if (data.forum.forum.comments[i].msg.parent_id != data.forum.forum.comments[z].msg.post_id) {
                       margin_indent -= 20;
                     } else {
                       z = -2;

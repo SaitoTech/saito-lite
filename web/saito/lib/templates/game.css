@@ -588,6 +588,11 @@ body {
     grid-template-rows: 8vh auto;
     max-width: unset;
     min-width: unset;
+
+    /* scrollable menus */
+    overflow-y: scroll;
+    transform: translate(-50%, 8%);
+
   }
 
   .hud-hidden-vertical {
@@ -657,6 +662,9 @@ body {
     overflow: hidden;
     margin-bottom: 0px;
     width: 100%;
+    /** hide in portrait mode **/
+    background: whitesmoke;
+    color: whitesmoke;
   }
 
     .status {
@@ -736,7 +744,7 @@ body {
 
   .cardbox-status-container {
     display: grid;
-    grid-template-rows: 5vh auto;
+    grid-template-rows: 3vh auto;
     grid-gap: 0.5em;
     /* height: 75%; */
   }
