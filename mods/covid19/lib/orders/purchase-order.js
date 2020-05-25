@@ -49,7 +49,7 @@ module.exports = PurchaseOrder = {
       html += `
       <tr>
         <td>${count}</td>
-        <td>${row.category}</td>
+        <td>${row.category} (${row.requirements.substring(0,30)})</td>
         <td style="text-align:right;">${s2Number(row.quantity)}</td>
         <td style="text-align:right;">${s2Number(row.price)}</td>
         <td style="text-align:right;">${s2Number(row.price * row.quantity)}</td>
