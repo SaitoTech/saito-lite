@@ -89,6 +89,9 @@ class Poker extends GameTemplate {
   }
 
 
+
+
+
   initializeQueue() {
 
     this.game.queue = [];
@@ -226,6 +229,19 @@ class Poker extends GameTemplate {
       }
       this.game.queue.push("DECK\t1\t"+JSON.stringify(this.returnDeck()));
   }
+
+
+
+  initializeHTML(app) {
+    super.initializeHTML(app);
+    this.app.modules.respondTo("chat-manager").forEach(mod => {
+      mod.respondTo('chat-manager').render(app, this);
+      mod.respondTo('chat-manager').attachEvents(app, this);
+    });
+  }
+
+
+
 
   initializeGame(game_id) {
 
