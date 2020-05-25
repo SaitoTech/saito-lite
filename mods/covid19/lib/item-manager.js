@@ -48,7 +48,8 @@ module.exports = ItemManager = {
         <div class="item-deails grid-2-columns">
           <div class="table-head">Category</div><div>${row.category}</div>
           <div class="table-head">Status</div><div>${row.status}</div>
-          <div class="table-head">Number</div><div>${s2Number(row.number)}</div>
+          <div class="table-head">Quantity</div><div>${s2Number(row.number)}</div>
+          <div class="table-head">Price</div><div>${s2Number(row.price)}</div>
         </div>
         <div class="item-requirements">
           <div class="table-head">Requirments</div>

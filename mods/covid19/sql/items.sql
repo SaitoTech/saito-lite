@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS items (
   category_id INTEGER,
   status_id INTEGER ,
   number INTEGER ,
+  price float,
   requirements TEXT,
 
   deleted INTEGER default 0,

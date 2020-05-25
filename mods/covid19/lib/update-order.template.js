@@ -11,6 +11,8 @@ module.exports = UpdateOrderTemplate = (app, data) => {
 
   <div class="main-form-buttons">
     <button id='save-order' class='save-order'><i class="fas fa-link"></i>  Add/Update Order</button>
+    <button class="hidden" id="create-po" class="create-po"><i class="fas fa-file-word"></i>  Download Template PO</button>
+    <button class="hidden" id="copy-po" class="copy-po"><i class="fas fa-file-word"></i>  Copy PO Grid</button>
   </div>
   
   <div id="purchase-order">
@@ -19,15 +21,7 @@ module.exports = UpdateOrderTemplate = (app, data) => {
     </div>
   </div>
 
-  <div class="main-form-buttons">
-    <button id="create-po" class="create-po"><i class="fas fa-file-word"></i>  Create Template Order</button>
-    <button id="copy-po" class="copy-po"><i class="fas fa-file-word"></i>  Copy Order Grid</button>
-    </div>
   
-</div>
-
-<div id="test">
-
 </div>
 
 

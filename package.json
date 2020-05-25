@@ -48,7 +48,6 @@
     "node-fetch": "^2.6.0",
     "nodemailer": "^6.4.2",
     "numeral": "^2.0.6",
-    "pt-html-docx-js": "0.0.1",
     "request": "^2.88.2",
     "sanitize-html": "^1.22.1",
     "secp256k1": "^3.7.1",

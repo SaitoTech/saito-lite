@@ -9,7 +9,7 @@ module.exports = SplashPageAdminTemplate = () => {
 
     <div class="grid-2-columns">
 
-    <p><a class="" href="/covid19/?mode=order-manager&create=true">Create Purchase Order</a></p>
+    <p><a class="" href="/covid19/?mode=order-manager&order=new">Create Purchase Order</a></p>
     <p><a class="" href="/covid19/?mode=category-manager">Categories and Pricing</a></p>
     
     <p><a class="" href="/covid19/?mode=order-manager">Manager Orders</a></p>
