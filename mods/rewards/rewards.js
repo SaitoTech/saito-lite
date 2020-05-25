@@ -61,6 +61,14 @@ class Rewards extends ModTemplate {
 
   async onPeerHandshakeComplete(app, peer) {
 
+    if (app.BROWSER == 1) {
+      if (typeof data == 'undefined') { var data = {} };
+
+      this.renderBadges(app, data);
+    }
+  }
+
+  renderBadges(app, data) {
     let rewards_self = app.modules.returnModule("Rewards");
 
     if (app.BROWSER == 1) {
@@ -82,6 +90,7 @@ class Rewards extends ModTemplate {
       }
     }
   }
+
 
   renderAchievmentRow(row) {
     if (typeof (row.label) != "undefined" || typeof (row.icon) != "undefined") {
@@ -123,8 +132,8 @@ class Rewards extends ModTemplate {
     obj.count = "";
     if (event != "") {
       activities.forEach((activity) => {
-        if (event == activity.event) { 
-          obj.label = activity.title ;
+        if (event == activity.event) {
+          obj.label = activity.title;
           obj.icon = activity.icon;
         }
       });
@@ -168,7 +177,7 @@ class Rewards extends ModTemplate {
     }
     if (x > 1000) {
       obj.label = "Master";
-      obj.count = (Math.floor(x / 100)/10).toString() + "k";
+      obj.count = (Math.floor(x / 100) / 10).toString() + "k";
       obj.icon = "<i class='master badge'><span>" + obj.count + "</span></i>";
     }
     return obj;
@@ -229,7 +238,6 @@ class Rewards extends ModTemplate {
       }
     }
   }
-
 
   async updateUsers(tx) {
     try {

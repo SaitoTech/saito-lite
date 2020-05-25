@@ -193,7 +193,7 @@ select * from
           html += "<div class='cert tip'><a class='attach-cert-" + row["id"] + "'>" + row["Name"] + "</a>" + note;
           html += " <i data-id='" + row["id"] + "' id='delete-cert-" + row["id"] + "' class='fright far fa-times-circle'></i></div>";
         } else {
-          html += "<div class='cert tip'><a target='_blank' href='/covid19/dummy.pdf'>" + row["Name"] + "</a><div class='tiptext'> Certification available on recipet of formal purchase order. </div></div>";
+          html += "<div class='cert tip'><a target='_blank' href='/covid19/dummy.pdf'>" + row["Name"] + "</a><div class='tiptext'> Certification available on receipt of formal purchase order. </div></div>";
         }
 
         el.append(elParser(html));
