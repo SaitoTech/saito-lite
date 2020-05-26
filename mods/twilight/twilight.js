@@ -640,7 +640,7 @@ console.log("\n\n\n\n");
                   this.endGame("ussr","Wargames");
               }
               if (this.game.state.vp == 0) {
-                this.endGame("ussr","Wargames");
+                this.endGame("tie game","Wargames");
               }
             } else {
               this.game.state.vp += 6;
@@ -652,7 +652,7 @@ console.log("\n\n\n\n");
                 this.endGame("ussr","Wargames");
               }
               if (this.game.state.vp == 0) {
-                this.endGame("us","Wargames");
+                this.endGame("tie game","Wargames");
               }
             }
 
@@ -740,7 +740,13 @@ console.log("\n\n\n\n");
 
             if (this.game.player == 1) {
               this.game.deck[0].hand.push(mv[2]);
-            }
+            } else {
+
+	      //
+	      // us increases ussr cards in hand to avoid deal errors
+	      //
+              this.game.state.opponent_cards_in_hand++;
+	    }
 
             this.game.queue.splice(qe, 1);
             shd_continue = 1;
@@ -5776,6 +5782,7 @@ this.startClock();
     this.game.over = 1;
     if (winner == "us") { this.game.winner = 2; }
     if (winner == "ussr") { this.game.winner = 1; }
+    if (winner == "tie game") { this.game.winner = 0; }
 
     if (this.game.winner != this.game.player) {
       //
@@ -12569,7 +12576,7 @@ console.log("card: " + card);
     }
     if (this.game.state.events.redscare_player2 >= 1 && playernum == 2) {
       if (updatelog == 1) {
-	if (this.game.state.events.redscare_player1 == 1) {
+	if (this.game.state.events.redscare_player2 == 1) {
           this.updateLog("US is affected by Red Scare");
         } else {
           this.updateLog("US is really affected by Red Scare");
@@ -13439,8 +13446,8 @@ console.log("card: " + card);
       if (this.isControlled("ussr", "philippines") == 1) { total_ussr++; }
       if (this.game.state.events.formosan == 0) {
         if (this.isControlled("us", "taiwan") == 1) { total_us++; }
-        if (this.isControlled("ussr", "taiwan") == 1) { total_ussr++; }
       }
+      if (this.isControlled("ussr", "taiwan") == 1) { total_ussr++; }
 
       //
       // Shuttle Diplomacy
