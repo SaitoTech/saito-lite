@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS items (
   order_id VARCHAR(255) DEFAULT "",
   category_id INTEGER,
   status_id INTEGER ,
-  number INTEGER ,
+  quantity INTEGER ,
+  price float,
   requirements TEXT,
 
   deleted INTEGER default 0,

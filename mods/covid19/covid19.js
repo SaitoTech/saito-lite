@@ -203,6 +203,7 @@ class Covid19 extends DBModTemplate {
   renderPage(page = "home", app, data) {
 
     data.covid19 = this;
+    var urlParams = new URLSearchParams(window.location.search);
 
     if (page == "home") {
       data.covid19.active_category_id = 0;
@@ -243,8 +244,20 @@ class Covid19 extends DBModTemplate {
     };
 
     if (page == "order-manager") {
-      OrderManager.render(app, data);
-      OrderManager.attachEvents(app, data);
+      if (urlParams.get('order')) {
+        if (urlParams.get('order') == 'new') {
+          data.order_id = "";
+          UpdateOrder.render(app, data);
+          UpdateOrder.attachEvents(app, data);
+        } else {
+          data.order_id = urlParams.get('order');
+          UpdateOrder.render(app, data);
+          UpdateOrder.attachEvents(app, data);
+        }
+      } else {
+        OrderManager.render(app, data);
+        OrderManager.attachEvents(app, data);
+      }
     };
 
   }
