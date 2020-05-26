@@ -192,8 +192,6 @@ class Balance extends ModTemplate {
       await db.run(sql2_3, params2);
       await db.run(sql2_4, {});
 
-      console.log("UPDATED RECORDS FOR: " + address);
-
     } 
     }
 
@@ -255,7 +253,7 @@ class Balance extends ModTemplate {
       await db.run(sql2_3, params2);
       await db.run(sql2_4, {});
 
-      console.log("UPDATED STAKING RECORDS FOR: " + address);
+      //console.log("UPDATED STAKING RECORDS FOR: " + address);
 
     } 
     }
@@ -270,7 +268,6 @@ class Balance extends ModTemplate {
     let sql = "SELECT sum(amt) AS sum, address FROM slips WHERE spent > 0 GROUP BY address";
     let params = {}
     let rows = await this.app.storage.queryDatabase(sql, params, "balance");
-console.log("rows: " + JSON.stringify(rows));
     if (rows) {
     if (rows.length) {
       for (let i = 0; i < rows.length; i++) {
@@ -281,16 +278,11 @@ console.log("rows: " + JSON.stringify(rows));
         let faucet_payment = rows[i].sum;
 	let address = rows[i].address;
 
-console.log("we need to pay: " + faucet_payment + " -- " + address);
-
         //
         // do we have enough tokens to issue this payment
         //
         app.wallet.calculateBalance();
-console.log("our wallet balance is: " + app.wallet.returnBalance());
         if (Big(faucet_payment).lte(app.wallet.returnBalance()) && Big(faucet_payment).gt(0)) {
-
-console.log("Sending our " + i + "th payment...");
 
           let newtx = this.app.wallet.createUnsignedTransaction(address, faucet_payment, 0.0);
           newtx.transaction.ts                = new Date().getTime();
@@ -304,8 +296,6 @@ console.log("Sending our " + i + "th payment...");
           let params2 = { $address : address }
           await this.app.storage.executeDatabase(sql2, params2, "balance");
 
-console.log("AND SENDING PAYMENT: " + newtx);
-
 	  //
 	  // propagate transaction 
 	  //
@@ -313,9 +303,10 @@ console.log("AND SENDING PAYMENT: " + newtx);
 
 	} else {
 
+          //
+          // telling this address to fuck off, it should send us cash if anything...
+          //
 	  if (Big(faucet_payment).lte(0)) {
-
-console.log("telling this address to fuck off, it should send us cash if anything...");
 
             //
             // issue payment
@@ -329,7 +320,6 @@ console.log("telling this address to fuck off, it should send us cash if anythin
       } 
     } else {
 
-console.log("remembering we are fully paid out...");
       this.fully_paid = 1;
     }
     } else {
