@@ -15101,7 +15101,7 @@ console.log("card: " + card);
 
             <label for="deck">Deck:</label>
             <select name="deck" id="deckselect" onchange='
-  if ($("#deckselect").val() == "saito") { $(".saito_edition").prop("checked",true); } else { $(".saito_edition").prop("checked", false); if ($("#deckselect").val() == "optional") { $(".optional_edition").prop("checked", false); } else { $(".optional_edition").prop("checked", true); if ($("#deckselect").val() == "endofhistory") { $(".endofhistory_edition").prop("checked",true); $(".optional_edition").prop("checked", true); } else { $(".endofhistory_edition").prop("checked", false); } } } '>
+  if ($("#deckselect").val() == "saito") { $(".saito_edition").prop("checked",true); } else { $(".saito_edition").prop("checked", false); if ($("#deckselect").val() == "optional") { $(".optional_edition").prop("checked", false); } else { $(".optional_edition").prop("checked", true); if ($("#deckselect").val() == "endofhistory") { $(".endofhistory_edition").prop("checked",true); $(".optional_edition").prop("checked", false); } else { $(".endofhistory_edition").prop("checked", false); } } } '>
             <option value="original">original</option>
               <option value="optional" selected>optional</option>
               <option value="saito">saito edition</option>
