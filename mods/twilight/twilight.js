@@ -3452,7 +3452,7 @@ this.startClock();
 
   playerTurnHeadlineSelected(card, player) {
 
-this.startClock();
+    this.startClock();
 
     let twilight_self = this;
 
@@ -3511,7 +3511,7 @@ this.startClock();
 
   playerTurn(selected_card=null) {
 
-this.startClock();
+    this.startClock();
 
     let twilight_self = this;
 
