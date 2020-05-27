@@ -1120,7 +1120,7 @@ console.log("move player 3");
     locations['49'] = { top : 1034 , left : 2501 , taxi : ['36','50','66'] , underground : [] , bus : [] , ferry : [] }
 
     locations['50'] = { top : 877 , left : 2740 , taxi : ['49','37','38'] , underground : [] , bus : [] , ferry : [] }
-    locations['51'] = { top : 923 , left : 3237 , taxi : ['67','38','39','52','66'] , underground : [] , bus : [] , ferry : [] }
+    locations['51'] = { top : 923 , left : 3237 , taxi : ['67','38','39','52','68'] , underground : [] , bus : [] , ferry : [] }
     locations['52'] = { top : 855 , left : 3488 , taxi : ['51','39','40','69'] , underground : [] , bus : ['41','13','86','67'] , ferry : [] }
     locations['53'] = { top : 1011 , left : 3765 , taxi : ['69','40','54'] , underground : [] , bus : [] , ferry : [] }
     locations['54'] = { top : 948 , left : 3958 , taxi : ['53','41','55','70'] , underground : [] , bus : [] , ferry : [] }
