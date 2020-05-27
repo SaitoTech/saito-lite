@@ -1,10 +1,14 @@
 
-  let x = "quick test of encoding";
-  let y = 
-  let z = Buffer.from(x, 'utf16le').toString('utf8');
+  try {
 
-transaction.msg = "BASE64STRING";
+    let x = Promise.reject(400);
+
+  } catch (err) {
+
+    console.log(err);
+
+  }
 
 
-console.log(z);
+
 
