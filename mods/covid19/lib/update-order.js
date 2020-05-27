@@ -58,7 +58,7 @@ module.exports = UpdateOrder = {
 
     document.getElementById('create-po').addEventListener('click', async (e) => {
 
-      var filename = 'DHBGlobal_Purchase_Order.docx';
+      var filename = 'DHBGlobal_Purchase_Order.doc';
 
       data.sub_title = document.getElementById('details').value;
       data.brief_description = document.getElementById('requirements').value;
