@@ -1177,8 +1177,6 @@ class Arcade extends ModTemplate {
 
   async receiveJoinRequest(blk, tx, conf, app) {
 
-    console.log("RECEIVED A JOIN REQUEST!");
-
     let txmsg = tx.returnMessage();
 
     //
@@ -1228,8 +1226,6 @@ class Arcade extends ModTemplate {
       $expires_at: expires_at
     };
     await app.storage.executeDatabase(sql2, params2, "arcade");
-
-    console.log("\n\n\n\n\n\n\nINSERTING NEW JOIN INTO GAME!");
 
     return;
 
