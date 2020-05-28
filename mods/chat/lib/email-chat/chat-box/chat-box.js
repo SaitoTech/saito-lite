@@ -98,6 +98,7 @@ module.exports = ChatBox = {
     },
 
     addMessageToDOM(app, data, msg) {
+      try {
       let message = Object.assign({}, msg, {
           keyHTML: data.chat.addrController.returnAddressHTML(msg.publickey),
           identicon : app.keys.returnIdenticon(msg.publickey),
@@ -138,6 +139,7 @@ module.exports = ChatBox = {
       }
 
       this.scrollToBottom(message.group_id);
+    } catch (err) {}
     },
 
     createMessage(app, data, msg_data) {

@@ -182,7 +182,6 @@ class Forum extends ModTemplate {
 
     resolver.resolve(link, (result) => {
       if (result) {
-        console.log(result.image);
         let sql = "UPDATE posts SET img = '" + result.image + "' WHERE post_id = '" + post_id + "';"
         this.app.storage.executeDatabase(sql, {}, "forum");
       } else {
@@ -341,7 +340,6 @@ class Forum extends ModTemplate {
     if (vote_type == "downvote") {
       sql_rank = "UPDATE posts SET rank = cast((rank - ($vote_bonus * (2000000/($current_time-unixtime)))) as INTEGER) WHERE post_id = $pid";
     }
-    console.log("UPDATING RANK: " + sql_rank);
     await this.app.storage.executeDatabase(sql_rank, params_rank, "forum");
 
   }
@@ -641,8 +639,6 @@ class Forum extends ModTemplate {
               let this_post_id = res.rows[i].post_id;
               let this_vote_type = res.rows[i].type;
 
-              console.log(this_post_id + " -- " + this_vote_type);
-
               //
               // upvotes
               //
@@ -650,7 +646,6 @@ class Forum extends ModTemplate {
                 Array.from(document.getElementsByClassName('post_upvote')).forEach(upvote => {
                   let post_id = upvote.getAttribute("id");
                   if (post_id == this_post_id) {
-                    console.log("A");
                     upvote.getElementsByClassName("post_upvote_arrow")[0].style.color = "#ff8235";
                   }
                 });
@@ -663,7 +658,6 @@ class Forum extends ModTemplate {
                 Array.from(document.getElementsByClassName('post_downvote')).forEach(upvote => {
                   let post_id = upvote.getAttribute("id");
                   if (post_id == this_post_id) {
-                    console.log("B");
                     upvote.getElementsByClassName("post_downvote_arrow")[0].style.color = "#ff8235";
                   }
                 });
@@ -913,8 +907,6 @@ class Forum extends ModTemplate {
       if (where_clause.toString().indexOf('DELETE') > -1) { return; }
 
       let sql = "SELECT tx, votes, comments, img FROM posts WHERE " + where_clause + " ORDER BY rank DESC LIMIT 100";
-
-      console.log(sql);
 
       let rows2 = await this.app.storage.queryDatabase(sql, {}, 'forum');
 

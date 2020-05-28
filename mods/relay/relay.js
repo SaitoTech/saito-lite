@@ -109,9 +109,6 @@ class Relay extends ModTemplate {
 
       if (message.request === "relay peer message") {
 
-console.log("received request to relay: ");
-
-
         //
         // sanity check on tx
         //
@@ -142,8 +139,6 @@ console.log("received request to relay: ");
           for (let i = 0; i < app.network.peers.length; i++) {
             if (tx2.isTo(app.network.peers[i].peer.publickey)) {
               peer_found = 1;
-
-console.log("about to relay!");
 
               app.network.peers[i].sendRequest("relay peer message", tx2.msg, function() {
 	        if (mycallback != null) {

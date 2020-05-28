@@ -3452,7 +3452,7 @@ this.startClock();
 
   playerTurnHeadlineSelected(card, player) {
 
-this.startClock();
+    this.startClock();
 
     let twilight_self = this;
 
@@ -3511,7 +3511,7 @@ this.startClock();
 
   playerTurn(selected_card=null) {
 
-this.startClock();
+    this.startClock();
 
     let twilight_self = this;
 
@@ -9123,6 +9123,7 @@ console.log("card: " + card);
       if (this.doesPlayerDominateRegion("ussr", "africa") == 1)   { ussr_roll++; }
       if (this.doesPlayerDominateRegion("ussr", "camerica") == 1) { ussr_roll++; }
       if (this.doesPlayerDominateRegion("ussr", "samerica") == 1) { ussr_roll++; }
+      if (this.doesPlayerDominateRegion("ussr", "seasia") == 1) { ussr_roll++; }
 
       if (this.doesPlayerDominateRegion("us", "europe") == 1)   { us_roll++; }
       if (this.doesPlayerDominateRegion("us", "mideast") == 1)  { us_roll++; }
@@ -9130,6 +9131,7 @@ console.log("card: " + card);
       if (this.doesPlayerDominateRegion("us", "africa") == 1)   { us_roll++; }
       if (this.doesPlayerDominateRegion("us", "camerica") == 1) { us_roll++; }
       if (this.doesPlayerDominateRegion("us", "samerica") == 1) { us_roll++; }
+      if (this.doesPlayerDominateRegion("us", "seasia") == 1)   { us_roll++; }
 
       this.updateLog("<span>Summit: US rolls</span> "+usbase+" (+"+(us_roll - usbase)+") and USSR rolls "+ussrbase+" (+"+(ussr_roll-ussrbase)+")");
 
@@ -13580,11 +13582,11 @@ console.log("card: " + card);
       vp_us = vp_us + bg_us;
       vp_ussr = vp_ussr + bg_ussr;
 
-      if (vp_us >= vp_ussr+2) {
+      if ((vp_us >= vp_ussr+2 && total_us > bg_us) || (bg_us == 5 && total_us > total_ussr)) {
         if (player == "us") { return 1; }
         if (player == "ussr") { return 0; }
       }
-      if (vp_ussr >= vp_us+2) {
+      if ((vp_ussr >= vp_us+2 && total_ussr > bg_ussr) || (bg_ussr == 5 && total_ussr > total_us)) {
         if (player == "us") { return 0; }
         if (player == "ussr") { return 1; }
       }
@@ -13634,11 +13636,11 @@ console.log("card: " + card);
       vp_us = vp_us + bg_us;
       vp_ussr = vp_ussr + bg_ussr;
 
-      if (vp_us >= vp_ussr+2) {
+      if ((vp_us >= vp_ussr+2 && total_us > bg_us) || (bg_us == 6 && total_us > total_ussr)) {
         if (player == "us") { return 1; }
         if (player == "ussr") { return 0; }
       }
-      if (vp_ussr >= vp_us+2) {
+      if ((vp_ussr >= vp_us+2 && total_ussr > bg_ussr) || (bg_ussr == 6 && total_ussr > total_us)) {
         if (player == "us") { return 0; }
         if (player == "ussr") { return 1; }
       }
@@ -13704,11 +13706,11 @@ console.log("card: " + card);
       vp_us = vp_us + bg_us;
       vp_ussr = vp_ussr + bg_ussr;
 
-      if (vp_us >= vp_ussr+2) {
+      if ((vp_us >= vp_ussr+2 && total_us > bg_us) || (bg_us == 5 && total_us > total_ussr)) {
         if (player == "us") { return 1; }
         if (player == "ussr") { return 0; }
       }
-      if (vp_ussr >= vp_us+2) {
+      if ((vp_ussr >= vp_us+2 && total_ussr > bg_ussr) || (bg_ussr == 5 && total_ussr > total_us)) {
         if (player == "us") { return 0; }
         if (player == "ussr") { return 1; }
       }
@@ -13758,11 +13760,11 @@ console.log("card: " + card);
       vp_us = vp_us + bg_us;
       vp_ussr = vp_ussr + bg_ussr;
 
-      if (vp_us >= vp_ussr+2) {
+      if ((vp_us > vp_ussr && total_us > bg_us && bg_us > 0) || (bg_us == 3 && total_us > total_ussr)) {
         if (player == "us") { return 1; }
         if (player == "ussr") { return 0; }
       }
-      if (vp_ussr >= vp_us+2) {
+      if ((vp_ussr > vp_us && total_ussr > bg_ussr && bg_ussr > 0) || (bg_ussr == 3 && total_ussr > total_us)) {
         if (player == "us") { return 0; }
         if (player == "ussr") { return 1; }
       }
@@ -13812,11 +13814,11 @@ console.log("card: " + card);
       vp_us = vp_us + bg_us;
       vp_ussr = vp_ussr + bg_ussr;
 
-      if (vp_us >= vp_ussr+2) {
+      if ((vp_us > vp_ussr+2 && total_us > bg_us && bg_us > 0) || (bg_us == 4 && total_us > total_ussr)) {
         if (player == "us") { return 1; }
         if (player == "ussr") { return 0; }
       }
-      if (vp_ussr >= vp_us+2) {
+      if ((vp_ussr > vp_us+2 && total_ussr > bg_ussr && bg_ussr > 0) || (bg_ussr == 4 && total_ussr > total_us)) {
         if (player == "us") { return 0; }
         if (player == "ussr") { return 1; }
       }
@@ -13884,11 +13886,12 @@ console.log("card: " + card);
       vp_us = vp_us + bg_us;
       vp_ussr = vp_ussr + bg_ussr;
 
-      if (vp_us >= vp_ussr+2) {
+      if ((vp_us > vp_ussr+2 && total_us > bg_us && bg_us > 0) || (bg_us >= 6 && total_us > total_ussr)) {
+	if (bg_us == 6 && this.isControlled("us", "taiwan") == 1 && this.game.state.events.formosan == 1) { return 0; }
         if (player == "us") { return 1; }
         if (player == "ussr") { return 0; }
       }
-      if (vp_ussr >= vp_us+2) {
+      if ((vp_ussr > vp_us+2 && total_ussr > bg_ussr && bg_ussr > 0) || (bg_ussr == 6 && total_ussr > total_us)) {
         if (player == "us") { return 0; }
         if (player == "ussr") { return 1; }
       }
@@ -15101,7 +15104,7 @@ console.log("card: " + card);
 
             <label for="deck">Deck:</label>
             <select name="deck" id="deckselect" onchange='
-  if ($("#deckselect").val() == "saito") { $(".saito_edition").prop("checked",true); } else { $(".saito_edition").prop("checked", false); if ($("#deckselect").val() == "optional") { $(".optional_edition").prop("checked", false); } else { $(".optional_edition").prop("checked", true); if ($("#deckselect").val() == "endofhistory") { $(".endofhistory_edition").prop("checked",true); $(".optional_edition").prop("checked", true); } else { $(".endofhistory_edition").prop("checked", false); } } } '>
+  if ($("#deckselect").val() == "saito") { $(".saito_edition").prop("checked",true); } else { $(".saito_edition").prop("checked", false); if ($("#deckselect").val() == "optional") { $(".optional_edition").prop("checked", false); } else { $(".optional_edition").prop("checked", true); if ($("#deckselect").val() == "endofhistory") { $(".endofhistory_edition").prop("checked",true); $(".optional_edition").prop("checked", false); } else { $(".endofhistory_edition").prop("checked", false); } } } '>
             <option value="original">original</option>
               <option value="optional" selected>optional</option>
               <option value="saito">saito edition</option>
