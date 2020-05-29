@@ -1169,17 +1169,17 @@ console.log(this.game.state.required_pot + " == " + JSON.stringify(this.game.sta
     for (let i = 0; i < 6; i++) {
       console.log("displaying player info box: " + (i+1));
 
-      let divname = "#player-info"+(i+1);
+      let divname = "#player-info-"+(i+1);
       let boxobj  = document.querySelector(divname);
 
       boxobj.innerHTML = `
-	<div class="player-info-hand hand">
+	<div class="player-info-hand hand" id="player-info-hand-${i+1}>
           <img class="card" src="${this.card_img_dir}/S1.png">
           <img class="card" src="${this.card_img_dir}/C1.png">
 	</div>
-	<div class="player-name">tucho@saito</div>
-	<div class="player-chips">1425 SAITO</div>
-	<div class="player-log">fold</div>
+	<div class="player-info-name" id="player-info-name-${i+1}>tucho@saito</div>
+	<div class="player-info-chips" id="player-info-chips-${i+1}>1425 SAITO</div>
+	<div class="player-info-log" id="player-info-log-${i+1}">fold</div>
       `;
 
     }
