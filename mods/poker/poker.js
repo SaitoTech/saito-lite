@@ -1087,7 +1087,7 @@ console.log("err: " + err);
       state.player_pot[i] = 0;
     }
     for (let i = 0; i < num_of_players; i++) {
-      state.player_names[i] = this.app.keychain.returnIdentifierByPublicKey(this.game.players[i], 1);
+      state.player_names[i] = this.app.keys.returnIdentifierByPublicKey(this.game.players[i], 1);
 console.log("NAME: " + state.player_names[i]);
       if (state.player_names[i] === this.game.players[i]) {
         state.player_names[i] = this.game.players[i].substring(0, 10) + "...";
@@ -1193,15 +1193,9 @@ console.log("NAME 2: " + state.player_names[i]);
   displayPlayers() {
 
     for (let i = 0; i < 6; i++) {
-      console.log("displaying player info box: " + (i+1));
 
       let divname = "#player-info-"+(i+1);
       let boxobj  = document.querySelector(divname);
-
-console.log(divname);
-
-      console.log("displaying player info box 2: " + (i+1));
-
 
       boxobj.innerHTML = `
 	<div class="player-info-hand hand" id="player-info-hand-${i+1}>
@@ -1213,7 +1207,6 @@ console.log(divname);
 	<div class="player-info-log" id="player-info-log-${i+1}"></div>
       `;
 
-      console.log("displaying player info box 3: " + (i+1));
     }
   }
 
@@ -1225,13 +1218,11 @@ console.log(divname);
 
   displayTable() {
 
-console.log("...a");
     //
     // display flip pool (cards on table)
     //
     $('#deal').empty();
 
-console.log("...b");
     for (let i = 0; i < 5 || i < this.game.pool[0].hand.length; i++) {
       let card = {};
       if (i < this.game.pool[0].hand.length) { card = this.game.pool[0].cards[this.game.pool[0].hand[i]]; } else { card.name = "red_back.png"; }
@@ -1243,15 +1234,12 @@ console.log("...b");
     //
     // update pot
     //
-console.log("...c");
     $('.pot').html(this.game.state.pot);
 
     //
     // display dealer
     //
-console.log("...d");
     $('.dealer').html(this.game.state.big_blind_player);
-console.log("...e");
 
   }
 
