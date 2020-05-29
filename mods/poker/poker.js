@@ -1035,8 +1035,10 @@ console.log(this.game.state.required_pot + " == " + JSON.stringify(this.game.sta
     try {
       this.displayPlayers();
       this.displayHand();
-      this.displayDeal();
+console.log("showing table...");
+      this.displayTable();
     } catch (err) {
+console.log("err: " + err);
     }
 
   }
@@ -1192,22 +1194,35 @@ console.log(this.game.state.required_pot + " == " + JSON.stringify(this.game.sta
 
 
 
-  displayDeal() {
+  displayTable() {
 
+console.log("...a");
     //
     // display flip pool (cards on table)
     //
     $('#deal').empty();
 
+console.log("...b");
     for (let i = 0; i < 5 || i < this.game.pool[0].hand.length; i++) {
       let card = {};
       if (i < this.game.pool[0].hand.length) { card = this.game.pool[0].cards[this.game.pool[0].hand[i]]; } else { card.name = "red_back.png"; }
-
       // let card_img = card.name + ".png";
       let html = `<img class="card" src="${this.card_img_dir}/${card.name}">`;
-      //document.getElementById('deal').innerHTML += html;
       $('#deal').append(html);
     }
+
+    //
+    // update pot
+    //
+console.log("...c");
+    $('.pot').html(this.game.state.pot);
+
+    //
+    // display dealer
+    //
+console.log("...d");
+    $('.dealer').html(this.game.state.big_blind_player);
+console.log("...e");
 
   }
 
