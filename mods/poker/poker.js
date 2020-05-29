@@ -381,17 +381,33 @@ console.log("POKER QUEUE: " + JSON.stringify(this.game.queue));
 	  // if everyone except 1 player has folded...
 	  //
 	  let active_players = 0;
+          let player_left_idx = 0;
 	  for (let i = 0; i < this.game.state.passed.length; i++) {
 	    if (this.game.state.passed[i] == 0) { active_players++; }
 	  }
-console.log("active players: " + active_players);
 	  if (active_players == 1) {
 	    for (let i = 0; i < this.game.state.passed.length; i++) {
 	      if (this.game.state.passed[i] == 0) {
 	        this.updateLog("Player " + i+1 + " wins " + this.game.state.pot);
                 this.game.state.player_credit[i] += this.game.state.pot;
+		player_left_idx = i;
 	      }
 	    }
+
+
+	    //
+	    // if only one player, everyone else settles
+	    //
+	    //
+	    // everyone should send anything they owe to winner
+	    //
+console.log("4. sending "+this.game.state.player_pot[this.game.player-1]+" to " + this.game.players[player_left_idx]);
+	    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[player_left_idx], this.game.state.player_pot[this.game.player-1]);
+	    newtx = this.app.wallet.signTransaction(newtx);
+	    this.app.network.propagateTransaction(newtx);
+
+
+
 
             this.startNextRound();
             return 1;
@@ -631,6 +647,20 @@ console.log("---------> " + this.game.state.plays_since_last_raise);
 	      this.game.state.player_credit[winners[i]-1] += pot_size;
 	    }
 
+	    //
+	    // send wagers to winner
+	    //
+	    let chips_to_send = this.game.state.player_pot[this.game.player-1] / winners.length;
+	    for (let i = 0; i < winners.length; i++) {
+	      //
+	      // non-winners send wagers to winner
+	      //
+console.log("1. sending "+this.game.state.player_pot[this.game.player-1]+" to " + this.game.players[winners[i]-1]);
+	      let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[winners[i]-1], this.game.state.player_pot[this.game.player-1]);
+	      newtx = this.app.wallet.signTransaction(newtx);
+	      this.app.network.propagateTransaction(newtx);
+	    }
+
 	  } else {
 
             //
@@ -639,7 +669,19 @@ console.log("---------> " + this.game.state.plays_since_last_raise);
 	    this.updateLog("Player: " + winners[0] + " wins " + this.game.state.pot);
 	    this.game.state.player_credit[winners[0]-1] += this.game.state.pot;
 
+	    //
+	    // non-winners send wagers to winner
+	    //
+console.log("2. sending "+this.game.state.player_pot[this.game.player-1]+" to " + this.game.players[winners[0]-1]);
+	    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[winners[0]-1], this.game.state.player_pot[this.game.player-1]);
+	    newtx = this.app.wallet.signTransaction(newtx);
+	    this.app.network.propagateTransaction(newtx);
+
+
 	  }
+
+
+
 
           this.startNextRound();
 	  return 1;
@@ -783,7 +825,17 @@ console.log("---------> " + this.game.state.plays_since_last_raise);
           }
 
 	  if (players_left == 1) {
-	    this.game.state.player_credit[player_left_idx] = this,game.state.pot;
+
+	    this.game.state.player_credit[player_left_idx] = this.game.state.pot;
+
+	    //
+	    // everyone should send anything they owe to winner
+	    //
+console.log("3. sending "+this.game.state.player_pot[this.game.player-1]+" to " + this.game.players[player_left_idx]);
+	    let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[player_left_idx], this.game.state.player_pot[this.game.player-1]);
+	    newtx = this.app.wallet.signTransaction(newtx);
+	    this.app.network.propagateTransaction(newtx);
+
 	    this.startNextRound();
           }
       }
@@ -1185,7 +1237,7 @@ console.log("NAME 2: " + state.player_names[i]);
     let divname = "#player-info-log-"+player;
     let logobj  = document.querySelector(divname);
     if (logobj) {
-      logobj.html(msg);
+      logobj.innerHTML = msg;
     }
 
   }
@@ -2154,8 +2206,6 @@ console.log("NAME 2: " + state.player_names[i]);
   returnGameOptionsHTML() {
 
     return `
-          <h3>Poker: </h3>
-          <form id="options" class="options">
             <label for="stake">Initial Stake:</label>
             <select name="stake">
               <option value="100">100</option>
@@ -2165,7 +2215,6 @@ console.log("NAME 2: " + state.player_names[i]);
               <option value="10000">10000</option>
               <option value="100">100</option>
 	    </select>
-	  </form>
     `;
 
   }

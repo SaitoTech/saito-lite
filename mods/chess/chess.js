@@ -568,8 +568,6 @@ class Chessgame extends GameTemplate {
 
   returnGameOptionsHTML() {
     return `
-      <h3>Chess: </h3>
-      <form id="options" class="options">
 
         <label for="color">Pick Your Color:</label>
         <select name="color">
@@ -585,7 +583,6 @@ class Chessgame extends GameTemplate {
           <option value="90">90 minutes</option>
         </select>
 
-      </form>
     `;
   }
 }

@@ -4322,9 +4322,6 @@ console.log("SHOULD PLACE: " + player);
   returnGameOptionsHTML() {
 
     return `
-          <h3>Thirteen Struggle: </h3>
-
-          <form id="options" class="options">
 
             <label for="player1">Play as:</label>
             <select name="player1">

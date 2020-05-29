@@ -1813,9 +1813,6 @@ console.log("INITIALIZE GAME");
   returnGameOptionsHTML() {
 
     return `
-        <h3>Wordblocks: </h3>
-
-        <form id="options" class="options">
 
           <label for="dictionary">Dictionary:</label>
           <select name="dictionary">
@@ -1824,7 +1821,7 @@ console.log("INITIALIZE GAME");
             <option value="fise">Spanish: FISE</option>
           </select>
 
-          </form>`
+          `;
   }
 
 }
