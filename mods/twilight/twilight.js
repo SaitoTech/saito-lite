@@ -15097,9 +15097,6 @@ console.log("card: " + card);
   returnGameOptionsHTML() {
 
     return `
-          <h3>Twilight Struggle: </h3>
-
-          <form id="options" class="options">
 
             <label for="player1">Play as:</label>
             <select name="player1">
@@ -15278,7 +15275,6 @@ console.log("card: " + card);
               <li><input class="remove_card endofhistory_edition" type="checkbox" name="eurocommunism" /> Eurocommunism (Mid-War)</li>
               <li><input class="remove_card endofhistory_edition" type="checkbox" name="inftreaty" /> INF Treaty (Latey-War)</li>
             </div>
-          </form>
 
           `;
 

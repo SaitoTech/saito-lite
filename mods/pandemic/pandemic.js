@@ -2681,9 +2681,6 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
   returnGameOptionsHTML() {
   
     return `
-          <h3>Pandemic: </h3>
-  
-          <form id="options" class="options" style="">
 
             <label for="difficulty">Difficulty:</label>
             <select name="difficulty">
@@ -2727,8 +2724,6 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
               <option value="medic">medic</option>
               <option value="operationsexpert">operations expert</option>
             </select>
-  
-  	</form>
   
   	`;
   

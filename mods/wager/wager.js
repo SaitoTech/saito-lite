@@ -31,38 +31,17 @@ class Wager extends ModTemplate {
 
       redirect_fncts[mod.returnSlug()] = mod.returnGameOptionsHTML;
       mod.returnGameOptionsHTML = function() {
-
-	let ndiv = document.createElement('div');
-            ndiv.innerHTML += `<label for="player1">Wager:</label>
+	return `<label for="player1">Wager:</label>
             <select name="wager">
               <option value="none"default>none</option>
               <option value="100">100</option>
               <option value="1000">1000</option>
               <option value="10000">10000</option>
               <option value="100000">100000</option>
-            </select>`;
-
-	let wdiv = document.createElement('div');
-	    wdiv.innerHTML = redirect_fncts(mod.returnSlug()]();
-
-        alert("modified function!");
-        return redirect_fncts[mod.returnSlug()]();  
+            </select>` + redirect_fncts[mod.returnSlug()]();
       }
 
-
-/***
-    return `
-          <h3>Twilight Struggle: </h3>
-
-          <form id="options" class="options">
-
-****/
-
     });
-
-
-alert("modded games");
-
 
   }
 

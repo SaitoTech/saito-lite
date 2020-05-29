@@ -32,9 +32,12 @@ module.exports = ArcadeGameDreate = {
         document.querySelector('.game-title').innerHTML = gamemod.name;
         document.querySelector('.game-description').innerHTML = gamemod.description;
         document.querySelector('.game-publisher-message').innerHTML = gamemod.publisher_message;
-        document.querySelector('.game-details').innerHTML = gamemod.returnGameOptionsHTML();
+	let x = gamemod.returnGameOptionsHTML();
+	if (x != "") {
+          document.querySelector('.game-details').innerHTML = '<h3>'+gamemod.name+': </h3><form id="options" class="options">'+x+'</form>'
+	}
 
-        setTimeout(() => {
+	setTimeout(() => {
 
           //
           // TODO: is this value supposed to be used?

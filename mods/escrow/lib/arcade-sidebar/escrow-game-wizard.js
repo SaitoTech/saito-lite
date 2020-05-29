@@ -38,7 +38,8 @@ alert("Rendered!");
 	}
 
 
-        document.querySelector('.game-details').innerHTML = gamemod.returnGameOptionsHTML();
+        document.querySelector('.game-details').innerHTML = '<h3>'+gamemod.name+': </h3><form id="options" class="options">'+gamemod.returnGameOptionsHTML()+'</form>';
+
 
 
         document.getElementById('escrow-submit-btn')
