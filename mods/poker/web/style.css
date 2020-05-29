@@ -24,8 +24,8 @@ body {
   position: absolute;
   background-image: url("img/gameboard.jpg");
   background-size: cover;
-  width: 1504px;
-  height: 1000px;
+  width: 100vw;
+  height: 100vh;
 }
 
 
@@ -105,3 +105,11 @@ body {
 
 
 
+.suit {
+  font-size: larger;
+}
+
+.htmlCard {
+  margin: 5px 3px;
+  display: inline-block;
+}

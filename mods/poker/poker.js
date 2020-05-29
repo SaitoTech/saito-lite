@@ -555,12 +555,12 @@ console.log("---------> " + this.game.state.plays_since_last_raise);
 	        html  = hand2.val[0] + hand2.suite[0];
 	        html += ", ";
 	        html += hand2.val[1] + hand2.suite[1];
-		this.updateLog("Player "+(i)+": " + h2score.hand_description + " ("+h2score.cards_to_score+")");
+		this.updateLog("Player "+(i)+": " + h2score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h2score.cards_to_score));
 
 	        html  = hand1.val[0] + hand1.suite[0];
 	        html += ", ";
 	        html += hand1.val[1] + hand1.suite[1];
-		this.updateLog("Player "+(i+1)+": " + h1score.hand_description + " ("+h1score.cards_to_score+")");
+		this.updateLog("Player "+(i+1)+": " + h1score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h1score.cards_to_score));
 
 	      } else {
 
@@ -570,7 +570,7 @@ console.log("---------> " + this.game.state.plays_since_last_raise);
 	        html  = hand1.val[0] + hand1.suite[0];
 	        html += ", ";
 	        html += hand1.val[1] + hand1.suite[1];
-		this.updateLog("Player "+(i+1)+": " + h1score.hand_description + " ("+h1score.cards_to_score+")");
+		this.updateLog("Player "+(i+1)+": " + h1score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h1score.cards_to_score));
 
 	      }
 
@@ -2091,6 +2091,25 @@ console.log(this.game.state.required_pot + " == " + JSON.stringify(this.game.sta
       }
     }
     return 0;
+  }
+
+  toHuman(hand) {
+    var humanHand = " <span class='htmlhand'>";
+    hand.forEach((h) => {
+      h = h.replace("H", "<span style='color:red'><span class='suit'>&hearts;</span>");
+      h = h.replace("D", "<span style='color:red'><span class='suit'>&diams;</span>");
+      h = h.replace("S", "<span style='color:black'><span class='suit'>&spades;</span>");
+      h = h.replace("C", "<span style='color:black'><span class='suit'>&clubs;</span>");
+      h = h.replace("13", "K");
+      h = h.replace("12", "Q");
+      h = h.replace("11", "J");
+      h = h.replace("1", "A");
+      h = h.replace("A0", "10");
+      h = "<span class='htmlCard'>" + h + "</span></span>";
+      humanHand += h;
+    });
+    humanHand += "</span> ";
+    return humanHand;
   }
 
 
