@@ -8267,6 +8267,7 @@ this.startClock();
       } else {
 
         this.game.state.vp = this.game.state.vp+vpchange;
+	this.updateLog("US gains "+vpchange+" VP from Duck and Cover");
         this.updateVictoryPoints();
 
       }

@@ -735,6 +735,7 @@ console.log("---------> " + this.game.state.plays_since_last_raise);
 	  let amount_to_call = 0;
 
 	  this.updateLog("Player " + player + " calls");
+	  this.updatePlayerLog(player, "calls");
 	  if (this.game.state.required_pot > this.game.state.player_pot[player-1]) {
 	    amount_to_call = this.game.state.required_pot - this.game.state.player_pot[player-1];
 	  }
@@ -763,6 +764,7 @@ console.log("---------> " + this.game.state.plays_since_last_raise);
       if (mv[0] === "fold") {
 
 	  let player = parseInt(mv[1]);
+	  this.updatePlayerLog(player, "folds");
 	  this.updateLog("Player " + player + " folds.");
 	  this.game.state.passed[player-1] = 1;
           this.game.queue.splice(qe, 1);
@@ -824,6 +826,7 @@ console.log("---------> " + this.game.state.plays_since_last_raise);
 
 	    this.updateLog("Player " + player + " calls " + call_portion + ".");
 	    this.updateLog("Player " + player + " raises " + raise_portion + ".");
+	    this.updatePlayerLog(player, "raises " + raise_portion);
 
 	  } else {
 
@@ -834,6 +837,7 @@ console.log("---------> " + this.game.state.plays_since_last_raise);
 	    this.game.state.last_raise = raise;
 
 	    this.updateLog("Player " + player + " raises " + raise + ".");
+	    this.updatePlayerLog(player, "raises " + raise);
 
           }
           this.game.queue.splice(qe, 1);
@@ -1062,6 +1066,7 @@ console.log("err: " + err);
 
         state.started = 0;
         state.pot = 0.0;
+        state.player_names = [];
         state.player_pot = [];
 	state.player_credit = [];
 	state.passed = [];
@@ -1080,6 +1085,14 @@ console.log("err: " + err);
     }
     for (let i = 0; i < num_of_players; i++) {
       state.player_pot[i] = 0;
+    }
+    for (let i = 0; i < num_of_players; i++) {
+      state.player_names[i] = this.app.keychain.returnIdentifierByPublicKey(this.game.players[i], 1);
+console.log("NAME: " + state.player_names[i]);
+      if (state.player_names[i] === this.game.players[i]) {
+        state.player_names[i] = this.game.players[i].substring(0, 10) + "...";
+console.log("NAME 2: " + state.player_names[i]);
+      }
     }
     for (let i = 0; i < num_of_players; i++) {
       state.player_credit[i] = 100;
@@ -1166,6 +1179,17 @@ console.log("err: " + err);
 
 
 
+  updatePlayerLog(player, msg) {
+
+    let divname = "#player-info-log-"+player;
+    let logobj  = document.querySelector(divname);
+    if (logobj) {
+      logobj.html(msg);
+    }
+
+  }
+
+
   displayPlayers() {
 
     for (let i = 0; i < 6; i++) {
@@ -1174,16 +1198,22 @@ console.log("err: " + err);
       let divname = "#player-info-"+(i+1);
       let boxobj  = document.querySelector(divname);
 
+console.log(divname);
+
+      console.log("displaying player info box 2: " + (i+1));
+
+
       boxobj.innerHTML = `
 	<div class="player-info-hand hand" id="player-info-hand-${i+1}>
           <img class="card" src="${this.card_img_dir}/S1.png">
           <img class="card" src="${this.card_img_dir}/C1.png">
 	</div>
-	<div class="player-info-name" id="player-info-name-${i+1}>tucho@saito</div>
-	<div class="player-info-chips" id="player-info-chips-${i+1}>1425 SAITO</div>
-	<div class="player-info-log" id="player-info-log-${i+1}">fold</div>
+	<div class="player-info-name" id="player-info-name-${i+1}>${this.game.state.player_names[i]}</div>
+	<div class="player-info-chips" id="player-info-chips-${i+1}>${this.game.state.player_credit[i]} SAITO</div>
+	<div class="player-info-log" id="player-info-log-${i+1}"></div>
       `;
 
+      console.log("displaying player info box 3: " + (i+1));
     }
   }
 
@@ -1191,7 +1221,6 @@ console.log("err: " + err);
     this.cardfan.render(this.app, this);
     this.cardfan.attachEvents(this.app, this);
   }
-
 
 
   displayTable() {
