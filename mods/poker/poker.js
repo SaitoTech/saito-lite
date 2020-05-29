@@ -1033,6 +1033,7 @@ console.log(this.game.state.required_pot + " == " + JSON.stringify(this.game.sta
     if (this.browser_active == 0) { return; }
 
     try {
+      this.displayPlayers();
       this.displayHand();
       this.displayDeal();
     } catch (err) {
@@ -1162,6 +1163,27 @@ console.log(this.game.state.required_pot + " == " + JSON.stringify(this.game.sta
 
 
 
+
+  displayPlayers() {
+
+    for (let i = 0; i < 6; i++) {
+      console.log("displaying player info box: " + (i+1));
+
+      let divname = "#player-info"+(i+1);
+      let boxobj  = document.querySelector(divname);
+
+      boxobj.innerHTML = `
+	<div class="player-info-hand hand">
+          <img class="card" src="${this.card_img_dir}/S1.png">
+          <img class="card" src="${this.card_img_dir}/C1.png">
+	</div>
+	<div class="player-name">tucho@saito</div>
+	<div class="player-chips">1425 SAITO</div>
+	<div class="player-log">fold</div>
+      `;
+
+    }
+  }
 
   displayHand() {
     this.cardfan.render(this.app, this);

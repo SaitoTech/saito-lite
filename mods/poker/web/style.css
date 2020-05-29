@@ -5,6 +5,16 @@ body {
   margin: 0px;
 }
 
+.player-info {
+  min-width: 200px;
+  min-height: 200px;
+  border: 1px red;
+  position: absolute;
+  left: -500px;
+  top: 10px;
+  transform: scale(0.5);
+}
+
 .main {
   margin-top: unset;
   padding: unset;
