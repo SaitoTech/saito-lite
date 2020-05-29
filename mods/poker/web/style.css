@@ -5,7 +5,6 @@ body {
   margin: 0px;
 }
 
-
 .main {
   margin-top: unset;
   padding: unset;
@@ -36,37 +35,35 @@ body {
   padding-top: 100px;
 }
 
-.card {
-  width: 200px;
-  float: left;
-  position: relative;
+.card {}
+
+.deal .card {
+  width: 15hw;
 }
 
 .deal {
   margin: 0 auto;
-  border: 1px solid aqua;
-  height: 15vh;
   position: absolute;
   top: 30vh;
   left: 50vw;
-    transform: translateX(-50%);
+  transform: translateX(-50%);
+  width: unset;
 }
 
 .pot {
   margin: 0 auto;
-  border: 1px solid aqua;
-  height: 10vh;
-  width: 30vw;
   position: absolute;
   top: 45vh;
   left: 50vw;
-    transform: translateX(-50%);
+  transform: translateX(-50%);
+  font-size: 10vh;
+  text-shadow: 0 0 10px aliceblue;
+  -webkit-text-stroke: 2px #FFF8;
 }
 
-
 .player-info {
- width: 10vw;
-  height: 10vw;
+  width: 10vh;
+  height: 10vh;
   border: 1px solid darkorange;
   position: absolute;
 }
@@ -85,29 +82,28 @@ body {
 }
 
 .player-info.p3 {
-  left: 1em; 
+  left: 1em;
   top: 30vh;
   transform: translateY(-50%);
 }
 
 .player-info.p4 {
-  right: 1em; 
+  right: 1em;
   top: 30vh;
   transform: translateY(-50%);
 }
 
 .player-info.p5 {
-  left: 1em; 
+  left: 1em;
   top: 60vh;
   transform: translateY(-50%);
 }
 
 .player-info.p6 {
-  right: 1em; 
+  right: 1em;
   top: 60vh;
   transform: translateY(-50%);
 }
-
 
 /* .card:nth-child(1n+2) {
   left: -130px;
@@ -157,8 +153,6 @@ body {
   transform: rotate(20deg);
   left: -600px;
 }
-
-
 
 .suit {
   font-size: larger;

@@ -1199,11 +1199,11 @@ console.log("NAME 2: " + state.player_names[i]);
       let boxobj  = document.querySelector(divname);
 
       boxobj.innerHTML = `
-	<div class="player-info-hand hand" id="player-info-hand-${i+1}>
+	<div class="player-info-hand hand" id="player-info-hand-${i+1}">
           <img class="card" src="${this.card_img_dir}/S1.png">
           <img class="card" src="${this.card_img_dir}/C1.png">
 	</div>
-	<div class="player-info-name" id="player-info-name-${i+1}>${this.game.state.player_names[i]}</div>
+	<div class="player-info-name" id="player-info-name-${i+1}">${this.game.state.player_names[i]}</div>
 	<div class="player-info-chips" id="player-info-chips-${i+1}">${this.game.state.player_credit[i]} SAITO</div>
 	<div class="player-info-log" id="player-info-log-${i+1}"></div>
       `;
