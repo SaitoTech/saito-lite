@@ -52,7 +52,11 @@ class Poker extends GameTemplate {
       <div id="menu-container">
         <div>Players:</div>
        <ul>
-          <li class="menu-item" id="">Player 1</li>
+    `;
+    for (let i = 0; i < this.game.state.player_names.length; i++) { 
+      html += `      <li class="menu-item" id="player-${i+1}">Player 1 - ${this.game.state.player_names[i]}</li>`;
+    }
+    html += `
         </ul>
       </div>
     `;
@@ -60,9 +64,6 @@ class Poker extends GameTemplate {
     $('.hud-menu-overlay').html(html);
     $('.status').hide();
     $('.hud-menu-overlay').show();
-
-    //$('.menu-item').on('click', function() {
-    //+);
 
   }
 
@@ -1203,7 +1204,7 @@ console.log("NAME 2: " + state.player_names[i]);
           <img class="card" src="${this.card_img_dir}/C1.png">
 	</div>
 	<div class="player-info-name" id="player-info-name-${i+1}>${this.game.state.player_names[i]}</div>
-	<div class="player-info-chips" id="player-info-chips-${i+1}>${this.game.state.player_credit[i]} SAITO</div>
+	<div class="player-info-chips" id="player-info-chips-${i+1}">${this.game.state.player_credit[i]} SAITO</div>
 	<div class="player-info-log" id="player-info-log-${i+1}"></div>
       `;
 

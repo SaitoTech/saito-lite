@@ -5782,7 +5782,12 @@ this.startClock();
     this.game.over = 1;
     if (winner == "us") { this.game.winner = 2; }
     if (winner == "ussr") { this.game.winner = 1; }
-    if (winner == "tie game") { this.game.winner = 0; }
+    if (winner == "tie game") { 
+      this.game.winner = 0; 
+      this.game.over = 1;
+      this.tieGame(this.game.id);
+      return;
+    }
 
     if (this.game.winner != this.game.player) {
       //

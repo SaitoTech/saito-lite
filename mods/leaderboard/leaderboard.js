@@ -149,6 +149,8 @@ class Leaderboard extends ModTemplate {
         console.log('++++++' + tx.transaction.sig);
         console.log('+++++++++++++++++++++++++++++++++++++++');
 
+	if (txmsg.winner === "") { return; } // tie game
+
         winner.publickey = txmsg.winner;
         module = txmsg.module;
         for (let i = 0; i < tx.transaction.to.length; i++) {
@@ -175,7 +177,8 @@ console.log(" ... update ranking");
 
     if (this.app.BROWSER == 1) { return; }
 
-    if (winner.publickey == loser.publickey) { console.log("Winner and Loser are the Same Player"); return; }
+    if (winner.publickey === "") {              console.log("Leaderboard: winner is undefined"); return; }
+    if (winner.publickey === loser.publickey) { console.log("Leaderboard: inner and Loser are the Same Player"); return; }
 
     //
     // magic ranking system
