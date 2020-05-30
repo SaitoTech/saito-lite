@@ -1243,22 +1243,54 @@ console.log("NAME 2: " + state.player_names[i]);
   }
 
 
+  returnPlayersBoxArray() {
+
+    let player_box = [];
+
+    if (this.game.players.length == 2) { player_box = [1,2]; }
+    if (this.game.players.length == 3) { player_box = [1,3,4]; }
+    if (this.game.players.length == 4) { player_box = [1,3,2,4]; }
+    if (this.game.players.length == 5) { player_box = [1,5,3,4,6]; }
+    if (this.game.players.length == 6) { player_box = [1,5,3,2,4,6]; }
+
+    return player_box;
+
+  }
+
   displayPlayers() {
 
-    for (let i = 0; i < 6; i++) {
+    let player_box = this.returnPlayersBoxArray();;
 
-      let divname = "#player-info-"+(i+1);
+    for (let i = 0; i < this.game.players.length; i++) {
+
+      let sbp = this.game.player+i;
+      if (sbp >= this.game.players.length) { sbp -= this.game.players.length; }
+
+      let player_box_num = player_box[i];
+      let divname = "#player-info-"+player_box_num;
       let boxobj  = document.querySelector(divname);
 
-      boxobj.innerHTML = `
-	<div class="player-info-hand hand" id="player-info-hand-${i+1}">
-          <img class="card" src="${this.card_img_dir}/S1.png">
-          <img class="card" src="${this.card_img_dir}/C1.png">
+      let newhtml = `
+	<div class="player-info-hand hand tinyhand" id="player-info-hand-${i+1}">
+      `;
+      if (i == 0) {
+      newhtml += `
+          <img class="card" src="${this.card_img_dir}/${this.game.deck[0].cards[this.game.deck[0].hand[0]].name}">
+          <img class="card" src="${this.card_img_dir}/${this.game.deck[0].cards[this.game.deck[0].hand[1]].name}">
+      `;
+      } else {
+      newhtml += `
+          <img class="card" src="${this.card_img_dir}/red_back.png">
+          <img class="card" src="${this.card_img_dir}/red_back.png">
+      `;
+      }
+      newhtml += `
 	</div>
 	<div class="player-info-name" id="player-info-name-${i+1}">${this.game.state.player_names[i]}</div>
 	<div class="player-info-chips" id="player-info-chips-${i+1}">${this.game.state.player_credit[i]} SAITO</div>
 	<div class="player-info-log" id="player-info-log-${i+1}"></div>
       `;
+      boxobj.innerHTML = newhtml;
 
     }
   }
