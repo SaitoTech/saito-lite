@@ -20,13 +20,14 @@ class Poker extends GameTemplate {
     this.categories      = "Games Arcade Entertainment";
 
     this.card_img_dir    = '/poker/img/cards';
+    this.useHUD          = 0;
 
     this.minPlayers      = 2;
     this.maxPlayers      = 4;
     this.interface       = 1;
     this.boardgameWidth  = 5100;
 
-    this.hud = new GameHud(this.app, this.menuItems());
+    //this.hud = new GameHud(this.app, this.menuItems());
 
     return this;
 
@@ -35,7 +36,7 @@ class Poker extends GameTemplate {
 
 
 
-
+/****
   menuItems() {
     return {
       'game-player': {
@@ -66,7 +67,7 @@ class Poker extends GameTemplate {
     $('.hud-menu-overlay').show();
 
   }
-
+****/
 
 
 //
@@ -909,7 +910,6 @@ console.log("3. sending "+this.game.state.player_pot[this.game.player-1]+" to " 
 
 
 
-
   playerTurn() {
 
     let poker_self = this;
@@ -937,7 +937,7 @@ console.log("3. sending "+this.game.state.player_pot[this.game.player-1]+" to " 
       return;
     }
 
-    html += '<div class="menu-player">Player '+this.game.player;
+    html += '<div class="menu-player">'+this.game.state.player_names[this.game.player-1];
     if (this.game.player == this.game.state.big_blind_player) {
       html += " (big blind)";
     }
@@ -945,18 +945,8 @@ console.log("3. sending "+this.game.state.player_pot[this.game.player-1]+" to " 
       html += " (small blind)";
     }
     html += '</div>';
-
-    html += `<table class="menu-table" style="width:100%;text-align:center;">
-	       <tr>
-		 <td style="width:33%">${this.game.state.pot} pot</td></td>
-		 <td style="width:33%">${this.game.state.player_pot[this.game.player-1]} raised</td></td>
-		 <td style="width:33%">${this.game.state.player_credit[this.game.player-1]} in chips</td></td>
-	       </tr>
-	     </table>`;
-	
     html += '<ul>';
 
-console.log(this.game.state.required_pot + " == " + JSON.stringify(this.game.state.player_pot));
     let cost_to_call = this.game.state.required_pot - this.game.state.player_pot[this.game.player-1];
     if (cost_to_call < 0) { cost_to_call = 0; }
 
