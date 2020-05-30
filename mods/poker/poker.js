@@ -1141,6 +1141,9 @@ console.log("err: " + err);
     }
     for (let i = 0; i < num_of_players; i++) {
       state.player_names[i] = this.app.keys.returnIdentifierByPublicKey(this.game.players[i], 1);
+      if (state.player_names[i].indexOf("@") > 0) {
+	state.player_names[i] = state.player_names[i].substring(0, state.player_names[i].indexOf("@"));
+      }
 console.log("NAME: " + state.player_names[i]);
       if (state.player_names[i] === this.game.players[i]) {
         state.player_names[i] = this.game.players[i].substring(0, 10) + "...";
@@ -1293,6 +1296,18 @@ console.log("NAME 2: " + state.player_names[i]);
       boxobj.innerHTML = newhtml;
 
     }
+
+    //
+    // hide empty
+    //
+    for (let i = 1; i < 7; i++) {
+      let boxname = "#player-info-"+i;
+      let boxobj = document.querySelector(boxname);
+      if (boxobj.innerHTML == "") {
+	boxobj.style.display = "none";
+      }
+    }
+
   }
 
   displayHand() {
