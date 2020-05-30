@@ -23,8 +23,8 @@ class Imperium extends GameTemplate {
     this.game.confirms_received = 0;
     this.game.confirms_players  = [];
 
-    this.minPlayers = 3;
-    this.maxPlayers = 6;
+//    this.minPlayers = 3;
+//    this.maxPlayers = 6;
     this.type       = "Strategy Boardgame";
 
     this.hud = new GameHud(this.app, this.menuItems());
@@ -557,14 +557,24 @@ console.log("GAME QUEUE: " + this.game.queue);
 	  lmv = this.game.queue[le].split("\t");
 	}
   
+console.log("HERE WE ARE TESTING");
+
 	if (mv[1] == lmv[0]) {
 
+console.log("TEST HERE");
+
   	  if (mv[2] != undefined) {
-  
+
+	    if (this.game.confirms_received == undefined || this.game.confirms_received == null) { this.resetConfirmsNeeded(this.game.players_info.length); }
+
   	    this.game.confirms_received += parseInt(mv[2]);
   	    this.game.confirms_players.push(mv[3]);
 
+console.log("CONFIRMS RECEIVED: " + this.game.confirms_received);
+
   	    if (this.game.confirms_needed <= this.game.confirms_received) {
+
+console.log("CONFIRMS ADEQUATE!");
 
 	      this.resetConfirmsNeeded(0);
     	      this.game.queue.splice(qe-1, 2);
@@ -572,7 +582,10 @@ console.log("GAME QUEUE: " + this.game.queue);
 
   	    } else {
 
+console.log("CONFIRMS INADEQUATE!");
+
     	      this.game.queue.splice(qe, 1);
+console.log("QUEUE: " + this.game.queue);
 
 	      //
 	      // we are waiting for a set number of confirmations
@@ -662,7 +675,7 @@ console.log("GAME QUEUE: " + this.game.queue);
 
 	let votes_finished = 0;
 	for (let i = 0; i < this.game.players.length; i++) {
-	  if (this.game.state.voted_on_agenda[i] != 0) { votes_finished++; }
+	  if (this.game.state.voted_on_agenda[i][this.game.state.voted_on_agenda.length-1] != 0) { votes_finished++; }
 	}
 
 
@@ -718,10 +731,11 @@ console.log("GAME QUEUE: " + this.game.queue);
 	  //
 	  // prepare for next vote
 	  //
-	  for (let i = 0; i < this.game.players.length; i++) {
-	    this.game.state.voted_on_agenda[i] = 0;
-	  }
-	  this.game.state.voting_on_agenda++;
+	  //for (let i = 0; i < this.game.players.length; i++) {
+	  //  this.game.state.voted_on_agenda[i].push([]);
+	  //  this.game.state.voted_on_agenda[i][this.game.state.voted_on_agenda[i].length-1] = 0;
+	  //}
+	  //this.game.state.voting_on_agenda++;
 
 	}
 
@@ -738,13 +752,25 @@ console.log("GAME QUEUE: " + this.game.queue);
 	//
 	let laws = imperium_self.returnAgendaCards();
         let agenda_num = parseInt(mv[1]);
+console.log("AGENDA NUMBER IS: " + agenda_num);
 	let agenda_name = laws[imperium_self.game.state.agendas[agenda_num]].name;
+	this.game.state.voting_on_agenda = agenda_num;
 
-
+	//
+	// voting happens in turns
+	//
         let who_is_next = 0;
+console.log("PLAYERS: " + this.game.players.length);
         for (let i = 0; i < this.game.players.length; i++) {
-          if (this.game.state.voted_on_agenda[i] == 0) { who_is_next = i+1; i = this.game.players.length; }
-        }
+console.log(i);
+console.log(JSON.stringify(this.game.state));
+console.log(i);
+console.log(JSON.stringify(this.game.state.voted_on_agenda[i]));
+console.log("VOA: " + this.game.state.voted_on_agenda[i][agenda_num]);
+          if (this.game.state.voted_on_agenda[i][agenda_num] == 0) { who_is_next = i+1; i = this.game.players.length; }
+ 
+       }
+console.log("WHO IS NEXT: " + who_is_next);
 
 	if (this.game.player != who_is_next) {
 
@@ -757,7 +783,6 @@ console.log("GAME QUEUE: " + this.game.queue);
 	  this.updateStatus(html);
 
 	} else {
-
 
           let html  = 'The following agenda has advanced for consideration in the Galactic Senate:<p></p>';
   	      html += '<b>' + laws[imperium_self.game.state.agendas[agenda_num]].name + '</b>';
@@ -947,6 +972,8 @@ console.log("GAME QUEUE: " + this.game.queue);
   	//
   	// FLIP NEW AGENDA CARDS
   	//
+	// TODO - un-hardcode number with agendas_per_round
+	//
         this.game.queue.push("revealagendas");
         this.game.queue.push("notify\tFLIPCARD is completed!");
   	for (let i = 1; i <= this.game.players_info.length; i++) {
@@ -1475,7 +1502,10 @@ console.log("IN SECTOR: " + JSON.stringify(sys.s));
 	// unpack space ships
 	//
 	this.unloadStoredShipsIntoSector(player, sector);
-	this.continuePlayerTurn(player, sector);
+
+	if (player == this.game.player) {
+	  this.continuePlayerTurn(player, sector);
+	}
 
         this.game.queue.splice(qe, 1);
         return 0;
@@ -1810,7 +1840,7 @@ console.log("IN SECTOR: " + JSON.stringify(sys.s));
   
       if (id == "yes") {
   
-        imperium_self.addMove("DEAL\t2\t"+this.game.player+"\t2");
+        imperium_self.addMove("DEAL\t2\t"+imperium_self.game.player+"\t2");
         imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
         imperium_self.endTurn();
         return;
@@ -4422,6 +4452,7 @@ console.log("pushing player: " + (a+1));
         state.votes_available = [];
         state.votes_cast = [];
         state.voted_on_agenda = [];
+        state.agendas_per_round = 2;
         state.how_voted_on_agenda = [];
         state.voting_on_agenda = 0;
   
@@ -7082,7 +7113,7 @@ console.log("C: " + JSON.stringify(c));
 	//
         this.addMove("strategy\t"+card+"\t"+player+"\t2");
         this.addMove("resetconfirmsneeded\t"+this.game.players_info.length);
-        this.addMove("notify\t"+player+" gains 2 command and 1 strategy tokens");
+        this.addMove("notify\tFaction "+player+" gains 2 command and 1 strategy tokens");
         this.endTurn();
       }
   
@@ -7121,7 +7152,14 @@ console.log("C: " + JSON.stringify(c));
     }
     if (card == "politics") {
 
-      if (this.game.confirms_needed == 0) {
+console.log("JN POLITICS");
+console.log("CONFIRMS NEEDED: " + this.game.confirms_needed);
+
+      //
+      // if done or just starting
+      //
+      if (this.game.confirms_needed == 0 || this.game.confirms_needed == undefined || this.game.confirms_needed == null) {
+
         //
         // refresh votes --> total available
         //
@@ -7131,15 +7169,29 @@ console.log("C: " + JSON.stringify(c));
         this.game.state.voted_on_agenda = [];
         this.game.state.voting_on_agenda = 0;
 
+console.log("VOTING ON AGENDA INITIALIZATION");
         for (let i = 0; i < this.game.players.length; i++) {
+console.log("1");
 	  this.game.state.votes_available.push(this.returnAvailableVotes(i+1));
+console.log("2");
 	  this.game.state.votes_cast.push(0);
-	  this.game.state.voted_on_agenda[i] = [];
+console.log("3");
+console.log("4");
 	  this.game.state.how_voted_on_agenda[i] = "abstain";
-	  for (let z = 0; z < this.game.state.agendas_per_round; z++) {
-	    this.game.state.voted_on_agenda[z].push(0);
+console.log("5");
+	  this.game.state.voted_on_agenda[i] = [];
+console.log("6 - " + this.game.state.agendas_per_round);
+	  //
+	  // this is a hack, because agendas_per_round is not universally implemented, so we make sure we have two extra 0s
+	  //
+	  for (let z = 0; z < this.game.state.agendas_per_round+2; z++) {
+console.log(z);
+	    this.game.state.voted_on_agenda[i].push(0);
   	  }
+console.log("7");
         }
+console.log("VOTING ON AGENDA INITIALIZATION DONE");
+console.log(JSON.stringify(this.game.state.voted_on_agenda));
       }
 
 
@@ -7174,8 +7226,6 @@ console.log("C: " + JSON.stringify(c));
         $('.option').on('click', function() {
 
   	  let chancellor = (parseInt($(this).attr("id")) + 1);
-alert(chancellor);
-
 	  let laws = imperium_self.returnAgendaCards();
 	  let laws_selected = 0;
 
