@@ -1536,7 +1536,6 @@ console.log("IN SECTOR: " + JSON.stringify(sys.s));
   
   	imperium_self.game.players_info[player-1].strategy_cards_played.push(card);
 
-
   	if (stage == 1) {
   	  this.playStrategyCardPrimary(player, card);
   	}
@@ -5849,7 +5848,7 @@ console.log("pushing player: " + (a+1));
     strategy['initiative']	= { order : 1 , img : "/imperium/img/strategy/INITIATIVE.png" , name : "Initiative" };
     strategy['diplomacy'] 	= { order : 2 , img : "/imperium/img/strategy/DIPLOMACY.png" , name : "Diplomacy" };
     strategy['politics'] 	= { order : 3 , img : "/imperium/img/strategy/POLITICS.png" , name : "Politics" };
-    strategy['build'] 		= { order : 4 , img : "/imperium/img/strategy/BUILD.png" , name : "Build" };
+    strategy['infrastructure']	= { order : 4 , img : "/imperium/img/strategy/BUILD.png" , name : "Build" };
     strategy['trade'] 	 	= { order : 5 , img : "/imperium/img/strategy/TRADE.png" , name : "Trade" };
     strategy['military'] 	= { order : 6 , img : "/imperium/img/strategy/MILITARY.png" , name : "Military" };
     strategy['tech'] 		= { order : 7 , img : "/imperium/img/strategy/TECH.png" , name : "Tech Research" };
@@ -7152,9 +7151,6 @@ console.log("C: " + JSON.stringify(c));
     }
     if (card == "politics") {
 
-console.log("JN POLITICS");
-console.log("CONFIRMS NEEDED: " + this.game.confirms_needed);
-
       //
       // if done or just starting
       //
@@ -7169,29 +7165,18 @@ console.log("CONFIRMS NEEDED: " + this.game.confirms_needed);
         this.game.state.voted_on_agenda = [];
         this.game.state.voting_on_agenda = 0;
 
-console.log("VOTING ON AGENDA INITIALIZATION");
         for (let i = 0; i < this.game.players.length; i++) {
-console.log("1");
 	  this.game.state.votes_available.push(this.returnAvailableVotes(i+1));
-console.log("2");
 	  this.game.state.votes_cast.push(0);
-console.log("3");
-console.log("4");
 	  this.game.state.how_voted_on_agenda[i] = "abstain";
-console.log("5");
 	  this.game.state.voted_on_agenda[i] = [];
-console.log("6 - " + this.game.state.agendas_per_round);
 	  //
 	  // this is a hack, because agendas_per_round is not universally implemented, so we make sure we have two extra 0s
 	  //
 	  for (let z = 0; z < this.game.state.agendas_per_round+2; z++) {
-console.log(z);
 	    this.game.state.voted_on_agenda[i].push(0);
   	  }
-console.log("7");
         }
-console.log("VOTING ON AGENDA INITIALIZATION DONE");
-console.log(JSON.stringify(this.game.state.voted_on_agenda));
       }
 
 
