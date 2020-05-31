@@ -332,13 +332,7 @@ class Imperium extends GameTemplate {
     let factions = this.returnFactions();
 
     if (this.game.status != "") { this.updateStatus(this.game.status); }
-    if (this.game.log != "") { 
-      if (this.game.log.length > 0) {
-        for (let i = this.game.log.length-1; i >= 0; i--) {
-	  this.updateLog(this.game.log[i]);
-        }
-      }
-    }
+    if (this.game.log != "") { this.updateStatus(this.game.status); }
   
     //
     // specify players
@@ -914,6 +908,8 @@ console.log("GAME QUEUE: " + this.game.queue);
   
       if (mv[0] === "newround") {
 
+console.log("A");  
+
         //
   	// reset tech bonuses
   	//
@@ -923,10 +919,14 @@ console.log("GAME QUEUE: " + this.game.queue);
   	  }
   	}
   
+console.log("B");  
+
       	this.game.queue.push("resolve\tnewround");
     	this.game.state.round++;
     	this.updateLog("ROUND: " + this.game.state.round);
   	this.updateStatus("Moving into Round " + this.game.state.round);
+  
+console.log("C");
   
   	//
   	// SCORING
@@ -1506,11 +1506,6 @@ console.log("GAME QUEUE: " + this.game.queue);
       }
 
 
-
-
-
-
-
       if (mv[0] === "move") {
  
   	let player       = mv[1];
@@ -1522,8 +1517,11 @@ console.log("GAME QUEUE: " + this.game.queue);
   	//
   	// move any ships
   	//
+console.log("MOVE INSTRUCTION");
   	if (this.game.player != player || player_moves == 1) {
+console.log("REMOVING SPACE UNIT BY: " + shipjson);
   	  let sys = this.returnSystemAndPlanets(sector_from);
+console.log("IN SECTOR: " + JSON.stringify(sys.s));
   	  this.removeSpaceUnitByJSON(player, sector_from, shipjson);
           this.addSpaceUnitByJSON(player, sector_to, shipjson);
   	}
@@ -1533,6 +1531,8 @@ console.log("GAME QUEUE: " + this.game.queue);
   	this.updateSectorGraphics(sector_from);
   	this.updateSectorGraphics(sector_to);
 
+console.log("REMOVING MOVE!"); 
+ 
   	this.game.queue.splice(qe, 1);
   	return 1;
   
@@ -3125,6 +3125,8 @@ console.log("GAME QUEUE: " + this.game.queue);
         return;
       }
 
+console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+
       if (!planets_invaded.includes(planet_idx)) {
         imperium_self.addMove("invade_planet\t"+imperium_self.game.player+"\t"+1+"\t"+imperium_self.game.player+"\t"+sys.p[planet_idx].owner+"\t"+sector+"\t"+planet_idx);
         planets_invaded.push(planet_idx);
@@ -3236,7 +3238,9 @@ console.log("GAME QUEUE: " + this.game.queue);
               landing.planet_idx = planet_idx;
               landing.unitjson = unitjson;
  
+console.log("LOADING THIS UNIT INTO LANDING FORCES: " + unitjson); 
           landing_forces.push(landing);
+console.log("LANDING FORCES NOW HAVE N UNITS: " + landing_forces.length);
   
           let planet_counter = ".invadeplanet_"+planet_idx;
           let planet_forces = parseInt($(planet_counter).html());
@@ -3254,7 +3258,9 @@ console.log("GAME QUEUE: " + this.game.queue);
           //
           // submit when done
           //
+console.log("TOTAL FORCES LANDING: " + landing_forces.length);
           for (let y = 0; y < landing_forces.length; y++) {
+console.log("\n\nLANDING 1 UNIT: ");
     	    imperium_self.addMove("land\t"+imperium_self.game.player+"\t"+1+"\t"+landing_forces[y].sector+"\t"+landing_forces[y].source+"\t"+landing_forces[y].source_idx+"\t"+landing_forces[y].planet_idx+"\t"+landing_forces[y].unitjson);
           };
 	  landing_forces = [];  
@@ -3468,6 +3474,7 @@ console.log("GAME QUEUE: " + this.game.queue);
   };
   removeSpaceUnit(player, sector, unitname) {
     let sys = this.returnSystemAndPlanets(sector);
+  
     for (let i = 0; i < sys.s.units[player - 1].length; i++) {
       if (sys.s.units[player - 1][i].name === unitname) {
         let removedunit = sys.s.units[player - 1].splice(i, 1);
@@ -3574,6 +3581,10 @@ console.log("GAME QUEUE: " + this.game.queue);
   };
   unloadUnitByJSONFromShip(player, sector, ship_idx, unitjson) {
     let sys = this.returnSystemAndPlanets(sector);
+console.log("PLAYER: " + player);
+console.log("SHIPS IN SECTOR: " + JSON.stringify(sys.s.units));
+console.log("UNLOADING: " + unitjson);
+console.log("FROM: " + sector + " -- " + ship_idx);
     for (let i = 0; i < sys.s.units[player - 1][ship_idx].length; i++) {
       if (JSON.stringify(sys.s.units[player - 1][ship_idx][i]) === unitjson) {
         sys.s.units[player-1][ship_idx].storage.splice(i, 1);
@@ -3613,6 +3624,8 @@ console.log("GAME QUEUE: " + this.game.queue);
     }
     return "";
   };
+
+
   unloadStoredShipsIntoSector(player, sector) {
     let sys = this.returnSystemAndPlanets(sector);
     for (let i = 0; i < sys.s.units[player - 1].length; i++) {
@@ -5550,6 +5563,7 @@ console.log(JSON.stringify(sys.p[planet_idx].units[attacker-1]));
 	return 1;
       },
       postSystemActivation : function(imperium_self, player, sector) {
+alert("TESTING NEURAL IMPLANTS PSA");
 	if (imperium_self.game.player == player) {
 	  let c = confirm("Do you want to play Neural Implants?");
 	  if (c) {
@@ -6036,7 +6050,7 @@ console.log(JSON.stringify(sys.p[planet_idx].units[attacker-1]));
 	return 1;
       },
       menuOptionActivated:  function(imperium_self, player) { 
-	if (imperium_self.game.player != player) {
+	if (this.game.player != player) {
 	} else {
 alert("ORBITAL DROP");
 	  this.endTurn();
@@ -6052,7 +6066,7 @@ alert("ORBITAL DROP");
       prereqs     :       [],
       type	  :	  "normal" ,
       onNewRound     :    function(imperium_self, player, mycallback) {
-	imperium_self.game.players_info[player-1].new_tokens_per_round = 3;
+	this.game.players_info[player-1].new_tokens_per_round = 3;
         mycallback(1);
       },
     };
@@ -6645,7 +6659,7 @@ console.log("THE LAW FAILS!");
       name: "Federation of Sol",
       space_units: ["carrier","carrier","destroyer","fighter","fighter","fighter"],
       ground_units: ["infantry","infantry","infantry","infantry","infantry","spacedock"],
-      tech: ["neural-implants","electron-shielding","faction1-orbital-drop","faction1-versatile"]
+      tech: ["neural-implants","electron-shielding"]
     };
     factions['faction2'] = {
       homeworld: "sector39",
@@ -6656,7 +6670,7 @@ console.log("THE LAW FAILS!");
     };
     factions['faction3'] = {
       homeworld: "sector40",
-      name: "BarXXCha Kingdom",
+      name: "XXCha Kingdom",
       space_units: ["carrier","cruiser","cruiser","fighter","fighter","fighter"],
       ground_units: ["infantry","infantry","infantry","infantry","pds","spacedock"],
       tech: ["plasma-clusters"]
@@ -7541,7 +7555,7 @@ console.log("C: " + JSON.stringify(c));
       }
   
     }
-    if (card == "diplomacy") {
+    if (card == "negotiation") {
   
       if (this.game.player == player) {
   
@@ -7787,7 +7801,7 @@ console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.co
       return 0;
     }
   
-    if (card == "diplomacy") {
+    if (card == "negotiation") {
   
       if (this.game.player != player) {
   
