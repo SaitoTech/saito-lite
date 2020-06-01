@@ -465,29 +465,6 @@ body {
  background-size: cover;
  margin-bottom: 10px;
 }
-.planetcard_name {
- position: relative;
- top: 6%;
- font-weight: bold;
- text-align: center;
- width: inherit;
- margin-left: auto;
- margin-right: auto;
-}
-.planetcard_resources {
-  top: 70%;
-  width: 50%;
-  position: relative;
-  font-size: 3em;
-  float: left;
-}
-.planetcard_influence {
-  top: 70%;
-  width: 50%;
-  position: relative;
-  font-size: 3em;
-  float: left;
-}
 
 .strategycard {
  width:180px;
