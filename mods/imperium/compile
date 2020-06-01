@@ -6,11 +6,6 @@
 cat ./src/imperium-start.js > ./imperium.js
 
 #
-# data objects universal to all games (cards, tiles, systems, planet definitions, etc.)
-#
-cat ./src/imperium-data.js >> ./imperium.js
-
-#
 # HUD menus and Arcade response
 #
 cat ./src/imperium-ui.js >> ./imperium.js
@@ -31,12 +26,17 @@ cat ./src/imperium-queue.js >> ./imperium.js
 cat ./src/imperium-player.js >> ./imperium.js
 
 #
-# functions that inquire about board state (canPlayerX, doesUnitY, returnStateOfSector, etc.)
+# data objects universal to all games (cards, tiles, systems, planet definitions, that form game state etc.)
+#
+cat ./src/imperium-state.js >> ./imperium.js
+
+#
+# functions that return information about board/game state (canPlayerX, doesUnitY, returnStateOfSector, etc.)
 #
 cat ./src/imperium-state-checks.js >> ./imperium.js
 
 #
-# functions that automate updates of game state (combat operations, ownership transfers, etc.)
+# functions that update game state without human intervention (ground / space combat round execution, ownership transfers, etc.)
 #
 cat ./src/imperium-state-updates.js >> ./imperium.js
 

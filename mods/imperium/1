@@ -336,7 +336,7 @@
   	  if (k != attacker-1) {
   	    for (let z = 0; z < sys.p[j].units[k].length; z++) {
   	      if (sys.p[j].units[k][z].name == "pds") {
-  		if (sys.p[j].units[k][z].range >= distance[i]) {
+  		if (sys.p[j].units[k][z].range <= distance[i]) {
   	          let pds = {};
   	              pds.combat = sys.p[j].units[k][z].combat;
   		      pds.owner = (k+1);

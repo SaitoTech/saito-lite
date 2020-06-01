@@ -67,16 +67,16 @@
 
       for (let j = 0; j < this.totalPlayers; j++) {
         planets[i].units[j] = [];
-/*
+
 	if (j == 1) {
 	  planets[i].units[j].push(this.returnUnit("infantry", 1));
-	  planets[i].units[j].push(this.returnUnit("infantry", 1));
-	  planets[i].units[j].push(this.returnUnit("infantry", 1));
+//	  planets[i].units[j].push(this.returnUnit("infantry", 1));
+//	  planets[i].units[j].push(this.returnUnit("infantry", 1));
+//	  planets[i].units[j].push(this.returnUnit("pds", 1));
 	  planets[i].units[j].push(this.returnUnit("pds", 1));
-	  planets[i].units[j].push(this.returnUnit("pds", 1));
-	  planets[i].units[j].push(this.returnUnit("spacedock", 1));
+//	  planets[i].units[j].push(this.returnUnit("spacedock", 1));
 	}
-*/
+
       }
     }
   
@@ -180,7 +180,8 @@
       }
   
       systems[i].units[1] = [];
-  
+      systems[i].units[1].push(this.returnUnit("fighter", 1));  
+
     }
     return systems;
   };
@@ -1061,10 +1062,11 @@
         imperium_self.game.players_info[player-1].action_cards_bonus_when_issued = 1;
         mycallback(1);
       },
-      postSystemActivationTriggers : function(imperium_self, player, sector) {
+/*
+      activateSystemTriggers : function(imperium_self, player, sector) {
 	return 1;
       },
-      postSystemActivation : function(imperium_self, player, sector) {
+      activateSystemEvent : function(imperium_self, player, sector) {
 	if (imperium_self.game.player == player) {
 	  let c = confirm("Do you want to play Neural Implants?");
 	  if (c) {
@@ -1076,6 +1078,7 @@
 	  return 0;
 	}
       }
+*/
     };
     tech['resuscitation-pods']                    = {
       name        :       "Resuscitation Pods" ,
@@ -1706,13 +1709,63 @@ alert("ORBITAL DROP");
 
 
       //
-      // triggers when system is activated
+      // when system is activated
       //
-      if (tech[i].postSystemActivationTriggers == null) {
-	tech[i].postSystemActivationTriggers = function(imperium_self, player, sector) { return 0; }
+      if (tech[i].activateSystemTriggers == null) {
+	tech[i].activateSystemTriggers = function(imperium_self, player, sector) { return 0; }
       }
-      if (tech[i].postSystemActivation == null) {
+      if (tech[i].activateSystemEvent == null) {
 	tech[i].postSystemActivation = function(imperium_self, player, sector) { return 0; }
+      }
+
+      //
+      // when pds combat starts
+      //
+      if (tech[i].pdsSpaceDefenseTriggers == null) {
+	tech[i].pdsSpaceDefenseTriggers = function(imperium_self, player, sector) { return 0; }
+      }
+      if (tech[i].pdsSpaceDefenseEvent == null) {
+	tech[i].pdsSpaceDefenseEvent = function(imperium_self, player, sector) { return 0; }
+      }
+
+      //
+      // when space combat round starts
+      //
+      if (tech[i].spaceCombatTriggers == null) {
+	tech[i].spaceCombatTriggers = function(imperium_self, player, sector) { return 0; }
+      }
+      if (tech[i].pdsSpaceDefenseEvent == null) {
+	tech[i].pdsSpaceDefenseEvent = function(imperium_self, player, sector) { return 0; }
+      }
+
+      //
+      // when bombardment starts
+      //
+      if (tech[i].bombardmentTriggers == null) {
+	tech[i].bombardmentTriggers = function(imperium_self, player, sector) { return 0; }
+      }
+      if (tech[i].bombardmentEvent == null) {
+	tech[i].bombardmentEvent = function(imperium_self, player, sector) { return 0; }
+      }
+
+      //
+      // when planetry invasion starts
+      //
+      if (tech[i].planetaryInvasionTriggers == null) {
+	tech[i].planetaryInvasionTriggers = function(imperium_self, player, sector) { return 0; }
+      }
+      if (tech[i].planetaryInvasionEvent == null) {
+	tech[i].planetaryInvasionEvent = function(imperium_self, player, sector) { return 0; }
+      }
+
+      //
+      // when ground combat round starts
+      //
+      if (tech[i].groundCombatTriggers == null) {
+	tech[i].groundCombatTriggers = function(imperium_self, player, sector) { return 0; }
+      }
+      if (tech[i].groundCombatEvent == null) {
+	tech[i].groundCombatEvent = function(imperium_self, player, sector) { return 0; }
       }
 
     }

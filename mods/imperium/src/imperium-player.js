@@ -89,7 +89,7 @@
           let x = mytech.menuOption(this, this.game.player);
 	  html += x.html;
 	  tech_attach_menu_index.push(i);
-	  tech_attach_menu_triggers(x.trigger);
+	  tech_attach_menu_triggers.push(x.trigger);
 	  tech_attach_menu_events = 1;
 	}
       }
@@ -116,13 +116,12 @@
 	      return;
 	    }
 	  }
-          imperium_self.playerActivateSystem();
         }
-
 
         if (action2 == "activate") {
           imperium_self.playerActivateSystem();
         }
+
         if (action2 == "select_strategy_card") {
           imperium_self.playerSelectStrategyCard(function(success) {
   	  imperium_self.addMove("strategy\t"+success+"\t"+imperium_self.game.player+"\t1");
@@ -763,7 +762,7 @@
 	  return;
 	}
 	else {
-	  imperium_self.continuePlayerTurn(player, sector);
+	  imperium_self.playerContinueTurn(player, sector);
 	  return;
 	}
       }
@@ -960,14 +959,13 @@
         if (id == "confirm") {
   
           imperium_self.addMove("resolve\tplay");
-          imperium_self.addMove("continue\t"+imperium_self.game.player+"\t"+destination);
+          imperium_self.addMove("space_invasion\t"+imperium_self.game.player+"\t"+destination);
           for (let y = 0; y < obj.stuff_to_move.length; y++) { 
             imperium_self.addMove("move\t"+imperium_self.game.player+"\t"+1+"\t"+obj.ships_and_sectors[obj.stuff_to_move[y].i].sector+"\t"+destination+"\t"+JSON.stringify(obj.ships_and_sectors[obj.stuff_to_move[y].i].ships[obj.stuff_to_move[y].ii])); 
           }
           for (let y = obj.stuff_to_load.length-1; y >= 0; y--) {
             imperium_self.addMove("load\t"+imperium_self.game.player+"\t"+0+"\t"+obj.stuff_to_load[y].sector+"\t"+obj.stuff_to_load[y].source+"\t"+obj.stuff_to_load[y].source_idx+"\t"+obj.stuff_to_load[y].unitjson+"\t"+obj.stuff_to_load[y].shipjson); 
           }
-          imperium_self.addMove("pds_space_defense\t"+imperium_self.game.player+"\t"+destination);
           imperium_self.endTurn();
           return;
         };
@@ -1391,14 +1389,10 @@
         let c = confirm("Activate this system?");
         if (c) {
           sys.s.activated[imperium_self.game.player-1] = 1;
-          imperium_self.addMove("post_activate\t"+imperium_self.game.player+"\t"+pid);
-          imperium_self.addMove("activate\t"+imperium_self.game.player+"\t"+pid);
+          imperium_self.addMove("activate_system_post\t"+imperium_self.game.player+"\t"+pid);
+          imperium_self.addMove("activate_system\t"+imperium_self.game.player+"\t"+pid);
           imperium_self.addMove("expend\t"+imperium_self.game.player+"\t"+"command"+"\t"+1);
 	  imperium_self.endTurn();
-	  //
-	  // CONTINUE MOVED INTO ACTIVATE
-	  //
-          //imperium_self.playerPostActivateSystem(pid);
         }
       }
   
@@ -1406,16 +1400,15 @@
   }
   
   
+  //
+  // if we have arrived here, we are ready to continue with our options post
+  // systems activation, which are move / pds combat / space combat / bombardment
+  // planetary invasion / ground combat
+  //
   playerPostActivateSystem(sector) {
   
     let imperium_self = this;
   
-    //
-    // move
-    // space
-    // ground
-    // produce
-    //
     let html  = this.returnFaction(this.game.player) + ": <p></p><ul>";
         html += '<li class="option" id="move">move into sector</li>';
     if (this.canPlayerProduceInSector(this.game.player, sector)) {
@@ -1431,6 +1424,7 @@
       let action2 = $(this).attr("id");
   
       if (action2 == "move") {
+	imperium_self.addMove("invade_sector\t"+imperium_self.game.player+"\t"+sector);
         imperium_self.playerSelectUnitsToMove(sector);
       }
       if (action2 == "produce") {

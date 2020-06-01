@@ -55,16 +55,19 @@
   
   
   
-  pdsSpaceDefense(attacker, destination) {
+
+
+  pdsSpaceDefense(attacker, destination, hops=1) {
   
     let sys = this.returnSystemAndPlanets(destination);
-    let x = this.returnSectorsWithinHopDistance(destination, 1);
+    let x = this.returnSectorsWithinHopDistance(destination, hops);
     let sectors = [];
     let distance = [];
   
-  
     sectors = x.sectors;
     distance = x.distance;
+
+coonsole.log(JSON.stringify(x));
   
     //
     // get enemy pds units within range
