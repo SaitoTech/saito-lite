@@ -111,7 +111,9 @@
   
       let player_action = $(this).attr("id");
       let array_of_cards = imperium_self.returnPlayerPlanetCards(player_action+1); // all
-  
+
+console.log("PLANETS: " + JSON.stringify(array_of_cards)); 
+
       let html  = "<ul>";
       for (let z = 0; z < array_of_cards.length; z++) {
         if (imperium_self.game.planets[array_of_cards[z]].exhausted == 1) {

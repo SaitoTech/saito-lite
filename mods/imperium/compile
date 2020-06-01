@@ -56,4 +56,5 @@ cat ./src/imperium-strategy.js >> ./imperium.js
 cat ./src/imperium-end.js >> ./imperium.js
 
 
+npm run compile
 

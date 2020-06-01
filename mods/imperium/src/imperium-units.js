@@ -127,8 +127,10 @@
   };
   unloadUnitByJSONFromShip(player, sector, ship_idx, unitjson) {
     let sys = this.returnSystemAndPlanets(sector);
-    for (let i = 0; i < sys.s.units[player - 1][ship_idx].length; i++) {
-      if (JSON.stringify(sys.s.units[player - 1][ship_idx][i]) === unitjson) {
+console.log("player: " + player);
+console.log("SHIPS: " + JSON.stringify(sys.s.units));
+    for (let i = 0; i < sys.s.units[player - 1][ship_idx].storage.length; i++) {
+      if (JSON.stringify(sys.s.units[player - 1][ship_idx].storage[i]) === unitjson) {
         sys.s.units[player-1][ship_idx].storage.splice(i, 1);
         this.saveSystemAndPlanets(sys);
         return unitjson;
@@ -316,6 +318,7 @@
     let num = 0;
   
     for (let z = 0; z < sys.s.units[player-1].length; z++) {
+console.log("UNIT for "+player+" - " + JSON.stringify(sys.s.units[player-1][z]));
       if (sys.s.units[player-1][z].strength > 0 && sys.s.units[player-1][z].destroyed == 0) {
         num++;
       }
@@ -358,13 +361,17 @@
       let sys = this.returnSystemAndPlanets(i);
       for (let i = 0; i < sys.s.units.length; i++) {
         for (let ii = 0; ii < sys.s.units[i].length; ii++) {
-          sys.s.units[i][ii].strength = sys.s.units[i][ii].max_strength;
+	  if (sys.s.units[i][ii].max_strenth > sys.s.units[i][ii].strength) {
+            sys.s.units[i][ii].strength = sys.s.units[i][ii].max_strength;
+	  }
         }
       }
       for (let i = 0; i < sys.p.length; i++) {
         for (let ii = 0; ii < sys.p[i].units; ii++) {
-          for (let iii = 0; iii < sys.p[i].units[ii].length; ii++) {
-            sys.p[i].units[ii][iii].strength = sys.p[i].units[ii][iii].max_strength;
+          for (let iii = 0; iii < sys.p[i].units[ii].length; iii++) {
+	    if (sys.p[i].units[ii][iii].max_strenth > sys.p[i].units[ii][iii].strength) {
+              sys.p[i].units[ii][iii].strength = sys.p[i].units[ii][iii].max_strength;
+            }
           }
         }
       }
@@ -375,7 +382,7 @@
   
   
   returnUnit(type = "", player) {
-  
+
     let unit = {};
   
     unit.name = type;
@@ -384,13 +391,13 @@
     unit.cost = 1;		   // cost to produce
     unit.capacity = 0;		   // number of units this unit can store
     unit.can_be_stored = 0;	   // can this be stored in other units
-    unit.capacity_required = 0;      // how many storage units does it occupy
+    unit.capacity_required = 0;    // how many storage units does it occupy
   
     unit.max_strength = 0;	   // number of hits can sustain (fully repaired)
     unit.strength = 0;	   	   // number of hits can sustain (dead at zero)
-    unit.combat = 10;   	           // number of hits on rolls of N
+    unit.combat = 10;   	   // number of hits on rolls of N
     unit.destroyed = 0;		   // set to 1 when unit is destroyed in battle
-  
+
     unit.move = 0;
     unit.range = 1;		   // range for firing (pds)
     unit.production = 0;
@@ -475,7 +482,6 @@
       unit.combat = 9;
       unit.strength = 1;
     }
-  
   
     unit = this.upgradeUnit(unit, player);
   

@@ -116,17 +116,30 @@
  
     let defender = 0;
     let defender_found = 0;
+    let attacker_found = 0;
+
+
     for (let i = 0; i < sys.s.units.length; i++) {
       if (attacker != (i+1)) {
         if (sys.s.units[i].length > 0) {
-        defender = (i+1);
-        defender_found = 1;
+          defender = (i+1);
+          defender_found = 1;
         }
+      } else {
+        if (sys.s.units[i].length > 0) {
+	  attacker_found = 1;
+	}
       }
     }
- 
+
+console.log("defender_found ---> " + defender_found); 
+console.log("attacker_found ---> " + attacker_found); 
+
     if (defender_found == 0) {
       return 0;
+    }
+    if (defender_found == 1 && attacker_found == 1) { 
+      return 1;
     }
 
     return 0;
@@ -287,7 +300,10 @@
 
 
   returnSectorsWithinHopDistance(destination, hops) {
-  
+
+console.log("DEST: " + destination);  
+console.log("HOPS: " + hops);
+
     let sectors = [];
     let distance = [];
     let s = this.returnSectors();
@@ -330,12 +346,19 @@
       // some sectors not playable in 3 player game
       //
       if (sys != null) {
+
+console.log(".1 " + JSON.stringify(sys));
   
         for (let j = 0; j < sys.p.length; j++) {
+console.log(".1 "+ j);
           for (let k = 0; k < sys.p[j].units.length; k++) {
+console.log(".2 "+ k);
   	  if (k != attacker-1) {
+console.log(".3");
   	    for (let z = 0; z < sys.p[j].units[k].length; z++) {
+console.log(".4" + z);
   	      if (sys.p[j].units[k][z].name == "pds") {
+console.log("RANGE: " + sys.p[j].units[k][z].range + " -- " + distance[i]);
   		if (sys.p[j].units[k][z].range >= distance[i]) {
   	          let pds = {};
   	              pds.combat = sys.p[j].units[k][z].combat;
@@ -495,19 +518,24 @@
   }
   
   
-  returnPlayerHomeworldPlanets(player=this.game.player) {
+  returnPlayerHomeworldPlanets(player=null) {
+    if (player == null) { player = this.game.player; }
     let home_sector = this.game.board[this.game.players_info[player-1].homeworld].tile;  // "sector";
     return this.game.systems[home_sector].planets;
   }
   
-  returnPlayerUnexhaustedPlanetCards(player=this.game.player) {
+  returnPlayerUnexhaustedPlanetCards(player=null) {
+    if (player == null) { player = this.game.player; }
     return this.returnPlayerPlanetCards(player, 1);
   }
-  returnPlayerExhaustedPlanetCards(player=this.game.player) {
+  returnPlayerExhaustedPlanetCards(player=null) {
+    if (player == null) { player = this.game.player; }
     return this.returnPlayerPlanetCards(player, 2);
   }
-  returnPlayerPlanetCards(player=this.game.player, mode=0) {
+  returnPlayerPlanetCards(player=null, mode=0) {
   
+    if (player == null) { player == this.game.player; }
+
     let x = [];
   
     for (var i in this.game.planets) {

@@ -750,6 +750,10 @@ console.log("GAME QUEUE: " + this.game.queue);
   	return 1;
       }
   
+
+
+
+
       if (mv[0] === "invade_planet") {
   
   	let player       = mv[1];
@@ -758,6 +762,8 @@ console.log("GAME QUEUE: " + this.game.queue);
   	let defender     = mv[4];
         let sector       = mv[5];
         let planet_idx   = mv[6];
+
+alert("invading planet!");
   
   	this.updateLog(this.returnFaction(player) + " invades " + this.returnPlanetName(sector, planet_idx));
   
@@ -879,17 +885,25 @@ console.log("GAME QUEUE: " + this.game.queue);
         let unitjson     = mv[7];
 
         let sys = this.returnSystemAndPlanets(sector);
-  
+
+console.log("TESTING A");  
+console.log(JSON.stringify(mv));
+
   	if (this.game.player != player || player_moves == 1) {
           if (source == "planet") {
+console.log("TESTING A-1");  
             this.unloadUnitByJSONFromPlanet(player, sector, source_idx, unitjson);
             this.loadUnitByJSONOntoPlanet(player, sector, planet_idx, unitjson);
           } else {
             if (source == "ship") {
+console.log("TESTING B-1 " + source_idx);  
               this.unloadUnitByJSONFromShip(player, sector, source_idx, unitjson);
+console.log("TESTING B-1 " + planet_idx);
               this.loadUnitByJSONOntoPlanet(player, sector, planet_idx, unitjson);
+console.log("TESTING B-1");  
             } else {
-              //this.loadUnitByJSONOntoShipByJSON(player, sector, shipjson, unitjson);
+console.log("TESTING C-1");  
+              this.loadUnitByJSONOntoShipByJSON(player, sector, shipjson, unitjson);
             }
           }
         }
@@ -1175,10 +1189,17 @@ alert("firing PDS: ");
       }
       if (mv[0] === "space_combat_post") {
 
+console.log("entering here");
+
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
         this.updateSectorGraphics(sector);
   	this.game.queue.splice(qe, 1);
+
+	//
+	// have a round of space combat
+	//
+	this.spaceCombat(player, sector);
 
   	if (this.hasUnresolvedSpaceCombat(player, sector) == 1) {
 	  if (this.game.player == player) {
@@ -1190,13 +1211,188 @@ alert("firing PDS: ");
 	    return 0;
 	  }
 	} else {
-	  // continue
 	  return 1;
 	}
+
+      }
+
+
+
+
+
+
+      /////////////////
+      // BOMBARDMENT //
+      /////////////////
+      if (mv[0] === "bombardment") {
+  
+  	let player       = mv[1];
+        let sector       = mv[2];
+        let planet_idx   = mv[3];
+	let technologies = this.returnTechnologyTree();
+
+  	this.game.queue.splice(qe, 1);
+
+        let speaker_order = this.returnSpeakerOrder();
+
+        for (let i = 0; i < speaker_order.length; i++) {
+          let techs = this.game.players_info[speaker_order[i]-1].tech;
+          for (let k = 0; k < techs.length; k++) {
+            if (technologies[techs[k]].bombardmentTriggers(this, player, sector) == 1) {
+              this.game.queue.push("bombardment_event\t"+speaker_order[i]+"\t"+sector+"\t"+planet_idx+"\t"+techs[k]);
+            }
+          }
+        }
+  	return 1;
+      }
+      if (mv[0] === "bombardment_event") {
+  
+        let technologies = this.returnTechnologyTree();
+  	let player       = parseInt(mv[1]);
+        let sector	 = mv[2];
+        let planet_idx	 = mv[3];
+        let tech	 = mv[4];
+
+	return technologies[tech].bombardmentEvent(this, player, sector, planet_idx);
+
+      }
+      if (mv[0] === "bombardment_post") {
+
+  	let player       = parseInt(mv[1]);
+        let sector	 = mv[2];
+	let planet_idx   = mv[3];
+
+        this.updateSectorGraphics(sector);
+  	this.game.queue.splice(qe, 1);
 
 	return 1;
 
       }
+
+
+
+      ///////////////////////
+      // PLANETARY DEFENSE //
+      ///////////////////////
+      if (mv[0] === "planetary_defense") {
+  
+  	let player       = mv[1];
+        let sector       = mv[2];
+        let planet_idx   = mv[3];
+	let technologies = this.returnTechnologyTree();
+
+  	this.game.queue.splice(qe, 1);
+
+        let speaker_order = this.returnSpeakerOrder();
+
+        for (let i = 0; i < speaker_order.length; i++) {
+          let techs = this.game.players_info[speaker_order[i]-1].tech;
+          for (let k = 0; k < techs.length; k++) {
+            if (technologies[techs[k]].planetaryDefenseTriggers(this, player, sector) == 1) {
+              this.game.queue.push("planetary_defense_event\t"+speaker_order[i]+"\t"+sector+"\t"+planet_idx+"\t"+techs[k]);
+            }
+          }
+        }
+  	return 1;
+      }
+      if (mv[0] === "planetary_defense_event") {
+  
+        let technologies = this.returnTechnologyTree();
+  	let player       = parseInt(mv[1]);
+        let sector	 = mv[2];
+        let planet_idx	 = mv[3];
+        let tech	 = mv[4];
+
+	return technologies[tech].planetaryDefenseEvent(this, player, sector, planet_idx);
+
+      }
+      if (mv[0] === "planetary_defense_post") {
+
+  	let player       = parseInt(mv[1]);
+        let sector	 = mv[2];
+	let planet_idx   = mv[3];
+
+        this.updateSectorGraphics(sector);
+  	this.game.queue.splice(qe, 1);
+
+	return 1;
+
+      }
+
+
+
+
+
+      ///////////////////
+      // GROUND COMBAT //
+      ///////////////////
+      if (mv[0] === "ground_combat") {
+  
+  	let player       = mv[1];
+        let sector       = mv[2];
+        let planet_idx   = mv[3];
+	let technologies = this.returnTechnologyTree();
+
+  	this.game.queue.splice(qe, 1);
+
+        let speaker_order = this.returnSpeakerOrder();
+
+        for (let i = 0; i < speaker_order.length; i++) {
+          let techs = this.game.players_info[speaker_order[i]-1].tech;
+          for (let k = 0; k < techs.length; k++) {
+            if (technologies[techs[k]].groundCombatTriggers(this, player, sector, planet_idx) == 1) {
+              this.game.queue.push("ground_combat_event\t"+speaker_order[i]+"\t"+sector+"\t"+planet_idx+"\t"+techs[k]);
+            }
+          }
+        }
+  	return 1;
+      }
+      if (mv[0] === "ground_combat_event") {
+  
+        let technologies = this.returnTechnologyTree();
+  	let player       = parseInt(mv[1]);
+        let sector	 = mv[2];
+        let planet_idx 	 = mv[3];
+        let tech	 = mv[4];
+
+	return technologies[tech].groundCombatEvent(this, player, sector, planet_idx);
+
+      }
+      if (mv[0] === "ground_combat_post") {
+
+  	let player       = parseInt(mv[1]);
+        let sector	 = mv[2];
+        let planet_idx	 = mv[3];
+
+        this.updateSectorGraphics(sector);
+  	this.game.queue.splice(qe, 1);
+
+	//
+	// have a round of ground combat
+	//
+	this.groundCombat(player, sector, planet_idx);
+
+  	if (this.hasUnresolvedGroundCombat(player, sector, planet_idx) == 1) {
+	  if (this.game.player == player) {
+	    this.addMove("ground_combat_post\t"+player+"\t"+sector+"\t"+planet_idx);
+	    this.addMove("ground_combat\t"+player+"\t"+sector+"\t"+planet_idx);
+	    this.endTurn();
+	    return 0;
+	  } else {
+	    return 0;
+	  }
+	} else {
+	  return 1;
+	}
+
+      }
+
+
+
+
+
+
+
 
 
 
@@ -1305,8 +1501,6 @@ alert("Player should choose what planets to invade (if possible)");
 
       if (mv[0] === "move") {
  
-alert("moving");
-
   	let player       = mv[1];
         let player_moves = parseInt(mv[2]);
         let sector_from  = mv[3];
@@ -1325,7 +1519,6 @@ alert("moving");
   	this.updateSectorGraphics(sector_from);
   	this.updateSectorGraphics(sector_to);
 
-alert("sector graphics updated!");
   	this.game.queue.splice(qe, 1);
   	return 1;
   
@@ -1370,7 +1563,14 @@ alert("sector graphics updated!");
 
         this.game.queue.splice(qe, 1);
 
-	this.playerContinueTurn(player, sector);
+  	//
+  	// update sector
+  	//
+  	this.updateSectorGraphics(sector);
+  
+	if (this.game.player == player) {
+  	  this.playerContinueTurn(player, sector);
+	}
 
         return 0;
 
@@ -1381,6 +1581,7 @@ alert("sector graphics updated!");
   
   	let player = mv[1];
   	let sector = mv[2];
+        this.game.queue.splice(qe, 1);
 
 	//
 	// unpack space ships
@@ -1396,7 +1597,6 @@ alert("sector graphics updated!");
 	  this.endTurn();
 	}
 
-        this.game.queue.splice(qe, 1);
         return 0;
 
       }

@@ -1005,8 +1005,28 @@
   
         obj.stuff_to_move.push(x);
         updateInterface(imperium_self, obj, updateInterface);
-  
-        if (total_ship_capacity > 0) {
+ 
+
+        //
+        // is there stuff left to move?
+        //
+	let stuff_available_to_move = 0;
+        for (let i = 0; i < sys.p.length; i++) {
+          let planetary_units = sys.p[i].units[imperium_self.game.player-1];
+          for (let k = 0; k < planetary_units.length; k++) {
+            if (planetary_units[k].name == "infantry") {
+              stuff_available_to_move++;
+            }
+          }
+        }
+        for (let i = 0; i < sys.s.units[imperium_self.game.player-1].length; i++) {
+          if (sys.s.units[imperium_self.game.player-1][i].name == "fighter") {
+    	    stuff_available_to_move++;
+          }
+        }
+
+
+        if (total_ship_capacity > 0 && stuff_available_to_move > 0) {
           let remove_what_capacity = 0;
           for (let z = 0; z < obj.stuff_to_load.length; z++) {
     	    let x = obj.stuff_to_load[z];
@@ -1206,6 +1226,10 @@
       let planet_idx = $(this).attr('id');
   
       if (planet_idx == "confirm") {
+	for (let i = 0; i < planets_invaded.length; i++) {
+          imperium_self.addMove("bombardment_post\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
+          imperium_self.addMove("bombardment\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
+	}
         imperium_self.endTurn();
         return;
       }
@@ -1263,17 +1287,15 @@
         let ship = sys.s.units[player-1][i];
         forces_on_ships.push(0);
         for (let j = 0; j < ship.storage.length; j++) {
-  	if (ship.storage[j].name === "infantry") {
+  	  if (ship.storage[j].name === "infantry") {
             if (populated_ship_forces == 0) {
               forces_on_ships[i]++;
-  	  } else {
-  
-  	    // need to subtract forces removed from ship
-  
+  	    }
   	  }
-  	}
         }
-        html += '<li class="invadechoice" id="invasion_ship_'+i+'">'+ship.name+' (<span class="ship_'+i+'_infantry">'+forces_on_ships[i]+'</span>)</li>';
+        if (forces_on_ships[i] > 0) {
+          html += '<li class="invadechoice" id="invasion_ship_'+i+'">'+ship.name+' (<span class="ship_'+i+'_infantry">'+forces_on_ships[i]+'</span>)</li>';
+        }
       }
       populated_ship_forces = 1;
       html += '<li class="invadechoice" id="finished_0_0">finish selecting</li>';
@@ -1339,6 +1361,21 @@
           //
           // submit when done
           //
+	  let planets_to_invade = [];
+	  for (let y = 0; y < landing_forces.length; y++) {
+	    let b = 0;
+	    for (let z = 0; z < planets_to_invade.length; z++) {
+	      if (landing_forces[y].planet_idx == planets_to_invade[z]) { b = 1; }
+	    }
+            if (b == 0) {
+    	      imperium_self.addMove("ground_combat_post\t"+imperium_self.game.player+"\t"+landing_forces[y].sector+"\t"+landing_forces[y].planet_idx);
+    	      imperium_self.addMove("ground_combat\t"+imperium_self.game.player+"\t"+landing_forces[y].sector+"\t"+landing_forces[y].planet_idx);
+    	      imperium_self.addMove("planetary_defense_post\t"+imperium_self.game.player+"\t"+landing_forces[y].sector+"\t"+landing_forces[y].planet_idx);
+    	      imperium_self.addMove("planetary_defense\t"+imperium_self.game.player+"\t"+landing_forces[y].sector+"\t"+landing_forces[y].planet_idx);
+	      planets_to_invade.push(landing_forces[y].planet_idx);
+	    }
+	  }
+
           for (let y = 0; y < landing_forces.length; y++) {
     	    imperium_self.addMove("land\t"+imperium_self.game.player+"\t"+1+"\t"+landing_forces[y].sector+"\t"+landing_forces[y].source+"\t"+landing_forces[y].source_idx+"\t"+landing_forces[y].planet_idx+"\t"+landing_forces[y].unitjson);
           };

@@ -61,6 +61,7 @@
 
   
     for (var i in planets) {
+
       planets[i].exhausted = 0;
       planets[i].owner = -1;
       planets[i].units = [this.totalPlayers]; // array to store units
@@ -1751,21 +1752,22 @@ alert("ORBITAL DROP");
       //
       // when planetry invasion starts
       //
-      if (tech[i].planetaryInvasionTriggers == null) {
-	tech[i].planetaryInvasionTriggers = function(imperium_self, player, sector) { return 0; }
+      if (tech[i].planetaryDefenseTriggers == null) {
+	tech[i].planetaryDefenseTriggers = function(imperium_self, player, sector, planet_idx) { return 0; }
       }
-      if (tech[i].planetaryInvasionEvent == null) {
-	tech[i].planetaryInvasionEvent = function(imperium_self, player, sector) { return 0; }
+      if (tech[i].planetaryDefenseEvent == null) {
+	tech[i].planetaryDefenseEvent = function(imperium_self, player, sector, planet_idx) { return 0; }
       }
+
 
       //
       // when ground combat round starts
       //
       if (tech[i].groundCombatTriggers == null) {
-	tech[i].groundCombatTriggers = function(imperium_self, player, sector) { return 0; }
+	tech[i].groundCombatTriggers = function(imperium_self, player, sector, planet_idx) { return 0; }
       }
       if (tech[i].groundCombatEvent == null) {
-	tech[i].groundCombatEvent = function(imperium_self, player, sector) { return 0; }
+	tech[i].groundCombatEvent = function(imperium_self, player, sector, planet_idx) { return 0; }
       }
 
     }
@@ -2204,7 +2206,7 @@ console.log("THE LAW FAILS!");
     };
     factions['faction3'] = {
       homeworld: "sector40",
-      name: "BarXXCha Kingdom",
+      name: "XXCha Kingdom",
       space_units: ["carrier","cruiser","cruiser","fighter","fighter","fighter"],
       ground_units: ["infantry","infantry","infantry","infantry","pds","spacedock"],
       tech: ["plasma-clusters"]
