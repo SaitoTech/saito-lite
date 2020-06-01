@@ -22,7 +22,7 @@ body {
 .status {
   position: absolute;
   bottom: 1em;
-  left: 60vw;
+  left: 54vw;
   height: 32vh;
   width: 32vh !important;
   color: #fff;
@@ -54,12 +54,13 @@ body {
 
 .deal .card {
   width: 8vw;
+  max-width: 15vh;
 }
 
 .deal {
   margin: 0 auto;
   position: absolute;
-  top: 30vh;
+  top: 25vh;
   left: 50vw;
   transform: translateX(-50%);
   width: unset;
@@ -68,7 +69,7 @@ body {
 .pot {
   margin: 0 auto;
   position: absolute;
-  top: 56vh;
+  top: 50vh;
   left: 50vw;
   transform: translateX(-50%);
   font-size: 10vh;
@@ -78,7 +79,7 @@ body {
 
 .player-info {
   width: 25vh;
-  height: 25vh;
+  height: 20vh;
   background-color: #4448;
   color: #fff;
   padding: 1em;
@@ -86,16 +87,17 @@ body {
 }
 
 .player-info.p1 {
-  width: 32vh;
+  min-width: 30vh;
   height: 32vh;
   bottom: 1em;
-  left: 50vw;
+  left: 43vw;
   transform: translateX(-50%);
-  ;
+  width: 16vw;
 }
 
 .player-info-name {
   font-size: 3vh;
+  text-align: center;
 }
 
 .player-info-chips {
@@ -155,7 +157,7 @@ body {
 
 .cardfan {
   bottom: 30vh;
-  left: 50vw;
+  left: 45vw;
   transform: translateX(-40vh);
 }
 
@@ -239,79 +241,82 @@ body {
   display: none;
 }
 
-@media all and (orientation:portrait) {
+@media all and (max-aspect-ratio:13/9) {
   .deal .card {
-    width: 15vw;
+    width: 18vw;
+    max-width: 9vh;
   }
   .deal {
     position: absolute;
-    top: 25vh;
+    top: 16vh;
     left: 50vw;
     transform: translateX(-50%);
-    width: 100vw;
-    margin: 0 15vw;
+    width: 92vw;
+    max-width: 45vh;
+    margin: 0 auto;
   }
   .pot {
-    top: 35vh;
-    font-size: 10vw;
+    top: 30vh;
+    font-size: 6vh;
   }
   .player-info-hand .card {
-    width: 10vw;
+    width: 4vh;
   }
-
   .cardfan {
-    top: 41vh;
-    left: 50vw;
+    top: 37vh;
+    left: 50%;
     transform: translateX(-50%);
     padding: unset;
-}
-
-.cardfan .card {
-  width: 14vw;
-  margin: 0 -10vw;
-}
-
+    width: 14vh;
+    margin: auto;
+  }
+  .cardfan .card {
+    width: 10vh;
+  }
   .p2 .hand, .p3 .hand, .p4 .hand {
     right: -3vh;
     left: unset;
-    top: 13vh;
+    top: 6vh;
   }
   .p5 .hand {
     right: -3vw;
     left: unset;
-    top: -10vh;
+    top: -9vh;
   }
   .p6 .hand {
     right: -3vw;
-    top: -10vh;
+    top: -9vh;
   }
   .player-info {
     width: 25vw;
-    height: 25vw;
+    height: 7vh;
     background-color: #4448;
     color: #fff;
     padding: 1em;
     position: absolute;
   }
   .player-info.p1 {
-    width: 36vw;
-    height: 36vw;
+    width: 100vw;
+    height: 17vh;
     top: 54vh;
     left: 50vw;
     transform: translateX(-50%);
-}
+  }
   .player-info-name {
-    font-size: 3vw;
+    font-size: 1.5vh;
+    text-align: center;
+  }
+  .player-info-log {
+    font-size: 1vh;
   }
   .player-info-chips {
     padding: 0.5em;
     text-align: center;
-    font-size: 2vw;
+    font-size: 1vh;
   }
   #player-info-hand-1 {
     display: none;
   }
-  
   .player-info.p2 {
     left: 50vw;
     top: 1em;
@@ -329,21 +334,22 @@ body {
   }
   .player-info.p5 {
     left: 1em;
-    top: 54vh;
+    top: 42vh;
     transform: translateY(-50%);
   }
   .player-info.p6 {
     right: 1em;
-    top: 54vh;
+    top: 42vh;
     transform: translateY(-50%);
   }
   .status {
+    width: 100vw !important;
     position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 25vh;
-    width: 32vh !important;
-    color: #fff;
+    top: 61vh;
+    border: 1px solid aqua;
+    left: 0px;
+    height: 10vh;
+    background-color: #fff2;
   }
 }
 
@@ -351,7 +357,6 @@ body {
   .status {
     width: 100vw !important;
   }
-
   .player-info-name {
     font-size: 4vw;
   }
