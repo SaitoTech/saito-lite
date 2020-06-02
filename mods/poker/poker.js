@@ -36,41 +36,7 @@ class Poker extends GameTemplate {
 
 
 
-/****
-  menuItems() {
-    return {
-      'game-player': {
-        name: 'Players',
-        callback: this.handlePlayersMenuItem.bind(this)
-      },
-    }
-  }
-
-  handlePlayersMenuItem() {
-
-    let twilight_self = this;
-    let html = `
-      <div id="menu-container">
-        <div>Players:</div>
-       <ul>
-    `;
-    for (let i = 0; i < this.game.state.player_names.length; i++) { 
-      html += `      <li class="menu-item" id="player-${i+1}">Player 1 - ${this.game.state.player_names[i]}</li>`;
-    }
-    html += `
-        </ul>
-      </div>
-    `;
-
-    $('.hud-menu-overlay').html(html);
-    $('.status').hide();
-    $('.hud-menu-overlay').show();
-
-  }
-****/
-
-
-//
+  //
   // manually announce arcade banner support
   //
   respondTo(type) {
@@ -337,11 +303,11 @@ console.log("POKER QUEUE: " + JSON.stringify(this.game.queue));
       }
 
       if (mv[0] === "winner") {
-  this.updateStatus("Game Over: Player " + mv[1] + " wins!");
-  this.updateLog("Game Over: Player " + mv[1] + " wins!");
-  this.game.over = 1;
-  this.saveGame(this.game.id);
-  return 0;
+        this.updateStatus("Game Over: Player " + mv[1] + " wins!");
+        this.updateLog("Game Over: Player " + mv[1] + " wins!");
+        this.game.over = 1;
+        this.saveGame(this.game.id);
+        return 0;
       }
 
       if (mv[0] === "turn") {
@@ -811,7 +777,7 @@ console.log("2. sending "+this.game.state.player_pot[this.game.player-1]+" to " 
     this.updatePlayerLog(player, "fold");
     this.updateLog("Player " + player + " folds.");
     this.game.state.passed[player-1] = 1;
-          this.game.queue.splice(qe, 1);
+    this.game.queue.splice(qe, 1);
 
     //
     // if everyone folds, last player in wins
@@ -823,7 +789,7 @@ console.log("2. sending "+this.game.state.player_pot[this.game.player-1]+" to " 
         players_left++;
         player_left_idx = i;
       }
-          }
+    }
 
     if (players_left == 1) {
 
@@ -1102,27 +1068,27 @@ console.log("err: " + err);
         state.turn = 0;
         state.flipped = 0;
 
-  state.player_cards = {};
-  state.player_cards_reported = 0;
-  state.player_cards_required = 0;
+        state.player_cards = {};
+        state.player_cards_reported = 0;
+        state.player_cards_required = 0;
 
-  state.plays_since_last_raise = -1;
+        state.plays_since_last_raise = -1;
 
         state.started = 0;
         state.pot = 0.0;
         state.player_names = [];
         state.player_pot = [];
-  state.player_credit = [];
-  state.passed = [];
-  state.round = 0;
-  state.big_blind = 50;
-  state.small_blind = 25;
-  state.big_blind_player = 1;
-  state.small_blind_player = 2;
-  state.big_blind_paid = 0;
-  state.small_blind_paid = 0;
-  state.required_pot = 0;
-  state.last_raise = state.big_blind;
+        state.player_credit = [];
+        state.passed = [];
+        state.round = 0;
+        state.big_blind = 50;
+        state.small_blind = 25;
+        state.big_blind_player = 1;
+        state.small_blind_player = 2;
+        state.big_blind_paid = 0;
+        state.small_blind_paid = 0;
+        state.required_pot = 0;
+        state.last_raise = state.big_blind;
 
     for (let i = 0; i < num_of_players; i++) {
       state.passed[i] = 0;

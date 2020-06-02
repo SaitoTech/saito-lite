@@ -231,8 +231,21 @@
   }
   
   
-  
-  
+  //
+  // utility function to convert sector32 to 3_2 or whatever
+  //
+  convertSectorToTile(sectorN) {
+
+    for (let i in this.game.board) {
+      if (this.game.board[i].tile == sectorN) {
+	return i;
+      }
+    }
+
+    return "";
+
+  }  
+
   
   
   
@@ -886,24 +899,16 @@ alert("invading planet!");
 
         let sys = this.returnSystemAndPlanets(sector);
 
-console.log("TESTING A");  
-console.log(JSON.stringify(mv));
-
   	if (this.game.player != player || player_moves == 1) {
           if (source == "planet") {
-console.log("TESTING A-1");  
             this.unloadUnitByJSONFromPlanet(player, sector, source_idx, unitjson);
             this.loadUnitByJSONOntoPlanet(player, sector, planet_idx, unitjson);
           } else {
             if (source == "ship") {
-console.log("TESTING B-1 " + source_idx);  
               this.unloadUnitByJSONFromShip(player, sector, source_idx, unitjson);
-console.log("TESTING B-1 " + planet_idx);
               this.loadUnitByJSONOntoPlanet(player, sector, planet_idx, unitjson);
-console.log("TESTING B-1");  
             } else {
-console.log("TESTING C-1");  
-              this.loadUnitByJSONOntoShipByJSON(player, sector, shipjson, unitjson);
+              this.loadUnitByJSONOntoPlanet(player, sector, planet_idx, unitjson);
             }
           }
         }
@@ -1174,6 +1179,7 @@ alert("Player should choose what planets to invade (if possible)");
       // whatever is left on the stack when done.
       //
       // flawless_combat
+      // destroyed_unit
       //
       if (mv[0] === "arbitrary_event") {
   
@@ -1184,6 +1190,7 @@ alert("Player should choose what planets to invade (if possible)");
   	let target       = parseInt(mv[3]);
         let sector	 = mv[4];
         let planet_idx   = mv[5];
+        let details      = mv[6];
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  let techs = this.game.players_info[speaker_order[i]-1].tech;
@@ -1192,9 +1199,14 @@ alert("Player should choose what planets to invade (if possible)");
 	    //
 	    // arbitrary events
 	    //
+	    if (eventname === "destroyed_unit") {
+              if (technologies[techs[k]].destroyedUnitTriggers(this, player, target, sector, planet_idx, details) == 1) {
+	        this.game.queue.push("arbitrary_event_event\t"+eventname+"\t"+player+"\t"+target+"\t"+sector+"\t"+planet_idx+"\t"+details+"\t"+techs[k]);
+	      }
+	    }
 	    if (eventname === "flawless_combat") {
               if (technologies[techs[k]].flawlessCombatTriggers(this, player, sector) == 1) {
-	        this.game.queue.push("arbitrary_event_event\t"+eventname+"\t"+player+"\t"+target+"\t"+sector+"\t"+planet_idx+"\t"+techs[k]);
+	        this.game.queue.push("arbitrary_event_event\t"+eventname+"\t"+player+"\t"+target+"\t"+sector+"\t"+planet_idx+"\t"+details+"\t"+techs[k]);
 	      }
 	    }
 
@@ -1212,10 +1224,14 @@ alert("Player should choose what planets to invade (if possible)");
   	let target       = parseInt(mv[3]);
         let sector	 = mv[4];
         let planet_idx   = mv[5];
-        let tech         = mv[6];
+        let details      = mv[6];
+        let tech         = mv[7];
 
+        if (eventname == "destroyed_unit") {
+	  return technologies[tech].destroyedUnitEvent(this, player, target, sector, planet_idx, details);
+	}
         if (eventname == "flawless_combat") {
-	  return technologies[tech].flawlessCombatEvent(this, player, sector);
+//	  return technologies[tech].flawlessCombatEvent(this, player, sector);
 	}
 
       }
@@ -1584,17 +1600,12 @@ console.log("IS GROUND COMBAT RESOLVED: " + player + "/" + sector + "/" + planet
 	let cards = this.returnActionCards();
 	let played_card = cards[card];
 
+	this.game.queue.splice(qe, 1);
+
 	cards[card].onPlay(this, player, function(c) {
 	  console.log("ACTION CARD HAS PLAYED AND RETURNED IN ACTION CALLBACK");
-	});
-
-	if (cards[card].interactive == 1) {
-  	  this.game.queue.splice(qe, 1);
   	  return 1;
-	} else {
-  	  this.game.queue.splice(qe, 1);
-	  return 0;
-	}
+	});
 
       }
 /****

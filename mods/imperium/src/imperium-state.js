@@ -1063,6 +1063,12 @@
         imperium_self.game.players_info[player-1].action_cards_bonus_when_issued = 1;
         mycallback(1);
       },
+      destroyedUnitTriggers :  function(this, player, target, sector, planet_idx, details)
+	if (target == this.game.player) {
+
+	}
+      }
+
 /*
       activateSystemTriggers : function(imperium_self, player, sector) {
 	return 1;
@@ -1552,19 +1558,46 @@
 	return x;
       },
       menuOptionTrigger:  function(imperium_self, player) { 
-	return 1;
+        if (imperium_self.game.players_info[imperium_self.game.player-1].command_tokens > 0) {
+	  return 1;
+	} else {
+	  return 0;
+	}
       },
       menuOptionActivated:  function(imperium_self, player) { 
 	if (imperium_self.game.player != player) {
 	} else {
 	  let targets = imperium_self.returnPlayerPlanetCards(player);
-console.log("ORB D:");
-console.log(JSON.stringify(targets));
 	  let html = 'Select Planet to Orbital Drop: <p></p><ul>';
 	  for (let i = 0; i < targets.length; i++) {
-	    html += '<li class="option" id="'+i+'">' + targets[i].name + '</li>';
+	    html += '<li class="option" id="'+targets[i]+'">' + imperium_self.game.planets[targets[i]].name + '</li>';
 	  }
-	  this.endTurn();
+	  imperium_self.updateStatus(html);
+	  $('.option').off();
+	  $('.option').on('click',function () {
+
+	    let choice = $(this).attr("id");
+
+	    let systems = imperium_self.returnSystems();
+	    for (let z in systems) {
+	      if (systems[z].planets.includes(choice)) {
+
+	        let idx = 0;
+	        for (let i = 0; i < systems[z].planets.length; i++) {
+		  if (systems[z].planets[i] == choice) { idx = i; }
+		}
+
+	        let u = imperium_self.returnUnit("infantry", imperium_self.game.player);
+	        let mysector = imperium_self.convertSectorToTile(z);
+   	        imperium_self.addMove("land\t"+imperium_self.game.player+"\t"+1+"\t"+mysector+"\t"+""+"\t"+""+"\t"+idx+"\t"+JSON.stringify(u));
+   	        imperium_self.addMove("land\t"+imperium_self.game.player+"\t"+1+"\t"+mysector+"\t"+""+"\t"+""+"\t"+idx+"\t"+JSON.stringify(u));
+   	        imperium_self.addMove("expend\t"+imperium_self.game.player+"\t"+"command"+"\t"+"1");
+
+		imperium_self.endTurn();
+	        
+	      }
+	    }
+	  });
 	}
       }
     };
@@ -1690,6 +1723,7 @@ console.log(JSON.stringify(targets));
 
       if (tech[i].replaces == null) { tech[i].replaces = ""; }
       if (tech[i].faction == null) { tech[i].faction = "all"; }
+      if (tech[i].type == null) { tech[i].type = "special"; } // i.e. not a tech card
 
       if (tech[i].upgradeUnit == null) {
 	tech[i].upgradeUnit = function(imperium_self, player, unit) { return unit; }
@@ -1714,6 +1748,25 @@ console.log(JSON.stringify(targets));
 	tech[i].menuOptionActivated = function(imperium_self, player) { return 0; }
       }
 
+
+
+      //////////////////////
+      // arbitrary events //
+      //////////////////////
+      if (tech[i].destroyedUnitTriggers == null) {
+	tech[i].destroyedUnitTriggers = function(imperium_self, player, target, sector, planet_idx, details) { return 0; }
+      }
+      if (tech[i].destroyedUnitEvent == null) {
+	tech[i].destroyedUnitEvent = function(imperium_self, player, target, sector, planet_idx, details) { return 0; }
+      }
+
+
+
+
+
+      ///////////////////
+      // in game-steps //
+      ///////////////////
 
       //
       // when system is activated

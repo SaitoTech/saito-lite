@@ -1,4 +1,14 @@
-  
+
+  //
+  // redraw all sectors
+  //
+  displayBoard() {
+    for (let i in this.game.systems) {
+      this.updateSectorGraphics(i);
+    }
+    this.addEventsToBoard();
+  } 
+ 
  
   /////////////////////////
   // Add Events to Board //
