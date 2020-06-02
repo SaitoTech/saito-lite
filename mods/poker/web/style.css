@@ -29,6 +29,7 @@ body {
   background-color: #4448;
   overflow-y: auto;
   border: none;
+  font-size: large;
 }
 
 .menu-player {
@@ -256,6 +257,17 @@ body {
   overflow-y: auto;
 }
 
+.player-info-log {
+  font-size: 2vh;
+  text-align: center;
+  border: 1px solid #aaaa;
+}
+
+.menu-player {
+  font-size: 2vh;
+  font-weight: bolder;
+}
+
 @media all and (max-aspect-ratio:13/9) {
   .deal .card {
     width: 18vw;
@@ -263,7 +275,7 @@ body {
   }
   .deal {
     position: absolute;
-    top: 16vh;
+    top: 19vh;
     left: 50vw;
     transform: translateX(-50%);
     width: 92vw;
@@ -271,14 +283,14 @@ body {
     margin: 0 auto;
   }
   .pot {
-    top: 30vh;
+    top: 33vh;
     font-size: 6vh;
   }
   .player-info-hand .card {
     width: 4vh;
   }
   .cardfan {
-    top: 37vh;
+    top: 40vh;
     left: 50%;
     transform: translateX(-50%);
     padding: unset;
@@ -291,7 +303,7 @@ body {
   .p4 .hand, .p3 .hand, .p5 .hand {
     right: -3vh;
     left: unset;
-    top: 6vh;
+    top: 9vh;
   }
   .p2 .hand {
     right: -3vw;
@@ -304,33 +316,32 @@ body {
   }
   .player-info {
     width: 25vw;
-    height: 7vh;
+    height: 10vh;
     background-color: #4448;
     color: #fff;
     padding: 1em;
     position: absolute;
   }
   .player-info.p1 {
-    width: 25vw;
-    height: 46vh;
+    width: 24vw;
+    height: 43vh;
     bottom: 0;
-    left: 63vw;
+    left: unset;
+    right: 25vw;
+    transform: none;
+    min-width: unset;
   }
-
   .player-info-name {
-    font-size: 1.5vh;
+    font-size: 1.75vh;
     text-align: center;
   }
   .player-info-log {
-    font-size: 1vh;
+    font-size: 1.5vh;
   }
   .player-info-chips {
     padding: 0.5em;
     text-align: center;
-    font-size: 1vh;
-  }
-  #player-info-hand-1 {
-    display: none;
+    font-size: 1.5vh;
   }
   .player-info.p4 {
     left: 50vw;
@@ -362,7 +373,7 @@ body {
     position: absolute;
     bottom: 0;
     left: 25vw;
-    height: 46vh;
+    height: 43vh;
     background-color: #4448;
   }
 }
@@ -375,7 +386,7 @@ body {
   .player-info.p1 {
     width: 50vw;
     right: 0;
-    left:unset;
+    left: unset;
     transform: unset;
   }
   .log {
