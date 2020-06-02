@@ -98,13 +98,15 @@ body {
 
 .player-info-name {
   font-size: 3vh;
+  font-weight: bold;
   text-align: center;
 }
 
 .player-info-chips {
   padding: 0.5em;
   text-align: center;
-  font-size: 2vh;
+*/  font-size: 2vh; */
+  font-size: 14px;
 }
 
 .player-info.p6 {

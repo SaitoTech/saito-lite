@@ -870,7 +870,7 @@ class Poker extends GameTemplate {
       return;
     }
 
-    html += '<div class="menu-player">'+this.game.state.player_names[this.game.player-1];
+    html += '<div class="menu-player">Your move ';
     if (this.game.player == this.game.state.big_blind_player) {
       html += " (big blind)";
     }
@@ -882,10 +882,6 @@ class Poker extends GameTemplate {
 
     let cost_to_call = this.game.state.required_pot - this.game.state.player_pot[this.game.player-1];
     if (cost_to_call < 0) { cost_to_call = 0; }
-
-console.log("REQUIRED POT: " + this.game.state.required_pot);
-console.log("MY POT: " + this.game.state.player_pot[this.game.player-1]);
-console.log("COST TO CALL: " + cost_to_call);
 
     //
     // if we need to raise
