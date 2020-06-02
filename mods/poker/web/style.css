@@ -344,7 +344,8 @@ body {
   .player-info-chips {
     padding: 0.5em;
     text-align: center;
-    font-size: 1.5vh;
+/*    font-size: 2vh; */
+    font-size: 14px;
   }
   
   
