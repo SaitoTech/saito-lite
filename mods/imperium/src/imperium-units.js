@@ -330,9 +330,15 @@ console.log("UNIT for "+player+" - " + JSON.stringify(sys.s.units[player-1][z]))
 
 
   returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx) {
-  
+
+    if (player <= 0) { return 0; }  
+
     let sys = this.returnSystemAndPlanets(sector);
     let num = 0;
+
+console.log("PLANET IDX: " + planet_idx);
+console.log("PLAYER: " + player);
+console.log(JSON.stringify(sys.p));
   
     for (let z = 0; z < sys.p[planet_idx].units[player-1].length; z++) {
       if (sys.p[planet_idx].units[player-1][z].strength > 0 && sys.p[planet_idx].units[player-1][z].destroyed == 0) {

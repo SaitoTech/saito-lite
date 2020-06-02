@@ -51,7 +51,7 @@
     planets['planet42'] = { type : "hazardous" , img : "/imperium/img/planets/INDUSTRYL.png" , name : "Industryl" , resources : 3 , influence : 1 , bonus : ""  }
     planets['planet43'] = { type : "cultural" , img : "/imperium/img/planets/MECHANEX.png" , name : "Mechanex" , resources : 1 , influence : 0 , bonus : ""  }
     planets['planet44'] = { type : "industrial" , img : "/imperium/img/planets/HEARTHSLOUGH.png" , name : "Hearthslough" , resources : 3 , influence : 0 , bonus : ""  }
-    planets['planet45'] = { type : "hazardous" , img : "/imperium/img/planets/" , name : "Incarth" , resources : 2 , influence : 0 , bonus : ""  }
+    planets['planet45'] = { type : "hazardous" , img : "/imperium/img/planets/INCARTH.png" , name : "Incarth" , resources : 2 , influence : 0 , bonus : ""  }
     planets['planet46'] = { type : "cultural" , img : "/imperium/img/planets/AANDOR.png" , name : "Aandor" , resources : 2 , influence : 1 , bonus : ""  }
     planets['planet39'] = { type : "cultural" , img : "/imperium/img/planets/YSSARI-II.png" , name : "Yssari II" , resources : 0 , influence : 1 , bonus : ""  }
     planets['planet40'] = { type : "industrial" , img : "/imperium/img/planets/HOPES-LURE.png" , name : "Hope's Lure" , resources : 3 , influence : 2 , bonus : ""  }
@@ -1557,7 +1557,13 @@
       menuOptionActivated:  function(imperium_self, player) { 
 	if (imperium_self.game.player != player) {
 	} else {
-alert("ORBITAL DROP");
+	  let targets = imperium_self.returnPlayerPlanetCards(player);
+console.log("ORB D:");
+console.log(JSON.stringify(targets));
+	  let html = 'Select Planet to Orbital Drop: <p></p><ul>';
+	  for (let i = 0; i < targets.length; i++) {
+	    html += '<li class="option" id="'+i+'">' + targets[i].name + '</li>';
+	  }
 	  this.endTurn();
 	}
       }

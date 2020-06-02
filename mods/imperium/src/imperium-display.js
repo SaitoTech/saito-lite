@@ -67,14 +67,14 @@
   
 
   updateSectorGraphics(sector) {
-  
+
     let sys = this.returnSystemAndPlanets(sector);
   
     let divsector = '#hex_space_'+sector;
     let fleet_color = '';
     let bg = '';
     let bgsize = '';
-  
+ 
     for (let z = 0; z < sys.s.units.length; z++) {
   
       let player = z+1;
@@ -188,18 +188,25 @@
     for (let z = 0; z < sys.s.units.length; z++) {
   
       let player = z+1;
-      
+  
       ////////////////////////
       // PLANETARY GRAPHICS //
       ////////////////////////
       let total_ground_forces_of_player = 0;
       
       for (let j = 0; j < sys.p.length; j++) {
-        total_ground_forces_of_player += sys.p[j].units[z].length;
+        total_ground_forces_of_player += sys.p[j].units[player-1].length;
       }
- 
+
       if (total_ground_forces_of_player > 0) {
+
+
         for (let j = 0; j < sys.p.length; j++) {
+
+if (sector == "2_1") {
+  console.log("PLAYER IS: " + player);
+  console.log("ALERT: "+z+" "+JSON.stringify(sys.p[j].units));
+}
   
           let infantry     = 0;
           let spacedock    = 0;
@@ -256,6 +263,7 @@
 	//
 	let old_images = "#hex_bg_"+sector+" > .sector_graphics_planet";
         $(old_images).remove();
+
 	let divsector2 = "#hex_bg_"+sector;
         let player_color = "player_color_"+player;
 	let pid = 0;
