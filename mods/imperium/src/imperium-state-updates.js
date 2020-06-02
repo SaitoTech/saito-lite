@@ -459,9 +459,11 @@ console.log("TESTING A 3: " + defender_hits + " / " + attacker_hits);
  
     this.assignHitsToGroundForces(attacker, sector, planet_idx, defender_hits);
     this.assignHitsToGroundForces(defender, sector, planet_idx, attacker_hits);
- 
+
+
     this.eliminateDestroyedUnitsInSector(attacker, sector);
     this.eliminateDestroyedUnitsInSector(defender, sector);
+
 console.log("TESTING A 4"); 
 
     if (attacker_hits > 0) {
@@ -691,6 +693,7 @@ console.log(JSON.stringify(err));
     for (let planet_idx = 0; planet_idx < sys.p.length; planet_idx++) {
       for (let z = 0; z < sys.p[planet_idx].units[player-1].length; z++) {
         if (sys.p[planet_idx].units[player-1][z].destroyed == 1) {
+console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
           sys.p[planet_idx].units[player-1].splice(z, 1);
           z--;
         }
@@ -737,10 +740,12 @@ console.log(JSON.stringify(err));
       let weakest_unit_idx = -1;
       for (let z = 0; z < sys.p[planet_idx].units[defender-1].length; z++) {
         let unit = sys.p[planet_idx].units[defender-1][z];
+
         if (unit.strength > 0 && weakest_unit_idx == -1 && unit.destroyed == 0) {
   	  weakest_unit = sys.p[planet_idx].units[defender-1].strength;
   	  weakest_unit_idx = z;
         }
+
         if (unit.strength > 0 && unit.strength < weakest_unit && weakest_unit_idx != -1) {
   	  weakest_unit = unit.strength;
   	  weakest_unit_idx = z;
@@ -751,8 +756,10 @@ console.log(JSON.stringify(err));
       // and assign 1 hit
       //
       if (weakest_unit_idx != -1) {
+console.log("REDUCING STRENGTH OF UNIT BY 1");
         sys.p[planet_idx].units[defender-1][weakest_unit_idx].strength--;
         if (sys.p[planet_idx].units[defender-1][weakest_unit_idx].strength <= 0) {
+console.log("DESTROYING UNIT: " + weakest_unit_idx);
           sys.p[planet_idx].units[defender-1][weakest_unit_idx].destroyed = 1;
         }
       }

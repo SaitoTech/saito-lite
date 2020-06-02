@@ -1163,6 +1163,67 @@ alert("Player should choose what planets to invade (if possible)");
 
 
       /////////////////////
+      // ARBITRARY EVENT //
+      /////////////////////
+      //
+      // arbitrary events are those which can take place at any time, and do not change the course of 
+      // game execution, although they can be noticed during game execution. things like destruction 
+      // of a ship, gaining of trade goods, etc. these are designed as "fallthrough" events, so there 
+      // is no "_post" event that is presumed to exist. The triggering of the _event checks to see if
+      // there are any tech modifiers that invite play or change gameboard, and then fallthrough to 
+      // whatever is left on the stack when done.
+      //
+      // flawless_combat
+      //
+      if (mv[0] === "arbitrary_event") {
+  
+        let technologies = this.returnTechnologyTree();
+
+  	let eventname    = parseInt(mv[1]);
+  	let player       = parseInt(mv[2]);
+  	let target       = parseInt(mv[3]);
+        let sector	 = mv[4];
+        let planet_idx   = mv[5];
+
+  	for (let i = 0; i < speaker_order.length; i++) {
+	  let techs = this.game.players_info[speaker_order[i]-1].tech;
+	  for (let k = 0; k < techs.length; k++) {
+
+	    //
+	    // arbitrary events
+	    //
+	    if (eventname === "flawless_combat") {
+              if (technologies[techs[k]].flawlessCombatTriggers(this, player, sector) == 1) {
+	        this.game.queue.push("arbitrary_event_event\t"+eventname+"\t"+player+"\t"+target+"\t"+sector+"\t"+planet_idx+"\t"+techs[k]);
+	      }
+	    }
+
+          }
+        }
+  	return 1;
+      }
+
+      if (mv[0] === "arbitrary_event_event") {
+
+        let technologies = this.returnTechnologyTree();
+
+  	let eventname    = parseInt(mv[1]);
+  	let player       = parseInt(mv[2]);
+  	let target       = parseInt(mv[3]);
+        let sector	 = mv[4];
+        let planet_idx   = mv[5];
+        let tech         = mv[6];
+
+        if (eventname == "flawless_combat") {
+	  return technologies[tech].flawlessCombatEvent(this, player, sector);
+	}
+
+      }
+
+
+
+
+      /////////////////////
       // ACTIVATE SYSTEM //
       /////////////////////
       if (mv[0] === "activate_system") {
@@ -1492,6 +1553,8 @@ console.log("entering here");
 
         this.updateSectorGraphics(sector);
 
+console.log("IS GROUND COMBAT RESOLVED: " + player + "/" + sector + "/" + planet_idx + "  " + this.hasUnresolvedGroundCombat(player, sector, planet_idx));
+
   	if (this.hasUnresolvedGroundCombat(player, sector, planet_idx) == 1) {
 	  if (this.game.player == player) {
 	    this.addMove("ground_combat_post\t"+player+"\t"+sector+"\t"+planet_idx);
@@ -1812,6 +1875,9 @@ console.log("entering here");
   ///////////////////////
   addMove(mv) {
     this.moves.push(mv);
+  };
+  prependMove(mv) {
+    this.moves.unshift(mv);
   };
   
   endTurn(nextTarget = 0) {

@@ -118,7 +118,6 @@
     let defender_found = 0;
     let attacker_found = 0;
 
-
     for (let i = 0; i < sys.s.units.length; i++) {
       if (attacker != (i+1)) {
         if (sys.s.units[i].length > 0) {
@@ -148,22 +147,42 @@
   hasUnresolvedGroundCombat(attacker, sector, pid) {
 
     let sys = this.returnSystemAndPlanets(sector);
-    let defender = sys.p[pid].owner;   
 
-    if (defender == attacker) { return 0; }
+    let defender = -1;
+    for (let i = 0; i < sys.p[pid].units.length; i++) {
+      if (sys.p[pid].units[i].length > 0) {
+        if ((i+1) != attacker) {
+	  defender = (i+1);
+	}
+      }
+    }
+
+    if (defender == attacker) { 
+console.log("DEFENDER IS: " + defender);
+console.log("ATTACKER IS: " + attacker);
+      return 0; 
+    }
 
     if (attacker == -1) {
+console.log("a1");
       attacker_forces = 0;
     } else {
+console.log("a2");
       attacker_forces = this.returnNumberOfGroundForcesOnPlanet(attacker, sector, pid);
     }
     if (defender == -1) {
+console.log("a3");
       defender_forces = 0;
     } else {
+console.log("a4");
       defender_forces = this.returnNumberOfGroundForcesOnPlanet(defender, sector, pid);
     }
 
-    if (attacker_forces > 0 && defender_forces > 0) { return 1; }
+    if (attacker_forces > 0 && defender_forces > 0) { 
+console.log("STILL CONFLICT!" + attacker_forces + " ____ " + defender_forces);
+
+return 1; }
+console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forces);
     return 0;
 
   }

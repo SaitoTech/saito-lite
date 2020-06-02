@@ -7,25 +7,22 @@ class Imperium extends GameTemplate {
   
     super(app);
   
-    this.name            = "Imperium";
-    this.slug		 = "imperium";
-    this.description     = `Red Imperium is a multi-player space exploration and conquest simulator. Each player controls a unique faction vying for political control of the galaxy in the waning days of a dying Empire.`;
-    this.categories	 = "Arcade Games Entertainment";
-    this.minPlayers      = 2;
-    this.maxPlayers      = 4;  
-    this.type       = "Strategy Boardgame";
+    this.name             = "Imperium";
+    this.slug		  = "imperium";
+    this.description      = `Red Imperium is a multi-player space exploration and conquest simulator. Each player controls a unique faction vying for political control of the galaxy in the waning days of a dying Empire.`;
+    this.categories	  = "Arcade Games Entertainment";
+    this.minPlayers       = 2;
+    this.maxPlayers       = 4;  
+    this.type             = "Strategy Boardgame";
 
-
-    this.gameboardWidth  = 1900;
+    this.gameboardWidth   = 1900;
   
-    this.rmoves          = [];
-    this.totalPlayers    = 2;
+    this.rmoves           = [];
+    this.totalPlayers     = 2;
 
     this.game.confirms_needed 	= 0;
     this.game.confirms_received = 0;
     this.game.confirms_players  = [];
-
-
 
     this.hud = new GameHud(this.app, this.menuItems());
 
@@ -2124,6 +2121,67 @@ alert("Player should choose what planets to invade (if possible)");
 
 
       /////////////////////
+      // ARBITRARY EVENT //
+      /////////////////////
+      //
+      // arbitrary events are those which can take place at any time, and do not change the course of 
+      // game execution, although they can be noticed during game execution. things like destruction 
+      // of a ship, gaining of trade goods, etc. these are designed as "fallthrough" events, so there 
+      // is no "_post" event that is presumed to exist. The triggering of the _event checks to see if
+      // there are any tech modifiers that invite play or change gameboard, and then fallthrough to 
+      // whatever is left on the stack when done.
+      //
+      // flawless_combat
+      //
+      if (mv[0] === "arbitrary_event") {
+  
+        let technologies = this.returnTechnologyTree();
+
+  	let eventname    = parseInt(mv[1]);
+  	let player       = parseInt(mv[2]);
+  	let target       = parseInt(mv[3]);
+        let sector	 = mv[4];
+        let planet_idx   = mv[5];
+
+  	for (let i = 0; i < speaker_order.length; i++) {
+	  let techs = this.game.players_info[speaker_order[i]-1].tech;
+	  for (let k = 0; k < techs.length; k++) {
+
+	    //
+	    // arbitrary events
+	    //
+	    if (eventname === "flawless_combat") {
+              if (technologies[techs[k]].flawlessCombatTriggers(this, player, sector) == 1) {
+	        this.game.queue.push("arbitrary_event_event\t"+eventname+"\t"+player+"\t"+target+"\t"+sector+"\t"+planet_idx+"\t"+techs[k]);
+	      }
+	    }
+
+          }
+        }
+  	return 1;
+      }
+
+      if (mv[0] === "arbitrary_event_event") {
+
+        let technologies = this.returnTechnologyTree();
+
+  	let eventname    = parseInt(mv[1]);
+  	let player       = parseInt(mv[2]);
+  	let target       = parseInt(mv[3]);
+        let sector	 = mv[4];
+        let planet_idx   = mv[5];
+        let tech         = mv[6];
+
+        if (eventname == "flawless_combat") {
+	  return technologies[tech].flawlessCombatEvent(this, player, sector);
+	}
+
+      }
+
+
+
+
+      /////////////////////
       // ACTIVATE SYSTEM //
       /////////////////////
       if (mv[0] === "activate_system") {
@@ -2453,6 +2511,8 @@ console.log("entering here");
 
         this.updateSectorGraphics(sector);
 
+console.log("IS GROUND COMBAT RESOLVED: " + player + "/" + sector + "/" + planet_idx + "  " + this.hasUnresolvedGroundCombat(player, sector, planet_idx));
+
   	if (this.hasUnresolvedGroundCombat(player, sector, planet_idx) == 1) {
 	  if (this.game.player == player) {
 	    this.addMove("ground_combat_post\t"+player+"\t"+sector+"\t"+planet_idx);
@@ -2773,6 +2833,9 @@ console.log("entering here");
   ///////////////////////
   addMove(mv) {
     this.moves.push(mv);
+  };
+  prependMove(mv) {
+    this.moves.unshift(mv);
   };
   
   endTurn(nextTarget = 0) {
@@ -4040,19 +4103,27 @@ console.log("entering here");
       let planet_idx = $(this).attr('id');
   
       if (planet_idx == "confirm") {
+console.log("confirm and launch invasion!");
 	for (let i = 0; i < planets_invaded.length; i++) {
-          imperium_self.addMove("bombardment_post\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
-          imperium_self.addMove("bombardment\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
+console.log("INVADING PLANET: " + planets_invaded[i]);
+          imperium_self.prependMove("bombardment\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
+          imperium_self.prependMove("bombardment_post\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
+    	  imperium_self.prependMove("planetary_defense\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
+    	  imperium_self.prependMove("planetary_defense_post\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
+    	  imperium_self.prependMove("ground_combat\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
+    	  imperium_self.prependMove("ground_combat_post\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
 	}
         imperium_self.endTurn();
         return;
       }
 
+      //
+      // looks like we have selected a planet for invasion
+      //
       if (!planets_invaded.includes(planet_idx)) {
-        imperium_self.addMove("invade_planet\t"+imperium_self.game.player+"\t"+1+"\t"+imperium_self.game.player+"\t"+sys.p[planet_idx].owner+"\t"+sector+"\t"+planet_idx);
         planets_invaded.push(planet_idx);
       }
-  
+
       //
       // figure out available infantry and ships capacity
       //
@@ -4172,24 +4243,6 @@ console.log("entering here");
   
         if (action2 === "finished") {
   
-          //
-          // submit when done
-          //
-	  let planets_to_invade = [];
-	  for (let y = 0; y < landing_forces.length; y++) {
-	    let b = 0;
-	    for (let z = 0; z < planets_to_invade.length; z++) {
-	      if (landing_forces[y].planet_idx == planets_to_invade[z]) { b = 1; }
-	    }
-            if (b == 0) {
-    	      imperium_self.addMove("ground_combat_post\t"+imperium_self.game.player+"\t"+landing_forces[y].sector+"\t"+landing_forces[y].planet_idx);
-    	      imperium_self.addMove("ground_combat\t"+imperium_self.game.player+"\t"+landing_forces[y].sector+"\t"+landing_forces[y].planet_idx);
-    	      imperium_self.addMove("planetary_defense_post\t"+imperium_self.game.player+"\t"+landing_forces[y].sector+"\t"+landing_forces[y].planet_idx);
-    	      imperium_self.addMove("planetary_defense\t"+imperium_self.game.player+"\t"+landing_forces[y].sector+"\t"+landing_forces[y].planet_idx);
-	      planets_to_invade.push(landing_forces[y].planet_idx);
-	    }
-	  }
-
           for (let y = 0; y < landing_forces.length; y++) {
     	    imperium_self.addMove("land\t"+imperium_self.game.player+"\t"+1+"\t"+landing_forces[y].sector+"\t"+landing_forces[y].source+"\t"+landing_forces[y].source_idx+"\t"+landing_forces[y].planet_idx+"\t"+landing_forces[y].unitjson);
           };
@@ -5917,7 +5970,13 @@ console.log("entering here");
       menuOptionActivated:  function(imperium_self, player) { 
 	if (imperium_self.game.player != player) {
 	} else {
-alert("ORBITAL DROP");
+	  let targets = imperium_self.returnPlayerPlanetCards(player);
+console.log("ORB D:");
+console.log(JSON.stringify(targets));
+	  let html = 'Select Planet to Orbital Drop: <p></p><ul>';
+	  for (let i = 0; i < targets.length; i++) {
+	    html += '<li class="option" id="'+i+'">' + targets[i].name + '</li>';
+	  }
 	  this.endTurn();
 	}
       }
@@ -6781,7 +6840,6 @@ console.log("THE LAW FAILS!");
     let defender_found = 0;
     let attacker_found = 0;
 
-
     for (let i = 0; i < sys.s.units.length; i++) {
       if (attacker != (i+1)) {
         if (sys.s.units[i].length > 0) {
@@ -6811,22 +6869,42 @@ console.log("THE LAW FAILS!");
   hasUnresolvedGroundCombat(attacker, sector, pid) {
 
     let sys = this.returnSystemAndPlanets(sector);
-    let defender = sys.p[pid].owner;   
 
-    if (defender == attacker) { return 0; }
+    let defender = -1;
+    for (let i = 0; i < sys.p[pid].units.length; i++) {
+      if (sys.p[pid].units[i].length > 0) {
+        if ((i+1) != attacker) {
+	  defender = (i+1);
+	}
+      }
+    }
+
+    if (defender == attacker) { 
+console.log("DEFENDER IS: " + defender);
+console.log("ATTACKER IS: " + attacker);
+      return 0; 
+    }
 
     if (attacker == -1) {
+console.log("a1");
       attacker_forces = 0;
     } else {
+console.log("a2");
       attacker_forces = this.returnNumberOfGroundForcesOnPlanet(attacker, sector, pid);
     }
     if (defender == -1) {
+console.log("a3");
       defender_forces = 0;
     } else {
+console.log("a4");
       defender_forces = this.returnNumberOfGroundForcesOnPlanet(defender, sector, pid);
     }
 
-    if (attacker_forces > 0 && defender_forces > 0) { return 1; }
+    if (attacker_forces > 0 && defender_forces > 0) { 
+console.log("STILL CONFLICT!" + attacker_forces + " ____ " + defender_forces);
+
+return 1; }
+console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forces);
     return 0;
 
   }
@@ -7799,9 +7877,11 @@ console.log("TESTING A 3: " + defender_hits + " / " + attacker_hits);
  
     this.assignHitsToGroundForces(attacker, sector, planet_idx, defender_hits);
     this.assignHitsToGroundForces(defender, sector, planet_idx, attacker_hits);
- 
+
+
     this.eliminateDestroyedUnitsInSector(attacker, sector);
     this.eliminateDestroyedUnitsInSector(defender, sector);
+
 console.log("TESTING A 4"); 
 
     if (attacker_hits > 0) {
@@ -8031,6 +8111,7 @@ console.log(JSON.stringify(err));
     for (let planet_idx = 0; planet_idx < sys.p.length; planet_idx++) {
       for (let z = 0; z < sys.p[planet_idx].units[player-1].length; z++) {
         if (sys.p[planet_idx].units[player-1][z].destroyed == 1) {
+console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
           sys.p[planet_idx].units[player-1].splice(z, 1);
           z--;
         }
@@ -8077,10 +8158,12 @@ console.log(JSON.stringify(err));
       let weakest_unit_idx = -1;
       for (let z = 0; z < sys.p[planet_idx].units[defender-1].length; z++) {
         let unit = sys.p[planet_idx].units[defender-1][z];
+
         if (unit.strength > 0 && weakest_unit_idx == -1 && unit.destroyed == 0) {
   	  weakest_unit = sys.p[planet_idx].units[defender-1].strength;
   	  weakest_unit_idx = z;
         }
+
         if (unit.strength > 0 && unit.strength < weakest_unit && weakest_unit_idx != -1) {
   	  weakest_unit = unit.strength;
   	  weakest_unit_idx = z;
@@ -8091,8 +8174,10 @@ console.log(JSON.stringify(err));
       // and assign 1 hit
       //
       if (weakest_unit_idx != -1) {
+console.log("REDUCING STRENGTH OF UNIT BY 1");
         sys.p[planet_idx].units[defender-1][weakest_unit_idx].strength--;
         if (sys.p[planet_idx].units[defender-1][weakest_unit_idx].strength <= 0) {
+console.log("DESTROYING UNIT: " + weakest_unit_idx);
           sys.p[planet_idx].units[defender-1][weakest_unit_idx].destroyed = 1;
         }
       }
@@ -8215,14 +8300,14 @@ console.log(JSON.stringify(err));
   
 
   updateSectorGraphics(sector) {
-  
+
     let sys = this.returnSystemAndPlanets(sector);
   
     let divsector = '#hex_space_'+sector;
     let fleet_color = '';
     let bg = '';
     let bgsize = '';
-  
+ 
     for (let z = 0; z < sys.s.units.length; z++) {
   
       let player = z+1;
@@ -8336,18 +8421,25 @@ console.log(JSON.stringify(err));
     for (let z = 0; z < sys.s.units.length; z++) {
   
       let player = z+1;
-      
+  
       ////////////////////////
       // PLANETARY GRAPHICS //
       ////////////////////////
       let total_ground_forces_of_player = 0;
       
       for (let j = 0; j < sys.p.length; j++) {
-        total_ground_forces_of_player += sys.p[j].units[z].length;
+        total_ground_forces_of_player += sys.p[j].units[player-1].length;
       }
- 
+
       if (total_ground_forces_of_player > 0) {
+
+
         for (let j = 0; j < sys.p.length; j++) {
+
+if (sector == "2_1") {
+  console.log("PLAYER IS: " + player);
+  console.log("ALERT: "+z+" "+JSON.stringify(sys.p[j].units));
+}
   
           let infantry     = 0;
           let spacedock    = 0;
@@ -8404,6 +8496,7 @@ console.log(JSON.stringify(err));
 	//
 	let old_images = "#hex_bg_"+sector+" > .sector_graphics_planet";
         $(old_images).remove();
+
 	let divsector2 = "#hex_bg_"+sector;
         let player_color = "player_color_"+player;
 	let pid = 0;

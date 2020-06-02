@@ -1557,7 +1557,13 @@
       menuOptionActivated:  function(imperium_self, player) { 
 	if (imperium_self.game.player != player) {
 	} else {
-alert("ORBITAL DROP");
+	  let targets = imperium_self.returnPlayerPlanetCards(player);
+console.log("ORB D:");
+console.log(JSON.stringify(targets));
+	  let html = 'Select Planet to Orbital Drop: <p></p><ul>';
+	  for (let i = 0; i < targets.length; i++) {
+	    html += '<li class="option" id="'+i+'">' + targets[i].name + '</li>';
+	  }
 	  this.endTurn();
 	}
       }
