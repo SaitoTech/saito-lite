@@ -42,10 +42,13 @@
   updatePlanetOwner(sector, planet_idx) {
     let sys = this.returnSystemAndPlanets(sector);
     let owner = -1;
+console.log("PLANET STATE: " + JSON.stringify(sys.p[planet_idx]));
+
     for (let i = 0; i < sys.p[planet_idx].units.length; i++) {
       if (sys.p[planet_idx].units[i].length > 0) { owner = i+1; }
     }
     if (owner != -1) {
+this.updateLog("setting owner to " + owner);
       sys.p[planet_idx].owner = owner;
       sys.p[planet_idx].exhausted = 1;
     }
@@ -59,12 +62,8 @@
 
   pdsSpaceDefense(attacker, destination, hops=1) {
 
-console.log("A");  
-
     let sys = this.returnSystemAndPlanets(destination);
-console.log("B: " + JSON.stringify(sys));  
     let x = this.returnSectorsWithinHopDistance(destination, hops);
-console.log("C: " + JSON.stringify(x));
     let sectors = [];
     let distance = [];
   
@@ -76,7 +75,6 @@ console.log("C: " + JSON.stringify(x));
     // get enemy pds units within range
     //
     let battery = this.returnPDSWithinRange(attacker, destination, sectors, distance);
-console.log("D: " + JSON.stringify(battery));
     let hits = 0;
   
     if (battery.length > 0) {
@@ -243,19 +241,27 @@ console.log(JSON.stringify(sys.p[planet_idx].units[attacker-1]));
       //
       let survivors = 0;
       for (let i = 0; i < sys.p[planet_idx].units[attacker-1].length; i++) {
+console.log(i);
         if (sys.p[planet_idx].units[attacker-1][i].name == "infantry") { survivors++; }
+console.log(i + " -- done");
       }
+console.log("survivors: " + survivors);
       if (survivors == 1) { 
+console.log("asd");
         this.updateLog(sys.p[planet_idx].name + " is conquered by " + this.returnFaction(attacker) + " (" + survivors + " survivor)");
       } else {
+console.log("fasdf");
         this.updateLog(sys.p[planet_idx].name + " is conquered by " + this.returnFaction(attacker) + " (" + survivors + " survivors)");
       }
-  
+console.log("fgh");  
+
       //
       // planet changes ownership
       //
-      sys.p[planet_idx].owner = attacker;
-      sys.p[planet_idx].exhausted = 1;
+      this.updatePlanetOwner(sector, planet_idx);
+//      sys.p[planet_idx].owner = attacker;
+this.updateLog("planet owner is set to: " + attacker);
+//      sys.p[planet_idx].exhausted = 1;
   
     } else {
   
@@ -390,6 +396,8 @@ console.log(JSON.stringify(sys.p[planet_idx].units[attacker-1]));
 
 
   groundCombat(attacker, sector, planet_idx) {
+
+try {
   
     let sys = this.returnSystemAndPlanets(sector);
   
@@ -413,12 +421,14 @@ console.log(JSON.stringify(sys.p[planet_idx].units[attacker-1]));
       return; 
     }
 
+console.log("TESTING A 1");
   
     let attacker_faction = this.returnFaction(attacker);
     let defender_faction = this.returnFaction(defender);
   
     let attacker_forces = this.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
     let defender_forces = this.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx);
+console.log("TESTING A 2");
 
     //
     // attacker rolls first
@@ -445,20 +455,23 @@ console.log(JSON.stringify(sys.p[planet_idx].units[attacker-1]));
         }
       }
     }
-  
+console.log("TESTING A 3: " + defender_hits + " / " + attacker_hits); 
+ 
     this.assignHitsToGroundForces(attacker, sector, planet_idx, defender_hits);
     this.assignHitsToGroundForces(defender, sector, planet_idx, attacker_hits);
  
     this.eliminateDestroyedUnitsInSector(attacker, sector);
     this.eliminateDestroyedUnitsInSector(defender, sector);
+console.log("TESTING A 4"); 
 
     if (attacker_hits > 0) {
-      this.updateLog(total_attacker_hits + " hits for " + this.returnFaction(attacker));
+      this.updateLog(attacker_hits + " hits for " + this.returnFaction(attacker));
     }
     if (defender_hits > 0) {
-      this.updateLog(total_defender_hits + " hits for " + this.returnFaction(defender));
+      this.updateLog(defender_hits + " hits for " + this.returnFaction(defender));
     }
-  
+console.log("TESTING A 5");  
+ 
     attacker_forces = this.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
     defender_forces = this.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx);
 
@@ -470,7 +483,8 @@ console.log("DEFENDER FORCES 2: " + defender_forces);
     // evaluate if planet has changed hands
     //
     if (attacker_forces > defender_forces && defender_forces <= 0) {
-  
+ 
+console.log(" . 1"); 
       //
       // destroy all units belonging to defender (pds, spacedocks)
       //
@@ -478,6 +492,8 @@ console.log("DEFENDER FORCES 2: " + defender_forces);
         sys.p[planet_idx].units[defender-1] = [];
       }
   
+console.log(" . 2"); 
+
       //
       // notify everyone
       //
@@ -485,27 +501,39 @@ console.log("DEFENDER FORCES 2: " + defender_forces);
       for (let i = 0; i < sys.p[planet_idx].units[attacker-1].length; i++) {
         if (sys.p[planet_idx].units[attacker-1][i].name == "infantry") { survivors++; }
       }
+console.log(" . 3"); 
       if (survivors == 1) { 
         this.updateLog(sys.p[planet_idx].name + " is conquered by " + this.returnFaction(attacker) + " (" + survivors + " survivor)");
       } else {
         this.updateLog(sys.p[planet_idx].name + " is conquered by " + this.returnFaction(attacker) + " (" + survivors + " survivors)");
       }
+console.log(" . 4"); 
   
       //
       // planet changes ownership
       //
 console.log("#########");
-this.updateLog("Updating owner to: " + attacker);
-      sys.p[planet_idx].owner = attacker;
-      sys.p[planet_idx].exhausted = 1;
+console.log("#########");
+console.log("#########");
+console.log("#########");
+console.log("Updating owner to: " + attacker);
+      //sys.p[planet_idx].owner = attacker;
+this.updateLog("planet owner is set 2: " + attacker);
+      //sys.p[planet_idx].exhausted = 1;
+      this.updatePlanetOwner(sector, planet_idx);
 console.log("PLANET UPDATED: " + JSON.stringify(sys.p[planet_idx]));
     }
-  
+
+console.log("skipping etc.");
+
     //
     // save regardless
     //
     this.saveSystemAndPlanets(sys);
-  
+} catch (err) {
+console.log(JSON.stringify(err));
+  process.exit(1);
+}  
   }
   
 

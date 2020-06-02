@@ -132,9 +132,6 @@
       }
     }
 
-console.log("defender_found ---> " + defender_found); 
-console.log("attacker_found ---> " + attacker_found); 
-
     if (defender_found == 0) {
       return 0;
     }
@@ -154,9 +151,17 @@ console.log("attacker_found ---> " + attacker_found);
     let defender = sys.p[pid].owner;   
 
     if (defender == attacker) { return 0; }
- 
-    attacker_forces = this.returnNumberOfGroundForcesOnPlanet(attacker, sector, pid);
-    defender_forces = this.returnNumberOfGroundForcesOnPlanet(defender, sector, pid);
+
+    if (attacker == -1) {
+      attacker_forces = 0;
+    } else {
+      attacker_forces = this.returnNumberOfGroundForcesOnPlanet(attacker, sector, pid);
+    }
+    if (defender == -1) {
+      defender_forces = 0;
+    } else {
+      defender_forces = this.returnNumberOfGroundForcesOnPlanet(defender, sector, pid);
+    }
 
     if (attacker_forces > 0 && defender_forces > 0) { return 1; }
     return 0;
@@ -301,9 +306,6 @@ console.log("attacker_found ---> " + attacker_found);
 
   returnSectorsWithinHopDistance(destination, hops) {
 
-console.log("DEST: " + destination);  
-console.log("HOPS: " + hops);
-
     let sectors = [];
     let distance = [];
     let s = this.returnSectors();
@@ -320,7 +322,6 @@ console.log("HOPS: " + hops);
         let neighbours = s[tmp[k]].neighbours;
         for (let m = 0; m < neighbours.length; m++) {
   	if (!sectors.includes(neighbours[m]))  {
-  console.log("adding neighbours " + neighbours[m] + " at " + (i+1) + " from " + tmp[k]);
   	  sectors.push(neighbours[m]);
   	  distance.push(i+1);
   	}
@@ -346,30 +347,21 @@ console.log("HOPS: " + hops);
       // some sectors not playable in 3 player game
       //
       if (sys != null) {
-
-console.log(".1 " + JSON.stringify(sys));
-  
         for (let j = 0; j < sys.p.length; j++) {
-console.log(".1 "+ j);
           for (let k = 0; k < sys.p[j].units.length; k++) {
-console.log(".2 "+ k);
   	  if (k != attacker-1) {
-console.log(".3");
-  	    for (let z = 0; z < sys.p[j].units[k].length; z++) {
-console.log(".4" + z);
-  	      if (sys.p[j].units[k][z].name == "pds") {
-console.log("RANGE: " + sys.p[j].units[k][z].range + " -- " + distance[i]);
-  		if (sys.p[j].units[k][z].range >= distance[i]) {
-  	          let pds = {};
-  	              pds.combat = sys.p[j].units[k][z].combat;
-  		      pds.owner = (k+1);
-  		      pds.sector = sectors[i];
-  
-  	          battery.push(pds);
-  		}
+  	      for (let z = 0; z < sys.p[j].units[k].length; z++) {
+    	        if (sys.p[j].units[k][z].name == "pds") {
+  		  if (sys.p[j].units[k][z].range >= distance[i]) {
+  	            let pds = {};
+  	                pds.combat = sys.p[j].units[k][z].combat;
+  		        pds.owner = (k+1);
+  		        pds.sector = sectors[i];
+  	            battery.push(pds);
+  	  	  }
+  	        }
   	      }
   	    }
-  	  }
           }
         }
       }
@@ -411,11 +403,7 @@ console.log("RANGE: " + sys.p[j].units[k][z].range + " -- " + distance[i]);
   
           for (let k = 0; k < sys.s.units[this.game.player-1].length; k++) {
             let this_ship = sys.s.units[this.game.player-1][k];
-  
-  console.log("examining sector " + sectors[i] + " -- ship found ("+this_ship.name+") with move / distance : " + this_ship.move + " -- " + distance[i]);
-  
             if (this_ship.move >= distance[i]) {
-  console.log("PUSHING THIS SHIP TO OUR LIST!");
   	    x.adjusted_distance.push(distance[i]);
               x.ships.push(this_ship);
               x.ship_idxs.push(k);
@@ -435,14 +423,17 @@ console.log("RANGE: " + sys.p[j].units[k][z].range + " -- " + distance[i]);
   }
  
 
+
   returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx) {
   
     let sys = this.returnSystemAndPlanets(sector);
     let num = 0;
-  
+
     for (let z = 0; z < sys.p[planet_idx].units[player-1].length; z++) {
       if (sys.p[planet_idx].units[player-1][z].strength > 0 && sys.p[planet_idx].units[player-1][z].destroyed == 0) {
-        num++;
+        if (sys.p[planet_idx].units[player-1][z].name == "infantry") {
+          num++;
+        }
       }
     }
   
@@ -534,13 +525,14 @@ console.log("RANGE: " + sys.p[j].units[k][z].range + " -- " + distance[i]);
   }
   returnPlayerPlanetCards(player=null, mode=0) {
   
-    if (player == null) { player == this.game.player; }
+    if (player == null) { player == parseInt(this.game.player); }
 
     let x = [];
   
     for (var i in this.game.planets) {
+
       if (this.game.planets[i].owner == player) {
-  
+
         if (mode == 0) {
           x.push(i);
         }

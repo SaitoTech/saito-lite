@@ -109,10 +109,9 @@
     //
     $('.option').on('click', function() {
   
-      let player_action = $(this).attr("id");
-      let array_of_cards = imperium_self.returnPlayerPlanetCards(player_action+1); // all
+      let player_action = parseInt($(this).attr("id"));
 
-console.log("PLANETS: " + JSON.stringify(array_of_cards)); 
+      let array_of_cards = imperium_self.returnPlayerPlanetCards(player_action+1); // all
 
       let html  = "<ul>";
       for (let z = 0; z < array_of_cards.length; z++) {

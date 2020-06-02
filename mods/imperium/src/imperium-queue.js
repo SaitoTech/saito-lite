@@ -1035,6 +1035,128 @@ console.log("TESTING C-1");
   	
       }
 
+      //
+      // planetary invasion
+      //
+      if (mv[0] === "planetary_invasion") {
+  
+  	let player       = mv[1];
+        let sector       = mv[2];
+
+        if (this.game.player == player) { 
+alert("Player should choose what planets to invade (if possible)");
+	  this.playerPlanetaryInvasion();
+	}
+
+      }
+
+
+
+      
+
+      if (mv[0] === "deactivate") {
+  
+  	let player       = parseInt(mv[1]);
+        let sector	 = mv[2];
+  
+        sys = this.returnSystemAndPlanets(sector);
+  	sys.s.activated[player-1] = 0;
+        this.updateSectorGraphics(sector);
+  	this.game.queue.splice(qe, 1);
+  	return 1;
+  
+      }
+
+
+      if (mv[0] === "purchase") {
+  
+  	let player       = parseInt(mv[1]);
+        let item         = mv[2];
+        let amount       = parseInt(mv[3]);
+  
+        if (item == "strategycard") {
+  
+  	  this.updateLog(this.returnFaction(player) + " takes " + mv[3]);
+  
+  	  this.game.players_info[player-1].strategy.push(mv[3]);
+  	  for (let i = 0; i < this.game.state.strategy_cards.length; i++) {
+  	    if (this.game.state.strategy_cards[i] === mv[3]) {
+  	      this.game.players_info[player-1].goods += this.game.state.strategy_cards_bonus[i];
+  	      this.game.state.strategy_cards.splice(i, 1);
+  	      this.game.state.strategy_cards_bonus.splice(i, 1);
+  	      i = this.game.state.strategy_cards.length+2;
+  	    }
+  	  }
+  	}
+
+        if (item == "tech") {
+  	  this.updateLog(this.returnFaction(player) + " gains " + mv[3]);
+  	  this.game.players_info[player-1].tech.push(mv[3]);
+  	  this.game.tech[mv[3]].onNewRound(imperium_self, player, function() {});
+  	  this.upgradePlayerUnitsOnBoard(player);
+  	}
+        if (item == "goods") {
+  	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " trade goods");
+  	  this.game.players_info[player-1].goods += amount;
+  	}
+
+        if (item == "commodities") {
+  	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " commodities");
+  	  this.game.players_info[player-1].commodities += amount;
+  	}
+
+        if (item == "command") {
+  	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " command tokens");
+  	  this.game.players_info[player-1].command_tokens += amount;
+  	}
+        if (item == "strategy") {
+  	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " strategy tokens");
+  	  this.game.players_info[player-1].strategy_tokens += amount;
+  	}
+
+        if (item == "fleetsupply") {
+  	  this.game.players_info[player-1].fleet_supply += amount;
+  	  this.updateLog(this.returnFaction(player) + " increases their fleet supply to " + this.game.players_info[player-1].fleet_supply);
+  	}
+  
+  	this.game.queue.splice(qe, 1);
+  	return 1;
+  
+      }
+
+
+      if (mv[0] === "pass") {
+  	let player       = parseInt(mv[1]);
+  	this.game.players_info[player-1].passed = 1;
+  	this.game.queue.splice(qe, 1);
+  	return 1;  
+      }
+
+
+      if (mv[0] === "move") {
+ 
+  	let player       = mv[1];
+        let player_moves = parseInt(mv[2]);
+        let sector_from  = mv[3];
+        let sector_to    = mv[4];
+        let shipjson     = mv[5];
+  
+  	//
+  	// move any ships
+  	//
+  	if (this.game.player != player || player_moves == 1) {
+  	  let sys = this.returnSystemAndPlanets(sector_from);
+  	  this.removeSpaceUnitByJSON(player, sector_from, shipjson);
+          this.addSpaceUnitByJSON(player, sector_to, shipjson);
+  	}
+  
+  	this.updateSectorGraphics(sector_from);
+  	this.updateSectorGraphics(sector_to);
+
+  	this.game.queue.splice(qe, 1);
+  	return 1;
+  
+      }
 
 
 
@@ -1085,6 +1207,7 @@ console.log("TESTING C-1");
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
   	this.game.queue.splice(qe, 1);
+        this.updateSectorGraphics(sector);
 	// control returns to original player
         if (this.game.player == player) { this.playerPostActivateSystem(sector); }
 	return 0;
@@ -1108,13 +1231,8 @@ console.log("TESTING C-1");
 
         for (let i = 0; i < speaker_order.length; i++) {
           let techs = this.game.players_info[speaker_order[i]-1].tech;
-console.log(JSON.stringify(techs));
           for (let k = 0; k < techs.length; k++) {
-console.log("SEEING IF PDS SPACE DEFENSE TRIGGERS!");
-console.log(techs[k]);
-
             if (technologies[techs[k]].pdsSpaceDefenseTriggers(this, player, sector) == 1) {
-console.log("PDS SPACE DEFENSE TRIGGERS!");
               this.game.queue.push("pds_space_defense_event\t"+speaker_order[i]+"\t"+sector+"\t"+techs[k]);
             }
           }
@@ -1142,8 +1260,9 @@ console.log("PDS SPACE DEFENSE TRIGGERS!");
 	//
 	// now fire the PDS
 	//
-alert("firing PDS: ");
 	this.pdsSpaceDefense(player, sector, 0); // 0 hops, as other PDS will have fired
+
+        this.updateSectorGraphics(sector);
 
 	// control returns to original player
         //if (this.game.player == player) { this.playerPostPDSSpaceDefense(sector); }
@@ -1364,13 +1483,14 @@ console.log("entering here");
         let sector	 = mv[2];
         let planet_idx	 = mv[3];
 
-        this.updateSectorGraphics(sector);
   	this.game.queue.splice(qe, 1);
 
 	//
 	// have a round of ground combat
 	//
 	this.groundCombat(player, sector, planet_idx);
+
+        this.updateSectorGraphics(sector);
 
   	if (this.hasUnresolvedGroundCombat(player, sector, planet_idx) == 1) {
 	  if (this.game.player == player) {
@@ -1390,139 +1510,105 @@ console.log("entering here");
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-      //
-      // planetary invasion
-      //
-      if (mv[0] === "planetary_invasion") {
+      /////////////////
+      // ACTION CARD //
+      /////////////////
+      if (mv[0] === "action") {
   
-  	let player       = mv[1];
-        let sector       = mv[2];
+  	let card = mv[1];
+  	let player = parseInt(mv[2]);
 
-        if (this.game.player == player) { 
-alert("Player should choose what planets to invade (if possible)");
-	  this.playerPlanetaryInvasion();
+	let cards = this.returnActionCards();
+	let played_card = cards[card];
+
+	cards[card].onPlay(this, player, function(c) {
+	  console.log("ACTION CARD HAS PLAYED AND RETURNED IN ACTION CALLBACK");
+	});
+
+	if (cards[card].interactive == 1) {
+  	  this.game.queue.splice(qe, 1);
+  	  return 1;
+	} else {
+  	  this.game.queue.splice(qe, 1);
+	  return 0;
 	}
 
       }
+/****
+      if (mv[0] === "action_card") {  
 
+  	let card = mv[1];
+  	let player = parseInt(mv[2]);
 
+	let cards = this.returnActionCards();
+	let played_card = cards[card];
 
-      
+	cards[card].onPlay(this, player, function(c) {
+	  console.log("ACTION CARD HAS PLAYED AND RETURNED IN ACTION CALLBACK");
+	});
 
-      if (mv[0] === "deactivate") {
-  
-  	let player       = parseInt(mv[1]);
-        let sector	 = mv[2];
-  
-        sys = this.returnSystemAndPlanets(sector);
-  	sys.s.activated[player-1] = 0;
-        this.updateSectorGraphics(sector);
-  	this.game.queue.splice(qe, 1);
-  	return 1;
-  
+	if (cards[card].interactive == 1) {
+  	  this.game.queue.splice(qe, 1);
+  	  return 1;
+	} else {
+  	  this.game.queue.splice(qe, 1);
+	  return 0;
+	}
+
       }
+      if (mv[0] === "action_card_event") {  
 
+  	let card = mv[1];
+  	let player = parseInt(mv[2]);
 
-      if (mv[0] === "purchase") {
-  
-  	let player       = parseInt(mv[1]);
-        let item         = mv[2];
-        let amount       = parseInt(mv[3]);
-  
-        if (item == "strategycard") {
-  
-  	  this.updateLog(this.returnFaction(player) + " takes " + mv[3]);
-  
-  	  this.game.players_info[player-1].strategy.push(mv[3]);
-  	  for (let i = 0; i < this.game.state.strategy_cards.length; i++) {
-  	    if (this.game.state.strategy_cards[i] === mv[3]) {
-  	      this.game.players_info[player-1].goods += this.game.state.strategy_cards_bonus[i];
-  	      this.game.state.strategy_cards.splice(i, 1);
-  	      this.game.state.strategy_cards_bonus.splice(i, 1);
-  	      i = this.game.state.strategy_cards.length+2;
-  	    }
-  	  }
-  	}
+	let cards = this.returnActionCards();
+	let played_card = cards[card];
 
-        if (item == "tech") {
-  	  this.updateLog(this.returnFaction(player) + " gains " + mv[3]);
-  	  this.game.players_info[player-1].tech.push(mv[3]);
-  	  this.game.tech[mv[3]].onNewRound(imperium_self, player, function() {});
-  	  this.upgradePlayerUnitsOnBoard(player);
-  	}
-        if (item == "goods") {
-  	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " trade goods");
-  	  this.game.players_info[player-1].goods += amount;
-  	}
+	cards[card].onPlay(this, player, function(c) {
+	  console.log("ACTION CARD HAS PLAYED AND RETURNED IN ACTION CALLBACK");
+	});
 
-        if (item == "commodities") {
-  	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " commodities");
-  	  this.game.players_info[player-1].commodities += amount;
-  	}
+	if (cards[card].interactive == 1) {
+  	  this.game.queue.splice(qe, 1);
+  	  return 1;
+	} else {
+  	  this.game.queue.splice(qe, 1);
+	  return 0;
+	}
 
-        if (item == "command") {
-  	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " command tokens");
-  	  this.game.players_info[player-1].command_tokens += amount;
-  	}
-        if (item == "strategy") {
-  	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " strategy tokens");
-  	  this.game.players_info[player-1].strategy_tokens += amount;
-  	}
-
-        if (item == "fleetsupply") {
-  	  this.game.players_info[player-1].fleet_supply += amount;
-  	  this.updateLog(this.returnFaction(player) + " increases their fleet supply to " + this.game.players_info[player-1].fleet_supply);
-  	}
-  
-  	this.game.queue.splice(qe, 1);
-  	return 1;
-  
       }
+      if (mv[0] === "action_card_post") {  
 
+  	let card = mv[1];
+  	let player = parseInt(mv[2]);
 
-      if (mv[0] === "pass") {
-  	let player       = parseInt(mv[1]);
-  	this.game.players_info[player-1].passed = 1;
-  	this.game.queue.splice(qe, 1);
-  	return 1;  
+	let cards = this.returnActionCards();
+	let played_card = cards[card];
+
+	cards[card].onPlay(this, player, function(c) {
+	  console.log("ACTION CARD HAS PLAYED AND RETURNED IN ACTION CALLBACK");
+	});
+
+	if (cards[card].interactive == 1) {
+  	  this.game.queue.splice(qe, 1);
+  	  return 1;
+	} else {
+  	  this.game.queue.splice(qe, 1);
+	  return 0;
+	}
+
       }
+****/
 
 
-      if (mv[0] === "move") {
- 
-  	let player       = mv[1];
-        let player_moves = parseInt(mv[2]);
-        let sector_from  = mv[3];
-        let sector_to    = mv[4];
-        let shipjson     = mv[5];
-  
-  	//
-  	// move any ships
-  	//
-  	if (this.game.player != player || player_moves == 1) {
-  	  let sys = this.returnSystemAndPlanets(sector_from);
-  	  this.removeSpaceUnitByJSON(player, sector_from, shipjson);
-          this.addSpaceUnitByJSON(player, sector_to, shipjson);
-  	}
-  
-  	this.updateSectorGraphics(sector_from);
-  	this.updateSectorGraphics(sector_to);
 
-  	this.game.queue.splice(qe, 1);
-  	return 1;
-  
-      }
+
+
+
+
+
+
+
 
 
       if (mv[0] === "produce") {
@@ -1611,6 +1697,7 @@ alert("Player should choose what planets to invade (if possible)");
   	  this.addMove("resolve\tplay");
   	  this.playerTurn();
         } else {
+	  this.addEventsToBoard();
   	  this.updateStatus(this.returnFaction(parseInt(player)) + " is taking their turn");
   	}
   
@@ -1639,29 +1726,6 @@ alert("Player should choose what planets to invade (if possible)");
       }
 
 
-
-      if (mv[0] === "action") {
-  
-  	let card = mv[1];
-  	let player = parseInt(mv[2]);
-
-	let cards = this.returnActionCards();
-	let played_card = cards[card];
-
-	cards[card].onPlay(this, player, function(c) {
-	  console.log("ACTION CARD HAS PLAYED AND RETURNED IN ACTION CALLBACK");
-	});
-
-	if (cards[card].interactive == 1) {
-  	  this.game.queue.splice(qe, 1);
-  	  return 1;
-	} else {
-  	  this.game.queue.splice(qe, 1);
-	  return 0;
-	}
-
-
-      }
 
 
   
