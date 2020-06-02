@@ -75,7 +75,7 @@ body {
   transform: translateX(-50%);
   font-size: 10vh;
   text-shadow: 0 0 5px #FFF;
-  -webkit-text-stroke: 2px #AAA8;
+  -webkit-text-stroke: 2px #EEEA;
 }
 
 .player-info {
@@ -98,13 +98,14 @@ body {
 
 .player-info-name {
   font-size: 3vh;
+  font-weight: bold;
   text-align: center;
 }
 
 .player-info-chips {
   padding: 0.5em;
   text-align: center;
-  font-size: 2vh;
+  font-size: 3vh; 
 }
 
 .player-info.p6 {

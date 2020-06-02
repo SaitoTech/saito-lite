@@ -227,6 +227,7 @@ class Poker extends GameTemplate {
       this.game.state = this.returnState(this.game.players.length);
 
       this.updateStatus("Generating the Game");
+      this.game.state.required_pot = this.game.state.big_blind;
       this.initializeQueue();
 
     }
@@ -246,6 +247,7 @@ class Poker extends GameTemplate {
 
     this.game.state.big_blind_player++;
     this.game.state.small_blind_player++;
+
     if (this.game.state.big_blind_player > this.game.players.length) { this.game.state.big_blind_player = 1; }
     if (this.game.state.small_blind_player > this.game.players.length) { this.game.state.small_blind_player = 1; }
 
@@ -257,6 +259,7 @@ class Poker extends GameTemplate {
     this.game.state.small_blind_paid = 0;
     this.game.state.required_pot = 0;
     this.game.state.last_raise = this.game.state.big_blind;
+    this.game.state.required_pot = this.game.state.big_blind;
 
     for (let i = 0; i < this.game.players.length; i++) {
       this.game.state.passed[i] = 0;
@@ -274,6 +277,9 @@ class Poker extends GameTemplate {
     }
 
     this.updateLog("New Round...");
+    document.querySelectorAll('.player-info-log').forEach(el => {
+      el.innerHTML = "";
+    });
 
     this.initializeQueue();
 
@@ -293,13 +299,9 @@ class Poker extends GameTemplate {
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
 
-console.log("POKER QUEUE: " + JSON.stringify(this.game.queue));
-
       if (mv[0] == "notify") {
-
-          this.updateLog(mv[1]);
-          this.game.queue.splice(qe, 1);
-
+        this.updateLog(mv[1]);
+        this.game.queue.splice(qe, 1);
       }
 
       if (mv[0] === "winner") {
@@ -311,558 +313,526 @@ console.log("POKER QUEUE: " + JSON.stringify(this.game.queue));
       }
 
       if (mv[0] === "turn") {
+        let player_to_go = parseInt(mv[1]);
+        this.displayBoard();
 
-  let player_to_go = parseInt(mv[1]);
-
-          this.displayBoard();
-
-    //
-    // if everyone except 1 player has zero credit...
-    //
-    let alive_players = 0;
-    for (let i = 0; i < this.game.state.player_credit.length; i++) {
-      if (this.game.state.player_credit[i] > 0) {
-          alive_players++; 
-      } else {
-        if (this.game.state.passed[i] == 0 && this.game.state.turn > 2) {
-          alive_players++; 
+        //
+        // if everyone except 1 player has zero credit...
+        //
+        let alive_players = 0;
+        for (let i = 0; i < this.game.state.player_credit.length; i++) {
+          if (this.game.state.player_credit[i] > 0) {
+            alive_players++; 
+          } else {
+            if (this.game.state.passed[i] == 0 && this.game.state.turn > 2) {
+              alive_players++; 
+            }
+          }
         }
-      }
-    }
 
-    if (alive_players == 1 && this.game.state.turn == 1) {
-      for (let i = 0; i < this.game.state.player_credit.length; i++) {
-        if (this.game.state.player_credit[i] > 0) {
-   
+        if (alive_players == 1 && this.game.state.turn == 1) {
+          for (let i = 0; i < this.game.state.player_credit.length; i++) {
+            if (this.game.state.player_credit[i] > 0) {
               this.addMove("winner\t"+this.game.player);
               this.endTurn();
-    return 0;
+              return 0;
+            }
+          }
+          this.updateStatus("Game Over");
+          return 0;
         }
-      }
-      this.updateStatus("Game Over");
-      return 0;
-    }
 
 
-    //
-    // if everyone except 1 player has folded...
-    //
-    let active_players = 0;
-          let player_left_idx = 0;
-    for (let i = 0; i < this.game.state.passed.length; i++) {
-      if (this.game.state.passed[i] == 0) { active_players++; }
-    }
-    if (active_players == 1) {
-      for (let i = 0; i < this.game.state.passed.length; i++) {
-        if (this.game.state.passed[i] == 0) {
-          this.updateLog("Player " + i+1 + " wins " + this.game.state.pot);
-                this.game.state.player_credit[i] += this.game.state.pot;
-    player_left_idx = i;
-        }
-      }
-
-
-      //
-      // if only one player, everyone else settles
-      //
-      //
-      // everyone should send anything they owe to winner
-      //
-console.log("4. sending "+this.game.state.player_pot[this.game.player-1]+" to " + this.game.players[player_left_idx]);
-      let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[player_left_idx], this.game.state.player_pot[this.game.player-1]);
-      newtx = this.app.wallet.signTransaction(newtx);
-      this.app.network.propagateTransaction(newtx);
-
-
-
-
-            this.startNextRound();
-            return 1;
-    }
-
-
-    //
-    // CHECK TO SEE IF WE NEED TO FLIP CARDS
-    //
-console.log("plays since last raise: " + this.game.state.plays_since_last_raise + " --- " + this.game.players.length);
-
-    if (this.game.state.plays_since_last_raise >= this.game.players.length) {
-
-      //
-      // figure out who won...
-      //
-      if (this.game.state.flipped == 5) {
-
-        this.game.state.player_cards = {};
-        this.game.state.player_cards_reported = 0;
-        this.game.state.player_cards_required = 0;
-
-
-        let first_scorer = -1;
+        //
+        // if everyone except 1 player has folded...
+        //
+        let active_players = 0;
+        let player_left_idx = 0;
         for (let i = 0; i < this.game.state.passed.length; i++) {
-    if (this.game.state.passed[i] == 0) {
-      if (first_scorer == -1) { first_scorer = i; }
-      this.game.state.player_cards_required++;
-      this.game.state.player_cards[i] = [];
-    }
-         }
+          if (this.game.state.passed[i] == 0) { active_players++; }
+        }
+        if (active_players == 1) {
+          for (let i = 0; i < this.game.state.passed.length; i++) {
+            if (this.game.state.passed[i] == 0) {
+              this.updateLog(this.game.state.player_names[i] + " wins " + this.game.state.pot);
+              this.game.state.player_credit[i] += this.game.state.pot;
+              player_left_idx = i;
+            }
+          }
 
-        if (first_scorer == this.game.player-1) {
-          this.addMove("reveal\t"+this.game.player+"\t"+this.game.deck[0].hand[0]+"\t"+this.game.deck[0].hand[1]);
-          this.endTurn();
+          //
+          // if only one player, everyone else settles
+          // everyone should send anything they owe to winner
+          //
+          let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[player_left_idx], this.game.state.player_pot[this.game.player-1]);
+          newtx = this.app.wallet.signTransaction(newtx);
+          this.app.network.propagateTransaction(newtx);
+
+          this.startNextRound();
+          return 1;
         }
 
-        return 0;
-      }
+        //
+        // CHECK TO SEE IF WE NEED TO FLIP CARDS
+        //
+        if (this.game.state.plays_since_last_raise >= this.game.players.length) {
 
+          //
+          // figure out who won...
+          //
+          if (this.game.state.flipped == 5) {
 
-      let cards_to_flip = 1;
-      if (this.game.state.flipped == 0) { 
-        cards_to_flip = 3; 
-      }
+            this.game.state.player_cards = {};
+            this.game.state.player_cards_reported = 0;
+            this.game.state.player_cards_required = 0;
 
-      this.game.state.flipped += cards_to_flip;
-      for (let z = 0; z < cards_to_flip; z++) {
-              for (let i = this.game.players.length-1; i >= 0; i--) {
-                this.game.queue.push("FLIPCARD\t1\t1\t1\t"+(i+1));
-        }
-               this.game.queue.push("FLIPRESET\t1");
-      }
-      this.game.state.plays_since_last_raise = 0;
-      return 1;
-    }
+            let first_scorer = -1;
 
-    this.game.state.plays_since_last_raise++;
-    if (this.game.state.plays_since_last_raise == 0) {
-      this.game.state.plays_since_last_raise++;
-    }
-    this.game.state.turn++;
-
-
-
-
-console.log("---------> " + this.game.state.plays_since_last_raise);
-
-    if (this.game.state.passed[player_to_go-1] == 1) {
-
-            this.game.queue.splice(qe, 1);
-      return 1;
-
-    } else {
-
-            this.game.queue.splice(qe, 1);
-
-      //
-      // if this is the first turn
-      // 
-            if (parseInt(mv[1]) == this.game.player) {
-              this.playerTurn();
-        return 0;
-            } else {
-              this.updateStatus("Waiting for Player " + mv[1]);
-        return 0;
+            for (let i = 0; i < this.game.state.passed.length; i++) {
+              if (this.game.state.passed[i] == 0) {
+                if (first_scorer == -1) { first_scorer = i; }
+                this.game.state.player_cards_required++;
+                this.game.state.player_cards[i] = [];
+              }
             }
 
-      shd_continue = 0;
+            if (first_scorer == this.game.player-1) {
+              this.addMove("reveal\t"+this.game.player+"\t"+this.game.deck[0].hand[0]+"\t"+this.game.deck[0].hand[1]);
+              this.endTurn();
+            }
 
+            return 0;
           }
+
+
+          let cards_to_flip = 1;
+          if (this.game.state.flipped == 0) { 
+            cards_to_flip = 3; 
+          }
+
+          this.game.state.flipped += cards_to_flip;
+          for (let z = 0; z < cards_to_flip; z++) {
+            for (let i = this.game.players.length-1; i >= 0; i--) {
+              this.game.queue.push("FLIPCARD\t1\t1\t1\t"+(i+1));
+            }
+            this.game.queue.push("FLIPRESET\t1");
+          }
+          this.game.state.plays_since_last_raise = 0;
+          return 1;
+        }
+
+        this.game.state.plays_since_last_raise++;
+        if (this.game.state.plays_since_last_raise == 0) {
+          this.game.state.plays_since_last_raise++;
+        }
+        this.game.state.turn++;
+
+        if (this.game.state.passed[player_to_go-1] == 1) {
+          this.game.queue.splice(qe, 1);
+          return 1;
+        } else {
+
+          this.game.queue.splice(qe, 1);
+
+          //
+          // if this is the first turn
+          // 
+          if (parseInt(mv[1]) == this.game.player) {
+            this.playerTurn();
+            return 0;
+          } else {
+            this.updateStatus("Waiting for " + this.game.state.player_names[mv[1]-1]);
+            
+
+            return 0;
+          }
+
+          shd_continue = 0;
+
+        }
       }
 
 
 
       if (mv[0] === "reveal") {
 
-  let scorer = parseInt(mv[1]);
-  let card1  = mv[2];
-  let card2  = mv[3];
+        let scorer = parseInt(mv[1]);
+        let card1  = mv[2];
+        let card2  = mv[3];
 
         this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(card1));
         this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(card2));
-  this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[0]));
-  this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[1]));
-  this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[2]));
-  this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[3]));
-  this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[4]));
+        this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[0]));
+        this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[1]));
+        this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[2]));
+        this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[3]));
+        this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[4]));
 
-  let everyone_ties = 1;
-  let winners = [];
+        let everyone_ties = 1;
+        let winners = [];
 
-  this.game.state.player_cards_reported++;
+        this.game.state.player_cards_reported++;
 
-  let first_scorer = -1;
+        let first_scorer = -1;
         for (let i = scorer; i < this.game.state.passed.length; i++) {
-    if (this.game.state.passed[i] == 0) {
-      if (first_scorer == -1) { first_scorer = i; }
-    }
+          if (this.game.state.passed[i] == 0) {
+            if (first_scorer == -1) { first_scorer = i; }
+          }
         }
 
-  //
-  // we have all of the hands, and can pick a winner
-  //
+        //
+        // we have all of the hands, and can pick a winner
+        //
         if (this.game.state.player_cards_reported == this.game.state.player_cards_required) {
 
-    let player1 = -1;
-    let player2 = -1;  
+          let player1 = -1;
+          let player2 = -1;  
 
-    let deck1 = null;
-    let deck2 = null;  
+          let deck1 = null;
+          let deck2 = null;  
 
-    let winning_player = -1;
-    let winning_deck = null;
+          let winning_player = -1;
+          let winning_deck = null;
 
+          let i = 0;
+          for (var key in this.game.state.player_cards) {
 
-    let i = 0;
-    for (var key in this.game.state.player_cards) {
+            if (i == 0) {
 
-      if (i == 0) {
+              deck2 = this.game.state.player_cards[key];
+              player2 = parseInt(key)+1;
 
-        deck2 = this.game.state.player_cards[key];
-        player2 = parseInt(key)+1;
+            } else {
 
-      } else {
+              deck1 = this.game.state.player_cards[key];
+              player1 = parseInt(key)+1;
 
-        deck1 = this.game.state.player_cards[key];
-        player1 = parseInt(key)+1;
+              let h1score = this.scoreHand(deck1);
+              let h2score = this.scoreHand(deck2);
 
-        let h1score = this.scoreHand(deck1);
-        let h2score = this.scoreHand(deck2);
+              //
+              // report hands
+              //
+              if (i == 1) {
 
-        //
-        // report hands
-        //
-        if (i == 1) {
+                let html = "";
+                let hand1 = this.convertHand(deck1);
+                let hand2 = this.convertHand(deck2);
 
-    let html = "";
-    let hand1 = this.convertHand(deck1);
-    let hand2 = this.convertHand(deck2);
+                html  = hand2.val[0] + hand2.suite[0];
+                html += ", ";
+                html += hand2.val[1] + hand2.suite[1];
+                this.updateLog(this.game.state.player_names[i-1]+": " + h2score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h2score.cards_to_score));
+                
 
-          html  = hand2.val[0] + hand2.suite[0];
-          html += ", ";
-          html += hand2.val[1] + hand2.suite[1];
-    this.updateLog("Player "+(i)+": " + h2score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h2score.cards_to_score));
+                html  = hand1.val[0] + hand1.suite[0];
+                html += ", ";
+                html += hand1.val[1] + hand1.suite[1];
+                this.updateLog(this.game.state.player_names[i]+": " + h1score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h1score.cards_to_score));
 
-          html  = hand1.val[0] + hand1.suite[0];
-          html += ", ";
-          html += hand1.val[1] + hand1.suite[1];
-    this.updateLog("Player "+(i+1)+": " + h1score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h1score.cards_to_score));
+              } else {
 
-        } else {
+                let html = "";
+                let hand1 = this.convertHand(deck1);
 
-    let html = "";
-    let hand1 = this.convertHand(deck1);
+                html  = hand1.val[0] + hand1.suite[0];
+                html += ", ";
+                html += hand1.val[1] + hand1.suite[1];
+                this.updateLog(this.game.state.player_names[i]+": " + h1score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h1score.cards_to_score));
 
-          html  = hand1.val[0] + hand1.suite[0];
-          html += ", ";
-          html += hand1.val[1] + hand1.suite[1];
-    this.updateLog("Player "+(i+1)+": " + h1score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h1score.cards_to_score));
+              }
 
-        }
+              let winner = this.pickWinner(h1score, h2score);
+  
+              if (winner == 0) {
 
+                //
+                // players all have the same hand (public cards)
+                //  
+                this.updateLog("Players tie -- no winner");
+                this.game.state.player_credit[player1-1] += this.game.state.player_pot[player1-1];
+                this.game.state.player_credit[player2-1] += this.game.state.player_pot[player2-1];
 
-        let winner = this.pickWinner(h1score, h2score);
+                winners.push(player1);
+                winners.push(player2);
 
-        if (winner == 0) {
+              } else {
 
-    //
-    // players all have the same hand (public cards)
-    //  
-    this.updateLog("Players tie -- no winner");
-    this.game.state.player_credit[player1-1] += this.game.state.player_pot[player1-1];
-    this.game.state.player_credit[player2-1] += this.game.state.player_pot[player2-1];
+                everyone_ties = 0;
+                winners = [];
 
-    winners.push(player1);
-    winners.push(player2);
-
-        } else {
-
-    everyone_ties = 0;
-    winners = [];
-
-          if (winner == 1) {
-        deck2 = deck1;
-      player2 = player1;
-      winning_player = player1;
-      winners.push(player1);
-      winning_deck = deck1;
-          } else {
-        deck2 = deck2;
-      player2 = player2;
-      winning_player = player2;
-      winners.push(player2);
-      winning_deck = deck2;
+                if (winner == 1) {
+                  deck2 = deck1;
+                  player2 = player1;
+                  winning_player = player1;
+                  winners.push(player1);
+                  winning_deck = deck1;
+                } else {
+                  deck2 = deck2;
+                  player2 = player2;
+                  winning_player = player2;
+                  winners.push(player2);
+                  winning_deck = deck2;
+                }
+              }
+            }
+            i++;
           }
 
-        }
-      }
-      i++;
-    }
-
-    //
-    // report winner
-    //
-    console.log("\n\nTHE WINNER IS: " + JSON.stringify(winners));
-
-
-    if (winners.length > 1) {
+          //
+          // report winner
+          //
+          if (winners.length > 1) {
 
             //
-      // split winnings among winners
-      //
-      let pot_size = Math.floor(this.game.state.pot / winners.length)
-      for (let i = 0; i < winners.length; i++) {
-        this.updateLog("Player: " + winners[i] + " splits pot and wins " + pot_size);
-        this.game.state.player_credit[winners[i]-1] += pot_size;
-      }
-
-      //
-      // send wagers to winner
-      //
-      let chips_to_send = this.game.state.player_pot[this.game.player-1] / winners.length;
-      for (let i = 0; i < winners.length; i++) {
-        //
-        // non-winners send wagers to winner
-        //
-console.log("1. sending "+this.game.state.player_pot[this.game.player-1]+" to " + this.game.players[winners[i]-1]);
-        let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[winners[i]-1], this.game.state.player_pot[this.game.player-1]);
-        newtx = this.app.wallet.signTransaction(newtx);
-        this.app.network.propagateTransaction(newtx);
-      }
-
-    } else {
+            // split winnings among winners
+            //
+            let pot_size = Math.floor(this.game.state.pot / winners.length)
+            for (let i = 0; i < winners.length; i++) {
+              this.updateLog(this.game.state.player_names[winners[i]-1] + " splits pot and wins " + pot_size);
+              
+              this.game.state.player_credit[winners[i]-1] += pot_size;
+            }
 
             //
-      // winner gets everything
-      //
-      this.updateLog("Player: " + winners[0] + " wins " + this.game.state.pot);
-      this.game.state.player_credit[winners[0]-1] += this.game.state.pot;
+            // send wagers to winner
+            //
+            let chips_to_send = this.game.state.player_pot[this.game.player-1] / winners.length;
+            for (let i = 0; i < winners.length; i++) {
+              //
+              // non-winners send wagers to winner
+              //
+              let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[winners[i]-1], this.game.state.player_pot[this.game.player-1]);
+              newtx = this.app.wallet.signTransaction(newtx);
+              this.app.network.propagateTransaction(newtx);
+            }
+          } else {
 
-      //
-      // non-winners send wagers to winner
-      //
-console.log("2. sending "+this.game.state.player_pot[this.game.player-1]+" to " + this.game.players[winners[0]-1]);
-      let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[winners[0]-1], this.game.state.player_pot[this.game.player-1]);
-      newtx = this.app.wallet.signTransaction(newtx);
-      this.app.network.propagateTransaction(newtx);
+            //
+            // winner gets everything
+            //
+            this.updateLog(this.game.state.player_names[winners[0]-1] + " wins " + this.game.state.pot);
+            this.game.state.player_credit[winners[0]-1] += this.game.state.pot;
 
+            //
+            // non-winners send wagers to winner
+            //
+            let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[winners[0]-1], this.game.state.player_pot[this.game.player-1]);
+            newtx = this.app.wallet.signTransaction(newtx);
+            this.app.network.propagateTransaction(newtx);
 
-    }
-
-
-
+          }
 
           this.startNextRound();
-    return 1;
-  }
+          return 1;
+        }
   
-
-  if (this.game.player-1 == first_scorer) {
+        if (this.game.player-1 == first_scorer) {
           this.addMove("reveal\t"+this.game.player+"\t"+this.game.deck[0].hand[0]+"\t"+this.game.deck[0].hand[1]);
           this.endTurn();
-  }
+        }
 
-  return 0;
+        return 0;
       }
-
-
-
-
-
 
 
       if (mv[0] === "round") {
 
-          this.displayBoard();
+        this.displayBoard();
 
-          if (this.game.state.turn == 0) {
+        if (this.game.state.turn == 0) {
 
           //
-      // Big Blind
-      //    
-            if (this.game.state.player_credit[this.game.state.big_blind_player-1] <= this.game.state.big_blind) {
-              if (this.game.state.player_credit[this.game.state.big_blind_player-1] == this.game.state.big_blind) {
-            this.updateLog("Player "+this.game.state.big_blind_player+" has no more chips");
-        } else {
-            this.updateLog("Player "+this.game.state.big_blind_player+" deposits remainder of tokens as big blind and is removed from game");
-        }
-        this.game.state.player_pot[this.game.state.big_blind_player-1] += this.game.state.player_credit[this.game.state.big_blind_player-1];
-        this.game.state.pot += this.game.state.player_credit[this.game.state.big_blind_player-1];
-        this.game.state.player_credit[this.game.state.big_blind_player-1] = -1;
-        this.game.state.passed[this.game.state.big_blind_player-1] = 1;
-      } else {
-        this.updateLog("Player "+this.game.state.big_blind_player+" deposits "+this.game.state.big_blind);
-        this.game.state.player_pot[this.game.state.big_blind_player-1] += this.game.state.big_blind;
-        this.game.state.pot += this.game.state.big_blind;
-        this.game.state.player_credit[this.game.state.big_blind_player-1] -= this.game.state.big_blind;
-      }
+          // Big Blind
+          //    
+          if (this.game.state.player_credit[this.game.state.big_blind_player-1] <= this.game.state.big_blind) {
+            if (this.game.state.player_credit[this.game.state.big_blind_player-1] == this.game.state.big_blind) {
+              this.updateLog(this.game.state.player_names[this.game.state.big_blind_player-1]+" has no more chips");
+              
+            } else {
+              this.updateLog(this.game.state.player_names[this.game.state.big_blind_player-1]+" deposits remainder of tokens as big blind and is removed from game");
+            }
+            this.game.state.player_pot[this.game.state.big_blind_player-1] += this.game.state.player_credit[this.game.state.big_blind_player-1];
+            this.game.state.pot += this.game.state.player_credit[this.game.state.big_blind_player-1];
+            this.game.state.player_credit[this.game.state.big_blind_player-1] = -1;
+            this.game.state.passed[this.game.state.big_blind_player-1] = 1;
+          } else {
+            this.updateLog(this.game.state.player_names[this.game.state.big_blind_player-1]+" deposits "+this.game.state.big_blind);
+            this.game.state.player_pot[this.game.state.big_blind_player-1] += this.game.state.big_blind;
+            this.game.state.pot += this.game.state.big_blind;
+            this.game.state.player_credit[this.game.state.big_blind_player-1] -= this.game.state.big_blind;
+          }
 
-      //
-      // Small Blind
-      //
+          //
+          // Small Blind
+          //
+          if (this.game.state.player_credit[this.game.state.small_blind_player-1] <= this.game.state.small_blind) {
             if (this.game.state.player_credit[this.game.state.small_blind_player-1] <= this.game.state.small_blind) {
-              if (this.game.state.player_credit[this.game.state.small_blind_player-1] <= this.game.state.small_blind) {
-          this.updateLog("Player "+this.game.state.small_blind_player+" has no more chips");
-        } else {
-          this.updateLog("Player "+this.game.state.small_blind_player+" deposits remainder tokens as small blind and is removed from game");
+              this.updateLog(this.game.state.player_names[this.game.state.small_blind_player-1]+" has no more chips");
+            } else {
+              this.updateLog(this.game.state.player_names[this.game.state.small_blind_player-1]+" deposits remainder tokens as small blind and is removed from game");
+            }
+            this.game.state.player_pot[this.game.state.small_blind_player-1] += this.game.state.player_credit[this.game.state.small_blind_player-1];
+            this.game.state.pot += this.game.state.player_credit[this.game.state.small_blind_player-1];
+            this.game.state.player_credit[this.game.state.small_blind_player-1] = -1;
+            this.game.state.passed[this.game.state.small_blind_player-1] = 1;
+          } else {
+            this.updateLog(this.game.state.player_names[this.game.state.small_blind_player-1]+" deposits "+this.game.state.small_blind);
+            this.game.state.player_pot[this.game.state.small_blind_player-1] += this.game.state.small_blind;
+            this.game.state.pot += this.game.state.small_blind;
+            this.game.state.player_credit[this.game.state.small_blind_player-1] -= this.game.state.small_blind;
+          }
         }
-        this.game.state.player_pot[this.game.state.small_blind_player-1] += this.game.state.player_credit[this.game.state.small_blind_player-1];
-        this.game.state.pot += this.game.state.player_credit[this.game.state.small_blind_player-1];
-        this.game.state.player_credit[this.game.state.small_blind_player-1] = -1;
-        this.game.state.passed[this.game.state.small_blind_player-1] = 1;
-      } else {
-        this.updateLog("Player "+this.game.state.small_blind_player+" deposits "+this.game.state.small_blind);
-        this.game.state.player_pot[this.game.state.small_blind_player-1] += this.game.state.small_blind;
-        this.game.state.pot += this.game.state.small_blind;
-        this.game.state.player_credit[this.game.state.small_blind_player-1] -= this.game.state.small_blind;
+
+        //
+        // update game state
+        //
+        this.game.state.round++;
+        this.game.state.turn++;
+
+        if (this.game.state.required_pot < this.game.state.big_blind) {
+          this.game.state.required_pot = this.game.state.big_blind;
+        }
+
+        this.updateStatus("Your opponent is making the first move.");
+        // not -1 to start with small blind
+
+        for (let i = this.game.state.big_blind_player; i <= (this.game.state.big_blind_player+this.game.players.length-1); i++) {
+          let player_to_go = (i%this.game.players.length);
+          if (player_to_go == 0) { player_to_go = this.game.players.length; }
+          this.game.queue.push("turn\t"+player_to_go);
+        }
       }
-    }
 
 
 
-    //
-    // update game state
-    //
-    this.game.state.round++;
-    this.game.state.turn++;
-
-    this.game.state.required_pot = this.game.state.big_blind;
-
-          this.updateStatus("Your opponent is making the first move.");
-    // not -1 to start with small blind
-
-
-          for (let i = this.game.state.big_blind_player; i <= (this.game.state.big_blind_player+this.game.players.length-1); i++) {
-//          for (let i = (this.game.state.big_blind_player+this.game.players.length-1); i >= this.game.state.big_blind_player; i--) {
-      let player_to_go = (i%this.game.players.length);
-            if (player_to_go == 0) { player_to_go = this.game.players.length; }
-      this.game.queue.push("turn\t"+player_to_go);
-    }
-
-      }
 
       if (mv[0] === "call") {
 
-    let player = parseInt(mv[1]);
-    let amount_to_call = 0;
+        let player = parseInt(mv[1]);
+        let amount_to_call = 0;
 
-    this.updateLog("Player " + player + " calls");
-    this.updatePlayerLog(player, "call");
-    if (this.game.state.required_pot > this.game.state.player_pot[player-1]) {
-      amount_to_call = this.game.state.required_pot - this.game.state.player_pot[player-1];
-    }
-     this.updateLog("Player " + player + " deposits " + amount_to_call);
-     this.updateLog(this.game.state.player_names[player-1] + " deposits " + amount_to_call);
+        this.updateLog(this.game.state.player_names[player-1] + " calls");
+        this.updatePlayerLog(player, "call");
+        if (this.game.state.required_pot > this.game.state.player_pot[player-1]) {
+          amount_to_call = this.game.state.required_pot - this.game.state.player_pot[player-1];
+        }
+        this.updateLog(this.game.state.player_names[player-1] + " deposits " + amount_to_call);
+        
 
-          if (this.game.state.small_blind_player == player) {
-      if (this.game.state.flipped == 0) {
-              this.game.state.plays_since_last_raise = this.game.players.length-1;
+        if (this.game.state.small_blind_player == player) {
+          if (this.game.state.flipped == 0) {
+            this.game.state.plays_since_last_raise = this.game.players.length-1;
+          }
+        }
+
+        //
+        // reset plays since last raise
+        //
+        this.game.state.player_credit[player-1] -= amount_to_call;
+        this.game.state.player_pot[player-1]  += amount_to_call;
+        this.game.state.pot += amount_to_call;
+
+        this.game.queue.splice(qe, 1);
+
       }
-    }
 
-          //
-          // reset plays since last raise
-          //
 
-    this.game.state.player_credit[player-1] -= amount_to_call;
-    this.game.state.player_pot[player-1]  += amount_to_call;
-    this.game.state.pot += amount_to_call;
-
-          this.game.queue.splice(qe, 1);
-
-      }
 
 
       if (mv[0] === "fold") {
 
     let player = parseInt(mv[1]);
     this.updatePlayerLog(player, "fold");
-    this.updateLog("Player " + player + " folds.");
     this.updateLog(this.game.state.player_names[player-1] + " folds.");
-    
+     
     this.game.state.passed[player-1] = 1;
     this.game.queue.splice(qe, 1);
 
-    //
-    // if everyone folds, last player in wins
-    //
-    let players_left = 0;
-    let player_left_idx = -1;
-    for (let i = 0; i < this.game.state.passed.length; i++) {
-      if (this.game.state.passed == 0) {
-        players_left++;
-        player_left_idx = i;
-      }
-    }
-
-    if (players_left == 1) {
-
-      this.game.state.player_credit[player_left_idx] = this.game.state.pot;
-
-      //
-      // everyone should send anything they owe to winner
-      //
-console.log("3. sending "+this.game.state.player_pot[this.game.player-1]+" to " + this.game.players[player_left_idx]);
-      let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[player_left_idx], this.game.state.player_pot[this.game.player-1]);
-      newtx = this.app.wallet.signTransaction(newtx);
-      this.app.network.propagateTransaction(newtx);
-
-      this.startNextRound();
+        //
+        // if everyone folds, last player in wins
+        //
+        let players_left = 0;
+        let player_left_idx = -1;
+        for (let i = 0; i < this.game.state.passed.length; i++) {
+          if (this.game.state.passed == 0) {
+            players_left++;
+            player_left_idx = i;
           }
+        }
+
+        if (players_left == 1) {
+
+          this.game.state.player_credit[player_left_idx] = this.game.state.pot;
+
+          //
+          // everyone should send anything they owe to winner
+          //
+          let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[player_left_idx], this.game.state.player_pot[this.game.player-1]);
+          newtx = this.app.wallet.signTransaction(newtx);
+          this.app.network.propagateTransaction(newtx);
+
+          this.startNextRound();
+        }
       }
+
+
+
 
       if (mv[0] === "check") {
-    let player = parseInt(mv[1]);
-          this.game.queue.splice(qe, 1);
-    this.updateLog("Player " + player + " checks.");
+        let player = parseInt(mv[1]);
+        this.game.queue.splice(qe, 1);
+        this.updateLog(this.game.state.player_names[player-1] + " checks.");
       }
 
 
 
       if (mv[0] == "raise") {
 
-    let player = parseInt(mv[1]);
-    let raise = parseInt(mv[2]);
+        let player = parseInt(mv[1]);
+        let raise = parseInt(mv[2]);
 
-    let call_portion = 0;
-    let raise_portion = 0;
+        let call_portion = 0;
+        let raise_portion = 0;
 
-    //
-    // 1 instead of 0 as my play is first player
-    //
-    this.game.state.plays_since_last_raise = 1;
+        //
+        // 1 instead of 0 as my play is first player
+        //
+        this.game.state.plays_since_last_raise = 1;
 
-    if (this.game.state.required_pot > this.game.state.player_pot[player-1]) {
-      call_portion = this.game.state.required_pot - this.game.state.player_pot[player-1];
-      raise_portion = raise - call_portion;
+        if (this.game.state.required_pot > this.game.state.player_pot[player-1]) {
+          call_portion = this.game.state.required_pot - this.game.state.player_pot[player-1];
+          raise_portion = raise - call_portion;
 
-      this.game.state.player_credit[player-1] -= call_portion;
-      this.game.state.player_pot[player-1] += call_portion;
-      //this.game.state.required_pot += call_portion;
-      this.game.state.pot += call_portion;
+          this.game.state.player_credit[player-1] -= call_portion;
+          this.game.state.player_pot[player-1] += call_portion;
+          //this.game.state.required_pot += call_portion;
+          this.game.state.pot += call_portion;
 
-      this.game.state.player_credit[player-1] -= raise_portion;
-      this.game.state.player_pot[player-1] += raise_portion;
-      this.game.state.required_pot += raise_portion;
-      this.game.state.pot += raise_portion;
+          this.game.state.player_credit[player-1] -= raise_portion;
+          this.game.state.player_pot[player-1] += raise_portion;
+          this.game.state.required_pot += raise_portion;
+          this.game.state.pot += raise_portion;
 
-      this.game.state.last_raise = raise_portion;
+          this.game.state.last_raise = raise_portion;
 
-      this.updateLog("Player " + player + " calls " + call_portion + ".");
-      this.updateLog("Player " + player + " raises " + raise_portion + ".");
-      this.updatePlayerLog(player, "raises " + raise_portion);
+          this.updateLog(this.game.state.player_names[player-1] + " calls " + call_portion + ".");
+          this.updateLog(this.game.state.player_names[player-1] + " raises " + raise_portion + ".");
+          this.updatePlayerLog(player, "raises " + raise_portion);
 
-    } else {
+        } else {
 
-      this.game.state.player_credit[player-1] -= raise;
-      this.game.state.player_pot[player-1] += raise;
-      this.game.state.required_pot += raise;
-      this.game.state.pot += raise;
-      this.game.state.last_raise = raise;
+          this.game.state.player_credit[player-1] -= raise;
+          this.game.state.player_pot[player-1] += raise;
+          this.game.state.required_pot += raise;
+          this.game.state.pot += raise;
+          this.game.state.last_raise = raise;
 
-      this.updateLog("Player " + player + " raises " + raise + ".");
-      this.updatePlayerLog(player, "raises " + raise);
+          this.updateLog(this.game.state.player_names[player-1] + " raises " + raise + ".");
+          this.updatePlayerLog(player, "raises " + raise);
 
-          }
-          this.game.queue.splice(qe, 1);
+        }
+        this.game.queue.splice(qe, 1);
       }
 
       //
@@ -872,9 +842,13 @@ console.log("3. sending "+this.game.state.player_pot[this.game.player-1]+" to " 
         console.log("NOT CONTINUING");
         return 0;
       }
+
     }
     return 1;
   }
+
+
+
 
 
 
@@ -906,7 +880,7 @@ console.log("3. sending "+this.game.state.player_pot[this.game.player-1]+" to " 
       return;
     }
 
-    html += '<div class="menu-player">'+this.game.state.player_names[this.game.player-1];
+    html += '<div class="menu-player">Your move ';
     if (this.game.player == this.game.state.big_blind_player) {
       html += " (big blind)";
     }
@@ -918,7 +892,6 @@ console.log("3. sending "+this.game.state.player_pot[this.game.player-1]+" to " 
 
     let cost_to_call = this.game.state.required_pot - this.game.state.player_pot[this.game.player-1];
     if (cost_to_call < 0) { cost_to_call = 0; }
-
 
     //
     // if we need to raise
