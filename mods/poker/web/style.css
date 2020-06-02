@@ -73,8 +73,8 @@ body {
   left: 50vw;
   transform: translateX(-50%);
   font-size: 10vh;
-  text-shadow: 0 0 10px aliceblue;
-  -webkit-text-stroke: 2px #FFF8;
+  text-shadow: 0 0 5px #FFF;
+  -webkit-text-stroke: 2px #AAA8;
 }
 
 .player-info {
@@ -106,14 +106,10 @@ body {
   font-size: 2vh;
 }
 
-#player-info-hand-1 {
-  display: none;
-}
-
 .player-info.p2 {
-  left: 50vw;
-  top: 1em;
-  transform: translateX(-50%);
+  left: 1em;
+  top: 60vh;
+  transform: translateY(-50%);
 }
 
 .player-info.p3 {
@@ -123,14 +119,14 @@ body {
 }
 
 .player-info.p4 {
-  right: 1em;
-  top: 30vh;
-  transform: translateY(-50%);
+  left: 50vw;
+  top: 1em;
+  transform: translateX(-50%);
 }
 
 .player-info.p5 {
-  left: 1em;
-  top: 60vh;
+  right: 1em;
+  top: 30vh;
   transform: translateY(-50%);
 }
 
@@ -140,12 +136,16 @@ body {
   transform: translateY(-50%);
 }
 
-.p2 .hand, .p4 .hand, .p6 .hand {
+.p1 .hand {
+  display: none;
+}
+
+.p4 .hand, .p5 .hand, .p6 .hand {
   right: 15vh;
   top: 2vh;
 }
 
-.p3 .hand, .p5 .hand {
+.p3 .hand, .p2 .hand {
   left: 24vh;
   top: 2vh;
 }
@@ -227,6 +227,9 @@ body {
 .htmlCard {
   margin: 5px 3px;
   display: inline-block;
+  background: #fffD;
+  padding: 4px 3px;
+  border-radius: 6px;
 }
 
 .chat-box {
@@ -234,11 +237,23 @@ body {
 }
 
 .chat-box-main {
-  height: 20vh !important;
+  max-height: 20vh !important;
 }
 
 .hud {
   display: none;
+}
+
+.status ul li:hover {
+  background: #ccc3;
+}
+
+.log {
+  color: #fff;
+  background: transparent;
+  font-size: larger;
+  height: 23vh;
+  overflow-y: auto;
 }
 
 @media all and (max-aspect-ratio:13/9) {
@@ -273,12 +288,12 @@ body {
   .cardfan .card {
     width: 10vh;
   }
-  .p2 .hand, .p3 .hand, .p4 .hand {
+  .p4 .hand, .p3 .hand, .p5 .hand {
     right: -3vh;
     left: unset;
     top: 6vh;
   }
-  .p5 .hand {
+  .p2 .hand {
     right: -3vw;
     left: unset;
     top: -9vh;
@@ -296,12 +311,12 @@ body {
     position: absolute;
   }
   .player-info.p1 {
-    width: 100vw;
-    height: 17vh;
-    top: 54vh;
-    left: 50vw;
-    transform: translateX(-50%);
+    width: 25vw;
+    height: 46vh;
+    bottom: 0;
+    left: 63vw;
   }
+
   .player-info-name {
     font-size: 1.5vh;
     text-align: center;
@@ -317,7 +332,7 @@ body {
   #player-info-hand-1 {
     display: none;
   }
-  .player-info.p2 {
+  .player-info.p4 {
     left: 50vw;
     top: 1em;
     transform: translateX(-50%);
@@ -327,12 +342,12 @@ body {
     top: 1em;
     transform: none;
   }
-  .player-info.p4 {
+  .player-info.p5 {
     right: 1em;
     top: 1em;
     transform: none;
   }
-  .player-info.p5 {
+  .player-info.p2 {
     left: 1em;
     top: 42vh;
     transform: translateY(-50%);
@@ -343,19 +358,28 @@ body {
     transform: translateY(-50%);
   }
   .status {
-    width: 100vw !important;
+    width: 24vw !important;
     position: absolute;
-    top: 61vh;
-    border: 1px solid aqua;
-    left: 0px;
-    height: 10vh;
-    background-color: #fff2;
+    bottom: 0;
+    left: 25vw;
+    height: 46vh;
+    background-color: #4448;
   }
 }
 
 @media only screen and (max-width: 750px) {
   .status {
-    width: 100vw !important;
+    width: 50vw !important;
+    left: 0px;
+  }
+  .player-info.p1 {
+    width: 50vw;
+    right: 0;
+    left:unset;
+    transform: unset;
+  }
+  .log {
+    font-size: smaller;
   }
   .player-info-name {
     font-size: 4vw;
