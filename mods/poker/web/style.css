@@ -107,13 +107,13 @@ body {
   font-size: 2vh;
 }
 
-.player-info.p2 {
+.player-info.p6 {
   left: 1em;
   top: 60vh;
   transform: translateY(-50%);
 }
 
-.player-info.p3 {
+.player-info.p5 {
   left: 1em;
   top: 30vh;
   transform: translateY(-50%);
@@ -125,13 +125,13 @@ body {
   transform: translateX(-50%);
 }
 
-.player-info.p5 {
+.player-info.p3 {
   right: 1em;
   top: 30vh;
   transform: translateY(-50%);
 }
 
-.player-info.p6 {
+.player-info.p2 {
   right: 1em;
   top: 60vh;
   transform: translateY(-50%);
@@ -141,12 +141,12 @@ body {
   display: none;
 }
 
-.p4 .hand, .p5 .hand, .p6 .hand {
+.p4 .hand, .p3 .hand, .p2 .hand {
   right: 15vh;
   top: 2vh;
 }
 
-.p3 .hand, .p2 .hand {
+.p5 .hand, .p6 .hand {
   left: 24vh;
   top: 2vh;
 }
@@ -300,17 +300,17 @@ body {
   .cardfan .card {
     width: 10vh;
   }
-  .p4 .hand, .p3 .hand, .p5 .hand {
+  .p4 .hand, .p5 .hand, .p3 .hand {
     right: -3vh;
     left: unset;
     top: 9vh;
   }
-  .p2 .hand {
+  .p6 .hand {
     right: -3vw;
     left: unset;
     top: -9vh;
   }
-  .p6 .hand {
+  .p2 .hand {
     right: -3vw;
     top: -9vh;
   }
@@ -322,7 +322,7 @@ body {
     padding: 1em;
     position: absolute;
   }
-  .player-info.p1 {
+ .player-info.p1 {
     width: 24vw;
     height: 43vh;
     bottom: 0;
@@ -330,7 +330,8 @@ body {
     right: 25vw;
     transform: none;
     min-width: unset;
-  }
+}
+
   .player-info-name {
     font-size: 1.75vh;
     text-align: center;
@@ -343,27 +344,29 @@ body {
     text-align: center;
     font-size: 1.5vh;
   }
+  
+  
   .player-info.p4 {
     left: 50vw;
     top: 1em;
     transform: translateX(-50%);
   }
-  .player-info.p3 {
+  .player-info.p5 {
     left: 1em;
     top: 1em;
     transform: none;
   }
-  .player-info.p5 {
+  .player-info.p3 {
     right: 1em;
     top: 1em;
     transform: none;
   }
-  .player-info.p2 {
+  .player-info.p6 {
     left: 1em;
     top: 42vh;
     transform: translateY(-50%);
   }
-  .player-info.p6 {
+  .player-info.p2 {
     right: 1em;
     top: 42vh;
     transform: translateY(-50%);
@@ -386,7 +389,7 @@ body {
   .player-info.p1 {
     width: 50vw;
     right: 0;
-    left: unset;
+    left:unset;
     transform: unset;
   }
   .log {
