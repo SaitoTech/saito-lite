@@ -253,9 +253,13 @@ body {
 .log {
   color: #fff;
   background: transparent;
-  font-size: larger;
+  font-size: xlarge;
   height: 23vh;
   overflow-y: auto;
+}
+
+#log {
+  font-size: 1.5em;
 }
 
 .player-info-log {
@@ -343,8 +347,8 @@ body {
   .player-info-chips {
     padding: 0.5em;
     text-align: center;
-/*    font-size: 2vh; */
-    font-size: 14px;
+    font-size: 2.5vh; 
+    /*font-size: 14px;*/
   }
   
   
