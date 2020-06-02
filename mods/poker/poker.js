@@ -750,7 +750,7 @@ console.log("2. sending "+this.game.state.player_pot[this.game.player-1]+" to " 
       amount_to_call = this.game.state.required_pot - this.game.state.player_pot[player-1];
     }
      this.updateLog("Player " + player + " deposits " + amount_to_call);
-
+     this.updateLog(this.game.state.player_names[player-1] + " deposits " + amount_to_call);
 
           if (this.game.state.small_blind_player == player) {
       if (this.game.state.flipped == 0) {
@@ -776,6 +776,8 @@ console.log("2. sending "+this.game.state.player_pot[this.game.player-1]+" to " 
     let player = parseInt(mv[1]);
     this.updatePlayerLog(player, "fold");
     this.updateLog("Player " + player + " folds.");
+    this.updateLog(this.game.state.player_names[player-1] + " folds.");
+    
     this.game.state.passed[player-1] = 1;
     this.game.queue.splice(qe, 1);
 
