@@ -150,6 +150,7 @@
           this.loadUnitOntoPlanet(i + 1, hwsectors[i], strongest_planet, factions[this.game.players_info[i].faction].ground_units[k]);
 	}
 
+	let technologies = this.returnTechnologyTree();
 
 	//
 	// assign faction technology
@@ -158,7 +159,7 @@
 	  let free_tech = factions[this.game.players_info[i].faction].tech[k];
 	  let player = i+1;
           this.game.players_info[i].tech.push(free_tech);
-          this.game.tech[free_tech].onNewRound(this, player, function() {});
+          technologies[free_tech].onNewRound(this, player, function() {});
           this.upgradePlayerUnitsOnBoard(player);
         }
 
@@ -605,12 +606,16 @@ console.log("GAME QUEUE: " + this.game.queue);
   
       if (mv[0] === "newround") {
 
+	let technologies = this.returnTechnologyTree();
+
         //
   	// reset tech bonuses
   	//
         for (let i = 0; i < this.game.players_info.length; i++) {
           for (let ii = 0; ii < this.game.players_info[i].tech.length; ii++) {
-            this.game.tech[this.game.players_info[i].tech[ii]].onNewRound(this, (i+1), function() {});
+console.log(ii);
+console.log("which tech: " + this.game.players_info[i].tech[ii]);
+            technologies[this.game.players_info[i].tech[ii]].onNewRound(this, (i+1), function() {});
   	  }
   	}
   
@@ -635,6 +640,7 @@ console.log("GAME QUEUE: " + this.game.queue);
         for (let i = 0; i < this.game.players_info.length; i++) {
   	  this.game.players_info[i].passed = 0;
 	  this.game.players_info[i].strategy_cards_played = [];
+  	  this.game.players_info[i].strategy = [];
         }
 
 
@@ -1095,9 +1101,12 @@ alert("Player should choose what planets to invade (if possible)");
   	}
 
         if (item == "tech") {
+
+	  let technologies = this.returnTechnologyTree();
+
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3]);
   	  this.game.players_info[player-1].tech.push(mv[3]);
-  	  this.game.tech[mv[3]].onNewRound(imperium_self, player, function() {});
+  	  technologies[mv[3]].onNewRound(imperium_self, player, function() {});
   	  this.upgradePlayerUnitsOnBoard(player);
   	}
         if (item == "goods") {
@@ -1222,6 +1231,8 @@ alert("Player should choose what planets to invade (if possible)");
         let planet_idx   = mv[5];
         let details      = mv[6];
         let tech         = mv[7];
+
+  	this.game.queue.splice(qe, 1);
 
         if (eventname == "destroyed_unit") {
 	  return technologies[tech].destroyedUnitEvent(this, player, target, sector, planet_idx, details);
@@ -1620,6 +1631,8 @@ console.log("IS GROUND COMBAT RESOLVED: " + player + "/" + sector + "/" + planet
         let card   	 = mv[3];
         let tech         = mv[4];
         
+  	this.game.queue.splice(qe, 1);
+
         return technologies[tech].playActionCardEvent(this, player, action_card_player, card); 
 
       }

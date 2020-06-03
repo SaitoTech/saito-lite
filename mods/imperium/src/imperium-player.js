@@ -275,7 +275,6 @@
     let html = 'You are eligible to upgrade to the following technologies: <p></p><ul>';
   
     for (var i in this.game.tech) {
-console.log("canm player research " + i + ": " + this.canPlayerResearchTechnology(i));
       if (this.canPlayerResearchTechnology(i)) {
         html += '<li class="option" id="'+i+'">'+this.game.tech[i].name+'</li>';
       }

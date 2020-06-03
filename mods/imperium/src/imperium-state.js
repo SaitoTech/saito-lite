@@ -2502,7 +2502,7 @@ console.log("THE LAW FAILS!");
       name: "XXCha Kingdom",
       space_units: ["carrier","cruiser","cruiser","fighter","fighter","fighter"],
       ground_units: ["infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech: ["plasma-clusters", "faction3-field-nullification", "faction3-peace-accords", "faction3-quash", "faction3-instinct-training"];
+      tech: ["plasma-clusters", "faction3-field-nullification", "faction3-peace-accords", "faction3-quash", "faction3-instinct-training"]
     };
   /**
     factions['faction4'] = {

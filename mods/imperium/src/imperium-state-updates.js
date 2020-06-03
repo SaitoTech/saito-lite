@@ -41,12 +41,15 @@
   // available.
   //
   resetTechBonuses() {
+
+    let technologies = this.returnTechnologyTree();
+
     //
     // reset tech bonuses
     //
     for (let i = 0; i < this.game.players_info.length; i++) {
       for (let ii = 0; ii < this.game.players_info[i].tech.length; ii++) {
-        this.game.tech[this.game.players_info[i].tech[ii]].onNewTurn();
+        technologies[this.game.players_info[i].tech[ii]].onNewTurn();
       }
     }
   }

@@ -171,7 +171,7 @@ console.log("PLAYING STRATEGY CARD PRIMARY!");
   
       if (this.game.player == player) {
         this.addMove("resolve\tstrategy");
-        this.addMove("strategy\t"+card+"\t"+player+"\t2\t"+player_confirmation_needed);
+        this.addMove("strategy\t"+card+"\t"+player+"\t2");
         this.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
         this.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
         this.playerBuildInfrastructure();
@@ -283,10 +283,15 @@ console.log("PLAYING STRATEGY CARD PRIMARY!");
     }
 
 
+    if (this.game.player == player) {
+      this.updateStatus("Waiting for other players to execute secondary...");
+    }
+
+
     //
     // CHECK IF FACTION HAS REPLACED SECONDARY STRATEGY CARD FUNCTION
     //
-    if (this.game.player == player) {
+    if (this.game.player != player) {
       let mytech = this.game.players_info[player-1].tech;
       for (let i = 0; i < mytech.length; i++) {
         if (technologies[mytech[i]].playStrategyCardSecondaryTriggers(imperium_self, player, card) == 1) {
