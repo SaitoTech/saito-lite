@@ -75,7 +75,7 @@ body {
   transform: translateX(-50%);
   font-size: 10vh;
   text-shadow: 0 0 5px #FFF;
-  -webkit-text-stroke: 2px #AAA8;
+  -webkit-text-stroke: 2px #EEEA;
 }
 
 .player-info {
@@ -105,8 +105,7 @@ body {
 .player-info-chips {
   padding: 0.5em;
   text-align: center;
-*/  font-size: 2vh; */
-  font-size: 14px;
+  font-size: 3vh;
 }
 
 .player-info.p6 {
@@ -254,8 +253,14 @@ body {
 .log {
   color: #fff;
   background: transparent;
-  font-size: larger;
+  font-size: xlarge;
   height: 23vh;
+  overflow-y: auto;
+}
+
+#log {
+  font-size: 1.5em;
+  height: 21vh;
   overflow-y: auto;
 }
 
@@ -324,7 +329,7 @@ body {
     padding: 1em;
     position: absolute;
   }
- .player-info.p1 {
+  .player-info.p1 {
     width: 24vw;
     height: 43vh;
     bottom: 0;
@@ -332,8 +337,7 @@ body {
     right: 25vw;
     transform: none;
     min-width: unset;
-}
-
+  }
   .player-info-name {
     font-size: 1.75vh;
     text-align: center;
@@ -344,11 +348,9 @@ body {
   .player-info-chips {
     padding: 0.5em;
     text-align: center;
-/*    font-size: 2vh; */
-    font-size: 14px;
+    font-size: 2.5vh;
+    /*font-size: 14px;*/
   }
-  
-  
   .player-info.p4 {
     left: 50vw;
     top: 1em;
@@ -392,7 +394,7 @@ body {
   .player-info.p1 {
     width: 50vw;
     right: 0;
-    left:unset;
+    left: unset;
     transform: unset;
   }
   .log {

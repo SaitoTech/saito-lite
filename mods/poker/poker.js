@@ -277,6 +277,9 @@ class Poker extends GameTemplate {
     }
 
     this.updateLog("New Round...");
+    document.querySelectorAll('.player-info-log').forEach(el => {
+      el.innerHTML = "";
+    });
 
     this.initializeQueue();
 
@@ -351,7 +354,7 @@ class Poker extends GameTemplate {
         if (active_players == 1) {
           for (let i = 0; i < this.game.state.passed.length; i++) {
             if (this.game.state.passed[i] == 0) {
-              this.updateLog("Player " + i+1 + " wins " + this.game.state.pot);
+              this.updateLog(this.game.state.player_names[i] + " wins " + this.game.state.pot);
               this.game.state.player_credit[i] += this.game.state.pot;
               player_left_idx = i;
             }
@@ -438,7 +441,9 @@ class Poker extends GameTemplate {
             this.playerTurn();
             return 0;
           } else {
-            this.updateStatus("Waiting for Player " + mv[1]);
+            this.updateStatus("Waiting for " + this.game.state.player_names[mv[1]-1]);
+            
+
             return 0;
           }
 
@@ -517,12 +522,13 @@ class Poker extends GameTemplate {
                 html  = hand2.val[0] + hand2.suite[0];
                 html += ", ";
                 html += hand2.val[1] + hand2.suite[1];
-                this.updateLog("Player "+(i)+": " + h2score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h2score.cards_to_score));
+                this.updateLog(this.game.state.player_names[i-1]+": " + h2score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h2score.cards_to_score));
+                
 
                 html  = hand1.val[0] + hand1.suite[0];
                 html += ", ";
                 html += hand1.val[1] + hand1.suite[1];
-                this.updateLog("Player "+(i+1)+": " + h1score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h1score.cards_to_score));
+                this.updateLog(this.game.state.player_names[i]+": " + h1score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h1score.cards_to_score));
 
               } else {
 
@@ -532,7 +538,7 @@ class Poker extends GameTemplate {
                 html  = hand1.val[0] + hand1.suite[0];
                 html += ", ";
                 html += hand1.val[1] + hand1.suite[1];
-                this.updateLog("Player "+(i+1)+": " + h1score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h1score.cards_to_score));
+                this.updateLog(this.game.state.player_names[i]+": " + h1score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h1score.cards_to_score));
 
               }
 
@@ -583,7 +589,8 @@ class Poker extends GameTemplate {
             //
             let pot_size = Math.floor(this.game.state.pot / winners.length)
             for (let i = 0; i < winners.length; i++) {
-              this.updateLog("Player: " + winners[i] + " splits pot and wins " + pot_size);
+              this.updateLog(this.game.state.player_names[winners[i]-1] + " splits pot and wins " + pot_size);
+              
               this.game.state.player_credit[winners[i]-1] += pot_size;
             }
 
@@ -604,7 +611,7 @@ class Poker extends GameTemplate {
             //
             // winner gets everything
             //
-            this.updateLog("Player: " + winners[0] + " wins " + this.game.state.pot);
+            this.updateLog(this.game.state.player_names[winners[0]-1] + " wins " + this.game.state.pot);
             this.game.state.player_credit[winners[0]-1] += this.game.state.pot;
 
             //
@@ -640,16 +647,17 @@ class Poker extends GameTemplate {
           //    
           if (this.game.state.player_credit[this.game.state.big_blind_player-1] <= this.game.state.big_blind) {
             if (this.game.state.player_credit[this.game.state.big_blind_player-1] == this.game.state.big_blind) {
-              this.updateLog("Player "+this.game.state.big_blind_player+" has no more chips");
+              this.updateLog(this.game.state.player_names[this.game.state.big_blind_player-1]+" has no more chips");
+              
             } else {
-              this.updateLog("Player "+this.game.state.big_blind_player+" deposits remainder of tokens as big blind and is removed from game");
+              this.updateLog(this.game.state.player_names[this.game.state.big_blind_player-1]+" deposits remainder of tokens as big blind and is removed from game");
             }
             this.game.state.player_pot[this.game.state.big_blind_player-1] += this.game.state.player_credit[this.game.state.big_blind_player-1];
             this.game.state.pot += this.game.state.player_credit[this.game.state.big_blind_player-1];
             this.game.state.player_credit[this.game.state.big_blind_player-1] = -1;
             this.game.state.passed[this.game.state.big_blind_player-1] = 1;
           } else {
-            this.updateLog("Player "+this.game.state.big_blind_player+" deposits "+this.game.state.big_blind);
+            this.updateLog(this.game.state.player_names[this.game.state.big_blind_player-1]+" deposits "+this.game.state.big_blind);
             this.game.state.player_pot[this.game.state.big_blind_player-1] += this.game.state.big_blind;
             this.game.state.pot += this.game.state.big_blind;
             this.game.state.player_credit[this.game.state.big_blind_player-1] -= this.game.state.big_blind;
@@ -660,16 +668,16 @@ class Poker extends GameTemplate {
           //
           if (this.game.state.player_credit[this.game.state.small_blind_player-1] <= this.game.state.small_blind) {
             if (this.game.state.player_credit[this.game.state.small_blind_player-1] <= this.game.state.small_blind) {
-              this.updateLog("Player "+this.game.state.small_blind_player+" has no more chips");
+              this.updateLog(this.game.state.player_names[this.game.state.small_blind_player-1]+" has no more chips");
             } else {
-              this.updateLog("Player "+this.game.state.small_blind_player+" deposits remainder tokens as small blind and is removed from game");
+              this.updateLog(this.game.state.player_names[this.game.state.small_blind_player-1]+" deposits remainder tokens as small blind and is removed from game");
             }
             this.game.state.player_pot[this.game.state.small_blind_player-1] += this.game.state.player_credit[this.game.state.small_blind_player-1];
             this.game.state.pot += this.game.state.player_credit[this.game.state.small_blind_player-1];
             this.game.state.player_credit[this.game.state.small_blind_player-1] = -1;
             this.game.state.passed[this.game.state.small_blind_player-1] = 1;
           } else {
-            this.updateLog("Player "+this.game.state.small_blind_player+" deposits "+this.game.state.small_blind);
+            this.updateLog(this.game.state.player_names[this.game.state.small_blind_player-1]+" deposits "+this.game.state.small_blind);
             this.game.state.player_pot[this.game.state.small_blind_player-1] += this.game.state.small_blind;
             this.game.state.pot += this.game.state.small_blind;
             this.game.state.player_credit[this.game.state.small_blind_player-1] -= this.game.state.small_blind;
@@ -704,12 +712,13 @@ class Poker extends GameTemplate {
         let player = parseInt(mv[1]);
         let amount_to_call = 0;
 
-        this.updateLog("Player " + player + " calls");
+        this.updateLog(this.game.state.player_names[player-1] + " calls");
         this.updatePlayerLog(player, "call");
         if (this.game.state.required_pot > this.game.state.player_pot[player-1]) {
           amount_to_call = this.game.state.required_pot - this.game.state.player_pot[player-1];
         }
-        this.updateLog("Player " + player + " deposits " + amount_to_call);
+        this.updateLog(this.game.state.player_names[player-1] + " deposits " + amount_to_call);
+        
 
         if (this.game.state.small_blind_player == player) {
           if (this.game.state.flipped == 0) {
@@ -733,11 +742,12 @@ class Poker extends GameTemplate {
 
       if (mv[0] === "fold") {
 
-        let player = parseInt(mv[1]);
-        this.updatePlayerLog(player, "fold");
-        this.updateLog("Player " + player + " folds.");
-        this.game.state.passed[player-1] = 1;
-        this.game.queue.splice(qe, 1);
+    let player = parseInt(mv[1]);
+    this.updatePlayerLog(player, "fold");
+    this.updateLog(this.game.state.player_names[player-1] + " folds.");
+     
+    this.game.state.passed[player-1] = 1;
+    this.game.queue.splice(qe, 1);
 
         //
         // if everyone folds, last player in wins
@@ -772,7 +782,7 @@ class Poker extends GameTemplate {
       if (mv[0] === "check") {
         let player = parseInt(mv[1]);
         this.game.queue.splice(qe, 1);
-        this.updateLog("Player " + player + " checks.");
+        this.updateLog(this.game.state.player_names[player-1] + " checks.");
       }
 
 
@@ -806,8 +816,8 @@ class Poker extends GameTemplate {
 
           this.game.state.last_raise = raise_portion;
 
-          this.updateLog("Player " + player + " calls " + call_portion + ".");
-          this.updateLog("Player " + player + " raises " + raise_portion + ".");
+          this.updateLog(this.game.state.player_names[player-1] + " calls " + call_portion + ".");
+          this.updateLog(this.game.state.player_names[player-1] + " raises " + raise_portion + ".");
           this.updatePlayerLog(player, "raises " + raise_portion);
 
         } else {
@@ -818,7 +828,7 @@ class Poker extends GameTemplate {
           this.game.state.pot += raise;
           this.game.state.last_raise = raise;
 
-          this.updateLog("Player " + player + " raises " + raise + ".");
+          this.updateLog(this.game.state.player_names[player-1] + " raises " + raise + ".");
           this.updatePlayerLog(player, "raises " + raise);
 
         }
