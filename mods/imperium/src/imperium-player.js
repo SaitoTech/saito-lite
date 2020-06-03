@@ -36,9 +36,10 @@
         }
 
         if (action2 == "action") {
-          imperium_self.playerSelectActionCard(function(success) {
+          imperium_self.playerSelectActionCard(function(card) {
             imperium_self.addMove("continue\t"+player+"\t"+sector);
-            imperium_self.addMove("action\t"+success+"\t"+imperium_self.game.player);
+            imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+            imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
             imperium_self.endTurn();
           }, player, sector);
         }
@@ -129,8 +130,9 @@
           });
         }
         if (action2 == "action") {
-          imperium_self.playerSelectActionCard(function(success) {
-  	    imperium_self.addMove("action\t"+success+"\t"+imperium_self.game.player);
+          imperium_self.playerSelectActionCard(function(card) {
+  	    imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+  	    imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.endTurn();
           });
         }
@@ -269,9 +271,11 @@
 
   playerResearchTechnology(mycallback) {
   
+    let imperium_self = this;
     let html = 'You are eligible to upgrade to the following technologies: <p></p><ul>';
   
-    for (var i in this.game.tech) {  
+    for (var i in this.game.tech) {
+console.log("canm player research " + i + ": " + this.canPlayerResearchTechnology(i));
       if (this.canPlayerResearchTechnology(i)) {
         html += '<li class="option" id="'+i+'">'+this.game.tech[i].name+'</li>';
       }
@@ -282,7 +286,13 @@
     
     $('.option').off();
     $('.option').on('click', function() {
+
+      //
+      // handle prerequisites
+      //
+      imperium_self.exhaustPlayerResearchTechnologyPrerequisites(i);
       mycallback($(this).attr("id"));
+
     });
   
   
@@ -734,6 +744,63 @@
   
   }
   
+
+
+
+
+
+  playerSelectResources(cost, mycallback) {
+ 
+    if (cost == 0) { mycallback(1); }
+ 
+    let imperium_self = this;
+    let array_of_cards = this.returnPlayerUnexhaustedPlanetCards(this.game.player); // unexhausted
+    let array_of_cards_to_exhaust = [];
+    let selected_cost = 0;
+ 
+    let html  = "Select "+cost+" in resources: <p></p><ul>";
+    for (let z = 0; z < array_of_cards.length; z++) {
+      html += '<li class="cardchoice" id="cardchoice_'+array_of_cards[z]+'">' + this.returnPlanetCard(array_of_cards[z]) + '</li>';
+    }
+    html += '</ul>';
+ 
+    this.updateStatus(html);
+    $('.cardchoice').on('click', function() {
+ 
+      let action2 = $(this).attr("id");
+      let tmpx = action2.split("_");
+  
+      let divid = "#"+action2;
+      let y = tmpx[1];
+      let idx = 0;
+      for (let i = 0; i < array_of_cards.length; i++) {
+        if (array_of_cards[i] === y) {
+          idx = i;
+        }
+      }
+
+
+      imperium_self.addMove("expend\t"+imperium_self.game.player+"\tplanet\t"+array_of_cards[idx]);
+
+      array_of_cards_to_exhaust.push(array_of_cards[idx]);
+
+      $(divid).off();
+      $(divid).css('opacity','0.3');
+
+      selected_cost += imperium_self.game.planets[array_of_cards[idx]].resources;
+
+      if (cost <= selected_cost) { mycallback(1); }
+
+    });
+
+  }
+
+
+
+
+
+
+
   
   playerSelectActionCard(mycallback, player, sector) { 
  

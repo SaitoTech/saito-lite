@@ -1587,89 +1587,64 @@ console.log("IS GROUND COMBAT RESOLVED: " + player + "/" + sector + "/" + planet
       /////////////////
       // ACTION CARD //
       /////////////////
-      if (mv[0] === "action") {
+      if (mv[0] === "action_card") {
   
-  	let card = mv[1];
-  	let player = parseInt(mv[2]);
+  	let player = parseInt(mv[1]);
+  	let card = mv[2];
+	let technologies = this.returnTechnologyTree();
 
 	let cards = this.returnActionCards();
 	let played_card = cards[card];
 
-	this.game.queue.splice(qe, 1);
+  	this.game.queue.splice(qe, 1);
 
-	cards[card].onPlay(this, player, function(c) {
-	  console.log("ACTION CARD HAS PLAYED AND RETURNED IN ACTION CALLBACK");
-  	  return 1;
-	});
+        let speaker_order = this.returnSpeakerOrder();
 
-      }
-/****
-      if (mv[0] === "action_card") {  
-
-  	let card = mv[1];
-  	let player = parseInt(mv[2]);
-
-	let cards = this.returnActionCards();
-	let played_card = cards[card];
-
-	cards[card].onPlay(this, player, function(c) {
-	  console.log("ACTION CARD HAS PLAYED AND RETURNED IN ACTION CALLBACK");
-	});
-
-	if (cards[card].interactive == 1) {
-  	  this.game.queue.splice(qe, 1);
-  	  return 1;
-	} else {
-  	  this.game.queue.splice(qe, 1);
-	  return 0;
-	}
+        for (let i = 0; i < speaker_order.length; i++) {
+          let techs = this.game.players_info[speaker_order[i]-1].tech;
+          for (let k = 0; k < techs.length; k++) {
+            if (technologies[techs[k]].playActionCardTriggers(this, player, card) == 1) {
+              this.game.queue.push("action_card_event\t"+speaker_order[i]+"\t"+player+"\t"+card+"\t"+techs[k]);
+            }
+          }
+        }
+	return 1;
 
       }
       if (mv[0] === "action_card_event") {  
+    
+        let technologies = this.returnTechnologyTree();
 
-  	let card = mv[1];
-  	let player = parseInt(mv[2]);
-
-	let cards = this.returnActionCards();
-	let played_card = cards[card];
-
-	cards[card].onPlay(this, player, function(c) {
-	  console.log("ACTION CARD HAS PLAYED AND RETURNED IN ACTION CALLBACK");
-	});
-
-	if (cards[card].interactive == 1) {
-  	  this.game.queue.splice(qe, 1);
-  	  return 1;
-	} else {
-  	  this.game.queue.splice(qe, 1);
-	  return 0;
-	}
+        let player       = parseInt(mv[1]);
+        let action_card_player = mv[2];
+        let card   	 = mv[3];
+        let tech         = mv[4];
+        
+        return technologies[tech].playActionCardEvent(this, player, action_card_player, card); 
 
       }
       if (mv[0] === "action_card_post") {  
 
-  	let card = mv[1];
-  	let player = parseInt(mv[2]);
-
+  	let player = parseInt(mv[1]);
+  	let card = mv[2];
 	let cards = this.returnActionCards();
+
 	let played_card = cards[card];
+  	this.game.queue.splice(qe, 1);
 
 	cards[card].onPlay(this, player, function(c) {
+
 	  console.log("ACTION CARD HAS PLAYED AND RETURNED IN ACTION CALLBACK");
+
+  	  if (cards[card].interactive == 1) {
+  	    return 1;
+	  } else {
+	    return 0;
+	  }
+
+	  return 1;
 	});
-
-	if (cards[card].interactive == 1) {
-  	  this.game.queue.splice(qe, 1);
-  	  return 1;
-	} else {
-  	  this.game.queue.splice(qe, 1);
-	  return 0;
-	}
-
       }
-****/
-
-
 
 
 

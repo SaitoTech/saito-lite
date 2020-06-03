@@ -1044,6 +1044,15 @@
   ////////////////////////////
   // Return Technology Tree //
   ////////////////////////////
+  //
+  // name -> technology name
+  // img -> card image
+  // color -> color
+  // unit -> is this a unit technology (0/1)
+  // faction -> is this restricted to a specific faction
+  // prereqs -> array of colors needed
+  // 
+
   returnTechnologyTree() {
   
     let tech = {};
@@ -1668,7 +1677,7 @@ console.log("Spec Ops not reanimated in homeworld...("+dieroll+")");
         imperium_self.game.players_info[player-1].deep_space_conduits = 1;
       }
     };
-    tech['faction1-resupply-stations']   = {
+    tech['faction2-resupply-stations']   = {
       name        :       "Resupply Stations" ,
       faction	  :	  "faction2",
       replaces	  :	  "",
@@ -1682,7 +1691,7 @@ console.log("Spec Ops not reanimated in homeworld...("+dieroll+")");
         mycallback(1);
       },
       postSystemActivationTriggers :    function(imperium_self, player, sector) {
-        if (imperium_self.game.players_info[player-1].resupply_stations == 1) { return 0; }
+        if (imperium_self.game.players_info[player-1].resupply_stations == 0) { return 0; }
 	if (imperium_self.doesSystemContainPlayerShips(player, sector) == 1) { return 1; }
 	return 0;
       },
@@ -1690,15 +1699,69 @@ console.log("Spec Ops not reanimated in homeworld...("+dieroll+")");
 	imperium_self.game.players_info[player-1].goods += 4;
       }
     };
+    tech['faction2-fragile']   = {
+      name        :       "Fragile" ,
+      faction	  :	  "faction2",
+      img         :       "/imperium/img/card_template.jpg" ,
+      color       :       "" ,
+      prereqs     :       [],
+      type	  :	  "special" ,
+      onNewRound     :       function(imperium_self, player, mycallback) {
+        imperium_self.game.players_info[player-1].space_combat_roll_modifier = -1;
+        imperium_self.game.players_info[player-1].ground_combat_roll_modifier = -1;
+        imperium_self.game.players_info[player-1].pds_combat_roll_modifier = -1;
+        mycallback(1);
+      },
+    };
+    tech['faction2-analytic']   = {
+      name        :       "Analytic" ,
+      faction	  :	  "faction2",
+      img         :       "/imperium/img/card_template.jpg" ,
+      color       :       "" ,
+      prereqs     :       [],
+      type	  :	  "special" ,
+      onNewRound     :       function(imperium_self, player, mycallback) {
+        imperium_self.game.players_info[player-1].space_combat_roll_modifier = -1;
+        imperium_self.game.players_info[player-1].ground_combat_roll_modifier = -1;
+        imperium_self.game.players_info[player-1].pds_combat_roll_modifier = -1;
+        mycallback(1);
+      },
+    };
+    tech['faction2-brilliant']   = {
+      name        :       "Brilliant" ,
+      faction	  :	  "faction2",
+      img         :       "/imperium/img/card_template.jpg" ,
+      color       :       "" ,
+      prereqs     :       [],
+      type	  :	  "special" ,
+      playStrategyCardSecondaryTriggers :  function(imperium_self, player, card) {
+	if (card == "tech") {
+	  return 1;
+	}
+	return 0;
+      },
+      playStrategyCardSecondaryEvent :  function(imperium_self, player, card) {
+        this.playerResearchTechnology(function(tech) {
+          imperium_self.addMove("resolve\tstrategy");
+          imperium_self.addMove("strategy\t"+card+"\t"+player+"\t2");
+          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+          imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
+          imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
+          imperium_self.endTurn();
+        });
+      },
+    };
  
+
+
 
 
 
     //
     // FACTION 3
     //
-    tech['faction2-turn-nullification']   = {
-      name        :       "Turn Nullification" ,
+    tech['faction3-field-nullification']   = {
+      name        :       "Field Nullification" ,
       faction	  :	  "faction3",
       replaces	  :	  "",
       img         :       "/imperium/img/card_template.jpg" ,
@@ -1720,21 +1783,80 @@ console.log("Spec Ops not reanimated in homeworld...("+dieroll+")");
       postSystemActivation :   function(imperium_self, player, sector) {
 
 	if (player != this.game.player) {
-	  this.updateStatus("Opponent is deciding whether to use Turn Nullification");
+	  this.updateStatus("Opponent is deciding whether to use Field Nullification");
 	  return 0;
 	} else {
-	  let c = confirm("Do you wish to use Turn Nullification to end this player's turn?");
+	  let c = confirm("Do you wish to use Field Nullification to end this player's turn?");
 	  if (c) {
-	    this.addMove("notify\tTurn Nullification is triggered...");
+	    this.addMove("notify\tField Nullification is triggered...");
   	    this.addMove("resolve\tpost_activate");
 	    this.endTurn();
 	  } else {
-	    this.addMove("notify\tTurn Nullification is not triggered...");
+	    this.addMove("notify\tField Nullification is not triggered...");
 	    this.endTurn();
 	  }
 	}
       }
     };
+    tech['faction3-peace-accords']   = {
+      name        :       "Peace Accords" ,
+      faction	  :	  "faction2",
+      img         :       "/imperium/img/card_template.jpg" ,
+      color       :       "" ,
+      prereqs     :       [],
+      type	  :	  "special" ,
+      playStrategyCardSecondaryTriggers :  function(imperium_self, player, card) {
+	if (card == "diplomacy") {
+	  return 1;
+	}
+	return 0;
+      },
+      playStrategyCardSecondaryEvent :  function(imperium_self, player, card) {
+alert("PEACE ACCORDS");
+        this.playerResearchTechnology(function(tech) {
+          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	  imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
+          imperium_self.endTurn();
+        });
+      },
+    };
+    tech['faction3-quash']   = {
+      name        :       "Peace Accords" ,
+      faction	  :	  "faction2",
+      img         :       "/imperium/img/card_template.jpg" ,
+      color       :       "" ,
+      prereqs     :       [],
+      type	  :	  "special" ,
+      playStrategyCardSecondaryTriggers :  function(imperium_self, player, card) {
+	if (card == "diplomacy") {
+	  return 1;
+	}
+	return 0;
+      },
+      playStrategyCardSecondaryEvent :  function(imperium_self, player, card) {
+        this.playerResearchTechnology(function(tech) {
+          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+          imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
+          imperium_self.endTurn();
+        });
+      },
+    };
+    tech['faction3-instinct-training']   = {
+      name        :       "Instinct Training" ,
+      faction	  :	  "faction2",
+      img         :       "/imperium/img/card_template.jpg" ,
+      color       :       "" ,
+      prereqs     :       [],
+      type	  :	  "special" ,
+      playActionCardTriggers :  function(imperium_self, player, card) {
+	return 1;
+      },
+      playActionCardEvent :  function(imperium_self, player, card) {
+	alert("Instinct Training Kicks In!");
+        imperium_self.endTurn();
+      },
+    };
+ 
  
 
 
@@ -1744,6 +1866,7 @@ console.log("Spec Ops not reanimated in homeworld...("+dieroll+")");
 
       if (tech[i].replaces == null) { tech[i].replaces = ""; }
       if (tech[i].faction == null) { tech[i].faction = "all"; }
+      if (tech[i].prereqs == null) { tech[i].prereqs = []; }
       if (tech[i].type == null) { tech[i].type = "special"; } // i.e. not a tech card
 
       if (tech[i].upgradeUnit == null) {
@@ -1823,6 +1946,40 @@ console.log("Spec Ops not reanimated in homeworld...("+dieroll+")");
       // which point the engine will examine which players wish to trigger the events and process the 
       // interventions IN ORDER based on who can successfully trigger.
       //
+
+      //
+      // when action card is played
+      //
+      if (tech[i].playActionCardTriggers == null) {
+	tech[i].playActionCardTriggers = function(imperium_self, player, card) { return 0; }
+      }
+      if (tech[i].playActionCardEvent == null) {
+	tech[i].playActionCardEvent = function(imperium_self, player, card) { return 0; }
+      }
+
+
+
+      //
+      // when strategy card primary is played
+      //
+      if (tech[i].playStrategyCardPrimaryTriggers == null) {
+	tech[i].playStrategyCardPrimaryTriggers = function(imperium_self, player, card) { return 0; }
+      }
+      if (tech[i].playStrategyCardPrimaryEvent == null) {
+	tech[i].playStrategyCardPrimaryEvent = function(imperium_self, player, card) { return 0; }
+      }
+
+
+      //
+      // when strategy card secondary is played
+      //
+      if (tech[i].playStrategyCardSecondaryTriggers == null) {
+	tech[i].playStrategyCardSecondaryTriggers = function(imperium_self, player, card) { return 0; }
+      }
+      if (tech[i].playStrategyCardSecondaryEvent == null) {
+	tech[i].playStrategyCardSecondaryEvent = function(imperium_self, player, card) { return 0; }
+      }
+
 
       //
       // when system is activated
@@ -2263,6 +2420,27 @@ console.log("THE LAW FAILS!");
       players[i].resupply_stations = 0; // gain trade goods on system activation if contains ships 
       players[i].turn_nullification = 0; // after player activates system with ships, can end turn ...
  
+      //
+      // roll modifiers
+      //
+      players[i].space_combat_roll_modifier 	= 0;
+      players[i].ground_combat_roll_modifier 	= 0;
+      players[i].pds_combat_roll_modifier 	= 0;
+
+      //
+      // tech upgrades
+      //
+      players[i].temporary_green_tech_prerequisite = 0;
+      players[i].temporary_yellow_tech_prerequisite = 0;
+      players[i].temporary_red_tech_prerequisite = 0;
+      players[i].temporary_blue_tech_prerequisite = 0;
+      players[i].permanent_green_tech_prerequisite = 0;
+      players[i].permanent_yellow_tech_prerequisite = 0;
+      players[i].permanent_red_tech_prerequisite = 0;
+      players[i].permanent_blue_tech_prerequisite = 0;
+      players[i].temporary_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 0;
+      players[i].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 0;
+
       players[i].upgraded_infantry = 0;
       players[i].upgraded_pds = 0;
       players[i].upgraded_spacedock = 0;
@@ -2310,21 +2488,21 @@ console.log("THE LAW FAILS!");
       name: "Federation of Sol",
       space_units: ["carrier","carrier","destroyer","fighter","fighter","fighter"],
       ground_units: ["infantry","infantry","infantry","infantry","infantry","spacedock"],
-      tech: ["neural-implants","electron-shielding","faction1-orbital-drop","faction1-versatile"]
+      tech: ["neural-implants","electron-shielding","faction1-orbital-drop","faction1-versatile", "faction1-advanced-carrier-ii", "faction1-infantry-ii"]
     };
     factions['faction2'] = {
       homeworld: "sector39",
       name: "Universities of Jol Nar",
       space_units: ["carrier","carrier","dreadnaught","fighter"],
       ground_units: ["infantry","infantry","pds","spacedock"],
-      tech: ["neural-implants","electron-shielding","waste-recycling","plasma-clusters"]
+      tech: ["neural-implants","electron-shielding","waste-recycling","plasma-clusters","faction2-analytic","faction2-brilliant","faction2-fragile","faction2-deep-space-conduits","faction2-resupply-stations"]
     };
     factions['faction3'] = {
       homeworld: "sector40",
       name: "XXCha Kingdom",
       space_units: ["carrier","cruiser","cruiser","fighter","fighter","fighter"],
       ground_units: ["infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech: ["plasma-clusters"]
+      tech: ["plasma-clusters", "faction3-field-nullification", "faction3-peace-accords", "faction3-quash", "faction3-instinct-training"];
     };
   /**
     factions['faction4'] = {
