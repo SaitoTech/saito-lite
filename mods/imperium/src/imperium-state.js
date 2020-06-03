@@ -114,6 +114,12 @@
 	//
         state.planetary_invasion = 0;
   
+        //
+        // variables to track executing 
+        //
+        state.space_combat_round = 0;
+        state.ground_combat_round = 0;
+
     return state;
   }
   
@@ -1035,9 +1041,6 @@
   
   
   
-  
-  
-  
   ////////////////////////////
   // Return Technology Tree //
   ////////////////////////////
@@ -1063,10 +1066,12 @@
         imperium_self.game.players_info[player-1].action_cards_bonus_when_issued = 1;
         mycallback(1);
       },
-      destroyedUnitTriggers :  function(this, player, target, sector, planet_idx, details)
-	if (target == this.game.player) {
-
-	}
+      destroyedUnitTriggersSync :  function(imperium_self, player, attacker, defender, sector, planet_idx, details) {
+	if (player == defender) { return 1; }
+      },
+      destroyedUnitEventSync :     function(imperium_self, player, attacker, defender, sector, planet_idx, unitname) {
+	if (player == this.game.player) { aalert("10 free trade goods"); }
+	imperium_self.game.players_info[player-1].trade_goods += 10;
       }
 
 /*
@@ -1541,6 +1546,22 @@
       onNewTurn        :       function(imperium_self, player, mycallback) {
         imperium_self.game.players_info[player-1].upgraded_carrier = 1;
         mycallback(1);
+      },
+      destroyedGroundUnitTriggerSync	: function(imperium_self, player, attacker, defender, sector, planet_idx, details) { 
+	if (defender == player) { return 1; }
+	return 0; 
+      },
+      destroyedGroundUnitEventSync	: function(imperium_self, player, attacker, defender, sector, planet_idx, details) { 
+	if (details == "infantry") {
+	  let dieroll = imperium_self.rollDice(10);
+          if (dieroll <= 5) {
+console.log("Spec Ops reanimated in homeworld... ("+dieroll+")");
+	    imperium_self.addPlanetaryUnit(player, sector, planet_idx, "infantry");
+	  } else {
+console.log("Spec Ops not reanimated in homeworld...("+dieroll+")");
+	  }
+	}
+	return 0;
       }
     };
     tech['faction1-orbital-drop']   = {
@@ -1750,23 +1771,58 @@
 
 
 
-      //////////////////////
-      // arbitrary events //
-      //////////////////////
-      if (tech[i].destroyedUnitTriggers == null) {
-	tech[i].destroyedUnitTriggers = function(imperium_self, player, target, sector, planet_idx, details) { return 0; }
+
+      ////////////////////////
+      // synchronous events //
+      ////////////////////////
+      //
+      // these can be called directly from game code itself, ie the imperium-state-updates functions
+      // that execute game-code collectively on all player machines. they do not need to be added to
+      // the stack for a separate check, since they are guaranteed not to stop execution for user-input.
+      //
+
+      //
+      // unit is destroyed
+      //
+      if (tech[i].destroyedUnitTriggersSync == null) {
+	tech[i].destroyedUnitTriggers = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
       }
-      if (tech[i].destroyedUnitEvent == null) {
-	tech[i].destroyedUnitEvent = function(imperium_self, player, target, sector, planet_idx, details) { return 0; }
+      if (tech[i].destroyedUnitEventSync == null) {
+	tech[i].destroyedUnitEvent = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
+      }
+
+      //
+      // space unit is destroyed
+      //
+      if (tech[i].destroyedSpaceUnitTriggersSync == null) {
+	tech[i].destroyedSpaceUnitTriggers = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
+      }
+      if (tech[i].destroyedUnitEventSync == null) {
+	tech[i].destroyedUnitEvent = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
+      }
+
+      //
+      // ground unit is destroyed
+      //
+      if (tech[i].destroyedGroundUnitTriggersSync == null) {
+	tech[i].destroyedGroundUnitTriggersSync = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
+      }
+      if (tech[i].destroyedGroundUnitEventSync == null) {
+	tech[i].destroyedGroundUnitEventSync = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
       }
 
 
 
 
 
-      ///////////////////
-      // in game-steps //
-      ///////////////////
+      //////////////////////////
+      // asynchronous eventsa //
+      //////////////////////////
+      //
+      // these should be trigged by placing the request for examination directly on the game stack. at
+      // which point the engine will examine which players wish to trigger the events and process the 
+      // interventions IN ORDER based on who can successfully trigger.
+      //
 
       //
       // when system is activated

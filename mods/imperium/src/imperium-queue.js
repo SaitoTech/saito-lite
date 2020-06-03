@@ -1187,10 +1187,11 @@ alert("Player should choose what planets to invade (if possible)");
 
   	let eventname    = parseInt(mv[1]);
   	let player       = parseInt(mv[2]);
-  	let target       = parseInt(mv[3]);
-        let sector	 = mv[4];
-        let planet_idx   = mv[5];
-        let details      = mv[6];
+  	let attacker     = parseInt(mv[3]);
+  	let defender     = parseInt(mv[4]);
+        let sector	 = mv[5];
+        let planet_idx   = mv[6];
+        let details      = mv[7];
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  let techs = this.game.players_info[speaker_order[i]-1].tech;
@@ -1200,13 +1201,8 @@ alert("Player should choose what planets to invade (if possible)");
 	    // arbitrary events
 	    //
 	    if (eventname === "destroyed_unit") {
-              if (technologies[techs[k]].destroyedUnitTriggers(this, player, target, sector, planet_idx, details) == 1) {
-	        this.game.queue.push("arbitrary_event_event\t"+eventname+"\t"+player+"\t"+target+"\t"+sector+"\t"+planet_idx+"\t"+details+"\t"+techs[k]);
-	      }
-	    }
-	    if (eventname === "flawless_combat") {
-              if (technologies[techs[k]].flawlessCombatTriggers(this, player, sector) == 1) {
-	        this.game.queue.push("arbitrary_event_event\t"+eventname+"\t"+player+"\t"+target+"\t"+sector+"\t"+planet_idx+"\t"+details+"\t"+techs[k]);
+              if (technologies[techs[k]].destroyedUnitTriggers(this, player, attacker, defender, sector, planet_idx, details) == 1) {
+	        this.game.queue.push("arbitrary_event_event\t"+eventname+"\t"+player+"\t"+attacker+"\t"+defender+"\t"+sector+"\t"+planet_idx+"\t"+details+"\t"+techs[k]);
 	      }
 	    }
 
@@ -1385,8 +1381,6 @@ alert("Player should choose what planets to invade (if possible)");
       }
       if (mv[0] === "space_combat_post") {
 
-console.log("entering here");
-
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
         this.updateSectorGraphics(sector);
@@ -1395,6 +1389,7 @@ console.log("entering here");
 	//
 	// have a round of space combat
 	//
+	this.game.state.space_combat_round++;
 	this.spaceCombat(player, sector);
 
   	if (this.hasUnresolvedSpaceCombat(player, sector) == 1) {
@@ -1747,6 +1742,14 @@ console.log("IS GROUND COMBAT RESOLVED: " + player + "/" + sector + "/" + planet
 	// unpack space ships
 	//
 	this.unloadStoredShipsIntoSector(player, sector);
+
+	//
+	// initialize variables for 
+	//
+	this.game.state.space_combat_round = 0;
+	this.game.state.space_combat_ships_destroyed_attacker = 0;
+	this.game.state.space_combat_ships_destroyed_defender = 0;
+	
 
   	if (player == this.game.player) {
 	  this.addMove("continue\t"+player+"\t"+sector);
