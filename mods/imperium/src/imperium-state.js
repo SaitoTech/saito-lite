@@ -1788,12 +1788,12 @@ console.log("Spec Ops not reanimated in homeworld...("+dieroll+")");
 	} else {
 	  let c = confirm("Do you wish to use Field Nullification to end this player's turn?");
 	  if (c) {
-	    imperium_self.addMove("notify\tField Nullification is triggered...");
-  	    imperium_self.addMove("resolve\tpost_activate");
-	    imperium_self.endTurn();
+	    this.addMove("notify\tField Nullification is triggered...");
+  	    this.addMove("resolve\tpost_activate");
+	    this.endTurn();
 	  } else {
-	    imperium_self.addMove("notify\tField Nullification is not triggered...");
-	    imperium_self.endTurn();
+	    this.addMove("notify\tField Nullification is not triggered...");
+	    this.endTurn();
 	  }
 	}
       }
@@ -1813,7 +1813,7 @@ console.log("Spec Ops not reanimated in homeworld...("+dieroll+")");
       },
       playStrategyCardSecondaryEvent :  function(imperium_self, player, card) {
 alert("PEACE ACCORDS");
-        imperium_self.playerResearchTechnology(function(tech) {
+        this.playerResearchTechnology(function(tech) {
           imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
 	  imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
           imperium_self.endTurn();
@@ -1863,14 +1863,12 @@ console.log("AGENDAS: " + JSON.stringify(agendas));
 
 	    let choice = $(this).attr("id");
 
-	    //
-	    // and reveal the agendas
-            //
             imperium_self.addMove("revealagendas");
+            imperium_self.addMove("discard\t"+player+"\t"+"agenda"+"\t"+choice);
+	    imperium_self.addMove("notify\tFLIPCARD is completed!");
             for (let i = 1; i <= imperium_self.game.players_info.length; i++) {
               imperium_self.addMove("FLIPCARD\t3\t1\t1\t"+i); // deck card poolnum player
             }
-            imperium_self.addMove("discard\t"+imperium_self.game.player+"\t"+"agenda"+"\t"+choice);
 	    imperium_self.endTurn();
 	        
 	  });
@@ -2562,6 +2560,7 @@ console.log("THE LAW FAILS!");
       ground_units: ["infantry","infantry","infantry","infantry","infantry","spacedock"],
       tech: ["neural-implants","electron-shielding","faction1-orbital-drop","faction1-versatile", "faction1-advanced-carrier-ii", "faction1-infantry-ii"]
     };
+/*
     factions['faction2'] = {
       homeworld: "sector39",
       name: "Universities of Jol Nar",
@@ -2569,6 +2568,7 @@ console.log("THE LAW FAILS!");
       ground_units: ["infantry","infantry","pds","spacedock"],
       tech: ["neural-implants","electron-shielding","waste-recycling","plasma-clusters","faction2-analytic","faction2-brilliant","faction2-fragile","faction2-deep-space-conduits","faction2-resupply-stations"]
     };
+*/
     factions['faction3'] = {
       homeworld: "sector40",
       name: "XXCha Kingdom",
@@ -2658,11 +2658,10 @@ console.log("THE LAW FAILS!");
     if (players <= 5) {
       return ["1_3", "3_1", "4_7", "7_1", "7_4"];
     }
-  
     if (players <= 6) {
       return ["1_1", "1_4", "4_1", "4_7", "7_1", "7_7"];
     }
-  };
-  
-  
-  
+  }; 
+
+
+

@@ -395,7 +395,7 @@ console.log("GAME QUEUE: " + this.game.queue);
 	  console.log("ASKED TO DISCARD: " + id);
 
 console.log("HERE IN DISCARD: ");
-console.log(JSON.stringify(this.game.deck));
+console.log(JSON.stringify(this.game.pool));
 console.log(JSON.stringify(this.game.state.agendas));
 
           console.log("POOL 0: " + JSON.stringify(this.game.pool[0].hand[i]));
