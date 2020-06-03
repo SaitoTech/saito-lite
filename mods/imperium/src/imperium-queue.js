@@ -386,19 +386,26 @@ console.log("GAME QUEUE: " + this.game.queue);
 
 	let player   = mv[1];
 	let target   = mv[2];
-	let id       = mv[3];
+	let choice   = mv[3];
 
   	this.game.queue.splice(qe, 1);
  
 	if (target == "agenda") {
 
-	  console.log("ASKED TO DISCARD: " + id);
+	  console.log("ASKED TO DISCARD: " + choice);
+
+          for (let z = 0; z < this.game.state.agendas.length; z++) {
+	    if (this.game.state.agendas[z] == choice) {
+	      this.game.state.agendas.splice(z, 1);
+	      z--;
+	    }
+	  }
 
 console.log("HERE IN DISCARD: ");
 console.log(JSON.stringify(this.game.pool));
 console.log(JSON.stringify(this.game.state.agendas));
 
-          console.log("POOL 0: " + JSON.stringify(this.game.pool[0].hand[i]));
+          console.log("POOL 0: " + JSON.stringify(this.game.pool[0].hand));
 
 	
 	}
@@ -752,14 +759,18 @@ console.log("which tech: " + this.game.players_info[i].tech[ii]);
  
 
       if (mv[0] === "revealagendas") {
-  
+
+	let updateonly = mv[1];
+
   	this.updateLog("revealing upcoming agendas...");
   
   	//
   	// reset agendas
   	//
-  	this.game.state.agendas = [];
-        for (i = 0; i < 3; i++) {
+	if (!updateonly) {
+    	  this.game.state.agendas = [];
+        }
+        for (i = 0; i < this.game.pool[0].hand.length; i++) {
           this.game.state.agendas.push(this.game.pool[0].hand[i]);	
   	}
   

@@ -69,15 +69,16 @@
       for (let j = 0; j < this.totalPlayers; j++) {
         planets[i].units[j] = [];
 
-	if (j == 1) {
-	  planets[i].units[j].push(this.returnUnit("infantry", 1));
+/*
+//	if (j == 1) {
+//	  planets[i].units[j].push(this.returnUnit("infantry", 1));
 //	  planets[i].units[j].push(this.returnUnit("infantry", 1));
 //	  planets[i].units[j].push(this.returnUnit("infantry", 1));
 //	  planets[i].units[j].push(this.returnUnit("pds", 1));
-	  planets[i].units[j].push(this.returnUnit("pds", 1));
+//	  planets[i].units[j].push(this.returnUnit("pds", 1));
 //	  planets[i].units[j].push(this.returnUnit("spacedock", 1));
-	}
-
+//	}
+*/
       }
     }
   
@@ -185,10 +186,11 @@
         systems[i].units[j] = []; // array of united
         systems[i].activated[j] = 0; // is this activated by the player
       }
-  
+
+/*  
       systems[i].units[1] = [];
       systems[i].units[1].push(this.returnUnit("fighter", 1));  
-
+*/
     }
     return systems;
   };
@@ -1862,8 +1864,10 @@ console.log("AGENDAS: " + JSON.stringify(agendas));
 	  $('.option').on('click',function () {
 
 	    let choice = $(this).attr("id");
-
-            imperium_self.addMove("revealagendas");
+	    //
+	    // 1 = update don't refresh
+	    //
+            imperium_self.addMove("revealagendas\t1");
             imperium_self.addMove("discard\t"+player+"\t"+"agenda"+"\t"+choice);
 	    imperium_self.addMove("notify\tFLIPCARD is completed!");
             for (let i = 1; i <= imperium_self.game.players_info.length; i++) {
@@ -2560,7 +2564,6 @@ console.log("THE LAW FAILS!");
       ground_units: ["infantry","infantry","infantry","infantry","infantry","spacedock"],
       tech: ["neural-implants","electron-shielding","faction1-orbital-drop","faction1-versatile", "faction1-advanced-carrier-ii", "faction1-infantry-ii"]
     };
-/*
     factions['faction2'] = {
       homeworld: "sector39",
       name: "Universities of Jol Nar",
@@ -2568,7 +2571,6 @@ console.log("THE LAW FAILS!");
       ground_units: ["infantry","infantry","pds","spacedock"],
       tech: ["neural-implants","electron-shielding","waste-recycling","plasma-clusters","faction2-analytic","faction2-brilliant","faction2-fragile","faction2-deep-space-conduits","faction2-resupply-stations"]
     };
-*/
     factions['faction3'] = {
       homeworld: "sector40",
       name: "XXCha Kingdom",
