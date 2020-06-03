@@ -150,6 +150,7 @@
           this.loadUnitOntoPlanet(i + 1, hwsectors[i], strongest_planet, factions[this.game.players_info[i].faction].ground_units[k]);
 	}
 
+	let technologies = this.returnTechnologyTree();
 
 	//
 	// assign faction technology
@@ -158,7 +159,7 @@
 	  let free_tech = factions[this.game.players_info[i].faction].tech[k];
 	  let player = i+1;
           this.game.players_info[i].tech.push(free_tech);
-          this.game.tech[free_tech].onNewRound(this, player, function() {});
+          technologies[free_tech].onNewRound(this, player, function() {});
           this.upgradePlayerUnitsOnBoard(player);
         }
 
@@ -276,9 +277,9 @@ console.log("GAME QUEUE: " + this.game.queue);
   
 
 
-	//
-	// resolve [action] [1] [publickey voting or 1 for agenda]
-	//
+      //
+      // resolve [action] [1] [publickey voting or 1 for agenda]
+      //
       if (mv[0] === "resolve") {
 
         let le = this.game.queue.length-2;
@@ -375,10 +376,37 @@ console.log("GAME QUEUE: " + this.game.queue);
   	}
   
   	this.updateLeaderboard();
+	return 1;
   
       }
-  
+
+
+
+      if (mv[0] === "discard") {
+
+	let player   = mv[1];
+	let target   = mv[2];
+	let id       = mv[3];
+
+  	this.game.queue.splice(qe, 1);
+ 
+	if (target == "agenda") {
+
+	  console.log("ASKED TO DISCARD: " + id);
+
+console.log("HERE IN DISCARD: ");
+console.log(JSON.stringify(this.game.deck));
+console.log(JSON.stringify(this.game.state.agendas));
+
+          console.log("POOL 0: " + JSON.stringify(this.game.pool[0].hand[i]));
+
+	
+	}
+
+	return 1; 
+      }
      
+
       if (mv[0] == "vote") {
 
 	let laws = this.returnAgendaCards();
@@ -605,12 +633,16 @@ console.log("GAME QUEUE: " + this.game.queue);
   
       if (mv[0] === "newround") {
 
+	let technologies = this.returnTechnologyTree();
+
         //
   	// reset tech bonuses
   	//
         for (let i = 0; i < this.game.players_info.length; i++) {
           for (let ii = 0; ii < this.game.players_info[i].tech.length; ii++) {
-            this.game.tech[this.game.players_info[i].tech[ii]].onNewRound(this, (i+1), function() {});
+console.log(ii);
+console.log("which tech: " + this.game.players_info[i].tech[ii]);
+            technologies[this.game.players_info[i].tech[ii]].onNewRound(this, (i+1), function() {});
   	  }
   	}
   
@@ -635,6 +667,7 @@ console.log("GAME QUEUE: " + this.game.queue);
         for (let i = 0; i < this.game.players_info.length; i++) {
   	  this.game.players_info[i].passed = 0;
 	  this.game.players_info[i].strategy_cards_played = [];
+  	  this.game.players_info[i].strategy = [];
         }
 
 
@@ -1095,9 +1128,12 @@ alert("Player should choose what planets to invade (if possible)");
   	}
 
         if (item == "tech") {
+
+	  let technologies = this.returnTechnologyTree();
+
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3]);
   	  this.game.players_info[player-1].tech.push(mv[3]);
-  	  this.game.tech[mv[3]].onNewRound(imperium_self, player, function() {});
+  	  technologies[mv[3]].onNewRound(imperium_self, player, function() {});
   	  this.upgradePlayerUnitsOnBoard(player);
   	}
         if (item == "goods") {
@@ -1187,10 +1223,11 @@ alert("Player should choose what planets to invade (if possible)");
 
   	let eventname    = parseInt(mv[1]);
   	let player       = parseInt(mv[2]);
-  	let target       = parseInt(mv[3]);
-        let sector	 = mv[4];
-        let planet_idx   = mv[5];
-        let details      = mv[6];
+  	let attacker     = parseInt(mv[3]);
+  	let defender     = parseInt(mv[4]);
+        let sector	 = mv[5];
+        let planet_idx   = mv[6];
+        let details      = mv[7];
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  let techs = this.game.players_info[speaker_order[i]-1].tech;
@@ -1200,13 +1237,8 @@ alert("Player should choose what planets to invade (if possible)");
 	    // arbitrary events
 	    //
 	    if (eventname === "destroyed_unit") {
-              if (technologies[techs[k]].destroyedUnitTriggers(this, player, target, sector, planet_idx, details) == 1) {
-	        this.game.queue.push("arbitrary_event_event\t"+eventname+"\t"+player+"\t"+target+"\t"+sector+"\t"+planet_idx+"\t"+details+"\t"+techs[k]);
-	      }
-	    }
-	    if (eventname === "flawless_combat") {
-              if (technologies[techs[k]].flawlessCombatTriggers(this, player, sector) == 1) {
-	        this.game.queue.push("arbitrary_event_event\t"+eventname+"\t"+player+"\t"+target+"\t"+sector+"\t"+planet_idx+"\t"+details+"\t"+techs[k]);
+              if (technologies[techs[k]].destroyedUnitTriggers(this, player, attacker, defender, sector, planet_idx, details) == 1) {
+	        this.game.queue.push("arbitrary_event_event\t"+eventname+"\t"+player+"\t"+attacker+"\t"+defender+"\t"+sector+"\t"+planet_idx+"\t"+details+"\t"+techs[k]);
 	      }
 	    }
 
@@ -1226,6 +1258,8 @@ alert("Player should choose what planets to invade (if possible)");
         let planet_idx   = mv[5];
         let details      = mv[6];
         let tech         = mv[7];
+
+  	this.game.queue.splice(qe, 1);
 
         if (eventname == "destroyed_unit") {
 	  return technologies[tech].destroyedUnitEvent(this, player, target, sector, planet_idx, details);
@@ -1385,8 +1419,6 @@ alert("Player should choose what planets to invade (if possible)");
       }
       if (mv[0] === "space_combat_post") {
 
-console.log("entering here");
-
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
         this.updateSectorGraphics(sector);
@@ -1395,6 +1427,7 @@ console.log("entering here");
 	//
 	// have a round of space combat
 	//
+	this.game.state.space_combat_round++;
 	this.spaceCombat(player, sector);
 
   	if (this.hasUnresolvedSpaceCombat(player, sector) == 1) {
@@ -1592,89 +1625,66 @@ console.log("IS GROUND COMBAT RESOLVED: " + player + "/" + sector + "/" + planet
       /////////////////
       // ACTION CARD //
       /////////////////
-      if (mv[0] === "action") {
+      if (mv[0] === "action_card") {
   
-  	let card = mv[1];
-  	let player = parseInt(mv[2]);
+  	let player = parseInt(mv[1]);
+  	let card = mv[2];
+	let technologies = this.returnTechnologyTree();
 
 	let cards = this.returnActionCards();
 	let played_card = cards[card];
 
-	this.game.queue.splice(qe, 1);
+  	this.game.queue.splice(qe, 1);
 
-	cards[card].onPlay(this, player, function(c) {
-	  console.log("ACTION CARD HAS PLAYED AND RETURNED IN ACTION CALLBACK");
-  	  return 1;
-	});
+        let speaker_order = this.returnSpeakerOrder();
 
-      }
-/****
-      if (mv[0] === "action_card") {  
-
-  	let card = mv[1];
-  	let player = parseInt(mv[2]);
-
-	let cards = this.returnActionCards();
-	let played_card = cards[card];
-
-	cards[card].onPlay(this, player, function(c) {
-	  console.log("ACTION CARD HAS PLAYED AND RETURNED IN ACTION CALLBACK");
-	});
-
-	if (cards[card].interactive == 1) {
-  	  this.game.queue.splice(qe, 1);
-  	  return 1;
-	} else {
-  	  this.game.queue.splice(qe, 1);
-	  return 0;
-	}
+        for (let i = 0; i < speaker_order.length; i++) {
+          let techs = this.game.players_info[speaker_order[i]-1].tech;
+          for (let k = 0; k < techs.length; k++) {
+            if (technologies[techs[k]].playActionCardTriggers(this, player, card) == 1) {
+              this.game.queue.push("action_card_event\t"+speaker_order[i]+"\t"+player+"\t"+card+"\t"+techs[k]);
+            }
+          }
+        }
+	return 1;
 
       }
       if (mv[0] === "action_card_event") {  
+    
+        let technologies = this.returnTechnologyTree();
 
-  	let card = mv[1];
-  	let player = parseInt(mv[2]);
+        let player       = parseInt(mv[1]);
+        let action_card_player = mv[2];
+        let card   	 = mv[3];
+        let tech         = mv[4];
+        
+  	this.game.queue.splice(qe, 1);
 
-	let cards = this.returnActionCards();
-	let played_card = cards[card];
-
-	cards[card].onPlay(this, player, function(c) {
-	  console.log("ACTION CARD HAS PLAYED AND RETURNED IN ACTION CALLBACK");
-	});
-
-	if (cards[card].interactive == 1) {
-  	  this.game.queue.splice(qe, 1);
-  	  return 1;
-	} else {
-  	  this.game.queue.splice(qe, 1);
-	  return 0;
-	}
+        return technologies[tech].playActionCardEvent(this, player, action_card_player, card); 
 
       }
       if (mv[0] === "action_card_post") {  
 
-  	let card = mv[1];
-  	let player = parseInt(mv[2]);
-
+  	let player = parseInt(mv[1]);
+  	let card = mv[2];
 	let cards = this.returnActionCards();
+
 	let played_card = cards[card];
+  	this.game.queue.splice(qe, 1);
 
 	cards[card].onPlay(this, player, function(c) {
+
 	  console.log("ACTION CARD HAS PLAYED AND RETURNED IN ACTION CALLBACK");
+
+  	  if (cards[card].interactive == 1) {
+  	    return 1;
+	  } else {
+	    return 0;
+	  }
+
+	  return 1;
 	});
-
-	if (cards[card].interactive == 1) {
-  	  this.game.queue.splice(qe, 1);
-  	  return 1;
-	} else {
-  	  this.game.queue.splice(qe, 1);
-	  return 0;
-	}
-
       }
-****/
-
-
 
 
 
@@ -1747,6 +1757,14 @@ console.log("IS GROUND COMBAT RESOLVED: " + player + "/" + sector + "/" + planet
 	// unpack space ships
 	//
 	this.unloadStoredShipsIntoSector(player, sector);
+
+	//
+	// initialize variables for 
+	//
+	this.game.state.space_combat_round = 0;
+	this.game.state.space_combat_ships_destroyed_attacker = 0;
+	this.game.state.space_combat_ships_destroyed_defender = 0;
+	
 
   	if (player == this.game.player) {
 	  this.addMove("continue\t"+player+"\t"+sector);

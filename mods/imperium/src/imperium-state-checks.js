@@ -28,16 +28,17 @@
   
 
 
+  exhaustPlayerResearchTechnologyPrerequisites(tech) {
 
-  canPlayerResearchTechnology(tech) {
-  
     let mytech = this.game.players_info[this.game.player-1].tech;
     if (mytech.includes(tech)) { return 0; }
-  
+
     let prereqs = JSON.parse(JSON.stringify(this.game.tech[tech].prereqs));
-  
+    let techfaction = this.game.tech[tech].faction;
+    let techtype = this.game.tech[tech].type;
+
     for (let i = 0; i < mytech.length; i++) {
-      let color = mytech[i].color;
+      let color = this.game.tech[mytech[i]].color;
       for (let j = 0; j < prereqs.length; j++) {
         if (prereqs[j] == color) {
           prereqs.splice(j, 1);
@@ -45,16 +46,291 @@
         }
       }
     }
-  
+
+    //
+    // permanent blue tech skip
+    //
+    if (this.game.players_info[this.game.player-1].permanent_blue_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "blue") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // permanent green tech skip
+    //
+    if (this.game.players_info[this.game.player-1].permanent_green_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "green") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // permanent red tech skip
+    //
+    if (this.game.players_info[this.game.player-1].permanent_red_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "red") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // permanent yellow tech skip
+    //
+    if (this.game.players_info[this.game.player-1].permanent_yellow_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "yellow") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // temporary blue tech skip
+    //
+    if (this.game.players_info[this.game.player-1].temporary_blue_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "blue") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+	  this.game.players_info[this.game.player-1].temporary_blue_tech_prerequisite = 0;
+        }
+      }
+    }
+
+    //
+    // temporary green tech skip
+    //
+    if (this.game.players_info[this.game.player-1].temporary_green_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "green") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+	  this.game.players_info[this.game.player-1].temporary_green_tech_prerequisite = 0;
+        }
+      }
+    }
+
+    //
+    // temporary red tech skip
+    //
+    if (this.game.players_info[this.game.player-1].temporary_red_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "red") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+	  this.game.players_info[this.game.player-1].temporary_red_tech_prerequisite = 0;
+        }
+      }
+    }
+
+    //
+    // temporary yellow tech skip
+    //
+    if (this.game.players_info[this.game.player-1].temporary_yellow_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "yellow") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+	  this.game.players_info[this.game.player-1].temporary_yellow_tech_prerequisite = 0;
+        }
+      }
+    }
+
+    //
+    // we don't meet the prereqs but have a skip
+    //
+    if (prereqs.length >= 1 && this.game.players_info[this.game.player-1].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade >= 1) {
+      prereqs.splice(0, 1);
+    }
+
+
+    //
+    // we don't meet the prereqs but have a skip
+    //
+    if (prereqs.length >= 1 && this.game.players_info[this.game.player-1].temporary_ignore_number_of_tech_prerequisites_on_nonunit_upgrade >= 1) {
+      prereqs.splice(0, 1);
+      this.game_players_info[this.game.player-1].temporary_ignore_number_of_tech_prerequisities_on_nonunit_upgrade = 0;
+    }
+
+
     //
     // we meet the pre-reqs
     //
     if (prereqs.length == 0) {
-      if (mytech.faction == "all" || mytech.faction == this.game.players_info[this.game.player-1].faction) {
-        return 1;
+      if (techfaction == "all" || techfaction == this.game.players_info[this.game.player-1].faction) {
+	if (techtype == "normal") {
+          return 1;
+	}
       }
     }
+
+    return 0;
+
+
+  }
+
+
+  canPlayerResearchTechnology(tech) {
   
+    let mytech = this.game.players_info[this.game.player-1].tech;
+    if (mytech.includes(tech)) { return 0; }
+  
+    let prereqs = JSON.parse(JSON.stringify(this.game.tech[tech].prereqs));
+    let techfaction = this.game.tech[tech].faction;
+    let techtype = this.game.tech[tech].type;
+
+    for (let i = 0; i < mytech.length; i++) {
+      let color = this.game.tech[mytech[i]].color;
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == color) {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+console.log("MYTECH: " + mytech);
+console.log("NOW OUR PREREQS ARE: " + JSON.stringify(prereqs));
+
+    //
+    // temporary blue tech skip
+    //
+    if (this.game.players_info[this.game.player-1].temporary_blue_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "blue") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // temporary green tech skip
+    //
+    if (this.game.players_info[this.game.player-1].temporary_green_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "green") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // temporary red tech skip
+    //
+    if (this.game.players_info[this.game.player-1].temporary_red_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "red") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // temporary yellow tech skip
+    //
+    if (this.game.players_info[this.game.player-1].temporary_yellow_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "yellow") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // permanent blue tech skip
+    //
+    if (this.game.players_info[this.game.player-1].permanent_blue_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "blue") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // permanent green tech skip
+    //
+    if (this.game.players_info[this.game.player-1].permanent_green_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "green") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // permanent red tech skip
+    //
+    if (this.game.players_info[this.game.player-1].permanent_red_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "red") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // permanent yellow tech skip
+    //
+    if (this.game.players_info[this.game.player-1].permanent_yellow_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "yellow") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // we don't meet the prereqs but have a skip
+    //
+    if (prereqs.length == 1 && this.game.players_info[this.game.player-1].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade >= 1) {
+      prereqs.splice(0, 1);
+    }
+
+    //
+    // we don't meet the prereqs but have a skip
+    //
+    if (prereqs.length == 1 && this.game.players_info[this.game.player-1].temporary_ignore_number_of_tech_prerequisites_on_nonunit_upgrade >= 1) {
+      prereqs.splice(0, 1);
+    }
+
+console.log(mytech);
+console.log(techtype);
+console.log(JSON.stringify(prereqs));
+console.log(techfaction);
+console.log(JSON.stringify(this.game.tech[tech]));
+console.log("F: " + this.game.players_info[this.game.player-1].faction);
+
+    //
+    // we meet the pre-reqs
+    //
+    if (prereqs.length == 0) {
+      if (techfaction == "all" || techfaction == this.game.players_info[this.game.player-1].faction) {
+	if (techtype == "normal") {
+          return 1;
+	}
+      }
+    }
+
     return 0;
   
   }

@@ -3,10 +3,30 @@
   playStrategyCardPrimary(player, card) {
   
     let imperium_self = this;
-  
+    let technologies = this.returnTechnologyTree();  
+
     let strategy_cards = this.returnStrategyCards();
     this.updateStatus(this.returnFaction(player) + " is playing the " + strategy_cards[card].name + " strategy card");
+
+    //
+    // CHECK IF FACTION HAS REPLACED PRIMARY STRATEGY CARD FUNCTION
+    //
+    if (this.game.player == player) {
+      let mytech = this.game.players_info[player-1].tech;
+      for (let i = 0; i < mytech.length; i++) {
+	if (technologies[mytech[i]].playStrategyCardPrimaryTriggers(imperium_self, player, card) == 1) {
+console.log("PLAYING STRATEGY CARD PRIMARY!");
+console.log("PLAYING STRATEGY CARD PRIMARY!");
+console.log("PLAYING STRATEGY CARD PRIMARY!");
+	  technologies[i].playStrategyCardPrimaryEvent(imperium_self, player, card);
+	  return;
+	}
+      }
+    }
   
+    //
+    // IF NOT CONTINUE AS NORMAL
+    //
     if (card == "initiative") {
   
       this.game.players_info[player-1].command_tokens += 2;
@@ -151,7 +171,7 @@
   
       if (this.game.player == player) {
         this.addMove("resolve\tstrategy");
-        this.addMove("strategy\t"+card+"\t"+player+"\t2\t"+player_confirmation_needed);
+        this.addMove("strategy\t"+card+"\t"+player+"\t2");
         this.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
         this.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
         this.playerBuildInfrastructure();
@@ -218,7 +238,6 @@
         this.playerResearchTechnology(function(tech) {
           imperium_self.addMove("resolve\tstrategy");
           imperium_self.addMove("strategy\t"+card+"\t"+player+"\t2");
-          imperium_self.addMove("strategy\t"+card+"\t"+player+"\t2");
           imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
           imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
           imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
@@ -251,7 +270,8 @@
   playStrategyCardSecondary(player, card) {
   
     let imperium_self = this;
-  
+    let technologies = this.returnTechnologyTree();
+
     let strategy_cards = this.returnStrategyCards();
     this.updateStatus("Moving into the secondary of the " + strategy_cards[card].name + " strategy card");
   
@@ -262,9 +282,32 @@
       this.resetConfirmsNeeded(this.game.players_info.length);
     }
 
-console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.confirms_received);
 
-  
+    if (this.game.player == player) {
+      this.updateStatus("Waiting for other players to execute secondary...");
+    }
+
+
+    //
+    // CHECK IF FACTION HAS REPLACED SECONDARY STRATEGY CARD FUNCTION
+    //
+    if (this.game.player != player) {
+      let mytech = this.game.players_info[player-1].tech;
+      for (let i = 0; i < mytech.length; i++) {
+        if (technologies[mytech[i]].playStrategyCardSecondaryTriggers(imperium_self, player, card) == 1) {
+console.log("PLAYING STRATEGY CARD SECONDARY");
+console.log("PLAYING STRATEGY CARD SECONDARY!");
+console.log("PLAYING STRATEGY CARD SECONDARY!");
+          technologies[i].playStrategyCardSecondaryEvent(imperium_self, player, card);
+          return;
+        }
+      }
+    }
+ 
+
+
+
+
     if (card == "initiative") {
       this.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
       this.playerBuyTokens();

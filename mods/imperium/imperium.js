@@ -1108,6 +1108,7 @@ console.log(JSON.stringify(sys.p));
           this.loadUnitOntoPlanet(i + 1, hwsectors[i], strongest_planet, factions[this.game.players_info[i].faction].ground_units[k]);
 	}
 
+	let technologies = this.returnTechnologyTree();
 
 	//
 	// assign faction technology
@@ -1116,7 +1117,7 @@ console.log(JSON.stringify(sys.p));
 	  let free_tech = factions[this.game.players_info[i].faction].tech[k];
 	  let player = i+1;
           this.game.players_info[i].tech.push(free_tech);
-          this.game.tech[free_tech].onNewRound(this, player, function() {});
+          technologies[free_tech].onNewRound(this, player, function() {});
           this.upgradePlayerUnitsOnBoard(player);
         }
 
@@ -1234,9 +1235,9 @@ console.log("GAME QUEUE: " + this.game.queue);
   
 
 
-	//
-	// resolve [action] [1] [publickey voting or 1 for agenda]
-	//
+      //
+      // resolve [action] [1] [publickey voting or 1 for agenda]
+      //
       if (mv[0] === "resolve") {
 
         let le = this.game.queue.length-2;
@@ -1333,10 +1334,37 @@ console.log("GAME QUEUE: " + this.game.queue);
   	}
   
   	this.updateLeaderboard();
+	return 1;
   
       }
-  
+
+
+
+      if (mv[0] === "discard") {
+
+	let player   = mv[1];
+	let target   = mv[2];
+	let id       = mv[3];
+
+  	this.game.queue.splice(qe, 1);
+ 
+	if (target == "agenda") {
+
+	  console.log("ASKED TO DISCARD: " + id);
+
+console.log("HERE IN DISCARD: ");
+console.log(JSON.stringify(this.game.deck));
+console.log(JSON.stringify(this.game.state.agendas));
+
+          console.log("POOL 0: " + JSON.stringify(this.game.pool[0].hand[i]));
+
+	
+	}
+
+	return 1; 
+      }
      
+
       if (mv[0] == "vote") {
 
 	let laws = this.returnAgendaCards();
@@ -1563,12 +1591,16 @@ console.log("GAME QUEUE: " + this.game.queue);
   
       if (mv[0] === "newround") {
 
+	let technologies = this.returnTechnologyTree();
+
         //
   	// reset tech bonuses
   	//
         for (let i = 0; i < this.game.players_info.length; i++) {
           for (let ii = 0; ii < this.game.players_info[i].tech.length; ii++) {
-            this.game.tech[this.game.players_info[i].tech[ii]].onNewRound(this, (i+1), function() {});
+console.log(ii);
+console.log("which tech: " + this.game.players_info[i].tech[ii]);
+            technologies[this.game.players_info[i].tech[ii]].onNewRound(this, (i+1), function() {});
   	  }
   	}
   
@@ -1593,6 +1625,7 @@ console.log("GAME QUEUE: " + this.game.queue);
         for (let i = 0; i < this.game.players_info.length; i++) {
   	  this.game.players_info[i].passed = 0;
 	  this.game.players_info[i].strategy_cards_played = [];
+  	  this.game.players_info[i].strategy = [];
         }
 
 
@@ -2053,9 +2086,12 @@ alert("Player should choose what planets to invade (if possible)");
   	}
 
         if (item == "tech") {
+
+	  let technologies = this.returnTechnologyTree();
+
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3]);
   	  this.game.players_info[player-1].tech.push(mv[3]);
-  	  this.game.tech[mv[3]].onNewRound(imperium_self, player, function() {});
+  	  technologies[mv[3]].onNewRound(imperium_self, player, function() {});
   	  this.upgradePlayerUnitsOnBoard(player);
   	}
         if (item == "goods") {
@@ -2137,6 +2173,7 @@ alert("Player should choose what planets to invade (if possible)");
       // whatever is left on the stack when done.
       //
       // flawless_combat
+      // destroyed_unit
       //
       if (mv[0] === "arbitrary_event") {
   
@@ -2144,9 +2181,11 @@ alert("Player should choose what planets to invade (if possible)");
 
   	let eventname    = parseInt(mv[1]);
   	let player       = parseInt(mv[2]);
-  	let target       = parseInt(mv[3]);
-        let sector	 = mv[4];
-        let planet_idx   = mv[5];
+  	let attacker     = parseInt(mv[3]);
+  	let defender     = parseInt(mv[4]);
+        let sector	 = mv[5];
+        let planet_idx   = mv[6];
+        let details      = mv[7];
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  let techs = this.game.players_info[speaker_order[i]-1].tech;
@@ -2155,9 +2194,9 @@ alert("Player should choose what planets to invade (if possible)");
 	    //
 	    // arbitrary events
 	    //
-	    if (eventname === "flawless_combat") {
-              if (technologies[techs[k]].flawlessCombatTriggers(this, player, sector) == 1) {
-	        this.game.queue.push("arbitrary_event_event\t"+eventname+"\t"+player+"\t"+target+"\t"+sector+"\t"+planet_idx+"\t"+techs[k]);
+	    if (eventname === "destroyed_unit") {
+              if (technologies[techs[k]].destroyedUnitTriggers(this, player, attacker, defender, sector, planet_idx, details) == 1) {
+	        this.game.queue.push("arbitrary_event_event\t"+eventname+"\t"+player+"\t"+attacker+"\t"+defender+"\t"+sector+"\t"+planet_idx+"\t"+details+"\t"+techs[k]);
 	      }
 	    }
 
@@ -2175,10 +2214,16 @@ alert("Player should choose what planets to invade (if possible)");
   	let target       = parseInt(mv[3]);
         let sector	 = mv[4];
         let planet_idx   = mv[5];
-        let tech         = mv[6];
+        let details      = mv[6];
+        let tech         = mv[7];
 
+  	this.game.queue.splice(qe, 1);
+
+        if (eventname == "destroyed_unit") {
+	  return technologies[tech].destroyedUnitEvent(this, player, target, sector, planet_idx, details);
+	}
         if (eventname == "flawless_combat") {
-	  return technologies[tech].flawlessCombatEvent(this, player, sector);
+//	  return technologies[tech].flawlessCombatEvent(this, player, sector);
 	}
 
       }
@@ -2332,8 +2377,6 @@ alert("Player should choose what planets to invade (if possible)");
       }
       if (mv[0] === "space_combat_post") {
 
-console.log("entering here");
-
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
         this.updateSectorGraphics(sector);
@@ -2342,6 +2385,7 @@ console.log("entering here");
 	//
 	// have a round of space combat
 	//
+	this.game.state.space_combat_round++;
 	this.spaceCombat(player, sector);
 
   	if (this.hasUnresolvedSpaceCombat(player, sector) == 1) {
@@ -2539,89 +2583,66 @@ console.log("IS GROUND COMBAT RESOLVED: " + player + "/" + sector + "/" + planet
       /////////////////
       // ACTION CARD //
       /////////////////
-      if (mv[0] === "action") {
+      if (mv[0] === "action_card") {
   
-  	let card = mv[1];
-  	let player = parseInt(mv[2]);
+  	let player = parseInt(mv[1]);
+  	let card = mv[2];
+	let technologies = this.returnTechnologyTree();
 
 	let cards = this.returnActionCards();
 	let played_card = cards[card];
 
-	this.game.queue.splice(qe, 1);
+  	this.game.queue.splice(qe, 1);
 
-	cards[card].onPlay(this, player, function(c) {
-	  console.log("ACTION CARD HAS PLAYED AND RETURNED IN ACTION CALLBACK");
-  	  return 1;
-	});
+        let speaker_order = this.returnSpeakerOrder();
 
-      }
-/****
-      if (mv[0] === "action_card") {  
-
-  	let card = mv[1];
-  	let player = parseInt(mv[2]);
-
-	let cards = this.returnActionCards();
-	let played_card = cards[card];
-
-	cards[card].onPlay(this, player, function(c) {
-	  console.log("ACTION CARD HAS PLAYED AND RETURNED IN ACTION CALLBACK");
-	});
-
-	if (cards[card].interactive == 1) {
-  	  this.game.queue.splice(qe, 1);
-  	  return 1;
-	} else {
-  	  this.game.queue.splice(qe, 1);
-	  return 0;
-	}
+        for (let i = 0; i < speaker_order.length; i++) {
+          let techs = this.game.players_info[speaker_order[i]-1].tech;
+          for (let k = 0; k < techs.length; k++) {
+            if (technologies[techs[k]].playActionCardTriggers(this, player, card) == 1) {
+              this.game.queue.push("action_card_event\t"+speaker_order[i]+"\t"+player+"\t"+card+"\t"+techs[k]);
+            }
+          }
+        }
+	return 1;
 
       }
       if (mv[0] === "action_card_event") {  
+    
+        let technologies = this.returnTechnologyTree();
 
-  	let card = mv[1];
-  	let player = parseInt(mv[2]);
+        let player       = parseInt(mv[1]);
+        let action_card_player = mv[2];
+        let card   	 = mv[3];
+        let tech         = mv[4];
+        
+  	this.game.queue.splice(qe, 1);
 
-	let cards = this.returnActionCards();
-	let played_card = cards[card];
-
-	cards[card].onPlay(this, player, function(c) {
-	  console.log("ACTION CARD HAS PLAYED AND RETURNED IN ACTION CALLBACK");
-	});
-
-	if (cards[card].interactive == 1) {
-  	  this.game.queue.splice(qe, 1);
-  	  return 1;
-	} else {
-  	  this.game.queue.splice(qe, 1);
-	  return 0;
-	}
+        return technologies[tech].playActionCardEvent(this, player, action_card_player, card); 
 
       }
       if (mv[0] === "action_card_post") {  
 
-  	let card = mv[1];
-  	let player = parseInt(mv[2]);
-
+  	let player = parseInt(mv[1]);
+  	let card = mv[2];
 	let cards = this.returnActionCards();
+
 	let played_card = cards[card];
+  	this.game.queue.splice(qe, 1);
 
 	cards[card].onPlay(this, player, function(c) {
+
 	  console.log("ACTION CARD HAS PLAYED AND RETURNED IN ACTION CALLBACK");
+
+  	  if (cards[card].interactive == 1) {
+  	    return 1;
+	  } else {
+	    return 0;
+	  }
+
+	  return 1;
 	});
-
-	if (cards[card].interactive == 1) {
-  	  this.game.queue.splice(qe, 1);
-  	  return 1;
-	} else {
-  	  this.game.queue.splice(qe, 1);
-	  return 0;
-	}
-
       }
-****/
-
-
 
 
 
@@ -2694,6 +2715,14 @@ console.log("IS GROUND COMBAT RESOLVED: " + player + "/" + sector + "/" + planet
 	// unpack space ships
 	//
 	this.unloadStoredShipsIntoSector(player, sector);
+
+	//
+	// initialize variables for 
+	//
+	this.game.state.space_combat_round = 0;
+	this.game.state.space_combat_ships_destroyed_attacker = 0;
+	this.game.state.space_combat_ships_destroyed_defender = 0;
+	
 
   	if (player == this.game.player) {
 	  this.addMove("continue\t"+player+"\t"+sector);
@@ -2913,9 +2942,10 @@ console.log("IS GROUND COMBAT RESOLVED: " + player + "/" + sector + "/" + planet
         }
 
         if (action2 == "action") {
-          imperium_self.playerSelectActionCard(function(success) {
+          imperium_self.playerSelectActionCard(function(card) {
             imperium_self.addMove("continue\t"+player+"\t"+sector);
-            imperium_self.addMove("action\t"+success+"\t"+imperium_self.game.player);
+            imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+            imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
             imperium_self.endTurn();
           }, player, sector);
         }
@@ -3006,8 +3036,9 @@ console.log("IS GROUND COMBAT RESOLVED: " + player + "/" + sector + "/" + planet
           });
         }
         if (action2 == "action") {
-          imperium_self.playerSelectActionCard(function(success) {
-  	    imperium_self.addMove("action\t"+success+"\t"+imperium_self.game.player);
+          imperium_self.playerSelectActionCard(function(card) {
+  	    imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+  	    imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.endTurn();
           });
         }
@@ -3146,9 +3177,10 @@ console.log("IS GROUND COMBAT RESOLVED: " + player + "/" + sector + "/" + planet
 
   playerResearchTechnology(mycallback) {
   
+    let imperium_self = this;
     let html = 'You are eligible to upgrade to the following technologies: <p></p><ul>';
   
-    for (var i in this.game.tech) {  
+    for (var i in this.game.tech) {
       if (this.canPlayerResearchTechnology(i)) {
         html += '<li class="option" id="'+i+'">'+this.game.tech[i].name+'</li>';
       }
@@ -3159,7 +3191,13 @@ console.log("IS GROUND COMBAT RESOLVED: " + player + "/" + sector + "/" + planet
     
     $('.option').off();
     $('.option').on('click', function() {
+
+      //
+      // handle prerequisites
+      //
+      imperium_self.exhaustPlayerResearchTechnologyPrerequisites(i);
       mycallback($(this).attr("id"));
+
     });
   
   
@@ -3611,6 +3649,63 @@ console.log("IS GROUND COMBAT RESOLVED: " + player + "/" + sector + "/" + planet
   
   }
   
+
+
+
+
+
+  playerSelectResources(cost, mycallback) {
+ 
+    if (cost == 0) { mycallback(1); }
+ 
+    let imperium_self = this;
+    let array_of_cards = this.returnPlayerUnexhaustedPlanetCards(this.game.player); // unexhausted
+    let array_of_cards_to_exhaust = [];
+    let selected_cost = 0;
+ 
+    let html  = "Select "+cost+" in resources: <p></p><ul>";
+    for (let z = 0; z < array_of_cards.length; z++) {
+      html += '<li class="cardchoice" id="cardchoice_'+array_of_cards[z]+'">' + this.returnPlanetCard(array_of_cards[z]) + '</li>';
+    }
+    html += '</ul>';
+ 
+    this.updateStatus(html);
+    $('.cardchoice').on('click', function() {
+ 
+      let action2 = $(this).attr("id");
+      let tmpx = action2.split("_");
+  
+      let divid = "#"+action2;
+      let y = tmpx[1];
+      let idx = 0;
+      for (let i = 0; i < array_of_cards.length; i++) {
+        if (array_of_cards[i] === y) {
+          idx = i;
+        }
+      }
+
+
+      imperium_self.addMove("expend\t"+imperium_self.game.player+"\tplanet\t"+array_of_cards[idx]);
+
+      array_of_cards_to_exhaust.push(array_of_cards[idx]);
+
+      $(divid).off();
+      $(divid).css('opacity','0.3');
+
+      selected_cost += imperium_self.game.planets[array_of_cards[idx]].resources;
+
+      if (cost <= selected_cost) { mycallback(1); }
+
+    });
+
+  }
+
+
+
+
+
+
+
   
   playerSelectActionCard(mycallback, player, sector) { 
  
@@ -4527,6 +4622,12 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
 	//
         state.planetary_invasion = 0;
   
+        //
+        // variables to track executing 
+        //
+        state.space_combat_round = 0;
+        state.ground_combat_round = 0;
+
     return state;
   }
   
@@ -5448,12 +5549,18 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
   
   
   
-  
-  
-  
   ////////////////////////////
   // Return Technology Tree //
   ////////////////////////////
+  //
+  // name -> technology name
+  // img -> card image
+  // color -> color
+  // unit -> is this a unit technology (0/1)
+  // faction -> is this restricted to a specific faction
+  // prereqs -> array of colors needed
+  // 
+
   returnTechnologyTree() {
   
     let tech = {};
@@ -5476,6 +5583,14 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
         imperium_self.game.players_info[player-1].action_cards_bonus_when_issued = 1;
         mycallback(1);
       },
+      destroyedUnitTriggersSync :  function(imperium_self, player, attacker, defender, sector, planet_idx, details) {
+	if (player == defender) { return 1; }
+      },
+      destroyedUnitEventSync :     function(imperium_self, player, attacker, defender, sector, planet_idx, unitname) {
+	if (player == this.game.player) { aalert("10 free trade goods"); }
+	imperium_self.game.players_info[player-1].trade_goods += 10;
+      }
+
 /*
       activateSystemTriggers : function(imperium_self, player, sector) {
 	return 1;
@@ -5948,6 +6063,22 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
       onNewTurn        :       function(imperium_self, player, mycallback) {
         imperium_self.game.players_info[player-1].upgraded_carrier = 1;
         mycallback(1);
+      },
+      destroyedGroundUnitTriggerSync	: function(imperium_self, player, attacker, defender, sector, planet_idx, details) { 
+	if (defender == player) { return 1; }
+	return 0; 
+      },
+      destroyedGroundUnitEventSync	: function(imperium_self, player, attacker, defender, sector, planet_idx, details) { 
+	if (details == "infantry") {
+	  let dieroll = imperium_self.rollDice(10);
+          if (dieroll <= 5) {
+console.log("Spec Ops reanimated in homeworld... ("+dieroll+")");
+	    imperium_self.addPlanetaryUnit(player, sector, planet_idx, "infantry");
+	  } else {
+console.log("Spec Ops not reanimated in homeworld...("+dieroll+")");
+	  }
+	}
+	return 0;
       }
     };
     tech['faction1-orbital-drop']   = {
@@ -6054,7 +6185,7 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
         imperium_self.game.players_info[player-1].deep_space_conduits = 1;
       }
     };
-    tech['faction1-resupply-stations']   = {
+    tech['faction2-resupply-stations']   = {
       name        :       "Resupply Stations" ,
       faction	  :	  "faction2",
       replaces	  :	  "",
@@ -6068,7 +6199,7 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
         mycallback(1);
       },
       postSystemActivationTriggers :    function(imperium_self, player, sector) {
-        if (imperium_self.game.players_info[player-1].resupply_stations == 1) { return 0; }
+        if (imperium_self.game.players_info[player-1].resupply_stations == 0) { return 0; }
 	if (imperium_self.doesSystemContainPlayerShips(player, sector) == 1) { return 1; }
 	return 0;
       },
@@ -6076,15 +6207,69 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
 	imperium_self.game.players_info[player-1].goods += 4;
       }
     };
+    tech['faction2-fragile']   = {
+      name        :       "Fragile" ,
+      faction	  :	  "faction2",
+      img         :       "/imperium/img/card_template.jpg" ,
+      color       :       "" ,
+      prereqs     :       [],
+      type	  :	  "special" ,
+      onNewRound     :       function(imperium_self, player, mycallback) {
+        imperium_self.game.players_info[player-1].space_combat_roll_modifier = -1;
+        imperium_self.game.players_info[player-1].ground_combat_roll_modifier = -1;
+        imperium_self.game.players_info[player-1].pds_combat_roll_modifier = -1;
+        mycallback(1);
+      },
+    };
+    tech['faction2-analytic']   = {
+      name        :       "Analytic" ,
+      faction	  :	  "faction2",
+      img         :       "/imperium/img/card_template.jpg" ,
+      color       :       "" ,
+      prereqs     :       [],
+      type	  :	  "special" ,
+      onNewRound     :       function(imperium_self, player, mycallback) {
+        imperium_self.game.players_info[player-1].space_combat_roll_modifier = -1;
+        imperium_self.game.players_info[player-1].ground_combat_roll_modifier = -1;
+        imperium_self.game.players_info[player-1].pds_combat_roll_modifier = -1;
+        mycallback(1);
+      },
+    };
+    tech['faction2-brilliant']   = {
+      name        :       "Brilliant" ,
+      faction	  :	  "faction2",
+      img         :       "/imperium/img/card_template.jpg" ,
+      color       :       "" ,
+      prereqs     :       [],
+      type	  :	  "special" ,
+      playStrategyCardSecondaryTriggers :  function(imperium_self, player, card) {
+	if (card == "tech") {
+	  return 1;
+	}
+	return 0;
+      },
+      playStrategyCardSecondaryEvent :  function(imperium_self, player, card) {
+        this.playerResearchTechnology(function(tech) {
+          imperium_self.addMove("resolve\tstrategy");
+          imperium_self.addMove("strategy\t"+card+"\t"+player+"\t2");
+          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+          imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
+          imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
+          imperium_self.endTurn();
+        });
+      },
+    };
  
+
+
 
 
 
     //
     // FACTION 3
     //
-    tech['faction2-turn-nullification']   = {
-      name        :       "Turn Nullification" ,
+    tech['faction3-field-nullification']   = {
+      name        :       "Field Nullification" ,
       faction	  :	  "faction3",
       replaces	  :	  "",
       img         :       "/imperium/img/card_template.jpg" ,
@@ -6106,21 +6291,152 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
       postSystemActivation :   function(imperium_self, player, sector) {
 
 	if (player != this.game.player) {
-	  this.updateStatus("Opponent is deciding whether to use Turn Nullification");
+	  this.updateStatus("Opponent is deciding whether to use Field Nullification");
 	  return 0;
 	} else {
-	  let c = confirm("Do you wish to use Turn Nullification to end this player's turn?");
+	  let c = confirm("Do you wish to use Field Nullification to end this player's turn?");
 	  if (c) {
-	    this.addMove("notify\tTurn Nullification is triggered...");
-  	    this.addMove("resolve\tpost_activate");
-	    this.endTurn();
+	    imperium_self.addMove("notify\tField Nullification is triggered...");
+  	    imperium_self.addMove("resolve\tpost_activate");
+	    imperium_self.endTurn();
 	  } else {
-	    this.addMove("notify\tTurn Nullification is not triggered...");
-	    this.endTurn();
+	    imperium_self.addMove("notify\tField Nullification is not triggered...");
+	    imperium_self.endTurn();
 	  }
 	}
       }
     };
+    tech['faction3-peace-accords']   = {
+      name        :       "Peace Accords" ,
+      faction	  :	  "faction2",
+      img         :       "/imperium/img/card_template.jpg" ,
+      color       :       "" ,
+      prereqs     :       [],
+      type	  :	  "special" ,
+      playStrategyCardSecondaryTriggers :  function(imperium_self, player, card) {
+	if (card == "diplomacy") {
+	  return 1;
+	}
+	return 0;
+      },
+      playStrategyCardSecondaryEvent :  function(imperium_self, player, card) {
+alert("PEACE ACCORDS");
+        imperium_self.playerResearchTechnology(function(tech) {
+          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	  imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
+          imperium_self.endTurn();
+        });
+      },
+    };
+
+
+    tech['faction3-quash']   = {
+      name        :       "Peace Accords" ,
+      faction	  :	  "faction2",
+      img         :       "/imperium/img/card_template.jpg" ,
+      color       :       "" ,
+      prereqs     :       [],
+      type	  :	  "special" ,
+      menuOption  :       function(imperium_self, player) { 
+	let x = {};
+	    x.trigger = 'quash';
+	    x.html = '<li class="option" id="quash">quash</li>';
+	return x;
+      },
+      menuOptionTrigger:  function(imperium_self, player) { 
+        if (imperium_self.game.players_info[imperium_self.game.player-1].strategy_tokens > 0) {
+	  return 1;
+	} else {
+	  return 0;
+	}
+      },
+      menuOptionActivated:  function(imperium_self, player) { 
+
+	let agendas = imperium_self.game.state.agendas;
+	let laws = imperium_self.returnAgendaCards();
+console.log("AGENDAS: " + JSON.stringify(agendas));
+
+	if (imperium_self.game.player != player) {
+
+	} else {
+
+	  let html = 'Select Agenda to Quash: <p></p><ul>';
+	  for (let i = 0; i < agendas.length; i++) {
+	    html += '<li class="option" id="'+agendas[i]+'">' + laws[agendas[i]].name + '</li>';
+	  }
+	  imperium_self.updateStatus(html);
+
+	  $('.option').off();
+	  $('.option').on('click',function () {
+
+	    let choice = $(this).attr("id");
+
+	    //
+	    // and reveal the agendas
+            //
+            imperium_self.addMove("revealagendas");
+            for (let i = 1; i <= imperium_self.game.players_info.length; i++) {
+              imperium_self.addMove("FLIPCARD\t3\t1\t1\t"+i); // deck card poolnum player
+            }
+            imperium_self.addMove("discard\t"+imperium_self.game.player+"\t"+"agenda"+"\t"+choice);
+	    imperium_self.endTurn();
+	        
+	  });
+	}
+      },
+    };
+    tech['faction3-instinct-training']   = {
+      name        :       "Instinct Training" ,
+      faction	  :	  "faction2",
+      img         :       "/imperium/img/card_template.jpg" ,
+      color       :       "" ,
+      prereqs     :       [],
+      type	  :	  "special" ,
+      onNewRound :  function(imperium_self, player, mycallback) {
+	if (player == imperium_self.game.player) {
+	  imperium_self.game.players_info[player-1].instinct_training_exhausted = 0;
+	}
+	mycallback(1);
+      },
+      playActionCardTriggers :  function(imperium_self, player, card) {
+	if (imperium_self.game.players_info[player-1].instinct_training_exhausted == 1) { return 0; }
+	return 1;
+      },
+      playActionCardEvent :  function(imperium_self, player, card) {
+
+	let factions = imperium_self.returnFactions();
+	let action_cards = imperium_self.returnActionCards();
+
+	let html  = factions[imperium_self.game.player_info[player-1].faction].name;
+	    html += ' has played ';
+	    html += action_cards[card].name;
+
+	    html += '<ul>';	   
+	    html += '<li class="option" id="yes">cancel action card</li>';
+	    html += '<li class="option" id="no">do nothing</li>';
+	    html += '</ul>';	   
+
+	imperium_self.updateStatus(html);
+
+	$('.option').off();
+	$('.option').on('click',function () {
+
+	  let choice = $(this).attr("id");
+	  if (choice == "yes") {
+	    imperium_self.game.players_info[player-1].instinct_training_exhausted = 1;
+	    imperium_self.addMove("resolve\taction_card_post");
+	    imperium_self.addMove("notify\tAction Card cancelled...");
+	    imperium_self.addMove("notify\tXXCha use Instinct Training");
+            imperium_self.endTurn();
+	  } else {
+	    imperium_self.addMove("notify\tXXCha do not use Instinct Training");
+            imperium_self.endTurn();
+	  }
+	});
+
+      },
+    };
+ 
  
 
 
@@ -6130,6 +6446,7 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
 
       if (tech[i].replaces == null) { tech[i].replaces = ""; }
       if (tech[i].faction == null) { tech[i].faction = "all"; }
+      if (tech[i].prereqs == null) { tech[i].prereqs = []; }
       if (tech[i].type == null) { tech[i].type = "special"; } // i.e. not a tech card
 
       if (tech[i].upgradeUnit == null) {
@@ -6153,6 +6470,94 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
       }
       if (tech[i].menuOptionActivated == null) {
 	tech[i].menuOptionActivated = function(imperium_self, player) { return 0; }
+      }
+
+
+
+
+      ////////////////////////
+      // synchronous events //
+      ////////////////////////
+      //
+      // these can be called directly from game code itself, ie the imperium-state-updates functions
+      // that execute game-code collectively on all player machines. they do not need to be added to
+      // the stack for a separate check, since they are guaranteed not to stop execution for user-input.
+      //
+
+      //
+      // unit is destroyed
+      //
+      if (tech[i].destroyedUnitTriggersSync == null) {
+	tech[i].destroyedUnitTriggers = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
+      }
+      if (tech[i].destroyedUnitEventSync == null) {
+	tech[i].destroyedUnitEvent = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
+      }
+
+      //
+      // space unit is destroyed
+      //
+      if (tech[i].destroyedSpaceUnitTriggersSync == null) {
+	tech[i].destroyedSpaceUnitTriggers = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
+      }
+      if (tech[i].destroyedUnitEventSync == null) {
+	tech[i].destroyedUnitEvent = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
+      }
+
+      //
+      // ground unit is destroyed
+      //
+      if (tech[i].destroyedGroundUnitTriggersSync == null) {
+	tech[i].destroyedGroundUnitTriggersSync = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
+      }
+      if (tech[i].destroyedGroundUnitEventSync == null) {
+	tech[i].destroyedGroundUnitEventSync = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
+      }
+
+
+
+
+
+      //////////////////////////
+      // asynchronous eventsa //
+      //////////////////////////
+      //
+      // these should be trigged by placing the request for examination directly on the game stack. at
+      // which point the engine will examine which players wish to trigger the events and process the 
+      // interventions IN ORDER based on who can successfully trigger.
+      //
+
+      //
+      // when action card is played
+      //
+      if (tech[i].playActionCardTriggers == null) {
+	tech[i].playActionCardTriggers = function(imperium_self, player, card) { return 0; }
+      }
+      if (tech[i].playActionCardEvent == null) {
+	tech[i].playActionCardEvent = function(imperium_self, player, card) { return 0; }
+      }
+
+
+
+      //
+      // when strategy card primary is played
+      //
+      if (tech[i].playStrategyCardPrimaryTriggers == null) {
+	tech[i].playStrategyCardPrimaryTriggers = function(imperium_self, player, card) { return 0; }
+      }
+      if (tech[i].playStrategyCardPrimaryEvent == null) {
+	tech[i].playStrategyCardPrimaryEvent = function(imperium_self, player, card) { return 0; }
+      }
+
+
+      //
+      // when strategy card secondary is played
+      //
+      if (tech[i].playStrategyCardSecondaryTriggers == null) {
+	tech[i].playStrategyCardSecondaryTriggers = function(imperium_self, player, card) { return 0; }
+      }
+      if (tech[i].playStrategyCardSecondaryEvent == null) {
+	tech[i].playStrategyCardSecondaryEvent = function(imperium_self, player, card) { return 0; }
       }
 
 
@@ -6595,6 +7000,27 @@ console.log("THE LAW FAILS!");
       players[i].resupply_stations = 0; // gain trade goods on system activation if contains ships 
       players[i].turn_nullification = 0; // after player activates system with ships, can end turn ...
  
+      //
+      // roll modifiers
+      //
+      players[i].space_combat_roll_modifier 	= 0;
+      players[i].ground_combat_roll_modifier 	= 0;
+      players[i].pds_combat_roll_modifier 	= 0;
+
+      //
+      // tech upgrades
+      //
+      players[i].temporary_green_tech_prerequisite = 0;
+      players[i].temporary_yellow_tech_prerequisite = 0;
+      players[i].temporary_red_tech_prerequisite = 0;
+      players[i].temporary_blue_tech_prerequisite = 0;
+      players[i].permanent_green_tech_prerequisite = 0;
+      players[i].permanent_yellow_tech_prerequisite = 0;
+      players[i].permanent_red_tech_prerequisite = 0;
+      players[i].permanent_blue_tech_prerequisite = 0;
+      players[i].temporary_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 0;
+      players[i].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 0;
+
       players[i].upgraded_infantry = 0;
       players[i].upgraded_pds = 0;
       players[i].upgraded_spacedock = 0;
@@ -6642,21 +7068,21 @@ console.log("THE LAW FAILS!");
       name: "Federation of Sol",
       space_units: ["carrier","carrier","destroyer","fighter","fighter","fighter"],
       ground_units: ["infantry","infantry","infantry","infantry","infantry","spacedock"],
-      tech: ["neural-implants","electron-shielding","faction1-orbital-drop","faction1-versatile"]
+      tech: ["neural-implants","electron-shielding","faction1-orbital-drop","faction1-versatile", "faction1-advanced-carrier-ii", "faction1-infantry-ii"]
     };
     factions['faction2'] = {
       homeworld: "sector39",
       name: "Universities of Jol Nar",
       space_units: ["carrier","carrier","dreadnaught","fighter"],
       ground_units: ["infantry","infantry","pds","spacedock"],
-      tech: ["neural-implants","electron-shielding","waste-recycling","plasma-clusters"]
+      tech: ["neural-implants","electron-shielding","waste-recycling","plasma-clusters","faction2-analytic","faction2-brilliant","faction2-fragile","faction2-deep-space-conduits","faction2-resupply-stations"]
     };
     factions['faction3'] = {
       homeworld: "sector40",
       name: "XXCha Kingdom",
       space_units: ["carrier","cruiser","cruiser","fighter","fighter","fighter"],
       ground_units: ["infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech: ["plasma-clusters"]
+      tech: ["plasma-clusters", "faction3-field-nullification", "faction3-peace-accords", "faction3-quash", "faction3-instinct-training"]
     };
   /**
     factions['faction4'] = {
@@ -6778,16 +7204,17 @@ console.log("THE LAW FAILS!");
   
 
 
+  exhaustPlayerResearchTechnologyPrerequisites(tech) {
 
-  canPlayerResearchTechnology(tech) {
-  
     let mytech = this.game.players_info[this.game.player-1].tech;
     if (mytech.includes(tech)) { return 0; }
-  
+
     let prereqs = JSON.parse(JSON.stringify(this.game.tech[tech].prereqs));
-  
+    let techfaction = this.game.tech[tech].faction;
+    let techtype = this.game.tech[tech].type;
+
     for (let i = 0; i < mytech.length; i++) {
-      let color = mytech[i].color;
+      let color = this.game.tech[mytech[i]].color;
       for (let j = 0; j < prereqs.length; j++) {
         if (prereqs[j] == color) {
           prereqs.splice(j, 1);
@@ -6795,16 +7222,291 @@ console.log("THE LAW FAILS!");
         }
       }
     }
-  
+
+    //
+    // permanent blue tech skip
+    //
+    if (this.game.players_info[this.game.player-1].permanent_blue_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "blue") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // permanent green tech skip
+    //
+    if (this.game.players_info[this.game.player-1].permanent_green_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "green") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // permanent red tech skip
+    //
+    if (this.game.players_info[this.game.player-1].permanent_red_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "red") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // permanent yellow tech skip
+    //
+    if (this.game.players_info[this.game.player-1].permanent_yellow_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "yellow") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // temporary blue tech skip
+    //
+    if (this.game.players_info[this.game.player-1].temporary_blue_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "blue") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+	  this.game.players_info[this.game.player-1].temporary_blue_tech_prerequisite = 0;
+        }
+      }
+    }
+
+    //
+    // temporary green tech skip
+    //
+    if (this.game.players_info[this.game.player-1].temporary_green_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "green") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+	  this.game.players_info[this.game.player-1].temporary_green_tech_prerequisite = 0;
+        }
+      }
+    }
+
+    //
+    // temporary red tech skip
+    //
+    if (this.game.players_info[this.game.player-1].temporary_red_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "red") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+	  this.game.players_info[this.game.player-1].temporary_red_tech_prerequisite = 0;
+        }
+      }
+    }
+
+    //
+    // temporary yellow tech skip
+    //
+    if (this.game.players_info[this.game.player-1].temporary_yellow_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "yellow") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+	  this.game.players_info[this.game.player-1].temporary_yellow_tech_prerequisite = 0;
+        }
+      }
+    }
+
+    //
+    // we don't meet the prereqs but have a skip
+    //
+    if (prereqs.length >= 1 && this.game.players_info[this.game.player-1].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade >= 1) {
+      prereqs.splice(0, 1);
+    }
+
+
+    //
+    // we don't meet the prereqs but have a skip
+    //
+    if (prereqs.length >= 1 && this.game.players_info[this.game.player-1].temporary_ignore_number_of_tech_prerequisites_on_nonunit_upgrade >= 1) {
+      prereqs.splice(0, 1);
+      this.game_players_info[this.game.player-1].temporary_ignore_number_of_tech_prerequisities_on_nonunit_upgrade = 0;
+    }
+
+
     //
     // we meet the pre-reqs
     //
     if (prereqs.length == 0) {
-      if (mytech.faction == "all" || mytech.faction == this.game.players_info[this.game.player-1].faction) {
-        return 1;
+      if (techfaction == "all" || techfaction == this.game.players_info[this.game.player-1].faction) {
+	if (techtype == "normal") {
+          return 1;
+	}
       }
     }
+
+    return 0;
+
+
+  }
+
+
+  canPlayerResearchTechnology(tech) {
   
+    let mytech = this.game.players_info[this.game.player-1].tech;
+    if (mytech.includes(tech)) { return 0; }
+  
+    let prereqs = JSON.parse(JSON.stringify(this.game.tech[tech].prereqs));
+    let techfaction = this.game.tech[tech].faction;
+    let techtype = this.game.tech[tech].type;
+
+    for (let i = 0; i < mytech.length; i++) {
+      let color = this.game.tech[mytech[i]].color;
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == color) {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+console.log("MYTECH: " + mytech);
+console.log("NOW OUR PREREQS ARE: " + JSON.stringify(prereqs));
+
+    //
+    // temporary blue tech skip
+    //
+    if (this.game.players_info[this.game.player-1].temporary_blue_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "blue") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // temporary green tech skip
+    //
+    if (this.game.players_info[this.game.player-1].temporary_green_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "green") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // temporary red tech skip
+    //
+    if (this.game.players_info[this.game.player-1].temporary_red_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "red") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // temporary yellow tech skip
+    //
+    if (this.game.players_info[this.game.player-1].temporary_yellow_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "yellow") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // permanent blue tech skip
+    //
+    if (this.game.players_info[this.game.player-1].permanent_blue_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "blue") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // permanent green tech skip
+    //
+    if (this.game.players_info[this.game.player-1].permanent_green_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "green") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // permanent red tech skip
+    //
+    if (this.game.players_info[this.game.player-1].permanent_red_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "red") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // permanent yellow tech skip
+    //
+    if (this.game.players_info[this.game.player-1].permanent_yellow_tech_prerequisite == 1) {
+      for (let j = 0; j < prereqs.length; j++) {
+        if (prereqs[j] == "yellow") {
+          prereqs.splice(j, 1);
+  	  j = prereqs.length;
+        }
+      }
+    }
+
+    //
+    // we don't meet the prereqs but have a skip
+    //
+    if (prereqs.length == 1 && this.game.players_info[this.game.player-1].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade >= 1) {
+      prereqs.splice(0, 1);
+    }
+
+    //
+    // we don't meet the prereqs but have a skip
+    //
+    if (prereqs.length == 1 && this.game.players_info[this.game.player-1].temporary_ignore_number_of_tech_prerequisites_on_nonunit_upgrade >= 1) {
+      prereqs.splice(0, 1);
+    }
+
+console.log(mytech);
+console.log(techtype);
+console.log(JSON.stringify(prereqs));
+console.log(techfaction);
+console.log(JSON.stringify(this.game.tech[tech]));
+console.log("F: " + this.game.players_info[this.game.player-1].faction);
+
+    //
+    // we meet the pre-reqs
+    //
+    if (prereqs.length == 0) {
+      if (techfaction == "all" || techfaction == this.game.players_info[this.game.player-1].faction) {
+	if (techtype == "normal") {
+          return 1;
+	}
+      }
+    }
+
     return 0;
   
   }
@@ -7447,18 +8149,55 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
   
 
   //
+  // synchronousGameEvents
+  //
+  executeSynchronousGameEvent(eventname="", arg2=null, arg3=null, arg4=null, arg5=null, arg6=null, arg7=null, arg8=null) {
+
+    let technologies = this.returnTechnologyTree();
+
+    for (let i = 0; i < this.game.players_info.length; i++) {
+
+      let techs = this.game.players_info[i].tech;
+      for (let k = 0; k < techs.length; k++) {
+
+        //
+        // destroyed unit
+        //
+        if (eventname === "destroyed_unit") {
+	  let attacker   = arg2;
+	  let defender   = arg3;
+	  let sector     = arg4;
+	  let planet_idx = arg5;
+	  let unitname   = arg6;
+
+          if (technologies[techs[k]].destroyedUnitTriggersSync(this, (i+1), attacker, defender, sector, planet_idx, unitname) == 1) {
+            technologies[techs[k]].destroyedUnitEventSync(this, (i+1), attacker, defender, sector, planet_idx, unitname);
+          }
+        }
+
+      }
+    }
+  }
+
+
+
+
+  //
   // this function can be run after a tech bonus is used, to see if 
   // it is really exhausted for the turn, or whether it is from an
   // underlying tech bonus (and will be reset so as to be always
   // available.
   //
   resetTechBonuses() {
+
+    let technologies = this.returnTechnologyTree();
+
     //
     // reset tech bonuses
     //
     for (let i = 0; i < this.game.players_info.length; i++) {
       for (let ii = 0; ii < this.game.players_info[i].tech.length; ii++) {
-        this.game.tech[this.game.players_info[i].tech[ii]].onNewTurn();
+        technologies[this.game.players_info[i].tech[ii]].onNewTurn();
       }
     }
   }
@@ -7505,7 +8244,9 @@ this.updateLog("setting owner to " + owner);
   
   
 
-
+  //
+  //
+  //
   pdsSpaceDefense(attacker, destination, hops=1) {
 
     let sys = this.returnSystemAndPlanets(destination);
@@ -7528,9 +8269,19 @@ this.updateLog("setting owner to " + owner);
       for (let i = 0; i < battery.length; i++) {
   
         let roll = this.rollDice();
+
+	//
+	// modify pdf rolls
+	//
+	roll += this.game.players_info[battery[i].owner-1].pds_combat_roll_modifier;
+
         if (roll >= battery[i].combat) {
+
           hits++;
-        } else {
+
+          this.assignHitsToSpaceFleet(battery[i].owner, attacker, destination, 1);
+          this.eliminateDestroyedUnitsInSector(attacker, destination);
+
         }
   
       }
@@ -7546,10 +8297,6 @@ this.updateLog("setting owner to " + owner);
       }
   
   
-      if (hits > 0) {
-        this.assignHitsToSpaceFleet(attacker, destination, hits);
-        this.eliminateDestroyedUnitsInSector(attacker, destination);
-      }
     }
   }
   
@@ -7558,181 +8305,6 @@ this.updateLog("setting owner to " + owner);
 
   
   
-  invadePlanet(attacker, defender, sector, planet_idx) {
-  
-    let sys = this.returnSystemAndPlanets(sector);
-  
-    attacker_faction = this.returnFaction(attacker);
-    defender_faction = this.returnFaction(defender);
-  
-    let attacker_forces = 0;
-    let defender_forces = 0;
-  
-    //
-    // if defender exists
-    //
-    if (defender != -1) {
-  
-      //
-      // planetary defense system
-      //
-      let hits = 0;
-      for (let z = 0; z < sys.p[planet_idx].units[defender-1].length; z++) {
-        if (sys.p[planet_idx].units[defender-1][z].name == "pds") {
-          let roll = this.rollDice(10);
-          if (roll >= 6) {
-            this.updateLog("PDS fires and hits (roll: "+roll+")");
-    	  hits++;  
-          } else {
-          }
-        }
-      }
-  
-      //
-      // assign hits
-      //
-      this.assignHitsToGroundForces(attacker, sector, planet_idx, hits);
-      this.eliminateDestroyedUnitsOnPlanet(attacker, sector, planet_idx);
-  
-  
-      //
-      // while the battle rages...
-      //
-      attacker_forces = this.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
-      defender_forces = this.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx);
-
-this.updateLog("attacker forces: " + attacker_forces);
-this.updateLog("defender forces: " + defender_forces);
-  
-      let total_attacker_hits = 0;
-      let total_defender_hits = 0;
-  
-      while (attacker_forces > 0 && defender_forces > 0) {
-  
-        //
-        // attacker rolls first
-        //
-        let attacker_hits = 0;
-        let defender_hits = 0;
-  
-        for (let z = 0; z < sys.p[planet_idx].units[attacker-1].length; z++) {
-          let unit = sys.p[planet_idx].units[attacker-1][z];
-          if (unit.name == "infantry") {
-            let roll = this.rollDice(10);
-            if (roll >= unit.combat) {
-    	    attacker_hits++;  
-            } else {
-            }
-          }
-        }
-  
-        for (let z = 0; z < sys.p[planet_idx].units[defender-1].length; z++) {
-          let unit = sys.p[planet_idx].units[defender-1][z];
-          if (unit.name == "infantry") {
-            let roll = this.rollDice(10);
-            if (roll >= unit.combat) {
-      	    defender_hits++;  
-            } else {
-            }
-          }
-        }
-  
-        total_attacker_hits += attacker_hits;
-        total_defender_hits += defender_hits;
-  
-        this.assignHitsToGroundForces(attacker, sector, planet_idx, defender_hits);
-        this.assignHitsToGroundForces(defender, sector, planet_idx, attacker_hits);
-  
-        //
-        // attacker strikes defender
-        //
-        attacker_forces = this.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
-        defender_forces = this.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx);
-  
-      }
-  
-      if (total_attacker_hits > 0) {
-        this.updateLog(total_attacker_hits + " hits for " + this.returnFaction(attacker));
-      }
-      if (total_defender_hits > 0) {
-        this.updateLog(total_defender_hits + " hits for " + this.returnFaction(defender));
-      }
-    } else {
-
-      attacker_forces = this.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
-  
-   }
-  
-this.updateLog("attacker forces: " + attacker_forces);
-this.updateLog("defender forces: " + defender_forces);
-  
-    //
-    // evaluate if planet has changed hands
-    //
-    if (attacker_forces > defender_forces || defender == -1) {
-  
-      //
-      // destroy all units belonging to defender (pds, spacedocks)
-      //
-      if (defender != -1) {
-        sys.p[planet_idx].units[defender-1] = [];
-      }
-  
-
-console.log("This is who is on the planet: ");
-console.log(JSON.stringify(sys.p[planet_idx].units[attacker-1]));
-
-      //
-      // notify everyone
-      //
-      let survivors = 0;
-      for (let i = 0; i < sys.p[planet_idx].units[attacker-1].length; i++) {
-console.log(i);
-        if (sys.p[planet_idx].units[attacker-1][i].name == "infantry") { survivors++; }
-console.log(i + " -- done");
-      }
-console.log("survivors: " + survivors);
-      if (survivors == 1) { 
-console.log("asd");
-        this.updateLog(sys.p[planet_idx].name + " is conquered by " + this.returnFaction(attacker) + " (" + survivors + " survivor)");
-      } else {
-console.log("fasdf");
-        this.updateLog(sys.p[planet_idx].name + " is conquered by " + this.returnFaction(attacker) + " (" + survivors + " survivors)");
-      }
-console.log("fgh");  
-
-      //
-      // planet changes ownership
-      //
-      this.updatePlanetOwner(sector, planet_idx);
-//      sys.p[planet_idx].owner = attacker;
-this.updateLog("planet owner is set to: " + attacker);
-//      sys.p[planet_idx].exhausted = 1;
-  
-    } else {
-  
-      //
-      // notify everyone
-      //
-      this.updateLog("Invasion fails!");
-  
-    }
-  
-    //
-    // remove destroyed units
-    //
-    this.eliminateDestroyedUnitsOnPlanet(attacker, sector, planet_idx);
-    this.eliminateDestroyedUnitsOnPlanet(defender, sector, planet_idx);
-  
-    //
-    // save regardless
-    //
-    this.saveSystemAndPlanets(sys);
-  
-  }
-  
-
-
 
 
   spaceCombat(attacker, sector) {
@@ -7770,6 +8342,13 @@ this.updateLog("planet owner is set to: " + attacker);
     for (let z = 0; z < sys.s.units[attacker-1].length; z++) {
       let unit = sys.s.units[attacker-1][z];
       let roll = this.rollDice(10);
+
+      //
+      // apply modifiers
+      //
+      roll += this.game.players_info[attacker-1].space_combat_roll_modifier;
+
+
       if (roll >= unit.combat) {
         this.updateLog(attacker_faction + " " +unit.name + " hits (roll: "+roll+")");
         attacker_hits++;  
@@ -7781,6 +8360,13 @@ this.updateLog("planet owner is set to: " + attacker);
     for (let z = 0; z < sys.s.units[defender-1].length; z++) {
       let unit = sys.s.units[defender-1][z];
       let roll = this.rollDice(10);
+
+      //
+      // apply modifiers
+      //
+      roll += this.game.players_info[defender-1].space_combat_roll_modifier;
+
+
       if (roll >= unit.combat) {
         this.updateLog(defender_faction + " " +unit.name + " hits (roll: "+roll+")");
         defender_hits++;  
@@ -7789,12 +8375,11 @@ this.updateLog("planet owner is set to: " + attacker);
       }
     }
 
-
     this.updateLog("Attacker hits: " + attacker_hits);
     this.updateLog("Defender hits: " + defender_hits);
 
-    this.assignHitsToSpaceFleet(attacker, sector, defender_hits);
-    this.assignHitsToSpaceFleet(defender, sector, attacker_hits);
+    this.game.state.space_combat_ships_destroyed_attacker = this.assignHitsToSpaceFleet(defender, attacker, sector, defender_hits);
+    this.game.state.space_combat_ships_destroyed_defender = this.assignHitsToSpaceFleet(attacker, defender, sector, attacker_hits);
 
     //
     // attacker strikes defender
@@ -7886,6 +8471,12 @@ console.log("TESTING A 2");
       let unit = sys.p[planet_idx].units[attacker-1][z];
       if (unit.name == "infantry") {
         let roll = this.rollDice(10);
+
+        //
+        // apply modifiers
+        //
+        roll += this.game.players_info[attacker-1].ground_combat_roll_modifier;
+
         if (roll >= unit.combat) {
           attacker_hits++;  
         }
@@ -7896,6 +8487,12 @@ console.log("TESTING A 2");
       let unit = sys.p[planet_idx].units[defender-1][z];
       if (unit.name == "infantry") {
         let roll = this.rollDice(10);
+
+        //
+        // apply modifiers
+        //
+        roll += this.game.players_info[defender-1].ground_combat_roll_modifier;
+
         if (roll >= unit.combat) {
           defender_hits++;  
         }
@@ -7903,8 +8500,8 @@ console.log("TESTING A 2");
     }
 console.log("TESTING A 3: " + defender_hits + " / " + attacker_hits); 
  
-    this.assignHitsToGroundForces(attacker, sector, planet_idx, defender_hits);
-    this.assignHitsToGroundForces(defender, sector, planet_idx, attacker_hits);
+    this.assignHitsToGroundForces(defender, attacker, sector, planet_idx, defender_hits);
+    this.assignHitsToGroundForces(attacker, defender, sector, planet_idx, attacker_hits);
 
 
     this.eliminateDestroyedUnitsInSector(attacker, sector);
@@ -7990,132 +8587,6 @@ console.log(JSON.stringify(err));
 
 
 
-  
-  invadeSector(attacker, sector) {
-  
-    let sys = this.returnSystemAndPlanets(sector);
-  
-    let defender = 0;
-    let defender_found = 0;
-    for (let i = 0; i < sys.s.units.length; i++) {
-      if (attacker != (i+1)) {
-        if (sys.s.units[i].length > 0) {
-  	defender = (i+1);
-  	defender_found = 1;
-        }
-      }
-    }
-  
-    if (defender_found == 0) {
-      this.updateLog(this.returnFaction(attacker) + " fleet moves into " + this.returnSectorName(sector) + " unopposed.");
-      return;
-    }
-  
-  
-    let attacker_faction = this.returnFaction(attacker);
-    let defender_faction = this.returnFaction(defender);
-  
-  
-    //
-    // while the battle rages...
-    //
-    let attacker_forces = this.returnNumberOfSpaceFleetInSector(attacker, sector);
-    let defender_forces = this.returnNumberOfSpaceFleetInSector(defender, sector);
-  
-    let total_attacker_hits = 0;
-    let total_defender_hits = 0;
-  
-    while (attacker_forces > 0 && defender_forces > 0) {
-  
-      //
-      // attacker rolls first
-      //
-      let attacker_hits = 0;
-      let defender_hits = 0;
-  
-      for (let z = 0; z < sys.s.units[attacker-1].length; z++) {
-        let unit = sys.s.units[attacker-1][z];
-        let roll = this.rollDice(10);
-        if (roll >= unit.combat) {
-  //        this.updateLog(attacker_faction + " " +unit.name + " hits (roll: "+roll+")");
-          attacker_hits++;  
-        } else {
-  //        this.updateLog(attacker_faction + " " +unit.name + " misses (roll: "+roll+")");
-        }
-      }
-  
-      for (let z = 0; z < sys.s.units[defender-1].length; z++) {
-        let unit = sys.s.units[defender-1][z];
-        let roll = this.rollDice(10);
-        if (roll >= unit.combat) {
-  //        this.updateLog(defender_faction + " " +unit.name + " hits (roll: "+roll+")");
-          defender_hits++;  
-        } else {
-  //        this.updateLog(defender_faction + " " +unit.name + " misses (roll: "+roll+")");
-        }
-      }
-  
-      this.assignHitsToSpaceFleet(attacker, sector, defender_hits);
-      this.assignHitsToSpaceFleet(defender, sector, attacker_hits);
-  
-      //
-      // attacker strikes defender
-      //
-      attacker_forces = this.returnNumberOfSpaceFleetInSector(attacker, sector);
-      defender_forces = this.returnNumberOfSpaceFleetInSector(defender, sector);
-  
-      total_attacker_hits += attacker_hits;
-      total_defender_hits += defender_hits;
-  
-    }
-  
-    if (total_attacker_hits > 0) {
-      this.updateLog(total_attacker_hits + " hits for " + this.returnFaction(attacker));
-    }
-    if (total_defender_hits > 0) {
-      this.updateLog(total_defender_hits + " hits for " + this.returnFaction(defender));
-    }
-  
-    //
-    // evaluate if sector has changed hands
-    //
-    if (attacker_forces > defender_forces) {
-  
-      //
-      // destroy all floating units belonging to defender (pds, spacedocks)
-      //
-  
-      //
-      // notify everyone
-      //
-      this.updateLog(sys.s.name + " is now controlled by "+ this.returnFaction(attacker));
-  
-    } else {
-  
-      //
-      // notify everyone
-      //
-      this.updateLog("Invasion fails!");
-  
-    }
-  
-    //
-    // remove destroyed units
-    //
-    this.eliminateDestroyedUnitsInSector(attacker, sector);
-    this.eliminateDestroyedUnitsInSector(defender, sector);
-  
-    //
-    // save regardless
-    //
-    this.saveSystemAndPlanets(sys);
-  
-  }
-  
- 
-
-
- 
 
   eliminateDestroyedUnitsInSector(player, sector) {
   
@@ -8174,8 +8645,9 @@ console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
 
 
 
-  assignHitsToGroundForces(defender, sector, planet_idx, hits) {
-  
+  assignHitsToGroundForces(attacker, defender, sector, planet_idx, hits) {
+
+    let ground_forces_destroyed = 0;  
     let sys = this.returnSystemAndPlanets(sector);
     for (let i = 0; i < hits; i++) {
   
@@ -8202,24 +8674,34 @@ console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
       // and assign 1 hit
       //
       if (weakest_unit_idx != -1) {
-console.log("REDUCING STRENGTH OF UNIT BY 1");
         sys.p[planet_idx].units[defender-1][weakest_unit_idx].strength--;
         if (sys.p[planet_idx].units[defender-1][weakest_unit_idx].strength <= 0) {
-console.log("DESTROYING UNIT: " + weakest_unit_idx);
+          ground_forces_destroyed++;
           sys.p[planet_idx].units[defender-1][weakest_unit_idx].destroyed = 1;
+
+          // let attacker   = arg2;
+          // let defender   = arg3;
+          // let sector     = arg4;
+          // let planet_idx = arg5;
+          // let unitname   = arg6;
+
+	  this.executeSynchronousGameEvent("destroyed_unit", attacker, defender, sector, planet_idx, sys.p[planet_idx].units[defender-1][weakest_unit_idx].name);
+
         }
       }
     }
   
     this.saveSystemAndPlanets(sys);
-  
+    return ground_forces_destroyed;
+
   }
 
 
 
 
-  assignHitsToSpaceFleet(defender, sector, hits) {
-  
+  assignHitsToSpaceFleet(attacker, defender, sector, hits) {
+
+    let ships_destroyed = 0;  
     let sys = this.returnSystemAndPlanets(sector);
     for (let i = 0; i < hits; i++) {
   
@@ -8246,13 +8728,24 @@ console.log("DESTROYING UNIT: " + weakest_unit_idx);
       if (weakest_unit_idx != -1) {
         sys.s.units[defender-1][weakest_unit_idx].strength--;
         if (sys.s.units[defender-1][weakest_unit_idx].strength <= 0) {
+	  ships_destroyed++;
           sys.s.units[defender-1][weakest_unit_idx].destroyed = 1;
+
+          // let attacker   = arg2;
+          // let defender   = arg3;
+          // let sector     = arg4;
+          // let planet_idx = arg5;
+          // let unitname   = arg6;
+
+	  this.executeSynchronousGameEvent("destroyed_unit", attacker, defender, sector, "", sys.s.units[defender-1][weakest_unit_idx].name);
+
         }
       }
     }
   
     this.saveSystemAndPlanets(sys);
-  
+    return ships_destroyed;  
+
   }
   
   
@@ -8589,10 +9082,30 @@ if (sector == "2_1") {
   playStrategyCardPrimary(player, card) {
   
     let imperium_self = this;
-  
+    let technologies = this.returnTechnologyTree();  
+
     let strategy_cards = this.returnStrategyCards();
     this.updateStatus(this.returnFaction(player) + " is playing the " + strategy_cards[card].name + " strategy card");
+
+    //
+    // CHECK IF FACTION HAS REPLACED PRIMARY STRATEGY CARD FUNCTION
+    //
+    if (this.game.player == player) {
+      let mytech = this.game.players_info[player-1].tech;
+      for (let i = 0; i < mytech.length; i++) {
+	if (technologies[mytech[i]].playStrategyCardPrimaryTriggers(imperium_self, player, card) == 1) {
+console.log("PLAYING STRATEGY CARD PRIMARY!");
+console.log("PLAYING STRATEGY CARD PRIMARY!");
+console.log("PLAYING STRATEGY CARD PRIMARY!");
+	  technologies[i].playStrategyCardPrimaryEvent(imperium_self, player, card);
+	  return;
+	}
+      }
+    }
   
+    //
+    // IF NOT CONTINUE AS NORMAL
+    //
     if (card == "initiative") {
   
       this.game.players_info[player-1].command_tokens += 2;
@@ -8737,7 +9250,7 @@ if (sector == "2_1") {
   
       if (this.game.player == player) {
         this.addMove("resolve\tstrategy");
-        this.addMove("strategy\t"+card+"\t"+player+"\t2\t"+player_confirmation_needed);
+        this.addMove("strategy\t"+card+"\t"+player+"\t2");
         this.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
         this.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
         this.playerBuildInfrastructure();
@@ -8804,7 +9317,6 @@ if (sector == "2_1") {
         this.playerResearchTechnology(function(tech) {
           imperium_self.addMove("resolve\tstrategy");
           imperium_self.addMove("strategy\t"+card+"\t"+player+"\t2");
-          imperium_self.addMove("strategy\t"+card+"\t"+player+"\t2");
           imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
           imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
           imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
@@ -8837,7 +9349,8 @@ if (sector == "2_1") {
   playStrategyCardSecondary(player, card) {
   
     let imperium_self = this;
-  
+    let technologies = this.returnTechnologyTree();
+
     let strategy_cards = this.returnStrategyCards();
     this.updateStatus("Moving into the secondary of the " + strategy_cards[card].name + " strategy card");
   
@@ -8848,9 +9361,32 @@ if (sector == "2_1") {
       this.resetConfirmsNeeded(this.game.players_info.length);
     }
 
-console.log("IN SECONDARY: " + this.game.confirms_needed + " -- " + this.game.confirms_received);
 
-  
+    if (this.game.player == player) {
+      this.updateStatus("Waiting for other players to execute secondary...");
+    }
+
+
+    //
+    // CHECK IF FACTION HAS REPLACED SECONDARY STRATEGY CARD FUNCTION
+    //
+    if (this.game.player != player) {
+      let mytech = this.game.players_info[player-1].tech;
+      for (let i = 0; i < mytech.length; i++) {
+        if (technologies[mytech[i]].playStrategyCardSecondaryTriggers(imperium_self, player, card) == 1) {
+console.log("PLAYING STRATEGY CARD SECONDARY");
+console.log("PLAYING STRATEGY CARD SECONDARY!");
+console.log("PLAYING STRATEGY CARD SECONDARY!");
+          technologies[i].playStrategyCardSecondaryEvent(imperium_self, player, card);
+          return;
+        }
+      }
+    }
+ 
+
+
+
+
     if (card == "initiative") {
       this.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
       this.playerBuyTokens();
