@@ -275,6 +275,11 @@ body {
   font-weight: bolder;
 }
 
+.dealerbutton::before {
+  content: "⬤";
+  margin-right: 2vh;
+}
+
 @media all and (max-aspect-ratio:13/9) {
   .deal .card {
     width: 18vw;

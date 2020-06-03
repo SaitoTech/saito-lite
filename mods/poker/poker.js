@@ -23,7 +23,7 @@ class Poker extends GameTemplate {
     this.useHUD          = 0;
 
     this.minPlayers      = 2;
-    this.maxPlayers      = 4;
+    this.maxPlayers      = 6;
     this.interface       = 1;
     this.boardgameWidth  = 5100;
 
@@ -861,8 +861,8 @@ class Poker extends GameTemplate {
     //
     // does the player need to call or raise?
     //
-    let match_required = this.game.state.required_pot - this.game.state.player_pot[this.game.player-1];
-  
+    let match_required = this.game.state.required_pot - this.game.state.player_pot[this.game.player - 1];
+
     let raise_required = this.game.state.last_raise;
     let html = '';
 
@@ -870,12 +870,12 @@ class Poker extends GameTemplate {
     let can_call = 1;
     let can_raise = 1;
 
-    if (this.game.state.player_credit[this.game.state.player-1] < match_required) { can_call = 0; }
-    if (this.game.state.player_credit[this.game.state.player-1] < (match_required+this.game.state.last_raise)) { can_raise = 0; }
+    if (this.game.state.player_credit[this.game.state.player - 1] < match_required) { can_call = 0; }
+    if (this.game.state.player_credit[this.game.state.player - 1] < (match_required + this.game.state.last_raise)) { can_raise = 0; }
 
     if (can_call == 0 && can_raise == 0) {
       this.updateStatus("You can only fold...");
-      this.addMove("fold\t"+poker_self.game.player);
+      this.addMove("fold\t" + poker_self.game.player);
       this.endTurn();
       return;
     }
@@ -890,18 +890,18 @@ class Poker extends GameTemplate {
     html += '</div>';
     html += '<ul>';
 
-    let cost_to_call = this.game.state.required_pot - this.game.state.player_pot[this.game.player-1];
+    let cost_to_call = this.game.state.required_pot - this.game.state.player_pot[this.game.player - 1];
     if (cost_to_call < 0) { cost_to_call = 0; }
 
     //
     // if we need to raise
     //
-    if (this.game.state.required_pot > this.game.state.player_pot[this.game.player-1]) {
-      if (can_fold == 1)  { html += '<li class="menu_option" id="fold">fold</li>'; }
-      if (can_call == 1 && cost_to_call <= 0)  { html += '<li class="menu_option" id="call">call</li>'; }
-      if (can_call == 1 && cost_to_call > 0)  { html += '<li class="menu_option" id="call">call ('+cost_to_call+')</li>'; }
+    if (this.game.state.required_pot > this.game.state.player_pot[this.game.player - 1]) {
+      if (can_fold == 1) { html += '<li class="menu_option" id="fold">fold</li>'; }
+      if (can_call == 1 && cost_to_call <= 0) { html += '<li class="menu_option" id="call">call</li>'; }
+      if (can_call == 1 && cost_to_call > 0) { html += '<li class="menu_option" id="call">call (' + cost_to_call + ')</li>'; }
       if (can_raise == 1 && cost_to_call <= 0) { html += '<li class="menu_option" id="raise">raise</li>'; }
-      if (can_raise == 1 && cost_to_call > 0) { html += '<li class="menu_option" id="raise">raise ('+cost_to_call+'+)</li>'; }
+      if (can_raise == 1 && cost_to_call > 0) { html += '<li class="menu_option" id="raise">raise (' + cost_to_call + '+)</li>'; }
       html += '</ul>';
       this.updateStatus(html);
     } else {
@@ -909,18 +909,18 @@ class Poker extends GameTemplate {
       //
       // we don't NEED to raise
       //
-      if (this.game.state.required_pot <= this.game.state.player_credit[this.game.player-1]) {
+      if (this.game.state.required_pot <= this.game.state.player_credit[this.game.player - 1]) {
 
-        if (can_fold == 1)  { html += '<li class="menu_option" id="fold">fold</li>'; }
-        if (can_fold == 1)  { html += '<li class="menu_option" id="check">check</li>'; }
+        if (can_fold == 1) { html += '<li class="menu_option" id="fold">fold</li>'; }
+        if (can_fold == 1) { html += '<li class="menu_option" id="check">check</li>'; }
         if (can_raise == 1) { html += '<li class="menu_option" id="raise">raise</li>'; }
         html += '</ul>';
         this.updateStatus(html);
 
       } else {
 
-        if (can_fold == 1)  { html += '<li class="menu_option" id="fold">fold</li>'; }
-        if (can_fold == 1)  { html += '<li class="menu_option" id="check">check</li>'; }
+        if (can_fold == 1) { html += '<li class="menu_option" id="fold">fold</li>'; }
+        if (can_fold == 1) { html += '<li class="menu_option" id="check">check</li>'; }
         html += '</ul>';
         this.updateStatus(html);
 
@@ -929,84 +929,84 @@ class Poker extends GameTemplate {
 
 
     $('.menu_option').off();
-    $('.menu_option').on('click', function() {
+    $('.menu_option').on('click', function () {
 
       let choice = $(this).attr("id");
 
       if (choice === "fold") {
-        poker_self.addMove("fold\t"+poker_self.game.player);
+        poker_self.addMove("fold\t" + poker_self.game.player);
         poker_self.endTurn();
       }
 
       if (choice === "check") {
-        poker_self.addMove("check\t"+poker_self.game.player);
+        poker_self.addMove("check\t" + poker_self.game.player);
         poker_self.endTurn();
       }
 
       if (choice === "call") {
-        poker_self.addMove("call\t"+poker_self.game.player);
+        poker_self.addMove("call\t" + poker_self.game.player);
         poker_self.endTurn();
       }
 
       if (choice === "raise") {
 
-  // match_required
-  // raise_required
-  let credit_remaining = poker_self.game.state.player_credit[poker_self.game.player-1];
-  let all_in_remaining = poker_self.game.state.player_credit[poker_self.game.player-1] - raise_required;
+        // match_required
+        // raise_required
+        let credit_remaining = poker_self.game.state.player_credit[poker_self.game.player - 1];
+        let all_in_remaining = poker_self.game.state.player_credit[poker_self.game.player - 1] - raise_required;
 
-  raise_required = parseInt(raise_required);
-  poker_self.game.state.last_raise = parseInt(poker_self.game.state.last_raise);
+        raise_required = parseInt(raise_required);
+        poker_self.game.state.last_raise = parseInt(poker_self.game.state.last_raise);
 
-        let cost_to_call = poker_self.game.state.required_pot - poker_self.game.state.player_pot[poker_self.game.player-1];
+        let cost_to_call = poker_self.game.state.required_pot - poker_self.game.state.player_pot[poker_self.game.player - 1];
         if (cost_to_call < 0) { cost_to_call = 0; }
 
-  if (cost_to_call > 0) {
-          html  = 'Match '+cost_to_call+' and raise: <p></p><ul>';
-  } else {
-          html  = 'Please select an option below: <p></p><ul>';
-  }
+        if (cost_to_call > 0) {
+          html = 'Match ' + cost_to_call + ' and raise: <p></p><ul>';
+        } else {
+          html = 'Please select an option below: <p></p><ul>';
+        }
 
         if (credit_remaining < (raise_required)) {
-    html += '<li class="menu_option" id="0">cancel raise</li>';
+          html += '<li class="menu_option" id="0">cancel raise</li>';
         }
         if (credit_remaining > (raise_required)) {
-    html += '<li class="menu_option" id="'+(raise_required)+'">raise '+(raise_required)+'</li>';
+          html += '<li class="menu_option" id="' + (raise_required) + '">raise ' + (raise_required) + '</li>';
         }
         if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
-    html += '<li class="menu_option" id="'+(raise_required + (1 * poker_self.game.state.last_raise))+'">raise '+(raise_required + (1 * poker_self.game.state.last_raise))+'</li>';
+          html += '<li class="menu_option" id="' + (raise_required + (1 * poker_self.game.state.last_raise)) + '">raise ' + (raise_required + (1 * poker_self.game.state.last_raise)) + '</li>';
         }
         if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
-    html += '<li class="menu_option" id="'+(raise_required + (2 * poker_self.game.state.last_raise))+'">raise '+(raise_required + (2 * poker_self.game.state.last_raise))+'</li>';
+          html += '<li class="menu_option" id="' + (raise_required + (2 * poker_self.game.state.last_raise)) + '">raise ' + (raise_required + (2 * poker_self.game.state.last_raise)) + '</li>';
         }
         if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
-    html += '<li class="menu_option" id="'+(raise_required + (3 * poker_self.game.state.last_raise))+'">raise '+(raise_required + (3 * poker_self.game.state.last_raise))+'</li>';
+          html += '<li class="menu_option" id="' + (raise_required + (3 * poker_self.game.state.last_raise)) + '">raise ' + (raise_required + (3 * poker_self.game.state.last_raise)) + '</li>';
         }
         if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
-    html += '<li class="menu_option" id="'+(raise_required + (4 * poker_self.game.state.last_raise))+'">raise '+(raise_required + (4 * poker_self.game.state.last_raise))+'</li>';
+          html += '<li class="menu_option" id="' + (raise_required + (4 * poker_self.game.state.last_raise)) + '">raise ' + (raise_required + (4 * poker_self.game.state.last_raise)) + '</li>';
         }
         if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
-    html += '<li class="menu_option" id="'+(raise_required + (5 * poker_self.game.state.last_raise))+'">raise '+(raise_required + (5 * poker_self.game.state.last_raise))+'</li>';
+          html += '<li class="menu_option" id="' + (raise_required + (5 * poker_self.game.state.last_raise)) + '">raise ' + (raise_required + (5 * poker_self.game.state.last_raise)) + '</li>';
         }
         if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
-    html += '<li class="menu_option" id="'+(all_in_remaining)+'">raise '+(all_in_remaining)+' (all in)</li>';
+          html += '<li class="menu_option" id="' + (all_in_remaining) + '">raise ' + (all_in_remaining) + ' (all in)</li>';
         }
 
         html += '</ul>';
         poker_self.updateStatus(html);
 
-          $('.menu_option').off();
-          $('.menu_option').on('click', function() {
+        $('.menu_option').off();
+        $('.menu_option').on('click', function () {
 
           let raise = $(this).attr("id");
 
-    if (cost_to_call > 0) { raise = parseInt(raise) + parseInt(cost_to_call); }
+          if (cost_to_call > 0) { raise = parseInt(raise) + parseInt(cost_to_call); }
 
-    if (raise == 0) {
-            poker_self.addMove("check\t"+poker_self.game.player);
-    } else {
-            poker_self.addMove("raise\t"+poker_self.game.player+"\t"+raise);
-    }
+          if (raise == 0) {
+            poker_self.addMove("check\t" + poker_self.game.player);
+          } else {
+            poker_self.addMove("raise\t" + poker_self.game.player + "\t" + raise);
+          }
           poker_self.endTurn();
 
         });
@@ -1197,51 +1197,59 @@ console.log("NAME 2: " + state.player_names[i]);
     let player_box = this.returnPlayersBoxArray();
 
     console.log("this is player: " + this.game.player + " - with key: " + this.app.wallet.returnPublicKey());
-    console.log(this.game.players[this.game.player-1] + " - " + this.app.wallet.returnPublicKey());
+    console.log(this.game.players[this.game.player - 1] + " - " + this.app.wallet.returnPublicKey());
     console.log(this.game.players);
 
     //var seat_adjust = (this.game.players.length-(this.game.player-1)); //+1?
     var prank = "";
 
     for (let i = 0; i < this.game.players.length; i++) {
-      if (this.app.wallet.returnPublicKey() == this.game.players[i]) {prank = i}
+      if (this.app.wallet.returnPublicKey() == this.game.players[i]) { prank = i }
     }
 
     for (let i = 0; i < this.game.players.length; i++) {
 
-      let seat = i-prank;
-      if (seat < 0) { seat += this.game.players.length }  
+      let seat = i - prank;
+      if (seat < 0) { seat += this.game.players.length }
 
       let player_box_num = player_box[seat];
       let divname = "#player-info-" + player_box_num;
-      let boxobj  = document.querySelector(divname);
+      let boxobj = document.querySelector(divname);
 
       let newhtml = `
-      <div class="player-info-hand hand tinyhand" id="player-info-hand-${i+1}">
+      <div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">
       `;
-      
+
       newhtml += `
           <img class="card" src="${this.card_img_dir}/red_back.png">
           <img class="card" src="${this.card_img_dir}/red_back.png">
       `;
       newhtml += `
         </div>
-        <div class="player-info-name" id="player-info-name-${i+1}">${this.game.state.player_names[i]}</div>
-        <div class="player-info-chips" id="player-info-chips-${i+1}">${this.game.state.player_credit[i]} SAITO</div> 
+        <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player_names[i]}</div>
+        <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player_credit[i]} SAITO</div> 
         
       `;
       boxobj.querySelector(".info").innerHTML = newhtml;
 
-      if(boxobj.querySelector(".plog").innerHTML == "") {
-        boxobj.querySelector(".plog").innerHTML += `<div class="player-info-log" id="player-info-log-${i+1}"></div>`;
+      if (boxobj.querySelector(".plog").innerHTML == "") {
+        boxobj.querySelector(".plog").innerHTML += `<div class="player-info-log" id="player-info-log-${i + 1}"></div>`;
       }
 
     }
 
     //
+    // display dealer
+    //
+    document.querySelector('.dealer').innerHTML = this.game.state.big_blind_player;
+
+    var dealer = 1 + ((this.game.players.length + this.game.state.big_blind_player - 2) % this.game.players.length);
+    document.querySelector('#player-info-name-' + dealer).classList.add("dealerbutton");
+
+    //
     // hide empty
     //
-    
+
     for (let j = 1; j < 7; j++) {
       let boxname = "#player-info-" + j;
       let boxobj = document.querySelector(boxname);
@@ -1249,7 +1257,7 @@ console.log("NAME 2: " + state.player_names[i]);
         boxobj.style.display = "none";
       }
     }
-    
+
   }
 
   displayHand() {
@@ -1263,26 +1271,23 @@ console.log("NAME 2: " + state.player_names[i]);
     //
     // display flip pool (cards on table)
     //
-    $('#deal').empty();
+
+    document.querySelector('#deal').innerHTML = "";
 
     for (let i = 0; i < 5 || i < this.game.pool[0].hand.length; i++) {
       let card = {};
       if (i < this.game.pool[0].hand.length) { card = this.game.pool[0].cards[this.game.pool[0].hand[i]]; } else { card.name = "red_back.png"; }
       // let card_img = card.name + ".png";
       let html = `<img class="card" src="${this.card_img_dir}/${card.name}">`;
-      $('#deal').append(html);
+      document.querySelector('#deal').innerHTML += html;
     }
 
     //
     // update pot
     //
-    $('.pot').html(this.game.state.pot);
+    document.querySelector('.pot').innerHTML = this.game.state.pot;
 
-    //
-    // display dealer
-    //
-    $('.dealer').html(this.game.state.big_blind_player);
-
+    
   }
 
 
@@ -2199,10 +2204,9 @@ console.log("NAME 2: " + state.player_names[i]);
             <select name="stake">
               <option value="100">100</option>
               <option value="500">500</option>
-              <option value="1000">1000</option>
-              <option value="5000" default>5000</option>
+              <option value="1000" selected="selected">1000</option>
+              <option value="5000" >5000</option>
               <option value="10000">10000</option>
-              <option value="100">100</option>
       </select>
     `;
 
