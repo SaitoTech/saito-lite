@@ -174,7 +174,11 @@ console.log("PLAYING STRATEGY CARD PRIMARY!");
         this.addMove("strategy\t"+card+"\t"+player+"\t2");
         this.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
         this.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
-        this.playerBuildInfrastructure();
+        this.playerBuildInfrastructure(() => {
+          this.playerBuildInfrastructure(() => {
+	    this.endTurn();
+	  }, 2);
+	}, 1);
       }
   
   
@@ -314,6 +318,7 @@ console.log("PLAYING STRATEGY CARD SECONDARY!");
       return 0;
     }
   
+
     if (card == "diplomacy") {
   
       if (this.game.player != player) {
@@ -331,17 +336,20 @@ console.log("PLAYING STRATEGY CARD SECONDARY!");
   
   	if (id == "yes") {
   
-            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-            let array_of_cards = imperium_self.returnPlayerExhaustedPlanetCards(imperium_self.game.player); // unexhausted
+          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+          let array_of_cards = imperium_self.returnPlayerExhaustedPlanetCards(imperium_self.game.player); // unexhausted
   
   	  let choices_selected = 0;
   	  let max_choices = 0;
   
-            let html  = "Select planets to unexhaust: <p></p><ul>";
+          let html  = "Select planets to unexhaust: <p></p><ul>";
   	  for (let z = 0; z < array_of_cards.length; z++) {
   	    max_choices++;
   	    html += '<li class="cardchoice" id="cardchoice_'+array_of_cards[z]+'">' + imperium_self.returnPlanetCard(array_of_cards[z]) + '</li>';
   	  }
+          if (max_choices == 0) {
+  	    html += '<li class="cardchoice" id="cancel">cancel (no options)</li>';
+	  }
   	  html += '</ul>';
   	  if (max_choices >= 2) { max_choices = 2; }
   
@@ -351,6 +359,13 @@ console.log("PLAYING STRATEGY CARD SECONDARY!");
   	  $('.cardchoice').on('click', function() {
   
   	    let action2 = $(this).attr("id");
+
+	    if (action2 === "cancel") {
+              imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+              imperium_self.endTurn();
+	      return;
+	    }
+
   	    let tmpx = action2.split("_");
   
   	    let divid = "#"+action2;
@@ -416,10 +431,12 @@ console.log("PLAYING STRATEGY CARD SECONDARY!");
   
         if (id == "yes") {
           imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-  	if (imperium_self.game.player != player) {
+  	  if (imperium_self.game.player != player) {
             imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
-  	}
-          imperium_self.playerBuildInfrastructure();
+  	  }
+          imperium_self.playerBuildInfrastructure(() => {
+	    imperium_self.endTurn();
+	  }, 1);
         }
         if (id == "no") {
           imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());

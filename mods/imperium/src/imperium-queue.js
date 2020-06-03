@@ -1281,6 +1281,26 @@ alert("Player should choose what planets to invade (if possible)");
 
       }
 
+      //
+      // can be used for passive activation that does not spend
+      // tokens or trigger events, like activating in diplomacy
+      //
+      if (mv[0] === "activate") {
+
+        let technologies = this.returnTechnologyTree();
+  	let player       = parseInt(mv[1]);
+        let sector	 = mv[2];
+	let player_to_continue = mv[3];  
+
+        sys = this.returnSystemAndPlanets(sector);
+  	sys.s.activated[player-1] = 1;
+  	this.saveSystemAndPlanets(sys);
+        this.updateSectorGraphics(sector);
+
+  	this.game.queue.splice(qe, 1);
+
+  	return 1;
+      }
 
 
 

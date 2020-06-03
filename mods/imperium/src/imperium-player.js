@@ -426,13 +426,19 @@
   
   
   
-  playerBuildInfrastructure() { 
-  
+  playerBuildInfrastructure(mycallback, stage=1) {   
+
     let imperium_self = this;
   
-    let html = 'Which would you like to build: <p></p><ul>';
+    let html = '';
+
+    if (stage == 1) { html += "Which would you like to build: <p></p><ul>"; }
+    else { html += "You may also build an additional PDS: <p></p><ul>"; }
+
     html += '<li class="buildchoice" id="pds">Planetary Defense System</li>';
-    html += '<li class="buildchoice" id="spacedock">Space Dock</li>';
+    if (stage == 1) {
+      html += '<li class="buildchoice" id="spacedock">Space Dock</li>';
+    }
     html += '</ul>';
     html += '<p></p>';
     html += '<div id="confirm" class="buildchoice">click here to build</div>';
@@ -449,18 +455,18 @@
       html = "Select a planet on which to build: ";
       imperium_self.updateStatus(html);
   
-      imperium_self.playerSelectPlanet(function(sector, planet_idx) {
-  
+      imperium_self.playerSelectPlanet(function(sector, planet_idx) {  
+
         if (id == "pds") {
-  	imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+planet_idx+"\tpds\t"+sector);
-  	imperium_self.endTurn();
+  	  imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+planet_idx+"\tpds\t"+sector);
+	  mycallback();
         }
         if (id == "spacedock") {
-  	imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+planet_idx+"\tspacedock\t"+sector);
-  	imperium_self.endTurn();
+  	  imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+planet_idx+"\tspacedock\t"+sector);
+	  mycallback();
         }
   
-      }, 0);  // 0 any planet
+      }, 2);  // 2 any i control
   
     });
   
@@ -667,6 +673,7 @@
     //
     // 0 = in any sector
     // 1 = in unactivated actor
+    // 2 = controlled by me
     //
   
     let imperium_self = this;
@@ -678,10 +685,35 @@
   
       let pid = $(this).attr("id");
       let sys = imperium_self.returnSystemAndPlanets(pid);
+
+      //
+      // exit if no planets are controlled
+      //
+      if (mode == 2) {
+	let exist_controlled_planets = 0;
+        for (let i = 0; i < sys.p.length; i++) {
+	  if (sys.p[i].owner == this.game.player) {
+	    exist_controlled_planets = 1;
+	  }
+        }
+	if (exist_controlled_planets == 0) {
+	  alert("Invalid Choice: you do not control planets in that sector");
+	  return;
+	}
+      }
+
   
       html = 'Select a planet in this system: <p></p><ul>';
       for (let i = 0; i < sys.p.length; i++) {
-        html += '<li class="option" id="' + i + '">' + sys.p[i].name + ' (<span class="invadeplanet_'+i+'">0</span>)</li>';
+	if (mode == 0) {
+          html += '<li class="option" id="' + i + '">' + sys.p[i].name + ' (<span class="invadeplanet_'+i+'">0</span>)</li>';
+	}
+	if (mode == 1) {
+          html += '<li class="option" id="' + i + '">' + sys.p[i].name + ' (<span class="invadeplanet_'+i+'">0</span>)</li>';
+	}
+	if (mode == 2 && sys.p[i].owner == this.game.player) {
+          html += '<li class="option" id="' + i + '">' + sys.p[i].name + ' (<span class="invadeplanet_'+i+'">0</span>)</li>';
+	}
       }
       html += '</ul>';
   
