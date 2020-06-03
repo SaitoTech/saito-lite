@@ -277,9 +277,9 @@ console.log("GAME QUEUE: " + this.game.queue);
   
 
 
-	//
-	// resolve [action] [1] [publickey voting or 1 for agenda]
-	//
+      //
+      // resolve [action] [1] [publickey voting or 1 for agenda]
+      //
       if (mv[0] === "resolve") {
 
         let le = this.game.queue.length-2;
@@ -376,10 +376,37 @@ console.log("GAME QUEUE: " + this.game.queue);
   	}
   
   	this.updateLeaderboard();
+	return 1;
   
       }
-  
+
+
+
+      if (mv[0] === "discard") {
+
+	let player   = mv[1];
+	let target   = mv[2];
+	let id       = mv[3];
+
+  	this.game.queue.splice(qe, 1);
+ 
+	if (target == "agenda") {
+
+	  console.log("ASKED TO DISCARD: " + id);
+
+console.log("HERE IN DISCARD: ");
+console.log(JSON.stringify(this.game.deck));
+console.log(JSON.stringify(this.game.state.agendas));
+
+          console.log("POOL 0: " + JSON.stringify(this.game.pool[0].hand[i]));
+
+	
+	}
+
+	return 1; 
+      }
      
+
       if (mv[0] == "vote") {
 
 	let laws = this.returnAgendaCards();

@@ -1788,12 +1788,12 @@ console.log("Spec Ops not reanimated in homeworld...("+dieroll+")");
 	} else {
 	  let c = confirm("Do you wish to use Field Nullification to end this player's turn?");
 	  if (c) {
-	    this.addMove("notify\tField Nullification is triggered...");
-  	    this.addMove("resolve\tpost_activate");
-	    this.endTurn();
+	    imperium_self.addMove("notify\tField Nullification is triggered...");
+  	    imperium_self.addMove("resolve\tpost_activate");
+	    imperium_self.endTurn();
 	  } else {
-	    this.addMove("notify\tField Nullification is not triggered...");
-	    this.endTurn();
+	    imperium_self.addMove("notify\tField Nullification is not triggered...");
+	    imperium_self.endTurn();
 	  }
 	}
       }
@@ -1813,13 +1813,15 @@ console.log("Spec Ops not reanimated in homeworld...("+dieroll+")");
       },
       playStrategyCardSecondaryEvent :  function(imperium_self, player, card) {
 alert("PEACE ACCORDS");
-        this.playerResearchTechnology(function(tech) {
+        imperium_self.playerResearchTechnology(function(tech) {
           imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
 	  imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
           imperium_self.endTurn();
         });
       },
     };
+
+
     tech['faction3-quash']   = {
       name        :       "Peace Accords" ,
       faction	  :	  "faction2",
@@ -1827,18 +1829,52 @@ alert("PEACE ACCORDS");
       color       :       "" ,
       prereqs     :       [],
       type	  :	  "special" ,
-      playStrategyCardSecondaryTriggers :  function(imperium_self, player, card) {
-	if (card == "diplomacy") {
-	  return 1;
-	}
-	return 0;
+      menuOption  :       function(imperium_self, player) { 
+	let x = {};
+	    x.trigger = 'quash';
+	    x.html = '<li class="option" id="quash">quash</li>';
+	return x;
       },
-      playStrategyCardSecondaryEvent :  function(imperium_self, player, card) {
-        this.playerResearchTechnology(function(tech) {
-          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-          imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
-          imperium_self.endTurn();
-        });
+      menuOptionTrigger:  function(imperium_self, player) { 
+        if (imperium_self.game.players_info[imperium_self.game.player-1].strategy_tokens > 0) {
+	  return 1;
+	} else {
+	  return 0;
+	}
+      },
+      menuOptionActivated:  function(imperium_self, player) { 
+
+	let agendas = imperium_self.game.state.agendas;
+	let laws = imperium_self.returnAgendaCards();
+console.log("AGENDAS: " + JSON.stringify(agendas));
+
+	if (imperium_self.game.player != player) {
+
+	} else {
+
+	  let html = 'Select Agenda to Quash: <p></p><ul>';
+	  for (let i = 0; i < agendas.length; i++) {
+	    html += '<li class="option" id="'+agendas[i]+'">' + laws[agendas[i]].name + '</li>';
+	  }
+	  imperium_self.updateStatus(html);
+
+	  $('.option').off();
+	  $('.option').on('click',function () {
+
+	    let choice = $(this).attr("id");
+
+	    //
+	    // and reveal the agendas
+            //
+            imperium_self.addMove("revealagendas");
+            for (let i = 1; i <= imperium_self.game.players_info.length; i++) {
+              imperium_self.addMove("FLIPCARD\t3\t1\t1\t"+i); // deck card poolnum player
+            }
+            imperium_self.addMove("discard\t"+imperium_self.game.player+"\t"+"agenda"+"\t"+choice);
+	    imperium_self.endTurn();
+	        
+	  });
+	}
       },
     };
     tech['faction3-instinct-training']   = {
@@ -1848,12 +1884,48 @@ alert("PEACE ACCORDS");
       color       :       "" ,
       prereqs     :       [],
       type	  :	  "special" ,
+      onNewRound :  function(imperium_self, player, mycallback) {
+	if (player == imperium_self.game.player) {
+	  imperium_self.game.players_info[player-1].instinct_training_exhausted = 0;
+	}
+	mycallback(1);
+      },
       playActionCardTriggers :  function(imperium_self, player, card) {
+	if (imperium_self.game.players_info[player-1].instinct_training_exhausted == 1) { return 0; }
 	return 1;
       },
       playActionCardEvent :  function(imperium_self, player, card) {
-	alert("Instinct Training Kicks In!");
-        imperium_self.endTurn();
+
+	let factions = imperium_self.returnFactions();
+	let action_cards = imperium_self.returnActionCards();
+
+	let html  = factions[imperium_self.game.player_info[player-1].faction].name;
+	    html += ' has played ';
+	    html += action_cards[card].name;
+
+	    html += '<ul>';	   
+	    html += '<li class="option" id="yes">cancel action card</li>';
+	    html += '<li class="option" id="no">do nothing</li>';
+	    html += '</ul>';	   
+
+	imperium_self.updateStatus(html);
+
+	$('.option').off();
+	$('.option').on('click',function () {
+
+	  let choice = $(this).attr("id");
+	  if (choice == "yes") {
+	    imperium_self.game.players_info[player-1].instinct_training_exhausted = 1;
+	    imperium_self.addMove("resolve\taction_card_post");
+	    imperium_self.addMove("notify\tAction Card cancelled...");
+	    imperium_self.addMove("notify\tXXCha use Instinct Training");
+            imperium_self.endTurn();
+	  } else {
+	    imperium_self.addMove("notify\tXXCha do not use Instinct Training");
+            imperium_self.endTurn();
+	  }
+	});
+
       },
     };
  
