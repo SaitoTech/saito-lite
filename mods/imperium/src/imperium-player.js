@@ -347,21 +347,21 @@
     // Stage I Public Objectives
     for (let i = 0; i < this.game.state.stage_i_objectives.length; i++) {
       if (this.canPlayerScoreVictoryPoints(this.game.player, this.game.state.stage_i_objectives[i], 1)) {
-        html += '1 VP Public Objective: <li class="option stage1" id="'+i+'">'+this.game.deck[3].cards[this.game.state.stage_i_objectives[i]].name+'</li>';
+        html += '1 VP Public Objective: <li class="option stage1" id="'+this.game.state.stage_i_objectives[i]+'">'+this.game.deck[3].cards[this.game.state.stage_i_objectives[i]].name+'</li>';
       }
     }
   
     // Stage II Public Objectives
     for (let i = 0; i < this.game.state.stage_ii_objectives.length; i++) {
       if (this.canPlayerScoreVictoryPoints(this.game.player, this.game.state.stage_ii_objectives[i], 2)) {
-        html += '2 VP Public Objective: <li class="option stage2" id="'+i+'">'+this.game.deck[4].cards[this.game.state.stage_ii_objectives[i]].name+'</li>';
+        html += '2 VP Public Objective: <li class="option stage2" id="'+this.game.state.stage_ii_objectives[i]+'">'+this.game.deck[4].cards[this.game.state.stage_ii_objectives[i]].name+'</li>';
       }
     }
   
     // Secret Objectives
     for (let i = 0 ; i < this.game.deck[5].hand.length; i++) {
       if (this.canPlayerScoreVictoryPoints(this.game.player, this.game.deck[5].hand[i], 3)) {
-        html += '1 VP Secret Objective: <li class="option secret3" id="'+i+'">'+this.game.deck[5].cards[this.game.deck[5].hand[i]].name+'</li>';
+        html += '1 VP Secret Objective: <li class="option secret3" id="'+this.game.deck[5].hand[i]+'">'+this.game.deck[5].cards[this.game.deck[5].hand[i]].name+'</li>';
       }
     }
   
@@ -398,24 +398,26 @@
 
 
   playerPostScoreVictoryPoints(objective, deck, mycallback) {
-  
+
+    let imperium_self = this;
+
     if (deck == 1) {
       let objectives = this.returnStageIPublicObjectives();
-      objectives[card].post(imperium_self, player, function(success) {
+      objectives[objective].post(imperium_self, imperium_self.game.player, function(success) {
         mycallback(1, objective);
       });
     }
   
     if (deck == 2) {
       let objectives = this.returnStageIIPublicObjectives();
-      objectives[card].post(imperium_self, player, function(success) {
+      objectives[objective].post(imperium_self, imperium_self.game.player, function(success) {
         mycallback(2, objective);
       });
     }
   
     if (deck == 3) {
       let objectives = this.returnSecretObjectives();
-      objectives[card].post(imperium_self, player, function(success) {
+      objectives[objective].post(imperium_self, imperium_self.game.player, function(success) {
         mycallback(1, objective);
       });
     }
@@ -503,15 +505,15 @@
   
       let calculated_total_cost = 0;
       for (let i = 0; i < stuff_to_build.length; i++) {
-        calculated_total_cost += imperium_self.returnUnitCost(stuff_to_build[i], this.game.player);
+        calculated_total_cost += imperium_self.returnUnitCost(stuff_to_build[i], imperium_self.game.player);
       }
-      calculated_total_cost += imperium_self.returnUnitCost(id, this.game.player);
+      calculated_total_cost += imperium_self.returnUnitCost(id, imperium_self.game.player);
   
       //
       // reduce production costs if needed
       //
-      if (this.game.players_info[player-1].production_bonus > 0) {
-        calculated_total_cost -= this.game.players_info[player-1].production_bonus;
+      if (imperium_self.game.players_info[imperium_self.game.player-1].production_bonus > 0) {
+        calculated_total_cost -= imperium_self.game.players_info[imperium_self.game.player-1].production_bonus;
       }
   
   
@@ -528,7 +530,7 @@
   
         let total_cost = 0;
         for (let i = 0; i < stuff_to_build.length; i++) {
-  	total_cost += imperium_self.returnUnitCost(stuff_to_build[i], this.game.player);
+  	total_cost += imperium_self.returnUnitCost(stuff_to_build[i], imperium_self.game.player);
         }
   
         imperium_self.playerSelectResources(total_cost, function(success) {
@@ -563,7 +565,7 @@
   
       let total_cost = 0;
       for (let i = 0; i < stuff_to_build.length; i++) {
-        total_cost += imperium_self.returnUnitCost(stuff_to_build[i], this.game.player);
+        total_cost += imperium_self.returnUnitCost(stuff_to_build[i], imperium_self.game.player);
       }
   
       let divtotal = "." + id + "_total";
