@@ -995,9 +995,7 @@ class Arcade extends ModTemplate {
 	    let thistx = new saito.transaction(JSON.parse(arcade_self.app.wallet.wallet.pending[i]));
 	    let thistxmsg = thistx.returnMessage();
 	    if (thistxmsg.module == arcade_self.app.options.games[game_idx].module) {
-console.log("CHECKING GID: " + thistxmsg.game_id);
               if (thistxmsg.game_id == arcade_self.app.options.games[game_idx].id) {
-console.log("PENDING TX 3: NOT READY");
 	        ready_to_go = 0;
 	      }
 	    }
