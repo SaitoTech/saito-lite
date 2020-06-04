@@ -985,6 +985,30 @@ class Arcade extends ModTemplate {
 
       if (arcade_self.app.options.games[game_idx].initializing == 0) {
 
+	//
+	// check we don't have a pending TX for this game...
+	//
+	let ready_to_go = 1;
+
+	if (arcade_self.app.wallet.wallet.pending.length > 0) {
+	  for (let i = 0; i < arcade_self.app.wallet.wallet.pending.length; i++) {
+	    let thistx = new saito.transaction(JSON.parse(arcade_self.app.wallet.wallet.pending[i]));
+	    let thistxmsg = thistx.returnMessage();
+	    if (thistxmsg.module == arcade_self.app.options.games[game_idx].module) {
+console.log("CHECKING GID: " + thistxmsg.game_id);
+              if (thistxmsg.game_id == arcade_self.app.options.games[game_idx].id) {
+console.log("PENDING TX 3: NOT READY");
+	        ready_to_go = 0;
+	      }
+	    }
+	  }
+	}
+
+	if (ready_to_go == 0) {
+	  console.log("transaction for this game still in pending...");
+	  return;
+	}
+
         clearInterval(arcade_self.initialization_timer);
 
         let data = {};

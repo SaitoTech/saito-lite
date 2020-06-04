@@ -848,7 +848,9 @@
     let array_of_cards = this.returnPlayerActionCards(this.game.player);
     let action_cards = this.returnActionCards();
 
-    let html = "Select an action card: <p></p><ul>";
+    let html = '';
+
+    html += "Select an action card: <p></p><ul>";
     for (let z in array_of_cards) {
       let thiscard = action_cards[this.game.deck[1].hand[z]];
       html += '<li class="cardchoice pointer" id="'+this.game.deck[1].hand[z]+'">' + thiscard.name + '</li>';
@@ -862,6 +864,8 @@
     $('.cardchoice').on('click', function() {
 
       let action2 = $(this).attr("id");
+
+      if (action2 != "cancel") { imperium_self.hideActionCard(action2); }
 
       if (action2 === "cancel") {
 	if (sector == null) {
@@ -885,13 +889,15 @@
   // this is when players are choosing to play the cards that they have 
   // already chosen.
   //
-  playerSelectStrategyCard(mycallback) {
+  playerSelectStrategyCard(mycallback, mode=0) {
 
     let array_of_cards = this.game.players_info[this.game.player-1].strategy;
     let strategy_cards = this.returnStrategyCards();
     let imperium_self = this;  
 
-    let html = "Select a strategy card: <p></p><ul>";
+    let html = "";
+
+    html += "Select a strategy card: <p></p><ul>";
     for (let z in array_of_cards) {
       if (!this.game.players_info[this.game.player-1].strategy_cards_played.includes(array_of_cards[z])) {
         html += '<li class="cardchoice" id="'+array_of_cards[z]+'">' + strategy_cards[array_of_cards[z]].name + '</li>';
@@ -906,6 +912,8 @@
     $('.cardchoice').on('click', function() {
 
       let action2 = $(this).attr("id");
+
+      if (action2 != "cancel") { imperium_self.hideStrategyCard(action2); }
 
       if (action2 === "cancel") {
 	imperium_self.playerTurn();

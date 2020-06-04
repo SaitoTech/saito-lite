@@ -1892,16 +1892,16 @@ console.log("AGENDAS: " + JSON.stringify(agendas));
 	}
 	mycallback(1);
       },
-      playActionCardTriggers :  function(imperium_self, player, card) {
+      playActionCardTriggers :  function(imperium_self, player, action_card_player, card) {
 	if (imperium_self.game.players_info[player-1].instinct_training_exhausted == 1) { return 0; }
 	return 1;
       },
-      playActionCardEvent :  function(imperium_self, player, card) {
+      playActionCardEvent :  function(imperium_self, player, action_card_player, card) {
 
 	let factions = imperium_self.returnFactions();
 	let action_cards = imperium_self.returnActionCards();
 
-	let html  = factions[imperium_self.game.player_info[player-1].faction].name;
+	let html  = factions[imperium_self.game.players_info[player-1].faction].name;
 	    html += ' has played ';
 	    html += action_cards[card].name;
 
@@ -2025,10 +2025,10 @@ console.log("AGENDAS: " + JSON.stringify(agendas));
       // when action card is played
       //
       if (tech[i].playActionCardTriggers == null) {
-	tech[i].playActionCardTriggers = function(imperium_self, player, card) { return 0; }
+	tech[i].playActionCardTriggers = function(imperium_self, player, action_card_player, card) { return 0; }
       }
       if (tech[i].playActionCardEvent == null) {
-	tech[i].playActionCardEvent = function(imperium_self, player, card) { return 0; }
+	tech[i].playActionCardEvent = function(imperium_self, player, action_card_player, card) { return 0; }
       }
 
 

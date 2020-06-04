@@ -647,8 +647,6 @@ console.log(JSON.stringify(this.game.state.agendas));
   	//
         for (let i = 0; i < this.game.players_info.length; i++) {
           for (let ii = 0; ii < this.game.players_info[i].tech.length; ii++) {
-console.log(ii);
-console.log("which tech: " + this.game.players_info[i].tech[ii]);
             technologies[this.game.players_info[i].tech[ii]].onNewRound(this, (i+1), function() {});
   	  }
   	}
@@ -1632,8 +1630,6 @@ alert("Player should choose what planets to invade (if possible)");
 	this.groundCombat(player, sector, planet_idx);
 
         this.updateSectorGraphics(sector);
-
-console.log("IS GROUND COMBAT RESOLVED: " + player + "/" + sector + "/" + planet_idx + "  " + this.hasUnresolvedGroundCombat(player, sector, planet_idx));
 
   	if (this.hasUnresolvedGroundCombat(player, sector, planet_idx) == 1) {
 	  if (this.game.player == player) {
