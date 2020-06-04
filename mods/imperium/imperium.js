@@ -3103,7 +3103,6 @@ console.log("IS GROUND COMBAT RESOLVED: " + player + "/" + sector + "/" + planet
       return 0;
     }
  
-
     let html = 'Do you wish to purchase any command or strategy tokens? <p></p><ul>';
     html += '<li class="buildchoice" id="command">Command Tokens (<span class="command_total">0</span>)</li>';
     html += '<li class="buildchoice" id="strategy">Strategy Tokens (<span class="strategy_total">0</span>)</li>';
@@ -3275,11 +3274,19 @@ console.log("IS GROUND COMBAT RESOLVED: " + player + "/" + sector + "/" + planet
 
 
 
-  playerScoreVictoryPoints(mycallback) {
-  
+  playerScoreVictoryPoints(mycallback, stage=0) {  
+
     let imperium_self = this;
-  
-    let html = 'Do you wish to score any victory points? <p></p><ul>';
+   
+    let html = '';  
+    if (stage == 1) { 
+      html += 'You are playing the Imperium primary. ';
+    }
+    if (stage == 2) { 
+      html += 'You are playing the Imperium secondary. ';
+    }
+
+    html += 'Do you wish to score any victory points? <p></p><ul>';
   
     // Stage I Public Objectives
     for (let i = 0; i < this.game.state.stage_i_objectives.length; i++) {
@@ -9408,7 +9415,7 @@ console.log("PLAYING STRATEGY CARD PRIMARY!");
             imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective);
   	  }
           imperium_self.endTurn();
-        });
+        }, 1);
       }
     }
   }
@@ -9432,24 +9439,19 @@ console.log("PLAYING STRATEGY CARD PRIMARY!");
     }
 
 
-    if (this.game.player == player) {
-      this.updateStatus("Waiting for other players to execute secondary...");
-    }
 
 
     //
     // CHECK IF FACTION HAS REPLACED SECONDARY STRATEGY CARD FUNCTION
     //
-    if (this.game.player != player) {
-      let mytech = this.game.players_info[player-1].tech;
-      for (let i = 0; i < mytech.length; i++) {
-        if (technologies[mytech[i]].playStrategyCardSecondaryTriggers(imperium_self, player, card) == 1) {
+    let mytech = this.game.players_info[player-1].tech;
+    for (let i = 0; i < mytech.length; i++) {
+      if (technologies[mytech[i]].playStrategyCardSecondaryTriggers(imperium_self, player, card) == 1) {
 console.log("PLAYING STRATEGY CARD SECONDARY");
 console.log("PLAYING STRATEGY CARD SECONDARY!");
 console.log("PLAYING STRATEGY CARD SECONDARY!");
-          technologies[i].playStrategyCardSecondaryEvent(imperium_self, player, card);
-          return;
-        }
+        technologies[i].playStrategyCardSecondaryEvent(imperium_self, player, card);
+        return;
       }
     }
  
@@ -9750,8 +9752,9 @@ console.log("PLAYING STRATEGY CARD SECONDARY!");
         if (vp > 0) {
           imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective);
         }
+	imperium_self.updateState("You have played the Imperial Secondary");
         imperium_self.endTurn();
-      });
+      }, 2);
   
     }
   

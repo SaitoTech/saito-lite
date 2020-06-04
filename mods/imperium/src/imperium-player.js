@@ -166,7 +166,6 @@
       return 0;
     }
  
-
     let html = 'Do you wish to purchase any command or strategy tokens? <p></p><ul>';
     html += '<li class="buildchoice" id="command">Command Tokens (<span class="command_total">0</span>)</li>';
     html += '<li class="buildchoice" id="strategy">Strategy Tokens (<span class="strategy_total">0</span>)</li>';
@@ -338,11 +337,19 @@
 
 
 
-  playerScoreVictoryPoints(mycallback) {
-  
+  playerScoreVictoryPoints(mycallback, stage=0) {  
+
     let imperium_self = this;
-  
-    let html = 'Do you wish to score any victory points? <p></p><ul>';
+   
+    let html = '';  
+    if (stage == 1) { 
+      html += 'You are playing the Imperium primary. ';
+    }
+    if (stage == 2) { 
+      html += 'You are playing the Imperium secondary. ';
+    }
+
+    html += 'Do you wish to score any victory points? <p></p><ul>';
   
     // Stage I Public Objectives
     for (let i = 0; i < this.game.state.stage_i_objectives.length; i++) {

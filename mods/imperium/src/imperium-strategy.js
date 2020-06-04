@@ -263,7 +263,7 @@ console.log("PLAYING STRATEGY CARD PRIMARY!");
             imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective);
   	  }
           imperium_self.endTurn();
-        });
+        }, 1);
       }
     }
   }
@@ -287,24 +287,19 @@ console.log("PLAYING STRATEGY CARD PRIMARY!");
     }
 
 
-    if (this.game.player == player) {
-      this.updateStatus("Waiting for other players to execute secondary...");
-    }
 
 
     //
     // CHECK IF FACTION HAS REPLACED SECONDARY STRATEGY CARD FUNCTION
     //
-    if (this.game.player != player) {
-      let mytech = this.game.players_info[player-1].tech;
-      for (let i = 0; i < mytech.length; i++) {
-        if (technologies[mytech[i]].playStrategyCardSecondaryTriggers(imperium_self, player, card) == 1) {
+    let mytech = this.game.players_info[player-1].tech;
+    for (let i = 0; i < mytech.length; i++) {
+      if (technologies[mytech[i]].playStrategyCardSecondaryTriggers(imperium_self, player, card) == 1) {
 console.log("PLAYING STRATEGY CARD SECONDARY");
 console.log("PLAYING STRATEGY CARD SECONDARY!");
 console.log("PLAYING STRATEGY CARD SECONDARY!");
-          technologies[i].playStrategyCardSecondaryEvent(imperium_self, player, card);
-          return;
-        }
+        technologies[i].playStrategyCardSecondaryEvent(imperium_self, player, card);
+        return;
       }
     }
  
@@ -605,8 +600,9 @@ console.log("PLAYING STRATEGY CARD SECONDARY!");
         if (vp > 0) {
           imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective);
         }
+	imperium_self.updateState("You have played the Imperial Secondary");
         imperium_self.endTurn();
-      });
+      }, 2);
   
     }
   
