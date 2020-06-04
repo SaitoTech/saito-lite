@@ -522,13 +522,13 @@ class Poker extends GameTemplate {
                 html  = hand2.val[0] + hand2.suite[0];
                 html += ", ";
                 html += hand2.val[1] + hand2.suite[1];
-                this.updateLog(this.game.state.player_names[i-1]+": " + h2score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h2score.cards_to_score));
+                this.updateLog(this.game.state.player_names[i]+": " + h2score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h2score.cards_to_score));
                 
 
                 html  = hand1.val[0] + hand1.suite[0];
                 html += ", ";
                 html += hand1.val[1] + hand1.suite[1];
-                this.updateLog(this.game.state.player_names[i]+": " + h1score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h1score.cards_to_score));
+                this.updateLog(this.game.state.player_names[i-1]+": " + h1score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h1score.cards_to_score));
 
               } else {
 
