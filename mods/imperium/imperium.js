@@ -1271,7 +1271,6 @@ console.log("GAME QUEUE: " + this.game.queue);
 	      // in which case the instruction we need to run is 
 	      // the last one.... 
 	      //
-
 	      if (mv[3] != undefined) {
 	        if (!this.game.confirms_players.includes(this.app.wallet.returnPublicKey())) {
 	  	  return 1;
@@ -1391,6 +1390,8 @@ console.log(JSON.stringify(this.game.state.agendas));
 	}
 
 
+console.log("VOTE: " + votes_finished + " -- " + this.game.players.length);
+
 	//
 	// everyone has voted
 	//
@@ -1471,10 +1472,13 @@ console.log(JSON.stringify(this.game.state.agendas));
 	// voting happens in turns
 	//
         let who_is_next = 0;
+console.log("WHO HAS VOTED: " + JSON.stringify(this.game.state.voted_on_agenda));
         for (let i = 0; i < this.game.players.length; i++) {
           if (this.game.state.voted_on_agenda[i][agenda_num] == 0) { who_is_next = i+1; i = this.game.players.length; }
  
        }
+
+console.log("WHO IS NEXT: " + who_is_next);
 
 	if (this.game.player != who_is_next) {
 
@@ -3170,8 +3174,6 @@ alert("Player should choose what planets to invade (if possible)");
     html += '<li class="buildchoice" id="yes">Purchase Action Cards</li>';
     html += '<li class="buildchoice" id="no">Do Not Purchase Action Cards</li>';
     html += '</ul>';
-    html += '<p></p>';
-    html += '<div id="confirm" class="buildchoice">click here to finish</div>';
   
     this.updateStatus(html);
   
@@ -9173,6 +9175,14 @@ console.log(sector_name + " -- " + this_planet_name + " -- " + pid);
   hidePlanetCard(sector, pid) {
     $('.cardbox').hide();
   }
+  showAgendaCard(agenda) {
+    let agendas = this.returnAgendaCards();
+    $('.cardbox').html('<img src="'+agendas[agenda].img+'" style="width:100%" />'); 
+    $('.cardbox').show();
+  }
+  hideAgendaCard(sector, pid) {
+    $('.cardbox').hide();
+  }
 
 
   
@@ -9321,7 +9331,16 @@ console.log("PLAYING STRATEGY CARD PRIMARY!");
 	  let laws_selected = 0;
 
 	  let html = '';
-	  html += 'Select two agendas to advance for consideration in the Galactic Senate.<ul>';	
+          if (imperium_self.game.state.agendas_per_round == 1) {
+  	    html += 'Select one agenda to advance for consideration in the Galactic Senate.<ul>';	
+	  }
+          if (imperium_self.game.state.agendas_per_round == 2) {
+  	    html += 'Select two agendas to advance for consideration in the Galactic Senate.<ul>';	
+	  }
+          if (imperium_self.game.state.agendas_per_round == 3) {
+  	    html += 'Select three agendas to advance for consideration in the Galactic Senate.<ul>';	
+	  }
+
           for (i = 0; i < 3; i++) {
     	    html += '<li class="option" id="'+i+'">' + laws[imperium_self.game.state.agendas[i]].name + '</li>';
           }
@@ -9330,15 +9349,20 @@ console.log("PLAYING STRATEGY CARD PRIMARY!");
 	  imperium_self.updateStatus(html);
 
           $('.option').off();
+          $('.option').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showAgendaCard(imperium_self.game.state.agendas[s]); });
+          $('.option').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hideAgendaCard(imperium_self.game.state.agendas[s]); });
           $('.option').on('click', function() {
 
 	    laws_selected++;
 	    selected_agendas.push($(this).attr('id'));
-	    $(this).hide();
 
-            if (laws_selected >= 2) {
+	    $(this).hide();
+   	    imperium_self.hideAgendaCard(selected_agendas[selected_agendas.length-1]); 
+
+            if (laws_selected >= imperium_self.game.state.agendas_per_round) {
               for (i = 1; i >= 0; i--) {
                 imperium_self.addMove("agenda\t"+selected_agendas[i]);
+                imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
               }
               imperium_self.addMove("change_speaker\t"+chancellor);
               imperium_self.endTurn();

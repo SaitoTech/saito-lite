@@ -237,8 +237,6 @@
     html += '<li class="buildchoice" id="yes">Purchase Action Cards</li>';
     html += '<li class="buildchoice" id="no">Do Not Purchase Action Cards</li>';
     html += '</ul>';
-    html += '<p></p>';
-    html += '<div id="confirm" class="buildchoice">click here to finish</div>';
   
     this.updateStatus(html);
   

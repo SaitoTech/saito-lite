@@ -313,7 +313,6 @@ console.log("GAME QUEUE: " + this.game.queue);
 	      // in which case the instruction we need to run is 
 	      // the last one.... 
 	      //
-
 	      if (mv[3] != undefined) {
 	        if (!this.game.confirms_players.includes(this.app.wallet.returnPublicKey())) {
 	  	  return 1;
@@ -433,6 +432,8 @@ console.log(JSON.stringify(this.game.state.agendas));
 	}
 
 
+console.log("VOTE: " + votes_finished + " -- " + this.game.players.length);
+
 	//
 	// everyone has voted
 	//
@@ -513,10 +514,13 @@ console.log(JSON.stringify(this.game.state.agendas));
 	// voting happens in turns
 	//
         let who_is_next = 0;
+console.log("WHO HAS VOTED: " + JSON.stringify(this.game.state.voted_on_agenda));
         for (let i = 0; i < this.game.players.length; i++) {
           if (this.game.state.voted_on_agenda[i][agenda_num] == 0) { who_is_next = i+1; i = this.game.players.length; }
  
        }
+
+console.log("WHO IS NEXT: " + who_is_next);
 
 	if (this.game.player != who_is_next) {
 

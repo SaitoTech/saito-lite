@@ -144,7 +144,16 @@ console.log("PLAYING STRATEGY CARD PRIMARY!");
 	  let laws_selected = 0;
 
 	  let html = '';
-	  html += 'Select two agendas to advance for consideration in the Galactic Senate.<ul>';	
+          if (imperium_self.game.state.agendas_per_round == 1) {
+  	    html += 'Select one agenda to advance for consideration in the Galactic Senate.<ul>';	
+	  }
+          if (imperium_self.game.state.agendas_per_round == 2) {
+  	    html += 'Select two agendas to advance for consideration in the Galactic Senate.<ul>';	
+	  }
+          if (imperium_self.game.state.agendas_per_round == 3) {
+  	    html += 'Select three agendas to advance for consideration in the Galactic Senate.<ul>';	
+	  }
+
           for (i = 0; i < 3; i++) {
     	    html += '<li class="option" id="'+i+'">' + laws[imperium_self.game.state.agendas[i]].name + '</li>';
           }
@@ -153,15 +162,20 @@ console.log("PLAYING STRATEGY CARD PRIMARY!");
 	  imperium_self.updateStatus(html);
 
           $('.option').off();
+          $('.option').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showAgendaCard(imperium_self.game.state.agendas[s]); });
+          $('.option').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hideAgendaCard(imperium_self.game.state.agendas[s]); });
           $('.option').on('click', function() {
 
 	    laws_selected++;
 	    selected_agendas.push($(this).attr('id'));
-	    $(this).hide();
 
-            if (laws_selected >= 2) {
+	    $(this).hide();
+   	    imperium_self.hideAgendaCard(selected_agendas[selected_agendas.length-1]); 
+
+            if (laws_selected >= imperium_self.game.state.agendas_per_round) {
               for (i = 1; i >= 0; i--) {
                 imperium_self.addMove("agenda\t"+selected_agendas[i]);
+                imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
               }
               imperium_self.addMove("change_speaker\t"+chancellor);
               imperium_self.endTurn();

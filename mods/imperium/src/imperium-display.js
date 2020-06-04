@@ -334,5 +334,13 @@ console.log(sector_name + " -- " + this_planet_name + " -- " + pid);
   hidePlanetCard(sector, pid) {
     $('.cardbox').hide();
   }
+  showAgendaCard(agenda) {
+    let agendas = this.returnAgendaCards();
+    $('.cardbox').html('<img src="'+agendas[agenda].img+'" style="width:100%" />'); 
+    $('.cardbox').show();
+  }
+  hideAgendaCard(sector, pid) {
+    $('.cardbox').hide();
+  }
 
 
