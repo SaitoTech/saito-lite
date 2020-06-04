@@ -336,6 +336,16 @@ console.log("F: " + this.game.players_info[this.game.player-1].faction);
   }
 
 
+  //
+  // 1_3 -> array of planets
+  //
+  returnPlanetsInSector(s) {
+    let systems = returnSystems();
+    let sector = systems[this.game.board[s].tile];
+    return sector.planets;
+  }
+
+
   returnAvailableVotes(player) {
 
     let array_of_cards = this.returnPlayerPlanetCards(player);

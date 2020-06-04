@@ -111,10 +111,33 @@
         state.voting_on_agenda = 0;
 
 	//
+	// these variables are set by laws
+	//
+	state.agendas = {};
+	state.agendas.unruly_natives = 1;
+	state.agendas.wormhole_travel_ban = 1;
+	state.agendas.regulated_bureaucracy = 1;
+	state.agendas.planetary_defense_act = 1;
+	state.agendas.performance_testing = 1;
+	state.agendas.fleet_limitations = 1;
+	state.agendas.restricted_conscription = 1;
+	state.agendas.representative_democracy = 1;
+	state.agendas.hidden_agenda = 1;
+
+
+	//
+	//
+	//
+        state.pds_planet_limit = 2;
+        state.tech_research_unit_sacrifice = "";
+  
+
+
+	//
 	// steps in move
 	//
         state.planetary_invasion = 0;
-  
+
         //
         // variables to track executing 
         //
@@ -2154,10 +2177,41 @@ console.log("AGENDAS: " + JSON.stringify(agendas));
     action['action1']	= { 
   	name : "Accidental Colonization" ,
   	type : "instant" ,
-  	text : "Gain control of one planet not controlled by any player" ,
+  	text : "Gain control of one non-homeworld planet containing no units from any player" ,
   	interactive : 1 ,
   	img : "/imperium/img/action_card_template.png" ,
         onPlay : function(imperium_self, player, mycallback) {
+/****
+	  let html = '';
+	  let available_planets_num = 0;
+	  let sectors = imperium_self.returnSystems();
+
+	  for (var i in imperium_self.game.board) {
+
+	    sector = sectors[imperium_self.game.board[i].tile];
+	    if (sector.hw != 1) {
+
+	      for (let i = 0; i < sector.planets.length; i++) {
+
+		let planet = this.game.planets[sector.planets[i]];
+
+// HACK
+	      }
+
+
+	      let planets = sector.planets;
+
+	    }
+
+
+	      html += '<li class="textchoice" id="
+        this.spaceCombat(player, sector);
+              return sys.p[planet_idx].name;
+	// HACK      
+            }
+
+	  }
+***/
 console.log("THE ACTION CARD: " + this.name + " is being played!");
           mycallback(1);
         },
@@ -2280,25 +2334,25 @@ console.log("THE ACTION CARD: " + this.name + " is being played!");
   	text : "All invasions of unoccupied planets require conquering 1 infantry" ,
   	img : "/imperium/img/agenda_card_template.png" ,
         onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW PASSED!");
+	  imperium_self.game.state.agendas.unruly_natives = 1;
           mycallback(1);
 	} ,
         onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW FAILS!");
+	  imperium_self.game.state.agendas.unruly_natives = 0;
           mycallback(1);
 	} ,
     };
     agenda['a2']	= { 
   	name : "Wormhole Travel Ban" ,
   	type : "Law" ,
-  	text : "All invasions of unoccupied planets require conquering 1 infantry" ,
+  	text : "All wormholes are closed" ,
   	img : "/imperium/img/agenda_card_template.png" ,
         onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW PASSED!");
+	  imperium_self.game.state.agendas.wormhole_travel_ban = 1;
           mycallback(1);
 	} ,
         onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW FAILS!");
+	  imperium_self.game.state.agendas.wormhole_travel_ban = 0;
           mycallback(1);
 	} ,
     };
@@ -2308,39 +2362,45 @@ console.log("THE LAW FAILS!");
   	text : "Players may have a maximum of 3 action cards in their hands at all times" ,
   	img : "/imperium/img/agenda_card_template.png" ,
         onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW PASSED!");
+	  imperium_self.game.state.agendas.regulated_bureaucracy = 1;
+	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	    imperium_self.game.players_info[i].action_card_limit = 3;
+	  }
           mycallback(1);
 	} ,
         onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW FAILS!");
+	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	    imperium_self.game.players_info[i].action_card_limit = 7;
+          }
           mycallback(1);
 	} ,
     };
     agenda['a4']	= { 
-  	name : "Freedom in Arms Act" ,
+  	name : "Planetary Defense Act" ,
   	type : "Law" ,
   	text : "Players may place any number of PDS units on planets" ,
   	img : "/imperium/img/agenda_card_template.png" ,
         onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW PASSED!");
+	  imperium_self.game.state.agendas.planetary_defense_act = 1;
+	  imperium_self.game.state.pds_planet_limit = 100;
           mycallback(1);
 	} ,
         onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW FAILS!");
+	  imperium_self.game.state.pds_planet_limit = 2;
           mycallback(1);
 	} ,
     };
     agenda['a5']	= { 
   	name : "Performance Testing" ,
   	type : "Law" ,
-  	text : "After any player researches a tach, he must destroy a non-fighter ship if possible" ,
+  	text : "Before any player researches a tach, he must destroy a non-fighter ship if possible" ,
   	img : "/imperium/img/agenda_card_template.png" ,
         onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW PASSED!");
+          imperium_self.game.state.agendas.performance_testing = 1;
+          imperium_self.game.state.tech_research_unit_sacrifice = "non-fighter";
           mycallback(1);
 	} ,
         onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW FAILS!");
           mycallback(1);
 	} ,
     };
@@ -2350,11 +2410,11 @@ console.log("THE LAW FAILS!");
   	text : "Players may have a maximum of four tokens in their fleet supply." ,
   	img : "/imperium/img/agenda_card_template.png" ,
         onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW PASSED!");
+          imperium_self.game.state.agendas.fleet_limitations = 1;
+	  imperium_self.game.state.fleet_supply_limit = 4;
           mycallback(1);
 	} ,
         onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW FAILS!");
           mycallback(1);
 	} ,
     };
@@ -2364,7 +2424,7 @@ console.log("THE LAW FAILS!");
   	text : "Production cost for infantry and fighters is 1 rather than 0.5 resources" ,
   	img : "/imperium/img/agenda_card_template.png" ,
         onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW PASSED!");
+	  imperium_self.game.state.agendas.restricted_conscription = 1;
           mycallback(1);
 	} ,
         onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
@@ -2378,11 +2438,10 @@ console.log("THE LAW FAILS!");
   	text : "All players have only 1 vote in each Politics Vote" ,
   	img : "/imperium/img/agenda_card_template.png" ,
         onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW PASSED!");
+	  imperium_self.game.state.agendas.representative_democracy = 1;
           mycallback(1);
 	} ,
         onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW FAILS!");
           mycallback(1);
 	} ,
     };
@@ -2392,11 +2451,10 @@ console.log("THE LAW FAILS!");
   	text : "Agendas are Hidden By Default and Only Revealed when the Politics Card is Played" ,
   	img : "/imperium/img/agenda_card_template.png" ,
         onPass : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW PASSED!");
+	  imperium_self.game.state.agendas.hidden_agenda = 1;
           mycallback(1);
 	} ,
         onFail : function(imperium_self, players_in_favour, players_opposed, mycallback) {
-console.log("THE LAW FAILS!");
           mycallback(1);
 	} ,
     };
@@ -2449,6 +2507,7 @@ console.log("THE LAW FAILS!");
   
       players[i] = {};
       players[i].action_cards_per_round = 1;
+      players[i].action_card_limit = 7;
       players[i].new_tokens_per_round = 2;
       players[i].new_token_bonus_when_issued = 0;
       players[i].command_tokens  	= 3;
