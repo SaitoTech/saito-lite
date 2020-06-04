@@ -3625,8 +3625,8 @@ alert("Player should choose what planets to invade (if possible)");
   
     $('.sector').on('click', function() {
   
-      let pid = $(this).attr("id");
-      let sys = imperium_self.returnSystemAndPlanets(pid);
+      let sector = $(this).attr("id");
+      let sys = imperium_self.returnSystemAndPlanets(sector);
 
       //
       // exit if no planets are controlled
@@ -3634,7 +3634,7 @@ alert("Player should choose what planets to invade (if possible)");
       if (mode == 2) {
 	let exist_controlled_planets = 0;
         for (let i = 0; i < sys.p.length; i++) {
-	  if (sys.p[i].owner == this.game.player) {
+	  if (sys.p[i].owner == imperium_self.game.player) {
 	    exist_controlled_planets = 1;
 	  }
         }
@@ -3653,17 +3653,22 @@ alert("Player should choose what planets to invade (if possible)");
 	if (mode == 1) {
           html += '<li class="option" id="' + i + '">' + sys.p[i].name + ' (<span class="invadeplanet_'+i+'">0</span>)</li>';
 	}
-	if (mode == 2 && sys.p[i].owner == this.game.player) {
-          html += '<li class="option" id="' + i + '">' + sys.p[i].name + ' (<span class="invadeplanet_'+i+'">0</span>)</li>';
+	if (mode == 2 && sys.p[i].owner == imperium_self.game.player) {
+          html += '<li class="option" id="' + i + '">' + sys.p[i].name + '</li>';
 	}
       }
       html += '</ul>';
   
+
       imperium_self.updateStatus(html);
   
       $('.option').off();
+      $('.option').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showPlanetCard(sector, s); });
+      $('.option').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hidePlanetCard(sector, s); });
       $('.option').on('click', function() {
-        mycallback(pid, $(this).attr("id"));
+	let pid = $(this).attr("id");
+	imperium_self.hidePlanetCard(sector, pid);
+        mycallback(sector, pid);
       });
   
     });
@@ -3786,15 +3791,15 @@ alert("Player should choose what planets to invade (if possible)");
     html += "Select an action card: <p></p><ul>";
     for (let z in array_of_cards) {
       let thiscard = action_cards[this.game.deck[1].hand[z]];
-      html += '<li class="cardchoice pointer" id="'+this.game.deck[1].hand[z]+'">' + thiscard.name + '</li>';
+      html += '<li class="textchoice pointer" id="'+this.game.deck[1].hand[z]+'">' + thiscard.name + '</li>';
     }
-    html += '<li class="cardchoice pointer" id="cancel">cancel</li>';
+    html += '<li class="textchoice pointer" id="cancel">cancel</li>';
     html += '</ul>';
   
     this.updateStatus(html);
-    $('.cardchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showActionCard(s); } });
-    $('.cardchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideActionCard(s); } });
-    $('.cardchoice').on('click', function() {
+    $('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showActionCard(s); } });
+    $('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideActionCard(s); } });
+    $('.textchoice').on('click', function() {
 
       let action2 = $(this).attr("id");
 
@@ -3833,16 +3838,16 @@ alert("Player should choose what planets to invade (if possible)");
     html += "Select a strategy card: <p></p><ul>";
     for (let z in array_of_cards) {
       if (!this.game.players_info[this.game.player-1].strategy_cards_played.includes(array_of_cards[z])) {
-        html += '<li class="cardchoice" id="'+array_of_cards[z]+'">' + strategy_cards[array_of_cards[z]].name + '</li>';
+        html += '<li class="textchoice" id="'+array_of_cards[z]+'">' + strategy_cards[array_of_cards[z]].name + '</li>';
       }
     }
-    html += '<li class="cardchoice pointer" id="cancel">cancel</li>';
+    html += '<li class="textchoice pointer" id="cancel">cancel</li>';
     html += '</ul>';
   
     this.updateStatus(html);
-    $('.cardchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showStrategyCard(s); } });
-    $('.cardchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideStrategyCard(s); } });
-    $('.cardchoice').on('click', function() {
+    $('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showStrategyCard(s); } });
+    $('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideStrategyCard(s); } });
+    $('.textchoice').on('click', function() {
 
       let action2 = $(this).attr("id");
 
@@ -3867,19 +3872,24 @@ alert("Player should choose what planets to invade (if possible)");
   //
   playerSelectStrategyCards(mycallback) {
 
+    let imperium_self = this;
     let cards = this.returnStrategyCards();
     let html  = "<div class='terminal_header'>You are playing as " + this.returnFaction(this.game.player) + ". Select your strategy card:</div><p></p><ul>";
     if (this.game.state.round > 1) {
       html  = "<div class='terminal_header'>"+this.returnFaction(this.game.player) + ": select your strategy card:</div><p></p><ul>";
     }
     for (let z = 0; z < this.game.state.strategy_cards.length; z++) {
-      html += '<li class="cardchoice" id="'+this.game.state.strategy_cards[z]+'">' + cards[this.game.state.strategy_cards[z]].name + '</li>';
+      html += '<li class="textchoice" id="'+this.game.state.strategy_cards[z]+'">' + cards[this.game.state.strategy_cards[z]].name + '</li>';
     }
     html += '</ul>';
   
     this.updateStatus(html);
-    $('.cardchoice').on('click', function() {
+    $('.textchoice').off();
+    $('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showStrategyCard(s); } });
+    $('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideStrategyCard(s); } });
+    $('.textchoice').on('click', function() {
       let action2 = $(this).attr("id");
+      imperium_self.hideStrategyCard(action2);
       mycallback(action2);
     });
   
@@ -9152,6 +9162,19 @@ if (sector == "2_1") {
   hideStrategyCard(c) {
     $('.cardbox').hide();
   }
+  showPlanetCard(sector, pid) {
+    let planets = this.returnPlanets();
+    let systems = this.returnSystems();
+    let sector_name = this.game.board[sector].tile;
+    let this_planet_name = systems[sector_name].planets[pid];
+console.log(sector_name + " -- " + this_planet_name + " -- " + pid);
+    let thiscard = planets[this_planet_name];
+    $('.cardbox').html('<img src="'+thiscard.img+'" style="width:100%" />'); 
+    $('.cardbox').show();
+  }
+  hidePlanetCard(sector, pid) {
+    $('.cardbox').hide();
+  }
 
 
   
@@ -9494,20 +9517,22 @@ console.log("PLAYING STRATEGY CARD SECONDARY!");
   	  let max_choices = 0;
   
           let html  = "Select planets to unexhaust: <p></p><ul>";
+	  let divname = ".cardchoice";
   	  for (let z = 0; z < array_of_cards.length; z++) {
   	    max_choices++;
   	    html += '<li class="cardchoice" id="cardchoice_'+array_of_cards[z]+'">' + imperium_self.returnPlanetCard(array_of_cards[z]) + '</li>';
   	  }
           if (max_choices == 0) {
-  	    html += '<li class="cardchoice" id="cancel">cancel (no options)</li>';
+  	    html += '<li class="textchoice" id="cancel">cancel (no options)</li>';
+	    divname = ".textchoice";
 	  }
   	  html += '</ul>';
   	  if (max_choices >= 2) { max_choices = 2; }
   
   	  imperium_self.updateStatus(html);
   
-  	  $('.cardchoice').off();
-  	  $('.cardchoice').on('click', function() {
+  	  $(divname).off();
+  	  $(divname).on('click', function() {
   
   	    let action2 = $(this).attr("id");
 

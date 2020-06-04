@@ -4,6 +4,11 @@
 }
 
 
+.cardbox {
+  top: 17vh;
+  height: 60vh;
+  width: auto;
+}
 
 
 
@@ -23,8 +28,13 @@
 .card {
   cursor: pointer;
 }
+.textchoice {
+  cursor: pointer;
+}
 .cardchoice {
   cursor: pointer;
+  margin-right:10px;
+  float:left;
 }
 .option {
   cursor: pointer;

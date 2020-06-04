@@ -338,20 +338,22 @@ console.log("PLAYING STRATEGY CARD SECONDARY!");
   	  let max_choices = 0;
   
           let html  = "Select planets to unexhaust: <p></p><ul>";
+	  let divname = ".cardchoice";
   	  for (let z = 0; z < array_of_cards.length; z++) {
   	    max_choices++;
   	    html += '<li class="cardchoice" id="cardchoice_'+array_of_cards[z]+'">' + imperium_self.returnPlanetCard(array_of_cards[z]) + '</li>';
   	  }
           if (max_choices == 0) {
-  	    html += '<li class="cardchoice" id="cancel">cancel (no options)</li>';
+  	    html += '<li class="textchoice" id="cancel">cancel (no options)</li>';
+	    divname = ".textchoice";
 	  }
   	  html += '</ul>';
   	  if (max_choices >= 2) { max_choices = 2; }
   
   	  imperium_self.updateStatus(html);
   
-  	  $('.cardchoice').off();
-  	  $('.cardchoice').on('click', function() {
+  	  $(divname).off();
+  	  $(divname).on('click', function() {
   
   	    let action2 = $(this).attr("id");
 

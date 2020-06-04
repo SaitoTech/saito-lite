@@ -321,5 +321,18 @@ if (sector == "2_1") {
   hideStrategyCard(c) {
     $('.cardbox').hide();
   }
+  showPlanetCard(sector, pid) {
+    let planets = this.returnPlanets();
+    let systems = this.returnSystems();
+    let sector_name = this.game.board[sector].tile;
+    let this_planet_name = systems[sector_name].planets[pid];
+console.log(sector_name + " -- " + this_planet_name + " -- " + pid);
+    let thiscard = planets[this_planet_name];
+    $('.cardbox').html('<img src="'+thiscard.img+'" style="width:100%" />'); 
+    $('.cardbox').show();
+  }
+  hidePlanetCard(sector, pid) {
+    $('.cardbox').hide();
+  }
 
 
