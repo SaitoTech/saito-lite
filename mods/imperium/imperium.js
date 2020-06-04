@@ -9303,10 +9303,11 @@ console.log("PLAYING STRATEGY CARD PRIMARY!");
         // pick the speaker
         //
         let factions = this.returnFactions();
-        let html = 'Make which player the speaker?';
+        let html = 'Make which player the speaker? <ul>';
         for (let i = 0; i < this.game.players_info.length; i++) {
       	  html += '<li class="option" id="'+i+'">' + factions[this.game.players_info[i].faction].name + '</li>';
         }
+        html += '</ul>';
         this.updateStatus(html);
 
         let chancellor = this.game.player;
@@ -9319,10 +9320,13 @@ console.log("PLAYING STRATEGY CARD PRIMARY!");
 	  let laws = imperium_self.returnAgendaCards();
 	  let laws_selected = 0;
 
-	  let html = 'Select two agendas to advance for consideration in the Galactic Senate';	
+	  let html = '';
+	  html += 'Select two agendas to advance for consideration in the Galactic Senate.<ul>';	
           for (i = 0; i < 3; i++) {
     	    html += '<li class="option" id="'+i+'">' + laws[imperium_self.game.state.agendas[i]].name + '</li>';
           }
+          html += '</ul>';
+
 	  imperium_self.updateStatus(html);
 
           $('.option').off();
