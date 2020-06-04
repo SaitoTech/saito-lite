@@ -3382,8 +3382,6 @@ alert("Player should choose what planets to invade (if possible)");
       html += '<li class="buildchoice" id="spacedock">Space Dock</li>';
     }
     html += '</ul>';
-    html += '<p></p>';
-    html += '<div id="confirm" class="buildchoice">click here to build</div>';
   
     this.updateStatus(html);
   
