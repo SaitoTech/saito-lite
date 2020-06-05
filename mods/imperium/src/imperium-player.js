@@ -1,56 +1,5 @@
 
 
-  playerContinueTurn(player, sector) {
-
-    let imperium_self = this;
-    let options_available = 0;
-
-    //
-    // check to see if any ships survived....
-    //
-    let html  = this.returnFaction(player) + ": <p></p><ul>";
-    if (this.canPlayerInvadePlanet(player, sector)) {
-      html += '<li class="option" id="invade">invade planet</li>';
-      options_available++;
-    }
-    if (this.canPlayerPlayActionCard(player)) {
-      html += '<li class="option" id="action">action card</li>';
-      options_available++;
-    }
-    html += '<li class="option" id="endturn">end turn</li>';
-    html += '</ul>';
-   
-    if (options_available > 0) {
-
-      this.updateStatus(html);
-      $('.option').on('click', function() {
-        let action2 = $(this).attr("id");
-
-        if (action2 == "endturn") {
-          imperium_self.addMove("resolve\tplay");
-          imperium_self.endTurn();
-        }
-  
-        if (action2 == "invade") {
-          imperium_self.playerInvadePlanet(player, sector);
-        }
-
-        if (action2 == "action") {
-          imperium_self.playerSelectActionCard(function(card) {
-            imperium_self.addMove("continue\t"+player+"\t"+sector);
-            imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
-            imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
-            imperium_self.endTurn();
-          }, player, sector);
-        }
-
-      });
-
-    }
-
-  }
-
-
 
   playerTurn(stage="main") {
   
@@ -122,16 +71,19 @@
         }
 
         if (action2 == "activate") {
+  	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.playerActivateSystem();
         }
 
         if (action2 == "select_strategy_card") {
+  	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.playerSelectStrategyCard(function(success) {
-  	  imperium_self.addMove("strategy\t"+success+"\t"+imperium_self.game.player+"\t1");
-  	  imperium_self.endTurn();
+  	    imperium_self.addMove("strategy\t"+success+"\t"+imperium_self.game.player+"\t1");
+  	    imperium_self.endTurn();
           });
         }
         if (action2 == "action") {
+  	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.playerSelectActionCard(function(card) {
   	    imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
@@ -140,10 +92,11 @@
         }
         if (action2 == "trade") {
           imperium_self.playerTrade(function() {
-  	  imperium_self.endTurn();
+  	    imperium_self.endTurn();
           });
         }
         if (action2 == "pass") {
+  	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.addMove("pass\t"+imperium_self.game.player);
           imperium_self.endTurn();
         }
@@ -152,6 +105,61 @@
   }
   
   
+
+
+
+  playerContinueTurn(player, sector) {
+
+    let imperium_self = this;
+    let options_available = 0;
+
+    //
+    // check to see if any ships survived....
+    //
+    let html  = this.returnFaction(player) + ": <p></p><ul>";
+    if (this.canPlayerInvadePlanet(player, sector)) {
+      html += '<li class="option" id="invade">invade planet</li>';
+      options_available++;
+    }
+    if (this.canPlayerPlayActionCard(player)) {
+      html += '<li class="option" id="action">action card</li>';
+      options_available++;
+    }
+    html += '<li class="option" id="endturn">end turn</li>';
+    html += '</ul>';
+   
+    if (options_available > 0) {
+
+      this.updateStatus(html);
+      $('.option').on('click', function() {
+        let action2 = $(this).attr("id");
+
+        if (action2 == "endturn") {
+          imperium_self.addMove("resolve\tplay");
+          imperium_self.endTurn();
+        }
+  
+        if (action2 == "invade") {
+          imperium_self.playerInvadePlanet(player, sector);
+        }
+
+        if (action2 == "action") {
+          imperium_self.playerSelectActionCard(function(card) {
+            imperium_self.addMove("continue\t"+player+"\t"+sector);
+            imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+            imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+            imperium_self.endTurn();
+          }, player, sector);
+        }
+
+      });
+
+    }
+
+  }
+
+
+
   
   
   ////////////////
@@ -1137,13 +1145,13 @@
         for (let i = 0; i < sys.p.length; i++) {
           let planetary_units = sys.p[i].units[imperium_self.game.player-1];
           for (let k = 0; k < planetary_units.length; k++) {
-            if (planetary_units[k].name == "infantry") {
+            if (planetary_units[k].type == "infantry") {
               stuff_available_to_move++;
             }
           }
         }
         for (let i = 0; i < sys.s.units[imperium_self.game.player-1].length; i++) {
-          if (sys.s.units[imperium_self.game.player-1][i].name == "fighter") {
+          if (sys.s.units[imperium_self.game.player-1][i].type == "fighter") {
     	    stuff_available_to_move++;
           }
         }
@@ -1165,7 +1173,7 @@
             let planetary_units = sys.p[i].units[imperium_self.game.player-1];
             let infantry_available_to_move = 0;
             for (let k = 0; k < planetary_units.length; k++) {
-              if (planetary_units[k].name == "infantry") {
+              if (planetary_units[k].type == "infantry") {
                 infantry_available_to_move++;
               }
             }
@@ -1176,7 +1184,7 @@
   
           let fighters_available_to_move = 0;
           for (let i = 0; i < sys.s.units[imperium_self.game.player-1].length; i++) {
-            if (sys.s.units[imperium_self.game.player-1][i].name == "fighter") {
+            if (sys.s.units[imperium_self.game.player-1][i].type == "fighter") {
     	    fighters_available_to_move++;
             }
           }
@@ -1356,8 +1364,10 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
           imperium_self.prependMove("bombardment_post\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
     	  imperium_self.prependMove("planetary_defense\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
     	  imperium_self.prependMove("planetary_defense_post\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
+    	  imperium_self.prependMove("ground_combat_start\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
     	  imperium_self.prependMove("ground_combat\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
     	  imperium_self.prependMove("ground_combat_post\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
+    	  imperium_self.prependMove("ground_combat_end\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
 	}
         imperium_self.endTurn();
         return;
@@ -1376,7 +1386,7 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
       for (let i = 0; i < sys.s.units[player - 1].length; i++) {
         let unit = sys.s.units[player-1][i];
         for (let k = 0; k < unit.storage.length; k++) {
-  	if (unit.storage[k].name == "infantry") {
+  	if (unit.storage[k].type == "infantry") {
             if (populated_ship_forces == 0) {
               total_available_infantry += 1;
   	  }
@@ -1398,7 +1408,7 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
         forces_on_planets.push(0);
         if (space_transport_available > 0 && sys.p[i].units[player - 1].length > 0) {
           for (let j = 0; j < sys.p[i].units[player - 1].length; j++) {
-            if (sys.p[i].units[player - 1][j].name == "infantry") {
+            if (sys.p[i].units[player - 1][j].type == "infantry") {
               if (populated_planet_forces == 0) {
                 forces_on_planets[i]++;;
   	    }
@@ -1574,7 +1584,6 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
       let action2 = $(this).attr("id");
   
       if (action2 == "move") {
-	imperium_self.addMove("invade_sector\t"+imperium_self.game.player+"\t"+sector);
         imperium_self.playerSelectUnitsToMove(sector);
       }
       if (action2 == "produce") {

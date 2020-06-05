@@ -1,5 +1,7 @@
 
 
+
+
   returnEventObjects(player) {
 
     // techs
@@ -9,8 +11,6 @@
     // agendas
 
     let z = [];
-
-console.log("THE TECH: " + JSON.stringify(this.tech));
 
     //
     // all player techs
@@ -198,8 +198,8 @@ console.log("MISSING FACTION: " + this.game.players_info[i].faction);
     if (obj.spaceCombatTriggers == null) {
       obj.spaceCombatTriggers = function(imperium_self, player, sector) { return 0; }
     }
-    if (obj.pdsSpaceDefenseEvent == null) {
-      obj.pdsSpaceDefenseEvent = function(imperium_self, player, sector) { return 0; }
+    if (obj.spaceCombatEvent == null) {
+      obj.spaceCombatEvent = function(imperium_self, player, sector) { return 0; }
     }
 
     //
@@ -231,6 +231,16 @@ console.log("MISSING FACTION: " + this.game.players_info[i].faction);
     }
     if (obj.groundCombatEvent == null) {
       obj.groundCombatEvent = function(imperium_self, player, sector, planet_idx) { return 0; }
+    }
+
+    //
+    // end of player turn
+    //
+    if (obj.playerEndTurnTriggers == null) {
+      obj.playerEndTurnTriggers = function(imperium_self, player) { return 0; }
+    }
+    if (obj.playerEndTurnEvent == null) {
+      obj.playerEndTurnEvent = function(imperium_self, player) { return 0; }
     }
 
     return obj;

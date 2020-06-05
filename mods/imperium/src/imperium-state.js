@@ -8,6 +8,10 @@
         state.turn = 1;
         state.round_scoring = 0;
         state.events = {};
+
+	//
+	// these are the laws, cards, etc. in force
+	//
         state.laws = [];
         state.agendas = [];
         state.strategy_cards = [];

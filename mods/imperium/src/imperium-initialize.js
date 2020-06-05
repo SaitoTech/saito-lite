@@ -183,10 +183,14 @@ console.log(JSON.stringify(this.factions));
   	  }
         }
 
+
+console.log("ASSIGN STARTING UNITS!");
+
 	//
 	// assign starting units
 	//
 	for (let k = 0; k < this.factions[this.game.players_info[i].faction].space_units.length; k++) {
+console.log("ADD SPACE UNIT: " + (i+1) + " -- " + hwsectors[i] + " --- " + this.factions[this.game.players_info[i].faction].space_units[k]);
           this.addSpaceUnit(i + 1, hwsectors[i], this.factions[this.game.players_info[i].faction].space_units[k]);
 	}
 	for (let k = 0; k < this.factions[this.game.players_info[i].faction].ground_units.length; k++) {

@@ -75,7 +75,6 @@ cat ./src/imperium-universe.js >> ./imperium.js
 cat ./src/imperium-playerstate.js >> ./imperium.js
 cat ./src/imperium-state.js >> ./imperium.js
 cat ./src/imperium-events.js >> ./imperium.js
-cat ./src/imperium-units.js >> ./imperium.js
 
 #
 # functions that return information about board/game state (canPlayerX, doesUnitY, returnStateOfSector, etc.)
