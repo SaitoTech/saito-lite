@@ -16,10 +16,10 @@
     return factions[this.game.players_info[this.game.state.speaker-1].faction].name;
   }
   returnSectorName(pid) {
-    return this.game.systems[this.game.board[pid].tile].name;
+    return this.game.sectors[this.game.board[pid].tile].name;
   }
   returnPlanetName(sector, planet_idx) {
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     return sys.p[planet_idx].name;
   }
 
@@ -406,7 +406,7 @@ console.log("F: " + this.game.players_info[this.game.player-1].faction);
   canPlayerActivateSystem(pid) {
   
     let imperium_self = this;
-    let sys = imperium_self.returnSystemAndPlanets(pid);
+    let sys = imperium_self.returnSectorAndPlanets(pid);
     if (sys.s.activated[imperium_self.game.player-1] == 1) { return 0; }
     return 1;
   
@@ -418,7 +418,7 @@ console.log("F: " + this.game.players_info[this.game.player-1].faction);
 
   hasUnresolvedSpaceCombat(attacker, sector) {
  
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
  
     let defender = 0;
     let defender_found = 0;
@@ -452,7 +452,7 @@ console.log("F: " + this.game.players_info[this.game.player-1].faction);
 
   hasUnresolvedGroundCombat(attacker, sector, pid) {
 
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
 
     let defender = -1;
     for (let i = 0; i < sys.p[pid].units.length; i++) {
@@ -504,7 +504,7 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
 
 
   canPlayerProduceInSector(player, sector) {
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.p.length; i++) {
       for (let k = 0; k < sys.p[i].units[player-1].length; k++) {
         if (sys.p[i].units[player-1][k].name == "spacedock") {
@@ -519,7 +519,7 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
 
   canPlayerInvadePlanet(player, sector) {
   
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     let space_transport_available = 0;
     let planets_ripe_for_plucking = 0;
     let total_available_infantry = 0;
@@ -666,7 +666,7 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
   
     for (let i = 0; i < sectors.length; i++) {
   
-      let sys = this.returnSystemAndPlanets(sectors[i]);
+      let sys = this.returnSectorAndPlanets(sectors[i]);
   
       //
       // some sectors not playable in 3 player game
@@ -706,7 +706,7 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
     let ships_and_sectors = [];
     for (let i = 0; i < sectors.length; i++) {
   
-      let sys = this.returnSystemAndPlanets(sectors[i]);
+      let sys = this.returnSectorAndPlanets(sectors[i]);
       
   
       //
@@ -751,7 +751,7 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
 
   returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx) {
   
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     let num = 0;
 
     for (let z = 0; z < sys.p[planet_idx].units[player-1].length; z++) {
@@ -771,7 +771,7 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
   ///////////////////////////////
   // Return System and Planets //
   ///////////////////////////////
-  returnSystemAndPlanets(pid) {
+  returnSectorAndPlanets(pid) {
   
     if (this.game.board[pid] == null) {
       return;
@@ -781,7 +781,7 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
       return;
     }
   
-    let sys = this.game.systems[this.game.board[pid].tile];
+    let sys = this.game.sectors[this.game.board[pid].tile];
     let planets = [];
   
     for (let i = 0; i < sys.planets.length; i++) {
@@ -801,11 +801,11 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
   // Save System and Planets //
   /////////////////////////////
   saveSystemAndPlanets(sys) {
-    for (let key in this.game.systems) {
-      if (this.game.systems[key].img == sys.s.img) {
-        this.game.systems[key] = sys.s;
-        for (let j = 0; j < this.game.systems[key].planets.length; j++) {
-          this.game.planets[this.game.systems[key].planets[j]] = sys.p[j];
+    for (let key in this.game.sectors) {
+      if (this.game.sectors[key].img == sys.s.img) {
+        this.game.sectors[key] = sys.s;
+        for (let j = 0; j < this.game.sectors[key].planets.length; j++) {
+          this.game.planets[this.game.sectors[key].planets[j]] = sys.p[j];
         }
       }
     }
@@ -837,7 +837,7 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
   returnPlayerHomeworldPlanets(player=null) {
     if (player == null) { player = this.game.player; }
     let home_sector = this.game.board[this.game.players_info[player-1].homeworld].tile;  // "sector";
-    return this.game.systems[home_sector].planets;
+    return this.game.sectors[home_sector].planets;
   }
   
   returnPlayerUnexhaustedPlanetCards(player=null) {
@@ -981,7 +981,7 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
 
   doesSectorContainPlayerShips(player, sector) {
 
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     if (sys.s.units[player-1].length > 0) { return 1; }
     return 0;
  
@@ -989,7 +989,7 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
 
   doesSectorContainPlayerUnits(player, sector) {
 
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     if (sys.s.units[player-1].length > 0) { return 1; }
     for (let i = 0; i < sys.p.length; i++) {
       if (sys.p[i].units[player-1].length > 0) { return 1; }

@@ -693,7 +693,7 @@ alert("invading planet!");
         let planet_idx   = mv[6];
         let unitjson     = mv[7];
 
-        let sys = this.returnSystemAndPlanets(sector);
+        let sys = this.returnSectorAndPlanets(sector);
 
   	if (this.game.player != player || player_moves == 1) {
           if (source == "planet") {
@@ -726,7 +726,7 @@ alert("invading planet!");
         let unitjson     = mv[6];
         let shipjson     = mv[7];
 
-//        let sys = this.returnSystemAndPlanets(sector);
+//        let sys = this.returnSectorAndPlanets(sector);
   
   	if (this.game.player != player || player_moves == 1) {
           if (source == "planet") {
@@ -749,7 +749,7 @@ alert("invading planet!");
           }
         }
 
-        let sys = this.returnSystemAndPlanets(sector);
+        let sys = this.returnSectorAndPlanets(sector);
   
 //        this.saveSystemAndPlanets(sys);
         this.updateSectorGraphics(sector);
@@ -860,7 +860,7 @@ alert("Player should choose what planets to invade (if possible)");
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
   
-        sys = this.returnSystemAndPlanets(sector);
+        sys = this.returnSectorAndPlanets(sector);
   	sys.s.activated[player-1] = 0;
         this.updateSectorGraphics(sector);
   	this.game.queue.splice(qe, 1);
@@ -949,7 +949,7 @@ alert("Player should choose what planets to invade (if possible)");
   	// move any ships
   	//
   	if (this.game.player != player || player_moves == 1) {
-  	  let sys = this.returnSystemAndPlanets(sector_from);
+  	  let sys = this.returnSectorAndPlanets(sector_from);
   	  this.removeSpaceUnitByJSON(player, sector_from, shipjson);
           this.addSpaceUnitByJSON(player, sector_to, shipjson);
   	}
@@ -1044,7 +1044,7 @@ alert("Player should choose what planets to invade (if possible)");
         let sector	 = mv[2];
 	let player_to_continue = mv[3];  
 
-        sys = this.returnSystemAndPlanets(sector);
+        sys = this.returnSectorAndPlanets(sector);
   	sys.s.activated[player-1] = 1;
   	this.saveSystemAndPlanets(sys);
         this.updateSectorGraphics(sector);
@@ -1066,7 +1066,7 @@ alert("Player should choose what planets to invade (if possible)");
         let sector	 = mv[2];
 	let player_to_continue = mv[3];  
 
-        sys = this.returnSystemAndPlanets(sector);
+        sys = this.returnSectorAndPlanets(sector);
   	sys.s.activated[player-1] = 1;
   	this.saveSystemAndPlanets(sys);
         this.updateSectorGraphics(sector);
@@ -1500,7 +1500,7 @@ alert("Player should choose what planets to invade (if possible)");
   	//
   	this.updateSectorGraphics(sector);
   
-  	let sys = this.returnSystemAndPlanets(sector);
+  	let sys = this.returnSectorAndPlanets(sector);
   
   	this.game.queue.splice(qe, 1);
   	return 1;

@@ -44,7 +44,6 @@ class Imperium extends GameTemplate {
     this.secret_objectives     	= {};
     this.stage_i_objectives     = {};
     this.stage_ii_objectives    = {};
-    this.faction        	= {};
     this.units          	= {};
 
     this.hud = new GameHud(this.app, this.menuItems());

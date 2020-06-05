@@ -78,7 +78,7 @@
 
   updateSectorGraphics(sector) {
 
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
   
     let divsector = '#hex_space_'+sector;
     let fleet_color = '';
@@ -323,7 +323,7 @@ if (sector == "2_1") {
   }
   showPlanetCard(sector, pid) {
     let planets = this.returnPlanets();
-    let systems = this.returnSystems();
+    let systems = this.returnSectors();
     let sector_name = this.game.board[sector].tile;
     let this_planet_name = systems[sector_name].planets[pid];
 console.log(sector_name + " -- " + this_planet_name + " -- " + pid);

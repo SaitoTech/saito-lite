@@ -44,7 +44,6 @@ class Imperium extends GameTemplate {
     this.secret_objectives     	= {};
     this.stage_i_objectives     = {};
     this.stage_ii_objectives    = {};
-    this.faction        	= {};
     this.units          	= {};
 
     this.hud = new GameHud(this.app, this.menuItems());
@@ -358,8 +357,6 @@ class Imperium extends GameTemplate {
       tech		: 	["neural-motivator","antimass-deflectors","sarween-tools","plasma-scoring","faction2-analytic","faction2-brilliant","faction2-fragile","faction2-deep-space-conduits","faction2-resupply-stations"]
     });
 
-console.log("IMPORTING FACTION 3");
- 
     this.importFaction('faction3', {
       name		: 	"XXCha Kingdom",
       homeworld		: 	"sector40",
@@ -368,7 +365,6 @@ console.log("IMPORTING FACTION 3");
       tech		: 	["plasma-scoring", "faction3-field-nullification", "faction3-peace-accords", "faction3-quash", "faction3-instinct-training"]
     });
   
-console.log("IMPORTING FACTION 3");
 
 
 
@@ -804,16 +800,13 @@ console.log("IMPORTING FACTION 3");
     // initialize game objects /w functions
     //
     //
-console.log("pre initialize game objects");
     this.initializeGameObjects();
-console.log("pst initialize game objects");
 
-
-
-console.log("THE TECH IS NOW: " + JSON.stringify(this.tech));
-alert("INITIALIZING");
-process.exit();
-
+//
+//
+//
+console.log("CHECKING FACTIONS ROBUSTNESS: ");
+console.log(JSON.stringify(this.factions));
 
 
     //
@@ -833,9 +826,9 @@ process.exit();
       // this.game.planets
       // this.game.systems
       //
-      this.game.state   = returnState();
-      this.game.sectors = returnSectors();
-      this.game.planets = returnPlanets();
+      this.game.state   = this.returnState();
+      this.game.sectors = this.returnSectors();
+      this.game.planets = this.returnPlanets();
 
       //
       // create the board
@@ -850,8 +843,10 @@ process.exit();
         if (i >= 4) { j--; };
       }
 
-      let factions = this.returnFactions();
-console.log("F: " + factions);
+
+console.log("SECOND CHECKING FACTIONS ROBUSTNESS: ");
+console.log(JSON.stringify(this.factions));
+
 
       //
       // some general-elements have game-specific elements
@@ -861,20 +856,43 @@ console.log("F: " + factions);
         this.game.strategy_cards.push(i);
         this.game.state.strategy_cards_bonus.push(0); 
       }
-  
+ 
+ 
+console.log("THIRD CHECKING FACTIONS ROBUSTNESS: ");
+console.log(JSON.stringify(this.factions));
+
 
       //
       // units are stored in within systems / planets
       //
       this.game.players_info = this.returnPlayers(this.totalPlayers); // factions and player info
 
+console.log("FOURTH CHECKING FACTIONS ROBUSTNESS: ");
+console.log(JSON.stringify(this.factions));
+
+
   
       //
       // put homeworlds on board
       //
       let hwsectors = this.returnHomeworldSectors(this.game.players_info.length);
+
+console.log("FIFTH CHECKING FACTIONS ROBUSTNESS: ");
+console.log(JSON.stringify(this.factions));
+
+
+      let factions = this.factions;
+console.log("F2: " + JSON.stringify(factions));
+console.log("F2: " + JSON.stringify(this.factions));
+console.log("F3: " + JSON.stringify(this.factions['faction1']));
+console.log("F4: " + JSON.stringify(this.factions['faction2']));
+console.log("F5: " + JSON.stringify(this.factions['faction3']));
+
       for (let i = 0; i < this.game.players_info.length; i++) {
         this.game.players_info[i].homeworld = hwsectors[i];
+console.log("Faction to check: " + JSON.stringify(this.game.players_info[i]));
+console.log("Faction Index: " + this.game.players_info[i].faction);
+console.log("F3: " + JSON.stringify(factions[this.game.players_info[i].faction]));
         this.game.board[hwsectors[i]].tile = factions[this.game.players_info[i].faction].homeworld;
       }
   
@@ -906,7 +924,7 @@ console.log("F: " + factions);
       //
       // add other planet tiles
       //
-      let tmp_sys = this.returnSystems();
+      let tmp_sys = this.returnSectors();
       let seltil = [];
   
   
@@ -1463,9 +1481,6 @@ console.log("tech added!");
   
   
   returnFactions() {
-
-console.log(JSON.stringify(this.factions));
-
     return this.factions;
   }
   
@@ -1478,10 +1493,11 @@ console.log(JSON.stringify(this.factions));
     if (obj.tech == null) 		{ obj.tech = []; }
 
     obj = this.addEvents(obj);
-
-console.log("adding this.factions["+name+"]");
-
+console.log("SETTING this.factions["+name+"] to object: " + JSON.stringify(obj));
     this.factions[name] = obj;
+console.log("... and done");
+
+
 
   }  
 
@@ -5198,8 +5214,9 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
   returnPlayers(num=0) {
   
     var players = [];
-    let factions = this.returnFactions();
-  
+
+    let factions = JSON.parse(JSON.stringify(this.returnFactions()));
+
     for (let i = 0; i < num; i++) {
   
       if (i == 0) { col = "color1"; }
@@ -8159,7 +8176,7 @@ if (sector == "2_1") {
   }
   showPlanetCard(sector, pid) {
     let planets = this.returnPlanets();
-    let systems = this.returnSystems();
+    let systems = this.returnSectors();
     let sector_name = this.game.board[sector].tile;
     let this_planet_name = systems[sector_name].planets[pid];
 console.log(sector_name + " -- " + this_planet_name + " -- " + pid);

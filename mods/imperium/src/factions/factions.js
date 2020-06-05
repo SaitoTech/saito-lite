@@ -16,8 +16,6 @@
       tech		: 	["neural-motivator","antimass-deflectors","sarween-tools","plasma-scoring","faction2-analytic","faction2-brilliant","faction2-fragile","faction2-deep-space-conduits","faction2-resupply-stations"]
     });
 
-console.log("IMPORTING FACTION 3");
- 
     this.importFaction('faction3', {
       name		: 	"XXCha Kingdom",
       homeworld		: 	"sector40",
@@ -26,5 +24,4 @@ console.log("IMPORTING FACTION 3");
       tech		: 	["plasma-scoring", "faction3-field-nullification", "faction3-peace-accords", "faction3-quash", "faction3-instinct-training"]
     });
   
-console.log("IMPORTING FACTION 3");
 

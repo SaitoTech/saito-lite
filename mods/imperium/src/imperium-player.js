@@ -694,7 +694,7 @@ console.log("z: " + JSON.stringify(z[i]));
     $('.sector').on('click', function() {
   
       let sector = $(this).attr("id");
-      let sys = imperium_self.returnSystemAndPlanets(sector);
+      let sys = imperium_self.returnSectorAndPlanets(sector);
 
       //
       // exit if no planets are controlled
@@ -1029,7 +1029,7 @@ console.log("z: " + JSON.stringify(z[i]));
       //
       for (let i = 0; i < obj.ships_and_sectors.length; i++) {
   
-        let sys = imperium_self.returnSystemAndPlanets(obj.ships_and_sectors[i].sector);
+        let sys = imperium_self.returnSectorAndPlanets(obj.ships_and_sectors[i].sector);
         html += '<b class="sector_name" id="'+obj.ships_and_sectors[i].sector+'" style="margin-top:10px">'+sys.s.name+'</b>';
         html += '<ul>';
         for (let ii = 0; ii < obj.ships_and_sectors[i].ships.length; ii++) {
@@ -1110,7 +1110,7 @@ console.log("z: " + JSON.stringify(z[i]));
         let ii = tmpx[2];
         let calcdist = obj.ships_and_sectors[i].distance;
         let sector = obj.ships_and_sectors[i].sector;
-        let sys = imperium_self.returnSystemAndPlanets(sector);
+        let sys = imperium_self.returnSectorAndPlanets(sector);
         let ship = obj.ships_and_sectors[i].ships[ii];
         let total_ship_capacity = imperium_self.returnRemainingCapacity(ship);
         let x = { i : i , ii : ii , sector : sector };
@@ -1318,7 +1318,7 @@ console.log("z: " + JSON.stringify(z[i]));
   playerInvadePlanet(player, sector) {
   
     let imperium_self = this;
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
   
     let total_available_infantry = 0;
     let space_transport_available = 0;
@@ -1533,7 +1533,7 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
       } else {
   
         activated_once = 1;
-        let sys = imperium_self.returnSystemAndPlanets(pid);
+        let sys = imperium_self.returnSectorAndPlanets(pid);
         let divpid = '#'+pid;
   
         $(divpid).find('.hex_activated').css('background-color', 'yellow');

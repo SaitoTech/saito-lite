@@ -62,7 +62,7 @@ console.log("PLAYING STRATEGY CARD PRIMARY!");
   	//
   	// re-activate any planets in that system
   	//
-   	let sys = imperium_self.returnSystemAndPlanets(sector);
+   	let sys = imperium_self.returnSectorAndPlanets(sector);
   	for (let i = 0; i < sys.p.length; i++) {
   	  if (sys.p[i].owner == imperium_self.game.player) {
               imperium_self.addMove("unexhaust\t"+imperium_self.game.player+"\t"+sector);

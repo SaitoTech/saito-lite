@@ -3,8 +3,9 @@
   returnPlayers(num=0) {
   
     var players = [];
-    let factions = this.returnFactions();
-  
+
+    let factions = JSON.parse(JSON.stringify(this.returnFactions()));
+
     for (let i = 0; i < num; i++) {
   
       if (i == 0) { col = "color1"; }

@@ -7,20 +7,20 @@
     return this.loadUnitByJSONOntoPlanet(player, sector, planet_idx, unitname);
   };
   addSpaceUnit(player, sector, unitname) {
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     let unit_to_add = this.returnUnit(unitname, player);
     sys.s.units[player - 1].push(unit_to_add);
     this.saveSystemAndPlanets(sys);
     return JSON.stringify(unit_to_add);
   };
   addSpaceUnitByJSON(player, sector, unitjson) {
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     sys.s.units[player - 1].push(JSON.parse(unitjson));
     this.saveSystemAndPlanets(sys);
     return unitjson;
   };
   removeSpaceUnit(player, sector, unitname) {
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.s.units[player - 1].length; i++) {
       if (sys.s.units[player - 1][i].name === unitname) {
         let removedunit = sys.s.units[player - 1].splice(i, 1);
@@ -31,7 +31,7 @@
     }
   };
   removeSpaceUnitByJSON(player, sector, unitjson) {
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.s.units[player - 1].length; i++) {
       if (JSON.stringify(sys.s.units[player - 1][i]) === unitjson) {
         sys.s.units[player - 1].splice(i, 1);
@@ -41,33 +41,33 @@
     }
   };
   loadUnitOntoPlanet(player, sector, planet_idx, unitname) {
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     let unit_to_add = this.returnUnit(unitname, player);
     sys.p[planet_idx].units[player - 1].push(unit_to_add);
     this.saveSystemAndPlanets(sys);
     return JSON.stringify(unit_to_add);
   };
   loadUnitByJSONOntoPlanet(player, sector, planet_idx, unitjson) {
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     sys.p[planet_idx].units[player - 1].push(JSON.parse(unitjson));
     this.saveSystemAndPlanets(sys);
     return unitjson;
   };
   loadUnitOntoShip(player, sector, ship_idx, unitname) {
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     let unit_to_add = this.returnUnit(unitname, player);
     sys.s.units[player - 1][ship_idx].storage.push(unit_to_add);
     this.saveSystemAndPlanets(sys);
     return JSON.stringify(unit_to_add);
   };
   loadUnitByJSONOntoShip(player, sector, ship_idx, unitjson) {
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     sys.s.units[player - 1][ship_idx].storage.push(JSON.parse(unitjson));
     this.saveSystemAndPlanets(sys);
     return unitjson;
   };
   loadUnitOntoShipByJSON(player, sector, shipjson, unitname) {
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.s.units[player - 1].length; i++) {
       if (JSON.stringify(sys.s.units[player - 1][i]) === shipjson) {
         let unit_to_add = this.returnUnit(unitname, player);
@@ -79,7 +79,7 @@
     return "";
   };
   loadUnitByJSONOntoShipByJSON(player, sector, shipjson, unitjson) {
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.s.units[player - 1].length; i++) {
       if (JSON.stringify(sys.s.units[player - 1][i]) === shipjson) {
         sys.s.units[player - 1][i].storage.push(JSON.parse(unitjson));
@@ -90,7 +90,7 @@
     return "";
   };
   loadUnitFromShip(player, sector, ship_idx, unitname) {
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.s.units[player - 1][ship_idx].storage.length; i++) {
       if (sys.s.units[player - 1][ship_idx].storage[i].name === unitname) {
         let unit_to_remove = sys.s.units[player - 1][ship_idx].storage[i];
@@ -102,7 +102,7 @@
     return "";
   };
   unloadUnitFromPlanet(player, sector, planet_idx, unitname) {
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.p[planet_idx].units[player - 1].length; i++) {
       if (sys.p[planet_idx].units[player - 1][i].name === unitname) {
         let unit_to_remove = sys.p[planet_idx].units[player - 1][i];
@@ -114,7 +114,7 @@
     return "";
   };
   unloadUnitByJSONFromPlanet(player, sector, planet_idx, unitjson) {
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.p[planet_idx].units[player-1].length; i++) {
       if (JSON.stringify(sys.p[planet_idx].units[player - 1][i]) === unitjson) {
         let unit_to_remove = sys.p[planet_idx].units[player - 1][i];
@@ -126,7 +126,7 @@
     return "";
   };
   unloadUnitByJSONFromShip(player, sector, ship_idx, unitjson) {
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
 console.log("player: " + player);
 console.log("SHIPS: " + JSON.stringify(sys.s.units));
     for (let i = 0; i < sys.s.units[player - 1][ship_idx].storage.length; i++) {
@@ -139,7 +139,7 @@ console.log("SHIPS: " + JSON.stringify(sys.s.units));
     return "";
   };
   unloadUnitFromShipByJSON(player, sector, shipjson, unitname) {
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.s.units[player - 1].length; i++) {
       if (JSON.stringify(sys.s.units[player - 1][i]) === shipjson) {
         for (let j = 0; j < sys.s.units[player - 1][i].storage.length; j++) {
@@ -154,7 +154,7 @@ console.log("SHIPS: " + JSON.stringify(sys.s.units));
     return "";
   };
   unloadUnitByJSONFromShipByJSON(player, sector, shipjson, unitjson) {
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.s.units[player - 1].length; i++) {
       if (JSON.stringify(sys.s.units[player - 1][i]) === shipjson) {
         for (let j = 0; j < sys.s.units[player - 1][i].storage.length; j++) {
@@ -169,7 +169,7 @@ console.log("SHIPS: " + JSON.stringify(sys.s.units));
     return "";
   };
   unloadStoredShipsIntoSector(player, sector) {
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.s.units[player - 1].length; i++) {
       for (let j = 0; j < sys.s.units[player - 1][i].storage.length; j++) {
 	let unit = sys.s.units[player-1][i].storage[j];
@@ -220,7 +220,7 @@ console.log("SHIPS: " + JSON.stringify(sys.s.units));
   
     for (let i = 0; i < sectors.length; i++) {
   
-      let sys = this.returnSystemAndPlanets(sectors[i]);
+      let sys = this.returnSectorAndPlanets(sectors[i]);
   
       //
       // some sectors not playable in 3 player game
@@ -261,7 +261,7 @@ console.log("SHIPS: " + JSON.stringify(sys.s.units));
     let ships_and_sectors = [];
     for (let i = 0; i < sectors.length; i++) {
   
-      let sys = this.returnSystemAndPlanets(sectors[i]);
+      let sys = this.returnSectorAndPlanets(sectors[i]);
       
   
       //
@@ -314,7 +314,7 @@ console.log("SHIPS: " + JSON.stringify(sys.s.units));
   
   returnNumberOfSpaceFleetInSector(player, sector) {
   
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     let num = 0;
   
     for (let z = 0; z < sys.s.units[player-1].length; z++) {
@@ -333,7 +333,7 @@ console.log("UNIT for "+player+" - " + JSON.stringify(sys.s.units[player-1][z]))
 
     if (player <= 0) { return 0; }  
 
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     let num = 0;
 
 console.log("PLANET IDX: " + planet_idx);
@@ -364,7 +364,7 @@ console.log(JSON.stringify(sys.p));
   repairUnits() {
   
     for (let i in this.game.board) {
-      let sys = this.returnSystemAndPlanets(i);
+      let sys = this.returnSectorAndPlanets(i);
       for (let i = 0; i < sys.s.units.length; i++) {
         for (let ii = 0; ii < sys.s.units[i].length; ii++) {
 	  if (sys.s.units[i][ii].max_strenth > sys.s.units[i][ii].strength) {
@@ -499,9 +499,9 @@ console.log(JSON.stringify(sys.p));
   
   upgradePlayerUnitsOnBoard(player) {
   
-    for (var i in this.game.systems) {
-      for (let ii = 0; ii < this.game.systems[i].units[player-1].length; ii++) {
-        this.game.systems[i].units[player-1][ii] = this.upgradeUnit(this.game.systems[i].units[player-1][ii], player);
+    for (var i in this.game.sectors) {
+      for (let ii = 0; ii < this.game.sectors[i].units[player-1].length; ii++) {
+        this.game.sectors[i].units[player-1][ii] = this.upgradeUnit(this.game.sectors[i].units[player-1][ii], player);
       }
     }
     for (var i in this.game.planets) {
@@ -624,7 +624,7 @@ console.log(JSON.stringify(sys.p));
   
   doesSectorContainPlayerShips(player, sector) {
 
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     if (sys.s.units[player-1].length > 0) { return 1; }
     return 0;
  
@@ -632,7 +632,7 @@ console.log(JSON.stringify(sys.p));
 
   doesSectorContainPlayerUnits(player, sector) {
 
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     if (sys.s.units[player-1].length > 0) { return 1; }
     for (let i = 0; i < sys.p.length; i++) {
       if (sys.p[i].units[player-1].length > 0) { return 1; }

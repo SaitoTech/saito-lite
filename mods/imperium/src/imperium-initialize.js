@@ -44,6 +44,12 @@
     //
     this.initializeGameObjects();
 
+//
+//
+//
+console.log("CHECKING FACTIONS ROBUSTNESS: ");
+console.log(JSON.stringify(this.factions));
+
 
     //
     // IF THIS IS A NEW GAME
@@ -60,11 +66,11 @@
       //
       // this.game.state
       // this.game.planets
-      // this.game.systems
+      // this.game.sectors
       //
-      this.game.state   = returnState();
-      this.game.sectors = returnSectors();
-      this.game.planets = returnPlanets();
+      this.game.state   = this.returnState();
+      this.game.sectors = this.returnSectors();
+      this.game.planets = this.returnPlanets();
 
       //
       // create the board
@@ -79,8 +85,10 @@
         if (i >= 4) { j--; };
       }
 
-      let factions = this.returnFactions();
-console.log("F: " + factions);
+
+console.log("SECOND CHECKING FACTIONS ROBUSTNESS: ");
+console.log(JSON.stringify(this.factions));
+
 
       //
       // some general-elements have game-specific elements
@@ -90,20 +98,43 @@ console.log("F: " + factions);
         this.game.strategy_cards.push(i);
         this.game.state.strategy_cards_bonus.push(0); 
       }
-  
+ 
+ 
+console.log("THIRD CHECKING FACTIONS ROBUSTNESS: ");
+console.log(JSON.stringify(this.factions));
+
 
       //
       // units are stored in within systems / planets
       //
       this.game.players_info = this.returnPlayers(this.totalPlayers); // factions and player info
 
+console.log("FOURTH CHECKING FACTIONS ROBUSTNESS: ");
+console.log(JSON.stringify(this.factions));
+
+
   
       //
       // put homeworlds on board
       //
       let hwsectors = this.returnHomeworldSectors(this.game.players_info.length);
+
+console.log("FIFTH CHECKING FACTIONS ROBUSTNESS: ");
+console.log(JSON.stringify(this.factions));
+
+
+      let factions = this.factions;
+console.log("F2: " + JSON.stringify(factions));
+console.log("F2: " + JSON.stringify(this.factions));
+console.log("F3: " + JSON.stringify(this.factions['faction1']));
+console.log("F4: " + JSON.stringify(this.factions['faction2']));
+console.log("F5: " + JSON.stringify(this.factions['faction3']));
+
       for (let i = 0; i < this.game.players_info.length; i++) {
         this.game.players_info[i].homeworld = hwsectors[i];
+console.log("Faction to check: " + JSON.stringify(this.game.players_info[i]));
+console.log("Faction Index: " + this.game.players_info[i].faction);
+console.log("F3: " + JSON.stringify(factions[this.game.players_info[i].faction]));
         this.game.board[hwsectors[i]].tile = factions[this.game.players_info[i].faction].homeworld;
       }
   
@@ -135,7 +166,7 @@ console.log("F: " + factions);
       //
       // add other planet tiles
       //
-      let tmp_sys = this.returnSystems();
+      let tmp_sys = this.returnSectors();
       let seltil = [];
   
   
@@ -150,7 +181,7 @@ console.log("F: " + factions);
           var keys = Object.keys(tmp_sys);
           while (oksel == 0) {
             let rp = keys[this.rollDice(keys.length)-1];
-            if (this.game.systems[rp].hw != 1 && seltil.includes(rp) != 1 && this.game.systems[rp].mr != 1) {
+            if (this.game.sectors[rp].hw != 1 && seltil.includes(rp) != 1 && this.game.sectors[rp].mr != 1) {
               seltil.push(rp);
               delete tmp_sys[rp];
               this.game.board[i].tile = rp;
@@ -165,7 +196,7 @@ console.log("F: " + factions);
       //
       for (let i = 0; i < this.totalPlayers; i++) {
   
-        let sys = this.returnSystemAndPlanets(hwsectors[i]); 
+        let sys = this.returnSectorAndPlanets(hwsectors[i]); 
   
         let strongest_planet = 0;
         let strongest_planet_resources = 0;
@@ -234,7 +265,7 @@ console.log("F: " + factions);
   
       // insert planet
       let planet_div = "#hex_img_"+i;
-      $(planet_div).attr("src", this.game.systems[this.game.board[i].tile].img);
+      $(planet_div).attr("src", this.game.sectors[this.game.board[i].tile].img);
   
       this.updateSectorGraphics(i);
   
