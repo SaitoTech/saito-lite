@@ -52,6 +52,9 @@ console.log("MISSING FACTION: " + this.game.players_info[i].faction);
     // on a new turn. they should be asynchronous (not require user input) and thus do not
     // require a trigger - every function is run every time the game reaches this state..
     //
+    if (obj.initialize == null) {
+      obj.initialize = function(imperium_self, player) { return 0; }
+    }
     if (obj.upgradeUnit == null) {
       obj.upgradeUnit = function(imperium_self, player, unit) { return unit; }
     }

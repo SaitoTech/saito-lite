@@ -86,10 +86,6 @@ console.log(JSON.stringify(this.factions));
       }
 
 
-console.log("SECOND CHECKING FACTIONS ROBUSTNESS: ");
-console.log(JSON.stringify(this.factions));
-
-
       //
       // some general-elements have game-specific elements
       //
@@ -100,18 +96,10 @@ console.log(JSON.stringify(this.factions));
       }
  
  
-console.log("THIRD CHECKING FACTIONS ROBUSTNESS: ");
-console.log(JSON.stringify(this.factions));
-
-
       //
       // units are stored in within systems / planets
       //
       this.game.players_info = this.returnPlayers(this.totalPlayers); // factions and player info
-
-console.log("FOURTH CHECKING FACTIONS ROBUSTNESS: ");
-console.log(JSON.stringify(this.factions));
-
 
   
       //
@@ -119,23 +107,10 @@ console.log(JSON.stringify(this.factions));
       //
       let hwsectors = this.returnHomeworldSectors(this.game.players_info.length);
 
-console.log("FIFTH CHECKING FACTIONS ROBUSTNESS: ");
-console.log(JSON.stringify(this.factions));
-
-
-      let factions = this.factions;
-console.log("F2: " + JSON.stringify(factions));
-console.log("F2: " + JSON.stringify(this.factions));
-console.log("F3: " + JSON.stringify(this.factions['faction1']));
-console.log("F4: " + JSON.stringify(this.factions['faction2']));
-console.log("F5: " + JSON.stringify(this.factions['faction3']));
 
       for (let i = 0; i < this.game.players_info.length; i++) {
         this.game.players_info[i].homeworld = hwsectors[i];
-console.log("Faction to check: " + JSON.stringify(this.game.players_info[i]));
-console.log("Faction Index: " + this.game.players_info[i].faction);
-console.log("F3: " + JSON.stringify(factions[this.game.players_info[i].faction]));
-        this.game.board[hwsectors[i]].tile = factions[this.game.players_info[i].faction].homeworld;
+        this.game.board[hwsectors[i]].tile = this.factions[this.game.players_info[i].faction].homeworld;
       }
   
       //
@@ -209,27 +184,39 @@ console.log("F3: " + JSON.stringify(factions[this.game.players_info[i].faction])
         }
 
 	//
-	// put faction units in sector 
+	// assign starting units
 	//
-	for (let k = 0; k < factions[this.game.players_info[i].faction].space_units.length; k++) {
-          this.addSpaceUnit(i + 1, hwsectors[i], factions[this.game.players_info[i].faction].space_units[k]);
+	for (let k = 0; k < this.factions[this.game.players_info[i].faction].space_units.length; k++) {
+          this.addSpaceUnit(i + 1, hwsectors[i], this.factions[this.game.players_info[i].faction].space_units[k]);
 	}
-	for (let k = 0; k < factions[this.game.players_info[i].faction].ground_units.length; k++) {
-          this.loadUnitOntoPlanet(i + 1, hwsectors[i], strongest_planet, factions[this.game.players_info[i].faction].ground_units[k]);
+	for (let k = 0; k < this.factions[this.game.players_info[i].faction].ground_units.length; k++) {
+          this.loadUnitOntoPlanet(i + 1, hwsectors[i], strongest_planet, this.factions[this.game.players_info[i].faction].ground_units[k]);
 	}
 
 	let technologies = this.returnTechnology();
 
 	//
-	// assign faction technology
+	// assign starting technology
 	//
-	for (let k = 0; k < factions[this.game.players_info[i].faction].tech.length; k++) {
-	  let free_tech = factions[this.game.players_info[i].faction].tech[k];
+	for (let k = 0; k < this.factions[this.game.players_info[i].faction].tech.length; k++) {
+console.log("adding starting tech: " + this.factions[this.game.players_info[i].faction].tech[k]);
+	  let free_tech = this.factions[this.game.players_info[i].faction].tech[k];
 	  let player = i+1;
           this.game.players_info[i].tech.push(free_tech);
-          technologies[free_tech].onNewRound(this, player, function() {});
-          this.upgradePlayerUnitsOnBoard(player);
         }
+
+
+	//
+	// initialize all units / techs / powers (for all players)
+	//
+	let z = this.returnEventObjects();
+        for (let i = 0; i < z.length; z++) {
+console.log("initializing: " + z[i].name);
+	  for (let k = 0; k < this.game.players_info.length; k++) {
+	    z[i].initialize(this, (k+1));
+          }
+        }
+
 
         this.saveSystemAndPlanets(sys);
   
@@ -313,9 +300,6 @@ console.log("F3: " + JSON.stringify(factions[this.game.players_info[i].faction])
     //
     this.addEventsToBoard();
  
-console.log("WE GOT IT HERE");
-process.exit();
-
   }
   
 

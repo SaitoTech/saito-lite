@@ -85,12 +85,9 @@
       let tech_attach_menu_triggers = [];
       let tech_attach_menu_index = [];
 
-      let z = this.returnEventObjects();
 
-console.log("Z: " + JSON.stringify(z));
+      let z = this.returnEventObjects();
       for (let i = 0; i < z.length; z++) {
-console.log("i: " + i);
-console.log("z: " + JSON.stringify(z[i]));
 	if (z[i].menuOptionTrigger(this, this.game.player) == 1) {
           let x = z[i].menuOption(this, this.game.player);
 	  html += x.html;
