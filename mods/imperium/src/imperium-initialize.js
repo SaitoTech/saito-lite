@@ -2,12 +2,12 @@
 
   } // end initializeGameObjects
 
+
   
   async initializeGame(game_id) {
 
     this.updateStatus("loading game...");
     this.loadGame(game_id);
-    let factions = this.returnFactions();
 
     if (this.game.status != "") { this.updateStatus(this.game.status); }
     if (this.game.log != "") { 
@@ -22,8 +22,6 @@
     // specify players
     //
     this.totalPlayers = this.game.players.length;  
-
-
 
 
     //
@@ -45,8 +43,6 @@
     //
     //
     this.initializeGameObjects();
-
-
 
 
     //
@@ -83,7 +79,8 @@
         if (i >= 4) { j--; };
       }
 
-console.log("F: " + this.game.factions);
+      let factions = this.returnFactions();
+console.log("F: " + factions);
 
       //
       // some general-elements have game-specific elements
@@ -190,7 +187,7 @@ console.log("F: " + this.game.factions);
           this.loadUnitOntoPlanet(i + 1, hwsectors[i], strongest_planet, factions[this.game.players_info[i].faction].ground_units[k]);
 	}
 
-	let technologies = this.returnTechnologyTree();
+	let technologies = this.returnTechnology();
 
 	//
 	// assign faction technology

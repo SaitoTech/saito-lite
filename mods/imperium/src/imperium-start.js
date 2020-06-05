@@ -22,11 +22,30 @@ class Imperium extends GameTemplate {
 
 
 
-    this.game.board 	  = null;
 
-    this.game.confirms_needed 	= 0;
+    //
+    // specific to THIS game
+    //
+    this.game.board          = null;
+    this.game.sectors        = null; 
+    this.game.planets        = null;
+    this.game.confirms_needed   = 0;
     this.game.confirms_received = 0;
     this.game.confirms_players  = [];
+    
+    //
+    // not specific to THIS game
+    //
+    this.factions       	= {};
+    this.tech           	= {};
+    this.strategy_cards 	= {};
+    this.action_cards 		= {};
+    this.agenda_cards   	= {};
+    this.secret_objectives     	= {};
+    this.stage_i_objectives     = {};
+    this.stage_ii_objectives    = {};
+    this.faction        	= {};
+    this.units          	= {};
 
     this.hud = new GameHud(this.app, this.menuItems());
   

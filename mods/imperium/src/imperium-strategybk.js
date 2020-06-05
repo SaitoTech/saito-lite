@@ -3,7 +3,7 @@
   playStrategyCardPrimary(player, card) {
   
     let imperium_self = this;
-    let technologies = this.returnTechnologyTree();  
+    let technologies = this.returnTechnology();  
 
     let strategy_cards = this.returnStrategyCards();
     this.updateStatus(this.returnFaction(player) + " is playing the " + strategy_cards[card].name + " strategy card");
@@ -292,7 +292,7 @@ console.log("PLAYING STRATEGY CARD PRIMARY!");
   playStrategyCardSecondary(player, card) {
   
     let imperium_self = this;
-    let technologies = this.returnTechnologyTree();
+    let technologies = this.returnTechnology();
 
     let strategy_cards = this.returnStrategyCards();
     this.updateStatus("Moving into the secondary of the " + strategy_cards[card].name + " strategy card");

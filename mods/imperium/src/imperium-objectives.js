@@ -1,6 +1,6 @@
   
   returnSecretObjectives() {
-    return this.game.secret_objectives;
+    return this.secret_objectives;
   }
   
   importSecretObjective(name, obj) {
@@ -11,7 +11,7 @@
     if (obj.img  == null) 	{ obj.img = "/imperium/img/objective_card_1_template.png"; }
 
     obj = this.addEvents(obj);
-    this.game.secret_objectives[name] = obj;
+    this.secret_objectives[name] = obj;
 
   }  
 
@@ -19,7 +19,7 @@
 
 
   returnStageIPublicObjectives() {
-    return this.game.stage_i_objectives;
+    return this.stage_i_objectives;
   }
   
   importStageIPublicObjective(name, obj) {
@@ -30,13 +30,13 @@
     if (obj.img  == null) 	{ obj.img = "/imperium/img/objective_card_1_template.png"; }
 
     obj = this.addEvents(obj);
-    this.game.stage_i_objectives[name] = obj;
+    this.stage_i_objectives[name] = obj;
 
   }  
 
 
   returnStageIIPublicObjectives() {
-    return this.game.stage_ii_objectives;
+    return this.stage_ii_objectives;
   }
   
   importStageIIPublicObjective(name, obj) {
@@ -47,7 +47,7 @@
     if (obj.img  == null) 	{ obj.img = "/imperium/img/objective_card_1_template.png"; }
 
     obj = this.addEvents(obj);
-    this.game.stage_ii_objectives[name] = obj;
+    this.stage_ii_objectives[name] = obj;
 
   }  
 

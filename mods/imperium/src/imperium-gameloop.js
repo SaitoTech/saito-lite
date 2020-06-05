@@ -394,7 +394,7 @@ console.log("WHO IS NEXT: " + who_is_next);
   
       if (mv[0] === "newround") {
 
-	let technologies = this.returnTechnologyTree();
+	let technologies = this.returnTechnology();
 
         //
   	// reset tech bonuses
@@ -892,7 +892,7 @@ alert("Player should choose what planets to invade (if possible)");
 
         if (item == "tech") {
 
-	  let technologies = this.returnTechnologyTree();
+	  let technologies = this.returnTechnology();
 
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3]);
   	  this.game.players_info[player-1].tech.push(mv[3]);
@@ -982,7 +982,7 @@ alert("Player should choose what planets to invade (if possible)");
       //
       if (mv[0] === "arbitrary_event") {
   
-        let technologies = this.returnTechnologyTree();
+        let technologies = this.returnTechnology();
 
   	let eventname    = parseInt(mv[1]);
   	let player       = parseInt(mv[2]);
@@ -1012,7 +1012,7 @@ alert("Player should choose what planets to invade (if possible)");
 
       if (mv[0] === "arbitrary_event_event") {
 
-        let technologies = this.returnTechnologyTree();
+        let technologies = this.returnTechnology();
 
   	let eventname    = parseInt(mv[1]);
   	let player       = parseInt(mv[2]);
@@ -1039,7 +1039,7 @@ alert("Player should choose what planets to invade (if possible)");
       //
       if (mv[0] === "activate") {
 
-        let technologies = this.returnTechnologyTree();
+        let technologies = this.returnTechnology();
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
 	let player_to_continue = mv[3];  
@@ -1061,7 +1061,7 @@ alert("Player should choose what planets to invade (if possible)");
       /////////////////////
       if (mv[0] === "activate_system") {
   
-        let technologies = this.returnTechnologyTree();
+        let technologies = this.returnTechnology();
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
 	let player_to_continue = mv[3];  
@@ -1087,7 +1087,7 @@ alert("Player should choose what planets to invade (if possible)");
       }
 
       if (mv[0] === "activate_system_event") {
-        let technologies = this.returnTechnologyTree();
+        let technologies = this.returnTechnology();
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
         let tech	 = mv[3];
@@ -1117,7 +1117,7 @@ alert("Player should choose what planets to invade (if possible)");
   
   	let player       = mv[1];
         let sector       = mv[2];
-	let technologies = this.returnTechnologyTree();
+	let technologies = this.returnTechnology();
 
   	this.game.queue.splice(qe, 1);
 
@@ -1137,7 +1137,7 @@ alert("Player should choose what planets to invade (if possible)");
 
       if (mv[0] === "pds_space_defense_event") {
   
-        let technologies = this.returnTechnologyTree();
+        let technologies = this.returnTechnology();
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
         let tech	 = mv[3];
@@ -1174,7 +1174,7 @@ alert("Player should choose what planets to invade (if possible)");
   
   	let player       = mv[1];
         let sector       = mv[2];
-	let technologies = this.returnTechnologyTree();
+	let technologies = this.returnTechnology();
 
   	this.game.queue.splice(qe, 1);
 
@@ -1192,7 +1192,7 @@ alert("Player should choose what planets to invade (if possible)");
       }
       if (mv[0] === "space_combat_event") {
   
-        let technologies = this.returnTechnologyTree();
+        let technologies = this.returnTechnology();
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
         let tech	 = mv[3];
@@ -1241,7 +1241,7 @@ alert("Player should choose what planets to invade (if possible)");
   	let player       = mv[1];
         let sector       = mv[2];
         let planet_idx   = mv[3];
-	let technologies = this.returnTechnologyTree();
+	let technologies = this.returnTechnology();
 
   	this.game.queue.splice(qe, 1);
 
@@ -1259,7 +1259,7 @@ alert("Player should choose what planets to invade (if possible)");
       }
       if (mv[0] === "bombardment_event") {
   
-        let technologies = this.returnTechnologyTree();
+        let technologies = this.returnTechnology();
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
         let planet_idx	 = mv[3];
@@ -1291,7 +1291,7 @@ alert("Player should choose what planets to invade (if possible)");
   	let player       = mv[1];
         let sector       = mv[2];
         let planet_idx   = mv[3];
-	let technologies = this.returnTechnologyTree();
+	let technologies = this.returnTechnology();
 
   	this.game.queue.splice(qe, 1);
 
@@ -1309,7 +1309,7 @@ alert("Player should choose what planets to invade (if possible)");
       }
       if (mv[0] === "planetary_defense_event") {
   
-        let technologies = this.returnTechnologyTree();
+        let technologies = this.returnTechnology();
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
         let planet_idx	 = mv[3];
@@ -1343,7 +1343,7 @@ alert("Player should choose what planets to invade (if possible)");
   	let player       = mv[1];
         let sector       = mv[2];
         let planet_idx   = mv[3];
-	let technologies = this.returnTechnologyTree();
+	let technologies = this.returnTechnology();
 
   	this.game.queue.splice(qe, 1);
 
@@ -1361,7 +1361,7 @@ alert("Player should choose what planets to invade (if possible)");
       }
       if (mv[0] === "ground_combat_event") {
   
-        let technologies = this.returnTechnologyTree();
+        let technologies = this.returnTechnology();
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
         let planet_idx 	 = mv[3];
@@ -1410,7 +1410,7 @@ alert("Player should choose what planets to invade (if possible)");
   
   	let player = parseInt(mv[1]);
   	let card = mv[2];
-	let technologies = this.returnTechnologyTree();
+	let technologies = this.returnTechnology();
 
 	let cards = this.returnActionCards();
 	let played_card = cards[card];
@@ -1432,7 +1432,7 @@ alert("Player should choose what planets to invade (if possible)");
       }
       if (mv[0] === "action_card_event") {  
     
-        let technologies = this.returnTechnologyTree();
+        let technologies = this.returnTechnology();
 
         let player       = parseInt(mv[1]);
         let action_card_player = mv[2];

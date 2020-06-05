@@ -7,10 +7,10 @@
   // Unit Objects are expected to support the following
   //
   returnUnits() {
-    return this.game.units;
+    return this.units;
   }
   
-  importTech(name, obj) {
+  importUnit(name, obj) {
 
     if (obj.name == null) 		{ obj.name = "Unknown Unit"; }
     if (obj.storage  == null) 		{ obj.storage = []; }			// units this stores
@@ -29,7 +29,7 @@
     if (obj.production == null) 	{ obj.production = 0; }			// can produce
 
     obj = this.addEvents(obj);
-    this.game.units[name] = obj;
+    this.units[name] = obj;
 
   }  
 

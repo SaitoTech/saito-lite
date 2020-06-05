@@ -1,7 +1,7 @@
   
   
   returnActionCards() {
-    return this.game.action_cards;
+    return this.action_cards;
   }
   
   importActionCard(name, obj) {
@@ -12,7 +12,7 @@
     if (obj.img  == null) 	{ obj.img  = "/imperium/img/action_card_template.png"; }
 
     obj = this.addEvents(obj);
-    this.game.action_cards[name] = obj;
+    this.action_cards[name] = obj;
 
   }  
 

@@ -1,5 +1,45 @@
 
 
+  returnEventObjects(player) {
+
+    // techs
+    // factions
+    // laws
+    // secret-objectives
+    // agendas
+
+    let z = [];
+
+console.log("THE TECH: " + JSON.stringify(this.tech));
+
+    //
+    // all player techs
+    //
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      for (let j = 0; j < this.game.players_info[i].tech.length; j++) {
+	if (this.tech[this.game.players_info[i].tech[j]] != undefined) {
+          z.push(this.tech[this.game.players_info[i].tech[j]]);
+	} else {
+console.log("MISSING TECH: " + this.game.players_info[i].tech[j]);
+	}
+      }
+    }
+
+    //
+    // all factions in-play
+    //
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      if (this.factions[this.game.players_info[i].faction] != undefined) {
+        z.push(this.factions[this.game.players_info[i].faction]);
+      } else {
+console.log("MISSING FACTION: " + this.game.players_info[i].faction);
+      }
+    }
+
+    return z;
+
+  }
+
 
 
   addEvents(obj) {
@@ -12,17 +52,17 @@
     // on a new turn. they should be asynchronous (not require user input) and thus do not
     // require a trigger - every function is run every time the game reaches this state..
     //
-    if (obj[i].upgradeUnit == null) {
-      obj[i].upgradeUnit = function(imperium_self, player, unit) { return unit; }
+    if (obj.upgradeUnit == null) {
+      obj.upgradeUnit = function(imperium_self, player, unit) { return unit; }
     }
-    if (obj[i].unitDestroyed == null) {
-      obj[i].unitDestroyed = function(imperium_self, player, unit) { return 0; }
+    if (obj.unitDestroyed == null) {
+      obj.unitDestroyed = function(imperium_self, player, unit) { return 0; }
     }
-    if (obj[i].onNewRound == null) {
-      obj[i].onNewRound = function(imperium_self, player, mycallback) { return 0; }
+    if (obj.onNewRound == null) {
+      obj.onNewRound = function(imperium_self, player, mycallback) { return 0; }
     }
-    if (obj[i].onNewTurn == null) {
-      obj[i].onNewTurn = function(imperium_self, player, mycallback) { return 0; }
+    if (obj.onNewTurn == null) {
+      obj.onNewTurn = function(imperium_self, player, mycallback) { return 0; }
     }
 
 
@@ -33,14 +73,14 @@
     // these events modify the menu presented to the player each and every time the player
     // has the option of a turn.
     //
-    if (obj[i].menuOption == null) {
-      obj[i].menuOption = function(imperium_self, player) { return 0; }
+    if (obj.menuOption == null) {
+      obj.menuOption = function(imperium_self, player) { return 0; }
     }
-    if (obj[i].menuOptionTrigger == null) {
-      obj[i].menuOptionTrigger = function(imperium_self, player) { return {}; }
+    if (obj.menuOptionTrigger == null) {
+      obj.menuOptionTrigger = function(imperium_self, player) { return {}; }
     }
-    if (obj[i].menuOptionActivated == null) {
-      obj[i].menuOptionActivated = function(imperium_self, player) { return 0; }
+    if (obj.menuOptionActivated == null) {
+      obj.menuOptionActivated = function(imperium_self, player) { return 0; }
     }
 
 
@@ -59,31 +99,31 @@
     //
     // unit is destroyed
     //
-    if (obj[i].destroyedUnitTriggersSync == null) {
-      obj[i].destroyedUnitTriggers = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
+    if (obj.destroyedUnitTriggersSync == null) {
+      obj.destroyedUnitTriggers = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
     }
-    if (obj[i].destroyedUnitEventSync == null) {
-      obj[i].destroyedUnitEvent = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
+    if (obj.destroyedUnitEventSync == null) {
+      obj.destroyedUnitEvent = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
     }
 
     //
     // space unit is destroyed
     //
-    if (obj[i].destroyedSpaceUnitTriggersSync == null) {
-      obj[i].destroyedSpaceUnitTriggers = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
+    if (obj.destroyedSpaceUnitTriggersSync == null) {
+      obj.destroyedSpaceUnitTriggers = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
     }
-    if (obj[i].destroyedUnitEventSync == null) {
-      obj[i].destroyedUnitEvent = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
+    if (obj.destroyedUnitEventSync == null) {
+      obj.destroyedUnitEvent = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
     }
 
     //
     // ground unit is destroyed
     //
-    if (obj[i].destroyedGroundUnitTriggersSync == null) {
-      obj[i].destroyedGroundUnitTriggersSync = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
+    if (obj.destroyedGroundUnitTriggersSync == null) {
+      obj.destroyedGroundUnitTriggersSync = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
     }
-    if (obj[i].destroyedGroundUnitEventSync == null) {
-      obj[i].destroyedGroundUnitEventSync = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
+    if (obj.destroyedGroundUnitEventSync == null) {
+      obj.destroyedGroundUnitEventSync = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
     }
 ****/
 
@@ -99,95 +139,95 @@
     //
     // when action card is played
     //
-    if (obj[i].playActionCardTriggers == null) {
-      obj[i].playActionCardTriggers = function(imperium_self, player, action_card_player, card) { return 0; }
+    if (obj.playActionCardTriggers == null) {
+      obj.playActionCardTriggers = function(imperium_self, player, action_card_player, card) { return 0; }
     }
-    if (obj[i].playActionCardEvent == null) {
-      obj[i].playActionCardEvent = function(imperium_self, player, action_card_player, card) { return 0; }
+    if (obj.playActionCardEvent == null) {
+      obj.playActionCardEvent = function(imperium_self, player, action_card_player, card) { return 0; }
     }
 
 
     //
     // when strategy card primary is played
     //
-    if (obj[i].playStrategyCardPrimaryTriggers == null) {
-      obj[i].playStrategyCardPrimaryTriggers = function(imperium_self, player, card) { return 0; }
+    if (obj.playStrategyCardPrimaryTriggers == null) {
+      obj.playStrategyCardPrimaryTriggers = function(imperium_self, player, card) { return 0; }
     }
-    if (obj[i].playStrategyCardPrimaryEvent == null) {
-      obj[i].playStrategyCardPrimaryEvent = function(imperium_self, player, card) { return 0; }
+    if (obj.playStrategyCardPrimaryEvent == null) {
+      obj.playStrategyCardPrimaryEvent = function(imperium_self, player, card) { return 0; }
     }
 
 
     //
     // when strategy card secondary is played
     //
-    if (obj[i].playStrategyCardSecondaryTriggers == null) {
-      obj[i].playStrategyCardSecondaryTriggers = function(imperium_self, player, card) { return 0; }
+    if (obj.playStrategyCardSecondaryTriggers == null) {
+      obj.playStrategyCardSecondaryTriggers = function(imperium_self, player, card) { return 0; }
     }
-    if (obj[i].playStrategyCardSecondaryEvent == null) {
-      obj[i].playStrategyCardSecondaryEvent = function(imperium_self, player, card) { return 0; }
+    if (obj.playStrategyCardSecondaryEvent == null) {
+      obj.playStrategyCardSecondaryEvent = function(imperium_self, player, card) { return 0; }
     }
 
 
     //
     // when system is activated
     //
-    if (obj[i].activateSystemTriggers == null) {
-      obj[i].activateSystemTriggers = function(imperium_self, player, sector) { return 0; }
+    if (obj.activateSystemTriggers == null) {
+      obj.activateSystemTriggers = function(imperium_self, player, sector) { return 0; }
     }
-    if (obj[i].activateSystemEvent == null) {
-      obj[i].postSystemActivation = function(imperium_self, player, sector) { return 0; }
+    if (obj.activateSystemEvent == null) {
+      obj.postSystemActivation = function(imperium_self, player, sector) { return 0; }
     }
 
     //
     // when pds combat starts
     //
-    if (obj[i].pdsSpaceDefenseTriggers == null) {
-      obj[i].pdsSpaceDefenseTriggers = function(imperium_self, player, sector) { return 0; }
+    if (obj.pdsSpaceDefenseTriggers == null) {
+      obj.pdsSpaceDefenseTriggers = function(imperium_self, player, sector) { return 0; }
     }
-    if (obj[i].pdsSpaceDefenseEvent == null) {
-      obj[i].pdsSpaceDefenseEvent = function(imperium_self, player, sector) { return 0; }
+    if (obj.pdsSpaceDefenseEvent == null) {
+      obj.pdsSpaceDefenseEvent = function(imperium_self, player, sector) { return 0; }
     }
 
     //
     // when space combat round starts
     //
-    if (obj[i].spaceCombatTriggers == null) {
-      obj[i].spaceCombatTriggers = function(imperium_self, player, sector) { return 0; }
+    if (obj.spaceCombatTriggers == null) {
+      obj.spaceCombatTriggers = function(imperium_self, player, sector) { return 0; }
     }
-    if (obj[i].pdsSpaceDefenseEvent == null) {
-      obj[i].pdsSpaceDefenseEvent = function(imperium_self, player, sector) { return 0; }
+    if (obj.pdsSpaceDefenseEvent == null) {
+      obj.pdsSpaceDefenseEvent = function(imperium_self, player, sector) { return 0; }
     }
 
     //
     // when bombardment starts
     //
-    if (obj[i].bombardmentTriggers == null) {
-      obj[i].bombardmentTriggers = function(imperium_self, player, sector) { return 0; }
+    if (obj.bombardmentTriggers == null) {
+      obj.bombardmentTriggers = function(imperium_self, player, sector) { return 0; }
     }
-    if (obj[i].bombardmentEvent == null) {
-      obj[i].bombardmentEvent = function(imperium_self, player, sector) { return 0; }
+    if (obj.bombardmentEvent == null) {
+      obj.bombardmentEvent = function(imperium_self, player, sector) { return 0; }
     }
 
     //
     // when planetry invasion starts
     //
-    if (obj[i].planetaryDefenseTriggers == null) {
-      obj[i].planetaryDefenseTriggers = function(imperium_self, player, sector, planet_idx) { return 0; }
+    if (obj.planetaryDefenseTriggers == null) {
+      obj.planetaryDefenseTriggers = function(imperium_self, player, sector, planet_idx) { return 0; }
     }
-    if (obj[i].planetaryDefenseEvent == null) {
-      obj[i].planetaryDefenseEvent = function(imperium_self, player, sector, planet_idx) { return 0; }
+    if (obj.planetaryDefenseEvent == null) {
+      obj.planetaryDefenseEvent = function(imperium_self, player, sector, planet_idx) { return 0; }
     }
 
 
     //
     // when ground combat round starts
     //
-    if (obj[i].groundCombatTriggers == null) {
-      obj[i].groundCombatTriggers = function(imperium_self, player, sector, planet_idx) { return 0; }
+    if (obj.groundCombatTriggers == null) {
+      obj.groundCombatTriggers = function(imperium_self, player, sector, planet_idx) { return 0; }
     }
-    if (obj[i].groundCombatEvent == null) {
-      obj[i].groundCombatEvent = function(imperium_self, player, sector, planet_idx) { return 0; }
+    if (obj.groundCombatEvent == null) {
+      obj.groundCombatEvent = function(imperium_self, player, sector, planet_idx) { return 0; }
     }
 
     return obj;

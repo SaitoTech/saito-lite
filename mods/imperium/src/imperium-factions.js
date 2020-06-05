@@ -1,8 +1,10 @@
   
   
   returnFactions() {
-console.log("return Factions function!");
-    return this.game.factions;
+
+console.log(JSON.stringify(this.factions));
+
+    return this.factions;
   }
   
   importFaction(name, obj) {
@@ -14,8 +16,10 @@ console.log("return Factions function!");
     if (obj.tech == null) 		{ obj.tech = []; }
 
     obj = this.addEvents(obj);
-console.log("adding faction : " + name);
-    this.game.factions[name] = obj;
+
+console.log("adding this.factions["+name+"]");
+
+    this.factions[name] = obj;
 
   }  
 

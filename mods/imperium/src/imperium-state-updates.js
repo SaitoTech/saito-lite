@@ -5,7 +5,7 @@
   //
   executeSynchronousGameEvent(eventname="", arg2=null, arg3=null, arg4=null, arg5=null, arg6=null, arg7=null, arg8=null) {
 
-    let technologies = this.returnTechnologyTree();
+    let technologies = this.returnTechnology();
 
     for (let i = 0; i < this.game.players_info.length; i++) {
 
@@ -42,7 +42,7 @@
   //
   resetTechBonuses() {
 
-    let technologies = this.returnTechnologyTree();
+    let technologies = this.returnTechnology();
 
     //
     // reset tech bonuses

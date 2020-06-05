@@ -56,7 +56,7 @@
   
     let html = '';
     let imperium_self = this;
-    let technologies = this.returnTechnologyTree();
+    let technologies = this.returnTechnology();
 
     if (stage == "main") {
   
@@ -84,10 +84,15 @@
       let tech_attach_menu_events = 0;
       let tech_attach_menu_triggers = [];
       let tech_attach_menu_index = [];
-      for (let i = 0; i < this.game.players_info[this.game.player-1].tech.length; i++) {
-	let mytech = technologies[this.game.players_info[this.game.player-1].tech[i]];
-	if (mytech.menuOptionTrigger(this, this.game.player) == 1) {
-          let x = mytech.menuOption(this, this.game.player);
+
+      let z = this.returnEventObjects();
+
+console.log("Z: " + JSON.stringify(z));
+      for (let i = 0; i < z.length; z++) {
+console.log("i: " + i);
+console.log("z: " + JSON.stringify(z[i]));
+	if (z[i].menuOptionTrigger(this, this.game.player) == 1) {
+          let x = z[i].menuOption(this, this.game.player);
 	  html += x.html;
 	  tech_attach_menu_index.push(i);
 	  tech_attach_menu_triggers.push(x.trigger);

@@ -51,11 +51,11 @@ cat ./src/imperium-ui.js >> ./imperium.js
 # functions that manipulate / move units
 #
 cat ./src/imperium-tech.js >> ./imperium.js
-cat ./src/imperium-units.js >> ./imperium.js
+cat ./src/imperium-unit.js >> ./imperium.js
 cat ./src/imperium-objectives.js >> ./imperium.js
 cat ./src/imperium-factions.js >> ./imperium.js
-cat ./src/imperium-agendas.js >> ./imperium.js
-cat ./src/imperium-actions.js >> ./imperium.js
+cat ./src/imperium-agenda-cards.js >> ./imperium.js
+cat ./src/imperium-action-cards.js >> ./imperium.js
 
 #
 # CORE EXECUTION - GAME QUEUE - handleGameLoop()
@@ -75,6 +75,7 @@ cat ./src/imperium-universe.js >> ./imperium.js
 cat ./src/imperium-playerstate.js >> ./imperium.js
 cat ./src/imperium-state.js >> ./imperium.js
 cat ./src/imperium-events.js >> ./imperium.js
+cat ./src/imperium-units.js >> ./imperium.js
 
 #
 # functions that return information about board/game state (canPlayerX, doesUnitY, returnStateOfSector, etc.)
@@ -95,7 +96,7 @@ cat ./src/imperium-display.js >> ./imperium.js
 #
 # strategy card execution logic
 #
-cat ./src/imperium-strategy.js >> ./imperium.js
+cat ./src/imperium-strategy-cards.js >> ./imperium.js
 cat ./src/imperium-strategybk.js >> ./imperium.js
 #
 # end of class

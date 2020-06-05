@@ -13,7 +13,7 @@
   // prereqs -> array of colors needed
   // 
   returnTechnology() {
-    return this.game.tech;
+    return this.tech;
   }
   
   importTech(name, obj) {
@@ -24,7 +24,13 @@
     if (obj.prereqs == null) 	{ obj.prereqs = []; }
 
     obj = this.addEvents(obj);
-    this.game.tech[name] = obj;
+
+console.log("Adding tech: " + name);
+
+    this.tech[name] = obj;
+
+console.log("tech added!");
+
 
   }  
 
