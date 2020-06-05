@@ -1922,20 +1922,25 @@ console.log("WHO IS NEXT: " + who_is_next);
 
 	let technologies = this.returnTechnology();
 
+console.log("A");
+
         //
   	// reset tech bonuses
   	//
+	let z = this.returnEventObjects();
         for (let i = 0; i < this.game.players_info.length; i++) {
-          for (let ii = 0; ii < this.game.players_info[i].tech.length; ii++) {
-            technologies[this.game.players_info[i].tech[ii]].onNewRound(this, (i+1), function() {});
-  	  }
+          z[i].onNewRound(this, (i+1));
   	}
-  
+
+console.log("B");
+
       	this.game.queue.push("resolve\tnewround");
     	this.game.state.round++;
     	this.updateLog("ROUND: " + this.game.state.round);
   	this.updateStatus("Moving into Round " + this.game.state.round);
   
+console.log("C");
+
   	//
   	// SCORING
   	//
@@ -1946,6 +1951,8 @@ console.log("WHO IS NEXT: " + who_is_next);
   	  this.game.state.round_scoring = 0;
   	}
   
+console.log("D");
+
   	//
   	// RESET USER ACCOUNTS
   	//
@@ -1965,6 +1972,8 @@ console.log("WHO IS NEXT: " + who_is_next);
   	// set initiative order
   	//
         this.game.queue.push("setinitiativeorder");
+
+console.log("E");
   
   
   	//
@@ -1973,6 +1982,7 @@ console.log("WHO IS NEXT: " + who_is_next);
         this.game.queue.push("playerschoosestrategycards");
  
 
+console.log("F");
 
   	//
   	// ACTION CARDS
@@ -1997,6 +2007,7 @@ console.log("WHO IS NEXT: " + who_is_next);
           this.game.queue.push("resetconfirmsneeded\t"+this.game.players_info.length);
 	}
   
+console.log("G");
 
   	//
   	// FLIP NEW AGENDA CARDS
