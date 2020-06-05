@@ -1,4 +1,34 @@
+
+
+
+
+  /////////////////////
+  // Return Factions //
+  /////////////////////
+  returnFaction(player) {
+    let factions = this.returnFactions();
+    if (this.game.players_info[player-1] == null) { return "Unknown"; }
+    if (this.game.players_info[player-1] == undefined) { return "Unknown"; }
+    return factions[this.game.players_info[player-1].faction].name;
+  }
+  returnSpeaker() {
+    let factions = this.returnFactions();
+    return factions[this.game.players_info[this.game.state.speaker-1].faction].name;
+  }
+  returnSectorName(pid) {
+    return this.game.systems[this.game.board[pid].tile].name;
+  }
+  returnPlanetName(sector, planet_idx) {
+    let sys = this.returnSystemAndPlanets(sector);
+    return sys.p[planet_idx].name;
+  }
+
+
+
+
+
   
+
   canPlayerTrade(player) {
     return 0;
   }
@@ -603,7 +633,7 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
 
     let sectors = [];
     let distance = [];
-    let s = this.returnSectors();
+    let s = this.returnBoardTiles();
   
     sectors.push(destination);
     distance.push(0);

@@ -20,12 +20,15 @@ class Imperium extends GameTemplate {
     this.rmoves           = [];
     this.totalPlayers     = 2;
 
+
+
+    this.game.board 	  = null;
+
     this.game.confirms_needed 	= 0;
     this.game.confirms_received = 0;
     this.game.confirms_players  = [];
 
     this.hud = new GameHud(this.app, this.menuItems());
-
   
     //
     // game-related
@@ -34,10 +37,20 @@ class Imperium extends GameTemplate {
     this.tracker = {};  // track options in turn
     this.activated_systems_player = 0;
 
-
     return this;
   
   }
   
+
+  //
+  // this function is CLOSED in imperium-initialize
+  //
+  // the compile script should process all of the objects that need to
+  // be added to the various trees, so that when this function is run
+  // in the initializeGame function everything is added to the appropriate
+  // tree and the functions are instantiated.
+  //
+  initializeGameObjects() {
+
 
 
