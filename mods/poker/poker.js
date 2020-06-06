@@ -242,14 +242,22 @@ class Poker extends GameTemplate {
 
   startNextRound() {
 
+    let live_players = 0;
+    this.game.state.player_credit.forEach(stack => {
+      if (stack > 0) { live_players++ };
+    });
+
+    if (live_players < 2) {
+      alert("It's all over folks.");
+    }
     this.game.state.turn = 0;
     this.game.state.round++;
 
-    this.game.state.big_blind_player++;
-    this.game.state.small_blind_player++;
+    this.game.state.big_blind_player--;
+    this.game.state.small_blind_player--;
 
-    if (this.game.state.big_blind_player > this.game.players.length) { this.game.state.big_blind_player = 1; }
-    if (this.game.state.small_blind_player > this.game.players.length) { this.game.state.small_blind_player = 1; }
+    if (this.game.state.big_blind_player < 1) { this.game.state.big_blind_player = this.game.players.length; }
+    if (this.game.state.small_blind_player < 1) { this.game.state.small_blind_player = this.game.players.length; }
 
     this.game.state.flipped = 0;
     this.game.state.plays_since_last_raise = -1;
@@ -272,7 +280,7 @@ class Poker extends GameTemplate {
     for (let i = 0; i < this.game.state.player_credit.length; i++) {
       if (this.game.state.player_credit[i] <= 0) {
         this.game.state.passed[i] = 1;
-        this.game.state.player_credit[i] = -1;
+        this.game.state.player_credit[i] = 0;
       }
     }
 
@@ -280,6 +288,7 @@ class Poker extends GameTemplate {
     document.querySelectorAll('.player-info-log').forEach(el => {
       el.innerHTML = "";
     });
+
 
     this.initializeQueue();
 
@@ -305,9 +314,13 @@ class Poker extends GameTemplate {
       }
 
       if (mv[0] === "winner") {
-        this.updateStatus("Game Over: Player " + mv[1] + " wins!");
-        this.updateLog("Game Over: Player " + mv[1] + " wins!");
+        this.updateStatus("Game Over: " + this.game.state.player_names[mv[1]-1] + " wins!");
+        this.updateLog("Game Over: " + this.game.state.player_names[mv[1]-1] + " wins!");
         this.game.over = 1;
+        this.game.winner = this.game.players[mv[1]-1];
+        if(this.game.player = mv[1]) {
+          this.resignGame(); //post to leaderboard - ignore 'resign'
+        }
         this.saveGame(this.game.id);
         return 0;
       }
@@ -332,7 +345,7 @@ class Poker extends GameTemplate {
 
         if (alive_players == 1 && this.game.state.turn == 1) {
           for (let i = 0; i < this.game.state.player_credit.length; i++) {
-            if (this.game.state.player_credit[i] > 0) {
+            if ((this.game.state.player_credit[i] > 0) && (i == this.game.player-1)) {
               this.addMove("winner\t"+this.game.player);
               this.endTurn();
               return 0;
@@ -368,6 +381,7 @@ class Poker extends GameTemplate {
           newtx = this.app.wallet.signTransaction(newtx);
           this.app.network.propagateTransaction(newtx);
 
+          // if everyone has folded - start a new round
           this.startNextRound();
           return 1;
         }
@@ -494,10 +508,10 @@ class Poker extends GameTemplate {
           let winning_player = -1;
           let winning_deck = null;
 
-          let i = 0;
+          let monster = 0;
           for (var key in this.game.state.player_cards) {
-
-            if (i == 0) {
+           
+            if (monster == 0) {
 
               deck2 = this.game.state.player_cards[key];
               player2 = parseInt(key)+1;
@@ -513,7 +527,7 @@ class Poker extends GameTemplate {
               //
               // report hands
               //
-              if (i == 1) {
+              if (monster == 1) {
 
                 let html = "";
                 let hand1 = this.convertHand(deck1);
@@ -522,13 +536,13 @@ class Poker extends GameTemplate {
                 html  = hand2.val[0] + hand2.suite[0];
                 html += ", ";
                 html += hand2.val[1] + hand2.suite[1];
-                this.updateLog(this.game.state.player_names[i]+": " + h2score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h2score.cards_to_score));
+                this.updateLog(this.game.state.player_names[monster-1]+": " + h2score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h2score.cards_to_score));
                 
 
                 html  = hand1.val[0] + hand1.suite[0];
                 html += ", ";
                 html += hand1.val[1] + hand1.suite[1];
-                this.updateLog(this.game.state.player_names[i-1]+": " + h1score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h1score.cards_to_score));
+                this.updateLog(this.game.state.player_names[monster]+": " + h1score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h1score.cards_to_score));
 
               } else {
 
@@ -538,7 +552,7 @@ class Poker extends GameTemplate {
                 html  = hand1.val[0] + hand1.suite[0];
                 html += ", ";
                 html += hand1.val[1] + hand1.suite[1];
-                this.updateLog(this.game.state.player_names[i]+": " + h1score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h1score.cards_to_score));
+                this.updateLog(this.game.state.player_names[monster]+": " + h1score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h1score.cards_to_score));
 
               }
 
@@ -576,7 +590,7 @@ class Poker extends GameTemplate {
                 }
               }
             }
-            i++;
+            monster++;
           }
 
           //
@@ -622,7 +636,7 @@ class Poker extends GameTemplate {
             this.app.network.propagateTransaction(newtx);
 
           }
-
+          // we have a hand winner - move on 
           this.startNextRound();
           return 1;
         }
@@ -654,7 +668,7 @@ class Poker extends GameTemplate {
             }
             this.game.state.player_pot[this.game.state.big_blind_player-1] += this.game.state.player_credit[this.game.state.big_blind_player-1];
             this.game.state.pot += this.game.state.player_credit[this.game.state.big_blind_player-1];
-            this.game.state.player_credit[this.game.state.big_blind_player-1] = -1;
+            this.game.state.player_credit[this.game.state.big_blind_player-1] = 0;
             this.game.state.passed[this.game.state.big_blind_player-1] = 1;
           } else {
             this.updateLog(this.game.state.player_names[this.game.state.big_blind_player-1]+" deposits "+this.game.state.big_blind);
@@ -674,7 +688,7 @@ class Poker extends GameTemplate {
             }
             this.game.state.player_pot[this.game.state.small_blind_player-1] += this.game.state.player_credit[this.game.state.small_blind_player-1];
             this.game.state.pot += this.game.state.player_credit[this.game.state.small_blind_player-1];
-            this.game.state.player_credit[this.game.state.small_blind_player-1] = -1;
+            this.game.state.player_credit[this.game.state.small_blind_player-1] = 0;
             this.game.state.passed[this.game.state.small_blind_player-1] = 1;
           } else {
             this.updateLog(this.game.state.player_names[this.game.state.small_blind_player-1]+" deposits "+this.game.state.small_blind);
@@ -772,6 +786,7 @@ class Poker extends GameTemplate {
           newtx = this.app.wallet.signTransaction(newtx);
           this.app.network.propagateTransaction(newtx);
 
+          // that fold closed out the hand.
           this.startNextRound();
         }
       }
@@ -872,6 +887,16 @@ class Poker extends GameTemplate {
 
     if (this.game.state.player_credit[this.game.state.player - 1] < match_required) { can_call = 0; }
     if (this.game.state.player_credit[this.game.state.player - 1] < (match_required + this.game.state.last_raise)) { can_raise = 0; }
+ 
+    //cannot raise more than everyone can call.
+    let smallest_stack = poker_self.game.options.stake * poker_self.game.players.length;
+
+    poker_self.game.state.player_credit.forEach((stack, index) => {
+      if (smallest_stack > stack && poker_self.game.state.passed[index] == 0) {
+        smallest_stack = stack;
+      }
+    });
+    if (smallest_stack <= match_required) { can_raise = 0; }
 
     if (can_call == 0 && can_raise == 0) {
       this.updateStatus("You can only fold...");
@@ -881,12 +906,14 @@ class Poker extends GameTemplate {
     }
 
     html += '<div class="menu-player">Your move ';
+    /*
     if (this.game.player == this.game.state.big_blind_player) {
       html += " (big blind)";
     }
     if (this.game.player == this.game.state.small_blind_player) {
       html += " (small blind)";
     }
+    */
     html += '</div>';
     html += '<ul>';
 
@@ -955,41 +982,55 @@ class Poker extends GameTemplate {
         let credit_remaining = poker_self.game.state.player_credit[poker_self.game.player - 1];
         let all_in_remaining = poker_self.game.state.player_credit[poker_self.game.player - 1] - raise_required;
 
+        let smallest_stack = poker_self.game.options.stake * poker_self.game.players.length;
+        let smallest_stack_player = 0;
+
+        poker_self.game.state.player_credit.forEach((stack, index) => {
+          if (smallest_stack > stack && poker_self.game.state.passed[index] == 0) {
+            smallest_stack = stack;
+            smallest_stack_player = index;
+          }
+        });
+
         raise_required = parseInt(raise_required);
         poker_self.game.state.last_raise = parseInt(poker_self.game.state.last_raise);
 
-        let cost_to_call = poker_self.game.state.required_pot - poker_self.game.state.player_pot[poker_self.game.player - 1];
-        if (cost_to_call < 0) { cost_to_call = 0; }
+        let cost_to_monster = poker_self.game.state.required_pot - poker_self.game.state.player_pot[poker_self.game.player - 1];
+        if (cost_to_monster < 0) { cost_to_monster = 0; }
 
-        if (cost_to_call > 0) {
-          html = 'Match ' + cost_to_call + ' and raise: <p></p><ul>';
+        if (cost_to_monster > 0) {
+          html = 'Match ' + cost_to_monster + ' and raise: <p></p><ul>';
         } else {
           html = 'Please select an option below: <p></p><ul>';
         }
 
-        if (credit_remaining < (raise_required)) {
-          html += '<li class="menu_option" id="0">cancel raise</li>';
-        }
-        if (credit_remaining > (raise_required)) {
-          html += '<li class="menu_option" id="' + (raise_required) + '">raise ' + (raise_required) + '</li>';
-        }
-        if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
-          html += '<li class="menu_option" id="' + (raise_required + (1 * poker_self.game.state.last_raise)) + '">raise ' + (raise_required + (1 * poker_self.game.state.last_raise)) + '</li>';
-        }
-        if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
-          html += '<li class="menu_option" id="' + (raise_required + (2 * poker_self.game.state.last_raise)) + '">raise ' + (raise_required + (2 * poker_self.game.state.last_raise)) + '</li>';
-        }
-        if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
-          html += '<li class="menu_option" id="' + (raise_required + (3 * poker_self.game.state.last_raise)) + '">raise ' + (raise_required + (3 * poker_self.game.state.last_raise)) + '</li>';
-        }
-        if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
-          html += '<li class="menu_option" id="' + (raise_required + (4 * poker_self.game.state.last_raise)) + '">raise ' + (raise_required + (4 * poker_self.game.state.last_raise)) + '</li>';
-        }
-        if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
-          html += '<li class="menu_option" id="' + (raise_required + (5 * poker_self.game.state.last_raise)) + '">raise ' + (raise_required + (5 * poker_self.game.state.last_raise)) + '</li>';
-        }
-        if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
-          html += '<li class="menu_option" id="' + (all_in_remaining) + '">raise ' + (all_in_remaining) + ' (all in)</li>';
+        //if (credit_remaining < (raise_required)) {
+        html += '<li class="menu_option" id="0">cancel raise</li>';
+        //}
+
+        for (let i = 0; i < 6; i++) {
+          let this_raise = (raise_required + (i * poker_self.game.state.last_raise));
+          if (credit_remaining > this_raise && smallest_stack > this_raise) {
+            if (this_raise - cost_to_monster > 0) {
+              html += '<li class="menu_option" id="' + (this_raise - cost_to_monster) + '">raise ' + (this_raise - cost_to_monster) + '</li>';
+            }
+          } else {
+            if (smallest_stack < this_raise) {
+              if (smallest_stack == credit_remaining) {
+                html += '<li class="menu_option" id="' + (smallest_stack - cost_to_monster) + '">raise ' + (smallest_stack - cost_to_monster) + ' (' + poker_self.game.state.player_names[smallest_stack_player] + ' all in)</li>';
+                i = 6;
+              } else {
+                html += '<li class="menu_option" id="' + (smallest_stack) + '">raise ' + (smallest_stack) + ' (' + poker_self.game.state.player_names[smallest_stack_player] + ' all in)</li>';
+              i = 6;
+              }
+            }
+          }
+
+       //   if (credit_remaining <= smallest_stack && ) {
+            //if (credit_remaining > (raise_required + poker_self.game.state.last_raise)) {
+       //     html += '<li class="menu_option" id="' + (all_in_remaining) + '">raise ' + (all_in_remaining) + ' (all in)</li>';
+            //}
+       //   }
         }
 
         html += '</ul>';
@@ -1245,7 +1286,8 @@ console.log("NAME 2: " + state.player_names[i]);
 
     var dealer = 1 + ((this.game.players.length + this.game.state.big_blind_player - 2) % this.game.players.length);
     document.querySelector('#player-info-name-' + dealer).classList.add("dealerbutton");
-
+    document.querySelector('#player-info-name-' + this.game.state.big_blind_player).classList.add("bigblind");
+    document.querySelector('#player-info-name-' + this.game.state.small_blind_player).classList.add("smallblind");
     //
     // hide empty
     //
@@ -1331,7 +1373,7 @@ console.log("NAME 2: " + state.player_names[i]);
       if (this.returnHigherCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
         return 1;
       } else {
-  return 2;
+        return 2;
       }
     }
     if (score1.hand_description == "royal flush") { return 1; }
@@ -1340,7 +1382,7 @@ console.log("NAME 2: " + state.player_names[i]);
 
     if (score1.hand_description == "straight flush" && score2.hand_description == "straight flush") {
       if (this.returnHigherCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
-  return 1;
+        return 1;
       } else {
         return 2;
       }
@@ -1409,22 +1451,22 @@ console.log("NAME 2: " + state.player_names[i]);
         return 1;
       } else {
         if (parseInt(score1.cards_to_score[0].substring(1)) < parseInt(score2.cards_to_score[0].substring(1))) {
-    return 2;
-  } else {
-          if (parseInt(score1.cards_to_score[2].substring(1)) > parseInt(score2.cards_to_score[2].substring(1))) {
-      return 1;
-    } else {
-            if (parseInt(score1.cards_to_score[2].substring(1)) < parseInt(score2.cards_to_score[2].substring(1))) {
-        return 2;
-      } else {
-              if (this.returnHigherCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score1.cards_to_score[4]) {
-    return 1;
+          return 2;
         } else {
-    return 2;
+          if (parseInt(score1.cards_to_score[2].substring(1)) > parseInt(score2.cards_to_score[2].substring(1))) {
+            return 1;
+          } else {
+            if (parseInt(score1.cards_to_score[2].substring(1)) < parseInt(score2.cards_to_score[2].substring(1))) {
+              return 2;
+            } else {
+              if (this.returnHigherCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score1.cards_to_score[4]) {
+                return 1;
+              } else {
+                return 2;
+              }
+            }
+          }
         }
-      }
-    }
-  }
         return 2;
       }
     }
@@ -1437,15 +1479,15 @@ console.log("NAME 2: " + state.player_names[i]);
         return 1;
       } else {
         if (parseInt(score1.cards_to_score[0].substring(1)) < parseInt(score2.cards_to_score[0].substring(1))) {
-    return 2;
+          return 2;
         }
       }
     }
     for (let z = 2; z < score1.cards_to_score.length; z++) {
       if (this.returnHigherCard(score1.cards_to_score[z], score2.cards_to_score[z]) == score1.cards_to_score[z]) {
-  return 1;
+        return 1;
       } else {
-  return 2;
+        return 2;
       }
     }
     if (score1.hand_description == "pair") { return 1; }
@@ -1454,9 +1496,9 @@ console.log("NAME 2: " + state.player_names[i]);
 
     if (score1.hand_description == "highest card" && score2.hand_description == "highest card") {
       if (this.returnHigherCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
-  return 1;
+        return 1;
       } else {
-  return 2;
+        return 2;
       }
     }
     if (score1.hand_description == "highest card") { return 1; }
@@ -1470,7 +1512,7 @@ console.log("NAME 2: " + state.player_names[i]);
 
     let x = this.convertHand(hand);
     let suite = x.suite;
-    let val   = x.val;
+    let val = x.val;
 
     let idx = 0;
     let pairs = [];
@@ -1478,7 +1520,7 @@ console.log("NAME 2: " + state.player_names[i]);
     let four_of_a_kind = [];
     let straights = [];
     let full_house = [];
-    
+
 
     //
     // identify pairs
@@ -1487,13 +1529,13 @@ console.log("NAME 2: " + state.player_names[i]);
     while (idx < 14) {
       let x = this.isTwo(suite, val, idx);
       if (x == 0) {
-  idx = 14;
+        idx = 14;
       } else {
-  pairs.push(x);
-  idx = x+1;
+        pairs.push(x);
+        idx = x + 1;
       }
-    } 
- 
+    }
+
 
     //
     // identify triples
@@ -1502,12 +1544,12 @@ console.log("NAME 2: " + state.player_names[i]);
     while (idx < 14) {
       let x = this.isThree(suite, val, idx);
       if (x == 0) {
-  idx = 14;
+        idx = 14;
       } else {
-  three_of_a_kind.push(x);
-  idx = x+1;
+        three_of_a_kind.push(x);
+        idx = x + 1;
       }
-    }  
+    }
 
 
     //
@@ -1517,12 +1559,12 @@ console.log("NAME 2: " + state.player_names[i]);
     while (idx < 14) {
       let x = this.isFour(suite, val, idx);
       if (x == 0) {
-  idx = 14;
+        idx = 14;
       } else {
-  four_of_a_kind.push(x);
-  idx = x+1;
+        four_of_a_kind.push(x);
+        idx = x + 1;
       }
-    }  
+    }
 
 
     //
@@ -1532,10 +1574,10 @@ console.log("NAME 2: " + state.player_names[i]);
     while (idx < 10) {
       let x = this.isStraight(suite, val, idx);
       if (x == 0) {
-  idx = 11;
+        idx = 11;
       } else {
-  straights.push(x);
-  idx = x+1;
+        straights.push(x);
+        idx = x + 1;
       }
     }
 
@@ -1545,16 +1587,16 @@ console.log("NAME 2: " + state.player_names[i]);
     //
     for (let i = 0; i < four_of_a_kind.length; i++) {
 
-      for( var z = 0; z < three_of_a_kind.length; z++){ 
-        if ( three_of_a_kind[z] === four_of_a_kind[i]) {
+      for (var z = 0; z < three_of_a_kind.length; z++) {
+        if (three_of_a_kind[z] === four_of_a_kind[i]) {
           three_of_a_kind.splice(z, 1);
-  }
+        }
       }
 
-      for( var z = 0; z < pairs.length; z++){ 
-        if ( pairs[z] === four_of_a_kind[i]) {
+      for (var z = 0; z < pairs.length; z++) {
+        if (pairs[z] === four_of_a_kind[i]) {
           pairs.splice(z, 1);
-  }
+        }
       }
 
     }
@@ -1564,10 +1606,10 @@ console.log("NAME 2: " + state.player_names[i]);
     // remove pairs that are also threes
     //
     for (let i = 0; i < three_of_a_kind.length; i++) {
-      for( var z = 0; z < pairs.length; z++){ 
-        if ( pairs[z] === three_of_a_kind[i]) {
+      for (var z = 0; z < pairs.length; z++) {
+        if (pairs[z] === three_of_a_kind[i]) {
           pairs.splice(z, 1);
-  }
+        }
       }
     }
 
@@ -1597,81 +1639,81 @@ console.log("NAME 2: " + state.player_names[i]);
     //
     if (straights.includes(10)) {
       if (this.isFlush(suite, val) != "") {
-  let x = this.isFlush(suite, val);
-  if (
-    this.isCardSuite(suite, val, 1,  x) == 1 &&
-    this.isCardSuite(suite, val, 13, x) == 1 && 
-    this.isCardSuite(suite, val, 12, x) == 1 && 
-    this.isCardSuite(suite, val, 11, x) == 1 && 
-    this.isCardSuite(suite, val, 10, x) == 1 
-  ) {
-    cards_to_score.push("1"+x); 
-    cards_to_score.push("13"+x); 
-    cards_to_score.push("12"+x); 
-    cards_to_score.push("11"+x); 
-    cards_to_score.push("10"+x); 
-    hand_description = "royal flush";
-    return { cards_to_score : cards_to_score , hand_description : hand_description };
-  }
-      }  
+        let x = this.isFlush(suite, val);
+        if (
+          this.isCardSuite(suite, val, 1, x) == 1 &&
+          this.isCardSuite(suite, val, 13, x) == 1 &&
+          this.isCardSuite(suite, val, 12, x) == 1 &&
+          this.isCardSuite(suite, val, 11, x) == 1 &&
+          this.isCardSuite(suite, val, 10, x) == 1
+        ) {
+          cards_to_score.push("1" + x);
+          cards_to_score.push("13" + x);
+          cards_to_score.push("12" + x);
+          cards_to_score.push("11" + x);
+          cards_to_score.push("10" + x);
+          hand_description = "royal flush";
+          return { cards_to_score: cards_to_score, hand_description: hand_description };
+        }
+      }
     }
-   
- 
+
+
     //
     // STRAIGHT FLUSH
     //
     if (straights.length > 0) {
       if (this.isFlush(suite, val) != "") {
-    let x = this.isFlush(suite, val);
-        for (let i = straights.length-1; i >= 0; i--) {
-      if (
-      this.isCardSuite(suite, val, straights[i]+4,  x) == 1 &&
-      this.isCardSuite(suite, val, straights[i]+3,  x) == 1 && 
-      this.isCardSuite(suite, val, straights[i]+2,  x) == 1 && 
-      this.isCardSuite(suite, val, straights[i]+1,  x) == 1 && 
-      this.isCardSuite(suite, val, straights[i],    x) == 1  
-    ) {
-      cards_to_score.push((straights[i]+4)+x); 
-      cards_to_score.push((straights[i]+3)+x); 
-      cards_to_score.push((straights[i]+2)+x); 
-      cards_to_score.push((straights[i]+1)+x); 
-      cards_to_score.push((straights[i])+x); 
-      hand_description = "straight flush";
-      return { cards_to_score : cards_to_score , hand_description : hand_description };
-    }
-  }
+        let x = this.isFlush(suite, val);
+        for (let i = straights.length - 1; i >= 0; i--) {
+          if (
+            this.isCardSuite(suite, val, straights[i] + 4, x) == 1 &&
+            this.isCardSuite(suite, val, straights[i] + 3, x) == 1 &&
+            this.isCardSuite(suite, val, straights[i] + 2, x) == 1 &&
+            this.isCardSuite(suite, val, straights[i] + 1, x) == 1 &&
+            this.isCardSuite(suite, val, straights[i], x) == 1
+          ) {
+            cards_to_score.push((straights[i] + 4) + x);
+            cards_to_score.push((straights[i] + 3) + x);
+            cards_to_score.push((straights[i] + 2) + x);
+            cards_to_score.push((straights[i] + 1) + x);
+            cards_to_score.push((straights[i]) + x);
+            hand_description = "straight flush";
+            return { cards_to_score: cards_to_score, hand_description: hand_description };
+          }
+        }
 
-      }  
+      }
     }
-    
+
     //
     // FOUR OF A KIND
     //
     if (four_of_a_kind.length > 0) {
 
       if (four_of_a_kind.includes(1)) {
-        cards_to_score = ["C1","D1","H1","S1"];
+        cards_to_score = ["C1", "D1", "H1", "S1"];
         highest_card = this.returnHighestCard(suite, val, cards_to_score);
         cards_to_score.push(highest_card);
         hand_description = "four-of-a-kind";
-        return { cards_to_score : cards_to_score , hand_description : hand_description }
+        return { cards_to_score: cards_to_score, hand_description: hand_description }
       }
 
       cards_to_score = [
-  "C"+(four_of_a_kind[four_of_a_kind.length-1]),
-  "D"+(four_of_a_kind[four_of_a_kind.length-1]),
-  "H"+(four_of_a_kind[four_of_a_kind.length-1]),
-  "S"+(four_of_a_kind[four_of_a_kind.length-1])
+        "C" + (four_of_a_kind[four_of_a_kind.length - 1]),
+        "D" + (four_of_a_kind[four_of_a_kind.length - 1]),
+        "H" + (four_of_a_kind[four_of_a_kind.length - 1]),
+        "S" + (four_of_a_kind[four_of_a_kind.length - 1])
       ]
       highest_card = this.returnHighestCard(suite, val, cards_to_score);
       hand_description = "four-of-a-kind";
       cards_to_score.push(highest_card);
-      return { cards_to_score : cards_to_score , hand_description : hand_description };
+      return { cards_to_score: cards_to_score, hand_description: hand_description };
 
     }
-    
 
- 
+
+
     //
     // FULL HOUSE
     //
@@ -1680,27 +1722,27 @@ console.log("NAME 2: " + state.player_names[i]);
       let highest_suite = "C";
 
       for (let i = 0; i < val.length; i++) {
-  if (val[i] == three_of_a_kind[three_of_a_kind.length-1]) {
-    if (this.isHigherSuite(suite[i], highest_suite)) {
-      highest_suite = suite[i];
+        if (val[i] == three_of_a_kind[three_of_a_kind.length - 1]) {
+          if (this.isHigherSuite(suite[i], highest_suite)) {
+            highest_suite = suite[i];
           }
-    cards_to_score.push(suite[i] + val[i]);
-  }
+          cards_to_score.push(suite[i] + val[i]);
+        }
       }
-      highest_card = highest_suite + three_of_a_kind[three_of_a_kind.length-1];
+      highest_card = highest_suite + three_of_a_kind[three_of_a_kind.length - 1];
 
       for (let i = 0; i < val.length; i++) {
-  if (val[i] == pairs[pairs.length-1]) {
-    cards_to_score.push(suite[i] + val[i]);
-  }
+        if (val[i] == pairs[pairs.length - 1]) {
+          cards_to_score.push(suite[i] + val[i]);
+        }
       }
 
       hand_description = "full house";
-      return { cards_to_score : cards_to_score , hand_description : hand_description , highest_card : highest_card };
+      return { cards_to_score: cards_to_score, hand_description: hand_description, highest_card: highest_card };
     }
 
 
- 
+
     //
     // FLUSH
     //
@@ -1710,18 +1752,18 @@ console.log("NAME 2: " + state.player_names[i]);
       let y = [];
 
       for (let i = 0; i < val.length; i++) {
-  if (suite[i] == x) {
-    y.push(val[i]);
-  }
+        if (suite[i] == x) {
+          y.push(val[i]);
+        }
       }
 
       // y now contians onyl in-suite vals
       y.sort();
-      y.splice(0, (y.length-5));
-      for (let i = y.length-1; i >= 0;  i--) { cards_to_score.push(x + y[i]); }
+      y.splice(0, (y.length - 5));
+      for (let i = y.length - 1; i >= 0; i--) { cards_to_score.push(x + y[i]); }
 
       hand_description = "flush";
-      return { cards_to_score : cards_to_score , hand_description : hand_description };
+      return { cards_to_score: cards_to_score, hand_description: hand_description };
 
     }
 
@@ -1735,18 +1777,18 @@ console.log("NAME 2: " + state.player_names[i]);
       let x = this.isStraight(suite, val);
 
       if (x == 10) {
-  cards_to_score.push(this.returnHighestSuiteCard(suite, val, 1));
-  cards_to_score.push(this.returnHighestSuiteCard(suite, val, 13));
-  cards_to_score.push(this.returnHighestSuiteCard(suite, val, 12));
-  cards_to_score.push(this.returnHighestSuiteCard(suite, val, 11));
-  cards_to_score.push(this.returnHighestSuiteCard(suite, val, 10));
+        cards_to_score.push(this.returnHighestSuiteCard(suite, val, 1));
+        cards_to_score.push(this.returnHighestSuiteCard(suite, val, 13));
+        cards_to_score.push(this.returnHighestSuiteCard(suite, val, 12));
+        cards_to_score.push(this.returnHighestSuiteCard(suite, val, 11));
+        cards_to_score.push(this.returnHighestSuiteCard(suite, val, 10));
       } else {
         for (let i = 4; i >= 0; i--) {
-    cards_to_score.push(this.returnHighestSuiteCard(suite, val, x+i));
+          cards_to_score.push(this.returnHighestSuiteCard(suite, val, x + i));
         }
       }
       hand_description = "straight";
-      return { cards_to_score : cards_to_score , hand_description : hand_description };
+      return { cards_to_score: cards_to_score, hand_description: hand_description };
 
     }
 
@@ -1756,18 +1798,18 @@ console.log("NAME 2: " + state.player_names[i]);
     //
     if (three_of_a_kind.length > 0) {
 
-      let x = three_of_a_kind[three_of_a_kind.length-1];
+      let x = three_of_a_kind[three_of_a_kind.length - 1];
       let y = [];
 
       let cards_remaining = val.length;
       for (let i = 0; i < cards_remaining; i++) {
-  if (val[i] == x) {
-    y.push(suite[i]+val[i]);
-    val.splice(i, 1);
-    suite.splice(i, 1);
-    cards_remaining--;
+        if (val[i] == x) {
+          y.push(suite[i] + val[i]);
+          val.splice(i, 1);
+          suite.splice(i, 1);
+          cards_remaining--;
           i--;
-  }
+        }
       }
 
       for (let i = 0; i < y.length; i++) {
@@ -1782,7 +1824,7 @@ console.log("NAME 2: " + state.player_names[i]);
       }
 
       hand_description = "three-of-a-kind";
-      return { cards_to_score : cards_to_score , hand_description : hand_description };
+      return { cards_to_score: cards_to_score, hand_description: hand_description };
 
     }
 
@@ -1792,28 +1834,28 @@ console.log("NAME 2: " + state.player_names[i]);
     //
     if (pairs.length > 1) {
 
-      let x = pairs[pairs.length-1];
-      let y = pairs[pairs.length-2];
+      let x = pairs[pairs.length - 1];
+      let y = pairs[pairs.length - 2];
 
       if (x > y) { highest_card = x; }
       else { highest_card = y; }
 
       cards_remaining = val.length;
       for (let i = 0; i < cards_remaining; i++) {
-  if (val[i] == x || val[i] == y) {
-    cards_to_score.push(suite[i]+val[i]);
-    val.splice(i, 1);
-    suite.splice(i, 1);
-    cards_remaining--;
-    i--;
-  }
+        if (val[i] == x || val[i] == y) {
+          cards_to_score.push(suite[i] + val[i]);
+          val.splice(i, 1);
+          suite.splice(i, 1);
+          cards_remaining--;
+          i--;
+        }
       }
 
       let remaining1 = this.returnHighestCard(suite, val, cards_to_score);
       cards_to_score.push(remaining1);
       hand_description = "two pair";
 
-      return { cards_to_score : cards_to_score , hand_description : hand_description };
+      return { cards_to_score: cards_to_score, hand_description: hand_description };
 
     }
 
@@ -1823,18 +1865,18 @@ console.log("NAME 2: " + state.player_names[i]);
     //
     if (pairs.length > 0) {
 
-      let x = pairs[pairs.length-1];
+      let x = pairs[pairs.length - 1];
       let y = [];
 
       let cards_remaining = val.length;
       for (let i = 0; i < cards_remaining; i++) {
-  if (val[i] == x) {
-    y.push(suite[i]+val[i]);
-    val.splice(i, 1);
-    suite.splice(i, 1);
-    cards_remaining--;
-    i--;
-  }
+        if (val[i] == x) {
+          y.push(suite[i] + val[i]);
+          val.splice(i, 1);
+          suite.splice(i, 1);
+          cards_remaining--;
+          i--;
+        }
       }
 
       let remaining1 = this.returnHighestCard(suite, val);
@@ -1848,7 +1890,7 @@ console.log("NAME 2: " + state.player_names[i]);
         cards_to_score.push(cards_remaining2[i]);
       }
       hand_description = "pair";
-      return { cards_to_score : cards_to_score , hand_description : hand_description };
+      return { cards_to_score: cards_to_score, hand_description: hand_description };
 
     }
 
@@ -1860,7 +1902,7 @@ console.log("NAME 2: " + state.player_names[i]);
     let remaining1 = this.returnHighestCard(suite, val);
     let remaining2 = this.returnHighestCard(suite, val, [remaining1]);
     let remaining3 = this.returnHighestCard(suite, val, [remaining1, remaining2]);
-    let remaining4 = this.returnHighestCard(suite, val, [remaining1, remaining2. remaining3]);
+    let remaining4 = this.returnHighestCard(suite, val, [remaining1, remaining2.remaining3]);
     let remaining5 = this.returnHighestCard(suite, val, [remaining1, remaining2, remaining3, remaining4]);
 
     cards_to_score.push(remaining1);
@@ -1871,7 +1913,7 @@ console.log("NAME 2: " + state.player_names[i]);
 
     hand_description = "highest card";
     highest_card = remaining1;
-    return { cards_to_score : cards_to_score , hand_description : hand_description };
+    return { cards_to_score: cards_to_score, hand_description: hand_description };
 
   }
 
@@ -2056,17 +2098,17 @@ console.log("NAME 2: " + state.player_names[i]);
 
 
 
-  isFour(suite, val, low=1) {
+  isFour(suite, val, low = 1) {
 
-    for (let i = (low-1); i < 13; i++) {
+    for (let i = (low - 1); i < 13; i++) {
       let total = 0;
       for (let z = 0; z < val.length; z++) {
-  if (val[z] == (i+1)) {
-    total++;
-    if (total == 4) {
-      return (i+1);
-    }
-  }
+        if (val[z] == (i + 1)) {
+          total++;
+          if (total == 4) {
+            return (i + 1);
+          }
+        }
       }
     }
 
@@ -2077,17 +2119,17 @@ console.log("NAME 2: " + state.player_names[i]);
 
 
 
-  isThree(suite, val, low=1) {
+  isThree(suite, val, low = 1) {
 
-    for (let i = (low-1); i < 13; i++) {
+    for (let i = (low - 1); i < 13; i++) {
       let total = 0;
       for (let z = 0; z < val.length; z++) {
-  if (val[z] == (i+1)) {
-    total++;
-    if (total == 3) {
-      return (i+1);
-    }
-  }
+        if (val[z] == (i + 1)) {
+          total++;
+          if (total == 3) {
+            return (i + 1);
+          }
+        }
       }
     }
 
@@ -2097,17 +2139,17 @@ console.log("NAME 2: " + state.player_names[i]);
 
 
 
-  isTwo(suite, val, low=1) {
+  isTwo(suite, val, low = 1) {
 
-    for (let i = (low-1); i < 13; i++) {
+    for (let i = (low - 1); i < 13; i++) {
       let total = 0;
       for (let z = 0; z < val.length; z++) {
-  if (val[z] == (i+1)) {
-    total++;
-    if (total == 2) {
-      return (i+1);
-    }
-  }
+        if (val[z] == (i + 1)) {
+          total++;
+          if (total == 2) {
+            return (i + 1);
+          }
+        }
       }
     }
 
@@ -2190,11 +2232,6 @@ console.log("NAME 2: " + state.player_names[i]);
     humanHand += "</span> ";
     return humanHand;
   }
-
-
-
-
-
 
 
   returnGameOptionsHTML() {

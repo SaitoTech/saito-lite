@@ -30,6 +30,7 @@ body {
   overflow-y: auto;
   border: none;
   font-size: large;
+  z-index: 1;
 }
 
 .menu-player {
@@ -100,6 +101,9 @@ body {
   font-size: 3vh;
   font-weight: bold;
   text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .player-info-chips {
@@ -275,10 +279,28 @@ body {
   font-weight: bolder;
 }
 
+.smallblind::before {
+  content: "◉";
+  margin-right: 0.5em;
+  color: aqua;
+  -webkit-text-stroke: 1px #444;
+}
+
+.bigblind::before {
+  content: "◉";
+  margin-right: 0.5em;
+  color: yellow;
+  -webkit-text-stroke: 1px #444;
+}
+
 .dealerbutton::before {
   content: "⬤";
-  margin-right: 2vh;
+  margin-right: 0.5em;
+  color: #fff;;
+  -webkit-text-stroke: 1px #444;
 }
+
+
 
 @media all and (max-aspect-ratio:13/9) {
   .deal .card {
@@ -388,6 +410,9 @@ body {
     left: 25vw;
     height: 43vh;
     background-color: #4448;
+  }
+  #log {
+    height: 31vh;
   }
 }
 

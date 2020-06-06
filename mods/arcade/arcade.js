@@ -1660,7 +1660,8 @@ console.log("REPORTING BACK WITH YES!");
   updateBalance() {
     if (this.browser_active) {
       try {
-        let balance = this.app.wallet.returnBalance();
+        //let balance = this.app.wallet.returnBalance();
+        let balance = this.returnDisplayBalance();
         document.querySelector('.saito-balance').innerHTML = balance + " SAITO";
       } catch (err) { }
     }
