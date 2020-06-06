@@ -3152,7 +3152,9 @@ console.log("E");
   	//
   	// STRATEGY CARDS
   	//
+        this.game.queue.push("playerschoosestrategycards_after");
         this.game.queue.push("playerschoosestrategycards");
+        this.game.queue.push("playerschoosestrategycards_before");
  
 
 console.log("F");

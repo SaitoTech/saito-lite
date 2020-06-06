@@ -265,6 +265,63 @@ console.log("GAME QUEUE: " + this.game.queue);
       }
   
 
+      if (mv[0] === "playerschoosestrategycards_before") {
+  
+        let z = this.returnEventObjects();
+
+        this.game.queue.splice(qe, 1);
+
+        let speaker_order = this.returnSpeakerOrder();
+
+        for (let i = 0; i < speaker_order.length; i++) {
+          for (let k = 0; k < z.length; k++) {
+            if (z[k].playersChooseStrategyCardsBeforeTrigger(this, (i+1), player, card) == 1) {
+              this.game.queue.push("playerschoosestrategycards_before_event+"\t"+speaker_order[i]+"\t"+k);
+            }
+          }
+        }
+        return 1;
+      }
+      if (mv[0] === "strategy_card_before_event") {
+  
+  	let player = parseInt(mv[1]);
+  	let z_index = parseInt(mv[2]);
+        let z = this.returnEventObjects();
+
+        this.game.queue.splice(qe, 1);
+
+        return z[z_index].playersChooseStrategyCardsBeforeEvent(this, player);
+
+      }
+      if (mv[0] === "playerschoosestrategycards_after") {
+  
+        let z = this.returnEventObjects();
+
+        this.game.queue.splice(qe, 1);
+
+        let speaker_order = this.returnSpeakerOrder();
+
+        for (let i = 0; i < speaker_order.length; i++) {
+          for (let k = 0; k < z.length; k++) {
+            if (z[k].playersChooseStrategyCardsAfterTrigger(this, (i+1), player, card) == 1) {
+              this.game.queue.push("playerschoosestrategycards_after_event+"\t"+speaker_order[i]+"\t"+k);
+            }
+          }
+        }
+        return 1;
+      }
+      if (mv[0] === "strategy_card_before_event") {
+  
+  	let player = parseInt(mv[1]);
+  	let z_index = parseInt(mv[2]);
+        let z = this.returnEventObjects();
+
+        this.game.queue.splice(qe, 1);
+
+        return z[z_index].playersChooseStrategyCardsAfterEvent(this, player);
+
+      }
+  
 
 
 
@@ -613,7 +670,9 @@ console.log("E");
   	//
   	// STRATEGY CARDS
   	//
+        this.game.queue.push("playerschoosestrategycards_after");
         this.game.queue.push("playerschoosestrategycards");
+        this.game.queue.push("playerschoosestrategycards_before");
  
 
 console.log("F");

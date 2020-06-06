@@ -90,6 +90,18 @@ console.log("MISSING FACTION: " + this.game.players_info[i].faction);
     if (obj.strategyCardAfterEvent == null) {
       obj.strategyCardAfterEvent = function(imperium_self, player, card_player, card) { return 0; }
     }
+    if (obj.playersChooseStrategyCardsBeforeTriggers == null) {
+      obj.playersChooseStrategyCardsBeforeTriggers = function(imperium_self, player) { return 0; }
+    }
+    if (obj.playersChooseStrategyCardsBeforeEvent == null) {
+      obj.playersChooseStrategyCardsBeforeEvent = function(imperium_self, player) { return 0; }
+    }
+    if (obj.playersChooseStrategyCardsAfterTriggers == null) {
+      obj.playersChooseStrategyCardsAfterTriggers = function(imperium_self, player) { return 0; }
+    }
+    if (obj.playersChooseStrategyCardsAfterEvent == null) {
+      obj.playersChooseStrategyCardsAfterEvent = function(imperium_self, player) { return 0; }
+    }
 
 
 
