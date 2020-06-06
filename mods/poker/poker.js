@@ -363,7 +363,7 @@ class Poker extends GameTemplate {
           for (let i = 0; i < this.game.state.passed.length; i++) {
             if (this.game.state.passed[i] == 0) {
               let winnings = (this.game.state.pot - this.game.state.player_pot)
-              salert(this.game.state.player_names[i] + " wins " + winnings);
+              //salert(this.game.state.player_names[i] + " wins " + winnings);
               this.updateLog(this.game.state.player_names[i] + " wins " + winnings);
               this.game.state.player_credit[i] += this.game.state.pot;
               player_left_idx = i;
