@@ -44,11 +44,10 @@
     //
     this.initializeGameObjects();
 
-//
-//
-//
-console.log("CHECKING FACTIONS ROBUSTNESS: ");
-console.log(JSON.stringify(this.factions));
+    //
+    // put homeworlds on board
+    //
+    let hwsectors = this.returnHomeworldSectors(this.totalPlayers);
 
 
     //
@@ -102,11 +101,6 @@ console.log(JSON.stringify(this.factions));
       this.game.players_info = this.returnPlayers(this.totalPlayers); // factions and player info
 
   
-      //
-      // put homeworlds on board
-      //
-      let hwsectors = this.returnHomeworldSectors(this.game.players_info.length);
-
 
       for (let i = 0; i < this.game.players_info.length; i++) {
         this.game.players_info[i].homeworld = hwsectors[i];
@@ -141,7 +135,7 @@ console.log(JSON.stringify(this.factions));
       //
       // add other planet tiles
       //
-      let tmp_sys = this.returnSectors();
+      let tmp_sys = JSON.parse(JSON.stringify(this.returnSectors()));
       let seltil = [];
   
   
@@ -184,13 +178,10 @@ console.log(JSON.stringify(this.factions));
         }
 
 
-console.log("ASSIGN STARTING UNITS!");
-
 	//
 	// assign starting units
 	//
 	for (let k = 0; k < this.factions[this.game.players_info[i].faction].space_units.length; k++) {
-console.log("ADD SPACE UNIT: " + (i+1) + " -- " + hwsectors[i] + " --- " + this.factions[this.game.players_info[i].faction].space_units[k]);
           this.addSpaceUnit(i + 1, hwsectors[i], this.factions[this.game.players_info[i].faction].space_units[k]);
 	}
 	for (let k = 0; k < this.factions[this.game.players_info[i].faction].ground_units.length; k++) {
@@ -203,7 +194,6 @@ console.log("ADD SPACE UNIT: " + (i+1) + " -- " + hwsectors[i] + " --- " + this.
 	// assign starting technology
 	//
 	for (let k = 0; k < this.factions[this.game.players_info[i].faction].tech.length; k++) {
-console.log("adding starting tech: " + this.factions[this.game.players_info[i].faction].tech[k]);
 	  let free_tech = this.factions[this.game.players_info[i].faction].tech[k];
 	  let player = i+1;
           this.game.players_info[i].tech.push(free_tech);
@@ -215,7 +205,6 @@ console.log("adding starting tech: " + this.factions[this.game.players_info[i].f
 	//
 	let z = this.returnEventObjects();
         for (let i = 0; i < z.length; z++) {
-console.log("initializing: " + z[i].name);
 	  for (let k = 0; k < this.game.players_info.length; k++) {
 	    z[i].initialize(this, (k+1));
           }

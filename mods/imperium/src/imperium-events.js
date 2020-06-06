@@ -69,6 +69,18 @@ console.log("MISSING FACTION: " + this.game.players_info[i].faction);
     }
 
 
+    //
+    // strategy cards
+    //
+    if (obj.strategyPrimaryEvent == null) {
+      obj.strategyPrimaryEvent = function(imperium_self, player, card_player) { return 0; }
+    }
+    if (obj.strategySecondaryEvent == null) {
+      obj.strategySecondaryEvent = function(imperium_self, player, card_player) { return 0; }
+    }
+
+
+
     ////////////////////
     // main turn menu //
     ////////////////////

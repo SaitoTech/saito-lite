@@ -185,6 +185,7 @@ console.log("GAME QUEUE: " + this.game.queue);
   	let stage = mv[3];
   
   	imperium_self.game.players_info[player-1].strategy_cards_played.push(card);
+	imperium_self.updateStatus("");
 
   	if (stage == 1) {
   	  this.playStrategyCardPrimary(player, card);
@@ -490,12 +491,8 @@ console.log("WHO IS NEXT: " + who_is_next);
   
       if (mv[0] === "newround") {
 
-	let technologies = this.returnTechnology();
-
-console.log("A");
-
         //
-  	// reset tech bonuses
+  	// game event triggers
   	//
 	let z = this.returnEventObjects();
         for (let i = 0; i < this.game.players_info.length; i++) {
@@ -967,7 +964,7 @@ alert("Player should choose what planets to invade (if possible)");
       //
       if (mv[0] === "activate") {
 
-        let technologies = this.returnTechnology();
+        let z		 = this.returnEventObjects();
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
 	let player_to_continue = mv[3];  
@@ -1183,7 +1180,7 @@ alert("Player should choose what planets to invade (if possible)");
   
   	let player       = mv[1];
         let sector       = mv[2];
-	let technologies = this.returnTechnology();
+	let z		 = this.returnEventObjects();
 
   	this.game.queue.splice(qe, 1);
 
@@ -1291,7 +1288,7 @@ alert("Player should choose what planets to invade (if possible)");
   
   	let player       = mv[1];
         let sector       = mv[2];
-	let technologies = this.returnTechnology();
+	let z 		 = this.returnEventObjects();
 
   	this.game.queue.splice(qe, 1);
 

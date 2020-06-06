@@ -780,10 +780,16 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
     if (this.game.board[pid].tile == null) {
       return;
     }
+
+console.log("PLANET: ");
+console.log(pid);
+console.log(JSON.stringify(this.game.board[pid]));
+console.log(JSON.stringify(sys));
+
   
     let sys = this.game.sectors[this.game.board[pid].tile];
     let planets = [];
-  
+
     for (let i = 0; i < sys.planets.length; i++) {
       planets[i] = this.game.planets[sys.planets[i]];
     }

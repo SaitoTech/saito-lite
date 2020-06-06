@@ -72,7 +72,6 @@ cat ./src/imperium-player.js >> ./imperium.js
 # data objects universal to all games (cards, tiles, systems, planet definitions, that form game state etc.)
 #
 cat ./src/imperium-universe.js >> ./imperium.js
-cat ./src/imperium-playerstate.js >> ./imperium.js
 cat ./src/imperium-state.js >> ./imperium.js
 cat ./src/imperium-events.js >> ./imperium.js
 

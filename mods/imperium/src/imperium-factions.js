@@ -13,11 +13,7 @@
     if (obj.tech == null) 		{ obj.tech = []; }
 
     obj = this.addEvents(obj);
-console.log("SETTING this.factions["+name+"] to object: " + JSON.stringify(obj));
     this.factions[name] = obj;
-console.log("... and done");
-
-
 
   }  
 

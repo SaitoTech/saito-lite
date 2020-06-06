@@ -20,3 +20,31 @@
   }  
 
 
+  playStrategyCardPrimary(player, card) {
+
+console.log("Playing: " + player + " -- " + card);
+
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      if (this.strategy_cards[card]) {
+console.log("INTO EVENT: " + card);
+	this.strategy_cards[card].strategyPrimaryEvent(this, (i+1), player);
+      }
+    }
+
+    return 0;
+  }
+
+  playStrategyCardSecondary(player, card) {
+
+console.log("Playing: " + player + " -- " + card);
+
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      if (this.strategy_cards[card]) {
+	this.strategy_cards[card].strategySecondaryEvent(this, (i+1), player);
+      }
+    }
+
+    return 0;
+  }
+
+
