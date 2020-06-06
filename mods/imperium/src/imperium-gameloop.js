@@ -182,8 +182,8 @@ console.log("GAME QUEUE: " + this.game.queue);
   
   	let card = mv[1];
   	let player = parseInt(mv[2]);
-  	let stage = mv[3];
-  
+  	let stage = parseInt(mv[3]);  
+
   	imperium_self.game.players_info[player-1].strategy_cards_played.push(card);
 	imperium_self.updateStatus("");
 
@@ -197,6 +197,73 @@ console.log("GAME QUEUE: " + this.game.queue);
   	return 0;
 
       }
+
+      if (mv[0] === "strategy_card_before") {
+  
+  	let card = mv[1];
+  	let player = parseInt(mv[2]);
+        let z = this.returnEventObjects();
+
+        this.game.queue.splice(qe, 1);
+
+        let speaker_order = this.returnSpeakerOrder();
+
+        for (let i = 0; i < speaker_order.length; i++) {
+          for (let k = 0; k < z.length; k++) {
+            if (z[k].strategyCardBeforeTrigger(this, (i+1), player, card) == 1) {
+              this.game.queue.push("strategy_card_before_event\t"+card+"\t"+speaker_order[i]+"\t"+player+"\t"+k);
+            }
+          }
+        }
+        return 1;
+      }
+      if (mv[0] === "strategy_card_before_event") {
+  
+  	let card = mv[1];
+  	let player = parseInt(mv[2]);
+  	let strategy_card_player = parseInt(mv[3]);
+  	let z_index = parseInt(mv[4]);
+        let z = this.returnEventObjects();
+
+        this.game.queue.splice(qe, 1);
+
+        return z[z_index].strategyCardBeforeEvent(this, player, strategy_card_player, card);
+
+      }
+  
+      if (mv[0] === "strategy_card_after") {
+  
+  	let card = mv[1];
+  	let player = parseInt(mv[2]);
+        let z = this.returnEventObjects();
+
+        this.game.queue.splice(qe, 1);
+
+        let speaker_order = this.returnSpeakerOrder();
+
+        for (let i = 0; i < speaker_order.length; i++) {
+          for (let k = 0; k < z.length; k++) {
+            if (z[k].strategyCardBeforeTrigger(this, (i+1), player, card) == 1) {
+              this.game.queue.push("strategy_card_after_event\t"+card+"\t"+speaker_order[i]+"\t"+player+"\t"+k);
+            }
+          }
+        }
+        return 1;
+      }
+      if (mv[0] === "strategy_card_after_event") {
+  
+  	let card = mv[1];
+  	let player = parseInt(mv[2]);
+  	let strategy_card_player = parseInt(mv[3]);
+  	let z_index = parseInt(mv[4]);
+        let z = this.returnEventObjects();
+
+        this.game.queue.splice(qe, 1);
+
+        return z[z_index].strategyCardBeforeEvent(this, player, strategy_card_player, card);
+
+      }
+  
 
 
 

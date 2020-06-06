@@ -69,14 +69,26 @@ console.log("MISSING FACTION: " + this.game.players_info[i].faction);
     }
 
 
-    //
-    // strategy cards
-    //
+    ////////////////////
+    // strategy cards //
+    ////////////////////
     if (obj.strategyPrimaryEvent == null) {
       obj.strategyPrimaryEvent = function(imperium_self, player, card_player) { return 0; }
     }
     if (obj.strategySecondaryEvent == null) {
       obj.strategySecondaryEvent = function(imperium_self, player, card_player) { return 0; }
+    }
+    if (obj.strategyCardBeforeTriggers == null) {
+      obj.strategyCardBeforeTriggers = function(imperium_self, player, card_player, card) { return 0; }
+    }
+    if (obj.strategyCardBeforeEvent == null) {
+      obj.strategyCardBeforeEvent = function(imperium_self, player, card_player, card) { return 0; }
+    }
+    if (obj.strategyCardAfterTriggers == null) {
+      obj.strategyCardAfterTriggers = function(imperium_self, player, card_player, card) { return 0; }
+    }
+    if (obj.strategyCardAfterEvent == null) {
+      obj.strategyCardAfterEvent = function(imperium_self, player, card_player, card) { return 0; }
     }
 
 

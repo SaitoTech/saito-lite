@@ -201,7 +201,9 @@
         if (action2 == "select_strategy_card") {
   	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.playerSelectStrategyCard(function(success) {
+  	    imperium_self.addMove("strategy_card_after\t"+success+"\t"+imperium_self.game.player+"\t1");
   	    imperium_self.addMove("strategy\t"+success+"\t"+imperium_self.game.player+"\t1");
+  	    imperium_self.addMove("strategy_card_before\t"+success+"\t"+imperium_self.game.player+"\t1");
   	    imperium_self.endTurn();
           });
         }
