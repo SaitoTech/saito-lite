@@ -27,6 +27,8 @@ class Poker extends GameTemplate {
     this.interface       = 1;
     this.boardgameWidth  = 5100;
 
+    this.updateHTML      = "";
+
     //this.hud = new GameHud(this.app, this.menuItems());
 
     return this;
@@ -242,14 +244,6 @@ class Poker extends GameTemplate {
 
   startNextRound() {
 
-    let live_players = 0;
-    this.game.state.player_credit.forEach(stack => {
-      if (stack > 0) { live_players++ };
-    });
-
-    if (live_players < 2) {
-      alert("It's all over folks.");
-    }
     this.game.state.turn = 0;
     this.game.state.round++;
 
@@ -316,6 +310,7 @@ class Poker extends GameTemplate {
       if (mv[0] === "winner") {
         this.updateStatus("Game Over: " + this.game.state.player_names[mv[1]-1] + " wins!");
         this.updateLog("Game Over: " + this.game.state.player_names[mv[1]-1] + " wins!");
+        this.showSplash("<h1>Game Over: " + this.game.state.player_names[mv[1]-1] + " wins!</h1>" + this.updateHTML);
         this.game.over = 1;
         this.game.winner = this.game.players[mv[1]-1];
         if(this.game.player = mv[1]) {
@@ -367,7 +362,9 @@ class Poker extends GameTemplate {
         if (active_players == 1) {
           for (let i = 0; i < this.game.state.passed.length; i++) {
             if (this.game.state.passed[i] == 0) {
-              this.updateLog(this.game.state.player_names[i] + " wins " + this.game.state.pot);
+              let winnings = (this.game.state.pot - this.game.state.player_pot)
+              salert(this.game.state.player_names[i] + " wins " + winnings);
+              this.updateLog(this.game.state.player_names[i] + " wins " + winnings);
               this.game.state.player_credit[i] += this.game.state.pot;
               player_left_idx = i;
             }
@@ -509,6 +506,7 @@ class Poker extends GameTemplate {
           let winning_deck = null;
 
           let monster = 0;
+          var updateHTML = "";
           for (var key in this.game.state.player_cards) {
            
             if (monster == 0) {
@@ -537,12 +535,15 @@ class Poker extends GameTemplate {
                 html += ", ";
                 html += hand2.val[1] + hand2.suite[1];
                 this.updateLog(this.game.state.player_names[monster-1]+": " + h2score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h2score.cards_to_score));
-                
+                updateHTML += "<h2>" + this.game.state.player_names[monster-1] + ": " + h2score.hand_description + "</h2>";
+                updateHTML += this.toHTMLHAND(h2score.cards_to_score);
 
                 html  = hand1.val[0] + hand1.suite[0];
                 html += ", ";
                 html += hand1.val[1] + hand1.suite[1];
                 this.updateLog(this.game.state.player_names[monster]+": " + h1score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h1score.cards_to_score));
+                updateHTML += "<h2>" + this.game.state.player_names[monster] + ": " + h1score.hand_description + "</h2>";
+                updateHTML += this.toHTMLHAND(h1score.cards_to_score);
 
               } else {
 
@@ -553,7 +554,8 @@ class Poker extends GameTemplate {
                 html += ", ";
                 html += hand1.val[1] + hand1.suite[1];
                 this.updateLog(this.game.state.player_names[monster]+": " + h1score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h1score.cards_to_score));
-
+                updateHTML += "<h2>" + this.game.state.player_names[monster] + ": " + h1score.hand_description + "</h2>";
+                updateHTML += this.toHTMLHAND(h1score.cards_to_score);
               }
 
               let winner = this.pickWinner(h1score, h2score);
@@ -592,6 +594,8 @@ class Poker extends GameTemplate {
             }
             monster++;
           }
+          this.showSplash(updateHTML);
+          this.updateHTML = updateHTML;
 
           //
           // report winner
@@ -2233,6 +2237,16 @@ console.log("NAME 2: " + state.player_names[i]);
     return humanHand;
   }
 
+  toHTMLHAND(hand) {
+    _this = this;
+    var htmlHand = " <span class='htmlCards'>";
+    hand.forEach((card) => {
+      htmlHand += `<img class="card" src="${_this.card_img_dir}/${card}.png">`;
+    });
+      htmlHand += "</span> ";
+    return htmlHand;
+  }
+
 
   returnGameOptionsHTML() {
 
@@ -2258,6 +2272,16 @@ console.log("NAME 2: " + state.player_names[i]);
       }
     }
     return new_options;
+  }
+
+  showSplash(message) {
+    shim = document.querySelector('.shim');
+    shim.classList.remove('hidden');
+    shim.firstElementChild.innerHTML = message;
+    shim.addEventListener('click', (e) => {
+      e.target.classList.add('hidden');
+      e.target.firstElementChild.innerHTML = "";
+    });
   }
 
 

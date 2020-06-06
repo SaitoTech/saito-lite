@@ -300,6 +300,37 @@ body {
   -webkit-text-stroke: 1px #444;
 }
 
+.shim {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #222b;
+  z-index: 101;
+  cursor: pointer;
+}
+
+.shim-notice {
+  background: #222b;
+  position: absolute;
+  top: 50vh;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  left: 50vw;
+  padding: 5vh;
+}
+
+.hidden {
+  display: none;
+}
+
+.shim-notice .card {
+  width: 5vw;
+  max-width: 8vh;
+  min-width: 60px;
+}
+
 
 
 @media all and (max-aspect-ratio:13/9) {
