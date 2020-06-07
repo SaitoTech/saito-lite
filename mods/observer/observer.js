@@ -82,6 +82,8 @@ console.log(sql + " -- " + params);
 
   onNewBlock(app) {
 
+    if (this.app.BROWSER == 1) { return; }
+
     let rando = Math.random();
 
     //
