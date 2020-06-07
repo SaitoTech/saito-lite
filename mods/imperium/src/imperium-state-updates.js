@@ -5,7 +5,7 @@
   //
   executeSynchronousGameEvent(eventname="", arg2=null, arg3=null, arg4=null, arg5=null, arg6=null, arg7=null, arg8=null) {
 
-    let technologies = this.returnTechnologyTree();
+    let technologies = this.returnTechnology();
 
     for (let i = 0; i < this.game.players_info.length; i++) {
 
@@ -42,7 +42,7 @@
   //
   resetTechBonuses() {
 
-    let technologies = this.returnTechnologyTree();
+    let technologies = this.returnTechnology();
 
     //
     // reset tech bonuses
@@ -77,7 +77,7 @@
     this.game.planets[pid].exhausted = 0;
   }
   updatePlanetOwner(sector, planet_idx) {
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     let owner = -1;
 console.log("PLANET STATE: " + JSON.stringify(sys.p[planet_idx]));
 
@@ -101,7 +101,7 @@ this.updateLog("setting owner to " + owner);
   //
   pdsSpaceDefense(attacker, destination, hops=1) {
 
-    let sys = this.returnSystemAndPlanets(destination);
+    let sys = this.returnSectorAndPlanets(destination);
     let x = this.returnSectorsWithinHopDistance(destination, hops);
     let sectors = [];
     let distance = [];
@@ -161,7 +161,7 @@ this.updateLog("setting owner to " + owner);
 
   spaceCombat(attacker, sector) {
   
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
   
     let defender = 0;
     let defender_found = 0;
@@ -282,7 +282,7 @@ this.updateLog("setting owner to " + owner);
 
 try {
   
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
   
     let defender = 0;
     let defender_found = 0;
@@ -444,7 +444,7 @@ console.log(JSON.stringify(err));
   
     if (player < 0) { return; }
   
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
   
     //
     // in space
@@ -481,7 +481,7 @@ console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
   
     if (player < 0) { return; }
   
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
   
     for (let z = 0; z < sys.p[planet_idx].units[player-1].length; z++) {
       if (sys.p[planet_idx].units[player-1][z].destroyed == 1) {
@@ -500,7 +500,7 @@ console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
   assignHitsToGroundForces(attacker, defender, sector, planet_idx, hits) {
 
     let ground_forces_destroyed = 0;  
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < hits; i++) {
   
       //
@@ -554,7 +554,7 @@ console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
   assignHitsToSpaceFleet(attacker, defender, sector, hits) {
 
     let ships_destroyed = 0;  
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < hits; i++) {
   
       //

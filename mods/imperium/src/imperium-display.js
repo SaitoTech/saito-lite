@@ -78,7 +78,7 @@
 
   updateSectorGraphics(sector) {
 
-    let sys = this.returnSystemAndPlanets(sector);
+    let sys = this.returnSectorAndPlanets(sector);
   
     let divsector = '#hex_space_'+sector;
     let fleet_color = '';
@@ -117,12 +117,12 @@
   
           let ship = sys.s.units[player-1][i];
   
-          if (ship.name == "carrier") { carriers++; }
-          if (ship.name == "fighter") { fighters++; }
-          if (ship.name == "destroyer") { destroyers++; }
-          if (ship.name == "cruiser") { cruisers++; }
-          if (ship.name == "dreadnaught") { dreadnaughts++; }
-          if (ship.name == "flagship") { flagships++; }
+          if (ship.type == "carrier") { carriers++; }
+          if (ship.type == "fighter") { fighters++; }
+          if (ship.type == "destroyer") { destroyers++; }
+          if (ship.type == "cruiser") { cruisers++; }
+          if (ship.type == "dreadnaught") { dreadnaughts++; }
+          if (ship.type == "flagship") { flagships++; }
   
         }
   
@@ -213,11 +213,6 @@
 
         for (let j = 0; j < sys.p.length; j++) {
 
-if (sector == "2_1") {
-  console.log("PLAYER IS: " + player);
-  console.log("ALERT: "+z+" "+JSON.stringify(sys.p[j].units));
-}
-  
           let infantry     = 0;
           let spacedock    = 0;
           let pds          = 0;
@@ -226,9 +221,9 @@ if (sector == "2_1") {
   
             let unit = sys.p[j].units[player-1][k];
   
-            if (unit.name == "infantry") { infantry++; }
-            if (unit.name == "pds") { pds++; }
-            if (unit.name == "spacedock") { spacedock++; }
+            if (unit.type == "infantry") { infantry++; }
+            if (unit.type == "pds") { pds++; }
+            if (unit.type == "spacedock") { spacedock++; }
   
           }
 
@@ -323,7 +318,7 @@ if (sector == "2_1") {
   }
   showPlanetCard(sector, pid) {
     let planets = this.returnPlanets();
-    let systems = this.returnSystems();
+    let systems = this.returnSectors();
     let sector_name = this.game.board[sector].tile;
     let this_planet_name = systems[sector_name].planets[pid];
 console.log(sector_name + " -- " + this_planet_name + " -- " + pid);
