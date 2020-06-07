@@ -10,7 +10,7 @@
           imperium_self.updateStatus('Select sector to de-activate.');
           imperium_self.playerSelectSector(function(sector) {
             imperium_self.addMove("resolve\tstrategy");
-            imperium_self.addMove("strategy\t"+card+"\t"+player+"\t2");
+            imperium_self.addMove("strategy\t"+"warfare"+"\t"+strategy_card_player+"\t2");
             imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
             imperium_self.addMove("deactivate\t"+player+"\t"+sector);
             imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
@@ -22,8 +22,8 @@
       },
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
-        if (imperium_self.game.player != player) {
- 
+        if (imperium_self.game.player != strategy_card_player) { 
+
           let html = 'Do you wish to spend 1 strategy token to produce in your home sector? <p></p><ul>';
           html += '<li class="option" id="yes">Yes</li>';
           html += '<li class="option" id="no">No</li>';

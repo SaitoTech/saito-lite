@@ -22,15 +22,11 @@
     if (obj.img  == null) 	{ obj.img = "/imperium/img/card_template.jpg"; }
     if (obj.faction == null) 	{ obj.faction = "all"; }
     if (obj.prereqs == null) 	{ obj.prereqs = []; }
+    if (obj.color == null)	{ obj.color = ""; }
+    if (obj.type == null)	{ obj.type = "normal"; }
 
     obj = this.addEvents(obj);
-
-console.log("Adding tech: " + name);
-
     this.tech[name] = obj;
-
-console.log("tech added!");
-
 
   }  
 

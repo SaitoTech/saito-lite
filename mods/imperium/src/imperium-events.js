@@ -125,6 +125,15 @@ console.log("MISSING FACTION: " + this.game.players_info[i].faction);
 
 
 
+    ////////////////////
+    // Victory Points //
+    ////////////////////
+    if (obj.canPlayerScoreVictoryPoints == null) {
+      obj.canPlayerScoreVictoryPoints = function(imperium_self, player) { return 0; }
+    }
+
+
+
     ////////////////////////
     // synchronous events //
     ////////////////////////

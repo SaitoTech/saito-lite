@@ -39,7 +39,11 @@ console.log("INTO EVENT: " + card);
 console.log("Playing: " + player + " -- " + card);
 
     for (let i = 0; i < this.game.players_info.length; i++) {
+console.log("Player: " + (i+1));
+console.log(JSON.stringify(this.strategy_cards));
+console.log(JSON.stringify(this.strategy_cards[card]));
       if (this.strategy_cards[card]) {
+console.log("player " + (i+1) + " executing " + card);
 	this.strategy_cards[card].strategySecondaryEvent(this, (i+1), player);
       }
     }

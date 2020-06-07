@@ -63,16 +63,18 @@
     let mytech = this.game.players_info[this.game.player-1].tech;
     if (mytech.includes(tech)) { return 0; }
 
-    let prereqs = JSON.parse(JSON.stringify(this.game.tech[tech].prereqs));
-    let techfaction = this.game.tech[tech].faction;
-    let techtype = this.game.tech[tech].type;
+    let prereqs = JSON.parse(JSON.stringify(this.tech[tech].prereqs));
+    let techfaction = this.tech[tech].faction;
+    let techtype = this.tech[tech].type;
 
     for (let i = 0; i < mytech.length; i++) {
-      let color = this.game.tech[mytech[i]].color;
-      for (let j = 0; j < prereqs.length; j++) {
-        if (prereqs[j] == color) {
-          prereqs.splice(j, 1);
-  	  j = prereqs.length;
+      if (this.tech[mytech[i]]) {
+        let color = this.tech[mytech[i]].color;
+        for (let j = 0; j < prereqs.length; j++) {
+          if (prereqs[j] == color) {
+            prereqs.splice(j, 1);
+  	    j = prereqs.length;
+          }
         }
       }
     }
@@ -215,17 +217,35 @@
   
     let mytech = this.game.players_info[this.game.player-1].tech;
     if (mytech.includes(tech)) { return 0; }
-  
-    let prereqs = JSON.parse(JSON.stringify(this.game.tech[tech].prereqs));
-    let techfaction = this.game.tech[tech].faction;
-    let techtype = this.game.tech[tech].type;
+ 
+    if (this.tech[tech] == undefined) {
+      console.log("Undefined Technology: " + tech);
+      return 0;
+    }
+
+    let prereqs = JSON.parse(JSON.stringify(this.tech[tech].prereqs));
+    let techfaction = this.tech[tech].faction;
+    let techtype = this.tech[tech].type;
+
+    //
+    // we can use tech to represent non-researchable
+    // powers, these are marked as "special" because
+    // they cannot be researched or stolen.
+    //
+    if (techtype == "special") { return 0; };
 
     for (let i = 0; i < mytech.length; i++) {
-      let color = this.game.tech[mytech[i]].color;
-      for (let j = 0; j < prereqs.length; j++) {
-        if (prereqs[j] == color) {
-          prereqs.splice(j, 1);
-  	  j = prereqs.length;
+
+console.log(mytech[i] + " ---> " + JSON.stringify(this.tech[mytech[i]]));
+
+      if (this.tech[mytech[i]]) {
+console.log("color is: " + this.tech[mytech[i]].color);
+        let color = this.tech[mytech[i]].color;
+        for (let j = 0; j < prereqs.length; j++) {
+          if (prereqs[j] == color) {
+            prereqs.splice(j, 1);
+    	    j = prereqs.length;
+          }
         }
       }
     }
@@ -347,7 +367,7 @@ console.log(mytech);
 console.log(techtype);
 console.log(JSON.stringify(prereqs));
 console.log(techfaction);
-console.log(JSON.stringify(this.game.tech[tech]));
+console.log(JSON.stringify(this.tech[tech]));
 console.log("F: " + this.game.players_info[this.game.player-1].faction);
 
     //
@@ -781,12 +801,6 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
       return;
     }
 
-console.log("PLANET: ");
-console.log(pid);
-console.log(JSON.stringify(this.game.board[pid]));
-console.log(JSON.stringify(sys));
-
-  
     let sys = this.game.sectors[this.game.board[pid].tile];
     let planets = [];
 

@@ -10,7 +10,7 @@
           imperium_self.updateStatus('Select sector to quagmire in diplomatic negotiations: ');
           imperium_self.playerSelectSector(function(sector) {
             imperium_self.addMove("resolve\tstrategy");
-            imperium_self.addMove("strategy\t"+"diplomacy"+"\t"+player+"\t2");
+            imperium_self.addMove("strategy\t"+"diplomacy"+"\t"+strategy_card_player+"\t2");
             imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
             imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
             for (let i = 0; i < imperium_self.game.players_info.length; i++) {

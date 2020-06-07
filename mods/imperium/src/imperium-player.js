@@ -230,6 +230,18 @@
   }
   
   
+  playerAcknowledgeNotice(msg, mycallback) {
+
+    let html  = msg + "<p></p><ul>";
+        html += '<li class="textchoice" id="confirmit">I understand...</li>';
+        html += '</ul>';
+
+    this.updateStatus(html);
+
+    $('.textchoice').off();
+    $('.textchoice').on('click', function() { mycallback(); });
+
+  }
 
 
 
@@ -406,9 +418,9 @@
     let imperium_self = this;
     let html = 'You are eligible to upgrade to the following technologies: <p></p><ul>';
   
-    for (var i in this.game.tech) {
+    for (var i in this.tech) {
       if (this.canPlayerResearchTechnology(i)) {
-        html += '<li class="option" id="'+i+'">'+this.game.tech[i].name+'</li>';
+        html += '<li class="option" id="'+i+'">'+this.tech[i].name+'</li>';
       }
     }
     html += '</ul>';
@@ -441,25 +453,27 @@
     // deck 1 = primary
     // deck 2 = secondary
     // deck 3 = secret
-  
+
+console.log(player + " -- " + card + " -- " + deck);  
+
     if (deck == 1) {
       let objectives = this.returnStageIPublicObjectives();
       if (objectives[card] != "") {
-        if (objectives[card].func(imperium_self, player) == 1) { return 1; }
+        if (objectives[card].canPlayerScoreVictoryPoints(imperium_self, player) == 1) { return 1; }
       }
     }
   
     if (deck == 2) {
       let objectives = this.returnStageIIPublicObjectives();
       if (objectives[card] != "") {
-        if (objectives[card].func(imperium_self, player) == 1) { return 1; }
+        if (objectives[card].canPlayerScoreVictoryPoints(imperium_self, player) == 1) { return 1; }
       }
     }
   
     if (deck == 3) {
       let objectives = this.returnSecretObjectives();
       if (objectives[card] != "") {
-        if (objectives[card].func(imperium_self, player) == 1) { return 1; }
+        if (objectives[card].canPlayerScoreVictoryPoints(imperium_self, player) == 1) { return 1; }
       }
     }
   
@@ -525,10 +539,12 @@
         mycallback(0, "");
   
       } else {
-  
-        imperium_self.playerPostScoreVictoryPoints(action, objective_type, mycallback);
+ 
+//
+// TODO HOOK UP ACTUAL VP ISSUANCE
+//
         let vp = 2;
-        let objective = "SECRET OBJECTIVE: mining power";
+        let objective = "TESTING SECRET OBJECTIVE: mining power";
         mycallback(vp, objective);
   
       }
@@ -537,36 +553,6 @@
   
 
 
-  playerPostScoreVictoryPoints(objective, deck, mycallback) {
-
-    let imperium_self = this;
-
-    if (deck == 1) {
-      let objectives = this.returnStageIPublicObjectives();
-      objectives[objective].post(imperium_self, imperium_self.game.player, function(success) {
-        mycallback(1, objective);
-      });
-    }
-  
-    if (deck == 2) {
-      let objectives = this.returnStageIIPublicObjectives();
-      objectives[objective].post(imperium_self, imperium_self.game.player, function(success) {
-        mycallback(2, objective);
-      });
-    }
-  
-    if (deck == 3) {
-      let objectives = this.returnSecretObjectives();
-      objectives[objective].post(imperium_self, imperium_self.game.player, function(success) {
-        mycallback(1, objective);
-      });
-    }
-  
-    mycallback(0, "null-vp-objective");
-  
-  }
-  
-  
   
   playerBuildInfrastructure(mycallback, stage=1) {   
 

@@ -37,7 +37,9 @@ console.log("GAME QUEUE: " + this.game.queue);
         if (le >= 0) {
 	  lmv = this.game.queue[le].split("\t");
 	}
-  
+
+        this.updateStatus("Waiting for Opponent Move...");  
+
 	if (mv[1] == lmv[0]) {
 
   	  if (mv[2] != undefined) {
@@ -181,17 +183,21 @@ console.log("GAME QUEUE: " + this.game.queue);
       if (mv[0] === "strategy") {
   
   	let card = mv[1];
-  	let player = parseInt(mv[2]);
+  	let strategy_card_player = parseInt(mv[2]);
   	let stage = parseInt(mv[3]);  
 
-  	imperium_self.game.players_info[player-1].strategy_cards_played.push(card);
+  	imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.push(card);
 	imperium_self.updateStatus("");
 
   	if (stage == 1) {
-  	  this.playStrategyCardPrimary(player, card);
+console.log("PLAY PRIMARY");
+  	  this.playStrategyCardPrimary(strategy_card_player, card);
+console.log("PLAY PRIMARY DONE!");
   	}
   	if (stage == 2) {
-  	  this.playStrategyCardSecondary(player, card);
+console.log("PLAY SECONDARY");
+  	  this.playStrategyCardSecondary(strategy_card_player, card);
+console.log("PLAY SECONDARY DONE!");
   	}
   
   	return 0;
@@ -199,6 +205,8 @@ console.log("GAME QUEUE: " + this.game.queue);
       }
 
       if (mv[0] === "strategy_card_before") {
+
+console.log("TESTING HERE");
   
   	let card = mv[1];
   	let player = parseInt(mv[2]);
@@ -210,7 +218,7 @@ console.log("GAME QUEUE: " + this.game.queue);
 
         for (let i = 0; i < speaker_order.length; i++) {
           for (let k = 0; k < z.length; k++) {
-            if (z[k].strategyCardBeforeTrigger(this, (i+1), player, card) == 1) {
+            if (z[k].strategyCardBeforeTriggers(this, (i+1), player, card) == 1) {
               this.game.queue.push("strategy_card_before_event\t"+card+"\t"+speaker_order[i]+"\t"+player+"\t"+k);
             }
           }
@@ -243,7 +251,7 @@ console.log("GAME QUEUE: " + this.game.queue);
 
         for (let i = 0; i < speaker_order.length; i++) {
           for (let k = 0; k < z.length; k++) {
-            if (z[k].strategyCardBeforeTrigger(this, (i+1), player, card) == 1) {
+            if (z[k].strategyCardAfterTriggers(this, (i+1), player, card) == 1) {
               this.game.queue.push("strategy_card_after_event\t"+card+"\t"+speaker_order[i]+"\t"+player+"\t"+k);
             }
           }
@@ -260,13 +268,16 @@ console.log("GAME QUEUE: " + this.game.queue);
 
         this.game.queue.splice(qe, 1);
 
-        return z[z_index].strategyCardBeforeEvent(this, player, strategy_card_player, card);
+        return z[z_index].strategyCardAfterEvent(this, player, strategy_card_player, card);
 
       }
   
 
       if (mv[0] === "playerschoosestrategycards_before") {
   
+  	let card = mv[1];
+  	let player = parseInt(mv[2]);
+  	let strategy_card_player = parseInt(mv[3]);
         let z = this.returnEventObjects();
 
         this.game.queue.splice(qe, 1);
@@ -275,14 +286,14 @@ console.log("GAME QUEUE: " + this.game.queue);
 
         for (let i = 0; i < speaker_order.length; i++) {
           for (let k = 0; k < z.length; k++) {
-            if (z[k].playersChooseStrategyCardsBeforeTrigger(this, (i+1), player, card) == 1) {
-              this.game.queue.push("playerschoosestrategycards_before_event+"\t"+speaker_order[i]+"\t"+k);
+            if (z[k].playersChooseStrategyCardsBeforeTriggers(this, (i+1), speaker_order[i], card) == 1) {
+              this.game.queue.push("playerschoosestrategycards_before_event"+"\t"+speaker_order[i]+"\t"+k);
             }
           }
         }
         return 1;
       }
-      if (mv[0] === "strategy_card_before_event") {
+      if (mv[0] === "playerschoosestrategycards_before_event") {
   
   	let player = parseInt(mv[1]);
   	let z_index = parseInt(mv[2]);
@@ -295,6 +306,9 @@ console.log("GAME QUEUE: " + this.game.queue);
       }
       if (mv[0] === "playerschoosestrategycards_after") {
   
+  	let card = mv[1];
+  	let player = parseInt(mv[2]);
+  	let strategy_card_player = parseInt(mv[3]);
         let z = this.returnEventObjects();
 
         this.game.queue.splice(qe, 1);
@@ -303,26 +317,23 @@ console.log("GAME QUEUE: " + this.game.queue);
 
         for (let i = 0; i < speaker_order.length; i++) {
           for (let k = 0; k < z.length; k++) {
-            if (z[k].playersChooseStrategyCardsAfterTrigger(this, (i+1), player, card) == 1) {
-              this.game.queue.push("playerschoosestrategycards_after_event+"\t"+speaker_order[i]+"\t"+k);
+            if (z[k].playersChooseStrategyCardsAfterTriggers(this, (i+1), speaker_order[i], card) == 1) {
+              this.game.queue.push("playerschoosestrategycards_after_event"+"\t"+speaker_order[i]+"\t"+k);
             }
           }
         }
         return 1;
       }
-      if (mv[0] === "strategy_card_before_event") {
-  
+      if (mv[0] === "strategy_card_after_event") {
+
   	let player = parseInt(mv[1]);
   	let z_index = parseInt(mv[2]);
         let z = this.returnEventObjects();
-
-        this.game.queue.splice(qe, 1);
 
         return z[z_index].playersChooseStrategyCardsAfterEvent(this, player);
 
       }
   
-
 
 
 

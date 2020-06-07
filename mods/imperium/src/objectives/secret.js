@@ -5,6 +5,9 @@
       img		:	"/imperium/img/objective_card_1_template.png" ,
       text		:	"Destroy the flagship of another player" ,
       type		: 	"instant" ,
+      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
+	return 1;
+      }
   });
   this.importSecretObjective('nuke-them-from-orbit', {
       name 		: 	"Nuke them from Orbit" ,
