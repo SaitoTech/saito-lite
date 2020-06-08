@@ -26,6 +26,9 @@
         state.how_voted_on_agenda = [];
         state.voting_on_agenda = 0;
 
+	state.round_of_space_combat = 0;
+	state.round_of_ground_combat = 0;
+
     return state;
   }
 

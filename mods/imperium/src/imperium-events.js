@@ -147,6 +147,19 @@ console.log("Returning Events!");
     }
 
 
+    ///////////////////////
+    // modify dice rolls //
+    ///////////////////////
+    if (obj.modifyPDSRoll == null) {
+      obj.modifyPDSRoll = function(imperium_self, attacker, defender, roll) { return roll; }
+    }
+    if (obj.modifySpaceCombat == null) {
+      obj.modifySpaceCombatRoll = function(imperium_self, attacker, defender, roll) { return roll; }
+    }
+    if (obj.modifyGroundCombatRoll == null) {
+      obj.modifyGroundCombatRoll = function(imperium_self, attacker, defender, roll) { return roll; }
+    }
+
 
 
     ////////////////////

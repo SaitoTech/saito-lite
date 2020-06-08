@@ -1,4 +1,3 @@
-console.log("A");
 
     this.importTech("sarween-tools", {
       name        	: 	"Sarween Tools" ,
@@ -12,6 +11,7 @@ console.log("A");
       onNewRound : function(imperium_self, player) {
         if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].sarween_tools = 1;
+          imperium_self.game.players_info[player-1].production_bonus = 1;
         }
         return 1;
       },
@@ -30,6 +30,7 @@ console.log("A");
       onNewRound : function(imperium_self, player) {
         if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].graviton_laser_system = 1;
+          imperium_self.game.players_info[player-1].assign_pds_hits_to_non_fighters = 1;
         }
         return 1;
       },
@@ -48,6 +49,7 @@ console.log("A");
       onNewRound : function(imperium_self, player) {
         if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].transit_diodes = 1;
+          imperium_self.game.players_info[player-1].reallocate_four_infantry_per_round = 1;
         }
         return 1;
       },
@@ -66,6 +68,7 @@ console.log("A");
       onNewRound : function(imperium_self, player) {
         if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].integrated_economy = 1;
+          imperium_self.game.players_info[player-1].may_produce_after_gaining_planet = 1;
         }
         return 1;
       },

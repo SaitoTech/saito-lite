@@ -640,15 +640,8 @@ console.log("WHO IS NEXT: " + who_is_next);
   	// game event triggers
   	//
 	let z = this.returnEventObjects();
-console.log("Z returned");
-console.log(this.game.players_info.length);
-console.log("Z returned");
-console.log("TECH: " + JSON.stringify(z));
-console.log("GAME: " + JSON.stringify(this.game));
         for (let i = 0; i < this.game.players_info.length; i++) {
-console.log("player: " + i);
           for (let k in z) {
-console.log("tech: " + k);
             z[k].onNewRound(this, (i+1));
   	  }
   	}
@@ -1498,6 +1491,23 @@ alert("Player should choose what planets to invade (if possible)");
 	//
 	this.game.state.space_combat_round++;
 	this.spaceCombat(player, sector);
+
+
+/****
+
+
+space_combat_post --> if unrest
+ ---> space_combat_hits_reported
+ ---> space_combat_mitigate_hits
+ ---> space_combat_assign_hits
+---------> 
+
+	if (this.game.player == player) {
+	  // walk us through the rest
+	}
+
+        return 0;
+****/
 
   	if (this.hasUnresolvedSpaceCombat(player, sector) == 1) {
 	  if (this.game.player == player) {

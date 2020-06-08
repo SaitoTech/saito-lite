@@ -13,6 +13,7 @@ console.log("D");
       onNewRound : function(imperium_self, player, mycallback) {
         if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].neural_motivator = 1;
+          imperium_self.game.players_info[player-1].action_cards_bonus_when_issued = 1;
         }
         return 1;
       },
@@ -31,6 +32,7 @@ console.log("D");
       onNewRound : function(imperium_self, player, mycallback) {
         if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].dacxive_animators = 1;
+          imperium_self.game.players_info[player-1].reinforce_infantry_after_successful_ground_combat = 1;
         }
         return 1;
       },
@@ -49,6 +51,7 @@ console.log("D");
       onNewRound : function(imperium_self, player, mycallback) {
         if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].hyper_metabolism = 1;
+          imperium_self.game.players_info[player-1].new_tokens_bonus_when_issued = 1;
         }
         return 1;
       },
@@ -67,6 +70,7 @@ console.log("D");
       onNewRound : function(imperium_self, player, mycallback) {
         if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].x89_bacterial_weapon = 1;
+          imperium_self.game.players_info[player-1].bacterial_weapon = 1;
         }
         return 1;
       },

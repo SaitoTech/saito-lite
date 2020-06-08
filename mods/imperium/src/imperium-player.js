@@ -21,7 +21,6 @@
       players[i] = {};
       players[i].action_cards_per_round = 1;
       players[i].new_tokens_per_round = 2;
-      players[i].new_token_bonus_when_issued = 0;
       players[i].command_tokens  	= 3;
       players[i].strategy_tokens 	= 2;
       players[i].fleet_supply    	= 3;
@@ -31,21 +30,22 @@
       players[i].goods		= 0;
       players[i].commodities	= 3;
       players[i].commodity_limit	= 3;
-  
       players[i].vp		= 0;
       players[i].passed		= 0;
       players[i].strategy_cards_played = [];
   
+  
       //
       // gameplay modifiers (action cards + tech)
       //
+      players[i].new_token_bonus_when_issued = 0;
       players[i].action_cards_bonus_when_issued = 0;
       players[i].new_tokens_bonus_when_issued = 0;
       players[i].fleet_move_bonus = 0;
       players[i].ship_move_bonus = 0;
       players[i].fly_through_asteroids = 0;
       players[i].reinforce_infantry_after_successful_ground_combat = 0;
-      players[i].x91_bacterial_bombardment = 0;
+      players[i].bacterial_weapon = 0;
       players[i].evasive_bonus_on_pds_shots = 0;
       players[i].perform_two_actions = 0;
       players[i].move_through_sectors_with_opponent_ships = 0;
@@ -55,11 +55,15 @@
       players[i].extra_roll_on_bombardment_or_pds = 0;
       players[i].stasis_on_opponent_combat_first_round = 0;
       players[i].may_repair_damaged_ships_after_space_combat = 0;
-      players[i].chain_shot = 0;
+      players[i].may_assign_first_round_combat_shot = 0;
       players[i].production_bonus = 0;
+      players[i].ground_combat_dice_reroll_permitted = 0;
+      players[i].space_combat_dice_reroll_permitted = 0;
+      players[i].pds_combat_dice_reroll_permitted = 0;
+      players[i].combat_dice_reroll_permitted = 0;
 
       //
-      // faction gameplay modifiers 
+      // faction-inspired gameplay modifiers 
       //
       players[i].deep_space_conduits = 0; // treat all systems adjacent to activated system
       players[i].resupply_stations = 0; // gain trade goods on system activation if contains ships 
@@ -86,17 +90,6 @@
       players[i].temporary_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 0;
       players[i].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 0;
 
-      players[i].upgraded_infantry = 0;
-      players[i].upgraded_pds = 0;
-      players[i].upgraded_spacedock = 0;
-      players[i].upgraded_fighter = 0;
-      players[i].upgraded_destroyer = 0;
-      players[i].upgraded_carrier = 0;
-      players[i].upgraded_cruiser = 0;
-      players[i].upgraded_dreadnaught = 0;
-      players[i].upgraded_flagship = 0;
-      players[i].upgraded_warsun = 0;
-  
       if (i == 1) { players[i].color   = "yellow"; }
       if (i == 2) { players[i].color   = "green"; }
       if (i == 3) { players[i].color   = "blue"; }
