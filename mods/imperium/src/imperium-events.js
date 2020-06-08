@@ -36,6 +36,9 @@ console.log("MISSING FACTION: " + this.game.players_info[i].faction);
       }
     }
 
+
+console.log("Returning Events!");
+
     return z;
 
   }
@@ -54,6 +57,27 @@ console.log("MISSING FACTION: " + this.game.players_info[i].faction);
     //
     if (obj.initialize == null) {
       obj.initialize = function(imperium_self, player) { return 0; }
+    }
+    if (obj.gainTechnology == null) {
+      obj.gainTechnology = function(imperium_self, player, tech) { return 1; }
+    }
+    if (obj.gainTradeGoods == null) {
+      obj.gainTradeGoods = function(imperium_self, player, amount) { return amount; }
+    }
+    if (obj.gainCommodities == null) {
+      obj.gainCommodities = function(imperium_self, player, amount) { return amount; }
+    }
+    if (obj.gainFleetSupply == null) {
+      obj.gainFleetSupply = function(imperium_self, player, amount) { return amount; }
+    }
+    if (obj.gainStrategyCard == null) {
+      obj.gainStrategyCard = function(imperium_self, player, card) { return card; }
+    }
+    if (obj.gainCommandTokens == null) {
+      obj.gainCommandToken = function(imperium_self, player, amount) { return amount; }
+    }
+    if (obj.gainStrategyTokens == null) {
+      obj.gainStrategyTokens = function(imperium_self, player, amount) { return amount; }
     }
     if (obj.upgradeUnit == null) {
       obj.upgradeUnit = function(imperium_self, player, unit) { return unit; }

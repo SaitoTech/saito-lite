@@ -72,238 +72,19 @@ class Imperium extends GameTemplate {
 
 
 
-
-
-
-    this.importTech("antimass-deflectors", {
-      name        	:       "Antimass Deflectors" ,
-      color       	:       "blue" ,
-      prereqs             :       [],
-      obj.initialize : function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].antimass_deflectors == undefined) {
-          imperium_self.game.players_info[player-1].antimass_deflectors = 0;
-        }
-      },
-      obj.onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
-          imperium_self.game.players_info[player-1].antimass_deflectors = 1;
-        }
-        return 1;
-      },
-    });
-
-
-    this.importTech("gravity-drive", {
-      name                :       "Gravity Drive" ,
-      color               :       "blue" ,
-      prereqs             :       ["blue"],
-      obj.initialize : function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].gravity_drive == undefined) {
-          imperium_self.game.players_info[player-1].gravity_drive = 0;
-        }
-      },
-      obj.onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
-          imperium_self.game.players_info[player-1].gravity_drive = 1;
-        }
-        return 1;
-      },
-    });
-
-
-    this.importTech("fleet-logistics", {
-      name        	: 	"Fleet Logistics" ,
-      color       	: 	"blue" ,
-      prereqs     	:       ['blue','blue'],
-      obj.initialize : function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].fleet_logistics == undefined) {
-          imperium_self.game.players_info[player-1].fleet_logistics = 0;
-        }
-      },
-      obj.onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
-          imperium_self.game.players_info[player-1].fleet_logistics = 1;
-        }
-        return 1;
-      },
-    });
-
-
-    this.importTech("lightwave-deflector", {
-      name        	:       "Light/Wave Deflector" ,
-      color       	:       "blue" ,
-      prereqs     	:       ['blue','blue','blue'],
-      obj.initialize : function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].lightwave_deflector == undefined) {
-          imperium_self.game.players_info[player-1].lightwave_deflector = 0;
-        }
-      },
-      obj.onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
-          imperium_self.game.players_info[player-1].lightwave_deflector = 1;
-        }
-        return 1;
-      },
-    });
-
-
-    this.importTech("neural-motivator", {
-      name        	:       "Neural Motivator" ,
-      color       	:       "green" ,
-      prereqs             :       [],
-      obj.initialize : function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].neural_motivator == undefined) {
-          imperium_self.game.players_info[player-1].neural_motivator = 0;
-        }
-      },
-      obj.onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
-          imperium_self.game.players_info[player-1].neural_motivator = 1;
-        }
-        return 1;
-      },
-    });
-
-
-    this.importTech("dacxive-animators", {
-      name                :       "Dacxive Animators" ,
-      color               :       "green" ,
-      prereqs             :       ["green"],
-      obj.initialize : function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].dacxive_animators == undefined) {
-          imperium_self.game.players_info[player-1].dacxive_animators;
-        }
-      },
-      obj.onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
-          imperium_self.game.players_info[player-1].dacxive_animators = 1;
-        }
-        return 1;
-      },
-    });
-
-
-    this.importTech("hyper-metabolism", {
-      name        	: 	"Hyper Metabolism" ,
-      color       	: 	"green" ,
-      prereqs     	:       ['green','green'],
-      obj.initialize : function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].hyper_metabolism == undefined) {
-          imperium_self.game.players_info[player-1].hyper_metabolism = 0;
-        }
-      },
-      obj.onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
-          imperium_self.game.players_info[player-1].hyper_metabolism = 1;
-        }
-        return 1;
-      },
-    });
-
-
-    this.importTech("x89-bacterial-weapon", {
-      name        	:       "X-89 Bacterial Weapon" ,
-      color       	:       "green" ,
-      prereqs     	:       ['green','green','green'],
-      obj.initialize : function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].x89_bacterial_weapon == undefined) {
-          imperium_self.game.players_info[player-1].x89_bacterial_weapon = 0;
-        }
-      },
-      obj.onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
-          imperium_self.game.players_info[player-1].x89_bacterial_weapon = 1;
-        }
-        return 1;
-      },
-    });
-
-
-
-
-    this.importTech("plasma-scoring", {
-      name        	:       "Plasma Scoring" ,
-      color       	:       "red" ,
-      prereqs             :       [],
-      obj.initialize = function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].plasma_scoring == undefined) {
-          imperium_self.game.players_info[player-1].plasma_scoring = 0;
-        }
-      },
-      obj.onNewRound = function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
-          imperium_self.game.players_info[player-1].plasma_scoring = 1;
-        }
-        return 1;
-      },
-    });
-
-    this.importTech("magan-defense-grid", {
-      name                :       "Magan Defense Grid" ,
-      color               :       "red" ,
-      prereqs             :       ["red"],
-
-      obj.initialize = function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].magen_defense_grid == undefined) {
-          imperium_self.game.players_info[player-1].magen_defense_grid = 0;
-        }
-      },
-      obj.onNewRound = function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
-          imperium_self.game.players_info[player-1].magen_defense_grid = 1;
-        }
-        return 1;
-      },
-    });
-
-    this.importTech("duranium-armor", {
-      name        	: 	"Duranium Armor" ,
-      color       	: 	"red" ,
-      prereqs     	:       ['red','red'],
-      obj.initialize = function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].duranium_armor == undefined) {
-          imperium_self.game.players_info[player-1].duranium_armor = 0;
-        }
-      },
-      obj.onNewRound = function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
-          imperium_self.game.players_info[player-1].duranium_armor = 1;
-        }
-        return 1;
-      },
-    });
-
-    this.importTech("assault-cannon", {
-      name        	:       "Assault Cannon" ,
-      color       	:       "red" ,
-      prereqs     	:       ['red','red','red'],
-      obj.initialize = function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].assault_cannont == undefined) {
-          imperium_self.game.players_info[player-1].assault_cannont = 0;
-        }
-      },
-      obj.onNewRound = function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
-          imperium_self.game.players_info[player-1].assault_cannont = 1;
-        }
-        return 1;
-      },
-    });
-
-
-
+console.log("A");
 
     this.importTech("sarween-tools", {
       name        	: 	"Sarween Tools" ,
       color       	: 	"yellow" ,
       prereqs     	:       [],
-      obj.initialize : function(imperium_self, player) {
+      initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].sarween_tools == undefined) {
           imperium_self.game.players_info[player-1].sarween_tools = 0;
         }
       },
-      obj.onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
+      onNewRound : function(imperium_self, player) {
+        if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].sarween_tools = 1;
         }
         return 1;
@@ -315,13 +96,13 @@ class Imperium extends GameTemplate {
       name        	:       "Graviton Laser System" ,
       color       	:       "yellow" ,
       prereqs             :       ["yellow"],
-      obj.initialize : function(imperium_self, player) {
+      initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].graviton_laser_system == undefined) {
           imperium_self.game.players_info[player-1].graviton_laser_system = 0;
         }
       },
-      obj.onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
+      onNewRound : function(imperium_self, player) {
+        if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].graviton_laser_system = 1;
         }
         return 1;
@@ -333,13 +114,13 @@ class Imperium extends GameTemplate {
       name                :       "Transit Diodes" ,
       color               :       "yellow" ,
       prereqs             :       ["yellow", "yellow"],
-      obj.initialize : function(imperium_self, player) {
+      initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].transit_diodes == undefined) {
           imperium_self.game.players_info[player-1].transit_diodes = 0;
         }
       },
-      obj.onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
+      onNewRound : function(imperium_self, player) {
+        if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].transit_diodes = 1;
         }
         return 1;
@@ -351,13 +132,13 @@ class Imperium extends GameTemplate {
       name        	:       "Integrated Economy" ,
       color       	:       "yellow" ,
       prereqs     	:       ['yellow','yellow','yellow'],
-      obj.initialize : function(imperium_self, player) {
+      initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].integrated_economy == undefined) {
           imperium_self.game.players_info[player-1].integrated_economy = 0;
         }
       },
-      obj.onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
+      onNewRound : function(imperium_self, player) {
+        if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].integrated_economy = 1;
         }
         return 1;
@@ -1694,7 +1475,7 @@ console.log("TESTING AAAD");
           }
         }
       }
-  
+ 
       //
       // add starting units to player homewords
       //
@@ -1712,6 +1493,8 @@ console.log("TESTING AAAD");
   	  }
         }
 
+
+console.log("ASSIGN STARTING UNITS!");
 
 	//
 	// assign starting units
@@ -1734,6 +1517,7 @@ console.log("TESTING AAAD");
           this.game.players_info[i].tech.push(free_tech);
         }
 
+console.log("ASSIGN STARTING TECH!");
 
 	//
 	// initialize all units / techs / powers (for all players)
@@ -3350,8 +3134,17 @@ console.log("WHO IS NEXT: " + who_is_next);
   	// game event triggers
   	//
 	let z = this.returnEventObjects();
+console.log("Z returned");
+console.log(this.game.players_info.length);
+console.log("Z returned");
+console.log("TECH: " + JSON.stringify(z));
+console.log("GAME: " + JSON.stringify(this.game));
         for (let i = 0; i < this.game.players_info.length; i++) {
-          z[i].onNewRound(this, (i+1));
+console.log("player: " + i);
+          for (let k in z) {
+console.log("tech: " + k);
+            z[k].onNewRound(this, (i+1));
+  	  }
   	}
 
 console.log("B");
@@ -3857,11 +3650,15 @@ alert("Player should choose what planets to invade (if possible)");
   	let player       = parseInt(mv[1]);
         let item         = mv[2];
         let amount       = parseInt(mv[3]);
+	let technologies = this.returnTechnology();
   
         if (item == "strategycard") {
   
   	  this.updateLog(this.returnFaction(player) + " takes " + mv[3]);
-  
+
+	  let strategy_card = mv[3];  
+  	  strategy_card = technologies[mv[3]].gainStrategyCard(imperium_self, player, mv[3]);
+
   	  this.game.players_info[player-1].strategy.push(mv[3]);
   	  for (let i = 0; i < this.game.state.strategy_cards.length; i++) {
   	    if (this.game.state.strategy_cards[i] === mv[3]) {
@@ -3875,33 +3672,36 @@ alert("Player should choose what planets to invade (if possible)");
 
         if (item == "tech") {
 
-	  let technologies = this.returnTechnology();
-
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3]);
   	  this.game.players_info[player-1].tech.push(mv[3]);
-  	  technologies[mv[3]].onNewRound(imperium_self, player, function() {});
+  	  technologies[mv[3]].gainTechnology(imperium_self, player, mv[3]);
   	  this.upgradePlayerUnitsOnBoard(player);
   	}
         if (item == "goods") {
-  	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " trade goods");
+  	  this.updateLog(this.returnFaction(player) + " gains " + parseInt(mv[3]) + " trade goods");
+  	  amount = technologies[mv[3]].gainTradeGoods(imperium_self, player, parseInt(mv[3]));
   	  this.game.players_info[player-1].goods += amount;
   	}
 
         if (item == "commodities") {
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " commodities");
+  	  amount = technologies[mv[3]].gainCommodities(imperium_self, player, parseInt(mv[3]));
   	  this.game.players_info[player-1].commodities += amount;
   	}
 
         if (item == "command") {
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " command tokens");
+  	  amount = technologies[mv[3]].gainCommandTokens(imperium_self, player, parseInt(mv[3]));
   	  this.game.players_info[player-1].command_tokens += amount;
   	}
         if (item == "strategy") {
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " strategy tokens");
+  	  amount = technologies[mv[3]].gainStrategyTokens(imperium_self, player, parseInt(mv[3]));
   	  this.game.players_info[player-1].strategy_tokens += amount;
   	}
 
         if (item == "fleetsupply") {
+  	  amount = technologies[mv[3]].gainFleetSupply(imperium_self, player, parseInt(mv[3]));
   	  this.game.players_info[player-1].fleet_supply += amount;
   	  this.updateLog(this.returnFaction(player) + " increases their fleet supply to " + this.game.players_info[player-1].fleet_supply);
   	}
@@ -6714,6 +6514,9 @@ console.log("MISSING FACTION: " + this.game.players_info[i].faction);
       }
     }
 
+
+console.log("Returning Events!");
+
     return z;
 
   }
@@ -6732,6 +6535,27 @@ console.log("MISSING FACTION: " + this.game.players_info[i].faction);
     //
     if (obj.initialize == null) {
       obj.initialize = function(imperium_self, player) { return 0; }
+    }
+    if (obj.gainTechnology == null) {
+      obj.gainTechnology = function(imperium_self, player, tech) { return 1; }
+    }
+    if (obj.gainTradeGoods == null) {
+      obj.gainTradeGoods = function(imperium_self, player, amount) { return amount; }
+    }
+    if (obj.gainCommodities == null) {
+      obj.gainCommodities = function(imperium_self, player, amount) { return amount; }
+    }
+    if (obj.gainFleetSupply == null) {
+      obj.gainFleetSupply = function(imperium_self, player, amount) { return amount; }
+    }
+    if (obj.gainStrategyCard == null) {
+      obj.gainStrategyCard = function(imperium_self, player, card) { return card; }
+    }
+    if (obj.gainCommandTokens == null) {
+      obj.gainCommandToken = function(imperium_self, player, amount) { return amount; }
+    }
+    if (obj.gainStrategyTokens == null) {
+      obj.gainStrategyTokens = function(imperium_self, player, amount) { return amount; }
     }
     if (obj.upgradeUnit == null) {
       obj.upgradeUnit = function(imperium_self, player, unit) { return unit; }

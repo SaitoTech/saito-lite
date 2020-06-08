@@ -1,3 +1,4 @@
+console.log("A");
 
     this.importTech("sarween-tools", {
       name        	: 	"Sarween Tools" ,
@@ -8,8 +9,8 @@
           imperium_self.game.players_info[player-1].sarween_tools = 0;
         }
       },
-      onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
+      onNewRound : function(imperium_self, player) {
+        if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].sarween_tools = 1;
         }
         return 1;
@@ -26,8 +27,8 @@
           imperium_self.game.players_info[player-1].graviton_laser_system = 0;
         }
       },
-      onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
+      onNewRound : function(imperium_self, player) {
+        if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].graviton_laser_system = 1;
         }
         return 1;
@@ -44,8 +45,8 @@
           imperium_self.game.players_info[player-1].transit_diodes = 0;
         }
       },
-      onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
+      onNewRound : function(imperium_self, player) {
+        if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].transit_diodes = 1;
         }
         return 1;
@@ -62,8 +63,8 @@
           imperium_self.game.players_info[player-1].integrated_economy = 0;
         }
       },
-      onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
+      onNewRound : function(imperium_self, player) {
+        if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].integrated_economy = 1;
         }
         return 1;

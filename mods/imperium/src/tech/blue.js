@@ -1,5 +1,5 @@
 
-
+console.log("B");
 
     this.importTech("antimass-deflectors", {
       name        	:       "Antimass Deflectors" ,
@@ -11,7 +11,7 @@
         }
       },
       onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
+        if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].antimass_deflectors = 1;
         }
         return 1;
@@ -29,7 +29,7 @@
         }
       },
       onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
+        if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].gravity_drive = 1;
         }
         return 1;
@@ -47,7 +47,7 @@
         }
       },
       onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
+        if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].fleet_logistics = 1;
         }
         return 1;
@@ -65,7 +65,7 @@
         }
       },
       onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
+        if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].lightwave_deflector = 1;
         }
         return 1;

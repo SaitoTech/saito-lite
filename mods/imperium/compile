@@ -95,7 +95,6 @@ cat ./src/imperium-display.js >> ./imperium.js
 # strategy card execution logic
 #
 cat ./src/imperium-strategy-cards.js >> ./imperium.js
-cat ./src/imperium-strategybk.js >> ./imperium.js
 #
 # end of class
 #

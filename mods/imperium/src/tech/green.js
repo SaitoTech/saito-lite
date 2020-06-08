@@ -1,4 +1,6 @@
 
+console.log("D");
+
     this.importTech("neural-motivator", {
       name        	:       "Neural Motivator" ,
       color       	:       "green" ,
@@ -9,7 +11,7 @@
         }
       },
       onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
+        if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].neural_motivator = 1;
         }
         return 1;
@@ -27,7 +29,7 @@
         }
       },
       onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
+        if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].dacxive_animators = 1;
         }
         return 1;
@@ -45,7 +47,7 @@
         }
       },
       onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
+        if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].hyper_metabolism = 1;
         }
         return 1;
@@ -63,7 +65,7 @@
         }
       },
       onNewRound : function(imperium_self, player, mycallback) {
-        if (player == this.game.player) {
+        if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].x89_bacterial_weapon = 1;
         }
         return 1;

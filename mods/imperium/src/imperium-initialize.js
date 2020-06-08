@@ -159,7 +159,7 @@
           }
         }
       }
-  
+ 
       //
       // add starting units to player homewords
       //
@@ -177,6 +177,8 @@
   	  }
         }
 
+
+console.log("ASSIGN STARTING UNITS!");
 
 	//
 	// assign starting units
@@ -199,6 +201,7 @@
           this.game.players_info[i].tech.push(free_tech);
         }
 
+console.log("ASSIGN STARTING TECH!");
 
 	//
 	// initialize all units / techs / powers (for all players)
