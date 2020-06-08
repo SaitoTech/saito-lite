@@ -264,7 +264,7 @@ body {
 
 #log {
   font-size: 1.5em;
-  height: 21vh;
+  height: 18vh;
   overflow-y: auto;
 }
 
@@ -329,6 +329,11 @@ body {
   width: 5vw;
   max-width: 8vh;
   min-width: 60px;
+}
+
+#log h2 {
+  font-size: larger;
+  margin: 8px 0 0px 0;
 }
 
 
@@ -443,7 +448,7 @@ body {
     background-color: #4448;
   }
   #log {
-    height: 31vh;
+    height: 34vh;
   }
 }
 

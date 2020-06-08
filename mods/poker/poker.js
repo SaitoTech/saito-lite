@@ -467,6 +467,8 @@ class Poker extends GameTemplate {
 
       if (mv[0] === "reveal") {
 
+        var _this = this;
+
         let scorer = parseInt(mv[1]);
         let card1  = mv[2];
         let card2  = mv[3];
@@ -479,7 +481,6 @@ class Poker extends GameTemplate {
         this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[3]));
         this.game.state.player_cards[scorer-1].push(this.returnCardFromDeck(this.game.pool[0].hand[4]));
 
-        let everyone_ties = 1;
         let winners = [];
 
         this.game.state.player_cards_reported++;
@@ -496,104 +497,60 @@ class Poker extends GameTemplate {
         //
         if (this.game.state.player_cards_reported == this.game.state.player_cards_required) {
 
-          let player1 = -1;
-          let player2 = -1;  
-
-          let deck1 = null;
-          let deck2 = null;  
-
-          let winning_player = -1;
-          let winning_deck = null;
-
-          let monster = 0;
+          let deck = null;
           var updateHTML = "";
-          for (var key in this.game.state.player_cards) {
-           
-            if (monster == 0) {
+          var winlist = [];
 
-              deck2 = this.game.state.player_cards[key];
-              player2 = parseInt(key)+1;
+          for (var key in this.game.state.player_cards) {
+
+            deck = this.game.state.player_cards[key];
+
+            if (winlist.length == 0) {
+
+              winlist.splice(0, 0, {player: parseInt(key) + 1, player_hand: this.scoreHand(deck)});
 
             } else {
 
-              deck1 = this.game.state.player_cards[key];
-              player1 = parseInt(key)+1;
-
-              let h1score = this.scoreHand(deck1);
-              let h2score = this.scoreHand(deck2);
-
-              //
-              // report hands
-              //
-              if (monster == 1) {
-
-                let html = "";
-                let hand1 = this.convertHand(deck1);
-                let hand2 = this.convertHand(deck2);
-
-                html  = hand2.val[0] + hand2.suite[0];
-                html += ", ";
-                html += hand2.val[1] + hand2.suite[1];
-                this.updateLog(this.game.state.player_names[monster-1]+": " + h2score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h2score.cards_to_score));
-                updateHTML += "<h2>" + this.game.state.player_names[monster-1] + ": " + h2score.hand_description + "</h2>";
-                updateHTML += this.toHTMLHAND(h2score.cards_to_score);
-
-                html  = hand1.val[0] + hand1.suite[0];
-                html += ", ";
-                html += hand1.val[1] + hand1.suite[1];
-                this.updateLog(this.game.state.player_names[monster]+": " + h1score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h1score.cards_to_score));
-                updateHTML += "<h2>" + this.game.state.player_names[monster] + ": " + h1score.hand_description + "</h2>";
-                updateHTML += this.toHTMLHAND(h1score.cards_to_score);
-
-              } else {
-
-                let html = "";
-                let hand1 = this.convertHand(deck1);
-
-                html  = hand1.val[0] + hand1.suite[0];
-                html += ", ";
-                html += hand1.val[1] + hand1.suite[1];
-                this.updateLog(this.game.state.player_names[monster]+": " + h1score.hand_description + " <br />&nbsp;&nbsp;"+this.toHuman(h1score.cards_to_score));
-                updateHTML += "<h2>" + this.game.state.player_names[monster] + ": " + h1score.hand_description + "</h2>";
-                updateHTML += this.toHTMLHAND(h1score.cards_to_score);
+                          
+              let winlist_length = winlist.length;
+              let place = 0;
+              for(let k = 0; k < winlist_length; k++) {
+                let w = _this.pickWinner(winlist[k].player_hand, _this.scoreHand(deck));
+                if (w > 1) { place = k+1 } 
               }
-
-              let winner = this.pickWinner(h1score, h2score);
-  
-              if (winner == 0) {
-
-                //
-                // players all have the same hand (public cards)
-                //  
-                this.updateLog("Players tie -- no winner");
-                this.game.state.player_credit[player1-1] += this.game.state.player_pot[player1-1];
-                this.game.state.player_credit[player2-1] += this.game.state.player_pot[player2-1];
-
-                winners.push(player1);
-                winners.push(player2);
-
-              } else {
-
-                everyone_ties = 0;
-                winners = [];
-
-                if (winner == 1) {
-                  deck2 = deck1;
-                  player2 = player1;
-                  winning_player = player1;
-                  winners.push(player1);
-                  winning_deck = deck1;
-                } else {
-                  deck2 = deck2;
-                  player2 = player2;
-                  winning_player = player2;
-                  winners.push(player2);
-                  winning_deck = deck2;
-                }
-              }
+              winlist.splice(place, 0, {player: parseInt(key) + 1, player_hand: _this.scoreHand(deck)});
             }
-            monster++;
+
+
           }
+          // Populate winners with winning players
+          winners.push(winlist[winlist.length - 1].player -1);
+          for (let p = winlist.length - 1; p > 0; p--) {
+            if (winlist[p].player_hand.cards_to_score == winlist[p-1].player_hand.cards_to_score) { winners.push(winlist[p-1].player -1) }
+          }
+
+          // update logs and splash!
+
+          var winner_html = "";
+
+          if (winners.length == 1) {
+            winner_html += "<h2>" + this.game.state.player_names[winners[0]] + " takes the pot!</h2>";
+          } else {
+            winners.forEach(num => {
+              winner_html += this.game.state.player_names[num] + ", ";
+            });
+            winner_html = "<h2>" + winner_html.replace(/,([^,]*)$/, ' and' + '$1' + " share the pot!</h2>");
+          }
+
+          winlist.forEach(pl => {
+            _this.updateLog(_this.game.state.player_names[pl.player-1] + ": " + pl.player_hand.hand_description + " <br />&nbsp;&nbsp;" + _this.toHuman(pl.player_hand.cards_to_score));
+            updateHTML = this.toHTMLHAND(pl.player_hand.cards_to_score) + updateHTML;
+            updateHTML = "<h3>" + _this.game.state.player_names[pl.player-1] + ": " + pl.player_hand.hand_description + "</h3>" + updateHTML;
+          });
+
+          updateHTML = winner_html + updateHTML;
+
+          this.updateLog(winner_html);
           this.showSplash(updateHTML);
           this.updateHTML = updateHTML;
 
@@ -607,20 +564,20 @@ class Poker extends GameTemplate {
             //
             let pot_size = Math.floor(this.game.state.pot / winners.length)
             for (let i = 0; i < winners.length; i++) {
-              this.updateLog(this.game.state.player_names[winners[i]-1] + " splits pot and wins " + pot_size);
-              
-              this.game.state.player_credit[winners[i]-1] += pot_size;
+              this.updateLog(this.game.state.player_names[winners[i] - 1] + " splits pot and wins " + pot_size);
+
+              this.game.state.player_credit[winners[i] - 1] += pot_size;
             }
 
             //
             // send wagers to winner
             //
-            let chips_to_send = this.game.state.player_pot[this.game.player-1] / winners.length;
+            let chips_to_send = this.game.state.player_pot[this.game.player - 1] / winners.length;
             for (let i = 0; i < winners.length; i++) {
               //
               // non-winners send wagers to winner
               //
-              let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[winners[i]-1], this.game.state.player_pot[this.game.player-1]);
+              let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[winners[i]], this.game.state.player_pot[this.game.player - 1]);
               newtx = this.app.wallet.signTransaction(newtx);
               this.app.network.propagateTransaction(newtx);
             }
@@ -629,13 +586,13 @@ class Poker extends GameTemplate {
             //
             // winner gets everything
             //
-            this.updateLog(this.game.state.player_names[winners[0]-1] + " wins " + this.game.state.pot);
-            this.game.state.player_credit[winners[0]-1] += this.game.state.pot;
+            this.updateLog(this.game.state.player_names[winners[0]] + " wins " + this.game.state.pot);
+            this.game.state.player_credit[winners[0]] += this.game.state.pot;
 
             //
             // non-winners send wagers to winner
             //
-            let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[winners[0]-1], this.game.state.player_pot[this.game.player-1]);
+            let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[winners[0]], this.game.state.player_pot[this.game.player - 1]);
             newtx = this.app.wallet.signTransaction(newtx);
             this.app.network.propagateTransaction(newtx);
 
@@ -644,7 +601,7 @@ class Poker extends GameTemplate {
           this.startNextRound();
           return 1;
         }
-  
+
         if (this.game.player-1 == first_scorer) {
           this.addMove("reveal\t"+this.game.player+"\t"+this.game.deck[0].hand[0]+"\t"+this.game.deck[0].hand[1]);
           this.endTurn();
@@ -1396,7 +1353,7 @@ console.log("NAME 2: " + state.player_names[i]);
 
 
     if (score1.hand_description == "four-of-a-kind" && score2.hand_description == "four-of-a-kind") {
-      if (this.returnHigherCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
+      if (this.returnHigherCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score1.cards_to_score[4]) {
         return 1;
       } else {
         return 2;
@@ -1440,10 +1397,18 @@ console.log("NAME 2: " + state.player_names[i]);
 
 
     if (score1.hand_description == "three-of-a-kind" && score2.hand_description == "three-of-a-kind") {
-      if (this.returnHigherCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
+      if (this.returnHigherNumberCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
         return 1;
       } else {
-        return 2;
+        if (this.returnHigherNumberCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score2.cards_to_score[0]) {
+          return 2;
+        } else {
+          if (this.returnHigherCard(score1.cards_to_score[3], score2.cards_to_score[3]) == score1.cards_to_score[3]) {
+            return 1;
+          } else {
+            return 2;
+          }
+        }
       }
     }
     if (score1.hand_description == "three-of-a-kind") { return 1; }
@@ -1451,17 +1416,17 @@ console.log("NAME 2: " + state.player_names[i]);
 
 
     if (score1.hand_description == "two pair" && score2.hand_description == "two pair") {
-      if (parseInt(score1.cards_to_score[0].substring(1)) > parseInt(score2.cards_to_score[0].substring(1))) {
+      if (this.returnHigherNumberCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
         return 1;
       } else {
-        if (parseInt(score1.cards_to_score[0].substring(1)) < parseInt(score2.cards_to_score[0].substring(1))) {
+        if (this.returnHigherNumberCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score2.cards_to_score[0]) {
           return 2;
         } else {
-          if (parseInt(score1.cards_to_score[2].substring(1)) > parseInt(score2.cards_to_score[2].substring(1))) {
+          if (this.returnHigherNumberCard(score1.cards_to_score[2], score2.cards_to_score[2]) == score1.cards_to_score[2]) {
             return 1;
           } else {
-            if (parseInt(score1.cards_to_score[2].substring(1)) < parseInt(score2.cards_to_score[2].substring(1))) {
-              return 2;
+            if (this.returnHigherNumberCard(score1.cards_to_score[2], score2.cards_to_score[2]) == score2.cards_to_score[2]) {
+              return 1;
             } else {
               if (this.returnHigherCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score1.cards_to_score[4]) {
                 return 1;
@@ -1479,21 +1444,21 @@ console.log("NAME 2: " + state.player_names[i]);
 
 
     if (score1.hand_description == "pair" && score2.hand_description == "pair") {
-      if (parseInt(score1.cards_to_score[0].substring(1)) > parseInt(score2.cards_to_score[0].substring(1))) {
+      if (this.returnHigherNumberCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
         return 1;
       } else {
-        if (parseInt(score1.cards_to_score[0].substring(1)) < parseInt(score2.cards_to_score[0].substring(1))) {
+        if (this.returnHigherNumberCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score2.cards_to_score[0]) {
           return 2;
+        } else {
+          if (this.returnHigherCard(score1.cards_to_score[2], score2.cards_to_score[2]) == score1.cards_to_score[2]) {
+            return 1;
+          } else {
+            return 2;
+          }
         }
       }
     }
-    for (let z = 2; z < score1.cards_to_score.length; z++) {
-      if (this.returnHigherCard(score1.cards_to_score[z], score2.cards_to_score[z]) == score1.cards_to_score[z]) {
-        return 1;
-      } else {
-        return 2;
-      }
-    }
+
     if (score1.hand_description == "pair") { return 1; }
     if (score2.hand_description == "pair") { return 2; }
 
@@ -1502,12 +1467,15 @@ console.log("NAME 2: " + state.player_names[i]);
       if (this.returnHigherCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
         return 1;
       } else {
-        return 2;
+        if (this.returnHigherCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score1.cards_to_score[4]) {
+          return 1;
+        } else {
+          return 2;
+        }
       }
+      if (score1.hand_description == "highest card") { return 1; }
+      if (score2.hand_description == "highest card") { return 2; }
     }
-    if (score1.hand_description == "highest card") { return 1; }
-    if (score2.hand_description == "highest card") { return 2; }
-
   }
 
 
@@ -1843,7 +1811,18 @@ console.log("NAME 2: " + state.player_names[i]);
 
       if (x > y) { highest_card = x; }
       else { highest_card = y; }
+      if (y == 1) { highest_card = y}
 
+      cards_remaining = val.length;
+      for (let i = 0; i < cards_remaining; i++) {
+        if (val[i] == highest_card) {
+          cards_to_score.push(suite[i] + val[i]);
+          val.splice(i, 1);
+          suite.splice(i, 1);
+          cards_remaining--;
+          i--;
+        }
+      }
       cards_remaining = val.length;
       for (let i = 0; i < cards_remaining; i++) {
         if (val[i] == x || val[i] == y) {
@@ -1882,12 +1861,14 @@ console.log("NAME 2: " + state.player_names[i]);
           i--;
         }
       }
-
+   
+      
       let remaining1 = this.returnHighestCard(suite, val);
       let remaining2 = this.returnHighestCard(suite, val, [remaining1]);
       let remaining3 = this.returnHighestCard(suite, val, [remaining1, remaining2]);
 
-      let cards_remaining2 = this.sortByValue([remaining1, remaining2, remaining3]);
+      //let cards_remaining2 = this.sortByValue([remaining1, remaining2, remaining3]);
+      let cards_remaining2 = [remaining1, remaining2, remaining3];
       cards_to_score.push(y[0]);
       cards_to_score.push(y[1]);
       for (let i = 0; i < cards_remaining2.length; i++) {
@@ -1944,8 +1925,6 @@ console.log("NAME 2: " + state.player_names[i]);
   sortByValue(cards) {
 
     let x = this.convertHand(cards);
-    let suite = x.suite;
-    let val   = x.val;
     let y = [];
 
     let cards_length = cards.length;
@@ -1954,9 +1933,9 @@ console.log("NAME 2: " + state.player_names[i]);
       let highest_card_idx = 0;
       for (let i = 1; i < cards_length; i++) {
         if (this.returnHigherCard(highest_card, cards[i]) == cards[i]) {
-    highest_card = cards[i];
-    highest_card_idx = i;
-  }
+          highest_card = cards[i];
+          highest_card_idx = i;
+        }
       }
       y.push(highest_card);
       cards.splice(highest_card_idx, 1);
@@ -1991,6 +1970,20 @@ console.log("NAME 2: " + state.player_names[i]);
   }
 
 
+  returnHigherNumberCard(card1, card2) {
+
+    let card1_val = parseInt(card1.substring(1));
+    let card2_val = parseInt(card2.substring(1));
+
+    if (card1_val == 1) { card1_val == 14; }
+    if (card2_val == 1) { card2_val == 14; }
+
+    if (card1_val > card2_val) { return card1; }
+    if (card2_val > card1_val) { return card2; }
+    if (card2_val == card1_val) {
+      return 0;
+    }
+  }
 
   isHigherSuite(currentv, newv) {
     if (currentv === "S") { return 1; }
@@ -2026,7 +2019,7 @@ console.log("NAME 2: " + state.player_names[i]);
   }
 
 
-  returnHighestCard(suite, val, noval=[], less_than=14) {
+  returnHighestCard(suite, val, noval = [], less_than = 14) {
 
     let highest_card = 0;
     let highest_suite = "C";
@@ -2034,32 +2027,32 @@ console.log("NAME 2: " + state.player_names[i]);
 
     for (let i = 0; i < val.length; i++) {
 
-      if (noval.includes((suite[i]+val[i]))) {
+      if (noval.includes((suite[i] + val[i]))) {
       } else {
 
-        if (highest_card == 1) { 
+        if (highest_card == 1) {
           if (val[i] == 1) {
-      if (this.isHigherSuite(suite[i], highest_suite)) {
+            if (this.isHigherSuite(suite[i], highest_suite)) {
               highest_idx = i;
-          highest_card = 1;
-          highest_suite = suite[i];
-      }
-    }
+              highest_card = 1;
+              highest_suite = suite[i];
+            }
+          }
         } else {
-      if (val[i] > highest_card && val[i] < less_than) {
-      if (this.isHigherSuite(suite[i], highest_suite)) {
+          if (val[i] > highest_card && val[i] < less_than) {
+            if (this.isHigherSuite(suite[i], highest_suite)) {
               highest_idx = i;
-          highest_card = val[i];
-          highest_suite = suite[i];
-      } else {
-      }
+              highest_card = val[i];
+              highest_suite = suite[i];
+            } else {
+            }
           }
           if (val[i] == 1 && less_than == 14) {
-      if (this.isHigherSuite(suite[i], highest_suite)) {
+            if (this.isHigherSuite(suite[i], highest_suite)) {
               highest_idx = i;
-          highest_card = val[i];
-          highest_suite = suite[i];
-      }
+              highest_card = val[i];
+              highest_suite = suite[i];
+            }
           }
         }
       }
