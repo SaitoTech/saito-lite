@@ -1153,7 +1153,9 @@ alert("Player should choose what planets to invade (if possible)");
   	  this.updateLog(this.returnFaction(player) + " takes " + mv[3]);
 
 	  let strategy_card = mv[3];  
-  	  strategy_card = technologies[mv[3]].gainStrategyCard(imperium_self, player, mv[3]);
+	  for (let z in technologies) {
+            strategy_card = technologies[z].gainStrategyCard(imperium_self, player, strategy_card);
+          }
 
   	  this.game.players_info[player-1].strategy.push(mv[3]);
   	  for (let i = 0; i < this.game.state.strategy_cards.length; i++) {
@@ -1170,34 +1172,46 @@ alert("Player should choose what planets to invade (if possible)");
 
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3]);
   	  this.game.players_info[player-1].tech.push(mv[3]);
-  	  technologies[mv[3]].gainTechnology(imperium_self, player, mv[3]);
-  	  this.upgradePlayerUnitsOnBoard(player);
+	  for (let z in technologies) {
+  	    technologies[mv[3]].gainTechnology(imperium_self, player, mv[3]);
+  	  }
+	  this.upgradePlayerUnitsOnBoard(player);
   	}
         if (item == "goods") {
-  	  this.updateLog(this.returnFaction(player) + " gains " + parseInt(mv[3]) + " trade goods");
-  	  amount = technologies[mv[3]].gainTradeGoods(imperium_self, player, parseInt(mv[3]));
-  	  this.game.players_info[player-1].goods += amount;
+  	  this.updateLog(this.returnFaction(player) + " gains " + amount + " trade goods");
+	  for (let z in technologies) {
+  	    amount = technologies[z].gainTradeGoods(imperium_self, player, amount);
+  	  }
+	  this.game.players_info[player-1].goods += amount;
   	}
 
         if (item == "commodities") {
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " commodities");
-  	  amount = technologies[mv[3]].gainCommodities(imperium_self, player, parseInt(mv[3]));
+	  for (let z in technologies) {
+  	    amount = technologies[z].gainCommodities(imperium_self, player, amount);
+  	  }
   	  this.game.players_info[player-1].commodities += amount;
   	}
 
         if (item == "command") {
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " command tokens");
-  	  amount = technologies[mv[3]].gainCommandTokens(imperium_self, player, parseInt(mv[3]));
+	  for (let z in technologies) {
+  	    amount = technologies[z].gainCommandTokens(imperium_self, player, amount);
+  	  }
   	  this.game.players_info[player-1].command_tokens += amount;
   	}
         if (item == "strategy") {
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " strategy tokens");
-  	  amount = technologies[mv[3]].gainStrategyTokens(imperium_self, player, parseInt(mv[3]));
+	  for (let z in technologies) {
+  	    amount = technologies[z].gainStrategyTokens(imperium_self, player, amount);
+  	  }
   	  this.game.players_info[player-1].strategy_tokens += amount;
   	}
 
         if (item == "fleetsupply") {
-  	  amount = technologies[mv[3]].gainFleetSupply(imperium_self, player, parseInt(mv[3]));
+	  for (let z in technologies) {
+  	    amount = technologies[z].gainFleetSupply(imperium_self, player, amount);
+  	  }
   	  this.game.players_info[player-1].fleet_supply += amount;
   	  this.updateLog(this.returnFaction(player) + " increases their fleet supply to " + this.game.players_info[player-1].fleet_supply);
   	}

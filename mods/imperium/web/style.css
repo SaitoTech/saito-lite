@@ -4,6 +4,32 @@
 }
 
 
+
+
+
+.faction_sheet {
+
+}
+.interface_overlay {
+
+}
+.log {
+  display:inline;
+  float: right;
+  width: 300px;
+  height: 700px;
+  z-index:999999;
+}
+.hud {
+  width: 600px;
+  min-width: 600px;
+}
+.hud-body {
+  display: block;
+  height: 100%;
+  max-width: 100%;
+  background-color: whitesmoke;
+}
 .cardbox {
   top: 17vh;
   height: 60vh;
