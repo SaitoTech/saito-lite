@@ -1211,7 +1211,10 @@ console.log(player + " -- " + card + " -- " + deck);
           imperium_self.endTurn();
           return;
         };
-  
+ 
+
+
+
   
         //
         // highlight ship on menu
@@ -1230,7 +1233,8 @@ console.log(player + " -- " + card + " -- " + deck);
         let ship = obj.ships_and_sectors[i].ships[ii];
         let total_ship_capacity = imperium_self.returnRemainingCapacity(ship);
         let x = { i : i , ii : ii , sector : sector };
-  
+
+
         //
         // calculate actual distance
         //
@@ -1268,6 +1272,28 @@ console.log(player + " -- " + card + " -- " + deck);
         }
 
 
+	//
+	// remove already-moved fighters from stuff-available-to-move
+	// 
+        let fighters_available_to_move = 0;
+        for (let iii = 0; iii < sys.s.units[imperium_self.game.player-1].length; iii++) {
+          if (sys.s.units[imperium_self.game.player-1][iii].type == "fighter") {
+            let fighter_already_moved = 0;
+            for (let z = 0; z < obj.stuff_to_move.length; z++) {
+              if (obj.stuff_to_move[z].sector == sector) {
+                if (obj.stuff_to_move[z].ii == iii) {
+                  fighter_already_moved = 1;
+                }
+              }
+            }  
+            if (fighter_already_moved == 1) {
+              stuff_available_to_move--;
+            }
+          }
+        }
+
+
+
         if (total_ship_capacity > 0 && stuff_available_to_move > 0) {
           let remove_what_capacity = 0;
           for (let z = 0; z < obj.stuff_to_load.length; z++) {
@@ -1289,18 +1315,28 @@ console.log(player + " -- " + card + " -- " + deck);
               }
             }
             if (infantry_available_to_move > 0) {
-              user_message += '<li class="addoption option" id="addinfantry_p_'+i+'">add infantry from '+sys.p[i].name+' (<span class="add_infantry_remaining_'+i+'">'+infantry_available_to_move+'</span>)</li>';
+              user_message += '<li class="addoption option textchoice" id="addinfantry_p_'+i+'">add infantry from '+sys.p[i].name+' (<span class="add_infantry_remaining_'+i+'">'+infantry_available_to_move+'</span>)</li>';
             }
           }
   
           let fighters_available_to_move = 0;
-          for (let i = 0; i < sys.s.units[imperium_self.game.player-1].length; i++) {
-            if (sys.s.units[imperium_self.game.player-1][i].type == "fighter") {
-    	    fighters_available_to_move++;
+          for (let iii = 0; iii < sys.s.units[imperium_self.game.player-1].length; iii++) {
+            if (sys.s.units[imperium_self.game.player-1][iii].type == "fighter") {
+	      let fighter_already_moved = 0;
+  	      for (let z = 0; z < obj.stuff_to_move.length; z++) {
+ 	        if (obj.stuff_to_move[z].sector == sector) {
+  	          if (obj.stuff_to_move[z].ii == iii) {
+  	            fighter_already_moved = 1;
+  	          }
+  	        }
+  	      }	
+	      if (fighter_already_moved == 0) {
+    	        fighters_available_to_move++;
+	      }
             }
           }
-          user_message += '<li class="addoption option" id="addfighter_s_s">add fighter (<span class="add_fighters_remaining">'+fighters_available_to_move+'</span>)</li>';
-          user_message += '<li class="addoption option" id="skip">finish</li>';
+          user_message += '<li class="addoption option textchoice" id="addfighter_s_s">add fighter (<span class="add_fighters_remaining">'+fighters_available_to_move+'</span>)</li>';
+          user_message += '<li class="addoption option textchoice" id="skip">finish</li>';
           user_message += '</ul></div>';
   
 
@@ -1311,8 +1347,6 @@ console.log(player + " -- " + card + " -- " + deck);
           $('.hud-menu-overlay').show();
           $('.status').hide();
           $('.addoption').off();
-
-
 
   
 	  //
@@ -1385,7 +1419,31 @@ console.log(player + " -- " + card + " -- " + deck);
                 let ic = parseInt($('.capacity_remaining').html());
     	        $('.add_fighters_remaining').html((ir-1));
   	        $('.capacity_remaining').html((ic-1));
-  
+
+		//
+		// remove this fighter ...
+		//
+		for (let sec = 0; sec < obj.ships_and_sectors.length; sec++) {
+		  if (obj.ships_and_sectors[sec].sector === sector) {
+		    let ships_to_check = obj.ships_and_sectors[sec].ships.length;
+		    for (let f = 0; f < ships_to_check; f++) {
+		      if (obj.ships_and_sectors[sec].ships[f].type == "fighter") {
+
+			// remove fighter from status menu
+			let status_div = '#sector_'+sec+'_'+f;
+			$(status_div).remove();
+
+			// remove from arrays (as loaded)
+		        obj.ships_and_sectors[sec].ships.splice(f, 1);
+		        obj.ships_and_sectors[sec].adjusted_distance.splice(f, 1);
+			f = obj.ships_and_sectors[sec].ships.length+2;
+			sec = obj.ships_and_sectors.length+2;
+
+		      }
+		    }
+		  }
+	        }
+
   	        let unitjson = imperium_self.removeSpaceUnit(imperium_self.game.player, sector, "fighter");
   	        let shipjson_preload = JSON.stringify(sys.s.units[imperium_self.game.player-1][obj.ships_and_sectors[i].ship_idxs[ii]]);  
 

@@ -60,7 +60,7 @@
     //
     // deactivate all systems
     //
-    for (var sys in this.game.systems) {
+    for (var sys in this.systems) {
       for (let j = 0; j < this.totalPlayers; j++) {
         this.game.systems[sys].activated[j] = 0;
       }

@@ -189,6 +189,16 @@ console.log("GAME QUEUE: " + this.game.queue);
   	imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.push(card);
 	imperium_self.updateStatus("");
 
+	if (strategy_card_player == 0) {
+	  //
+	  // play secondary
+	  //
+	  this.playerStrategyCardSecondary(-1, card);
+	  return 0;
+	}
+
+
+
   	if (stage == 1) {
 console.log("PLAY PRIMARY");
   	  this.playStrategyCardPrimary(strategy_card_player, card);
@@ -643,27 +653,22 @@ console.log("tech: " + k);
   	  }
   	}
 
-console.log("B");
 
       	this.game.queue.push("resolve\tnewround");
     	this.game.state.round++;
     	this.updateLog("ROUND: " + this.game.state.round);
   	this.updateStatus("Moving into Round " + this.game.state.round);
   
-console.log("C");
-
   	//
   	// SCORING
   	//
         if (this.game.state.round_scoring == 0 && this.game.state.round > 1) {
-          this.game.queue.push("strategy\t"+"empire"+"\t"+"-1"+"\t2\t"+1);
+          this.game.queue.push("strategy\t"+"imperial"+"\t"+"-1"+"\t2\t"+1);
   	  this.game.state.round_scoring = 0;
   	} else {
   	  this.game.state.round_scoring = 0;
   	}
   
-console.log("D");
-
   	//
   	// RESET USER ACCOUNTS
   	//
@@ -1247,8 +1252,8 @@ alert("Player should choose what planets to invade (if possible)");
           this.addSpaceUnitByJSON(player, sector_to, shipjson);
   	}
   
-  	this.updateSectorGraphics(sector_from);
   	this.updateSectorGraphics(sector_to);
+  	this.updateSectorGraphics(sector_from);
 
   	this.game.queue.splice(qe, 1);
   	return 1;
