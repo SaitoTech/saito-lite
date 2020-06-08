@@ -73,65 +73,23 @@ class Imperium extends GameTemplate {
 
 
 
-    this.importTech("neural-motivator", {
-      name        	:       "Neural Motivator" ,
-      color       	:       "green" ,
-      prereqs             :       [],
-    });
-
-    this.importTech("dacxive-animators", {
-      name                :       "Dacxive Animators" ,
-      color               :       "green" ,
-      prereqs             :       ["green"],
-    });
-
-    this.importTech("hyper-metabolism", {
-      name        	: 	"Hyper Metabolism" ,
-      color       	: 	"green" ,
-      prereqs     	:       ['green','green'],
-    });
-
-    this.importTech("x89-bacterial-weapon", {
-      name        	:       "X-89 Bacterial Weapon" ,
-      color       	:       "green" ,
-      prereqs     	:       ['green','green','green'],
-    });
-
-
-
-    this.importTech("plasma-scoring", {
-      name        	:       "Plasma Scoring" ,
-      color       	:       "red" ,
-      prereqs             :       [],
-    });
-
-    this.importTech("magan-defense-grid", {
-      name                :       "Magan Defense Grid" ,
-      color               :       "red" ,
-      prereqs             :       ["red"],
-    });
-
-    this.importTech("duranium-armor", {
-      name        	: 	"Duranium Armor" ,
-      color       	: 	"red" ,
-      prereqs     	:       ['red','red'],
-    });
-
-    this.importTech("assault-cannon", {
-      name        	:       "Assault Cannon" ,
-      color       	:       "red" ,
-      prereqs     	:       ['red','red','red'],
-    });
-
-
-
-
 
 
     this.importTech("antimass-deflectors", {
       name        	:       "Antimass Deflectors" ,
       color       	:       "blue" ,
       prereqs             :       [],
+      obj.initialize : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].antimass_deflectors == undefined) {
+          imperium_self.game.players_info[player-1].antimass_deflectors = 0;
+        }
+      },
+      obj.onNewRound : function(imperium_self, player, mycallback) {
+        if (player == this.game.player) {
+          imperium_self.game.players_info[player-1].antimass_deflectors = 1;
+        }
+        return 1;
+      },
     });
 
 
@@ -139,6 +97,17 @@ class Imperium extends GameTemplate {
       name                :       "Gravity Drive" ,
       color               :       "blue" ,
       prereqs             :       ["blue"],
+      obj.initialize : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].gravity_drive == undefined) {
+          imperium_self.game.players_info[player-1].gravity_drive = 0;
+        }
+      },
+      obj.onNewRound : function(imperium_self, player, mycallback) {
+        if (player == this.game.player) {
+          imperium_self.game.players_info[player-1].gravity_drive = 1;
+        }
+        return 1;
+      },
     });
 
 
@@ -146,6 +115,17 @@ class Imperium extends GameTemplate {
       name        	: 	"Fleet Logistics" ,
       color       	: 	"blue" ,
       prereqs     	:       ['blue','blue'],
+      obj.initialize : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].fleet_logistics == undefined) {
+          imperium_self.game.players_info[player-1].fleet_logistics = 0;
+        }
+      },
+      obj.onNewRound : function(imperium_self, player, mycallback) {
+        if (player == this.game.player) {
+          imperium_self.game.players_info[player-1].fleet_logistics = 1;
+        }
+        return 1;
+      },
     });
 
 
@@ -153,8 +133,162 @@ class Imperium extends GameTemplate {
       name        	:       "Light/Wave Deflector" ,
       color       	:       "blue" ,
       prereqs     	:       ['blue','blue','blue'],
+      obj.initialize : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].lightwave_deflector == undefined) {
+          imperium_self.game.players_info[player-1].lightwave_deflector = 0;
+        }
+      },
+      obj.onNewRound : function(imperium_self, player, mycallback) {
+        if (player == this.game.player) {
+          imperium_self.game.players_info[player-1].lightwave_deflector = 1;
+        }
+        return 1;
+      },
     });
 
+
+    this.importTech("neural-motivator", {
+      name        	:       "Neural Motivator" ,
+      color       	:       "green" ,
+      prereqs             :       [],
+      obj.initialize : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].neural_motivator == undefined) {
+          imperium_self.game.players_info[player-1].neural_motivator = 0;
+        }
+      },
+      obj.onNewRound : function(imperium_self, player, mycallback) {
+        if (player == this.game.player) {
+          imperium_self.game.players_info[player-1].neural_motivator = 1;
+        }
+        return 1;
+      },
+    });
+
+
+    this.importTech("dacxive-animators", {
+      name                :       "Dacxive Animators" ,
+      color               :       "green" ,
+      prereqs             :       ["green"],
+      obj.initialize : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].dacxive_animators == undefined) {
+          imperium_self.game.players_info[player-1].dacxive_animators;
+        }
+      },
+      obj.onNewRound : function(imperium_self, player, mycallback) {
+        if (player == this.game.player) {
+          imperium_self.game.players_info[player-1].dacxive_animators = 1;
+        }
+        return 1;
+      },
+    });
+
+
+    this.importTech("hyper-metabolism", {
+      name        	: 	"Hyper Metabolism" ,
+      color       	: 	"green" ,
+      prereqs     	:       ['green','green'],
+      obj.initialize : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].hyper_metabolism == undefined) {
+          imperium_self.game.players_info[player-1].hyper_metabolism = 0;
+        }
+      },
+      obj.onNewRound : function(imperium_self, player, mycallback) {
+        if (player == this.game.player) {
+          imperium_self.game.players_info[player-1].hyper_metabolism = 1;
+        }
+        return 1;
+      },
+    });
+
+
+    this.importTech("x89-bacterial-weapon", {
+      name        	:       "X-89 Bacterial Weapon" ,
+      color       	:       "green" ,
+      prereqs     	:       ['green','green','green'],
+      obj.initialize : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].x89_bacterial_weapon == undefined) {
+          imperium_self.game.players_info[player-1].x89_bacterial_weapon = 0;
+        }
+      },
+      obj.onNewRound : function(imperium_self, player, mycallback) {
+        if (player == this.game.player) {
+          imperium_self.game.players_info[player-1].x89_bacterial_weapon = 1;
+        }
+        return 1;
+      },
+    });
+
+
+
+
+    this.importTech("plasma-scoring", {
+      name        	:       "Plasma Scoring" ,
+      color       	:       "red" ,
+      prereqs             :       [],
+      obj.initialize = function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].plasma_scoring == undefined) {
+          imperium_self.game.players_info[player-1].plasma_scoring = 0;
+        }
+      },
+      obj.onNewRound = function(imperium_self, player, mycallback) {
+        if (player == this.game.player) {
+          imperium_self.game.players_info[player-1].plasma_scoring = 1;
+        }
+        return 1;
+      },
+    });
+
+    this.importTech("magan-defense-grid", {
+      name                :       "Magan Defense Grid" ,
+      color               :       "red" ,
+      prereqs             :       ["red"],
+
+      obj.initialize = function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].magen_defense_grid == undefined) {
+          imperium_self.game.players_info[player-1].magen_defense_grid = 0;
+        }
+      },
+      obj.onNewRound = function(imperium_self, player, mycallback) {
+        if (player == this.game.player) {
+          imperium_self.game.players_info[player-1].magen_defense_grid = 1;
+        }
+        return 1;
+      },
+    });
+
+    this.importTech("duranium-armor", {
+      name        	: 	"Duranium Armor" ,
+      color       	: 	"red" ,
+      prereqs     	:       ['red','red'],
+      obj.initialize = function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].duranium_armor == undefined) {
+          imperium_self.game.players_info[player-1].duranium_armor = 0;
+        }
+      },
+      obj.onNewRound = function(imperium_self, player, mycallback) {
+        if (player == this.game.player) {
+          imperium_self.game.players_info[player-1].duranium_armor = 1;
+        }
+        return 1;
+      },
+    });
+
+    this.importTech("assault-cannon", {
+      name        	:       "Assault Cannon" ,
+      color       	:       "red" ,
+      prereqs     	:       ['red','red','red'],
+      obj.initialize = function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].assault_cannont == undefined) {
+          imperium_self.game.players_info[player-1].assault_cannont = 0;
+        }
+      },
+      obj.onNewRound = function(imperium_self, player, mycallback) {
+        if (player == this.game.player) {
+          imperium_self.game.players_info[player-1].assault_cannont = 1;
+        }
+        return 1;
+      },
+    });
 
 
 
@@ -163,6 +297,17 @@ class Imperium extends GameTemplate {
       name        	: 	"Sarween Tools" ,
       color       	: 	"yellow" ,
       prereqs     	:       [],
+      obj.initialize : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].sarween_tools == undefined) {
+          imperium_self.game.players_info[player-1].sarween_tools = 0;
+        }
+      },
+      obj.onNewRound : function(imperium_self, player, mycallback) {
+        if (player == this.game.player) {
+          imperium_self.game.players_info[player-1].sarween_tools = 1;
+        }
+        return 1;
+      },
     });
 
 
@@ -170,6 +315,17 @@ class Imperium extends GameTemplate {
       name        	:       "Graviton Laser System" ,
       color       	:       "yellow" ,
       prereqs             :       ["yellow"],
+      obj.initialize : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].graviton_laser_system == undefined) {
+          imperium_self.game.players_info[player-1].graviton_laser_system = 0;
+        }
+      },
+      obj.onNewRound : function(imperium_self, player, mycallback) {
+        if (player == this.game.player) {
+          imperium_self.game.players_info[player-1].graviton_laser_system = 1;
+        }
+        return 1;
+      },
     });
 
 
@@ -177,6 +333,17 @@ class Imperium extends GameTemplate {
       name                :       "Transit Diodes" ,
       color               :       "yellow" ,
       prereqs             :       ["yellow", "yellow"],
+      obj.initialize : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].transit_diodes == undefined) {
+          imperium_self.game.players_info[player-1].transit_diodes = 0;
+        }
+      },
+      obj.onNewRound : function(imperium_self, player, mycallback) {
+        if (player == this.game.player) {
+          imperium_self.game.players_info[player-1].transit_diodes = 1;
+        }
+        return 1;
+      },
     });
 
 
@@ -184,6 +351,17 @@ class Imperium extends GameTemplate {
       name        	:       "Integrated Economy" ,
       color       	:       "yellow" ,
       prereqs     	:       ['yellow','yellow','yellow'],
+      obj.initialize : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].integrated_economy == undefined) {
+          imperium_self.game.players_info[player-1].integrated_economy = 0;
+        }
+      },
+      obj.onNewRound : function(imperium_self, player, mycallback) {
+        if (player == this.game.player) {
+          imperium_self.game.players_info[player-1].integrated_economy = 1;
+        }
+        return 1;
+      },
     });
 
 
