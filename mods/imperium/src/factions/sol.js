@@ -12,9 +12,6 @@
 
       name        :       "Orbital Drop" ,
       faction     :       "faction1",
-      img         :       "/imperium/img/card_template.jpg" ,
-      unit        :       1 ,
-      prereqs     :       [],
       menuOption  :       function(imperium_self, player) {
         let x = {};
             x.trigger = 'orbitaldrop';
@@ -50,9 +47,15 @@
       replaces    :       "carrier-ii",
       unit        :       1 ,
       prereqs     :       ["blue","blue"],
+      initialize :       function(imperium_self, player) {
+	imperium_self.game.players_info[player-1].faction1_advanced_carrier_ii = 0;
+      },
+      gainTechnology :       function(imperium_self, gainer, tech) {
+	imperium_self.game.players_info[gainer-1].faction1_advanced_carrier_ii = 1;
+      },
       upgradeUnit :       function(imperium_self, player, unit) {
 
-	if (imperium_self.doesPlayerHaveTech("faction1-advanced-carrier-ii") && unit.type == "carrier") {
+	if (imperium_self.game.players_info[unit.owner-1].faction1_advanced_carrier_ii == 1 && unit.type == "carrier") {
           unit.cost = 3;
           unit.combat = 9;
           unit.move = 2;
@@ -61,14 +64,6 @@
 
         return unit;
       },
-      onNewRound     :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players_info[player-1].upgraded_carrier = 1;
-        mycallback(1);
-      },
-      onNewTurn        :       function(imperium_self, player, mycallback) {
-        imperium_self.game.players_info[player-1].upgraded_carrier = 1;
-        mycallback(1);
-      }
 
     });
 
@@ -80,9 +75,15 @@
       replaces    :       "infantry-ii",
       unit        :       1 ,
       prereqs     :       ["green","green"],
+      initialize :       function(imperium_self, player) {
+	imperium_self.game.players_info[player-1].faction1_advanced_infantry_ii = 0;
+      },
+      gainTechnology :       function(imperium_self, gainer, tech) {
+	imperium_self.game.players_info[gainer-1].faction1_advanced_infantry_ii = 1;
+      },
       upgradeUnit :       function(imperium_self, player, unit) {
 
-	if (imperium_self.doesPlayerHaveTech("faction1-advanced-infantry-ii") && unit.type == "infantry") {
+	if (imperium_self.game.players_info[unit.owner-1].faction1_advanced_infantry_ii == 1 && unit.type == "infantry") {
           unit.cost = 0.5;
           unit.combat = 6;
         }
@@ -91,4 +92,6 @@
       },
 
     });
+
+
 

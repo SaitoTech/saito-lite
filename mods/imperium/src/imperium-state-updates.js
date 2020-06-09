@@ -1,38 +1,5 @@
   
 
-  //
-  // synchronousGameEvents
-  //
-  executeSynchronousGameEvent(eventname="", arg2=null, arg3=null, arg4=null, arg5=null, arg6=null, arg7=null, arg8=null) {
-
-    let technologies = this.returnTechnology();
-
-    for (let i = 0; i < this.game.players_info.length; i++) {
-
-      let techs = this.game.players_info[i].tech;
-      for (let k = 0; k < techs.length; k++) {
-
-        //
-        // destroyed unit
-        //
-        if (eventname === "destroyed_unit") {
-	  let attacker   = arg2;
-	  let defender   = arg3;
-	  let sector     = arg4;
-	  let planet_idx = arg5;
-	  let unitname   = arg6;
-
-          if (technologies[techs[k]].destroyedUnitTriggersSync(this, (i+1), attacker, defender, sector, planet_idx, unitname) == 1) {
-            technologies[techs[k]].destroyedUnitEventSync(this, (i+1), attacker, defender, sector, planet_idx, unitname);
-          }
-        }
-
-      }
-    }
-  }
-
-
-
 
   //
   // this function can be run after a tech bonus is used, to see if 
@@ -79,13 +46,12 @@
   updatePlanetOwner(sector, planet_idx) {
     let sys = this.returnSectorAndPlanets(sector);
     let owner = -1;
-console.log("PLANET STATE: " + JSON.stringify(sys.p[planet_idx]));
 
     for (let i = 0; i < sys.p[planet_idx].units.length; i++) {
       if (sys.p[planet_idx].units[i].length > 0) { owner = i+1; }
     }
     if (owner != -1) {
-this.updateLog("setting owner to " + owner);
+      this.updateLog("setting owner to " + owner);
       sys.p[planet_idx].owner = owner;
       sys.p[planet_idx].exhausted = 1;
     }
@@ -436,19 +402,9 @@ try {
       //
       // planet changes ownership
       //
-console.log("#########");
-console.log("#########");
-console.log("#########");
-console.log("#########");
-console.log("Updating owner to: " + attacker);
-      //sys.p[planet_idx].owner = attacker;
-this.updateLog("planet owner is set 2: " + attacker);
-      //sys.p[planet_idx].exhausted = 1;
       this.updatePlanetOwner(sector, planet_idx);
-console.log("PLANET UPDATED: " + JSON.stringify(sys.p[planet_idx]));
     }
 
-console.log("skipping etc.");
 
     //
     // save regardless
@@ -526,6 +482,8 @@ console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
 
   assignHitsToGroundForces(attacker, defender, sector, planet_idx, hits) {
 
+    let z = this.returnEventObjects();
+
     let ground_forces_destroyed = 0;  
     let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < hits; i++) {
@@ -558,13 +516,9 @@ console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
           ground_forces_destroyed++;
           sys.p[planet_idx].units[defender-1][weakest_unit_idx].destroyed = 1;
 
-          // let attacker   = arg2;
-          // let defender   = arg3;
-          // let sector     = arg4;
-          // let planet_idx = arg5;
-          // let unitname   = arg6;
-
-	  this.executeSynchronousGameEvent("destroyed_unit", attacker, defender, sector, planet_idx, sys.p[planet_idx].units[defender-1][weakest_unit_idx].name);
+	  for (z_index in z) {
+            sys.p[planet_idx].units[defender-1][weakest_unit_idx] = z[z_index].unitDestroyed(this, attacker, sys.p[planet_idx].units[defender-1][weakest_unit_idx]);
+	  }
 
         }
       }
@@ -580,6 +534,7 @@ console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
 
   assignHitsToSpaceFleet(attacker, defender, sector, hits) {
 
+    let z = this.returnEventObjects();
     let ships_destroyed = 0;  
     let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < hits; i++) {
@@ -610,13 +565,9 @@ console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
 	  ships_destroyed++;
           sys.s.units[defender-1][weakest_unit_idx].destroyed = 1;
 
-          // let attacker   = arg2;
-          // let defender   = arg3;
-          // let sector     = arg4;
-          // let planet_idx = arg5;
-          // let unitname   = arg6;
-
-	  this.executeSynchronousGameEvent("destroyed_unit", attacker, defender, sector, "", sys.s.units[defender-1][weakest_unit_idx].name);
+	  for (z_index in z) {
+            sys.s.units[defender-1][weakest_unit_idx] = z[z_index].unitDestroyed(this, attacker, sys.s.units[defender-1][weakest_unit_idx]);
+	  }
 
         }
       }

@@ -36,9 +36,6 @@ console.log("MISSING FACTION: " + this.game.players_info[i].faction);
       }
     }
 
-
-console.log("Returning Events!");
-
     return z;
 
   }
@@ -55,35 +52,52 @@ console.log("Returning Events!");
     // on a new turn. they should be asynchronous (not require user input) and thus do not
     // require a trigger - every function is run every time the game reaches this state..
     //
+    // by convention "player" means the player in the players_info. if you mean "the player 
+    // that has this tech" you should do a secondary check in the logic of the card to 
+    // ensure that "player" has the right to execute the logic being coded, either by 
+    // adding gainTechnology() or doesPlayerHaveTech()
+    //
+    //
+    // runs for everyone
+    //
     if (obj.initialize == null) {
       obj.initialize = function(imperium_self, player) { return 0; }
     }
     if (obj.gainTechnology == null) {
-      obj.gainTechnology = function(imperium_self, player, tech) { return 1; }
+      obj.gainTechnology = function(imperium_self, gainer, tech) { return 1; }
     }
     if (obj.gainTradeGoods == null) {
-      obj.gainTradeGoods = function(imperium_self, player, amount) { return amount; }
+      obj.gainTradeGoods = function(imperium_self, gainer, amount) { return amount; }
     }
     if (obj.gainCommodities == null) {
-      obj.gainCommodities = function(imperium_self, player, amount) { return amount; }
+      obj.gainCommodities = function(imperium_self, gainer, amount) { return amount; }
     }
     if (obj.gainFleetSupply == null) {
-      obj.gainFleetSupply = function(imperium_self, player, amount) { return amount; }
+      obj.gainFleetSupply = function(imperium_self, gainer, amount) { return amount; }
     }
     if (obj.gainStrategyCard == null) {
-      obj.gainStrategyCard = function(imperium_self, player, card) { return card; }
+      obj.gainStrategyCard = function(imperium_self, gainer, card) { return card; }
     }
     if (obj.gainCommandTokens == null) {
-      obj.gainCommandToken = function(imperium_self, player, amount) { return amount; }
+      obj.gainCommandToken = function(imperium_self, gainer, amount) { return amount; }
     }
     if (obj.gainStrategyTokens == null) {
-      obj.gainStrategyTokens = function(imperium_self, player, amount) { return amount; }
+      obj.gainStrategyTokens = function(imperium_self, gainer, amount) { return amount; }
     }
+    //
+    // ALL players run upgradeUnit, so upgrades should manage who have them
+    //
     if (obj.upgradeUnit == null) {
       obj.upgradeUnit = function(imperium_self, player, unit) { return unit; }
     }
+    //
+    // ALL players run unitDestroyed
+    //
     if (obj.unitDestroyed == null) {
-      obj.unitDestroyed = function(imperium_self, player, unit) { return 0; }
+      obj.unitDestroyed = function(imperium_self, player, unit) { return unit;}
+    }
+    if (obj.unitHit == null) {
+      obj.unitHit = function(imperium_self, player, unit) { return unit;}
     }
     if (obj.onNewRound == null) {
       obj.onNewRound = function(imperium_self, player, mycallback) { return 0; }
@@ -97,22 +111,22 @@ console.log("Returning Events!");
     // strategy cards //
     ////////////////////
     if (obj.strategyPrimaryEvent == null) {
-      obj.strategyPrimaryEvent = function(imperium_self, player, card_player) { return 0; }
+      obj.strategyPrimaryEvent = function(imperium_self, player, strategy_card_player) { return 0; }
     }
     if (obj.strategySecondaryEvent == null) {
-      obj.strategySecondaryEvent = function(imperium_self, player, card_player) { return 0; }
+      obj.strategySecondaryEvent = function(imperium_self, player, strategy_card_player) { return 0; }
     }
     if (obj.strategyCardBeforeTriggers == null) {
-      obj.strategyCardBeforeTriggers = function(imperium_self, player, card_player, card) { return 0; }
+      obj.strategyCardBeforeTriggers = function(imperium_self, player, strategy_card_player, card) { return 0; }
     }
     if (obj.strategyCardBeforeEvent == null) {
-      obj.strategyCardBeforeEvent = function(imperium_self, player, card_player, card) { return 0; }
+      obj.strategyCardBeforeEvent = function(imperium_self, player, strategy_card_player, card) { return 0; }
     }
     if (obj.strategyCardAfterTriggers == null) {
-      obj.strategyCardAfterTriggers = function(imperium_self, player, card_player, card) { return 0; }
+      obj.strategyCardAfterTriggers = function(imperium_self, player, strategy_card_player, card) { return 0; }
     }
     if (obj.strategyCardAfterEvent == null) {
-      obj.strategyCardAfterEvent = function(imperium_self, player, card_player, card) { return 0; }
+      obj.strategyCardAfterEvent = function(imperium_self, player, strategy_card_player, card) { return 0; }
     }
     if (obj.playersChooseStrategyCardsBeforeTriggers == null) {
       obj.playersChooseStrategyCardsBeforeTriggers = function(imperium_self, player) { return 0; }
@@ -133,8 +147,8 @@ console.log("Returning Events!");
     // main turn menu //
     ////////////////////
     //
-    // these events modify the menu presented to the player each and every time the player
-    // has the option of a turn.
+    // the player here will be the user who is viewing the menu, so this only executes for the
+    // active player.
     //
     if (obj.menuOption == null) {
       obj.menuOption = function(imperium_self, player) { return 0; }
@@ -147,9 +161,14 @@ console.log("Returning Events!");
     }
 
 
+
     ///////////////////////
     // modify dice rolls //
     ///////////////////////
+    //
+    // executes for all technologies that are available. these functions should check if they
+    // are active for either the attacker or the defender when executing.
+    //
     if (obj.modifyPDSRoll == null) {
       obj.modifyPDSRoll = function(imperium_self, attacker, defender, roll) { return roll; }
     }
@@ -169,48 +188,6 @@ console.log("Returning Events!");
       obj.canPlayerScoreVictoryPoints = function(imperium_self, player) { return 0; }
     }
 
-
-
-    ////////////////////////
-    // synchronous events //
-    ////////////////////////
-    //
-    // these can be called directly from game code itself, ie the imperium-state-updates functions
-    // that execute game-code collectively on all player machines. they do not need to be added to
-    // the stack for a separate check, but cannot require intervention.
-    //
-
-/****
-    //
-    // unit is destroyed
-    //
-    if (obj.destroyedUnitTriggersSync == null) {
-      obj.destroyedUnitTriggers = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
-    }
-    if (obj.destroyedUnitEventSync == null) {
-      obj.destroyedUnitEvent = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
-    }
-
-    //
-    // space unit is destroyed
-    //
-    if (obj.destroyedSpaceUnitTriggersSync == null) {
-      obj.destroyedSpaceUnitTriggers = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
-    }
-    if (obj.destroyedUnitEventSync == null) {
-      obj.destroyedUnitEvent = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
-    }
-
-    //
-    // ground unit is destroyed
-    //
-    if (obj.destroyedGroundUnitTriggersSync == null) {
-      obj.destroyedGroundUnitTriggersSync = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
-    }
-    if (obj.destroyedGroundUnitEventSync == null) {
-      obj.destroyedGroundUnitEventSync = function(imperium_self, player, attacker, defender, sector, planet_idx, details) { return 0; }
-    }
-****/
 
 
     //////////////////////////

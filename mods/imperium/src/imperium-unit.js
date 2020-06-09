@@ -427,6 +427,8 @@
 
   upgradeUnit(unit, player_to_upgrade) {
 
+    let z = this.returnEventObjects();
+
     for (let z_index in z) {
       unit = z[z_index].upgradeUnit(this, player_to_upgrade, unit);
     }

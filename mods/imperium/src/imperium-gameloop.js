@@ -1114,7 +1114,7 @@ alert("Player should choose what planets to invade (if possible)");
 	let player_to_continue = mv[3];  
 
         sys = this.returnSectorAndPlanets(sector);
-  	sys.s.activated[player-1] = 1;
+  	_to_continuesys.s.activated[player-1] = 1;
   	this.saveSystemAndPlanets(sys);
         this.updateSectorGraphics(sector);
 
@@ -1291,13 +1291,13 @@ alert("Player should choose what planets to invade (if possible)");
       /////////////////////
       if (mv[0] === "activate_system") {
   
-  	let player       = parseInt(mv[1]);
+  	let activating_player       = parseInt(mv[1]);
         let sector	 = mv[2];
 	let player_to_continue = mv[3];  
         let z = this.returnEventObjects();
 
         sys = this.returnSectorAndPlanets(sector);
-  	sys.s.activated[player-1] = 1;
+  	sys.s.activated[player_to_continue-1] = 1;
   	this.saveSystemAndPlanets(sys);
         this.updateSectorGraphics(sector);
 
@@ -1307,8 +1307,8 @@ alert("Player should choose what planets to invade (if possible)");
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
-	    if (z[k].activateSystemTriggers(this, player, sector) == 1) {
-	      this.game.queue.push("activate_system_event\t"+speaker_order[i]+"\t"+sector+"\t"+k);
+	    if (z[k].activateSystemTriggers(this, activating_player, speaker_order[i], sector) == 1) {
+	      this.game.queue.push("activate_system_event\t"+activating_player+"\t"+speaker_order[i]+"\t"+sector+"\t"+k);
 	    }
           }
         }
@@ -1317,11 +1317,12 @@ alert("Player should choose what planets to invade (if possible)");
 
       if (mv[0] === "activate_system_event") {
         let z		 = this.returnEventObjects();
-  	let player       = parseInt(mv[1]);
-        let sector	 = mv[2];
-        let z_index	 = parseInt(mv[3]);
+  	let activating_player = parseInt(mv[1]);
+  	let player       = parseInt(mv[2]);
+        let sector	 = mv[3];
+        let z_index	 = parseInt(mv[4]);
   	this.game.queue.splice(qe, 1);
-	return z[z_index].activateSystemEvent(this, player, sector);
+	return z[z_index].activateSystemEvent(this, activating_player, player, sector);
 
       }
 

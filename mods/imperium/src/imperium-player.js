@@ -247,6 +247,7 @@
     // check to see if any ships survived....
     //
     let html  = this.returnFaction(player) + ": <p></p><ul>";
+
     if (this.canPlayerInvadePlanet(player, sector)) {
       html += '<li class="option" id="invade">invade planet</li>';
       options_available++;
@@ -1573,7 +1574,7 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
             if (sys.p[i].units[player - 1][j].type == "infantry") {
               if (populated_planet_forces == 0) {
                 forces_on_planets[i]++;;
-  	    }
+  	      }
             }
           }
           html += '<li class="invadechoice option" id="invasion_planet_'+i+'">'+sys.p[i].name+' (<span class="planet_'+i+'_infantry">'+forces_on_planets[i]+'</span>)</li>';
@@ -1590,7 +1591,7 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
         let ship = sys.s.units[player-1][i];
         forces_on_ships.push(0);
         for (let j = 0; j < ship.storage.length; j++) {
-  	  if (ship.storage[j].name === "infantry") {
+  	  if (ship.storage[j].type === "infantry") {
             if (populated_ship_forces == 0) {
               forces_on_ships[i]++;
   	    }
