@@ -82,8 +82,8 @@ class Leaderboard extends ModTemplate {
             player = "me";
           }
 
-	  let player_identifier = app.keys.returnIdentifierByPublicKey(row.publickey, true);
-	  if (app.crypto.isPublicKey(player_identifier)) { identifiers_to_fetch.push(player_identifier); }
+      let player_identifier = app.keys.returnIdentifierByPublicKey(row.publickey, true);
+      if (app.crypto.isPublicKey(player_identifier)) { identifiers_to_fetch.push(player_identifier); }
 
           leaderboard_self.rankings[row.module].push({
             "address": row.publickey ,
@@ -149,7 +149,7 @@ class Leaderboard extends ModTemplate {
         console.log('++++++' + tx.transaction.sig);
         console.log('+++++++++++++++++++++++++++++++++++++++');
 
-	if (txmsg.winner === "") { return; } // tie game
+    if (txmsg.winner === "") { return; } // tie game
 
         winner.publickey = txmsg.winner;
         module = txmsg.module;
