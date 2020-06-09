@@ -32,9 +32,8 @@
       name        :       "Versatile" ,
       faction     :       "faction1",
       type        :       "special" ,
-      onNewRound     :    function(imperium_self, player, mycallback) {
+      onNewRound     :    function(imperium_self, player) {
         imperium_self.game.players_info[player-1].new_tokens_per_round = 3;
-        mycallback(1);
       },
 
     });

@@ -60,6 +60,13 @@
       //
       this.initializeDice();
 
+
+      //
+      // players first
+      //
+      this.game.players_info = this.returnPlayers(this.totalPlayers); // factions and player info
+
+
       //
       // initialize game state
       //
@@ -95,11 +102,6 @@
       }
  
  
-      //
-      // units are stored in within systems / planets
-      //
-      this.game.players_info = this.returnPlayers(this.totalPlayers); // factions and player info
-
   
 
       for (let i = 0; i < this.game.players_info.length; i++) {

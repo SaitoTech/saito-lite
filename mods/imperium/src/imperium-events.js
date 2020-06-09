@@ -4,16 +4,10 @@
 
   returnEventObjects(player) {
 
-    // techs
-    // factions
-    // laws
-    // secret-objectives
-    // agendas
-
     let z = [];
 
     //
-    // all player techs
+    // player techs
     //
     for (let i = 0; i < this.game.players_info.length; i++) {
       for (let j = 0; j < this.game.players_info[i].tech.length; j++) {
@@ -26,7 +20,7 @@ console.log("MISSING TECH: " + this.game.players_info[i].tech[j]);
     }
 
     //
-    // all factions in-play
+    // factions in-play
     //
     for (let i = 0; i < this.game.players_info.length; i++) {
       if (this.factions[this.game.players_info[i].faction] != undefined) {

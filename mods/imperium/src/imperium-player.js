@@ -308,8 +308,8 @@
     }
  
     let html = 'Do you wish to purchase any command or strategy tokens? <p></p><ul>';
-    html += '<li class="buildchoice" id="command">Command Tokens (<span class="command_total">0</span>)</li>';
-    html += '<li class="buildchoice" id="strategy">Strategy Tokens (<span class="strategy_total">0</span>)</li>';
+    html += '<li class="buildchoice textchoice" id="command">Command Tokens (<span class="command_total">0</span>)</li>';
+    html += '<li class="buildchoice textchoice" id="strategy">Strategy Tokens (<span class="strategy_total">0</span>)</li>';
     html += '</ul>';
     html += '<p></p>';
     html += '<div id="buildcost" class="buildcost"><span class="buildcost_total">0</span> influence</div>';
@@ -375,8 +375,8 @@
     let imperium_self = this;
   
     let html = 'Do you wish to spend 1 strategy token to purchase 2 action cards? <p></p><ul>';
-    html += '<li class="buildchoice" id="yes">Purchase Action Cards</li>';
-    html += '<li class="buildchoice" id="no">Do Not Purchase Action Cards</li>';
+    html += '<li class="buildchoice textchoice" id="yes">Purchase Action Cards</li>';
+    html += '<li class="buildchoice textchoice" id="no">Do Not Purchase Action Cards</li>';
     html += '</ul>';
   
     this.updateStatus(html);
@@ -1577,7 +1577,7 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
   	      }
             }
           }
-          html += '<li class="invadechoice option" id="invasion_planet_'+i+'">'+sys.p[i].name+' (<span class="planet_'+i+'_infantry">'+forces_on_planets[i]+'</span>)</li>';
+          html += '<li class="invadechoice textchoice option" id="invasion_planet_'+i+'">'+sys.p[i].name+' (<span class="planet_'+i+'_infantry">'+forces_on_planets[i]+'</span>)</li>';
         }
       }
       populated_planet_forces = 1;
@@ -1598,11 +1598,11 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
   	  }
         }
         if (forces_on_ships[i] > 0) {
-          html += '<li class="invadechoice" id="invasion_ship_'+i+'">'+ship.name+' (<span class="ship_'+i+'_infantry">'+forces_on_ships[i]+'</span>)</li>';
+          html += '<li class="invadechoice textchoice" id="invasion_ship_'+i+'">'+ship.name+' (<span class="ship_'+i+'_infantry">'+forces_on_ships[i]+'</span>)</li>';
         }
       }
       populated_ship_forces = 1;
-      html += '<li class="invadechoice" id="finished_0_0">finish selecting</li>';
+      html += '<li class="invadechoice textchoice" id="finished_0_0">finish selecting</li>';
       html += '</ul>';
   
   

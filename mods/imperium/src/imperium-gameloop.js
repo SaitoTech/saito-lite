@@ -640,17 +640,23 @@ console.log("WHO IS NEXT: " + who_is_next);
   	// game event triggers
   	//
 	let z = this.returnEventObjects();
-        for (let i = 0; i < this.game.players_info.length; i++) {
-          for (let k in z) {
+        for (let k in z) {
+          for (let i = 0; i < this.game.players_info.length; i++) {
+console.log("X: " + k);
+console.log("NAME: " + z[k].name);
             z[k].onNewRound(this, (i+1));
+console.log("Y: " + k);
   	  }
   	}
 
+console.log("X");
 
       	this.game.queue.push("resolve\tnewround");
     	this.game.state.round++;
     	this.updateLog("ROUND: " + this.game.state.round);
   	this.updateStatus("Moving into Round " + this.game.state.round);
+
+console.log("Y");
   
   	//
   	// SCORING
