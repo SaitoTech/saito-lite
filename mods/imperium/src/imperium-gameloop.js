@@ -27,6 +27,31 @@ console.log("GAME QUEUE: " + this.game.queue);
   
 
 
+
+      if (mv[0] === "setvar") { 
+
+	let type = mv[1]; // state or players
+	let num = parseInt(mv[2]); // 0 if state, player_number if players
+	let valname = mv[3]; // a string
+	let valtype = mv[4];
+	let val = mv[5];
+	if (valtype == "int") { val = parseInt(val); }
+
+	if (type == "state") {
+console.log("updating state variable "+valname+" to: " + val);
+	  imperium_self.game.state[valname] = val;
+	}
+
+	if (type == "players") {
+console.log("updating player ("+num+") variable "+valname+" to: " + val);
+	  imperium_self.game.players_info[num-1][valname] = val;
+	}
+
+  	return;
+      }
+  
+
+
       //
       // resolve [action] [1] [publickey voting or 1 for agenda]
       //
@@ -142,8 +167,8 @@ console.log("GAME QUEUE: " + this.game.queue);
   
       }
 
-      if (mv[0] === "continue") {
-  
+      if (mv[0] === "continue") {  
+
   	let player = mv[1];
   	let sector = mv[2];
 
@@ -1387,6 +1412,7 @@ alert("Player should choose what planets to invade (if possible)");
 
 
       if (mv[0] === "pds_space_defense_post") {
+
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
   	this.game.queue.splice(qe, 1);
@@ -1394,7 +1420,9 @@ alert("Player should choose what planets to invade (if possible)");
         this.updateSectorGraphics(sector);
 
 	//
-	// this identifies which PDS can fire and creates a list
+	// all pds units have been identified and have chosen to fire at this point
+        // this is taken care of by the event above. so we should calculate hits and 
+	// process re-rolls.
 	//
         this.pdsSpaceDefense(player, sector, 1); // 1 hop also finds adjacent PDS units
 

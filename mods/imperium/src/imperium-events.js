@@ -144,14 +144,14 @@ console.log("MISSING FACTION: " + this.game.players_info[i].faction);
     // the player here will be the user who is viewing the menu, so this only executes for the
     // active player.
     //
-    if (obj.menuOption == null) {
-      obj.menuOption = function(imperium_self, player) { return 0; }
+    if (obj.menuOptionHTML == null) {
+      obj.menuOptionHTML = function(imperium_self, menu, player) { return 0; }
     }
-    if (obj.menuOptionTrigger == null) {
-      obj.menuOptionTrigger = function(imperium_self, player) { return {}; }
+    if (obj.menuOptionTriggers == null) {
+      obj.menuOptionTriggers = function(imperium_self, menu, player) { return {}; }
     }
     if (obj.menuOptionActivated == null) {
-      obj.menuOptionActivated = function(imperium_self, player) { return 0; }
+      obj.menuOptionActivated = function(imperium_self, menu, player) { return 0; }
     }
 
 
@@ -172,6 +172,16 @@ console.log("MISSING FACTION: " + this.game.players_info[i].faction);
     if (obj.modifyGroundCombatRoll == null) {
       obj.modifyGroundCombatRoll = function(imperium_self, attacker, defender, roll) { return roll; }
     }
+    if (obj.modifyCombatRoll == null) {
+      obj.modifyPDSRoll = function(imperium_self, attacker, defender, player, combat_type, roll) { return roll; }
+    }
+    if (obj.modifyCombatRerolls == null) {
+      obj.modifyRerolls = function(imperium_self, attacker, defender, player, combat_type, roll) { return roll; }
+    }
+    if (obj.modifyCombatTargets == null) {
+      obj.modifyTargets = function(imperium_self, attacker, defender, player, combat_type, targets=[]) { return targets; }
+    }
+
 
 
 

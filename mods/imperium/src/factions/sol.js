@@ -7,7 +7,7 @@
       tech		:	["neural-motivator","antimass-deflectors","faction1-orbital-drop","faction1-versatile", "faction1-advanced-carrier-ii", "faction1-infantry-ii"]
     });
  
-
+/***
     this.importTech("faction1-orbital-drop", {
 
       name        :       "Orbital Drop" ,
@@ -25,7 +25,7 @@
       }
 
     });
-
+***/
 
     this.importTech("faction1-versatile", {
 

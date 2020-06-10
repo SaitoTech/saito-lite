@@ -33,30 +33,19 @@
           imperium_self.game.players_info[player-1].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 1;
         }
       },
-      modifyPDSRoll :	  function(imperium_self, attacker, defender, roll) {
-        if (imperium_self.doesPlayerHaveTech(attacker, "faction2-fragile")) {
-	  imperium_self.updateLog("Jol Nar combat roll adjusted to -1 due to faction limitation");
-	  roll -= 1;
-	  if (roll < 1) { roll = 1; }
-	}
+      modifyCombatRoll :	  function(imperium_self, attacker, defender, player, combat_type, roll) {
+
+	if (combat_type == "pds") {
+          if (imperium_self.doesPlayerHaveTech(attacker, "faction2-fragile")) {
+  	    imperium_self.updateLog("Jol Nar combat roll adjusted to -1 due to faction limitation");
+	    roll -= 1;
+	    if (roll < 1) { roll = 1; }
+	  }
+        }
+
 	return roll;
+
       },
-      modifyGroundCombatRoll :	  function(imperium_self, attacker, defender, roll) {
-        if (imperium_self.doesPlayerHaveTech(attacker, "faction2-fragile")) {
-	  imperium_self.updateLog("Jol Nar combat roll adjusted to -1 due to faction limitation");
-	  roll -= 1;
-	  if (roll < 1) { roll = 1; }
-	}
-	return roll;
-      },
-      modifyGroundCombatRoll :	  function(imperium_self, attacker, defender, roll) {
-        if (imperium_self.doesPlayerHaveTech(attacker, "faction2-fragile")) {
-	  imperium_self.updateLog("Jol Nar combat roll adjusted to -1 due to faction limitation");
-	  roll -= 1;
-	  if (roll < 1) { roll = 1; }
-	}
-	return roll;
-      }
 
     });
     this.importTech('faction2-brilliant', {

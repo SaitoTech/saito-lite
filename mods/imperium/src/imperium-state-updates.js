@@ -96,7 +96,7 @@
 	// attacker --> invading system, but on receiving end
 	//
 	for (let z_index in z) {
-          roll = z[z_index].modifyPDSRoll(this, battery[i].owner, attacker, roll);
+          roll = z[z_index].modifyCombatRoll(this, battery[i].owner, attacker, this.game.player, "pds", roll);
 	}
 
 
@@ -178,7 +178,7 @@
       // event modifiers
       //
       for (let z_index in z) {
-        roll = z[z_index].modifySpaceCombatRoll(this, attacker, defender, roll);
+        roll = z[z_index].modifyCombatRoll(this, attacker, defender, this.game.player, "space", roll);
       }
 
 
@@ -204,7 +204,7 @@
       // event modifiers -- reversed as defender is attacking
       //
       for (let z_index in z) {
-        roll = z[z_index].modifySpaceCombatRoll(this, defender, attacker, roll);
+        roll = z[z_index].modifyCombatRoll(this, defender, attacker, this.game.player, "space", roll);
       }
 
       //
@@ -320,7 +320,7 @@ try {
 	// modify callback 
 	//
         for (let z_index in z) {
-          roll = z[z_index].modifyGroundCombatRoll(this, attacker, defender, roll);
+          roll = z[z_index].modifyCombatRoll(this, attacker, defender, this.game.player, "ground", roll);
         }
 
         //
@@ -343,7 +343,7 @@ try {
 	// modify roll
 	//
         for (let z_index in z) {
-          roll = z[z_index].modifyGroundCombatRoll(this, defender, attacker, roll);
+          roll = z[z_index].modifyCombatRoll(this, defender, attacker, this.game.player, "ground", roll);
         }
 
         //
