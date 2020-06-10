@@ -681,8 +681,33 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
 
 
 
+  doesPlayerHavePDSUnitsWithinRange(player, sector) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+    let x = this.returnSectorsWithinHopDistance(sector, 1);
+    let sectors = [];
+    let distance = [];
+
+    sectors = x.sectors;
+    distance = x.distance;
+
+    //
+    // get pds units within range
+    //
+    let battery = this.returnPDSWithinRange(attacker, sector, sectors, distance);
+
+    for (let i = 0; i < battery.length; i++) {
+      if (battery[i].owner == player) { return 1; }
+    }
+
+    return 0;
+  }
+
+
+
   returnPDSWithinRange(attacker, destination, sectors, distance) {
   
+    let z = this.returnEventObjects();
     let battery = [];
   
     for (let i = 0; i < sectors.length; i++) {
@@ -712,7 +737,24 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
         }
       }
     }
-  
+
+/****
+    let battery2 = [];   
+    for (let i = 0; i < this.game.players_info.length; i++) {
+
+      let owner = (i+1);
+      let pds_shots = 0;
+      let hits_on = 6;
+
+      for (let j = 0; j < battery.length; j++) {
+	if (battery[j].owner == owner) { pds_shots++; hits_on = battery[j].combat; }
+      }
+
+      battery2.push({ player : owner , shots : pds_shots });
+    }
+
+****/
+
     return battery;
   
   }

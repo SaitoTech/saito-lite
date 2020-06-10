@@ -26,8 +26,15 @@
         state.how_voted_on_agenda = [];
         state.voting_on_agenda = 0;
 
-	state.round_of_space_combat = 0;
-	state.round_of_ground_combat = 0;
+        state.temporary_assignments = ["all"]; // all = any units
+        state.temporary_rerolls = 0; // 100 = unlimited
+        state.space_combat_round = 0;
+        state.space_combat_ships_destroyed_attacker = 0;
+        state.space_combat_ships_destroyed_defender = 0;
+        state.ground_combat_round = 0;
+        state.ground_combat_infantry_destroyed_attacker = 0;
+        state.ground_combat_infantry_destroyed_defender = 0;
+
 
     return state;
   }

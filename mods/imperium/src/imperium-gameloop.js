@@ -1350,7 +1350,7 @@ alert("Player should choose what planets to invade (if possible)");
       ///////////////////////
       if (mv[0] === "pds_space_defense") {
   
-  	let player       = mv[1];
+  	let attacker       = mv[1];
         let sector       = mv[2];
 	let z		 = this.returnEventObjects();
 
@@ -1360,8 +1360,8 @@ alert("Player should choose what planets to invade (if possible)");
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
-	    if (z[k].pdsSpaceDefenseTriggers(this, player, sector) == 1) {
-	      this.game.queue.push("pds_space_defense_event\t"+speaker_order[i]+"\t"+sector+"\t"+k);
+	    if (z[k].pdsSpaceDefenseTriggers(this, attacker, speaker_order[i], sector) == 1) {
+	      this.game.queue.push("pds_space_defense_event\t"+speaker_order[i]+"\t"+attacker+"\t"+sector+"\t"+k);
             }
           }
         }
@@ -1373,28 +1373,34 @@ alert("Player should choose what planets to invade (if possible)");
   
         let z 	 	 = this.returnEventObjects();
   	let player       = parseInt(mv[1]);
-        let sector	 = mv[2];
-        let z_index	 = parseInt(mv[3]);
+  	let attacker       = parseInt(mv[2]);
+        let sector	 = mv[3];
+        let z_index	 = parseInt(mv[4]);
   	this.game.queue.splice(qe, 1);
 
-	return z[z_index].pdsSpaceDefenseEvent(this, player, sector);
+	//
+	// opportunity to add action cards / graviton / etc.
+	//
+	return z[z_index].pdsSpaceDefenseEvent(this, attacker, player, sector);
 
       }
+
 
       if (mv[0] === "pds_space_defense_post") {
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
   	this.game.queue.splice(qe, 1);
 
-	//
-	// now fire the PDS
-	//
-	this.pdsSpaceDefense(player, sector, 0); // 0 hops, as other PDS will have fired
-
         this.updateSectorGraphics(sector);
 
-	// control returns to original player
-        //if (this.game.player == player) { this.playerPostPDSSpaceDefense(sector); }
+	//
+	// this identifies which PDS can fire and creates a list
+	//
+        this.pdsSpaceDefense(player, sector, 1); // 1 hop also finds adjacent PDS units
+
+	//
+	// people will need to opt-in to attack / opportunity for action cards / graviton
+	//
 	return 1;
       }
 
@@ -1648,7 +1654,15 @@ space_combat_post --> if unrest
         let planet_idx   = mv[3];
   	this.game.queue.splice(qe, 1);
 
+	//
+	// reset the combat round
+        //
+        this.game.state.ground_combat_round = 0;
+        this.game.state.ground_combat_infantry_destroyed_attacker = 0;
+        this.game.state.ground_combat_infantry_destroyed_defender = 0;
+
   	return 1;
+
       }
       if (mv[0] === "ground_combat_end") {
 

@@ -1,10 +1,10 @@
 
     this.importFaction('faction2', {
       name		: 	"Universities of Jol Nar",
-      homeworld		: 	"sector39",
+      homeworld		: 	"sector50",
       space_units	: 	["carrier","carrier","dreadnaught","fighter"],
       ground_units	: 	["infantry","infantry","pds","spacedock"],
-      tech		: 	["neural-motivator","antimass-deflectors","sarween-tools","plasma-scoring","faction2-analytic","faction2-brilliant","faction2-fragile","faction2-deep-space-conduits","faction2-resupply-stations"]
+      tech		: 	["graviton-laser-system", "neural-motivator","antimass-deflectors","sarween-tools","plasma-scoring","faction2-analytic","faction2-brilliant","faction2-fragile","faction2-deep-space-conduits","faction2-resupply-stations"]
     });
 
 
@@ -25,7 +25,7 @@
 
     this.importTech('faction2-fragile', {
 
-      name        :       "Analytic" ,
+      name        :       "Fragile" ,
       faction     :       "faction2",
       type        :       "special" ,
       onNewRound     :    function(imperium_self, player) {
@@ -34,7 +34,7 @@
         }
       },
       modifyPDSRoll :	  function(imperium_self, attacker, defender, roll) {
-        if (imperium_self.doesPlayerHaveTech(player, "faction2-fragile")) {
+        if (imperium_self.doesPlayerHaveTech(attacker, "faction2-fragile")) {
 	  imperium_self.updateLog("Jol Nar combat roll adjusted to -1 due to faction limitation");
 	  roll -= 1;
 	  if (roll < 1) { roll = 1; }
@@ -42,7 +42,7 @@
 	return roll;
       },
       modifyGroundCombatRoll :	  function(imperium_self, attacker, defender, roll) {
-        if (imperium_self.doesPlayerHaveTech(player, "faction2-fragile")) {
+        if (imperium_self.doesPlayerHaveTech(attacker, "faction2-fragile")) {
 	  imperium_self.updateLog("Jol Nar combat roll adjusted to -1 due to faction limitation");
 	  roll -= 1;
 	  if (roll < 1) { roll = 1; }
@@ -50,7 +50,7 @@
 	return roll;
       },
       modifyGroundCombatRoll :	  function(imperium_self, attacker, defender, roll) {
-        if (imperium_self.doesPlayerHaveTech(player, "faction2-fragile")) {
+        if (imperium_self.doesPlayerHaveTech(attacker, "faction2-fragile")) {
 	  imperium_self.updateLog("Jol Nar combat roll adjusted to -1 due to faction limitation");
 	  roll -= 1;
 	  if (roll < 1) { roll = 1; }
@@ -105,22 +105,5 @@
       }
     });
 
-
-
-
-/***
-      initialize     :    function(imperium_self, player) {
-	imperium_self.strategy_cards["technology"].strategySecondaryEvent = function(imperium_self, player, strategy_card_player) {
-          imperium_self.playerAcknowledgeNotice("You will first have the option of researching a free-technology, and then invited to purchase an additional tech for 6 resources:", function() {
-            imperium_self.playerResearchTechnology(function(tech) {
-              //imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-              imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
-              imperium_self.endTurn();
-            });
-          });
-	}
-      }
-    });
-***/
 
 

@@ -239,10 +239,10 @@ console.log("MISSING FACTION: " + this.game.players_info[i].faction);
     // when pds combat starts
     //
     if (obj.pdsSpaceDefenseTriggers == null) {
-      obj.pdsSpaceDefenseTriggers = function(imperium_self, player, sector) { return 0; }
+      obj.pdsSpaceDefenseTriggers = function(imperium_self, attacker, player, sector) { return 0; }
     }
     if (obj.pdsSpaceDefenseEvent == null) {
-      obj.pdsSpaceDefenseEvent = function(imperium_self, player, sector) { return 0; }
+      obj.pdsSpaceDefenseEvent = function(imperium_self, attacker, player, sector) { return 0; }
     }
 
     //
