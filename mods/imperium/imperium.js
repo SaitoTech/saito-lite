@@ -1,5 +1,6 @@
 const GameHud = require('../../lib/templates/lib/game-hud/game-hud'); 
 const GameTemplate = require('../../lib/templates/gametemplate');
+  
 class Imperium extends GameTemplate {
   
   constructor(app) {
@@ -18,6 +19,7 @@ class Imperium extends GameTemplate {
   
     this.rmoves           = [];
     this.totalPlayers     = 2;
+    this.vp_needed        = 12;
 
 
 
@@ -2062,26 +2064,10 @@ console.log("ASSIGN STARTING TECH!");
     // add events to board 
     //
     this.addEventsToBoard();
- 
-    //make board draggable
-    $('#hexGrid').draggable();
-    //add ui functions
     this.addUIEvents();
-
-
   }
   
-  addUIEvents() {
 
-    //log-lock
-    document.querySelector('.log').addEventListener('click', (e) =>{
-      document.querySelector('.log').toggleClass('log-lock');
-    });
-
-    //set player highlight color
-    document.documentElement.style.setProperty('--my-color', `var(--p${this.game.player})`);
-
-  }
 
 
 
@@ -2326,12 +2312,13 @@ console.log("ASSIGN STARTING TECH!");
   
     if (this.game.state.laws.length > 0) {
       html += '<div style="margin-bottom: 1em">Galactic Laws Under Enforcement:</div>';
-      html += '<ul>';
+      html += '<p><ul>';
       for (let i = 0; i < this.game.state.laws.length; i++) {
         html += `  <li class="card" id="${i}">${laws[this.game.state.laws[i]].name}</li>`;
       }
       html += '</ul>';
-   }
+      html += '</p>';
+    }
   
     if (this.game.state.agendas.length > 0) {
       html += '<div style="margin-bottom: 1em">Galactic Laws Under Consideration:</div>';
@@ -3138,15 +3125,20 @@ console.log("GAME QUEUE: " + this.game.queue);
 
 
       if (mv[0] === "play") {
-  
-  	let player = mv[1];
+
+        
+    let player = mv[1];
+          //set player highlight color
+          document.documentElement.style.setProperty('--playing-color', `var(--p${player})`);
+
+    
         if (player == this.game.player) {
   	  this.tracker = this.returnPlayerTurnTracker();
   	  this.addMove("resolve\tplay");
   	  this.playerTurn();
         } else {
 	  this.addEventsToBoard();
-  	  this.updateStatus(this.returnFaction(parseInt(player)) + " is taking their turn");
+  	  this.updateStatus("<div><p>" + this.returnFaction(parseInt(player)) + " is taking their turn.</p></div>");
   	}
   
   	return 0;
@@ -3503,11 +3495,10 @@ console.log("WHO IS NEXT: " + who_is_next);
   	      html += '<b>' + laws[imperium_self.game.state.agendas[agenda_num]].name + '</b>';
 	      html += '<br />';
   	      html += laws[imperium_self.game.state.agendas[agenda_num]].text;
-          html += '<p>';
+	      html += '<p><ul>';
               html += '<li class="option" id="support">support</li>';
               html += '<li class="option" id="oppose">oppose</li>';
-              html += '<li class="option" id="abstain">abstain</li>';
-              html += '</p>';
+              html += '<li class="option" id="abstain">abstain</li></ul></p>';
 	  imperium_self.updateStatus(html);
 
 
@@ -5004,7 +4995,8 @@ space_combat_post --> if unrest
       let playercol = "player_color_"+this.game.player;
   
       let html  = '<div class="terminal_header">[command: '+this.game.players_info[this.game.player-1].command_tokens+'] [strategy: '+this.game.players_info[this.game.player-1].strategy_tokens+'] [fleet: '+this.game.players_info[this.game.player-1].fleet_supply+'] [commodities: '+this.game.players_info[this.game.player-1].commodities+'] [trade goods: '+this.game.players_info[this.game.player-1].goods+'] [player: '+this.game.player+']</div>';
-          html  += '<div style="margin-top:20px" class="terminal_header2"><div class="player_color_box '+playercol+'"></div>' + this.returnFaction(this.game.player) + ":</div><ul class='terminal_header3'>";
+          html  += '<p style="margin-top:20px"></p>';
+          html  += '<div class="terminal_header2"><div class="player_color_box '+playercol+'"></div>' + this.returnFaction(this.game.player) + ":</div><p><ul class='terminal_header3'>";
       if (this.game.players_info[this.game.player-1].command_tokens > 0) {
         html += '<li class="option" id="activate">activate system</li>';
       }
@@ -5040,7 +5032,7 @@ space_combat_post --> if unrest
       if (this.canPlayerPass(this.game.player) == 1) {
         html += '<li class="option" id="pass">pass</li>';
       }
-      html += '</ul>';
+      html += '</ul></p>';
   
       this.updateStatus(html);
   
@@ -5121,7 +5113,8 @@ space_combat_post --> if unrest
     //
     // check to see if any ships survived....
     //
-    let html  = this.returnFaction(player) + ": <p><ul>";
+    let html  = "<p>" + this.returnFaction(player) + ": </p><ul>";
+
     if (this.canPlayerInvadePlanet(player, sector)) {
       html += '<li class="option" id="invade">invade planet</li>';
       options_available++;
@@ -5131,7 +5124,7 @@ space_combat_post --> if unrest
       options_available++;
     }
     html += '<li class="option" id="endturn">end turn</li>';
-    html += '</ul></p>';
+    html += '</ul>';
    
     if (options_available > 0) {
 
@@ -5181,11 +5174,11 @@ space_combat_post --> if unrest
       return 0;
     }
  
-    let html = '<p>Do you wish to purchase any command or strategy tokens? </p><ul>';
-    html += '<li class="buildchoice" id="command">Command Tokens (<span class="command_total">0</span>)</li>';
-    html += '<li class="buildchoice" id="strategy">Strategy Tokens (<span class="strategy_total">0</span>)</li>';
-    html += '</ul>';
-    html += '<br /><br />';
+    let html = '<p>Do you wish to purchase any command or strategy tokens? </p><p><ul>';
+    html += '<li class="buildchoice textchoice" id="command">Command Tokens (<span class="command_total">0</span>)</li>';
+    html += '<li class="buildchoice textchoice" id="strategy">Strategy Tokens (<span class="strategy_total">0</span>)</li>';
+    html += '</ul></p>';
+    html += '';
     html += '<div id="buildcost" class="buildcost"><span class="buildcost_total">0</span> influence</div>';
     html += '<div id="confirm" class="buildchoice">click here to finish</div>';
   
@@ -5249,8 +5242,8 @@ space_combat_post --> if unrest
     let imperium_self = this;
   
     let html = '<p>Do you wish to spend 1 strategy token to purchase 2 action cards? </p><ul>';
-    html += '<li class="buildchoice" id="yes">Purchase Action Cards</li>';
-    html += '<li class="buildchoice" id="no">Do Not Purchase Action Cards</li>';
+    html += '<li class="buildchoice textchoice" id="yes">Purchase Action Cards</li>';
+    html += '<li class="buildchoice textchoice" id="no">Do Not Purchase Action Cards</li>';
     html += '</ul>';
   
     this.updateStatus(html);
@@ -5926,7 +5919,7 @@ console.log(player + " -- " + card + " -- " + deck);
 
     let imperium_self = this;
     let cards = this.returnStrategyCards();
-    let html  = "<div class='terminal_header'><p>You are playing as " + this.returnFaction(this.game.player) + ". Select your strategy card:</div></p><ul>";
+    let html  = "<div class='terminal_header'>You are playing as " + this.returnFaction(this.game.player) + ". Select your strategy card:</div><p><ul>";
     if (this.game.state.round > 1) {
       html  = "<div class='terminal_header'>"+this.returnFaction(this.game.player) + ": select your strategy card:</div><p><ul>";
     }
@@ -6172,7 +6165,7 @@ console.log(player + " -- " + card + " -- " + deck);
   	    }
           }
 
-          let user_message = `<div id="menu-container"><p>This ship has <span class="capacity_remaining">${total_ship_capacity}</span> capacity to carry fighters / infantry. Do you wish to add them? </p><ul>`;
+          let user_message = `<div id="menu-container">This ship has <span class="capacity_remaining">${total_ship_capacity}</span> capacity to carry fighters / infantry. Do you wish to add them? <p><ul>`;
   
           for (let i = 0; i < sys.p.length; i++) {
             let planetary_units = sys.p[i].units[imperium_self.game.player-1];
@@ -6205,7 +6198,7 @@ console.log(player + " -- " + card + " -- " + deck);
           }
           user_message += '<li class="addoption option textchoice" id="addfighter_s_s">add fighter (<span class="add_fighters_remaining">'+fighters_available_to_move+'</span>)</li>';
           user_message += '<li class="addoption option textchoice" id="skip">finish</li>';
-          user_message += '</ul></div>';
+          user_message += '</ul></p></div>';
   
 
           //
@@ -6436,7 +6429,7 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
         }
       }
   
-      html = '<p>Select Ground Forces for Invasion of '+sys.p[planet_idx].name+': </p><ul>';
+      html = 'Select Ground Forces for Invasion of '+sys.p[planet_idx].name+': <p><ul>';
   
       //
       // other planets in system
@@ -6477,7 +6470,7 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
       }
       populated_ship_forces = 1;
       html += '<li class="invadechoice textchoice" id="finished_0_0">finish selecting</li>';
-      html += '</ul>';
+      html += '</ul></p>';
   
   
       //
@@ -9034,6 +9027,7 @@ console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
       this.updateSectorGraphics(i);
     }
     this.addEventsToBoard();
+   
   } 
  
  
@@ -9055,7 +9049,26 @@ console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
     });
 
   }
- 
+
+
+
+  addUIEvents() {
+    //make board draggable
+    $('#hexGrid').draggable();
+    //add ui functions  
+    //log-lock
+    document.querySelector('.log').addEventListener('click', (e) => {
+      document.querySelector('.log').toggleClass('log-lock');
+    });
+
+    document.querySelector('.leaderboardbox').addEventListener('click', (e) => {
+      document.querySelector('.leaderboardbox').toggleClass('leaderboardbox-lock');
+    });
+
+    //set player highlight color
+    document.documentElement.style.setProperty('--my-color', `var(--p${this.game.player})`);
+
+}
 
   
 
@@ -9085,19 +9098,25 @@ console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
   
     let imperium_self = this;
     let factions = this.returnFactions();
-    let html = "<p>Round " + this.game.state.round + " (turn " + this.game.state.turn + ")";
+    document.querySelector('.round').innerHTML = this.game.state.round;
+    document.querySelector('.turn').innerHTML = this.game.state.turn;
   
-        html += '</p>';
-        html += '<hr />';
-        html += '<ul>';
+    let html = '<div class="VP-track-label">Victory Points</div>';
+
+    for(j = this.vp_needed; j >= 0; j--) {
+      html += '<div class="vp ' + j + '-points"><div class="player-vp-background">' + j + '</div>';
+      html += '<div class="vp-players">'
   
-    for (let i = 0; i < this.game.players_info.length; i++) {
-      html += `  <li class="card" id="${i}">${factions[this.game.players_info[i].faction].name} -- ${this.game.players_info[i].vp} VP</li>`;
+      for (let i = 0; i < this.game.players_info.length; i++) {
+        if(this.game.players_info[i].vp == j) {
+          html += `  <div class="player-vp" style="background-color:var(--p${i+1});"><div class="vp-faction-name">${factions[this.game.players_info[i].faction].name}</div></div>`;
+        }
+      }
+    
+      html += '</div></div>';
     }
   
-    html += '</ul>';
-  
-    $('.leaderboard').html(html);
+    document.querySelector('.leaderboard').innerHTML = html;
   
   }
   

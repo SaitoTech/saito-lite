@@ -25,7 +25,7 @@ console.log("PLAYER: " + player + " scp: " + strategy_card_player);
 
         if (imperium_self.game.player != strategy_card_player) {
  
-          let html = 'Do you wish to spend 4 resources and a strategy token to research a technology? <p></p><ul>';
+          let html = '<p>Do you wish to spend 4 resources and a strategy token to research a technology? </p><ul>';
           html += '<li class="option" id="yes">Yes</li>';
           html += '<li class="option" id="no">No</li>';
           html += '</ul>';
@@ -63,7 +63,7 @@ console.log("TESTING AAAC");
         } else {
 console.log("TESTING AAAD");
 
-          let html = 'Do you wish to spend 6 resources to research an additional technology? <p></p><ul>';
+          let html = '<p>Do you wish to spend 6 resources to research an additional technology? </p><ul>';
           html += '<li class="option" id="yes">Yes</li>';
           html += '<li class="option" id="no">No</li>';
           html += '</ul>';

@@ -15,7 +15,7 @@
           imperium_self.addMove("purchase\t"+this.game.player+"\tcommodities\t"+this.game.players_info[this.game.player-1].commodity_limit);
  
           let factions = imperium_self.returnFactions();
-          let html = 'Issue commodities to which players: <p></p><ul>';
+          let html = '<p>Issue commodities to which players: </p><ul>';
           for (let i = 0; i < imperium_self.game.players_info.length; i++) {
             if (i != imperium_self.game.player-1) {
               html += '<li class="option" id="'+i+'">' + factions[imperium_self.game.players_info[i].faction].name + '</li>';
@@ -43,7 +43,7 @@
 
         if (imperium_self.game.player != strategy_card_player) {
 
-          let html = 'Do you wish to spend 1 strategy token to refresh your commodities? <p></p><ul>';
+          let html = '<p>Do you wish to spend 1 strategy token to refresh your commodities? </p><ul>';
           html += '<li class="option" id="yes">Yes</li>';
           html += '<li class="option" id="no">No</li>';
           html += '</ul>';

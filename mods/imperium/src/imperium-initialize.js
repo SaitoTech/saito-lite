@@ -312,7 +312,7 @@ console.log("ASSIGN STARTING TECH!");
     // add events to board 
     //
     this.addEventsToBoard();
- 
+    this.addUIEvents();
   }
   
 

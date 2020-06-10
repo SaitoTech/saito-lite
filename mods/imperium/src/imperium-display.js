@@ -7,6 +7,7 @@
       this.updateSectorGraphics(i);
     }
     this.addEventsToBoard();
+   
   } 
  
  
@@ -28,7 +29,26 @@
     });
 
   }
- 
+
+
+
+  addUIEvents() {
+    //make board draggable
+    $('#hexGrid').draggable();
+    //add ui functions  
+    //log-lock
+    document.querySelector('.log').addEventListener('click', (e) => {
+      document.querySelector('.log').toggleClass('log-lock');
+    });
+
+    document.querySelector('.leaderboardbox').addEventListener('click', (e) => {
+      document.querySelector('.leaderboardbox').toggleClass('leaderboardbox-lock');
+    });
+
+    //set player highlight color
+    document.documentElement.style.setProperty('--my-color', `var(--p${this.game.player})`);
+
+}
 
   
 
@@ -58,19 +78,25 @@
   
     let imperium_self = this;
     let factions = this.returnFactions();
-    let html = "Round " + this.game.state.round + " (turn " + this.game.state.turn + ")";
+    document.querySelector('.round').innerHTML = this.game.state.round;
+    document.querySelector('.turn').innerHTML = this.game.state.turn;
   
-        html += '<p></p>';
-        html += '<hr />';
-        html += '<ul>';
+    let html = '<div class="VP-track-label">Victory Points</div>';
+
+    for(j = this.vp_needed; j >= 0; j--) {
+      html += '<div class="vp ' + j + '-points"><div class="player-vp-background">' + j + '</div>';
+      html += '<div class="vp-players">'
   
-    for (let i = 0; i < this.game.players_info.length; i++) {
-      html += `  <li class="card" id="${i}">${factions[this.game.players_info[i].faction].name} -- ${this.game.players_info[i].vp} VP</li>`;
+      for (let i = 0; i < this.game.players_info.length; i++) {
+        if(this.game.players_info[i].vp == j) {
+          html += `  <div class="player-vp" style="background-color:var(--p${i+1});"><div class="vp-faction-name">${factions[this.game.players_info[i].faction].name}</div></div>`;
+        }
+      }
+    
+      html += '</div></div>';
     }
   
-    html += '</ul>';
-  
-    $('.leaderboard').html(html);
+    document.querySelector('.leaderboard').innerHTML = html;
   
   }
   

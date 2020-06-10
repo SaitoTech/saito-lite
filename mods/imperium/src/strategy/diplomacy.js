@@ -36,7 +36,7 @@
 
         if (imperium_self.game.player != strategy_card_player) {
 
-          let html = 'Do you wish to spend 1 strategy token to unexhaust two planet cards? <p></p><ul>';
+          let html = '<p>Do you wish to spend 1 strategy token to unexhaust two planet cards? </p><ul>';
           html += '<li class="option" id="yes">Yes</li>';
           html += '<li class="option" id="no">No</li>';
           html += '</ul>';
@@ -55,7 +55,7 @@
               let choices_selected = 0;
               let max_choices = 0;
 
-              let html  = "Select planets to unexhaust: <p></p><ul>";
+              let html  = "<p>Select planets to unexhaust: </p><ul>";
               let divname = ".cardchoice";
               for (let z = 0; z < array_of_cards.length; z++) {
                 max_choices++;

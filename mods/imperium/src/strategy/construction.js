@@ -25,7 +25,7 @@
 
         if (imperium_self.game.player != strategy_card_player) {
 
-          let html = 'Do you wish to spend 1 strategy token to build a PDS or Space Dock? <p></p><ul>';
+          let html = '<p>Do you wish to spend 1 strategy token to build a PDS or Space Dock? </p><ul>';
           html += '<li class="option" id="yes">Yes</li>';
           html += '<li class="option" id="no">No</li>';
           html += '</ul>';
