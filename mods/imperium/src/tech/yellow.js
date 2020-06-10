@@ -70,7 +70,9 @@
 
       menuOption  :       function(imperium_self, menu, player) {
 	if (menu == "pds") {
-        return { event : 'graviton', html : '<li class="option" id="graviton">use graviton laser targetting</li>' };
+          return { event : 'graviton', html : '<li class="option" id="graviton">use graviton laser targetting</li>' };
+        }
+        return {};
       },
       menuOptionTrigger:  function(imperium_self, menu, player) { 
 	if (menu == "pds" && imperium_self.game.players_info[player-1].graviton_laser_system_exhausted == 0 && imperium_self.game.players_info[player-1].graviton_laser_system == 1) {

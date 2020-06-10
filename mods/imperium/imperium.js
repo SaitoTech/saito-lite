@@ -336,11 +336,13 @@ console.log("C");
         if (imperium_self.game.players_info[player-1].graviton_laser_system == undefined) {
           imperium_self.game.players_info[player-1].graviton_laser_system = 0;
           imperium_self.game.players_info[player-1].graviton_laser_system_exhausted = 0;
+          imperium_self.game.players_info[player-1].graviton_laser_system_active = 0;
         }
       },
       onNewRound : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].graviton_laser_system == 1) {
           imperium_self.game.players_info[gainer-1].graviton_laser_system_exhausted = 0;
+          imperium_self.game.players_info[player-1].graviton_laser_system_active = 0;
         }
       },
       gainTechnology : function(imperium_self, gainer, tech) {
@@ -350,6 +352,7 @@ console.log("C");
         }
       },
       pdsSpaceDefenseTriggers(imperium_self, attacker, player, sector) {
+        imperium_self.game.players_info[player-1].graviton_laser_system_active = 0;
 	if (imperium_self.game.players_info[player-1].graviton_laser_system == 1 && imperium_self.game.players_info[player-1].graviton_laser_system_exhausted == 0) {
           if (this.doesPlayerHavePDSUnitsWithinRange(player, sector) && player != attacker) {
   	    return 1;
@@ -358,8 +361,42 @@ console.log("C");
 	return 0;
       },
       pdsSpaceDefenseEvent(imperium_self, attacker, player, sector) {
-alert("GRAVITON LASER SYSTEM TRIGGERS");	
+        imperium_self.game.players_info[player-1].graviton_laser_system_exhausted = 1;
+        imperium_self.game.players_info[player-1].graviton_laser_system_active = 1;
 	return 1;
+      },
+      modifyTargets(imperium_self, attacker, defender, player, combat_type="", targets=[]) {
+        if (combat_type == "pds") {
+          if (imperium_self.game.players_info[player-1].graviton_laser_system_active == 1) {
+	    targets.push("warsun");
+	    targets.push("flagship");
+	    targets.push("dreadnaught");
+	    targets.push("cruiser");
+	    targets.push("carrier");
+	    targets.push("destroyer");
+          }
+        }
+	return targets;
+      },
+
+      menuOption  :       function(imperium_self, menu, player) {
+	if (menu == "pds") {
+          return { event : 'graviton', html : '<li class="option" id="graviton">use graviton laser targetting</li>' };
+        }
+        return {};
+      },
+      menuOptionTrigger:  function(imperium_self, menu, player) { 
+	if (menu == "pds" && imperium_self.game.players_info[player-1].graviton_laser_system_exhausted == 0 && imperium_self.game.players_info[player-1].graviton_laser_system == 1) {
+	  return 1;
+	}
+        return 0;
+      },
+      menuOptionActivated:  function(imperium_self, menu, player) {
+        if (menu == "pds") {
+          imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"graviton_laser_system_exhausted"+"\t"+"int"+"\t"+"1");
+          imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"graviton_laser_system_active"+"\t"+"int"+"\t"+"1");
+	}
+	return 0;
       }
     });
 
@@ -598,30 +635,19 @@ alert("GRAVITON LASER SYSTEM TRIGGERS");
           imperium_self.game.players_info[player-1].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 1;
         }
       },
-      modifyPDSRoll :	  function(imperium_self, attacker, defender, roll) {
-        if (imperium_self.doesPlayerHaveTech(attacker, "faction2-fragile")) {
-	  imperium_self.updateLog("Jol Nar combat roll adjusted to -1 due to faction limitation");
-	  roll -= 1;
-	  if (roll < 1) { roll = 1; }
-	}
+      modifyCombatRoll :	  function(imperium_self, attacker, defender, player, combat_type, roll) {
+
+	if (combat_type == "pds") {
+          if (imperium_self.doesPlayerHaveTech(attacker, "faction2-fragile")) {
+  	    imperium_self.updateLog("Jol Nar combat roll adjusted to -1 due to faction limitation");
+	    roll -= 1;
+	    if (roll < 1) { roll = 1; }
+	  }
+        }
+
 	return roll;
+
       },
-      modifyGroundCombatRoll :	  function(imperium_self, attacker, defender, roll) {
-        if (imperium_self.doesPlayerHaveTech(attacker, "faction2-fragile")) {
-	  imperium_self.updateLog("Jol Nar combat roll adjusted to -1 due to faction limitation");
-	  roll -= 1;
-	  if (roll < 1) { roll = 1; }
-	}
-	return roll;
-      },
-      modifyGroundCombatRoll :	  function(imperium_self, attacker, defender, roll) {
-        if (imperium_self.doesPlayerHaveTech(attacker, "faction2-fragile")) {
-	  imperium_self.updateLog("Jol Nar combat roll adjusted to -1 due to faction limitation");
-	  roll -= 1;
-	  if (roll < 1) { roll = 1; }
-	}
-	return roll;
-      }
 
     });
     this.importTech('faction2-brilliant', {
@@ -681,7 +707,7 @@ alert("GRAVITON LASER SYSTEM TRIGGERS");
       tech		:	["neural-motivator","antimass-deflectors","faction1-orbital-drop","faction1-versatile", "faction1-advanced-carrier-ii", "faction1-infantry-ii"]
     });
  
-
+/***
     this.importTech("faction1-orbital-drop", {
 
       name        :       "Orbital Drop" ,
@@ -699,7 +725,7 @@ alert("GRAVITON LASER SYSTEM TRIGGERS");
       }
 
     });
-
+***/
 
     this.importTech("faction1-versatile", {
 
@@ -2988,6 +3014,31 @@ console.log("GAME QUEUE: " + this.game.queue);
   
 
 
+
+      if (mv[0] === "setvar") { 
+
+	let type = mv[1]; // state or players
+	let num = parseInt(mv[2]); // 0 if state, player_number if players
+	let valname = mv[3]; // a string
+	let valtype = mv[4];
+	let val = mv[5];
+	if (valtype == "int") { val = parseInt(val); }
+
+	if (type == "state") {
+console.log("updating state variable "+valname+" to: " + val);
+	  imperium_self.game.state[valname] = val;
+	}
+
+	if (type == "players") {
+console.log("updating player ("+num+") variable "+valname+" to: " + val);
+	  imperium_self.game.players_info[num-1][valname] = val;
+	}
+
+  	return;
+      }
+  
+
+
       //
       // resolve [action] [1] [publickey voting or 1 for agenda]
       //
@@ -3103,8 +3154,8 @@ console.log("GAME QUEUE: " + this.game.queue);
   
       }
 
-      if (mv[0] === "continue") {
-  
+      if (mv[0] === "continue") {  
+
   	let player = mv[1];
   	let sector = mv[2];
 
@@ -4352,6 +4403,7 @@ alert("Player should choose what planets to invade (if possible)");
 
 
       if (mv[0] === "pds_space_defense_post") {
+
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
   	this.game.queue.splice(qe, 1);
@@ -4359,7 +4411,9 @@ alert("Player should choose what planets to invade (if possible)");
         this.updateSectorGraphics(sector);
 
 	//
-	// this identifies which PDS can fire and creates a list
+	// all pds units have been identified and have chosen to fire at this point
+        // this is taken care of by the event above. so we should calculate hits and 
+	// process re-rolls.
 	//
         this.pdsSpaceDefense(player, sector, 1); // 1 hop also finds adjacent PDS units
 
@@ -7211,14 +7265,14 @@ console.log("MISSING FACTION: " + this.game.players_info[i].faction);
     // the player here will be the user who is viewing the menu, so this only executes for the
     // active player.
     //
-    if (obj.menuOption == null) {
-      obj.menuOption = function(imperium_self, player) { return 0; }
+    if (obj.menuOptionHTML == null) {
+      obj.menuOptionHTML = function(imperium_self, menu, player) { return 0; }
     }
-    if (obj.menuOptionTrigger == null) {
-      obj.menuOptionTrigger = function(imperium_self, player) { return {}; }
+    if (obj.menuOptionTriggers == null) {
+      obj.menuOptionTriggers = function(imperium_self, menu, player) { return {}; }
     }
     if (obj.menuOptionActivated == null) {
-      obj.menuOptionActivated = function(imperium_self, player) { return 0; }
+      obj.menuOptionActivated = function(imperium_self, menu, player) { return 0; }
     }
 
 
@@ -7239,6 +7293,16 @@ console.log("MISSING FACTION: " + this.game.players_info[i].faction);
     if (obj.modifyGroundCombatRoll == null) {
       obj.modifyGroundCombatRoll = function(imperium_self, attacker, defender, roll) { return roll; }
     }
+    if (obj.modifyCombatRoll == null) {
+      obj.modifyPDSRoll = function(imperium_self, attacker, defender, player, combat_type, roll) { return roll; }
+    }
+    if (obj.modifyCombatRerolls == null) {
+      obj.modifyRerolls = function(imperium_self, attacker, defender, player, combat_type, roll) { return roll; }
+    }
+    if (obj.modifyCombatTargets == null) {
+      obj.modifyTargets = function(imperium_self, attacker, defender, player, combat_type, targets=[]) { return targets; }
+    }
+
 
 
 
@@ -8532,7 +8596,7 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
 	// attacker --> invading system, but on receiving end
 	//
 	for (let z_index in z) {
-          roll = z[z_index].modifyPDSRoll(this, battery[i].owner, attacker, roll);
+          roll = z[z_index].modifyCombatRoll(this, battery[i].owner, attacker, this.game.player, "pds", roll);
 	}
 
 
@@ -8614,7 +8678,7 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
       // event modifiers
       //
       for (let z_index in z) {
-        roll = z[z_index].modifySpaceCombatRoll(this, attacker, defender, roll);
+        roll = z[z_index].modifyCombatRoll(this, attacker, defender, this.game.player, "space", roll);
       }
 
 
@@ -8640,7 +8704,7 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
       // event modifiers -- reversed as defender is attacking
       //
       for (let z_index in z) {
-        roll = z[z_index].modifySpaceCombatRoll(this, defender, attacker, roll);
+        roll = z[z_index].modifyCombatRoll(this, defender, attacker, this.game.player, "space", roll);
       }
 
       //
@@ -8756,7 +8820,7 @@ try {
 	// modify callback 
 	//
         for (let z_index in z) {
-          roll = z[z_index].modifyGroundCombatRoll(this, attacker, defender, roll);
+          roll = z[z_index].modifyCombatRoll(this, attacker, defender, this.game.player, "ground", roll);
         }
 
         //
@@ -8779,7 +8843,7 @@ try {
 	// modify roll
 	//
         for (let z_index in z) {
-          roll = z[z_index].modifyGroundCombatRoll(this, defender, attacker, roll);
+          roll = z[z_index].modifyCombatRoll(this, defender, attacker, this.game.player, "ground", roll);
         }
 
         //
