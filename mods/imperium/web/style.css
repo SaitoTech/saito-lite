@@ -3,8 +3,33 @@
     padding: 0;
 }
 
+:root {
+  --p1: #0088ff;
+  --p2: #00ff00;
+  --p3: #FF6037;
+  --p4: #FF00CC;
+  --p5: #FFCC33;
+  --p5: #FF355E;
 
 
+  --my-color: var(--p1);
+}
+
+body {
+  overflow: hidden;
+}
+
+.game_background {
+  background-image: url(img/spacebg.png);
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  height: 200vh;
+  width: 200vw;
+  filter: blur(1px);
+  /*animation: spin 1440s linear infinite;*/
+  z-index: -999;
+}
 
 
 .faction_sheet {
@@ -14,23 +39,66 @@
 
 }
 .log {
-  display:inline;
-  float: right;
-  width: 300px;
-  height: 200px;
-  z-index:999999;
+  display: block;
+  width: 298px;
+  height: 100vh;
+  z-index: 999999;
+  overflow-x: hidden;
+  overflow-y: auto;
+  right: -290px;
+  position: absolute;
+  color: #fff;
+  background: #222c;
+  transition: all 500ms;
+  border-left: 3px solid var(--my-color);
+  font-size: 1em;
 }
+
+.log:hover {
+  right: 0;
+}
+
+.log-lock {
+  right: 0;
+  border-left: 1px solid var(--my-color);
+  width: 301px;
+}
+.status, .hud-header, .hud-menu, .hud-body, .controls, .hud-menu-overlay {
+  background-color: #222C;
+  color: #fff;
+  border-color: #555;
+}
+
+.status ul li, .status ul li:last-child {
+  border-color: #555;
+}
+
+.hud {
+  background-color: unset;
+  border: 1px solid var(--my-color);
+  box-shadow: none;
+}
+
 .hud {
   width: 600px;
   min-width: 600px;
 }
 .hud-body {
   display: block;
-//  height: 100%;
+  height: 100%;
   max-width: 100%;
-  background-color: whitesmoke;
   overflow-y: scroll;
 }
+
+.hud-menu ul li a {
+  text-decoration: none;
+  color: #fffD;
+}
+
+.status ul li:hover, .hud-menu ul li a:hover {
+  background: #8888;
+}
+
 .cardbox {
   top: 17vh;
   height: 60vh;
@@ -601,3 +669,7 @@ body {
 }
 
 
+@keyframes spin{
+	from{transform:rotate(0deg)}
+	to{transform:rotate(360deg)}	
+}

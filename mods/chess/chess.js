@@ -196,7 +196,7 @@ class Chessgame extends GameTemplate {
     this.saveGame(this.game.id);
 
     return 0;
-
+   
   }
 
   endTurn(data) {
