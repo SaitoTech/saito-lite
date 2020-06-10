@@ -1,38 +1,5 @@
   
 
-  //
-  // synchronousGameEvents
-  //
-  executeSynchronousGameEvent(eventname="", arg2=null, arg3=null, arg4=null, arg5=null, arg6=null, arg7=null, arg8=null) {
-
-    let technologies = this.returnTechnology();
-
-    for (let i = 0; i < this.game.players_info.length; i++) {
-
-      let techs = this.game.players_info[i].tech;
-      for (let k = 0; k < techs.length; k++) {
-
-        //
-        // destroyed unit
-        //
-        if (eventname === "destroyed_unit") {
-	  let attacker   = arg2;
-	  let defender   = arg3;
-	  let sector     = arg4;
-	  let planet_idx = arg5;
-	  let unitname   = arg6;
-
-          if (technologies[techs[k]].destroyedUnitTriggersSync(this, (i+1), attacker, defender, sector, planet_idx, unitname) == 1) {
-            technologies[techs[k]].destroyedUnitEventSync(this, (i+1), attacker, defender, sector, planet_idx, unitname);
-          }
-        }
-
-      }
-    }
-  }
-
-
-
 
   //
   // this function can be run after a tech bonus is used, to see if 
@@ -79,13 +46,12 @@
   updatePlanetOwner(sector, planet_idx) {
     let sys = this.returnSectorAndPlanets(sector);
     let owner = -1;
-console.log("PLANET STATE: " + JSON.stringify(sys.p[planet_idx]));
 
     for (let i = 0; i < sys.p[planet_idx].units.length; i++) {
       if (sys.p[planet_idx].units[i].length > 0) { owner = i+1; }
     }
     if (owner != -1) {
-this.updateLog("setting owner to " + owner);
+      this.updateLog("setting owner to " + owner);
       sys.p[planet_idx].owner = owner;
       sys.p[planet_idx].exhausted = 1;
     }
@@ -105,7 +71,10 @@ this.updateLog("setting owner to " + owner);
     let x = this.returnSectorsWithinHopDistance(destination, hops);
     let sectors = [];
     let distance = [];
+
+    let z = this.returnEventObjects();
   
+
     sectors = x.sectors;
     distance = x.distance;
 
@@ -120,7 +89,16 @@ this.updateLog("setting owner to " + owner);
   
       for (let i = 0; i < battery.length; i++) {
   
-        let roll = this.rollDice();
+        let roll = this.rollDice(10);
+
+	//
+	// owner --> firing PDS
+	// attacker --> invading system, but on receiving end
+	//
+	for (let z_index in z) {
+          roll = z[z_index].modifyPDSRoll(this, battery[i].owner, attacker, roll);
+	}
+
 
 	//
 	// modify pdf rolls
@@ -162,7 +140,8 @@ this.updateLog("setting owner to " + owner);
   spaceCombat(attacker, sector) {
   
     let sys = this.returnSectorAndPlanets(sector);
-  
+    let z = this.returnEventObjects();  
+
     let defender = 0;
     let defender_found = 0;
     for (let i = 0; i < sys.s.units.length; i++) {
@@ -190,10 +169,18 @@ this.updateLog("setting owner to " + owner);
     //
     let attacker_hits = 0;
     let defender_hits = 0;
-  
+
     for (let z = 0; z < sys.s.units[attacker-1].length; z++) {
       let unit = sys.s.units[attacker-1][z];
       let roll = this.rollDice(10);
+
+      //
+      // event modifiers
+      //
+      for (let z_index in z) {
+        roll = z[z_index].modifySpaceCombatRoll(this, attacker, defender, roll);
+      }
+
 
       //
       // apply modifiers
@@ -212,6 +199,13 @@ this.updateLog("setting owner to " + owner);
     for (let z = 0; z < sys.s.units[defender-1].length; z++) {
       let unit = sys.s.units[defender-1][z];
       let roll = this.rollDice(10);
+
+      //
+      // event modifiers -- reversed as defender is attacking
+      //
+      for (let z_index in z) {
+        roll = z[z_index].modifySpaceCombatRoll(this, defender, attacker, roll);
+      }
 
       //
       // apply modifiers
@@ -283,7 +277,8 @@ this.updateLog("setting owner to " + owner);
 try {
   
     let sys = this.returnSectorAndPlanets(sector);
-  
+    let z = this.returnEventObjects();
+
     let defender = 0;
     let defender_found = 0;
 
@@ -304,14 +299,11 @@ try {
       return; 
     }
 
-console.log("TESTING A 1");
-  
     let attacker_faction = this.returnFaction(attacker);
     let defender_faction = this.returnFaction(defender);
   
     let attacker_forces = this.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
     let defender_forces = this.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx);
-console.log("TESTING A 2");
 
     //
     // attacker rolls first
@@ -321,8 +313,15 @@ console.log("TESTING A 2");
   
     for (let z = 0; z < sys.p[planet_idx].units[attacker-1].length; z++) {
       let unit = sys.p[planet_idx].units[attacker-1][z];
-      if (unit.name == "infantry") {
+      if (unit.type == "infantry") {
         let roll = this.rollDice(10);
+
+	//
+	// modify callback 
+	//
+        for (let z_index in z) {
+          roll = z[z_index].modifyGroundCombatRoll(this, attacker, defender, roll);
+        }
 
         //
         // apply modifiers
@@ -337,8 +336,15 @@ console.log("TESTING A 2");
   
     for (let z = 0; z < sys.p[planet_idx].units[defender-1].length; z++) {
       let unit = sys.p[planet_idx].units[defender-1][z];
-      if (unit.name == "infantry") {
+      if (unit.type == "infantry") {
         let roll = this.rollDice(10);
+
+	//
+	// modify roll
+	//
+        for (let z_index in z) {
+          roll = z[z_index].modifyGroundCombatRoll(this, defender, attacker, roll);
+        }
 
         //
         // apply modifiers
@@ -350,7 +356,6 @@ console.log("TESTING A 2");
         }
       }
     }
-console.log("TESTING A 3: " + defender_hits + " / " + attacker_hits); 
  
     this.assignHitsToGroundForces(defender, attacker, sector, planet_idx, defender_hits);
     this.assignHitsToGroundForces(attacker, defender, sector, planet_idx, attacker_hits);
@@ -359,29 +364,21 @@ console.log("TESTING A 3: " + defender_hits + " / " + attacker_hits);
     this.eliminateDestroyedUnitsInSector(attacker, sector);
     this.eliminateDestroyedUnitsInSector(defender, sector);
 
-console.log("TESTING A 4"); 
-
     if (attacker_hits > 0) {
       this.updateLog(attacker_hits + " hits for " + this.returnFaction(attacker));
     }
     if (defender_hits > 0) {
       this.updateLog(defender_hits + " hits for " + this.returnFaction(defender));
     }
-console.log("TESTING A 5");  
  
     attacker_forces = this.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
     defender_forces = this.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx);
-
-
-console.log("ATTACKER FORCES 2: " + attacker_forces);
-console.log("DEFENDER FORCES 2: " + defender_forces);
 
     //
     // evaluate if planet has changed hands
     //
     if (attacker_forces > defender_forces && defender_forces <= 0) {
  
-console.log(" . 1"); 
       //
       // destroy all units belonging to defender (pds, spacedocks)
       //
@@ -389,8 +386,6 @@ console.log(" . 1");
         sys.p[planet_idx].units[defender-1] = [];
       }
   
-console.log(" . 2"); 
-
       //
       // notify everyone
       //
@@ -398,30 +393,18 @@ console.log(" . 2");
       for (let i = 0; i < sys.p[planet_idx].units[attacker-1].length; i++) {
         if (sys.p[planet_idx].units[attacker-1][i].name == "infantry") { survivors++; }
       }
-console.log(" . 3"); 
       if (survivors == 1) { 
         this.updateLog(sys.p[planet_idx].name + " is conquered by " + this.returnFaction(attacker) + " (" + survivors + " survivor)");
       } else {
         this.updateLog(sys.p[planet_idx].name + " is conquered by " + this.returnFaction(attacker) + " (" + survivors + " survivors)");
       }
-console.log(" . 4"); 
   
       //
       // planet changes ownership
       //
-console.log("#########");
-console.log("#########");
-console.log("#########");
-console.log("#########");
-console.log("Updating owner to: " + attacker);
-      //sys.p[planet_idx].owner = attacker;
-this.updateLog("planet owner is set 2: " + attacker);
-      //sys.p[planet_idx].exhausted = 1;
       this.updatePlanetOwner(sector, planet_idx);
-console.log("PLANET UPDATED: " + JSON.stringify(sys.p[planet_idx]));
     }
 
-console.log("skipping etc.");
 
     //
     // save regardless
@@ -499,6 +482,8 @@ console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
 
   assignHitsToGroundForces(attacker, defender, sector, planet_idx, hits) {
 
+    let z = this.returnEventObjects();
+
     let ground_forces_destroyed = 0;  
     let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < hits; i++) {
@@ -531,13 +516,9 @@ console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
           ground_forces_destroyed++;
           sys.p[planet_idx].units[defender-1][weakest_unit_idx].destroyed = 1;
 
-          // let attacker   = arg2;
-          // let defender   = arg3;
-          // let sector     = arg4;
-          // let planet_idx = arg5;
-          // let unitname   = arg6;
-
-	  this.executeSynchronousGameEvent("destroyed_unit", attacker, defender, sector, planet_idx, sys.p[planet_idx].units[defender-1][weakest_unit_idx].name);
+	  for (z_index in z) {
+            sys.p[planet_idx].units[defender-1][weakest_unit_idx] = z[z_index].unitDestroyed(this, attacker, sys.p[planet_idx].units[defender-1][weakest_unit_idx]);
+	  }
 
         }
       }
@@ -553,6 +534,7 @@ console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
 
   assignHitsToSpaceFleet(attacker, defender, sector, hits) {
 
+    let z = this.returnEventObjects();
     let ships_destroyed = 0;  
     let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < hits; i++) {
@@ -583,13 +565,9 @@ console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
 	  ships_destroyed++;
           sys.s.units[defender-1][weakest_unit_idx].destroyed = 1;
 
-          // let attacker   = arg2;
-          // let defender   = arg3;
-          // let sector     = arg4;
-          // let planet_idx = arg5;
-          // let unitname   = arg6;
-
-	  this.executeSynchronousGameEvent("destroyed_unit", attacker, defender, sector, "", sys.s.units[defender-1][weakest_unit_idx].name);
+	  for (z_index in z) {
+            sys.s.units[defender-1][weakest_unit_idx] = z[z_index].unitDestroyed(this, attacker, sys.s.units[defender-1][weakest_unit_idx]);
+	  }
 
         }
       }

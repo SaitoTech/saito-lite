@@ -60,6 +60,13 @@
       //
       this.initializeDice();
 
+
+      //
+      // players first
+      //
+      this.game.players_info = this.returnPlayers(this.totalPlayers); // factions and player info
+
+
       //
       // initialize game state
       //
@@ -95,18 +102,9 @@
       }
  
  
-      //
-      // units are stored in within systems / planets
-      //
-      this.game.players_info = this.returnPlayers(this.totalPlayers); // factions and player info
-
   
 
-      for (let i = 0; i < this.game.players_info.length; i++) {
-        this.game.players_info[i].homeworld = hwsectors[i];
-        this.game.board[hwsectors[i]].tile = this.factions[this.game.players_info[i].faction].homeworld;
-      }
-  
+
       //
       // remove tiles in 3 player game
       //
@@ -160,6 +158,18 @@
         }
       }
  
+
+      //
+      // set homeworlds
+      //
+      for (let i = 0; i < this.game.players_info.length; i++) {
+        this.game.players_info[i].homeworld = hwsectors[i];
+        this.game.board[hwsectors[i]].tile = this.factions[this.game.players_info[i].faction].homeworld;
+console.log("SETTING HOMEWORLD TO: " + this.factions[this.game.players_info[i].faction].homeworld);
+      }
+  
+
+
       //
       // add starting units to player homewords
       //

@@ -13,6 +13,7 @@ console.log("B");
       onNewRound : function(imperium_self, player, mycallback) {
         if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].antimass_deflectors = 1;
+          imperium_self.game.players_info[player-1].fly_through_asteroids = 1;
         }
         return 1;
       },
@@ -31,6 +32,7 @@ console.log("B");
       onNewRound : function(imperium_self, player, mycallback) {
         if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].gravity_drive = 1;
+          imperium_self.game.players_info[player-1].ship_move_bonus = 1;
         }
         return 1;
       },
@@ -49,6 +51,7 @@ console.log("B");
       onNewRound : function(imperium_self, player, mycallback) {
         if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].fleet_logistics = 1;
+          imperium_self.game.players_info[player-1].perform_two_actions = 1;
         }
         return 1;
       },
@@ -67,6 +70,7 @@ console.log("B");
       onNewRound : function(imperium_self, player, mycallback) {
         if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].lightwave_deflector = 1;
+          imperium_self.game.players_info[player-1].move_through_sectors_with_opponent_ships = 1;
         }
         return 1;
       },

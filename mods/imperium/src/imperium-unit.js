@@ -7,6 +7,7 @@
   importUnit(name, obj) {
 
     if (obj.name == null) 		{ obj.name = "Unknown Unit"; }
+    if (obj.owner == null)		{ obj.owner = -1; }			// who owns this unit
     if (obj.type == null) 		{ obj.type = ""; }			// infantry / fighter / etc.
     if (obj.storage  == null) 		{ obj.storage = []; }			// units this stores
     if (obj.space == null) 		{ obj.space = 1; }			// defaults to spaceship
@@ -400,6 +401,7 @@
   returnUnit(type = "", player) {
 
     let unit = JSON.parse(JSON.stringify(this.units[type]));
+    unit.owner = player;
     unit = this.upgradeUnit(unit, player);
     return unit;
   };
@@ -407,7 +409,7 @@
   
   
   upgradePlayerUnitsOnBoard(player) {
-  
+
     for (var i in this.game.sectors) {
       for (let ii = 0; ii < this.game.sectors[i].units[player-1].length; ii++) {
         this.game.sectors[i].units[player-1][ii] = this.upgradeUnit(this.game.sectors[i].units[player-1][ii], player);
@@ -423,23 +425,13 @@
   
   
 
-  upgradeUnit(unit, player) {
-  
-    let p = this.game.players_info[player-1];
+  upgradeUnit(unit, player_to_upgrade) {
 
-console.log("UPGRADING UNITS AVAILABLE...");
+    let z = this.returnEventObjects();
 
-/****
-    //
-    // check against tech tree for faction-specific upgrades
-    //
-    for (let i = 0; i < this.game.players_info[player-1].tech.length; i++) {
-      let mytech = this.game.players_info[player-1].tech[i];
-      if (mytech.unit == 1) {
-        unit = mytech.upgradeUnit(this, player, unit);
-      }
+    for (let z_index in z) {
+      unit = z[z_index].upgradeUnit(this, player_to_upgrade, unit);
     }
-****/
 
     return unit;
   }

@@ -527,7 +527,7 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
     let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.p.length; i++) {
       for (let k = 0; k < sys.p[i].units[player-1].length; k++) {
-        if (sys.p[i].units[player-1][k].name == "spacedock") {
+        if (sys.p[i].units[player-1][k].type == "spacedock") {
           return 1;
         }
       }
@@ -552,6 +552,7 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
       if (sys.p[i].owner != player) { planets_ripe_for_plucking = 1; }
     }
     if (planets_ripe_for_plucking == 0) { return 0; }
+
   
   
     //
@@ -560,7 +561,7 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
     for (let i = 0; i < sys.s.units[player-1].length; i++) {
       let unit = sys.s.units[player-1][i];
       for (let k = 0; k < unit.storage.length; k++) {
-        if (unit.storage[k].name == "infantry") {
+        if (unit.storage[k].type == "infantry") {
           total_available_infantry += 1;
         }
       }
@@ -580,7 +581,7 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
     if (space_transport_available == 1) {
       for (let i = 0; i < sys.p.length; i++) {
         for (let k = 0; k < sys.p[i].units[player-1].length; k++) {
-          if (sys.p[i].units[player-1][k].name == "infantry") { return 1; }
+          if (sys.p[i].units[player-1][k].type == "infantry") { return 1; }
         }
       }
     }
@@ -680,8 +681,33 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
 
 
 
+  doesPlayerHavePDSUnitsWithinRange(player, sector) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+    let x = this.returnSectorsWithinHopDistance(sector, 1);
+    let sectors = [];
+    let distance = [];
+
+    sectors = x.sectors;
+    distance = x.distance;
+
+    //
+    // get pds units within range
+    //
+    let battery = this.returnPDSWithinRange(attacker, sector, sectors, distance);
+
+    for (let i = 0; i < battery.length; i++) {
+      if (battery[i].owner == player) { return 1; }
+    }
+
+    return 0;
+  }
+
+
+
   returnPDSWithinRange(attacker, destination, sectors, distance) {
   
+    let z = this.returnEventObjects();
     let battery = [];
   
     for (let i = 0; i < sectors.length; i++) {
@@ -696,7 +722,7 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
           for (let k = 0; k < sys.p[j].units.length; k++) {
   	  if (k != attacker-1) {
   	      for (let z = 0; z < sys.p[j].units[k].length; z++) {
-    	        if (sys.p[j].units[k][z].name == "pds") {
+    	        if (sys.p[j].units[k][z].type == "pds") {
   		  if (sys.p[j].units[k][z].range >= distance[i]) {
   	            let pds = {};
   	                pds.combat = sys.p[j].units[k][z].combat;
@@ -711,7 +737,24 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
         }
       }
     }
-  
+
+/****
+    let battery2 = [];   
+    for (let i = 0; i < this.game.players_info.length; i++) {
+
+      let owner = (i+1);
+      let pds_shots = 0;
+      let hits_on = 6;
+
+      for (let j = 0; j < battery.length; j++) {
+	if (battery[j].owner == owner) { pds_shots++; hits_on = battery[j].combat; }
+      }
+
+      battery2.push({ player : owner , shots : pds_shots });
+    }
+
+****/
+
     return battery;
   
   }
@@ -776,7 +819,7 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
 
     for (let z = 0; z < sys.p[planet_idx].units[player-1].length; z++) {
       if (sys.p[planet_idx].units[player-1][z].strength > 0 && sys.p[planet_idx].units[player-1][z].destroyed == 0) {
-        if (sys.p[planet_idx].units[player-1][z].name == "infantry") {
+        if (sys.p[planet_idx].units[player-1][z].type == "infantry") {
           num++;
         }
       }
