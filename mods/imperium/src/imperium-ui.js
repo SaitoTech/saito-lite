@@ -215,7 +215,7 @@
       let command_total = imperium_self.game.players_info[p].command_tokens;
       let strategy_total = imperium_self.game.players_info[p].strategy_tokens;
   
-      let html  = "Total Faction Resources: <p></p><ul>";
+      let html  = "<p>Total Faction Resources: </p><ul>";
       html += '<li>' + commodities_total + " commodities" + '</li>';
       html += '<li>' + goods_total + " goods" + '</li>'
       html += '<li>' + command_total + " command tokens" + '</li>'
@@ -239,12 +239,12 @@
   
     if (this.game.state.laws.length > 0) {
       html += '<div style="margin-bottom: 1em">Galactic Laws Under Enforcement:</div>';
-      html += '<ul>';
+      html += '<p><ul>';
       for (let i = 0; i < this.game.state.laws.length; i++) {
         html += `  <li class="card" id="${i}">${laws[this.game.state.laws[i]].name}</li>`;
       }
       html += '</ul>';
-      html += '<p></p>';
+      html += '</p>';
     }
   
     if (this.game.state.agendas.length > 0) {

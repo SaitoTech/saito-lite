@@ -189,15 +189,20 @@ console.log("updating player ("+num+") variable "+valname+" to: " + val);
 
 
       if (mv[0] === "play") {
-  
-  	let player = mv[1];
+
+        
+    let player = mv[1];
+          //set player highlight color
+          document.documentElement.style.setProperty('--playing-color', `var(--p${player})`);
+
+    
         if (player == this.game.player) {
   	  this.tracker = this.returnPlayerTurnTracker();
   	  this.addMove("resolve\tplay");
   	  this.playerTurn();
         } else {
 	  this.addEventsToBoard();
-  	  this.updateStatus(this.returnFaction(parseInt(player)) + " is taking their turn");
+  	  this.updateStatus("<div><p>" + this.returnFaction(parseInt(player)) + " is taking their turn.</p></div>");
   	}
   
   	return 0;
@@ -541,24 +546,23 @@ console.log("WHO IS NEXT: " + who_is_next);
 
 	if (this.game.player != who_is_next) {
 
-          let html  = 'The following agenda has advanced for consideration in the Galactic Senate:<p></p>';
+          let html  = '<p>The following agenda has advanced for consideration in the Galactic Senate:</p>';
   	      html += '<b>' + laws[imperium_self.game.state.agendas[agenda_num]].name + '</b>';
 	      html += '<br />';
 	      html += laws[imperium_self.game.state.agendas[agenda_num]].text;
-	      html += '<p></p>';
-	      html += 'Player '+who_is_next+' is now voting.';
+	      html += '<p>Player '+who_is_next+' is now voting.</p>';
 	  this.updateStatus(html);
 
 	} else {
 
-          let html  = 'The following agenda has advanced for consideration in the Galactic Senate:<p></p>';
+          let html  = '<p>The following agenda has advanced for consideration in the Galactic Senate:</p>';
   	      html += '<b>' + laws[imperium_self.game.state.agendas[agenda_num]].name + '</b>';
 	      html += '<br />';
   	      html += laws[imperium_self.game.state.agendas[agenda_num]].text;
-	      html += '<p></p>';
+	      html += '<p><ul>';
               html += '<li class="option" id="support">support</li>';
               html += '<li class="option" id="oppose">oppose</li>';
-              html += '<li class="option" id="abstain">abstain</li>';
+              html += '<li class="option" id="abstain">abstain</li></ul></p>';
 	  imperium_self.updateStatus(html);
 
 
@@ -579,7 +583,7 @@ console.log("WHO IS NEXT: " + who_is_next);
 
 	    if (vote == "support" || vote == "oppose") {
 
-              let html = 'How many votes do you wish to cast in the Galactic Senate:<p></p>';
+              let html = '<p>How many votes do you wish to cast in the Galactic Senate:</p>';
 	      for (let i = 0; i <= imperium_self.game.state.votes_available[imperium_self.game.player-1]; i++) {
                 if (i == 1) {
 	          html += '<li class="option" id="'+i+'">'+i+' vote</li>';

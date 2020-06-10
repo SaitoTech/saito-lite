@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,35 +20,42 @@
   <link rel="stylesheet" type="text/css" href="/saito/lib/templates/game.css" />
   <link rel="stylesheet" type="text/css" href="/imperium/style.css" />
 
-  <link rel="icon" media="all" type="image/x-icon" href="/favicon.ico?v=2"/>
+  <link rel="icon" media="all" type="image/x-icon" href="/favicon.ico?v=2" />
 
 </head>
+
 <body>
-      <div class="cardbox">
 
-      </div>
+  <div class="cardbox">
 
-      <div class="leaderboardbox">
-        <div class="leaderboard" id="leaderboard"></div>
-      </div>
+  </div>
+  <div class="turns" id="turns">
+    <div class="round" id="round"></div>
+    <div class="turn" id="turn"></div>
+    <div class="round-label">Round</div>
+    <div class="turn-label">Turn</div>
+  </div>
+  <div class="leaderboardbox">
+    <div class="leaderboard" id="leaderboard"></div>
+  </div>
 
-      <!--- replace the standard HUD log --->
-      <div class="log">
-        <div class="log" id="log"></div>
-      </div>
+  <!--- replace the standard HUD log --->
 
-      <!--- faction overview overlay --->
-      <div class="faction_sheet">
-        <div class="faction_sheet" id="faction_sheet"></div>
-      </div>
-
-      <!--- interface element for showing faction sheets / ui elements --->
-      <div class="interface_overlay">
-        <div class="interface_overlay" id="interface_overlay"></div>
-      </div>
+  <div class="log" id="log"></div>
 
 
-<!---
+  <!--- faction overview overlay --->
+  <div class="faction_sheet">
+    <div class="faction_sheet" id="faction_sheet"></div>
+  </div>
+
+  <!--- interface element for showing faction sheets / ui elements --->
+  <div class="interface_overlay">
+    <div class="interface_overlay" id="interface_overlay"></div>
+  </div>
+
+
+  <!---
       <div class="agendabox">
         <div class="agendas" id="agendas"></div>
       </div>
@@ -61,77 +69,117 @@
         <div class="objectives" id="objectives"></div>
       </div>
 --->
-        <!--- https://github.com/web-tiki/responsive-grid-of-hexagons --->
-        <ul id="hexGrid">
+  <!--- https://github.com/web-tiki/responsive-grid-of-hexagons --->
+  <ul id="hexGrid">
 
-        <li class="hex"></li>
-        <li class="hex"></li>
-        <li class="sector hex" id="1_1"></div>
-        <li class="sector hex" id="1_2"></div>
-        <li class="sector hex" id="1_3"></div>
-        <li class="sector hex" id="1_4"></div>
-        <li class="hex"></li>
-        <li class="hex"></li>
+    <li class="hex"></li>
+    <li class="hex"></li>
+    <li class="sector hex" id="1_1">
+      </div>
+    <li class="sector hex" id="1_2">
+      </div>
+    <li class="sector hex" id="1_3">
+      </div>
+    <li class="sector hex" id="1_4">
+      </div>
+    <li class="hex"></li>
+    <li class="hex"></li>
 
-        <li class="hex"></li>
-        <li class="sector hex" id="2_1"></div>
-        <li class="sector hex" id="2_2"></div>
-        <li class="sector hex" id="2_3"></div>
-        <li class="sector hex" id="2_4"></div>
-        <li class="sector hex" id="2_5"></div>
-        <li class="hex"></li>
+    <li class="hex"></li>
+    <li class="sector hex" id="2_1">
+      </div>
+    <li class="sector hex" id="2_2">
+      </div>
+    <li class="sector hex" id="2_3">
+      </div>
+    <li class="sector hex" id="2_4">
+      </div>
+    <li class="sector hex" id="2_5">
+      </div>
+    <li class="hex"></li>
 
-        <li class="hex"></li>
-        <li class="sector hex" id="3_1"></div>
-        <li class="sector hex" id="3_2"></div>
-        <li class="sector hex" id="3_3"></div>
-        <li class="sector hex" id="3_4"></div>
-        <li class="sector hex" id="3_5"></div>
-        <li class="sector hex" id="3_6"></div>
-        <li class="hex"></li>
+    <li class="hex"></li>
+    <li class="sector hex" id="3_1">
+      </div>
+    <li class="sector hex" id="3_2">
+      </div>
+    <li class="sector hex" id="3_3">
+      </div>
+    <li class="sector hex" id="3_4">
+      </div>
+    <li class="sector hex" id="3_5">
+      </div>
+    <li class="sector hex" id="3_6">
+      </div>
+    <li class="hex"></li>
 
-        <li class="sector hex" id="4_1"></div>
-        <li class="sector hex" id="4_2"></div>
-        <li class="sector hex" id="4_3"></div>
-        <li class="sector hex" id="4_4"></div>
-        <li class="sector hex" id="4_5"></div>
-        <li class="sector hex" id="4_6"></div>
-        <li class="sector hex" id="4_7"></div>
+    <li class="sector hex" id="4_1">
+      </div>
+    <li class="sector hex" id="4_2">
+      </div>
+    <li class="sector hex" id="4_3">
+      </div>
+    <li class="sector hex" id="4_4">
+      </div>
+    <li class="sector hex" id="4_5">
+      </div>
+    <li class="sector hex" id="4_6">
+      </div>
+    <li class="sector hex" id="4_7">
+      </div>
 
-        <li class="hex"></li>
-        <li class="sector hex" id="5_1"></div>
-        <li class="sector hex" id="5_2"></div>
-        <li class="sector hex" id="5_3"></div>
-        <li class="sector hex" id="5_4"></div>
-        <li class="sector hex" id="5_5"></div>
-        <li class="sector hex" id="5_6"></div>
-        <li class="hex"></li>
+    <li class="hex"></li>
+    <li class="sector hex" id="5_1">
+      </div>
+    <li class="sector hex" id="5_2">
+      </div>
+    <li class="sector hex" id="5_3">
+      </div>
+    <li class="sector hex" id="5_4">
+      </div>
+    <li class="sector hex" id="5_5">
+      </div>
+    <li class="sector hex" id="5_6">
+      </div>
+    <li class="hex"></li>
+
+    <li class="hex"></li>
+    <li class="sector hex" id="6_1">
+      </div>
+    <li class="sector hex" id="6_2">
+      </div>
+    <li class="sector hex" id="6_3">
+      </div>
+    <li class="sector hex" id="6_4">
+      </div>
+    <li class="sector hex" id="6_5">
+      </div>
+    <li class="hex"></li>
+
+    <li class="hex"></li>
+    <li class="hex"></li>
+    <li class="sector hex" id="7_1">
+      </div>
+    <li class="sector hex" id="7_2">
+      </div>
+    <li class="sector hex" id="7_3">
+      </div>
+    <li class="sector hex" id="7_4">
+      </div>
+    <li class="hex"></li>
+    <li class="hex"></li>
+
+  </ul>
+
+  <div class="gameboard">
+  </div>
+
+  <div class="game_background"></div>
   
-        <li class="hex"></li>
-        <li class="sector hex" id="6_1"></div>
-        <li class="sector hex" id="6_2"></div>
-        <li class="sector hex" id="6_3"></div>
-        <li class="sector hex" id="6_4"></div>
-        <li class="sector hex" id="6_5"></div>
-        <li class="hex"></li>
-
-        <li class="hex"></li>
-        <li class="hex"></li>
-        <li class="sector hex" id="7_1"></div>
-        <li class="sector hex" id="7_2"></div>
-        <li class="sector hex" id="7_3"></div>
-        <li class="sector hex" id="7_4"></div>
-        <li class="hex"></li>
-        <li class="hex"></li>
-
-      </ul>
-
-    <div class="gameboard">
-    </div>
 
   <script src="/saito/saito.js"></script>
   <script src="/imperium/script.js"></script>
 
 </body>
-</html>
 
+</html>
