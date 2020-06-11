@@ -449,8 +449,7 @@
 	//
 	// ships_fire needs to make sure it permits any opponents to fire...
 	//
-        imperium_self.prependMove("ships_fire\t"+imperium_self.game.player+"\t"+attacker+"\t"+sector);
-        imperium_self.prependMove("notify\tPlayer attacks");
+        imperium_self.prependMove("ships_fire\t"+attacker+"\t"+defender+"\t"+sector);
 	imperium_self.endTurn();
       }
 
@@ -534,14 +533,12 @@ console.log("triggered is: " + z[i].name);
 
       if (action2 == "skip") {
 	// prepend so it happens after the modifiers
-        imperium_self.prependMove("notify\tPlayer elects not to fire their PDS");
 	imperium_self.endTurn();
       }
 
       if (action2 == "fire") {
 	// prepend so it happens after the modifiers
         imperium_self.prependMove("pds_fire\t"+imperium_self.game.player+"\t"+attacker+"\t"+sector);
-        imperium_self.prependMove("notify\tPlayer elects to fire their PDS");
 	imperium_self.endTurn();
       };
 
@@ -559,7 +556,8 @@ console.log("triggered is: " + z[i].name);
     //
     // check to see if any ships survived....
     //
-    let html  = "<p>" + this.returnFaction(player) + ": </p><ul>";
+    let playercol = "player_color_"+this.game.player;
+    let html  = "<div class='player_color_box "+playercol+"'></div>" + this.returnFaction(player) + ": <ul>";
 
     if (this.canPlayerInvadePlanet(player, sector)) {
       html += '<li class="option" id="invade">invade planet</li>';
@@ -623,7 +621,7 @@ console.log("triggered is: " + z[i].name);
       return 0;
     }
  
-    let html = '<p>Do you wish to purchase any command or strategy tokens? </p><p><ul>';
+    let html = '<p>Do you wish to purchase any command or strategy tokens?</p> <ul>';
     html += '<li class="buildchoice textchoice" id="command">Command Tokens (<span class="command_total">0</span>)</li>';
     html += '<li class="buildchoice textchoice" id="strategy">Strategy Tokens (<span class="strategy_total">0</span>)</li>';
     html += '</ul></p>';
@@ -913,7 +911,7 @@ console.log(player + " -- " + card + " -- " + deck);
   
     let imperium_self = this;
   
-    let html = '<p>Produce Units in this Sector: </p><p><ul>';
+    let html = '<p>Produce Units in this Sector: </p><ul>';
     html += '<li class="buildchoice" id="infantry">Infantry (<span class="infantry_total">0</span>)</li>';
     html += '<li class="buildchoice" id="fighter">Fighter (<span class="fighter_total">0</span>)</li>';
     html += '<li class="buildchoice" id="destroyer">Destroyer (<span class="destroyer_total">0</span>)</li>';
@@ -1364,9 +1362,9 @@ console.log(player + " -- " + card + " -- " + deck);
     let cards = this.returnStrategyCards();
     let playercol = "player_color_"+this.game.player;
           
-    let html  = "<div class='terminal_header'><div class='player_color_box "+playercol+"'></div>" + this.returnFaction(this.game.player) + ": select your strategy card:</div><p><ul>";
+    let html  = "<div class='terminal_header'><div class='player_color_box "+playercol+"'></div>" + this.returnFaction(this.game.player) + ": select your strategy card:</div><ul>";
     if (this.game.state.round > 1) {
-      html  = "<div class='terminal_header'>"+this.returnFaction(this.game.player) + ": select your strategy card:</div><p><ul>";
+      html  = "<div class='terminal_header'>"+this.returnFaction(this.game.player) + ": select your strategy card:</div><ul>";
     }
     let scards = [];
 
@@ -1468,7 +1466,7 @@ console.log(player + " -- " + card + " -- " + deck);
   
         let sys = imperium_self.returnSectorAndPlanets(obj.ships_and_sectors[i].sector);
         html += '<b class="sector_name" id="'+obj.ships_and_sectors[i].sector+'" style="margin-top:10px">'+sys.s.name+'</b>';
-        html += '<p><ul>';
+        html += '<ul>';
         for (let ii = 0; ii < obj.ships_and_sectors[i].ships.length; ii++) {
   
   	//
@@ -1625,7 +1623,7 @@ console.log(player + " -- " + card + " -- " + deck);
   	    }
           }
 
-          let user_message = `<div id="menu-container">This ship has <span class="capacity_remaining">${total_ship_capacity}</span> capacity to carry fighters / infantry. Do you wish to add them? <p><ul>`;
+          let user_message = `<div id="menu-container">This ship has <span class="capacity_remaining">${total_ship_capacity}</span> capacity to carry fighters / infantry. Do you wish to add them? <ul>`;
   
           for (let i = 0; i < sys.p.length; i++) {
             let planetary_units = sys.p[i].units[imperium_self.game.player-1];
@@ -1658,7 +1656,7 @@ console.log(player + " -- " + card + " -- " + deck);
           }
           user_message += '<li class="addoption option textchoice" id="addfighter_s_s">add fighter (<span class="add_fighters_remaining">'+fighters_available_to_move+'</span>)</li>';
           user_message += '<li class="addoption option textchoice" id="skip">finish</li>';
-          user_message += '</ul></p></div>';
+          user_message += '</ul></div>';
   
 
           //

@@ -38,12 +38,10 @@ console.log("GAME QUEUE: " + this.game.queue);
 	if (valtype == "int") { val = parseInt(val); }
 
 	if (type == "state") {
-console.log("updating state variable "+valname+" to: " + val);
 	  imperium_self.game.state[valname] = val;
 	}
 
 	if (type == "players") {
-console.log("updating player ("+num+") variable "+valname+" to: " + val);
 	  imperium_self.game.players_info[num-1][valname] = val;
 	}
 
@@ -233,14 +231,10 @@ console.log("updating player ("+num+") variable "+valname+" to: " + val);
 
 
   	if (stage == 1) {
-console.log("PLAY PRIMARY");
   	  this.playStrategyCardPrimary(strategy_card_player, card);
-console.log("PLAY PRIMARY DONE!");
   	}
   	if (stage == 2) {
-console.log("PLAY SECONDARY");
   	  this.playStrategyCardSecondary(strategy_card_player, card);
-console.log("PLAY SECONDARY DONE!");
   	}
   
   	return 0;
@@ -249,8 +243,6 @@ console.log("PLAY SECONDARY DONE!");
 
       if (mv[0] === "strategy_card_before") {
 
-console.log("TESTING HERE");
-  
   	let card = mv[1];
   	let player = parseInt(mv[2]);
         let z = this.returnEventObjects();
@@ -366,6 +358,7 @@ console.log("TESTING HERE");
           }
         }
         return 1;
+
       }
       if (mv[0] === "strategy_card_after_event") {
 
@@ -393,8 +386,8 @@ console.log("TESTING HERE");
   	// NEW TURN
   	//
   	if (new_round == 1) {
-  	  this.game.queue.push("setinitiativeorder");
   	  this.game.queue.push("newround");
+  	  this.game.queue.push("setinitiativeorder");
   	} else {
   	  this.game.queue.push("setinitiativeorder");
   	}
@@ -628,9 +621,11 @@ console.log("WHO IS NEXT: " + who_is_next);
       if (mv[0] == "setinitiativeorder") {
 
   	let initiative_order = this.returnInitiativeOrder();
+
+console.log("INITIAIVE ORDER IS: " + JSON.stringify(initiative_order));
   	this.game.queue.push("resolve\tsetinitiativeorder");
 
-  	for (let i = 0; i < initiative_order.length; i++) {
+  	for (let i = initiative_order.length-1; i >= 0; i--) {
   	  if (this.game.players_info[initiative_order[i]-1].passed == 0) {
   	    this.game.queue.push("play\t"+initiative_order[i]);
   	  }
@@ -674,22 +669,15 @@ console.log("WHO IS NEXT: " + who_is_next);
 	let z = this.returnEventObjects();
         for (let k in z) {
           for (let i = 0; i < this.game.players_info.length; i++) {
-console.log("X: " + k);
-console.log("NAME: " + z[k].name);
             z[k].onNewRound(this, (i+1));
-console.log("Y: " + k);
   	  }
   	}
-
-console.log("X");
 
       	this.game.queue.push("resolve\tnewround");
     	this.game.state.round++;
     	this.updateLog("ROUND: " + this.game.state.round);
   	this.updateStatus("Moving into Round " + this.game.state.round);
 
-console.log("Y");
-  
   	//
   	// SCORING
   	//
@@ -720,8 +708,6 @@ console.log("Y");
   	//
         this.game.queue.push("setinitiativeorder");
 
-console.log("E");
-  
   
   	//
   	// STRATEGY CARDS
@@ -731,8 +717,6 @@ console.log("E");
         this.game.queue.push("playerschoosestrategycards_before");
  
 
-console.log("F");
-
   	//
   	// ACTION CARDS
   	//
@@ -741,7 +725,6 @@ console.log("F");
   	}
   	
   
-
 
   	//
   	// mark as ready 
@@ -756,7 +739,6 @@ console.log("F");
           this.game.queue.push("resetconfirmsneeded\t"+this.game.players_info.length);
 	}
   
-console.log("G");
 
   	//
   	// FLIP NEW AGENDA CARDS
@@ -1339,6 +1321,8 @@ alert("Player should choose what planets to invade (if possible)");
   	this.saveSystemAndPlanets(sys);
         this.updateSectorGraphics(sector);
 
+	this.updateLog(this.returnFaction(activating_player) + " activates " + this.returnSectorName(sector));
+
   	this.game.queue.splice(qe, 1);
 
 	let speaker_order = this.returnSpeakerOrder();
@@ -1457,6 +1441,8 @@ console.log("prepds space defense!");
 
         this.updateSectorGraphics(sector);
 
+	this.updateLog(this.returnFaction(player) + " is preparing to fire PDS shots");
+
 	if (this.game.player == player) {
           this.playerPlayPDSDefense(player, attacker, sector);        
 	}
@@ -1484,10 +1470,13 @@ console.log("prepds space defense!");
 	if (type == "ship") {
 	  sys.s.units[player-1][unit_idx].strength--;
 	  if (sys.s.units[player-1][unit_idx].strength <= 0) {
+	    this.updateLog(this.returnFaction(player) + " assigns hit to " + sys.s.units[player-1][unit_idx].name + " (destroyed)");
 	    sys.s.units[player-1][unit_idx].destroyed = 1;
 	    for (let z_index in z) {
 	      z[z_index].unitDestroyed(imperium_self, attacker, sys.s.units[player-1][unit_idx]);
 	    } 
+	  } else {
+	    this.updateLog(this.returnFaction(player) + " assigns hit to " + sys.s.units[player-1][unit_idx].name);
 	  }
 
 	}
@@ -1521,10 +1510,16 @@ console.log("prepds space defense!");
 
         this.game.queue.splice(qe, 1);
 
+	if (total_hits > 0 ) {
+          this.updateStatus(this.returnFaction(defender) + " is assigning hits to units ... ");
+	}
+
 	if (planet_idx == "pds") {
 	  if (total_hits > 0) {
 	    if (this.game.player == defender) {
   	      this.playerAssignHits(attacker, defender, type, sector, planet_idx, total_hits);
+	    } else {
+              this.updateStatus(this.returnFaction(defender) + " assigning hits to units ... ");
 	    }
 	    return 0;
 	  } else {
@@ -1536,6 +1531,8 @@ console.log("prepds space defense!");
 	  if (total_hits > 0) {
 	    if (this.game.player == defender) {
   	      this.playerAssignHits(attacker, defender, type, sector, planet_idx, total_hits);
+	    } else {
+              this.updateStatus(this.returnFaction(defender) + " assigning hits to units ... ");
 	    }
 	    return 0;
 	  } else {
@@ -1589,6 +1586,9 @@ console.log("prepds space defense!");
 
 	  total_shots += this.game.players_info[player-1].pds_combat_roll_bonus_shots;
 
+          this.updateLog(this.returnFaction(player) + " has " + total_shots + " PDS shots");
+
+
 	  for (let s = 0; s < total_shots; s++) {
 	    let roll = this.rollDice(10);
 	    for (let z_index in z) {
@@ -1603,6 +1603,8 @@ console.log("prepds space defense!");
 	      hits_or_misses.push(0);
 	    }
 	  }
+
+	  this.updateLog(this.returnFaction(player) + " has " + total_hits + " hits");
 
 	  //
  	  // handle rerolls
@@ -1650,6 +1652,8 @@ console.log("prepds space defense!");
 
 	  }
 
+	  this.updateLog(this.returnFaction(attacker) + " has " + total_hits + " hits");
+
 	  //
 	  // total hits to assign
 	  //
@@ -1685,7 +1689,6 @@ console.log("prepds space defense!");
 	    //
 	    // 
 	    //
-alert("sanity check on ships_fire!");
 	    return 1;
 	  }
 	}
@@ -1790,6 +1793,11 @@ alert("sanity check on ships_fire!");
 	  //
 	  let restrictions = [];
 
+	  if (total_hits == 1) {
+  	    this.updateLog(this.returnFaction(attacker) + ":  " + total_hits + " hit");
+	  } else {
+  	    this.updateLog(this.returnFaction(attacker) + ":  " + total_hits + " hits");
+	  }
 	  this.game.queue.push("assign_hits\t"+attacker+"\t"+defender+"\tspace\t"+sector+"\tspace\t"+total_hits);
 
         }
@@ -1853,7 +1861,21 @@ alert("sanity check on ships_fire!");
   	let player       = mv[1];
         let sector       = mv[2];
         let planet_idx   = mv[3];
-  	this.game.queue.splice(qe, 1);
+
+
+  	if (this.hasUnresolvedSpaceCombat(player, sector) == 1) {
+	  if (this.game.player == player) {
+	    this.addMove("space_combat_post\t"+player+"\t"+sector);
+	    this.addMove("space_combat\t"+player+"\t"+sector);
+	    this.endTurn();
+	    return 0;
+	  } else {
+	    return 0;
+	  }
+	} else {
+  	  this.game.queue.splice(qe, 1);
+	  return 1;
+	}
 
   	return 1;
       }
@@ -1915,6 +1937,8 @@ alert("sanity check on ships_fire!");
 	//
 	// otherwise, process combat
 	//
+	this.updateLog("Space Combat: round " + this.game.state.space_combat_round);
+
 	this.game.queue.push("space_combat_player_menu\t"+defender+"\t"+player+"\t"+sector);
 	this.game.queue.push("space_combat_player_menu\t"+player+"\t"+defender+"\t"+sector);
 
@@ -1926,12 +1950,17 @@ alert("sanity check on ships_fire!");
 
       if (mv[0] === "space_combat_player_menu") {
 
-        let attacker     = parseInt(mv[2]);
+        let attacker     = parseInt(mv[1]);
         let defender     = parseInt(mv[2]);
         let sector       = mv[3];
         this.game.queue.splice(qe, 1);
 
         this.updateSectorGraphics(sector);
+
+	//
+	//
+	//
+	this.updateLog(this.returnFaction(attacker) + " prepares to fire on " + this.returnFaction(defender));
 
 	if (this.game.player == attacker) {
           this.playerPlaySpaceCombat(attacker, defender, sector);        

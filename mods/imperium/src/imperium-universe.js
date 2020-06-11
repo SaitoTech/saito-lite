@@ -154,7 +154,7 @@
     sectors['sector48']        = { img : "/imperium/img/sector46.png" , 	   name : "Sector 48" , hw : 0 , mr : 0 , planets : [] } // wormhole a
     sectors['sector49']        = { img : "/imperium/img/sector47.png" , 	   name : "Sector 49" , hw : 0 , mr : 0 , planets : [] } // wormhole b
     sectors['sector50']        = { img : "/imperium/img/sector50.png" , 	   name : "Jol Nar Homeworld" , hw : 1 , mr : 0 , planets : ['planet53','planet54'] }
-    sectors['sector51']        = { img : "/imperium/img/sector51.png" , 	   name : "XXCha Homeworld" , hw : 1 , mr : 0 , planets : ['planet55','planet55'] }
+    sectors['sector51']        = { img : "/imperium/img/sector51.png" , 	   name : "XXCha Homeworld" , hw : 1 , mr : 0 , planets : ['planet55','planet56'] }
     sectors['sector52']        = { img : "/imperium/img/sector52.png" , 	   name : "Sol Homeworld" , hw : 1 , mr : 0 , planets : ['planet57'] }
     sectors['sector53']        = { img : "/imperium/img/sector53.png" , 	   name : "Mentak Homeworld" , hw : 1 , mr : 0 , planets : ['planet58'] }
 

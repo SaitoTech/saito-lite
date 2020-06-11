@@ -14,12 +14,9 @@
       for (let j = 0; j < this.game.players_info[i].tech.length; j++) {
 	if (this.tech[this.game.players_info[i].tech[j]] != undefined) {
 	  if (!zz.includes(this.game.players_info[i].tech[j])) {
-console.log("PUSHING TECH: " + this.game.players_info[i].tech[j]);
             z.push(this.tech[this.game.players_info[i].tech[j]]);
             zz.push(this.game.players_info[i].tech[j]);
 	  }
-	} else {
-console.log("MISSING TECH: " + this.game.players_info[i].tech[j]);
 	}
       }
     }
@@ -30,8 +27,6 @@ console.log("MISSING TECH: " + this.game.players_info[i].tech[j]);
     for (let i = 0; i < this.game.players_info.length; i++) {
       if (this.factions[this.game.players_info[i].faction] != undefined) {
         z.push(this.factions[this.game.players_info[i].faction]);
-      } else {
-console.log("MISSING FACTION: " + this.game.players_info[i].faction);
       }
     }
 
