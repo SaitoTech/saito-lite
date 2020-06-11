@@ -6738,7 +6738,9 @@ console.log(player + " -- " + card + " -- " + deck);
     let hops = 3;
     let sectors = [];
     let distance = [];
-  
+    let fighters_loaded = 0; 
+    let infantry_loaded = 0;
+ 
     let obj = {};
         obj.max_hops = 2;
         obj.ship_move_bonus = this.game.players_info[this.game.player-1].ship_move_bonus;
@@ -6783,9 +6785,10 @@ console.log(player + " -- " + card + " -- " + deck);
         subjective_distance_adjustment += obj.fleet_move_bonus;
       }
       let spent_distance_boost = (obj.distance_adjustment - subjective_distance_adjustment);
-  
-      let html = '<p>Select ships to move: </p><ul>';
-  
+ 
+      let playercol = "player_color_"+imperium_self.game.player;
+      let html = "<div class='player_color_box "+playercol+"'></div> "+imperium_self.returnFaction(imperium_self.game.player)+': select ships to move<ul>';  
+
       //
       // select ships
       //
@@ -6859,9 +6862,6 @@ console.log(player + " -- " + card + " -- " + deck);
         };
  
 
-
-
-  
         //
         // highlight ship on menu
         //
@@ -7060,31 +7060,43 @@ console.log(player + " -- " + card + " -- " + deck);
   
   
               if (action2 === "addfighter") {
-  
+
+alert("FATM: " + fighters_available_to_move);
+		if (fighters_available_to_move <= 0) { return; }  
+
                 let ir = parseInt($('.add_fighters_remaining').html());
                 let ic = parseInt($('.capacity_remaining').html());
     	        $('.add_fighters_remaining').html((ir-1));
+		fighters_available_to_move--;
   	        $('.capacity_remaining').html((ic-1));
 
 		//
 		// remove this fighter ...
 		//
+		let already_loaded = 0;
 		for (let sec = 0; sec < obj.ships_and_sectors.length; sec++) {
 		  if (obj.ships_and_sectors[sec].sector === sector) {
 		    let ships_to_check = obj.ships_and_sectors[sec].ships.length;
 		    for (let f = 0; f < ships_to_check; f++) {
 		      if (obj.ships_and_sectors[sec].ships[f].type == "fighter") {
 
-			// remove fighter from status menu
-			let status_div = '#sector_'+sec+'_'+f;
-			$(status_div).remove();
+			already_loaded++;
 
-			// remove from arrays (as loaded)
-		        obj.ships_and_sectors[sec].ships.splice(f, 1);
-		        obj.ships_and_sectors[sec].adjusted_distance.splice(f, 1);
-			f = obj.ships_and_sectors[sec].ships.length+2;
-			sec = obj.ships_and_sectors.length+2;
+			if (already_loaded > fighters_loaded) {
 
+			  fighters_loaded++;
+
+			  // remove fighter from status menu
+			  let status_div = '#sector_'+sec+'_'+f;
+			  $(status_div).remove();
+
+			  // remove from arrays (as loaded)
+		          obj.ships_and_sectors[sec].ships.splice(f, 1);
+		          obj.ships_and_sectors[sec].adjusted_distance.splice(f, 1);
+			  f = obj.ships_and_sectors[sec].ships.length+2;
+			  sec = obj.ships_and_sectors.length+2;
+
+			}
 		      }
 		    }
 		  }
@@ -7103,7 +7115,6 @@ console.log(player + " -- " + card + " -- " + deck);
   	        loading.source_idx = "";
   	        loading.unitjson = unitjson;
   	        loading.ship_idx = obj.ships_and_sectors[i].ship_idxs[ii];
-  	        //loading.shipjson = JSON.stringify(sys.s.units[imperium_self.game.player-1][obj.ships_and_sectors[i].ship_idxs[ii]]);;
   	        loading.shipjson = shipjson_preload;
   	        loading.i = i;
   	        loading.ii = ii;
@@ -7383,7 +7394,7 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
   playerPostActivateSystem(sector) {
   
     let imperium_self = this;
-  
+
     let html  = "<p>" + this.returnFaction(this.game.player) + ": </p><ul>";
         html += '<li class="option" id="move">move into sector</li>';
     if (this.canPlayerProduceInSector(this.game.player, sector)) {
