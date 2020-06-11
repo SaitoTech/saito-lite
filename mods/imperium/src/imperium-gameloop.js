@@ -1521,21 +1521,38 @@ console.log("prepds space defense!");
 
         this.game.queue.splice(qe, 1);
 
-	if (total_hits > 0) {
-
-	  alert("Player is assigning "+total_hits+" hits!");
-
-	  if (this.game.player == defender) {
-  	    this.playerAssignHits(attacker, defender, type, sector, planet_idx, total_hits);
+	if (planet_idx == "pds") {
+	  if (total_hits > 0) {
+	    if (this.game.player == defender) {
+  	      this.playerAssignHits(attacker, defender, type, sector, planet_idx, total_hits);
+	    }
+	    return 0;
+	  } else {
+	    return 1;
 	  }
-
-	  return 0;
-
-	} else {
-
-	  return 1;
-
 	}
+
+	if (type == "space") {
+	  if (total_hits > 0) {
+	    if (this.game.player == defender) {
+  	      this.playerAssignHits(attacker, defender, type, sector, planet_idx, total_hits);
+	    }
+	    return 0;
+	  } else {
+	    return 1;
+	  }
+	}
+
+        if (type == "ground") {
+          if (total_hits > 0) {
+            if (this.game.player == defender) {
+              this.playerAssignHits(attacker, defender, type, sector, planet_idx, total_hits);
+            }
+            return 0;
+          } else {
+            return 1;
+          }
+        }
 
       }
 
@@ -1649,6 +1666,140 @@ console.log("prepds space defense!");
 
 
 
+      if (mv[0] === "ships_fire") {
+
+	//
+	// we need to permit both sides to play action cards before they fire and start destroying units
+	// so we check to make sure that "space_combat_player_menu" does not immediately precede us... if
+	// it does we swap out the instructions, so that both players can pick...
+	//
+        let le = this.game.queue.length-2;
+        let lmv = [];
+        if (le >= 0) {
+	  lmv = this.game.queue[le].split("\t");
+	  if (lmv[0] === "space_combat_player_menu") {
+	    let tmpq = this.game.queue[le];
+	    let tmpp = this.game.queue[le+1];
+	    this.game.queue[le]   = tmpp;
+	    this.game.queue[le+1] = tmpq;
+	  }
+
+alert("sanity check on ships_fire!");
+	  //
+	  // 
+	  //
+	  return 1;
+	}
+
+        let attacker     = parseInt(mv[1]);
+        let defender     = parseInt(mv[2]);
+        let sector       = mv[3];
+	let sys 	 = this.returnSystemAndPlanets(sector);
+
+        this.game.queue.splice(qe, 1);
+
+	//
+	// sanity check
+	//
+	if (this.doesPlayerHaveShipsInSector(player, sector) == 1) {	  
+
+	  //
+	  // barrage against fighters fires first
+	  //
+
+
+	  let total_shots = 0;
+	  let total_hits = 0;
+	  let hits_or_misses = [];
+
+	  //
+	  // then the rest
+	  //
+	  for (let i = 0; i < sys.s.units[attacker-1].length; i++) {
+
+	    let roll = this.rollDice(10);
+
+	    for (let z_index in z) {
+	      roll = z[z_index].modifyCombatRoll(this, attacker, defender, this.game.player, "space", roll);
+	    }
+
+	    roll += this.game.players_info[player-1].space_combat_roll_modifier;
+
+	    if (roll >= sys.s.units[attacker-1][i].combat) {
+	      total_hits++;
+	      total_shots++;
+	      hits_or_misses.push(1);
+	    } else {
+	      total_shots++;
+	      hits_or_misses.push(0);
+	    }
+
+	  }
+
+
+	  //
+ 	  // handle rerolls
+	  //
+	  if (total_hits < total_shots) {
+
+	    let max_rerolls = total_shots - total_hits;
+	    let available_rerolls = this.game.players_info[player-1].combat_dice_reroll_permitted + this.game.players_info[player-1].space_combat_dice_reroll;
+
+	    for (let z_index in z) {
+	      available_rerolls = z[z_index].modifyCombatRerolls(this, player, attacker, player, "space", available_rerolls);
+	    }
+
+	    let attacker_rerolls = available_rerolls;
+	    if (max_rerolls < available_rerolls) {
+	      attacker_rerolls = max_rerolls;
+	    }
+
+	    for (let i = 0; i < attacker_rerolls; i++) {
+
+	      let lowest_combat_hit = 11;
+	      let lowest_combat_idx = 11;
+
+	      for (let n = 0; n < hits_to_misses.length; n++) {
+	        if (hits_on[n] < lowest_combat_hit && hits_or_misses[n] == 0) {
+		  lowest_combat_idx = n;
+		  lowest_combat_hit = hits_on[n];
+		}
+	      }
+	     
+	      let roll = this.rollDice(10);
+ 
+	      for (let z_index in z) {
+	        roll =  z[z_index].modifyCombatRerolls(this, player, attacker, player, "space", roll);
+	      }
+
+	      roll += this.game.players_info[player-1].space_combat_roll_modifier;
+
+	      if (roll >= hits_on[lowest_combat_idx]) {
+	        total_hits++;
+		hits_or_misses[lowest_combat_idx] = 1;
+	      } else {
+		hits_or_misses[lowest_combat_idx] = -1;
+	      }
+	    }
+
+	  }
+
+	  //
+	  // total hits to assign
+	  //
+	  let restrictions = [];
+
+	  this.game.queue.push("assign_hits\t"+attacker+"\t"+defender+"\tspace\t"+sector+"\tspace\t"+total_hits);
+
+        }
+
+        return 1;
+
+      }
+
+
+
+
 
 
       //////////////////
@@ -1735,6 +1886,7 @@ console.log("prepds space defense!");
 	return z[z_index].spaceCombatEvent(this, player, sector);
 
       }
+
       if (mv[0] === "space_combat_post") {
 
   	let player       = parseInt(mv[1]);
@@ -1746,39 +1898,50 @@ console.log("prepds space defense!");
 	// have a round of space combat
 	//
 	this.game.state.space_combat_round++;
-	this.spaceCombat(player, sector);
 
+	//
+	// who is the defender?
+	//
+	let defender = this.returnDefender(player, sector);
 
-/****
-
-
-space_combat_post --> if unrest
- ---> space_combat_hits_reported
- ---> space_combat_mitigate_hits
- ---> space_combat_assign_hits
----------> 
-
-	if (this.game.player == player) {
-	  // walk us through the rest
-	}
-
-        return 0;
-****/
-
-  	if (this.hasUnresolvedSpaceCombat(player, sector) == 1) {
-	  if (this.game.player == player) {
-	    this.addMove("space_combat_post\t"+player+"\t"+sector);
-	    this.addMove("space_combat\t"+player+"\t"+sector);
-	    this.endTurn();
-	    return 0;
-	  } else {
-	    return 0;
-	  }
-	} else {
+	//
+	// if there is no defender, end this charade
+	//
+	if (defender == -1) {
 	  return 1;
 	}
 
+	//
+	// otherwise, process combat
+	//
+	if (this.game.player == player) {
+	  this.game.queue.push("space_combat_player_menu\t"+defender+"\t"+attacker+"\t"+sector);
+	  this.game.queue.push("space_combat_player_menu\t"+attacker+"\t"+defender+"\t"+sector);
+	}
+
+        return 1;
+
       }
+
+
+
+      if (mv[0] === "space_combat_player_menu") {
+
+        let attacker     = parseInt(mv[2]);
+        let defender     = parseInt(mv[2]);
+        let sector       = mv[3];
+        this.game.queue.splice(qe, 1);
+
+        this.updateSectorGraphics(sector);
+
+	if (this.game.player == attacker) {
+          this.playerPlaySpaceCombat(attacker, defender, sector);        
+	}
+
+        return 0;
+      }
+
+
 
 
 

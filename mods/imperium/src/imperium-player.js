@@ -381,6 +381,88 @@
   }
 
 
+
+  //
+  // reaching this implies that the player can choose to fire / not-fire
+  //
+  playerPlaySpaceCombat(attacker, defender, sector) {
+ 
+    let imperium_self = this;
+    let sys = this.returnSectorAndPlanets(sector);
+    let html = '';
+
+    html = '<p>Do you wish to fire your PDS?</p><ul>';
+
+    if (1 == 1) {
+      html += '<li class="option" id="attack">launch attack</li>';
+    }
+    if (1 == 1) {
+      html += '<li class="option" id="action">action card</li>';
+    }
+
+    let tech_attach_menu_events = 0;
+    let tech_attach_menu_triggers = [];
+    let tech_attach_menu_index = [];
+
+    let z = this.returnEventObjects();
+    for (let i = 0; i < z.length; i++) {
+      if (z[i].menuOptionTriggers(this, "space_combat", this.game.player) == 1) {
+        let x = z[i].menuOption(this, "space_combat", this.game.player);
+        html += x.html;
+	tech_attach_menu_index.push(i);
+	tech_attach_menu_triggers.push(x.event);
+	tech_attach_menu_events = 1;
+      }
+    }
+    html += '</ul>';
+
+    this.updateStatus(html);
+  
+    $('.option').on('click', function() {
+  
+      let action2 = $(this).attr("id");
+
+      //
+      // respond to tech and factional abilities
+      //
+      if (tech_attach_menu_events == 1) {
+	for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
+	  if (action2 == tech_attach_menu_triggers[i]) {
+	    $(this).remove();
+	    z[tech_attach_menu_index[i]].menuOptionActivated(imperium_self, "space_combat", imperium_self.game.player);
+          }
+        }
+      }
+
+      if (action2 == "action") {
+        imperium_self.playerSelectActionCard(function(card) {
+  	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+	  imperium_self.playerPlaySpaceCombat(attacker, defender, sector);
+        }, function() {
+	  imperium_self.playerPlaySpaceCombat(attacker, defender, sector);
+	});
+      }
+
+      if (action2 == "attack") {
+	// prepend so it happens after the modifiers
+	//
+	// ships_fire needs to make sure it permits any opponents to fire...
+	//
+        imperium_self.prependMove("ships_fire\t"+imperium_self.game.player+"\t"+attacker+"\t"+sector);
+        imperium_self.prependMove("notify\tPlayer attacks");
+	imperium_self.endTurn();
+      }
+
+    });
+  }
+
+
+
+
+
+
+
   //
   // reaching this implies that the player can choose to fire / not-fire
   //

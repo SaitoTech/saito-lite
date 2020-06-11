@@ -231,8 +231,6 @@ console.log("D");
 
 
 
-console.log("C");
-
     this.importTech("plasma-scoring", {
       name        	:       "Plasma Scoring" ,
       color       	:       "red" ,
@@ -242,14 +240,16 @@ console.log("C");
           imperium_self.game.players_info[player-1].plasma_scoring = 0;
         }
       },
-      onNewRound : function(imperium_self, player, mycallback) {
-        if (player == imperium_self.game.player) {
-          imperium_self.game.players_info[player-1].plasma_scoring = 1;
-          imperium_self.game.players_info[player-1].extra_roll_on_bombardment_or_pds = 1;
+      gainTechnology : function(imperium_self, gainer, tech) {
+        if (tech == "graviton-laser-system") {
+          imperium_self.game.players_info[gainer-1].plasma_scoring = 1;
+	  imperium_self.game.players_info[gainer-1].pds_combat_roll_bonus_shots++;
         }
-        return 1;
       },
     });
+
+
+
 
     this.importTech("magan-defense-grid", {
       name                :       "Magan Defense Grid" ,
@@ -351,6 +351,7 @@ console.log("C");
           imperium_self.game.players_info[gainer-1].graviton_laser_system_exhausted = 0;
         }
       },
+/***
       pdsSpaceDefenseTriggers(imperium_self, attacker, player, sector) {
         imperium_self.game.players_info[player-1].graviton_laser_system_active = 0;
 	if (imperium_self.game.players_info[player-1].graviton_laser_system == 1 && imperium_self.game.players_info[player-1].graviton_laser_system_exhausted == 0) {
@@ -361,14 +362,8 @@ console.log("C");
 	return 0;
       },
       pdsSpaceDefenseEvent(imperium_self, attacker, player, sector) {
-//
-// graviton requires activation -- if it did not we could just auto-handle whatever variables required setting here
-// with returning 0.
-//
-//        imperium_self.game.players_info[player-1].graviton_laser_system_exhausted = 1;
-//        imperium_self.game.players_info[player-1].graviton_laser_system_active = 1;
-	return 1;
       },
+***/
       modifyTargets(imperium_self, attacker, defender, player, combat_type="", targets=[]) {
         if (combat_type == "pds") {
           if (imperium_self.game.players_info[player-1].graviton_laser_system_active == 1) {
@@ -382,7 +377,6 @@ console.log("C");
         }
 	return targets;
       },
-
       menuOption  :       function(imperium_self, menu, player) {
 	if (menu == "pds") {
           return { event : 'graviton', html : '<li class="option" id="graviton">use graviton laser targetting</li>' };
@@ -396,7 +390,6 @@ console.log("C");
         return 0;
       },
       menuOptionActivated:  function(imperium_self, menu, player) {
-alert("HERE!: " + menu);
         if (menu == "pds") {
           imperium_self.game.players_info[player-1].graviton_laser_system_exhausted = 1;
           imperium_self.game.players_info[player-1].graviton_laser_system_active = 1;
@@ -4517,27 +4510,40 @@ console.log("prepds space defense!");
 	if (planet_idx != "pds") { planet_idx = parseInt(planet_idx); }
 	let total_hits     = parseInt(mv[6]);
 
-	if (total_hits == 0) { total_hits = 3; }
-
         this.game.queue.splice(qe, 1);
 
-	if (total_hits > 0) {
-
-	  alert("Player is assigning "+total_hits+" hits!");
-
-	  if (this.game.player == defender) {
-  	    this.playerAssignHits(attacker, defender, type, sector, planet_idx, total_hits);
+	if (planet_idx == "pds") {
+	  if (total_hits > 0) {
+	    if (this.game.player == defender) {
+  	      this.playerAssignHits(attacker, defender, type, sector, planet_idx, total_hits);
+	    }
+	    return 0;
+	  } else {
+	    return 1;
 	  }
-
-	  return 0;
-
-	} else {
-
-alert("RETURNING 1");
-
-	  return 1;
-
 	}
+
+	if (type == "space") {
+	  if (total_hits > 0) {
+	    if (this.game.player == defender) {
+  	      this.playerAssignHits(attacker, defender, type, sector, planet_idx, total_hits);
+	    }
+	    return 0;
+	  } else {
+	    return 1;
+	  }
+	}
+
+        if (type == "ground") {
+          if (total_hits > 0) {
+            if (this.game.player == defender) {
+              this.playerAssignHits(attacker, defender, type, sector, planet_idx, total_hits);
+            }
+            return 0;
+          } else {
+            return 1;
+          }
+        }
 
       }
 
@@ -4651,6 +4657,140 @@ alert("RETURNING 1");
 
 
 
+      if (mv[0] === "ships_fire") {
+
+	//
+	// we need to permit both sides to play action cards before they fire and start destroying units
+	// so we check to make sure that "space_combat_player_menu" does not immediately precede us... if
+	// it does we swap out the instructions, so that both players can pick...
+	//
+        let le = this.game.queue.length-2;
+        let lmv = [];
+        if (le >= 0) {
+	  lmv = this.game.queue[le].split("\t");
+	  if (lmv[0] === "space_combat_player_menu") {
+	    let tmpq = this.game.queue[le];
+	    let tmpp = this.game.queue[le+1];
+	    this.game.queue[le]   = tmpp;
+	    this.game.queue[le+1] = tmpq;
+	  }
+
+alert("sanity check on ships_fire!");
+	  //
+	  // 
+	  //
+	  return 1;
+	}
+
+        let attacker     = parseInt(mv[1]);
+        let defender     = parseInt(mv[2]);
+        let sector       = mv[3];
+	let sys 	 = this.returnSystemAndPlanets(sector);
+
+        this.game.queue.splice(qe, 1);
+
+	//
+	// sanity check
+	//
+	if (this.doesPlayerHaveShipsInSector(player, sector) == 1) {	  
+
+	  //
+	  // barrage against fighters fires first
+	  //
+
+
+	  let total_shots = 0;
+	  let total_hits = 0;
+	  let hits_or_misses = [];
+
+	  //
+	  // then the rest
+	  //
+	  for (let i = 0; i < sys.s.units[attacker-1].length; i++) {
+
+	    let roll = this.rollDice(10);
+
+	    for (let z_index in z) {
+	      roll = z[z_index].modifyCombatRoll(this, attacker, defender, this.game.player, "space", roll);
+	    }
+
+	    roll += this.game.players_info[player-1].space_combat_roll_modifier;
+
+	    if (roll >= sys.s.units[attacker-1][i].combat) {
+	      total_hits++;
+	      total_shots++;
+	      hits_or_misses.push(1);
+	    } else {
+	      total_shots++;
+	      hits_or_misses.push(0);
+	    }
+
+	  }
+
+
+	  //
+ 	  // handle rerolls
+	  //
+	  if (total_hits < total_shots) {
+
+	    let max_rerolls = total_shots - total_hits;
+	    let available_rerolls = this.game.players_info[player-1].combat_dice_reroll_permitted + this.game.players_info[player-1].space_combat_dice_reroll;
+
+	    for (let z_index in z) {
+	      available_rerolls = z[z_index].modifyCombatRerolls(this, player, attacker, player, "space", available_rerolls);
+	    }
+
+	    let attacker_rerolls = available_rerolls;
+	    if (max_rerolls < available_rerolls) {
+	      attacker_rerolls = max_rerolls;
+	    }
+
+	    for (let i = 0; i < attacker_rerolls; i++) {
+
+	      let lowest_combat_hit = 11;
+	      let lowest_combat_idx = 11;
+
+	      for (let n = 0; n < hits_to_misses.length; n++) {
+	        if (hits_on[n] < lowest_combat_hit && hits_or_misses[n] == 0) {
+		  lowest_combat_idx = n;
+		  lowest_combat_hit = hits_on[n];
+		}
+	      }
+	     
+	      let roll = this.rollDice(10);
+ 
+	      for (let z_index in z) {
+	        roll =  z[z_index].modifyCombatRerolls(this, player, attacker, player, "space", roll);
+	      }
+
+	      roll += this.game.players_info[player-1].space_combat_roll_modifier;
+
+	      if (roll >= hits_on[lowest_combat_idx]) {
+	        total_hits++;
+		hits_or_misses[lowest_combat_idx] = 1;
+	      } else {
+		hits_or_misses[lowest_combat_idx] = -1;
+	      }
+	    }
+
+	  }
+
+	  //
+	  // total hits to assign
+	  //
+	  let restrictions = [];
+
+	  this.game.queue.push("assign_hits\t"+attacker+"\t"+defender+"\tspace\t"+sector+"\tspace\t"+total_hits);
+
+        }
+
+        return 1;
+
+      }
+
+
+
+
 
 
       //////////////////
@@ -4737,6 +4877,7 @@ alert("RETURNING 1");
 	return z[z_index].spaceCombatEvent(this, player, sector);
 
       }
+
       if (mv[0] === "space_combat_post") {
 
   	let player       = parseInt(mv[1]);
@@ -4748,39 +4889,50 @@ alert("RETURNING 1");
 	// have a round of space combat
 	//
 	this.game.state.space_combat_round++;
-	this.spaceCombat(player, sector);
 
+	//
+	// who is the defender?
+	//
+	let defender = this.returnDefender(player, sector);
 
-/****
-
-
-space_combat_post --> if unrest
- ---> space_combat_hits_reported
- ---> space_combat_mitigate_hits
- ---> space_combat_assign_hits
----------> 
-
-	if (this.game.player == player) {
-	  // walk us through the rest
-	}
-
-        return 0;
-****/
-
-  	if (this.hasUnresolvedSpaceCombat(player, sector) == 1) {
-	  if (this.game.player == player) {
-	    this.addMove("space_combat_post\t"+player+"\t"+sector);
-	    this.addMove("space_combat\t"+player+"\t"+sector);
-	    this.endTurn();
-	    return 0;
-	  } else {
-	    return 0;
-	  }
-	} else {
+	//
+	// if there is no defender, end this charade
+	//
+	if (defender == -1) {
 	  return 1;
 	}
 
+	//
+	// otherwise, process combat
+	//
+	if (this.game.player == player) {
+	  this.game.queue.push("space_combat_player_menu\t"+defender+"\t"+attacker+"\t"+sector);
+	  this.game.queue.push("space_combat_player_menu\t"+attacker+"\t"+defender+"\t"+sector);
+	}
+
+        return 1;
+
       }
+
+
+
+      if (mv[0] === "space_combat_player_menu") {
+
+        let attacker     = parseInt(mv[2]);
+        let defender     = parseInt(mv[2]);
+        let sector       = mv[3];
+        this.game.queue.splice(qe, 1);
+
+        this.updateSectorGraphics(sector);
+
+	if (this.game.player == attacker) {
+          this.playerPlaySpaceCombat(attacker, defender, sector);        
+	}
+
+        return 0;
+      }
+
+
 
 
 
@@ -5526,6 +5678,88 @@ space_combat_post --> if unrest
 
     });
   }
+
+
+
+  //
+  // reaching this implies that the player can choose to fire / not-fire
+  //
+  playerPlaySpaceCombat(attacker, defender, sector) {
+ 
+    let imperium_self = this;
+    let sys = this.returnSectorAndPlanets(sector);
+    let html = '';
+
+    html = '<p>Do you wish to fire your PDS?</p><ul>';
+
+    if (1 == 1) {
+      html += '<li class="option" id="attack">launch attack</li>';
+    }
+    if (1 == 1) {
+      html += '<li class="option" id="action">action card</li>';
+    }
+
+    let tech_attach_menu_events = 0;
+    let tech_attach_menu_triggers = [];
+    let tech_attach_menu_index = [];
+
+    let z = this.returnEventObjects();
+    for (let i = 0; i < z.length; i++) {
+      if (z[i].menuOptionTriggers(this, "space_combat", this.game.player) == 1) {
+        let x = z[i].menuOption(this, "space_combat", this.game.player);
+        html += x.html;
+	tech_attach_menu_index.push(i);
+	tech_attach_menu_triggers.push(x.event);
+	tech_attach_menu_events = 1;
+      }
+    }
+    html += '</ul>';
+
+    this.updateStatus(html);
+  
+    $('.option').on('click', function() {
+  
+      let action2 = $(this).attr("id");
+
+      //
+      // respond to tech and factional abilities
+      //
+      if (tech_attach_menu_events == 1) {
+	for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
+	  if (action2 == tech_attach_menu_triggers[i]) {
+	    $(this).remove();
+	    z[tech_attach_menu_index[i]].menuOptionActivated(imperium_self, "space_combat", imperium_self.game.player);
+          }
+        }
+      }
+
+      if (action2 == "action") {
+        imperium_self.playerSelectActionCard(function(card) {
+  	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+	  imperium_self.playerPlaySpaceCombat(attacker, defender, sector);
+        }, function() {
+	  imperium_self.playerPlaySpaceCombat(attacker, defender, sector);
+	});
+      }
+
+      if (action2 == "attack") {
+	// prepend so it happens after the modifiers
+	//
+	// ships_fire needs to make sure it permits any opponents to fire...
+	//
+        imperium_self.prependMove("ships_fire\t"+imperium_self.game.player+"\t"+attacker+"\t"+sector);
+        imperium_self.prependMove("notify\tPlayer attacks");
+	imperium_self.endTurn();
+      }
+
+    });
+  }
+
+
+
+
+
 
 
   //
@@ -8355,6 +8589,37 @@ console.log("F: " + this.game.players_info[this.game.player-1].faction);
 
 
 
+  returnDefender(attacker, sector, planet_idx=null) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+
+    let defender = -1;
+    let defender_found = 0;
+
+    if (planet_idx == null) {
+      for (let i = 0; i < sys.s.units.length; i++) {
+        if (attacker != (i+1)) {
+          if (sys.s.units[i].length > 0) {
+            defender = (i+1);
+          }
+        }
+      }
+      return defender;
+    }
+
+    //
+    // planet_idx is not null
+    //
+    for (let i = 0; i < sys.p[planet_idx].units.length; i++) {
+      if (attacker != (i+1)) {
+        if (sys.p[planet_idx].units[i].length > 0) {
+          defender = (i+1);
+        }
+      }
+    }
+    return defender;
+  }
+
 
   hasUnresolvedSpaceCombat(attacker, sector) {
  
@@ -8602,6 +8867,16 @@ console.log("A: " + tmp[k]);
   }
   
 
+
+
+
+  doesPlayerHaveShipsInSector(player, sector) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+    if (sys.s.units[player-1].length > 0) { return 1; }
+    return 0;
+
+  }
 
 
 

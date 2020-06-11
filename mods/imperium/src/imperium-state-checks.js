@@ -435,6 +435,37 @@ console.log("F: " + this.game.players_info[this.game.player-1].faction);
 
 
 
+  returnDefender(attacker, sector, planet_idx=null) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+
+    let defender = -1;
+    let defender_found = 0;
+
+    if (planet_idx == null) {
+      for (let i = 0; i < sys.s.units.length; i++) {
+        if (attacker != (i+1)) {
+          if (sys.s.units[i].length > 0) {
+            defender = (i+1);
+          }
+        }
+      }
+      return defender;
+    }
+
+    //
+    // planet_idx is not null
+    //
+    for (let i = 0; i < sys.p[planet_idx].units.length; i++) {
+      if (attacker != (i+1)) {
+        if (sys.p[planet_idx].units[i].length > 0) {
+          defender = (i+1);
+        }
+      }
+    }
+    return defender;
+  }
+
 
   hasUnresolvedSpaceCombat(attacker, sector) {
  
@@ -682,6 +713,16 @@ console.log("A: " + tmp[k]);
   }
   
 
+
+
+
+  doesPlayerHaveShipsInSector(player, sector) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+    if (sys.s.units[player-1].length > 0) { return 1; }
+    return 0;
+
+  }
 
 
 
