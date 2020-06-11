@@ -1,6 +1,7 @@
 const UpdateOrderTemplate = require('./update-order.template');
 const PurchaseOrder = require('./orders/purchase-order');
 const ItemManager = require('./item-manager');
+const Log = require('./utils/log');
 
 
 module.exports = UpdateOrder = {
@@ -30,6 +31,9 @@ module.exports = UpdateOrder = {
         document.getElementById('copy-po').classList.remove('hidden');
       });
     }
+
+    Log.render(app, data, document.querySelector('.order-log'));
+    Log.attachEvents(app, data);
 
   },
 

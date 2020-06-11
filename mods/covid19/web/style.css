@@ -440,3 +440,51 @@ td.inq-product-id div.editable {
 .medium-editor-element p {
   margin: 0;
 }
+
+
+.order-log {
+  border: 1px solid var(--saito-red);
+}
+
+.new-log-message {
+  border-top: 1px solid var(--saito-red);
+  height: 2em;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: auto;
+}
+
+.log-frame {
+  position: relative;
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 2em;
+}
+
+.log-message-add {
+  line-height: 2em;
+  text-align: right;
+}
+
+.log-message-add i {
+  margin: 0 5px;
+}
+
+.log-block {
+  display: grid;
+  grid-template-columns: 9em auto;
+  grid-gap: 1em;
+  padding: 0 3px;
+  border-bottom: 1px dashed #ddd;
+  margin: 0 0 1px 0;
+}
+
+.log-time {
+  font-size: smaller;
+}
+
+.log-messages {
+  height: 100%;
+  max-height: 350px;
+  overflow: auto;
+}

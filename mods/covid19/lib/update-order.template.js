@@ -5,8 +5,12 @@ module.exports = UpdateOrderTemplate = (app, data) => {
   html = `
   <div class="order-template">
     
-  <h2>Add Order</h2>
-  <div class="main-form grid-2"></div>
+  <h2>Order</h2>
+
+  <div class="order-head grid-2-1-columns">
+    <div class="main-form grid-2"></div>
+    <div class="order-log"></div>
+  </div>
 
 
   <div class="main-form-buttons">
