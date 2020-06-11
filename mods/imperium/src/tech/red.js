@@ -1,6 +1,4 @@
 
-console.log("C");
-
     this.importTech("plasma-scoring", {
       name        	:       "Plasma Scoring" ,
       color       	:       "red" ,
@@ -10,14 +8,16 @@ console.log("C");
           imperium_self.game.players_info[player-1].plasma_scoring = 0;
         }
       },
-      onNewRound : function(imperium_self, player, mycallback) {
-        if (player == imperium_self.game.player) {
-          imperium_self.game.players_info[player-1].plasma_scoring = 1;
-          imperium_self.game.players_info[player-1].extra_roll_on_bombardment_or_pds = 1;
+      gainTechnology : function(imperium_self, gainer, tech) {
+        if (tech == "graviton-laser-system") {
+          imperium_self.game.players_info[gainer-1].plasma_scoring = 1;
+	  imperium_self.game.players_info[gainer-1].pds_combat_roll_bonus_shots++;
         }
-        return 1;
       },
     });
+
+
+
 
     this.importTech("magan-defense-grid", {
       name                :       "Magan Defense Grid" ,

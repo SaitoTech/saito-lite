@@ -40,6 +40,7 @@
           imperium_self.game.players_info[gainer-1].graviton_laser_system_exhausted = 0;
         }
       },
+/***
       pdsSpaceDefenseTriggers(imperium_self, attacker, player, sector) {
         imperium_self.game.players_info[player-1].graviton_laser_system_active = 0;
 	if (imperium_self.game.players_info[player-1].graviton_laser_system == 1 && imperium_self.game.players_info[player-1].graviton_laser_system_exhausted == 0) {
@@ -50,14 +51,8 @@
 	return 0;
       },
       pdsSpaceDefenseEvent(imperium_self, attacker, player, sector) {
-//
-// graviton requires activation -- if it did not we could just auto-handle whatever variables required setting here
-// with returning 0.
-//
-//        imperium_self.game.players_info[player-1].graviton_laser_system_exhausted = 1;
-//        imperium_self.game.players_info[player-1].graviton_laser_system_active = 1;
-	return 1;
       },
+***/
       modifyTargets(imperium_self, attacker, defender, player, combat_type="", targets=[]) {
         if (combat_type == "pds") {
           if (imperium_self.game.players_info[player-1].graviton_laser_system_active == 1) {
@@ -71,7 +66,6 @@
         }
 	return targets;
       },
-
       menuOption  :       function(imperium_self, menu, player) {
 	if (menu == "pds") {
           return { event : 'graviton', html : '<li class="option" id="graviton">use graviton laser targetting</li>' };
@@ -85,7 +79,6 @@
         return 0;
       },
       menuOptionActivated:  function(imperium_self, menu, player) {
-alert("HERE!: " + menu);
         if (menu == "pds") {
           imperium_self.game.players_info[player-1].graviton_laser_system_exhausted = 1;
           imperium_self.game.players_info[player-1].graviton_laser_system_active = 1;
