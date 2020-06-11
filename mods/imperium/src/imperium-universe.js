@@ -168,10 +168,12 @@
         sectors[i].activated[j] = 0; // is this activated by the player
       }
 
-/*  
-      systems[i].units[1] = [];
-      systems[i].units[1].push(this.returnUnit("fighter", 1));  
-*/
+  
+      sectors[i].units[1] = [];
+      sectors[i].units[1].push(this.returnUnit("fighter", 1));  
+      sectors[i].units[1].push(this.returnUnit("fighter", 1));  
+
+
     }
     return sectors;
   };

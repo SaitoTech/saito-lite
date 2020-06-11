@@ -4906,8 +4906,8 @@ alert("sanity check on ships_fire!");
 	// otherwise, process combat
 	//
 	if (this.game.player == player) {
-	  this.game.queue.push("space_combat_player_menu\t"+defender+"\t"+attacker+"\t"+sector);
-	  this.game.queue.push("space_combat_player_menu\t"+attacker+"\t"+defender+"\t"+sector);
+	  this.game.queue.push("space_combat_player_menu\t"+defender+"\t"+player+"\t"+sector);
+	  this.game.queue.push("space_combat_player_menu\t"+player+"\t"+defender+"\t"+sector);
 	}
 
         return 1;
@@ -7634,10 +7634,12 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
         sectors[i].activated[j] = 0; // is this activated by the player
       }
 
-/*  
-      systems[i].units[1] = [];
-      systems[i].units[1].push(this.returnUnit("fighter", 1));  
-*/
+  
+      sectors[i].units[1] = [];
+      sectors[i].units[1].push(this.returnUnit("fighter", 1));  
+      sectors[i].units[1].push(this.returnUnit("fighter", 1));  
+
+
     }
     return sectors;
   };
