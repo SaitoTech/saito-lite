@@ -33,7 +33,8 @@
       players[i].vp		= 0;
       players[i].passed		= 0;
       players[i].strategy_cards_played = [];
-  
+      players[i].action_cards_played = [];
+
   
       //
       // gameplay modifiers (action cards + tech)
@@ -57,10 +58,6 @@
       players[i].may_repair_damaged_ships_after_space_combat = 0;
       players[i].may_assign_first_round_combat_shot = 0;
       players[i].production_bonus = 0;
-      players[i].ground_combat_dice_reroll_permitted = 0;
-      players[i].space_combat_dice_reroll_permitted = 0;
-      players[i].pds_combat_dice_reroll_permitted = 0;
-      players[i].combat_dice_reroll_permitted = 0;
 
       //
       // faction-inspired gameplay modifiers 
@@ -75,6 +72,13 @@
       players[i].space_combat_roll_modifier 	= 0;
       players[i].ground_combat_roll_modifier 	= 0;
       players[i].pds_combat_roll_modifier 	= 0;
+      players[i].space_combat_roll_bonus_shots 	= 0;
+      players[i].ground_combat_roll_bonus_shots	= 0;
+      players[i].pds_combat_roll_bonus_shots 	= 0;
+      players[i].ground_combat_dice_reroll      = 0;
+      players[i].space_combat_dice_reroll       = 0;
+      players[i].pds_combat_dice_reroll		= 0;
+      players[i].combat_dice_reroll_permitted 	= 0;
 
       //
       // tech upgrades
@@ -117,6 +121,8 @@
 
 
 
+
+
   playerTurn(stage="main") {
   
     let html = '';
@@ -152,12 +158,12 @@
 
 
       let z = this.returnEventObjects();
-      for (let i = 0; i < z.length; z++) {
-	if (z[i].menuOptionTrigger(this, this.game.player) == 1) {
-          let x = z[i].menuOption(this, this.game.player);
+      for (let i = 0; i < z.length; i++) {
+	if (z[i].menuOptionTriggers(this, "main", this.game.player) == 1) {
+          let x = z[i].menuOption(this, "main", this.game.player);
 	  html += x.html;
 	  tech_attach_menu_index.push(i);
-	  tech_attach_menu_triggers.push(x.trigger);
+	  tech_attach_menu_triggers.push(x.event);
 	  tech_attach_menu_events = 1;
 	}
       }
@@ -180,7 +186,8 @@
 	  for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
 	    if (action2 == tech_attach_menu_triggers[i]) {
    	      let mytech = technologies[imperium_self.game.players_info[imperium_self.game.player-1].tech[tech_attach_menu_index]];
-	      mytech.menuOptionActivated(imperium_self, imperium_self.game.player);
+	      $(this).remove();
+	      mytech.menuOptionActivated(imperium_self, "main", imperium_self.game.player);
 	      return;
 	    }
 	  }
@@ -206,7 +213,7 @@
   	    imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.endTurn();
-          });
+          }, function() { imperium_self.playerTurn(); });
         }
         if (action2 == "trade") {
           imperium_self.playerTrade(function() {
@@ -233,6 +240,230 @@
 
     $('.textchoice').off();
     $('.textchoice').on('click', function() { mycallback(); });
+
+  }
+
+
+  //
+  // assign hits to my forces
+  //
+  playerAssignHits(attacker, defender, type, sector, details, total_hits) {
+
+    let imperium_self = this;
+    let hits_assigned = 0;
+
+    html = '<p>You must assign '+total_hits+' to your fleet:</p><ul>';
+
+    if (1 == 1) {
+      html += '<li class="option" id="assign">assign hits</li>';
+    }
+    if (1 == 1) {
+      html += '<li class="option" id="action">action card</li>';
+    }
+
+    let menu_tyoe = "";
+    if (details == "pds") { menu_type = "assign_hits_pds"; }
+    if (menu_type == "" && type == "space") { menu_type = "assign_hits_space"; }
+    if (type == "ground") { menu_type = "assign_hits_ground"; }
+
+    let tech_attach_menu_events = 0;
+    let tech_attach_menu_triggers = [];
+    let tech_attach_menu_index = [];
+
+    let z = this.returnEventObjects();
+    for (let i = 0; i < z.length; i++) {
+      if (z[i].menuOptionTriggers(this, menu_type, this.game.player) == 1) {
+        let x = z[i].menuOption(this, menu_type, this.game.player);
+        html += x.html;
+	tech_attach_menu_index.push(i);
+	tech_attach_menu_triggers.push(x.event);
+	tech_attach_menu_events = 1;
+      }
+    }
+    html += '</ul>';
+
+
+    this.updateStatus(html);
+  
+    $('.option').on('click', function() {
+  
+      let action2 = $(this).attr("id");
+
+      //
+      // respond to tech and factional abilities
+      //
+      if (tech_attach_menu_events == 1) {
+	for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
+	  if (action2 == tech_attach_menu_triggers[i]) {
+   	    let mytech = this.tech[imperium_self.game.players_info[imperium_self.game.player-1].tech[tech_attach_menu_index]];
+	    z[tech_attach_menu_index[i]].menuOptionActivated(imperium_self, menu_type, imperium_self.game.player);
+          }
+        }
+      }
+
+
+      if (action2 == "action") {
+        imperium_self.playerSelectActionCard(function(card) {
+  	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+	  imperium_self.playerPlayPDSDefense(player, attacker, sector);
+        }, function() {
+	  imperium_self.playerPlayPDSDefense(player, attacker, sector);
+	});
+      }
+
+      if (action2 == "assign") {
+
+	let sys = imperium_self.returnSectorAndPlanets(sector);
+
+	let html = '';
+	html += 'Assign <div style="display:inline" id="total_hits_to_assign">'+total_hits+'</div> hits:';
+	html += '<ul>';
+	
+        for (let i = 0; i < sys.s.units[imperium_self.game.player-1].length; i++) {
+  
+	  let unit = sys.s.units[imperium_self.game.player-1][i];
+	  html += '<li class="textchoice player_ship_'+i+'" id="'+i+'">'+unit.name;
+	  if (unit.strength > 1) { 
+	    html += ' <div style="display:inline" id="player_ship_'+i+'_hits">(';
+	    for (let bb = 1; bb < unit.strength; bb++) { html += '*'; }
+	    html += ')</div>'
+	  }
+	  html += '</li>';
+
+	}
+	html += '</ul>';
+  
+
+	imperium_self.updateStatus(html);
+	
+	$('.textchoice').off();
+	$('.textchoice').on('click', function() {
+
+	  let ship_idx = $(this).attr("id");
+	  let selected_unit = sys.s.units[imperium_self.game.player-1][ship_idx];
+
+	  imperium_self.addMove("assign_hit\t"+attacker+"\t"+defender+"\t"+imperium_self.game.player+"\tship\t"+sector+"\t"+ship_idx+"\t0"); // last argument --> player should not assign again 
+
+
+	  total_hits--;
+
+	  $('#total_hits_to_assign').innerHTML = total_hits;
+
+	  if (selected_unit.strength > 1) {	  
+	    selected_unit.strength--;
+
+	    let ship_to_reduce = "#player_ship_"+ship_idx+'_hits';
+	    let rhtml = '';
+	    if (selected_unit.strength > 1) {
+	      html += '(';
+	      for (let bb = 1; bb < selected_unit.strength; bb++) {
+	        rhtml += '*';
+	      }
+	      rhtml += ')';
+	    }
+	    $(ship_to_reduce).html(rhtml);
+	  } else {
+	    selected_unit.strength = 0;
+	    selected_unit.destroyed = 0;
+	    $(this).remove();
+	  }
+
+	  if (total_hits == 0) {
+	    imperium_self.updateStatus("Notifying players of hits assignment...");
+	    imperium_self.endTurn();
+	  }
+
+	});
+      }
+
+    });
+  }
+
+
+  //
+  // reaching this implies that the player can choose to fire / not-fire
+  //
+  playerPlayPDSDefense(player, attacker, sector) {
+
+    let imperium_self = this;
+    let html = '';
+
+    html = '<p>Do you wish to fire your PDS?</p><ul>';
+
+    if (1 == 1) {
+      html += '<li class="option" id="skip">skip PDS</li>';
+    }
+    if (1 == 1) {
+      html += '<li class="option" id="fire">fire PDS</li>';
+    }
+    if (1 == 1) {
+      html += '<li class="option" id="action">action card</li>';
+    }
+
+    let tech_attach_menu_events = 0;
+    let tech_attach_menu_triggers = [];
+    let tech_attach_menu_index = [];
+
+    let z = this.returnEventObjects();
+    for (let i = 0; i < z.length; i++) {
+console.log("MENU FOR: " + i);
+      if (z[i].menuOptionTriggers(this, "pds", this.game.player) == 1) {
+
+console.log("triggered is: " + z[i].name);
+
+        let x = z[i].menuOption(this, "pds", this.game.player);
+        html += x.html;
+	tech_attach_menu_index.push(i);
+	tech_attach_menu_triggers.push(x.event);
+	tech_attach_menu_events = 1;
+      }
+    }
+    html += '</ul>';
+
+    this.updateStatus(html);
+  
+    $('.option').on('click', function() {
+  
+      let action2 = $(this).attr("id");
+
+      //
+      // respond to tech and factional abilities
+      //
+      if (tech_attach_menu_events == 1) {
+	for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
+	  if (action2 == tech_attach_menu_triggers[i]) {
+	    $(this).remove();
+	    z[tech_attach_menu_index[i]].menuOptionActivated(imperium_self, "pds", imperium_self.game.player);
+          }
+        }
+      }
+
+
+      if (action2 == "action") {
+        imperium_self.playerSelectActionCard(function(card) {
+  	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+	  imperium_self.playerPlayPDSDefense(player, attacker, sector);
+        }, function() {
+	  imperium_self.playerPlayPDSDefense(player, attacker, sector);
+	});
+      }
+
+      if (action2 == "skip") {
+	// prepend so it happens after the modifiers
+        imperium_self.prependMove("notify\tPlayer elects not to fire their PDS");
+	imperium_self.endTurn();
+      }
+
+      if (action2 == "fire") {
+	// prepend so it happens after the modifiers
+        imperium_self.prependMove("pds_fire\t"+imperium_self.game.player+"\t"+attacker+"\t"+sector);
+        imperium_self.prependMove("notify\tPlayer elects to fire their PDS");
+	imperium_self.endTurn();
+      };
+
+    });
 
   }
 
@@ -280,7 +511,10 @@
             imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
             imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
             imperium_self.endTurn();
-          }, player, sector);
+          }, function() {
+            imperium_self.playerContinueTurn(player, sector);
+            return;
+	  });
         }
 
       });
@@ -958,7 +1192,7 @@ console.log(player + " -- " + card + " -- " + deck);
 
 
   
-  playerSelectActionCard(mycallback, player, sector) { 
+  playerSelectActionCard(mycallback, cancel_callback) { 
  
     let imperium_self = this;
     let array_of_cards = this.returnPlayerActionCards(this.game.player);
@@ -968,8 +1202,10 @@ console.log(player + " -- " + card + " -- " + deck);
 
     html += "<p>Select an action card: </p><ul>";
     for (let z in array_of_cards) {
-      let thiscard = action_cards[this.game.deck[1].hand[z]];
-      html += '<li class="textchoice pointer" id="'+this.game.deck[1].hand[z]+'">' + thiscard.name + '</li>';
+      if (!this.game.players_info[this.game.player-1].action_cards_played.includes(this.game.deck[1].hand[z])) {
+        let thiscard = action_cards[this.game.deck[1].hand[z]];
+        html += '<li class="textchoice pointer" id="'+this.game.deck[1].hand[z]+'">' + thiscard.name + '</li>';
+      }
     }
     html += '<li class="textchoice pointer" id="cancel">cancel</li>';
     html += '</ul>';
@@ -982,17 +1218,9 @@ console.log(player + " -- " + card + " -- " + deck);
       let action2 = $(this).attr("id");
 
       if (action2 != "cancel") { imperium_self.hideActionCard(action2); }
+      if (action2 === "cancel") { cancel_callback(); return; }
 
-      if (action2 === "cancel") {
-	if (sector == null) {
-	  imperium_self.playerTurn();
-	  return;
-	}
-	else {
-	  imperium_self.playerContinueTurn(player, sector);
-	  return;
-	}
-      }
+      imperium_self.game.players_info[imperium_self.game.player-1].action_cards_played.push(action2);
 
       mycallback(action2);
 
@@ -1056,9 +1284,33 @@ console.log(player + " -- " + card + " -- " + deck);
     if (this.game.state.round > 1) {
       html  = "<div class='terminal_header'>"+this.returnFaction(this.game.player) + ": select your strategy card:</div><p><ul>";
     }
-    for (let z = 0; z < this.game.state.strategy_cards.length; z++) {
-      html += '<li class="textchoice" id="'+this.game.state.strategy_cards[z]+'">' + cards[this.game.state.strategy_cards[z]].name + '</li>';
+    let scards = [];
+
+console.log("GSSC: " + JSON.stringify(this.game.state.strategy_cards));
+
+    for (let z in this.strategy_cards) {
+      scards.push("");
     }
+
+    for (let z = 0; z < this.game.state.strategy_cards.length; z++) {
+console.log("HERE: " + z);
+console.log("WO: " + this.game.state.strategy_cards[z]);
+      let rank = parseInt(this.strategy_cards[this.game.state.strategy_cards[z]].rank);
+console.log("z: " + rank);
+      while (scards[rank-1] != "") { rank++; }
+console.log("adjusted rank: " + rank);
+      scards[rank-1] = '<li class="textchoice" id="'+this.game.state.strategy_cards[z]+'">' + cards[this.game.state.strategy_cards[z]].name + '</li>';
+    }
+console.log("and out!");
+
+    for (let z = 0; z < scards.length; z++) {
+      if (scards[z] != "") {
+        html += scards[z];
+      }
+    }
+    
+console.log("and out 2!");
+
     html += '</ul></p>';
   
     this.updateStatus(html);

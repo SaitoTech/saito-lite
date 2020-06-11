@@ -202,15 +202,6 @@ console.log("ASSIGN STARTING UNITS!");
 
 	let technologies = this.returnTechnology();
 
-	//
-	// assign starting technology
-	//
-	for (let k = 0; k < this.factions[this.game.players_info[i].faction].tech.length; k++) {
-	  let free_tech = this.factions[this.game.players_info[i].faction].tech[k];
-	  let player = i+1;
-          this.game.players_info[i].tech.push(free_tech);
-        }
-
 console.log("ASSIGN STARTING TECH!");
 
 	//
@@ -223,6 +214,18 @@ console.log("ASSIGN STARTING TECH!");
           }
         }
 
+
+	//
+	// assign starting technology
+	//
+	for (let k = 0; k < this.factions[this.game.players_info[i].faction].tech.length; k++) {
+	  let free_tech = this.factions[this.game.players_info[i].faction].tech[k];
+	  let player = i+1;
+          this.game.players_info[i].tech.push(free_tech);
+	  if (this.tech[free_tech]) {
+	    this.tech[free_tech].gainTechnology(this, player, free_tech);
+	  }
+        }
 
         this.saveSystemAndPlanets(sys);
   

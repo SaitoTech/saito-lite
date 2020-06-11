@@ -47,7 +47,10 @@ console.log("updating player ("+num+") variable "+valname+" to: " + val);
 	  imperium_self.game.players_info[num-1][valname] = val;
 	}
 
-  	return;
+        this.game.queue.splice(qe, 1);
+
+  	return 1;
+
       }
   
 
@@ -190,12 +193,12 @@ console.log("updating player ("+num+") variable "+valname+" to: " + val);
 
       if (mv[0] === "play") {
 
-        
-    let player = mv[1];
-          //set player highlight color
-          document.documentElement.style.setProperty('--playing-color', `var(--p${player})`);
+    	let player = mv[1];
 
-    
+	try {
+          document.documentElement.style.setProperty('--playing-color', `var(--p${player})`);
+    	} catch (err) {}
+
         if (player == this.game.player) {
   	  this.tracker = this.returnPlayerTurnTracker();
   	  this.addMove("resolve\tplay");
@@ -1149,7 +1152,7 @@ alert("Player should choose what planets to invade (if possible)");
 	let player_to_continue = mv[3];  
 
         sys = this.returnSectorAndPlanets(sector);
-  	_to_continuesys.s.activated[player-1] = 1;
+  	sys.s.activated[player-1] = 1;
   	this.saveSystemAndPlanets(sys);
         this.updateSectorGraphics(sector);
 
@@ -1389,6 +1392,7 @@ alert("Player should choose what planets to invade (if possible)");
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
+console.log("moving into trigger function with sector: " + sector);
 	    if (z[k].pdsSpaceDefenseTriggers(this, attacker, speaker_order[i], sector) == 1) {
 	      this.game.queue.push("pds_space_defense_event\t"+speaker_order[i]+"\t"+attacker+"\t"+sector+"\t"+k);
             }
@@ -1417,7 +1421,7 @@ alert("Player should choose what planets to invade (if possible)");
 
       if (mv[0] === "pds_space_defense_post") {
 
-  	let player       = parseInt(mv[1]);
+  	let attacker     = parseInt(mv[1]);
         let sector	 = mv[2];
   	this.game.queue.splice(qe, 1);
 
@@ -1428,13 +1432,224 @@ alert("Player should choose what planets to invade (if possible)");
         // this is taken care of by the event above. so we should calculate hits and 
 	// process re-rolls.
 	//
-        this.pdsSpaceDefense(player, sector, 1); // 1 hop also finds adjacent PDS units
+        let speaker_order = this.returnSpeakerOrder();
+
+console.log("prepds space defense!");
+
+  	for (let i = 0; i < speaker_order.length; i++) {
+	  if (this.doesPlayerHavePDSUnitsWithinRange(attacker, speaker_order[i], sector) == 1) {
+	    this.game.queue.push("pds_space_defense_player_menu\t"+speaker_order[i]+"\t"+attacker+"\t"+sector);
+          }
+        }
+
+  	return 1;
+
+      }
+
+
+
+      if (mv[0] === "pds_space_defense_player_menu") {
+
+        let player       = parseInt(mv[1]);
+        let attacker     = parseInt(mv[2]);
+        let sector       = mv[3];
+        this.game.queue.splice(qe, 1);
+
+        this.updateSectorGraphics(sector);
+
+	if (this.game.player == player) {
+          this.playerPlayPDSDefense(player, attacker, sector);        
+	}
+
+        return 0;
+      }
+
+
+      //
+      // assigns one hit to one unit
+      //
+      if (mv[0] === "assign_hit") {
+
+        let attacker     = parseInt(mv[1]);
+        let defender     = parseInt(mv[2]);
+        let player       = parseInt(mv[3]);
+        let type 	 = mv[4]; // ship // ground
+        let sector 	 = mv[5]; // ship // ground
+        let unit_idx 	 = parseInt(mv[6]); // ship // ground
+        let player_moves = parseInt(mv[7]); // does player also do this?
+
+	let sys = this.returnSectorAndPlanets(sector);
+	let z = this.returnEventObjects();
+
+	if (type == "ship") {
+	  sys.s.units[player-1][unit_idx].strength--;
+	  if (sys.s.units[player-1][unit_idx].strength <= 0) {
+	    sys.s.units[player-1][unit_idx].destroyed = 1;
+	    for (let z_index in z) {
+	      z[z_index].unitDestroyed(imperium_self, attacker, sys.s.units[player-1][unit_idx]);
+	    } 
+	  }
+
+	}
 
 	//
-	// people will need to opt-in to attack / opportunity for action cards / graviton
+	// re-display sector
 	//
+        this.eliminateDestroyedUnitsInSector(player, sector);
+	this.saveSystemAndPlanets(sys);
+	this.updateSectorGraphics(sector);
+        this.game.queue.splice(qe, 1);
+
 	return 1;
+
       }
+
+
+
+      //
+      // triggers menu for user to choose how to assign hits
+      //
+      if (mv[0] === "assign_hits") {
+
+        let attacker       = parseInt(mv[1]);
+        let defender       = parseInt(mv[2]);
+        let type           = mv[3]; // space // infantry
+	let sector	   = mv[4];
+	let planet_idx	   = mv[5]; // "pds" for pds shots
+	if (planet_idx != "pds") { planet_idx = parseInt(planet_idx); }
+	let total_hits     = parseInt(mv[6]);
+
+	if (total_hits == 0) { total_hits = 3; }
+
+        this.game.queue.splice(qe, 1);
+
+	if (total_hits > 0) {
+
+	  alert("Player is assigning "+total_hits+" hits!");
+
+	  if (this.game.player == defender) {
+  	    this.playerAssignHits(attacker, defender, type, sector, planet_idx, total_hits);
+	  }
+
+	  return 0;
+
+	} else {
+
+alert("RETURNING 1");
+
+	  return 1;
+
+	}
+
+      }
+
+      if (mv[0] === "pds_fire") {
+
+        let player       = parseInt(mv[1]);
+        let attacker     = parseInt(mv[2]);
+        let sector       = mv[3];
+
+        this.game.queue.splice(qe, 1);
+
+	//
+	// sanity check
+	//
+	if (this.doesPlayerHavePDSUnitsWithinRange(attacker, player, sector) == 1) {	  
+
+          //
+          // get pds units within range
+          //
+          let battery = this.returnPDSWithinRangeOfSector(attacker, player, sector);
+
+	  let total_shots = 0;
+	  let hits_on = [];
+	  let hits_or_misses = [];
+	  let total_hits  = 0;
+	  let z = this.returnEventObjects();
+
+	  for (let i = 0; i < battery.length; i++) {
+	    if (battery[i].owner == player) {
+ 	      total_shots++;
+	      hits_on.push(battery[i].combat);
+	    }
+	  }
+
+	  total_shots += this.game.players_info[player-1].pds_combat_roll_bonus_shots;
+
+	  for (let s = 0; s < total_shots; s++) {
+	    let roll = this.rollDice(10);
+	    for (let z_index in z) {
+	      // function modifyCombatRoll(imperium_self, attacker, defender, player, combat_type, roll) <--- attacker defender reversed here as we (oplayer) attack hte attacker (attacker)
+	      roll = z[z_index].modifyCombatRoll(this, player, attacker, player, "pds", roll);
+	    }
+	    roll += this.game.players_info[player-1].pdf_combat_roll_modifier;
+	    if (roll >= hits_on[s]) {
+	      total_hits++;
+	      hits_or_misses.push(1);
+	    } else {
+	      hits_or_misses.push(0);
+	    }
+	  }
+
+	  //
+ 	  // handle rerolls
+	  //
+	  if (total_hits < total_shots) {
+
+	    let max_rerolls = total_shots - total_hits;
+	    let available_rerolls = this.game.players_info[player-1].combat_dice_reroll_permitted + this.game.players_info[player-1].pds_combat_dice_reroll;
+
+	    for (let z_index in z) {
+	      available_rerolls = z[z_index].modifyCombatRerolls(this, player, attacker, player, "pds", available_rerolls);
+	    }
+
+	    let attacker_rerolls = available_rerolls;
+	    if (max_rerolls < available_rerolls) {
+	      attacker_rerolls = max_rerolls;
+	    }
+
+	    for (let i = 0; i < attacker_rerolls; i++) {
+
+	      let lowest_combat_hit = 11;
+	      let lowest_combat_idx = 11;
+
+	      for (let n = 0; n < hits_to_misses.length; n++) {
+	        if (hits_on[n] < lowest_combat_hit && hits_or_misses[n] == 0) {
+		  lowest_combat_idx = n;
+		  lowest_combat_hit = hits_on[n];
+		}
+	      }
+	     
+	      let roll = this.rollDice(10);
+ 
+	      for (let z_index in z) {
+	        roll =  z[z_index].modifyCombatRerolls(this, player, attacker, player, "pds", roll);
+	      }
+
+	      roll += this.game.players_info[player-1].pdf_combat_roll_modifier;
+	      if (roll >= hits_on[lowest_combat_idx]) {
+	        total_hits++;
+		hits_or_misses[lowest_combat_idx] = 1;
+	      } else {
+		hits_or_misses[lowest_combat_idx] = -1;
+	      }
+	    }
+
+	  }
+
+	  //
+	  // total hits to assign
+	  //
+	  let restrictions = [];
+
+	  this.game.queue.push("assign_hits\t"+player+"\t"+attacker+"\tspace\t"+sector+"\tpds\t"+total_hits);
+
+        }
+
+        return 1;
+
+      }
+
 
 
 

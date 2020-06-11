@@ -652,6 +652,8 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
 
   returnSectorsWithinHopDistance(destination, hops) {
 
+console.log(destination + " <----> " + hops);
+
     let sectors = [];
     let distance = [];
     let s = this.returnBoardTiles();
@@ -663,8 +665,10 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
     // find which systems within move distance (hops)
     //
     for (let i = 0; i < hops; i++) {
+console.log("SECTORS: " + sectors);
       let tmp = JSON.parse(JSON.stringify(sectors));
       for (let k = 0; k < tmp.length; k++) {
+console.log("A: " + tmp[k]);
         let neighbours = s[tmp[k]].neighbours;
         for (let m = 0; m < neighbours.length; m++) {
   	if (!sectors.includes(neighbours[m]))  {
@@ -681,7 +685,9 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
 
 
 
-  doesPlayerHavePDSUnitsWithinRange(player, sector) {
+  doesPlayerHavePDSUnitsWithinRange(attacker, player, sector) {
+
+console.log("SECTOR: " + sector);
 
     let sys = this.returnSectorAndPlanets(sector);
     let x = this.returnSectorsWithinHopDistance(sector, 1);
@@ -702,6 +708,26 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
 
     return 0;
   }
+
+
+  returnPDSWithinRangeOfSector(attacker, player, sector) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+    let x = this.returnSectorsWithinHopDistance(sector, 1);
+    let sectors = [];
+    let distance = [];
+
+    sectors = x.sectors;
+    distance = x.distance;
+
+    //
+    // get pds units within range
+    //
+    return this.returnPDSWithinRange(attacker, sector, sectors, distance);
+
+  }
+
+
 
 
 

@@ -5,6 +5,7 @@
   returnEventObjects(player) {
 
     let z = [];
+    let zz = [];
 
     //
     // player techs
@@ -12,7 +13,11 @@
     for (let i = 0; i < this.game.players_info.length; i++) {
       for (let j = 0; j < this.game.players_info[i].tech.length; j++) {
 	if (this.tech[this.game.players_info[i].tech[j]] != undefined) {
-          z.push(this.tech[this.game.players_info[i].tech[j]]);
+	  if (!zz.includes(this.game.players_info[i].tech[j])) {
+console.log("PUSHING TECH: " + this.game.players_info[i].tech[j]);
+            z.push(this.tech[this.game.players_info[i].tech[j]]);
+            zz.push(this.game.players_info[i].tech[j]);
+	  }
 	} else {
 console.log("MISSING TECH: " + this.game.players_info[i].tech[j]);
 	}
@@ -88,10 +93,10 @@ console.log("MISSING FACTION: " + this.game.players_info[i].faction);
     // ALL players run unitDestroyed
     //
     if (obj.unitDestroyed == null) {
-      obj.unitDestroyed = function(imperium_self, player, unit) { return unit;}
+      obj.unitDestroyed = function(imperium_self, attacker, unit) { return unit;}
     }
     if (obj.unitHit == null) {
-      obj.unitHit = function(imperium_self, player, unit) { return unit;}
+      obj.unitHit = function(imperium_self, attacker, unit) { return unit;}
     }
     if (obj.onNewRound == null) {
       obj.onNewRound = function(imperium_self, player, mycallback) { return 0; }
@@ -144,11 +149,11 @@ console.log("MISSING FACTION: " + this.game.players_info[i].faction);
     // the player here will be the user who is viewing the menu, so this only executes for the
     // active player.
     //
-    if (obj.menuOptionHTML == null) {
-      obj.menuOptionHTML = function(imperium_self, menu, player) { return 0; }
+    if (obj.menuOption == null) {
+      obj.menuOption = function(imperium_self, menu, player) { return {}; }
     }
     if (obj.menuOptionTriggers == null) {
-      obj.menuOptionTriggers = function(imperium_self, menu, player) { return {}; }
+      obj.menuOptionTriggers = function(imperium_self, menu, player) { return 0; }
     }
     if (obj.menuOptionActivated == null) {
       obj.menuOptionActivated = function(imperium_self, menu, player) { return 0; }
@@ -173,10 +178,10 @@ console.log("MISSING FACTION: " + this.game.players_info[i].faction);
       obj.modifyGroundCombatRoll = function(imperium_self, attacker, defender, roll) { return roll; }
     }
     if (obj.modifyCombatRoll == null) {
-      obj.modifyPDSRoll = function(imperium_self, attacker, defender, player, combat_type, roll) { return roll; }
+      obj.modifyCombatRoll = function(imperium_self, attacker, defender, player, combat_type, roll) { return roll; }
     }
     if (obj.modifyCombatRerolls == null) {
-      obj.modifyRerolls = function(imperium_self, attacker, defender, player, combat_type, roll) { return roll; }
+      obj.modifyCombatRerolls = function(imperium_self, attacker, defender, player, combat_type, roll) { return roll; }
     }
     if (obj.modifyCombatTargets == null) {
       obj.modifyTargets = function(imperium_self, attacker, defender, player, combat_type, targets=[]) { return targets; }

@@ -33,6 +33,9 @@
 
 
   addUIEvents() {
+
+    if (this.browser_active == 0) { return; }
+
     //make board draggable
     $('#hexGrid').draggable();
     //add ui functions  
@@ -75,29 +78,35 @@
   
   
   updateLeaderboard() {
-  
+
+    if (this.browser_active == 0) { return; }  
+
     let imperium_self = this;
     let factions = this.returnFactions();
-    document.querySelector('.round').innerHTML = this.game.state.round;
-    document.querySelector('.turn').innerHTML = this.game.state.turn;
-  
-    let html = '<div class="VP-track-label">Victory Points</div>';
 
-    for(j = this.vp_needed; j >= 0; j--) {
-      html += '<div class="vp ' + j + '-points"><div class="player-vp-background">' + j + '</div>';
-      html += '<div class="vp-players">'
+    try {
+
+      document.querySelector('.round').innerHTML = this.game.state.round;
+      document.querySelector('.turn').innerHTML = this.game.state.turn;
+
+      let html = '<div class="VP-track-label">Victory Points</div>';
+
+      for (let j = this.vp_needed; j >= 0; j--) {
+        html += '<div class="vp ' + j + '-points"><div class="player-vp-background">' + j + '</div>';
+        html += '<div class="vp-players">'
   
-      for (let i = 0; i < this.game.players_info.length; i++) {
-        if(this.game.players_info[i].vp == j) {
-          html += `  <div class="player-vp" style="background-color:var(--p${i+1});"><div class="vp-faction-name">${factions[this.game.players_info[i].faction].name}</div></div>`;
+        for (let i = 0; i < this.game.players_info.length; i++) {
+          if  (this.game.players_info[i].vp == j) {
+            html += `  <div class="player-vp" style="background-color:var(--p${i+1});"><div class="vp-faction-name">${factions[this.game.players_info[i].faction].name}</div></div>`;
+          }
         }
-      }
     
-      html += '</div></div>';
-    }
+        html += '</div></div>';
+      }
   
-    document.querySelector('.leaderboard').innerHTML = html;
+      document.querySelector('.leaderboard').innerHTML = html;
   
+    } catch (err) {}
   }
   
   
