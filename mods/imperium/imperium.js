@@ -4673,26 +4673,27 @@ console.log("prepds space defense!");
 	    let tmpp = this.game.queue[le+1];
 	    this.game.queue[le]   = tmpp;
 	    this.game.queue[le+1] = tmpq;
-	  }
-
+	    //
+	    // 
+	    //
 alert("sanity check on ships_fire!");
-	  //
-	  // 
-	  //
-	  return 1;
+	    return 1;
+	  }
 	}
 
+	let player 	 = imperium_self.game.player;
         let attacker     = parseInt(mv[1]);
         let defender     = parseInt(mv[2]);
         let sector       = mv[3];
-	let sys 	 = this.returnSystemAndPlanets(sector);
+	let sys 	 = this.returnSectorAndPlanets(sector);
+	let z 		 = this.returnEventObjects();
 
         this.game.queue.splice(qe, 1);
 
 	//
 	// sanity check
 	//
-	if (this.doesPlayerHaveShipsInSector(player, sector) == 1) {	  
+	if (this.doesPlayerHaveShipsInSector(attacker, sector) == 1) {	  
 
 	  //
 	  // barrage against fighters fires first
@@ -4711,10 +4712,10 @@ alert("sanity check on ships_fire!");
 	    let roll = this.rollDice(10);
 
 	    for (let z_index in z) {
-	      roll = z[z_index].modifyCombatRoll(this, attacker, defender, this.game.player, "space", roll);
+	      roll = z[z_index].modifyCombatRoll(this, attacker, defender, attacker, "space", roll);
 	    }
 
-	    roll += this.game.players_info[player-1].space_combat_roll_modifier;
+	    roll += this.game.players_info[attacker-1].space_combat_roll_modifier;
 
 	    if (roll >= sys.s.units[attacker-1][i].combat) {
 	      total_hits++;
@@ -4734,7 +4735,7 @@ alert("sanity check on ships_fire!");
 	  if (total_hits < total_shots) {
 
 	    let max_rerolls = total_shots - total_hits;
-	    let available_rerolls = this.game.players_info[player-1].combat_dice_reroll_permitted + this.game.players_info[player-1].space_combat_dice_reroll;
+	    let available_rerolls = this.game.players_info[attacker-1].combat_dice_reroll_permitted + this.game.players_info[attacker-1].space_combat_dice_reroll;
 
 	    for (let z_index in z) {
 	      available_rerolls = z[z_index].modifyCombatRerolls(this, player, attacker, player, "space", available_rerolls);
@@ -4905,10 +4906,8 @@ alert("sanity check on ships_fire!");
 	//
 	// otherwise, process combat
 	//
-	if (this.game.player == player) {
-	  this.game.queue.push("space_combat_player_menu\t"+defender+"\t"+player+"\t"+sector);
-	  this.game.queue.push("space_combat_player_menu\t"+player+"\t"+defender+"\t"+sector);
-	}
+	this.game.queue.push("space_combat_player_menu\t"+defender+"\t"+player+"\t"+sector);
+	this.game.queue.push("space_combat_player_menu\t"+player+"\t"+defender+"\t"+sector);
 
         return 1;
 
@@ -5560,7 +5559,7 @@ alert("sanity check on ships_fire!");
       html += '<li class="option" id="action">action card</li>';
     }
 
-    let menu_tyoe = "";
+    let menu_type = "";
     if (details == "pds") { menu_type = "assign_hits_pds"; }
     if (menu_type == "" && type == "space") { menu_type = "assign_hits_space"; }
     if (type == "ground") { menu_type = "assign_hits_ground"; }
@@ -5690,7 +5689,7 @@ alert("sanity check on ships_fire!");
     let sys = this.returnSectorAndPlanets(sector);
     let html = '';
 
-    html = '<p>Do you wish to fire your PDS?</p><ul>';
+    html = '<p>Prepare your fleet for attack:</p><ul>';
 
     if (1 == 1) {
       html += '<li class="option" id="attack">launch attack</li>';
@@ -6669,22 +6668,15 @@ console.log(player + " -- " + card + " -- " + deck);
     }
     let scards = [];
 
-console.log("GSSC: " + JSON.stringify(this.game.state.strategy_cards));
-
     for (let z in this.strategy_cards) {
       scards.push("");
     }
 
     for (let z = 0; z < this.game.state.strategy_cards.length; z++) {
-console.log("HERE: " + z);
-console.log("WO: " + this.game.state.strategy_cards[z]);
       let rank = parseInt(this.strategy_cards[this.game.state.strategy_cards[z]].rank);
-console.log("z: " + rank);
       while (scards[rank-1] != "") { rank++; }
-console.log("adjusted rank: " + rank);
       scards[rank-1] = '<li class="textchoice" id="'+this.game.state.strategy_cards[z]+'">' + cards[this.game.state.strategy_cards[z]].name + '</li>';
     }
-console.log("and out!");
 
     for (let z = 0; z < scards.length; z++) {
       if (scards[z] != "") {
@@ -6692,8 +6684,6 @@ console.log("and out!");
       }
     }
     
-console.log("and out 2!");
-
     html += '</ul></p>';
   
     this.updateStatus(html);

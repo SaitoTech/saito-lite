@@ -261,7 +261,7 @@
       html += '<li class="option" id="action">action card</li>';
     }
 
-    let menu_tyoe = "";
+    let menu_type = "";
     if (details == "pds") { menu_type = "assign_hits_pds"; }
     if (menu_type == "" && type == "space") { menu_type = "assign_hits_space"; }
     if (type == "ground") { menu_type = "assign_hits_ground"; }
@@ -391,7 +391,7 @@
     let sys = this.returnSectorAndPlanets(sector);
     let html = '';
 
-    html = '<p>Do you wish to fire your PDS?</p><ul>';
+    html = '<p>Prepare your fleet for attack:</p><ul>';
 
     if (1 == 1) {
       html += '<li class="option" id="attack">launch attack</li>';
@@ -1370,22 +1370,15 @@ console.log(player + " -- " + card + " -- " + deck);
     }
     let scards = [];
 
-console.log("GSSC: " + JSON.stringify(this.game.state.strategy_cards));
-
     for (let z in this.strategy_cards) {
       scards.push("");
     }
 
     for (let z = 0; z < this.game.state.strategy_cards.length; z++) {
-console.log("HERE: " + z);
-console.log("WO: " + this.game.state.strategy_cards[z]);
       let rank = parseInt(this.strategy_cards[this.game.state.strategy_cards[z]].rank);
-console.log("z: " + rank);
       while (scards[rank-1] != "") { rank++; }
-console.log("adjusted rank: " + rank);
       scards[rank-1] = '<li class="textchoice" id="'+this.game.state.strategy_cards[z]+'">' + cards[this.game.state.strategy_cards[z]].name + '</li>';
     }
-console.log("and out!");
 
     for (let z = 0; z < scards.length; z++) {
       if (scards[z] != "") {
@@ -1393,8 +1386,6 @@ console.log("and out!");
       }
     }
     
-console.log("and out 2!");
-
     html += '</ul></p>';
   
     this.updateStatus(html);

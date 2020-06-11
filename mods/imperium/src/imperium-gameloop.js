@@ -1682,26 +1682,27 @@ console.log("prepds space defense!");
 	    let tmpp = this.game.queue[le+1];
 	    this.game.queue[le]   = tmpp;
 	    this.game.queue[le+1] = tmpq;
-	  }
-
+	    //
+	    // 
+	    //
 alert("sanity check on ships_fire!");
-	  //
-	  // 
-	  //
-	  return 1;
+	    return 1;
+	  }
 	}
 
+	let player 	 = imperium_self.game.player;
         let attacker     = parseInt(mv[1]);
         let defender     = parseInt(mv[2]);
         let sector       = mv[3];
-	let sys 	 = this.returnSystemAndPlanets(sector);
+	let sys 	 = this.returnSectorAndPlanets(sector);
+	let z 		 = this.returnEventObjects();
 
         this.game.queue.splice(qe, 1);
 
 	//
 	// sanity check
 	//
-	if (this.doesPlayerHaveShipsInSector(player, sector) == 1) {	  
+	if (this.doesPlayerHaveShipsInSector(attacker, sector) == 1) {	  
 
 	  //
 	  // barrage against fighters fires first
@@ -1720,10 +1721,10 @@ alert("sanity check on ships_fire!");
 	    let roll = this.rollDice(10);
 
 	    for (let z_index in z) {
-	      roll = z[z_index].modifyCombatRoll(this, attacker, defender, this.game.player, "space", roll);
+	      roll = z[z_index].modifyCombatRoll(this, attacker, defender, attacker, "space", roll);
 	    }
 
-	    roll += this.game.players_info[player-1].space_combat_roll_modifier;
+	    roll += this.game.players_info[attacker-1].space_combat_roll_modifier;
 
 	    if (roll >= sys.s.units[attacker-1][i].combat) {
 	      total_hits++;
@@ -1743,7 +1744,7 @@ alert("sanity check on ships_fire!");
 	  if (total_hits < total_shots) {
 
 	    let max_rerolls = total_shots - total_hits;
-	    let available_rerolls = this.game.players_info[player-1].combat_dice_reroll_permitted + this.game.players_info[player-1].space_combat_dice_reroll;
+	    let available_rerolls = this.game.players_info[attacker-1].combat_dice_reroll_permitted + this.game.players_info[attacker-1].space_combat_dice_reroll;
 
 	    for (let z_index in z) {
 	      available_rerolls = z[z_index].modifyCombatRerolls(this, player, attacker, player, "space", available_rerolls);
@@ -1914,10 +1915,8 @@ alert("sanity check on ships_fire!");
 	//
 	// otherwise, process combat
 	//
-	if (this.game.player == player) {
-	  this.game.queue.push("space_combat_player_menu\t"+defender+"\t"+player+"\t"+sector);
-	  this.game.queue.push("space_combat_player_menu\t"+player+"\t"+defender+"\t"+sector);
-	}
+	this.game.queue.push("space_combat_player_menu\t"+defender+"\t"+player+"\t"+sector);
+	this.game.queue.push("space_combat_player_menu\t"+player+"\t"+defender+"\t"+sector);
 
         return 1;
 
