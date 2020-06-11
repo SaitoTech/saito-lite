@@ -2022,6 +2022,7 @@ console.log("ASSIGN STARTING TECH!");
     // HIDE HUD LOG
     //
     $('.hud-body > .log').remove();
+    $('.status').css('display','block');
 
 
  
@@ -4483,20 +4484,21 @@ console.log("prepds space defense!");
 	  if (sys.s.units[player-1][unit_idx].strength <= 0) {
 	    sys.s.units[player-1][unit_idx].destroyed = 1;
 	    for (let z_index in z) {
-	      z[z_index].unitDestroyed(imperium_self, player, sys.s.units[player-1][unit_idx]);
+	      z[z_index].unitDestroyed(imperium_self, attacker, sys.s.units[player-1][unit_idx]);
 	    } 
 	  }
 
-
-          this.eliminateDestroyedUnitsInSector(player, sector);
-
 	}
 
-
-
+	//
+	// re-display sector
+	//
+        this.eliminateDestroyedUnitsInSector(player, sector);
 	this.saveSystemAndPlanets(sys);
 	this.updateSectorGraphics(sector);
         this.game.queue.splice(qe, 1);
+
+	return 1;
 
       }
 
@@ -6425,7 +6427,9 @@ console.log(player + " -- " + card + " -- " + deck);
 
     let imperium_self = this;
     let cards = this.returnStrategyCards();
-    let html  = "<div class='terminal_header'>You are playing as " + this.returnFaction(this.game.player) + ". Select your strategy card:</div><p><ul>";
+    let playercol = "player_color_"+this.game.player;
+          
+    let html  = "<div class='terminal_header'><div class='player_color_box "+playercol+"'></div>" + this.returnFaction(this.game.player) + ": select your strategy card:</div><p><ul>";
     if (this.game.state.round > 1) {
       html  = "<div class='terminal_header'>"+this.returnFaction(this.game.player) + ": select your strategy card:</div><p><ul>";
     }
@@ -7690,10 +7694,10 @@ console.log("MISSING FACTION: " + this.game.players_info[i].faction);
     // ALL players run unitDestroyed
     //
     if (obj.unitDestroyed == null) {
-      obj.unitDestroyed = function(imperium_self, player, unit) { return unit;}
+      obj.unitDestroyed = function(imperium_self, attacker, unit) { return unit;}
     }
     if (obj.unitHit == null) {
-      obj.unitHit = function(imperium_self, player, unit) { return unit;}
+      obj.unitHit = function(imperium_self, attacker, unit) { return unit;}
     }
     if (obj.onNewRound == null) {
       obj.onNewRound = function(imperium_self, player, mycallback) { return 0; }

@@ -1519,8 +1519,6 @@ console.log("prepds space defense!");
 	if (planet_idx != "pds") { planet_idx = parseInt(planet_idx); }
 	let total_hits     = parseInt(mv[6]);
 
-	if (total_hits == 0) { total_hits = 3; }
-
         this.game.queue.splice(qe, 1);
 
 	if (total_hits > 0) {
@@ -1534,8 +1532,6 @@ console.log("prepds space defense!");
 	  return 0;
 
 	} else {
-
-alert("RETURNING 1");
 
 	  return 1;
 

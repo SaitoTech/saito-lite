@@ -237,6 +237,7 @@ console.log("ASSIGN STARTING TECH!");
     // HIDE HUD LOG
     //
     $('.hud-body > .log').remove();
+    $('.status').css('display','block');
 
 
  

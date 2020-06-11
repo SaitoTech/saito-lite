@@ -1280,7 +1280,9 @@ console.log(player + " -- " + card + " -- " + deck);
 
     let imperium_self = this;
     let cards = this.returnStrategyCards();
-    let html  = "<div class='terminal_header'>You are playing as " + this.returnFaction(this.game.player) + ". Select your strategy card:</div><p><ul>";
+    let playercol = "player_color_"+this.game.player;
+          
+    let html  = "<div class='terminal_header'><div class='player_color_box "+playercol+"'></div>" + this.returnFaction(this.game.player) + ": select your strategy card:</div><p><ul>";
     if (this.game.state.round > 1) {
       html  = "<div class='terminal_header'>"+this.returnFaction(this.game.player) + ": select your strategy card:</div><p><ul>";
     }
