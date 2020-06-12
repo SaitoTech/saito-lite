@@ -485,6 +485,25 @@ td.inq-product-id div.editable {
 
 .log-messages {
   height: 100%;
-  max-height: 350px;
-  overflow: auto;
+  max-height: 420px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.log-update {
+  display: grid;
+  grid-gap: 3px;
+  grid-template-columns: auto;
+  padding: 3px 0;
+}
+
+.log-update div {
+  padding: 4px;
+}
+
+.log-update-value {
+  background: #eee;
+}
+.log-update-field {
+  text-transform: capitalize;
 }

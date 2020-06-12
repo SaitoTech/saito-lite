@@ -28,11 +28,23 @@ module.exports = Log = {
         data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
             res.rows.forEach((row, index) => {
                 let payload = "";
-                if (row.type == "image") {
+                switch (row.type){
+                  case 'image':
                     payload = `<div class="product-image">
                     <img src="${row.body}">
-                    </div> `
-                } else {
+                    </div> `;
+                    break;
+                  case 'update':
+                    var update = JSON.parse(row.body);
+                    payload = `
+                    <div class="log-update">
+                      <div class="log-update-field">${update.field_name}</div>
+                      <div class="log-update-value">${update.from_value}&nbsp;&nbsp;
+                      <i class="fas fa-caret-right"></i>&nbsp;&nbsp; ${update.to_value}</div>
+                    </div>
+                    `;
+                    break;
+                  default:               
                     payload = `<div class="log-message-text">${row.body}</div>`;
                 }
                 html += `

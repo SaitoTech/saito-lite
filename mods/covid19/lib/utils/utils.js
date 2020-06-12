@@ -309,6 +309,11 @@ select * from
 
   },
 
+  treatLog(el) {
+    el.dataset['before'] = el.nextElementSibling.value;
+    el.classList.add('to-log'); 
+  },
+
   treatTextArea(el) {
     let cell = el.id;
     let html = `
@@ -406,9 +411,10 @@ select * from
 
   },
 
-  treatACDropDown(el, dbtable, idcol, valuecol) {
+  treatACDropDown(el, dbtable, idcol, valuecol, log = false) {
 
-    let cell = el.id;
+    
+    el.classList.add('to-log'); 
     let html = "";
     var options = "";
     this.sendPeerDatabaseRequest("covid19", dbtable, idcol + " as 'id', " + valuecol + " as 'value'", "deleted <> 1", null, function (res) {
@@ -430,7 +436,7 @@ select * from
       document.getElementById(`${dbtable}-display`).addEventListener("change", (e) => {
         el.value = document.querySelector(`#${dbtable}-options [value='${e.target.value}']`).dataset.value;
       });
-
+      el.dataset['before'] = document.getElementById(`${dbtable}-display`).value;
       document.getElementById(`${dbtable}-display`).addEventListener("focus", (e) => {
         e.target.value = "";
         e.target.click();
@@ -523,6 +529,47 @@ select * from
         doc.save(filename);
         shim.destroy();
       });
+  }, 
+
+  logFields(el, object_id, log_table) {
+    var _this = this;
+    var update = {};
+    var values = [];
+    var fields_to_log = el.querySelectorAll('.to-log');
+    fields_to_log.forEach(function(field) {
+      update.field_name = field.parentNode.previousSibling.innerHTML;
+      update.from_value = field.dataset.before;
+      update.to_value = field.nextElementSibling.value;
+      if (update.from_value != update.to_value) {
+        let obj = {};
+        obj.dbname = 'covid19';
+        obj.table = log_table;
+        obj.column = "order_id";
+        obj.value = object_id;
+        values.push(obj);
+        let tm = {};
+        tm.dbname = 'covid19';
+        tm.table = log_table;
+        tm.column = "ts";
+        tm.value = new Date().getTime();
+        values.push(tm);
+        let val = {};
+        val.dbname = 'covid19';
+        val.table = log_table;
+        val.column = "type";
+        val.value = "update";
+        values.push(val);
+        let val_body = {};
+        val_body.dbname = 'covid19';
+        val_body.table = log_table;
+        val_body.column = "body";
+        val_body.value = JSON.stringify(update);
+        values.push(val_body);        
+      }
+      if(values.length > 0) {
+        _this.submitValues(values);
+      }
+    });
   }
 
 
