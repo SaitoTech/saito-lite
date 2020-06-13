@@ -72,7 +72,7 @@ module.exports = Log = {
 
     attachEvents(app, data) {
         app.connection.on('log_render_complete', (app, data) => {
-            console.log(document.querySelectorAll('.log-message'));
+            //console.log(document.querySelectorAll('.log-message'));
         });
         document.querySelector('.fa-align-left').addEventListener('click', () => {
             AddLog.render(app, data);

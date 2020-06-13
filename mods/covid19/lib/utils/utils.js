@@ -205,7 +205,7 @@ select * from
       // this may not work right now.
       if (row["source"] == "files") {
 
-        console.log("FILE: " + JSON.stringify(row));
+        //console.log("FILE: " + JSON.stringify(row));
 
         var note = "";
         if (row["note"]) { note = "<div class='tiptext'>supplementary file</div>"; }
@@ -413,8 +413,9 @@ select * from
 
   treatACDropDown(el, dbtable, idcol, valuecol, log = false) {
 
-    
-    el.classList.add('to-log'); 
+    if(log) {
+      el.classList.add('to-log');
+    }
     let html = "";
     var options = "";
     this.sendPeerDatabaseRequest("covid19", dbtable, idcol + " as 'id', " + valuecol + " as 'value'", "deleted <> 1", null, function (res) {
@@ -425,19 +426,23 @@ select * from
           <input type="text" id="${dbtable}-display" list="${dbtable}-options" placeholder="Click or type...">
           <datalist id="${dbtable}-options">${options}</datalist>
         `;
-      el.parentNode.innerHTML += html;
-      el = document.getElementById(el.id);
+      var field = el.parentNode
+      field.innerHTML += html;
+      el = field.querySelector("#"+el.id);
       el.classList.add('hidden');
 
+
       if (el.value.length > 0) {
-        document.getElementById(`${dbtable}-display`).value = document.querySelector(`#${dbtable}-options [data-value='${el.value}']`).value;
+        field.querySelector(`#${dbtable}-display`).value = document.querySelector(`#${dbtable}-options [data-value='${el.value}']`).value;
+        el.dataset['before'] = field.querySelector(`#${dbtable}-display`).value;
+
       }
 
-      document.getElementById(`${dbtable}-display`).addEventListener("change", (e) => {
-        el.value = document.querySelector(`#${dbtable}-options [value='${e.target.value}']`).dataset.value;
+      field.querySelector(`#${dbtable}-display`).addEventListener("change", (e) => {
+        el.value = field.querySelector(`#${dbtable}-options [value='${e.target.value}']`).dataset.value;
+        el.dataset[after] = field.querySelector(`#${dbtable}-display`).value;
       });
-      el.dataset['before'] = document.getElementById(`${dbtable}-display`).value;
-      document.getElementById(`${dbtable}-display`).addEventListener("focus", (e) => {
+      field.querySelector(`#${dbtable}-display`).addEventListener("focus", (e) => {
         e.target.value = "";
         e.target.click();
         e.target.click();
@@ -515,7 +520,7 @@ select * from
       }
     })
       .then((canvas) => {
-        console.log(canvas.width + " " + canvas.height);
+        //console.log(canvas.width + " " + canvas.height);
         var imgData = canvas.toDataURL('image/jpeg', 1);
 
         // console.log('Report Image URL: ' + imgData);
