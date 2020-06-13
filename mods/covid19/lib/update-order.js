@@ -25,7 +25,7 @@ module.exports = UpdateOrder = {
         html = data.covid19.returnForm("covid19", "orders", data.order_id, res.rows[0]);
         document.querySelector('.main-form').innerHTML += html;
         data.covid19.treatTextArea(document.getElementById('requirements'));
-        data.covid19.treatACDropDown(document.getElementById('order_status'), 'statuses', 'id', 'status_name');
+        data.covid19.treatACDropDown(document.getElementById('order_status'), 'statuses', 'id', 'status_name', true);
         //data.covid19.treatLog(document.getElementById('order_status'));
 
         ItemManager.render(app, data);
