@@ -414,7 +414,7 @@ console.log("\n\n\nWe need to assign the hits to these units: " + JSON.stringify
     let sys = this.returnSectorAndPlanets(sector);
     let html = '';
 
-    html = '<p>Prepare your fleet for attack:</p><ul>';
+    html = '<p>Space Combat: round ' + this.game.state.space_combat_round + '</p><ul>';
 
     if (1 == 1) {
       html += '<li class="option" id="attack">launch attack</li>';
@@ -947,7 +947,6 @@ console.log(player + " -- " + card + " -- " + deck);
     this.updateStatus(html);
   
     let stuff_to_build = [];  
-  
   
     $('.buildchoice').off();
     $('.buildchoice').on('click', function() {

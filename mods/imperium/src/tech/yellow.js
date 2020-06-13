@@ -17,6 +17,8 @@
     });
 
 
+
+
     this.importTech("graviton-laser-system", {
       name        	:       "Graviton Laser System" ,
       color       	:       "yellow" ,
@@ -46,12 +48,12 @@
 	  // defenders in PDS are the ones with this enabled
 	  //
           if (imperium_self.game.players_info[defender-1].graviton_laser_system_active == 1) {
-	    targets.push("warsun");
-	    targets.push("flagship");
-	    targets.push("dreadnaught");
-	    targets.push("cruiser");
-	    targets.push("carrier");
-	    targets.push("destroyer");
+	    if (!targets.include("warsun")) { targets.push("warsun"); }
+	    if (!targets.include("flagship")) { targets.push("flagship"); }
+	    if (!targets.include("dreadnaught")) { targets.push("dreadnaught"); }
+	    if (!targets.include("cruiser")) { targets.push("cruiser"); }
+	    if (!targets.include("carrier")) { targets.push("carrier"); }
+	    if (!targets.include("destroyer")) { targets.push("destroyer"); }
           }
         }
 	return targets;
@@ -93,13 +95,35 @@
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].transit_diodes == undefined) {
           imperium_self.game.players_info[player-1].transit_diodes = 0;
+          imperium_self.game.players_info[player-1].transit_diodes_exhausted = 0;
         }
       },
       gainTechnology : function(imperium_self, gainer, tech) {
         if (tech == "transit-diodes") {
           imperium_self.game.players_info[gainer-1].transit_diodes = 1;
+          imperium_self.game.players_info[gainer-1].transit_diodes_exhausted = 0;
         }
       },
+      menuOption  :       function(imperium_self, menu, player) {
+	if (menu == "main") {
+          return { event : 'transitdiodes', html : '<li class="option" id="transitdiodes">use transit diodes</li>' };
+        }
+        return {};
+      },
+      menuOptionTriggers:  function(imperium_self, menu, player) { 
+	if (menu == "main" && imperium_self.doesPlayerHaveTech(player, "transit-diodes") {
+	  return 1;
+	}
+        return 0;
+      },
+      menuOptionActivated:  function(imperium_self, menu, player) {
+        if (menu == "pds") {
+alert("Transit Diodes activated -- implementation required");
+          imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"transit_diodes_exhausted"+"\t"+"int"+"\t"+"1");
+          imperium_self.addMove("notify\t"+player+" activates transit diodes");
+	}
+	return 0;
+      }
     });
 
 

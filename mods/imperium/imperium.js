@@ -246,6 +246,12 @@ console.log("D");
 	  imperium_self.game.players_info[gainer-1].pds_combat_roll_bonus_shots++;
         }
       },
+      obj.pdsSpaceDefenseTriggers : function(imperium_self, attacker, player, sector) {
+	if (imperium_self.doesPlayerHaveTech(player, "plasma-scoring")) {
+	  this.updateLog(imperium_self.returnFaction(player) + " gets +1 shot from Plasma Scoring");
+	  return 1;
+	}
+      },
     });
 
 
@@ -357,12 +363,12 @@ console.log("D");
 	  // defenders in PDS are the ones with this enabled
 	  //
           if (imperium_self.game.players_info[defender-1].graviton_laser_system_active == 1) {
-	    targets.push("warsun");
-	    targets.push("flagship");
-	    targets.push("dreadnaught");
-	    targets.push("cruiser");
-	    targets.push("carrier");
-	    targets.push("destroyer");
+	    if (!targets.include("warsun")) { targets.push("warsun"); }
+	    if (!targets.include("flagship")) { targets.push("flagship"); }
+	    if (!targets.include("dreadnaught")) { targets.push("dreadnaught"); }
+	    if (!targets.include("cruiser")) { targets.push("cruiser"); }
+	    if (!targets.include("carrier")) { targets.push("carrier"); }
+	    if (!targets.include("destroyer")) { targets.push("destroyer"); }
           }
         }
 	return targets;
@@ -5747,7 +5753,7 @@ console.log("\n\n\nWe need to assign the hits to these units: " + JSON.stringify
     let sys = this.returnSectorAndPlanets(sector);
     let html = '';
 
-    html = '<p>Prepare your fleet for attack:</p><ul>';
+    html = '<p>Space Combat: round ' + this.game.state.space_combat_round + '</p><ul>';
 
     if (1 == 1) {
       html += '<li class="option" id="attack">launch attack</li>';
