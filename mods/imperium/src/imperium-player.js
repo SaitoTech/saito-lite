@@ -409,6 +409,11 @@ console.log("\n\n\nWe need to assign the hits to these units: " + JSON.stringify
 
 
 
+
+
+
+
+
   //
   // reaching this implies that the player can choose to fire / not-fire
   //
@@ -477,6 +482,86 @@ console.log("\n\n\nWe need to assign the hits to these units: " + JSON.stringify
 	// ships_fire needs to make sure it permits any opponents to fire...
 	//
         imperium_self.prependMove("ships_fire\t"+attacker+"\t"+defender+"\t"+sector);
+	imperium_self.endTurn();
+      }
+
+    });
+  }
+
+
+
+
+
+
+
+  //
+  // reaching this implies that the player can choose to fire / not-fire
+  //
+  playerPlayGroundCombat(attacker, defender, sector, planet_idx) { 
+
+    let imperium_self = this;
+    let sys = this.returnSectorAndPlanets(sector);
+    let html = '';
+
+    html = '<p>Ground Combat: round ' + this.game.state.ground_combat_round + '</p><ul>';
+
+    if (1 == 1) {
+      html += '<li class="option" id="attack">launch attack</li>';
+    }
+    if (1 == 1) {
+      html += '<li class="option" id="action">action card</li>';
+    }
+
+    let tech_attach_menu_events = 0;
+    let tech_attach_menu_triggers = [];
+    let tech_attach_menu_index = [];
+
+    let z = this.returnEventObjects();
+    for (let i = 0; i < z.length; i++) {
+      if (z[i].menuOptionTriggers(this, "ground_combat", this.game.player) == 1) {
+        let x = z[i].menuOption(this, "ground_combat", this.game.player);
+        html += x.html;
+	tech_attach_menu_index.push(i);
+	tech_attach_menu_triggers.push(x.event);
+	tech_attach_menu_events = 1;
+      }
+    }
+    html += '</ul>';
+
+    this.updateStatus(html);
+  
+    $('.option').on('click', function() {
+  
+      let action2 = $(this).attr("id");
+
+      //
+      // respond to tech and factional abilities
+      //
+      if (tech_attach_menu_events == 1) {
+	for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
+	  if (action2 == tech_attach_menu_triggers[i]) {
+	    $(this).remove();
+	    z[tech_attach_menu_index[i]].menuOptionActivated(imperium_self, "ground_combat", imperium_self.game.player);
+          }
+        }
+      }
+
+      if (action2 == "action") {
+        imperium_self.playerSelectActionCard(function(card) {
+  	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+	  imperium_self.playerPlayGroundCombat(attacker, defender, sector, planet_idx);
+        }, function() {
+	  imperium_self.playerPlayGroundCombat(attacker, defender, sector, planet_idx);
+	});
+      }
+
+      if (action2 == "attack") {
+	// prepend so it happens after the modifiers
+	//
+	// ships_fire needs to make sure it permits any opponents to fire...
+	//
+        imperium_self.prependMove("infantry_fire\t"+attacker+"\t"+defender+"\t"+sector+"\t"+planet_idx);
 	imperium_self.endTurn();
       }
 
@@ -1029,7 +1114,7 @@ console.log(player + " -- " + card + " -- " + deck);
   
         let total_cost = 0;
         for (let i = 0; i < stuff_to_build.length; i++) {
-  	total_cost += imperium_self.returnUnitCost(stuff_to_build[i], imperium_self.game.player);
+  	  total_cost += imperium_self.returnUnitCost(stuff_to_build[i], imperium_self.game.player);
         }
   
         if (imperium_self.game.players_info[imperium_self.game.player-1].production_bonus > 0) {
@@ -1042,8 +1127,8 @@ console.log(player + " -- " + card + " -- " + deck);
             imperium_self.addMove("resolve\tplay");
             imperium_self.addMove("continue\t"+imperium_self.game.player+"\t"+sector);
             for (let y = 0; y < stuff_to_build.length; y++) {
-  	      let planet_idx = -1;
-  	      if (stuff_to_build[y] == "infantry") { planet_idx = 0; }
+  	      let planet_idx = imperium_self.returnPlayersLeastDefendedPlanetInSector(sector);
+  	      //if (stuff_to_build[y] == "infantry") { planet_idx = 0; }
   	      imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+planet_idx+"\t"+stuff_to_build[y]+"\t"+sector);
 	      imperium_self.tracker.production = 1;
             }
@@ -1984,6 +2069,7 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
     	  imperium_self.prependMove("ground_combat_end\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
     	  imperium_self.prependMove("continue\t" + imperium_self.game.player + "\t" + sector);
 	}
+
         imperium_self.endTurn();
         return;
       }

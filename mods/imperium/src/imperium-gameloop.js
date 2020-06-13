@@ -1544,15 +1544,55 @@ console.log("TECH: " + z[z_index].name);
 
         if (type == "ground") {
           if (total_hits > 0) {
-            if (this.game.player == defender) {
-              this.playerAssignHits(attacker, defender, type, sector, planet_idx, total_hits);
+
+
+this.updateLog("assigning "+total_hits+" hits to "+this.returnFaction(defender)+" ground forces...");
+
+	    //
+	    // Ground Combat is Automated
+	    //
+            this.assignHitsToGroundForces(attacker, defender, sector, planet_idx, total_hits);
+    	    this.eliminateDestroyedUnitsInSector(defender, sector);
+    	    this.eliminateDestroyedUnitsInSector(attacker, sector);
+	    this.updateSectorGraphics(sector);
+
+            let attacker_forces = this.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
+            let defender_forces = this.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx);
+
+            //
+            // evaluate if planet has changed hands
+            //
+            if (attacker_forces > defender_forces && defender_forces <= 0) {
+
+              //
+              // destroy all units belonging to defender (pds, spacedocks)
+              //
+              if (defender != -1) {
+                sys.p[planet_idx].units[defender-1] = [];
+              }
+
+              //
+              // notify everyone
+              //
+              let survivors = 0;
+              for (let i = 0; i < sys.p[planet_idx].units[attacker-1].length; i++) {
+                if (sys.p[planet_idx].units[attacker-1][i].name == "infantry") { survivors++; }
+              }
+              if (survivors == 1) {
+                this.updateLog(sys.p[planet_idx].name + " is conquered by " + this.returnFaction(attacker) + " (" + survivors + " survivor)");
+              } else {
+                this.updateLog(sys.p[planet_idx].name + " is conquered by " + this.returnFaction(attacker) + " (" + survivors + " survivors)");
+              }
+
+              //
+              // planet changes ownership
+              //
+              this.updatePlanetOwner(sector, planet_idx, attacker);
             }
-            return 0;
-          } else {
-            return 1;
+
+	    return 1;
           }
         }
-
       }
 
       if (mv[0] === "pds_fire") {
@@ -1826,6 +1866,146 @@ alert("ATTACKER TARGETS: " + imperium_self.game.players_info[attacker-1].target_
 
 
 
+      if (mv[0] === "infantry_fire") {
+
+	//
+	// we need to permit both sides to play action cards before they fire and start destroying units
+	// so we check to make sure that "ground_combat_player_menu" does not immediately precede us... if
+	// it does we swap out the instructions, so that both players can pick...
+	//
+        let le = this.game.queue.length-2;
+        let lmv = [];
+        if (le >= 0) {
+	  lmv = this.game.queue[le].split("\t");
+	  if (lmv[0] === "ground_combat_player_menu") {
+	    let tmpq = this.game.queue[le];
+	    let tmpp = this.game.queue[le+1];
+	    this.game.queue[le]   = tmpp;
+	    this.game.queue[le+1] = tmpq;
+	    //
+	    // 
+	    //
+	    return 1;
+	  }
+	}
+
+	let player 	 = imperium_self.game.player;
+        let attacker     = parseInt(mv[1]);
+        let defender     = parseInt(mv[2]);
+        let sector       = mv[3];
+        let planet_idx   = mv[4];
+	let sys 	 = this.returnSectorAndPlanets(sector);
+	let z 		 = this.returnEventObjects();
+
+        this.game.queue.splice(qe, 1);
+
+	//
+	// sanity check
+	//
+	if (this.doesPlayerHaveInfantryOnPlanet(attacker, sector, planet_idx) == 1) {	  
+
+	  let total_shots = 0;
+	  let total_hits = 0;
+	  let hits_or_misses = [];
+
+	  //
+	  // then the rest
+	  //
+	  for (let i = 0; i < sys.p[planet_idx].units[attacker-1].length; i++) {
+
+	    let roll = this.rollDice(10);
+
+	    for (let z_index in z) {
+	      roll = z[z_index].modifyCombatRoll(this, attacker, defender, attacker, "ground", roll);
+	      imperium_self.game.players_info[defender-1].target_units = z[z_index].modifyTargets(this, attacker, defender, imperium_self.game.player, "ground", imperium_self.game.players_info[defender-1].target_units);
+	    }
+
+	    roll += this.game.players_info[attacker-1].ground_combat_roll_modifier;
+
+	    if (roll >= sys.p[planet_idx].units[attacker-1][i].combat) {
+	      total_hits++;
+	      total_shots++;
+	      hits_or_misses.push(1);
+	    } else {
+	      total_shots++;
+	      hits_or_misses.push(0);
+	    }
+
+	  }
+
+
+	  //
+ 	  // handle rerolls
+	  //
+	  if (total_hits < total_shots) {
+
+	    let max_rerolls = total_shots - total_hits;
+	    let available_rerolls = this.game.players_info[attacker-1].combat_dice_reroll_permitted + this.game.players_info[attacker-1].ground_combat_dice_reroll;
+
+	    for (let z_index in z) {
+	      available_rerolls = z[z_index].modifyCombatRerolls(this, player, attacker, player, "ground", available_rerolls);
+	      imperium_self.game.players_info[defender-1].target_units = z[z_index].modifyTargets(this, attacker, defender, imperium_self.game.player, "ground", imperium_self.game.players_info[defender-1].target_units);
+	    }
+
+	    let attacker_rerolls = available_rerolls;
+	    if (max_rerolls < available_rerolls) {
+	      attacker_rerolls = max_rerolls;
+	    }
+
+	    for (let i = 0; i < attacker_rerolls; i++) {
+
+	      let lowest_combat_hit = 11;
+	      let lowest_combat_idx = 11;
+
+	      for (let n = 0; n < hits_to_misses.length; n++) {
+	        if (hits_on[n] < lowest_combat_hit && hits_or_misses[n] == 0) {
+		  lowest_combat_idx = n;
+		  lowest_combat_hit = hits_on[n];
+		}
+	      }
+	     
+	      let roll = this.rollDice(10);
+ 
+	      for (let z_index in z) {
+	        roll =  z[z_index].modifyCombatRerolls(this, player, attacker, player, "ground", roll);
+	        imperium_self.game.players_info[defender-1].target_units = z[z_index].modifyTargets(this, attacker, defender, imperium_self.game.player, "ground", imperium_self.game.players_info[defender-1].target_units);
+	      }
+
+	      roll += this.game.players_info[player-1].ground_combat_roll_modifier;
+
+	      if (roll >= hits_on[lowest_combat_idx]) {
+	        total_hits++;
+		hits_or_misses[lowest_combat_idx] = 1;
+	      } else {
+		hits_or_misses[lowest_combat_idx] = -1;
+	      }
+	    }
+
+	  }
+
+	  //
+	  // total hits to assign
+	  //
+	  let restrictions = [];
+
+	  if (total_hits == 1) {
+  	    this.updateLog(this.returnFaction(attacker) + ":  " + total_hits + " hit");
+	  } else {
+  	    this.updateLog(this.returnFaction(attacker) + ":  " + total_hits + " hits");
+	  }
+	  this.game.queue.push("assign_hits\t"+attacker+"\t"+defender+"\tground\t"+sector+"\t"+planet_idx+"\t"+total_hits);
+
+
+        }
+
+        return 1;
+
+      }
+
+
+
+
+
 
       //////////////////
       // SPACE COMBAT //
@@ -1994,6 +2174,32 @@ alert("ATTACKER TARGETS: " + imperium_self.game.players_info[attacker-1].target_
 
 
 
+      if (mv[0] === "ground_combat_player_menu") {
+
+        let attacker     = parseInt(mv[1]);
+        let defender     = parseInt(mv[2]);
+        let sector       = mv[3];
+        let planet_idx   = mv[4];
+        this.game.queue.splice(qe, 1);
+
+        this.updateSectorGraphics(sector);
+
+	//
+	//
+	//
+	this.updateLog(this.returnFaction(attacker) + " prepares to fire on " + this.returnFaction(defender));
+
+	if (this.game.player == attacker) {
+          this.playerPlayGroundCombat(attacker, defender, sector, planet_idx);
+	}
+
+        return 0;
+      }
+
+
+
+
+
 
 
 
@@ -2126,6 +2332,21 @@ alert("ATTACKER TARGETS: " + imperium_self.game.players_info[attacker-1].target_
         let planet_idx   = mv[3];
   	this.game.queue.splice(qe, 1);
 
+
+        if (this.hasUnresolvedGroundCombat(player, sector, planet_idx) == 1) {
+          if (this.game.player == player) {
+            this.addMove("ground_combat_post\t"+player+"\t"+sector);
+            this.addMove("ground_combat\t"+player+"\t"+sector);
+            this.endTurn();
+            return 0;
+          } else {
+            return 0;
+          }
+        } else {
+          this.game.queue.splice(qe, 1);
+          return 1;
+        }
+
   	return 1;
       }
       if (mv[0] === "ground_combat") {
@@ -2141,7 +2362,7 @@ alert("ATTACKER TARGETS: " + imperium_self.game.players_info[attacker-1].target_
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
-	    if (z[k].groundCombatTriggers(this, player, sector) == 1) {
+	    if (z[k].groundCombatTriggers(this, player, sector, planet_idx) == 1) {
               this.game.queue.push("ground_combat_event\t"+speaker_order[i]+"\t"+sector+"\t"+planet_idx+"\t"+k);
             }
           }
@@ -2168,25 +2389,36 @@ alert("ATTACKER TARGETS: " + imperium_self.game.players_info[attacker-1].target_
 
   	this.game.queue.splice(qe, 1);
 
-	//
-	// have a round of ground combat
-	//
-	this.groundCombat(player, sector, planet_idx);
+        //
+        // have a round of ground combat
+        //
+        this.game.state.ground_combat_round++;
 
-        this.updateSectorGraphics(sector);
 
-  	if (this.hasUnresolvedGroundCombat(player, sector, planet_idx) == 1) {
-	  if (this.game.player == player) {
-	    this.addMove("ground_combat_post\t"+player+"\t"+sector+"\t"+planet_idx);
-	    this.addMove("ground_combat\t"+player+"\t"+sector+"\t"+planet_idx);
-	    this.endTurn();
-	    return 0;
-	  } else {
-	    return 0;
-	  }
-	} else {
-	  return 1;
-	}
+        //
+        // who is the defender?
+        //
+alert("Attacker is: " + this.returnFaction(player));
+        let defender = this.returnDefender(player, sector, planet_idx);
+
+        //
+        // if there is no defender, end this charade
+        //
+        if (defender == -1) {
+alert("there is no defender...");
+          return 1;
+        }
+
+
+	//
+	// otherwise, have a round of ground combat
+	//
+        this.updateLog("Ground Combat: round " + this.game.state.ground_combat_round);
+
+        this.game.queue.push("ground_combat_player_menu\t"+defender+"\t"+player+"\t"+sector+"\t"+planet_idx);
+        this.game.queue.push("ground_combat_player_menu\t"+player+"\t"+defender+"\t"+sector+"\t"+planet_idx);
+
+	return 1;
 
       }
 

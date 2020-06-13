@@ -81,7 +81,7 @@
 
 
 	if (j == 1) {
-//	  planets[i].units[j].push(this.returnUnit("infantry", 1));
+	  planets[i].units[j].push(this.returnUnit("infantry", 1));
 //	  planets[i].units[j].push(this.returnUnit("infantry", 1));
 //	  planets[i].units[j].push(this.returnUnit("infantry", 1));
 //	  planets[i].units[j].push(this.returnUnit("pds", 1));

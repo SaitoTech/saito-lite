@@ -400,6 +400,26 @@ console.log("F: " + this.game.players_info[this.game.player-1].faction);
 
   }
 
+
+  returnPlayersLeastDefendedPlanetInSector(player, sector) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+    let least_defended = 100;
+    let least_defended_idx = 0;
+
+    if (sys.p.length == 0) { return -1; }
+    
+    for (let i = 0; i < sys.p.length; i++) {
+      if (sys.p[i].owner == player && sys.p[i].units[player-1].length < least_defended) {
+	least_defended = sys.p[i].units[player-1].length;
+	least_defended_idx = i;
+      }
+    }
+
+    return least_defended_idx;
+
+  }
+
   returnAvailableResources(player) {
   
     let array_of_cards = this.returnPlayerUnexhaustedPlanetCards(player); // unexhausted
@@ -456,6 +476,8 @@ console.log("F: " + this.game.players_info[this.game.player-1].faction);
       return defender;
     }
 
+console.log("PLANET IS: " + JSON.stringify(sys.p[planet_idx]));
+
     //
     // planet_idx is not null
     //
@@ -466,6 +488,13 @@ console.log("F: " + this.game.players_info[this.game.player-1].faction);
         }
       }
     }
+
+    if (defender == -1) {
+      if (sys.p[planet_idx].owner != attacker) {
+	return sys.p[planet_idx].owner;
+      }
+    }
+
     return defender;
   }
 
@@ -518,30 +547,21 @@ console.log("F: " + this.game.players_info[this.game.player-1].faction);
     }
 
     if (defender == attacker) { 
-console.log("DEFENDER IS: " + defender);
-console.log("ATTACKER IS: " + attacker);
       return 0; 
     }
 
     if (attacker == -1) {
-console.log("a1");
       attacker_forces = 0;
     } else {
-console.log("a2");
       attacker_forces = this.returnNumberOfGroundForcesOnPlanet(attacker, sector, pid);
     }
     if (defender == -1) {
-console.log("a3");
       defender_forces = 0;
     } else {
-console.log("a4");
       defender_forces = this.returnNumberOfGroundForcesOnPlanet(defender, sector, pid);
     }
 
-    if (attacker_forces > 0 && defender_forces > 0) { 
-console.log("STILL CONFLICT!" + attacker_forces + " ____ " + defender_forces);
-
-return 1; }
+    if (attacker_forces > 0 && defender_forces > 0) { return 1; }
 console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forces);
     return 0;
 
@@ -720,6 +740,16 @@ console.log("B: ");
   }
   
 
+
+
+
+  doesPlayerHaveInfantryOnPlanet(player, sector, planet_idx) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+    if (sys.p[planet_idx].units[player-1].length > 0) { return 1; }
+    return 0;
+
+  }
 
 
 

@@ -554,6 +554,9 @@ console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
       if (weakest_unit_idx != -1) {
         sys.p[planet_idx].units[defender-1][weakest_unit_idx].strength--;
         if (sys.p[planet_idx].units[defender-1][weakest_unit_idx].strength <= 0) {
+
+console.log(this.returnFaction(defender) + " has assigned a hit to their weakest unit...");
+
           ground_forces_destroyed++;
           sys.p[planet_idx].units[defender-1][weakest_unit_idx].destroyed = 1;
 
@@ -564,7 +567,7 @@ console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
         }
       }
     }
-  
+
     this.saveSystemAndPlanets(sys);
     return ground_forces_destroyed;
 
