@@ -57,6 +57,9 @@
     if (obj.initialize == null) {
       obj.initialize = function(imperium_self, player) { return 0; }
     }
+    if (obj.gainPlanet == null) {
+      obj.gainPlanet = function(imperium_self, gainer, planet) { return 1; }
+    }
     if (obj.gainTechnology == null) {
       obj.gainTechnology = function(imperium_self, gainer, tech) { return 1; }
     }
@@ -78,6 +81,11 @@
     if (obj.gainStrategyTokens == null) {
       obj.gainStrategyTokens = function(imperium_self, gainer, amount) { return amount; }
     }
+
+    if (obj.losePlanet == null) {
+      obj.losePlanet = function(imperium_self, loser, planet) { return 1; }
+    }
+
     //
     // ALL players run upgradeUnit, so upgrades should manage who have them
     //

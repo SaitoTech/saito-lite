@@ -193,12 +193,20 @@ console.log("MOVE: " + mv[0]);
 
     	let player = mv[1];
 
+
 	try {
           document.documentElement.style.setProperty('--playing-color', `var(--p${player})`);
     	} catch (err) {}
 
         if (player == this.game.player) {
+	  //
+	  // reset menu track vars
+	  //
   	  this.tracker = this.returnPlayerTurnTracker();
+	  //
+	  // reset vars like "planets_conquered_this_turn"
+	  //
+	  this.resetTurnVariables(player);
   	  this.addMove("resolve\tplay");
   	  this.playerTurn();
         } else {
@@ -1271,6 +1279,7 @@ alert("Player should choose what planets to invade (if possible)");
   	let player       = parseInt(mv[1]);
 	let z = this.returnEventObjects();
 
+
   	this.game.queue.splice(qe, 1);
 
 	let speaker_order = this.returnSpeakerOrder();
@@ -1386,6 +1395,9 @@ alert("Player should choose what planets to invade (if possible)");
         let sector	 = mv[3];
         let z_index	 = parseInt(mv[4]);
   	this.game.queue.splice(qe, 1);
+
+console.log("TRIGGERS EVENT: " + player + " -- " + attacker + " == " + sector + " -- " + z_index);
+console.log("TECH: " + z[z_index].name);
 
 	//
 	// opportunity to add action cards / graviton / etc.

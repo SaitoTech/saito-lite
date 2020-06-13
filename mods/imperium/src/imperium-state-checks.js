@@ -558,6 +558,9 @@ console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forc
 
 
   canPlayerProduceInSector(player, sector) {
+    if (this.game.players_info[player-1].may_player_produce_without_spacedock == 1) {
+      return 1;
+    }
     let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.p.length; i++) {
       for (let k = 0; k < sys.p[i].units[player-1].length; k++) {

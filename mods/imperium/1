@@ -644,6 +644,7 @@ console.log("\n\n\nWe need to assign the hits to these units: " + JSON.stringify
         }  
 
         if (action2 == "invade") {
+          imperium_self.addMove("continue\t"+player+"\t"+sector);
           imperium_self.playerInvadePlanet(player, sector);
         }
 
@@ -1934,7 +1935,6 @@ console.log("INVADING PLANET: " + planets_invaded[i]);
     	  imperium_self.prependMove("ground_combat\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
     	  imperium_self.prependMove("ground_combat_post\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
     	  imperium_self.prependMove("ground_combat_end\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
-    	  imperium_self.prependMove("continue\t" + imperium_self.game.player + "\t" + sector);
 	}
         imperium_self.endTurn();
         return;

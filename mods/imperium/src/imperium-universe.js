@@ -81,11 +81,11 @@
 
 
 	if (j == 1) {
-	  planets[i].units[j].push(this.returnUnit("infantry", 1));
+//	  planets[i].units[j].push(this.returnUnit("infantry", 1));
 //	  planets[i].units[j].push(this.returnUnit("infantry", 1));
 //	  planets[i].units[j].push(this.returnUnit("infantry", 1));
 //	  planets[i].units[j].push(this.returnUnit("pds", 1));
-	  planets[i].units[j].push(this.returnUnit("pds", 1));
+//	  planets[i].units[j].push(this.returnUnit("pds", 1));
 //	  planets[i].units[j].push(this.returnUnit("spacedock", 1));
 	}
 
@@ -169,9 +169,9 @@
       }
 
   
-      sectors[i].units[1] = [];
-      sectors[i].units[1].push(this.returnUnit("fighter", 1));  
-      sectors[i].units[1].push(this.returnUnit("fighter", 1));  
+//      sectors[i].units[1] = [];
+//      sectors[i].units[1].push(this.returnUnit("fighter", 1));  
+//      sectors[i].units[1].push(this.returnUnit("fighter", 1));  
 
 
     }

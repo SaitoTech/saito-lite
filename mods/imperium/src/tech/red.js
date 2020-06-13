@@ -14,11 +14,14 @@
 	  imperium_self.game.players_info[gainer-1].pds_combat_roll_bonus_shots++;
         }
       },
-      obj.pdsSpaceDefenseTriggers : function(imperium_self, attacker, player, sector) {
+      pdsSpaceDefenseTriggers : function(imperium_self, attacker, player, sector) {
 	if (imperium_self.doesPlayerHaveTech(player, "plasma-scoring")) {
-	  this.updateLog(imperium_self.returnFaction(player) + " gets +1 shot from Plasma Scoring");
-	  return 1;
+	  imperium_self.updateLog(imperium_self.returnFaction(player) + " gets +1 shot from Plasma Scoring");
 	}
+	//
+	// we don't need the event, just the notification on trigger
+	//
+	return 0;
       },
     });
 

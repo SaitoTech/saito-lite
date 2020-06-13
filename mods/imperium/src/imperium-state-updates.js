@@ -28,6 +28,13 @@
     }
   }
 
+  resetTurnVariables(player) {
+    this.game.players_info[player-1].planets_conquered_this_turn = [];
+    this.game.players_info[player-1].may_player_produce_without_spacedock = 0;
+    this.game.players_info[player-1].may_player_produce_without_spacedock_production_limit = 0;
+    this.game.players_info[player-1].may_player_produce_without_spacedock_cost_limit = 0;
+  }
+
 
 
 
@@ -52,18 +59,49 @@
   unexhaustPlanet(pid) {
     this.game.planets[pid].exhausted = 0;
   }
-  updatePlanetOwner(sector, planet_idx) {
-    let sys = this.returnSectorAndPlanets(sector);
-    let owner = -1;
 
+  updatePlanetOwner(sector, planet_idx, new_owner=-1) {
+
+    let planetname = "";
+    let sys = this.returnSectorAndPlanets(sector);
+    let owner = new_owner;
+    let existing_owner = sys.p[planet_idx].owner;
+
+    //
+    // new_owner does not need to be provided if the player has units on the planet
+    //
     for (let i = 0; i < sys.p[planet_idx].units.length; i++) {
       if (sys.p[planet_idx].units[i].length > 0) { owner = i+1; }
     }
     if (owner != -1) {
-      this.updateLog("setting owner to " + owner);
       sys.p[planet_idx].owner = owner;
       sys.p[planet_idx].exhausted = 1;
     }
+
+    for (let pidx in this.game.planets) {
+      if (this.game.planets[pidx].name === sys.p[planet_idx].name) {
+	planetname = pidx;
+      }
+    }
+
+console.log("planet ownership updated: " + owner + " -- from " + existing_owner);
+
+    if (existing_owner != owner) {
+
+      this.game.players_info[owner-1].planets_conquered_this_turn.push(sys.p[planet_idx].name);
+
+console.log("planetname = " + planetname);
+
+      let z = this.returnEventObjects();
+      for (let z_index in z) {
+	z[z_index].gainPlanet(this, owner, planetname); 
+	if (existing_owner != -1) {
+	  z[z_index].losePlanet(this, existing_owner, planetname); 
+        }
+      }
+
+    }
+
     this.saveSystemAndPlanets(sys);
   }
   
@@ -283,8 +321,6 @@
 
   groundCombat(attacker, sector, planet_idx) {
 
-try {
-  
     let sys = this.returnSectorAndPlanets(sector);
     let z = this.returnEventObjects();
 
@@ -303,8 +339,7 @@ try {
     }
     if (defender_found == 0) {
       this.updateLog("taking undefended planet");
-      sys.p[planet_idx].owner = attacker;
-      sys.p[planet_idx].exhausted = 1;
+      this.updatePlanetOwner(sector, planet_idx, attacker);
       return; 
     }
 
@@ -411,7 +446,7 @@ try {
       //
       // planet changes ownership
       //
-      this.updatePlanetOwner(sector, planet_idx);
+      this.updatePlanetOwner(sector, planet_idx, attacker);
     }
 
 
@@ -419,10 +454,7 @@ try {
     // save regardless
     //
     this.saveSystemAndPlanets(sys);
-} catch (err) {
-console.log(JSON.stringify(err));
-  process.exit(1);
-}  
+
   }
   
 
