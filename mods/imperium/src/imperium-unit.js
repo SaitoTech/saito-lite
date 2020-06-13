@@ -22,7 +22,7 @@
     if (obj.destroyed == null) 		{ obj.destroyed = 0; }			// when destroyed
     if (obj.move == null) 		{ obj.move = 0; }			// range to move
     if (obj.range == null) 		{ obj.range = 0; }			// firing range
-    if (obj.production == null) 	{ obj.production = 0; }			// can produce
+    if (obj.production == null) 	{ obj.production = 0; }			// can produce X units (production limit)
 
     obj = this.addEvents(obj);
     this.units[name] = obj;
@@ -404,7 +404,7 @@
   
   
   returnUnit(type = "", player) {
-
+console.log("HERE: " + type);
     let unit = JSON.parse(JSON.stringify(this.units[type]));
     unit.owner = player;
     unit = this.upgradeUnit(unit, player);

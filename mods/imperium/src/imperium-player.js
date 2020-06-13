@@ -582,7 +582,7 @@ console.log("\n\n\nWe need to assign the hits to these units: " + JSON.stringify
     let playercol = "player_color_"+this.game.player;
     let html  = "<div class='player_color_box "+playercol+"'></div>" + this.returnFaction(player) + ": <ul>";
 
-    if (this.canPlayerProduceInSector(player, sector)) {
+    if (this.canPlayerProduceInSector(player, sector) && this.tracker.production == 0) {
       html += '<li class="option" id="produce">produce units</li>';
       options_available++;
     }
@@ -969,11 +969,36 @@ console.log(player + " -- " + card + " -- " + deck);
   }
   
   
-  playerProduceUnits(sector) { 
+  playerProduceUnits(sector, production_limit=0, cost_limit=0) { 
   
     let imperium_self = this;
-  
-    let html = '<p>Produce Units in this Sector: </p><ul>';
+
+    //
+    // determine production_limit from sector
+    //
+    let sys = this.returnSectorAndPlanets(sector);
+    let calculated_production_limit = 0;
+    for (let i = 0; i < sys.s.units[this.game.player-1].length; i++) {
+      calculated_production_limit += sys.s.units[this.game.player-1][i].production;
+    }
+    for (let p = 0; p < sys.p.length; p++) {
+      for (let i = 0; i < sys.p[p].units[this.game.player-1].length; i++) {
+        calculated_production_limit += sys.p[p].units[this.game.player-1][i].production;
+      }
+    }
+
+    if (this.game.players_info[this.game.player-1].may_player_produce_without_spacedock == 1) {
+      if (production_limit == 0 && this.game.players_info[this.game.player-1].may_player_produce_without_spacedock_production_limit >= 0) { production_limit = this.game.players_info[this.game.player-1].may_player_produce_without_spacedock_production_limit; }
+      if (cost_limit == 0 && this.game.players_info[this.game.player-1].may_player_produce_without_spacedock_cost_limit >= 0) { cost_limit = this.game.players_info[this.game.player-1].may_player_produce_without_spacedock_cost_limit; }
+    };
+
+    if (calculated_production_limit > production_limit) { production_limit = calculated_production_limit; }
+
+
+    let html = '<p>Produce Units in this Sector: ';
+    if (production_limit != 0) { html += '('+production_limit+' units max)'; }
+    if (cost_limit != 0) { html += '('+cost_limit+' cost max)'; }
+    html += '</p><ul>';
     html += '<li class="buildchoice" id="infantry">Infantry (<span class="infantry_total">0</span>)</li>';
     html += '<li class="buildchoice" id="fighter">Fighter (<span class="fighter_total">0</span>)</li>';
     html += '<li class="buildchoice" id="destroyer">Destroyer (<span class="destroyer_total">0</span>)</li>';
@@ -984,7 +1009,7 @@ console.log(player + " -- " + card + " -- " + deck);
     html += '<li class="buildchoice" id="warsun">War Sun (<span class="warsun_total">0</span>)</li>';
     html += '</ul>';
     html += '</p>';
-    html += '<div id="buildcost" class="buildcost"><span class="buildcost_total">0</span> resources</div>';
+    html += '<div id="buildcost" class="buildcost"><span class="buildcost_total">0 resources</span></div>';
     html += '<div id="confirm" class="buildchoice">click here to build</div>';
   
     this.updateStatus(html);
@@ -995,7 +1020,48 @@ console.log(player + " -- " + card + " -- " + deck);
     $('.buildchoice').on('click', function() {
   
       let id = $(this).attr("id");
+
+
+      //
+      // submit when done
+      //
+      if (id == "confirm") {
   
+        let total_cost = 0;
+        for (let i = 0; i < stuff_to_build.length; i++) {
+  	total_cost += imperium_self.returnUnitCost(stuff_to_build[i], imperium_self.game.player);
+        }
+  
+        if (imperium_self.game.players_info[imperium_self.game.player-1].production_bonus > 0) {
+          total_cost -= imperium_self.game.players_info[imperium_self.game.player-1].production_bonus;
+        }
+
+        imperium_self.playerSelectResources(total_cost, function(success) {
+
+  	  if (success == 1) {
+            imperium_self.addMove("resolve\tplay");
+            imperium_self.addMove("continue\t"+imperium_self.game.player+"\t"+sector);
+            for (let y = 0; y < stuff_to_build.length; y++) {
+  	      let planet_idx = -1;
+  	      if (stuff_to_build[y] == "infantry") { planet_idx = 0; }
+  	      imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+planet_idx+"\t"+stuff_to_build[y]+"\t"+sector);
+	      imperium_self.tracker.production = 1;
+            }
+            imperium_self.endTurn();
+            return;
+  	  } else {
+  	    alert("failure to find appropriate influence");
+  	  }
+        });
+
+	return;  
+      };
+  
+
+
+      //
+      // build stuff
+      //
       let calculated_total_cost = 0;
       for (let i = 0; i < stuff_to_build.length; i++) {
         calculated_total_cost += imperium_self.returnUnitCost(stuff_to_build[i], imperium_self.game.player);
@@ -1009,46 +1075,22 @@ console.log(player + " -- " + card + " -- " + deck);
         calculated_total_cost -= imperium_self.game.players_info[imperium_self.game.player-1].production_bonus;
       }
   
-  
       if (calculated_total_cost > imperium_self.returnAvailableResources(imperium_self.game.player)) {
         alert("You cannot build more than you have available to pay for it.");
         return;
       }
-  
-  
+
       //
-      // submit when done
+      // respect production / cost limits
       //
-      if (id == "confirm") {
-  
-        let total_cost = 0;
-        for (let i = 0; i < stuff_to_build.length; i++) {
-  	total_cost += imperium_self.returnUnitCost(stuff_to_build[i], imperium_self.game.player);
-        }
-  
-        imperium_self.playerSelectResources(total_cost, function(success) {
-  
-  	if (success == 1) {
-  
-            imperium_self.addMove("resolve\tplay");
-            imperium_self.addMove("continue\t"+imperium_self.game.player+"\t"+sector);
-            for (let y = 0; y < stuff_to_build.length; y++) {
-  	    let planet_idx = -1;
-  	    if (stuff_to_build[y] == "infantry") { planet_idx = 0; }
-  	    imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+planet_idx+"\t"+stuff_to_build[y]+"\t"+sector);
-            }
-            imperium_self.endTurn();
-            return;
-  
-  	} else {
-  
-  	  alert("failure to find appropriate influence");
-  
-  	}
-  
-        });
-  
-      };
+      if (production_limit < stuff_to_build.length && production_limit > 0) {
+        alert("You cannot build more units than your production limit");
+        return;
+      }
+      if (cost_limit < calculated_total_cost && cost_limit > 0) {
+        alert("You cannot build units that cost more than your cost limit");
+        return;
+      }
   
   
       //
@@ -1066,7 +1108,13 @@ console.log(player + " -- " + card + " -- " + deck);
       x++;
       $(divtotal).html(x);
   
-  
+      //
+      // reduce production costs if needed
+      //
+      if (imperium_self.game.players_info[imperium_self.game.player-1].production_bonus > 0) {
+        total_cost -= imperium_self.game.players_info[imperium_self.game.player-1].production_bonus;
+        imperium_self.updateLog("Production Costs reduced by 1");
+      }
   
       let resourcetxt = " resources";
       if (total_cost == 1) { resourcetxt = " resource"; }
