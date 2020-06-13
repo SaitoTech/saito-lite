@@ -29,6 +29,9 @@
 
   
 
+
+  
+
   canPlayerTrade(player) {
     return 0;
   }
@@ -709,6 +712,7 @@ console.log("A: " + tmp[k]);
         }
       }
     }
+console.log("B: ");
     return { sectors : sectors , distance : distance };
   }
   

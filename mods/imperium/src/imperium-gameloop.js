@@ -14,7 +14,7 @@
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
   
-console.log("GAME QUEUE: " + this.game.queue);
+console.log("MOVE: " + mv[0]);
 
       if (mv[0] === "gameover") {
   	if (imperium_self.browser_active == 1) {
@@ -418,12 +418,7 @@ console.log("GAME QUEUE: " + this.game.queue);
 	    }
 	  }
 
-console.log("HERE IN DISCARD: ");
-console.log(JSON.stringify(this.game.pool));
-console.log(JSON.stringify(this.game.state.agendas));
-
           console.log("POOL 0: " + JSON.stringify(this.game.pool[0].hand));
-
 	
 	}
 
@@ -448,9 +443,6 @@ console.log(JSON.stringify(this.game.state.agendas));
 	for (let i = 0; i < this.game.players.length; i++) {
 	  if (this.game.state.voted_on_agenda[i][this.game.state.voted_on_agenda.length-1] != 0) { votes_finished++; }
 	}
-
-
-console.log("VOTE: " + votes_finished + " -- " + this.game.players.length);
 
 	//
 	// everyone has voted
@@ -532,13 +524,10 @@ console.log("VOTE: " + votes_finished + " -- " + this.game.players.length);
 	// voting happens in turns
 	//
         let who_is_next = 0;
-console.log("WHO HAS VOTED: " + JSON.stringify(this.game.state.voted_on_agenda));
         for (let i = 0; i < this.game.players.length; i++) {
           if (this.game.state.voted_on_agenda[i][agenda_num] == 0) { who_is_next = i+1; i = this.game.players.length; }
  
        }
-
-console.log("WHO IS NEXT: " + who_is_next);
 
 	if (this.game.player != who_is_next) {
 
@@ -622,7 +611,6 @@ console.log("WHO IS NEXT: " + who_is_next);
 
   	let initiative_order = this.returnInitiativeOrder();
 
-console.log("INITIAIVE ORDER IS: " + JSON.stringify(initiative_order));
   	this.game.queue.push("resolve\tsetinitiativeorder");
 
   	for (let i = initiative_order.length-1; i >= 0; i--) {
@@ -1374,9 +1362,13 @@ alert("Player should choose what planets to invade (if possible)");
 
         let speaker_order = this.returnSpeakerOrder();
 
+	//
+	// reset 
+	//
+	this.resetTargetUnits();
+
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
-console.log("moving into trigger function with sector: " + sector);
 	    if (z[k].pdsSpaceDefenseTriggers(this, attacker, speaker_order[i], sector) == 1) {
 	      this.game.queue.push("pds_space_defense_event\t"+speaker_order[i]+"\t"+attacker+"\t"+sector+"\t"+k);
             }
@@ -1417,8 +1409,6 @@ console.log("moving into trigger function with sector: " + sector);
 	// process re-rolls.
 	//
         let speaker_order = this.returnSpeakerOrder();
-
-console.log("prepds space defense!");
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  if (this.doesPlayerHavePDSUnitsWithinRange(attacker, speaker_order[i], sector) == 1) {
@@ -1592,9 +1582,18 @@ console.log("prepds space defense!");
 	  for (let s = 0; s < total_shots; s++) {
 	    let roll = this.rollDice(10);
 	    for (let z_index in z) {
+
+console.log("MODIFY TECH FOR: " + z[z_index].name);
+
 	      // function modifyCombatRoll(imperium_self, attacker, defender, player, combat_type, roll) <--- attacker defender reversed here as we (oplayer) attack hte attacker (attacker)
 	      roll = z[z_index].modifyCombatRoll(this, player, attacker, player, "pds", roll);
+	      imperium_self.game.players_info[attacker-1].target_units = z[z_index].modifyTargets(this, attacker, player, imperium_self.game.player, "pds", imperium_self.game.players_info[attacker-1].target_units);
+	      //imperium_self.game.players_info[player-1].target_units = z[z_index].modifyTargets(this, attacker, player, imperium_self.game.player, "pds", imperium_self.game.players_info[player-1].target_units);
 	    }
+
+alert("PLAYER TARGETS: " + imperium_self.game.players_info[player-1].target_units);
+alert("ATTACKER TARGETS: " + imperium_self.game.players_info[attacker-1].target_units);
+
 	    roll += this.game.players_info[player-1].pdf_combat_roll_modifier;
 	    if (roll >= hits_on[s]) {
 	      total_hits++;
@@ -1616,6 +1615,7 @@ console.log("prepds space defense!");
 
 	    for (let z_index in z) {
 	      available_rerolls = z[z_index].modifyCombatRerolls(this, player, attacker, player, "pds", available_rerolls);
+	      imperium_self.game.players_info[player-1].target_units = z[z_index].modifyTargets(this, attacker, player, imperium_self.game.player, "pds", imperium_self.game.players_info[player-1].target_units);
 	    }
 
 	    let attacker_rerolls = available_rerolls;
@@ -1639,6 +1639,7 @@ console.log("prepds space defense!");
  
 	      for (let z_index in z) {
 	        roll =  z[z_index].modifyCombatRerolls(this, player, attacker, player, "pds", roll);
+	        imperium_self.game.players_info[player-1].target_units = z[z_index].modifyTargets(this, attacker, player, imperium_self.game.player, "pds", imperium_self.game.players_info[player-1].target_units);
 	      }
 
 	      roll += this.game.players_info[player-1].pdf_combat_roll_modifier;
@@ -1725,6 +1726,7 @@ console.log("prepds space defense!");
 
 	    for (let z_index in z) {
 	      roll = z[z_index].modifyCombatRoll(this, attacker, defender, attacker, "space", roll);
+	      imperium_self.game.players_info[defender-1].target_units = z[z_index].modifyTargets(this, attacker, defender, imperium_self.game.player, "space", imperium_self.game.players_info[defender-1].target_units);
 	    }
 
 	    roll += this.game.players_info[attacker-1].space_combat_roll_modifier;
@@ -1751,6 +1753,7 @@ console.log("prepds space defense!");
 
 	    for (let z_index in z) {
 	      available_rerolls = z[z_index].modifyCombatRerolls(this, player, attacker, player, "space", available_rerolls);
+	      imperium_self.game.players_info[defender-1].target_units = z[z_index].modifyTargets(this, attacker, defender, imperium_self.game.player, "space", imperium_self.game.players_info[defender-1].target_units);
 	    }
 
 	    let attacker_rerolls = available_rerolls;
@@ -1774,6 +1777,7 @@ console.log("prepds space defense!");
  
 	      for (let z_index in z) {
 	        roll =  z[z_index].modifyCombatRerolls(this, player, attacker, player, "space", roll);
+	        imperium_self.game.players_info[defender-1].target_units = z[z_index].modifyTargets(this, attacker, defender, imperium_self.game.player, "space", imperium_self.game.players_info[defender-1].target_units);
 	      }
 
 	      roll += this.game.players_info[player-1].space_combat_roll_modifier;
@@ -1853,6 +1857,11 @@ console.log("prepds space defense!");
         let sector       = mv[2];
         let planet_idx   = mv[3];
   	this.game.queue.splice(qe, 1);
+
+	//
+	// reset 
+	//
+	this.resetTargetUnits();
 
   	return 1;
       }

@@ -22,6 +22,15 @@
   }
  
 
+  resetTargetUnits() {
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      this.game.players_info[i].target_units = [];
+    }
+  }
+
+
+
+
   deactivateSystems() {
 
     //

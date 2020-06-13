@@ -201,14 +201,19 @@
   unloadStoredShipsIntoSector(player, sector) {
     let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.s.units[player - 1].length; i++) {
-      for (let j = 0; j < sys.s.units[player - 1][i].storage.length; j++) {
-	let unit = sys.s.units[player-1][i].storage[j];
-	let unitjson = JSON.stringify(unit);
-        if (unit.type === "fighter") {
-	  sys.s.units[player-1].push(unit);
-          sys.s.units[player-1][i].storage.splice(j, 1);
-	  j--;
-	}
+      if (JSON.stringify(sys.s.units[player-1][i]) != "{}") {
+        for (let j = 0; j < sys.s.units[player - 1][i].storage.length; j++) {
+	  let unit = sys.s.units[player-1][i].storage[j];
+	  let unitjson = JSON.stringify(unit);
+          if (unit.type === "fighter") {
+	    sys.s.units[player-1].push(unit);
+            sys.s.units[player-1][i].storage.splice(j, 1);
+	    j--;
+  	  }
+        }
+      } else {
+        sys.s.units[player-1].splice(i, 1);
+	i--;
       }
     }
     this.updateSectorGraphics(sector);

@@ -178,7 +178,7 @@
     if (obj.modifyCombatRerolls == null) {
       obj.modifyCombatRerolls = function(imperium_self, attacker, defender, player, combat_type, roll) { return roll; }
     }
-    if (obj.modifyCombatTargets == null) {
+    if (obj.modifyTargets == null) {
       obj.modifyTargets = function(imperium_self, attacker, defender, player, combat_type, targets=[]) { return targets; }
     }
 

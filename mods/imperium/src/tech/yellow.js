@@ -40,22 +40,12 @@
           imperium_self.game.players_info[gainer-1].graviton_laser_system_exhausted = 0;
         }
       },
-/***
-      pdsSpaceDefenseTriggers(imperium_self, attacker, player, sector) {
-        imperium_self.game.players_info[player-1].graviton_laser_system_active = 0;
-	if (imperium_self.game.players_info[player-1].graviton_laser_system == 1 && imperium_self.game.players_info[player-1].graviton_laser_system_exhausted == 0) {
-          if (imperium_self.doesPlayerHavePDSUnitsWithinRange(attacker, player, sector) && player != attacker) {
-  	    return 1;
-	  }
-	}
-	return 0;
-      },
-      pdsSpaceDefenseEvent(imperium_self, attacker, player, sector) {
-      },
-***/
       modifyTargets(imperium_self, attacker, defender, player, combat_type="", targets=[]) {
         if (combat_type == "pds") {
-          if (imperium_self.game.players_info[player-1].graviton_laser_system_active == 1) {
+	  //
+	  // defenders in PDS are the ones with this enabled
+	  //
+          if (imperium_self.game.players_info[defender-1].graviton_laser_system_active == 1) {
 	    targets.push("warsun");
 	    targets.push("flagship");
 	    targets.push("dreadnaught");
@@ -80,10 +70,12 @@
       },
       menuOptionActivated:  function(imperium_self, menu, player) {
         if (menu == "pds") {
+	  imperium_self.updateLog(imperium_self.returnFaction(player) + " exhausts Graviton Laser System");
           imperium_self.game.players_info[player-1].graviton_laser_system_exhausted = 1;
           imperium_self.game.players_info[player-1].graviton_laser_system_active = 1;
           imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"graviton_laser_system_exhausted"+"\t"+"int"+"\t"+"1");
           imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"graviton_laser_system_active"+"\t"+"int"+"\t"+"1");
+          imperium_self.addMove("notify\t"+player+" activates graviton_laser_system");
 	}
 	return 0;
       }

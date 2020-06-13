@@ -60,6 +60,12 @@
       players[i].production_bonus = 0;
 
       //
+      // must target certain units when assigning hits, if possible
+      //
+      players[i].target_units = [];
+
+
+      //
       // faction-inspired gameplay modifiers 
       //
       players[i].deep_space_conduits = 0; // treat all systems adjacent to activated system
@@ -251,6 +257,7 @@
 
     let imperium_self = this;
     let hits_assigned = 0;
+    let maximum_assignable_hits = 0;
 
     html = '<p>You must assign '+total_hits+' to your fleet:</p><ul>';
 
@@ -319,10 +326,16 @@
 	let html = '';
 	html += 'Assign <div style="display:inline" id="total_hits_to_assign">'+total_hits+'</div> hits:';
 	html += '<ul>';
+
+	let total_targetted_units = 0;;
+	let targetted_units = imperium_self.game.players_info[imperium_self.game.player-1].target_units;
+console.log("\n\n\nWe need to assign the hits to these units: " + JSON.stringify(imperium_self.game.players_info[imperium_self.game.player-1].target_units));
 	
         for (let i = 0; i < sys.s.units[imperium_self.game.player-1].length; i++) {
   
 	  let unit = sys.s.units[imperium_self.game.player-1][i];
+	  maximum_assignable_hits++;
+	  if (targetted_units.includes(unit.type)) { total_targetted_units++; }
 	  html += '<li class="textchoice player_ship_'+i+'" id="'+i+'">'+unit.name;
 	  if (unit.strength > 1) { 
 	    html += ' <div style="display:inline" id="player_ship_'+i+'_hits">(';
@@ -343,10 +356,20 @@
 	  let ship_idx = $(this).attr("id");
 	  let selected_unit = sys.s.units[imperium_self.game.player-1][ship_idx];
 
+	  if (total_targetted_units > 0) {
+	    if (!targetted_units.includes(selected_unit.type)) {
+	      alert("You must first assign hits to the required unit types");
+	      return;
+	    } else {
+	      total_targetted_units--;
+	    }
+	  }
+
 	  imperium_self.addMove("assign_hit\t"+attacker+"\t"+defender+"\t"+imperium_self.game.player+"\tship\t"+sector+"\t"+ship_idx+"\t0"); // last argument --> player should not assign again 
 
 
 	  total_hits--;
+	  hits_assigned++;
 
 	  $('#total_hits_to_assign').innerHTML = total_hits;
 
@@ -369,7 +392,7 @@
 	    $(this).remove();
 	  }
 
-	  if (total_hits == 0) {
+	  if (total_hits == 0 || hits_assigned >- maximum_assignable_hits) {
 	    imperium_self.updateStatus("Notifying players of hits assignment...");
 	    imperium_self.endTurn();
 	  }
@@ -488,11 +511,7 @@
 
     let z = this.returnEventObjects();
     for (let i = 0; i < z.length; i++) {
-console.log("MENU FOR: " + i);
       if (z[i].menuOptionTriggers(this, "pds", this.game.player) == 1) {
-
-console.log("triggered is: " + z[i].name);
-
         let x = z[i].menuOption(this, "pds", this.game.player);
         html += x.html;
 	tech_attach_menu_index.push(i);
@@ -1472,31 +1491,32 @@ console.log(player + " -- " + card + " -- " + deck);
         html += '<ul>';
         for (let ii = 0; ii < obj.ships_and_sectors[i].ships.length; ii++) {
   
-  	//
-  	// figure out if we can still move this ship
-  	//
-  	let already_moved = 0;
-  	for (let z = 0; z < obj.stuff_to_move.length; z++) {
-  	  if (obj.stuff_to_move[z].sector == obj.ships_and_sectors[i].sector) {
-  	    if (obj.stuff_to_move[z].i == i) {
-  	      if (obj.stuff_to_move[z].ii == ii) {
-  	        already_moved = 1;
+    	  //
+    	  // figure out if we can still move this ship
+  	  //
+  	  let already_moved = 0;
+  	  for (let z = 0; z < obj.stuff_to_move.length; z++) {
+  	    if (obj.stuff_to_move[z].already_moved == 1) {
+ 	      already_moved = 1;
+	    }
+  	    if (obj.stuff_to_move[z].sector == obj.ships_and_sectors[i].sector) {
+  	      if (obj.stuff_to_move[z].i == i) {
+  	        if (obj.stuff_to_move[z].ii == ii) {
+  	          already_moved = 1;
+  	        }
   	      }
   	    }
-  	  }
-  	}	
-  
-  	if (already_moved == 1) {
-  
-          html += '<li id="sector_'+i+'_'+ii+'" class=""><b>'+obj.ships_and_sectors[i].ships[ii].name+'</b></li>';
-  
-  	} else {
-  
-  	  if (obj.ships_and_sectors[i].ships[ii].move - (obj.ships_and_sectors[i].adjusted_distance[ii] + spent_distance_boost) >= 0) {
+  	  }	
+
+  	  if (already_moved == 1) {
+            html += '<li id="sector_'+i+'_'+ii+'" class=""><b>'+obj.ships_and_sectors[i].ships[ii].name+'</b></li>';
+    	  } else {
+  	    if (obj.ships_and_sectors[i].ships[ii].move - (obj.ships_and_sectors[i].adjusted_distance[ii] + spent_distance_boost) >= 0) {
               html += '<li id="sector_'+i+'_'+ii+'" class="option">'+obj.ships_and_sectors[i].ships[ii].name+'</li>';
+  	    }
   	  }
-  	}
         }
+
         html += '</ul>';
       }
       html += '</p>';
@@ -1566,7 +1586,18 @@ console.log(player + " -- " + card + " -- " + deck);
   	  //
   	  obj.ship_move_bonus--;
         }
-  
+ 
+
+        //
+        // if this is a fighter, remove it from the underlying
+        // list of units we can move, so that it is not double-added
+	//
+	if (ship.type == "fighter") {
+	  obj.ships_and_sectors[i].ships[ii].already_moved = 1;
+	}
+
+
+
   
         obj.stuff_to_move.push(x);
         updateInterface(imperium_self, obj, updateInterface);
@@ -1610,7 +1641,6 @@ console.log(player + " -- " + card + " -- " + deck);
             }
           }
         }
-
 
 
         if (total_ship_capacity > 0 && stuff_available_to_move > 0) {
@@ -1715,7 +1745,6 @@ console.log(player + " -- " + card + " -- " + deck);
   	          loading.source_idx = planet_idx;
   	          loading.unitjson = unitjson;
   	          loading.ship_idx = obj.ships_and_sectors[i].ship_idxs[ii];
-  	          //loading.shipjson = JSON.stringify(sys.s.units[imperium_self.game.player-1][obj.ships_and_sectors[i].ship_idxs[ii]]);
   	          loading.shipjson = shipjson_preload;
   	          loading.i = i;
   	          loading.ii = ii;
@@ -1734,7 +1763,6 @@ console.log(player + " -- " + card + " -- " + deck);
   
               if (action2 === "addfighter") {
 
-alert("FATM: " + fighters_available_to_move);
 		if (fighters_available_to_move <= 0) { return; }  
 
                 let ir = parseInt($('.add_fighters_remaining').html());
@@ -1746,30 +1774,28 @@ alert("FATM: " + fighters_available_to_move);
 		//
 		// remove this fighter ...
 		//
-		let already_loaded = 0;
+		let secs_to_check = obj.ships_and_sectors.length;
 		for (let sec = 0; sec < obj.ships_and_sectors.length; sec++) {
 		  if (obj.ships_and_sectors[sec].sector === sector) {
 		    let ships_to_check = obj.ships_and_sectors[sec].ships.length;
 		    for (let f = 0; f < ships_to_check; f++) {
-		      if (obj.ships_and_sectors[sec].ships[f].type == "fighter") {
-
-			already_loaded++;
-
-			if (already_loaded > fighters_loaded) {
-
-			  fighters_loaded++;
+		      if (obj.ships_and_sectors[sec].ships[f].already_moved == 1) {} else {
+		        if (obj.ships_and_sectors[sec].ships[f].type == "fighter") {
 
 			  // remove fighter from status menu
 			  let status_div = '#sector_'+sec+'_'+f;
 			  $(status_div).remove();
 
 			  // remove from arrays (as loaded)
-		          obj.ships_and_sectors[sec].ships.splice(f, 1);
-		          obj.ships_and_sectors[sec].adjusted_distance.splice(f, 1);
-			  f = obj.ships_and_sectors[sec].ships.length+2;
-			  sec = obj.ships_and_sectors.length+2;
+			  // removed fri june 12
+		          //obj.ships_and_sectors[sec].ships.splice(f, 1);
+		          //obj.ships_and_sectors[sec].adjusted_distance.splice(f, 1);
+		          obj.ships_and_sectors[sec].ships[f] = {};
+		          obj.ships_and_sectors[sec].adjusted_distance[f] = 0;
+			  f = ships_to_check+2;
+			  sec = secs_to_check+2;
 
-			}
+		        }
 		      }
 		    }
 		  }
