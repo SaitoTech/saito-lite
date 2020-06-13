@@ -16,6 +16,8 @@ module.exports = UpdateOrder = {
       data.covid19.returnFormFromPragma("covid19", "orders", function (res) {
         document.querySelector('.main-form').innerHTML = res;
         data.covid19.treatTextArea(document.getElementById('requirements'));
+        data.covid19.treatACDropDown(document.getElementById('order_status'), 'statuses', 'id', 'status_name');
+        data.covid19.treatLog(document.getElementById('order_status'));
       });
     } else {
       data.covid19.sendPeerDatabaseRequest("covid19", "orders", "*", "deleted <> 1 AND orders.id = " + data.order_id, null, function (res) {
@@ -23,6 +25,8 @@ module.exports = UpdateOrder = {
         html = data.covid19.returnForm("covid19", "orders", data.order_id, res.rows[0]);
         document.querySelector('.main-form').innerHTML += html;
         data.covid19.treatTextArea(document.getElementById('requirements'));
+        data.covid19.treatACDropDown(document.getElementById('order_status'), 'statuses', 'id', 'status_name', true);
+        //data.covid19.treatLog(document.getElementById('order_status'));
 
         ItemManager.render(app, data);
         ItemManager.attachEvents(app, data);
@@ -50,6 +54,7 @@ module.exports = UpdateOrder = {
 
     document.getElementById('save-order').addEventListener('click', (e) => {
       data.covid19.submitForm(document.querySelector('.main-form'));
+      data.covid19.logFields(document.querySelector('.main-form'), data.order_id, 'log');
       document.querySelector('.order-template').destroy();
       if(data.order_id) {
         data.location = "mode=order-manager&order=" + data.order_id;

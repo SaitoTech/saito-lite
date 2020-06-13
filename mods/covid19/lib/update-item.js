@@ -10,23 +10,25 @@ module.exports = UpdateItem = {
 
     if (typeof data.item_id == 'undefined' || data.item_id == "") {
       data.covid19.returnFormFromPragma("covid19", "items", function (res) {
-        document.querySelector('.modal-form').innerHTML = res;
+        var form = document.querySelector('.modal-form');
+        form.innerHTML = res;
 
-        document.getElementById('order_id').value = data.order_id;
-        data.covid19.treatHide(document.getElementById('order_id'));
-        data.covid19.treatACDropDown(document.getElementById('category_id'), 'categories', 'id', 'name');
-        data.covid19.treatACDropDown(document.getElementById('status_id'), 'statuses', 'id', 'status_name');
+        form.querySelector('#order_id').value = data.order_id;
+        data.covid19.treatHide(form.querySelector('#order_id'));
+        data.covid19.treatACDropDown(form.querySelector('#category_id'), 'categories', 'id', 'name');
+        data.covid19.treatACDropDown(form.querySelector('#status_id'), 'statuses', 'id', 'status_name');
 
       });
     } else {
       data.covid19.sendPeerDatabaseRequest("covid19", "items", "*", "deleted <> 1 AND items.id = " + data.item_id, null, function (res) {
         html = data.covid19.returnForm("covid19", "items", data.item_id, res.rows[0]);
-        document.querySelector('.modal-form').innerHTML += html;
+        var form = document.querySelector('.modal-form');
+        form.innerHTML += html;
 
-        document.getElementById('order_id').value = data.order_id;
-        data.covid19.treatHide(document.getElementById('order_id'));
-        data.covid19.treatACDropDown(document.getElementById('category_id'), 'categories', 'id', 'name');
-        data.covid19.treatACDropDown(document.getElementById('status_id'), 'statuses', 'id', 'status_name');
+        form.querySelector('#order_id').value = data.order_id;
+        data.covid19.treatHide(form.querySelector('#order_id'));
+        data.covid19.treatACDropDown(form.querySelector('#category_id'), 'categories', 'id', 'name');
+        data.covid19.treatACDropDown(form.querySelector('#status_id'), 'statuses', 'id', 'status_name');
 
 
       });

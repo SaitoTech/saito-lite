@@ -45,14 +45,15 @@ module.exports = PurchaseOrder = {
 
   data.covid19.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
     res.rows.forEach(row => {
-
+      var requirements = "";
+      if(row.requirements.length > 0) { requirements = "(" + row.requirements.substring(0,30) + ")" ;}
       html += `
       <tr>
         <td>${count}</td>
-        <td>${row.category} (${row.requirements.substring(0,30)})</td>
+        <td>${row.category} ${requirements}</td>
         <td style="text-align:right;">${s2Number(row.quantity)}</td>
         <td style="text-align:right;">${s2Number(row.price)}</td>
-        <td style="text-align:right;">${s2Number(row.price * row.quantity)}</td>
+        <td style="text-align:right;">${s2Number(Math.ceil(row.price * row.quantity))}</td>
       </tr>
       `;
       count ++;
@@ -64,7 +65,7 @@ module.exports = PurchaseOrder = {
         <td></td>
         <td></td>
         <td style="text-align:right;"><b>TOTAL:</b></td>
-        <td style="text-align:right;"><b>${s2Number(total)}</b></td>
+        <td style="text-align:right;"><b>${s2Number(Math.ceil(total))}</b></td>
       </tr>
     `;
     doc.getElementById('requirements-grid').innerHTML = html;
