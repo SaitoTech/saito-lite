@@ -10598,6 +10598,35 @@ console.log(this.returnFaction(defender) + " has assigned a hit to their weakest
     //set player highlight color
     document.documentElement.style.setProperty('--my-color', `var(--p${this.game.player})`);
 
+    //add faction buttons
+    var html = "";
+    var faction_initial = "";
+    this.game.players.forEach((player, index) => {
+      faction_initial = this.returnFaction(index+1).split("of ")[this.returnFaction(index+1).split("of ").length-1].charAt(0);
+      html += `<div data-id="${index+1}" class="faction_button p${index+1}" style="border-color:var(--p${index+1});">${faction_initial}</div>`;
+    });
+    document.querySelector('.faction_buttons').innerHTML = html;
+    document.querySelector('.hud-header').innerHTML += html;
+
+    //add faction names to their sheets
+    this.game.players.forEach((player, index) => {
+      document.querySelector('.faction_name.p'+(index+1)).innerHTML = this.returnFaction(index+1);
+    });
+
+    document.querySelectorAll('.faction_button').forEach(el => {
+      el.addEventListener('click', (e) => {
+        if(document.querySelector('.interface_overlay').classList.contains('hidden')) {
+          document.querySelector('.interface_overlay').classList.remove('hidden');
+        }
+        document.querySelector('.faction_sheet.p' + e.target.dataset.id).toggleClass('hidden');
+      });
+    });
+
+    document.querySelectorAll('.faction_sheet').forEach(el => {
+      el.addEventListener('click', (e) => {
+        document.querySelector('.interface_overlay').classList.add('hidden');
+      });
+    });
 }
 
   
