@@ -23,8 +23,9 @@
   returnPlayerTurnTracker() {
     let tracker = {};
     tracker.activate_system = 0;
-    tracker.action_card = 0;
     tracker.production = 0;
+    tracker.invasion = 0;
+    tracker.action_card = 0;
     tracker.trade = 0;
     return tracker;
   };

@@ -465,6 +465,8 @@ console.log("F: " + this.game.players_info[this.game.player-1].faction);
     let defender = -1;
     let defender_found = 0;
 
+console.log("returning defender of " + sector + " / " + planet_idx);
+
     if (planet_idx == null) {
       for (let i = 0; i < sys.s.units.length; i++) {
         if (attacker != (i+1)) {
@@ -473,6 +475,7 @@ console.log("F: " + this.game.players_info[this.game.player-1].faction);
           }
         }
       }
+console.log("returning defender here!");
       return defender;
     }
 

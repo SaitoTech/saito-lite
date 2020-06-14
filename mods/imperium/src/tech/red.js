@@ -16,7 +16,9 @@
       },
       pdsSpaceDefenseTriggers : function(imperium_self, attacker, player, sector) {
 	if (imperium_self.doesPlayerHaveTech(player, "plasma-scoring")) {
-	  imperium_self.updateLog(imperium_self.returnFaction(player) + " gets +1 shot from Plasma Scoring");
+ 	  if (imperium_self.doesPlayerHavePDSUnitsWithinRange(attacker, player, sector) == 1 && attacker != player) {
+	    imperium_self.updateLog(imperium_self.returnFaction(player) + " gets +1 shot from Plasma Scoring");
+	  }
 	}
 	//
 	// we don't need the event, just the notification on trigger
@@ -28,8 +30,8 @@
 
 
 
-    this.importTech("magan-defense-grid", {
-      name                :       "Magan Defense Grid" ,
+    this.importTech("magen-defense-grid", {
+      name                :       "Magen Defense Grid" ,
       color               :       "red" ,
       prereqs             :       ["red"],
 
@@ -45,7 +47,53 @@
         }
         return 1;
       },
+      groundCombatTriggers : function(imperium_self, player, sector, planet_idx) { 
+	if (imperium_self.doesPlayerHaveTech(player, "magan-defense-grid")) {
+	  let sys = imperium_self.returnSectorAndPlanets(sector);
+	  let planet = sys.p[planet_idx];
+
+          if (player == planet.owner) {
+	    let non_infantry_units_on_planet = 0;
+	    for (let i = 0; i < planet.units[player-1].length; i++) {
+	      if (planet.units[player-1][i].type == "spacedock" || planet.units[player-1][i].type == "pds") {
+imperium_self.updateLog("Magan Defense Grid triggers on " + planet.name);
+	        return 1;
+	      }
+	    }
+	  }
+	}
+        return 0;
+      },
+      groundCombatEvent : function(imperium_self, player, sector, planet_idx) {
+
+	let sys = imperium_self.returnSectorAndPlanets(sector);
+	let planet = sys.p[planet_idx];
+
+	for (let i = 0; i < planet.units.length; i++) {
+	  if (planet.units[i] != (player-1)) {
+	    for (let ii = 0; i < planet.units[i].length; ii++) {
+
+	      let attacker_unit = planet.units[i][ii];
+	      let attacker = (i+1);
+	      let defender = player;
+
+	      if (attacker_unit.type == "infantry") {
+		imperium_self.assignHitsToGroundForces(attacker, defender, sector, planet_idx, 1);
+                imperium_self.eliminateDestroyedUnitsInSector(attacker, sector);
+                imperium_self.updateSectorGraphics(sector);
+imperium_self.updateLog(imperium_self.returnFaction(attacker) + " loses 1 infantry to Magan Defense Grid");
+		ii = planet.units[i].length+3;
+		i = planet.units.length+3;
+	      }
+	    }
+	  }
+	}
+	return 1;
+      }
     });
+
+
+
 
     this.importTech("duranium-armor", {
       name        	: 	"Duranium Armor" ,
