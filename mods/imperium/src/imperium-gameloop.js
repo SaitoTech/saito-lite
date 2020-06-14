@@ -24,7 +24,7 @@
       }
   
 
-
+console.log("NEXT MV: " + mv[0]);
 
       if (mv[0] === "setvar") { 
 
@@ -943,6 +943,8 @@ console.log("I AM CONTINUING!");
             }
           }
         }
+        let player_forces = this.returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx);
+console.log(player_forces + " landed on planet");
   
         this.saveSystemAndPlanets(sys);
         this.updateSectorGraphics(sector);
@@ -1458,6 +1460,28 @@ console.log("TECH: " + z[z_index].name);
       //
       if (mv[0] === "assign_hits") {
 
+	//
+	// we need to permit both sides to play action cards before they fire and start destroying units
+	// so we check to make sure that "space_combat_player_menu" does not immediately precede us... if
+	// it does we swap out the instructions, so that both players can pick...
+	//
+        let le = this.game.queue.length-2;
+        let lmv = [];
+        if (le >= 0) {
+	  lmv = this.game.queue[le].split("\t");
+	  if (lmv[0] === "ships_fire" || lmv[0] == "infantry_fire" || lmv[0] == "pds_fire") {
+	    let tmple = this.game.queue[le];
+	    let tmple1 = this.game.queue[le+1];
+	    this.game.queue[le]   = tmple1;
+	    this.game.queue[le+1] = tmple;
+	    //
+	    // 
+	    //
+	    return 1;
+	  }
+	}
+
+
         let attacker       = parseInt(mv[1]);
         let defender       = parseInt(mv[2]);
         let type           = mv[3]; // space // infantry
@@ -1513,8 +1537,6 @@ console.log("TECH: " + z[z_index].name);
             let attacker_forces = this.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
             let defender_forces = this.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx);
 
-console.log(attacker_forces + " af and " + defender_forces + " df");
-
             //
             // evaluate if planet has changed hands
             //
@@ -1530,10 +1552,7 @@ console.log(attacker_forces + " af and " + defender_forces + " df");
               //
               // notify everyone
               //
-              let survivors = 0;
-              for (let i = 0; i < sys.p[planet_idx].units[attacker-1].length; i++) {
-                if (sys.p[planet_idx].units[attacker-1][i].name == "infantry") { survivors++; }
-              }
+              let survivors = imperium_self.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
               if (survivors == 1) {
                 this.updateLog(sys.p[planet_idx].name + " conquered by " + this.returnFaction(attacker) + " (" + survivors + " infantry)");
               } else {
@@ -1683,10 +1702,10 @@ console.log(attacker_forces + " af and " + defender_forces + " df");
         if (le >= 0) {
 	  lmv = this.game.queue[le].split("\t");
 	  if (lmv[0] === "space_combat_player_menu") {
-	    let tmpq = this.game.queue[le];
-	    let tmpp = this.game.queue[le+1];
-	    this.game.queue[le]   = tmpp;
-	    this.game.queue[le+1] = tmpq;
+	    let tmple = this.game.queue[le];
+	    let tmple1 = this.game.queue[le+1];
+	    this.game.queue[le]   = tmple1;
+	    this.game.queue[le+1] = tmple;
 	    //
 	    // 
 	    //
@@ -1826,10 +1845,10 @@ console.log(attacker_forces + " af and " + defender_forces + " df");
         if (le >= 0) {
 	  lmv = this.game.queue[le].split("\t");
 	  if (lmv[0] === "ground_combat_player_menu") {
-	    let tmpq = this.game.queue[le];
-	    let tmpp = this.game.queue[le+1];
-	    this.game.queue[le]   = tmpp;
-	    this.game.queue[le+1] = tmpq;
+	    let tmple = this.game.queue[le];
+	    let tmple1 = this.game.queue[le+1];
+	    this.game.queue[le]   = tmple1;
+	    this.game.queue[le+1] = tmple;
 	    //
 	    // 
 	    //
@@ -1847,6 +1866,13 @@ console.log(attacker_forces + " af and " + defender_forces + " df");
 
         this.game.queue.splice(qe, 1);
 
+
+this.updateLog("SANITY CHECK: ");
+this.updateLog(this.returnFaction(attacker) + ": " + this.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx));
+this.updateLog(this.returnFaction(defender) + ": " + this.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx));
+
+
+
 	//
 	// sanity check
 	//
@@ -1860,25 +1886,30 @@ console.log(attacker_forces + " af and " + defender_forces + " df");
 	  // then the rest
 	  //
 	  for (let i = 0; i < sys.p[planet_idx].units[attacker-1].length; i++) {
+	    if (sys.p[planet_idx].units[attacker-1][i].type == "infantry" ) {
 
-	    let roll = this.rollDice(10);
+	      let roll = this.rollDice(10);
 
-	    for (let z_index in z) {
-	      roll = z[z_index].modifyCombatRoll(this, attacker, defender, attacker, "ground", roll);
-	      imperium_self.game.players_info[defender-1].target_units = z[z_index].modifyTargets(this, attacker, defender, imperium_self.game.player, "ground", imperium_self.game.players_info[defender-1].target_units);
+
+	      for (let z_index in z) {
+	        roll = z[z_index].modifyCombatRoll(this, attacker, defender, attacker, "ground", roll);
+	        imperium_self.game.players_info[defender-1].target_units = z[z_index].modifyTargets(this, attacker, defender, imperium_self.game.player, "ground", imperium_self.game.players_info[defender-1].target_units);
+	      }
+
+	      roll += this.game.players_info[attacker-1].ground_combat_roll_modifier;
+
+console.log(this.returnFaction(attacker) + " rolls a " + roll);
+
+	      if (roll >= sys.p[planet_idx].units[attacker-1][i].combat) {
+	        total_hits++;
+	        total_shots++;
+	        hits_or_misses.push(1);
+	      } else {
+	        total_shots++;
+	        hits_or_misses.push(0);
+	      }
+
 	    }
-
-	    roll += this.game.players_info[attacker-1].ground_combat_roll_modifier;
-
-	    if (roll >= sys.p[planet_idx].units[attacker-1][i].combat) {
-	      total_hits++;
-	      total_shots++;
-	      hits_or_misses.push(1);
-	    } else {
-	      total_shots++;
-	      hits_or_misses.push(0);
-	    }
-
 	  }
 
 
@@ -1886,6 +1917,7 @@ console.log(attacker_forces + " af and " + defender_forces + " df");
  	  // handle rerolls
 	  //
 	  if (total_hits < total_shots) {
+
 
 	    let max_rerolls = total_shots - total_hits;
 	    let available_rerolls = this.game.players_info[attacker-1].combat_dice_reroll_permitted + this.game.players_info[attacker-1].ground_combat_dice_reroll;
@@ -2127,6 +2159,9 @@ console.log(attacker_forces + " af and " + defender_forces + " df");
 
         this.updateSectorGraphics(sector);
 
+this.updateLog("ground combat player menu for player " + attacker);
+this.updateLog(" they are faction: " + this.returnFaction(attacker));
+this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx));
 	if (this.game.player == attacker) {
           this.playerPlayGroundCombat(attacker, defender, sector, planet_idx);
 	}
@@ -2349,6 +2384,7 @@ console.log(attacker_forces + " af and " + defender_forces + " df");
           return 1;
         }
 
+this.updateLog("DEFENDER IS PRESUMED TO BE: " + this.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx));
 
 	//
 	// otherwise, have a round of ground combat

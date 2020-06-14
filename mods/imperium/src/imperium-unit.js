@@ -22,6 +22,7 @@
     if (obj.destroyed == null) 		{ obj.destroyed = 0; }			// when destroyed
     if (obj.move == null) 		{ obj.move = 0; }			// range to move
     if (obj.range == null) 		{ obj.range = 0; }			// firing range
+    if (obj.last_round_damaged == null) { obj.last_round_damaged = 0; }		// last round in which hit (some techs care)
     if (obj.production == null) 	{ obj.production = 0; }			// can produce X units (production limit)
 
     obj = this.addEvents(obj);
@@ -404,7 +405,6 @@
   
   
   returnUnit(type = "", player) {
-console.log("HERE: " + type);
     let unit = JSON.parse(JSON.stringify(this.units[type]));
     unit.owner = player;
     unit = this.upgradeUnit(unit, player);

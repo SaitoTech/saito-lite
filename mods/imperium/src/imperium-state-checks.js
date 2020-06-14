@@ -565,7 +565,6 @@ console.log("PLANET IS: " + JSON.stringify(sys.p[planet_idx]));
     }
 
     if (attacker_forces > 0 && defender_forces > 0) { return 1; }
-console.log("WE HAVE HIT THE END: " + attacker_forces + " ____ " + defender_forces);
     return 0;
 
   }
@@ -926,7 +925,7 @@ console.log("SECTOR: " + sector);
 
     for (let z = 0; z < sys.p[planet_idx].units[player-1].length; z++) {
       if (sys.p[planet_idx].units[player-1][z].strength > 0 && sys.p[planet_idx].units[player-1][z].destroyed == 0) {
-        if (sys.p[planet_idx].units[player-1][z].type == "infantry") {
+        if (sys.p[planet_idx].units[player-1][z].type === "infantry") {
           num++;
         }
       }

@@ -43,19 +43,23 @@
       onNewRound : function(imperium_self, player, mycallback) {
         if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].magen_defense_grid = 1;
-          imperium_self.game.players_info[player-1].stasis_on_opponent_combat_first_round = 1;
         }
         return 1;
       },
       groundCombatTriggers : function(imperium_self, player, sector, planet_idx) { 
-	if (imperium_self.doesPlayerHaveTech(player, "magan-defense-grid")) {
+console.log("CHECKING IF " + imperium_self.returnFaction(player) + " has MDG");
+	if (imperium_self.doesPlayerHaveTech(player, "magen-defense-grid")) {
+console.log("ok, they do...");
 	  let sys = imperium_self.returnSectorAndPlanets(sector);
 	  let planet = sys.p[planet_idx];
 
           if (player == planet.owner) {
+console.log(" and they control this planet...");
 	    let non_infantry_units_on_planet = 0;
 	    for (let i = 0; i < planet.units[player-1].length; i++) {
+console.log(" checking unit " + i);
 	      if (planet.units[player-1][i].type == "spacedock" || planet.units[player-1][i].type == "pds") {
+console.log(" and we have a PDS or spacedock unit here!");
 imperium_self.updateLog("Magan Defense Grid triggers on " + planet.name);
 	        return 1;
 	      }

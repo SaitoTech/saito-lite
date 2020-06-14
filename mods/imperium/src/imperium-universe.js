@@ -81,12 +81,12 @@
 
 
 	if (j == 1) {
-	  planets[i].units[j].push(this.returnUnit("infantry", 1));
+//	  planets[i].units[j].push(this.returnUnit("infantry", 1));
 //	  planets[i].units[j].push(this.returnUnit("infantry", 1));
 //	  planets[i].units[j].push(this.returnUnit("infantry", 1));
 //	  planets[i].units[j].push(this.returnUnit("pds", 1));
 //	  planets[i].units[j].push(this.returnUnit("pds", 1));
-	  planets[i].units[j].push(this.returnUnit("spacedock", 1));
+//	  planets[i].units[j].push(this.returnUnit("spacedock", 1));
 	}
 
       }
@@ -306,7 +306,8 @@
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-      return ["1_1", "4_7"];
+//      return ["1_1", "4_7"];
+      return ["1_1", "2_1"];
     }
   
     if (players <= 3) {

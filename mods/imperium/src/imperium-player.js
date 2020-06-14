@@ -396,7 +396,7 @@ console.log("\n\n\nWe need to assign the hits to these units: " + JSON.stringify
 	    $(this).remove();
 	  }
 
-	  if (total_hits == 0 || hits_assigned >- maximum_assignable_hits) {
+	  if (total_hits == 0 || hits_assigned >= maximum_assignable_hits) {
 	    imperium_self.updateStatus("Notifying players of hits assignment...");
 	    imperium_self.endTurn();
 	  }
@@ -505,6 +505,10 @@ console.log("\n\n\nWe need to assign the hits to these units: " + JSON.stringify
 
     let attacker_forces = this.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
     let defender_forces = this.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx);
+
+this.updateLog("ATTACKER PPGC: " + attacker_forces);
+this.updateLog("DEFENDER PPGC: " + defender_forces);
+
 
     if (this.game.player == attacker) {
       html = '<p>You are invading ' + sys.p[planet_idx].name + ' with ' + attacker_forces + ' infantry. ' +this.returnFaction(defender) + ' has ' + defender_forces + ' infanty remaining. This is round ' + this.game.state.ground_combat_round + ' of ground combat. </p><ul>';
