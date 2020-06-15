@@ -28,10 +28,16 @@
 
         state.temporary_assignments = ["all"]; // all = any units
         state.temporary_rerolls = 0; // 100 = unlimited
+
+
         state.space_combat_round = 0;
+	state.space_combat_attacker = -1;
+	state.space_combat_defender = -1;
         state.space_combat_ships_destroyed_attacker = 0;
         state.space_combat_ships_destroyed_defender = 0;
         state.ground_combat_round = 0;
+	state.ground_combat_attacker = -1;
+	state.ground_combat_defender = -1;
         state.ground_combat_infantry_destroyed_attacker = 0;
         state.ground_combat_infantry_destroyed_defender = 0;
 

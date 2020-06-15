@@ -116,7 +116,35 @@ imperium_self.updateLog(imperium_self.returnFaction(attacker) + " loses 1 infant
         }
         return 1;
       },
+      spaceCombatRoundOver : function(imperium_self, attacker, defender, sector) {
+
+	let sys = imperium_self.returnSectorAndPlanets(sector);
+
+	if (imperium_self.doesPlayerHaveTech(attacker, "duranium-armor")) {
+	  for (let i = 0; i < sys.s.units[attacker-1].length; i++) {
+	    let this_unit = sys.s.units[attacker-1][i];
+	    if (this_unit.last_round_damaged < imperium_self.game.state.space_combat_round) {
+	      this_unit.strength = this_unit.max_strength;
+	      imperium_self.updateLog(imperium_self.returnFaction(attacker) + " repairs ships with Duranium Armor");
+	    }
+	  }
+        }
+
+	if (imperium_self.doesPlayerHaveTech(defender, "duranium-armor")) {
+	  for (let i = 0; i < sys.s.units[defender-1].length; i++) {
+	    let this_unit = sys.s.units[defender-1][i];
+	    if (this_unit.last_round_damaged < imperium_self.game.state.space_combat_round) {
+	      this_unit.strength = this_unit.max_strength;
+	      imperium_self.updateLog(imperium_self.returnFaction(defender) + " repairs ships with Duranium Armor");
+	    }
+	  }
+        }
+
+      },
     });
+
+
+
 
     this.importTech("assault-cannon", {
       name        	:       "Assault Cannon" ,
@@ -133,6 +161,48 @@ imperium_self.updateLog(imperium_self.returnFaction(attacker) + " loses 1 infant
           imperium_self.game.players_info[player-1].may_assign_first_round_combat_shot = 1;
         }
         return 1;
+      },
+      spaceCombatTriggers :function(imperium_self, player, sector) {
+	let sys = imperium_self.returnSectorAndPlanets(sector);
+
+	for (let i = 0; i < sys.s.units.length; i++) {
+	  if ((i+1) != player) {
+	    if (imperium_self.doesPlayerHaveTech((i+1), "assault-cannon")) {
+	      let capital_ships = 0;
+	      for (let ii = 0; ii < sys.s.units[i].length; ii++) {
+		let thisunit = sys.s.units[i][ii];
+		if (thisunit.type == "destroyer") { capital_ships++; }
+		if (thisunit.type == "carrier") { capital_ships++; }
+		if (thisunit.type == "cruiser") { capital_ships++; }
+		if (thisunit.type == "dreadnaught") { capital_ships++; }
+		if (thisunit.type == "flagship") { capital_ships++; }
+		if (thisunit.type == "warsun") { capital_ships++; }
+	      }
+	      if (capital_ships >= 3) {
+
+		//
+		// if I have an eligible ship
+		//
+	        for (let z = 0; z < sys.s.units[player-1].length; z++) {
+		  let thisunit = sys.s.units[player-1][z];
+		  if (thisunit.type == "destroyer") { return 1; }
+		  if (thisunit.type == "carrier") { return 1; }
+		  if (thisunit.type == "cruiser") { return 1; }
+		  if (thisunit.type == "dreadnaught") { return 1; }
+		  if (thisunit.type == "flagship") { return 1; }
+		  if (thisunit.type == "warsun") { return 1; }
+	        }
+	        return 1;
+	      }
+	    }
+	  }
+	}
+
+      },
+      spaceCombatEvent : function(imperium_self, player, sector) {
+	imperium_self.game.players_info[player-1].target_units = ['carrier','destroyer','cruiser','dreadnaught','flagship','warsun'];
+	imperium_self.game.queue.push("destroy_ships\t"+player+"\t"+"3");
+	return 1;
       },
     });
 

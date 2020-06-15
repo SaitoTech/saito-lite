@@ -1411,6 +1411,49 @@ console.log("TECH: " + z[z_index].name);
       }
 
 
+
+
+
+
+      //
+      // assigns one hit to one unit
+      //
+      if (mv[0] === "destroy_unit") {
+
+        let destroyer    = parseInt(mv[1]);
+        let destroyee    = parseInt(mv[2]);
+        let type 	 = mv[3]; // space // ground
+        let sector 	 = mv[4];
+        let planet_idx 	 = mv[5];
+        let unit_idx 	 = parseInt(mv[6]); // ship // ground
+        let player_moves = parseInt(mv[7]); // does player also do this?
+
+	let sys = this.returnSectorAndPlanets(sector);
+	let z = this.returnEventObjects();
+
+	if (type == "space") {
+	  sys.s.units[destroyee-1][unit_idx].strength = 0;
+	  sys.s.units[destroyee-1][unit_idx].destroyed = 1;
+	}
+	if (type == "ground") {
+	  sys.p[planet_idx].units[destroyee-1][unit_idx].strength = 0;
+	  sys.p[planet_idx].units[destroyee-1][unit_idx].destroyed = 1;
+	}
+
+	//
+	// re-display sector
+	//
+        this.eliminateDestroyedUnitsInSector(player, sector);
+	this.saveSystemAndPlanets(sys);
+	this.updateSectorGraphics(sector);
+        this.game.queue.splice(qe, 1);
+
+	return 1;
+
+      }
+
+
+
       //
       // assigns one hit to one unit
       //
@@ -1428,6 +1471,7 @@ console.log("TECH: " + z[z_index].name);
 	let z = this.returnEventObjects();
 
 	if (type == "ship") {
+	  sys.s.units[player-1][unit_idx].last_round_damaged = this.game.state.space_combat_round;
 	  sys.s.units[player-1][unit_idx].strength--;
 	  if (sys.s.units[player-1][unit_idx].strength <= 0) {
 	    this.updateLog(this.returnFaction(player) + " assigns hit to " + sys.s.units[player-1][unit_idx].name + " (destroyed)");
@@ -1569,6 +1613,36 @@ console.log("TECH: " + z[z_index].name);
           }
         }
       }
+
+
+
+      //
+      // triggers menu for user to choose how to assign hits
+      //
+      if (mv[0] === "destroy_ships") {
+
+        let player	   = parseInt(mv[1]);
+	let total          = parseInt(mv[2]);
+	let sector	   = mv[3];
+
+        this.game.queue.splice(qe, 1);
+
+	if (this.game.player == player) {
+  	  this.playerDestroyShips(player, total, sector);
+	  return 0;
+	}
+
+	if (destroy == 1) {
+  	  this.updateStatus("Opponent is destroying "+destroy+" ship");
+	} else { 
+	  this.updateStatus("Opponent is destroying "+destroy+" ships");
+	}
+	return 0;
+
+      }
+
+
+
 
       if (mv[0] === "pds_fire") {
 
@@ -2034,6 +2108,8 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	// reset 
 	//
 	this.resetTargetUnits();
+        this.game.state.space_combat_attacker = -1;
+        this.game.state.space_combat_defender = -1;
 
   	return 1;
       }
@@ -2043,6 +2119,13 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
         let sector       = mv[2];
         let planet_idx   = mv[3];
 
+
+	if (this.game.state.space_combat_defender != -1) {
+	  let z = this.returnEventObjects();
+	  for (let z_index in z) {
+	    z[z_index].spaceCombatRoundEnd(this, attacker, defender, sector);
+	  }
+	}
 
   	if (this.hasUnresolvedSpaceCombat(player, sector) == 1) {
 	  if (this.game.player == player) {
@@ -2114,6 +2197,10 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	if (defender == -1) {
 	  return 1;
 	}
+
+	this.game.state.space_combat_attacker = player;
+	this.game.state.space_combat_defender = defender;
+
 
 	//
 	// otherwise, process combat
@@ -2294,6 +2381,8 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
         this.game.state.ground_combat_round = 0;
         this.game.state.ground_combat_infantry_destroyed_attacker = 0;
         this.game.state.ground_combat_infantry_destroyed_defender = 0;
+        this.game.state.ground_combat_attacker = -1;
+        this.game.state.ground_combat_defender = -1;
 
   	return 1;
 
@@ -2305,6 +2394,12 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
         let planet_idx   = mv[3];
   	this.game.queue.splice(qe, 1);
 
+	if (this.game.state.ground_combat_defender != -1) {
+	  let z = this.returnEventObjects();
+	  for (let z_index in z) {
+	    z[z_index].groundCombatRoundEnd(this, attacker, defender, sector, planet_idx);
+	  }
+	}
 
         if (this.hasUnresolvedGroundCombat(player, sector, planet_idx) == 1) {
           if (this.game.player == player) {
@@ -2374,6 +2469,7 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
         //
         let defender = this.returnDefender(player, sector, planet_idx);
 
+
         //
         // if there is no defender, end this charade
         //
@@ -2384,7 +2480,8 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
           return 1;
         }
 
-this.updateLog("DEFENDER IS PRESUMED TO BE: " + this.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx));
+	this.game.state.ground_combat_attacker = player;
+	this.game.state.ground_combat_defender = defender;
 
 	//
 	// otherwise, have a round of ground combat

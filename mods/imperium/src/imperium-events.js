@@ -191,6 +191,15 @@
     }
 
 
+    //
+    // synchronous interventions in combat state -- take place at the END of the combat round
+    //
+    if (obj.spaceCombatRoundEnd == null) {
+      obj.spaceCombatRoundEnd = function(imperium_self, attacker, defender, sector) { return roll; }
+    }
+    if (obj.groundCombatRoundEnd == null) {
+      obj.spaceCombatRoundEnd = function(imperium_self, attacker, defender, sector, planet_idx) { return roll; }
+    }
 
 
     ////////////////////

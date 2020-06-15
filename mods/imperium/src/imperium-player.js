@@ -195,7 +195,7 @@
         if (tech_attach_menu_events == 1) {
 	  for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
 	    if (action2 == tech_attach_menu_triggers[i]) {
-   	      let mytech = technologies[imperium_self.game.players_info[imperium_self.game.player-1].tech[tech_attach_menu_index]];
+   	      let mytech = this.tech[imperium_self.game.players_info[imperium_self.game.player-1].tech[tech_attach_menu_index]];
 	      $(this).remove();
 	      mytech.menuOptionActivated(imperium_self, "main", imperium_self.game.player);
 	      return;
@@ -402,6 +402,75 @@ console.log("\n\n\nWe need to assign the hits to these units: " + JSON.stringify
 	  }
 
 	});
+      }
+
+    });
+  }
+
+
+
+
+
+  //
+  // destroy units
+  //
+  playerDestroyShips(player, total, sector) {
+
+    let imperium_self = this;
+    let total_hits = total;
+    let hits_assigned = 0;
+    let maximum_assignable_hits = 0;
+    let sys = imperium_self.returnSectorAndPlanets(sector);
+
+    html = '<p>You must destroy '+total+' ships in your fleet:</p><ul>';
+
+    let total_targetted_units = 0;;
+    let targetted_units = imperium_self.game.players_info[imperium_self.game.player-1].target_units;
+
+    for (let i = 0; i < sys.s.units[imperium_self.game.player-1].length; i++) {
+      let unit = sys.s.units[imperium_self.game.player-1][i];
+      maximum_assignable_hits++;
+      if (targetted_units.includes(unit.type)) { total_targetted_units++; }
+      html += '<li class="textchoice player_ship_'+i+'" id="'+i+'">'+unit.name+'</li>';
+    }
+    html += '</ul>';
+  
+    if (maximum_assignable_hits == 0) {
+      this.addMove("notify\t" + this.returnFaction(player) + " has no ships to destroy");
+      this.endTurn();
+      return 0;
+    }
+
+
+    imperium_self.updateStatus(html);
+	
+    $('.textchoice').off();
+    $('.textchoice').on('click', function() {
+
+      let ship_idx = $(this).attr("id");
+      let selected_unit = sys.s.units[imperium_self.game.player-1][ship_idx];
+
+      if (total_targetted_units > 0) {
+        if (!targetted_units.includes(selected_unit.type)) {
+          alert("You must first destroy the required unit types");
+          return;
+	} else {
+	  total_targetted_units--;
+	}
+      }
+
+      imperium_self.addMove("destroy_unit\t"+player+"\t"+player+"\t"+"space\t"+sector+"\t"+"0"+"\t"+ship_idx+"\t1");
+
+      selected_unit.strength = 0;;
+      selected_unit.destroyed = 0;
+      $(this).remove();
+
+      total_hits--;
+      hits_assigned++;
+
+      if (total_hits == 0 || hits_assigned >= maximum_assignable_hits) {
+        imperium_self.updateStatus("Notifying players of hits assignment...");
+        imperium_self.endTurn();
       }
 
     });
