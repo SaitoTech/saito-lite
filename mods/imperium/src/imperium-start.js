@@ -1,4 +1,5 @@
 const GameHud = require('../../lib/templates/lib/game-hud/game-hud'); 
+const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
 const GameTemplate = require('../../lib/templates/gametemplate');
   
 class Imperium extends GameTemplate {
@@ -48,6 +49,7 @@ class Imperium extends GameTemplate {
     this.units          	= {};
 
     this.hud = new GameHud(this.app, this.menuItems());
+   
   
     //
     // game-related

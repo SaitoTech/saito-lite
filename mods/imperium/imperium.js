@@ -1,4 +1,5 @@
 const GameHud = require('../../lib/templates/lib/game-hud/game-hud'); 
+const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
 const GameTemplate = require('../../lib/templates/gametemplate');
   
 class Imperium extends GameTemplate {
@@ -48,6 +49,7 @@ class Imperium extends GameTemplate {
     this.units          	= {};
 
     this.hud = new GameHud(this.app, this.menuItems());
+   
   
     //
     // game-related
@@ -10797,6 +10799,9 @@ console.log(this.returnFaction(defender) + " has assigned a hit to their weakest
   addUIEvents() {
 
     if (this.browser_active == 0) { return; }
+
+    GameBoardSizer.render(this.app, this.data);
+    GameBoardSizer.attachEvents(this.app, this.data, '.gameboard');
 
     //make board draggable
     $('#hexGrid').draggable();
