@@ -503,16 +503,16 @@ body {
  padding: 15px;
 }
 .gameboard {
-  position: absolute;
-  background-size: cover;
-  /* width: 5100px; */
-  /* height: 3300px; */
-  /* width: 2550px; */
-  /* height: 1650px; */
+  
 }
 
 
-
+#game_board_sizer {
+  position: absolute;
+  bottom: 20px;
+  width: 200px;
+  left: 150px;
+}
 
 
 
@@ -868,4 +868,21 @@ body {
 @keyframes spin{
 	from{transform:rotate(0deg)}
 	to{transform:rotate(360deg)}	
+}
+
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background-color: var(--my-color);
+ 
+}
+
+/* All the same stuff for Firefox */
+input[type=range]::-moz-range-thumb {
+  background-color: var(--my-color);
+  border: 1px solid var(--my-color);
+}
+
+input[type=range] {
+  border: 1px solid var(--my-color);
 }

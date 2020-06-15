@@ -1,4 +1,5 @@
 const GameHud = require('../../lib/templates/lib/game-hud/game-hud'); 
+const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
 const GameTemplate = require('../../lib/templates/gametemplate');
   
 class Imperium extends GameTemplate {
@@ -48,6 +49,7 @@ class Imperium extends GameTemplate {
     this.units          	= {};
 
     this.hud = new GameHud(this.app, this.menuItems());
+   
   
     //
     // game-related
@@ -2539,6 +2541,7 @@ console.log("ASSIGN STARTING TECH!");
     if (obj.destroyed == null) 		{ obj.destroyed = 0; }			// when destroyed
     if (obj.move == null) 		{ obj.move = 0; }			// range to move
     if (obj.range == null) 		{ obj.range = 0; }			// firing range
+    if (obj.last_round_damaged == null) { obj.last_round_damaged = 0; }		// last round in which hit (some techs care)
     if (obj.production == null) 	{ obj.production = 0; }			// can produce X units (production limit)
 
     obj = this.addEvents(obj);
@@ -5071,10 +5074,6 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 
         }
 
-this.updateLog("SANITY CHECK 2: ");
-this.updateLog("ATTACKER: " + this.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx));
-this.updateLog("DEFENDER: " + this.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx));
-
         return 1;
 
       }
@@ -5285,10 +5284,6 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
 
   	this.game.queue.splice(qe, 1);
 
-this.updateLog("SANITY CHECK: ");
-this.updateLog("ATTACKER / PLAYER: " + this.returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx));
-
-
         let speaker_order = this.returnSpeakerOrder();
 
   	for (let i = 0; i < speaker_order.length; i++) {
@@ -5468,9 +5463,6 @@ this.updateLog("ATTACKER / PLAYER: " + this.returnNumberOfGroundForcesOnPlanet(p
         // have a round of ground combat
         //
         this.game.state.ground_combat_round++;
-
-
-this.updateLog("ATTACKER IS PRESUMED TO BE: " + this.returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx));
 
 
         //
@@ -10583,6 +10575,9 @@ console.log(this.returnFaction(defender) + " has assigned a hit to their weakest
 
     if (this.browser_active == 0) { return; }
 
+    GameBoardSizer.render(this.app, this.data);
+    GameBoardSizer.attachEvents(this.app, this.data, '.gameboard');
+
     //make board draggable
     $('#hexGrid').draggable();
     //add ui functions  
@@ -10606,7 +10601,7 @@ console.log(this.returnFaction(defender) + " has assigned a hit to their weakest
       html += `<div data-id="${index+1}" class="faction_button p${index+1}" style="border-color:var(--p${index+1});">${faction_initial}</div>`;
     });
     document.querySelector('.faction_buttons').innerHTML = html;
-    document.querySelector('.hud-header').innerHTML += html;
+    //document.querySelector('.hud-header').innerHTML += html;
 
     //add faction names to their sheets
     this.game.players.forEach((player, index) => {
