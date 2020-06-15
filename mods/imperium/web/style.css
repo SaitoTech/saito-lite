@@ -54,12 +54,12 @@ body {
 
 #interface_overlay {
   position: absolute;
-  width: 90vw;
-  height: 90vh;
+  width: 80vw;
+  height: 80vh;
   border: 1px solid var(--my-color);
   z-index: 99;
   background-color: #4448;
-  margin: 5vh 5vw;
+  margin: 12vh 10vw 8vh;
 }
 
 .faction_buttons {
