@@ -101,5 +101,5 @@ cat ./src/imperium-strategy-cards.js >> ./imperium.js
 cat ./src/imperium-end.js >> ./imperium.js
 
 
-npm run compile
+npm run compile dev
 

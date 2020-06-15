@@ -26,6 +26,8 @@
 
 <body>
 
+
+
   <div class="cardbox">
 
   </div>
@@ -44,14 +46,33 @@
   <div class="log" id="log"></div>
 
 
-  <!--- faction overview overlay --->
-  <div class="faction_sheet">
-    <div class="faction_sheet" id="faction_sheet"></div>
-  </div>
+   <!--- interface element for showing faction sheets / ui elements --->
+  <div class="faction_buttons">
 
-  <!--- interface element for showing faction sheets / ui elements --->
-  <div class="interface_overlay">
-    <div class="interface_overlay" id="interface_overlay"></div>
+  </div>
+  <div class="interface_overlay hidden" id="interface_overlay">
+    <div class="overlay_controls"></div>
+    <div class="faction_sheets">
+      <div data-id="1" class="faction_sheet p1 hidden">
+        <div class="faction_name p1"></div>
+      </div>
+      <div data-id="2" class="faction_sheet p2 hidden">
+        <div class="faction_name p2"></div>
+      </div>
+      <div data-id="3" class="faction_sheet p3 hidden">
+        <div class="faction_name p3"></div>
+      </div>
+      <div data-id="4" class="faction_sheet p4 hidden">
+        <div class="faction_name p4"></div>
+      </div>
+      <div data-id="5" class="faction_sheet p5 hidden">
+        <div class="faction_name p5"></div>
+      </div>
+      <div data-id="6" class="faction_sheet p6 hidden">
+        <div class="faction_name p6"></div>
+      </div>
+    </div>
+  </div>
   </div>
 
 
