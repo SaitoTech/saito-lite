@@ -117,9 +117,15 @@
         return 0;
       },
       menuOptionActivated:  function(imperium_self, menu, player) {
-        if (menu == "pds") {
-          imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"transit_diodes_exhausted"+"\t"+"int"+"\t"+"1");
-          imperium_self.addMove("notify\t"+player+" activates transit diodes");
+        if (menu == "main") {
+	  imperium_self.playerRemoveInfantryFromPlanets(player, 4, function(num_to_add) {
+	    imperium_self.playerAddInfantryToPlanets(player, num_to_add, function() {
+              imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"transit_diodes_exhausted"+"\t"+"int"+"\t"+"1");
+              imperium_self.addMove("notify\t"+player+" activates transit diodes");
+	      imperium_self.addMove("notify\t"+imperium_self.returnFaction(player) + " has moved infantry");
+	      imperium_self.endTurn();
+	    });	    
+	  });
 	}
 	return 0;
       }

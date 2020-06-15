@@ -286,10 +286,10 @@
     // when bombardment starts
     //
     if (obj.bombardmentTriggers == null) {
-      obj.bombardmentTriggers = function(imperium_self, player, sector) { return 0; }
+      obj.bombardmentTriggers = function(imperium_self, player, sector, planet_idx) { return 0; }
     }
     if (obj.bombardmentEvent == null) {
-      obj.bombardmentEvent = function(imperium_self, player, sector) { return 0; }
+      obj.bombardmentEvent = function(imperium_self, player, sector, planet_idx) { return 0; }
     }
 
     //

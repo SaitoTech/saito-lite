@@ -1202,6 +1202,53 @@ console.log(player_forces + " landed on planet");
       }
 
 
+      if (mv[0] === "add_infantry_to_planet") {
+ 
+  	let player       = mv[1];
+        let planet       = mv[2];
+        let player_moves = parseInt(mv[3]);
+  
+ 	if (player_moves == 0 && this.game.player == player) {
+	}
+	else {
+	  this.game.planets[planet].units[player-1].push(this.returnUnit("infantry", player)); 
+	}
+
+  	this.game.queue.splice(qe, 1);
+  	return 1;
+  
+      }
+
+
+      if (mv[0] === "remove_infantry_from_planet") {
+ 
+  	let player       = mv[1];
+        let planet_n       = mv[2];
+        let player_moves = parseInt(mv[3]); 
+ 
+ 	if (player_moves == 0 && this.game.player == player) {
+	}
+	else {
+	
+	  let planet = this.game.planets[planet_n];
+console.log("P: " + JSON.stringify(planet));
+	  let planetunits = planet.units[player-1].length;
+
+	  for (let i = 0; i < planetunits; i++) {
+	    let thisunit = planet.units[player-1][i];
+	    if (thisunit.type == "infantry") {
+	      planet.units[player-1].splice(i, 1);
+	      i = planetunits+2;
+	    }
+	  }
+
+	}
+
+  	this.game.queue.splice(qe, 1);
+  	return 1;
+  
+      }
+
       if (mv[0] === "move") {
  
   	let player       = mv[1];
@@ -1445,6 +1492,56 @@ console.log("TECH: " + z[z_index].name);
 	//
         this.eliminateDestroyedUnitsInSector(player, sector);
 	this.saveSystemAndPlanets(sys);
+	this.updateSectorGraphics(sector);
+        this.game.queue.splice(qe, 1);
+
+	return 1;
+
+      }
+
+
+
+      //
+      // assigns one hit to one unit
+      //
+      if (mv[0] === "destroy_infantry_on_planet") {
+
+        let attacker     = parseInt(mv[1]);
+        let sector 	 = mv[2];
+        let planet_idx 	 = parseInt(mv[3]);
+        let destroy 	 = parseInt(mv[4]);
+
+	let sys = this.returnSectorAndPlanets(sector);
+	let z = this.returnEventObjects();
+	let planet = sys.p[planet_idx];
+
+	for (let i = 0; i < planet.units.length; i++) {
+	  if (planet.units[i].length > 0) {
+	    if ((i+1) != attacker) {
+
+	      let units_destroyed = 0;
+
+	      for (let ii = 0; ii < planet.units[i].length && units_destroyed < destroy; ii++) {
+		let unit = planet.units[i][i];
+		if (unit.type == "infantry") {
+
+		  unit.strength = 0;
+		  unit.destroyed = 1;
+		  units_destroyed++;
+
+   	          for (let z_index in z) {
+	            z[z_index].unitDestroyed(imperium_self, attacker, sys.p.units[i][ii]);
+	          } 
+
+
+	        }
+	      }
+	    }
+	  }
+	}
+
+        this.eliminateDestroyedUnitsInSector(player, sector);
+  	this.saveSystemAndPlanets(sys);
 	this.updateSectorGraphics(sector);
         this.game.queue.splice(qe, 1);
 
@@ -2279,7 +2376,7 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
-	    if (z[k].bombardmentTriggers(this, player, sector) == 1) {
+	    if (z[k].bombardmentTriggers(this, player, sector, planet_idx) == 1) {
 	      this.game.queue.push("bombardment_event\t"+speaker_order[i]+"\t"+sector+"\t"+planet_idx+"\t"+k);
             }
           }
@@ -2475,7 +2572,7 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
         //
         if (defender == -1) {
 	  if (sys.p[planet_idx].owner != player) {
-            this.updateLog(this.returnFaction(player) + " seizes " + sys.p[planet_idx]);
+            this.updateLog(this.returnFaction(player) + " seizes " + sys.p[planet_idx].name);
 	  }
           return 1;
         }

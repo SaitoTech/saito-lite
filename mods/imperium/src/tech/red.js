@@ -40,7 +40,7 @@
           imperium_self.game.players_info[player-1].magen_defense_grid = 0;
         }
       },
-      onNewRound : function(imperium_self, player, mycallback) {
+      onNewRound : function(imperium_self, player) {
         if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].magen_defense_grid = 1;
         }

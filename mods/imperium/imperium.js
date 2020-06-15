@@ -201,12 +201,11 @@ console.log("D");
           imperium_self.game.players_info[player-1].neural_motivator = 0;
         }
       },
-      onNewRound : function(imperium_self, player, mycallback) {
-        if (player == imperium_self.game.player) {
-          imperium_self.game.players_info[player-1].neural_motivator = 1;
-          imperium_self.game.players_info[player-1].action_cards_bonus_when_issued = 1;
+      gainTechnology : function(imperium_self, gainer, tech) {
+        if (tech == "neural-motivator") {
+          imperium_self.game.players_info[gainer-1].neural_motivator = 1;
+          imperium_self.game.players_info[gainer-1].action_cards_bonus_when_issued = 1;
         }
-        return 1;
       },
     });
 
@@ -217,15 +216,30 @@ console.log("D");
       prereqs             :       ["green"],
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].dacxive_animators == undefined) {
-          imperium_self.game.players_info[player-1].dacxive_animators;
+          imperium_self.game.players_info[player-1].dacxive_animators = 0;
         }
       },
-      onNewRound : function(imperium_self, player, mycallback) {
-        if (player == imperium_self.game.player) {
-          imperium_self.game.players_info[player-1].dacxive_animators = 1;
-          imperium_self.game.players_info[player-1].reinforce_infantry_after_successful_ground_combat = 1;
+      gainTechnology : function(imperium_self, gainer, tech) {
+        if (tech == "neural-motivator") {
+          imperium_self.game.players_info[gainer-1].dacxive_animators = 1;
+          imperium_self.game.players_info[gainer-1].action_cards_bonus_when_issued = 1;
         }
-        return 1;
+      },
+      groundCombatRoundEnd : function(imperium_self, attacker, defender, sector, planet_idx) {
+        let attacker_forces = imperium_self.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
+        let defender_forces = imperium_self.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx);
+	if (imperium_self.doesPlayerHaveTech(attacker, "dacxive-animators")) {
+	  if (attacker_forces > defender_forces && defender_forces == 0) {
+	   imperium_self.addPlanetaryUnit(attacker, sector, planet_idx, "infantry");
+	   imperium_self.updateLog(imperium_self.returnFaction(attacker) + " reinforces infantry with Dacxive Animators");
+	  }
+	}
+	if (imperium_self.doesPlayerHaveTech(defender, "dacxive-animators")) {
+	  if (attacker_forces < defender_forces && attacker_forces == 0) {
+	   imperium_self.addPlanetaryUnit(defender, sector, planet_idx, "infantry");
+	   imperium_self.updateLog(imperium_self.returnFaction(defender) + " reinforces infantry with Dacxive Animators");
+	  }
+	}
       },
     });
 
@@ -239,14 +253,15 @@ console.log("D");
           imperium_self.game.players_info[player-1].hyper_metabolism = 0;
         }
       },
-      onNewRound : function(imperium_self, player, mycallback) {
-        if (player == imperium_self.game.player) {
-          imperium_self.game.players_info[player-1].hyper_metabolism = 1;
-          imperium_self.game.players_info[player-1].new_tokens_bonus_when_issued = 1;
+      gainTechnology : function(imperium_self, gainer, tech) {
+        if (tech == "hyper-metabolism") {
+          imperium_self.game.players_info[gainer-1].hyper_metabolism = 1;
+          imperium_self.game.players_info[gainer-1].new_tokens_bonus_when_issued = 1;
         }
-        return 1;
       },
     });
+
+
 
 
     this.importTech("x89-bacterial-weapon", {
@@ -256,14 +271,59 @@ console.log("D");
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].x89_bacterial_weapon == undefined) {
           imperium_self.game.players_info[player-1].x89_bacterial_weapon = 0;
+          imperium_self.game.players_info[gainer-1].x89_bacterial_weapon_exhausted = 0;
         }
       },
-      onNewRound : function(imperium_self, player, mycallback) {
-        if (player == imperium_self.game.player) {
-          imperium_self.game.players_info[player-1].x89_bacterial_weapon = 1;
-          imperium_self.game.players_info[player-1].bacterial_weapon = 1;
+      gainTechnology : function(imperium_self, gainer, tech) {
+        if (tech == "x89-bacterial-weapon") {
+          imperium_self.game.players_info[gainer-1].x89_bacterial_weapon = 1;
+          imperium_self.game.players_info[gainer-1].x89_bacterial_weapon_exhausted = 0;
         }
+      },
+      onNewRound : function(imperium_self, player) {
+        imperium_self.game.players_info[player-1].x89_bacterial_weapon_exhausted = 0;
         return 1;
+      },
+      bombardmentTriggers : function(imperium_self, player, sector) { 
+	if (imperium_self.game.players_info[player-1].x89_bacterial_weapon == 1 && imperium_self.game.players_info[player-1].x89_bacterial_weapon_exhausted == 0) {
+	  return 1;
+	}
+	return 0;
+      },
+      bombardmentEvent : function(imperium_self, player, sector, planet_idx) {
+
+	if (imperium_self.game.player != player) { return 0; }
+
+        let sys = this.returnSectorAndPlanets(sector);
+        let planet = sys.p[planet_idx];
+	let html = '';
+
+        html = '<p>Do you wish to use Bacterial Weapons during Bombardment?</p><ul>';
+        html += '<li class="option textchoice" id="attack">use bacterial weapons?</li>';
+        html += '<li class="option textchoice" id="skip">skip</li>';
+        html += '</ul>';
+
+	imperium_self.updateStatus(html);
+
+        $('.textchoice').off();
+        $('.textchoice').on('click', function() {
+
+          let action2 = $(this).attr("id");
+
+	  if (action2 == "attack") {
+
+	    // destroy 100 == destroy them all :)
+	    imperium_self.addMove("destroy_infantry_on_planet\t"+player+"\t"+sector+"\t"+planet_idx+"\t"+"100");
+            imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"x89_bacterial_weapon_exhausted"+"\t"+"int"+"\t"+"1");
+	    imperium_self.addMove("notify\t" + imperium_self.returnFaction(player) + " uses Bacterial Weapons");
+	    imperium_self.endTurn();
+	  }
+	  if (action2 == "skip") {
+	    imperium_self.addMove("notify\t" + imperium_self.returnFaction(player) + " refrains from using Bacterial Weapons");
+	    imperium_self.endTurn();
+	  }
+        });
+	return 0;
       },
     });
 
@@ -310,7 +370,7 @@ console.log("D");
           imperium_self.game.players_info[player-1].magen_defense_grid = 0;
         }
       },
-      onNewRound : function(imperium_self, player, mycallback) {
+      onNewRound : function(imperium_self, player) {
         if (player == imperium_self.game.player) {
           imperium_self.game.players_info[player-1].magen_defense_grid = 1;
         }
@@ -597,9 +657,15 @@ imperium_self.updateLog(imperium_self.returnFaction(attacker) + " loses 1 infant
         return 0;
       },
       menuOptionActivated:  function(imperium_self, menu, player) {
-        if (menu == "pds") {
-          imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"transit_diodes_exhausted"+"\t"+"int"+"\t"+"1");
-          imperium_self.addMove("notify\t"+player+" activates transit diodes");
+        if (menu == "main") {
+	  imperium_self.playerRemoveInfantryFromPlanets(player, 4, function(num_to_add) {
+	    imperium_self.playerAddInfantryToPlanets(player, num_to_add, function() {
+              imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"transit_diodes_exhausted"+"\t"+"int"+"\t"+"1");
+              imperium_self.addMove("notify\t"+player+" activates transit diodes");
+	      imperium_self.addMove("notify\t"+imperium_self.returnFaction(player) + " has moved infantry");
+	      imperium_self.endTurn();
+	    });	    
+	  });
 	}
 	return 0;
       }
@@ -812,7 +878,7 @@ console.log("P: " + planet);
       homeworld		: 	"sector50",
       space_units	: 	["carrier","carrier","dreadnaught","fighter"],
       ground_units	: 	["infantry","infantry","pds","spacedock"],
-      tech		: 	["sarween-tools", "graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","sarween-tools","magen-defense-grid", "plasma-scoring","faction2-analytic","faction2-brilliant","faction2-fragile","faction2-deep-space-conduits","faction2-resupply-stations","antimass-deflectors","lightwave-deflectors","gravity-drive","fleet-logistics"]
+      tech		: 	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector","faction2-analytic","faction2-brilliant","faction2-fragile","faction2-deep-space-conduits","faction2-resupply-stations"]
     });
 
 
@@ -910,7 +976,7 @@ console.log("P: " + planet);
       homeworld		: 	"sector52",
       space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter"],
       ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock"],
-      tech		:	["sarween-tools","magen-defense-grid", "plasma-scoring", "graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","faction1-orbital-drop","faction1-versatile", "faction1-advanced-carrier-ii", "faction1-infantry-ii","antimass-deflectors","lightwave-deflectors","gravity-drive","fleet-logistics"]
+      tech		:	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector","faction1-orbital-drop","faction1-versatile", "faction1-advanced-carrier-ii", "faction1-infantry-ii"]
     });
  
 /***
@@ -1006,7 +1072,7 @@ console.log("P: " + planet);
       homeworld		: 	"sector51",
       space_units	: 	["carrier","cruiser","cruiser","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech		: 	["sarween-tools", "magen-defense-grid", "graviton-laser-system", "transit-diodes", "integrated-economy", "plasma-scoring", "faction3-field-nullification", "faction3-peace-accords", "faction3-quash", "faction3-instinct-training","antimass-deflectors","lightwave-deflectors","gravity-drive","fleet-logistics"]
+      tech		: 	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflectors", "faction3-field-nullification", "faction3-peace-accords", "faction3-quash", "faction3-instinct-training"]
     });
   
 
@@ -4404,6 +4470,53 @@ console.log(player_forces + " landed on planet");
       }
 
 
+      if (mv[0] === "add_infantry_to_planet") {
+ 
+  	let player       = mv[1];
+        let planet       = mv[2];
+        let player_moves = parseInt(mv[3]);
+  
+ 	if (player_moves == 0 && this.game.player == player) {
+	}
+	else {
+	  this.game.planets[planet].units[player-1].push(this.returnUnit("infantry", player)); 
+	}
+
+  	this.game.queue.splice(qe, 1);
+  	return 1;
+  
+      }
+
+
+      if (mv[0] === "remove_infantry_from_planet") {
+ 
+  	let player       = mv[1];
+        let planet_n       = mv[2];
+        let player_moves = parseInt(mv[3]); 
+ 
+ 	if (player_moves == 0 && this.game.player == player) {
+	}
+	else {
+	
+	  let planet = this.game.planets[planet_n];
+console.log("P: " + JSON.stringify(planet));
+	  let planetunits = planet.units[player-1].length;
+
+	  for (let i = 0; i < planetunits; i++) {
+	    let thisunit = planet.units[player-1][i];
+	    if (thisunit.type == "infantry") {
+	      planet.units[player-1].splice(i, 1);
+	      i = planetunits+2;
+	    }
+	  }
+
+	}
+
+  	this.game.queue.splice(qe, 1);
+  	return 1;
+  
+      }
+
       if (mv[0] === "move") {
  
   	let player       = mv[1];
@@ -4647,6 +4760,56 @@ console.log("TECH: " + z[z_index].name);
 	//
         this.eliminateDestroyedUnitsInSector(player, sector);
 	this.saveSystemAndPlanets(sys);
+	this.updateSectorGraphics(sector);
+        this.game.queue.splice(qe, 1);
+
+	return 1;
+
+      }
+
+
+
+      //
+      // assigns one hit to one unit
+      //
+      if (mv[0] === "destroy_infantry_on_planet") {
+
+        let attacker     = parseInt(mv[1]);
+        let sector 	 = mv[2];
+        let planet_idx 	 = parseInt(mv[3]);
+        let destroy 	 = parseInt(mv[4]);
+
+	let sys = this.returnSectorAndPlanets(sector);
+	let z = this.returnEventObjects();
+	let planet = sys.p[planet_idx];
+
+	for (let i = 0; i < planet.units.length; i++) {
+	  if (planet.units[i].length > 0) {
+	    if ((i+1) != attacker) {
+
+	      let units_destroyed = 0;
+
+	      for (let ii = 0; ii < planet.units[i].length && units_destroyed < destroy; ii++) {
+		let unit = planet.units[i][i];
+		if (unit.type == "infantry") {
+
+		  unit.strength = 0;
+		  unit.destroyed = 1;
+		  units_destroyed++;
+
+   	          for (let z_index in z) {
+	            z[z_index].unitDestroyed(imperium_self, attacker, sys.p.units[i][ii]);
+	          } 
+
+
+	        }
+	      }
+	    }
+	  }
+	}
+
+        this.eliminateDestroyedUnitsInSector(player, sector);
+  	this.saveSystemAndPlanets(sys);
 	this.updateSectorGraphics(sector);
         this.game.queue.splice(qe, 1);
 
@@ -5481,7 +5644,7 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
-	    if (z[k].bombardmentTriggers(this, player, sector) == 1) {
+	    if (z[k].bombardmentTriggers(this, player, sector, planet_idx) == 1) {
 	      this.game.queue.push("bombardment_event\t"+speaker_order[i]+"\t"+sector+"\t"+planet_idx+"\t"+k);
             }
           }
@@ -5677,7 +5840,7 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
         //
         if (defender == -1) {
 	  if (sys.p[planet_idx].owner != player) {
-            this.updateLog(this.returnFaction(player) + " seizes " + sys.p[planet_idx]);
+            this.updateLog(this.returnFaction(player) + " seizes " + sys.p[planet_idx].name);
 	  }
           return 1;
         }
@@ -6064,9 +6227,8 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
         if (tech_attach_menu_events == 1) {
 	  for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
 	    if (action2 == tech_attach_menu_triggers[i]) {
-   	      let mytech = this.tech[imperium_self.game.players_info[imperium_self.game.player-1].tech[tech_attach_menu_index]];
-	      $(this).remove();
-	      mytech.menuOptionActivated(imperium_self, "main", imperium_self.game.player);
+              $(this).remove();
+              z[tech_attach_menu_index[i]].menuOptionActivated(imperium_self, "main", imperium_self.game.player);
 	      return;
 	    }
 	  }
@@ -7543,6 +7705,133 @@ console.log(player + " -- " + card + " -- " + deck);
   }
   
   
+
+  playerRemoveInfantryFromPlanets(player, total=1, mycallback) {
+
+    let imperium_self = this;
+
+    let html =  '';
+        html += '<p>Remove '+total+' infantry from planets you control:</p>';
+	html += '<ul>'; 
+
+    let infantry_to_remove = [];
+
+    for (let s in this.game.planets) {
+      let planet = this.game.planets[s];
+      if (planet.owner == player) {
+        let infantry_available_here = 0;
+	for (let ss = 0; ss < planet.units[player-1].length; ss++) {
+	  if (planet.units[player-1][ss].type == "infantry") { infantry_available_here++; }
+	}
+	if (infantry_available_here > 0) {
+	  html += '<li class="option textchoice" id="'+s+'">' + planet.name + ' (<div style="display:inline" id="'+s+'_infantry">'+infantry_available_here+'</div>)</li>';
+	}
+      }
+    }
+    html += '<li class="option textchoice" id="end"></li>';
+    html += '</ul>';
+
+    this.updateStatus(html);
+
+    $('.textchoice').off();
+    $('.textchoice').on('click', function() {
+
+      let action2 = $(this).attr("id");
+
+      if (action2 == "end") {
+
+	for (let i = 0; i < infantry_to_remove.length; i++) {
+
+	  let planet_in_question = imperium_self.game.planets[infantry_to_remove[i].planet];
+	  
+	  let total_units_on_planet = planet_in_question.units[player-1].length;
+	  for (let ii = 0; ii < total_units_on_planet; ii++) {
+	    let thisunit = planet_in_question.units[player-1][ii];
+	    if (thisunit.type == "infantry") {
+	      planet_in_question.units[player-1].splice(ii, 1);
+	      ii = total_units_on_planet+2; // 0 as player_moves below because we have removed above
+	      imperium_self.addMove("remove_infantry_from_planet\t"+player+"\t"+infantry_to_remove[i].planet+"\t"+"0");
+	      imperium_self.addMove("notify\tREMOVING INFANTRY FROM PLANET: " + infantry_to_remove[i].planet);
+console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
+	    }
+	  }
+	}
+	mycallback(infantry_to_remove.length);
+	return;
+      }
+
+      infantry_to_remove.push({ infantry : 1, planet : action2 });
+      let divname = "#" + action2 + "_infantry";
+      let existing_infantry = $(divname).html();
+      let updated_infantry = parseInt(existing_infantry)-1;
+      if (updated_infantry < 0) { updated_infantry = 0; }
+
+      $(divname).html(updated_infantry);
+
+      if (updated_infantry == 0) {
+	$(this).remove();
+      }
+
+      if (infantry_to_remove.length >= total) {
+	$('#end').click();
+      }
+
+    });
+
+  }
+
+  playerAddInfantryToPlanets(player, total=1, mycallback) {
+
+    let imperium_self = this;
+
+    let html =  '';
+        html += '<p>Add '+total+' infantry to planets you control:</p>';
+	html += '<ul>'; 
+
+    let infantry_to_add = [];
+
+    for (let s in this.game.planets) {
+      let planet = this.game.planets[s];
+      if (planet.owner == player) {
+        let infantry_available_here = 0;
+	for (let ss = 0; ss < planet.units[player-1].length; ss++) {
+	  if (planet.units[player-1][ss].type == "infantry") { infantry_available_here++; }
+	}
+	html += '<li class="option textchoice" id="'+s+'">' + planet.name + ' (<div style="display:inline" id="'+s+'_infantry">'+infantry_available_here+'</div>)</li>';
+      }
+    }
+    html += '<li class="option textchoice" id="end"></li>';
+    html += '</ul>';
+
+    this.updateStatus(html);
+
+    $('.textchoice').off();
+    $('.textchoice').on('click', function() {
+
+      let action2 = $(this).attr("id");
+
+      if (action2 == "end") {
+	for (let i = 0; i < infantry_to_add.length; i++) {
+	  imperium_self.addMove("add_infantry_to_planet\t"+player+"\t"+infantry_to_add[i].planet+"\t"+"1");
+	}
+	mycallback(infantry_to_add.length);
+	return;
+      }
+
+      infantry_to_add.push({ infantry : 1, planet : action2 });
+      let divname = "#" + action2 + "_infantry";
+      let existing_infantry = $(divname).html();
+      let updated_infantry = parseInt(existing_infantry)+1;
+
+      $(divname).html(updated_infantry);
+
+      if (infantry_to_add.length >= total) {
+	$('#end').click();
+      }
+
+    });
+
+  }
   
   
   //////////////////////////
@@ -8982,10 +9271,10 @@ console.log(player + " -- " + card + " -- " + deck);
     // when bombardment starts
     //
     if (obj.bombardmentTriggers == null) {
-      obj.bombardmentTriggers = function(imperium_self, player, sector) { return 0; }
+      obj.bombardmentTriggers = function(imperium_self, player, sector, planet_idx) { return 0; }
     }
     if (obj.bombardmentEvent == null) {
-      obj.bombardmentEvent = function(imperium_self, player, sector) { return 0; }
+      obj.bombardmentEvent = function(imperium_self, player, sector, planet_idx) { return 0; }
     }
 
     //
@@ -10532,7 +10821,7 @@ console.log(this.returnFaction(defender) + " has assigned a hit to their weakest
       html += `<div data-id="${index+1}" class="faction_button p${index+1}" style="border-color:var(--p${index+1});">${faction_initial}</div>`;
     });
     document.querySelector('.faction_buttons').innerHTML = html;
-    document.querySelector('.hud-header').innerHTML += html;
+    //document.querySelector('.hud-header').innerHTML += html;
 
     //add faction names to their sheets
     this.game.players.forEach((player, index) => {

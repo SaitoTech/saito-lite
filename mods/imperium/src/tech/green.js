@@ -10,12 +10,11 @@ console.log("D");
           imperium_self.game.players_info[player-1].neural_motivator = 0;
         }
       },
-      onNewRound : function(imperium_self, player, mycallback) {
-        if (player == imperium_self.game.player) {
-          imperium_self.game.players_info[player-1].neural_motivator = 1;
-          imperium_self.game.players_info[player-1].action_cards_bonus_when_issued = 1;
+      gainTechnology : function(imperium_self, gainer, tech) {
+        if (tech == "neural-motivator") {
+          imperium_self.game.players_info[gainer-1].neural_motivator = 1;
+          imperium_self.game.players_info[gainer-1].action_cards_bonus_when_issued = 1;
         }
-        return 1;
       },
     });
 
@@ -26,15 +25,30 @@ console.log("D");
       prereqs             :       ["green"],
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].dacxive_animators == undefined) {
-          imperium_self.game.players_info[player-1].dacxive_animators;
+          imperium_self.game.players_info[player-1].dacxive_animators = 0;
         }
       },
-      onNewRound : function(imperium_self, player, mycallback) {
-        if (player == imperium_self.game.player) {
-          imperium_self.game.players_info[player-1].dacxive_animators = 1;
-          imperium_self.game.players_info[player-1].reinforce_infantry_after_successful_ground_combat = 1;
+      gainTechnology : function(imperium_self, gainer, tech) {
+        if (tech == "neural-motivator") {
+          imperium_self.game.players_info[gainer-1].dacxive_animators = 1;
+          imperium_self.game.players_info[gainer-1].action_cards_bonus_when_issued = 1;
         }
-        return 1;
+      },
+      groundCombatRoundEnd : function(imperium_self, attacker, defender, sector, planet_idx) {
+        let attacker_forces = imperium_self.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
+        let defender_forces = imperium_self.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx);
+	if (imperium_self.doesPlayerHaveTech(attacker, "dacxive-animators")) {
+	  if (attacker_forces > defender_forces && defender_forces == 0) {
+	   imperium_self.addPlanetaryUnit(attacker, sector, planet_idx, "infantry");
+	   imperium_self.updateLog(imperium_self.returnFaction(attacker) + " reinforces infantry with Dacxive Animators");
+	  }
+	}
+	if (imperium_self.doesPlayerHaveTech(defender, "dacxive-animators")) {
+	  if (attacker_forces < defender_forces && attacker_forces == 0) {
+	   imperium_self.addPlanetaryUnit(defender, sector, planet_idx, "infantry");
+	   imperium_self.updateLog(imperium_self.returnFaction(defender) + " reinforces infantry with Dacxive Animators");
+	  }
+	}
       },
     });
 
@@ -48,14 +62,15 @@ console.log("D");
           imperium_self.game.players_info[player-1].hyper_metabolism = 0;
         }
       },
-      onNewRound : function(imperium_self, player, mycallback) {
-        if (player == imperium_self.game.player) {
-          imperium_self.game.players_info[player-1].hyper_metabolism = 1;
-          imperium_self.game.players_info[player-1].new_tokens_bonus_when_issued = 1;
+      gainTechnology : function(imperium_self, gainer, tech) {
+        if (tech == "hyper-metabolism") {
+          imperium_self.game.players_info[gainer-1].hyper_metabolism = 1;
+          imperium_self.game.players_info[gainer-1].new_tokens_bonus_when_issued = 1;
         }
-        return 1;
       },
     });
+
+
 
 
     this.importTech("x89-bacterial-weapon", {
@@ -65,14 +80,59 @@ console.log("D");
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].x89_bacterial_weapon == undefined) {
           imperium_self.game.players_info[player-1].x89_bacterial_weapon = 0;
+          imperium_self.game.players_info[gainer-1].x89_bacterial_weapon_exhausted = 0;
         }
       },
-      onNewRound : function(imperium_self, player, mycallback) {
-        if (player == imperium_self.game.player) {
-          imperium_self.game.players_info[player-1].x89_bacterial_weapon = 1;
-          imperium_self.game.players_info[player-1].bacterial_weapon = 1;
+      gainTechnology : function(imperium_self, gainer, tech) {
+        if (tech == "x89-bacterial-weapon") {
+          imperium_self.game.players_info[gainer-1].x89_bacterial_weapon = 1;
+          imperium_self.game.players_info[gainer-1].x89_bacterial_weapon_exhausted = 0;
         }
+      },
+      onNewRound : function(imperium_self, player) {
+        imperium_self.game.players_info[player-1].x89_bacterial_weapon_exhausted = 0;
         return 1;
+      },
+      bombardmentTriggers : function(imperium_self, player, sector) { 
+	if (imperium_self.game.players_info[player-1].x89_bacterial_weapon == 1 && imperium_self.game.players_info[player-1].x89_bacterial_weapon_exhausted == 0) {
+	  return 1;
+	}
+	return 0;
+      },
+      bombardmentEvent : function(imperium_self, player, sector, planet_idx) {
+
+	if (imperium_self.game.player != player) { return 0; }
+
+        let sys = this.returnSectorAndPlanets(sector);
+        let planet = sys.p[planet_idx];
+	let html = '';
+
+        html = '<p>Do you wish to use Bacterial Weapons during Bombardment?</p><ul>';
+        html += '<li class="option textchoice" id="attack">use bacterial weapons?</li>';
+        html += '<li class="option textchoice" id="skip">skip</li>';
+        html += '</ul>';
+
+	imperium_self.updateStatus(html);
+
+        $('.textchoice').off();
+        $('.textchoice').on('click', function() {
+
+          let action2 = $(this).attr("id");
+
+	  if (action2 == "attack") {
+
+	    // destroy 100 == destroy them all :)
+	    imperium_self.addMove("destroy_infantry_on_planet\t"+player+"\t"+sector+"\t"+planet_idx+"\t"+"100");
+            imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"x89_bacterial_weapon_exhausted"+"\t"+"int"+"\t"+"1");
+	    imperium_self.addMove("notify\t" + imperium_self.returnFaction(player) + " uses Bacterial Weapons");
+	    imperium_self.endTurn();
+	  }
+	  if (action2 == "skip") {
+	    imperium_self.addMove("notify\t" + imperium_self.returnFaction(player) + " refrains from using Bacterial Weapons");
+	    imperium_self.endTurn();
+	  }
+        });
+	return 0;
       },
     });
 

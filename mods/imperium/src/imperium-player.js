@@ -195,9 +195,8 @@
         if (tech_attach_menu_events == 1) {
 	  for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
 	    if (action2 == tech_attach_menu_triggers[i]) {
-   	      let mytech = this.tech[imperium_self.game.players_info[imperium_self.game.player-1].tech[tech_attach_menu_index]];
-	      $(this).remove();
-	      mytech.menuOptionActivated(imperium_self, "main", imperium_self.game.player);
+              $(this).remove();
+              z[tech_attach_menu_index[i]].menuOptionActivated(imperium_self, "main", imperium_self.game.player);
 	      return;
 	    }
 	  }
@@ -1674,6 +1673,133 @@ console.log(player + " -- " + card + " -- " + deck);
   }
   
   
+
+  playerRemoveInfantryFromPlanets(player, total=1, mycallback) {
+
+    let imperium_self = this;
+
+    let html =  '';
+        html += '<p>Remove '+total+' infantry from planets you control:</p>';
+	html += '<ul>'; 
+
+    let infantry_to_remove = [];
+
+    for (let s in this.game.planets) {
+      let planet = this.game.planets[s];
+      if (planet.owner == player) {
+        let infantry_available_here = 0;
+	for (let ss = 0; ss < planet.units[player-1].length; ss++) {
+	  if (planet.units[player-1][ss].type == "infantry") { infantry_available_here++; }
+	}
+	if (infantry_available_here > 0) {
+	  html += '<li class="option textchoice" id="'+s+'">' + planet.name + ' (<div style="display:inline" id="'+s+'_infantry">'+infantry_available_here+'</div>)</li>';
+	}
+      }
+    }
+    html += '<li class="option textchoice" id="end"></li>';
+    html += '</ul>';
+
+    this.updateStatus(html);
+
+    $('.textchoice').off();
+    $('.textchoice').on('click', function() {
+
+      let action2 = $(this).attr("id");
+
+      if (action2 == "end") {
+
+	for (let i = 0; i < infantry_to_remove.length; i++) {
+
+	  let planet_in_question = imperium_self.game.planets[infantry_to_remove[i].planet];
+	  
+	  let total_units_on_planet = planet_in_question.units[player-1].length;
+	  for (let ii = 0; ii < total_units_on_planet; ii++) {
+	    let thisunit = planet_in_question.units[player-1][ii];
+	    if (thisunit.type == "infantry") {
+	      planet_in_question.units[player-1].splice(ii, 1);
+	      ii = total_units_on_planet+2; // 0 as player_moves below because we have removed above
+	      imperium_self.addMove("remove_infantry_from_planet\t"+player+"\t"+infantry_to_remove[i].planet+"\t"+"0");
+	      imperium_self.addMove("notify\tREMOVING INFANTRY FROM PLANET: " + infantry_to_remove[i].planet);
+console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
+	    }
+	  }
+	}
+	mycallback(infantry_to_remove.length);
+	return;
+      }
+
+      infantry_to_remove.push({ infantry : 1, planet : action2 });
+      let divname = "#" + action2 + "_infantry";
+      let existing_infantry = $(divname).html();
+      let updated_infantry = parseInt(existing_infantry)-1;
+      if (updated_infantry < 0) { updated_infantry = 0; }
+
+      $(divname).html(updated_infantry);
+
+      if (updated_infantry == 0) {
+	$(this).remove();
+      }
+
+      if (infantry_to_remove.length >= total) {
+	$('#end').click();
+      }
+
+    });
+
+  }
+
+  playerAddInfantryToPlanets(player, total=1, mycallback) {
+
+    let imperium_self = this;
+
+    let html =  '';
+        html += '<p>Add '+total+' infantry to planets you control:</p>';
+	html += '<ul>'; 
+
+    let infantry_to_add = [];
+
+    for (let s in this.game.planets) {
+      let planet = this.game.planets[s];
+      if (planet.owner == player) {
+        let infantry_available_here = 0;
+	for (let ss = 0; ss < planet.units[player-1].length; ss++) {
+	  if (planet.units[player-1][ss].type == "infantry") { infantry_available_here++; }
+	}
+	html += '<li class="option textchoice" id="'+s+'">' + planet.name + ' (<div style="display:inline" id="'+s+'_infantry">'+infantry_available_here+'</div>)</li>';
+      }
+    }
+    html += '<li class="option textchoice" id="end"></li>';
+    html += '</ul>';
+
+    this.updateStatus(html);
+
+    $('.textchoice').off();
+    $('.textchoice').on('click', function() {
+
+      let action2 = $(this).attr("id");
+
+      if (action2 == "end") {
+	for (let i = 0; i < infantry_to_add.length; i++) {
+	  imperium_self.addMove("add_infantry_to_planet\t"+player+"\t"+infantry_to_add[i].planet+"\t"+"1");
+	}
+	mycallback(infantry_to_add.length);
+	return;
+      }
+
+      infantry_to_add.push({ infantry : 1, planet : action2 });
+      let divname = "#" + action2 + "_infantry";
+      let existing_infantry = $(divname).html();
+      let updated_infantry = parseInt(existing_infantry)+1;
+
+      $(divname).html(updated_infantry);
+
+      if (infantry_to_add.length >= total) {
+	$('#end').click();
+      }
+
+    });
+
+  }
   
   
   //////////////////////////
