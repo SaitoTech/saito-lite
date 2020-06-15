@@ -1207,7 +1207,7 @@ console.log(player + " -- " + card + " -- " + deck);
             imperium_self.addMove("resolve\tplay");
             imperium_self.addMove("continue\t"+imperium_self.game.player+"\t"+sector);
             for (let y = 0; y < stuff_to_build.length; y++) {
-  	      let planet_idx = imperium_self.returnPlayersLeastDefendedPlanetInSector(sector);
+  	      let planet_idx = imperium_self.returnPlayersLeastDefendedPlanetInSector(imperium_self.game.player, sector);
   	      //if (stuff_to_build[y] == "infantry") { planet_idx = 0; }
   	      imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+planet_idx+"\t"+stuff_to_build[y]+"\t"+sector);
 	      imperium_self.tracker.production = 1;

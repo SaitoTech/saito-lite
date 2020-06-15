@@ -403,6 +403,8 @@ console.log("F: " + this.game.players_info[this.game.player-1].faction);
 
   returnPlayersLeastDefendedPlanetInSector(player, sector) {
 
+console.log("HER: " + sector);
+
     let sys = this.returnSectorAndPlanets(sector);
     let least_defended = 100;
     let least_defended_idx = 0;
