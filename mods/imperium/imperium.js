@@ -706,7 +706,8 @@ console.log("P: " + planet);
       homeworld		: 	"sector50",
       space_units	: 	["carrier","carrier","dreadnaught","fighter"],
       ground_units	: 	["infantry","infantry","pds","spacedock"],
-      tech		: 	["sarween-tools", "graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","antimass-deflectors","sarween-tools","magen-defense-grid", "plasma-scoring","faction2-analytic","faction2-brilliant","faction2-fragile","faction2-deep-space-conduits","faction2-resupply-stations"]
+      tech		: 	["sarween-tools", "graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","antimass-deflectors","sarween-tools","magen-defense-grid", "plasma-scoring","faction2-analytic","faction2-brilliant","faction2-fragile","faction2-deep-space-conduits","faction2-resupply-stations"],
+      background: 'jol.jpg'
     });
 
 
@@ -804,7 +805,8 @@ console.log("P: " + planet);
       homeworld		: 	"sector52",
       space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter"],
       ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock"],
-      tech		:	["sarween-tools","magen-defense-grid", "plasma-scoring", "graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","antimass-deflectors","faction1-orbital-drop","faction1-versatile", "faction1-advanced-carrier-ii", "faction1-infantry-ii"]
+      tech		:	["sarween-tools","magen-defense-grid", "plasma-scoring", "graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","antimass-deflectors","faction1-orbital-drop","faction1-versatile", "faction1-advanced-carrier-ii", "faction1-infantry-ii"],
+      background: "jord.png"
     });
  
 /***
@@ -900,7 +902,8 @@ console.log("P: " + planet);
       homeworld		: 	"sector51",
       space_units	: 	["carrier","cruiser","cruiser","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech		: 	["sarween-tools", "magen-defense-grid", "graviton-laser-system", "transit-diodes", "integrated-economy", "plasma-scoring", "faction3-field-nullification", "faction3-peace-accords", "faction3-quash", "faction3-instinct-training"]
+      tech		: 	["sarween-tools", "magen-defense-grid", "graviton-laser-system", "transit-diodes", "integrated-economy", "plasma-scoring", "faction3-field-nullification", "faction3-peace-accords", "faction3-quash", "faction3-instinct-training"],
+      background: 'ren.jpg'
     });
   
 
@@ -10606,6 +10609,8 @@ console.log(this.returnFaction(defender) + " has assigned a hit to their weakest
     //add faction names to their sheets
     this.game.players.forEach((player, index) => {
       document.querySelector('.faction_name.p'+(index+1)).innerHTML = this.returnFaction(index+1);
+      let factions = this.returnFactions();
+      document.querySelector('.faction_sheet.p'+(index+1)).style.backgroundImage = "url('./img/factions/" + factions[this.game.players_info[index].faction].background + "')";
     });
 
     document.querySelectorAll('.faction_button').forEach(el => {

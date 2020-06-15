@@ -67,6 +67,8 @@
     //add faction names to their sheets
     this.game.players.forEach((player, index) => {
       document.querySelector('.faction_name.p'+(index+1)).innerHTML = this.returnFaction(index+1);
+      let factions = this.returnFactions();
+      document.querySelector('.faction_sheet.p'+(index+1)).style.backgroundImage = "url('./img/factions/" + factions[this.game.players_info[index].faction].background + "')";
     });
 
     document.querySelectorAll('.faction_button').forEach(el => {
