@@ -491,6 +491,62 @@ input[type=text].red-bottom-border {
   border-bottom: 2px solid red;
 }
 
+/* way too much stuff to clean up range sliders */
+
+input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 100%; /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+  border: 1px solid var(--saito-red);
+  padding: 3px;
+  border-radius: 5px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type=range]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+input[type=range]::-ms-track {
+  width: 100%;
+  cursor: pointer;
+
+  /* Hides the slider so custom styles can be added */
+  background: transparent; 
+  border-color: transparent;
+  color: transparent;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background-color: var(--saito-red);
+  height: 16px;
+  width: 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-top: -14px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+  border: 1px solid var(--saito-red);
+  margin: 0;
+}
+
+/* All the same stuff for Firefox */
+input[type=range]::-moz-range-thumb {
+  background-color: var(--saito-red);
+  height: 16px;
+  width: 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  border: 1px solid var(--saito-red);
+
+}
+
+
+
+
+
 select {
   -webkit-appearance: none;
   -moz-appearance: none;

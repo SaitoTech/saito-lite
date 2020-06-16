@@ -183,12 +183,12 @@ label.treated {
   cursor: pointer;
 }
 
-.file-table, .bundle-table, .category-table{
+.file-table, .bundle-table, .category-table {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 2fr;
 }
 
-.category-table{
+.category-table {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 }
@@ -246,7 +246,7 @@ button, .button {
   min-width: 300px;
   max-width: 400px;
   margin: 0 1em 0 0;
-  text-align: center; 
+  text-align: center;
   padding: 5px;
 }
 
@@ -367,6 +367,7 @@ td.inq-product-id div.editable {
 .grid-go.delete {
   cursor: pointer;
 }
+
 .fright {
   margin-left: 5px;
   position: absolute;
@@ -376,7 +377,6 @@ td.inq-product-id div.editable {
 
 .item-product-block {
   padding: 0 1em 1em;
-  
 }
 
 .item-product-block-grid {
@@ -441,7 +441,6 @@ td.inq-product-id div.editable {
   margin: 0;
 }
 
-
 .order-log {
   border: 1px solid var(--saito-red);
 }
@@ -504,6 +503,49 @@ td.inq-product-id div.editable {
 .log-update-value {
   background: #eee;
 }
+
 .log-update-field {
   text-transform: capitalize;
+}
+
+@media only screen and (max-width: 700px) {
+  .main {
+    width: 100vw;
+    padding: 0 3px;
+    border-bottom: none;
+  }
+  .grid-4 div, .grid-2 div {
+    align-self: auto;
+    line-height: 1em;
+    padding: 0;
+  }
+  .grid-4 div:nth-child(2n-1), .grid-2 div:nth-child(2n-1) {
+    padding: 3px 0;
+    font-size: 1em;
+    line-height: 1em;
+  }
+  .order-template .grid-2-columns, .order-template .grid-2 {
+    overflow-x: hidden;
+    overflow-y: auto;
+    grid-gap: 5px 1em;
+  }
+  .grid-2-columns div {
+    overflow-y: auto;
+  }
+  .order-template .grid-2-columns {
+    grid-template-columns: 1fr;
+  }
+  .grid-value {
+    padding-top: 2px !important;
+  }
+  .log-frame {
+    height: calc(100vh - 17em);
+  }
+  .log-messages {
+    max-height: unset;
+    height: calc(100% + 1em);
+  }
+  .powered-by {
+    display: none;
+  }
 }

@@ -33,6 +33,20 @@ module.exports = UpdateOrder = {
 
         document.getElementById('create-po').classList.remove('hidden');
         document.getElementById('copy-po').classList.remove('hidden');
+
+        document.querySelector('.share-order').innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-share-alt"></i>';
+        var token = res.rows[0].uuid.substring(14, 29);
+        document.querySelector('.share-order').addEventListener('click', () => {
+          var link = window.location.origin + window.location.pathname + "?mode=order-tracker&token=" + token;
+          const el = document.createElement('textarea');
+          el.value = link;
+          document.body.appendChild(el);
+          el.select();
+          document.execCommand('copy');
+          document.body.removeChild(el);
+          siteMessage('Tracking Link Copied to Clipboard', 5000);
+        });
+
       });
     }
 
@@ -56,7 +70,7 @@ module.exports = UpdateOrder = {
       data.covid19.submitForm(document.querySelector('.main-form'));
       data.covid19.logFields(document.querySelector('.main-form'), data.order_id, 'log');
       document.querySelector('.order-template').destroy();
-      if(data.order_id) {
+      if (data.order_id) {
         data.location = "mode=order-manager&order=" + data.order_id;
       } else {
         data.location = "mode=order-manager";
