@@ -23,7 +23,6 @@
   	return;
       }
   
-
 console.log("NEXT MV: " + mv[0]);
 
       if (mv[0] === "setvar") { 
@@ -130,6 +129,20 @@ console.log("NEXT MV: " + mv[0]);
 	}
       } 
  
+
+
+
+      if (mv[0] === "rider") {
+  
+  	let player       = mv[1];
+        let rider 	 = mv[2];
+  
+  	this.game.queue.splice(qe, 1);
+  	return 1;
+  
+      }
+
+
 
 
 
@@ -425,7 +438,6 @@ console.log("NEXT MV: " + mv[0]);
 
       if (mv[0] === "resolve_agenda") {
 
-alert("RESOLVING VOTE NOW!");
 	let laws = this.returnAgendaCards();
         let agenda = mv[1];
         let agenda_num = parseInt(mv[1]);
@@ -434,7 +446,6 @@ alert("RESOLVING VOTE NOW!");
         //
 	// speaker breaks ties here
 	// 
-console.log("VoA: " + JSON.stringify(this.game.state.agendas_voting_information));
 	if (agenda === "support") {
 	  this.game.state.agendas_voting_information[agenda_num].votes_for += 1; 
 	}
@@ -452,19 +463,6 @@ console.log("VoA: " + JSON.stringify(this.game.state.agendas_voting_information)
 	}
 
 
-        if (direction_of_vote > 0) {
-          imperium_self.game.state.laws.push(imperium_self.game.state.agendas[agenda_num]);
-          laws[imperium_self.game.state.agendas[agenda_num]].onPass(imperium_self, players_in_favour, players_opposed, votes_for, votes_against, function(res) {
-            console.log("\n\nBACK FROM AGENDA ONPASS FUNCTION");
-          });
-	  return 1;
-        }
-        if (direction_of_vote < 0) {
-          laws[imperium_self.game.state.agendas[agenda_num]].onFail(imperium_self, players_in_favour, players_opposed, votes_for_votes_against, function(res) {
-            console.log("\n\nBACK FROM AGENDA ONFAIL FUNCTION");
-          });
-	  return 1;
-	}
         if (direction_of_vote == 0) {
 	  if (this.game.state.speaker == this.game.player) {
 	    imperium_self.playerResolveDeadlockedAgenda(agenda, agenda_num);
@@ -472,7 +470,44 @@ console.log("VoA: " + JSON.stringify(this.game.state.agendas_voting_information)
 	  return 0;
 	}
 
+        if (direction_of_vote > 0) {
+          imperium_self.game.state.laws.push(imperium_self.game.state.agendas[agenda_num]);
+          laws[imperium_self.game.state.agendas[agenda_num]].onPass(imperium_self, players_in_favour, players_opposed, votes_for, votes_against, function(res) {
+            console.log("\n\nBACK FROM AGENDA ONPASS FUNCTION");
+          });
+        }
+        if (direction_of_vote < 0) {
+          laws[imperium_self.game.state.agendas[agenda_num]].onFail(imperium_self, players_in_favour, players_opposed, votes_for_votes_against, function(res) {
+            console.log("\n\nBACK FROM AGENDA ONFAIL FUNCTION");
+          });
+	}
+
+
+	//
+	// resolve riders
+	//
+	for (let i = 0; i < this.game.state.riders.length; i++) {
+	  let x = this.game.state.riders[i];
+	  if (x.direction_of_vote == dictionary_of_vote) {
+	    this.game.queue.addMove("execute_rider\t"+x.player+"\t"+x.rider);	  
+	  }
+	}
+
+	return 1;
+
       }
+
+
+
+      if (mv[0] == "execute_rider") {
+
+	let action_card_player = parseInt(mv[1]);
+	let rider = mv[2];
+
+	return this.action_cards[rider].playActionCardEvent(this, this.game.player, action_card_player, card);
+
+      }
+
 
 
       if (mv[0] == "vote") {
@@ -1144,7 +1179,6 @@ console.log(player_forces + " landed on planet");
         let z		 = this.returnEventObjects();
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
-	let player_to_continue = mv[3];  
 
         sys = this.returnSectorAndPlanets(sector);
   	sys.s.activated[player-1] = 1;
@@ -1432,6 +1466,11 @@ console.log("P: " + JSON.stringify(planet));
 	let agenda_idx = mv[2];
 
   	this.game.queue.splice(qe, 1);
+
+	//
+	// clear all riders
+	//
+	this.game.state.riders = [];
 
 	let speaker_order = this.returnSpeakerOrder();
   	for (let i = 0; i < speaker_order.length; i++) {

@@ -14,6 +14,14 @@
 	//
         state.laws = [];
         state.agendas = [];
+
+	//
+	// riders => who has riders (and is not voting
+	// choices => possible outcomes (for/against, players, etc)
+	//
+        state.riders = [];
+        state.choices = [];
+
         state.agendas_voting_information = [];
         state.strategy_cards = [];
         state.strategy_cards_bonus = [];
