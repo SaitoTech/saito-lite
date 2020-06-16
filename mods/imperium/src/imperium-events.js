@@ -167,10 +167,10 @@
     // agendas //
     /////////////
     if (obj.onPass == null) {
-      obj.onPass = function(imperium_self, players_in_favour, players_opposed, votes_for, votes_against, mycallback);
+      obj.onPass = function(imperium_self, players_in_favour, players_opposed, votes_for, votes_against, mycallback) { mycallback(); }
     }
     if (obj.onFail == null) {
-      obj.onFail = function(imperium_self, players_in_favour, players_opposed, votes_for, votes_against, mycallback);
+      obj.onFail = function(imperium_self, players_in_favour, players_opposed, votes_for, votes_against, mycallback) { mycallback(); }
     }
 
 
