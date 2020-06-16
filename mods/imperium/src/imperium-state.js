@@ -28,7 +28,8 @@
 
         state.temporary_assignments = ["all"]; // all = any units
         state.temporary_rerolls = 0; // 100 = unlimited
-
+	
+        state.wormholes_open = 1;
 
         state.space_combat_round = 0;
 	state.space_combat_attacker = -1;

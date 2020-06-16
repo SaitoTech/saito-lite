@@ -211,7 +211,7 @@ console.log("SECTOR: " + sector);
 
             imperium_self.playerResearchTechnology(function(tech) {
               imperium_self.addMove("purchase\t"+imperium_self.game.player+"\ttech\t"+tech);
-              imperium_self.addMove("expend\t"+imperium_self.game.player+"\tgoods\t4);
+              imperium_self.addMove("expend\t"+imperium_self.game.player+"\tgoods\t4");
               imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " researches " + imperium_self.tech[tech].name);
               imperium_self.endTurn();
 	    });
@@ -274,7 +274,7 @@ console.log("SECTOR: " + sector);
             );
           }
           return 0;
-        })
+        }
     });
 
 
@@ -329,7 +329,7 @@ console.log("SECTOR: " + sector);
 	    );
 	  }
 	  return 0;
-        })
+        }
     });
 
 
@@ -384,7 +384,7 @@ console.log("SECTOR: " + sector);
 	    );
 	  }
 	  return 0;
-        })
+        }
     });
 
 

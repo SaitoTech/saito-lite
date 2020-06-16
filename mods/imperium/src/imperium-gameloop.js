@@ -486,13 +486,14 @@ console.log("I AM CONTINUING!");
 	  //
 	  //
 	  if (direction_of_vote == "passes") {
-	    laws[imperium_self.game.state.agendas[agenda_num]].onPass(imperium_self, players_in_favour, players_opposed, function(res) {
+	    imperium_self.game.state.laws.push(imperium_self.game.state.agendas[agenda_num]);
+	    laws[imperium_self.game.state.agendas[agenda_num]].onPass(imperium_self, players_in_favour, players_opposed, votes_for, votes_against, function(res) {
 	      console.log("\n\nBACK FROM AGENDA ONPASS FUNCTION");
 	    });
 	  } else {
 	    if (direction_of_vote == "fails") {
-	      laws[imperium_self.game.state.agendas[agenda_num]].onPass(imperium_self, players_in_favour, players_opposed, function(res) {
-	        console.log("\n\nBACK FROM AGENDA ONPASS FUNCTION");
+	      laws[imperium_self.game.state.agendas[agenda_num]].onFail(imperium_self, players_in_favour, players_opposed, votes_for_votes_against, function(res) {
+	        console.log("\n\nBACK FROM AGENDA ONFAIL FUNCTION");
 	      });
 	    } else {
 	      this.updateLog("The law is quietly shelved...");

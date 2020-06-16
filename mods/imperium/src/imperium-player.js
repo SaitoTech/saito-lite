@@ -24,6 +24,7 @@
       players[i].command_tokens  	= 3;
       players[i].strategy_tokens 	= 2;
       players[i].fleet_supply    	= 3;
+      players[i].fleet_supply_limit    	= 16;
       players[i].faction 		= rf;
       players[i].homeworld		= "";
       players[i].color   		= col;
@@ -32,6 +33,7 @@
       players[i].commodity_limit	= 3;
       players[i].vp			= 0;
       players[i].passed			= 0;
+      players[i].action_card_limit      = 7;
       players[i].strategy_cards_played = [];
       players[i].action_cards_played = [];
       players[i].objectives_scored = [];
