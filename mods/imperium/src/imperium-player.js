@@ -25,15 +25,16 @@
       players[i].strategy_tokens 	= 2;
       players[i].fleet_supply    	= 3;
       players[i].faction 		= rf;
-      players[i].homeworld	= "";
+      players[i].homeworld		= "";
       players[i].color   		= col;
-      players[i].goods		= 0;
-      players[i].commodities	= 3;
+      players[i].goods			= 20;
+      players[i].commodities		= 3;
       players[i].commodity_limit	= 3;
-      players[i].vp		= 0;
-      players[i].passed		= 0;
+      players[i].vp			= 0;
+      players[i].passed			= 0;
       players[i].strategy_cards_played = [];
       players[i].action_cards_played = [];
+      players[i].objectives_scored = [];
 
   
       //
@@ -1035,22 +1036,30 @@ console.log(player + " -- " + card + " -- " + deck);
   
     // Stage I Public Objectives
     for (let i = 0; i < this.game.state.stage_i_objectives.length; i++) {
-      if (this.canPlayerScoreVictoryPoints(this.game.player, this.game.state.stage_i_objectives[i], 1)) {
-        html += '1 VP Public Objective: <li class="option stage1" id="'+this.game.state.stage_i_objectives[i]+'">'+this.game.deck[3].cards[this.game.state.stage_i_objectives[i]].name+'</li>';
+console.log("STAGE I: " + this.game.state.stage_i_objectives[i]);
+      if (!this.game.players_info[this.game.player-1].objectives_scored.includes(this.game.state.stage_i_objectives[i])) {
+        if (this.canPlayerScoreVictoryPoints(this.game.player, this.game.state.stage_i_objectives[i], 1)) {
+          html += '1 VP Public Objective: <li class="option stage1" id="'+this.game.state.stage_i_objectives[i]+'">'+this.game.deck[3].cards[this.game.state.stage_i_objectives[i]].name+'</li>';
+        }
       }
     }
   
     // Stage II Public Objectives
     for (let i = 0; i < this.game.state.stage_ii_objectives.length; i++) {
-      if (this.canPlayerScoreVictoryPoints(this.game.player, this.game.state.stage_ii_objectives[i], 2)) {
-        html += '2 VP Public Objective: <li class="option stage2" id="'+this.game.state.stage_ii_objectives[i]+'">'+this.game.deck[4].cards[this.game.state.stage_ii_objectives[i]].name+'</li>';
+console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
+      if (!this.game.players_info[this.game.player-1].objectives_scored.includes(this.game.state.stage_ii_objectives[i])) {
+        if (this.canPlayerScoreVictoryPoints(this.game.player, this.game.state.stage_ii_objectives[i], 2)) {
+          html += '2 VP Public Objective: <li class="option stage2" id="'+this.game.state.stage_ii_objectives[i]+'">'+this.game.deck[4].cards[this.game.state.stage_ii_objectives[i]].name+'</li>';
+        }
       }
     }
   
     // Secret Objectives
     for (let i = 0 ; i < this.game.deck[5].hand.length; i++) {
-      if (this.canPlayerScoreVictoryPoints(this.game.player, this.game.deck[5].hand[i], 3)) {
-        html += '1 VP Secret Objective: <li class="option secret3" id="'+this.game.deck[5].hand[i]+'">'+this.game.deck[5].cards[this.game.deck[5].hand[i]].name+'</li>';
+      if (!this.game.players_info[this.game.player-1].objectives_scored.includes(this.game.deck[5].hand[i])) {
+        if (this.canPlayerScoreVictoryPoints(this.game.player, this.game.deck[5].hand[i], 3)) {
+          html += '1 VP Secret Objective: <li class="option secret3" id="'+this.game.deck[5].hand[i]+'">'+this.game.deck[5].cards[this.game.deck[5].hand[i]].name+'</li>';
+        }
       }
     }
   
@@ -1074,12 +1083,9 @@ console.log(player + " -- " + card + " -- " + deck);
         mycallback(0, "");
   
       } else {
- 
-//
-// TODO HOOK UP ACTUAL VP ISSUANCE
-//
+
         let vp = 2;
-        let objective = "TESTING SECRET OBJECTIVE: mining power";
+        let objective = action;
         mycallback(vp, objective);
   
       }
@@ -1457,6 +1463,10 @@ console.log(player + " -- " + card + " -- " + deck);
       html += '<li class="cardchoice" id="cardchoice_'+array_of_cards[z]+'">' + this.returnPlanetCard(array_of_cards[z]) + '</li>';
     }
     html += '</ul>';
+
+//    html += '<ul>';
+//    html += '<li class="textchoice" id="goods">trade goods</li>';
+//    html += '</ul>';
   
     this.updateStatus(html);
     $('.cardchoice').on('click', function() {
@@ -1490,6 +1500,40 @@ console.log(player + " -- " + card + " -- " + deck);
   
 
 
+
+
+
+  playerSelectStrategyAndCommandTokens(cost, mycallback) {
+ 
+    if (cost == 0) { mycallback(1); }
+ 
+    let imperium_self = this;
+    let selected_cost = 0;
+ 
+    let html  = "<p>Select "+cost+" in Strategy and Command Tokens: </p><ul>";
+    html += '<li class="textchoice" id="strategy">strategy tokens</li>';
+    html += '<li class="textchoice" id="command">command tokens</li>';
+    html += '</ul>';
+ 
+    this.updateStatus(html);
+    $('.cardchoice').on('click', function() {
+ 
+      let action2 = $(this).attr("id");
+
+      selected_cost++;
+  
+      if (action2 == "strategy") {
+        imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
+      }
+      if (action2 == "command") {
+        imperium_self.addMove("expend\t"+imperium_self.game.player+"\tcommand\t1");
+      }
+
+      if (cost <= selected_cost) { mycallback(1); }
+
+    });
+
+  }
 
 
 

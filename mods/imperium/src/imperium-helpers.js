@@ -15,6 +15,39 @@
 
   }  
 
+
+  convertPlanetIdentifierToSector(planet_identifier) {
+
+    for (let i in this.game.board) {
+      let sector = this.game.board[i].tile;
+      let this_sector = this.game.sectors[sector];
+
+      for (let z = 0; z < this_sector.planets.length; z++) {
+	if (this_sector.planets[z] == planet_identifier) { return sector; }
+      }
+    }
+
+    return null;
+
+  }
+
+
+  returnPlanetIdxOfPlanetIdentifierInSector(planet_identifier, sector) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+    for (let i = 0; i < sys.p.length; i++) {
+      for (let z in this.game.planets) {
+	if (z == planet_identifier) {
+          if (sys.p[i] == this.game.planets[z]) { return i; }
+	}
+      }
+    }
+
+    return -1;
+
+  }
+
+
   
   
   /////////////////////////

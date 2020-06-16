@@ -165,7 +165,6 @@
       for (let i = 0; i < this.game.players_info.length; i++) {
         this.game.players_info[i].homeworld = hwsectors[i];
         this.game.board[hwsectors[i]].tile = this.factions[this.game.players_info[i].faction].homeworld;
-console.log("SETTING HOMEWORLD TO: " + this.factions[this.game.players_info[i].faction].homeworld);
       }
   
 
@@ -188,8 +187,6 @@ console.log("SETTING HOMEWORLD TO: " + this.factions[this.game.players_info[i].f
         }
 
 
-console.log("ASSIGN STARTING UNITS!");
-
 	//
 	// assign starting units
 	//
@@ -201,8 +198,6 @@ console.log("ASSIGN STARTING UNITS!");
 	}
 
 	let technologies = this.returnTechnology();
-
-console.log("ASSIGN STARTING TECH!");
 
 	//
 	// initialize all units / techs / powers (for all players)

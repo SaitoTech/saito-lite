@@ -448,6 +448,13 @@ console.log("HER: " + sector);
   }
   
   
+  returnAvailableTradeGoods(player) {
+  
+    return this.game.players_info[player-1].goods;
+  
+  }
+  
+  
   canPlayerActivateSystem(pid) {
   
     let imperium_self = this;
@@ -745,6 +752,52 @@ console.log("B: ");
   
 
 
+  doesPlanetHavePDS(planet) {
+    for (let i = 0; i < planet.units.length; i++) {
+      for (let ii = 0; ii < planet.units[i].length; ii++) {
+	if (planet.units[i][ii].type == "pds") { return 1; }
+      }
+    }
+    return 0;
+  }
+
+
+  doesPlanetHaveUnits(planet) {
+    for (let i = 0; i < planet.units.length; i++) {
+      if (planet.units[i].length > 0) { return 1; }
+    }
+    return 0;
+  }
+
+
+  doesPlanetHaveInfantry(planet) {
+    for (let i = 0; i < planet.units.length; i++) {
+      for (let ii = 0; ii < planet.units[i].length; ii++) {
+	if (planet.units[i][ii].type == "infantry") { return 1; }
+      }
+    }
+    return 0;
+  }
+
+
+  doesPlanetHaveSpaceDock(planet) {
+    for (let i = 0; i < planet.units.length; i++) {
+      for (let ii = 0; ii < planet.units[i].length; ii++) {
+	if (planet.units[i][ii].type == "spacedock") { return 1; }
+      }
+    }
+    return 0;
+  }
+
+
+  doesPlanetHavePDS(planet) {
+    for (let i = 0; i < planet.units.length; i++) {
+      for (let ii = 0; ii < planet.units[i].length; ii++) {
+	if (planet.units[i][ii].type == "pds") { return 1; }
+      }
+    }
+    return 0;
+  }
 
 
   doesPlayerHaveInfantryOnPlanet(player, sector, planet_idx) {
@@ -1019,6 +1072,10 @@ console.log("SECTOR: " + sector);
     if (player == null) { player = this.game.player; }
     return this.returnPlayerPlanetCards(player, 2);
   }
+  // mode = 0 ==> all
+  // mode = 1 ==> unexausted
+  // mode = 2 ==> exhausted
+  //
   returnPlayerPlanetCards(player=null, mode=0) {
   
     if (player == null) { player == parseInt(this.game.player); }

@@ -621,7 +621,7 @@ console.log("I AM CONTINUING!");
 
   	this.game.queue.push("resolve\tsetinitiativeorder");
 
-  	for (let i = initiative_order.length-1; i >= 0; i--) {
+  	for (let i = 0; i < initiative_order.length; i++) {
   	  if (this.game.players_info[initiative_order[i]-1].passed == 0) {
   	    this.game.queue.push("play\t"+initiative_order[i]);
   	  }
@@ -721,7 +721,6 @@ console.log("I AM CONTINUING!");
   	}
   	
   
-
   	//
   	// mark as ready 
   	//	  
@@ -754,23 +753,37 @@ console.log("I AM CONTINUING!");
         this.deactivateSystems();
 	
 
-/***
   	//
   	// FLIP NEW OBJECTIVES
   	//
         if (this.game.state.round == 1) {
           this.game.queue.push("revealobjectives");
   	  for (let i = 1; i <= this.game.players_info.length; i++) {
-            this.game.queue.push("FLIPCARD\t4\t8\t2\t"+i); // deck card poolnum player
+            this.game.queue.push("FLIPCARD\t4\t2\t2\t"+i); // deck card poolnum player
   	  }
+/***
   	  for (let i = 1; i <= this.game.players_info.length; i++) {
-            this.game.queue.push("FLIPCARD\t5\t8\t2\t"+i); // deck card poolnum player
+            this.game.queue.push("FLIPCARD\t5\t2\t2\t"+i); // deck card poolnum player
   	  }
-        }
 ***/
+        } else {
 
+          if (this.game.state.round < 4) {
+            this.game.queue.push("revealobjectives");
+  	    for (let i = 1; i <= this.game.players_info.length; i++) {
+              this.game.queue.push("FLIPCARD\t4\t1\t2\t"+i); // deck card poolnum player
+  	    }
+	  }
+
+          if (this.game.state.round >= 4) {
+            this.game.queue.push("revealobjectives");
+  	    for (let i = 1; i <= this.game.players_info.length; i++) {
+              this.game.queue.push("FLIPCARD\t5\t1\t3\t"+i); // deck card poolnum player
+  	    }
+	  }
+
+	}
     	return 1;
-  
       }
  
 
@@ -813,10 +826,14 @@ console.log("I AM CONTINUING!");
         this.game.state.secret_objectives = [];
   
         for (i = 0; i < this.game.pool[1].hand.length; i++) {
-          this.game.state.stage_i_objectives.push(this.game.pool[1].hand[i]);	
+	  if (!this.game.state.stage_i_objectives.includes(this.game.pool[1].hand[i])) {
+            this.game.state.stage_i_objectives.push(this.game.pool[1].hand[i]);	
+	  }
   	}
-        for (i = 0; i < this.game.pool[1].hand.length; i++) {
-          this.game.state.stage_ii_objectives.push(this.game.pool[1].hand[i]);	
+        for (i = 0; i < this.game.pool[2].hand.length; i++) {
+	  if (!this.game.state.stage_ii_objectives.includes(this.game.pool[2].hand[i])) {
+            this.game.state.stage_ii_objectives.push(this.game.pool[2].hand[i]);	
+  	  }
   	}
   
   	this.game.queue.splice(qe, 1);
@@ -832,9 +849,22 @@ console.log("I AM CONTINUING!");
   	let objective    = mv[3];
   
   	this.updateLog(this.returnFaction(player)+" scores "+vp+" VP");
+
   	this.game.players_info[player-1].vp += vp;
-  
+  	this.game.players_info[player-1].objectives_scored.push(objective);
+
   	this.game.queue.splice(qe-1, 2);
+
+        if (this.stage_i_objectives[objective] != undefined) {
+	  return this.stage_i_objectives[objective].scoreObjective(this, player);
+	}
+        if (this.stage_ii_objectives[objective] != undefined) {
+	  return this.stage_ii_objectives[objective].scoreObjective(this, player);
+	}
+        if (this.secret_objectives[objective] != undefined) {
+	  return this.secret_objectives[objective].scoreObjective(this, player);
+	}
+
   	return 1;
 
       }
@@ -2648,7 +2678,10 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
 	let played_card = cards[card];
   	this.game.queue.splice(qe, 1);
 
-	console.log("ACTION CARD HAS PLAYED AND RETURNED IN ACTION CALLBACK");
+	//
+	// this is where we execute the card
+	//
+	return played_card.playActionCard(this, this.game.player, player, card);
 
       }
 

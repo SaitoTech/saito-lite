@@ -157,7 +157,24 @@
     sectors['sector51']        = { img : "/imperium/img/sector51.png" , 	   name : "XXCha Homeworld" , hw : 1 , mr : 0 , planets : ['planet55','planet56'] }
     sectors['sector52']        = { img : "/imperium/img/sector52.png" , 	   name : "Sol Homeworld" , hw : 1 , mr : 0 , planets : ['planet57'] }
     sectors['sector53']        = { img : "/imperium/img/sector53.png" , 	   name : "Mentak Homeworld" , hw : 1 , mr : 0 , planets : ['planet58'] }
-
+/*
+    sectors['sector54']        = { img : "/imperium/img/sector48.png" , 	   name : "Sector 46" , hw : 0 , mr : 0 , planets : ['planet52'] } // wormhole a
+    sectors['sector55']        = { img : "/imperium/img/sector49.png" , 	   name : "Sector 47" , hw : 0 , mr : 0 , planets : ['planet51'] } // wormhole b
+    sectors['sector56']        = { img : "/imperium/img/sector46.png" , 	   name : "Sector 48" , hw : 0 , mr : 0 , planets : [] } // wormhole a
+    sectors['sector57']        = { img : "/imperium/img/sector47.png" , 	   name : "Sector 49" , hw : 0 , mr : 0 , planets : [] } // wormhole b
+    sectors['sector58']        = { img : "/imperium/img/sector58.png" , 	   name : "Sector 58" , hw : 0 , mr : 0 , planets : [] }
+    sectors['sector59']        = { img : "/imperium/img/sector59.png" , 	   name : "Sector 59" , hw : 0 , mr : 0 , planets : [] }
+    sectors['sector60']        = { img : "/imperium/img/sector60.png" , 	   name : "Sector 60" , hw : 0 , mr : 0 , planets : [] }
+    sectors['sector61']        = { img : "/imperium/img/sector61.png" , 	   name : "Sector 61" , hw : 0 , mr : 0 , planets : [] }
+    sectors['sector62']        = { img : "/imperium/img/sector62.png" , 	   name : "Sector 62" , hw : 0 , mr : 0 , planets : [] }
+    sectors['sector63']        = { img : "/imperium/img/sector63.png" , 	   name : "Sector 63" , hw : 0 , mr : 0 , planets : [] }
+    sectors['sector64']        = { img : "/imperium/img/sector64.png" , 	   name : "Sector 64" , hw : 0 , mr : 0 , planets : [] }
+    sectors['sector65']        = { img : "/imperium/img/sector65.png" , 	   name : "Sector 65" , hw : 0 , mr : 0 , planets : [] }
+    sectors['sector66']        = { img : "/imperium/img/sector66.png" , 	   name : "Sector 66" , hw : 0 , mr : 0 , planets : [] }
+    sectors['sector67']        = { img : "/imperium/img/sector67.png" , 	   name : "Sector 67" , hw : 0 , mr : 0 , planets : [] }
+    sectors['sector68']        = { img : "/imperium/img/sector68.png" , 	   name : "Sector 68" , hw : 0 , mr : 0 , planets : [] }
+    sectors['sector69']        = { img : "/imperium/img/sector69.png" , 	   name : "Sector 69" , hw : 0 , mr : 0 , planets : [] }
+*/
 
     for (var i in sectors) {
       sectors[i].units = [this.totalPlayers]; // array to store units

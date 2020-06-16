@@ -208,6 +208,9 @@
     if (obj.canPlayerScoreVictoryPoints == null) {
       obj.canPlayerScoreVictoryPoints = function(imperium_self, player) { return 0; }
     }
+    if (obj.scoreObjective == null) {
+      obj.scoreObjective = function(imperium_self, player) { return 1; }
+    }
 
 
 
@@ -227,6 +230,12 @@
     }
     if (obj.playActionCardEvent == null) {
       obj.playActionCardEvent = function(imperium_self, player, action_card_player, card) { return 0; }
+    }
+    //
+    // the substance of the action card
+    //
+    if (obj.playActionCard == null) {
+      obj.playActionCard = function(imperium_self, player, action_card_player, card) { return 1; }
     }
 
 
