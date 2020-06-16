@@ -13,6 +13,7 @@
               },
 	      function(planet) {
 
+		planet = imperium_self.game.planets[planet];
 		let sector = planet.sector;
 		let tile = planet.tile;	        
 		let planet_idx = planet.idx;
@@ -55,6 +56,7 @@
               },
 	      function(planet) {
 
+		planet = imperium_self.game.planets[planet];
 		let sector = planet.sector;
 		let tile = planet.tile;	        
 		let planet_idx = planet.idx;
@@ -124,6 +126,7 @@ console.log("SECTOR: " + sector);
               },
 	      function(planet) {
 
+		planet = imperium_self.game.planets[planet];
                 imperium_self.addMove("gain_planet\t"+imperium_self.game.player+"\t"+sector+"\t"+planet.idx);
                 imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " gains planet " + planet.name);
                 imperium_self.endTurn();
@@ -155,6 +158,7 @@ console.log("SECTOR: " + sector);
               },
 	      function(planet) {
 
+		planet = imperium_self.game.planets[planet];
 		let goods = imperium_self.game.planets[planet].resources;
 
                 imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tgoods\t"+goods);
@@ -237,6 +241,7 @@ console.log("SECTOR: " + sector);
                 if (planet.owner == imperium_self.game.player) { return 1; } return 0;
               },
               function(planet) {
+		planet = imperium_self.game.planets[planet];
                 imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
                 imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys three infantry to " + planet.name);
                 imperium_self.endTurn();
@@ -321,7 +326,7 @@ console.log("SECTOR: " + sector);
               },
 	      function(player) {
                 imperium_self.addMove("expend\t"+player+"\tcommand\t"+"1");
-		imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " destroys all PDS units destroyed on "+sys.p[planet_idx].name);
+		imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " loses one comand token");
 		imperium_self.endTurn();
 		return 0;
 	      },

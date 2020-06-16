@@ -1439,7 +1439,11 @@ console.log("player: " + player + " -- " + strategy_card_player);
 
               if (laws_selected >= imperium_self.game.state.agendas_per_round) {
                 for (i = 1; i >= 0; i--) {
-                  imperium_self.addMove("agenda\t"+selected_agendas[i]);
+                  imperium_self.addMove("post_agenda_stage_post\t"+selected_agendas[i]+"\t"+i);
+                  imperium_self.addMove("post_agenda_stage\t"+selected_agendas[i]+"\t"+i);
+                  imperium_self.addMove("agenda\t"+selected_agendas[i]+"\t"+i);
+                  imperium_self.addMove("pre_agenda_stage_post\t"+selected_agendas[i]+"\t"+i);
+                  imperium_self.addMove("pre_agenda_stage\t"+selected_agendas[i]+"\t"+i);
                   imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
                 }
                 imperium_self.addMove("change_speaker\t"+chancellor);
@@ -2444,6 +2448,7 @@ console.log("TESTING AAAD");
               },
 	      function(planet) {
 
+		planet = imperium_self.game.planets[planet];
 		let sector = planet.sector;
 		let tile = planet.tile;	        
 		let planet_idx = planet.idx;
@@ -2486,6 +2491,7 @@ console.log("TESTING AAAD");
               },
 	      function(planet) {
 
+		planet = imperium_self.game.planets[planet];
 		let sector = planet.sector;
 		let tile = planet.tile;	        
 		let planet_idx = planet.idx;
@@ -2555,6 +2561,7 @@ console.log("SECTOR: " + sector);
               },
 	      function(planet) {
 
+		planet = imperium_self.game.planets[planet];
                 imperium_self.addMove("gain_planet\t"+imperium_self.game.player+"\t"+sector+"\t"+planet.idx);
                 imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " gains planet " + planet.name);
                 imperium_self.endTurn();
@@ -2586,6 +2593,7 @@ console.log("SECTOR: " + sector);
               },
 	      function(planet) {
 
+		planet = imperium_self.game.planets[planet];
 		let goods = imperium_self.game.planets[planet].resources;
 
                 imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tgoods\t"+goods);
@@ -2668,6 +2676,7 @@ console.log("SECTOR: " + sector);
                 if (planet.owner == imperium_self.game.player) { return 1; } return 0;
               },
               function(planet) {
+		planet = imperium_self.game.planets[planet];
                 imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
                 imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys three infantry to " + planet.name);
                 imperium_self.endTurn();
@@ -2752,7 +2761,7 @@ console.log("SECTOR: " + sector);
               },
 	      function(player) {
                 imperium_self.addMove("expend\t"+player+"\tcommand\t"+"1");
-		imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " destroys all PDS units destroyed on "+sys.p[planet_idx].name);
+		imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " loses one comand token");
 		imperium_self.endTurn();
 		return 0;
 	      },
@@ -5538,6 +5547,115 @@ console.log("P: " + JSON.stringify(planet));
 
 
 
+      ///////////////////
+      // AGENDA VOTING //
+      ///////////////////
+      if (mv[0] === "pre_agenda_stage") {
+  
+        let z = this.returnEventObjects();
+	let agenda = mv[1];
+	let agenda_idx = mv[2];
+
+  	this.game.queue.splice(qe, 1);
+
+	let speaker_order = this.returnSpeakerOrder();
+  	for (let i = 0; i < speaker_order.length; i++) {
+	  for (let k = 0; k < z.length; k++) {
+	    if (z[k].preAgendaStageTriggers(this, speaker_order[i], agenda) == 1) {
+	      this.game.queue.push("pre_agenda_stage_event\t"+speaker_order[i]+"\t"+agenda+"\t"+agenda_idx+"\t"+k);
+	    }
+          }
+        }
+  	return 1;
+      }
+      if (mv[0] === "pre_agenda_stage_event") {
+        let z		 = this.returnEventObjects();
+  	let player       = parseInt(mv[1]);
+  	let agenda       = mv[2];
+  	let agenda_idx   = parseInt(mv[3]);
+        let z_index	 = parseInt(mv[4]);
+  	this.game.queue.splice(qe, 1);
+	return z[z_index].preAgendaStageEvent(this, player);
+      }
+      if (mv[0] === "pre_agenda_stage_post") {
+  	let player       = parseInt(mv[1]);
+        let agenda	 = mv[2];
+        let agenda_idx	 = parseInt(mv[3]);
+  	this.game.queue.splice(qe, 1);
+        let speaker_order = this.returnSpeakerOrder();
+  	for (let i = 0; i < speaker_order.length; i++) {
+	  this.game.queue.push("pre_agenda_stage_player_menu\t"+speaker_order[i]+"\t"+agenda+"\t"+agenda_idx);
+        }
+	return 1;
+      }
+      if (mv[0] === "pre_agenda_stage_player_menu") {
+        let player       = parseInt(mv[1]);
+        let agenda       = mv[2];
+        let agenda_idx   = parseInt(mv[3]);
+        this.game.queue.splice(qe, 1);
+	this.updateLog(this.returnFaction(player) + " is considering agenda options");
+	if (this.game.player == player) {
+          this.playerPlayPreAgendaStage(player, agenda);        
+	}
+        return 0;
+      }
+
+
+
+
+
+      if (mv[0] === "post_agenda_stage") {
+        let z = this.returnEventObjects();
+	let agenda = mv[1];
+	let agenda_idx = mv[2];
+  	this.game.queue.splice(qe, 1);
+	let speaker_order = this.returnSpeakerOrder();
+  	for (let i = 0; i < speaker_order.length; i++) {
+	  for (let k = 0; k < z.length; k++) {
+	    if (z[k].postAgendaStageTriggers(this, speaker_order[i], agenda) == 1) {
+	      this.game.queue.push("post_agenda_stage_event\t"+speaker_order[i]+"\t"+agenda+"\t"+agenda_idx+"\t"+k);
+	    }
+          }
+        }
+  	return 1;
+      }
+      if (mv[0] === "post_agenda_stage_event") {
+        let z		 = this.returnEventObjects();
+  	let player       = parseInt(mv[1]);
+  	let agenda       = mv[2];
+  	let agenda_idx   = parseInt(mv[3]);
+        let z_index	 = parseInt(mv[4]);
+  	this.game.queue.splice(qe, 1);
+	return z[z_index].postAgendaStageEvent(this, player);
+      }
+      if (mv[0] === "post_agenda_stage_post") {
+  	let player       = parseInt(mv[1]);
+        let agenda	 = mv[2];
+        let agenda_idx	 = parseInt(mv[3]);
+  	this.game.queue.splice(qe, 1);
+        let speaker_order = this.returnSpeakerOrder();
+  	for (let i = 0; i < speaker_order.length; i++) {
+	  this.game.queue.push("post_agenda_stage_player_menu\t"+speaker_order[i]+"\t"+agenda+"\t"+agenda_idx);
+        }
+	return 1;
+      }
+      if (mv[0] === "post_agenda_stage_player_menu") {
+        let player       = parseInt(mv[1]);
+        let agenda       = mv[2];
+        let agenda_idx   = parseInt(mv[3]);
+        this.game.queue.splice(qe, 1);
+	this.updateLog(this.returnFaction(player) + " is considering agenda options");
+	if (this.game.player == player) {
+          this.playerPlayPostAgendaStage(player, agenda);        
+	}
+        return 0;
+      }
+
+
+
+
+
+
       ///////////////////////
       // PDS SPACE DEFENSE //
       ///////////////////////
@@ -7725,6 +7843,140 @@ this.updateLog("DEFENDER PPGC: " + defender_forces);
         imperium_self.prependMove("pds_fire\t"+imperium_self.game.player+"\t"+attacker+"\t"+sector);
 	imperium_self.endTurn();
       };
+
+    });
+
+  }
+
+  //
+  // reaching this implies that the player can choose to fire / not-fire
+  //
+  playerPlayPreAgendaStage(player, agenda, agenda_idx) {
+
+    let imperium_self = this;
+    let html = '';
+
+    html = '<p>Do you wish to take action before voting on this Agenda: </p><ul>';
+
+    if (1 == 1) {
+      html += '<li class="option" id="skip">proceed to vote</li>';
+    }
+    if (1 == 1) {
+      html += '<li class="option" id="action">action card</li>';
+    }
+
+    let tech_attach_menu_events = 0;
+    let tech_attach_menu_triggers = [];
+    let tech_attach_menu_index = [];
+
+    let z = this.returnEventObjects();
+    for (let i = 0; i < z.length; i++) {
+      if (z[i].menuOptionTriggers(this, "agenda", this.game.player) == 1) {
+        let x = z[i].menuOption(this, "agenda", this.game.player);
+        html += x.html;
+	tech_attach_menu_index.push(i);
+	tech_attach_menu_triggers.push(x.event);
+	tech_attach_menu_events = 1;
+      }
+    }
+    html += '</ul>';
+
+    this.updateStatus(html);
+  
+    $('.option').on('click', function() {
+  
+      let action2 = $(this).attr("id");
+
+      //
+      // respond to tech and factional abilities
+      //
+      if (tech_attach_menu_events == 1) {
+	for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
+	  if (action2 == tech_attach_menu_triggers[i]) {
+	    $(this).remove();
+	    z[tech_attach_menu_index[i]].menuOptionActivated(imperium_self, "agenda", imperium_self.game.player);
+          }
+        }
+      }
+
+      if (action2 == "action") {
+        imperium_self.playerSelectActionCard(function(card) {
+  	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+	  imperium_self.playerPlayPreAgendaStage(player, agenda, agenda_idx);
+        }, function() {
+	  imperium_self.playerPlayPreAgendaStage(player, agenda, agenda_idx);
+	});
+      }
+
+      if (action2 == "skip") {
+	imperium_self.endTurn();
+      }
+
+    });
+
+  }
+  playerPlayPostAgendaStage(player, agenda, agenda_idx) {
+
+    let imperium_self = this;
+    let html = '';
+
+    html = '<p>Do you wish to take action before this Agenda is written into Law: </p><ul>';
+
+    if (1 == 1) {
+      html += '<li class="option" id="skip">continue</li>';
+    }
+    if (1 == 1) {
+      html += '<li class="option" id="action">action card</li>';
+    }
+
+    let tech_attach_menu_events = 0;
+    let tech_attach_menu_triggers = [];
+    let tech_attach_menu_index = [];
+
+    let z = this.returnEventObjects();
+    for (let i = 0; i < z.length; i++) {
+      if (z[i].menuOptionTriggers(this, "post_agenda", this.game.player) == 1) {
+        let x = z[i].menuOption(this, "post_agenda", this.game.player);
+        html += x.html;
+	tech_attach_menu_index.push(i);
+	tech_attach_menu_triggers.push(x.event);
+	tech_attach_menu_events = 1;
+      }
+    }
+    html += '</ul>';
+
+    this.updateStatus(html);
+  
+    $('.option').on('click', function() {
+  
+      let action2 = $(this).attr("id");
+
+      //
+      // respond to tech and factional abilities
+      //
+      if (tech_attach_menu_events == 1) {
+	for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
+	  if (action2 == tech_attach_menu_triggers[i]) {
+	    $(this).remove();
+	    z[tech_attach_menu_index[i]].menuOptionActivated(imperium_self, "post_agenda", imperium_self.game.player);
+          }
+        }
+      }
+
+      if (action2 == "action") {
+        imperium_self.playerSelectActionCard(function(card) {
+  	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+	  imperium_self.playerPlayPostAgendaStage(player, agenda, agenda_idx);
+        }, function() {
+	  imperium_self.playerPlayPostAgendaStage(player, agenda, agenda_idx);
+	});
+      }
+
+      if (action2 == "skip") {
+	imperium_self.endTurn();
+      }
 
     });
 
@@ -10339,6 +10591,18 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     /////////////
     // agendas //
     /////////////
+    if (obj.preAgendaStageTriggers == null) {
+      obj.preAgendaStageTriggers = function(imperium_self, agenda, agenda_idx) { return 0; }
+    }
+    if (obj.preAgendaStageEvent == null) {
+      obj.preAgendaStageEvent = function(imperium_self, agenda, agenda_idx) { return 1; }
+    }
+    if (obj.postAgendaStageTriggers == null) {
+      obj.postAgendaStageTriggers = function(imperium_self, agenda, agenda_idx) { return 0; }
+    }
+    if (obj.postAgendaStageEvent == null) {
+      obj.postAgendaStageEvent = function(imperium_self, agenda, agenda_idx) { return 1; }
+    }
     if (obj.onPass == null) {
       obj.onPass = function(imperium_self, players_in_favour, players_opposed, votes_for, votes_against, mycallback) { mycallback(); }
     }

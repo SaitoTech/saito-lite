@@ -736,6 +736,140 @@ this.updateLog("DEFENDER PPGC: " + defender_forces);
 
   }
 
+  //
+  // reaching this implies that the player can choose to fire / not-fire
+  //
+  playerPlayPreAgendaStage(player, agenda, agenda_idx) {
+
+    let imperium_self = this;
+    let html = '';
+
+    html = '<p>Do you wish to take action before voting on this Agenda: </p><ul>';
+
+    if (1 == 1) {
+      html += '<li class="option" id="skip">proceed to vote</li>';
+    }
+    if (1 == 1) {
+      html += '<li class="option" id="action">action card</li>';
+    }
+
+    let tech_attach_menu_events = 0;
+    let tech_attach_menu_triggers = [];
+    let tech_attach_menu_index = [];
+
+    let z = this.returnEventObjects();
+    for (let i = 0; i < z.length; i++) {
+      if (z[i].menuOptionTriggers(this, "agenda", this.game.player) == 1) {
+        let x = z[i].menuOption(this, "agenda", this.game.player);
+        html += x.html;
+	tech_attach_menu_index.push(i);
+	tech_attach_menu_triggers.push(x.event);
+	tech_attach_menu_events = 1;
+      }
+    }
+    html += '</ul>';
+
+    this.updateStatus(html);
+  
+    $('.option').on('click', function() {
+  
+      let action2 = $(this).attr("id");
+
+      //
+      // respond to tech and factional abilities
+      //
+      if (tech_attach_menu_events == 1) {
+	for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
+	  if (action2 == tech_attach_menu_triggers[i]) {
+	    $(this).remove();
+	    z[tech_attach_menu_index[i]].menuOptionActivated(imperium_self, "agenda", imperium_self.game.player);
+          }
+        }
+      }
+
+      if (action2 == "action") {
+        imperium_self.playerSelectActionCard(function(card) {
+  	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+	  imperium_self.playerPlayPreAgendaStage(player, agenda, agenda_idx);
+        }, function() {
+	  imperium_self.playerPlayPreAgendaStage(player, agenda, agenda_idx);
+	});
+      }
+
+      if (action2 == "skip") {
+	imperium_self.endTurn();
+      }
+
+    });
+
+  }
+  playerPlayPostAgendaStage(player, agenda, agenda_idx) {
+
+    let imperium_self = this;
+    let html = '';
+
+    html = '<p>Do you wish to take action before this Agenda is written into Law: </p><ul>';
+
+    if (1 == 1) {
+      html += '<li class="option" id="skip">continue</li>';
+    }
+    if (1 == 1) {
+      html += '<li class="option" id="action">action card</li>';
+    }
+
+    let tech_attach_menu_events = 0;
+    let tech_attach_menu_triggers = [];
+    let tech_attach_menu_index = [];
+
+    let z = this.returnEventObjects();
+    for (let i = 0; i < z.length; i++) {
+      if (z[i].menuOptionTriggers(this, "post_agenda", this.game.player) == 1) {
+        let x = z[i].menuOption(this, "post_agenda", this.game.player);
+        html += x.html;
+	tech_attach_menu_index.push(i);
+	tech_attach_menu_triggers.push(x.event);
+	tech_attach_menu_events = 1;
+      }
+    }
+    html += '</ul>';
+
+    this.updateStatus(html);
+  
+    $('.option').on('click', function() {
+  
+      let action2 = $(this).attr("id");
+
+      //
+      // respond to tech and factional abilities
+      //
+      if (tech_attach_menu_events == 1) {
+	for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
+	  if (action2 == tech_attach_menu_triggers[i]) {
+	    $(this).remove();
+	    z[tech_attach_menu_index[i]].menuOptionActivated(imperium_self, "post_agenda", imperium_self.game.player);
+          }
+        }
+      }
+
+      if (action2 == "action") {
+        imperium_self.playerSelectActionCard(function(card) {
+  	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+	  imperium_self.playerPlayPostAgendaStage(player, agenda, agenda_idx);
+        }, function() {
+	  imperium_self.playerPlayPostAgendaStage(player, agenda, agenda_idx);
+	});
+      }
+
+      if (action2 == "skip") {
+	imperium_self.endTurn();
+      }
+
+    });
+
+  }
+
 
 
   playerContinueTurn(player, sector) {

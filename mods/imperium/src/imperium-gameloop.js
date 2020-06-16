@@ -1394,6 +1394,115 @@ console.log("P: " + JSON.stringify(planet));
 
 
 
+      ///////////////////
+      // AGENDA VOTING //
+      ///////////////////
+      if (mv[0] === "pre_agenda_stage") {
+  
+        let z = this.returnEventObjects();
+	let agenda = mv[1];
+	let agenda_idx = mv[2];
+
+  	this.game.queue.splice(qe, 1);
+
+	let speaker_order = this.returnSpeakerOrder();
+  	for (let i = 0; i < speaker_order.length; i++) {
+	  for (let k = 0; k < z.length; k++) {
+	    if (z[k].preAgendaStageTriggers(this, speaker_order[i], agenda) == 1) {
+	      this.game.queue.push("pre_agenda_stage_event\t"+speaker_order[i]+"\t"+agenda+"\t"+agenda_idx+"\t"+k);
+	    }
+          }
+        }
+  	return 1;
+      }
+      if (mv[0] === "pre_agenda_stage_event") {
+        let z		 = this.returnEventObjects();
+  	let player       = parseInt(mv[1]);
+  	let agenda       = mv[2];
+  	let agenda_idx   = parseInt(mv[3]);
+        let z_index	 = parseInt(mv[4]);
+  	this.game.queue.splice(qe, 1);
+	return z[z_index].preAgendaStageEvent(this, player);
+      }
+      if (mv[0] === "pre_agenda_stage_post") {
+  	let player       = parseInt(mv[1]);
+        let agenda	 = mv[2];
+        let agenda_idx	 = parseInt(mv[3]);
+  	this.game.queue.splice(qe, 1);
+        let speaker_order = this.returnSpeakerOrder();
+  	for (let i = 0; i < speaker_order.length; i++) {
+	  this.game.queue.push("pre_agenda_stage_player_menu\t"+speaker_order[i]+"\t"+agenda+"\t"+agenda_idx);
+        }
+	return 1;
+      }
+      if (mv[0] === "pre_agenda_stage_player_menu") {
+        let player       = parseInt(mv[1]);
+        let agenda       = mv[2];
+        let agenda_idx   = parseInt(mv[3]);
+        this.game.queue.splice(qe, 1);
+	this.updateLog(this.returnFaction(player) + " is considering agenda options");
+	if (this.game.player == player) {
+          this.playerPlayPreAgendaStage(player, agenda);        
+	}
+        return 0;
+      }
+
+
+
+
+
+      if (mv[0] === "post_agenda_stage") {
+        let z = this.returnEventObjects();
+	let agenda = mv[1];
+	let agenda_idx = mv[2];
+  	this.game.queue.splice(qe, 1);
+	let speaker_order = this.returnSpeakerOrder();
+  	for (let i = 0; i < speaker_order.length; i++) {
+	  for (let k = 0; k < z.length; k++) {
+	    if (z[k].postAgendaStageTriggers(this, speaker_order[i], agenda) == 1) {
+	      this.game.queue.push("post_agenda_stage_event\t"+speaker_order[i]+"\t"+agenda+"\t"+agenda_idx+"\t"+k);
+	    }
+          }
+        }
+  	return 1;
+      }
+      if (mv[0] === "post_agenda_stage_event") {
+        let z		 = this.returnEventObjects();
+  	let player       = parseInt(mv[1]);
+  	let agenda       = mv[2];
+  	let agenda_idx   = parseInt(mv[3]);
+        let z_index	 = parseInt(mv[4]);
+  	this.game.queue.splice(qe, 1);
+	return z[z_index].postAgendaStageEvent(this, player);
+      }
+      if (mv[0] === "post_agenda_stage_post") {
+  	let player       = parseInt(mv[1]);
+        let agenda	 = mv[2];
+        let agenda_idx	 = parseInt(mv[3]);
+  	this.game.queue.splice(qe, 1);
+        let speaker_order = this.returnSpeakerOrder();
+  	for (let i = 0; i < speaker_order.length; i++) {
+	  this.game.queue.push("post_agenda_stage_player_menu\t"+speaker_order[i]+"\t"+agenda+"\t"+agenda_idx);
+        }
+	return 1;
+      }
+      if (mv[0] === "post_agenda_stage_player_menu") {
+        let player       = parseInt(mv[1]);
+        let agenda       = mv[2];
+        let agenda_idx   = parseInt(mv[3]);
+        this.game.queue.splice(qe, 1);
+	this.updateLog(this.returnFaction(player) + " is considering agenda options");
+	if (this.game.player == player) {
+          this.playerPlayPostAgendaStage(player, agenda);        
+	}
+        return 0;
+      }
+
+
+
+
+
+
       ///////////////////////
       // PDS SPACE DEFENSE //
       ///////////////////////
