@@ -2617,3 +2617,161 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 
 
 
+
+  playerSelectPlayerWithFilter(msg, filter_func, mycallback=null, cancel_func=null) {
+
+    let imperium_self = this;
+
+    let html  = msg;
+        html += '<ul>';
+
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      if (filter_func(this.game.players_info[i]) == 1) {
+        html += '<li class="textchoice" id="'+(i+1)+'">'+this.returnFaction((i+1))+'</li>';
+      }
+    }
+    if (cancel_func != null) {
+      html += '<li class="textchoice" id="cancel">cancel</li>';
+    }
+    html += '</ul>';
+
+    this.updateStatus(html);
+
+    $('.textchoice').off();
+    $('.textchoice').on('click', function() {
+       
+      let action = $(this).attr("id");
+                
+      if (action == "cancel") {
+        cancel_func();
+        return 0;
+      }
+
+      mycallback(action);
+
+    });
+  }
+
+
+
+  playerSelectSectorWithFilter(msg, filter_func, mycallback=null, cancel_func=null) {
+
+    let imperium_self = this;
+
+    let html  = msg;
+        html += '<ul>';
+
+    for (let i in this.game.board) {
+      if (filter_func(this.game.board[i].tile) == 1) {
+        html += '<li class="textchoice" id="'+this.game.board[i].tile+'">'+this.game.sectors[this.game.board[i].tile].name+'</li>';
+      }
+    }
+    if (cancel_func != null) {
+      html += '<li class="textchoice" id="cancel">cancel</li>';
+    }
+    html += '</ul>';
+
+    this.updateStatus(html);
+
+    $('.textchoice').off();
+    $('.textchoice').on('click', function() {
+       
+      let action = $(this).attr("id");
+                
+      if (action == "cancel") {
+        cancel_func();
+        return 0;
+      }
+
+      mycallback(action);
+
+    });
+  }
+
+
+  playerSelectPlanetWithFilter(msg, filter_func, mycallback=null, cancel_func=null) {
+
+    let imperium_self = this;
+
+    let html  = msg;
+        html += '<ul>';
+
+    for (let i in this.game.planets) {
+      if (filter_func(this.game.planets[i]) == 1) {
+        html += '<li class="textchoice" id="'+i+'">'+this.game.planets[i].name+'</li>';
+      }
+    }
+    if (cancel_func != null) {
+      html += '<li class="textchoice" id="cancel">cancel</li>';
+    }
+    html += '</ul>';
+
+    this.updateStatus(html);
+
+    $('.textchoice').off();
+    $('.textchoice').on('click', function() {
+
+      let action = $(this).attr("id");
+
+      if (action == "cancel") {
+        cancel_func();
+        return 0;
+      }
+
+      mycallback(action);
+
+    });
+  }
+
+
+
+
+
+  playerSelectUnitInSectorFilter(msg, sector, filter_func, mycallback=null, cancel_func=null) {
+
+    let imperium_self = this;
+    let sys = this.returnSectorAndPlanets(sector);
+
+    let html  = msg;
+        html += '<ul>';
+
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      for (let ii = 0; ii < sys.s.units[i].length; ii++) {
+        if (filter_func(sys.s.units[i][ii]) == 1) {
+          html += '<li class="textchoice" id="'+sector+'_'+i+'_'+i+'">' + this.returnFaction((i+1)) + " - " + sys.s.units[i][ii].name + '</li>';
+        }
+      }
+    }
+    if (cancel_func != null) {
+      html += '<li class="textchoice" id="cancel">cancel</li>';
+    }
+    html += '</ul>';
+
+    this.updateStatus(html);
+
+    $('.textchoice').off();
+    $('.textchoice').on('click', function() {
+
+      let action = $(this).attr("id");
+
+      if (action == "cancel") {
+        cancel_func();
+        return 0;
+      }
+
+      let tmpar = action.split("_");
+
+      let s       = tmpar[0];
+      let p       = tmpar[1];
+      let unitidx = tmpar[2];
+
+      mycallback({ sector : s , player : p , unitidx : unitidx });
+
+    });
+  }
+
+
+
+
+
+

@@ -403,8 +403,6 @@ console.log("F: " + this.game.players_info[this.game.player-1].faction);
 
   returnPlayersLeastDefendedPlanetInSector(player, sector) {
 
-console.log("HER: " + sector);
-
     let sys = this.returnSectorAndPlanets(sector);
     let least_defended = 100;
     let least_defended_idx = 0;
@@ -762,6 +760,16 @@ console.log("B: ");
   }
 
 
+  doesPlanetHaveSpaceDock(planet) {
+    for (let i = 0; i < planet.units.length; i++) {
+      for (let ii = 0; ii < planet.units[i].length; ii++) {
+	if (planet.units[i][ii].type == "spacedock") { return 1; }
+      }
+    }
+    return 0;
+  }
+
+
   doesPlanetHaveUnits(planet) {
     for (let i = 0; i < planet.units.length; i++) {
       if (planet.units[i].length > 0) { return 1; }
@@ -995,17 +1003,32 @@ console.log("SECTOR: " + sector);
   ///////////////////////////////
   // Return System and Planets //
   ///////////////////////////////
+  //
+  // pid can be the tile "2_2" or the sector name "sector42"
+  //
   returnSectorAndPlanets(pid) {
-  
+
+    let sys = null;
+    
     if (this.game.board[pid] == null) {
-      return;
-    }
-  
-    if (this.game.board[pid].tile == null) {
-      return;
+      //
+      // then this must be the name of a sector
+      //
+      if (this.game.sectors[pid]) {
+        sys = this.game.sectors[pid];
+      } else {
+        return;
+      }
+    } else {
+      if (this.game.board[pid].tile == null) {
+        return;
+      } else {
+        sys = this.game.sectors[this.game.board[pid].tile];
+      }
     }
 
-    let sys = this.game.sectors[this.game.board[pid].tile];
+    if (sys == null) { return null; }
+
     let planets = [];
 
     for (let i = 0; i < sys.planets.length; i++) {
@@ -1207,10 +1230,54 @@ console.log("SECTOR: " + sector);
   }
   
 
+  doesSectorContainWormhole(sector) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+    if (sys.s.wormhole != 0) { return 1; }
+    return 0;
+ 
+  }
+
+  doesSectorContainPlanetOwnedByPlayer(sector, player) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+    for (let i = 0; i < sys.p.length; i++) {
+      if (sys.p[i].owner == player) { 
+	return 1;
+      }
+    }
+    return 0;
+ 
+  }
+
+  doesSectorContainUnit(sector, unittype) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+    for (let i = 0; i < sys.s.units.length; i++) {
+      for (let ii = 0; ii < sys.s.units[i].length; ii++) {
+        if (sys.s.units[i][ii].type == unittype) {
+	  return 1;
+	}
+      }
+    }
+    return 0;
+ 
+  }
+
   doesSectorContainPlayerShips(player, sector) {
 
     let sys = this.returnSectorAndPlanets(sector);
     if (sys.s.units[player-1].length > 0) { return 1; }
+    return 0;
+ 
+  }
+
+  doesSectorContainShips(sector) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+    for (let i = 0; i < sys.s.units.length; i++) { 
+      if (sys.s.units[i].length > 0) { return 1; }
+    }
     return 0;
  
   }

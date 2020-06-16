@@ -1744,6 +1744,25 @@ console.log("TECH: " + z[z_index].name);
 
 
       //
+      // update ownership of planet
+      //
+      if (mv[0] === "gain_planet") {
+
+        let gainer	   = parseInt(mv[1]);
+	let sector	   = mv[2];
+	let planet_idx	   = parseInt(mv[3]);
+
+        this.game.queue.splice(qe, 1);
+
+        this.updatePlanetOwner(sector, planet_idx, gainer);
+
+      }
+
+
+
+
+
+      //
       // triggers menu for user to choose how to assign hits
       //
       if (mv[0] === "destroy_ships") {

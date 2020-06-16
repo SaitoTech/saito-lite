@@ -226,8 +226,26 @@
   
       }
     }
-  
+
+
+    //
+    // update planets with tile / sector info
+    //
+    for (let i in this.game.board) {
+      let sector = this.game.board[i].tile;
+      let sys = this.returnSectorAndPlanets(sector);
+      if (sys.p != undefined) {
+        for (let ii = 0; ii < sys.p.length; ii++) {
+          sys.p[ii].sector = sector;
+          sys.p[ii].tile = i;
+          sys.p[ii].idx = ii;
+	  if (sys.s.hw == 1) { sys.p[ii].hw = 1; }
+        }
+        this.saveSystemAndPlanets(sys);
+      }
+    }
  
+
     //
     // HIDE HUD LOG
     //
@@ -235,8 +253,6 @@
     $('.status').css('display','block');
 
 
- 
-  
     //
     // display board
     //
