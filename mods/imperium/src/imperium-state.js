@@ -14,6 +14,7 @@
 	//
         state.laws = [];
         state.agendas = [];
+        state.agendas_voting_information = [];
         state.strategy_cards = [];
         state.strategy_cards_bonus = [];
         state.stage_i_objectives = [];
@@ -22,9 +23,9 @@
         state.votes_available = [];
         state.votes_cast = [];
         state.voted_on_agenda = [];
+        state.voting_on_agenda = 0; // record of how people have voted, so action cards may be played
         state.agendas_per_round = 2;
         state.how_voted_on_agenda = [];
-        state.voting_on_agenda = 0;
 
         state.temporary_assignments = ["all"]; // all = any units
         state.temporary_rerolls = 0; // 100 = unlimited

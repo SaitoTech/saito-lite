@@ -29,6 +29,9 @@
               imperium_self.game.state.voted_on_agenda[i].push(0);
             }
           }
+
+alert("PRIMARY EVENT RUN and VOTED ON AGENDA IS: " + JSON.stringify(imperium_self.game.state.voted_on_agenda));
+
         }
 
         //
@@ -97,6 +100,7 @@
 
               if (laws_selected >= imperium_self.game.state.agendas_per_round) {
                 for (i = 1; i >= 0; i--) {
+                  imperium_self.addMove("resolve_agenda\t"+selected_agendas[i]+"\t"+i);
                   imperium_self.addMove("post_agenda_stage_post\t"+selected_agendas[i]+"\t"+i);
                   imperium_self.addMove("post_agenda_stage\t"+selected_agendas[i]+"\t"+i);
                   imperium_self.addMove("agenda\t"+selected_agendas[i]+"\t"+i);

@@ -177,10 +177,8 @@ console.log("NEXT MV: " + mv[0]);
   	// update sector
   	//
   	this.updateSectorGraphics(sector);
-  
 
 	if (this.game.player == player) {
-console.log("I AM CONTINUING!");
   	  this.playerContinueTurn(player, sector);
 	}
 
@@ -192,7 +190,6 @@ console.log("I AM CONTINUING!");
       if (mv[0] === "play") {
 
     	let player = mv[1];
-
 
 	try {
           document.documentElement.style.setProperty('--playing-color', `var(--p${player})`);
@@ -412,27 +409,71 @@ console.log("I AM CONTINUING!");
 	let player   = mv[1];
 	let target   = mv[2];
 	let choice   = mv[3];
-
   	this.game.queue.splice(qe, 1);
  
 	if (target == "agenda") {
-
-	  console.log("ASKED TO DISCARD: " + choice);
-
           for (let z = 0; z < this.game.state.agendas.length; z++) {
 	    if (this.game.state.agendas[z] == choice) {
 	      this.game.state.agendas.splice(z, 1);
 	      z--;
 	    }
 	  }
-
-          console.log("POOL 0: " + JSON.stringify(this.game.pool[0].hand));
-	
 	}
-
 	return 1; 
       }
      
+
+      if (mv[0] === "resolve_agenda") {
+
+alert("RESOLVING VOTE NOW!");
+	let laws = this.returnAgendaCards();
+        let agenda = mv[1];
+        let agenda_num = parseInt(mv[1]);
+  	this.game.queue.splice(qe, 1);
+
+        //
+	// speaker breaks ties here
+	// 
+console.log("VoA: " + JSON.stringify(this.game.state.agendas_voting_information));
+	if (agenda === "support") {
+	  this.game.state.agendas_voting_information[agenda_num].votes_for += 1; 
+	}
+	if (agenda === "dismiss") {
+	  this.game.state.agendas_voting_information[agenda_num].votes_against += 1; 
+	}
+
+
+	let direction_of_vote = 0;
+        if (this.game.state.agendas_voting_information[agenda_num].votes_against > this.game.state.agendas_voting_information[agenda_num].votes_for) {
+	  direction_of_vote = -1;
+	}
+        if (this.game.state.agendas_voting_information[agenda_num].votes_against < this.game.state.agendas_voting_information[agenda_num].votes_for) {
+	  direction_of_vote = 1;
+	}
+
+
+        if (direction_of_vote > 0) {
+          imperium_self.game.state.laws.push(imperium_self.game.state.agendas[agenda_num]);
+          laws[imperium_self.game.state.agendas[agenda_num]].onPass(imperium_self, players_in_favour, players_opposed, votes_for, votes_against, function(res) {
+            console.log("\n\nBACK FROM AGENDA ONPASS FUNCTION");
+          });
+	  return 1;
+        }
+        if (direction_of_vote < 0) {
+          laws[imperium_self.game.state.agendas[agenda_num]].onFail(imperium_self, players_in_favour, players_opposed, votes_for_votes_against, function(res) {
+            console.log("\n\nBACK FROM AGENDA ONFAIL FUNCTION");
+          });
+	  return 1;
+	}
+        if (direction_of_vote == 0) {
+	  if (this.game.state.speaker == this.game.player) {
+	    imperium_self.playerResolveDeadlockedAgenda(agenda, agenda_num);
+	  }
+	  return 0;
+	}
+
+      }
+
 
       if (mv[0] == "vote") {
 
@@ -441,6 +482,7 @@ console.log("I AM CONTINUING!");
 	let player = mv[2];
 	let vote = mv[3];
 	let votes = parseInt(mv[4]);
+
 
 	this.game.state.votes_cast[player-1] = votes;
 	this.game.state.votes_available[player-1] -= votes;
@@ -481,29 +523,14 @@ console.log("I AM CONTINUING!");
 	  // announce if the vote passed
 	  //
 	  this.updateLog("The agenda "+direction_of_vote);
+
+	  this.game.state.agendas_voting_information[agenda_num].votes_against = votes_against;
+	  this.game.state.agendas_voting_information[agenda_num].votes_for = votes_for;
+	  this.game.state.agendas_voting_information[agenda_num].players_for = players_in_favour;
+	  this.game.state.agendas_voting_information[agenda_num].players_opposed = players_opposed;
+	  this.game.state.agendas_voting_information[agenda_num].direction_of_vote = direction_of_vote;
 	 
-	  //
-	  //
-	  //
-	  if (direction_of_vote == "passes") {
-	    imperium_self.game.state.laws.push(imperium_self.game.state.agendas[agenda_num]);
-	    laws[imperium_self.game.state.agendas[agenda_num]].onPass(imperium_self, players_in_favour, players_opposed, votes_for, votes_against, function(res) {
-	      console.log("\n\nBACK FROM AGENDA ONPASS FUNCTION");
-	    });
-	  } else {
-	    if (direction_of_vote == "fails") {
-	      laws[imperium_self.game.state.agendas[agenda_num]].onFail(imperium_self, players_in_favour, players_opposed, votes_for_votes_against, function(res) {
-	        console.log("\n\nBACK FROM AGENDA ONFAIL FUNCTION");
-	      });
-	    } else {
-	      this.updateLog("The law is quietly shelved...");
-	    }
-	  }
-
-
-	
-	  //
-	  // prepare for next vote
+	  // this seems unnecessary - 16 June
 	  //
 	  //for (let i = 0; i < this.game.players.length; i++) {
 	  //  this.game.state.voted_on_agenda[i].push([]);
@@ -535,8 +562,7 @@ console.log("I AM CONTINUING!");
         let who_is_next = 0;
         for (let i = 0; i < this.game.players.length; i++) {
           if (this.game.state.voted_on_agenda[i][agenda_num] == 0) { who_is_next = i+1; i = this.game.players.length; }
- 
-       }
+        }
 
 	if (this.game.player != who_is_next) {
 
@@ -799,9 +825,11 @@ console.log("I AM CONTINUING!");
   	//
 	if (!updateonly) {
     	  this.game.state.agendas = [];
+    	  this.game.state.agendas_voting_information = [];
         }
         for (i = 0; i < this.game.pool[0].hand.length; i++) {
           this.game.state.agendas.push(this.game.pool[0].hand[i]);	
+          this.game.state.agendas_voting_information.push({});
   	}
   
   	//
@@ -1149,15 +1177,15 @@ console.log(player_forces + " landed on planet");
   	let player       = parseInt(mv[1]);
         let item         = mv[2];
         let amount       = parseInt(mv[3]);
-	let technologies = this.returnTechnology();
+	let z            = this.returnEventObjects();
   
         if (item == "strategycard") {
   
   	  this.updateLog(this.returnFaction(player) + " takes " + mv[3]);
 
 	  let strategy_card = mv[3];  
-	  for (let z in technologies) {
-            strategy_card = technologies[z].gainStrategyCard(imperium_self, player, strategy_card);
+	  for (let z_index in z) {
+            strategy_card = z[z_index].gainStrategyCard(imperium_self, player, strategy_card);
           }
 
   	  this.game.players_info[player-1].strategy.push(mv[3]);
@@ -1175,45 +1203,45 @@ console.log(player_forces + " landed on planet");
 
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3]);
   	  this.game.players_info[player-1].tech.push(mv[3]);
-	  for (let z in technologies) {
-  	    technologies[mv[3]].gainTechnology(imperium_self, player, mv[3]);
+	  for (let z_index in z) {
+  	    z[z_index].gainTechnology(imperium_self, player, mv[3]);
   	  }
 	  this.upgradePlayerUnitsOnBoard(player);
   	}
         if (item == "goods") {
   	  this.updateLog(this.returnFaction(player) + " gains " + amount + " trade goods");
-	  for (let z in technologies) {
-  	    amount = technologies[z].gainTradeGoods(imperium_self, player, amount);
+	  for (let z_index in z) {
+  	    amount = z[z_index].gainTradeGoods(imperium_self, player, amount);
   	  }
 	  this.game.players_info[player-1].goods += amount;
   	}
 
         if (item == "commodities") {
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " commodities");
-	  for (let z in technologies) {
-  	    amount = technologies[z].gainCommodities(imperium_self, player, amount);
+	  for (let z_index in z) {
+  	    amount = z[z_index].gainCommodities(imperium_self, player, amount);
   	  }
   	  this.game.players_info[player-1].commodities += amount;
   	}
 
         if (item == "command") {
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " command tokens");
-	  for (let z in technologies) {
-  	    amount = technologies[z].gainCommandTokens(imperium_self, player, amount);
+	  for (let z_index in z) {
+  	    amount = z[z_index].gainCommandTokens(imperium_self, player, amount);
   	  }
   	  this.game.players_info[player-1].command_tokens += amount;
   	}
         if (item == "strategy") {
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " strategy tokens");
-	  for (let z in technologies) {
-  	    amount = technologies[z].gainStrategyTokens(imperium_self, player, amount);
+	  for (let z_index in z) {
+  	    amount = z[z_index].gainStrategyTokens(imperium_self, player, amount);
   	  }
   	  this.game.players_info[player-1].strategy_tokens += amount;
   	}
 
         if (item == "fleetsupply") {
-	  for (let z in technologies) {
-  	    amount = technologies[z].gainFleetSupply(imperium_self, player, amount);
+	  for (let z_index in z) {
+  	    amount = z[z_index].gainFleetSupply(imperium_self, player, amount);
   	  }
   	  this.game.players_info[player-1].fleet_supply += amount;
   	  this.updateLog(this.returnFaction(player) + " increases their fleet supply to " + this.game.players_info[player-1].fleet_supply);

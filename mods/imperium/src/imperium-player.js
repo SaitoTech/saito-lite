@@ -736,6 +736,52 @@ this.updateLog("DEFENDER PPGC: " + defender_forces);
 
   }
 
+
+  //
+  // reaching this implies that the player can choose to fire / not-fire
+  //
+  playerResolveDeadlockedAgenda(agenda, agenda_idx) {
+
+    let imperium_self = this;
+    let html = '';
+
+    html = '<p>How do you wish to resolve this Agenda: </p><ul>';
+
+    if (1 == 1) {
+      html += '<li class="option" id="support">support</li>';
+    }
+    if (1 == 1) {
+      html += '<li class="option" id="dismiss">dismiss</li>';
+    }
+
+    html += '</ul>';
+
+    this.updateStatus(html);
+  
+    $('.option').off();
+    $('.option').on('click', function() {
+  
+      let action2 = $(this).attr("id");
+
+      //
+      // speaker breaks ties here
+      //
+      if (action2 === "support") {
+        imperium_self.addMove("resolve_agenda\tsupport\t"+agenda_idx);
+        imperium_self.endTurn();
+        return 0;
+      }
+      if (actions2 === "dismiss") {
+  	imperium_self.addMove("resolve_agenda\tdismiss\t"+agenda_idx);
+        imperium_self.endTurn();
+	return 0;
+      }
+    });
+  }
+
+
+
+
   //
   // reaching this implies that the player can choose to fire / not-fire
   //
@@ -771,6 +817,7 @@ this.updateLog("DEFENDER PPGC: " + defender_forces);
 
     this.updateStatus(html);
   
+    $('.option').off();
     $('.option').on('click', function() {
   
       let action2 = $(this).attr("id");
@@ -836,6 +883,7 @@ this.updateLog("DEFENDER PPGC: " + defender_forces);
 
     this.updateStatus(html);
   
+    $('.option').off();
     $('.option').on('click', function() {
   
       let action2 = $(this).attr("id");

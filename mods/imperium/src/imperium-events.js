@@ -76,7 +76,7 @@
       obj.gainStrategyCard = function(imperium_self, gainer, card) { return card; }
     }
     if (obj.gainCommandTokens == null) {
-      obj.gainCommandToken = function(imperium_self, gainer, amount) { return amount; }
+      obj.gainCommandTokens = function(imperium_self, gainer, amount) { return amount; }
     }
     if (obj.gainStrategyTokens == null) {
       obj.gainStrategyTokens = function(imperium_self, gainer, amount) { return amount; }
