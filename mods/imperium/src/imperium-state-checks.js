@@ -772,14 +772,6 @@ console.log("B: ");
   }
 
 
-  doesPlanetHaveUnits(planet) {
-    for (let i = 0; i < planet.units.length; i++) {
-      if (planet.units[i].length > 0) { return 1; }
-    }
-    return 0;
-  }
-
-
   doesPlanetHaveInfantry(planet) {
     for (let i = 0; i < planet.units.length; i++) {
       for (let ii = 0; ii < planet.units[i].length; ii++) {
@@ -790,21 +782,35 @@ console.log("B: ");
   }
 
 
-  doesPlanetHaveSpaceDock(planet) {
+  doesPlanetHaveUnits(planet) {
     for (let i = 0; i < planet.units.length; i++) {
-      for (let ii = 0; ii < planet.units[i].length; ii++) {
-	if (planet.units[i][ii].type == "spacedock") { return 1; }
-      }
+      if (planet.units[i].length > 0) { return 1; }
     }
     return 0;
   }
 
 
-  doesPlanetHavePDS(planet) {
-    for (let i = 0; i < planet.units.length; i++) {
-      for (let ii = 0; ii < planet.units[i].length; ii++) {
-	if (planet.units[i][ii].type == "pds") { return 1; }
-      }
+
+
+  doesPlanetHavePlayerInfantry(planet, player) {
+    for (let ii = 0; ii < planet.units[player-1].length; ii++) {
+      if (planet.units[i][ii].type == "infantry") { return 1; }
+    }
+    return 0;
+  }
+
+
+  doesPlanetHavePlayerSpaceDock(planet, player) {
+    for (let ii = 0; ii < planet.units[player-1].length; ii++) {
+      if (planet.units[i][ii].type == "spacedock") { return 1; }
+    }
+    return 0;
+  }
+
+
+  doesPlanetHavePlayerPDS(planet, player) {
+    for (let ii = 0; ii < planet.units[player-1].length; ii++) {
+      if (planet.units[i][ii].type == "pds") { return 1; }
     }
     return 0;
   }
@@ -1279,6 +1285,10 @@ console.log("SECTOR: " + sector);
  
   }
 
+
+  doesSectorContainPlayerShip(player, sector) {
+    return this.doesSectorContainPlayerShips(player, sector);
+  }
   doesSectorContainPlayerShips(player, sector) {
 
     let sys = this.returnSectorAndPlanets(sector);
@@ -1307,6 +1317,37 @@ console.log("SECTOR: " + sector);
     return 0;
  
   }
+
+
+  doesSectorContainNonPlayerUnit(player, sector, unittype) {
+
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      if ((i+1) != player) {
+	if (this.doesSectorContainPlayerUnit((i+1), sector, unittype)) { return 1; }
+      }
+    }
+
+    return 0;
+ 
+  }
+  
+
+  doesSectorContainPlayerUnit(player, sector, unittype) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+
+    for (let i = 0; i < sys.s.units[player-1].length; i++) {
+      if (sys.s.units[player-1][i].type == unittype) { return 1; }
+    }
+    for (let i = 0; i < sys.p.length; i++) {
+      for (let ii = 0; ii < sys.p[i].units[player-1].length; ii++) {
+        if (sys.p[i].units[player-1][ii].type == unittype) { return 1; }
+      }
+    }
+    return 0;
+ 
+  }
   
   
+
 

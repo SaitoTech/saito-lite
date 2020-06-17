@@ -745,7 +745,7 @@ this.updateLog("DEFENDER PPGC: " + defender_forces);
     let imperium_self = this;
     let html = '';
 
-    html = '<p>How do you wish to resolve this Agenda: </p><ul>';
+    html = '<p>This agenda is deadlocked in the Senate. As speaker, how do you wish to resolve this Agenda: </p><ul>';
     for (let i = 0; i < choices.length; i++) {
       html += '<li class="option" id="'+i+'">'+choices[i]+'</li>';
     }
