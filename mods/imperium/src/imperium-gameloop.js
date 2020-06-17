@@ -443,7 +443,9 @@
 
 	let laws = this.returnAgendaCards();
         let agenda = mv[1];
-        let agenda_num = parseInt(mv[1]);
+        let winning_choice = "";
+	let winning_options = [];
+  	this.game.queue.splice(qe, 1);
 
         for (let i = 0; i < this.game.state.choices.length; i++) {
           winning_options.push(0);
@@ -456,17 +458,15 @@
         //
 	// speaker breaks ties
 	//
-	if (mv[1] === "speaker") {
+	if (mv[2] === "speaker") {
 	  // resolve_agenda	speaker	    winning_choice	
-	  let winner = mv[2];
+	  let winner = mv[3];
 	  for (let i = 0; i < this.game.state.choices.length; i++) {
 	    if (this.game.state.choices[i] === winner) {
 	      winning_options[i] += 1;
 	    }
 	  }
 	}
-
-        let winning_options = [];
 
         //
         // determine winning option
@@ -493,14 +493,26 @@
         }
 
 
+
+	//
+	// more than one winniner
+	//
+	if (total_options_at_winning_strength > 1) {
+	  console.log("WE NEED THE SPEAKER TO INTERVENE: " + total_options_at_winning_strength);
+	  if (this.game.player == this.game.state.speaker) {
+	    imperium_self.playerResolveDeadlockedAgenda(agenda, tied_choices);
+	  }
+	  return 0;
+	}
+
+
 	//
 	// single winner
 	//
 	if (total_options_at_winning_strength == 1) {
-
-          let success = laws[imperium_self.game.state.agendas[agenda_num]].onPass(imperium_self, winning_choice);
+          let success = imperium_self.agenda_cards[agenda].onPass(imperium_self, winning_choice);
           if (success == 1) {
-	    imperium_self.game.state.laws.push(imperium_self.game.state.agendas[agenda_num]);
+	    imperium_self.game.state.laws.push(agenda);
 	  }
 
           //
@@ -603,8 +615,9 @@
 	// we repeatedly hit "agenda"
 	//
 	let laws = imperium_self.returnAgendaCards();
-        let agenda_num = parseInt(mv[1]);
-	let agenda_name = laws[imperium_self.game.state.agendas[agenda_num]].name;
+        let agenda = mv[1];
+        let agenda_num = parseInt(mv[2]);
+	let agenda_name = this.agenda_cards[agenda].name;
 	this.game.state.voting_on_agenda = agenda_num;
 
 	//

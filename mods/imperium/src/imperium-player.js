@@ -740,7 +740,7 @@ this.updateLog("DEFENDER PPGC: " + defender_forces);
   //
   // reaching this implies that the player can choose to fire / not-fire
   //
-  playerResolveDeadlockedAgenda(agenda, agenda_idx, choices) {
+  playerResolveDeadlockedAgenda(agenda, choices) {
 
     let imperium_self = this;
     let html = '';
@@ -758,7 +758,7 @@ this.updateLog("DEFENDER PPGC: " + defender_forces);
   
       let action2 = $(this).attr("id");
 
-      imperium_self.addMove("resolve_agenda\tspeaker\t"+choices[action2]);
+      imperium_self.addMove("resolve_agenda\t"+agenda+"\tspeaker\t"+choices[action2]);
       imperium_self.endTurn();
       return 0;
 

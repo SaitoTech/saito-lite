@@ -1371,9 +1371,6 @@ console.log("player: " + player + " -- " + strategy_card_player);
               imperium_self.game.state.voted_on_agenda[i].push(0);
             }
           }
-
-alert("PRIMARY EVENT RUN and VOTED ON AGENDA IS: " + JSON.stringify(imperium_self.game.state.voted_on_agenda));
-
         }
 
         //
@@ -1445,7 +1442,7 @@ alert("PRIMARY EVENT RUN and VOTED ON AGENDA IS: " + JSON.stringify(imperium_sel
                   imperium_self.addMove("resolve_agenda\t"+selected_agendas[i]);
                   imperium_self.addMove("post_agenda_stage_post\t"+selected_agendas[i]);
                   imperium_self.addMove("post_agenda_stage\t"+selected_agendas[i]);
-                  imperium_self.addMove("agenda\t"+selected_agendas[i]);
+                  imperium_self.addMove("agenda\t"+selected_agendas[i]+"\t"+i);
                   imperium_self.addMove("pre_agenda_stage_post\t"+selected_agendas[i]);
                   imperium_self.addMove("pre_agenda_stage\t"+selected_agendas[i]);
                   imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
@@ -2393,11 +2390,11 @@ console.log("TESTING AAAD");
   	name : "Regulated Bureaucracy" ,
   	type : "Law" ,
   	text : "Players may have a maximum of 3 action cards in their hands at all times" ,
-        onPass : function(imperium_self, players_in_favour, players_opposed, votes_for, votes_against, mycallback) {
+        onPass : function(imperium_self, players_in_favour, players_opposed, votes_for, votes_against) {
 	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
 	    imperium_self.game.players_info[i].action_card_limit = 3;
 	  }
-	  mycallback();
+	  return 1;
 	},
   });
 
@@ -2406,12 +2403,12 @@ console.log("TESTING AAAD");
   	type : "Law" ,
   	text : "Players may have a maximum of four tokens in their fleet supply." ,
   	img : "/imperium/img/agenda_card_template.png" ,
-        onPass : function(imperium_self, players_in_favour, players_opposed, votes_for, votes_against, mycallback) {
+        onPass : function(imperium_self, players_in_favour, players_opposed, votes_for, votes_against) {
 	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
 	    imperium_self.game.players_info[i].fleet_supply_limit = 4;
 	    if (imperium_self.game.players_info[i].fleet_supply >= 4) { imperium_self.game.players_info[i].fleet_supply = 4; }
 	  }
-	  mycallback();
+	  return 1;
 	},
   });
   this.importAgendaCard('restricted-conscription', {
@@ -2419,10 +2416,10 @@ console.log("TESTING AAAD");
   	type : "Law" ,
   	text : "Production cost for infantry and fighters is 1 rather than 0.5 resources" ,
   	img : "/imperium/img/agenda_card_template.png" ,
-        onPass : function(imperium_self, players_in_favour, players_opposed, votes_for, votes_against, mycallback) {
+        onPass : function(imperium_self, players_in_favour, players_opposed, votes_for, votes_against) {
 	  imperium_self.units["infantry"].cost = 1;
 	  imperium_self.units["fighter"].cost = 1;
-	  mycallback();
+	  return 1;
 	},
   });
   this.importAgendaCard('wormhole-travel-ban', {
@@ -2430,9 +2427,9 @@ console.log("TESTING AAAD");
   	type : "Law" ,
   	text : "All invasions of unoccupied planets require conquering 1 infantry" ,
   	img : "/imperium/img/agenda_card_template.png" ,
-        onPass : function(imperium_self, players_in_favour, players_opposed, votes_for, votes_against, mycallback) {
+        onPass : function(imperium_self, players_in_favour, players_opposed, votes_for, votes_against) {
 	  imperium_self.game.state.wormholes_open = 0;
-	  mycallback();
+	  return 1;
 	},
   });
 
@@ -4917,7 +4914,9 @@ console.log("SECTOR: " + sector);
 
 	let laws = this.returnAgendaCards();
         let agenda = mv[1];
-        let agenda_num = parseInt(mv[1]);
+        let winning_choice = "";
+	let winning_options = [];
+  	this.game.queue.splice(qe, 1);
 
         for (let i = 0; i < this.game.state.choices.length; i++) {
           winning_options.push(0);
@@ -4930,17 +4929,15 @@ console.log("SECTOR: " + sector);
         //
 	// speaker breaks ties
 	//
-	if (mv[1] === "speaker") {
+	if (mv[2] === "speaker") {
 	  // resolve_agenda	speaker	    winning_choice	
-	  let winner = mv[2];
+	  let winner = mv[3];
 	  for (let i = 0; i < this.game.state.choices.length; i++) {
 	    if (this.game.state.choices[i] === winner) {
 	      winning_options[i] += 1;
 	    }
 	  }
 	}
-
-        let winning_options = [];
 
         //
         // determine winning option
@@ -4967,14 +4964,26 @@ console.log("SECTOR: " + sector);
         }
 
 
+
+	//
+	// more than one winniner
+	//
+	if (total_options_at_winning_strength > 1) {
+	  console.log("WE NEED THE SPEAKER TO INTERVENE: " + total_options_at_winning_strength);
+	  if (this.game.player == this.game.state.speaker) {
+	    imperium_self.playerResolveDeadlockedAgenda(agenda, tied_choices);
+	  }
+	  return 0;
+	}
+
+
 	//
 	// single winner
 	//
 	if (total_options_at_winning_strength == 1) {
-
-          let success = laws[imperium_self.game.state.agendas[agenda_num]].onPass(imperium_self, winning_choice);
+          let success = imperium_self.agenda_cards[agenda].onPass(imperium_self, winning_choice);
           if (success == 1) {
-	    imperium_self.game.state.laws.push(imperium_self.game.state.agendas[agenda_num]);
+	    imperium_self.game.state.laws.push(agenda);
 	  }
 
           //
@@ -5077,8 +5086,9 @@ console.log("SECTOR: " + sector);
 	// we repeatedly hit "agenda"
 	//
 	let laws = imperium_self.returnAgendaCards();
-        let agenda_num = parseInt(mv[1]);
-	let agenda_name = laws[imperium_self.game.state.agendas[agenda_num]].name;
+        let agenda = mv[1];
+        let agenda_num = parseInt(mv[2]);
+	let agenda_name = this.agenda_cards[agenda].name;
 	this.game.state.voting_on_agenda = agenda_num;
 
 	//
@@ -5995,8 +6005,7 @@ console.log("P: " + JSON.stringify(planet));
 	return z[z_index].preAgendaStageEvent(this, player);
       }
       if (mv[0] === "pre_agenda_stage_post") {
-  	let player       = parseInt(mv[1]);
-        let agenda	 = mv[2];
+        let agenda	 = mv[1];
   	this.game.queue.splice(qe, 1);
 
 	//
@@ -6051,8 +6060,7 @@ console.log("X: " +JSON.stringify(this.agenda_cards[agenda]));
 	return z[z_index].postAgendaStageEvent(this, player);
       }
       if (mv[0] === "post_agenda_stage_post") {
-  	let player       = parseInt(mv[1]);
-        let agenda	 = mv[2];
+        let agenda	 = mv[1];
   	this.game.queue.splice(qe, 1);
         let speaker_order = this.returnSpeakerOrder();
   	for (let i = 0; i < speaker_order.length; i++) {
@@ -8272,7 +8280,7 @@ this.updateLog("DEFENDER PPGC: " + defender_forces);
   //
   // reaching this implies that the player can choose to fire / not-fire
   //
-  playerResolveDeadlockedAgenda(agenda, agenda_idx, choices) {
+  playerResolveDeadlockedAgenda(agenda, choices) {
 
     let imperium_self = this;
     let html = '';
@@ -8290,7 +8298,7 @@ this.updateLog("DEFENDER PPGC: " + defender_forces);
   
       let action2 = $(this).attr("id");
 
-      imperium_self.addMove("resolve_agenda\tspeaker\t"+choices[action2]);
+      imperium_self.addMove("resolve_agenda\t"+agenda+"\tspeaker\t"+choices[action2]);
       imperium_self.endTurn();
       return 0;
 
@@ -11069,11 +11077,11 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     if (obj.returnAgendaOptions == null) {
       obj.returnAgendaOptions = function(imperium_self) { return ['support','oppose']; }
     }
+    //
+    // when an agenda is resolved (passes) --> not necessarily if it is voted in favour
+    //
     if (obj.onPass == null) {
       obj.onPass = function(imperium_self, winning_choice) { return 0; }
-    }
-    if (obj.onFail == null) {
-      obj.onFail = function(imperium_self, players_in_favour, players_opposed, votes_for, votes_against, mycallback) { mycallback(); }
     }
 
 
@@ -12064,7 +12072,7 @@ console.log("B: ");
 
 
 
-  doesPlayerHaveActiveRider(player) {
+  doesPlayerHaveRider(player) {
 
     for (let i = 0; i < this.game.state.riders.length; i++) {
       if (this.game.state.riders[i].player == player) { return 1; }

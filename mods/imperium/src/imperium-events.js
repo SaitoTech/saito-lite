@@ -181,11 +181,11 @@
     if (obj.returnAgendaOptions == null) {
       obj.returnAgendaOptions = function(imperium_self) { return ['support','oppose']; }
     }
+    //
+    // when an agenda is resolved (passes) --> not necessarily if it is voted in favour
+    //
     if (obj.onPass == null) {
       obj.onPass = function(imperium_self, winning_choice) { return 0; }
-    }
-    if (obj.onFail == null) {
-      obj.onFail = function(imperium_self, players_in_favour, players_opposed, votes_for, votes_against, mycallback) { mycallback(); }
     }
 
 

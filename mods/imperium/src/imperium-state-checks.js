@@ -811,7 +811,7 @@ console.log("B: ");
 
 
 
-  doesPlayerHaveActiveRider(player) {
+  doesPlayerHaveRider(player) {
 
     for (let i = 0; i < this.game.state.riders.length; i++) {
       if (this.game.state.riders[i].player == player) { return 1; }
