@@ -750,6 +750,8 @@ console.log("B: ");
   
 
 
+
+
   doesPlanetHavePDS(planet) {
     for (let i = 0; i < planet.units.length; i++) {
       for (let ii = 0; ii < planet.units[i].length; ii++) {
@@ -805,6 +807,18 @@ console.log("B: ");
       }
     }
     return 0;
+  }
+
+
+
+  doesPlayerHaveActiveRider(player) {
+
+    for (let i = 0; i < this.game.state.riders.length; i++) {
+      if (this.game.state.riders[i].player == player) { return 1; }
+    }
+
+    return 0;
+
   }
 
 
@@ -1186,6 +1200,7 @@ console.log("SECTOR: " + sector);
   
   
   returnActionCard(cardname) {
+
     let cards = this.returnActionCards();
     let c = cards[cardname];
     if (c == undefined) {

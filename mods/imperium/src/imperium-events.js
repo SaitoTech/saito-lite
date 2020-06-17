@@ -178,8 +178,11 @@
     if (obj.postAgendaStageEvent == null) {
       obj.postAgendaStageEvent = function(imperium_self, agenda, agenda_idx) { return 1; }
     }
+    if (obj.returnAgendaOptions == null) {
+      obj.returnAgendaOptions = function(imperium_self) { return ['support','oppose']; }
+    }
     if (obj.onPass == null) {
-      obj.onPass = function(imperium_self, players_in_favour, players_opposed, votes_for, votes_against, mycallback) { mycallback(); }
+      obj.onPass = function(imperium_self, winning_choice) { return 0; }
     }
     if (obj.onFail == null) {
       obj.onFail = function(imperium_self, players_in_favour, players_opposed, votes_for, votes_against, mycallback) { mycallback(); }

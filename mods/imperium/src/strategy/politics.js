@@ -81,7 +81,7 @@ alert("PRIMARY EVENT RUN and VOTED ON AGENDA IS: " + JSON.stringify(imperium_sel
             }
 
             for (i = 0; i < 3; i++) {
-              html += '<li class="option" id="'+i+'">' + laws[imperium_self.game.state.agendas[i]].name + '</li>';
+              html += '<li class="option" id="'+imperium_self.game.state.agendas[i]+'">' + laws[imperium_self.game.state.agendas[i]].name + '</li>';
             }
             html += '</ul>';
 
@@ -100,12 +100,12 @@ alert("PRIMARY EVENT RUN and VOTED ON AGENDA IS: " + JSON.stringify(imperium_sel
 
               if (laws_selected >= imperium_self.game.state.agendas_per_round) {
                 for (i = 1; i >= 0; i--) {
-                  imperium_self.addMove("resolve_agenda\t"+selected_agendas[i]+"\t"+i);
-                  imperium_self.addMove("post_agenda_stage_post\t"+selected_agendas[i]+"\t"+i);
-                  imperium_self.addMove("post_agenda_stage\t"+selected_agendas[i]+"\t"+i);
-                  imperium_self.addMove("agenda\t"+selected_agendas[i]+"\t"+i);
-                  imperium_self.addMove("pre_agenda_stage_post\t"+selected_agendas[i]+"\t"+i);
-                  imperium_self.addMove("pre_agenda_stage\t"+selected_agendas[i]+"\t"+i);
+                  imperium_self.addMove("resolve_agenda\t"+selected_agendas[i]);
+                  imperium_self.addMove("post_agenda_stage_post\t"+selected_agendas[i]);
+                  imperium_self.addMove("post_agenda_stage\t"+selected_agendas[i]);
+                  imperium_self.addMove("agenda\t"+selected_agendas[i]);
+                  imperium_self.addMove("pre_agenda_stage_post\t"+selected_agendas[i]);
+                  imperium_self.addMove("pre_agenda_stage\t"+selected_agendas[i]);
                   imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
                 }
                 imperium_self.addMove("change_speaker\t"+chancellor);

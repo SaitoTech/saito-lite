@@ -1423,7 +1423,7 @@ alert("PRIMARY EVENT RUN and VOTED ON AGENDA IS: " + JSON.stringify(imperium_sel
             }
 
             for (i = 0; i < 3; i++) {
-              html += '<li class="option" id="'+i+'">' + laws[imperium_self.game.state.agendas[i]].name + '</li>';
+              html += '<li class="option" id="'+imperium_self.game.state.agendas[i]+'">' + laws[imperium_self.game.state.agendas[i]].name + '</li>';
             }
             html += '</ul>';
 
@@ -1442,12 +1442,12 @@ alert("PRIMARY EVENT RUN and VOTED ON AGENDA IS: " + JSON.stringify(imperium_sel
 
               if (laws_selected >= imperium_self.game.state.agendas_per_round) {
                 for (i = 1; i >= 0; i--) {
-                  imperium_self.addMove("resolve_agenda\t"+selected_agendas[i]+"\t"+i);
-                  imperium_self.addMove("post_agenda_stage_post\t"+selected_agendas[i]+"\t"+i);
-                  imperium_self.addMove("post_agenda_stage\t"+selected_agendas[i]+"\t"+i);
-                  imperium_self.addMove("agenda\t"+selected_agendas[i]+"\t"+i);
-                  imperium_self.addMove("pre_agenda_stage_post\t"+selected_agendas[i]+"\t"+i);
-                  imperium_self.addMove("pre_agenda_stage\t"+selected_agendas[i]+"\t"+i);
+                  imperium_self.addMove("resolve_agenda\t"+selected_agendas[i]);
+                  imperium_self.addMove("post_agenda_stage_post\t"+selected_agendas[i]);
+                  imperium_self.addMove("post_agenda_stage\t"+selected_agendas[i]);
+                  imperium_self.addMove("agenda\t"+selected_agendas[i]);
+                  imperium_self.addMove("pre_agenda_stage_post\t"+selected_agendas[i]);
+                  imperium_self.addMove("pre_agenda_stage\t"+selected_agendas[i]);
                   imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
                 }
                 imperium_self.addMove("change_speaker\t"+chancellor);
@@ -2926,6 +2926,323 @@ console.log("SECTOR: " + sector);
 ***/
 
 
+
+    this.importActionCard('diplomacy-rider', {
+  	name : "Diplomacy Rider" ,
+  	type : "action" ,
+  	text : "Select a planet and destroy all PDS units on that planet" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  if (action_card_player == imperium_self.game.player) {
+            imperium_self.playerSelectSectorWithFilter(
+              "Select a sector with a planet you control: ",
+              function(sector) {
+		for (let i = 0; i < this.game.sectors[sector].planets.length; i++) {
+  		  if (this.game.planets[this.game.sectors[sector].planets[i]].owner == imperium_self.game.player) { return 1; } return 0;
+                }
+              },
+              function(sector) {
+                for (let b = 0; b < imperium_self.game.players_info.length; b++) {
+                  imperium_self.addMove("activate\t"+(b+1)+"\t"+sector);
+                }
+                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " uses Diplomacy Rider to protect " + sector);
+                imperium_self.endTurn();
+                return 0;
+              },
+              null
+            );
+	  }
+
+	  return 0;
+	}
+    });
+
+
+    this.importActionCard('imperial-rider', {
+  	name : "Imperial Rider" ,
+  	type : "action" ,
+  	text : "Player gains 1 VP" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+          imperium_self.game.players_info[action_card_player-1].vp += 1;
+          imperium_self.game.players_info[action_card_player-1].objectives_scored.push("imperial-rider");
+	  return 1;
+	}
+    });
+
+    this.importActionCard('leadership-rider', {
+  	name : "Leadership Rider" ,
+  	type : "action" ,
+  	text : "Gain two strategy tokens and 1 command token" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+          imperium_self.game.players_info[action_card_player-1].strategy_tokens += 2;
+          imperium_self.game.players_info[action_card_player-1].command_tokens += 1;
+	  return 1;
+	}
+    });
+
+    this.importActionCard('politics-rider', {
+  	name : "Politics Rider" ,
+  	type : "action" ,
+  	text : "Gain three action cards and the speaker token" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+	
+	  if (imperium_self.game.player == action_card_player) {
+
+	    // three action cards
+            imperium_self.addMove("DEAL\t2\t"+imperium_self.game.player+"\t3");
+            imperium_self.addMove("notify\tdealing two action cards to player "+player);
+
+	    // and change speaker
+	    let html = 'Make which player the speaker? <ul>';
+            for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+              html += '<li class="textchoice" id="'+i+'">' + factions[imperium_self.game.players_info[i].faction].name + '</li>';
+            }
+            html += '</ul>';
+            imperium_self.updateStatus(html);
+
+            let chancellor = imperium_self.game.player;
+
+            $('.textchoice').off();
+            $('.textchoice').on('click', function() {
+              let chancellor = (parseInt($(this).attr("id")) + 1);
+	      imperium_self.addMove("change_speaker\t"+chancellor);
+	      imperium_self.endTurn();
+	    });
+	  } 
+
+ 	  return 0;
+	}
+    });
+
+    this.importActionCard('technology-rider', {
+  	name : "Technology Rider" ,
+  	type : "action" ,
+  	text : "Select a planet and destroy all PDS units on that planet" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+	  return 1;
+	}
+    });
+
+    this.importActionCard('trade-rider', {
+  	name : "Trade Rider" ,
+  	type : "action" ,
+  	text : "Select a planet and destroy all PDS units on that planet" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  if (imperium_self.game.player == action_card_player) {
+	    imperium_self.playerResearchTechnology(function(tech) {
+	      imperium_self.endTurn();
+	    });
+	  } 
+
+ 	  return 0;
+	}
+    });
+
+    this.importActionCard('warfare-rider', {
+  	name : "Warfare Rider" ,
+  	type : "action" ,
+  	text : "Place a dreadnaught in a system with one of your ships." ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  if (imperium_self.game.player == action_card_player) {
+
+            imperium_self.playerSelectSectorWithFilter(
+              "Select a sector which contains at least one of your ships: ",
+              function(sector) {
+                return imperium_self.doesSectorContainPlayerShips(action_card_player, sector);
+              },
+              function(sector) {
+
+                imperium_self.addMove("produce\t"+imperium_self.game.player+"\t1\t-1\tdreadnaught\t"+sector);
+                imperium_self.addMove("notify\tAdding dreadnaught to gamebaord");
+                imperium_self.endTurn();
+                return 0;
+
+              },
+              null
+            );
+          }
+	  return 0;
+	}
+    });
+
+
+
+    this.importActionCard('diplomacy-rider', {
+  	name : "Diplomacy Rider" ,
+  	type : "rider" ,
+  	text : "Select a planet and destroy all PDS units on that planet" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  if (action_card_player == imperium_self.game.player) {
+            imperium_self.playerSelectSectorWithFilter(
+              "Select a sector with a planet you control: ",
+              function(sector) {
+		for (let i = 0; i < this.game.sectors[sector].planets.length; i++) {
+  		  if (this.game.planets[this.game.sectors[sector].planets[i]].owner == imperium_self.game.player) { return 1; } return 0;
+                }
+              },
+              function(sector) {
+                for (let b = 0; b < imperium_self.game.players_info.length; b++) {
+                  imperium_self.addMove("activate\t"+(b+1)+"\t"+sector);
+                }
+                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " uses Diplomacy Rider to protect " + sector);
+                imperium_self.endTurn();
+                return 0;
+              },
+              null
+            );
+	  }
+
+	  return 0;
+	}
+    });
+
+
+    this.importActionCard('imperial-rider', {
+  	name : "Imperial Rider" ,
+  	type : "rider" ,
+  	text : "Player gains 1 VP" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+          imperium_self.game.players_info[action_card_player-1].vp += 1;
+          imperium_self.game.players_info[action_card_player-1].objectives_scored.push("imperial-rider");
+	  return 1;
+	}
+    });
+
+
+    this.importActionCard('construction-rider', {
+  	name : "Construction Rider" ,
+  	type : "rider" ,
+  	text : "Player gains 1 VP" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+	  if (action_card_player == imperium_self.game.player) {
+            imperium_self.playerSelectPlanetWithFilter(
+              "Select a planet you control without a Space Dock: ",
+              function(planet) {
+  		if (this.game.planets[planet].owner == imperium_self.game.player && imperium_self.doesPlanetHaveSpaceDock(planet) == 0) { return 1; } return 0;
+              },
+              function(planet) {
+                imperium_self.addMove("produce\t"+imperium_self.game.player+"\t1\t"+imperium_self.game.planets[planet].idx+"\t"+"spacedock"+"\t"+imperium_self.game.planets[planet].sector);
+                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " builds a Space Dock in " + imperium_self.game.sectors[imperium_self.game.planets[planet].sector].name);
+                imperium_self.endTurn();
+                return 0;
+              },
+              null
+            );
+	  }
+	  return 0;
+	}
+    });
+
+
+
+    this.importActionCard('leadership-rider', {
+  	name : "Leadership Rider" ,
+  	type : "rider" ,
+  	text : "Gain two strategy tokens and 1 command token" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+          imperium_self.game.players_info[action_card_player-1].strategy_tokens += 2;
+          imperium_self.game.players_info[action_card_player-1].command_tokens += 1;
+	  return 1;
+	}
+    });
+
+    this.importActionCard('politics-rider', {
+  	name : "Politics Rider" ,
+  	type : "rider" ,
+  	text : "Gain three action cards and the speaker token" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+	
+	  if (imperium_self.game.player == action_card_player) {
+
+	    // three action cards
+            imperium_self.addMove("DEAL\t2\t"+imperium_self.game.player+"\t3");
+            imperium_self.addMove("notify\tdealing two action cards to player "+player);
+
+	    // and change speaker
+	    let html = 'Make which player the speaker? <ul>';
+            for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+              html += '<li class="textchoice" id="'+i+'">' + factions[imperium_self.game.players_info[i].faction].name + '</li>';
+            }
+            html += '</ul>';
+            imperium_self.updateStatus(html);
+
+            let chancellor = imperium_self.game.player;
+
+            $('.textchoice').off();
+            $('.textchoice').on('click', function() {
+              let chancellor = (parseInt($(this).attr("id")) + 1);
+	      imperium_self.addMove("change_speaker\t"+chancellor);
+	      imperium_self.endTurn();
+	    });
+	  } 
+
+ 	  return 0;
+	}
+    });
+
+    this.importActionCard('technology-rider', {
+  	name : "Technology Rider" ,
+  	type : "rider" ,
+  	text : "Select a planet and destroy all PDS units on that planet" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+	  if (imperium_self.game.player == action_card_player) {
+	    imperium_self.playerResearchTechnology(function(tech) {
+	      imperium_self.endTurn();
+	    });
+	  } 
+
+ 	  return 0;
+	}
+    });
+
+    this.importActionCard('trade-rider', {
+  	name : "Trade Rider" ,
+  	type : "rider" ,
+  	text : "Select a planet and destroy all PDS units on that planet" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  if (imperium_self.game.player == action_card_player) {
+	    imperium_self.playerResearchTechnology(function(tech) {
+	      imperium_self.endTurn();
+	    });
+	  } 
+
+ 	  return 0;
+	}
+    });
+
+    this.importActionCard('warfare-rider', {
+  	name : "Warfare Rider" ,
+  	type : "rider" ,
+  	text : "Place a dreadnaught in a system with one of your ships." ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  if (imperium_self.game.player == action_card_player) {
+
+            imperium_self.playerSelectSectorWithFilter(
+              "Select a sector which contains at least one of your ships: ",
+              function(sector) {
+                return imperium_self.doesSectorContainPlayerShips(action_card_player, sector);
+              },
+              function(sector) {
+
+                imperium_self.addMove("produce\t"+imperium_self.game.player+"\t1\t-1\tdreadnaught\t"+sector);
+                imperium_self.addMove("notify\tAdding dreadnaught to gamebaord");
+                imperium_self.endTurn();
+                return 0;
+
+              },
+              null
+            );
+          }
+	  return 0;
+	}
+    });
+
+
   
 
   } // end initializeGameObjects
@@ -4181,8 +4498,6 @@ console.log("SECTOR: " + sector);
       }
   
 
-console.log("NEXT MV: " + mv[0]);
-
       if (mv[0] === "setvar") { 
 
 	let type = mv[1]; // state or players
@@ -4287,6 +4602,24 @@ console.log("NEXT MV: " + mv[0]);
 	}
       } 
  
+
+
+
+      if (mv[0] === "rider") {
+  
+	let x = {};
+	    x.player 	= mv[1];
+	    x.rider 	= mv[2];
+	    x.choice 	= parseInt(mv[3]);
+
+	this.game.state.riders.push(x);  
+
+  	this.game.queue.splice(qe, 1);
+  	return 1;
+  
+      }
+
+
 
 
 
@@ -4582,54 +4915,97 @@ console.log("NEXT MV: " + mv[0]);
 
       if (mv[0] === "resolve_agenda") {
 
-alert("RESOLVING VOTE NOW!");
 	let laws = this.returnAgendaCards();
         let agenda = mv[1];
         let agenda_num = parseInt(mv[1]);
-  	this.game.queue.splice(qe, 1);
+
+        for (let i = 0; i < this.game.state.choices.length; i++) {
+          winning_options.push(0);
+        }
+        for (let i = 0; i < this.game.players.length; i++) {
+          winning_options[this.game.state.how_voted_on_agenda[i]] += this.game.state.votes_cast[i];
+        }
+
 
         //
-	// speaker breaks ties here
-	// 
-console.log("VoA: " + JSON.stringify(this.game.state.agendas_voting_information));
-	if (agenda === "support") {
-	  this.game.state.agendas_voting_information[agenda_num].votes_for += 1; 
-	}
-	if (agenda === "dismiss") {
-	  this.game.state.agendas_voting_information[agenda_num].votes_against += 1; 
-	}
-
-
-	let direction_of_vote = 0;
-        if (this.game.state.agendas_voting_information[agenda_num].votes_against > this.game.state.agendas_voting_information[agenda_num].votes_for) {
-	  direction_of_vote = -1;
-	}
-        if (this.game.state.agendas_voting_information[agenda_num].votes_against < this.game.state.agendas_voting_information[agenda_num].votes_for) {
-	  direction_of_vote = 1;
-	}
-
-
-        if (direction_of_vote > 0) {
-          imperium_self.game.state.laws.push(imperium_self.game.state.agendas[agenda_num]);
-          laws[imperium_self.game.state.agendas[agenda_num]].onPass(imperium_self, players_in_favour, players_opposed, votes_for, votes_against, function(res) {
-            console.log("\n\nBACK FROM AGENDA ONPASS FUNCTION");
-          });
-	  return 1;
-        }
-        if (direction_of_vote < 0) {
-          laws[imperium_self.game.state.agendas[agenda_num]].onFail(imperium_self, players_in_favour, players_opposed, votes_for_votes_against, function(res) {
-            console.log("\n\nBACK FROM AGENDA ONFAIL FUNCTION");
-          });
-	  return 1;
-	}
-        if (direction_of_vote == 0) {
-	  if (this.game.state.speaker == this.game.player) {
-	    imperium_self.playerResolveDeadlockedAgenda(agenda, agenda_num);
+	// speaker breaks ties
+	//
+	if (mv[1] === "speaker") {
+	  // resolve_agenda	speaker	    winning_choice	
+	  let winner = mv[2];
+	  for (let i = 0; i < this.game.state.choices.length; i++) {
+	    if (this.game.state.choices[i] === winner) {
+	      winning_options[i] += 1;
+	    }
 	  }
-	  return 0;
 	}
+
+        let winning_options = [];
+
+        //
+        // determine winning option
+        //
+        let max_votes_options = -1;
+        let max_votes_options_idx = 0;
+        for (let i = 0; i < winning_options.length; i++) {
+          if (winning_options[i] > max_votes_options) {
+            max_votes_options = winning_options[i];
+            max_votes_options_idx = i;
+          }
+          if (winning_options[i] > 0) {
+            this.updateLog(this.game.state.choices[i] + " receives " + winning_options[i] + " votes");
+          }
+        }
+
+        let total_options_at_winning_strength = 0;
+	let tied_choices = [];
+        for (let i = 0; i < winning_options.length; i++) {
+          if (winning_options[i] == max_votes_options) {
+	    total_options_at_winning_strength++; 
+	    tied_choices.push(this.game.state.choices[i]);
+	  }
+        }
+
+
+	//
+	// single winner
+	//
+	if (total_options_at_winning_strength == 1) {
+
+          let success = laws[imperium_self.game.state.agendas[agenda_num]].onPass(imperium_self, winning_choice);
+          if (success == 1) {
+	    imperium_self.game.state.laws.push(imperium_self.game.state.agendas[agenda_num]);
+	  }
+
+          //
+          // resolve riders
+          //
+          for (let i = 0; i < this.game.state.riders.length; i++) {
+            let x = this.game.state.riders[i];
+            if (x.direction_of_vote == dictionary_of_vote) {
+              this.game.queue.addMove("execute_rider\t"+x.player+"\t"+x.rider);
+            }
+          }
+
+        }
+
+	return 1;
 
       }
+
+
+
+
+
+      if (mv[0] == "execute_rider") {
+
+	let action_card_player = parseInt(mv[1]);
+	let rider = mv[2];
+
+	return this.action_cards[rider].playActionCardEvent(this, this.game.player, action_card_player, card);
+
+      }
+
 
 
       if (mv[0] == "vote") {
@@ -4639,7 +5015,6 @@ console.log("VoA: " + JSON.stringify(this.game.state.agendas_voting_information)
 	let player = mv[2];
 	let vote = mv[3];
 	let votes = parseInt(mv[4]);
-
 
 	this.game.state.votes_cast[player-1] = votes;
 	this.game.state.votes_available[player-1] -= votes;
@@ -4656,45 +5031,38 @@ console.log("VoA: " + JSON.stringify(this.game.state.agendas_voting_information)
 	//
 	if (votes_finished == this.game.players.length) {
 
-	  let votes_for = 0;
-	  let votes_against = 0;
 	  let direction_of_vote = "tie";
  	  let players_in_favour = [];
 	  let players_opposed = [];
 
+	  let winning_options = [];
+	  for (let i = 0; i < this.game.state.choices.length; i++) { 
+	    winning_options.push(0);
+	  }
 	  for (let i = 0; i < this.game.players.length; i++) {
-
-	    if (this.game.state.how_voted_on_agenda[i] == "support") {
-	      votes_for += this.game.state.votes_cast[i];
-	      players_in_favour.push(i+1);
-	    }
-	    if (this.game.state.how_voted_on_agenda[i] == "oppose") {
-	      votes_against += this.game.state.votes_cast[i];
-	      players_opposed.push(i+1);
-	    }
-	    if (votes_against > votes_for) { direction_of_vote = "fails"; }
-	    if (votes_against < votes_for) { direction_of_vote = "passes"; }	    
+	    winning_options[this.game.state.how_voted_on_agenda[i]] += this.game.state.votes_cast[i];
 	  }
 
 	  //
-	  // announce if the vote passed
+	  // determine winning option
 	  //
-	  this.updateLog("The agenda "+direction_of_vote);
-
-	  this.game.state.agendas_voting_information[agenda_num].votes_against = votes_against;
-	  this.game.state.agendas_voting_information[agenda_num].votes_for = votes_for;
-	  this.game.state.agendas_voting_information[agenda_num].players_for = players_in_favour;
-	  this.game.state.agendas_voting_information[agenda_num].players_opposed = players_opposed;
-	  this.game.state.agendas_voting_information[agenda_num].direction_of_vote = direction_of_vote;
-	 
-	  // this seems unnecessary - 16 June
-	  //
-	  //for (let i = 0; i < this.game.players.length; i++) {
-	  //  this.game.state.voted_on_agenda[i].push([]);
-	  //  this.game.state.voted_on_agenda[i][this.game.state.voted_on_agenda[i].length-1] = 0;
-	  //}
-	  //this.game.state.voting_on_agenda++;
-
+	  let max_votes_options = -1;
+	  let max_votes_options_idx = 0;
+	  for (let i = 0; i < winning_options.length; i++) {
+	    if (winning_options[i] > max_votes_options) {
+	      max_votes_options = winning_options[i];
+	      max_votes_options_idx = i;
+	    }
+	    if (winning_options[i] > 0) {
+	      this.updateLog(this.game.state.choices[i] + " receives " + winning_options[i] + " votes");
+	    }
+	  }
+	  
+	  let total_options_at_winning_strength = 0;
+	  for (let i = 0; i < winning_options.length; i++) {
+	    if (winning_options[i] == max_votes_options) { total_options_at_winning_strength++; }
+	  }
+	
 	}
 
   	this.game.queue.splice(qe, 1);
@@ -4718,7 +5086,10 @@ console.log("VoA: " + JSON.stringify(this.game.state.agendas_voting_information)
 	//
         let who_is_next = 0;
         for (let i = 0; i < this.game.players.length; i++) {
-          if (this.game.state.voted_on_agenda[i][agenda_num] == 0) { who_is_next = i+1; i = this.game.players.length; }
+          if (this.game.state.voted_on_agenda[i][agenda_num] == 0) { 
+	    who_is_next = i+1;
+	    i = this.game.players.length; 
+	  }
         }
 
 	if (this.game.player != who_is_next) {
@@ -4732,13 +5103,27 @@ console.log("VoA: " + JSON.stringify(this.game.state.agendas_voting_information)
 
 	} else {
 
+	  //
+	  // if the player has a rider, we skip the interactive voting and submit an abstention
+	  //
+	  if (imperium_self.doesPlayerHaveRider(this.game.player)) {
+	    imperium_self.addMove("resolve\tagenda\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	    imperium_self.addMove("vote\t"+agenda_num+"\t"+imperium_self.game.player+"\t"+"abstain"+"\t"+"0");
+	    imperium_self.endTurn();
+	    return 0;
+	  }
+
+	  //
+	  // otherwise we let them vote
+	  //
           let html  = '<p>The following agenda has advanced for consideration in the Galactic Senate:</p>';
   	      html += '<b>' + laws[imperium_self.game.state.agendas[agenda_num]].name + '</b>';
 	      html += '<br />';
   	      html += laws[imperium_self.game.state.agendas[agenda_num]].text;
 	      html += '<p><ul>';
-              html += '<li class="option" id="support">support</li>';
-              html += '<li class="option" id="oppose">oppose</li>';
+	  for (let i = 0; i < this.game.state.choices.length; i++) {
+              html += '<li class="option" id="'+i+'">'+this.game.state.choices[i]+'</li>';
+	  }
               html += '<li class="option" id="abstain">abstain</li></ul></p>';
 	  imperium_self.updateStatus(html);
 
@@ -4758,30 +5143,27 @@ console.log("VoA: " + JSON.stringify(this.game.state.agendas_voting_information)
 
 	    }
 
-	    if (vote == "support" || vote == "oppose") {
-
-              let html = '<p>How many votes do you wish to cast in the Galactic Senate:</p>';
-	      for (let i = 0; i <= imperium_self.game.state.votes_available[imperium_self.game.player-1]; i++) {
-                if (i == 1) {
-	          html += '<li class="option" id="'+i+'">'+i+' vote</li>';
-                } else {
-	          html += '<li class="option" id="'+i+'">'+i+' votes</li>';
-	        }
+            let html = '<p>How many votes do you wish to cast in the Galactic Senate:</p>';
+	    for (let i = 0; i <= imperium_self.game.state.votes_available[imperium_self.game.player-1]; i++) {
+              if (i == 1) {
+	        html += '<li class="option" id="'+i+'">'+i+' vote</li>';
+              } else {
+	        html += '<li class="option" id="'+i+'">'+i+' votes</li>';
 	      }
-	      imperium_self.updateStatus(html);
-
-              $('.option').off();
-              $('.option').on('click', function() {
-
-                votes = $(this).attr("id");
- 
-  	        imperium_self.addMove("resolve\tagenda\t1\t"+imperium_self.app.wallet.returnPublicKey());
-	        imperium_self.addMove("vote\t"+agenda_num+"\t"+imperium_self.game.player+"\t"+vote+"\t"+votes);
-	        imperium_self.endTurn();
-	        return 0;
-
-	      });
 	    }
+	    imperium_self.updateStatus(html);
+
+            $('.option').off();
+            $('.option').on('click', function() {
+
+              votes = $(this).attr("id");
+ 
+  	      imperium_self.addMove("resolve\tagenda\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	      imperium_self.addMove("vote\t"+agenda_num+"\t"+imperium_self.game.player+"\t"+vote+"\t"+votes);
+	      imperium_self.endTurn();
+	      return 0;
+
+	    });
 	  });
 	}
 
@@ -5301,7 +5683,6 @@ console.log(player_forces + " landed on planet");
         let z		 = this.returnEventObjects();
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
-	let player_to_continue = mv[3];  
 
         sys = this.returnSectorAndPlanets(sector);
   	sys.s.activated[player-1] = 1;
@@ -5586,15 +5967,20 @@ console.log("P: " + JSON.stringify(planet));
   
         let z = this.returnEventObjects();
 	let agenda = mv[1];
-	let agenda_idx = mv[2];
 
   	this.game.queue.splice(qe, 1);
+
+	//
+	// clear all riders
+	//
+	this.game.state.riders = [];
+	this.game.state.choices = [];
 
 	let speaker_order = this.returnSpeakerOrder();
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
 	    if (z[k].preAgendaStageTriggers(this, speaker_order[i], agenda) == 1) {
-	      this.game.queue.push("pre_agenda_stage_event\t"+speaker_order[i]+"\t"+agenda+"\t"+agenda_idx+"\t"+k);
+	      this.game.queue.push("pre_agenda_stage_event\t"+speaker_order[i]+"\t"+agenda+"\t"+k);
 	    }
           }
         }
@@ -5604,26 +5990,32 @@ console.log("P: " + JSON.stringify(planet));
         let z		 = this.returnEventObjects();
   	let player       = parseInt(mv[1]);
   	let agenda       = mv[2];
-  	let agenda_idx   = parseInt(mv[3]);
-        let z_index	 = parseInt(mv[4]);
+        let z_index	 = parseInt(mv[3]);
   	this.game.queue.splice(qe, 1);
 	return z[z_index].preAgendaStageEvent(this, player);
       }
       if (mv[0] === "pre_agenda_stage_post") {
   	let player       = parseInt(mv[1]);
         let agenda	 = mv[2];
-        let agenda_idx	 = parseInt(mv[3]);
   	this.game.queue.splice(qe, 1);
+
+	//
+	// determine which choices the agenda is voting on
+	//
+console.log("AGENDA IS: " + agenda);
+console.log("X: " +JSON.stringify(this.agenda_cards[agenda]));
+	this.game.state.choices = this.agenda_cards[agenda].returnAgendaOptions();
+
+
         let speaker_order = this.returnSpeakerOrder();
   	for (let i = 0; i < speaker_order.length; i++) {
-	  this.game.queue.push("pre_agenda_stage_player_menu\t"+speaker_order[i]+"\t"+agenda+"\t"+agenda_idx);
+	  this.game.queue.push("pre_agenda_stage_player_menu\t"+speaker_order[i]+"\t"+agenda);
         }
 	return 1;
       }
       if (mv[0] === "pre_agenda_stage_player_menu") {
         let player       = parseInt(mv[1]);
         let agenda       = mv[2];
-        let agenda_idx   = parseInt(mv[3]);
         this.game.queue.splice(qe, 1);
 	this.updateLog(this.returnFaction(player) + " is considering agenda options");
 	if (this.game.player == player) {
@@ -5639,13 +6031,12 @@ console.log("P: " + JSON.stringify(planet));
       if (mv[0] === "post_agenda_stage") {
         let z = this.returnEventObjects();
 	let agenda = mv[1];
-	let agenda_idx = mv[2];
   	this.game.queue.splice(qe, 1);
 	let speaker_order = this.returnSpeakerOrder();
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
 	    if (z[k].postAgendaStageTriggers(this, speaker_order[i], agenda) == 1) {
-	      this.game.queue.push("post_agenda_stage_event\t"+speaker_order[i]+"\t"+agenda+"\t"+agenda_idx+"\t"+k);
+	      this.game.queue.push("post_agenda_stage_event\t"+speaker_order[i]+"\t"+agenda+"\t"+k);
 	    }
           }
         }
@@ -5655,26 +6046,23 @@ console.log("P: " + JSON.stringify(planet));
         let z		 = this.returnEventObjects();
   	let player       = parseInt(mv[1]);
   	let agenda       = mv[2];
-  	let agenda_idx   = parseInt(mv[3]);
-        let z_index	 = parseInt(mv[4]);
+        let z_index	 = parseInt(mv[3]);
   	this.game.queue.splice(qe, 1);
 	return z[z_index].postAgendaStageEvent(this, player);
       }
       if (mv[0] === "post_agenda_stage_post") {
   	let player       = parseInt(mv[1]);
         let agenda	 = mv[2];
-        let agenda_idx	 = parseInt(mv[3]);
   	this.game.queue.splice(qe, 1);
         let speaker_order = this.returnSpeakerOrder();
   	for (let i = 0; i < speaker_order.length; i++) {
-	  this.game.queue.push("post_agenda_stage_player_menu\t"+speaker_order[i]+"\t"+agenda+"\t"+agenda_idx);
+	  this.game.queue.push("post_agenda_stage_player_menu\t"+speaker_order[i]+"\t"+agenda);
         }
 	return 1;
       }
       if (mv[0] === "post_agenda_stage_player_menu") {
         let player       = parseInt(mv[1]);
         let agenda       = mv[2];
-        let agenda_idx   = parseInt(mv[3]);
         this.game.queue.splice(qe, 1);
 	this.updateLog(this.returnFaction(player) + " is considering agenda options");
 	if (this.game.player == player) {
@@ -6074,9 +6462,9 @@ console.log("TECH: " + z[z_index].name);
 	}
 
 	if (destroy == 1) {
-  	  this.updateStatus("Opponent is destroying "+destroy+" ship");
+  	  this.updateStatus("Opponent is destroying "+total+" ship");
 	} else { 
-	  this.updateStatus("Opponent is destroying "+destroy+" ships");
+	  this.updateStatus("Opponent is destroying "+total+" ships");
 	}
 	return 0;
 
@@ -7884,20 +8272,15 @@ this.updateLog("DEFENDER PPGC: " + defender_forces);
   //
   // reaching this implies that the player can choose to fire / not-fire
   //
-  playerResolveDeadlockedAgenda(agenda, agenda_idx) {
+  playerResolveDeadlockedAgenda(agenda, agenda_idx, choices) {
 
     let imperium_self = this;
     let html = '';
 
     html = '<p>How do you wish to resolve this Agenda: </p><ul>';
-
-    if (1 == 1) {
-      html += '<li class="option" id="support">support</li>';
+    for (let i = 0; i < choices.length; i++) {
+      html += '<li class="option" id="'+i+'">'+choices[i]+'</li>';
     }
-    if (1 == 1) {
-      html += '<li class="option" id="dismiss">dismiss</li>';
-    }
-
     html += '</ul>';
 
     this.updateStatus(html);
@@ -7907,19 +8290,10 @@ this.updateLog("DEFENDER PPGC: " + defender_forces);
   
       let action2 = $(this).attr("id");
 
-      //
-      // speaker breaks ties here
-      //
-      if (action2 === "support") {
-        imperium_self.addMove("resolve_agenda\tsupport\t"+agenda_idx);
-        imperium_self.endTurn();
-        return 0;
-      }
-      if (actions2 === "dismiss") {
-  	imperium_self.addMove("resolve_agenda\tdismiss\t"+agenda_idx);
-        imperium_self.endTurn();
-	return 0;
-      }
+      imperium_self.addMove("resolve_agenda\tspeaker\t"+choices[action2]);
+      imperium_self.endTurn();
+      return 0;
+
     });
   }
 
@@ -10470,6 +10844,14 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 	//
         state.laws = [];
         state.agendas = [];
+
+	//
+	// riders => who has riders (and is not voting
+	// choices => possible outcomes (for/against, players, etc)
+	//
+        state.riders = [];
+        state.choices = [];
+
         state.agendas_voting_information = [];
         state.strategy_cards = [];
         state.strategy_cards_bonus = [];
@@ -10684,8 +11066,11 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     if (obj.postAgendaStageEvent == null) {
       obj.postAgendaStageEvent = function(imperium_self, agenda, agenda_idx) { return 1; }
     }
+    if (obj.returnAgendaOptions == null) {
+      obj.returnAgendaOptions = function(imperium_self) { return ['support','oppose']; }
+    }
     if (obj.onPass == null) {
-      obj.onPass = function(imperium_self, players_in_favour, players_opposed, votes_for, votes_against, mycallback) { mycallback(); }
+      obj.onPass = function(imperium_self, winning_choice) { return 0; }
     }
     if (obj.onFail == null) {
       obj.onFail = function(imperium_self, players_in_favour, players_opposed, votes_for, votes_against, mycallback) { mycallback(); }
@@ -11618,6 +12003,8 @@ console.log("B: ");
   
 
 
+
+
   doesPlanetHavePDS(planet) {
     for (let i = 0; i < planet.units.length; i++) {
       for (let ii = 0; ii < planet.units[i].length; ii++) {
@@ -11673,6 +12060,18 @@ console.log("B: ");
       }
     }
     return 0;
+  }
+
+
+
+  doesPlayerHaveActiveRider(player) {
+
+    for (let i = 0; i < this.game.state.riders.length; i++) {
+      if (this.game.state.riders[i].player == player) { return 1; }
+    }
+
+    return 0;
+
   }
 
 
@@ -12054,6 +12453,7 @@ console.log("SECTOR: " + sector);
   
   
   returnActionCard(cardname) {
+
     let cards = this.returnActionCards();
     let c = cards[cardname];
     if (c == undefined) {

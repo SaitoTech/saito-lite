@@ -740,20 +740,15 @@ this.updateLog("DEFENDER PPGC: " + defender_forces);
   //
   // reaching this implies that the player can choose to fire / not-fire
   //
-  playerResolveDeadlockedAgenda(agenda, agenda_idx) {
+  playerResolveDeadlockedAgenda(agenda, agenda_idx, choices) {
 
     let imperium_self = this;
     let html = '';
 
     html = '<p>How do you wish to resolve this Agenda: </p><ul>';
-
-    if (1 == 1) {
-      html += '<li class="option" id="support">support</li>';
+    for (let i = 0; i < choices.length; i++) {
+      html += '<li class="option" id="'+i+'">'+choices[i]+'</li>';
     }
-    if (1 == 1) {
-      html += '<li class="option" id="dismiss">dismiss</li>';
-    }
-
     html += '</ul>';
 
     this.updateStatus(html);
@@ -763,19 +758,10 @@ this.updateLog("DEFENDER PPGC: " + defender_forces);
   
       let action2 = $(this).attr("id");
 
-      //
-      // speaker breaks ties here
-      //
-      if (action2 === "support") {
-        imperium_self.addMove("resolve_agenda\tsupport\t"+agenda_idx);
-        imperium_self.endTurn();
-        return 0;
-      }
-      if (actions2 === "dismiss") {
-  	imperium_self.addMove("resolve_agenda\tdismiss\t"+agenda_idx);
-        imperium_self.endTurn();
-	return 0;
-      }
+      imperium_self.addMove("resolve_agenda\tspeaker\t"+choices[action2]);
+      imperium_self.endTurn();
+      return 0;
+
     });
   }
 
