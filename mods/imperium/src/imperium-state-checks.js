@@ -1263,16 +1263,22 @@ console.log("SECTOR: " + sector);
     return x;
   
   }
-  returnPlayerActionCards(player=this.game.player, types=[]) {
-  
+  returnPlayerActionCards(player=null, types=[]) {
+
+    if (player == null) { player = this.game.player; }  
+
     let x = [];
     //
-    // deck 2 -- hand #1
+    // deck 2 -- hand #1 -- action cards
     //
-    for (var i in this.game.deck[1].hand) {
-     // if (types.lengtmode == 0) {
+    for (let i = 0; i < this.game.deck[1].hand.length; i++) {
+      if (types.length == 0) {
         x.push(i);
-     // } // HACK
+      } else {
+	if (types.includes(this.action_cards[this.game.deck[1].hand[i]].type)) {
+	  x.push(i);
+	}
+      }
     }
   
     return x;

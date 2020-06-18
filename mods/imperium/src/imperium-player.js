@@ -255,13 +255,13 @@
 
     if (this.game.players_info[this.game.player-1].can_intervene_in_action_card) {
 
-      html = '<p>Do you wish to play a countering action card? <ul>';
+      html = '<p>Do you wish to play an action card to counter? <ul>';
 
       if (1 == 1) {
         html += '<li class="option" id="cont">continue</li>';
       }
       if (1 == 1) {
-        html += '<li class="option" id="action">action card</li>';
+        html += '<li class="option" id="action">play action card</li>';
       }
 
       let tech_attach_menu_events = 0;
@@ -1847,14 +1847,20 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
 
     let imperium_self = this;
     let array_of_cards = this.returnPlayerActionCards(this.game.player, types);
-    let action_cards = this.returnActionCards(types);
+    if (array_of_cards.length == 0) {
+      this.playerAcknowledgeNotice(this.returnFaction(action_card_player) + " plays " + this.action_cards[card].name, function() {
+        imperium_self.playerTurn();
+        return 0;
+      });
+      return 0;
+    }
 
     let html = '';
 
     html += "<p>Select an action card: </p><ul>";
     for (let z in array_of_cards) {
       if (!this.game.players_info[this.game.player-1].action_cards_played.includes(this.game.deck[1].hand[z])) {
-        let thiscard = action_cards[this.game.deck[1].hand[z]];
+        let thiscard = imperium_self.action_cards[this.game.deck[1].hand[z]];
         html += '<li class="textchoice pointer" id="'+this.game.deck[1].hand[z]+'">' + thiscard.name + '</li>';
       }
     }

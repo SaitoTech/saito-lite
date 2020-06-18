@@ -6,10 +6,10 @@
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
 
-	for (let i in this.game.board) {
-	  let sector = this.game.board[i].tile;
-	  if (this.doesSectorContainPlayerShip(player, sector)) {
-	    if (this.doesSectorContainNonPlayerUnit(player, sector, "spacedock")) {
+	for (let i in imperium_self.game.board) {
+	  let sector = imperium_self.game.board[i].tile;
+	  if (imperium_self.doesSectorContainPlayerShip(player, sector)) {
+	    if (imperium_self.doesSectorContainNonPlayerUnit(player, sector, "spacedock")) {
 	      return 1;
 	    }
 	  }

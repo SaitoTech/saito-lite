@@ -880,7 +880,7 @@ console.log("P: " + planet);
       homeworld		: 	"sector50",
       space_units	: 	["carrier","carrier","dreadnaught","fighter"],
       ground_units	: 	["infantry","infantry","pds","spacedock"],
-      tech		: 	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector","faction2-analytic","faction2-brilliant","faction2-fragile","faction2-deep-space-conduits","faction2-resupply-stations"],
+      tech		: 	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector","faction2-analytic","faction2-brilliant","faction2-fragile","faction2-deep-space-conduits","faction2-eres-siphons"],
       background	: 	'faction2.jpg'
     });
 
@@ -987,7 +987,7 @@ console.log("P: " + planet);
       gainTechnology : function(imperium_self, gainer, tech) {
 	if (tech == "faction2-deep-space-conduits") {
           imperium_self.game.players_info[gainer-1].deep_space_conduits = 1;
-          imperium_self.game.players_info[player-1].deep_space_conduits_exhausted = 0;
+          imperium_self.game.players_info[gainer-1].deep_space_conduits_exhausted = 0;
         }
       },
       activateSystemTriggers : function(imperium_self, activating_player, player, sector) { 
@@ -1805,10 +1805,10 @@ console.log("TESTING AAAD");
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
 
-	for (let i in this.game.board) {
-	  let sector = this.game.board[i].tile;
-	  if (this.doesSectorContainPlayerShip(player, sector)) {
-	    if (this.doesSectorContainNonPlayerUnit(player, sector, "spacedock")) {
+	for (let i in imperium_self.game.board) {
+	  let sector = imperium_self.game.board[i].tile;
+	  if (imperium_self.doesSectorContainPlayerShip(player, sector)) {
+	    if (imperium_self.doesSectorContainNonPlayerUnit(player, sector, "spacedock")) {
 	      return 1;
 	    }
 	  }
@@ -9998,14 +9998,13 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
 
     let imperium_self = this;
     let array_of_cards = this.returnPlayerActionCards(this.game.player, types);
-    let action_cards = this.returnActionCards(types);
 
     let html = '';
 
     html += "<p>Select an action card: </p><ul>";
     for (let z in array_of_cards) {
       if (!this.game.players_info[this.game.player-1].action_cards_played.includes(this.game.deck[1].hand[z])) {
-        let thiscard = action_cards[this.game.deck[1].hand[z]];
+        let thiscard = imperium_self.action_cards[this.game.deck[1].hand[z]];
         html += '<li class="textchoice pointer" id="'+this.game.deck[1].hand[z]+'">' + thiscard.name + '</li>';
       }
     }
@@ -13284,16 +13283,22 @@ console.log("SECTOR: " + sector);
     return x;
   
   }
-  returnPlayerActionCards(player=this.game.player, types=[]) {
-  
+  returnPlayerActionCards(player=null, types=[]) {
+
+    if (player == null) { player = this.game.player; }  
+
     let x = [];
     //
-    // deck 2 -- hand #1
+    // deck 2 -- hand #1 -- action cards
     //
-    for (var i in this.game.deck[1].hand) {
-     // if (types.lengtmode == 0) {
+    for (let i = 0; i < this.game.deck[1].hand.length; i++) {
+      if (types.length == 0) {
         x.push(i);
-     // } // HACK
+      } else {
+	if (types.includes(this.action_cards[this.game.deck[1].hand[i]].type)) {
+	  x.push(i);
+	}
+      }
     }
   
     return x;
