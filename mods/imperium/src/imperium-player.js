@@ -1,4 +1,4 @@
-  
+
   returnPlayers(num=0) {
   
     var players = [];
@@ -93,6 +93,11 @@
       players[i].space_combat_dice_reroll       = 0;
       players[i].pds_combat_dice_reroll		= 0;
       players[i].combat_dice_reroll_permitted 	= 0;
+
+      players[i].temporary_space_combat_roll_modifier 	= 0;
+      players[i].temporary_ground_combat_roll_modifier 	= 0;
+      players[i].temporary_pds_combat_roll_modifier 	= 0;
+
 
       //
       // tech upgrades
@@ -243,6 +248,9 @@
     }
   }
 
+
+
+
   playerPlayActionCardMenu(action_card_player, card, action_cards_played=[]) {
 
     let imperium_self = this;
@@ -257,11 +265,12 @@
 
       html = '<p>Do you wish to play an action card to counter? <ul>';
 
-      if (1 == 1) {
+      let ac = this.returnPlayerActionCards(player, ["action_cards"])
+      if (ac.length > 0) {
         html += '<li class="option" id="cont">continue</li>';
-      }
-      if (1 == 1) {
         html += '<li class="option" id="action">play action card</li>';
+      } else {
+        html += '<li class="option" id="cont">continue</li>';
       }
 
       let tech_attach_menu_events = 0;
@@ -577,13 +586,16 @@ console.log("\n\n\nWe need to assign the hits to these units: " + JSON.stringify
     let sys = this.returnSectorAndPlanets(sector);
     let html = '';
 
+    this.game.state.space_combat_sector = sector;
+
     html = '<p>Space Combat: round ' + this.game.state.space_combat_round + '</p><ul>';
 
-    if (1 == 1) {
-      html += '<li class="option" id="attack">roll dice</li>';
-    }
-    if (1 == 1) {
-      html += '<li class="option" id="action">action card</li>';
+    let ac = this.returnPlayerActionCards(this.game.player, ["combat", "space_combat"])
+    if (ac.length > 0) {
+      html += '<li class="option" id="attack">continue</li>';
+      html += '<li class="option" id="action">play action card</li>';
+    } else {
+      html += '<li class="option" id="attack">continue</li>';
     }
 
     let tech_attach_menu_events = 0;
@@ -657,12 +669,12 @@ console.log("\n\n\nWe need to assign the hits to these units: " + JSON.stringify
     let sys = this.returnSectorAndPlanets(sector);
     let html = '';
 
+    this.game.state.ground_combat_sector = sector;
+    this.game.state.ground_combat_planet_idx = planet_idx;
+
+
     let attacker_forces = this.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
     let defender_forces = this.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx);
-
-this.updateLog("ATTACKER PPGC: " + attacker_forces);
-this.updateLog("DEFENDER PPGC: " + defender_forces);
-
 
     if (this.game.player == attacker) {
       html = '<p>You are invading ' + sys.p[planet_idx].name + ' with ' + attacker_forces + ' infantry. ' +this.returnFaction(defender) + ' has ' + defender_forces + ' infanty remaining. This is round ' + this.game.state.ground_combat_round + ' of ground combat. </p><ul>';
@@ -670,12 +682,14 @@ this.updateLog("DEFENDER PPGC: " + defender_forces);
       html = '<p>' + this.returnFaction(attacker) + ' has invaded ' + sys.p[planet_idx].name + ' with ' + attacker_forces + ' infantry. You have ' + defender_forces + ' infantry remaining. This is round ' + this.game.state.ground_combat_round + ' of ground combat. </p><ul>';
     }
 
-    if (1 == 1) {
-      html += '<li class="option" id="attack">roll dice</li>';
+    let ac = this.returnPlayerActionCards(this.game.player, ["combat","ground_combat"])
+    if (ac.length > 0) {
+      html += '<li class="option" id="attack">continue</li>';
+      html += '<li class="option" id="action">play action card</li>';
+    } else {
+      html += '<li class="option" id="attack">continue</li>';
     }
-    if (1 == 1) {
-      html += '<li class="option" id="action">action card</li>';
-    }
+
 
     let tech_attach_menu_events = 0;
     let tech_attach_menu_triggers = [];
@@ -1273,6 +1287,44 @@ console.log(player + " -- " + card + " -- " + deck);
 
 
 
+  playerScoreSecretObjective(mycallback, stage=0) {
+
+    let imperium_self = this;
+   
+    let html = '';  
+    let can_score = 0;
+
+    html += '<p>Do you wish to score any Secret Objectives? </p><ul>';
+  
+    // Secret Objectives
+    for (let i = 0 ; i < this.game.deck[5].hand.length; i++) {
+      if (!this.game.players_info[this.game.player-1].objectives_scored.includes(this.game.deck[5].hand[i])) {
+        if (this.canPlayerScoreVictoryPoints(this.game.player, this.game.deck[5].hand[i], 3)) {
+	  can_score = 1;
+          html += '1 VP Secret Objective: <li class="option secret3" id="'+this.game.deck[5].hand[i]+'">'+this.game.deck[5].cards[this.game.deck[5].hand[i]].name+'</li>';
+        }
+      }
+    }
+  
+    html += '<li class="option" id="no">I choose not to score...</li>';
+    html += '</ul>';
+  
+    this.updateStatus(html);
+    
+    $('.option').off();
+    $('.option').on('click', function() {
+  
+      let action = $(this).attr("id");
+      if (action == "no") {
+        mycallback(0, "");
+      } else {
+        let vp = 2;
+        let objective = action;
+        mycallback(vp, objective);
+      }
+    });
+  }
+  
   playerScoreVictoryPoints(mycallback, stage=0) {  
 
     let imperium_self = this;
@@ -2338,7 +2390,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
   	    }
           }
 
-          let user_message = `<div id="menu-container">This ship has <span class="capacity_remaining">${total_ship_capacity}</span> capacity to carry fighters / infantry. Do you wish to add them? <ul>`;
+          let user_message = `<div id="">This ship has <span class="capacity_remaining">${total_ship_capacity}</span> capacity to carry fighters / infantry. Do you wish to add them? <ul>`;
   
           for (let i = 0; i < sys.p.length; i++) {
             let planetary_units = sys.p[i].units[imperium_self.game.player-1];
@@ -2349,7 +2401,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
               }
             }
             if (infantry_available_to_move > 0) {
-              user_message += '<li class="addoption option textchoice" id="addinfantry_p_'+i+'">add infantry from '+sys.p[i].name+' (<span class="add_infantry_remaining_'+i+'">'+infantry_available_to_move+'</span>)</li>';
+              user_message += '<li class="option textchoice" id="addinfantry_p_'+i+'">add infantry from '+sys.p[i].name+' (<span class="add_infantry_remaining_'+i+'">'+infantry_available_to_move+'</span>)</li>';
             }
           }
   
@@ -2369,8 +2421,8 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 	      }
             }
           }
-          user_message += '<li class="addoption option textchoice" id="addfighter_s_s">add fighter (<span class="add_fighters_remaining">'+fighters_available_to_move+'</span>)</li>';
-          user_message += '<li class="addoption option textchoice" id="skip">finish</li>';
+          user_message += '<li class="option textchoice" id="addfighter_s_s">add fighter (<span class="add_fighters_remaining">'+fighters_available_to_move+'</span>)</li>';
+          user_message += '<li class="option textchoice" id="skip">finish</li>';
           user_message += '</ul></div>';
   
 
@@ -2380,8 +2432,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
           $('.hud-menu-overlay').html(user_message);
           $('.hud-menu-overlay').show();
           $('.status').hide();
-          $('.addoption').off();
-
+          $('.textchoice').off();
   
 	  //
 	  // add hover / mouseover to message
@@ -2397,7 +2448,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 
   
           // leave action enabled on other panels
-          $('.addoption').on('click', function() {
+          $('.textchoice').on('click', function() {
   
             let id = $(this).attr("id");
             let tmpx = id.split("_");

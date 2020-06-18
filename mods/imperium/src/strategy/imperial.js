@@ -25,12 +25,14 @@
         imperium_self.game.state.round_scoring = 2;
 
         imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-        imperium_self.playerScoreVictoryPoints(function(vp, objective) {
+        imperium_self.playerScoreSecretObjective(function(vp, objective) {
           if (vp > 0) { imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); }
-          imperium_self.updateStatus("You have played the Imperial Secondary");
-          imperium_self.endTurn();
-        }, 2);
-
+          imperium_self.playerScoreVictoryPoints(function(vp, objective) {
+            if (vp > 0) { imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); }
+            imperium_self.updateStatus("You have played the Imperial Secondary");
+            imperium_self.endTurn();
+          }, 2);
+        });
       },
     });
 

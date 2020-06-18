@@ -1,6 +1,4 @@
 
-console.log("D");
-
     this.importTech("neural-motivator", {
       name        	:       "Neural Motivator" ,
       color       	:       "green" ,
@@ -103,7 +101,7 @@ console.log("D");
 
 	if (imperium_self.game.player != player) { return 0; }
 
-        let sys = this.returnSectorAndPlanets(sector);
+        let sys = imperium_self.returnSectorAndPlanets(sector);
         let planet = sys.p[planet_idx];
 	let html = '';
 

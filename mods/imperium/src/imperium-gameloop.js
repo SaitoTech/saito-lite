@@ -151,6 +151,51 @@
 
 
 
+      if (mv[0] === "repair") {  
+
+  	let player       = parseInt(mv[1]);
+        let type         = mv[2];
+        let sector       = mv[3];
+        let planet_idx   = parseInt(mv[4]);
+        let unit_idx     = parseInt(mv[5]);
+
+	let sys = this.returnSectorAndPlanets(sector);  
+
+  	if (type == "space") {
+	  sys.s.units[player-1][unit_idx].strength = sys.s.units[player-1][unit_idx].max_strength;
+  	} else {
+	  sys.p[planet_idx].units[player-1][unit_idx].strength = sys.p[planet_idx].units[player-1][unit_idx].max_strength;
+        }
+  
+  	this.game.queue.splice(qe, 1);
+  	return 1;
+  
+      }
+
+
+
+      if (mv[0] === "continue") {  
+
+  	let player = mv[1];
+  	let sector = mv[2];
+
+        this.game.queue.splice(qe, 1);
+
+  	//
+  	// update sector
+  	//
+  	this.updateSectorGraphics(sector);
+
+	if (this.game.player == player) {
+  	  this.playerContinueTurn(player, sector);
+	}
+
+        return 0;
+
+      }
+
+
+
       if (mv[0] === "produce") {
   
   	let player       = mv[1];
@@ -493,9 +538,8 @@
         }
 
 
-
 	//
-	// more than one winniner
+	// more than one winner
 	//
 	if (total_options_at_winning_strength > 1) {
 	  console.log("WE NEED THE SPEAKER TO INTERVENE: " + total_options_at_winning_strength);
@@ -2132,7 +2176,8 @@ console.log("TECH: " + z[z_index].name);
 	      imperium_self.game.players_info[attacker-1].target_units = z[z_index].modifyTargets(this, attacker, player, imperium_self.game.player, "pds", imperium_self.game.players_info[attacker-1].target_units);
 	    }
 
-	    roll += this.game.players_info[player-1].pdf_combat_roll_modifier;
+	    roll += this.game.players_info[player-1].pds_combat_roll_modifier;
+	    roll += this.game.players_info[player-1].temporary_pds_combat_roll_modifier;
 	    if (roll >= hits_on[s]) {
 	      total_hits++;
 	      hits_or_misses.push(1);
@@ -2180,7 +2225,8 @@ console.log("TECH: " + z[z_index].name);
 	        imperium_self.game.players_info[player-1].target_units = z[z_index].modifyTargets(this, attacker, player, imperium_self.game.player, "pds", imperium_self.game.players_info[player-1].target_units);
 	      }
 
-	      roll += this.game.players_info[player-1].pdf_combat_roll_modifier;
+	      roll += this.game.players_info[player-1].pds_combat_roll_modifier;
+	      roll += this.game.players_info[player-1].temporary_pds_combat_roll_modifier;
 	      if (roll >= hits_on[lowest_combat_idx]) {
 	        total_hits++;
 		hits_or_misses[lowest_combat_idx] = 1;
@@ -2268,6 +2314,8 @@ console.log("TECH: " + z[z_index].name);
 	    }
 
 	    roll += this.game.players_info[attacker-1].space_combat_roll_modifier;
+	    roll += this.game.players_info[attacker-1].temporary_space_combat_roll_modifier;
+	    roll += sys.s.units[attacker-1][i].temporary_combat_modifier;
 
 	    if (roll >= sys.s.units[attacker-1][i].combat) {
 	      total_hits++;
@@ -2319,6 +2367,8 @@ console.log("TECH: " + z[z_index].name);
 	      }
 
 	      roll += this.game.players_info[player-1].space_combat_roll_modifier;
+	      roll += this.game.players_info[player-1].temporary_space_combat_roll_modifier;
+	      roll += sys.s.units[attacker-1][lowest_combat_idx].temporary_combat_modifier;
 
 	      if (roll >= hits_on[lowest_combat_idx]) {
 	        total_hits++;
@@ -2416,6 +2466,8 @@ this.updateLog(this.returnFaction(defender) + ": " + this.returnNumberOfGroundFo
 	      }
 
 	      roll += this.game.players_info[attacker-1].ground_combat_roll_modifier;
+	      roll += this.game.players_info[attacker-1].temporary_ground_combat_roll_modifier;
+	      roll += sys.p[planet_idx].units[attacker-1][i].temporary_combat_modifier;
 
 console.log(this.returnFaction(attacker) + " rolls a " + roll);
 
@@ -2471,6 +2523,8 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	      }
 
 	      roll += this.game.players_info[player-1].ground_combat_roll_modifier;
+	      roll += this.game.players_info[player-1].temporary_ground_combat_roll_modifier;
+	      roll += sys.p[planet_idx].units[attacker-1][lowest_combat_idx].temporary_combat_modifier;
 
 	      if (roll >= hits_on[lowest_combat_idx]) {
 	        total_hits++;
@@ -2642,6 +2696,12 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	if (defender == -1) {
 	  return 1;
 	}
+
+	//
+	// space units combat temporary modifiers set to 0
+	//
+        this.resetSpaceUnitTemporaryModifiers(sector);
+
 
 	this.game.state.space_combat_attacker = player;
 	this.game.state.space_combat_defender = defender;
@@ -2871,6 +2931,7 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
 
   	this.game.queue.splice(qe, 1);
 
+
         let speaker_order = this.returnSpeakerOrder();
 
   	for (let i = 0; i < speaker_order.length; i++) {
@@ -2925,6 +2986,11 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
           return 1;
         }
 
+	//
+	// reset temporary combat modifiers
+	//
+	this.resetGroundUnitTemporaryModifiers();
+
 	this.game.state.ground_combat_attacker = player;
 	this.game.state.ground_combat_defender = defender;
 
@@ -2974,7 +3040,9 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
               this.game.queue.push("action_card_event\t"+speaker_order[i]+"\t"+player+"\t"+card+"\t"+k);
             }
           }
-          this.game.queue.push("action_card_player_menu\t"+speaker_order[i]+"\t"+player+"\t"+card);
+	  if ((i+1) != player) {
+            this.game.queue.push("action_card_player_menu\t"+speaker_order[i]+"\t"+player+"\t"+card);
+          }
         }
 
 

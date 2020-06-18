@@ -33,6 +33,10 @@
     this.game.players_info[player-1].may_player_produce_without_spacedock = 0;
     this.game.players_info[player-1].may_player_produce_without_spacedock_production_limit = 0;
     this.game.players_info[player-1].may_player_produce_without_spacedock_cost_limit = 0;
+    this.game.players_info[player-1].temporary_space_combat_roll_modifier 	= 0;
+    this.game.players_info[player-1].temporary_ground_combat_roll_modifier 	= 0;
+    this.game.players_info[player-1].temporary_pds_combat_roll_modifier 	= 0;
+
     this.game.state.temporary_adjacency = [];
   }
 

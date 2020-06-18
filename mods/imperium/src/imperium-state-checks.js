@@ -584,6 +584,22 @@ console.log("PLANET IS: " + JSON.stringify(sys.p[planet_idx]));
     return 0;
   }
 
+  returnAdjacentSectors(sector) {
+
+    let adjasec = [];
+    let s = this.addWormholesToBoardTiles(this.returnBoardTiles());  
+    for (let i in s) {
+      if (this.areSectorsAdjacent(sector, s[i].tile) && s[i].tile != sector) {
+        adjasec.push(s[i].tile);
+      }
+    }
+
+    return adjasec;
+
+  }
+
+
+
   areSectorsAdjacent(sector1, sector2) {
 
     let s = this.addWormholesToBoardTiles(this.returnBoardTiles());  
@@ -790,7 +806,7 @@ console.log("PLAYER LOWEST: " + JSON.stringify(player_lowest));
   
     let loop = player_lowest.length;
     let player_initiative_order = [];
-  
+
     for (let i = 0; i < loop; i++) {
 
       let lowest_this_loop 	 = 100000;
@@ -799,14 +815,19 @@ console.log("PLAYER LOWEST: " + JSON.stringify(player_lowest));
       for (let ii = 0; ii < player_lowest.length; ii++) {
         if (player_lowest[ii] < lowest_this_loop) {
 	  lowest_this_loop = player_lowest[ii];
-	  lowest_this_loop_idx = i;
+	  lowest_this_loop_idx = ii;
 	}
       }
 
       player_lowest[lowest_this_loop_idx] = 999999;
       player_initiative_order.push(lowest_this_loop_idx+1);
 
+console.log("PL: " + JSON.stringify(player_lowest));
+console.log("PIO: " + JSON.stringify(player_initiative_order));
+
+
     }
+
 
 console.log('INITIATIE ORDER: ' + JSON.stringify(player_initiative_order));
 
@@ -1407,6 +1428,15 @@ console.log("SECTOR: " + sector);
 
     return 0;
  
+  }
+  
+  doesSectorContainNonPlayerShips(player, sector) {
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      if ((i+1) != player) {
+	if (this.doesSectorContainPlayerShips((i+1), sector)) { return 1; }
+      }
+    }
+    return 0;
   }
   
 

@@ -24,12 +24,20 @@
     if (obj.range == null) 		{ obj.range = 0; }			// firing range
     if (obj.last_round_damaged == null) { obj.last_round_damaged = 0; }		// last round in which hit (some techs care)
     if (obj.production == null) 	{ obj.production = 0; }			// can produce X units (production limit)
+    if (obj.temporary_combat_modifier == null) { obj.temporary_combat_modifier = 0; } // some action cards manipulate
 
     obj = this.addEvents(obj);
     this.units[name] = obj;
 
   }  
 
+
+  resetSpaceUnitTemporaryModifiers(sector) {
+
+  }
+  resetGroundnitTemporaryModifiers(sector) {
+
+  }
 
   
   

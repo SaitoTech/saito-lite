@@ -52,6 +52,9 @@
         state.ground_combat_infantry_destroyed_attacker = 0;
         state.ground_combat_infantry_destroyed_defender = 0;
 
+	state.space_combat_sector = "";
+	state.ground_combat_sector = "";
+	state.ground_combat_planet_idx = "";
 
     return state;
   }

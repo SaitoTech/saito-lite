@@ -82,7 +82,7 @@
       },
       activateSystemTriggers :    function(imperium_self, activating_player, player, sector) {
 	if (imperium_self.game.players_info[player-1].eres_siphons == 1 && activating_player != player) {
-          if (imperium_self.doesSystemContainPlayerShips(player, sector) == 1) { return 1; }
+          if (imperium_self.doesSectorContainPlayerShips(player, sector) == 1) { return 1; }
 	}
         return 0;
       },
