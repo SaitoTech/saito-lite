@@ -41,7 +41,7 @@
     planets['planet32'] = { type : "hazardous" , img : "/imperium/img/planets/GRAVITYS-EDGE.png" , name : "Gravity's Edge" , resources : 2 , influence : 1 , bonus : ""  }
     planets['planet33'] = { type : "industrial" , img : "/imperium/img/planets/POPULAX.png" , name : "Populax" , resources : 3 , influence : 2 , bonus : "yellow"  }
     planets['planet34'] = { type : "cultural" , img : "/imperium/img/planets/OLD-MOLTOUR.png" , name : "Old Moltour" , resources : 2 , influence : 0 , bonus : ""  }
-    planets['planet35'] = { type : "diplomatic" , img : "/imperium/img/planets/NEW-BYZANTIUM.png" , name : "New Byzantium" , resources : 1 , influence : 6 , bonus : ""  }
+    planets['new-byzantium'] = { type : "diplomatic" , img : "/imperium/img/planets/NEW-BYZANTIUM.png" , name : "New Byzantium" , resources : 1 , influence : 6 , bonus : ""  }
     planets['planet36'] = { type : "cultural" , img : "/imperium/img/planets/OUTERANT.png" , name : "Outerant" , resources : 1 , influence : 3 , bonus : ""  }
     planets['planet37'] = { type : "industrial" , img : "/imperium/img/planets/VESPAR.png" , name : "Vespar" , resources : 2 , influence : 2 , bonus : ""  }
 
@@ -135,7 +135,7 @@
     sectors['sector25']        = { img : "/imperium/img/sectors/sector25.png" , 	   name : "Sector 25" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet32'] }
     sectors['sector26']        = { img : "/imperium/img/sectors/sector26.png" , 	   name : "Sector 26" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet33'] }
     sectors['sector27']        = { img : "/imperium/img/sectors/sector27.png" , 	   name : "Sector 27" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet34'] } 
-    sectors['new-byzantium']   = { img : "/imperium/img/sectors/sector28.png" , 	   name : "New Byzantium" , hw : 0 , wormhole : 0, mr : 1 , planets : ['planet35'] }
+    sectors['new-byzantium']   = { img : "/imperium/img/sectors/sector28.png" , 	   name : "New Byzantium" , hw : 0 , wormhole : 0, mr : 1 , planets : ['new-byzantium'] }
     sectors['sector29']        = { img : "/imperium/img/sectors/sector29.png" , 	   name : "Sector 29" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet36'] }
     sectors['sector30']        = { img : "/imperium/img/sectors/sector30.png" , 	   name : "Sector 30" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet37'] }
     sectors['sector31']        = { img : "/imperium/img/sectors/sector31.png" , 	   name : "Sector 31" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet38'] }
@@ -200,7 +200,40 @@
   };
   
   
-  
+  addWormholesToBoardTiles(tiles) {
+
+    let wormholes = [];
+
+    for (let i in this.game.sectors) {
+      if (this.game.sectors[i].wormhole != 0) { wormholes.push(i); }
+    }    
+
+    for (let i in tiles) {
+      if (this.game.board[i]) {
+        let sector = this.game.board[i].tile;
+        if (this.game.sectors[sector].wormhole != 0) {
+	  for (let z = 0; z < wormholes.length; z++) {
+	    if (wormholes[z] != sector && this.game.sectors[sector].wormhole == this.game.sectors[wormholes[z]].wormhole) {
+	      let tile_with_partner_wormhole = "";
+	      for (let b in tiles) {
+	        if (this.game.board[b]) {
+	          if (this.game.board[b].tile == wormholes[z]) {
+	            if (!tiles[i].neighbours.includes(b)) {
+		      tiles[i].neighbours.push(b);
+	  	    }
+	          }
+	        }
+	      }
+	    }
+  	  }
+        }
+      }
+    }
+
+    return tiles;
+  }
+
+
   
   returnBoardTiles() {
     var slot = {};

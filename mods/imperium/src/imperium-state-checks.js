@@ -578,13 +578,91 @@ console.log("PLANET IS: " + JSON.stringify(sys.p[planet_idx]));
 
 
   
+
   isPlanetExhausted(planetname) {
     if (this.game.planets[planetname].exhausted == 1) { return 1; }
     return 0;
   }
-  
-  
 
+  areSectorsAdjacent(sector1, sector2) {
+
+    let s = this.addWormholesToBoardTiles(this.returnBoardTiles());  
+    let tile1 = "";
+    let tile2 = "";
+
+    for (let i in s) {
+      if (s[i].tile == sector1) { tile1 = i; }
+      if (s[i].tile == sector2) { tile2 = i; }
+    }
+
+    if (s[tile1].neighbours.includes(tile2)) { return 1; }
+    if (s[tile2].neighbours.includes(tile1)) { return 1; }
+
+    return 0;
+  }
+  
+  arePlayersAdjacent(player1, player2) {
+
+    let p1sectors = this.returnSectorsWithPlayerUnits(player1);
+    let p2sectors = this.returnSectorsWithPlayerUnits(player2);
+
+    for (let i = 0; i < p1sectors.length; i++) {
+      for (let ii = 0; ii < p2sectors.length; ii++) {
+        if (p1sectors[i] === p2sectors[ii]) { return 1; }
+	if (this.areSectorsAdjacent(p1sectors[i], p2sectors[ii])) { return 1; }
+      }
+    }
+
+    return 0;
+  }
+
+  isPlayerAdjacentToSector(player, sector) {
+
+    let p1sectors = this.returnSectorsWithPlayerUnits(player1);
+
+    for (let i = 0; i < p1sectors.length; i++) {
+      if (p1sectors[i] == sector) { return 1; }
+      if (this.areSectorsAdjacent(p1sectors[i], sector)) { return 1; }
+    }
+    return 0;
+
+  }
+
+
+
+  isPlayerShipAdjacentToSector(player, sector) {
+
+    let p1sectors = this.returnSectorsWithPlayerShips(player);
+
+    for (let i = 0; i < p1sectors.length; i++) {
+      if (p1sectors[i] == sector) { return 1; }
+      if (this.areSectorsAdjacent(p1sectors[i], sector)) { return 1; }
+    }
+    return 0;
+
+  }
+
+
+
+  returnSectorsWithPlayerShips(player) {
+    let sectors_with_units = [];
+    for (let i in this.game.sectors) {
+      if (this.doesSectorContainPlayerShips(player, i)) {
+	sectors_with_units.push(i);
+      }
+    }
+    return sectors_with_units;
+  }
+
+  returnSectorsWithPlayerUnits(player) {
+    let sectors_with_units = [];
+    for (let i in this.game.sectors) {
+      if (this.doesSectorContainPlayerUnits(player, i)) {
+	sectors_with_units.push(i);
+      }
+    }
+    return sectors_with_units;
+  }
 
   canPlayerProduceInSector(player, sector) {
     if (this.game.players_info[player-1].may_player_produce_without_spacedock == 1) {
@@ -684,9 +762,11 @@ console.log("PLANET IS: " + JSON.stringify(sys.p[planet_idx]));
     let strategy_cards   = this.returnStrategyCards();
     let card_io_hmap  = [];
     let player_lowest = [];
-  
+
+console.log("STRAT: " + JSON.stringify(strategy_cards));  
+
     for (let j in strategy_cards) {
-      card_io_hmap[j] = strategy_cards[j].order;
+      card_io_hmap[j] = strategy_cards[j].rank;
     }
 
     for (let i = 0; i < this.game.players_info.length; i++) {
@@ -696,18 +776,39 @@ console.log("PLANET IS: " + JSON.stringify(sys.p[planet_idx]));
       for (let k = 0; k < this.game.players_info[i].strategy.length; k++) {
         let sc = this.game.players_info[i].strategy[k];
         let or = card_io_hmap[sc];
+
+console.log(k + " -- " + sc.name + " has order " + or);
         if (or < player_lowest[i]) { player_lowest[i] = or; }
       }
     }
+
+console.log("PLAYER LOWEST: " + JSON.stringify(player_lowest));
   
     let loop = player_lowest.length;
     let player_initiative_order = [];
   
     for (let i = 0; i < loop; i++) {
-      let a = player_lowest.indexOf(Math.max(...player_lowest));
-      player_lowest[a] = -1;
-      player_initiative_order.push(a+1);
+
+      let lowest_this_loop 	 = 100000;
+      let lowest_this_loop_idx = 0;
+
+      for (let ii = 0; ii < player_lowest.length; ii++) {
+        if (player_lowest[ii] < lowest_this_loop) {
+	  lowest_this_loop = player_lowest[ii];
+	  lowest_this_loop_idx = i;
+	}
+      }
+
+      player_lowest[lowest_this_loop_idx] = 999999;
+      player_initiative_order.push(lowest_this_loop_idx+1);
+
     }
+
+console.log('INITIATIE ORDER: ' + JSON.stringify(player_initiative_order));
+
+for (let i = 0; i < player_initiative_order.length; i++) {
+  console.log(this.returnFaction(player_initiative_order[i]) + " is " + (i+1));
+}
 
     return player_initiative_order;
   
@@ -718,12 +819,10 @@ console.log("PLANET IS: " + JSON.stringify(sys.p[planet_idx]));
 
   returnSectorsWithinHopDistance(destination, hops) {
 
-console.log(destination + " <----> " + hops);
-
     let sectors = [];
     let distance = [];
-    let s = this.returnBoardTiles();
-  
+    let s = this.addWormholesToBoardTiles(this.returnBoardTiles());  
+
     sectors.push(destination);
     distance.push(0);
   
@@ -731,20 +830,17 @@ console.log(destination + " <----> " + hops);
     // find which systems within move distance (hops)
     //
     for (let i = 0; i < hops; i++) {
-console.log("SECTORS: " + sectors);
       let tmp = JSON.parse(JSON.stringify(sectors));
       for (let k = 0; k < tmp.length; k++) {
-console.log("A: " + tmp[k]);
         let neighbours = s[tmp[k]].neighbours;
         for (let m = 0; m < neighbours.length; m++) {
-  	if (!sectors.includes(neighbours[m]))  {
-  	  sectors.push(neighbours[m]);
-  	  distance.push(i+1);
-  	}
+  	  if (!sectors.includes(neighbours[m]))  {
+  	    sectors.push(neighbours[m]);
+  	    distance.push(i+1);
+  	  }
         }
       }
     }
-console.log("B: ");
     return { sectors : sectors , distance : distance };
   }
   
@@ -1209,53 +1305,6 @@ console.log("SECTOR: " + sector);
 
     let cards = this.returnActionCards();
     let c = cards[cardname];
-    if (c == undefined) {
-  
-      //
-      // this is not a card, it is something like "skip turn" or cancel
-      //
-      return '<div class="noncard">'+c.name+'</div>';
-  
-    }
-    var html = `
-      <div class="actioncard" style="background-image: url('${c.img}');">
-        <div class="actioncard_name">${c.name}</div>
-      </div>
-    `;
-    return html;
-  
-  }
-  
-  
-  returnAgendaCard(cardname) {
-  
-    let cards = this.returnAgendaCards();
-    let c = cards[cardname];
-  
-    if (c == undefined) {
-  
-      //
-      // this is not a card, it is something like "skip turn" or cancel
-      //
-      return '<div class="noncard">'+cardname+'</div>';
-  
-    }
-  
-    var html = `
-      <div class="agendacard" style="background-image: url('${c.img}');">
-        <div class="agendacard_name">${c.name}</div>
-      </div>
-    `;
-    return html;
-  
-  }
-  
-
-  doesSectorContainWormhole(sector) {
-
-    let sys = this.returnSectorAndPlanets(sector);
-    if (sys.s.wormhole != 0) { return 1; }
-    return 0;
  
   }
 

@@ -726,7 +726,7 @@
 
   	this.game.queue.push("resolve\tsetinitiativeorder");
 
-  	for (let i = 0; i < initiative_order.length; i++) {
+  	for (let i = initiative_order.length-1; i >= 0; i--) {
   	  if (this.game.players_info[initiative_order[i]-1].passed == 0) {
   	    this.game.queue.push("play\t"+initiative_order[i]);
   	  }
@@ -788,6 +788,17 @@
   	} else {
   	  this.game.state.round_scoring = 0;
   	}
+
+
+	//
+	// SECRET OBJECTIVES (now handled by init)
+	//
+  	//if (this.game.state.round == 1) {
+	//  for (let i = 1; i <= this.game.players_info.length; i++) {
+        //    this.game.queue.push("DEAL\t6\t"+i+'\t'+"1");
+  	//  }
+  	//}
+	
   
   	//
   	// RESET USER ACCOUNTS
@@ -817,6 +828,8 @@
         this.game.queue.push("playerschoosestrategycards");
         this.game.queue.push("playerschoosestrategycards_before");
  
+
+
 
   	//
   	// ACTION CARDS
@@ -1139,6 +1152,59 @@ console.log(player_forces + " landed on planet");
   	this.game.queue.splice(qe, 1);
   	return 1;
   
+      }
+
+
+      if (mv[0] === "give") {
+  
+  	let giver       = parseInt(mv[1]);
+        let recipient    = parseInt(mv[2]);
+        let type         = mv[3];
+        let details      = mv[4];
+  	this.game.queue.splice(qe, 1);
+
+        if (type == "action") {
+	  if (this.game.player == recipient) {
+	    this.game.deck[1].hand.push(details);
+	    if (this.game.deck[1].hand.length > this.game.players_info[this.game.player-1].action_card_limit) {
+	      this.playerDiscardActionCard(1);
+	      return 0;
+	    } else {
+	    }
+	    this.endMove();
+	  }
+        }
+  
+  	return 0;  
+
+      }
+
+
+      if (mv[0] === "pull") {
+  
+  	let puller       = parseInt(mv[1]);
+        let pullee       = parseInt(mv[2]);
+        let type         = mv[3];
+        let details      = mv[4];
+  	this.game.queue.splice(qe, 1);
+
+        if (type == "action") {
+	  if (details === "random") {
+	    if (this.game.player == pullee) {
+	      let roll = this.rollDice(this.game.deck[1].hand.length);
+	      let action_card = this.game.deck[1].hand[roll-1];
+	      this.game.deck[1].hand.splice((roll-1), 1);
+	      this.addMove("give\t"+pullee+"\t"+puller+"\t"+"action"+"\t"+action_card);
+	      this.addMove("notify\t" + this.returnFaction(puller) + " pulls " + this.action_cards[action_card].name);
+	      this.endTurn();
+	    } else {
+	      let roll = this.rollDice();
+	    }
+	  }
+  	}
+  
+  	return 0;  
+
       }
 
 
@@ -2872,7 +2938,7 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
       // ACTION CARD //
       /////////////////
       if (mv[0] === "action_card") {
-  
+ 
   	let player = parseInt(mv[1]);
   	let card = mv[2];
 	let z = this.returnEventObjects();
@@ -2884,16 +2950,37 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
 
         let speaker_order = this.returnSpeakerOrder();
 
+	this.game.players_info[this.game.player-1].can_intervene_in_action_card = 0;
+
+	//
+	// allow players to respond to their action cards, EVENT always triggers
+	//
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
 	    if (z[k].playActionCardTriggers(this, player, card) == 1) {
               this.game.queue.push("action_card_event\t"+speaker_order[i]+"\t"+player+"\t"+card+"\t"+k);
             }
           }
+          this.game.queue.push("action_card_player_menu\t"+speaker_order[i]+"\t"+player+"\t"+card);
         }
+
+
 	return 1;
 
       }
+      if (mv[0] === "action_card_player_menu") { 
+
+	let player = parseInt(mv[1]);
+	let action_card_player = parseInt(mv[2]);
+	let action_card = mv[3];
+  	this.game.queue.splice(qe, 1);
+
+	if (this.game.player == player) {
+	  this.playerPlayActionCardMenu(action_card_player, action_card);
+	}
+	return 0;
+
+      } 
       if (mv[0] === "action_card_event") {  
     
 	let z = this.returnEventObjects();

@@ -102,9 +102,6 @@
       }
  
  
-  
-
-
       //
       // remove tiles in 3 player game
       //

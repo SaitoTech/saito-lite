@@ -1,7 +1,18 @@
   
   
-  returnActionCards() {
-    return this.action_cards;
+  returnActionCards(types=[]) {
+    if (types.length == 0) { return this.action_cards; }
+    else {
+
+      let return_obj = {};
+      for (let i in this.action_cards) {
+	if (types.includes(this.action_cards[i].type)) {
+	  return_obj[i] = this.action_cards[i];
+	}
+      }
+      return return_obj;
+
+    }
   }
   
   importActionCard(name, obj) {

@@ -1,4 +1,23 @@
 
+    this.importActionCard('sabotage', {
+  	name : "Sabotage" ,
+  	type : "instant" ,
+  	text : "When another player plays an action card, you may cancel that action card" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  //
+	  // this runs in actioncard post...
+	  //
+          if (imperium_self.game.player == action_card_player) {
+	    // remove previous action card
+	    imperium_self.addMove("resolve\t"+"action_card");
+	    imperium_self.addMove("resolve\t"+"action_card_post");
+	  }
+
+	  return 0;
+	}
+    });
+
     this.importActionCard('cripple-defenses', {
   	name : "Cripple Defenses" ,
   	type : "action" ,
@@ -143,10 +162,10 @@ console.log("SECTOR: " + sector);
 
 
 
-    this.importActionCard('diaspora-conflict', {
-  	name : "Diaspora Conflict" ,
+    this.importActionCard('uprising', {
+  	name : "Uprising" ,
   	type : "instant" ,
-  	text : "Exhaust a planet card held by another player. Gain trade goods equal to resource value." ,
+  	text : "Exhaust a non-home planet card held by another player. Gain trade goods equal to resource value." ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -154,7 +173,41 @@ console.log("SECTOR: " + sector);
             imperium_self.playerSelectPlanetWithFilter(
 	      "Exhaust a planet card held vy another player. Gain trade goods equal to resource value." ,
               function(planet) {
-		if (planet.owner != -1 && planet.owner != imperium_self.game.player && planet.exhausted == 0) { return 1; } return 0;
+		if (imperium_self.game.planets[planet].owner != -1 && imperium_self.game.planets[planet].owner != imperium_self.game.player && imperium_self.game.planets[planet].exhausted == 0 && imperium_self.game.planets[planet].hw == 0) { return 1; } return 0;
+              },
+	      function(planet) {
+
+		planet = imperium_self.game.planets[planet];
+		let goods = imperium_self.game.planets[planet].resources;
+
+                imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tgoods\t"+goods);
+                imperium_self.addMove("expend\t"+imperium_self.game.player+"\tplanet\t"+planet);
+                imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " exhausting "+imperium_self.game.planets[planet].name + " and gaining " + goods + " trade goods");
+                imperium_self.endTurn();
+		return 0;
+
+	      },
+	      null
+	    );
+	  }
+	  return 0;
+	}
+    });
+
+
+
+    this.importActionCard('diaspora-conflict', {
+  	name : "Diaspora Conflict" ,
+  	type : "instant" ,
+  	text : "Exhaust a non-home planet card held by another player. Gain trade goods equal to resource value." ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  if (imperium_self.game.player == action_card_player) {
+
+            imperium_self.playerSelectPlanetWithFilter(
+	      "Exhaust a planet card held vy another player. Gain trade goods equal to resource value." ,
+              function(planet) {
+		if (imperium_self.game.planets[planet].owner != -1 && imperium_self.game.planets[planet].owner != imperium_self.game.player && imperium_self.game.planets[planet].exhausted == 0) { return 1; } return 0;
               },
 	      function(planet) {
 
@@ -271,7 +324,35 @@ console.log("SECTOR: " + sector);
               },
               function(sector) {
                 imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+"-1"+"\t"+"destroyer"+"\t"+sector);
-                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys a destroyer to " + sector.name);
+                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys a destroyer to " + imperium_self.game.sectors[sector].name);
+               imperium_self.endTurn();
+                return 0;
+              },
+              null
+            );
+          }
+          return 0;
+        }
+    });
+
+
+
+    this.importActionCard('war-effort', {
+  	name : "War Effort" ,
+  	type : "action" ,
+  	text : "Place a cruiser in a sector with one of your ships" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+          if (imperium_self.game.player == action_card_player) {
+
+            imperium_self.playerSelectSectorWithFilter(
+              "Place a cruiser in a sector with one of your ships: " ,
+              function(sector) {
+                if (imperium_self.doesSectorContainPlayerShips(player, sector) == 1) { return 1; } return 0;
+              },
+              function(sector) {
+                imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+"-1"+"\t"+"cruiser"+"\t"+sector);
+                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys a cruiser to " + imperium_self.game.sectors[sector].name);
                 imperium_self.endTurn();
                 return 0;
               },
@@ -281,6 +362,8 @@ console.log("SECTOR: " + sector);
           return 0;
         }
     });
+
+
 
 
 
@@ -434,6 +517,191 @@ console.log("SECTOR: " + sector);
 	    }
 	  }
 	  return 1;
+	}
+    });
+
+
+
+    this.importActionCard('unstable-planet', {
+  	name : "Unstable Planet" ,
+  	type : "action" ,
+  	text : "Choose a hazardous planet and exhaust it. Destroy 3 infantry on that planet if they exist" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  if (imperium_self.game.player == action_card_player) {
+
+            imperium_self.playerSelectPlanetWithFilter(
+	      "Select a hazardous planet and exhaust it. Destroy 3 infantry on that planet if they exist" ,
+              function(planet) {
+	        if (imperium_self.game.planets[planet].type == "hazardous") { return 1; } return 0;
+              },
+	      function(planet) {
+                imperium_self.addMove("expend\t"+player+"\tplanet\t"+planet);
+
+		//
+		//
+		//
+		let planet_obj   = imperium_self.game.planets[planet];	
+		let planet_owner = planet_obj.owner;
+		let planet_res   = planet_obj.resources;
+
+		let infantry_destroyed = 0;
+
+		for (let i = 0; i < planet_obj.units[planet_owner-1].length; i++) {
+		  if (infantry_destroyed > 3) {
+		    if (planet_obj.units[planet_owner-1][i].type == "infantry") {
+		      imperium_self.addMove("destroy\t"+action_card_player+"\t"+planet_owner+"\t"+"ground"+"\t"+planet_obj.sector+"\t"+planet_obj.idx+"\t"+"1");
+		    }
+		  }
+		}
+                imperium_self.addMove("purchase\t"+action_card_player+"\tgoods\t"+goods);
+		imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " gains " + planet_res + " trade goods");
+		imperium_self.endTurn();
+		return 0;
+	      },
+	      null
+	    );
+	  }
+	  return 0;
+	}
+    });
+
+
+
+
+
+
+    this.importActionCard('Covert Operation', {
+  	name : "Covert Operation" ,
+  	type : "action" ,
+  	text : "Choose a player. They give you one of their action cards, if possible" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  if (imperium_self.game.player == action_card_player) {
+
+            imperium_self.playerSelectPlayerWithFilter(
+	      "Select a player. They give you one of their action cards: ",
+              function(player) {
+	        if (player != imperium_self.game.player) { return 1; } return 0;
+              },
+	      function(player) {
+                imperium_self.addMove("pull\t"+imperium_self.game.player+"\t"+player+"\t"+"action"+"\t"+"random");
+		imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " pulls a random action card from " + imperium_self.returnFaction(player));
+		imperium_self.endTurn();
+		return 0;
+	      },
+	      null
+	    );
+	  }
+	  return 0;
+	}
+    });
+
+
+
+
+    this.importActionCard('tactical-bombardment', {
+  	name : "Tactical Bombardment" ,
+  	type : "action" ,
+  	text : "Choose a sector in which you have ships with bombardment. Exhaust all planets in that sector" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  if (imperium_self.game.player == action_card_player) {
+
+            imperium_self.playerSelectSectorWithFilter(
+	      "Select a sector in which you have ships with bombardment. Exhaust all planets in that sector" ,
+              function(sector) {
+	        if (imperium_self.doesSectorContainPlayerUnit(player, sector, "dreadnaught") == 1) { return 1; }
+	        if (imperium_self.doesSectorContainPlayerUnit(player, sector, "warsun") == 1) { return 1; }
+		return 0;
+              },
+
+	      function(sector) {
+
+		let planets_in_sector = imperium_self.game.sectors[sector].planets;
+		for (let i = 0; i < planets_in_sector.length; i++) {
+                  imperium_self.addMove("expend\t"+player+"\tplanet\t"+planets_in_sector[i]);
+		  imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " exhausts " + imperium_self.game.planets[planets_in_sector[i]].name);
+		}
+		imperium_self.endTurn();
+		return 0;
+	      },
+	      null
+	    );
+	  }
+	  return 0;
+	}
+    });
+
+
+
+
+    this.importActionCard('signal-jamming', {
+  	name : "Signal Jamming" ,
+  	type : "action" ,
+  	text : "Choose a player. They must activate a system in or next to a system in which you have a ship" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  if (imperium_self.game.player == action_card_player) {
+
+            imperium_self.playerSelectSectorWithFilter(
+	      "Select a sector in which you have a ship or one adjacent to one: ",
+              function(sector) {
+	        if (imperium_self.isPlayerShipAdjacentToSector(action_card_player, sector)) {
+		  return 1;
+		}
+	        return 0;
+              },
+	      function(sector) {
+
+            	imperium_self.playerSelectPlayerWithFilter(
+	          "Select a player to signal jam in that sector: " ,
+                  function(p) {
+	            if (p != imperium_self.game.player) { return 1; } return 0;
+                  },
+	          function(p) {
+                    imperium_self.addMove("activate\t"+p+"\t"+sector);
+		    imperium_self.addMove("notify\t" + imperium_self.returnFaction(p) + " suffers signal jamming in " + imperium_self.game.sectors[sector].name);
+		    imperium_self.endTurn();
+		    return 0;
+	          },
+	          null
+	        );
+	      },
+	      null
+	    );
+	  }
+	  return 0;
+	}
+    });
+
+
+    this.importActionCard('unexpected-action', {
+  	name : "Unexpected Action" ,
+  	type : "action" ,
+  	text : "Deactivate a stystem you have activated. Gain one command or strategy token: ", 
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  if (imperium_self.game.player == action_card_player) {
+
+            imperium_self.playerSelectSectorWithFilter(
+	      "Select a hazardous planet and exhaust it. Destroy 3 infantry on that planet if they exist" ,
+              function(sector) {
+		if (imperium_self.game.sectors[sector].activated[action_card_player-1] == 1) {
+		  return 1;
+		}
+              },
+	      function(planet) {
+                imperium_self.addMove("purchase\t"+action_card_player+"\tcommand\t"+"1");
+                imperium_self.addMove("deactivate\t"+action_card_player+"\t"+sector);
+                imperium_self.addMove("notify\t"+imperium_self.returnFaction(action_card_player) + " deactivates " + imperium_self.game.sectors[sector].name);
+		imperium_self.endTurn();
+		return 0;
+	      },
+	      null
+	    );
+	  }
+	  return 0;
 	}
     });
 

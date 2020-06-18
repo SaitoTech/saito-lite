@@ -85,8 +85,78 @@
         document.querySelector('.interface_overlay').classList.add('hidden');
       });
     });
-}
+  }
 
+
+  returnFactionInformation(player) {
+
+    let html = `
+
+      <div class="faction_sheet_lore" id="faction_sheet_lore"></div>
+
+      <div class="faction_sheet_command_tokens" id="faction_sheet_command_tokens">${this.game.players_info[player-1].command_tokens}</div>
+      <div class="faction_sheet_strategy_tokens" id="faction_sheet_strategy_tokens">${this.game.players_info[player-1].strategy_tokens}</div>
+      <div class="faction_sheet_fleet_supply" id="faction_sheet_fleet_supply">${this.game.players_info[player-1].fleet_supply}</div>
+
+      <div class="faction_sheet_action_card_box" id="faction_sheet_action_card_box">
+	<div class="faction_sheet_action_card">wormhole-navigator</div>
+	<div class="faction_sheet_action_card">terrestrial magnetism</div>
+	<div class="faction_sheet_action_card">gravity boots</div>
+      </div>
+      <div class="faction_sheet_planet_card_box" id="faction_sheet_planet_card_box">
+    `;
+
+    let pc = this.returnPlayerPlanetCards(player);
+    for (let b = 0; b < pc.length; b++) {
+       html += `<div class="faction_sheet_action_card" id="${pc[b]}">${this.game.planets[pc[b]].name}</div>`
+    }
+
+    html += `
+      </div>
+
+
+      <div class="faction_sheet_tech_box" id="faction_sheet_tech_box">
+    `;
+
+    for (let b = 0; b < pc.length; b++) {
+       html += `<div class="faction_sheet_action_card" id="${pc[b]}">${this.game.planets[pc[b]].name}</div>`
+    }
+ 
+
+    html += `
+      </div>
+
+
+      <div class="faction_sheet_secret_objectives" id="faction_sheet_secret_objectives">
+        <div class="faction_sheet_secret_objective" id="">secret objective</div>
+      </div>
+
+
+
+      <table class="faction_sheet_unit_box" id="faction_sheet_unit_box">
+	<tr>
+	  <th>Unit</th>
+	  <th>Cost</th>
+	  <th>Combat</th>
+	  <th>Movement</th>
+	  <th>Capacity</th>
+	  <th></th>
+        </tr>
+	<tr>
+	  <th>Infantry</th>
+	  <th>${this.units["infantry"].cost}</th>
+	  <th>${this.units["infantry"].combat}</th>
+	  <th>${this.units["infantry"].movement}</th>
+	  <th>${this.units["infantry"].capacity}</th>
+	  <th></th>
+        </tr>
+      </table>
+
+
+    `;
+
+    return html;
+  }
   
 
 

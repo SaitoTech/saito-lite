@@ -5,8 +5,6 @@
       img			:	"/imperium/img/strategy/EMPIRE.png",
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
-console.log("player: " + player + " -- " + strategy_card_player);
-
         imperium_self.game.state.round_scoring = 1;
 
         if (imperium_self.game.player == strategy_card_player) {
@@ -23,6 +21,8 @@ console.log("player: " + player + " -- " + strategy_card_player);
 
       },
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
+
+        imperium_self.game.state.round_scoring = 2;
 
         imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
         imperium_self.playerScoreVictoryPoints(function(vp, objective) {

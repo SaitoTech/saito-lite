@@ -31,15 +31,7 @@
         name: 'Systems',
         callback: this.handleSystemsMenuItem.bind(this)
       },
-      'game-planets': {
-        name: 'Planets',
-        callback: this.handlePlanetsMenuItem.bind(this)
-      },
-      'game-tech': {
-        name: 'Tech',
-        callback: this.handleTechMenuItem.bind(this)
-      },
-      'game-player': {
+      'game-trade': {
         name: 'Trade',
         callback: this.handleTradeMenuItem.bind(this)
       },
@@ -188,15 +180,14 @@
     `
       <div id="menu-container">
         <div style="margin-bottom: 1em">
-          The Commercial Empires:
+          Manage Trade Relations:
         </div>
         <ul>
      `;
-    for (let i = 0; i < this.game.players_info.length; i++) {
-    html += `  <li class="option" id="${i}">${factions[this.game.players_info[i].faction].name}</li>`;
-    }
+    html += `  <li class="option" id="makeoffer">make offer</li>`;
+    html += `  <li class="option" id="acceptoffer">see offers</li>`;
     html += `
-        </ul>
+      </ul>
       </div>
     `
     $('.hud-menu-overlay').html(html);
@@ -209,6 +200,9 @@
     $('.card').on('click', function() {
   
       let p = $(this).attr("id");
+
+      p = imperium_self.game.player-1;
+
       let commodities_total = imperium_self.game.players_info[p].commodities;
       let goods_total = imperium_self.game.players_info[p].goods;
       let fleet_total = imperium_self.game.players_info[p].fleet_supply;

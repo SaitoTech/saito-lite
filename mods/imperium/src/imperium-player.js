@@ -19,7 +19,8 @@
       delete factions[rf];
   
       players[i] = {};
-      players[i].action_cards_per_round = 1;
+      players[i].can_intervene_in_action_card = 0;
+      players[i].action_cards_per_round = 4;
       players[i].new_tokens_per_round = 2;
       players[i].command_tokens  	= 3;
       players[i].strategy_tokens 	= 2;
@@ -239,6 +240,87 @@
         }
       });
     }
+  }
+
+  playerPlayActionCardMenu(action_card_player, card, action_cards_played=[]) {
+
+    let imperium_self = this;
+
+    for (let i = 0; i < this.game.deck[1].hand.length; i++) {
+      if (this.game.deck[1].hand[i].indexOf("sabotage") > -1) {
+	this.game.players_info[this.game.player-1].can_intervene_in_action_card = 1;
+      }
+    }
+
+    if (this.game.players_info[this.game.player-1].can_intervene_in_action_card) {
+
+      html = '<p>Do you wish to play a countering action card? <ul>';
+
+      if (1 == 1) {
+        html += '<li class="option" id="cont">continue</li>';
+      }
+      if (1 == 1) {
+        html += '<li class="option" id="action">action card</li>';
+      }
+
+      let tech_attach_menu_events = 0;
+      let tech_attach_menu_triggers = [];
+      let tech_attach_menu_index = [];
+
+      let z = this.returnEventObjects();
+      for (let i = 0; i < z.length; i++) {
+        if (z[i].menuOptionTriggers(this, "action_card", this.game.player) == 1) {
+          let x = z[i].menuOption(this, "action_card", this.game.player);
+          html += x.html;
+  	  tech_attach_menu_index.push(i);
+	  tech_attach_menu_triggers.push(x.event);
+	  tech_attach_menu_events = 1;
+        }
+      }
+      html += '</ul>';
+
+      this.updateStatus(html);
+  
+      $('.option').on('click', function() {
+  
+        let action2 = $(this).attr("id");
+
+        //
+        // respond to tech and factional abilities
+        //
+        if (tech_attach_menu_events == 1) {
+  	  for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
+	    if (action2 == tech_attach_menu_triggers[i]) {
+	      $(this).remove();
+	      z[tech_attach_menu_index[i]].menuOptionActivated(imperium_self, "action_card", imperium_self.game.player);
+            }
+          }
+        }
+
+        if (action2 == "action") {
+          imperium_self.playerSelectActionCard(function(card) {
+            imperium_self.game.players_info[this.game.player-1].action_cards_played.push(card);
+    	    imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+  	    imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+	    imperium_self.playerPlayActionCardMenu(action_card_player, card);
+          }, function() {
+	    imperium_self.playerPlayActionCardMenu(action_card_player, card);
+	  }, ["action"]);
+        }
+
+        if (action2 == "cont") {
+          imperium_self.endTurn();
+        }
+        return 0;
+      });
+
+    } else {
+      this.playerAcknowledgeNotice(this.returnFaction(action_card_player) + " plays " + this.action_cards[card].name, function() {
+	imperium_self.endTurn();
+      });
+      return 0;
+    }
+    
   }
   
   
@@ -827,7 +909,7 @@ this.updateLog("DEFENDER PPGC: " + defender_forces);
 	  imperium_self.playerPlayPreAgendaStage(player, agenda, agenda_idx);
         }, function() {
 	  imperium_self.playerPlayPreAgendaStage(player, agenda, agenda_idx);
-	});
+	}, ["rider"]);
       }
 
       if (action2 == "skip") {
@@ -1760,11 +1842,11 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
 
 
   
-  playerSelectActionCard(mycallback, cancel_callback) { 
- 
+  playerSelectActionCard(mycallback, cancel_callback, types=[]) {  
+
     let imperium_self = this;
     let array_of_cards = this.returnPlayerActionCards(this.game.player);
-    let action_cards = this.returnActionCards();
+    let action_cards = this.returnActionCards(types);
 
     let html = '';
 
@@ -2941,6 +3023,38 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
   }
 
 
+
+  playerDiscardActionCards(num) {
+
+    let imperium_self = this;
+
+    let html  = "You must discard <div style='display:inline' class='totalnum' id='totalnum'>"+num+"</div> action card"; if (num > 1) { html += 's'; }; html += ':';
+        html += '<ul>';
+    for (let i = 0; i < this.game.geck[1].hand.length; i++) {
+      html += '<li class="textchoice" id="'+i+'">' + this.action_cards[this.game.deck[1].hand[i]].name+'</li>';
+    }
+    html += '</ul>';
+
+    this.updateStatus(html);
+
+    $('.textchoice').off();
+    $('.textchoice').on('click', function() {
+
+      let action2 = $(this).attr("id");
+
+      num--; 
+
+      $('.totalnum').html(num);
+      $(this).remove();
+      imperium_self.game.players_info[imperium_self.game.player-1].action_cards_played.push(action2);
+
+      if (num == 0) {
+	imperium_self.endTurn();
+      }
+
+    });
+
+  }
 
 
 
