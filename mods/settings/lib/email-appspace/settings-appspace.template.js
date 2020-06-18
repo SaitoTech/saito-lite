@@ -18,6 +18,15 @@ module.exports = SettingsAppspaceTemplate = (app) => {
     })
     .join('');
 
+    let balance_ = "";
+    app.modules.mods.forEach(mod => {
+      if(mod.name == 'Balance') {
+        balance_link = `
+          <a target="_blank" href="${window.location.origin + "/balance?address=" + app.wallet.returnPublicKey()}">Check Recorded Balance</a>
+        `;
+      }
+    });
+
   return `
   <link rel="stylesheet" href="/settings/style.css">
   <div class="email-appspace-settings">
@@ -27,14 +36,17 @@ module.exports = SettingsAppspaceTemplate = (app) => {
       <div class="settings-wallet-management">
 
         <h3>Wallet Management:</h3>
-        
+        ${balance_link}
+
         <div class="grid-4">
         <div>Code Version:</div>
         <div>${app.wallet.wallet.version}</div>
         <div>Wallet Version:</div>
         <div>${app.options.wallet.version}</div>
+            
 
         </div>
+
 
         <div class="grid-2">
 

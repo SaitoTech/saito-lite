@@ -43,13 +43,14 @@ module.exports = OrderTracker = {
           html += `
           <div class="grid-title">Order No:</div>
           <div class="grid-value">${row.order_number}</div>
+          <div class="grid-title">Status:</div>
+          <div class="grid-value order-status">${row.status}</div>
+
           <div class="grid-title">Created:</div>
           <div class="grid-value">
             <span><i class="far fa-clock"></i></span>
             <span>${new Date(parseInt(row.created)).toLocaleDateString('zh-CN', { dateStyle: 'short', timeStyle: 'short', hour12: false })}</span>
           </div>
-          <div class="grid-title">Status:</div>
-          <div class="grid-value">${row.status}</div>
           <div class="grid-title">Last Update:</div>
           <div class="grid-value last-update"></div>          
           `;
