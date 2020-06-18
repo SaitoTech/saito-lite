@@ -226,7 +226,8 @@
   	    imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.endTurn();
-          }, function() { imperium_self.playerTurn(); });
+          }, function() { imperium_self.playerTurn(); }, 
+	    ["action"]);
         }
         if (action2 == "trade") {
           imperium_self.playerTrade(function() {
@@ -1845,7 +1846,7 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
   playerSelectActionCard(mycallback, cancel_callback, types=[]) {  
 
     let imperium_self = this;
-    let array_of_cards = this.returnPlayerActionCards(this.game.player);
+    let array_of_cards = this.returnPlayerActionCards(this.game.player, types);
     let action_cards = this.returnActionCards(types);
 
     let html = '';

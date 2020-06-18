@@ -1240,16 +1240,16 @@ console.log("SECTOR: " + sector);
     return x;
   
   }
-  returnPlayerActionCards(player=this.game.player, mode=0) {
+  returnPlayerActionCards(player=this.game.player, types=[]) {
   
     let x = [];
     //
     // deck 2 -- hand #1
     //
     for (var i in this.game.deck[1].hand) {
-      if (mode == 0) {
+     // if (types.lengtmode == 0) {
         x.push(i);
-      }
+     // } // HACK
     }
   
     return x;

@@ -8273,7 +8273,8 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
   	    imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.endTurn();
-          }, function() { imperium_self.playerTurn(); });
+          }, function() { imperium_self.playerTurn(); }, 
+	    ["action"]);
         }
         if (action2 == "trade") {
           imperium_self.playerTrade(function() {
