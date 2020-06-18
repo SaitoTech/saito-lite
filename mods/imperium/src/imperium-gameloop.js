@@ -1180,6 +1180,19 @@ console.log(player_forces + " landed on planet");
       }
 
 
+      if (mv[0] === "adjacency") {
+  
+  	let type       	= mv[1];
+  	let sector1	= mv[2];
+  	let sector2	= mv[3];
+  	this.game.queue.splice(qe, 1);
+
+	this.game.state.temporary_adjacency.push([sector1, sector2]);
+  	return 1;
+
+      }
+
+
       if (mv[0] === "pull") {
   
   	let puller       = parseInt(mv[1]);

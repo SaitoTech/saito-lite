@@ -942,14 +942,10 @@ console.log("P: " + planet);
       }
     });
 
-
     this.importTech('faction2-eres-siphons', {
       name        :       "E-Res Siphons" ,
       faction     :       "faction2",
       type        :       "special" ,
-      //
-      // add our player tracker (tracks who has this)
-      //
       initialize  :	  function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].eres_siphons == null) {
           imperium_self.game.players_info[player-1].eres_siphons = 0;
@@ -973,21 +969,97 @@ console.log("P: " + planet);
 
 
 
+    this.importTech('faction2-deep-space-conduits', {
+      name        :       "Deep Space Conduits" ,
+      faction     :       "faction2",
+      type        :       "special" ,
+      initialize  :	  function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].deep_space_conduits == null) {
+          imperium_self.game.players_info[player-1].deep_space_conduits = 0;
+          imperium_self.game.players_info[player-1].deep_space_conduits_exhausted = 0;
+	}
+      },
+      onNewRound : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].deep_space_conduits == 1) {
+          imperium_self.game.players_info[player-1].deep_space_conduits_exhausted = 0;
+        }
+      },
+      gainTechnology : function(imperium_self, gainer, tech) {
+	if (tech == "faction2-deep-space-conduits") {
+          imperium_self.game.players_info[gainer-1].deep_space_conduits = 1;
+          imperium_self.game.players_info[player-1].deep_space_conduits_exhausted = 0;
+        }
+      },
+      activateSystemTriggers : function(imperium_self, activating_player, player, sector) { 
+	if (player == imperium_self.game.player && activating_player == player) {
+	  if (imperium_self.game.players_info[activating_player-1].deep_space_conduits == 1 && imperium_self.game.players_info[activating_player-1].deep_space_conduits_exhausted == 0) {
+	    if (imperium_self.doesSectorContainPlayerUnits(activating_player, sector)) {
+	      return 1;
+	    }
+	  }
+	}
+	return 0;
+      },
+      activateSystemEvent : function(imperium_self, activating_player, player, sector) { 
+
+	let html = 'Do you wish to activate Deep Space Conduits: <ul>';
+	html    += '<li class="textchoice" id="yes">activate</li>';
+	html    += '<li class="textchoice" id="no">skip</li>';
+	html    += '</ul>';
+
+	imperium_self.updateStatus(html);
+
+	$('.textchoice').off();
+	$('.textchoice').on('click', function() {
+
+	  let action = $(this).attr("id");
+
+	  if (action == "yes") {
+	    let sectors = imperium_self.returnSectorsWithPlayerUnits(activating_player);
+	    imperium_self.game.players_info[activating_player-1].deep_space_conduits_exhausted = 1;
+            imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"deep_space_conduits_exhausted"+"\t"+"int"+"\t"+"1");
+	    for (let i = 0; i < sectors.length; i++) {
+	      imperium_self.addMove("adjacency\ttemporary\t"+sectors[i]+"\t"+sector);
+	    }
+	    imperium_self.endTurn();
+	  }
+
+	  if (action == "no") {
+	    imperium_self.updateStatus();
+	    imperium_self.endTurn();
+	  }
+
+	});
+      }
+    });
+
+
+
+
 
     this.importFaction('faction1', {
       name		: 	"Federation of Sol",
       homeworld		: 	"sector52",
       space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter"],
       ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock"],
-      tech		:	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector","faction1-orbital-drop","faction1-versatile", "faction1-advanced-carrier-ii", "faction1-infantry-ii"],
+      tech		:	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector","faction1-orbital-drop","faction1-versatile", "faction1-advanced-carrier-ii", "faction1-advanced-infantry-ii"],
       background	: 	"faction1.jpg"
     });
  
-/***
     this.importTech("faction1-orbital-drop", {
 
       name        :       "Orbital Drop" ,
       faction     :       "faction1",
+      initialize : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].orbital_drop == undefined) {
+          imperium_self.game.players_info[player-1].orbital_drop = 0;
+        }
+      },
+      gainTechnology : function(imperium_self, gainer, tech) {
+        if (tech == "faction1-orbital-drop") {
+          imperium_self.game.players_info[gainer-1].orbital_drop = 1;
+        }
+      },
       menuOption  :       function(imperium_self, player) {
         let x = {};
             x.trigger = 'orbitaldrop';
@@ -996,12 +1068,29 @@ console.log("P: " + planet);
       },
       menuOptionTrigger:  function(imperium_self, player) { return 1; },
       menuOptionActivated:  function(imperium_self, player) {
-	alert("ORBITAL DROP");
-        this.endTurn();
-      }
 
+	if (imperium_self.game.player == player) {
+	
+          imperium_self.playerSelectPlanetWithFilter(
+            "Use Orbital Drop to reinforce which planet with two infantry: " ,
+            function(planet) {
+	      if (imperium_self.game.planets[planet].owner == imperium_self.game.player) { return 1; } return 0;
+            },
+            function(planet) {
+              planet = imperium_self.game.planets[planet];
+              imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
+              imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
+              imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
+              imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys three infantry to " + planet.name);
+              imperium_self.endTurn();
+              return 0;
+            },
+	    null
+	  );
+	  return 0;
+        };
+      }
     });
-***/
 
     this.importTech("faction1-versatile", {
 
@@ -2146,7 +2235,8 @@ console.log("TESTING AAAD");
 	let techlist = imperium_self.game.players_info[player-1].tech;
 	let unit_upgrades = 0;
 	for (let i = 0; i < techlist.length; i++) {
-	  if (this.tech[techlist[i]].unit == 1) {
+console.log("TECH: " + techlist[i]);
+	  if (imperium_self.tech[techlist[i]].unit == 1) {
 	    unit_upgrades++;
 	  }
 	}
@@ -2171,10 +2261,11 @@ console.log("TESTING AAAD");
 	let yellowtech = 0;
 
 	for (let i = 0; i < techlist.length; i++) {
-	  if (this.tech[techlist[i]].color == "blue") { bluetech++; }
-	  if (this.tech[techlist[i]].color == "red") { redtech++; }
-	  if (this.tech[techlist[i]].color == "yellow") { yellowtech++; }
-	  if (this.tech[techlist[i]].color == "green") { greentech++; }
+console.log("TECH: " + techlist[i]);
+	  if (imperium_self.tech[techlist[i]].color == "blue") { bluetech++; }
+	  if (imperium_self.tech[techlist[i]].color == "red") { redtech++; }
+	  if (imperium_self.tech[techlist[i]].color == "yellow") { yellowtech++; }
+	  if (imperium_self.tech[techlist[i]].color == "green") { greentech++; }
 	}
 
 	let achieve_two = 0;
@@ -2409,10 +2500,10 @@ console.log("TESTING AAAD");
         let yellowtech = 0;
 
         for (let i = 0; i < techlist.length; i++) {
-          if (this.tech[techlist[i]].color == "blue") { bluetech++; }
-          if (this.tech[techlist[i]].color == "red") { redtech++; }
-          if (this.tech[techlist[i]].color == "yellow") { yellowtech++; }
-          if (this.tech[techlist[i]].color == "green") { greentech++; }
+          if (imperium_self.tech[techlist[i]].color == "blue") { bluetech++; }
+          if (imperium_self.tech[techlist[i]].color == "red") { redtech++; }
+          if (imperium_self.tech[techlist[i]].color == "yellow") { yellowtech++; }
+          if (imperium_self.tech[techlist[i]].color == "green") { greentech++; }
         }
 
         let achieve_two = 0;
@@ -2464,7 +2555,7 @@ console.log("TESTING AAAD");
         let techlist = imperium_self.game.players_info[player-1].tech;
         let unit_upgrades = 0;
         for (let i = 0; i < techlist.length; i++) {
-          if (this.tech[techlist[i]].unit == 1) {
+          if (imperium_self.tech[techlist[i]].unit == 1) {
             unit_upgrades++;
           }
         }
@@ -6067,6 +6158,19 @@ console.log(player_forces + " landed on planet");
         }
   
   	return 0;  
+
+      }
+
+
+      if (mv[0] === "adjacency") {
+  
+  	let type       	= mv[1];
+  	let sector1	= mv[2];
+  	let sector2	= mv[3];
+  	this.game.queue.splice(qe, 1);
+
+	this.game.state.temporary_adjacency.push([sector1, sector2]);
+  	return 1;
 
       }
 
@@ -9893,7 +9997,7 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
   playerSelectActionCard(mycallback, cancel_callback, types=[]) {  
 
     let imperium_self = this;
-    let array_of_cards = this.returnPlayerActionCards(this.game.player);
+    let array_of_cards = this.returnPlayerActionCards(this.game.player, types);
     let action_cards = this.returnActionCards(types);
 
     let html = '';
@@ -11530,6 +11634,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 
         state.temporary_assignments = ["all"]; // all = any units
         state.temporary_rerolls = 0; // 100 = unlimited
+        state.temporary_adjacency = [];
 	
         state.wormholes_open = 1;
 
@@ -11841,10 +11946,10 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     // when system is activated
     //
     if (obj.activateSystemTriggers == null) {
-      obj.activateSystemTriggers = function(imperium_self, player, sector) { return 0; }
+      obj.activateSystemTriggers = function(imperium_self, activating_player, player, sector) { return 0; }
     }
     if (obj.activateSystemEvent == null) {
-      obj.postSystemActivation = function(imperium_self, player, sector) { return 0; }
+      obj.postSystemActivation = function(imperium_self, activating_player, player, sector) { return 0; }
     }
 
     //
@@ -12514,6 +12619,11 @@ console.log("PLANET IS: " + JSON.stringify(sys.p[planet_idx]));
     if (s[tile1].neighbours.includes(tile2)) { return 1; }
     if (s[tile2].neighbours.includes(tile1)) { return 1; }
 
+    for (let i = 0; i < this.game.state.temporary_adjacency.length; i++) {
+      if (temporary_adjacency[i][0] == sector1 && temporary_adjacency[i][1] == sector2) { return 1; }
+      if (temporary_adjacency[i][0] == sector2 && temporary_adjacency[i][1] == sector1) { return 1; }
+    }
+
     return 0;
   }
   
@@ -12692,8 +12802,7 @@ console.log("STRAT: " + JSON.stringify(strategy_cards));
       for (let k = 0; k < this.game.players_info[i].strategy.length; k++) {
         let sc = this.game.players_info[i].strategy[k];
         let or = card_io_hmap[sc];
-
-console.log(k + " -- " + sc.name + " has order " + or);
+console.log(k + " -- " + this.strategy_cards[sc].name + " has order " + or);
         if (or < player_lowest[i]) { player_lowest[i] = or; }
       }
     }
@@ -12755,6 +12864,25 @@ for (let i = 0; i < player_initiative_order.length; i++) {
   	    distance.push(i+1);
   	  }
         }
+
+	//
+	// temporary adjacency 
+	//
+        for (let z = 0; z < this.game.state.temporary_adjacency.length; z++) {
+	  if (tmp[k] == this.game.state.temporary_adjacency[z][0]) {
+  	    if (!sectors.includes(this.game.state.temporary_adjacency[z][1]))  {
+  	      sectors.push(this.game.state.temporary_adjacency[z][1]);
+  	      distance.push(i+1);
+  	    }
+	  }
+	  if (tmp[k] == this.game.state.temporary_adjacency[z][1]) {
+  	    if (!sectors.includes(this.game.state.temporary_adjacency[z][0]))  {
+  	      sectors.push(this.game.state.temporary_adjacency[z][0]);
+  	      distance.push(i+1);
+  	    }
+	  }
+	}
+
       }
     }
     return { sectors : sectors , distance : distance };
@@ -13156,16 +13284,16 @@ console.log("SECTOR: " + sector);
     return x;
   
   }
-  returnPlayerActionCards(player=this.game.player, mode=0) {
+  returnPlayerActionCards(player=this.game.player, types=[]) {
   
     let x = [];
     //
     // deck 2 -- hand #1
     //
     for (var i in this.game.deck[1].hand) {
-      if (mode == 0) {
+     // if (types.lengtmode == 0) {
         x.push(i);
-      }
+     // } // HACK
     }
   
     return x;
@@ -13351,6 +13479,7 @@ console.log("SECTOR: " + sector);
     this.game.players_info[player-1].may_player_produce_without_spacedock = 0;
     this.game.players_info[player-1].may_player_produce_without_spacedock_production_limit = 0;
     this.game.players_info[player-1].may_player_produce_without_spacedock_cost_limit = 0;
+    this.game.state.temporary_adjacency = [];
   }
 
 

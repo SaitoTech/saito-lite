@@ -598,6 +598,11 @@ console.log("PLANET IS: " + JSON.stringify(sys.p[planet_idx]));
     if (s[tile1].neighbours.includes(tile2)) { return 1; }
     if (s[tile2].neighbours.includes(tile1)) { return 1; }
 
+    for (let i = 0; i < this.game.state.temporary_adjacency.length; i++) {
+      if (temporary_adjacency[i][0] == sector1 && temporary_adjacency[i][1] == sector2) { return 1; }
+      if (temporary_adjacency[i][0] == sector2 && temporary_adjacency[i][1] == sector1) { return 1; }
+    }
+
     return 0;
   }
   
@@ -776,8 +781,7 @@ console.log("STRAT: " + JSON.stringify(strategy_cards));
       for (let k = 0; k < this.game.players_info[i].strategy.length; k++) {
         let sc = this.game.players_info[i].strategy[k];
         let or = card_io_hmap[sc];
-
-console.log(k + " -- " + sc.name + " has order " + or);
+console.log(k + " -- " + this.strategy_cards[sc].name + " has order " + or);
         if (or < player_lowest[i]) { player_lowest[i] = or; }
       }
     }
@@ -839,6 +843,25 @@ for (let i = 0; i < player_initiative_order.length; i++) {
   	    distance.push(i+1);
   	  }
         }
+
+	//
+	// temporary adjacency 
+	//
+        for (let z = 0; z < this.game.state.temporary_adjacency.length; z++) {
+	  if (tmp[k] == this.game.state.temporary_adjacency[z][0]) {
+  	    if (!sectors.includes(this.game.state.temporary_adjacency[z][1]))  {
+  	      sectors.push(this.game.state.temporary_adjacency[z][1]);
+  	      distance.push(i+1);
+  	    }
+	  }
+	  if (tmp[k] == this.game.state.temporary_adjacency[z][1]) {
+  	    if (!sectors.includes(this.game.state.temporary_adjacency[z][0]))  {
+  	      sectors.push(this.game.state.temporary_adjacency[z][0]);
+  	      distance.push(i+1);
+  	    }
+	  }
+	}
+
       }
     }
     return { sectors : sectors , distance : distance };

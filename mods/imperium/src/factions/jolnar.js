@@ -66,14 +66,10 @@
       }
     });
 
-
     this.importTech('faction2-eres-siphons', {
       name        :       "E-Res Siphons" ,
       faction     :       "faction2",
       type        :       "special" ,
-      //
-      // add our player tracker (tracks who has this)
-      //
       initialize  :	  function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].eres_siphons == null) {
           imperium_self.game.players_info[player-1].eres_siphons = 0;
@@ -94,6 +90,73 @@
         imperium_self.game.players_info[player-1].goods += 4;
       }
     });
+
+
+
+    this.importTech('faction2-deep-space-conduits', {
+      name        :       "Deep Space Conduits" ,
+      faction     :       "faction2",
+      type        :       "special" ,
+      initialize  :	  function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].deep_space_conduits == null) {
+          imperium_self.game.players_info[player-1].deep_space_conduits = 0;
+          imperium_self.game.players_info[player-1].deep_space_conduits_exhausted = 0;
+	}
+      },
+      onNewRound : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].deep_space_conduits == 1) {
+          imperium_self.game.players_info[player-1].deep_space_conduits_exhausted = 0;
+        }
+      },
+      gainTechnology : function(imperium_self, gainer, tech) {
+	if (tech == "faction2-deep-space-conduits") {
+          imperium_self.game.players_info[gainer-1].deep_space_conduits = 1;
+          imperium_self.game.players_info[player-1].deep_space_conduits_exhausted = 0;
+        }
+      },
+      activateSystemTriggers : function(imperium_self, activating_player, player, sector) { 
+	if (player == imperium_self.game.player && activating_player == player) {
+	  if (imperium_self.game.players_info[activating_player-1].deep_space_conduits == 1 && imperium_self.game.players_info[activating_player-1].deep_space_conduits_exhausted == 0) {
+	    if (imperium_self.doesSectorContainPlayerUnits(activating_player, sector)) {
+	      return 1;
+	    }
+	  }
+	}
+	return 0;
+      },
+      activateSystemEvent : function(imperium_self, activating_player, player, sector) { 
+
+	let html = 'Do you wish to activate Deep Space Conduits: <ul>';
+	html    += '<li class="textchoice" id="yes">activate</li>';
+	html    += '<li class="textchoice" id="no">skip</li>';
+	html    += '</ul>';
+
+	imperium_self.updateStatus(html);
+
+	$('.textchoice').off();
+	$('.textchoice').on('click', function() {
+
+	  let action = $(this).attr("id");
+
+	  if (action == "yes") {
+	    let sectors = imperium_self.returnSectorsWithPlayerUnits(activating_player);
+	    imperium_self.game.players_info[activating_player-1].deep_space_conduits_exhausted = 1;
+            imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"deep_space_conduits_exhausted"+"\t"+"int"+"\t"+"1");
+	    for (let i = 0; i < sectors.length; i++) {
+	      imperium_self.addMove("adjacency\ttemporary\t"+sectors[i]+"\t"+sector);
+	    }
+	    imperium_self.endTurn();
+	  }
+
+	  if (action == "no") {
+	    imperium_self.updateStatus();
+	    imperium_self.endTurn();
+	  }
+
+	});
+      }
+    });
+
 
 
 

@@ -37,6 +37,7 @@
 
         state.temporary_assignments = ["all"]; // all = any units
         state.temporary_rerolls = 0; // 100 = unlimited
+        state.temporary_adjacency = [];
 	
         state.wormholes_open = 1;
 

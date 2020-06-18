@@ -4,15 +4,24 @@
       homeworld		: 	"sector52",
       space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter"],
       ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock"],
-      tech		:	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector","faction1-orbital-drop","faction1-versatile", "faction1-advanced-carrier-ii", "faction1-infantry-ii"],
+      tech		:	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector","faction1-orbital-drop","faction1-versatile", "faction1-advanced-carrier-ii", "faction1-advanced-infantry-ii"],
       background	: 	"faction1.jpg"
     });
  
-/***
     this.importTech("faction1-orbital-drop", {
 
       name        :       "Orbital Drop" ,
       faction     :       "faction1",
+      initialize : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].orbital_drop == undefined) {
+          imperium_self.game.players_info[player-1].orbital_drop = 0;
+        }
+      },
+      gainTechnology : function(imperium_self, gainer, tech) {
+        if (tech == "faction1-orbital-drop") {
+          imperium_self.game.players_info[gainer-1].orbital_drop = 1;
+        }
+      },
       menuOption  :       function(imperium_self, player) {
         let x = {};
             x.trigger = 'orbitaldrop';
@@ -21,12 +30,29 @@
       },
       menuOptionTrigger:  function(imperium_self, player) { return 1; },
       menuOptionActivated:  function(imperium_self, player) {
-	alert("ORBITAL DROP");
-        this.endTurn();
-      }
 
+	if (imperium_self.game.player == player) {
+	
+          imperium_self.playerSelectPlanetWithFilter(
+            "Use Orbital Drop to reinforce which planet with two infantry: " ,
+            function(planet) {
+	      if (imperium_self.game.planets[planet].owner == imperium_self.game.player) { return 1; } return 0;
+            },
+            function(planet) {
+              planet = imperium_self.game.planets[planet];
+              imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
+              imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
+              imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
+              imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys three infantry to " + planet.name);
+              imperium_self.endTurn();
+              return 0;
+            },
+	    null
+	  );
+	  return 0;
+        };
+      }
     });
-***/
 
     this.importTech("faction1-versatile", {
 

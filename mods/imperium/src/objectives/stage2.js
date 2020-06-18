@@ -104,10 +104,10 @@
         let yellowtech = 0;
 
         for (let i = 0; i < techlist.length; i++) {
-          if (this.tech[techlist[i]].color == "blue") { bluetech++; }
-          if (this.tech[techlist[i]].color == "red") { redtech++; }
-          if (this.tech[techlist[i]].color == "yellow") { yellowtech++; }
-          if (this.tech[techlist[i]].color == "green") { greentech++; }
+          if (imperium_self.tech[techlist[i]].color == "blue") { bluetech++; }
+          if (imperium_self.tech[techlist[i]].color == "red") { redtech++; }
+          if (imperium_self.tech[techlist[i]].color == "yellow") { yellowtech++; }
+          if (imperium_self.tech[techlist[i]].color == "green") { greentech++; }
         }
 
         let achieve_two = 0;
@@ -159,7 +159,7 @@
         let techlist = imperium_self.game.players_info[player-1].tech;
         let unit_upgrades = 0;
         for (let i = 0; i < techlist.length; i++) {
-          if (this.tech[techlist[i]].unit == 1) {
+          if (imperium_self.tech[techlist[i]].unit == 1) {
             unit_upgrades++;
           }
         }

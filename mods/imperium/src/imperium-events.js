@@ -290,10 +290,10 @@
     // when system is activated
     //
     if (obj.activateSystemTriggers == null) {
-      obj.activateSystemTriggers = function(imperium_self, player, sector) { return 0; }
+      obj.activateSystemTriggers = function(imperium_self, activating_player, player, sector) { return 0; }
     }
     if (obj.activateSystemEvent == null) {
-      obj.postSystemActivation = function(imperium_self, player, sector) { return 0; }
+      obj.postSystemActivation = function(imperium_self, activating_player, player, sector) { return 0; }
     }
 
     //
