@@ -286,7 +286,9 @@ class Imperium extends GameTemplate {
       },
       bombardmentTriggers : function(imperium_self, player, sector) { 
 	if (imperium_self.game.players_info[player-1].x89_bacterial_weapon == 1 && imperium_self.game.players_info[player-1].x89_bacterial_weapon_exhausted == 0) {
-	  return 1;
+	  if (imperium_self.doesSectorContainPlayerUnit(player, sector, "warsun") || imperium_self.doesSectorContainPlayerUnit(player, sector, "dreadnaught")) { 
+	    return 1;
+ 	  }
 	}
 	return 0;
       },
@@ -4317,6 +4319,12 @@ console.log("TECH: " + techlist[i]);
       }
     }
  
+
+
+    this.game.sectors[this.game.board["2_3"].tile].units[1] = [];
+    this.game.sectors[this.game.board["3_3"].tile].units[1] = [];
+    this.game.sectors[this.game.board["2_4"].tile].units[1] = [];
+
 
     //
     // HIDE HUD LOG
@@ -8650,6 +8658,7 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
       players[i].evasive_bonus_on_pds_shots = 0;
       players[i].perform_two_actions = 0;
       players[i].move_through_sectors_with_opponent_ships = 0;
+      players[i].temporary_move_through_sectors_with_opponent_ships = 0;
       players[i].assign_pds_hits_to_non_fighters = 0;
       players[i].reallocate_four_infantry_per_round = 0;
       players[i].may_produce_after_gaining_planet = 0;
@@ -10783,7 +10792,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
         obj.max_hops += obj.ship_move_bonus;
         obj.max_hops += obj.fleet_move_bonus;
   
-    let x = imperium_self.returnSectorsWithinHopDistance(destination, obj.max_hops);
+    let x = imperium_self.returnSectorsWithinHopDistance(destination, obj.max_hops, imperium_self.game.player);
     sectors = x.sectors; 
     distance = x.distance;
   
@@ -11415,7 +11424,13 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
           imperium_self.addMove("activate_system\t"+imperium_self.game.player+"\t"+pid);
           imperium_self.addMove("expend\t"+imperium_self.game.player+"\t"+"command"+"\t"+1);
 	  imperium_self.endTurn();
-        }
+        } else {
+
+          activated_once = 0;
+          $(divpid).find('.hex_activated').css('background-color', 'transparent');
+          $(divpid).find('.hex_activated').css('opacity', '1');
+
+	}
       }
   
     });
@@ -11910,10 +11925,10 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
         sectors[i].activated[j] = 0; // is this activated by the player
       }
 
-  
-//      sectors[i].units[1] = [];
-//      sectors[i].units[1].push(this.returnUnit("fighter", 1));  
-//      sectors[i].units[1].push(this.returnUnit("fighter", 1));  
+      
+      sectors[i].units[1] = [];
+      sectors[i].units[1].push(this.returnUnit("fighter", 1));  
+      sectors[i].units[1].push(this.returnUnit("fighter", 1));  
 
 
     }
@@ -13374,7 +13389,7 @@ for (let i = 0; i < player_initiative_order.length; i++) {
 
 
 
-  returnSectorsWithinHopDistance(destination, hops) {
+  returnSectorsWithinHopDistance(destination, hops, player=null) {
 
     let sectors = [];
     let distance = [];
@@ -13389,32 +13404,60 @@ for (let i = 0; i < player_initiative_order.length; i++) {
     for (let i = 0; i < hops; i++) {
       let tmp = JSON.parse(JSON.stringify(sectors));
       for (let k = 0; k < tmp.length; k++) {
-        let neighbours = s[tmp[k]].neighbours;
-        for (let m = 0; m < neighbours.length; m++) {
-  	  if (!sectors.includes(neighbours[m]))  {
-  	    sectors.push(neighbours[m]);
-  	    distance.push(i+1);
-  	  }
-        }
+
+//
+// 2/3-player game will remove some tiles
+//
+if (this.game.board[tmp[k]] != undefined) {
 
 	//
-	// temporary adjacency 
+	// if the player is provided and this sector has ships from 
+	// other players, then we cannot calculate hop distance as 
+	// it would mean moving through systems that are controlled by
+	// other players.
 	//
-        for (let z = 0; z < this.game.state.temporary_adjacency.length; z++) {
-	  if (tmp[k] == this.game.state.temporary_adjacency[z][0]) {
-  	    if (!sectors.includes(this.game.state.temporary_adjacency[z][1]))  {
-  	      sectors.push(this.game.state.temporary_adjacency[z][1]);
-  	      distance.push(i+1);
-  	    }
-	  }
-	  if (tmp[k] == this.game.state.temporary_adjacency[z][1]) {
-  	    if (!sectors.includes(this.game.state.temporary_adjacency[z][0]))  {
-  	      sectors.push(this.game.state.temporary_adjacency[z][0]);
-  	      distance.push(i+1);
-  	    }
+	let can_hop_through_this_sector = 1;
+	if (player == null) {} else {
+	  if (this.game.players_info[player-1].move_through_sectors_with_opponent_ships == 1 || players[i].temporary_move_through_sectors_with_opponent_ships == 1) {
+	  } else {
+	    if (this.doesSectorContainNonPlayerShips(player, tmp[k])) {
+	      can_hop_through_this_sector = 0;
+	    }
 	  }
 	}
 
+	if (can_hop_through_this_sector == 1) {
+
+	  //
+	  // board adjacency 
+	  //
+          let neighbours = s[tmp[k]].neighbours;
+          for (let m = 0; m < neighbours.length; m++) {
+    	    if (!sectors.includes(neighbours[m]))  {
+  	      sectors.push(neighbours[m]);
+  	      distance.push(i+1);
+  	    }
+          }
+
+	  //
+	  // temporary adjacency 
+	  //
+          for (let z = 0; z < this.game.state.temporary_adjacency.length; z++) {
+	    if (tmp[k] == this.game.state.temporary_adjacency[z][0]) {
+  	      if (!sectors.includes(this.game.state.temporary_adjacency[z][1]))  {
+  	        sectors.push(this.game.state.temporary_adjacency[z][1]);
+  	        distance.push(i+1);
+  	      }
+	    }
+	    if (tmp[k] == this.game.state.temporary_adjacency[z][1]) {
+  	      if (!sectors.includes(this.game.state.temporary_adjacency[z][0]))  {
+  	        sectors.push(this.game.state.temporary_adjacency[z][0]);
+  	        distance.push(i+1);
+  	      }
+	    }
+	  }
+	}
+}
       }
     }
     return { sectors : sectors , distance : distance };
@@ -13921,6 +13964,8 @@ console.log("SECTOR: " + sector);
     return this.doesSectorContainPlayerShips(player, sector);
   }
   doesSectorContainPlayerShips(player, sector) {
+
+console.log("sector: " + sector);
 
     let sys = this.returnSectorAndPlanets(sector);
     if (sys.s.units[player-1].length > 0) { return 1; }

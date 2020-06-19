@@ -54,6 +54,7 @@
       players[i].evasive_bonus_on_pds_shots = 0;
       players[i].perform_two_actions = 0;
       players[i].move_through_sectors_with_opponent_ships = 0;
+      players[i].temporary_move_through_sectors_with_opponent_ships = 0;
       players[i].assign_pds_hits_to_non_fighters = 0;
       players[i].reallocate_four_infantry_per_round = 0;
       players[i].may_produce_after_gaining_planet = 0;
@@ -2187,7 +2188,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
         obj.max_hops += obj.ship_move_bonus;
         obj.max_hops += obj.fleet_move_bonus;
   
-    let x = imperium_self.returnSectorsWithinHopDistance(destination, obj.max_hops);
+    let x = imperium_self.returnSectorsWithinHopDistance(destination, obj.max_hops, imperium_self.game.player);
     sectors = x.sectors; 
     distance = x.distance;
   
@@ -2819,7 +2820,13 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
           imperium_self.addMove("activate_system\t"+imperium_self.game.player+"\t"+pid);
           imperium_self.addMove("expend\t"+imperium_self.game.player+"\t"+"command"+"\t"+1);
 	  imperium_self.endTurn();
-        }
+        } else {
+
+          activated_once = 0;
+          $(divpid).find('.hex_activated').css('background-color', 'transparent');
+          $(divpid).find('.hex_activated').css('opacity', '1');
+
+	}
       }
   
     });

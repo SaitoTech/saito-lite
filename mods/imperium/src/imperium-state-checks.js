@@ -842,7 +842,7 @@ for (let i = 0; i < player_initiative_order.length; i++) {
 
 
 
-  returnSectorsWithinHopDistance(destination, hops) {
+  returnSectorsWithinHopDistance(destination, hops, player=null) {
 
     let sectors = [];
     let distance = [];
@@ -857,32 +857,60 @@ for (let i = 0; i < player_initiative_order.length; i++) {
     for (let i = 0; i < hops; i++) {
       let tmp = JSON.parse(JSON.stringify(sectors));
       for (let k = 0; k < tmp.length; k++) {
-        let neighbours = s[tmp[k]].neighbours;
-        for (let m = 0; m < neighbours.length; m++) {
-  	  if (!sectors.includes(neighbours[m]))  {
-  	    sectors.push(neighbours[m]);
-  	    distance.push(i+1);
-  	  }
-        }
+
+//
+// 2/3-player game will remove some tiles
+//
+if (this.game.board[tmp[k]] != undefined) {
 
 	//
-	// temporary adjacency 
+	// if the player is provided and this sector has ships from 
+	// other players, then we cannot calculate hop distance as 
+	// it would mean moving through systems that are controlled by
+	// other players.
 	//
-        for (let z = 0; z < this.game.state.temporary_adjacency.length; z++) {
-	  if (tmp[k] == this.game.state.temporary_adjacency[z][0]) {
-  	    if (!sectors.includes(this.game.state.temporary_adjacency[z][1]))  {
-  	      sectors.push(this.game.state.temporary_adjacency[z][1]);
-  	      distance.push(i+1);
-  	    }
-	  }
-	  if (tmp[k] == this.game.state.temporary_adjacency[z][1]) {
-  	    if (!sectors.includes(this.game.state.temporary_adjacency[z][0]))  {
-  	      sectors.push(this.game.state.temporary_adjacency[z][0]);
-  	      distance.push(i+1);
-  	    }
+	let can_hop_through_this_sector = 1;
+	if (player == null) {} else {
+	  if (this.game.players_info[player-1].move_through_sectors_with_opponent_ships == 1 || players[i].temporary_move_through_sectors_with_opponent_ships == 1) {
+	  } else {
+	    if (this.doesSectorContainNonPlayerShips(player, tmp[k])) {
+	      can_hop_through_this_sector = 0;
+	    }
 	  }
 	}
 
+	if (can_hop_through_this_sector == 1) {
+
+	  //
+	  // board adjacency 
+	  //
+          let neighbours = s[tmp[k]].neighbours;
+          for (let m = 0; m < neighbours.length; m++) {
+    	    if (!sectors.includes(neighbours[m]))  {
+  	      sectors.push(neighbours[m]);
+  	      distance.push(i+1);
+  	    }
+          }
+
+	  //
+	  // temporary adjacency 
+	  //
+          for (let z = 0; z < this.game.state.temporary_adjacency.length; z++) {
+	    if (tmp[k] == this.game.state.temporary_adjacency[z][0]) {
+  	      if (!sectors.includes(this.game.state.temporary_adjacency[z][1]))  {
+  	        sectors.push(this.game.state.temporary_adjacency[z][1]);
+  	        distance.push(i+1);
+  	      }
+	    }
+	    if (tmp[k] == this.game.state.temporary_adjacency[z][1]) {
+  	      if (!sectors.includes(this.game.state.temporary_adjacency[z][0]))  {
+  	        sectors.push(this.game.state.temporary_adjacency[z][0]);
+  	        distance.push(i+1);
+  	      }
+	    }
+	  }
+	}
+}
       }
     }
     return { sectors : sectors , distance : distance };
@@ -1389,6 +1417,8 @@ console.log("SECTOR: " + sector);
     return this.doesSectorContainPlayerShips(player, sector);
   }
   doesSectorContainPlayerShips(player, sector) {
+
+console.log("sector: " + sector);
 
     let sys = this.returnSectorAndPlanets(sector);
     if (sys.s.units[player-1].length > 0) { return 1; }

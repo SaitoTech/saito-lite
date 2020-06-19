@@ -93,7 +93,9 @@
       },
       bombardmentTriggers : function(imperium_self, player, sector) { 
 	if (imperium_self.game.players_info[player-1].x89_bacterial_weapon == 1 && imperium_self.game.players_info[player-1].x89_bacterial_weapon_exhausted == 0) {
-	  return 1;
+	  if (imperium_self.doesSectorContainPlayerUnit(player, sector, "warsun") || imperium_self.doesSectorContainPlayerUnit(player, sector, "dreadnaught")) { 
+	    return 1;
+ 	  }
 	}
 	return 0;
       },
