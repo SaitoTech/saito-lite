@@ -147,6 +147,8 @@
     let html = '';
     let imperium_self = this;
     let technologies = this.returnTechnology();
+    let relevant_action_cards = ["action"];
+    let ac = this.returnPlayerActionCards(relevant_action_cards);
 
     if (stage == "main") {
   
@@ -161,7 +163,7 @@
       if (this.canPlayerPlayStrategyCard(this.game.player) == 1) {
         html += '<li class="option" id="select_strategy_card">play strategy card</li>';
       }
-      if (this.tracker.action_card == 0 && this.canPlayerPlayActionCard(this.game.player) == 1) {
+      if (ac.length > 0 && this.tracker.action_card == 0 && this.canPlayerPlayActionCard(this.game.player) == 1) {
         html += '<li class="option" id="action">play action card</li>';
       }
       if (this.tracker.trade == 0 && this.canPlayerTrade(this.game.player) == 1) {
@@ -232,7 +234,7 @@
   	    imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.endTurn();
           }, function() { imperium_self.playerTurn(); }, 
-	    ["action"]);
+	    relevant_action_cards);
         }
         if (action2 == "trade") {
           imperium_self.playerTrade(function() {
@@ -356,14 +358,16 @@
     let imperium_self = this;
     let hits_assigned = 0;
     let maximum_assignable_hits = 0;
+    let relevant_action_cards = ["post_pds","damage_control","space_combat"];
 
     html = '<p>You must assign '+total_hits+' to your fleet:</p><ul>';
 
-    if (1 == 1) {
-      html += '<li class="option" id="assign">assign hits</li>';
-    }
-    if (1 == 1) {
-      html += '<li class="option" id="action">action card</li>';
+    let ac = this.returnPlayerActionCards(player, relevant_action_cards);
+    if (ac.length > 0) {
+      html += '<li class="option" id="cont">continue</li>';
+      html += '<li class="option" id="action">play action card</li>';
+    } else {
+      html += '<li class="option" id="cont">continue</li>';
     }
 
     let menu_type = "";
@@ -414,7 +418,7 @@
 	  imperium_self.playerPlayPDSDefense(player, attacker, sector);
         }, function() {
 	  imperium_self.playerPlayPDSDefense(player, attacker, sector);
-	});
+	}, relevant_action_cards);
       }
 
       if (action2 == "assign") {
@@ -760,17 +764,19 @@ console.log("\n\n\nWe need to assign the hits to these units: " + JSON.stringify
 
     let imperium_self = this;
     let html = '';
+    let relevant_action_cards = ["pre_pds"];
 
     html = '<p>Do you wish to fire your PDS?</p><ul>';
 
+    let ac = this.returnPlayerActionCards(player, relevant_action_cards);
     if (1 == 1) {
       html += '<li class="option" id="skip">skip PDS</li>';
     }
     if (1 == 1) {
       html += '<li class="option" id="fire">fire PDS</li>';
     }
-    if (1 == 1) {
-      html += '<li class="option" id="action">action card</li>';
+    if (ac.length > 0) {
+      html += '<li class="option" id="action">play action card</li>';
     }
 
     let tech_attach_menu_events = 0;
@@ -815,11 +821,10 @@ console.log("\n\n\nWe need to assign the hits to these units: " + JSON.stringify
 	  imperium_self.playerPlayPDSDefense(player, attacker, sector);
         }, function() {
 	  imperium_self.playerPlayPDSDefense(player, attacker, sector);
-	});
+	}, relevant_action_cards);
       }
 
       if (action2 == "skip") {
-	// prepend so it happens after the modifiers
 	imperium_self.endTurn();
       }
 

@@ -23,6 +23,7 @@ console.log("PLAYER: " + player + " scp: " + strategy_card_player);
       },
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
+        if (imperium_self.game.player == player) {
         if (imperium_self.game.player != strategy_card_player) {
  
           let html = '<p>Do you wish to spend 4 resources and a strategy token to research a technology? </p><ul>';
@@ -96,6 +97,7 @@ console.log("TESTING AAAD");
               return 0;
             }
           });
+        }
         }
       },
     });

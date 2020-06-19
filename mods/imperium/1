@@ -60,10 +60,7 @@
 	  lmv = this.game.queue[le].split("\t");
 	}
 
-	// this overwrites secondaries, we need to clear manually
-	if (this.game.state.playing_strategy_card_secondary == 0) {
-          this.updateStatus("Waiting for Opponent Move...");  
-	}
+        this.updateStatus("Waiting for Opponent Move...");  
 
 	if (mv[1] == lmv[0]) {
 

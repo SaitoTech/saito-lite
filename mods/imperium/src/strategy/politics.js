@@ -114,13 +114,16 @@
       },
 
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
+        if (imperium_self.game.player == player) {
 
-        if (imperium_self.game.player != strategy_card_player) {
-          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-          imperium_self.playerBuyActionCards();
-        } else {
-          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-          imperium_self.endTurn();
+          if (imperium_self.game.player != strategy_card_player) {
+            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+            imperium_self.playerBuyActionCards();
+          } else {
+            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+            imperium_self.endTurn();
+          }
+
         }
 
       },

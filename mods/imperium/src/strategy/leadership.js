@@ -24,13 +24,15 @@
 
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
-	if (strategy_card_player != imperium_self.game.player) {
-          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-          imperium_self.playerBuyTokens();
- 	} else {
-          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-	  imperium_self.endTurn();
-	}
+        if (player == imperium_self.game.player) {
+	  if (strategy_card_player != imperium_self.game.player) {
+            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+            imperium_self.playerBuyTokens();
+ 	  } else {
+            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	    imperium_self.endTurn();
+	  }
+        }
 
       },
 

@@ -41,6 +41,7 @@
       },
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
+        if (imperium_self.game.player != player) {
         if (imperium_self.game.player != strategy_card_player) {
 
           let html = '<p>Do you wish to spend 1 strategy token to refresh your commodities? </p><ul>';
@@ -71,6 +72,7 @@
           imperium_self.addMove("resolve\tstrategy\t1");
           imperium_self.endTurn();
           return 0;
+        }
         }
       },
     });

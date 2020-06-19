@@ -321,6 +321,12 @@
   
 
     //
+    // prevent hangs
+    //
+    this.game.state.playing_strategy_card_secondary = 0;
+
+
+    //
     // add events to board 
     //
     this.addEventsToBoard();
