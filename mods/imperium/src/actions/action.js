@@ -280,15 +280,15 @@
     this.importActionCard('frontline-deployment', {
   	name : "Frontline Deployment" ,
   	type : "action" ,
-  	text : "Place three infantry on one planet you control" ,
+  	text : "Deploy three infantry on one planet you control" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
           if (imperium_self.game.player == action_card_player) {
 
             imperium_self.playerSelectPlanetWithFilter(
-              "Add three infantry to a planet you control: ",
+              "Deploy three infantry to a planet you control: ",
               function(planet) {
-                if (planet.owner == imperium_self.game.player) { return 1; } return 0;
+                if (imperium_self.game.planets[planet].owner == imperium_self.game.player) { return 1; } return 0;
               },
               function(planet) {
 		planet = imperium_self.game.planets[planet];

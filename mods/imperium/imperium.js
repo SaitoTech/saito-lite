@@ -1355,11 +1355,11 @@ console.log("P: " + planet);
       },
       gainTechnology : function(imperium_self, gainer, tech) {
 	if (tech == "faction3-instinct-training") {
-
+          imperium_self.game.players_info[gainer-1].instinct_training = 1;
         }
       },
       playActionCardTriggers : function(imperium_self, player, action_card_player, card) {
-        if (imperium_self.game.players_info[gainer-1].instinct_training == 1) { return 1; }
+        if (imperium_self.game.players_info[player-1].instinct_training == 1) { return 1; }
 	return 0;
       },
       playActionCardEvent : function(imperium_self, player, action_card_player, card) {
@@ -3195,15 +3195,15 @@ console.log("TECH: " + techlist[i]);
     this.importActionCard('frontline-deployment', {
   	name : "Frontline Deployment" ,
   	type : "action" ,
-  	text : "Place three infantry on one planet you control" ,
+  	text : "Deploy three infantry on one planet you control" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
           if (imperium_self.game.player == action_card_player) {
 
             imperium_self.playerSelectPlanetWithFilter(
-              "Add three infantry to a planet you control: ",
+              "Deploy three infantry to a planet you control: ",
               function(planet) {
-                if (planet.owner == imperium_self.game.player) { return 1; } return 0;
+                if (imperium_self.game.planets[planet].owner == imperium_self.game.player) { return 1; } return 0;
               },
               function(planet) {
 		planet = imperium_self.game.planets[planet];
@@ -8882,7 +8882,7 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
 
       html = '<p>Do you wish to play an action card to counter? <ul>';
 
-      let ac = this.returnPlayerActionCards(player, ["action_cards"])
+      let ac = this.returnPlayerActionCards(this.game.player, ["action_cards"])
       if (ac.length > 0) {
         html += '<li class="option" id="cont">continue</li>';
         html += '<li class="option" id="action">play action card</li>';

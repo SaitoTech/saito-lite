@@ -194,11 +194,11 @@
       },
       gainTechnology : function(imperium_self, gainer, tech) {
 	if (tech == "faction3-instinct-training") {
-
+          imperium_self.game.players_info[gainer-1].instinct_training = 1;
         }
       },
       playActionCardTriggers : function(imperium_self, player, action_card_player, card) {
-        if (imperium_self.game.players_info[gainer-1].instinct_training == 1) { return 1; }
+        if (imperium_self.game.players_info[player-1].instinct_training == 1) { return 1; }
 	return 0;
       },
       playActionCardEvent : function(imperium_self, player, action_card_player, card) {

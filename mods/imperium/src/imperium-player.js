@@ -268,7 +268,7 @@
 
       html = '<p>Do you wish to play an action card to counter? <ul>';
 
-      let ac = this.returnPlayerActionCards(player, ["action_cards"])
+      let ac = this.returnPlayerActionCards(this.game.player, ["action_cards"])
       if (ac.length > 0) {
         html += '<li class="option" id="cont">continue</li>';
         html += '<li class="option" id="action">play action card</li>';
