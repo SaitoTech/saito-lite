@@ -2209,7 +2209,9 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
       obj.distance_adjustment += obj.fleet_move_bonus;
     }
   
-    obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance);
+   console.log("SECTORS: " + JSON.stringify(sectors));
+ 
+   obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance);
 
     let updateInterface = function(imperium_self, obj, updateInterface) {
 
