@@ -245,11 +245,6 @@
  
 
 
-    this.game.sectors[this.game.board["2_3"].tile].units[1] = [];
-    this.game.sectors[this.game.board["3_3"].tile].units[1] = [];
-    this.game.sectors[this.game.board["2_4"].tile].units[1] = [];
-
-
     //
     // HIDE HUD LOG
     //

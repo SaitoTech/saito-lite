@@ -191,9 +191,9 @@
       }
 
       
-      sectors[i].units[1] = [];
-      sectors[i].units[1].push(this.returnUnit("fighter", 1));  
-      sectors[i].units[1].push(this.returnUnit("fighter", 1));  
+//      sectors[i].units[1] = [];
+//      sectors[i].units[1].push(this.returnUnit("fighter", 1));  
+//      sectors[i].units[1].push(this.returnUnit("fighter", 1));  
 
 
     }
