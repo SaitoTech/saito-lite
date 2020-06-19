@@ -1493,7 +1493,13 @@ console.log("CARD: " + card);
               } else {
                 this.game.state.vp_outstanding -= parseInt(mv[2]);
               }
-            }
+            } else {
+              if (mv[1] === "us") {
+                this.game.state.vp += parseInt(mv[2]);
+              } else {
+                this.game.state.vp -= parseInt(mv[2]);
+              }
+	   }
           } else {
             this.updateLog(mv[1].toUpperCase() + "</span> <span>receives</span> <span>" + mv[2] + "</span> <span>VP");
             if (mv[1] === "us") {
@@ -3013,13 +3019,15 @@ console.log("CARD: " + card);
 	      return;
             }
             if (action2 === "skip") {
+              twilight_self.addMove("resolve\tplay");
               twilight_self.addMove("vp\tus\t1\t0");
               twilight_self.addMove("notify\tUS skips a turn for 1 VP as a Great Society");
               twilight_self.endTurn();
             }
             if (action2 === "scoring") {
+              twilight_self.addMove("resolve\tplay");
               twilight_self.addMove("vp\tus\t1\t0");
-              twilight_self.addMove("notify\tUS plays a scoring card as a Great Society");
+              twilight_self.addMove("notify\tUS plays a scoring card for 1 VP as a Great Society");
               twilight_self.playerTurn("greatsociety");
             }
 	  });
@@ -15112,11 +15120,11 @@ console.log("card: " + card);
 
             <label for="deck">Deck:</label>
             <select name="deck" id="deckselect" onchange='
-  if ($("#deckselect").val() == "saito") { $(".saito_edition").prop("checked",true); } else { $(".saito_edition").prop("checked", false); if ($("#deckselect").val() == "optional") { $(".optional_edition").prop("checked", false); } else { $(".optional_edition").prop("checked", true); if ($("#deckselect").val() == "endofhistory") { $(".endofhistory_edition").prop("checked",true); $(".optional_edition").prop("checked", false); } else { $(".endofhistory_edition").prop("checked", false); } } } '>
+  if ($("#deckselect").val() == "saito") { $(".saito_edition").prop("checked",true); $(".endofhistory_edition").prop("checked", false); } else { $(".saito_edition").prop("checked", false); if ($("#deckselect").val() == "optional") { $(".optional_edition").prop("checked", false); } else { $(".optional_edition").prop("checked", true); if ($("#deckselect").val() == "endofhistory") { $(".endofhistory_edition").prop("checked",true); $(".optional_edition").prop("checked", false); } else { $(".endofhistory_edition").prop("checked", false); } } } '>
             <option value="original">original</option>
               <option value="optional" selected>optional</option>
               <option value="saito">saito edition</option>
-              <option value="end_of_history">end of history</option>
+              <option value="endofhistory">end of history</option>
             </select>
 
             <label for="usbonus">US bonus: </label>

@@ -10118,7 +10118,6 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
   
       let id = $(this).attr("id");
 
-
       //
       // submit when done
       //
@@ -10383,19 +10382,23 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
     let array_of_cards = this.returnPlayerUnexhaustedPlanetCards(this.game.player); // unexhausted
     let array_of_cards_to_exhaust = [];
     let selected_cost = 0;
-  
+    let total_trade_goods = imperium_self.game.players_info[imperium_self.game.player-1].goods;
+
+
     let html  = "<p>Select "+cost+" in influence: </p><ul>";
     for (let z = 0; z < array_of_cards.length; z++) {
       html += '<li class="cardchoice" id="cardchoice_'+array_of_cards[z]+'">' + this.returnPlanetCard(array_of_cards[z]) + '</li>';
     }
+    if (1 == imperium_self.game.players_info[imperium_self.game.player-1].goods) {
+      html += '<li class="textchoice" id="trade_goods">' + imperium_self.game.players_info[imperium_self.game.player-1].goods + ' trade good</li>';
+    } else {
+      html += '<li class="textchoice" id="trade_goods">' + imperium_self.game.players_info[imperium_self.game.player-1].goods + ' trade goods</li>';
+    }
     html += '</ul>';
 
-//    html += '<ul>';
-//    html += '<li class="textchoice" id="goods">trade goods</li>';
-//    html += '</ul>';
   
     this.updateStatus(html);
-    $('.cardchoice').on('click', function() {
+    $('.cardchoice , .textchoice').on('click', function() {
   
       let action2 = $(this).attr("id");
       let tmpx = action2.split("_");
@@ -10409,19 +10412,34 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
         } 
       }
   
-      imperium_self.addMove("expend\t"+imperium_self.game.player+"\tplanet\t"+array_of_cards[idx]);
-  
-      array_of_cards_to_exhaust.push(array_of_cards[idx]);
-  
-      $(divid).off();
-      $(divid).css('opacity','0.3');
-  
-      selected_cost += imperium_self.game.planets[array_of_cards[idx]].resources;
-  
+
+
+      //
+      // handle spending trade goods
+      //
+      if (action2 == "trade_goods") {
+        if (total_trade_goods > 0) {
+          imperium_self.addMove("expend\t"+imperium_self.game.player+"\tgoods\t1");
+          total_trade_goods--;
+          selected_cost += 1;
+
+          if (1 == total_trade_goods) {
+            $('#trade_goods').html(('' + total_trade_goods+' trade good'));
+          } else {
+            $('#trade_goods').html(('' + total_trade_goods+' trade goods'));
+          }
+        }
+      } else {
+        imperium_self.addMove("expend\t"+imperium_self.game.player+"\tplanet\t"+array_of_cards[idx]);
+        array_of_cards_to_exhaust.push(array_of_cards[idx]);
+        $(divid).off();
+        $(divid).css('opacity','0.3');
+        selected_cost += imperium_self.game.planets[array_of_cards[idx]].resources;
+      }  
+
       if (cost <= selected_cost) { mycallback(1); }
   
     });
-  
   }
   
 
@@ -10471,37 +10489,62 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
     let array_of_cards = this.returnPlayerUnexhaustedPlanetCards(this.game.player); // unexhausted
     let array_of_cards_to_exhaust = [];
     let selected_cost = 0;
- 
+    let total_trade_goods = imperium_self.game.players_info[imperium_self.game.player-1].goods; 
+
     let html  = "<p>Select "+cost+" in resources: </p><ul>";
     for (let z = 0; z < array_of_cards.length; z++) {
       html += '<li class="cardchoice" id="cardchoice_'+array_of_cards[z]+'">' + this.returnPlanetCard(array_of_cards[z]) + '</li>';
     }
+    if (1 == imperium_self.game.players_info[imperium_self.game.player-1].goods) {
+      html += '<li class="textchoice" id="trade_goods">' + imperium_self.game.players_info[imperium_self.game.player-1].goods + ' trade good</li>';
+    } else {
+      html += '<li class="textchoice" id="trade_goods">' + imperium_self.game.players_info[imperium_self.game.player-1].goods + ' trade goods</li>';
+    }
     html += '</ul>';
  
     this.updateStatus(html);
-    $('.cardchoice').on('click', function() {
+    $('.cardchoice , .textchoice').on('click', function() {
  
       let action2 = $(this).attr("id");
       let tmpx = action2.split("_");
+alert("TTG 1: " + total_trade_goods);
   
       let divid = "#"+action2;
+alert("TTG 2: " + total_trade_goods);
       let y = tmpx[1];
+alert("TTG 3: " + total_trade_goods);
       let idx = 0;
+alert("TTG 4: " + total_trade_goods);
       for (let i = 0; i < array_of_cards.length; i++) {
         if (array_of_cards[i] === y) {
           idx = i;
         }
       }
 
+alert("TTG 5: " + total_trade_goods);
+      //
+      // handle spending trade goods
+      //
+      if (action2 == "trade_goods") {
+alert("TTG: 6" + total_trade_goods);
+	if (total_trade_goods > 0) { 
+          imperium_self.addMove("expend\t"+imperium_self.game.player+"\tgoods\t1");
+	  total_trade_goods--;
+          selected_cost += 1;
 
-      imperium_self.addMove("expend\t"+imperium_self.game.player+"\tplanet\t"+array_of_cards[idx]);
-
-      array_of_cards_to_exhaust.push(array_of_cards[idx]);
-
-      $(divid).off();
-      $(divid).css('opacity','0.3');
-
-      selected_cost += imperium_self.game.planets[array_of_cards[idx]].resources;
+          if (1 == total_trade_goods) {
+	    $('#trade_goods').html(('' + total_trade_goods+' trade good'));
+          } else {
+	    $('#trade_goods').html(('' + total_trade_goods+' trade goods'));
+          }
+	}
+      } else {
+        imperium_self.addMove("expend\t"+imperium_self.game.player+"\tplanet\t"+array_of_cards[idx]);
+        array_of_cards_to_exhaust.push(array_of_cards[idx]);
+        $(divid).off();
+        $(divid).css('opacity','0.3');
+        selected_cost += imperium_self.game.planets[array_of_cards[idx]].resources;
+      }
 
       if (cost <= selected_cost) { mycallback(1); }
 
