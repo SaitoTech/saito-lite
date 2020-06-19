@@ -2823,8 +2823,8 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
-	    if (z[k].bombardmentTriggers(this, player, sector, planet_idx) == 1) {
-	      this.game.queue.push("bombardment_event\t"+speaker_order[i]+"\t"+sector+"\t"+planet_idx+"\t"+k);
+	    if (z[k].bombardmentTriggers(this, speaker_order[i], player, sector, planet_idx) == 1) {
+	      this.game.queue.push("bombardment_event\t"+speaker_order[i]+"\t"+player+"\t"+sector+"\t"+planet_idx+"\t"+k);
             }
           }
         }
@@ -2834,12 +2834,13 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
   
         let z		 = this.returnEventObjects();
   	let player       = parseInt(mv[1]);
+  	let bombarding_player = parseInt(mv[1]);
         let sector	 = mv[2];
         let planet_idx	 = mv[3];
         let z_index	 = parseInt(mv[4]);
 
   	this.game.queue.splice(qe, 1);
-	return z[z_index].bombardmentEvent(this, player, sector, planet_idx);
+	return z[z_index].bombardmentEvent(this, player, bombarding_player, sector, planet_idx);
 
       }
       if (mv[0] === "bombardment_post") {
@@ -3021,6 +3022,7 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
         if (defender == -1) {
 	  if (sys.p[planet_idx].owner != player) {
             this.updateLog(this.returnFaction(player) + " seizes " + sys.p[planet_idx].name);
+	    this.updatePlanetOwner(sector, planet_idx, player);
 	  }
           return 1;
         }

@@ -1430,22 +1430,23 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
   
       let id = $(this).attr("id");
   
-      html = "Select a planet on which to build: ";
-      imperium_self.updateStatus(html);
-  
-      imperium_self.playerSelectPlanet(function(sector, planet_idx) {  
-
-        if (id == "pds") {
-  	  imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+planet_idx+"\tpds\t"+sector);
-	  mycallback();
-        }
-        if (id == "spacedock") {
-  	  imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+planet_idx+"\tspacedock\t"+sector);
-	  mycallback();
-        }
-  
-      }, 2);  // 2 any i control
-  
+      imperium_self.playerSelectPlanetWithFilter(
+              "Select a planet on which to build: ",
+              function(planet) {
+                if (imperium_self.game.planets[planet].owner == imperium_self.game.player) { return 1; } return 0;
+              },
+              function(planet) {
+                if (id == "pds") {
+                  imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+planet.idx+"\tpds\t"+planet.sector);
+                  mycallback();
+                }
+                if (id == "spacedock") {
+                  imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+planet.idx+"\tspacedock\t"+planet.sector);
+                  mycallback();
+                }
+              },
+              null
+      );
     });
   
   }

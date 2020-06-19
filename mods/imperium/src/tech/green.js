@@ -91,17 +91,17 @@
         imperium_self.game.players_info[player-1].x89_bacterial_weapon_exhausted = 0;
         return 1;
       },
-      bombardmentTriggers : function(imperium_self, player, sector) { 
-	if (imperium_self.game.players_info[player-1].x89_bacterial_weapon == 1 && imperium_self.game.players_info[player-1].x89_bacterial_weapon_exhausted == 0) {
-	  if (imperium_self.doesSectorContainPlayerUnit(player, sector, "warsun") || imperium_self.doesSectorContainPlayerUnit(player, sector, "dreadnaught")) { 
+      bombardmentTriggers : function(imperium_self, player, bombarding_player, sector) { 
+	if (imperium_self.game.players_info[bombarding_player-1].x89_bacterial_weapon == 1 && imperium_self.game.players_info[bombarding_player-1].x89_bacterial_weapon_exhausted == 0) {
+	  if (imperium_self.doesSectorContainPlayerUnit(bombarding_player, sector, "warsun") || imperium_self.doesSectorContainPlayerUnit(bombarding_player, sector, "dreadnaught")) { 
 	    return 1;
  	  }
 	}
 	return 0;
       },
-      bombardmentEvent : function(imperium_self, player, sector, planet_idx) {
+      bombardmentEvent : function(imperium_self, player, bombarding_player, sector, planet_idx) {
 
-	if (imperium_self.game.player != player) { return 0; }
+	if (imperium_self.game.player != bombarding_player) { return 0; }
 
         let sys = imperium_self.returnSectorAndPlanets(sector);
         let planet = sys.p[planet_idx];
