@@ -96,7 +96,8 @@
       space		:	0,
       ground		:	1,
       can_be_stored	:	1,
-      capacity_required :	1
+      capacity_required :	1,
+      extension : 1
     });
 
     this.importUnit("fighter-ii", {
@@ -107,14 +108,17 @@
       combat 		:	8,
       strength 		:	1,
       can_be_stored	:	1,
-      capacity_required :	1
+      capacity_required :	1,
+      extension : 1
+      
     });
 
     this.importUnit("spacedock", {
       name     		:       "Spacedock II",
       type     		:       "spacedock",
       capacity 		:	5,
-      production 	:	4
+      production 	:	4,
+      extension : 1
     });
 
     this.importUnit("pds-ii", {
@@ -122,7 +126,8 @@
       type     		:       "pds",
       cost 		:	5,
       combat 		:	6,
-      range		:	2
+      range		:	2,
+      extension : 1
     });
 
     this.importUnit("carrier-ii", {
@@ -132,7 +137,8 @@
       move 		:	2,
       combat 		:	9,
       capacity 		:	6,
-      strength 		:	1
+      strength 		:	1,
+      extension : 1
     });
 
     this.importUnit("destroyer-ii", {
@@ -141,7 +147,8 @@
       cost 		:	1,
       move 		:	2,
       combat 		:	8,
-      strength 		:	1
+      strength 		:	1,
+      extension : 1
     });
 
     this.importUnit("cruiser-ii", {
@@ -150,7 +157,8 @@
       cost 		:	2,
       move 		:	2,
       combat 		:	7,
-      strength 		:	1
+      strength 		:	1,
+      extension : 1
     });
 
     this.importUnit("dreadnaught-ii", {
@@ -160,7 +168,8 @@
       move 		:	2,
       capacity 		:	1,
       combat 		:	5,
-      strength 		:	2
+      strength 		:	2,
+      extension : 1
     });
 
 

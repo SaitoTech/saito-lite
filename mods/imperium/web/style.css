@@ -25,11 +25,35 @@
   --p3: #FF6037;
   --p4: #FF00CC;
   --p5: #FFCC33;
-  --p5: #FF355E;
+  --p6: #FF355E;
 
 
   --my-color: var(--p1);
   --playing-color: var(--p1);
+}
+
+.p1 .pc {
+  color: var(--p1);
+}
+
+.p2 .pc {
+  color: var(--p2);
+}
+
+.p3 .pc {
+  color: var(--p3);
+}
+
+.p4 .pc {
+  color: var(--p4);
+}
+
+.p5 .pc {
+  color: var(--p5);
+}
+
+.p6 .pc {
+  color: var(--p6);
 }
 
 body {
@@ -77,9 +101,44 @@ body {
 }
 
 .faction_content {
-  background-color: #4448;
+  background-color: #0008;
   height: calc(100% - 5em);
   margin: 0 1em;
+  color: #FFF;
+  padding: 1em;
+}
+
+.faction_sheet_unit_box {
+  display: grid;
+  grid-gap: 5px 1em;
+  grid-template-columns: auto auto auto auto auto;
+}
+
+.faction_sheet_token_box {
+  margin: 1em auto;
+  width: 40em;
+  display: grid;
+  grid-gap: 0 2em;
+  grid-template-columns: auto auto auto;
+  font-family: 'bank-gothic';
+  transform: scale(0.85);
+}
+.token_count {
+  font-size: 1em;
+  margin-top: 0px;
+  display: block;
+  color: #FFF;
+  font-family: 'bank-gothic';
+  text-shadow: 1px 1px #000;
+}
+
+.faction_sheet_token_box div {
+  text-align: center;
+  font-size: 1.5em;
+}
+
+.faction_sheet_token_box span {
+  text-align: center;
 }
 
 #interface_overlay {
