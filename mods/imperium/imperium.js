@@ -3641,6 +3641,19 @@ console.log("TECH: " + techlist[i]);
 
 
 
+    this.importActionCard('in-the-silence-of-space', {
+  	name : "In the Silence of Space" ,
+  	type : "action" ,
+  	text : "Your ships may move through sectors with other player ships this turn: " ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+	  imperium_self.game.players_info[action_card_player-1].temporary_move_through_sectors_with_opponent_ships = 1;
+	  return 1;
+	}
+    });
+
+
+
+
 /***
 
     this.importActionCard('', {
@@ -14074,7 +14087,7 @@ console.log("sector: " + sector);
     this.game.players_info[player-1].temporary_space_combat_roll_modifier 	= 0;
     this.game.players_info[player-1].temporary_ground_combat_roll_modifier 	= 0;
     this.game.players_info[player-1].temporary_pds_combat_roll_modifier 	= 0;
-
+    this.game.players_info[player-1].temporary_move_through_sectors_with_opponent_ships = 0;
     this.game.state.temporary_adjacency = [];
   }
 

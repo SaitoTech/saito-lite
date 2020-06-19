@@ -726,6 +726,19 @@
 
 
 
+    this.importActionCard('in-the-silence-of-space', {
+  	name : "In the Silence of Space" ,
+  	type : "action" ,
+  	text : "Your ships may move through sectors with other player ships this turn: " ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+	  imperium_self.game.players_info[action_card_player-1].temporary_move_through_sectors_with_opponent_ships = 1;
+	  return 1;
+	}
+    });
+
+
+
+
 /***
 
     this.importActionCard('', {
