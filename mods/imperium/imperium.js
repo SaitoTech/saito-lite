@@ -5366,21 +5366,15 @@ console.log("SECTOR: " + sector);
 
       if (mv[0] === "strategy") {
   
-console.log("HERE: " + this.game.queue);
-alert("hit strategy here!");
-
   	let card = mv[1];
   	let strategy_card_player = parseInt(mv[2]);
   	let stage = parseInt(mv[3]);  
 
 	if (this.game.state.playing_strategy_card_secondary == 1) {
-console.log("noping out as we think we are already playing the secondary...");
 	  return 0;
 	}
 
   	imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.push(card);
-//	imperium_self.updateStatus("");
-
 
   	if (stage == 1) {
   	  this.playStrategyCardPrimary(strategy_card_player, card);
@@ -5388,7 +5382,6 @@ console.log("noping out as we think we are already playing the secondary...");
   	}
   	if (stage == 2) {
 	  this.game.state.playing_strategy_card_secondary = 1;
-alert("heading into secondary!");
   	  this.playStrategyCardSecondary(strategy_card_player, card);
 	  return 0;
   	}
