@@ -191,7 +191,7 @@ body {
 }
 
 
-.status ul li:hover, .hud-menu ul li a:hover {
+.status ul li:hover, .hud-menu ul li a:hover, hud-menu-overlay ul li:hover {
   background: #8888;
 }
 
@@ -207,8 +207,10 @@ body {
   overflow-y: auto;
   color: #fff;
   font-family: 'bank-gothic', arial, helvetica, sans-serif;
+  padding-top: 5px;
 }
-.status ul li, .status ul li:last-child {
+
+.status ul li, .status ul li:last-child, hud-menu-overlay ul li {
   border-color: #555;
 }
 

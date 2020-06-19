@@ -78,6 +78,7 @@
       planets[i].sector = ""; // "sector43" <--- fleshed in by initialize
       planets[i].tile = ""; // "4_5" <--- fleshed in by initialize
       planets[i].idx = -1; // 0 - n // <--- fleshed in by initialize
+      planets[i].planet = ""; // name in planets array
       planets[i].hw = 0;
 
       for (let j = 0; j < this.totalPlayers; j++) {

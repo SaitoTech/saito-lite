@@ -1078,7 +1078,7 @@ console.log("P: " + planet);
               planet = imperium_self.game.planets[planet];
               imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
               imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
-              imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
+              imperium_self.addMove("expend\t"+imperium_self.game.player+"\t"+"strategy"+"\t"+"1");
               imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys three infantry to " + planet.name);
               imperium_self.endTurn();
               return 0;
@@ -1163,11 +1163,218 @@ console.log("P: " + planet);
       homeworld		: 	"sector51",
       space_units	: 	["carrier","cruiser","cruiser","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech		: 	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector"],
-//, "faction3-field-nullification", "faction3-peace-accords", "faction3-quash", "faction3-instinct-training"],
+      tech		: 	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector", "faction3-field-nullification", "faction3-peace-accords", "faction3-quash", "faction3-instinct-training"],
       background	: 'faction3.jpg'
     });
   
+
+
+
+    this.importTech('faction3-faction3-field-nullification', {
+
+      name        :       "Field Nullification" ,
+      faction     :       "faction3",
+      type        :       "special" ,
+      initialize  : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].field_nullification == undefined) {
+          imperium_self.game.players_info[player-1].field_nullification = 0;
+        }
+      },
+      gainTechnology : function(imperium_self, gainer, tech) {
+        if (tech == "faction3-field-nullification") {
+          imperium_self.game.players_info[gainer-1].field_nullification = 1;
+        }
+      },
+      activateSystemTriggers : function(imperium_self, activating_player, player, sector) {
+	if (imperium_self.doesSectorContainPlayerShips(imperium_self.game.player, sector)) { return 1; }
+	return 0;
+      },
+      activateSystemEvent : function(imperium_self, activating_player, player, sector) {
+	let html = 'Do you wish to use Field Nullification to terminate this player\'s turn? <ul>';
+	html += '<li class="textchoice" id="yes">activate nullification field</li>';
+	html += '<li class="textchoice" id="no">do not activate</li>';
+	html += '</ul>';
+
+	$('.textchoice').off();
+	$('.textchoice').on('click', function() {
+
+	  let choice = $(this).attr("id");
+
+	  if (choice == "yes") {
+	    imperium_self.endTurn();
+	  }
+	  if (choice == "no") {
+	    imperium_self.endTurn();
+	  }
+	});
+	return 0;
+      }
+    });
+
+
+
+    this.importTech('faction3-peace-accords', {
+
+      name        :       "Peace Accords" ,
+      faction     :       "faction3",
+      type        :       "special" ,
+      initialize  : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].peace_accords == undefined) {
+          imperium_self.game.players_info[player-1].peace_accords = 0;
+        }
+      },
+      gainTechnology : function(imperium_self, gainer, tech) {
+        if (tech == "faction3-peace-accords") {
+          imperium_self.game.players_info[gainer-1].peace_accords = 1;
+        }
+      },
+      strategyCardAfterTriggers : function(imperium_self, player, strategy_card_player, card) {
+
+	if (card == "diplomacy") {
+
+	  let pcs = imperium_self.returnPlayerPlanetCards(imperium_self.game.player);
+	  let sectors = [];
+	  let adjacent_sectors = [];
+	  let seizable_planets = [];
+
+	  for (let i = 0; i < pcs.length; i++) {
+	    sectors.push(pcs[i]);
+	    adjacent_sectors.push(pcs[i]);
+	  }
+
+	  //
+	  // get all planets adjacent to...
+	  //
+	  for (let i = 0; i < sectors.length; i++) {
+	    let as = returnAdjacentSectors(sectors[i]);
+	    for (let z = 0; z < as.length; z++) {
+	      if (!adjacent_sectors.includes(as[z])) { adjacent_sectors.push(as[z]); }
+	    }
+    	  }
+
+	  //
+	  // get all planets I don't control in those sectors
+	  //
+	  for (let b = 0; b < adjacent_sectors.length; b++) {
+	    let sys = imperium_self.returnSectorAndPlanets(adjacent_sectors[b]);
+	    for (let y = 0; y < sys.p.length; y++) {
+	      let planet_uncontrolled = 0;
+	      if (sys.p[y].owner != imperium_self.game.player) {
+		if (!imperium_self.doesPlanetHaveUnits(sys.p[y])) {
+		  available_planets.push(sys.p[y].planet);
+	        }
+	      }
+	    }
+	  }
+
+	  //
+	  //
+	  //
+	  if (available_planets.length < 0) { 
+	    return 1;
+	  }
+
+	  if (imperium_self.game.players_info[imperium_self.game.player].peace_accords == 1) {
+	   
+	    if (player == imperium_self.game.player) {
+	      alert("Peace Accords can trigger...");
+	      imperium_self.endTurn(); 
+	    }
+
+	  }
+
+	  return 0;
+	}
+      }
+    });
+
+
+
+
+    this.importTech('faction3-quash', {
+      name        :       "Quash" ,
+      faction     :       "faction3",
+      type        :       "special" ,
+      initialize : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].quash == undefined) {
+          imperium_self.game.players_info[player-1].quash = 0;
+        }
+      },
+      gainTechnology : function(imperium_self, gainer, tech) {
+        if (tech == "faction3-quash") {
+          imperium_self.game.players_info[gainer-1].quash = 1;
+        }
+      },
+      menuOption  :       function(imperium_self, player) {
+        let x = {};
+            x.trigger = 'quash';
+            x.html = '<li class="option" id="quash">quash agenda</li>';
+        return x;
+      },
+      menuOptionTrigger:  function(imperium_self, player) { return 1; },
+      menuOptionActivated:  function(imperium_self, player) {
+
+        if (imperium_self.game.player == player) {
+
+          let html = '';
+          html += 'Select one agenda to quash in the Galactic Senate.<ul>';
+          for (i = 0; i < 3; i++) {
+            html += '<li class="option" id="'+imperium_self.game.state.agendas[i]+'">' + laws[imperium_self.game.state.agendas[i]].name + '</li>';
+          }
+          html += '</ul>';
+
+          imperium_self.updateStatus(html);
+
+          $('.option').off();
+          $('.option').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showAgendaCard(imperium_self.game.state.agendas[s]); });
+          $('.option').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hideAgendaCard(imperium_self.game.state.agendas[s]); });
+          $('.option').on('click', function() {
+
+             let agenda_to_quash = $(this).attr('id');
+	     imperium_self.updateStatus("Quashing Agenda");
+
+             imperium_self.addMove("expend\t"+imperium_self.game.player+"\t"+"strategy"+"\t"+"1");
+             imperium_self.addMove("quash\t"+agenda_to_quash+"\t"+"1"); // 1 = re-deal
+	     imperium_self.endTurn();
+	  });
+	}
+      }
+    });
+
+
+    this.importTech('faction3-instinct-training', {
+      name        :       "Instinct Training" ,
+      faction     :       "faction3",
+      type        :       "special" ,
+      initialize  :	  function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].instinct_training == null) {
+          imperium_self.game.players_info[player-1].instinct_training = 0;
+	}
+      },
+      gainTechnology : function(imperium_self, gainer, tech) {
+	if (tech == "faction3-instinct-training") {
+
+        }
+      },
+      playActionCardTriggers : function(imperium_self, player, action_card_player, card) {
+        if (imperium_self.game.players_info[gainer-1].instinct_training == 1) { return 1; }
+	return 0;
+      },
+      playActionCardEvent : function(imperium_self, player, action_card_player, card) {
+
+        if (imperium_self.game.player == player) {
+          // remove previous action card
+          imperium_self.addMove("resolve\t"+"action_card");
+          imperium_self.addMove("resolve\t"+"action_card_post");
+          imperium_self.addMove("expend\t"+imperium_self.game.player+"strategy"+"1");
+	  imperium_self.endTurn();
+        }
+
+	return 0;
+
+      },
+    });
+
 
 
 
@@ -2705,26 +2912,6 @@ console.log("TECH: " + techlist[i]);
 
 
 
-    this.importActionCard('sabotage', {
-  	name : "Sabotage" ,
-  	type : "action_card" ,
-  	text : "When another player plays an action card, you may cancel that action card" ,
-	playActionCard : function(imperium_self, player, action_card_player, card) {
-
-	  //
-	  // this runs in actioncard post...
-	  //
-          if (imperium_self.game.player == action_card_player) {
-	    // remove previous action card
-	    imperium_self.addMove("resolve\t"+"action_card");
-	    imperium_self.addMove("resolve\t"+"action_card_post");
-	  }
-
-	  return 0;
-	}
-    });
-
-
     this.importActionCard('cripple-defenses', {
   	name : "Cripple Defenses" ,
   	type : "action" ,
@@ -2758,7 +2945,9 @@ console.log("TECH: " + techlist[i]);
 		return 0;
 
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -2776,6 +2965,7 @@ console.log("TECH: " + techlist[i]);
             imperium_self.playerSelectPlanetWithFilter(
 	      "Select a non-homeworld planet and destroy one Space Dock on that planet: " ,
               function(planet) {
+		planet = imperium_self.game.planets[planet];
 	        if (planet.hw == 0 && imperium_self.doesPlanetHaveSpaceDock(planet)) {
 		  return 1;
 		}
@@ -2801,7 +2991,10 @@ console.log("TECH: " + techlist[i]);
 		return 0;
 
 	      },
-	      null
+	      // cancel -- no space dock available?
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -2819,7 +3012,6 @@ console.log("TECH: " + techlist[i]);
             imperium_self.playerSelectSectorWithFilter(
 	      "Select a sector with no existing ships in which to place a Destroyer: ",
               function(sector) {
-console.log("SECTOR: " + sector);
 		return !imperium_self.doesSectorContainShips(sector);
               },
 	      function(sector) {
@@ -2830,7 +3022,9 @@ console.log("SECTOR: " + sector);
 		return 0;
 
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -2848,6 +3042,7 @@ console.log("SECTOR: " + sector);
             imperium_self.playerSelectPlanetWithFilter(
 	      "Select a planet not controlled by another player: ",
               function(planet) {
+		planet = imperium_self.game.planets[planet];
 		if (planet.owner == -1) { return 1; } return 0;
               },
 	      function(planet) {
@@ -2859,7 +3054,9 @@ console.log("SECTOR: " + sector);
 		return 0;
 
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -2880,7 +3077,8 @@ console.log("SECTOR: " + sector);
             imperium_self.playerSelectPlanetWithFilter(
 	      "Exhaust a planet card held vy another player. Gain trade goods equal to resource value." ,
               function(planet) {
-		if (imperium_self.game.planets[planet].owner != -1 && imperium_self.game.planets[planet].owner != imperium_self.game.player && imperium_self.game.planets[planet].exhausted == 0 && imperium_self.game.planets[planet].hw == 0) { return 1; } return 0;
+		planet = imperium_self.game.planets[planet];
+		if (planet.owner != -1 && planet.owner != imperium_self.game.player && planet.exhausted == 0 && planet.hw == 0) { return 1; } return 0;
               },
 	      function(planet) {
 
@@ -2894,7 +3092,9 @@ console.log("SECTOR: " + sector);
 		return 0;
 
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -2914,7 +3114,8 @@ console.log("SECTOR: " + sector);
             imperium_self.playerSelectPlanetWithFilter(
 	      "Exhaust a planet card held vy another player. Gain trade goods equal to resource value." ,
               function(planet) {
-		if (imperium_self.game.planets[planet].owner != -1 && imperium_self.game.planets[planet].owner != imperium_self.game.player && imperium_self.game.planets[planet].exhausted == 0) { return 1; } return 0;
+		planet = imperium_self.game.planets[planet];
+		if (planet.owner != -1 && planet.owner != imperium_self.game.player && planet.exhausted == 0) { return 1; } return 0;
               },
 	      function(planet) {
 
@@ -2928,7 +3129,9 @@ console.log("SECTOR: " + sector);
 		return 0;
 
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -3007,7 +3210,9 @@ console.log("SECTOR: " + sector);
                 imperium_self.endTurn();
                 return 0;
               },
-              null
+	      function() {
+		imperium_self.playerTurn();
+	      }
             );
           }
           return 0;
@@ -3035,7 +3240,9 @@ console.log("SECTOR: " + sector);
                imperium_self.endTurn();
                 return 0;
               },
-              null
+	      function() {
+		imperium_self.playerTurn();
+	      }
             );
           }
           return 0;
@@ -3063,7 +3270,9 @@ console.log("SECTOR: " + sector);
                 imperium_self.endTurn();
                 return 0;
               },
-              null
+	      function() {
+		imperium_self.playerTurn();
+	      }
             );
           }
           return 0;
@@ -3120,7 +3329,9 @@ console.log("SECTOR: " + sector);
 		imperium_self.endTurn();
 		return 0;
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -3175,7 +3386,9 @@ console.log("SECTOR: " + sector);
 	          null
 	        );
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -3240,7 +3453,8 @@ console.log("SECTOR: " + sector);
             imperium_self.playerSelectPlanetWithFilter(
 	      "Select a hazardous planet and exhaust it. Destroy 3 infantry on that planet if they exist" ,
               function(planet) {
-	        if (imperium_self.game.planets[planet].type == "hazardous") { return 1; } return 0;
+		planet = imperium_self.game.planets[planet];
+	        if (planet.type == "hazardous") { return 1; } return 0;
               },
 	      function(planet) {
                 imperium_self.addMove("expend\t"+player+"\tplanet\t"+planet);
@@ -3266,7 +3480,9 @@ console.log("SECTOR: " + sector);
 		imperium_self.endTurn();
 		return 0;
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -3297,7 +3513,9 @@ console.log("SECTOR: " + sector);
 		imperium_self.endTurn();
 		return 0;
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -3333,7 +3551,9 @@ console.log("SECTOR: " + sector);
 		imperium_self.endTurn();
 		return 0;
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -3375,7 +3595,9 @@ console.log("SECTOR: " + sector);
 	          null
 	        );
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -3405,7 +3627,9 @@ console.log("SECTOR: " + sector);
 		imperium_self.endTurn();
 		return 0;
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -3461,6 +3685,26 @@ console.log("SECTOR: " + sector);
     });
 ***/
 
+
+
+    this.importActionCard('sabotage', {
+  	name : "Sabotage" ,
+  	type : "action_card" ,
+  	text : "When another player plays an action card, you may cancel that action card" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  //
+	  // this runs in actioncard post...
+	  //
+          if (imperium_self.game.player == action_card_player) {
+	    // remove previous action card
+	    imperium_self.addMove("resolve\t"+"action_card");
+	    imperium_self.addMove("resolve\t"+"action_card_post");
+	  }
+
+	  return 0;
+	}
+    });
 
 
     this.importActionCard('distinguished-councillor', {
@@ -4066,6 +4310,7 @@ console.log("SECTOR: " + sector);
           sys.p[ii].sector = sector;
           sys.p[ii].tile = i;
           sys.p[ii].idx = ii;
+	  sys.p[ii].planet = sys.s.planets[ii];
 	  if (sys.s.hw == 1) { sys.p[ii].hw = 1; }
         }
         this.saveSystemAndPlanets(sys);
@@ -5567,6 +5812,25 @@ console.log("SECTOR: " + sector);
       }
      
 
+      if (mv[0] === "quash") {
+
+	let agenda_to_quash = parseInt(mv[1]);
+	let redeal_new = parseInt(mv[2]);
+  	this.game.queue.splice(qe, 1);
+
+	this.game.state.agendas.splice(agenda_to_quash, 1);
+
+	if (redeal_new == 1) {
+  	  for (let i = 1; i <= this.game.players_info.length; i++) {
+            this.game.queue.push("FLIPCARD\t3\t3\t1\t"+i); // deck card poolnum player
+   	  }
+	}
+
+	imperium_self.game.queue.push();
+	return 1;
+
+      }
+
       if (mv[0] === "resolve_agenda") {
 
 	let laws = this.returnAgendaCards();
@@ -6972,13 +7236,24 @@ console.log("TECH: " + z[z_index].name);
 	let planet = sys.p[planet_idx];
 
 	for (let i = 0; i < planet.units.length; i++) {
+
+console.log("i: " + i);
+
 	  if (planet.units[i].length > 0) {
+
+
 	    if ((i+1) != attacker) {
 
 	      let units_destroyed = 0;
 
+console.log("planet units: " + planet.units[i].length);
+
 	      for (let ii = 0; ii < planet.units[i].length && units_destroyed < destroy; ii++) {
-		let unit = planet.units[i][i];
+
+console.log("ii: " + ii + " ---- " + destroy + " -- " + units_destroyed);
+
+		let unit = planet.units[i][ii];
+
 		if (unit.type == "infantry") {
 
 		  unit.strength = 0;
@@ -6986,9 +7261,11 @@ console.log("TECH: " + z[z_index].name);
 		  units_destroyed++;
 
    	          for (let z_index in z) {
-	            z[z_index].unitDestroyed(imperium_self, attacker, sys.p.units[i][ii]);
+console.log("TECH IS: " + z[z_index].name);
+	            z[z_index].unitDestroyed(imperium_self, attacker, planet.units[i][ii]);
 	          } 
 
+        	  imperium_self.eliminateDestroyedUnitsInSector(planet.owner, sector);
 
 	        }
 	      }
@@ -6996,7 +7273,6 @@ console.log("TECH: " + z[z_index].name);
 	  }
 	}
 
-        this.eliminateDestroyedUnitsInSector(player, sector);
   	this.saveSystemAndPlanets(sys);
 	this.updateSectorGraphics(sector);
         this.game.queue.splice(qe, 1);
@@ -8119,7 +8395,7 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
 	//
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
-	    if (z[k].playActionCardTriggers(this, player, card) == 1) {
+	    if (z[k].playActionCardTriggers(this, speaker_order[i], player, card) == 1) {
               this.game.queue.push("action_card_event\t"+speaker_order[i]+"\t"+player+"\t"+card+"\t"+k);
             }
           }
@@ -11332,7 +11608,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
         html += '<ul>';
 
     for (let i in this.game.planets) {
-      if (filter_func(this.game.planets[i]) == 1) {
+      if (filter_func(i) == 1) {
         html += '<li class="textchoice" id="'+i+'">'+this.game.planets[i].name+'</li>';
       }
     }
@@ -11522,6 +11798,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
       planets[i].sector = ""; // "sector43" <--- fleshed in by initialize
       planets[i].tile = ""; // "4_5" <--- fleshed in by initialize
       planets[i].idx = -1; // 0 - n // <--- fleshed in by initialize
+      planets[i].planet = ""; // name in planets array
       planets[i].hw = 0;
 
       for (let j = 0; j < this.totalPlayers; j++) {
@@ -12183,7 +12460,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
       obj.activateSystemTriggers = function(imperium_self, activating_player, player, sector) { return 0; }
     }
     if (obj.activateSystemEvent == null) {
-      obj.postSystemActivation = function(imperium_self, activating_player, player, sector) { return 0; }
+      obj.activateSystemEvent = function(imperium_self, activating_player, player, sector) { return 0; }
     }
 
     //

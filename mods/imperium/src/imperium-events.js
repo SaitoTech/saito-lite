@@ -293,7 +293,7 @@
       obj.activateSystemTriggers = function(imperium_self, activating_player, player, sector) { return 0; }
     }
     if (obj.activateSystemEvent == null) {
-      obj.postSystemActivation = function(imperium_self, activating_player, player, sector) { return 0; }
+      obj.activateSystemEvent = function(imperium_self, activating_player, player, sector) { return 0; }
     }
 
     //

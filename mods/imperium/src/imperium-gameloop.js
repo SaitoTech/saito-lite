@@ -492,6 +492,25 @@
       }
      
 
+      if (mv[0] === "quash") {
+
+	let agenda_to_quash = parseInt(mv[1]);
+	let redeal_new = parseInt(mv[2]);
+  	this.game.queue.splice(qe, 1);
+
+	this.game.state.agendas.splice(agenda_to_quash, 1);
+
+	if (redeal_new == 1) {
+  	  for (let i = 1; i <= this.game.players_info.length; i++) {
+            this.game.queue.push("FLIPCARD\t3\t3\t1\t"+i); // deck card poolnum player
+   	  }
+	}
+
+	imperium_self.game.queue.push();
+	return 1;
+
+      }
+
       if (mv[0] === "resolve_agenda") {
 
 	let laws = this.returnAgendaCards();
@@ -1897,13 +1916,24 @@ console.log("TECH: " + z[z_index].name);
 	let planet = sys.p[planet_idx];
 
 	for (let i = 0; i < planet.units.length; i++) {
+
+console.log("i: " + i);
+
 	  if (planet.units[i].length > 0) {
+
+
 	    if ((i+1) != attacker) {
 
 	      let units_destroyed = 0;
 
+console.log("planet units: " + planet.units[i].length);
+
 	      for (let ii = 0; ii < planet.units[i].length && units_destroyed < destroy; ii++) {
-		let unit = planet.units[i][i];
+
+console.log("ii: " + ii + " ---- " + destroy + " -- " + units_destroyed);
+
+		let unit = planet.units[i][ii];
+
 		if (unit.type == "infantry") {
 
 		  unit.strength = 0;
@@ -1911,9 +1941,11 @@ console.log("TECH: " + z[z_index].name);
 		  units_destroyed++;
 
    	          for (let z_index in z) {
-	            z[z_index].unitDestroyed(imperium_self, attacker, sys.p.units[i][ii]);
+console.log("TECH IS: " + z[z_index].name);
+	            z[z_index].unitDestroyed(imperium_self, attacker, planet.units[i][ii]);
 	          } 
 
+        	  imperium_self.eliminateDestroyedUnitsInSector(planet.owner, sector);
 
 	        }
 	      }
@@ -1921,7 +1953,6 @@ console.log("TECH: " + z[z_index].name);
 	  }
 	}
 
-        this.eliminateDestroyedUnitsInSector(player, sector);
   	this.saveSystemAndPlanets(sys);
 	this.updateSectorGraphics(sector);
         this.game.queue.splice(qe, 1);
@@ -3044,7 +3075,7 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
 	//
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
-	    if (z[k].playActionCardTriggers(this, player, card) == 1) {
+	    if (z[k].playActionCardTriggers(this, speaker_order[i], player, card) == 1) {
               this.game.queue.push("action_card_event\t"+speaker_order[i]+"\t"+player+"\t"+card+"\t"+k);
             }
           }

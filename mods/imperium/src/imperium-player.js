@@ -3012,7 +3012,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
         html += '<ul>';
 
     for (let i in this.game.planets) {
-      if (filter_func(this.game.planets[i]) == 1) {
+      if (filter_func(i) == 1) {
         html += '<li class="textchoice" id="'+i+'">'+this.game.planets[i].name+'</li>';
       }
     }

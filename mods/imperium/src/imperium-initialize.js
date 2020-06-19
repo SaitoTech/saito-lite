@@ -236,6 +236,7 @@
           sys.p[ii].sector = sector;
           sys.p[ii].tile = i;
           sys.p[ii].idx = ii;
+	  sys.p[ii].planet = sys.s.planets[ii];
 	  if (sys.s.hw == 1) { sys.p[ii].hw = 1; }
         }
         this.saveSystemAndPlanets(sys);

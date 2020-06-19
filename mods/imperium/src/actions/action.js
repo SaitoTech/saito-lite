@@ -32,7 +32,9 @@
 		return 0;
 
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -50,6 +52,7 @@
             imperium_self.playerSelectPlanetWithFilter(
 	      "Select a non-homeworld planet and destroy one Space Dock on that planet: " ,
               function(planet) {
+		planet = imperium_self.game.planets[planet];
 	        if (planet.hw == 0 && imperium_self.doesPlanetHaveSpaceDock(planet)) {
 		  return 1;
 		}
@@ -75,7 +78,10 @@
 		return 0;
 
 	      },
-	      null
+	      // cancel -- no space dock available?
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -93,7 +99,6 @@
             imperium_self.playerSelectSectorWithFilter(
 	      "Select a sector with no existing ships in which to place a Destroyer: ",
               function(sector) {
-console.log("SECTOR: " + sector);
 		return !imperium_self.doesSectorContainShips(sector);
               },
 	      function(sector) {
@@ -104,7 +109,9 @@ console.log("SECTOR: " + sector);
 		return 0;
 
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -122,6 +129,7 @@ console.log("SECTOR: " + sector);
             imperium_self.playerSelectPlanetWithFilter(
 	      "Select a planet not controlled by another player: ",
               function(planet) {
+		planet = imperium_self.game.planets[planet];
 		if (planet.owner == -1) { return 1; } return 0;
               },
 	      function(planet) {
@@ -133,7 +141,9 @@ console.log("SECTOR: " + sector);
 		return 0;
 
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -154,7 +164,8 @@ console.log("SECTOR: " + sector);
             imperium_self.playerSelectPlanetWithFilter(
 	      "Exhaust a planet card held vy another player. Gain trade goods equal to resource value." ,
               function(planet) {
-		if (imperium_self.game.planets[planet].owner != -1 && imperium_self.game.planets[planet].owner != imperium_self.game.player && imperium_self.game.planets[planet].exhausted == 0 && imperium_self.game.planets[planet].hw == 0) { return 1; } return 0;
+		planet = imperium_self.game.planets[planet];
+		if (planet.owner != -1 && planet.owner != imperium_self.game.player && planet.exhausted == 0 && planet.hw == 0) { return 1; } return 0;
               },
 	      function(planet) {
 
@@ -168,7 +179,9 @@ console.log("SECTOR: " + sector);
 		return 0;
 
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -188,7 +201,8 @@ console.log("SECTOR: " + sector);
             imperium_self.playerSelectPlanetWithFilter(
 	      "Exhaust a planet card held vy another player. Gain trade goods equal to resource value." ,
               function(planet) {
-		if (imperium_self.game.planets[planet].owner != -1 && imperium_self.game.planets[planet].owner != imperium_self.game.player && imperium_self.game.planets[planet].exhausted == 0) { return 1; } return 0;
+		planet = imperium_self.game.planets[planet];
+		if (planet.owner != -1 && planet.owner != imperium_self.game.player && planet.exhausted == 0) { return 1; } return 0;
               },
 	      function(planet) {
 
@@ -202,7 +216,9 @@ console.log("SECTOR: " + sector);
 		return 0;
 
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -281,7 +297,9 @@ console.log("SECTOR: " + sector);
                 imperium_self.endTurn();
                 return 0;
               },
-              null
+	      function() {
+		imperium_self.playerTurn();
+	      }
             );
           }
           return 0;
@@ -309,7 +327,9 @@ console.log("SECTOR: " + sector);
                imperium_self.endTurn();
                 return 0;
               },
-              null
+	      function() {
+		imperium_self.playerTurn();
+	      }
             );
           }
           return 0;
@@ -337,7 +357,9 @@ console.log("SECTOR: " + sector);
                 imperium_self.endTurn();
                 return 0;
               },
-              null
+	      function() {
+		imperium_self.playerTurn();
+	      }
             );
           }
           return 0;
@@ -394,7 +416,9 @@ console.log("SECTOR: " + sector);
 		imperium_self.endTurn();
 		return 0;
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -449,7 +473,9 @@ console.log("SECTOR: " + sector);
 	          null
 	        );
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -514,7 +540,8 @@ console.log("SECTOR: " + sector);
             imperium_self.playerSelectPlanetWithFilter(
 	      "Select a hazardous planet and exhaust it. Destroy 3 infantry on that planet if they exist" ,
               function(planet) {
-	        if (imperium_self.game.planets[planet].type == "hazardous") { return 1; } return 0;
+		planet = imperium_self.game.planets[planet];
+	        if (planet.type == "hazardous") { return 1; } return 0;
               },
 	      function(planet) {
                 imperium_self.addMove("expend\t"+player+"\tplanet\t"+planet);
@@ -540,7 +567,9 @@ console.log("SECTOR: " + sector);
 		imperium_self.endTurn();
 		return 0;
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -571,7 +600,9 @@ console.log("SECTOR: " + sector);
 		imperium_self.endTurn();
 		return 0;
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -607,7 +638,9 @@ console.log("SECTOR: " + sector);
 		imperium_self.endTurn();
 		return 0;
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -649,7 +682,9 @@ console.log("SECTOR: " + sector);
 	          null
 	        );
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
@@ -679,7 +714,9 @@ console.log("SECTOR: " + sector);
 		imperium_self.endTurn();
 		return 0;
 	      },
-	      null
+	      function() {
+		imperium_self.playerTurn();
+	      }
 	    );
 	  }
 	  return 0;
