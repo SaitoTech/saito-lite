@@ -25,6 +25,9 @@
     if (obj.last_round_damaged == null) { obj.last_round_damaged = 0; }		// last round in which hit (some techs care)
     if (obj.production == null) 	{ obj.production = 0; }			// can produce X units (production limit)
     if (obj.temporary_combat_modifier == null) { obj.temporary_combat_modifier = 0; } // some action cards manipulate
+    if (obj.bombardment_rolls == null)  { obj.bombardment = 0; } // 0 means no bombardment abilities
+    if (obj.bombardment_combat == null) { obj.bombardment = -1; } // hits on N
+
 
     obj = this.addEvents(obj);
     this.units[name] = obj;

@@ -228,7 +228,7 @@
   	// monitor fleet supply
   	//
         console.log("Fleet Supply issues getting managed here....");
-  0 
+
   	//
   	// update sector
   	//
@@ -2235,7 +2235,7 @@ console.log("TECH IS: " + z[z_index].name);
 	  if (total_hits < total_shots) {
 
 	    let max_rerolls = total_shots - total_hits;
-	    let available_rerolls = this.game.players_info[player-1].combat_dice_reroll_permitted + this.game.players_info[player-1].pds_combat_dice_reroll;
+	    let available_rerolls = this.game.players_info[player-1].combat_dice_reroll + this.game.players_info[player-1].pds_combat_dice_reroll;
 
 	    for (let z_index in z) {
 	      available_rerolls = z[z_index].modifyCombatRerolls(this, player, attacker, player, "pds", available_rerolls);
@@ -2296,6 +2296,162 @@ console.log("TECH IS: " + z[z_index].name);
 
 
 
+
+
+      if (mv[0] === "bombard") {
+
+	let imperium_self = this;
+        let attacker     = parseInt(mv[1]);
+        let sector       = mv[2];
+        let planet_idx   = mv[3];
+	let z 		 = this.returnEventObjects();
+
+        this.game.queue.splice(qe, 1);
+
+	//
+	// sanity check
+	//
+	if (this.doesPlayerHaveShipsInSector(attacker, sector) == 1) {	  
+
+	  let sys = this.returnSectorAndPlanets(sector);
+	  let defender = sys.p[planet_idx].owner;
+	  let hits_to_assign = 0;
+	  let total_shots = 0;
+	  let hits_or_misses = [];
+	  let hits_on = [];
+
+	  let bonus_shots = 0;
+
+	  for (let i = 0; i < sys.p[planet_idx].units[attacker-1].length; i++) {
+	    if (sys.p[planet_idx].units[attacker-1][i].bombardment_rolls > 0) {
+	      for (let b = 0; b < sys.p[planet_idx].units[attacker-1][i].bombardment_rolls; b++) {
+
+	        let roll = this.rollDice(10);
+      	        for (z_index in z) { roll = z[z_index].modifyCombatRoll(imperium_self, attacker, sys.p[planet_idx].owner, this.game.player, "bombardment", roll); }
+
+  	        roll += this.game.players_info[attacker-1].bombardment_roll_modifier;
+	        roll += this.game.players_info[attacker-1].temporary_bombardment_roll_modifier;
+	        roll += this.game.players_info[attacker-1].combat_roll_modifier;
+	        roll += sys.s.units[attacker-1][i].temporary_combat_modifier;
+
+	        if (roll >= sys.p[planet_idx].units[attacker-1][i].bombardment_combat) {
+		  hits_to_assign++;
+		  hits_or_misses.push(1);
+		  hits_on.push(sys.p[planet_idx].units[attacker-1][i].bombardment_combat);
+	        } else {
+		  hits_or_misses.push(0);
+		  hits_on.push(sys.p[planet_idx].units[attacker-1][i].bombardment_combat);
+	        }
+	      }
+	    }
+	  }
+
+	  //
+	  // bonus hits on is lowest attacking unit
+	  //
+	  let bonus_hits_on = 10;
+	  for (let i = 0; i < hits_on.length; i++) {
+	    if (hits_on[i] < bonus_hits_on) {
+	      bonus_hits_on = hits_on[i];
+	    }
+	  }
+
+	  bonus_shots += this.game.players_info[attacker-1].bombardment_combat_roll_bonus_shots;
+	  for (let i = hits_or_misses.length; i < hits_or_misses.length+bonus_shots; i++) {
+	 
+	    let roll = this.rollDice(10);
+      	    for (z_index in z) { roll = z[z_index].modifyCombatRoll(imperium_self, attacker, sys.p[planet_idx].owner, this.game.player, "bombardment", roll); }
+
+  	    roll += this.game.players_info[attacker-1].bombardment_roll_modifier;
+	    roll += this.game.players_info[attacker-1].temporary_bombardment_roll_modifier;
+	    roll += this.game.players_info[attacker-1].combat_roll_modifier;
+	    roll += sys.s.units[attacker-1][i].temporary_combat_modifier;
+
+	    if (roll >= bonus_hits_on) {
+	      hits_to_assign++;
+	      hits_or_misses.push(1);
+	      hits_on.push(sys.p[planet_idx].units[attacker-1][i].bombardment_combat);
+	    } else {
+	      hits_or_misses.push(0);
+	      hits_on.push(bonus_hits_on);
+	    }
+	  }
+
+
+
+
+	  //
+ 	  // handle rerolls
+	  //
+	  if (hits_to_assign < total_shots) {
+
+	    let max_rerolls = hits_to_assign - total_hits;
+	    let available_rerolls = this.game.players_info[attacker-1].combat_dice_reroll_permitted + this.game.players_info[attacker-1].bombardment_combat_dice_reroll;
+
+	    for (let z_index in z) {
+	      available_rerolls = z[z_index].modifyCombatRerolls(this, attacker, defender, player, "bombardment", available_rerolls);
+	    }
+
+	    let attacker_rerolls = available_rerolls;
+	    if (max_rerolls < available_rerolls) {
+	      attacker_rerolls = max_rerolls;
+	    }
+
+	    for (let i = 0; i < attacker_rerolls; i++) {
+
+	      let lowest_combat_hit = 11;
+	      let lowest_combat_idx = 11;
+
+	      for (let n = 0; n < hits_to_misses.length; n++) {
+	        if (hits_on[n] < lowest_combat_hit && hits_or_misses[n] == 0) {
+		  lowest_combat_idx = n;
+		  lowest_combat_hit = hits_on[n];
+		}
+	      }
+	     
+	      let roll = this.rollDice(10);
+ 
+	      for (let z_index in z) {
+	        roll =  z[z_index].modifyCombatRerolls(this, player, attacker, player, "space", roll);
+	        imperium_self.game.players_info[defender-1].target_units = z[z_index].modifyTargets(this, attacker, defender, imperium_self.game.player, "space", imperium_self.game.players_info[defender-1].target_units);
+	      }
+
+      	      for (z_index in z) { roll = z[z_index].modifyCombatRoll(imperium_self, attacker, sys.p[planet_idx].owner, this.game.player, "bombardment", roll); }
+  	      roll += this.game.players_info[attacker-1].bombardment_roll_modifier;
+	      roll += this.game.players_info[attacker-1].temporary_bombardment_roll_modifier;
+	      roll += this.game.players_info[attacker-1].combat_roll_modifier;
+	      roll += sys.s.units[attacker-1][lowest_combat_idx].temporary_combat_modifier;
+
+	      if (roll >= hits_on[lowest_combat_idx]) {
+	        hits_to_assign++;
+		hits_or_misses[lowest_combat_idx] = 1;
+	      } else {
+		hits_or_misses[lowest_combat_idx] = -1;
+	      }
+	    }
+	  }
+
+
+	  if (hits_to_assign == 1) {
+	    this.updateLog("Bombardment produces " + hits_to_assign + " hit");
+	  } else {
+	    this.updateLog("Bombardment produces " + hits_to_assign + " hits");
+	  }
+
+          this.game.queue.push("assign_hits\t"+attacker+"\t"+sys.p[planet_idx].owner+"\tground\t"+sector+"\t"+planet_idx+"\t"+hits_to_assign);
+
+        }
+
+        return 1;
+
+      }
+
+
+
+
+
+
+
       if (mv[0] === "ships_fire") {
 
 	//
@@ -2341,6 +2497,7 @@ console.log("TECH IS: " + z[z_index].name);
 	  let total_shots = 0;
 	  let total_hits = 0;
 	  let hits_or_misses = [];
+	  let hits_on = [];
 
 	  //
 	  // then the rest
@@ -2361,10 +2518,12 @@ console.log("TECH IS: " + z[z_index].name);
 	    if (roll >= sys.s.units[attacker-1][i].combat) {
 	      total_hits++;
 	      total_shots++;
+	      hits_on.push(sys.s.units[attacker-1][i].combat);
 	      hits_or_misses.push(1);
 	    } else {
 	      total_shots++;
 	      hits_or_misses.push(0);
+	      hits_on.push(sys.s.units[attacker-1][i].combat);
 	    }
 
 	  }
@@ -2376,7 +2535,7 @@ console.log("TECH IS: " + z[z_index].name);
 	  if (total_hits < total_shots) {
 
 	    let max_rerolls = total_shots - total_hits;
-	    let available_rerolls = this.game.players_info[attacker-1].combat_dice_reroll_permitted + this.game.players_info[attacker-1].space_combat_dice_reroll;
+	    let available_rerolls = this.game.players_info[attacker-1].combat_dice_reroll + this.game.players_info[attacker-1].space_combat_dice_reroll;
 
 	    for (let z_index in z) {
 	      available_rerolls = z[z_index].modifyCombatRerolls(this, player, attacker, player, "space", available_rerolls);
@@ -2491,6 +2650,7 @@ this.updateLog(this.returnFaction(defender) + ": " + this.returnNumberOfGroundFo
 	  let total_shots = 0;
 	  let total_hits = 0;
 	  let hits_or_misses = [];
+	  let hits_on = [];
 
 	  //
 	  // then the rest
@@ -2516,9 +2676,11 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	        total_hits++;
 	        total_shots++;
 	        hits_or_misses.push(1);
+	        hits_on.push(sys.p[planet_idx].units[attacker-1][i].combat);
 	      } else {
 	        total_shots++;
 	        hits_or_misses.push(0);
+	        hits_on.push(sys.p[planet_idx].units[attacker-1][i].combat);
 	      }
 
 	    }
@@ -2532,7 +2694,7 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 
 
 	    let max_rerolls = total_shots - total_hits;
-	    let available_rerolls = this.game.players_info[attacker-1].combat_dice_reroll_permitted + this.game.players_info[attacker-1].ground_combat_dice_reroll;
+	    let available_rerolls = this.game.players_info[attacker-1].combat_dice_reroll + this.game.players_info[attacker-1].ground_combat_dice_reroll;
 
 	    for (let z_index in z) {
 	      available_rerolls = z[z_index].modifyCombatRerolls(this, player, attacker, player, "ground", available_rerolls);
@@ -2853,6 +3015,11 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
 
         this.updateSectorGraphics(sector);
   	this.game.queue.splice(qe, 1);
+
+	if (this.doesSectorContainPlayerUnit(player, sector, "dreadnaught") || this.doesSectorContainPlayerUnit(player, sector, "warsun")) {
+	  this.playerPlayBombardment(player, sector, planet_idx);
+	  return 0;
+        }
 
 	return 1;
 

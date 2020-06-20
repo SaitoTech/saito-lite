@@ -296,6 +296,7 @@ updateSectorGraphics(sector) {
       let cruisers = 0;
       let dreadnaughts = 0;
       let flagships = 0;
+      let warsuns = 0;
 
       for (let i = 0; i < sys.s.units[player - 1].length; i++) {
 
@@ -307,6 +308,7 @@ updateSectorGraphics(sector) {
         if (ship.type == "cruiser") { cruisers++; }
         if (ship.type == "dreadnaught") { dreadnaughts++; }
         if (ship.type == "flagship") { flagships++; }
+        if (ship.type == "warsun") { warsuns++; }
 
       }
 
@@ -353,6 +355,12 @@ updateSectorGraphics(sector) {
         let x = flagships; if (flagships > 9) { x = 9; }
         let numpng = "white_space_frame_6_" + x + ".png";
         ship_graphics.push("white_space_flagship.png");
+        space_frames.push(numpng);
+      }
+      if (warsuns > 0) {
+        let x = flagships; if (flagships > 9) { x = 9; }
+        let numpng = "white_space_frame_7_" + x + ".png";
+        ship_graphics.push("white_space_warsun.png");
         space_frames.push(numpng);
       }
 

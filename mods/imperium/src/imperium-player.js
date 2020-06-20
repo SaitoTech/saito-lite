@@ -84,20 +84,24 @@
       //
       // roll modifiers
       //
-      players[i].space_combat_roll_modifier 	= 0;
-      players[i].ground_combat_roll_modifier 	= 0;
-      players[i].pds_combat_roll_modifier 	= 0;
-      players[i].space_combat_roll_bonus_shots 	= 0;
-      players[i].ground_combat_roll_bonus_shots	= 0;
-      players[i].pds_combat_roll_bonus_shots 	= 0;
-      players[i].ground_combat_dice_reroll      = 0;
-      players[i].space_combat_dice_reroll       = 0;
-      players[i].pds_combat_dice_reroll		= 0;
-      players[i].combat_dice_reroll_permitted 	= 0;
+      players[i].space_combat_roll_modifier 		= 0;
+      players[i].ground_combat_roll_modifier 		= 0;
+      players[i].pds_combat_roll_modifier 		= 0;
+      players[i].bombardment_combat_roll_modifier 	= 0;
+      players[i].space_combat_roll_bonus_shots 		= 0;
+      players[i].ground_combat_roll_bonus_shots		= 0;
+      players[i].pds_combat_roll_bonus_shots 		= 0;
+      players[i].bombardment_combat_roll_bonus_shots 	= 0;
+      players[i].ground_combat_dice_reroll      	= 0;
+      players[i].space_combat_dice_reroll       	= 0;
+      players[i].pds_combat_dice_reroll			= 0;
+      players[i].bombardment_combat_dice_reroll 	= 0;
+      players[i].combat_dice_reroll	 		= 0;
 
       players[i].temporary_space_combat_roll_modifier 	= 0;
       players[i].temporary_ground_combat_roll_modifier 	= 0;
       players[i].temporary_pds_combat_roll_modifier 	= 0;
+      players[i].temporary_bombardment_combat_roll_modifier 	= 0;
 
 
       //
@@ -334,6 +338,84 @@
       return 0;
     }
     
+  }
+  
+
+
+
+  
+  playerPlayBombardment(attacker, sector, planet_idx) {
+
+    let imperium_self = this;
+
+    html = '<div class="sf-readable">Do you wish to bombard '+this.game.planets[this.game.sectors[sector].planets[planet_idx]].name+'? </div><ul>';
+
+    let ac = this.returnPlayerActionCards(this.game.player, ["pre_bombardment"]);
+    if (ac.length > 0) {
+      html += '<li class="option" id="bombard">bombard planet</li>';
+      html += '<li class="option" id="action">play action card</li>';
+      html += '<li class="option" id="skip">skip bombardment</li>';
+    } else {
+      html += '<li class="option" id="bombard">bombard planet</li>';
+      html += '<li class="option" id="skip">skiop bombardment</li>';
+    }
+
+    let tech_attach_menu_events = 0;
+    let tech_attach_menu_triggers = [];
+    let tech_attach_menu_index = [];
+
+    let z = this.returnEventObjects();
+    for (let i = 0; i < z.length; i++) {
+      if (z[i].menuOptionTriggers(this, "pre_bombardment", this.game.player) == 1) {
+        let x = z[i].menuOption(this, "pre_bombardment", this.game.player);
+        html += x.html;
+        tech_attach_menu_index.push(i);
+	tech_attach_menu_triggers.push(x.event);
+	tech_attach_menu_events = 1;
+      }
+    }
+    html += '</ul>';
+
+    this.updateStatus(html);
+  
+    $('.option').on('click', function() {
+  
+      let action2 = $(this).attr("id");
+
+      //
+      // respond to tech and factional abilities
+      //
+      if (tech_attach_menu_events == 1) {
+        for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
+	  if (action2 == tech_attach_menu_triggers[i]) {
+	    $(this).remove();
+	    z[tech_attach_menu_index[i]].menuOptionActivated(imperium_self, "pre_bombardment", imperium_self.game.player);
+          }
+        }
+      }
+
+      if (action2 == "action") {
+        imperium_self.playerSelectActionCard(function(card) {
+          imperium_self.game.players_info[this.game.player-1].action_cards_played.push(card);
+    	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+	  imperium_self.playerPlayActionCardMenu(action_card_player, card);
+        }, function() {
+	  imperium_self.playerPlayActionCardMenu(action_card_player, card);
+	}, ["pre_bombardment"]);
+      }
+
+      if (action2 == "bombard") {
+        imperium_self.addMove("bombard\t"+imperium_self.game.player+"\t"+sectpr+"\t"+planet_idx);
+        imperium_self.endTurn();
+      }
+      if (action2 == "skip") {
+        imperium_self.endTurn();
+      }
+      return 0;
+    });
+
+
   }
   
   
@@ -1121,9 +1203,10 @@ console.log(" ... and done");
       return 0;
     }
 
-    let html = '<div class="sf-readable">Do you wish to purchase any command or strategy tokens?</div><ul>';
-    html += '<li class="buildchoice textchoice" id="command">Command Tokens (<span class="command_total">0</span>)</li>';
-    html += '<li class="buildchoice textchoice" id="strategy">Strategy Tokens (<span class="strategy_total">0</span>)</li>';
+    let html = '<div class="sf-readable">Do you wish to purchase any command or strategy tokens, or increase your fleet supply?</div><ul>';
+    html += '<li class="buildchoice textchoice" id="command">Command Tokens  +<span class="command_total">0</span></li>';
+    html += '<li class="buildchoice textchoice" id="strategy">Strategy Tokens +<span class="strategy_total">0</span></li>';
+    html += '<li class="buildchoice textchoice" id="fleet">Fleet Supply  +<span class="fleet_total">0</span></li>';
     html += '</ul></p>';
     html += '';
     html += '<div id="buildcost" class="buildcost"><span class="buildcost_total">0</span> influence</div>';
@@ -1134,6 +1217,7 @@ console.log(" ... and done");
 
     let command_tokens = 0;
     let strategy_tokens = 0;
+    let fleet_supply = 0;
     let total_cost = 0;
   
     $('.buildchoice').off();
@@ -1149,6 +1233,7 @@ console.log(" ... and done");
   	if (success == 1) {
             imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tcommand\t"+command_tokens);
             imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tcommand\t"+strategy_tokens);
+            imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tfleetsupply\t"+fleet_supply);
             imperium_self.endTurn();
             return;
   	} else {
@@ -1162,12 +1247,12 @@ console.log(" ... and done");
       //
       if (id == "command") 	{ command_tokens++; }
       if (id == "strategy")	{ strategy_tokens++; }
+      if (id == "fleet")	{ fleet_supply++; }
   
       let divtotal = "." + id + "_total";
       let x = parseInt($(divtotal).html());
       x++;
       $(divtotal).html(x);
-  
   
   
       let resourcetxt = " resources";
@@ -2441,7 +2526,8 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
   	    }
           }
 
-          let user_message = `<div id="">This ship has <span class="capacity_remaining">${total_ship_capacity}</span> capacity to carry fighters / infantry. Do you wish to add them? <ul>`;
+
+          let user_message = `<div class="sf-readable">This ship has <span class="capacity_remaining">${total_ship_capacity}</span> capacity to carry fighters / infantry. Do you wish to add them? </div><ul>`;
   
           for (let i = 0; i < sys.p.length; i++) {
             let planetary_units = sys.p[i].units[imperium_self.game.player-1];
@@ -2452,7 +2538,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
               }
             }
             if (infantry_available_to_move > 0) {
-              user_message += '<li class="option textchoice" id="addinfantry_p_'+i+'">add infantry from '+sys.p[i].name+' (<span class="add_infantry_remaining_'+i+'">'+infantry_available_to_move+'</span>)</li>';
+              user_message += '<li class="option textchoice" id="addinfantry_p_'+i+'">add infantry from '+sys.p[i].name+' - <span class="add_infantry_remaining_'+i+'">'+infantry_available_to_move+'</span></li>';
             }
           }
   
@@ -2472,7 +2558,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 	      }
             }
           }
-          user_message += '<li class="option textchoice" id="addfighter_s_s">add fighter (<span class="add_fighters_remaining">'+fighters_available_to_move+'</span>)</li>';
+          user_message += '<li class="option textchoice" id="addfighter_s_s">add fighter - <span class="add_fighters_remaining">'+fighters_available_to_move+'</span></li>';
           user_message += '<li class="option textchoice" id="skip">finish</li>';
           user_message += '</ul></div>';
   
@@ -2545,10 +2631,10 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
                   $('.hud-menu-overlay').hide();
   	      }
   
-              }
+            }
   
   
-              if (action2 === "addfighter") {
+            if (action2 === "addfighter") {
 
 		if (fighters_available_to_move <= 0) { return; }  
 

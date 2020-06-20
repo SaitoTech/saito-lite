@@ -73,7 +73,9 @@
       move 		:	1,
       capacity 		:	1,
       combat 		:	6,
-      strength 		:	2
+      strength 		:	2,
+      bombardment_rolls	:	1,
+      bombardment_combat:	5
     });
 
     this.importUnit("flagship", {
@@ -84,6 +86,18 @@
       capacity 		:	1,
       combat 		:	7,
       strength 		:	2
+    });
+
+    this.importUnit("warsun", {
+      name     		:       "War Sun",
+      type     		:       "warsun",
+      cost 		:	12,
+      move 		:	1,
+      capacity 		:	6,
+      combat 		:	3,
+      strength 		:	2,
+      bombardment_rolls	:	3,
+      bombardment_combat:	3
     });
 
   
