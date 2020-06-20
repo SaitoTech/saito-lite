@@ -1,7 +1,7 @@
 @font-face {
   font-family: 'bank-gothic';
   src: url('./font/BankGothicRegular.eot');
-	src: local('BankGothicRegular'), url('./font/BankGothicRegular.woff') format('woff'), url('./font/BankGothicRegular.ttf') format('truetype');
+  src: local('BankGothicRegular'), url('./font/BankGothicRegular.woff') format('woff'), url('./font/BankGothicRegular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
@@ -9,7 +9,7 @@
 @font-face {
   font-family: 'orbitron-medium';
   src: url('./font/orbitron-medium-webfont.eot');
-	src: local('orbitron-medium-webfont'), url('./font/orbitron-medium-webfont.woff') format('woff'), url('./font/orbitron-medium-webfont.ttf') format('truetype');
+  src: local('orbitron-medium-webfont'), url('./font/orbitron-medium-webfont.woff') format('woff'), url('./font/orbitron-medium-webfont.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
@@ -32,8 +32,8 @@
 
 
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 :root {
@@ -43,8 +43,6 @@
   --p4: #FF00CC;
   --p5: #FFCC33;
   --p6: #FF355E;
-
-
   --my-color: var(--p1);
   --playing-color: var(--p1);
 }
@@ -73,16 +71,41 @@
   color: var(--p6);
 }
 
+.p1 .bc {
+  border-color: var(--p1);
+}
+
+.p2 .bc {
+  border-color: var(--p2);
+}
+
+.p3 .bc {
+  border-color: var(--p3);
+}
+
+.p4 .bc {
+  border-color: var(--p4);
+}
+
+.p5 .bc {
+  border-color: var(--p5);
+}
+
+.p6 .bc {
+  border-color: var(--p6);
+}
+
 body {
   overflow: hidden;
-  font-family: 'bank-gothic', 'orbitron-medium', arial, helvetica, sans-serif;;
+  font-family: 'bank-gothic', 'orbitron-medium', arial, helvetica, sans-serif;
+  ;
   background: #151717;
   font-size: 13px;
-  padding:0px;
-  margin:0px;
- }
- 
- .game_background {
+  padding: 0px;
+  margin: 0px;
+}
+
+.game_background {
   background-image: url(img/spacebg.png);
   position: absolute;
   top: -50%;
@@ -122,7 +145,8 @@ body {
   height: calc(100% - 5em);
   margin: 0 1em;
   color: #FFF;
-  padding: 1em;
+  padding: 0 1em;
+  overflow-y: auto;
 }
 
 .faction_sheet_unit_box {
@@ -140,6 +164,7 @@ body {
   font-family: 'bank-gothic';
   transform: scale(0.85);
 }
+
 .token_count {
   font-size: 1em;
   margin-top: 0px;
@@ -156,6 +181,62 @@ body {
 
 .faction_sheet_token_box span {
   text-align: center;
+}
+
+.faction_sheet_action_card_box, .faction_sheet_planet_card_box {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin: 1em 1em 17vw 1em;
+}
+
+.faction_sheet_action_card {
+  background-image: url(img/action_card_template.png);
+  width: 12vw;
+  height: 17vw;
+  background-size: cover;
+  margin: 1vw;
+  padding: 1vw;
+  text-align: center;
+  font-size: 0.75vw;
+  transition: all 50ms;
+  margin-bottom: -15vw;
+  border: 1px solid;
+}
+
+.faction_sheet_action_card:hover, .faction_sheet_planet_card:hover {
+  transform: scale(1.33) translate(1vw, 1vw);
+}
+
+.action_card_content {
+  margin: 1.1vw 0 0 0;
+  height: 11vw;
+  text-align: left;
+}
+
+.action_card_name {
+  font-family: 'bank-gothic';
+  white-space: nowrap;
+  margin: 0.2vw 0 0 0;
+}
+
+.faction_sheet_planet_card {
+  width: 12vw;
+  height: 17vw;
+  background-size: cover;
+  margin: 1vw;
+  padding: 1vw;
+  text-align: center;
+  font-size: 0.75vw;
+  transition: all 50ms;
+  margin-bottom: -15vw;
+  border: 1px solid;
+}
+
+.faction_sheet_objectives {
+  display: grid;
+  grid-template-columns: auto auto;
+  margin-bottom: 1em;
 }
 
 #interface_overlay {
@@ -185,7 +266,6 @@ body {
   border: 1px solid var(--my-color);
 }
 
-
 .faction_button {
   font-size: 2em;
   text-shadow: 2px 2px #222;
@@ -200,7 +280,7 @@ body {
   cursor: pointer;
 }
 
-.faction_button:hover { 
+.faction_button:hover {
   border: 1px solid #fff;
   text-shadow: 1px 1px #fff;
 }
@@ -256,7 +336,8 @@ body {
   border-left: 1px solid var(--my-color);
   width: 301px;
 }
-.status, .hud-header, .hud-menu, .hud-body, .controls, #menu-container > ul > li, #menu-container > ul > li:first-child  {
+
+.status, .hud-header, .hud-menu, .hud-body, .controls, #menu-container>ul>li, #menu-container>ul>li:first-child {
   background-color: #222C;
   color: #fff;
   border-color: #555;
@@ -266,7 +347,6 @@ body {
 .hud-menu {
   font-family: 'bank-gothic', 'orbitron-medium', arial, helvetica, sans-serif;
 }
-
 
 .status ul li:hover, .hud-menu ul li a:hover, hud-menu-overlay ul li:hover {
   background: #8888;
@@ -301,6 +381,7 @@ body {
   width: 600px;
   min-width: 600px;
 }
+
 .hud-body {
   display: block;
   height: 100%;
@@ -370,6 +451,7 @@ body {
   color: #fff;
   text-align: left;
 }
+
 .vp {
   position: relative;
   height: 5vh;
@@ -431,34 +513,37 @@ body {
   left: 0;
 }
 
-.leaderboard {
-  
-}
+.leaderboard {}
 
 .ship_graphic {
   filter: brightness(0) saturate(100%) invert(76%) sepia(0%) saturate(7455%) hue-rotate(66deg) brightness(66%) contrast(92%);
 }
+
 .pointer {
   cursor: pointer;
 }
 
 .addoption {
   cursor: pointer;
-  margin-left: 20px;  
+  margin-left: 20px;
 }
+
 .card {
   cursor: pointer;
 }
+
 .textchoice {
   cursor: pointer;
   font-family: 'orbitron-medium', helvetica, arial, courier;
   text-transform: uppercase;
 }
+
 .cardchoice {
   cursor: pointer;
-  margin-right:10px;
-  float:left;
+  margin-right: 10px;
+  float: left;
 }
+
 .option {
   cursor: pointer;
 }
@@ -466,9 +551,9 @@ body {
 .sector_name {
   cursor: pointer;
 }
-.sector_graphics_space {
 
-}
+.sector_graphics_space {}
+
 .sector_graphics_planet {
   display: none;
 }
@@ -479,12 +564,12 @@ body {
   left: 0px;
 }
 
-
 /* https://codepen.io/sosuke/pen/Pjoqqp */
 
 .player_color_1 {
   filter: brightness(0) saturate(100%) invert(57%) sepia(13%) saturate(2390%) hue-rotate(84deg) brightness(93%) contrast(80%);
 }
+
 .player_color_1 {
   filter: invert(42%) sepia(30%) saturate(7403%) hue-rotate(191deg) brightness(100%) contrast(103%);
 }
@@ -492,6 +577,7 @@ body {
 .player_color_2 {
   filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
 }
+
 .player_color_2 {
   filter: invert(44%) sepia(96%) saturate(2682%) hue-rotate(91deg) brightness(136%) contrast(117%);
 }
@@ -499,22 +585,26 @@ body {
 .player_color_3 {
   filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
 }
+
 .player_color_4 {
   filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
 }
+
 .player_color_5 {
   filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
 }
+
 .player_color_6 {
   filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
 }
+
 .player_color_7 {
   filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
 }
+
 .player_color_8 {
   filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
 }
-
 
 .player_color_box {
   width: 25px;
@@ -527,18 +617,16 @@ body {
 .terminal_header {
   margin-bottom: 15px;
 }
+
 .terminal_header2 {
   margin-bottom: 15px;
 }
-.terminal_header3 {
-}
 
-
+.terminal_header3 {}
 
 .exhausted {
   opacity: 0.3;
 }
-
 
 .agendabox {
   float: right;
@@ -546,35 +634,40 @@ body {
   height: 200px;
   background-color: lightyellow;
 }
-.agendas {
-}
+
+.agendas {}
+
 .agendacard {
- width: 180px;
- height: 252px;
- position: relative;
- left: 0px;
- top: 0px;
- background-size: cover;
- float: right;
- border: 2px solid white;
- margin-left: 10px;
+  width: 180px;
+  height: 252px;
+  position: relative;
+  left: 0px;
+  top: 0px;
+  background-size: cover;
+  float: right;
+  border: 2px solid white;
+  margin-left: 10px;
 }
+
 .agendacard_name {
- color: white;
- position: relative;
- top: 6%;
- font-weight: bold;
- text-align: center;
- width: inherit;
- margin-left: auto;
- margin-right: auto;
+  color: white;
+  position: relative;
+  top: 6%;
+  font-weight: bold;
+  text-align: center;
+  width: inherit;
+  margin-left: auto;
+  margin-right: auto;
 }
+
 .agendacard:nth-child(1) {
   transform: translate(0px, 50px);
 }
+
 .agendacard:nth-child(2) {
   transform: translate(0px, 100px);
 }
+
 .agendacard:nth-child(3) {
   transform: translate(0px, 150px);
 }
@@ -582,35 +675,24 @@ body {
 .actionbox {
   background-color: lightblue;
 }
-.actioncards {
 
-}
+.actioncards {}
+
 .techbox {
   background-color: lightgrey;
 }
-.techcards {
 
-}
+.techcards {}
+
 .objectivebox {
   background-color: orange;
 }
-.objectives {
 
-}
-
-
-
-
-
+.objectives {}
 
 .option {
- cursor:pointer;
+  cursor: pointer;
 }
-
-
-
-
-
 
 #game_board_sizer {
   position: absolute;
@@ -618,12 +700,6 @@ body {
   width: 200px;
   left: 150px;
 }
-
-
-
-
-
-
 
 #hexGrid {
   display: flex;
@@ -633,7 +709,7 @@ body {
   overflow: hidden;
   font-size: 15px;
   list-style-type: none;
-/*
+  /*
 %  3D Perspective
 %  -webkit-transform: perspective(600px) rotateX(60deg);
 %  -moz-transform: perspective(600px) rotateX(60deg);
@@ -645,41 +721,50 @@ body {
 
 .hex {
   position: relative;
-  visibility:hidden;
-  outline:1px solid transparent; /* fix for jagged edges in FF on hover transition */
+  visibility: hidden;
+  outline: 1px solid transparent;
+  /* fix for jagged edges in FF on hover transition */
 }
-.hex::after{
-  content:'';
-  display:block;
-  padding-bottom: 86.602%;  /* =  100 / tan(60) * 1.5 */
+
+.hex::after {
+  content: '';
+  display: block;
+  padding-bottom: 86.602%;
+  /* =  100 / tan(60) * 1.5 */
 }
-.hexIn{
+
+.hexIn {
   position: absolute;
-  width:96%;
-  padding-bottom: 110.851%; /* =  width / sin(60) */
-  margin:0 2%;
+  width: 96%;
+  padding-bottom: 110.851%;
+  /* =  width / sin(60) */
+  margin: 0 2%;
   overflow: hidden;
   visibility: hidden;
-  outline:1px solid transparent; /* fix for jagged edges in FF on hover transition */
-  -webkit-transform: rotate3d(0,0,1,-60deg) skewY(30deg);
-      -ms-transform: rotate3d(0,0,1,-60deg) skewY(30deg);
-          transform: rotate3d(0,0,1,-60deg) skewY(30deg);
+  outline: 1px solid transparent;
+  /* fix for jagged edges in FF on hover transition */
+  -webkit-transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
+  -ms-transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
+  transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
 }
+
 .hexIn * {
   position: absolute;
   visibility: visible;
-  outline:1px solid transparent; /* fix for jagged edges in FF on hover transition */
+  outline: 1px solid transparent;
+  /* fix for jagged edges in FF on hover transition */
 }
+
 .hexLink {
-  display:block;
+  display: block;
   width: 100%;
   height: 100%;
   text-align: center;
   color: #fff;
   overflow: hidden;
-  -webkit-transform: skewY(-30deg) rotate3d(0,0,1,60deg);
-      -ms-transform: skewY(-30deg) rotate3d(0,0,1,60deg);
-          transform: skewY(-30deg) rotate3d(0,0,1,60deg);
+  -webkit-transform: skewY(-30deg) rotate3d(0, 0, 1, 60deg);
+  -ms-transform: skewY(-30deg) rotate3d(0, 0, 1, 60deg);
+  transform: skewY(-30deg) rotate3d(0, 0, 1, 60deg);
 }
 
 .hex_ground {
@@ -694,6 +779,7 @@ body {
   position: relative;
   left: 28.5%;
 }
+
 .hex_space {
   height: 100%;
   width: 100%;
@@ -706,6 +792,7 @@ body {
   position: relative;
   left: 28.5%;
 }
+
 .hex_activated {
   position: fixed;
   top: 0;
@@ -720,17 +807,17 @@ body {
   background-color: transparent;
   opacity: 1.0;
 }
+
 .hex_bg {
   left: -100%;
   right: -100%;
   width: auto;
   height: 100%;
   margin: 0 auto;
-  -webkit-transform: rotate3d(0,0,0,0deg);
-      -ms-transform: rotate3d(0,0,0,0deg);
-          transform: rotate3d(0,0,0,0deg);
-          transform: rotate(30deg) scale(0.88);
-
+  -webkit-transform: rotate3d(0, 0, 0, 0deg);
+  -ms-transform: rotate3d(0, 0, 0, 0deg);
+  transform: rotate3d(0, 0, 0, 0deg);
+  transform: rotate(30deg) scale(0.88);
 }
 
 .sector_graphics_background {
@@ -739,37 +826,34 @@ body {
   width: auto;
   height: 100%;
   margin: 0 auto;
-  -webkit-transform: rotate3d(0,0,0,0deg);
-      -ms-transform: rotate3d(0,0,0,0deg);
-          transform: rotate3d(0,0,0,0deg);
+  -webkit-transform: rotate3d(0, 0, 0, 0deg);
+  -ms-transform: rotate3d(0, 0, 0, 0deg);
+  transform: rotate3d(0, 0, 0, 0deg);
 }
+
 .sector_graphics {
   left: -100%;
   right: -100%;
   width: auto;
   height: 100%;
   margin: 0 auto;
-  -webkit-transform: rotate3d(0,0,0,0deg);
-      -ms-transform: rotate3d(0,0,0,0deg);
-          transform: rotate3d(0,0,0,0deg);
+  -webkit-transform: rotate3d(0, 0, 0, 0deg);
+  -ms-transform: rotate3d(0, 0, 0, 0deg);
+  transform: rotate3d(0, 0, 0, 0deg);
 }
+
 .top_left {
-  transform: translate(-50px,-55px);
+  transform: translate(-50px, -55px);
 }
+
 .bottom_right {
-  transform: translate(50px,50px);
+  transform: translate(50px, 50px);
 }
-
-
-
-
-
-
-
 
 .fleet * {
   position: relative;
 }
+
 .fighter {
   #background-color: white;
   width: 20px;
@@ -779,6 +863,7 @@ body {
   margin-right: 10px;
   margin-top: 10px;
 }
+
 .destroyer {
   #background-color: white;
   width: 20px;
@@ -788,6 +873,7 @@ body {
   margin-right: 10px;
   margin-top: 10px;
 }
+
 .carrier {
   #background-color: white;
   width: 90px;
@@ -797,6 +883,7 @@ body {
   margin-right: 10px;
   margin-top: 10px;
 }
+
 .cruiser {
   #background-color: white;
   width: 120px;
@@ -806,6 +893,7 @@ body {
   margin-right: 10px;
   margin-top: 10px;
 }
+
 .dreadnaught {
   #background-color: white;
   width: 120px;
@@ -815,6 +903,7 @@ body {
   margin-right: 10px;
   margin-top: 10px;
 }
+
 .flagship {
   #background-color: white;
   width: 140px;
@@ -824,6 +913,7 @@ body {
   margin-right: 10px;
   margin-top: 10px;
 }
+
 .planet {
   position: absolute;
   height: 90px;
@@ -836,6 +926,7 @@ body {
   position: relative;
   float: left;
 }
+
 .infantry {
   position: relative;
   background-color: blue;
@@ -844,6 +935,7 @@ body {
   padding: 3px;
   float: left;
 }
+
 .pds {
   position: relative;
   background-color: red;
@@ -852,6 +944,7 @@ body {
   padding: 3px;
   float: left;
 }
+
 .spacedock {
   position: relative;
   background-color: green;
@@ -861,127 +954,138 @@ body {
   float: left;
 }
 
-
-
 .planetcard {
- width:180px;
- height: 252px;
- position: relative;
- background-size: cover;
- margin-bottom: 10px;
+  width: 180px;
+  height: 252px;
+  position: relative;
+  background-size: cover;
+  margin-bottom: 10px;
 }
 
 .strategycard {
- width:180px;
- height: 252px;
- position: relative;
- background-size: cover;
- margin-bottom: 10px;
-}
-.strategycard_name {
- position: relative;
- top: 6%;
- font-weight: bold;
- text-align: center;
- width: inherit;
- margin-left: auto;
- margin-right: auto;
+  width: 180px;
+  height: 252px;
+  position: relative;
+  background-size: cover;
+  margin-bottom: 10px;
 }
 
+.strategycard_name {
+  position: relative;
+  top: 6%;
+  font-weight: bold;
+  text-align: center;
+  width: inherit;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 .actioncard {
- width:180px;
- height: 252px;
- position: relative;
- background-size: cover;
- margin-bottom: 10px;
+  width: 180px;
+  height: 252px;
+  position: relative;
+  background-size: cover;
+  margin-bottom: 10px;
 }
+
 .actioncard_name {
- position: relative;
- top: 6%;
- font-weight: bold;
- text-align: center;
- width: inherit;
- margin-left: auto;
- margin-right: auto;
+  position: relative;
+  top: 6%;
+  font-weight: bold;
+  text-align: center;
+  width: inherit;
+  margin-left: auto;
+  margin-right: auto;
 }
-
-
-
-
-
-
-
 
 /*** HEXAGON SIZING AND EVEN ROW INDENTATION *****************************************************************/
-@media (min-width:1201px) { /* <- 5-4  hexagons per row */
-  #hexGrid{
+
+@media (min-width:1201px) {
+  /* <- 5-4  hexagons per row */
+  #hexGrid {
     padding-bottom: 4.4%
   }
   .hex {
-    width: 12.5%; /* = 100 / 8 */
+    width: 12.5%;
+    /* = 100 / 8 */
   }
-  .hex:nth-child(15n+9){ /* first hexagon of even rows */
-    margin-left:6.25%;  /* = width of .hex / 2  to indent even rows */
+  .hex:nth-child(15n+9) {
+    /* first hexagon of even rows */
+    margin-left: 6.25%;
+    /* = width of .hex / 2  to indent even rows */
   }
 }
 
-@media (max-width: 1200px) and (min-width:901px) { /* <- 4-3  hexagons per row */
-  #hexGrid{
+@media (max-width: 1200px) and (min-width:901px) {
+  /* <- 4-3  hexagons per row */
+  #hexGrid {
     padding-bottom: 5.5%
   }
   .hex {
-    width: 12.5%; /* = 100 / 8 */
+    width: 12.5%;
+    /* = 100 / 8 */
   }
-  .hex:nth-child(15n+9){ /* first hexagon of even rows */
-    margin-left:6.25%;  /* = width of .hex / 2  to indent even rows */
+  .hex:nth-child(15n+9) {
+    /* first hexagon of even rows */
+    margin-left: 6.25%;
+    /* = width of .hex / 2  to indent even rows */
   }
 }
 
-@media (max-width: 900px) and (min-width:601px) { /* <- 3-2  hexagons per row */
-  #hexGrid{
+@media (max-width: 900px) and (min-width:601px) {
+  /* <- 3-2  hexagons per row */
+  #hexGrid {
     padding-bottom: 7.4%
   }
   .hex {
-    width: 12.5%; /* = 100 / 8 */
+    width: 12.5%;
+    /* = 100 / 8 */
   }
-  .hex:nth-child(15n+9){ /* first hexagon of even rows */
-    margin-left:6.25%;  /* = width of .hex / 2  to indent even rows */
+  .hex:nth-child(15n+9) {
+    /* first hexagon of even rows */
+    margin-left: 6.25%;
+    /* = width of .hex / 2  to indent even rows */
   }
 }
 
-@media (max-width: 600px) { /* <- 2-1  hexagons per row */
-  #hexGrid{
+@media (max-width: 600px) {
+  /* <- 2-1  hexagons per row */
+  #hexGrid {
     padding-bottom: 11.2%
   }
   .hex {
-    width: 12.5%; /* = 100 / 8 */
+    width: 12.5%;
+    /* = 100 / 8 */
   }
-  .hex:nth-child(15n+9){ /* first hexagon of even rows */
-    margin-left:6.25%;  /* = width of .hex / 2  to indent even rows */
+  .hex:nth-child(15n+9) {
+    /* first hexagon of even rows */
+    margin-left: 6.25%;
+    /* = width of .hex / 2  to indent even rows */
   }
 }
 
 @media (max-width: 400px) {
-    #hexGrid {
-        font-size: 13px;
-    }
+  #hexGrid {
+    font-size: 13px;
+  }
 }
 
-
-@keyframes spin{
-	from{transform:rotate(0deg)}
-	to{transform:rotate(360deg)}	
+@keyframes spin {
+  from {
+    transform: rotate(0deg)
+  }
+  to {
+    transform: rotate(360deg)
+  }
 }
-
 
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
   background-color: var(--my-color);
- 
 }
 
 /* All the same stuff for Firefox */
+
 input[type=range]::-moz-range-thumb {
   background-color: var(--my-color);
   border: 1px solid var(--my-color);
