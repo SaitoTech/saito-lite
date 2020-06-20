@@ -465,61 +465,63 @@ updateSectorGraphics(sector) {
 };
 
 
-
-addSectorHighlight(sector) {
-  let divname = "#hex_space_" + sector;
-  $(divname).css('background-color', '#900');
-}
-removeSectorHighlight(sector) {
-  let divname = "#hex_space_" + sector;
-  $(divname).css('background-color', 'transparent');
-}
-addPlanetHighlight(sector, pid)  {
-  let divname = ".sector_graphics_planet_" + sector + '_' + pid;
-  $(divname).show();
-}
-removePlanetHighlight(sector, pid)  {
-  let divname = ".sector_graphics_planet_" + sector + '_' + pid;
-  $(divname).hide();
-}
-showActionCard(c) {
-  let action_cards = this.returnActionCards();
-  let thiscard = action_cards[c];
-  $('.cardbox').html('<img src="' + thiscard.img + '" style="width:100%" />');
-  $('.cardbox').show();
-}
-hideActionCard(c) {
-  $('.cardbox').hide();
-}
-showStrategyCard(c) {
-  let strategy_cards = this.returnStrategyCards();
-  let thiscard = strategy_cards[c];
-  $('.cardbox').html('<img src="' + thiscard.img + '" style="width:100%" />');
-  $('.cardbox').show();
-}
-hideStrategyCard(c) {
-  $('.cardbox').hide();
-}
-showPlanetCard(sector, pid) {
-  let planets = this.returnPlanets();
-  let systems = this.returnSectors();
-  let sector_name = this.game.board[sector].tile;
-  let this_planet_name = systems[sector_name].planets[pid];
-  console.log(sector_name + " -- " + this_planet_name + " -- " + pid);
-  let thiscard = planets[this_planet_name];
-  $('.cardbox').html('<img src="' + thiscard.img + '" style="width:100%" />');
-  $('.cardbox').show();
-}
-hidePlanetCard(sector, pid) {
-  $('.cardbox').hide();
-}
-showAgendaCard(agenda) {
-  let agendas = this.returnAgendaCards();
-  $('.cardbox').html('<img src="' + agendas[agenda].img + '" style="width:100%" />');
-  $('.cardbox').show();
-}
-hideAgendaCard(sector, pid) {
-  $('.cardbox').hide();
-}
+  showSectorHighlight(sector) { this.addSectorHighlight(sector); }
+  hideSectorHighlight(sector) { this.removeSectorHighlight(sector); }
+  addSectorHighlight(sector) {
+    let divname = "#hex_space_" + sector;
+console.log("Add: " + divname);
+    $(divname).css('background-color', '#900');
+  }
+  removeSectorHighlight(sector) {
+    let divname = "#hex_space_" + sector;
+    $(divname).css('background-color', 'transparent');
+  }
+  addPlanetHighlight(sector, pid)  {
+    let divname = ".sector_graphics_planet_" + sector + '_' + pid;
+    $(divname).show();
+  }
+  removePlanetHighlight(sector, pid)  {
+    let divname = ".sector_graphics_planet_" + sector + '_' + pid;
+    $(divname).hide();
+  }
+  showActionCard(c) {
+    let action_cards = this.returnActionCards();
+    let thiscard = action_cards[c];
+    $('.cardbox').html('<img src="' + thiscard.img + '" style="width:100%" />');
+    $('.cardbox').show();
+  }
+  hideActionCard(c) {
+    $('.cardbox').hide();
+  }
+  showStrategyCard(c) {
+    let strategy_cards = this.returnStrategyCards();
+    let thiscard = strategy_cards[c];
+    $('.cardbox').html('<img src="' + thiscard.img + '" style="width:100%" />');
+    $('.cardbox').show();
+  }
+  hideStrategyCard(c) {
+    $('.cardbox').hide();
+  }
+  showPlanetCard(sector, pid) {
+    let planets = this.returnPlanets();
+    let systems = this.returnSectors();
+    let sector_name = this.game.board[sector].tile;
+    let this_planet_name = systems[sector_name].planets[pid];
+    console.log(sector_name + " -- " + this_planet_name + " -- " + pid);
+    let thiscard = planets[this_planet_name];
+    $('.cardbox').html('<img src="' + thiscard.img + '" style="width:100%" />');
+    $('.cardbox').show();
+  }
+  hidePlanetCard(sector, pid) {
+    $('.cardbox').hide();
+  }
+  showAgendaCard(agenda) {
+    let agendas = this.returnAgendaCards();
+    $('.cardbox').html('<img src="' + agendas[agenda].img + '" style="width:100%" />');
+    $('.cardbox').show();
+  }
+  hideAgendaCard(sector, pid) {
+    $('.cardbox').hide();
+  }
 
 

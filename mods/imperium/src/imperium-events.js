@@ -54,6 +54,9 @@
     //
     // runs for everyone
     //
+    if (obj.handleGameLoop == null) {
+      obj.handleGameLoop = function(imperium_self, qe, mv) { return 1; }
+    }
     if (obj.initialize == null) {
       obj.initialize = function(imperium_self, player) { return 0; }
     }

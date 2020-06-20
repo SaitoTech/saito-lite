@@ -6,6 +6,8 @@
   handleGameLoop(msg=null) {
   
     let imperium_self = this;
+    let z = imperium_self.returnEventObjects();
+
     if (this.game.queue.length > 0) {
   
       imperium_self.saveGame(imperium_self.game.id);
@@ -3135,7 +3137,9 @@ this.updateLog(" they have infantry: " + this.returnNumberOfGroundForcesOnPlanet
 
 
 
-
+      for (let i in z) {
+        if (!z[i].handleGameLoop(imperium_self, qe, mv)) { return 0; }
+      }
 
 
 
