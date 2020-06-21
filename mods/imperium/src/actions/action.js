@@ -70,6 +70,8 @@
 
             return 1;
           }
+
+	  return 1;
         }
 
     });
@@ -482,6 +484,7 @@ imperium_self.endTurn();
 
           if (imperium_self.game.player == action_card_player) {
 
+alert("select sector with filter");
             imperium_self.playerSelectSectorWithFilter(
               "Place a destroyer in a sector with a wormhole and no enemy ships: " ,
               function(sector) {

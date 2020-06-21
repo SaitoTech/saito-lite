@@ -2840,7 +2840,7 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	  }
 	} else {
 
-	  if (this.gae_space_combat_defender == 1) {
+	  if (this.game_space_combat_defender == 1) {
             this.game.queue.push("space_combat_over_player_menu\t"+this.game.state.space_combat_defender+"\t"+sector);
  	  } else {
             this.game.queue.push("space_combat_over_player_menu\t"+this.game.state.space_combat_attacker+"\t"+sector);
@@ -2935,8 +2935,6 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	let sector 	 = mv[2];
         this.game.queue.splice(qe, 1);
 
-	let sys = this.returnSectorAndPlanets(sector);
-
 	if (this.game.player == player) {
           this.playerPlaySpaceCombatOver(player, sector);
 	}
@@ -2964,6 +2962,21 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 
 
 
+      if (mv[0] === "ground_combat_over_player_menu") {
+
+	let player	 = parseInt(mv[1]);
+	let sector 	 = mv[2];
+	let planet_idx 	 = parseInt(mv[3]);
+
+        this.game.queue.splice(qe, 1);
+
+	if (this.game.player == player) {
+          this.playerPlayGroundCombatOver(player, sector, planet_idx);
+	}
+
+	return 1;
+
+      }
 
 
       if (mv[0] === "ground_combat_player_menu") {
@@ -3161,8 +3174,15 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
             return 0;
           }
         } else {
-          this.game.queue.splice(qe, 1);
-          return 1;
+
+	  if (this.game_ground_combat_defender == 1) {
+            this.game.queue.push("ground_combat_over_player_menu\t"+this.game.state.ground_combat_defender+"\t"+sector+"\t"+planet_idx);
+ 	  } else {
+            this.game.queue.push("ground_combat_over_player_menu\t"+this.game.state.ground_combat_attacker+"\t"+sector+"\t"+planet_idx);
+	  }
+
+ 	  this.game.queue.splice(qe, 1);
+	  return 1;
         }
 
   	return 1;
@@ -3324,7 +3344,7 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
       }
       if (mv[0] === "action_card_post") {  
 
-  	let player = parseInt(mv[1]);
+  	let action_card_player = parseInt(mv[1]);
   	let card = mv[2];
 	let cards = this.returnActionCards();
 
@@ -3334,14 +3354,17 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	//
 	// this is where we execute the card
 	//
-	return played_card.playActionCard(this, this.game.player, player, card);
+	return played_card.playActionCard(this, this.game.player, action_card_player, card);
 
       }
 
 
 
+
       for (let i in z) {
-        if (!z[i].handleGameLoop(imperium_self, qe, mv)) { return 0; }
+        if (!z[i].handleGameLoop(imperium_self, qe, mv)) {
+console.log("HERE: " + z[i].name);
+ return 0; }
       }
 
 

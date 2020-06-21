@@ -762,19 +762,20 @@
 
 
   //
-  // reaching this implies that the player can choose to fire / not-fire
+  // ground combat is over -- provide options for scoring cards, action cards
   //
-  playerPlaySpaceCombatOver(player, sector) { 
+  playerPlayGroundCombatOver(player, sector) { 
 
     let imperium_self = this;
     let sys = this.returnSectorAndPlanets(sector);
-    let relevant_action_cards = ["space_combat_victory","space_combat_over","space_combat_loss"];
+    let relevant_action_cards = ["ground_combat_victory","ground_combat_over","ground_combat_loss"];
     let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards);
+
     let html = '';
     let win = 0;
 
-    if (this.doesPlayerHaveShipsInSector(player, sector)) {
-      html = '<div class="sf-readable">Space Combat is Over (you win): </div><ul>';
+    if (player == sys.p[planet_idx].owner) {
+      html = '<div class="sf-readable">Ground Combat is Over (you win): </div><ul>';
       win = 1;
     } else {
       html = '<div class="sf-readable">Space Combat is Over (you lose): </div><ul>';
@@ -793,8 +794,8 @@
 
     let z = this.returnEventObjects();
     for (let i = 0; i < z.length; i++) {
-      if (z[i].menuOptionTriggers(this, "space_combat", this.game.player) == 1) {
-        let x = z[i].menuOption(this, "space_combat", this.game.player);
+      if (z[i].menuOptionTriggers(this, "ground_combat_over", this.game.player) == 1) {
+        let x = z[i].menuOption(this, "ground_combat_over", this.game.player);
         html += x.html;
 	tech_attach_menu_index.push(i);
 	tech_attach_menu_triggers.push(x.event);
@@ -825,9 +826,93 @@
         imperium_self.playerSelectActionCard(function(card) {
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
-	  imperium_self.playerPlaySpaceCombat(attacker, defender, sector);
+	  imperium_self.playerPlayGroundCombatOver(player, sector, planet_idx);
         }, function() {
-	  imperium_self.playerPlaySpaceCombat(attacker, defender, sector);
+	  imperium_self.playerPlayGroundCombatOver(player, sector, planet_idx);
+	});
+      }
+
+      if (action2 === "ok") {
+	// prepend so it happens after the modifiers
+	//
+	// ships_fire needs to make sure it permits any opponents to fire...
+	//
+	imperium_self.endTurn();
+      }
+
+    });
+  }
+
+
+
+
+  //
+  // space combat is over -- provide options for scoring cards, action cards
+  //
+  playerPlaySpaceCombatOver(player, sector) { 
+
+    let imperium_self = this;
+    let sys = this.returnSectorAndPlanets(sector);
+    let relevant_action_cards = ["space_combat_victory","space_combat_over","space_combat_loss"];
+    let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards);
+    let html = '';
+    let win = 0;
+
+    if (this.doesPlayerHaveShipsInSector(player, sector)) {
+      html = '<div class="sf-readable">Space Combat is Over (you win): </div><ul>';
+      win = 1;
+    } else {
+      html = '<div class="sf-readable">Space Combat is Over (you lose): </div><ul>';
+    }
+
+    if (ac.length > 0) {
+      html += '<li class="option" id="ok">acknowledge</li>';
+      html += '<li class="option" id="action">action card</li>';
+    } else {
+      html += '<li class="option" id="ok">acknowledge</li>';
+    }
+
+    let tech_attach_menu_events = 0;
+    let tech_attach_menu_triggers = [];
+    let tech_attach_menu_index = [];
+
+    let z = this.returnEventObjects();
+    for (let i = 0; i < z.length; i++) {
+      if (z[i].menuOptionTriggers(this, "space_combat_over", this.game.player) == 1) {
+        let x = z[i].menuOption(this, "space_combat_over", this.game.player);
+        html += x.html;
+	tech_attach_menu_index.push(i);
+	tech_attach_menu_triggers.push(x.event);
+	tech_attach_menu_events = 1;
+      }
+    }
+    html += '</ul>';
+
+    this.updateStatus(html);
+  
+    $('.option').on('click', function() {
+  
+      let action2 = $(this).attr("id");
+
+      //
+      // respond to tech and factional abilities
+      //
+      if (tech_attach_menu_events == 1) {
+	for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
+	  if (action2 == tech_attach_menu_triggers[i]) {
+	    $(this).remove();
+	    z[tech_attach_menu_index[i]].menuOptionActivated(imperium_self, "space_combat_over", imperium_self.game.player);
+          }
+        }
+      }
+
+      if (action2 == "action") {
+        imperium_self.playerSelectActionCard(function(card) {
+  	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+	  imperium_self.playerPlaySpaceCombatOver(player, sector, planet_idx);
+        }, function() {
+	  imperium_self.playerPlaySpaceCombatOver(player, sector, planet_idx);
 	});
       }
 
@@ -2137,6 +2222,7 @@ alert("TTG: 6" + total_trade_goods);
   playerSelectActionCard(mycallback, cancel_callback, types=[]) {  
 
     let imperium_self = this;
+console.log("types: " + types);
     let array_of_cards = this.returnPlayerActionCards(this.game.player, types);
     if (array_of_cards.length == 0) {
       this.playerAcknowledgeNotice(this.returnFaction(action_card_player) + " plays " + this.action_cards[card].name, function() {
@@ -2149,10 +2235,10 @@ alert("TTG: 6" + total_trade_goods);
     let html = '';
 
     html += "<div class='sf-readable'>Select an action card: </div><ul>";
-    for (let z in array_of_cards) {
-      if (!this.game.players_info[this.game.player-1].action_cards_played.includes(this.game.deck[1].hand[z])) {
-        let thiscard = imperium_self.action_cards[this.game.deck[1].hand[z]];
-        html += '<li class="textchoice pointer" id="'+this.game.deck[1].hand[z]+'">' + thiscard.name + '</li>';
+    for (let z = 0; z < array_of_cards.length; z++) {
+      if (!this.game.players_info[this.game.player-1].action_cards_played.includes(array_of_cards[z])) {
+        let thiscard = imperium_self.action_cards[array_of_cards[z]];
+        html += '<li class="textchoice pointer" id="'+array_of_cards[z]+'">' + thiscard.name + '</li>';
       }
     }
     html += '<li class="textchoice pointer" id="cancel">cancel</li>';
@@ -3247,11 +3333,11 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     $('.textchoice').off();
     $('.textchoice').on('mouseenter', function() { 
       let s = $(this).attr("id"); 
-      imperium_self.showSectorHighlight(i);
+      imperium_self.showSectorHighlight(s);
     });
     $('.textchoice').on('mouseleave', function() { 
       let s = $(this).attr("id");
-      imperium_self.hideSectorHighlight(i);
+      imperium_self.hideSectorHighlight(s);
     });
     $('.textchoice').on('click', function() {
        
@@ -3262,7 +3348,9 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
         return 0;
       }
 
-      mycallback(imperium_self.game.board[i].tile);
+      imperium_self.updateStatus("");
+      imperium_self.hideSectorHighlight(action);
+      mycallback(imperium_self.game.board[action].tile);
 
     });
   }
@@ -3309,6 +3397,8 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
         return 0;
       }
 
+      imperium_self.updateStatus("");
+      imperium_self.hideSectorHighlight(action);
       mycallback(action);
 
     });

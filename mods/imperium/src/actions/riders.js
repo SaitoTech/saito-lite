@@ -9,8 +9,8 @@
             imperium_self.playerSelectSectorWithFilter(
               "Select a sector with a planet you control: ",
               function(sector) {
-		for (let i = 0; i < this.game.sectors[sector].planets.length; i++) {
-  		  if (this.game.planets[this.game.sectors[sector].planets[i]].owner == imperium_self.game.player) { return 1; } return 0;
+		for (let i = 0; i < imperium_self.game.sectors[sector].planets.length; i++) {
+  		  if (imperium_self.game.planets[imperium_self.game.sectors[sector].planets[i]].owner == imperium_self.game.player) { return 1; } return 0;
                 }
               },
               function(sector) {
@@ -51,7 +51,7 @@
             imperium_self.playerSelectPlanetWithFilter(
               "Select a planet you control without a Space Dock: ",
               function(planet) {
-  		if (this.game.planets[planet].owner == imperium_self.game.player && imperium_self.doesPlanetHaveSpaceDock(planet) == 0) { return 1; } return 0;
+  		if (imperium_self.game.planets[planet].owner == imperium_self.game.player && imperium_self.doesPlanetHaveSpaceDock(planet) == 0) { return 1; } return 0;
               },
               function(planet) {
                 imperium_self.addMove("produce\t"+imperium_self.game.player+"\t1\t"+imperium_self.game.planets[planet].idx+"\t"+"spacedock"+"\t"+imperium_self.game.planets[planet].sector);

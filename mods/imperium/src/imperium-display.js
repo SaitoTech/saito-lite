@@ -442,7 +442,7 @@ updateSectorGraphics(sector) {
         space_frames.push(numpng);
       }
       if (warsuns > 0) {
-        let x = flagships; if (flagships > 9) { x = 9; }
+        let x = warsuns; if (warsuns > 9) { x = 9; }
         let numpng = "white_space_frame_7_" + x + ".png";
         ship_graphics.push("white_space_warsun.png");
         space_frames.push(numpng);

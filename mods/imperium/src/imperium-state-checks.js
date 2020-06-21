@@ -1322,10 +1322,10 @@ console.log("SECTOR: " + sector);
     //
     for (let i = 0; i < this.game.deck[1].hand.length; i++) {
       if (types.length == 0) {
-        x.push(i);
+	x.push(this.game.deck[1].hand[i]);
       } else {
 	if (types.includes(this.action_cards[this.game.deck[1].hand[i]].type)) {
-	  x.push(i);
+	  x.push(this.game.deck[1].hand[i]);
 	}
       }
     }
