@@ -38,7 +38,15 @@
     this.game.players_info[player-1].temporary_pds_combat_roll_modifier 	= 0;
     this.game.players_info[player-1].temporary_bombardment_combat_roll_modifier 	= 0;
     this.game.players_info[player-1].temporary_move_through_sectors_with_opponent_ships = 0;
+    this.game.players_info[player-1].temporary_fleet_move_bonus = 0;
+    this.game.players_info[player-1].temporary_ship_move_bonus = 0;
+    this.game.players_info[player-1].ground_combat_dice_reroll = 0;
+    this.game.players_info[player-1].space_combat_dice_reroll               = 0;
+    this.game.players_info[player-1].pds_combat_dice_reroll                 = 0;
+    this.game.players_info[player-1].bombardment_combat_dice_reroll         = 0;
+    this.game.players_info[player-1].combat_dice_reroll                     = 0;
     this.game.state.temporary_adjacency = [];
+    this.game.state.temporary_wormhole_adjacency = 0;
   }
 
 

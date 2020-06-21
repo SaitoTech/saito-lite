@@ -40,6 +40,8 @@
         state.temporary_adjacency = [];
 	
         state.wormholes_open = 1;
+        state.wormholes_adjacent = 0;
+        state.temporary_wormholes_adjacent = 0;
 
         state.space_combat_round = 0;
 	state.space_combat_attacker = -1;
@@ -52,6 +54,8 @@
         state.ground_combat_infantry_destroyed_attacker = 0;
         state.ground_combat_infantry_destroyed_defender = 0;
 
+	state.bombardment_sector = "";
+	state.bombardment_planet_idx = "";
 	state.space_combat_sector = "";
 	state.ground_combat_sector = "";
 	state.ground_combat_planet_idx = "";

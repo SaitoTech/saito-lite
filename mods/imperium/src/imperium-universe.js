@@ -215,19 +215,46 @@
         if (this.game.sectors[sector].wormhole != 0) {
 console.log("WORMHOLE IN: " + sector);
 	  for (let z = 0; z < wormholes.length; z++) {
-	    if (wormholes[z] != sector && this.game.sectors[sector].wormhole == this.game.sectors[wormholes[z]].wormhole) {
-	      let tile_with_partner_wormhole = "";
-	      for (let b in tiles) {
-	        if (this.game.board[b]) {
-	          if (this.game.board[b].tile == wormholes[z]) {
-	            if (!tiles[i].neighbours.includes(b)) {
-console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
-		      tiles[i].neighbours.push(b);
-	  	    }
+
+	    //
+	    // wormholes are all adjacent
+	    //
+	    if (this.game.state.wormholes_adjacent || this.game.state.temporary_wormholes_adjacent) {
+
+	      if (wormholes[z] != sector && this.game.sectors[sector].wormhole != 0 && this.game.sectors[wormholes[z]].wormhole != 0) {
+	        let tile_with_partner_wormhole = "";
+	        for (let b in tiles) {
+	          if (this.game.board[b]) {
+	            if (this.game.board[b].tile == wormholes[z]) {
+	              if (!tiles[i].neighbours.includes(b)) {
+console.log("ADDING AN ALL-ADJACENT WORMHOLE RELATIONSHIP: " + i + " -- " + b);
+	  	        tiles[i].neighbours.push(b);
+	  	      }
+	            }
 	          }
 	        }
 	      }
-	    }
+
+	    //
+	    // wormholes are not adjacent
+	    //
+	    } else {
+
+	      if (wormholes[z] != sector && this.game.sectors[sector].wormhole == this.game.sectors[wormholes[z]].wormhole) {
+	        let tile_with_partner_wormhole = "";
+	        for (let b in tiles) {
+	          if (this.game.board[b]) {
+	            if (this.game.board[b].tile == wormholes[z]) {
+	              if (!tiles[i].neighbours.includes(b)) {
+console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
+	  	        tiles[i].neighbours.push(b);
+	  	      }
+	            }
+	          }
+	        }
+	      }
+  	    }
+
   	  }
         }
       }

@@ -1,4 +1,170 @@
 
+
+    this.importActionCard('lost-star-chart', {
+  	name : "Lost Star Chart" ,
+  	type : "action" ,
+  	text : "During this turn, all wormholes are adjacent to each other" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+	  imperium_self.game.state.temporary_wormholes_adjacent = 1;
+	  return 1;
+	},
+    });
+
+
+    this.importActionCard('plague', {
+  	name : "Plague" ,
+  	type : "action" ,
+  	text : "Select a planet and destroy infantry on that planet. Roll a dice for each infantry, and destroy those with rolls of 6 or higher." ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+	  if (imperium_self.game.player == action_card_player) {
+
+            imperium_self.playerSelectPlanetWithFilter(
+	      "Select a planet to cripple with the plague:",
+              function(planet) {
+		return imperium_self.doesPlanetHaveInfantry(planet);
+              },
+	      function(planet) {
+		imperium_self.addMove("plague\t"+imperium_self.game.player+"\t"+planet);
+		imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " unleashes a plague on " + imperium_self.game.planets[planet].name);
+		imperium_self.endTurn();
+		return 0;
+	      },
+	      null
+	    );
+	  }
+	  return 0;
+	},
+        handleGameLoop : function(imperium_self, qe, mv) {
+
+          if (mv[0] == "plague") {
+
+            let player = parseInt(mv[1]);
+            let attacker = parseInt(mv[2]);
+            let planet = parseInt(mv[3]);
+
+	    let sector = imperium_self.game.planets[target].sector;
+	    let planet_idx = imperium_self.game.planets[target].idx;
+	    let sys = imperium_self.returnSectorsAndPlanets(sector);
+	    let z = imperium_self.returnEventObjects();
+
+            for (let i = 0; i < sys.p[planet_idx].units.length; i++) {
+              for (let ii = 0; ii < sys.p[planet_idx].units[i].length; ii++) {
+		let thisunit = sys.p[planet_idx].units[i][ii];
+
+		if (thisunit.type == "infantry") {
+		  let roll = imperium_self.rollDice(10);
+		  if (roll > 6) {
+		    thisunit.destroyed = 1;
+		    for (z_index in z) {
+		      thisunit = z[z_index].unitDestroyed(this, attacker, thisunit);
+		    }
+		  }
+		}
+	      }
+            }
+
+            imperium_self.eliminateDestroyedUnitsInSector(player, sector);
+            imperium_self.saveSystemAndPlanets(sys);
+            imperium_self.updateSectorGraphics(sector);
+            imperium_self.game.queue.splice(qe, 1);
+
+            return 1;
+          }
+        }
+
+    });
+
+
+
+    this.importActionCard('repeal-law', {
+  	name : "Repeal Law" ,
+  	type : "action" ,
+  	text : "Repeal one law that is in effect." ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+          if (imperium_self.game.player == action_card_player) {
+alert("requires implementation");
+imperium_self.endTurn();
+          }
+
+	  return 0;
+        }
+    });
+
+    this.importActionCard('veto', {
+  	name : "Veto" ,
+  	type : "action" ,
+  	text : "Select one agenda to remove from consideration and draw a replacement" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+          if (imperium_self.game.player == action_card_player) {
+
+            let html = '';
+            html += 'Select one agenda to quash in the Galactic Senate.<ul>';
+            for (i = 0; i < 3; i++) {
+              html += '<li class="option" id="'+imperium_self.game.state.agendas[i]+'">' + laws[imperium_self.game.state.agendas[i]].name + '</li>';
+            }
+            html += '</ul>';
+
+            imperium_self.updateStatus(html);
+
+            $('.option').off();
+            $('.option').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showAgendaCard(imperium_self.game.state.agendas[s]); });
+            $('.option').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hideAgendaCard(imperium_self.game.state.agendas[s]); });
+            $('.option').on('click', function() {
+
+              let agenda_to_quash = $(this).attr('id');
+              imperium_self.updateStatus("Quashing Agenda");
+
+              imperium_self.addMove("quash\t"+agenda_to_quash+"\t"+"1"); // 1 = re-deal
+              imperium_self.endTurn();
+            });
+          }
+
+	  return 0;
+        }
+    });
+
+
+    this.importActionCard('flank-speed', {
+  	name : "Flank Speed" ,
+  	type : "action" ,
+  	text : "Gain +1 movement on all ships moved this turn" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+	  imperium_self.game.players_info[action_card_player-1].temporary_fleet_move_bonus = 1;
+	  return 1;
+	}
+    });
+
+
+
+    this.importActionCard('propulsion-research', {
+  	name : "Propulsion Research" ,
+  	type : "action" ,
+  	text : "Gain +1 movement on a single ship moved this turn" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+	  imperium_self.game.players_info[action_card_player-1].temporary_ship_move_bonus = 1;
+	  return 1;
+	}
+    });
+
+
+
+
+    this.importActionCard('military-drills', {
+  	name : "Military Drills" ,
+  	type : "action" ,
+  	text : "Gain two command or strategy tokens" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+	  if (imperium_self.game.player == action_card_player) {
+	    imperium_self.playerAllocateNewTokens(action_card_player, 2);
+	  }
+	  return 0;
+	}
+    });
+
+
+
     this.importActionCard('cripple-defenses', {
   	name : "Cripple Defenses" ,
   	type : "action" ,

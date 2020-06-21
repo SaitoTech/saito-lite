@@ -1,4 +1,53 @@
 
+
+    this.importActionCard('salvage', {
+  	name : "Salvage" ,
+  	type : "space_combat_victory" ,
+  	text : "If you win a space combat, opponent gives you all their commodities" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  if (player == action_card_player) {
+
+  	    let a = imperium_self.game.players_info[imperium_self.game.state.space_combat_attacker];
+	    let d = imperium_self.game.players_info[imperium_self.game.state.space_combat_defender];
+
+
+	    if (d.commodities > 0) {
+	      a.goods += d.commodities;
+	      imperium_self.updateLog(imperium_self.returnFaction(imperium_self.game.state.space_combat_attacker) + " takes " + d.commodities + " in trade goods from commodities lost in combat");
+	      d.commodities = 0;
+	    }
+	  
+	    return 1;
+	  }
+        }
+    });
+
+
+
+    this.importActionCard('shields-holding', {
+  	name : "Shields Holding" ,
+  	type : "space_combat" ,
+  	text : "Cancel 2 hits in Space Combat" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+	  imperium_self.game.state.assign_hits_to_cancel+=2;
+	  return 1;
+	}
+    });
+
+
+    this.importActionCard('maneuvering-jets', {
+  	name : "Maneuvering Jets" ,
+  	type : "post_pds" ,
+  	text : "Cancel 1 hit from a PDS firing upon your ships" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+	  imperium_self.game.state.assign_hits_to_cancel++;
+	  return 1;
+	}
+    });
+
+
+
     this.importActionCard('emergency-repairs', {
   	name : "Emergency Repairs" ,
   	type : "space_combat" ,

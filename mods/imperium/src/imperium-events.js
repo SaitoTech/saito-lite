@@ -30,6 +30,13 @@
       }
     }
 
+    //
+    // action cards
+    //
+    for (let i in this.action_cards) {
+      z.push(this.action_cards[i]);
+    }
+
     return z;
 
   }

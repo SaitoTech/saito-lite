@@ -47,7 +47,9 @@
       players[i].action_cards_bonus_when_issued = 0;
       players[i].new_tokens_bonus_when_issued = 0;
       players[i].fleet_move_bonus = 0;
+      players[i].temporary_fleet_move_bonus = 0;
       players[i].ship_move_bonus = 0;
+      players[i].temporary_ship_move_bonus = 0;
       players[i].fly_through_asteroids = 0;
       players[i].reinforce_infantry_after_successful_ground_combat = 0;
       players[i].bacterial_weapon = 0;
@@ -92,6 +94,7 @@
       players[i].ground_combat_roll_bonus_shots		= 0;
       players[i].pds_combat_roll_bonus_shots 		= 0;
       players[i].bombardment_combat_roll_bonus_shots 	= 0;
+
       players[i].ground_combat_dice_reroll      	= 0;
       players[i].space_combat_dice_reroll       	= 0;
       players[i].pds_combat_dice_reroll			= 0;
@@ -348,6 +351,9 @@
 
     let imperium_self = this;
 
+    this.game.state.bombardment_sector = sector;
+    this.game.state.bombardment_planet_idx = planet_idx;
+
     html = '<div class="sf-readable">Do you wish to bombard '+this.game.planets[this.game.sectors[sector].planets[planet_idx]].name+'? </div><ul>';
 
     let ac = this.returnPlayerActionCards(this.game.player, ["pre_bombardment"]);
@@ -436,12 +442,14 @@
   //
   // assign hits to my forces
   //
-  playerAssignHits(attacker, defender, type, sector, details, total_hits) {
+  playerAssignHits(attacker, defender, type, sector, details, total_hits, source="") {
 
     let imperium_self = this;
     let hits_assigned = 0;
     let maximum_assignable_hits = 0;
     let relevant_action_cards = ["post_pds","damage_control","space_combat"];
+
+    this.game.state.assign_hits_to_cancel = 0;
 
     html = '<div class="sf-readable">You must assign '+total_hits+' to your fleet:</div><ul>';
 
@@ -505,6 +513,16 @@
       }
 
       if (action2 == "assign") {
+
+	if (imperium_self.game.state.assign_hits_to_cancel > 0) {
+	  total_hits -= imperium_self.game.state.assign_hits_to_cancel;
+	  if (total_hits < 0) { total_hits = 0; }
+	  if (total_hits == 0) {
+	    imperium_self.updateLog("notify\t"+imperium_self.returnFaction(imperium_self.game.player)+" does not take any hits");
+	    imperium_self.endTurn();
+	    return 0;
+	  }
+	}
 
 	let sys = imperium_self.returnSectorAndPlanets(sector);
 
@@ -743,6 +761,90 @@
 
 
 
+  //
+  // reaching this implies that the player can choose to fire / not-fire
+  //
+  playerPlaySpaceCombatOver(player, sector) { 
+
+    let imperium_self = this;
+    let sys = this.returnSectorAndPlanets(sector);
+    let relevant_action_cards = ["space_combat_victory","space_combat_over","space_combat_loss"];
+    let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards);
+    let html = '';
+    let win = 0;
+
+    if (this.doesPlayerHaveShipsInSector(player, sector)) {
+      html = '<div class="sf-readable">Space Combat is Over (you win): </div><ul>';
+      win = 1;
+    } else {
+      html = '<div class="sf-readable">Space Combat is Over (you lose): </div><ul>';
+    }
+
+    if (ac.length > 0) {
+      html += '<li class="option" id="ok">acknowledge</li>';
+      html += '<li class="option" id="action">action card</li>';
+    } else {
+      html += '<li class="option" id="ok">acknowledge</li>';
+    }
+
+    let tech_attach_menu_events = 0;
+    let tech_attach_menu_triggers = [];
+    let tech_attach_menu_index = [];
+
+    let z = this.returnEventObjects();
+    for (let i = 0; i < z.length; i++) {
+      if (z[i].menuOptionTriggers(this, "space_combat", this.game.player) == 1) {
+        let x = z[i].menuOption(this, "space_combat", this.game.player);
+        html += x.html;
+	tech_attach_menu_index.push(i);
+	tech_attach_menu_triggers.push(x.event);
+	tech_attach_menu_events = 1;
+      }
+    }
+    html += '</ul>';
+
+    this.updateStatus(html);
+  
+    $('.option').on('click', function() {
+  
+      let action2 = $(this).attr("id");
+
+      //
+      // respond to tech and factional abilities
+      //
+      if (tech_attach_menu_events == 1) {
+	for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
+	  if (action2 == tech_attach_menu_triggers[i]) {
+	    $(this).remove();
+	    z[tech_attach_menu_index[i]].menuOptionActivated(imperium_self, "space_combat", imperium_self.game.player);
+          }
+        }
+      }
+
+      if (action2 == "action") {
+        imperium_self.playerSelectActionCard(function(card) {
+  	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+	  imperium_self.playerPlaySpaceCombat(attacker, defender, sector);
+        }, function() {
+	  imperium_self.playerPlaySpaceCombat(attacker, defender, sector);
+	});
+      }
+
+      if (action2 === "ok") {
+	// prepend so it happens after the modifiers
+	//
+	// ships_fire needs to make sure it permits any opponents to fire...
+	//
+	imperium_self.endTurn();
+      }
+
+    });
+  }
+
+
+
+
 
 
 
@@ -959,13 +1061,16 @@
 
     let imperium_self = this;
     let html = '';
+    let relevant_action_cards = ["pre_agenda"];
+    let ac = this.returnPlayerActionCards(relevant_action_cards);
+   
 
     html = '<div class="sf-readable">Do you wish to take action before voting on this Agenda: </div><ul>';
 
     if (1 == 1) {
       html += '<li class="option" id="skip">proceed to vote</li>';
     }
-    if (1 == 1) {
+    if (ac.length > 0) {
       html += '<li class="option" id="action">action card</li>';
     }
 
@@ -2306,8 +2411,8 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
  
     let obj = {};
         obj.max_hops = 2;
-        obj.ship_move_bonus = this.game.players_info[this.game.player-1].ship_move_bonus;
-        obj.fleet_move_bonus = this.game.players_info[this.game.player-1].fleet_move_bonus;
+        obj.ship_move_bonus = this.game.players_info[this.game.player-1].ship_move_bonus + this.game.players_info[this.game.player-1].temporary_ship_move_bonus;
+        obj.fleet_move_bonus = this.game.players_info[this.game.player-1].fleet_move_bonus + this.game.players_info[this.game.player-1].temporary_fleet_move_bonus;
         obj.ships_and_sectors = [];
         obj.stuff_to_move = [];  
         obj.stuff_to_load = [];  
@@ -2756,8 +2861,12 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
       if (planet_idx == "confirm") {
 
 	for (let i = 0; i < planets_invaded.length; i++) {
+
+	  let owner = sys.p[planets_invaded[i]].owner;
+
           imperium_self.prependMove("bombardment\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
           imperium_self.prependMove("bombardment_post\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
+          imperium_self.prependMove("bombardment_post\t"+owner+"\t"+sector+"\t"+planets_invaded[i]);
     	  imperium_self.prependMove("planetary_defense\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
     	  imperium_self.prependMove("planetary_defense_post\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
     	  imperium_self.prependMove("ground_combat_start\t"+imperium_self.game.player+"\t"+sector+"\t"+planets_invaded[i]);
