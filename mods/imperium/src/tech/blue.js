@@ -3,6 +3,7 @@
       name        	:       "Antimass Deflectors" ,
       color       	:       "blue" ,
       prereqs             :       [],
+      text		: 	"You may move through asteroid fields and gain -1 when receiving PDS fire",
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].antimass_deflectors == undefined) {
           imperium_self.game.players_info[player-1].antimass_deflectors = 0;
@@ -21,6 +22,7 @@
       name                :       "Gravity Drive" ,
       color               :       "blue" ,
       prereqs             :       ["blue"],
+      text		: 	"One ship may gain +1 movement when you activate a system" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].gravity_drive == undefined) {
           imperium_self.game.players_info[player-1].gravity_drive = 0;
@@ -41,6 +43,7 @@
       name        	: 	"Fleet Logistics" ,
       color       	: 	"blue" ,
       prereqs     	:       ['blue','blue'],
+      text		: 	"You may perform two actions in any turn" ,
       onNewRound : function(imperium_self, player) {
         imperium_self.game.players_info[player-1].fleet_logistics_turn = 0;
       },
@@ -100,6 +103,7 @@
       name        	:       "Light/Wave Deflector" ,
       color       	:       "blue" ,
       prereqs     	:       ['blue','blue','blue'],
+      text		:	"Your fleet may move through sectors with opponent ships" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].lightwave_deflector == undefined) {
           imperium_self.game.players_info[player-1].lightwave_deflector = 0;

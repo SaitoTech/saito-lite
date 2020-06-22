@@ -25,6 +25,7 @@
     if (obj.prereqs == null) 	{ obj.prereqs = []; }
     if (obj.color == null)	{ obj.color = ""; }
     if (obj.type == null)	{ obj.type = "normal"; }
+    if (obj.text == null)	{ obj.text = ""; }
     if (obj.unit == null)	{ obj.unit = 0; }
 
     obj = this.addEvents(obj);

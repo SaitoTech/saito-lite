@@ -80,6 +80,7 @@ class Imperium extends GameTemplate {
       name        	:       "Antimass Deflectors" ,
       color       	:       "blue" ,
       prereqs             :       [],
+      text		: 	"You may move through asteroid fields and gain -1 when receiving PDS fire",
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].antimass_deflectors == undefined) {
           imperium_self.game.players_info[player-1].antimass_deflectors = 0;
@@ -98,6 +99,7 @@ class Imperium extends GameTemplate {
       name                :       "Gravity Drive" ,
       color               :       "blue" ,
       prereqs             :       ["blue"],
+      text		: 	"One ship may gain +1 movement when you activate a system" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].gravity_drive == undefined) {
           imperium_self.game.players_info[player-1].gravity_drive = 0;
@@ -118,6 +120,7 @@ class Imperium extends GameTemplate {
       name        	: 	"Fleet Logistics" ,
       color       	: 	"blue" ,
       prereqs     	:       ['blue','blue'],
+      text		: 	"You may perform two actions in any turn" ,
       onNewRound : function(imperium_self, player) {
         imperium_self.game.players_info[player-1].fleet_logistics_turn = 0;
       },
@@ -177,6 +180,7 @@ class Imperium extends GameTemplate {
       name        	:       "Light/Wave Deflector" ,
       color       	:       "blue" ,
       prereqs     	:       ['blue','blue','blue'],
+      text		:	"Your fleet may move through sectors with opponent ships" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].lightwave_deflector == undefined) {
           imperium_self.game.players_info[player-1].lightwave_deflector = 0;
@@ -196,6 +200,7 @@ class Imperium extends GameTemplate {
       name        	:       "Neural Motivator" ,
       color       	:       "green" ,
       prereqs             :       [],
+      text		:	"Gain an extra action card each turn" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].neural_motivator == undefined) {
           imperium_self.game.players_info[player-1].neural_motivator = 0;
@@ -214,6 +219,7 @@ class Imperium extends GameTemplate {
       name                :       "Dacxive Animators" ,
       color               :       "green" ,
       prereqs             :       ["green"],
+      text		:	"Place an extra infantry on any planet after winning a defensive ground combat tbere" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].dacxive_animators == undefined) {
           imperium_self.game.players_info[player-1].dacxive_animators = 0;
@@ -248,6 +254,7 @@ class Imperium extends GameTemplate {
       name        	: 	"Hyper Metabolism" ,
       color       	: 	"green" ,
       prereqs     	:       ['green','green'],
+      text		:	"Gain an extra command token each round" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].hyper_metabolism == undefined) {
           imperium_self.game.players_info[player-1].hyper_metabolism = 0;
@@ -268,6 +275,7 @@ class Imperium extends GameTemplate {
       name        	:       "X-89 Bacterial Weapon" ,
       color       	:       "green" ,
       prereqs     	:       ['green','green','green'],
+      text		:	"Bombardment destroys all infantry on planet" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].x89_bacterial_weapon == undefined) {
           imperium_self.game.players_info[player-1].x89_bacterial_weapon = 0;
@@ -335,6 +343,7 @@ class Imperium extends GameTemplate {
       name        	:       "Plasma Scoring" ,
       color       	:       "red" ,
       prereqs             :       [],
+      text		:	"All PDS and bombardment fire gets +1 bonus shot" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].plasma_scoring == undefined) {
           imperium_self.game.players_info[player-1].plasma_scoring = 0;
@@ -365,6 +374,7 @@ class Imperium extends GameTemplate {
     this.importTech("magen-defense-grid", {
       name                :       "Magen Defense Grid" ,
       color               :       "red" ,
+      text		:	"When ground combat begins on a planet with PDS or Space Dock, destroy one opponent infantry" ,
       prereqs             :       ["red"],
 
       initialize : function(imperium_self, player) {
@@ -379,20 +389,15 @@ class Imperium extends GameTemplate {
         return 1;
       },
       groundCombatTriggers : function(imperium_self, player, sector, planet_idx) { 
-console.log("CHECKING IF " + imperium_self.returnFaction(player) + " has MDG");
 	if (imperium_self.doesPlayerHaveTech(player, "magen-defense-grid")) {
-console.log("ok, they do...");
 	  let sys = imperium_self.returnSectorAndPlanets(sector);
 	  let planet = sys.p[planet_idx];
 
           if (player == planet.owner) {
-console.log(" and they control this planet...");
 	    let non_infantry_units_on_planet = 0;
 	    for (let i = 0; i < planet.units[player-1].length; i++) {
-console.log(" checking unit " + i);
 	      if (planet.units[player-1][i].type == "spacedock" || planet.units[player-1][i].type == "pds") {
-console.log(" and we have a PDS or spacedock unit here!");
-imperium_self.updateLog("Magan Defense Grid triggers on " + planet.name);
+		imperium_self.updateLog("Magan Defense Grid triggers on " + planet.name);
 	        return 1;
 	      }
 	    }
@@ -417,7 +422,7 @@ imperium_self.updateLog("Magan Defense Grid triggers on " + planet.name);
 		imperium_self.assignHitsToGroundForces(attacker, defender, sector, planet_idx, 1);
                 imperium_self.eliminateDestroyedUnitsInSector(attacker, sector);
                 imperium_self.updateSectorGraphics(sector);
-imperium_self.updateLog(imperium_self.returnFaction(attacker) + " loses 1 infantry to Magan Defense Grid");
+		imperium_self.updateLog(imperium_self.returnFaction(attacker) + " loses 1 infantry to Magan Defense Grid");
 		ii = planet.units[i].length+3;
 		i = planet.units.length+3;
 	      }
@@ -435,6 +440,7 @@ imperium_self.updateLog(imperium_self.returnFaction(attacker) + " loses 1 infant
       name        	: 	"Duranium Armor" ,
       color       	: 	"red" ,
       prereqs     	:       ['red','red'],
+      text		:	"Each round, you may epair any ship which has not taken damage this round" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].duranium_armor == undefined) {
           imperium_self.game.players_info[player-1].duranium_armor = 0;
@@ -482,6 +488,7 @@ imperium_self.updateLog(imperium_self.returnFaction(attacker) + " loses 1 infant
       name        	:       "Assault Cannon" ,
       color       	:       "red" ,
       prereqs     	:       ['red','red','red'],
+      text		:	"If you have three or more capital ships in a sector, destroy one opponent capital ship" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].assault_cannont == undefined) {
           imperium_self.game.players_info[player-1].assault_cannont = 0;
@@ -544,6 +551,7 @@ imperium_self.updateLog(imperium_self.returnFaction(attacker) + " loses 1 infant
     this.importTech("sarween-tools", {
       name        	: 	"Sarween Tools" ,
       color       	: 	"yellow" ,
+      text		:	"Reduce cost of units produced by -1 when using production",
       prereqs     	:       [],
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].sarween_tools == undefined) {
@@ -564,6 +572,7 @@ imperium_self.updateLog(imperium_self.returnFaction(attacker) + " loses 1 infant
     this.importTech("graviton-laser-system", {
       name        	:       "Graviton Laser System" ,
       color       	:       "yellow" ,
+      text		:	"Exhaust card once per round to target capital ships with PDS fire" ,
       prereqs             :       ["yellow"],
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].graviton_laser_system == undefined) {
@@ -634,6 +643,7 @@ imperium_self.updateLog(imperium_self.returnFaction(attacker) + " loses 1 infant
       name                :       "Transit Diodes" ,
       color               :       "yellow" ,
       prereqs             :       ["yellow", "yellow"],
+      text		:	"Exhaust to reallocate 4 infantry between planets your control" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].transit_diodes == undefined) {
           imperium_self.game.players_info[player-1].transit_diodes = 0;
@@ -680,6 +690,7 @@ imperium_self.updateLog(imperium_self.returnFaction(attacker) + " loses 1 infant
       name        	:       "Integrated Economy" ,
       color       	:       "yellow" ,
       prereqs     	:       ['yellow','yellow','yellow'],
+      text		:	"You may produce on a planet after capturing it, up to cost (resource) limit of planet." ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].integrated_economy == undefined) {
           imperium_self.game.players_info[player-1].integrated_economy = 0;
@@ -913,7 +924,7 @@ console.log("P: " + planet);
 
       name        :       "Analytic" ,
       faction     :       "faction2",
-      type        :       "special" ,
+      type        :       "ability" ,
       onNewRound     :    function(imperium_self, player) {
         if (imperium_self.doesPlayerHaveTech(player, "faction2-analytic")) {
           imperium_self.game.players_info[player-1].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 1;
@@ -927,7 +938,7 @@ console.log("P: " + planet);
 
       name        :       "Fragile" ,
       faction     :       "faction2",
-      type        :       "special" ,
+      type        :       "ability" ,
       onNewRound     :    function(imperium_self, player) {
         if (imperium_self.doesPlayerHaveTech(player, "faction2-analytic")) {
           imperium_self.game.players_info[player-1].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 1;
@@ -951,7 +962,7 @@ console.log("P: " + planet);
     this.importTech('faction2-brilliant', {
       name        :       "Brilliant" ,
       faction     :       "faction2",
-      type        :       "special" ,
+      type        :       "ability" ,
       initialize     :    function(imperium_self, player) {
 	imperium_self.strategy_cards["technology"].strategySecondaryEvent = function(imperium_self, player, strategy_card_player) {
           imperium_self.playerAcknowledgeNotice("You will first have the option of researching a free-technology, and then invited to purchase an additional tech for 6 resources:", function() {
@@ -965,10 +976,13 @@ console.log("P: " + planet);
       }
     });
 
+
+
     this.importTech('faction2-eres-siphons', {
       name        :       "E-Res Siphons" ,
       faction     :       "faction2",
       type        :       "special" ,
+      prereqs	:	["yellow","yellow"],
       initialize  :	  function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].eres_siphons == null) {
           imperium_self.game.players_info[player-1].eres_siphons = 0;
@@ -996,6 +1010,7 @@ console.log("P: " + planet);
       name        :       "Deep Space Conduits" ,
       faction     :       "faction2",
       type        :       "special" ,
+      prereqs	:	["blue","blue"],
       initialize  :	  function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].deep_space_conduits == null) {
           imperium_self.game.players_info[player-1].deep_space_conduits = 0;
@@ -1073,6 +1088,7 @@ console.log("P: " + planet);
 
       name        :       "Orbital Drop" ,
       faction     :       "faction1",
+      type	:	"ability" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].orbital_drop == undefined) {
           imperium_self.game.players_info[player-1].orbital_drop = 0;
@@ -1119,7 +1135,7 @@ console.log("P: " + planet);
 
       name        :       "Versatile" ,
       faction     :       "faction1",
-      type        :       "special" ,
+      type        :       "ability" ,
       onNewRound     :    function(imperium_self, player) {
         imperium_self.game.players_info[player-1].new_tokens_per_round = 3;
       },
@@ -1133,6 +1149,7 @@ console.log("P: " + planet);
       faction     :       "faction1",
       replaces    :       "carrier-ii",
       unit        :       1 ,
+      type	:	"special",
       prereqs     :       ["blue","blue"],
       initialize :       function(imperium_self, player) {
 	imperium_self.game.players_info[player-1].faction1_advanced_carrier_ii = 0;
@@ -1161,6 +1178,7 @@ console.log("P: " + planet);
       faction     :       "faction1",
       replaces    :       "infantry-ii",
       unit        :       1 ,
+      type	:	"special",
       prereqs     :       ["green","green"],
       initialize :       function(imperium_self, player) {
 	imperium_self.game.players_info[player-1].faction1_advanced_infantry_ii = 0;
@@ -1195,54 +1213,13 @@ console.log("P: " + planet);
 
 
 
-    this.importTech('faction3-faction3-field-nullification', {
-
-      name        :       "Field Nullification" ,
-      faction     :       "faction3",
-      type        :       "special" ,
-      initialize  : function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].field_nullification == undefined) {
-          imperium_self.game.players_info[player-1].field_nullification = 0;
-        }
-      },
-      gainTechnology : function(imperium_self, gainer, tech) {
-        if (tech == "faction3-field-nullification") {
-          imperium_self.game.players_info[gainer-1].field_nullification = 1;
-        }
-      },
-      activateSystemTriggers : function(imperium_self, activating_player, player, sector) {
-	if (imperium_self.doesSectorContainPlayerShips(imperium_self.game.player, sector)) { return 1; }
-	return 0;
-      },
-      activateSystemEvent : function(imperium_self, activating_player, player, sector) {
-	let html = 'Do you wish to use Field Nullification to terminate this player\'s turn? <ul>';
-	html += '<li class="textchoice" id="yes">activate nullification field</li>';
-	html += '<li class="textchoice" id="no">do not activate</li>';
-	html += '</ul>';
-
-	$('.textchoice').off();
-	$('.textchoice').on('click', function() {
-
-	  let choice = $(this).attr("id");
-
-	  if (choice == "yes") {
-	    imperium_self.endTurn();
-	  }
-	  if (choice == "no") {
-	    imperium_self.endTurn();
-	  }
-	});
-	return 0;
-      }
-    });
-
 
 
     this.importTech('faction3-peace-accords', {
 
       name        :       "Peace Accords" ,
       faction     :       "faction3",
-      type        :       "special" ,
+      type        :       "ability",
       initialize  : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].peace_accords == undefined) {
           imperium_self.game.players_info[player-1].peace_accords = 0;
@@ -1319,7 +1296,7 @@ console.log("P: " + planet);
     this.importTech('faction3-quash', {
       name        :       "Quash" ,
       faction     :       "faction3",
-      type        :       "special" ,
+      type        :       "ability" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].quash == undefined) {
           imperium_self.game.players_info[player-1].quash = 0;
@@ -1367,9 +1344,12 @@ console.log("P: " + planet);
     });
 
 
+
+
     this.importTech('faction3-instinct-training', {
       name        :       "Instinct Training" ,
       faction     :       "faction3",
+      prereqs	:	["green"] ,
       type        :       "special" ,
       initialize  :	  function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].instinct_training == null) {
@@ -1398,6 +1378,48 @@ console.log("P: " + planet);
 	return 0;
 
       },
+    });
+
+    this.importTech('faction3-field-nullification', {
+
+      name        :       "Nullification Fields" ,
+      faction     :       "faction3",
+      type        :       "special" ,
+      prereqs	:	["yellow","yellow"] ,
+      initialize  : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].field_nullification == undefined) {
+          imperium_self.game.players_info[player-1].field_nullification = 0;
+        }
+      },
+      gainTechnology : function(imperium_self, gainer, tech) {
+        if (tech == "faction3-field-nullification") {
+          imperium_self.game.players_info[gainer-1].field_nullification = 1;
+        }
+      },
+      activateSystemTriggers : function(imperium_self, activating_player, player, sector) {
+	if (imperium_self.doesSectorContainPlayerShips(imperium_self.game.player, sector)) { return 1; }
+	return 0;
+      },
+      activateSystemEvent : function(imperium_self, activating_player, player, sector) {
+	let html = 'Do you wish to use Field Nullification to terminate this player\'s turn? <ul>';
+	html += '<li class="textchoice" id="yes">activate nullification field</li>';
+	html += '<li class="textchoice" id="no">do not activate</li>';
+	html += '</ul>';
+
+	$('.textchoice').off();
+	$('.textchoice').on('click', function() {
+
+	  let choice = $(this).attr("id");
+
+	  if (choice == "yes") {
+	    imperium_self.endTurn();
+	  }
+	  if (choice == "no") {
+	    imperium_self.endTurn();
+	  }
+	});
+	return 0;
+      }
     });
 
 
@@ -5149,6 +5171,7 @@ alert("select sector with filter");
     if (obj.prereqs == null) 	{ obj.prereqs = []; }
     if (obj.color == null)	{ obj.color = ""; }
     if (obj.type == null)	{ obj.type = "normal"; }
+    if (obj.text == null)	{ obj.text = ""; }
     if (obj.unit == null)	{ obj.unit = 0; }
 
     obj = this.addEvents(obj);
@@ -7361,8 +7384,10 @@ console.log("P: " + JSON.stringify(planet));
   	//
   	if (this.game.player != player || player_moves == 1) {
   	  let sys = this.returnSectorAndPlanets(sector_from);
+  	  let sys2 = this.returnSectorAndPlanets(sector_to);
 	  let obj = JSON.parse(shipjson);
-	  this.updateLog(this.returnFaction(player) + " moves " + obj.name + " into " + this.game.sectors[sector_to].name);
+console.log(sector_to + " -- " + sector_from);
+	  this.updateLog(this.returnFaction(player) + " moves " + obj.name + " into " + sys2.s.name);
   	  this.removeSpaceUnitByJSON(player, sector_from, shipjson);
           this.addSpaceUnitByJSON(player, sector_to, shipjson);
   	}
@@ -15707,56 +15732,58 @@ returnFactionSheet(imperium_self, player) {
   
     let pc = imperium_self.returnPlayerPlanetCards(player);
     for (let b = 0; b < pc.length; b++) {
-      html += `
-        <div class="faction_sheet_planet_card bc" id="${pc[b]}" style="background-image: url(${this.game.planets[pc[b]].img});">
-        </div>`
+      let exhausted = "";
+      if (pc[b].exhausted == 1) { exhausted = "exhausted"; }
+      html += `<div class="faction_sheet_planet_card bc ${exhausted}" id="${pc[b]}" style="background-image: url(${this.game.planets[pc[b]].img});"></div>`
     }
     html += `
       </div>
     `;
 
 
-     //
-     // TECH BOX
-     //
-     html += `
+    //
+    // FACTION ABILITIES
+    //
+    html += `
+      <h3>Faction Abilities</h3>
+      <div class="faction_sheet_tech_box" id="faction_sheet_abilities_box">
+    `;
+
+    for (let i = 0; i < imperium_self.game.players_info[player-1].tech.length; i++) {
+      let tech = imperium_self.tech[imperium_self.game.players_info[player-1].tech[i]];
+      if (tech.type == "ability") {
+        html += `
+          <div class="faction_sheet_tech_card bc">
+            <div class="tech_card_name">${tech.name}</div>
+            <div class="tech_card_content">${tech.text}</div>
+            <div class="tech_card_level">♦♦</div>
+          </div>
+        `;
+      }
+    }
+    html += `</div>`;
+
+    //
+    // TECH BOX
+    //
+    html += `
       <h3>Tech</h3>
       <div class="faction_sheet_tech_box" id="faction_sheet_tech_box">
-      <div class="faction_sheet_tech_card bc">
-        <div class="tech_card_name">
-            Faster Ships Zoom
-        </div>
-        <div class="tech_card_content">
-          Make the ship faster zoom, zoom.
-        </div>
-    <div class="tech_card_level">
-         ♦♦
-        </div>
-     </div>
-     <div class="faction_sheet_tech_card bc">
-     <div class="tech_card_name">
-         Faster Ships Zoom
-     </div>
-     <div class="tech_card_content">
-       Make the ship faster zoom, zoom.
-     </div>
- <div class="tech_card_level">
-      ♦♦
-     </div>
-  </div>
-  <div class="faction_sheet_tech_card bc">
-        <div class="tech_card_name">
-            Faster Ships Zoom
-        </div>
-        <div class="tech_card_content">
-          Make the ship faster zoom, zoom.
-        </div>
-    <div class="tech_card_level">
-         ♦♦
-        </div>
-     </div>
-      </div>
-     `;
+    `;
+
+    for (let i = 0; i < imperium_self.game.players_info[player-1].tech.length; i++) {
+      let tech = imperium_self.tech[imperium_self.game.players_info[player-1].tech[i]];
+      if (tech.type != "ability") {
+        html += `
+          <div class="faction_sheet_tech_card bc">
+            <div class="tech_card_name">${tech.name}</div>
+            <div class="tech_card_content">${tech.text}</div>
+            <div class="tech_card_level">♦♦</div>
+          </div>
+        `;
+      }
+    }
+    html += `</div>`;
 
 
     //

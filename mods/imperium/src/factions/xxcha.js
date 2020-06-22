@@ -11,54 +11,13 @@
 
 
 
-    this.importTech('faction3-faction3-field-nullification', {
-
-      name        :       "Field Nullification" ,
-      faction     :       "faction3",
-      type        :       "special" ,
-      initialize  : function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].field_nullification == undefined) {
-          imperium_self.game.players_info[player-1].field_nullification = 0;
-        }
-      },
-      gainTechnology : function(imperium_self, gainer, tech) {
-        if (tech == "faction3-field-nullification") {
-          imperium_self.game.players_info[gainer-1].field_nullification = 1;
-        }
-      },
-      activateSystemTriggers : function(imperium_self, activating_player, player, sector) {
-	if (imperium_self.doesSectorContainPlayerShips(imperium_self.game.player, sector)) { return 1; }
-	return 0;
-      },
-      activateSystemEvent : function(imperium_self, activating_player, player, sector) {
-	let html = 'Do you wish to use Field Nullification to terminate this player\'s turn? <ul>';
-	html += '<li class="textchoice" id="yes">activate nullification field</li>';
-	html += '<li class="textchoice" id="no">do not activate</li>';
-	html += '</ul>';
-
-	$('.textchoice').off();
-	$('.textchoice').on('click', function() {
-
-	  let choice = $(this).attr("id");
-
-	  if (choice == "yes") {
-	    imperium_self.endTurn();
-	  }
-	  if (choice == "no") {
-	    imperium_self.endTurn();
-	  }
-	});
-	return 0;
-      }
-    });
-
 
 
     this.importTech('faction3-peace-accords', {
 
       name        :       "Peace Accords" ,
       faction     :       "faction3",
-      type        :       "special" ,
+      type        :       "ability",
       initialize  : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].peace_accords == undefined) {
           imperium_self.game.players_info[player-1].peace_accords = 0;
@@ -135,7 +94,7 @@
     this.importTech('faction3-quash', {
       name        :       "Quash" ,
       faction     :       "faction3",
-      type        :       "special" ,
+      type        :       "ability" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].quash == undefined) {
           imperium_self.game.players_info[player-1].quash = 0;
@@ -183,9 +142,12 @@
     });
 
 
+
+
     this.importTech('faction3-instinct-training', {
       name        :       "Instinct Training" ,
       faction     :       "faction3",
+      prereqs	:	["green"] ,
       type        :       "special" ,
       initialize  :	  function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].instinct_training == null) {
@@ -214,6 +176,48 @@
 	return 0;
 
       },
+    });
+
+    this.importTech('faction3-field-nullification', {
+
+      name        :       "Nullification Fields" ,
+      faction     :       "faction3",
+      type        :       "special" ,
+      prereqs	:	["yellow","yellow"] ,
+      initialize  : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].field_nullification == undefined) {
+          imperium_self.game.players_info[player-1].field_nullification = 0;
+        }
+      },
+      gainTechnology : function(imperium_self, gainer, tech) {
+        if (tech == "faction3-field-nullification") {
+          imperium_self.game.players_info[gainer-1].field_nullification = 1;
+        }
+      },
+      activateSystemTriggers : function(imperium_self, activating_player, player, sector) {
+	if (imperium_self.doesSectorContainPlayerShips(imperium_self.game.player, sector)) { return 1; }
+	return 0;
+      },
+      activateSystemEvent : function(imperium_self, activating_player, player, sector) {
+	let html = 'Do you wish to use Field Nullification to terminate this player\'s turn? <ul>';
+	html += '<li class="textchoice" id="yes">activate nullification field</li>';
+	html += '<li class="textchoice" id="no">do not activate</li>';
+	html += '</ul>';
+
+	$('.textchoice').off();
+	$('.textchoice').on('click', function() {
+
+	  let choice = $(this).attr("id");
+
+	  if (choice == "yes") {
+	    imperium_self.endTurn();
+	  }
+	  if (choice == "no") {
+	    imperium_self.endTurn();
+	  }
+	});
+	return 0;
+      }
     });
 
 

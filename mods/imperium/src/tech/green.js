@@ -3,6 +3,7 @@
       name        	:       "Neural Motivator" ,
       color       	:       "green" ,
       prereqs             :       [],
+      text		:	"Gain an extra action card each turn" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].neural_motivator == undefined) {
           imperium_self.game.players_info[player-1].neural_motivator = 0;
@@ -21,6 +22,7 @@
       name                :       "Dacxive Animators" ,
       color               :       "green" ,
       prereqs             :       ["green"],
+      text		:	"Place an extra infantry on any planet after winning a defensive ground combat tbere" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].dacxive_animators == undefined) {
           imperium_self.game.players_info[player-1].dacxive_animators = 0;
@@ -55,6 +57,7 @@
       name        	: 	"Hyper Metabolism" ,
       color       	: 	"green" ,
       prereqs     	:       ['green','green'],
+      text		:	"Gain an extra command token each round" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].hyper_metabolism == undefined) {
           imperium_self.game.players_info[player-1].hyper_metabolism = 0;
@@ -75,6 +78,7 @@
       name        	:       "X-89 Bacterial Weapon" ,
       color       	:       "green" ,
       prereqs     	:       ['green','green','green'],
+      text		:	"Bombardment destroys all infantry on planet" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].x89_bacterial_weapon == undefined) {
           imperium_self.game.players_info[player-1].x89_bacterial_weapon = 0;

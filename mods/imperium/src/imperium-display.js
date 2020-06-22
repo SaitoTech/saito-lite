@@ -185,56 +185,58 @@ returnFactionSheet(imperium_self, player) {
   
     let pc = imperium_self.returnPlayerPlanetCards(player);
     for (let b = 0; b < pc.length; b++) {
-      html += `
-        <div class="faction_sheet_planet_card bc" id="${pc[b]}" style="background-image: url(${this.game.planets[pc[b]].img});">
-        </div>`
+      let exhausted = "";
+      if (pc[b].exhausted == 1) { exhausted = "exhausted"; }
+      html += `<div class="faction_sheet_planet_card bc ${exhausted}" id="${pc[b]}" style="background-image: url(${this.game.planets[pc[b]].img});"></div>`
     }
     html += `
       </div>
     `;
 
 
-     //
-     // TECH BOX
-     //
-     html += `
+    //
+    // FACTION ABILITIES
+    //
+    html += `
+      <h3>Faction Abilities</h3>
+      <div class="faction_sheet_tech_box" id="faction_sheet_abilities_box">
+    `;
+
+    for (let i = 0; i < imperium_self.game.players_info[player-1].tech.length; i++) {
+      let tech = imperium_self.tech[imperium_self.game.players_info[player-1].tech[i]];
+      if (tech.type == "ability") {
+        html += `
+          <div class="faction_sheet_tech_card bc">
+            <div class="tech_card_name">${tech.name}</div>
+            <div class="tech_card_content">${tech.text}</div>
+            <div class="tech_card_level">♦♦</div>
+          </div>
+        `;
+      }
+    }
+    html += `</div>`;
+
+    //
+    // TECH BOX
+    //
+    html += `
       <h3>Tech</h3>
       <div class="faction_sheet_tech_box" id="faction_sheet_tech_box">
-      <div class="faction_sheet_tech_card bc">
-        <div class="tech_card_name">
-            Faster Ships Zoom
-        </div>
-        <div class="tech_card_content">
-          Make the ship faster zoom, zoom.
-        </div>
-    <div class="tech_card_level">
-         ♦♦
-        </div>
-     </div>
-     <div class="faction_sheet_tech_card bc">
-     <div class="tech_card_name">
-         Faster Ships Zoom
-     </div>
-     <div class="tech_card_content">
-       Make the ship faster zoom, zoom.
-     </div>
- <div class="tech_card_level">
-      ♦♦
-     </div>
-  </div>
-  <div class="faction_sheet_tech_card bc">
-        <div class="tech_card_name">
-            Faster Ships Zoom
-        </div>
-        <div class="tech_card_content">
-          Make the ship faster zoom, zoom.
-        </div>
-    <div class="tech_card_level">
-         ♦♦
-        </div>
-     </div>
-      </div>
-     `;
+    `;
+
+    for (let i = 0; i < imperium_self.game.players_info[player-1].tech.length; i++) {
+      let tech = imperium_self.tech[imperium_self.game.players_info[player-1].tech[i]];
+      if (tech.type != "ability") {
+        html += `
+          <div class="faction_sheet_tech_card bc">
+            <div class="tech_card_name">${tech.name}</div>
+            <div class="tech_card_content">${tech.text}</div>
+            <div class="tech_card_level">♦♦</div>
+          </div>
+        `;
+      }
+    }
+    html += `</div>`;
 
 
     //

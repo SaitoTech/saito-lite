@@ -2,6 +2,7 @@
     this.importTech("sarween-tools", {
       name        	: 	"Sarween Tools" ,
       color       	: 	"yellow" ,
+      text		:	"Reduce cost of units produced by -1 when using production",
       prereqs     	:       [],
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].sarween_tools == undefined) {
@@ -22,6 +23,7 @@
     this.importTech("graviton-laser-system", {
       name        	:       "Graviton Laser System" ,
       color       	:       "yellow" ,
+      text		:	"Exhaust card once per round to target capital ships with PDS fire" ,
       prereqs             :       ["yellow"],
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].graviton_laser_system == undefined) {
@@ -92,6 +94,7 @@
       name                :       "Transit Diodes" ,
       color               :       "yellow" ,
       prereqs             :       ["yellow", "yellow"],
+      text		:	"Exhaust to reallocate 4 infantry between planets your control" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].transit_diodes == undefined) {
           imperium_self.game.players_info[player-1].transit_diodes = 0;
@@ -138,6 +141,7 @@
       name        	:       "Integrated Economy" ,
       color       	:       "yellow" ,
       prereqs     	:       ['yellow','yellow','yellow'],
+      text		:	"You may produce on a planet after capturing it, up to cost (resource) limit of planet." ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].integrated_economy == undefined) {
           imperium_self.game.players_info[player-1].integrated_economy = 0;

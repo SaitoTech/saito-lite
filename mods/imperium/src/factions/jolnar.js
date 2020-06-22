@@ -14,7 +14,7 @@
 
       name        :       "Analytic" ,
       faction     :       "faction2",
-      type        :       "special" ,
+      type        :       "ability" ,
       onNewRound     :    function(imperium_self, player) {
         if (imperium_self.doesPlayerHaveTech(player, "faction2-analytic")) {
           imperium_self.game.players_info[player-1].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 1;
@@ -28,7 +28,7 @@
 
       name        :       "Fragile" ,
       faction     :       "faction2",
-      type        :       "special" ,
+      type        :       "ability" ,
       onNewRound     :    function(imperium_self, player) {
         if (imperium_self.doesPlayerHaveTech(player, "faction2-analytic")) {
           imperium_self.game.players_info[player-1].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 1;
@@ -52,7 +52,7 @@
     this.importTech('faction2-brilliant', {
       name        :       "Brilliant" ,
       faction     :       "faction2",
-      type        :       "special" ,
+      type        :       "ability" ,
       initialize     :    function(imperium_self, player) {
 	imperium_self.strategy_cards["technology"].strategySecondaryEvent = function(imperium_self, player, strategy_card_player) {
           imperium_self.playerAcknowledgeNotice("You will first have the option of researching a free-technology, and then invited to purchase an additional tech for 6 resources:", function() {
@@ -66,10 +66,13 @@
       }
     });
 
+
+
     this.importTech('faction2-eres-siphons', {
       name        :       "E-Res Siphons" ,
       faction     :       "faction2",
       type        :       "special" ,
+      prereqs	:	["yellow","yellow"],
       initialize  :	  function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].eres_siphons == null) {
           imperium_self.game.players_info[player-1].eres_siphons = 0;
@@ -97,6 +100,7 @@
       name        :       "Deep Space Conduits" ,
       faction     :       "faction2",
       type        :       "special" ,
+      prereqs	:	["blue","blue"],
       initialize  :	  function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].deep_space_conduits == null) {
           imperium_self.game.players_info[player-1].deep_space_conduits = 0;

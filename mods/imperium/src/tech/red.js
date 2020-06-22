@@ -3,6 +3,7 @@
       name        	:       "Plasma Scoring" ,
       color       	:       "red" ,
       prereqs             :       [],
+      text		:	"All PDS and bombardment fire gets +1 bonus shot" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].plasma_scoring == undefined) {
           imperium_self.game.players_info[player-1].plasma_scoring = 0;
@@ -33,6 +34,7 @@
     this.importTech("magen-defense-grid", {
       name                :       "Magen Defense Grid" ,
       color               :       "red" ,
+      text		:	"When ground combat begins on a planet with PDS or Space Dock, destroy one opponent infantry" ,
       prereqs             :       ["red"],
 
       initialize : function(imperium_self, player) {
@@ -47,20 +49,15 @@
         return 1;
       },
       groundCombatTriggers : function(imperium_self, player, sector, planet_idx) { 
-console.log("CHECKING IF " + imperium_self.returnFaction(player) + " has MDG");
 	if (imperium_self.doesPlayerHaveTech(player, "magen-defense-grid")) {
-console.log("ok, they do...");
 	  let sys = imperium_self.returnSectorAndPlanets(sector);
 	  let planet = sys.p[planet_idx];
 
           if (player == planet.owner) {
-console.log(" and they control this planet...");
 	    let non_infantry_units_on_planet = 0;
 	    for (let i = 0; i < planet.units[player-1].length; i++) {
-console.log(" checking unit " + i);
 	      if (planet.units[player-1][i].type == "spacedock" || planet.units[player-1][i].type == "pds") {
-console.log(" and we have a PDS or spacedock unit here!");
-imperium_self.updateLog("Magan Defense Grid triggers on " + planet.name);
+		imperium_self.updateLog("Magan Defense Grid triggers on " + planet.name);
 	        return 1;
 	      }
 	    }
@@ -85,7 +82,7 @@ imperium_self.updateLog("Magan Defense Grid triggers on " + planet.name);
 		imperium_self.assignHitsToGroundForces(attacker, defender, sector, planet_idx, 1);
                 imperium_self.eliminateDestroyedUnitsInSector(attacker, sector);
                 imperium_self.updateSectorGraphics(sector);
-imperium_self.updateLog(imperium_self.returnFaction(attacker) + " loses 1 infantry to Magan Defense Grid");
+		imperium_self.updateLog(imperium_self.returnFaction(attacker) + " loses 1 infantry to Magan Defense Grid");
 		ii = planet.units[i].length+3;
 		i = planet.units.length+3;
 	      }
@@ -103,6 +100,7 @@ imperium_self.updateLog(imperium_self.returnFaction(attacker) + " loses 1 infant
       name        	: 	"Duranium Armor" ,
       color       	: 	"red" ,
       prereqs     	:       ['red','red'],
+      text		:	"Each round, you may epair any ship which has not taken damage this round" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].duranium_armor == undefined) {
           imperium_self.game.players_info[player-1].duranium_armor = 0;
@@ -150,6 +148,7 @@ imperium_self.updateLog(imperium_self.returnFaction(attacker) + " loses 1 infant
       name        	:       "Assault Cannon" ,
       color       	:       "red" ,
       prereqs     	:       ['red','red','red'],
+      text		:	"If you have three or more capital ships in a sector, destroy one opponent capital ship" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].assault_cannont == undefined) {
           imperium_self.game.players_info[player-1].assault_cannont = 0;
