@@ -139,17 +139,16 @@ returnFactionSheet(imperium_self, player) {
           </span>
         </div>
       </div>
+   `;
 
+
+    //
+    // ACTION CARDS
+    //
+    html += `
       <h3>Action Cards</h3>
       <div class="faction_sheet_action_card_box" id="faction_sheet_action_card_box">
-     
       `;
-
-
-
-      //
-      // me
-      //
       if (imperium_self.game.player == player) {
 
         let ac = imperium_self.returnPlayerActionCards(imperium_self.game.player);
@@ -173,107 +172,43 @@ returnFactionSheet(imperium_self, player) {
             </div> 
 	  `;
 	}
-
       }
+    html += `</div>`;
 
 
-/*
-      html += JSON.stringify(ac);
-
-      for (let b = 0; b < pc.length; b++) {
-        html += `<div class="faction_sheet_action_card bc" id="${pc[b]}">${this.game.planets[pc[b]].name}</div>`
-      }
-      html += `
-        <div class="faction_sheet_action_card bc">
-          <div class="action_card_name">wormhole-navigator</div>
-          <div class="action_card_content">About this action card.</div>
-        </div> 
-        <div class="faction_sheet_action_card bc">
-          <div class="action_card_name">terrestrial magnetism</div>
-          <div class="action_card_content">About this action card.</div>
-        </div>
-        <div class="faction_sheet_action_card bc">
-          <div class="action_card_name">gravity boots</div>
-          <div class="action_card_content">About this action card.</div>
-        </div>
-        <div class="faction_sheet_action_card bc">
-          <div class="action_card_name">gravity boots</div>
-          <div class="action_card_content">About this action card.</div>
-        </div>
-        <div class="faction_sheet_action_card bc">
-          <div class="action_card_name">gravity boots</div>
-          <div class="action_card_content">About this action card.</div>
-        </div>
-        <div class="faction_sheet_action_card bc">
-          <div class="action_card_name">gravity boots</div>
-          <div class="action_card_content">About this action card.</div>
-        </div>
-        <div class="faction_sheet_action_card bc">
-          <div class="action_card_name">gravity boots</div>
-          <div class="action_card_content">About this action card.</div>
-        </div>
-        <div class="faction_sheet_action_card bc">
-          <div class="action_card_name">gravity boots</div>
-          <div class="action_card_content">About this action card.</div>
-        </div>
-        <div class="faction_sheet_action_card bc">
-          <div class="action_card_name">gravity boots</div>
-          <div class="action_card_content">About this action card.</div>
-        </div>
-        <div class="faction_sheet_action_card bc">
-          <div class="action_card_name">gravity boots</div>
-          <div class="action_card_content">About this action card.</div>
-        </div>
-        <div class="faction_sheet_action_card bc">
-          <div class="action_card_name">gravity boots</div>
-          <div class="action_card_content">About this action card.</div>
-        </div>
-        <div class="faction_sheet_action_card bc">
-          <div class="action_card_name">gravity boots</div>
-          <div class="action_card_content">About this action card.</div>
-        </div>
-        <div class="faction_sheet_action_card bc">
-          <div class="action_card_name">gravity boots</div>
-          <div class="action_card_content">About this action card.</div>
-        </div>
-*/
-
-     html += `
-      </div>
-
+    //
+    // PLANET CARDS
+    //
+    html += `
       <h3>Planet Cards</h3>
       <div class="faction_sheet_planet_card_box" id="faction_sheet_planet_card_box">
-     
     `;
   
-    
-   
-        
-
-
-
-  let pc = imperium_self.returnPlayerPlanetCards(player);
-  //html += JSON.stringify(pc);
-  for (let b = 0; b < pc.length; b++) {
+    let pc = imperium_self.returnPlayerPlanetCards(player);
+    for (let b = 0; b < pc.length; b++) {
+      html += `
+        <div class="faction_sheet_planet_card bc" id="${pc[b]}" style="background-image: url(${this.game.planets[pc[b]].img});">
+        </div>`
+    }
     html += `
-      <div class="faction_sheet_planet_card bc" id="${pc[b]}" style="background-image: url(img/planets/${this.game.planets[pc[b]].name.toUpperCase()}.png);">
-      </div>`
-  }
-
-  html += `
       </div>
-      
+    `;
 
+
+     //
+     // TECH BOX
+     //
+     html += `
 
       <div class="faction_sheet_tech_box" id="faction_sheet_tech_box">
-    `;
-
-    
-
-  
-
-  html += `
       </div>
+     `;
+
+
+    //
+    // OBJECTIVES
+    //
+    html += `
 
       <h3>Objectives</h3>
       <div class="faction_sheet_objectives">
