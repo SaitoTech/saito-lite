@@ -17,11 +17,10 @@
 @font-face {
   font-family: 'orbitron-light';
   src: url('./font/orbitron-light-webfont.eot');
-	src: local('orbitron-light-webfont'), url('./font/orbitron-light-webfont.woff') format('woff'), url('./font/orbitron-light-webfont.ttf') format('truetype');
+  src: local('orbitron-light-webfont'), url('./font/orbitron-light-webfont.woff') format('woff'), url('./font/orbitron-light-webfont.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
-
 
 #confirm {
   padding-top: 8px;
@@ -30,28 +29,27 @@
 }
 
 .hud-menu-overlay ul {
-    list-style: none;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    cursor: pointer;
+  list-style: none;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  cursor: pointer;
 }
+
 .hud-menu-overlay ul li {
-    width: 100%;
-    line-height: 3.5em;
-    border-top: 1px solid var(--saito-skyline-grey);
-    cursor: pointer;
+  width: 100%;
+  line-height: 3.5em;
+  border-top: 1px solid var(--saito-skyline-grey);
+  cursor: pointer;
 }
-
-
 
 .sf-readable {
   font-family: 'orbitron-light', helvetica, sans-serif;
   line-height: 1.6em;
 }
-.status > .sf-readable {
-  padding-top:14px;
-}
 
+.status>.sf-readable {
+  padding-top: 14px;
+}
 
 * {
   margin: 0;
@@ -93,27 +91,27 @@
   color: var(--p6);
 }
 
-.p1 .bc {
+.p1 .bc, .p1 .bc::before {
   border-color: var(--p1);
 }
 
-.p2 .bc {
+.p2 .bc, .p2 .bc::before {
   border-color: var(--p2);
 }
 
-.p3 .bc {
+.p3 .bc, .p3 .bc::before {
   border-color: var(--p3);
 }
 
-.p4 .bc {
+.p4 .bc, .p4 .bc::before {
   border-color: var(--p4);
 }
 
-.p5 .bc {
+.p5 .bc, .p5 .bc::before {
   border-color: var(--p5);
 }
 
-.p6 .bc {
+.p6 .bc, .p6 .bc::before {
   border-color: var(--p6);
 }
 
@@ -175,6 +173,7 @@ body {
   display: grid;
   grid-gap: 5px 1em;
   grid-template-columns: auto auto auto auto auto;
+  margin-bottom: 2vh;
 }
 
 .faction_sheet_token_box {
@@ -195,6 +194,10 @@ body {
   font-family: 'bank-gothic';
   text-shadow: 1px 1px #000;
 }
+.faction_sheet_active {
+  overflow-y: auto;
+  height: 64vh;
+}
 
 .faction_sheet_token_box div {
   text-align: center;
@@ -205,10 +208,14 @@ body {
   text-align: center;
 }
 
-.faction_sheet_action_card_box, .faction_sheet_planet_card_box {
+.faction_sheet_action_card_box, .faction_sheet_planet_card_box, .faction_sheet_tech_box {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
+  margin: 1em 1em 1em 1em;
+}
+
+.faction_sheet_action_card_box, .faction_sheet_planet_card_box {
   margin: 1em 1em 17vw 1em;
 }
 
@@ -226,8 +233,9 @@ body {
   border: 1px solid;
 }
 
-.faction_sheet_action_card:hover, .faction_sheet_planet_card:hover {
+.faction_sheet_action_card:hover, .faction_sheet_planet_card:hover, .faction_sheet_tech_card:hover {
   transform: scale(1.33) translate(1vw, 1vw);
+  z-index: 10;
 }
 
 .action_card_content {
@@ -258,7 +266,66 @@ body {
 .faction_sheet_objectives {
   display: grid;
   grid-template-columns: auto auto;
-  margin-bottom: 1em;
+  margin-bottom: 17vw;
+}
+
+.faction_sheet_objective_cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin: 1em 1em 1em 1em;
+}
+
+.faction_sheet_tech_card {
+  background-image: url(img/tech_card_template.jpg);
+  position: relative;
+  width: 12vw;
+  height: 8vw;
+  background-size: cover;
+  margin: 1vw;
+  text-align: center;
+  font-size: 0.75vw;
+  transition: all 50ms;
+  border: 1px solid;
+}
+
+.faction_sheet_tech_card::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-bottom: 33px solid;
+  border-left: 100px solid transparent !important;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.tech_card_name {
+  margin: 0 0 3px 0;
+  font-family: 'bank-gothic';
+  text-align: center;
+  padding: 1vw;
+  padding: 0.5vw;
+  background: #0009;
+}
+
+.tech_card_content {
+  text-align: left;
+  padding: 1vw;
+}
+
+.tech_card_level {
+  font-size: 2em;
+  letter-spacing: 5px;
+  position: absolute;
+  bottom: 0;
+  left: 9px;
+}
+
+.faction_sheet_lore {
+  font-size: 1.3em;
+  line-height: 1.5em;
+  margin-bottom: 50vh;
 }
 
 #interface_overlay {

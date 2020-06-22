@@ -2953,20 +2953,26 @@ console.log("TECH: " + techlist[i]);
 
 
 
-/************************************
 
-ACTION CARD - types
+    this.importActionCard('sabotage', {
+  	name : "Sabotage" ,
+  	type : "action_card" ,
+  	text : "When another player plays an action card, you may cancel that action card" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
 
-"action" -> main menu
-"pds" -> before pds fire
-"bombardment_defense" -> defensive action
-"bombardment_offense" -> offensive action
-"space_combat"
-"ground_combat"
-"combat"
-"rider"
+	  //
+	  // this runs in actioncard post...
+	  //
+          if (imperium_self.game.player == action_card_player) {
+	    // remove previous action card
+	    imperium_self.addMove("resolve\t"+"action_card");
+	    imperium_self.addMove("resolve\t"+"action_card_post");
+	  }
 
-************************************/
+	  return 0;
+	}
+    });
+
 
 
     this.importActionCard('lost-star-chart', {
@@ -3926,26 +3932,6 @@ alert("select sector with filter");
 
 
 
-    this.importActionCard('sabotage', {
-  	name : "Sabotage" ,
-  	type : "action_card" ,
-  	text : "When another player plays an action card, you may cancel that action card" ,
-	playActionCard : function(imperium_self, player, action_card_player, card) {
-
-	  //
-	  // this runs in actioncard post...
-	  //
-          if (imperium_self.game.player == action_card_player) {
-	    // remove previous action card
-	    imperium_self.addMove("resolve\t"+"action_card");
-	    imperium_self.addMove("resolve\t"+"action_card_post");
-	  }
-
-	  return 0;
-	}
-    });
-
-
     this.importActionCard('bunker', {
   	name : "Bunker" ,
   	type : "bombardment_defender" ,
@@ -4176,6 +4162,20 @@ alert("select sector with filter");
 
 
 
+/************************************
+
+ACTION CARD - types
+
+"action" -> main menu
+"pds" -> before pds fire
+"bombardment_defense" -> defensive action
+"bombardment_offense" -> offensive action
+"space_combat"
+"ground_combat"
+"combat"
+"rider"
+
+************************************/
 
     this.importActionCard('diplomacy-rider', {
   	name : "Diplomacy Rider" ,
@@ -15694,6 +15694,7 @@ returnFactionSheet(imperium_self, player) {
           </span>
         </div>
       </div>
+      <div class="faction_sheet_active">
    `;
 
 
@@ -15754,8 +15755,41 @@ returnFactionSheet(imperium_self, player) {
      // TECH BOX
      //
      html += `
-
+      <h3>Tech</h3>
       <div class="faction_sheet_tech_box" id="faction_sheet_tech_box">
+      <div class="faction_sheet_tech_card bc">
+        <div class="tech_card_name">
+            Faster Ships Zoom
+        </div>
+        <div class="tech_card_content">
+          Make the ship faster zoom, zoom.
+        </div>
+    <div class="tech_card_level">
+         ♦♦
+        </div>
+     </div>
+     <div class="faction_sheet_tech_card bc">
+     <div class="tech_card_name">
+         Faster Ships Zoom
+     </div>
+     <div class="tech_card_content">
+       Make the ship faster zoom, zoom.
+     </div>
+ <div class="tech_card_level">
+      ♦♦
+     </div>
+  </div>
+  <div class="faction_sheet_tech_card bc">
+        <div class="tech_card_name">
+            Faster Ships Zoom
+        </div>
+        <div class="tech_card_content">
+          Make the ship faster zoom, zoom.
+        </div>
+    <div class="tech_card_level">
+         ♦♦
+        </div>
+     </div>
       </div>
      `;
 
@@ -15824,8 +15858,7 @@ console.log("UNSCORED: " + JSON.stringify(unscored_objectives));
         </div>
       </div>
 
-      <div class="faction_sheet_lore" id="faction_sheet_lore"></div>
-
+     
       <h3>Units - to rework</h3>
       <div class="faction_sheet_unit_box" id="faction_sheet_unit_box">
       <div>Unit </div>
@@ -15851,6 +15884,12 @@ console.log("UNSCORED: " + JSON.stringify(unscored_objectives));
 
 
     html += `
+    </div>
+    <h3>Faction Lore</h3>
+    <div class="faction_sheet_lore" id="faction_sheet_lore">
+    <div class="anyipsum-output"><p>Spicy jalapeno bacon ipsum dolor amet turducken jerky pork loin pork chop pig chislic boudin meatloaf biltong.  Beef tri-tip ham hock, swine biltong prosciutto frankfurter.  Porchetta swine chislic pork belly bacon salami beef ribs pork loin prosciutto fatback pastrami ham hock ham.  Pastrami sausage t-bone filet mignon cow porchetta, bresaola landjaeger pork loin shoulder alcatra chislic ham buffalo.  Beef ribs sirloin strip steak prosciutto corned beef.  Biltong sausage porchetta, hamburger turkey tenderloin tongue frankfurter bresaola rump doner kevin pancetta burgdoggen.  Picanha porchetta drumstick turkey tenderloin landjaeger pork ribeye pig swine sausage t-bone chuck flank bacon.</p><p>Andouille tail sausage, ham hock capicola turkey chicken short loin buffalo meatloaf sirloin.  Jerky filet mignon tenderloin pancetta bresaola kielbasa.  Beef venison t-bone, tongue sausage cow burgdoggen landjaeger jowl alcatra short loin shoulder turducken.  Tenderloin cow landjaeger, chuck capicola picanha beef tri-tip cupim prosciutto kevin.  Pancetta capicola short ribs shank.  Bacon porchetta short ribs short loin, prosciutto pork belly chicken corned beef.  Kielbasa biltong corned beef hamburger doner jowl boudin jerky shank cupim frankfurter pancetta strip steak ribeye.</p><p>Tri-tip beef pork chop beef ribs.  Capicola tongue cow flank ham, landjaeger hamburger beef ribs turkey sausage.  Meatball ground round pastrami cow bresaola.  Jerky tail tri-tip picanha salami ground round meatloaf shoulder strip steak jowl porchetta sausage pork chop short ribs shank.  Capicola bacon beef strip steak corned beef.  Strip steak beef pork leberkas.  Jerky shank ham hock leberkas beef ribs doner.</p><p>Pastrami drumstick picanha bresaola.  Cow kevin pork loin, turducken alcatra beef ribs jerky salami.  Pastrami pork meatball buffalo chuck, chicken short loin ham.  Pork belly swine venison chicken beef ribs beef.</p><p>Pork bresaola shankle short loin, frankfurter jowl flank leberkas.  Filet mignon drumstick tri-tip sirloin tenderloin meatloaf buffalo.  Cupim ground round venison tri-tip salami tenderloin pork chop spare ribs bacon.  Shank picanha flank chuck cupim jowl pork belly.  Meatball kevin jowl short ribs pork loin spare ribs.</p><p>Bacon frankfurter rump, chislic ground round sausage prosciutto fatback drumstick boudin.  Cow ground round burgdoggen tri-tip bresaola.  Pig chuck tail pork.  Pork loin swine chislic shoulder cupim.  Capicola pig doner brisket meatball burgdoggen.  Biltong short loin flank, pork loin meatball ham hock shank beef ribs fatback.  Shank ball tip beef ribs, ribeye ham hock pancetta sausage chislic chicken picanha biltong rump leberkas filet mignon alcatra.</p><p>Beef chislic short ribs jerky landjaeger tri-tip boudin corned beef.  Short ribs fatback rump shankle andouille.  Pig shoulder andouille burgdoggen, tongue frankfurter tail tenderloin pork landjaeger alcatra swine boudin turducken.  Short loin corned beef capicola chuck kielbasa tri-tip, burgdoggen bacon drumstick meatball spare ribs.  Sirloin pig jowl meatball, tail drumstick landjaeger short loin bresaola ham hock.  Capicola meatball ham hock ground round.  Boudin salami flank swine sirloin kevin ball tip strip steak capicola t-bone shankle landjaeger chuck chislic.</p><p>Ribeye rump pig doner tongue beef ribs boudin filet mignon turducken corned beef jowl shankle strip steak andouille short loin.  Turducken tongue pork belly pork loin short ribs jerky strip steak jowl shank leberkas filet mignon.  Corned beef flank buffalo, ham hock short loin turkey pork loin.  Tenderloin bacon bresaola, short ribs meatball rump tongue fatback picanha filet mignon.  Frankfurter chicken pork loin, pancetta chuck turkey rump cupim cow.  Picanha shank doner drumstick meatball landjaeger brisket cupim.</p><p>Capicola turkey pork belly andouille filet mignon buffalo.  Strip steak shoulder short ribs biltong chicken, corned beef sirloin salami capicola bacon.  Boudin tenderloin bresaola shank pork belly drumstick kevin alcatra brisket biltong chicken jerky shoulder shankle corned beef.  Pork chop beef ribs meatloaf boudin, buffalo shoulder jowl salami brisket ball tip beef chislic.  Turkey andouille spare ribs, pork belly tongue tail tri-tip venison.  Frankfurter chuck porchetta biltong pastrami andouille kielbasa flank chislic pig t-bone hamburger turducken boudin venison.  Tri-tip filet mignon kevin, porchetta jerky rump picanha shank buffalo flank short loin.</p></div>
+    
+      </div>
     </div>
 
     `;
