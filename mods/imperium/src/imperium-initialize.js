@@ -307,6 +307,7 @@
       this.game.queue.push("SHUFFLE\t5");
       this.game.queue.push("SHUFFLE\t6");
       for (let i = 0; i < this.game.players_info.length; i++) {
+        this.game.queue.push("gain\t"+(i+1)+"\tsecret_objectives\t2");
         this.game.queue.push("DEAL\t6\t"+(i+1)+"\t2");
       }
       this.game.queue.push("POOL\t3");   // stage ii objectives

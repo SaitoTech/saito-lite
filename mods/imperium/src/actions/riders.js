@@ -88,6 +88,7 @@
 	  if (imperium_self.game.player == action_card_player) {
 
 	    // three action cards
+            imperium_self.addMove("gain\t"+imperium_self.game.player+"\taction_cards\t3");
             imperium_self.addMove("DEAL\t2\t"+imperium_self.game.player+"\t3");
             imperium_self.addMove("notify\tdealing two action cards to player "+player);
 

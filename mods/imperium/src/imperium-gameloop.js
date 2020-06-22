@@ -863,16 +863,6 @@
   	}
 
 
-	//
-	// SECRET OBJECTIVES (now handled by init)
-	//
-  	//if (this.game.state.round == 1) {
-	//  for (let i = 1; i <= this.game.players_info.length; i++) {
-        //    this.game.queue.push("DEAL\t6\t"+i+'\t'+"1");
-  	//  }
-  	//}
-	
-  
   	//
   	// RESET USER ACCOUNTS
   	//
@@ -908,6 +898,7 @@
   	// ACTION CARDS
   	//
   	for (let i = 1; i <= this.game.players_info.length; i++) {
+          this.game.queue.push("gain\t"+i+'\t'+"action_cards"+"\t"+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
           this.game.queue.push("DEAL\t2\t"+i+'\t'+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
   	}
   	
@@ -1400,6 +1391,57 @@ console.log(player_forces + " landed on planet");
   
       }
 
+
+
+      //
+      // used to track cards
+      //
+      if (mv[0] === "lose") {
+
+  	let player       = parseInt(mv[1]);
+        let type         = mv[2];
+        let amount       = parseInt(mv[3]);
+	let z            = this.returnEventObjects();
+
+	if (type == "action_cards") {
+	  this.game.players_info[player-1].action_cards_in_hand -= amount;
+	  if (this.game.players_info[player-1].action_cards_in_hand > 0) {
+	    this.game.players_info[player-1].action_cards_in_hand = 0;
+	  }
+	}
+	if (type == "secret_objectives") {
+	  this.game.players_info[player-1].secret_objectives_in_hand -= amount;
+	  if (this.game.players_info[player-1].secret_objectives_in_hand > 0) {
+	    this.game.players_info[player-1].secret_objectives_in_hand = 0;
+	  }
+	}
+
+  	this.game.queue.splice(qe, 1);
+  	return 1;
+
+      }
+      //
+      // used to track cards
+      //
+      if (mv[0] === "gain") {
+
+  	let player       = parseInt(mv[1]);
+        let type         = mv[2];
+        let amount       = parseInt(mv[3]);
+	let z            = this.returnEventObjects();
+
+	if (type == "action_cards") {
+	  this.game.players_info[player-1].action_cards_in_hand += amount;
+	}
+	if (type == "secret_objective") {
+	  this.game.players_info[player-1].secret_objectives_in_hand += amount;
+	}
+
+  	this.game.queue.splice(qe, 1);
+  	return 1;
+
+      }
+  
 
       if (mv[0] === "purchase") {
   
@@ -3321,6 +3363,13 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	let action_card_player = parseInt(mv[2]);
 	let action_card = mv[3];
   	this.game.queue.splice(qe, 1);
+
+	//
+	// the person who played the action card cannot respond to it
+	//
+	if (player == action_card_player) {
+	  return 1;
+	}
 
 	if (this.game.player == player) {
 	  this.playerPlayActionCardMenu(action_card_player, action_card);

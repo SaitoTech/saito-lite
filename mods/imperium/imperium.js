@@ -1611,7 +1611,6 @@ console.log("P: " + planet);
 	  if (imperium_self.game.planets['new-byzantium'].owner == strategy_card_player) {
 	    imperium_self.playerAcknowledgeNotice("Congratulations, Master of New Byzantium (+1 VP). Your power grows by the day. Surely it is only a matter of time before the Galaxy bows to your superiority and a Natural Order is restored to the universe", supplementary_scoring);
 	  } else {
-	    //imperium_self.addMove("DEAL\t6\t"+strategy_card_player+"\t1");
 	    imperium_self.playerAcknowledgeNotice("Although you do not control New Byzantium, your strategic choice of play has been noticed by the other factions, and will be rewarded by the issuance of a Secret Objective", supplementary_scoring);
 	  }
         }
@@ -1723,6 +1722,7 @@ console.log("P: " + planet);
           // two action cards
           //
           imperium_self.addMove("resolve\tstrategy");
+          imperium_self.addMove("gain\t2\t"+imperium_self.game.player+"\taction_cards"+"\t"+2);
           imperium_self.addMove("DEAL\t2\t"+imperium_self.game.player+"\t2");
           imperium_self.addMove("notify\tdealing two action cards to player "+player);
           imperium_self.addMove("strategy\t"+"politics"+"\t"+strategy_card_player+"\t2");
@@ -4265,6 +4265,7 @@ alert("select sector with filter");
 	  if (imperium_self.game.player == action_card_player) {
 
 	    // three action cards
+            imperium_self.addMove("gain\t"+imperium_self.game.player+"\taction_cards\t3");
             imperium_self.addMove("DEAL\t2\t"+imperium_self.game.player+"\t3");
             imperium_self.addMove("notify\tdealing two action cards to player "+player);
 
@@ -4865,6 +4866,7 @@ alert("select sector with filter");
       this.game.queue.push("SHUFFLE\t5");
       this.game.queue.push("SHUFFLE\t6");
       for (let i = 0; i < this.game.players_info.length; i++) {
+        this.game.queue.push("gain\t"+(i+1)+"\tsecret_objectives\t2");
         this.game.queue.push("DEAL\t6\t"+(i+1)+"\t2");
       }
       this.game.queue.push("POOL\t3");   // stage ii objectives
@@ -6672,16 +6674,6 @@ alert("select sector with filter");
   	}
 
 
-	//
-	// SECRET OBJECTIVES (now handled by init)
-	//
-  	//if (this.game.state.round == 1) {
-	//  for (let i = 1; i <= this.game.players_info.length; i++) {
-        //    this.game.queue.push("DEAL\t6\t"+i+'\t'+"1");
-  	//  }
-  	//}
-	
-  
   	//
   	// RESET USER ACCOUNTS
   	//
@@ -6717,6 +6709,7 @@ alert("select sector with filter");
   	// ACTION CARDS
   	//
   	for (let i = 1; i <= this.game.players_info.length; i++) {
+          this.game.queue.push("gain\t"+i+'\t'+"action_cards"+"\t"+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
           this.game.queue.push("DEAL\t2\t"+i+'\t'+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
   	}
   	
@@ -7209,6 +7202,57 @@ console.log(player_forces + " landed on planet");
   
       }
 
+
+
+      //
+      // used to track cards
+      //
+      if (mv[0] === "lose") {
+
+  	let player       = parseInt(mv[1]);
+        let type         = mv[2];
+        let amount       = parseInt(mv[3]);
+	let z            = this.returnEventObjects();
+
+	if (type == "action_cards") {
+	  this.game.players_info[player-1].action_cards_in_hand -= amount;
+	  if (this.game.players_info[player-1].action_cards_in_hand > 0) {
+	    this.game.players_info[player-1].action_cards_in_hand = 0;
+	  }
+	}
+	if (type == "secret_objectives") {
+	  this.game.players_info[player-1].secret_objectives_in_hand -= amount;
+	  if (this.game.players_info[player-1].secret_objectives_in_hand > 0) {
+	    this.game.players_info[player-1].secret_objectives_in_hand = 0;
+	  }
+	}
+
+  	this.game.queue.splice(qe, 1);
+  	return 1;
+
+      }
+      //
+      // used to track cards
+      //
+      if (mv[0] === "gain") {
+
+  	let player       = parseInt(mv[1]);
+        let type         = mv[2];
+        let amount       = parseInt(mv[3]);
+	let z            = this.returnEventObjects();
+
+	if (type == "action_cards") {
+	  this.game.players_info[player-1].action_cards_in_hand += amount;
+	}
+	if (type == "secret_objective") {
+	  this.game.players_info[player-1].secret_objectives_in_hand += amount;
+	}
+
+  	this.game.queue.splice(qe, 1);
+  	return 1;
+
+      }
+  
 
       if (mv[0] === "purchase") {
   
@@ -9131,6 +9175,13 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	let action_card = mv[3];
   	this.game.queue.splice(qe, 1);
 
+	//
+	// the person who played the action card cannot respond to it
+	//
+	if (player == action_card_player) {
+	  return 1;
+	}
+
 	if (this.game.player == player) {
 	  this.playerPlayActionCardMenu(action_card_player, action_card);
 	}
@@ -9336,37 +9387,39 @@ console.log("HERE: " + z[i].name);
       delete factions[rf];
   
       players[i] = {};
-      players[i].can_intervene_in_action_card = 0;
-      players[i].action_cards_per_round = 4;
-      players[i].new_tokens_per_round = 2;
-      players[i].command_tokens  	= 3;
-      players[i].strategy_tokens 	= 2;
-      players[i].fleet_supply    	= 3;
-      players[i].fleet_supply_limit    	= 16;
-      players[i].faction 		= rf;
-      players[i].homeworld		= "";
-      players[i].color   		= col;
-      players[i].goods			= 20;
-      players[i].commodities		= 3;
-      players[i].commodity_limit	= 3;
-      players[i].vp			= 0;
-      players[i].passed			= 0;
-      players[i].action_card_limit      = 7;
-      players[i].strategy_cards_played = [];
-      players[i].action_cards_played = [];
-      players[i].objectives_scored = [];
+      players[i].can_intervene_in_action_card 	= 0;
+      players[i].secret_objectives_in_hand     	= 0;
+      players[i].action_cards_in_hand         	= 0;
+      players[i].action_cards_per_round       	= 4;
+      players[i].new_tokens_per_round 	 	= 2;
+      players[i].command_tokens  		= 3;
+      players[i].strategy_tokens 		= 2;
+      players[i].fleet_supply    		= 3;
+      players[i].fleet_supply_limit    		= 16;
+      players[i].faction 			= rf;
+      players[i].homeworld			= "";
+      players[i].color   			= col;
+      players[i].goods				= 20;
+      players[i].commodities			= 3;
+      players[i].commodity_limit		= 3;
+      players[i].vp				= 0;
+      players[i].passed				= 0;
+      players[i].action_card_limit      	= 7;
+      players[i].strategy_cards_played 		= [];
+      players[i].action_cards_played 		= [];
+      players[i].objectives_scored 		= [];
 
   
       //
       // gameplay modifiers (action cards + tech)
       //
-      players[i].new_token_bonus_when_issued = 0;
+      players[i].new_token_bonus_when_issued 	= 0;
       players[i].action_cards_bonus_when_issued = 0;
-      players[i].new_tokens_bonus_when_issued = 0;
-      players[i].fleet_move_bonus = 0;
-      players[i].temporary_fleet_move_bonus = 0;
-      players[i].ship_move_bonus = 0;
-      players[i].temporary_ship_move_bonus = 0;
+      players[i].new_tokens_bonus_when_issued 	= 0;
+      players[i].fleet_move_bonus 		= 0;
+      players[i].temporary_fleet_move_bonus 	= 0;
+      players[i].ship_move_bonus 		= 0;
+      players[i].temporary_ship_move_bonus 	= 0;
       players[i].fly_through_asteroids = 0;
       players[i].reinforce_infantry_after_successful_ground_combat = 0;
       players[i].bacterial_weapon = 0;
@@ -9557,6 +9610,7 @@ console.log("HERE: " + z[i].name);
           imperium_self.playerSelectActionCard(function(card) {
   	    imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	    imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
   	    imperium_self.endTurn();
           }, function() { imperium_self.playerTurn(); }, 
 	    relevant_action_cards);
@@ -9639,6 +9693,7 @@ console.log("HERE: " + z[i].name);
             imperium_self.game.players_info[this.game.player-1].action_cards_played.push(card);
     	    imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	    imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	    imperium_self.playerPlayActionCardMenu(action_card_player, card);
           }, function() {
 	    imperium_self.playerPlayActionCardMenu(action_card_player, card);
@@ -9722,6 +9777,7 @@ console.log("HERE: " + z[i].name);
           imperium_self.game.players_info[this.game.player-1].action_cards_played.push(card);
     	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	  imperium_self.playerPlayActionCardMenu(action_card_player, card);
         }, function() {
 	  imperium_self.playerPlayActionCardMenu(action_card_player, card);
@@ -9823,6 +9879,7 @@ console.log("HERE: " + z[i].name);
         imperium_self.playerSelectActionCard(function(card) {
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	  imperium_self.playerPlayPDSDefense(player, attacker, sector);
         }, function() {
 	  imperium_self.playerPlayPDSDefense(player, attacker, sector);
@@ -10057,6 +10114,7 @@ console.log("HERE: " + z[i].name);
         imperium_self.playerSelectActionCard(function(card) {
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	  imperium_self.playerPlaySpaceCombat(attacker, defender, sector);
         }, function() {
 	  imperium_self.playerPlaySpaceCombat(attacker, defender, sector);
@@ -10143,6 +10201,7 @@ console.log("HERE: " + z[i].name);
         imperium_self.playerSelectActionCard(function(card) {
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	  imperium_self.playerPlayGroundCombatOver(player, sector, planet_idx);
         }, function() {
 	  imperium_self.playerPlayGroundCombatOver(player, sector, planet_idx);
@@ -10227,6 +10286,7 @@ console.log("HERE: " + z[i].name);
         imperium_self.playerSelectActionCard(function(card) {
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	  imperium_self.playerPlaySpaceCombatOver(player, sector, planet_idx);
         }, function() {
 	  imperium_self.playerPlaySpaceCombatOver(player, sector, planet_idx);
@@ -10319,6 +10379,7 @@ console.log("HERE: " + z[i].name);
         imperium_self.playerSelectActionCard(function(card) {
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	  imperium_self.playerPlayGroundCombat(attacker, defender, sector, planet_idx);
         }, function() {
 	  imperium_self.playerPlayGroundCombat(attacker, defender, sector, planet_idx);
@@ -10404,6 +10465,7 @@ console.log("HERE: " + z[i].name);
         imperium_self.playerSelectActionCard(function(card) {
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	  imperium_self.playerPlayPDSDefense(player, attacker, sector);
         }, function() {
 	  imperium_self.playerPlayPDSDefense(player, attacker, sector);
@@ -10515,6 +10577,7 @@ console.log("HERE: " + z[i].name);
         imperium_self.playerSelectActionCard(function(card) {
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	  imperium_self.playerPlayPreAgendaStage(player, agenda, agenda_idx);
         }, function() {
 	  imperium_self.playerPlayPreAgendaStage(player, agenda, agenda_idx);
@@ -10581,6 +10644,7 @@ console.log("HERE: " + z[i].name);
         imperium_self.playerSelectActionCard(function(card) {
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	  imperium_self.playerPlayPostAgendaStage(player, agenda, agenda_idx);
         }, function() {
 	  imperium_self.playerPlayPostAgendaStage(player, agenda, agenda_idx);
@@ -10681,6 +10745,7 @@ console.log(" ... and done");
           imperium_self.addMove("continue\t"+player+"\t"+sector);
           imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
           imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
           imperium_self.endTurn();
         }, function() {
           imperium_self.playerContinueTurn(player, sector);
@@ -10794,6 +10859,7 @@ console.log(" ... and done");
   
       if (id == "yes") {
   
+        imperium_self.addMove("gain\t"+imperium_self.game.player+"\taction_cards\t2");
         imperium_self.addMove("DEAL\t2\t"+imperium_self.game.player+"\t2");
         imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
         imperium_self.endTurn();

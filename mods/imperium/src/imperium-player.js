@@ -19,37 +19,39 @@
       delete factions[rf];
   
       players[i] = {};
-      players[i].can_intervene_in_action_card = 0;
-      players[i].action_cards_per_round = 4;
-      players[i].new_tokens_per_round = 2;
-      players[i].command_tokens  	= 3;
-      players[i].strategy_tokens 	= 2;
-      players[i].fleet_supply    	= 3;
-      players[i].fleet_supply_limit    	= 16;
-      players[i].faction 		= rf;
-      players[i].homeworld		= "";
-      players[i].color   		= col;
-      players[i].goods			= 20;
-      players[i].commodities		= 3;
-      players[i].commodity_limit	= 3;
-      players[i].vp			= 0;
-      players[i].passed			= 0;
-      players[i].action_card_limit      = 7;
-      players[i].strategy_cards_played = [];
-      players[i].action_cards_played = [];
-      players[i].objectives_scored = [];
+      players[i].can_intervene_in_action_card 	= 0;
+      players[i].secret_objectives_in_hand     	= 0;
+      players[i].action_cards_in_hand         	= 0;
+      players[i].action_cards_per_round       	= 4;
+      players[i].new_tokens_per_round 	 	= 2;
+      players[i].command_tokens  		= 3;
+      players[i].strategy_tokens 		= 2;
+      players[i].fleet_supply    		= 3;
+      players[i].fleet_supply_limit    		= 16;
+      players[i].faction 			= rf;
+      players[i].homeworld			= "";
+      players[i].color   			= col;
+      players[i].goods				= 20;
+      players[i].commodities			= 3;
+      players[i].commodity_limit		= 3;
+      players[i].vp				= 0;
+      players[i].passed				= 0;
+      players[i].action_card_limit      	= 7;
+      players[i].strategy_cards_played 		= [];
+      players[i].action_cards_played 		= [];
+      players[i].objectives_scored 		= [];
 
   
       //
       // gameplay modifiers (action cards + tech)
       //
-      players[i].new_token_bonus_when_issued = 0;
+      players[i].new_token_bonus_when_issued 	= 0;
       players[i].action_cards_bonus_when_issued = 0;
-      players[i].new_tokens_bonus_when_issued = 0;
-      players[i].fleet_move_bonus = 0;
-      players[i].temporary_fleet_move_bonus = 0;
-      players[i].ship_move_bonus = 0;
-      players[i].temporary_ship_move_bonus = 0;
+      players[i].new_tokens_bonus_when_issued 	= 0;
+      players[i].fleet_move_bonus 		= 0;
+      players[i].temporary_fleet_move_bonus 	= 0;
+      players[i].ship_move_bonus 		= 0;
+      players[i].temporary_ship_move_bonus 	= 0;
       players[i].fly_through_asteroids = 0;
       players[i].reinforce_infantry_after_successful_ground_combat = 0;
       players[i].bacterial_weapon = 0;
@@ -240,6 +242,7 @@
           imperium_self.playerSelectActionCard(function(card) {
   	    imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	    imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
   	    imperium_self.endTurn();
           }, function() { imperium_self.playerTurn(); }, 
 	    relevant_action_cards);
@@ -322,6 +325,7 @@
             imperium_self.game.players_info[this.game.player-1].action_cards_played.push(card);
     	    imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	    imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	    imperium_self.playerPlayActionCardMenu(action_card_player, card);
           }, function() {
 	    imperium_self.playerPlayActionCardMenu(action_card_player, card);
@@ -405,6 +409,7 @@
           imperium_self.game.players_info[this.game.player-1].action_cards_played.push(card);
     	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	  imperium_self.playerPlayActionCardMenu(action_card_player, card);
         }, function() {
 	  imperium_self.playerPlayActionCardMenu(action_card_player, card);
@@ -506,6 +511,7 @@
         imperium_self.playerSelectActionCard(function(card) {
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	  imperium_self.playerPlayPDSDefense(player, attacker, sector);
         }, function() {
 	  imperium_self.playerPlayPDSDefense(player, attacker, sector);
@@ -740,6 +746,7 @@
         imperium_self.playerSelectActionCard(function(card) {
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	  imperium_self.playerPlaySpaceCombat(attacker, defender, sector);
         }, function() {
 	  imperium_self.playerPlaySpaceCombat(attacker, defender, sector);
@@ -826,6 +833,7 @@
         imperium_self.playerSelectActionCard(function(card) {
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	  imperium_self.playerPlayGroundCombatOver(player, sector, planet_idx);
         }, function() {
 	  imperium_self.playerPlayGroundCombatOver(player, sector, planet_idx);
@@ -910,6 +918,7 @@
         imperium_self.playerSelectActionCard(function(card) {
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	  imperium_self.playerPlaySpaceCombatOver(player, sector, planet_idx);
         }, function() {
 	  imperium_self.playerPlaySpaceCombatOver(player, sector, planet_idx);
@@ -1002,6 +1011,7 @@
         imperium_self.playerSelectActionCard(function(card) {
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	  imperium_self.playerPlayGroundCombat(attacker, defender, sector, planet_idx);
         }, function() {
 	  imperium_self.playerPlayGroundCombat(attacker, defender, sector, planet_idx);
@@ -1087,6 +1097,7 @@
         imperium_self.playerSelectActionCard(function(card) {
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	  imperium_self.playerPlayPDSDefense(player, attacker, sector);
         }, function() {
 	  imperium_self.playerPlayPDSDefense(player, attacker, sector);
@@ -1198,6 +1209,7 @@
         imperium_self.playerSelectActionCard(function(card) {
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	  imperium_self.playerPlayPreAgendaStage(player, agenda, agenda_idx);
         }, function() {
 	  imperium_self.playerPlayPreAgendaStage(player, agenda, agenda_idx);
@@ -1264,6 +1276,7 @@
         imperium_self.playerSelectActionCard(function(card) {
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	  imperium_self.playerPlayPostAgendaStage(player, agenda, agenda_idx);
         }, function() {
 	  imperium_self.playerPlayPostAgendaStage(player, agenda, agenda_idx);
@@ -1364,6 +1377,7 @@ console.log(" ... and done");
           imperium_self.addMove("continue\t"+player+"\t"+sector);
           imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
           imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
           imperium_self.endTurn();
         }, function() {
           imperium_self.playerContinueTurn(player, sector);
@@ -1477,6 +1491,7 @@ console.log(" ... and done");
   
       if (id == "yes") {
   
+        imperium_self.addMove("gain\t"+imperium_self.game.player+"\taction_cards\t2");
         imperium_self.addMove("DEAL\t2\t"+imperium_self.game.player+"\t2");
         imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
         imperium_self.endTurn();
