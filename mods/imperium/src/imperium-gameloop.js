@@ -1592,6 +1592,8 @@ console.log("P: " + JSON.stringify(planet));
   	//
   	if (this.game.player != player || player_moves == 1) {
   	  let sys = this.returnSectorAndPlanets(sector_from);
+	  let obj = JSON.parse(shipjson);
+	  this.updateLog(this.returnFaction(player) + " moves " + obj.name + " into " + this.game.sectors[sector_to].name);
   	  this.removeSpaceUnitByJSON(player, sector_from, shipjson);
           this.addSpaceUnitByJSON(player, sector_to, shipjson);
   	}

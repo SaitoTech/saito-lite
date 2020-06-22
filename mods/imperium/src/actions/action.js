@@ -689,6 +689,7 @@ alert("select sector with filter");
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  for (let i in imperium_self.game.planets) {
 	    if (imperium_self.game.planets[i].owner == action_card_player) {
+	      imperium_self.updateLog(imperium_self.returnFaction(action_card_player) + " adds 1 infantry to " + imperium_self.game.planets[i].name);
 	      imperium_self.addPlanetaryUnit(action_card_player, imperium_self.game.planets[i].sector, imperium_self.game.planets[i].idx, "infantry");
 	    }
 	  }

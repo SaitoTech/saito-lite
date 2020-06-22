@@ -162,7 +162,7 @@
   
       let playercol = "player_color_"+this.game.player;
   
-      let html  = '<div class="terminal_header sf-readable">[command: '+this.game.players_info[this.game.player-1].command_tokens+'] [strategy: '+this.game.players_info[this.game.player-1].strategy_tokens+'] [fleet: '+this.game.players_info[this.game.player-1].fleet_supply+'] [commodities: '+this.game.players_info[this.game.player-1].commodities+'] [trade goods: '+this.game.players_info[this.game.player-1].goods+'] [player: '+this.game.player+']</div>';
+      let html  = '<div class="terminal_header sf-readable">[cmd: '+this.game.players_info[this.game.player-1].command_tokens+'] [str: '+this.game.players_info[this.game.player-1].strategy_tokens+'] [flt: '+this.game.players_info[this.game.player-1].fleet_supply+']</div>';
           html  += '<p style="margin-top:20px"></p>';
           html  += '<div class="terminal_header2 sf-readable"><div class="player_color_box '+playercol+'"></div>' + this.returnFaction(this.game.player) + ":</div><p><ul class='terminal_header3'>";
       if (this.game.players_info[this.game.player-1].command_tokens > 0) {
@@ -2235,7 +2235,6 @@ alert("TTG: 6" + total_trade_goods);
   playerSelectActionCard(mycallback, cancel_callback, types=[]) {  
 
     let imperium_self = this;
-console.log("types: " + types);
     let array_of_cards = this.returnPlayerActionCards(this.game.player, types);
     if (array_of_cards.length == 0) {
       this.playerAcknowledgeNotice(this.returnFaction(action_card_player) + " plays " + this.action_cards[card].name, function() {
@@ -2258,8 +2257,6 @@ console.log("types: " + types);
     html += '</ul>';
   
     this.updateStatus(html);
-    $('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showActionCard(s); } });
-    $('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideActionCard(s); } });
     $('.textchoice').on('click', function() {
 
       let action2 = $(this).attr("id");
