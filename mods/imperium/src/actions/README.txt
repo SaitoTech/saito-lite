@@ -3,12 +3,17 @@
 ACTION CARD - types
 
 "action" -> main menu
-"pds" -> before pds fire
-"bombardment_defense" -> defensive action
-"bombardment_offense" -> offensive action
-"space_combat"
-"ground_combat"
+"bombardment_attacker"
+"bombardment_defender"
 "combat"
+"ground_combat"
+"pds" -> before pds fire
+"post_pds" -> after pds fire
+"pre_agenda" --> before agenda voting
+"post_agenda" --> after agenda voting
+"space_combat"
+"space_combat_victory"
 "rider"
+
 
 ************************************/
