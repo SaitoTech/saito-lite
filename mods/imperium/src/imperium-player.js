@@ -39,7 +39,6 @@
       players[i].action_card_limit      	= 7;
       players[i].strategy_cards_played 		= [];
       players[i].action_cards_played 		= [];
-      players[i].objectives_scored 		= [];
 
   
       //
@@ -136,8 +135,8 @@
       players[i].strategy = [];		// strategy cards  
 
       // scored objectives
-      players[i].scored_objectives = [];
-      players[i].secret_objectives = [];
+      players[i].objectives_scored = [];
+      players[i].objectives_secret = [];
   
     }
   

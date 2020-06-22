@@ -15648,17 +15648,16 @@ returnFactionSheet(imperium_self, player) {
           </span>
         </div>
       </div>
+   `;
 
+
+    //
+    // ACTION CARDS
+    //
+    html += `
       <h3>Action Cards</h3>
       <div class="faction_sheet_action_card_box" id="faction_sheet_action_card_box">
-     
       `;
-
-
-
-      //
-      // me
-      //
       if (imperium_self.game.player == player) {
 
         let ac = imperium_self.returnPlayerActionCards(imperium_self.game.player);
@@ -15682,37 +15681,43 @@ returnFactionSheet(imperium_self, player) {
             </div> 
 	  `;
 	}
-
       }
+    html += `</div>`;
 
 
+    //
+    // PLANET CARDS
+    //
     html += `
-
       <h3>Planet Cards</h3>
       <div class="faction_sheet_planet_card_box" id="faction_sheet_planet_card_box">
-     
     `;
   
-
     let pc = imperium_self.returnPlayerPlanetCards(player);
     for (let b = 0; b < pc.length; b++) {
       html += `
         <div class="faction_sheet_planet_card bc" id="${pc[b]}" style="background-image: url(${this.game.planets[pc[b]].img});">
         </div>`
     }
-
-  html += `
+    html += `
       </div>
-
-      <div class="faction_sheet_tech_box" id="faction_sheet_tech_box">
     `;
 
-    
 
-  
+     //
+     // TECH BOX
+     //
+     html += `
 
-  html += `
+      <div class="faction_sheet_tech_box" id="faction_sheet_tech_box">
       </div>
+     `;
+
+
+    //
+    // OBJECTIVES
+    //
+    html += `
 
       <h3>Objectives</h3>
       <div class="faction_sheet_objectives">

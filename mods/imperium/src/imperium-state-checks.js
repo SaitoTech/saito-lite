@@ -1333,6 +1333,28 @@ console.log("SECTOR: " + sector);
     return x;
   
   }
+  returnPlayerObjectives(player=null, types=[]) {
+
+    if (player == null) { player = this.game.player; }  
+
+    let x = [];
+
+    //
+    // deck 6 -- hand #5 -- secret objectives
+    //
+    for (let i = 0; i < this.game.deck[5].hand.length; i++) {
+      if (types.length == 0) {
+	x.push(this.game.deck[1].hand[i]);
+      } else {
+	if (types.includes(this.action_cards[this.game.deck[1].hand[i]].type)) {
+	  x.push(this.game.deck[1].hand[i]);
+	}
+      }
+    }
+  
+    return x;
+  
+  }
   
   returnPlanetCard(planetname="") {
   
