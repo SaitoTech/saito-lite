@@ -98,14 +98,8 @@
       }
     }
 
-console.log("planet ownership updated: " + owner + " -- from " + existing_owner);
-
     if (existing_owner != owner) {
-
       this.game.players_info[owner-1].planets_conquered_this_turn.push(sys.p[planet_idx].name);
-
-console.log("planetname = " + planetname);
-
       let z = this.returnEventObjects();
       for (let z_index in z) {
 	z[z_index].gainPlanet(this, owner, planetname); 

@@ -232,6 +232,10 @@ body {
   margin-bottom: -15vw;
   border: 1px solid;
 }
+.faction_sheet_action_card_back {
+  background-image: url(img/action_card_back.jpg);
+}
+
 
 .faction_sheet_action_card:hover, .faction_sheet_planet_card:hover, .faction_sheet_tech_card:hover {
   transform: scale(1.33) translate(1vw, 1vw);

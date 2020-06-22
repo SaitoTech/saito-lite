@@ -10649,6 +10649,8 @@ console.log("HERE: " + z[i].name);
     let imperium_self = this;
     let options_available = 0;
 
+    if (this.tracker.invasion == undefined) { this.tracker = this.returnPlayerTurnTracker(); this.tracker.activate_system = 1; }
+
     //
     // check to see if any ships survived....
     //
@@ -10659,6 +10661,8 @@ console.log("HERE: " + z[i].name);
       html += '<li class="option" id="produce">produce units</li>';
       options_available++;
     }
+console.log("CAN PLAYER INVADE: " + this.canPlayerInvadePlanet(player, sector));
+console.log("INVASION: " + this.tracker.invasion);
     if (this.canPlayerInvadePlanet(player, sector) && this.tracker.invasion == 0) {
       html += '<li class="option" id="invade">invade planet</li>';
       options_available++;
@@ -10667,8 +10671,6 @@ console.log("HERE: " + z[i].name);
       html += '<li class="option" id="action">action card</li>';
       options_available++;
     }
-
-console.log("HERE WE GO!");
 
     let tech_attach_menu_events = 0;
     let tech_attach_menu_triggers = [];
@@ -12287,7 +12289,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     html = '<div class="sf-readable">Which planet(s) do you invade: </div><ul>';
     for (let i = 0; i < sys.p.length; i++) {
       if (sys.p[i].owner != player) {
-        html += '<li class="option sector_name" id="' + i + '">' + sys.p[i].name + ' (<span class="invadeplanet_'+i+'">0</span>)</li>'; 
+        html += '<li class="option sector_name" id="' + i + '">' + sys.p[i].name + ' - <span class="invadeplanet_'+i+'">0</span></li>'; 
       }
     }
     html += '<li class="option" id="confirm">launch invasion(s)</li>'; 
@@ -15356,14 +15358,8 @@ console.log("sector: " + sector);
       }
     }
 
-console.log("planet ownership updated: " + owner + " -- from " + existing_owner);
-
     if (existing_owner != owner) {
-
       this.game.players_info[owner-1].planets_conquered_this_turn.push(sys.p[planet_idx].name);
-
-console.log("planetname = " + planetname);
-
       let z = this.returnEventObjects();
       for (let z_index in z) {
 	z[z_index].gainPlanet(this, owner, planetname); 
@@ -15712,9 +15708,7 @@ returnFactionSheet(imperium_self, player) {
 	let acih = imperium_self.game.players_info[player-1].action_cards_in_hand;
 	for (let i = 0; i < acih; i++) {
           html += `
-            <div class="faction_sheet_action_card bc">
-              <div class="action_card_name">UNKNOWN CARD</div>
-              <div class="action_card_content"></div>
+            <div class="faction_sheet_action_card faction_sheet_action_card_back bc">
             </div> 
 	  `;
 	}
@@ -15733,7 +15727,7 @@ returnFactionSheet(imperium_self, player) {
     let pc = imperium_self.returnPlayerPlanetCards(player);
     for (let b = 0; b < pc.length; b++) {
       let exhausted = "";
-      if (pc[b].exhausted == 1) { exhausted = "exhausted"; }
+      if (this.game.planets[pc[b]].exhausted == 1) { exhausted = "exhausted"; }
       html += `<div class="faction_sheet_planet_card bc ${exhausted}" id="${pc[b]}" style="background-image: url(${this.game.planets[pc[b]].img});"></div>`
     }
     html += `

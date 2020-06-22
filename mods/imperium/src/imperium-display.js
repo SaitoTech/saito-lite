@@ -165,9 +165,7 @@ returnFactionSheet(imperium_self, player) {
 	let acih = imperium_self.game.players_info[player-1].action_cards_in_hand;
 	for (let i = 0; i < acih; i++) {
           html += `
-            <div class="faction_sheet_action_card bc">
-              <div class="action_card_name">UNKNOWN CARD</div>
-              <div class="action_card_content"></div>
+            <div class="faction_sheet_action_card faction_sheet_action_card_back bc">
             </div> 
 	  `;
 	}
@@ -186,7 +184,7 @@ returnFactionSheet(imperium_self, player) {
     let pc = imperium_self.returnPlayerPlanetCards(player);
     for (let b = 0; b < pc.length; b++) {
       let exhausted = "";
-      if (pc[b].exhausted == 1) { exhausted = "exhausted"; }
+      if (this.game.planets[pc[b]].exhausted == 1) { exhausted = "exhausted"; }
       html += `<div class="faction_sheet_planet_card bc ${exhausted}" id="${pc[b]}" style="background-image: url(${this.game.planets[pc[b]].img});"></div>`
     }
     html += `

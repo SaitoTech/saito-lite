@@ -1296,6 +1296,8 @@
     let imperium_self = this;
     let options_available = 0;
 
+    if (this.tracker.invasion == undefined) { this.tracker = this.returnPlayerTurnTracker(); this.tracker.activate_system = 1; }
+
     //
     // check to see if any ships survived....
     //
@@ -1306,6 +1308,8 @@
       html += '<li class="option" id="produce">produce units</li>';
       options_available++;
     }
+console.log("CAN PLAYER INVADE: " + this.canPlayerInvadePlanet(player, sector));
+console.log("INVASION: " + this.tracker.invasion);
     if (this.canPlayerInvadePlanet(player, sector) && this.tracker.invasion == 0) {
       html += '<li class="option" id="invade">invade planet</li>';
       options_available++;
@@ -1314,8 +1318,6 @@
       html += '<li class="option" id="action">action card</li>';
       options_available++;
     }
-
-console.log("HERE WE GO!");
 
     let tech_attach_menu_events = 0;
     let tech_attach_menu_triggers = [];
@@ -2934,7 +2936,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     html = '<div class="sf-readable">Which planet(s) do you invade: </div><ul>';
     for (let i = 0; i < sys.p.length; i++) {
       if (sys.p[i].owner != player) {
-        html += '<li class="option sector_name" id="' + i + '">' + sys.p[i].name + ' (<span class="invadeplanet_'+i+'">0</span>)</li>'; 
+        html += '<li class="option sector_name" id="' + i + '">' + sys.p[i].name + ' - <span class="invadeplanet_'+i+'">0</span></li>'; 
       }
     }
     html += '<li class="option" id="confirm">launch invasion(s)</li>'; 
