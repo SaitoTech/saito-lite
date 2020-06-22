@@ -136,7 +136,6 @@
 
       // scored objectives
       players[i].objectives_scored = [];
-      players[i].objectives_secret = [];
   
     }
   

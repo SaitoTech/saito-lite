@@ -4594,7 +4594,7 @@ alert("select sector with filter");
     // this.action_cards
     // this.stage_i_objectives
     // this.stage_ii_objectives
-    // this.secret_i_objectives
+    // this.secret_objectives
     //
 
     //
@@ -9408,7 +9408,6 @@ console.log("HERE: " + z[i].name);
       players[i].action_card_limit      	= 7;
       players[i].strategy_cards_played 		= [];
       players[i].action_cards_played 		= [];
-      players[i].objectives_scored 		= [];
 
   
       //
@@ -9505,8 +9504,7 @@ console.log("HERE: " + z[i].name);
       players[i].strategy = [];		// strategy cards  
 
       // scored objectives
-      players[i].scored_objectives = [];
-      players[i].secret_objectives = [];
+      players[i].objectives_scored = [];
   
     }
   
@@ -15062,6 +15060,56 @@ console.log("SECTOR: " + sector);
     return x;
   
   }
+  returnPlayerObjectives(player=null, types=[]) {
+
+    if (player == null) { player = this.game.player; }  
+
+    let x = [];
+
+    //
+    // deck 6 -- hand #5 -- secret objectives
+    //
+    for (let i = 0; i < this.game.deck[5].hand.length; i++) {
+      if (types.length == 0) {
+	x.push(this.secret_objectives[this.game.deck[5].hand[i]]);
+      } else {
+	if (types.includes("secret_objectives")) {
+	  x.push(this.secret_objectives[this.game.deck[5].hand[i]]);
+	}
+      }
+    }
+
+
+    //
+    // stage 1 public objectives
+    //
+    for (let i = 0; i < this.game.state.stage_i_objectives; i++) {
+      if (types.length == 0) {
+	x.push(this.stage_i_objectives[this.game.state.stage_i_objectives[i]]);
+      } else {
+	if (types.includes("stage_i_objectives")) {
+	  x.push(this.stage_i_objectives[this.game.state.stage_i_objectives[i]]);
+	}
+      }
+    }
+
+
+    //
+    // stage 2 public objectives
+    //
+    for (let i = 0; i < this.game.state.stage_ii_objectives; i++) {
+      if (types.length == 0) {
+	x.push(this.stage_ii_objectives[this.game.state.stage_ii_objectives[i]]);
+      } else {
+	if (types.includes("stage_ii_objectives")) {
+	  x.push(this.stage_ii_objectives[this.game.state.stage_ii_objectives[i]]);
+	}
+      }
+    }
+
+    return x;
+  
+  }
   
   returnPlanetCard(planetname="") {
   
@@ -15610,8 +15658,6 @@ console.log("PLAYER: " + i);
 
 returnFactionSheet(imperium_self, player) {
 
- console.log("GAME: "+JSON.stringify(imperium_self.game));
-
   let html = `
         <div class="faction_sheet_token_box" id="faction_sheet_token_box">
         <div>Strategy</div>
@@ -15717,6 +15763,26 @@ returnFactionSheet(imperium_self, player) {
     //
     // OBJECTIVES
     //
+    let objc = imperium_self.returnPlayerObjectives();
+    let scored_objectives = [];
+    let unscored_objectives = [];
+
+let xxx = 0;
+    for (let i in objc) {
+xxx++;
+if (xxx == 2) { 
+  this.game.players_info[player-1].objectives_scored.push(i);
+}
+      if (this.game.players_info[player-1].objectives_scored.includes(i)) {
+	scored_objectives.push(objc[i]);
+      } else {
+	unscored_objectives.push(objc[i]);
+      }
+    }
+
+console.log("SCORED: " + JSON.stringify(scored_objectives));
+console.log("UNSCORED: " + JSON.stringify(unscored_objectives));
+
     html += `
 
       <h3>Objectives</h3>

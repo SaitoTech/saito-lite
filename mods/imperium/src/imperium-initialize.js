@@ -35,7 +35,7 @@
     // this.action_cards
     // this.stage_i_objectives
     // this.stage_ii_objectives
-    // this.secret_i_objectives
+    // this.secret_objectives
     //
 
     //

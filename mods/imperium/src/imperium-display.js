@@ -101,8 +101,6 @@ console.log("PLAYER: " + i);
 
 returnFactionSheet(imperium_self, player) {
 
- console.log("GAME: "+JSON.stringify(imperium_self.game));
-
   let html = `
         <div class="faction_sheet_token_box" id="faction_sheet_token_box">
         <div>Strategy</div>
@@ -208,6 +206,26 @@ returnFactionSheet(imperium_self, player) {
     //
     // OBJECTIVES
     //
+    let objc = imperium_self.returnPlayerObjectives();
+    let scored_objectives = [];
+    let unscored_objectives = [];
+
+let xxx = 0;
+    for (let i in objc) {
+xxx++;
+if (xxx == 2) { 
+  this.game.players_info[player-1].objectives_scored.push(i);
+}
+      if (this.game.players_info[player-1].objectives_scored.includes(i)) {
+	scored_objectives.push(objc[i]);
+      } else {
+	unscored_objectives.push(objc[i]);
+      }
+    }
+
+console.log("SCORED: " + JSON.stringify(scored_objectives));
+console.log("UNSCORED: " + JSON.stringify(unscored_objectives));
+
     html += `
 
       <h3>Objectives</h3>

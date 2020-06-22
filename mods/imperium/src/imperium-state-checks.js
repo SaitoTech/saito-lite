@@ -1344,14 +1344,42 @@ console.log("SECTOR: " + sector);
     //
     for (let i = 0; i < this.game.deck[5].hand.length; i++) {
       if (types.length == 0) {
-	x.push(this.game.deck[1].hand[i]);
+	x.push(this.secret_objectives[this.game.deck[5].hand[i]]);
       } else {
-	if (types.includes(this.action_cards[this.game.deck[1].hand[i]].type)) {
-	  x.push(this.game.deck[1].hand[i]);
+	if (types.includes("secret_objectives")) {
+	  x.push(this.secret_objectives[this.game.deck[5].hand[i]]);
 	}
       }
     }
-  
+
+
+    //
+    // stage 1 public objectives
+    //
+    for (let i = 0; i < this.game.state.stage_i_objectives; i++) {
+      if (types.length == 0) {
+	x.push(this.stage_i_objectives[this.game.state.stage_i_objectives[i]]);
+      } else {
+	if (types.includes("stage_i_objectives")) {
+	  x.push(this.stage_i_objectives[this.game.state.stage_i_objectives[i]]);
+	}
+      }
+    }
+
+
+    //
+    // stage 2 public objectives
+    //
+    for (let i = 0; i < this.game.state.stage_ii_objectives; i++) {
+      if (types.length == 0) {
+	x.push(this.stage_ii_objectives[this.game.state.stage_ii_objectives[i]]);
+      } else {
+	if (types.includes("stage_ii_objectives")) {
+	  x.push(this.stage_ii_objectives[this.game.state.stage_ii_objectives[i]]);
+	}
+      }
+    }
+
     return x;
   
   }
