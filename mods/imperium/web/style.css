@@ -430,7 +430,6 @@ body {
   transition: all 500ms;
   border-left: 3px solid var(--my-color);
   font-size: 1em;
-  /* font-family: 'orbitron-medium', 'bank-gothic', arial, helvetica, sans-serif; */
   font-family: courier, sans-serif;
 }
 
