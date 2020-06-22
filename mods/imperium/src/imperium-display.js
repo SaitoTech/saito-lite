@@ -146,9 +146,6 @@ returnFactionSheet(imperium_self, player) {
       `;
 
 
-console.log("PLA: " + player);
-console.log("ME: " + imperium_self.game.player);
-
 
       //
       // me
@@ -167,10 +164,8 @@ console.log("ME: " + imperium_self.game.player);
 
       } else {
 
-alert("TESTING!");
-
-	for (let i = 0; i < imperium_self.game.players_info[i].action_cards_in_hand; i++) {
-alert("TESTING: " + i);
+	let acih = imperium_self.game.players_info[player-1].action_cards_in_hand;
+	for (let i = 0; i < acih; i++) {
           html += `
             <div class="faction_sheet_action_card bc">
               <div class="action_card_name">UNKNOWN CARD</div>
@@ -178,6 +173,7 @@ alert("TESTING: " + i);
             </div> 
 	  `;
 	}
+
       }
 
 
