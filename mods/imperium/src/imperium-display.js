@@ -233,18 +233,39 @@ console.log("UNSCORED: " + JSON.stringify(unscored_objectives));
         <div class="scored">
           <h4>Scored</h4>
           <div class="faction_sheet_objective_cards scored">
-            card, card, card
+    `;
+
+    for (let i = 0; i < scored_objectives.length; i++) {
+      html += `
+            <div class="faction_sheet_action_card bc" style="background-image: url(${scored_objectives[i].img})">
+              <div class="action_card_name">${scored_objectives[i].name}</div>
+              <div class="action_card_content">${scored_objectives[i].text}</div>
+            </div>
+      `;
+    }
+
+
+    html += `
           </div>
         </div>
         <div class="unscored">
           <h4>Unscored</h4>
           <div class="faction_sheet_objective_cards unscored">
-            card, card, card
+    `;
+
+    for (let i = 0; i < unscored_objectives.length; i++) {
+      html += `
+            <div class="faction_sheet_action_card bc" style="background-image: url(${unscored_objectives[i].img})">
+              <div class="action_card_name">${unscored_objectives[i].name}</div>
+              <div class="action_card_content">${unscored_objectives[i].text}</div>
+            </div>
+      `;
+    }
+
+    html += `
           </div>
         </div>
       </div>
-   
-
 
       <div class="faction_sheet_lore" id="faction_sheet_lore"></div>
 
