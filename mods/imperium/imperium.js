@@ -4893,6 +4893,7 @@ alert("select sector with filter");
     //
     this.addEventsToBoard();
     this.addUIEvents();
+
   }
   
 
@@ -15567,19 +15568,23 @@ addUIEvents() {
   //add faction buttons
   var html = "";
   var faction_initial = "";
-  this.game.players.forEach((player, index) => {
-    faction_initial = this.returnFaction(index + 1).split("of ")[this.returnFaction(index + 1).split("of ").length - 1].charAt(0);
-    html += `<div data-id="${index + 1}" class="faction_button p${index + 1}" style="border-color:var(--p${index + 1});">${faction_initial}</div>`;
-  });
+  for (let i = 0; i < this.game.players_info.length; i++) {
+    let faction_name = this.returnFaction((i+1));
+    let faction_initial = "";
+    if (faction_name[0] != "") { faction_initial = faction_name[0]; }
+    if (faction_name.indexOf("of ") > -1) {
+      faction_initial = faction_name.split("of ")[faction_name.split("of ").length-1].charAt(0);
+    }
+    html += `<div data-id="${(i+1)}" class="faction_button p${(i+1)}" style="border-color:var(--p${(i+1)});">${faction_initial}</div>`;
+  };
   document.querySelector('.faction_buttons').innerHTML = html;
-  //document.querySelector('.hud-header').innerHTML += html;
 
   //add faction names to their sheets
-  this.game.players.forEach((player, index) => {
-    document.querySelector('.faction_name.p' + (index + 1)).innerHTML = this.returnFaction(index + 1);
+  for (let i = 0; i < this.game.players_info.length; i++) {
+    document.querySelector('.faction_name.p' + (i+1)).innerHTML = this.returnFaction(i+1);
     let factions = this.returnFactions();
-    document.querySelector('.faction_sheet.p' + (index + 1)).style.backgroundImage = "url('./img/factions/" + factions[this.game.players_info[index].faction].background + "')";
-  });
+    document.querySelector('.faction_sheet.p' + (i+1)).style.backgroundImage = "url('./img/factions/" + factions[this.game.players_info[i].faction].background + "')";
+  };
 
   document.querySelectorAll('.faction_button').forEach(el => {
     el.addEventListener('click', (e) => {
@@ -15596,14 +15601,16 @@ addUIEvents() {
     });
   });
 
-  this.game.players.forEach(function (player, index) {
-    document.querySelector(`.faction_content.p${index + 1}`).innerHTML = imperium_self.returnFactionInformation(index + 1, imperium_self);
-  });
+  for (let i = 0; i < this.game.players_info.length; i++) {
+console.log("PLAYER: " + i);
+    document.querySelector(`.faction_content.p${(i+1)}`).innerHTML = imperium_self.returnFactionSheet(imperium_self, (i+1));
+  }
 }
 
 
-returnFactionInformation(player, imperium) {
+returnFactionSheet(imperium_self, player) {
 
+ console.log("GAME: "+JSON.stringify(imperium_self.game));
 
   let html = `
         <div class="faction_sheet_token_box" id="faction_sheet_token_box">
@@ -15646,20 +15653,54 @@ returnFactionInformation(player, imperium) {
       <div class="faction_sheet_action_card_box" id="faction_sheet_action_card_box">
      
       `;
+
+
+console.log("PLA: " + player);
+console.log("ME: " + imperium_self.game.player);
+
+
+      //
+      // me
+      //
+      if (imperium_self.game.player == player) {
+
+        let ac = imperium_self.returnPlayerActionCards(imperium_self.game.player);
+	for (let i = 0; i < ac.length; i++) {
+          html += `
+            <div class="faction_sheet_action_card bc">
+              <div class="action_card_name">${imperium_self.action_cards[ac[i]].name}</div>
+              <div class="action_card_content">${imperium_self.action_cards[ac[i]].text}</div>
+            </div> 
+	  `;
+	}
+
+      } else {
+
+alert("TESTING!");
+
+	for (let i = 0; i < imperium_self.game.players_info[i].action_cards_in_hand; i++) {
+alert("TESTING: " + i);
+          html += `
+            <div class="faction_sheet_action_card bc">
+              <div class="action_card_name">UNKNOWN CARD</div>
+              <div class="action_card_content"></div>
+            </div> 
+	  `;
+	}
+      }
+
+
 /*
-      let ac = this.returnPlayerActionCards(this.game.player);
-      
       html += JSON.stringify(ac);
 
       for (let b = 0; b < pc.length; b++) {
         html += `<div class="faction_sheet_action_card bc" id="${pc[b]}">${this.game.planets[pc[b]].name}</div>`
       }
-*/
       html += `
         <div class="faction_sheet_action_card bc">
           <div class="action_card_name">wormhole-navigator</div>
           <div class="action_card_content">About this action card.</div>
-        </div>
+        </div> 
         <div class="faction_sheet_action_card bc">
           <div class="action_card_name">terrestrial magnetism</div>
           <div class="action_card_content">About this action card.</div>
@@ -15708,7 +15749,11 @@ returnFactionInformation(player, imperium) {
           <div class="action_card_name">gravity boots</div>
           <div class="action_card_content">About this action card.</div>
         </div>
+*/
+
+     html += `
       </div>
+
       <h3>Planet Cards</h3>
       <div class="faction_sheet_planet_card_box" id="faction_sheet_planet_card_box">
      
@@ -15720,7 +15765,7 @@ returnFactionInformation(player, imperium) {
 
 
 
-  let pc = this.returnPlayerPlanetCards(player);
+  let pc = imperium_self.returnPlayerPlanetCards(player);
   //html += JSON.stringify(pc);
   for (let b = 0; b < pc.length; b++) {
     html += `
@@ -15773,7 +15818,7 @@ returnFactionInformation(player, imperium) {
      
      `;
 
-     Object.entries(imperium.units).forEach(item => {
+     Object.entries(imperium_self.units).forEach(item => {
        let unit = item[1];
        if(unit.extension == 1) {
         html += `

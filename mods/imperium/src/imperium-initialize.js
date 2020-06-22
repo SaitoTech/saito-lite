@@ -334,6 +334,7 @@
     //
     this.addEventsToBoard();
     this.addUIEvents();
+
   }
   
 
