@@ -15083,7 +15083,7 @@ console.log("SECTOR: " + sector);
     //
     // stage 1 public objectives
     //
-    for (let i = 0; i < this.game.state.stage_i_objectives; i++) {
+    for (let i = 0; i < this.game.state.stage_i_objectives.length; i++) {
       if (types.length == 0) {
 	x.push(this.stage_i_objectives[this.game.state.stage_i_objectives[i]]);
       } else {
@@ -15099,10 +15099,10 @@ console.log("SECTOR: " + sector);
     //
     for (let i = 0; i < this.game.state.stage_ii_objectives; i++) {
       if (types.length == 0) {
-	x.push(this.stage_ii_objectives[this.game.state.stage_ii_objectives[i]]);
+	x.push(this.stage_i_objectives[this.game.state.stage_ii_objectives[i]]);
       } else {
 	if (types.includes("stage_ii_objectives")) {
-	  x.push(this.stage_ii_objectives[this.game.state.stage_ii_objectives[i]]);
+	  x.push(this.stage_i_objectives[this.game.state.stage_ii_objectives[i]]);
 	}
       }
     }
