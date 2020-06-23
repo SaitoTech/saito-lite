@@ -160,6 +160,17 @@ body {
   background-position: center;
 }
 
+.faction_sheet_buttons {
+  display: flex;
+}
+
+.faction_sheet_buttons div {
+  color: #fff;
+  margin: 1em 2em;
+  cursor: pointer;
+  font-size: 1.5em;
+}
+
 .faction_content {
   background-color: #0008;
   height: calc(100% - 5em);
@@ -179,6 +190,7 @@ body {
 .faction_sheet_token_box {
   margin: 1em auto;
   width: 40em;
+  height: 10em;
   display: grid;
   grid-gap: 0 2em;
   grid-template-columns: auto auto auto;
@@ -194,9 +206,11 @@ body {
   font-family: 'bank-gothic';
   text-shadow: 1px 1px #000;
 }
+
 .faction_sheet_active {
   overflow-y: auto;
-  height: 64vh;
+  height: calc(80vh - 24em);
+  scroll-behavior: smooth; 
 }
 
 .faction_sheet_token_box div {
@@ -416,7 +430,6 @@ body {
   transition: all 500ms;
   border-left: 3px solid var(--my-color);
   font-size: 1em;
-  /* font-family: 'orbitron-medium', 'bank-gothic', arial, helvetica, sans-serif; */
   font-family: courier, sans-serif;
 }
 
@@ -1187,3 +1200,10 @@ input[type=range]::-moz-range-thumb {
 input[type=range] {
   border: 1px solid var(--my-color);
 }
+<<<<<<< HEAD
+=======
+
+.white-stroke {
+  -webkit-text-stroke: 1px #fff;
+}
+>>>>>>> 04026ac1... faction sheet updates, nav, lore units neatened.
