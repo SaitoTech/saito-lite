@@ -1234,6 +1234,7 @@ console.log("P: " + planet);
 
 	if (card == "diplomacy") {
 
+
 	  let pcs = imperium_self.returnPlayerPlanetCards(imperium_self.game.player);
 	  let sectors = [];
 	  let adjacent_sectors = [];
@@ -1298,8 +1299,10 @@ console.log("P: " + planet);
                 null
               );
             }
+            return 0;
           }
-          return 0;
+
+	  return 1;
 	}
       }
     });
@@ -6161,10 +6164,13 @@ alert("select sector with filter");
   	let strategy_card_player = parseInt(mv[2]);
   	let stage = parseInt(mv[3]);  
 
+console.log("STRATEGY CARD!");
+
 	if (this.game.state.playing_strategy_card_secondary == 1) {
 	  return 0;
 	}
 
+console.log("STRATEGY CARD 2!");
   	imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.push(card);
 
   	if (stage == 1) {
@@ -6200,7 +6206,9 @@ alert("select sector with filter");
             }
           }
         }
+
         return 1;
+
       }
       if (mv[0] === "strategy_card_before_event") {
   
@@ -6211,6 +6219,8 @@ alert("select sector with filter");
         let z = this.returnEventObjects();
 
         this.game.queue.splice(qe, 1);
+
+console.log("STRATEGY CARD BEFORE EVENT");
 
         return z[z_index].strategyCardBeforeEvent(this, player, strategy_card_player, card);
 
@@ -12721,8 +12731,8 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
   
         let html = '<div class="sf-readable">You have '+obj.new_tokens+' tokens to allocate. How do you want to allocate them? </div><ul>';
             html += '<li class="option" id="strategy">Strategy Token - '+ (parseInt(obj.current_strategy)+parseInt(obj.new_strategy)) + '</li>';
-            html += '<li class="option" id="command">Command Token - '+ parseInt(obj.current_command)+parseInt(obj.new_command)) + '</li>';
-            html += '<li class="option" id="fleet">Fleet Supply - '+ parseInt(obj.current_fleet)+parseInt(obj.new_fleet)) + '</li>';
+            html += '<li class="option" id="command">Command Token - '+ (parseInt(obj.current_command)+parseInt(obj.new_command)) + '</li>';
+            html += '<li class="option" id="fleet">Fleet Supply - '+ (parseInt(obj.current_fleet)+parseInt(obj.new_fleet)) + '</li>';
             html += '</ul>';
   
         imperium_self.updateStatus(html);

@@ -299,10 +299,13 @@
   	let strategy_card_player = parseInt(mv[2]);
   	let stage = parseInt(mv[3]);  
 
+console.log("STRATEGY CARD!");
+
 	if (this.game.state.playing_strategy_card_secondary == 1) {
 	  return 0;
 	}
 
+console.log("STRATEGY CARD 2!");
   	imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.push(card);
 
   	if (stage == 1) {
@@ -338,7 +341,9 @@
             }
           }
         }
+
         return 1;
+
       }
       if (mv[0] === "strategy_card_before_event") {
   
@@ -349,6 +354,8 @@
         let z = this.returnEventObjects();
 
         this.game.queue.splice(qe, 1);
+
+console.log("STRATEGY CARD BEFORE EVENT");
 
         return z[z_index].strategyCardBeforeEvent(this, player, strategy_card_player, card);
 

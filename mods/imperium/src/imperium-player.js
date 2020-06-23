@@ -3224,8 +3224,8 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
   
         let html = '<div class="sf-readable">You have '+obj.new_tokens+' tokens to allocate. How do you want to allocate them? </div><ul>';
             html += '<li class="option" id="strategy">Strategy Token - '+ (parseInt(obj.current_strategy)+parseInt(obj.new_strategy)) + '</li>';
-            html += '<li class="option" id="command">Command Token - '+ parseInt(obj.current_command)+parseInt(obj.new_command)) + '</li>';
-            html += '<li class="option" id="fleet">Fleet Supply - '+ parseInt(obj.current_fleet)+parseInt(obj.new_fleet)) + '</li>';
+            html += '<li class="option" id="command">Command Token - '+ (parseInt(obj.current_command)+parseInt(obj.new_command)) + '</li>';
+            html += '<li class="option" id="fleet">Fleet Supply - '+ (parseInt(obj.current_fleet)+parseInt(obj.new_fleet)) + '</li>';
             html += '</ul>';
   
         imperium_self.updateStatus(html);

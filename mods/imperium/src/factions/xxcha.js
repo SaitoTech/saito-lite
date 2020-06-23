@@ -32,6 +32,7 @@
 
 	if (card == "diplomacy") {
 
+
 	  let pcs = imperium_self.returnPlayerPlanetCards(imperium_self.game.player);
 	  let sectors = [];
 	  let adjacent_sectors = [];
@@ -96,8 +97,10 @@
                 null
               );
             }
+            return 0;
           }
-          return 0;
+
+	  return 1;
 	}
       }
     });
