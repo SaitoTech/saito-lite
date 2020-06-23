@@ -7,27 +7,32 @@
 
         if (imperium_self.game.player == strategy_card_player) {
 
-          imperium_self.updateStatus('Select sector to quagmire in diplomatic negotiations: ');
-          imperium_self.playerSelectSector(function(sector) {
-            imperium_self.addMove("resolve\tstrategy");
-            imperium_self.addMove("strategy\t"+"diplomacy"+"\t"+strategy_card_player+"\t2");
-            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-            imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
-            for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-              imperium_self.addMove("activate\t"+(i+1)+"\t"+sector);
-            }
+	  let chosen = 0;
 
-            //
-            // re-activate any planets in that system
-            //
-            let sys = imperium_self.returnSectorAndPlanets(sector);
-            for (let i = 0; i < sys.p.length; i++) {
-              if (sys.p[i].owner == imperium_self.game.player) {
-                imperium_self.addMove("unexhaust\t"+imperium_self.game.player+"\t"+sector);
+          imperium_self.updateStatus('Select sector to quagmire in diplomatic negotiations, and refresh any planets in that system: ');
+          imperium_self.playerSelectSector(function(sector) {
+	    if (chosen == 0) {
+
+              imperium_self.addMove("resolve\tstrategy");
+              imperium_self.addMove("strategy\t"+"diplomacy"+"\t"+strategy_card_player+"\t2");
+              imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
+              for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+                imperium_self.addMove("activate\t"+(i+1)+"\t"+sector);
               }
-            }
-            imperium_self.saveSystemAndPlanets(sys);
-            imperium_self.endTurn();
+
+              //
+              // re-activate any planets in that system
+              //
+              let sys = imperium_self.returnSectorAndPlanets(sector);
+              for (let i = 0; i < sys.p.length; i++) {
+                if (sys.p[i].owner == imperium_self.game.player) {
+                  imperium_self.addMove("unexhaust\t"+imperium_self.game.player+"\t"+sector);
+                }
+              }
+              imperium_self.saveSystemAndPlanets(sys);
+              imperium_self.endTurn();
+	    }
           });
         }
       },

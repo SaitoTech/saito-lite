@@ -217,24 +217,26 @@
         let planet_idx   = parseInt(mv[3]); // planet to build on
         let unitname     = mv[4];
         let sector       = mv[5];
-  
+
+  	let sys = this.returnSectorAndPlanets(sector);
+ 
   	if (planet_idx != -1) {
           this.addPlanetaryUnit(player, sector, planet_idx, unitname);
-  	} else {
+	  this.updateLog(this.returnFaction(player) + " produces " + this.returnUnit(unitname).name + " on " + sys.p[planet_idx].name);  
+ 	} else {
           this.addSpaceUnit(player, sector, unitname);
+	  this.updateLog(this.returnFaction(player) + " produces " + this.returnUnit(unitname).name + " in " + sys.s.name);  
         }
   
   	//
   	// monitor fleet supply
   	//
-        console.log("Fleet Supply issues getting managed here....");
+        console.log("TODO - Fleet Supply check");
 
   	//
   	// update sector
   	//
   	this.updateSectorGraphics(sector);
-  
-  	let sys = this.returnSectorAndPlanets(sector);
   
   	this.game.queue.splice(qe, 1);
   	return 1;
@@ -632,6 +634,14 @@
 	this.game.state.voted_on_agenda[player-1][this.game.state.voting_on_agenda] = 1;
 	this.game.state.how_voted_on_agenda[player-1] = vote;
 
+        if (vote == "abstain") {
+          this.updateLog(this.returnFaction(player-1) + " abstains");
+	} else {
+          this.updateLog(this.returnFaction(player-1) + " spends " + votes + " on " + vote);
+        }
+
+
+
 	let votes_finished = 0;
 	for (let i = 0; i < this.game.players.length; i++) {
 	  if (this.game.state.voted_on_agenda[i][this.game.state.voted_on_agenda.length-1] != 0) { votes_finished++; }
@@ -706,11 +716,12 @@
 
 	if (this.game.player != who_is_next) {
 
-          let html  = '<p>The following agenda has advanced for consideration in the Galactic Senate:</p>';
-  	      html += '<b>' + laws[imperium_self.game.state.agendas[agenda_num]].name + '</b>';
-	      html += '<br />';
+          let html  = '<div class="agenda_instructions">The following agenda has advanced for consideration in the Galactic Senate:</div>';
+  	      html += '<div class="agenda_name">' + laws[imperium_self.game.state.agendas[agenda_num]].name + '</div>';
+	      html += '<div class="agenda_text">';
 	      html += laws[imperium_self.game.state.agendas[agenda_num]].text;
-	      html += '<p>Player '+who_is_next+' is now voting.</p>';
+	      html += '</div>';
+	      html += '<div class="agenda_status">'+this.returnFaction(who_is_next)+' is now voting.</div>';
 	  this.updateStatus(html);
 
 	} else {
@@ -728,11 +739,11 @@
 	  //
 	  // otherwise we let them vote
 	  //
-          let html  = '<p>The following agenda has advanced for consideration in the Galactic Senate:</p>';
-  	      html += '<b>' + laws[imperium_self.game.state.agendas[agenda_num]].name + '</b>';
-	      html += '<br />';
+          let html  = '<div class="agenda_instructions">The following agenda has advanced for consideration in the Galactic Senate:</div>';
+  	      html += '<div class="agenda_name">' + laws[imperium_self.game.state.agendas[agenda_num]].name + '</div>';
+	      html += '<div class="agenda_text">';
   	      html += laws[imperium_self.game.state.agendas[agenda_num]].text;
-	      html += '<p><ul>';
+	      html += '</div><ul>';
 	  for (let i = 0; i < this.game.state.choices.length; i++) {
               html += '<li class="option" id="'+i+'">'+this.game.state.choices[i]+'</li>';
 	  }
@@ -1157,9 +1168,24 @@
             }
           }
         }
-        let player_forces = this.returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx);
-console.log(player_forces + " landed on planet");
-  
+
+
+        if (this.game.queue.length > 1) {
+	  if (this.game.queue[this.game.queue.length-2].indexOf("land") != 0) {
+	    if (this.game.queue[this.game.queue.length-2].indexOf("land") != 0) {
+              let player_forces = this.returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx);
+	      this.updateLog(this.returnFaction(player) + " lands " + player_forces + " infantry on " + sys.p[parseInt(planet_idx)].name);  
+	    } else {
+	      let lmv = this.game.queue[this.game.queue.length-2].split("\t");
+	      let lplanet_idx = lmv[6];
+	      if (lplanet_idx != planet_idx) {
+                let player_forces = this.returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx);
+	        this.updateLog(this.returnFaction(player) + " lands " + player_forces + " infantry on " + sys.p[parseInt(planet_idx)].name);  
+	      }
+	    }
+	  }
+	}
+
         this.saveSystemAndPlanets(sys);
         this.updateSectorGraphics(sector);
         this.game.queue.splice(qe, 1);
@@ -1594,8 +1620,18 @@ console.log("P: " + JSON.stringify(planet));
   	  let sys = this.returnSectorAndPlanets(sector_from);
   	  let sys2 = this.returnSectorAndPlanets(sector_to);
 	  let obj = JSON.parse(shipjson);
-console.log(sector_to + " -- " + sector_from);
-	  this.updateLog(this.returnFaction(player) + " moves " + obj.name + " into " + sys2.s.name);
+	  let storage = "";
+	  let units_in_storage = this.returnUnitsInStorage(obj); 
+console.log("UNITS IN STORAGE: " + units_in_storage);
+          if (units_in_storage.length > 0 ) {
+	    storage += ' (';
+	    for (let i = 0; i < units_in_storage.length; i++) {
+	      if (i > 0) { storage += ", "; }
+	      storage += units_in_storage[i].name;
+	    }
+	    storage += '}';
+          }
+	  this.updateLog(this.returnFaction(player) + " moves " + obj.name + " into " + sys2.s.name + storage);
   	  this.removeSpaceUnitByJSON(player, sector_from, shipjson);
           this.addSpaceUnitByJSON(player, sector_to, shipjson);
   	}
@@ -3335,6 +3371,8 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
   	let player = parseInt(mv[1]);
   	let card = mv[2];
 	let z = this.returnEventObjects();
+
+	this.updateLog(this.returnFaction(player) + " plays " + this.action_cards[card].name + "<p></p>" + this.action_cards[card].text);
 
 	let cards = this.returnActionCards();
 	let played_card = cards[card];

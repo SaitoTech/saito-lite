@@ -1492,27 +1492,32 @@ console.log("P: " + planet);
 
         if (imperium_self.game.player == strategy_card_player) {
 
-          imperium_self.updateStatus('Select sector to quagmire in diplomatic negotiations: ');
-          imperium_self.playerSelectSector(function(sector) {
-            imperium_self.addMove("resolve\tstrategy");
-            imperium_self.addMove("strategy\t"+"diplomacy"+"\t"+strategy_card_player+"\t2");
-            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-            imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
-            for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-              imperium_self.addMove("activate\t"+(i+1)+"\t"+sector);
-            }
+	  let chosen = 0;
 
-            //
-            // re-activate any planets in that system
-            //
-            let sys = imperium_self.returnSectorAndPlanets(sector);
-            for (let i = 0; i < sys.p.length; i++) {
-              if (sys.p[i].owner == imperium_self.game.player) {
-                imperium_self.addMove("unexhaust\t"+imperium_self.game.player+"\t"+sector);
+          imperium_self.updateStatus('Select sector to quagmire in diplomatic negotiations, and refresh any planets in that system: ');
+          imperium_self.playerSelectSector(function(sector) {
+	    if (chosen == 0) {
+
+              imperium_self.addMove("resolve\tstrategy");
+              imperium_self.addMove("strategy\t"+"diplomacy"+"\t"+strategy_card_player+"\t2");
+              imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
+              for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+                imperium_self.addMove("activate\t"+(i+1)+"\t"+sector);
               }
-            }
-            imperium_self.saveSystemAndPlanets(sys);
-            imperium_self.endTurn();
+
+              //
+              // re-activate any planets in that system
+              //
+              let sys = imperium_self.returnSectorAndPlanets(sector);
+              for (let i = 0; i < sys.p.length; i++) {
+                if (sys.p[i].owner == imperium_self.game.player) {
+                  imperium_self.addMove("unexhaust\t"+imperium_self.game.player+"\t"+sector);
+                }
+              }
+              imperium_self.saveSystemAndPlanets(sys);
+              imperium_self.endTurn();
+	    }
           });
         }
       },
@@ -5208,11 +5213,12 @@ alert("select sector with filter");
   }  
 
 
-  resetSpaceUnitTemporaryModifiers(sector) {
-
-  }
-  resetGroundnitTemporaryModifiers(sector) {
-
+  returnUnitsInStorage(unit) {
+    let array_of_stored_units = [];
+    for (let i = 0; i < unit.storage.length; i++) {
+      array_of_stored_units.push(unit.storage[i]);
+    }
+    return array_of_stored_units;
   }
 
   
@@ -5990,24 +5996,26 @@ alert("select sector with filter");
         let planet_idx   = parseInt(mv[3]); // planet to build on
         let unitname     = mv[4];
         let sector       = mv[5];
-  
+
+  	let sys = this.returnSectorAndPlanets(sector);
+ 
   	if (planet_idx != -1) {
           this.addPlanetaryUnit(player, sector, planet_idx, unitname);
-  	} else {
+	  this.updateLog(this.returnFaction(player) + " produces " + this.returnUnit(unitname).name + " on " + sys.p[planet_idx].name);  
+ 	} else {
           this.addSpaceUnit(player, sector, unitname);
+	  this.updateLog(this.returnFaction(player) + " produces " + this.returnUnit(unitname).name + " in " + sys.s.name);  
         }
   
   	//
   	// monitor fleet supply
   	//
-        console.log("Fleet Supply issues getting managed here....");
+        console.log("TODO - Fleet Supply check");
 
   	//
   	// update sector
   	//
   	this.updateSectorGraphics(sector);
-  
-  	let sys = this.returnSectorAndPlanets(sector);
   
   	this.game.queue.splice(qe, 1);
   	return 1;
@@ -6405,6 +6413,14 @@ alert("select sector with filter");
 	this.game.state.voted_on_agenda[player-1][this.game.state.voting_on_agenda] = 1;
 	this.game.state.how_voted_on_agenda[player-1] = vote;
 
+        if (vote == "abstain") {
+          this.updateLog(this.returnFaction(player-1) + " abstains");
+	} else {
+          this.updateLog(this.returnFaction(player-1) + " spends " + votes + " on " + vote);
+        }
+
+
+
 	let votes_finished = 0;
 	for (let i = 0; i < this.game.players.length; i++) {
 	  if (this.game.state.voted_on_agenda[i][this.game.state.voted_on_agenda.length-1] != 0) { votes_finished++; }
@@ -6479,11 +6495,12 @@ alert("select sector with filter");
 
 	if (this.game.player != who_is_next) {
 
-          let html  = '<p>The following agenda has advanced for consideration in the Galactic Senate:</p>';
-  	      html += '<b>' + laws[imperium_self.game.state.agendas[agenda_num]].name + '</b>';
-	      html += '<br />';
+          let html  = '<div class="agenda_instructions">The following agenda has advanced for consideration in the Galactic Senate:</div>';
+  	      html += '<div class="agenda_name">' + laws[imperium_self.game.state.agendas[agenda_num]].name + '</div>';
+	      html += '<div class="agenda_text">';
 	      html += laws[imperium_self.game.state.agendas[agenda_num]].text;
-	      html += '<p>Player '+who_is_next+' is now voting.</p>';
+	      html += '</div>';
+	      html += '<div class="agenda_status">'+this.returnFaction(who_is_next)+' is now voting.</div>';
 	  this.updateStatus(html);
 
 	} else {
@@ -6501,11 +6518,11 @@ alert("select sector with filter");
 	  //
 	  // otherwise we let them vote
 	  //
-          let html  = '<p>The following agenda has advanced for consideration in the Galactic Senate:</p>';
-  	      html += '<b>' + laws[imperium_self.game.state.agendas[agenda_num]].name + '</b>';
-	      html += '<br />';
+          let html  = '<div class="agenda_instructions">The following agenda has advanced for consideration in the Galactic Senate:</div>';
+  	      html += '<div class="agenda_name">' + laws[imperium_self.game.state.agendas[agenda_num]].name + '</div>';
+	      html += '<div class="agenda_text">';
   	      html += laws[imperium_self.game.state.agendas[agenda_num]].text;
-	      html += '<p><ul>';
+	      html += '</div><ul>';
 	  for (let i = 0; i < this.game.state.choices.length; i++) {
               html += '<li class="option" id="'+i+'">'+this.game.state.choices[i]+'</li>';
 	  }
@@ -6930,9 +6947,24 @@ alert("select sector with filter");
             }
           }
         }
-        let player_forces = this.returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx);
-console.log(player_forces + " landed on planet");
-  
+
+
+        if (this.game.queue.length > 1) {
+	  if (this.game.queue[this.game.queue.length-2].indexOf("land") != 0) {
+	    if (this.game.queue[this.game.queue.length-2].indexOf("land") != 0) {
+              let player_forces = this.returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx);
+	      this.updateLog(this.returnFaction(player) + " lands " + player_forces + " infantry on " + sys.p[parseInt(planet_idx)].name);  
+	    } else {
+	      let lmv = this.game.queue[this.game.queue.length-2].split("\t");
+	      let lplanet_idx = lmv[6];
+	      if (lplanet_idx != planet_idx) {
+                let player_forces = this.returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx);
+	        this.updateLog(this.returnFaction(player) + " lands " + player_forces + " infantry on " + sys.p[parseInt(planet_idx)].name);  
+	      }
+	    }
+	  }
+	}
+
         this.saveSystemAndPlanets(sys);
         this.updateSectorGraphics(sector);
         this.game.queue.splice(qe, 1);
@@ -7367,8 +7399,18 @@ console.log("P: " + JSON.stringify(planet));
   	  let sys = this.returnSectorAndPlanets(sector_from);
   	  let sys2 = this.returnSectorAndPlanets(sector_to);
 	  let obj = JSON.parse(shipjson);
-console.log(sector_to + " -- " + sector_from);
-	  this.updateLog(this.returnFaction(player) + " moves " + obj.name + " into " + sys2.s.name);
+	  let storage = "";
+	  let units_in_storage = this.returnUnitsInStorage(obj); 
+console.log("UNITS IN STORAGE: " + units_in_storage);
+          if (units_in_storage.length > 0 ) {
+	    storage += ' (';
+	    for (let i = 0; i < units_in_storage.length; i++) {
+	      if (i > 0) { storage += ", "; }
+	      storage += units_in_storage[i].name;
+	    }
+	    storage += '}';
+          }
+	  this.updateLog(this.returnFaction(player) + " moves " + obj.name + " into " + sys2.s.name + storage);
   	  this.removeSpaceUnitByJSON(player, sector_from, shipjson);
           this.addSpaceUnitByJSON(player, sector_to, shipjson);
   	}
@@ -9109,6 +9151,8 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
   	let card = mv[2];
 	let z = this.returnEventObjects();
 
+	this.updateLog(this.returnFaction(player) + " plays " + this.action_cards[card].name + "<p></p>" + this.action_cards[card].text);
+
 	let cards = this.returnActionCards();
 	let played_card = cards[card];
 
@@ -9331,6 +9375,7 @@ console.log("HERE: " + z[i].name);
     this.game.confirms_received = 0;
     this.game.confirms_players  = [];
   }
+
 
 
 
@@ -10795,10 +10840,8 @@ console.log(" ... and done");
       $(divtotal).html(x);
   
   
-      let resourcetxt = " resources";
-      total_cost = 3 * (command_tokens + strategy_tokens);
-      if (total_cost == 1) { resourcetxt = " resource"; }
-      $('.buildcost_total').html(total_cost + resourcetxt);
+      total_cost = 3 * (command_tokens + strategy_tokens + fleet_supply);
+      $('.buildcost_total').html(total_cost);
   
     });
   
@@ -11107,14 +11150,14 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
     if (production_limit != 0) { html += '('+production_limit+' units max)'; }
     if (cost_limit != 0) { html += '('+cost_limit+' cost max)'; }
     html += '</div><ul>';
-    html += '<li class="buildchoice" id="infantry">Infantry (<span class="infantry_total">0</span>)</li>';
-    html += '<li class="buildchoice" id="fighter">Fighter (<span class="fighter_total">0</span>)</li>';
-    html += '<li class="buildchoice" id="destroyer">Destroyer (<span class="destroyer_total">0</span>)</li>';
-    html += '<li class="buildchoice" id="carrier">Carrier (<span class="carrier_total">0</span>)</li>';
-    html += '<li class="buildchoice" id="cruiser">Cruiser (<span class="cruiser_total">0</span>)</li>';
-    html += '<li class="buildchoice" id="dreadnaught">Dreadnaught (<span class="dreadnaught_total">0</span>)</li>';
-    html += '<li class="buildchoice" id="flagship">Flagship (<span class="flagship_total">0</span>)</li>';
-    html += '<li class="buildchoice" id="warsun">War Sun (<span class="warsun_total">0</span>)</li>';
+    html += '<li class="buildchoice" id="infantry">Infantry - <span class="infantry_total">0</span></li>';
+    html += '<li class="buildchoice" id="fighter">Fighter - <span class="fighter_total">0</span></li>';
+    html += '<li class="buildchoice" id="destroyer">Destroyer - <span class="destroyer_total">0</span></li>';
+    html += '<li class="buildchoice" id="carrier">Carrier - <span class="carrier_total">0</span></li>';
+    html += '<li class="buildchoice" id="cruiser">Cruiser - <span class="cruiser_total">0</span></li>';
+    html += '<li class="buildchoice" id="dreadnaught">Dreadnaught - <span class="dreadnaught_total">0</span></li>';
+    html += '<li class="buildchoice" id="flagship">Flagship - <span class="flagship_total">0</span></li>';
+    html += '<li class="buildchoice" id="warsun">War Sun - <span class="warsun_total">0</span></li>';
     html += '</ul>';
     html += '</p>';
     html += '<div id="buildcost" class="buildcost"><span class="buildcost_total">0 resources</span></div>';
@@ -11518,26 +11561,20 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
  
       let action2 = $(this).attr("id");
       let tmpx = action2.split("_");
-alert("TTG 1: " + total_trade_goods);
   
       let divid = "#"+action2;
-alert("TTG 2: " + total_trade_goods);
       let y = tmpx[1];
-alert("TTG 3: " + total_trade_goods);
       let idx = 0;
-alert("TTG 4: " + total_trade_goods);
       for (let i = 0; i < array_of_cards.length; i++) {
         if (array_of_cards[i] === y) {
           idx = i;
         }
       }
 
-alert("TTG 5: " + total_trade_goods);
       //
       // handle spending trade goods
       //
       if (action2 == "trade_goods") {
-alert("TTG: 6" + total_trade_goods);
 	if (total_trade_goods > 0) { 
           imperium_self.addMove("expend\t"+imperium_self.game.player+"\tgoods\t1");
 	  total_trade_goods--;
@@ -11690,8 +11727,8 @@ alert("TTG: 6" + total_trade_goods);
   
     this.updateStatus(html);
     $('.textchoice').off();
-    $('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showStrategyCard(s); } });
-    $('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideStrategyCard(s); } });
+    //$('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showStrategyCard(s); } });
+    //$('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideStrategyCard(s); } });
     $('.textchoice').on('click', function() {
       let action2 = $(this).attr("id");
       imperium_self.hideStrategyCard(action2);
@@ -12355,7 +12392,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
   	      }
             }
           }
-          html += '<li class="invadechoice textchoice option" id="invasion_planet_'+i+'">'+sys.p[i].name+' (<span class="planet_'+i+'_infantry">'+forces_on_planets[i]+'</span>)</li>';
+          html += '<li class="invadechoice textchoice option" id="invasion_planet_'+i+'">'+sys.p[i].name+' - <span class="planet_'+i+'_infantry">'+forces_on_planets[i]+'</span></li>';
         }
       }
       populated_planet_forces = 1;
@@ -13402,6 +13439,9 @@ console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
     }
     if (obj.gainTechnology == null) {
       obj.gainTechnology = function(imperium_self, gainer, tech) { return 1; }
+    }
+    if (obj.gainFleetSupply == null) {
+      obj.gainFleetSupply = function(imperium_self, gainer, amount) { return amount; }
     }
     if (obj.gainTradeGoods == null) {
       obj.gainTradeGoods = function(imperium_self, gainer, amount) { return amount; }

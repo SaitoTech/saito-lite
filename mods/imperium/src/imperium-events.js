@@ -73,6 +73,9 @@
     if (obj.gainTechnology == null) {
       obj.gainTechnology = function(imperium_self, gainer, tech) { return 1; }
     }
+    if (obj.gainFleetSupply == null) {
+      obj.gainFleetSupply = function(imperium_self, gainer, amount) { return amount; }
+    }
     if (obj.gainTradeGoods == null) {
       obj.gainTradeGoods = function(imperium_self, gainer, amount) { return amount; }
     }

@@ -1460,8 +1460,10 @@ console.log(" ... and done");
       $(divtotal).html(x);
   
   
-      total_cost = 3 * (command_tokens + strategy_tokens + fleet_supply);
-      $('.buildcost_total').html(total_cost);
+      let resourcetxt = " resources";
+      total_cost = 3 * (command_tokens + strategy_tokens);
+      if (total_cost == 1) { resourcetxt = " resource"; }
+      $('.buildcost_total').html(total_cost + resourcetxt);
   
     });
   

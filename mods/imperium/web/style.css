@@ -127,6 +127,7 @@ body {
 
 .game_background {
   background-image: url(img/spacebg.png);
+  background-image: url(img/spaceb2.jpg);
   position: absolute;
   top: -50%;
   left: -50%;
@@ -256,16 +257,53 @@ body {
   z-index: 10;
 }
 
+
+.agenda_instructions {
+  font-family: 'orbitron-light', helvetica;
+  font-size: 0.9em;
+  margin-top: 15px;
+  line-height: 1.5em;
+}
+.agenda_name {
+  margin-top:20px;
+  margin-bottom:15px;
+  width:80%;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'orbitron-medium', helvetica;
+  font-weight: bold;
+  line-height: 1.5em;
+}
+.agenda_text {
+  margin-bottom:20px;
+  width:80%;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'orbitron-light', helvetica;
+  line-height: 1.6em;
+  font-size:0.9em;
+}
+.agenda_status {
+  font-family: 'orbitron-light', helvetica;
+  font-size: 0.9em;
+  margin-top:10px;
+}
+
+
+
 .action_card_content {
   margin: 1.1vw 0 0 0;
   height: 11vw;
   text-align: left;
+  line-height: 1.6em;
+  padding-top: 10px;
 }
 
 .action_card_name {
   font-family: 'bank-gothic';
   white-space: nowrap;
   margin: 0.2vw 0 0 0;
+  font-weight: bold;
 }
 
 .faction_sheet_planet_card {

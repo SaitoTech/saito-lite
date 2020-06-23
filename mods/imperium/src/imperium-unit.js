@@ -35,11 +35,12 @@
   }  
 
 
-  resetSpaceUnitTemporaryModifiers(sector) {
-
-  }
-  resetGroundnitTemporaryModifiers(sector) {
-
+  returnUnitsInStorage(unit) {
+    let array_of_stored_units = [];
+    for (let i = 0; i < unit.storage.length; i++) {
+      array_of_stored_units.push(unit.storage[i]);
+    }
+    return array_of_stored_units;
   }
 
   
