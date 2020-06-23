@@ -182,10 +182,9 @@ body {
 }
 
 .faction_sheet_unit_box {
-  display: grid;
-  grid-gap: 5px 1em;
-  grid-template-columns: auto auto auto auto auto;
+  display: flex;
   margin-bottom: 2vh;
+  flex-wrap: wrap;
 }
 
 .faction_sheet_token_box {
@@ -211,7 +210,7 @@ body {
 .faction_sheet_active {
   overflow-y: auto;
   height: calc(80vh - 24em);
-  scroll-behavior: smooth; 
+  scroll-behavior: smooth;
 }
 
 .faction_sheet_token_box div {
@@ -247,10 +246,10 @@ body {
   margin-bottom: -15vw;
   border: 1px solid;
 }
+
 .faction_sheet_action_card_back {
   background-image: url(img/action_card_back.jpg);
 }
-
 
 .faction_sheet_action_card:hover, .faction_sheet_planet_card:hover, .faction_sheet_tech_card:hover {
   transform: scale(1.33) translate(1vw, 1vw);
@@ -382,6 +381,46 @@ body {
   font-size: 1.3em;
   line-height: 1.5em;
   margin-bottom: 50vh;
+}
+
+.unit-display-tile {
+  height: 8vw;
+  width: 16vw;
+  position: relative;
+  margin: 1em;
+  
+}
+
+.unit-display {
+  position: absolute;
+  display: grid;
+  grid-template-columns: auto auto;
+  height: 100%;
+  width: 100%;
+}
+
+.unit-image {
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+}
+
+.unit-display div {
+  text-align: center;
+  line-height: 4vh;
+  z-index: 1;
+}
+
+.unit-name {
+  text-align: center;
+  font-size: 1.5em;
+  line-height: 7.5vh;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+  background: linear-gradient(150deg, #000B, #0004);
 }
 
 #interface_overlay {
@@ -592,7 +631,7 @@ body {
 }
 
 .VP-track-label {
-  font-size: 1.5em;
+  font-size: 1.35em;
   color: #fff;
   text-align: left;
 }
@@ -1239,10 +1278,7 @@ input[type=range]::-moz-range-thumb {
 input[type=range] {
   border: 1px solid var(--my-color);
 }
-<<<<<<< HEAD
-=======
 
 .white-stroke {
   -webkit-text-stroke: 1px #fff;
 }
->>>>>>> 04026ac1... faction sheet updates, nav, lore units neatened.
