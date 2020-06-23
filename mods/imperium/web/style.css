@@ -486,6 +486,7 @@ body {
   color: #fff;
   border-color: #555;
   font-family: 'orbitron-medium', 'bank-gothic', arial, helvetica, sans-serif;
+  line-height: 1.3em;
 }
 
 .hud-menu {
@@ -541,7 +542,7 @@ body {
 .status {
   display: block;
   text-align: center;
-  padding-top: 5px;
+  padding-top: 9px;
   border: none;
   overflow-y: auto;
 }

@@ -11,6 +11,7 @@
 
           imperium_self.updateStatus('Select sector to quagmire in diplomatic negotiations, and refresh any planets in that system: ');
           imperium_self.playerSelectSector(function(sector) {
+
 	    if (chosen == 0) {
 
               imperium_self.addMove("resolve\tstrategy");
@@ -25,16 +26,20 @@
               // re-activate any planets in that system
               //
               let sys = imperium_self.returnSectorAndPlanets(sector);
-              for (let i = 0; i < sys.p.length; i++) {
-                if (sys.p[i].owner == imperium_self.game.player) {
-                  imperium_self.addMove("unexhaust\t"+imperium_self.game.player+"\t"+sector);
+	      if (sys.p) {
+                for (let i = 0; i < sys.p.length; i++) {
+                  if (sys.p[i].owner == imperium_self.game.player) {
+                    imperium_self.addMove("unexhaust\t"+imperium_self.game.player+"\t"+sector);
+                  }
                 }
-              }
+	      }
               imperium_self.saveSystemAndPlanets(sys);
               imperium_self.endTurn();
 	    }
           });
         }
+	return 0;
+
       },
 
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {

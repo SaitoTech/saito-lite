@@ -1248,7 +1248,7 @@ console.log("P: " + planet);
 	  // get all planets adjacent to...
 	  //
 	  for (let i = 0; i < sectors.length; i++) {
-	    let as = returnAdjacentSectors(sectors[i]);
+	    let as = imperium_self.returnAdjacentSectors(sectors[i]);
 	    for (let z = 0; z < as.length; z++) {
 	      if (!adjacent_sectors.includes(as[z])) { adjacent_sectors.push(as[z]); }
 	    }
@@ -1496,6 +1496,7 @@ console.log("P: " + planet);
 
           imperium_self.updateStatus('Select sector to quagmire in diplomatic negotiations, and refresh any planets in that system: ');
           imperium_self.playerSelectSector(function(sector) {
+
 	    if (chosen == 0) {
 
               imperium_self.addMove("resolve\tstrategy");
@@ -1520,6 +1521,8 @@ console.log("P: " + planet);
 	    }
           });
         }
+	return 0;
+
       },
 
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
@@ -14355,6 +14358,8 @@ console.log("PLANET IS: " + JSON.stringify(sys.p[planet_idx]));
       if (s[i].tile == sector1) { tile1 = i; }
       if (s[i].tile == sector2) { tile2 = i; }
     }
+
+    if (tile1 === "" || tile2 === "") { return 0; }
 
     if (s[tile1].neighbours.includes(tile2)) { return 1; }
     if (s[tile2].neighbours.includes(tile1)) { return 1; }

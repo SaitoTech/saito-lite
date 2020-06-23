@@ -46,7 +46,7 @@
 	  // get all planets adjacent to...
 	  //
 	  for (let i = 0; i < sectors.length; i++) {
-	    let as = returnAdjacentSectors(sectors[i]);
+	    let as = imperium_self.returnAdjacentSectors(sectors[i]);
 	    for (let z = 0; z < as.length; z++) {
 	      if (!adjacent_sectors.includes(as[z])) { adjacent_sectors.push(as[z]); }
 	    }
@@ -57,11 +57,13 @@
 	  //
 	  for (let b = 0; b < adjacent_sectors.length; b++) {
 	    let sys = imperium_self.returnSectorAndPlanets(adjacent_sectors[b]);
-	    for (let y = 0; y < sys.p.length; y++) {
-	      let planet_uncontrolled = 0;
-	      if (sys.p[y].owner != imperium_self.game.player) {
-		if (!imperium_self.doesPlanetHaveUnits(sys.p[y])) {
-		  available_planets.push(sys.p[y].planet);
+	    if (sys.p) {
+	      for (let y = 0; y < sys.p.length; y++) {
+	        let planet_uncontrolled = 0;
+	        if (sys.p[y].owner != imperium_self.game.player) {
+		  if (!imperium_self.doesPlanetHaveUnits(sys.p[y])) {
+	  	    available_planets.push(sys.p[y].planet);
+	          }
 	        }
 	      }
 	    }

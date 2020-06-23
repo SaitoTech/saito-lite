@@ -611,6 +611,8 @@ console.log("PLANET IS: " + JSON.stringify(sys.p[planet_idx]));
       if (s[i].tile == sector2) { tile2 = i; }
     }
 
+    if (tile1 === "" || tile2 === "") { return 0; }
+
     if (s[tile1].neighbours.includes(tile2)) { return 1; }
     if (s[tile2].neighbours.includes(tile1)) { return 1; }
 
