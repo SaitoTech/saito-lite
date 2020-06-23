@@ -339,27 +339,51 @@ returnFactionSheet(imperium_self, player) {
      `;
      
      //var unit_array = Object.entries(imperium_self.units);
+     var unit_array = [];
+     console.log(imperium_self.units);
      Object.entries(imperium_self.units).forEach(item => {
        let unit = item[1];
        if(unit.extension == 1) {
        } else {
-        html += `
-
-        <div class="unit-display-tile _${unit.type}">
-      <div class="unit-name">${unit.name}</div>
-        <div class="unit-image player_color_${player}" style="background-image: url(img/units/${item[0]}.png);"></div>
-        <div class="unit-display">
-          <div class="cost">Cost: ${unit.cost}</div>
-          <div class="combat">Combat: ${unit.combat}</div>
-          <div class="movement">Move: ${unit.move}</div>
-          <div class="capacity">Carry: ${unit.capacity}</div>
-        </div>
-    </div>
-       
-        `;
-       }  //todo Add Extended Units
+         unit_array.push([item[0],{
+           type: unit.type,
+           name: unit.name,
+           cost: unit.cost,
+           combat: unit.combat, 
+           move: unit.move,
+           capacity: unit.capacity
+         }]);
+       }  
      });
+     Object.entries(imperium_self.units).forEach(item => {
+      let unit = item[1];
+      if(unit.extension == 1) {
+        for(i=0; i < unit_array.length; i++){
+          console.log("---"+unit_array[i][0]+"---"+item[0]+"---");
+           if(unit_array[i][1].type == unit.type){
+             unit_array[i][1].cost += " (" + unit.cost +")";
+             unit_array[i][1].combat += " (" + unit.combat +")";
+             unit_array[i][1].move += " (" + unit.move +")";
+             unit_array[i][1].capacity += " (" + unit.capacity +")";
+           }
+         };
+      }
+    });
+    unit_array.forEach((u) =>{
+     html += `
 
+     <div class="unit-display-tile _${u[1].type}">
+   <div class="unit-name">${u[1].name}</div>
+     <div class="unit-image player_color_${player}" style="background-image: url(img/units/${u[0]}.png);"></div>
+     <div class="unit-display">
+       <div class="cost">Cost: ${u[1].cost}</div>
+       <div class="combat">Combat: ${u[1].combat}</div>
+       <div class="movement">Move: ${u[1].move}</div>
+       <div class="capacity">Carry: ${u[1].capacity}</div>
+     </div>
+ </div>
+     `;
+    });
 
     html += `
     </div>

@@ -22,6 +22,11 @@
   font-style: normal;
 }
 
+/* restore when lore added */
+.faction_sheet_lore, .lore.anchor, .show_lore {
+  display: none;
+}
+
 #confirm {
   padding-top: 8px;
   padding-bottom: 8px;
@@ -128,12 +133,13 @@ body {
 .game_background {
   background-image: url(img/spacebg.png);
   background-image: url(img/spaceb2.jpg);
+  background-size: cover;
   position: absolute;
   top: -50%;
   left: -50%;
   height: 200vh;
   width: 200vw;
-  filter: blur(1px);
+  filter: blur(1px) grayscale(0.2);
   /*animation: spin 1440s linear infinite;*/
   z-index: -999;
 }
@@ -584,6 +590,15 @@ body {
   padding-top: 9px;
   border: none;
   overflow-y: auto;
+  background-color: transparent;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 10px;
+  background-color: transparent;
 }
 
 .cardbox {
@@ -1266,6 +1281,8 @@ body {
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
   background-color: var(--my-color);
+  background-color: var(--my-color) ;
+  border: var(--my-color);
 }
 
 /* All the same stuff for Firefox */
@@ -1277,6 +1294,11 @@ input[type=range]::-moz-range-thumb {
 
 input[type=range] {
   border: 1px solid var(--my-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--my-color) ;
+  border: var(--my-color);
 }
 
 .white-stroke {
