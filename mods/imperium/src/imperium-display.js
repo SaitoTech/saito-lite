@@ -330,13 +330,12 @@ returnFactionSheet(imperium_self, player) {
 
      
       <h3 class="units anchor">Units</h3>
+
+       
+
+
       <div class="faction_sheet_unit_box" id="faction_sheet_unit_box">
-      <div>Unit </div>
-      <div>Cost </div>
-      <div>Combat </div>
-      <div>Movement </div>
-      <div>Capacity </div>
-     
+          
      `;
      
      //var unit_array = Object.entries(imperium_self.units);
@@ -345,11 +344,18 @@ returnFactionSheet(imperium_self, player) {
        if(unit.extension == 1) {
        } else {
         html += `
-        <div>${unit.name} </div>
-        <div>${unit.cost} </div>
-        <div>${unit.combat} </div>
-        <div>${unit.move} </div>
-        <div>${unit.capacity} </div>
+
+        <div class="unit-display-tile _${unit.type}">
+      <div class="unit-name">${unit.name}</div>
+        <div class="unit-image player_color_${player}" style="background-image: url(img/units/${item[0]}.png);"></div>
+        <div class="unit-display">
+          <div class="cost">Cost: ${unit.cost}</div>
+          <div class="combat">Combat: ${unit.combat}</div>
+          <div class="movement">Move: ${unit.move}</div>
+          <div class="capacity">Carry: ${unit.capacity}</div>
+        </div>
+    </div>
+       
         `;
        }  //todo Add Extended Units
      });
