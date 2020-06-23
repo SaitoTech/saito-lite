@@ -1239,9 +1239,12 @@ console.log("P: " + planet);
 	  let adjacent_sectors = [];
 	  let seizable_planets = [];
 
+
 	  for (let i = 0; i < pcs.length; i++) {
-	    sectors.push(pcs[i]);
-	    adjacent_sectors.push(pcs[i]);
+	    if (!sectors.includes(imperium_self.game.planets[pcs[i]].sector)) {
+	      sectors.push(imperium_self.game.planets[pcs[i]].sector);
+	      adjacent_sectors.push(imperium_self.game.planets[pcs[i]].sector);
+	    }
 	  }
 
 	  //
@@ -1259,11 +1262,15 @@ console.log("P: " + planet);
 	  //
 	  for (let b = 0; b < adjacent_sectors.length; b++) {
 	    let sys = imperium_self.returnSectorAndPlanets(adjacent_sectors[b]);
-	    for (let y = 0; y < sys.p.length; y++) {
-	      let planet_uncontrolled = 0;
-	      if (sys.p[y].owner != imperium_self.game.player) {
-		if (!imperium_self.doesPlanetHaveUnits(sys.p[y])) {
-		  available_planets.push(sys.p[y].planet);
+	    if (sys.p) {
+	      for (let y = 0; y < sys.p.length; y++) {
+	        let planet_uncontrolled = 0;
+console.log("CHECKING PLANET: " + sys.p[y].name);
+	        if (sys.p[y].owner != player) {
+		  if (!imperium_self.doesPlanetHaveUnits(sys.p[y])) {
+console.log("candidate 2: " + sys.p[y].name);
+	  	    seizable_planets.push(sys.p[y].planet);
+	          }
 	        }
 	      }
 	    }
@@ -1272,17 +1279,15 @@ console.log("P: " + planet);
 	  //
 	  //
 	  //
-	  if (available_planets.length < 0) { 
+	  if (seizable_planets.length < 0) { 
 	    return 1;
 	  }
 
-	  if (imperium_self.game.players_info[imperium_self.game.player].peace_accords == 1) {
-	   
-	    if (player == imperium_self.game.player) {
+	  if (imperium_self.game.players_info[player-1].peace_accords == 1) {
+	    if (imperium_self.game.player == player) {
 	      alert("Peace Accords can trigger...");
 	      imperium_self.endTurn(); 
 	    }
-
 	  }
 
 	  return 0;
@@ -1511,11 +1516,13 @@ console.log("P: " + planet);
               // re-activate any planets in that system
               //
               let sys = imperium_self.returnSectorAndPlanets(sector);
-              for (let i = 0; i < sys.p.length; i++) {
-                if (sys.p[i].owner == imperium_self.game.player) {
-                  imperium_self.addMove("unexhaust\t"+imperium_self.game.player+"\t"+sector);
+	      if (sys.p) {
+                for (let i = 0; i < sys.p.length; i++) {
+                  if (sys.p[i].owner == imperium_self.game.player) {
+                    imperium_self.addMove("unexhaust\t"+imperium_self.game.player+"\t"+sector);
+                  }
                 }
-              }
+	      }
               imperium_self.saveSystemAndPlanets(sys);
               imperium_self.endTurn();
 	    }
@@ -12876,7 +12883,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 
 
 
-  
+ 
   ////////////////////
   // Return Planets //
   ////////////////////
@@ -14338,6 +14345,7 @@ console.log("PLANET IS: " + JSON.stringify(sys.p[planet_idx]));
     let s = this.addWormholesToBoardTiles(this.returnBoardTiles());  
     for (let i in s) {
       if (this.areSectorsAdjacent(sector, s[i].tile) && s[i].tile != sector) {
+console.log("PUSHING TILE: " + s[i].tile);
         adjasec.push(s[i].tile);
       }
     }

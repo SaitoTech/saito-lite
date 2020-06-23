@@ -590,6 +590,7 @@ console.log("PLANET IS: " + JSON.stringify(sys.p[planet_idx]));
     let s = this.addWormholesToBoardTiles(this.returnBoardTiles());  
     for (let i in s) {
       if (this.areSectorsAdjacent(sector, s[i].tile) && s[i].tile != sector) {
+console.log("PUSHING TILE: " + s[i].tile);
         adjasec.push(s[i].tile);
       }
     }
