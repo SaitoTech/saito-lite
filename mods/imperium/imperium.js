@@ -1265,10 +1265,8 @@ console.log("P: " + planet);
 	    if (sys.p) {
 	      for (let y = 0; y < sys.p.length; y++) {
 	        let planet_uncontrolled = 0;
-console.log("CHECKING PLANET: " + sys.p[y].name);
 	        if (sys.p[y].owner != player) {
 		  if (!imperium_self.doesPlanetHaveUnits(sys.p[y])) {
-console.log("candidate 2: " + sys.p[y].name);
 	  	    seizable_planets.push(sys.p[y].planet);
 	          }
 	        }
@@ -1285,12 +1283,23 @@ console.log("candidate 2: " + sys.p[y].name);
 
 	  if (imperium_self.game.players_info[player-1].peace_accords == 1) {
 	    if (imperium_self.game.player == player) {
-	      alert("Peace Accords can trigger...");
-	      imperium_self.endTurn(); 
-	    }
-	  }
 
-	  return 0;
+              imperium_self.playerSelectPlanetWithFilter(
+                "Select a planet to annex via Peace Accords: " ,
+                function(planet) {
+	  	  if (seizable_planets.includes(planet)) { return 1; } return 0;
+                },
+                function(planet) {
+                  imperium_self.addMove("annex\t"+imperium_self.game.player+"\t"+imperium_self.game.planets[planet].sector+"\t"+imperium_self.game.planets[planet].idx);
+                  imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " annexes " + imperium_self.game.planets[planet].name + " via Peace Accords");
+	    	  imperium_self.endTurn();
+                  return 0;
+                },
+                null
+              );
+            }
+          }
+          return 0;
 	}
       }
     });
@@ -2906,6 +2915,70 @@ console.log("TECH: " + techlist[i]);
   
 
 
+
+  this.importAgendaCard('papers-please-1', {
+  	name : "Papers Please 1" ,
+  	type : "Law" ,
+  	text : "Players must have papers" ,
+        returnAgendaOptions : function(imperium_self) { return ['support','oppose']; },
+        onPass : function(imperium_self, winning_choice) {
+	  return 1;
+	},
+  });
+  this.importAgendaCard('papers-please-2', {
+  	name : "Papers Please 2" ,
+  	type : "Law" ,
+  	text : "Players must have papers" ,
+        returnAgendaOptions : function(imperium_self) { return ['support','oppose']; },
+        onPass : function(imperium_self, winning_choice) {
+	  return 1;
+	},
+  });
+  this.importAgendaCard('papers-please-3', {
+  	name : "Papers Please 3" ,
+  	type : "Law" ,
+  	text : "Players must have papers" ,
+        returnAgendaOptions : function(imperium_self) { return ['support','oppose']; },
+        onPass : function(imperium_self, winning_choice) {
+	  return 1;
+	},
+  });
+  this.importAgendaCard('papers-please-4', {
+  	name : "Papers Please 4" ,
+  	type : "Law" ,
+  	text : "Players must have papers" ,
+        returnAgendaOptions : function(imperium_self) { return ['support','oppose']; },
+        onPass : function(imperium_self, winning_choice) {
+	  return 1;
+	},
+  });
+  this.importAgendaCard('papers-please-5', {
+  	name : "Papers Please 5" ,
+  	type : "Law" ,
+  	text : "Players must have papers" ,
+        returnAgendaOptions : function(imperium_self) { return ['support','oppose']; },
+        onPass : function(imperium_self, winning_choice) {
+	  return 1;
+	},
+  });
+  this.importAgendaCard('Papers Please', {
+  	name : "Papers Please" ,
+  	type : "Law" ,
+  	text : "Players must have papers" ,
+        returnAgendaOptions : function(imperium_self) { return ['support','oppose']; },
+        onPass : function(imperium_self, winning_choice) {
+	  return 1;
+	},
+  });
+  this.importAgendaCard('Papers Please', {
+  	name : "Papers Please" ,
+  	type : "Law" ,
+  	text : "Players must have papers" ,
+        returnAgendaOptions : function(imperium_self) { return ['support','oppose']; },
+        onPass : function(imperium_self, winning_choice) {
+	  return 1;
+	},
+  });
   this.importAgendaCard('regulated-bureaucracy', {
   	name : "Regulated Bureaucracy" ,
   	type : "Law" ,
@@ -2971,26 +3044,25 @@ console.log("TECH: " + techlist[i]);
 
 
 
+/************************************
 
-    this.importActionCard('sabotage', {
-  	name : "Sabotage" ,
-  	type : "action_card" ,
-  	text : "When another player plays an action card, you may cancel that action card" ,
-	playActionCard : function(imperium_self, player, action_card_player, card) {
+ACTION CARD - types
 
-	  //
-	  // this runs in actioncard post...
-	  //
-          if (imperium_self.game.player == action_card_player) {
-	    // remove previous action card
-	    imperium_self.addMove("resolve\t"+"action_card");
-	    imperium_self.addMove("resolve\t"+"action_card_post");
-	  }
+"action" -> main menu
+"bombardment_attacker"
+"bombardment_defender"
+"combat"
+"ground_combat"
+"pds" -> before pds fire
+"post_pds" -> after pds fire
+"pre_agenda" --> before agenda voting
+"post_agenda" --> after agenda voting
+"space_combat"
+"space_combat_victory"
+"rider"
 
-	  return 0;
-	}
-    });
 
+************************************/
 
 
     this.importActionCard('lost-star-chart', {
@@ -3901,6 +3973,26 @@ alert("select sector with filter");
 
 
 
+    this.importActionCard('sabotage', {
+  	name : "Sabotage" ,
+  	type : "action_card" ,
+  	text : "When another player plays an action card, you may cancel that action card" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  //
+	  // this runs in actioncard post...
+	  //
+          if (imperium_self.game.player == action_card_player) {
+	    // remove previous action card
+	    imperium_self.addMove("resolve\t"+"action_card");
+	    imperium_self.addMove("resolve\t"+"action_card_post");
+	  }
+
+	  return 0;
+	}
+    });
+
+
     this.importActionCard('bunker', {
   	name : "Bunker" ,
   	type : "bombardment_defender" ,
@@ -4131,25 +4223,6 @@ alert("select sector with filter");
 
 
 
-/************************************
-
-ACTION CARD - types
-
-"action" -> main menu
-"bombardment_attacker"
-"bombardment_defender"
-"combat"
-"ground_combat"
-"pds" -> before pds fire
-"post_pds" -> after pds fire
-"pre_agenda" --> before agenda voting
-"post_agenda" --> after agenda voting
-"space_combat"
-"space_combat_victory"
-"rider"
-
-
-************************************/
 
     this.importActionCard('diplomacy-rider', {
   	name : "Diplomacy Rider" ,
@@ -6095,10 +6168,12 @@ ACTION CARD - types
   	imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.push(card);
 
   	if (stage == 1) {
+	  this.updateLog(this.returnFaction(strategy_card_player) + " plays " + this.strategy_cards[card].name + " primary");
   	  this.playStrategyCardPrimary(strategy_card_player, card);
 	  return 0;
   	}
   	if (stage == 2) {
+	  this.updateLog(this.strategy_cards[card].name + " secondary triggers...");
 	  this.game.state.playing_strategy_card_secondary = 1;
   	  this.playStrategyCardSecondary(strategy_card_player, card);
 	  return 0;
@@ -6753,7 +6828,9 @@ ACTION CARD - types
           if (this.game.state.round < 4) {
             this.game.queue.push("revealobjectives");
   	    for (let i = 1; i <= this.game.players_info.length; i++) {
+console.log("HERE: " + i);
               this.game.queue.push("FLIPCARD\t4\t1\t2\t"+i); // deck card poolnum player
+console.log("HERE 2: " + i);
   	    }
 	  }
 
@@ -6765,6 +6842,7 @@ ACTION CARD - types
 	  }
 
 	}
+console.log("DONE HERE!");
     	return 1;
       }
  
@@ -6801,6 +6879,8 @@ ACTION CARD - types
       if (mv[0] === "revealobjectives") {
   
   	this.updateLog("revealing upcoming objectives...");
+
+console.log("A");
   
   	//
   	// reset agendas
@@ -6808,15 +6888,24 @@ ACTION CARD - types
         this.game.state.stage_i_objectives = [];
         this.game.state.stage_ii_objectives = [];
         this.game.state.secret_objectives = [];
-  
-        for (i = 0; i < this.game.pool[1].hand.length; i++) {
-	  if (!this.game.state.stage_i_objectives.includes(this.game.pool[1].hand[i])) {
-            this.game.state.stage_i_objectives.push(this.game.pool[1].hand[i]);	
-	  }
-  	}
-        for (i = 0; i < this.game.pool[2].hand.length; i++) {
-	  if (!this.game.state.stage_ii_objectives.includes(this.game.pool[2].hand[i])) {
-            this.game.state.stage_ii_objectives.push(this.game.pool[2].hand[i]);	
+
+console.log("POOLS: " + this.game.pool.length);;
+console.log(JSON.stringify(this.game.pool));
+
+
+	if (this.game.pool.length > 1) {
+          for (i = 0; i < this.game.pool[1].hand.length; i++) {
+  	    if (!this.game.state.stage_i_objectives.includes(this.game.pool[1].hand[i])) {
+              this.game.state.stage_i_objectives.push(this.game.pool[1].hand[i]);	
+	    }
+  	  }
+	}
+console.log("do we have a pool 2?");
+	if (this.game.pool.length > 2) {
+          for (i = 0; i < this.game.pool[2].hand.length; i++) {
+	    if (!this.game.state.stage_ii_objectives.includes(this.game.pool[2].hand[i])) {
+              this.game.state.stage_ii_objectives.push(this.game.pool[2].hand[i]);	
+  	    }
   	  }
   	}
   
@@ -6961,16 +7050,14 @@ ACTION CARD - types
 
         if (this.game.queue.length > 1) {
 	  if (this.game.queue[this.game.queue.length-2].indexOf("land") != 0) {
-	    if (this.game.queue[this.game.queue.length-2].indexOf("land") != 0) {
+            let player_forces = this.returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx);
+	    this.updateLog(this.returnFaction(player) + " lands " + player_forces + " infantry on " + sys.p[parseInt(planet_idx)].name);  
+	  } else {
+	    let lmv = this.game.queue[this.game.queue.length-2].split("\t");
+	    let lplanet_idx = lmv[6];
+	    if (lplanet_idx != planet_idx) {
               let player_forces = this.returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx);
 	      this.updateLog(this.returnFaction(player) + " lands " + player_forces + " infantry on " + sys.p[parseInt(planet_idx)].name);  
-	    } else {
-	      let lmv = this.game.queue[this.game.queue.length-2].split("\t");
-	      let lplanet_idx = lmv[6];
-	      if (lplanet_idx != planet_idx) {
-                let player_forces = this.returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx);
-	        this.updateLog(this.returnFaction(player) + " lands " + player_forces + " infantry on " + sys.p[parseInt(planet_idx)].name);  
-	      }
 	    }
 	  }
 	}
@@ -7029,6 +7116,26 @@ ACTION CARD - types
   
   	this.updateLog(mv[1]);
   	this.game.queue.splice(qe, 1);
+  	return 1;
+  
+      }
+
+
+      if (mv[0] === "annex") {
+  
+  	let player 	= parseInt(mv[1]);
+  	let sector	= mv[2];
+  	let planet_idx	= parseInt(mv[3]);
+  	this.game.queue.splice(qe, 1);
+
+	let sys = this.returnSectorAndPlanets(sector);
+	let planet = sys.p[planet_idx];
+
+	if (planet) {
+	  planet.units[planet.owner-1] = [];
+	  this.updatePlanetOwner(sector, planet_idx, player);
+	}
+
   	return 1;
   
       }
@@ -11409,10 +11516,10 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
       html = '<div class="sf-readable">Select a planet in this system: </div><ul>';
       for (let i = 0; i < sys.p.length; i++) {
 	if (mode == 0) {
-          html += '<li class="option" id="' + i + '">' + sys.p[i].name + ' (<span class="invadeplanet_'+i+'">0</span>)</li>';
+          html += '<li class="option" id="' + i + '">' + sys.p[i].name + ' - <span class="invadeplanet_'+i+'">0</span></li>';
 	}
 	if (mode == 1) {
-          html += '<li class="option" id="' + i + '">' + sys.p[i].name + ' (<span class="invadeplanet_'+i+'">0</span>)</li>';
+          html += '<li class="option" id="' + i + '">' + sys.p[i].name + ' - <span class="invadeplanet_'+i+'">0</span></li>';
 	}
 	if (mode == 2 && sys.p[i].owner == imperium_self.game.player) {
           html += '<li class="option" id="' + i + '">' + sys.p[i].name + '</li>';
@@ -11767,7 +11874,7 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
 	  if (planet.units[player-1][ss].type == "infantry") { infantry_available_here++; }
 	}
 	if (infantry_available_here > 0) {
-	  html += '<li class="option textchoice" id="'+s+'">' + planet.name + ' (<div style="display:inline" id="'+s+'_infantry">'+infantry_available_here+'</div>)</li>';
+	  html += '<li class="option textchoice" id="'+s+'">' + planet.name + ' - <div style="display:inline" id="'+s+'_infantry">'+infantry_available_here+'</div></li>';
 	}
       }
     }
@@ -11840,7 +11947,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 	for (let ss = 0; ss < planet.units[player-1].length; ss++) {
 	  if (planet.units[player-1][ss].type == "infantry") { infantry_available_here++; }
 	}
-	html += '<li class="option textchoice" id="'+s+'">' + planet.name + ' (<div style="display:inline" id="'+s+'_infantry">'+infantry_available_here+'</div>)</li>';
+	html += '<li class="option textchoice" id="'+s+'">' + planet.name + ' - <div style="display:inline" id="'+s+'_infantry">'+infantry_available_here+'</div></li>';
       }
     }
     html += '<li class="option textchoice" id="end"></li>';
@@ -12423,7 +12530,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
   	  }
         }
         if (forces_on_ships[i] > 0) {
-          html += '<li class="invadechoice textchoice" id="invasion_ship_'+i+'">'+ship.name+' (<span class="ship_'+i+'_infantry">'+forces_on_ships[i]+'</span>)</li>';
+          html += '<li class="invadechoice textchoice" id="invasion_ship_'+i+'">'+ship.name+' - <span class="ship_'+i+'_infantry">'+forces_on_ships[i]+'</span></li>';
         }
       }
       populated_ship_forces = 1;
@@ -12612,10 +12719,10 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
   
       let updateInterface = function(imperium_self, obj, updateInterface) {
   
-        let html = '<div class="sf-readable">You have '+obj.new_tokens+' to allocate. How do you want to allocate them? </div><ul>';
-            html += '<li class="option" id="strategy">Strategy Token - '+ obj.current_strategy+obj.new_strategy + '</li>';
-            html += '<li class="option" id="command">Command Token - '+ obj.current_command+obj.new_command + '</li>';
-            html += '<li class="option" id="fleet">Fleet Supply - '+ obj.current_fleet+obj.new_fleet + '</li>';
+        let html = '<div class="sf-readable">You have '+obj.new_tokens+' tokens to allocate. How do you want to allocate them? </div><ul>';
+            html += '<li class="option" id="strategy">Strategy Token - '+ (parseInt(obj.current_strategy)+parseInt(obj.new_strategy)) + '</li>';
+            html += '<li class="option" id="command">Command Token - '+ parseInt(obj.current_command)+parseInt(obj.new_command)) + '</li>';
+            html += '<li class="option" id="fleet">Fleet Supply - '+ parseInt(obj.current_fleet)+parseInt(obj.new_fleet)) + '</li>';
             html += '</ul>';
   
         imperium_self.updateStatus(html);
@@ -15929,7 +16036,7 @@ returnFactionSheet(imperium_self, player) {
        } else {
         html += `
 
-        <div class="unit-display-tile">
+        <div class="unit-display-tile _${unit.type}">
       <div class="unit-name">${unit.name}</div>
         <div class="unit-image player_color_${player}" style="background-image: url(img/units/${item[0]}.png);"></div>
         <div class="unit-display">

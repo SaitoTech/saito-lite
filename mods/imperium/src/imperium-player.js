@@ -2019,10 +2019,10 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
       html = '<div class="sf-readable">Select a planet in this system: </div><ul>';
       for (let i = 0; i < sys.p.length; i++) {
 	if (mode == 0) {
-          html += '<li class="option" id="' + i + '">' + sys.p[i].name + ' (<span class="invadeplanet_'+i+'">0</span>)</li>';
+          html += '<li class="option" id="' + i + '">' + sys.p[i].name + ' - <span class="invadeplanet_'+i+'">0</span></li>';
 	}
 	if (mode == 1) {
-          html += '<li class="option" id="' + i + '">' + sys.p[i].name + ' (<span class="invadeplanet_'+i+'">0</span>)</li>';
+          html += '<li class="option" id="' + i + '">' + sys.p[i].name + ' - <span class="invadeplanet_'+i+'">0</span></li>';
 	}
 	if (mode == 2 && sys.p[i].owner == imperium_self.game.player) {
           html += '<li class="option" id="' + i + '">' + sys.p[i].name + '</li>';
@@ -2377,7 +2377,7 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
 	  if (planet.units[player-1][ss].type == "infantry") { infantry_available_here++; }
 	}
 	if (infantry_available_here > 0) {
-	  html += '<li class="option textchoice" id="'+s+'">' + planet.name + ' (<div style="display:inline" id="'+s+'_infantry">'+infantry_available_here+'</div>)</li>';
+	  html += '<li class="option textchoice" id="'+s+'">' + planet.name + ' - <div style="display:inline" id="'+s+'_infantry">'+infantry_available_here+'</div></li>';
 	}
       }
     }
@@ -2450,7 +2450,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 	for (let ss = 0; ss < planet.units[player-1].length; ss++) {
 	  if (planet.units[player-1][ss].type == "infantry") { infantry_available_here++; }
 	}
-	html += '<li class="option textchoice" id="'+s+'">' + planet.name + ' (<div style="display:inline" id="'+s+'_infantry">'+infantry_available_here+'</div>)</li>';
+	html += '<li class="option textchoice" id="'+s+'">' + planet.name + ' - <div style="display:inline" id="'+s+'_infantry">'+infantry_available_here+'</div></li>';
       }
     }
     html += '<li class="option textchoice" id="end"></li>';
@@ -3033,7 +3033,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
   	  }
         }
         if (forces_on_ships[i] > 0) {
-          html += '<li class="invadechoice textchoice" id="invasion_ship_'+i+'">'+ship.name+' (<span class="ship_'+i+'_infantry">'+forces_on_ships[i]+'</span>)</li>';
+          html += '<li class="invadechoice textchoice" id="invasion_ship_'+i+'">'+ship.name+' - <span class="ship_'+i+'_infantry">'+forces_on_ships[i]+'</span></li>';
         }
       }
       populated_ship_forces = 1;
@@ -3222,10 +3222,10 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
   
       let updateInterface = function(imperium_self, obj, updateInterface) {
   
-        let html = '<div class="sf-readable">You have '+obj.new_tokens+' to allocate. How do you want to allocate them? </div><ul>';
-            html += '<li class="option" id="strategy">Strategy Token - '+ obj.current_strategy+obj.new_strategy + '</li>';
-            html += '<li class="option" id="command">Command Token - '+ obj.current_command+obj.new_command + '</li>';
-            html += '<li class="option" id="fleet">Fleet Supply - '+ obj.current_fleet+obj.new_fleet + '</li>';
+        let html = '<div class="sf-readable">You have '+obj.new_tokens+' tokens to allocate. How do you want to allocate them? </div><ul>';
+            html += '<li class="option" id="strategy">Strategy Token - '+ (parseInt(obj.current_strategy)+parseInt(obj.new_strategy)) + '</li>';
+            html += '<li class="option" id="command">Command Token - '+ parseInt(obj.current_command)+parseInt(obj.new_command)) + '</li>';
+            html += '<li class="option" id="fleet">Fleet Supply - '+ parseInt(obj.current_fleet)+parseInt(obj.new_fleet)) + '</li>';
             html += '</ul>';
   
         imperium_self.updateStatus(html);

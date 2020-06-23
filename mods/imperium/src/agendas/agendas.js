@@ -1,5 +1,69 @@
 
 
+
+  this.importAgendaCard('papers-please-1', {
+  	name : "Papers Please 1" ,
+  	type : "Law" ,
+  	text : "Players must have papers" ,
+        returnAgendaOptions : function(imperium_self) { return ['support','oppose']; },
+        onPass : function(imperium_self, winning_choice) {
+	  return 1;
+	},
+  });
+  this.importAgendaCard('papers-please-2', {
+  	name : "Papers Please 2" ,
+  	type : "Law" ,
+  	text : "Players must have papers" ,
+        returnAgendaOptions : function(imperium_self) { return ['support','oppose']; },
+        onPass : function(imperium_self, winning_choice) {
+	  return 1;
+	},
+  });
+  this.importAgendaCard('papers-please-3', {
+  	name : "Papers Please 3" ,
+  	type : "Law" ,
+  	text : "Players must have papers" ,
+        returnAgendaOptions : function(imperium_self) { return ['support','oppose']; },
+        onPass : function(imperium_self, winning_choice) {
+	  return 1;
+	},
+  });
+  this.importAgendaCard('papers-please-4', {
+  	name : "Papers Please 4" ,
+  	type : "Law" ,
+  	text : "Players must have papers" ,
+        returnAgendaOptions : function(imperium_self) { return ['support','oppose']; },
+        onPass : function(imperium_self, winning_choice) {
+	  return 1;
+	},
+  });
+  this.importAgendaCard('papers-please-5', {
+  	name : "Papers Please 5" ,
+  	type : "Law" ,
+  	text : "Players must have papers" ,
+        returnAgendaOptions : function(imperium_self) { return ['support','oppose']; },
+        onPass : function(imperium_self, winning_choice) {
+	  return 1;
+	},
+  });
+  this.importAgendaCard('Papers Please', {
+  	name : "Papers Please" ,
+  	type : "Law" ,
+  	text : "Players must have papers" ,
+        returnAgendaOptions : function(imperium_self) { return ['support','oppose']; },
+        onPass : function(imperium_self, winning_choice) {
+	  return 1;
+	},
+  });
+  this.importAgendaCard('Papers Please', {
+  	name : "Papers Please" ,
+  	type : "Law" ,
+  	text : "Players must have papers" ,
+        returnAgendaOptions : function(imperium_self) { return ['support','oppose']; },
+        onPass : function(imperium_self, winning_choice) {
+	  return 1;
+	},
+  });
   this.importAgendaCard('regulated-bureaucracy', {
   	name : "Regulated Bureaucracy" ,
   	type : "Law" ,

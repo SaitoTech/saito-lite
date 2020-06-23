@@ -306,10 +306,12 @@
   	imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.push(card);
 
   	if (stage == 1) {
+	  this.updateLog(this.returnFaction(strategy_card_player) + " plays " + this.strategy_cards[card].name + " primary");
   	  this.playStrategyCardPrimary(strategy_card_player, card);
 	  return 0;
   	}
   	if (stage == 2) {
+	  this.updateLog(this.strategy_cards[card].name + " secondary triggers...");
 	  this.game.state.playing_strategy_card_secondary = 1;
   	  this.playStrategyCardSecondary(strategy_card_player, card);
 	  return 0;
@@ -964,7 +966,9 @@
           if (this.game.state.round < 4) {
             this.game.queue.push("revealobjectives");
   	    for (let i = 1; i <= this.game.players_info.length; i++) {
+console.log("HERE: " + i);
               this.game.queue.push("FLIPCARD\t4\t1\t2\t"+i); // deck card poolnum player
+console.log("HERE 2: " + i);
   	    }
 	  }
 
@@ -976,6 +980,7 @@
 	  }
 
 	}
+console.log("DONE HERE!");
     	return 1;
       }
  
@@ -1012,6 +1017,8 @@
       if (mv[0] === "revealobjectives") {
   
   	this.updateLog("revealing upcoming objectives...");
+
+console.log("A");
   
   	//
   	// reset agendas
@@ -1019,15 +1026,24 @@
         this.game.state.stage_i_objectives = [];
         this.game.state.stage_ii_objectives = [];
         this.game.state.secret_objectives = [];
-  
-        for (i = 0; i < this.game.pool[1].hand.length; i++) {
-	  if (!this.game.state.stage_i_objectives.includes(this.game.pool[1].hand[i])) {
-            this.game.state.stage_i_objectives.push(this.game.pool[1].hand[i]);	
-	  }
-  	}
-        for (i = 0; i < this.game.pool[2].hand.length; i++) {
-	  if (!this.game.state.stage_ii_objectives.includes(this.game.pool[2].hand[i])) {
-            this.game.state.stage_ii_objectives.push(this.game.pool[2].hand[i]);	
+
+console.log("POOLS: " + this.game.pool.length);;
+console.log(JSON.stringify(this.game.pool));
+
+
+	if (this.game.pool.length > 1) {
+          for (i = 0; i < this.game.pool[1].hand.length; i++) {
+  	    if (!this.game.state.stage_i_objectives.includes(this.game.pool[1].hand[i])) {
+              this.game.state.stage_i_objectives.push(this.game.pool[1].hand[i]);	
+	    }
+  	  }
+	}
+console.log("do we have a pool 2?");
+	if (this.game.pool.length > 2) {
+          for (i = 0; i < this.game.pool[2].hand.length; i++) {
+	    if (!this.game.state.stage_ii_objectives.includes(this.game.pool[2].hand[i])) {
+              this.game.state.stage_ii_objectives.push(this.game.pool[2].hand[i]);	
+  	    }
   	  }
   	}
   
@@ -1172,16 +1188,14 @@
 
         if (this.game.queue.length > 1) {
 	  if (this.game.queue[this.game.queue.length-2].indexOf("land") != 0) {
-	    if (this.game.queue[this.game.queue.length-2].indexOf("land") != 0) {
+            let player_forces = this.returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx);
+	    this.updateLog(this.returnFaction(player) + " lands " + player_forces + " infantry on " + sys.p[parseInt(planet_idx)].name);  
+	  } else {
+	    let lmv = this.game.queue[this.game.queue.length-2].split("\t");
+	    let lplanet_idx = lmv[6];
+	    if (lplanet_idx != planet_idx) {
               let player_forces = this.returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx);
 	      this.updateLog(this.returnFaction(player) + " lands " + player_forces + " infantry on " + sys.p[parseInt(planet_idx)].name);  
-	    } else {
-	      let lmv = this.game.queue[this.game.queue.length-2].split("\t");
-	      let lplanet_idx = lmv[6];
-	      if (lplanet_idx != planet_idx) {
-                let player_forces = this.returnNumberOfGroundForcesOnPlanet(player, sector, planet_idx);
-	        this.updateLog(this.returnFaction(player) + " lands " + player_forces + " infantry on " + sys.p[parseInt(planet_idx)].name);  
-	      }
 	    }
 	  }
 	}
@@ -1240,6 +1254,26 @@
   
   	this.updateLog(mv[1]);
   	this.game.queue.splice(qe, 1);
+  	return 1;
+  
+      }
+
+
+      if (mv[0] === "annex") {
+  
+  	let player 	= parseInt(mv[1]);
+  	let sector	= mv[2];
+  	let planet_idx	= parseInt(mv[3]);
+  	this.game.queue.splice(qe, 1);
+
+	let sys = this.returnSectorAndPlanets(sector);
+	let planet = sys.p[planet_idx];
+
+	if (planet) {
+	  planet.units[planet.owner-1] = [];
+	  this.updatePlanetOwner(sector, planet_idx, player);
+	}
+
   	return 1;
   
       }

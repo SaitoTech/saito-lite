@@ -63,10 +63,8 @@
 	    if (sys.p) {
 	      for (let y = 0; y < sys.p.length; y++) {
 	        let planet_uncontrolled = 0;
-console.log("CHECKING PLANET: " + sys.p[y].name);
 	        if (sys.p[y].owner != player) {
 		  if (!imperium_self.doesPlanetHaveUnits(sys.p[y])) {
-console.log("candidate 2: " + sys.p[y].name);
 	  	    seizable_planets.push(sys.p[y].planet);
 	          }
 	        }
@@ -83,12 +81,23 @@ console.log("candidate 2: " + sys.p[y].name);
 
 	  if (imperium_self.game.players_info[player-1].peace_accords == 1) {
 	    if (imperium_self.game.player == player) {
-	      alert("Peace Accords can trigger...");
-	      imperium_self.endTurn(); 
-	    }
-	  }
 
-	  return 0;
+              imperium_self.playerSelectPlanetWithFilter(
+                "Select a planet to annex via Peace Accords: " ,
+                function(planet) {
+	  	  if (seizable_planets.includes(planet)) { return 1; } return 0;
+                },
+                function(planet) {
+                  imperium_self.addMove("annex\t"+imperium_self.game.player+"\t"+imperium_self.game.planets[planet].sector+"\t"+imperium_self.game.planets[planet].idx);
+                  imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " annexes " + imperium_self.game.planets[planet].name + " via Peace Accords");
+	    	  imperium_self.endTurn();
+                  return 0;
+                },
+                null
+              );
+            }
+          }
+          return 0;
 	}
       }
     });
