@@ -286,11 +286,6 @@ returnFactionSheet(imperium_self, player) {
             <div class="faction_sheet_objective_cards scored">
       `;
 
-console.log("SCORED: " + JSON.stringify(scored_objectives));
-console.log("UNSCORED: " + JSON.stringify(unscored_objectives));
-console.log(this.game.players_info[player-1].secret_objectives_in_hand);
-
-<<<<<<< HEAD
       for (let i = 0; i < scored_objectives.length; i++) {
         html += `
               <div class="faction_sheet_action_card bc" style="background-image: url(${scored_objectives[i].img})">
@@ -299,16 +294,6 @@ console.log(this.game.players_info[player-1].secret_objectives_in_hand);
               </div>
         `;
       }
-=======
-    html += `
-
-      <h3 class="objectives anchor">Objectives</h3>
-      <div class="faction_sheet_objectives">
-        <div class="scored">
-          <h4>Scored</h4>
-          <div class="faction_sheet_objective_cards scored">
-    `;
->>>>>>> 6e603a0d510f9107c274530d21d3138073fd30ed
 
       html += `
           </div>
