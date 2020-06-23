@@ -535,6 +535,10 @@ body {
   line-height: 1.3em;
 }
 
+#menu-container>ul>li:hover {
+  background-color: #3334;
+}
+
 .hud-menu {
   font-family: 'bank-gothic', 'orbitron-medium', arial, helvetica, sans-serif;
 }
@@ -554,7 +558,6 @@ body {
   background-color: transparent;
   overflow-y: auto;
   color: #fff;
-  font-family: 'bank-gothic', arial, helvetica, sans-serif;
   padding-top: 5px;
 }
 
