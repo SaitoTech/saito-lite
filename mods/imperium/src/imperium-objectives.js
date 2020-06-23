@@ -8,7 +8,7 @@
     if (obj.name == null) 	{ obj.name = "Unknown Objective"; }
     if (obj.text == null)	{ obj.type = "Unclear Objective"; }
     if (obj.type == null)	{ obj.type = "normal"; }
-    if (obj.img  == null) 	{ obj.img = "/imperium/img/objective_card_1_template.png"; }
+    if (obj.img  == null) 	{ obj.img = "/imperium/img/secret_objective.jpg"; }
 
     obj = this.addEvents(obj);
     this.secret_objectives[name] = obj;

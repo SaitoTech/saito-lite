@@ -2083,7 +2083,6 @@ console.log("TESTING AAAD");
   
   this.importSecretObjective('establish-a-blockade', {
       name 		: 	"Establish a Blockade" ,
-      img		:	"/imperium/img/objective_card_1_template.png" ,
       text		:	"Have at least 1 ship in the same sector as an opponent's spacedock",
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
@@ -2109,7 +2108,6 @@ console.log("TESTING AAAD");
 
   this.importSecretObjective('galactic-observer', {
       name 		: 	"Galactic Observer" ,
-      img		:	"/imperium/img/objective_card_1_template.png" ,
       text		:	"Have at least 1 ship in 6 different sectors" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
@@ -2133,7 +2131,6 @@ console.log("TESTING AAAD");
 
   this.importSecretObjective('master-of-the-ion-cannon', {
       name 		: 	"Master of the Ion Cannon" ,
-      img		:	"/imperium/img/objective_card_1_template.png" ,
       text		:	"Have at least 4 PDS units in play" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
@@ -2184,7 +2181,6 @@ console.log("TESTING AAAD");
 
   this.importSecretObjective('wormhole-administrator', {
       name 		: 	"Wormhole Administrator" ,
-      img		:	"/imperium/img/objective_card_1_template.png" ,
       text		:	"Have at least 1 ship in asystems containing alpha and beta wormholes respectively" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
@@ -2204,7 +2200,6 @@ console.log("TESTING AAAD");
   });
   this.importSecretObjective('fleet-of-terror', {
       name 		: 	"Fleet of Terror" ,
-      img		:	"/imperium/img/objective_card_1_template.png" ,
       text		:	"Have five dreadnaughts in play" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
@@ -2228,7 +2223,6 @@ console.log("TESTING AAAD");
 
   this.importSecretObjective('cultural-diplomacy', {
       name 		: 	"Cultural Diplomacy" ,
-      img		:	"/imperium/img/objective_card_1_template.png" ,
       text		:	"Control at least 4 cultural planets" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
@@ -2246,7 +2240,6 @@ console.log("TESTING AAAD");
 
   this.importSecretObjective('act-of-espionage', {
       name 		: 	"Act of Espionage" ,
-      img		:	"/imperium/img/objective_card_1_template.png" ,
       text		:	"Discard 5 action cards from your hard" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
@@ -2264,7 +2257,6 @@ console.log("TESTING AAAD");
 
   this.importSecretObjective('space-to-breathe', {
       name 		: 	"Space to Breathe" ,
-      img		:	"/imperium/img/objective_card_1_template.png" ,
       text		:	"Have at least 1 ship in 3 systems with no planets" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
@@ -2284,7 +2276,6 @@ console.log("TESTING AAAD");
 
   this.importSecretObjective('ascendant-technocracy', {
       name 		: 	"Ascendant Technocracy" ,
-      img		:	"/imperium/img/objective_card_1_template.png" ,
       text		:	"Research 4 tech upgrades on the same color path" , 
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
@@ -2316,7 +2307,6 @@ console.log("TESTING AAAD");
   });
   this.importSecretObjective('penal-colonies', {
       name 		: 	"Penal Colonies" ,
-      img		:	"/imperium/img/objective_card_1_template.png" ,
       text		:	"Control four planets with hazardous conditions" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
@@ -2332,7 +2322,6 @@ console.log("TESTING AAAD");
   });
   this.importSecretObjective('master-of-production', {
       name 		: 	"Master of Production" ,
-      img		:	"/imperium/img/objective_card_1_template.png" ,
       text		:	"Control four planets with industrial civilizations" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
@@ -2348,7 +2337,6 @@ console.log("TESTING AAAD");
   });
   this.importSecretObjective('faction-technologies', {
       name 		: 	"Faction Technologies" ,
-      img		:	"/imperium/img/objective_card_1_template.png" ,
       text		:	"Research 2 faction technologies" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
@@ -2366,7 +2354,6 @@ console.log("TESTING AAAD");
   });
   this.importSecretObjective('occupy-new-byzantium', {
       name 		: 	"Occupy New Byzantium" ,
-      img		:	"/imperium/img/objective_card_1_template.png" ,
       text		:	"Control New Byzantium and have at least 3 ships protecting the sector" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
@@ -2381,7 +2368,6 @@ console.log("TESTING AAAD");
   });
   this.importSecretObjective('cast-a-long-shadow', {
       name 		: 	"Cast a Long Shadow" ,
-      img		:	"/imperium/img/objective_card_1_template.png" ,
       text		:	"Have at least 1 ship in a system adjacent to an opponent homeworld" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
@@ -2411,7 +2397,6 @@ console.log("TESTING AAAD");
 /*****
   this.importSecretObjective('military-catastrophe', {
       name 		: 	"Military Catastrophe" ,
-      img		:	"/imperium/img/objective_card_1_template.png" ,
       text		:	"Destroy the flagship of another player" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
@@ -2423,7 +2408,6 @@ console.log("TESTING AAAD");
   });
   this.importSecretObjective('nuke-them-from-orbit', {
       name 		: 	"Nuke them from Orbit" ,
-      img		:	"/imperium/img/objective_card_1_template.png" ,
       text		:	"Destroy the last of a player's ground forces using bombardment" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
@@ -2435,7 +2419,6 @@ console.log("TESTING AAAD");
   });
   this.importSecretObjective('anti-imperialism', {
       name 		: 	"Anti-Imperialism" ,
-      img		:	"/imperium/img/objective_card_1_template.png" ,
       text		:	"Achieve victory in combat with a player with the most VP" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
@@ -2447,7 +2430,6 @@ console.log("TESTING AAAD");
   });
   this.importSecretObjective('close-the-trap', {
       name 		: 	"Close the Trap" ,
-      img		:	"/imperium/img/objective_card_1_template.png" ,
       text		:	"Destroy another player's last ship in a system using a PDS" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
@@ -2459,7 +2441,6 @@ console.log("TESTING AAAD");
   });
   this.importSecretObjective('flagship-dominance', {
       name 		: 	"" ,
-      img		:	"/imperium/img/objective_card_1_template.png" ,
       text		:	"Achieve victory in a space combat in a system containing your flagship. Your flagship must survive this combat" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
@@ -5676,7 +5657,7 @@ alert("select sector with filter");
     if (obj.name == null) 	{ obj.name = "Unknown Objective"; }
     if (obj.text == null)	{ obj.type = "Unclear Objective"; }
     if (obj.type == null)	{ obj.type = "normal"; }
-    if (obj.img  == null) 	{ obj.img = "/imperium/img/objective_card_1_template.png"; }
+    if (obj.img  == null) 	{ obj.img = "/imperium/img/secret_objective.jpg"; }
 
     obj = this.addEvents(obj);
     this.secret_objectives[name] = obj;
@@ -7225,7 +7206,7 @@ console.log(player_forces + " landed on planet");
 	if (type == "action_cards") {
 	  this.game.players_info[player-1].action_cards_in_hand += amount;
 	}
-	if (type == "secret_objective") {
+	if (type == "secret_objectives") {
 	  this.game.players_info[player-1].secret_objectives_in_hand += amount;
 	}
 
@@ -8874,6 +8855,8 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
         let z_index	 = parseInt(mv[4]);
 
   	this.game.queue.splice(qe, 1);
+	console.log("BE: " +z_index+" -- " +  z[z_index].bombardmentEvent(this, player, bombarding_player, sector, planet_idx));
+
 	return z[z_index].bombardmentEvent(this, player, bombarding_player, sector, planet_idx);
 
       }
@@ -9508,7 +9491,7 @@ console.log("HERE: " + z[i].name);
     let html = '';
     let imperium_self = this;
     let technologies = this.returnTechnology();
-    let relevant_action_cards = ["action"];
+    let relevant_action_cards = ["action","main"];
     let ac = this.returnPlayerActionCards(relevant_action_cards);
 
     if (stage == "main") {
@@ -11650,8 +11633,8 @@ alert("TTG: 6" + total_trade_goods);
     html += '</ul>';
   
     this.updateStatus(html);
-    $('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showStrategyCard(s); } });
-    $('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideStrategyCard(s); } });
+    //$('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showStrategyCard(s); } });
+    //$('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideStrategyCard(s); } });
     $('.textchoice').on('click', function() {
 
       let action2 = $(this).attr("id");
@@ -12923,16 +12906,20 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     planets['planet57'] = { type : "homeworld" , img : "/imperium/img/planets/EARTH.png" , name : "Earth" , resources : 4 , influence : 2 , bonus : ""  }
     planets['planet58'] = { type : "homeworld" , img : "/imperium/img/planets/ARTIZZ.png" , name : "Artizz" , resources : 4 , influence : 1 , bonus : ""  }
 
-    planets['planet59'] = { type : "homeworld" , img : "/imperium/img/planets/STARTIDE.png" , name : "Startide" , resources : 2 , influence : 0 , bonus : ""  }   	// sector 58
-    planets['planet60'] = { type : "homeworld" , img : "/imperium/img/planets/GIANTSDRINK.png" , name : "Giant's Drink" , resources : 1 , influence : 1 , bonus : ""  }	// sector 59
-    planets['planet61'] = { type : "homeworld" , img : "/imperium/img/planets/MIRANDA.png" , name : "Miranda" , resources : 0 , influence : 2 , bonus : ""  }		// sector 60
-    planets['planet62'] = { type : "homeworld" , img : "/imperium/img/planets/EBERBACH.png" , name : "Eberbach" , resources : 2 , influence : 1 , bonus : ""  }		// sector 61
-    planets['planet63'] = { type : "homeworld" , img : "/imperium/img/planets/OTHO.png" , name : "Otho" , resources : 1 , influence : 2 , bonus : ""  }			// sector 62
-    planets['planet64'] = { type : "homeworld" , img : "/imperium/img/planets/PERTINAX.png" , name : "Pertinax" , resources : 2 , influence : 2 , bonus : ""  }		// sector 63
-    planets['planet65'] = { type : "homeworld" , img : "/imperium/img/planets/COTILLARD.png" , name : "Cotillard" , resources : 2 , influence : 2 , bonus : ""  }	// sector 64
-    planets['planet66'] = { type : "homeworld" , img : "/imperium/img/planets/DOMINIC.png" , name : "Dominic" , resources : 3 , influence : 1 , bonus : ""  }		// sector 65
-    planets['planet67'] = { type : "homeworld" , img : "/imperium/img/planets/PESTULON.png" , name : "Pestulon" , resources : 1 , influence : 1 , bonus : "yellow"  }	// sector 66
-    planets['planet68'] = { type : "homeworld" , img : "/imperium/img/planets/XIAOZUOR.png" , name : "Xiao Zuor" , resources : 1 , influence : 3 , bonus : ""  }	// sector 67
+    planets['planet59'] = { type : "cultural" , img : "/imperium/img/planets/STARTIDE.png" , name : "Startide" , resources : 2 , influence : 0 , bonus : ""  }   	// sector 58
+    planets['planet60'] = { type : "industrial" , img : "/imperium/img/planets/GIANTSDRINK.png" , name : "Giant's Drink" , resources : 1 , influence : 1 , bonus : ""  }	// sector 59
+    planets['planet61'] = { type : "hazardous" , img : "/imperium/img/planets/MIRANDA.png" , name : "Miranda" , resources : 0 , influence : 2 , bonus : ""  }		// sector 60
+    planets['planet62'] = { type : "industrial" , img : "/imperium/img/planets/EBERBACH.png" , name : "Eberbach" , resources : 2 , influence : 1 , bonus : ""  }		// sector 61
+    planets['planet63'] = { type : "hazardous" , img : "/imperium/img/planets/OTHO.png" , name : "Otho" , resources : 1 , influence : 2 , bonus : ""  }			// sector 62
+    planets['planet64'] = { type : "hazardous" , img : "/imperium/img/planets/PERTINAX.png" , name : "Pertinax" , resources : 2 , influence : 2 , bonus : ""  }		// sector 63
+    planets['planet65'] = { type : "cotillard" , img : "/imperium/img/planets/COTILLARD.png" , name : "Cotillard" , resources : 2 , influence : 2 , bonus : ""  }	// sector 64
+    planets['planet66'] = { type : "cultural" , img : "/imperium/img/planets/DOMINIC.png" , name : "Dominic" , resources : 3 , influence : 1 , bonus : ""  }		// sector 65
+    planets['planet67'] = { type : "industrial" , img : "/imperium/img/planets/PESTULON.png" , name : "Pestulon" , resources : 1 , influence : 1 , bonus : "yellow"  }	// sector 66
+    planets['planet68'] = { type : "hazardous" , img : "/imperium/img/planets/XIAOZUOR.png" , name : "Xiao Zuor" , resources : 1 , influence : 3 , bonus : ""  }	// sector 67
+    planets['planet69'] = { type : "hazardous" , img : "/imperium/img/planets/KROEBER.png" , name : "Kroeber" , resources : 2 , influence : 0 , bonus : ""  }		// sector 68
+    planets['planet70'] = { type : "hazardous" , img : "/imperium/img/planets/LEGUIN.png" , name : "Leguin" , resources : 0 , influence : 1 , bonus : ""  }		// sector 69
+    planets['planet71'] = { type : "cultural" , img : "/imperium/img/planets/SIGURDS-CRADLE.png" , name : "Sigurd's Cradle" , resources : 1 , influence : 3 , bonus : ""  }	// sector 70
+    planets['planet72'] = { type : "cultural" , img : "/imperium/img/planets/KLENCORY.png" , name : "Klencory" , resources : 2 , influence : 2 , bonus : ""  }		// sector 71
 
     for (var i in planets) {
 
@@ -13028,7 +13015,6 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     sectors['sector53']        = { img : "/imperium/img/sectors/sector53.png" , 	   name : "Mentak Homeworld" , hw : 1 , wormhole: 0 , mr : 0 , planets : ['planet58'] }
 
 
-/*
     sectors['sector54']        = { img : "/imperium/img/sectors/sector48.png" , 	   name : "Sector 46" , hw : 0 , wormhole : 1, mr : 0 , planets : ['planet52'] } // wormhole a
     sectors['sector55']        = { img : "/imperium/img/sectors/sector49.png" , 	   name : "Sector 47" , hw : 0 , wormhole : 2, mr : 0 , planets : ['planet51'] } // wormhole b
     sectors['sector56']        = { img : "/imperium/img/sectors/sector46.png" , 	   name : "Sector 48" , hw : 0 , wormhole : 1, mr : 0 , planets : [] } // wormhole a
@@ -13043,7 +13029,10 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     sectors['sector65']        = { img : "/imperium/img/sectors/sector65.png" , 	   name : "Sector 65" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet66'] }
     sectors['sector66']        = { img : "/imperium/img/sectors/sector66.png" , 	   name : "Sector 66" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet67'] }
     sectors['sector67']        = { img : "/imperium/img/sectors/sector67.png" , 	   name : "Sector 67" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet68'] }
-*/
+    sectors['sector68']        = { img : "/imperium/img/sectors/sector67.png" , 	   name : "Sector 67" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet69','planet70'] }
+    sectors['sector69']        = { img : "/imperium/img/sectors/sector67.png" , 	   name : "Sector 67" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet71'] }
+    sectors['sector70']        = { img : "/imperium/img/sectors/sector67.png" , 	   name : "Sector 67" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet72'] }
+
 
     for (var i in sectors) {
       sectors[i].units = [this.totalPlayers]; // array to store units
@@ -15061,13 +15050,15 @@ console.log("SECTOR: " + sector);
     //
     // deck 6 -- hand #5 -- secret objectives
     //
-    for (let i = 0; i < this.game.deck[5].hand.length; i++) {
-      if (types.length == 0) {
-	x.push(this.secret_objectives[this.game.deck[5].hand[i]]);
-      } else {
-	if (types.includes("secret_objectives")) {
-	  x.push(this.secret_objectives[this.game.deck[5].hand[i]]);
-	}
+    if (this.game.player == player) {
+      for (let i = 0; i < this.game.deck[5].hand.length; i++) {
+        if (types.length == 0) {
+  	  x.push(this.secret_objectives[this.game.deck[5].hand[i]]);
+        } else {
+  	  if (types.includes("secret_objectives")) {
+	    x.push(this.secret_objectives[this.game.deck[5].hand[i]]);
+	  }
+        }
       }
     }
 
@@ -15550,7 +15541,6 @@ displayBoard() {
     this.updateSectorGraphics(i);
   }
   this.addEventsToBoard();
-
 }
 
 
@@ -15602,7 +15592,10 @@ addUIEvents() {
   //add faction buttons
   var html = "";
   var faction_initial = "";
+  var factions_enabled = [];
+
   for (let i = 0; i < this.game.players_info.length; i++) {
+    factions_enabled.push(0);
     let faction_name = this.returnFaction((i+1));
     let faction_initial = "";
     if (faction_name[0] != "") { faction_initial = faction_name[0]; }
@@ -15624,8 +15617,23 @@ addUIEvents() {
     el.addEventListener('click', (e) => {
       if (document.querySelector('.interface_overlay').classList.contains('hidden')) {
         document.querySelector('.interface_overlay').classList.remove('hidden');
+      } else {
+        
+      }
+      let is_visible = 0;
+      let faction_idx = e.target.dataset.id-1;
+      if (factions_enabled[faction_idx] == 1) {
+	factions_enabled[faction_idx] = 0;
+      } else {
+	factions_enabled[faction_idx] = 1;
       }
       document.querySelector('.faction_sheet.p' + e.target.dataset.id).toggleClass('hidden');
+      for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+        if (factions_enabled[i] > 0) { is_visible++; }
+      }
+      if (is_visible == 0) {
+        document.querySelector('.interface_overlay').classList.add('hidden');
+      }
     });
   });
 
@@ -15636,7 +15644,6 @@ addUIEvents() {
   });
 
   for (let i = 0; i < this.game.players_info.length; i++) {
-console.log("PLAYER: " + i);
     document.querySelector(`.faction_content.p${(i+1)}`).innerHTML = imperium_self.returnFactionSheet(imperium_self, (i+1));
   }
 }
@@ -15713,6 +15720,7 @@ returnFactionSheet(imperium_self, player) {
 	  `;
 	}
       }
+
     html += `</div>`;
 
 
@@ -15783,63 +15791,70 @@ returnFactionSheet(imperium_self, player) {
     //
     // OBJECTIVES
     //
-    let objc = imperium_self.returnPlayerObjectives();
+    let objc = imperium_self.returnPlayerObjectives(player);
     let scored_objectives = [];
     let unscored_objectives = [];
 
-let xxx = 0;
-    for (let i in objc) {
-xxx++;
-if (xxx == 2) { 
-  this.game.players_info[player-1].objectives_scored.push(i);
-}
-      if (this.game.players_info[player-1].objectives_scored.includes(i)) {
-	scored_objectives.push(objc[i]);
-      } else {
-	unscored_objectives.push(objc[i]);
+
+      for (let i in objc) {
+        if (this.game.players_info[player-1].objectives_scored.includes(i)) {
+   	  scored_objectives.push(objc[i]);
+        } else {
+  	  unscored_objectives.push(objc[i]);
+        }
       }
-    }
+
+      html += `
+
+        <h3>Objectives</h3>
+        <div class="faction_sheet_objectives">
+          <div class="scored">
+            <h4>Scored</h4>
+            <div class="faction_sheet_objective_cards scored">
+      `;
 
 console.log("SCORED: " + JSON.stringify(scored_objectives));
 console.log("UNSCORED: " + JSON.stringify(unscored_objectives));
+console.log(this.game.players_info[player-1].secret_objectives_in_hand);
 
-    html += `
+      for (let i = 0; i < scored_objectives.length; i++) {
+        html += `
+              <div class="faction_sheet_action_card bc" style="background-image: url(${scored_objectives[i].img})">
+                <div class="action_card_name">${scored_objectives[i].name}</div>
+                <div class="action_card_content">${scored_objectives[i].text}</div>
+              </div>
+        `;
+      }
 
-      <h3>Objectives</h3>
-      <div class="faction_sheet_objectives">
-        <div class="scored">
-          <h4>Scored</h4>
-          <div class="faction_sheet_objective_cards scored">
-    `;
-
-    for (let i = 0; i < scored_objectives.length; i++) {
       html += `
-            <div class="faction_sheet_action_card bc" style="background-image: url(${scored_objectives[i].img})">
-              <div class="action_card_name">${scored_objectives[i].name}</div>
-              <div class="action_card_content">${scored_objectives[i].text}</div>
-            </div>
-      `;
-    }
-
-
-    html += `
           </div>
-        </div>
-        <div class="unscored">
-          <h4>Unscored</h4>
-          <div class="faction_sheet_objective_cards unscored">
-    `;
+          </div>
+          <div class="unscored">
+            <h4>Unscored</h4>
+            <div class="faction_sheet_objective_cards unscored">
+      `;
 
-    for (let i = 0; i < unscored_objectives.length; i++) {
-      html += `
+
+      if (this.game.player != player) {
+        for (let i = 0; i < this.game.players_info[player-1].secret_objectives_in_hand; i++) {
+          html += `
+            <div class="faction_sheet_action_card bc" style="background-image: url(/imperium/img/secret_objective_back.png)">
+            </div>
+        `;
+        }
+      }
+	
+
+      for (let i = 0; i < unscored_objectives.length; i++) {
+        html += `
             <div class="faction_sheet_action_card bc" style="background-image: url(${unscored_objectives[i].img})">
               <div class="action_card_name">${unscored_objectives[i].name}</div>
               <div class="action_card_content">${unscored_objectives[i].text}</div>
             </div>
-      `;
-    }
+        `;
+      }
 
-    html += `
+      html += `
           </div>
         </div>
       </div>

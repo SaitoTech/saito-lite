@@ -1433,7 +1433,7 @@ console.log(player_forces + " landed on planet");
 	if (type == "action_cards") {
 	  this.game.players_info[player-1].action_cards_in_hand += amount;
 	}
-	if (type == "secret_objective") {
+	if (type == "secret_objectives") {
 	  this.game.players_info[player-1].secret_objectives_in_hand += amount;
 	}
 
@@ -3082,6 +3082,8 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
         let z_index	 = parseInt(mv[4]);
 
   	this.game.queue.splice(qe, 1);
+	console.log("BE: " +z_index+" -- " +  z[z_index].bombardmentEvent(this, player, bombarding_player, sector, planet_idx));
+
 	return z[z_index].bombardmentEvent(this, player, bombarding_player, sector, planet_idx);
 
       }

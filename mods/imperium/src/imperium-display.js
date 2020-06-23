@@ -7,7 +7,6 @@ displayBoard() {
     this.updateSectorGraphics(i);
   }
   this.addEventsToBoard();
-
 }
 
 
@@ -59,7 +58,10 @@ addUIEvents() {
   //add faction buttons
   var html = "";
   var faction_initial = "";
+  var factions_enabled = [];
+
   for (let i = 0; i < this.game.players_info.length; i++) {
+    factions_enabled.push(0);
     let faction_name = this.returnFaction((i+1));
     let faction_initial = "";
     if (faction_name[0] != "") { faction_initial = faction_name[0]; }
@@ -81,8 +83,23 @@ addUIEvents() {
     el.addEventListener('click', (e) => {
       if (document.querySelector('.interface_overlay').classList.contains('hidden')) {
         document.querySelector('.interface_overlay').classList.remove('hidden');
+      } else {
+        
+      }
+      let is_visible = 0;
+      let faction_idx = e.target.dataset.id-1;
+      if (factions_enabled[faction_idx] == 1) {
+	factions_enabled[faction_idx] = 0;
+      } else {
+	factions_enabled[faction_idx] = 1;
       }
       document.querySelector('.faction_sheet.p' + e.target.dataset.id).toggleClass('hidden');
+      for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+        if (factions_enabled[i] > 0) { is_visible++; }
+      }
+      if (is_visible == 0) {
+        document.querySelector('.interface_overlay').classList.add('hidden');
+      }
     });
   });
 
@@ -93,7 +110,6 @@ addUIEvents() {
   });
 
   for (let i = 0; i < this.game.players_info.length; i++) {
-console.log("PLAYER: " + i);
     document.querySelector(`.faction_content.p${(i+1)}`).innerHTML = imperium_self.returnFactionSheet(imperium_self, (i+1));
   }
 }
@@ -170,6 +186,7 @@ returnFactionSheet(imperium_self, player) {
 	  `;
 	}
       }
+
     html += `</div>`;
 
 
@@ -240,63 +257,70 @@ returnFactionSheet(imperium_self, player) {
     //
     // OBJECTIVES
     //
-    let objc = imperium_self.returnPlayerObjectives();
+    let objc = imperium_self.returnPlayerObjectives(player);
     let scored_objectives = [];
     let unscored_objectives = [];
 
-let xxx = 0;
-    for (let i in objc) {
-xxx++;
-if (xxx == 2) { 
-  this.game.players_info[player-1].objectives_scored.push(i);
-}
-      if (this.game.players_info[player-1].objectives_scored.includes(i)) {
-	scored_objectives.push(objc[i]);
-      } else {
-	unscored_objectives.push(objc[i]);
+
+      for (let i in objc) {
+        if (this.game.players_info[player-1].objectives_scored.includes(i)) {
+   	  scored_objectives.push(objc[i]);
+        } else {
+  	  unscored_objectives.push(objc[i]);
+        }
       }
-    }
+
+      html += `
+
+        <h3>Objectives</h3>
+        <div class="faction_sheet_objectives">
+          <div class="scored">
+            <h4>Scored</h4>
+            <div class="faction_sheet_objective_cards scored">
+      `;
 
 console.log("SCORED: " + JSON.stringify(scored_objectives));
 console.log("UNSCORED: " + JSON.stringify(unscored_objectives));
+console.log(this.game.players_info[player-1].secret_objectives_in_hand);
 
-    html += `
+      for (let i = 0; i < scored_objectives.length; i++) {
+        html += `
+              <div class="faction_sheet_action_card bc" style="background-image: url(${scored_objectives[i].img})">
+                <div class="action_card_name">${scored_objectives[i].name}</div>
+                <div class="action_card_content">${scored_objectives[i].text}</div>
+              </div>
+        `;
+      }
 
-      <h3>Objectives</h3>
-      <div class="faction_sheet_objectives">
-        <div class="scored">
-          <h4>Scored</h4>
-          <div class="faction_sheet_objective_cards scored">
-    `;
-
-    for (let i = 0; i < scored_objectives.length; i++) {
       html += `
-            <div class="faction_sheet_action_card bc" style="background-image: url(${scored_objectives[i].img})">
-              <div class="action_card_name">${scored_objectives[i].name}</div>
-              <div class="action_card_content">${scored_objectives[i].text}</div>
-            </div>
-      `;
-    }
-
-
-    html += `
           </div>
-        </div>
-        <div class="unscored">
-          <h4>Unscored</h4>
-          <div class="faction_sheet_objective_cards unscored">
-    `;
+          </div>
+          <div class="unscored">
+            <h4>Unscored</h4>
+            <div class="faction_sheet_objective_cards unscored">
+      `;
 
-    for (let i = 0; i < unscored_objectives.length; i++) {
-      html += `
+
+      if (this.game.player != player) {
+        for (let i = 0; i < this.game.players_info[player-1].secret_objectives_in_hand; i++) {
+          html += `
+            <div class="faction_sheet_action_card bc" style="background-image: url(/imperium/img/secret_objective_back.png)">
+            </div>
+        `;
+        }
+      }
+	
+
+      for (let i = 0; i < unscored_objectives.length; i++) {
+        html += `
             <div class="faction_sheet_action_card bc" style="background-image: url(${unscored_objectives[i].img})">
               <div class="action_card_name">${unscored_objectives[i].name}</div>
               <div class="action_card_content">${unscored_objectives[i].text}</div>
             </div>
-      `;
-    }
+        `;
+      }
 
-    html += `
+      html += `
           </div>
         </div>
       </div>

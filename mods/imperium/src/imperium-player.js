@@ -155,7 +155,7 @@
     let html = '';
     let imperium_self = this;
     let technologies = this.returnTechnology();
-    let relevant_action_cards = ["action"];
+    let relevant_action_cards = ["action","main"];
     let ac = this.returnPlayerActionCards(relevant_action_cards);
 
     if (stage == "main") {
@@ -2297,8 +2297,8 @@ alert("TTG: 6" + total_trade_goods);
     html += '</ul>';
   
     this.updateStatus(html);
-    $('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showStrategyCard(s); } });
-    $('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideStrategyCard(s); } });
+    //$('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showStrategyCard(s); } });
+    //$('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideStrategyCard(s); } });
     $('.textchoice').on('click', function() {
 
       let action2 = $(this).attr("id");

@@ -1342,13 +1342,15 @@ console.log("SECTOR: " + sector);
     //
     // deck 6 -- hand #5 -- secret objectives
     //
-    for (let i = 0; i < this.game.deck[5].hand.length; i++) {
-      if (types.length == 0) {
-	x.push(this.secret_objectives[this.game.deck[5].hand[i]]);
-      } else {
-	if (types.includes("secret_objectives")) {
-	  x.push(this.secret_objectives[this.game.deck[5].hand[i]]);
-	}
+    if (this.game.player == player) {
+      for (let i = 0; i < this.game.deck[5].hand.length; i++) {
+        if (types.length == 0) {
+  	  x.push(this.secret_objectives[this.game.deck[5].hand[i]]);
+        } else {
+  	  if (types.includes("secret_objectives")) {
+	    x.push(this.secret_objectives[this.game.deck[5].hand[i]]);
+	  }
+        }
       }
     }
 

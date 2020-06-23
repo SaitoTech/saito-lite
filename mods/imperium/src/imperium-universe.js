@@ -68,16 +68,20 @@
     planets['planet57'] = { type : "homeworld" , img : "/imperium/img/planets/EARTH.png" , name : "Earth" , resources : 4 , influence : 2 , bonus : ""  }
     planets['planet58'] = { type : "homeworld" , img : "/imperium/img/planets/ARTIZZ.png" , name : "Artizz" , resources : 4 , influence : 1 , bonus : ""  }
 
-    planets['planet59'] = { type : "homeworld" , img : "/imperium/img/planets/STARTIDE.png" , name : "Startide" , resources : 2 , influence : 0 , bonus : ""  }   	// sector 58
-    planets['planet60'] = { type : "homeworld" , img : "/imperium/img/planets/GIANTSDRINK.png" , name : "Giant's Drink" , resources : 1 , influence : 1 , bonus : ""  }	// sector 59
-    planets['planet61'] = { type : "homeworld" , img : "/imperium/img/planets/MIRANDA.png" , name : "Miranda" , resources : 0 , influence : 2 , bonus : ""  }		// sector 60
-    planets['planet62'] = { type : "homeworld" , img : "/imperium/img/planets/EBERBACH.png" , name : "Eberbach" , resources : 2 , influence : 1 , bonus : ""  }		// sector 61
-    planets['planet63'] = { type : "homeworld" , img : "/imperium/img/planets/OTHO.png" , name : "Otho" , resources : 1 , influence : 2 , bonus : ""  }			// sector 62
-    planets['planet64'] = { type : "homeworld" , img : "/imperium/img/planets/PERTINAX.png" , name : "Pertinax" , resources : 2 , influence : 2 , bonus : ""  }		// sector 63
-    planets['planet65'] = { type : "homeworld" , img : "/imperium/img/planets/COTILLARD.png" , name : "Cotillard" , resources : 2 , influence : 2 , bonus : ""  }	// sector 64
-    planets['planet66'] = { type : "homeworld" , img : "/imperium/img/planets/DOMINIC.png" , name : "Dominic" , resources : 3 , influence : 1 , bonus : ""  }		// sector 65
-    planets['planet67'] = { type : "homeworld" , img : "/imperium/img/planets/PESTULON.png" , name : "Pestulon" , resources : 1 , influence : 1 , bonus : "yellow"  }	// sector 66
-    planets['planet68'] = { type : "homeworld" , img : "/imperium/img/planets/XIAOZUOR.png" , name : "Xiao Zuor" , resources : 1 , influence : 3 , bonus : ""  }	// sector 67
+    planets['planet59'] = { type : "cultural" , img : "/imperium/img/planets/STARTIDE.png" , name : "Startide" , resources : 2 , influence : 0 , bonus : ""  }   	// sector 58
+    planets['planet60'] = { type : "industrial" , img : "/imperium/img/planets/GIANTSDRINK.png" , name : "Giant's Drink" , resources : 1 , influence : 1 , bonus : ""  }	// sector 59
+    planets['planet61'] = { type : "hazardous" , img : "/imperium/img/planets/MIRANDA.png" , name : "Miranda" , resources : 0 , influence : 2 , bonus : ""  }		// sector 60
+    planets['planet62'] = { type : "industrial" , img : "/imperium/img/planets/EBERBACH.png" , name : "Eberbach" , resources : 2 , influence : 1 , bonus : ""  }		// sector 61
+    planets['planet63'] = { type : "hazardous" , img : "/imperium/img/planets/OTHO.png" , name : "Otho" , resources : 1 , influence : 2 , bonus : ""  }			// sector 62
+    planets['planet64'] = { type : "hazardous" , img : "/imperium/img/planets/PERTINAX.png" , name : "Pertinax" , resources : 2 , influence : 2 , bonus : ""  }		// sector 63
+    planets['planet65'] = { type : "cotillard" , img : "/imperium/img/planets/COTILLARD.png" , name : "Cotillard" , resources : 2 , influence : 2 , bonus : ""  }	// sector 64
+    planets['planet66'] = { type : "cultural" , img : "/imperium/img/planets/DOMINIC.png" , name : "Dominic" , resources : 3 , influence : 1 , bonus : ""  }		// sector 65
+    planets['planet67'] = { type : "industrial" , img : "/imperium/img/planets/PESTULON.png" , name : "Pestulon" , resources : 1 , influence : 1 , bonus : "yellow"  }	// sector 66
+    planets['planet68'] = { type : "hazardous" , img : "/imperium/img/planets/XIAOZUOR.png" , name : "Xiao Zuor" , resources : 1 , influence : 3 , bonus : ""  }	// sector 67
+    planets['planet69'] = { type : "hazardous" , img : "/imperium/img/planets/KROEBER.png" , name : "Kroeber" , resources : 2 , influence : 0 , bonus : ""  }		// sector 68
+    planets['planet70'] = { type : "hazardous" , img : "/imperium/img/planets/LEGUIN.png" , name : "Leguin" , resources : 0 , influence : 1 , bonus : ""  }		// sector 69
+    planets['planet71'] = { type : "cultural" , img : "/imperium/img/planets/SIGURDS-CRADLE.png" , name : "Sigurd's Cradle" , resources : 1 , influence : 3 , bonus : ""  }	// sector 70
+    planets['planet72'] = { type : "cultural" , img : "/imperium/img/planets/KLENCORY.png" , name : "Klencory" , resources : 2 , influence : 2 , bonus : ""  }		// sector 71
 
     for (var i in planets) {
 
@@ -173,7 +177,6 @@
     sectors['sector53']        = { img : "/imperium/img/sectors/sector53.png" , 	   name : "Mentak Homeworld" , hw : 1 , wormhole: 0 , mr : 0 , planets : ['planet58'] }
 
 
-/*
     sectors['sector54']        = { img : "/imperium/img/sectors/sector48.png" , 	   name : "Sector 46" , hw : 0 , wormhole : 1, mr : 0 , planets : ['planet52'] } // wormhole a
     sectors['sector55']        = { img : "/imperium/img/sectors/sector49.png" , 	   name : "Sector 47" , hw : 0 , wormhole : 2, mr : 0 , planets : ['planet51'] } // wormhole b
     sectors['sector56']        = { img : "/imperium/img/sectors/sector46.png" , 	   name : "Sector 48" , hw : 0 , wormhole : 1, mr : 0 , planets : [] } // wormhole a
@@ -188,7 +191,10 @@
     sectors['sector65']        = { img : "/imperium/img/sectors/sector65.png" , 	   name : "Sector 65" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet66'] }
     sectors['sector66']        = { img : "/imperium/img/sectors/sector66.png" , 	   name : "Sector 66" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet67'] }
     sectors['sector67']        = { img : "/imperium/img/sectors/sector67.png" , 	   name : "Sector 67" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet68'] }
-*/
+    sectors['sector68']        = { img : "/imperium/img/sectors/sector67.png" , 	   name : "Sector 67" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet69','planet70'] }
+    sectors['sector69']        = { img : "/imperium/img/sectors/sector67.png" , 	   name : "Sector 67" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet71'] }
+    sectors['sector70']        = { img : "/imperium/img/sectors/sector67.png" , 	   name : "Sector 67" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet72'] }
+
 
     for (var i in sectors) {
       sectors[i].units = [this.totalPlayers]; // array to store units
