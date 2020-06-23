@@ -415,16 +415,17 @@ body {
 
 .unit-display div {
   text-align: center;
-  line-height: 4vh;
+  line-height: 4vw;
   z-index: 1;
 }
 
 .unit-name {
   text-align: center;
   font-size: 1.5em;
-  line-height: 7.5vh;
+  line-height: 8vw;
   position: absolute;
   width: 100%;
+  height: 100%;
   z-index: 1;
   background: linear-gradient(150deg, #000B, #0004);
 }
