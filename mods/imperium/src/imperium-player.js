@@ -1432,18 +1432,18 @@ console.log(" ... and done");
   
       if (id == "confirm") {
   
-        total_cost = 3 * (command_tokens + strategy_tokens);
+        total_cost = 3 * (fleet_supply + command_tokens + strategy_tokens);
         imperium_self.playerSelectInfluence(total_cost, function(success) {
   
-  	if (success == 1) {
+  	  if (success == 1) {
             imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tcommand\t"+command_tokens);
             imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tcommand\t"+strategy_tokens);
             imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tfleetsupply\t"+fleet_supply);
             imperium_self.endTurn();
             return;
-  	} else {
-  	  alert("failure to find appropriate influence");
-  	}
+  	  } else {
+  	    alert("failure to find appropriate influence");
+  	  }
         });
       };
   
@@ -2050,8 +2050,8 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
   
   playerSelectInfluence(cost, mycallback) {
   
-    if (cost == 0) { mycallback(1); }
-  
+    if (cost == 0) { mycallback(1); return; }  
+
     let imperium_self = this;
     let array_of_cards = this.returnPlayerUnexhaustedPlanetCards(this.game.player); // unexhausted
     let array_of_cards_to_exhaust = [];
@@ -3399,6 +3399,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 
       if (action == "cancel") {
         cancel_func();
+        imperium_self.hideSectorHighlight(action);
         return 0;
       }
 

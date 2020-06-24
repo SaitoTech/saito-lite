@@ -589,12 +589,25 @@ console.log("PLANET IS: " + JSON.stringify(sys.p[planet_idx]));
     let adjasec = [];
     let s = this.addWormholesToBoardTiles(this.returnBoardTiles());  
     for (let i in s) {
-      if (this.areSectorsAdjacent(sector, s[i].tile) && s[i].tile != sector) {
-console.log("PUSHING TILE: " + s[i].tile);
-        adjasec.push(s[i].tile);
-      }
-    }
 
+console.log("-->" + i);
+      if (this.game.board[i]) {
+        let sys = this.returnSectorAndPlanets(i);
+console.log("IDENTIFIED: " + sys.s.sector);
+        if (sys.s.sector == sector) {
+          for (let t = 0; t < s[i].neighbours.length; t++) {
+
+console.log("nb is: " + s[i].neighbours[t]);
+	    let sys2 = this.returnSectorAndPlanets(s[i].neighbours[t]);
+
+	    adjasec.push(sys2.s.sector);
+
+  	  }
+        }
+      }
+console.log("ADJASEC: " + JSON.stringify(adjasec));
+
+    }
     return adjasec;
 
   }

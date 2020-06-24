@@ -307,6 +307,7 @@ console.log("STRATEGY CARD!");
 
 console.log("STRATEGY CARD 2!");
   	imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.push(card);
+console.log("STRATEGY CARD 3!");
 
   	if (stage == 1) {
 	  this.updateLog(this.returnFaction(strategy_card_player) + " plays " + this.strategy_cards[card].name + " primary");
@@ -373,11 +374,14 @@ console.log("STRATEGY CARD BEFORE EVENT");
 
         for (let i = 0; i < speaker_order.length; i++) {
           for (let k = 0; k < z.length; k++) {
-            if (z[k].strategyCardAfterTriggers(this, (i+1), player, card) == 1) {
+            if (z[k].strategyCardAfterTriggers(this, speaker_order[i], player, card) == 1) {
               this.game.queue.push("strategy_card_after_event\t"+card+"\t"+speaker_order[i]+"\t"+player+"\t"+k);
             }
           }
         }
+
+        this.game.state.playing_strategy_card_secondary = 0;
+
         return 1;
       }
       if (mv[0] === "strategy_card_after_event") {
@@ -389,6 +393,8 @@ console.log("STRATEGY CARD BEFORE EVENT");
         let z = this.returnEventObjects();
 
         this.game.queue.splice(qe, 1);
+
+console.log("executing "+z[z_index].name);
 
         return z[z_index].strategyCardAfterEvent(this, player, strategy_card_player, card);
 

@@ -29,15 +29,17 @@
         }
       },
       strategyCardAfterTriggers : function(imperium_self, player, strategy_card_player, card) {
+	if (imperium_self.game.players_info[player-1].peace_accords == 1) { return 1; }
+	return 0;
+      },
+      strategyCardAfterEvent : function(imperium_self, player, strategy_card_player, card) {
 
 	if (card == "diplomacy") {
 
-
-	  let pcs = imperium_self.returnPlayerPlanetCards(imperium_self.game.player);
+	  let pcs = imperium_self.returnPlayerPlanetCards(player);
 	  let sectors = [];
 	  let adjacent_sectors = [];
 	  let seizable_planets = [];
-
 
 	  for (let i = 0; i < pcs.length; i++) {
 	    if (!sectors.includes(imperium_self.game.planets[pcs[i]].sector)) {
@@ -45,6 +47,9 @@
 	      adjacent_sectors.push(imperium_self.game.planets[pcs[i]].sector);
 	    }
 	  }
+
+
+console.log("SECTORS: " + JSON.stringify(sectors));
 
 	  //
 	  // get all planets adjacent to...
@@ -55,6 +60,8 @@
 	      if (!adjacent_sectors.includes(as[z])) { adjacent_sectors.push(as[z]); }
 	    }
     	  }
+
+console.log("ADJACENT SECTORS: " + JSON.stringify(adjacent_sectors));
 
 	  //
 	  // get all planets I don't control in those sectors
@@ -67,6 +74,7 @@
 	        if (sys.p[y].owner != player) {
 		  if (!imperium_self.doesPlanetHaveUnits(sys.p[y])) {
 	  	    seizable_planets.push(sys.p[y].planet);
+console.log("can seize: " + sys.p[y].planet + " in " + adjacent_sectors[b]);
 	          }
 	        }
 	      }
@@ -80,8 +88,12 @@
 	    return 1;
 	  }
 
+
+
 	  if (imperium_self.game.players_info[player-1].peace_accords == 1) {
 	    if (imperium_self.game.player == player) {
+
+console.log("SEIZE: " + JSON.stringify(seizable_planets));
 
               imperium_self.playerSelectPlanetWithFilter(
                 "Select a planet to annex via Peace Accords: " ,
@@ -102,6 +114,8 @@
 
 	  return 1;
 	}
+
+	return 1;
       }
     });
 

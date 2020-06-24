@@ -1231,15 +1231,17 @@ console.log("P: " + planet);
         }
       },
       strategyCardAfterTriggers : function(imperium_self, player, strategy_card_player, card) {
+	if (imperium_self.game.players_info[player-1].peace_accords == 1) { return 1; }
+	return 0;
+      },
+      strategyCardAfterEvent : function(imperium_self, player, strategy_card_player, card) {
 
 	if (card == "diplomacy") {
 
-
-	  let pcs = imperium_self.returnPlayerPlanetCards(imperium_self.game.player);
+	  let pcs = imperium_self.returnPlayerPlanetCards(player);
 	  let sectors = [];
 	  let adjacent_sectors = [];
 	  let seizable_planets = [];
-
 
 	  for (let i = 0; i < pcs.length; i++) {
 	    if (!sectors.includes(imperium_self.game.planets[pcs[i]].sector)) {
@@ -1247,6 +1249,9 @@ console.log("P: " + planet);
 	      adjacent_sectors.push(imperium_self.game.planets[pcs[i]].sector);
 	    }
 	  }
+
+
+console.log("SECTORS: " + JSON.stringify(sectors));
 
 	  //
 	  // get all planets adjacent to...
@@ -1257,6 +1262,8 @@ console.log("P: " + planet);
 	      if (!adjacent_sectors.includes(as[z])) { adjacent_sectors.push(as[z]); }
 	    }
     	  }
+
+console.log("ADJACENT SECTORS: " + JSON.stringify(adjacent_sectors));
 
 	  //
 	  // get all planets I don't control in those sectors
@@ -1269,6 +1276,7 @@ console.log("P: " + planet);
 	        if (sys.p[y].owner != player) {
 		  if (!imperium_self.doesPlanetHaveUnits(sys.p[y])) {
 	  	    seizable_planets.push(sys.p[y].planet);
+console.log("can seize: " + sys.p[y].planet + " in " + adjacent_sectors[b]);
 	          }
 	        }
 	      }
@@ -1282,8 +1290,12 @@ console.log("P: " + planet);
 	    return 1;
 	  }
 
+
+
 	  if (imperium_self.game.players_info[player-1].peace_accords == 1) {
 	    if (imperium_self.game.player == player) {
+
+console.log("SEIZE: " + JSON.stringify(seizable_planets));
 
               imperium_self.playerSelectPlanetWithFilter(
                 "Select a planet to annex via Peace Accords: " ,
@@ -1304,6 +1316,8 @@ console.log("P: " + planet);
 
 	  return 1;
 	}
+
+	return 1;
       }
     });
 
@@ -4841,6 +4855,8 @@ alert("select sector with filter");
     for (let i in this.game.board) {
       let sector = this.game.board[i].tile;
       let sys = this.returnSectorAndPlanets(sector);
+      sys.s.sector = sector;
+      sys.s.tile = i;
       if (sys.p != undefined) {
         for (let ii = 0; ii < sys.p.length; ii++) {
           sys.p[ii].sector = sector;
@@ -4849,8 +4865,8 @@ alert("select sector with filter");
 	  sys.p[ii].planet = sys.s.planets[ii];
 	  if (sys.s.hw == 1) { sys.p[ii].hw = 1; }
         }
-        this.saveSystemAndPlanets(sys);
       }
+      this.saveSystemAndPlanets(sys);
     }
  
 
@@ -6172,6 +6188,7 @@ console.log("STRATEGY CARD!");
 
 console.log("STRATEGY CARD 2!");
   	imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.push(card);
+console.log("STRATEGY CARD 3!");
 
   	if (stage == 1) {
 	  this.updateLog(this.returnFaction(strategy_card_player) + " plays " + this.strategy_cards[card].name + " primary");
@@ -6238,11 +6255,14 @@ console.log("STRATEGY CARD BEFORE EVENT");
 
         for (let i = 0; i < speaker_order.length; i++) {
           for (let k = 0; k < z.length; k++) {
-            if (z[k].strategyCardAfterTriggers(this, (i+1), player, card) == 1) {
+            if (z[k].strategyCardAfterTriggers(this, speaker_order[i], player, card) == 1) {
               this.game.queue.push("strategy_card_after_event\t"+card+"\t"+speaker_order[i]+"\t"+player+"\t"+k);
             }
           }
         }
+
+        this.game.state.playing_strategy_card_secondary = 0;
+
         return 1;
       }
       if (mv[0] === "strategy_card_after_event") {
@@ -6254,6 +6274,8 @@ console.log("STRATEGY CARD BEFORE EVENT");
         let z = this.returnEventObjects();
 
         this.game.queue.splice(qe, 1);
+
+console.log("executing "+z[z_index].name);
 
         return z[z_index].strategyCardAfterEvent(this, player, strategy_card_player, card);
 
@@ -10939,18 +10961,18 @@ console.log(" ... and done");
   
       if (id == "confirm") {
   
-        total_cost = 3 * (command_tokens + strategy_tokens);
+        total_cost = 3 * (fleet_supply + command_tokens + strategy_tokens);
         imperium_self.playerSelectInfluence(total_cost, function(success) {
   
-  	if (success == 1) {
+  	  if (success == 1) {
             imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tcommand\t"+command_tokens);
             imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tcommand\t"+strategy_tokens);
             imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tfleetsupply\t"+fleet_supply);
             imperium_self.endTurn();
             return;
-  	} else {
-  	  alert("failure to find appropriate influence");
-  	}
+  	  } else {
+  	    alert("failure to find appropriate influence");
+  	  }
         });
       };
   
@@ -11557,8 +11579,8 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
   
   playerSelectInfluence(cost, mycallback) {
   
-    if (cost == 0) { mycallback(1); }
-  
+    if (cost == 0) { mycallback(1); return; }  
+
     let imperium_self = this;
     let array_of_cards = this.returnPlayerUnexhaustedPlanetCards(this.game.player); // unexhausted
     let array_of_cards_to_exhaust = [];
@@ -13198,7 +13220,9 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     for (var i in sectors) {
       sectors[i].units = [this.totalPlayers]; // array to store units
       sectors[i].activated = [this.totalPlayers]; // array to store units
-  
+      sectors[i].sector = "";  // sector reference
+      sectors[i].tile = "";  // tile on board
+
       for (let j = 0; j < this.totalPlayers; j++) {
         sectors[i].units[j] = []; // array of united
         sectors[i].activated[j] = 0; // is this activated by the player
@@ -14461,12 +14485,25 @@ console.log("PLANET IS: " + JSON.stringify(sys.p[planet_idx]));
     let adjasec = [];
     let s = this.addWormholesToBoardTiles(this.returnBoardTiles());  
     for (let i in s) {
-      if (this.areSectorsAdjacent(sector, s[i].tile) && s[i].tile != sector) {
-console.log("PUSHING TILE: " + s[i].tile);
-        adjasec.push(s[i].tile);
-      }
-    }
 
+console.log("-->" + i);
+      if (this.game.board[i]) {
+        let sys = this.returnSectorAndPlanets(i);
+console.log("IDENTIFIED: " + sys.s.sector);
+        if (sys.s.sector == sector) {
+          for (let t = 0; t < s[i].neighbours.length; t++) {
+
+console.log("nb is: " + s[i].neighbours[t]);
+	    let sys2 = this.returnSectorAndPlanets(s[i].neighbours[t]);
+
+	    adjasec.push(sys2.s.sector);
+
+  	  }
+        }
+      }
+console.log("ADJASEC: " + JSON.stringify(adjasec));
+
+    }
     return adjasec;
 
   }

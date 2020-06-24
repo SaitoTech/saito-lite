@@ -196,7 +196,9 @@
     for (var i in sectors) {
       sectors[i].units = [this.totalPlayers]; // array to store units
       sectors[i].activated = [this.totalPlayers]; // array to store units
-  
+      sectors[i].sector = "";  // sector reference
+      sectors[i].tile = "";  // tile on board
+
       for (let j = 0; j < this.totalPlayers; j++) {
         sectors[i].units[j] = []; // array of united
         sectors[i].activated[j] = 0; // is this activated by the player
