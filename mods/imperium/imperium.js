@@ -6847,7 +6847,7 @@ console.log("executing "+z[z_index].name);
         this.game.queue.push("playerschoosestrategycards");
         this.game.queue.push("playerschoosestrategycards_before");
         if (this.game.state.round == 1) {
-          this.game.queue.push("acknowledge\t"+"<center><p style='font-weight:bold'>The Republic has fallen Player"+this.game.player+"</p><p style='font-size:0.95em;margin-top:10px;'>As the Galactic Senate collapses into factional squabbling, the ascendant powers on the outer rim plot to seize New Byzantium...</p><p style='font-size:0.95em;margin-top:10px'>Take the lead by moving your fleet to capture New Byzantium, or establish a power-base to displace the leader and impose your will on your peers.</p></center>");
+          this.game.queue.push("acknowledge\t"+"<center><p style='font-weight:bold'>The Republic has fallen!</p><p style='font-size:0.95em;margin-top:10px;'>As the Galactic Senate collapses into factional squabbling, the ascendant powers on the outer rim plot to seize New Byzantium...</p><p style='font-size:0.95em;margin-top:10px'>Take the lead by moving your fleet to capture New Byzantium, or establish a power-base to displace the leader and impose your will on your peers.</p></center>");
  	}
 
 
@@ -7039,7 +7039,6 @@ console.log("do we have a pool 2?");
   
   	for (let z in x) {
     	  if (!this.game.state.strategy_cards.includes(z)) {
-alert("pushing " + x[z].name);
   	    this.game.state.strategy_cards.push(z);
   	    this.game.state.strategy_cards_bonus.push(0);
           }
