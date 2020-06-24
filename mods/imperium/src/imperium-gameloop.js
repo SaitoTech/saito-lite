@@ -870,6 +870,7 @@ console.log("executing "+z[z_index].name);
   	//
         if (this.game.state.round_scoring == 0 && this.game.state.round >= 1) {
           this.game.queue.push("strategy\t"+"imperial"+"\t"+"-1"+"\t2\t"+1);
+          this.game.queue.push("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
           this.game.queue.push("acknowledge\t"+"As the Imperial card was not played in the previous round, all players now have an opportunity to score Victory Points (in initiative order)");
   	  this.game.state.round_scoring = 0;
 	  return 1;
@@ -933,10 +934,11 @@ console.log("executing "+z[z_index].name);
         this.game.queue.push("playerschoosestrategycards");
         this.game.queue.push("playerschoosestrategycards_before");
         if (this.game.state.round == 1) {
-          this.game.queue.push("acknowledge\t"+"<center><p style='font-weight:bold'>The Republic has fallen!</p><p style='font-size:0.95em'>As the Galactic Senate collapses into factional squabbling, the ascendant factions lurking on the outer rim plot to seize New Byzantium and establish a new Imperial Age...</p></center>");
+          this.game.queue.push("acknowledge\t"+"<center><p style='font-weight:bold'>The Republic has fallen Player"+this.game.player+"</p><p style='font-size:0.95em;margin-top:10px;'>As the Galactic Senate collapses into factional squabbling, the ascendant powers on the outer rim plot to seize New Byzantium...</p><p style='font-size:0.95em;margin-top:10px'>Take the lead by moving your fleet to capture New Byzantium, or establish a power-base to displace the leader and impose your will on your peers.</p></center>");
  	}
 
 
+console.log("STRATEGY CARDS: " + JSON.stringify(this.strategy_cards));
 
   	//
   	// ACTION CARDS
@@ -1174,6 +1176,8 @@ console.log("do we have a pool 2?");
       if (mv[0] === "pickstrategy") {
   
   	let player       = parseInt(mv[1]);
+
+console.log("HERE WE ARE: " + player);
   
   	if (this.game.player == player) {
   	  this.playerSelectStrategyCards(function(card) {
@@ -1294,10 +1298,18 @@ console.log("do we have a pool 2?");
 	let imperium_self = this;
 	let notice = mv[1];
 
+	this.game.halted = 1;
+	this.saveGame(this.game.id);
+
+console.log("GAMING HALTED!");
+
   	this.playerAcknowledgeNotice(notice, function() {
   	  imperium_self.game.queue.splice(qe, 1);
 	  // we have stopped queue execution, so need to restart at the lowest level
-  	  imperium_self.runQueue();
+	  imperium_self.game.halted = 0;
+  	  console.log("CONTINUING EXECUTION FROM HERE");
+	  console.log(imperium_self.game.queue);
+	  imperium_self.runQueue();
 	});
 
 	return 0;
@@ -3534,9 +3546,7 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 
 
       for (let i in z) {
-        if (!z[i].handleGameLoop(imperium_self, qe, mv)) {
-console.log("HERE: " + z[i].name);
- return 0; }
+        if (!z[i].handleGameLoop(imperium_self, qe, mv)) { return 0; }
       }
 
 

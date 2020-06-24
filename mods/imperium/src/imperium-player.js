@@ -1629,18 +1629,10 @@ console.log(player + " -- " + card + " -- " + deck);
     let imperium_self = this;
    
     let html = '';  
-    if (stage == 1) { 
-      html += 'You are playing the Imperium primary. ';
-    }
-    if (stage == 2) { 
-      html += 'You are playing the Imperium secondary. ';
-    }
-
     html += '<div class="sf-readable">Do you wish to score any victory points? </div><ul>';
   
     // Stage I Public Objectives
     for (let i = 0; i < this.game.state.stage_i_objectives.length; i++) {
-console.log("STAGE I: " + this.game.state.stage_i_objectives[i]);
       if (!this.game.players_info[this.game.player-1].objectives_scored.includes(this.game.state.stage_i_objectives[i])) {
         if (this.canPlayerScoreVictoryPoints(this.game.player, this.game.state.stage_i_objectives[i], 1)) {
           html += '1 VP Public Objective: <li class="option stage1" id="'+this.game.state.stage_i_objectives[i]+'">'+this.game.deck[3].cards[this.game.state.stage_i_objectives[i]].name+'</li>';
@@ -1650,7 +1642,6 @@ console.log("STAGE I: " + this.game.state.stage_i_objectives[i]);
   
     // Stage II Public Objectives
     for (let i = 0; i < this.game.state.stage_ii_objectives.length; i++) {
-console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
       if (!this.game.players_info[this.game.player-1].objectives_scored.includes(this.game.state.stage_ii_objectives[i])) {
         if (this.canPlayerScoreVictoryPoints(this.game.player, this.game.state.stage_ii_objectives[i], 2)) {
           html += '2 VP Public Objective: <li class="option stage2" id="'+this.game.state.stage_ii_objectives[i]+'">'+this.game.deck[4].cards[this.game.state.stage_ii_objectives[i]].name+'</li>';
@@ -2139,7 +2130,7 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
     html += '</ul>';
  
     this.updateStatus(html);
-    $('.cardchoice').on('click', function() {
+    $('.textchoice').on('click', function() {
  
       let action2 = $(this).attr("id");
 
@@ -3213,8 +3204,8 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
   
   
   
-  playerAllocateNewTokens(player, tokens) {
-  
+  playerAllocateNewTokens(player, tokens, resolve_needed=1) {  
+
     let imperium_self = this;
   
     if (this.game.player == player) {
@@ -3260,15 +3251,17 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
         }
 
         if (obj.new_tokens == 0) {
-            if (imperium_self.game.confirms_needed > 0) {
-              imperium_self.addMove("resolve\ttokenallocation\t1\t"+imperium_self.app.wallet.returnPublicKey());
-	    } else {
-              imperium_self.addMove("resolve\ttokenallocation");
+	    if (resolve_needed == 1) {
+              if (imperium_self.game.confirms_needed > 0) {
+                imperium_self.addMove("resolve\ttokenallocation\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	      } else {
+                imperium_self.addMove("resolve\ttokenallocation");
+	      }
 	    }
             imperium_self.addMove("purchase\t"+player+"\tstrategy\t"+obj.new_strategy);
             imperium_self.addMove("purchase\t"+player+"\tcommand\t"+obj.new_command);
             imperium_self.addMove("purchase\t"+player+"\tfleetsupply\t"+obj.new_fleet);
-          imperium_self.endTurn();
+            imperium_self.endTurn();
           } else {
           updateInterface(imperium_self, obj, updateInterface);
         }

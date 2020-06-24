@@ -357,10 +357,10 @@ returnFactionSheet(imperium_self, player) {
      });
      Object.entries(imperium_self.units).forEach(item => {
       let unit = item[1];
-      if(unit.extension == 1) {
+      if (unit.extension == 1) {
         for(i=0; i < unit_array.length; i++){
-          console.log("---"+unit_array[i][0]+"---"+item[0]+"---");
-           if(unit_array[i][1].type == unit.type){
+          //console.log("---"+unit_array[i][0]+"---"+item[0]+"---");
+           if (unit_array[i][1].type == unit.type){
              unit_array[i][1].cost += " (" + unit.cost +")";
              unit_array[i][1].combat += " (" + unit.combat +")";
              unit_array[i][1].move += " (" + unit.move +")";

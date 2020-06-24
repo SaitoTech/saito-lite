@@ -169,9 +169,11 @@ console.log("TECH: " + techlist[i]);
 	return 0;
       },
       scoreObjective : function(imperium_self, player) {
-        imperium_self.playerSelectStrategyAndCommandTokens(3, function(success) {
-          if (success == 1) { imperium_self.endTurn(); }
-        });
+	if (imperium_self.game.player == player) {
+          imperium_self.playerSelectStrategyAndCommandTokens(3, function(success) {
+            if (success == 1) { imperium_self.endTurn(); }
+          });
+	}
 	return 0;
       },
   });
@@ -197,9 +199,11 @@ console.log("TECH: " + techlist[i]);
 	return 0;
       },
       scoreObjective : function(imperium_self, player) {
-        imperium_self.playerSelectInfluence(8, function(success) {
-          if (success == 1) { imperium_self.endTurn(); }
-        });
+	if (imperium_self.game.player == player) {
+          imperium_self.playerSelectInfluence(8, function(success) {
+            if (success == 1) { imperium_self.endTurn(); }
+          });
+        }
 	return 0;
       },
   });
