@@ -62,36 +62,43 @@
 	  lmv = this.game.queue[le].split("\t");
 	}
 
+	//
 	// this overwrites secondaries, we need to clear manually
+	// if we are playing the sceondary, we don't want to udpate status
 	if (this.game.state.playing_strategy_card_secondary == 0) {
           this.updateStatus("Waiting for Opponent Move...");  
 	}
 
 	if (mv[1] == lmv[0]) {
-
   	  if (mv[2] != undefined) {
 
 	    //
+	    // June 24th removed
 	    //
-	    //
-	    if (mv[1] === "strategy") {
-	      if (mv[2] === this.app.wallet.returnPublicKey()) {
-		this.game.state.playing_strategy_card_secondary = 0;
-	      }
-	    }
+	    //if (mv[1] === "strategy") {
+	    //  if (mv[2] === this.app.wallet.returnPublicKey()) {
+	    //	this.game.state.playing_strategy_card_secondary = 0;
+	    //  }
+	    //}
 
 	    if (this.game.confirms_received == undefined || this.game.confirms_received == null) { this.resetConfirmsNeeded(this.game.players_info.length); }
+
 
   	    this.game.confirms_received += parseInt(mv[2]);
   	    this.game.confirms_players.push(mv[3]);
 
+
   	    if (this.game.confirms_needed <= this.game.confirms_received) {
+
+console.log("RESOLVED 1: " + this.game.confirms_received + " of " + this.game.confirms_needed);
 
 	      this.resetConfirmsNeeded(0);
     	      this.game.queue.splice(qe-1, 2);
   	      return 1;
 
   	    } else {
+
+console.log("RESOLVED 2: " + this.game.confirms_received + " of " + this.game.confirms_needed);
 
     	      this.game.queue.splice(qe, 1);
 
@@ -300,8 +307,10 @@
   	let stage = parseInt(mv[3]);  
 
 console.log("STRATEGY CARD!");
+console.log("playing_strategy_card_secondary: " + this.game.state.playing_strategy_card_secondary);
 
 	if (this.game.state.playing_strategy_card_secondary == 1) {
+console.log("noping out of secondary...");
 	  return 0;
 	}
 
@@ -319,6 +328,7 @@ console.log("STRATEGY CARD 3!");
   	if (stage == 2) {
 	  this.updateLog(this.strategy_cards[card].name + " secondary triggers...");
 	  this.game.state.playing_strategy_card_secondary = 1;
+console.log("setting playing_strategy_card_secondary to " + this.game.state.playing_strategy_card_secondary);
   	  this.playStrategyCardSecondary(strategy_card_player, card);
 	  return 0;
   	}
@@ -870,12 +880,14 @@ console.log("executing "+z[z_index].name);
   	//
         if (this.game.state.round_scoring == 0 && this.game.state.round >= 1) {
           this.game.queue.push("strategy\t"+"imperial"+"\t"+"-1"+"\t2\t"+1);
+	  this.game.state.playing_strategy_card_secondary = 0; // reset to 0 as we are kicking into secondary
           this.game.queue.push("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
           this.game.queue.push("acknowledge\t"+"As the Imperial card was not played in the previous round, all players now have an opportunity to score Victory Points (in initiative order)");
   	  this.game.state.round_scoring = 0;
 	  return 1;
   	} else {
   	  this.game.state.round_scoring = 0;
+	  this.game.state.playing_strategy_card_secondary = 0; // reset to 0 as no secondary to run
   	}
 
 
@@ -1096,7 +1108,7 @@ console.log("do we have a pool 2?");
   	this.game.players_info[player-1].vp += vp;
   	this.game.players_info[player-1].objectives_scored.push(objective);
 
-  	this.game.queue.splice(qe-1, 2);
+  	this.game.queue.splice(qe, 1);
 
         if (this.stage_i_objectives[objective] != undefined) {
 	  return this.stage_i_objectives[objective].scoreObjective(this, player);
@@ -1976,9 +1988,6 @@ console.log("X: " +JSON.stringify(this.agenda_cards[agenda]));
         let z_index	 = parseInt(mv[4]);
   	this.game.queue.splice(qe, 1);
 
-console.log("TRIGGERS EVENT: " + player + " -- " + attacker + " == " + sector + " -- " + z_index);
-console.log("TECH: " + z[z_index].name);
-
 	//
 	// opportunity to add action cards / graviton / etc.
 	//
@@ -2092,21 +2101,13 @@ console.log("TECH: " + z[z_index].name);
 
 	for (let i = 0; i < planet.units.length; i++) {
 
-console.log("i: " + i);
-
 	  if (planet.units[i].length > 0) {
-
 
 	    if ((i+1) != attacker) {
 
 	      let units_destroyed = 0;
 
-console.log("planet units: " + planet.units[i].length);
-
 	      for (let ii = 0; ii < planet.units[i].length && units_destroyed < destroy; ii++) {
-
-console.log("ii: " + ii + " ---- " + destroy + " -- " + units_destroyed);
-
 		let unit = planet.units[i][ii];
 
 		if (unit.type == "infantry") {
@@ -2116,7 +2117,6 @@ console.log("ii: " + ii + " ---- " + destroy + " -- " + units_destroyed);
 		  units_destroyed++;
 
    	          for (let z_index in z) {
-console.log("TECH IS: " + z[z_index].name);
 	            z[z_index].unitDestroyed(imperium_self, attacker, planet.units[i][ii]);
 	          } 
 
@@ -3209,7 +3209,6 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
         let z_index	 = parseInt(mv[4]);
 
   	this.game.queue.splice(qe, 1);
-	console.log("BE: " +z_index+" -- " +  z[z_index].bombardmentEvent(this, player, bombarding_player, sector, planet_idx));
 
 	return z[z_index].bombardmentEvent(this, player, bombarding_player, sector, planet_idx);
 

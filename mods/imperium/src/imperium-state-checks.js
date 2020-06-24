@@ -238,11 +238,7 @@
     if (techtype == "special") { return 0; };
 
     for (let i = 0; i < mytech.length; i++) {
-
-console.log(mytech[i] + " ---> " + JSON.stringify(this.tech[mytech[i]]));
-
       if (this.tech[mytech[i]]) {
-console.log("color is: " + this.tech[mytech[i]].color);
         let color = this.tech[mytech[i]].color;
         for (let j = 0; j < prereqs.length; j++) {
           if (prereqs[j] == color) {
@@ -252,9 +248,6 @@ console.log("color is: " + this.tech[mytech[i]].color);
         }
       }
     }
-
-console.log("MYTECH: " + mytech);
-console.log("NOW OUR PREREQS ARE: " + JSON.stringify(prereqs));
 
     //
     // temporary blue tech skip
@@ -366,13 +359,6 @@ console.log("NOW OUR PREREQS ARE: " + JSON.stringify(prereqs));
       prereqs.splice(0, 1);
     }
 
-console.log(mytech);
-console.log(techtype);
-console.log(JSON.stringify(prereqs));
-console.log(techfaction);
-console.log(JSON.stringify(this.tech[tech]));
-console.log("F: " + this.game.players_info[this.game.player-1].faction);
-
     //
     // we meet the pre-reqs
     //
@@ -472,8 +458,6 @@ console.log("F: " + this.game.players_info[this.game.player-1].faction);
     let defender = -1;
     let defender_found = 0;
 
-console.log("returning defender of " + sector + " / " + planet_idx);
-
     if (planet_idx == null) {
       for (let i = 0; i < sys.s.units.length; i++) {
         if (attacker != (i+1)) {
@@ -482,11 +466,8 @@ console.log("returning defender of " + sector + " / " + planet_idx);
           }
         }
       }
-console.log("returning defender here!");
       return defender;
     }
-
-console.log("PLANET IS: " + JSON.stringify(sys.p[planet_idx]));
 
     //
     // planet_idx is not null
@@ -590,14 +571,11 @@ console.log("PLANET IS: " + JSON.stringify(sys.p[planet_idx]));
     let s = this.addWormholesToBoardTiles(this.returnBoardTiles());  
     for (let i in s) {
 
-console.log("-->" + i);
       if (this.game.board[i]) {
         let sys = this.returnSectorAndPlanets(i);
-console.log("IDENTIFIED: " + sys.s.sector);
         if (sys.s.sector == sector) {
           for (let t = 0; t < s[i].neighbours.length; t++) {
 
-console.log("nb is: " + s[i].neighbours[t]);
 	    let sys2 = this.returnSectorAndPlanets(s[i].neighbours[t]);
 
 	    adjasec.push(sys2.s.sector);
@@ -605,7 +583,6 @@ console.log("nb is: " + s[i].neighbours[t]);
   	  }
         }
       }
-console.log("ADJASEC: " + JSON.stringify(adjasec));
 
     }
     return adjasec;
@@ -800,8 +777,6 @@ console.log("ADJASEC: " + JSON.stringify(adjasec));
     let card_io_hmap  = [];
     let player_lowest = [];
 
-console.log("STRAT: " + JSON.stringify(strategy_cards));  
-
     for (let j in strategy_cards) {
       card_io_hmap[j] = strategy_cards[j].rank;
     }
@@ -813,12 +788,10 @@ console.log("STRAT: " + JSON.stringify(strategy_cards));
       for (let k = 0; k < this.game.players_info[i].strategy.length; k++) {
         let sc = this.game.players_info[i].strategy[k];
         let or = card_io_hmap[sc];
-console.log(k + " -- " + this.strategy_cards[sc].name + " has order " + or);
         if (or < player_lowest[i]) { player_lowest[i] = or; }
       }
     }
 
-console.log("PLAYER LOWEST: " + JSON.stringify(player_lowest));
   
     let loop = player_lowest.length;
     let player_initiative_order = [];
@@ -838,18 +811,7 @@ console.log("PLAYER LOWEST: " + JSON.stringify(player_lowest));
       player_lowest[lowest_this_loop_idx] = 999999;
       player_initiative_order.push(lowest_this_loop_idx+1);
 
-console.log("PL: " + JSON.stringify(player_lowest));
-console.log("PIO: " + JSON.stringify(player_initiative_order));
-
-
     }
-
-
-console.log('INITIATIE ORDER: ' + JSON.stringify(player_initiative_order));
-
-for (let i = 0; i < player_initiative_order.length; i++) {
-  console.log(this.returnFaction(player_initiative_order[i]) + " is " + (i+1));
-}
 
     return player_initiative_order;
   
@@ -1485,34 +1447,26 @@ console.log("SECTOR: " + sector);
     return this.doesSectorContainPlayerShips(player, sector);
   }
   doesSectorContainPlayerShips(player, sector) {
-
-console.log("sector: " + sector);
-
     let sys = this.returnSectorAndPlanets(sector);
     if (sys.s.units[player-1].length > 0) { return 1; }
     return 0;
- 
   }
 
   doesSectorContainShips(sector) {
-
     let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.s.units.length; i++) { 
       if (sys.s.units[i].length > 0) { return 1; }
     }
     return 0;
- 
   }
 
   doesSectorContainPlayerUnits(player, sector) {
-
     let sys = this.returnSectorAndPlanets(sector);
     if (sys.s.units[player-1].length > 0) { return 1; }
     for (let i = 0; i < sys.p.length; i++) {
       if (sys.p[i].units[player-1].length > 0) { return 1; }
     }
     return 0;
- 
   }
 
 

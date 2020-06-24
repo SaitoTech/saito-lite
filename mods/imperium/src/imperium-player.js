@@ -1556,8 +1556,6 @@ console.log(" ... and done");
     // deck 2 = secondary
     // deck 3 = secret
 
-console.log(player + " -- " + card + " -- " + deck);  
-
     if (deck == 1) {
       let objectives = this.returnStageIPublicObjectives();
       if (objectives[card] != "") {

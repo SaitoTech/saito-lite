@@ -11,6 +11,9 @@
 	return 1;
       },
   });
+
+/**
+
   this.importStageIPublicObjective('planetary-unity', {
       name 	: 	"Planetary Unity" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,
@@ -45,7 +48,6 @@
 	let techlist = imperium_self.game.players_info[player-1].tech;
 	let unit_upgrades = 0;
 	for (let i = 0; i < techlist.length; i++) {
-console.log("TECH: " + techlist[i]);
 	  if (imperium_self.tech[techlist[i]].unit == 1) {
 	    unit_upgrades++;
 	  }
@@ -71,7 +73,6 @@ console.log("TECH: " + techlist[i]);
 	let yellowtech = 0;
 
 	for (let i = 0; i < techlist.length; i++) {
-console.log("TECH: " + techlist[i]);
 	  if (imperium_self.tech[techlist[i]].color == "blue") { bluetech++; }
 	  if (imperium_self.tech[techlist[i]].color == "red") { redtech++; }
 	  if (imperium_self.tech[techlist[i]].color == "yellow") { yellowtech++; }
@@ -92,6 +93,10 @@ console.log("TECH: " + techlist[i]);
 	return 1;
       },
   });
+
+***/
+
+
   this.importStageIPublicObjective('mining-conglomerate', {
       name 	: 	"Mining Conglomerate" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,
@@ -101,13 +106,12 @@ console.log("TECH: " + techlist[i]);
 	return 0;
       },
       scoreObjective : function(imperium_self, player) {
-        imperium_self.playerSelectResources(8, function(success) {
-          if (success == 1) { imperium_self.endTurn(); }
-        });
+	if (imperium_self.game.player == player) {
+          imperium_self.playerSelectResources(8, function(success) {
+            if (success == 1) { imperium_self.endTurn(); }
+          });
+	}
 	return 0;
-      },
-      scoreObjective : function(imperium_self, player) {
-	return 1;
       },
   });
   this.importStageIPublicObjective('conquest-of-science', {
@@ -134,6 +138,8 @@ console.log("TECH: " + techlist[i]);
 	return 1;
       },
   });
+
+/***
   this.importStageIPublicObjective('colonization', {
       name 	: 	"Colonization" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,
@@ -190,6 +196,9 @@ console.log("TECH: " + techlist[i]);
 	return 1;
       },
   });
+
+***/
+
   this.importStageIPublicObjective('pecuniary-diplomacy', {
       name 	: 	"Pecuniary Diplomacy" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,

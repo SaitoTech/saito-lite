@@ -22,6 +22,8 @@
 	    let planet_idx = imperium_self.game.state.ground_combat_planet_idx;
 	    let attacker = imperium_self.game.state.ground_combat_attacker;
 
+	    let sys = imperium_self.returnSectorAndPlanets(sector);
+
 	    let attacker_infantry = sys.p[planet_idx].units[attacker-1];
 	    sys.p[planet_idx].units[attacker-1] = [];;
 
