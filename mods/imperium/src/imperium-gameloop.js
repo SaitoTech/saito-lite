@@ -870,6 +870,7 @@ console.log("executing "+z[z_index].name);
   	//
         if (this.game.state.round_scoring == 0 && this.game.state.round >= 1) {
           this.game.queue.push("strategy\t"+"imperial"+"\t"+"-1"+"\t2\t"+1);
+          this.game.queue.push("acknowledge\t"+"As the Imperial card was not played in the previous round, all players now have an opportunity to score Victory Points (in initiative order)");
   	  this.game.state.round_scoring = 0;
 	  return 1;
   	} else {
@@ -931,7 +932,9 @@ console.log("executing "+z[z_index].name);
         this.game.queue.push("playerschoosestrategycards_after");
         this.game.queue.push("playerschoosestrategycards");
         this.game.queue.push("playerschoosestrategycards_before");
- 
+        if (this.game.state.round == 1) {
+          this.game.queue.push("acknowledge\t"+"<center><p style='font-weight:bold'>The Republic has fallen!</p><p style='font-size:0.95em'>As the Galactic Senate collapses into factional squabbling, the ascendant factions lurking on the outer rim plot to seize New Byzantium and establish a new Imperial Age...</p></center>");
+ 	}
 
 
 
@@ -1283,6 +1286,21 @@ console.log("do we have a pool 2?");
   	this.game.queue.splice(qe, 1);
   	return 1;
   
+      }
+
+
+      if (mv[0] === "acknowledge") {  
+
+	let imperium_self = this;
+	let notice = mv[1];
+
+  	this.playerAcknowledgeNotice(notice, function() {
+  	  imperium_self.game.queue.splice(qe, 1);
+	  // we have stopped queue execution, so need to restart at the lowest level
+  	  imperium_self.runQueue();
+	});
+
+	return 0;
       }
 
 

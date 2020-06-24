@@ -887,7 +887,7 @@ if (this.game.board[tmp[k]] != undefined) {
 	//
 	let can_hop_through_this_sector = 1;
 	if (player == null) {} else {
-	  if (this.game.players_info[player-1].move_through_sectors_with_opponent_ships == 1 || players[i].temporary_move_through_sectors_with_opponent_ships == 1) {
+	  if (this.game.players_info[player-1].move_through_sectors_with_opponent_ships == 1 || this.game.players_info[player-1].temporary_move_through_sectors_with_opponent_ships == 1) {
 	  } else {
 	    if (this.doesSectorContainNonPlayerShips(player, tmp[k])) {
 	      can_hop_through_this_sector = 0;

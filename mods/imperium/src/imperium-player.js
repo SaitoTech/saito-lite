@@ -1159,7 +1159,6 @@
     let relevant_action_cards = ["pre_agenda"];
     let ac = this.returnPlayerActionCards(relevant_action_cards);
    
-
     html = '<div class="sf-readable">Do you wish to take action before voting on this Agenda: </div><ul>';
 
     if (1 == 1) {
@@ -1409,6 +1408,7 @@ console.log(" ... and done");
     }
 
     let html = '<div class="sf-readable">Do you wish to purchase any command or strategy tokens, or increase your fleet supply?</div><ul>';
+    html += '<li class="buildchoice textchoice" id="skip">Do Not Purchase</li>';
     html += '<li class="buildchoice textchoice" id="command">Command Tokens  +<span class="command_total">0</span></li>';
     html += '<li class="buildchoice textchoice" id="strategy">Strategy Tokens +<span class="strategy_total">0</span></li>';
     html += '<li class="buildchoice textchoice" id="fleet">Fleet Supply  +<span class="fleet_total">0</span></li>';
@@ -1430,6 +1430,11 @@ console.log(" ... and done");
   
       let id = $(this).attr("id");
   
+      if (id == "skip") {
+  	imperium_self.endTurn();
+	return;
+      }
+
       if (id == "confirm") {
   
         total_cost = 3 * (fleet_supply + command_tokens + strategy_tokens);
@@ -1725,11 +1730,11 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
               },
               function(planet) {
                 if (id == "pds") {
-                  imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+planet.idx+"\tpds\t"+planet.sector);
+                  imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+imperium_self.game.planets[planet].idx+"\tpds\t"+imperium_self.game.planets[planet].sector);
                   mycallback();
                 }
                 if (id == "spacedock") {
-                  imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+planet.idx+"\tspacedock\t"+planet.sector);
+                  imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+imperium_self.game.planets[planet].idx+"\tspacedock\t"+imperium_self.game.planets[planet].sector);
                   mycallback();
                 }
               },
@@ -2232,7 +2237,7 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
     let imperium_self = this;
     let array_of_cards = this.returnPlayerActionCards(this.game.player, types);
     if (array_of_cards.length == 0) {
-      this.playerAcknowledgeNotice(this.returnFaction(action_card_player) + " plays " + this.action_cards[card].name, function() {
+      this.playerAcknowledgeNotice("You do not have any action cards that can be played now", function() {
         imperium_self.playerTurn();
         return 0;
       });
@@ -2330,6 +2335,9 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
     for (let z in this.strategy_cards) {
       scards.push("");
     }
+
+console.log("CARDS: " + JSON.stringify(this.game.state.strategy_cards));
+
 
     for (let z = 0; z < this.game.state.strategy_cards.length; z++) {
       let rank = parseInt(this.strategy_cards[this.game.state.strategy_cards[z]].rank);

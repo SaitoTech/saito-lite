@@ -1739,7 +1739,7 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
             imperium_self.playerBuyTokens();
  	  } else {
             imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-	    imperium_self.endTurn();
+            imperium_self.playerBuyTokens();
 	  }
         }
 
@@ -1816,6 +1816,17 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
             let chancellor = (parseInt($(this).attr("id")) + 1);
             let laws = imperium_self.returnAgendaCards();
             let laws_selected = 0;
+
+	    //
+	    // if New Byzantium is unoccupied, we skip the voting stage
+	    //
+	    if (imperium_self.game.planets['new-byzantium'].owner == -1) {
+	      imperium_self.playerAcknowledgeNotice("The Galactic Senate has yet to be established on New Byzantium. Occupy the planet to establish the Senate and earn 1 VP: ", function() {
+		imperium_self.endTurn();
+	      });
+	      return 0;
+	    }
+
 
             let html = '';
             if (imperium_self.game.state.agendas_per_round == 1) {
@@ -6756,6 +6767,7 @@ console.log("executing "+z[z_index].name);
   	//
         if (this.game.state.round_scoring == 0 && this.game.state.round >= 1) {
           this.game.queue.push("strategy\t"+"imperial"+"\t"+"-1"+"\t2\t"+1);
+          this.game.queue.push("acknowledge\t"+"As the Imperial card was not played in the previous round, all players now have an opportunity to score Victory Points (in initiative order)");
   	  this.game.state.round_scoring = 0;
 	  return 1;
   	} else {
@@ -6817,7 +6829,9 @@ console.log("executing "+z[z_index].name);
         this.game.queue.push("playerschoosestrategycards_after");
         this.game.queue.push("playerschoosestrategycards");
         this.game.queue.push("playerschoosestrategycards_before");
- 
+        if (this.game.state.round == 1) {
+          this.game.queue.push("acknowledge\t"+"<center><p style='font-weight:bold'>The Republic has fallen!</p><p style='font-size:0.95em'>As the Galactic Senate collapses into factional squabbling, the ascendant factions lurking on the outer rim plot to seize New Byzantium and establish a new Imperial Age...</p></center>");
+ 	}
 
 
 
@@ -7169,6 +7183,21 @@ console.log("do we have a pool 2?");
   	this.game.queue.splice(qe, 1);
   	return 1;
   
+      }
+
+
+      if (mv[0] === "acknowledge") {  
+
+	let imperium_self = this;
+	let notice = mv[1];
+
+  	this.playerAcknowledgeNotice(notice, function() {
+  	  imperium_self.game.queue.splice(qe, 1);
+	  // we have stopped queue execution, so need to restart at the lowest level
+  	  imperium_self.runQueue();
+	});
+
+	return 0;
       }
 
 
@@ -10707,7 +10736,6 @@ console.log("HERE: " + z[i].name);
     let relevant_action_cards = ["pre_agenda"];
     let ac = this.returnPlayerActionCards(relevant_action_cards);
    
-
     html = '<div class="sf-readable">Do you wish to take action before voting on this Agenda: </div><ul>';
 
     if (1 == 1) {
@@ -10957,6 +10985,7 @@ console.log(" ... and done");
     }
 
     let html = '<div class="sf-readable">Do you wish to purchase any command or strategy tokens, or increase your fleet supply?</div><ul>';
+    html += '<li class="buildchoice textchoice" id="skip">Do Not Purchase</li>';
     html += '<li class="buildchoice textchoice" id="command">Command Tokens  +<span class="command_total">0</span></li>';
     html += '<li class="buildchoice textchoice" id="strategy">Strategy Tokens +<span class="strategy_total">0</span></li>';
     html += '<li class="buildchoice textchoice" id="fleet">Fleet Supply  +<span class="fleet_total">0</span></li>';
@@ -10978,6 +11007,11 @@ console.log(" ... and done");
   
       let id = $(this).attr("id");
   
+      if (id == "skip") {
+  	imperium_self.endTurn();
+	return;
+      }
+
       if (id == "confirm") {
   
         total_cost = 3 * (fleet_supply + command_tokens + strategy_tokens);
@@ -11273,11 +11307,11 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
               },
               function(planet) {
                 if (id == "pds") {
-                  imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+planet.idx+"\tpds\t"+planet.sector);
+                  imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+imperium_self.game.planets[planet].idx+"\tpds\t"+imperium_self.game.planets[planet].sector);
                   mycallback();
                 }
                 if (id == "spacedock") {
-                  imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+planet.idx+"\tspacedock\t"+planet.sector);
+                  imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+imperium_self.game.planets[planet].idx+"\tspacedock\t"+imperium_self.game.planets[planet].sector);
                   mycallback();
                 }
               },
@@ -11780,7 +11814,7 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
     let imperium_self = this;
     let array_of_cards = this.returnPlayerActionCards(this.game.player, types);
     if (array_of_cards.length == 0) {
-      this.playerAcknowledgeNotice(this.returnFaction(action_card_player) + " plays " + this.action_cards[card].name, function() {
+      this.playerAcknowledgeNotice("You do not have any action cards that can be played now", function() {
         imperium_self.playerTurn();
         return 0;
       });
@@ -11878,6 +11912,9 @@ console.log("STAGE II: " + this.game.state.stage_ii_objectives[i]);
     for (let z in this.strategy_cards) {
       scards.push("");
     }
+
+console.log("CARDS: " + JSON.stringify(this.game.state.strategy_cards));
+
 
     for (let z = 0; z < this.game.state.strategy_cards.length; z++) {
       let rank = parseInt(this.strategy_cards[this.game.state.strategy_cards[z]].rank);
@@ -14805,7 +14842,7 @@ if (this.game.board[tmp[k]] != undefined) {
 	//
 	let can_hop_through_this_sector = 1;
 	if (player == null) {} else {
-	  if (this.game.players_info[player-1].move_through_sectors_with_opponent_ships == 1 || players[i].temporary_move_through_sectors_with_opponent_ships == 1) {
+	  if (this.game.players_info[player-1].move_through_sectors_with_opponent_ships == 1 || this.game.players_info[player-1].temporary_move_through_sectors_with_opponent_ships == 1) {
 	  } else {
 	    if (this.doesSectorContainNonPlayerShips(player, tmp[k])) {
 	      can_hop_through_this_sector = 0;
@@ -16431,7 +16468,7 @@ updateSectorGraphics(sector) {
 
   unhighlightSectors() {
     for (let i in this.game.sectors) {
-      this.removeSectorHighlight(sector);
+      this.removeSectorHighlight(i);
     }
   }
 

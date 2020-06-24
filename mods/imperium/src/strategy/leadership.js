@@ -30,7 +30,7 @@
             imperium_self.playerBuyTokens();
  	  } else {
             imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-	    imperium_self.endTurn();
+            imperium_self.playerBuyTokens();
 	  }
         }
 

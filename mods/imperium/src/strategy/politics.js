@@ -67,6 +67,17 @@
             let laws = imperium_self.returnAgendaCards();
             let laws_selected = 0;
 
+	    //
+	    // if New Byzantium is unoccupied, we skip the voting stage
+	    //
+	    if (imperium_self.game.planets['new-byzantium'].owner == -1) {
+	      imperium_self.playerAcknowledgeNotice("The Galactic Senate has yet to be established on New Byzantium. Occupy the planet to establish the Senate and earn 1 VP: ", function() {
+		imperium_self.endTurn();
+	      });
+	      return 0;
+	    }
+
+
             let html = '';
             if (imperium_self.game.state.agendas_per_round == 1) {
               html += 'Select one agenda to advance for consideration in the Galactic Senate.<ul>';

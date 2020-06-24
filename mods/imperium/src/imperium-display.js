@@ -671,7 +671,7 @@ updateSectorGraphics(sector) {
 
   unhighlightSectors() {
     for (let i in this.game.sectors) {
-      this.removeSectorHighlight(sector);
+      this.removeSectorHighlight(i);
     }
   }
 
