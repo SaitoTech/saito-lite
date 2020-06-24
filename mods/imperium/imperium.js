@@ -916,7 +916,8 @@ console.log("P: " + planet);
       homeworld		: 	"sector50",
       space_units	: 	["carrier","carrier","dreadnaught","fighter"],
       ground_units	: 	["infantry","infantry","pds","spacedock"],
-      tech		: 	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector","faction2-analytic","faction2-brilliant","faction2-fragile","faction2-deep-space-conduits","faction2-eres-siphons"],
+      //tech		: 	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector","faction2-analytic","faction2-brilliant","faction2-fragile","faction2-deep-space-conduits","faction2-eres-siphons"],
+      tech		: 	["sarween-tools", "neural-motivator", "plasma-scoring", "antimass-deflectors", "faction2-analytic", "faction2-brilliant", "faction2-fragile"],
       background	: 	'faction2.jpg'
     });
 
@@ -1082,7 +1083,8 @@ console.log("P: " + planet);
       homeworld		: 	"sector52",
       space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter","warsun"],
       ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock"],
-      tech		:	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector","faction1-orbital-drop","faction1-versatile", "faction1-advanced-carrier-ii", "faction1-advanced-infantry-ii"],
+//      tech		:	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector","faction1-orbital-drop","faction1-versatile", "faction1-advanced-carrier-ii", "faction1-advanced-infantry-ii"],
+      tech		:	["neural-motivator","antimass-deflectors", "faction1-orbital-drop", "faction1-versatile"],
       background	: 	"faction1.jpg"
     });
  
@@ -1208,7 +1210,8 @@ console.log("P: " + planet);
       homeworld		: 	"sector51",
       space_units	: 	["carrier","cruiser","cruiser","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech		: 	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector", "faction3-field-nullification", "faction3-peace-accords", "faction3-quash", "faction3-instinct-training"],
+//      tech		: 	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector", "faction3-field-nullification", "faction3-peace-accords", "faction3-quash", "faction3-instinct-training"],
+      tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash"],
       background	: 'faction3.jpg'
     });
   
@@ -3063,26 +3066,25 @@ console.log("TECH: " + techlist[i]);
 
 
 
+/************************************
 
-    this.importActionCard('sabotage', {
-  	name : "Sabotage" ,
-  	type : "action_card" ,
-  	text : "When another player plays an action card, you may cancel that action card" ,
-	playActionCard : function(imperium_self, player, action_card_player, card) {
+ACTION CARD - types
 
-	  //
-	  // this runs in actioncard post...
-	  //
-          if (imperium_self.game.player == action_card_player) {
-	    // remove previous action card
-	    imperium_self.addMove("resolve\t"+"action_card");
-	    imperium_self.addMove("resolve\t"+"action_card_post");
-	  }
+"action" -> main menu
+"bombardment_attacker"
+"bombardment_defender"
+"combat"
+"ground_combat"
+"pds" -> before pds fire
+"post_pds" -> after pds fire
+"pre_agenda" --> before agenda voting
+"post_agenda" --> after agenda voting
+"space_combat"
+"space_combat_victory"
+"rider"
 
-	  return 0;
-	}
-    });
 
+************************************/
 
 
     this.importActionCard('lost-star-chart', {
@@ -3993,6 +3995,26 @@ alert("select sector with filter");
 
 
 
+    this.importActionCard('sabotage', {
+  	name : "Sabotage" ,
+  	type : "action_card" ,
+  	text : "When another player plays an action card, you may cancel that action card" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  //
+	  // this runs in actioncard post...
+	  //
+          if (imperium_self.game.player == action_card_player) {
+	    // remove previous action card
+	    imperium_self.addMove("resolve\t"+"action_card");
+	    imperium_self.addMove("resolve\t"+"action_card_post");
+	  }
+
+	  return 0;
+	}
+    });
+
+
     this.importActionCard('bunker', {
   	name : "Bunker" ,
   	type : "bombardment_defender" ,
@@ -4223,25 +4245,6 @@ alert("select sector with filter");
 
 
 
-/************************************
-
-ACTION CARD - types
-
-"action" -> main menu
-"bombardment_attacker"
-"bombardment_defender"
-"combat"
-"ground_combat"
-"pds" -> before pds fire
-"post_pds" -> after pds fire
-"pre_agenda" --> before agenda voting
-"post_agenda" --> after agenda voting
-"space_combat"
-"space_combat_victory"
-"rider"
-
-
-************************************/
 
     this.importActionCard('diplomacy-rider', {
   	name : "Diplomacy Rider" ,
@@ -6189,7 +6192,9 @@ console.log("STRATEGY CARD!");
 	}
 
 console.log("STRATEGY CARD 2!");
-  	imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.push(card);
+	if (strategy_card_player != -1) {
+    	  imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.push(card);
+	}
 console.log("STRATEGY CARD 3!");
 
   	if (stage == 1) {
@@ -6746,6 +6751,18 @@ console.log("executing "+z[z_index].name);
   
       if (mv[0] === "newround") {
 
+  	//
+  	// SCORING
+  	//
+        if (this.game.state.round_scoring == 0 && this.game.state.round >= 1) {
+          this.game.queue.push("strategy\t"+"imperial"+"\t"+"-1"+"\t2\t"+1);
+  	  this.game.state.round_scoring = 0;
+	  return 1;
+  	} else {
+  	  this.game.state.round_scoring = 0;
+  	}
+
+
         //
   	// game event triggers
   	//
@@ -6761,15 +6778,15 @@ console.log("executing "+z[z_index].name);
     	this.updateLog("ROUND: " + this.game.state.round);
   	this.updateStatus("Moving into Round " + this.game.state.round);
 
-  	//
-  	// SCORING
-  	//
-        if (this.game.state.round_scoring == 0 && this.game.state.round > 1) {
-          this.game.queue.push("strategy\t"+"imperial"+"\t"+"-1"+"\t2\t"+1);
-  	  this.game.state.round_scoring = 0;
-  	} else {
-  	  this.game.state.round_scoring = 0;
-  	}
+
+	//
+	// REFRESH PLANETS
+	//
+	for (let i = 0; i < this.game.players_info.length; i++) {
+	  for (let ii in this.game.planets) {
+	    this.game.planets[ii].exhausted = 0;
+	  }
+	}
 
 
   	//
@@ -6786,9 +6803,10 @@ console.log("executing "+z[z_index].name);
   	// REPAIR UNITS
   	//
   	this.repairUnits();
+
   
   	//
-  	// set initiative order
+  	// SET INITIATIVE ORDER
   	//
         this.game.queue.push("setinitiativeorder");
 
@@ -6813,7 +6831,7 @@ console.log("executing "+z[z_index].name);
   	
   
   	//
-  	// mark as ready 
+  	// READY (arcade can let us in!)
   	//	  
   	if (this.game.initializing == 1) {
           this.game.queue.push("READY");
@@ -6829,8 +6847,6 @@ console.log("executing "+z[z_index].name);
   	//
   	// FLIP NEW AGENDA CARDS
   	//
-	// TODO - un-hardcode number with agendas_per_round
-	//
         this.game.queue.push("revealagendas");
         this.game.queue.push("notify\tFLIPCARD is completed!");
   	for (let i = 1; i <= this.game.players_info.length; i++) {
@@ -6842,7 +6858,8 @@ console.log("executing "+z[z_index].name);
 	// DE-ACTIVATE SYSTEMS
 	//
         this.deactivateSystems();
-	
+        this.unhighlightSectors();	
+
 
   	//
   	// FLIP NEW OBJECTIVES
@@ -12927,9 +12944,12 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     $('.textchoice').on('click', function() {
 
       let action = $(this).attr("id");
+      imperium_self.hidePlanetCard(imperium_self.game.planets[action].tile, imperium_self.game.planets[action].idx); 
+      imperium_self.hideSectorHighlight(imperium_self.game.planets[action].tile);
 
       if (action == "cancel") {
         cancel_func();
+        imperium_self.hideSectorHighlight(action);
         return 0;
       }
 
@@ -16408,6 +16428,12 @@ updateSectorGraphics(sector) {
   }
 };
 
+
+  unhighlightSectors() {
+    for (let i in this.game.sectors) {
+      this.removeSectorHighlight(sector);
+    }
+  }
 
   showSectorHighlight(sector) { this.addSectorHighlight(sector); }
   hideSectorHighlight(sector) { this.removeSectorHighlight(sector); }

@@ -306,7 +306,9 @@ console.log("STRATEGY CARD!");
 	}
 
 console.log("STRATEGY CARD 2!");
-  	imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.push(card);
+	if (strategy_card_player != -1) {
+    	  imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.push(card);
+	}
 console.log("STRATEGY CARD 3!");
 
   	if (stage == 1) {
@@ -863,6 +865,18 @@ console.log("executing "+z[z_index].name);
   
       if (mv[0] === "newround") {
 
+  	//
+  	// SCORING
+  	//
+        if (this.game.state.round_scoring == 0 && this.game.state.round >= 1) {
+          this.game.queue.push("strategy\t"+"imperial"+"\t"+"-1"+"\t2\t"+1);
+  	  this.game.state.round_scoring = 0;
+	  return 1;
+  	} else {
+  	  this.game.state.round_scoring = 0;
+  	}
+
+
         //
   	// game event triggers
   	//
@@ -878,15 +892,15 @@ console.log("executing "+z[z_index].name);
     	this.updateLog("ROUND: " + this.game.state.round);
   	this.updateStatus("Moving into Round " + this.game.state.round);
 
-  	//
-  	// SCORING
-  	//
-        if (this.game.state.round_scoring == 0 && this.game.state.round > 1) {
-          this.game.queue.push("strategy\t"+"imperial"+"\t"+"-1"+"\t2\t"+1);
-  	  this.game.state.round_scoring = 0;
-  	} else {
-  	  this.game.state.round_scoring = 0;
-  	}
+
+	//
+	// REFRESH PLANETS
+	//
+	for (let i = 0; i < this.game.players_info.length; i++) {
+	  for (let ii in this.game.planets) {
+	    this.game.planets[ii].exhausted = 0;
+	  }
+	}
 
 
   	//
@@ -903,9 +917,10 @@ console.log("executing "+z[z_index].name);
   	// REPAIR UNITS
   	//
   	this.repairUnits();
+
   
   	//
-  	// set initiative order
+  	// SET INITIATIVE ORDER
   	//
         this.game.queue.push("setinitiativeorder");
 
@@ -930,7 +945,7 @@ console.log("executing "+z[z_index].name);
   	
   
   	//
-  	// mark as ready 
+  	// READY (arcade can let us in!)
   	//	  
   	if (this.game.initializing == 1) {
           this.game.queue.push("READY");
@@ -946,8 +961,6 @@ console.log("executing "+z[z_index].name);
   	//
   	// FLIP NEW AGENDA CARDS
   	//
-	// TODO - un-hardcode number with agendas_per_round
-	//
         this.game.queue.push("revealagendas");
         this.game.queue.push("notify\tFLIPCARD is completed!");
   	for (let i = 1; i <= this.game.players_info.length; i++) {
@@ -959,7 +972,8 @@ console.log("executing "+z[z_index].name);
 	// DE-ACTIVATE SYSTEMS
 	//
         this.deactivateSystems();
-	
+        this.unhighlightSectors();	
+
 
   	//
   	// FLIP NEW OBJECTIVES

@@ -3396,6 +3396,8 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     $('.textchoice').on('click', function() {
 
       let action = $(this).attr("id");
+      imperium_self.hidePlanetCard(imperium_self.game.planets[action].tile, imperium_self.game.planets[action].idx); 
+      imperium_self.hideSectorHighlight(imperium_self.game.planets[action].tile);
 
       if (action == "cancel") {
         cancel_func();

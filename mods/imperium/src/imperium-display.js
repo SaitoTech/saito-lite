@@ -669,6 +669,12 @@ updateSectorGraphics(sector) {
 };
 
 
+  unhighlightSectors() {
+    for (let i in this.game.sectors) {
+      this.removeSectorHighlight(sector);
+    }
+  }
+
   showSectorHighlight(sector) { this.addSectorHighlight(sector); }
   hideSectorHighlight(sector) { this.removeSectorHighlight(sector); }
   addSectorHighlight(sector) {
