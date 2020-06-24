@@ -11,9 +11,6 @@
 	return 1;
       },
   });
-
-/**
-
   this.importStageIPublicObjective('planetary-unity', {
       name 	: 	"Planetary Unity" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,
@@ -93,10 +90,6 @@
 	return 1;
       },
   });
-
-***/
-
-
   this.importStageIPublicObjective('mining-conglomerate', {
       name 	: 	"Mining Conglomerate" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,
@@ -138,8 +131,6 @@
 	return 1;
       },
   });
-
-/***
   this.importStageIPublicObjective('colonization', {
       name 	: 	"Colonization" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,
@@ -196,9 +187,6 @@
 	return 1;
       },
   });
-
-***/
-
   this.importStageIPublicObjective('pecuniary-diplomacy', {
       name 	: 	"Pecuniary Diplomacy" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,
