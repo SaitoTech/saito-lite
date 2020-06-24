@@ -137,7 +137,6 @@
   font-size: 1.15em;
   text-overflow: ellipsis;
   width: 100%;
-  max-width: 300px;
   white-space: nowrap;
   overflow: hidden;
 }
