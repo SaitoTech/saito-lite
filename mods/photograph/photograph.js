@@ -41,7 +41,7 @@ class Photograph extends ModTemplate {
 
     document.body.innerHTML = this.returnCameraHTML();
 
-    scanner_self.start(
+    this.start(
       document.getElementById("qr-video"),
       document.getElementById("qr-canvas")
     );
@@ -55,12 +55,18 @@ class Photograph extends ModTemplate {
 
     document.querySelector('.take-photo-btn').addEventListener('click', (e) => {
 
-      document.body.innerHTML = this.returnCameraHTML();
-
-      scanner_self.start(
-        document.getElementById("qr-video"),
-        document.getElementById("qr-canvas")
-      );
+      let cameramod = app.modules.returnModule("Photograph");
+      if (cameramod != null) {
+	cameramod.takePhotograph(
+	  function(img) {
+            document.body.innerHTML = "You took this image: <p></p>";
+            document.body.appendChild(img);
+	  },
+	  function() {
+	    alert("Cancel");
+  	  }
+	);
+      }
 
     });
 
@@ -118,7 +124,6 @@ class Photograph extends ModTemplate {
   //
   attemptVideoCapture() {
     if (this.isStreamInit)  {
-
       try {
         this.canvas.width = this.video.videoWidth;
         this.canvas.height = this.video.videoHeight;
@@ -134,8 +139,9 @@ class Photograph extends ModTemplate {
     return 1;
   }
 
+
   captureImage() {
-`
+
     //
     // take another (refreshed) image
     //
@@ -193,22 +199,9 @@ class Photograph extends ModTemplate {
         <canvas style="display: none" id="qr-canvas"></canvas>
 	<div id="capture-the-moment-btn" class="capture-the-moment-btn" style="top:40px;left:20px;position:absolute;width:80%;height:140px;z-index:9999;background-color:white">CAPTURE THE MOMENT</div>
       </div>
-
     `;
 
   }
-
-
-  returnPhotoHTML(imgdata) {
-
-    return `
-      <div class="">
-      </div>
-    `;
-
-  }
-
-
 
 }
 
