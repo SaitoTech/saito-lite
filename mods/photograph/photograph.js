@@ -19,6 +19,10 @@ class Photograph extends ModTemplate {
     this.canvas = null;
     this.canvas_context = null;
     this.isStreamInit = false;
+
+    this.cancel_callback = null;
+    this.success_callback = null;
+
     this.constraints = {
       audio: false,
       video: {
@@ -30,9 +34,20 @@ class Photograph extends ModTemplate {
 
   }
 
-  initializeHTML(app) {
+  takePhotograph(success_callback=null, cancel_callback=null) {
+
+    this.success_callback = success_callback;
+    this.cancel_callback = cancel_callback;
+
+    document.body.innerHTML = this.returnCameraHTML();
+
+    scanner_self.start(
+      document.getElementById("qr-video"),
+      document.getElementById("qr-canvas")
+    );
 
   }
+
 
   attachEvents(app) {
 
@@ -79,17 +94,14 @@ class Photograph extends ModTemplate {
     //
     x = this.attemptVideoCapture();
     if (x == 1) {
-      console.log("working...");
-
       //
       // attach event to button
       //
       document.querySelector(".capture-the-moment-btn").addEventListener('click', (e) => {
-	this.takePhotograph();
+	this.captureImage();
       });
 
     } else {
-      console.log("wait 100....");
       setTimeout(() => {
         this.startCameraLoop();
       }, 100);
@@ -122,8 +134,8 @@ class Photograph extends ModTemplate {
     return 1;
   }
 
-  takePhotograph() {
-
+  captureImage() {
+`
     //
     // take another (refreshed) image
     //
@@ -136,6 +148,18 @@ class Photograph extends ModTemplate {
     var image = new Image();
     image.id = "pic";
     image.src = this.canvas.toDataURL();
+
+    //
+    // run callback if exists
+    //
+    if (this.success_callback != null) {
+      this.success_callback(image);
+      return;
+    }
+
+    //
+    // or just display
+    //
     document.body.innerHTML = "";
     document.body.appendChild(image);
 
