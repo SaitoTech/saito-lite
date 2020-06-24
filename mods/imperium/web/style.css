@@ -63,7 +63,7 @@
 
 :root {
   --p1: #0066ff;
-  --p2: #00ff00;
+  --p2: #229922;
   --p3: #FF6037;
   --p4: #FF00CC;
   --p5: #FFCC33;
@@ -430,6 +430,19 @@ body {
   background: linear-gradient(150deg, #000B, #0004);
 }
 
+.hud-token-count {
+  transform: scale(0.35);
+  display: flex;
+  position: absolute;
+  top: -5em;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.hud-token-count .pc {
+  color: var(--my-color);
+}
+
 #interface_overlay {
   position: absolute;
   width: 80vw;
@@ -502,7 +515,7 @@ body {
 
 .log {
   display: block;
-  width: 298px;
+  width: 498px;
   height: 100vh;
   z-index: 999999;
   overflow-x: hidden;
@@ -524,7 +537,7 @@ body {
 .log-lock {
   right: 0;
   border-left: 1px solid var(--my-color);
-  width: 301px;
+  width: 501px;
 }
 
 .status, .hud-header, .hud-menu, .hud-body, .controls, #menu-container>ul>li, #menu-container>ul>li:first-child {

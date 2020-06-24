@@ -3102,25 +3102,26 @@ console.log("TESTING AAAD");
 
 
 
-/************************************
 
-ACTION CARD - types
+    this.importActionCard('sabotage', {
+  	name : "Sabotage" ,
+  	type : "action_card" ,
+  	text : "When another player plays an action card, you may cancel that action card" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
 
-"action" -> main menu
-"bombardment_attacker"
-"bombardment_defender"
-"combat"
-"ground_combat"
-"pds" -> before pds fire
-"post_pds" -> after pds fire
-"pre_agenda" --> before agenda voting
-"post_agenda" --> after agenda voting
-"space_combat"
-"space_combat_victory"
-"rider"
+	  //
+	  // this runs in actioncard post...
+	  //
+          if (imperium_self.game.player == action_card_player) {
+	    // remove previous action card
+	    imperium_self.addMove("resolve\t"+"action_card");
+	    imperium_self.addMove("resolve\t"+"action_card_post");
+	  }
 
+	  return 0;
+	}
+    });
 
-************************************/
 
 
     this.importActionCard('lost-star-chart', {
@@ -4031,26 +4032,6 @@ alert("select sector with filter");
 
 
 
-    this.importActionCard('sabotage', {
-  	name : "Sabotage" ,
-  	type : "action_card" ,
-  	text : "When another player plays an action card, you may cancel that action card" ,
-	playActionCard : function(imperium_self, player, action_card_player, card) {
-
-	  //
-	  // this runs in actioncard post...
-	  //
-          if (imperium_self.game.player == action_card_player) {
-	    // remove previous action card
-	    imperium_self.addMove("resolve\t"+"action_card");
-	    imperium_self.addMove("resolve\t"+"action_card_post");
-	  }
-
-	  return 0;
-	}
-    });
-
-
     this.importActionCard('bunker', {
   	name : "Bunker" ,
   	type : "bombardment_defender" ,
@@ -4283,6 +4264,25 @@ alert("select sector with filter");
 
 
 
+/************************************
+
+ACTION CARD - types
+
+"action" -> main menu
+"bombardment_attacker"
+"bombardment_defender"
+"combat"
+"ground_combat"
+"pds" -> before pds fire
+"post_pds" -> after pds fire
+"pre_agenda" --> before agenda voting
+"post_agenda" --> after agenda voting
+"space_combat"
+"space_combat_victory"
+"rider"
+
+
+************************************/
 
     this.importActionCard('diplomacy-rider', {
   	name : "Diplomacy Rider" ,
@@ -15890,6 +15890,42 @@ addUIEvents() {
   for (let i = 0; i < this.game.players_info.length; i++) {
     document.querySelector(`.faction_content.p${(i+1)}`).innerHTML = imperium_self.returnFactionSheet(imperium_self, (i+1));
   }
+
+  var html = `
+    <div class="hud-token-count">
+      <div>
+        <span class="fa-stack fa-3x">
+        <i class="far fa-futbol fa-stack-2x pc white-stroke"></i>
+        <span class="fa fa-stack-1x">
+        <span class="token_count">
+        ${this.game.players_info[this.game.player-1].strategy_tokens}
+        </span>
+        </span>
+        </span>
+      </div>
+      <div>	
+        <span class="fa-stack fa-3x">
+        <i class="fas fa-dice-d20 fa-stack-2x pc white-stroke"></i>
+        <span class="fa fa-stack-1x">
+        <span class="token_count">
+        ${this.game.players_info[this.game.player-1].command_tokens}
+        </span>
+        </span>
+        </span>
+      </div>
+      <div>
+        <span class="fa-stack fa-3x">
+        <i class="fas fa-space-shuttle fa-stack-2x pc white-stroke"></i>
+        <span class="fa fa-stack-1x">
+        <span class="token_count">
+        ${this.game.players_info[this.game.player-1].fleet_supply}
+        </span>
+        </span>
+        </span>
+      </div>
+    </div>;`
+
+    document.querySelector('.hud-header').innerHTML += html;
 
   document.querySelectorAll('.faction_sheet_buttons div').forEach((el) => {
     var target = el.dataset.action;

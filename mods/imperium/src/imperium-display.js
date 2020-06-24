@@ -113,6 +113,42 @@ addUIEvents() {
     document.querySelector(`.faction_content.p${(i+1)}`).innerHTML = imperium_self.returnFactionSheet(imperium_self, (i+1));
   }
 
+  var html = `
+    <div class="hud-token-count">
+      <div>
+        <span class="fa-stack fa-3x">
+        <i class="far fa-futbol fa-stack-2x pc white-stroke"></i>
+        <span class="fa fa-stack-1x">
+        <span class="token_count">
+        ${this.game.players_info[this.game.player-1].strategy_tokens}
+        </span>
+        </span>
+        </span>
+      </div>
+      <div>	
+        <span class="fa-stack fa-3x">
+        <i class="fas fa-dice-d20 fa-stack-2x pc white-stroke"></i>
+        <span class="fa fa-stack-1x">
+        <span class="token_count">
+        ${this.game.players_info[this.game.player-1].command_tokens}
+        </span>
+        </span>
+        </span>
+      </div>
+      <div>
+        <span class="fa-stack fa-3x">
+        <i class="fas fa-space-shuttle fa-stack-2x pc white-stroke"></i>
+        <span class="fa fa-stack-1x">
+        <span class="token_count">
+        ${this.game.players_info[this.game.player-1].fleet_supply}
+        </span>
+        </span>
+        </span>
+      </div>
+    </div>;`
+
+    document.querySelector('.hud-header').innerHTML += html;
+
   document.querySelectorAll('.faction_sheet_buttons div').forEach((el) => {
     var target = el.dataset.action;
     el.addEventListener('click', (el) => {

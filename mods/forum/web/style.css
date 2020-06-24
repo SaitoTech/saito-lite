@@ -153,6 +153,13 @@
   text-decoration: none;
 }
 
+.hud-token-count {
+    transform: scale(0.35);
+    display: flex;
+    position: absolute;
+    top: -5em;
+}
+
 .teaser-content {}
 
 .teaser-content-title {}
