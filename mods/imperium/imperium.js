@@ -741,13 +741,6 @@ console.log("P: " + planet);
       capacity_required :	1
     });
 
-    this.importUnit("spacedock", {
-      name     		:       "Spacedock",
-      type     		:       "spacedock",
-      capacity 		:	3,
-      production 	:	2
-    });
-
     this.importUnit("pds", {
       name     		:       "PDS",
       type     		:       "pds",
@@ -756,6 +749,15 @@ console.log("P: " + planet);
       combat 		:	6
     });
 
+    this.importUnit("spacedock", {
+      name     		:       "Spacedock",
+      type     		:       "spacedock",
+      capacity 		:	3,
+      production 	:	2,
+      combat      : 0,
+      range       :0
+    });
+    
     this.importUnit("carrier", {
       name     		:       "Carrier",
       type     		:       "carrier",
@@ -845,7 +847,7 @@ console.log("P: " + planet);
       
     });
 
-    this.importUnit("spacedock", {
+    this.importUnit("spacedock-ii", {
       name     		:       "Spacedock II",
       type     		:       "spacedock",
       capacity 		:	5,
@@ -3061,25 +3063,26 @@ console.log("TECH: " + techlist[i]);
 
 
 
-/************************************
 
-ACTION CARD - types
+    this.importActionCard('sabotage', {
+  	name : "Sabotage" ,
+  	type : "action_card" ,
+  	text : "When another player plays an action card, you may cancel that action card" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
 
-"action" -> main menu
-"bombardment_attacker"
-"bombardment_defender"
-"combat"
-"ground_combat"
-"pds" -> before pds fire
-"post_pds" -> after pds fire
-"pre_agenda" --> before agenda voting
-"post_agenda" --> after agenda voting
-"space_combat"
-"space_combat_victory"
-"rider"
+	  //
+	  // this runs in actioncard post...
+	  //
+          if (imperium_self.game.player == action_card_player) {
+	    // remove previous action card
+	    imperium_self.addMove("resolve\t"+"action_card");
+	    imperium_self.addMove("resolve\t"+"action_card_post");
+	  }
 
+	  return 0;
+	}
+    });
 
-************************************/
 
 
     this.importActionCard('lost-star-chart', {
@@ -3990,26 +3993,6 @@ alert("select sector with filter");
 
 
 
-    this.importActionCard('sabotage', {
-  	name : "Sabotage" ,
-  	type : "action_card" ,
-  	text : "When another player plays an action card, you may cancel that action card" ,
-	playActionCard : function(imperium_self, player, action_card_player, card) {
-
-	  //
-	  // this runs in actioncard post...
-	  //
-          if (imperium_self.game.player == action_card_player) {
-	    // remove previous action card
-	    imperium_self.addMove("resolve\t"+"action_card");
-	    imperium_self.addMove("resolve\t"+"action_card_post");
-	  }
-
-	  return 0;
-	}
-    });
-
-
     this.importActionCard('bunker', {
   	name : "Bunker" ,
   	type : "bombardment_defender" ,
@@ -4240,6 +4223,25 @@ alert("select sector with filter");
 
 
 
+/************************************
+
+ACTION CARD - types
+
+"action" -> main menu
+"bombardment_attacker"
+"bombardment_defender"
+"combat"
+"ground_combat"
+"pds" -> before pds fire
+"post_pds" -> after pds fire
+"pre_agenda" --> before agenda voting
+"post_agenda" --> after agenda voting
+"space_combat"
+"space_combat_victory"
+"rider"
+
+
+************************************/
 
     this.importActionCard('diplomacy-rider', {
   	name : "Diplomacy Rider" ,
@@ -16077,27 +16079,51 @@ returnFactionSheet(imperium_self, player) {
      `;
      
      //var unit_array = Object.entries(imperium_self.units);
+     var unit_array = [];
+     console.log(imperium_self.units);
      Object.entries(imperium_self.units).forEach(item => {
        let unit = item[1];
        if(unit.extension == 1) {
        } else {
-        html += `
-
-        <div class="unit-display-tile _${unit.type}">
-      <div class="unit-name">${unit.name}</div>
-        <div class="unit-image player_color_${player}" style="background-image: url(img/units/${item[0]}.png);"></div>
-        <div class="unit-display">
-          <div class="cost">Cost: ${unit.cost}</div>
-          <div class="combat">Combat: ${unit.combat}</div>
-          <div class="movement">Move: ${unit.move}</div>
-          <div class="capacity">Carry: ${unit.capacity}</div>
-        </div>
-    </div>
-       
-        `;
-       }  //todo Add Extended Units
+         unit_array.push([item[0],{
+           type: unit.type,
+           name: unit.name,
+           cost: unit.cost,
+           combat: unit.combat, 
+           move: unit.move,
+           capacity: unit.capacity
+         }]);
+       }  
      });
+     Object.entries(imperium_self.units).forEach(item => {
+      let unit = item[1];
+      if(unit.extension == 1) {
+        for(i=0; i < unit_array.length; i++){
+          console.log("---"+unit_array[i][0]+"---"+item[0]+"---");
+           if(unit_array[i][1].type == unit.type){
+             unit_array[i][1].cost += " (" + unit.cost +")";
+             unit_array[i][1].combat += " (" + unit.combat +")";
+             unit_array[i][1].move += " (" + unit.move +")";
+             unit_array[i][1].capacity += " (" + unit.capacity +")";
+           }
+         };
+      }
+    });
+    unit_array.forEach((u) =>{
+     html += `
 
+     <div class="unit-display-tile _${u[1].type}">
+   <div class="unit-name">${u[1].name}</div>
+     <div class="unit-image player_color_${player}" style="background-image: url(img/units/${u[0]}.png);"></div>
+     <div class="unit-display">
+       <div class="cost">Cost: ${u[1].cost}</div>
+       <div class="combat">Combat: ${u[1].combat}</div>
+       <div class="movement">Move: ${u[1].move}</div>
+       <div class="capacity">Carry: ${u[1].capacity}</div>
+     </div>
+ </div>
+     `;
+    });
 
     html += `
     </div>
