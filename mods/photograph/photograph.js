@@ -38,6 +38,8 @@ class Photograph extends ModTemplate {
 
   takePhotograph(success_callback = null, cancel_callback = null) {
 
+    //navigator.mediaDevices.getUserMedia({video: true});
+
     this.success_callback = success_callback;
     this.cancel_callback = cancel_callback;
 
