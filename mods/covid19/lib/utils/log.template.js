@@ -8,6 +8,7 @@ module.exports = LogTemplate = () => {
           <div class="log-message-input"></div>
           <div class="log-message-add">
             <i class="far fa-compass"></i>
+            <i class="fas fa-camera hidden"></i>
             <i class="fas fa-image"></i>
             <i class="fas fa-align-left"></i>
           </div>
