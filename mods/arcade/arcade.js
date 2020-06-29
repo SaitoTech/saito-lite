@@ -556,8 +556,55 @@ class Arcade extends ModTemplate {
       // join msgs -- add myself to game list
       //
       if (txmsg.request == "join") {
+
+	//
+	// check to see if this 
+	//
+	console.log("JOIN REQUEST FOR OPEN GAMES: ");
+	console.log(JSON.stringify(this.games));
+
+	let game_id = txmsg.game_id;
+
+	for (let i = 0; i < this.games; i++) {
+	  if (this.games[i].transaction) {
+	    if (this.games[i].transaction.msg) {
+	      if (txmsg.game_id == this.games[i].transaction.msg.game_id) {
+
+console.log("we have received a join request for an existing game on our list...");
+
+		let existing_players_found = 0;
+
+		for (let z = 0; z < this.games[i].transaction.msg.players.length; z++) {
+		  for (let zz = 0; zz < tx.transaction.to.length; zz++) {
+		    if (this.games[i].transaction.msg.players[z] == tx.transaction.to[zz].add) {
+		      existing_players_found++;
+		      z = this.games[i].transaction.msg.players.length+1;
+		    }
+		  }
+		}
+
+		if (existing_players_found < this.games[i].transaction.msg.players.length) {
+
+console.log("WE HAVE FOUND A GAME WITH A PLAYER IN IT WHO WAS NOT ACCEPTED...");
+console.log(JSON.stringify(this.games[i].transaction.msg.players));
+console.log("vs");
+console.log(JSON.stringify(tx.transaction.to));
+
+
+		}
+
+	      }
+	    }
+	  }
+	}
+
+console.log("AFTER ALL THE FUSS");
+
         this.joinGameOnOpenList(tx);
         this.receiveJoinRequest(blk, tx, conf, app);
+
+console.log("OUT OF JOIN GAME ON OPEN");
+
       }
 
       //
