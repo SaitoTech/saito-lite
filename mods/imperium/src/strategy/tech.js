@@ -12,7 +12,7 @@ console.log("PLAYER: " + player + " scp: " + strategy_card_player);
             imperium_self.playerResearchTechnology(function(tech) {
               imperium_self.addMove("resolve\tstrategy");
               imperium_self.addMove("strategy\t"+"technology"+"\t"+strategy_card_player+"\t2");
-              //imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+              imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
               imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
               imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
               imperium_self.endTurn();
@@ -23,10 +23,23 @@ console.log("PLAYER: " + player + " scp: " + strategy_card_player);
       },
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
+	let html = "";
+	let resources_to_spend = 0;
+
         if (imperium_self.game.player == player) {
         if (imperium_self.game.player != strategy_card_player) {
  
-          let html = '<p>Do you wish to spend 4 resources and a strategy token to research a technology? </p><ul>';
+	  resources_to_spend = 4;
+          html = '<p>Technology has been played. Do you wish to spend 4 resources and a strategy token to research a technology? </p><ul>';
+
+	  if (
+	    imperium_self.game.players_info[player-1].permanent_research_technology_card_must_not_spend_resources == 1 ||
+	    imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources == 1
+	  ) { 
+            html = '<p>Technology has been played. Do you wish to spend a strategy token to research a technology? </p><ul>';
+	    resources_to_spend = 0;
+	  }
+
           html += '<li class="option" id="yes">Yes</li>';
           html += '<li class="option" id="no">No</li>';
           html += '</ul>';
@@ -40,8 +53,9 @@ console.log("PLAYER: " + player + " scp: " + strategy_card_player);
 
             if (id == "yes") {
 
+	      imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources == 0;
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-              imperium_self.playerSelectResources(4, function(success) {
+              imperium_self.playerSelectResources(resources_to_spend, function(success) {
                 if (success == 1) {
                   imperium_self.playerResearchTechnology(function(tech) {
                     imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
@@ -59,12 +73,22 @@ console.log("PLAYER: " + player + " scp: " + strategy_card_player);
               return 0;
             }
           });
-console.log("TESTING AAAC");
+
+	  return 0;
 
         } else {
-console.log("TESTING AAAD");
 
-          let html = '<p>Do you wish to spend 6 resources to research an additional technology? </p><ul>';
+	  resources_to_spend = 4;
+          html = '<p>Do you wish to spend 6 resources to research an additional technology? </p><ul>';
+
+	  if (
+	    imperium_self.game.players_info[player-1].permanent_research_technology_card_must_not_spend_resources == 1 ||
+	    imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources == 1
+	  ) { 
+            html = '<p>Do you wish to research an additional technology? </p><ul>';
+	    resources_to_spend = 0;
+	  }
+
           html += '<li class="option" id="yes">Yes</li>';
           html += '<li class="option" id="no">No</li>';
           html += '</ul>';
@@ -77,12 +101,11 @@ console.log("TESTING AAAD");
             let id = $(this).attr("id");
 
             if (id == "yes") {
-              imperium_self.addMove("resolve\tstrategy\t1");
+	      imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources == 0;
+              imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
               imperium_self.playerSelectResources(6, function(success) {
-
                 if (success == 1) {
                   imperium_self.playerResearchTechnology(function(tech) {
-                    imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
                     imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
                     imperium_self.endTurn();
                   });
@@ -97,8 +120,68 @@ console.log("TESTING AAAD");
               return 0;
             }
           });
+
+	  return 0;
+
         }
         }
       },
     });
+
+
+
+
+
+
+
+
+
+    this.importAgendaCard('minister-of-technology', {
+        name : "Miniaster of Technology" ,
+        type : "Law" ,
+        text : "Elect a player. They do not need to spend resources to research technology when the technology card is played" ,
+	initialize : function(imperium_self) {
+	  imperium_self.game.state.minster_of_technology = null;
+	  imperium_self.game.state.minster_of_technology_player = null;
+	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	    imperium_self.game.players_info[i].temporary_research_technology_card_must_not_spend_resources = 0;
+	    imperium_self.game.players_info[i].permanent_research_technology_card_must_not_spend_resources = 0;
+	  }
+	},
+        returnAgendaOptions : function(imperium_self) {
+          let options = [];
+          for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+            options.push(imperium_self.returnFaction(i+1));
+          }
+          return options;
+        },
+        onPass : function(imperium_self, winning_choice) {
+console.log("WINNIGN CHOICE: " + winning_choice);
+	  let player_number = 0;
+	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	    if (imperium_self.returnFaction(i+1) == winning_choice) { player_number = i; }
+	  }
+          imperium_self.game.state.minister_of_technology = 1;
+          imperium_self.game.state.minister_of_technology_player = player_number+1;
+          imperium_self.game.players_info[player_number-1].permanent_research_technology_card_must_not_spend_resources = 1;
+        }
+  });
+
+
+
+
+
+    this.importActionCard('unexpected-breakthrough', {
+        name : "Unexpected Breakthrough" ,
+        type : "action" ,
+        text : "Do not spend resources to research technology the next time the Technology card is played" ,
+        playActionCard : function(imperium_self, player, action_card_player, card) {
+	  imperium_self.game.players_info[action_card_player-1].temporary_research_technology_card_must_not_spend_resources = 1;
+          return 1;
+        }
+    });
+
+
+
+
 

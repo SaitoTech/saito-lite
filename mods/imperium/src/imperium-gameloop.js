@@ -26,6 +26,19 @@
       }
   
 
+      //
+      // start of status phase, players must exhaust
+      //
+      if (mv[0] === "exhaust_at_round_start") { 
+
+	let player = mv[1]; // state or players
+        this.game.queue.splice(qe, 1);
+
+  	return 0;
+
+      }
+  
+
       if (mv[0] === "setvar") { 
 
 	let type = mv[1]; // state or players
@@ -306,29 +319,21 @@ console.log("RESOLVED 2: " + this.game.confirms_received + " of " + this.game.co
   	let strategy_card_player = parseInt(mv[2]);
   	let stage = parseInt(mv[3]);  
 
-console.log("STRATEGY CARD!");
-console.log("playing_strategy_card_secondary: " + this.game.state.playing_strategy_card_secondary);
-
 	if (this.game.state.playing_strategy_card_secondary == 1) {
-console.log("noping out of secondary...");
 	  return 0;
 	}
 
-console.log("STRATEGY CARD 2!");
 	if (strategy_card_player != -1) {
     	  imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.push(card);
 	}
-console.log("STRATEGY CARD 3!");
 
   	if (stage == 1) {
-	  this.updateLog(this.returnFaction(strategy_card_player) + " plays " + this.strategy_cards[card].name + " primary");
+	  this.updateLog(this.returnFaction(strategy_card_player) + " plays " + this.strategy_cards[card].name);
   	  this.playStrategyCardPrimary(strategy_card_player, card);
 	  return 0;
   	}
   	if (stage == 2) {
-	  this.updateLog(this.strategy_cards[card].name + " secondary triggers...");
 	  this.game.state.playing_strategy_card_secondary = 1;
-console.log("setting playing_strategy_card_secondary to " + this.game.state.playing_strategy_card_secondary);
   	  this.playStrategyCardSecondary(strategy_card_player, card);
 	  return 0;
   	}
@@ -558,6 +563,10 @@ console.log("executing "+z[z_index].name);
         }
 
 
+alert(JSON.stringify(this.game.state.how_voted_on_agenda));
+alert(JSON.stringify(this.game.state.votes_cast));
+
+
         //
 	// speaker breaks ties
 	//
@@ -609,13 +618,25 @@ console.log("executing "+z[z_index].name);
 
 
 	//
+	//
+	//
+	if (tied_choices.length == 1) { winning_choice = tied_choices[0]; }
+
+alert("TIED CHOICES: " + JSON.stringify(tied_choices));
+
+	//
 	// single winner
 	//
 	if (total_options_at_winning_strength == 1) {
+
           let success = imperium_self.agenda_cards[agenda].onPass(imperium_self, winning_choice);
-          if (success == 1) {
-	    imperium_self.game.state.laws.push(agenda);
-	  }
+
+	  //
+	  // handled differently
+	  //
+          //if (success == 1) {
+	  //  imperium_self.game.state.laws.push(agenda);
+	  //}
 
           //
           // resolve riders
@@ -629,7 +650,10 @@ console.log("executing "+z[z_index].name);
 
         }
 
-	return 1;
+	//
+	// notify users of vote results
+	//
+	this.game.queue.push("acknowledge\tThe Galactic Senate has settled on '"+winning_choice+"'");
 
       }
 
@@ -652,7 +676,7 @@ console.log("executing "+z[z_index].name);
 
 	let laws = this.returnAgendaCards();
         let agenda_num = mv[1];
-	let player = mv[2];
+	let player = parseInt(mv[2]);
 	let vote = mv[3];
 	let votes = parseInt(mv[4]);
 
@@ -744,9 +768,9 @@ console.log("executing "+z[z_index].name);
 	if (this.game.player != who_is_next) {
 
           let html  = '<div class="agenda_instructions">The following agenda has advanced for consideration in the Galactic Senate:</div>';
-  	      html += '<div class="agenda_name">' + laws[imperium_self.game.state.agendas[agenda_num]].name + '</div>';
+  	      html += '<div class="agenda_name">' + imperium_self.agenda_cards[agenda].name + '</div>';
 	      html += '<div class="agenda_text">';
-	      html += laws[imperium_self.game.state.agendas[agenda_num]].text;
+	      html += imperium_self.agenda_cards[agenda].text;
 	      html += '</div>';
 	      html += '<div class="agenda_status">'+this.returnFaction(who_is_next)+' is now voting.</div>';
 	  this.updateStatus(html);
@@ -767,9 +791,9 @@ console.log("executing "+z[z_index].name);
 	  // otherwise we let them vote
 	  //
           let html  = '<div class="agenda_instructions">The following agenda has advanced for consideration in the Galactic Senate:</div>';
-  	      html += '<div class="agenda_name">' + laws[imperium_self.game.state.agendas[agenda_num]].name + '</div>';
+  	      html += '<div class="agenda_name">' + imperium_self.agenda_cards[agenda].name + '</div>';
 	      html += '<div class="agenda_text">';
-  	      html += laws[imperium_self.game.state.agendas[agenda_num]].text;
+	      html += imperium_self.agenda_cards[agenda].text;
 	      html += '</div><ul>';
 	  for (let i = 0; i < this.game.state.choices.length; i++) {
               html += '<li class="option" id="'+i+'">'+this.game.state.choices[i]+'</li>';
@@ -868,7 +892,7 @@ console.log("executing "+z[z_index].name);
       }
 
       if (mv[0] == "tokenallocation") {
- 	this.playerAllocateNewTokens(this.game.player, (this.game.players_info[this.game.player-1].new_tokens_per_round+this.game.players_info[this.game.player-1].new_token_bonus_when_issued));
+ 	this.playerAllocateNewTokens(this.game.player, (this.game.players_info[this.game.player-1].new_tokens_per_round+this.game.players_info[this.game.player-1].new_token_bonus_when_issued), 1, 3);
   	return 0;
       }
   
@@ -903,8 +927,18 @@ console.log("executing "+z[z_index].name);
 
       	this.game.queue.push("resolve\tnewround");
     	this.game.state.round++;
-    	this.updateLog("ROUND: " + this.game.state.round);
+    	this.updateLog("<div style='margin-top:10px;margin-bottom:10px;'>ROUND: " + this.game.state.round + '</div>');
   	this.updateStatus("Moving into Round " + this.game.state.round);
+
+
+	//
+	//
+	//
+	for (let i = 0; i < this.game.players_info.length; i++) {
+	  if (this.game.players_info[i].must_exhaust_at_round_start.length > 0) {
+	    this.game.queue.push("must_exhaust_at_round_start\t"+(i+1));
+	  }
+	}
 
 
 	//
@@ -924,6 +958,7 @@ console.log("executing "+z[z_index].name);
   	  this.game.players_info[i].passed = 0;
 	  this.game.players_info[i].strategy_cards_played = [];
   	  this.game.players_info[i].strategy = [];
+  	  this.game.players_info[i].must_exhaust_at_round_start = [];
         }
 
 
@@ -1107,6 +1142,14 @@ console.log("do we have a pool 2?");
 
   	this.game.players_info[player-1].vp += vp;
   	this.game.players_info[player-1].objectives_scored.push(objective);
+
+	//
+	// end game
+	//
+	if (this.checkForVictory() == 1) {
+	  this.updateStatus("Game Over: " + this.returnFaction(player-1) + " has reached 14 VP");
+	  return 0;
+	}
 
   	this.game.queue.splice(qe, 1);
 
@@ -1581,7 +1624,7 @@ console.log("GAMING HALTED!");
   
         if (item == "strategycard") {
   
-  	  this.updateLog(this.returnFaction(player) + " takes " + mv[3]);
+  	  this.updateLog(this.returnFaction(player) + " takes " + this.strategy_cards[mv[3]].name);
 
 	  let strategy_card = mv[3];  
 	  for (let z_index in z) {
@@ -1601,7 +1644,7 @@ console.log("GAMING HALTED!");
 
         if (item == "tech") {
 
-  	  this.updateLog(this.returnFaction(player) + " gains " + mv[3]);
+  	  this.updateLog(this.returnFaction(player) + " gains " + this.tech[mv[3]].name);
   	  this.game.players_info[player-1].tech.push(mv[3]);
 	  for (let z_index in z) {
   	    z[z_index].gainTechnology(imperium_self, player, mv[3]);
@@ -1644,7 +1687,7 @@ console.log("GAMING HALTED!");
   	    amount = z[z_index].gainFleetSupply(imperium_self, player, amount);
   	  }
   	  this.game.players_info[player-1].fleet_supply += amount;
-  	  this.updateLog(this.returnFaction(player) + " increases their fleet supply to " + this.game.players_info[player-1].fleet_supply);
+  	  this.updateLog(this.returnFaction(player) + " increases fleet supply to " + this.game.players_info[player-1].fleet_supply);
   	}
   
   	this.game.queue.splice(qe, 1);
@@ -1872,6 +1915,7 @@ console.log("UNITS IN STORAGE: " + units_in_storage);
       }
       if (mv[0] === "pre_agenda_stage_post") {
         let agenda	 = mv[1];
+        let imperium_self = this;
   	this.game.queue.splice(qe, 1);
 
 	//
@@ -1879,7 +1923,8 @@ console.log("UNITS IN STORAGE: " + units_in_storage);
 	//
 console.log("AGENDA IS: " + agenda);
 console.log("X: " +JSON.stringify(this.agenda_cards[agenda]));
-	this.game.state.choices = this.agenda_cards[agenda].returnAgendaOptions();
+	this.game.state.choices = this.agenda_cards[agenda].returnAgendaOptions(imperium_self);
+console.log("CHOICES: " +this.game.state.choices);
 
 
         let speaker_order = this.returnSpeakerOrder();
@@ -1940,7 +1985,39 @@ console.log("X: " +JSON.stringify(this.agenda_cards[agenda]));
         this.game.queue.splice(qe, 1);
 	this.updateLog(this.returnFaction(player) + " is considering agenda options");
 	if (this.game.player == player) {
-          this.playerPlayPostAgendaStage(player, agenda);        
+
+          let winning_choice = "";
+          let winning_options = [];
+
+          for (let i = 0; i < this.game.state.choices.length; i++) {
+            winning_options.push(0);
+          }
+          for (let i = 0; i < this.game.players.length; i++) {
+            winning_options[this.game.state.how_voted_on_agenda[i]] += this.game.state.votes_cast[i];
+          }
+
+          //
+          // determine winning option
+          //
+          let max_votes_options = -1;
+          let max_votes_options_idx = 0;
+          for (let i = 0; i < winning_options.length; i++) {
+            if (winning_options[i] > max_votes_options) {
+              max_votes_options = winning_options[i];
+              max_votes_options_idx = i;
+            }
+          }
+
+          let total_options_at_winning_strength = 0;
+	  let tied_choices = [];
+          for (let i = 0; i < winning_options.length; i++) {
+            if (winning_options[i] == max_votes_options) {
+	      total_options_at_winning_strength++; 
+	      tied_choices.push(this.game.state.choices[i]);
+	    }
+          }
+
+          this.playerPlayPostAgendaStage(player, agenda, tied_choices); 
 	}
         return 0;
       }
@@ -3462,7 +3539,7 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
   	let card = mv[2];
 	let z = this.returnEventObjects();
 
-	this.updateLog(this.returnFaction(player) + " plays " + this.action_cards[card].name + "<p></p>" + this.action_cards[card].text);
+	this.updateLog(this.returnFaction(player) + " plays " + this.action_cards[card].name + "<p></p><div style='width:80%;font-size:0.9em;margin-left:auto;margin-right:auto;margin-bottom:15px'>" + this.action_cards[card].text +'</div>');
 
 	let cards = this.returnActionCards();
 	let played_card = cards[card];

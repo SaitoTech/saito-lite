@@ -146,6 +146,7 @@
           while (oksel == 0) {
             let rp = keys[this.rollDice(keys.length)-1];
             if (this.game.sectors[rp].hw != 1 && seltil.includes(rp) != 1 && this.game.sectors[rp].mr != 1) {
+console.log("PUSHING rp: " + rp);
               seltil.push(rp);
               delete tmp_sys[rp];
               this.game.board[i].tile = rp;
@@ -214,9 +215,6 @@
 	  let free_tech = this.factions[this.game.players_info[i].faction].tech[k];
 	  let player = i+1;
           this.game.players_info[i].tech.push(free_tech);
-	  if (this.tech[free_tech]) {
-	    this.tech[free_tech].gainTechnology(this, player, free_tech);
-	  }
         }
 
         this.saveSystemAndPlanets(sys);
@@ -244,7 +242,22 @@
       }
       this.saveSystemAndPlanets(sys);
     }
- 
+
+
+
+    //
+    // initialize laws
+    //
+    for (let k = 0; k < this.game.state.laws.length; k++) {
+      let this_law = this.game.state.laws[k];
+      let agenda_name = this_law.agenda;
+      let agenda_option = this_law.option;
+      if (this.agenda_cards[agenda]) {
+	this.agenda_cards[agenda].initialize(this, agenda_option);
+      }
+    }
+
+
 
 
     //
@@ -302,16 +315,16 @@
       //
       // add cards to deck and shuffle as needed
       //
+      for (let i = 0; i < this.game.players_info.length; i++) {
+        this.game.queue.push("gain\t"+(i+1)+"\tsecret_objectives\t2");
+        this.game.queue.push("DEAL\t6\t"+(i+1)+"\t2");
+      }
       this.game.queue.push("SHUFFLE\t1");
       this.game.queue.push("SHUFFLE\t2");
       this.game.queue.push("SHUFFLE\t3");
       this.game.queue.push("SHUFFLE\t4");
       this.game.queue.push("SHUFFLE\t5");
       this.game.queue.push("SHUFFLE\t6");
-      for (let i = 0; i < this.game.players_info.length; i++) {
-        this.game.queue.push("gain\t"+(i+1)+"\tsecret_objectives\t2");
-        this.game.queue.push("DEAL\t6\t"+(i+1)+"\t2");
-      }
       this.game.queue.push("POOL\t3");   // stage ii objectives
       this.game.queue.push("POOL\t2");   // stage i objectives
       this.game.queue.push("POOL\t1");   // agenda cards

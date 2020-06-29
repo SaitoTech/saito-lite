@@ -31,6 +31,19 @@
     }
 
     //
+    // laws-in-play
+    //
+    for (let i = 0; i < this.game.state.laws.length; i++) {
+      if (this.game.state.laws[i].agenda) {
+        if (this.agenda_cards[this.game.state.laws[i].agenda]) {
+          z.push(this.agenda_cards[this.game.state.laws[i].agenda]);
+        }
+      }
+    }
+
+     
+
+    //
     // action cards
     //
     for (let i in this.action_cards) {
@@ -180,23 +193,23 @@
     // agendas //
     /////////////
     if (obj.preAgendaStageTriggers == null) {
-      obj.preAgendaStageTriggers = function(imperium_self, agenda, agenda_idx) { return 0; }
+      obj.preAgendaStageTriggers = function(imperium_self, player, agenda) { return 0; }
     }
     if (obj.preAgendaStageEvent == null) {
-      obj.preAgendaStageEvent = function(imperium_self, agenda, agenda_idx) { return 1; }
+      obj.preAgendaStageEvent = function(imperium_self, player, agenda) { return 1; }
     }
     if (obj.postAgendaStageTriggers == null) {
-      obj.postAgendaStageTriggers = function(imperium_self, agenda, agenda_idx) { return 0; }
+      obj.postAgendaStageTriggers = function(imperium_self, player, agenda) { return 0; }
     }
     if (obj.postAgendaStageEvent == null) {
-      obj.postAgendaStageEvent = function(imperium_self, agenda, agenda_idx) { return 1; }
+      obj.postAgendaStageEvent = function(imperium_self, player, agenda) { return 1; }
     }
     if (obj.returnAgendaOptions == null) {
       obj.returnAgendaOptions = function(imperium_self) { return ['support','oppose']; }
     }
     //
     // when an agenda is resolved (passes) --> not necessarily if it is voted in favour
-    //
+    // for permanent game effects, run initialize after setting a var
     if (obj.onPass == null) {
       obj.onPass = function(imperium_self, winning_choice) { return 0; }
     }

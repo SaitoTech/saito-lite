@@ -50,7 +50,7 @@
 	    return 1;
 	  }
 
-          let html = '<p>Do you wish to spend 1 strategy token to refresh your commodities? </p><ul>';
+          let html = '<p>Trade has been played. Do you wish to spend 1 strategy token to refresh your commodities? </p><ul>';
           html += '<li class="option" id="yes">Yes</li>';
           html += '<li class="option" id="no">No</li>';
           html += '</ul>';

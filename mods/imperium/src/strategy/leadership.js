@@ -12,7 +12,7 @@
             imperium_self.addMove("resolve\tstrategy");
             imperium_self.addMove("strategy\t"+"leadership"+"\t"+strategy_card_player+"\t2");
             imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
-            imperium_self.playerAllocateNewTokens(imperium_self.game.player, 3, 0);
+            imperium_self.playerAllocateNewTokens(imperium_self.game.player, 3, 0, 1);
           }
  	}
 
@@ -25,10 +25,10 @@
         if (player == imperium_self.game.player) {
 	  if (strategy_card_player != imperium_self.game.player) {
             imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-            imperium_self.playerBuyTokens();
+            imperium_self.playerBuyTokens(2);
  	  } else {
             imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-            imperium_self.playerBuyTokens();
+            imperium_self.playerBuyTokens(2);
 	  }
         }
 

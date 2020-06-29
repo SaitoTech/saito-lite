@@ -77,6 +77,8 @@
       players[i].target_units = [];
       players[i].planets_conquered_this_turn = [];
 
+      players[i].must_exhaust_at_round_start = [];
+
 
       //
       // faction-inspired gameplay modifiers 
@@ -157,13 +159,13 @@
     let imperium_self = this;
     let technologies = this.returnTechnology();
     let relevant_action_cards = ["action","main"];
-    let ac = this.returnPlayerActionCards(relevant_action_cards);
+    let ac = this.returnPlayerActionCards(imperium_self.game.player, relevant_action_cards);
 
     if (stage == "main") {
   
       let playercol = "player_color_"+this.game.player;
   
-      let html  = '<div class="terminal_header sf-readable">[cmd: '+this.game.players_info[this.game.player-1].command_tokens+'] [str: '+this.game.players_info[this.game.player-1].strategy_tokens+'] [flt: '+this.game.players_info[this.game.player-1].fleet_supply+']</div>';
+      let html  = '<div class="terminal_header sf-readable">[command: '+this.game.players_info[this.game.player-1].command_tokens+'] [strategy: '+this.game.players_info[this.game.player-1].strategy_tokens+'] [fleet: '+this.game.players_info[this.game.player-1].fleet_supply+']</div>';
           html  += '<p style="margin-top:20px"></p>';
           html  += '<div class="terminal_header2 sf-readable"><div class="player_color_box '+playercol+'"></div>' + this.returnFaction(this.game.player) + ":</div><p><ul class='terminal_header3'>";
       if (this.game.players_info[this.game.player-1].command_tokens > 0) {
@@ -1126,7 +1128,7 @@
     let imperium_self = this;
     let html = '';
 
-    html = '<div class="sf-readable">This agenda is deadlocked in the Senate. As speaker, how do you wish to resolve this Agenda: </div><ul>';
+    html = '<div class="sf-readable">The agenda has become deadlocked in the Senate. You - the Speaker - must resolve it: </div><ul>';
     for (let i = 0; i < choices.length; i++) {
       html += '<li class="option" id="'+i+'">'+choices[i]+'</li>';
     }
@@ -1158,11 +1160,11 @@
     let html = '';
     let relevant_action_cards = ["pre_agenda"];
     let ac = this.returnPlayerActionCards(relevant_action_cards);
-   
-    html = '<div class="sf-readable">Do you wish to take action before voting on this Agenda: </div><ul>';
+
+    html = '<div class="sf-readable">As the Senators gather to vote on '+this.agenda_cards[agenda].name+', your emissaries nervously tally the votes in their head:</div><ul>';
 
     if (1 == 1) {
-      html += '<li class="option" id="skip">proceed to vote</li>';
+      html += '<li class="option" id="skip">proceed into Senate</li>';
     }
     if (ac.length > 0) {
       html += '<li class="option" id="action">action card</li>';
@@ -1221,17 +1223,22 @@
     });
 
   }
-  playerPlayPostAgendaStage(player, agenda, agenda_idx) {
+  playerPlayPostAgendaStage(player, agenda, array_of_winning_options) {
 
     let imperium_self = this;
     let html = '';
+    let relevant_action_cards = ["post_agenda"];
+    let ac = this.returnPlayerActionCards(imperium_self.game.player, relevant_action_cards);
 
-    html = '<div class="sf-readable">Do you wish to take action before this Agenda is written into Law: </div><ul>';
-
-    if (1 == 1) {
-      html += '<li class="option" id="skip">continue</li>';
+    html = '<div class="sf-readable">The Senate has apparently voted for "'+array_of_winning_options[0]+'". As the Speaker confirms the final tally, you get the feeling the issue may not be fully settled:</div><ul>';
+    if (array_of_winning_options.length > 1) {
+      html = '<div class="sf-readable">The voting has concluded in apparent deadlock. As you leave the council, you see the Speaker smile faintly as he crumples a note and stuffs it into his pocket:</div><ul>';
     }
+
     if (1 == 1) {
+      html += '<li class="option" id="skip">await results</li>';
+    }
+    if (ac.length > 0) {
       html += '<li class="option" id="action">action card</li>';
     }
 
@@ -1396,8 +1403,8 @@ console.log(" ... and done");
   ////////////////
   // Production //
   ////////////////
-  playerBuyTokens() {
-  
+  playerBuyTokens(stage=0) {  
+
     let imperium_self = this;
 
     if (this.returnAvailableInfluence(this.game.player) <= 2) {
@@ -1408,6 +1415,9 @@ console.log(" ... and done");
     }
 
     let html = '<div class="sf-readable">Do you wish to purchase any command or strategy tokens, or increase your fleet supply?</div><ul>';
+    if (stage == 2) {
+        html = '<div class="sf-readable">The Leadership strategy card has been played. Do you wish to purchase any additional command or strategy tokens, or increase your fleet supply?</div><ul>';
+    }
     html += '<li class="buildchoice textchoice" id="skip">Do Not Purchase</li>';
     html += '<li class="buildchoice textchoice" id="command">Command Tokens  +<span class="command_total">0</span></li>';
     html += '<li class="buildchoice textchoice" id="strategy">Strategy Tokens +<span class="strategy_total">0</span></li>';
@@ -1477,11 +1487,14 @@ console.log(" ... and done");
   
   
   
-  playerBuyActionCards() {
-  
+  playerBuyActionCards(stage=0) {  
+
     let imperium_self = this;
   
     let html = '<div class="sf-readable">Do you wish to spend 1 strategy token to purchase 2 action cards?</div><ul>';
+    if (stage == 2) {
+        html = '<div class="sf-readable">Politics has been played: do you wish to spend 1 strategy token to purchase 2 action cards?</div><ul>';
+    }
     html += '<li class="buildchoice textchoice" id="yes">Purchase Action Cards</li>';
     html += '<li class="buildchoice textchoice" id="no">Do Not Purchase Action Cards</li>';
     html += '</ul>';
@@ -1734,7 +1747,7 @@ console.log(" ... and done");
   }
   
   
-  playerProduceUnits(sector, production_limit=0, cost_limit=0) { 
+  playerProduceUnits(sector, production_limit=0, cost_limit=0, stage=0) { 
   
     let imperium_self = this;
 
@@ -3202,7 +3215,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
   
   
   
-  playerAllocateNewTokens(player, tokens, resolve_needed=1) {  
+  playerAllocateNewTokens(player, tokens, resolve_needed=1, stage=0) {  
 
     let imperium_self = this;
   
@@ -3220,6 +3233,17 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
       let updateInterface = function(imperium_self, obj, updateInterface) {
   
         let html = '<div class="sf-readable">You have '+obj.new_tokens+' tokens to allocate. How do you want to allocate them? </div><ul>';
+
+	if (stage == 1) {
+          html = '<div class="sf-readable">The Leadership card gives you '+obj.new_tokens+' tokens to allocate. How do you wish to allocate them? </div><ul>';
+	}
+	if (stage == 2) {
+          html = '<div class="sf-readable">Leadership has been played and you have purchased '+obj.new_tokens+' additional tokens. How do you wish to allocate them? </div><ul>';
+	}
+	if (stage == 3) {
+          html = '<div class="sf-readable">It is the start of a new round. You have '+obj.new_tokens+' new tokens to allocate. But how?</div><ul>';
+	}
+
             html += '<li class="option" id="strategy">Strategy Token - '+ (parseInt(obj.current_strategy)+parseInt(obj.new_strategy)) + '</li>';
             html += '<li class="option" id="command">Command Token - '+ (parseInt(obj.current_command)+parseInt(obj.new_command)) + '</li>';
             html += '<li class="option" id="fleet">Fleet Supply - '+ (parseInt(obj.current_fleet)+parseInt(obj.new_fleet)) + '</li>';
@@ -3407,6 +3431,90 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
       imperium_self.updateStatus("");
       imperium_self.hideSectorHighlight(action);
       mycallback(action);
+
+    });
+  }
+
+
+
+
+  playerSelectUnitWithFilter(msg, filter_func, mycallback=null, cancel_func=null) {
+
+    let imperium_self = this;
+    let unit_array = [];
+    let sector_array = [];
+    let planet_array = [];
+    let unit_idx = [];
+
+    let html  = '<div class="sf-readable">' + msg + '</div>';
+        html += '<ul>';
+
+    for (let i in this.game.sectors) {
+
+      let sys = this.returnSectorAndPlanets(this.game.sectors[i]);
+
+      let sector = i;
+      let planet_idx = -1;
+      let unit_idx = -1;
+
+      for (let k = 0; k < sys.s.units[imperium_self.game.player-1].length; k++) {
+	if (filter_func(sys.s.units[imperium_self.game.player-1][k])) {
+	  unit_array.push(sys.s.units[imperium_self.game.player-1][k]);
+	  sector_array.push(sector);
+	  planet_array.push(-1);
+	  unit_idx.push(k);
+          html += '<li class="textchoice" id="'+unit_array.length-1+'">'+sys.s.name+' - ' + unit_array[unit_array.length-1].name + '</li>';
+	}
+      }
+
+      for (let p = 0; p < sys.p.length; p++) {
+        for (let k = 0; k < sys.p[k].units.length; k++) {
+	  if (filter_func(sys.p[k].units[imperium_self.game.player-1][k])) {
+	    unit_array.push(sys.p[k].units[imperium_self.game.player-1][k]);
+	    sector_array.push(sector);
+	    planet_array.push(p);
+	    unit_idx.push(k);
+            html += '<li class="textchoice" id="'+unit_array.length-1+'">'+sys.s.name+'/' + sys.p[p].name + " - " + unit_array[unit_array.length-1].name + '</li>';
+	  }
+	}
+      }
+
+    }
+    if (cancel_func != null) {
+      html += '<li class="textchoice" id="cancel">cancel</li>';
+    }
+    html += '</ul>';
+
+    this.updateStatus(html);
+
+    $('.textchoice').off();
+//    $('.textchoice').on('mouseenter', function() { 
+//      let s = $(this).attr("id"); 
+//      imperium_self.showPlanetCard(imperium_self.game.planets[s].tile, imperium_self.game.planets[s].idx); 
+//      imperium_self.showSectorHighlight(imperium_self.game.planets[s].tile);
+//    });
+//    $('.textchoice').on('mouseleave', function() { 
+//      let s = $(this).attr("id");
+//      imperium_self.hidePlanetCard(imperium_self.game.planets[s].tile, imperium_self.game.planets[s].idx); 
+//      imperium_self.hideSectorHighlight(imperium_self.game.planets[s].tile);
+//    });
+    $('.textchoice').on('click', function() {
+
+      let action = $(this).attr("id");
+//      imperium_self.hidePlanetCard(imperium_self.game.planets[action].tile, imperium_self.game.planets[action].idx); 
+//      imperium_self.hideSectorHighlight(imperium_self.game.planets[action].tile);
+
+      if (action == "cancel") {
+        cancel_func();
+        imperium_self.hideSectorHighlight(action);
+        return 0;
+      }
+
+      let unit_to_return = { sector : sector_array[action] , planet_idx : planet_array[action] , unit_idx : unit_idx[action] , unit : unit_array[action] }
+//      imperium_self.hideSectorHighlight(action);
+
+      imperium_self.updateStatus("");
+      mycallback(unit_to_return);
 
     });
   }

@@ -48,7 +48,7 @@
 
 
   this.importSecretObjective('master-of-the-ion-cannon', {
-      name 		: 	"Master of the Ion Cannon" ,
+      name 		: 	"Master Cannoneer" ,
       text		:	"Have at least 4 PDS units in play" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
