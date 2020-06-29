@@ -44,8 +44,6 @@
     planets['new-byzantium'] = { type : "diplomatic" , img : "/imperium/img/planets/NEW-BYZANTIUM.png" , name : "New Byzantium" , resources : 1 , influence : 6 , bonus : ""  }
     planets['planet36'] = { type : "cultural" , img : "/imperium/img/planets/OUTERANT.png" , name : "Outerant" , resources : 1 , influence : 3 , bonus : ""  }
     planets['planet37'] = { type : "industrial" , img : "/imperium/img/planets/VESPAR.png" , name : "Vespar" , resources : 2 , influence : 2 , bonus : ""  }
-
-
     planets['planet38'] = { type : "hazardous" , img : "/imperium/img/planets/CRAW-POPULI.png" , name : "Craw Populi" , resources : 1 , influence : 2 , bonus : ""  }
     planets['planet41'] = { type : "industrial" , img : "/imperium/img/planets/LORSTRUCK.png" , name : "Lorstruck" , resources : 1 , influence : 0 , bonus : ""  }
     planets['planet42'] = { type : "hazardous" , img : "/imperium/img/planets/INDUSTRYL.png" , name : "Industryl" , resources : 3 , influence : 1 , bonus : ""  }
@@ -118,82 +116,83 @@
   // Return Planets //
   ////////////////////
   returnSectors() {
-  
+
     var sectors = {};
-  
-    sectors['sector1']         = { img : "/imperium/img/sectors/sector1.png" , 	   	   name : "Sector 1" , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector2']         = { img : "/imperium/img/sectors/sector2.png" , 	   	   name : "Sector 2" , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector3']         = { img : "/imperium/img/sectors/sector3.png" , 	   	   name : "Sector 3" , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector4']         = { img : "/imperium/img/sectors/sector4.png" , 	   	   name : "Sector 4" , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector5']         = { img : "/imperium/img/sectors/sector5.png" , 	   	   name : "Sector 5" , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector6']         = { img : "/imperium/img/sectors/sector6.png" , 	   	   name : "Sector 6" , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector7']         = { img : "/imperium/img/sectors/sector7.png" , 	   	   name : "Sector 7" , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector8']         = { img : "/imperium/img/sectors/sector8.png" , 	   	   name : "Sector 8" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet1','planet2'] }
-    sectors['sector9']         = { img : "/imperium/img/sectors/sector9.png" , 	   	   name : "Sector 9" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet3','planet4'] }
-    sectors['sector10']        = { img : "/imperium/img/sectors/sector10.png" , 	   name : "Sector 10" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet5','planet6'] }
-    sectors['sector11']        = { img : "/imperium/img/sectors/sector11.png" , 	   name : "Sector 11" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet7','planet8'] }
-    sectors['sector12']        = { img : "/imperium/img/sectors/sector12.png" , 	   name : "Sector 12" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet9','planet10'] }
-    sectors['sector13']        = { img : "/imperium/img/sectors/sector13.png" , 	   name : "Sector 13" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet11','planet12'] }
-    sectors['sector14']        = { img : "/imperium/img/sectors/sector14.png" , 	   name : "Sector 14" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet13','planet14'] }
-    sectors['sector15']        = { img : "/imperium/img/sectors/sector15.png" , 	   name : "Sector 15" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet15','planet16'] }
-    sectors['sector16']        = { img : "/imperium/img/sectors/sector16.png" , 	   name : "Sector 16" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet17','planet18'] }
-    sectors['sector17']        = { img : "/imperium/img/sectors/sector17.png" , 	   name : "Sector 17" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet19','planet20'] }
-    sectors['sector18']        = { img : "/imperium/img/sectors/sector18.png" , 	   name : "Sector 18" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet21','planet22'] }
-    sectors['sector19']        = { img : "/imperium/img/sectors/sector19.png" , 	   name : "Sector 19" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet23','planet24'] }
-    sectors['sector20']        = { img : "/imperium/img/sectors/sector20.png" , 	   name : "Sector 20" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet25','planet26'] }
-    sectors['sector21']        = { img : "/imperium/img/sectors/sector21.png" , 	   name : "Sector 21" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet27','planet28'] }
-    sectors['sector22']        = { img : "/imperium/img/sectors/sector22.png" , 	   name : "Sector 22" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet29'] }
-    sectors['sector23']        = { img : "/imperium/img/sectors/sector23.png" , 	   name : "Sector 23" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet30'] }
-    sectors['sector24']        = { img : "/imperium/img/sectors/sector24.png" , 	   name : "Sector 24" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet31'] }
-    sectors['sector25']        = { img : "/imperium/img/sectors/sector25.png" , 	   name : "Sector 25" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet32'] }
-    sectors['sector26']        = { img : "/imperium/img/sectors/sector26.png" , 	   name : "Sector 26" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet33'] }
-    sectors['sector27']        = { img : "/imperium/img/sectors/sector27.png" , 	   name : "Sector 27" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet34'] } 
-    sectors['new-byzantium']   = { img : "/imperium/img/sectors/sector28.png" , 	   name : "New Byzantium" , hw : 0 , wormhole : 0, mr : 1 , planets : ['new-byzantium'] }
-    sectors['sector29']        = { img : "/imperium/img/sectors/sector29.png" , 	   name : "Sector 29" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet36'] }
-    sectors['sector30']        = { img : "/imperium/img/sectors/sector30.png" , 	   name : "Sector 30" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet37'] }
-    sectors['sector31']        = { img : "/imperium/img/sectors/sector31.png" , 	   name : "Sector 31" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet38'] }
-    sectors['sector32']        = { img : "/imperium/img/sectors/sector32.png" , 	   name : "Sector 32" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet39'] }
-    sectors['sector33']        = { img : "/imperium/img/sectors/sector34.png" , 	   name : "Sector 33" , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector34']        = { img : "/imperium/img/sectors/sector34.png" , 	   name : "Sector 34" , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector35']        = { img : "/imperium/img/sectors/sector35.png" , 	   name : "Sector 35" , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector36']        = { img : "/imperium/img/sectors/sector36.png" , 	   name : "Sector 36" , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector37']        = { img : "/imperium/img/sectors/sector36.png" , 	   name : "Sector 37" , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector38']        = { img : "/imperium/img/sectors/sector38.png" , 	   name : "Sector 30" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet41','planet42'] }
-    sectors['sector39']        = { img : "/imperium/img/sectors/sector39.png" , 	   name : "Sector 31" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet43','planet44'] }
-    sectors['sector40']        = { img : "/imperium/img/sectors/sector40.png" , 	   name : "Sector 32" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet45','planet46'] }
-    sectors['sector41']        = { img : "/imperium/img/sectors/sector41.png" , 	   name : "Sector 41" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet40'] }
-    sectors['sector42']        = { img : "/imperium/img/sectors/sector42.png" , 	   name : "Sector 42" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet47'] }
-    sectors['sector43']        = { img : "/imperium/img/sectors/sector43.png" , 	   name : "Sector 43" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet48'] }
-    sectors['sector44']        = { img : "/imperium/img/sectors/sector44.png" , 	   name : "Sector 44" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet49'] }
-    sectors['sector45']        = { img : "/imperium/img/sectors/sector45.png" , 	   name : "Sector 45" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet50'] } 
-    sectors['sector47']        = { img : "/imperium/img/sectors/sector49.png" , 	   name : "Sector 47" , hw : 0 , wormhole : 1, mr : 0 , planets : ['planet51'] } // wormhole a
-    sectors['sector48']        = { img : "/imperium/img/sectors/sector46.png" , 	   name : "Sector 48" , hw : 0 , wormhole : 1, mr : 0 , planets : [] } // wormhole a
-    sectors['sector46']        = { img : "/imperium/img/sectors/sector48.png" , 	   name : "Sector 46" , hw : 0 , wormhole : 2, mr : 0 , planets : ['planet52'] } // wormhole b
-    sectors['sector49']        = { img : "/imperium/img/sectors/sector47.png" , 	   name : "Sector 49" , hw : 0 , wormhole : 2, mr : 0 , planets : [] } // wormhole b
+
+    sectors['sector3']         = { img : "/imperium/img/sectors/sector3.png" , 	   	   name : "Sector 3" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
+    sectors['sector4']         = { img : "/imperium/img/sectors/sector4.png" , 	   	   name : "Sector 4" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
+    sectors['sector5']         = { img : "/imperium/img/sectors/sector5.png" , 	   	   name : "Sector 5" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
+    sectors['sector6']         = { img : "/imperium/img/sectors/sector6.png" , 	   	   name : "Sector 6" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
+    sectors['sector1']         = { img : "/imperium/img/sectors/sector1.png" , 	   	   name : "Sector 1" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
+    sectors['sector2']         = { img : "/imperium/img/sectors/sector2.png" , 	   	   name : "Sector 2" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
+    sectors['sector7']         = { img : "/imperium/img/sectors/sector7.png" , 	   	   name : "Sector 7" , type : 1 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
+    //sectors['sector33']        = { img : "/imperium/img/sectors/sector33.png" , 	   name : "Sector 33" , type : 2 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
+    sectors['sector72']         = { img : "/imperium/img/sectors/sector72.png" , 	   name : "Sector 72" , type : 2 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
+    sectors['sector34']        = { img : "/imperium/img/sectors/sector34.png" , 	   name : "Sector 34" , type : 3 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
+    sectors['sector35']        = { img : "/imperium/img/sectors/sector35.png" , 	   name : "Sector 35" , type : 3 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
+    //sectors['sector36']        = { img : "/imperium/img/sectors/sector36.png" , 	   name : "Sector 36" , type : 4 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
+    sectors['sector71']        = { img : "/imperium/img/sectors/sector71.png" , 	   name : "Sector 71" , type : 4 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
+    sectors['sector54']        = { img : "/imperium/img/sectors/sector54.png" , 	   name : "Sector 48" , type : 0 , hw : 0 , wormhole : 1, mr : 0 , planets : [] } 		// wormhole a
+    sectors['sector56']        = { img : "/imperium/img/sectors/sector56.png" , 	   name : "Sector 49" , type : 0 , hw : 0 , wormhole : 2, mr : 0 , planets : [] } 		// wormhole b
+
+    sectors['sector55']        = { img : "/imperium/img/sectors/sector55.png" , 	   name : "Sector 47" , type : 0 , hw : 0 , wormhole : 1, mr : 0 , planets : ['planet51'] } 	// wormhole a
+    sectors['sector57']        = { img : "/imperium/img/sectors/sector57.png" , 	   name : "Sector 46" , type : 0 , hw : 0 , wormhole : 2, mr : 0 , planets : ['planet52'] } 	// wormhole b
+
+    sectors['sector8']         = { img : "/imperium/img/sectors/sector8.png" , 	   	   name : "Sector 8" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet1','planet2'] }
+    sectors['sector9']         = { img : "/imperium/img/sectors/sector9.png" , 	   	   name : "Sector 9" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet3','planet4'] }
+    sectors['sector10']        = { img : "/imperium/img/sectors/sector10.png" , 	   name : "Sector 10" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet5','planet6'] }
+    sectors['sector11']        = { img : "/imperium/img/sectors/sector11.png" , 	   name : "Sector 11" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet7','planet8'] }
+    sectors['sector12']        = { img : "/imperium/img/sectors/sector12.png" , 	   name : "Sector 12" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet9','planet10'] }
+    sectors['sector15']        = { img : "/imperium/img/sectors/sector15.png" , 	   name : "Sector 15" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet15','planet16'] }
+    sectors['sector16']        = { img : "/imperium/img/sectors/sector16.png" , 	   name : "Sector 16" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet17','planet18'] }
+    sectors['sector18']        = { img : "/imperium/img/sectors/sector18.png" , 	   name : "Sector 18" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet21','planet22'] }
+    sectors['sector19']        = { img : "/imperium/img/sectors/sector19.png" , 	   name : "Sector 19" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet23','planet24'] }
+    sectors['sector20']        = { img : "/imperium/img/sectors/sector20.png" , 	   name : "Sector 20" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet25','planet26'] }
+    sectors['sector22']        = { img : "/imperium/img/sectors/sector22.png" , 	   name : "Sector 22" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet29'] }
+    sectors['sector25']        = { img : "/imperium/img/sectors/sector25.png" , 	   name : "Sector 25" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet32'] }
+    sectors['sector26']        = { img : "/imperium/img/sectors/sector26.png" , 	   name : "Sector 26" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet33'] }
+    sectors['sector27']        = { img : "/imperium/img/sectors/sector27.png" , 	   name : "Sector 27" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet34'] } 
+    sectors['new-byzantium']   = { img : "/imperium/img/sectors/sector28.png" , 	   name : "New Byzantium" , type : 0 , hw : 0 , wormhole : 0, mr : 1 , planets : ['new-byzantium'] }
+    sectors['sector29']        = { img : "/imperium/img/sectors/sector29.png" , 	   name : "Sector 29" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet36'] }
+    sectors['sector31']        = { img : "/imperium/img/sectors/sector31.png" , 	   name : "Sector 31" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet38'] }
+    sectors['sector32']        = { img : "/imperium/img/sectors/sector32.png" , 	   name : "Sector 32" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet39'] }
+    sectors['sector38']        = { img : "/imperium/img/sectors/sector38.png" , 	   name : "Sector 30" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet41','planet42'] }
+    sectors['sector39']        = { img : "/imperium/img/sectors/sector39.png" , 	   name : "Sector 31" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet43','planet44'] }
+    sectors['sector40']        = { img : "/imperium/img/sectors/sector40.png" , 	   name : "Sector 32" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet45','planet46'] }
+    sectors['sector41']        = { img : "/imperium/img/sectors/sector41.png" , 	   name : "Sector 41" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet40'] }
+    sectors['sector42']        = { img : "/imperium/img/sectors/sector42.png" , 	   name : "Sector 42" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet47'] }
+    sectors['sector43']        = { img : "/imperium/img/sectors/sector43.png" , 	   name : "Sector 43" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet48'] }
+    sectors['sector44']        = { img : "/imperium/img/sectors/sector44.png" , 	   name : "Sector 44" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet49'] }
+    sectors['sector58']        = { img : "/imperium/img/sectors/sector58.png" , 	   name : "Sector 58" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet59'] }
+    sectors['sector59']        = { img : "/imperium/img/sectors/sector59.png" , 	   name : "Sector 59" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet60'] }
+    sectors['sector60']        = { img : "/imperium/img/sectors/sector60.png" , 	   name : "Sector 60" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet61'] }
+    sectors['sector62']        = { img : "/imperium/img/sectors/sector62.png" , 	   name : "Sector 62" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet63'] }
+    sectors['sector65']        = { img : "/imperium/img/sectors/sector65.png" , 	   name : "Sector 65" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet66'] }
+    sectors['sector67']        = { img : "/imperium/img/sectors/sector67.png" , 	   name : "Sector 67" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet68'] }
+    sectors['sector69']        = { img : "/imperium/img/sectors/sector69.png" , 	   name : "Sector 69" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet71'] }
+
+    //sectors['sector13']        = { img : "/imperium/img/sectors/sector13.png" , 	   name : "Sector 13" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet11','planet12'] }
+    //sectors['sector14']        = { img : "/imperium/img/sectors/sector14.png" , 	   name : "Sector 14" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet13','planet14'] }
+    //sectors['sector17']        = { img : "/imperium/img/sectors/sector17.png" , 	   name : "Sector 17" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet19','planet20'] }
+    //sectors['sector21']        = { img : "/imperium/img/sectors/sector21.png" , 	   name : "Sector 21" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet27','planet28'] }
+    //sectors['sector23']        = { img : "/imperium/img/sectors/sector23.png" , 	   name : "Sector 23" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet30'] }
+    //sectors['sector24']        = { img : "/imperium/img/sectors/sector24.png" , 	   name : "Sector 24" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet31'] }
+    //sectors['sector30']        = { img : "/imperium/img/sectors/sector30.png" , 	   name : "Sector 30" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet37'] }
+    //sectors['sector45']        = { img : "/imperium/img/sectors/sector45.png" , 	   name : "Sector 45" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet50'] } 
+    //sectors['sector61']        = { img : "/imperium/img/sectors/sector61.png" , 	   name : "Sector 61" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet62'] } // weird ring
+    //sectors['sector63']        = { img : "/imperium/img/sectors/sector63.png" , 	   name : "Sector 63" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet64'] }
+    //sectors['sector64']        = { img : "/imperium/img/sectors/sector64.png" , 	   name : "Sector 64" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet65'] }
+    //sectors['sector66']        = { img : "/imperium/img/sectors/sector66.png" , 	   name : "Sector 66" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet67'] }
+    //sectors['sector68']        = { img : "/imperium/img/sectors/sector68.png" , 	   name : "Sector 68" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet69','planet70'] }
+    //sectors['sector70']        = { img : "/imperium/img/sectors/sector70.png" , 	   name : "Sector 70" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet72'] }
+
     sectors['sector50']        = { img : "/imperium/img/sectors/sector50.png" , 	   name : "Jol Nar Homeworld" , hw : 1 , wormhole : 0 , mr : 0 , planets : ['planet53','planet54'] }
     sectors['sector51']        = { img : "/imperium/img/sectors/sector51.png" , 	   name : "XXCha Homeworld" , hw : 1 , wormhole : 0 , mr : 0 , planets : ['planet55','planet56'] }
     sectors['sector52']        = { img : "/imperium/img/sectors/sector52.png" , 	   name : "Sol Homeworld" , hw : 1 , wormhole : 0 , mr : 0 , planets : ['planet57'] }
     sectors['sector53']        = { img : "/imperium/img/sectors/sector53.png" , 	   name : "Mentak Homeworld" , hw : 1 , wormhole: 0 , mr : 0 , planets : ['planet58'] }
-//    sectors['sector54']        = { img : "/imperium/img/sectors/sector48.png" , 	   name : "Sector 46" , hw : 0 , wormhole : 1, mr : 0 , planets : ['planet52'] } // wormhole a
-//    sectors['sector55']        = { img : "/imperium/img/sectors/sector49.png" , 	   name : "Sector 47" , hw : 0 , wormhole : 2, mr : 0 , planets : ['planet51'] } // wormhole b
-//    sectors['sector56']        = { img : "/imperium/img/sectors/sector46.png" , 	   name : "Sector 48" , hw : 0 , wormhole : 1, mr : 0 , planets : [] } // wormhole a
-//    sectors['sector57']        = { img : "/imperium/img/sectors/sector47.png" , 	   name : "Sector 49" , hw : 0 , wormhole : 2, mr : 0 , planets : [] } // wormhole b
-    sectors['sector58']        = { img : "/imperium/img/sectors/sector58.png" , 	   name : "Sector 58" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet59'] }
-    sectors['sector59']        = { img : "/imperium/img/sectors/sector59.png" , 	   name : "Sector 59" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet60'] }
-    sectors['sector60']        = { img : "/imperium/img/sectors/sector60.png" , 	   name : "Sector 60" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet61'] }
-    sectors['sector61']        = { img : "/imperium/img/sectors/sector61.png" , 	   name : "Sector 61" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet62'] } // weird ring
-    sectors['sector62']        = { img : "/imperium/img/sectors/sector62.png" , 	   name : "Sector 62" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet63'] }
-    sectors['sector63']        = { img : "/imperium/img/sectors/sector63.png" , 	   name : "Sector 63" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet64'] }
-    sectors['sector64']        = { img : "/imperium/img/sectors/sector64.png" , 	   name : "Sector 64" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet65'] }
-    sectors['sector65']        = { img : "/imperium/img/sectors/sector65.png" , 	   name : "Sector 65" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet66'] }
-    sectors['sector66']        = { img : "/imperium/img/sectors/sector66.png" , 	   name : "Sector 66" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet67'] }
-    sectors['sector67']        = { img : "/imperium/img/sectors/sector67.png" , 	   name : "Sector 67" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet68'] }
-    sectors['sector68']        = { img : "/imperium/img/sectors/sector68.png" , 	   name : "Sector 68" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet69','planet70'] }
-    sectors['sector69']        = { img : "/imperium/img/sectors/sector69.png" , 	   name : "Sector 69" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet71'] }
-    sectors['sector70']        = { img : "/imperium/img/sectors/sector70.png" , 	   name : "Sector 70" , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet72'] }
-
 
     for (var i in sectors) {
+
       sectors[i].units = [this.totalPlayers]; // array to store units
       sectors[i].activated = [this.totalPlayers]; // array to store units
       sectors[i].sector = "";  // sector reference

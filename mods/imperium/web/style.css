@@ -27,6 +27,23 @@
   display: none;
 }
 
+.hazard_border {
+  display : none;
+  left: -100%;
+  right: -100%;
+  width: auto;
+  height: 100%;
+  margin: 0 auto;
+}
+.faction_border {
+  display : none;
+  left: -100%;
+  right: -100%;
+  width: auto;
+  height: 100%;
+  margin: 0 auto;
+}
+
 #confirm {
   padding-top: 8px;
   padding-bottom: 8px;

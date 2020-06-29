@@ -514,9 +514,11 @@ updateSectorGraphics(sector) {
       $(divpid).find('.hex_activated').css('opacity', '0.3');
     }
 
+HACK
     if (sys.s.type > 0) {
-      let divpid = '#hex_img_hazard_border_' + sector;
-      $(divpid).css('display', 'block');
+      let divpid = '#hex_' + sector;
+      $(divpid).find('.hex_activated').css('background-color', 'yellow');
+      $(divpid).find('.hex_activated').css('opacity', '0.3');
     }
 
 

@@ -280,6 +280,8 @@ console.log("PUSHING rp: " + rp);
             <div class="hexLink" id="hexLink_'+i+'"> \
               <div class="hex_bg" id="hex_bg_'+i+'"> \
                 <img class="hex_img sector_graphics_background" id="hex_img_'+i+'" src="" /> \
+                <img src="/imperium/img/frame/border_full_white.png" id="hex_img_faction_border_'+i+'" class="faction_border" /> \
+                <img src="/imperium/img/frame/border_full_yellow.png" id="hex_img_hazard_border_'+i+'" class="hazard_border" /> \
                 <div class="hex_activated" id="hex_activated_'+i+'"> \
               </div> \
                 <div class="hex_space" id="hex_space_'+i+'"> \
