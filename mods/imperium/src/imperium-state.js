@@ -54,6 +54,9 @@
         state.ground_combat_infantry_destroyed_attacker = 0;
         state.ground_combat_infantry_destroyed_defender = 0;
 
+	state.pds_limit_per_planet = 2;
+	state.pds_limit_total = 4;
+
 	state.bombardment_sector = "";
 	state.bombardment_planet_idx = "";
 	state.space_combat_sector = "";

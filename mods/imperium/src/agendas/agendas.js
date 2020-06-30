@@ -1,5 +1,120 @@
 
 
+  this.importAgendaCard('shard-of-the-throne', {
+  	name : "Shard of the Throne" ,
+  	type : "Law" ,
+  	text : "Elect a Player to earn 1 VP. When this player loses a space combat to another player, they transfer the VP to that player" ,
+        returnAgendaOptions : function(imperium_self) {
+	  return imperium_self.returnPlanetsOnBoard(function(planet) {
+	    if (planet.type === "cultural") { return 1; } return 0; 
+	  });
+	},
+	onPass : function(imperium_self, winning_choice) {
+	  imperium_self.game.state.shard_of_the_throne = 1;
+
+	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	    if (winning_choice === imperium_self.returnFaction((i+1))) {
+	      imperium_self.game.state.shard_of_the_throne_player = i+1;
+	    }
+	  }
+
+	  let law_to_push = {};
+	      law_to_push.agenda = "shard-of-the-throne";
+	      law_to_push.option = winning_choice;
+	  imperium_self.game.state.laws.push(law_to_push);
+
+          imperium_self.game.players_info[imperium_self.game.state.shard_of_the_throne_player-1].vp += 1;
+	  imperium_self.updateLeaderboard();
+	  imperium_self.updateLog(imperium_self.returnFaction(imperium_self.game.state.shard_of_the_throne_player) + " gains 1 VP from Holy Planet of Ixth");
+
+	},
+        spaceCombatRoundEnd : function(imperium_self, attacker, defender, sector) {
+	  if (defender == imperium_self.game.state.shard_of_the_throne_player) {
+	    if (!imperium_self.doesPlayerHaveShipsInSector(defender, sector)) {
+	      imperium_self.game.state.shard_of_the_throne_player = attacker;
+	      imperium_self.updateLog(imperium_self.returnFaction(imperium_self.game.state.shard_of_the_throne_player) + " gains the Shard of the Throne (1VP)");
+	      imperium_self.game.players_info[attacker-1].vp += 1;
+	      imperium_self.game.players_info[defender-1].vp -= 1;
+	      imperium_self.updateLeaderboard();
+	    }
+	  }
+	},
+	groundCombatRoundEnd : function(imperium_self, attacker, defender, sector, planet_idx) {
+	  if (defender == imperium_self.game.state.shard_of_the_throne_player) {
+	    if (!imperium_self.doesPlayerHaveInfantryOnPlanet(defender, sector, planet_idx)) {
+	      imperium_self.game.state.shard_of_the_throne_player = attacker;
+	      imperium_self.updateLog(imperium_self.returnFaction(imperium_self.game.state.shard_of_the_throne_player) + " gains the Shard of the Throne (1VP)");
+	      imperium_self.game.players_info[attacker-1].vp += 1;
+	      imperium_self.game.players_info[defender-1].vp -= 1;
+	      imperium_self.updateLeaderboard();
+	    }
+	  }
+	},
+  });
+
+
+  this.importAgendaCard('homeland-defense-act', {
+  	name : "Homeland Defense Act" ,
+  	type : "Law" ,
+  	text : "FOR: there is no limit to the number of PDS units on a planet. AGAINST: each player must destroy one PDS unit" ,
+        returnAgendaOptions : function(imperium_self) { return ['for','against']; },
+	onPass : function(imperium_self, winning_choice) {
+	  imperium_self.game.state.homeland_defense_act = 1;
+	  let law_to_push = {};
+	      law_to_push.agenda = "homeland-defense-act";
+	      law_to_push.option = winning_choice;
+	  imperium_self.game.state.laws.push(law_to_push);
+
+          if (winning_choice === "for") {
+	    imperium_self.game.state.pds_limit_per_planet = 100;
+	  }
+
+          if (winning_choice === "against") {
+	    for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	      if (imperium_self.doesPlayerHaveUnitOnBoard((i+1), "pds")) {
+	        imperium_self.game.queue.push("destroy_a_pds\t"+(i+1));
+	      }
+	    }
+	  }
+	},
+        handleGameLoop : function(imperium_self, qe, mv) {
+
+          if (mv[0] == "destroy_a_pds") {
+
+            let player = parseInt(mv[1]);
+	    imperium_self.game.queue.splice(qe, 1);
+
+            imperium_self.playerSelectUnitWithFilter(
+                    "Select a PDS unit to destroy: ",
+                    function(unit) {
+                      if (unit.type == "pds") { return 1; }
+                      return 0;
+            	    },
+                    function(unit_identifier) {
+
+                      let sector        = unit_identifier.sector;
+                      let planet_idx    = unit_identifier.planet_idx;
+                      let unit_idx      = unit_identifier.unit_idx;
+                      let unit          = unit_identifier.unit;
+
+                      imperium_self.addMove("destroy\t"+imperium_self.game.player+"\t"+imperium_self.game.player+"\t"+"ground"+"\t"+sector+"\t"+planet_idx+"\t"+unit_idx+"\t"+"1");
+                      imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit.name + " in " + imperium_self.game.sectors[sector].name);
+		      imperium_self.endTurn();
+                    }
+            );
+
+            return 0;
+          }
+
+          return 1;
+
+        }
+
+  });
+
+
+
+
   this.importAgendaCard('holy-planet-of-ixth', {
   	name : "Holy Planet of Ixth" ,
   	type : "Law" ,
@@ -725,7 +840,8 @@
 	  return 1;
 	},
   });
-*/
+
+
   this.importAgendaCard('restricted-conscription', {
   	name : "Restricted Conscription" ,
   	type : "Law" ,

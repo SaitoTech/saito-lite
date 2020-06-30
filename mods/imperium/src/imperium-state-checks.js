@@ -1041,6 +1041,24 @@ if (this.game.board[tmp[k]] != undefined) {
   }
 
 
+  doesPlayerHaveUnitOnBoard(player, unittype) {
+
+    for (let i in this.game.sectors) {
+      for (let ii = 0; ii < this.game.sectors[i].units[player-1].length; ii++) {
+	if (this.game.sectors[i].units[player-1][ii].type == unittype) { return 1; }
+      }
+    }
+
+    for (let i in this.game.planets) {
+      for (let ii = 0; ii < this.game.planets[i].units[player-1].length; ii++) {
+	if (this.game.planets[i].units[player-1][ii].type == unittype) { return 1; }
+      }
+    }
+
+    return 1;
+
+  }
+
 
   doesPlayerHavePDSUnitsWithinRange(attacker, player, sector) {
 

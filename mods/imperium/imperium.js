@@ -1794,7 +1794,7 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
           imperium_self.addMove("resolve\tstrategy");
           imperium_self.addMove("gain\t2\t"+imperium_self.game.player+"\taction_cards"+"\t"+2);
           imperium_self.addMove("DEAL\t2\t"+imperium_self.game.player+"\t2");
-          imperium_self.addMove("notify\tdealing two action cards to player "+player);
+          imperium_self.addMove("notify\tdealing two action cards to " + imperium_self.returnFaction(player));
           imperium_self.addMove("strategy\t"+"politics"+"\t"+strategy_card_player+"\t2");
           imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
 
@@ -3047,7 +3047,121 @@ console.log("WINNIGN CHOICE: " + winning_choice);
   
   
 
-/***
+
+  this.importAgendaCard('shard-of-the-throne', {
+  	name : "Shard of the Throne" ,
+  	type : "Law" ,
+  	text : "Elect a Player to earn 1 VP. When this player loses a space combat to another player, they transfer the VP to that player" ,
+        returnAgendaOptions : function(imperium_self) {
+	  return imperium_self.returnPlanetsOnBoard(function(planet) {
+	    if (planet.type === "cultural") { return 1; } return 0; 
+	  });
+	},
+	onPass : function(imperium_self, winning_choice) {
+	  imperium_self.game.state.shard_of_the_throne = 1;
+
+	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	    if (winning_choice === imperium_self.returnFaction((i+1))) {
+	      imperium_self.game.state.shard_of_the_throne_player = i+1;
+	    }
+	  }
+
+	  let law_to_push = {};
+	      law_to_push.agenda = "shard-of-the-throne";
+	      law_to_push.option = winning_choice;
+	  imperium_self.game.state.laws.push(law_to_push);
+
+          imperium_self.game.players_info[imperium_self.game.state.shard_of_the_throne_player-1].vp += 1;
+	  imperium_self.updateLeaderboard();
+	  imperium_self.updateLog(imperium_self.returnFaction(imperium_self.game.state.shard_of_the_throne_player) + " gains 1 VP from Holy Planet of Ixth");
+
+	},
+        spaceCombatRoundEnd : function(imperium_self, attacker, defender, sector) {
+	  if (defender == imperium_self.game.state.shard_of_the_throne_player) {
+	    if (!imperium_self.doesPlayerHaveShipsInSector(defender, sector)) {
+	      imperium_self.game.state.shard_of_the_throne_player = attacker;
+	      imperium_self.updateLog(imperium_self.returnFaction(imperium_self.game.state.shard_of_the_throne_player) + " gains the Shard of the Throne (1VP)");
+	      imperium_self.game.players_info[attacker-1].vp += 1;
+	      imperium_self.game.players_info[defender-1].vp -= 1;
+	      imperium_self.updateLeaderboard();
+	    }
+	  }
+	},
+	groundCombatRoundEnd : function(imperium_self, attacker, defender, sector, planet_idx) {
+	  if (defender == imperium_self.game.state.shard_of_the_throne_player) {
+	    if (!imperium_self.doesPlayerHaveInfantryOnPlanet(defender, sector, planet_idx)) {
+	      imperium_self.game.state.shard_of_the_throne_player = attacker;
+	      imperium_self.updateLog(imperium_self.returnFaction(imperium_self.game.state.shard_of_the_throne_player) + " gains the Shard of the Throne (1VP)");
+	      imperium_self.game.players_info[attacker-1].vp += 1;
+	      imperium_self.game.players_info[defender-1].vp -= 1;
+	      imperium_self.updateLeaderboard();
+	    }
+	  }
+	},
+  });
+
+
+  this.importAgendaCard('homeland-defense-act', {
+  	name : "Homeland Defense Act" ,
+  	type : "Law" ,
+  	text : "FOR: there is no limit to the number of PDS units on a planet. AGAINST: each player must destroy one PDS unit" ,
+        returnAgendaOptions : function(imperium_self) { return ['for','against']; },
+	onPass : function(imperium_self, winning_choice) {
+	  imperium_self.game.state.homeland_defense_act = 1;
+	  let law_to_push = {};
+	      law_to_push.agenda = "homeland-defense-act";
+	      law_to_push.option = winning_choice;
+	  imperium_self.game.state.laws.push(law_to_push);
+
+          if (winning_choice === "for") {
+	    imperium_self.game.state.pds_limit_per_planet = 100;
+	  }
+
+          if (winning_choice === "against") {
+	    for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	      if (imperium_self.doesPlayerHaveUnitOnBoard((i+1), "pds")) {
+	        imperium_self.game.queue.push("destroy_a_pds\t"+(i+1));
+	      }
+	    }
+	  }
+	},
+        handleGameLoop : function(imperium_self, qe, mv) {
+
+          if (mv[0] == "destroy_a_pds") {
+
+            let player = parseInt(mv[1]);
+	    imperium_self.game.queue.splice(qe, 1);
+
+            imperium_self.playerSelectUnitWithFilter(
+                    "Select a PDS unit to destroy: ",
+                    function(unit) {
+                      if (unit.type == "pds") { return 1; }
+                      return 0;
+            	    },
+                    function(unit_identifier) {
+
+                      let sector        = unit_identifier.sector;
+                      let planet_idx    = unit_identifier.planet_idx;
+                      let unit_idx      = unit_identifier.unit_idx;
+                      let unit          = unit_identifier.unit;
+
+                      imperium_self.addMove("destroy\t"+imperium_self.game.player+"\t"+imperium_self.game.player+"\t"+"ground"+"\t"+sector+"\t"+planet_idx+"\t"+unit_idx+"\t"+"1");
+                      imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit.name + " in " + imperium_self.game.sectors[sector].name);
+		      imperium_self.endTurn();
+                    }
+            );
+
+            return 0;
+          }
+
+          return 1;
+
+        }
+
+  });
+
+
+
 
   this.importAgendaCard('holy-planet-of-ixth', {
   	name : "Holy Planet of Ixth" ,
@@ -3503,8 +3617,6 @@ console.log("WINNIGN CHOICE: " + winning_choice);
         }
   });
 
-****/
-
 
   this.importAgendaCard('space-cadet', {
   	name : "Space Cadet" ,
@@ -3677,9 +3789,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 
 
 
-
-
-/***
+/****
 
   this.importAgendaCard('papers-please-1', {
   	name : "Papers Please 1" ,
@@ -3744,6 +3854,9 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	  return 1;
 	},
   });
+
+****/
+
   this.importAgendaCard('regulated-bureaucracy', {
   	name : "Regulated Bureaucracy" ,
   	type : "Law" ,
@@ -3775,7 +3888,8 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	  return 1;
 	},
   });
-*/
+
+
   this.importAgendaCard('restricted-conscription', {
   	name : "Restricted Conscription" ,
   	type : "Law" ,
@@ -11120,12 +11234,13 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
     let imperium_self = this;
     let sys = this.returnSectorAndPlanets(sector);
     let html = '';
+    let relevant_action_cards = ["combat", "space_combat"];
 
     this.game.state.space_combat_sector = sector;
 
     html = '<div class="sf-readable">Space Combat: round ' + this.game.state.space_combat_round + '</div><ul>';
 
-    let ac = this.returnPlayerActionCards(this.game.player, ["combat", "space_combat"])
+    let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards)
     if (ac.length > 0) {
       html += '<li class="option" id="attack">continue</li>';
       html += '<li class="option" id="action">play action card</li>';
@@ -11175,7 +11290,7 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	  imperium_self.playerPlaySpaceCombat(attacker, defender, sector);
         }, function() {
 	  imperium_self.playerPlaySpaceCombat(attacker, defender, sector);
-	});
+	}, relevant_action_cards);
       }
 
       if (action2 == "attack") {
@@ -11600,7 +11715,6 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 
     let z = this.returnEventObjects();
     for (let i = 0; i < z.length; i++) {
-console.log("CHECKING: " + z[i].name);
       if (z[i].menuOptionTriggers(this, "agenda", this.game.player) == 1) {
         let x = z[i].menuOption(this, "agenda", this.game.player);
         html += x.html;
@@ -11608,7 +11722,6 @@ console.log("CHECKING: " + z[i].name);
 	tech_attach_menu_triggers.push(x.event);
 	tech_attach_menu_events = 1;
       }
-console.log("done!");
     }
     html += '</ul>';
 
@@ -11658,7 +11771,7 @@ console.log("done!");
 
     html = '<div class="sf-readable">The Senate has apparently voted for "'+array_of_winning_options[0]+'". As the Speaker confirms the final tally, you get the feeling the issue may not be fully settled:</div><ul>';
     if (array_of_winning_options.length > 1) {
-      html = '<div class="sf-readable">The voting has concluded in apparent deadlock. As you leave the council, you see the Speaker smile faintly as he crumples a note and stuffs it into his pocket:</div><ul>';
+      html = '<div class="sf-readable">The voting has concluded in deadlock. As you leave the council, you see the Speaker smile and crumple a small note into his pocket:</div><ul>';
     }
 
     if (1 == 1) {
@@ -11708,10 +11821,10 @@ console.log("done!");
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
-	  imperium_self.playerPlayPostAgendaStage(player, agenda, agenda_idx);
+	  imperium_self.playerPlayPostAgendaStage(player, agenda, array_of_winning_options);
         }, function() {
-	  imperium_self.playerPlayPostAgendaStage(player, agenda, agenda_idx);
-	});
+	  imperium_self.playerPlayPostAgendaStage(player, agenda, array_of_winning_options);
+	}, relevant_action_cards);
       }
 
       if (action2 == "skip") {
@@ -14513,6 +14626,9 @@ console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
         state.ground_combat_infantry_destroyed_attacker = 0;
         state.ground_combat_infantry_destroyed_defender = 0;
 
+	state.pds_limit_per_planet = 2;
+	state.pds_limit_total = 4;
+
 	state.bombardment_sector = "";
 	state.bombardment_planet_idx = "";
 	state.space_combat_sector = "";
@@ -15956,6 +16072,24 @@ if (this.game.board[tmp[k]] != undefined) {
 
   }
 
+
+  doesPlayerHaveUnitOnBoard(player, unittype) {
+
+    for (let i in this.game.sectors) {
+      for (let ii = 0; ii < this.game.sectors[i].units[player-1].length; ii++) {
+	if (this.game.sectors[i].units[player-1][ii].type == unittype) { return 1; }
+      }
+    }
+
+    for (let i in this.game.planets) {
+      for (let ii = 0; ii < this.game.planets[i].units[player-1].length; ii++) {
+	if (this.game.planets[i].units[player-1][ii].type == unittype) { return 1; }
+      }
+    }
+
+    return 1;
+
+  }
 
 
   doesPlayerHavePDSUnitsWithinRange(attacker, player, sector) {

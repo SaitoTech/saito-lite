@@ -696,12 +696,13 @@
     let imperium_self = this;
     let sys = this.returnSectorAndPlanets(sector);
     let html = '';
+    let relevant_action_cards = ["combat", "space_combat"];
 
     this.game.state.space_combat_sector = sector;
 
     html = '<div class="sf-readable">Space Combat: round ' + this.game.state.space_combat_round + '</div><ul>';
 
-    let ac = this.returnPlayerActionCards(this.game.player, ["combat", "space_combat"])
+    let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards)
     if (ac.length > 0) {
       html += '<li class="option" id="attack">continue</li>';
       html += '<li class="option" id="action">play action card</li>';
@@ -751,7 +752,7 @@
 	  imperium_self.playerPlaySpaceCombat(attacker, defender, sector);
         }, function() {
 	  imperium_self.playerPlaySpaceCombat(attacker, defender, sector);
-	});
+	}, relevant_action_cards);
       }
 
       if (action2 == "attack") {
@@ -1176,7 +1177,6 @@
 
     let z = this.returnEventObjects();
     for (let i = 0; i < z.length; i++) {
-console.log("CHECKING: " + z[i].name);
       if (z[i].menuOptionTriggers(this, "agenda", this.game.player) == 1) {
         let x = z[i].menuOption(this, "agenda", this.game.player);
         html += x.html;
@@ -1184,7 +1184,6 @@ console.log("CHECKING: " + z[i].name);
 	tech_attach_menu_triggers.push(x.event);
 	tech_attach_menu_events = 1;
       }
-console.log("done!");
     }
     html += '</ul>';
 
@@ -1234,7 +1233,7 @@ console.log("done!");
 
     html = '<div class="sf-readable">The Senate has apparently voted for "'+array_of_winning_options[0]+'". As the Speaker confirms the final tally, you get the feeling the issue may not be fully settled:</div><ul>';
     if (array_of_winning_options.length > 1) {
-      html = '<div class="sf-readable">The voting has concluded in apparent deadlock. As you leave the council, you see the Speaker smile faintly as he crumples a note and stuffs it into his pocket:</div><ul>';
+      html = '<div class="sf-readable">The voting has concluded in deadlock. As you leave the council, you see the Speaker smile and crumple a small note into his pocket:</div><ul>';
     }
 
     if (1 == 1) {
@@ -1284,10 +1283,10 @@ console.log("done!");
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
-	  imperium_self.playerPlayPostAgendaStage(player, agenda, agenda_idx);
+	  imperium_self.playerPlayPostAgendaStage(player, agenda, array_of_winning_options);
         }, function() {
-	  imperium_self.playerPlayPostAgendaStage(player, agenda, agenda_idx);
-	});
+	  imperium_self.playerPlayPostAgendaStage(player, agenda, array_of_winning_options);
+	}, relevant_action_cards);
       }
 
       if (action2 == "skip") {
