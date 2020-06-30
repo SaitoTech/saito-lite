@@ -12779,6 +12779,7 @@ console.log(" ... and done");
     let array_of_cards = this.returnPlayerActionCards(this.game.player, types);
     if (array_of_cards.length == 0) {
       this.playerAcknowledgeNotice("You do not have any action cards that can be played now", function() {
+	if (cancel_callback != null) { imperium_self.cancel_callback(); return 0; }
         imperium_self.playerTurn();
         return 0;
       });
@@ -12803,7 +12804,7 @@ console.log(" ... and done");
       let action2 = $(this).attr("id");
 
       if (action2 != "cancel") { imperium_self.hideActionCard(action2); }
-      if (action2 === "cancel") { cancel_callback(); return; }
+      if (action2 === "cancel") { cancel_callback(); return 0; }
 
       imperium_self.game.players_info[imperium_self.game.player-1].action_cards_played.push(action2);
 
