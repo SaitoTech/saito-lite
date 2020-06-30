@@ -83,6 +83,7 @@
     for (var i in planets) {
 
       planets[i].exhausted = 0;
+      planets[i].locked = 0; // units cannot be placed, produced or landed
       planets[i].owner = -1;
       planets[i].units = [this.totalPlayers]; // array to store units
       planets[i].sector = ""; // "sector43" <--- fleshed in by initialize

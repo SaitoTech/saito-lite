@@ -6,10 +6,13 @@
   // Return Factions //
   /////////////////////
   returnFaction(player) {
-    let factions = this.returnFactions();
     if (this.game.players_info[player-1] == null) { return "Unknown"; }
     if (this.game.players_info[player-1] == undefined) { return "Unknown"; }
-    return factions[this.game.players_info[player-1].faction].name;
+    return this.returnFactionName(this, player);
+  }
+  returnFactionName(imperium_self, player) {
+    let factions = imperium_self.returnFactions();
+    return factions[imperium_self.game.players_info[player-1].faction].name;
   }
   returnSpeaker() {
     let factions = this.returnFactions();
@@ -670,6 +673,38 @@
   }
 
 
+  returnPlanetsOnBoard(filterfunc=null) {
+    let planets_to_return = [];
+    for (let i in this.game.planets) {
+      if (this.game.planets[i].idx) {
+	if (filterfunc == null) {
+	  planets_to_return.push(i);
+	} else {
+	  if (filterfunc(this.game.planets[i])) {
+	    planets_to_return.push(i);
+	  }
+	}
+      }
+    }
+    return planets_to_return;
+  }
+
+  returnSectorsOnBoard(filterfunc=null) {
+    let sectors_to_return = [];
+    for (let i in this.game.sectors) {
+      if (this.game.sectors[i].tile) {
+	if (filterfunc == null) {
+  	  sectors_to_return.push(i);
+        } else {
+	  if (filterfunc(this.game.sectors[i])) {
+  	    sectors_to_return.push(i);
+	  }
+	}
+      }
+    }
+    return sectors_to_return;
+  }
+
 
   returnSectorsWithPlayerShips(player) {
     let sectors_with_units = [];
@@ -720,7 +755,7 @@
     // any planets available to invade?
     //
     for (let i = 0; i < sys.p.length; i++) {
-      if (sys.p[i].owner != player) { planets_ripe_for_plucking = 1; }
+      if (sys.p[i].locked == 0 && sys.p[i].owner != player) { planets_ripe_for_plucking = 1; }
     }
     if (planets_ripe_for_plucking == 0) { return 0; }
 

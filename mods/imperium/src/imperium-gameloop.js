@@ -563,10 +563,6 @@ console.log("executing "+z[z_index].name);
         }
 
 
-alert(JSON.stringify(this.game.state.how_voted_on_agenda));
-alert(JSON.stringify(this.game.state.votes_cast));
-
-
         //
 	// speaker breaks ties
 	//
@@ -620,9 +616,9 @@ alert(JSON.stringify(this.game.state.votes_cast));
 	//
 	//
 	//
-	if (tied_choices.length == 1) { winning_choice = tied_choices[0]; }
-
-alert("TIED CHOICES: " + JSON.stringify(tied_choices));
+	if (tied_choices.length == 1) { 
+	  winning_choice = tied_choices[0]; 
+	}
 
 	//
 	// single winner
@@ -684,6 +680,8 @@ alert("TIED CHOICES: " + JSON.stringify(tied_choices));
 	this.game.state.votes_available[player-1] -= votes;
 	this.game.state.voted_on_agenda[player-1][this.game.state.voting_on_agenda] = 1;
 	this.game.state.how_voted_on_agenda[player-1] = vote;
+
+console.log("PLAYER FOR VOTE IS: " + player);
 
         if (vote == "abstain") {
           this.updateLog(this.returnFaction(player-1) + " abstains");
@@ -1352,18 +1350,25 @@ console.log("HERE WE ARE: " + player);
 
 	let imperium_self = this;
 	let notice = mv[1];
+  	//this.game.queue.splice(qe, 1);
 
 	this.game.halted = 1;
-	this.saveGame(this.game.id);
+	//this.saveGame(this.game.id);
 
 console.log("GAMING HALTED!");
 
   	this.playerAcknowledgeNotice(notice, function() {
+
+	  imperium_self.updateStatus(" acknowledged...");
+
   	  imperium_self.game.queue.splice(qe, 1);
 	  // we have stopped queue execution, so need to restart at the lowest level
 	  imperium_self.game.halted = 0;
   	  console.log("CONTINUING EXECUTION FROM HERE");
 	  console.log(imperium_self.game.queue);
+console.log("STARTING WITH RUN QUEUE");
+
+	  console.log("DO WE HAVE FUTURE MOVES? " + JSON.stringify(imperium_self.game.future));
 	  imperium_self.runQueue();
 	});
 
@@ -1938,6 +1943,9 @@ console.log("CHOICES: " +this.game.state.choices);
         let agenda       = mv[2];
         this.game.queue.splice(qe, 1);
 	this.updateLog(this.returnFaction(player) + " is considering agenda options");
+
+console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
+
 	if (this.game.player == player) {
           this.playerPlayPreAgendaStage(player, agenda);        
 	}

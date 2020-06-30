@@ -1,4 +1,287 @@
 
+/***
+
+  this.importAgendaCard('holy-planet-of-ixth', {
+  	name : "Holy Planet of Ixth" ,
+  	type : "Law" ,
+  	text : "Elect a cultural planet. The planet's controller gains 1 VP. Units cannot be landed, produced or placed on this planet" ,
+        returnAgendaOptions : function(imperium_self) {
+	  return imperium_self.returnPlanetsOnBoard(function(planet) {
+	    if (planet.type === "cultural") { return 1; } return 0; 
+	  });
+	},
+	onPass : function(imperium_self, winning_choice) {
+	  imperium_self.game.state.holy_planet_of_ixth = 1;
+	  imperium_self.game.state.holy_planet_of_ixth_planet = winning_choice;
+	  let law_to_push = {};
+	      law_to_push.agenda = "holy_planet_of_ixth";
+	      law_to_push.option = winning_choice;
+	  imperium_self.game.state.laws.push(law_to_push);
+
+	  //
+	  // lock the planet
+	  //
+	  imperium_self.game.planets[winning_choice].locked = 1;
+
+	  //
+	  // issue VP to controller
+	  //
+	  let owner = imperium_self.game.planets[winning_choice].owner;
+	  if (owner != -1) {
+	    imperium_self.game.players_info[owner-1].vp += 1;
+	    imperium_self.updateLeaderboard();
+	    imperium_self.updateLog(imperium_self.returnFaction(owner) + " gains 1 VP from Holy Planet of Ixth");
+	  }
+
+	}
+  });
+
+
+
+  this.importAgendaCard('research-team-biotic', {
+        name : "Research Team: Biotic" ,
+        type : "Law" ,
+        text : "Elect an industrial planet. The owner may exhaust this planet to ignore 1 green technology prerequisite the next time they research a technology" ,
+        returnAgendaOptions : function(imperium_self) {
+          return imperium_self.returnPlanetsOnBoard(function(planet) {
+            if (planet.type === "industrial") { return 1; } return 0;
+          });
+        },
+        onPass : function(imperium_self, winning_choice) {
+          imperium_self.game.state.research_team_biotic = 1;
+          imperium_self.game.state.research_team_biotic_planet = winning_choice;
+          let law_to_push = {};
+              law_to_push.agenda = "research_team_biotic";
+              law_to_push.option = winning_choice;
+          imperium_self.game.state.laws.push(law_to_push);
+        },
+        menuOption  :       function(imperium_self, menu, player) {
+          if (menu == "main" && imperium_self.game.planets[imperium_self.game.state.research_team_biotic_planet].owner == player) {
+            return { event : 'research_team_biotic', html : '<li class="option" id="research_team_biotic">use biotic (green) tech-skip</li>' };
+	  }
+	  return {};
+        },
+        menuOptionTriggers:  function(imperium_self, menu, player) {
+          if (menu == "main") {
+            if (imperium_self.game.planets[imperium_self.game.state.research_team_biotic_planet].owner == player) {
+              if (imperium_self.game.planets[imperium_self.game.state.research_team_biotic_planet].exhausted == 0) {
+                return 1;
+              }
+            }
+          }
+          return 0;
+        },
+        menuOptionActivated:  function(imperium_self, menu, player) {
+          if (menu == "main") {
+            imperium_self.game.players_info[player-1].temporary_green_tech_prerequisite++;
+            imperium_self.game.planets[imperium_self.game.state.research_team_biotic_planet].exhausted = 1;
+	  }
+          return 0;
+        }
+  });
+
+
+  this.importAgendaCard('research-team-cybernetic', {
+        name : "Research Team: Cybernetic" ,
+        type : "Law" ,
+        text : "Elect an industrial planet. The owner may exhaust this planet to ignore 1 yellow technology prerequisite the next time they research a technology" ,
+        returnAgendaOptions : function(imperium_self) {
+          return imperium_self.returnPlanetsOnBoard(function(planet) {
+            if (planet.type === "industrial") { return 1; } return 0;
+          });
+        },
+        onPass : function(imperium_self, winning_choice) {
+          imperium_self.game.state.research_team_cybernetic = 1;
+          imperium_self.game.state.research_team_cybernetic_planet = winning_choice;
+          let law_to_push = {};
+              law_to_push.agenda = "research_team_cybernetic";
+              law_to_push.option = winning_choice;
+          imperium_self.game.state.laws.push(law_to_push);
+        },
+        menuOption  :       function(imperium_self, menu, player) {
+          if (menu == "main" && imperium_self.game.planets[imperium_self.game.state.research_team_cybernetic_planet].owner == player) {
+            return { event : 'research_team_cybernetic', html : '<li class="option" id="research_team_cybernetic">use cybernetic (yellow) tech-skip</li>' };
+	  }
+	  return {};
+        },
+        menuOptionTriggers:  function(imperium_self, menu, player) {
+          if (menu == "main") {
+            if (imperium_self.game.planets[imperium_self.game.state.research_team_cybernetic_planet].owner == player) {
+              if (imperium_self.game.planets[imperium_self.game.state.research_team_cybernetic_planet].exhausted == 0) {
+                return 1;
+              }
+            }
+          }
+          return 0;
+        },
+        menuOptionActivated:  function(imperium_self, menu, player) {
+          if (menu == "main") {
+            imperium_self.game.players_info[player-1].temporary_yellow_tech_prerequisite++;
+            imperium_self.game.planets[imperium_self.game.state.research_team_cybernetic_planet].exhausted = 1;
+	  }
+          return 0;
+        }
+  });
+
+
+  this.importAgendaCard('research-team-propulsion', {
+        name : "Research Team: Propulsion" ,
+        type : "Law" ,
+        text : "Elect an industrial planet. The owner may exhaust this planet to ignore 1 blue technology prerequisite the next time they research a technology" ,
+        returnAgendaOptions : function(imperium_self) {
+          return imperium_self.returnPlanetsOnBoard(function(planet) {
+            if (planet.type === "industrial") { return 1; } return 0;
+          });
+        },
+        onPass : function(imperium_self, winning_choice) {
+          imperium_self.game.state.research_team_propulsion = 1;
+          imperium_self.game.state.research_team_propulsion_planet = winning_choice;
+          let law_to_push = {};
+              law_to_push.agenda = "research_team_propulsion";
+              law_to_push.option = winning_choice;
+          imperium_self.game.state.laws.push(law_to_push);
+        },
+        menuOption  :       function(imperium_self, menu, player) {
+          if (menu == "main" && imperium_self.game.planets[imperium_self.game.state.research_team_propulsion_planet].owner == player) {
+            return { event : 'research_team_propulsion', html : '<li class="option" id="research_team_propulsion">use propulsion (blue) tech-skip</li>' };
+	  }
+	  return {};
+        },
+        menuOptionTriggers:  function(imperium_self, menu, player) {
+          if (menu == "main") {
+            if (imperium_self.game.planets[imperium_self.game.state.research_team_propulsion_planet].owner == player) {
+              if (imperium_self.game.planets[imperium_self.game.state.research_team_propulsion_planet].exhausted == 0) {
+                return 1;
+              }
+            }
+          }
+          return 0;
+        },
+        menuOptionActivated:  function(imperium_self, menu, player) {
+          if (menu == "main") {
+            imperium_self.game.players_info[player-1].temporary_blue_tech_prerequisite++;
+            imperium_self.game.planets[imperium_self.game.state.research_team_propulsion_planet].exhausted = 1;
+	  }
+          return 0;
+        }
+  });
+
+
+  this.importAgendaCard('research-team-warfare', {
+        name : "Research Team: Warfare" ,
+        type : "Law" ,
+        text : "Elect an hazardous planet. The owner may exhaust this planet to ignore 1 red technology prerequisite the next time they research a technology" ,
+        returnAgendaOptions : function(imperium_self) {
+          return imperium_self.returnPlanetsOnBoard(function(planet) {
+            if (planet.type === "industrial") { return 1; } return 0;
+          });
+        },
+        onPass : function(imperium_self, winning_choice) {
+          imperium_self.game.state.research_team_warfare = 1;
+          imperium_self.game.state.research_team_warfare_planet = winning_choice;
+          let law_to_push = {};
+              law_to_push.agenda = "research_team_warfare";
+              law_to_push.option = winning_choice;
+          imperium_self.game.state.laws.push(law_to_push);
+        },
+        menuOption  :       function(imperium_self, menu, player) {
+          if (menu == "main" && imperium_self.game.planets[imperium_self.game.state.research_team_warfare_planet].owner == player) {
+            return { event : 'research_team_warfare', html : '<li class="option" id="research_team_warfare">use warfare (red) tech-skip</li>' };
+	  }
+	  return {};
+        },
+        menuOptionTriggers:  function(imperium_self, menu, player) {
+          if (menu == "main") {
+            if (imperium_self.game.planets[imperium_self.game.state.research_team_warfare_planet].owner == player) {
+              if (imperium_self.game.planets[imperium_self.game.state.research_team_warfare_planet].exhausted == 0) {
+                return 1;
+              }
+            }
+          }
+          return 0;
+        },
+        menuOptionActivated:  function(imperium_self, menu, player) {
+          if (menu == "main") {
+            imperium_self.game.players_info[player-1].temporary_red_tech_prerequisite++;
+            imperium_self.game.planets[imperium_self.game.state.research_team_warfare_planet].exhausted = 1;
+	  }
+          return 0;
+        }
+  });
+
+
+
+  this.importAgendaCard('demilitarized-zone', {
+  	name : "Demilitarized Zone" ,
+  	type : "Law" ,
+  	text : "Elect a cultural planet. All units are destroyed and cannot be landed, produced or placed on this planet" ,
+        returnAgendaOptions : function(imperium_self) {
+	  return imperium_self.returnPlanetsOnBoard(function(planet) {
+	    if (planet.type === "cultural") { return 1; } return 0; 
+	  });
+	},
+	onPass : function(imperium_self, winning_choice) {
+	  imperium_self.game.state.demilitarized_zone = 1;
+	  imperium_self.game.state.demilitarized_zone_planet = winning_choice;
+	  let law_to_push = {};
+	      law_to_push.agenda = "demilitarized-zone";
+	      law_to_push.option = winning_choice;
+	  imperium_self.game.state.laws.push(law_to_push);
+
+	  //
+	  // also - destroy the planet and increase its resource value
+	  //
+	  imperium_self.game.planets[winning_choice].units = []; 
+	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	    imperium_self.game.planets[winning_choice].units = [];
+	  }
+
+	  imperium_self.game.planets[winning_choice].locked = 1;
+
+	}
+  });
+
+  this.importAgendaCard('core-mining', {
+  	name : "Core Mining" ,
+  	type : "Law" ,
+  	text : "Elect a hazardous planet. Destroy half the infantry on that planet and increase its resource value by +2" ,
+        returnAgendaOptions : function(imperium_self) {
+	  return imperium_self.returnPlanetsOnBoard(function(planet) {
+	    if (planet.type === "hazardous") { return 1; } return 0; 
+	  });
+	},
+	onPass : function(imperium_self, winning_choice) {
+	  imperium_self.game.state.core_mining = 1;
+	  imperium_self.game.state.core_mining_planet = winning_choice;
+	  let law_to_push = {};
+	      law_to_push.agenda = "core-mining";
+	      law_to_push.option = winning_choice;
+	  imperium_self.game.state.laws.push(law_to_push);
+
+	  //
+	  // also - destroy the planet and increase its resource value
+	  //
+	  for (let i = 0; i < imperium_self.game.planets[winning_choice].units.length; i++) {
+	    let destroy = 1;
+	    for (let ii = 0; ii < imperium_self.game.planets[winning_choice].units[i].length; ii++) {
+	      if (imperium_self.game.planets[winning_choice].units[i][ii].type == "infantry") {
+	        if (destroy == 1) {
+	          imperium_self.game.players[winning_choice].units[i].splice(ii, 1);
+		  ii--;
+		  destroy = 0;
+		} else {
+		  destroy = 1;
+		}
+	      }
+	    }
+	  }
+
+	  imperium_self.game.planets[winning_choice].resources += 2;
+
+	}
+  });
+
+
 
   this.importAgendaCard('anti-intellectual-revolution', {
   	name : "Anti-Intellectual Revolution" ,
@@ -172,7 +455,46 @@
         }
   });
 
+****/
 
+
+  this.importAgendaCard('space-cadet', {
+  	name : "Space Cadet" ,
+  	type : "Law" ,
+  	text : "Any player more than 3 VP behind the lead must henceforth be referred to as an Irrelevant Loser" ,
+        returnAgendaOptions : function(imperium_self) { 
+	  let options = [ 'for' , 'against' ];
+	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	    options.push(imperium_self.returnFaction(i+1));
+	  }
+	  return options;
+        },
+	initialize : function(imperium_self, winning_choice) {
+	  if (imperium_self.game.state.space_cadet == 1) {
+	    imperium_self.returnFactionNamePreSpaceCadet = imperium_self.returnFactionName;
+	    imperium_self.returnFactionName = function(imperium_self, player) {
+	      let max_vp = 0;
+	      for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	        if (max_vp > imperium_self.game.players_info[i].vp) {
+		  max_vp = imperium_self.game.players_info[i].vp;
+		}
+	      }
+              if (imperium_self.game.players_info[player-1].vp < (max_vp-3)) { return "Irrelevant Loser"; }
+              return imperium_self.returnFactionNamePreSpaceCadet(imperium_self, player);
+            };
+	  }
+	},
+	onPass : function(imperium_self, winning_choice) {
+	  if (winning_choice == 'for') {
+	    imperium_self.game.state.space_cadet = 1;
+	    let law_to_push = {};
+	        law_to_push.agenda = "space-cadet";
+	        law_to_push.option = winning_choice;
+	    imperium_self.game.state.laws.push(law_to_push);
+	    this.initialize(imperium_self);
+	  }
+	}
+  });
 
 
   this.importAgendaCard('galactic-threat', {
@@ -187,23 +509,28 @@
 	  return options;
         },
 	initialize : function(imperium_self, winning_choice) {
-alert("winning choice: " + winning_choice);
+alert("initializing!");
 	  if (imperium_self.game.state.galactic_threat == 1) {
-  	    imperium_self.returnFaction = function(player) {
-              let factions = imperium_self.returnFactions();
-              if (imperium_self.game.players_info[player-1] == null) { return "Unknown"; }
-              if (imperium_self.game.players_info[player-1] == undefined) { return "Unknown"; }
+	    imperium_self.returnFactionNamePreGalacticThreat = imperium_self.returnFactionName;
+	    imperium_self.returnFactionName = function(imperium_self, player) {
+    	      let factions = imperium_self.returnFactions();
               if (imperium_self.game.state.galactic_threat_player == player) { return "The Galactic Threat"; }
-              return factions[imperium_self.game.players_info[player-1].faction].name;
-            };
+    	      return imperium_self.returnFactionNamePreGalacticThreat(imperium_self, player);
+  	    }
 	  }
 	},
 	onPass : function(imperium_self, winning_choice) {
 	  imperium_self.game.state.galactic_threat = 1;
-	  imperium_self.game.state.galactic_threat_player = winning_choice+1;
+
+	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	    if (winning_choice === imperium_self.returnFaction((i+1))) {
+	      imperium_self.game.state.galactic_threat_player = i+1;
+	    }
+	  }
+
 	  let law_to_push = {};
 	      law_to_push.agenda = "galactic-threat";
-	      law_to_push.option = winning_choice+1;
+	      law_to_push.option = winning_choice;
 	  imperium_self.game.state.laws.push(law_to_push);
 	  this.initialize(imperium_self);
 	}
@@ -228,12 +555,40 @@ alert("winning choice: " + winning_choice);
 	  return 0;
 	},
 	preAgendaStageEvent : function(imperium_self, player, agenda) {
-alert("Player has the option of Pre Agenda Stage Event!");
-	  return 1;
+
+	  let html = "Do you wish to use Committee Formation to select the winner yourself? <ul>";
+	      html += '<li class="textchoice" id="yes">assemble the committee</li>';
+	      html += '<li class="textchoice" id="no">not this time</li>';
+	      html += '</ul>';
+
+	  imperium_self.updateStatus(html);
+
+	  $('.textchoice').off();
+	  $('.textchoice').on('click', function() {
+
+	    let action = $(this).attr("id");
+
+	    if (action == "no") { imperium_self.endTurn(); }
+
+	    //
+	    // works by "Assassinating all other representatives, so they don't / can't vote"
+	    //
+	    for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	      if (i != imperium_self.game.player-1) {
+                imperium_self.addMove("rider\t"+player+"\tassassinate-representative\t-1");
+	      }
+	    }
+            imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " forms a committee...");
+	    
+
+	  });
+
+          return 0;
+
 	},
 	onPass : function(imperium_self, winning_choice) {
 	  imperium_self.game.state.committee_formation = 1;
-	  imperium_self.game.state.committee_formation = winning_choice;
+	  imperium_self.game.state.committee_formation_player = winning_choice;
 	  let law_to_push = {};
 	      law_to_push.agenda = "committee_formation";
 	      law_to_push.option = winning_choice;

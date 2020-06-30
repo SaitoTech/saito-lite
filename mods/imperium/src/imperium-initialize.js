@@ -248,12 +248,14 @@ console.log("PUSHING rp: " + rp);
     //
     // initialize laws
     //
+console.log("THIS LAW: " + JSON.stringify(this.game.state.laws));
     for (let k = 0; k < this.game.state.laws.length; k++) {
       let this_law = this.game.state.laws[k];
+console.log(" 2THIS LAW: " + JSON.stringify(this_law));
       let agenda_name = this_law.agenda;
       let agenda_option = this_law.option;
-      if (this.agenda_cards[agenda]) {
-	this.agenda_cards[agenda].initialize(this, agenda_option);
+      if (this.agenda_cards[this_law.agenda]) {
+	this.agenda_cards[this_law.agenda].initialize(this, agenda_option);
       }
     }
 

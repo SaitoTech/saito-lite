@@ -519,6 +519,19 @@ updateSectorGraphics(sector) {
       $(divpid).css('display', 'block');
     }
 
+    if (sys.s.units[player-1].length > 0) {
+      let divpid = '#hex_img_faction_border_' + sector;
+      let newclass = "player_color_"+player;
+      $(divpid).removeClass("player_color_1");
+      $(divpid).removeClass("player_color_2");
+      $(divpid).removeClass("player_color_3");
+      $(divpid).removeClass("player_color_4");
+      $(divpid).removeClass("player_color_5");
+      $(divpid).removeClass("player_color_6");
+      $(divpid).addClass(newclass);
+      $(divpid).css('display','all');
+    }
+
 
     //
     // space

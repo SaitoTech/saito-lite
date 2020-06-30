@@ -1176,6 +1176,7 @@
 
     let z = this.returnEventObjects();
     for (let i = 0; i < z.length; i++) {
+console.log("CHECKING: " + z[i].name);
       if (z[i].menuOptionTriggers(this, "agenda", this.game.player) == 1) {
         let x = z[i].menuOption(this, "agenda", this.game.player);
         html += x.html;
@@ -1183,6 +1184,7 @@
 	tech_attach_menu_triggers.push(x.event);
 	tech_attach_menu_events = 1;
       }
+console.log("done!");
     }
     html += '</ul>';
 
