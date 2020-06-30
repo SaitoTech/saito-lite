@@ -681,12 +681,11 @@ console.log("executing "+z[z_index].name);
 	this.game.state.voted_on_agenda[player-1][this.game.state.voting_on_agenda] = 1;
 	this.game.state.how_voted_on_agenda[player-1] = vote;
 
-console.log("PLAYER FOR VOTE IS: " + player);
 
         if (vote == "abstain") {
-          this.updateLog(this.returnFaction(player-1) + " abstains");
+          this.updateLog(this.returnFaction(player) + " abstains");
 	} else {
-          this.updateLog(this.returnFaction(player-1) + " spends " + votes + " on " + vote);
+          this.updateLog(this.returnFaction(player) + " spends " + votes + " on " + vote);
         }
 
 
@@ -1650,7 +1649,9 @@ console.log("STARTING WITH RUN QUEUE");
         if (item == "tech") {
 
   	  this.updateLog(this.returnFaction(player) + " gains " + this.tech[mv[3]].name);
-  	  this.game.players_info[player-1].tech.push(mv[3]);
+  	  if (!this.game.players_info[player-1].tech.includes(mv[3])) {
+	    this.game.players_info[player-1].tech.push(mv[3]);
+	  }
 	  for (let z_index in z) {
   	    z[z_index].gainTechnology(imperium_self, player, mv[3]);
   	  }

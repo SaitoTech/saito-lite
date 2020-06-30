@@ -2166,7 +2166,7 @@ console.log(" ... and done");
 
   playerSelectResources(cost, mycallback) {
  
-    if (cost == 0) { mycallback(1); }
+    if (cost == 0) { mycallback(1); return; }
  
     let imperium_self = this;
     let array_of_cards = this.returnPlayerUnexhaustedPlanetCards(this.game.player); // unexhausted

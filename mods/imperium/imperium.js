@@ -1908,6 +1908,7 @@ console.log("PLAYER: " + player + " scp: " + strategy_card_player);
         if (imperium_self.game.player == strategy_card_player) {
           imperium_self.playerAcknowledgeNotice("You will first have the option of researching a free-technology, and then invited to purchase an additional tech for 6 resources:", function() {
             imperium_self.playerResearchTechnology(function(tech) {
+	      imperium_self.game.players_info[imperium_self.game.player-1].tech.push(tech);
               imperium_self.addMove("resolve\tstrategy");
               imperium_self.addMove("strategy\t"+"technology"+"\t"+strategy_card_player+"\t2");
               imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
@@ -2035,7 +2036,7 @@ console.log("PLAYER: " + player + " scp: " + strategy_card_player);
 
 
     this.importAgendaCard('minister-of-technology', {
-        name : "Miniaster of Technology" ,
+        name : "Minister of Technology" ,
         type : "Law" ,
         text : "Elect a player. They do not need to spend resources to research technology when the technology card is played" ,
 	initialize : function(imperium_self) {
@@ -3556,7 +3557,6 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	  return options;
         },
 	initialize : function(imperium_self, winning_choice) {
-alert("initializing!");
 	  if (imperium_self.game.state.galactic_threat == 1) {
 	    imperium_self.returnFactionNamePreGalacticThreat = imperium_self.returnFactionName;
 	    imperium_self.returnFactionName = function(imperium_self, player) {
@@ -3635,7 +3635,13 @@ alert("initializing!");
 	},
 	onPass : function(imperium_self, winning_choice) {
 	  imperium_self.game.state.committee_formation = 1;
-	  imperium_self.game.state.committee_formation_player = winning_choice;
+
+	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	    if (winning_choice === imperium_self.returnFaction((i+1))) {
+	      imperium_self.game.state.committee_formation_player = (i+1);
+	    }
+	  }
+
 	  let law_to_push = {};
 	      law_to_push.agenda = "committee_formation";
 	      law_to_push.option = winning_choice;
@@ -3660,7 +3666,12 @@ alert("initializing!");
         onPass : function(imperium_self, winning_choice) {
           imperium_self.game.state.minister_of_policy = 1;
           imperium_self.game.state.minister_of_policy_player = winning_choice;
-	  imperium_self.game.players_info[winning_choice-1].action_cards_bonus_when_issued++;
+	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	    if (winning_choice === imperium_self.returnFaction((i+1))) {
+	      imperium_self.game.state.minister_of_policy_player = i+1;
+	    }
+	  }
+	  imperium_self.game.players_info[imperium_self.game.state.minister_of_policy_player].action_cards_bonus_when_issued++;
         }
   });
 
@@ -3669,27 +3680,6 @@ alert("initializing!");
 
 
 /***
-
-
-  this.importAgendaCard('research-team-biotic', {
-        name : "Research Team: Biotic" ,
-        type : "Law" ,
-        text : "Elect a planet. The owner may exhaust that planet to ignore a Green Prerequisite the next time they research technology" ,
-        returnAgendaOptions : function(imperium_self) {
-          let options = [];
-          for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-            options.push(imperium_self.returnFaction(i+1));
-          }
-          return options;
-        },
-        onPass : function(imperium_self, winning_choice) {
-          imperium_self.game.state.minister_of_policy = 1;
-          imperium_self.game.state.minister_of_policy_player = winning_choice;
-	  imperium_self.game.players_info[winning_choice-1].action_cards_bonus_when_issued++;
-        }
-  });
-
-
 
   this.importAgendaCard('papers-please-1', {
   	name : "Papers Please 1" ,
@@ -7222,10 +7212,6 @@ console.log("executing "+z[z_index].name);
         }
 
 
-alert(JSON.stringify(this.game.state.how_voted_on_agenda));
-alert(JSON.stringify(this.game.state.votes_cast));
-
-
         //
 	// speaker breaks ties
 	//
@@ -7283,8 +7269,6 @@ alert(JSON.stringify(this.game.state.votes_cast));
 	  winning_choice = tied_choices[0]; 
 	}
 
-alert("TIED CHOICES: " + JSON.stringify(tied_choices));
-alert("WINNING CHOICE HERE IS: " + winning_choice);
 	//
 	// single winner
 	//
@@ -7346,12 +7330,11 @@ alert("WINNING CHOICE HERE IS: " + winning_choice);
 	this.game.state.voted_on_agenda[player-1][this.game.state.voting_on_agenda] = 1;
 	this.game.state.how_voted_on_agenda[player-1] = vote;
 
-console.log("PLAYER FOR VOTE IS: " + player);
 
         if (vote == "abstain") {
-          this.updateLog(this.returnFaction(player-1) + " abstains");
+          this.updateLog(this.returnFaction(player) + " abstains");
 	} else {
-          this.updateLog(this.returnFaction(player-1) + " spends " + votes + " on " + vote);
+          this.updateLog(this.returnFaction(player) + " spends " + votes + " on " + vote);
         }
 
 
@@ -8315,7 +8298,9 @@ console.log("STARTING WITH RUN QUEUE");
         if (item == "tech") {
 
   	  this.updateLog(this.returnFaction(player) + " gains " + this.tech[mv[3]].name);
-  	  this.game.players_info[player-1].tech.push(mv[3]);
+  	  if (!this.game.players_info[player-1].tech.includes(mv[3])) {
+	    this.game.players_info[player-1].tech.push(mv[3]);
+	  }
 	  for (let z_index in z) {
   	    z[z_index].gainTechnology(imperium_self, player, mv[3]);
   	  }
@@ -12605,7 +12590,7 @@ console.log(" ... and done");
 
   playerSelectResources(cost, mycallback) {
  
-    if (cost == 0) { mycallback(1); }
+    if (cost == 0) { mycallback(1); return; }
  
     let imperium_self = this;
     let array_of_cards = this.returnPlayerUnexhaustedPlanetCards(this.game.player); // unexhausted

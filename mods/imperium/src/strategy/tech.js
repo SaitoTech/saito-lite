@@ -10,6 +10,7 @@ console.log("PLAYER: " + player + " scp: " + strategy_card_player);
         if (imperium_self.game.player == strategy_card_player) {
           imperium_self.playerAcknowledgeNotice("You will first have the option of researching a free-technology, and then invited to purchase an additional tech for 6 resources:", function() {
             imperium_self.playerResearchTechnology(function(tech) {
+	      imperium_self.game.players_info[imperium_self.game.player-1].tech.push(tech);
               imperium_self.addMove("resolve\tstrategy");
               imperium_self.addMove("strategy\t"+"technology"+"\t"+strategy_card_player+"\t2");
               imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
@@ -137,7 +138,7 @@ console.log("PLAYER: " + player + " scp: " + strategy_card_player);
 
 
     this.importAgendaCard('minister-of-technology', {
-        name : "Miniaster of Technology" ,
+        name : "Minister of Technology" ,
         type : "Law" ,
         text : "Elect a player. They do not need to spend resources to research technology when the technology card is played" ,
 	initialize : function(imperium_self) {

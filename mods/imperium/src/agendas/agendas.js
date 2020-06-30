@@ -1,5 +1,4 @@
 
-/***
 
   this.importAgendaCard('holy-planet-of-ixth', {
   	name : "Holy Planet of Ixth" ,
@@ -455,8 +454,6 @@
         }
   });
 
-****/
-
 
   this.importAgendaCard('space-cadet', {
   	name : "Space Cadet" ,
@@ -509,7 +506,6 @@
 	  return options;
         },
 	initialize : function(imperium_self, winning_choice) {
-alert("initializing!");
 	  if (imperium_self.game.state.galactic_threat == 1) {
 	    imperium_self.returnFactionNamePreGalacticThreat = imperium_self.returnFactionName;
 	    imperium_self.returnFactionName = function(imperium_self, player) {
@@ -588,7 +584,13 @@ alert("initializing!");
 	},
 	onPass : function(imperium_self, winning_choice) {
 	  imperium_self.game.state.committee_formation = 1;
-	  imperium_self.game.state.committee_formation_player = winning_choice;
+
+	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	    if (winning_choice === imperium_self.returnFaction((i+1))) {
+	      imperium_self.game.state.committee_formation_player = (i+1);
+	    }
+	  }
+
 	  let law_to_push = {};
 	      law_to_push.agenda = "committee_formation";
 	      law_to_push.option = winning_choice;
@@ -613,36 +615,18 @@ alert("initializing!");
         onPass : function(imperium_self, winning_choice) {
           imperium_self.game.state.minister_of_policy = 1;
           imperium_self.game.state.minister_of_policy_player = winning_choice;
-	  imperium_self.game.players_info[winning_choice-1].action_cards_bonus_when_issued++;
+	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	    if (winning_choice === imperium_self.returnFaction((i+1))) {
+	      imperium_self.game.state.minister_of_policy_player = i+1;
+	    }
+	  }
+	  imperium_self.game.players_info[imperium_self.game.state.minister_of_policy_player].action_cards_bonus_when_issued++;
         }
   });
 
 
 
-
-
-/***
-
-
-  this.importAgendaCard('research-team-biotic', {
-        name : "Research Team: Biotic" ,
-        type : "Law" ,
-        text : "Elect a planet. The owner may exhaust that planet to ignore a Green Prerequisite the next time they research technology" ,
-        returnAgendaOptions : function(imperium_self) {
-          let options = [];
-          for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-            options.push(imperium_self.returnFaction(i+1));
-          }
-          return options;
-        },
-        onPass : function(imperium_self, winning_choice) {
-          imperium_self.game.state.minister_of_policy = 1;
-          imperium_self.game.state.minister_of_policy_player = winning_choice;
-	  imperium_self.game.players_info[winning_choice-1].action_cards_bonus_when_issued++;
-        }
-  });
-
-
+/****
 
   this.importAgendaCard('papers-please-1', {
   	name : "Papers Please 1" ,
@@ -707,6 +691,9 @@ alert("initializing!");
 	  return 1;
 	},
   });
+
+****/
+
   this.importAgendaCard('regulated-bureaucracy', {
   	name : "Regulated Bureaucracy" ,
   	type : "Law" ,
