@@ -5,9 +5,11 @@
   	type : "Law" ,
   	text : "Elect a Player to earn 1 VP. When this player loses a space combat to another player, they transfer the VP to that player" ,
         returnAgendaOptions : function(imperium_self) {
-	  return imperium_self.returnPlanetsOnBoard(function(planet) {
-	    if (planet.type === "cultural") { return 1; } return 0; 
-	  });
+	  let options = [];
+	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	    options.push(imperium_self.returnFaction(i+1));
+	  }
+	  return options;
 	},
 	onPass : function(imperium_self, winning_choice) {
 	  imperium_self.game.state.shard_of_the_throne = 1;

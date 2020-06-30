@@ -34,6 +34,10 @@
 
   }  
 
+  resetTemporaryModifiers(unit) {
+    unit.temporary_combat_modifier = 0;
+  }
+
 
   returnUnitsInStorage(unit) {
     let array_of_stored_units = [];

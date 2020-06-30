@@ -3053,9 +3053,11 @@ console.log("WINNIGN CHOICE: " + winning_choice);
   	type : "Law" ,
   	text : "Elect a Player to earn 1 VP. When this player loses a space combat to another player, they transfer the VP to that player" ,
         returnAgendaOptions : function(imperium_self) {
-	  return imperium_self.returnPlanetsOnBoard(function(planet) {
-	    if (planet.type === "cultural") { return 1; } return 0; 
-	  });
+	  let options = [];
+	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+	    options.push(imperium_self.returnFaction(i+1));
+	  }
+	  return options;
 	},
 	onPass : function(imperium_self, winning_choice) {
 	  imperium_self.game.state.shard_of_the_throne = 1;
@@ -12779,7 +12781,7 @@ console.log(" ... and done");
     let array_of_cards = this.returnPlayerActionCards(this.game.player, types);
     if (array_of_cards.length == 0) {
       this.playerAcknowledgeNotice("You do not have any action cards that can be played now", function() {
-	if (cancel_callback != null) { imperium_self.cancel_callback(); return 0; }
+	if (cancel_callback != null) { cancel_callback(); return 0; }
         imperium_self.playerTurn();
         return 0;
       });
@@ -14549,8 +14551,8 @@ console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-      return ["1_1", "4_7"];
-//      return ["1_1", "2_1"];
+//      return ["1_1", "4_7"];
+      return ["1_1", "2_1"];
     }
   
     if (players <= 3) {

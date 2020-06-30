@@ -3515,7 +3515,7 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	//
 	// reset temporary combat modifiers
 	//
-	this.resetGroundUnitTemporaryModifiers();
+	this.resetGroundUnitTemporaryModifiers(sector, planet_idx);
 
 	this.game.state.ground_combat_attacker = player;
 	this.game.state.ground_combat_defender = defender;
