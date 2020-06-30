@@ -9,7 +9,9 @@
     let z = imperium_self.returnEventObjects();
 
     if (this.game.queue.length > 0) {
-  
+
+console.log("QUEUE: " + JSON.stringify(this.game.queue));  
+
       imperium_self.saveGame(imperium_self.game.id);
   
       let qe = this.game.queue.length-1;
@@ -2255,6 +2257,8 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 
 	}
 
+console.log("THIS IS WHERE WE REACH!");
+
 	//
 	// re-display sector
 	//
@@ -2262,6 +2266,9 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 	this.saveSystemAndPlanets(sys);
 	this.updateSectorGraphics(sector);
         this.game.queue.splice(qe, 1);
+
+
+console.log("THIS IS WHERE WE REACH 2!");
 
 	return 1;
 
@@ -3084,7 +3091,7 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	if (this.game.state.space_combat_defender != -1) {
 	  let z = this.returnEventObjects();
 	  for (let z_index in z) {
-	    z[z_index].spaceCombatRoundEnd(this, attacker, defender, sector);
+	    z[z_index].spaceCombatRoundEnd(this, this.game.state.space_combat_attacker, this.game.state.space_combat_defender, sector);
 	  }
 	}
 

@@ -905,6 +905,12 @@ if (this.game.board[tmp[k]] != undefined) {
 	  }
 	}
 
+	//
+	// otherwise we can't move into our destination
+	//
+	if (tmp[k] == destination) { can_hop_through_this_sector = 1; }
+
+
 	if (can_hop_through_this_sector == 1) {
 
 	  //

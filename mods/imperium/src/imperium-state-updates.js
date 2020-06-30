@@ -23,18 +23,18 @@
  
 
   resetSpaceUnitTemporaryModifiers(sector) {
-    let sys = this.returnSectorAndPlanets();
+    let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.s.units.length; i++) {
       for (let ii = 0; ii < sys.s.units[i].length; ii++) {
-	sys.s.units[i][ii].resetTemporaryModifiers();
+	this.resetTemporaryModifiers(sys.s.units[i][ii]);
       }
     }
   }
   resetGroundUnitTemporaryModifiers(sector, planet_idx) {
-    let sys = this.returnSectorAndPlanets();
+    let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.p[planet_idx].units.length; i++) {
       for (let ii = 0; ii < sys.p[planet_idx].units[i].length; ii++) {
-	sys.p[planet_idx].units[i][ii].resetTemporaryModifiers();
+	this.resetTemporaryModifiers(sys.p[planet_idx].units[i][ii]);
       }
     }
   }

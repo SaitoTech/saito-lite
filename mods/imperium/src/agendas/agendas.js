@@ -553,7 +553,7 @@
 	      if (lowest_vp <= imperium_self.game.players_info[io[i]-1].vp) { highest_vp = imperium_self.game.players_info[io[i]-1].vp; }
 	    }
 
-	    for (let i = 0; i < ip.length; i++) {
+	    for (let i = 0; i < io.length; i++) {
 	      if (lowest_vp == imperium_self.game.players_info[io[i]-1].vp) {
 		imperium_self.game.players_info[io[i]-1].vp += 1;
 		imperium_self.game.queue.push("notify\t"+imperium_self.returnFaction((io[i]+1)) + " gains 1 VP from Seeds of an Empire");

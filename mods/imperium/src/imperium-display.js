@@ -529,7 +529,7 @@ updateSectorGraphics(sector) {
       $(divpid).removeClass("player_color_5");
       $(divpid).removeClass("player_color_6");
       $(divpid).addClass(newclass);
-      $(divpid).css('display','all');
+      $(divpid).css('display','block');
     }
 
 
@@ -564,7 +564,10 @@ updateSectorGraphics(sector) {
 
       let space_frames = [];
       let ship_graphics = [];
-      space_frames.push("white_space_frame.png");
+//
+// replaced with border
+//
+//      space_frames.push("white_space_frame.png");
 
       ////////////////////
       // SPACE GRAPHICS //

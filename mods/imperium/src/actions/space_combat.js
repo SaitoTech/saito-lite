@@ -55,7 +55,7 @@
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  //
-	  // repairs all non-full-strenght units for the action_card_player
+	  // repairs all non-full-strength units for the action_card_player
 	  //
           let sys = imperium_self.returnSectorAndPlanets(imperium_self.game.state.space_combat_sector);
 	  for (let i = 0; i < sys.s.units[action_card_player-1].length; i++) {

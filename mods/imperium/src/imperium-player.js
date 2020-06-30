@@ -359,7 +359,9 @@
     this.game.state.bombardment_sector = sector;
     this.game.state.bombardment_planet_idx = planet_idx;
 
-    html = '<div class="sf-readable">Do you wish to bombard '+this.game.planets[this.game.sectors[sector].planets[planet_idx]].name+'? </div><ul>';
+    let sys = imperium_self.returnSectorAndPlanets(sector);
+
+    html = '<div class="sf-readable">Do you wish to bombard '+sys.p[planet_idx].name+'? </div><ul>';
 
     let ac = this.returnPlayerActionCards(this.game.player, ["pre_bombardment"]);
     if (ac.length > 0) {
@@ -368,7 +370,7 @@
       html += '<li class="option" id="skip">skip bombardment</li>';
     } else {
       html += '<li class="option" id="bombard">bombard planet</li>';
-      html += '<li class="option" id="skip">skiop bombardment</li>';
+      html += '<li class="option" id="skip">skip bombardment</li>';
     }
 
     let tech_attach_menu_events = 0;
@@ -418,7 +420,7 @@
       }
 
       if (action2 == "bombard") {
-        imperium_self.addMove("bombard\t"+imperium_self.game.player+"\t"+sectpr+"\t"+planet_idx);
+        imperium_self.addMove("bombard\t"+imperium_self.game.player+"\t"+sector+"\t"+planet_idx);
         imperium_self.endTurn();
       }
       if (action2 == "skip") {
@@ -459,12 +461,12 @@
 
     html = '<div class="sf-readable">You must assign '+total_hits+' to your fleet:</div><ul>';
 
-    let ac = this.returnPlayerActionCards(player, relevant_action_cards);
+    let ac = this.returnPlayerActionCards(imperium_self.game.player, relevant_action_cards);
     if (ac.length > 0) {
-      html += '<li class="option" id="cont">continue</li>';
+      html += '<li class="option" id="assign">continue</li>';
       html += '<li class="option" id="action">play action card</li>';
     } else {
-      html += '<li class="option" id="cont">continue</li>';
+      html += '<li class="option" id="assign">continue</li>';
     }
 
     let menu_type = "";
@@ -513,9 +515,9 @@
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
-	  imperium_self.playerPlayPDSDefense(player, attacker, sector);
+          imperium_self.playerAssignHits(attacker, defender, type, sector, details, total_hits, source);
         }, function() {
-	  imperium_self.playerPlayPDSDefense(player, attacker, sector);
+          imperium_self.playerAssignHits(attacker, defender, type, sector, details, total_hits, source);
 	}, relevant_action_cards);
       }
 

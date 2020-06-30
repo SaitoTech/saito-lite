@@ -3601,7 +3601,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	      if (lowest_vp <= imperium_self.game.players_info[io[i]-1].vp) { highest_vp = imperium_self.game.players_info[io[i]-1].vp; }
 	    }
 
-	    for (let i = 0; i < ip.length; i++) {
+	    for (let i = 0; i < io.length; i++) {
 	      if (lowest_vp == imperium_self.game.players_info[io[i]-1].vp) {
 		imperium_self.game.players_info[io[i]-1].vp += 1;
 		imperium_self.game.queue.push("notify\t"+imperium_self.returnFaction((io[i]+1)) + " gains 1 VP from Seeds of an Empire");
@@ -5340,7 +5340,7 @@ alert("select sector with filter");
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  //
-	  // repairs all non-full-strenght units for the action_card_player
+	  // repairs all non-full-strength units for the action_card_player
 	  //
           let sys = imperium_self.returnSectorAndPlanets(imperium_self.game.state.space_combat_sector);
 	  for (let i = 0; i < sys.s.units[action_card_player-1].length; i++) {
@@ -6198,6 +6198,10 @@ console.log(" 2THIS LAW: " + JSON.stringify(this_law));
 
   }  
 
+  resetTemporaryModifiers(unit) {
+    unit.temporary_combat_modifier = 0;
+  }
+
 
   returnUnitsInStorage(unit) {
     let array_of_stored_units = [];
@@ -6774,7 +6778,9 @@ console.log(" 2THIS LAW: " + JSON.stringify(this_law));
     let z = imperium_self.returnEventObjects();
 
     if (this.game.queue.length > 0) {
-  
+
+console.log("QUEUE: " + JSON.stringify(this.game.queue));  
+
       imperium_self.saveGame(imperium_self.game.id);
   
       let qe = this.game.queue.length-1;
@@ -9020,6 +9026,8 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 
 	}
 
+console.log("THIS IS WHERE WE REACH!");
+
 	//
 	// re-display sector
 	//
@@ -9027,6 +9035,9 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 	this.saveSystemAndPlanets(sys);
 	this.updateSectorGraphics(sector);
         this.game.queue.splice(qe, 1);
+
+
+console.log("THIS IS WHERE WE REACH 2!");
 
 	return 1;
 
@@ -9849,7 +9860,7 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	if (this.game.state.space_combat_defender != -1) {
 	  let z = this.returnEventObjects();
 	  for (let z_index in z) {
-	    z[z_index].spaceCombatRoundEnd(this, attacker, defender, sector);
+	    z[z_index].spaceCombatRoundEnd(this, this.game.state.space_combat_attacker, this.game.state.space_combat_defender, sector);
 	  }
 	}
 
@@ -10280,7 +10291,7 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	//
 	// reset temporary combat modifiers
 	//
-	this.resetGroundUnitTemporaryModifiers();
+	this.resetGroundUnitTemporaryModifiers(sector, planet_idx);
 
 	this.game.state.ground_combat_attacker = player;
 	this.game.state.ground_combat_defender = defender;
@@ -10899,7 +10910,9 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
     this.game.state.bombardment_sector = sector;
     this.game.state.bombardment_planet_idx = planet_idx;
 
-    html = '<div class="sf-readable">Do you wish to bombard '+this.game.planets[this.game.sectors[sector].planets[planet_idx]].name+'? </div><ul>';
+    let sys = imperium_self.returnSectorAndPlanets(sector);
+
+    html = '<div class="sf-readable">Do you wish to bombard '+sys.p[planet_idx].name+'? </div><ul>';
 
     let ac = this.returnPlayerActionCards(this.game.player, ["pre_bombardment"]);
     if (ac.length > 0) {
@@ -10999,12 +11012,12 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 
     html = '<div class="sf-readable">You must assign '+total_hits+' to your fleet:</div><ul>';
 
-    let ac = this.returnPlayerActionCards(player, relevant_action_cards);
+    let ac = this.returnPlayerActionCards(imperium_self.game.player, relevant_action_cards);
     if (ac.length > 0) {
-      html += '<li class="option" id="cont">continue</li>';
+      html += '<li class="option" id="assign">continue</li>';
       html += '<li class="option" id="action">play action card</li>';
     } else {
-      html += '<li class="option" id="cont">continue</li>';
+      html += '<li class="option" id="assign">continue</li>';
     }
 
     let menu_type = "";
@@ -11053,9 +11066,9 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
-	  imperium_self.playerPlayPDSDefense(player, attacker, sector);
+          imperium_self.playerAssignHits(attacker, defender, type, sector, details, total_hits, source);
         }, function() {
-	  imperium_self.playerPlayPDSDefense(player, attacker, sector);
+          imperium_self.playerAssignHits(attacker, defender, type, sector, details, total_hits, source);
 	}, relevant_action_cards);
       }
 
@@ -14890,10 +14903,10 @@ console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
     // synchronous interventions in combat state -- take place at the END of the combat round
     //
     if (obj.spaceCombatRoundEnd == null) {
-      obj.spaceCombatRoundEnd = function(imperium_self, attacker, defender, sector) { return roll; }
+      obj.spaceCombatRoundEnd = function(imperium_self, attacker, defender, sector) { return 1; }
     }
     if (obj.groundCombatRoundEnd == null) {
-      obj.spaceCombatRoundEnd = function(imperium_self, attacker, defender, sector, planet_idx) { return roll; }
+      obj.spaceCombatRoundEnd = function(imperium_self, attacker, defender, sector, planet_idx) { return 1; }
     }
 
 
@@ -15940,6 +15953,12 @@ if (this.game.board[tmp[k]] != undefined) {
 	  }
 	}
 
+	//
+	// otherwise we can't move into our destination
+	//
+	if (tmp[k] == destination) { can_hop_through_this_sector = 1; }
+
+
 	if (can_hop_through_this_sector == 1) {
 
 	  //
@@ -16635,6 +16654,24 @@ console.log("SECTOR: " + sector);
     }
   }
  
+
+  resetSpaceUnitTemporaryModifiers(sector) {
+    let sys = this.returnSectorAndPlanets(sector);
+    for (let i = 0; i < sys.s.units.length; i++) {
+      for (let ii = 0; ii < sys.s.units[i].length; ii++) {
+	this.resetTemporaryModifiers(sys.s.units[i][ii]);
+      }
+    }
+  }
+  resetGroundUnitTemporaryModifiers(sector, planet_idx) {
+    let sys = this.returnSectorAndPlanets(sector);
+    for (let i = 0; i < sys.p[planet_idx].units.length; i++) {
+      for (let ii = 0; ii < sys.p[planet_idx].units[i].length; ii++) {
+	this.resetTemporaryModifiers(sys.p[planet_idx].units[i][ii]);
+      }
+    }
+  }
+
 
   resetTargetUnits() {
     for (let i = 0; i < this.game.players_info.length; i++) {
@@ -17426,7 +17463,7 @@ updateSectorGraphics(sector) {
       $(divpid).removeClass("player_color_5");
       $(divpid).removeClass("player_color_6");
       $(divpid).addClass(newclass);
-      $(divpid).css('display','all');
+      $(divpid).css('display','block');
     }
 
 
@@ -17461,7 +17498,10 @@ updateSectorGraphics(sector) {
 
       let space_frames = [];
       let ship_graphics = [];
-      space_frames.push("white_space_frame.png");
+//
+// replaced with border
+//
+//      space_frames.push("white_space_frame.png");
 
       ////////////////////
       // SPACE GRAPHICS //
