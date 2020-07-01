@@ -17,10 +17,5 @@ imperium.js?41c4:3108 Uncaught (in promise) ReferenceError: laws is not defined
 ```
 
 * During ship movement - allow undoing selection
-* Only offer to move ships to activated sector if move is possible. (DONE)
 
-* Add card mouse over for action cards (not clear if desireable ? how to do -- could use for strategy cards too but cards show up over HUD))
-
-* Show planet card popup over name when planets listed for invation
-* Announce invasion success in HUD
 * 

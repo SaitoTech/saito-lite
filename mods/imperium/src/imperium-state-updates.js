@@ -63,6 +63,11 @@
     this.game.players_info[player-1].pds_combat_dice_reroll                 = 0;
     this.game.players_info[player-1].bombardment_combat_dice_reroll         = 0;
     this.game.players_info[player-1].combat_dice_reroll                     = 0;
+
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      this.game.players_info[i].traded_this_turn 			    = 0;
+    }
+
     this.game.state.temporary_adjacency = [];
     this.game.state.temporary_wormhole_adjacency = 0;
   }

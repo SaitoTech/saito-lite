@@ -5898,10 +5898,6 @@ console.log(" 2THIS LAW: " + JSON.stringify(this_law));
         name: 'Systems',
         callback: this.handleSystemsMenuItem.bind(this)
       },
-      'game-trade': {
-        name: 'Trade',
-        callback: this.handleTradeMenuItem.bind(this)
-      },
       'game-player': {
         name: 'Laws',
         callback: this.handleLawsMenuItem.bind(this)
@@ -6039,59 +6035,6 @@ console.log(" 2THIS LAW: " + JSON.stringify(this_law));
 
 
   
-  handleTradeMenuItem() {
-  
-    let imperium_self = this;
-    let factions = this.returnFactions();
-    let html =
-    `
-      <div id="menu-container">
-        <div style="margin-bottom: 1em">
-          Manage Trade Relations:
-        </div>
-        <ul>
-     `;
-    html += `  <li class="option" id="makeoffer">make offer</li>`;
-    html += `  <li class="option" id="acceptoffer">see offers</li>`;
-    html += `
-      </ul>
-      </div>
-    `
-    $('.hud-menu-overlay').html(html);
-    $('.hud-menu-overlay').show();
-    $('.status').hide();
-  
-    //
-    // leave action enabled on other panels
-    //
-    $('.card').on('click', function() {
-  
-      let p = $(this).attr("id");
-
-      p = imperium_self.game.player-1;
-
-      let commodities_total = imperium_self.game.players_info[p].commodities;
-      let goods_total = imperium_self.game.players_info[p].goods;
-      let fleet_total = imperium_self.game.players_info[p].fleet_supply;
-      let command_total = imperium_self.game.players_info[p].command_tokens;
-      let strategy_total = imperium_self.game.players_info[p].strategy_tokens;
-  
-      let html  = "<p>Total Faction Resources: </p><ul>";
-      html += '<li>' + commodities_total + " commodities" + '</li>';
-      html += '<li>' + goods_total + " goods" + '</li>'
-      html += '<li>' + command_total + " command tokens" + '</li>'
-      html += '<li>' + strategy_total + " strategy tokens" + '</li>'
-      html += '<li>' + fleet_total + " fleet supply" + '</li>'
-      html += '</ul>';
-  
-      $('.hud-menu-overlay').html(html);
-  
-    });
-  }
-
-
-
-
   handleLawsMenuItem() {
   
     let imperium_self = this;
@@ -8340,31 +8283,60 @@ console.log("STARTING WITH RUN QUEUE");
   
       }
 
+      if (mv[0] === "offer") {
+
+	let offering_faction = parseInt(mv[1]);
+	let faction_to_consider = parseInt(mv[2]);
+	let stuff_on_offer = JSON.parse(mv[3]);
+	let stuff_in_return = JSON.parse(mv[4]);
+  	this.game.queue.splice(qe, 1);
+
+	if (this.game.player == faction_to_consider) {
+	  this.playerHandleTradeOffer(offering_faction, stuff_on_offer, stuff_in_return);
+	}
+
+        return 0;
+      }
+      
+
+
+      if (mv[0] === "refuse_offer") {
+
+	let refusing_faction = parseInt(mv[1]);
+	let faction_that_offered = parseInt(mv[2]);
+  	this.game.queue.splice(qe, 1);
+	this.updateLog(this.returnName(refusing_faction) + " spurns a trade offered by " + this.returnName(faction_that_offered));
+        return 1;
+
+      }
+      
+
 
       if (mv[0] === "trade") {
   
-  	let player       = parseInt(mv[1]);
-  	let recipient    = parseInt(mv[2]);
-        let offer	 = mv[3];
-  	let amount	 = mv[4];
-  
-  	if (offer == "goods") {
-  	  amount = parseInt(amount);
-  	  if (this.game.players_info[player-1].goods >= amount) {
-  	    this.game.players_info[player-1].goods -= amount;
-  	    this.game.players_info[recipient-1].goods += amount;
-  	  }
-  	}
-  
-  	if (offer == "commodities") {
-  	  amount = parseInt(amount);
-  	  if (this.game.players_info[player-1].commodities >= amount) {
-  	    this.game.players_info[player-1].commodities -= amount;
-  	    this.game.players_info[recipient-1].goods += amount;
-  	  }
-  	}
-  
+  	let offering_faction      = parseInt(mv[1]);
+  	let faction_responding    = parseInt(mv[2]);
+        let offer	 	  = JSON.parse(mv[3]);
+  	let response	 	  = JSON.parse(mv[4]);
+
   	this.game.queue.splice(qe, 1);
+
+  	this.game.players_info[offering_faction-1].commodities -= offer.goods;
+  	this.game.players_info[faction_responding-1].commodities -= response.goods;
+
+  	this.game.players_info[offering_faction-1].goods += response.goods;
+  	this.game.players_info[faction_responding-1].goods += offer.goods;
+
+	if (this.game.players_info[offering_faction-1].commodities < 0) {
+	  this.game.players_info[offering_faction-1].goods += this.game.players_info[offering_faction-1].commodities;
+	  this.game.players_info[offering_faction-1].commodities = 0;
+	}
+
+	if (this.game.players_info[faction_responding-1].commodities < 0) {
+	  this.game.players_info[faction_responding-1].goods += this.game.players_info[faction_responding-1].commodities;
+	  this.game.players_info[faction_responding-1].commodities = 0;
+	}
+
   	return 1;
   	
       }
@@ -10683,7 +10655,10 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
       players[i].strategy_cards_played 		= [];
       players[i].action_cards_played 		= [];
 
-  
+
+      players[i].traded_this_turn = 0;  
+
+
       //
       // gameplay modifiers (action cards + tech)
       //
@@ -10819,9 +10794,10 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
       if (ac.length > 0 && this.tracker.action_card == 0 && this.canPlayerPlayActionCard(this.game.player) == 1) {
         html += '<li class="option" id="action">play action card</li>';
       }
-      if (this.tracker.trade == 0 && this.canPlayerTrade(this.game.player) == 1) {
+
+//      if (this.tracker.trade == 0 && this.canPlayerTrade(this.game.player) == 1) {
         html += '<li class="option" id="trade">send trade goods</li>';
-      }
+//      }
 
       //
       // add tech and factional abilities
@@ -10891,9 +10867,8 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	    relevant_action_cards);
         }
         if (action2 == "trade") {
-          imperium_self.playerTrade(function() {
-  	    imperium_self.endTurn();
-          });
+          imperium_self.playerTrade();
+	  return 0;
         }
         if (action2 == "pass") {
   	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
@@ -12561,17 +12536,51 @@ console.log(" ... and done");
   
   }
   
+  playerHandleTradeOffer(faction_offering, their_offer, my_offer) {
+
+    let imperium_self = this;
+
+    let html = '<div class="sf-readable">You have received a trade offer from ' + imperium_self.returnFaction(faction_offering) + '. They offer '+their_offer.goods+' trade goods in exchange for '+my_offer.goods+' trade goods or commodities: </div><ul>';
+        html += `  <li class="option" id="yes">accept trade</li>`;
+        html += `  <li class="option" id="no">refuse trade</li>`;
+    html += '</ul>';
   
+    this.updateStatus(html);
+  
+    $('.option').off();
+    $('.option').on('click', function() {
+  
+      let action = $(this).attr("id");
+
+      if (action == "no") {
+  	imperium_self.addMove("refuse_offer\t"+imperium_self.game.player+"\t"+faction_offering);
+  	imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player)+ " refuses trade offer from " + imperium_self.returnFaction(faction_offering));
+	imperium_self.endTurn();
+	return 0;
+      }
+
+      if (action == "yes") { 
+ 	imperium_self.addMove("trade\t"+faction_offering+"\t"+imperium_self.game.player+"\t"+JSON.stringify(their_offer)+"\t"+JSON.stringify(my_offer));
+  	imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player)+ " accepts trade offer from " + imperium_self.returnFaction(faction_offering));
+	imperium_self.endTurn();
+	return 0;
+      }
+
+    });
+
+  }
 
 
-  playerTrade(mycallback) {
+  playerTrade() {
   
     let imperium_self = this;
     let factions = this.returnFactions();
   
-    let html = '<div class="sf-readable">Initiate Trade Offer with Faction: </div><ul>';
+    let html = '<div class="sf-readable">Make Trade Offer to Faction: </div><ul>';
     for (let i = 0; i < this.game.players_info.length; i++) {
-      html += `  <li class="option" id="${i}">${factions[this.game.players_info[i].faction].name}</li>`;
+      if (this.game.players_info[i].traded_this_turn == 0 && (i+1) != this.game.player) {
+        html += `  <li class="option" id="${i}">${factions[this.game.players_info[i].faction].name}</li>`;
+      }
     }
     html += '</ul>';
   
@@ -12581,13 +12590,17 @@ console.log(" ... and done");
     $('.option').on('click', function() {
   
       let faction = $(this).attr("id");
-      let commodities_selected = 0;
-      let goods_selected = 0;
+
+      let offer_selected = 0;
+      let receive_selected = 0;
+
+      let max_offer = imperium_self.game.players_info[imperium_self.game.player-1].commodities + imperium_self.game.players_info[imperium_self.game.player-1].goods;
+      let max_receipt = imperium_self.game.players_info[parseInt(faction)-1].commodities + imperium_self.game.players_info[parseInt(faction)-1].goods;
   
-      let html = "<div class='sf-readable'>Extend Trade Mission: </div><ul>";
-      html += '<li id="commodities" class="option"><span class="commodities_total">0</span> commodities</li>';
-      html += '<li id="goods" class="option"><span class="goods_total">0</span> goods</li>';
-      html += '<li id="confirm" class="option">CLICK HERE TO SEND TRADE MISSION</li>';
+      let html = "<div class='sf-readable'>Make an Offer: </div><ul>";
+      html += '<li id="to_offer" class="option">you give <span class="offer_total">0</span> commodities/goods</li>';
+      html += '<li id="to_receive" class="option">you receive <span class="receive_total">0</span> trade goods</li>';
+      html += '<li id="confirm" class="option">submit offer</li>';
       html += '</ul>';
   
       imperium_self.updateStatus(html);
@@ -12597,27 +12610,26 @@ console.log(" ... and done");
   
         let selected = $(this).attr("id");
   
-        if (selected == "commodities") { commodities_selected++; }
-        if (selected == "goods") { goods_selected++; }
+        if (selected == "to_offer") { offer_selected++; if (offer_selected > max_offer) { offer_selected = 0; } }
+        if (selected == "to_receive") { receive_selected++; if (receive_selected > max_receipt) { receive_selected = 0; } }
+
+
         if (selected == "confirm") {
-  	if (commodities_selected >= 1) {
-  	  imperium_self.addMove("trade\t"+imperium_self.game.player+"\t"+(faction+1)+"commodities"+"\t"+commodities_selected);
+
+	  let my_offer = {};
+	      my_offer.goods = $('.offer_total').html();
+	  let my_receive = {};
+	      my_receive.goods = $('.receive_total').html();
+
+  	  imperium_self.addMove("offer\t"+imperium_self.game.player+"\t"+(parseInt(faction)+1)+"\t" + JSON.stringify(my_offer) + "\t" + JSON.stringify(my_receive));
+	  imperium_self.updateStatus("trade offer submitted");
+	  imperium_self.endTurn();
+
   	}
-  	if (goods_selected >= 1) {
-  	  imperium_self.addMove("trade\t"+imperium_self.game.player+"\t"+(faction+1)+"goods"+"\t"+goods_selected);
-  	}
-        }
-  
-        if (commodities_selected > imperium_self.game.players_info[imperium_self.game.player-1].commodities) {
-  	commodities_selected = imperium_self.game.players_info[imperium_self.game.player-1].commodities;
-        }
-        if (goods_selected > imperium_self.game.players_info[imperium_self.game.player-1].goods) {
-  	goods_selected = imperium_self.game.players_info[imperium_self.game.player-1].goods;
-        }
-  
-        $('.commodities_total').html(commodities_selected);
-        $('.goods_total').html(goods_selected);
-  
+
+        $('.offer_total').html(offer_selected);
+        $('.receive_total').html(receive_selected);
+ 
       });
     });
   }
@@ -16816,6 +16828,11 @@ console.log("SECTOR: " + sector);
     this.game.players_info[player-1].pds_combat_dice_reroll                 = 0;
     this.game.players_info[player-1].bombardment_combat_dice_reroll         = 0;
     this.game.players_info[player-1].combat_dice_reroll                     = 0;
+
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      this.game.players_info[i].traded_this_turn 			    = 0;
+    }
+
     this.game.state.temporary_adjacency = [];
     this.game.state.temporary_wormhole_adjacency = 0;
   }
@@ -17681,10 +17698,10 @@ updateSectorGraphics(sector) {
       let divsector2 = "#hex_bg_" + sector;
       let player_color = "player_color_" + player;
       for (let i = 0; i < ship_graphics.length; i++) {
-        $(divsector2).append('<img class="sector_graphics ship_graphic sector_graphics_space sector_graphics_space_' + sector + '" src="/imperium/img/frame/' + ship_graphics[i] + '" />');
+        $(divsector2).append('<img class="sector_graphics ' + player_color + ' ship_graphic sector_graphics_space sector_graphics_space_' + sector + '" src="/imperium/img/frame/' + ship_graphics[i] + '" />');
       }
       for (let i = 0; i < space_frames.length; i++) {
-        $(divsector2).append('<img class="sector_graphics ' + player_color + ' sector_graphics_space sector_graphics_space_' + sector + '" src="/imperium/img/frame/' + space_frames[i] + '" />');
+        $(divsector2).append('<img style="opacity:0.8" class="sector_graphics sector_graphics_space sector_graphics_space_' + sector + '" src="/imperium/img/frame/' + space_frames[i] + '" />');
       }
     }
   }

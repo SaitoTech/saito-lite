@@ -1557,31 +1557,60 @@ console.log("STARTING WITH RUN QUEUE");
   
       }
 
+      if (mv[0] === "offer") {
+
+	let offering_faction = parseInt(mv[1]);
+	let faction_to_consider = parseInt(mv[2]);
+	let stuff_on_offer = JSON.parse(mv[3]);
+	let stuff_in_return = JSON.parse(mv[4]);
+  	this.game.queue.splice(qe, 1);
+
+	if (this.game.player == faction_to_consider) {
+	  this.playerHandleTradeOffer(offering_faction, stuff_on_offer, stuff_in_return);
+	}
+
+        return 0;
+      }
+      
+
+
+      if (mv[0] === "refuse_offer") {
+
+	let refusing_faction = parseInt(mv[1]);
+	let faction_that_offered = parseInt(mv[2]);
+  	this.game.queue.splice(qe, 1);
+	this.updateLog(this.returnName(refusing_faction) + " spurns a trade offered by " + this.returnName(faction_that_offered));
+        return 1;
+
+      }
+      
+
 
       if (mv[0] === "trade") {
   
-  	let player       = parseInt(mv[1]);
-  	let recipient    = parseInt(mv[2]);
-        let offer	 = mv[3];
-  	let amount	 = mv[4];
-  
-  	if (offer == "goods") {
-  	  amount = parseInt(amount);
-  	  if (this.game.players_info[player-1].goods >= amount) {
-  	    this.game.players_info[player-1].goods -= amount;
-  	    this.game.players_info[recipient-1].goods += amount;
-  	  }
-  	}
-  
-  	if (offer == "commodities") {
-  	  amount = parseInt(amount);
-  	  if (this.game.players_info[player-1].commodities >= amount) {
-  	    this.game.players_info[player-1].commodities -= amount;
-  	    this.game.players_info[recipient-1].goods += amount;
-  	  }
-  	}
-  
+  	let offering_faction      = parseInt(mv[1]);
+  	let faction_responding    = parseInt(mv[2]);
+        let offer	 	  = JSON.parse(mv[3]);
+  	let response	 	  = JSON.parse(mv[4]);
+
   	this.game.queue.splice(qe, 1);
+
+  	this.game.players_info[offering_faction-1].commodities -= offer.goods;
+  	this.game.players_info[faction_responding-1].commodities -= response.goods;
+
+  	this.game.players_info[offering_faction-1].goods += response.goods;
+  	this.game.players_info[faction_responding-1].goods += offer.goods;
+
+	if (this.game.players_info[offering_faction-1].commodities < 0) {
+	  this.game.players_info[offering_faction-1].goods += this.game.players_info[offering_faction-1].commodities;
+	  this.game.players_info[offering_faction-1].commodities = 0;
+	}
+
+	if (this.game.players_info[faction_responding-1].commodities < 0) {
+	  this.game.players_info[faction_responding-1].goods += this.game.players_info[faction_responding-1].commodities;
+	  this.game.players_info[faction_responding-1].commodities = 0;
+	}
+
   	return 1;
   	
       }
