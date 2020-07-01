@@ -789,19 +789,25 @@ console.log("executing "+z[z_index].name);
 	  //
 	  // otherwise we let them vote
 	  //
+    	  let is_planet = 0;
+   	  let is_sector = 0;
+
           let html  = '<div class="agenda_instructions">The following agenda has advanced for consideration in the Galactic Senate:</div>';
   	      html += '<div class="agenda_name">' + imperium_self.agenda_cards[agenda].name + '</div>';
 	      html += '<div class="agenda_text">';
 	      html += imperium_self.agenda_cards[agenda].text;
 	      html += '</div><ul>';
 	  for (let i = 0; i < this.game.state.choices.length; i++) {
-              html += '<li class="option" id="'+i+'">'+this.game.state.choices[i]+'</li>';
+
+	      let to_print = this.game.state.choices[i];
+	      if (to_print.indexOf("planet") == 0) { to_print = this.game.planets[to_print].name; }
+	      if (to_print.indexOf("sector") == 0) { to_print = this.game.sectors[to_print].sector; }
+	      if (to_print.indexOf("new-byzantium") == 0) { to_print = "New Byzantium"; }
+
+              html += '<li class="option" id="'+i+'">' + to_print + '</li>';
 	  }
               html += '<li class="option" id="abstain">abstain</li></ul></p>';
 	  imperium_self.updateStatus(html);
-
-    	  let is_planet = 0;
-   	  let is_sector = 0;
 
           $('.option').off();
     	  $('.option').on('mouseenter', function() {

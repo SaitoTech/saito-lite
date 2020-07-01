@@ -7566,19 +7566,25 @@ console.log("executing "+z[z_index].name);
 	  //
 	  // otherwise we let them vote
 	  //
+    	  let is_planet = 0;
+   	  let is_sector = 0;
+
           let html  = '<div class="agenda_instructions">The following agenda has advanced for consideration in the Galactic Senate:</div>';
   	      html += '<div class="agenda_name">' + imperium_self.agenda_cards[agenda].name + '</div>';
 	      html += '<div class="agenda_text">';
 	      html += imperium_self.agenda_cards[agenda].text;
 	      html += '</div><ul>';
 	  for (let i = 0; i < this.game.state.choices.length; i++) {
-              html += '<li class="option" id="'+i+'">'+this.game.state.choices[i]+'</li>';
+
+	      let to_print = this.game.state.choices[i];
+	      if (to_print.indexOf("planet") == 0) { to_print = this.game.planets[to_print].name; }
+	      if (to_print.indexOf("sector") == 0) { to_print = this.game.sectors[to_print].sector; }
+	      if (to_print.indexOf("new-byzantium") == 0) { to_print = "New Byzantium"; }
+
+              html += '<li class="option" id="'+i+'">' + to_print + '</li>';
 	  }
               html += '<li class="option" id="abstain">abstain</li></ul></p>';
 	  imperium_self.updateStatus(html);
-
-    	  let is_planet = 0;
-   	  let is_sector = 0;
 
           $('.option').off();
     	  $('.option').on('mouseenter', function() {
@@ -8450,7 +8456,7 @@ console.log("STARTING WITH RUN QUEUE");
   	  }
   	}
 
-        if (item == "tech") {
+        if (item == "tech" && item == "technology") {
 
   	  this.updateLog(this.returnFaction(player) + " gains " + this.tech[mv[3]].name);
   	  if (!this.game.players_info[player-1].tech.includes(mv[3])) {
@@ -14643,9 +14649,10 @@ console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-//      return ["1_1", "4_7"];
-      return ["1_1", "2_1"];
+      return ["1_1", "4_7"];
+//      return ["1_1", "2_1"];
     }
+
   
     if (players <= 3) {
       return ["1_1", "4_7", "7_1"];
