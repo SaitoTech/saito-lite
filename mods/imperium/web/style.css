@@ -44,10 +44,51 @@
   margin: 0 auto;
 }
 
+.action_card_overlay {
+  position: absolute;
+  color: white;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 100px;
+  top: 0px;
+  line-height: 1.8em;
+  font-family: 'orbitron-light', helvetica, sans-serif;
+  font-size: 2em;
+}
+
+.agenda_card_overlay {
+  position: absolute;
+  color: white;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 130px;
+  top: 0px;
+  line-height: 1.8em;
+  font-family: 'orbitron-light', helvetica, sans-serif;
+  font-size: 2em;
+}
+
+.strategy_card_overlay {
+  position: absolute;
+  color: white;
+  padding-left: 20px;
+  padding-top: 70px;
+  top: 0px;
+  line-height: 1.8em;
+  width: 80%;
+  font-family: 'orbitron-light', helvetica, sans-serif;
+  font-size: 1.4em;
+}
+
 #confirm {
   padding-top: 8px;
   padding-bottom: 8px;
   cursor: pointer;
+}
+
+.hud {
+  left: 140px;
+  transform: translate(0, 0);
 }
 
 .hud-menu-overlay ul {
@@ -543,7 +584,7 @@ body {
   background: #222c;
   transition: all 500ms;
   border-left: 3px solid var(--my-color);
-  font-size: 1em;
+  font-size: 1.15em;
   font-family: courier, sans-serif;
 }
 

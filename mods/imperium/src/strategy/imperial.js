@@ -3,6 +3,7 @@
       name     			:       "Imperial",
       rank			:	8,
       img			:	"/imperium/img/strategy/EMPIRE.png",
+      text			:	"The player of this card may score a public objective. All players then go around in Initiative Order and score secret and public objectives" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         imperium_self.game.state.round_scoring = 1;

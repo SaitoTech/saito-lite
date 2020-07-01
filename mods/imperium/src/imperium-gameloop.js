@@ -687,7 +687,31 @@ console.log("executing "+z[z_index].name);
         if (vote == "abstain") {
           this.updateLog(this.returnFaction(player) + " abstains");
 	} else {
-          this.updateLog(this.returnFaction(player) + " spends " + votes + " on " + vote);
+
+	  let is_planet = 0;
+	  let is_sector = 0;
+
+	  let elected_choice = this.game.state.choices[parseInt(vote)];
+
+	  if (elected_choice.indexOf("planet") == 0 || elected_choice.indexOf("new-byzantium") == 0) { is_planet = 1; }
+	  if (elected_choice.indexOf("sector") == 0) { is_sector = 1; }
+
+	  if (is_planet == 1) {
+            this.updateLog(this.returnFaction(player) + " spends " + votes + " on " + this.game.planets[this.game.state.choices[vote]].name);
+	  }
+	  if (is_sector == 1) {
+            this.updateLog(this.returnFaction(player) + " spends " + votes + " on " + this.game.sectors[this.game.state.choices[vote]].sector);
+	  }
+	  if (is_planet == 0 && is_sector == 0) {
+	    //
+	    // player?
+	    //
+	    if (this.game.state.choices.length == this.game.players_info.length) {
+              this.updateLog(this.returnFaction(player) + " spends " + votes + " on " + this.returnFaction(vote+1));
+	    } else {
+              this.updateLog(this.returnFaction(player) + " spends " + votes + " on " + vote);
+	    }
+	  }
         }
 
 
@@ -1053,7 +1077,7 @@ console.log("STRATEGY CARDS: " + JSON.stringify(this.strategy_cards));
 	//
 	// DE-ACTIVATE SYSTEMS
 	//
-        this.deactivateSystems();
+        this.deactivateSectors();
         this.unhighlightSectors();	
 
 

@@ -4,6 +4,7 @@
       name     			:       "Leadership",
       rank			:	1,
       img			:	"/imperium/img/strategy/INITIATIVE.png",
+      text			:	"The player of this card gets three tokens to allocate among their command, strategy and fleet pool. All players may then purchase additional tokens at a cost of three influence per token purchased." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
 	if (imperium_self.game.player == strategy_card_player) {

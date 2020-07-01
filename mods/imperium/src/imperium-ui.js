@@ -31,10 +31,6 @@
         name: 'Systems',
         callback: this.handleSystemsMenuItem.bind(this)
       },
-      'game-trade': {
-        name: 'Trade',
-        callback: this.handleTradeMenuItem.bind(this)
-      },
       'game-player': {
         name: 'Laws',
         callback: this.handleLawsMenuItem.bind(this)
@@ -172,59 +168,6 @@
 
 
   
-  handleTradeMenuItem() {
-  
-    let imperium_self = this;
-    let factions = this.returnFactions();
-    let html =
-    `
-      <div id="menu-container">
-        <div style="margin-bottom: 1em">
-          Manage Trade Relations:
-        </div>
-        <ul>
-     `;
-    html += `  <li class="option" id="makeoffer">make offer</li>`;
-    html += `  <li class="option" id="acceptoffer">see offers</li>`;
-    html += `
-      </ul>
-      </div>
-    `
-    $('.hud-menu-overlay').html(html);
-    $('.hud-menu-overlay').show();
-    $('.status').hide();
-  
-    //
-    // leave action enabled on other panels
-    //
-    $('.card').on('click', function() {
-  
-      let p = $(this).attr("id");
-
-      p = imperium_self.game.player-1;
-
-      let commodities_total = imperium_self.game.players_info[p].commodities;
-      let goods_total = imperium_self.game.players_info[p].goods;
-      let fleet_total = imperium_self.game.players_info[p].fleet_supply;
-      let command_total = imperium_self.game.players_info[p].command_tokens;
-      let strategy_total = imperium_self.game.players_info[p].strategy_tokens;
-  
-      let html  = "<p>Total Faction Resources: </p><ul>";
-      html += '<li>' + commodities_total + " commodities" + '</li>';
-      html += '<li>' + goods_total + " goods" + '</li>'
-      html += '<li>' + command_total + " command tokens" + '</li>'
-      html += '<li>' + strategy_total + " strategy tokens" + '</li>'
-      html += '<li>' + fleet_total + " fleet supply" + '</li>'
-      html += '</ul>';
-  
-      $('.hud-menu-overlay').html(html);
-  
-    });
-  }
-
-
-
-
   handleLawsMenuItem() {
   
     let imperium_self = this;

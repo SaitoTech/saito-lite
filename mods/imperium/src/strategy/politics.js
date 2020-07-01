@@ -4,6 +4,7 @@
       name     			:       "Politics",
       rank			:	3,
       img			:	"/imperium/img/strategy/POLITICS.png",
+      text			:	"The player of this card may choose a player to serve as Speaker. If New Byzantium is controlled they may then choose two upcoming agendas for debate in the Galactic Senate. All other players then have the option of spending a strategy token to purchase two action cards. ",
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.confirms_needed == 0 || imperium_self.game.confirms_needed == undefined || imperium_self.game.confirms_needed == null) {
@@ -98,8 +99,8 @@
             imperium_self.updateStatus(html);
 
             $('.option').off();
-            $('.option').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showAgendaCard(imperium_self.game.state.agendas[s]); });
-            $('.option').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hideAgendaCard(imperium_self.game.state.agendas[s]); });
+            $('.option').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showAgendaCard(s); });
+            $('.option').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hideAgendaCard(s); });
             $('.option').on('click', function() {
 
               laws_selected++;

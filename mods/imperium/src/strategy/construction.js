@@ -4,6 +4,7 @@
       name     			:       "Construction",
       rank			:	4,
       img			:	"/imperium/img/strategy/BUILD.png",
+      text			:	"The player of this card may build a PDS or Space dock on a planet they control, and then a PDS on a second planet. Other players may spend a strategy token to build either a PDS or Space Dock on a planet they control" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player) {

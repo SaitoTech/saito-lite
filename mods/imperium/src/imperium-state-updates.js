@@ -70,14 +70,14 @@
 
 
 
-  deactivateSystems() {
+  deactivateSectors() {
 
     //
     // deactivate all systems
     //
-    for (var sys in this.systems) {
+    for (let sys in this.game.sectors) {
       for (let j = 0; j < this.totalPlayers; j++) {
-        this.game.systems[sys].activated[j] = 0;
+        this.game.sectors[sys].activated[j] = 0;
       }
     }
 

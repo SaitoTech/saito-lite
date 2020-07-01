@@ -753,9 +753,8 @@ console.log("Add: " + divname);
     $(divname).hide();
   }
   showActionCard(c) {
-    let action_cards = this.returnActionCards();
-    let thiscard = action_cards[c];
-    $('.cardbox').html('<img src="' + thiscard.img + '" style="width:100%" />');
+    let thiscard = this.action_cards[c];
+    $('.cardbox').html('<img src="' + thiscard.img + '" style="width:100%" /><div class="action_card_overlay">'+thiscard.text+'</div>');
     $('.cardbox').show();
   }
   hideActionCard(c) {
@@ -764,7 +763,7 @@ console.log("Add: " + divname);
   showStrategyCard(c) {
     let strategy_cards = this.returnStrategyCards();
     let thiscard = strategy_cards[c];
-    $('.cardbox').html('<img src="' + thiscard.img + '" style="width:100%" />');
+    $('.cardbox').html('<img src="' + thiscard.img + '" style="width:100%" /><div class="strategy_card_overlay">'+thiscard.text+'</div>');
     $('.cardbox').show();
   }
   hideStrategyCard(c) {
@@ -784,8 +783,7 @@ console.log("Add: " + divname);
     $('.cardbox').hide();
   }
   showAgendaCard(agenda) {
-    let agendas = this.returnAgendaCards();
-    $('.cardbox').html('<img src="' + agendas[agenda].img + '" style="width:100%" />');
+    $('.cardbox').html('<img src="' + this.agenda_cards[agenda].img + '" style="width:100%" /><div class="agenda_card_overlay">'+this.agenda_cards[agenda].text+'</div>');
     $('.cardbox').show();
   }
   hideAgendaCard(sector, pid) {

@@ -2278,9 +2278,13 @@ console.log(" ... and done");
     html += '</ul>';
   
     this.updateStatus(html);
+    $('.textchoice').off();
+    $('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showActionCard(s); } });
+    $('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideActionCard(s); } });
     $('.textchoice').on('click', function() {
 
       let action2 = $(this).attr("id");
+      imperium_self.hideActionCard(action2);
 
       if (action2 != "cancel") { imperium_self.hideActionCard(action2); }
       if (action2 === "cancel") { cancel_callback(); return 0; }
@@ -2316,8 +2320,8 @@ console.log(" ... and done");
     html += '</ul>';
   
     this.updateStatus(html);
-    //$('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showStrategyCard(s); } });
-    //$('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideStrategyCard(s); } });
+    $('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showStrategyCard(s); } });
+    $('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideStrategyCard(s); } });
     $('.textchoice').on('click', function() {
 
       let action2 = $(this).attr("id");
@@ -2357,8 +2361,6 @@ console.log(" ... and done");
       scards.push("");
     }
 
-console.log("CARDS: " + JSON.stringify(this.game.state.strategy_cards));
-
 
     for (let z = 0; z < this.game.state.strategy_cards.length; z++) {
       let rank = parseInt(this.strategy_cards[this.game.state.strategy_cards[z]].rank);
@@ -2376,8 +2378,8 @@ console.log("CARDS: " + JSON.stringify(this.game.state.strategy_cards));
   
     this.updateStatus(html);
     $('.textchoice').off();
-    //$('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showStrategyCard(s); } });
-    //$('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideStrategyCard(s); } });
+    $('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showStrategyCard(s); } });
+    $('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideStrategyCard(s); } });
     $('.textchoice').on('click', function() {
       let action2 = $(this).attr("id");
       imperium_self.hideStrategyCard(action2);

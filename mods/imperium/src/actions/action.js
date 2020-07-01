@@ -569,7 +569,7 @@ alert("select sector with filter");
     this.importActionCard('Insubordination', {
   	name : "Insubordination" ,
   	type : "action" ,
-  	text : "" ,
+  	text : "Select a player and remove 1 token from their command pool" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -598,9 +598,9 @@ alert("select sector with filter");
 
 
     this.importActionCard('Lucky Shot', {
-  	name : "Insubordination" ,
+  	name : "Lucky Shot" ,
   	type : "action" ,
-  	text : "" ,
+  	text : "Destroy a destroyer, cruiser or dreadnaught in a sector with a planet you control" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {

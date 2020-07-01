@@ -1465,6 +1465,7 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
       name     			:       "Construction",
       rank			:	4,
       img			:	"/imperium/img/strategy/BUILD.png",
+      text			:	"The player of this card may build a PDS or Space dock on a planet they control, and then a PDS on a second planet. Other players may spend a strategy token to build either a PDS or Space Dock on a planet they control" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player) {
@@ -1525,7 +1526,8 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
     this.importStrategyCard("diplomacy", {
       name     			:       "Diplomacy",
       rank			:	2,
-      img			:	"/imperium/img/strategy/INITIATIVE.png",
+      img			:	"/imperium/img/strategy/DIPLOMACY.png",
+      text			:	"The player of this card may select a sector other than New Byzantium to mire in diplomatic conflict. That sector is activated for all other players. Any planets in that sector controlled by the player are refreshed. Other players may then spend a strategy token to refresh two of their planets." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player) {
@@ -1660,6 +1662,7 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
       name     			:       "Imperial",
       rank			:	8,
       img			:	"/imperium/img/strategy/EMPIRE.png",
+      text			:	"The player of this card may score a public objective. All players then go around in Initiative Order and score secret and public objectives" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         imperium_self.game.state.round_scoring = 1;
@@ -1717,6 +1720,7 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
       name     			:       "Leadership",
       rank			:	1,
       img			:	"/imperium/img/strategy/INITIATIVE.png",
+      text			:	"The player of this card gets three tokens to allocate among their command, strategy and fleet pool. All players may then purchase additional tokens at a cost of three influence per token purchased." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
 	if (imperium_self.game.player == strategy_card_player) {
@@ -1756,6 +1760,7 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
       name     			:       "Politics",
       rank			:	3,
       img			:	"/imperium/img/strategy/POLITICS.png",
+      text			:	"The player of this card may choose a player to serve as Speaker. If New Byzantium is controlled they may then choose two upcoming agendas for debate in the Galactic Senate. All other players then have the option of spending a strategy token to purchase two action cards. ",
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.confirms_needed == 0 || imperium_self.game.confirms_needed == undefined || imperium_self.game.confirms_needed == null) {
@@ -1850,8 +1855,8 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
             imperium_self.updateStatus(html);
 
             $('.option').off();
-            $('.option').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showAgendaCard(imperium_self.game.state.agendas[s]); });
-            $('.option').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hideAgendaCard(imperium_self.game.state.agendas[s]); });
+            $('.option').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showAgendaCard(s); });
+            $('.option').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hideAgendaCard(s); });
             $('.option').on('click', function() {
 
               laws_selected++;
@@ -1901,9 +1906,8 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
       name     			:       "Technology",
       rank			:	7,
       img			:	"/imperium/img/strategy/TECH.png",
+      text			:	"The player of this card may research a technology for free, and then spend 6 resources to research a second if they so choose. All other players may then spend a strategy token and four resources to research a technology" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
-
-console.log("PLAYER: " + player + " scp: " + strategy_card_player);
 
         if (imperium_self.game.player == strategy_card_player) {
           imperium_self.playerAcknowledgeNotice("You will first have the option of researching a free-technology, and then invited to purchase an additional tech for 6 resources:", function() {
@@ -2089,6 +2093,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
       name     			:       "Trade",
       rank			:	5,
       img			:	"/imperium/img/strategy/TRADE.png",
+      text			:	"The player of this card gains 3 trade goods and refreshes their commodities. They may then choose to refresh any number of other players. Any players who have not been refreshed are then permitted to refresh their commodities by spending a trade good.",
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player) {
@@ -2174,6 +2179,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
       name     			:       "Warfare",
       rank			:	6,
       img			:	"/imperium/img/strategy/MILITARY.png",
+      text			:	"The player of this card may de-activate a sector if already activated. All other players may then produce in their home system" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player) {
@@ -4524,7 +4530,7 @@ alert("select sector with filter");
     this.importActionCard('Insubordination', {
   	name : "Insubordination" ,
   	type : "action" ,
-  	text : "" ,
+  	text : "Select a player and remove 1 token from their command pool" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -4553,9 +4559,9 @@ alert("select sector with filter");
 
 
     this.importActionCard('Lucky Shot', {
-  	name : "Insubordination" ,
+  	name : "Lucky Shot" ,
   	type : "action" ,
-  	text : "" ,
+  	text : "Destroy a destroyer, cruiser or dreadnaught in a sector with a planet you control" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -7464,7 +7470,31 @@ console.log("executing "+z[z_index].name);
         if (vote == "abstain") {
           this.updateLog(this.returnFaction(player) + " abstains");
 	} else {
-          this.updateLog(this.returnFaction(player) + " spends " + votes + " on " + vote);
+
+	  let is_planet = 0;
+	  let is_sector = 0;
+
+	  let elected_choice = this.game.state.choices[parseInt(vote)];
+
+	  if (elected_choice.indexOf("planet") == 0 || elected_choice.indexOf("new-byzantium") == 0) { is_planet = 1; }
+	  if (elected_choice.indexOf("sector") == 0) { is_sector = 1; }
+
+	  if (is_planet == 1) {
+            this.updateLog(this.returnFaction(player) + " spends " + votes + " on " + this.game.planets[this.game.state.choices[vote]].name);
+	  }
+	  if (is_sector == 1) {
+            this.updateLog(this.returnFaction(player) + " spends " + votes + " on " + this.game.sectors[this.game.state.choices[vote]].sector);
+	  }
+	  if (is_planet == 0 && is_sector == 0) {
+	    //
+	    // player?
+	    //
+	    if (this.game.state.choices.length == this.game.players_info.length) {
+              this.updateLog(this.returnFaction(player) + " spends " + votes + " on " + this.returnFaction(vote+1));
+	    } else {
+              this.updateLog(this.returnFaction(player) + " spends " + votes + " on " + vote);
+	    }
+	  }
         }
 
 
@@ -7830,7 +7860,7 @@ console.log("STRATEGY CARDS: " + JSON.stringify(this.strategy_cards));
 	//
 	// DE-ACTIVATE SYSTEMS
 	//
-        this.deactivateSystems();
+        this.deactivateSectors();
         this.unhighlightSectors();	
 
 
@@ -12890,9 +12920,13 @@ console.log(" ... and done");
     html += '</ul>';
   
     this.updateStatus(html);
+    $('.textchoice').off();
+    $('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showActionCard(s); } });
+    $('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideActionCard(s); } });
     $('.textchoice').on('click', function() {
 
       let action2 = $(this).attr("id");
+      imperium_self.hideActionCard(action2);
 
       if (action2 != "cancel") { imperium_self.hideActionCard(action2); }
       if (action2 === "cancel") { cancel_callback(); return 0; }
@@ -12928,8 +12962,8 @@ console.log(" ... and done");
     html += '</ul>';
   
     this.updateStatus(html);
-    //$('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showStrategyCard(s); } });
-    //$('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideStrategyCard(s); } });
+    $('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showStrategyCard(s); } });
+    $('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideStrategyCard(s); } });
     $('.textchoice').on('click', function() {
 
       let action2 = $(this).attr("id");
@@ -12969,8 +13003,6 @@ console.log(" ... and done");
       scards.push("");
     }
 
-console.log("CARDS: " + JSON.stringify(this.game.state.strategy_cards));
-
 
     for (let z = 0; z < this.game.state.strategy_cards.length; z++) {
       let rank = parseInt(this.strategy_cards[this.game.state.strategy_cards[z]].rank);
@@ -12988,8 +13020,8 @@ console.log("CARDS: " + JSON.stringify(this.game.state.strategy_cards));
   
     this.updateStatus(html);
     $('.textchoice').off();
-    //$('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showStrategyCard(s); } });
-    //$('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideStrategyCard(s); } });
+    $('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showStrategyCard(s); } });
+    $('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideStrategyCard(s); } });
     $('.textchoice').on('click', function() {
       let action2 = $(this).attr("id");
       imperium_self.hideStrategyCard(action2);
@@ -16791,14 +16823,14 @@ console.log("SECTOR: " + sector);
 
 
 
-  deactivateSystems() {
+  deactivateSectors() {
 
     //
     // deactivate all systems
     //
-    for (var sys in this.systems) {
+    for (let sys in this.game.sectors) {
       for (let j = 0; j < this.totalPlayers; j++) {
-        this.game.systems[sys].activated[j] = 0;
+        this.game.sectors[sys].activated[j] = 0;
       }
     }
 
@@ -17775,9 +17807,8 @@ console.log("Add: " + divname);
     $(divname).hide();
   }
   showActionCard(c) {
-    let action_cards = this.returnActionCards();
-    let thiscard = action_cards[c];
-    $('.cardbox').html('<img src="' + thiscard.img + '" style="width:100%" />');
+    let thiscard = this.action_cards[c];
+    $('.cardbox').html('<img src="' + thiscard.img + '" style="width:100%" /><div class="action_card_overlay">'+thiscard.text+'</div>');
     $('.cardbox').show();
   }
   hideActionCard(c) {
@@ -17786,7 +17817,7 @@ console.log("Add: " + divname);
   showStrategyCard(c) {
     let strategy_cards = this.returnStrategyCards();
     let thiscard = strategy_cards[c];
-    $('.cardbox').html('<img src="' + thiscard.img + '" style="width:100%" />');
+    $('.cardbox').html('<img src="' + thiscard.img + '" style="width:100%" /><div class="strategy_card_overlay">'+thiscard.text+'</div>');
     $('.cardbox').show();
   }
   hideStrategyCard(c) {
@@ -17806,8 +17837,7 @@ console.log("Add: " + divname);
     $('.cardbox').hide();
   }
   showAgendaCard(agenda) {
-    let agendas = this.returnAgendaCards();
-    $('.cardbox').html('<img src="' + agendas[agenda].img + '" style="width:100%" />');
+    $('.cardbox').html('<img src="' + this.agenda_cards[agenda].img + '" style="width:100%" /><div class="agenda_card_overlay">'+this.agenda_cards[agenda].text+'</div>');
     $('.cardbox').show();
   }
   hideAgendaCard(sector, pid) {

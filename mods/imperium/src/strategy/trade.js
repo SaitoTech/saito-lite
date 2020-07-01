@@ -3,6 +3,7 @@
       name     			:       "Trade",
       rank			:	5,
       img			:	"/imperium/img/strategy/TRADE.png",
+      text			:	"The player of this card gains 3 trade goods and refreshes their commodities. They may then choose to refresh any number of other players. Any players who have not been refreshed are then permitted to refresh their commodities by spending a trade good.",
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player) {
