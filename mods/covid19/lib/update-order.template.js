@@ -5,7 +5,7 @@ module.exports = UpdateOrderTemplate = (app, data) => {
   html = `
   <div class="order-template">
     
-  <h2>Order <span class="share-order"></span></h2>
+  <h2>Order <span class="share-order"></span><span class="request-photo"></span></h2>
 
   <div class="order-head grid-2-1-columns">
     <div class="main-form grid-2"></div>

@@ -548,4 +548,12 @@ td.inq-product-id div.editable {
   .powered-by {
     display: none;
   }
+  .modal-form-wrapper {
+    height: calc(94vh - 6em);
+    top: 8em;
+    transform: translate(-50%, 0);
+  }
+  button, .button {
+    margin: 1em;
+  }
 }

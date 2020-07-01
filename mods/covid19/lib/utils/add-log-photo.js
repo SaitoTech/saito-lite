@@ -21,7 +21,11 @@ module.exports = AddLogPhoto = {
       document.getElementById('order_id').value = data.order_id;
       data.covid19.treatHide(document.getElementById('order_id'));
       
-      data.covid19.treatBoolean(document.getElementById('public'));
+      if(data.covid19.isAdmin()){
+        data.covid19.treatBoolean(document.getElementById('public'));
+      } else {
+        data.covid19.treatHide(document.getElementById('public'));
+      }
       
       document.getElementById('type').value = 'photo';
       data.covid19.treatHide(document.getElementById('type'));
@@ -29,6 +33,7 @@ module.exports = AddLogPhoto = {
       data.covid19.treatMobilePhoto(document.getElementById('body'));
       document.getElementById('body').parentElement.previousElementSibling.innerHTML = "Photo";
       
+      app.connection.emit('log_photo_render_complete');
     });
     
    

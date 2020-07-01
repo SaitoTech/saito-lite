@@ -9,9 +9,6 @@ module.exports = AddLogImage = {
     data.covid19.returnFormFromPragma("covid19", "log", function(res) {
       document.querySelector('.modal-form').innerHTML = res;
 
-      //data.covid19.treatHide(document.getElementById('object_table'));
-      //document.getElementById('object_table').value = data.target_object;
-      //data.covid19.treatHide(document.getElementById('object_id'));
       document.getElementById('ts').value = new Date().getTime();
       data.covid19.treatHide(document.getElementById('ts'));
       
@@ -21,7 +18,12 @@ module.exports = AddLogImage = {
       document.getElementById('order_id').value = data.order_id;
       data.covid19.treatHide(document.getElementById('order_id'));
       
-      data.covid19.treatBoolean(document.getElementById('public'));
+      if(data.covid19.isAdmin()){
+        data.covid19.treatBoolean(document.getElementById('public'));
+      } else {
+        data.covid19.treatHide(document.getElementById('public'));
+      }
+
       
       document.getElementById('type').value = 'photo';
       data.covid19.treatHide(document.getElementById('type'));
