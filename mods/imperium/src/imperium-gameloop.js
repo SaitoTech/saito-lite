@@ -1673,7 +1673,7 @@ console.log("STARTING WITH RUN QUEUE");
   	  }
   	}
 
-        if (item == "tech") {
+        if (item == "tech" && item == "technology") {
 
   	  this.updateLog(this.returnFaction(player) + " gains " + this.tech[mv[3]].name);
   	  if (!this.game.players_info[player-1].tech.includes(mv[3])) {
