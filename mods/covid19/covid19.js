@@ -8,7 +8,7 @@ const BundleManager = require('./lib/bundle-manager');
 const CategoryManager = require('./lib/category-manager')
 const OrderManager = require('./lib/order-manager')
 const OrderTracker = require('./lib/orders/order-tracker');
-
+const RequestPhoto = require('./lib/orders/request-photo');
 const InquirePage = require('./lib/inquire-page');
 
 const Certification = require('./lib/certification');
@@ -247,6 +247,11 @@ class Covid19 extends DBModTemplate {
     if (page == "order-tracker") {
       OrderTracker.render(app, data);
       OrderTracker.attachEvents(app, data);
+    }
+
+    if (page == "order-photo") {
+      RequestPhoto.render(app, data);
+      RequestPhoto.attachEvents(app, data);
     }
 
     if (page == "order-manager") {
