@@ -21,7 +21,7 @@ body {
 
 .status {
   position: absolute;
-  bottom: 1em;
+  bottom: 1vh;
   left: 54vw;
   height: 32vh;
   width: 32vh !important;
@@ -91,7 +91,7 @@ body {
 .player-info.p1 {
   min-width: 30vh;
   height: 32vh;
-  bottom: 1em;
+  bottom: 1vh;
   left: 43vw;
   transform: translateX(-50%);
   width: 16vw;
@@ -386,7 +386,7 @@ body {
   }
   .player-info {
     width: 25vw;
-    height: 10vh;
+    height: 12vh;
     background-color: #4448;
     color: #fff;
     padding: 1em;

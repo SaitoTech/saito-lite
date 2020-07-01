@@ -1,6 +1,7 @@
 const LogTemplate = require('./log.template');
 const AddLog = require('./add-log');
 const AddLogImage = require('./add-log-image');
+const AddLogPhoto = require('./add-log-photo');
 //const Photograph = require('../../../photograph/photograph');
 
 module.exports = Log = {
@@ -91,66 +92,83 @@ module.exports = Log = {
       AddLogImage.attachEvents(app, data);
     });
 
-    if (app.modules.returnModule("Photograph")) {
+    /*
+    document.querySelector('.fa-compass').addEventListener('click', () => {
+      AddLogPhoto.render(app, data);
+      AddLogPhoto.attachEvents(app, data);
+    }); 
+    */
+    var el = document.createElement('input');
+    var supported = el.capture != undefined;
+    if (supported) {
       document.querySelector('.fa-camera').classList.remove('hidden');
       document.querySelector('.fa-camera').addEventListener('click', function () {
-        var camera = app.modules.returnModule('Photograph');
-        camera.takePhotograph(
-          function (image) {
-            console.log('snap, snap');
-            console.log(image);
-            var log_table = "log";
-            var values = [];
-            var update = {
-              image: image,
-              location: ""
-            }
-            let obj = {};
-            obj.dbname = 'covid19';
-            obj.table = log_table;
-            obj.column = "order_id";
-            obj.value = data.order_id;
-            values.push(obj);
-            let tm = {};
-            tm.dbname = 'covid19';
-            tm.table = log_table;
-            tm.column = "ts";
-            tm.value = new Date().getTime();
-            values.push(tm);
-            let type = {};
-            type.dbname = 'covid19';
-            type.table = log_table;
-            type.column = "type";
-            type.value = "photo";
-            values.push(type);
-            let body = {};
-            body.dbname = 'covid19';
-            body.table = log_table;
-            body.column = "body";
-            body.value = JSON.stringify(update);
-            values.push(body);
-
-            if (values.length > 0) {
-              data.covid19.submitValues(values);
-            }
-
-            if(data.location) {
-              location = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + data.location;
-            } else {
-              location = window.location;
-            }
-          }
-          ,
-          function () {
-            console.log('camera close action');
-            if(data.location) {
-              location = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + data.location;
-            } else {
-              location = window.location;
-            }
-          }
-        );
+        AddLogPhoto.render(app, data);
+        AddLogPhoto.attachEvents(app, data);
       });
+    } else {
+      if (app.modules.returnModule("Photograph")) {
+        document.querySelector('.fa-camera').classList.remove('hidden');
+        document.querySelector('.fa-camera').addEventListener('click', function () {
+          var camera = app.modules.returnModule('Photograph');
+          camera.takePhotograph(
+            function (image) {
+              console.log('snap, snap');
+              console.log(image);
+              var log_table = "log";
+              var values = [];
+              var update = {
+                image: image,
+                location: ""
+              }
+              let obj = {};
+              obj.dbname = 'covid19';
+              obj.table = log_table;
+              obj.column = "order_id";
+              obj.value = data.order_id;
+              values.push(obj);
+              let tm = {};
+              tm.dbname = 'covid19';
+              tm.table = log_table;
+              tm.column = "ts";
+              tm.value = new Date().getTime();
+              values.push(tm);
+              let type = {};
+              type.dbname = 'covid19';
+              type.table = log_table;
+              type.column = "type";
+              type.value = "photo";
+              values.push(type);
+              let body = {};
+              body.dbname = 'covid19';
+              body.table = log_table;
+              body.column = "body";
+              body.value = JSON.stringify(update);
+              values.push(body);
+
+              if (values.length > 0) {
+                data.covid19.submitValues(values);
+              }
+
+              if (data.location) {
+                location = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + data.location;
+              } else {
+                location = window.location;
+              }
+            }
+            ,
+            function () {
+              console.log('camera close action');
+              if (data.location) {
+                location = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + data.location;
+              } else {
+                location = window.location;
+              }
+            }
+          );
+        });
+      }
+
     }
   }
 }

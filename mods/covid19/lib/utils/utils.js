@@ -411,6 +411,62 @@ select * from
 
   },
 
+  treatMobilePhoto(el) {
+
+    let cell = el.id;
+    let html = `
+          <div class="product-image-holder" id="img-holder-${cell}">
+            <img class="product-image" id="img-${cell}" src="${el.value}" />
+          </div>
+          <input class="products-${cell}" id="file-${cell}" type="file" accept="image" capture="camera">
+          `;
+    el.parentNode.innerHTML += html;
+    //when rewriting the partent innerhtml - the element reference is lost.
+    el = document.getElementById(el.id);
+    el.classList.add('hidden');
+
+    document.getElementById(`file-${cell}`).addEventListener('change', (e) => {
+      var img = document.getElementById(`img-${cell}`);
+      var reader = new FileReader();
+      var file = e.target.files[0];
+      var original = new Image();
+      original.onload = function () {
+        var w = 0;
+        var h = 0;
+        var r = 1;
+
+        var canvas = document.createElement('canvas');
+
+        if (original.width > 900) {
+          r = 900 / original.width;
+        } if (r * original.height > 300) {
+          r = 600 / original.height;
+        }
+        w = original.width * r;
+        h = original.height * r;
+
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext('2d').drawImage(original, 0, 0, w, h);
+        var result = canvas.toDataURL(file.type);
+        img.src = result;
+        var payload = {image: result};
+        el.value = JSON.stringify(payload);
+      }
+      reader.addEventListener("load", function () {
+
+        original.src = reader.result;
+
+      }, false);
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById(`img-holder-${cell}`).addEventListener('click', e => {
+      document.getElementById(`file-${cell}`).click();
+    });
+
+  },
+
   treatACDropDown(el, dbtable, idcol, valuecol, log = false) {
 
     if(log) {

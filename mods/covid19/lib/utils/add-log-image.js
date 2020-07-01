@@ -1,4 +1,4 @@
-const AddLogImageTemplate = require('./add-log-image.template');
+const AddLogImageTemplate = require('./add-log-photo.template');
 
 module.exports = AddLogImage = {
 
@@ -23,10 +23,10 @@ module.exports = AddLogImage = {
       
       data.covid19.treatBoolean(document.getElementById('public'));
       
-      document.getElementById('type').value = 'image';
+      document.getElementById('type').value = 'photo';
       data.covid19.treatHide(document.getElementById('type'));
       
-      data.covid19.treatPhoto(document.getElementById('body'));
+      data.covid19.treatMobilePhoto(document.getElementById('body'));
       document.getElementById('body').parentElement.previousElementSibling.innerHTML = "Image";
       
     });
@@ -41,11 +41,9 @@ module.exports = AddLogImage = {
       document.querySelector('.log-template').destroy();
       UpdateSuccess.render(app, data);
       UpdateSuccess.attachEvents(app, data);
-
     });
 
     document.getElementById('cancel-log').addEventListener('click', (e) => {
-     //document.querySelector('.file').style.display = "none";
      document.querySelector('.log-template').destroy();
     });
 
