@@ -75,7 +75,6 @@
     let factions = this.returnFactions();
     let html =
     `
-      <div id="menu-container">
         <div style="margin-bottom: 1em">
           The Planetary Empires:
         </div>
@@ -86,7 +85,6 @@
     }
     html += `
         </ul>
-      </div>
     `
     $('.hud-menu-overlay').html(html);
     $('.hud-menu-overlay').show();
@@ -127,7 +125,6 @@
     let factions = this.returnFactions();
     let html =
     `
-      <div id="menu-container">
         <div style="margin-bottom: 1em">
           The Technological Empires:
         </div>
@@ -138,7 +135,6 @@
     }
     html += `
         </ul>
-      </div>
     `
     $('.hud-menu-overlay').html(html);
     $('.hud-menu-overlay').show();
@@ -172,13 +168,13 @@
   
     let imperium_self = this;
     let laws = this.returnAgendaCards();
-    let html = '<div id="menu-container">';
-  
+    let html = '';  
+
     if (this.game.state.laws.length > 0) {
       html += '<div style="margin-bottom: 1em">Galactic Laws Under Enforcement:</div>';
       html += '<p><ul>';
       for (let i = 0; i < this.game.state.laws.length; i++) {
-        html += `  <li class="card" id="${i}">${laws[this.game.state.laws[i]].name}</li>`;
+        html += `  <li class="card option" id="${i}">${laws[this.game.state.laws[i]].name}</li>`;
       }
       html += '</ul>';
       html += '</p>';
@@ -188,19 +184,22 @@
       html += '<div style="margin-bottom: 1em">Galactic Laws Under Consideration:</div>';
       html += '<ul>';
       for (let i = 0; i < this.game.state.agendas.length; i++) {
-        html += `  <li class="card options" id="${i}">${laws[this.game.state.agendas[i]].name}</li>`;
+        html += `  <li class="card option" id="${i}">${laws[this.game.state.agendas[i]].name}</li>`;
       }
       html += '</ul>';
     }
-  
+
     if (this.game.state.laws.length == 0 && this.game.state.agendas.length == 0) {
       html += 'There are no laws in force or agendas up for consideration at this time.';
     }
   
-    html += '</div>';
-  
     $('.hud-menu-overlay').html(html);
     $('.hud-menu-overlay').show();
+
+    $('.option').off();
+    $('.option').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showAgendaCard(imperium_self.game.state.agendas[s]); });
+    $('.option').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hideAgendaCard(imperium_self.game.state.agendas[s]); });
+  
     $('.status').hide();
   
   }

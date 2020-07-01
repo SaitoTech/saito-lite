@@ -115,16 +115,6 @@ addUIEvents() {
 
   var html = `
     <div class="hud-token-count">
-      <div>
-        <span class="fa-stack fa-3x">
-        <i class="far fa-futbol fa-stack-2x pc white-stroke"></i>
-        <span class="fa fa-stack-1x">
-        <span class="token_count">
-        ${this.game.players_info[this.game.player-1].strategy_tokens}
-        </span>
-        </span>
-        </span>
-      </div>
       <div>	
         <span class="fa-stack fa-3x">
         <i class="fas fa-dice-d20 fa-stack-2x pc white-stroke"></i>
@@ -137,10 +127,40 @@ addUIEvents() {
       </div>
       <div>
         <span class="fa-stack fa-3x">
+        <i class="far fa-futbol fa-stack-2x pc white-stroke"></i>
+        <span class="fa fa-stack-1x">
+        <span class="token_count">
+        ${this.game.players_info[this.game.player-1].strategy_tokens}
+        </span>
+        </span>
+        </span>
+      </div>
+      <div>
+        <span class="fa-stack fa-3x">
         <i class="fas fa-space-shuttle fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
         <span class="token_count">
         ${this.game.players_info[this.game.player-1].fleet_supply}
+        </span>
+        </span>
+        </span>
+      </div>
+      <div>
+        <span class="fa-stack fa-3x">
+        <i class="fas fa-box fa-stack-2x pc white-stroke"></i>
+        <span class="fa fa-stack-1x">
+        <span class="token_count">
+        ${this.game.players_info[this.game.player-1].commodities}
+        </span>
+        </span>
+        </span>
+      </div>
+      <div>
+        <span class="fa-stack fa-3x">
+        <i class="fas fa-database fa-stack-2x pc white-stroke"></i>
+        <span class="fa fa-stack-1x">
+        <span class="token_count">
+        ${this.game.players_info[this.game.player-1].goods}
         </span>
         </span>
         </span>

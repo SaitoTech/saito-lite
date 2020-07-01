@@ -310,7 +310,7 @@ console.log("RESOLVED 2: " + this.game.confirms_received + " of " + this.game.co
 	    //
 	    // reset menu track vars
 	    //
-  	    this.tracker = this.returnPlayerTurnTracker();
+  	    this.game.tracker = this.returnPlayerTurnTracker();
 
 	    //
 	    // reset vars like "planets_conquered_this_turn"
@@ -1589,6 +1589,7 @@ console.log("STARTING WITH RUN QUEUE");
 	let stuff_in_return = JSON.parse(mv[4]);
   	this.game.queue.splice(qe, 1);
 
+	this.updateLog(this.returnName(offering_faction) + " makes a trade offer to " + this.returnName(faction_to_consider));
 	if (this.game.player == faction_to_consider) {
 	  this.playerHandleTradeOffer(offering_faction, stuff_on_offer, stuff_in_return);
 	}
@@ -1607,6 +1608,10 @@ console.log("STARTING WITH RUN QUEUE");
         this.game.players_info[refusing_faction-1].traded_this_turn = 1;
         this.game.players_info[faction_that_offered-1].traded_this_turn = 1;
 
+	if (offering_faction == this.game.player) {
+	  this.game.queue.push("acknowledge\tYour trade offer has been spurned by "+this.returnFaction(faction_responding));
+	}
+
 	this.updateLog(this.returnName(refusing_faction) + " spurns a trade offered by " + this.returnName(faction_that_offered));
         return 1;
 
@@ -1622,6 +1627,10 @@ console.log("STARTING WITH RUN QUEUE");
   	let response	 	  = JSON.parse(mv[4]);
 
   	this.game.queue.splice(qe, 1);
+
+	if (offering_faction == this.game.player) {
+	  this.game.queue.push("acknowledge\tYour trade offer has been accepted by "+this.returnFaction(faction_responding));
+	}
 
         this.game.players_info[offering_faction-1].traded_this_turn = 1;
         this.game.players_info[faction_responding-1].traded_this_turn = 1;

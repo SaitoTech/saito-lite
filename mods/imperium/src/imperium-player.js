@@ -172,22 +172,22 @@
           html  += '<p style="margin-top:20px"></p>';
           html  += '<div class="terminal_header2 sf-readable"><div class="player_color_box '+playercol+'"></div>' + this.returnFaction(this.game.player) + ":</div><p><ul class='terminal_header3'>";
       if (this.game.players_info[this.game.player-1].command_tokens > 0) {
-	if (this.game.state.active_played_moved == 0) {
+	if (this.game.state.active_player_moved == 0) {
           html += '<li class="option" id="activate">activate system</li>';
         }
       }
       if (this.canPlayerPlayStrategyCard(this.game.player) == 1) {
-	if (this.game.state.active_played_moved == 0) {
+	if (this.game.state.active_player_moved == 0) {
           html += '<li class="option" id="select_strategy_card">play strategy card</li>';
         }
       }
-      if (ac.length > 0 && this.tracker.action_card == 0 && this.canPlayerPlayActionCard(this.game.player) == 1) {
-	if (this.game.state.active_played_moved == 0) {
+      if (ac.length > 0 && this.game.tracker.action_card == 0 && this.canPlayerPlayActionCard(this.game.player) == 1) {
+	if (this.game.state.active_player_moved == 0) {
           html += '<li class="option" id="action">play action card</li>';
         }
       }
-
-      if (this.tracker.trade == 0 && this.canPlayerTrade(this.game.player) == 1) {
+console.log(this.game.tracker.trade + " -- " + this.canPlayerTrade(this.game.player));
+      if (this.game.tracker.trade == 0 && this.canPlayerTrade(this.game.player) == 1) {
         html += '<li class="option" id="trade">trade</li>';
       }
 
@@ -211,7 +211,7 @@
       }
   
       if (this.canPlayerPass(this.game.player) == 1) {
-	if (this.game.state.active_played_moved == 1) {
+	if (this.game.state.active_player_moved == 1) {
 	  //
 	  // if we have already moved, we end turn rather than pass
 	  //
@@ -223,7 +223,7 @@
           html += '<li class="option" id="pass">pass</li>';
         }
       } else {
-	if (this.game.state.active_played_moved == 1) {
+	if (this.game.state.active_player_moved == 1) {
 	  //
 	  // if we have already moved, we end turn rather than pass
 	  //
@@ -246,7 +246,7 @@
 	  for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
 	    if (action2 == tech_attach_menu_triggers[i]) {
               $(this).remove();
-	      imperium_self.game.state.active_played_moved = 1;
+	      imperium_self.game.state.active_player_moved = 1;
               z[tech_attach_menu_index[i]].menuOptionActivated(imperium_self, "main", imperium_self.game.player);
 	      return;
 	    }
@@ -254,13 +254,13 @@
         }
 
         if (action2 == "activate") {
-	  imperium_self.game.state.active_played_moved = 1;
+	  imperium_self.game.state.active_player_moved = 1;
   	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.playerActivateSystem();
         }
 
         if (action2 == "select_strategy_card") {
-	  imperium_self.game.state.active_played_moved = 1;
+	  imperium_self.game.state.active_player_moved = 1;
   	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.playerSelectStrategyCard(function(success) {
   	    imperium_self.addMove("strategy_card_after\t"+success+"\t"+imperium_self.game.player+"\t1");
@@ -272,7 +272,7 @@
         if (action2 == "action") {
   	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.playerSelectActionCard(function(card) {
-	    if (imperium_self.action_cards[card].type == "action") { imperium_self.game.state.active_played_moved = 1; }
+	    if (imperium_self.action_cards[card].type == "action") { imperium_self.game.state.active_player_moved = 1; }
   	    imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
@@ -1358,7 +1358,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
     let imperium_self = this;
     let options_available = 0;
 
-    if (this.tracker.invasion == undefined) { this.tracker = this.returnPlayerTurnTracker(); this.tracker.activate_system = 1; }
+    if (this.game.tracker.invasion == undefined) { this.game.tracker = this.returnPlayerTurnTracker(); this.game.tracker.activate_system = 1; }
 
     //
     // check to see if any ships survived....
@@ -1366,15 +1366,15 @@ console.log("ERROR: you had no hits left to assign, bug?");
     let playercol = "player_color_"+this.game.player;
     let html  = "<div class='sf-readable'><div class='player_color_box "+playercol+"'></div>" + this.returnFaction(player) + ": </div><ul>";
 
-    if (this.canPlayerProduceInSector(player, sector) && this.tracker.production == 0) {
+    if (this.canPlayerProduceInSector(player, sector) && this.game.tracker.production == 0) {
       html += '<li class="option" id="produce">produce units</li>';
       options_available++;
     }
-    if (this.canPlayerInvadePlanet(player, sector) && this.tracker.invasion == 0) {
+    if (this.canPlayerInvadePlanet(player, sector) && this.game.tracker.invasion == 0) {
       html += '<li class="option" id="invade">invade planet</li>';
       options_available++;
     }
-    //if (this.canPlayerPlayActionCard(player) && this.tracker.action_card == 0) {
+    //if (this.canPlayerPlayActionCard(player) && this.game.tracker.action_card == 0) {
     //  html += '<li class="option" id="action">action card</li>';
     //  options_available++;
     //}
@@ -1425,13 +1425,13 @@ console.log("ERROR: you had no hits left to assign, bug?");
       }  
 
       if (action2 == "invade") {
-        imperium_self.tracker.invasion = 1;
+        imperium_self.game.tracker.invasion = 1;
         imperium_self.playerInvadePlanet(player, sector);
       }
 
       if (action2 == "action") {
         imperium_self.playerSelectActionCard(function(card) {
-          imperium_self.tracker.action_card = 1;
+          imperium_self.game.tracker.action_card = 1;
           imperium_self.addMove("continue\t"+player+"\t"+sector);
           imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
           imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
@@ -1881,7 +1881,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
   	      let planet_idx = imperium_self.returnPlayersLeastDefendedPlanetInSector(imperium_self.game.player, sector);
   	      if (stuff_to_build[y] != "infantry") { planet_idx = -1; }
   	      imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+planet_idx+"\t"+stuff_to_build[y]+"\t"+sector);
-	      imperium_self.tracker.production = 1;
+	      imperium_self.game.tracker.production = 1;
             }
             imperium_self.endTurn();
             return;

@@ -55,7 +55,7 @@ class Imperium extends GameTemplate {
     // game-related
     //
     this.assigns = [];  // floating units needing assignment to ships
-    this.tracker = {};  // track options in turn
+    this.game.tracker = {};  // track options in turn
     this.activated_systems_player = 0;
 
     return this;

@@ -55,7 +55,7 @@ class Imperium extends GameTemplate {
     // game-related
     //
     this.assigns = [];  // floating units needing assignment to ships
-    this.tracker = {};  // track options in turn
+    this.game.tracker = {};  // track options in turn
     this.activated_systems_player = 0;
 
     return this;
@@ -3978,7 +3978,7 @@ ACTION CARD - types
     this.importActionCard('plague', {
   	name : "Plague" ,
   	type : "action" ,
-  	text : "Select a planet and destroy infantry on that planet. Roll a dice for each infantry, and destroy those with rolls of 6 or higher." ,
+  	text : "ACTION: Select a planet and destroy infantry on that planet. Roll a dice for each infantry, and destroy those with rolls of 6 or higher." ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (imperium_self.game.player == action_card_player) {
 
@@ -4045,7 +4045,7 @@ ACTION CARD - types
     this.importActionCard('repeal-law', {
   	name : "Repeal Law" ,
   	type : "action" ,
-  	text : "Repeal one law that is in effect." ,
+  	text : "ACTION: Repeal one law that is in effect." ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
           if (imperium_self.game.player == action_card_player) {
@@ -4060,7 +4060,7 @@ imperium_self.endTurn();
     this.importActionCard('veto', {
   	name : "Veto" ,
   	type : "action" ,
-  	text : "Select one agenda to remove from consideration and draw a replacement" ,
+  	text : "ACTION: Select one agenda to remove from consideration and draw a replacement" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
           if (imperium_self.game.player == action_card_player) {
@@ -4120,7 +4120,7 @@ imperium_self.endTurn();
     this.importActionCard('military-drills', {
   	name : "Military Drills" ,
   	type : "action" ,
-  	text : "Gain two command or strategy tokens" ,
+  	text : "ACTION: Gain two new command tokens" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (imperium_self.game.player == action_card_player) {
 	    imperium_self.playerAllocateNewTokens(action_card_player, 2);
@@ -4134,7 +4134,7 @@ imperium_self.endTurn();
     this.importActionCard('cripple-defenses', {
   	name : "Cripple Defenses" ,
   	type : "action" ,
-  	text : "Select a planet and destroy all PDS units on that planet" ,
+  	text : "ACTION: Select a planet and destroy all PDS units on that planet" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (imperium_self.game.player == action_card_player) {
 
@@ -4177,7 +4177,7 @@ imperium_self.endTurn();
     this.importActionCard('reactor-meltdown', {
   	name : "Reactor Meltdown" ,
   	type : "action" ,
-  	text : "Select a non-homeworld planet and destroy and destroy one Space Dock on that planet" ,
+  	text : "ACTION: Select a non-homeworld planet and destroy and destroy one Space Dock on that planet" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (imperium_self.game.player == action_card_player) {
 
@@ -4226,7 +4226,7 @@ alert("H: " + planet);
     this.importActionCard('lost-mission', {
   	name : "Lost Mission" ,
   	type : "action" ,
-  	text : "Place 1 Destroyer in a system with no existing ships" ,
+  	text : "ACTION: Place 1 Destroyer in a system with no existing ships" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (imperium_self.game.player == action_card_player) {
 
@@ -4255,7 +4255,7 @@ alert("H: " + planet);
     this.importActionCard('accidental-colonization', {
   	name : "Accidental Colonization" ,
   	type : "action" ,
-  	text : "Gain control of one planet not controlled by any player" ,
+  	text : "ACTION: Gain control of one planet not controlled by any player" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -4290,7 +4290,7 @@ alert("H: " + planet);
     this.importActionCard('uprising', {
   	name : "Uprising" ,
   	type : "action" ,
-  	text : "Exhaust a non-home planet card held by another player. Gain trade goods equal to resource value." ,
+  	text : "ACTION: Exhaust a non-home planet card held by another player. Gain trade goods equal to resource value." ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -4327,7 +4327,7 @@ alert("H: " + planet);
     this.importActionCard('diaspora-conflict', {
   	name : "Diaspora Conflict" ,
   	type : "action" ,
-  	text : "Exhaust a non-home planet card held by another player. Gain trade goods equal to resource value." ,
+  	text : "ACTION: Exhaust a non-home planet card held by another player. Gain trade goods equal to resource value." ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -4364,7 +4364,7 @@ alert("H: " + planet);
     this.importActionCard('economic-initiative', {
   	name : "Economic Initiative" ,
   	type : "action" ,
-  	text : "Ready each cultural planet in your control" ,
+  	text : "ACTION: Ready each cultural planet in your control" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  for (let i in imperium_self.game.planets) {
@@ -4382,7 +4382,7 @@ alert("H: " + planet);
     this.importActionCard('focused-research', {
   	name : "Focused Research" ,
   	type : "action" ,
-  	text : "Spend 4 Trade Goods to Research 1 Technology" ,
+  	text : "ACTION: Spend 4 Trade Goods to Research 1 Technology" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  let p = imperium_self.game.players_info[imperium_self.game.player-1];
@@ -4414,7 +4414,7 @@ alert("H: " + planet);
     this.importActionCard('frontline-deployment', {
   	name : "Frontline Deployment" ,
   	type : "action" ,
-  	text : "Deploy three infantry on one planet you control" ,
+  	text : "ACTION: Deploy three infantry on one planet you control" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
           if (imperium_self.game.player == action_card_player) {
@@ -4445,7 +4445,7 @@ alert("H: " + planet);
     this.importActionCard('ghost-ship', {
   	name : "Ghost Ship" ,
   	type : "action" ,
-  	text : "Place a destroyer in a sector with a wormhole and no enemy ships" ,
+  	text : "ACTION: Place a destroyer in a sector with a wormhole and no enemy ships" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
           if (imperium_self.game.player == action_card_player) {
@@ -4476,7 +4476,7 @@ alert("select sector with filter");
     this.importActionCard('war-effort', {
   	name : "War Effort" ,
   	type : "action" ,
-  	text : "Place a cruiser in a sector with one of your ships" ,
+  	text : "ACTION: Place a cruiser in a sector with one of your ships" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
           if (imperium_self.game.player == action_card_player) {
@@ -4508,7 +4508,7 @@ alert("select sector with filter");
     this.importActionCard('industrial-initiative', {
   	name : "Industrial Initiative" ,
   	type : "action" ,
-  	text : "Gain a trade good for each industrial planet you control" ,
+  	text : "ACTION: Gain a trade good for each industrial planet you control" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  let trade_goods_to_gain = 0;
@@ -4535,7 +4535,7 @@ alert("select sector with filter");
     this.importActionCard('Insubordination', {
   	name : "Insubordination" ,
   	type : "action" ,
-  	text : "Select a player and remove 1 token from their command pool" ,
+  	text : "ACTION: Select a player and remove 1 token from their command pool" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -4566,7 +4566,7 @@ alert("select sector with filter");
     this.importActionCard('Lucky Shot', {
   	name : "Lucky Shot" ,
   	type : "action" ,
-  	text : "Destroy a destroyer, cruiser or dreadnaught in a sector with a planet you control" ,
+  	text : "ACTION: Destroy a destroyer, cruiser or dreadnaught in a sector with a planet you control" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -4624,7 +4624,7 @@ alert("select sector with filter");
     this.importActionCard('mining-initiative-ac', {
   	name : "Mining Initiative" ,
   	type : "action" ,
-  	text : "Gain trade goods equal to the highest resource value planet you control" ,
+  	text : "ACTION: Gain trade goods equal to the highest resource value planet you control" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (imperium_self.game.player == action_card_player) {
 
@@ -4651,7 +4651,7 @@ alert("select sector with filter");
     this.importActionCard('rise-of-a-messiah', {
   	name : "Rise of a Messiah" ,
   	type : "action" ,
-  	text : "Add one infantry to each planet player controls" ,
+  	text : "ACTION: Add one infantry to each planet player controls" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  for (let i in imperium_self.game.planets) {
 	    if (imperium_self.game.planets[i].owner == action_card_player) {
@@ -4668,7 +4668,7 @@ alert("select sector with filter");
     this.importActionCard('unstable-planet', {
   	name : "Unstable Planet" ,
   	type : "action" ,
-  	text : "Choose a hazardous planet and exhaust it. Destroy 3 infantry on that planet if they exist" ,
+  	text : "ACTION: Choose a hazardous planet and exhaust it. Destroy 3 infantry on that planet if they exist" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -4720,7 +4720,7 @@ alert("select sector with filter");
     this.importActionCard('Covert Operation', {
   	name : "Covert Operation" ,
   	type : "action" ,
-  	text : "Choose a player. They give you one of their action cards, if possible" ,
+  	text : "ACTION: Choose a player. They give you one of their action cards, if possible" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -4751,7 +4751,7 @@ alert("select sector with filter");
     this.importActionCard('tactical-bombardment', {
   	name : "Tactical Bombardment" ,
   	type : "action" ,
-  	text : "Choose a sector in which you have ships with bombardment. Exhaust all planets in that sector" ,
+  	text : "ACTION: Choose a sector in which you have ships with bombardment. Exhaust all planets in that sector" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -4789,7 +4789,7 @@ alert("select sector with filter");
     this.importActionCard('signal-jamming', {
   	name : "Signal Jamming" ,
   	type : "action" ,
-  	text : "Choose a player. They must activate a system in or next to a system in which you have a ship" ,
+  	text : "ACTION: Choose a player. They must activate a system in or next to a system in which you have a ship" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -4831,7 +4831,7 @@ alert("select sector with filter");
     this.importActionCard('unexpected-action', {
   	name : "Unexpected Action" ,
   	type : "action" ,
-  	text : "Deactivate a stystem you have activated. Gain one command or strategy token: ", 
+  	text : "ACTION: Deactivate a stystem you have activated. Gain one command or strategy token: ", 
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -5947,7 +5947,6 @@ console.log(" 2THIS LAW: " + JSON.stringify(this_law));
     let factions = this.returnFactions();
     let html =
     `
-      <div id="menu-container">
         <div style="margin-bottom: 1em">
           The Planetary Empires:
         </div>
@@ -5958,7 +5957,6 @@ console.log(" 2THIS LAW: " + JSON.stringify(this_law));
     }
     html += `
         </ul>
-      </div>
     `
     $('.hud-menu-overlay').html(html);
     $('.hud-menu-overlay').show();
@@ -5999,7 +5997,6 @@ console.log(" 2THIS LAW: " + JSON.stringify(this_law));
     let factions = this.returnFactions();
     let html =
     `
-      <div id="menu-container">
         <div style="margin-bottom: 1em">
           The Technological Empires:
         </div>
@@ -6010,7 +6007,6 @@ console.log(" 2THIS LAW: " + JSON.stringify(this_law));
     }
     html += `
         </ul>
-      </div>
     `
     $('.hud-menu-overlay').html(html);
     $('.hud-menu-overlay').show();
@@ -6044,13 +6040,13 @@ console.log(" 2THIS LAW: " + JSON.stringify(this_law));
   
     let imperium_self = this;
     let laws = this.returnAgendaCards();
-    let html = '<div id="menu-container">';
-  
+    let html = '';  
+
     if (this.game.state.laws.length > 0) {
       html += '<div style="margin-bottom: 1em">Galactic Laws Under Enforcement:</div>';
       html += '<p><ul>';
       for (let i = 0; i < this.game.state.laws.length; i++) {
-        html += `  <li class="card" id="${i}">${laws[this.game.state.laws[i]].name}</li>`;
+        html += `  <li class="card option" id="${i}">${laws[this.game.state.laws[i]].name}</li>`;
       }
       html += '</ul>';
       html += '</p>';
@@ -6060,19 +6056,22 @@ console.log(" 2THIS LAW: " + JSON.stringify(this_law));
       html += '<div style="margin-bottom: 1em">Galactic Laws Under Consideration:</div>';
       html += '<ul>';
       for (let i = 0; i < this.game.state.agendas.length; i++) {
-        html += `  <li class="card options" id="${i}">${laws[this.game.state.agendas[i]].name}</li>`;
+        html += `  <li class="card option" id="${i}">${laws[this.game.state.agendas[i]].name}</li>`;
       }
       html += '</ul>';
     }
-  
+
     if (this.game.state.laws.length == 0 && this.game.state.agendas.length == 0) {
       html += 'There are no laws in force or agendas up for consideration at this time.';
     }
   
-    html += '</div>';
-  
     $('.hud-menu-overlay').html(html);
     $('.hud-menu-overlay').show();
+
+    $('.option').off();
+    $('.option').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showAgendaCard(imperium_self.game.state.agendas[s]); });
+    $('.option').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hideAgendaCard(imperium_self.game.state.agendas[s]); });
+  
     $('.status').hide();
   
   }
@@ -7041,7 +7040,7 @@ console.log("RESOLVED 2: " + this.game.confirms_received + " of " + this.game.co
 	    //
 	    // reset menu track vars
 	    //
-  	    this.tracker = this.returnPlayerTurnTracker();
+  	    this.game.tracker = this.returnPlayerTurnTracker();
 
 	    //
 	    // reset vars like "planets_conquered_this_turn"
@@ -8320,6 +8319,7 @@ console.log("STARTING WITH RUN QUEUE");
 	let stuff_in_return = JSON.parse(mv[4]);
   	this.game.queue.splice(qe, 1);
 
+	this.updateLog(this.returnName(offering_faction) + " makes a trade offer to " + this.returnName(faction_to_consider));
 	if (this.game.player == faction_to_consider) {
 	  this.playerHandleTradeOffer(offering_faction, stuff_on_offer, stuff_in_return);
 	}
@@ -8338,6 +8338,10 @@ console.log("STARTING WITH RUN QUEUE");
         this.game.players_info[refusing_faction-1].traded_this_turn = 1;
         this.game.players_info[faction_that_offered-1].traded_this_turn = 1;
 
+	if (offering_faction == this.game.player) {
+	  this.game.queue.push("acknowledge\tYour trade offer has been spurned by "+this.returnFaction(faction_responding));
+	}
+
 	this.updateLog(this.returnName(refusing_faction) + " spurns a trade offered by " + this.returnName(faction_that_offered));
         return 1;
 
@@ -8353,6 +8357,10 @@ console.log("STARTING WITH RUN QUEUE");
   	let response	 	  = JSON.parse(mv[4]);
 
   	this.game.queue.splice(qe, 1);
+
+	if (offering_faction == this.game.player) {
+	  this.game.queue.push("acknowledge\tYour trade offer has been accepted by "+this.returnFaction(faction_responding));
+	}
 
         this.game.players_info[offering_faction-1].traded_this_turn = 1;
         this.game.players_info[faction_responding-1].traded_this_turn = 1;
@@ -10822,22 +10830,22 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
           html  += '<p style="margin-top:20px"></p>';
           html  += '<div class="terminal_header2 sf-readable"><div class="player_color_box '+playercol+'"></div>' + this.returnFaction(this.game.player) + ":</div><p><ul class='terminal_header3'>";
       if (this.game.players_info[this.game.player-1].command_tokens > 0) {
-	if (this.game.state.active_played_moved == 0) {
+	if (this.game.state.active_player_moved == 0) {
           html += '<li class="option" id="activate">activate system</li>';
         }
       }
       if (this.canPlayerPlayStrategyCard(this.game.player) == 1) {
-	if (this.game.state.active_played_moved == 0) {
+	if (this.game.state.active_player_moved == 0) {
           html += '<li class="option" id="select_strategy_card">play strategy card</li>';
         }
       }
-      if (ac.length > 0 && this.tracker.action_card == 0 && this.canPlayerPlayActionCard(this.game.player) == 1) {
-	if (this.game.state.active_played_moved == 0) {
+      if (ac.length > 0 && this.game.tracker.action_card == 0 && this.canPlayerPlayActionCard(this.game.player) == 1) {
+	if (this.game.state.active_player_moved == 0) {
           html += '<li class="option" id="action">play action card</li>';
         }
       }
-
-      if (this.tracker.trade == 0 && this.canPlayerTrade(this.game.player) == 1) {
+console.log(this.game.tracker.trade + " -- " + this.canPlayerTrade(this.game.player));
+      if (this.game.tracker.trade == 0 && this.canPlayerTrade(this.game.player) == 1) {
         html += '<li class="option" id="trade">trade</li>';
       }
 
@@ -10861,7 +10869,7 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
       }
   
       if (this.canPlayerPass(this.game.player) == 1) {
-	if (this.game.state.active_played_moved == 1) {
+	if (this.game.state.active_player_moved == 1) {
 	  //
 	  // if we have already moved, we end turn rather than pass
 	  //
@@ -10873,7 +10881,7 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
           html += '<li class="option" id="pass">pass</li>';
         }
       } else {
-	if (this.game.state.active_played_moved == 1) {
+	if (this.game.state.active_player_moved == 1) {
 	  //
 	  // if we have already moved, we end turn rather than pass
 	  //
@@ -10896,7 +10904,7 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	  for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
 	    if (action2 == tech_attach_menu_triggers[i]) {
               $(this).remove();
-	      imperium_self.game.state.active_played_moved = 1;
+	      imperium_self.game.state.active_player_moved = 1;
               z[tech_attach_menu_index[i]].menuOptionActivated(imperium_self, "main", imperium_self.game.player);
 	      return;
 	    }
@@ -10904,13 +10912,13 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
         }
 
         if (action2 == "activate") {
-	  imperium_self.game.state.active_played_moved = 1;
+	  imperium_self.game.state.active_player_moved = 1;
   	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.playerActivateSystem();
         }
 
         if (action2 == "select_strategy_card") {
-	  imperium_self.game.state.active_played_moved = 1;
+	  imperium_self.game.state.active_player_moved = 1;
   	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.playerSelectStrategyCard(function(success) {
   	    imperium_self.addMove("strategy_card_after\t"+success+"\t"+imperium_self.game.player+"\t1");
@@ -10922,7 +10930,7 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
         if (action2 == "action") {
   	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.playerSelectActionCard(function(card) {
-	    if (imperium_self.action_cards[card].type == "action") { imperium_self.game.state.active_played_moved = 1; }
+	    if (imperium_self.action_cards[card].type == "action") { imperium_self.game.state.active_player_moved = 1; }
   	    imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
@@ -12008,7 +12016,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
     let imperium_self = this;
     let options_available = 0;
 
-    if (this.tracker.invasion == undefined) { this.tracker = this.returnPlayerTurnTracker(); this.tracker.activate_system = 1; }
+    if (this.game.tracker.invasion == undefined) { this.game.tracker = this.returnPlayerTurnTracker(); this.game.tracker.activate_system = 1; }
 
     //
     // check to see if any ships survived....
@@ -12016,15 +12024,15 @@ console.log("ERROR: you had no hits left to assign, bug?");
     let playercol = "player_color_"+this.game.player;
     let html  = "<div class='sf-readable'><div class='player_color_box "+playercol+"'></div>" + this.returnFaction(player) + ": </div><ul>";
 
-    if (this.canPlayerProduceInSector(player, sector) && this.tracker.production == 0) {
+    if (this.canPlayerProduceInSector(player, sector) && this.game.tracker.production == 0) {
       html += '<li class="option" id="produce">produce units</li>';
       options_available++;
     }
-    if (this.canPlayerInvadePlanet(player, sector) && this.tracker.invasion == 0) {
+    if (this.canPlayerInvadePlanet(player, sector) && this.game.tracker.invasion == 0) {
       html += '<li class="option" id="invade">invade planet</li>';
       options_available++;
     }
-    //if (this.canPlayerPlayActionCard(player) && this.tracker.action_card == 0) {
+    //if (this.canPlayerPlayActionCard(player) && this.game.tracker.action_card == 0) {
     //  html += '<li class="option" id="action">action card</li>';
     //  options_available++;
     //}
@@ -12075,13 +12083,13 @@ console.log("ERROR: you had no hits left to assign, bug?");
       }  
 
       if (action2 == "invade") {
-        imperium_self.tracker.invasion = 1;
+        imperium_self.game.tracker.invasion = 1;
         imperium_self.playerInvadePlanet(player, sector);
       }
 
       if (action2 == "action") {
         imperium_self.playerSelectActionCard(function(card) {
-          imperium_self.tracker.action_card = 1;
+          imperium_self.game.tracker.action_card = 1;
           imperium_self.addMove("continue\t"+player+"\t"+sector);
           imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
           imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
@@ -12531,7 +12539,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
   	      let planet_idx = imperium_self.returnPlayersLeastDefendedPlanetInSector(imperium_self.game.player, sector);
   	      if (stuff_to_build[y] != "infantry") { planet_idx = -1; }
   	      imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+planet_idx+"\t"+stuff_to_build[y]+"\t"+sector);
-	      imperium_self.tracker.production = 1;
+	      imperium_self.game.tracker.production = 1;
             }
             imperium_self.endTurn();
             return;
@@ -16251,6 +16259,11 @@ if (this.game.board[tmp[k]] != undefined) {
 
 
   doesPlanetHavePDS(planet) {
+    if (planet.units == undefined) {
+      let x = this.game.planets[planet];
+      if (x.units) { planet = x; }
+      else { return 0; }
+    }
     for (let i = 0; i < planet.units.length; i++) {
       for (let ii = 0; ii < planet.units[i].length; ii++) {
 	if (planet.units[i][ii].type == "pds") { return 1; }
@@ -17304,16 +17317,6 @@ addUIEvents() {
 
   var html = `
     <div class="hud-token-count">
-      <div>
-        <span class="fa-stack fa-3x">
-        <i class="far fa-futbol fa-stack-2x pc white-stroke"></i>
-        <span class="fa fa-stack-1x">
-        <span class="token_count">
-        ${this.game.players_info[this.game.player-1].strategy_tokens}
-        </span>
-        </span>
-        </span>
-      </div>
       <div>	
         <span class="fa-stack fa-3x">
         <i class="fas fa-dice-d20 fa-stack-2x pc white-stroke"></i>
@@ -17326,10 +17329,40 @@ addUIEvents() {
       </div>
       <div>
         <span class="fa-stack fa-3x">
+        <i class="far fa-futbol fa-stack-2x pc white-stroke"></i>
+        <span class="fa fa-stack-1x">
+        <span class="token_count">
+        ${this.game.players_info[this.game.player-1].strategy_tokens}
+        </span>
+        </span>
+        </span>
+      </div>
+      <div>
+        <span class="fa-stack fa-3x">
         <i class="fas fa-space-shuttle fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
         <span class="token_count">
         ${this.game.players_info[this.game.player-1].fleet_supply}
+        </span>
+        </span>
+        </span>
+      </div>
+      <div>
+        <span class="fa-stack fa-3x">
+        <i class="fas fa-box fa-stack-2x pc white-stroke"></i>
+        <span class="fa fa-stack-1x">
+        <span class="token_count">
+        ${this.game.players_info[this.game.player-1].commodities}
+        </span>
+        </span>
+        </span>
+      </div>
+      <div>
+        <span class="fa-stack fa-3x">
+        <i class="fas fa-database fa-stack-2x pc white-stroke"></i>
+        <span class="fa fa-stack-1x">
+        <span class="token_count">
+        ${this.game.players_info[this.game.player-1].goods}
         </span>
         </span>
         </span>

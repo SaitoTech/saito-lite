@@ -978,6 +978,11 @@ if (this.game.board[tmp[k]] != undefined) {
 
 
   doesPlanetHavePDS(planet) {
+    if (planet.units == undefined) {
+      let x = this.game.planets[planet];
+      if (x.units) { planet = x; }
+      else { return 0; }
+    }
     for (let i = 0; i < planet.units.length; i++) {
       for (let ii = 0; ii < planet.units[i].length; ii++) {
 	if (planet.units[i][ii].type == "pds") { return 1; }
