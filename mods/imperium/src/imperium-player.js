@@ -361,6 +361,16 @@
 
     let sys = imperium_self.returnSectorAndPlanets(sector);
 
+    //
+    // if player is planet owner, this is secondary which should
+    // happen afterwards -- parlay, etc. ?
+    //
+    if (sys.p[planet_idx].owner == imperium_self.game.player) {
+      imperium_self.endTurn();
+      return 0;
+    }
+
+
     html = '<div class="sf-readable">Do you wish to bombard '+sys.p[planet_idx].name+'? </div><ul>';
 
     let ac = this.returnPlayerActionCards(this.game.player, ["pre_bombardment"]);
@@ -539,7 +549,7 @@
 	html += '<div class="sf-readable">Assign <div style="display:inline" id="total_hits_to_assign">'+total_hits+'</div> hits:</div>';
 	html += '<ul>';
 
-	let total_targetted_units = 0;;
+	let total_targetted_units = 0;
 	let targetted_units = imperium_self.game.players_info[imperium_self.game.player-1].target_units;
 	
         for (let i = 0; i < sys.s.units[imperium_self.game.player-1].length; i++) {
@@ -558,6 +568,11 @@
 	}
 	html += '</ul>';
   
+	if (maximum_assignable_hits == 0) {
+console.log("ERROR: you had no hits left to assign, bug?");
+	  imperium_self.endTurn();
+	  return 0;
+	}
 
 	imperium_self.updateStatus(html);
 	
@@ -1823,7 +1838,7 @@ console.log(" ... and done");
             imperium_self.addMove("continue\t"+imperium_self.game.player+"\t"+sector);
             for (let y = 0; y < stuff_to_build.length; y++) {
   	      let planet_idx = imperium_self.returnPlayersLeastDefendedPlanetInSector(imperium_self.game.player, sector);
-  	      //if (stuff_to_build[y] == "infantry") { planet_idx = 0; }
+  	      if (stuff_to_build[y] != "infantry") { planet_idx = -1; }
   	      imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+1+"\t"+planet_idx+"\t"+stuff_to_build[y]+"\t"+sector);
 	      imperium_self.tracker.production = 1;
             }
@@ -3449,17 +3464,15 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     let sector_array = [];
     let planet_array = [];
     let unit_idx = [];
+    let exists_unit = 0;
 
     let html  = '<div class="sf-readable">' + msg + '</div>';
         html += '<ul>';
 
     for (let i in this.game.sectors) {
 
-      let sys = this.returnSectorAndPlanets(this.game.sectors[i]);
-
+      let sys = this.returnSectorAndPlanets(i);
       let sector = i;
-      let planet_idx = -1;
-      let unit_idx = -1;
 
       for (let k = 0; k < sys.s.units[imperium_self.game.player-1].length; k++) {
 	if (filter_func(sys.s.units[imperium_self.game.player-1][k])) {
@@ -3467,22 +3480,27 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 	  sector_array.push(sector);
 	  planet_array.push(-1);
 	  unit_idx.push(k);
-          html += '<li class="textchoice" id="'+unit_array.length-1+'">'+sys.s.name+' - ' + unit_array[unit_array.length-1].name + '</li>';
+          exists_unit = 1;
+          html += '<li class="textchoice" id="'+(unit_array.length-1)+'">'+sys.s.name+' - ' + unit_array[unit_array.length-1].name + '</li>';
 	}
       }
 
       for (let p = 0; p < sys.p.length; p++) {
-        for (let k = 0; k < sys.p[k].units.length; k++) {
-	  if (filter_func(sys.p[k].units[imperium_self.game.player-1][k])) {
-	    unit_array.push(sys.p[k].units[imperium_self.game.player-1][k]);
+        for (let k = 0; k < sys.p[p].units[imperium_self.game.player-1].length; k++) {
+	  if (filter_func(sys.p[p].units[imperium_self.game.player-1][k])) {
+	    unit_array.push(sys.p[p].units[imperium_self.game.player-1][k]);
 	    sector_array.push(sector);
 	    planet_array.push(p);
 	    unit_idx.push(k);
-            html += '<li class="textchoice" id="'+unit_array.length-1+'">'+sys.s.name+'/' + sys.p[p].name + " - " + unit_array[unit_array.length-1].name + '</li>';
+            exists_unit = 1;
+            html += '<li class="textchoice" id="'+(unit_array.length-1)+'">' + sys.s.sector + ' / ' + sys.p[p].name + " - " + unit_array[unit_array.length-1].name + '</li>';
 	  }
 	}
       }
 
+    }
+    if (exists_unit == 0) {
+      html += '<li class="textchoice" id="none">no unit available</li>';
     }
     if (cancel_func != null) {
       html += '<li class="textchoice" id="cancel">cancel</li>';
@@ -3508,10 +3526,16 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 //      imperium_self.hidePlanetCard(imperium_self.game.planets[action].tile, imperium_self.game.planets[action].idx); 
 //      imperium_self.hideSectorHighlight(imperium_self.game.planets[action].tile);
 
-      if (action == "cancel") {
+      if (action === "cancel") {
         cancel_func();
         imperium_self.hideSectorHighlight(action);
         return 0;
+      }
+      if (action === "none") {
+console.log("NONE!");
+        let unit_to_return = { sector : "" , planet_idx : "" , unit_idx : -1 , unit : null }
+        mycallback(unit_to_return);
+	return;
       }
 
       let unit_to_return = { sector : sector_array[action] , planet_idx : planet_array[action] , unit_idx : unit_idx[action] , unit : unit_array[action] }

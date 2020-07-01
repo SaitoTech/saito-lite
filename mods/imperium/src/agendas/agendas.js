@@ -86,32 +86,40 @@
             let player = parseInt(mv[1]);
 	    imperium_self.game.queue.splice(qe, 1);
 
-            imperium_self.playerSelectUnitWithFilter(
+	    if (imperium_self.game.player == player) {
+              imperium_self.playerSelectUnitWithFilter(
                     "Select a PDS unit to destroy: ",
                     function(unit) {
+		      if (unit == undefined) { return 0; }
                       if (unit.type == "pds") { return 1; }
                       return 0;
             	    },
                     function(unit_identifier) {
 
+console.log("WOOT");
                       let sector        = unit_identifier.sector;
                       let planet_idx    = unit_identifier.planet_idx;
                       let unit_idx      = unit_identifier.unit_idx;
                       let unit          = unit_identifier.unit;
 
+console.log(sector + " -- " + planet_idx + " -- " + unit_idx);
+
+		      if (unit == null) {
+                        imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " has no PDS units to destroy");
+		        imperium_self.endTurn();
+			return 0;
+		      }
                       imperium_self.addMove("destroy\t"+imperium_self.game.player+"\t"+imperium_self.game.player+"\t"+"ground"+"\t"+sector+"\t"+planet_idx+"\t"+unit_idx+"\t"+"1");
                       imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit.name + " in " + imperium_self.game.sectors[sector].name);
 		      imperium_self.endTurn();
                     }
-            );
+              );
+	    }
 
             return 0;
           }
-
           return 1;
-
         }
-
   });
 
 

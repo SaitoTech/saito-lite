@@ -500,6 +500,7 @@ updateSectorGraphics(sector) {
   let fleet_color = '';
   let bg = '';
   let bgsize = '';
+  let sector_controlled = 0;
 
   for (let z = 0; z < sys.s.units.length; z++) {
 

@@ -800,13 +800,38 @@ console.log("executing "+z[z_index].name);
               html += '<li class="option" id="abstain">abstain</li></ul></p>';
 	  imperium_self.updateStatus(html);
 
+    	  let is_planet = 0;
+   	  let is_sector = 0;
 
           $('.option').off();
+    	  $('.option').on('mouseenter', function() {
+    	    let s = $(this).attr("id");
+    	    if (imperium_self.game.state.choices[s].indexOf("planet") == 0) { is_planet = 1; }
+    	    if (imperium_self.game.state.choices[s].indexOf("sector") == 0 || imperium_self.game.state.choices[s].indexOf("new-byzantium") == 0) { is_sector = 0; }
+    	    if (is_planet == 1) {
+    	      imperium_self.showPlanetCard(imperium_self.game.planets[imperium_self.game.state.choices[s]].tile, imperium_self.game.planets[imperium_self.game.state.choices[s]].idx);
+    	      imperium_self.showSectorHighlight(imperium_self.game.planets[imperium_self.game.state.choices[s]].tile);
+      	    }
+    	  });
+    	  $('.option').on('mouseleave', function() {
+   	    let s = $(this).attr("id");
+      	    if (imperium_self.game.state.choices[s].indexOf("planet") == 0) { is_planet = 1; }
+     	    if (imperium_self.game.state.choices[s].indexOf("sector") == 0 || imperium_self.game.state.choices[s].indexOf("new-byzantium") == 0) { is_sector = 0; }
+     	    if (is_planet == 1) {
+     	      imperium_self.hidePlanetCard(imperium_self.game.planets[imperium_self.game.state.choices[s]].tile, imperium_self.game.planets[imperium_self.game.state.choices[s]].idx);
+              imperium_self.hideSectorHighlight(imperium_self.game.planets[imperium_self.game.state.choices[s]].tile);
+            }
+          });
           $('.option').on('click', function() {
 
             let vote = $(this).attr("id");
 	    let votes = 0;
-	
+
+	    if (is_planet == 1) {
+  	      imperium_self.hidePlanetCard(imperium_self.game.planets[imperium_self.game.state.choices[vote]].tile, imperium_self.game.planets[imperium_self.game.state.choices[vote]].idx);
+  	      imperium_self.hideSectorHighlight(imperium_self.game.planets[imperium_self.game.state.choices[vote]].tile);
+	    }	
+
 	    if (vote == "abstain") {
 
 	      imperium_self.addMove("resolve\tagenda\t1\t"+imperium_self.app.wallet.returnPublicKey());
@@ -2243,6 +2268,8 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 	let z = this.returnEventObjects();
 
 	if (type == "ship") {
+
+	  try {
 	  sys.s.units[player-1][unit_idx].last_round_damaged = this.game.state.space_combat_round;
 	  sys.s.units[player-1][unit_idx].strength--;
 	  if (sys.s.units[player-1][unit_idx].strength <= 0) {
@@ -2254,10 +2281,26 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 	  } else {
 	    this.updateLog(this.returnFaction(player) + " assigns hit to " + sys.s.units[player-1][unit_idx].name);
 	  }
+	  } catch (err) {
+	    console.log("Error? Not all hits assigned");
+	  }
+
+
+	  //
+	  // HACK
+	  //
+          let attacker_forces = this.doesPlayerHaveShipsInSector(attacker, sector);
+          let defender_forces = this.doesPlayerHaveShipsInSector(defender, sector);
+
+          if (attacker_forces > 0 && defender_forces == 0) {
+            this.updateLog(this.returnFaction(attacker) + " wins the space combat");
+          }
+          if (attacker_forces == 0 && defender_forces == 0) {
+            this.updateLog(this.returnFaction(attacker) + " and " + this.returnFaction(defender) + " are obliterated in space combat");
+          }
 
 	}
 
-console.log("THIS IS WHERE WE REACH!");
 
 	//
 	// re-display sector
@@ -2266,9 +2309,6 @@ console.log("THIS IS WHERE WE REACH!");
 	this.saveSystemAndPlanets(sys);
 	this.updateSectorGraphics(sector);
         this.game.queue.splice(qe, 1);
-
-
-console.log("THIS IS WHERE WE REACH 2!");
 
 	return 1;
 
@@ -2362,7 +2402,7 @@ console.log("THIS IS WHERE WE REACH 2!");
             //
             // evaluate if planet has changed hands
             //
-            if (attacker_forces > defender_forces && defender_forces <= 0) {
+            if (attacker_forces >= 0 && attacker_forces > defender_forces && defender_forces <= 0) {
 
               //
               // destroy all units belonging to defender (pds, spacedocks)
@@ -2372,19 +2412,32 @@ console.log("THIS IS WHERE WE REACH 2!");
               }
 
               //
-              // notify everyone
+              // notify and change ownership (if needed)
               //
-              let survivors = imperium_self.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
-              if (survivors == 1) {
-                this.updateLog(sys.p[planet_idx].name + " conquered by " + this.returnFaction(attacker) + " (" + survivors + " infantry)");
-              } else {
-                this.updateLog(sys.p[planet_idx].name + " conquered by " + this.returnFaction(attacker) + " (" + survivors + " infantry)");
+	      if (sys.p[planet_idx].owner == attacker) {
+
+                let survivors = imperium_self.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
+                if (survivors == 1) {
+                  this.updateLog(sys.p[planet_idx].name + " defended by " + this.returnFaction(attacker) + " (" + survivors + " infantry)");
+                } else {
+                  this.updateLog(sys.p[planet_idx].name + " defended by " + this.returnFaction(attacker) + " (" + survivors + " infantry)");
+                }
+
+	      } else {
+
+                let survivors = imperium_self.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx);
+                if (survivors == 1) {
+                  this.updateLog(sys.p[planet_idx].name + " conquered by " + this.returnFaction(attacker) + " (" + survivors + " infantry)");
+                } else {
+                  this.updateLog(sys.p[planet_idx].name + " conquered by " + this.returnFaction(attacker) + " (" + survivors + " infantry)");
+                }
+
+                //
+                // planet changes ownership
+                //
+                this.updatePlanetOwner(sector, planet_idx, attacker);
               }
 
-              //
-              // planet changes ownership
-              //
-              this.updatePlanetOwner(sector, planet_idx, attacker);
             }
 
 	    return 1;
@@ -2901,12 +2954,6 @@ console.log("THIS IS WHERE WE REACH 2!");
 	let z 		 = this.returnEventObjects();
 
         this.game.queue.splice(qe, 1);
-
-
-this.updateLog("SANITY CHECK: ");
-this.updateLog(this.returnFaction(attacker) + ": " + this.returnNumberOfGroundForcesOnPlanet(attacker, sector, planet_idx));
-this.updateLog(this.returnFaction(defender) + ": " + this.returnNumberOfGroundForcesOnPlanet(defender, sector, planet_idx));
-
 
 
 	//
@@ -3427,7 +3474,7 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	if (this.game.state.ground_combat_defender != -1) {
 	  let z = this.returnEventObjects();
 	  for (let z_index in z) {
-	    z[z_index].groundCombatRoundEnd(this, attacker, defender, sector, planet_idx);
+	    z[z_index].groundCombatRoundEnd(this, this.game.state.ground_combat_attacker, this.game.state.ground_combat_defender, sector, planet_idx);
 	  }
 	}
 

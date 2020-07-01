@@ -249,7 +249,7 @@
       obj.spaceCombatRoundEnd = function(imperium_self, attacker, defender, sector) { return 1; }
     }
     if (obj.groundCombatRoundEnd == null) {
-      obj.spaceCombatRoundEnd = function(imperium_self, attacker, defender, sector, planet_idx) { return 1; }
+      obj.groundCombatRoundEnd = function(imperium_self, attacker, defender, sector, planet_idx) { return 1; }
     }
 
 

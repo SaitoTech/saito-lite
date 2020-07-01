@@ -676,11 +676,13 @@
   returnPlanetsOnBoard(filterfunc=null) {
     let planets_to_return = [];
     for (let i in this.game.planets) {
-      if (this.game.planets[i].idx) {
+      if (this.game.planets[i].tile != "") {
 	if (filterfunc == null) {
+console.log("pushing " + i);
 	  planets_to_return.push(i);
 	} else {
 	  if (filterfunc(this.game.planets[i])) {
+console.log("pushing " + i);
 	    planets_to_return.push(i);
 	  }
 	}
