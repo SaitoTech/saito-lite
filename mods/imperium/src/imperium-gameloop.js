@@ -288,26 +288,49 @@ console.log("RESOLVED 2: " + this.game.confirms_received + " of " + this.game.co
 
       if (mv[0] === "play") {
 
+
     	let player = mv[1];
+    	let contplay = 0;
+        this.game.state.active_player_moved = 0;
+	if (this.game.state.active_player_turn == player) { contplay = 1; }
+	if (parseInt(mv[2]) == 1) { contplay = 1; }
+        if (contplay == 1) { this.game.state.active_player_moved = 1; }
+	this.game.state.active_player_turn = player;
+
+//        this.game.queue.splice(qe, 1);
 
 	try {
           document.documentElement.style.setProperty('--playing-color', `var(--p${player})`);
     	} catch (err) {}
 
         if (player == this.game.player) {
-	  //
-	  // reset menu track vars
-	  //
-  	  this.tracker = this.returnPlayerTurnTracker();
-	  //
-	  // reset vars like "planets_conquered_this_turn"
-	  //
-	  this.resetTurnVariables(player);
-  	  this.addMove("resolve\tplay");
+
+	  if (contplay == 0) {
+
+	    //
+	    // reset menu track vars
+	    //
+  	    this.tracker = this.returnPlayerTurnTracker();
+
+	    //
+	    // reset vars like "planets_conquered_this_turn"
+	    //
+	    this.resetTurnVariables(player);
+
+	    //
+	    // removed this July 1 when added splice above
+	    //
+  	    //this.addMove("resolve\tplay");
+
+	  }
+
   	  this.playerTurn();
+
         } else {
+
 	  this.addEventsToBoard();
   	  this.updateStatus("<div><p>" + this.returnFaction(parseInt(player)) + " is taking their turn.</p></div>");
+
   	}
   
   	return 0;
@@ -1013,6 +1036,7 @@ console.log("executing "+z[z_index].name);
 	  this.game.players_info[i].strategy_cards_played = [];
   	  this.game.players_info[i].strategy = [];
   	  this.game.players_info[i].must_exhaust_at_round_start = [];
+  	  this.game.players_info[i].objectives_scored_this_round = [];
         }
 
 
@@ -1579,6 +1603,10 @@ console.log("STARTING WITH RUN QUEUE");
 	let refusing_faction = parseInt(mv[1]);
 	let faction_that_offered = parseInt(mv[2]);
   	this.game.queue.splice(qe, 1);
+
+        this.game.players_info[refusing_faction-1].traded_this_turn = 1;
+        this.game.players_info[faction_that_offered-1].traded_this_turn = 1;
+
 	this.updateLog(this.returnName(refusing_faction) + " spurns a trade offered by " + this.returnName(faction_that_offered));
         return 1;
 
@@ -1594,6 +1622,9 @@ console.log("STARTING WITH RUN QUEUE");
   	let response	 	  = JSON.parse(mv[4]);
 
   	this.game.queue.splice(qe, 1);
+
+        this.game.players_info[offering_faction-1].traded_this_turn = 1;
+        this.game.players_info[faction_responding-1].traded_this_turn = 1;
 
   	this.game.players_info[offering_faction-1].commodities -= offer.goods;
   	this.game.players_info[faction_responding-1].commodities -= response.goods;

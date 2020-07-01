@@ -22,7 +22,7 @@
               html += '<li class="option" id="'+i+'">' + factions[imperium_self.game.players_info[i].faction].name + '</li>';
             }
           }
-          html += '<li class="option" id="finish">finish and end turn</li>';
+          html += '<li class="option" id="finish">finish replenishing</li>';
  
           imperium_self.updateStatus(html);
  
@@ -46,7 +46,7 @@
         if (imperium_self.game.player != strategy_card_player) {
 
 	  if (imperium_self.game.players_info[player-1].commodities == imperium_self.game.players_info[player-1].commodity_limit) { 
-	    imperium_self.notify(imperium_self.returnFaction(player) + " skips the Trade secondary as they have already refreshed commodities");
+	    imperium_self.updateLog(imperium_self.returnFaction(player) + " skips the Trade secondary as they have already refreshed commodities");
             imperium_self.endTurn();
 	    return 1;
 	  }

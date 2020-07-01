@@ -227,7 +227,6 @@
       if (this.game.board[i]) {
         let sector = this.game.board[i].tile;
         if (this.game.sectors[sector].wormhole != 0) {
-console.log("WORMHOLE IN: " + sector);
 	  for (let z = 0; z < wormholes.length; z++) {
 
 	    //
@@ -241,7 +240,6 @@ console.log("WORMHOLE IN: " + sector);
 	          if (this.game.board[b]) {
 	            if (this.game.board[b].tile == wormholes[z]) {
 	              if (!tiles[i].neighbours.includes(b)) {
-console.log("ADDING AN ALL-ADJACENT WORMHOLE RELATIONSHIP: " + i + " -- " + b);
 	  	        tiles[i].neighbours.push(b);
 	  	      }
 	            }
@@ -404,9 +402,10 @@ console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-      return ["1_1", "4_7"];
-//      return ["1_1", "2_1"];
+//      return ["1_1", "4_7"];
+      return ["1_1", "2_1"];
     }
+
 
   
     if (players <= 3) {

@@ -2,7 +2,7 @@
 
     this.importActionCard('lost-star-chart', {
   	name : "Lost Star Chart" ,
-  	type : "action" ,
+  	type : "instant" ,
   	text : "During this turn, all wormholes are adjacent to each other" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  imperium_self.game.state.temporary_wormholes_adjacent = 1;
@@ -14,7 +14,7 @@
     this.importActionCard('plague', {
   	name : "Plague" ,
   	type : "action" ,
-  	text : "Select a planet and destroy infantry on that planet. Roll a dice for each infantry, and destroy those with rolls of 6 or higher." ,
+  	text : "ACTION: Select a planet and destroy infantry on that planet. Roll a dice for each infantry, and destroy those with rolls of 6 or higher." ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (imperium_self.game.player == action_card_player) {
 
@@ -81,7 +81,7 @@
     this.importActionCard('repeal-law', {
   	name : "Repeal Law" ,
   	type : "action" ,
-  	text : "Repeal one law that is in effect." ,
+  	text : "ACTION: Repeal one law that is in effect." ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
           if (imperium_self.game.player == action_card_player) {
@@ -96,7 +96,7 @@ imperium_self.endTurn();
     this.importActionCard('veto', {
   	name : "Veto" ,
   	type : "action" ,
-  	text : "Select one agenda to remove from consideration and draw a replacement" ,
+  	text : "ACTION: Select one agenda to remove from consideration and draw a replacement" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
           if (imperium_self.game.player == action_card_player) {
@@ -130,7 +130,7 @@ imperium_self.endTurn();
 
     this.importActionCard('flank-speed', {
   	name : "Flank Speed" ,
-  	type : "action" ,
+  	type : "instant" ,
   	text : "Gain +1 movement on all ships moved this turn" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  imperium_self.game.players_info[action_card_player-1].temporary_fleet_move_bonus = 1;
@@ -142,7 +142,7 @@ imperium_self.endTurn();
 
     this.importActionCard('propulsion-research', {
   	name : "Propulsion Research" ,
-  	type : "action" ,
+  	type : "instant" ,
   	text : "Gain +1 movement on a single ship moved this turn" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  imperium_self.game.players_info[action_card_player-1].temporary_ship_move_bonus = 1;
@@ -156,7 +156,7 @@ imperium_self.endTurn();
     this.importActionCard('military-drills', {
   	name : "Military Drills" ,
   	type : "action" ,
-  	text : "Gain two command or strategy tokens" ,
+  	text : "ACTION: Gain two new command tokens" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (imperium_self.game.player == action_card_player) {
 	    imperium_self.playerAllocateNewTokens(action_card_player, 2);
@@ -170,7 +170,7 @@ imperium_self.endTurn();
     this.importActionCard('cripple-defenses', {
   	name : "Cripple Defenses" ,
   	type : "action" ,
-  	text : "Select a planet and destroy all PDS units on that planet" ,
+  	text : "ACTION: Select a planet and destroy all PDS units on that planet" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (imperium_self.game.player == action_card_player) {
 
@@ -213,7 +213,7 @@ imperium_self.endTurn();
     this.importActionCard('reactor-meltdown', {
   	name : "Reactor Meltdown" ,
   	type : "action" ,
-  	text : "Select a non-homeworld planet and destroy and destroy one Space Dock on that planet" ,
+  	text : "ACTION: Select a non-homeworld planet and destroy and destroy one Space Dock on that planet" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (imperium_self.game.player == action_card_player) {
 
@@ -226,6 +226,8 @@ imperium_self.endTurn();
 		}
               },
 	      function(planet) {
+
+alert("H: " + planet);
 
 		planet = imperium_self.game.planets[planet];
 		let sector = planet.sector;
@@ -260,7 +262,7 @@ imperium_self.endTurn();
     this.importActionCard('lost-mission', {
   	name : "Lost Mission" ,
   	type : "action" ,
-  	text : "Place 1 Destroyer in a system with no existing ships" ,
+  	text : "ACTION: Place 1 Destroyer in a system with no existing ships" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (imperium_self.game.player == action_card_player) {
 
@@ -289,7 +291,7 @@ imperium_self.endTurn();
     this.importActionCard('accidental-colonization', {
   	name : "Accidental Colonization" ,
   	type : "action" ,
-  	text : "Gain control of one planet not controlled by any player" ,
+  	text : "ACTION: Gain control of one planet not controlled by any player" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -324,7 +326,7 @@ imperium_self.endTurn();
     this.importActionCard('uprising', {
   	name : "Uprising" ,
   	type : "action" ,
-  	text : "Exhaust a non-home planet card held by another player. Gain trade goods equal to resource value." ,
+  	text : "ACTION: Exhaust a non-home planet card held by another player. Gain trade goods equal to resource value." ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -361,7 +363,7 @@ imperium_self.endTurn();
     this.importActionCard('diaspora-conflict', {
   	name : "Diaspora Conflict" ,
   	type : "action" ,
-  	text : "Exhaust a non-home planet card held by another player. Gain trade goods equal to resource value." ,
+  	text : "ACTION: Exhaust a non-home planet card held by another player. Gain trade goods equal to resource value." ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -398,7 +400,7 @@ imperium_self.endTurn();
     this.importActionCard('economic-initiative', {
   	name : "Economic Initiative" ,
   	type : "action" ,
-  	text : "Ready each cultural planet in your control" ,
+  	text : "ACTION: Ready each cultural planet in your control" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  for (let i in imperium_self.game.planets) {
@@ -416,7 +418,7 @@ imperium_self.endTurn();
     this.importActionCard('focused-research', {
   	name : "Focused Research" ,
   	type : "action" ,
-  	text : "Spend 4 Trade Goods to Research 1 Technology" ,
+  	text : "ACTION: Spend 4 Trade Goods to Research 1 Technology" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  let p = imperium_self.game.players_info[imperium_self.game.player-1];
@@ -448,7 +450,7 @@ imperium_self.endTurn();
     this.importActionCard('frontline-deployment', {
   	name : "Frontline Deployment" ,
   	type : "action" ,
-  	text : "Deploy three infantry on one planet you control" ,
+  	text : "ACTION: Deploy three infantry on one planet you control" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
           if (imperium_self.game.player == action_card_player) {
@@ -479,7 +481,7 @@ imperium_self.endTurn();
     this.importActionCard('ghost-ship', {
   	name : "Ghost Ship" ,
   	type : "action" ,
-  	text : "Place a destroyer in a sector with a wormhole and no enemy ships" ,
+  	text : "ACTION: Place a destroyer in a sector with a wormhole and no enemy ships" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
           if (imperium_self.game.player == action_card_player) {
@@ -510,7 +512,7 @@ alert("select sector with filter");
     this.importActionCard('war-effort', {
   	name : "War Effort" ,
   	type : "action" ,
-  	text : "Place a cruiser in a sector with one of your ships" ,
+  	text : "ACTION: Place a cruiser in a sector with one of your ships" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
           if (imperium_self.game.player == action_card_player) {
@@ -542,7 +544,7 @@ alert("select sector with filter");
     this.importActionCard('industrial-initiative', {
   	name : "Industrial Initiative" ,
   	type : "action" ,
-  	text : "Gain a trade good for each industrial planet you control" ,
+  	text : "ACTION: Gain a trade good for each industrial planet you control" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  let trade_goods_to_gain = 0;
@@ -569,7 +571,7 @@ alert("select sector with filter");
     this.importActionCard('Insubordination', {
   	name : "Insubordination" ,
   	type : "action" ,
-  	text : "Select a player and remove 1 token from their command pool" ,
+  	text : "ACTION: Select a player and remove 1 token from their command pool" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -600,7 +602,7 @@ alert("select sector with filter");
     this.importActionCard('Lucky Shot', {
   	name : "Lucky Shot" ,
   	type : "action" ,
-  	text : "Destroy a destroyer, cruiser or dreadnaught in a sector with a planet you control" ,
+  	text : "ACTION: Destroy a destroyer, cruiser or dreadnaught in a sector with a planet you control" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -658,7 +660,7 @@ alert("select sector with filter");
     this.importActionCard('mining-initiative-ac', {
   	name : "Mining Initiative" ,
   	type : "action" ,
-  	text : "Gain trade goods equal to the highest resource value planet you control" ,
+  	text : "ACTION: Gain trade goods equal to the highest resource value planet you control" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (imperium_self.game.player == action_card_player) {
 
@@ -685,7 +687,7 @@ alert("select sector with filter");
     this.importActionCard('rise-of-a-messiah', {
   	name : "Rise of a Messiah" ,
   	type : "action" ,
-  	text : "Add one infantry to each planet player controls" ,
+  	text : "ACTION: Add one infantry to each planet player controls" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  for (let i in imperium_self.game.planets) {
 	    if (imperium_self.game.planets[i].owner == action_card_player) {
@@ -702,7 +704,7 @@ alert("select sector with filter");
     this.importActionCard('unstable-planet', {
   	name : "Unstable Planet" ,
   	type : "action" ,
-  	text : "Choose a hazardous planet and exhaust it. Destroy 3 infantry on that planet if they exist" ,
+  	text : "ACTION: Choose a hazardous planet and exhaust it. Destroy 3 infantry on that planet if they exist" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -754,7 +756,7 @@ alert("select sector with filter");
     this.importActionCard('Covert Operation', {
   	name : "Covert Operation" ,
   	type : "action" ,
-  	text : "Choose a player. They give you one of their action cards, if possible" ,
+  	text : "ACTION: Choose a player. They give you one of their action cards, if possible" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -785,7 +787,7 @@ alert("select sector with filter");
     this.importActionCard('tactical-bombardment', {
   	name : "Tactical Bombardment" ,
   	type : "action" ,
-  	text : "Choose a sector in which you have ships with bombardment. Exhaust all planets in that sector" ,
+  	text : "ACTION: Choose a sector in which you have ships with bombardment. Exhaust all planets in that sector" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -823,7 +825,7 @@ alert("select sector with filter");
     this.importActionCard('signal-jamming', {
   	name : "Signal Jamming" ,
   	type : "action" ,
-  	text : "Choose a player. They must activate a system in or next to a system in which you have a ship" ,
+  	text : "ACTION: Choose a player. They must activate a system in or next to a system in which you have a ship" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -865,7 +867,7 @@ alert("select sector with filter");
     this.importActionCard('unexpected-action', {
   	name : "Unexpected Action" ,
   	type : "action" ,
-  	text : "Deactivate a stystem you have activated. Gain one command or strategy token: ", 
+  	text : "ACTION: Deactivate a stystem you have activated. Gain one command or strategy token: ", 
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -898,7 +900,7 @@ alert("select sector with filter");
 
     this.importActionCard('in-the-silence-of-space', {
   	name : "In the Silence of Space" ,
-  	type : "action" ,
+  	type : "instant" ,
   	text : "Your ships may move through sectors with other player ships this turn: " ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  imperium_self.game.players_info[action_card_player-1].temporary_move_through_sectors_with_opponent_ships = 1;

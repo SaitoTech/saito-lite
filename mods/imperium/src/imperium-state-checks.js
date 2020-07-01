@@ -49,6 +49,20 @@
   
 
   canPlayerTrade(player) {
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      if (this.game.players_info[i].traded_this_turn == 0 && (i+1) != this.game.player) {
+        if (this.arePlayersAdjacent(this.game.player, (i+1))) {
+	  //
+	  // anyone have anything to trade?
+	  //
+	  if (this.game.players_info[this.game.player-1].commodities > 0 || this.game.players_info[this.game.player-1].goods > 0) {
+	    if (this.game.players_info[i].commodities > 0 || this.game.players_info[i].goods > 0) {
+	      return 1;
+	    }
+	  }
+        }
+      }
+    }
     return 0;
   }
   
@@ -609,16 +623,19 @@
 
   areSectorsAdjacent(sector1, sector2) {
 
-    let s = this.addWormholesToBoardTiles(this.returnBoardTiles());  
-    let tile1 = "";
-    let tile2 = "";
+    let s = this.addWormholesToBoardTiles(this.returnBoardTiles()); 
 
-    for (let i in s) {
-      if (s[i].tile == sector1) { tile1 = i; }
-      if (s[i].tile == sector2) { tile2 = i; }
-    }
+    let sys1 = this.returnSectorAndPlanets(sector1);
+    let sys2 = this.returnSectorAndPlanets(sector2);
+    let tile1 = sys1.s.tile;
+    let tile2 = sys2.s.tile;
+
+console.log(tile1 + " tile2 " + tile2);
 
     if (tile1 === "" || tile2 === "") { return 0; }
+
+console.log("CHECKING JSON");
+console.log(JSON.stringify(this.game.board));
 
     if (s[tile1].neighbours.includes(tile2)) { return 1; }
     if (s[tile2].neighbours.includes(tile1)) { return 1; }
@@ -633,8 +650,13 @@
   
   arePlayersAdjacent(player1, player2) {
 
+console.log("checking if players: " + player1 + " + " + player2 + " are adjacent");
+
     let p1sectors = this.returnSectorsWithPlayerUnits(player1);
     let p2sectors = this.returnSectorsWithPlayerUnits(player2);
+
+console.log(JSON.stringify(p1sectors));
+console.log(JSON.stringify(p2sectors));
 
     for (let i = 0; i < p1sectors.length; i++) {
       for (let ii = 0; ii < p2sectors.length; ii++) {
@@ -643,12 +665,13 @@
       }
     }
 
+console.log("no");
     return 0;
   }
 
   isPlayerAdjacentToSector(player, sector) {
 
-    let p1sectors = this.returnSectorsWithPlayerUnits(player1);
+    let p1sectors = this.returnSectorsWithPlayerUnits(player);
 
     for (let i = 0; i < p1sectors.length; i++) {
       if (p1sectors[i] == sector) { return 1; }
