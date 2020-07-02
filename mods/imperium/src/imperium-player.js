@@ -558,14 +558,12 @@ console.log("ASSIGN HITS TO CANCEL: " + this.game.state.assign_hits_to_cancel);
 
       if (action2 == "action") {
         imperium_self.playerSelectActionCard(function(card) {
-alert("SELECTING AN ACTION CARD");
 	  imperium_self.addMove(imperium_self.game.state.assign_hits_queue_instruction);
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	  imperium_self.endTurn();
 	  imperium_self.updateStatus("playing action card before hits assignment");
-//          imperium_self.playerAssignHits(attacker, defender, type, sector, details, total_hits, source);
         }, function() {
           imperium_self.playerAssignHits(attacker, defender, type, sector, details, total_hits, source);
 	}, relevant_action_cards);
@@ -2374,10 +2372,12 @@ console.log("ERROR: you had no hits left to assign, bug?");
     $('.textchoice').on('click', function() {
 
       let action2 = $(this).attr("id");
-      imperium_self.hideActionCard(action2);
 
       if (action2 != "cancel") { imperium_self.hideActionCard(action2); }
       if (action2 === "cancel") { cancel_callback(); return 0; }
+
+      imperium_self.game.tracker.action_card = 1;
+      if (imperium_self.action_cards[action2].type == "action") { imperium_self.game.state.active_player_moved = 1; }
 
       imperium_self.game.players_info[imperium_self.game.player-1].action_cards_played.push(action2);
 
@@ -3558,6 +3558,96 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 
     });
   }
+
+
+
+
+  playerSelectUnitInSectorWithFilter(msg, sector, filter_func, mycallback=null, cancel_func=null) {
+
+    let imperium_self = this;
+    let unit_array = [];
+    let sector_array = [];
+    let planet_array = [];
+    let unit_idx = [];
+    let exists_unit = 0;
+
+    let html  = '<div class="sf-readable">' + msg + '</div>';
+        html += '<ul>';
+
+    let sys = this.returnSectorAndPlanets(sector);
+
+    for (let k = 0; k < sys.s.units[imperium_self.game.player-1].length; k++) {
+      if (filter_func(sys.s.units[imperium_self.game.player-1][k])) {
+	unit_array.push(sys.s.units[imperium_self.game.player-1][k]);
+	sector_array.push(sector);
+	planet_array.push(-1);
+	unit_idx.push(k);
+        exists_unit = 1;
+        html += '<li class="textchoice" id="'+(unit_array.length-1)+'">'+sys.s.name+' - ' + unit_array[unit_array.length-1].name + '</li>';
+      }
+    }
+
+    for (let p = 0; p < sys.p.length; p++) {
+      for (let k = 0; k < sys.p[p].units[imperium_self.game.player-1].length; k++) {
+	if (filter_func(sys.p[p].units[imperium_self.game.player-1][k])) {
+	  unit_array.push(sys.p[p].units[imperium_self.game.player-1][k]);
+	  sector_array.push(sector);
+	  planet_array.push(p);
+	  unit_idx.push(k);
+          exists_unit = 1;
+          html += '<li class="textchoice" id="'+(unit_array.length-1)+'">' + sys.s.sector + ' / ' + sys.p[p].name + " - " + unit_array[unit_array.length-1].name + '</li>';
+	}
+      }
+    }
+
+    if (exists_unit == 0) {
+      html += '<li class="textchoice" id="none">no unit available</li>';
+    }
+    if (cancel_func != null) {
+      html += '<li class="textchoice" id="cancel">cancel</li>';
+    }
+    html += '</ul>';
+
+    this.updateStatus(html);
+
+    $('.textchoice').off();
+//    $('.textchoice').on('mouseenter', function() { 
+//      let s = $(this).attr("id"); 
+//      imperium_self.showPlanetCard(imperium_self.game.planets[s].tile, imperium_self.game.planets[s].idx); 
+//      imperium_self.showSectorHighlight(imperium_self.game.planets[s].tile);
+//    });
+//    $('.textchoice').on('mouseleave', function() { 
+//      let s = $(this).attr("id");
+//      imperium_self.hidePlanetCard(imperium_self.game.planets[s].tile, imperium_self.game.planets[s].idx); 
+//      imperium_self.hideSectorHighlight(imperium_self.game.planets[s].tile);
+//    });
+    $('.textchoice').on('click', function() {
+
+      let action = $(this).attr("id");
+//      imperium_self.hidePlanetCard(imperium_self.game.planets[action].tile, imperium_self.game.planets[action].idx); 
+//      imperium_self.hideSectorHighlight(imperium_self.game.planets[action].tile);
+
+      if (action === "cancel") {
+        cancel_func();
+        imperium_self.hideSectorHighlight(action);
+        return 0;
+      }
+      if (action === "none") {
+        let unit_to_return = { sector : "" , planet_idx : "" , unit_idx : -1 , unit : null }
+        mycallback(unit_to_return);
+	return;
+      }
+
+      let unit_to_return = { sector : sector_array[action] , planet_idx : planet_array[action] , unit_idx : unit_idx[action] , unit : unit_array[action] }
+//      imperium_self.hideSectorHighlight(action);
+
+      imperium_self.updateStatus("");
+      mycallback(unit_to_return);
+
+    });
+  }
+
+
 
 
 

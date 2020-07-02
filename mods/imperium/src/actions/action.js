@@ -620,6 +620,7 @@ alert("select sector with filter");
 
                 imperium_self.playerSelectUnitInSectorWithFilter(
 	          "Select a ship in this sector to destroy: " ,
+		  sector,
                   function(unit) {
 		    if (unit.type == "destroyer") { return 1; }
 		    if (unit.type == "cruiser") { return 1; }
@@ -629,11 +630,11 @@ alert("select sector with filter");
 	          function(unit_info) {
 
 		    let s = unit_info.sector;
-		    let p = unit_info.player;
-		    let uidx = unit_info.unitidx;
+		    let p = parseInt(unit_info.unit.owner);
+		    let uidx = unit_info.unit_idx;
 
 		    let sys = imperium_self.returnSectorAndPlanets(s);
-		    let unit_to_destroy = sys.s.units[p][uidx];
+		    let unit_to_destroy = unit_info.unit;
 
                     imperium_self.addMove("destroy_unit\t"+imperium_self.game.player+"\t"+unit_to_destroy.owner+"\t"+"space"+"\t"+s+"\t"+"-1"+"\t"+uidx+"\t"+"1");
 		    imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit_to_destroy.name + " in " + sys.name);
@@ -728,10 +729,12 @@ alert("select sector with filter");
 
 console.log("PLANET OBJ: " + JSON.stringify(planet_obj));
 
-		for (let i = 0; i < planet_obj.units[planet_owner-1].length; i++) {
-		  if (infantry_destroyed > 3) {
-		    if (planet_obj.units[planet_owner-1][i].type == "infantry") {
-		      imperium_self.addMove("destroy\t"+action_card_player+"\t"+planet_owner+"\t"+"ground"+"\t"+planet_obj.sector+"\t"+planet_obj.idx+"\t"+"1");
+		if (planet_owner >= 0) {
+		  for (let i = 0; i < planet_obj.units[planet_owner-1].length; i++) {
+		    if (infantry_destroyed > 3) {
+		      if (planet_obj.units[planet_owner-1][i].type == "infantry") {
+		        imperium_self.addMove("destroy\t"+action_card_player+"\t"+planet_owner+"\t"+"ground"+"\t"+planet_obj.sector+"\t"+planet_obj.idx+"\t"+"1");
+		      }
 		    }
 		  }
 		}
