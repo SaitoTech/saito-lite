@@ -584,7 +584,7 @@ body {
   background: #222c;
   transition: all 500ms;
   border-left: 3px solid var(--my-color);
-  font-size: 1.15em;
+  font-size: 1.25em;
   font-family: courier, sans-serif;
 }
 

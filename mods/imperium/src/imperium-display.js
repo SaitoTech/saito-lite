@@ -165,7 +165,7 @@ addUIEvents() {
         </span>
         </span>
       </div>
-    </div>;`
+    </div>`;
 
     document.querySelector('.hud-header').innerHTML += html;
 
