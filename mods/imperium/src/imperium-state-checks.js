@@ -436,6 +436,27 @@
 
   }
 
+  returnPlayerFleetInSector(player, sector) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+    let fleet = '';
+
+    for (let i = 0; i < sys.s.units[player-1].length; i++) {
+      if (i > 0) { fleet += ", "; }
+      fleet += sys.s.units[player-1][i].name;
+      //if (sys.s.units[player-1][i].storage.length > 0) {
+      //  fleet += ' (';
+      //  for (let ii = 0; ii < sys.s.units[player-1][i].storage.length; ii++) {
+      //    if (ii > 0) { fleet += ", "; }
+      //    fleet += sys.s.units[player-1][i].storage[ii].name;
+      //  }
+      //  fleet += ')';
+      //}
+    }
+    return fleet;
+  }
+
+
   returnAvailableResources(player) {
   
     let array_of_cards = this.returnPlayerUnexhaustedPlanetCards(player); // unexhausted
@@ -625,6 +646,9 @@
 
     let s = this.addWormholesToBoardTiles(this.returnBoardTiles()); 
 
+    if (sector1 === "") { return 0; }
+    if (sector2 === "") { return 0; }
+
     let sys1 = this.returnSectorAndPlanets(sector1);
     let sys2 = this.returnSectorAndPlanets(sector2);
     let tile1 = sys1.s.tile;
@@ -672,6 +696,8 @@ console.log("no");
   isPlayerAdjacentToSector(player, sector) {
 
     let p1sectors = this.returnSectorsWithPlayerUnits(player);
+
+console.log("JALKING: " + JSON.stringify(p1sectors));
 
     for (let i = 0; i < p1sectors.length; i++) {
       if (p1sectors[i] == sector) { return 1; }
@@ -993,6 +1019,7 @@ if (this.game.board[tmp[k]] != undefined) {
 
 
   doesPlanetHaveSpaceDock(planet) {
+    if (planet.units == undefined) { planet = this.game.planets[planet]; }
     for (let i = 0; i < planet.units.length; i++) {
       for (let ii = 0; ii < planet.units[i].length; ii++) {
 	if (planet.units[i][ii].type == "spacedock") { return 1; }
@@ -1003,6 +1030,8 @@ if (this.game.board[tmp[k]] != undefined) {
 
 
   doesPlanetHaveInfantry(planet) {
+console.log("p: " + planet);
+    if (planet.units == undefined) { planet = this.game.planets[planet]; }
     for (let i = 0; i < planet.units.length; i++) {
       for (let ii = 0; ii < planet.units[i].length; ii++) {
 	if (planet.units[i][ii].type == "infantry") { return 1; }
@@ -1013,6 +1042,7 @@ if (this.game.board[tmp[k]] != undefined) {
 
 
   doesPlanetHaveUnits(planet) {
+    if (planet.units == undefined) { planet = this.game.planets[planet]; }
     for (let i = 0; i < planet.units.length; i++) {
       if (planet.units[i].length > 0) { return 1; }
     }
@@ -1023,6 +1053,7 @@ if (this.game.board[tmp[k]] != undefined) {
 
 
   doesPlanetHavePlayerInfantry(planet, player) {
+    if (planet.units == undefined) { planet = this.game.planets[planet]; }
     for (let ii = 0; ii < planet.units[player-1].length; ii++) {
       if (planet.units[i][ii].type == "infantry") { return 1; }
     }
@@ -1521,6 +1552,7 @@ console.log("SECTOR: " + sector);
   doesSectorContainPlanetOwnedByPlayer(sector, player) {
 
     let sys = this.returnSectorAndPlanets(sector);
+    if (!sys) { return 0; }
     for (let i = 0; i < sys.p.length; i++) {
       if (sys.p[i].owner == player) { 
 	return 1;
@@ -1533,6 +1565,7 @@ console.log("SECTOR: " + sector);
   doesSectorContainUnit(sector, unittype) {
 
     let sys = this.returnSectorAndPlanets(sector);
+    if (!sys) { return 0; }
     for (let i = 0; i < sys.s.units.length; i++) {
       for (let ii = 0; ii < sys.s.units[i].length; ii++) {
         if (sys.s.units[i][ii].type == unittype) {
@@ -1550,12 +1583,14 @@ console.log("SECTOR: " + sector);
   }
   doesSectorContainPlayerShips(player, sector) {
     let sys = this.returnSectorAndPlanets(sector);
+    if (!sys) { return 0; }
     if (sys.s.units[player-1].length > 0) { return 1; }
     return 0;
   }
 
   doesSectorContainShips(sector) {
     let sys = this.returnSectorAndPlanets(sector);
+    if (!sys) { return 0; }
     for (let i = 0; i < sys.s.units.length; i++) { 
       if (sys.s.units[i].length > 0) { return 1; }
     }
@@ -1564,6 +1599,7 @@ console.log("SECTOR: " + sector);
 
   doesSectorContainPlayerUnits(player, sector) {
     let sys = this.returnSectorAndPlanets(sector);
+    if (!sys) { return 0; }
     if (sys.s.units[player-1].length > 0) { return 1; }
     for (let i = 0; i < sys.p.length; i++) {
       if (sys.p[i].units[player-1].length > 0) { return 1; }
@@ -1597,6 +1633,7 @@ console.log("SECTOR: " + sector);
   doesSectorContainPlayerUnit(player, sector, unittype) {
 
     let sys = this.returnSectorAndPlanets(sector);
+    if (!sys) { return 0; }
 
     for (let i = 0; i < sys.s.units[player-1].length; i++) {
       if (sys.s.units[player-1][i].type == unittype) { return 1; }

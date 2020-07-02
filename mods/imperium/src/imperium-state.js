@@ -22,6 +22,10 @@
         state.riders = [];
         state.choices = [];
 
+        state.assign_hits_queue_instruction = "";
+        state.assign_hits_to_cancel = "";
+
+
         state.agendas_voting_information = [];
         state.strategy_cards = [];
         state.strategy_cards_bonus = [];

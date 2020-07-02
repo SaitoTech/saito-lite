@@ -41,9 +41,12 @@
 
 
   resetTargetUnits() {
+console.log("let a here");
     for (let i = 0; i < this.game.players_info.length; i++) {
+console.log(i);
       this.game.players_info[i].target_units = [];
     }
+console.log(" ... anddone");
   }
 
   resetTurnVariables(player) {

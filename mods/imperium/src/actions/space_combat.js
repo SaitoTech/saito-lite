@@ -181,6 +181,7 @@
             imperium_self.playerSelectSectorWithFilter(
               "Select an adjacent sector without opponent ships into which to retreat: " ,
               function(s) {
+console.log("Sector to ask about: " + s + " --- " + sector);
 	        if (imperium_self.areSectorsAdjacent(sector, s) && s != sector) {
 	          if (!imperium_self.doesSectorContainNonPlayerShips(s)) { return 1; }
 	        }
@@ -191,7 +192,10 @@
 	        imperium_self.addMove("activate\t"+imperium_self.game.player+"\t"+s);
 	        imperium_self.playerSelectUnitsToMove(s);
               },
-              null
+	      function() {
+		imperium_self.addMove("notify\tno suitable sectors available for skilled retreat");
+		imperium_self.endTurn();
+	      }
             );
           }
 	  return 0;

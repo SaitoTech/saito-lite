@@ -38,14 +38,13 @@
 
           if (mv[0] == "plague") {
 
-            let player = parseInt(mv[1]);
-            let attacker = parseInt(mv[2]);
-            let planet = parseInt(mv[3]);
-
+            let attacker = parseInt(mv[1]);
+            let target = mv[2];
 	    let sector = imperium_self.game.planets[target].sector;
 	    let planet_idx = imperium_self.game.planets[target].idx;
-	    let sys = imperium_self.returnSectorsAndPlanets(sector);
+	    let sys = imperium_self.returnSectorAndPlanets(sector);
 	    let z = imperium_self.returnEventObjects();
+	    let player = sys.p[planet_idx].owner;
 
             for (let i = 0; i < sys.p[planet_idx].units.length; i++) {
               for (let ii = 0; ii < sys.p[planet_idx].units[i].length; ii++) {
@@ -332,7 +331,7 @@ alert("H: " + planet);
 	  if (imperium_self.game.player == action_card_player) {
 
             imperium_self.playerSelectPlanetWithFilter(
-	      "Exhaust a planet card held vy another player. Gain trade goods equal to resource value." ,
+	      "Exhaust a non-homeworld planet card held by another player. Gain trade goods equal to resource value." ,
               function(planet) {
 		planet = imperium_self.game.planets[planet];
 		if (planet.owner != -1 && planet.owner != imperium_self.game.player && planet.exhausted == 0 && planet.hw == 0) { return 1; } return 0;
@@ -340,7 +339,7 @@ alert("H: " + planet);
 	      function(planet) {
 
 		planet = imperium_self.game.planets[planet];
-		let goods = imperium_self.game.planets[planet].resources;
+		let goods = planet.resources;
 
                 imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tgoods\t"+goods);
                 imperium_self.addMove("expend\t"+imperium_self.game.player+"\tplanet\t"+planet);
@@ -369,19 +368,19 @@ alert("H: " + planet);
 	  if (imperium_self.game.player == action_card_player) {
 
             imperium_self.playerSelectPlanetWithFilter(
-	      "Exhaust a planet card held vy another player. Gain trade goods equal to resource value." ,
+	      "Exhaust a planet card held by another player. Gain trade goods equal to resource value." ,
               function(planet) {
 		planet = imperium_self.game.planets[planet];
-		if (planet.owner != -1 && planet.owner != imperium_self.game.player && planet.exhausted == 0) { return 1; } return 0;
+		if (planet.owner != -1 && planet.owner != imperium_self.game.player && planet.exhausted == 0 && planet.hw ==0) { return 1; } return 0;
               },
 	      function(planet) {
 
 		planet = imperium_self.game.planets[planet];
-		let goods = imperium_self.game.planets[planet].resources;
+		let goods = planet.resources;
 
                 imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tgoods\t"+goods);
                 imperium_self.addMove("expend\t"+imperium_self.game.player+"\tplanet\t"+planet);
-                imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " exhausting "+imperium_self.game.planets[planet].name + " and gaining " + goods + " trade goods");
+                imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " exhausting "+planet.name + " and gaining " + goods + " trade goods");
                 imperium_self.endTurn();
 		return 0;
 
@@ -722,10 +721,12 @@ alert("select sector with filter");
 		//
 		//
 		let planet_obj   = imperium_self.game.planets[planet];	
-		let planet_owner = planet_obj.owner;
-		let planet_res   = planet_obj.resources;
+		let planet_owner = parseInt(planet_obj.owner);
+		let planet_res   = parseInt(planet_obj.resources);
 
 		let infantry_destroyed = 0;
+
+console.log("PLANET OBJ: " + JSON.stringify(planet_obj));
 
 		for (let i = 0; i < planet_obj.units[planet_owner-1].length; i++) {
 		  if (infantry_destroyed > 3) {

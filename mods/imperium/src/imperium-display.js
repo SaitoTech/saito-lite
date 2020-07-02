@@ -119,7 +119,7 @@ addUIEvents() {
         <span class="fa-stack fa-3x">
         <i class="fas fa-dice-d20 fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
-        <span class="token_count">
+        <span class="token_count command_token_count">
         ${this.game.players_info[this.game.player-1].command_tokens}
         </span>
         </span>
@@ -129,7 +129,7 @@ addUIEvents() {
         <span class="fa-stack fa-3x">
         <i class="far fa-futbol fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
-        <span class="token_count">
+        <span class="token_count strategy_token_count">
         ${this.game.players_info[this.game.player-1].strategy_tokens}
         </span>
         </span>
@@ -139,7 +139,7 @@ addUIEvents() {
         <span class="fa-stack fa-3x">
         <i class="fas fa-space-shuttle fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
-        <span class="token_count">
+        <span class="token_count fleet_supply_count">
         ${this.game.players_info[this.game.player-1].fleet_supply}
         </span>
         </span>
@@ -149,7 +149,7 @@ addUIEvents() {
         <span class="fa-stack fa-3x">
         <i class="fas fa-box fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
-        <span class="token_count">
+        <span class="token_count commodities_count">
         ${this.game.players_info[this.game.player-1].commodities}
         </span>
         </span>
@@ -159,7 +159,7 @@ addUIEvents() {
         <span class="fa-stack fa-3x">
         <i class="fas fa-database fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
-        <span class="token_count">
+        <span class="token_count trade_goods_count">
         ${this.game.players_info[this.game.player-1].goods}
         </span>
         </span>
@@ -184,25 +184,25 @@ returnFactionSheet(imperium_self, player) {
 
   let html = `
         <div class="faction_sheet_token_box" id="faction_sheet_token_box">
-        <div>Strategy</div>
         <div>Command</div>
+        <div>Strategy</div>
         <div>Fleet</div>
-        <div>
-          <span class="fa-stack fa-3x">
-          <i class="far fa-futbol fa-stack-2x pc white-stroke"></i>
-          <span class="fa fa-stack-1x">
-          <span class="token_count">
-          ${this.game.players_info[player - 1].strategy_tokens}
-          </span>
-          </span>
-          </span>
-        </div>
         <div>	
           <span class="fa-stack fa-3x">
           <i class="fas fa-dice-d20 fa-stack-2x pc white-stroke"></i>
           <span class="fa fa-stack-1x">
-          <span class="token_count">
+          <span class="token_count commend_token_count">
           ${this.game.players_info[player - 1].command_tokens}
+          </span>
+          </span>
+          </span>
+        </div>
+        <div>
+          <span class="fa-stack fa-3x">
+          <i class="far fa-futbol fa-stack-2x pc white-stroke"></i>
+          <span class="fa fa-stack-1x">
+          <span class="token_count strategy_token_count">
+          ${this.game.players_info[player - 1].strategy_tokens}
           </span>
           </span>
           </span>
@@ -211,7 +211,7 @@ returnFactionSheet(imperium_self, player) {
           <span class="fa-stack fa-3x">
           <i class="fas fa-space-shuttle fa-stack-2x pc white-stroke"></i>
           <span class="fa fa-stack-1x">
-          <span class="token_count">
+          <span class="token_count fleet_supply_count">
           ${this.game.players_info[player - 1].fleet_supply}
           </span>
           </span>
@@ -478,6 +478,18 @@ hideSector(pid) {
 
 
 
+updateTokenDisplay() {
+
+  try {
+    $('.command_token_count').html(imperium_self.game.players[imperium_self.game.player-1].command_tokens);
+    $('.strategy_token_count').html(imperium_self.game.players[imperium_self.game.player-1].strategy_tokens);
+    $('.fleet_supply_count').html(imperium_self.game.players[imperium_self.game.player-1].fleet_supply_tokens);
+    $('.commodities_count').html(imperium_self.game.players[imperium_self.game.player-1].commodities);
+    $('.trade_goods_count').html(imperium_self.game.players[imperium_self.game.player-1].goods);
+
+  } catch (err) {}
+
+}
 updateLeaderboard() {
 
   if (this.browser_active == 0) { return; }

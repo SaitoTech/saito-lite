@@ -146,7 +146,6 @@
           while (oksel == 0) {
             let rp = keys[this.rollDice(keys.length)-1];
             if (this.game.sectors[rp].hw != 1 && seltil.includes(rp) != 1 && this.game.sectors[rp].mr != 1) {
-console.log("PUSHING rp: " + rp);
               seltil.push(rp);
               delete tmp_sys[rp];
               this.game.board[i].tile = rp;
@@ -236,6 +235,7 @@ console.log("PUSHING rp: " + rp);
           sys.p[ii].sector = sector;
           sys.p[ii].tile = i;
           sys.p[ii].idx = ii;
+	  sys.p[ii].hw = sys.s.hw;
 	  sys.p[ii].planet = sys.s.planets[ii];
 	  if (sys.s.hw == 1) { sys.p[ii].hw = 1; }
         }

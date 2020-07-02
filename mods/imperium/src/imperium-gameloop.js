@@ -288,6 +288,8 @@ console.log("RESOLVED 2: " + this.game.confirms_received + " of " + this.game.co
 
       if (mv[0] === "play") {
 
+        this.updateTokenDisplay();
+
     	let player = mv[1];
     	let contplay = 0;
         this.game.state.active_player_moved = 0;
@@ -1908,7 +1910,7 @@ console.log("UNITS IN STORAGE: " + units_in_storage);
 	      if (i > 0) { storage += ", "; }
 	      storage += units_in_storage[i].name;
 	    }
-	    storage += '}';
+	    storage += ')';
           }
 	  this.updateLog(this.returnFaction(player) + " moves " + obj.name + " into " + sys2.s.name + storage);
   	  this.removeSpaceUnitByJSON(player, sector_from, shipjson);
@@ -2288,7 +2290,7 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 	//
 	// re-display sector
 	//
-        this.eliminateDestroyedUnitsInSector(player, sector);
+        this.eliminateDestroyedUnitsInSector(destroyee, sector);
 	this.saveSystemAndPlanets(sys);
 	this.updateSectorGraphics(sector);
         this.game.queue.splice(qe, 1);
@@ -2372,7 +2374,9 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 
 	  try {
 	  sys.s.units[player-1][unit_idx].last_round_damaged = this.game.state.space_combat_round;
-	  sys.s.units[player-1][unit_idx].strength--;
+	  if ((player_moves == 1 && imperium_self.game.player == player) || imperium_self.game.player != player) {
+	    sys.s.units[player-1][unit_idx].strength--;
+	  }
 	  if (sys.s.units[player-1][unit_idx].strength <= 0) {
 	    this.updateLog(this.returnFaction(player) + " assigns hit to " + sys.s.units[player-1][unit_idx].name + " (destroyed)");
 	    sys.s.units[player-1][unit_idx].destroyed = 1;
@@ -2453,6 +2457,8 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 	let total_hits     = parseInt(mv[6]);
 	let source	   = mv[7]; // pds // bombardment // space_combat // ground_combat
         let sys 	   = this.returnSectorAndPlanets(sector);
+
+        this.game.state.assign_hits_queue_instruction = this.game.queue[this.game.queue.length-1];
 
         this.game.queue.splice(qe, 1);
 
@@ -2648,7 +2654,7 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 	    }
 	  }
 
-	  this.updateLog(this.returnFaction(player) + " has " + total_hits + " hits");
+	  //this.updateLog(this.returnFaction(player) + " has " + total_hits + " hits");
 
 	  //
  	  // handle rerolls
@@ -2699,7 +2705,12 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 
 	  }
 
-	  this.updateLog(this.returnFaction(attacker) + " has " + total_hits + " hits");
+	  if (total_hits == 1) {
+	    this.updateLog(this.returnFaction(attacker) + " takes " + total_hits + " hit");
+	  } else {
+	    this.updateLog(this.returnFaction(attacker) + " takes " + total_hits + " hits");
+	  }
+
 
 	  //
 	  // total hits to assign
@@ -3187,6 +3198,8 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
   	let sector = mv[2];
         this.game.queue.splice(qe, 1);
 
+        this.game.state.space_combat_sector = sector;
+
 	//
 	// unpack space ships
 	//
@@ -3242,8 +3255,10 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	    z[z_index].spaceCombatRoundEnd(this, this.game.state.space_combat_attacker, this.game.state.space_combat_defender, sector);
 	  }
 	}
+console.log("AAAA");
 
   	if (this.hasUnresolvedSpaceCombat(player, sector) == 1) {
+console.log("AAAA 1");
 	  if (this.game.player == player) {
 	    this.addMove("space_combat_post\t"+player+"\t"+sector);
 	    this.addMove("space_combat\t"+player+"\t"+sector);
@@ -3254,11 +3269,24 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	  }
 	} else {
 
+console.log("AAAA 2 - " + sector);
+
+	  let sys = this.returnSectorAndPlanets(sector);
+console.log("AAAA 3");
+console.log(JSON.stringify(sys.s.units));
+	  if (sys.s.units[player-1].length > 0) {
+	    this.updateLog(this.returnFaction(player) + " succeeds in capturing the sector");
+	  } else {
+	    this.updateLog(this.returnFaction(player) + " fails to capture the sector");
+	  }
+console.log("AAAA 4");
+
 	  if (this.game_space_combat_defender == 1) {
             this.game.queue.push("space_combat_over_player_menu\t"+this.game.state.space_combat_defender+"\t"+sector);
  	  } else {
             this.game.queue.push("space_combat_over_player_menu\t"+this.game.state.space_combat_attacker+"\t"+sector);
 	  }
+console.log("AAAA 5");
 
  	  this.game.queue.splice(qe, 1);
 	  return 1;
@@ -3308,6 +3336,7 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	// have a round of space combat
 	//
 	this.game.state.space_combat_round++;
+	this.game.state.assign_hits_to_cancel = 0;
 
 	//
 	// who is the defender?
@@ -3643,6 +3672,7 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	let sys 	 = this.returnSectorAndPlanets(sector);
 
   	this.game.queue.splice(qe, 1);
+	this.game.state.assign_hits_to_cancel = 0;
 
         //
         // have a round of ground combat

@@ -120,8 +120,8 @@
 }
 
 :root {
-  --p1: #0066ff;
-  --p2: #229922;
+  --p1: #229922;
+  --p2: #0066ff;
   --p3: #FF6037;
   --p4: #FF00CC;
   --p5: #FFCC33;
@@ -891,7 +891,7 @@ body {
 .terminal_header3 {}
 
 .exhausted {
-  opacity: 0.3;
+  opacity: 0.5;
 }
 
 .agendabox {

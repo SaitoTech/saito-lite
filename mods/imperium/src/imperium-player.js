@@ -186,7 +186,6 @@
           html += '<li class="option" id="action">play action card</li>';
         }
       }
-console.log(this.game.tracker.trade + " -- " + this.canPlayerTrade(this.game.player));
       if (this.game.tracker.trade == 0 && this.canPlayerTrade(this.game.player) == 1) {
         html += '<li class="option" id="trade">trade</li>';
       }
@@ -504,7 +503,7 @@ console.log(this.game.tracker.trade + " -- " + this.canPlayerTrade(this.game.pla
     let maximum_assignable_hits = 0;
     let relevant_action_cards = ["post_pds","damage_control","space_combat"];
 
-    this.game.state.assign_hits_to_cancel = 0;
+console.log("ASSIGN HITS TO CANCEL: " + this.game.state.assign_hits_to_cancel);
 
     html = '<div class="sf-readable">You must assign '+total_hits+' to your fleet:</div><ul>';
 
@@ -559,10 +558,14 @@ console.log(this.game.tracker.trade + " -- " + this.canPlayerTrade(this.game.pla
 
       if (action2 == "action") {
         imperium_self.playerSelectActionCard(function(card) {
+alert("SELECTING AN ACTION CARD");
+	  imperium_self.addMove(imperium_self.game.state.assign_hits_queue_instruction);
   	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
   	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
-          imperium_self.playerAssignHits(attacker, defender, type, sector, details, total_hits, source);
+	  imperium_self.endTurn();
+	  imperium_self.updateStatus("playing action card before hits assignment");
+//          imperium_self.playerAssignHits(attacker, defender, type, sector, details, total_hits, source);
         }, function() {
           imperium_self.playerAssignHits(attacker, defender, type, sector, details, total_hits, source);
 	}, relevant_action_cards);
@@ -754,7 +757,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
 
     this.game.state.space_combat_sector = sector;
 
-    html = '<div class="sf-readable">Space Combat: round ' + this.game.state.space_combat_round + '</div><ul>';
+    html = '<div class="sf-readable">Space Combat: round ' + this.game.state.space_combat_round + ':<p></p>'+this.returnFaction(attacker)+" attacks with "+this.returnPlayerFleetInSector(attacker, sector) + ". " + this.returnFaction(defender) + " defends with " + this.returnPlayerFleetInSector(defender, sector) + "</div><ul>";
 
     let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards)
     if (ac.length > 0) {
