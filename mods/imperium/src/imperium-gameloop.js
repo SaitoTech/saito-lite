@@ -1636,19 +1636,19 @@ console.log("STARTING WITH RUN QUEUE");
         this.game.players_info[offering_faction-1].traded_this_turn = 1;
         this.game.players_info[faction_responding-1].traded_this_turn = 1;
 
-  	this.game.players_info[offering_faction-1].commodities -= offer.goods;
-  	this.game.players_info[faction_responding-1].commodities -= response.goods;
+  	this.game.players_info[offering_faction-1].commodities -= parseInt(offer.goods);
+  	this.game.players_info[faction_responding-1].commodities -= parseInt(response.goods);
 
-  	this.game.players_info[offering_faction-1].goods += response.goods;
-  	this.game.players_info[faction_responding-1].goods += offer.goods;
+  	this.game.players_info[offering_faction-1].goods += parseInt(response.goods);
+  	this.game.players_info[faction_responding-1].goods += parseInt(offer.goods);
 
 	if (this.game.players_info[offering_faction-1].commodities < 0) {
-	  this.game.players_info[offering_faction-1].goods += this.game.players_info[offering_faction-1].commodities;
+	  this.game.players_info[offering_faction-1].goods += parseInt(this.game.players_info[offering_faction-1].commodities);
 	  this.game.players_info[offering_faction-1].commodities = 0;
 	}
 
 	if (this.game.players_info[faction_responding-1].commodities < 0) {
-	  this.game.players_info[faction_responding-1].goods += this.game.players_info[faction_responding-1].commodities;
+	  this.game.players_info[faction_responding-1].goods += parseInt(this.game.players_info[faction_responding-1].commodities);
 	  this.game.players_info[faction_responding-1].commodities = 0;
 	}
 

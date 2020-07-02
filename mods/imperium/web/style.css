@@ -844,16 +844,8 @@ body {
   filter: brightness(0) saturate(100%) invert(57%) sepia(13%) saturate(2390%) hue-rotate(84deg) brightness(93%) contrast(80%);
 }
 
-.player_color_1 {
-  filter: invert(42%) sepia(30%) saturate(7403%) hue-rotate(191deg) brightness(100%) contrast(103%);
-}
-
 .player_color_2 {
-  filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
-}
-
-.player_color_2 {
-  filter: invert(44%) sepia(96%) saturate(2682%) hue-rotate(91deg) brightness(136%) contrast(117%);
+  filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%); 
 }
 
 .player_color_3 {

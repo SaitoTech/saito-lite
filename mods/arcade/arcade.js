@@ -605,6 +605,62 @@ console.log("AFTER ALL THE FUSS");
 
 console.log("OUT OF JOIN GAME ON OPEN");
 
+	//
+	// it is possible that we have multiple joins that bring us up to
+	// the required number of players, but that did not arrive in the
+	// one-by-one sequence needed for the last player to trigger an
+	// "accept" request instead of another "join".
+	//
+	// in this case the last player sends an accept request which triggers
+	// the start of the game automatically.
+	//
+        if (tx.transaction) {
+          if (!tx.transaction.sig) { return; }
+          if (tx.msg.over == 1) { return; }
+  
+          for (let i = 0; i < this.games.length; i++) {
+            if (this.games[i].transaction.sig == txmsg.game_id) {
+
+ 	      //
+	      // console.log
+	      //
+	      let number_of_willing_players = this.games[i].msg.players.length;
+	      let number_of_players_needed  = this.games[i].msg.players_needed;
+
+	      console.log("NUMBER OF WILLING PLAYERS IN THIS GAME: " + number_of_willing_players);
+	      console.log("NUMBER OF PLAYERS NEEDED IN THIS GAME: " + number_of_players_needed);
+
+	      if (number_of_willing_players >= number_of_players_needed) {
+console.log("ALL PLAYERS: " + JSON.stringify(this.games[i].msg.players));
+	        console.log(this.games[i].msg.players[0] + " is the critical address, we are: " + this.app.wallet.returnPublicKey());
+
+	        //
+	        // first player is the only one with a guaranteed consistent order in all 
+	        // browsers -- cannot use last player to join as players may disagree on 
+		// their order. so the first player is responsible for processing the "accept"
+		//
+	        if (this.games[i].msg.players[0] == this.app.wallet.returnPublicKey()) {
+
+	 	  // i should send an accept request to kick this all off
+		  this.games[i].msg.players.splice(0, 1);
+		  this.games[i].msg.players_sigs.splice(0, 1);
+
+console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+console.log("CREATING A TRANSACTION TO ACCEPT THIS GAME");
+console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+		  let newtx = this.createAcceptTransaction(this.games[i]);
+		  this.app.network.propagateTransaction(newtx);
+
+console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+console.log("AND PROPAGATED... ");
+console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	        }
+	      }
+	    }
+          }
+        }
+
       }
 
       //

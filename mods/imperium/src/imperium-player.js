@@ -3352,8 +3352,8 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
           html = '<div class="sf-readable">It is the start of a new round. You have '+obj.new_tokens+' new tokens to allocate. But how?</div><ul>';
 	}
 
-            html += '<li class="option" id="strategy">Strategy Token - '+ (parseInt(obj.current_strategy)+parseInt(obj.new_strategy)) + '</li>';
             html += '<li class="option" id="command">Command Token - '+ (parseInt(obj.current_command)+parseInt(obj.new_command)) + '</li>';
+            html += '<li class="option" id="strategy">Strategy Token - '+ (parseInt(obj.current_strategy)+parseInt(obj.new_strategy)) + '</li>';
             html += '<li class="option" id="fleet">Fleet Supply - '+ (parseInt(obj.current_fleet)+parseInt(obj.new_fleet)) + '</li>';
             html += '</ul>';
   
