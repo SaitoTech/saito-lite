@@ -16,13 +16,13 @@
           imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tcommodities\t"+imperium_self.game.players_info[imperium_self.game.player-1].commodity_limit);
  
           let factions = imperium_self.returnFactions();
-          let html = '<p>Issue commodities to which players: </p><ul>';
+          let html = '<p>You have received 3 trade goods and '+imperium_self.game.players_info[imperium_self.game.player-1].commodities+' commodities. You may choose to replenish the commodities of any other players: </p><ul>';
           for (let i = 0; i < imperium_self.game.players_info.length; i++) {
             if (i != imperium_self.game.player-1) {
               html += '<li class="option" id="'+i+'">' + factions[imperium_self.game.players_info[i].faction].name + '</li>';
             }
           }
-          html += '<li class="option" id="finish">finish replenishing</li>';
+          html += '<li class="option" id="finish">stop replenishing</li>';
  
           imperium_self.updateStatus(html);
  

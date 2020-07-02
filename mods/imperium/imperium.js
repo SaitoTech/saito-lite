@@ -2109,13 +2109,13 @@ console.log("WINNIGN CHOICE: " + winning_choice);
           imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tcommodities\t"+imperium_self.game.players_info[imperium_self.game.player-1].commodity_limit);
  
           let factions = imperium_self.returnFactions();
-          let html = '<p>Issue commodities to which players: </p><ul>';
+          let html = '<p>You have received 3 trade goods and '+imperium_self.game.players_info[imperium_self.game.player-1].commodities+' commodities. You may choose to replenish the commodities of any other players: </p><ul>';
           for (let i = 0; i < imperium_self.game.players_info.length; i++) {
             if (i != imperium_self.game.player-1) {
               html += '<li class="option" id="'+i+'">' + factions[imperium_self.game.players_info[i].faction].name + '</li>';
             }
           }
-          html += '<li class="option" id="finish">finish replenishing</li>';
+          html += '<li class="option" id="finish">stop replenishing</li>';
  
           imperium_self.updateStatus(html);
  
@@ -7018,7 +7018,6 @@ console.log("RESOLVED 2: " + this.game.confirms_received + " of " + this.game.co
 
       if (mv[0] === "play") {
 
-
     	let player = mv[1];
     	let contplay = 0;
         this.game.state.active_player_moved = 0;
@@ -7026,6 +7025,8 @@ console.log("RESOLVED 2: " + this.game.confirms_received + " of " + this.game.co
 	if (parseInt(mv[2]) == 1) { contplay = 1; }
         if (contplay == 1) { this.game.state.active_player_moved = 1; }
 	this.game.state.active_player_turn = player;
+
+console.log(this.game.state.active_player_moved + " ---> " + this.game.state.active_player_turn);
 
 //        this.game.queue.splice(qe, 1);
 
@@ -8662,7 +8663,8 @@ console.log("UNITS IN STORAGE: " + units_in_storage);
   	let player       = parseInt(mv[1]);
 	let z = this.returnEventObjects();
 
-
+        this.game.state.active_player_moved = 0;
+        this.game.state.active_player_turn = -1;
   	this.game.queue.splice(qe, 1);
 
 	let speaker_order = this.returnSpeakerOrder();

@@ -288,7 +288,6 @@ console.log("RESOLVED 2: " + this.game.confirms_received + " of " + this.game.co
 
       if (mv[0] === "play") {
 
-
     	let player = mv[1];
     	let contplay = 0;
         this.game.state.active_player_moved = 0;
@@ -296,6 +295,8 @@ console.log("RESOLVED 2: " + this.game.confirms_received + " of " + this.game.co
 	if (parseInt(mv[2]) == 1) { contplay = 1; }
         if (contplay == 1) { this.game.state.active_player_moved = 1; }
 	this.game.state.active_player_turn = player;
+
+console.log(this.game.state.active_player_moved + " ---> " + this.game.state.active_player_turn);
 
 //        this.game.queue.splice(qe, 1);
 
@@ -1932,7 +1933,8 @@ console.log("UNITS IN STORAGE: " + units_in_storage);
   	let player       = parseInt(mv[1]);
 	let z = this.returnEventObjects();
 
-
+        this.game.state.active_player_moved = 0;
+        this.game.state.active_player_turn = -1;
   	this.game.queue.splice(qe, 1);
 
 	let speaker_order = this.returnSpeakerOrder();
