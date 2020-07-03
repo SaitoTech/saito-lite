@@ -4682,25 +4682,22 @@ alert("select sector with filter");
 	      function(planet) {
                 imperium_self.addMove("expend\t"+player+"\tplanet\t"+planet);
 
-		//
-		//
-		//
 		let planet_obj   = imperium_self.game.planets[planet];	
 		let planet_owner = parseInt(planet_obj.owner);
 		let planet_res   = parseInt(planet_obj.resources);
 
 		let infantry_destroyed = 0;
 
-console.log("PLANET OBJ: " + JSON.stringify(planet_obj));
-
-		for (let i = 0; i < planet_obj.units[planet_owner-1].length; i++) {
-		  if (infantry_destroyed > 3) {
-		    if (planet_obj.units[planet_owner-1][i].type == "infantry") {
-		      imperium_self.addMove("destroy\t"+action_card_player+"\t"+planet_owner+"\t"+"ground"+"\t"+planet_obj.sector+"\t"+planet_obj.idx+"\t"+"1");
+		if (planet_owner >= 0) {
+		  for (let i = 0; i < planet_obj.units[planet_owner-1].length; i++) {
+		    if (infantry_destroyed > 3) {
+		      if (planet_obj.units[planet_owner-1][i].type == "infantry") {
+		        imperium_self.addMove("destroy\t"+action_card_player+"\t"+planet_owner+"\t"+"ground"+"\t"+planet_obj.sector+"\t"+planet_obj.idx+"\t"+"1");
+		      }
 		    }
 		  }
 		}
-                imperium_self.addMove("purchase\t"+action_card_player+"\tgoods\t"+goods);
+                imperium_self.addMove("purchase\t"+action_card_player+"\tgoods\t"+planet_res);
 		imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " gains " + planet_res + " trade goods");
 		imperium_self.endTurn();
 		return 0;
@@ -17542,7 +17539,7 @@ addUIEvents() {
         </span>
         </span>
       </div>
-    </div>;`
+    </div>`;
 
     document.querySelector('.hud-header').innerHTML += html;
 
