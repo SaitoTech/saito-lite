@@ -5519,6 +5519,18 @@ console.log("Sector to ask about: " + s + " --- " + sector);
   } // end initializeGameObjects
 
 
+
+  initializeHTML(app) {
+    super.initializeHTML(app);
+    this.app.modules.respondTo("chat-manager").forEach(mod => {
+      mod.respondTo('chat-manager').render(app, this);
+      mod.respondTo('chat-manager').attachEvents(app, this);
+    });
+    $('.content').css('visibility', 'visible');
+  }
+
+
+
   
   async initializeGame(game_id) {
 
