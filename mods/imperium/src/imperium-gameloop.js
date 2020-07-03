@@ -1280,7 +1280,7 @@ console.log("do we have a pool 2?");
   	  //
   	  // TODO -- pick appropriate card number
   	  //
-  	  cards_to_select = 1;
+  	  //cards_to_select = 1;
   
   	  for (cts = 0; cts < cards_to_select; cts++) {
             for (let i = 0; i < this.game.players_info.length; i++) {
