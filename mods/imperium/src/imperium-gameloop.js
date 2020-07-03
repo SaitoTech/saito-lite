@@ -292,7 +292,6 @@ console.log("RESOLVED 2: " + this.game.confirms_received + " of " + this.game.co
 
     	let player = mv[1];
     	let contplay = 0;
-        this.game.state.active_player_moved = 0;
 	if (this.game.state.active_player_turn == player) { contplay = 1; }
 	if (parseInt(mv[2]) == 1) { contplay = 1; }
         if (contplay == 1) { this.game.state.active_player_moved = 1; }
@@ -1495,7 +1494,7 @@ console.log("STARTING WITH RUN QUEUE");
 	      return 0;
 	    } else {
 	    }
-	    this.endMove();
+	    this.endTurn();
 	  }
         }
   
@@ -1742,6 +1741,9 @@ console.log("STARTING WITH RUN QUEUE");
 	  this.game.players_info[player-1].secret_objectives_in_hand += amount;
 	}
 
+	this.updateTokenDisplay();
+	this.updateLeaderboard();
+
   	this.game.queue.splice(qe, 1);
   	return 1;
 
@@ -1825,6 +1827,10 @@ console.log("STARTING WITH RUN QUEUE");
   	  this.updateLog(this.returnFaction(player) + " increases fleet supply to " + this.game.players_info[player-1].fleet_supply);
   	}
   
+
+	this.updateTokenDisplay();
+	this.updateLeaderboard();
+
   	this.game.queue.splice(qe, 1);
   	return 1;
   
@@ -3732,6 +3738,10 @@ console.log("AAAA 5");
   	let player = parseInt(mv[1]);
   	let card = mv[2];
 	let z = this.returnEventObjects();
+
+        if (this.action_cards[card].type == "action") {
+	  this.game.state.active_player_moved = 1;
+	}
 
 	this.updateLog(this.returnFaction(player) + " plays " + this.action_cards[card].name + "<p></p><div style='width:80%;font-size:0.9em;margin-left:auto;margin-right:auto;margin-bottom:15px'>" + this.action_cards[card].text +'</div>');
 

@@ -4268,6 +4268,7 @@ alert("H: " + planet);
 	      function(planet) {
 
 		planet = imperium_self.game.planets[planet];
+		let sector = planet.sector;
                 imperium_self.addMove("gain_planet\t"+imperium_self.game.player+"\t"+sector+"\t"+planet.idx);
                 imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " gains planet " + planet.name);
                 imperium_self.endTurn();
@@ -7025,7 +7026,6 @@ console.log("RESOLVED 2: " + this.game.confirms_received + " of " + this.game.co
 
     	let player = mv[1];
     	let contplay = 0;
-        this.game.state.active_player_moved = 0;
 	if (this.game.state.active_player_turn == player) { contplay = 1; }
 	if (parseInt(mv[2]) == 1) { contplay = 1; }
         if (contplay == 1) { this.game.state.active_player_moved = 1; }
@@ -8228,7 +8228,7 @@ console.log("STARTING WITH RUN QUEUE");
 	      return 0;
 	    } else {
 	    }
-	    this.endMove();
+	    this.endTurn();
 	  }
         }
   
@@ -8475,6 +8475,9 @@ console.log("STARTING WITH RUN QUEUE");
 	  this.game.players_info[player-1].secret_objectives_in_hand += amount;
 	}
 
+	this.updateTokenDisplay();
+	this.updateLeaderboard();
+
   	this.game.queue.splice(qe, 1);
   	return 1;
 
@@ -8558,6 +8561,10 @@ console.log("STARTING WITH RUN QUEUE");
   	  this.updateLog(this.returnFaction(player) + " increases fleet supply to " + this.game.players_info[player-1].fleet_supply);
   	}
   
+
+	this.updateTokenDisplay();
+	this.updateLeaderboard();
+
   	this.game.queue.splice(qe, 1);
   	return 1;
   
@@ -10466,6 +10473,10 @@ console.log("AAAA 5");
   	let card = mv[2];
 	let z = this.returnEventObjects();
 
+        if (this.action_cards[card].type == "action") {
+	  this.game.state.active_player_moved = 1;
+	}
+
 	this.updateLog(this.returnFaction(player) + " plays " + this.action_cards[card].name + "<p></p><div style='width:80%;font-size:0.9em;margin-left:auto;margin-right:auto;margin-bottom:15px'>" + this.action_cards[card].text +'</div>');
 
 	let cards = this.returnActionCards();
@@ -10947,13 +10958,11 @@ console.log("AAAA 5");
 
         if (action2 == "activate") {
 	  imperium_self.game.state.active_player_moved = 1;
-  	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.playerActivateSystem();
         }
 
         if (action2 == "select_strategy_card") {
 	  imperium_self.game.state.active_player_moved = 1;
-  	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.playerSelectStrategyCard(function(success) {
   	    imperium_self.addMove("strategy_card_after\t"+success+"\t"+imperium_self.game.player+"\t1");
   	    imperium_self.addMove("strategy\t"+success+"\t"+imperium_self.game.player+"\t1");
@@ -10962,7 +10971,6 @@ console.log("AAAA 5");
           });
         }
         if (action2 == "action") {
-  	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.playerSelectActionCard(function(card) {
 	    if (imperium_self.action_cards[card].type == "action") { imperium_self.game.state.active_player_moved = 1; }
   	    imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
@@ -11195,8 +11203,6 @@ console.log("AAAA 5");
     let hits_assigned = 0;
     let maximum_assignable_hits = 0;
     let relevant_action_cards = ["post_pds","damage_control","space_combat"];
-
-console.log("ASSIGN HITS TO CANCEL: " + this.game.state.assign_hits_to_cancel);
 
     html = '<div class="sf-readable">You must assign '+total_hits+' to your fleet:</div><ul>';
 
@@ -14973,6 +14979,7 @@ console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
 
         state.assign_hits_queue_instruction = "";
         state.assign_hits_to_cancel = "";
+        state.active_player_moved = 0;
 
 
         state.agendas_voting_information = [];

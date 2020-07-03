@@ -254,13 +254,11 @@
 
         if (action2 == "activate") {
 	  imperium_self.game.state.active_player_moved = 1;
-  	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.playerActivateSystem();
         }
 
         if (action2 == "select_strategy_card") {
 	  imperium_self.game.state.active_player_moved = 1;
-  	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.playerSelectStrategyCard(function(success) {
   	    imperium_self.addMove("strategy_card_after\t"+success+"\t"+imperium_self.game.player+"\t1");
   	    imperium_self.addMove("strategy\t"+success+"\t"+imperium_self.game.player+"\t1");
@@ -269,7 +267,6 @@
           });
         }
         if (action2 == "action") {
-  	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.playerSelectActionCard(function(card) {
 	    if (imperium_self.action_cards[card].type == "action") { imperium_self.game.state.active_player_moved = 1; }
   	    imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
@@ -502,8 +499,6 @@
     let hits_assigned = 0;
     let maximum_assignable_hits = 0;
     let relevant_action_cards = ["post_pds","damage_control","space_combat"];
-
-console.log("ASSIGN HITS TO CANCEL: " + this.game.state.assign_hits_to_cancel);
 
     html = '<div class="sf-readable">You must assign '+total_hits+' to your fleet:</div><ul>';
 
