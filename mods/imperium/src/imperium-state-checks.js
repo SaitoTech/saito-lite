@@ -1096,6 +1096,13 @@ console.log("p: " + planet);
       if (this.game.state.riders[i].player == player) { return 1; }
     }
 
+    if (this.game.turn) {
+      for (let i = 0; i < this.game.turn.length; i++) {
+	let x = this.game.turn[i].split("\t");
+	if (x[0] == "rider") { if (x[1] == this.game.player) { return 1; } }
+      }
+    }
+
     return 0;
 
   }

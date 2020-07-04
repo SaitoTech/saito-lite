@@ -81,10 +81,12 @@ addUIEvents() {
 
   document.querySelectorAll('.faction_button').forEach(el => {
     el.addEventListener('click', (e) => {
+      for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+        document.querySelector(`.faction_content.p${(i+1)}`).innerHTML = imperium_self.returnFactionSheet(imperium_self, (i+1));
+      }
       if (document.querySelector('.interface_overlay').classList.contains('hidden')) {
         document.querySelector('.interface_overlay').classList.remove('hidden');
       } else {
-        
       }
       let is_visible = 0;
       let faction_idx = e.target.dataset.id-1;

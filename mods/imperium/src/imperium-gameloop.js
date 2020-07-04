@@ -684,9 +684,7 @@ console.log("executing "+z[z_index].name);
 	let action_card_player = parseInt(mv[1]);
 	let rider = mv[2];
 
-console.log("EXECUTING RIDER!: " + rider);
-
-	return this.action_cards[rider].playActionCardEvent(this, this.game.player, action_card_player, card);
+	return this.action_cards[rider].playActionCardEvent(this, this.game.player, action_card_player, rider);
 
       }
 

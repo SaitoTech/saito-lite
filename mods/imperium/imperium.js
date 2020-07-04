@@ -1465,7 +1465,7 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
       name     			:       "Construction",
       rank			:	4,
       img			:	"/imperium/img/strategy/BUILD.png",
-      text			:	"The player of this card may build a PDS or Space dock on a planet they control, and then a PDS on a second planet. Other players may spend a strategy token to build either a PDS or Space Dock on a planet they control" ,
+      text			:	"Player builds PDS or Space dock on planet they control, and additional PDS on a second planet. Other players may spend a strategy token and activate sector to build PDS or Space Dock in it." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player) {
@@ -1527,7 +1527,7 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
       name     			:       "Diplomacy",
       rank			:	2,
       img			:	"/imperium/img/strategy/DIPLOMACY.png",
-      text			:	"The player of this card may select a sector other than New Byzantium to mire in diplomatic conflict. That sector is activated for all other players. Any planets in that sector controlled by the player are refreshed. Other players may then spend a strategy token to refresh two of their planets." ,
+      text			:	"Player selects a sector other than New Byzantium: that sector is activated for all other players and any planets in that sector are refreshed. Other players may spend a strategy token to refresh two planets." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player) {
@@ -1723,7 +1723,7 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
       name     			:       "Leadership",
       rank			:	1,
       img			:	"/imperium/img/strategy/INITIATIVE.png",
-      text			:	"The player of this card gets three tokens to allocate among their command, strategy and fleet pool. All players may then purchase additional tokens at a cost of three influence per token purchased." ,
+      text			:	"Player gets three tokens for their command, strategy and fleet pools. All players may purchase additional tokens at three influence per token." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
 	if (imperium_self.game.player == strategy_card_player) {
@@ -3885,26 +3885,25 @@ console.log(sector + " -- " + planet_idx + " -- " + unit_idx);
 
 
 
+/************************************
 
-    this.importActionCard('sabotage', {
-  	name : "Sabotage" ,
-  	type : "action_card" ,
-  	text : "When another player plays an action card, you may cancel that action card" ,
-	playActionCard : function(imperium_self, player, action_card_player, card) {
+ACTION CARD - types
 
-	  //
-	  // this runs in actioncard post...
-	  //
-          if (imperium_self.game.player == action_card_player) {
-	    // remove previous action card
-	    imperium_self.addMove("resolve\t"+"action_card");
-	    imperium_self.addMove("resolve\t"+"action_card_post");
-	  }
+"action" -> main menu
+"bombardment_attacker"
+"bombardment_defender"
+"combat"
+"ground_combat"
+"pds" -> before pds fire
+"post_pds" -> after pds fire
+"pre_agenda" --> before agenda voting
+"post_agenda" --> after agenda voting
+"space_combat"
+"space_combat_victory"
+"rider"
 
-	  return 0;
-	}
-    });
 
+************************************/
 
 
     this.importActionCard('lost-star-chart', {
@@ -4821,6 +4820,26 @@ alert("select sector with filter");
 
 
 
+    this.importActionCard('sabotage', {
+  	name : "Sabotage" ,
+  	type : "action_card" ,
+  	text : "When another player plays an action card, you may cancel that action card" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  //
+	  // this runs in actioncard post...
+	  //
+          if (imperium_self.game.player == action_card_player) {
+	    // remove previous action card
+	    imperium_self.addMove("resolve\t"+"action_card");
+	    imperium_self.addMove("resolve\t"+"action_card_post");
+	  }
+
+	  return 0;
+	}
+    });
+
+
     this.importActionCard('bunker', {
   	name : "Bunker" ,
   	type : "bombardment_defender" ,
@@ -5053,25 +5072,6 @@ alert("select sector with filter");
 
 
 
-/************************************
-
-ACTION CARD - types
-
-"action" -> main menu
-"bombardment_attacker"
-"bombardment_defender"
-"combat"
-"ground_combat"
-"pds" -> before pds fire
-"post_pds" -> after pds fire
-"pre_agenda" --> before agenda voting
-"post_agenda" --> after agenda voting
-"space_combat"
-"space_combat_victory"
-"rider"
-
-
-************************************/
 
 
     this.importActionCard('leadership-rider', {
@@ -7524,9 +7524,7 @@ console.log("executing "+z[z_index].name);
 	let action_card_player = parseInt(mv[1]);
 	let rider = mv[2];
 
-console.log("EXECUTING RIDER!: " + rider);
-
-	return this.action_cards[rider].playActionCardEvent(this, this.game.player, action_card_player, card);
+	return this.action_cards[rider].playActionCardEvent(this, this.game.player, action_card_player, rider);
 
       }
 
@@ -11997,7 +11995,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
 
     html = '<div class="sf-readable">The agenda has become deadlocked in the Senate. You - the Speaker - must resolve it: </div><ul>';
     for (let i = 0; i < choices.length; i++) {
-      html += '<li class="option" id="'+i+'">'+choices[i]+'</li>';
+      html += '<li class="option" id="'+i+'">'+this.returnNameFromIndex(choices[i])+'</li>';
     }
     html += '</ul>';
 
@@ -16680,6 +16678,13 @@ console.log("p: " + planet);
       if (this.game.state.riders[i].player == player) { return 1; }
     }
 
+    if (this.game.turn) {
+      for (let i = 0; i < this.game.turn.length; i++) {
+	let x = this.game.turn[i].split("\t");
+	if (x[0] == "rider") { if (x[1] == this.game.player) { return 1; } }
+      }
+    }
+
     return 0;
 
   }
@@ -17638,10 +17643,12 @@ addUIEvents() {
 
   document.querySelectorAll('.faction_button').forEach(el => {
     el.addEventListener('click', (e) => {
+      for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+        document.querySelector(`.faction_content.p${(i+1)}`).innerHTML = imperium_self.returnFactionSheet(imperium_self, (i+1));
+      }
       if (document.querySelector('.interface_overlay').classList.contains('hidden')) {
         document.querySelector('.interface_overlay').classList.remove('hidden');
       } else {
-        
       }
       let is_visible = 0;
       let faction_idx = e.target.dataset.id-1;

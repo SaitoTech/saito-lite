@@ -3,7 +3,7 @@
       name     			:       "Diplomacy",
       rank			:	2,
       img			:	"/imperium/img/strategy/DIPLOMACY.png",
-      text			:	"The player of this card may select a sector other than New Byzantium to mire in diplomatic conflict. That sector is activated for all other players. Any planets in that sector controlled by the player are refreshed. Other players may then spend a strategy token to refresh two of their planets." ,
+      text			:	"Player selects a sector other than New Byzantium: that sector is activated for all other players and any planets in that sector are refreshed. Other players may spend a strategy token to refresh two planets." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player) {

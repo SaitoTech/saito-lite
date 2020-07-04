@@ -1180,7 +1180,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
 
     html = '<div class="sf-readable">The agenda has become deadlocked in the Senate. You - the Speaker - must resolve it: </div><ul>';
     for (let i = 0; i < choices.length; i++) {
-      html += '<li class="option" id="'+i+'">'+choices[i]+'</li>';
+      html += '<li class="option" id="'+i+'">'+this.returnNameFromIndex(choices[i])+'</li>';
     }
     html += '</ul>';
 
