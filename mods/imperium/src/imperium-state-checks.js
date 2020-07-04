@@ -28,18 +28,30 @@
 
 
 
+  returnNameFromIndex(idx) {
+    if (idx.indexOf("planet") == 0) { if (this.game.planets[idx]) { return this.game.planets[idx].name; } }
+    if (idx.indexOf("sector") == 0) { if (this.game.sectors[idx]) { return this.game.sectors[idx].sector; } }
+    return idx;
+  }
+
+
+  returnActiveAgenda() {
+    for (let i = this.game.queue.length-1; i >= 0; i--) {
+      let x = this.game.queue[i].split("\t");
+      if (x[0] == "agenda") { return x[1]; }
+    }
+    return "";
+  }
 
 
 
   checkForVictory() {
-
     for (let i = 0; i < this.game.players_info.length; i++) {
       if (this.game.players_info[i].vp >= this.vp_needed) {
         this.updateStatus("Game Over: " + this.returnFaction(i+1) + " has reached 14 VP");
         return 1;
       }
     }
-
     return 0;
   }
 

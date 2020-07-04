@@ -105,15 +105,11 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 
   	    if (this.game.confirms_needed <= this.game.confirms_received) {
 
-console.log("RESOLVED 1: " + this.game.confirms_received + " of " + this.game.confirms_needed);
-
 	      this.resetConfirmsNeeded(0);
     	      this.game.queue.splice(qe-1, 2);
   	      return 1;
 
   	    } else {
-
-console.log("RESOLVED 2: " + this.game.confirms_received + " of " + this.game.confirms_needed);
 
     	      this.game.queue.splice(qe, 1);
 
@@ -172,7 +168,7 @@ console.log("RESOLVED 2: " + this.game.confirms_received + " of " + this.game.co
 	let x = {};
 	    x.player 	= mv[1];
 	    x.rider 	= mv[2];
-	    x.choice 	= parseInt(mv[3]);
+	    x.choice 	= mv[3];
 
 	this.game.state.riders.push(x);  
 
@@ -569,7 +565,6 @@ console.log("executing "+z[z_index].name);
    	  }
 	}
 
-	imperium_self.game.queue.push();
 	return 1;
 
       }
@@ -666,8 +661,8 @@ console.log("executing "+z[z_index].name);
           //
           for (let i = 0; i < this.game.state.riders.length; i++) {
             let x = this.game.state.riders[i];
-            if (x.choice == winning_choice) {
-              this.game.queue.addMove("execute_rider\t"+x.player+"\t"+x.rider);
+            if (x.choice === winning_choice || x.choice === this.game.state.choices[winning_choice]) {
+              this.game.queue.push("execute_rider\t"+x.player+"\t"+x.rider);
             }
           }
 
@@ -676,7 +671,7 @@ console.log("executing "+z[z_index].name);
 	//
 	// notify users of vote results
 	//
-	this.game.queue.push("acknowledge\tThe Galactic Senate has settled on '"+winning_choice+"'");
+	this.game.queue.push("acknowledge\tThe Galactic Senate has settled on '"+this.returnNameFromIndex(winning_choice)+"'");
 
       }
 
@@ -688,6 +683,8 @@ console.log("executing "+z[z_index].name);
 
 	let action_card_player = parseInt(mv[1]);
 	let rider = mv[2];
+
+console.log("EXECUTING RIDER!: " + rider);
 
 	return this.action_cards[rider].playActionCardEvent(this, this.game.player, action_card_player, card);
 
@@ -792,6 +789,8 @@ console.log("executing "+z[z_index].name);
 
 
       if (mv[0] == "agenda") {
+
+console.log("start ofg agenda");
 
 	//
 	// we repeatedly hit "agenda"
@@ -1556,6 +1555,9 @@ console.log("STARTING WITH RUN QUEUE");
         if (type == "strategy") {
   	  this.game.players_info[player-1].strategy_tokens -= parseInt(details);
   	}
+        if (type == "goods") {
+  	  this.game.players_info[player-1].goods -= parseInt(details);
+  	}
         if (type == "trade") {
   	  this.game.players_info[player-1].goods -= parseInt(details);
   	}
@@ -1563,6 +1565,10 @@ console.log("STARTING WITH RUN QUEUE");
   	  this.game.planets[details].exhausted = 1;
   	}
   
+
+	this.updateTokenDisplay();
+	this.updateLeaderboard();
+
   	this.game.queue.splice(qe, 1);
   	return 1;
   
@@ -3743,7 +3749,7 @@ console.log("AAAA 5");
 	  this.game.state.active_player_moved = 1;
 	}
 
-	this.updateLog(this.returnFaction(player) + " plays " + this.action_cards[card].name + "<p></p><div style='width:80%;font-size:0.9em;margin-left:auto;margin-right:auto;margin-bottom:15px'>" + this.action_cards[card].text +'</div>');
+	this.updateLog(this.returnFaction(player) + " plays " + this.action_cards[card].name + "<p></p><div style='width:80%;font-size:1.0em;margin-left:auto;margin-right:auto;margin-top:15px;margin-bottom:15px'>" + this.action_cards[card].text +'</div>');
 
 	let cards = this.returnActionCards();
 	let played_card = cards[card];
@@ -3818,6 +3824,7 @@ console.log("AAAA 5");
 	//
 	// this is where we execute the card
 	//
+console.log("EXECUTING CARD: " + card);
 	return played_card.playActionCard(this, this.game.player, action_card_player, card);
 
       }

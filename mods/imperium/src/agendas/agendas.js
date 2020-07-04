@@ -3,6 +3,7 @@
   this.importAgendaCard('shard-of-the-throne', {
   	name : "Shard of the Throne" ,
   	type : "Law" ,
+	elect : "player" ,
   	text : "Elect a Player to earn 1 VP. When this player loses a space combat to another player, they transfer the VP to that player" ,
         returnAgendaOptions : function(imperium_self) {
 	  let options = [];
@@ -128,6 +129,7 @@ console.log(sector + " -- " + planet_idx + " -- " + unit_idx);
   this.importAgendaCard('holy-planet-of-ixth', {
   	name : "Holy Planet of Ixth" ,
   	type : "Law" ,
+	elect : "planet" ,
   	text : "Elect a cultural planet. The planet's controller gains 1 VP. Units cannot be landed, produced or placed on this planet" ,
         returnAgendaOptions : function(imperium_self) {
 	  return imperium_self.returnPlanetsOnBoard(function(planet) {
@@ -165,6 +167,7 @@ console.log(sector + " -- " + planet_idx + " -- " + unit_idx);
   this.importAgendaCard('research-team-biotic', {
         name : "Research Team: Biotic" ,
         type : "Law" ,
+	elect : "planet" ,
         text : "Elect an industrial planet. The owner may exhaust this planet to ignore 1 green technology prerequisite the next time they research a technology" ,
         returnAgendaOptions : function(imperium_self) {
           return imperium_self.returnPlanetsOnBoard(function(planet) {
@@ -208,6 +211,7 @@ console.log(sector + " -- " + planet_idx + " -- " + unit_idx);
   this.importAgendaCard('research-team-cybernetic', {
         name : "Research Team: Cybernetic" ,
         type : "Law" ,
+	elect : "planet" ,
         text : "Elect an industrial planet. The owner may exhaust this planet to ignore 1 yellow technology prerequisite the next time they research a technology" ,
         returnAgendaOptions : function(imperium_self) {
           return imperium_self.returnPlanetsOnBoard(function(planet) {
@@ -251,6 +255,7 @@ console.log(sector + " -- " + planet_idx + " -- " + unit_idx);
   this.importAgendaCard('research-team-propulsion', {
         name : "Research Team: Propulsion" ,
         type : "Law" ,
+	elect : "planet" ,
         text : "Elect an industrial planet. The owner may exhaust this planet to ignore 1 blue technology prerequisite the next time they research a technology" ,
         returnAgendaOptions : function(imperium_self) {
           return imperium_self.returnPlanetsOnBoard(function(planet) {
@@ -294,6 +299,7 @@ console.log(sector + " -- " + planet_idx + " -- " + unit_idx);
   this.importAgendaCard('research-team-warfare', {
         name : "Research Team: Warfare" ,
         type : "Law" ,
+	elect : "planet" ,
         text : "Elect an hazardous planet. The owner may exhaust this planet to ignore 1 red technology prerequisite the next time they research a technology" ,
         returnAgendaOptions : function(imperium_self) {
           return imperium_self.returnPlanetsOnBoard(function(planet) {
@@ -338,6 +344,7 @@ console.log(sector + " -- " + planet_idx + " -- " + unit_idx);
   this.importAgendaCard('demilitarized-zone', {
   	name : "Demilitarized Zone" ,
   	type : "Law" ,
+	elect : "planet" ,
   	text : "Elect a cultural planet. All units are destroyed and cannot be landed, produced or placed on this planet" ,
         returnAgendaOptions : function(imperium_self) {
 	  return imperium_self.returnPlanetsOnBoard(function(planet) {
@@ -368,6 +375,7 @@ console.log(sector + " -- " + planet_idx + " -- " + unit_idx);
   this.importAgendaCard('core-mining', {
   	name : "Core Mining" ,
   	type : "Law" ,
+	elect : "planet" ,
   	text : "Elect a hazardous planet. Destroy half the infantry on that planet and increase its resource value by +2" ,
         returnAgendaOptions : function(imperium_self) {
 	  return imperium_self.returnPlanetsOnBoard(function(planet) {
@@ -663,6 +671,7 @@ console.log(sector + " -- " + planet_idx + " -- " + unit_idx);
   this.importAgendaCard('Committee Formation', {
   	name : "Committee Formation" ,
   	type : "Law" ,
+	elect : "player" ,
   	text : "Elect a player. They may form a committee to choose a player to be elected in a future agenda, bypassing voting" ,
         returnAgendaOptions : function(imperium_self) { 
 	  let options = [];
@@ -729,6 +738,7 @@ console.log(sector + " -- " + planet_idx + " -- " + unit_idx);
   this.importAgendaCard('minister-of-policy', {
         name : "Minister of Policy" ,
         type : "Law" ,
+	elect : "player" ,
         text : "Elect a player. They draw an extra action card at the start of each round" ,
         returnAgendaOptions : function(imperium_self) {
           let options = [];
@@ -750,74 +760,6 @@ console.log(sector + " -- " + planet_idx + " -- " + unit_idx);
   });
 
 
-
-/****
-
-  this.importAgendaCard('papers-please-1', {
-  	name : "Papers Please 1" ,
-  	type : "Law" ,
-  	text : "Players must have papers" ,
-        returnAgendaOptions : function(imperium_self) { return ['support','oppose']; },
-        onPass : function(imperium_self, winning_choice) {
-	  return 1;
-	},
-  });
-  this.importAgendaCard('papers-please-2', {
-  	name : "Papers Please 2" ,
-  	type : "Law" ,
-  	text : "Players must have papers" ,
-        returnAgendaOptions : function(imperium_self) { return ['support','oppose']; },
-        onPass : function(imperium_self, winning_choice) {
-	  return 1;
-	},
-  });
-  this.importAgendaCard('papers-please-3', {
-  	name : "Papers Please 3" ,
-  	type : "Law" ,
-  	text : "Players must have papers" ,
-        returnAgendaOptions : function(imperium_self) { return ['support','oppose']; },
-        onPass : function(imperium_self, winning_choice) {
-	  return 1;
-	},
-  });
-  this.importAgendaCard('papers-please-4', {
-  	name : "Papers Please 4" ,
-  	type : "Law" ,
-  	text : "Players must have papers" ,
-        returnAgendaOptions : function(imperium_self) { return ['support','oppose']; },
-        onPass : function(imperium_self, winning_choice) {
-	  return 1;
-	},
-  });
-  this.importAgendaCard('papers-please-5', {
-  	name : "Papers Please 5" ,
-  	type : "Law" ,
-  	text : "Players must have papers" ,
-        returnAgendaOptions : function(imperium_self) { return ['support','oppose']; },
-        onPass : function(imperium_self, winning_choice) {
-	  return 1;
-	},
-  });
-  this.importAgendaCard('Papers Please', {
-  	name : "Papers Please" ,
-  	type : "Law" ,
-  	text : "Players must have papers" ,
-        returnAgendaOptions : function(imperium_self) { return ['support','oppose']; },
-        onPass : function(imperium_self, winning_choice) {
-	  return 1;
-	},
-  });
-  this.importAgendaCard('Papers Please', {
-  	name : "Papers Please" ,
-  	type : "Law" ,
-  	text : "Players must have papers" ,
-        returnAgendaOptions : function(imperium_self) { return ['support','oppose']; },
-        onPass : function(imperium_self, winning_choice) {
-	  return 1;
-	},
-  });
-
-****/
 
   this.importAgendaCard('regulated-bureaucracy', {
   	name : "Regulated Bureaucracy" ,

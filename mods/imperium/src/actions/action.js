@@ -103,20 +103,22 @@ imperium_self.endTurn();
             let html = '';
             html += 'Select one agenda to quash in the Galactic Senate.<ul>';
             for (i = 0; i < 3; i++) {
-              html += '<li class="option" id="'+imperium_self.game.state.agendas[i]+'">' + laws[imperium_self.game.state.agendas[i]].name + '</li>';
+              html += '<li class="option" id="'+imperium_self.game.state.agendas[i]+'">' + imperium_self.agenda_cards[imperium_self.game.state.agendas[i]].name + '</li>';
             }
             html += '</ul>';
 
             imperium_self.updateStatus(html);
 
             $('.option').off();
-            $('.option').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showAgendaCard(imperium_self.game.state.agendas[s]); });
-            $('.option').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hideAgendaCard(imperium_self.game.state.agendas[s]); });
+            $('.option').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showAgendaCard(s); });
+            $('.option').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hideAgendaCard(s); });
             $('.option').on('click', function() {
 
               let agenda_to_quash = $(this).attr('id');
-              imperium_self.updateStatus("Quashing Agenda");
 
+	      imperium_self.hideAgendaCard(agenda_to_quash);
+
+              imperium_self.updateStatus("Quashing Agenda");
               imperium_self.addMove("quash\t"+agenda_to_quash+"\t"+"1"); // 1 = re-deal
               imperium_self.endTurn();
             });

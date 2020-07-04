@@ -91,7 +91,7 @@
               html += 'Select three agendas to advance for consideration in the Galactic Senate.<ul>';
             }
 
-            for (i = 0; i < 3; i++) {
+            for (i = 0; i < 3 && i < imperium_self.game.state.agendas.length; i++) {
               html += '<li class="option" id="'+imperium_self.game.state.agendas[i]+'">' + laws[imperium_self.game.state.agendas[i]].name + '</li>';
             }
             html += '</ul>';

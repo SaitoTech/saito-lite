@@ -23,7 +23,7 @@
       players[i].can_intervene_in_action_card 	= 0;
       players[i].secret_objectives_in_hand     	= 0;
       players[i].action_cards_in_hand         	= 0;
-      players[i].action_cards_per_round       	= 4;
+      players[i].action_cards_per_round       	= 20;
       players[i].new_tokens_per_round 	 	= 2;
       players[i].command_tokens  		= 3;
       players[i].strategy_tokens 		= 2;
@@ -253,13 +253,12 @@
         }
 
         if (action2 == "activate") {
-	  imperium_self.game.state.active_player_moved = 1;
           imperium_self.playerActivateSystem();
         }
 
         if (action2 == "select_strategy_card") {
-	  imperium_self.game.state.active_player_moved = 1;
           imperium_self.playerSelectStrategyCard(function(success) {
+	    imperium_self.game.state.active_player_moved = 1;
   	    imperium_self.addMove("strategy_card_after\t"+success+"\t"+imperium_self.game.player+"\t1");
   	    imperium_self.addMove("strategy\t"+success+"\t"+imperium_self.game.player+"\t1");
   	    imperium_self.addMove("strategy_card_before\t"+success+"\t"+imperium_self.game.player+"\t1");
@@ -1212,7 +1211,11 @@ console.log("ERROR: you had no hits left to assign, bug?");
     let relevant_action_cards = ["pre_agenda"];
     let ac = this.returnPlayerActionCards(relevant_action_cards);
 
-    html = '<div class="sf-readable">As the Senators gather to vote on '+this.agenda_cards[agenda].name+', your emissaries nervously tally the votes in their head:</div><ul>';
+    if (this.doesPlayerHaveRider(imperium_self.game.player)) {
+      html = '<div class="sf-readable">With your Rider depending on how the other players vote, your emissaries track the mood in the Senate closely...:</div><ul>';
+    } else {
+      html = '<div class="sf-readable">As the Senators gather to vote on '+this.agenda_cards[agenda].name+', your emissaries nervously tally the votes in their head:</div><ul>';
+    }
 
     if (1 == 1) {
       html += '<li class="option" id="skip">proceed into Senate</li>';
@@ -1281,7 +1284,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
     let relevant_action_cards = ["post_agenda"];
     let ac = this.returnPlayerActionCards(imperium_self.game.player, relevant_action_cards);
 
-    html = '<div class="sf-readable">The Senate has apparently voted for "'+array_of_winning_options[0]+'". As the Speaker confirms the final tally, you get the feeling the issue may not be fully settled:</div><ul>';
+    html = '<div class="sf-readable">The Senate has apparently voted for "'+this.returnNameFromIndex(array_of_winning_options[0])+'". As the Speaker confirms the final tally, you get the feeling the issue may not be fully settled:</div><ul>';
     if (array_of_winning_options.length > 1) {
       html = '<div class="sf-readable">The voting has concluded in deadlock. As you leave the council, you see the Speaker smile and crumple a small note into his pocket:</div><ul>';
     }
@@ -2371,7 +2374,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
       if (action2 != "cancel") { imperium_self.hideActionCard(action2); }
       if (action2 === "cancel") { cancel_callback(); return 0; }
 
-      imperium_self.game.tracker.action_card = 1;
+      if (imperium_self.game.tracker) { imperium_self.game.tracker.action_card = 1; }
       if (imperium_self.action_cards[action2].type == "action") { imperium_self.game.state.active_player_moved = 1; }
 
       imperium_self.game.players_info[imperium_self.game.player-1].action_cards_played.push(action2);
@@ -3262,6 +3265,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
   
         let c = confirm("Activate this system?");
         if (c) {
+	  imperium_self.game.state.active_player_moved = 1;
           sys.s.activated[imperium_self.game.player-1] = 1;
           imperium_self.addMove("activate_system_post\t"+imperium_self.game.player+"\t"+pid);
           imperium_self.addMove("activate_system\t"+imperium_self.game.player+"\t"+pid);
@@ -3495,6 +3499,53 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 
     });
   }
+
+
+
+
+
+  playerSelectChoice(msg, choices, elect="other", mycallback=null) {
+
+    let imperium_self = this;
+
+    let html  = '<div class="sf-readable">' + msg + '</div>';
+        html += '<ul>';
+
+    for (let i = 0; i < choices.length; i++) {
+      if (elect == "player") {
+        html += '<li class="textchoice" id="'+choices[i]+'">'+this.returnFaction(choices[i])+'</li>';
+      }
+      if (elect == "planet") {
+        html += '<li class="textchoice" id="'+choices[i]+'">'+this.game.planets[choices[i]].name+'</li>';
+      }
+      if (elect == "sector") {
+        html += '<li class="textchoice" id="'+choices[i]+'">'+this.game.sectors[this.game.board[choices[i]].tile].name+'</li>';
+      }
+      if (elect == "other") {
+        html += '<li class="textchoice" id="'+i+'">' + choices[i] + '</li>';
+      }
+    }
+    html += '</ul>';
+
+    this.updateStatus(html);
+
+    $('.textchoice').off();
+    $('.textchoice').on('click', function() {
+
+      let action = $(this).attr("id");
+      mycallback(action);
+
+    });
+
+  }
+
+
+
+
+
+
+
+
 
 
   playerSelectPlanetWithFilter(msg, filter_func, mycallback=null, cancel_func=null) {
