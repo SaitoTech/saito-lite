@@ -18,7 +18,7 @@
   
   async initializeGame(game_id) {
 
-    this.updateStatus("loading game...");
+    this.updateStatus("loading game...: " + game_id);
     this.loadGame(game_id);
 
     if (this.game.status != "") { this.updateStatus(this.game.status); }
@@ -325,6 +325,8 @@ console.log(" 2THIS LAW: " + JSON.stringify(this_law));
     //
     if (this.game.queue.length == 0) {
 
+alert("QUEUE LENGTH IS ZERO!");
+
       this.game.queue.push("turn");
       this.game.queue.push("newround");
   
@@ -365,6 +367,9 @@ console.log(" 2THIS LAW: " + JSON.stringify(this_law));
     //
     this.addEventsToBoard();
     this.addUIEvents();
+
+
+console.log("INITIALIZE IS DONE: " + JSON.stringify(this.game.queue));
 
   }
   

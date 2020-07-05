@@ -5625,7 +5625,7 @@ console.log("Sector to ask about: " + s + " --- " + sector);
   
   async initializeGame(game_id) {
 
-    this.updateStatus("loading game...");
+    this.updateStatus("loading game...: " + game_id);
     this.loadGame(game_id);
 
     if (this.game.status != "") { this.updateStatus(this.game.status); }
@@ -5932,6 +5932,8 @@ console.log(" 2THIS LAW: " + JSON.stringify(this_law));
     //
     if (this.game.queue.length == 0) {
 
+alert("QUEUE LENGTH IS ZERO!");
+
       this.game.queue.push("turn");
       this.game.queue.push("newround");
   
@@ -5972,6 +5974,9 @@ console.log(" 2THIS LAW: " + JSON.stringify(this_law));
     //
     this.addEventsToBoard();
     this.addUIEvents();
+
+
+console.log("INITIALIZE IS DONE: " + JSON.stringify(this.game.queue));
 
   }
   
@@ -7130,7 +7135,6 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
     	let contplay = 0;
 	if (this.game.state.active_player_turn == player) { contplay = 1; }
 	if (parseInt(mv[2]) == 1) { contplay = 1; }
-        if (contplay == 1) { this.game.state.active_player_moved = 1; }
 	this.game.state.active_player_turn = player;
 
 console.log(this.game.state.active_player_moved + " ---> " + this.game.state.active_player_turn);
@@ -7523,6 +7527,7 @@ console.log("executing "+z[z_index].name);
 
 	let action_card_player = parseInt(mv[1]);
 	let rider = mv[2];
+  	this.game.queue.splice(qe, 1);
 
 	return this.action_cards[rider].playActionCardEvent(this, this.game.player, action_card_player, rider);
 
@@ -7815,6 +7820,8 @@ console.log("start ofg agenda");
   
       if (mv[0] === "newround") {
 
+alert("AT THE START OF NEWROUND");
+
   	//
   	// SCORING
   	//
@@ -7898,6 +7905,7 @@ console.log("start ofg agenda");
         this.game.queue.push("playerschoosestrategycards");
         this.game.queue.push("playerschoosestrategycards_before");
         if (this.game.state.round == 1) {
+alert("WE ARE ADDING OUR ACKNOWLEDGEMENT TO QUEUE!");
           this.game.queue.push("acknowledge\t"+"<center><p style='font-weight:bold'>The Republic has fallen!</p><p style='font-size:0.95em;margin-top:10px;'>As the Galactic Senate collapses into factional squabbling, the ascendant powers on the outer rim plot to seize New Byzantium...</p><p style='font-size:0.95em;margin-top:10px'>Take the lead by moving your fleet to capture New Byzantium, or establish a power-base to displace the leader and impose your will on your peers.</p></center>");
  	}
 
@@ -8270,11 +8278,11 @@ console.log("HERE WE ARE: " + player);
 	let imperium_self = this;
 	let notice = mv[1];
   	//this.game.queue.splice(qe, 1);
-
 	this.game.halted = 1;
 	//this.saveGame(this.game.id);
 
 console.log("GAMING HALTED!");
+console.log("GAME ID: " + this.game.id);
 
   	this.playerAcknowledgeNotice(notice, function() {
 
@@ -8285,10 +8293,12 @@ console.log("GAMING HALTED!");
 	  imperium_self.game.halted = 0;
   	  console.log("CONTINUING EXECUTION FROM HERE");
 	  console.log(imperium_self.game.queue);
-console.log("STARTING WITH RUN QUEUE");
+//console.log("STARTING WITH RUN QUEUE");
 
 	  console.log("DO WE HAVE FUTURE MOVES? " + JSON.stringify(imperium_self.game.future));
 	  imperium_self.runQueue();
+	  return 0;
+
 	});
 
 	return 0;
@@ -10980,7 +10990,10 @@ console.log("EXECUTING CARD: " + card);
     let ac = this.returnPlayerActionCards(imperium_self.game.player, relevant_action_cards);
 
     if (stage == "main") {
-  
+
+      this.updateLeaderboard();
+      this.updateTokenDisplay();  
+
       let playercol = "player_color_"+this.game.player;
   
       let html  = '<div class="terminal_header sf-readable">[command: '+this.game.players_info[this.game.player-1].command_tokens+'] [strategy: '+this.game.players_info[this.game.player-1].strategy_tokens+'] [fleet: '+this.game.players_info[this.game.player-1].fleet_supply+']</div>';
@@ -14080,12 +14093,13 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
   
         let c = confirm("Activate this system?");
         if (c) {
-	  imperium_self.game.state.active_player_moved = 1;
           sys.s.activated[imperium_self.game.player-1] = 1;
           imperium_self.addMove("activate_system_post\t"+imperium_self.game.player+"\t"+pid);
           imperium_self.addMove("activate_system\t"+imperium_self.game.player+"\t"+pid);
           imperium_self.addMove("expend\t"+imperium_self.game.player+"\t"+"command"+"\t"+1);
+          imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t"+"int"+"\t"+"1");
 	  imperium_self.endTurn();
+
         } else {
 
           activated_once = 0;

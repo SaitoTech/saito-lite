@@ -290,7 +290,6 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
     	let contplay = 0;
 	if (this.game.state.active_player_turn == player) { contplay = 1; }
 	if (parseInt(mv[2]) == 1) { contplay = 1; }
-        if (contplay == 1) { this.game.state.active_player_moved = 1; }
 	this.game.state.active_player_turn = player;
 
 console.log(this.game.state.active_player_moved + " ---> " + this.game.state.active_player_turn);
@@ -1063,7 +1062,6 @@ console.log("start ofg agenda");
  	}
 
 
-console.log("STRATEGY CARDS: " + JSON.stringify(this.strategy_cards));
 
   	//
   	// ACTION CARDS
@@ -1431,11 +1429,11 @@ console.log("HERE WE ARE: " + player);
 	let imperium_self = this;
 	let notice = mv[1];
   	//this.game.queue.splice(qe, 1);
-
 	this.game.halted = 1;
 	//this.saveGame(this.game.id);
 
 console.log("GAMING HALTED!");
+console.log("GAME ID: " + this.game.id);
 
   	this.playerAcknowledgeNotice(notice, function() {
 
@@ -1446,10 +1444,12 @@ console.log("GAMING HALTED!");
 	  imperium_self.game.halted = 0;
   	  console.log("CONTINUING EXECUTION FROM HERE");
 	  console.log(imperium_self.game.queue);
-console.log("STARTING WITH RUN QUEUE");
+//console.log("STARTING WITH RUN QUEUE");
 
 	  console.log("DO WE HAVE FUTURE MOVES? " + JSON.stringify(imperium_self.game.future));
 	  imperium_self.runQueue();
+	  return 0;
+
 	});
 
 	return 0;

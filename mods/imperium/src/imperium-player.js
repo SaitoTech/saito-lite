@@ -165,7 +165,10 @@
     let ac = this.returnPlayerActionCards(imperium_self.game.player, relevant_action_cards);
 
     if (stage == "main") {
-  
+
+      this.updateLeaderboard();
+      this.updateTokenDisplay();  
+
       let playercol = "player_color_"+this.game.player;
   
       let html  = '<div class="terminal_header sf-readable">[command: '+this.game.players_info[this.game.player-1].command_tokens+'] [strategy: '+this.game.players_info[this.game.player-1].strategy_tokens+'] [fleet: '+this.game.players_info[this.game.player-1].fleet_supply+']</div>';
@@ -3265,12 +3268,13 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
   
         let c = confirm("Activate this system?");
         if (c) {
-	  imperium_self.game.state.active_player_moved = 1;
           sys.s.activated[imperium_self.game.player-1] = 1;
           imperium_self.addMove("activate_system_post\t"+imperium_self.game.player+"\t"+pid);
           imperium_self.addMove("activate_system\t"+imperium_self.game.player+"\t"+pid);
           imperium_self.addMove("expend\t"+imperium_self.game.player+"\t"+"command"+"\t"+1);
+          imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t"+"int"+"\t"+"1");
 	  imperium_self.endTurn();
+
         } else {
 
           activated_once = 0;
