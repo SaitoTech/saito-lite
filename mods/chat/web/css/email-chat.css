@@ -187,11 +187,10 @@ p {
 
 .chat-room-submit-button {
   justify-self: center;
-  background: var(--saito-cyber-black);
-  padding: 7px 10px;
-  color: white;
-  border-radius: 100px;
+  color: var(--saito-red);
   cursor: pointer;
+  font-size: 2em;
+  margin: 0.1em 0 0 0;
 }
 
 .chat-message-header {

@@ -67,6 +67,23 @@ module.exports = ChatBox = {
           }
       });
 
+      document.querySelector('.chat-room-submit-button').addEventListener('click', () => {
+        if (msg_input.value == '') { return; }
+              let msg_data = {
+                message: msg_input.value,
+                group_id: group.id,
+                publickey: app.wallet.returnPublicKey(),
+                timestamp: new Date().getTime()
+              };
+
+              let newtx = this.createMessage(app, data, msg_data);
+              app.modules.returnModule("Chat")
+                      .sendMessage(app, newtx);
+
+              this.addMessage(app, data, newtx);
+              msg_input.value = '';
+      });
+
       let chat_box_header = document.getElementById(`chat-box-header-${group.id}`);
       chat_box_header.onclick = () => {
         let chat_box = document.getElementById(`chat-box-${group.id}`);
