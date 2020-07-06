@@ -864,6 +864,9 @@ option {
   color: white;
 }
 
+.chat-room-submit-button {
+  color: #fff;
+}
 
 .chat-message-header {
   color: #ffffff;
