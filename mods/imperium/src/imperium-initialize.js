@@ -231,6 +231,41 @@
         this.saveSystemAndPlanets(sys);
   
       }
+
+
+
+      //
+      // initialize game queue
+      //
+      if (this.game.queue.length == 0) {
+
+        this.game.queue.push("turn");
+        this.game.queue.push("newround"); 
+
+        //
+        // add cards to deck and shuffle as needed
+        //
+        for (let i = 0; i < this.game.players_info.length; i++) {
+          this.game.queue.push("gain\t"+(i+1)+"\tsecret_objectives\t2");
+          this.game.queue.push("DEAL\t6\t"+(i+1)+"\t2");
+        }
+        this.game.queue.push("SHUFFLE\t1");
+        this.game.queue.push("SHUFFLE\t2");
+        this.game.queue.push("SHUFFLE\t3");
+        this.game.queue.push("SHUFFLE\t4");
+        this.game.queue.push("SHUFFLE\t5");
+        this.game.queue.push("SHUFFLE\t6");
+        this.game.queue.push("POOL\t3");   // stage ii objectives
+        this.game.queue.push("POOL\t2");   // stage i objectives
+        this.game.queue.push("POOL\t1");   // agenda cards
+        this.game.queue.push("DECK\t1\t"+JSON.stringify(this.returnStrategyCards()));
+        this.game.queue.push("DECK\t2\t"+JSON.stringify(this.returnActionCards()));	
+        this.game.queue.push("DECK\t3\t"+JSON.stringify(this.returnAgendaCards()));
+        this.game.queue.push("DECK\t4\t"+JSON.stringify(this.returnStageIPublicObjectives()));
+        this.game.queue.push("DECK\t5\t"+JSON.stringify(this.returnStageIIPublicObjectives()));
+        this.game.queue.push("DECK\t6\t"+JSON.stringify(this.returnSecretObjectives()));
+  
+      }
     }
 
 
@@ -314,46 +349,11 @@ console.log(" 2THIS LAW: " + JSON.stringify(this_law));
   
       this.updateSectorGraphics(i);
   
+          
     }
   
   
     this.updateLeaderboard();
-          
-  
-    //
-    // initialize game queue
-    //
-    if (this.game.queue.length == 0) {
-
-alert("QUEUE LENGTH IS ZERO!");
-
-      this.game.queue.push("turn");
-      this.game.queue.push("newround");
-  
-      //
-      // add cards to deck and shuffle as needed
-      //
-      for (let i = 0; i < this.game.players_info.length; i++) {
-        this.game.queue.push("gain\t"+(i+1)+"\tsecret_objectives\t2");
-        this.game.queue.push("DEAL\t6\t"+(i+1)+"\t2");
-      }
-      this.game.queue.push("SHUFFLE\t1");
-      this.game.queue.push("SHUFFLE\t2");
-      this.game.queue.push("SHUFFLE\t3");
-      this.game.queue.push("SHUFFLE\t4");
-      this.game.queue.push("SHUFFLE\t5");
-      this.game.queue.push("SHUFFLE\t6");
-      this.game.queue.push("POOL\t3");   // stage ii objectives
-      this.game.queue.push("POOL\t2");   // stage i objectives
-      this.game.queue.push("POOL\t1");   // agenda cards
-      this.game.queue.push("DECK\t1\t"+JSON.stringify(this.returnStrategyCards()));
-      this.game.queue.push("DECK\t2\t"+JSON.stringify(this.returnActionCards()));	
-      this.game.queue.push("DECK\t3\t"+JSON.stringify(this.returnAgendaCards()));
-      this.game.queue.push("DECK\t4\t"+JSON.stringify(this.returnStageIPublicObjectives()));
-      this.game.queue.push("DECK\t5\t"+JSON.stringify(this.returnStageIIPublicObjectives()));
-      this.game.queue.push("DECK\t6\t"+JSON.stringify(this.returnSecretObjectives()));
-  
-    }
   
 
     //

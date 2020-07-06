@@ -1,4 +1,6 @@
 
+rm ../../web/saito/saito.js
+
 
 #
 # class constructor

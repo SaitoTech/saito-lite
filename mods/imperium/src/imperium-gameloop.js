@@ -285,6 +285,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
       if (mv[0] === "play") {
 
         this.updateTokenDisplay();
+        this.updateLeaderboard();
 
     	let player = mv[1];
     	let contplay = 0;
@@ -337,6 +338,9 @@ console.log(this.game.state.active_player_moved + " ---> " + this.game.state.act
 
       if (mv[0] === "strategy") {
   
+	this.updateLeaderboard();
+	this.updateTokenDisplay();
+
   	let card = mv[1];
   	let strategy_card_player = parseInt(mv[2]);
   	let stage = parseInt(mv[3]);  
@@ -508,7 +512,10 @@ console.log("executing "+z[z_index].name);
       if (mv[0] === "turn") {
   
   	this.game.state.turn++;
- 
+
+        this.game.state.active_player_moved = 0;
+        this.game.state.active_player_turn = -1;
+
   	let new_round = 1;
         for (let i = 0; i < this.game.players_info.length; i++) {
   	  if (this.game.players_info[i].passed == 0) { new_round = 0; }
@@ -1432,16 +1439,22 @@ console.log("HERE WE ARE: " + player);
 	this.game.halted = 1;
 	//this.saveGame(this.game.id);
 
-console.log("GAMING HALTED!");
-console.log("GAME ID: " + this.game.id);
+	let my_specific_game_id = this.game.id;
 
   	this.playerAcknowledgeNotice(notice, function() {
+
+	  imperium_self.game = imperium_self.loadGame(my_specific_game_id);
 
 	  imperium_self.updateStatus(" acknowledged...");
 
   	  imperium_self.game.queue.splice(qe, 1);
 	  // we have stopped queue execution, so need to restart at the lowest level
 	  imperium_self.game.halted = 0;
+
+//
+// and save so we continue from AFTER this point...
+//
+imperium_self.saveGame(imperium_self.game.id);
   	  console.log("CONTINUING EXECUTION FROM HERE");
 	  console.log(imperium_self.game.queue);
 //console.log("STARTING WITH RUN QUEUE");
@@ -1943,7 +1956,7 @@ console.log("UNITS IN STORAGE: " + units_in_storage);
       /////////////////
       if (mv[0] === "player_end_turn") {
 
-  	let player       = parseInt(mv[1]);
+  	let player = parseInt(mv[1]);
 	let z = this.returnEventObjects();
 
         this.game.state.active_player_moved = 0;

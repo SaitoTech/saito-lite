@@ -286,11 +286,13 @@
   	  imperium_self.addMove("resolve\tplay");
   	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.addMove("pass\t"+imperium_self.game.player);
-          imperium_self.endTurn();
+          imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t"+"int"+"\t"+"0");
+  	  imperium_self.endTurn();
         }
         if (action2 == "endturn") {
   	  imperium_self.addMove("resolve\tplay");
   	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
+          imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t"+"int"+"\t"+"0");
           imperium_self.endTurn();
         }
       });
@@ -488,6 +490,8 @@
 
     $('.textchoice').off();
     $('.textchoice').on('click', function() { mycallback(); });
+
+    return 0;
 
   }
 

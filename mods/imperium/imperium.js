@@ -2109,7 +2109,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
           imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tcommodities\t"+imperium_self.game.players_info[imperium_self.game.player-1].commodity_limit);
  
           let factions = imperium_self.returnFactions();
-          let html = '<p>You have received 3 trade goods and '+imperium_self.game.players_info[imperium_self.game.player-1].commodities+' commodities. You may choose to replenish the commodities of any other players: </p><ul>';
+          let html = '<p>You will receive 3 trade goods and '+imperium_self.game.players_info[imperium_self.game.player-1].commodity_limit+' commodities. You may choose to replenish the commodities of any other players: </p><ul>';
           for (let i = 0; i < imperium_self.game.players_info.length; i++) {
             if (i != imperium_self.game.player-1) {
               html += '<li class="option" id="'+i+'">' + factions[imperium_self.game.players_info[i].faction].name + '</li>';
@@ -5838,6 +5838,41 @@ console.log("Sector to ask about: " + s + " --- " + sector);
         this.saveSystemAndPlanets(sys);
   
       }
+
+
+
+      //
+      // initialize game queue
+      //
+      if (this.game.queue.length == 0) {
+
+        this.game.queue.push("turn");
+        this.game.queue.push("newround"); 
+
+        //
+        // add cards to deck and shuffle as needed
+        //
+        for (let i = 0; i < this.game.players_info.length; i++) {
+          this.game.queue.push("gain\t"+(i+1)+"\tsecret_objectives\t2");
+          this.game.queue.push("DEAL\t6\t"+(i+1)+"\t2");
+        }
+        this.game.queue.push("SHUFFLE\t1");
+        this.game.queue.push("SHUFFLE\t2");
+        this.game.queue.push("SHUFFLE\t3");
+        this.game.queue.push("SHUFFLE\t4");
+        this.game.queue.push("SHUFFLE\t5");
+        this.game.queue.push("SHUFFLE\t6");
+        this.game.queue.push("POOL\t3");   // stage ii objectives
+        this.game.queue.push("POOL\t2");   // stage i objectives
+        this.game.queue.push("POOL\t1");   // agenda cards
+        this.game.queue.push("DECK\t1\t"+JSON.stringify(this.returnStrategyCards()));
+        this.game.queue.push("DECK\t2\t"+JSON.stringify(this.returnActionCards()));	
+        this.game.queue.push("DECK\t3\t"+JSON.stringify(this.returnAgendaCards()));
+        this.game.queue.push("DECK\t4\t"+JSON.stringify(this.returnStageIPublicObjectives()));
+        this.game.queue.push("DECK\t5\t"+JSON.stringify(this.returnStageIIPublicObjectives()));
+        this.game.queue.push("DECK\t6\t"+JSON.stringify(this.returnSecretObjectives()));
+  
+      }
     }
 
 
@@ -5921,46 +5956,11 @@ console.log(" 2THIS LAW: " + JSON.stringify(this_law));
   
       this.updateSectorGraphics(i);
   
+          
     }
   
   
     this.updateLeaderboard();
-          
-  
-    //
-    // initialize game queue
-    //
-    if (this.game.queue.length == 0) {
-
-alert("QUEUE LENGTH IS ZERO!");
-
-      this.game.queue.push("turn");
-      this.game.queue.push("newround");
-  
-      //
-      // add cards to deck and shuffle as needed
-      //
-      for (let i = 0; i < this.game.players_info.length; i++) {
-        this.game.queue.push("gain\t"+(i+1)+"\tsecret_objectives\t2");
-        this.game.queue.push("DEAL\t6\t"+(i+1)+"\t2");
-      }
-      this.game.queue.push("SHUFFLE\t1");
-      this.game.queue.push("SHUFFLE\t2");
-      this.game.queue.push("SHUFFLE\t3");
-      this.game.queue.push("SHUFFLE\t4");
-      this.game.queue.push("SHUFFLE\t5");
-      this.game.queue.push("SHUFFLE\t6");
-      this.game.queue.push("POOL\t3");   // stage ii objectives
-      this.game.queue.push("POOL\t2");   // stage i objectives
-      this.game.queue.push("POOL\t1");   // agenda cards
-      this.game.queue.push("DECK\t1\t"+JSON.stringify(this.returnStrategyCards()));
-      this.game.queue.push("DECK\t2\t"+JSON.stringify(this.returnActionCards()));	
-      this.game.queue.push("DECK\t3\t"+JSON.stringify(this.returnAgendaCards()));
-      this.game.queue.push("DECK\t4\t"+JSON.stringify(this.returnStageIPublicObjectives()));
-      this.game.queue.push("DECK\t5\t"+JSON.stringify(this.returnStageIIPublicObjectives()));
-      this.game.queue.push("DECK\t6\t"+JSON.stringify(this.returnSecretObjectives()));
-  
-    }
   
 
     //
@@ -7130,6 +7130,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
       if (mv[0] === "play") {
 
         this.updateTokenDisplay();
+        this.updateLeaderboard();
 
     	let player = mv[1];
     	let contplay = 0;
@@ -7182,6 +7183,9 @@ console.log(this.game.state.active_player_moved + " ---> " + this.game.state.act
 
       if (mv[0] === "strategy") {
   
+	this.updateLeaderboard();
+	this.updateTokenDisplay();
+
   	let card = mv[1];
   	let strategy_card_player = parseInt(mv[2]);
   	let stage = parseInt(mv[3]);  
@@ -7353,7 +7357,10 @@ console.log("executing "+z[z_index].name);
       if (mv[0] === "turn") {
   
   	this.game.state.turn++;
- 
+
+        this.game.state.active_player_moved = 0;
+        this.game.state.active_player_turn = -1;
+
   	let new_round = 1;
         for (let i = 0; i < this.game.players_info.length; i++) {
   	  if (this.game.players_info[i].passed == 0) { new_round = 0; }
@@ -7820,8 +7827,6 @@ console.log("start ofg agenda");
   
       if (mv[0] === "newround") {
 
-alert("AT THE START OF NEWROUND");
-
   	//
   	// SCORING
   	//
@@ -7905,12 +7910,10 @@ alert("AT THE START OF NEWROUND");
         this.game.queue.push("playerschoosestrategycards");
         this.game.queue.push("playerschoosestrategycards_before");
         if (this.game.state.round == 1) {
-alert("WE ARE ADDING OUR ACKNOWLEDGEMENT TO QUEUE!");
           this.game.queue.push("acknowledge\t"+"<center><p style='font-weight:bold'>The Republic has fallen!</p><p style='font-size:0.95em;margin-top:10px;'>As the Galactic Senate collapses into factional squabbling, the ascendant powers on the outer rim plot to seize New Byzantium...</p><p style='font-size:0.95em;margin-top:10px'>Take the lead by moving your fleet to capture New Byzantium, or establish a power-base to displace the leader and impose your will on your peers.</p></center>");
  	}
 
 
-console.log("STRATEGY CARDS: " + JSON.stringify(this.strategy_cards));
 
   	//
   	// ACTION CARDS
@@ -8281,16 +8284,22 @@ console.log("HERE WE ARE: " + player);
 	this.game.halted = 1;
 	//this.saveGame(this.game.id);
 
-console.log("GAMING HALTED!");
-console.log("GAME ID: " + this.game.id);
+	let my_specific_game_id = this.game.id;
 
   	this.playerAcknowledgeNotice(notice, function() {
+
+	  imperium_self.game = imperium_self.loadGame(my_specific_game_id);
 
 	  imperium_self.updateStatus(" acknowledged...");
 
   	  imperium_self.game.queue.splice(qe, 1);
 	  // we have stopped queue execution, so need to restart at the lowest level
 	  imperium_self.game.halted = 0;
+
+//
+// and save so we continue from AFTER this point...
+//
+imperium_self.saveGame(imperium_self.game.id);
   	  console.log("CONTINUING EXECUTION FROM HERE");
 	  console.log(imperium_self.game.queue);
 //console.log("STARTING WITH RUN QUEUE");
@@ -8792,7 +8801,7 @@ console.log("UNITS IN STORAGE: " + units_in_storage);
       /////////////////
       if (mv[0] === "player_end_turn") {
 
-  	let player       = parseInt(mv[1]);
+  	let player = parseInt(mv[1]);
 	let z = this.returnEventObjects();
 
         this.game.state.active_player_moved = 0;
@@ -11111,11 +11120,13 @@ console.log("EXECUTING CARD: " + card);
   	  imperium_self.addMove("resolve\tplay");
   	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.addMove("pass\t"+imperium_self.game.player);
-          imperium_self.endTurn();
+          imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t"+"int"+"\t"+"0");
+  	  imperium_self.endTurn();
         }
         if (action2 == "endturn") {
   	  imperium_self.addMove("resolve\tplay");
   	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
+          imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t"+"int"+"\t"+"0");
           imperium_self.endTurn();
         }
       });
@@ -11313,6 +11324,8 @@ console.log("EXECUTING CARD: " + card);
 
     $('.textchoice').off();
     $('.textchoice').on('click', function() { mycallback(); });
+
+    return 0;
 
   }
 
@@ -16335,11 +16348,9 @@ console.log("JALKING: " + JSON.stringify(p1sectors));
     for (let i in this.game.planets) {
       if (this.game.planets[i].tile != "") {
 	if (filterfunc == null) {
-console.log("pushing " + i);
 	  planets_to_return.push(i);
 	} else {
 	  if (filterfunc(this.game.planets[i])) {
-console.log("pushing " + i);
 	    planets_to_return.push(i);
 	  }
 	}
@@ -17697,7 +17708,7 @@ addUIEvents() {
         <span class="fa-stack fa-3x">
         <i class="fas fa-dice-d20 fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
-        <span class="token_count command_token_count">
+        <span id="token_display_command_token_count" class="token_count command_token_count">
         ${this.game.players_info[this.game.player-1].command_tokens}
         </span>
         </span>
@@ -17707,7 +17718,7 @@ addUIEvents() {
         <span class="fa-stack fa-3x">
         <i class="far fa-futbol fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
-        <span class="token_count strategy_token_count">
+        <span id="token_display_strategy_token_count" class="token_count strategy_token_count">
         ${this.game.players_info[this.game.player-1].strategy_tokens}
         </span>
         </span>
@@ -17717,7 +17728,7 @@ addUIEvents() {
         <span class="fa-stack fa-3x">
         <i class="fas fa-space-shuttle fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
-        <span class="token_count fleet_supply_count">
+        <span id="token_display_fleet_supply_count" class="token_count fleet_supply_count">
         ${this.game.players_info[this.game.player-1].fleet_supply}
         </span>
         </span>
@@ -17727,7 +17738,7 @@ addUIEvents() {
         <span class="fa-stack fa-3x">
         <i class="fas fa-box fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
-        <span class="token_count commodities_count">
+        <span id="token_display_commodities_count" class="token_count commodities_count">
         ${this.game.players_info[this.game.player-1].commodities}
         </span>
         </span>
@@ -17737,7 +17748,7 @@ addUIEvents() {
         <span class="fa-stack fa-3x">
         <i class="fas fa-database fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
-        <span class="token_count trade_goods_count">
+        <span id="token_display_trade_goods_count" class="token_count trade_goods_count">
         ${this.game.players_info[this.game.player-1].goods}
         </span>
         </span>
@@ -18059,11 +18070,11 @@ hideSector(pid) {
 updateTokenDisplay() {
 
   try {
-    $('.command_token_count').html(imperium_self.game.players[imperium_self.game.player-1].command_tokens);
-    $('.strategy_token_count').html(imperium_self.game.players[imperium_self.game.player-1].strategy_tokens);
-    $('.fleet_supply_count').html(imperium_self.game.players[imperium_self.game.player-1].fleet_supply_tokens);
-    $('.commodities_count').html(imperium_self.game.players[imperium_self.game.player-1].commodities);
-    $('.trade_goods_count').html(imperium_self.game.players[imperium_self.game.player-1].goods);
+    $('#token_display_command_token_count').html(imperium_self.game.players[imperium_self.game.player-1].command_tokens);
+    $('#token_display_strategy_token_count').html(imperium_self.game.players[imperium_self.game.player-1].strategy_tokens);
+    $('#token_display_fleet_supply_count').html(imperium_self.game.players[imperium_self.game.player-1].fleet_supply_tokens);
+    $('#token_display_commodities_count').html(imperium_self.game.players[imperium_self.game.player-1].commodities);
+    $('#token_display_trade_goods_count').html(imperium_self.game.players[imperium_self.game.player-1].goods);
 
   } catch (err) {}
 
