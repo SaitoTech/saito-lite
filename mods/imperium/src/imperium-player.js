@@ -1422,6 +1422,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
 
       if (action2 == "endturn") {
         imperium_self.addMove("resolve\tplay");
+        imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t"+"int"+"\t"+"0");
         imperium_self.endTurn();
       }
 
