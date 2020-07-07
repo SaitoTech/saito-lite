@@ -3886,7 +3886,7 @@ console.log(sector + " -- " + planet_idx + " -- " + unit_idx);
 
 
 /************************************
-
+  
 ACTION CARD - types
 
 "action" -> main menu
@@ -3904,6 +3904,7 @@ ACTION CARD - types
 
 
 ************************************/
+
 
 
     this.importActionCard('lost-star-chart', {
@@ -10857,7 +10858,7 @@ console.log("EXECUTING CARD: " + card);
       players[i].can_intervene_in_action_card 	= 0;
       players[i].secret_objectives_in_hand     	= 0;
       players[i].action_cards_in_hand         	= 0;
-      players[i].action_cards_per_round       	= 20;
+      players[i].action_cards_per_round       	= 2;
       players[i].new_tokens_per_round 	 	= 2;
       players[i].command_tokens  		= 3;
       players[i].strategy_tokens 		= 2;
