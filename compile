@@ -135,6 +135,9 @@ function copy_lite_mods_to_bundler_directory {
     cp -rf ./mods/$i bundler/default/mods/$i
   done
 
+
+  rm -f ./bundler/default/mods/appstore/mods/*
+
 }
 
 
