@@ -336,7 +336,7 @@ p {
 }
 
 .chat-box-main {
-  display: flex;
+  display: block;
   flex-direction: column;
   height: 32em;
   grid-area: chat_main;
