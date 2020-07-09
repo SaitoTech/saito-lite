@@ -8626,7 +8626,7 @@ imperium_self.saveGame(imperium_self.game.id);
         let amount       = parseInt(mv[3]);
 	let z            = this.returnEventObjects();
   
-        if (item == "strategycard") {
+        if (item === "strategycard") {
   
   	  this.updateLog(this.returnFaction(player) + " takes " + this.strategy_cards[mv[3]].name);
 
@@ -8646,7 +8646,7 @@ imperium_self.saveGame(imperium_self.game.id);
   	  }
   	}
 
-        if (item == "tech" && item == "technology") {
+        if (item === "tech" && item === "technology") {
 
   	  this.updateLog(this.returnFaction(player) + " gains " + this.tech[mv[3]].name);
   	  if (!this.game.players_info[player-1].tech.includes(mv[3])) {
@@ -8657,7 +8657,7 @@ imperium_self.saveGame(imperium_self.game.id);
   	  }
 	  this.upgradePlayerUnitsOnBoard(player);
   	}
-        if (item == "goods") {
+        if (item === "goods") {
   	  this.updateLog(this.returnFaction(player) + " gains " + amount + " trade goods");
 	  for (let z_index in z) {
   	    amount = z[z_index].gainTradeGoods(imperium_self, player, amount);
@@ -8665,7 +8665,7 @@ imperium_self.saveGame(imperium_self.game.id);
 	  this.game.players_info[player-1].goods += amount;
   	}
 
-        if (item == "commodities") {
+        if (item === "commodities") {
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " commodities");
 	  for (let z_index in z) {
   	    amount = z[z_index].gainCommodities(imperium_self, player, amount);
@@ -8673,14 +8673,14 @@ imperium_self.saveGame(imperium_self.game.id);
   	  this.game.players_info[player-1].commodities += amount;
   	}
 
-        if (item == "command") {
+        if (item === "command") {
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " command tokens");
 	  for (let z_index in z) {
   	    amount = z[z_index].gainCommandTokens(imperium_self, player, amount);
   	  }
   	  this.game.players_info[player-1].command_tokens += amount;
   	}
-        if (item == "strategy") {
+        if (item === "strategy") {
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " strategy tokens");
 	  for (let z_index in z) {
   	    amount = z[z_index].gainStrategyTokens(imperium_self, player, amount);
@@ -8688,7 +8688,7 @@ imperium_self.saveGame(imperium_self.game.id);
   	  this.game.players_info[player-1].strategy_tokens += amount;
   	}
 
-        if (item == "fleetsupply") {
+        if (item === "fleetsupply") {
 	  for (let z_index in z) {
   	    amount = z[z_index].gainFleetSupply(imperium_self, player, amount);
   	  }
@@ -8696,7 +8696,6 @@ imperium_self.saveGame(imperium_self.game.id);
   	  this.updateLog(this.returnFaction(player) + " increases fleet supply to " + this.game.players_info[player-1].fleet_supply);
   	}
   
-
 	this.updateTokenDisplay();
 	this.updateLeaderboard();
 
@@ -11004,10 +11003,10 @@ console.log("EXECUTING CARD: " + card);
     let relevant_action_cards = ["action","main","instant"];
     let ac = this.returnPlayerActionCards(imperium_self.game.player, relevant_action_cards);
 
-    if (stage == "main") {
+    this.updateLeaderboard();
+    this.updateTokenDisplay();
 
-      this.updateLeaderboard();
-      this.updateTokenDisplay();  
+    if (stage == "main") {
 
       let playercol = "player_color_"+this.game.player;
   
@@ -17756,7 +17755,7 @@ addUIEvents() {
         <span class="fa-stack fa-3x">
         <i class="fas fa-database fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
-        <span id="token_display_trade_goods_count" class="token_count trade_goods_count">
+        <div id="token_display_trade_goods_count" class="token_count trade_goods_count">
         ${this.game.players_info[this.game.player-1].goods}
         </div>
         </span>
@@ -18077,13 +18076,23 @@ hideSector(pid) {
 
 updateTokenDisplay() {
 
+  let imperium_self = this;
+
   try {
-    $('#token_display_command_token_count').html(imperium_self.game.players[imperium_self.game.player-1].command_tokens);
-    $('#token_display_strategy_token_count').html(imperium_self.game.players[imperium_self.game.player-1].strategy_tokens);
-    $('#token_display_fleet_supply_count').html(imperium_self.game.players[imperium_self.game.player-1].fleet_supply_tokens);
-    $('#token_display_commodities_count').html(imperium_self.game.players[imperium_self.game.player-1].commodities);
-    $('#token_display_trade_goods_count').html(imperium_self.game.players[imperium_self.game.player-1].goods);
-  } catch (err) {}
+console.log("UTD: 1");
+    $('#token_display_command_token_count').html(imperium_self.game.players_info[imperium_self.game.player-1].command_tokens);
+console.log("UTD: 2");
+    $('#token_display_strategy_token_count').html(imperium_self.game.players_info[imperium_self.game.player-1].strategy_tokens);
+console.log("UTD: 3");
+    $('#token_display_fleet_supply_count').html(imperium_self.game.players_info[imperium_self.game.player-1].fleet_supply_tokens);
+console.log("UTD: 4");
+    $('#token_display_commodities_count').html(imperium_self.game.players_info[imperium_self.game.player-1].commodities);
+console.log("UTD: 5");
+    $('#token_display_trade_goods_count').html(imperium_self.game.players_info[imperium_self.game.player-1].goods);
+console.log("UTD: 6");
+  } catch (err) {
+console.log("error updating token display: " + err);
+  }
 
 }
 updateLeaderboard() {

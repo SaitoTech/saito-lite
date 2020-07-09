@@ -161,7 +161,7 @@ addUIEvents() {
         <span class="fa-stack fa-3x">
         <i class="fas fa-database fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
-        <span id="token_display_trade_goods_count" class="token_count trade_goods_count">
+        <div id="token_display_trade_goods_count" class="token_count trade_goods_count">
         ${this.game.players_info[this.game.player-1].goods}
         </div>
         </span>
@@ -482,13 +482,23 @@ hideSector(pid) {
 
 updateTokenDisplay() {
 
+  let imperium_self = this;
+
   try {
-    $('#token_display_command_token_count').html(imperium_self.game.players[imperium_self.game.player-1].command_tokens);
-    $('#token_display_strategy_token_count').html(imperium_self.game.players[imperium_self.game.player-1].strategy_tokens);
-    $('#token_display_fleet_supply_count').html(imperium_self.game.players[imperium_self.game.player-1].fleet_supply_tokens);
-    $('#token_display_commodities_count').html(imperium_self.game.players[imperium_self.game.player-1].commodities);
-    $('#token_display_trade_goods_count').html(imperium_self.game.players[imperium_self.game.player-1].goods);
-  } catch (err) {}
+console.log("UTD: 1");
+    $('#token_display_command_token_count').html(imperium_self.game.players_info[imperium_self.game.player-1].command_tokens);
+console.log("UTD: 2");
+    $('#token_display_strategy_token_count').html(imperium_self.game.players_info[imperium_self.game.player-1].strategy_tokens);
+console.log("UTD: 3");
+    $('#token_display_fleet_supply_count').html(imperium_self.game.players_info[imperium_self.game.player-1].fleet_supply_tokens);
+console.log("UTD: 4");
+    $('#token_display_commodities_count').html(imperium_self.game.players_info[imperium_self.game.player-1].commodities);
+console.log("UTD: 5");
+    $('#token_display_trade_goods_count').html(imperium_self.game.players_info[imperium_self.game.player-1].goods);
+console.log("UTD: 6");
+  } catch (err) {
+console.log("error updating token display: " + err);
+  }
 
 }
 updateLeaderboard() {

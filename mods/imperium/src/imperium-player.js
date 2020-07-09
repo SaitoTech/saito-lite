@@ -164,10 +164,10 @@
     let relevant_action_cards = ["action","main","instant"];
     let ac = this.returnPlayerActionCards(imperium_self.game.player, relevant_action_cards);
 
-    if (stage == "main") {
+    this.updateLeaderboard();
+    this.updateTokenDisplay();
 
-      this.updateLeaderboard();
-      this.updateTokenDisplay();  
+    if (stage == "main") {
 
       let playercol = "player_color_"+this.game.player;
   

@@ -1450,7 +1450,11 @@ console.log("HERE WE ARE: " + player);
 //
 // and save so we continue from AFTER this point...
 //
+console.log("saved game");
 imperium_self.saveGame(imperium_self.game.id);
+//
+//
+//
   	  console.log("CONTINUING EXECUTION FROM HERE");
 	  console.log(imperium_self.game.queue);
 //console.log("STARTING WITH RUN QUEUE");
@@ -1771,7 +1775,7 @@ imperium_self.saveGame(imperium_self.game.id);
         let amount       = parseInt(mv[3]);
 	let z            = this.returnEventObjects();
   
-        if (item == "strategycard") {
+        if (item === "strategycard") {
   
   	  this.updateLog(this.returnFaction(player) + " takes " + this.strategy_cards[mv[3]].name);
 
@@ -1791,7 +1795,7 @@ imperium_self.saveGame(imperium_self.game.id);
   	  }
   	}
 
-        if (item == "tech" && item == "technology") {
+        if (item === "tech" && item === "technology") {
 
   	  this.updateLog(this.returnFaction(player) + " gains " + this.tech[mv[3]].name);
   	  if (!this.game.players_info[player-1].tech.includes(mv[3])) {
@@ -1802,7 +1806,7 @@ imperium_self.saveGame(imperium_self.game.id);
   	  }
 	  this.upgradePlayerUnitsOnBoard(player);
   	}
-        if (item == "goods") {
+        if (item === "goods") {
   	  this.updateLog(this.returnFaction(player) + " gains " + amount + " trade goods");
 	  for (let z_index in z) {
   	    amount = z[z_index].gainTradeGoods(imperium_self, player, amount);
@@ -1810,7 +1814,7 @@ imperium_self.saveGame(imperium_self.game.id);
 	  this.game.players_info[player-1].goods += amount;
   	}
 
-        if (item == "commodities") {
+        if (item === "commodities") {
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " commodities");
 	  for (let z_index in z) {
   	    amount = z[z_index].gainCommodities(imperium_self, player, amount);
@@ -1818,14 +1822,14 @@ imperium_self.saveGame(imperium_self.game.id);
   	  this.game.players_info[player-1].commodities += amount;
   	}
 
-        if (item == "command") {
+        if (item === "command") {
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " command tokens");
 	  for (let z_index in z) {
   	    amount = z[z_index].gainCommandTokens(imperium_self, player, amount);
   	  }
   	  this.game.players_info[player-1].command_tokens += amount;
   	}
-        if (item == "strategy") {
+        if (item === "strategy") {
   	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " strategy tokens");
 	  for (let z_index in z) {
   	    amount = z[z_index].gainStrategyTokens(imperium_self, player, amount);
@@ -1833,7 +1837,7 @@ imperium_self.saveGame(imperium_self.game.id);
   	  this.game.players_info[player-1].strategy_tokens += amount;
   	}
 
-        if (item == "fleetsupply") {
+        if (item === "fleetsupply") {
 	  for (let z_index in z) {
   	    amount = z[z_index].gainFleetSupply(imperium_self, player, amount);
   	  }
@@ -1841,7 +1845,6 @@ imperium_self.saveGame(imperium_self.game.id);
   	  this.updateLog(this.returnFaction(player) + " increases fleet supply to " + this.game.players_info[player-1].fleet_supply);
   	}
   
-
 	this.updateTokenDisplay();
 	this.updateLeaderboard();
 
