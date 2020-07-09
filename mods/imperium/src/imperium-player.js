@@ -2465,7 +2465,7 @@ console.log("HI SEBASTIAN");
 console.log(JSON.stringify(this.game.state.strategy_cards));
 
 
-    for (let z in this.game.state.strategy_cards) {
+    for (let z = 0; z < this.game.state.strategy_cards.length; z++) {
       let rank = parseInt(this.strategy_cards[this.game.state.strategy_cards[z]].rank);
       while (scards[rank-1] != "") { rank++; }
       scards[rank-1] = '<li class="textchoice" id="'+this.game.state.strategy_cards[z]+'">' + cards[this.game.state.strategy_cards[z]].name + '</li>';

@@ -1323,7 +1323,7 @@ console.log("do we have a pool 2?");
 
 	  let html = '';
 	  html += this.returnFaction(player) + " is picking a strategy card. Their options: <ul>";
-          for (let n in this.game.state.strategy_cards) {
+          for (let n = 0; n < this.game.state.strategy_cards.length; n++) {
             html += '<li class="textchoice" id="'+this.game.state.strategy_cards[n]+'">' + this.strategy_cards[this.game.state.strategy_cards[n]].name + '</li>';
     	  }
           html += '</ul>';
