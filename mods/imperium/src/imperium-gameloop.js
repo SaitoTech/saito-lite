@@ -1251,7 +1251,8 @@ console.log("do we have a pool 2?");
   
   	this.updateLog("Players selecting strategy cards, starting from " + this.returnSpeaker());
   	this.updateStatus("Players selecting strategy cards, starting from " + this.returnSpeaker());
-  
+
+
   	//
   	// all strategy cards on table again
   	//
@@ -1311,8 +1312,6 @@ console.log("do we have a pool 2?");
   
   	let player       = parseInt(mv[1]);
 
-console.log("HERE WE ARE: " + player);
-  
   	if (this.game.player == player) {
   	  this.playerSelectStrategyCards(function(card) {
   	    imperium_self.addMove("resolve\tpickstrategy");
@@ -1321,7 +1320,17 @@ console.log("HERE WE ARE: " + player);
   	  });
   	  return 0;
   	} else {
-  	  this.updateStatus(this.returnFaction(player) + " is picking a strategy card");
+
+	  let html = '';
+	  html += this.returnFaction(player) + " is picking a strategy card. Their options: <ul>";
+          for (let n in this.game.state.strategy_cards) {
+            html += '<li class="textchoice" id="'+this.game.state.strategy_cards[n]+'">' + this.strategy_cards[this.game.state.strategy_cards[n]].name + '</li>';
+    	  }
+          html += '</ul>';
+  	  this.updateStatus(html);
+    	  $('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showStrategyCard(s); });
+    	  $('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hideStrategyCard(s); });
+
   	}
   	return 0;
       }

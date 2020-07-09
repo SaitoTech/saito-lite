@@ -4,7 +4,7 @@
       name     			:       "Construction",
       rank			:	4,
       img			:	"/imperium/img/strategy/BUILD.png",
-      text			:	"Player builds PDS or Space dock on planet they control, and additional PDS on a second planet. Other players may spend a strategy token and activate sector to build PDS or Space Dock in it." ,
+      text			:	"Build a PDS and Space Dock or two PDS units. Others can spend a strategy token and activate a sector to build a PDS or Space Dock in it." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player) {

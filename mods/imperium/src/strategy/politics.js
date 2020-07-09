@@ -4,7 +4,7 @@
       name     			:       "Politics",
       rank			:	3,
       img			:	"/imperium/img/strategy/POLITICS.png",
-      text			:	"The player of this card may choose a player to serve as Speaker. If New Byzantium is controlled they may then choose two upcoming agendas for debate in the Galactic Senate. All other players then have the option of spending a strategy token to purchase two action cards. ",
+      text			:	"Pick a new Speaker. If New Byzantium is controlled vote on two agendas. Other players may spend a strategy token to purchase two action cards. ",
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.confirms_needed == 0 || imperium_self.game.confirms_needed == undefined || imperium_self.game.confirms_needed == null) {

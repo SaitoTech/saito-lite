@@ -1465,7 +1465,7 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
       name     			:       "Construction",
       rank			:	4,
       img			:	"/imperium/img/strategy/BUILD.png",
-      text			:	"Player builds PDS or Space dock on planet they control, and additional PDS on a second planet. Other players may spend a strategy token and activate sector to build PDS or Space Dock in it." ,
+      text			:	"Build a PDS and Space Dock or two PDS units. Others can spend a strategy token and activate a sector to build a PDS or Space Dock in it." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player) {
@@ -1525,7 +1525,7 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
       name     			:       "Diplomacy",
       rank			:	2,
       img			:	"/imperium/img/strategy/DIPLOMACY.png",
-      text			:	"Player selects a sector other than New Byzantium: that sector is activated for all other players and any planets in that sector are refreshed. Other players may spend a strategy token to refresh two planets." ,
+      text			:	"Everyone but you activates a system other than New Byzantium. All planets in that sector are refreshed. Ohters may spend a strategy token to refresh two planets." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player) {
@@ -1664,7 +1664,7 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
       name     			:       "Imperial",
       rank			:	8,
       img			:	"/imperium/img/strategy/EMPIRE.png",
-      text			:	"The player of this card may score a public objective. All players then go around in Initiative Order and score secret and public objectives" ,
+      text			:	"You may score a public objective. All players then score objectives in Initiative Order" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         imperium_self.game.state.round_scoring = 1;
@@ -1725,7 +1725,7 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
       name     			:       "Leadership",
       rank			:	1,
       img			:	"/imperium/img/strategy/INITIATIVE.png",
-      text			:	"Player gets three tokens for their command, strategy and fleet pools. All players may purchase additional tokens at three influence per token." ,
+      text			:	"Get three tokens for your command, strategy and fleet pools. Everyone may purchase additional tokens at three influence per token." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
 	if (imperium_self.game.player == strategy_card_player) {
@@ -1765,7 +1765,7 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
       name     			:       "Politics",
       rank			:	3,
       img			:	"/imperium/img/strategy/POLITICS.png",
-      text			:	"The player of this card may choose a player to serve as Speaker. If New Byzantium is controlled they may then choose two upcoming agendas for debate in the Galactic Senate. All other players then have the option of spending a strategy token to purchase two action cards. ",
+      text			:	"Pick a new Speaker. If New Byzantium is controlled vote on two agendas. Other players may spend a strategy token to purchase two action cards. ",
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.confirms_needed == 0 || imperium_self.game.confirms_needed == undefined || imperium_self.game.confirms_needed == null) {
@@ -1911,9 +1911,8 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
       name     			:       "Technology",
       rank			:	7,
       img			:	"/imperium/img/strategy/TECH.png",
-      text			:	"The player of this card may research a technology for free, and then spend 6 resources to research a second if they so choose. All other players may then spend a strategy token and four resources to research a technology" ,
+      text			:	"Research a technology for free, and spend 6 resources for a second if you wish. Others may spend a strategy token and 4 resources to research one technology" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
-
         if (imperium_self.game.player == strategy_card_player) {
           imperium_self.playerAcknowledgeNotice("You will first have the option of researching a free-technology, and then invited to purchase an additional tech for 6 resources:", function() {
             imperium_self.playerResearchTechnology(function(tech) {
@@ -1927,7 +1926,6 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
             });
           });
         }
-
       },
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
@@ -2104,7 +2102,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
       name     			:       "Trade",
       rank			:	5,
       img			:	"/imperium/img/strategy/TRADE.png",
-      text			:	"The player of this card gains 3 trade goods and refreshes their commodities. They may then choose to refresh any number of other players. Any players who have not been refreshed are then permitted to refresh their commodities by spending a trade good.",
+      text			:	"Gain 3 trade goods and refresh your commodities. You may refresh the commodities of any other players, or they may refresh themselves by spending a strategy token." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player) {
@@ -2190,7 +2188,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
       name     			:       "Warfare",
       rank			:	6,
       img			:	"/imperium/img/strategy/MILITARY.png",
-      text			:	"The player of this card may de-activate a sector if already activated. All other players may then produce in their home system" ,
+      text			:	"De-activate a sector and get 1 free token. Others may spend a strategy token to producein their home system" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player) {
@@ -8106,7 +8104,8 @@ console.log("do we have a pool 2?");
   
   	this.updateLog("Players selecting strategy cards, starting from " + this.returnSpeaker());
   	this.updateStatus("Players selecting strategy cards, starting from " + this.returnSpeaker());
-  
+
+
   	//
   	// all strategy cards on table again
   	//
@@ -8166,8 +8165,6 @@ console.log("do we have a pool 2?");
   
   	let player       = parseInt(mv[1]);
 
-console.log("HERE WE ARE: " + player);
-  
   	if (this.game.player == player) {
   	  this.playerSelectStrategyCards(function(card) {
   	    imperium_self.addMove("resolve\tpickstrategy");
@@ -8176,7 +8173,17 @@ console.log("HERE WE ARE: " + player);
   	  });
   	  return 0;
   	} else {
-  	  this.updateStatus(this.returnFaction(player) + " is picking a strategy card");
+
+	  let html = '';
+	  html += this.returnFaction(player) + " is picking a strategy card. Their options: <ul>";
+          for (let n in this.game.state.strategy_cards) {
+            html += '<li class="textchoice" id="'+this.game.state.strategy_cards[n]+'">' + this.strategy_cards[this.game.state.strategy_cards[n]].name + '</li>';
+    	  }
+          html += '</ul>';
+  	  this.updateStatus(html);
+    	  $('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showStrategyCard(s); });
+    	  $('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hideStrategyCard(s); });
+
   	}
   	return 0;
       }
@@ -8305,7 +8312,11 @@ console.log("HERE WE ARE: " + player);
 //
 // and save so we continue from AFTER this point...
 //
+console.log("saved game");
 imperium_self.saveGame(imperium_self.game.id);
+//
+//
+//
   	  console.log("CONTINUING EXECUTION FROM HERE");
 	  console.log(imperium_self.game.queue);
 //console.log("STARTING WITH RUN QUEUE");

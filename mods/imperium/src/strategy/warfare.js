@@ -3,7 +3,7 @@
       name     			:       "Warfare",
       rank			:	6,
       img			:	"/imperium/img/strategy/MILITARY.png",
-      text			:	"The player of this card may de-activate a sector if already activated. All other players may then produce in their home system" ,
+      text			:	"De-activate a sector and get 1 free token. Others may spend a strategy token to producein their home system" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
         if (imperium_self.game.player == strategy_card_player) {
