@@ -13311,12 +13311,18 @@ console.log(7);
       scards.push("");
     }
 
+console.log("HI SEBASTIAN");
+console.log(JSON.stringify(this.game.state.strategy_cards));
 
-    for (let z = 0; z < this.game.state.strategy_cards.length; z++) {
+
+    for (let z in this.game.state.strategy_cards) {
       let rank = parseInt(this.strategy_cards[this.game.state.strategy_cards[z]].rank);
       while (scards[rank-1] != "") { rank++; }
       scards[rank-1] = '<li class="textchoice" id="'+this.game.state.strategy_cards[z]+'">' + cards[this.game.state.strategy_cards[z]].name + '</li>';
     }
+
+console.log(" and scards: ");
+console.log(JSON.stringify(scards));
 
     for (let z = 0; z < scards.length; z++) {
       if (scards[z] != "") {
@@ -13325,8 +13331,8 @@ console.log(7);
     }
     
     html += '</ul></p>';
-  
     this.updateStatus(html);
+
     $('.textchoice').off();
     $('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showStrategyCard(s); } });
     $('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideStrategyCard(s); } });
