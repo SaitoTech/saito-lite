@@ -42,9 +42,7 @@
  
             if (id == "yes") {
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-              if (imperium_self.game.player != player) {
-                imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
-              }
+              imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
               imperium_self.playerBuildInfrastructure(() => {
                 imperium_self.endTurn();
               }, 1);

@@ -42,7 +42,7 @@
       },
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
-        if (imperium_self.game.player != player) {
+        if (imperium_self.game.player == player) {
         if (imperium_self.game.player != strategy_card_player) {
 
 	  if (imperium_self.game.players_info[player-1].commodities == imperium_self.game.players_info[player-1].commodity_limit) { 
