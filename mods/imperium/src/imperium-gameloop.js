@@ -76,6 +76,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
         if (le >= 0) {
 	  lmv = this.game.queue[le].split("\t");
 	}
+console.log("RESOLVE");
 
 	//
 	// this overwrites secondaries, we need to clear manually
@@ -104,7 +105,6 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 
 
   	    if (this.game.confirms_needed <= this.game.confirms_received) {
-
 	      this.resetConfirmsNeeded(0);
     	      this.game.queue.splice(qe-1, 2);
   	      return 1;
@@ -127,7 +127,10 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 		  return 1;
 		}
 	      }
+console.log("cn : " + this.game.confirms_needed + " -- " + this.game.confirms_received);
 
+	      if (this.game.confirms_needed < this.game.confirms_received) { return 1; }
+console.log("stopping execution");
   	      return 0;
             }
   
@@ -962,13 +965,6 @@ console.log("start ofg agenda");
 	let confirms = 1;
 	if (parseInt(mv[1]) > 1) { confirms = parseInt(mv[1]); }
  	this.resetConfirmsNeeded(confirms);
-
-	for (let i = 2; i < mv.length; i++) {
-	  if (mv[i] != undefined) {
-	    this.game.confirms_players.push(mv[i]);
-	  }
-	}
-
   	this.game.queue.splice(qe, 1);
   	return 1;
 
@@ -1594,7 +1590,7 @@ imperium_self.saveGame(imperium_self.game.id);
         let type	 = mv[2];
         let name	 = mv[3];
   
-  	if (type == "planet") { this.exhaustPlanet(name); }
+  	if (type == "planet") { this.unexhaustPlanet(name); }
   
   	this.game.queue.splice(qe, 1);
   	return 1;

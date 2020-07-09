@@ -30,7 +30,11 @@
 	      if (sys.p) {
                 for (let i = 0; i < sys.p.length; i++) {
                   if (sys.p[i].owner == imperium_self.game.player) {
-                    imperium_self.addMove("unexhaust\t"+imperium_self.game.player+"\t"+sector);
+		    for (let p in imperium_self.game.planets) {
+		      if (sys.p[i] == imperium_self.game.planets[p]) {
+                        imperium_self.addMove("unexhaust\t"+imperium_self.game.player+"\t"+"planet"+"\t"+p);
+		      }
+		    }
                   }
                 }
 	      }

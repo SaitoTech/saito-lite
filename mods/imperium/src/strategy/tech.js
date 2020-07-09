@@ -40,8 +40,11 @@
 	    resources_to_spend = 0;
 	  }
 
-          html += '<li class="option" id="yes">Yes</li>';
-          html += '<li class="option" id="no">No</li>';
+	  let available_resources = imperium_self.returnAvailableResources(imperium_self.game.player);
+	  if (available_resources >= 4) {
+            html += '<li class="option" id="yes">Yes</li>';
+          }
+	  html += '<li class="option" id="no">No</li>';
           html += '</ul>';
  
           imperium_self.updateStatus(html);
@@ -78,8 +81,8 @@
 
         } else {
 
-	  resources_to_spend = 4;
-          html = '<p>Do you wish to spend 6 resources to research an additional technology? </p><ul>';
+	  resources_to_spend = 6;
+          html = '<p>Do you wish to spend "+resources_to_spend+" resources to research an additional technology? </p><ul>';
 
 	  if (
 	    imperium_self.game.players_info[player-1].permanent_research_technology_card_must_not_spend_resources == 1 ||
@@ -89,7 +92,10 @@
 	    resources_to_spend = 0;
 	  }
 
-          html += '<li class="option" id="yes">Yes</li>';
+	  let available_resources = imperium_self.returnAvailableResources(imperium_self.game.player);
+	  if (available_resources >= resources_to_spend) {
+            html += '<li class="option" id="yes">Yes</li>';
+	  }
           html += '<li class="option" id="no">No</li>';
           html += '</ul>';
 

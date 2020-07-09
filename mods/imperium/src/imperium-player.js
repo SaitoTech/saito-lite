@@ -1655,22 +1655,20 @@ console.log("ERROR: you had no hits left to assign, bug?");
 
 
 
-  playerScoreSecretObjective(mycallback, stage=0) {
+  playerScoreSecretObjective(imperium_self, mycallback, stage=0) {
 
-    let imperium_self = this;
-   
     let html = '';  
     let can_score = 0;
 
     html += '<div class="sf-readable">Do you wish to score any Secret Objectives? </div><ul>';
   
     // Secret Objectives
-    for (let i = 0 ; i < this.game.deck[5].hand.length; i++) {
-      if (!this.game.players_info[this.game.player-1].objectives_scored.includes(this.game.deck[5].hand[i])) {
-        if (this.canPlayerScoreVictoryPoints(this.game.player, this.game.deck[5].hand[i], 3)) {
-	  if (!this.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(this.game.deck[5].hand[i])) {
+    for (let i = 0 ; i < imperium_self.game.deck[5].hand.length; i++) {
+      if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored.includes(imperium_self.game.deck[5].hand[i])) {
+        if (imperium_self.canPlayerScoreVictoryPoints(imperium_self.game.player, imperium_self.game.deck[5].hand[i], 3)) {
+	  if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(imperium_self.game.deck[5].hand[i])) {
 	    can_score = 1;
-            html += '1 VP Secret Objective: <li class="option secret3" id="'+this.game.deck[5].hand[i]+'">'+this.game.deck[5].cards[this.game.deck[5].hand[i]].name+'</li>';
+            html += '1 VP Secret Objective: <li class="option secret3" id="'+imperium_self.game.deck[5].hand[i]+'">'+imperium_self.game.deck[5].cards[imperium_self.game.deck[5].hand[i]].name+'</li>';
           }
         }
       }
@@ -1679,57 +1677,63 @@ console.log("ERROR: you had no hits left to assign, bug?");
     html += '<li class="option" id="no">I choose not to score...</li>';
     html += '</ul>';
   
-    this.updateStatus(html);
+    imperium_self.updateStatus(html);
     
     $('.option').off();
     $('.option').on('click', function() {
   
       let action = $(this).attr("id");
       if (action == "no") {
-        mycallback(0, "");
+        mycallback(imperium_self, 0, "");
       } else {
         let vp = 2;
         let objective = action;
-        mycallback(vp, objective);
+        mycallback(imperium_self, vp, objective);
       }
     });
   }
   
-  playerScoreVictoryPoints(mycallback, stage=0) {  
+  playerScoreVictoryPoints(imperium_self, mycallback, stage=0) {  
 
-    let imperium_self = this;
-   
     let html = '';  
     html += '<div class="sf-readable">Do you wish to score any victory points? </div><ul>';
   
     // Stage I Public Objectives
-    for (let i = 0; i < this.game.state.stage_i_objectives.length; i++) {
-      if (!this.game.players_info[this.game.player-1].objectives_scored.includes(this.game.state.stage_i_objectives[i])) {
-        if (this.canPlayerScoreVictoryPoints(this.game.player, this.game.state.stage_i_objectives[i], 1)) {
-	  if (!this.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(this.game.stage_i_objectives[i])) {
-            html += '1 VP Public Objective: <li class="option stage1" id="'+this.game.state.stage_i_objectives[i]+'">'+this.game.deck[3].cards[this.game.state.stage_i_objectives[i]].name+'</li>';
+    for (let i = 0; i < imperium_self.game.state.stage_i_objectives.length; i++) {
+console.log(i);
+console.log("2 --> " + imperium_self.game.player);
+	    console.log("3 -> " + JSON.stringify(imperium_self.game.players_info[imperium_self.game.player-1]));
+	    console.log("4 -> " + JSON.stringify(imperium_self.game.state.stage_i_objectives));
+
+	    if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored.includes(imperium_self.game.state.stage_i_objectives[i])) {
+console.log(5);
+		    if (imperium_self.canPlayerScoreVictoryPoints(imperium_self.game.player, imperium_self.game.state.stage_i_objectives[i], 1)) {
+console.log(6);
+	  if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(imperium_self.game.stage_i_objectives[i])) {
+console.log(7);
+            html += '1 VP Public Objective: <li class="option stage1" id="'+imperium_self.game.state.stage_i_objectives[i]+'">'+imperium_self.game.deck[3].cards[imperium_self.game.state.stage_i_objectives[i]].name+'</li>';
           }
         }
       }
     }
   
     // Stage II Public Objectives
-    for (let i = 0; i < this.game.state.stage_ii_objectives.length; i++) {
-      if (!this.game.players_info[this.game.player-1].objectives_scored.includes(this.game.state.stage_ii_objectives[i])) {
-        if (this.canPlayerScoreVictoryPoints(this.game.player, this.game.state.stage_ii_objectives[i], 2)) {
-	  if (!this.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(this.game.stage_ii_objectives[i])) {
-            html += '2 VP Public Objective: <li class="option stage2" id="'+this.game.state.stage_ii_objectives[i]+'">'+this.game.deck[4].cards[this.game.state.stage_ii_objectives[i]].name+'</li>';
+    for (let i = 0; i < imperium_self.game.state.stage_ii_objectives.length; i++) {
+      if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored.includes(imperium_self.game.state.stage_ii_objectives[i])) {
+        if (imperium_self.canPlayerScoreVictoryPoints(imperium_self.game.player, imperium_self.game.state.stage_ii_objectives[i], 2)) {
+	  if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(imperium_self.game.stage_ii_objectives[i])) {
+            html += '2 VP Public Objective: <li class="option stage2" id="'+imperium_self.game.state.stage_ii_objectives[i]+'">'+imperium_self.game.deck[4].cards[imperium_self.game.state.stage_ii_objectives[i]].name+'</li>';
           }
         }
       }
     }
   
     // Secret Objectives
-    for (let i = 0 ; i < this.game.deck[5].hand.length; i++) {
-      if (!this.game.players_info[this.game.player-1].objectives_scored.includes(this.game.deck[5].hand[i])) {
-        if (this.canPlayerScoreVictoryPoints(this.game.player, this.game.deck[5].hand[i], 3)) {
-	  if (!this.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(this.game.deck[5].hand[i])) {
-            html += '1 VP Secret Objective: <li class="option secret3" id="'+this.game.deck[5].hand[i]+'">'+this.game.deck[5].cards[this.game.deck[5].hand[i]].name+'</li>';
+    for (let i = 0 ; i < imperium_self.game.deck[5].hand.length; i++) {
+      if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored.includes(imperium_self.game.deck[5].hand[i])) {
+        if (imperium_self.canPlayerScoreVictoryPoints(imperium_self.game.player, imperium_self.game.deck[5].hand[i], 3)) {
+	  if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(imperium_self.game.deck[5].hand[i])) {
+            html += '1 VP Secret Objective: <li class="option secret3" id="'+imperium_self.game.deck[5].hand[i]+'">'+imperium_self.game.deck[5].cards[imperium_self.game.deck[5].hand[i]].name+'</li>';
           }
         }
       }
@@ -1738,7 +1742,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
     html += '<li class="option" id="no">I choose not to score...</li>';
     html += '</ul>';
   
-    this.updateStatus(html);
+    imperium_self.updateStatus(html);
     
     $('.option').off();
     $('.option').on('click', function() {
@@ -1752,13 +1756,13 @@ console.log("ERROR: you had no hits left to assign, bug?");
   
       if (action == "no") {
   
-        mycallback(0, "");
+        mycallback(imperium_self, 0, "");
   
       } else {
 
         let vp = 2;
         let objective = action;
-        mycallback(vp, objective);
+        mycallback(imperium_self, vp, objective);
   
       }
     });

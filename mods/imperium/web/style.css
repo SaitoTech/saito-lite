@@ -850,19 +850,19 @@ body {
 }
 
 .player_color_3 {
-  filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
+  filter: invert(50%) sepia(52%) saturate(753%) hue-rotate(333deg) brightness(95%) contrast(93%);
 }
 
 .player_color_4 {
-  filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
+  filter: invert(39%) sepia(11%) saturate(5559%) hue-rotate(273deg) brightness(101%) contrast(86%);;
 }
 
 .player_color_5 {
-  filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
+  filter: invert(84%) sepia(92%) saturate(701%) hue-rotate(154deg) brightness(84%) contrast(97%);
 }
 
 .player_color_6 {
-  filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
+  filter: invert(32%) sepia(14%) saturate(7093%) hue-rotate(336deg) brightness(88%) contrast(86%);
 }
 
 .player_color_7 {
@@ -870,7 +870,6 @@ body {
 }
 
 .player_color_8 {
-  filter: brightness(0) saturate(100%) invert(32%) sepia(90%) saturate(870%) hue-rotate(184deg) brightness(93%) contrast(97%);
 }
 
 .player_color_box {

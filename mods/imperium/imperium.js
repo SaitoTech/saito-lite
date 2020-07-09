@@ -1503,9 +1503,7 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
  
             if (id == "yes") {
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-              if (imperium_self.game.player != player) {
-                imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
-              }
+              imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
               imperium_self.playerBuildInfrastructure(() => {
                 imperium_self.endTurn();
               }, 1);
@@ -1554,7 +1552,11 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
 	      if (sys.p) {
                 for (let i = 0; i < sys.p.length; i++) {
                   if (sys.p[i].owner == imperium_self.game.player) {
-                    imperium_self.addMove("unexhaust\t"+imperium_self.game.player+"\t"+sector);
+		    for (let p in imperium_self.game.planets) {
+		      if (sys.p[i] == imperium_self.game.planets[p]) {
+                        imperium_self.addMove("unexhaust\t"+imperium_self.game.player+"\t"+"planet"+"\t"+p);
+		      }
+		    }
                   }
                 }
 	      }
@@ -1672,7 +1674,7 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
 	  let supplementary_scoring = function() {
   	    imperium_self.playerAcknowledgeNotice("You will first be asked to score your public objective. The game will then precede and allow all players (including you) to score additional objectives in initiative order.", function() {
               imperium_self.addMove("resolve\tstrategy");
-              imperium_self.playerScoreVictoryPoints(function(vp, objective) {
+              imperium_self.playerScoreVictoryPoints(imperium_self, function(vp, objective) {
                 imperium_self.addMove("strategy\t"+"imperial"+"\t"+strategy_card_player+"\t2");
                 imperium_self.addMove("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
                 if (vp > 0) { imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); }
@@ -1699,10 +1701,10 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
 	  imperium_self.game_halted = 1;
 
           imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-          imperium_self.playerScoreSecretObjective(function(vp, objective) {
+          imperium_self.playerScoreSecretObjective(imperium_self, function(vp, objective) {
             if (vp > 0) { imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); }
 	    imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
-            imperium_self.playerScoreVictoryPoints(function(vp, objective) {
+            imperium_self.playerScoreVictoryPoints(imperium_self, function(vp, objective) {
               if (vp > 0) { imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); }
 	      imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
               imperium_self.updateStatus("You have played the Imperial Secondary");
@@ -1946,8 +1948,11 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
 	    resources_to_spend = 0;
 	  }
 
-          html += '<li class="option" id="yes">Yes</li>';
-          html += '<li class="option" id="no">No</li>';
+	  let available_resources = imperium_self.returnAvailableResources(imperium_self.game.player);
+	  if (available_resources >= 4) {
+            html += '<li class="option" id="yes">Yes</li>';
+          }
+	  html += '<li class="option" id="no">No</li>';
           html += '</ul>';
  
           imperium_self.updateStatus(html);
@@ -1984,8 +1989,8 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
 
         } else {
 
-	  resources_to_spend = 4;
-          html = '<p>Do you wish to spend 6 resources to research an additional technology? </p><ul>';
+	  resources_to_spend = 6;
+          html = '<p>Do you wish to spend "+resources_to_spend+" resources to research an additional technology? </p><ul>';
 
 	  if (
 	    imperium_self.game.players_info[player-1].permanent_research_technology_card_must_not_spend_resources == 1 ||
@@ -1995,7 +2000,10 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
 	    resources_to_spend = 0;
 	  }
 
-          html += '<li class="option" id="yes">Yes</li>';
+	  let available_resources = imperium_self.returnAvailableResources(imperium_self.game.player);
+	  if (available_resources >= resources_to_spend) {
+            html += '<li class="option" id="yes">Yes</li>';
+	  }
           html += '<li class="option" id="no">No</li>';
           html += '</ul>';
 
@@ -2135,7 +2143,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
       },
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
-        if (imperium_self.game.player != player) {
+        if (imperium_self.game.player == player) {
         if (imperium_self.game.player != strategy_card_player) {
 
 	  if (imperium_self.game.players_info[player-1].commodities == imperium_self.game.players_info[player-1].commodity_limit) { 
@@ -6922,6 +6930,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
         if (le >= 0) {
 	  lmv = this.game.queue[le].split("\t");
 	}
+console.log("RESOLVE");
 
 	//
 	// this overwrites secondaries, we need to clear manually
@@ -6950,7 +6959,6 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 
 
   	    if (this.game.confirms_needed <= this.game.confirms_received) {
-
 	      this.resetConfirmsNeeded(0);
     	      this.game.queue.splice(qe-1, 2);
   	      return 1;
@@ -6973,7 +6981,10 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 		  return 1;
 		}
 	      }
+console.log("cn : " + this.game.confirms_needed + " -- " + this.game.confirms_received);
 
+	      if (this.game.confirms_needed < this.game.confirms_received) { return 1; }
+console.log("stopping execution");
   	      return 0;
             }
   
@@ -7808,13 +7819,6 @@ console.log("start ofg agenda");
 	let confirms = 1;
 	if (parseInt(mv[1]) > 1) { confirms = parseInt(mv[1]); }
  	this.resetConfirmsNeeded(confirms);
-
-	for (let i = 2; i < mv.length; i++) {
-	  if (mv[i] != undefined) {
-	    this.game.confirms_players.push(mv[i]);
-	  }
-	}
-
   	this.game.queue.splice(qe, 1);
   	return 1;
 
@@ -8440,7 +8444,7 @@ imperium_self.saveGame(imperium_self.game.id);
         let type	 = mv[2];
         let name	 = mv[3];
   
-  	if (type == "planet") { this.exhaustPlanet(name); }
+  	if (type == "planet") { this.unexhaustPlanet(name); }
   
   	this.game.queue.splice(qe, 1);
   	return 1;
@@ -12490,22 +12494,20 @@ console.log("ERROR: you had no hits left to assign, bug?");
 
 
 
-  playerScoreSecretObjective(mycallback, stage=0) {
+  playerScoreSecretObjective(imperium_self, mycallback, stage=0) {
 
-    let imperium_self = this;
-   
     let html = '';  
     let can_score = 0;
 
     html += '<div class="sf-readable">Do you wish to score any Secret Objectives? </div><ul>';
   
     // Secret Objectives
-    for (let i = 0 ; i < this.game.deck[5].hand.length; i++) {
-      if (!this.game.players_info[this.game.player-1].objectives_scored.includes(this.game.deck[5].hand[i])) {
-        if (this.canPlayerScoreVictoryPoints(this.game.player, this.game.deck[5].hand[i], 3)) {
-	  if (!this.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(this.game.deck[5].hand[i])) {
+    for (let i = 0 ; i < imperium_self.game.deck[5].hand.length; i++) {
+      if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored.includes(imperium_self.game.deck[5].hand[i])) {
+        if (imperium_self.canPlayerScoreVictoryPoints(imperium_self.game.player, imperium_self.game.deck[5].hand[i], 3)) {
+	  if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(imperium_self.game.deck[5].hand[i])) {
 	    can_score = 1;
-            html += '1 VP Secret Objective: <li class="option secret3" id="'+this.game.deck[5].hand[i]+'">'+this.game.deck[5].cards[this.game.deck[5].hand[i]].name+'</li>';
+            html += '1 VP Secret Objective: <li class="option secret3" id="'+imperium_self.game.deck[5].hand[i]+'">'+imperium_self.game.deck[5].cards[imperium_self.game.deck[5].hand[i]].name+'</li>';
           }
         }
       }
@@ -12514,57 +12516,63 @@ console.log("ERROR: you had no hits left to assign, bug?");
     html += '<li class="option" id="no">I choose not to score...</li>';
     html += '</ul>';
   
-    this.updateStatus(html);
+    imperium_self.updateStatus(html);
     
     $('.option').off();
     $('.option').on('click', function() {
   
       let action = $(this).attr("id");
       if (action == "no") {
-        mycallback(0, "");
+        mycallback(imperium_self, 0, "");
       } else {
         let vp = 2;
         let objective = action;
-        mycallback(vp, objective);
+        mycallback(imperium_self, vp, objective);
       }
     });
   }
   
-  playerScoreVictoryPoints(mycallback, stage=0) {  
+  playerScoreVictoryPoints(imperium_self, mycallback, stage=0) {  
 
-    let imperium_self = this;
-   
     let html = '';  
     html += '<div class="sf-readable">Do you wish to score any victory points? </div><ul>';
   
     // Stage I Public Objectives
-    for (let i = 0; i < this.game.state.stage_i_objectives.length; i++) {
-      if (!this.game.players_info[this.game.player-1].objectives_scored.includes(this.game.state.stage_i_objectives[i])) {
-        if (this.canPlayerScoreVictoryPoints(this.game.player, this.game.state.stage_i_objectives[i], 1)) {
-	  if (!this.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(this.game.stage_i_objectives[i])) {
-            html += '1 VP Public Objective: <li class="option stage1" id="'+this.game.state.stage_i_objectives[i]+'">'+this.game.deck[3].cards[this.game.state.stage_i_objectives[i]].name+'</li>';
+    for (let i = 0; i < imperium_self.game.state.stage_i_objectives.length; i++) {
+console.log(i);
+console.log("2 --> " + imperium_self.game.player);
+	    console.log("3 -> " + JSON.stringify(imperium_self.game.players_info[imperium_self.game.player-1]));
+	    console.log("4 -> " + JSON.stringify(imperium_self.game.state.stage_i_objectives));
+
+	    if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored.includes(imperium_self.game.state.stage_i_objectives[i])) {
+console.log(5);
+		    if (imperium_self.canPlayerScoreVictoryPoints(imperium_self.game.player, imperium_self.game.state.stage_i_objectives[i], 1)) {
+console.log(6);
+	  if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(imperium_self.game.stage_i_objectives[i])) {
+console.log(7);
+            html += '1 VP Public Objective: <li class="option stage1" id="'+imperium_self.game.state.stage_i_objectives[i]+'">'+imperium_self.game.deck[3].cards[imperium_self.game.state.stage_i_objectives[i]].name+'</li>';
           }
         }
       }
     }
   
     // Stage II Public Objectives
-    for (let i = 0; i < this.game.state.stage_ii_objectives.length; i++) {
-      if (!this.game.players_info[this.game.player-1].objectives_scored.includes(this.game.state.stage_ii_objectives[i])) {
-        if (this.canPlayerScoreVictoryPoints(this.game.player, this.game.state.stage_ii_objectives[i], 2)) {
-	  if (!this.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(this.game.stage_ii_objectives[i])) {
-            html += '2 VP Public Objective: <li class="option stage2" id="'+this.game.state.stage_ii_objectives[i]+'">'+this.game.deck[4].cards[this.game.state.stage_ii_objectives[i]].name+'</li>';
+    for (let i = 0; i < imperium_self.game.state.stage_ii_objectives.length; i++) {
+      if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored.includes(imperium_self.game.state.stage_ii_objectives[i])) {
+        if (imperium_self.canPlayerScoreVictoryPoints(imperium_self.game.player, imperium_self.game.state.stage_ii_objectives[i], 2)) {
+	  if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(imperium_self.game.stage_ii_objectives[i])) {
+            html += '2 VP Public Objective: <li class="option stage2" id="'+imperium_self.game.state.stage_ii_objectives[i]+'">'+imperium_self.game.deck[4].cards[imperium_self.game.state.stage_ii_objectives[i]].name+'</li>';
           }
         }
       }
     }
   
     // Secret Objectives
-    for (let i = 0 ; i < this.game.deck[5].hand.length; i++) {
-      if (!this.game.players_info[this.game.player-1].objectives_scored.includes(this.game.deck[5].hand[i])) {
-        if (this.canPlayerScoreVictoryPoints(this.game.player, this.game.deck[5].hand[i], 3)) {
-	  if (!this.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(this.game.deck[5].hand[i])) {
-            html += '1 VP Secret Objective: <li class="option secret3" id="'+this.game.deck[5].hand[i]+'">'+this.game.deck[5].cards[this.game.deck[5].hand[i]].name+'</li>';
+    for (let i = 0 ; i < imperium_self.game.deck[5].hand.length; i++) {
+      if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored.includes(imperium_self.game.deck[5].hand[i])) {
+        if (imperium_self.canPlayerScoreVictoryPoints(imperium_self.game.player, imperium_self.game.deck[5].hand[i], 3)) {
+	  if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(imperium_self.game.deck[5].hand[i])) {
+            html += '1 VP Secret Objective: <li class="option secret3" id="'+imperium_self.game.deck[5].hand[i]+'">'+imperium_self.game.deck[5].cards[imperium_self.game.deck[5].hand[i]].name+'</li>';
           }
         }
       }
@@ -12573,7 +12581,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
     html += '<li class="option" id="no">I choose not to score...</li>';
     html += '</ul>';
   
-    this.updateStatus(html);
+    imperium_self.updateStatus(html);
     
     $('.option').off();
     $('.option').on('click', function() {
@@ -12587,13 +12595,13 @@ console.log("ERROR: you had no hits left to assign, bug?");
   
       if (action == "no") {
   
-        mycallback(0, "");
+        mycallback(imperium_self, 0, "");
   
       } else {
 
         let vp = 2;
         let objective = action;
-        mycallback(vp, objective);
+        mycallback(imperium_self, vp, objective);
   
       }
     });
@@ -15120,12 +15128,9 @@ console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-//      return ["1_1", "4_7"];
-      return ["1_1", "2_1"];
+      return ["1_1", "4_7"];
+//      return ["1_1", "2_1"];
     }
-
-
-  
     if (players <= 3) {
       return ["1_1", "4_7", "7_1"];
     }
@@ -17710,9 +17715,9 @@ addUIEvents() {
         <span class="fa-stack fa-3x">
         <i class="fas fa-dice-d20 fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
-        <span id="token_display_command_token_count" class="token_count command_token_count">
+        <div id="token_display_command_token_count" class="token_count command_token_count">
         ${this.game.players_info[this.game.player-1].command_tokens}
-        </span>
+        </div>
         </span>
         </span>
       </div>
@@ -17720,9 +17725,9 @@ addUIEvents() {
         <span class="fa-stack fa-3x">
         <i class="far fa-futbol fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
-        <span id="token_display_strategy_token_count" class="token_count strategy_token_count">
+        <div id="token_display_strategy_token_count" class="token_count strategy_token_count">
         ${this.game.players_info[this.game.player-1].strategy_tokens}
-        </span>
+        </div>
         </span>
         </span>
       </div>
@@ -17730,9 +17735,9 @@ addUIEvents() {
         <span class="fa-stack fa-3x">
         <i class="fas fa-space-shuttle fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
-        <span id="token_display_fleet_supply_count" class="token_count fleet_supply_count">
+        <div id="token_display_fleet_supply_count" class="token_count fleet_supply_count">
         ${this.game.players_info[this.game.player-1].fleet_supply}
-        </span>
+        </div>
         </span>
         </span>
       </div>
@@ -17740,9 +17745,9 @@ addUIEvents() {
         <span class="fa-stack fa-3x">
         <i class="fas fa-box fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
-        <span id="token_display_commodities_count" class="token_count commodities_count">
+        <div id="token_display_commodities_count" class="token_count commodities_count">
         ${this.game.players_info[this.game.player-1].commodities}
-        </span>
+        </div>
         </span>
         </span>
       </div>
@@ -17752,7 +17757,7 @@ addUIEvents() {
         <span class="fa fa-stack-1x">
         <span id="token_display_trade_goods_count" class="token_count trade_goods_count">
         ${this.game.players_info[this.game.player-1].goods}
-        </span>
+        </div>
         </span>
         </span>
       </div>
@@ -18077,7 +18082,6 @@ updateTokenDisplay() {
     $('#token_display_fleet_supply_count').html(imperium_self.game.players[imperium_self.game.player-1].fleet_supply_tokens);
     $('#token_display_commodities_count').html(imperium_self.game.players[imperium_self.game.player-1].commodities);
     $('#token_display_trade_goods_count').html(imperium_self.game.players[imperium_self.game.player-1].goods);
-
   } catch (err) {}
 
 }
