@@ -5627,6 +5627,7 @@ console.log("Sector to ask about: " + s + " --- " + sector);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
     $('.content').css('visibility', 'visible');
+    $('#hud_menu_game-logs').css('display', 'none');
   }
 
 
