@@ -41,12 +41,9 @@
 
 
   resetTargetUnits() {
-console.log("let a here");
     for (let i = 0; i < this.game.players_info.length; i++) {
-console.log(i);
       this.game.players_info[i].target_units = [];
     }
-console.log(" ... anddone");
   }
 
   resetTurnVariables(player) {
@@ -54,6 +51,8 @@ console.log(" ... anddone");
     this.game.players_info[player-1].may_player_produce_without_spacedock = 0;
     this.game.players_info[player-1].may_player_produce_without_spacedock_production_limit = 0;
     this.game.players_info[player-1].may_player_produce_without_spacedock_cost_limit = 0;
+    this.game.players_info[player-1].temporary_immune_to_pds_fire = 0;
+    this.game.players_info[player-1].temporary_immune_to_planetary_defense = 0;
     this.game.players_info[player-1].temporary_space_combat_roll_modifier 	= 0;
     this.game.players_info[player-1].temporary_ground_combat_roll_modifier 	= 0;
     this.game.players_info[player-1].temporary_pds_combat_roll_modifier 	= 0;
@@ -66,6 +65,8 @@ console.log(" ... anddone");
     this.game.players_info[player-1].pds_combat_dice_reroll                 = 0;
     this.game.players_info[player-1].bombardment_combat_dice_reroll         = 0;
     this.game.players_info[player-1].combat_dice_reroll                     = 0;
+    this.game.players_info[player-1].experimental_battlestation		    = "";
+    this.game.players_info[player-1].lost_planet_this_round		= -1; // is player to whom lost
 
     for (let i = 0; i < this.game.players_info.length; i++) {
       this.game.players_info[i].traded_this_turn 			    = 0;
@@ -110,7 +111,7 @@ console.log(" ... anddone");
     //
     // new_owner does not need to be provided if the player has units on the planet
     //
-    for (let i = 0; i < sys.p[planet_idx].units.length; i++) {
+    for (let i = 0; i < sys.p[planet_idx].units.length && new_owner == -1; i++) {
       if (sys.p[planet_idx].units[i].length > 0) { owner = i+1; }
     }
     if (owner != -1) {

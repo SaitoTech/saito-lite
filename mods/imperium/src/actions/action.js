@@ -19,6 +19,98 @@ ACTION CARD - types
 ************************************/
 
 
+/***
+
+    this.importActionCard('infiltrate', {
+  	name : "Infiltrate" ,
+  	type : "instant" ,
+  	text : "The next time you invade a planet, you may takeover any existing PDS units or Space Docks" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+	  imperium_self.game.players_info[action_card_player-1].temporary_infiltrate_infrastructure_on_invasion = 1;
+	  return 1;
+	},
+    });
+
+
+
+
+    this.importActionCard('reparations', {
+  	name : "Reparations" ,
+  	type : "action" ,
+  	text : "If you have lost a planet this round, refresh one of your planets" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  if (imperium_self.game.players_info[action_card_player-1].lost_planet_this_round != -1) {
+
+	    let my_planets = imperium_self.returnPlayerExhaustedPlanetCards(imperium_self.game.player);
+
+            imperium_self.playerSelectPlanetWithFilter(
+              "Select an exhausted planet to refresh: " ,
+              function(planet) {
+		if (my_planets.includes(planet)) { return 1; } return 0;
+              },
+              function(planet) {
+                imperium_self.addMove("unexhaust\tplanet\t"+planet);
+                imperium_self.addMove("notify\t"+imperium_self.returnFaction(action_card_player)+" refreshes " + imperium_self.game.planets[planet].name);
+                imperium_self.endTurn();
+                return 0;
+              },
+              null
+            );
+	    return 0;
+	  }
+	  return 1;
+	},
+    });
+
+
+
+    this.importActionCard('political-stability', {
+  	name : "Political Stability" ,
+  	type : "instant" ,
+  	text : "Pick a strategy card you have already played this round. You may keep this for next round" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  if (imperium_self.game.player == action_card_player) {
+
+	    let html = '<div class="sf-readable">Pick a Strategy Card to keep for next round: </div><ul>';
+	    for (let i = 0; i < imperium_self.game.players_info[action_card_player-1].strategy_cards_played.length; i++) {
+	      let card = imperium_self.game.players_info[action_card_player-1].strategy_cards_played[i];
+              html += '<li class="option" id="'+card+'">' + imperium_self.strategy_cards[card].name + '</li>';
+	    }
+	    html += '</ul>';
+
+	    imperium_self.updateStatus(html);
+
+	    $('.option').off();
+	    $('.option').on('click', function() {
+	      let card = $(this).attr("id");
+	      imperium_self.addMove("strategy_card_retained\t"+imperium_self.game.player+"\t"+card);
+	      imperium_self.endTurn();
+	      return 0;
+	    });
+
+	  }
+
+	  return 0;
+	},
+        handleGameLoop : function(imperium_self, qe, mv) {
+
+          if (mv[0] == "strategy_card_retained") {
+
+            let player = parseInt(mv[1]);
+            let card = mv[2];
+            imperium_self.game.queue.splice(qe, 1);
+	    imperium_self.game.players_info[player-1].strategy_cards_retained.push(card);
+
+            return 1;
+          }
+
+	  return 1;
+        }
+    });
+
+
 
     this.importActionCard('lost-star-chart', {
   	name : "Lost Star Chart" ,
@@ -104,11 +196,53 @@ ACTION CARD - types
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
           if (imperium_self.game.player == action_card_player) {
-alert("requires implementation");
-imperium_self.endTurn();
+
+	    let html = '<div class="sf-readable">Pick a Law to Repeal: </div><ul>';
+	    for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+	      let law = imperium_self.game.state.laws[i];
+	      let agenda = imperium_self.agenda_cards[law];
+              html += '<li class="option" id="'+agenda+'">' + imperium_self.agenda_cards[card].name + '</li>';
+	    }
+            html += '<li class="option" id="cancel">cancel</li>';
+	    html += '</ul>';
+
+	    imperium_self.updateStatus(html);
+
+	    $('.option').off();
+	    $('.option').on('click', function() {
+
+	      let card = $(this).attr("id");
+
+	      if (card === "cancel") {
+	        imperium_self.endTurn();
+		return 0;
+	      }
+
+	      imperium_self.addMove("repeal_law\t"+card);
+	      imperium_self.endTurn();
+	      return 0;
+	    });
           }
 
 	  return 0;
+        },
+        handleGameLoop : function(imperium_self, qe, mv) {
+
+          if (mv[0] == "repeal_law") {
+
+            let card = mv[2];
+            imperium_self.game.queue.splice(qe, 1);
+	    for (let i = 0; i < imperium_self.game.state.laws.length; i++) {
+	      if (imperium_self.game.state.laws[i] == card) {
+		imperium_self.game.state.laws.splice(i, 1);
+		i--;
+	      }
+	    }
+
+            return 1;
+          }
+
+	  return 1;
         }
     });
 
@@ -932,4 +1066,5 @@ alert("select sector with filter");
 	}
     });
 
+***/
 

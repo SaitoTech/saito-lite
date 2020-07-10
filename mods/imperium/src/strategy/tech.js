@@ -80,7 +80,7 @@
         } else {
 
 	  resources_to_spend = 6;
-          html = '<p>Do you wish to spend "+resources_to_spend+" resources to research an additional technology? </p><ul>';
+          html = '<p>Do you wish to spend '+resources_to_spend+' resources to research an additional technology? </p><ul>';
 
 	  if (
 	    imperium_self.game.players_info[player-1].permanent_research_technology_card_must_not_spend_resources == 1 ||

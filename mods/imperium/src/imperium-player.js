@@ -39,6 +39,7 @@
       players[i].passed				= 0;
       players[i].action_card_limit      	= 7;
       players[i].strategy_cards_played 		= [];
+      players[i].strategy_cards_retained        = [];
       players[i].action_cards_played 		= [];
 
 
@@ -108,11 +109,18 @@
       players[i].bombardment_combat_dice_reroll 	= 0;
       players[i].combat_dice_reroll	 		= 0;
 
+      players[i].temporary_immune_to_pds_fire = 0;
+      players[i].temporary_immune_to_planetary_defense = 0;
+
       players[i].temporary_space_combat_roll_modifier 	= 0;
       players[i].temporary_ground_combat_roll_modifier 	= 0;
       players[i].temporary_pds_combat_roll_modifier 	= 0;
       players[i].temporary_bombardment_combat_roll_modifier 	= 0;
 
+      players[i].units_i_destroyed_this_combat_round      = [];
+      players[i].units_i_destroyed_last_combat_round      = [];
+      players[i].my_units_destroyed_this_combat_round      = [];
+      players[i].my_units_destroyed_last_combat_round      = [];
 
       //
       // tech upgrades
@@ -127,6 +135,8 @@
       players[i].permanent_blue_tech_prerequisite = 0;
       players[i].temporary_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 0;
       players[i].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 0;
+      players[i].temporary_infiltrate_infrastructure_on_invasion = 0;
+      players[i].permanent_infiltrate_infrastructure_on_invasion = 0;
 
       if (i == 1) { players[i].color   = "yellow"; }
       if (i == 2) { players[i].color   = "green"; }
@@ -142,6 +152,10 @@
 
       // scored objectives
       players[i].objectives_scored = [];
+
+
+      // random
+      players[i].lost_planet_this_round		= -1; // is player to whom lost
   
     }
   
@@ -212,6 +226,7 @@
 	}
       }
   
+
       if (this.canPlayerPass(this.game.player) == 1) {
 	if (this.game.state.active_player_moved == 1) {
 	  //
@@ -766,6 +781,15 @@ console.log("ERROR: you had no hits left to assign, bug?");
       html += '<li class="option" id="attack">continue</li>';
     }
 
+    //
+    // can I retreat
+    //
+    if (this.canPlayerRetreat(imperium_self.game.player, sector)) {
+      html += '<li class="option" id="retreat">announce retreat</li>';
+    }
+
+
+
     let tech_attach_menu_events = 0;
     let tech_attach_menu_triggers = [];
     let tech_attach_menu_index = [];
@@ -818,6 +842,34 @@ console.log("ERROR: you had no hits left to assign, bug?");
 	//
         imperium_self.prependMove("ships_fire\t"+attacker+"\t"+defender+"\t"+sector);
 	imperium_self.endTurn();
+      }
+
+      if (action2 == "retreat") {
+	if (this.canPlayerRetreat(player, sector)) {
+
+	  let retreat_options = this.selectSectorsWherePlayerCanRetreat(player, sector);
+	
+          let html = '<div clss="sf-readable">Retreat into which Sector? </div><ul>';
+	  for (let i = 0; i < retreat_options.length; i++) {
+            html += '<li class="option" id="'+i+'">'+sector+'</li>';
+	  }
+	  html += '</ul>';
+
+	  $('.option').off();
+	  $('.option').on('click', function() {
+
+	    let opt = $(this).attr("id");
+	    let retreat_to_sector = retreat_options[opt];
+
+	    imperium_self.addMove("retreat\t"+player+"\t"+sector+"\t"+retreat_to_sector);
+	    imperium_self.endTurn();
+	    return 0;
+	  });
+
+
+	} else {
+          this.playerPlaySpaceCombat(attacker, defender, sector);
+        }
       }
 
     });
@@ -1102,14 +1154,24 @@ console.log("ERROR: you had no hits left to assign, bug?");
     let imperium_self = this;
     let html = '';
     let relevant_action_cards = ["pre_pds"];
+    let can_target_with_pds_fire = 1;
 
     html = '<div class="sf-readable">Do you wish to fire your PDS?</div><ul>';
+
+    //
+    // skip if attacker is immune
+    //
+    if (imperium_self.game.players_info[attacker-1].temporary_immune_to_pds_fire) {
+      html = '<div class="sf-readable">Your attacker cannot be targeted by PDS fire during this invasion:</div><ul>';
+      can_target_with_pds_fire = 0;
+    }
+
 
     let ac = this.returnPlayerActionCards(player, relevant_action_cards);
     if (1 == 1) {
       html += '<li class="option" id="skip">skip PDS</li>';
     }
-    if (1 == 1) {
+    if (can_target_with_pds_fire == 1) {
       html += '<li class="option" id="fire">fire PDS</li>';
     }
     if (ac.length > 0) {
@@ -1601,7 +1663,11 @@ console.log("ERROR: you had no hits left to assign, bug?");
     this.updateStatus(html);
     
     $('.option').off();
+    $('.option').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showTechCard(s); });
+    $('.option').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hideTechCard(s); });
     $('.option').on('click', function() {
+
+      let i = $(this).attr("id");
 
       //
       // handle prerequisites
@@ -2450,10 +2516,16 @@ console.log(7);
     let imperium_self = this;
     let cards = this.returnStrategyCards();
     let playercol = "player_color_"+this.game.player;
-          
+    let relevant_action_cards = ["strategy"];
+    let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards);
+
+
     let html  = "<div class='terminal_header'><div class='player_color_box "+playercol+"'></div>" + this.returnFaction(this.game.player) + ": select your strategy card:</div><ul>";
     if (this.game.state.round > 1) {
       html  = "<div class='terminal_header'>"+this.returnFaction(this.game.player) + ": select your strategy card:</div><ul>";
+    }
+    if (ac.length > 0) {
+        html += '<li class="option" id="action">play action card</li>';
     }
     let scards = [];
 
@@ -2461,18 +2533,11 @@ console.log(7);
       scards.push("");
     }
 
-console.log("HI SEBASTIAN");
-console.log(JSON.stringify(this.game.state.strategy_cards));
-
-
     for (let z = 0; z < this.game.state.strategy_cards.length; z++) {
       let rank = parseInt(this.strategy_cards[this.game.state.strategy_cards[z]].rank);
       while (scards[rank-1] != "") { rank++; }
       scards[rank-1] = '<li class="textchoice" id="'+this.game.state.strategy_cards[z]+'">' + cards[this.game.state.strategy_cards[z]].name + '</li>';
     }
-
-console.log(" and scards: ");
-console.log(JSON.stringify(scards));
 
     for (let z = 0; z < scards.length; z++) {
       if (scards[z] != "") {
@@ -2487,7 +2552,23 @@ console.log(JSON.stringify(scards));
     $('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.showStrategyCard(s); } });
     $('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); if (s != "cancel") { imperium_self.hideStrategyCard(s); } });
     $('.textchoice').on('click', function() {
+
       let action2 = $(this).attr("id");
+
+      if (action2 == "action") {
+        imperium_self.playerSelectActionCard(function(card) {
+	  imperium_self.addMove("pickstrategy\t"+imperium_self.game.player);
+          imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+          imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+          imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
+	  imperium_self.endTurn();
+	  return 0;
+        }, function() {
+          imperium_self.playerSelectActionCards(action_card_player, card);
+        }, ["action"]);
+	return 0;
+      }
+
       imperium_self.hideStrategyCard(action2);
       mycallback(action2);
     });
@@ -3311,11 +3392,17 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
   playerPostActivateSystem(sector) {
   
     let imperium_self = this;
+    let relevant_action_cards = ["post_activate_system"];
+    let ac = this.returnPlayerActionCards(imperium_self.game.player, relevant_action_cards);
+
 
     let html  = "<div class='sf-readable'>" + this.returnFaction(this.game.player) + ": </div><ul>";
         html += '<li class="option" id="move">move into sector</li>';
     if (this.canPlayerProduceInSector(this.game.player, sector)) {
         html += '<li class="option" id="produce">produce units</li>';
+    }
+    if (ac.length > 0) {
+        html += '<li class="option" id="action">play action card</li>';
     }
         html += '<li class="option" id="finish">finish turn</li>';
         html += '</ul>';
@@ -3326,6 +3413,20 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
   
       let action2 = $(this).attr("id");
   
+
+      if (action2 == "action") {
+        imperium_self.playerSelectActionCard(function(card) {
+	  imperium_self.addMove("activate_system_post\t"+imperium_self.game.player+"\t"+sector);
+          imperium_self.game.players_info[this.game.player-1].action_cards_played.push(card);
+          imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+          imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+          imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
+        }, function() {
+          imperium_self.playerPlayActionCardMenu(action_card_player, card);
+        }, ["action"]);
+      }
+
+
       if (action2 == "move") {
         imperium_self.playerSelectUnitsToMove(sector);
       }

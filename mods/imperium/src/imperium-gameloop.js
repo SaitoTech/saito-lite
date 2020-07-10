@@ -1,4 +1,4 @@
-  
+ 
   
   /////////////////////
   // Core Game Logic //
@@ -127,10 +127,7 @@ console.log("RESOLVE");
 		  return 1;
 		}
 	      }
-console.log("cn : " + this.game.confirms_needed + " -- " + this.game.confirms_received);
-
 	      if (this.game.confirms_needed < this.game.confirms_received) { return 1; }
-console.log("stopping execution");
   	      return 0;
             }
   
@@ -176,6 +173,38 @@ console.log("stopping execution");
 	this.game.state.riders.push(x);  
 
   	this.game.queue.splice(qe, 1);
+  	return 1;
+  
+      }
+
+
+
+
+
+      if (mv[0] === "retreat") {
+  
+	let player = parseInt(mv[1]);
+        let from = mv[2];
+        let to = mv[3];
+  	this.game.queue.splice(qe, 1);
+
+	let sys_from = this.returnSectorAndPlanets(from);
+	let sys_to = this.returnSectorAndPlanets(to);
+
+	for (let i = 0; i < sys_from.s.units[player-1].length; i++) {
+	  sys_to.s.units[player-1].push(sys_from.s.units[player-1][i]);
+	}
+	sys_from.s.units[player-1] = [];
+
+
+        sys_to.s.activated[player-1] = 1;
+        this.saveSystemAndPlanets(sys_to);
+        this.saveSystemAndPlanets(sys_from);
+        this.updateSectorGraphics(from);
+        this.updateSectorGraphics(to);
+
+	imperium_self.updateLog(this.returnFaction(player) + " retreats from " + sys_from.s.sector + " to " + sys_to.s.sector);
+
   	return 1;
   
       }
@@ -1114,11 +1143,6 @@ console.log("start ofg agenda");
   	  for (let i = 1; i <= this.game.players_info.length; i++) {
             this.game.queue.push("FLIPCARD\t4\t2\t2\t"+i); // deck card poolnum player
   	  }
-/***
-  	  for (let i = 1; i <= this.game.players_info.length; i++) {
-            this.game.queue.push("FLIPCARD\t5\t2\t2\t"+i); // deck card poolnum player
-  	  }
-***/
         } else {
 
           if (this.game.state.round < 4) {
@@ -1252,6 +1276,20 @@ console.log("do we have a pool 2?");
   	this.updateLog("Players selecting strategy cards, starting from " + this.returnSpeaker());
   	this.updateStatus("Players selecting strategy cards, starting from " + this.returnSpeaker());
 
+	let cards_issued = [];
+
+	for (let i = 0; i < this.game.players_info.length; i++) {
+	  cards_issued[i] = 0;
+	  if (this.game.players_info[i].strategy_cards_retained.length > 1) {
+	    for (let y = 0; y < this.game.players_info[i].length; y++) {
+	      this.game.players_info[i].strategy.push(this.game.players_info[i].strategy_cards_retained[y]);
+	      cards_issued[i]++;
+	    }
+	  }
+	  this.game.players_info[i].strategy_cards_retained = [];
+	}
+
+
 
   	//
   	// all strategy cards on table again
@@ -1286,7 +1324,9 @@ console.log("do we have a pool 2?");
             for (let i = 0; i < this.game.players_info.length; i++) {
   	      let this_player = this.game.state.speaker+i;
   	      if (this_player > this.game.players_info.length) { this_player -= this.game.players_info.length; }
-  	      this.rmoves.push("pickstrategy\t"+this_player);
+	      if ((cts+cards_issued[i]) < cards_to_select) {
+  	        this.rmoves.push("pickstrategy\t"+this_player);
+              }
             }
   	  }
   
@@ -1696,6 +1736,8 @@ imperium_self.saveGame(imperium_self.game.id);
         let z		 = this.returnEventObjects();
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
+
+	this.game.state.activated_sector = sector;
 
         sys = this.returnSectorAndPlanets(sector);
   	sys.s.activated[player-1] = 1;
@@ -2291,11 +2333,27 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 
 
 
+      if (mv[0] === "player_destroy_unit") {
+
+        let destroyer    = parseInt(mv[1]);
+        let destroyee    = parseInt(mv[2]);
+        let total 	 = parseInt(mv[3]);
+        let type 	 = mv[4]; // space // ground
+        let sector 	 = mv[5];
+        let planet_idx 	 = mv[6];
+
+	if (type == "space") {
+	  this.playerDestroyShips(destroyee, total, sector);
+	}
+
+	return 0;
+
+      }
 
 
 
       //
-      // assigns one hit to one unit
+      // destroys a unit
       //
       if (mv[0] === "destroy_unit") {
 
@@ -2365,8 +2423,18 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 		  units_destroyed++;
 
    	          for (let z_index in z) {
-	            z[z_index].unitDestroyed(imperium_self, attacker, planet.units[i][ii]);
+	            planet.units[i][ii] = z[z_index].unitDestroyed(imperium_self, attacker, planet.units[i][ii]);
 	          } 
+
+	          //
+	          // record units destroyed this round
+	          //
+	          if (sys.s.units[player-1][unit_idx].destroyed == 1) {
+	  	    this.game.players_info[player-1].my_units_destroyed_this_combat_round.push(planet.units[i][ii].type);
+		    this.game.players_info[attacker-1].units_i_destroyed_this_combat_round.push(planet.units[i][ii].type);
+	          }
+
+
 
         	  imperium_self.eliminateDestroyedUnitsInSector(planet.owner, sector);
 
@@ -2405,19 +2473,29 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 	if (type == "ship") {
 
 	  try {
-	  sys.s.units[player-1][unit_idx].last_round_damaged = this.game.state.space_combat_round;
-	  if ((player_moves == 1 && imperium_self.game.player == player) || imperium_self.game.player != player) {
-	    sys.s.units[player-1][unit_idx].strength--;
-	  }
-	  if (sys.s.units[player-1][unit_idx].strength <= 0) {
-	    this.updateLog(this.returnFaction(player) + " assigns hit to " + sys.s.units[player-1][unit_idx].name + " (destroyed)");
-	    sys.s.units[player-1][unit_idx].destroyed = 1;
-	    for (let z_index in z) {
-	      z[z_index].unitDestroyed(imperium_self, attacker, sys.s.units[player-1][unit_idx]);
-	    } 
-	  } else {
-	    this.updateLog(this.returnFaction(player) + " assigns hit to " + sys.s.units[player-1][unit_idx].name);
-	  }
+
+	    sys.s.units[player-1][unit_idx].last_round_damaged = this.game.state.space_combat_round;
+	    if ((player_moves == 1 && imperium_self.game.player == player) || imperium_self.game.player != player) {
+	      sys.s.units[player-1][unit_idx].strength--;
+	    }
+	    if (sys.s.units[player-1][unit_idx].strength <= 0) {
+	      this.updateLog(this.returnFaction(player) + " assigns hit to " + sys.s.units[player-1][unit_idx].name + " (destroyed)");
+	      sys.s.units[player-1][unit_idx].destroyed = 1;
+	      for (let z_index in z) {
+	        sys.s.units[player-1][unit_idx] = z[z_index].unitDestroyed(imperium_self, attacker, sys.s.units[player-1][unit_idx]);
+	      } 
+
+	      //
+	      // record units destroyed this round
+	      //
+	      if (sys.s.units[player-1][unit_idx].destroyed == 1) {
+		this.game.players_info[player-1].my_units_destroyed_this_combat_round.push(sys.s.units[player-1][unit_idx].type);
+		this.game.players_info[attacker-1].units_i_destroyed_this_combat_round.push(sys.s.units[player-1][unit_idx].type);
+	      }
+
+	    } else {
+	      this.updateLog(this.returnFaction(player) + " assigns hit to " + sys.s.units[player-1][unit_idx].name);
+	    }
 	  } catch (err) {
 	    console.log("Error? Not all hits assigned");
 	  }
@@ -2547,7 +2625,29 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
               // destroy all units belonging to defender (pds, spacedocks)
               //
               if (defender != -1) {
-                sys.p[planet_idx].units[defender-1] = [];
+		//
+		//
+		//
+		if (this.game.players_info[attacker-1].temporary_infiltrate_infrastructure_on_invasion == 1 || this.game.players_info[attacker-1].temporary_infiltrate_infrastructure_on_invasion == 1) {
+		  let infiltration = 0;
+		  for (let i = 0; i < sys.p[planet_idx].units[defender-1].length; i++) {
+		    if (sys.p[planet_idx].units[defender-1][i].type === "pds") {
+		      this.addPlanetaryUnit(attacker, sector, planet_idx, "pds");
+		      infiltration = 1;
+		    }
+		    if (sys.p[planet_idx].units[defender-1][i].type === "spacedock") {
+		      this.addPlanetaryUnit(attacker, sector, planet_idx, "spacedock");
+		      infiltration = 1;
+		    }
+		  }
+                  sys.p[planet_idx].units[defender-1] = [];
+		  if (infiltration == 1) {
+		    this.game.players_info[attacker-1].temporary_infiltrate_infrastructure_on_invasion = 0;
+		  }
+		} else {
+                  sys.p[planet_idx].units[defender-1] = [];
+                }
+
               }
 
               //
@@ -3370,6 +3470,13 @@ console.log("AAAA 5");
 	this.game.state.space_combat_round++;
 	this.game.state.assign_hits_to_cancel = 0;
 
+	for (let i = 0; i < this.game.players_info.length; i++) {
+	   this.game.players_info[i].units_i_destroyed_last_combat_round = this.game.players_info[i].units_i_destroyed_last_combat_round;
+	   this.game.players_info[i].units_i_destroyed_this_combat_round = [];
+	   this.game.players_info[i].my_units_destroyed_last_combat_round = this.game.players_info[i].my_units_destroyed_last_combat_round;
+	   this.game.players_info[i].my_units_destroyed_this_combat_round = [];
+	}
+
 	//
 	// who is the defender?
 	//
@@ -3711,6 +3818,12 @@ console.log("AAAA 5");
         //
         this.game.state.ground_combat_round++;
 
+	for (let i = 0; i < this.game.players_info.length; i++) {
+	 this.game.players_info[i].units_i_destroyed_last_combat_round = this.game.players_info[i].units_i_destroyed_last_combat_round;
+	 this.game.players_info[i].units_i_destroyed_this_combat_round = [];
+	 this.game.players_info[i].my_units_destroyed_last_combat_round = this.game.players_info[i].my_units_destroyed_last_combat_round;
+	 this.game.players_info[i].my_units_destroyed_this_combat_round = [];
+	}
 
         //
         // who is the defender?
@@ -3879,5 +3992,6 @@ console.log("EXECUTING CARD: " + card);
   
   }
   
+
 
 

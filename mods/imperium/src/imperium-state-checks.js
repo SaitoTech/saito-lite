@@ -1,7 +1,6 @@
 
 
 
-
   /////////////////////
   // Return Factions //
   /////////////////////
@@ -58,6 +57,31 @@
   
 
 
+  
+
+  returnSectorsWherePlayerCanRetreat(player, sector) {
+
+    let retreat_sectors = [];
+    let as = this.returnAdjacentSectors(sector);
+    for (let i = 0; i < as.length; i++) {
+      let addsec = 0;
+      if (this.doesSectorContainPlayerShips(as[i]) && (!this.doesSectorContainNonPlayerShips(as[i]))) { addsec = 1; }
+      if (this.doesSectorContainPlanetOwnedByPlayer(sector, player)&& (!this.doesSectorContainNonPlayerShips(as[i]))) { addsec = 1; }
+      if (addsec == 1) { retreat_sectors.push(as[i]); }
+    }
+
+    return retreat_sectors;
+  }
+  canPlayerRetreat(player, sector) {
+
+    let as = this.returnAdjacentSectors(sector);
+    for (let i = 0; i < as.length; i++) {
+      if (this.doesSectorContainPlayerShips(as[i]) && (!this.doesSectorContainNonPlayerShips(as[i]))) { return 1; }
+      if (this.doesSectorContainPlanetOwnedByPlayer(sector, player)&& (!this.doesSectorContainNonPlayerShips(as[i]))) { return 1; }
+    }
+
+    return 0;
+  }
   
 
   canPlayerTrade(player) {
@@ -1146,8 +1170,6 @@ console.log("p: " + planet);
 
   doesPlayerHavePDSUnitsWithinRange(attacker, player, sector) {
 
-console.log("SECTOR: " + sector);
-
     let sys = this.returnSectorAndPlanets(sector);
     let x = this.returnSectorsWithinHopDistance(sector, 1);
     let sectors = [];
@@ -1198,7 +1220,19 @@ console.log("SECTOR: " + sector);
     for (let i = 0; i < sectors.length; i++) {
   
       let sys = this.returnSectorAndPlanets(sectors[i]);
-  
+
+      //
+      // experimental battlestation
+      //
+      if (this.game.players_info[player-1].experimental_battlestation === sectors[i]) {
+        let pds = {};
+  	    pds.combat = sys.p[j].units[k][z].combat;
+  	    pds.owner = (k+1);
+  	    pds.sector = sectors[i];
+  	battery.push(pds);
+      }  
+
+
       //
       // some sectors not playable in 3 player game
       //
@@ -1222,23 +1256,6 @@ console.log("SECTOR: " + sector);
         }
       }
     }
-
-/****
-    let battery2 = [];   
-    for (let i = 0; i < this.game.players_info.length; i++) {
-
-      let owner = (i+1);
-      let pds_shots = 0;
-      let hits_on = 6;
-
-      for (let j = 0; j < battery.length; j++) {
-	if (battery[j].owner == owner) { pds_shots++; hits_on = battery[j].combat; }
-      }
-
-      battery2.push({ player : owner , shots : pds_shots });
-    }
-
-****/
 
     return battery;
   

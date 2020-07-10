@@ -832,5 +832,13 @@ console.log("Add: " + divname);
   hideAgendaCard(sector, pid) {
     $('.cardbox').hide();
   }
+  showTechCard(tech) {
+    let html = this.returnTechCardHTML(tech);
+    $('.cardbox').html(html);
+    $('.cardbox').show();
+  }
+  hideTechCard(tech) {
+    $('.cardbox').hide();
+  }
 
 

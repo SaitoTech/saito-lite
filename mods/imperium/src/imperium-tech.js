@@ -20,7 +20,7 @@
   importTech(name, obj) {
 
     if (obj.name == null) 	{ obj.name = "Unknown Technology"; }
-    if (obj.img  == null) 	{ obj.img = "/imperium/img/card_template.jpg"; }
+    if (obj.img  == null) 	{ obj.img = "/imperium/img/tech_card_template.jpg"; }
     if (obj.faction == null) 	{ obj.faction = "all"; }
     if (obj.prereqs == null) 	{ obj.prereqs = []; }
     if (obj.color == null)	{ obj.color = ""; }
@@ -42,5 +42,27 @@
 
   }
 
+  returnTechCardHTML(tech, tclass="tech_card") {
 
+    let name = this.tech[tech].name;
+    let text = this.tech[tech].text;
+    let color = this.tech[tech].color;
+    let prereqs = "";
+    for (let i = 0; i < this.tech[tech].prereqs.length; i++) {
+      if (this.tech[tech].prereqs[i] == "yellow") { prereqs += '<span class="yellow">♦</span>'; }
+      if (this.tech[tech].prereqs[i] == "blue") { prereqs += '<span class="blue">♦</span>'; }
+      if (this.tech[tech].prereqs[i] == "green") { prereqs += '<span class="green">♦</span>'; }
+      if (this.tech[tech].prereqs[i] == "red") { prereqs += '<span class="red">♦</span>'; }
+    }
+
+    let html = `
+    <div class="${color} ${tclass}">
+      <div class="tech_card_name">${name}</div>
+      <div class="tech_card_content">${text}</div>
+      <div class="tech_card_level">${prereqs}</div>
+    </div>
+    `;
+
+    return html;
+  }
 

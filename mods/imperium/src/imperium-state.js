@@ -26,7 +26,6 @@
         state.assign_hits_to_cancel = "";
         state.active_player_moved = 0;
 
-
         state.agendas_voting_information = [];
         state.strategy_cards = [];
         state.strategy_cards_bonus = [];
@@ -62,6 +61,7 @@
 	state.pds_limit_per_planet = 2;
 	state.pds_limit_total = 4;
 
+	state.activated_sector = "";
 	state.bombardment_sector = "";
 	state.bombardment_planet_idx = "";
 	state.space_combat_sector = "";

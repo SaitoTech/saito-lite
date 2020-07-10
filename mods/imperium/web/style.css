@@ -45,6 +45,18 @@
   margin: 0 auto;
 }
 
+.tech_card_overlay {
+  position: absolute;
+  color: white;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 100px;
+  top: 0px;
+  line-height: 1.8em;
+  font-family: 'orbitron-light', helvetica, sans-serif;
+  font-size: 2em;
+}
+
 .action_card_overlay {
   position: absolute;
   color: white;
@@ -317,7 +329,7 @@ body {
 }
 
 .faction_sheet_action_card:hover, .faction_sheet_planet_card:hover, .faction_sheet_tech_card:hover {
-  transform: scale(1.33) translate(1vw, 1vw);
+  transform: scale(1.5) translate(1vw, 1vw);
   z-index: 10;
 }
 
@@ -396,6 +408,41 @@ body {
   margin: 1em 1em 1em 1em;
 }
 
+
+.tech_card {
+  background-image: url(img/tech_card_template.jpg);
+  position: relative;
+  width: 340px;
+  height: 200px;
+  font-size:2em;
+  background-size: cover;
+  margin: 1vw;
+  text-align: center;
+  font-size: 1.25vw;
+  transition: all 50ms;
+  border: 1px solid;
+  color: white;
+}
+.tech_card::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-bottom: 33px solid;
+  border-left: 100px solid transparent !important;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.tech_card .tech_card_name {
+  font-size:3em;
+}
+.tech_card .tech_card_content {
+  font-size:1.7em;
+}
+.tech_card .tech_card_level {
+  font-size:3em;
+  background-color: #444;;
+}
 .faction_sheet_tech_card {
   background-image: url(img/tech_card_template.jpg);
   position: relative;
@@ -427,11 +474,13 @@ body {
   padding: 1vw;
   padding: 0.5vw;
   background: #0009;
+  color: white;
 }
 
 .tech_card_content {
   text-align: left;
   padding: 1vw;
+  color: white;
 }
 
 .tech_card_level {
@@ -1382,3 +1431,21 @@ input[type=range] {
   background-image: none;
   color: #fff;
 }
+
+
+
+.yellow {
+  color: yellow;
+}
+.red {
+  color: red;
+}
+.blue {
+  color: blue;
+}
+.green {
+  color: green;
+}
+
+
+

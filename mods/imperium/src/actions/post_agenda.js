@@ -1,4 +1,73 @@
 
+    this.importActionCard('confusing-legal-text', {
+  	name : "Confusing Legal Text" ,
+  	type : "post_agenda" ,
+  	text : "After the speaker has cast his votes, pick another player to win if you are the leading candidate" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  if (imperium_self.agenda_cards[card].elect === "player") {
+
+            let winning_options = [];
+            for (let i = 0; i < imperium_self.game.state.choices.length; i++) {
+              winning_options.push(0);
+            }
+            for (let i = 0; i < imperium_self.game.players.length; i++) {
+              winning_options[imperium_self.game.state.how_voted_on_agenda[i]] += imperium_self.game.state.votes_cast[i];
+            }
+
+            //
+            // determine winning option
+            //
+            let max_votes_options = -1;
+            let max_votes_options_idx = 0;
+            for (let i = 0; i < winning_options.length; i++) {
+              if (winning_options[i] > max_votes_options) {
+                max_votes_options = winning_options[i];
+                max_votes_options_idx = i;
+              }
+            }
+
+            let total_options_at_winning_strength = 0;
+            for (let i = 0; i < winning_options.length; i++) {
+              if (winning_options[i] == max_votes_options) { total_options_at_winning_strength++; }
+            }
+
+	    if (total_options_at_winning_strength == 1) {
+
+	      //
+	      // cast 1000 votes for someone else
+	      //
+	      if (imperium_self.game.player == action_card_player) { 
+                html = '<div class="sf-readable">Who do you wish to be elected instead? </div><ul>';
+	        for (let i = 0; i < imperium_self.game.state.choices.length; i++) {
+		  if (imperium_self.game.state.choices[i] != imperium_self.game.player) {
+		    html += '<li class="options textchoice" id="'+imperium_self.game.state.choices[i]+'">'+imperium_self.returnFaction(imperium_self.game.state.choices[i])+'</li>';
+		  }
+	        }
+		html += '</ul>';
+	      }
+
+      	      $('.textchoice').off();
+	      $('.textchoice').on('click', function() {
+
+		let action = $(this).attr("id");
+
+		imperium_self.addMove("vote\t"+imperium_self.returnActiveAgenda()+"\t"+action+"\t"+"1000");
+		imperium_self.endTurn();
+		return 0;
+
+	      });
+	
+	      return 0;
+	    } else {
+alert("Confusing Legal Text -- multiple options appear to be winning -- nothing to be done");
+	      return 1;
+	    }
+	  }
+	  return 1;
+	}
+    });
+
     this.importActionCard('distinguished-councillor', {
   	name : "Distinguished Coucillor" ,
   	type : "post_agenda" ,
@@ -44,7 +113,6 @@
 	  return 0;
 
 	},
-
 	handleGameLoop : function(imperium_self, qe, mv) {
 
 	  if (mv[0] == "bribery") {
