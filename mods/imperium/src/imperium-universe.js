@@ -116,6 +116,13 @@
   ////////////////////
   // Return Planets //
   ////////////////////
+  //
+  // type 0 - normal
+  // type 1 - rift
+  // type 2 - nebula
+  // type 3 - asteroids
+  // type 4 - supernova
+  //
   returnSectors() {
 
     var sectors = {};
@@ -125,14 +132,14 @@
     sectors['sector5']         = { img : "/imperium/img/sectors/sector5.png" , 	   	   name : "Sector 5" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
     sectors['sector6']         = { img : "/imperium/img/sectors/sector6.png" , 	   	   name : "Sector 6" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
     sectors['sector1']         = { img : "/imperium/img/sectors/sector1.png" , 	   	   name : "Sector 1" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector2']         = { img : "/imperium/img/sectors/sector2.png" , 	   	   name : "Sector 2" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector7']         = { img : "/imperium/img/sectors/sector7.png" , 	   	   name : "Sector 7" , type : 1 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    //sectors['sector33']        = { img : "/imperium/img/sectors/sector33.png" , 	   name : "Sector 33" , type : 2 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector72']         = { img : "/imperium/img/sectors/sector72.png" , 	   name : "Sector 72" , type : 2 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector34']        = { img : "/imperium/img/sectors/sector34.png" , 	   name : "Sector 34" , type : 3 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector35']        = { img : "/imperium/img/sectors/sector35.png" , 	   name : "Sector 35" , type : 3 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    //sectors['sector36']        = { img : "/imperium/img/sectors/sector36.png" , 	   name : "Sector 36" , type : 4 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector71']        = { img : "/imperium/img/sectors/sector71.png" , 	   name : "Sector 71" , type : 4 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
+    sectors['sector2']         = { img : "/imperium/img/sectors/sector2.png" , 	   	   name : "Sector 2" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } 
+//    sectors['sector7']         = { img : "/imperium/img/sectors/sector7.png" , 	   	   name : "Sector 7" , type : 1 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } // black hole or rift
+    //sectors['sector33']        = { img : "/imperium/img/sectors/sector33.png" , 	   name : "Sector 33" , type : 2 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } // nebula
+    sectors['sector72']         = { img : "/imperium/img/sectors/sector72.png" , 	   name : "Sector 72" , type : 2 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } // nebula
+    sectors['sector34']        = { img : "/imperium/img/sectors/sector34.png" , 	   name : "Sector 34" , type : 3 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } // asteroids
+    sectors['sector35']        = { img : "/imperium/img/sectors/sector35.png" , 	   name : "Sector 35" , type : 3 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } // asteroids
+    //sectors['sector36']        = { img : "/imperium/img/sectors/sector36.png" , 	   name : "Sector 36" , type : 4 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } // supernova
+    sectors['sector71']        = { img : "/imperium/img/sectors/sector71.png" , 	   name : "Sector 71" , type : 4 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } // supernova
     sectors['sector54']        = { img : "/imperium/img/sectors/sector54.png" , 	   name : "Sector 48" , type : 0 , hw : 0 , wormhole : 1, mr : 0 , planets : [] } 		// wormhole a
     sectors['sector56']        = { img : "/imperium/img/sectors/sector56.png" , 	   name : "Sector 49" , type : 0 , hw : 0 , wormhole : 2, mr : 0 , planets : [] } 		// wormhole b
 

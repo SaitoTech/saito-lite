@@ -19,8 +19,6 @@ ACTION CARD - types
 ************************************/
 
 
-/***
-
     this.importActionCard('infiltrate', {
   	name : "Infiltrate" ,
   	type : "instant" ,
@@ -1066,5 +1064,4 @@ alert("select sector with filter");
 	}
     });
 
-***/
 

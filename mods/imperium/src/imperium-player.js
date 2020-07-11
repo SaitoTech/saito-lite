@@ -23,7 +23,7 @@
       players[i].can_intervene_in_action_card 	= 0;
       players[i].secret_objectives_in_hand     	= 0;
       players[i].action_cards_in_hand         	= 0;
-      players[i].action_cards_per_round       	= 2;
+      players[i].action_cards_per_round       	= 20;
       players[i].new_tokens_per_round 	 	= 2;
       players[i].command_tokens  		= 3;
       players[i].strategy_tokens 		= 2;
@@ -57,6 +57,8 @@
       players[i].ship_move_bonus 		= 0;
       players[i].temporary_ship_move_bonus 	= 0;
       players[i].fly_through_asteroids = 0;
+      players[i].fly_through_nebulas = 0;
+      players[i].fly_through_supernovas = 0;
       players[i].reinforce_infantry_after_successful_ground_combat = 0;
       players[i].bacterial_weapon = 0;
       players[i].evasive_bonus_on_pds_shots = 0;
@@ -137,6 +139,8 @@
       players[i].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 0;
       players[i].temporary_infiltrate_infrastructure_on_invasion = 0;
       players[i].permanent_infiltrate_infrastructure_on_invasion = 0;
+      players[i].temporary_opponent_cannot_retreat = 0;
+      players[i].permanent_opponent_cannot_retreat = 0;
 
       if (i == 1) { players[i].color   = "yellow"; }
       if (i == 2) { players[i].color   = "green"; }
@@ -320,6 +324,7 @@
   playerPlayActionCardMenu(action_card_player, card, action_cards_played=[]) {
 
     let imperium_self = this;
+    let relevant_action_cards = ["counter"];
 
     for (let i = 0; i < this.game.deck[1].hand.length; i++) {
       if (this.game.deck[1].hand[i].indexOf("sabotage") > -1) {
@@ -329,9 +334,14 @@
 
     if (this.game.players_info[this.game.player-1].can_intervene_in_action_card) {
 
-      html = '<div class="sf-readable">Do you wish to play an action card to counter? </div><ul>';
+       let html  = '<div class="action_card_instructions">'+this.returnFaction(action_card_player)+' has played an action card:</div>';
+              html += '<div class="action_card_name">' + imperium_self.action_cards[card].name + '</div>';
+              html += '<div class="action_card_text">';
+	      html += this.action_cards[card].text;
+	      html += '</div>';
+	      html += '<ul>';
 
-      let ac = this.returnPlayerActionCards(this.game.player, ["action_cards"])
+      let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards);
       if (ac.length > 0) {
         html += '<li class="option" id="cont">continue</li>';
         html += '<li class="option" id="action">play action card</li>';
@@ -357,6 +367,7 @@
 
       this.updateStatus(html);
   
+      $('.option').off();
       $('.option').on('click', function() {
   
         let action2 = $(this).attr("id");
@@ -375,14 +386,14 @@
 
         if (action2 == "action") {
           imperium_self.playerSelectActionCard(function(card) {
-            imperium_self.game.players_info[this.game.player-1].action_cards_played.push(card);
+            imperium_self.game.players_info[imperium_self.game.player-1].action_cards_played.push(card);
     	    imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	    imperium_self.playerPlayActionCardMenu(action_card_player, card);
           }, function() {
 	    imperium_self.playerPlayActionCardMenu(action_card_player, card);
-	  }, ["action"]);
+	  }, relevant_action_cards);
         }
 
         if (action2 == "cont") {
@@ -769,6 +780,9 @@ console.log("ERROR: you had no hits left to assign, bug?");
     let html = '';
     let relevant_action_cards = ["combat", "space_combat"];
 
+    let opponent = attacker;
+    if (imperium_self.game.player == attacker) { opponent = defender; }
+
     this.game.state.space_combat_sector = sector;
 
     html = '<div class="sf-readable">Space Combat: round ' + this.game.state.space_combat_round + ':<p></p>'+this.returnFaction(attacker)+" attacks with "+this.returnPlayerFleetInSector(attacker, sector) + ". " + this.returnFaction(defender) + " defends with " + this.returnPlayerFleetInSector(defender, sector) + "</div><ul>";
@@ -784,7 +798,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
     //
     // can I retreat
     //
-    if (this.canPlayerRetreat(imperium_self.game.player, sector)) {
+    if (this.canPlayerRetreat(imperium_self.game.player, attacker, defender, sector)) {
       html += '<li class="option" id="retreat">announce retreat</li>';
     }
 
@@ -861,7 +875,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
 	    let opt = $(this).attr("id");
 	    let retreat_to_sector = retreat_options[opt];
 
-	    imperium_self.addMove("retreat\t"+player+"\t"+sector+"\t"+retreat_to_sector);
+	    imperium_self.addMove("retreat\t"+player+"\t"+opponent+"\t"+sector+"\t"+retreat_to_sector);
 	    imperium_self.endTurn();
 	    return 0;
 	  });
@@ -874,6 +888,84 @@ console.log("ERROR: you had no hits left to assign, bug?");
 
     });
   }
+
+
+
+
+  //
+  // ground combat is over -- provide options for scoring cards, action cards
+  //
+  playerRespondToRetreat(player, opponent, from, to) {
+
+    let imperium_self = this;
+    let sys = this.returnSectorAndPlanets(to);
+    let relevant_action_cards = ["retreat"];
+    let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards);
+
+    if (ac.length == 0) {
+      this.playerAcknowledgeNotice("Your opponent has announced a retreat into "+sys.s.sector+" at teh end of this round of combat");
+      return;
+    }
+
+    let html = '<div class="sf-readable">Your opponent has announced a retreat into '+sys.s.sector+' at teh end of this round of combat: </div>';
+    html += '<li class="option" option="action">play action card</li>';
+    html += '<li class="option" option="permit">permit retreat</li>';
+
+    let tech_attach_menu_events = 0;
+    let tech_attach_menu_triggers = [];
+    let tech_attach_menu_index = [];
+
+    let z = this.returnEventObjects();
+    for (let i = 0; i < z.length; i++) {
+      if (z[i].menuOptionTriggers(this, "retreat", this.game.player) == 1) {
+        let x = z[i].menuOption(this, "retreat", this.game.player);
+        html += x.html;
+        tech_attach_menu_index.push(i);
+        tech_attach_menu_triggers.push(x.event);
+        tech_attach_menu_events = 1;
+      }
+    }
+    html += '</ul>';
+
+
+    this.updateStatus(html);
+
+    $('.option').off();
+    $('.option').on('click', function() {
+
+      let action2 = $(this).attr("id");
+
+      //
+      // respond to tech and factional abilities
+      //
+      if (tech_attach_menu_events == 1) {
+        for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
+          if (action2 == tech_attach_menu_triggers[i]) {
+            $(this).remove();
+            z[tech_attach_menu_index[i]].menuOptionActivated(imperium_self, "space_combat", imperium_self.game.player);
+          }
+        }
+      }
+
+      if (action2 == "action") {
+        imperium_self.playerSelectActionCard(function(card) {
+          imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+          imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+          imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
+          imperium_self.playerRespondToRetreat(player, opponent, from, to);
+        }, function() {
+          imperium_self.playerRespondToRetreat(player, opponent, from, to);
+        }. relevant_action_cards);
+      }
+
+
+      if (action2 == "permit") {
+	imperium_self.endTurn();
+      }
+    });
+  }
+
+
 
 
 

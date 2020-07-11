@@ -18,6 +18,8 @@
   
   importActionCard(name, obj) {
 
+console.log("import: " + name);
+
     if (obj.name == null) 	{ obj.name = "Action Card"; }
     if (obj.type == null) 	{ obj.type = "instant"; }
     if (obj.text == null) 	{ obj.text = "Unknown Action"; }

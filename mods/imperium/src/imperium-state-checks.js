@@ -72,7 +72,7 @@
 
     return retreat_sectors;
   }
-  canPlayerRetreat(player, sector) {
+  canPlayerRetreat(player, attacker, defender, sector) {
 
     let as = this.returnAdjacentSectors(sector);
     for (let i = 0; i < as.length; i++) {
@@ -959,8 +959,11 @@ console.log("JALKING: " + JSON.stringify(p1sectors));
     let distance = [];
     let s = this.addWormholesToBoardTiles(this.returnBoardTiles());  
 
+    let add_at_end = [];
+
     sectors.push(destination);
     distance.push(0);
+
   
     //
     // find which systems within move distance (hops)
@@ -981,6 +984,7 @@ if (this.game.board[tmp[k]] != undefined) {
 	// other players.
 	//
 	let can_hop_through_this_sector = 1;
+
 	if (player == null) {} else {
 	  if (this.game.players_info[player-1].move_through_sectors_with_opponent_ships == 1 || this.game.players_info[player-1].temporary_move_through_sectors_with_opponent_ships == 1) {
 	  } else {
@@ -989,6 +993,37 @@ if (this.game.board[tmp[k]] != undefined) {
 	    }
 	  }
 	}
+
+
+        //
+        // ASTEROIDS
+        //
+        if (tmp[k].type == 3) {
+          if (this.game.players_info[player-1].fly_through_asteroids == 0) {
+            can_hop_through_this_sector = 0;
+          }
+        }
+
+
+        //
+        // SUPERNOVA
+        //
+        if (tmp[k].type == 4) {
+          if (this.game.players_info[player-1].fly_through_supernovas == 0) {
+            can_hop_through_this_sector = 0;
+          }
+        }
+
+
+        //
+        // NEBULA
+        //
+        if (tmp[k].type == 2) {
+          if (this.game.players_info[player-1].fly_through_nebulas == 0) {
+            can_hop_through_this_sector = 0;
+          }
+        }
+
 
 	//
 	// otherwise we can't move into our destination
@@ -1224,13 +1259,15 @@ console.log("p: " + planet);
       //
       // experimental battlestation
       //
-      if (this.game.players_info[player-1].experimental_battlestation === sectors[i]) {
-        let pds = {};
-  	    pds.combat = sys.p[j].units[k][z].combat;
-  	    pds.owner = (k+1);
-  	    pds.sector = sectors[i];
-  	battery.push(pds);
-      }  
+      for (let z = 0; z < this.game.players_info.length; z++) {
+        if (this.game.players_info[z].experimental_battlestation === sectors[i]) {
+          let pds = {};
+  	      pds.combat = this.returnUnit((z+1), "pds").combat;
+  	      pds.owner = (z+1);
+  	      pds.sector = sectors[i];
+    	  battery.push(pds);
+        }  
+      }
 
 
       //

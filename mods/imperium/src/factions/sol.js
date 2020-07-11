@@ -6,7 +6,8 @@
       ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock"],
 //      tech		:	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector","faction1-orbital-drop","faction1-versatile", "faction1-advanced-carrier-ii", "faction1-advanced-infantry-ii"],
       tech		:	["neural-motivator","antimass-deflectors", "faction1-orbital-drop", "faction1-versatile"],
-      background	: 	"faction1.jpg"
+      background	: 	"faction1.jpg",
+      intro		:	`<div style="font-weight:bold">The Republic has fallen!</div><div style="margin-top:10px">The fall of New Byzantium led swiftly to the overthrow of the Sol Republic and their ex-terra appeasement policies...</div><div style="margin-top:10px">For the Sol Federation t action and an iron fist are acceptable strategies for subduing New Byzantium and establishing a pro-terra galaxy</div>`
     });
  
     this.importTech("faction1-orbital-drop", {

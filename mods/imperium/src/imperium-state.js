@@ -61,6 +61,8 @@
 	state.pds_limit_per_planet = 2;
 	state.pds_limit_total = 4;
 
+	state.retreat_cancelled = 0;
+
 	state.activated_sector = "";
 	state.bombardment_sector = "";
 	state.bombardment_planet_idx = "";

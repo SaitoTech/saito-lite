@@ -334,6 +334,37 @@ body {
 }
 
 
+.action_card_instructions {
+  font-family: 'orbitron-light', helvetica;
+  font-size: 0.9em;
+  margin-top: 15px;
+  line-height: 1.5em;
+}
+.action_card_name {
+  margin-top:20px;
+  margin-bottom:15px;
+  width:80%;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'orbitron-medium', helvetica;
+  font-weight: bold;
+  line-height: 1.5em;
+}
+.action_card_text {
+  margin-bottom:20px;
+  width:80%;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'orbitron-light', helvetica;
+  line-height: 1.6em;
+  font-size:0.9em;
+}
+.action_card_status {
+  font-family: 'orbitron-light', helvetica;
+  font-size: 0.9em;
+  margin-top:10px;
+}
+
 .agenda_instructions {
   font-family: 'orbitron-light', helvetica;
   font-size: 0.9em;

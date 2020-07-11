@@ -1,5 +1,22 @@
 
 
+
+    this.importActionCard('intercept', {
+  	name : "Intercept" ,
+  	type : "space_combat" ,
+  	text : "After your opponent declares a retreat in space combat, they cannot retreat" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  imperium_self.game.players[action_card_player-1].temporary_opponent_cannot_retreat = 1;
+	  return 1;
+
+        }
+    });
+
+
+
+
+
     this.importActionCard('courageous-to-the-end', {
   	name : "Courageous to the End" ,
   	type : "space_combat" ,
@@ -237,12 +254,6 @@
 	  return 1;
         }
     });
-
-
-
-
-
-
 
 
 

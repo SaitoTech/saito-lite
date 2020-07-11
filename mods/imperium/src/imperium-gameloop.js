@@ -11,6 +11,7 @@
     if (this.game.queue.length > 0) {
 
 console.log("QUEUE: " + JSON.stringify(this.game.queue));  
+      imperium_self.updateStatus("received game move... opponent moving.");
 
       imperium_self.saveGame(imperium_self.game.id);
   
@@ -178,15 +179,35 @@ console.log("RESOLVE");
       }
 
 
+      if (mv[0] === "announce_retreat") {
 
+	let player = parseInt(mv[1]);
+	let opponent = parseInt(mv[2]);
+
+        let from = mv[3];
+        let to = mv[4];
+
+  	this.game.queue.splice(qe, 1);
+
+	this.playerRespondToRetreat(player, opponent);
+
+	return 0;
+
+      }
 
 
       if (mv[0] === "retreat") {
   
 	let player = parseInt(mv[1]);
-        let from = mv[2];
-        let to = mv[3];
+	let opponent = parseInt(mv[2]);
+        let from = mv[3];
+        let to = mv[4];
   	this.game.queue.splice(qe, 1);
+
+	if (this.game.state.retreat_cancelled == 1 || this.game.players_info[opponent-1].temporary_opponent_cannot_retreat == 1 || this.game.players_info[opponent-1].permanent_opponent_cannot_retreat == 1) {
+	  this.updateLog("Retreat is impossible. The remainder of the fleet returns to battle...");
+	  return 1; 
+	}
 
 	let sys_from = this.returnSectorAndPlanets(from);
 	let sys_to = this.returnSectorAndPlanets(to);
@@ -724,7 +745,6 @@ console.log("executing "+z[z_index].name);
   	this.game.queue.splice(qe, 1);
 
 	return this.action_cards[rider].playActionCardEvent(this, this.game.player, action_card_player, rider);
-
       }
 
 
@@ -1090,7 +1110,8 @@ console.log("start ofg agenda");
         this.game.queue.push("playerschoosestrategycards");
         this.game.queue.push("playerschoosestrategycards_before");
         if (this.game.state.round == 1) {
-          this.game.queue.push("acknowledge\t"+"<center><p style='font-weight:bold'>The Republic has fallen!</p><p style='font-size:0.95em;margin-top:10px;'>As the Galactic Senate collapses into factional squabbling, the ascendant powers on the outer rim plot to seize New Byzantium...</p><p style='font-size:0.95em;margin-top:10px'>Take the lead by moving your fleet to capture New Byzantium, or establish a power-base to displace the leader and impose your will on your peers.</p></center>");
+          let faction = this.game.players_info[this.game.player-1].faction;
+          this.game.queue.push("acknowledge\t"+this.factions[faction].intro);
  	}
 
 
@@ -1363,10 +1384,25 @@ console.log("do we have a pool 2?");
 
 	  let html = '';
 	  html += this.returnFaction(player) + " is picking a strategy card. Their options: <ul>";
-          for (let n = 0; n < this.game.state.strategy_cards.length; n++) {
-            html += '<li class="textchoice" id="'+this.game.state.strategy_cards[n]+'">' + this.strategy_cards[this.game.state.strategy_cards[n]].name + '</li>';
-    	  }
+
+          let scards = [];
+          for (let z in this.strategy_cards) {
+            scards.push("");
+          }
+
+          for (let z = 0; z < this.game.state.strategy_cards.length; z++) {
+            let rank = parseInt(this.strategy_cards[this.game.state.strategy_cards[z]].rank);
+            while (scards[rank-1] != "") { rank++; }
+            scards[rank-1] = '<li class="textchoice" id="'+this.game.state.strategy_cards[z]+'">' + this.strategy_cards[this.game.state.strategy_cards[z]].name + '</li>';
+          }
+
+          for (let z = 0; z < scards.length; z++) {
+            if (scards[z] != "") {
+              html += scards[z];
+            }
+          }
           html += '</ul>';
+
   	  this.updateStatus(html);
     	  $('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showStrategyCard(s); });
     	  $('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hideStrategyCard(s); });
@@ -3902,7 +3938,7 @@ console.log("AAAA 5");
               this.game.queue.push("action_card_event\t"+speaker_order[i]+"\t"+player+"\t"+card+"\t"+k);
             }
           }
-	  if ((i+1) != player) {
+	  if (speaker_order[i] != player) {
             this.game.queue.push("action_card_player_menu\t"+speaker_order[i]+"\t"+player+"\t"+card);
           }
         }

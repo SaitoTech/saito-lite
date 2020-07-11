@@ -13,7 +13,7 @@ class Imperium extends GameTemplate {
     this.description      = `Red Imperium is a multi-player space exploration and conquest simulator. Each player controls a unique faction vying for political control of the galaxy in the waning days of a dying Empire.`;
     this.categories	  = "Arcade Games Entertainment";
     this.minPlayers       = 2;
-    this.maxPlayers       = 4;  
+    this.maxPlayers       = 3; 
     this.type             = "Strategy Boardgame";
 
     this.gameboardWidth   = 1900;
@@ -918,7 +918,8 @@ console.log("P: " + planet);
       ground_units	: 	["infantry","infantry","pds","spacedock"],
       //tech		: 	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector","faction2-analytic","faction2-brilliant","faction2-fragile","faction2-deep-space-conduits","faction2-eres-siphons"],
       tech		: 	["sarween-tools", "neural-motivator", "plasma-scoring", "antimass-deflectors", "faction2-analytic", "faction2-brilliant", "faction2-fragile"],
-      background	: 	'faction2.jpg'
+      background	: 	'faction2.jpg' ,
+      intro		:	`<div style="font-weight:bold">The Republic has fallen!</div><div style="margin-top:10px">The Universities of Jol Nar have been preparing for this moment for years, researching ever-better technologies for war...</div><div style="margin-top:10px">But will your intellectual brilliance be enough to command New Byzantium and secure your people Galactic Rule?</div>`
     });
 
 
@@ -1085,7 +1086,8 @@ console.log("P: " + planet);
       ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock"],
 //      tech		:	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector","faction1-orbital-drop","faction1-versatile", "faction1-advanced-carrier-ii", "faction1-advanced-infantry-ii"],
       tech		:	["neural-motivator","antimass-deflectors", "faction1-orbital-drop", "faction1-versatile"],
-      background	: 	"faction1.jpg"
+      background	: 	"faction1.jpg",
+      intro		:	`<div style="font-weight:bold">The Republic has fallen!</div><div style="margin-top:10px">The fall of New Byzantium led swiftly to the overthrow of the Sol Republic and their ex-terra appeasement policies...</div><div style="margin-top:10px">For the Sol Federation t action and an iron fist are acceptable strategies for subduing New Byzantium and establishing a pro-terra galaxy</div>`
     });
  
     this.importTech("faction1-orbital-drop", {
@@ -1212,7 +1214,8 @@ console.log("P: " + planet);
       ground_units	: 	["infantry","infantry","infantry","infantry","pds","spacedock"],
 //      tech		: 	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector", "faction3-field-nullification", "faction3-peace-accords", "faction3-quash", "faction3-instinct-training"],
       tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash"],
-      background	: 'faction3.jpg'
+      background	: 'faction3.jpg',
+      intro		:	`<div style="font-weight:bold">The Senate has Collapsed!</div><div style="margin-top:10px">War came as no surprise to the XXCha Kingdom, their diplomats having laid the groundwork for it...</div><div style="margin-top:10px">Far from a threat, now is time for the apotheosis of your plans: seizure of New Byzantium and imposition of XXcha rule by either force or reason.</div>`
     });
   
 
@@ -3912,8 +3915,6 @@ ACTION CARD - types
 ************************************/
 
 
-/***
-
     this.importActionCard('infiltrate', {
   	name : "Infiltrate" ,
   	type : "instant" ,
@@ -4959,27 +4960,6 @@ alert("select sector with filter");
 	}
     });
 
-***/
-
-
-    this.importActionCard('sabotage', {
-  	name : "Sabotage" ,
-  	type : "action_card" ,
-  	text : "When another player plays an action card, you may cancel that action card" ,
-	playActionCard : function(imperium_self, player, action_card_player, card) {
-
-	  //
-	  // this runs in actioncard post...
-	  //
-          if (imperium_self.game.player == action_card_player) {
-	    // remove previous action card
-	    imperium_self.addMove("resolve\t"+"action_card");
-	    imperium_self.addMove("resolve\t"+"action_card_post");
-	  }
-
-	  return 0;
-	}
-    });
 
 
     this.importActionCard('upgrade', {
@@ -5035,6 +5015,31 @@ alert("select sector with filter");
 	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
 	    imperium_self.game.players_info[i].temporary_bombardment_combat_roll_modifier = 2;
 	  }
+	  return 1;
+	}
+    });
+
+
+
+
+    this.importActionCard('sabotage', {
+  	name : "Sabotage" ,
+  	type : "counter" , 
+ 	text : "When another player plays an action card, you may cancel that action card" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  //
+	  // this runs in actioncard post...
+	  //
+	  for (let i = imperium_self.game.queue.length-1; i >= 0; i--) {
+	    if (imperium_self.game.queue[i].indexOf("action_card_") == 0) {
+	      let removed_previous = 0;
+	      if (imperium_self.game.queue[i].indexOf("action_card_post") == 0) { removed_previous = 1; }
+	      imperium_self.game.queue.splice(i, 1);
+	      if (removed_previous == 1) { return 1; }
+	    }
+	  }
+
 	  return 1;
 	}
     });
@@ -5639,6 +5644,23 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
 
 
 
+
+    this.importActionCard('intercept', {
+  	name : "Intercept" ,
+  	type : "space_combat" ,
+  	text : "After your opponent declares a retreat in space combat, they cannot retreat" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+
+	  imperium_self.game.players[action_card_player-1].temporary_opponent_cannot_retreat = 1;
+	  return 1;
+
+        }
+    });
+
+
+
+
+
     this.importActionCard('courageous-to-the-end', {
   	name : "Courageous to the End" ,
   	type : "space_combat" ,
@@ -5876,12 +5898,6 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
 	  return 1;
         }
     });
-
-
-
-
-
-
 
 
 
@@ -7195,6 +7211,14 @@ console.log("INITIALIZE IS DONE: " + JSON.stringify(this.game.queue));
     if (obj.space_units == null) 	{ obj.space_units = []; }
     if (obj.ground_units == null) 	{ obj.ground_units = []; }
     if (obj.tech == null) 		{ obj.tech = []; }
+    if (obj.intro == null) 		{ obj.intro = `
+        <div style="font-weight:bold">The Republic has fallen!</div>
+        <div style="margin-top:10px">
+	As the Galactic Senate collapses into factional squabbling, the ascendant powers on the outer rim plot to seize New Byzantium...</div>
+        <div style="margin-top:10px">
+	Take the lead by moving your fleet to capture New Byzantium, or establish a power-base to displace the leader and impose your will on your peers.
+ 	</div>
+    `; }
 
     obj = this.addEvents(obj);
     this.factions[name] = obj;
@@ -7242,6 +7266,8 @@ console.log("INITIALIZE IS DONE: " + JSON.stringify(this.game.queue));
   
   importActionCard(name, obj) {
 
+console.log("import: " + name);
+
     if (obj.name == null) 	{ obj.name = "Action Card"; }
     if (obj.type == null) 	{ obj.type = "instant"; }
     if (obj.text == null) 	{ obj.text = "Unknown Action"; }
@@ -7266,6 +7292,7 @@ console.log("INITIALIZE IS DONE: " + JSON.stringify(this.game.queue));
     if (this.game.queue.length > 0) {
 
 console.log("QUEUE: " + JSON.stringify(this.game.queue));  
+      imperium_self.updateStatus("received game move... opponent moving.");
 
       imperium_self.saveGame(imperium_self.game.id);
   
@@ -7433,15 +7460,35 @@ console.log("RESOLVE");
       }
 
 
+      if (mv[0] === "announce_retreat") {
 
+	let player = parseInt(mv[1]);
+	let opponent = parseInt(mv[2]);
+
+        let from = mv[3];
+        let to = mv[4];
+
+  	this.game.queue.splice(qe, 1);
+
+	this.playerRespondToRetreat(player, opponent);
+
+	return 0;
+
+      }
 
 
       if (mv[0] === "retreat") {
   
 	let player = parseInt(mv[1]);
-        let from = mv[2];
-        let to = mv[3];
+	let opponent = parseInt(mv[2]);
+        let from = mv[3];
+        let to = mv[4];
   	this.game.queue.splice(qe, 1);
+
+	if (this.game.state.retreat_cancelled == 1 || this.game.players_info[opponent-1].temporary_opponent_cannot_retreat == 1 || this.game.players_info[opponent-1].permanent_opponent_cannot_retreat == 1) {
+	  this.updateLog("Retreat is impossible. The remainder of the fleet returns to battle...");
+	  return 1; 
+	}
 
 	let sys_from = this.returnSectorAndPlanets(from);
 	let sys_to = this.returnSectorAndPlanets(to);
@@ -7979,7 +8026,6 @@ console.log("executing "+z[z_index].name);
   	this.game.queue.splice(qe, 1);
 
 	return this.action_cards[rider].playActionCardEvent(this, this.game.player, action_card_player, rider);
-
       }
 
 
@@ -8345,7 +8391,8 @@ console.log("start ofg agenda");
         this.game.queue.push("playerschoosestrategycards");
         this.game.queue.push("playerschoosestrategycards_before");
         if (this.game.state.round == 1) {
-          this.game.queue.push("acknowledge\t"+"<center><p style='font-weight:bold'>The Republic has fallen!</p><p style='font-size:0.95em;margin-top:10px;'>As the Galactic Senate collapses into factional squabbling, the ascendant powers on the outer rim plot to seize New Byzantium...</p><p style='font-size:0.95em;margin-top:10px'>Take the lead by moving your fleet to capture New Byzantium, or establish a power-base to displace the leader and impose your will on your peers.</p></center>");
+          let faction = this.game.players_info[this.game.player-1].faction;
+          this.game.queue.push("acknowledge\t"+this.factions[faction].intro);
  	}
 
 
@@ -8618,10 +8665,25 @@ console.log("do we have a pool 2?");
 
 	  let html = '';
 	  html += this.returnFaction(player) + " is picking a strategy card. Their options: <ul>";
-          for (let n = 0; n < this.game.state.strategy_cards.length; n++) {
-            html += '<li class="textchoice" id="'+this.game.state.strategy_cards[n]+'">' + this.strategy_cards[this.game.state.strategy_cards[n]].name + '</li>';
-    	  }
+
+          let scards = [];
+          for (let z in this.strategy_cards) {
+            scards.push("");
+          }
+
+          for (let z = 0; z < this.game.state.strategy_cards.length; z++) {
+            let rank = parseInt(this.strategy_cards[this.game.state.strategy_cards[z]].rank);
+            while (scards[rank-1] != "") { rank++; }
+            scards[rank-1] = '<li class="textchoice" id="'+this.game.state.strategy_cards[z]+'">' + this.strategy_cards[this.game.state.strategy_cards[z]].name + '</li>';
+          }
+
+          for (let z = 0; z < scards.length; z++) {
+            if (scards[z] != "") {
+              html += scards[z];
+            }
+          }
           html += '</ul>';
+
   	  this.updateStatus(html);
     	  $('.textchoice').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showStrategyCard(s); });
     	  $('.textchoice').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hideStrategyCard(s); });
@@ -11157,7 +11219,7 @@ console.log("AAAA 5");
               this.game.queue.push("action_card_event\t"+speaker_order[i]+"\t"+player+"\t"+card+"\t"+k);
             }
           }
-	  if ((i+1) != player) {
+	  if (speaker_order[i] != player) {
             this.game.queue.push("action_card_player_menu\t"+speaker_order[i]+"\t"+player+"\t"+card);
           }
         }
@@ -11389,7 +11451,7 @@ console.log("EXECUTING CARD: " + card);
       players[i].can_intervene_in_action_card 	= 0;
       players[i].secret_objectives_in_hand     	= 0;
       players[i].action_cards_in_hand         	= 0;
-      players[i].action_cards_per_round       	= 2;
+      players[i].action_cards_per_round       	= 20;
       players[i].new_tokens_per_round 	 	= 2;
       players[i].command_tokens  		= 3;
       players[i].strategy_tokens 		= 2;
@@ -11423,6 +11485,8 @@ console.log("EXECUTING CARD: " + card);
       players[i].ship_move_bonus 		= 0;
       players[i].temporary_ship_move_bonus 	= 0;
       players[i].fly_through_asteroids = 0;
+      players[i].fly_through_nebulas = 0;
+      players[i].fly_through_supernovas = 0;
       players[i].reinforce_infantry_after_successful_ground_combat = 0;
       players[i].bacterial_weapon = 0;
       players[i].evasive_bonus_on_pds_shots = 0;
@@ -11503,6 +11567,8 @@ console.log("EXECUTING CARD: " + card);
       players[i].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 0;
       players[i].temporary_infiltrate_infrastructure_on_invasion = 0;
       players[i].permanent_infiltrate_infrastructure_on_invasion = 0;
+      players[i].temporary_opponent_cannot_retreat = 0;
+      players[i].permanent_opponent_cannot_retreat = 0;
 
       if (i == 1) { players[i].color   = "yellow"; }
       if (i == 2) { players[i].color   = "green"; }
@@ -11686,6 +11752,7 @@ console.log("EXECUTING CARD: " + card);
   playerPlayActionCardMenu(action_card_player, card, action_cards_played=[]) {
 
     let imperium_self = this;
+    let relevant_action_cards = ["counter"];
 
     for (let i = 0; i < this.game.deck[1].hand.length; i++) {
       if (this.game.deck[1].hand[i].indexOf("sabotage") > -1) {
@@ -11695,9 +11762,14 @@ console.log("EXECUTING CARD: " + card);
 
     if (this.game.players_info[this.game.player-1].can_intervene_in_action_card) {
 
-      html = '<div class="sf-readable">Do you wish to play an action card to counter? </div><ul>';
+       let html  = '<div class="action_card_instructions">'+this.returnFaction(action_card_player)+' has played an action card:</div>';
+              html += '<div class="action_card_name">' + imperium_self.action_cards[card].name + '</div>';
+              html += '<div class="action_card_text">';
+	      html += this.action_cards[card].text;
+	      html += '</div>';
+	      html += '<ul>';
 
-      let ac = this.returnPlayerActionCards(this.game.player, ["action_cards"])
+      let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards);
       if (ac.length > 0) {
         html += '<li class="option" id="cont">continue</li>';
         html += '<li class="option" id="action">play action card</li>';
@@ -11723,6 +11795,7 @@ console.log("EXECUTING CARD: " + card);
 
       this.updateStatus(html);
   
+      $('.option').off();
       $('.option').on('click', function() {
   
         let action2 = $(this).attr("id");
@@ -11741,14 +11814,14 @@ console.log("EXECUTING CARD: " + card);
 
         if (action2 == "action") {
           imperium_self.playerSelectActionCard(function(card) {
-            imperium_self.game.players_info[this.game.player-1].action_cards_played.push(card);
+            imperium_self.game.players_info[imperium_self.game.player-1].action_cards_played.push(card);
     	    imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
   	    imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
 	    imperium_self.playerPlayActionCardMenu(action_card_player, card);
           }, function() {
 	    imperium_self.playerPlayActionCardMenu(action_card_player, card);
-	  }, ["action"]);
+	  }, relevant_action_cards);
         }
 
         if (action2 == "cont") {
@@ -12135,6 +12208,9 @@ console.log("ERROR: you had no hits left to assign, bug?");
     let html = '';
     let relevant_action_cards = ["combat", "space_combat"];
 
+    let opponent = attacker;
+    if (imperium_self.game.player == attacker) { opponent = defender; }
+
     this.game.state.space_combat_sector = sector;
 
     html = '<div class="sf-readable">Space Combat: round ' + this.game.state.space_combat_round + ':<p></p>'+this.returnFaction(attacker)+" attacks with "+this.returnPlayerFleetInSector(attacker, sector) + ". " + this.returnFaction(defender) + " defends with " + this.returnPlayerFleetInSector(defender, sector) + "</div><ul>";
@@ -12150,7 +12226,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
     //
     // can I retreat
     //
-    if (this.canPlayerRetreat(imperium_self.game.player, sector)) {
+    if (this.canPlayerRetreat(imperium_self.game.player, attacker, defender, sector)) {
       html += '<li class="option" id="retreat">announce retreat</li>';
     }
 
@@ -12227,7 +12303,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
 	    let opt = $(this).attr("id");
 	    let retreat_to_sector = retreat_options[opt];
 
-	    imperium_self.addMove("retreat\t"+player+"\t"+sector+"\t"+retreat_to_sector);
+	    imperium_self.addMove("retreat\t"+player+"\t"+opponent+"\t"+sector+"\t"+retreat_to_sector);
 	    imperium_self.endTurn();
 	    return 0;
 	  });
@@ -12240,6 +12316,84 @@ console.log("ERROR: you had no hits left to assign, bug?");
 
     });
   }
+
+
+
+
+  //
+  // ground combat is over -- provide options for scoring cards, action cards
+  //
+  playerRespondToRetreat(player, opponent, from, to) {
+
+    let imperium_self = this;
+    let sys = this.returnSectorAndPlanets(to);
+    let relevant_action_cards = ["retreat"];
+    let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards);
+
+    if (ac.length == 0) {
+      this.playerAcknowledgeNotice("Your opponent has announced a retreat into "+sys.s.sector+" at teh end of this round of combat");
+      return;
+    }
+
+    let html = '<div class="sf-readable">Your opponent has announced a retreat into '+sys.s.sector+' at teh end of this round of combat: </div>';
+    html += '<li class="option" option="action">play action card</li>';
+    html += '<li class="option" option="permit">permit retreat</li>';
+
+    let tech_attach_menu_events = 0;
+    let tech_attach_menu_triggers = [];
+    let tech_attach_menu_index = [];
+
+    let z = this.returnEventObjects();
+    for (let i = 0; i < z.length; i++) {
+      if (z[i].menuOptionTriggers(this, "retreat", this.game.player) == 1) {
+        let x = z[i].menuOption(this, "retreat", this.game.player);
+        html += x.html;
+        tech_attach_menu_index.push(i);
+        tech_attach_menu_triggers.push(x.event);
+        tech_attach_menu_events = 1;
+      }
+    }
+    html += '</ul>';
+
+
+    this.updateStatus(html);
+
+    $('.option').off();
+    $('.option').on('click', function() {
+
+      let action2 = $(this).attr("id");
+
+      //
+      // respond to tech and factional abilities
+      //
+      if (tech_attach_menu_events == 1) {
+        for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
+          if (action2 == tech_attach_menu_triggers[i]) {
+            $(this).remove();
+            z[tech_attach_menu_index[i]].menuOptionActivated(imperium_self, "space_combat", imperium_self.game.player);
+          }
+        }
+      }
+
+      if (action2 == "action") {
+        imperium_self.playerSelectActionCard(function(card) {
+          imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+          imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+          imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
+          imperium_self.playerRespondToRetreat(player, opponent, from, to);
+        }, function() {
+          imperium_self.playerRespondToRetreat(player, opponent, from, to);
+        }. relevant_action_cards);
+      }
+
+
+      if (action2 == "permit") {
+	imperium_self.endTurn();
+      }
+    });
+  }
+
+
 
 
 
@@ -15476,6 +15630,13 @@ console.log("NONE!");
   ////////////////////
   // Return Planets //
   ////////////////////
+  //
+  // type 0 - normal
+  // type 1 - rift
+  // type 2 - nebula
+  // type 3 - asteroids
+  // type 4 - supernova
+  //
   returnSectors() {
 
     var sectors = {};
@@ -15485,14 +15646,14 @@ console.log("NONE!");
     sectors['sector5']         = { img : "/imperium/img/sectors/sector5.png" , 	   	   name : "Sector 5" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
     sectors['sector6']         = { img : "/imperium/img/sectors/sector6.png" , 	   	   name : "Sector 6" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
     sectors['sector1']         = { img : "/imperium/img/sectors/sector1.png" , 	   	   name : "Sector 1" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector2']         = { img : "/imperium/img/sectors/sector2.png" , 	   	   name : "Sector 2" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector7']         = { img : "/imperium/img/sectors/sector7.png" , 	   	   name : "Sector 7" , type : 1 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    //sectors['sector33']        = { img : "/imperium/img/sectors/sector33.png" , 	   name : "Sector 33" , type : 2 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector72']         = { img : "/imperium/img/sectors/sector72.png" , 	   name : "Sector 72" , type : 2 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector34']        = { img : "/imperium/img/sectors/sector34.png" , 	   name : "Sector 34" , type : 3 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector35']        = { img : "/imperium/img/sectors/sector35.png" , 	   name : "Sector 35" , type : 3 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    //sectors['sector36']        = { img : "/imperium/img/sectors/sector36.png" , 	   name : "Sector 36" , type : 4 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
-    sectors['sector71']        = { img : "/imperium/img/sectors/sector71.png" , 	   name : "Sector 71" , type : 4 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
+    sectors['sector2']         = { img : "/imperium/img/sectors/sector2.png" , 	   	   name : "Sector 2" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } 
+//    sectors['sector7']         = { img : "/imperium/img/sectors/sector7.png" , 	   	   name : "Sector 7" , type : 1 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } // black hole or rift
+    //sectors['sector33']        = { img : "/imperium/img/sectors/sector33.png" , 	   name : "Sector 33" , type : 2 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } // nebula
+    sectors['sector72']         = { img : "/imperium/img/sectors/sector72.png" , 	   name : "Sector 72" , type : 2 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } // nebula
+    sectors['sector34']        = { img : "/imperium/img/sectors/sector34.png" , 	   name : "Sector 34" , type : 3 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } // asteroids
+    sectors['sector35']        = { img : "/imperium/img/sectors/sector35.png" , 	   name : "Sector 35" , type : 3 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } // asteroids
+    //sectors['sector36']        = { img : "/imperium/img/sectors/sector36.png" , 	   name : "Sector 36" , type : 4 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } // supernova
+    sectors['sector71']        = { img : "/imperium/img/sectors/sector71.png" , 	   name : "Sector 71" , type : 4 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } // supernova
     sectors['sector54']        = { img : "/imperium/img/sectors/sector54.png" , 	   name : "Sector 48" , type : 0 , hw : 0 , wormhole : 1, mr : 0 , planets : [] } 		// wormhole a
     sectors['sector56']        = { img : "/imperium/img/sectors/sector56.png" , 	   name : "Sector 49" , type : 0 , hw : 0 , wormhole : 2, mr : 0 , planets : [] } 		// wormhole b
 
@@ -15846,6 +16007,8 @@ console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
 
 	state.pds_limit_per_planet = 2;
 	state.pds_limit_total = 4;
+
+	state.retreat_cancelled = 0;
 
 	state.activated_sector = "";
 	state.bombardment_sector = "";
@@ -16323,7 +16486,7 @@ console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
 
     return retreat_sectors;
   }
-  canPlayerRetreat(player, sector) {
+  canPlayerRetreat(player, attacker, defender, sector) {
 
     let as = this.returnAdjacentSectors(sector);
     for (let i = 0; i < as.length; i++) {
@@ -17210,8 +17373,11 @@ console.log("JALKING: " + JSON.stringify(p1sectors));
     let distance = [];
     let s = this.addWormholesToBoardTiles(this.returnBoardTiles());  
 
+    let add_at_end = [];
+
     sectors.push(destination);
     distance.push(0);
+
   
     //
     // find which systems within move distance (hops)
@@ -17232,6 +17398,7 @@ if (this.game.board[tmp[k]] != undefined) {
 	// other players.
 	//
 	let can_hop_through_this_sector = 1;
+
 	if (player == null) {} else {
 	  if (this.game.players_info[player-1].move_through_sectors_with_opponent_ships == 1 || this.game.players_info[player-1].temporary_move_through_sectors_with_opponent_ships == 1) {
 	  } else {
@@ -17240,6 +17407,37 @@ if (this.game.board[tmp[k]] != undefined) {
 	    }
 	  }
 	}
+
+
+        //
+        // ASTEROIDS
+        //
+        if (tmp[k].type == 3) {
+          if (this.game.players_info[player-1].fly_through_asteroids == 0) {
+            can_hop_through_this_sector = 0;
+          }
+        }
+
+
+        //
+        // SUPERNOVA
+        //
+        if (tmp[k].type == 4) {
+          if (this.game.players_info[player-1].fly_through_supernovas == 0) {
+            can_hop_through_this_sector = 0;
+          }
+        }
+
+
+        //
+        // NEBULA
+        //
+        if (tmp[k].type == 2) {
+          if (this.game.players_info[player-1].fly_through_nebulas == 0) {
+            can_hop_through_this_sector = 0;
+          }
+        }
+
 
 	//
 	// otherwise we can't move into our destination
@@ -17475,13 +17673,15 @@ console.log("p: " + planet);
       //
       // experimental battlestation
       //
-      if (this.game.players_info[player-1].experimental_battlestation === sectors[i]) {
-        let pds = {};
-  	    pds.combat = sys.p[j].units[k][z].combat;
-  	    pds.owner = (k+1);
-  	    pds.sector = sectors[i];
-  	battery.push(pds);
-      }  
+      for (let z = 0; z < this.game.players_info.length; z++) {
+        if (this.game.players_info[z].experimental_battlestation === sectors[i]) {
+          let pds = {};
+  	      pds.combat = this.returnUnit((z+1), "pds").combat;
+  	      pds.owner = (z+1);
+  	      pds.sector = sectors[i];
+    	  battery.push(pds);
+        }  
+      }
 
 
       //
@@ -18004,6 +18204,7 @@ console.log("p: " + planet);
     this.game.players_info[player-1].combat_dice_reroll                     = 0;
     this.game.players_info[player-1].experimental_battlestation		    = "";
     this.game.players_info[player-1].lost_planet_this_round		= -1; // is player to whom lost
+    this.game.players_info[player-1].temporary_opponent_cannot_retreat = 0;
 
     for (let i = 0; i < this.game.players_info.length; i++) {
       this.game.players_info[i].traded_this_turn 			    = 0;
@@ -18011,6 +18212,7 @@ console.log("p: " + planet);
 
     this.game.state.temporary_adjacency = [];
     this.game.state.temporary_wormhole_adjacency = 0;
+    this.game.state.retreat_cancelled = 0;
   }
 
 
