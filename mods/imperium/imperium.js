@@ -7292,7 +7292,6 @@ console.log("import: " + name);
     if (this.game.queue.length > 0) {
 
 console.log("QUEUE: " + JSON.stringify(this.game.queue));  
-      imperium_self.updateStatus("received game move... opponent moving.");
 
       imperium_self.saveGame(imperium_self.game.id);
   
@@ -7465,6 +7464,8 @@ console.log("RESOLVE");
 	let player = parseInt(mv[1]);
 	let opponent = parseInt(mv[2]);
 
+        this.updateStatus(this.returnFaction(player) + " announces a retreat");
+
         let from = mv[3];
         let to = mv[4];
 
@@ -7609,7 +7610,9 @@ console.log("RESOLVE");
 
 	if (this.game.player == player) {
   	  this.playerContinueTurn(player, sector);
-	}
+	} else {
+          this.updateStatus(this.returnFaction(player) + " continues their turn");
+ 	}
 
         return 0;
 
@@ -8128,8 +8131,6 @@ console.log("executing "+z[z_index].name);
 
       if (mv[0] == "agenda") {
 
-console.log("start ofg agenda");
-
 	//
 	// we repeatedly hit "agenda"
 	//
@@ -8502,18 +8503,12 @@ console.log("DONE HERE!");
   
   	this.updateLog("revealing upcoming objectives...");
 
-console.log("A");
-  
   	//
   	// reset agendas
   	//
         this.game.state.stage_i_objectives = [];
         this.game.state.stage_ii_objectives = [];
         this.game.state.secret_objectives = [];
-
-console.log("POOLS: " + this.game.pool.length);;
-console.log(JSON.stringify(this.game.pool));
-
 
 	if (this.game.pool.length > 1) {
           for (i = 0; i < this.game.pool[1].hand.length; i++) {
@@ -8522,7 +8517,6 @@ console.log(JSON.stringify(this.game.pool));
 	    }
   	  }
 	}
-console.log("do we have a pool 2?");
 	if (this.game.pool.length > 2) {
           for (i = 0; i < this.game.pool[2].hand.length; i++) {
 	    if (!this.game.state.stage_ii_objectives.includes(this.game.pool[2].hand[i])) {
@@ -8530,12 +8524,10 @@ console.log("do we have a pool 2?");
   	    }
   	  }
   	}
-  
   	this.game.queue.splice(qe, 1);
   	return 1;
       }
   
-
 
       if (mv[0] === "score") {
   
@@ -16461,6 +16453,76 @@ console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
 
 
 
+
+  returnShipsOverCapacity(player, sector) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+    let fleet_supply = this.game.players_info[player-1].fleet_supply;
+
+    let spare_capacity = 0;
+    let capital_ships = 0;
+    let fighter_ships = 0;
+    let storable_ships = 0;
+    let total_capacity = 0;
+
+    for (let i = 0; i < sys.s.units[player-1].length; i++) {
+      let ship = sys.s.units[player-1][i];
+      total_capacity += ship.capacity;
+      spare_capacity += imperium_self.returnRemainingCapacity(ship);
+      if (ship.type == "destroyer") { capital_ships++; }
+      if (ship.type == "carrier") { capital_ships++; }
+      if (ship.type == "cruiser") { capital_ships++; }
+      if (ship.type == "dreadnaught") { capital_ships++; }
+      if (ship.type == "flagship") { capital_ships++; }
+      if (ship.type == "warsun") { capital_ships++; }
+      if (ship.type == "fighter") { fighter_ships++; }
+    }
+
+    if (capital_ships > fleet_supply) { return (capital_ships - fleet_supply); }
+    
+    return 0;
+  }
+
+
+  returnFightersWithoutCapacity(player, sector) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+    let fleet_supply = this.game.players_info[player-1].fleet_supply;
+
+    let spare_capacity = 0;
+    let capital_ships = 0;
+    let fighter_ships = 0;
+    let storable_ships = 0;
+    let total_capacity = 0;
+
+    for (let i = 0; i < sys.s.units[player-1].length; i++) {
+      let ship = sys.s.units[player-1][i];
+      total_capacity += ship.capacity;
+      spare_capacity += imperium_self.returnRemainingCapacity(ship);
+      if (ship.type == "destroyer") { capital_ships++; }
+      if (ship.type == "carrier") { capital_ships++; }
+      if (ship.type == "cruiser") { capital_ships++; }
+      if (ship.type == "dreadnaught") { capital_ships++; }
+      if (ship.type == "flagship") { capital_ships++; }
+      if (ship.type == "warsun") { capital_ships++; }
+      if (ship.type == "fighter") { fighter_ships++; }
+    }
+
+    //
+    // fighter II
+    //
+    if (imperium_self.doesPlayerHaveTech(player, "fighter-ii")) {
+      if ((fighter_ships+capital_ships-spare_capacity) > fleet_supply) { return (fighter_ships - (spare_capacity+(fleet_supply-capital_ships))); }
+    }
+
+    //
+    // fighter I
+    //
+    if (fighter_ships > total_capacity) { return (fighter_ships - total_capacity); }
+    
+    return 0;
+  }
+
   checkForVictory() {
     for (let i = 0; i < this.game.players_info.length; i++) {
       if (this.game.players_info[i].vp >= this.vp_needed) {
@@ -16470,9 +16532,6 @@ console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
     }
     return 0;
   }
-
-  
-
 
   
 
@@ -18163,6 +18222,20 @@ console.log("p: " + planet);
         technologies[this.game.players_info[i].tech[ii]].onNewTurn();
       }
     }
+  }
+
+
+  handleFleetSupply(player, sector) {
+
+    let ships_over_capacity = this.returnShipsOverCapacity(player, sector);
+    let fighters_over_capacity = this.returnFightersWithoutCapacity(player, sector);
+
+    if (ships_over_capacity > 0) { 
+      return 0;
+    }
+
+
+    return 1; // no need for player to remove ships
   }
  
 

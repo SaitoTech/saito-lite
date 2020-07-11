@@ -43,6 +43,91 @@
   }
 
 
+  isPlayerOverCapacity(player, sector) {
+
+    let ships_over_capacity = this.returnShipsOverCapacity(player, sector);
+    let fighters_over_capacity = this.returnFightersWithoutCapacity(player, sector);
+
+    if (ships_over_capacity > 0) {
+      return 1;
+    }
+    if (fighters_over_capacity > 0) {
+      return 1;
+    }
+
+    return 0;
+  }
+
+
+
+  returnShipsOverCapacity(player, sector) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+    let fleet_supply = this.game.players_info[player-1].fleet_supply;
+
+    let spare_capacity = 0;
+    let capital_ships = 0;
+    let fighter_ships = 0;
+    let storable_ships = 0;
+    let total_capacity = 0;
+
+    for (let i = 0; i < sys.s.units[player-1].length; i++) {
+      let ship = sys.s.units[player-1][i];
+      total_capacity += ship.capacity;
+      spare_capacity += imperium_self.returnRemainingCapacity(ship);
+      if (ship.type == "destroyer") { capital_ships++; }
+      if (ship.type == "carrier") { capital_ships++; }
+      if (ship.type == "cruiser") { capital_ships++; }
+      if (ship.type == "dreadnaught") { capital_ships++; }
+      if (ship.type == "flagship") { capital_ships++; }
+      if (ship.type == "warsun") { capital_ships++; }
+      if (ship.type == "fighter") { fighter_ships++; }
+    }
+
+    if (capital_ships > fleet_supply) { return (capital_ships - fleet_supply); }
+    
+    return 0;
+  }
+
+
+  returnFightersWithoutCapacity(player, sector) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+    let fleet_supply = this.game.players_info[player-1].fleet_supply;
+
+    let spare_capacity = 0;
+    let capital_ships = 0;
+    let fighter_ships = 0;
+    let storable_ships = 0;
+    let total_capacity = 0;
+
+    for (let i = 0; i < sys.s.units[player-1].length; i++) {
+      let ship = sys.s.units[player-1][i];
+      total_capacity += ship.capacity;
+      spare_capacity += imperium_self.returnRemainingCapacity(ship);
+      if (ship.type == "destroyer") { capital_ships++; }
+      if (ship.type == "carrier") { capital_ships++; }
+      if (ship.type == "cruiser") { capital_ships++; }
+      if (ship.type == "dreadnaught") { capital_ships++; }
+      if (ship.type == "flagship") { capital_ships++; }
+      if (ship.type == "warsun") { capital_ships++; }
+      if (ship.type == "fighter") { fighter_ships++; }
+    }
+
+    //
+    // fighter II
+    //
+    if (imperium_self.doesPlayerHaveTech(player, "fighter-ii")) {
+      if ((fighter_ships+capital_ships-spare_capacity) > fleet_supply) { return (fighter_ships - (spare_capacity+(fleet_supply-capital_ships))); }
+    }
+
+    //
+    // fighter I
+    //
+    if (fighter_ships > total_capacity) { return (fighter_ships - total_capacity); }
+    
+    return 0;
+  }
 
   checkForVictory() {
     for (let i = 0; i < this.game.players_info.length; i++) {
@@ -53,9 +138,6 @@
     }
     return 0;
   }
-
-  
-
 
   
 

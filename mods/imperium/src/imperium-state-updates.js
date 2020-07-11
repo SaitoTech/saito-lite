@@ -20,6 +20,37 @@
       }
     }
   }
+
+
+  handleFleetSupply(player, sector) {
+
+    let ships_over_capacity = this.returnShipsOverCapacity(player, sector);
+    let fighters_over_capacity = this.returnFightersWithoutCapacity(player, sector);
+
+    if (ships_over_capacity > 0) { 
+      if (player == this.game.player) {
+        this.addMove("destroy_ships\t"+ships_over_capacity+"\t"+sector+"\t"+"1");
+	this.endTurn();
+      }
+      return 0;
+    }
+
+    if (fighters_over_capacity > 0) {
+      let sys = this.returnSectorAndPlanets(sector);
+      let fighters_removed = 0;
+      for (let i = 0; i < sys.s.units[player-1].length && fighters_removed < fighters_over_capacity; i++) {
+	if (sys.s.units[player-1][i].type == "fighter") {
+	  sys.s.units[player-1].splice(i, 1);
+	  i--;
+	  fighters_removed++;
+	}
+      }
+      this.saveSystemAndPlanets(sys);
+    }
+
+
+    return 1;
+  }
  
 
   resetSpaceUnitTemporaryModifiers(sector) {

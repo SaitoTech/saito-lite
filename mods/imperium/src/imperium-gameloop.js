@@ -11,7 +11,6 @@
     if (this.game.queue.length > 0) {
 
 console.log("QUEUE: " + JSON.stringify(this.game.queue));  
-      imperium_self.updateStatus("received game move... opponent moving.");
 
       imperium_self.saveGame(imperium_self.game.id);
   
@@ -179,10 +178,14 @@ console.log("RESOLVE");
       }
 
 
+
+
       if (mv[0] === "announce_retreat") {
 
 	let player = parseInt(mv[1]);
 	let opponent = parseInt(mv[2]);
+
+        this.updateStatus(this.returnFaction(player) + " announces a retreat");
 
         let from = mv[3];
         let to = mv[4];
@@ -301,15 +304,17 @@ console.log("RESOLVE");
 
 
   	//
-  	// monitor fleet supply
-  	//
-        console.log("TODO - Fleet Supply check");
-
-  	//
   	// update sector
   	//
   	this.updateSectorGraphics(sector);
   	this.game.queue.splice(qe, 1);
+
+  	//
+  	// handle fleet supply
+  	//
+        return.handleFleetSupply(player, sector);
+
+
   	return 1;
   
       }
@@ -328,7 +333,9 @@ console.log("RESOLVE");
 
 	if (this.game.player == player) {
   	  this.playerContinueTurn(player, sector);
-	}
+	} else {
+          this.updateStatus(this.returnFaction(player) + " continues their turn");
+ 	}
 
         return 0;
 
@@ -847,8 +854,6 @@ console.log("executing "+z[z_index].name);
 
       if (mv[0] == "agenda") {
 
-console.log("start ofg agenda");
-
 	//
 	// we repeatedly hit "agenda"
 	//
@@ -1221,18 +1226,12 @@ console.log("DONE HERE!");
   
   	this.updateLog("revealing upcoming objectives...");
 
-console.log("A");
-  
   	//
   	// reset agendas
   	//
         this.game.state.stage_i_objectives = [];
         this.game.state.stage_ii_objectives = [];
         this.game.state.secret_objectives = [];
-
-console.log("POOLS: " + this.game.pool.length);;
-console.log(JSON.stringify(this.game.pool));
-
 
 	if (this.game.pool.length > 1) {
           for (i = 0; i < this.game.pool[1].hand.length; i++) {
@@ -1241,7 +1240,6 @@ console.log(JSON.stringify(this.game.pool));
 	    }
   	  }
 	}
-console.log("do we have a pool 2?");
 	if (this.game.pool.length > 2) {
           for (i = 0; i < this.game.pool[2].hand.length; i++) {
 	    if (!this.game.state.stage_ii_objectives.includes(this.game.pool[2].hand[i])) {
@@ -1249,12 +1247,10 @@ console.log("do we have a pool 2?");
   	    }
   	  }
   	}
-  
   	this.game.queue.splice(qe, 1);
   	return 1;
       }
   
-
 
       if (mv[0] === "score") {
   
@@ -2749,11 +2745,13 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
         let player	   = parseInt(mv[1]);
 	let total          = parseInt(mv[2]);
 	let sector	   = mv[3];
+	let capital 	   = 0;
+	if (parseInt(mv[4])) { capital = 1; }
 
         this.game.queue.splice(qe, 1);
 
 	if (this.game.player == player) {
-  	  this.playerDestroyShips(player, total, sector);
+  	  this.playerDestroyShips(player, total, sector, capital);
 	  return 0;
 	}
 

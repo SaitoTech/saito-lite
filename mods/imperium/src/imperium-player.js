@@ -702,7 +702,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
   //
   // destroy units
   //
-  playerDestroyShips(player, total, sector) {
+  playerDestroyShips(player, total, sector, capital=0) {
 
     let imperium_self = this;
     let total_hits = total;
@@ -712,8 +712,19 @@ console.log("ERROR: you had no hits left to assign, bug?");
 
     html = '<div class="sf-readable">You must destroy '+total+' ships in your fleet:</div><ul>';
 
-    let total_targetted_units = 0;;
+    let total_targetted_units = 0;
     let targetted_units = imperium_self.game.players_info[imperium_self.game.player-1].target_units;
+
+    if (capital == 1) {
+      targetted_units = [];
+      targetted_units.push("destroyer");
+      targetted_units.push("carrier");
+      targetted_units.push("destroyer");
+      targetted_units.push("cruiser");
+      targetted_units.push("dreadnaught");
+      targetted_units.push("warsun");
+      targetted_units.push("flagship");
+    }
 
     for (let i = 0; i < sys.s.units[imperium_self.game.player-1].length; i++) {
       let unit = sys.s.units[imperium_self.game.player-1][i];
