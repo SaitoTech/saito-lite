@@ -312,8 +312,20 @@ console.log("RESOLVE");
   	//
   	// handle fleet supply
   	//
-        return.handleFleetSupply(player, sector);
-
+	let handle_fleet_supply = 1;
+        for (let i = 0; i < this.game.queue.length; i++) {
+	  let nextcmd = this.game.queue[i];
+	  let tmpc = nextcmd.split("\t");
+	  if (tmpc[0] == "produce" && parseInt(tmpc[1]) == player) {
+	    //
+	    // handle fleet supply when all of my units are produced
+	    //
+	    handle_fleet_supply = 0;
+	  }
+	}
+        if (handle_fleet_supply == 1) {
+          return this.handleFleetSupply(player, sector);
+	}
 
   	return 1;
   
@@ -2748,18 +2760,23 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 	let capital 	   = 0;
 	if (parseInt(mv[4])) { capital = 1; }
 
+	if (sector.indexOf("_") > 0) {
+	  let sys = this.returnSectorAndPlanets(sector);
+	  sector = sys.s.sector;
+	}
+
         this.game.queue.splice(qe, 1);
+
+	if (total == 1) {
+  	  this.updateStatus(this.returnFaction(player) + " is destroying "+total+" ship");
+	} else { 
+  	  this.updateStatus(this.returnFaction(player) + " is destroying "+total+" ships");
+	}
 
 	if (this.game.player == player) {
   	  this.playerDestroyShips(player, total, sector, capital);
-	  return 0;
 	}
 
-	if (destroy == 1) {
-  	  this.updateStatus("Opponent is destroying "+total+" ship");
-	} else { 
-	  this.updateStatus("Opponent is destroying "+total+" ships");
-	}
 	return 0;
 
       }

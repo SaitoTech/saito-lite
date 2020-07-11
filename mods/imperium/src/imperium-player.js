@@ -710,6 +710,8 @@ console.log("ERROR: you had no hits left to assign, bug?");
     let maximum_assignable_hits = 0;
     let sys = imperium_self.returnSectorAndPlanets(sector);
 
+console.log("SECTOR: " + sector);
+
     html = '<div class="sf-readable">You must destroy '+total+' ships in your fleet:</div><ul>';
 
     let total_targetted_units = 0;
@@ -726,12 +728,14 @@ console.log("ERROR: you had no hits left to assign, bug?");
       targetted_units.push("flagship");
     }
 
+console.log("A");
     for (let i = 0; i < sys.s.units[imperium_self.game.player-1].length; i++) {
       let unit = sys.s.units[imperium_self.game.player-1][i];
       maximum_assignable_hits++;
       if (targetted_units.includes(unit.type)) { total_targetted_units++; }
       html += '<li class="textchoice player_ship_'+i+'" id="'+i+'">'+unit.name+'</li>';
     }
+console.log("B");
     html += '</ul>';
   
     if (maximum_assignable_hits == 0) {
@@ -740,6 +744,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
       return 0;
     }
 
+console.log("C");
 
     imperium_self.updateStatus(html);
 	

@@ -7459,6 +7459,8 @@ console.log("RESOLVE");
       }
 
 
+
+
       if (mv[0] === "announce_retreat") {
 
 	let player = parseInt(mv[1]);
@@ -7583,15 +7585,17 @@ console.log("RESOLVE");
 
 
   	//
-  	// monitor fleet supply
-  	//
-        console.log("TODO - Fleet Supply check");
-
-  	//
   	// update sector
   	//
   	this.updateSectorGraphics(sector);
   	this.game.queue.splice(qe, 1);
+
+  	//
+  	// handle fleet supply
+  	//
+        return this.handleFleetSupply(player, sector);
+
+
   	return 1;
   
       }
@@ -10022,19 +10026,26 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
         let player	   = parseInt(mv[1]);
 	let total          = parseInt(mv[2]);
 	let sector	   = mv[3];
+	let capital 	   = 0;
+	if (parseInt(mv[4])) { capital = 1; }
+
+	if (sector.indexOf("_") > 0) {
+	  let sys = this.returnSectorAndPlanets(sector);
+	  sector = sys.s.sector;
+	}
 
         this.game.queue.splice(qe, 1);
 
-	if (this.game.player == player) {
-  	  this.playerDestroyShips(player, total, sector);
-	  return 0;
+	if (total == 1) {
+  	  this.updateStatus(this.returnFaction(player) + " is destroying "+total+" ship");
+	} else { 
+  	  this.updateStatus(this.returnFaction(player) + " is destroying "+total+" ships");
 	}
 
-	if (destroy == 1) {
-  	  this.updateStatus("Opponent is destroying "+total+" ship");
-	} else { 
-	  this.updateStatus("Opponent is destroying "+total+" ships");
+	if (this.game.player == player) {
+  	  this.playerDestroyShips(player, total, sector, capital);
 	}
+
 	return 0;
 
       }
@@ -12122,7 +12133,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
   //
   // destroy units
   //
-  playerDestroyShips(player, total, sector) {
+  playerDestroyShips(player, total, sector, capital=0) {
 
     let imperium_self = this;
     let total_hits = total;
@@ -12130,17 +12141,32 @@ console.log("ERROR: you had no hits left to assign, bug?");
     let maximum_assignable_hits = 0;
     let sys = imperium_self.returnSectorAndPlanets(sector);
 
+console.log("SECTOR: " + sector);
+
     html = '<div class="sf-readable">You must destroy '+total+' ships in your fleet:</div><ul>';
 
-    let total_targetted_units = 0;;
+    let total_targetted_units = 0;
     let targetted_units = imperium_self.game.players_info[imperium_self.game.player-1].target_units;
 
+    if (capital == 1) {
+      targetted_units = [];
+      targetted_units.push("destroyer");
+      targetted_units.push("carrier");
+      targetted_units.push("destroyer");
+      targetted_units.push("cruiser");
+      targetted_units.push("dreadnaught");
+      targetted_units.push("warsun");
+      targetted_units.push("flagship");
+    }
+
+console.log("A");
     for (let i = 0; i < sys.s.units[imperium_self.game.player-1].length; i++) {
       let unit = sys.s.units[imperium_self.game.player-1][i];
       maximum_assignable_hits++;
       if (targetted_units.includes(unit.type)) { total_targetted_units++; }
       html += '<li class="textchoice player_ship_'+i+'" id="'+i+'">'+unit.name+'</li>';
     }
+console.log("B");
     html += '</ul>';
   
     if (maximum_assignable_hits == 0) {
@@ -12149,6 +12175,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
       return 0;
     }
 
+console.log("C");
 
     imperium_self.updateStatus(html);
 	
@@ -16452,10 +16479,28 @@ console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
   }
 
 
+  isPlayerOverCapacity(player, sector) {
+
+    let imperium_self = this;
+
+    let ships_over_capacity = this.returnShipsOverCapacity(player, sector);
+    let fighters_over_capacity = this.returnFightersWithoutCapacity(player, sector);
+
+    if (ships_over_capacity > 0) {
+      return 1;
+    }
+    if (fighters_over_capacity > 0) {
+      return 1;
+    }
+
+    return 0;
+  }
+
 
 
   returnShipsOverCapacity(player, sector) {
 
+    let imperium_self = this;
     let sys = this.returnSectorAndPlanets(sector);
     let fleet_supply = this.game.players_info[player-1].fleet_supply;
 
@@ -16486,6 +16531,7 @@ console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
 
   returnFightersWithoutCapacity(player, sector) {
 
+    let imperium_self = this;
     let sys = this.returnSectorAndPlanets(sector);
     let fleet_supply = this.game.players_info[player-1].fleet_supply;
 
@@ -18227,15 +18273,37 @@ console.log("p: " + planet);
 
   handleFleetSupply(player, sector) {
 
+    let imperium_self = this;
+    let sys = imperium_self.returnSectorAndPlanets(sector);
+    if (sector.indexOf("_") > 0) { sector = sys.s.sector; }
+
+
     let ships_over_capacity = this.returnShipsOverCapacity(player, sector);
     let fighters_over_capacity = this.returnFightersWithoutCapacity(player, sector);
 
     if (ships_over_capacity > 0) { 
+      if (player == this.game.player) {
+        this.addMove("destroy_ships\t"+player+"\t"+ships_over_capacity+"\t"+sector+"\t"+"1");
+	this.endTurn();
+      }
       return 0;
     }
 
+    if (fighters_over_capacity > 0) {
+      let sys = this.returnSectorAndPlanets(sector);
+      let fighters_removed = 0;
+      for (let i = 0; i < sys.s.units[player-1].length && fighters_removed < fighters_over_capacity; i++) {
+	if (sys.s.units[player-1][i].type == "fighter") {
+	  sys.s.units[player-1].splice(i, 1);
+	  i--;
+	  fighters_removed++;
+	}
+      }
+      this.saveSystemAndPlanets(sys);
+    }
 
-    return 1; // no need for player to remove ships
+
+    return 1;
   }
  
 

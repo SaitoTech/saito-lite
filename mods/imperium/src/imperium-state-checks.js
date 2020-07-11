@@ -45,6 +45,8 @@
 
   isPlayerOverCapacity(player, sector) {
 
+    let imperium_self = this;
+
     let ships_over_capacity = this.returnShipsOverCapacity(player, sector);
     let fighters_over_capacity = this.returnFightersWithoutCapacity(player, sector);
 
@@ -62,6 +64,7 @@
 
   returnShipsOverCapacity(player, sector) {
 
+    let imperium_self = this;
     let sys = this.returnSectorAndPlanets(sector);
     let fleet_supply = this.game.players_info[player-1].fleet_supply;
 
@@ -92,6 +95,7 @@
 
   returnFightersWithoutCapacity(player, sector) {
 
+    let imperium_self = this;
     let sys = this.returnSectorAndPlanets(sector);
     let fleet_supply = this.game.players_info[player-1].fleet_supply;
 
