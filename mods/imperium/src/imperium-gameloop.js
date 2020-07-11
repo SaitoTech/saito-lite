@@ -298,7 +298,8 @@ console.log("RESOLVE");
           this.addSpaceUnit(player, sector, unitname);
 	  this.updateLog(this.returnFaction(player) + " produces " + this.returnUnit(unitname).name + " in " + sys.s.name);  
         }
-  
+
+
   	//
   	// monitor fleet supply
   	//
@@ -308,7 +309,6 @@ console.log("RESOLVE");
   	// update sector
   	//
   	this.updateSectorGraphics(sector);
-  
   	this.game.queue.splice(qe, 1);
   	return 1;
   
@@ -1586,7 +1586,7 @@ imperium_self.saveGame(imperium_self.game.id);
 	  if (this.game.player == recipient) {
 	    this.game.deck[1].hand.push(details);
 	    if (this.game.deck[1].hand.length > this.game.players_info[this.game.player-1].action_card_limit) {
-	      this.playerDiscardActionCard(1);
+	      this.playerDiscardActionCards(1);
 	      return 0;
 	    } else {
 	    }

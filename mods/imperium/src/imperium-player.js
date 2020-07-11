@@ -334,14 +334,15 @@
 
     if (this.game.players_info[this.game.player-1].can_intervene_in_action_card) {
 
-       let html  = '<div class="action_card_instructions">'+this.returnFaction(action_card_player)+' has played an action card:</div>';
-              html += '<div class="action_card_name">' + imperium_self.action_cards[card].name + '</div>';
-              html += '<div class="action_card_text">';
+       let html  = '<div class="action_card_instructions_hud">'+this.returnFaction(action_card_player)+' has played an action card:</div>';
+              html += '<div class="action_card_name_hud">' + imperium_self.action_cards[card].name + '</div>';
+              html += '<div class="action_card_text_hud">';
 	      html += this.action_cards[card].text;
 	      html += '</div>';
 	      html += '<ul>';
 
       let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards);
+console.log("AC: " + JSON.stringify(ac));
       if (ac.length > 0) {
         html += '<li class="option" id="cont">continue</li>';
         html += '<li class="option" id="action">play action card</li>';
@@ -2510,6 +2511,8 @@ console.log(7);
   
   playerSelectActionCard(mycallback, cancel_callback, types=[]) {  
 
+console.log("WHAT TYPE: " + JSON.stringify(types));
+
     let imperium_self = this;
     let array_of_cards = this.returnPlayerActionCards(this.game.player, types);
     if (array_of_cards.length == 0) {
@@ -4055,7 +4058,7 @@ console.log("NONE!");
 
     let html  = "<div class='sf-readable'>You must discard <div style='display:inline' class='totalnum' id='totalnum'>"+num+"</div> action card"; if (num > 1) { html += 's'; }; html += ':</div>';
         html += '<ul>';
-    for (let i = 0; i < this.game.geck[1].hand.length; i++) {
+    for (let i = 0; i < this.game.deck[1].hand.length; i++) {
       html += '<li class="textchoice" id="'+i+'">' + this.action_cards[this.game.deck[1].hand[i]].name+'</li>';
     }
     html += '</ul>';

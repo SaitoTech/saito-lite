@@ -485,19 +485,12 @@ updateTokenDisplay() {
   let imperium_self = this;
 
   try {
-console.log("UTD: 1");
     $('#token_display_command_token_count').html(imperium_self.game.players_info[imperium_self.game.player-1].command_tokens);
-console.log("UTD: 2");
     $('#token_display_strategy_token_count').html(imperium_self.game.players_info[imperium_self.game.player-1].strategy_tokens);
-console.log("UTD: 3");
     $('#token_display_fleet_supply_count').html(imperium_self.game.players_info[imperium_self.game.player-1].fleet_supply_tokens);
-console.log("UTD: 4");
     $('#token_display_commodities_count').html(imperium_self.game.players_info[imperium_self.game.player-1].commodities);
-console.log("UTD: 5");
     $('#token_display_trade_goods_count').html(imperium_self.game.players_info[imperium_self.game.player-1].goods);
-console.log("UTD: 6");
   } catch (err) {
-console.log("error updating token display: " + err);
   }
 
 }
@@ -537,7 +530,11 @@ updateLeaderboard() {
 
 updateSectorGraphics(sector) {
 
+  //
+  // handle both 'sector41' and '2_1'
+  //
   let sys = this.returnSectorAndPlanets(sector);
+  if (sector.indexOf("_") == -1) { sector = sys.s.tile; }
 
   let divsector = '#hex_space_' + sector;
   let fleet_color = '';
@@ -595,6 +592,8 @@ updateSectorGraphics(sector) {
       for (let i = 0; i < sys.s.units[player - 1].length; i++) {
 
         let ship = sys.s.units[player - 1][i];
+
+console.log("player: " + ship.type);
 
         if (ship.type == "carrier") { carriers++; }
         if (ship.type == "fighter") { fighters++; }
@@ -661,6 +660,9 @@ updateSectorGraphics(sector) {
         space_frames.push(numpng);
       }
 
+
+console.log("OK... ship graphics: ");
+console.log(JSON.stringify(ship_graphics));
 
       //
       // remove and re-add space frames
@@ -779,12 +781,14 @@ updateSectorGraphics(sector) {
   showSectorHighlight(sector) { this.addSectorHighlight(sector); }
   hideSectorHighlight(sector) { this.removeSectorHighlight(sector); }
   addSectorHighlight(sector) {
-    let divname = "#hex_space_" + sector;
+    let sys = this.returnSectorAndPlanets(sector);
+    let divname = "#hex_space_" + sys.s.tile;
 console.log("Add: " + divname);
     $(divname).css('background-color', '#900');
   }
   removeSectorHighlight(sector) {
-    let divname = "#hex_space_" + sector;
+    let sys = this.returnSectorAndPlanets(sector);
+    let divname = "#hex_space_" + sys.s.tile;
     $(divname).css('background-color', 'transparent');
   }
   addPlanetHighlight(sector, pid)  {

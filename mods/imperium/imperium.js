@@ -1215,7 +1215,7 @@ console.log("P: " + planet);
 //      tech		: 	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector", "faction3-field-nullification", "faction3-peace-accords", "faction3-quash", "faction3-instinct-training"],
       tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash"],
       background	: 'faction3.jpg',
-      intro		:	`<div style="font-weight:bold">The Senate has Collapsed!</div><div style="margin-top:10px">War came as no surprise to the XXCha Kingdom, their diplomats having laid the groundwork for it...</div><div style="margin-top:10px">Far from a threat, now is time for the apotheosis of your plans: seizure of New Byzantium and imposition of XXcha rule by either force or reason.</div>`
+      intro		:	`<div style="font-weight:bold">The Senate has Collapsed!</div><div style="margin-top:10px">War came as no surprise to the XXCha Kingdom, their diplomats having laid the groundwork for it...</div><div style="margin-top:10px">Now the apotheosis of their plans: conquest of New Byzantium and imposition of XXcha rule by force or reason.</div>`
     });
   
 
@@ -7579,7 +7579,8 @@ console.log("RESOLVE");
           this.addSpaceUnit(player, sector, unitname);
 	  this.updateLog(this.returnFaction(player) + " produces " + this.returnUnit(unitname).name + " in " + sys.s.name);  
         }
-  
+
+
   	//
   	// monitor fleet supply
   	//
@@ -7589,7 +7590,6 @@ console.log("RESOLVE");
   	// update sector
   	//
   	this.updateSectorGraphics(sector);
-  
   	this.game.queue.splice(qe, 1);
   	return 1;
   
@@ -8867,7 +8867,7 @@ imperium_self.saveGame(imperium_self.game.id);
 	  if (this.game.player == recipient) {
 	    this.game.deck[1].hand.push(details);
 	    if (this.game.deck[1].hand.length > this.game.players_info[this.game.player-1].action_card_limit) {
-	      this.playerDiscardActionCard(1);
+	      this.playerDiscardActionCards(1);
 	      return 0;
 	    } else {
 	    }
@@ -11762,14 +11762,15 @@ console.log("EXECUTING CARD: " + card);
 
     if (this.game.players_info[this.game.player-1].can_intervene_in_action_card) {
 
-       let html  = '<div class="action_card_instructions">'+this.returnFaction(action_card_player)+' has played an action card:</div>';
-              html += '<div class="action_card_name">' + imperium_self.action_cards[card].name + '</div>';
-              html += '<div class="action_card_text">';
+       let html  = '<div class="action_card_instructions_hud">'+this.returnFaction(action_card_player)+' has played an action card:</div>';
+              html += '<div class="action_card_name_hud">' + imperium_self.action_cards[card].name + '</div>';
+              html += '<div class="action_card_text_hud">';
 	      html += this.action_cards[card].text;
 	      html += '</div>';
 	      html += '<ul>';
 
       let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards);
+console.log("AC: " + JSON.stringify(ac));
       if (ac.length > 0) {
         html += '<li class="option" id="cont">continue</li>';
         html += '<li class="option" id="action">play action card</li>';
@@ -13938,6 +13939,8 @@ console.log(7);
   
   playerSelectActionCard(mycallback, cancel_callback, types=[]) {  
 
+console.log("WHAT TYPE: " + JSON.stringify(types));
+
     let imperium_self = this;
     let array_of_cards = this.returnPlayerActionCards(this.game.player, types);
     if (array_of_cards.length == 0) {
@@ -15483,7 +15486,7 @@ console.log("NONE!");
 
     let html  = "<div class='sf-readable'>You must discard <div style='display:inline' class='totalnum' id='totalnum'>"+num+"</div> action card"; if (num > 1) { html += 's'; }; html += ':</div>';
         html += '<ul>';
-    for (let i = 0; i < this.game.geck[1].hand.length; i++) {
+    for (let i = 0; i < this.game.deck[1].hand.length; i++) {
       html += '<li class="textchoice" id="'+i+'">' + this.action_cards[this.game.deck[1].hand[i]].name+'</li>';
     }
     html += '</ul>';
@@ -17918,10 +17921,14 @@ console.log("p: " + planet);
     //
     for (let i = 0; i < this.game.deck[1].hand.length; i++) {
       if (types.length == 0) {
-	x.push(this.game.deck[1].hand[i]);
+        if (!this.game.players_info[player-1].action_cards_played.includes(this.game.deck[1].hand[i])) {
+	  x.push(this.game.deck[1].hand[i]);
+	}
       } else {
 	if (types.includes(this.action_cards[this.game.deck[1].hand[i]].type)) {
-	  x.push(this.game.deck[1].hand[i]);
+          if (!this.game.players_info[player-1].action_cards_played.includes(this.game.deck[1].hand[i])) {
+	    x.push(this.game.deck[1].hand[i]);
+	  }
 	}
       }
     }
@@ -18934,19 +18941,12 @@ updateTokenDisplay() {
   let imperium_self = this;
 
   try {
-console.log("UTD: 1");
     $('#token_display_command_token_count').html(imperium_self.game.players_info[imperium_self.game.player-1].command_tokens);
-console.log("UTD: 2");
     $('#token_display_strategy_token_count').html(imperium_self.game.players_info[imperium_self.game.player-1].strategy_tokens);
-console.log("UTD: 3");
     $('#token_display_fleet_supply_count').html(imperium_self.game.players_info[imperium_self.game.player-1].fleet_supply_tokens);
-console.log("UTD: 4");
     $('#token_display_commodities_count').html(imperium_self.game.players_info[imperium_self.game.player-1].commodities);
-console.log("UTD: 5");
     $('#token_display_trade_goods_count').html(imperium_self.game.players_info[imperium_self.game.player-1].goods);
-console.log("UTD: 6");
   } catch (err) {
-console.log("error updating token display: " + err);
   }
 
 }
@@ -18986,7 +18986,11 @@ updateLeaderboard() {
 
 updateSectorGraphics(sector) {
 
+  //
+  // handle both 'sector41' and '2_1'
+  //
   let sys = this.returnSectorAndPlanets(sector);
+  if (sector.indexOf("_") == -1) { sector = sys.s.tile; }
 
   let divsector = '#hex_space_' + sector;
   let fleet_color = '';
@@ -19044,6 +19048,8 @@ updateSectorGraphics(sector) {
       for (let i = 0; i < sys.s.units[player - 1].length; i++) {
 
         let ship = sys.s.units[player - 1][i];
+
+console.log("player: " + ship.type);
 
         if (ship.type == "carrier") { carriers++; }
         if (ship.type == "fighter") { fighters++; }
@@ -19110,6 +19116,9 @@ updateSectorGraphics(sector) {
         space_frames.push(numpng);
       }
 
+
+console.log("OK... ship graphics: ");
+console.log(JSON.stringify(ship_graphics));
 
       //
       // remove and re-add space frames
@@ -19228,12 +19237,14 @@ updateSectorGraphics(sector) {
   showSectorHighlight(sector) { this.addSectorHighlight(sector); }
   hideSectorHighlight(sector) { this.removeSectorHighlight(sector); }
   addSectorHighlight(sector) {
-    let divname = "#hex_space_" + sector;
+    let sys = this.returnSectorAndPlanets(sector);
+    let divname = "#hex_space_" + sys.s.tile;
 console.log("Add: " + divname);
     $(divname).css('background-color', '#900');
   }
   removeSectorHighlight(sector) {
-    let divname = "#hex_space_" + sector;
+    let sys = this.returnSectorAndPlanets(sector);
+    let divname = "#hex_space_" + sys.s.tile;
     $(divname).css('background-color', 'transparent');
   }
   addPlanetHighlight(sector, pid)  {

@@ -1504,10 +1504,14 @@ console.log("p: " + planet);
     //
     for (let i = 0; i < this.game.deck[1].hand.length; i++) {
       if (types.length == 0) {
-	x.push(this.game.deck[1].hand[i]);
+        if (!this.game.players_info[player-1].action_cards_played.includes(this.game.deck[1].hand[i])) {
+	  x.push(this.game.deck[1].hand[i]);
+	}
       } else {
 	if (types.includes(this.action_cards[this.game.deck[1].hand[i]].type)) {
-	  x.push(this.game.deck[1].hand[i]);
+          if (!this.game.players_info[player-1].action_cards_played.includes(this.game.deck[1].hand[i])) {
+	    x.push(this.game.deck[1].hand[i]);
+	  }
 	}
       }
     }

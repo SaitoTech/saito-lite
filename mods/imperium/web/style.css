@@ -334,13 +334,13 @@ body {
 }
 
 
-.action_card_instructions {
+.action_card_instructions_hud {
   font-family: 'orbitron-light', helvetica;
   font-size: 0.9em;
   margin-top: 15px;
   line-height: 1.5em;
 }
-.action_card_name {
+.action_card_name_hud {
   margin-top:20px;
   margin-bottom:15px;
   width:80%;
@@ -349,8 +349,12 @@ body {
   font-family: 'orbitron-medium', helvetica;
   font-weight: bold;
   line-height: 1.5em;
+  text-align: center;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
-.action_card_text {
+.action_card_text_hud {
   margin-bottom:20px;
   width:80%;
   margin-left: auto;
@@ -359,7 +363,7 @@ body {
   line-height: 1.6em;
   font-size:0.9em;
 }
-.action_card_status {
+.action_card_status_hud {
   font-family: 'orbitron-light', helvetica;
   font-size: 0.9em;
   margin-top:10px;
