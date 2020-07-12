@@ -7,7 +7,7 @@
 //      tech		: 	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector", "faction3-field-nullification", "faction3-peace-accords", "faction3-quash", "faction3-instinct-training"],
       tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash"],
       background	: 'faction3.jpg',
-      intro		:	`<div style="font-weight:bold">The Senate has Collapsed!</div><div style="margin-top:10px">War came as no surprise to the XXCha Kingdom, their diplomats having laid the groundwork for it...</div><div style="margin-top:10px">Now the apotheosis of their plans: conquest of New Byzantium and imposition of XXcha rule by force or reason.</div>`
+      intro		:	`<div style="font-weight:bold">The Senate has Collapsed!</div><div style="margin-top:10px">The failure of diplomatic options has struck the XXCha Kingdom harshly...</div><div style="margin-top:10px">What is left for your people but the conquest of New Byzantium and imposition of peace by force?</div>`
     });
   
 

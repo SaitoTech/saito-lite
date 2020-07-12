@@ -919,7 +919,7 @@ console.log("P: " + planet);
       //tech		: 	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector","faction2-analytic","faction2-brilliant","faction2-fragile","faction2-deep-space-conduits","faction2-eres-siphons"],
       tech		: 	["sarween-tools", "neural-motivator", "plasma-scoring", "antimass-deflectors", "faction2-analytic", "faction2-brilliant", "faction2-fragile"],
       background	: 	'faction2.jpg' ,
-      intro		:	`<div style="font-weight:bold">The Republic has fallen!</div><div style="margin-top:10px">The Universities of Jol Nar have been preparing for this moment for years, researching ever-better technologies for war...</div><div style="margin-top:10px">But will your intellectual brilliance be enough to command New Byzantium and secure your people Galactic Rule?</div>`
+      intro		:	`<div style="font-weight:bold">The Republic has fallen!</div><div style="margin-top:10px">The Universities of Jol Nar have been preparing for War for decades...</div><div style="margin-top:10px">But the leadership is torn: assault New Byzantium or establish a regional power-base first?</div>`
     });
 
 
@@ -1082,12 +1082,12 @@ console.log("P: " + planet);
     this.importFaction('faction1', {
       name		: 	"Federation of Sol",
       homeworld		: 	"sector52",
-      space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter","warsun"],
+      space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter"],
       ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock"],
 //      tech		:	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector","faction1-orbital-drop","faction1-versatile", "faction1-advanced-carrier-ii", "faction1-advanced-infantry-ii"],
       tech		:	["neural-motivator","antimass-deflectors", "faction1-orbital-drop", "faction1-versatile"],
       background	: 	"faction1.jpg",
-      intro		:	`<div style="font-weight:bold">The Republic has fallen!</div><div style="margin-top:10px">The fall of New Byzantium led swiftly to the overthrow of the Sol Republic and their ex-terra appeasement policies...</div><div style="margin-top:10px">For the Sol Federation t action and an iron fist are acceptable strategies for subduing New Byzantium and establishing a pro-terra galaxy</div>`
+      intro		:	`<div style="font-weight:bold">Rise of the Sol Federation</div><div style="margin-top:10px">The fall of the Galactic Senate marked the end of Earth's pursuit of ex-terra appeasement policies...</div><div style="margin-top:10px">Rule of the day is swift action in pursuit of humanity's interest, as broadly defined by Earth's Governing Trifecta.</div>`
     });
  
     this.importTech("faction1-orbital-drop", {
@@ -1215,7 +1215,7 @@ console.log("P: " + planet);
 //      tech		: 	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector", "faction3-field-nullification", "faction3-peace-accords", "faction3-quash", "faction3-instinct-training"],
       tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash"],
       background	: 'faction3.jpg',
-      intro		:	`<div style="font-weight:bold">The Senate has Collapsed!</div><div style="margin-top:10px">War came as no surprise to the XXCha Kingdom, their diplomats having laid the groundwork for it...</div><div style="margin-top:10px">Now the apotheosis of their plans: conquest of New Byzantium and imposition of XXcha rule by force or reason.</div>`
+      intro		:	`<div style="font-weight:bold">The Senate has Collapsed!</div><div style="margin-top:10px">The failure of diplomatic options has struck the XXCha Kingdom harshly...</div><div style="margin-top:10px">What is left for your people but the conquest of New Byzantium and imposition of peace by force?</div>`
     });
   
 
@@ -11559,7 +11559,7 @@ console.log("EXECUTING CARD: " + card);
       players[i].can_intervene_in_action_card 	= 0;
       players[i].secret_objectives_in_hand     	= 0;
       players[i].action_cards_in_hand         	= 0;
-      players[i].action_cards_per_round       	= 31;
+      players[i].action_cards_per_round       	= 2;
       players[i].new_tokens_per_round 	 	= 2;
       players[i].command_tokens  		= 3;
       players[i].strategy_tokens 		= 2;
@@ -16067,8 +16067,8 @@ console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-//      return ["1_1", "4_7"];
-      return ["1_1", "2_1"];
+      return ["1_1", "4_7"];
+//      return ["1_1", "2_1"];
     }
 
     if (players <= 3) {
