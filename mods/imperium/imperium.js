@@ -12356,7 +12356,7 @@ console.log("C");
 
     this.game.state.space_combat_sector = sector;
 
-    html = '<div class="sf-readable">Space Combat: round ' + this.game.state.space_combat_round + ':<p></p>'+this.returnFaction(attacker)+" attacks with "+this.returnPlayerFleetInSector(attacker, sector) + ". " + this.returnFaction(defender) + " defends with " + this.returnPlayerFleetInSector(defender, sector) + "</div><ul>";
+    html = '<div class="sf-readable"><b>Space Combat: round ' + this.game.state.space_combat_round + ':</b><div class="combat_attacker">'+this.returnFaction(attacker)+'</div><div class="combat_attacker_fleet">'+this.returnPlayerFleetInSector(attacker, sector) + '</div><div class="combat_defender">' + this.returnFaction(defender) + '</div><div class="combat_defender_fleet">' + this.returnPlayerFleetInSector(defender, sector) + '</div><ul>';
 
     let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards)
     if (ac.length > 0) {
@@ -17236,12 +17236,20 @@ console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
     for (let i = 0; i < sys.s.units.length; i++) {
       if (attacker != (i+1)) {
         if (sys.s.units[i].length > 0) {
-          defender = (i+1);
-          defender_found = 1;
+          for (let b = 0; b < sys.s.units[i].length; b++) {
+	    if (sys.s.units[i][b].destroyed == 0) {
+              defender = (i+1);
+              defender_found = 1;
+	    }
+	  }
         }
       } else {
         if (sys.s.units[i].length > 0) {
-	  attacker_found = 1;
+          for (let b = 0; b < sys.s.units[i].length; b++) {
+	    if (sys.s.units[i][b].destroyed == 0) {
+	      attacker_found = 1;
+	    }
+	  }
 	}
       }
     }
@@ -18010,7 +18018,7 @@ console.log("p: " + planet);
 
     for (let z = 0; z < sys.p[planet_idx].units[player-1].length; z++) {
       if (sys.p[planet_idx].units[player-1][z].strength > 0 && sys.p[planet_idx].units[player-1][z].destroyed == 0) {
-        if (sys.p[planet_idx].units[player-1][z].type === "infantry") {
+        if (sys.p[planet_idx].units[player-1][z].type === "infantry" && sys.p[planet_idx].units[player-1][z].destroyed == 0) {
           num++;
         }
       }

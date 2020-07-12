@@ -820,7 +820,7 @@ console.log("C");
 
     this.game.state.space_combat_sector = sector;
 
-    html = '<div class="sf-readable">Space Combat: round ' + this.game.state.space_combat_round + ':<p></p>'+this.returnFaction(attacker)+" attacks with "+this.returnPlayerFleetInSector(attacker, sector) + ". " + this.returnFaction(defender) + " defends with " + this.returnPlayerFleetInSector(defender, sector) + "</div><ul>";
+    html = '<div class="sf-readable"><b>Space Combat: round ' + this.game.state.space_combat_round + ':</b><div class="combat_attacker">'+this.returnFaction(attacker)+'</div><div class="combat_attacker_fleet">'+this.returnPlayerFleetInSector(attacker, sector) + '</div><div class="combat_defender">' + this.returnFaction(defender) + '</div><div class="combat_defender_fleet">' + this.returnPlayerFleetInSector(defender, sector) + '</div><ul>';
 
     let ac = this.returnPlayerActionCards(this.game.player, relevant_action_cards)
     if (ac.length > 0) {

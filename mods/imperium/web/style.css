@@ -334,6 +334,61 @@ body {
 }
 
 
+
+.combat_attacker {
+  margin-top:20px;
+  margin-bottom:15px;
+  width:80%;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'orbitron-medium', helvetica;
+  font-weight: bold;
+  line-height: 1.5em;
+  text-align: center;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.combat_attacker_fleet {
+  margin-top:20px;
+  margin-bottom:15px;
+  font-size: 0.8em;
+  margin-right: auto;
+  margin-left: auto;
+  font-family: 'orbitron-medium', helvetica;
+  font-weight: normal;
+  line-height: 1.5em;
+  text-align: center;
+  width: 100%;
+}
+.combat_defender {
+  margin-top:20px;
+  margin-bottom:15px;
+  width:80%;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'orbitron-medium', helvetica;
+  font-weight: bold;
+  line-height: 1.5em;
+  text-align: center;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.combat_defender_fleet {
+  margin-top:20px;
+  margin-bottom:15px;
+  font-size: 0.8em;
+  font-weight: normal;
+  margin-right: auto;
+  margin-left: auto;
+  font-family: 'orbitron-medium', helvetica;
+  line-height: 1.5em;
+  text-align: center;
+  width: 100%;
+}
+
+
 .action_card_instructions_hud {
   font-family: 'orbitron-light', helvetica;
   font-size: 0.9em;
