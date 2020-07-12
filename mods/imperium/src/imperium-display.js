@@ -553,6 +553,9 @@ updateSectorGraphics(sector) {
       let divpid = '#' + sector;
       $(divpid).find('.hex_activated').css('background-color', 'yellow');
       $(divpid).find('.hex_activated').css('opacity', '0.3');
+    } else {
+      let divpid = '#' + sector;
+      $(divpid).find('.hex_activated').css('opacity', '0.0');
     }
 
     if (sys.s.type > 0) {

@@ -303,15 +303,15 @@
         }
         if (action2 == "pass") {
   	  imperium_self.addMove("resolve\tplay");
+          imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t"+"int"+"\t"+"0");
   	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.addMove("pass\t"+imperium_self.game.player);
-          imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t"+"int"+"\t"+"0");
   	  imperium_self.endTurn();
         }
         if (action2 == "endturn") {
   	  imperium_self.addMove("resolve\tplay");
-  	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t"+"int"+"\t"+"0");
+  	  imperium_self.addMove("player_end_turn\t"+imperium_self.game.player);
           imperium_self.endTurn();
         }
       });
@@ -3563,6 +3563,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
       }
       if (action2 == "finish") {
         imperium_self.addMove("resolve\tplay");
+        imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t"+"int"+"\t"+"0");
         imperium_self.endTurn();
       }
     });

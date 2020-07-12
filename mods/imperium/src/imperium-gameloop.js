@@ -1037,7 +1037,12 @@ console.log("executing "+z[z_index].name);
       }
 
       if (mv[0] == "tokenallocation") {
- 	this.playerAllocateNewTokens(this.game.player, (this.game.players_info[this.game.player-1].new_tokens_per_round+this.game.players_info[this.game.player-1].new_token_bonus_when_issued), 1, 3);
+	if (parseInt(mv[1])) { 
+ 	  this.playerAllocateNewTokens(parseInt(mv[1]), parseInt(mv[2]), 1, 3);
+
+	} else { 
+ 	  this.playerAllocateNewTokens(this.game.player, (this.game.players_info[this.game.player-1].new_tokens_per_round+this.game.players_info[this.game.player-1].new_token_bonus_when_issued), 1, 3);
+        }
   	return 0;
       }
   
@@ -1799,10 +1804,16 @@ imperium_self.saveGame(imperium_self.game.id);
   
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
-  
+
+console.log(" ... a");
         sys = this.returnSectorAndPlanets(sector);
+console.log(" ... b");
   	sys.s.activated[player-1] = 0;
+console.log(" ... c");
+        this.saveSystemAndPlanets(sys);
+console.log(" ... d");
         this.updateSectorGraphics(sector);
+console.log(" ... e");
   	this.game.queue.splice(qe, 1);
   	return 1;
   
@@ -1869,7 +1880,8 @@ imperium_self.saveGame(imperium_self.game.id);
         let item         = mv[2];
         let amount       = parseInt(mv[3]);
 	let z            = this.returnEventObjects();
-  
+
+ 
         if (item === "strategycard") {
   
   	  this.updateLog(this.returnFaction(player) + " takes " + this.strategy_cards[mv[3]].name);
@@ -1890,9 +1902,10 @@ imperium_self.saveGame(imperium_self.game.id);
   	  }
   	}
 
-        if (item === "tech" && item === "technology") {
+        if (item === "tech" || item === "technology") {
 
   	  this.updateLog(this.returnFaction(player) + " gains " + this.tech[mv[3]].name);
+
   	  if (!this.game.players_info[player-1].tech.includes(mv[3])) {
 	    this.game.players_info[player-1].tech.push(mv[3]);
 	  }
@@ -1901,6 +1914,7 @@ imperium_self.saveGame(imperium_self.game.id);
   	  }
 	  this.upgradePlayerUnitsOnBoard(player);
   	}
+
         if (item === "goods") {
   	  this.updateLog(this.returnFaction(player) + " gains " + amount + " trade goods");
 	  for (let z_index in z) {
