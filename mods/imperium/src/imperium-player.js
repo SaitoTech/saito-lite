@@ -653,8 +653,6 @@ console.log("ERROR: you had no hits left to assign, bug?");
 	$('.textchoice').off();
 	$('.textchoice').on('click', function() {
 
-alert("hit assigned");
-
 	  let ship_idx = $(this).attr("id");
 	  let selected_unit = sys.s.units[imperium_self.game.player-1][ship_idx];
 
