@@ -536,8 +536,6 @@ console.log("AC: " + JSON.stringify(ac));
 
     html = '<div class="sf-readable">You must assign '+total_hits+' to your fleet:</div><ul>';
 
-console.log("HERE WE ARE 1!");
-
     let ac = this.returnPlayerActionCards(imperium_self.game.player, relevant_action_cards);
     if (ac.length > 0) {
       html += '<li class="option" id="assign">continue</li>';
@@ -545,7 +543,6 @@ console.log("HERE WE ARE 1!");
     } else {
       html += '<li class="option" id="assign">continue</li>';
     }
-console.log("HERE WE ARE 2!");
 
     let menu_type = "";
     if (details == "pds") { menu_type = "assign_hits_pds"; }
@@ -557,7 +554,6 @@ console.log("HERE WE ARE 2!");
     let tech_attach_menu_index = [];
 
     let z = this.returnEventObjects();
-console.log("HERE WE ARE 3!");
     for (let i = 0; i < z.length; i++) {
       if (z[i].menuOptionTriggers(this, menu_type, this.game.player) == 1) {
         let x = z[i].menuOption(this, menu_type, this.game.player);
@@ -567,9 +563,7 @@ console.log("HERE WE ARE 3!");
 	tech_attach_menu_events = 1;
       }
     }
-console.log("HERE WE ARE 4!");
     html += '</ul>';
-
 
     this.updateStatus(html);
   
@@ -623,19 +617,27 @@ console.log("HERE WE ARE 4!");
 
 	let total_targetted_units = 0;
 	let targetted_units = imperium_self.game.players_info[imperium_self.game.player-1].target_units;
+
 	
         for (let i = 0; i < sys.s.units[imperium_self.game.player-1].length; i++) {
-  
-	  let unit = sys.s.units[imperium_self.game.player-1][i];
-	  maximum_assignable_hits++;
-	  if (targetted_units.includes(unit.type)) { total_targetted_units++; }
-	  html += '<li class="textchoice player_ship_'+i+'" id="'+i+'">'+unit.name;
-	  if (unit.strength > 1) { 
-	    html += ' <div style="display:inline" id="player_ship_'+i+'_hits">(';
-	    for (let bb = 1; bb < unit.strength; bb++) { html += '*'; }
-	    html += ')</div>'
+
+
+	  if (sys.s.units[imperium_self.game.player-1][i].destroyed == 0 && sys.s.units[imperium_self.game.player-1][i].strength > 0) {
+
+console.log("INDEX: " + i + " --- ship: " + sys.s.units[imperium_self.game.player-1][i].type);  
+
+	    let unit = sys.s.units[imperium_self.game.player-1][i];
+	    maximum_assignable_hits++;
+	    if (targetted_units.includes(unit.type)) { total_targetted_units++; }
+	    html += '<li class="textchoice player_ship_'+i+'" id="'+i+'">'+unit.name;
+	    if (unit.strength > 1) { 
+	      maximum_assignable_hits += (unit.strength-1);
+	      html += ' <div style="display:inline" id="player_ship_'+i+'_hits">(';
+	      for (let bb = 1; bb < unit.strength; bb++) { html += '*'; }
+	      html += ')</div>'
+	    }
+	    html += '</li>';
 	  }
-	  html += '</li>';
 
 	}
 	html += '</ul>';
@@ -650,6 +652,8 @@ console.log("ERROR: you had no hits left to assign, bug?");
 	
 	$('.textchoice').off();
 	$('.textchoice').on('click', function() {
+
+alert("hit assigned");
 
 	  let ship_idx = $(this).attr("id");
 	  let selected_unit = sys.s.units[imperium_self.game.player-1][ship_idx];
@@ -673,7 +677,6 @@ console.log("ERROR: you had no hits left to assign, bug?");
 
 	  if (selected_unit.strength > 1) {	  
 	    selected_unit.strength--;
-
 	    let ship_to_reduce = "#player_ship_"+ship_idx+'_hits';
 	    let rhtml = '';
 	    if (selected_unit.strength > 1) {
@@ -690,9 +693,15 @@ console.log("ERROR: you had no hits left to assign, bug?");
 	    $(this).remove();
 	  }
 
+	  //
+ 	  // we have assigned damage, so make sure sys is updated
+	  //
+	  imperium_self.saveSystemAndPlanets(sys);
+
 	  if (total_hits == 0 || hits_assigned >= maximum_assignable_hits) {
 	    imperium_self.updateStatus("Notifying players of hits assignment...");
 	    imperium_self.endTurn();
+	    imperium_self.updateStatus("Hits taken...");
 	  }
 
 	});

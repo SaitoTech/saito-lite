@@ -2479,7 +2479,7 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 	          }
 
 
-
+		  
         	  imperium_self.eliminateDestroyedUnitsInSector(planet.owner, sector);
 
 	        }
@@ -2518,11 +2518,17 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 
 	  try {
 
+
+console.log("\n\n");
+console.log("UNITS IN SPACE: " + JSON.stringify(sys.s.units[player-1]));
+console.log("THIS UNIT: " + JSON.stringify(sys.s.units[player-1][unit_idx]));
+
 	    sys.s.units[player-1][unit_idx].last_round_damaged = this.game.state.space_combat_round;
 	    if ((player_moves == 1 && imperium_self.game.player == player) || imperium_self.game.player != player) {
 	      sys.s.units[player-1][unit_idx].strength--;
 	    }
 	    if (sys.s.units[player-1][unit_idx].strength <= 0) {
+
 	      this.updateLog(this.returnFaction(player) + " assigns hit to " + sys.s.units[player-1][unit_idx].name + " (destroyed)");
 	      sys.s.units[player-1][unit_idx].destroyed = 1;
 	      for (let z_index in z) {
@@ -2541,12 +2547,16 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 	      this.updateLog(this.returnFaction(player) + " assigns hit to " + sys.s.units[player-1][unit_idx].name);
 	    }
 	  } catch (err) {
-	    console.log("Error? Not all hits assigned");
+	    console.log("Error? Not all hits assigned: " + err);
 	  }
 
+	  //
+	  // save our obliterated ships
+	  //
+	  this.saveSystemAndPlanets(sys);
 
 	  //
-	  // HACK
+	  // has someone won?
 	  //
           let attacker_forces = this.doesPlayerHaveShipsInSector(attacker, sector);
           let defender_forces = this.doesPlayerHaveShipsInSector(defender, sector);
@@ -2562,9 +2572,16 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 
 
 	//
+	// don't clear if we have more to remove
+	//
+	let tmpx = this.game.queue[this.game.queue.length-1].split("\t");
+	if (tmpx[0] === "assign_hit" && tmpx[5] === sector) {} else {
+          this.eliminateDestroyedUnitsInSector(player, sector);
+	}
+
+	//
 	// re-display sector
 	//
-        this.eliminateDestroyedUnitsInSector(player, sector);
 	this.saveSystemAndPlanets(sys);
 	this.updateSectorGraphics(sector);
         this.game.queue.splice(qe, 1);
@@ -2612,7 +2629,12 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 	let source	   = mv[7]; // pds // bombardment // space_combat // ground_combat
         let sys 	   = this.returnSectorAndPlanets(sector);
 
-        this.game.state.assign_hits_queue_instruction = this.game.queue[this.game.queue.length-1];
+	this.game.state.assign_hits_queue_instruction = "";
+        if (this.game.player == defender) {
+	  this.game.state.assign_hits_queue_instruction = this.game.queue[this.game.queue.length-1];
+console.log("ASSIGN HITS QUEUE: " + this.game.state.assign_hits_queue_instruction);
+	}
+
         this.game.queue.splice(qe, 1);
 
 	if (total_hits > 0 ) {
@@ -2651,11 +2673,8 @@ console.log("HERE AND BAD: " + imperium_self.game.player + " -- " + defender);
 	    } else {
               this.updateStatus(this.returnFaction(defender) + " assigning hits to units ... ");
 	    }
-console.log("HERE AND BAD 2!");
 	    return 0;
 	  } else {
-console.log("HERE AND BAD 3!");
-	    // no hits, so keep executing
 	    return 1;
 	  }
 	}

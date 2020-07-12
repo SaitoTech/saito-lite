@@ -564,16 +564,18 @@
     let fleet = '';
 
     for (let i = 0; i < sys.s.units[player-1].length; i++) {
-      if (i > 0) { fleet += ", "; }
-      fleet += sys.s.units[player-1][i].name;
-      //if (sys.s.units[player-1][i].storage.length > 0) {
-      //  fleet += ' (';
-      //  for (let ii = 0; ii < sys.s.units[player-1][i].storage.length; ii++) {
-      //    if (ii > 0) { fleet += ", "; }
-      //    fleet += sys.s.units[player-1][i].storage[ii].name;
-      //  }
-      //  fleet += ')';
-      //}
+      if (sys.s.units[player-1][i].destroyed == 0) {
+        if (i > 0) { fleet += ", "; }
+        fleet += sys.s.units[player-1][i].name;
+        //if (sys.s.units[player-1][i].storage.length > 0) {
+        //  fleet += ' (';
+        //  for (let ii = 0; ii < sys.s.units[player-1][i].storage.length; ii++) {
+        //    if (ii > 0) { fleet += ", "; }
+        //    fleet += sys.s.units[player-1][i].storage[ii].name;
+        //  }
+        //  fleet += ')';
+        //}
+      }
     }
     return fleet;
   }
@@ -1264,7 +1266,11 @@ console.log("p: " + planet);
   doesPlayerHaveShipsInSector(player, sector) {
 
     let sys = this.returnSectorAndPlanets(sector);
-    if (sys.s.units[player-1].length > 0) { return 1; }
+    if (sys.s.units[player-1].length > 0) { 
+      for (let i = 0; i < sys.s.units[player-1].length; i++) {
+        if (sys.s.units[player-1][i].destroyed == 0) { return 1; } 
+      }
+    }
     return 0;
 
   }

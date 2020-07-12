@@ -5925,9 +5925,10 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
               },
               function(s) {
 		// from active sector into... s
+	        imperium_self.addMove("skilled_retreat\t"+action_card_player+"\t"+s+"\t"+imperium_self.game.state.space_combat_sector);
 	        imperium_self.addMove("notify\t"+imperium_self.returnFaction(action_card_player) + " makes skilled retreat into " + imperium_self.game.sectors[s].name);
 	        imperium_self.addMove("activate\t"+action_card_player+"\t"+s);
-	        imperium_self.addMove("skilled_retreat\t"+action_card_player+"\t"+s+"\t"+imperium_self.game.state.space_combat_sector);
+	        imperium_self.addMove("activate\t"+action_card_player+"\t"+imperium_self.game.state.space_combat_sector);
 		imperium_self.endTurn();
               },
 	      function() {
@@ -9819,7 +9820,7 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 	          }
 
 
-
+		  
         	  imperium_self.eliminateDestroyedUnitsInSector(planet.owner, sector);
 
 	        }
@@ -9858,11 +9859,17 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 
 	  try {
 
+
+console.log("\n\n");
+console.log("UNITS IN SPACE: " + JSON.stringify(sys.s.units[player-1]));
+console.log("THIS UNIT: " + JSON.stringify(sys.s.units[player-1][unit_idx]));
+
 	    sys.s.units[player-1][unit_idx].last_round_damaged = this.game.state.space_combat_round;
 	    if ((player_moves == 1 && imperium_self.game.player == player) || imperium_self.game.player != player) {
 	      sys.s.units[player-1][unit_idx].strength--;
 	    }
 	    if (sys.s.units[player-1][unit_idx].strength <= 0) {
+
 	      this.updateLog(this.returnFaction(player) + " assigns hit to " + sys.s.units[player-1][unit_idx].name + " (destroyed)");
 	      sys.s.units[player-1][unit_idx].destroyed = 1;
 	      for (let z_index in z) {
@@ -9881,12 +9888,16 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 	      this.updateLog(this.returnFaction(player) + " assigns hit to " + sys.s.units[player-1][unit_idx].name);
 	    }
 	  } catch (err) {
-	    console.log("Error? Not all hits assigned");
+	    console.log("Error? Not all hits assigned: " + err);
 	  }
 
+	  //
+	  // save our obliterated ships
+	  //
+	  this.saveSystemAndPlanets(sys);
 
 	  //
-	  // HACK
+	  // has someone won?
 	  //
           let attacker_forces = this.doesPlayerHaveShipsInSector(attacker, sector);
           let defender_forces = this.doesPlayerHaveShipsInSector(defender, sector);
@@ -9902,9 +9913,16 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 
 
 	//
+	// don't clear if we have more to remove
+	//
+	let tmpx = this.game.queue[this.game.queue.length-1].split("\t");
+	if (tmpx[0] === "assign_hit" && tmpx[5] === sector) {} else {
+          this.eliminateDestroyedUnitsInSector(player, sector);
+	}
+
+	//
 	// re-display sector
 	//
-        this.eliminateDestroyedUnitsInSector(player, sector);
 	this.saveSystemAndPlanets(sys);
 	this.updateSectorGraphics(sector);
         this.game.queue.splice(qe, 1);
@@ -9952,7 +9970,12 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 	let source	   = mv[7]; // pds // bombardment // space_combat // ground_combat
         let sys 	   = this.returnSectorAndPlanets(sector);
 
-        this.game.state.assign_hits_queue_instruction = this.game.queue[this.game.queue.length-1];
+	this.game.state.assign_hits_queue_instruction = "";
+        if (this.game.player == defender) {
+	  this.game.state.assign_hits_queue_instruction = this.game.queue[this.game.queue.length-1];
+console.log("ASSIGN HITS QUEUE: " + this.game.state.assign_hits_queue_instruction);
+	}
+
         this.game.queue.splice(qe, 1);
 
 	if (total_hits > 0 ) {
@@ -9991,11 +10014,8 @@ console.log("HERE AND BAD: " + imperium_self.game.player + " -- " + defender);
 	    } else {
               this.updateStatus(this.returnFaction(defender) + " assigning hits to units ... ");
 	    }
-console.log("HERE AND BAD 2!");
 	    return 0;
 	  } else {
-console.log("HERE AND BAD 3!");
-	    // no hits, so keep executing
 	    return 1;
 	  }
 	}
@@ -12052,8 +12072,6 @@ console.log("AC: " + JSON.stringify(ac));
 
     html = '<div class="sf-readable">You must assign '+total_hits+' to your fleet:</div><ul>';
 
-console.log("HERE WE ARE 1!");
-
     let ac = this.returnPlayerActionCards(imperium_self.game.player, relevant_action_cards);
     if (ac.length > 0) {
       html += '<li class="option" id="assign">continue</li>';
@@ -12061,7 +12079,6 @@ console.log("HERE WE ARE 1!");
     } else {
       html += '<li class="option" id="assign">continue</li>';
     }
-console.log("HERE WE ARE 2!");
 
     let menu_type = "";
     if (details == "pds") { menu_type = "assign_hits_pds"; }
@@ -12073,7 +12090,6 @@ console.log("HERE WE ARE 2!");
     let tech_attach_menu_index = [];
 
     let z = this.returnEventObjects();
-console.log("HERE WE ARE 3!");
     for (let i = 0; i < z.length; i++) {
       if (z[i].menuOptionTriggers(this, menu_type, this.game.player) == 1) {
         let x = z[i].menuOption(this, menu_type, this.game.player);
@@ -12083,9 +12099,7 @@ console.log("HERE WE ARE 3!");
 	tech_attach_menu_events = 1;
       }
     }
-console.log("HERE WE ARE 4!");
     html += '</ul>';
-
 
     this.updateStatus(html);
   
@@ -12139,19 +12153,27 @@ console.log("HERE WE ARE 4!");
 
 	let total_targetted_units = 0;
 	let targetted_units = imperium_self.game.players_info[imperium_self.game.player-1].target_units;
+
 	
         for (let i = 0; i < sys.s.units[imperium_self.game.player-1].length; i++) {
-  
-	  let unit = sys.s.units[imperium_self.game.player-1][i];
-	  maximum_assignable_hits++;
-	  if (targetted_units.includes(unit.type)) { total_targetted_units++; }
-	  html += '<li class="textchoice player_ship_'+i+'" id="'+i+'">'+unit.name;
-	  if (unit.strength > 1) { 
-	    html += ' <div style="display:inline" id="player_ship_'+i+'_hits">(';
-	    for (let bb = 1; bb < unit.strength; bb++) { html += '*'; }
-	    html += ')</div>'
+
+
+	  if (sys.s.units[imperium_self.game.player-1][i].destroyed == 0 && sys.s.units[imperium_self.game.player-1][i].strength > 0) {
+
+console.log("INDEX: " + i + " --- ship: " + sys.s.units[imperium_self.game.player-1][i].type);  
+
+	    let unit = sys.s.units[imperium_self.game.player-1][i];
+	    maximum_assignable_hits++;
+	    if (targetted_units.includes(unit.type)) { total_targetted_units++; }
+	    html += '<li class="textchoice player_ship_'+i+'" id="'+i+'">'+unit.name;
+	    if (unit.strength > 1) { 
+	      maximum_assignable_hits += (unit.strength-1);
+	      html += ' <div style="display:inline" id="player_ship_'+i+'_hits">(';
+	      for (let bb = 1; bb < unit.strength; bb++) { html += '*'; }
+	      html += ')</div>'
+	    }
+	    html += '</li>';
 	  }
-	  html += '</li>';
 
 	}
 	html += '</ul>';
@@ -12166,6 +12188,8 @@ console.log("ERROR: you had no hits left to assign, bug?");
 	
 	$('.textchoice').off();
 	$('.textchoice').on('click', function() {
+
+alert("hit assigned");
 
 	  let ship_idx = $(this).attr("id");
 	  let selected_unit = sys.s.units[imperium_self.game.player-1][ship_idx];
@@ -12189,7 +12213,6 @@ console.log("ERROR: you had no hits left to assign, bug?");
 
 	  if (selected_unit.strength > 1) {	  
 	    selected_unit.strength--;
-
 	    let ship_to_reduce = "#player_ship_"+ship_idx+'_hits';
 	    let rhtml = '';
 	    if (selected_unit.strength > 1) {
@@ -12206,9 +12229,15 @@ console.log("ERROR: you had no hits left to assign, bug?");
 	    $(this).remove();
 	  }
 
+	  //
+ 	  // we have assigned damage, so make sure sys is updated
+	  //
+	  imperium_self.saveSystemAndPlanets(sys);
+
 	  if (total_hits == 0 || hits_assigned >= maximum_assignable_hits) {
 	    imperium_self.updateStatus("Notifying players of hits assignment...");
 	    imperium_self.endTurn();
+	    imperium_self.updateStatus("Hits taken...");
 	  }
 
 	});
@@ -17095,16 +17124,18 @@ console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
     let fleet = '';
 
     for (let i = 0; i < sys.s.units[player-1].length; i++) {
-      if (i > 0) { fleet += ", "; }
-      fleet += sys.s.units[player-1][i].name;
-      //if (sys.s.units[player-1][i].storage.length > 0) {
-      //  fleet += ' (';
-      //  for (let ii = 0; ii < sys.s.units[player-1][i].storage.length; ii++) {
-      //    if (ii > 0) { fleet += ", "; }
-      //    fleet += sys.s.units[player-1][i].storage[ii].name;
-      //  }
-      //  fleet += ')';
-      //}
+      if (sys.s.units[player-1][i].destroyed == 0) {
+        if (i > 0) { fleet += ", "; }
+        fleet += sys.s.units[player-1][i].name;
+        //if (sys.s.units[player-1][i].storage.length > 0) {
+        //  fleet += ' (';
+        //  for (let ii = 0; ii < sys.s.units[player-1][i].storage.length; ii++) {
+        //    if (ii > 0) { fleet += ", "; }
+        //    fleet += sys.s.units[player-1][i].storage[ii].name;
+        //  }
+        //  fleet += ')';
+        //}
+      }
     }
     return fleet;
   }
@@ -17795,7 +17826,11 @@ console.log("p: " + planet);
   doesPlayerHaveShipsInSector(player, sector) {
 
     let sys = this.returnSectorAndPlanets(sector);
-    if (sys.s.units[player-1].length > 0) { return 1; }
+    if (sys.s.units[player-1].length > 0) { 
+      for (let i = 0; i < sys.s.units[player-1].length; i++) {
+        if (sys.s.units[player-1][i].destroyed == 0) { return 1; } 
+      }
+    }
     return 0;
 
   }
@@ -19284,9 +19319,6 @@ updateSectorGraphics(sector) {
       for (let i = 0; i < sys.s.units[player - 1].length; i++) {
 
         let ship = sys.s.units[player - 1][i];
-
-console.log("player: " + ship.type);
-
         if (ship.type == "carrier") { carriers++; }
         if (ship.type == "fighter") { fighters++; }
         if (ship.type == "destroyer") { destroyers++; }
@@ -19351,10 +19383,6 @@ console.log("player: " + ship.type);
         ship_graphics.push("white_space_warsun.png");
         space_frames.push(numpng);
       }
-
-
-console.log("OK... ship graphics: ");
-console.log(JSON.stringify(ship_graphics));
 
       //
       // remove and re-add space frames
@@ -19473,12 +19501,22 @@ console.log(JSON.stringify(ship_graphics));
   showSectorHighlight(sector) { this.addSectorHighlight(sector); }
   hideSectorHighlight(sector) { this.removeSectorHighlight(sector); }
   addSectorHighlight(sector) {
+
+    if (sector.indexOf("planet") == 0 || sector == 'new-byzantium') {
+      sector = this.game.planets[sector].sector;
+    }
+
     let sys = this.returnSectorAndPlanets(sector);
     let divname = "#hex_space_" + sys.s.tile;
 console.log("Add: " + divname);
     $(divname).css('background-color', '#900');
   }
   removeSectorHighlight(sector) {
+console.log("fore sector: " + sector);
+    if (sector.indexOf("planet") == 0 || sector == 'new-byzantium') {
+      sector = this.game.planets[sector].sector;
+    }
+
     let sys = this.returnSectorAndPlanets(sector);
     let divname = "#hex_space_" + sys.s.tile;
     $(divname).css('background-color', 'transparent');

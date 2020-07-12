@@ -592,9 +592,6 @@ updateSectorGraphics(sector) {
       for (let i = 0; i < sys.s.units[player - 1].length; i++) {
 
         let ship = sys.s.units[player - 1][i];
-
-console.log("player: " + ship.type);
-
         if (ship.type == "carrier") { carriers++; }
         if (ship.type == "fighter") { fighters++; }
         if (ship.type == "destroyer") { destroyers++; }
@@ -659,10 +656,6 @@ console.log("player: " + ship.type);
         ship_graphics.push("white_space_warsun.png");
         space_frames.push(numpng);
       }
-
-
-console.log("OK... ship graphics: ");
-console.log(JSON.stringify(ship_graphics));
 
       //
       // remove and re-add space frames
@@ -781,12 +774,22 @@ console.log(JSON.stringify(ship_graphics));
   showSectorHighlight(sector) { this.addSectorHighlight(sector); }
   hideSectorHighlight(sector) { this.removeSectorHighlight(sector); }
   addSectorHighlight(sector) {
+
+    if (sector.indexOf("planet") == 0 || sector == 'new-byzantium') {
+      sector = this.game.planets[sector].sector;
+    }
+
     let sys = this.returnSectorAndPlanets(sector);
     let divname = "#hex_space_" + sys.s.tile;
 console.log("Add: " + divname);
     $(divname).css('background-color', '#900');
   }
   removeSectorHighlight(sector) {
+console.log("fore sector: " + sector);
+    if (sector.indexOf("planet") == 0 || sector == 'new-byzantium') {
+      sector = this.game.planets[sector].sector;
+    }
+
     let sys = this.returnSectorAndPlanets(sector);
     let divname = "#hex_space_" + sys.s.tile;
     $(divname).css('background-color', 'transparent');
