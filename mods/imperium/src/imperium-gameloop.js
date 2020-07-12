@@ -2613,7 +2613,6 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
         let sys 	   = this.returnSectorAndPlanets(sector);
 
         this.game.state.assign_hits_queue_instruction = this.game.queue[this.game.queue.length-1];
-
         this.game.queue.splice(qe, 1);
 
 	if (total_hits > 0 ) {
@@ -2621,21 +2620,24 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 	}
 
         if (this.game.state.assign_hits_to_cancel > 0) {
+console.log("HERE IS A TEST: " + this.game.state.assign_hits_to_cancel);
           total_hits -= this.game.state.assign_hits_to_cancel;
           this.game.state.assign_hits_to_cancel = 0;
 	  if (total_hits <= 0) { return 1; }
         }
 
 
+console.log("HERE AND BAD: " + imperium_self.game.player + " -- " + defender);
 
 	if (planet_idx == "pds") {
 	  if (total_hits > 0) {
 	    if (this.game.player == defender) {
   	      this.playerAssignHits(attacker, defender, type, sector, planet_idx, total_hits, source);
+	      return 0;
 	    } else {
               this.updateStatus(this.returnFaction(defender) + " assigning hits to units ... ");
 	    }
-	    return 0;
+  	    return 0;
 	  } else {
 	    return 1;
 	  }
@@ -2645,11 +2647,15 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 	  if (total_hits > 0) {
 	    if (this.game.player == defender) {
   	      this.playerAssignHits(attacker, defender, type, sector, planet_idx, total_hits, source);
+	      return 0;
 	    } else {
               this.updateStatus(this.returnFaction(defender) + " assigning hits to units ... ");
 	    }
+console.log("HERE AND BAD 2!");
 	    return 0;
 	  } else {
+console.log("HERE AND BAD 3!");
+	    // no hits, so keep executing
 	    return 1;
 	  }
 	}

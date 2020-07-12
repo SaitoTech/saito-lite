@@ -23,7 +23,7 @@
       players[i].can_intervene_in_action_card 	= 0;
       players[i].secret_objectives_in_hand     	= 0;
       players[i].action_cards_in_hand         	= 0;
-      players[i].action_cards_per_round       	= 20;
+      players[i].action_cards_per_round       	= 31;
       players[i].new_tokens_per_round 	 	= 2;
       players[i].command_tokens  		= 3;
       players[i].strategy_tokens 		= 2;
@@ -532,9 +532,11 @@ console.log("AC: " + JSON.stringify(ac));
     let hits_assigned = 0;
     let maximum_assignable_hits = 0;
     let relevant_action_cards = ["assign_hits"];
-    if (details == "pds") { revelent_action_cards = ["post_pds"]; }
+    if (details == "pds") { relevant_action_cards = ["post_pds"]; }
 
     html = '<div class="sf-readable">You must assign '+total_hits+' to your fleet:</div><ul>';
+
+console.log("HERE WE ARE 1!");
 
     let ac = this.returnPlayerActionCards(imperium_self.game.player, relevant_action_cards);
     if (ac.length > 0) {
@@ -543,6 +545,7 @@ console.log("AC: " + JSON.stringify(ac));
     } else {
       html += '<li class="option" id="assign">continue</li>';
     }
+console.log("HERE WE ARE 2!");
 
     let menu_type = "";
     if (details == "pds") { menu_type = "assign_hits_pds"; }
@@ -554,6 +557,7 @@ console.log("AC: " + JSON.stringify(ac));
     let tech_attach_menu_index = [];
 
     let z = this.returnEventObjects();
+console.log("HERE WE ARE 3!");
     for (let i = 0; i < z.length; i++) {
       if (z[i].menuOptionTriggers(this, menu_type, this.game.player) == 1) {
         let x = z[i].menuOption(this, menu_type, this.game.player);
@@ -563,6 +567,7 @@ console.log("AC: " + JSON.stringify(ac));
 	tech_attach_menu_events = 1;
       }
     }
+console.log("HERE WE ARE 4!");
     html += '</ul>';
 
 

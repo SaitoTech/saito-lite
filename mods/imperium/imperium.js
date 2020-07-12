@@ -5918,7 +5918,6 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
             imperium_self.playerSelectSectorWithFilter(
               "Select an adjacent sector without opponent ships into which to retreat: " ,
               function(s) {
-console.log("Sector to ask about: " + s + " --- " + sector);
 	        if (imperium_self.areSectorsAdjacent(sector, s) && s != sector) {
 	          if (!imperium_self.doesSectorContainNonPlayerShips(s)) { return 1; }
 	        }
@@ -5926,9 +5925,9 @@ console.log("Sector to ask about: " + s + " --- " + sector);
               },
               function(s) {
 		// from active sector into... s
-	        imperium_self.addMove("skilled_retreat\t"+action_card_player+"\t"+s+"\t"+imperium_self.game.state.activated_sector);
 	        imperium_self.addMove("notify\t"+imperium_self.returnFaction(action_card_player) + " makes skilled retreat into " + imperium_self.game.sectors[s].name);
 	        imperium_self.addMove("activate\t"+action_card_player+"\t"+s);
+	        imperium_self.addMove("skilled_retreat\t"+action_card_player+"\t"+s+"\t"+imperium_self.game.state.space_combat_sector);
 		imperium_self.endTurn();
               },
 	      function() {
@@ -5957,7 +5956,7 @@ console.log("SKILLED RETREAT: " + player + " -- " + destination + " -- " + sourc
 	    // move the units over
 	    //
 	    for (let i = 0; i < ssys.s.units[player-1].length; i++) {
-	      dsys.s.units.push(ssys.s.units[player-1][i]);
+	      dsys.s.units[player-1].push(ssys.s.units[player-1][i]);
 	    }
 	    ssys.s.units[player-1] = [];
 
@@ -5975,6 +5974,13 @@ console.log("SKILLED RETREAT: " + player + " -- " + destination + " -- " + sourc
 		i = -1;
 	      }
 	    }
+
+
+	    //
+	    // update sector graphics
+	    //
+	    imperium_self.updateSectorGraphics(ssys.s.sector);
+	    imperium_self.updateSectorGraphics(dsys.s.sector);
 
 console.log("MOVED AND SAVING!");
 
@@ -9947,7 +9953,6 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
         let sys 	   = this.returnSectorAndPlanets(sector);
 
         this.game.state.assign_hits_queue_instruction = this.game.queue[this.game.queue.length-1];
-
         this.game.queue.splice(qe, 1);
 
 	if (total_hits > 0 ) {
@@ -9955,21 +9960,24 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 	}
 
         if (this.game.state.assign_hits_to_cancel > 0) {
+console.log("HERE IS A TEST: " + this.game.state.assign_hits_to_cancel);
           total_hits -= this.game.state.assign_hits_to_cancel;
           this.game.state.assign_hits_to_cancel = 0;
 	  if (total_hits <= 0) { return 1; }
         }
 
 
+console.log("HERE AND BAD: " + imperium_self.game.player + " -- " + defender);
 
 	if (planet_idx == "pds") {
 	  if (total_hits > 0) {
 	    if (this.game.player == defender) {
   	      this.playerAssignHits(attacker, defender, type, sector, planet_idx, total_hits, source);
+	      return 0;
 	    } else {
               this.updateStatus(this.returnFaction(defender) + " assigning hits to units ... ");
 	    }
-	    return 0;
+  	    return 0;
 	  } else {
 	    return 1;
 	  }
@@ -9979,11 +9987,15 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 	  if (total_hits > 0) {
 	    if (this.game.player == defender) {
   	      this.playerAssignHits(attacker, defender, type, sector, planet_idx, total_hits, source);
+	      return 0;
 	    } else {
               this.updateStatus(this.returnFaction(defender) + " assigning hits to units ... ");
 	    }
+console.log("HERE AND BAD 2!");
 	    return 0;
 	  } else {
+console.log("HERE AND BAD 3!");
+	    // no hits, so keep executing
 	    return 1;
 	  }
 	}
@@ -11527,7 +11539,7 @@ console.log("EXECUTING CARD: " + card);
       players[i].can_intervene_in_action_card 	= 0;
       players[i].secret_objectives_in_hand     	= 0;
       players[i].action_cards_in_hand         	= 0;
-      players[i].action_cards_per_round       	= 20;
+      players[i].action_cards_per_round       	= 31;
       players[i].new_tokens_per_round 	 	= 2;
       players[i].command_tokens  		= 3;
       players[i].strategy_tokens 		= 2;
@@ -12036,9 +12048,11 @@ console.log("AC: " + JSON.stringify(ac));
     let hits_assigned = 0;
     let maximum_assignable_hits = 0;
     let relevant_action_cards = ["assign_hits"];
-    if (details == "pds") { revelent_action_cards = ["post_pds"]; }
+    if (details == "pds") { relevant_action_cards = ["post_pds"]; }
 
     html = '<div class="sf-readable">You must assign '+total_hits+' to your fleet:</div><ul>';
+
+console.log("HERE WE ARE 1!");
 
     let ac = this.returnPlayerActionCards(imperium_self.game.player, relevant_action_cards);
     if (ac.length > 0) {
@@ -12047,6 +12061,7 @@ console.log("AC: " + JSON.stringify(ac));
     } else {
       html += '<li class="option" id="assign">continue</li>';
     }
+console.log("HERE WE ARE 2!");
 
     let menu_type = "";
     if (details == "pds") { menu_type = "assign_hits_pds"; }
@@ -12058,6 +12073,7 @@ console.log("AC: " + JSON.stringify(ac));
     let tech_attach_menu_index = [];
 
     let z = this.returnEventObjects();
+console.log("HERE WE ARE 3!");
     for (let i = 0; i < z.length; i++) {
       if (z[i].menuOptionTriggers(this, menu_type, this.game.player) == 1) {
         let x = z[i].menuOption(this, menu_type, this.game.player);
@@ -12067,6 +12083,7 @@ console.log("AC: " + JSON.stringify(ac));
 	tech_attach_menu_events = 1;
       }
     }
+console.log("HERE WE ARE 4!");
     html += '</ul>';
 
 

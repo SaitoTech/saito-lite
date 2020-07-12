@@ -269,7 +269,6 @@
             imperium_self.playerSelectSectorWithFilter(
               "Select an adjacent sector without opponent ships into which to retreat: " ,
               function(s) {
-console.log("Sector to ask about: " + s + " --- " + sector);
 	        if (imperium_self.areSectorsAdjacent(sector, s) && s != sector) {
 	          if (!imperium_self.doesSectorContainNonPlayerShips(s)) { return 1; }
 	        }
@@ -277,9 +276,9 @@ console.log("Sector to ask about: " + s + " --- " + sector);
               },
               function(s) {
 		// from active sector into... s
-	        imperium_self.addMove("skilled_retreat\t"+action_card_player+"\t"+s+"\t"+imperium_self.game.state.activated_sector);
 	        imperium_self.addMove("notify\t"+imperium_self.returnFaction(action_card_player) + " makes skilled retreat into " + imperium_self.game.sectors[s].name);
 	        imperium_self.addMove("activate\t"+action_card_player+"\t"+s);
+	        imperium_self.addMove("skilled_retreat\t"+action_card_player+"\t"+s+"\t"+imperium_self.game.state.space_combat_sector);
 		imperium_self.endTurn();
               },
 	      function() {
@@ -308,7 +307,7 @@ console.log("SKILLED RETREAT: " + player + " -- " + destination + " -- " + sourc
 	    // move the units over
 	    //
 	    for (let i = 0; i < ssys.s.units[player-1].length; i++) {
-	      dsys.s.units.push(ssys.s.units[player-1][i]);
+	      dsys.s.units[player-1].push(ssys.s.units[player-1][i]);
 	    }
 	    ssys.s.units[player-1] = [];
 
@@ -326,6 +325,13 @@ console.log("SKILLED RETREAT: " + player + " -- " + destination + " -- " + sourc
 		i = -1;
 	      }
 	    }
+
+
+	    //
+	    // update sector graphics
+	    //
+	    imperium_self.updateSectorGraphics(ssys.s.sector);
+	    imperium_self.updateSectorGraphics(dsys.s.sector);
 
 console.log("MOVED AND SAVING!");
 
