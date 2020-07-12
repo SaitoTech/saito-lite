@@ -156,6 +156,8 @@ ACTION CARD - types
 	    let z = imperium_self.returnEventObjects();
 	    let player = sys.p[planet_idx].owner;
 
+	    let total_units_destroyed = 0;
+
             for (let i = 0; i < sys.p[planet_idx].units.length; i++) {
               for (let ii = 0; ii < sys.p[planet_idx].units[i].length; ii++) {
 		let thisunit = sys.p[planet_idx].units[i][ii];
@@ -167,10 +169,13 @@ ACTION CARD - types
 		    for (z_index in z) {
 		      thisunit = z[z_index].unitDestroyed(this, attacker, thisunit);
 		    }
+	            total_units_destroyed++;
 		  }
 		}
 	      }
             }
+
+	    imperium_self.updateLog("The plague destroys " + total_units_destroyed + " infantry");
 
             imperium_self.eliminateDestroyedUnitsInSector(player, sector);
             imperium_self.saveSystemAndPlanets(sys);

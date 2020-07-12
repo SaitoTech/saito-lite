@@ -531,7 +531,8 @@ console.log("AC: " + JSON.stringify(ac));
     let imperium_self = this;
     let hits_assigned = 0;
     let maximum_assignable_hits = 0;
-    let relevant_action_cards = ["post_pds","damage_control","space_combat"];
+    let relevant_action_cards = ["assign_hits"];
+    if (details == "pds") { revelent_action_cards = ["post_pds"]; }
 
     html = '<div class="sf-readable">You must assign '+total_hits+' to your fleet:</div><ul>';
 
@@ -795,7 +796,10 @@ console.log("C");
     let imperium_self = this;
     let sys = this.returnSectorAndPlanets(sector);
     let html = '';
-    let relevant_action_cards = ["combat", "space_combat"];
+    let relevant_action_cards = ["space_combat"];
+    if (this.game.state.space_combat_round > 1) {
+      relevant_action_cards.push("space_combat_post");
+    }
 
     let opponent = attacker;
     if (imperium_self.game.player == attacker) { opponent = defender; }
@@ -1777,6 +1781,7 @@ console.log("C");
     $('.option').on('click', function() {
 
       let i = $(this).attr("id");
+      imperium_self.hideTechCard(i);
 
       //
       // handle prerequisites

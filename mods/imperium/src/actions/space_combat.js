@@ -3,7 +3,7 @@
 
     this.importActionCard('intercept', {
   	name : "Intercept" ,
-  	type : "space_combat" ,
+  	type : "retreat" ,
   	text : "After your opponent declares a retreat in space combat, they cannot retreat" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
@@ -19,7 +19,7 @@
 
     this.importActionCard('courageous-to-the-end', {
   	name : "Courageous to the End" ,
-  	type : "space_combat" ,
+  	type : "space_combat_after" ,
   	text : "If you lost a ship in the last round of space combat, roll two dice. For each result greater than the combat value of that ship, your opponent must destroy a ship of their chosing" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
@@ -90,7 +90,7 @@
 
     this.importActionCard('shields-holding', {
   	name : "Shields Holding" ,
-  	type : "space_combat" ,
+  	type : "assign_hits" ,
   	text : "Cancel 2 hits in Space Combat" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  imperium_self.game.state.assign_hits_to_cancel+=2;
@@ -113,7 +113,7 @@
 
     this.importActionCard('emergency-repairs', {
   	name : "Emergency Repairs" ,
-  	type : "space_combat" ,
+  	type : "assign_hits" ,
   	text : "Repair all damaged ships not at full strength" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
@@ -135,13 +135,10 @@
 
     this.importActionCard('direct-hit', {
   	name : "Direct Hit" ,
-  	type : "space_combat" ,
+  	type : "space_combat_after" ,
   	text : "Destroy a ship that is damaged or not at full strength" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
-	  //
-	  // repairs all non-full-strenght units for the action_card_player
-	  //
 	  let z = imperium_self.returnEventObjects();
           let sys = imperium_self.returnSectorAndPlanets(imperium_self.game.state.space_combat_sector);
 	  for (let p = 0; p < sys.s.units.length; p++) {
@@ -261,10 +258,10 @@
     this.importActionCard('skilled-retreat', {
   	name : "Skilled Retreat" ,
   	type : "space_combat" ,
-  	text : "Apply +1 to each of your units' combat rolls during this round of combat" ,
+  	text : "Retreat into an adjacent system without enemy ships. Space Battle ends tied" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
-	  if (imperium_self.game.player != action_card_player) {
+	  if (imperium_self.game.player == action_card_player) {
 
             let sector = imperium_self.game.state.space_combat_sector;
 	    let adjacents = imperium_self.returnAdjacentSectors(sector);
@@ -279,9 +276,11 @@ console.log("Sector to ask about: " + s + " --- " + sector);
 	        return 0; 
               },
               function(s) {
-	        imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " makes skilled retreat into " + imperium_self.game.sectors[s].name);
-	        imperium_self.addMove("activate\t"+imperium_self.game.player+"\t"+s);
-	        imperium_self.playerSelectUnitsToMove(s);
+		// from active sector into... s
+	        imperium_self.addMove("skilled_retreat\t"+action_card_player+"\t"+s+"\t"+imperium_self.game.state.activated_sector);
+	        imperium_self.addMove("notify\t"+imperium_self.returnFaction(action_card_player) + " makes skilled retreat into " + imperium_self.game.sectors[s].name);
+	        imperium_self.addMove("activate\t"+action_card_player+"\t"+s);
+		imperium_self.endTurn();
               },
 	      function() {
 		imperium_self.addMove("notify\tno suitable sectors available for skilled retreat");
@@ -290,7 +289,56 @@ console.log("Sector to ask about: " + s + " --- " + sector);
             );
           }
 	  return 0;
+        },
+        handleGameLoop : function(imperium_self, qe, mv) {
+
+          if (mv[0] == "skilled_retreat") {
+
+            let player = parseInt(mv[1]);
+            let destination = mv[2];
+	    let source = mv[3];
+            imperium_self.game.queue.splice(qe, 1);
+
+console.log("SKILLED RETREAT: " + player + " -- " + destination + " -- " + source);
+
+	    let dsys = imperium_self.returnSectorAndPlanets(destination);
+	    let ssys = imperium_self.returnSectorAndPlanets(source);
+
+	    //
+	    // move the units over
+	    //
+	    for (let i = 0; i < ssys.s.units[player-1].length; i++) {
+	      dsys.s.units.push(ssys.s.units[player-1][i]);
+	    }
+	    ssys.s.units[player-1] = [];
+
+	    imperium_self.saveSystemAndPlanets(dsys);
+	    imperium_self.saveSystemAndPlanets(ssys);
+
+	    //
+	    // eliminate all commands down to "continue"
+	    //
+	    for (let i = imperium_self.game.queue.length-1; i >= 0; i--) {
+	      let tmpk = imperium_self.game.queue[i].split("\t");
+	      if (tmpk[0] !== "continue") {
+		imperium_self.game.queue.splice(i, 1);
+	      } else {
+		i = -1;
+	      }
+	    }
+
+console.log("MOVED AND SAVING!");
+
+	    //
+	    // handle fleet supply
+	    //
+	    return imperium_self.handleFleetSupply(player, destination);
+
+          }
+
+          return 1;
         }
+
     });
 
 

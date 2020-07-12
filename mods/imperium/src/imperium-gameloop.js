@@ -1401,7 +1401,7 @@ console.log("DONE HERE!");
           for (let z = 0; z < this.game.state.strategy_cards.length; z++) {
             let rank = parseInt(this.strategy_cards[this.game.state.strategy_cards[z]].rank);
             while (scards[rank-1] != "") { rank++; }
-            scards[rank-1] = '<li class="textchoice" id="'+this.game.state.strategy_cards[z]+'">' + this.strategy_cards[this.game.state.strategy_cards[z]].name + '</li>';
+            scards[rank-1] = '<li class="textchoice" style="opacity:0.5" id="'+this.game.state.strategy_cards[z]+'">' + this.strategy_cards[this.game.state.strategy_cards[z]].name + '</li>';
           }
 
           for (let z = 0; z < scards.length; z++) {
@@ -2619,6 +2619,14 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
 	if (total_hits > 0 ) {
           this.updateStatus(this.returnFaction(defender) + " is assigning hits to units ... ");
 	}
+
+        if (this.game.state.assign_hits_to_cancel > 0) {
+          total_hits -= this.game.state.assign_hits_to_cancel;
+          this.game.state.assign_hits_to_cancel = 0;
+	  if (total_hits <= 0) { return 1; }
+        }
+
+
 
 	if (planet_idx == "pds") {
 	  if (total_hits > 0) {
