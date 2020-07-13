@@ -418,7 +418,9 @@ console.log(this.game.state.active_player_moved + " ---> " + this.game.state.act
   	let stage = parseInt(mv[3]);  
 
 	if (this.game.state.playing_strategy_card_secondary == 1) {
-	  return 0;
+	  if (this.game.confirms_players.includes(this.app.wallet.returnPublicKey())) {
+	    return 0;
+	  }
 	}
 
 	if (strategy_card_player != -1) {
@@ -1343,10 +1345,10 @@ console.log("DONE HERE!");
   	  this.addMove("addbonustounselectedstrategycards");
   
   	  let cards_to_select = 1;
-  	  if (this.game.players_info.length == 2) { cards_to_select = 3; }
-  	  if (this.game.players_info.length == 3) { cards_to_select = 2; }
-  	  if (this.game.players_info.length == 4) { cards_to_select = 2; }
-  	  if (this.game.players_info.length >= 5) { cards_to_select = 1; }
+//  	  if (this.game.players_info.length == 2) { cards_to_select = 3; }
+//  	  if (this.game.players_info.length == 3) { cards_to_select = 2; }
+//  	  if (this.game.players_info.length == 4) { cards_to_select = 2; }
+//  	  if (this.game.players_info.length >= 5) { cards_to_select = 1; }
   
   	  //
   	  // TODO -- pick appropriate card number

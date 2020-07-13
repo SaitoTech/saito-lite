@@ -24,7 +24,6 @@ class Imperium extends GameTemplate {
 
 
 
-
     //
     // specific to THIS game
     //

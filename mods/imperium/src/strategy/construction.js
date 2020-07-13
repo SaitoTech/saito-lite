@@ -7,7 +7,7 @@
       text			:	"Build a PDS and Space Dock or two PDS units. Others can spend a strategy token and activate a sector to build a PDS or Space Dock in it." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
-        if (imperium_self.game.player == strategy_card_player) {
+        if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
           imperium_self.addMove("resolve\tstrategy");
           imperium_self.addMove("strategy\t"+"construction"+"\t"+strategy_card_player+"\t2");
           imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());

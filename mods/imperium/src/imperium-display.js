@@ -774,22 +774,17 @@ updateSectorGraphics(sector) {
   showSectorHighlight(sector) { this.addSectorHighlight(sector); }
   hideSectorHighlight(sector) { this.removeSectorHighlight(sector); }
   addSectorHighlight(sector) {
-
     if (sector.indexOf("planet") == 0 || sector == 'new-byzantium') {
       sector = this.game.planets[sector].sector;
     }
-
     let sys = this.returnSectorAndPlanets(sector);
     let divname = "#hex_space_" + sys.s.tile;
-console.log("Add: " + divname);
     $(divname).css('background-color', '#900');
   }
   removeSectorHighlight(sector) {
-console.log("fore sector: " + sector);
     if (sector.indexOf("planet") == 0 || sector == 'new-byzantium') {
       sector = this.game.planets[sector].sector;
     }
-
     let sys = this.returnSectorAndPlanets(sector);
     let divname = "#hex_space_" + sys.s.tile;
     $(divname).css('background-color', 'transparent');

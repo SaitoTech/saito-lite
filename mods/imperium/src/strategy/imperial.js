@@ -8,7 +8,7 @@
 
         imperium_self.game.state.round_scoring = 1;
 
-        if (imperium_self.game.player == strategy_card_player) {
+        if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
 
 	  let supplementary_scoring = function() {
   	    imperium_self.playerAcknowledgeNotice("You will first be asked to score your public objective. The game will then precede and allow all players (including you) to score additional objectives in initiative order.", function() {

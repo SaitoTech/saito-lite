@@ -35,7 +35,9 @@
         //
         // card player goes for primary
         //
-        if (imperium_self.game.player == strategy_card_player) {
+        if (imperium_self.game.player === strategy_card_player && player == strategy_card_player) {
+
+alert("politics primary");
 
           //
           // two action cards
@@ -43,7 +45,7 @@
           imperium_self.addMove("resolve\tstrategy");
           imperium_self.addMove("gain\t2\t"+imperium_self.game.player+"\taction_cards"+"\t"+2);
           imperium_self.addMove("DEAL\t2\t"+imperium_self.game.player+"\t2");
-          imperium_self.addMove("notify\tdealing two action cards to " + imperium_self.returnFaction(player));
+          imperium_self.addMove("notify\tdealing action cards to " + imperium_self.returnFaction(player));
           imperium_self.addMove("strategy\t"+"politics"+"\t"+strategy_card_player+"\t2");
           imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
 
@@ -72,12 +74,12 @@
 	    // if New Byzantium is unoccupied, we skip the voting stage
 	    //
 
-//	    if (imperium_self.game.planets['new-byzantium'].owner == -1) {
-//	      imperium_self.playerAcknowledgeNotice("The Galactic Senate has yet to be established on New Byzantium. Occupy the planet to establish the Senate and earn 1 VP: ", function() {
-//		imperium_self.endTurn();
-//	      });
-//	      return 0;
-//	    }
+	    if (imperium_self.game.planets['new-byzantium'].owner == -1) {
+	      imperium_self.playerAcknowledgeNotice("The Galactic Senate has yet to be established on New Byzantium. Occupy the planet to establish the Senate and earn 1 VP: ", function() {
+		imperium_self.endTurn();
+	      });
+	      return 0;
+	    }
 
 
             let html = '';
@@ -129,17 +131,15 @@
 
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
         if (imperium_self.game.player == player) {
-
           if (imperium_self.game.player != strategy_card_player) {
-            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	    // moved inside playerBuyAtionCards
+            //imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
             imperium_self.playerBuyActionCards(2);
           } else {
             imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
             imperium_self.endTurn();
           }
-
         }
-
       },
     });
 

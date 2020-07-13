@@ -478,8 +478,6 @@
 	    let source = mv[3];
             imperium_self.game.queue.splice(qe, 1);
 
-console.log("SKILLED RETREAT: " + player + " -- " + destination + " -- " + source);
-
 	    let dsys = imperium_self.returnSectorAndPlanets(destination);
 	    let ssys = imperium_self.returnSectorAndPlanets(source);
 
@@ -512,8 +510,6 @@ console.log("SKILLED RETREAT: " + player + " -- " + destination + " -- " + sourc
 	    //
 	    imperium_self.updateSectorGraphics(ssys.s.sector);
 	    imperium_self.updateSectorGraphics(dsys.s.sector);
-
-console.log("MOVED AND SAVING!");
 
 	    //
 	    // handle fleet supply
@@ -560,63 +556,7 @@ console.log("MOVED AND SAVING!");
             );
           }
 	  return 0;
-        },
-        handleGameLoop : function(imperium_self, qe, mv) {
-
-          if (mv[0] == "skilled_retreat") {
-
-            let player = parseInt(mv[1]);
-            let destination = mv[2];
-	    let source = mv[3];
-            imperium_self.game.queue.splice(qe, 1);
-
-console.log("SKILLED RETREAT: " + player + " -- " + destination + " -- " + source);
-
-	    let dsys = imperium_self.returnSectorAndPlanets(destination);
-	    let ssys = imperium_self.returnSectorAndPlanets(source);
-
-	    //
-	    // move the units over
-	    //
-	    for (let i = 0; i < ssys.s.units[player-1].length; i++) {
-	      dsys.s.units[player-1].push(ssys.s.units[player-1][i]);
-	    }
-	    ssys.s.units[player-1] = [];
-
-	    imperium_self.saveSystemAndPlanets(dsys);
-	    imperium_self.saveSystemAndPlanets(ssys);
-
-	    //
-	    // eliminate all commands down to "continue"
-	    //
-	    for (let i = imperium_self.game.queue.length-1; i >= 0; i--) {
-	      let tmpk = imperium_self.game.queue[i].split("\t");
-	      if (tmpk[0] !== "continue") {
-		imperium_self.game.queue.splice(i, 1);
-	      } else {
-		i = -1;
-	      }
-	    }
-
-
-	    //
-	    // update sector graphics
-	    //
-	    imperium_self.updateSectorGraphics(ssys.s.sector);
-	    imperium_self.updateSectorGraphics(dsys.s.sector);
-
-console.log("MOVED AND SAVING!");
-
-	    //
-	    // handle fleet supply
-	    //
-	    return imperium_self.handleFleetSupply(player, destination);
-
-          }
-
-          return 1;
         }
-
     });
     this.importActionCard('skilled-retreat3', {
   	name : "Skilled Retreat" ,
@@ -652,66 +592,10 @@ console.log("MOVED AND SAVING!");
             );
           }
 	  return 0;
-        },
-        handleGameLoop : function(imperium_self, qe, mv) {
-
-          if (mv[0] == "skilled_retreat") {
-
-            let player = parseInt(mv[1]);
-            let destination = mv[2];
-	    let source = mv[3];
-            imperium_self.game.queue.splice(qe, 1);
-
-console.log("SKILLED RETREAT: " + player + " -- " + destination + " -- " + source);
-
-	    let dsys = imperium_self.returnSectorAndPlanets(destination);
-	    let ssys = imperium_self.returnSectorAndPlanets(source);
-
-	    //
-	    // move the units over
-	    //
-	    for (let i = 0; i < ssys.s.units[player-1].length; i++) {
-	      dsys.s.units[player-1].push(ssys.s.units[player-1][i]);
-	    }
-	    ssys.s.units[player-1] = [];
-
-	    imperium_self.saveSystemAndPlanets(dsys);
-	    imperium_self.saveSystemAndPlanets(ssys);
-
-	    //
-	    // eliminate all commands down to "continue"
-	    //
-	    for (let i = imperium_self.game.queue.length-1; i >= 0; i--) {
-	      let tmpk = imperium_self.game.queue[i].split("\t");
-	      if (tmpk[0] !== "continue") {
-		imperium_self.game.queue.splice(i, 1);
-	      } else {
-		i = -1;
-	      }
-	    }
-
-
-	    //
-	    // update sector graphics
-	    //
-	    imperium_self.updateSectorGraphics(ssys.s.sector);
-	    imperium_self.updateSectorGraphics(dsys.s.sector);
-
-console.log("MOVED AND SAVING!");
-
-	    //
-	    // handle fleet supply
-	    //
-	    return imperium_self.handleFleetSupply(player, destination);
-
-          }
-
-          return 1;
         }
-
     });
     this.importActionCard('skilled-retreat4', {
-  	name : "Skilled Retreat" 4,
+  	name : "Skilled Retreat" ,
   	type : "space_combat" ,
   	text : "Retreat into an adjacent system without enemy ships. Space Battle ends tied" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
@@ -744,62 +628,9 @@ console.log("MOVED AND SAVING!");
             );
           }
 	  return 0;
-        },
-        handleGameLoop : function(imperium_self, qe, mv) {
-
-          if (mv[0] == "skilled_retreat") {
-
-            let player = parseInt(mv[1]);
-            let destination = mv[2];
-	    let source = mv[3];
-            imperium_self.game.queue.splice(qe, 1);
-
-console.log("SKILLED RETREAT: " + player + " -- " + destination + " -- " + source);
-
-	    let dsys = imperium_self.returnSectorAndPlanets(destination);
-	    let ssys = imperium_self.returnSectorAndPlanets(source);
-
-	    //
-	    // move the units over
-	    //
-	    for (let i = 0; i < ssys.s.units[player-1].length; i++) {
-	      dsys.s.units[player-1].push(ssys.s.units[player-1][i]);
-	    }
-	    ssys.s.units[player-1] = [];
-
-	    imperium_self.saveSystemAndPlanets(dsys);
-	    imperium_self.saveSystemAndPlanets(ssys);
-
-	    //
-	    // eliminate all commands down to "continue"
-	    //
-	    for (let i = imperium_self.game.queue.length-1; i >= 0; i--) {
-	      let tmpk = imperium_self.game.queue[i].split("\t");
-	      if (tmpk[0] !== "continue") {
-		imperium_self.game.queue.splice(i, 1);
-	      } else {
-		i = -1;
-	      }
-	    }
-
-
-	    //
-	    // update sector graphics
-	    //
-	    imperium_self.updateSectorGraphics(ssys.s.sector);
-	    imperium_self.updateSectorGraphics(dsys.s.sector);
-
-console.log("MOVED AND SAVING!");
-
-	    //
-	    // handle fleet supply
-	    //
-	    return imperium_self.handleFleetSupply(player, destination);
-
-          }
-
-          return 1;
         }
-
     });
+
+
+
 

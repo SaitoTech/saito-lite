@@ -7,7 +7,7 @@
       text			:	"Get three tokens for your command, strategy and fleet pools. Everyone may purchase additional tokens at three influence per token." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
-	if (imperium_self.game.player == strategy_card_player) {
+	if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
 
           if (imperium_self.game.player == player) {
             imperium_self.addMove("resolve\tstrategy");

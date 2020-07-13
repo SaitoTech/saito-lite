@@ -6,7 +6,7 @@
       text			:	"Gain 3 trade goods and refresh your commodities. You may refresh the commodities of any other players, or they may refresh themselves by spending a strategy token." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
-        if (imperium_self.game.player == strategy_card_player) {
+        if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
 
           imperium_self.addMove("resolve\tstrategy");
           imperium_self.addMove("strategy\t"+"trade"+"\t"+strategy_card_player+"\t2");

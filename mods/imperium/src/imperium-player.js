@@ -1721,11 +1721,12 @@ console.log("C");
             imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tcommand\t"+command_tokens);
             imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tcommand\t"+strategy_tokens);
             imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tfleetsupply\t"+fleet_supply);
+	    imperium_self.lock_interface = 0;
             imperium_self.endTurn();
             return;
   	  } else {
+	    imperium_self.lock_interface = 0;
 	    imperium_self.endTurn();
-  	    alert("failure to find appropriate influence");
   	  }
         });
       };
@@ -1771,11 +1772,13 @@ console.log("C");
   
     $('.buildchoice').off();
     $('.buildchoice').on('click', function() {
-  
+ 
       let id = $(this).attr("id");
   
       if (id == "yes") {
-  
+
+        imperium_self.lock_interface = 0;
+        imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
         imperium_self.addMove("gain\t"+imperium_self.game.player+"\taction_cards\t2");
         imperium_self.addMove("DEAL\t2\t"+imperium_self.game.player+"\t2");
         imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
@@ -1784,12 +1787,16 @@ console.log("C");
   
       } else {
   
+        imperium_self.lock_interface = 0;
+        imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
         imperium_self.endTurn();
         return;
   
       }
     });
-  
+
+    this.lock_interface = 1; 
+ 
   }
   
   
@@ -3625,7 +3632,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
         imperium_self.playerProduceUnits(sector);
       }
       if (action2 == "finish") {
-        if (!imperium_self.turn.includes("resolve\tplay")) { imperium_self.addMove("resolve\tplay"); }
+        if (!imperium_self.moves.includes("resolve\tplay")) { imperium_self.addMove("resolve\tplay"); }
         imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t"+"int"+"\t"+"0");
         imperium_self.endTurn();
       }

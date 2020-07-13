@@ -5,7 +5,7 @@
       img			:	"/imperium/img/strategy/TECH.png",
       text			:	"Research a technology for free, and spend 6 resources for a second if you wish. Others may spend a strategy token and 4 resources to research one technology" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
-        if (imperium_self.game.player == strategy_card_player) {
+        if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
           imperium_self.playerAcknowledgeNotice("You will first have the option of researching a free-technology, and then invited to purchase an additional tech for 6 resources:", function() {
             imperium_self.playerResearchTechnology(function(tech) {
 	      imperium_self.game.players_info[imperium_self.game.player-1].tech.push(tech);

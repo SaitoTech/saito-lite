@@ -6,17 +6,17 @@
       text			:	"De-activate a sector and get 1 free token. Others may spend a strategy token to producein their home system" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
-        if (imperium_self.game.player == strategy_card_player) {
+        if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
 
           imperium_self.updateStatus('Select sector to de-activate.');
           imperium_self.playerSelectSector(function(sector) {
             imperium_self.addMove("resolve\tstrategy");
             imperium_self.addMove("strategy\t"+"warfare"+"\t"+strategy_card_player+"\t2");
             imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-            imperium_self.addMove("notify\t"+imperium_self.returnFaction(strategy_card_player)+" deactivates "+sector);
+            imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
             imperium_self.addMove("tokenallocation\t"+strategy_card_player+"\t"+1);
             imperium_self.addMove("deactivate\t"+strategy_card_player+"\t"+sector);
-            imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
+            imperium_self.addMove("notify\t"+imperium_self.returnFaction(strategy_card_player)+" deactivates "+sector);
             imperium_self.endTurn();
           });
     
