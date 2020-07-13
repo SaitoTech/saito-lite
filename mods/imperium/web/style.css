@@ -629,12 +629,16 @@ body {
 }
 
 .hud-token-count {
-  transform: scale(0.35);
+  transform: scale(0.25);
   display: flex;
   position: absolute;
-  top: -5em;
+  top: -2em;
   justify-content: space-around;
   width: 100%;
+}
+
+.hud-token-count > div {
+  margin: 0px 3em;
 }
 
 .hud-token-count .pc {
@@ -715,7 +719,7 @@ body {
   display: block;
   width: 498px;
   height: 100vh;
-  z-index: 999999;
+  z-index: 50;
   overflow-x: hidden;
   overflow-y: auto;
   right: -485px;
@@ -1101,9 +1105,9 @@ body {
 
 #game_board_sizer {
   position: absolute;
-  bottom: 20px;
+  top: 20px;
   width: 200px;
-  left: 150px;
+  right: 50px;
 }
 
 #hexGrid {
