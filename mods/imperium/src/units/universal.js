@@ -36,8 +36,8 @@
       type     		:       "spacedock",
       capacity 		:	3,
       production 	:	2,
-      combat      : 0,
-      range       :0
+      combat      	: 	0,
+      range       	: 	0
     });
     
     this.importUnit("carrier", {

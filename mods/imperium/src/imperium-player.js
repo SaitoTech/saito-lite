@@ -404,9 +404,14 @@ console.log("AC: " + JSON.stringify(ac));
       });
 
     } else {
-      this.playerAcknowledgeNotice(this.returnFaction(action_card_player) + " plays " + this.action_cards[card].name, function() {
-	imperium_self.endTurn();
-      });
+
+      let notice = '<div class="action_card_instructions_hud">'+this.returnFaction(action_card_player)+' has played an action card:</div>';
+          notice += '<div class="action_card_name_hud">' + imperium_self.action_cards[card].name + '</div>';
+          notice += '<div class="action_card_text_hud">';
+	  notice += this.action_cards[card].text;
+	  notice += '</div>';
+
+      this.playerAcknowledgeNotice(notice, function() { imperium_self.endTurn(); });
       return 0;
     }
     
@@ -1403,7 +1408,7 @@ console.log("C");
     let imperium_self = this;
     let html = '';
     let relevant_action_cards = ["pre_agenda"];
-    let ac = this.returnPlayerActionCards(relevant_action_cards);
+    let ac = this.returnPlayerActionCards(imperium_self.game.player, relevant_action_cards);
 
     if (this.doesPlayerHaveRider(imperium_self.game.player)) {
       html = '<div class="sf-readable">With your Rider depending on how the other players vote, your emissaries track the mood in the Senate closely...:</div><ul>';
@@ -1614,7 +1619,24 @@ console.log("C");
       }
 
       if (action2 == "produce") {
-        imperium_self.addMove("continue\t"+player+"\t"+sector);
+
+	//
+	// check the fleet supply and notify users if they are about to surpass it
+	//
+	let fleet_supply_in_sector = imperium_self.returnSpareFleetSupplyInSector(imperium-self.game.player, sector);
+	if (fleet_supply_in_sector <= 1) {
+	  let notice = "You have no spare fleet supply in this sector. Do you still wish to produce more ships?";
+	  if (fleet_supply_in_sector == 1) {
+	    notice = "You have fleet supply for 1 additional capital ship in this sector. Do you still wish to produce more ships?";
+	  }
+	  let c = confirm(notice);
+	  if (c) {
+            imperium_self.addMove("continue\t"+imperium_self.game.player+"\t"+sector);
+            imperium_self.playerProduceUnits(sector);
+	  }
+	  return;
+	} 
+        imperium_self.addMove("continue\t"+imperium_self.game.player+"\t"+sector);
         imperium_self.playerProduceUnits(sector);
       }  
 
@@ -1702,6 +1724,7 @@ console.log("C");
             imperium_self.endTurn();
             return;
   	  } else {
+	    imperium_self.endTurn();
   	    alert("failure to find appropriate influence");
   	  }
         });
@@ -2024,6 +2047,9 @@ console.log(7);
     for (let p = 0; p < sys.p.length; p++) {
       for (let i = 0; i < sys.p[p].units[this.game.player-1].length; i++) {
         calculated_production_limit += sys.p[p].units[this.game.player-1][i].production;
+	if (sys.p[p].units[this.game.player-1][i].type === "spacedock") {
+	  calculated_production_limit += sys.p[p].resources;
+	}
       }
     }
 
@@ -2075,11 +2101,12 @@ console.log(7);
           total_cost -= imperium_self.game.players_info[imperium_self.game.player-1].production_bonus;
         }
 
+        imperium_self.addMove("resolve\tplay");
+        imperium_self.addMove("continue\t"+imperium_self.game.player+"\t"+sector);
+
         imperium_self.playerSelectResources(total_cost, function(success) {
 
   	  if (success == 1) {
-            imperium_self.addMove("resolve\tplay");
-            imperium_self.addMove("continue\t"+imperium_self.game.player+"\t"+sector);
             for (let y = 0; y < stuff_to_build.length; y++) {
   	      let planet_idx = imperium_self.returnPlayersLeastDefendedPlanetInSector(imperium_self.game.player, sector);
   	      if (stuff_to_build[y] != "infantry") { planet_idx = -1; }
@@ -2098,9 +2125,9 @@ console.log(7);
   
 
 
-      //
-      // build stuff
-      //
+
+
+
       let calculated_total_cost = 0;
       for (let i = 0; i < stuff_to_build.length; i++) {
         calculated_total_cost += imperium_self.returnUnitCost(stuff_to_build[i], imperium_self.game.player);
@@ -2114,23 +2141,45 @@ console.log(7);
         calculated_total_cost -= imperium_self.game.players_info[imperium_self.game.player-1].production_bonus;
       }
   
-      if (calculated_total_cost > imperium_self.returnAvailableResources(imperium_self.game.player)) {
-        alert("You cannot build more than you have available to pay for it.");
-        return;
-      }
+
+
 
       //
       // respect production / cost limits
       //
+      let return_to_zero = 0;
+      if (calculated_total_cost > imperium_self.returnAvailableResources(imperium_self.game.player)) {
+        alert("You cannot build more than you have available to pay for it.");
+        return_to_zero = 1;
+      }
       if (production_limit < stuff_to_build.length && production_limit > 0) {
         alert("You cannot build more units than your production limit");
-        return;
+	return_to_zero = 1;
       }
       if (cost_limit < calculated_total_cost && cost_limit > 0) {
         alert("You cannot build units that cost more than your cost limit");
-        return;
+	return_to_zero = 1;
       }
-  
+      if ((stuff_to_build.length+1) > calculated_production_limit) {
+        alert("You cannot build more units than your production limit");
+	return_to_zero = 1;
+      }
+
+
+      if (return_to_zero == 1) {
+        stuff_to_build = [];
+	$('.infantry_total').html(0);
+	$('.fighter_total').html(0);
+	$('.destroyer_total').html(0);
+	$('.carrier_total').html(0);
+	$('.cruiser_total').html(0);
+	$('.dreadnaught_total').html(0);
+	$('.flagship_total').html(0);
+	$('.warsun_total').html(0);
+	return;
+      }
+
+
   
       //
       //  figure out if we need to load infantry / fighters
@@ -3522,7 +3571,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     let imperium_self = this;
     let relevant_action_cards = ["post_activate_system"];
     let ac = this.returnPlayerActionCards(imperium_self.game.player, relevant_action_cards);
-
+    let player = imperium_self.game.player;
 
     let html  = "<div class='sf-readable'>" + this.returnFaction(this.game.player) + ": </div><ul>";
         html += '<li class="option" id="move">move into sector</li>';
@@ -3541,7 +3590,6 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
   
       let action2 = $(this).attr("id");
   
-
       if (action2 == "action") {
         imperium_self.playerSelectActionCard(function(card) {
 	  imperium_self.addMove("activate_system_post\t"+imperium_self.game.player+"\t"+sector);
@@ -3559,10 +3607,25 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
         imperium_self.playerSelectUnitsToMove(sector);
       }
       if (action2 == "produce") {
+	//
+	// check the fleet supply and notify users if they are about to surpass it
+	//
+	let fleet_supply_in_sector = imperium_self.returnSpareFleetSupplyInSector(player, sector);
+	if (fleet_supply_in_sector <= 1) {
+	  let notice = "You have no spare fleet supply in this sector. Do you still wish to produce more ships?";
+	  if (fleet_supply_in_sector == 1) {
+	    notice = "You have fleet supply for 1 additional capital ship in this sector. Do you still wish to produce more ships?";
+	  }
+	  let c = confirm(notice);
+	  if (c) {
+            imperium_self.playerProduceUnits(sector);
+	  }
+	  return;
+	} 
         imperium_self.playerProduceUnits(sector);
       }
       if (action2 == "finish") {
-        imperium_self.addMove("resolve\tplay");
+        if (!imperium_self.turn.includes("resolve\tplay")) { imperium_self.addMove("resolve\tplay"); }
         imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t"+"int"+"\t"+"0");
         imperium_self.endTurn();
       }

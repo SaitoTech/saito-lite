@@ -795,19 +795,19 @@ console.log("executing "+z[z_index].name);
 	  if (elected_choice.indexOf("sector") == 0) { is_sector = 1; }
 
 	  if (is_planet == 1) {
-            this.updateLog(this.returnFaction(player) + " spends " + votes + " on " + this.game.planets[this.game.state.choices[vote]].name);
+            this.updateLog(this.returnFaction(player) + " votes " + votes + " on " + this.game.planets[this.game.state.choices[vote]].name);
 	  }
 	  if (is_sector == 1) {
-            this.updateLog(this.returnFaction(player) + " spends " + votes + " on " + this.game.sectors[this.game.state.choices[vote]].sector);
+            this.updateLog(this.returnFaction(player) + " votes " + votes + " on " + this.game.sectors[this.game.state.choices[vote]].sector);
 	  }
 	  if (is_planet == 0 && is_sector == 0) {
 	    //
 	    // player?
 	    //
 	    if (this.game.state.choices.length == this.game.players_info.length) {
-              this.updateLog(this.returnFaction(player) + " spends " + votes + " on " + this.returnFaction(vote+1));
+              this.updateLog(this.returnFaction(player) + " votes " + votes + " on " + this.returnFaction(vote+1));
 	    } else {
-              this.updateLog(this.returnFaction(player) + " spends " + votes + " on " + vote);
+              this.updateLog(this.returnFaction(player) + " votes " + votes + " on " + this.game.state.choices[vote]);
 	    }
 	  }
         }
@@ -1037,9 +1037,8 @@ console.log("executing "+z[z_index].name);
       }
 
       if (mv[0] == "tokenallocation") {
-	if (parseInt(mv[1])) { 
+	if (parseInt(mv[2])) { 
  	  this.playerAllocateNewTokens(parseInt(mv[1]), parseInt(mv[2]), 1, 3);
-
 	} else { 
  	  this.playerAllocateNewTokens(this.game.player, (this.game.players_info[this.game.player-1].new_tokens_per_round+this.game.players_info[this.game.player-1].new_token_bonus_when_issued), 1, 3);
         }
@@ -1672,10 +1671,11 @@ imperium_self.saveGame(imperium_self.game.id);
   	  this.game.players_info[player-1].goods -= parseInt(details);
   	}
         if (type == "planet") {
+console.log("exhausting planet: " + details);
   	  this.game.planets[details].exhausted = 1;
+console.log("planet exhausted: " + this.game.planets[details].exhausted);
   	}
   
-
 	this.updateTokenDisplay();
 	this.updateLeaderboard();
 
@@ -1805,15 +1805,11 @@ imperium_self.saveGame(imperium_self.game.id);
   	let player       = parseInt(mv[1]);
         let sector	 = mv[2];
 
-console.log(" ... a");
         sys = this.returnSectorAndPlanets(sector);
-console.log(" ... b");
   	sys.s.activated[player-1] = 0;
-console.log(" ... c");
         this.saveSystemAndPlanets(sys);
-console.log(" ... d");
+console.log("UPDATE SECTOR GRAPHICS!");
         this.updateSectorGraphics(sector);
-console.log(" ... e");
   	this.game.queue.splice(qe, 1);
   	return 1;
   
@@ -2205,10 +2201,6 @@ console.log("CHOICES: " +this.game.state.choices);
         let player       = parseInt(mv[1]);
         let agenda       = mv[2];
         this.game.queue.splice(qe, 1);
-	this.updateLog(this.returnFaction(player) + " is considering agenda options");
-
-console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
-
 	if (this.game.player == player) {
           this.playerPlayPreAgendaStage(player, agenda);        
 	}
@@ -2254,7 +2246,6 @@ console.log("WHICH PLAYER? " + player + " -- " + this.game.player);
         let player       = parseInt(mv[1]);
         let agenda       = mv[2];
         this.game.queue.splice(qe, 1);
-	this.updateLog(this.returnFaction(player) + " is considering agenda options");
 	if (this.game.player == player) {
 
           let winning_choice = "";

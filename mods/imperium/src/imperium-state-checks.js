@@ -62,6 +62,35 @@
 
 
 
+  returnSpareFleetSupplyInSector(player, sector) {
+
+    let imperium_self = this;
+    let sys = this.returnSectorAndPlanets(sector);
+    let fleet_supply = this.game.players_info[player-1].fleet_supply;
+
+    let capital_ships = 0;
+    let fighter_ships = 0;
+    let total_ships = 0;
+
+    for (let i = 0; i < sys.s.units[player-1].length; i++) {
+      let ship = sys.s.units[player-1][i];
+      total_ships++;
+      if (ship.type == "destroyer") { capital_ships++; }
+      if (ship.type == "carrier") { capital_ships++; }
+      if (ship.type == "cruiser") { capital_ships++; }
+      if (ship.type == "dreadnaught") { capital_ships++; }
+      if (ship.type == "flagship") { capital_ships++; }
+      if (ship.type == "warsun") { capital_ships++; }
+      if (ship.type == "fighter") { fighter_ships++; }
+    }
+
+    if ((fleet_supply-capital_ships) > 0) {
+      return (fleet_supply-capital_ships);
+    }
+    
+    return 0;
+  }
+
   returnShipsOverCapacity(player, sector) {
 
     let imperium_self = this;
@@ -1586,7 +1615,7 @@ console.log("p: " + planet);
           x.push(i);
         }
         if (mode == 2 && this.game.planets[i].exhausted == 1) {
-  	x.push(i);
+  	  x.push(i);
         }
       }
     }

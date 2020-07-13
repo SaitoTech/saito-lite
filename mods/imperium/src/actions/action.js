@@ -719,7 +719,7 @@ alert("select sector with filter");
 	  }
 
 	  if (trade_goods_to_gain > 0 ) {
-            imperium_self.game.queue.push("purchase\t"+imperium_self.game.player+"\tgoods\t"+goods);
+            imperium_self.game.queue.push("purchase\t"+imperium_self.game.player+"\tgoods\t"+trade_goods_to_gain);
 	  }
 
 	  return 1;

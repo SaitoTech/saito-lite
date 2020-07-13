@@ -41,10 +41,13 @@
 
           imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
           imperium_self.playerScoreSecretObjective(imperium_self, function(vp, objective) {
+            if (vp == 0) { imperium_self.addMove(imperium_self.returnFaction(player) + " elects not to score any secret objectives"); }
             if (vp > 0) { imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); }
+
 	    imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
             imperium_self.playerScoreVictoryPoints(imperium_self, function(vp, objective) {
               if (vp > 0) { imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); }
+              if (vp == 0) { imperium_self.addMove(imperium_self.returnFaction(player) + " elects not to score any public objectives"); }
 	      imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
               imperium_self.updateStatus("You have played the Imperial Secondary");
 	      imperium_self.game_halted = 0;

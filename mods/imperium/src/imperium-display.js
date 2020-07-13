@@ -542,21 +542,22 @@ updateSectorGraphics(sector) {
   let bgsize = '';
   let sector_controlled = 0;
 
+  //
+  // is activated?
+  //
+  if (sys.s.activated[this.game.player - 1] == 1) {
+    let divpid = '#' + sector;
+    $(divpid).find('.hex_activated').css('background-color', 'yellow');
+    $(divpid).find('.hex_activated').css('opacity', '0.3');
+  } else {
+    let divpid = '#' + sector;
+    $(divpid).find('.hex_activated').css('opacity', '0.0');
+  }
+
+
   for (let z = 0; z < sys.s.units.length; z++) {
 
     let player = z + 1;
-
-    //
-    // is activated?
-    //
-    if (sys.s.activated[player - 1] == 1) {
-      let divpid = '#' + sector;
-      $(divpid).find('.hex_activated').css('background-color', 'yellow');
-      $(divpid).find('.hex_activated').css('opacity', '0.3');
-    } else {
-      let divpid = '#' + sector;
-      $(divpid).find('.hex_activated').css('opacity', '0.0');
-    }
 
     if (sys.s.type > 0) {
       let divpid = '#hex_img_hazard_border_' + sector;
@@ -607,10 +608,6 @@ updateSectorGraphics(sector) {
 
       let space_frames = [];
       let ship_graphics = [];
-//
-// replaced with border
-//
-//      space_frames.push("white_space_frame.png");
 
       ////////////////////
       // SPACE GRAPHICS //
