@@ -286,7 +286,34 @@ ACTION CARD - types
     });
 
 
-    this.importActionCard('flank-speed', {
+    this.importActionCard('flank-speed1', {
+  	name : "Flank Speed" ,
+  	type : "instant" ,
+  	text : "Gain +1 movement on all ships moved this turn" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+	  imperium_self.game.players_info[action_card_player-1].temporary_fleet_move_bonus = 1;
+	  return 1;
+	}
+    });
+    this.importActionCard('flank-speed2', {
+  	name : "Flank Speed" ,
+  	type : "instant" ,
+  	text : "Gain +1 movement on all ships moved this turn" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+	  imperium_self.game.players_info[action_card_player-1].temporary_fleet_move_bonus = 1;
+	  return 1;
+	}
+    });
+    this.importActionCard('flank-speed3', {
+  	name : "Flank Speed" ,
+  	type : "instant" ,
+  	text : "Gain +1 movement on all ships moved this turn" ,
+	playActionCard : function(imperium_self, player, action_card_player, card) {
+	  imperium_self.game.players_info[action_card_player-1].temporary_fleet_move_bonus = 1;
+	  return 1;
+	}
+    });
+    this.importActionCard('flank-speed4', {
   	name : "Flank Speed" ,
   	type : "instant" ,
   	text : "Gain +1 movement on all ships moved this turn" ,
