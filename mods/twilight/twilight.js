@@ -1,4 +1,5 @@
 const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
+const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
 const GameTemplate = require('../../lib/templates/gametemplate');
 const helpers = require('../../lib/helpers/index');
 
@@ -274,6 +275,9 @@ class Twilight extends GameTemplate {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
+
+    GameBoardSizer.render({}, {});
+    GameBoardSizer.attachEvents({}, {}, '.gameboard');
   }
 
 
@@ -431,8 +435,9 @@ console.log("\n\n\n\n");
   }
 
   var element = document.getElementById('gameboard');
-  if (element !== null) { helpers.hammer(element); }
-
+  //if (element !== null) { helpers.hammer(element); }
+  //helpers.drag_element(element);
+  $('#gameboard').draggable();
 
   let twilight_self = this;
   $('.scoring_card').off();

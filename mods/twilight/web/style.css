@@ -819,3 +819,10 @@ body {
   }
 }
 
+input#game_board_sizer {
+  position: absolute;
+  top: 20px;
+  right: 50px;
+  width: 300px;
+  background: #0004;
+}
