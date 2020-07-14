@@ -81,7 +81,7 @@
               if (max_choices >= 2) { max_choices = 2; }
 
               imperium_self.updateStatus(html);
-	      imperiumn_self.lockInterface();
+	      imperium_self.lockInterface();
 
               $(divname).off();
               $(divname).on('click', function() {
