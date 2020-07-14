@@ -1725,6 +1725,7 @@ class Poker extends GameTemplate {
         if (val[i] == pairs[pairs.length - 1]) {
           cards_to_score.push(suite[i] + val[i]);
         }
+        if (cards_to_score.length > 5) {cards_to_score.pop()}
       }
 
       hand_description = "full house";
