@@ -37,8 +37,6 @@
         //
         if (imperium_self.game.player === strategy_card_player && player == strategy_card_player) {
 
-alert("politics primary");
-
           //
           // two action cards
           //

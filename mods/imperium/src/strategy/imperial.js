@@ -36,21 +36,36 @@
 
 	if (player == imperium_self.game.player) {
 
-          imperium_self.game.state.round_scoring = 2;
-	  imperium_self.game_halted = 1;
+	  let my_secret_objective = "";
+	  let my_secret_vp = "";
 
-          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+          imperium_self.game.state.round_scoring = 2;
+
+	  imperium_self.lockInterface();
+
           imperium_self.playerScoreSecretObjective(imperium_self, function(vp, objective) {
-            if (vp == 0) { imperium_self.addMove(imperium_self.returnFaction(player) + " elects not to score any secret objectives"); }
-            if (vp > 0) { imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); }
+
+	    my_secret_vp = vp;
+	    my_secret_objective = objective;
 
 	    imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
             imperium_self.playerScoreVictoryPoints(imperium_self, function(vp, objective) {
+
+              if (!imperium_self.mayUnlockInterface()) {
+                alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+                return;
+              }
+              imperium_self.unlockInterface();
+
+              imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+
+              if (my_secret_vp == 0) { imperium_self.addMove(imperium_self.returnFaction(player) + " elects not to score any secret objectives"); }
+              if (my_secret_vp > 0) { imperium_self.addMove("score\t"+player+"\t"+my_secret_vp+"\t"+my_secret_objective); }
               if (vp > 0) { imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); }
               if (vp == 0) { imperium_self.addMove(imperium_self.returnFaction(player) + " elects not to score any public objectives"); }
+
 	      imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
               imperium_self.updateStatus("You have played the Imperial Secondary");
-	      imperium_self.game_halted = 0;
               imperium_self.endTurn();
             }, 2);
           });

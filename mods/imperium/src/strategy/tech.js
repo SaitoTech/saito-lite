@@ -47,8 +47,17 @@
  
           imperium_self.updateStatus(html);
 
+	  imperium_self.lockInterface();
+
           $('.option').off();
           $('.option').on('click', function() {
+ 
+            if (!imperium_self.mayUnlockInterface()) {
+              alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+              return;
+            }
+            imperium_self.unlockInterface();
+
 
             let id = $(this).attr("id");
 
@@ -99,8 +108,17 @@
 
           imperium_self.updateStatus(html);
 
+	  imperium_self.lockInterface();
+
           $('.option').off();
           $('.option').on('click', function() {
+
+            if (!imperium_self.mayUnlockInterface()) {
+              alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+              return;
+            }
+            imperium_self.unlockInterface();
+
 
             let id = $(this).attr("id");
 

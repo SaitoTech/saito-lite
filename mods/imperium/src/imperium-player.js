@@ -1641,6 +1641,33 @@ console.log("C");
       }  
 
       if (action2 == "invade") {
+
+	//
+	// New Byzantium requires 6 influence to conquer
+	//
+	if (sector === "new-byzantium") {
+	  if (imperium_self.game.planets['new-byzantium'].owner == -1) {
+
+	    if (imperium_self.returnAvailableInfluence(imperium_self.game.player) >= 6) {
+
+	      imperium_self.game.playerSelectInfluence(6, function(success) {
+ 	        imperium_self.game.tracker.invasion = 1;
+                imperium_self.playerInvadePlanet(player, sector);
+	      });
+
+	    } else {
+
+	      alert("The first conquest of New Byzantium requires spending 6 influence, which you lack.");
+	      return;
+
+	    }
+
+	    return;
+	  }
+	}
+
+
+
         imperium_self.game.tracker.invasion = 1;
         imperium_self.playerInvadePlanet(player, sector);
       }
@@ -1670,20 +1697,23 @@ console.log("C");
   ////////////////
   // Production //
   ////////////////
-  playerBuyTokens(stage=0) {  
+  playerBuyTokens(stage=0, resolve=1) {  
 
     let imperium_self = this;
 
     if (this.returnAvailableInfluence(this.game.player) <= 2) {
       this.updateLog("You skip the initiative secondary, as you lack adequate influence...");
       this.updateStatus("Skipping purchase of tokens as insufficient influence...");
+      if (resolve == 1) {
+        imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+      } 
       this.endTurn();
       return 0;
     }
 
     let html = '<div class="sf-readable">Do you wish to purchase any command or strategy tokens, or increase your fleet supply?</div><ul>';
     if (stage == 2) {
-        html = '<div class="sf-readable">The Leadership strategy card has been played. Do you wish to purchase any additional command or strategy tokens, or increase your fleet supply?</div><ul>';
+        html = '<div class="sf-readable">Leadership has been played. Do you wish to purchase any additional command or strategy tokens, or increase your fleet supply?</div><ul>';
     }
     html += '<li class="buildchoice textchoice" id="skip">Do Not Purchase</li>';
     html += '<li class="buildchoice textchoice" id="command">Command Tokens  +<span class="command_total">0</span></li>';
@@ -1702,12 +1732,24 @@ console.log("C");
     let fleet_supply = 0;
     let total_cost = 0;
   
+    imperium_self.lockInterface();
+
     $('.buildchoice').off();
     $('.buildchoice').on('click', function() {
-  
+
+      if (!imperium_self.mayUnlockInterface()) {
+	alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+        return;
+      }
+      imperium_self.unlockInterface();
+
+
       let id = $(this).attr("id");
   
       if (id == "skip") {
+	if (resolve == 1) {
+          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	} 
   	imperium_self.endTurn();
 	return;
       }
@@ -1715,17 +1757,20 @@ console.log("C");
       if (id == "confirm") {
   
         total_cost = 3 * (fleet_supply + command_tokens + strategy_tokens);
+
+	if (resolve == 1) {
+          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	} 
+
         imperium_self.playerSelectInfluence(total_cost, function(success) {
-  
+
   	  if (success == 1) {
             imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tcommand\t"+command_tokens);
             imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tcommand\t"+strategy_tokens);
             imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tfleetsupply\t"+fleet_supply);
-	    imperium_self.lock_interface = 0;
             imperium_self.endTurn();
             return;
   	  } else {
-	    imperium_self.lock_interface = 0;
 	    imperium_self.endTurn();
   	  }
         });
@@ -1756,7 +1801,7 @@ console.log("C");
   
   
   
-  playerBuyActionCards(stage=0) {  
+  playerBuyActionCards(stage=0, resolve=1) {  
 
     let imperium_self = this;
   
@@ -1769,15 +1814,22 @@ console.log("C");
     html += '</ul>';
   
     this.updateStatus(html);
+
+    imperium_self.lockInterface();
   
     $('.buildchoice').off();
     $('.buildchoice').on('click', function() {
- 
+
+      if (!imperium_self.mayUnlockInterface()) {
+	alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+        return;
+      }
+      imperium_self.unlockInterface();
+
       let id = $(this).attr("id");
   
       if (id == "yes") {
 
-        imperium_self.lock_interface = 0;
         imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
         imperium_self.addMove("gain\t"+imperium_self.game.player+"\taction_cards\t2");
         imperium_self.addMove("DEAL\t2\t"+imperium_self.game.player+"\t2");
@@ -1787,7 +1839,6 @@ console.log("C");
   
       } else {
   
-        imperium_self.lock_interface = 0;
         imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
         imperium_self.endTurn();
         return;
@@ -1795,8 +1846,6 @@ console.log("C");
       }
     });
 
-    this.lock_interface = 1; 
- 
   }
   
   
@@ -1900,10 +1949,11 @@ console.log("C");
     html += '</ul>';
   
     imperium_self.updateStatus(html);
+
     
     $('.option').off();
     $('.option').on('click', function() {
-  
+
       let action = $(this).attr("id");
       if (action == "no") {
         mycallback(imperium_self, 0, "");
@@ -3670,7 +3720,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
           html = '<div class="sf-readable">Leadership has been played and you have purchased '+obj.new_tokens+' additional tokens. How do you wish to allocate them? </div><ul>';
 	}
 	if (stage == 3) {
-          html = '<div class="sf-readable">It is the start of a new round. You have '+obj.new_tokens+' new tokens to allocate. But how?</div><ul>';
+          html = '<div class="sf-readable">You have '+obj.new_tokens+' new tokens to allocate: </div><ul>';
 	}
 
             html += '<li class="option" id="command">Command Token - '+ (parseInt(obj.current_command)+parseInt(obj.new_command)) + '</li>';

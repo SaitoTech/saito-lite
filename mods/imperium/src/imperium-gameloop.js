@@ -88,15 +88,6 @@ console.log("RESOLVE");
 	if (mv[1] == lmv[0]) {
   	  if (mv[2] != undefined) {
 
-	    //
-	    // June 24th removed
-	    //
-	    //if (mv[1] === "strategy") {
-	    //  if (mv[2] === this.app.wallet.returnPublicKey()) {
-	    //	this.game.state.playing_strategy_card_secondary = 0;
-	    //  }
-	    //}
-
 	    if (this.game.confirms_received == undefined || this.game.confirms_received == null) { this.resetConfirmsNeeded(this.game.players_info.length); }
 
 
@@ -417,14 +408,20 @@ console.log(this.game.state.active_player_moved + " ---> " + this.game.state.act
   	let strategy_card_player = parseInt(mv[2]);
   	let stage = parseInt(mv[3]);  
 
+console.log("A");
+
 	if (this.game.state.playing_strategy_card_secondary == 1) {
 	  if (this.game.confirms_players.includes(this.app.wallet.returnPublicKey())) {
 	    return 0;
 	  }
 	}
 
+console.log("A");
+
 	if (strategy_card_player != -1) {
-    	  imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.push(card);
+	  if (!imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.includes(card)) {
+    	    imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.push(card);
+	  }
 	}
 
   	if (stage == 1) {
@@ -441,6 +438,8 @@ console.log(this.game.state.active_player_moved + " ---> " + this.game.state.act
   	return 0;
 
       }
+
+
 
       if (mv[0] === "strategy_card_before") {
 
