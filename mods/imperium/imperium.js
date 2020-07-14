@@ -4826,7 +4826,6 @@ alert("select sector with filter");
 	    }
 
             imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tgoods\t"+maximum_resources);
-            imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " gainst " + maximum_resources + " trade goods");
             imperium_self.endTurn();
 	    return 0;
 
