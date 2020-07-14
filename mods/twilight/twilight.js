@@ -434,6 +434,9 @@ console.log("\n\n\n\n");
     if (this.countries[i].ussr > 0) { this.showInfluence(i, "ussr"); }
   }
 
+
+  try {
+
   var element = document.getElementById('gameboard');
   //if (element !== null) { helpers.hammer(element); }
   //helpers.drag_element(element);
@@ -460,6 +463,8 @@ console.log("\n\n\n\n");
     let region = this.id;
     $(`.display_card#${region}`).hide();
   })
+
+  } catch (err) {}
 
 }
 
