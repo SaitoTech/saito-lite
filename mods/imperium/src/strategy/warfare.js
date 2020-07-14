@@ -25,8 +25,7 @@
       },
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
-        if (imperium_self.game.player == player) { 
-        if (imperium_self.game.player != strategy_card_player) { 
+        if (imperium_self.game.player == player && imperium_self.game.player != strategy_card_player) { 
 
           let html = '<p>Do you wish to spend 1 strategy token to produce in your home sector? </p><ul>';
           html += '<li class="option" id="yes">Yes</li>';
@@ -58,13 +57,7 @@
             }
  
           });
-        } else {
-          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-          imperium_self.endTurn();
-          return 0;
         }
-        }
-
       },
     });
 
