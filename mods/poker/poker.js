@@ -1701,8 +1701,11 @@ class Poker extends GameTemplate {
     // FULL HOUSE
     //
     if (three_of_a_kind.length == 2) {
-      pairs.push(three_of_a_kind[0].pop());
-      three_of_a_kind.shift();
+      if(three_of_a_kind[0] > three_of_a_kind[1]) {
+        pairs.push(three_of_a_kind.pop());
+      } else {
+        pairs.push(three_of_a_kind.shift());
+      }
     }
     if (three_of_a_kind.length > 0 && pairs.length > 0) {
 
@@ -1722,6 +1725,7 @@ class Poker extends GameTemplate {
         if (val[i] == pairs[pairs.length - 1]) {
           cards_to_score.push(suite[i] + val[i]);
         }
+        if (cards_to_score.length > 5) {cards_to_score.pop();}
       }
 
       hand_description = "full house";
