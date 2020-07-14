@@ -437,32 +437,32 @@ console.log("\n\n\n\n");
 
   try {
 
-  var element = document.getElementById('gameboard');
-  //if (element !== null) { helpers.hammer(element); }
-  //helpers.drag_element(element);
-  $('#gameboard').draggable();
+    var element = document.getElementById('gameboard');
+    //if (element !== null) { helpers.hammer(element); }
+    //helpers.drag_element(element);
+    $('#gameboard').draggable();
 
-  let twilight_self = this;
-  $('.scoring_card').off();
-  $('.scoring_card').mouseover(function() {
+    let twilight_self = this;
+    $('.scoring_card').off();
+    $('.scoring_card').mouseover(function() {
 
-    let region = this.id;
-    let scoring = twilight_self.calculateScoring(region, 1);
-    let total_vp = scoring.us.vp - scoring.ussr.vp;
-    let vp_color = "white";
+      let region = this.id;
+      let scoring = twilight_self.calculateScoring(region, 1);
+      let total_vp = scoring.us.vp - scoring.ussr.vp;
+      let vp_color = "white";
 
-    if (total_vp > 0) { vp_color = "blue" }
-    if (total_vp < 0) { vp_color = "red" }
-    if (total_vp > 20 || total_vp < -20) { total_vp = "WIN" }
+      if (total_vp > 0) { vp_color = "blue" }
+      if (total_vp < 0) { vp_color = "red" }
+      if (total_vp > 20 || total_vp < -20) { total_vp = "WIN" }
 
-    $(`.display_card#${region}`).show();
-    $(`.display_vp#${region}`).html(
-      `VP: <div style="color:${vp_color}">&nbsp${total_vp}</div>`
-    );
-  }).mouseout(function() {
-    let region = this.id;
-    $(`.display_card#${region}`).hide();
-  })
+      $(`.display_card#${region}`).show();
+      $(`.display_vp#${region}`).html(
+        `VP: <div style="color:${vp_color}">&nbsp${total_vp}</div>`
+      );
+    }).mouseout(function() {
+      let region = this.id;
+      $(`.display_card#${region}`).hide();
+    })
 
   } catch (err) {}
 
