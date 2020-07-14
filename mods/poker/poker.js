@@ -1701,8 +1701,11 @@ class Poker extends GameTemplate {
     // FULL HOUSE
     //
     if (three_of_a_kind.length == 2) {
-      pairs.push(three_of_a_kind[0].pop());
-      three_of_a_kind.shift();
+      if(three_of_a_kind[0] > three_of_a_kind[1]) {
+        pairs.push(three_of_a_kind.pop());
+      } else {
+        pairs.push(three_of_a_kind.shift());
+      }
     }
     if (three_of_a_kind.length > 0 && pairs.length > 0) {
 
