@@ -41,8 +41,6 @@
 
           imperium_self.game.state.round_scoring = 2;
 
-	  imperium_self.lockInterface();
-
           imperium_self.playerScoreSecretObjective(imperium_self, function(vp, objective) {
 
 	    my_secret_vp = vp;
@@ -50,12 +48,6 @@
 
 	    imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
             imperium_self.playerScoreVictoryPoints(imperium_self, function(vp, objective) {
-
-              if (!imperium_self.mayUnlockInterface()) {
-                alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
-                return;
-              }
-              imperium_self.unlockInterface();
 
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
 

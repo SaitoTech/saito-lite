@@ -8,17 +8,14 @@
 
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
 
-	  let chosen = 0;
-
           imperium_self.updateStatus('Select sector to quagmire in diplomatic negotiations, and refresh any planets in that system: ');
           imperium_self.playerSelectSector(function(sector) {
-
-	    if (chosen == 0) {
 
               imperium_self.addMove("resolve\tstrategy");
               imperium_self.addMove("strategy\t"+"diplomacy"+"\t"+strategy_card_player+"\t2");
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
               imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
+
               for (let i = 0; i < imperium_self.game.players_info.length; i++) {
                 imperium_self.addMove("activate\t"+(i+1)+"\t"+sector);
               }
@@ -40,7 +37,8 @@
 	      }
               imperium_self.saveSystemAndPlanets(sys);
               imperium_self.endTurn();
-	    }
+
+
           });
         }
 	return 0;
@@ -57,23 +55,13 @@
           html += '</ul>';
           imperium_self.updateStatus(html);
 
-	  imperium_self.lockInterface();
-
           $('.option').off();
           $('.option').on('click', function() {
-
-	    if (!imperium_self.mayUnlockInterface()) {
-              alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
-              return;
-            }
-            imperium_self.unlockInterface();
-
 
             let id = $(this).attr("id");
 
             if (id == "yes") {
 
-              imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
               let array_of_cards = imperium_self.returnPlayerExhaustedPlanetCards(imperium_self.game.player); // unexhausted
 
               let choices_selected = 0;
@@ -93,9 +81,16 @@
               if (max_choices >= 2) { max_choices = 2; }
 
               imperium_self.updateStatus(html);
+	      imperiumn_self.lockInterface();
 
               $(divname).off();
               $(divname).on('click', function() {
+
+	        if (!imperium_self.mayUnlockInterface()) {
+	          alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+	          return;
+	        }
+	        imperium_self.unlockInterface();
 
                 let action2 = $(this).attr("id");
 
@@ -122,6 +117,7 @@
                 $(divid).css('opacity','0.3');
 
                 if (choices_selected >= max_choices) {
+                  imperium_self.prependMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
                   imperium_self.endTurn();
                 }
 
@@ -136,10 +132,6 @@
 
           });
 
-        } else {
-          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-          imperium_self.endTurn();
-          return 0;
         }
 
       },

@@ -1929,26 +1929,32 @@ console.log("UPDATE SECTOR GRAPHICS!");
   	}
 
         if (item === "command") {
-  	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " command tokens");
-	  for (let z_index in z) {
-  	    amount = z[z_index].gainCommandTokens(imperium_self, player, amount);
+	  if (parseInt(mv[3]) > 0) {
+  	    this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " command tokens");
+	    for (let z_index in z) {
+  	      amount = z[z_index].gainCommandTokens(imperium_self, player, amount);
+  	    }
+  	    this.game.players_info[player-1].command_tokens += amount;
   	  }
-  	  this.game.players_info[player-1].command_tokens += amount;
   	}
         if (item === "strategy") {
-  	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " strategy tokens");
-	  for (let z_index in z) {
-  	    amount = z[z_index].gainStrategyTokens(imperium_self, player, amount);
+	  if (parseInt(mv[3]) > 0) {
+  	    this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " strategy tokens");
+	    for (let z_index in z) {
+  	      amount = z[z_index].gainStrategyTokens(imperium_self, player, amount);
+  	    }
+  	    this.game.players_info[player-1].strategy_tokens += amount;
   	  }
-  	  this.game.players_info[player-1].strategy_tokens += amount;
   	}
 
         if (item === "fleetsupply") {
-	  for (let z_index in z) {
-  	    amount = z[z_index].gainFleetSupply(imperium_self, player, amount);
+	  if (parseInt(mv[3]) > 0) {
+	    for (let z_index in z) {
+  	      amount = z[z_index].gainFleetSupply(imperium_self, player, amount);
+  	    }
+  	    this.game.players_info[player-1].fleet_supply += amount;
+  	    this.updateLog(this.returnFaction(player) + " increases fleet supply to " + this.game.players_info[player-1].fleet_supply);
   	  }
-  	  this.game.players_info[player-1].fleet_supply += amount;
-  	  this.updateLog(this.returnFaction(player) + " increases fleet supply to " + this.game.players_info[player-1].fleet_supply);
   	}
   
 	this.updateTokenDisplay();

@@ -1541,17 +1541,14 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
 
         if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
 
-	  let chosen = 0;
-
           imperium_self.updateStatus('Select sector to quagmire in diplomatic negotiations, and refresh any planets in that system: ');
           imperium_self.playerSelectSector(function(sector) {
-
-	    if (chosen == 0) {
 
               imperium_self.addMove("resolve\tstrategy");
               imperium_self.addMove("strategy\t"+"diplomacy"+"\t"+strategy_card_player+"\t2");
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
               imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
+
               for (let i = 0; i < imperium_self.game.players_info.length; i++) {
                 imperium_self.addMove("activate\t"+(i+1)+"\t"+sector);
               }
@@ -1573,7 +1570,8 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
 	      }
               imperium_self.saveSystemAndPlanets(sys);
               imperium_self.endTurn();
-	    }
+
+
           });
         }
 	return 0;
@@ -1590,23 +1588,13 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
           html += '</ul>';
           imperium_self.updateStatus(html);
 
-	  imperium_self.lockInterface();
-
           $('.option').off();
           $('.option').on('click', function() {
-
-	    if (!imperium_self.mayUnlockInterface()) {
-              alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
-              return;
-            }
-            imperium_self.unlockInterface();
-
 
             let id = $(this).attr("id");
 
             if (id == "yes") {
 
-              imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
               let array_of_cards = imperium_self.returnPlayerExhaustedPlanetCards(imperium_self.game.player); // unexhausted
 
               let choices_selected = 0;
@@ -1626,9 +1614,16 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
               if (max_choices >= 2) { max_choices = 2; }
 
               imperium_self.updateStatus(html);
+	      imperiumn_self.lockInterface();
 
               $(divname).off();
               $(divname).on('click', function() {
+
+	        if (!imperium_self.mayUnlockInterface()) {
+	          alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+	          return;
+	        }
+	        imperium_self.unlockInterface();
 
                 let action2 = $(this).attr("id");
 
@@ -1655,6 +1650,7 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
                 $(divid).css('opacity','0.3');
 
                 if (choices_selected >= max_choices) {
+                  imperium_self.prependMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
                   imperium_self.endTurn();
                 }
 
@@ -1669,10 +1665,6 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
 
           });
 
-        } else {
-          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-          imperium_self.endTurn();
-          return 0;
         }
 
       },
@@ -1722,8 +1714,6 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
 
           imperium_self.game.state.round_scoring = 2;
 
-	  imperium_self.lockInterface();
-
           imperium_self.playerScoreSecretObjective(imperium_self, function(vp, objective) {
 
 	    my_secret_vp = vp;
@@ -1731,12 +1721,6 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
 
 	    imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
             imperium_self.playerScoreVictoryPoints(imperium_self, function(vp, objective) {
-
-              if (!imperium_self.mayUnlockInterface()) {
-                alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
-                return;
-              }
-              imperium_self.unlockInterface();
 
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
 
@@ -2193,10 +2177,10 @@ console.log("WINNIGN CHOICE: " + winning_choice);
       },
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
-        if (imperium_self.game.player == player) {
-        if (imperium_self.game.player != strategy_card_player) {
+        if (imperium_self.game.player == player && imperium_self.game.player != strategy_card_player) {
 
 	  if (imperium_self.game.players_info[player-1].commodities == imperium_self.game.players_info[player-1].commodity_limit) { 
+            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
 	    imperium_self.updateLog(imperium_self.returnFaction(player) + " skips the Trade secondary as they have already refreshed commodities");
             imperium_self.endTurn();
 	    return 1;
@@ -2234,11 +2218,6 @@ console.log("WINNIGN CHOICE: " + winning_choice);
             }
  
           });
-        } else {
-          imperium_self.addMove("resolve\tstrategy\t1");
-          imperium_self.endTurn();
-          return 0;
-        }
         }
       },
     });
@@ -2294,9 +2273,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
             let id = $(this).attr("id");
  
             if (id == "yes") {
-              imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-              imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
-              imperium_self.playerProduceUnits(imperium_self.game.players_info[imperium_self.game.player-1].homeworld, 0, 0, 2);
+              imperium_self.playerProduceUnits(imperium_self.game.players_info[imperium_self.game.player-1].homeworld, 0, 0, 2, 1); // final is warfare card
             }
             if (id == "no") {
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
@@ -9702,26 +9679,32 @@ console.log("UPDATE SECTOR GRAPHICS!");
   	}
 
         if (item === "command") {
-  	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " command tokens");
-	  for (let z_index in z) {
-  	    amount = z[z_index].gainCommandTokens(imperium_self, player, amount);
+	  if (parseInt(mv[3]) > 0) {
+  	    this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " command tokens");
+	    for (let z_index in z) {
+  	      amount = z[z_index].gainCommandTokens(imperium_self, player, amount);
+  	    }
+  	    this.game.players_info[player-1].command_tokens += amount;
   	  }
-  	  this.game.players_info[player-1].command_tokens += amount;
   	}
         if (item === "strategy") {
-  	  this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " strategy tokens");
-	  for (let z_index in z) {
-  	    amount = z[z_index].gainStrategyTokens(imperium_self, player, amount);
+	  if (parseInt(mv[3]) > 0) {
+  	    this.updateLog(this.returnFaction(player) + " gains " + mv[3] + " strategy tokens");
+	    for (let z_index in z) {
+  	      amount = z[z_index].gainStrategyTokens(imperium_self, player, amount);
+  	    }
+  	    this.game.players_info[player-1].strategy_tokens += amount;
   	  }
-  	  this.game.players_info[player-1].strategy_tokens += amount;
   	}
 
         if (item === "fleetsupply") {
-	  for (let z_index in z) {
-  	    amount = z[z_index].gainFleetSupply(imperium_self, player, amount);
+	  if (parseInt(mv[3]) > 0) {
+	    for (let z_index in z) {
+  	      amount = z[z_index].gainFleetSupply(imperium_self, player, amount);
+  	    }
+  	    this.game.players_info[player-1].fleet_supply += amount;
+  	    this.updateLog(this.returnFaction(player) + " increases fleet supply to " + this.game.players_info[player-1].fleet_supply);
   	  }
-  	  this.game.players_info[player-1].fleet_supply += amount;
-  	  this.updateLog(this.returnFaction(player) + " increases fleet supply to " + this.game.players_info[player-1].fleet_supply);
   	}
   
 	this.updateTokenDisplay();
@@ -13924,9 +13907,16 @@ console.log("C");
   
     imperium_self.updateStatus(html);
 
+    imperium_self.lockInterface();
     
     $('.option').off();
     $('.option').on('click', function() {
+
+      if (!imperium_self.mayUnlockInterface()) {
+	alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+        return;
+      }
+      imperium_self.unlockInterface();
 
       let action = $(this).attr("id");
       if (action == "no") {
@@ -13946,28 +13936,28 @@ console.log("C");
   
     // Stage I Public Objectives
     for (let i = 0; i < imperium_self.game.state.stage_i_objectives.length; i++) {
-console.log(i);
-console.log("2 --> " + imperium_self.game.player);
-	    console.log("3 -> " + JSON.stringify(imperium_self.game.players_info[imperium_self.game.player-1]));
-	    console.log("4 -> " + JSON.stringify(imperium_self.game.state.stage_i_objectives));
 
-	    if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored.includes(imperium_self.game.state.stage_i_objectives[i])) {
-console.log(5);
-		    if (imperium_self.canPlayerScoreVictoryPoints(imperium_self.game.player, imperium_self.game.state.stage_i_objectives[i], 1)) {
-console.log(6);
-	  if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(imperium_self.game.stage_i_objectives[i])) {
-console.log(7);
+      console.log("3 -> " + JSON.stringify(imperium_self.game.players_info[imperium_self.game.player-1]));
+      console.log("4 -> " + JSON.stringify(imperium_self.game.state.stage_i_objectives));
+
+      if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored.includes(imperium_self.game.state.stage_i_objectives[i])) {
+      console.log("5 -> " + JSON.stringify(imperium_self.game.state.stage_i_objectives));
+	if (imperium_self.canPlayerScoreVictoryPoints(imperium_self.game.player, imperium_self.game.state.stage_i_objectives[i], 1)) {
+      console.log("6 -> " + JSON.stringify(imperium_self.game.state.stage_i_objectives));
+	  if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(imperium_self.game.state.stage_i_objectives[i])) {
+      console.log("7 -> " + JSON.stringify(imperium_self.game.state.stage_i_objectives));
             html += '1 VP Public Objective: <li class="option stage1" id="'+imperium_self.game.state.stage_i_objectives[i]+'">'+imperium_self.game.deck[3].cards[imperium_self.game.state.stage_i_objectives[i]].name+'</li>';
           }
         }
       }
     }
+      console.log("8 -> " + JSON.stringify(imperium_self.game.state.stage_i_objectives));
   
     // Stage II Public Objectives
     for (let i = 0; i < imperium_self.game.state.stage_ii_objectives.length; i++) {
       if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored.includes(imperium_self.game.state.stage_ii_objectives[i])) {
         if (imperium_self.canPlayerScoreVictoryPoints(imperium_self.game.player, imperium_self.game.state.stage_ii_objectives[i], 2)) {
-	  if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(imperium_self.game.stage_ii_objectives[i])) {
+	  if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(imperium_self.game.state.stage_ii_objectives[i])) {
             html += '2 VP Public Objective: <li class="option stage2" id="'+imperium_self.game.state.stage_ii_objectives[i]+'">'+imperium_self.game.deck[4].cards[imperium_self.game.state.stage_ii_objectives[i]].name+'</li>';
           }
         }
@@ -13990,9 +13980,17 @@ console.log(7);
   
     imperium_self.updateStatus(html);
     
+    imperium_self.lockInterface(); 
+
     $('.option').off();
     $('.option').on('click', function() {
   
+      if (!imperium_self.mayUnlockInterface()) {
+	alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+        return;
+      }
+      imperium_self.unlockInterface();
+
       let action = $(this).attr("id");
       let objective_type = 3;
   
@@ -14035,9 +14033,17 @@ console.log(7);
     this.updateStatus(html);
   
     let stuff_to_build = [];  
-  
+
+    imperium_self.lockInterface();  
+
     $('.buildchoice').off();
     $('.buildchoice').on('click', function() {
+
+      if (!imperium_self.mayUnlockInterface()) {
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+        return;
+      }
+      imperium_self.unlockInterface();
   
       let id = $(this).attr("id");
   
@@ -14063,7 +14069,7 @@ console.log(7);
   }
   
   
-  playerProduceUnits(sector, production_limit=0, cost_limit=0, stage=0) { 
+  playerProduceUnits(sector, production_limit=0, cost_limit=0, stage=0, warfare=0) { 
   
     let imperium_self = this;
 
@@ -14112,10 +14118,19 @@ console.log(7);
     this.updateStatus(html);
   
     let stuff_to_build = [];  
-  
+
+    imperium_self.lockInterface();  
+
     $('.buildchoice').off();
     $('.buildchoice').on('click', function() {
   
+      if (!imperium_self.mayUnlockInterface()) {
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+        return;
+      }
+      imperium_self.unlockInterface();
+
+
       let id = $(this).attr("id");
 
       //
@@ -14132,8 +14147,13 @@ console.log(7);
           total_cost -= imperium_self.game.players_info[imperium_self.game.player-1].production_bonus;
         }
 
-        imperium_self.addMove("resolve\tplay");
-        imperium_self.addMove("continue\t"+imperium_self.game.player+"\t"+sector);
+	if (warfare == 0) {
+          imperium_self.addMove("resolve\tplay");
+          imperium_self.addMove("continue\t"+imperium_self.game.player+"\t"+sector);
+	} else {
+          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+          imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
+        }
 
         imperium_self.playerSelectResources(total_cost, function(success) {
 
@@ -14575,6 +14595,9 @@ console.log(7);
     $('.cardchoice , .textchoice').on('click', function() {
  
       let action2 = $(this).attr("id");
+
+alert("--->" + action2);
+  
       let tmpx = action2.split("_");
   
       let divid = "#"+action2;
@@ -14606,10 +14629,12 @@ console.log(7);
         array_of_cards_to_exhaust.push(array_of_cards[idx]);
         $(divid).off();
         $(divid).css('opacity','0.3');
-        selected_cost += imperium_self.game.planets[array_of_cards[idx]].resources;
+        selected_cost += parseInt(imperium_self.game.planets[array_of_cards[idx]].resources);
+alert("HERE: " + selected_cost);
+
       }
 
-      if (cost <= selected_cost) { mycallback(1); }
+      if (cost <= selected_cost) { alert("OUT"); mycallback(1); }
 
     });
 
@@ -15775,9 +15800,19 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 
     this.updateStatus(html);
 
+    imperium_self.lockInterface();
+
     $('.textchoice').off();
     $('.textchoice').on('click', function() {
        
+      if (!imperium_self.mayUnlockInterface()) {
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+        return;
+      }
+      imperium_self.unlockInterface();
+
+
+
       let action = $(this).attr("id");
                 
       if (action == "cancel") {
@@ -15810,6 +15845,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     html += '</ul>';
 
     this.updateStatus(html);
+    this.lockInterface();
 
     $('.textchoice').off();
     $('.textchoice').on('mouseenter', function() { 
@@ -15825,6 +15861,13 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
       }
     });
     $('.textchoice').on('click', function() {
+
+      if (!imperium_self.mayUnlockInterface()) {
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+        return;
+      }
+      imperium_self.unlockInterface();
+
        
       let action = $(this).attr("id");
                 
@@ -15872,8 +15915,16 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 
     this.updateStatus(html);
 
+    this.lockInterface();
+
     $('.textchoice').off();
     $('.textchoice').on('click', function() {
+
+      if (!imperium_self.mayUnlockInterface()) {
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+        return;
+      }
+      imperium_self.unlockInterface();
 
       let action = $(this).attr("id");
       mycallback(action);
@@ -15912,6 +15963,8 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 
     this.updateStatus(html);
 
+    this.lockInterface();
+
     $('.textchoice').off();
     $('.textchoice').on('mouseenter', function() { 
       let s = $(this).attr("id"); 
@@ -15928,6 +15981,13 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
       }
     });
     $('.textchoice').on('click', function() {
+
+      if (!imperium_self.mayUnlockInterface()) {
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+        return;
+      }
+      imperium_self.unlockInterface();
+
 
       let action = $(this).attr("id");
       if (action != "cancel") {
@@ -16010,7 +16070,17 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 //      imperium_self.hidePlanetCard(imperium_self.game.planets[s].tile, imperium_self.game.planets[s].idx); 
 //      imperium_self.hideSectorHighlight(imperium_self.game.planets[s].tile);
 //    });
+
+    this.lockInterface();
+
     $('.textchoice').on('click', function() {
+
+      if (!imperium_self.mayUnlockInterface()) {
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+        return;
+      }
+      imperium_self.unlockInterface();
+
 
       let action = $(this).attr("id");
 //      imperium_self.hidePlanetCard(imperium_self.game.planets[action].tile, imperium_self.game.planets[action].idx); 
@@ -16093,6 +16163,8 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 
     this.updateStatus(html);
 
+    this.lockInterface();
+
     $('.textchoice').off();
 //    $('.textchoice').on('mouseenter', function() { 
 //      let s = $(this).attr("id"); 
@@ -16105,6 +16177,13 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 //      imperium_self.hideSectorHighlight(imperium_self.game.planets[s].tile);
 //    });
     $('.textchoice').on('click', function() {
+
+      if (!imperium_self.mayUnlockInterface()) {
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+        return;
+      }
+      imperium_self.unlockInterface();
+
 
       let action = $(this).attr("id");
 //      imperium_self.hidePlanetCard(imperium_self.game.planets[action].tile, imperium_self.game.planets[action].idx); 

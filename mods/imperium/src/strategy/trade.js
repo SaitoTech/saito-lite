@@ -42,10 +42,10 @@
       },
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
-        if (imperium_self.game.player == player) {
-        if (imperium_self.game.player != strategy_card_player) {
+        if (imperium_self.game.player == player && imperium_self.game.player != strategy_card_player) {
 
 	  if (imperium_self.game.players_info[player-1].commodities == imperium_self.game.players_info[player-1].commodity_limit) { 
+            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
 	    imperium_self.updateLog(imperium_self.returnFaction(player) + " skips the Trade secondary as they have already refreshed commodities");
             imperium_self.endTurn();
 	    return 1;
@@ -83,11 +83,6 @@
             }
  
           });
-        } else {
-          imperium_self.addMove("resolve\tstrategy\t1");
-          imperium_self.endTurn();
-          return 0;
-        }
         }
       },
     });
