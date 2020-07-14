@@ -41,8 +41,6 @@
       }
     }
 
-     
-
     //
     // action cards
     //

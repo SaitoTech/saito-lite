@@ -125,7 +125,8 @@
     for (let sys in this.game.sectors) {
       for (let j = 0; j < this.totalPlayers; j++) {
         this.game.sectors[sys].activated[j] = 0;
-      }
+	try { this.updateSectorGraphics(sys); } catch (err) {}
+      } 
     }
 
   }

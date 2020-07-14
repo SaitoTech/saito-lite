@@ -967,14 +967,23 @@ console.log("P: " + planet);
       faction     :       "faction2",
       type        :       "ability" ,
       initialize     :    function(imperium_self, player) {
+	imperium_self.game.state.brilliant_original_event = imperium_self.strategy_cards['technology'].strategySecondaryEvent;
 	imperium_self.strategy_cards["technology"].strategySecondaryEvent = function(imperium_self, player, strategy_card_player) {
-          imperium_self.playerAcknowledgeNotice("You will first have the option of researching a free-technology, and then invited to purchase an additional tech for 6 resources:", function() {
-            imperium_self.playerResearchTechnology(function(tech) {
-              //imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-              imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
-              imperium_self.endTurn();
-            });
-          });
+	  if (imperium_self.doesPlayerHaveTech(player, "faction2-brilliant") && player != strategy_card_player) {
+	    alert("JOL NAR SPECIAL");
+	    imperium_self.game.state.brilliant_original_event(imperium_self, player, strategy_card_player);
+
+            //imperium_self.playerAcknowledgeNotice("The Jol Nar may research a free-technology, and then purchase another for 6 resources:", function() {
+            //  imperium_self.playerResearchTechnology(function(tech) {
+            //    imperium_self.prependMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+            //    imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
+            //    imperium_self.endTurn();
+            //  });
+            //});
+
+	  } else {
+	    imperium_self.game.state.brilliant_original_event(imperium_self, player, strategy_card_player);
+	  }
 	}
       }
     });
@@ -1104,14 +1113,21 @@ console.log("P: " + planet);
           imperium_self.game.players_info[gainer-1].orbital_drop = 1;
         }
       },
-      menuOption  :       function(imperium_self, player) {
+      menuOption  :       function(imperium_self, menu, player) {
         let x = {};
-            x.trigger = 'orbitaldrop';
-            x.html = '<li class="option" id="orbitaldrop">orbital drop</li>';
+	if (menu == "main") {
+          x.event = 'orbitaldrop';
+          x.html = '<li class="option" id="orbitaldrop">orbital drop</li>';
+	}
         return x;
       },
-      menuOptionTrigger:  function(imperium_self, player) { return 1; },
-      menuOptionActivated:  function(imperium_self, player) {
+      menuOptionTriggers:  function(imperium_self, menu, player) { 
+        if (imperium_self.doesPlayerHaveTech(player, "faction1-orbital-drop") && menu == "main") {
+	  return 1;
+	}
+        return 0; 
+      },
+      menuOptionActivated:  function(imperium_self, menu, player) {
 
 	if (imperium_self.game.player == player) {
 	
@@ -1345,21 +1361,28 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
           imperium_self.game.players_info[gainer-1].quash = 1;
         }
       },
-      menuOption  :       function(imperium_self, player) {
+      menuOption  :       function(imperium_self, menu, player) {
         let x = {};
-            x.trigger = 'quash';
-            x.html = '<li class="option" id="quash">quash agenda</li>';
+	if (menu === "main") {
+          x.event = 'quash';
+          x.html = '<li class="option" id="quash">quash agenda</li>';
+        }
         return x;
       },
-      menuOptionTrigger:  function(imperium_self, player) { return 1; },
-      menuOptionActivated:  function(imperium_self, player) {
+      menuOptionTriggers:  function(imperium_self, menu, player) { 
+        if (imperium_self.doesPlayerHaveTech(player, "faction3-quash") && menu == "main") {
+	  return 1;
+	}
+	return 0;
+      },
+      menuOptionActivated:  function(imperium_self, menu, player) {
 
         if (imperium_self.game.player == player) {
 
           let html = '';
           html += 'Select one agenda to quash in the Galactic Senate.<ul>';
           for (i = 0; i < 3; i++) {
-            html += '<li class="option" id="'+imperium_self.game.state.agendas[i]+'">' + laws[imperium_self.game.state.agendas[i]].name + '</li>';
+            html += '<li class="option" id="'+imperium_self.game.state.agendas[i]+'">' + imperium_self.agenda_cards[imperium_self.game.state.agendas[i]].name + '</li>';
           }
           html += '</ul>';
 
@@ -2191,6 +2214,15 @@ console.log("WINNIGN CHOICE: " + winning_choice);
           html += '<li class="option" id="no">No</li>';
           html += '</ul>';
 
+
+	  if (imperium_self.game.players_info[imperium_self.game.player-1].commodities == imperium_self.game.players_info[imperium_self.game.player-1].commodity_limit) {
+            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	    imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " already has commodities and skips trade secondary");
+	    imperium_self.endTurn();
+	    return 0;
+	  }
+
+
           imperium_self.updateStatus(html);
 
 	  imperium_self.lockInterface();
@@ -2249,8 +2281,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
       },
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
-        if (imperium_self.game.player == player) { 
-        if (imperium_self.game.player != strategy_card_player) { 
+        if (imperium_self.game.player == player && imperium_self.game.player != strategy_card_player) { 
 
           let html = '<p>Do you wish to spend 1 strategy token to produce in your home sector? </p><ul>';
           html += '<li class="option" id="yes">Yes</li>';
@@ -2282,13 +2313,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
             }
  
           });
-        } else {
-          imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-          imperium_self.endTurn();
-          return 0;
         }
-        }
-
       },
     });
 
@@ -6721,7 +6746,6 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
 
         this.game.queue.push("turn");
         this.game.queue.push("newround"); 
-alert("YOU GOT NEW JS - version 302.312");
         //
         // add cards to deck and shuffle as needed
         //
@@ -9676,6 +9700,9 @@ console.log("UPDATE SECTOR GRAPHICS!");
   	    amount = z[z_index].gainCommodities(imperium_self, player, amount);
   	  }
   	  this.game.players_info[player-1].commodities += amount;
+	  if (this.game.players_info[player-1].commodities > this.game.players_info[player-1].commodity_limit) {
+	    this.game.players_info[player-1].commodities = this.game.players_info[player-1].commodity_limit;
+	  }
   	}
 
         if (item === "command") {
@@ -14215,8 +14242,6 @@ console.log("C");
         alert("You cannot build more units than your production limit");
 	return_to_zero = 1;
       }
-
-
       if (return_to_zero == 1) {
         stuff_to_build = [];
 	$('.infantry_total').html(0);
@@ -14229,6 +14254,7 @@ console.log("C");
 	$('.warsun_total').html(0);
 	return;
       }
+
 
 
   
@@ -14596,8 +14622,6 @@ console.log("C");
  
       let action2 = $(this).attr("id");
 
-alert("--->" + action2);
-  
       let tmpx = action2.split("_");
   
       let divid = "#"+action2;
@@ -14630,11 +14654,9 @@ alert("--->" + action2);
         $(divid).off();
         $(divid).css('opacity','0.3');
         selected_cost += parseInt(imperium_self.game.planets[array_of_cards[idx]].resources);
-alert("HERE: " + selected_cost);
-
       }
 
-      if (cost <= selected_cost) { alert("OUT"); mycallback(1); }
+      if (cost <= selected_cost) { mycallback(1); }
 
     });
 
@@ -16846,8 +16868,6 @@ console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
         }
       }
     }
-
-     
 
     //
     // action cards
@@ -19178,7 +19198,8 @@ console.log("p: " + planet);
     for (let sys in this.game.sectors) {
       for (let j = 0; j < this.totalPlayers; j++) {
         this.game.sectors[sys].activated[j] = 0;
-      }
+	try { this.updateSectorGraphics(sys); } catch (err) {}
+      } 
     }
 
   }

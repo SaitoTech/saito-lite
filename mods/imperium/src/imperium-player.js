@@ -2258,8 +2258,6 @@ console.log("C");
         alert("You cannot build more units than your production limit");
 	return_to_zero = 1;
       }
-
-
       if (return_to_zero == 1) {
         stuff_to_build = [];
 	$('.infantry_total').html(0);
@@ -2272,6 +2270,7 @@ console.log("C");
 	$('.warsun_total').html(0);
 	return;
       }
+
 
 
   
@@ -2639,8 +2638,6 @@ console.log("C");
  
       let action2 = $(this).attr("id");
 
-alert("--->" + action2);
-  
       let tmpx = action2.split("_");
   
       let divid = "#"+action2;
@@ -2673,11 +2670,9 @@ alert("--->" + action2);
         $(divid).off();
         $(divid).css('opacity','0.3');
         selected_cost += parseInt(imperium_self.game.planets[array_of_cards[idx]].resources);
-alert("HERE: " + selected_cost);
-
       }
 
-      if (cost <= selected_cost) { alert("OUT"); mycallback(1); }
+      if (cost <= selected_cost) { mycallback(1); }
 
     });
 

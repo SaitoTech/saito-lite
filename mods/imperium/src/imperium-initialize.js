@@ -242,7 +242,6 @@
 
         this.game.queue.push("turn");
         this.game.queue.push("newround"); 
-alert("YOU GOT NEW JS - version 302.312");
         //
         // add cards to deck and shuffle as needed
         //

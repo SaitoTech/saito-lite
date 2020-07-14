@@ -138,21 +138,28 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
           imperium_self.game.players_info[gainer-1].quash = 1;
         }
       },
-      menuOption  :       function(imperium_self, player) {
+      menuOption  :       function(imperium_self, menu, player) {
         let x = {};
-            x.trigger = 'quash';
-            x.html = '<li class="option" id="quash">quash agenda</li>';
+	if (menu === "main") {
+          x.event = 'quash';
+          x.html = '<li class="option" id="quash">quash agenda</li>';
+        }
         return x;
       },
-      menuOptionTrigger:  function(imperium_self, player) { return 1; },
-      menuOptionActivated:  function(imperium_self, player) {
+      menuOptionTriggers:  function(imperium_self, menu, player) { 
+        if (imperium_self.doesPlayerHaveTech(player, "faction3-quash") && menu == "main") {
+	  return 1;
+	}
+	return 0;
+      },
+      menuOptionActivated:  function(imperium_self, menu, player) {
 
         if (imperium_self.game.player == player) {
 
           let html = '';
           html += 'Select one agenda to quash in the Galactic Senate.<ul>';
           for (i = 0; i < 3; i++) {
-            html += '<li class="option" id="'+imperium_self.game.state.agendas[i]+'">' + laws[imperium_self.game.state.agendas[i]].name + '</li>';
+            html += '<li class="option" id="'+imperium_self.game.state.agendas[i]+'">' + imperium_self.agenda_cards[imperium_self.game.state.agendas[i]].name + '</li>';
           }
           html += '</ul>';
 

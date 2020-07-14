@@ -56,14 +56,23 @@
       faction     :       "faction2",
       type        :       "ability" ,
       initialize     :    function(imperium_self, player) {
+	imperium_self.game.state.brilliant_original_event = imperium_self.strategy_cards['technology'].strategySecondaryEvent;
 	imperium_self.strategy_cards["technology"].strategySecondaryEvent = function(imperium_self, player, strategy_card_player) {
-          imperium_self.playerAcknowledgeNotice("You will first have the option of researching a free-technology, and then invited to purchase an additional tech for 6 resources:", function() {
-            imperium_self.playerResearchTechnology(function(tech) {
-              //imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-              imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
-              imperium_self.endTurn();
-            });
-          });
+	  if (imperium_self.doesPlayerHaveTech(player, "faction2-brilliant") && player != strategy_card_player) {
+	    alert("JOL NAR SPECIAL");
+	    imperium_self.game.state.brilliant_original_event(imperium_self, player, strategy_card_player);
+
+            //imperium_self.playerAcknowledgeNotice("The Jol Nar may research a free-technology, and then purchase another for 6 resources:", function() {
+            //  imperium_self.playerResearchTechnology(function(tech) {
+            //    imperium_self.prependMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+            //    imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
+            //    imperium_self.endTurn();
+            //  });
+            //});
+
+	  } else {
+	    imperium_self.game.state.brilliant_original_event(imperium_self, player, strategy_card_player);
+	  }
 	}
       }
     });

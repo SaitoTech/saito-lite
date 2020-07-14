@@ -33,12 +33,7 @@
 	}
         return x;
       },
-      menuOptionTriggers:  function(imperium_self, menu, player) { 
-        if (imperium_self.doesPlayerHaveTech(player, "faction1-orbital-drop") && menu == "main") {
-	  return 1;
-	}
-        return 0; 
-      },
+      menuOptionTriggers:  function(imperium_self, menu, player) { return 1; },
       menuOptionActivated:  function(imperium_self, menu, player) {
 
 	if (imperium_self.game.player == player) {

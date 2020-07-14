@@ -1926,6 +1926,9 @@ console.log("UPDATE SECTOR GRAPHICS!");
   	    amount = z[z_index].gainCommodities(imperium_self, player, amount);
   	  }
   	  this.game.players_info[player-1].commodities += amount;
+	  if (this.game.players_info[player-1].commodities > this.game.players_info[player-1].commodity_limit) {
+	    this.game.players_info[player-1].commodities = this.game.players_info[player-1].commodity_limit;
+	  }
   	}
 
         if (item === "command") {
