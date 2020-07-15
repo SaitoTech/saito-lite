@@ -528,7 +528,7 @@ class Poker extends GameTemplate {
           // Populate winners with winning players
           winners.push(winlist[winlist.length - 1].player - 1);
           for (let p = winlist.length - 1; p > 0; p--) {
-            if (winlist[p].player_hand.cards_to_score == winlist[p - 1].player_hand.cards_to_score) { winners.push(winlist[p - 1].player - 1) }
+            if (winlist[p].player_hand.cards_to_score.toString() == winlist[p - 1].player_hand.cards_to_score.toSting()) { winners.push(winlist[p - 1].player - 1) }
           }
 
           // update logs and splash!
@@ -1332,7 +1332,7 @@ class Poker extends GameTemplate {
         hands_differ = 1;
       }
     }
-    if (hands_differ == 0) { return 0; }
+    if (hands_differ == 0) { return 3; }
 
     if (score1.hand_description == "royal flush" && score2.hand_description == "royal flush") {
       for (let i = 0; i < score1.cards_to_score.length; i++) {
