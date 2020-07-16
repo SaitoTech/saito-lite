@@ -317,6 +317,8 @@ initializeGame(game_id) {
     }
   }
 
+ 
+
 
   //
   // initialize
