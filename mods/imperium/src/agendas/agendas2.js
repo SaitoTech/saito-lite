@@ -390,7 +390,7 @@
           if (winning_choice === "against") {
 	    for (let i in imperium_self.game.sectors) {
 	      if (imperium_self.game.sectors[i].wormhole == 1 || imperium_self.game.sectors[i].wormhole == 2) {
-		for (let ii = 0; ii < imperium_self.game.sectors[ii].units.length; ii++) {
+		for (let ii = 0; ii < imperium_self.game.players_info.length; ii++) {
 		  imperium_self.game.sectors[i].units[ii] = [];
 		}
 	      }
@@ -459,7 +459,7 @@
 
 
   this.importAgendaCard('terraforming-initiative', {
-        name : "terraforming-initiative" ,
+        name : "Terraforming Initiative" ,
         type : "Law" ,
         elect : "planet" ,
         text : "Elect a hazardous planet. The resource and influence values of this planet are increased by 1 point each" ,
@@ -479,9 +479,9 @@
           //
           // alter planet
           //
-          imperium_self.game.planet[winning_choice].resources++;
-          imperium_self.game.planet[winning_choice].influence++;
-          imperium_self.updateLog(imperium_self.game.planet[winning_choice].name + " increases resource and influence through terraforming");
+          imperium_self.game.planets[winning_choice].resources++;
+          imperium_self.game.planets[winning_choice].influence++;
+          imperium_self.updateLog(imperium_self.game.planets[winning_choice].name + " increases resource and influence through terraforming");
 
 	  return 1;
 

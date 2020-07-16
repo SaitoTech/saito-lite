@@ -7,7 +7,7 @@
     var planets = {};
   
     // regular planets
-    planets['planet1']  = { type : "hazardous" , img : "/imperium/img/planets/CRYSTALIS" , name : "Crystalis" , resources : 3 , influence : 0 , bonus : ""  }
+    planets['planet1']  = { type : "hazardous" , img : "/imperium/img/planets/CRYSTALIS.png" , name : "Crystalis" , resources : 3 , influence : 0 , bonus : ""  }
     planets['planet2']  = { type : "hazardous" , img : "/imperium/img/planets/TROTH.png" , name : "Troth" , resources : 2 , influence : 0 , bonus : ""  }
     planets['planet3']  = { type : "industrial" , img : "/imperium/img/planets/LONDRAK.png" , name : "Londrak" , resources : 1 , influence : 2 , bonus : ""  }
     planets['planet4']  = { type : "hazardous" , img : "/imperium/img/planets/CITADEL.png" , name : "Citadel" , resources : 0 , influence : 4 , bonus : "red"  }

@@ -4503,7 +4503,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
           if (winning_choice === "against") {
 	    for (let i in imperium_self.game.sectors) {
 	      if (imperium_self.game.sectors[i].wormhole == 1 || imperium_self.game.sectors[i].wormhole == 2) {
-		for (let ii = 0; ii < imperium_self.game.sectors[ii].units.length; ii++) {
+		for (let ii = 0; ii < imperium_self.game.players_info.length; ii++) {
 		  imperium_self.game.sectors[i].units[ii] = [];
 		}
 	      }
@@ -4572,7 +4572,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 
 
   this.importAgendaCard('terraforming-initiative', {
-        name : "terraforming-initiative" ,
+        name : "Terraforming Initiative" ,
         type : "Law" ,
         elect : "planet" ,
         text : "Elect a hazardous planet. The resource and influence values of this planet are increased by 1 point each" ,
@@ -4592,9 +4592,9 @@ console.log("WINNIGN CHOICE: " + winning_choice);
           //
           // alter planet
           //
-          imperium_self.game.planet[winning_choice].resources++;
-          imperium_self.game.planet[winning_choice].influence++;
-          imperium_self.updateLog(imperium_self.game.planet[winning_choice].name + " increases resource and influence through terraforming");
+          imperium_self.game.planets[winning_choice].resources++;
+          imperium_self.game.planets[winning_choice].influence++;
+          imperium_self.updateLog(imperium_self.game.planets[winning_choice].name + " increases resource and influence through terraforming");
 
 	  return 1;
 
@@ -4790,14 +4790,14 @@ console.log(JSON.stringify(imperium_self.game.planets[winning_choice]));
 	  let owner = parseInt(planet.owner);
 	  let total_infantry = 0;
 
-	  let units_to_check = planets.units[owner-1].length;
+	  let units_to_check = planet.units[owner-1].length;
 	  for (let i = 0; i < units_to_check; i++) {
-	    let unit = planets.units[owner-1][i];
+	    let unit = planet.units[owner-1][i];
 	    if (unit.type == "infantry") {
 	      total_infantry++;
-	      planets.units[owner-1].splice(i, 1);
+	      planet.units[owner-1].splice(i, 1);
 	      i--;
-	      units_to_check = planets.units[owner-1].length;
+	      units_to_check = planet.units[owner-1].length;
 	    }
 	  }
 
@@ -17563,7 +17563,7 @@ console.log("NONE!");
     var planets = {};
   
     // regular planets
-    planets['planet1']  = { type : "hazardous" , img : "/imperium/img/planets/CRYSTALIS" , name : "Crystalis" , resources : 3 , influence : 0 , bonus : ""  }
+    planets['planet1']  = { type : "hazardous" , img : "/imperium/img/planets/CRYSTALIS.png" , name : "Crystalis" , resources : 3 , influence : 0 , bonus : ""  }
     planets['planet2']  = { type : "hazardous" , img : "/imperium/img/planets/TROTH.png" , name : "Troth" , resources : 2 , influence : 0 , bonus : ""  }
     planets['planet3']  = { type : "industrial" , img : "/imperium/img/planets/LONDRAK.png" , name : "Londrak" , resources : 1 , influence : 2 , bonus : ""  }
     planets['planet4']  = { type : "hazardous" , img : "/imperium/img/planets/CITADEL.png" , name : "Citadel" , resources : 0 , influence : 4 , bonus : "red"  }
