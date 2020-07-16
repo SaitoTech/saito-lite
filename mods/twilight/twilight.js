@@ -277,12 +277,19 @@ class Twilight extends GameTemplate {
     let data = {}; 
         data.game = this;
 
-    GameBoardSizer.render(this.app, data);
-    GameBoardSizer.attachEvents(this.app, data, '.gameboard');
+    try {
+      if (app.browser.isMobileBrowser(navigator.userAgent)) {
 
-    GameHammerMobile.render(this.app, data);
-    GameHammerMobile.attachEvents(this.app, data, '.gameboard');
+        GameBoardSizer.render(this.app, data);
+        GameBoardSizer.attachEvents(this.app, data, '.gameboard');
 
+      } else {
+
+        GameHammerMobile.render(this.app, data);
+        GameHammerMobile.attachEvents(this.app, data, '.gameboard');
+
+      }
+    } catch (err) {}
 
   }
 
