@@ -1366,16 +1366,16 @@ class Poker extends GameTemplate {
 
 
     if (score1.hand_description == "four-of-a-kind" && score2.hand_description == "four-of-a-kind") {
-      if (this.returnHigherCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
+      if (this.returnHigherNumberCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
         return 1;
       }
-      if (this.returnHigherCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score2.cards_to_score[0]) {
+      if (this.returnHigherNumberCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score2.cards_to_score[0]) {
         return 2;
       }
-      if (this.returnHigherCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score1.cards_to_score[4]) {
+      if (this.returnHigherNumberCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score1.cards_to_score[4]) {
         return 1;
       }
-      if (this.returnHigherCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score2.cards_to_score[4]) {
+      if (this.returnHigherNumberCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score2.cards_to_score[4]) {
         return 2;
       }
       return 3;
@@ -1419,10 +1419,10 @@ class Poker extends GameTemplate {
 
     if (score1.hand_description == "straight" && score2.hand_description == "straight") {
       for (let i = 0; i < score1.cards_to_score.length; i++) {
-        if (this.returnHigherCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score1.cards_to_score[i]) {
+        if (this.returnHigherNumberCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score1.cards_to_score[i]) {
           return 1;
         }
-        if (this.returnHigherCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score2.cards_to_score[i]) {
+        if (this.returnHigherNumberCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score2.cards_to_score[i]) {
           return 2;
         }
       }
@@ -1440,10 +1440,10 @@ class Poker extends GameTemplate {
         return 2;
       }
       for (let i = 3; i < 5; i++) {
-        if (this.returnHigherCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score1.cards_to_score[i]) {
+        if (this.returnHigherNumberCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score1.cards_to_score[i]) {
           return 1;
         }
-        if (this.returnHigherCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score2.cards_to_score[i]) {
+        if (this.returnHigherNumberCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score2.cards_to_score[i]) {
           return 2;
         }
       }
@@ -1466,10 +1466,10 @@ class Poker extends GameTemplate {
       if (this.returnHigherNumberCard(score1.cards_to_score[2], score2.cards_to_score[2]) == score2.cards_to_score[2]) {
         return 2;
       }
-      if (this.returnHigherCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score1.cards_to_score[4]) {
+      if (this.returnHigherNumberCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score1.cards_to_score[4]) {
         return 1;
       }
-      if (this.returnHigherCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score2.cards_to_score[4]) {
+      if (this.returnHigherNumberCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score2.cards_to_score[4]) {
         return 2;
       }
       return 3;
@@ -1492,10 +1492,10 @@ class Poker extends GameTemplate {
       if (this.returnHigherNumberCard(score1.cards_to_score[2], score2.cards_to_score[2]) == score2.cards_to_score[2]) {
         return 2;
       }
-      if (this.returnHigherCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score1.cards_to_score[4]) {
+      if (this.returnHigherNumberCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score1.cards_to_score[4]) {
         return 1;
       }
-      if (this.returnHigherCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score2.cards_to_score[4]) {
+      if (this.returnHigherNumberCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score2.cards_to_score[4]) {
         return 2;
       }
       return 3;
