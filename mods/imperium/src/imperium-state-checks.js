@@ -13,6 +13,10 @@
     let factions = imperium_self.returnFactions();
     return factions[imperium_self.game.players_info[player-1].faction].name;
   }
+  returnPlayerHomeworld(player) {
+    let factions = imperium_self.returnFactions();
+    return factions[this.game.players_info[player-1].faction].homeworld
+  }
   returnSpeaker() {
     let factions = this.returnFactions();
     return factions[this.game.players_info[this.game.state.speaker-1].faction].name;
@@ -815,12 +819,7 @@
     let tile1 = sys1.s.tile;
     let tile2 = sys2.s.tile;
 
-console.log(tile1 + " tile2 " + tile2);
-
     if (tile1 === "" || tile2 === "") { return 0; }
-
-console.log("CHECKING JSON");
-console.log(JSON.stringify(this.game.board));
 
     if (s[tile1].neighbours.includes(tile2)) { return 1; }
     if (s[tile2].neighbours.includes(tile1)) { return 1; }
@@ -835,13 +834,8 @@ console.log(JSON.stringify(this.game.board));
   
   arePlayersAdjacent(player1, player2) {
 
-console.log("checking if players: " + player1 + " + " + player2 + " are adjacent");
-
     let p1sectors = this.returnSectorsWithPlayerUnits(player1);
     let p2sectors = this.returnSectorsWithPlayerUnits(player2);
-
-console.log(JSON.stringify(p1sectors));
-console.log(JSON.stringify(p2sectors));
 
     for (let i = 0; i < p1sectors.length; i++) {
       for (let ii = 0; ii < p2sectors.length; ii++) {
@@ -850,15 +844,12 @@ console.log(JSON.stringify(p2sectors));
       }
     }
 
-console.log("no");
     return 0;
   }
 
   isPlayerAdjacentToSector(player, sector) {
 
     let p1sectors = this.returnSectorsWithPlayerUnits(player);
-
-console.log("JALKING: " + JSON.stringify(p1sectors));
 
     for (let i = 0; i < p1sectors.length; i++) {
       if (p1sectors[i] == sector) { return 1; }

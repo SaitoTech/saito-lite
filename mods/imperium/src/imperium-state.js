@@ -58,6 +58,10 @@
         state.ground_combat_infantry_destroyed_attacker = 0;
         state.ground_combat_infantry_destroyed_defender = 0;
 
+	state.bombardment_against_cultural_planets = 1;
+	state.bombardment_against_industrial_planets = 1;
+	state.bombardment_against_hazardous_planets = 1;
+
 	state.pds_limit_per_planet = 2;
 	state.pds_limit_total = 4;
 

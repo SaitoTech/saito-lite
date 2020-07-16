@@ -430,14 +430,39 @@ console.log("AC: " + JSON.stringify(ac));
 
     let sys = imperium_self.returnSectorAndPlanets(sector);
 
+
     //
-    // if player is planet owner, this is secondary which should
-    // happen afterwards -- parlay, etc. ?
+    // some laws prohibit bombardment against
+    //
+    if (this.game.state.bombardment_against_cultural_planets == 0 && sys.p[planet_idx].type == "cultural") {
+      this.updateLog("Bombardment is not possible against cultural planets. Skipping.");
+      this.endTurn();
+    }
+    if (this.game.state.bombardment_against_industrial_planets == 0 && sys.p[planet_idx].type == "industrial") {
+      this.updateLog("Bombardment is not possible against industrial planets. Skipping.");
+      this.endTurn();
+    }
+    if (this.game.state.bombardment_against_hazardous_planets == 0 && sys.p[planet_idx].type == "hazardous") {
+      this.updateLog("Bombardment is not possible against hazardous planets. Skipping.");
+      this.endTurn();
+    }
+    //
+    // no bombardment of my own planets (i.e. if parlay ends invasion)
     //
     if (sys.p[planet_idx].owner == imperium_self.game.player) {
       imperium_self.endTurn();
       return 0;
     }
+    //
+    // no bombardment of PDS-defended territories
+    //
+    if (this.doesPlanetHavePDS(sys.p[planet_idx])) {
+      this.updateLog("Bombardment not possible against PDS-defended planets. Skipping.");
+      imperium_self.endTurn();
+      return 0;
+    }
+
+
 
 
     html = '<div class="sf-readable">Do you wish to bombard '+sys.p[planet_idx].name+'? </div><ul>';
@@ -720,7 +745,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
   //
   // destroy units
   //
-  playerDestroyShips(player, total, sector, capital=0) {
+  playerDestroyUnits(player, total, sector, capital=0) {
 
     let imperium_self = this;
     let total_hits = total;
@@ -728,7 +753,115 @@ console.log("ERROR: you had no hits left to assign, bug?");
     let maximum_assignable_hits = 0;
     let sys = imperium_self.returnSectorAndPlanets(sector);
 
-console.log("SECTOR: " + sector);
+    html = '<div class="sf-readable">You must destroy '+total+' units in sector: '+ imperium_self.game.sectors[sector].name +':</div><ul>';
+
+    let total_targetted_units = 0;
+    let targetted_units = imperium_self.game.players_info[imperium_self.game.player-1].target_units;
+
+    if (capital == 1) {
+      targetted_units = [];
+      targetted_units.push("destroyer");
+      targetted_units.push("carrier");
+      targetted_units.push("destroyer");
+      targetted_units.push("cruiser");
+      targetted_units.push("dreadnaught");
+      targetted_units.push("warsun");
+      targetted_units.push("flagship");
+    }
+
+    for (let i = 0; i < sys.s.units[imperium_self.game.player-1].length; i++) {
+      let unit = sys.s.units[imperium_self.game.player-1][i];
+      maximum_assignable_hits++;
+      if (targetted_units.includes(unit.type)) { total_targetted_units++; }
+      html += '<li class="textchoice player_ship_'+i+'" id="'+i+'">'+unit.name+'</li>';
+    }
+    for (let p = 0; i < sys.p.length; p++) {
+      for (let i = 0; i < sys.p[p].units[imperium_self.game.player-1].length; i++) {
+        let unit = sys.p[p].units[imperium_self.game.player-1][i];
+        maximum_assignable_hits++;
+        if (targetted_units.includes(unit.type)) { total_targetted_units++; }
+        html += '<li class="textchoice player_unit_'+p+'_'+i+'" id="ground_unit_'+p+'_'+i+'">'+unit.name+'</li>';
+      }
+    }
+    html += '</ul>';
+  
+    if (maximum_assignable_hits == 0) {
+      this.addMove("notify\t" + this.returnFaction(player) + " has no ships to destroy");
+      this.endTurn();
+      return 0;
+    }
+
+
+    imperium_self.updateStatus(html);
+	
+    $('.textchoice').off();
+    $('.textchoice').on('click', function() {
+
+
+      let ship_idx = $(this).attr("id");
+      let planet_idx = 0;
+      let unit_idx = 0;
+      let unit_type = "ship";
+
+      if (ship_idx.indexOf("_unit_") > 0) {
+        unit_type = "ground";
+	let tmpk = ship_idx.split("_");
+	planet_idx = tmpk[1];
+	unit_idx = tmpk[2];
+	
+      }
+
+      let selected_unit = null;
+      if (unit_type == "ship") {
+        selected_unit = sys.s.units[imperium_self.game.player-1][ship_idx];
+      } else {
+        selected_unit = sys.p[planet_idx].units[imperium_self.game.player-1][unit_idx];
+      }
+
+      if (total_targetted_units > 0) {
+        if (!targetted_units.includes(selected_unit.type)) {
+          alert("You must first destroy the required unit types");
+          return;
+	} else {
+	  total_targetted_units--;
+	}
+      }
+
+      if (unit_type == "ship") {
+        imperium_self.addMove("destroy_unit\t"+player+"\t"+player+"\t"+"space\t"+sector+"\t"+"0"+"\t"+ship_idx+"\t1");
+      } else {
+        imperium_self.addMove("destroy_unit\t"+player+"\t"+player+"\t"+"ground\t"+sector+"\t"+planet_idx+"\t"+unit_idx+"\t1");
+      }
+
+      selected_unit.strength = 0;;
+      selected_unit.destroyed = 0;
+      $(this).remove();
+
+      total_hits--;
+      hits_assigned++;
+
+      if (total_hits == 0 || hits_assigned >= maximum_assignable_hits) {
+        imperium_self.updateStatus("Notifying players of units destroyed...");
+        imperium_self.endTurn();
+      }
+
+    });
+  }
+
+
+
+
+
+  //
+  // destroy ships
+  //
+  playerDestroyShips(player, total, sector, capital=0) {
+
+    let imperium_self = this;
+    let total_hits = total;
+    let hits_assigned = 0;
+    let maximum_assignable_hits = 0;
+    let sys = imperium_self.returnSectorAndPlanets(sector);
 
     html = '<div class="sf-readable">You must destroy '+total+' ships in your fleet:</div><ul>';
 
@@ -746,14 +879,12 @@ console.log("SECTOR: " + sector);
       targetted_units.push("flagship");
     }
 
-console.log("A");
     for (let i = 0; i < sys.s.units[imperium_self.game.player-1].length; i++) {
       let unit = sys.s.units[imperium_self.game.player-1][i];
       maximum_assignable_hits++;
       if (targetted_units.includes(unit.type)) { total_targetted_units++; }
       html += '<li class="textchoice player_ship_'+i+'" id="'+i+'">'+unit.name+'</li>';
     }
-console.log("B");
     html += '</ul>';
   
     if (maximum_assignable_hits == 0) {
@@ -762,7 +893,6 @@ console.log("B");
       return 0;
     }
 
-console.log("C");
 
     imperium_self.updateStatus(html);
 	
@@ -2152,7 +2282,9 @@ console.log("C");
     html += '<li class="buildchoice" id="cruiser">Cruiser - <span class="cruiser_total">0</span></li>';
     html += '<li class="buildchoice" id="dreadnaught">Dreadnaught - <span class="dreadnaught_total">0</span></li>';
     html += '<li class="buildchoice" id="flagship">Flagship - <span class="flagship_total">0</span></li>';
-    html += '<li class="buildchoice" id="warsun">War Sun - <span class="warsun_total">0</span></li>';
+    if (imperium_self.game.players_info[imperium_self.game.player-1].may_produce_warsuns == 1) {
+      html += '<li class="buildchoice" id="warsun">War Sun - <span class="warsun_total">0</span></li>';
+    }
     html += '</ul>';
     html += '</p>';
     html += '<div id="buildcost" class="buildcost"><span class="buildcost_total">0 resources</span></div>';

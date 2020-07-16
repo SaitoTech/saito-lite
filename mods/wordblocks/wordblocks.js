@@ -126,7 +126,7 @@ console.log("INITIALIZE GAME");
     //
     // deal cards 
     //
-    if (this.game.deck.length == 0 && this.game.step.game == 0) {
+    if (this.game.deck.length == 0 && this.game.step.game == 1) {
 
       this.updateStatus("Generating the Game");
 

@@ -171,6 +171,25 @@ console.log("RESOLVE");
 
 
 
+      if (mv[0] === "research") {
+
+        let player = parseInt(mv[1]);
+  	this.game.queue.splice(qe, 1);
+
+        if (imperium_self.game.player == player) {
+            imperium_self.playerResearchTechnology(function(tech) {
+              imperium_self.addMove("purchase\t"+imperium_self.game.player+"\ttech\t"+tech);
+              imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " researches " + imperium_self.tech[tech].name);
+              imperium_self.endTurn();
+          });
+        }
+	return 0;
+
+      }
+
+
+
+
       if (mv[0] === "announce_retreat") {
 
 	let player = parseInt(mv[1]);
@@ -1086,7 +1105,9 @@ console.log("executing "+z[z_index].name);
 	//
 	for (let i = 0; i < this.game.players_info.length; i++) {
 	  if (this.game.players_info[i].must_exhaust_at_round_start.length > 0) {
-	    this.game.queue.push("must_exhaust_at_round_start\t"+(i+1));
+	    for (let b = 0; b < this.game.players_info.length; b++) {
+	      this.game.queue.push("must_exhaust_at_round_start\t"+(i+1)+"\t"+this.game.players_info[i].must_exhaust_at_round_start[b]);
+	    }
 	  }
 	}
 
@@ -1191,9 +1212,7 @@ console.log("executing "+z[z_index].name);
           if (this.game.state.round < 4) {
             this.game.queue.push("revealobjectives");
   	    for (let i = 1; i <= this.game.players_info.length; i++) {
-console.log("HERE: " + i);
               this.game.queue.push("FLIPCARD\t4\t1\t2\t"+i); // deck card poolnum player
-console.log("HERE 2: " + i);
   	    }
 	  }
 
@@ -1205,7 +1224,6 @@ console.log("HERE 2: " + i);
 	  }
 
 	}
-console.log("DONE HERE!");
     	return 1;
       }
  
@@ -1344,10 +1362,10 @@ console.log("DONE HERE!");
   	  this.addMove("addbonustounselectedstrategycards");
   
   	  let cards_to_select = 1;
-  	  if (this.game.players_info.length == 2) { cards_to_select = 3; }
-  	  if (this.game.players_info.length == 3) { cards_to_select = 2; }
-  	  if (this.game.players_info.length == 4) { cards_to_select = 2; }
-  	  if (this.game.players_info.length >= 5) { cards_to_select = 1; }
+//  	  if (this.game.players_info.length == 2) { cards_to_select = 3; }
+//  	  if (this.game.players_info.length == 3) { cards_to_select = 2; }
+//  	  if (this.game.players_info.length == 4) { cards_to_select = 2; }
+//  	  if (this.game.players_info.length >= 5) { cards_to_select = 1; }
   
   	  //
   	  // TODO -- pick appropriate card number
@@ -1380,6 +1398,63 @@ console.log("DONE HERE!");
   	return 1;
   
       }
+
+
+      if (mv[0] === "must_exhaust_at_round_start") {
+
+	let player = parseInt(mv[1]);
+	let type = mv[2];;
+	let number = "all"; if (mv[2]) { number = mv[2]; }
+        this.game.queue.splice(qe, 1);
+
+	let exhausted = 0;
+
+	if (player) {
+          let planets = this.returnPlayerPlanetCards(player);
+	}
+
+	if (type == "cultural") {
+	  for (let i in this.game.planets) {
+	    if (this.game.planets[i].type == "cultural") {
+	      planets[i].exhausted = 1;
+	      exhausted = 1;
+	    }
+	  }
+	}
+	if (type == "industrial") {	
+	  for (let i in this.game.planets) {
+	    if (this.game.planets[i].type == "industrial") {
+	      planets[i].exhausted = 1;
+	      exhausted = 1;
+	    }
+	  }
+	}
+	if (type == "hazardous") {
+	  for (let i in this.game.planets) {
+	    if (this.game.planets[i].type == "hazardous") {
+	      planets[i].exhausted = 1;
+	      exhausted = 1;
+	    }
+	  }
+	}
+	if (type == "homeworld") {
+	  for (let i in this.game.planets) {
+	    if (this.game.planets[i].type == "homeworld") {
+	      planets[i].exhausted = 1;
+	      exhausted = 1;
+	    }
+	  }
+	}
+
+	if (exhausted == 0) {
+	  this.game.planets[type] = exhausted;
+	}
+
+
+	return 1;
+
+      }
+
 
 
       if (mv[0] === "pickstrategy") {
@@ -2794,6 +2869,40 @@ console.log("HERE AND BAD: " + imperium_self.game.player + " -- " + defender);
       }
 
 
+
+
+
+      //
+      // triggers menu for user to choose how to assign hits
+      //
+      if (mv[0] === "destroy_units") {
+
+        let player	   = parseInt(mv[1]);
+	let total          = parseInt(mv[2]);
+	let sector	   = mv[3];
+	let capital 	   = 0;
+	if (parseInt(mv[4])) { capital = 1; }
+
+	if (sector.indexOf("_") > 0) {
+	  let sys = this.returnSectorAndPlanets(sector);
+	  sector = sys.s.sector;
+	}
+
+        this.game.queue.splice(qe, 1);
+
+	if (total == 1) {
+  	  this.updateStatus(this.returnFaction(player) + " is destroying "+total+" unit");
+	} else { 
+  	  this.updateStatus(this.returnFaction(player) + " is destroying "+total+" units");
+	}
+
+	if (this.game.player == player) {
+  	  this.playerDestroyUnits(player, total, sector, capital);
+	}
+
+	return 0;
+
+      }
 
 
 
