@@ -523,12 +523,15 @@ class Poker extends GameTemplate {
               winlist.splice(place, 0, { player: parseInt(key) + 1, player_hand: _this.scoreHand(deck) });
             }
 
+            //need to specify two winners differently not just on identical hands.
 
           }
           // Populate winners with winning players
           winners.push(winlist[winlist.length - 1].player - 1);
           for (let p = winlist.length - 1; p > 0; p--) {
-            if (winlist[p].player_hand.cards_to_score == winlist[p - 1].player_hand.cards_to_score) { winners.push(winlist[p - 1].player - 1) }
+            if (_this.pickWinner(winlist[winlist.length - 1].player_hand, winlist[p - 1].player_hand) == 3) {
+              winners.push(winlist[p - 1].player - 1)
+            }
           }
 
           // update logs and splash!
@@ -541,7 +544,7 @@ class Poker extends GameTemplate {
             winners.forEach(num => {
               winner_html += this.game.state.player_names[num] + ", ";
             });
-            winner_html = "<h2>" + winner_html.replace(/,([^,]*)$/, ' and' + '$1' + " share the pot!</h2>");
+            winner_html = "<h2>" + winner_html.replace(/,([^,])$/, "").replace(/,([^,]*)$/, " and$1") + " share the pot!</h2>";
           }
 
           winlist.forEach(pl => {
@@ -1332,7 +1335,7 @@ class Poker extends GameTemplate {
         hands_differ = 1;
       }
     }
-    if (hands_differ == 0) { return 0; }
+    if (hands_differ == 0) { return 3; }
 
     if (score1.hand_description == "royal flush" && score2.hand_description == "royal flush") {
       for (let i = 0; i < score1.cards_to_score.length; i++) {
@@ -1349,23 +1352,33 @@ class Poker extends GameTemplate {
 
     if (score1.hand_description == "straight flush" && score2.hand_description == "straight flush") {
       for (let i = 0; i < score1.cards_to_score.length; i++) {
-        if (this.returnHigherCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score1.cards_to_score[i]) {
+        if (this.returnHigherNumberCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score1.cards_to_score[i]) {
           return 1;
-        } else {
+        }
+        if (this.returnHigherNumberCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score2.cards_to_score[i]) {
           return 2;
         }
       }
+      return 3;
     }
     if (score1.hand_description == "straight flush") { return 1; }
     if (score2.hand_description == "straight flush") { return 2; }
 
 
     if (score1.hand_description == "four-of-a-kind" && score2.hand_description == "four-of-a-kind") {
-      if (this.returnHigherCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score1.cards_to_score[4]) {
+      if (this.returnHigherNumberCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
         return 1;
-      } else {
+      }
+      if (this.returnHigherNumberCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score2.cards_to_score[0]) {
         return 2;
       }
+      if (this.returnHigherNumberCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score1.cards_to_score[4]) {
+        return 1;
+      }
+      if (this.returnHigherNumberCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score2.cards_to_score[4]) {
+        return 2;
+      }
+      return 3;
     }
     if (score1.hand_description == "four-of-a-kind") { return 1; }
     if (score2.hand_description == "four-of-a-kind") { return 2; }
@@ -1393,21 +1406,27 @@ class Poker extends GameTemplate {
       for (let i = 0; i < score1.cards_to_score.length; i++) {
         if (this.returnHigherCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score1.cards_to_score[i]) {
           return 1;
-        } else {
+        }
+        if (this.returnHigherCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score2.cards_to_score[i]) {
           return 2;
         }
       }
+      return 3;
     }
     if (score1.hand_description == "flush") { return 1; }
     if (score2.hand_description == "flush") { return 2; }
 
 
     if (score1.hand_description == "straight" && score2.hand_description == "straight") {
-      if (this.returnHigherCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score1.cards_to_score[0]) {
-        return 1;
-      } else {
-        return 2;
+      for (let i = 0; i < score1.cards_to_score.length; i++) {
+        if (this.returnHigherNumberCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score1.cards_to_score[i]) {
+          return 1;
+        }
+        if (this.returnHigherNumberCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score2.cards_to_score[i]) {
+          return 2;
+        }
       }
+      return 3;
     }
     if (score1.hand_description == "straight") { return 1; }
     if (score2.hand_description == "straight") { return 2; }
@@ -1421,12 +1440,14 @@ class Poker extends GameTemplate {
         return 2;
       }
       for (let i = 3; i < 5; i++) {
-        if (this.returnHigherCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score1.cards_to_score[i]) {
+        if (this.returnHigherNumberCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score1.cards_to_score[i]) {
           return 1;
-        } else {
+        }
+        if (this.returnHigherNumberCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score2.cards_to_score[i]) {
           return 2;
         }
       }
+      return 3;
     }
     if (score1.hand_description == "three-of-a-kind") { return 1; }
     if (score2.hand_description == "three-of-a-kind") { return 2; }
@@ -1445,11 +1466,13 @@ class Poker extends GameTemplate {
       if (this.returnHigherNumberCard(score1.cards_to_score[2], score2.cards_to_score[2]) == score2.cards_to_score[2]) {
         return 2;
       }
-      if (this.returnHigherCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score1.cards_to_score[4]) {
+      if (this.returnHigherNumberCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score1.cards_to_score[4]) {
         return 1;
-      } else {
+      }
+      if (this.returnHigherNumberCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score2.cards_to_score[4]) {
         return 2;
       }
+      return 3;
     }
 
     if (score1.hand_description == "two pair") { return 1; }
@@ -1463,13 +1486,19 @@ class Poker extends GameTemplate {
       if (this.returnHigherNumberCard(score1.cards_to_score[0], score2.cards_to_score[0]) == score2.cards_to_score[0]) {
         return 2;
       }
-      for (let i = 2; i < 5; i++) {
-        if (this.returnHigherCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score1.cards_to_score[i]) {
-          return 1;
-        } else {
-          return 2;
-        }
+      if (this.returnHigherNumberCard(score1.cards_to_score[2], score2.cards_to_score[2]) == score1.cards_to_score[2]) {
+        return 1;
       }
+      if (this.returnHigherNumberCard(score1.cards_to_score[2], score2.cards_to_score[2]) == score2.cards_to_score[2]) {
+        return 2;
+      }
+      if (this.returnHigherNumberCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score1.cards_to_score[4]) {
+        return 1;
+      }
+      if (this.returnHigherNumberCard(score1.cards_to_score[4], score2.cards_to_score[4]) == score2.cards_to_score[4]) {
+        return 2;
+      }
+      return 3;
     }
 
     if (score1.hand_description == "pair") { return 1; }
@@ -1478,15 +1507,17 @@ class Poker extends GameTemplate {
 
     if (score1.hand_description == "highest card" && score2.hand_description == "highest card") {
       for (let i = 0; i < score1.cards_to_score.length; i++) {
-        if (this.returnHigherCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score1.cards_to_score[i]) {
+        if (this.returnHigherNumberCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score1.cards_to_score[i]) {
           return 1;
-        } else {
+        }
+        if (this.returnHigherNumberCard(score1.cards_to_score[i], score2.cards_to_score[i]) == score2.cards_to_score[i]) {
           return 2;
         }
       }
-      if (score1.hand_description == "highest card") { return 1; }
-      if (score2.hand_description == "highest card") { return 2; }
+      return 3;
     }
+    if (score1.hand_description == "highest card") { return 1; }
+    if (score2.hand_description == "highest card") { return 2; }
   }
 
 
@@ -1701,7 +1732,7 @@ class Poker extends GameTemplate {
     // FULL HOUSE
     //
     if (three_of_a_kind.length == 2) {
-      if(three_of_a_kind[0] > three_of_a_kind[1]) {
+      if (three_of_a_kind[0] > three_of_a_kind[1]) {
         pairs.push(three_of_a_kind.pop());
       } else {
         pairs.push(three_of_a_kind.shift());
@@ -1725,7 +1756,7 @@ class Poker extends GameTemplate {
         if (val[i] == pairs[pairs.length - 1]) {
           cards_to_score.push(suite[i] + val[i]);
         }
-        if (cards_to_score.length > 5) {cards_to_score.pop();}
+        if (cards_to_score.length > 5) { cards_to_score.pop(); }
       }
 
       hand_description = "full house";
@@ -1824,6 +1855,16 @@ class Poker extends GameTemplate {
     // TWO PAIR
     //
     if (pairs.length > 1) {
+
+      pairs.sort();
+
+      // deal with three pairs.
+      if (pairs.length == 3) {
+        if (pairs[0] == 1) {
+          pairs.push(pairs.shift());
+        }
+        pairs.shift();
+      }
 
       let x = pairs[pairs.length - 1];
       let y = pairs[pairs.length - 2];
@@ -1963,6 +2004,8 @@ class Poker extends GameTemplate {
 
   returnHigherCard(card1, card2) {
 
+
+
     let card1_suite = card1[0];
     let card1_val = parseInt(card1.substring(1));
 
@@ -1975,6 +2018,9 @@ class Poker extends GameTemplate {
     if (card1_val > card2_val) { return card1; }
     if (card2_val > card1_val) { return card2; }
     if (card2_val == card1_val) {
+      if (card1_suite == card2_suite) {
+        return 0;
+      }
       if (this.isHigherSuite(card1_suite, card2_suite)) {
         return card1;
       } else {
@@ -2043,17 +2089,17 @@ class Poker extends GameTemplate {
     for (let i = 0; i < val.length; i++) {
 
       if (noval.includes((suite[i] + val[i]))) {  //if the case id not in the exclude list
-        console.log('you are barred from the pub'); 
+        console.log('you are barred from the pub');
       } else {
         if (val[i] == 1) {  //if the candidate is an ace
           if (highest_card == 14) {  //and the encumbent is an ace
             if (this.isHigherSuite(suite[i], highest_suite)) {  //if the candidate is a higher suite
               //the candidate wins
               highest_suite = suite[i];
-            } 
+            }
           } else {
             highest_card = 14;  // and if there was no encumbent - the candidate is the winner.
-            highest_suite = suite[i];            
+            highest_suite = suite[i];
           }
         }
 
@@ -2068,9 +2114,9 @@ class Poker extends GameTemplate {
           highest_suite = suite[i]; // the candiate wins
         }
       }
-    } 
-      if (highest_card == 14) { highest_card = 1};
-      return highest_suite + highest_card;
+    }
+    if (highest_card == 14) { highest_card = 1 };
+    return highest_suite + highest_card;
   }
 
 
