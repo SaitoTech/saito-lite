@@ -353,7 +353,7 @@ class Thirteen extends GameTemplate {
     // make board draggable
     //
     var element = document.getElementById('gameboard');
-    if (element !== null) { helpers.hammer(element); }
+    if (element !== null) { helpers.hammer(this, element); }
 
   }
 

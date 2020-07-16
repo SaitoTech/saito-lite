@@ -954,6 +954,7 @@ console.log("executing "+z[z_index].name);
           $('.option').off();
     	  $('.option').on('mouseenter', function() {
     	    let s = $(this).attr("id");
+	    if (s === "abstain") { return; }
     	    if (imperium_self.game.state.choices[s].indexOf("planet") == 0) { is_planet = 1; }
     	    if (imperium_self.game.state.choices[s].indexOf("sector") == 0 || imperium_self.game.state.choices[s].indexOf("new-byzantium") == 0) { is_sector = 0; }
     	    if (is_planet == 1) {
@@ -963,6 +964,7 @@ console.log("executing "+z[z_index].name);
     	  });
     	  $('.option').on('mouseleave', function() {
    	    let s = $(this).attr("id");
+	    if (s === "abstain") { return; }
       	    if (imperium_self.game.state.choices[s].indexOf("planet") == 0) { is_planet = 1; }
      	    if (imperium_self.game.state.choices[s].indexOf("sector") == 0 || imperium_self.game.state.choices[s].indexOf("new-byzantium") == 0) { is_sector = 0; }
      	    if (is_planet == 1) {
@@ -975,7 +977,7 @@ console.log("executing "+z[z_index].name);
             let vote = $(this).attr("id");
 	    let votes = 0;
 
-	    if (is_planet == 1) {
+	    if (is_planet == 1 && vote != "abstain") {
   	      imperium_self.hidePlanetCard(imperium_self.game.planets[imperium_self.game.state.choices[vote]].tile, imperium_self.game.planets[imperium_self.game.state.choices[vote]].idx);
   	      imperium_self.hideSectorHighlight(imperium_self.game.planets[imperium_self.game.state.choices[vote]].tile);
 	    }	

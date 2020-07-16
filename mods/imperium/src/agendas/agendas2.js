@@ -77,7 +77,7 @@
   this.importAgendaCard('mutiny', {
   	name : "Mutiny" ,
   	type : "Law" ,
-  	text : "FOR: all who vote FOR gain 1 VP, AGAINST: all players who cote FOR lose 1 VP" ,
+  	text : "FOR: all who vote FOR gain 1 VP, AGAINST: all players who vote FOR lose 1 VP" ,
         returnAgendaOptions : function(imperium_self) {
 	  return ["for","against"];
 	},
@@ -669,18 +669,22 @@
           imperium_self.game.state.compensated_disarmament = 1;
           imperium_self.game.state.compensated_disarmament_planet = winning_choice;
 
+console.log("winning choice: " + winning_choice);
+console.log(JSON.stringify(imperium_self.game.planets[winning_choice]));
+
+
 	  let planet = imperium_self.game.planets[winning_choice];
-	  let owner = planet.owner;
+	  let owner = parseInt(planet.owner);
 	  let total_infantry = 0;
 
-	  let units_to_check = planets.units[owner-1].length;
+	  let units_to_check = planet.units[owner-1].length;
 	  for (let i = 0; i < units_to_check; i++) {
-	    let unit = planets.units[owner-1][i];
+	    let unit = planet.units[owner-1][i];
 	    if (unit.type == "infantry") {
 	      total_infantry++;
-	      planets.units[owner-1].splice(i, 1);
+	      planet.units[owner-1].splice(i, 1);
 	      i--;
-	      units_to_check = planets.units[owner-1].length;
+	      units_to_check = planet.units[owner-1].length;
 	    }
 	  }
 
@@ -761,7 +765,7 @@
 
 
 	  // lose action cards
-          imperium_self.game.players_info[parseInt(winning_choice)-1].action_cards_in_hand = 0;
+          imperium_self.game.players_info[imperium_self.game.state.public_execution_player-1].action_cards_in_hand = 0;
 	  if (imperium_self.game.player == imperium_self.game.state.public_execution_player) {
 	    imperium_self.game.deck[1].hand = [];
 	  }

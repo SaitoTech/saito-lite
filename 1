@@ -1,6 +1,5 @@
 const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
 const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
-const GameHammerMobile = require('../../lib/templates/lib/game-hammer-mobile/game-hammer-mobile');
 const GameTemplate = require('../../lib/templates/gametemplate');
 const helpers = require('../../lib/helpers/index');
 
@@ -16,6 +15,9 @@ var is_player_skipping_playing_china_card = 0;
 // allows cancellation of pick "pickagain"
 //
 var original_selected_card = null;
+
+
+
 
 
 
@@ -276,14 +278,8 @@ class Twilight extends GameTemplate {
 
     let data = {}; 
         data.game = this;
-
-    GameBoardSizer.render(this.app, data);
-    GameBoardSizer.attachEvents(this.app, data, '.gameboard');
-
-    GameHammerMobile.render(this.app, data);
-    GameHammerMobile.attachEvents(this.app, data, '.gameboard');
-
-
+    GameBoardSizer.render({}, data);
+    GameBoardSizer.attachEvents({}, data, '.gameboard');
   }
 
 
@@ -443,10 +439,10 @@ console.log("\n\n\n\n");
 
   try {
 
-    //var element = document.getElementById('gameboard');
-    //if (element !== null) { helpers.hammer(this, element); }
+    var element = document.getElementById('gameboard');
+    if (element !== null) { helpers.hammer(this, element); }
     //helpers.drag_element(element);
-    //$('#gameboard').draggable();
+    $('#gameboard').draggable();
 
     let twilight_self = this;
     $('.scoring_card').off();

@@ -133,7 +133,7 @@
     this.importTech("warsun", {
       name        :       "Warsun" ,
       unit        :       1 ,
-      prereqs     :       ["blue","blue"],
+      prereqs     :       ["red","red","red","yellow"],
       initialize :       function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].may_produce_warsuns == undefined) {
           imperium_self.game.players_info[player-1].may_produce_warsuns = 0;
