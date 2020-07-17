@@ -475,14 +475,17 @@ p {
   .header {
     width: 100vw;
   }
-  .chat-box-close::before {
+  .chat-box-header-title::after {
     font-family: sans-serif, 'Courier New', Courier, monospace;
     content: "\25BC";
     margin: 0px 10px;
   }
-  .chat-box-hide .chat-box-close::before {
+  .chat-box-hide .chat-box-header::before {
     content: "\25B2";
     margin: 0px 10px;
+  }
+  .chat-box-hide .chat-box-input, .chat-box-hide .chat-box-header-title {
+    display: none;
   }
   .chat-box {
     /*    display: none; 
@@ -490,6 +493,13 @@ p {
     */
     width: calc(100vw -1px);
     max-height: 50vh;
+  }
+  .chat-manager.min-chat {
+    left: -14px;
+    width: 5em;
+  }
+  .chat-box.chat-box-hide {
+    width: 5em;
   }
   .chat-manager {
     bottom: 1px;
@@ -501,6 +511,6 @@ p {
 
 @media screen and (orientation:landscape) and (max-height: 700px) {
   .chat-manager {
-  /*  display: none;*/
+    /*  display: none;*/
   }
 }
