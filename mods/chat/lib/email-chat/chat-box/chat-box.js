@@ -88,6 +88,7 @@ module.exports = ChatBox = {
       chat_box_header.onclick = () => {
         let chat_box = document.getElementById(`chat-box-${group.id}`);
         chat_box.classList.toggle('chat-box-hide');
+        chat_box.parentNode.classList.toggle('min-chat');
       };
 
       document.getElementById(`chat-box-close-${group.id}`)
