@@ -7802,10 +7802,8 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
     //
     // initialize laws
     //
-console.log("THIS LAW: " + JSON.stringify(this.game.state.laws));
     for (let k = 0; k < this.game.state.laws.length; k++) {
       let this_law = this.game.state.laws[k];
-console.log(" 2THIS LAW: " + JSON.stringify(this_law));
       let agenda_name = this_law.agenda;
       let agenda_option = this_law.option;
       if (this.agenda_cards[this_law.agenda]) {
@@ -7874,9 +7872,6 @@ console.log(" 2THIS LAW: " + JSON.stringify(this_law));
     //
     this.addEventsToBoard();
     this.addUIEvents();
-
-
-console.log("INITIALIZE IS DONE: " + JSON.stringify(this.game.queue));
 
   }
   
@@ -8761,8 +8756,6 @@ console.log("INITIALIZE IS DONE: " + JSON.stringify(this.game.queue));
   }
   
   importActionCard(name, obj) {
-
-console.log("import: " + name);
 
     if (obj.name == null) 	{ obj.name = "Action Card"; }
     if (obj.type == null) 	{ obj.type = "instant"; }
