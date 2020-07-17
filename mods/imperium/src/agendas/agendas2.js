@@ -22,7 +22,7 @@
 	  //
 	  // deal secret objective
 	  //
-          inperium_self.game.queue.push("gain\t"+(imperium_self.game.state.archived_secret_player)+"\tsecret_objectives\t1");
+          imperium_self.game.queue.push("gain\t"+(imperium_self.game.state.archived_secret_player)+"\tsecret_objectives\t1");
           imperium_self.game.queue.push("DEAL\t6\t"+(i+1)+"\t1");
 
 	  return 1;
@@ -521,7 +521,7 @@
 
 
   this.importAgendaCard('publicize-weapons-schematics', {
-        name : "publicize-weapons-schematics" ,
+        name : "Publicize Weapons Schematics" ,
         type : "Directive" ,
         text : "FOR: all players now have War Suns technology, AGAINST: all players with War Suns technology discard all action cards" ,
         returnAgendaOptions : function(imperium_self) {
@@ -560,7 +560,7 @@
 
 
   this.importAgendaCard('incentive-program', {
-        name : "incentive-program" ,
+        name : "Incentive Program" ,
         type : "Directive" ,
         text : "FOR: reveal a 1 VP public objective, AGAINST: reveal a 2 VP public objective" ,
         returnAgendaOptions : function(imperium_self) {

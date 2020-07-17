@@ -8,13 +8,10 @@
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
 	if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
-
-          if (imperium_self.game.player == player) {
-            imperium_self.addMove("resolve\tstrategy");
-            imperium_self.addMove("strategy\t"+"leadership"+"\t"+strategy_card_player+"\t2");
-            imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
-            imperium_self.playerAllocateNewTokens(imperium_self.game.player, 3, 0, 1);
-          }
+          imperium_self.addMove("resolve\tstrategy");
+          imperium_self.addMove("strategy\t"+"leadership"+"\t"+strategy_card_player+"\t2");
+          imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
+          imperium_self.playerAllocateNewTokens(imperium_self.game.player, 3, 0, 1, 1);
  	}
 
 	return 0;

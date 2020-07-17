@@ -1923,13 +1923,10 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
 	if (imperium_self.game.player == strategy_card_player && player == strategy_card_player) {
-
-          if (imperium_self.game.player == player) {
-            imperium_self.addMove("resolve\tstrategy");
-            imperium_self.addMove("strategy\t"+"leadership"+"\t"+strategy_card_player+"\t2");
-            imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
-            imperium_self.playerAllocateNewTokens(imperium_self.game.player, 3, 0, 1);
-          }
+          imperium_self.addMove("resolve\tstrategy");
+          imperium_self.addMove("strategy\t"+"leadership"+"\t"+strategy_card_player+"\t2");
+          imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
+          imperium_self.playerAllocateNewTokens(imperium_self.game.player, 3, 0, 1, 1);
  	}
 
 	return 0;
@@ -4135,7 +4132,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	  //
 	  // deal secret objective
 	  //
-          inperium_self.game.queue.push("gain\t"+(imperium_self.game.state.archived_secret_player)+"\tsecret_objectives\t1");
+          imperium_self.game.queue.push("gain\t"+(imperium_self.game.state.archived_secret_player)+"\tsecret_objectives\t1");
           imperium_self.game.queue.push("DEAL\t6\t"+(i+1)+"\t1");
 
 	  return 1;
@@ -4634,7 +4631,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 
 
   this.importAgendaCard('publicize-weapons-schematics', {
-        name : "publicize-weapons-schematics" ,
+        name : "Publicize Weapons Schematics" ,
         type : "Directive" ,
         text : "FOR: all players now have War Suns technology, AGAINST: all players with War Suns technology discard all action cards" ,
         returnAgendaOptions : function(imperium_self) {
@@ -4673,7 +4670,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 
 
   this.importAgendaCard('incentive-program', {
-        name : "incentive-program" ,
+        name : "Incentive Program" ,
         type : "Directive" ,
         text : "FOR: reveal a 1 VP public objective, AGAINST: reveal a 2 VP public objective" ,
         returnAgendaOptions : function(imperium_self) {
@@ -16947,7 +16944,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
   
   
   
-  playerAllocateNewTokens(player, tokens, resolve_needed=1, stage=0) {  
+  playerAllocateNewTokens(player, tokens, resolve_needed=1, stage=0, leadership_primary=0) {  
 
     let imperium_self = this;
   
@@ -17005,23 +17002,23 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
         }
 
         if (obj.new_tokens == 0) {
-	    if (resolve_needed == 1) {
-              if (imperium_self.game.confirms_needed > 0) {
-                imperium_self.addMove("resolve\ttokenallocation\t1\t"+imperium_self.app.wallet.returnPublicKey());
-	      } else {
-                imperium_self.addMove("resolve\ttokenallocation");
-	      }
+	  if (resolve_needed == 1) {
+            if (imperium_self.game.confirms_needed > 0 && leadership_primary == 0) {
+              imperium_self.addMove("resolve\ttokenallocation\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	    } else {
+              imperium_self.addMove("resolve\ttokenallocation");
 	    }
-            imperium_self.addMove("purchase\t"+player+"\tstrategy\t"+obj.new_strategy);
-            imperium_self.addMove("purchase\t"+player+"\tcommand\t"+obj.new_command);
-            imperium_self.addMove("purchase\t"+player+"\tfleetsupply\t"+obj.new_fleet);
-            imperium_self.endTurn();
-          } else {
+	  }
+          imperium_self.addMove("purchase\t"+player+"\tstrategy\t"+obj.new_strategy);
+          imperium_self.addMove("purchase\t"+player+"\tcommand\t"+obj.new_command);
+          imperium_self.addMove("purchase\t"+player+"\tfleetsupply\t"+obj.new_fleet);
+          imperium_self.endTurn();
+        } else {
           updateInterface(imperium_self, obj, updateInterface);
         }
 
         });
-
+	
       };
 
       updateInterface(imperium_self, obj, updateInterface);
@@ -18467,7 +18464,7 @@ console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
     return factions[imperium_self.game.players_info[player-1].faction].name;
   }
   returnPlayerHomeworld(player) {
-    let factions = imperium_self.returnFactions();
+    let factions = this.returnFactions();
     return factions[this.game.players_info[player-1].faction].homeworld
   }
   returnSpeaker() {

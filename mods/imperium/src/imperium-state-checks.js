@@ -14,7 +14,7 @@
     return factions[imperium_self.game.players_info[player-1].faction].name;
   }
   returnPlayerHomeworld(player) {
-    let factions = imperium_self.returnFactions();
+    let factions = this.returnFactions();
     return factions[this.game.players_info[player-1].faction].homeworld
   }
   returnSpeaker() {

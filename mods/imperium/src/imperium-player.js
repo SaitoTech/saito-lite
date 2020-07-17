@@ -3863,7 +3863,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
   
   
   
-  playerAllocateNewTokens(player, tokens, resolve_needed=1, stage=0) {  
+  playerAllocateNewTokens(player, tokens, resolve_needed=1, stage=0, leadership_primary=0) {  
 
     let imperium_self = this;
   
@@ -3921,23 +3921,23 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
         }
 
         if (obj.new_tokens == 0) {
-	    if (resolve_needed == 1) {
-              if (imperium_self.game.confirms_needed > 0) {
-                imperium_self.addMove("resolve\ttokenallocation\t1\t"+imperium_self.app.wallet.returnPublicKey());
-	      } else {
-                imperium_self.addMove("resolve\ttokenallocation");
-	      }
+	  if (resolve_needed == 1) {
+            if (imperium_self.game.confirms_needed > 0 && leadership_primary == 0) {
+              imperium_self.addMove("resolve\ttokenallocation\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	    } else {
+              imperium_self.addMove("resolve\ttokenallocation");
 	    }
-            imperium_self.addMove("purchase\t"+player+"\tstrategy\t"+obj.new_strategy);
-            imperium_self.addMove("purchase\t"+player+"\tcommand\t"+obj.new_command);
-            imperium_self.addMove("purchase\t"+player+"\tfleetsupply\t"+obj.new_fleet);
-            imperium_self.endTurn();
-          } else {
+	  }
+          imperium_self.addMove("purchase\t"+player+"\tstrategy\t"+obj.new_strategy);
+          imperium_self.addMove("purchase\t"+player+"\tcommand\t"+obj.new_command);
+          imperium_self.addMove("purchase\t"+player+"\tfleetsupply\t"+obj.new_fleet);
+          imperium_self.endTurn();
+        } else {
           updateInterface(imperium_self, obj, updateInterface);
         }
 
         });
-
+	
       };
 
       updateInterface(imperium_self, obj, updateInterface);
