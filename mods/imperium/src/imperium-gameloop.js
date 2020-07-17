@@ -747,13 +747,6 @@ console.log("executing "+z[z_index].name);
 
           let success = imperium_self.agenda_cards[agenda].onPass(imperium_self, winning_choice);
 
-	  //
-	  // handled differently
-	  //
-          //if (success == 1) {
-	  //  imperium_self.game.state.laws.push(agenda);
-	  //}
-
           //
           // resolve riders
           //

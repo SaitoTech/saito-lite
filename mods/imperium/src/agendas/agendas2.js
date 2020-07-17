@@ -511,7 +511,7 @@
           // alter planet
           //
           imperium_self.game.planets[winning_choice].influence+=2;
-          imperium_self.updateLog(imperium_self.game.planet[winning_choice].name + " increases influence value by 2");
+          imperium_self.updateLog(imperium_self.game.planets[winning_choice].name + " increases influence value by 2");
 
 	  return 1;
 
@@ -610,32 +610,39 @@
 
           imperium_self.game.state.colonial_redistribution = 1;
           imperium_self.game.state.colonial_redistribution_planet = winning_choice;
+	  imperium_self.game.queue.push("colonial_redistribution\t"+winning_choice);
 
-          //
-          // alter planet
-          //
-	  let owner = imperium_self.game.planets[winning_choice].owner;
-	  let planet_idx = imperium_self.game.planets[winning_choice].idx;
-	  let sector = imperium_self.game.planets[winning_choice].sector;
+	  return 0;
 
-	  if (owner == -1) { owner = imperium_self.game.state.speaker; }
-	  imperium_self.game.planet[winning_choice].units[owner] = [];
-	  imperium_self.updatePlanetOwner(winning_choice);
+        },
+        handleGameLoop : function(imperium_self, qe, mv) {
 
-	  if (imperium_self.game.player == owner) {
+          if (mv[0] == "colonial_redistribution") {
 
+            let winning_choice = mv[1];
+            imperium_self.game.queue.splice(qe, 1);
+
+	    let owner = imperium_self.game.planets[winning_choice].owner;
+	    let planet_idx = imperium_self.game.planets[winning_choice].idx;
+	    let sector = imperium_self.game.planets[winning_choice].sector;
+
+	    if (owner == -1) { owner = imperium_self.game.state.speaker; }
+	    imperium_self.game.planets[winning_choice].units[owner] = [];
+
+	    if (imperium_self.game.player == owner) {
             imperium_self.playerSelectPlayerWithFilter(
-	      "Select a player to receive 1 VP and this planet" ,
+	      "Select a player to receive 1 infantry and this planet" ,
               function(player) {
 	        let lower_vp_player = 0;
-		let this_player_vp = imperium_self.game.players_info[player-1].vp;
+		let this_player_vp = player.vp;
 	        for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-		  if (imperium_self.game.players_info[i] < lower_vp_player) { lower_vp_player = 1; }
+		  if (imperium_self.game.players_info[i] < this_player_vp) { lower_vp_player = 1; }
 		}
 	        if (lower_vp_player == 1) { return 0; }
 		return 1;
               },
 	      function(player) {
+		imperium_self.updateStatus("");
 		imperium_self.addMove("produce\t" + player + "\t" + "1" + "\t" + planet_idx + "\t" + "infantry" + "\t" + sector);
 		imperium_self.addMove("annex\t" + player + "\t" + sector + "\t" + planet_idx);
 		imperium_self.addMove("notify\t" + imperium_self.returnFaction(player) + " gains the contested planet");
@@ -643,11 +650,12 @@
 		return 0;
 	      },
 	    );
+	    }
 
-	  }
+            return 0;
+          }
 
-	  return 0;
-
+          return 1;
         }
   });
 
