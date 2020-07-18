@@ -20,6 +20,8 @@
 
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
+console.log("LEADERSHIP SECONDARY TRIGGERED: " + imperium_self.game.player + " -- " + player + " -- " + strategy_card_player);
+
         if (player == imperium_self.game.player) {
 	  if (strategy_card_player != imperium_self.game.player) {
             imperium_self.playerBuyTokens(2);

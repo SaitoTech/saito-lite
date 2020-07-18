@@ -1935,6 +1935,8 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
 
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
+console.log("LEADERSHIP SECONDARY TRIGGERED: " + imperium_self.game.player + " -- " + player + " -- " + strategy_card_player);
+
         if (player == imperium_self.game.player) {
 	  if (strategy_card_player != imperium_self.game.player) {
             imperium_self.playerBuyTokens(2);
@@ -8822,9 +8824,10 @@ console.log("type: " + type + " ---- " + player);
 	//
 	// this overwrites secondaries, we need to clear manually
 	// if we are playing the sceondary, we don't want to udpate status
-	if (this.game.state.playing_strategy_card_secondary == 0) {
-          this.updateStatus("Waiting for Opponent Move...");  
-	}
+	//
+	//if (this.game.state.playing_strategy_card_secondary == 0) {
+        //  this.updateStatus("Waiting for Opponent Move...");  
+	//}
 
 	if (mv[1] == lmv[0]) {
   	  if (mv[2] != undefined) {
