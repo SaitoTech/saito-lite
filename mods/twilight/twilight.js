@@ -150,7 +150,7 @@ class Twilight extends GameTemplate {
 
       cards_img_html = cards.map(card =>  {
         if (card != undefined) {
-          return `<div class="cardbox-hud" id="cardbox-hud-${cards_in_pile}">${twilight_self.returnCardImage(card)}</div>`;
+          return `<div class="cardbox-hud" id="cardbox-hud-${cards_in_pile}">${twilight_self.returnCardImage(card, 1)}</div>`;
         } else {
   	  return '';
         }
@@ -13952,9 +13952,9 @@ console.log("card: " + card);
 
     if (this.interface == 1) {
       if (this.game.deck[0].cards[card] == undefined) {
-        return `<div id="${card.replace(/ /g,'')}" class="card cardbox-hud cardbox-hud-status">${this.returnCardImage(card)}</div>`;
+        return `<div id="${card.replace(/ /g,'')}" class="card cardbox-hud cardbox-hud-status">${this.returnCardImage(card, 1)}</div>`;
       }
-      return `<div id="${card.replace(/ /g,'')}" class="card showcard cardbox-hud cardbox-hud-status">${this.returnCardImage(card)}</div>`;
+      return `<div id="${card.replace(/ /g,'')}" class="card showcard cardbox-hud cardbox-hud-status">${this.returnCardImage(card, 1)}</div>`;
     } else {
       if (this.game.deck[0].cards[card] == undefined) {
         return '<li class="card showcard" id="'+card+'">'+this.game.deck[0].cards[card].name+'</li>';
@@ -14000,7 +14000,6 @@ console.log("card: " + card);
 
 
   updateStatusAndListCards(message, cards=null) {
-
 
     if (cards == null) {
       cards = this.game.deck[0].hand;
@@ -15023,7 +15022,10 @@ console.log("card: " + card);
 
   }
 
-  returnCardImage(cardname) {
+  returnCardImage(cardname, hud=0) {
+
+    let cardclass = "cardimg";
+    if (hud == 1) { cardclass = "cardimg-hud"; }
 
     var c = this.game.deck[0].cards[cardname];
     if (c == undefined) { c = this.game.deck[0].discards[cardname]; }
@@ -15037,7 +15039,7 @@ console.log("card: " + card);
 
     }
 
-    var html = `<img class="cardimg" src="/twilight/img/${this.lang}/${c.img}.svg" />`;
+    var html = `<img class="${cardclass}" src="/twilight/img/${this.lang}/${c.img}.svg" />`;
 
     //
     // cards can be generated with http://www.invadethree.space/tscardgen/
@@ -15047,27 +15049,27 @@ console.log("card: " + card);
     // cards that may be released officially.
     //
     if (c.img.indexOf("png") > -1) {
-        html = `<img class="cardimg" src="/twilight/img/${this.lang}/${c.img}.png" />`;
+        html = `<img class="${cardclass}" src="/twilight/img/${this.lang}/${c.img}.png" />`;
     } else {
-        if (c.p == 0) { html +='<img class="cardimg" src="/twilight/img/EarlyWar.svg" />'; }
-        if (c.p == 1) { html +='<img class="cardimg" src="/twilight/img/MidWar.svg" />'; }
-        if (c.p == 2) { html +='<img class="cardimg" src="/twilight/img/LateWar.svg" />'; }
+        if (c.p == 0) { html += `<img class="${cardclass}" src="/twilight/img/EarlyWar.svg" />`; }
+        if (c.p == 1) { html += `<img class="${cardclass}" src="/twilight/img/MidWar.svg" />`; }
+        if (c.p == 2) { html += `<img class="${cardclass}" src="/twilight/img/LateWar.svg" />`; }
 
       switch (c.player) {
         case "both":
-          html += '<img class="cardimg" src="/twilight/img/BothPlayerCard.svg" />';
+          html += `<img class="${cardclass}" src="/twilight/img/BothPlayerCard.svg" />`;
           if (c.ops) {
-            html += `<img class="cardimg" src="/twilight/img/White${c.ops}.svg" />`;
-            html += `<img class="cardimg" src="/twilight/img/Black${c.ops}.svg" />`;
+            html += `<img class="${cardclass}" src="/twilight/img/White${c.ops}.svg" />`;
+            html += `<img class="${cardclass}" src="/twilight/img/Black${c.ops}.svg" />`;
           }
           break;
         case "us":
-          html +='<img class="cardimg" src="/twilight/img/AmericanPlayerCard.svg" />';
-          if (c.ops) { html += `<img class="cardimg" src="/twilight/img/Black${c.ops}.svg" />`; }
+          html += `<img class="${cardclass}" src="/twilight/img/AmericanPlayerCard.svg" />`;
+          if (c.ops) { html += `<img class="${cardclass}" src="/twilight/img/Black${c.ops}.svg" />`; }
           break;
         case "ussr":
-          html +='<img class="cardimg" src="/twilight/img/SovietPlayerCard.svg" />';
-          if (c.ops) { html += `<img class="cardimg" src="/twilight/img/White${c.ops}.svg" />`; }
+          html += `<img class="${cardclass}" src="/twilight/img/SovietPlayerCard.svg" />`;
+          if (c.ops) { html += `<img class="${cardclass}" src="/twilight/img/White${c.ops}.svg" />`; }
           break;
         default:
           break;
@@ -15075,10 +15077,10 @@ console.log("card: " + card);
     }
 
     if (c.scoring == 1) {
-      html +='<img class="cardimg" src="/twilight/img/MayNotBeHeld.svg" />';
+      html +=`<img class="${cardclass}" src="/twilight/img/MayNotBeHeld.svg" />`;
     } else if (c.recurring == 0) {
       if (c.img.indexOf("png") > -1) {} else {
-        html +='<img class="cardimg" src="/twilight/img/RemoveFromPlay.svg" />';
+        html += `<img class="${cardclass}" src="/twilight/img/RemoveFromPlay.svg" />`;
       }
     }
 

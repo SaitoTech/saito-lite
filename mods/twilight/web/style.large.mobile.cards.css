@@ -614,7 +614,6 @@ body {
   }
 }
 
-
 @media only screen and (orientation: portrait) and (max-width: 750px) {
   .status {
     font-size: 0.8em;
@@ -662,21 +661,14 @@ body {
   } */
 
   .cardbox {
-position: fixed;
+    position: fixed;
     z-index: 90000;
-    top: 33vh;
+    top: 21vh;
     left: 53vw;
     display: block;
-    height: 60vh;
-    width: calc(60vh * 0.7211);
-/*    position: fixed; */
-/*    z-index: 90000; */
-/*    top: 21vh; */
-/*    left: 53vw; */
-/*    display: block; */
-/*    /* zoom: 0.66; */
-/*    height: 40vh; */
-/*    width: calc(40vh * 0.7211); */
+    /* zoom: 0.66; */
+    height: 40vh;
+    width: calc(40vh * 0.7211);
   }
 
   .cardbox_menu_btn {
@@ -716,19 +708,10 @@ position: fixed;
     /* height: 75%; */
   }
 
-
-  .hud {
-    max-height: 250px;
-  }
   .cardbox-hud-status {
-    width: 90px;
-    min-width: 90px;
+    width: calc(32vh * 0.7211);
+    min-width: calc(32vh * 0.7211);
     margin-right: 0.75em;
-    height: 125px;
-    min-height: 125px;
-/*    width: calc(32vh * 0.7211); */
-/*    min-width: calc(32vh * 0.7211); */
-/*    margin-right: 0.75em; */
   }
 
   #sizer {
@@ -750,38 +733,7 @@ position: fixed;
   } */
 }
 
-
-
 @media only screen and (orientation: landscape) and (max-height: 700px) {
-
-  .hud-menu-first-letter {
-  }
-  .hud-menu-other-letters { display: none; }
-
-  .hud {
-    grid-template-areas:
-      "hud-header hud-content"
-      "hud-menu   hud-content";
-    grid-template-columns: 2em auto;
-    grid-template-rows: 30px auto;
-    min-width: unset;
-    max-width: unset;
-    width: 25vw;
-    height: 100vh;
-    right: -13vw;
-    left: unset;
-    cursor: unset;
-    max-height: unset;
-  }
-  .hud-hidden-horizontal {
-    width: 2em;
-    right: -1em;
-  }
-
-  .status {
-    font-size: 0.8em;
-  }
-
   .status > ul {
     margin: 0;
   }
@@ -845,14 +797,6 @@ position: fixed;
     margin-bottom: 0.5em;
   }
 
-  .cardimg-hud {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 140px;
-    width: 98px;
-  }
-
   .cardbox_menu_btn {
     width: 97%;
   }
@@ -861,8 +805,6 @@ position: fixed;
     left: 88.9%;
   }
 }
-
-
 
 @media (min-width: 481px) and (max-width: 850px) and (max-height: 500px) {
   .cardbox {
