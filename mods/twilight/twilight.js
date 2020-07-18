@@ -288,6 +288,8 @@ class Twilight extends GameTemplate {
         GameBoardSizer.render(this.app, data);
         GameBoardSizer.attachEvents(this.app, data, '.gameboard');
 
+        $('#gameboard').draggable();
+
       }
     } catch (err) {}
 
@@ -451,11 +453,6 @@ console.log("\n\n\n\n");
 
 
   try {
-
-    //var element = document.getElementById('gameboard');
-    //if (element !== null) { helpers.hammer(this, element); }
-    //helpers.drag_element(element);
-    //$('#gameboard').draggable();
 
     let twilight_self = this;
     $('.scoring_card').off();
