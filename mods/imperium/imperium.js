@@ -2119,8 +2119,7 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
 	let html = "";
 	let resources_to_spend = 0;
 
-        if (imperium_self.game.player == player) {
-        if (imperium_self.game.player != strategy_card_player) {
+        if (imperium_self.game.player == player && imperium_self.game.player != strategy_card_player) {
  
 	  resources_to_spend = 4;
           html = '<p>Technology has been played. Do you wish to spend 4 resources and a strategy token to research a technology? </p><ul>';
@@ -2153,12 +2152,11 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
             }
             imperium_self.unlockInterface();
 
-
             let id = $(this).attr("id");
 
-            if (id == "yes") {
+            if (id === "yes") {
 
-	      imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources == 0;
+	      imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources = 0;
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
               imperium_self.playerSelectResources(resources_to_spend, function(success) {
                 if (success == 1) {
@@ -2172,7 +2170,7 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
                 }
               });
             }
-            if (id == "no") {
+            if (id === "no") {
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
               imperium_self.endTurn();
               return 0;
@@ -2182,6 +2180,8 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
 	  return 0;
 
         } else {
+
+          if (imperium_self.game.player != strategy_card_player) { return; }
 
 	  resources_to_spend = 6;
           html = '<p>Do you wish to spend '+resources_to_spend+' resources to research an additional technology? </p><ul>';
@@ -2220,14 +2220,14 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
             if (id == "yes") {
 	      imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources == 0;
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-              imperium_self.playerSelectResources(6, function(success) {
+              imperium_self.playerSelectResources(resources_to_spend, function(success) {
                 if (success == 1) {
                   imperium_self.playerResearchTechnology(function(tech) {
                     imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
                     imperium_self.endTurn();
                   });
                 } else {
- alert("insufficient resources to build this tech... dying");
+ //alert("insufficient resources to build this tech... dying");
                 }
               });
             }
@@ -2240,7 +2240,6 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
 
 	  return 0;
 
-        }
         }
       },
     });
@@ -2280,7 +2279,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	  }
           imperium_self.game.state.minister_of_technology = 1;
           imperium_self.game.state.minister_of_technology_player = player_number+1;
-          imperium_self.game.players_info[player_number-1].permanent_research_technology_card_must_not_spend_resources = 1;
+          imperium_self.game.players_info[player_number].permanent_research_technology_card_must_not_spend_resources = 1;
         }
   });
 
@@ -4109,6 +4108,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 
 
 
+
   this.importAgendaCard('archived-secret', {
   	name : "Archived Secret" ,
   	type : "Law" ,
@@ -4143,7 +4143,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 
 
 
-
+/***
   this.importAgendaCard('economic-equality', {
   	name : "Economic Equality" ,
   	type : "Law" ,
@@ -4154,8 +4154,6 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	onPass : function(imperium_self, winning_choice) {
 
 	  imperium_self.game.state.economic_equality = 1;
-
-
 
           if (winning_choice === "for") {
 	    for (let i = 0; i < imperium_self.game.players_info.length; i++) {
@@ -4177,7 +4175,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 
 	},
   });
-
+***/
 
 
 
@@ -4197,7 +4195,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 
           if (winning_choice === "for") {
             for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-              if (imperium_self.game.state.how_voted_on_agenda[i] == winning_choice) {
+              if (imperium_self.game.state.how_voted_on_agenda[i] == "for") {
                 imperium_self.game.players_info[i].vp++;
 	        imperium_self.updateLog(imperium_self.returnFaction(i+1) + " gains 1 VP from unconventional measures");
               }
@@ -4216,6 +4214,8 @@ console.log("WINNIGN CHOICE: " + winning_choice);
             }
 	  }
 
+	  imperium_self.updateLeaderboard();
+
 	  return 1;
 
 	},
@@ -4224,7 +4224,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 
 
 
-
+/***
   this.importAgendaCard('conventions-of-war', {
   	name : "Conventions of War" ,
   	type : "Law" ,
@@ -4259,7 +4259,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	},
   });
 
-
+***/
 
 
 
@@ -4426,9 +4426,6 @@ console.log("WINNIGN CHOICE: " + winning_choice);
             }
           }
 
-          if (winning_choice === "against") {
-	  }
-
 	  return 1;
 
 
@@ -4441,7 +4438,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 
 
 
-
+/****
 
   this.importAgendaCard('shared-research', {
   	name : "Shared Research" ,
@@ -4471,7 +4468,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	},
   });
 
-
+****/
 
 
 
@@ -4501,8 +4498,9 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	    for (let i in imperium_self.game.sectors) {
 	      if (imperium_self.game.sectors[i].wormhole == 1 || imperium_self.game.sectors[i].wormhole == 2) {
 		for (let ii = 0; ii < imperium_self.game.players_info.length; ii++) {
-		  imperium_self.game.sectors[i].units[ii] = [];
+		  imperium_self.game.sectors[i].activated[ii] = 1;
 		}
+		imperium_self.updateSectorDisplay(i);
 	      }
 	    }
 	  }
@@ -4567,7 +4565,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
         },
   });
 
-
+/****
   this.importAgendaCard('terraforming-initiative', {
         name : "Terraforming Initiative" ,
         type : "Law" ,
@@ -4627,7 +4625,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 
         }
   });
-
+***/
 
 
   this.importAgendaCard('publicize-weapons-schematics', {
@@ -4643,15 +4641,15 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 
           if (winning_choice === "for") {
 	    for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-	      if (!imperium_self.doesPlayerHaveTech((i+1), "warsuns")) {
-		imperium_self.game.queue.push("produce\t"+(i+1)+"\t"+"tech"+"\t"+"warsuns");
+	      if (!imperium_self.doesPlayerHaveTech((i+1), "warsun")) {
+		imperium_self.game.queue.push("purchase\t"+(i+1)+"\t"+"tech"+"\t"+"warsun");
 	      }
  	    }
           }
 
           if (winning_choice === "against") {
 	    for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-	      if (imperium_self.doesPlayerHaveTech((i+1), "warsuns")) {
+	      if (imperium_self.doesPlayerHaveTech((i+1), "warsun")) {
 		imperium_self.game.players_info[i].action_cards_in_hand = 0;
 		if (imperium_self.game.player == (i+1)) {
 		  imperium_self.game.deck[1].hand = [];
@@ -4702,7 +4700,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 
 
 
-
+/***
   this.importAgendaCard('colonial-redistribution', {
         name : "Colonial Redistribution" ,
         type : "Law" ,
@@ -4768,7 +4766,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
           return 1;
         }
   });
-
+***/
 
 
 
@@ -4854,7 +4852,7 @@ console.log(JSON.stringify(imperium_self.game.planets[winning_choice]));
 
 
 
-
+/****
 
   this.importAgendaCard('public-execution', {
 
@@ -4908,7 +4906,7 @@ console.log(JSON.stringify(imperium_self.game.planets[winning_choice]));
         }
   });
 
-
+***/
 
 
 
@@ -8574,6 +8572,8 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
   
   
   returnUnit(type = "", player) {
+
+console.log("type: " + type + " ---- " + player);
     let unit = JSON.parse(JSON.stringify(this.units[type]));
     unit.owner = player;
     unit = this.upgradeUnit(unit, player);
@@ -9867,7 +9867,7 @@ console.log("executing "+z[z_index].name);
 	//
 	for (let i = 0; i < this.game.players_info.length; i++) {
 	  if (this.game.players_info[i].must_exhaust_at_round_start.length > 0) {
-	    for (let b = 0; b < this.game.players_info.length; b++) {
+	    for (let b = 0; b < this.game.players_info[i].must_exhaust_at_round_start.length; b++) {
 	      this.game.queue.push("must_exhaust_at_round_start\t"+(i+1)+"\t"+this.game.players_info[i].must_exhaust_at_round_start[b]);
 	    }
 	  }
@@ -10180,6 +10180,7 @@ console.log("executing "+z[z_index].name);
 	    if (this.game.planets[i].type == "cultural") {
 	      planets[i].exhausted = 1;
 	      exhausted = 1;
+	      this.updateSectorGraphics(i);
 	    }
 	  }
 	}
@@ -10188,6 +10189,7 @@ console.log("executing "+z[z_index].name);
 	    if (this.game.planets[i].type == "industrial") {
 	      planets[i].exhausted = 1;
 	      exhausted = 1;
+	      this.updateSectorGraphics(i);
 	    }
 	  }
 	}
@@ -10196,6 +10198,7 @@ console.log("executing "+z[z_index].name);
 	    if (this.game.planets[i].type == "hazardous") {
 	      planets[i].exhausted = 1;
 	      exhausted = 1;
+	      this.updateSectorGraphics(i);
 	    }
 	  }
 	}
@@ -10204,12 +10207,14 @@ console.log("executing "+z[z_index].name);
 	    if (this.game.planets[i].type == "homeworld") {
 	      planets[i].exhausted = 1;
 	      exhausted = 1;
+	      this.updateSectorGraphics(i);
 	    }
 	  }
 	}
 
 	if (exhausted == 0) {
 	  this.game.planets[type] = exhausted;
+	  this.updateSectorGraphics(i);
 	}
 
 
@@ -13222,6 +13227,7 @@ console.log("EXECUTING CARD: " + card);
       players[i].permanent_infiltrate_infrastructure_on_invasion = 0;
       players[i].temporary_opponent_cannot_retreat = 0;
       players[i].permanent_opponent_cannot_retreat = 0;
+      players[i].permanent_research_technology_card_must_not_spend_resources = 0;
 
       if (i == 1) { players[i].color   = "yellow"; }
       if (i == 2) { players[i].color   = "green"; }
@@ -19721,8 +19727,11 @@ console.log("p: " + planet);
 
     if (this.game.turn) {
       for (let i = 0; i < this.game.turn.length; i++) {
-	let x = this.game.turn[i].split("\t");
-	if (x[0] == "rider") { if (x[1] == this.game.player) { return 1; } }
+console.log("RIDER: " + this.game.turn[i]);
+	if (this.game.turn[i]) {
+	  let x = this.game.turn[i].split("\t");
+	  if (x[0] == "rider") { if (x[1] == this.game.player) { return 1; } }
+	}
       }
     }
 
@@ -21187,6 +21196,7 @@ updateSectorGraphics(sector) {
   let bg = '';
   let bgsize = '';
   let sector_controlled = 0;
+  let player_border_visible = 0;
 
   //
   // is activated?
@@ -21221,6 +21231,8 @@ updateSectorGraphics(sector) {
       $(divpid).removeClass("player_color_6");
       $(divpid).addClass(newclass);
       $(divpid).css('display','block');
+      $(divpid).css('opacity', '1');
+      player_border_visible = 1;
     }
 
 
@@ -21342,6 +21354,22 @@ updateSectorGraphics(sector) {
 
 
       for (let j = 0; j < sys.p.length; j++) {
+
+        if (sys.p[j].units[player-1].length > 0 && player_border_visible == 0) {
+          let divpid = '#hex_img_faction_border_' + sector;
+          let newclass = "player_color_"+player;
+          $(divpid).removeClass("player_color_1");
+          $(divpid).removeClass("player_color_2");
+          $(divpid).removeClass("player_color_3");
+          $(divpid).removeClass("player_color_4");
+          $(divpid).removeClass("player_color_5");
+          $(divpid).removeClass("player_color_6");
+          $(divpid).addClass(newclass);
+          $(divpid).css('display','block');
+          $(divpid).css('opacity', '0.4');
+          player_border_visible = 1;
+        }
+
 
         let infantry = 0;
         let spacedock = 0;

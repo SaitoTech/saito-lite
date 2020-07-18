@@ -1,4 +1,5 @@
 
+
   this.importAgendaCard('archived-secret', {
   	name : "Archived Secret" ,
   	type : "Law" ,
@@ -33,7 +34,7 @@
 
 
 
-
+/***
   this.importAgendaCard('economic-equality', {
   	name : "Economic Equality" ,
   	type : "Law" ,
@@ -44,8 +45,6 @@
 	onPass : function(imperium_self, winning_choice) {
 
 	  imperium_self.game.state.economic_equality = 1;
-
-
 
           if (winning_choice === "for") {
 	    for (let i = 0; i < imperium_self.game.players_info.length; i++) {
@@ -67,7 +66,7 @@
 
 	},
   });
-
+***/
 
 
 
@@ -87,7 +86,7 @@
 
           if (winning_choice === "for") {
             for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-              if (imperium_self.game.state.how_voted_on_agenda[i] == winning_choice) {
+              if (imperium_self.game.state.how_voted_on_agenda[i] == "for") {
                 imperium_self.game.players_info[i].vp++;
 	        imperium_self.updateLog(imperium_self.returnFaction(i+1) + " gains 1 VP from unconventional measures");
               }
@@ -106,6 +105,8 @@
             }
 	  }
 
+	  imperium_self.updateLeaderboard();
+
 	  return 1;
 
 	},
@@ -114,7 +115,7 @@
 
 
 
-
+/***
   this.importAgendaCard('conventions-of-war', {
   	name : "Conventions of War" ,
   	type : "Law" ,
@@ -149,7 +150,7 @@
 	},
   });
 
-
+***/
 
 
 
@@ -316,9 +317,6 @@
             }
           }
 
-          if (winning_choice === "against") {
-	  }
-
 	  return 1;
 
 
@@ -331,7 +329,7 @@
 
 
 
-
+/****
 
   this.importAgendaCard('shared-research', {
   	name : "Shared Research" ,
@@ -361,7 +359,7 @@
 	},
   });
 
-
+****/
 
 
 
@@ -391,8 +389,9 @@
 	    for (let i in imperium_self.game.sectors) {
 	      if (imperium_self.game.sectors[i].wormhole == 1 || imperium_self.game.sectors[i].wormhole == 2) {
 		for (let ii = 0; ii < imperium_self.game.players_info.length; ii++) {
-		  imperium_self.game.sectors[i].units[ii] = [];
+		  imperium_self.game.sectors[i].activated[ii] = 1;
 		}
+		imperium_self.updateSectorDisplay(i);
 	      }
 	    }
 	  }
@@ -457,7 +456,7 @@
         },
   });
 
-
+/****
   this.importAgendaCard('terraforming-initiative', {
         name : "Terraforming Initiative" ,
         type : "Law" ,
@@ -517,7 +516,7 @@
 
         }
   });
-
+***/
 
 
   this.importAgendaCard('publicize-weapons-schematics', {
@@ -533,15 +532,15 @@
 
           if (winning_choice === "for") {
 	    for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-	      if (!imperium_self.doesPlayerHaveTech((i+1), "warsuns")) {
-		imperium_self.game.queue.push("produce\t"+(i+1)+"\t"+"tech"+"\t"+"warsuns");
+	      if (!imperium_self.doesPlayerHaveTech((i+1), "warsun")) {
+		imperium_self.game.queue.push("purchase\t"+(i+1)+"\t"+"tech"+"\t"+"warsun");
 	      }
  	    }
           }
 
           if (winning_choice === "against") {
 	    for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-	      if (imperium_self.doesPlayerHaveTech((i+1), "warsuns")) {
+	      if (imperium_self.doesPlayerHaveTech((i+1), "warsun")) {
 		imperium_self.game.players_info[i].action_cards_in_hand = 0;
 		if (imperium_self.game.player == (i+1)) {
 		  imperium_self.game.deck[1].hand = [];
@@ -592,7 +591,7 @@
 
 
 
-
+/***
   this.importAgendaCard('colonial-redistribution', {
         name : "Colonial Redistribution" ,
         type : "Law" ,
@@ -658,7 +657,7 @@
           return 1;
         }
   });
-
+***/
 
 
 
@@ -744,7 +743,7 @@ console.log(JSON.stringify(imperium_self.game.planets[winning_choice]));
 
 
 
-
+/****
 
   this.importAgendaCard('public-execution', {
 
@@ -798,7 +797,7 @@ console.log(JSON.stringify(imperium_self.game.planets[winning_choice]));
         }
   });
 
-
+***/
 
 
 

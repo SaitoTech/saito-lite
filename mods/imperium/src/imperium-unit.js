@@ -421,6 +421,8 @@
   
   
   returnUnit(type = "", player) {
+
+console.log("type: " + type + " ---- " + player);
     let unit = JSON.parse(JSON.stringify(this.units[type]));
     unit.owner = player;
     unit = this.upgradeUnit(unit, player);

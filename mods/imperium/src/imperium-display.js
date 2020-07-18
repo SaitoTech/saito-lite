@@ -541,6 +541,7 @@ updateSectorGraphics(sector) {
   let bg = '';
   let bgsize = '';
   let sector_controlled = 0;
+  let player_border_visible = 0;
 
   //
   // is activated?
@@ -575,6 +576,8 @@ updateSectorGraphics(sector) {
       $(divpid).removeClass("player_color_6");
       $(divpid).addClass(newclass);
       $(divpid).css('display','block');
+      $(divpid).css('opacity', '1');
+      player_border_visible = 1;
     }
 
 
@@ -696,6 +699,22 @@ updateSectorGraphics(sector) {
 
 
       for (let j = 0; j < sys.p.length; j++) {
+
+        if (sys.p[j].units[player-1].length > 0 && player_border_visible == 0) {
+          let divpid = '#hex_img_faction_border_' + sector;
+          let newclass = "player_color_"+player;
+          $(divpid).removeClass("player_color_1");
+          $(divpid).removeClass("player_color_2");
+          $(divpid).removeClass("player_color_3");
+          $(divpid).removeClass("player_color_4");
+          $(divpid).removeClass("player_color_5");
+          $(divpid).removeClass("player_color_6");
+          $(divpid).addClass(newclass);
+          $(divpid).css('display','block');
+          $(divpid).css('opacity', '0.4');
+          player_border_visible = 1;
+        }
+
 
         let infantry = 0;
         let spacedock = 0;

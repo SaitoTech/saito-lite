@@ -24,8 +24,7 @@
 	let html = "";
 	let resources_to_spend = 0;
 
-        if (imperium_self.game.player == player) {
-        if (imperium_self.game.player != strategy_card_player) {
+        if (imperium_self.game.player == player && imperium_self.game.player != strategy_card_player) {
  
 	  resources_to_spend = 4;
           html = '<p>Technology has been played. Do you wish to spend 4 resources and a strategy token to research a technology? </p><ul>';
@@ -58,12 +57,11 @@
             }
             imperium_self.unlockInterface();
 
-
             let id = $(this).attr("id");
 
-            if (id == "yes") {
+            if (id === "yes") {
 
-	      imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources == 0;
+	      imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources = 0;
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
               imperium_self.playerSelectResources(resources_to_spend, function(success) {
                 if (success == 1) {
@@ -77,7 +75,7 @@
                 }
               });
             }
-            if (id == "no") {
+            if (id === "no") {
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
               imperium_self.endTurn();
               return 0;
@@ -87,6 +85,8 @@
 	  return 0;
 
         } else {
+
+          if (imperium_self.game.player != strategy_card_player) { return; }
 
 	  resources_to_spend = 6;
           html = '<p>Do you wish to spend '+resources_to_spend+' resources to research an additional technology? </p><ul>';
@@ -125,14 +125,14 @@
             if (id == "yes") {
 	      imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources == 0;
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-              imperium_self.playerSelectResources(6, function(success) {
+              imperium_self.playerSelectResources(resources_to_spend, function(success) {
                 if (success == 1) {
                   imperium_self.playerResearchTechnology(function(tech) {
                     imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
                     imperium_self.endTurn();
                   });
                 } else {
- alert("insufficient resources to build this tech... dying");
+ //alert("insufficient resources to build this tech... dying");
                 }
               });
             }
@@ -145,7 +145,6 @@
 
 	  return 0;
 
-        }
         }
       },
     });
@@ -185,7 +184,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	  }
           imperium_self.game.state.minister_of_technology = 1;
           imperium_self.game.state.minister_of_technology_player = player_number+1;
-          imperium_self.game.players_info[player_number-1].permanent_research_technology_card_must_not_spend_resources = 1;
+          imperium_self.game.players_info[player_number].permanent_research_technology_card_must_not_spend_resources = 1;
         }
   });
 

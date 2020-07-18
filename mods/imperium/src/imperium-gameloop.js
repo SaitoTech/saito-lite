@@ -1100,7 +1100,7 @@ console.log("executing "+z[z_index].name);
 	//
 	for (let i = 0; i < this.game.players_info.length; i++) {
 	  if (this.game.players_info[i].must_exhaust_at_round_start.length > 0) {
-	    for (let b = 0; b < this.game.players_info.length; b++) {
+	    for (let b = 0; b < this.game.players_info[i].must_exhaust_at_round_start.length; b++) {
 	      this.game.queue.push("must_exhaust_at_round_start\t"+(i+1)+"\t"+this.game.players_info[i].must_exhaust_at_round_start[b]);
 	    }
 	  }
@@ -1413,6 +1413,7 @@ console.log("executing "+z[z_index].name);
 	    if (this.game.planets[i].type == "cultural") {
 	      planets[i].exhausted = 1;
 	      exhausted = 1;
+	      this.updateSectorGraphics(i);
 	    }
 	  }
 	}
@@ -1421,6 +1422,7 @@ console.log("executing "+z[z_index].name);
 	    if (this.game.planets[i].type == "industrial") {
 	      planets[i].exhausted = 1;
 	      exhausted = 1;
+	      this.updateSectorGraphics(i);
 	    }
 	  }
 	}
@@ -1429,6 +1431,7 @@ console.log("executing "+z[z_index].name);
 	    if (this.game.planets[i].type == "hazardous") {
 	      planets[i].exhausted = 1;
 	      exhausted = 1;
+	      this.updateSectorGraphics(i);
 	    }
 	  }
 	}
@@ -1437,12 +1440,14 @@ console.log("executing "+z[z_index].name);
 	    if (this.game.planets[i].type == "homeworld") {
 	      planets[i].exhausted = 1;
 	      exhausted = 1;
+	      this.updateSectorGraphics(i);
 	    }
 	  }
 	}
 
 	if (exhausted == 0) {
 	  this.game.planets[type] = exhausted;
+	  this.updateSectorGraphics(i);
 	}
 
 

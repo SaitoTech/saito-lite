@@ -141,6 +141,7 @@
       players[i].permanent_infiltrate_infrastructure_on_invasion = 0;
       players[i].temporary_opponent_cannot_retreat = 0;
       players[i].permanent_opponent_cannot_retreat = 0;
+      players[i].permanent_research_technology_card_must_not_spend_resources = 0;
 
       if (i == 1) { players[i].color   = "yellow"; }
       if (i == 2) { players[i].color   = "green"; }
