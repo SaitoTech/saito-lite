@@ -418,15 +418,13 @@ body {
   cursor: pointer;
 }
 
-
 .cardimg-hud {
   position: absolute;
   left: 0;
   top: 0;
-  height: 110px;
-  width: 85px;
+  height: 100%;
+  width: 100%;
 }
-
 .cardimg {
   position: absolute;
   left: 0;
@@ -660,6 +658,15 @@ body {
     margin-bottom: 0px;
     width: 100%;
   } */
+
+  .cardimg-hud {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 110px;
+    width: 85px;
+  }
+
 
   .cardbox {
 position: fixed;
