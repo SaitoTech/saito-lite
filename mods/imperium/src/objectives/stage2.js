@@ -1,7 +1,9 @@
 
+
+/**** TEST CARD EASY TO SCORE ****
   this.importStageIIPublicObjective('deep-breathing', {
       name 	: 	"Deep Breathing" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/objective_card_2_template.png" ,
       text	:	"Just score this two VP for free..." ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
         return 1;
@@ -10,9 +12,11 @@
         return 1;
       },
   });
+****/
+
   this.importStageIIPublicObjective('master-of-commerce', {
       name 	: 	"Master of Commerce" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/objective_card_2_template.png" ,
       text	:	"Spend 10 trade goods when scoring" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
         if (imperium_self.returnAvailableTradeGoods(player) >= 10) { return 1; }
@@ -25,7 +29,7 @@
   });
   this.importStageIIPublicObjective('display-of-dominance', {
       name 	: 	"Display of Dominance" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/objective_card_2_template.png" ,
       text	:	"Control at least 1 planet in another player's home sector" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 
@@ -53,7 +57,7 @@
   });
   this.importStageIIPublicObjective('technological-empire', {
       name 	: 	"Technological Empire" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/objective_card_2_template.png" ,
       text	:	"Control 5 planets with tech bonuses" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 
@@ -77,7 +81,7 @@
   });
   this.importStageIIPublicObjective('establish-galactic-currency', {
       name 	: 	"Establish Galactic Currency" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/objective_card_2_template.png" ,
       text	:	"Spend 16 resources when scoring" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
         if (imperium_self.returnAvailableResources(player) >= 16) { return 1; }
@@ -94,7 +98,7 @@
   });
   this.importStageIIPublicObjective('master-of-science', {
       name 	: 	"Master of Science" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/objective_card_2_template.png" ,
       text	:	"Own 2 tech upgrades in each of 4 tech color paths" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 
@@ -129,7 +133,7 @@
   });
   this.importStageIIPublicObjective('imperial-unity', {
       name 	: 	"Imperial Unity" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/objective_card_2_template.png" ,
       text	:	"Control 6 planets of the same planet type" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 
@@ -155,7 +159,7 @@
   });
   this.importStageIIPublicObjective('advanced-technologies', {
       name 	: 	"Advanced Technologies" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/objective_card_2_template.png" ,
       text	:	"Research 3 unit upgrade technologies" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
         let techlist = imperium_self.game.players_info[player-1].tech;
@@ -174,7 +178,7 @@
   });
   this.importStageIIPublicObjective('colonial-dominance', {
       name 	: 	"Colonial Dominance" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/objective_card_2_template.png" ,
       text	:	"Control 11 planets outside your home system" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
 
@@ -200,7 +204,7 @@
   });
   this.importStageIIPublicObjective('power-broker', {
       name 	: 	"Power Broker" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/objective_card_2_template.png" ,
       text	:	"Spend 16 influence when scoring" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
         if (imperium_self.returnAvailableInfluence(player) >= 16) { return 1; }
@@ -217,7 +221,7 @@
   });
   this.importStageIIPublicObjective('cultural-revolution', {
       name 	: 	"A Cultural Revolution" ,
-      img	:	"/imperium/img/objective_card_1_template.png" ,
+      img	:	"/imperium/img/objective_card_2_template.png" ,
       text	:	"Spend 6 command or strategy tokens when scoring" ,
       canPlayerScoreVictoryPoints : function(imperium_self, player) {
         if ((imperium_self.game.players_info[player-1].strategy_tokens + imperium_self.game.players_info[player-1].command_tokens) >= 6) { return 1; }

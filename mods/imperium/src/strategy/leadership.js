@@ -23,10 +23,14 @@
         if (player == imperium_self.game.player) {
 	  if (strategy_card_player != imperium_self.game.player) {
             imperium_self.playerBuyTokens(2);
+	    return 0;
  	  } else {
             imperium_self.playerBuyTokens(2);
+	    return 0;
 	  }
         }
+
+	return 1;
 
       },
 

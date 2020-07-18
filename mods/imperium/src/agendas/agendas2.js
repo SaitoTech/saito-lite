@@ -1,4 +1,4 @@
-
+/****
 
   this.importAgendaCard('archived-secret', {
   	name : "Archived Secret" ,
@@ -24,7 +24,7 @@
 	  // deal secret objective
 	  //
           imperium_self.game.queue.push("gain\t"+(imperium_self.game.state.archived_secret_player)+"\tsecret_objectives\t1");
-          imperium_self.game.queue.push("DEAL\t6\t"+(i+1)+"\t1");
+          imperium_self.game.queue.push("DEAL\t6\t"+(imperium_self.game.state.archived_secret_player)+"\t1");
 
 	  return 1;
 
@@ -33,8 +33,6 @@
 
 
 
-
-/***
   this.importAgendaCard('economic-equality', {
   	name : "Economic Equality" ,
   	type : "Law" ,
@@ -66,7 +64,6 @@
 
 	},
   });
-***/
 
 
 
@@ -82,11 +79,12 @@
 	},
 	onPass : function(imperium_self, winning_choice) {
 
+alert("WINNING CHOICE: " + winning_choice);
 	  imperium_self.game.state.mutiny = 1;
 
           if (winning_choice === "for") {
             for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-              if (imperium_self.game.state.how_voted_on_agenda[i] == "for") {
+              if (imperium_self.game.state.choices[imperium_self.game.state.how_voted_on_agenda[i]] == "for") {
                 imperium_self.game.players_info[i].vp++;
 	        imperium_self.updateLog(imperium_self.returnFaction(i+1) + " gains 1 VP from unconventional measures");
               }
@@ -98,7 +96,7 @@
           //
           if (winning_choice === "against") {
             for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-              if (imperium_self.game.state.how_voted_on_agenda[i] == "for") {
+              if (imperium_self.game.state.choices[imperium_self.game.state.how_voted_on_agenda[i]] === "for") {
                 imperium_self.game.players_info[i].vp--;
 	        imperium_self.updateLog(imperium_self.returnFaction(i+1) + " loses 1 VP from unconventional measures");
               }
@@ -115,7 +113,6 @@
 
 
 
-/***
   this.importAgendaCard('conventions-of-war', {
   	name : "Conventions of War" ,
   	type : "Law" ,
@@ -129,7 +126,7 @@
 
           if (winning_choice === "for") {
             for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-              if (imperium_self.game.state.how_voted_on_agenda[i] == "against") {
+              if (imperium_self.game.state.choices[imperium_self.game.state.how_voted_on_agenda[i]] == "against") {
                 imperium_self.game.players_info[i].action_cards_in_hand = 0;
 		if (imperium_self.game.player == (i+1)) {
 		  imperium_self.game.deck[1].hand = [];
@@ -150,7 +147,6 @@
 	},
   });
 
-***/
 
 
 
@@ -165,7 +161,6 @@
 	onPass : function(imperium_self, winning_choice) {
 
 	  imperium_self.game.state.swords_to_ploughshares = 1;
-
 
           if (winning_choice === "against") {
             for (let i in imperium_self.game.planets) {
@@ -186,25 +181,24 @@
 	      let total_infantry_destroyed = 0;
 
               for (let k in imperium_self.game.planets) {
-	        if (imperium_self.game.planets[k].owner == (k+1)) {
+	        if (imperium_self.game.planets[k].owner == (i+1)) {
 
 		  let destroy_this_infantry = 0;
 
-		  for (let m = 0; m < imperium_self.game.planets[i].units.length; m++) {
-		    if (imperium_self.game.planets[i].units[m].type == "infantry") {
+		  for (let m = 0; m < imperium_self.game.planets[k].units[i].length; m++) {
+		    if (imperium_self.game.planets[k].units[i][m].type == "infantry") {
 		      if (destroy_this_infantry == 1) {
 			destroy_this_infantry = 0;
 			total_infantry_destroyed++;
-		      }
-		      if (destroy_this_infantry == 0) {
+		      } else {
 			destroy_this_infantry = 1;
 		      }
 		    }
 		  }
 
-		  for (let m = 0, n = 0; n < total_infantry_destroyed && m < imperium_self.game.planets[i].units.length; m++) {
-		    if (imperium_self.game.planets[i].units[m].type == "infantry") {
-		      imperium_self.game.planets[i].units.splice(m, 1);
+		  for (let m = 0, n = 0; n < total_infantry_destroyed && m < imperium_self.game.planets[k].units[i].length; m++) {
+		    if (imperium_self.game.planets[k].units[i][m].type == "infantry") {
+		      imperium_self.game.planets[k].units[i].splice(m, 1);
 		      m--;
 		      n++;
 		    }
@@ -227,7 +221,6 @@
 
 	},
   });
-
 
 
 
@@ -274,22 +267,19 @@
           //
           if (winning_choice === "against") {
             for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-              if (imperium_self.game.state.how_voted_on_agenda[i] == "against") {
-                imperium_self.game.players_info[i].command--;
-                if (imperium_self.game.players_info[i].command <= 0) {
-                  imperium_self.game.players_info[i].command = 0;
+              if (imperium_self.game.state.choices[imperium_self.game.state.how_voted_on_agenda[i]] == "against") {
+                imperium_self.game.players_info[i].command_tokens--;
+                if (imperium_self.game.players_info[i].command_tokens <= 0) {
+                  imperium_self.game.players_info[i].command_tokens = 0;
 		}
 	      }
 	    }
+	    imperium_self.updateTokenDisplay();
 	  }
-
 	  return 1;
-
 
 	},
   });
-
-
 
 
 
@@ -328,9 +318,6 @@
 
 
 
-
-/****
-
   this.importAgendaCard('shared-research', {
   	name : "Shared Research" ,
   	type : "Directive" ,
@@ -359,11 +346,6 @@
 	},
   });
 
-****/
-
-
-
-
 
 
 
@@ -391,7 +373,7 @@
 		for (let ii = 0; ii < imperium_self.game.players_info.length; ii++) {
 		  imperium_self.game.sectors[i].activated[ii] = 1;
 		}
-		imperium_self.updateSectorDisplay(i);
+		imperium_self.updateSectorGraphics(i);
 	      }
 	    }
 	  }
@@ -400,7 +382,6 @@
 
 	},
   });
-
 
 
 
@@ -456,7 +437,6 @@
         },
   });
 
-/****
   this.importAgendaCard('terraforming-initiative', {
         name : "Terraforming Initiative" ,
         type : "Law" ,
@@ -516,7 +496,6 @@
 
         }
   });
-***/
 
 
   this.importAgendaCard('publicize-weapons-schematics', {
@@ -557,7 +536,6 @@
 
 
 
-
   this.importAgendaCard('incentive-program', {
         name : "Incentive Program" ,
         type : "Directive" ,
@@ -567,7 +545,7 @@
         },
         onPass : function(imperium_self, winning_choice) {
 
-          imperium_self.game.state.publicize_weapons_schematics = 1;
+          imperium_self.game.state.incentive_program = 1;
 
           if (winning_choice === "for") {
             imperium_self.game.queue.push("revealobjectives");
@@ -589,9 +567,6 @@
 
 
 
-
-
-/***
   this.importAgendaCard('colonial-redistribution', {
         name : "Colonial Redistribution" ,
         type : "Law" ,
@@ -657,7 +632,6 @@
           return 1;
         }
   });
-***/
 
 
 
@@ -675,10 +649,6 @@
 
           imperium_self.game.state.compensated_disarmament = 1;
           imperium_self.game.state.compensated_disarmament_planet = winning_choice;
-
-console.log("winning choice: " + winning_choice);
-console.log(JSON.stringify(imperium_self.game.planets[winning_choice]));
-
 
 	  let planet = imperium_self.game.planets[winning_choice];
 	  let owner = parseInt(planet.owner);
@@ -699,11 +669,12 @@ console.log(JSON.stringify(imperium_self.game.planets[winning_choice]));
 	    imperium_self.game.queue.push("purchase\t"+owner+"\tgoods\t"+total_infantry);
 	  }
 
+	  imperium_self.updateSectorGraphics(planet.sector);
+
 	  return 1;
 
         }
   });
-
 
 
 
@@ -741,9 +712,6 @@ console.log(JSON.stringify(imperium_self.game.planets[winning_choice]));
 
 
 
-
-
-/****
 
   this.importAgendaCard('public-execution', {
 
@@ -797,7 +765,6 @@ console.log(JSON.stringify(imperium_self.game.planets[winning_choice]));
         }
   });
 
-***/
 
 
 
@@ -815,16 +782,18 @@ console.log(JSON.stringify(imperium_self.game.planets[winning_choice]));
 	},
         onPass : function(imperium_self, winning_choice) {
 
-	  if (winning_choice == "against") {
+	  if (winning_choice == "for") {
 
-	    let roll = imperium_self.rolLDice(10);
+	    let roll = imperium_self.rollDice(10);
+
+imperium_self.updateLog("Ixthian Artifact rolls " + roll);
 
 	    if (roll <= 5) {
 
 	      // destroy all units
 	      for (let i = 0; i < imperium_self.game.players_info.length; i++) {
 		imperium_self.game.planets['new-byzantium'].units[i] = [];
-		imperium_self.game.sector['new-byzantium'].units[i] = [];
+		imperium_self.game.sectors['new-byzantium'].units[i] = [];
 	      }
 
      	      let as = imperium_self.returnAdjacentSectors('new-byzantium');
@@ -851,5 +820,7 @@ console.log(JSON.stringify(imperium_self.game.planets[winning_choice]));
   });
 
 
+
+***/
 
 

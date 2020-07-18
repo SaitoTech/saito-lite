@@ -74,7 +74,6 @@
 
   this.importSecretObjective('war-engine', {
       name 		: 	"War Engine" ,
-      img		:	"/imperium/img/objective_card_1_template.png" ,
       text		:	"Have three spacedocks in play" ,
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {

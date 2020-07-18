@@ -1614,7 +1614,11 @@ console.log("ERROR: you had no hits left to assign, bug?");
     let relevant_action_cards = ["post_agenda"];
     let ac = this.returnPlayerActionCards(imperium_self.game.player, relevant_action_cards);
 
-    html = '<div class="sf-readable">The Senate has apparently voted for "'+this.returnNameFromIndex(array_of_winning_options[0])+'". As the Speaker confirms the final tally, you get the feeling the issue may not be fully settled:</div><ul>';
+    if (array_of_winning_options.length > 0) {
+      html = '<div class="sf-readable">The Senate has apparently voted for "'+this.returnNameFromIndex(array_of_winning_options[0])+'". As the Speaker confirms the final tally, you get the feeling the issue may not be fully settled:</div><ul>';
+    } else {
+      html = '<div class="sf-readable">No-one in the Senate bothered to show-up and vote, leaving the matter to be decided by the Speaker:</div><ul>';
+    }
     if (array_of_winning_options.length > 1) {
       html = '<div class="sf-readable">The voting has concluded in deadlock. As you leave the council, you see the Speaker smile and crumple a small note into his pocket:</div><ul>';
     }

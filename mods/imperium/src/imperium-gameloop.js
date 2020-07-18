@@ -10,8 +10,6 @@
 
     if (this.game.queue.length > 0) {
 
-console.log("QUEUE: " + JSON.stringify(this.game.queue));  
-
       imperium_self.saveGame(imperium_self.game.id);
   
       let qe = this.game.queue.length-1;
@@ -76,7 +74,6 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
         if (le >= 0) {
 	  lmv = this.game.queue[le].split("\t");
 	}
-console.log("RESOLVE");
 
 	//
 	// this overwrites secondaries, we need to clear manually
@@ -375,10 +372,6 @@ console.log("RESOLVE");
 	if (parseInt(mv[2]) == 1) { contplay = 1; }
 	this.game.state.active_player_turn = player;
 
-console.log(this.game.state.active_player_moved + " ---> " + this.game.state.active_player_turn);
-
-//        this.game.queue.splice(qe, 1);
-
 	try {
           document.documentElement.style.setProperty('--playing-color', `var(--p${player})`);
     	} catch (err) {}
@@ -427,15 +420,11 @@ console.log(this.game.state.active_player_moved + " ---> " + this.game.state.act
   	let strategy_card_player = parseInt(mv[2]);
   	let stage = parseInt(mv[3]);  
 
-console.log("A");
-
 	if (this.game.state.playing_strategy_card_secondary == 1) {
 	  if (this.game.confirms_players.includes(this.app.wallet.returnPublicKey())) {
 	    return 0;
 	  }
 	}
-
-console.log("A");
 
 	if (strategy_card_player != -1) {
 	  if (!imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.includes(card)) {
@@ -491,8 +480,6 @@ console.log("A");
 
         this.game.queue.splice(qe, 1);
 
-console.log("STRATEGY CARD BEFORE EVENT");
-
         return z[z_index].strategyCardBeforeEvent(this, player, strategy_card_player, card);
 
       }
@@ -528,8 +515,6 @@ console.log("STRATEGY CARD BEFORE EVENT");
         let z = this.returnEventObjects();
 
         this.game.queue.splice(qe, 1);
-
-console.log("executing "+z[z_index].name);
 
         return z[z_index].strategyCardAfterEvent(this, player, strategy_card_player, card);
 
@@ -725,7 +710,6 @@ console.log("executing "+z[z_index].name);
 	// more than one winner
 	//
 	if (total_options_at_winning_strength > 1) {
-	  console.log("WE NEED THE SPEAKER TO INTERVENE: " + total_options_at_winning_strength);
 	  if (this.game.player == this.game.state.speaker) {
 	    imperium_self.playerResolveDeadlockedAgenda(agenda, tied_choices);
 	  }
@@ -932,7 +916,7 @@ console.log("executing "+z[z_index].name);
 	      html += '<div class="agenda_text">';
 	      html += imperium_self.agenda_cards[agenda].text;
 	      html += '</div><ul>';
-	  for (let i = 0; i < this.game.state.choices.length; i++) {
+	  for (let i = 0; i < this.game.state.choices.length && this.game.state.votes_available[imperium_self.game.player-1] > 0; i++) {
 
 	      let to_print = this.game.state.choices[i];
 	      if (to_print.indexOf("planet") == 0) { to_print = this.game.planets[to_print].name; }
@@ -985,11 +969,11 @@ console.log("executing "+z[z_index].name);
 	    }
 
             let html = '<p>How many votes do you wish to cast in the Galactic Senate:</p>';
-	    for (let i = 0; i <= imperium_self.game.state.votes_available[imperium_self.game.player-1]; i++) {
+	    for (let i = 1; i <= imperium_self.game.state.votes_available[imperium_self.game.player-1]; i++) {
               if (i == 1) {
-	        html += '<li class="option" id="'+i+'">'+i+' vote</li>';
+	        html += '<li class="option textchoice" id="'+i+'">'+i+' vote</li>';
               } else {
-	        html += '<li class="option" id="'+i+'">'+i+' votes</li>';
+	        html += '<li class="option textchoice" id="'+i+'">'+i+' votes</li>';
 	      }
 	    }
 	    imperium_self.updateStatus(html);
@@ -1257,12 +1241,19 @@ console.log("executing "+z[z_index].name);
   	this.updateLog("revealing upcoming objectives...");
 
   	//
-  	// reset agendas
+  	// reset agendas -- disabled July 19
   	//
-        this.game.state.stage_i_objectives = [];
-        this.game.state.stage_ii_objectives = [];
-        this.game.state.secret_objectives = [];
+        //this.game.state.stage_i_objectives = [];
+        //this.game.state.stage_ii_objectives = [];
+        //this.game.state.secret_objectives = [];
 
+	if (this.game.deck.length > 5) {
+          for (i = 0; i < this.game.deck[5].hand.length; i++) {
+  	    if (!this.game.state.secret_objectives.includes(this.game.deck[5].hand[i])) {
+              this.game.state.secret_objectives.push(this.game.deck[5].hand[i]);
+	    }
+  	  }
+	}
 	if (this.game.pool.length > 1) {
           for (i = 0; i < this.game.pool[1].hand.length; i++) {
   	    if (!this.game.state.stage_i_objectives.includes(this.game.pool[1].hand[i])) {
@@ -1623,7 +1614,6 @@ console.log("executing "+z[z_index].name);
 //
 // and save so we continue from AFTER this point...
 //
-console.log("saved game");
 imperium_self.saveGame(imperium_self.game.id);
 //
 //
@@ -1633,7 +1623,11 @@ imperium_self.saveGame(imperium_self.game.id);
 //console.log("STARTING WITH RUN QUEUE");
 
 	  console.log("DO WE HAVE FUTURE MOVES? " + JSON.stringify(imperium_self.game.future));
-	  imperium_self.runQueue();
+	  let cont = imperium_self.runQueue();
+	  if (cont == 0) { 
+	    imperium_self.processFutureMoves();
+	  }
+
 	  return 0;
 
 	});
@@ -1747,9 +1741,7 @@ imperium_self.saveGame(imperium_self.game.id);
   	  this.game.players_info[player-1].goods -= parseInt(details);
   	}
         if (type == "planet") {
-console.log("exhausting planet: " + details);
   	  this.game.planets[details].exhausted = 1;
-console.log("planet exhausted: " + this.game.planets[details].exhausted);
   	}
   
 	this.updateTokenDisplay();
@@ -1884,7 +1876,6 @@ console.log("planet exhausted: " + this.game.planets[details].exhausted);
         sys = this.returnSectorAndPlanets(sector);
   	sys.s.activated[player-1] = 0;
         this.saveSystemAndPlanets(sys);
-console.log("UPDATE SECTOR GRAPHICS!");
         this.updateSectorGraphics(sector);
   	this.game.queue.splice(qe, 1);
   	return 1;
@@ -2081,7 +2072,6 @@ console.log("UPDATE SECTOR GRAPHICS!");
 	else {
 	
 	  let planet = this.game.planets[planet_n];
-console.log("P: " + JSON.stringify(planet));
 	  let planetunits = planet.units[player-1].length;
 
 	  for (let i = 0; i < planetunits; i++) {
@@ -2116,7 +2106,6 @@ console.log("P: " + JSON.stringify(planet));
 	  let obj = JSON.parse(shipjson);
 	  let storage = "";
 	  let units_in_storage = this.returnUnitsInStorage(obj); 
-console.log("UNITS IN STORAGE: " + units_in_storage);
           if (units_in_storage.length > 0 ) {
 	    storage += ' (';
 	    for (let i = 0; i < units_in_storage.length; i++) {
@@ -2270,11 +2259,7 @@ console.log("UNITS IN STORAGE: " + units_in_storage);
 	//
 	// determine which choices the agenda is voting on
 	//
-console.log("AGENDA IS: " + agenda);
-console.log("X: " +JSON.stringify(this.agenda_cards[agenda]));
 	this.game.state.choices = this.agenda_cards[agenda].returnAgendaOptions(imperium_self);
-console.log("CHOICES: " +this.game.state.choices);
-
 
         let speaker_order = this.returnSpeakerOrder();
   	for (let i = 0; i < speaker_order.length; i++) {
@@ -2608,11 +2593,6 @@ console.log("CHOICES: " +this.game.state.choices);
 
 	  try {
 
-
-console.log("\n\n");
-console.log("UNITS IN SPACE: " + JSON.stringify(sys.s.units[player-1]));
-console.log("THIS UNIT: " + JSON.stringify(sys.s.units[player-1][unit_idx]));
-
 	    sys.s.units[player-1][unit_idx].last_round_damaged = this.game.state.space_combat_round;
 	    if ((player_moves == 1 && imperium_self.game.player == player) || imperium_self.game.player != player) {
 	      sys.s.units[player-1][unit_idx].strength--;
@@ -2722,7 +2702,6 @@ console.log("THIS UNIT: " + JSON.stringify(sys.s.units[player-1][unit_idx]));
 	this.game.state.assign_hits_queue_instruction = "";
         if (this.game.player == defender) {
 	  this.game.state.assign_hits_queue_instruction = this.game.queue[this.game.queue.length-1];
-console.log("ASSIGN HITS QUEUE: " + this.game.state.assign_hits_queue_instruction);
 	}
 
         this.game.queue.splice(qe, 1);
@@ -2732,14 +2711,10 @@ console.log("ASSIGN HITS QUEUE: " + this.game.state.assign_hits_queue_instructio
 	}
 
         if (this.game.state.assign_hits_to_cancel > 0) {
-console.log("HERE IS A TEST: " + this.game.state.assign_hits_to_cancel);
           total_hits -= this.game.state.assign_hits_to_cancel;
           this.game.state.assign_hits_to_cancel = 0;
 	  if (total_hits <= 0) { return 1; }
         }
-
-
-console.log("HERE AND BAD: " + imperium_self.game.player + " -- " + defender);
 
 	if (planet_idx == "pds") {
 	  if (total_hits > 0) {
@@ -3436,8 +3411,6 @@ console.log("HERE AND BAD: " + imperium_self.game.player + " -- " + defender);
 	      roll += this.game.players_info[attacker-1].temporary_ground_combat_roll_modifier;
 	      roll += sys.p[planet_idx].units[attacker-1][i].temporary_combat_modifier;
 
-console.log(this.returnFaction(attacker) + " rolls a " + roll);
-
 	      if (roll >= sys.p[planet_idx].units[attacker-1][i].combat) {
 	        total_hits++;
 	        total_shots++;
@@ -3595,10 +3568,8 @@ console.log(this.returnFaction(attacker) + " rolls a " + roll);
 	    z[z_index].spaceCombatRoundEnd(this, this.game.state.space_combat_attacker, this.game.state.space_combat_defender, sector);
 	  }
 	}
-console.log("AAAA");
 
   	if (this.hasUnresolvedSpaceCombat(player, sector) == 1) {
-console.log("AAAA 1");
 	  if (this.game.player == player) {
 	    this.addMove("space_combat_post\t"+player+"\t"+sector);
 	    this.addMove("space_combat\t"+player+"\t"+sector);
@@ -3609,24 +3580,18 @@ console.log("AAAA 1");
 	  }
 	} else {
 
-console.log("AAAA 2 - " + sector);
-
 	  let sys = this.returnSectorAndPlanets(sector);
-console.log("AAAA 3");
-console.log(JSON.stringify(sys.s.units));
 	  if (sys.s.units[player-1].length > 0) {
 	    this.updateLog(this.returnFaction(player) + " succeeds in capturing the sector");
 	  } else {
 	    this.updateLog(this.returnFaction(player) + " fails to capture the sector");
 	  }
-console.log("AAAA 4");
 
 	  if (this.game_space_combat_defender == 1) {
             this.game.queue.push("space_combat_over_player_menu\t"+this.game.state.space_combat_defender+"\t"+sector);
  	  } else {
             this.game.queue.push("space_combat_over_player_menu\t"+this.game.state.space_combat_attacker+"\t"+sector);
 	  }
-console.log("AAAA 5");
 
  	  this.game.queue.splice(qe, 1);
 	  return 1;
@@ -4165,7 +4130,6 @@ console.log("AAAA 5");
 	//
 	// this is where we execute the card
 	//
-console.log("EXECUTING CARD: " + card);
 	return played_card.playActionCard(this, this.game.player, action_card_player, card);
 
       }

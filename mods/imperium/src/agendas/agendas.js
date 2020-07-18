@@ -1,4 +1,3 @@
-/***
 
   this.importAgendaCard('shard-of-the-throne', {
   	name : "Shard of the Throne" ,
@@ -492,7 +491,7 @@
 	  //
 	  if (winning_choice === "for") {
 	    for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-	      if (imperium_self.game.state.how_voted_on_agenda[i] == winning_choice) {
+	      if (imperium_self.game.state.choices[imperium_self.game.state.how_voted_on_agenda[i]] == winning_choice) {
                 imperium_self.game.queue.push("gain\t2\t"+(i+2)+"\taction_cards"+"\t"+2);
                 imperium_self.game.queue.push("DEAL\t2\t"+(i+1)+"\t2");
                 imperium_self.game.queue.push("notify\tdealing two action cards to player "+(i+1));
@@ -505,7 +504,7 @@
 	  //
 	  if (winning_choice === "against") {
 	    for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-	      if (imperium_self.game.state.how_voted_on_agenda[i] == "for") {
+	      if (imperium_self.game.state.choices[imperium_self.game.state.how_voted_on_agenda[i]] == "for") {
                 if (imperium_self.game.player == (i+1)) {
 		  imperium_self.game.players_info[i].action_cards_in_hand = 0;
 		} else {
@@ -823,7 +822,5 @@
 
 
 
-
-***/
 
 

@@ -22,7 +22,7 @@
               html += '<li class="option" id="'+i+'">' + factions[imperium_self.game.players_info[i].faction].name + '</li>';
             }
           }
-          html += '<li class="option" id="finish">stop replenishing</li>';
+          html += '<li class="option" id="finish">done</li>';
  
           imperium_self.updateStatus(html);
  

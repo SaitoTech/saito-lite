@@ -319,6 +319,7 @@ returnFactionSheet(imperium_self, player) {
     html += `</div>`;
 
 
+
     //
     // OBJECTIVES
     //
@@ -336,7 +337,6 @@ returnFactionSheet(imperium_self, player) {
       }
 
       html += `
-
         <h3>Objectives</h3>
         <div class="faction_sheet_objectives">
           <div class="scored">
