@@ -488,9 +488,9 @@ p {
     display: none;
   }
   .chat-box {
-    /*    display: none; 
+        display: none; 
     height: calc(100vh - 5em);
-    */
+    
     width: calc(100vw -1px);
     max-height: 50vh;
   }
@@ -511,6 +511,6 @@ p {
 
 @media screen and (orientation:landscape) and (max-height: 700px) {
   .chat-manager {
-    /*  display: none;*/
+      display: none;
   }
 }
