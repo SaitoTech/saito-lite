@@ -1963,7 +1963,7 @@ console.log("LEADERSHIP SECONDARY TRIGGERED: " + imperium_self.game.player + " -
       text			:	"Pick a new Speaker. If New Byzantium is controlled vote on two agendas. Other players may spend a strategy token to purchase two action cards. ",
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
-        if (imperium_self.game.confirms_needed == 0 || imperium_self.game.confirms_needed == undefined || imperium_self.game.confirms_needed == null) {
+        if (imperium_self.game.player == player) {
 
           //
           // refresh votes --> total available
@@ -1974,7 +1974,7 @@ console.log("LEADERSHIP SECONDARY TRIGGERED: " + imperium_self.game.player + " -
           imperium_self.game.state.voted_on_agenda = [];
           imperium_self.game.state.voting_on_agenda = 0;
 
-          for (let i = 0; i < imperium_self.game.players.length; i++) {
+          for (let i = 0; i < imperium_self.game.players_info.length; i++) {
             imperium_self.game.state.votes_available.push(imperium_self.returnAvailableVotes(i+1));
             imperium_self.game.state.votes_cast.push(0);
             imperium_self.game.state.how_voted_on_agenda[i] = "abstain";
@@ -2421,10 +2421,9 @@ console.log("WINNIGN CHOICE: " + winning_choice);
             imperium_self.addMove("strategy\t"+"warfare"+"\t"+strategy_card_player+"\t2");
             imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
             imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
-            imperium_self.addMove("tokenallocation\t"+strategy_card_player+"\t"+1);
             imperium_self.addMove("deactivate\t"+strategy_card_player+"\t"+sector);
             imperium_self.addMove("notify\t"+imperium_self.returnFaction(strategy_card_player)+" deactivates "+sector);
-            imperium_self.endTurn();
+            imperium_self.playerAllocateNewTokens(imperium_self.game.player, 1, 0, 3, 0);
           });
     
         }
@@ -9610,10 +9609,11 @@ console.log("type: " + type + " ---- " + player);
 	// voting happens in turns
 	//
         let who_is_next = 0;
-        for (let i = 0; i < this.game.players.length; i++) {
-          if (this.game.state.voted_on_agenda[i][agenda_num] == 0) { 
+
+	for (let i = 0; i < this.game.players_info.length; i++) {
+	  if (this.game.state.voted_on_agenda[i][agenda_num] == 0) { 
 	    who_is_next = i+1;
-	    i = this.game.players.length; 
+	    i = this.game.players_info.length; 
 	  }
         }
 
@@ -9796,7 +9796,6 @@ console.log("type: " + type + " ---- " + player);
 	  this.game.state.playing_strategy_card_secondary = 0; // reset to 0 as no secondary to run
   	}
 
-
         //
   	// game event triggers
   	//
@@ -9871,15 +9870,6 @@ console.log("type: " + type + " ---- " + player);
  	}
 
 
-
-  	//
-  	// ACTION CARDS
-  	//
-  	for (let i = 1; i <= this.game.players_info.length; i++) {
-          this.game.queue.push("gain\t"+i+'\t'+"action_cards"+"\t"+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
-          this.game.queue.push("DEAL\t2\t"+i+'\t'+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
-  	}
-  	
   
   	//
   	// READY (arcade can let us in!)
@@ -9893,6 +9883,15 @@ console.log("type: " + type + " ---- " + player);
           this.game.queue.push("tokenallocation\t"+this.game.players_info.length);
           this.game.queue.push("resetconfirmsneeded\t"+this.game.players_info.length);
 	}
+
+  	//
+  	// ACTION CARDS
+  	//
+  	for (let i = 1; i <= this.game.players_info.length; i++) {
+          this.game.queue.push("gain\t"+i+'\t'+"action_cards"+"\t"+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
+          this.game.queue.push("DEAL\t2\t"+i+'\t'+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
+  	}
+  	
   
 
   	//
@@ -16954,7 +16953,6 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
         }
 
         });
-	
       };
 
       updateInterface(imperium_self, obj, updateInterface);

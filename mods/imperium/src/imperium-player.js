@@ -3934,7 +3934,6 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
         }
 
         });
-	
       };
 
       updateInterface(imperium_self, obj, updateInterface);

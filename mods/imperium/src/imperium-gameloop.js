@@ -1050,7 +1050,6 @@
 	  this.game.state.playing_strategy_card_secondary = 0; // reset to 0 as no secondary to run
   	}
 
-
         //
   	// game event triggers
   	//
@@ -1125,15 +1124,6 @@
  	}
 
 
-
-  	//
-  	// ACTION CARDS
-  	//
-  	for (let i = 1; i <= this.game.players_info.length; i++) {
-          this.game.queue.push("gain\t"+i+'\t'+"action_cards"+"\t"+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
-          this.game.queue.push("DEAL\t2\t"+i+'\t'+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
-  	}
-  	
   
   	//
   	// READY (arcade can let us in!)
@@ -1147,6 +1137,15 @@
           this.game.queue.push("tokenallocation\t"+this.game.players_info.length);
           this.game.queue.push("resetconfirmsneeded\t"+this.game.players_info.length);
 	}
+
+  	//
+  	// ACTION CARDS
+  	//
+  	for (let i = 1; i <= this.game.players_info.length; i++) {
+          this.game.queue.push("gain\t"+i+'\t'+"action_cards"+"\t"+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
+          this.game.queue.push("DEAL\t2\t"+i+'\t'+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
+  	}
+  	
   
 
   	//
