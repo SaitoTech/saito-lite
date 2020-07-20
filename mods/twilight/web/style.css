@@ -663,27 +663,18 @@ body {
     position: absolute;
     left: 0;
     top: 0;
-    height: 110px;
-    width: 85px;
+    height: 16vh;
+    width: calc(16vh * 0.72110);
   }
 
-
   .cardbox {
-position: fixed;
+    position: fixed;
     z-index: 90000;
     top: 33vh;
     left: 53vw;
     display: block;
     height: 60vh;
     width: calc(60vh * 0.7211);
-/*    position: fixed; */
-/*    z-index: 90000; */
-/*    top: 21vh; */
-/*    left: 53vw; */
-/*    display: block; */
-/*    /* zoom: 0.66; */
-/*    height: 40vh; */
-/*    width: calc(40vh * 0.7211); */
   }
 
   .cardbox_menu_btn {
@@ -707,10 +698,10 @@ position: fixed;
 
   .cardbox-hud {
     display: block;
-    min-width: calc(36vh * 0.7211);
+    min-width: calc(16vh * 0.7211);
     min-height: 100%;
     z-index: 2;
-    width: calc(37vh * 0.7211);
+    width: calc(16vh * 0.7211);
     transform: translate(0%, 0%);
     margin-right: 0.5em;
     margin-top: 0em;
@@ -718,24 +709,21 @@ position: fixed;
 
   .cardbox-status-container {
     display: grid;
-    grid-template-rows: 5vh auto;
+    grid-template-rows: auto auto;
     grid-gap: 0.5em;
     /* height: 75%; */
   }
 
 
   .hud {
-    max-height: 250px;
+    max-height: 35vh;
   }
   .cardbox-hud-status {
-    width: 90px;
-    min-width: 90px;
+    width: calc(16vh * 0.72110);
+    min-width: calc(16vh * 0.72110);
+    height: 16vh;
+    min-height: 16vh;
     margin-right: 0.75em;
-    height: 125px;
-    min-height: 125px;
-/*    width: calc(32vh * 0.7211); */
-/*    min-width: calc(32vh * 0.7211); */
-/*    margin-right: 0.75em; */
   }
 
   #sizer {
