@@ -99,6 +99,10 @@ class Twilight extends GameTemplate {
         name: 'Display',
         callback: this.handleLangMenuItem.bind(this)
       },
+      'game-fullscreen': {
+        name: 'FullScreen',
+        callback: this.handleFullScreenMenuItem.bind(this)
+      },
       'game-player': {
         name: 'Players',
         callback: this.handlePlayerMenuItem.bind(this)
@@ -235,6 +239,10 @@ class Twilight extends GameTemplate {
     });
   }
 
+  async handleFullScreenMenuItem() {
+    this.app.browser.requestFullscreen();
+  }
+
   async handlePlayerMenuItem() {
     // let opponent = await this.app.dns.fetchIdentifierPromise(this.game.opponents[0]);
 
@@ -273,8 +281,6 @@ class Twilight extends GameTemplate {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
-
-    app.browser.requestFullscreen(document.body);
 
     let data = {}; 
         data.game = this;
