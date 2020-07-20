@@ -863,10 +863,11 @@
 	// voting happens in turns
 	//
         let who_is_next = 0;
-        for (let i = 0; i < this.game.players.length; i++) {
-          if (this.game.state.voted_on_agenda[i][agenda_num] == 0) { 
+
+	for (let i = 0; i < this.game.players_info.length; i++) {
+	  if (this.game.state.voted_on_agenda[i][agenda_num] == 0) { 
 	    who_is_next = i+1;
-	    i = this.game.players.length; 
+	    i = this.game.players_info.length; 
 	  }
         }
 

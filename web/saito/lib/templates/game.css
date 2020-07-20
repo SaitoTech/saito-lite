@@ -225,10 +225,20 @@ body {
   height: 100%;
 }
 
+.hud-transparent {
+  grid-area: hud-transparent;
+  display: none;
+}
 .hud-menu {
   grid-area: hud-menu;
   background-color: whitesmoke;
   border-right: 1px solid var(--saito-skyline-grey);
+}
+.hud-menu-topleft {
+  display: none;
+}
+.hud-menu-inhud {
+
 }
 
 .status-header {
@@ -255,7 +265,8 @@ body {
 .hud-menu-overlay {
   color: black;
   background-color: whitesmoke;
-  width: unset !important;
+  /* width: unset !important; */
+  width: 100%;
   border-right: 1px solid var(--saito-skyline-grey);
   overflow-y: scroll;
   padding: 5px;
@@ -796,6 +807,13 @@ body {
 
   #hud-home-button {
     display: none;
+  }
+
+  .hud-menu-inhud {
+    display: none;
+  }
+  .hud-menu-topleft {
+    display: flex;
   }
 
   .hud-menu ul {

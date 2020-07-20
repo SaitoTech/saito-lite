@@ -15,6 +15,11 @@
 .china_card_status_ussr_facedown {
   background-color: #ea3041;
 }
+.hud-menu {
+  grid-area: hud-menu;
+  display: flex;
+}
+
 .china_card_status {
   position: absolute;
   width: 130px;
@@ -261,28 +266,6 @@ body {
   color: #fff
 } */
 
-/* .hud_menu_overlay > div > ul {
-  list-style-type: none;
-  padding: 0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-top: 0.3em;
-  text-align: center;
-}
-
-.hud_menu_overlay > div > ul > li {
-  border-bottom: 1px solid #ccc;
-  padding: 5px;
-  margin: 0;
-  transition: .3s background-color;
-  transition: .1s color;
-}
-
-.hud_menu_overlay > div > ul > li:hover {
-  background-color: #005f5f;
-  color: #fff
-} */
-
 .hud-body {
   height: 380px;
 }
@@ -465,18 +448,12 @@ body {
 
 .cardbox-hud {
   display: block;
-
-/* PREVIOUS - works but too small? */
-/*  width: calc(8.7em * 0.7211); */
-/*  height: 8.7em; */
   width: calc(9em * 0.811);
   height: 10em;
-
   background-image: url(/twilight/img/Base.svg);
   background-size: cover;
   z-index: 2;
   transform: translate(0%, 0%);
-
   justify-self: center;
 }
 
@@ -630,7 +607,7 @@ body {
     height: unset;
   }
 
-  .hud_menu_overlay {
+  .hud-menu-overlay {
     display: grid;
     grid-template-rows: auto 1em;
     font-size: 0.8em;
@@ -644,20 +621,9 @@ body {
     padding: 3vh;
   }
 
-  .hud_menu_overlay > div > ul > li {
+  .hud-menuoverlay > div > ul > li {
     padding: 20px;
   }
-
-  /* .log {
-    height: 1em;
-    bottom: 0;
-    padding: 0.2rem;
-    position: fixed;
-    background: black;
-    overflow: hidden;
-    margin-bottom: 0px;
-    width: 100%;
-  } */
 
   .cardimg-hud {
     position: absolute;
@@ -749,24 +715,62 @@ body {
 
 @media only screen and (orientation: landscape) and (max-height: 700px) {
 
+  .hud-menu {
+    position: absolute;
+    display: block;
+    top: 0px;
+    left: 0px;
+    height: 30px;
+    width: auto;
+    max-width: auto;
+    z-index: 90000;
+    float: left;
+    grid-area: none;
+  }
+
+  .hud-menu-inhud {
+    display: none;
+  }
+  .hud-menu-topleft {
+    display: flex;
+  }
+  .hud-menu-topleft ul {
+    width: auto;
+    margin-bottom: 0px;
+  }
+  .hud-menu-topleft ul li {
+    height: 30px;
+    line-height: 35px;
+    float:left;
+    width: auto;
+    max-width: auto;
+    margin-left:10px;
+    margin-right: 10px;
+  }
   .hud-menu-first-letter {
   }
-  .hud-menu-other-letters { display: none; }
+  .hud-menu-other-letters { }
+
+  .log {
+    display: block;
+    visibility: hidden;
+  }
 
   .hud {
     grid-template-areas:
       "hud-header hud-content"
-      "hud-menu   hud-content";
-    grid-template-columns: 2em auto;
+      "hud-transparent hud-content";
+    grid-template-columns: 2em auto auto;
     grid-template-rows: 30px auto;
     min-width: unset;
     max-width: unset;
-    width: 25vw;
+    width: 22vw;
     height: 100vh;
-    right: -13vw;
+    right: -12vw;
     left: unset;
     cursor: unset;
     max-height: unset;
+    box-shadow: 0px 0px 0px 0px #BBB;
   }
   .hud-hidden-horizontal {
     width: 2em;
@@ -789,30 +793,11 @@ body {
     padding: 3vh;
   }
 
-  .hud_menu_overlay > div > ul > li {
+  .hud-menu-overlay > div > ul > li {
     padding: 20px;
   }
 
-  /*
-  .log {
-    height: 15px;
-    bottom: 0;
-    padding: 0.2rem;
-    position: fixed;
-    background: black;
-    overflow: hidden;
-    margin-bottom: 0px;
-    width: 100%;
-  }
-   */
-
   .cardbox {
-    /* position: fixed;
-    height: 95vh;
-    width: calc(95vh * 0.7211);
-    left: 33vw;
-    transform: translate(0%, -30%); */
-
     position: fixed;
     height: 50vh;
     width: calc(50vh * 0.7211);
@@ -832,10 +817,8 @@ body {
   }
 
   .cardbox-hud {
-    /* width: 10em;
-    min-height: 14em; */
-    width: calc(22vw * 0.7211);
-    min-height: 22vw;
+    width: calc(26vh * 0.7211);
+    min-height: 26vh;
     margin-top: 0;
     margin-bottom: 0.5em;
   }
@@ -844,8 +827,8 @@ body {
     position: absolute;
     left: 0;
     top: 0;
-    height: 140px;
-    width: 98px;
+    height: 26vh;
+    width: calc(26vh * 0.72110);
   }
 
   .cardbox_menu_btn {
@@ -856,7 +839,6 @@ body {
     left: 88.9%;
   }
 }
-
 
 
 @media (min-width: 481px) and (max-width: 850px) and (max-height: 500px) {

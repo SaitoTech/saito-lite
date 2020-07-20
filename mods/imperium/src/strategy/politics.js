@@ -7,7 +7,7 @@
       text			:	"Pick a new Speaker. If New Byzantium is controlled vote on two agendas. Other players may spend a strategy token to purchase two action cards. ",
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 
-        if (imperium_self.game.confirms_needed == 0 || imperium_self.game.confirms_needed == undefined || imperium_self.game.confirms_needed == null) {
+        if (imperium_self.game.player == player) {
 
           //
           // refresh votes --> total available
@@ -18,7 +18,7 @@
           imperium_self.game.state.voted_on_agenda = [];
           imperium_self.game.state.voting_on_agenda = 0;
 
-          for (let i = 0; i < imperium_self.game.players.length; i++) {
+          for (let i = 0; i < imperium_self.game.players_info.length; i++) {
             imperium_self.game.state.votes_available.push(imperium_self.returnAvailableVotes(i+1));
             imperium_self.game.state.votes_cast.push(0);
             imperium_self.game.state.how_voted_on_agenda[i] = "abstain";
