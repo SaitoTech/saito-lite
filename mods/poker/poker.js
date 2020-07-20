@@ -544,7 +544,7 @@ class Poker extends GameTemplate {
             winners.forEach(num => {
               winner_html += this.game.state.player_names[num] + ", ";
             });
-            winner_html = "<h2>" + winner_html.replace(/,([^,])$/, "").replace(/,([^,]*)$/, " and$1") + " share the pot!</h2>";
+            winner_html = "<h2>" + winner_html.replace(/,([^,])$/, "").replace(/,([^,]*)$/, " and$1") + " split the pot!</h2>";
           }
 
           winlist.forEach(pl => {
@@ -569,9 +569,9 @@ class Poker extends GameTemplate {
             //
             let pot_size = Math.floor(this.game.state.pot / winners.length)
             for (let i = 0; i < winners.length; i++) {
-              this.updateLog(this.game.state.player_names[winners[i] - 1] + " splits pot and wins " + pot_size);
+              this.updateLog(this.game.state.player_names[winners[i]] + " splits pot and wins " + pot_size);
 
-              this.game.state.player_credit[winners[i] - 1] += pot_size;
+              this.game.state.player_credit[winners[i]] += pot_size;
             }
 
             //
