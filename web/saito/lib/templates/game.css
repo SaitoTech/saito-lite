@@ -237,9 +237,6 @@ body {
 .hud-menu-topleft {
   display: none;
 }
-.hud-menu-inhud {
-
-}
 
 .status-header {
   display: grid;
@@ -310,6 +307,10 @@ body {
 .hud-menu {
   display: flex;
   color: black;
+}
+
+.hud-menu-topleft {
+  display: none;
 }
 
 .hud-menu ul {
