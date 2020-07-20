@@ -26,7 +26,8 @@
 
         if (imperium_self.game.player == player && imperium_self.game.player != strategy_card_player) {
  
-	  resources_to_spend = 4;
+	  resources_to_spend = imperium_self.game.players_info[imperium_self.game.player-1].cost_of_technology_secondary;
+;
           html = '<p>Technology has been played. Do you wish to spend 4 resources and a strategy token to research a technology? </p><ul>';
 
 	  if (
@@ -88,7 +89,8 @@
 
           if (imperium_self.game.player != strategy_card_player) { return; }
 
-	  resources_to_spend = 6;
+	  resources_to_spend = imperium_self.game.players_info[imperium_self.game.player-1].cost_of_technology_primary;
+
           html = '<p>Do you wish to spend '+resources_to_spend+' resources to research an additional technology? </p><ul>';
 
 	  if (

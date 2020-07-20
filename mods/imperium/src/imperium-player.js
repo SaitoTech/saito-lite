@@ -41,6 +41,8 @@
       players[i].strategy_cards_played 		= [];
       players[i].strategy_cards_retained        = [];
       players[i].action_cards_played 		= [];
+      players[i].cost_of_technology_primary	= 6;
+      players[i].cost_of_technology_secondary	= 4;
 
 
       players[i].traded_this_turn = 0;  

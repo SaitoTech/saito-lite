@@ -1116,23 +1116,84 @@ console.log("P: " + planet);
       faction     :       "faction2",
       type        :       "ability" ,
       initialize     :    function(imperium_self, player) {
+	if (imperium_self.faction2_brilliant_swapped == undefined) {
+
+	imperium_self.faction2_brilliant_swapped = 1;
+
 	imperium_self.game.state.brilliant_original_event = imperium_self.strategy_cards['technology'].strategySecondaryEvent;
 	imperium_self.strategy_cards["technology"].strategySecondaryEvent = function(imperium_self, player, strategy_card_player) {
-	  if (imperium_self.doesPlayerHaveTech(player, "faction2-brilliant") && player != strategy_card_player) {
-	    alert("JOL NAR SPECIAL");
-	    imperium_self.game.state.brilliant_original_event(imperium_self, player, strategy_card_player);
 
-            //imperium_self.playerAcknowledgeNotice("The Jol Nar may research a free-technology, and then purchase another for 6 resources:", function() {
-            //  imperium_self.playerResearchTechnology(function(tech) {
-            //    imperium_self.prependMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-            //    imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
-            //    imperium_self.endTurn();
-            //  });
-            //});
+	  if (imperium_self.doesPlayerHaveTech(player, "faction2-brilliant") && player != strategy_card_player && imperium_self.game.player == player) {
 
+	    imperium_self.game.players_info[player-1].cost_of_technology_secondary = 6;
+
+            imperium_self.playerAcknowledgeNotice("The Jol Nar may research a free-technology, and then purchase another for 6 resources:", function() {
+
+              imperium_self.playerResearchTechnology(function(tech) {
+
+                imperium_self.prependMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+                imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
+
+		let resources_to_spend = 6;
+                let html = '<p>Do you wish to spend 6 resources to research a second technology? </p><ul>';
+
+  	        if (
+        	  imperium_self.game.players_info[player-1].permanent_research_technology_card_must_not_spend_resources == 1 ||
+        	  imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources == 1
+        	) {
+        	  html = '<p>Do you wish to research a second technology for free?';
+        	  resources_to_spend = 0;
+        	}
+
+	        let available_resources = imperium_self.returnAvailableResources(imperium_self.game.player);
+	        if (available_resources >= resources_to_spend) {
+	          html += '<li class="option" id="yes">Yes</li>';
+	        }
+	        html += '<li class="option" id="no">No</li>';
+	        html += '</ul>';
+ 
+	        imperium_self.updateStatus(html);
+	        imperium_self.lockInterface();
+
+	        $('.option').off();
+	        $('.option').on('click', function() {
+
+	          if (!imperium_self.mayUnlockInterface()) {
+	            alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+	            return;
+	          }
+	          imperium_self.unlockInterface();
+
+	          let id = $(this).attr("id");
+
+	          if (id === "yes") {
+	            imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources = 0;
+	            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	            imperium_self.playerSelectResources(resources_to_spend, function(success) {
+	              if (success == 1) {
+	                imperium_self.playerResearchTechnology(function(tech) {
+	                  imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
+	                  imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
+	                  imperium_self.endTurn();
+	                });
+	              } else {
+	                imperium_self.endTurn();
+			return 0;
+	              }
+	            });
+	          }
+	          if (id === "no") {
+	            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+	            imperium_self.endTurn();
+	            return 0;
+	          }
+	        });
+              });
+            });
 	  } else {
 	    imperium_self.game.state.brilliant_original_event(imperium_self, player, strategy_card_player);
 	  }
+	}
 	}
       }
     });
@@ -2127,7 +2188,8 @@ console.log("LEADERSHIP SECONDARY TRIGGERED: " + imperium_self.game.player + " -
 
         if (imperium_self.game.player == player && imperium_self.game.player != strategy_card_player) {
  
-	  resources_to_spend = 4;
+	  resources_to_spend = imperium_self.game.players_info[imperium_self.game.player-1].cost_of_technology_secondary;
+;
           html = '<p>Technology has been played. Do you wish to spend 4 resources and a strategy token to research a technology? </p><ul>';
 
 	  if (
@@ -2189,7 +2251,8 @@ console.log("LEADERSHIP SECONDARY TRIGGERED: " + imperium_self.game.player + " -
 
           if (imperium_self.game.player != strategy_card_player) { return; }
 
-	  resources_to_spend = 6;
+	  resources_to_spend = imperium_self.game.players_info[imperium_self.game.player-1].cost_of_technology_primary;
+
           html = '<p>Do you wish to spend '+resources_to_spend+' resources to research an additional technology? </p><ul>';
 
 	  if (
@@ -7690,16 +7753,6 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
 
 	let technologies = this.returnTechnology();
 
-	//
-	// initialize all units / techs / powers (for all players)
-	//
-	let z = this.returnEventObjects();
-        for (let i = 0; i < z.length; z++) {
-	  for (let k = 0; k < this.game.players_info.length; k++) {
-	    z[i].initialize(this, (k+1));
-          }
-        }
-
 
 	//
 	// assign starting technology
@@ -7746,6 +7799,16 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
         this.game.queue.push("DECK\t5\t"+JSON.stringify(this.returnStageIIPublicObjectives()));
         this.game.queue.push("DECK\t6\t"+JSON.stringify(this.returnSecretObjectives()));
   
+      }
+    }
+
+    //
+    // initialize all units / techs / powers (for all players)
+    //
+    let z = this.returnEventObjects();
+    for (let i = 0; i < z.length; i++) {
+      for (let k = 0; k < this.game.players_info.length; k++) {
+        z[i].initialize(this, (k+1));
       }
     }
 
@@ -13060,6 +13123,8 @@ imperium_self.saveGame(imperium_self.game.id);
       players[i].strategy_cards_played 		= [];
       players[i].strategy_cards_retained        = [];
       players[i].action_cards_played 		= [];
+      players[i].cost_of_technology_primary	= 6;
+      players[i].cost_of_technology_secondary	= 4;
 
 
       players[i].traded_this_turn = 0;  
@@ -18009,6 +18074,7 @@ console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
       for (let j = 0; j < this.game.players_info[i].tech.length; j++) {
 	if (this.tech[this.game.players_info[i].tech[j]] != undefined) {
 	  if (!zz.includes(this.game.players_info[i].tech[j])) {
+console.log("HERE: " + this.game.players_info[i].tech[j]);
             z.push(this.tech[this.game.players_info[i].tech[j]]);
             zz.push(this.game.players_info[i].tech[j]);
 	  }

@@ -209,16 +209,6 @@
 
 	let technologies = this.returnTechnology();
 
-	//
-	// initialize all units / techs / powers (for all players)
-	//
-	let z = this.returnEventObjects();
-        for (let i = 0; i < z.length; z++) {
-	  for (let k = 0; k < this.game.players_info.length; k++) {
-	    z[i].initialize(this, (k+1));
-          }
-        }
-
 
 	//
 	// assign starting technology
@@ -265,6 +255,16 @@
         this.game.queue.push("DECK\t5\t"+JSON.stringify(this.returnStageIIPublicObjectives()));
         this.game.queue.push("DECK\t6\t"+JSON.stringify(this.returnSecretObjectives()));
   
+      }
+    }
+
+    //
+    // initialize all units / techs / powers (for all players)
+    //
+    let z = this.returnEventObjects();
+    for (let i = 0; i < z.length; i++) {
+      for (let k = 0; k < this.game.players_info.length; k++) {
+        z[i].initialize(this, (k+1));
       }
     }
 
