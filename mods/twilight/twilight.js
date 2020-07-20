@@ -274,6 +274,8 @@ class Twilight extends GameTemplate {
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
 
+    app.browser.requestFullscreen(document.body);
+
     let data = {}; 
         data.game = this;
 
