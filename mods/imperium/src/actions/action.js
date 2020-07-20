@@ -562,11 +562,12 @@ alert("H: " + planet);
               },
 	      function(planet) {
 
+	        let planetname = planet;
 		planet = imperium_self.game.planets[planet];
 		let goods = planet.resources;
 
                 imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tgoods\t"+goods);
-                imperium_self.addMove("expend\t"+imperium_self.game.player+"\tplanet\t"+planet);
+                imperium_self.addMove("expend\t"+imperium_self.game.player+"\tplanet\t"+planetname);
                 imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " exhausting "+planet.name + " and gaining " + goods + " trade goods");
                 imperium_self.endTurn();
 		return 0;

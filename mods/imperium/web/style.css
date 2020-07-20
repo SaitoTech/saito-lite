@@ -270,9 +270,9 @@ body {
   height: 10em;
   display: grid;
   grid-gap: 0 2em;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto auto auto auto;
   font-family: 'bank-gothic';
-  transform: scale(0.85);
+  transform: scale(0.6);
 }
 
 .token_count {

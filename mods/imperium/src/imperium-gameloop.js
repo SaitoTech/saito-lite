@@ -180,7 +180,9 @@
               imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " researches " + imperium_self.tech[tech].name);
               imperium_self.endTurn();
           });
-        }
+        } else {
+	  imperium_self.updateStatus(imperium_self.returnFaction(player) + " is researching technology...");
+	}
 	return 0;
 
       }
@@ -284,6 +286,8 @@
 
 	if (this.game.player == player) {
   	  this.playerContinueTurn(player, sector);
+	} else {
+	  this.updateStatus(this.returnFaction(player) + " has moved into " + this.game.sectors[this.game.board[sector].tile].name + " and is continuing their move.");
 	}
 
         return 0;
@@ -333,33 +337,14 @@
 	}
         if (handle_fleet_supply == 1) {
           return this.handleFleetSupply(player, sector);
+	} else {
+	  this.updateStatus(this.returnFaction(player) + " is over their fleet supply in "+this.game.sectors[sector].name+" and must destroy ships");
 	}
 
   	return 1;
   
       }
 
-      if (mv[0] === "continue") {  
-
-  	let player = mv[1];
-  	let sector = mv[2];
-
-        this.game.queue.splice(qe, 1);
-
-  	//
-  	// update sector
-  	//
-  	this.updateSectorGraphics(sector);
-
-	if (this.game.player == player) {
-  	  this.playerContinueTurn(player, sector);
-	} else {
-          this.updateStatus(this.returnFaction(player) + " continues their turn");
- 	}
-
-        return 0;
-
-      }
 
 
       if (mv[0] === "play") {
@@ -435,6 +420,7 @@
 
   	if (stage == 1) {
 	  this.updateLog(this.returnFaction(strategy_card_player) + " plays " + this.strategy_cards[card].name);
+	  this.updateStatus(this.returnFaction(strategy_card_player) + " is playing " + this.strategy_cards[card].name);
   	  this.playStrategyCardPrimary(strategy_card_player, card);
 	  return 0;
   	}
@@ -1166,7 +1152,6 @@
   	// FLIP NEW AGENDA CARDS
   	//
         this.game.queue.push("revealagendas");
-        this.game.queue.push("notify\tFLIPCARD is completed!");
   	for (let i = 1; i <= this.game.players_info.length; i++) {
           this.game.queue.push("FLIPCARD\t3\t3\t1\t"+i); // deck card poolnum player
   	}
@@ -1349,10 +1334,10 @@
   	  this.addMove("addbonustounselectedstrategycards");
   
   	  let cards_to_select = 1;
-//  	  if (this.game.players_info.length == 2) { cards_to_select = 3; }
-//  	  if (this.game.players_info.length == 3) { cards_to_select = 2; }
-//  	  if (this.game.players_info.length == 4) { cards_to_select = 2; }
-//  	  if (this.game.players_info.length >= 5) { cards_to_select = 1; }
+  	  if (this.game.players_info.length == 2) { cards_to_select = 3; }
+  	  if (this.game.players_info.length == 3) { cards_to_select = 2; }
+  	  if (this.game.players_info.length == 4) { cards_to_select = 2; }
+  	  if (this.game.players_info.length >= 5) { cards_to_select = 1; }
   
   	  //
   	  // TODO -- pick appropriate card number
@@ -2179,6 +2164,7 @@ imperium_self.saveGame(imperium_self.game.id);
         this.updateSectorGraphics(sector);
 
 	this.updateLog(this.returnFaction(activating_player) + " activates " + this.returnSectorName(sector));
+	this.updateStatus(this.returnFaction(activating_player) + " activates " + this.returnSectorName(sector));
 
   	this.game.queue.splice(qe, 1);
 
@@ -4096,11 +4082,14 @@ imperium_self.saveGame(imperium_self.game.id);
 	// the person who played the action card cannot respond to it
 	//
 	if (player == action_card_player) {
+	  this.updateStatus(this.returnFaction(player) + " is responding to the action card");
 	  return 1;
 	}
 
 	if (this.game.player == player) {
 	  this.playerPlayActionCardMenu(action_card_player, action_card);
+	} else {
+	  this.updateStatus(this.returnFaction(player) + " is responding to action card " + this.action_cards[action_card].name);
 	}
 	return 0;
 

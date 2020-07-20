@@ -151,7 +151,7 @@ addUIEvents() {
         <span class="fa-stack fa-3x">
         <i class="fas fa-box fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
-        <div id="token_display_commodities_count" class="token_count commodities_count">
+        <div id="token_display_commodities_count" style="font-size:1em" class="token_count commodities_count">
         ${this.game.players_info[this.game.player-1].commodities}
         </div>
         </span>
@@ -161,7 +161,7 @@ addUIEvents() {
         <span class="fa-stack fa-3x">
         <i class="fas fa-database fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
-        <div id="token_display_trade_goods_count" class="token_count trade_goods_count">
+        <div id="token_display_trade_goods_count" style="font-size:1em" class="token_count trade_goods_count">
         ${this.game.players_info[this.game.player-1].goods}
         </div>
         </span>
@@ -189,6 +189,8 @@ returnFactionSheet(imperium_self, player) {
         <div>Command</div>
         <div>Strategy</div>
         <div>Fleet</div>
+        <div>Commodities</div>
+        <div>Goods</div>
         <div>	
           <span class="fa-stack fa-3x">
           <i class="fas fa-dice-d20 fa-stack-2x pc white-stroke"></i>
@@ -216,6 +218,26 @@ returnFactionSheet(imperium_self, player) {
           <span class="token_count fleet_supply_count">
           ${this.game.players_info[player - 1].fleet_supply}
           </span>
+          </span>
+          </span>
+        </div>
+        <div>
+          <span class="fa-stack fa-3x">
+          <i class="fas fa-box fa-stack-2x pc white-stroke"></i>
+          <span class="fa fa-stack-1x">
+          <div class="token_count commodities_count">
+          ${this.game.players_info[this.game.player-1].commodities}
+          </div>
+          </span>
+          </span>
+        </div>
+        <div>
+          <span class="fa-stack fa-3x">
+          <i class="fas fa-database fa-stack-2x pc white-stroke"></i>
+          <span class="fa fa-stack-1x">
+          <div class="token_count trade_goods_count">
+          ${this.game.players_info[this.game.player-1].goods}
+          </div>
           </span>
           </span>
         </div>
@@ -711,7 +733,7 @@ updateSectorGraphics(sector) {
           $(divpid).removeClass("player_color_6");
           $(divpid).addClass(newclass);
           $(divpid).css('display','block');
-          $(divpid).css('opacity', '0.4');
+          $(divpid).css('opacity', '0.6');
           player_border_visible = 1;
         }
 

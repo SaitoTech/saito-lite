@@ -1782,26 +1782,18 @@ console.log("ERROR: you had no hits left to assign, bug?");
 	//
 	if (sector === "new-byzantium") {
 	  if (imperium_self.game.planets['new-byzantium'].owner == -1) {
-
 	    if (imperium_self.returnAvailableInfluence(imperium_self.game.player) >= 6) {
-
 	      imperium_self.game.playerSelectInfluence(6, function(success) {
  	        imperium_self.game.tracker.invasion = 1;
                 imperium_self.playerInvadePlanet(player, sector);
 	      });
-
 	    } else {
-
 	      alert("The first conquest of New Byzantium requires spending 6 influence, which you lack.");
 	      return;
-
 	    }
-
 	    return;
 	  }
 	}
-
-
 
         imperium_self.game.tracker.invasion = 1;
         imperium_self.playerInvadePlanet(player, sector);

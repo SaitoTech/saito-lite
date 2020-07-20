@@ -5505,11 +5505,12 @@ alert("H: " + planet);
               },
 	      function(planet) {
 
+	        let planetname = planet;
 		planet = imperium_self.game.planets[planet];
 		let goods = planet.resources;
 
                 imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tgoods\t"+goods);
-                imperium_self.addMove("expend\t"+imperium_self.game.player+"\tplanet\t"+planet);
+                imperium_self.addMove("expend\t"+imperium_self.game.player+"\tplanet\t"+planetname);
                 imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " exhausting "+planet.name + " and gaining " + goods + " trade goods");
                 imperium_self.endTurn();
 		return 0;
@@ -8825,9 +8826,9 @@ console.log("type: " + type + " ---- " + player);
 	// this overwrites secondaries, we need to clear manually
 	// if we are playing the sceondary, we don't want to udpate status
 	//
-	//if (this.game.state.playing_strategy_card_secondary == 0) {
-        //  this.updateStatus("Waiting for Opponent Move...");  
-	//}
+	if (this.game.state.playing_strategy_card_secondary == 0) {
+          this.updateStatus("Waiting for Opponent Move...");  
+	}
 
 	if (mv[1] == lmv[0]) {
   	  if (mv[2] != undefined) {
@@ -8926,7 +8927,9 @@ console.log("type: " + type + " ---- " + player);
               imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " researches " + imperium_self.tech[tech].name);
               imperium_self.endTurn();
           });
-        }
+        } else {
+	  imperium_self.updateStatus(imperium_self.returnFaction(player) + " is researching technology...");
+	}
 	return 0;
 
       }
@@ -9030,6 +9033,8 @@ console.log("type: " + type + " ---- " + player);
 
 	if (this.game.player == player) {
   	  this.playerContinueTurn(player, sector);
+	} else {
+	  this.updateStatus(this.returnFaction(player) + " has moved into " + this.game.sectors[this.game.board[sector].tile].name + " and is continuing their move.");
 	}
 
         return 0;
@@ -9079,33 +9084,14 @@ console.log("type: " + type + " ---- " + player);
 	}
         if (handle_fleet_supply == 1) {
           return this.handleFleetSupply(player, sector);
+	} else {
+	  this.updateStatus(this.returnFaction(player) + " is over their fleet supply in "+this.game.sectors[sector].name+" and must destroy ships");
 	}
 
   	return 1;
   
       }
 
-      if (mv[0] === "continue") {  
-
-  	let player = mv[1];
-  	let sector = mv[2];
-
-        this.game.queue.splice(qe, 1);
-
-  	//
-  	// update sector
-  	//
-  	this.updateSectorGraphics(sector);
-
-	if (this.game.player == player) {
-  	  this.playerContinueTurn(player, sector);
-	} else {
-          this.updateStatus(this.returnFaction(player) + " continues their turn");
- 	}
-
-        return 0;
-
-      }
 
 
       if (mv[0] === "play") {
@@ -9181,6 +9167,7 @@ console.log("type: " + type + " ---- " + player);
 
   	if (stage == 1) {
 	  this.updateLog(this.returnFaction(strategy_card_player) + " plays " + this.strategy_cards[card].name);
+	  this.updateStatus(this.returnFaction(strategy_card_player) + " is playing " + this.strategy_cards[card].name);
   	  this.playStrategyCardPrimary(strategy_card_player, card);
 	  return 0;
   	}
@@ -9912,7 +9899,6 @@ console.log("type: " + type + " ---- " + player);
   	// FLIP NEW AGENDA CARDS
   	//
         this.game.queue.push("revealagendas");
-        this.game.queue.push("notify\tFLIPCARD is completed!");
   	for (let i = 1; i <= this.game.players_info.length; i++) {
           this.game.queue.push("FLIPCARD\t3\t3\t1\t"+i); // deck card poolnum player
   	}
@@ -10095,10 +10081,10 @@ console.log("type: " + type + " ---- " + player);
   	  this.addMove("addbonustounselectedstrategycards");
   
   	  let cards_to_select = 1;
-//  	  if (this.game.players_info.length == 2) { cards_to_select = 3; }
-//  	  if (this.game.players_info.length == 3) { cards_to_select = 2; }
-//  	  if (this.game.players_info.length == 4) { cards_to_select = 2; }
-//  	  if (this.game.players_info.length >= 5) { cards_to_select = 1; }
+  	  if (this.game.players_info.length == 2) { cards_to_select = 3; }
+  	  if (this.game.players_info.length == 3) { cards_to_select = 2; }
+  	  if (this.game.players_info.length == 4) { cards_to_select = 2; }
+  	  if (this.game.players_info.length >= 5) { cards_to_select = 1; }
   
   	  //
   	  // TODO -- pick appropriate card number
@@ -10925,6 +10911,7 @@ imperium_self.saveGame(imperium_self.game.id);
         this.updateSectorGraphics(sector);
 
 	this.updateLog(this.returnFaction(activating_player) + " activates " + this.returnSectorName(sector));
+	this.updateStatus(this.returnFaction(activating_player) + " activates " + this.returnSectorName(sector));
 
   	this.game.queue.splice(qe, 1);
 
@@ -12842,11 +12829,14 @@ imperium_self.saveGame(imperium_self.game.id);
 	// the person who played the action card cannot respond to it
 	//
 	if (player == action_card_player) {
+	  this.updateStatus(this.returnFaction(player) + " is responding to the action card");
 	  return 1;
 	}
 
 	if (this.game.player == player) {
 	  this.playerPlayActionCardMenu(action_card_player, action_card);
+	} else {
+	  this.updateStatus(this.returnFaction(player) + " is responding to action card " + this.action_cards[action_card].name);
 	}
 	return 0;
 
@@ -14812,26 +14802,18 @@ console.log("ERROR: you had no hits left to assign, bug?");
 	//
 	if (sector === "new-byzantium") {
 	  if (imperium_self.game.planets['new-byzantium'].owner == -1) {
-
 	    if (imperium_self.returnAvailableInfluence(imperium_self.game.player) >= 6) {
-
 	      imperium_self.game.playerSelectInfluence(6, function(success) {
  	        imperium_self.game.tracker.invasion = 1;
                 imperium_self.playerInvadePlanet(player, sector);
 	      });
-
 	    } else {
-
 	      alert("The first conquest of New Byzantium requires spending 6 influence, which you lack.");
 	      return;
-
 	    }
-
 	    return;
 	  }
 	}
-
-
 
         imperium_self.game.tracker.invasion = 1;
         imperium_self.playerInvadePlanet(player, sector);
@@ -20754,7 +20736,7 @@ addUIEvents() {
         <span class="fa-stack fa-3x">
         <i class="fas fa-box fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
-        <div id="token_display_commodities_count" class="token_count commodities_count">
+        <div id="token_display_commodities_count" style="font-size:1em" class="token_count commodities_count">
         ${this.game.players_info[this.game.player-1].commodities}
         </div>
         </span>
@@ -20764,7 +20746,7 @@ addUIEvents() {
         <span class="fa-stack fa-3x">
         <i class="fas fa-database fa-stack-2x pc white-stroke"></i>
         <span class="fa fa-stack-1x">
-        <div id="token_display_trade_goods_count" class="token_count trade_goods_count">
+        <div id="token_display_trade_goods_count" style="font-size:1em" class="token_count trade_goods_count">
         ${this.game.players_info[this.game.player-1].goods}
         </div>
         </span>
@@ -20792,6 +20774,8 @@ returnFactionSheet(imperium_self, player) {
         <div>Command</div>
         <div>Strategy</div>
         <div>Fleet</div>
+        <div>Commodities</div>
+        <div>Goods</div>
         <div>	
           <span class="fa-stack fa-3x">
           <i class="fas fa-dice-d20 fa-stack-2x pc white-stroke"></i>
@@ -20819,6 +20803,26 @@ returnFactionSheet(imperium_self, player) {
           <span class="token_count fleet_supply_count">
           ${this.game.players_info[player - 1].fleet_supply}
           </span>
+          </span>
+          </span>
+        </div>
+        <div>
+          <span class="fa-stack fa-3x">
+          <i class="fas fa-box fa-stack-2x pc white-stroke"></i>
+          <span class="fa fa-stack-1x">
+          <div class="token_count commodities_count">
+          ${this.game.players_info[this.game.player-1].commodities}
+          </div>
+          </span>
+          </span>
+        </div>
+        <div>
+          <span class="fa-stack fa-3x">
+          <i class="fas fa-database fa-stack-2x pc white-stroke"></i>
+          <span class="fa fa-stack-1x">
+          <div class="token_count trade_goods_count">
+          ${this.game.players_info[this.game.player-1].goods}
+          </div>
           </span>
           </span>
         </div>
@@ -21314,7 +21318,7 @@ updateSectorGraphics(sector) {
           $(divpid).removeClass("player_color_6");
           $(divpid).addClass(newclass);
           $(divpid).css('display','block');
-          $(divpid).css('opacity', '0.4');
+          $(divpid).css('opacity', '0.6');
           player_border_visible = 1;
         }
 
