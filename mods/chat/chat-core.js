@@ -79,7 +79,7 @@ class ChatCore extends ModTemplate {
     let group_ids = this.groups.map(group => group.id);
 
     let txs = new Promise((resolve, reject) => {
-      app.storage.loadTransactionsByKeys(group_ids, "Chat", 50, (txs) => {
+      app.storage.loadTransactionsByKeys(group_ids, "Chat", 25, (txs) => {
         resolve(txs);
       });
     });

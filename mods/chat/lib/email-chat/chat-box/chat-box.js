@@ -46,6 +46,23 @@ module.exports = ChatBox = {
 
     attachEvents(app, data, group) {
       let msg_input = document.getElementById(`chat-box-new-message-input-${group.id}`);
+
+      window.handlePasteImage(msg_input, (img) => {
+        
+        let msg_data = {
+          message: img,
+          group_id: group.id,
+          publickey: app.wallet.returnPublicKey(),
+          timestamp: new Date().getTime()
+        };
+
+        let newtx = this.createMessage(app, data, msg_data);
+        app.modules.returnModule("Chat").sendMessage(app, newtx);
+
+        this.addMessage(app, data, newtx);
+      
+      });
+
       msg_input.addEventListener("keypress", (e) => {
           if ((e.which == 13 || e.keyCode == 13) && !e.shiftKey) {
               e.preventDefault();
@@ -155,7 +172,11 @@ module.exports = ChatBox = {
           this.message_blocks.push(new_message_block);
           chat_box_main.innerHTML += ChatBoxMessageBlockTemplate(new_message_block, data);
       }
+     // add window.imgPoP to all images in chat_box_main ...
 
+      document.querySelectorAll('.chat-box-main .img-prev').forEach(img => {
+        img.addEventListener('click', window.imgPop(img));
+      });
       this.scrollToBottom(message.group_id);
     } catch (err) {}
     },
@@ -271,16 +292,9 @@ module.exports = ChatBox = {
         selfClosing: ['img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta'],
         allowedSchemes: ['http', 'https', 'ftp', 'mailto'],
         allowedSchemesByTag: {},
-        allowedSchemesAppliedToAttributes: ['href', 'src', 'cite'],
+        allowedSchemesAppliedToAttributes: ['href', 'cite'],
         allowProtocolRelative: true,
         transformTags: {
-          'img': function(tagName, attribs) {
-            attribs.class = 'chat-message-markdown';
-            return {
-              tagName: 'img',
-              attribs
-            };
-          },
           'a': sanitizeHtml.simpleTransform('a', {target: '_blank'})
         }
       });
@@ -288,6 +302,19 @@ module.exports = ChatBox = {
       
       return msg;
     }
+
+/*
+
+'img': function(tagName, attribs) {
+            attribs.class = 'chat-message-markdown';
+            return {
+              tagName: 'img',
+              attribs
+            };
+          },
+
+*/
+
 
 }
 

@@ -708,6 +708,13 @@ div#message-wrapper {
   border-radius: 2px;
   padding: 1em;
   background-color: #eee;
+  max-width: 90%;
+    max-height: 90%;
+}
+
+.img-prev {
+  max-width: 90%;
+  max-height: 80vh;
 }
 
 
