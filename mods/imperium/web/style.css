@@ -824,6 +824,8 @@ body {
   top: 17vh;
   height: 60vh;
   width: auto;
+  -webkit-filter: drop-shadow(1px 1px 3px #FFF8) drop-shadow(-1px -1px 3px #fff8);
+    filter: drop-shadow(1px 1px 3px #FFF8) drop-shadow(-1px -1px 3px #fff8);
 }
 
 .turns {

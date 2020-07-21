@@ -32,12 +32,12 @@ module.exports = ArcadeGameDreate = {
         document.querySelector('.game-title').innerHTML = gamemod.name;
         document.querySelector('.game-description').innerHTML = gamemod.description;
         document.querySelector('.game-publisher-message').innerHTML = gamemod.publisher_message;
-	let x = gamemod.returnGameOptionsHTML();
-	if (x != "") {
-          document.querySelector('.game-details').innerHTML = '<h3>'+gamemod.name+': </h3><form id="options" class="options">'+x+'</form>'
-	}
+        let x = gamemod.returnGameOptionsHTML();
+        if (x != "") {
+          document.querySelector('.game-details').innerHTML = '<h3>' + gamemod.name + ': </h3><form id="options" class="options">' + x + '</form>'
+        }
 
-	setTimeout(() => {
+        setTimeout(() => {
 
           //
           // TODO: is this value supposed to be used?
@@ -127,7 +127,7 @@ module.exports = ArcadeGameDreate = {
               options['players_invited'] = players_invited;
 
               let gamedata = {
-	        ts: new Date().getTime(),
+                ts: new Date().getTime(),
                 name: gamemod.name,
                 slug: gamemod.returnSlug(),
                 options: gamemod.returnFormattedGameOptions(options),
@@ -147,13 +147,14 @@ module.exports = ArcadeGameDreate = {
 
           });
 
-	  //
-          //link-invite-btn
-	  //
-          document.getElementById('link-invite-btn')
+        //
+        //link-invite-btn
+        //
+        
+        document.getElementById('link-invite-btn')
           .addEventListener('click', (e) => {
 
-            document.querySelector('.game-players-select').val = 2;
+            document.querySelector('.game-players-select').value = 2;
 
             let { active_game } = data;
             let game_module = app.modules.returnModule(active_game);
@@ -162,10 +163,10 @@ module.exports = ArcadeGameDreate = {
             let payload = {
               ts: new Date().getTime(),
               name: active_game,
-	      slug: game_module.returnSlug(),
+              slug: game_module.returnSlug(),
               publickey: app.wallet.returnPublicKey(),
               options,
-              players_needed: document.querySelector('.game-players-select').val,
+              players_needed: 2,
             };
 
             let newtx = data.arcade.createOpenTransaction(payload);
@@ -179,24 +180,17 @@ module.exports = ArcadeGameDreate = {
 
 
             var inviteInput = document.getElementById("link-invite-input");
-            inviteInput.innerText = `${window.location}invite/${base64str}`;
+            //inviteInput.innerText = `${window.location}invite/${base64str}`;
 
-/***
-            let copiedText = inviteInput.createTextRange();
-            copiedText.execCommand("Copy");
-            salert(`Link copied to clipboard`);
-***/
 
-if (document.selection) { //IE
-    var range = document.body.createTextRange();
-    range.moveToElementText(document.getElementById("link-invite-input"));
-    range.select();
-} else if (window.getSelection) { //others
-    var range = document.createRange();
-    range.selectNode(document.getElementById("link-invite-input"));
-    window.getSelection().addRange(range);
-}
-    document.execCommand("copy"); 
+            var link = `${window.location}invite/${base64str}`;
+            const el = document.createElement('textarea');
+            el.value = link;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            siteMessage('Invite Link Copied', 5000);
 
 
             data.arcade.addGameToOpenList(newtx);
@@ -232,7 +226,7 @@ if (document.selection) { //IE
         let payload = {
           ts: new Date().getTime(),
           name: active_game,
-	  slug: game_module.returnSlug(),
+          slug: game_module.returnSlug(),
           publickey: app.wallet.returnPublicKey(),
           options,
           players_needed: document.querySelector('.game-players-select').value,
