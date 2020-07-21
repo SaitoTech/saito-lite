@@ -46,9 +46,9 @@
 
     this.activated_systems_player++;
 
-    if (this.activated_systems_player >= this.game.players_info.length) { this.activated_systems_player = 0; }
+    if (this.activated_systems_player > this.game.players_info.length) { this.activated_systems_player = 1; }
 
-    let html = `Showing Systems Activated by ${factions[this.game.players_info[this.activated_systems_player].faction].name}`;
+    let html = `Showing Systems Activated by ${factions[this.game.players_info[this.activated_systems_player-1].faction].name}`;
     $('.hud-menu-overlay').html(html);
     $('.hud-menu-overlay').show();
     $('.status').hide();
@@ -58,7 +58,7 @@
     $('.hex_activated').css('opacity', '0.3');
 
     for (var i in this.game.board) {
-      if (this.game.sectors[ this.game.board[i].tile ].activated[this.activated_systems_player] == 1) {
+      if (this.game.sectors[ this.game.board[i].tile ].activated[this.activated_systems_player-1] == 1) {
 	let divpid = "#hex_activated_"+i;
         $(divpid).css('background-color', 'yellow');
         $(divpid).css('opacity', '0.3');

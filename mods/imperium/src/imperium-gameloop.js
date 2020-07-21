@@ -2112,17 +2112,11 @@ imperium_self.saveGame(imperium_self.game.id);
 	    storage += ')';
           }
 	  this.updateLog(this.returnFaction(player) + " moves " + obj.name + " into " + sys2.s.name + storage);
-console.log("SYS FROM pre: " + JSON.stringify(sys.s.units[player-1]));
-console.log("REMOVING: " + shipjson);
-console.log("a");
   	  this.removeSpaceUnitByJSON(player, sector_from, shipjson);
-console.log("SYS FROM post: " + JSON.stringify(sys.s.units[player-1]));
           this.addSpaceUnitByJSON(player, sector_to, shipjson);
   	}
   
-console.log("UPDATING SECTOR TO:");
   	this.updateSectorGraphics(sector_to);
-console.log("UPDATING SECTOR FROM: ");
   	this.updateSectorGraphics(sector_from);
 
   	this.game.queue.splice(qe, 1);
