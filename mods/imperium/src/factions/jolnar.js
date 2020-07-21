@@ -60,7 +60,7 @@
 
 	imperium_self.faction2_brilliant_swapped = 1;
 
-	imperium_self.game.state.brilliant_original_event = imperium_self.strategy_cards['technology'].strategySecondaryEvent;
+	imperium_self.brilliant_original_event = imperium_self.strategy_cards['technology'].strategySecondaryEvent;
 	imperium_self.strategy_cards["technology"].strategySecondaryEvent = function(imperium_self, player, strategy_card_player) {
 
 	  if (imperium_self.doesPlayerHaveTech(player, "faction2-brilliant") && player != strategy_card_player && imperium_self.game.player == player) {
@@ -131,7 +131,7 @@
               });
             });
 	  } else {
-	    imperium_self.game.state.brilliant_original_event(imperium_self, player, strategy_card_player);
+	    imperium_self.brilliant_original_event(imperium_self, player, strategy_card_player);
 	  }
 	}
 	}

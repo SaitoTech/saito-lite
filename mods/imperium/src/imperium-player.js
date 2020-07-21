@@ -195,6 +195,12 @@
       let html  = '<div class="terminal_header sf-readable">[command: '+this.game.players_info[this.game.player-1].command_tokens+'] [strategy: '+this.game.players_info[this.game.player-1].strategy_tokens+'] [fleet: '+this.game.players_info[this.game.player-1].fleet_supply+']</div>';
           html  += '<p style="margin-top:20px"></p>';
           html  += '<div class="terminal_header2 sf-readable"><div class="player_color_box '+playercol+'"></div>' + this.returnFaction(this.game.player) + ":</div><p><ul class='terminal_header3'>";
+
+      if (this.game.state.round == 1) {
+          html += '<li class="option" id="tutorial_move_ships">move ships</li>';
+          html += '<li class="option" id="tutorial_produce_units">produce units</li>';
+      }
+
       if (this.game.players_info[this.game.player-1].command_tokens > 0) {
 	if (this.game.state.active_player_moved == 0) {
           html += '<li class="option" id="activate">activate system</li>';
@@ -279,6 +285,19 @@
 
         if (action2 == "activate") {
           imperium_self.playerActivateSystem();
+        }
+
+        if (action2 == "tutorial_move_ships") {
+	  imperium_self.playerAcknowledgeNotice("To move ships select \"activate sector\". Be careful as most ships can only move 1-hexagon and you cannot move ships from sectors that are already activated. You will be able to choose the ships to move, and load infantry and fighters into units that can carry them.", function() {
+	    imperium_self.playerTurn();
+	  });
+	  return;
+        }
+        if (action2 == "tutorial_produce_units") {
+	  imperium_self.playerAcknowledgeNotice("To produce units, select \"activate sector\" and choose a sector with a space dock (like your home system). You can only have as many non-fighter ships in any sector as your fleet supply, so move your ships out before producing more!", function() {
+	    imperium_self.playerTurn();
+	  });
+	  return;
         }
 
         if (action2 == "select_strategy_card") {
@@ -2349,10 +2368,6 @@ console.log("ERROR: you had no hits left to assign, bug?");
       };
   
 
-
-
-
-
       let calculated_total_cost = 0;
       for (let i = 0; i < stuff_to_build.length; i++) {
         calculated_total_cost += imperium_self.returnUnitCost(stuff_to_build[i], imperium_self.game.player);
@@ -2401,7 +2416,6 @@ console.log("ERROR: you had no hits left to assign, bug?");
 	$('.warsun_total').html(0);
 	return;
       }
-
 
 
   
@@ -3232,7 +3246,9 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
         if (id == "confirm") {
   
           imperium_self.addMove("resolve\tplay");
+	  // source should be OK as moving out does not add units
           imperium_self.addMove("space_invasion\t"+imperium_self.game.player+"\t"+destination);
+          imperium_self.addMove("check_fleet_supply\t"+imperium_self.game.player+"\t"+destination);
           for (let y = 0; y < obj.stuff_to_move.length; y++) { 
             imperium_self.addMove("move\t"+imperium_self.game.player+"\t"+1+"\t"+obj.ships_and_sectors[obj.stuff_to_move[y].i].sector+"\t"+destination+"\t"+JSON.stringify(obj.ships_and_sectors[obj.stuff_to_move[y].i].ships[obj.stuff_to_move[y].ii])); 
           }

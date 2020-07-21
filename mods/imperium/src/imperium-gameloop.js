@@ -1,4 +1,4 @@
- 
+
   
   /////////////////////
   // Core Game Logic //
@@ -270,6 +270,15 @@
   
       }
 
+      if (mv[0] === "check_fleet_supply") {  
+
+  	let player = parseInt(mv[1]);
+  	let sector = mv[2];
+        this.game.queue.splice(qe, 1);
+
+        return this.handleFleetSupply(player, sector);
+
+      }
 
 
       if (mv[0] === "continue") {  
@@ -338,7 +347,7 @@
         if (handle_fleet_supply == 1) {
           return this.handleFleetSupply(player, sector);
 	} else {
-	  this.updateStatus(this.returnFaction(player) + " is over their fleet supply in "+this.game.sectors[sector].name+" and must destroy ships");
+	  this.updateStatus(this.returnFaction(player) + " is over their fleet supply in "+sys.s.name+" and must destroy ships");
 	}
 
   	return 1;
@@ -1535,6 +1544,7 @@
         let unitjson     = mv[6];
         let shipjson     = mv[7];
 
+// july 21 - prev commented out
 //        let sys = this.returnSectorAndPlanets(sector);
   
   	if (this.game.player != player || player_moves == 1) {
@@ -1547,10 +1557,8 @@
                 this.unloadUnitByJSONFromShip(player, sector, source_idx, unitjson);
                 this.loadUnitByJSONOntoShipByJSON(player, sector, shipjson, unitjson);
 	      } else {
-
  		this.removeSpaceUnitByJSON(player, sector, unitjson);
                 this.loadUnitByJSONOntoShipByJSON(player, sector, shipjson, unitjson);
-
 	      }
             } else {
               this.loadUnitByJSONOntoShipByJSON(player, sector, shipjson, unitjson);
@@ -1558,9 +1566,10 @@
           }
         }
 
-        let sys = this.returnSectorAndPlanets(sector);
-  
+//        let sys = this.returnSectorAndPlanets(sector);
+// july 21   
 //        this.saveSystemAndPlanets(sys);
+
         this.updateSectorGraphics(sector);
         this.game.queue.splice(qe, 1);
         return 1;
@@ -2087,9 +2096,11 @@ imperium_self.saveGame(imperium_self.game.id);
   	// move any ships
   	//
   	if (this.game.player != player || player_moves == 1) {
+
   	  let sys = this.returnSectorAndPlanets(sector_from);
   	  let sys2 = this.returnSectorAndPlanets(sector_to);
 	  let obj = JSON.parse(shipjson);
+
 	  let storage = "";
 	  let units_in_storage = this.returnUnitsInStorage(obj); 
           if (units_in_storage.length > 0 ) {
@@ -2101,11 +2112,17 @@ imperium_self.saveGame(imperium_self.game.id);
 	    storage += ')';
           }
 	  this.updateLog(this.returnFaction(player) + " moves " + obj.name + " into " + sys2.s.name + storage);
+console.log("SYS FROM pre: " + JSON.stringify(sys.s.units[player-1]));
+console.log("REMOVING: " + shipjson);
+console.log("a");
   	  this.removeSpaceUnitByJSON(player, sector_from, shipjson);
+console.log("SYS FROM post: " + JSON.stringify(sys.s.units[player-1]));
           this.addSpaceUnitByJSON(player, sector_to, shipjson);
   	}
   
+console.log("UPDATING SECTOR TO:");
   	this.updateSectorGraphics(sector_to);
+console.log("UPDATING SECTOR FROM: ");
   	this.updateSectorGraphics(sector_from);
 
   	this.game.queue.splice(qe, 1);
@@ -2635,6 +2652,7 @@ imperium_self.saveGame(imperium_self.game.id);
 	if (tmpx[0] === "assign_hit" && tmpx[5] === sector) {} else {
           this.eliminateDestroyedUnitsInSector(player, sector);
 	}
+
 
 	//
 	// re-display sector

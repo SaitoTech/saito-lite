@@ -564,6 +564,7 @@ updateSectorGraphics(sector) {
   let bgsize = '';
   let sector_controlled = 0;
   let player_border_visible = 0;
+  let player_fleet_drawn = 0;
 
   //
   // is activated?
@@ -609,6 +610,7 @@ updateSectorGraphics(sector) {
     if (sys.s.units[player - 1].length > 0) {
 
       updated_space_graphics = 1;
+      player_fleet_drawn = 1;
 
       let carriers = 0;
       let fighters = 0;
@@ -787,6 +789,19 @@ updateSectorGraphics(sector) {
           ground_pos.push(postext);
         }
       }
+
+
+
+      //
+      // remove space units if needed - otherwise last unit will not be removed when sector is emptied
+      //
+      if (player_fleet_drawn == 0) {
+        let old_images = "#hex_bg_" + sector + " > .sector_graphics";
+        $(old_images).remove();
+	player_fleet_drawn = 1;
+      }
+
+
 
       //
       // remove and re-add space frames
