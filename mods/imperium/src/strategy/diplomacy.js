@@ -114,7 +114,7 @@
                 imperium_self.addMove("unexhaust\t"+imperium_self.game.player+"\tplanet\t"+array_of_cards[idx]);
 
                 $(divid).off();
-                $(divid).css('opacity','0.3');
+                $(divid).css('opacity','0.2');
 
                 if (choices_selected >= max_choices) {
                   imperium_self.prependMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());

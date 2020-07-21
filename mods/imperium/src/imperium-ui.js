@@ -55,13 +55,13 @@
   
 
     $('.hex_activated').css('background-color', 'transparent');
-    $('.hex_activated').css('opacity', '0.3');
+    $('.hex_activated').css('opacity', '0.2');
 
     for (var i in this.game.board) {
       if (this.game.sectors[ this.game.board[i].tile ].activated[this.activated_systems_player-1] == 1) {
 	let divpid = "#hex_activated_"+i;
         $(divpid).css('background-color', 'yellow');
-        $(divpid).css('opacity', '0.3');
+        $(divpid).css('opacity', '0.2');
       }
     }
   }

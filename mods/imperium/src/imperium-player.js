@@ -2712,7 +2712,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
         imperium_self.addMove("expend\t"+imperium_self.game.player+"\tplanet\t"+array_of_cards[idx]);
         array_of_cards_to_exhaust.push(array_of_cards[idx]);
         $(divid).off();
-        $(divid).css('opacity','0.3');
+        $(divid).css('opacity','0.2');
         selected_cost += imperium_self.game.planets[array_of_cards[idx]].resources;
       }  
 
@@ -2816,7 +2816,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
         imperium_self.addMove("expend\t"+imperium_self.game.player+"\tplanet\t"+array_of_cards[idx]);
         array_of_cards_to_exhaust.push(array_of_cards[idx]);
         $(divid).off();
-        $(divid).css('opacity','0.3');
+        $(divid).css('opacity','0.2');
         selected_cost += parseInt(imperium_self.game.planets[array_of_cards[idx]].resources);
       }
 
@@ -3781,7 +3781,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
         let divpid = '#'+pid;
   
         $(divpid).find('.hex_activated').css('background-color', 'yellow');
-        $(divpid).find('.hex_activated').css('opacity', '0.3');
+        $(divpid).find('.hex_activated').css('opacity', '0.2');
   
         let c = confirm("Activate this system?");
         if (c) {
