@@ -3777,8 +3777,8 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
         let sys = imperium_self.returnSectorAndPlanets(pid);
         let divpid = '#'+pid;
   
-        $(divpid).find('.hex_activated').css('background-color', 'yellow');
-        $(divpid).find('.hex_activated').css('opacity', '0.2');
+        $(divpid).find('.hex_activated').css('background-color', 'var(--p' + imperium_self.game.player + ')');
+        $(divpid).find('.hex_activated').css('opacity', '0.3');
   
         let c = confirm("Activate this system?");
         if (c) {

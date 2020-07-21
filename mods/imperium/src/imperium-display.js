@@ -571,8 +571,8 @@ updateSectorGraphics(sector) {
   //
   if (sys.s.activated[this.game.player - 1] == 1) {
     let divpid = '#' + sector;
-    $(divpid).find('.hex_activated').css('background-color', 'yellow');
-    $(divpid).find('.hex_activated').css('opacity', '0.2');
+    $(divpid).find('.hex_activated').css('background-color', 'var(--p' + this.game.player + ")");
+    $(divpid).find('.hex_activated').css('opacity', '0.3');
   } else {
     let divpid = '#' + sector;
     $(divpid).find('.hex_activated').css('opacity', '0.0');
