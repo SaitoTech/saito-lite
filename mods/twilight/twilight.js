@@ -416,6 +416,7 @@ console.log("\n\n\n\n");
   //
   // adjust screen ratio
   //
+try {
   $('.country').css('width', this.scale(202)+"px");
   $('.us').css('width', this.scale(100)+"px");
   $('.ussr').css('width', this.scale(100)+"px");
@@ -437,6 +438,7 @@ console.log("\n\n\n\n");
   this.updateVictoryPoints();
   this.updateMilitaryOperations();
   this.updateRound();
+} catch (err) {} // we must be in invite page
 
   //
   // initialize interface
@@ -450,6 +452,7 @@ console.log("\n\n\n\n");
     let us_i   = 0;
     let ussr_i = 0;
 
+try {
     $(divname).css('top', this.scale(this.countries[i].top)+"px");
     $(divname).css('left', this.scale(this.countries[i].left)+"px");
     $(divname_us).css('height', this.scale(100)+"px");
@@ -457,6 +460,8 @@ console.log("\n\n\n\n");
 
     if (this.countries[i].us > 0) { this.showInfluence(i, "us"); }
     if (this.countries[i].ussr > 0) { this.showInfluence(i, "ussr"); }
+} catch (err) {} // invite page
+
   }
 
 

@@ -190,7 +190,8 @@ module.exports = ArcadeGameDreate = {
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
-            siteMessage('Invite Link Copied', 5000);
+	    salert("invite link copied to clipboard and added to your list of open games...");
+            //siteMessage('Invite Link Copied', 5000);
 
 
             data.arcade.addGameToOpenList(newtx);
@@ -219,9 +220,14 @@ module.exports = ArcadeGameDreate = {
 
     document.getElementById('link-invite-btn')
       .onclick = () => {
+
         let { active_game } = data;
         let game_module = app.modules.returnModule(active_game);
         let options = game_module.returnFormattedGameOptions(getOptions());
+
+	let gpselect = document.querySelector('.game-player-select');
+	let plnum    = gpselect.options[gpselect.selectedIndex].value;
+
 
         let payload = {
           ts: new Date().getTime(),
@@ -229,7 +235,7 @@ module.exports = ArcadeGameDreate = {
           slug: game_module.returnSlug(),
           publickey: app.wallet.returnPublicKey(),
           options,
-          players_needed: document.querySelector('.game-players-select').value,
+          players_needed: plnum,
         };
 
         let newtx = data.arcade.createOpenTransaction(payload);
