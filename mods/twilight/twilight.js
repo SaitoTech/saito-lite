@@ -15424,7 +15424,7 @@ alert(card);
         if (options[index] == "random") {
           new_options[index] = options[index];
         } else {
-          new_options[index] = options[index] == "ussr" ? "ussr" : "us";
+          new_options[index] = options[index] == "ussr" ? "us" : "ussr";
         }
       } else {
         new_options[index] = options[index]

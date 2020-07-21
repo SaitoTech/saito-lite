@@ -54,7 +54,6 @@ module.exports = ArcadeGameDreate = {
         }, 100);
 
         //game-invite-btn
-
         document.getElementById('game-invite-btn')
           .addEventListener('click', (e) => {
 
@@ -109,6 +108,8 @@ module.exports = ArcadeGameDreate = {
 
           });
 
+
+
         document.getElementById('friend-invite-btn')
           .addEventListener('click', (e) => {
 
@@ -140,19 +141,66 @@ module.exports = ArcadeGameDreate = {
               document.querySelector('.arcade-main').innerHTML = '';
               data.arcade.render(app, data);
             } else {
-
               salert('More players needed. Add a comma separated list of their names or addresses.');
               document.querySelector('#game-invitees').focus();
-
             }
 
           });
 
+	  //
           //link-invite-btn
+	  //
           document.getElementById('link-invite-btn')
           .addEventListener('click', (e) => {
-            document.querySelector('.game-players-select').value = 2;
-            // and then SP's amazing code.
+
+            document.querySelector('.game-players-select').val = 2;
+
+            let { active_game } = data;
+            let game_module = app.modules.returnModule(active_game);
+            let options = game_module.returnFormattedGameOptions(getOptions());
+
+            let payload = {
+              ts: new Date().getTime(),
+              name: active_game,
+	      slug: game_module.returnSlug(),
+              publickey: app.wallet.returnPublicKey(),
+              options,
+              players_needed: document.querySelector('.game-players-select').val,
+            };
+
+            let newtx = data.arcade.createOpenTransaction(payload);
+            let base64str = app.crypto.stringToBase64(JSON.stringify({
+              tx: newtx.transaction
+            }));
+
+            //
+            // TODO: include additional html for copy to clipboard functionality
+            console.log(base64str);
+
+
+            var inviteInput = document.getElementById("link-invite-input");
+            inviteInput.innerText = `${window.location}invite/${base64str}`;
+
+/***
+            let copiedText = inviteInput.createTextRange();
+            copiedText.execCommand("Copy");
+            salert(`Link copied to clipboard`);
+***/
+
+if (document.selection) { //IE
+    var range = document.body.createTextRange();
+    range.moveToElementText(document.getElementById("link-invite-input"));
+    range.select();
+} else if (window.getSelection) { //others
+    var range = document.createRange();
+    range.selectNode(document.getElementById("link-invite-input"));
+    window.getSelection().addRange(range);
+}
+    document.execCommand("copy"); 
+
+
+            data.arcade.addGameToOpenList(newtx);
+
           });
 
         return;
