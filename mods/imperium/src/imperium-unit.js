@@ -80,20 +80,14 @@
     }
   };
   removeSpaceUnitByJSON(player, sector, unitjson) {
-console.log("b");
-console.log("b - " + player + " -- " + sector);
     let sys = this.returnSectorAndPlanets(sector);
-console.log("units in sector: " + sector + " -- " + sys.s.units[player-1].length);
     for (let i = 0; i < sys.s.units[player - 1].length; i++) {
-console.log("i: " + i);
       if (JSON.stringify(sys.s.units[player - 1][i]) === unitjson) {
-console.log("match:");
         sys.s.units[player-1].splice(i, 1);
         this.saveSystemAndPlanets(sys);
         return unitjson;
       }
     }
-console.log("no match");
     return "";
   };
   loadUnitOntoPlanet(player, sector, planet_idx, unitname) {
@@ -428,8 +422,6 @@ console.log("no match");
   
   
   returnUnit(type = "", player) {
-
-console.log("type: " + type + " ---- " + player);
     let unit = JSON.parse(JSON.stringify(this.units[type]));
     unit.owner = player;
     unit = this.upgradeUnit(unit, player);

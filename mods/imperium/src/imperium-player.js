@@ -203,7 +203,7 @@
 
       if (this.game.players_info[this.game.player-1].command_tokens > 0) {
 	if (this.game.state.active_player_moved == 0) {
-          html += '<li class="option" id="activate">activate system</li>';
+          html += '<li class="option" id="activate">activate sector</li>';
         }
       }
       if (this.canPlayerPlayStrategyCard(this.game.player) == 1) {
@@ -2572,6 +2572,9 @@ console.log("ERROR: you had no hits left to assign, bug?");
     let imperium_self = this;
   
     $('.sector').on('click', function() {
+
+      $('.sector').off();
+
       let pid = $(this).attr("id");
       mycallback(pid);
     });
@@ -4030,6 +4033,8 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 
     this.updateStatus(html);
     this.lockInterface();
+
+    $('.sector').off();
 
     $('.textchoice').off();
     $('.textchoice').on('mouseenter', function() { 

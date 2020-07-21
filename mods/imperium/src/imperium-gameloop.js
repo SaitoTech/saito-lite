@@ -1613,11 +1613,6 @@ imperium_self.saveGame(imperium_self.game.id);
 //
 //
 //
-  	  console.log("CONTINUING EXECUTION FROM HERE");
-	  console.log(imperium_self.game.queue);
-//console.log("STARTING WITH RUN QUEUE");
-
-	  console.log("DO WE HAVE FUTURE MOVES? " + JSON.stringify(imperium_self.game.future));
 	  let cont = imperium_self.runQueue();
 	  if (cont == 0) { 
 	    imperium_self.processFutureMoves();

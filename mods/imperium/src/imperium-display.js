@@ -420,7 +420,6 @@ returnFactionSheet(imperium_self, player) {
      
      //var unit_array = Object.entries(imperium_self.units);
      var unit_array = [];
-     console.log(imperium_self.units);
      Object.entries(imperium_self.units).forEach(item => {
        let unit = item[1];
        if(unit.extension == 1) {
@@ -439,7 +438,6 @@ returnFactionSheet(imperium_self, player) {
       let unit = item[1];
       if (unit.extension == 1) {
         for(i=0; i < unit_array.length; i++){
-          //console.log("---"+unit_array[i][0]+"---"+item[0]+"---");
            if (unit_array[i][1].type == unit.type){
              unit_array[i][1].cost += " (" + unit.cost +")";
              unit_array[i][1].combat += " (" + unit.combat +")";
@@ -565,6 +563,7 @@ updateSectorGraphics(sector) {
   let sector_controlled = 0;
   let player_border_visible = 0;
   let player_fleet_drawn = 0;
+  let player_planets_drawn = 0;
 
   //
   // is activated?
@@ -721,8 +720,9 @@ updateSectorGraphics(sector) {
 
     if (total_ground_forces_of_player > 0) {
 
-
       for (let j = 0; j < sys.p.length; j++) {
+
+	player_planets_drawn = 1;
 
         if (sys.p[j].units[player-1].length > 0 && player_border_visible == 0) {
           let divpid = '#hex_img_faction_border_' + sector;
@@ -818,6 +818,26 @@ updateSectorGraphics(sector) {
       }
     }
   }
+
+  if (player_border_visible == 0) {
+    for (let p = 0; p < sys.p.length; p++) {
+      if (sys.p[p].owner != -1) {
+        let divpid = '#hex_img_faction_border_' + sector;
+        let newclass = "player_color_"+sys.p[p].owner;
+        $(divpid).removeClass("player_color_1");
+        $(divpid).removeClass("player_color_2");
+        $(divpid).removeClass("player_color_3");
+        $(divpid).removeClass("player_color_4");
+        $(divpid).removeClass("player_color_5");
+        $(divpid).removeClass("player_color_6");
+        $(divpid).addClass(newclass);
+        $(divpid).css('display','block');
+        $(divpid).css('opacity', '0.6');
+        player_border_visible = 1;
+      }
+    }
+  }
+
 };
 
 
@@ -875,7 +895,6 @@ updateSectorGraphics(sector) {
     let systems = this.returnSectors();
     let sector_name = this.game.board[sector].tile;
     let this_planet_name = systems[sector_name].planets[pid];
-    console.log(sector_name + " -- " + this_planet_name + " -- " + pid);
     let thiscard = planets[this_planet_name];
     $('.cardbox').html('<img src="' + thiscard.img + '" style="width:100%" />');
     $('.cardbox').show();
