@@ -80,7 +80,7 @@
 	// if we are playing the sceondary, we don't want to udpate status
 	//
 	if (this.game.state.playing_strategy_card_secondary == 0) {
-          this.updateStatus("Waiting for Opponent Move...");  
+          this.updateStatus("Waiting for Opponent Move..."); 
 	}
 
 	if (mv[1] == lmv[0]) {
@@ -91,6 +91,35 @@
 
   	    this.game.confirms_received += parseInt(mv[2]);
   	    this.game.confirms_players.push(mv[3]);
+
+
+	    //
+	    //
+	    //
+	    let still_to_move = [];
+	    for (let i = 0; i < this.game.players.length; i++) {
+	      still_to_move.push(this.game.players[i]);
+	    }
+	    for (let i = 0; i < this.game.confirms_players.length; i++) {
+	      for (let z = 0; z < still_to_move.length; z++) {
+		if (still_to_move[z] === this.game.confirms_players[i]) {
+		  still_to_move.splice(z, 1);
+	        }
+	      }
+	    }
+
+console.log("STM: " + JSON.stringify(still_to_move));
+
+	    let notice = "Players still to move: <ul>";
+	    for (let i = 0; i < still_to_move.length; i++) {
+	      for (let z = 0; z < this.game.players.length; z++) {
+		if (this.game.players[z] === still_to_move[i]) {
+	          notice += '<li class="option">'+this.returnFaction((i+1))+'</li>';
+		}
+	      }
+	    }
+	    notice += '</ul>';
+	    this.updateStatus(notice);
 
 
   	    if (this.game.confirms_needed <= this.game.confirms_received) {
@@ -1784,8 +1813,9 @@ imperium_self.saveGame(imperium_self.game.id);
         this.game.players_info[refusing_faction-1].traded_this_turn = 1;
         this.game.players_info[faction_that_offered-1].traded_this_turn = 1;
 
-	if (offering_faction == this.game.player) {
+	if (faction_that_offered == this.game.player) {
 	  this.game.queue.push("acknowledge\tYour trade offer has been spurned by "+this.returnFaction(faction_responding));
+	  return 1;
 	}
 
 	this.updateLog(this.returnFaction(refusing_faction) + " spurns a trade offered by " + this.returnFaction(faction_that_offered));
@@ -4002,6 +4032,7 @@ imperium_self.saveGame(imperium_self.game.id);
         // if there is no defender, end this charade
         //
         if (defender == -1) {
+
 	  if (sys.p[planet_idx].owner != player) {
             this.updateLog(this.returnFaction(player) + " seizes " + sys.p[planet_idx].name);
 	    this.updatePlanetOwner(sector, planet_idx, player);

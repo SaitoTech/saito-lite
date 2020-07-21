@@ -196,7 +196,7 @@
           html  += '<p style="margin-top:20px"></p>';
           html  += '<div class="terminal_header2 sf-readable"><div class="player_color_box '+playercol+'"></div>' + this.returnFaction(this.game.player) + ":</div><p><ul class='terminal_header3'>";
 
-      if (this.game.state.round == 1) {
+      if (this.game.state.round == 1 && this.game.state.active_player_moved == 0) {
           html += '<li class="option" id="tutorial_move_ships">move ships</li>';
           html += '<li class="option" id="tutorial_produce_units">produce units</li>';
       }
@@ -1709,6 +1709,8 @@ console.log("ERROR: you had no hits left to assign, bug?");
 
   playerContinueTurn(player, sector) {
 
+console.log("is sector NB: " + sector);
+
     let imperium_self = this;
     let options_available = 0;
 
@@ -1725,8 +1727,15 @@ console.log("ERROR: you had no hits left to assign, bug?");
       options_available++;
     }
     if (this.canPlayerInvadePlanet(player, sector) && this.game.tracker.invasion == 0) {
-      html += '<li class="option" id="invade">invade planet</li>';
-      options_available++;
+      if (sector == "new-byzantium") {
+        if ( (imperium_self.game.planets['new-byzantium'].owner != -1) || imperium_self.returnAvailableInfluence(imperium_self.game.player) >= 6) {
+          html += '<li class="option" id="invade">invade planet</li>';
+          options_available++;
+	}
+      } else {
+        html += '<li class="option" id="invade">invade planet</li>';
+        options_available++;
+      }
     }
     //if (this.canPlayerPlayActionCard(player) && this.game.tracker.action_card == 0) {
     //  html += '<li class="option" id="action">action card</li>';
@@ -1802,8 +1811,11 @@ console.log("ERROR: you had no hits left to assign, bug?");
 	// New Byzantium requires 6 influence to conquer
 	//
 	if (sector === "new-byzantium") {
+console.log("invading NB");
 	  if (imperium_self.game.planets['new-byzantium'].owner == -1) {
+console.log("invading NB -- planet is uncontrolled");
 	    if (imperium_self.returnAvailableInfluence(imperium_self.game.player) >= 6) {
+console.log("we have more than 6 influence...");
 	      imperium_self.game.playerSelectInfluence(6, function(success) {
  	        imperium_self.game.tracker.invasion = 1;
                 imperium_self.playerInvadePlanet(player, sector);
@@ -1886,7 +1898,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
     $('.buildchoice').on('click', function() {
 
       if (!imperium_self.mayUnlockInterface()) {
-	alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+	alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
         return;
       }
       imperium_self.unlockInterface();
@@ -1936,13 +1948,27 @@ console.log("ERROR: you had no hits left to assign, bug?");
       x++;
       $(divtotal).html(x);
   
-  
       total_cost = 3 * (command_tokens + strategy_tokens + fleet_supply);
       $('.buildcost_total').html(total_cost);
   
+
+      let return_to_zero = 0;
+      if (total_cost > imperium_self.returnAvailableInfluence(imperium_self.game.player)) {
+        alert("You cannot buy more tokens than you have influence available to pay");
+        return_to_zero = 1;
+      }
+      if (return_to_zero == 1) {
+        total_cost = 0;
+	command_tokens = 0;
+	strategy_tokens = 0;
+	fleet_supply = 0;
+	$('.command_total').html(0);
+	$('.strategy_total').html(0);
+	$('.fleet_total').html(0);
+	return;
+      }
+
     });
-  
-  
   }
   
   
@@ -1969,7 +1995,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
     $('.buildchoice').on('click', function() {
 
       if (!imperium_self.mayUnlockInterface()) {
-	alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+	alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
         return;
       }
       imperium_self.unlockInterface();
@@ -2104,7 +2130,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
     $('.option').on('click', function() {
 
       if (!imperium_self.mayUnlockInterface()) {
-	alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+	alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
         return;
       }
       imperium_self.unlockInterface();
@@ -2177,7 +2203,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
     $('.option').on('click', function() {
   
       if (!imperium_self.mayUnlockInterface()) {
-	alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+	alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
         return;
       }
       imperium_self.unlockInterface();
@@ -2231,7 +2257,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
     $('.buildchoice').on('click', function() {
 
       if (!imperium_self.mayUnlockInterface()) {
-        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
         return;
       }
       imperium_self.unlockInterface();
@@ -2318,7 +2344,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
     $('.buildchoice').on('click', function() {
   
       if (!imperium_self.mayUnlockInterface()) {
-        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
         return;
       }
       imperium_self.unlockInterface();
@@ -2573,6 +2599,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
   
     $('.sector').on('click', function() {
 
+console.log("de-activated sectors -- clicks should do nothing now...");
       $('.sector').off();
 
       let pid = $(this).attr("id");
@@ -3993,7 +4020,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     $('.textchoice').on('click', function() {
        
       if (!imperium_self.mayUnlockInterface()) {
-        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
         return;
       }
       imperium_self.unlockInterface();
@@ -4034,7 +4061,6 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     this.updateStatus(html);
     this.lockInterface();
 
-    $('.sector').off();
 
     $('.textchoice').off();
     $('.textchoice').on('mouseenter', function() { 
@@ -4052,7 +4078,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     $('.textchoice').on('click', function() {
 
       if (!imperium_self.mayUnlockInterface()) {
-        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
         return;
       }
       imperium_self.unlockInterface();
@@ -4110,7 +4136,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     $('.textchoice').on('click', function() {
 
       if (!imperium_self.mayUnlockInterface()) {
-        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
         return;
       }
       imperium_self.unlockInterface();
@@ -4172,7 +4198,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     $('.textchoice').on('click', function() {
 
       if (!imperium_self.mayUnlockInterface()) {
-        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
         return;
       }
       imperium_self.unlockInterface();
@@ -4265,7 +4291,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     $('.textchoice').on('click', function() {
 
       if (!imperium_self.mayUnlockInterface()) {
-        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
         return;
       }
       imperium_self.unlockInterface();
@@ -4368,7 +4394,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
     $('.textchoice').on('click', function() {
 
       if (!imperium_self.mayUnlockInterface()) {
-        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
         return;
       }
       imperium_self.unlockInterface();

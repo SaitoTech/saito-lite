@@ -683,7 +683,7 @@ alert("select sector with filter");
               },
               function(sector) {
                 imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+"-1"+"\t"+"destroyer"+"\t"+sector);
-                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys a destroyer to " + imperium_self.game.sectors[sector].name);
+                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys a Destroyer to " + imperium_self.game.sectors[sector].name);
                imperium_self.endTurn();
                 return 0;
               },
@@ -713,7 +713,7 @@ alert("select sector with filter");
               },
               function(sector) {
                 imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+"-1"+"\t"+"cruiser"+"\t"+sector);
-                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys a cruiser to " + imperium_self.game.sectors[sector].name);
+                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys a Cruiser to " + imperium_self.game.sectors[sector].name);
                 imperium_self.endTurn();
                 return 0;
               },
@@ -1067,7 +1067,7 @@ alert("select sector with filter");
 		  return 1;
 		}
               },
-	      function(planet) {
+	      function(sector) {
                 imperium_self.addMove("purchase\t"+action_card_player+"\tcommand\t"+"1");
                 imperium_self.addMove("deactivate\t"+action_card_player+"\t"+sector);
                 imperium_self.addMove("notify\t"+imperium_self.returnFaction(action_card_player) + " deactivates " + imperium_self.game.sectors[sector].name);

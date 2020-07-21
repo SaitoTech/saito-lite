@@ -148,6 +148,18 @@
     let existing_owner = sys.p[planet_idx].owner;
 
     //
+    // first-to-the-post New Byzantium bonus
+    //
+    if (sector == 'new-byzantium') {
+      if (sys.p[planet_idx].owner == -1 && new_owner != -1) {
+	this.game.players_info[new_owner-1].vp += 1;
+	this.updateLog(this.returnFaction(new_owner) + " gains 1 VP for first conquest of New Byzantium");
+      }
+    }
+
+
+
+    //
     // new_owner does not need to be provided if the player has units on the planet
     //
     for (let i = 0; i < sys.p[planet_idx].units.length && new_owner == -1; i++) {
