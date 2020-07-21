@@ -18,7 +18,7 @@ module.exports = SettingsAppspaceTemplate = (app) => {
     })
     .join('');
 
-    let balance_ = "";
+    let balance_link = "";
     app.modules.mods.forEach(mod => {
       if(mod.name == 'Balance') {
         balance_link = `
