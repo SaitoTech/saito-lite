@@ -244,8 +244,6 @@ class Poker extends GameTemplate {
 
   startNextRound() {
 
-
-
     this.game.state.turn = 0;
     this.game.state.round++;
 
@@ -275,16 +273,45 @@ class Poker extends GameTemplate {
     //
     for (let i = 0; i < this.game.state.player_credit.length; i++) {
       if (this.game.state.player_credit[i] <= 0) {
+
         this.game.state.passed[i] = 1;
         this.game.state.player_credit[i] = 0;
+
+	if (this.game.player == (i+1)) {
+	  this.updateLog("You have been removed from the game.");
+	}
+
+        //
+        // remove any players who are missing
+        //
+	this.game.state.player_names.splice(i, 1);	
+	this.game.state.player_pot.splice(i, 1);
+	this.game.state.player_credit.splice(i, 1);
+	this.game.state.passed.splice(i, 1);
+	this.removePlayer(this.game.players[i]);
+
+
+        if (this.game.state.big_blind_player == (i+1)) { this.game.state.big_blind_player--; }
+        if (this.game.state.small_blind_player == (i+1)) { this.game.state.small_blind_player--; }
+        if (this.game.state.big_blind_player < 1) { this.game.state.big_blind_player = this.game.players.length; }
+        if (this.game.state.small_blind_player < 1) { this.game.state.small_blind_player = this.game.players.length; }
+        if (this.game.state.big_blind_player > this.game.players.length) { this.game.state.big_blind_player = this.game.players_length; }
+        if (this.game.state.small_blind_player > this.game.players.length) { this.game.state.small_blind_player = this.game.players_length; }
+
       }
     }
+
+    for (let i = 0; i < this.game.players.length; i++) {
+      if (this.game.players[i] === this.app.wallet.returnPublicKey()) {
+	this.game.player = (i+1);
+      }
+    }
+
 
     this.updateLog("New Round...");
     document.querySelectorAll('.plog').forEach(el => {
       el.innerHTML = "";
     });
-
 
     this.initializeQueue();
 
@@ -323,6 +350,7 @@ class Poker extends GameTemplate {
       }
 
       if (mv[0] === "turn") {
+
         let player_to_go = parseInt(mv[1]);
         this.displayBoard();
 
@@ -637,6 +665,10 @@ class Poker extends GameTemplate {
             this.game.state.player_credit[this.game.state.big_blind_player - 1] = 0;
             this.game.state.passed[this.game.state.big_blind_player - 1] = 1;
           } else {
+
+
+console.log("HERE: " + JSON.stringify(this.game.state.player_names) + " ------ " + this.game.state.big_blind_player);
+
             this.updateLog(this.game.state.player_names[this.game.state.big_blind_player - 1] + " deposits " + this.game.state.big_blind);
             this.game.state.player_pot[this.game.state.big_blind_player - 1] += this.game.state.big_blind;
             this.game.state.pot += this.game.state.big_blind;
@@ -1083,10 +1115,8 @@ class Poker extends GameTemplate {
       if (state.player_names[i].indexOf("@") > 0) {
         state.player_names[i] = state.player_names[i].substring(0, state.player_names[i].indexOf("@"));
       }
-      //console.log("NAME: " + state.player_names[i]);
       if (state.player_names[i] === this.game.players[i]) {
         state.player_names[i] = this.game.players[i].substring(0, 10) + "...";
-        //console.log("NAME 2: " + state.player_names[i]);
       }
     }
     for (let i = 0; i < num_of_players; i++) {
