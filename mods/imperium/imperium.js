@@ -8920,15 +8920,19 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
 console.log("STM: " + JSON.stringify(still_to_move));
 
 	    let notice = "Players still to move: <ul>";
+	    let am_i_still_to_move = 0;
 	    for (let i = 0; i < still_to_move.length; i++) {
 	      for (let z = 0; z < this.game.players.length; z++) {
 		if (this.game.players[z] === still_to_move[i]) {
+		  if (this.game.players[z] === this.app.wallet.returnPublicKey()) { am_i_still_to_move = 1; }
 	          notice += '<li class="option">'+this.returnFaction((i+1))+'</li>';
 		}
 	      }
 	    }
 	    notice += '</ul>';
-	    this.updateStatus(notice);
+	    if (am_i_still_to_move == 0) {
+	      this.updateStatus(notice);
+	    }
 
 
   	    if (this.game.confirms_needed <= this.game.confirms_received) {
@@ -9184,10 +9188,9 @@ console.log("STM: " + JSON.stringify(still_to_move));
 	}
         if (handle_fleet_supply == 1) {
           return this.handleFleetSupply(player, sector);
-	} else {
-	  this.updateStatus(this.returnFaction(player) + " is over their fleet supply in "+sys.s.name+" and must destroy ships");
 	}
 
+console.log("game queue: " + JSON.stringify(this.game.queue));
   	return 1;
   
       }
@@ -9272,6 +9275,7 @@ console.log("STM: " + JSON.stringify(still_to_move));
 	  return 0;
   	}
   	if (stage == 2) {
+	  this.updateStatus("All factions have the opportunity to play " + this.strategy_cards[card].name);
 	  this.game.state.playing_strategy_card_secondary = 1;
   	  this.playStrategyCardSecondary(strategy_card_player, card);
 	  return 0;
@@ -12929,8 +12933,8 @@ imperium_self.saveGame(imperium_self.game.id);
 	// the person who played the action card cannot respond to it
 	//
 	if (player == action_card_player) {
-	  this.updateStatus(this.returnFaction(player) + " is responding to the action card");
-	  return 1;
+	  this.updateStatus("Your opponents are being notified you have played " + this.action_cards[action_card].name);
+	  return 0;
 	}
 
 	if (this.game.player == player) {
@@ -12938,6 +12942,7 @@ imperium_self.saveGame(imperium_self.game.id);
 	} else {
 	  this.updateStatus(this.returnFaction(player) + " is responding to action card " + this.action_cards[action_card].name);
 	}
+console.log("returning zero!");
 	return 0;
 
       } 

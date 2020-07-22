@@ -60,7 +60,8 @@ class Leaderboard extends ModTemplate {
     let leaderboard_self = app.modules.returnModule("Leaderboard");
 
     
-
+    let arcade_installed = app.modules.returnModule("Arcade");
+    if (arcade_installed == null) { return ; }
 
     if (app.modules.returnModule('Arcade').browser_active == 1) {
 
