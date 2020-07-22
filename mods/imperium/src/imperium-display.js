@@ -327,6 +327,14 @@ returnFactionSheet(imperium_self, player) {
     `;
 
     for (let i = 0; i < imperium_self.game.players_info[player-1].tech.length; i++) {
+      let techname = imperium_self.game.players_info[player-1].tech[i];
+      let tech = imperium_self.tech[techname];
+      if (tech.type != "ability") {
+        html += imperium_self.returnTechCardHTML(techname, "faction_sheet_tech_card bc");
+      }
+    }
+/****
+    for (let i = 0; i < imperium_self.game.players_info[player-1].tech.length; i++) {
       let tech = imperium_self.tech[imperium_self.game.players_info[player-1].tech[i]];
       if (tech.type != "ability") {
         html += `
@@ -338,6 +346,8 @@ returnFactionSheet(imperium_self, player) {
         `;
       }
     }
+****/
+
     html += `</div>`;
 
 

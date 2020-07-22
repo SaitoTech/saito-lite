@@ -56,7 +56,7 @@
     }
 
     let html = `
-    <div class="${color} ${tclass}">
+    <div class="tech_${color} ${tclass} tech_${color}">
       <div class="tech_card_name">${name}</div>
       <div class="tech_card_content">${text}</div>
       <div class="tech_card_level">${prereqs}</div>

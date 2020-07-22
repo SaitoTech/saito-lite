@@ -2294,6 +2294,9 @@ console.log("we have more than 6 influence...");
     // determine production_limit from sector
     //
     let sys = this.returnSectorAndPlanets(sector);
+    let available_resources = imperium_self.returnAvailableResources(imperium_self.game.player);
+        available_resources += imperium_self.game.players_info[imperium_self.game.player-1].production_bonus;
+
     let calculated_production_limit = 0;
     for (let i = 0; i < sys.s.units[this.game.player-1].length; i++) {
       calculated_production_limit += sys.s.units[this.game.player-1][i].production;
@@ -2314,20 +2317,36 @@ console.log("we have more than 6 influence...");
 
     if (calculated_production_limit > production_limit) { production_limit = calculated_production_limit; }
 
-
+    
     let html = '<div class="sf-readable">Produce Units in this Sector: ';
     if (production_limit != 0) { html += '('+production_limit+' units max)'; }
     if (cost_limit != 0) { html += '('+cost_limit+' cost max)'; }
     html += '</div><ul>';
-    html += '<li class="buildchoice" id="infantry">Infantry - <span class="infantry_total">0</span></li>';
-    html += '<li class="buildchoice" id="fighter">Fighter - <span class="fighter_total">0</span></li>';
-    html += '<li class="buildchoice" id="destroyer">Destroyer - <span class="destroyer_total">0</span></li>';
-    html += '<li class="buildchoice" id="carrier">Carrier - <span class="carrier_total">0</span></li>';
-    html += '<li class="buildchoice" id="cruiser">Cruiser - <span class="cruiser_total">0</span></li>';
-    html += '<li class="buildchoice" id="dreadnaught">Dreadnaught - <span class="dreadnaught_total">0</span></li>';
-    html += '<li class="buildchoice" id="flagship">Flagship - <span class="flagship_total">0</span></li>';
+    if (available_resources >= 1) {
+      html += '<li class="buildchoice" id="infantry">Infantry - <span class="infantry_total">0</span></li>';
+    }
+    if (available_resources >= 1) {
+      html += '<li class="buildchoice" id="fighter">Fighter - <span class="fighter_total">0</span></li>';
+    }
+    if (available_resources >= 1) {
+      html += '<li class="buildchoice" id="destroyer">Destroyer - <span class="destroyer_total">0</span></li>';
+    }
+    if (available_resources >= 3) {
+      html += '<li class="buildchoice" id="carrier">Carrier - <span class="carrier_total">0</span></li>';
+    }
+    if (available_resources >= 2) {
+      html += '<li class="buildchoice" id="cruiser">Cruiser - <span class="cruiser_total">0</span></li>';
+    }
+    if (available_resources >= 4) {
+      html += '<li class="buildchoice" id="dreadnaught">Dreadnaught - <span class="dreadnaught_total">0</span></li>';
+    }
+    if (available_resources >= 8) {
+      html += '<li class="buildchoice" id="flagship">Flagship - <span class="flagship_total">0</span></li>';
+    }
     if (imperium_self.game.players_info[imperium_self.game.player-1].may_produce_warsuns == 1) {
-      html += '<li class="buildchoice" id="warsun">War Sun - <span class="warsun_total">0</span></li>';
+      if (available_resources >= 8) {
+        html += '<li class="buildchoice" id="warsun">War Sun - <span class="warsun_total">0</span></li>';
+      }
     }
     html += '</ul>';
     html += '</p>';

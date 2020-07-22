@@ -8182,7 +8182,7 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
     }
 
     let html = `
-    <div class="tech_${color} ${tclass} tech_${color}">
+    <div class="${color} ${tclass}">
       <div class="tech_card_name">${name}</div>
       <div class="tech_card_content">${text}</div>
       <div class="tech_card_level">${prereqs}</div>
@@ -15422,6 +15422,9 @@ console.log("we have more than 6 influence...");
     let available_resources = imperium_self.returnAvailableResources(imperium_self.game.player);
         available_resources += imperium_self.game.players_info[imperium_self.game.player-1].production_bonus;
 
+
+    <div class="player_color_box '+playercol+'"></div>
+
     let calculated_production_limit = 0;
     for (let i = 0; i < sys.s.units[this.game.player-1].length; i++) {
       calculated_production_limit += sys.s.units[this.game.player-1][i].production;
@@ -21097,10 +21100,9 @@ returnFactionSheet(imperium_self, player) {
     `;
 
     for (let i = 0; i < imperium_self.game.players_info[player-1].tech.length; i++) {
-      let techname = imperium_self.game.players_info[player-1].tech[i];
-      let tech = imperium_self.tech[techname];
+      let tech = imperium_self.tech[imperium_self.game.players_info[player-1].tech[i]];
       if (tech.type != "ability") {
-        html += imperium_self.returnTechCardHTML(techname, "faction_sheet_tech_card bc");
+        html += imperium_self.returnTechCardHTML(tech, "faction_sheet_tech_card bc");
       }
     }
 /****

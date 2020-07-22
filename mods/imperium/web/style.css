@@ -1529,19 +1529,41 @@ input[type=range] {
 }
 
 
-
-.yellow {
+.tech_yellow {
   color: yellow;
+  border-color: yellow;
 }
-.red {
+.tech_red {
   color: red;
+  border-color: red;
 }
-.blue {
+.tech_blue {
   color: blue;
+  border-color: blue;
 }
-.green {
+.tech_green {
   color: green;
+  border-color: green;
 }
+.tech_yellow::before {
+  color: yellow;
+  border-color: yellow;
+}
+.tech_red::before {
+  color: red;
+  border-color: red;
+}
+.tech_blue::before {
+  color: blue;
+  border-color: blue;
+}
+.tech_green::before {
+  color: green;
+  border-color: green;
+}
+
+
+
 
 
 
