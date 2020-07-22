@@ -298,6 +298,16 @@ class Poker extends GameTemplate {
         if (this.game.state.big_blind_player > this.game.players.length) { this.game.state.big_blind_player = this.game.players_length; }
         if (this.game.state.small_blind_player > this.game.players.length) { this.game.state.small_blind_player = this.game.players_length; }
 
+	//
+	// purge turns from queue -- force a re-issuing of turn order
+	//
+	for (let i = this.game.queue.length-1; i > 0; i--) {
+	  let tmpar = this.game.queue[i].split("\t");
+	  if (tmpar[0] === "turn") {
+	    this.game.queue.splice(i, 1);
+	  }
+	}
+
       }
     }
 
