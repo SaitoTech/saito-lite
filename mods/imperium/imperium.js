@@ -1131,7 +1131,7 @@ console.log("P: " + planet);
 
               imperium_self.playerResearchTechnology(function(tech) {
 
-                imperium_self.prependMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+                imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
                 imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
 
 		let resources_to_spend = 6;
@@ -1168,12 +1168,10 @@ console.log("P: " + planet);
 
 	          if (id === "yes") {
 	            imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources = 0;
-	            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
 	            imperium_self.playerSelectResources(resources_to_spend, function(success) {
 	              if (success == 1) {
 	                imperium_self.playerResearchTechnology(function(tech) {
 	                  imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
-	                  imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
 	                  imperium_self.endTurn();
 	                });
 	              } else {
@@ -1183,7 +1181,6 @@ console.log("P: " + planet);
 	            });
 	          }
 	          if (id === "no") {
-	            imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
 	            imperium_self.endTurn();
 	            return 0;
 	          }
