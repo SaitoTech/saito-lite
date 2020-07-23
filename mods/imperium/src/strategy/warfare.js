@@ -30,7 +30,9 @@
         if (imperium_self.game.player == player && imperium_self.game.player != strategy_card_player) { 
 
           let html = '<p>Do you wish to spend 1 strategy token to produce in your home sector? </p><ul>';
-          html += '<li class="option" id="yes">Yes</li>';
+          if (imperium_self.game.players_info[player-1].strategy_tokens > 0 ) { 
+            html += '<li class="option" id="yes">Yes</li>';
+	  }
           html += '<li class="option" id="no">No</li>';
           html += '</ul>';
  

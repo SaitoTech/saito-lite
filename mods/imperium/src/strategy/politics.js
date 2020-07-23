@@ -71,13 +71,12 @@
 	    //
 	    // if New Byzantium is unoccupied, we skip the voting stage
 	    //
-
-//	    if (imperium_self.game.planets['new-byzantium'].owner == -1) {
-//	      imperium_self.playerAcknowledgeNotice("The Galactic Senate has yet to be established on New Byzantium. Occupy the planet to establish the Senate and earn 1 VP: ", function() {
-//		imperium_self.endTurn();
-//	      });
-//	      return 0;
-//	    }
+	    if (imperium_self.game.planets['new-byzantium'].owner == -1) {
+	      imperium_self.playerAcknowledgeNotice("The Galactic Senate has yet to be established on New Byzantium. Occupy the planet to establish the Senate and earn 1 VP: ", function() {
+		imperium_self.endTurn();
+	      });
+	      return 0;
+	    }
 
 
             let html = '';
@@ -128,10 +127,9 @@
       },
 
       strategySecondaryEvent 	:	function(imperium_self, player, strategy_card_player) {
+
         if (imperium_self.game.player == player) {
-          if (imperium_self.game.player != strategy_card_player) {
-	    // moved inside playerBuyAtionCards
-            //imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+          if (imperium_self.game.player != strategy_card_player && imperium_self.game.players_info[player-1].strategy_tokens > 0) {
             imperium_self.playerBuyActionCards(2);
           } else {
             imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
@@ -139,6 +137,7 @@
           }
         }
       },
+
     });
 
 

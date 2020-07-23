@@ -52,9 +52,11 @@
 	  }
 
           let html = '<p>Trade has been played. Do you wish to spend 1 strategy token to refresh your commodities? </p><ul>';
-          html += '<li class="option" id="yes">Yes</li>';
+          if (imperium_self.game.players_info[player-1].strategy_tokens > 0) {
+            html += '<li class="option" id="yes">Yes</li>';
+          }
           html += '<li class="option" id="no">No</li>';
-          html += '</ul>';
+	  html += '</ul>';
 
 
 	  if (imperium_self.game.players_info[imperium_self.game.player-1].commodities == imperium_self.game.players_info[imperium_self.game.player-1].commodity_limit) {

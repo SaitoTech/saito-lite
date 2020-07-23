@@ -50,7 +50,9 @@
         if (imperium_self.game.player != strategy_card_player && imperium_self.game.player == player) {
 
           let html = '<p>Do you wish to spend 1 strategy token to unexhaust two planet cards? </p><ul>';
-          html += '<li class="option" id="yes">Yes</li>';
+          if (imperium_self.game.players_info[player-1].strategy_tokens > 0) {
+	    html += '<li class="option" id="yes">Yes</li>';
+	  }
           html += '<li class="option" id="no">No</li>';
           html += '</ul>';
           imperium_self.updateStatus(html);

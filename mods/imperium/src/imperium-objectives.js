@@ -9,6 +9,7 @@
     if (obj.text == null)	{ obj.type = "Unclear Objective"; }
     if (obj.type == null)	{ obj.type = "normal"; }
     if (obj.img  == null) 	{ obj.img = "/imperium/img/secret_objective.jpg"; }
+    if (obj.vp == null)		{ obj.vp = 1; }
 
     obj = this.addEvents(obj);
     this.secret_objectives[name] = obj;
@@ -28,6 +29,7 @@
     if (obj.text == null)	{ obj.type = "Unclear Objective"; }
     if (obj.type == null)	{ obj.type = "normal"; }
     if (obj.img  == null) 	{ obj.img = "/imperium/img/objective_card_1_template.png"; }
+    if (obj.vp == null)		{ obj.vp = 1; }
 
     obj = this.addEvents(obj);
     this.stage_i_objectives[name] = obj;
@@ -45,6 +47,7 @@
     if (obj.text == null)	{ obj.type = "Unclear Objective"; }
     if (obj.type == null)	{ obj.type = "normal"; }
     if (obj.img  == null) 	{ obj.img = "/imperium/img/objective_card_1_template.png"; }
+    if (obj.vp == null)		{ obj.vp = 2; }
 
     obj = this.addEvents(obj);
     this.stage_ii_objectives[name] = obj;

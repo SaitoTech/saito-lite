@@ -15,6 +15,8 @@
       let qe = this.game.queue.length-1;
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
+
+console.log("MOVE: " + mv[0]);
   
       if (mv[0] === "gameover") {
   	if (imperium_self.browser_active == 1) {
@@ -1180,11 +1182,12 @@
   	//
   	// ACTION CARDS
   	//
-  	for (let i = 1; i <= this.game.players_info.length; i++) {
-          this.game.queue.push("gain\t"+i+'\t'+"action_cards"+"\t"+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
-          this.game.queue.push("DEAL\t2\t"+i+'\t'+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
+        if (this.game.state.round > 1) {
+  	  for (let i = 1; i <= this.game.players_info.length; i++) {
+            this.game.queue.push("gain\t"+i+'\t'+"action_cards"+"\t"+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
+            this.game.queue.push("DEAL\t2\t"+i+'\t'+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
+  	  }
   	}
-  	
   
 
   	//
@@ -1952,7 +1955,10 @@ imperium_self.saveGame(imperium_self.game.id);
 	this.updateLeaderboard();
 
   	this.game.queue.splice(qe, 1);
-  	return 1;
+
+	// if action cards over limit
+	return this.handleActionCardLimit(player);
+
 
       }
   

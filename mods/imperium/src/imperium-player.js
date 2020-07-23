@@ -24,6 +24,8 @@
       players[i].secret_objectives_in_hand     	= 0;
       players[i].action_cards_in_hand         	= 0;
       players[i].action_cards_per_round       	= 2;
+      players[i].action_card_limit      	= 7;
+      players[i].action_cards_played 		= [];
       players[i].new_tokens_per_round 	 	= 2;
       players[i].command_tokens  		= 3;
       players[i].strategy_tokens 		= 2;
@@ -37,10 +39,8 @@
       players[i].commodity_limit		= 3;
       players[i].vp				= 0;
       players[i].passed				= 0;
-      players[i].action_card_limit      	= 7;
       players[i].strategy_cards_played 		= [];
       players[i].strategy_cards_retained        = [];
-      players[i].action_cards_played 		= [];
       players[i].cost_of_technology_primary	= 6;
       players[i].cost_of_technology_secondary	= 4;
 
@@ -2134,9 +2134,12 @@ console.log("ERROR: you had no hits left to assign, bug?");
       if (action == "no") {
         mycallback(imperium_self, 0, "");
       } else {
-        let vp = 2;
         let objective = action;
-        mycallback(imperium_self, vp, objective);
+        let vp = 1;
+        if (imperium_self.secret_objectives[objective]) {
+          if (imperium_self.secret_objectives[objective].vp > 1) { vp = imperium_self.secret_objectives[objective].vp; }
+        }
+	mycallback(imperium_self, vp, objective);
       }
     });
   }
@@ -2176,7 +2179,9 @@ console.log("ERROR: you had no hits left to assign, bug?");
         }
       }
     }
-  
+
+
+/***
     // Secret Objectives
     for (let i = 0 ; i < imperium_self.game.deck[5].hand.length; i++) {
       if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored.includes(imperium_self.game.deck[5].hand[i])) {
@@ -2187,7 +2192,8 @@ console.log("ERROR: you had no hits left to assign, bug?");
         }
       }
     }
-  
+***/
+
     html += '<li class="option" id="no">I choose not to score...</li>';
     html += '</ul>';
   
@@ -2211,14 +2217,19 @@ console.log("ERROR: you had no hits left to assign, bug?");
       if ($(this).hasClass("secret3")) { objective_type = 3; }
   
       if (action === "no") {
-alert("not scoring!"); 
         mycallback(imperium_self, 0, "");
   
       } else {
 
-alert("scoring vp: " + action); 
-        let vp = 2;
         let objective = action;
+        let vp = 1;
+alert("objectives...: " + objective);
+        if (imperium_self.stage_ii_objectives[objective]) {
+          if (imperium_self.stage_ii_objectives[objective].vp > 1) { vp = imperium_self.stage_ii_objectives[objective].vp; }
+	}
+alert("objectives... 2: " + objective);
+
+
         mycallback(imperium_self, vp, objective);
   
       }
@@ -2755,7 +2766,7 @@ console.log("de-activated sectors -- clicks should do nothing now...");
         array_of_cards_to_exhaust.push(array_of_cards[idx]);
         $(divid).off();
         $(divid).css('opacity','0.2');
-        selected_cost += imperium_self.game.planets[array_of_cards[idx]].resources;
+        selected_cost += imperium_self.game.planets[array_of_cards[idx]].influence;
       }  
 
       if (cost <= selected_cost) { mycallback(1); }
@@ -3648,6 +3659,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 	}
 
     	imperium_self.prependMove("continue\t" + imperium_self.game.player + "\t" + sector);
+alert("HERE WE ARE: " + JSON.stringify(imperium_self.moves));
         imperium_self.endTurn();
         return;
       }

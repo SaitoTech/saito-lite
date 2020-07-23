@@ -21,7 +21,6 @@
     }
   }
 
-
   handleFleetSupply(player, sector) {
 
     let imperium_self = this;
@@ -57,6 +56,25 @@
     return 1;
   }
  
+
+
+  handleActionCardLimit(player) {
+
+    let imperium_self = this;
+
+    if (imperium_self.game.players_info[player-1].action_cards_in_hand > imperium_self.game.players_info[player-1].action_card_limit) {
+      if (imperium_self.game.player == player) {
+	imperium_self.playerDiscardActionCards( (imperium_self.game.players_info[player-1].action_card_limit - imperium_self.game.players_info[player-1].action_cards_in_hand) );
+      }
+      return 0;
+    }
+
+    return 1;
+  }
+ 
+
+
+
 
   resetSpaceUnitTemporaryModifiers(sector) {
     let sys = this.returnSectorAndPlanets(sector);

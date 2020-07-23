@@ -29,8 +29,10 @@
         if (imperium_self.game.player != strategy_card_player && imperium_self.game.player == player) {
 
           let html = '<p>Construction has been played. Do you wish to spend 1 strategy token to build a PDS or Space Dock? </p><ul>';
-          html += '<li class="option" id="yes">Yes</li>';
-          html += '<li class="option" id="no">No</li>';
+          if (imperium_self.game.players_info[player-1].strategy_tokens > 0) {
+            html += '<li class="option" id="yes">Yes</li>';
+          }
+	  html += '<li class="option" id="no">No</li>';
           html += '</ul>';
  
           imperium_self.updateStatus(html);

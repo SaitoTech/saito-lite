@@ -39,7 +39,7 @@
 	  }
 
 	  let available_resources = imperium_self.returnAvailableResources(imperium_self.game.player);
-	  if (available_resources >= 4) {
+	  if (available_resources >= 4 && imperium_self.game.players_info[player-1].strategy_tokens > 0) {
             html += '<li class="option" id="yes">Yes</li>';
           }
 	  html += '<li class="option" id="no">No</li>';
