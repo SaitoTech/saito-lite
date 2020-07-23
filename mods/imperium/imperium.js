@@ -9549,7 +9549,7 @@ console.log("MOVE: " + mv[0]);
 
 	    if (this.agenda_cards[agenda].elect == "planet") { 
 	      is_planet = 1;
-              this.updateLog(this.game.planets[this.game.state.choices[i]].name) + " receives " + winning_options[i] + " votes");
+              this.updateLog(this.game.planets[this.game.state.choices[i]].name + " receives " + winning_options[i] + " votes");
 	    }
 	    if (this.agenda_cards[agenda].elect == "player") { 
 	      is_player = 1;
