@@ -1709,8 +1709,6 @@ console.log("ERROR: you had no hits left to assign, bug?");
 
   playerContinueTurn(player, sector) {
 
-console.log("is sector NB: " + sector);
-
     let imperium_self = this;
     let options_available = 0;
 
@@ -1727,7 +1725,7 @@ console.log("is sector NB: " + sector);
       options_available++;
     }
     if (this.canPlayerInvadePlanet(player, sector) && this.game.tracker.invasion == 0) {
-      if (sector == "new-byzantium") {
+      if (sector == "new-byzantium" || sector == "4_4") {
         if ( (imperium_self.game.planets['new-byzantium'].owner != -1) || imperium_self.returnAvailableInfluence(imperium_self.game.player) >= 6) {
           html += '<li class="option" id="invade">invade planet</li>';
           options_available++;
@@ -1810,13 +1808,10 @@ console.log("is sector NB: " + sector);
 	//
 	// New Byzantium requires 6 influence to conquer
 	//
-	if (sector === "new-byzantium") {
-console.log("invading NB");
+	if (sector === "new-byzantium" || sector == "4_4") {
 	  if (imperium_self.game.planets['new-byzantium'].owner == -1) {
-console.log("invading NB -- planet is uncontrolled");
 	    if (imperium_self.returnAvailableInfluence(imperium_self.game.player) >= 6) {
-console.log("we have more than 6 influence...");
-	      imperium_self.game.playerSelectInfluence(6, function(success) {
+	      imperium_self.playerSelectInfluence(6, function(success) {
  	        imperium_self.game.tracker.invasion = 1;
                 imperium_self.playerInvadePlanet(player, sector);
 	      });
@@ -2145,6 +2140,7 @@ console.log("we have more than 6 influence...");
       }
     });
   }
+
   
   playerScoreVictoryPoints(imperium_self, mycallback, stage=0) {  
 
@@ -2196,7 +2192,6 @@ console.log("we have more than 6 influence...");
     html += '</ul>';
   
     imperium_self.updateStatus(html);
-    
     imperium_self.lockInterface(); 
 
     $('.option').off();
@@ -2215,12 +2210,13 @@ console.log("we have more than 6 influence...");
       if ($(this).hasClass("stage2")) { objective_type = 2; }
       if ($(this).hasClass("secret3")) { objective_type = 3; }
   
-      if (action == "no") {
-  
+      if (action === "no") {
+alert("not scoring!"); 
         mycallback(imperium_self, 0, "");
   
       } else {
 
+alert("scoring vp: " + action); 
         let vp = 2;
         let objective = action;
         mycallback(imperium_self, vp, objective);
@@ -3817,9 +3813,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
       let pid = $(this).attr("id");
   
       if (imperium_self.canPlayerActivateSystem(pid) == 0) {
-  
-        alert("You cannot activate that system: " + pid);
-  
+        alert("You cannot activate that system.");
       } else {
   
         activated_once = 1;

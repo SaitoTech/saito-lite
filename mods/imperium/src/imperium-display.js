@@ -712,6 +712,7 @@ updateSectorGraphics(sector) {
 
 
 
+
   let ground_frames = [];
   let ground_pos = [];
 
@@ -727,6 +728,7 @@ updateSectorGraphics(sector) {
     for (let j = 0; j < sys.p.length; j++) {
       total_ground_forces_of_player += sys.p[j].units[player - 1].length;
     }
+
 
     if (total_ground_forces_of_player > 0) {
 
@@ -830,10 +832,8 @@ updateSectorGraphics(sector) {
   }
 
   if (player_border_visible == 0) {
-console.log("player border visible NO in sector: " + sector);
     for (let p = 0; p < sys.p.length; p++) {
       if (sys.p[p].owner != -1) {
-console.log("there is a planet here belonging to someone... so lets colour it.");
         let divpid = '#hex_img_faction_border_' + sector;
         let newclass = "player_color_"+sys.p[p].owner;
         $(divpid).removeClass("player_color_1");

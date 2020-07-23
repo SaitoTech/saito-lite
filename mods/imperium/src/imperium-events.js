@@ -14,7 +14,7 @@
       for (let j = 0; j < this.game.players_info[i].tech.length; j++) {
 	if (this.tech[this.game.players_info[i].tech[j]] != undefined) {
 	  if (!zz.includes(this.game.players_info[i].tech[j])) {
-console.log("HERE: " + this.game.players_info[i].tech[j]);
+//console.log("HERE: " + this.game.players_info[i].tech[j]);
             z.push(this.tech[this.game.players_info[i].tech[j]]);
             zz.push(this.game.players_info[i].tech[j]);
 	  }

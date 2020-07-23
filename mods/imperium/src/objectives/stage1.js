@@ -1,5 +1,4 @@
   
-/**** TEST CARD easy to score 
   this.importStageIPublicObjective('manage-to-breathe', {
       name 	: 	"Deep Breathing" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,
@@ -11,7 +10,6 @@
 	return 1;
       },
   });
-***/
 
   this.importStageIPublicObjective('planetary-unity', {
       name 	: 	"Planetary Unity" ,
@@ -176,6 +174,7 @@
 	return 0;
       },
   });
+
   this.importStageIPublicObjective('establish-trade-outposts', {
       name 	: 	"Establish Trade Outposts" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,
@@ -206,4 +205,3 @@
 	return 0;
       },
   });
-

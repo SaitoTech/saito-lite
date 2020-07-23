@@ -635,13 +635,16 @@
 	  return options;
         },
 	initialize : function(imperium_self, winning_choice) {
-	  if (imperium_self.game.state.galactic_threat == 1) {
-	    imperium_self.returnFactionNamePreGalacticThreat = imperium_self.returnFactionName;
-	    imperium_self.returnFactionName = function(imperium_self, player) {
-    	      let factions = imperium_self.returnFactions();
-              if (imperium_self.game.state.galactic_threat_player == player) { return "The Galactic Threat"; }
-    	      return imperium_self.returnFactionNamePreGalacticThreat(imperium_self, player);
-  	    }
+	  if (imperium_self.galactic_threat_initialized == undefined) {
+	    imperium_self.galactic_threat_initialized = 1;
+	    if (imperium_self.game.state.galactic_threat == 1) {
+	      imperium_self.returnFactionNamePreGalacticThreat = imperium_self.returnFactionName;
+	      imperium_self.returnFactionName = function(imperium_self, player) {
+    	        let factions = imperium_self.returnFactions();
+                if (imperium_self.game.state.galactic_threat_player == player) { return "The Galactic Threat"; }
+    	        return imperium_self.returnFactionNamePreGalacticThreat(imperium_self, player);
+  	      }
+	    }
 	  }
 	},
 	onPass : function(imperium_self, winning_choice) {

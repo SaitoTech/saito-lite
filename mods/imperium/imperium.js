@@ -1919,7 +1919,7 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
 	  let supplementary_scoring = function() {
   	    imperium_self.playerAcknowledgeNotice("You will first be asked to score your public objective. The game will then precede and allow all players (including you) to score additional objectives in initiative order.", function() {
               imperium_self.addMove("resolve\tstrategy");
-              imperium_self.playerScoreVictoryPoints(imperium_self, function(vp, objective) {
+              imperium_self.playerScoreVictoryPoints(imperium_self, function(imperium_self, vp, objective) {
                 imperium_self.addMove("strategy\t"+"imperial"+"\t"+strategy_card_player+"\t2");
                 imperium_self.addMove("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
                 if (vp > 0) { imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); }
@@ -1947,20 +1947,20 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
 
           imperium_self.game.state.round_scoring = 2;
 
-          imperium_self.playerScoreSecretObjective(imperium_self, function(vp, objective) {
+          imperium_self.playerScoreSecretObjective(imperium_self, function(imperium_self, vp, objective) {
 
 	    my_secret_vp = vp;
 	    my_secret_objective = objective;
 
 	    imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
-            imperium_self.playerScoreVictoryPoints(imperium_self, function(vp, objective) {
+            imperium_self.playerScoreVictoryPoints(imperium_self, function(imperium_self, vp, objective) {
 
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
 
-              if (my_secret_vp == 0) { imperium_self.addMove(imperium_self.returnFaction(player) + " elects not to score any secret objectives"); }
+              if (my_secret_vp == 0) { imperium_self.addMove("notify\t"+imperium_self.returnFaction(player) + " elects not to score any secret objectives"); }
               if (my_secret_vp > 0) { imperium_self.addMove("score\t"+player+"\t"+my_secret_vp+"\t"+my_secret_objective); }
               if (vp > 0) { imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); }
-              if (vp == 0) { imperium_self.addMove(imperium_self.returnFaction(player) + " elects not to score any public objectives"); }
+              if (vp == 0) { imperium_self.addMove("notify\t"+imperium_self.returnFaction(player) + " elects not to score any public objectives"); }
 
 	      imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
               imperium_self.updateStatus("You have played the Imperial Secondary");
@@ -2903,7 +2903,6 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 
 ***/
   
-/**** TEST CARD easy to score 
   this.importStageIPublicObjective('manage-to-breathe', {
       name 	: 	"Deep Breathing" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,
@@ -2915,8 +2914,8 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	return 1;
       },
   });
-***/
 
+/***
   this.importStageIPublicObjective('planetary-unity', {
       name 	: 	"Planetary Unity" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,
@@ -2996,6 +2995,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	return 1;
       },
   });
+***/
   this.importStageIPublicObjective('mining-conglomerate', {
       name 	: 	"Mining Conglomerate" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,
@@ -3037,6 +3037,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	return 1;
       },
   });
+/***
   this.importStageIPublicObjective('colonization', {
       name 	: 	"Colonization" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,
@@ -3063,6 +3064,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	return 1;
       },
   });
+***/
   this.importStageIPublicObjective('grand-gesture', {
       name 	: 	"A Grand Gesture" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,
@@ -3080,6 +3082,8 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	return 0;
       },
   });
+
+/***
   this.importStageIPublicObjective('establish-trade-outposts', {
       name 	: 	"Establish Trade Outposts" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,
@@ -3110,7 +3114,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	return 0;
       },
   });
-
+***/
 
 
 /**** TEST CARD EASY TO SCORE ****
@@ -3989,13 +3993,16 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	  return options;
         },
 	initialize : function(imperium_self, winning_choice) {
-	  if (imperium_self.game.state.galactic_threat == 1) {
-	    imperium_self.returnFactionNamePreGalacticThreat = imperium_self.returnFactionName;
-	    imperium_self.returnFactionName = function(imperium_self, player) {
-    	      let factions = imperium_self.returnFactions();
-              if (imperium_self.game.state.galactic_threat_player == player) { return "The Galactic Threat"; }
-    	      return imperium_self.returnFactionNamePreGalacticThreat(imperium_self, player);
-  	    }
+	  if (imperium_self.galactic_threat_initialized == undefined) {
+	    imperium_self.galactic_threat_initialized = 1;
+	    if (imperium_self.game.state.galactic_threat == 1) {
+	      imperium_self.returnFactionNamePreGalacticThreat = imperium_self.returnFactionName;
+	      imperium_self.returnFactionName = function(imperium_self, player) {
+    	        let factions = imperium_self.returnFactions();
+                if (imperium_self.game.state.galactic_threat_player == player) { return "The Galactic Threat"; }
+    	        return imperium_self.returnFactionNamePreGalacticThreat(imperium_self, player);
+  	      }
+	    }
 	  }
 	},
 	onPass : function(imperium_self, winning_choice) {
@@ -7556,7 +7563,7 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
     $('.content').css('visibility', 'visible');
-    $('#hud_menu_game-logs').css('display', 'none');
+    $('.hud_menu_game-logs').css('display', 'none');
   }
 
 
@@ -8917,15 +8924,13 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
 	      }
 	    }
 
-console.log("STM: " + JSON.stringify(still_to_move));
-
 	    let notice = "Players still to move: <ul>";
 	    let am_i_still_to_move = 0;
 	    for (let i = 0; i < still_to_move.length; i++) {
 	      for (let z = 0; z < this.game.players.length; z++) {
 		if (this.game.players[z] === still_to_move[i]) {
 		  if (this.game.players[z] === this.app.wallet.returnPublicKey()) { am_i_still_to_move = 1; }
-	          notice += '<li class="option">'+this.returnFaction((i+1))+'</li>';
+	          notice += '<li class="option">'+this.returnFaction((z+1))+'</li>';
 		}
 	      }
 	    }
@@ -9190,7 +9195,6 @@ console.log("STM: " + JSON.stringify(still_to_move));
           return this.handleFleetSupply(player, sector);
 	}
 
-console.log("game queue: " + JSON.stringify(this.game.queue));
   	return 1;
   
       }
@@ -10871,6 +10875,7 @@ imperium_self.saveGame(imperium_self.game.id);
       if (mv[0] === "pass") {
   	let player       = parseInt(mv[1]);
   	this.game.players_info[player-1].passed = 1;
+  	this.updateLog(this.returnFaction(player) + " has passed");
   	this.game.queue.splice(qe, 1);
   	return 1;  
       }
@@ -12942,7 +12947,6 @@ imperium_self.saveGame(imperium_self.game.id);
 	} else {
 	  this.updateStatus(this.returnFaction(player) + " is responding to action card " + this.action_cards[action_card].name);
 	}
-console.log("returning zero!");
 	return 0;
 
       } 
@@ -14834,8 +14838,6 @@ console.log("ERROR: you had no hits left to assign, bug?");
 
   playerContinueTurn(player, sector) {
 
-console.log("is sector NB: " + sector);
-
     let imperium_self = this;
     let options_available = 0;
 
@@ -14852,7 +14854,7 @@ console.log("is sector NB: " + sector);
       options_available++;
     }
     if (this.canPlayerInvadePlanet(player, sector) && this.game.tracker.invasion == 0) {
-      if (sector == "new-byzantium") {
+      if (sector == "new-byzantium" || sector == "4_4") {
         if ( (imperium_self.game.planets['new-byzantium'].owner != -1) || imperium_self.returnAvailableInfluence(imperium_self.game.player) >= 6) {
           html += '<li class="option" id="invade">invade planet</li>';
           options_available++;
@@ -14935,13 +14937,10 @@ console.log("is sector NB: " + sector);
 	//
 	// New Byzantium requires 6 influence to conquer
 	//
-	if (sector === "new-byzantium") {
-console.log("invading NB");
+	if (sector === "new-byzantium" || sector == "4_4") {
 	  if (imperium_self.game.planets['new-byzantium'].owner == -1) {
-console.log("invading NB -- planet is uncontrolled");
 	    if (imperium_self.returnAvailableInfluence(imperium_self.game.player) >= 6) {
-console.log("we have more than 6 influence...");
-	      imperium_self.game.playerSelectInfluence(6, function(success) {
+	      imperium_self.playerSelectInfluence(6, function(success) {
  	        imperium_self.game.tracker.invasion = 1;
                 imperium_self.playerInvadePlanet(player, sector);
 	      });
@@ -15270,6 +15269,7 @@ console.log("we have more than 6 influence...");
       }
     });
   }
+
   
   playerScoreVictoryPoints(imperium_self, mycallback, stage=0) {  
 
@@ -15321,7 +15321,6 @@ console.log("we have more than 6 influence...");
     html += '</ul>';
   
     imperium_self.updateStatus(html);
-    
     imperium_self.lockInterface(); 
 
     $('.option').off();
@@ -15340,12 +15339,13 @@ console.log("we have more than 6 influence...");
       if ($(this).hasClass("stage2")) { objective_type = 2; }
       if ($(this).hasClass("secret3")) { objective_type = 3; }
   
-      if (action == "no") {
-  
+      if (action === "no") {
+alert("not scoring!"); 
         mycallback(imperium_self, 0, "");
   
       } else {
 
+alert("scoring vp: " + action); 
         let vp = 2;
         let objective = action;
         mycallback(imperium_self, vp, objective);
@@ -16942,9 +16942,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
       let pid = $(this).attr("id");
   
       if (imperium_self.canPlayerActivateSystem(pid) == 0) {
-  
-        alert("You cannot activate that system: " + pid);
-  
+        alert("You cannot activate that system.");
       } else {
   
         activated_once = 1;
@@ -17822,7 +17820,7 @@ console.log("NONE!");
     sectors['sector32']        = { img : "/imperium/img/sectors/sector32.png" , 	   name : "Yssari-II" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet39'] }
     sectors['sector38']        = { img : "/imperium/img/sectors/sector38.png" , 	   name : "Lorstruck / Industryl" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet41','planet42'] }
     sectors['sector39']        = { img : "/imperium/img/sectors/sector39.png" , 	   name : "Mechanix / Hearthslough" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet43','planet44'] }
-    sectors['sector40']        = { img : "/imperium/img/sectors/sector40.png" , 	   name : "Incarth / Aandor" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet45','planet46'] }
+    sectors['sector40']        = { img : "/imperium/img/sectors/sector40.png" , 	   name : "Incarth / Aandor" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet46','planet45'] }
     sectors['sector41']        = { img : "/imperium/img/sectors/sector41.png" , 	   name : "Hope's Lure" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet40'] }
     sectors['sector42']        = { img : "/imperium/img/sectors/sector42.png" , 	   name : "Quandam" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet47'] }
     sectors['sector43']        = { img : "/imperium/img/sectors/sector43.png" , 	   name : "Brest" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet48'] }
@@ -17921,7 +17919,6 @@ console.log("NONE!");
 	          if (this.game.board[b]) {
 	            if (this.game.board[b].tile == wormholes[z]) {
 	              if (!tiles[i].neighbours.includes(b)) {
-console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
 	  	        tiles[i].neighbours.push(b);
 	  	      }
 	            }
@@ -18183,7 +18180,7 @@ console.log("ADDING A WORMHOLE RELATIONSHIP: " + i + " -- " + b);
       for (let j = 0; j < this.game.players_info[i].tech.length; j++) {
 	if (this.tech[this.game.players_info[i].tech[j]] != undefined) {
 	  if (!zz.includes(this.game.players_info[i].tech[j])) {
-console.log("HERE: " + this.game.players_info[i].tech[j]);
+//console.log("HERE: " + this.game.players_info[i].tech[j]);
             z.push(this.tech[this.game.players_info[i].tech[j]]);
             zz.push(this.game.players_info[i].tech[j]);
 	  }
@@ -21482,6 +21479,7 @@ updateSectorGraphics(sector) {
 
 
 
+
   let ground_frames = [];
   let ground_pos = [];
 
@@ -21497,6 +21495,7 @@ updateSectorGraphics(sector) {
     for (let j = 0; j < sys.p.length; j++) {
       total_ground_forces_of_player += sys.p[j].units[player - 1].length;
     }
+
 
     if (total_ground_forces_of_player > 0) {
 
@@ -21600,10 +21599,8 @@ updateSectorGraphics(sector) {
   }
 
   if (player_border_visible == 0) {
-console.log("player border visible NO in sector: " + sector);
     for (let p = 0; p < sys.p.length; p++) {
       if (sys.p[p].owner != -1) {
-console.log("there is a planet here belonging to someone... so lets colour it.");
         let divpid = '#hex_img_faction_border_' + sector;
         let newclass = "player_color_"+sys.p[p].owner;
         $(divpid).removeClass("player_color_1");

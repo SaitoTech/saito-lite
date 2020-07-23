@@ -108,15 +108,13 @@
 	      }
 	    }
 
-console.log("STM: " + JSON.stringify(still_to_move));
-
 	    let notice = "Players still to move: <ul>";
 	    let am_i_still_to_move = 0;
 	    for (let i = 0; i < still_to_move.length; i++) {
 	      for (let z = 0; z < this.game.players.length; z++) {
 		if (this.game.players[z] === still_to_move[i]) {
 		  if (this.game.players[z] === this.app.wallet.returnPublicKey()) { am_i_still_to_move = 1; }
-	          notice += '<li class="option">'+this.returnFaction((i+1))+'</li>';
+	          notice += '<li class="option">'+this.returnFaction((z+1))+'</li>';
 		}
 	      }
 	    }
@@ -381,7 +379,6 @@ console.log("STM: " + JSON.stringify(still_to_move));
           return this.handleFleetSupply(player, sector);
 	}
 
-console.log("game queue: " + JSON.stringify(this.game.queue));
   	return 1;
   
       }
@@ -2062,6 +2059,7 @@ imperium_self.saveGame(imperium_self.game.id);
       if (mv[0] === "pass") {
   	let player       = parseInt(mv[1]);
   	this.game.players_info[player-1].passed = 1;
+  	this.updateLog(this.returnFaction(player) + " has passed");
   	this.game.queue.splice(qe, 1);
   	return 1;  
       }
@@ -4133,7 +4131,6 @@ imperium_self.saveGame(imperium_self.game.id);
 	} else {
 	  this.updateStatus(this.returnFaction(player) + " is responding to action card " + this.action_cards[action_card].name);
 	}
-console.log("returning zero!");
 	return 0;
 
       } 
