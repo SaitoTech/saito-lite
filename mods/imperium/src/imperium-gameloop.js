@@ -722,7 +722,27 @@ console.log("MOVE: " + mv[0]);
             max_votes_options_idx = i;
           }
           if (winning_options[i] > 0) {
-            this.updateLog(this.game.state.choices[i] + " receives " + winning_options[i] + " votes");
+
+	    let is_planet = 0;
+	    let is_player = 0;
+	    let is_sector = 0;
+
+	    if (this.agenda_cards[agenda].elect == "planet") { 
+	      is_planet = 1;
+              this.updateLog(this.game.planets[this.game.state.choices[i]].name + " receives " + winning_options[i] + " votes");
+	    }
+	    if (this.agenda_cards[agenda].elect == "player") { 
+	      is_player = 1;
+              this.updateLog(this.returnFaction(this.game.state.choices[i]) + " receives " + winning_options[i] + " votes");
+	    }
+	    if (this.agenda_cards[agenda].elect == "sector") { 
+	      is_sector = 1;
+              this.updateLog(this.game.sectors[this.game.state.choices[i]].name + " receives " + winning_options[i] + " votes");
+	    }
+
+	    if (is_sector == 0 && is_player == 0 && is_planet == 0) {
+              this.updateLog(this.game.state.choices[i] + " receives " + winning_options[i] + " votes");
+	    }
           }
         }
 
@@ -798,7 +818,7 @@ console.log("MOVE: " + mv[0]);
       if (mv[0] == "vote") {
 
 	let laws = this.returnAgendaCards();
-        let agenda_num = mv[1];
+        let agenda = mv[1];
 	let player = parseInt(mv[2]);
 	let vote = mv[3];
 	let votes = parseInt(mv[4]);
@@ -813,11 +833,14 @@ console.log("MOVE: " + mv[0]);
           this.updateLog(this.returnFaction(player) + " abstains");
 	} else {
 
+	  let is_player = 0;
 	  let is_planet = 0;
 	  let is_sector = 0;
 
 	  let elected_choice = this.game.state.choices[parseInt(vote)];
-
+	  if (laws[agenda].elect === "player") { is_player = 1; }
+	  if (laws[agenda].elect === "planet") { is_planet = 1; }
+	  if (laws[agenda].elect === "sector") { is_sector = 1; }
 	  if (elected_choice.indexOf("planet") == 0 || elected_choice.indexOf("new-byzantium") == 0) { is_planet = 1; }
 	  if (elected_choice.indexOf("sector") == 0) { is_sector = 1; }
 
@@ -827,18 +850,14 @@ console.log("MOVE: " + mv[0]);
 	  if (is_sector == 1) {
             this.updateLog(this.returnFaction(player) + " votes " + votes + " on " + this.game.sectors[this.game.state.choices[vote]].sector);
 	  }
-	  if (is_planet == 0 && is_sector == 0) {
-	    //
-	    // player?
-	    //
-	    if (this.game.state.choices.length == this.game.players_info.length) {
-              this.updateLog(this.returnFaction(player) + " votes " + votes + " on " + this.returnFaction(vote+1));
-	    } else {
-              this.updateLog(this.returnFaction(player) + " votes " + votes + " on " + this.game.state.choices[vote]);
-	    }
+	  if (is_player == 1) {
+console.log("we think this is a player agenda: " + JSON.stringify(this.game.state.choices));
+            this.updateLog(this.returnFaction(player) + " votes " + votes + " on " + this.returnFaction(this.game.state.choices[vote]));
+	  }
+	  if (is_planet == 0 && is_sector == 0 && is_player == 0) {
+            this.updateLog(this.returnFaction(player) + " votes " + votes + " on " + this.game.state.choices[vote]);
 	  }
         }
-
 
 
 	let votes_finished = 0;
@@ -931,7 +950,7 @@ console.log("MOVE: " + mv[0]);
 	  //
 	  if (imperium_self.doesPlayerHaveRider(this.game.player)) {
 	    imperium_self.addMove("resolve\tagenda\t1\t"+imperium_self.app.wallet.returnPublicKey());
-	    imperium_self.addMove("vote\t"+agenda_num+"\t"+imperium_self.game.player+"\t"+"abstain"+"\t"+"0");
+	    imperium_self.addMove("vote\t"+agenda+"\t"+imperium_self.game.player+"\t"+"abstain"+"\t"+"0");
 	    imperium_self.endTurn();
 	    return 0;
 	  }
@@ -993,7 +1012,7 @@ console.log("MOVE: " + mv[0]);
 	    if (vote == "abstain") {
 
 	      imperium_self.addMove("resolve\tagenda\t1\t"+imperium_self.app.wallet.returnPublicKey());
-	      imperium_self.addMove("vote\t"+agenda_num+"\t"+imperium_self.game.player+"\t"+vote+"\t"+votes);
+	      imperium_self.addMove("vote\t"+agenda+"\t"+imperium_self.game.player+"\t"+vote+"\t"+votes);
 	      imperium_self.endTurn();
 	      return 0;
 
@@ -1015,7 +1034,7 @@ console.log("MOVE: " + mv[0]);
               votes = $(this).attr("id");
  
   	      imperium_self.addMove("resolve\tagenda\t1\t"+imperium_self.app.wallet.returnPublicKey());
-	      imperium_self.addMove("vote\t"+agenda_num+"\t"+imperium_self.game.player+"\t"+vote+"\t"+votes);
+	      imperium_self.addMove("vote\t"+agenda+"\t"+imperium_self.game.player+"\t"+vote+"\t"+votes);
 	      imperium_self.endTurn();
 	      return 0;
 
