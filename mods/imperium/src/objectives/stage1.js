@@ -1,4 +1,4 @@
-  
+/***
   this.importStageIPublicObjective('manage-to-breathe', {
       name 	: 	"Deep Breathing" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,
@@ -10,7 +10,7 @@
 	return 1;
       },
   });
-
+***/
   this.importStageIPublicObjective('planetary-unity', {
       name 	: 	"Planetary Unity" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,

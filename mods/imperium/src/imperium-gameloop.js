@@ -1336,7 +1336,6 @@
   
       if (mv[0] === "playerschoosestrategycards") {
   
-  	this.updateLog("Players selecting strategy cards, starting from " + this.returnSpeaker());
   	this.updateStatus("Players selecting strategy cards, starting from " + this.returnSpeaker());
 
 	let cards_issued = [];
