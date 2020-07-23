@@ -158,8 +158,11 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
 
           let html = '';
           html += 'Select one agenda to quash in the Galactic Senate.<ul>';
-          for (i = 0; i < 3; i++) {
-            html += '<li class="option" id="'+imperium_self.game.state.agendas[i]+'">' + imperium_self.agenda_cards[imperium_self.game.state.agendas[i]].name + '</li>';
+          for (i = 0; i < imperium_self.game.state.agendas.length; i++) {
+	    if (imperium_self.game.state.agendas[i] != "") {
+console.log("agenda: " + imperium_self.game.state.agendas[i]);
+              html += '<li class="option" id="'+imperium_self.game.state.agendas[i]+'">' + imperium_self.agenda_cards[imperium_self.game.state.agendas[i]].name + '</li>';
+            }
           }
           html += '</ul>';
 

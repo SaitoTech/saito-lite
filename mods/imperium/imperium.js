@@ -1588,8 +1588,11 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
 
           let html = '';
           html += 'Select one agenda to quash in the Galactic Senate.<ul>';
-          for (i = 0; i < 3; i++) {
-            html += '<li class="option" id="'+imperium_self.game.state.agendas[i]+'">' + imperium_self.agenda_cards[imperium_self.game.state.agendas[i]].name + '</li>';
+          for (i = 0; i < imperium_self.game.state.agendas.length; i++) {
+	    if (imperium_self.game.state.agendas[i] != "") {
+console.log("agenda: " + imperium_self.game.state.agendas[i]);
+              html += '<li class="option" id="'+imperium_self.game.state.agendas[i]+'">' + imperium_self.agenda_cards[imperium_self.game.state.agendas[i]].name + '</li>';
+            }
           }
           html += '</ul>';
 
@@ -9488,8 +9491,10 @@ console.log("MOVE: " + mv[0]);
 	this.game.state.agendas.splice(agenda_to_quash, 1);
 
 	if (redeal_new == 1) {
+          this.game.queue.push("revealagendas\t1");
   	  for (let i = 1; i <= this.game.players_info.length; i++) {
-            this.game.queue.push("FLIPCARD\t3\t3\t1\t"+i); // deck card poolnum player
+            //this.game.queue.push("FLIPCARD\t1\t1\t1\t"+i); // deck card poolnum player
+            this.game.queue.push("FLIPCARD\t3\t1\t1\t"+i); // deck card poolnum player
    	  }
 	}
 

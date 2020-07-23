@@ -671,8 +671,10 @@ console.log("MOVE: " + mv[0]);
 	this.game.state.agendas.splice(agenda_to_quash, 1);
 
 	if (redeal_new == 1) {
+          this.game.queue.push("revealagendas\t1");
   	  for (let i = 1; i <= this.game.players_info.length; i++) {
-            this.game.queue.push("FLIPCARD\t3\t3\t1\t"+i); // deck card poolnum player
+            //this.game.queue.push("FLIPCARD\t1\t1\t1\t"+i); // deck card poolnum player
+            this.game.queue.push("FLIPCARD\t3\t1\t1\t"+i); // deck card poolnum player
    	  }
 	}
 
