@@ -79,13 +79,15 @@ module.exports = ChatRoom = {
         if (app.browser.isMobileBrowser(navigator.userAgent)) {
             chat_room_input.addEventListener('focusin', () => {
                 let chat_room_content = document.querySelector('.chat-room-content')
-                chat_room_content.style.height = "52vh";
+                //chat_room_content.style.height = "52vh";
+		// july 24, 2020
                 setTimeout(() => this.scrollToBottom(), 100);
             });
 
             chat_room_input.addEventListener('focusout', () => {
                 let chat_room_content = document.querySelector('.chat-room-content')
-                chat_room_content.style.height = "76vh";
+                //chat_room_content.style.height = "76vh";
+		// july 24, 2020
                 setTimeout(() => this.scrollToBottom(), 100);
             });
         }

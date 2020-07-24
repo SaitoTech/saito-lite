@@ -1,10 +1,10 @@
-module.exports = ChatListRowTemplate = ({name, group_id, message, timestamp, is_encrypted}, helpers) => {
+module.exports = ChatListRowTemplate = (app, {name, group_id, message, timestamp, is_encrypted}, helpers) => {
   let {datetime_formatter} = helpers;
   let datetime = datetime_formatter(timestamp);
   let lock_icon_html = is_encrypted ? '<div style="justify-self: center;"><i class="fas fa-lock" style="color: black;"></i></div>' : '';
 
   let tmp = document.createElement("DIV");
-  tmp.innerHTML = this.app.crypto.base64ToString(message);
+  tmp.innerHTML = message;
   let clean_message = tmp.innerText;
 
   return `

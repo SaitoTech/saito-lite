@@ -42,7 +42,7 @@ module.exports = ChatList = {
             }
 
             document.querySelector('.chat').innerHTML
-                += ChatListRowTemplate(row, data.chat.helpers);
+                += ChatListRowTemplate(app, row, data.chat.helpers);
         });
 
     },
