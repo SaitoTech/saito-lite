@@ -290,7 +290,6 @@ class Poker extends GameTemplate {
 	this.game.state.passed.splice(i, 1);
 	this.removePlayer(this.game.players[i]);
 
-
         if (this.game.state.big_blind_player == (i+1)) { this.game.state.big_blind_player--; }
         if (this.game.state.small_blind_player == (i+1)) { this.game.state.small_blind_player--; }
         if (this.game.state.big_blind_player < 1) { this.game.state.big_blind_player = this.game.players.length; }
@@ -301,13 +300,19 @@ class Poker extends GameTemplate {
 	//
 	// purge turns from queue -- force a re-issuing of turn order
 	//
-	for (let i = this.game.queue.length-1; i > 0; i--) {
-	  let tmpar = this.game.queue[i].split("\t");
-	  if (tmpar[0] === "turn") {
-	    this.game.queue.splice(i, 1);
-	  }
-	}
+        this.game.queue = [];
+	this.displayBoard();
 
+	//for (let i = this.game.queue.length-1; i > 0; i--) {
+	//  let tmpar = this.game.queue[i].split("\t");
+	//  if (tmpar[0] != "round") {
+	//    this.game.queue.splice(i, 1);
+	//  }
+	//}
+
+
+	// remove
+	i--;
       }
     }
 
