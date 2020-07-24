@@ -143,27 +143,27 @@
   --playing-color: var(--p1);
 }
 
-.p1 .pc {
+.p1, .p1 .pc {
   color: var(--p1);
 }
 
-.p2 .pc {
+.p2, .p2 .pc {
   color: var(--p2);
 }
 
-.p3 .pc {
+.p3, .p3 .pc {
   color: var(--p3);
 }
 
-.p4 .pc {
+.p4, .p4 .pc {
   color: var(--p4);
 }
 
-.p5 .pc {
+.p5, .p5 .pc {
   color: var(--p5);
 }
 
-.p6 .pc {
+.p6, .p6 .pc {
   color: var(--p6);
 }
 
@@ -1260,6 +1260,43 @@ body {
 .bottom_right {
   transform: translate(50px, 50px);
 }
+
+.dashboard {
+  display: inline-flex;
+  position: absolute;
+  left: 50vw;
+  transform: translateX(-50%);
+  z-index: 9;
+  color: #fff;
+  background: #0008;
+}
+
+.dash-faction-name {
+  text-align: center;
+  font-size: 2em;
+}
+
+.dash-faction {
+  display: grid;
+}
+
+.dash-faction-info {
+  display: grid;
+  grid-template-columns: repeat(7, 3em);
+}
+
+.dash-item {
+  width: 3em;
+  line-height: 2em;
+  text-align: center;
+  font-size: 1.5em;
+}
+
+.dash-label {
+  transform: rotate(35deg);
+  height: 1em;
+}
+
 
 .fleet * {
   position: relative;
