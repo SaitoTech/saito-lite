@@ -330,7 +330,7 @@ returnFactionSheet(imperium_self, player) {
       let techname = imperium_self.game.players_info[player-1].tech[i];
       let tech = imperium_self.tech[techname];
       if (tech.type != "ability") {
-        html += imperium_self.returnTechCardHTML(techname, "faction_sheet_tech_card bc");
+        html += imperium_self.returnTechCardHTML(techname, "faction_sheet_tech_card");
       }
     }
 /****
