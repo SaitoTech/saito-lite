@@ -615,6 +615,31 @@
   }
 
 
+  returnTotalResources(player) {
+  
+    let array_of_cards = this.returnPlayerPlanetCards(player);
+    let total_available_resources = 0;
+    for (let z = 0; z < array_of_cards.length; z++) {
+      total_available_resources += this.game.planets[array_of_cards[z]].resources;
+    }
+    total_available_resources += this.game.players_info[player-1].goods;
+    return total_available_resources;
+  
+  }
+
+
+  returnTotalInfluence(player) {
+  
+    let array_of_cards = this.returnPlayerPlanetCards(player); // unexhausted
+    let total_available_influence = 0;
+    for (let z = 0; z < array_of_cards.length; z++) {
+      total_available_influence += this.game.planets[array_of_cards[z]].influence;
+    }
+    total_available_influence += this.game.players_info[player-1].goods;
+    return total_available_influence;
+  
+  }
+  
   returnAvailableResources(player) {
   
     let array_of_cards = this.returnPlayerUnexhaustedPlanetCards(player); // unexhausted

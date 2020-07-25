@@ -67,102 +67,6 @@
   }
   
   
-
-
-  handlePlanetsMenuItem() {
-  
-    let imperium_self = this;
-    let factions = this.returnFactions();
-    let html =
-    `
-        <div style="margin-bottom: 1em">
-          The Planetary Empires:
-        </div>
-        <ul>
-     `;
-    for (let i = 0; i < this.game.players_info.length; i++) {
-      html += `  <li class="option" id="${i}">${factions[this.game.players_info[i].faction].name}</li>`;
-    }
-    html += `
-        </ul>
-    `
-    $('.hud-menu-overlay').html(html);
-    $('.hud-menu-overlay').show();
-    $('.status').hide();
-  
-    //
-    // leave action enabled on other panels
-    //
-    $('.option').on('click', function() {
-  
-      let player_action = parseInt($(this).attr("id"));
-
-      let array_of_cards = imperium_self.returnPlayerPlanetCards(player_action+1); // all
-
-      let html  = "<ul>";
-      for (let z = 0; z < array_of_cards.length; z++) {
-        if (imperium_self.game.planets[array_of_cards[z]].exhausted == 1) {
-          html += '<li class="cardchoice exhausted" id="cardchoice_'+array_of_cards[z]+'">' + imperium_self.returnPlanetCard(array_of_cards[z]) + '</li>';
-        } else {
-          html += '<li class="cardchoice" id="cardchoice_'+array_of_cards[z]+'">' + imperium_self.returnPlanetCard(array_of_cards[z]) + '</li>';
-        }
-      }
-      html += '</ul>';
-  
-      $('.hud-menu-overlay').html(html);
-      $('.hud-menu-overlay').show();
-  
-    });
-  }
-  
-  
-
-
- 
-  handleTechMenuItem() {
-  
-    let imperium_self = this;
-    let factions = this.returnFactions();
-    let html =
-    `
-        <div style="margin-bottom: 1em">
-          The Technological Empires:
-        </div>
-        <ul>
-     `;
-    for (let i = 0; i < this.game.players_info.length; i++) {
-    html += `  <li class="option" id="${i}">${factions[this.game.players_info[i].faction].name}</li>`;
-    }
-    html += `
-        </ul>
-    `
-    $('.hud-menu-overlay').html(html);
-    $('.hud-menu-overlay').show();
-    $('.status').hide();
-  
-    //
-    // leave action enabled on other panels
-    //
-    $('.option').on('click', function() {
-  
-      let p = $(this).attr("id");
-      let tech = imperium_self.game.players_info[p].tech;
-  
-      let html  = "<ul>";
-      for (let z = 0; z < tech.length; z++) {
-        html += '<li class="cardchoice" id="">' + tech[z] + '</li>';
-      }
-      html += '</ul>';
-  
-      $('.hud-menu-overlay').html(html);
-  
-    });
-  }
-  
-
-
-
-
   
   handleLawsMenuItem() {
   
@@ -195,12 +99,12 @@
   
     $('.hud-menu-overlay').html(html);
     $('.hud-menu-overlay').show();
+    $('.status').hide();
 
     $('.option').off();
     $('.option').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showAgendaCard(imperium_self.game.state.agendas[s]); });
     $('.option').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hideAgendaCard(imperium_self.game.state.agendas[s]); });
   
-    $('.status').hide();
   
   }
   

@@ -29,6 +29,112 @@ addEventsToBoard() {
 
 }
 
+returnFactionDashboard() {
+
+  let html = '';
+  for (let i = 0; i < this.game.players_info.length; i++) {
+
+    html += `
+
+    <div data-id="${(i+1)}" class="dash-faction p${i+1}">
+     <div data-id="${(i+1)}" class="dash-faction-name bk"></div>
+      <div class="dash-faction-info">
+
+        <div class="dash-item resources">
+          <span class="avail"></span>
+          <span class="total"></span>
+        </div>
+
+        <div class="dash-item influence">
+          <span class="avail"></span>
+          <span class="total"></span>
+        </div>
+
+        <div class="dash-item trade">
+          <i class="fas fa-database pc white-stroke"></i>
+          <div id="dash-item-goods" class="dash-item-goods">
+            ${this.game.players_info[i].goods}
+          </div>
+        </div>
+
+        <div class="dash-label">Resources</div>
+        <div class="dash-label">Influence</div>
+        <div class="dash-label">Goods</div>
+      </div>
+
+      <div data-id="${(i+1)}" class="dash-faction-base">
+	<div class="dash-faction-status"></div>
+	commodities : <span class="dash-item-commodities">${this.game.players_info[i].commodities}</span> / <span class="dash-item-commodity-limit">${this.game.players_info[i].commodity_limit}</span>
+      </div>
+    </div>
+    `;
+
+  }
+  return html;
+
+}
+
+
+displayFactionDashboard() {
+
+  document.querySelector('.dashboard').innerHTML = this.returnFactionDashboard();
+
+  var pl = "";
+  for (let i = 0; i < this.game.players_info.length; i++) {
+
+    pl = "p" + (i+1);
+
+    let total_resources = this.returnTotalResources((i+1));
+    let available_resources = this.returnAvailableResources((i+1));
+    let total_influence = this.returnTotalInfluence((i+1));
+    let available_influence = this.returnAvailableInfluence((i+1));
+
+    document.querySelector(`.${pl} .dash-faction-name`).innerHTML = this.returnFaction(i+1);
+    document.querySelector(`.${pl} .resources .avail`).innerHTML = available_resources;
+    document.querySelector(`.${pl} .resources .total`).innerHTML = total_resources;
+    document.querySelector(`.${pl} .influence .avail`).innerHTML = available_influence;
+    document.querySelector(`.${pl} .influence .total`).innerHTML = total_influence;
+    document.querySelector(`.${pl} .dash-item-goods`).innerHTML = this.game.players_info[i].goods;
+    document.querySelector(`.${pl} .dash-item-commodities`).innerHTML = this.game.players_info[i].commodities;
+    document.querySelector(`.${pl} .dash-item-commodity-limit`).innerHTML = this.game.players_info[i].commodity_limit;
+  }
+
+}
+
+
+displayFactionSheet(player) {
+
+  let imperium_self = this;
+
+  if (!imperium_self.factions_enabled) {
+    imperium_self.factions_enabled = [];
+    for (let i = 0; i < imperium_self.game.players_info; i++) { 
+      imperium_self.factions_enabled.push(0);
+    }
+  }
+
+  document.querySelector(`.faction_content.p${player}`).innerHTML = imperium_self.returnFactionSheet(imperium_self, player);
+
+  if (document.querySelector('.interface_overlay').classList.contains('hidden')) {
+    document.querySelector('.interface_overlay').classList.remove('hidden');
+  }
+
+  let is_visible = 0;
+  if (imperium_self.factions_enabled[player-1] == 1) {
+    imperium_self.factions_enabled[player-1] = 0;
+  } else {
+    imperium_self.factions_enabled[player-1] = 1;
+  }
+
+  document.querySelector('.faction_sheet.p'+player).toggleClass('hidden');
+  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+    if (imperium_self.factions_enabled[i] > 0) { is_visible++; }
+  }
+  if (is_visible == 0) {
+    document.querySelector('.interface_overlay').classList.add('hidden');
+  }
+
+}
 
 
 addUIEvents() {
@@ -40,28 +146,9 @@ addUIEvents() {
   GameBoardSizer.render(this.app, this.data);
   GameBoardSizer.attachEvents(this.app, this.data, '.gameboard');
 
-  //temp function to polulate dashboard
-
-  var pl = "";
-  for (let i = 1; i < 7; i++) {
-    pl = "p" + i;
-    document.querySelector(`.${pl} .dash-faction-name`).innerHTML = `Faction-${i}`;
-    document.querySelector(`.${pl} .resources .avail`).innerHTML = Math.random().toString().slice(-1);
-    document.querySelector(`.${pl} .resources .spent`).innerHTML = Math.random().toString().slice(-1);
-    document.querySelector(`.${pl} .influence .avail`).innerHTML = Math.random().toString().slice(-1);
-    document.querySelector(`.${pl} .influence .spent`).innerHTML = Math.random().toString().slice(-1);
-    document.querySelector(`.${pl} .command`).innerHTML = Math.random().toString().slice(-1);
-    document.querySelector(`.${pl} .strategy`).innerHTML = Math.random().toString().slice(-1);
-    document.querySelector(`.${pl} .fleet`).innerHTML = Math.random().toString().slice(-1);
-    document.querySelector(`.${pl} .trade`).innerHTML = Math.random().toString().slice(-1);
-    document.querySelector(`.${pl} .comodities .avail`).innerHTML = Math.random().toString().slice(-1);
-    document.querySelector(`.${pl} .comodities .limit`).innerHTML = Math.random().toString().slice(-1);
-    document.querySelector(`.${pl} .dash-faction-action`).innerHTML = `Action-${i}`;
-  }
+  this.displayFactionDashboard();
 
 
-
-  //make board draggable
   $('#hexGrid').draggable();
   //add ui functions  
   //log-lock
@@ -93,6 +180,7 @@ addUIEvents() {
   };
   document.querySelector('.faction_buttons').innerHTML = html;
 
+
   //add faction names to their sheets
   for (let i = 0; i < this.game.players_info.length; i++) {
     document.querySelector('.faction_name.p' + (i+1)).innerHTML = this.returnFaction(i+1);
@@ -102,27 +190,16 @@ addUIEvents() {
 
   document.querySelectorAll('.faction_button').forEach(el => {
     el.addEventListener('click', (e) => {
-      for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-        document.querySelector(`.faction_content.p${(i+1)}`).innerHTML = imperium_self.returnFactionSheet(imperium_self, (i+1));
-      }
-      if (document.querySelector('.interface_overlay').classList.contains('hidden')) {
-        document.querySelector('.interface_overlay').classList.remove('hidden');
-      } else {
-      }
-      let is_visible = 0;
-      let faction_idx = e.target.dataset.id-1;
-      if (factions_enabled[faction_idx] == 1) {
-	factions_enabled[faction_idx] = 0;
-      } else {
-	factions_enabled[faction_idx] = 1;
-      }
-      document.querySelector('.faction_sheet.p' + e.target.dataset.id).toggleClass('hidden');
-      for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-        if (factions_enabled[i] > 0) { is_visible++; }
-      }
-      if (is_visible == 0) {
-        document.querySelector('.interface_overlay').classList.add('hidden');
-      }
+      let faction_player = e.target.dataset.id;
+      imperium_self.displayFactionSheet(faction_player);
+    });
+  });
+
+
+  document.querySelectorAll('.dash-faction').forEach(el => {
+    el.addEventListener('click', (e) => {
+      let faction_player = e.target.dataset.id;
+      imperium_self.displayFactionSheet(faction_player);
     });
   });
 
@@ -136,61 +213,8 @@ addUIEvents() {
     document.querySelector(`.faction_content.p${(i+1)}`).innerHTML = imperium_self.returnFactionSheet(imperium_self, (i+1));
   }
 
-  var html = `
-    <div class="hud-token-count">
-      <div>	
-        <span class="fa-stack fa-3x">
-        <i class="fas fa-dice-d20 fa-stack-2x pc white-stroke"></i>
-        <span class="fa fa-stack-1x">
-        <div id="token_display_command_token_count" class="token_count command_token_count">
-        ${this.game.players_info[this.game.player-1].command_tokens}
-        </div>
-        </span>
-        </span>
-      </div>
-      <div>
-        <span class="fa-stack fa-3x">
-        <i class="far fa-futbol fa-stack-2x pc white-stroke"></i>
-        <span class="fa fa-stack-1x">
-        <div id="token_display_strategy_token_count" class="token_count strategy_token_count">
-        ${this.game.players_info[this.game.player-1].strategy_tokens}
-        </div>
-        </span>
-        </span>
-      </div>
-      <div>
-        <span class="fa-stack fa-3x">
-        <i class="fas fa-space-shuttle fa-stack-2x pc white-stroke"></i>
-        <span class="fa fa-stack-1x">
-        <div id="token_display_fleet_supply_count" class="token_count fleet_supply_count">
-        ${this.game.players_info[this.game.player-1].fleet_supply}
-        </div>
-        </span>
-        </span>
-      </div>
-      <div>
-        <span class="fa-stack fa-3x">
-        <i class="fas fa-box fa-stack-2x pc white-stroke"></i>
-        <span class="fa fa-stack-1x">
-        <div id="token_display_commodities_count" style="font-size:1em" class="token_count commodities_count">
-        ${this.game.players_info[this.game.player-1].commodities}
-        </div>
-        </span>
-        </span>
-      </div>
-      <div>
-        <span class="fa-stack fa-3x">
-        <i class="fas fa-database fa-stack-2x pc white-stroke"></i>
-        <span class="fa fa-stack-1x">
-        <div id="token_display_trade_goods_count" style="font-size:1em" class="token_count trade_goods_count">
-        ${this.game.players_info[this.game.player-1].goods}
-        </div>
-        </span>
-        </span>
-      </div>
-    </div>`;
-
-    document.querySelector('.hud-header').innerHTML += html;
+  var html = this.returnTokenDisplay(); 
+  document.querySelector('.hud-header').innerHTML += html;
 
   document.querySelectorAll('.faction_sheet_buttons div').forEach((el) => {
     var target = el.dataset.action;
@@ -203,7 +227,73 @@ addUIEvents() {
 }
 
 
-returnFactionSheet(imperium_self, player) {
+
+
+returnTokenDisplay(player=null) {
+
+  if (player == null) { player = this.game.player; }
+
+  let html = `
+    <div class="hud-token-count">
+      <div>	
+        <span class="fa-stack fa-3x">
+        <i class="fas fa-dice-d20 fa-stack-2x pc white-stroke"></i>
+        <span class="fa fa-stack-1x">
+        <div id="token_display_command_token_count" class="token_count command_token_count">
+        ${this.game.players_info[player-1].command_tokens}
+        </div>
+        </span>
+        </span>
+      </div>
+      <div>
+        <span class="fa-stack fa-3x">
+        <i class="far fa-futbol fa-stack-2x pc white-stroke"></i>
+        <span class="fa fa-stack-1x">
+        <div id="token_display_strategy_token_count" class="token_count strategy_token_count">
+        ${this.game.players_info[player-1].strategy_tokens}
+        </div>
+        </span>
+        </span>
+      </div>
+      <div>
+        <span class="fa-stack fa-3x">
+        <i class="fas fa-space-shuttle fa-stack-2x pc white-stroke"></i>
+        <span class="fa fa-stack-1x">
+        <div id="token_display_fleet_supply_count" class="token_count fleet_supply_count">
+        ${this.game.players_info[player-1].fleet_supply}
+        </div>
+        </span>
+        </span>
+      </div>
+      <div>
+        <span class="fa-stack fa-3x">
+        <i class="fas fa-box fa-stack-2x pc white-stroke"></i>
+        <span class="fa fa-stack-1x">
+        <div id="token_display_commodities_count" style="font-size:1em" class="token_count commodities_count">
+        ${this.game.players_info[player-1].commodities}
+        </div>
+        </span>
+        </span>
+      </div>
+      <div>
+        <span class="fa-stack fa-3x">
+        <i class="fas fa-database fa-stack-2x pc white-stroke"></i>
+        <span class="fa fa-stack-1x">
+        <div id="token_display_trade_goods_count" style="font-size:1em" class="token_count trade_goods_count">
+        ${this.game.players_info[player-1].goods}
+        </div>
+        </span>
+        </span>
+      </div>
+    </div>`;
+
+  return html;
+
+}
+
+returnFactionSheet(imperium_self, player=null) {
+
+  if (!player) { player = imperium_self.game.player; }
 
   let html = `
         <div class="faction_sheet_token_box" id="faction_sheet_token_box">
@@ -217,7 +307,7 @@ returnFactionSheet(imperium_self, player) {
           <i class="fas fa-dice-d20 fa-stack-2x pc white-stroke"></i>
           <span class="fa fa-stack-1x">
           <span class="token_count commend_token_count">
-          ${this.game.players_info[player - 1].command_tokens}
+          ${imperium_self.game.players_info[player - 1].command_tokens}
           </span>
           </span>
           </span>

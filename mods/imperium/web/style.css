@@ -1297,34 +1297,53 @@ body {
 .dashboard {
   display: inline-flex;
   position: absolute;
-  left: 50vw;
-  transform: translateX(-50%);
   z-index: 9;
   color: #fff;
-  background: #0008;
+  background: transparent;
+  margin-top: 10px;
+  margin-left: 15em;
 }
 
 .p1 .dash-faction-name {
   background-color: var(--p1);
 }
+.dash-faction-base {
+  background-color: #000;
+  opacity: 0.95;
+  color: white;
+  text-weight: bold;
+  margin-top: 2px;
+}
+
+.dash-faction-status {
+  border: 1px solid #c16400;
+  background-color: green;
+  height: 10px;
+  width: 15px;
+  margin-right: 5px;
+  margin-left: 5px;
+  margin-top: 4px;
+  float: left;
+}
 
 .dash-faction-name {
   text-align: center;
-  font-size: 2em;
+  font-size: 1.2em;
   text-align: center;
   color: #fff
 }
 
 .dash-faction {
   display: grid;
-  grid-gap: 1em;
+  grid-gap: 0.2em;
+  margin-right:15px;
 }
 
 .dash-faction-info {
   display: grid;
-  grid-template-columns: repeat(7, 4em);
-  height: 3em;
-  padding: 0 1em;
+  grid-template-columns: repeat(3, 4.5em);
+  height: 4.4em;
+  padding: 0;
 }
 
 .dash-item {
@@ -1337,11 +1356,13 @@ body {
 .dash-item .avail {
   transform: translateY(-0.2em);
   display: inline-block;
+  color: white;
 }
 
-.dash-item .spent, .dash-item .limit {
+.dash-item .total, .dash-item .limit {
   transform: translateY(0.2em);
-  display: inline-block;
+  /* display: inline-block; */
+  display: none;
   opacity: 0.7;
 }
 
@@ -1374,88 +1395,53 @@ body {
   position: relative;
 }
 
-.dash-item.resources::after {
-  content: "\2B23";
+.dash-item.resources {
+  background-image: url('/imperium/img/blank_resources_hex.png');
+  background-size: cover;
+  /* content: "\2B23"; */
+  /* background-color: #c16400; */
   color: #000000;
   font-size: 3em;
   position: relative;
   left: 0em;
   z-index: -1;
-  bottom: 0.66em;
+  /* bottom: 0.66em; */
+  height: 58px;
+  width: 65px;
 }
 
-.dash-item.influence::after {
-  content: "\2B23";
+.dash-item.influence {
+  background-image: url('/imperium/img/blank_influence_hex.png');
+  background-size: cover;
+  /* content: "\2B23";
+  /* background-color: #000000; */
   color: #c16400;
   font-size: 3em;
   position: relative;
-  left: 0em;
   z-index: -2;
-  bottom: 0.66em;
+  /* bottom: 0.66em; */
+  height: 58px;
+  width: 65px;
 }
 
-.dash-item.command::after {
-  content: "\2BC0";
-  color: #003366;
-  font-size: 3em;
+.dash-item.trade {
+  /* content: "\2B1F"; */
+  /* color: #ffaa00; */
+  font-size: 4em;
   position: relative;
-  left: 0em;
-  z-index: -3;
-  bottom: 0.64em;
-  display: inline-block;
-}
-
-.dash-item.strategy::after {
-  content: "\2B24";
-  color: #336600;
-  font-size: 2em;
-  position: relative;
-  left: 0em;
-  z-index: -3;
-  bottom: 1.1em;
-  display: inline-block;
-}
-
-.dash-item.fleet::after {
-  content: "\2BC8";
-  color: #330033;
-  font-size: 3em;
-  position: relative;
-  left: 0.1em;
-  z-index: -4;
-  bottom: 0.66em;
-  display: inline-block;
-}
-
-.dash-item.fleet::after {
-  content: "\2BC8";
-  color: #330033;
-  font-size: 3em;
-  position: relative;
-  left: 0.1em;
-  z-index: -4;
-  bottom: 0.66em;
-  display: inline-block;
-}
-
-.dash-item.trade::after {
-  content: "\2B1F";
-  color: #ffaa00;
-  font-size: 2.5em;
-  position: absolute;
-  left: 0.166em;
   z-index: -5;
-  display: inline-block;
+  height: 58px;
+  width: 65px;
+  display: flex;
+  left: 10px;
+  top: 4px;
 }
 
-.dash-item.comodities::after {
-  content: "\2BC2";
-  color: #cc3333;
-  font-size: 2.5em;
-  position: absolute;
-  left: 0.166em;
-  z-index: -5;
-  display: inline-block;
+.dash-item-goods {
+  position:relative;
+  top: -25px;
+  left: -40px;
+  font-size: 0.9em;
 }
 
 .fleet * {
