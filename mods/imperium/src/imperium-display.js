@@ -40,6 +40,27 @@ addUIEvents() {
   GameBoardSizer.render(this.app, this.data);
   GameBoardSizer.attachEvents(this.app, this.data, '.gameboard');
 
+  //temp function to polulate dashboard
+
+  var pl = "";
+  for (let i = 1; i < 7; i++) {
+    pl = "p" + i;
+    document.querySelector(`.${pl} .dash-faction-name`).innerHTML = `Faction-${i}`;
+    document.querySelector(`.${pl} .resources .avail`).innerHTML = Math.random().toString().slice(-1);
+    document.querySelector(`.${pl} .resources .spent`).innerHTML = Math.random().toString().slice(-1);
+    document.querySelector(`.${pl} .influence .avail`).innerHTML = Math.random().toString().slice(-1);
+    document.querySelector(`.${pl} .influence .spent`).innerHTML = Math.random().toString().slice(-1);
+    document.querySelector(`.${pl} .command`).innerHTML = Math.random().toString().slice(-1);
+    document.querySelector(`.${pl} .strategy`).innerHTML = Math.random().toString().slice(-1);
+    document.querySelector(`.${pl} .fleet`).innerHTML = Math.random().toString().slice(-1);
+    document.querySelector(`.${pl} .trade`).innerHTML = Math.random().toString().slice(-1);
+    document.querySelector(`.${pl} .comodities .avail`).innerHTML = Math.random().toString().slice(-1);
+    document.querySelector(`.${pl} .comodities .limit`).innerHTML = Math.random().toString().slice(-1);
+    document.querySelector(`.${pl} .dash-faction-action`).innerHTML = `Action-${i}`;
+  }
+
+
+
   //make board draggable
   $('#hexGrid').draggable();
   //add ui functions  
