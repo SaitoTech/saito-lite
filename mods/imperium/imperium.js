@@ -2921,11 +2921,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	return 1;
       },
   });
-<<<<<<< HEAD
 ***/
-=======
-
->>>>>>> 7afcde17... scaffolding for dashboard
   this.importStageIPublicObjective('planetary-unity', {
       name 	: 	"Planetary Unity" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,
