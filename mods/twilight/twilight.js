@@ -99,10 +99,6 @@ class Twilight extends GameTemplate {
         name: 'Display',
         callback: this.handleLangMenuItem.bind(this)
       },
-      'game-fullscreen': {
-        name: 'FullScreen',
-        callback: this.handleFullScreenMenuItem.bind(this)
-      },
       'game-player': {
         name: 'Players',
         callback: this.handlePlayerMenuItem.bind(this)
@@ -237,10 +233,6 @@ class Twilight extends GameTemplate {
       }
 
     });
-  }
-
-  async handleFullScreenMenuItem() {
-    this.app.browser.requestFullscreen();
   }
 
   async handlePlayerMenuItem() {
