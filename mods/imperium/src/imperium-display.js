@@ -53,37 +53,53 @@ returnFactionDashboard() {
 
     <div data-id="${(i+1)}" class="dash-faction p${i+1}">
      <div data-id="${(i+1)}" class="dash-faction-name bk"></div>
-      <div class="dash-faction-info">
+      <div data-id="${(i+1)}" class="dash-faction-info">
 
-        <div class="dash-item resources">
-          <span class="avail"></span>
-          <span class="total"></span>
+        <div data-id="${(i+1)}" class="dash-item resources">
+          <span data-id="${(i+1)}" class="avail"></span>
+          <span data-id="${(i+1)}" class="total"></span>
         </div>
 
-        <div class="dash-item influence">
-          <span class="avail"></span>
-          <span class="total"></span>
+        <div data-id="${(i+1)}" class="dash-item influence">
+          <span data-id="${(i+1)}" class="avail"></span>
+          <span data-id="${(i+1)}" class="total"></span>
         </div>
 
-        <div class="dash-item trade">
-          <i class="fas fa-database pc white-stroke"></i>
-          <div id="dash-item-goods" class="dash-item-goods">
+        <div data-id="${(i+1)}" class="dash-item trade">
+          <i data-id="${(i+1)}" class="fas fa-database pc white-stroke"></i>
+          <div data-id="${(i+1)}" id="dash-item-goods" class="dash-item-goods">
             ${this.game.players_info[i].goods}
           </div>
         </div>
 
-        <div class="dash-label">Resources</div>
-        <div class="dash-label">Influence</div>
-        <div class="dash-label">Goods</div>
+        <div data-id="${(i+1)}" class="dash-label">Resources</div>
+        <div data-id="${(i+1)}" class="dash-label">Influence</div>
+        <div data-id="${(i+1)}" class="dash-label">Goods</div>
       </div>
 
       <div data-id="${(i+1)}" class="dash-faction-base">
-	<div class="dash-faction-status-${(i+1)} dash-faction-status"></div>
-	commodities : <span class="dash-item-commodities">${this.game.players_info[i].commodities}</span> / <span class="dash-item-commodity-limit">${this.game.players_info[i].commodity_limit}</span>
+	<div data-id="${(i+1)}" class="dash-faction-status-${(i+1)} dash-faction-status"></div>
+	commodities : <span data-id="${(i+1)}" class="dash-item-commodities">${this.game.players_info[i].commodities}</span> / <span data-id="${(i+1)}" class="dash-item-commodity-limit">${this.game.players_info[i].commodity_limit}</span>
       </div>
     </div>
     `;
 
+  }
+  return html;
+
+}
+
+
+returnFactionSheets() {
+
+  let html = '';
+  for (let i = 0; i < this.game.players_info.length; i++) {
+    html += `
+      <div data-id="${(i+1)}" class="faction_sheet faction_sheet_${(i+1)} p${(i+1)} hidden">
+        <div class="faction_name faction_name_${(i+1)} p1"></div>
+        <div id="faction_content_${(i+1)}" class="faction_content faction_content_${(i+1)} p${(i+1)}"></div>
+      </div>
+    `;
   }
   return html;
 
@@ -112,6 +128,7 @@ displayFactionDashboard() {
     document.querySelector(`.${pl} .dash-item-goods`).innerHTML = this.game.players_info[i].goods;
     document.querySelector(`.${pl} .dash-item-commodities`).innerHTML = this.game.players_info[i].commodities;
     document.querySelector(`.${pl} .dash-item-commodity-limit`).innerHTML = this.game.players_info[i].commodity_limit;
+
   }
 
 }
@@ -128,7 +145,11 @@ displayFactionSheet(player) {
     }
   }
 
-  document.querySelector(`.faction_content.p${player}`).innerHTML = imperium_self.returnFactionSheet(imperium_self, player);
+  let divar = "faction_content_"+player;
+console.log(divar);
+  let html = imperium_self.returnFactionSheet(imperium_self, player);
+console.log(document.getElementById(divar));
+  document.getElementById(divar).innerHTML = html;
 
   if (document.querySelector('.interface_overlay').classList.contains('hidden')) {
     document.querySelector('.interface_overlay').classList.remove('hidden');
@@ -141,7 +162,8 @@ displayFactionSheet(player) {
     imperium_self.factions_enabled[player-1] = 1;
   }
 
-  document.querySelector('.faction_sheet.p'+player).toggleClass('hidden');
+  let faction_sheet_class = ".faction_sheet_"+player;
+  document.querySelector(faction_sheet_class).toggleClass('hidden');
   for (let i = 0; i < imperium_self.game.players_info.length; i++) {
     if (imperium_self.factions_enabled[i] > 0) { is_visible++; }
   }
@@ -161,11 +183,10 @@ addUIEvents() {
   GameBoardSizer.render(this.app, this.data);
   GameBoardSizer.attachEvents(this.app, this.data, '.gameboard');
 
-  this.displayFactionDashboard();
 
 
   $('#hexGrid').draggable();
-  //add ui functions  
+
   //log-lock
   document.querySelector('.log').addEventListener('click', (e) => {
     document.querySelector('.log').toggleClass('log-lock');
@@ -178,37 +199,16 @@ addUIEvents() {
   //set player highlight color
   document.documentElement.style.setProperty('--my-color', `var(--p${this.game.player})`);
 
-  //add faction buttons
-  var html = "";
-  var faction_initial = "";
-  var factions_enabled = [];
-
-  for (let i = 0; i < this.game.players_info.length; i++) {
-    factions_enabled.push(0);
-    let faction_name = this.returnFaction((i+1));
-    let faction_initial = "";
-    if (faction_name[0] != "") { faction_initial = faction_name[0]; }
-    if (faction_name.indexOf("of ") > -1) {
-      faction_initial = faction_name.split("of ")[faction_name.split("of ").length-1].charAt(0);
-    }
-    html += `<div data-id="${(i+1)}" class="faction_button p${(i+1)}" style="border-color:var(--p${(i+1)});">${faction_initial}</div>`;
-  };
-  document.querySelector('.faction_buttons').innerHTML = html;
-
+  document.getElementById('faction_sheets').innerHTML = this.returnFactionSheets();
 
   //add faction names to their sheets
   for (let i = 0; i < this.game.players_info.length; i++) {
-    document.querySelector('.faction_name.p' + (i+1)).innerHTML = this.returnFaction(i+1);
+    document.querySelector('.faction_name_' + (i+1)).innerHTML = this.returnFaction(i+1);
     let factions = this.returnFactions();
-    document.querySelector('.faction_sheet.p' + (i+1)).style.backgroundImage = "url('./img/factions/" + factions[this.game.players_info[i].faction].background + "')";
+    document.querySelector('.faction_sheet_' + (i+1)).style.backgroundImage = "url('./img/factions/" + factions[this.game.players_info[i].faction].background + "')";
   };
 
-  document.querySelectorAll('.faction_button').forEach(el => {
-    el.addEventListener('click', (e) => {
-      let faction_player = e.target.dataset.id;
-      imperium_self.displayFactionSheet(faction_player);
-    });
-  });
+  this.displayFactionDashboard();
 
 
   document.querySelectorAll('.dash-faction').forEach(el => {
@@ -280,26 +280,6 @@ returnTokenDisplay(player=null) {
         </span>
         </span>
       </div>
-      <div>
-        <span class="fa-stack fa-3x">
-        <i class="fas fa-box fa-stack-2x pc white-stroke"></i>
-        <span class="fa fa-stack-1x">
-        <div id="token_display_commodities_count" style="font-size:1em" class="token_count commodities_count">
-        ${this.game.players_info[player-1].commodities}
-        </div>
-        </span>
-        </span>
-      </div>
-      <div>
-        <span class="fa-stack fa-3x">
-        <i class="fas fa-database fa-stack-2x pc white-stroke"></i>
-        <span class="fa fa-stack-1x">
-        <div id="token_display_trade_goods_count" style="font-size:1em" class="token_count trade_goods_count">
-        ${this.game.players_info[player-1].goods}
-        </div>
-        </span>
-        </span>
-      </div>
     </div>`;
 
   return html;
@@ -315,8 +295,6 @@ returnFactionSheet(imperium_self, player=null) {
         <div>Command</div>
         <div>Strategy</div>
         <div>Fleet</div>
-        <div>Commodities</div>
-        <div>Goods</div>
         <div>	
           <span class="fa-stack fa-3x">
           <i class="fas fa-dice-d20 fa-stack-2x pc white-stroke"></i>
@@ -347,26 +325,6 @@ returnFactionSheet(imperium_self, player=null) {
           </span>
           </span>
         </div>
-        <div>
-          <span class="fa-stack fa-3x">
-          <i class="fas fa-box fa-stack-2x pc white-stroke"></i>
-          <span class="fa fa-stack-1x">
-          <div class="token_count commodities_count">
-          ${this.game.players_info[this.game.player-1].commodities}
-          </div>
-          </span>
-          </span>
-        </div>
-        <div>
-          <span class="fa-stack fa-3x">
-          <i class="fas fa-database fa-stack-2x pc white-stroke"></i>
-          <span class="fa fa-stack-1x">
-          <div class="token_count trade_goods_count">
-          ${this.game.players_info[this.game.player-1].goods}
-          </div>
-          </span>
-          </span>
-        </div>
       </div>
       <div class="faction_sheet_active">
    `;
@@ -375,13 +333,14 @@ returnFactionSheet(imperium_self, player=null) {
     //
     // ACTION CARDS
     //
-    html += `
+    let ac = imperium_self.returnPlayerActionCards(imperium_self.game.player);
+    if (ac.length > 0) {
+      html += `
       <h3 class="action anchor">Action Cards</h3>
       <div class="faction_sheet_action_card_box" id="faction_sheet_action_card_box">
       `;
       if (imperium_self.game.player == player) {
 
-        let ac = imperium_self.returnPlayerActionCards(imperium_self.game.player);
 	for (let i = 0; i < ac.length; i++) {
           html += `
             <div class="faction_sheet_action_card bc">
@@ -401,9 +360,8 @@ returnFactionSheet(imperium_self, player=null) {
 	  `;
 	}
       }
-
-    html += `</div>`;
-
+      html += `</div>`;
+    }
 
     //
     // PLANET CARDS
@@ -459,21 +417,6 @@ returnFactionSheet(imperium_self, player=null) {
         html += imperium_self.returnTechCardHTML(techname, "faction_sheet_tech_card");
       }
     }
-/****
-    for (let i = 0; i < imperium_self.game.players_info[player-1].tech.length; i++) {
-      let tech = imperium_self.tech[imperium_self.game.players_info[player-1].tech[i]];
-      if (tech.type != "ability") {
-        html += `
-          <div class="faction_sheet_tech_card bc">
-            <div class="tech_card_name">${tech.name}</div>
-            <div class="tech_card_content">${tech.text}</div>
-            <div class="tech_card_level">♦♦</div>
-          </div>
-        `;
-      }
-    }
-****/
-
     html += `</div>`;
 
 
@@ -644,8 +587,6 @@ updateTokenDisplay() {
     $('#token_display_command_token_count').html(imperium_self.game.players_info[imperium_self.game.player-1].command_tokens);
     $('#token_display_strategy_token_count').html(imperium_self.game.players_info[imperium_self.game.player-1].strategy_tokens);
     $('#token_display_fleet_supply_count').html(imperium_self.game.players_info[imperium_self.game.player-1].fleet_supply_tokens);
-    $('#token_display_commodities_count').html(imperium_self.game.players_info[imperium_self.game.player-1].commodities);
-    $('#token_display_trade_goods_count').html(imperium_self.game.players_info[imperium_self.game.player-1].goods);
   } catch (err) {
   }
 

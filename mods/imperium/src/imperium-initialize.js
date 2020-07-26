@@ -12,6 +12,8 @@
     });
     $('.content').css('visibility', 'visible');
     $('.hud_menu_game-logs').css('display', 'none');
+
+
   }
 
 
@@ -365,6 +367,7 @@
     //
     this.addEventsToBoard();
     this.addUIEvents();
+
 
   }
   
