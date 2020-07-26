@@ -50,9 +50,7 @@ module.exports = ArcadeMain = {
 	  mygame = 1;
 	}
       }
-      if (mygame == 1) {
-        button_text.cancel = "CANCEL";
-      }
+
 
 
       if (players) {
@@ -73,8 +71,9 @@ module.exports = ArcadeMain = {
 
             if (tx.msg.over == 1) {
               delete button_text.continue;
-            }
-
+            } else {
+	      button_text.cancel = "CANCEL";
+	    }
           }
         });
       }

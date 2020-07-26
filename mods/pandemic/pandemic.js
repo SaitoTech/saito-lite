@@ -141,7 +141,7 @@ class Pandemic extends GameTemplate {
       //
       // Shuffle Infection Cards
       //
-      this.game.queue.push("READY");
+      this.game.queue.push("READY\t1");
   
       //
       // Shuffle Player Cards
