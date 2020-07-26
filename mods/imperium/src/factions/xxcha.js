@@ -5,11 +5,57 @@
       space_units	: 	["carrier","cruiser","cruiser","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","pds","spacedock"],
 //      tech		: 	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector", "faction3-field-nullification", "faction3-peace-accords", "faction3-quash", "faction3-instinct-training"],
-      tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash"],
+      tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship"],
       background	: 'faction3.jpg',
       intro		:	`<div style="font-weight:bold">The Senate has Collapsed!</div><div style="margin-top:10px">The failure of diplomatic options has struck the XXCha Kingdom harshly...</div><div style="margin-top:10px">What is left for your people but the conquest of New Byzantium and imposition of peace by force?</div>`
     });
   
+
+
+
+
+    this.importTech('faction3-flagship', {
+      name        :       "XXCha Flagship" ,
+      faction     :       "faction3",
+      type        :       "ability" ,
+      returnPDSUnitsWithinRange : function(imperium_self, player, attacker, defender, sector, battery) {
+
+       if (!imperium_self.doesPlayerHaveTech("faction3-flagship")) { return 0; }
+
+       let player_fleet = imperium_self.returnPlayerFleet(player);
+       if (player_fleet.flagship > 0) {
+
+         let as = this.returnAdjacentSectors(sector);
+         for (let i = 0; i < as.length; i++) {
+	   if (imperium_self.doesSectorContainPlayerUnit(player, as[i], "flagship")) {
+
+             let pds1 = {};
+                 pds1.combat = imperium_self.returnUnit(player, "pds").combat;
+                 pds1.owner = player;
+                 pds1.sector = sector;
+
+             let pds2 = {};
+                 pds2.combat = imperium_self.returnUnit(player, "pds").combat;
+                 pds2.owner = player;
+                 pds2.sector = sector;
+
+             let pds3 = {};
+                 pds3.combat = imperium_self.returnUnit(player, "pds").combat;
+                 pds3.owner = player;
+                 pds3.sector = sector;
+
+             battery.push(pds1);
+             battery.push(pds2);
+             battery.push(pds3);
+     
+	     return battery;
+	   }
+	 }
+        }
+       return battery;
+      }
+    });
+
 
 
 
@@ -50,9 +96,6 @@
 	    }
 	  }
 
-
-console.log("SECTORS: " + JSON.stringify(sectors));
-
 	  //
 	  // get all planets adjacent to...
 	  //
@@ -62,8 +105,6 @@ console.log("SECTORS: " + JSON.stringify(sectors));
 	      if (!adjacent_sectors.includes(as[z])) { adjacent_sectors.push(as[z]); }
 	    }
     	  }
-
-console.log("ADJACENT SECTORS: " + JSON.stringify(adjacent_sectors));
 
 	  //
 	  // get all planets I don't control in those sectors
@@ -76,7 +117,6 @@ console.log("ADJACENT SECTORS: " + JSON.stringify(adjacent_sectors));
 	        if (sys.p[y].owner != player) {
 		  if (!imperium_self.doesPlanetHaveUnits(sys.p[y])) {
 	  	    seizable_planets.push(sys.p[y].planet);
-console.log("can seize: " + sys.p[y].planet + " in " + adjacent_sectors[b]);
 	          }
 	        }
 	      }
@@ -94,9 +134,6 @@ console.log("can seize: " + sys.p[y].planet + " in " + adjacent_sectors[b]);
 
 	  if (imperium_self.game.players_info[player-1].peace_accords == 1) {
 	    if (imperium_self.game.player == player) {
-
-console.log("SEIZE: " + JSON.stringify(seizable_planets));
-
               imperium_self.playerSelectPlanetWithFilter(
                 "Select a planet to annex via Peace Accords: " ,
                 function(planet) {
@@ -113,10 +150,8 @@ console.log("SEIZE: " + JSON.stringify(seizable_planets));
             }
             return 0;
           }
-
 	  return 1;
 	}
-
 	return 1;
       }
     });

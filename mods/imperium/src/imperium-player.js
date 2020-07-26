@@ -44,6 +44,20 @@
       players[i].cost_of_technology_primary	= 6;
       players[i].cost_of_technology_secondary	= 4;
 
+      //
+      // unit limits
+      //
+      players[i].infantry_limit		= 30;
+      players[i].fighter_limit		= 30;
+      players[i].carrier_limit		= 4;
+      players[i].destroyer_limit	= 8;
+      players[i].cruiser_limit		= 8;
+      players[i].dreadnaught_limit	= 5;
+      players[i].flagship_limit		= 1;
+      players[i].warsun_limit		= 2;
+      players[i].pds_limit		= 4;
+      players[i].spacedock_limit	= 3;
+
 
       players[i].traded_this_turn = 0;  
 
@@ -2297,6 +2311,17 @@ alert("objectives... 2: " + objective);
   
     let imperium_self = this;
 
+    let player_fleet = this.returnPlayerFleet(imperium_self.game.player);
+    let player_build = {};
+        player_build.infantry = 0;
+        player_build.fighters = 0;
+        player_build.carriers = 0;
+        player_build.cruisers = 0;
+        player_build.dreadnaughts = 0;
+        player_build.destroyers = 0;
+        player_build.flagships = 0;
+        player_build.warsuns = 0;
+
     //
     // determine production_limit from sector
     //
@@ -2440,6 +2465,38 @@ alert("objectives... 2: " + objective);
       // respect production / cost limits
       //
       let return_to_zero = 0;
+      if (id == "fighter" && (player_build.fighters + player_fleet.fighters) > imperium_self.game.players_info[imperium_self.game.player-1].fighter_limit) {
+        alert("You can only have "+imperium_self.game.players_info[imperium_self.game.player-1].fighter_limit + " fighters on the board");
+        return_to_zero = 1;
+      }
+      if (id == "infantry" && (player_build.infantry + player_fleet.infantry) > imperium_self.game.players_info[imperium_self.game.player-1].infantry_limit) {
+        alert("You can only have "+imperium_self.game.players_info[imperium_self.game.player-1].infantry_limit + " infantry on the board");
+        return_to_zero = 1;
+      }
+      if (id == "destroyer" && (player_build.destroyers + player_fleet.destroyers) > imperium_self.game.players_info[imperium_self.game.player-1].destroyer_limit) {
+        alert("You can only have "+imperium_self.game.players_info[imperium_self.game.player-1].destroyer_limit + " destroyers on the board");
+        return_to_zero = 1;
+      }
+      if (id == "carrier" && (player_build.carriers + player_fleet.carriers) > imperium_self.game.players_info[imperium_self.game.player-1].carrier_limit) {
+        alert("You can only have "+imperium_self.game.players_info[imperium_self.game.player-1].carrier_limit + " carriers on the board");
+        return_to_zero = 1;
+      }
+      if (id == "cruiser" && (player_build.cruisers + player_fleet.cruisers) > imperium_self.game.players_info[imperium_self.game.player-1].cruiser_limit) {
+        alert("You can only have "+imperium_self.game.players_info[imperium_self.game.player-1].cruiser_limit + " cruisers on the board");
+        return_to_zero = 1;
+      }
+      if (id == "dreadnaught" && (player_build.dreadnaughts + player_fleet.dreadnaughts) > imperium_self.game.players_info[imperium_self.game.player-1].dreadnaught_limit) {
+        alert("You can only have "+imperium_self.game.players_info[imperium_self.game.player-1].dreadnaught_limit + " dreadnaughts on the board");
+        return_to_zero = 1;
+      }
+      if (id == "flagship" && (player_build.flagships + player_fleet.flagships) > imperium_self.game.players_info[imperium_self.game.player-1].flagships_limit) {
+        alert("You can only have "+imperium_self.game.players_info[imperium_self.game.player-1].flagship_limit + " flagships on the board");
+        return_to_zero = 1;
+      }
+      if (id == "warsun" && (player_build.warsuns + player_fleet.warsuns) > imperium_self.game.players_info[imperium_self.game.player-1].warsun_limit) {
+        alert("You can only have "+imperium_self.game.players_info[imperium_self.game.player-1].warsun_limit + " warsuns on the board");
+        return_to_zero = 1;
+      }
       if (calculated_total_cost > imperium_self.returnAvailableResources(imperium_self.game.player)) {
         alert("You cannot build more than you have available to pay for it.");
         return_to_zero = 1;
@@ -2466,6 +2523,15 @@ alert("objectives... 2: " + objective);
 	$('.dreadnaught_total').html(0);
 	$('.flagship_total').html(0);
 	$('.warsun_total').html(0);
+        player_build = {};
+        player_build.infantry = 0;
+        player_build.fighters = 0;
+        player_build.carriers = 0;
+        player_build.cruisers = 0;
+        player_build.dreadnaughts = 0;
+        player_build.destroyers = 0;
+        player_build.flagships = 0;
+        player_build.warsuns = 0;
 	return;
       }
 
@@ -3659,7 +3725,6 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
 	}
 
     	imperium_self.prependMove("continue\t" + imperium_self.game.player + "\t" + sector);
-alert("HERE WE ARE: " + JSON.stringify(imperium_self.moves));
         imperium_self.endTurn();
         return;
       }

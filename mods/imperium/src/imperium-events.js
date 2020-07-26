@@ -1,7 +1,5 @@
 
 
-
-
   returnEventObjects(player) {
 
     let z = [];
@@ -14,7 +12,6 @@
       for (let j = 0; j < this.game.players_info[i].tech.length; j++) {
 	if (this.tech[this.game.players_info[i].tech[j]] != undefined) {
 	  if (!zz.includes(this.game.players_info[i].tech[j])) {
-//console.log("HERE: " + this.game.players_info[i].tech[j]);
             z.push(this.tech[this.game.players_info[i].tech[j]]);
             zz.push(this.game.players_info[i].tech[j]);
 	  }
@@ -224,11 +221,14 @@
     if (obj.modifyPDSRoll == null) {
       obj.modifyPDSRoll = function(imperium_self, attacker, defender, roll) { return roll; }
     }
-    if (obj.modifySpaceCombat == null) {
+    if (obj.modifySpaceCombatRoll == null) {
       obj.modifySpaceCombatRoll = function(imperium_self, attacker, defender, roll) { return roll; }
     }
     if (obj.modifyGroundCombatRoll == null) {
       obj.modifyGroundCombatRoll = function(imperium_self, attacker, defender, roll) { return roll; }
+    }
+    if (obj.modifyUnitHits == null) {
+      obj.modifyUnitHits = function(imperium_self, player, defender, attacker, combat_type, unit, roll, hits) { return hits };
     }
     if (obj.modifyCombatRoll == null) {
       obj.modifyCombatRoll = function(imperium_self, attacker, defender, player, combat_type, roll) { return roll; }
@@ -263,6 +263,12 @@
     }
 
 
+    /////////////////
+    // PDS defense //
+    /////////////////
+    if (obj.returnPDSUnitsWithinRange == null) {
+      obj.returnPDSUnitsWithinRange = function(imperium_self, player, attacker, defender, sector, battery) { return battery; }
+    }
 
     //////////////////////////
     // asynchronous eventsa //

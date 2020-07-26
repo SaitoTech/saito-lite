@@ -23,10 +23,21 @@
             });
 	  };
 
+	  let supplementary_secret = function() {
+            imperium_self.addMove("resolve\tstrategy");
+            imperium_self.addMove("strategy\t"+"imperial"+"\t"+strategy_card_player+"\t2");
+            imperium_self.addMove("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
+            this.game.queue.push("gain\t"+strategy_card_player+"\tsecret_objectives\t2");
+            for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+              imperium_self.game.queue.push("DEAL\t6\t"+(i+1)+"\t1");
+            }
+	    imperium_self.endTurn();
+	  };
+
 	  if (imperium_self.game.planets['new-byzantium'].owner == strategy_card_player) {
 	    imperium_self.playerAcknowledgeNotice("Congratulations, Master of New Byzantium (+1 VP). Your power grows by the day. Surely it is only a matter of time before the Galaxy bows to your superiority and a Natural Order is restored to the universe", supplementary_scoring);
 	  } else {
-	    imperium_self.playerAcknowledgeNotice("Although you do not control New Byzantium, your strategic choice of play has been noticed by the other factions, and will be rewarded by the issuance of a Secret Objective", supplementary_scoring);
+	    imperium_self.playerAcknowledgeNotice("Although you do not control New Byzantium, your strategic choice of play has been noticed by the other factions, and will be rewarded by the issuance of a Secret Objective", supplementary_secret);
 	  }
         }
 

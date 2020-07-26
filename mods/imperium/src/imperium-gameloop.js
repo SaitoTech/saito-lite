@@ -1706,6 +1706,8 @@ imperium_self.saveGame(imperium_self.game.id);
   	let planet_idx	= parseInt(mv[3]);
   	this.game.queue.splice(qe, 1);
 
+	this.displayFactionDashboard();
+
 	let sys = this.returnSectorAndPlanets(sector);
 	let planet = sys.p[planet_idx];
 
@@ -1809,6 +1811,8 @@ imperium_self.saveGame(imperium_self.game.id);
   
 	this.updateTokenDisplay();
 	this.updateLeaderboard();
+	this.displayFactionDashboard();
+ 
 
   	this.game.queue.splice(qe, 1);
   	return 1;
@@ -1994,6 +1998,7 @@ imperium_self.saveGame(imperium_self.game.id);
 
 	this.updateTokenDisplay();
 	this.updateLeaderboard();
+	this.displayFactionDashboard();
 
   	this.game.queue.splice(qe, 1);
 
@@ -2011,7 +2016,6 @@ imperium_self.saveGame(imperium_self.game.id);
         let amount       = parseInt(mv[3]);
 	let z            = this.returnEventObjects();
 
- 
         if (item === "strategycard") {
   
   	  this.updateLog(this.returnFaction(player) + " takes " + this.strategy_cards[mv[3]].name);
@@ -2095,6 +2099,8 @@ imperium_self.saveGame(imperium_self.game.id);
   
 	this.updateTokenDisplay();
 	this.updateLeaderboard();
+	this.displayFactionDashboard();
+ 
 
   	this.game.queue.splice(qe, 1);
   	return 1;
@@ -2210,7 +2216,6 @@ imperium_self.saveGame(imperium_self.game.id);
 	//
 	// set player as inactive
 	//
-alert("setting player as inactive...");
         this.setPlayerInactive(player);
 
         this.game.state.active_player_moved = 0;
@@ -3323,6 +3328,7 @@ alert("setting player as inactive...");
 	  let total_hits = 0;
 	  let hits_or_misses = [];
 	  let hits_on = [];
+	  let units_firing = [];
 
 	  //
 	  // then the rest
@@ -3333,6 +3339,7 @@ alert("setting player as inactive...");
 
 	    for (let z_index in z) {
 	      roll = z[z_index].modifyCombatRoll(this, attacker, defender, attacker, "space", roll);
+	      total_hits = z[z_index].modifyUnitHits(this, attacker, defender, attacker, "space", sys.s.units[attacker-1][i], roll, total_hits);
 	      imperium_self.game.players_info[defender-1].target_units = z[z_index].modifyTargets(this, attacker, defender, imperium_self.game.player, "space", imperium_self.game.players_info[defender-1].target_units);
 	    }
 
@@ -3345,10 +3352,12 @@ alert("setting player as inactive...");
 	      total_shots++;
 	      hits_on.push(sys.s.units[attacker-1][i].combat);
 	      hits_or_misses.push(1);
+	      units_firing.push(sys.s.units[attacker-1][i]);
 	    } else {
 	      total_shots++;
 	      hits_or_misses.push(0);
 	      hits_on.push(sys.s.units[attacker-1][i].combat);
+	      units_firing.push(sys.s.units[attacker-1][i]);
 	    }
 
 	  }
@@ -3376,11 +3385,13 @@ alert("setting player as inactive...");
 
 	      let lowest_combat_hit = 11;
 	      let lowest_combat_idx = 11;
+	      let rerolling_unit = null;
 
 	      for (let n = 0; n < hits_to_misses.length; n++) {
 	        if (hits_on[n] < lowest_combat_hit && hits_or_misses[n] == 0) {
 		  lowest_combat_idx = n;
 		  lowest_combat_hit = hits_on[n];
+	          rerolling_unit = units_firing[n];;
 		}
 	      }
 	     
@@ -3388,6 +3399,7 @@ alert("setting player as inactive...");
  
 	      for (let z_index in z) {
 	        roll =  z[z_index].modifyCombatRerolls(this, player, attacker, player, "space", roll);
+	        total_hits = z[z_index].modifyUnitHits(this, attacker, defender, attacker, "space", rerolling_unit, roll, total_hits);
 	        imperium_self.game.players_info[defender-1].target_units = z[z_index].modifyTargets(this, attacker, defender, imperium_self.game.player, "space", imperium_self.game.players_info[defender-1].target_units);
 	      }
 

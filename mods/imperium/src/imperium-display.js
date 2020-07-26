@@ -108,6 +108,10 @@ returnFactionSheets() {
 
 displayFactionDashboard() {
 
+  let imperium_self = this;
+
+  try {
+
   document.querySelector('.dashboard').innerHTML = this.returnFactionDashboard();
 
   var pl = "";
@@ -129,8 +133,17 @@ displayFactionDashboard() {
     document.querySelector(`.${pl} .dash-item-commodities`).innerHTML = this.game.players_info[i].commodities;
     document.querySelector(`.${pl} .dash-item-commodity-limit`).innerHTML = this.game.players_info[i].commodity_limit;
 
+
   }
 
+    document.querySelectorAll('.dash-faction').forEach(el => {
+      el.addEventListener('click', (e) => {
+        let faction_player = e.target.dataset.id;
+        imperium_self.displayFactionSheet(faction_player);
+      });
+    });
+
+  } catch (err) {}
 }
 
 
@@ -210,13 +223,6 @@ addUIEvents() {
 
   this.displayFactionDashboard();
 
-
-  document.querySelectorAll('.dash-faction').forEach(el => {
-    el.addEventListener('click', (e) => {
-      let faction_player = e.target.dataset.id;
-      imperium_self.displayFactionSheet(faction_player);
-    });
-  });
 
   document.querySelectorAll('.faction_sheet').forEach(el => {
     el.addEventListener('click', (e) => {

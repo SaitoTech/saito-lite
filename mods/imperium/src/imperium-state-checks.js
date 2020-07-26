@@ -48,6 +48,51 @@
   }
 
 
+  returnPlayerFleet(player) {
+
+    let obj = {};
+        obj.fighters = 0;
+        obj.infantry = 0;
+        obj.carriers = 0;
+        obj.cruisers = 0;
+        obj.destroyers = 0;
+        obj.dreadnaughts = 0;
+        obj.flagships = 0;
+        obj.warsuns = 0;
+        obj.pds = 0;
+        obj.spacedocks = 0;
+
+    for (let i in this.game.sectors) {
+      if (this.game.sectors[i].units[player-1]) {
+        for (let k in this.game.sectors[i].units[player-1]) {
+          let unit = this.game.sectors[i].units[player-1][k];
+	  if (unit.type == "fighter")     { obj.fighters++; }
+	  if (unit.type == "carrier")     { obj.carriers++; }
+	  if (unit.type == "cruiser")     { obj.cruisers++; }
+	  if (unit.type == "destroyer")   { obj.destroyers++; }
+	  if (unit.type == "dreadnaught") { obj.dreadnaughts++; }
+	  if (unit.type == "flagship")    { obj.flagship++; }
+	  if (unit.type == "warsun")      { obj.warsun++; }
+        }
+      }
+    }
+
+    for (let i in this.game.planets) {
+      if (this.game.planets[i].units[player-1]) {
+        for (let k in this.game.planets[i].units[player-1]) {
+          let unit = this.game.planets[i].units[player-1][k];
+	  if (unit.type == "infantry")  { obj.infantry++; }
+	  if (unit.type == "spacedock") { obj.spacedock++; }
+  	  if (unit.type == "pds")       { obj.pds++; }
+        }
+      }
+    }
+
+    return obj;
+
+  }
+
+
   isPlayerOverCapacity(player, sector) {
 
     let imperium_self = this;
@@ -1382,17 +1427,32 @@ console.log("RIDER: " + this.game.turn[i]);
     let sectors = [];
     let distance = [];
 
+    let defender = -1;
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      if (sys.s.units[i].length > 0 && (i+1) != attacker) {
+	defender = (i+1);
+      }
+    }
+
+
     sectors = x.sectors;
     distance = x.distance;
 
     //
     // get pds units within range
     //
-    return this.returnPDSWithinRange(attacker, sector, sectors, distance);
+    let battery = this.returnPDSWithinRange(attacker, sector, sectors, distance);
+
+    let z = this.returnEventObjects();
+    for (let z_index in z) {
+      for (let i = 0; i < this.game.players_info.length; i++) {
+	battery = z[z_index].returnPDSUnitsWithinRange(this, (i+1), attacker, defender, sector, battery);
+      }
+    }
+
+    return battery;
 
   }
-
-
 
 
 

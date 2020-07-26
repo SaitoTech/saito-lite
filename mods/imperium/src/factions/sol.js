@@ -5,11 +5,46 @@
       space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter"],
       ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock"],
 //      tech		:	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector","faction1-orbital-drop","faction1-versatile", "faction1-advanced-carrier-ii", "faction1-advanced-infantry-ii"],
-      tech		:	["neural-motivator","antimass-deflectors", "faction1-orbital-drop", "faction1-versatile"],
+      tech		:	["neural-motivator","antimass-deflectors", "faction1-orbital-drop", "faction1-versatile", "faction1-flagship"],
       background	: 	"faction1.jpg",
       intro		:	`<div style="font-weight:bold">Rise of the Sol Federation</div><div style="margin-top:10px">The fall of the Galactic Senate marked the end of Earth's pursuit of ex-terra appeasement policies...</div><div style="margin-top:10px">Rule of the day is swift action in pursuit of humanity's interest, as broadly defined by Earth's Governing Trifecta.</div>`
     });
  
+
+
+    this.importTech("faction1-flagship", {
+
+      name        :       "Sol Flagship" ,
+      faction     :       "faction1",
+      type	:	"ability" ,
+      playersChooseStrategyCardsBeforeTriggers : function(imperium_self, player) {
+	if (!imperium_self.doesPlayerHaveTech(player, "faction1-flagship")) { return 0; }
+        let player_fleet = imperium_self.returnPlayerFleet(player);
+	if (player_fleet.flagship > 0) {
+	  return 1;
+	}
+	return 0;
+      },
+      playersChooseStrategyCardsBeforeEvent : function(imperium_self, player) {
+	for (let i in this.game.sectors) {
+	  if (imperium_self.doesSectorContainPlayerUnit(player, i, "flagship")) {
+	    let sec = this.game.sectors[i];
+	    for (let k = 0; k < sec.units[player-1].length; k++) {
+	      if (sec.units[player-1][k].type == "flagship") {
+		imperium_self.loadUnitOntoShip(player, i, k, "infantry");
+		imperium_self.updateLog("Faction Ability: infantry added to Sol Flagship...");
+		return 1;
+	      }
+	    }
+	  }
+	}
+	return 1;
+      }  
+    });
+
+
+
+
     this.importTech("faction1-orbital-drop", {
 
       name        :       "Orbital Drop" ,
