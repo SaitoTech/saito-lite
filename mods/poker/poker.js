@@ -322,7 +322,6 @@ class Poker extends GameTemplate {
         this.game.player = (i + 1);
       }
     }
-
    
 
     this.updateLog("New Round...");
