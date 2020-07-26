@@ -34,6 +34,7 @@ module.exports = ArcadeMain = {
 
       if (game == '') { return; }
 
+
       let button_text = {};
       button_text.join = "JOIN";
 
@@ -44,12 +45,19 @@ module.exports = ArcadeMain = {
         delete button_text.join;
       }
 
+      let mygame = 0;
+      for (let i = 0; i < tx.transaction.from.length; i++) {
+	if (tx.transaction.from[i].add === app.wallet.returnPublicKey()) {
+	  mygame = 1;
+	}
+      }
+
       if (players) {
         if (players.includes(app.wallet.returnPublicKey())) {
           delete button_text.join;
         }
 
-        if (players.includes(app.wallet.returnPublicKey())) {
+        if (mygame == 1) {
           button_text.cancel = "CANCEL";
         }
       }
