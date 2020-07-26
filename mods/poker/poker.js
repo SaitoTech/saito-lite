@@ -271,57 +271,59 @@ class Poker extends GameTemplate {
     //
     // if players are out-of-tokens, set as inactive
     //
-    for (let i = 0; i < this.game.state.player_credit.length; i++) {
-      if (this.game.state.player_credit[i] <= 0) {
 
-        this.game.state.passed[i] = 1;
-        this.game.state.player_credit[i] = 0;
+    // only remove if there are more than two players
+    // if two players - let victory play out.
+    if (this.game.state.player_credit.length > 2) {
+      for (let i = 0; i < this.game.state.player_credit.length; i++) {
+        if (this.game.state.player_credit[i] <= 0) {
 
-	if (this.game.player == (i+1)) {
-	  this.updateLog("You have been removed from the game.");
-	}
+          this.game.state.passed[i] = 1;
+          this.game.state.player_credit[i] = 0;
 
-        //
-        // remove any players who are missing
-        //
-	this.game.state.player_names.splice(i, 1);	
-	this.game.state.player_pot.splice(i, 1);
-	this.game.state.player_credit.splice(i, 1);
-	this.game.state.passed.splice(i, 1);
-	this.removePlayer(this.game.players[i]);
+          if (this.game.player == (i + 1)) {
+            this.updateLog("You have been removed from the game.");
+          }
 
-        if (this.game.state.big_blind_player == (i+1)) { this.game.state.big_blind_player--; }
-        if (this.game.state.small_blind_player == (i+1)) { this.game.state.small_blind_player--; }
-        if (this.game.state.big_blind_player < 1) { this.game.state.big_blind_player = this.game.players.length; }
-        if (this.game.state.small_blind_player < 1) { this.game.state.small_blind_player = this.game.players.length; }
-        if (this.game.state.big_blind_player > this.game.players.length) { this.game.state.big_blind_player = this.game.players_length; }
-        if (this.game.state.small_blind_player > this.game.players.length) { this.game.state.small_blind_player = this.game.players_length; }
-
-	//
-	// purge turns from queue -- force a re-issuing of turn order
-	//
-        this.game.queue = [];
-	this.displayBoard();
-
-	//for (let i = this.game.queue.length-1; i > 0; i--) {
-	//  let tmpar = this.game.queue[i].split("\t");
-	//  if (tmpar[0] != "round") {
-	//    this.game.queue.splice(i, 1);
-	//  }
-	//}
+          //
+          // remove any players who are missing
+          //
+          this.game.state.player_names.splice(i, 1);
+          this.game.state.player_pot.splice(i, 1);
+          this.game.state.player_credit.splice(i, 1);
+          this.game.state.passed.splice(i, 1);
+          this.removePlayer(this.game.players[i]);
 
 
-	// remove
-	i--;
+          if (this.game.state.big_blind_player > this.game.players.length) {
+            this.game.state.big_blind_player = 1;
+            this.game.state.small_blind_player = 2;
+          }
+          if (this.game.state.small_blind_player > this.game.players.length) {
+            this.game.state.small_blind_player = 1;
+          }
+
+
+
+          //
+          // purge turns from queue -- force a re-issuing of turn order
+          //
+          this.game.queue = [];
+          //this.displayBoard();
+
+          // remove
+          i--;
+        }
       }
     }
 
     for (let i = 0; i < this.game.players.length; i++) {
       if (this.game.players[i] === this.app.wallet.returnPublicKey()) {
-	this.game.player = (i+1);
+        this.game.player = (i + 1);
       }
     }
 
+   
 
     this.updateLog("New Round...");
     document.querySelectorAll('.plog').forEach(el => {
@@ -329,6 +331,8 @@ class Poker extends GameTemplate {
     });
 
     this.initializeQueue();
+
+    this.displayBoard();
 
   }
 
@@ -682,7 +686,7 @@ class Poker extends GameTemplate {
           } else {
 
 
-console.log("HERE: " + JSON.stringify(this.game.state.player_names) + " ------ " + this.game.state.big_blind_player);
+            console.log("HERE: " + JSON.stringify(this.game.state.player_names) + " ------ " + this.game.state.big_blind_player);
 
             this.updateLog(this.game.state.player_names[this.game.state.big_blind_player - 1] + " deposits " + this.game.state.big_blind);
             this.game.state.player_pot[this.game.state.big_blind_player - 1] += this.game.state.big_blind;
@@ -1075,14 +1079,14 @@ console.log("HERE: " + JSON.stringify(this.game.state.player_names) + " ------ "
 
     if (this.browser_active == 0) { return; }
 
-    try {
-      this.displayPlayers();
-      this.displayHand();
-      console.log("showing table...");
-      this.displayTable();
-    } catch (err) {
-      console.log("err: " + err);
-    }
+    //try {
+    this.displayPlayers();
+    this.displayHand();
+    console.log("showing table...");
+    this.displayTable();
+    //   } catch (err) {
+    //     console.log("err: " + err);
+    //   }
 
   }
 
@@ -1244,20 +1248,50 @@ console.log("HERE: " + JSON.stringify(this.game.state.player_names) + " ------ "
 
   }
 
+  returnViewBoxArray() {
+
+    let player_box = [];
+
+    if (this.game.players.length == 2) { player_box = [3, 5]; }
+    if (this.game.players.length == 3) { player_box = [3, 4, 5]; }
+    if (this.game.players.length == 4) { player_box = [2, 3, 5, 6]; }
+    if (this.game.players.length == 5) { player_box = [2, 3, 4, 5, 6]; }
+
+    return player_box;
+
+  }
+
   displayPlayers() {
 
-    let player_box = this.returnPlayersBoxArray();
+    let player_box = "";
+
+    var prank = "";
+    if (this.game.players.includes(this.app.wallet.returnPublicKey())) {
+      player_box = this.returnPlayersBoxArray();
+      prank = this.game.players.indexOf(this.app.wallet.returnPublicKey());
+    } else {
+      //salert("You are not in or have been removed from this game.")
+      //return;
+      document.querySelector('.status').innerHTML = "You are out of the game.<br />Feel free to hang out and watch.";
+      document.querySelector('.cardfan').classList.add('hidden');
+      player_box = this.returnViewBoxArray();
+    }
 
     //console.log("this is player: " + this.game.player + " - with key: " + this.app.wallet.returnPublicKey());
     //console.log(this.game.players[this.game.player - 1] + " - " + this.app.wallet.returnPublicKey());
     //console.log(this.game.players);
 
     //var seat_adjust = (this.game.players.length-(this.game.player-1)); //+1?
-    var prank = "";
 
-    for (let i = 0; i < this.game.players.length; i++) {
-      if (this.app.wallet.returnPublicKey() == this.game.players[i]) { prank = i }
+    for (let j = 2; j < 7; j++) {
+      let boxobj = document.querySelector("#player-info-" + j);
+      if (!player_box.includes(j)) {
+        boxobj.style.display = "none";
+      } else {
+        boxobj.style.display = "block";
+      }
     }
+
 
     for (let i = 0; i < this.game.players.length; i++) {
 
@@ -1303,13 +1337,6 @@ console.log("HERE: " + JSON.stringify(this.game.state.player_names) + " ------ "
     // hide empty
     //
 
-    for (let j = 1; j < 7; j++) {
-      let boxname = "#player-info-" + j;
-      let boxobj = document.querySelector(boxname);
-      if (boxobj.querySelector('.info').innerHTML == "") {
-        boxobj.style.display = "none";
-      }
-    }
 
   }
 
@@ -2380,6 +2407,22 @@ console.log("HERE: " + JSON.stringify(this.game.state.player_names) + " ------ "
     });
   }
 
+  updateStatus(str) {
+
+    if (this.lock_interface == 1) { return; }
+
+    this.game.status = str;
+
+    try {
+      if (this.browser_active == 1) {
+        let status_obj = document.getElementById("status");
+        if (this.game.players.includes(this.app.wallet.returnPublicKey())) {
+          status_obj.innerHTML = str;
+        }
+      }
+    } catch (err) { }
+
+  }
 
 
 
