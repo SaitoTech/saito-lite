@@ -8818,6 +8818,14 @@ console.log("MOVE: " + mv[0]);
   	    this.game.confirms_received += parseInt(mv[2]);
   	    this.game.confirms_players.push(mv[3]);
 
+	    //
+	    // set confirming player as inactive
+	    //
+	    for (let i = 0; i < this.game.players.length; i++) {
+	      if (this.game.players[i] === mv[3]) {
+	        this.setPlayerInactive((i+1));
+	      }
+	    }
 
 	    //
 	    //
@@ -8931,6 +8939,8 @@ console.log("MOVE: " + mv[0]);
         let player = parseInt(mv[1]);
   	this.game.queue.splice(qe, 1);
 
+        this.setPlayerActiveOnly(player);
+
         if (imperium_self.game.player == player) {
             imperium_self.playerResearchTechnology(function(tech) {
               imperium_self.addMove("purchase\t"+imperium_self.game.player+"\ttech\t"+tech);
@@ -9043,6 +9053,8 @@ console.log("MOVE: " + mv[0]);
   	let player = mv[1];
   	let sector = mv[2];
 
+	this.setPlayerActiveOnly(player);
+
         this.game.queue.splice(qe, 1);
 
   	//
@@ -9121,6 +9133,8 @@ console.log("MOVE: " + mv[0]);
 	if (this.game.state.active_player_turn == player) { contplay = 1; }
 	if (parseInt(mv[2]) == 1) { contplay = 1; }
 	this.game.state.active_player_turn = player;
+
+	this.setPlayerActiveOnly(player);
 
 	try {
           document.documentElement.style.setProperty('--playing-color', `var(--p${player})`);
@@ -9656,6 +9670,10 @@ console.log("we think this is a player agenda: " + JSON.stringify(this.game.stat
 	    i = this.game.players_info.length; 
 	  }
         }
+
+
+        this.setPlayerActiveOnly(who_is_next);
+
 
 	if (this.game.player != who_is_next) {
 
@@ -10223,6 +10241,8 @@ console.log("we think this is a player agenda: " + JSON.stringify(this.game.stat
       if (mv[0] === "pickstrategy") {
   
   	let player       = parseInt(mv[1]);
+
+        this.setPlayerActiveOnly(player);
 
   	if (this.game.player == player) {
   	  this.playerSelectStrategyCards(function(card) {
@@ -10910,6 +10930,12 @@ imperium_self.saveGame(imperium_self.game.id);
 
   	let player = parseInt(mv[1]);
 	let z = this.returnEventObjects();
+
+	//
+	// set player as inactive
+	//
+alert("setting player as inactive...");
+        this.setPlayerInactive(player);
 
         this.game.state.active_player_moved = 0;
         this.game.state.active_player_turn = -1;
@@ -13054,9 +13080,18 @@ imperium_self.saveGame(imperium_self.game.id);
   
   
   resetConfirmsNeeded(num) {
+
     this.game.confirms_needed   = num;
     this.game.confirms_received = 0;
     this.game.confirms_players  = [];
+
+    // if confirms in the number of players, we set them all as active
+    if (this.game.confirms_needed == this.game.players_info.length) {
+      for (let i = 1; i <= this.game.players_info.length; i++) {
+	this.setPlayerActive(i);
+      }
+    }
+
   }
 
 
@@ -20785,6 +20820,21 @@ addEventsToBoard() {
 
 }
 
+
+setPlayerActive(player) {
+  let divclass = ".dash-faction-status-"+player;
+  $(divclass).css('background-color', 'green');
+}
+setPlayerInactive(player) {
+  let divclass = ".dash-faction-status-"+player;
+  $(divclass).css('background-color', 'red');
+}
+setPlayerActiveOnly(player) {
+  for (let i = 1; i <= this.game.players_info.length; i++) {
+    if (player == i) { this.setPlayerActive(i); } else { this.setPlayerInactive(i); }  
+  }
+}
+
 returnFactionDashboard() {
 
   let html = '';
@@ -20819,7 +20869,7 @@ returnFactionDashboard() {
       </div>
 
       <div data-id="${(i+1)}" class="dash-faction-base">
-	<div class="dash-faction-status"></div>
+	<div class="dash-faction-status-${(i+1)} dash-faction-status"></div>
 	commodities : <span class="dash-item-commodities">${this.game.players_info[i].commodities}</span> / <span class="dash-item-commodity-limit">${this.game.players_info[i].commodity_limit}</span>
       </div>
     </div>

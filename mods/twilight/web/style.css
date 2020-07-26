@@ -270,6 +270,10 @@ body {
   height: 380px;
 }
 
+.hud-menu-topleft {
+  display: none;
+}
+
 /* #menu-container {}
 
 #menu-container > div {

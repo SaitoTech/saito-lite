@@ -105,9 +105,18 @@
   
   
   resetConfirmsNeeded(num) {
+
     this.game.confirms_needed   = num;
     this.game.confirms_received = 0;
     this.game.confirms_players  = [];
+
+    // if confirms in the number of players, we set them all as active
+    if (this.game.confirms_needed == this.game.players_info.length) {
+      for (let i = 1; i <= this.game.players_info.length; i++) {
+	this.setPlayerActive(i);
+      }
+    }
+
   }
 
 

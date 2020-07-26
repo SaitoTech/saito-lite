@@ -401,10 +401,6 @@ console.log("\n\n\n\n");
 
   this.countries = this.game.countries;
 
-  // this.hud = new GameHud(this.app, 0, 0, this.menuItems());
-  // this.hud.render(this.app, this.game);
-  // this.hud.attachEvents(this.app, this.game);
-
   //
   // adjust screen ratio
   //

@@ -29,6 +29,21 @@ addEventsToBoard() {
 
 }
 
+
+setPlayerActive(player) {
+  let divclass = ".dash-faction-status-"+player;
+  $(divclass).css('background-color', 'green');
+}
+setPlayerInactive(player) {
+  let divclass = ".dash-faction-status-"+player;
+  $(divclass).css('background-color', 'red');
+}
+setPlayerActiveOnly(player) {
+  for (let i = 1; i <= this.game.players_info.length; i++) {
+    if (player == i) { this.setPlayerActive(i); } else { this.setPlayerInactive(i); }  
+  }
+}
+
 returnFactionDashboard() {
 
   let html = '';
@@ -63,7 +78,7 @@ returnFactionDashboard() {
       </div>
 
       <div data-id="${(i+1)}" class="dash-faction-base">
-	<div class="dash-faction-status"></div>
+	<div class="dash-faction-status-${(i+1)} dash-faction-status"></div>
 	commodities : <span class="dash-item-commodities">${this.game.players_info[i].commodities}</span> / <span class="dash-item-commodity-limit">${this.game.players_info[i].commodity_limit}</span>
       </div>
     </div>
