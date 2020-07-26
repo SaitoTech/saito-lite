@@ -37,6 +37,7 @@ module.exports = ArcadeMain = {
       let button_text = {};
       button_text.join = "JOIN";
 
+
       //
       // eliminate "JOIN" button if I am in the game already
       //
@@ -44,18 +45,13 @@ module.exports = ArcadeMain = {
         delete button_text.join;
       }
 
-      let mygame = 0;
-      for (let i = 0; i < tx.transaction.from.length; i++) {
-	if (tx.transaction.from[i].add === app.wallet.returnPublicKey()) {
-	  mygame = 1;
-	}
-      }
-
-
-
       if (players) {
-        if (mygame == 1) {
+        if (players.includes(app.wallet.returnPublicKey())) {
           delete button_text.join;
+        }
+
+        if (players.includes(app.wallet.returnPublicKey())) {
+          button_text.cancel = "CANCEL";
         }
       }
 
@@ -71,12 +67,12 @@ module.exports = ArcadeMain = {
 
             if (tx.msg.over == 1) {
               delete button_text.continue;
-            } else {
-	      button_text.cancel = "CANCEL";
-	    }
+            }
+
           }
         });
       }
+
       document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(app, tx, button_text);
     });
 
