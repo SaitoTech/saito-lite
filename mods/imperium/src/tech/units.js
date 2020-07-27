@@ -14,8 +14,9 @@
         }
       },
       upgradeUnit :       function(imperium_self, player, unit) {
-        if (unit.type == "carrier" && imperium_self.doesPlayerHaveTech(player, "carrier-ii")) {
-          return imperium_self.returnUnit("carrier-ii");
+        if (unit.type === "carrier" && unit.name !== "CarrierII" && imperium_self.doesPlayerHaveTech(player, "carrier-ii")) {
+console.log("returning upgraded carrier...");
+          return imperium_self.returnUnit("carrier-ii", player, 0);
         }
         return unit;
       },
@@ -37,7 +38,7 @@
       },
       upgradeUnit :       function(imperium_self, player, unit) {
         if (unit.type == "infantry" && imperium_self.doesPlayerHaveTech(player, "infantry-ii")) {
-          return imperium_self.returnUnit("infantry-ii");
+          return imperium_self.returnUnit("infantry-ii", player, 0);
         }
         return unit;
       },
@@ -58,7 +59,7 @@
       },
       upgradeUnit :       function(imperium_self, player, unit) {
         if (unit.type == "destroyer" && imperium_self.doesPlayerHaveTech(player, "destroyer-ii")) {
-          return imperium_self.returnUnit("destroyer-ii");
+          return imperium_self.returnUnit("destroyer-ii", player, 0);
         }
         return unit;
       },
@@ -79,7 +80,7 @@
       },
       upgradeUnit :       function(imperium_self, player, unit) {
         if (unit.type == "fighter" && imperium_self.doesPlayerHaveTech(player, "fighter-ii")) {
-          return imperium_self.returnUnit("fighter-ii");
+          return imperium_self.returnUnit("fighter-ii", player, 0);
         }
         return unit;
       },
@@ -100,7 +101,7 @@
       },
       upgradeUnit :       function(imperium_self, player, unit) {
         if (unit.type == "cruiser" && imperium_self.doesPlayerHaveTech(player, "cruiser-ii")) {
-          return imperium_self.returnUnit("cruiser-ii");
+          return imperium_self.returnUnit("cruiser-ii", player, 0);
         }
         return unit;
       },
@@ -121,7 +122,7 @@
       },
       upgradeUnit :       function(imperium_self, player, unit) {
         if (unit.type == "dreadnaught" && imperium_self.doesPlayerHaveTech(player, "dreadnaught-ii")) {
-          return imperium_self.returnUnit("dreadnaught-ii");
+          return imperium_self.returnUnit("dreadnaught-ii", player, 0);
         }
         return unit;
       },

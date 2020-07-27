@@ -70,7 +70,10 @@ module.exports = ArcadeMain = {
             }
 
           }
-        });
+
+	  button_text.cancel = "CANCEL";
+
+	});
       }
 
       document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(app, tx, button_text);

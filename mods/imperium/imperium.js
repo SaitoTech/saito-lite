@@ -562,8 +562,9 @@ class Imperium extends GameTemplate {
         }
       },
       upgradeUnit :       function(imperium_self, player, unit) {
-        if (unit.type == "carrier" && imperium_self.doesPlayerHaveTech(player, "carrier-ii")) {
-          return imperium_self.returnUnit("carrier-ii");
+        if (unit.type === "carrier" && unit.name !== "CarrierII" && imperium_self.doesPlayerHaveTech(player, "carrier-ii")) {
+console.log("returning upgraded carrier...");
+          return imperium_self.returnUnit("carrier-ii", player);
         }
         return unit;
       },
@@ -8180,6 +8181,8 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
 
   doesPlayerHaveTech(player, tech) {
 
+console.log("player: " + player + " ---- " + tech);
+
     for (let i = 0; i < this.game.players_info[player-1].tech.length; i++) {
       if (this.game.players_info[player-1].tech[i] == tech) { return 1; }
     }
@@ -8645,13 +8648,19 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
   
   upgradePlayerUnitsOnBoard(player) {
 
+console.log("upgradePlayerUnitsonBoard: " + player);
+
     for (var i in this.game.sectors) {
       for (let ii = 0; ii < this.game.sectors[i].units[player-1].length; ii++) {
+console.log(i + " -s- " + this.game.sectors[i].units[player-1][ii].type + " ------> " + player);
         this.game.sectors[i].units[player-1][ii] = this.upgradeUnit(this.game.sectors[i].units[player-1][ii], player);
+console.log(i + " -ss- " + ii + " ------> " + player);
       }
     }
+console.log("DONE!");
     for (var i in this.game.planets) {
       for (let ii = 0; ii < this.game.planets[i].units[player-1].length; ii++) {
+console.log(i + " -p- " + ii);
         this.game.planets[i].units[player-1][ii] = this.upgradeUnit(this.game.planets[i].units[player-1][ii], player);
       }
     }
@@ -8662,11 +8671,14 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
 
   upgradeUnit(unit, player_to_upgrade) {
 
-    let z = this.returnEventObjects();
+console.log("UPGRADING: " + unit + " >>>> " + player_to_upgrade);
 
-    for (let z_index in z) {
-      unit = z[z_index].upgradeUnit(this, player_to_upgrade, unit);
-    }
+    let z = this.returnEventObjects();
+    for (let z_index in z) { 
+console.log("ZINDEX: " +z[z_index].name );
+unit = z[z_index].upgradeUnit(this, player_to_upgrade, unit); }
+
+console.log("Returning Unit");
 
     return unit;
   }
@@ -21160,10 +21172,10 @@ displayFactionDashboard() {
 
     pl = "p" + (i+1);
 
-    let total_resources = this.returnTotalResources((i+1));
-    let available_resources = this.returnAvailableResources((i+1));
-    let total_influence = this.returnTotalInfluence((i+1));
-    let available_influence = this.returnAvailableInfluence((i+1));
+    let total_resources = this.returnTotalResources((i+1)) - this.game.players_info[i].goods;
+    let available_resources = this.returnAvailableResources((i+1)) - this.game.players_info[i].goods;
+    let total_influence = this.returnTotalInfluence((i+1)) - this.game.players_info[i].goods;
+    let available_influence = this.returnAvailableInfluence((i+1)) - this.game.players_info[i].goods;
 
     document.querySelector(`.${pl} .dash-faction-name`).innerHTML = this.returnFaction(i+1);
     document.querySelector(`.${pl} .resources .avail`).innerHTML = available_resources;

@@ -367,6 +367,8 @@ class Poker extends GameTemplate {
         return 0;
       }
 
+
+
       if (mv[0] === "turn") {
 
         let player_to_go = parseInt(mv[1]);
@@ -431,10 +433,15 @@ class Poker extends GameTemplate {
           return 1;
         }
 
+console.log("plays_since_last-raise: " + this.game.state.plays_since_last_raise);
+console.log("players_length: " + this.game.players.length);
+
         //
         // CHECK TO SEE IF WE NEED TO FLIP CARDS
         //
         if (this.game.state.plays_since_last_raise >= this.game.players.length) {
+
+console.log("we need to flip cards...");
 
           //
           // figure out who won...
@@ -469,6 +476,8 @@ class Poker extends GameTemplate {
             cards_to_flip = 3;
           }
 
+console.log("FLIPPED STATE: " + this.game.state.flipped);
+
           this.game.state.flipped += cards_to_flip;
           for (let z = 0; z < cards_to_flip; z++) {
             for (let i = this.game.players.length - 1; i >= 0; i--) {
@@ -480,11 +489,17 @@ class Poker extends GameTemplate {
           return 1;
         }
 
+console.log("PLAYS SINCE LAST RAISE: " + this.game.state.plays_since_last_raise);
+
         this.game.state.plays_since_last_raise++;
         if (this.game.state.plays_since_last_raise == 0) {
           this.game.state.plays_since_last_raise++;
         }
         this.game.state.turn++;
+
+console.log("player to go and passed: " + player_to_go + " --- " + this.game.state.passed[player_to_go]);
+
+console.log("players_length: " + this.game.players.length);
 
         if (this.game.state.passed[player_to_go - 1] == 1) {
           this.game.queue.splice(qe, 1);
@@ -1353,8 +1368,12 @@ class Poker extends GameTemplate {
 
     document.querySelector('#deal').innerHTML = "";
 
+console.log("POOL DUMP: "+ JSON.stringify(this.game.pool[0]));
+
     for (let i = 0; i < 5 || i < this.game.pool[0].hand.length; i++) {
       let card = {};
+
+
       if (i < this.game.pool[0].hand.length) { card = this.game.pool[0].cards[this.game.pool[0].hand[i]]; } else { card.name = "red_back.png"; }
       // let card_img = card.name + ".png";
       let html = `<img class="card" src="${this.card_img_dir}/${card.name}">`;

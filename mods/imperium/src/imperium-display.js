@@ -119,10 +119,10 @@ displayFactionDashboard() {
 
     pl = "p" + (i+1);
 
-    let total_resources = this.returnTotalResources((i+1));
-    let available_resources = this.returnAvailableResources((i+1));
-    let total_influence = this.returnTotalInfluence((i+1));
-    let available_influence = this.returnAvailableInfluence((i+1));
+    let total_resources = this.returnTotalResources((i+1)) - this.game.players_info[i].goods;
+    let available_resources = this.returnAvailableResources((i+1)) - this.game.players_info[i].goods;
+    let total_influence = this.returnTotalInfluence((i+1)) - this.game.players_info[i].goods;
+    let available_influence = this.returnAvailableInfluence((i+1)) - this.game.players_info[i].goods;
 
     document.querySelector(`.${pl} .dash-faction-name`).innerHTML = this.returnFaction(i+1);
     document.querySelector(`.${pl} .resources .avail`).innerHTML = available_resources;

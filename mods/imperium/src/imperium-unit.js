@@ -421,10 +421,13 @@
   }
   
   
-  returnUnit(type = "", player) {
+  returnUnit(type = "", player, upgrade_unit=1) {
     let unit = JSON.parse(JSON.stringify(this.units[type]));
     unit.owner = player;
-    unit = this.upgradeUnit(unit, player);
+    // this is optional as otherwise we can have a loop
+    if (upgrade_unit == 1) {
+      unit = this.upgradeUnit(unit, player);
+    }
     return unit;
   };
   
@@ -432,13 +435,19 @@
   
   upgradePlayerUnitsOnBoard(player) {
 
+console.log("upgradePlayerUnitsonBoard: " + player);
+
     for (var i in this.game.sectors) {
       for (let ii = 0; ii < this.game.sectors[i].units[player-1].length; ii++) {
+console.log(i + " -s- " + this.game.sectors[i].units[player-1][ii].type + " ------> " + player);
         this.game.sectors[i].units[player-1][ii] = this.upgradeUnit(this.game.sectors[i].units[player-1][ii], player);
+console.log(i + " -ss- " + ii + " ------> " + player);
       }
     }
+console.log("DONE!");
     for (var i in this.game.planets) {
       for (let ii = 0; ii < this.game.planets[i].units[player-1].length; ii++) {
+console.log(i + " -p- " + ii);
         this.game.planets[i].units[player-1][ii] = this.upgradeUnit(this.game.planets[i].units[player-1][ii], player);
       }
     }
@@ -449,11 +458,14 @@
 
   upgradeUnit(unit, player_to_upgrade) {
 
-    let z = this.returnEventObjects();
+console.log("UPGRADING: " + unit + " >>>> " + player_to_upgrade);
 
-    for (let z_index in z) {
-      unit = z[z_index].upgradeUnit(this, player_to_upgrade, unit);
-    }
+    let z = this.returnEventObjects();
+    for (let z_index in z) { 
+console.log("ZINDEX: " +z[z_index].name );
+unit = z[z_index].upgradeUnit(this, player_to_upgrade, unit); }
+
+console.log("Returning Unit");
 
     return unit;
   }
