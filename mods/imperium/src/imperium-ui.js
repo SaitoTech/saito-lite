@@ -39,11 +39,11 @@
         name: 'Tech',
         callback: this.handleTechMenuItem.bind(this)
       },
-      'game-player': {
+      'game-strategy': {
         name: 'Strategy',
         callback: this.handleStrategyMenuItem.bind(this)
       },
-      'game-player': {
+      'game-objectives': {
         name: 'VP Cards',
         callback: this.handleObjectivesMenuItem.bind(this)
       },
@@ -60,10 +60,12 @@
   }
   
   handleStrategyMenuItem() {
+    $('.strategy_overlay').html(this.returnStrategyOverlay());
     $('.strategy_overlay').removeClass("hidden");
   }
   
   handleObjectivesMenuItem() {
+    $('.objectives_overlay').html(this.returnObjectivesOverlay());
     $('.objectives_overlay').removeClass("hidden");
   }
   

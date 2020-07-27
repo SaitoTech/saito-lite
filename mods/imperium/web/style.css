@@ -678,6 +678,34 @@ body {
   color: var(--my-color);
 }
 
+#objectives_overlay {
+  position: absolute;
+  width: auto;
+  height: auto;
+  padding: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid var(--my-color);
+  z-index: 99;
+  background-color: #4448;
+  font-family: 'orbitron-medium', 'bank-gothic', arial, helvetica, sans-serif;
+  background-image: url('/imperium/tech_tree.png');
+  background-size: "contain";
+}
+#strategy_overlay {
+  position: absolute;
+  width: auto;
+  height: auto;
+  padding: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid var(--my-color);
+  z-index: 99;
+  background-color: #4448;
+  font-family: 'orbitron-medium', 'bank-gothic', arial, helvetica, sans-serif;
+  background-image: url('/imperium/tech_tree.png');
+  background-size: "contain";
+}
 #tech_overlay {
   position: absolute;
   width: auto;

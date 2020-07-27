@@ -8070,8 +8070,42 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
         name: 'Laws',
         callback: this.handleLawsMenuItem.bind(this)
       },
+      'game-tech': {
+        name: 'Tech',
+        callback: this.handleTechMenuItem.bind(this)
+      },
+      'game-strategy': {
+        name: 'Strategy',
+        callback: this.handleStrategyMenuItem.bind(this)
+      },
+      'game-objectives': {
+        name: 'VP Cards',
+        callback: this.handleObjectivesMenuItem.bind(this)
+      },
     }
   }
+
+
+
+
+
+
+  handleTechMenuItem() {
+    $('.tech_overlay').removeClass("hidden");
+  }
+  
+  handleStrategyMenuItem() {
+    $('.strategy_overlay').html(this.returnStrategyOverlay());
+    $('.strategy_overlay').removeClass("hidden");
+  }
+  
+  handleObjectivesMenuItem() {
+    $('.objectives_overlay').html(this.returnObjectivesOverlay());
+    $('.objectives_overlay').removeClass("hidden");
+  }
+  
+  
+  
 
 
   handleSystemsMenuItem() {
@@ -21152,6 +21186,42 @@ returnFactionSheets() {
 }
 
 
+
+returnStrategyOverlay() {
+
+
+}
+
+returnObjectivesOverlay() {
+
+  let html = '';
+
+  //
+  // OBJECTIVES
+  //
+  for (let i = 0; i < this.game.players_info; i++) {
+
+    if (i > 0) { html += '<p></p>'; }
+
+    let objc = imperium_self.returnPlayerObjectives((i+1));
+    for (let i in objc) {
+      if (this.game.players_info[player-1].objectives_scored.includes(i)) {
+        html += '<div class="faction_sheet_action_card bc" style="background-image: url(/imperium/img/secret_objective_back.png)">';
+      } else {
+        html += '<div class="faction_sheet_action_card bc" style="background-image: url(/imperium/img/secret_objective_back.png)">';
+      }
+    }
+
+  }
+
+  return html;
+
+}
+
+
+
+
+
 displayFactionDashboard() {
 
   let imperium_self = this;
@@ -21205,9 +21275,7 @@ displayFactionSheet(player) {
   }
 
   let divar = "faction_content_"+player;
-console.log(divar);
   let html = imperium_self.returnFactionSheet(imperium_self, player);
-console.log(document.getElementById(divar));
   document.getElementById(divar).innerHTML = html;
 
   if (document.querySelector('.interface_overlay').classList.contains('hidden')) {
@@ -22049,6 +22117,7 @@ updateSectorGraphics(sector) {
   hideTechCard(tech) {
     $('.cardbox').hide();
   }
+
 
 
   

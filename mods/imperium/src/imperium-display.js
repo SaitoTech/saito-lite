@@ -106,6 +106,42 @@ returnFactionSheets() {
 }
 
 
+
+returnStrategyOverlay() {
+
+
+}
+
+returnObjectivesOverlay() {
+
+  let html = '';
+
+  //
+  // OBJECTIVES
+  //
+  for (let i = 0; i < this.game.players_info; i++) {
+
+    if (i > 0) { html += '<p></p>'; }
+
+    let objc = imperium_self.returnPlayerObjectives((i+1));
+    for (let i in objc) {
+      if (this.game.players_info[player-1].objectives_scored.includes(i)) {
+        html += '<div class="faction_sheet_action_card bc" style="background-image: url(/imperium/img/secret_objective_back.png)">';
+      } else {
+        html += '<div class="faction_sheet_action_card bc" style="background-image: url(/imperium/img/secret_objective_back.png)">';
+      }
+    }
+
+  }
+
+  return html;
+
+}
+
+
+
+
+
 displayFactionDashboard() {
 
   let imperium_self = this;
@@ -159,9 +195,7 @@ displayFactionSheet(player) {
   }
 
   let divar = "faction_content_"+player;
-console.log(divar);
   let html = imperium_self.returnFactionSheet(imperium_self, player);
-console.log(document.getElementById(divar));
   document.getElementById(divar).innerHTML = html;
 
   if (document.querySelector('.interface_overlay').classList.contains('hidden')) {
@@ -1003,5 +1037,6 @@ updateSectorGraphics(sector) {
   hideTechCard(tech) {
     $('.cardbox').hide();
   }
+
 
 
