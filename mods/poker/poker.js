@@ -1269,7 +1269,7 @@ class Poker extends GameTemplate {
     } else {
       //salert("You are not in or have been removed from this game.")
       //return;
-      document.querySelector('.status').innerHTML = "You are out of the game.<br />Feel free to hang out and watch.";
+      document.querySelector('.status').innerHTML = "You are out of the game.<br />Feel free to hang out and chat.";
       document.querySelector('.cardfan').classList.add('hidden');
       player_box = this.returnViewBoxArray();
     }
