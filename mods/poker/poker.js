@@ -433,15 +433,10 @@ class Poker extends GameTemplate {
           return 1;
         }
 
-console.log("plays_since_last-raise: " + this.game.state.plays_since_last_raise);
-console.log("players_length: " + this.game.players.length);
-
         //
         // CHECK TO SEE IF WE NEED TO FLIP CARDS
         //
         if (this.game.state.plays_since_last_raise >= this.game.players.length) {
-
-console.log("we need to flip cards...");
 
           //
           // figure out who won...
@@ -476,8 +471,6 @@ console.log("we need to flip cards...");
             cards_to_flip = 3;
           }
 
-console.log("FLIPPED STATE: " + this.game.state.flipped);
-
           this.game.state.flipped += cards_to_flip;
           for (let z = 0; z < cards_to_flip; z++) {
             for (let i = this.game.players.length - 1; i >= 0; i--) {
@@ -489,17 +482,11 @@ console.log("FLIPPED STATE: " + this.game.state.flipped);
           return 1;
         }
 
-console.log("PLAYS SINCE LAST RAISE: " + this.game.state.plays_since_last_raise);
-
         this.game.state.plays_since_last_raise++;
         if (this.game.state.plays_since_last_raise == 0) {
           this.game.state.plays_since_last_raise++;
         }
         this.game.state.turn++;
-
-console.log("player to go and passed: " + player_to_go + " --- " + this.game.state.passed[player_to_go]);
-
-console.log("players_length: " + this.game.players.length);
 
         if (this.game.state.passed[player_to_go - 1] == 1) {
           this.game.queue.splice(qe, 1);
@@ -698,9 +685,6 @@ console.log("players_length: " + this.game.players.length);
             this.game.state.player_credit[this.game.state.big_blind_player - 1] = 0;
             this.game.state.passed[this.game.state.big_blind_player - 1] = 1;
           } else {
-
-
-            console.log("HERE: " + JSON.stringify(this.game.state.player_names) + " ------ " + this.game.state.big_blind_player);
 
             this.updateLog(this.game.state.player_names[this.game.state.big_blind_player - 1] + " deposits " + this.game.state.big_blind);
             this.game.state.player_pot[this.game.state.big_blind_player - 1] += this.game.state.big_blind;
@@ -1093,14 +1077,13 @@ console.log("players_length: " + this.game.players.length);
 
     if (this.browser_active == 0) { return; }
 
-    //try {
-    this.displayPlayers();
-    this.displayHand();
-    console.log("showing table...");
-    this.displayTable();
-    //   } catch (err) {
-    //     console.log("err: " + err);
-    //   }
+    try {
+      this.displayPlayers();
+      this.displayHand();
+      this.displayTable();
+    } catch (err) {
+      console.log("err: " + err);
+    }
 
   }
 
@@ -1367,8 +1350,6 @@ console.log("players_length: " + this.game.players.length);
     //
 
     document.querySelector('#deal').innerHTML = "";
-
-console.log("POOL DUMP: "+ JSON.stringify(this.game.pool[0]));
 
     for (let i = 0; i < 5 || i < this.game.pool[0].hand.length; i++) {
       let card = {};
