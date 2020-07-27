@@ -246,6 +246,11 @@ addUIEvents() {
       });
     });
   });
+  document.querySelectorAll('.overlay').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      e.target.classList.add("hidden");
+    });
+  });
 }
 
 

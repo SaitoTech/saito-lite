@@ -686,6 +686,26 @@ body {
   z-index: 99;
 }
 
+.overlay::after {
+  content: "\00D7";
+  position: absolute;
+  top: -20px;
+  right: -15px;
+  font-size: 40px;
+  color: #fff;
+  border: 3px #fff solid;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 48px;
+  background-color: #888;
+  border-radius: 50%;
+}
+
+.objectives_overlay:after {
+  line-height: 38px;
+}
+
 .tech_overlay {
   width: auto;
   height: auto;
