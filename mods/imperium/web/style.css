@@ -562,15 +562,15 @@ body {
   right: 0;
 }
 
-.tech_card .tech_card_name {
+.faction_sheet .tech_card .tech_card_name {
   font-size: 3em;
 }
 
-.tech_card .tech_card_content {
+.faction_sheet .tech_card .tech_card_content {
   font-size: 1.7em;
 }
 
-.tech_card .tech_card_level {
+.faction_sheet .tech_card .tech_card_level {
   font-size: 3em;
   background-color: #444;
   ;
@@ -715,21 +715,46 @@ body {
   background-image: url('/imperium/tech_tree.png');
   background-size: "contain";
 }
-#tech_overlay {
+.overlay {
   position: absolute;
+  top: 40vh;
+  left: 50vw;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+}
+
+.overlay::after {
+  content: "\00D7";
+  position: absolute;
+  top: -20px;
+  right: -15px;
+  font-size: 40px;
+  color: #fff;
+  border: 3px #fff solid;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 48px;
+  background-color: #888;
+  border-radius: 50%;
+}
+
+.objectives_overlay:after {
+  line-height: 38px;
+}
+
+.tech_overlay {
   width: auto;
   height: auto;
   padding: 10px;
-  margin-left: auto;
-  margin-right: auto;
   border: 1px solid var(--my-color);
-  z-index: 99;
   background-color: #4448;
   font-family: 'orbitron-medium', 'bank-gothic', arial, helvetica, sans-serif;
   background-image: url('/imperium/tech_tree.png');
   background-size: "contain";
 }
-#interface_overlay {
+
+.interface_overlay {
   position: absolute;
   width: 80vw;
   height: 80vh;
@@ -974,7 +999,6 @@ body {
 
 .vp-faction-name {
   color: #fff;
-  background-color: #4448;
   display: inline-block;
   padding: 2px;
   position: relative;
@@ -1355,9 +1379,7 @@ body {
   margin-left: 15em;
 }
 
-.p1 .dash-faction-name {
-  background-color: var(--p1);
-}
+
 .dash-faction-base {
   background-color: #000;
   opacity: 0.95;
@@ -1381,7 +1403,8 @@ body {
   text-align: center;
   font-size: 0.9em;
   text-align: center;
-  color: #fff
+  color: #fff;
+  cursor: pointer;
 }
 
 .dash-faction {
