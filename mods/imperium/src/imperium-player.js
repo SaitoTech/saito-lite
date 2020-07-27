@@ -2167,21 +2167,14 @@ console.log("ERROR: you had no hits left to assign, bug?");
     // Stage I Public Objectives
     for (let i = 0; i < imperium_self.game.state.stage_i_objectives.length; i++) {
 
-      console.log("3 -> " + JSON.stringify(imperium_self.game.players_info[imperium_self.game.player-1]));
-      console.log("4 -> " + JSON.stringify(imperium_self.game.state.stage_i_objectives));
-
       if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored.includes(imperium_self.game.state.stage_i_objectives[i])) {
-      console.log("5 -> " + JSON.stringify(imperium_self.game.state.stage_i_objectives));
 	if (imperium_self.canPlayerScoreVictoryPoints(imperium_self.game.player, imperium_self.game.state.stage_i_objectives[i], 1)) {
-      console.log("6 -> " + JSON.stringify(imperium_self.game.state.stage_i_objectives));
 	  if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(imperium_self.game.state.stage_i_objectives[i])) {
-      console.log("7 -> " + JSON.stringify(imperium_self.game.state.stage_i_objectives));
             html += '1 VP Public Objective: <li class="option stage1" id="'+imperium_self.game.state.stage_i_objectives[i]+'">'+imperium_self.game.deck[3].cards[imperium_self.game.state.stage_i_objectives[i]].name+'</li>';
           }
         }
       }
     }
-      console.log("8 -> " + JSON.stringify(imperium_self.game.state.stage_i_objectives));
   
     // Stage II Public Objectives
     for (let i = 0; i < imperium_self.game.state.stage_ii_objectives.length; i++) {
@@ -2237,12 +2230,9 @@ console.log("ERROR: you had no hits left to assign, bug?");
 
         let objective = action;
         let vp = 1;
-alert("objectives...: " + objective);
         if (imperium_self.stage_ii_objectives[objective]) {
           if (imperium_self.stage_ii_objectives[objective].vp > 1) { vp = imperium_self.stage_ii_objectives[objective].vp; }
 	}
-alert("objectives... 2: " + objective);
-
 
         mycallback(imperium_self, vp, objective);
   

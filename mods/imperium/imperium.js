@@ -564,7 +564,7 @@ class Imperium extends GameTemplate {
       upgradeUnit :       function(imperium_self, player, unit) {
         if (unit.type === "carrier" && unit.name !== "CarrierII" && imperium_self.doesPlayerHaveTech(player, "carrier-ii")) {
 console.log("returning upgraded carrier...");
-          return imperium_self.returnUnit("carrier-ii", player);
+          return imperium_self.returnUnit("carrier-ii", player, 0);
         }
         return unit;
       },
@@ -586,7 +586,7 @@ console.log("returning upgraded carrier...");
       },
       upgradeUnit :       function(imperium_self, player, unit) {
         if (unit.type == "infantry" && imperium_self.doesPlayerHaveTech(player, "infantry-ii")) {
-          return imperium_self.returnUnit("infantry-ii");
+          return imperium_self.returnUnit("infantry-ii", player, 0);
         }
         return unit;
       },
@@ -607,7 +607,7 @@ console.log("returning upgraded carrier...");
       },
       upgradeUnit :       function(imperium_self, player, unit) {
         if (unit.type == "destroyer" && imperium_self.doesPlayerHaveTech(player, "destroyer-ii")) {
-          return imperium_self.returnUnit("destroyer-ii");
+          return imperium_self.returnUnit("destroyer-ii", player, 0);
         }
         return unit;
       },
@@ -628,7 +628,7 @@ console.log("returning upgraded carrier...");
       },
       upgradeUnit :       function(imperium_self, player, unit) {
         if (unit.type == "fighter" && imperium_self.doesPlayerHaveTech(player, "fighter-ii")) {
-          return imperium_self.returnUnit("fighter-ii");
+          return imperium_self.returnUnit("fighter-ii", player, 0);
         }
         return unit;
       },
@@ -649,7 +649,7 @@ console.log("returning upgraded carrier...");
       },
       upgradeUnit :       function(imperium_self, player, unit) {
         if (unit.type == "cruiser" && imperium_self.doesPlayerHaveTech(player, "cruiser-ii")) {
-          return imperium_self.returnUnit("cruiser-ii");
+          return imperium_self.returnUnit("cruiser-ii", player, 0);
         }
         return unit;
       },
@@ -670,7 +670,7 @@ console.log("returning upgraded carrier...");
       },
       upgradeUnit :       function(imperium_self, player, unit) {
         if (unit.type == "dreadnaught" && imperium_self.doesPlayerHaveTech(player, "dreadnaught-ii")) {
-          return imperium_self.returnUnit("dreadnaught-ii");
+          return imperium_self.returnUnit("dreadnaught-ii", player, 0);
         }
         return unit;
       },
@@ -2031,9 +2031,9 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
             imperium_self.addMove("resolve\tstrategy");
             imperium_self.addMove("strategy\t"+"imperial"+"\t"+strategy_card_player+"\t2");
             imperium_self.addMove("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
-            this.game.queue.push("gain\t"+strategy_card_player+"\tsecret_objectives\t2");
+            imperium_self.addMove("gain\t"+strategy_card_player+"\tsecret_objectives\t1");
             for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-              imperium_self.game.queue.push("DEAL\t6\t"+(i+1)+"\t1");
+              imperium_self.addMove("DEAL\t6\t"+(i+1)+"\t1");
             }
 	    imperium_self.endTurn();
 	  };
@@ -2079,8 +2079,8 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
 
   	  return 0;
         }
-      }
 
+      }
     });
 
 
@@ -8637,10 +8637,13 @@ console.log("player: " + player + " ---- " + tech);
   }
   
   
-  returnUnit(type = "", player) {
+  returnUnit(type = "", player, upgrade_unit=1) {
     let unit = JSON.parse(JSON.stringify(this.units[type]));
     unit.owner = player;
-    unit = this.upgradeUnit(unit, player);
+    // this is optional as otherwise we can have a loop
+    if (upgrade_unit == 1) {
+      unit = this.upgradeUnit(unit, player);
+    }
     return unit;
   };
   
@@ -15396,21 +15399,14 @@ console.log("ERROR: you had no hits left to assign, bug?");
     // Stage I Public Objectives
     for (let i = 0; i < imperium_self.game.state.stage_i_objectives.length; i++) {
 
-      console.log("3 -> " + JSON.stringify(imperium_self.game.players_info[imperium_self.game.player-1]));
-      console.log("4 -> " + JSON.stringify(imperium_self.game.state.stage_i_objectives));
-
       if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored.includes(imperium_self.game.state.stage_i_objectives[i])) {
-      console.log("5 -> " + JSON.stringify(imperium_self.game.state.stage_i_objectives));
 	if (imperium_self.canPlayerScoreVictoryPoints(imperium_self.game.player, imperium_self.game.state.stage_i_objectives[i], 1)) {
-      console.log("6 -> " + JSON.stringify(imperium_self.game.state.stage_i_objectives));
 	  if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.includes(imperium_self.game.state.stage_i_objectives[i])) {
-      console.log("7 -> " + JSON.stringify(imperium_self.game.state.stage_i_objectives));
             html += '1 VP Public Objective: <li class="option stage1" id="'+imperium_self.game.state.stage_i_objectives[i]+'">'+imperium_self.game.deck[3].cards[imperium_self.game.state.stage_i_objectives[i]].name+'</li>';
           }
         }
       }
     }
-      console.log("8 -> " + JSON.stringify(imperium_self.game.state.stage_i_objectives));
   
     // Stage II Public Objectives
     for (let i = 0; i < imperium_self.game.state.stage_ii_objectives.length; i++) {
@@ -15466,12 +15462,9 @@ console.log("ERROR: you had no hits left to assign, bug?");
 
         let objective = action;
         let vp = 1;
-alert("objectives...: " + objective);
         if (imperium_self.stage_ii_objectives[objective]) {
           if (imperium_self.stage_ii_objectives[objective].vp > 1) { vp = imperium_self.stage_ii_objectives[objective].vp; }
 	}
-alert("objectives... 2: " + objective);
-
 
         mycallback(imperium_self, vp, objective);
   
@@ -21242,6 +21235,7 @@ console.log(document.getElementById(divar));
 
 addUIEvents() {
 
+
   var imperium_self = this;
 
   if (this.browser_active == 0) { return; }
@@ -21287,8 +21281,8 @@ addUIEvents() {
     document.querySelector(`.faction_content.p${(i+1)}`).innerHTML = imperium_self.returnFactionSheet(imperium_self, (i+1));
   }
 
-  var html = this.returnTokenDisplay(); 
-  document.querySelector('.hud-header').innerHTML += html;
+  //var html = this.returnTokenDisplay(); 
+  //document.querySelector('.hud-header').innerHTML += html;
 
   document.querySelectorAll('.faction_sheet_buttons div').forEach((el) => {
     var target = el.dataset.action;

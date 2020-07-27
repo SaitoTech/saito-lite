@@ -189,6 +189,7 @@ console.log(document.getElementById(divar));
 
 addUIEvents() {
 
+
   var imperium_self = this;
 
   if (this.browser_active == 0) { return; }
@@ -234,8 +235,8 @@ addUIEvents() {
     document.querySelector(`.faction_content.p${(i+1)}`).innerHTML = imperium_self.returnFactionSheet(imperium_self, (i+1));
   }
 
-  var html = this.returnTokenDisplay(); 
-  document.querySelector('.hud-header').innerHTML += html;
+  //var html = this.returnTokenDisplay(); 
+  //document.querySelector('.hud-header').innerHTML += html;
 
   document.querySelectorAll('.faction_sheet_buttons div').forEach((el) => {
     var target = el.dataset.action;

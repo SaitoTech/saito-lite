@@ -35,8 +35,40 @@
         name: 'Laws',
         callback: this.handleLawsMenuItem.bind(this)
       },
+      'game-tech': {
+        name: 'Tech',
+        callback: this.handleTechMenuItem.bind(this)
+      },
+      'game-player': {
+        name: 'Strategy',
+        callback: this.handleStrategyMenuItem.bind(this)
+      },
+      'game-player': {
+        name: 'VP Cards',
+        callback: this.handleObjectivesMenuItem.bind(this)
+      },
     }
   }
+
+
+
+
+
+
+  handleTechMenuItem() {
+    $('.tech_overlay').removeClass("hidden");
+  }
+  
+  handleStrategyMenuItem() {
+    $('.strategy_overlay').removeClass("hidden");
+  }
+  
+  handleObjectivesMenuItem() {
+    $('.objectives_overlay').removeClass("hidden");
+  }
+  
+  
+  
 
 
   handleSystemsMenuItem() {

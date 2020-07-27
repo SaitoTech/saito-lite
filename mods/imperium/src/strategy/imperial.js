@@ -27,9 +27,9 @@
             imperium_self.addMove("resolve\tstrategy");
             imperium_self.addMove("strategy\t"+"imperial"+"\t"+strategy_card_player+"\t2");
             imperium_self.addMove("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
-            imperium_self.game.queue.push("gain\t"+strategy_card_player+"\tsecret_objectives\t1");
+            imperium_self.addMove("gain\t"+strategy_card_player+"\tsecret_objectives\t1");
             for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-              imperium_self.game.queue.push("DEAL\t6\t"+(i+1)+"\t1");
+              imperium_self.addMove("DEAL\t6\t"+(i+1)+"\t1");
             }
 	    imperium_self.endTurn();
 	  };
@@ -75,7 +75,7 @@
 
   	  return 0;
         }
-      }
 
+      }
     });
 
