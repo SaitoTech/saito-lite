@@ -553,15 +553,15 @@ body {
   right: 0;
 }
 
-.tech_card .tech_card_name {
+.faction_sheet .tech_card .tech_card_name {
   font-size: 3em;
 }
 
-.tech_card .tech_card_content {
+.faction_sheet .tech_card .tech_card_content {
   font-size: 1.7em;
 }
 
-.tech_card .tech_card_level {
+.faction_sheet .tech_card .tech_card_level {
   font-size: 3em;
   background-color: #444;
   ;
@@ -937,7 +937,6 @@ body {
 
 .vp-faction-name {
   color: #fff;
-  background-color: #4448;
   display: inline-block;
   padding: 2px;
   position: relative;
@@ -1318,9 +1317,7 @@ body {
   margin-left: 15em;
 }
 
-.p1 .dash-faction-name {
-  background-color: var(--p1);
-}
+
 .dash-faction-base {
   background-color: #000;
   opacity: 0.95;
@@ -1344,7 +1341,8 @@ body {
   text-align: center;
   font-size: 0.9em;
   text-align: center;
-  color: #fff
+  color: #fff;
+  cursor: pointer;
 }
 
 .dash-faction {

@@ -445,7 +445,7 @@ returnFactionSheet(imperium_self, player=null) {
       }
 
       html += `
-        <h3>Objectives</h3>
+        <h3 class="objectives anchor">Objectives</h3>
         <div class="faction_sheet_objectives">
           <div class="scored">
             <h4>Scored</h4>
