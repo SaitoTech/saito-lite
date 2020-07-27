@@ -1728,6 +1728,55 @@ console.log("RIDER: " + this.game.turn[i]);
     return x;
   
   }
+
+
+
+  returnPlayerObjectivesScored(player=null, types=[]) {
+
+    if (player == null) { player = this.game.player; }  
+
+    let x = [];
+
+    for (let i = 0; i < this.game.players_info[player-1].objectives_scored.length; i++) {
+
+	let objective_idx = this.game.players_info[player-1].objectives_scored[i];
+
+        if (this.stage_i_objectives[objective_idx] !== undefined) {
+          if (types.length == 0) {
+	    x.push(this.stage_i_objectives_objectives[objective_idx]);
+	  } else {
+  	    if (types.includes("stage_i_objectives")) {
+	      x.push(this.stage_i_objectives[objective_idx]);
+	    }
+	  }
+	}
+
+        if (this.stage_ii_objectives[objective_idx] !== undefined) {
+          if (types.length == 0) {
+	    x.push(this.stage_ii_objectives_objectives[objective_idx]);
+	  } else {
+  	    if (types.includes("stage_ii_objectives")) {
+	      x.push(this.stage_ii_objectives[objective_idx]);
+	    }
+	  }
+	}
+
+        if (this.secret_objectives[objective_idx] !== undefined) {
+          if (types.length == 0) {
+	    x.push(this.secret_objectives_objectives[objective_idx]);
+	  } else {
+  	    if (types.includes("secret_objectives")) {
+	      x.push(this.secret_objectives[objective_idx]);
+	    }
+	  }
+	}
+
+    }
+
+    return x;
+  
+  }
+  
   returnPlayerObjectives(player=null, types=[]) {
 
     if (player == null) { player = this.game.player; }  

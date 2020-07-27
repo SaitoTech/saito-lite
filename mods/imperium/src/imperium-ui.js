@@ -51,10 +51,6 @@
   }
 
 
-
-
-
-
   handleTechMenuItem() {
     $('.tech_overlay').removeClass("hidden");
   }
@@ -69,10 +65,6 @@
     $('.objectives_overlay').removeClass("hidden");
   }
   
-  
-  
-
-
   handleSystemsMenuItem() {
   
     let imperium_self = this;

@@ -115,23 +115,60 @@ returnStrategyOverlay() {
 returnObjectivesOverlay() {
 
   let html = '';
+  let imperium_self = this;
 
   //
-  // OBJECTIVES
+  // STAGE 1 OBJECTIVES
   //
-  for (let i = 0; i < this.game.players_info; i++) {
+  for (let i = 0; i < this.game.state.stage_i_objectives.length; i++) {
+    let obj = this.stage_i_objectives[this.game.state.stage_i_objectives[i]];
+    html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
+               <div class="objectives_card_name">${obj.name}</div>
+               <div class="objectives_card_content">${obj.text}</div>
+               <div class="objectives_players_scored players_scored_1 hidden p1"></div>
+               <div class="objectives_players_scored players_scored_2 hidden p2"></div>
+               <div class="objectives_players_scored players_scored_3 hidden p3"></div>
+               <div class="objectives_players_scored players_scored_4 hidden p4"></div>
+               <div class="objectives_players_scored players_scored_5 hidden p5"></div>
+               <div class="objectives_players_scored players_scored_6 hidden p5"></div>
+             </div>`;
+  }
 
+  html += '<p></p>';
+
+  //
+  // STAGE 2 OBJECTIVES
+  //
+  for (let i = 0; i < this.game.state.stage_ii_objectives.length; i++) {
+    let obj = this.stage_ii_objectives[this.game.state.stage_ii_objectives[i]];
+    html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
+               <div class="objectives_card_name">${obj.name}</div>
+               <div class="objectives_card_content">${obj.text}</div>
+               <div class="objectives_players_scored players_scored_1 hidden p1"></div>
+               <div class="objectives_players_scored players_scored_2 hidden p2"></div>
+               <div class="objectives_players_scored players_scored_3 hidden p3"></div>
+               <div class="objectives_players_scored players_scored_4 hidden p4"></div>
+               <div class="objectives_players_scored players_scored_5 hidden p5"></div>
+               <div class="objectives_players_scored players_scored_6 hidden p5"></div>
+             </div>`;
+  }
+
+  html += '<p></p>';
+
+
+  //
+  // SECRET OBJECTIVES
+  //
+  for (let i = 0; i < this.game.players_info.length; i++) {
     if (i > 0) { html += '<p></p>'; }
-
-    let objc = imperium_self.returnPlayerObjectives((i+1));
-    for (let i in objc) {
-      if (this.game.players_info[player-1].objectives_scored.includes(i)) {
-        html += '<div class="faction_sheet_action_card bc" style="background-image: url(/imperium/img/secret_objective_back.png)">';
-      } else {
-        html += '<div class="faction_sheet_action_card bc" style="background-image: url(/imperium/img/secret_objective_back.png)">';
-      }
+    let objc = imperium_self.returnPlayerObjectivesScored((i+1), ["secret_objectives"]);
+    for (let o in objc) {
+      html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${objc[o].img})">
+               <div class="objectives_card_name">${objc[o].name}</div>
+               <div class="objectives_card_content">${objc[o].text}</div>
+               <div class="objectives_players_scored players_scored_${(i+1)} hidden p${(i+1)}"></div>
+             </div>`;
     }
-
   }
 
   return html;

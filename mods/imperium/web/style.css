@@ -300,6 +300,15 @@ body {
   transform: scale(0.6);
 }
 
+.objectives_overlay_objectives_card {
+  width: 17vh;
+  height: 24vh;
+  float: left;
+  display: relative;
+  margin-right: 10px;
+  background-size: cover;
+}
+
 .token_count {
   font-size: 1em;
   margin-top: 0px;
