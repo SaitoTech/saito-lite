@@ -318,8 +318,9 @@ addUIEvents() {
     document.querySelector(`.faction_content.p${(i+1)}`).innerHTML = imperium_self.returnFactionSheet(imperium_self, (i+1));
   }
 
-  //var html = this.returnTokenDisplay(); 
-  //document.querySelector('.hud-header').innerHTML += html;
+  var html = this.returnTokenDisplay(); 
+  document.querySelector('.hud-header').append(elParser(html));
+
 
   document.querySelectorAll('.faction_sheet_buttons div').forEach((el) => {
     var target = el.dataset.action;
@@ -331,7 +332,8 @@ addUIEvents() {
   });
   document.querySelectorAll('.overlay').forEach((el) => {
     el.addEventListener('click', (e) => {
-      e.target.classList.add("hidden");
+      //e.target.classList.add("hidden");
+      imperium_self.hideOverlays();
     });
   });
 }

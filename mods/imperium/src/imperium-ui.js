@@ -51,16 +51,25 @@
   }
 
 
+  hideOverlays() {
+    document.querySelectorAll('.overlay').forEach(el => {
+      el.classList.add('hidden');      
+    });
+  }
+
   handleTechMenuItem() {
+    this.hideOverlays();
     $('.tech_overlay').removeClass("hidden");
   }
   
   handleStrategyMenuItem() {
+    this.hideOverlays();
     $('.strategy_overlay').html(this.returnStrategyOverlay());
     $('.strategy_overlay').removeClass("hidden");
   }
   
   handleObjectivesMenuItem() {
+    this.hideOverlays();
     $('.objectives_overlay').html(this.returnObjectivesOverlay());
     $('.objectives_overlay').removeClass("hidden");
   }

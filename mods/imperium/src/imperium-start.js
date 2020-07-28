@@ -1,7 +1,7 @@
 const GameHud = require('../../lib/templates/lib/game-hud/game-hud'); 
 const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
 const GameTemplate = require('../../lib/templates/gametemplate');
-  
+const elParser = require('../../lib/helpers/el_parser');
 class Imperium extends GameTemplate {
   
   constructor(app) {
