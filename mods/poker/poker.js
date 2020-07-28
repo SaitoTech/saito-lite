@@ -1468,6 +1468,7 @@ class Poker extends GameTemplate {
       if (this.returnHigherNumberCard(score1.cards_to_score[3], score2.cards_to_score[3]) == score2.cards_to_score[3]) {
         return 2;
       }
+      return 3;
     }
     if (score1.hand_description == "full house") { return 1; }
     if (score2.hand_description == "full house") { return 2; }
