@@ -21233,10 +21233,22 @@ returnStrategyOverlay() {
   let html = '';
   let imperium_self = this;
 
+  let strategy_card_state = "unplayed";
+  let strategy_card_player = -1;
+
   for (let i in this.strategy_cards) {
     let thiscard = this.strategy_cards[i];
-    html += '<div class="overlay_strategy_card_box"><img class="overlay_strategy_card_box_img" src="' + thiscard.img + '" style="width:100%" /><div class="overlay_strategy_card_text">'+thiscard.text+'</div></div>';
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      if (this.game.players_info[i].strategy.includes(thiscard)) {
+	strategy_card_player = (i+1);
+      };
+      if (this.game.players_info[i].strategy_cards_played.includes(thiscard)) {
+	strategy_card_state = "passed";
+      };
+    }
+    html += '<div class="overlay_strategy_card_box"><img class="overlay_strategy_card_box_img" src="' + thiscard.img + '" style="width:100%" /><div class="overlay_strategy_card_text">'+thiscard.text+'</div><div class="strategy_card_state p'+strategy_card_player+'"><div class="bk">'+strategy_card_state+'</div><div></div>';
   }
+
 
   return html;
 
