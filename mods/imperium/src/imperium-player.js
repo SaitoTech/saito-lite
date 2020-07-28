@@ -210,6 +210,27 @@
           html  += '<p style="margin-top:20px"></p>';
           html  += '<div class="terminal_header2 sf-readable"><div class="player_color_box '+playercol+'"></div>' + this.returnFaction(this.game.player) + ":</div><p><ul class='terminal_header3'>";
 
+      if (this.canPlayerPass(this.game.player) == 1) {
+	if (this.game.state.active_player_moved == 1) {
+	  //
+	  // if we have already moved, we end turn rather than pass
+	  //
+          html += '<li class="option" id="endturn">end turn</li>';
+	} else {
+	  //
+	  // otherwise we pass
+  	  //
+          html += '<li class="option" id="pass">pass</li>';
+        }
+      } else {
+	if (this.game.state.active_player_moved == 1) {
+	  //
+	  // if we have already moved, we end turn rather than pass
+	  //
+          html += '<li class="option" id="endturn">end turn</li>';
+        }
+      }
+
       if (this.game.state.round == 1 && this.game.state.active_player_moved == 0) {
           html += '<li class="option" id="tutorial_move_ships">move ships</li>';
           html += '<li class="option" id="tutorial_produce_units">produce units</li>';
@@ -254,26 +275,6 @@
       }
   
 
-      if (this.canPlayerPass(this.game.player) == 1) {
-	if (this.game.state.active_player_moved == 1) {
-	  //
-	  // if we have already moved, we end turn rather than pass
-	  //
-          html += '<li class="option" id="endturn">end turn</li>';
-	} else {
-	  //
-	  // otherwise we pass
-  	  //
-          html += '<li class="option" id="pass">pass</li>';
-        }
-      } else {
-	if (this.game.state.active_player_moved == 1) {
-	  //
-	  // if we have already moved, we end turn rather than pass
-	  //
-          html += '<li class="option" id="endturn">end turn</li>';
-        }
-      }
 
       html += '</ul></p>';
   
@@ -1749,6 +1750,10 @@ console.log("ERROR: you had no hits left to assign, bug?");
         options_available++;
       }
     }
+    if (this.game.tracker.trade == 0 && this.canPlayerTrade(this.game.player) == 1) {
+      html += '<li class="option" id="trade">trade</li>';
+    }
+
     //if (this.canPlayerPlayActionCard(player) && this.game.tracker.action_card == 0) {
     //  html += '<li class="option" id="action">action card</li>';
     //  options_available++;
@@ -1795,6 +1800,15 @@ console.log("ERROR: you had no hits left to assign, bug?");
         imperium_self.endTurn();
       }
 
+      if (action2 == "trade") {
+        imperium_self.playerTrade();
+        return 0;
+      }
+
+      if (this.game.tracker.trade == 0 && this.canPlayerTrade(this.game.player) == 1) {
+        html += '<li class="option" id="trade">trade</li>';
+      }
+
       if (action2 == "produce") {
 
 	//
@@ -1806,7 +1820,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
 	  if (fleet_supply_in_sector == 1) {
 	    notice = "You have fleet supply for 1 additional capital ship in this sector. Do you still wish to produce more ships?";
 	  }
-	  let c = confirm(notice);
+	  let c = sconfirm(notice);
 	  if (c) {
             imperium_self.addMove("continue\t"+imperium_self.game.player+"\t"+sector);
             imperium_self.playerProduceUnits(sector);
@@ -2187,7 +2201,6 @@ console.log("ERROR: you had no hits left to assign, bug?");
       }
     }
 
-
 /***
     // Secret Objectives
     for (let i = 0 ; i < imperium_self.game.deck[5].hand.length; i++) {
@@ -2278,7 +2291,22 @@ console.log("ERROR: you had no hits left to assign, bug?");
       imperium_self.playerSelectPlanetWithFilter(
               "Select a planet on which to build: ",
               function(planet) {
-                if (imperium_self.game.planets[planet].owner == imperium_self.game.player) { return 1; } return 0;
+		let existing_units = 0;
+                if (imperium_self.game.planets[planet].owner == imperium_self.game.player) { 
+		  for (let i = 0; i < imperium_self.game.planets[planet].units[imperium_self.game.player-1].length; i++) {
+		    if (imperium_self.game.planets[planet].units[imperium_self.game.player-1][i].type == id) {
+	              existing_units++;
+		    }
+	          }
+		  if (id === "pds") {
+		    if (existing_units >= imperium_self.game.state_pds_limit_per_planet) { return 0; }
+		  }
+		  if (id === "spacedock") {
+		    if (existing_units >= 1) { return 0; }
+		  }
+		  return 1; 
+		}
+		return 0;
               },
               function(planet) {
                 if (id == "pds") {
@@ -3890,7 +3918,7 @@ console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
         $(divpid).find('.hex_activated').css('background-color', 'var(--p' + imperium_self.game.player + ')');
         $(divpid).find('.hex_activated').css('opacity', '0.3');
   
-        let c = confirm("Activate this system?");
+        let c = sconfirm("Activate this system?");
         if (c) {
           sys.s.activated[imperium_self.game.player-1] = 1;
           imperium_self.addMove("activate_system_post\t"+imperium_self.game.player+"\t"+pid);

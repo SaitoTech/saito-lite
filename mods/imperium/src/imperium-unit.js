@@ -422,6 +422,7 @@
   
   
   returnUnit(type = "", player, upgrade_unit=1) {
+console.log("type: " + type + " -- " + player + " -- " + upgrade_unit);
     let unit = JSON.parse(JSON.stringify(this.units[type]));
     unit.owner = player;
     // this is optional as otherwise we can have a loop

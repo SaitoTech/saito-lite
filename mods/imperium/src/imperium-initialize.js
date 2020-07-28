@@ -12,6 +12,7 @@
     });
     $('.content').css('visibility', 'visible');
     $('.hud_menu_game-logs').css('display', 'none');
+    $('.hud_menu_game-status').css('display', 'none');
 
 
   }

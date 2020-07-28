@@ -289,11 +289,12 @@
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
 
+ 	// 1_1, 4_7, etc.
 	let homeworlds = imperium_self.returnHomeworldSectors(imperium_self.game.players_info.length);
 	let sectors = [];
 
 	for (let i = 0; i < homeworlds.length; i++) {
-	  if (homeworlds[i].tile != imperium_self.game.players_info[player-1].homeworld) {
+	  if (imperium_self.game.board[homeworlds[i]].tile != imperium_self.game.players_info[player-1].homeworld) {
 	    sectors.push(imperium_self.game.board[homeworlds[i]].tile);
 	  }
 	}

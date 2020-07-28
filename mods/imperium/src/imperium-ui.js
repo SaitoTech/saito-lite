@@ -40,11 +40,11 @@
         callback: this.handleTechMenuItem.bind(this)
       },
       'game-strategy': {
-        name: 'Strategy',
+        name: 'Strat',
         callback: this.handleStrategyMenuItem.bind(this)
       },
       'game-objectives': {
-        name: 'VP Cards',
+        name: 'VP',
         callback: this.handleObjectivesMenuItem.bind(this)
       },
     }
@@ -83,11 +83,7 @@
 
     if (this.activated_systems_player > this.game.players_info.length) { this.activated_systems_player = 1; }
 
-    let html = `Showing Systems Activated by ${factions[this.game.players_info[this.activated_systems_player-1].faction].name}`;
-    $('.hud-menu-overlay').html(html);
-    $('.hud-menu-overlay').show();
-    $('.status').hide();
-  
+    salert(`Showing Systems Activated by ${factions[this.game.players_info[this.activated_systems_player-1].faction].name}`);
 
     $('.hex_activated').css('background-color', 'transparent');
     $('.hex_activated').css('opacity', '0.3');
@@ -105,42 +101,9 @@
   
   handleLawsMenuItem() {
   
-    let imperium_self = this;
-    let laws = this.returnAgendaCards();
-    let html = '';  
+    this.hideOverlays();
+    $('.laws_overlay').html(this.returnLawsOverlay());
+    $('.laws_overlay').removeClass("hidden");
 
-    if (this.game.state.laws.length > 0) {
-      html += '<div style="margin-bottom: 1em">Galactic Laws Under Enforcement:</div>';
-      html += '<p><ul>';
-      for (let i = 0; i < this.game.state.laws.length; i++) {
-        html += `  <li class="card option" id="${i}">${laws[this.game.state.laws[i]].name}</li>`;
-      }
-      html += '</ul>';
-      html += '</p>';
-    }
-  
-    if (this.game.state.agendas.length > 0) {
-      html += '<div style="margin-bottom: 1em">Galactic Laws Under Consideration:</div>';
-      html += '<ul>';
-      for (let i = 0; i < this.game.state.agendas.length; i++) {
-        html += `  <li class="card option" id="${i}">${laws[this.game.state.agendas[i]].name}</li>`;
-      }
-      html += '</ul>';
-    }
-
-    if (this.game.state.laws.length == 0 && this.game.state.agendas.length == 0) {
-      html += 'There are no laws in force or agendas up for consideration at this time.';
-    }
-  
-    $('.hud-menu-overlay').html(html);
-    $('.hud-menu-overlay').show();
-    $('.status').hide();
-
-    $('.option').off();
-    $('.option').on('mouseenter', function() { let s = $(this).attr("id"); imperium_self.showAgendaCard(imperium_self.game.state.agendas[s]); });
-    $('.option').on('mouseleave', function() { let s = $(this).attr("id"); imperium_self.hideAgendaCard(imperium_self.game.state.agendas[s]); });
-  
-  
   }
-  
 

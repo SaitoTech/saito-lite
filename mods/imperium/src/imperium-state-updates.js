@@ -168,10 +168,14 @@
     //
     // first-to-the-post New Byzantium bonus
     //
+console.log("SECTOR: " + sector);
     if (sector == 'new-byzantium') {
+console.log("NEW BYZANTIUM OWNER: " + sys.p[planet_idx].owner + " ----> " + new_owner);
       if (sys.p[planet_idx].owner == -1 && new_owner != -1) {
+console.log("GET THAT VP");
 	this.game.players_info[new_owner-1].vp += 1;
 	this.updateLog(this.returnFaction(new_owner) + " gains 1 VP for first conquest of New Byzantium");
+	this.updateLeaderboard();
       }
     }
 

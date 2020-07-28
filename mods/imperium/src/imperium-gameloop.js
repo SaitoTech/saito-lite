@@ -362,10 +362,10 @@ console.log("MOVE: " + mv[0]);
  
   	if (planet_idx != -1) {
           this.addPlanetaryUnit(player, sector, planet_idx, unitname);
-	  this.updateLog(this.returnFaction(player) + " produces " + this.returnUnit(unitname).name + " on " + sys.p[planet_idx].name);  
+	  this.updateLog(this.returnFaction(player) + " produces " + this.returnUnit(unitname).name + " on " + sys.p[planet_idx].name, 120, 1);  // force message
  	} else {
           this.addSpaceUnit(player, sector, unitname);
-	  this.updateLog(this.returnFaction(player) + " produces " + this.returnUnit(unitname).name + " in " + sys.s.name);  
+	  this.updateLog(this.returnFaction(player) + " produces " + this.returnUnit(unitname).name + " in " + sys.s.name, 120, 1); // force message
         }
 
 
@@ -572,7 +572,7 @@ console.log("MOVE: " + mv[0]);
 
         this.game.queue.splice(qe, 1);
 
-        let speaker_order = this.returnSpeakerOrder();
+        let speaker_order = this.returnSpeakerFirstOrder();
 
         for (let i = 0; i < speaker_order.length; i++) {
           for (let k = 0; k < z.length; k++) {
@@ -1420,10 +1420,11 @@ console.log("we think this is a player agenda: " + JSON.stringify(this.game.stat
   	  if (this.game.players_info.length >= 5) { cards_to_select = 1; }
   
   	  //
-  	  // TODO -- pick appropriate card number
+  	  // TODO -- ROUND 1 players only select 1
   	  //
-  	  //cards_to_select = 1;
-  
+          if (this.game.state.round == 1) { cards_to_select = 1; }
+ 
+
   	  for (cts = 0; cts < cards_to_select; cts++) {
             for (let i = 0; i < this.game.players_info.length; i++) {
   	      let this_player = this.game.state.speaker+i;
@@ -1862,7 +1863,7 @@ imperium_self.saveGame(imperium_self.game.id);
         this.game.players_info[faction_that_offered-1].traded_this_turn = 1;
 
 	if (faction_that_offered == this.game.player) {
-	  this.game.queue.push("acknowledge\tYour trade offer has been spurned by "+this.returnFaction(faction_responding));
+	  this.game.queue.push("acknowledge\tYour trade offer has been spurned by "+this.returnFaction(refusing_faction));
 	  return 1;
 	}
 

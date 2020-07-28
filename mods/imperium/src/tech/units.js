@@ -1,6 +1,51 @@
 
 
 
+    this.importTech("spacedock-ii", {
+      name        :       "SpaceDock II" ,
+      unit        :       1 ,
+      prereqs     :       ["yellow","yellow"],
+      initialize :       function(imperium_self, player) {
+        imperium_self.game.players_info[player-1].spacedock_ii = 0;
+      },
+      gainTechnology :       function(imperium_self, gainer, tech) {
+	if (tech == "spacedock-ii") {
+          imperium_self.game.players_info[gainer-1].spacedock_ii = 1;
+        }
+      },
+      upgradeUnit :       function(imperium_self, player, unit) {
+        if (unit.type === "spacedock" && imperium_self.doesPlayerHaveTech(player, "spacedock-ii")) {
+          return imperium_self.returnUnit("spacedock-ii", player, 0);
+        }
+        return unit;
+      },
+
+    });
+
+
+
+    this.importTech("pds-ii", {
+      name        :       "PDS II" ,
+      unit        :       1 ,
+      prereqs     :       ["red","yellow"],
+      initialize :       function(imperium_self, player) {
+        imperium_self.game.players_info[player-1].pds_ii = 0;
+      },
+      gainTechnology :       function(imperium_self, gainer, tech) {
+	if (tech == "pds-ii") {
+          imperium_self.game.players_info[gainer-1].pds_ii = 1;
+        }
+      },
+      upgradeUnit :       function(imperium_self, player, unit) {
+        if (unit.type === "pds" && imperium_self.doesPlayerHaveTech(player, "pds-ii")) {
+          return imperium_self.returnUnit("pds-ii", player, 0);
+        }
+        return unit;
+      },
+
+    });
+
+
     this.importTech("carrier-ii", {
       name        :       "Carrier II" ,
       unit        :       1 ,
@@ -14,7 +59,7 @@
         }
       },
       upgradeUnit :       function(imperium_self, player, unit) {
-        if (unit.type === "carrier" && unit.name !== "CarrierII" && imperium_self.doesPlayerHaveTech(player, "carrier-ii")) {
+        if (unit.type === "carrier" && imperium_self.doesPlayerHaveTech(player, "carrier-ii")) {
 console.log("returning upgraded carrier...");
           return imperium_self.returnUnit("carrier-ii", player, 0);
         }

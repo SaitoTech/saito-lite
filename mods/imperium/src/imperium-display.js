@@ -107,6 +107,40 @@ returnFactionSheets() {
 
 
 
+returnLawsOverlay() {
+
+  let html = '';
+
+  if (this.game.state.laws.length > 0) {
+      html += '<div style="margin-bottom: 1em">Galactic Laws Under Enforcement:</div>';
+      html += '<p><ul>';
+      for (let i = 0; i < this.game.state.laws.length; i++) {
+        html += `  <li class="card option" id="${i}">${laws[this.game.state.laws[i]].name}</li>`;
+      }
+      html += '</ul>';
+      html += '</p>';
+  }
+
+  if (this.game.state.agendas.length > 0) {
+      html += '<div style="margin-bottom: 1em">Galactic Laws Under Consideration:</div>';
+      html += '<ul>';
+      for (let i = 0; i < this.game.state.agendas.length; i++) {
+        html += `  <li class="card option" id="${i}">${laws[this.game.state.agendas[i]].name}</li>`;
+      }
+      html += '</ul>';
+  }
+
+  if (this.game.state.laws.length == 0 && this.game.state.agendas.length == 0) {
+      html += 'There are no laws in force or agendas up for consideration at this time.';
+  }
+
+  return html;
+
+}
+
+
+
+
 returnStrategyOverlay() {
 
   let html = '';

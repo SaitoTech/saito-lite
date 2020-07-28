@@ -1073,12 +1073,26 @@
   
   
 
+  returnSpeakerFirstOrder() {
+
+    let speaker = this.game.state.speaker;
+    let speaker_order = [];
+  
+    for (let i = 0; i < this.game.players.length; i++) {
+      let thisplayer = (i+speaker);
+      if (thisplayer > this.game.players.length) { thisplayer -= this.game.players.length; }
+      speaker_order.push(thisplayer);
+    }
+
+    return speaker_order;
+
+  }
+
   returnSpeakerOrder() {
 
     let speaker = this.game.state.speaker;
     let speaker_order = [];
   
-
     for (let i = 0; i < this.game.players.length; i++) {
       let thisplayer = (i+speaker+1);
       if (thisplayer > this.game.players.length) { thisplayer-=this.game.players.length; }

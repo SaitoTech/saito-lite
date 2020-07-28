@@ -23,10 +23,11 @@
       capacity_required :	1
     });
 
+
     this.importUnit("pds", {
       name     		:       "PDS",
       type     		:       "pds",
-      range 		:	0,
+      range 		:	1,
       cost 		:	5,
       combat 		:	6
     });
@@ -35,11 +36,11 @@
       name     		:       "Spacedock",
       type     		:       "spacedock",
       capacity 		:	3,
-      production 	:	2,
+      production 	:	4,
       combat      	: 	0,
       range       	: 	0
     });
-    
+
     this.importUnit("carrier", {
       name     		:       "Carrier",
       type     		:       "carrier",
@@ -132,7 +133,7 @@
     this.importUnit("spacedock-ii", {
       name     		:       "Spacedock II",
       type     		:       "spacedock",
-      capacity 		:	5,
+      capacity 		:	3,
       production 	:	4,
       extension : 1
     });
@@ -141,7 +142,7 @@
       name     		:       "PDS II",
       type     		:       "pds",
       cost 		:	5,
-      combat 		:	6,
+      combat 		:	5,
       range		:	2,
       extension : 1
     });

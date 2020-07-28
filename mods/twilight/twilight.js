@@ -9043,9 +9043,9 @@ console.log("card: " + card);
 
             if (action2 != "nocard") {
               twilight_self.game.deck[0].hand.push(action2);
-              twilight_self.addMove("notify\t"+player+" retrieved "+twilight_self.game.deck[0].cards[action2].name);
+              twilight_self.addMove("notify\t"+player.toUpperCase()+" retrieved "+twilight_self.game.deck[0].cards[action2].name);
             } else {
-              twilight_self.addMove("notify\t"+player+" does not retrieve card");
+              twilight_self.addMove("notify\t"+player.toUpperCase() +" does not retrieve card");
             }
             twilight_self.endTurn();
 
@@ -9054,9 +9054,9 @@ console.log("card: " + card);
 
           if (action2 != "nocard") {
             twilight_self.game.deck[0].hand.push(action2);
-            twilight_self.addMove("notify\t"+player+" retrieved "+twilight_self.game.deck[0].cards[action2].name);
+            twilight_self.addMove("notify\t"+player.toUpperCase() +" retrieved "+twilight_self.game.deck[0].cards[action2].name);
           } else {
-            twilight_self.addMove("notify\t"+player+" does not retrieve card");
+            twilight_self.addMove("notify\t"+player.toUpperCase() +" does not retrieve card");
           }
           twilight_self.endTurn();
         }

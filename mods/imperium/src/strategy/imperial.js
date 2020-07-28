@@ -62,10 +62,14 @@
 
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
 
-              if (my_secret_vp == 0) { imperium_self.addMove("notify\t"+imperium_self.returnFaction(player) + " elects not to score any secret objectives"); }
-              if (my_secret_vp > 0) { imperium_self.addMove("score\t"+player+"\t"+my_secret_vp+"\t"+my_secret_objective); }
-              if (vp > 0) { imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); }
-              if (vp == 0) { imperium_self.addMove("notify\t"+imperium_self.returnFaction(player) + " elects not to score any public objectives"); }
+              //if (my_secret_vp == 0) { imperium_self.addMove("notify\t"+imperium_self.returnFaction(player) + " elects not to score any secret objectives"); }
+              if (my_secret_vp > 0) { 
+		imperium_self.addMove("score\t"+player+"\t"+my_secret_vp+"\t"+my_secret_objective); 
+	      }
+              //if (vp == 0) { imperium_self.addMove("notify\t"+imperium_self.returnFaction(player) + " elects not to score any public objectives"); }
+              if (vp > 0) {
+		imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective);
+	      }
 
 	      imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
               imperium_self.updateStatus("You have played the Imperial Secondary");
