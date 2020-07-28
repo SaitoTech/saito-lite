@@ -37,20 +37,28 @@ module.exports = Log = {
                     </div> `;
             break;
           case 'update':
-            var update = JSON.parse(row.body);
-            payload = `
-                    <div class="log-update">
-                      <div class="log-update-field">${update.field_name}</div>
-                      <div class="log-update-value">${update.from_value}&nbsp;&nbsp;
-                      <i class="fas fa-caret-right"></i>&nbsp;&nbsp; ${update.to_value}</div>
-                    </div>
-                    `;
+            try {
+              var update = JSON.parse(row.body);
+              payload = `
+                      <div class="log-update">
+                        <div class="log-update-field">${update.field_name}</div>
+                        <div class="log-update-value">${update.from_value}&nbsp;&nbsp;
+                        <i class="fas fa-caret-right"></i>&nbsp;&nbsp; ${update.to_value}</div>
+                      </div>
+                      `;
+            } catch (e) {
+              console.log(e);
+            }
             break;
           case 'photo':
-            var update = JSON.parse(row.body);
-            payload = `<div class="product-image">
+            try {
+              var update = JSON.parse(row.body);
+              payload = `<div class="product-image">
                     <img src="${update.image}">
                     </div> `;
+            } catch (e) {
+              console.log(e);
+            }
             break;
           default:
             payload = `<div class="log-message-text">${row.body}</div>`;
