@@ -119,6 +119,19 @@
   font-family: 'orbitron-light', helvetica, sans-serif;
   font-size: 1.4em;
 }
+.strategy_card_state {
+  margin-left: 20px;
+  width: 130px;
+  min-height: 20px;
+  color: white;
+  font-weight: bold;
+  z-index: 100;
+  position: absolute;
+}
+.strategy_card_state_internal {
+  color: white;
+  padding: 5px;
+}
 
 #confirm {
   padding-top: 8px;
