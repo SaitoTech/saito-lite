@@ -85,14 +85,17 @@
 .overlay_strategy_card_box_img {
   position: absolute;
 }
+
+
 .overlay_strategy_card_box {
   margin-right: 15px;
   margin-bottom: 15px;
   position: relative;
-  width: 200px;
+  width: 200px !important;
   height: 300px;
-  float: left;
+  display: block;
 }
+
 .overlay_strategy_card_text {
   position: relative;
   color: white;
@@ -332,11 +335,9 @@ body {
 .objectives_overlay_objectives_card {
   width: 17vh;
   height: 24vh;
-  float: left;
-  display: relative;
-  margin-right: 10px;
-  margin-bottom:10px;
+  margin: 10px;
   background-size: cover;
+  display: inline-block;
 }
 .objectives_players_scored {
     height: 20px;
@@ -728,34 +729,23 @@ body {
 }
 
 #objectives_overlay {
-  position: absolute;
-  width: auto;
-  height: auto;
-  padding: 10px;
-  margin-left: auto;
-  margin-right: auto;
   border: 1px solid var(--my-color);
-  z-index: 99;
   background-color: #4448;
   font-family: 'orbitron-medium', 'bank-gothic', arial, helvetica, sans-serif;
-  background-image: url('/imperium/tech_tree.png');
-  background-size: "contain";
 }
+
 #strategy_overlay {
-  position: absolute;
-  width: auto;
-  min-width: 900px;
+  width: 80vw;
   height: auto;
   padding: 10px;
-  margin-left: auto;
-  margin-right: auto;
   border: 1px solid var(--my-color);
-  z-index: 99;
   background-color: #4448;
   font-family: 'orbitron-medium', 'bank-gothic', arial, helvetica, sans-serif;
-  background-image: url('/imperium/tech_tree.png');
-  background-size: "contain";
+  display: flex;
+  justify-content: space-around;
+  flex-flow: wrap;
 }
+
 .overlay {
   position: absolute;
   top: 50vh;
@@ -776,13 +766,10 @@ body {
   height: 40px;
   text-align: center;
   line-height: 48px;
-  background-color: #888;
+  background-color: #8888;
   border-radius: 50%;
 }
 
-.objectives_overlay:after {
-  line-height: 38px;
-}
 
 .tech_overlay {
   width: auto;
@@ -1490,13 +1477,15 @@ body {
 }
 
 .dash-label {
-  transform: rotate(35deg);
-  color: #fff;
-  position: relative;
-  left: 2em;
-  height: 0;
-  top: -3em;
-  background: #0004;
+    transform: rotate(35deg);
+    color: #fff;
+    position: relative;
+    left: 2em;
+    height: 0;
+    top: 1em;
+    background: #000a;
+    z-index: 100;
+    padding: 10px;
 }
 
 .dash-faction-action {
@@ -1813,6 +1802,7 @@ input[type=range] {
 
 .white-stroke {
   -webkit-text-stroke: 1px #fff;
+  stroke: 1px #fff;;
 }
 
 .chat-box {
