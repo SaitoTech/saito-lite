@@ -294,7 +294,7 @@
 	let sectors = [];
 
 	for (let i = 0; i < homeworlds.length; i++) {
-	  if (imperium_self.game.board[homeworlds[i]].tile != imperium_self.game.players_info[player-1].homeworld) {
+	  if (imperium_self.game.board[homeworlds[i]].tile != imperium_self.game.board[imperium_self.game.players_info[player-1].homeworld].tile) {
 	    sectors.push(imperium_self.game.board[homeworlds[i]].tile);
 	  }
 	}

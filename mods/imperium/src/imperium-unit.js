@@ -436,19 +436,13 @@ console.log("type: " + type + " -- " + player + " -- " + upgrade_unit);
   
   upgradePlayerUnitsOnBoard(player) {
 
-console.log("upgradePlayerUnitsonBoard: " + player);
-
     for (var i in this.game.sectors) {
       for (let ii = 0; ii < this.game.sectors[i].units[player-1].length; ii++) {
-console.log(i + " -s- " + this.game.sectors[i].units[player-1][ii].type + " ------> " + player);
         this.game.sectors[i].units[player-1][ii] = this.upgradeUnit(this.game.sectors[i].units[player-1][ii], player);
-console.log(i + " -ss- " + ii + " ------> " + player);
       }
     }
-console.log("DONE!");
     for (var i in this.game.planets) {
       for (let ii = 0; ii < this.game.planets[i].units[player-1].length; ii++) {
-console.log(i + " -p- " + ii);
         this.game.planets[i].units[player-1][ii] = this.upgradeUnit(this.game.planets[i].units[player-1][ii], player);
       }
     }
@@ -458,16 +452,8 @@ console.log(i + " -p- " + ii);
   
 
   upgradeUnit(unit, player_to_upgrade) {
-
-console.log("UPGRADING: " + unit + " >>>> " + player_to_upgrade);
-
     let z = this.returnEventObjects();
-    for (let z_index in z) { 
-console.log("ZINDEX: " +z[z_index].name );
-unit = z[z_index].upgradeUnit(this, player_to_upgrade, unit); }
-
-console.log("Returning Unit");
-
+    for (let z_index in z) { unit = z[z_index].upgradeUnit(this, player_to_upgrade, unit); }
     return unit;
   }
   

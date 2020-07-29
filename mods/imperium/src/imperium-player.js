@@ -1805,10 +1805,6 @@ console.log("ERROR: you had no hits left to assign, bug?");
         return 0;
       }
 
-      if (this.game.tracker.trade == 0 && this.canPlayerTrade(this.game.player) == 1) {
-        html += '<li class="option" id="trade">trade</li>';
-      }
-
       if (action2 == "produce") {
 
 	//

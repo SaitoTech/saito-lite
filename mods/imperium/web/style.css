@@ -151,6 +151,24 @@
   cursor: pointer;
 }
 
+.overlay_agendacard {
+  height: 200px;
+  width: 130px;
+  color: white;
+  padding: 10px;
+  margin-right: 20px;
+  list-style: none;
+}
+.overlay_agendatitle {
+  position: relative;
+}
+.overlay_agendacontent {
+  clear:both;
+  margin-top: 20px;
+  position: relative;
+  font-size: 0.85em;
+}
+
 .hud-menu-overlay ul li {
   width: 100%;
   line-height: 3.5em;
@@ -745,6 +763,18 @@ body {
   border: 1px solid var(--my-color);
   background-color: #4448;
   font-family: 'orbitron-medium', 'bank-gothic', arial, helvetica, sans-serif;
+}
+
+#laws_overlay {
+  width: 80vw;
+  height: auto;
+  padding: 10px;
+  border: 1px solid var(--my-color);
+  background-color: #4448;
+  font-family: 'orbitron-medium', 'bank-gothic', arial, helvetica, sans-serif;
+  display: flex;
+  justify-content: space-around;
+  flex-flow: wrap;
 }
 
 #strategy_overlay {
@@ -1558,7 +1588,7 @@ body {
   position:relative;
   top: -25px;
   left: -40px;
-  font-size: 0.9em;
+  font-size: 0.8em;
 }
 
 .fleet * {

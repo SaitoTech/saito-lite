@@ -1278,8 +1278,6 @@ console.log("we think this is a player agenda: " + JSON.stringify(this.game.stat
 
 	let updateonly = mv[1];
 
-  	this.updateLog("revealing upcoming agendas...");
-  
   	//
   	// reset agendas
   	//
@@ -1305,8 +1303,6 @@ console.log("we think this is a player agenda: " + JSON.stringify(this.game.stat
 
       if (mv[0] === "revealobjectives") {
   
-  	this.updateLog("revealing upcoming objectives...");
-
   	//
   	// reset agendas -- disabled July 19
   	//
@@ -1868,6 +1864,7 @@ imperium_self.saveGame(imperium_self.game.id);
 	}
 
 	this.updateLog(this.returnFaction(refusing_faction) + " spurns a trade offered by " + this.returnFaction(faction_that_offered));
+	this.displayFactionDashboard();
         return 1;
 
       }
@@ -1906,6 +1903,7 @@ imperium_self.saveGame(imperium_self.game.id);
 	  this.game.players_info[faction_responding-1].commodities = 0;
 	}
 
+	this.displayFactionDashboard();
   	return 1;
   	
       }

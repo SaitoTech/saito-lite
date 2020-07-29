@@ -109,29 +109,32 @@ returnFactionSheets() {
 
 returnLawsOverlay() {
 
+  let laws = this.returnAgendaCards();
   let html = '';
 
   if (this.game.state.laws.length > 0) {
-      html += '<div style="margin-bottom: 1em">Galactic Laws Under Enforcement:</div>';
-      html += '<p><ul>';
+      html += '<div style="margin-bottom: 1em;color:white;font-size:1.4em;margin-left:auto;margin-right:auto">Galactic Laws Under Enforcement:</div>';
+      html += '<p></p>';
+      html += '<ul style="clear:both;margin-top:10px;">';
       for (let i = 0; i < this.game.state.laws.length; i++) {
-        html += `  <li class="card option" id="${i}">${laws[this.game.state.laws[i]].name}</li>`;
+console.log("1: "+ this.game.state.laws[i]);
+        html += `  <li style="background-image: url('/imperium/img/agenda_card_template.png');background-size:cover;" class="overlay_agendacard card option" id="${i}"><div class="overlay_agendatitle">${laws[this.game.state.laws[i]].name}</div><div class="overlay_agendacontent">${laws[this.game.state.laws[i]].text}</div></li>`;
       }
       html += '</ul>';
-      html += '</p>';
   }
 
   if (this.game.state.agendas.length > 0) {
-      html += '<div style="margin-bottom: 1em">Galactic Laws Under Consideration:</div>';
-      html += '<ul>';
+      html += '<div style="margin-bottom: 1em; color:white;font-size:1.4em;margin-left:auto;margin-right:auto">Galactic Laws Under Consideration:</div>';
+      html += '<p></p>';
+      html += '<ul style="clear:both;margin-top:10px;">';
       for (let i = 0; i < this.game.state.agendas.length; i++) {
-        html += `  <li class="card option" id="${i}">${laws[this.game.state.agendas[i]].name}</li>`;
+        html += `  <li style="background-image: url('/imperium/img/agenda_card_template.png');background-size:cover;" class="overlay_agendacard card option" id="${i}"><div class="overlay_agendatitle">${laws[this.game.state.agendas[i]].name}</div><div class="overlay_agendacontent">${laws[this.game.state.agendas[i]].text}</div></li>`;
       }
       html += '</ul>';
   }
 
   if (this.game.state.laws.length == 0 && this.game.state.agendas.length == 0) {
-      html += 'There are no laws in force or agendas up for consideration at this time.';
+      html += '<div class="color:white;font-size:1.2em">There are no laws in force or agendas up for consideration at this time.</div>';
   }
 
   return html;

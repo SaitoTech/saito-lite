@@ -2988,7 +2988,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	let sectors = [];
 
 	for (let i = 0; i < homeworlds.length; i++) {
-	  if (imperium_self.game.board[homeworlds[i]].tile != imperium_self.game.players_info[player-1].homeworld) {
+	  if (imperium_self.game.board[homeworlds[i]].tile != imperium_self.game.board[imperium_self.game.players_info[player-1].homeworld].tile) {
 	    sectors.push(imperium_self.game.board[homeworlds[i]].tile);
 	  }
 	}
@@ -8701,19 +8701,13 @@ console.log("type: " + type + " -- " + player + " -- " + upgrade_unit);
   
   upgradePlayerUnitsOnBoard(player) {
 
-console.log("upgradePlayerUnitsonBoard: " + player);
-
     for (var i in this.game.sectors) {
       for (let ii = 0; ii < this.game.sectors[i].units[player-1].length; ii++) {
-console.log(i + " -s- " + this.game.sectors[i].units[player-1][ii].type + " ------> " + player);
         this.game.sectors[i].units[player-1][ii] = this.upgradeUnit(this.game.sectors[i].units[player-1][ii], player);
-console.log(i + " -ss- " + ii + " ------> " + player);
       }
     }
-console.log("DONE!");
     for (var i in this.game.planets) {
       for (let ii = 0; ii < this.game.planets[i].units[player-1].length; ii++) {
-console.log(i + " -p- " + ii);
         this.game.planets[i].units[player-1][ii] = this.upgradeUnit(this.game.planets[i].units[player-1][ii], player);
       }
     }
@@ -8723,16 +8717,8 @@ console.log(i + " -p- " + ii);
   
 
   upgradeUnit(unit, player_to_upgrade) {
-
-console.log("UPGRADING: " + unit + " >>>> " + player_to_upgrade);
-
     let z = this.returnEventObjects();
-    for (let z_index in z) { 
-console.log("ZINDEX: " +z[z_index].name );
-unit = z[z_index].upgradeUnit(this, player_to_upgrade, unit); }
-
-console.log("Returning Unit");
-
+    for (let z_index in z) { unit = z[z_index].upgradeUnit(this, player_to_upgrade, unit); }
     return unit;
   }
   
@@ -10174,8 +10160,6 @@ console.log("we think this is a player agenda: " + JSON.stringify(this.game.stat
 
 	let updateonly = mv[1];
 
-  	this.updateLog("revealing upcoming agendas...");
-  
   	//
   	// reset agendas
   	//
@@ -10201,8 +10185,6 @@ console.log("we think this is a player agenda: " + JSON.stringify(this.game.stat
 
       if (mv[0] === "revealobjectives") {
   
-  	this.updateLog("revealing upcoming objectives...");
-
   	//
   	// reset agendas -- disabled July 19
   	//
@@ -10764,6 +10746,7 @@ imperium_self.saveGame(imperium_self.game.id);
 	}
 
 	this.updateLog(this.returnFaction(refusing_faction) + " spurns a trade offered by " + this.returnFaction(faction_that_offered));
+	this.displayFactionDashboard();
         return 1;
 
       }
@@ -10802,6 +10785,7 @@ imperium_self.saveGame(imperium_self.game.id);
 	  this.game.players_info[faction_responding-1].commodities = 0;
 	}
 
+	this.displayFactionDashboard();
   	return 1;
   	
       }
@@ -15086,10 +15070,6 @@ console.log("ERROR: you had no hits left to assign, bug?");
       if (action2 == "trade") {
         imperium_self.playerTrade();
         return 0;
-      }
-
-      if (this.game.tracker.trade == 0 && this.canPlayerTrade(this.game.player) == 1) {
-        html += '<li class="option" id="trade">trade</li>';
       }
 
       if (action2 == "produce") {
@@ -21301,29 +21281,32 @@ returnFactionSheets() {
 
 returnLawsOverlay() {
 
+  let laws = this.returnAgendaCards();
   let html = '';
 
   if (this.game.state.laws.length > 0) {
-      html += '<div style="margin-bottom: 1em">Galactic Laws Under Enforcement:</div>';
-      html += '<p><ul>';
+      html += '<div style="margin-bottom: 1em;color:white;font-size:1.4em;margin-left:auto;margin-right:auto">Galactic Laws Under Enforcement:</div>';
+      html += '<p></p>';
+      html += '<ul style="clear:both;margin-top:10px;">';
       for (let i = 0; i < this.game.state.laws.length; i++) {
-        html += `  <li class="card option" id="${i}">${laws[this.game.state.laws[i]].name}</li>`;
+console.log("1: "+ this.game.state.laws[i]);
+        html += `  <li style="background-image: url('/imperium/img/agenda_card_template.png');background-size:cover;" class="overlay_agendacard card option" id="${i}"><div class="overlay_agendatitle">${laws[this.game.state.laws[i]].name}</div><div class="overlay_agendacontent">${laws[this.game.state.laws[i]].text}</div></li>`;
       }
       html += '</ul>';
-      html += '</p>';
   }
 
   if (this.game.state.agendas.length > 0) {
-      html += '<div style="margin-bottom: 1em">Galactic Laws Under Consideration:</div>';
-      html += '<ul>';
+      html += '<div style="margin-bottom: 1em; color:white;font-size:1.4em;margin-left:auto;margin-right:auto">Galactic Laws Under Consideration:</div>';
+      html += '<p></p>';
+      html += '<ul style="clear:both;margin-top:10px;">';
       for (let i = 0; i < this.game.state.agendas.length; i++) {
-        html += `  <li class="card option" id="${i}">${laws[this.game.state.agendas[i]].name}</li>`;
+        html += `  <li style="background-image: url('/imperium/img/agenda_card_template.png');background-size:cover;" class="overlay_agendacard card option" id="${i}"><div class="overlay_agendatitle">${laws[this.game.state.agendas[i]].name}</div><div class="overlay_agendacontent">${laws[this.game.state.agendas[i]].text}</div></li>`;
       }
       html += '</ul>';
   }
 
   if (this.game.state.laws.length == 0 && this.game.state.agendas.length == 0) {
-      html += 'There are no laws in force or agendas up for consideration at this time.';
+      html += '<div class="color:white;font-size:1.2em">There are no laws in force or agendas up for consideration at this time.</div>';
   }
 
   return html;
