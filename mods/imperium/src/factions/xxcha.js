@@ -19,7 +19,7 @@
       type        :       "ability" ,
       returnPDSUnitsWithinRange : function(imperium_self, player, attacker, defender, sector, battery) {
 
-       if (!imperium_self.doesPlayerHaveTech("faction3-flagship")) { return 0; }
+       if (!imperium_self.doesPlayerHaveTech(player, "faction3-flagship")) { return 0; }
 
        let player_fleet = imperium_self.returnPlayerFleet(player);
        if (player_fleet.flagship > 0) {
