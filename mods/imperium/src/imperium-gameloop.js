@@ -1342,7 +1342,7 @@ console.log("we think this is a player agenda: " + JSON.stringify(this.game.stat
   	let vp 		 = parseInt(mv[2]);
   	let objective    = mv[3];
   
-  	this.updateLog(this.returnFaction(player)+" scores "+vp+" VP");
+  	this.updateLog(this.returnFaction(player)+" scores "+objective+" ("+vp+" VP)");
 
   	this.game.players_info[player-1].vp += vp;
   	this.game.players_info[player-1].objectives_scored.push(objective);

@@ -2067,6 +2067,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
                 imperium_self.addMove("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
                 if (vp > 0) { imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); }
 		imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
+		imperium_self.updateStatus("scoring completed");
                 imperium_self.endTurn();
               }, 1);
             });
@@ -2080,6 +2081,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
             for (let i = 0; i < imperium_self.game.players_info.length; i++) {
               imperium_self.addMove("DEAL\t6\t"+(i+1)+"\t1");
             }
+	    imperium_self.updateStatus("scoring completed");
 	    imperium_self.endTurn();
 	  };
 
@@ -2109,6 +2111,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
 	    imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
             imperium_self.playerScoreVictoryPoints(imperium_self, function(imperium_self, vp, objective) {
 
+	      imperium_self.updateStatus("scoring completed");
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
 
               //if (my_secret_vp == 0) { imperium_self.addMove("notify\t"+imperium_self.returnFaction(player) + " elects not to score any secret objectives"); }
@@ -10224,7 +10227,7 @@ console.log("we think this is a player agenda: " + JSON.stringify(this.game.stat
   	let vp 		 = parseInt(mv[2]);
   	let objective    = mv[3];
   
-  	this.updateLog(this.returnFaction(player)+" scores "+vp+" VP");
+  	this.updateLog(this.returnFaction(player)+" scores "+objective+" ("+vp+" VP)");
 
   	this.game.players_info[player-1].vp += vp;
   	this.game.players_info[player-1].objectives_scored.push(objective);
