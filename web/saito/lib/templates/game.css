@@ -798,13 +798,16 @@ body {
   }
 
   .hud-header {
-    grid-template-rows: 50px 50px auto;
+    grid-template-rows: auto;
     grid-template-columns: unset;
     width: unset;
-    height: 100%;
+    height: 50px;
     border-right: 1px solid grey;
     cursor: initial;
-  }
+    position: relative;
+    top: 100vh;
+    transform: translateY(-100%);
+}
 
   #hud-home-button {
     display: none;
