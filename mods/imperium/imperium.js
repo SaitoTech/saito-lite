@@ -8039,7 +8039,7 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
         ' \
           <div class="hexIn" id="hexIn_'+i+'"> \
             <div class="hexLink" id="hexLink_'+i+'"> \
-            <div class="hexInfo" id="hexninfo_'+i+'"></div> \
+            <div class="hexInfo" id="hex_info_'+i+'"></div> \
               <div class="hex_bg" id="hex_bg_'+i+'"> \
                 <img class="hex_img sector_graphics_background '+this.game.board[i].tile+'" id="hex_img_'+i+'" src="" /> \
                 <img src="/imperium/img/frame/border_full_white.png" id="hex_img_faction_border_'+i+'" class="faction_border" /> \
@@ -21499,7 +21499,6 @@ console.log(JSON.stringify(objc[o]));
 
 
 
-
 displayFactionDashboard() {
 
   let imperium_self = this;
@@ -22342,23 +22341,31 @@ updateSectorGraphics(sector) {
   hideSectorHighlight(sector) { this.removeSectorHighlight(sector); }
   addSectorHighlight(sector) {
 
-alert("This is where we switch over to the new display");
-
     if (sector.indexOf("planet") == 0 || sector == 'new-byzantium') {
       sector = this.game.planets[sector].sector;
     }
     let sys = this.returnSectorAndPlanets(sector);
-    let divname = "#hex_space_" + sys.s.tile;
-    $(divname).css('background-color', '#900');
+    //let divname = "#hex_space_" + sys.s.tile;
+   //$(divname).css('background-color', '#900');
+    let divname = "#hexIn_" + sys.s.tile;
+
+    //returnPlanetInformationHTML(this.game.sectors[sector].planets[0])
+    let html = this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
+    document.querySelector("#hex_info_" + sys.s.tile).innerHTML += html;
+    document.querySelector(divname).classList.add('bi');
   }
+
   removeSectorHighlight(sector) {
     if (sector.indexOf("planet") == 0 || sector == 'new-byzantium') {
       sector = this.game.planets[sector].sector;
     }
     let sys = this.returnSectorAndPlanets(sector);
-    let divname = "#hex_space_" + sys.s.tile;
-    $(divname).css('background-color', 'transparent');
+    //let divname = "#hex_space_" + sys.s.tile;
+    //$(divname).css('background-color', 'transparent');
+    let divname = "#hexIn_" + sys.s.tile;
+    document.querySelector(divname).classList.add('bi');
   }
+
   addPlanetHighlight(sector, pid)  {
     this.showSectorHighlight(sector);
 // red overlay

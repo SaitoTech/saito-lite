@@ -1995,8 +1995,16 @@ input[type=range] {
 
 .hexInfo {
   position: absolute;
-  top: 20px;
+  top: 70px;
   border: 1px solid aqua;
   color: #fff;
   z-index: 99999999;
+  width: 240px;
+  height: 135px;
+  background: #000a;
+  display: none;
+}
+
+.bi .hexInfo {
+  display: block;
 }
