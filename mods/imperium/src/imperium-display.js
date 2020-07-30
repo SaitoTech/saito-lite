@@ -759,20 +759,26 @@ returnFactionSheet(imperium_self, player=null) {
 
 showSector(pid) {
 
-  let hex_space = ".sector_graphics_space_" + pid;
-  let hex_ground = ".sector_graphics_planet_" + pid;
+  let sector_name = this.game.board[pid].tile;
+  this.showSectorHighlight(sector_name);
 
-  $(hex_space).fadeOut();
-  $(hex_ground).fadeIn();
+//  let hex_space = ".sector_graphics_space_" + pid;
+//  let hex_ground = ".sector_graphics_planet_" + pid;
+//
+//  $(hex_space).fadeOut();
+//  $(hex_ground).fadeIn();
 
 }
 hideSector(pid) {
 
-  let hex_space = ".sector_graphics_space_" + pid;
-  let hex_ground = ".sector_graphics_planet_" + pid;
+  let sector_name = this.game.board[pid].tile;
+  this.hideSectorHighlight(sector_name);
 
-  $(hex_ground).fadeOut();
-  $(hex_space).fadeIn();
+//  let hex_space = ".sector_graphics_space_" + pid;
+//  let hex_ground = ".sector_graphics_planet_" + pid;
+//
+//  $(hex_ground).fadeOut();
+//  $(hex_space).fadeIn();
 
 }
 
@@ -1128,6 +1134,9 @@ updateSectorGraphics(sector) {
   showSectorHighlight(sector) { this.addSectorHighlight(sector); }
   hideSectorHighlight(sector) { this.removeSectorHighlight(sector); }
   addSectorHighlight(sector) {
+
+alert("This is where we switch over to the new display");
+
     if (sector.indexOf("planet") == 0 || sector == 'new-byzantium') {
       sector = this.game.planets[sector].sector;
     }
