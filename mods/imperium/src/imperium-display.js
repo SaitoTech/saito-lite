@@ -104,28 +104,24 @@ returnPlanetInformationHTML(planet) {
 
   let html = '';
 
-  html += `<div class="sector_information_planetname">${p.name}</div><ul class="sector_information_planet_content">`;
-
   if (ionp > 0) {
-    html += '<li class="sector_information_planet_content_box">';
-    html += '<div class="planet_infantry_count">'+ionp+'</div>';
-    html += '</li>';
+    html += '<div class="planet_infantry_count_label">Infantry</div><div class="planet_infantry_count">'+ionp+'</div>';
   }
-  html += '</ul>';
-
-  if (sonp > 0) {
-    html += '<li class="sector_information_planet_content_box">';
-    html += '<div class="planet_spacedock_count">'+sonp+'</div>';
-    html += '</li>';
-  }
-  html += '</ul>';
 
   if (ponp > 0) {
-    html += '<li class="sector_information_planet_content_box">';
-    html += '<div class="planet_pds_count">'+ponp+'</div>';
-    html += '</li>';
+    html += '<div class="planet_pds_count_label">PDS</div><div class="planet_pds_count">'+ponp+'</div>';
   }
-  html += '</ul>';
+
+  if (sonp > 0) {
+    html += '<div class="planet_spacedock_count_label">Space Doc</div><div class="planet_spacedock_count">'+sonp+'</div>';
+  }
+
+  if (ponp+sonp+ionp > 0) {
+    html = `<div class="sector_information_planetname">${p.name}</div><div class="sector_information_planet_content">` + html;
+    html +=  `</div>`;
+  } else {
+    html = `<div class="sector_information_planetname">${p.name}</div>`;
+  }
 
   return html;
 
@@ -1197,22 +1193,29 @@ console.log(JSON.stringify(this.game.sectors[sector].planets));
 
     //handle writing for one or two planets
     var info_tile = document.querySelector("#hex_info_" + sys.s.tile);
-    if (this.game.sectors[sector].planets.length == 1) {
-      let html = this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
+
+    let html = '';
+
+    if(this.game.sectors[sector].planets.length == 1) {
+      html = this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
       info_tile.innerHTML = html;
+      console.log(html);
       info_tile.classList.add('one_planet');
     } else {
-      let html = '<div class="top_planet">';
+      html = '<div class="top_planet">';
       html += this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
       html += '</div><div class="bottom_planet">';
       html += this.returnPlanetInformationHTML(this.game.sectors[sector].planets[1]);
       html += '</div>';
+      console.log(html);
       info_tile.innerHTML = html;
       info_tile.classList.add('two_planet');
     }
 
+    /* Function for design work - not needed 
+       once plannet array not allways just one planet
 
-/*    if(this.game.sectors[sector].planets.length = 1) {
+   if(this.game.sectors[sector].planets.length = 1) {
       let html = '<div class="top_planet">';
       html += this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
       html += '</div><div class="bottom_planet">';
@@ -1221,8 +1224,7 @@ console.log(JSON.stringify(this.game.sectors[sector].planets));
       info_tile.innerHTML = html;
       info_tile.classList.add('two_planet');
     }
-*/
-
+  */
     document.querySelector("#hexIn_" + sys.s.tile).classList.add('bi');
     } catch (err) {}
   }
@@ -1233,6 +1235,7 @@ console.log(JSON.stringify(this.game.sectors[sector].planets));
       sector = this.game.planets[sector].sector;
     }
     let sys = this.returnSectorAndPlanets(sector);
+
     let divname = ".sector_graphics_space_" + sys.s.tile;
     $(divname).css('display', 'all');
 
