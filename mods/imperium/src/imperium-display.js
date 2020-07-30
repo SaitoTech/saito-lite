@@ -10,6 +10,9 @@ displayBoard() {
 }
 
 
+
+
+
 /////////////////////////
 // Add Events to Board //
 /////////////////////////
@@ -28,6 +31,8 @@ addEventsToBoard() {
   });
 
 }
+
+
 
 
 setPlayerActive(player) {
@@ -1139,12 +1144,16 @@ updateSectorGraphics(sector) {
     $(divname).css('background-color', 'transparent');
   }
   addPlanetHighlight(sector, pid)  {
-    let divname = ".sector_graphics_planet_" + sector + '_' + pid;
-    $(divname).show();
+    this.showSectorHighlight(sector);
+// red overlay
+//    let divname = ".sector_graphics_planet_" + sector + '_' + pid;
+//    $(divname).show();
   }
   removePlanetHighlight(sector, pid)  {
-    let divname = ".sector_graphics_planet_" + sector + '_' + pid;
-    $(divname).hide();
+    this.hideSectorHighlight(sector);
+// red overlay
+//    let divname = ".sector_graphics_planet_" + sector + '_' + pid;
+//    $(divname).hide();
   }
   showActionCard(c) {
     let thiscard = this.action_cards[c];

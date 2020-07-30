@@ -20067,7 +20067,33 @@ if (this.game.board[tmp[k]] != undefined) {
   
 
 
-
+  returnPDSOnPlanet(planet) {
+    let total = 0;
+    for (let i = 0; i < planet.units.length && (i+1) == planet.owner; i++) {
+      for (let k = 0; k < planet.units[i].length; k++) {
+	if (planet.units[i][k].type == "pds") { total++; }
+      }
+    }
+    return total;
+  }
+  returnSpaceDocksOnPlanet(planet) {
+    let total = 0;
+    for (let i = 0; i < planet.units.length && (i+1) == planet.owner; i++) {
+      for (let k = 0; k < planet.units[i].length; k++) {
+	if (planet.units[i][k].type == "spacedock") { total++; }
+      }
+    }
+    return total;
+  }
+  returnInfantryOnPlanet(planet) {
+    let total = 0;
+    for (let i = 0; i < planet.units.length; i++) {
+      for (let k = 0; k < planet.units[i].length && (i+1) == planet.owner; k++) {
+	if (planet.units[i][k].type == "infantry") { total++; }
+      }
+    }
+    return total;
+  }
 
   doesPlanetHavePDS(planet) {
     if (planet.units == undefined) {
@@ -21224,8 +21250,38 @@ setPlayerActiveOnly(player) {
 
 returnPlanetInformationHTML(planet) {
 
+  let p = planet;
+  if (this.game.planets[planet]) { p = this.game.planets[planet]; }
+  let ionp = this.returnInfantryOnPlanet(p);
+  let ponp = this.returnPDSOnPlanet(p);
+  let sonp = this.returnSpaceDocksOnPlanet(p);
+
   let html = '';
-  let p = this.game.planets[planet]; 
+
+  html += `<div class="sector_information_planetname">${p.name}</div><ul class="sector_information_planet_content">`;
+
+  if (ionp > 0) {
+    html += '<li class="sector_information_planet_content_box">';
+    html += '<div class="planet_infantry_count">'+ionp+'</div>';
+    hmtl += '</li>';
+  }
+  html += '</ul>';
+
+  if (sonp > 0) {
+    html += '<li class="sector_information_planet_content_box">';
+    html += '<div class="planet_spacedock_count">'+sonp+'</div>';
+    hmtl += '</li>';
+  }
+  html += '</ul>';
+
+  if (ponp > 0) {
+    html += '<li class="sector_information_planet_content_box">';
+    html += '<div class="planet_pds_count">'+ponp+'</div>';
+    hmtl += '</li>';
+  }
+  html += '</ul>';
+
+  return html;
 
 }
 
