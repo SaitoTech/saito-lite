@@ -28,6 +28,14 @@
   display: none;
 }
 
+.combat_log_th {
+ padding-right:5px;
+}
+.combat_log_td {
+ padding-right:5px;
+ text-align:right;
+}
+
 .hazard_border {
   display: none;
   left: -100%;
@@ -86,7 +94,6 @@
   position: absolute;
 }
 
-
 .overlay_strategy_card_box {
   margin-right: 15px;
   margin-bottom: 15px;
@@ -119,6 +126,7 @@
   font-family: 'orbitron-light', helvetica, sans-serif;
   font-size: 1.4em;
 }
+
 .strategy_card_state {
   margin-left: 20px;
   width: 130px;
@@ -128,6 +136,7 @@
   z-index: 100;
   position: absolute;
 }
+
 .strategy_card_state_internal {
   color: white;
   padding: 5px;
@@ -159,11 +168,13 @@
   margin-right: 20px;
   list-style: none;
 }
+
 .overlay_agendatitle {
   position: relative;
 }
+
 .overlay_agendacontent {
-  clear:both;
+  clear: both;
   margin-top: 20px;
   position: relative;
   font-size: 0.85em;
@@ -360,25 +371,29 @@ body {
 .objectives_card_name {
   color: white;
 }
+
 .objectives_card_content {
   color: white;
 }
+
 .objectives_overlay_objectives_card {
   width: 17vh;
   height: 24vh;
   margin: 10px;
   background-size: cover;
-  display: inline-block;
+  max-width: 300px;
+  max-height: 450px;
 }
+
 .objectives_players_scored {
-    height: 20px;
-    width: 80px;
-    display: block;
-    z-index: 99;
-    position: relative;
-    display: all;
-    margin-left: auto;
-    margin-right: auto;
+  height: 20px;
+  width: 80px;
+  display: block;
+  z-index: 99;
+  position: relative;
+  display: all;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .token_count {
@@ -779,6 +794,7 @@ body {
 
 #strategy_overlay {
   width: 80vw;
+  max-width: 900px;
   height: auto;
   padding: 10px;
   border: 1px solid var(--my-color);
@@ -812,7 +828,6 @@ body {
   background-color: #8888;
   border-radius: 50%;
 }
-
 
 .tech_overlay {
   width: auto;
@@ -1450,7 +1465,6 @@ body {
   margin-left: 15em;
 }
 
-
 .dash-faction-base {
   background-color: #000;
   opacity: 0.95;
@@ -1481,7 +1495,7 @@ body {
 .dash-faction {
   display: grid;
   grid-gap: 0.2em;
-  margin-right:15px;
+  margin-right: 15px;
 }
 
 .dash-faction-info {
@@ -1520,15 +1534,15 @@ body {
 }
 
 .dash-label {
-    transform: rotate(35deg);
-    color: #fff;
-    position: relative;
-    left: 2em;
-    height: 0;
-    top: 1em;
-    background: #000a;
-    z-index: 100;
-    padding: 10px;
+  transform: rotate(35deg);
+  color: #fff;
+  position: relative;
+  left: 2em;
+  height: 0;
+  top: 1em;
+  background: #000a;
+  z-index: 100;
+  padding: 10px;
 }
 
 .dash-faction-action {
@@ -1585,7 +1599,7 @@ body {
 }
 
 .dash-item-goods {
-  position:relative;
+  position: relative;
   top: -25px;
   left: -40px;
   font-size: 0.8em;
@@ -1845,7 +1859,8 @@ input[type=range] {
 
 .white-stroke {
   -webkit-text-stroke: 1px #fff;
-  stroke: 1px #fff;;
+  stroke: 1px #fff;
+  ;
 }
 
 .chat-box {
@@ -1898,4 +1913,84 @@ input[type=range] {
 .tech_green::before {
   color: green;
   border-color: green;
+}
+
+.gameboard img {
+  transition: 0.4s;
+}
+
+/* double planet */
+
+.bi .sector8, .bi .sector9, .bi .sector10, .bi .sector11, .bi .sector12, .bi .sector13, .bi .sector14, .bi .sector15, .bi .sector16, .bi .sector17, .bi .sector18, .bi .sector19, .bi .sector20, .bi .sector21, .bi .sector38, .bi .sector39, .bi .sector40, .bi .sector50, .bi .sector51 {
+  scale: 2.6;
+  transform: rotate(-30deg);
+}
+
+/* large single planet */
+
+.bi .sector22, .bi .sector23, .bi .sector24, .bi .sector25, .bi .sector26, .bi .sector27, .bi .sector28, .bi .new-byzantium, .bi .sector29, .bi .sector30, .bi .sector31, .bi .sector32, .bi .sector45, .bi .sector52, .bi .sector53, .bi .sector73 {
+  scale: 2.3;
+  transform: translate(0%, 25%) rotate(17deg);
+}
+
+/* small single planet */
+
+.bi .sector58, .bi .sector59, .bi .sector60, .bi .sector61, .bi .sector62, .bi .sector63, .bi .sector64, .bi .sector65, .bi .sector66, .bi .sector67, .bi .sector62, .bi .sector69, .bi .sector70 {
+  scale: 3;
+  transform: translate(-5%, 16%);
+}
+
+/* planet and wormhole */
+
+.bi .sector41, .bi .sector42, .bi .sector46, .bi .sector47, .bi .sector55, .bi .sector57 {
+  scale: 3;
+  transform: translate(11%, 35%);
+}
+
+/* small planet bottom */
+
+.bi .sector43, .bi .sector44 {
+  scale: 3;
+  transform: translate(-10%, 6%);
+}
+
+.hexInfo {
+  position: absolute;
+  color: #fff;
+  display: none;
+  z-index: 999;
+  white-space: nowrap;
+}
+
+.bi .hexInfo {
+  display: block;
+}
+
+.sector_information_planetname {
+  font-size: 1.65em;
+  position: absolute;
+  padding: 5px 10px;
+  color: #fff;
+  text-shadow: 1px 1px darkorange;
+  background-color: #000A;
+}
+
+.one_planet .sector_information_planetname {
+  top: 165px;
+  left: 10px;
+}
+
+.two_planet .sector_information_planetname {
+  font-size: 1.2em;
+}
+
+.top_planet .sector_information_planetname {
+  top: 40px;
+  left: 20px;
+}
+
+.bottom_planet .sector_information_planetname {
+  top: 190px;
+  left: 230px;
+  transform: translateX(-100%);
 }

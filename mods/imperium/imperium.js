@@ -8039,6 +8039,7 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
         ' \
           <div class="hexIn" id="hexIn_'+i+'"> \
             <div class="hexLink" id="hexLink_'+i+'"> \
+            <div class="hexInfo" id="hex_info_'+i+'"></div> \
               <div class="hex_bg" id="hex_bg_'+i+'"> \
                 <img class="hex_img sector_graphics_background '+this.game.board[i].tile+'" id="hex_img_'+i+'" src="" /> \
                 <img src="/imperium/img/frame/border_full_white.png" id="hex_img_faction_border_'+i+'" class="faction_border" /> \
@@ -8058,9 +8059,12 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
       // insert planet
       let planet_div = "#hex_img_"+i;
       $(planet_div).attr("src", this.game.sectors[this.game.board[i].tile].img);
+
+      // add planet info
   
       this.updateSectorGraphics(i);
-  
+
+        
           
     }
   
@@ -12324,7 +12328,6 @@ imperium_self.saveGame(imperium_self.game.id);
 
 	  this.updateCombatLog(combat_info);
 
-
 	  //
 	  // total hits to assign
 	  //
@@ -12390,6 +12393,11 @@ imperium_self.saveGame(imperium_self.game.id);
 	  let total_hits = 0;
 	  let hits_or_misses = [];
 	  let hits_on = [];
+          let units_firing = [];
+          let unmodified_roll = [];
+          let modified_roll = [];
+          let reroll = [];
+
 
 	  //
 	  // then the rest
@@ -12397,8 +12405,11 @@ imperium_self.saveGame(imperium_self.game.id);
 	  for (let i = 0; i < sys.p[planet_idx].units[attacker-1].length; i++) {
 	    if (sys.p[planet_idx].units[attacker-1][i].type == "infantry" ) {
 
+	      units_firing.push(sys.p[planet_idx].units[attacker-1][i]);
+
 	      let roll = this.rollDice(10);
 
+	      unmodified_roll.push(roll);
 
 	      for (let z_index in z) {
 	        roll = z[z_index].modifyCombatRoll(this, attacker, defender, attacker, "ground", roll);
@@ -12408,6 +12419,9 @@ imperium_self.saveGame(imperium_self.game.id);
 	      roll += this.game.players_info[attacker-1].ground_combat_roll_modifier;
 	      roll += this.game.players_info[attacker-1].temporary_ground_combat_roll_modifier;
 	      roll += sys.p[planet_idx].units[attacker-1][i].temporary_combat_modifier;
+
+	      modified_roll.push(roll);
+	      reroll.push(0);
 
 	      if (roll >= sys.p[planet_idx].units[attacker-1][i].combat) {
 	        total_hits++;
@@ -12428,7 +12442,6 @@ imperium_self.saveGame(imperium_self.game.id);
  	  // handle rerolls
 	  //
 	  if (total_hits < total_shots) {
-
 
 	    let max_rerolls = total_shots - total_hits;
 	    let available_rerolls = this.game.players_info[attacker-1].combat_dice_reroll + this.game.players_info[attacker-1].ground_combat_dice_reroll;
@@ -12456,7 +12469,10 @@ imperium_self.saveGame(imperium_self.game.id);
 	      }
 	     
 	      let roll = this.rollDice(10);
- 
+
+	      unmodified_roll[lowest_combat_idx] = roll;
+	      reroll[lowest_combat_idx] = 1;
+
 	      for (let z_index in z) {
 	        roll =  z[z_index].modifyCombatRerolls(this, player, attacker, player, "ground", roll);
 	        imperium_self.game.players_info[defender-1].target_units = z[z_index].modifyTargets(this, attacker, defender, imperium_self.game.player, "ground", imperium_self.game.players_info[defender-1].target_units);
@@ -12465,6 +12481,8 @@ imperium_self.saveGame(imperium_self.game.id);
 	      roll += this.game.players_info[player-1].ground_combat_roll_modifier;
 	      roll += this.game.players_info[player-1].temporary_ground_combat_roll_modifier;
 	      roll += sys.p[planet_idx].units[attacker-1][lowest_combat_idx].temporary_combat_modifier;
+
+	      modified_roll[lowest_combat_idx] = roll;
 
 	      if (roll >= hits_on[lowest_combat_idx]) {
 	        total_hits++;
@@ -12475,6 +12493,20 @@ imperium_self.saveGame(imperium_self.game.id);
 	    }
 
 	  }
+
+	  //
+	  // create an object with all this information to update our LOG
+	  //
+	  let combat_info = {};
+	      combat_info.hits_or_misses  = hits_or_misses;
+	      combat_info.units_firing 	  = units_firing;
+	      combat_info.hits_on 	  = hits_on;
+	      combat_info.unmodified_roll = unmodified_roll;  // unmodified roll
+	      combat_info.modified_roll   = modified_roll; // modified roll
+	      combat_info.reroll 	  = reroll; // rerolls
+
+	  this.updateCombatLog(combat_info);
+
 
 	  //
 	  // total hits to assign
@@ -21270,33 +21302,33 @@ updateCombatLog(cobj) {
   }
 
   let html = '';
-      html += '<table>';
+      html += '<table class="combat_log">';
       html += '<tr>';
-      html += '<td></th>';
-      html += '<td>Strength</th>';
-      html += '<td>Combat</th>';
-      html += '<td>Roll</th>';
+      html += '<th class="combat_log_th"></th>';
+      html += '<th class="combat_log_th">HP</th>';
+      html += '<th class="combat_log_th">Combat</th>';
+      html += '<th class="combat_log_th">Roll</th>';
   if (are_there_modified_rolls) {
-      html += '<td>Modified</th>';
+      html += '<th class="combat_log_th">Modified</th>';
   }
   if (are_there_rerolls) {
-      html += '<td>Reroll</th>';
+      html += '<th class="combat_log_th">Reroll</th>';
   }
-      html += '<td>Hit</th>';
+      html += '<th class="combat_log_th">Hit</th>';
       html += '</tr>';
   for (let i = 0; i < cobj.units_firing.length; i++) {
       html += '<tr>';
-      html += `<td>${cobj.units_firing[i].name}</td>`;
-      html += `<td>${cobj.units_firing[i].strength}</td>`;
-      html += `<td>${cobj.hits_on[i]}</td>`;
-      html += `<td>${cobj.unmodified_roll[i]}</td>`;
+      html += `<td class="combat_log_td">${cobj.units_firing[i].name}</td>`;
+      html += `<td class="combat_log_td">${cobj.units_firing[i].strength}</td>`;
+      html += `<td class="combat_log_td">${cobj.hits_on[i]}</td>`;
+      html += `<td class="combat_log_td">${cobj.unmodified_roll[i]}</td>`;
   if (are_there_modified_rolls) {
-      html += `<td>${cobj.modified_roll[i]}</td>`;
+      html += `<td class="combat_log_td">${cobj.modified_roll[i]}</td>`;
   }
   if (are_there_rerolls) {
-      html += `<td>${cobj.reroll[i]}</td>`;
+      html += `<td class="combat_log_td">${cobj.reroll[i]}</td>`;
   }
-      html += `<td>${cobj.hits_or_misses[i]}</td>`;
+      html += `<td class="combat_log_td">${cobj.hits_or_misses[i]}</td>`;
       html += '</tr>';
   }
       html += '</table>';
@@ -21336,21 +21368,21 @@ returnPlanetInformationHTML(planet) {
   if (ionp > 0) {
     html += '<li class="sector_information_planet_content_box">';
     html += '<div class="planet_infantry_count">'+ionp+'</div>';
-    hmtl += '</li>';
+    html += '</li>';
   }
   html += '</ul>';
 
   if (sonp > 0) {
     html += '<li class="sector_information_planet_content_box">';
     html += '<div class="planet_spacedock_count">'+sonp+'</div>';
-    hmtl += '</li>';
+    html += '</li>';
   }
   html += '</ul>';
 
   if (ponp > 0) {
     html += '<li class="sector_information_planet_content_box">';
     html += '<div class="planet_pds_count">'+ponp+'</div>';
-    hmtl += '</li>';
+    html += '</li>';
   }
   html += '</ul>';
 
@@ -21559,7 +21591,6 @@ console.log(JSON.stringify(objc[o]));
   return html;
 
 }
-
 
 
 
@@ -22405,24 +22436,63 @@ updateSectorGraphics(sector) {
   showSectorHighlight(sector) { this.addSectorHighlight(sector); }
   hideSectorHighlight(sector) { this.removeSectorHighlight(sector); }
   addSectorHighlight(sector) {
-
-//alert("This is where we switch over to the new display");
-
+    try {
     if (sector.indexOf("planet") == 0 || sector == 'new-byzantium') {
       sector = this.game.planets[sector].sector;
     }
     let sys = this.returnSectorAndPlanets(sector);
-    let divname = "#hex_space_" + sys.s.tile;
-    $(divname).css('background-color', '#900');
+    //let divname = "#hex_space_" + sys.s.tile;
+   //$(divname).css('background-color', '#900');
+
+    //returnPlanetInformationHTML(this.game.sectors[sector].planets[0])
+
+    // if we got here but the sector has no planets, nope out.
+    if(this.game.sectors[sector].planets.length ==0) { return;}
+
+    //handle writing for one or two planets
+    var info_tile = document.querySelector("#hex_info_" + sys.s.tile);
+    if(this.game.sectors[sector].planets.length = 1) {
+      let html = this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
+      info_tile.innerHTML = html;
+      info_tile.classList.add('one_planet');
+    } else {
+      let html = '<div class="top_planet">';
+      html += this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
+      html += '</div><div class="bottom_planet">';
+      html += this.returnPlanetInformationHTML(this.game.sectors[sector].planets[1]);
+      html += '</div>';
+      info_tile.innerHTML = html;
+      info_tile.classList.add('two_planet');
+    }
+
+
+/*    if(this.game.sectors[sector].planets.length = 1) {
+      let html = '<div class="top_planet">';
+      html += this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
+      html += '</div><div class="bottom_planet">';
+      html += this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
+      html += '</div>';
+      info_tile.innerHTML = html;
+      info_tile.classList.add('two_planet');
+    }
+*/
+
+    document.querySelector("#hexIn_" + sys.s.tile).classList.add('bi');
+    } catch (err) {}
   }
+
   removeSectorHighlight(sector) {
+    try {
     if (sector.indexOf("planet") == 0 || sector == 'new-byzantium') {
       sector = this.game.planets[sector].sector;
     }
     let sys = this.returnSectorAndPlanets(sector);
-    let divname = "#hex_space_" + sys.s.tile;
-    $(divname).css('background-color', 'transparent');
+    //let divname = "#hex_space_" + sys.s.tile;
+    //$(divname).css('background-color', 'transparent');coo
+    document.querySelector("#hexIn_" + sys.s.tile).classList.remove('bi');
+    } catch (err) {}
   }
+
   addPlanetHighlight(sector, pid)  {
     this.showSectorHighlight(sector);
 // red overlay

@@ -43,33 +43,33 @@ updateCombatLog(cobj) {
   }
 
   let html = '';
-      html += '<table>';
+      html += '<table class="combat_log">';
       html += '<tr>';
-      html += '<td></th>';
-      html += '<td>Strength</th>';
-      html += '<td>Combat</th>';
-      html += '<td>Roll</th>';
+      html += '<th class="combat_log_th"></th>';
+      html += '<th class="combat_log_th">HP</th>';
+      html += '<th class="combat_log_th">Combat</th>';
+      html += '<th class="combat_log_th">Roll</th>';
   if (are_there_modified_rolls) {
-      html += '<td>Modified</th>';
+      html += '<th class="combat_log_th">Modified</th>';
   }
   if (are_there_rerolls) {
-      html += '<td>Reroll</th>';
+      html += '<th class="combat_log_th">Reroll</th>';
   }
-      html += '<td>Hit</th>';
+      html += '<th class="combat_log_th">Hit</th>';
       html += '</tr>';
   for (let i = 0; i < cobj.units_firing.length; i++) {
       html += '<tr>';
-      html += `<td>${cobj.units_firing[i].name}</td>`;
-      html += `<td>${cobj.units_firing[i].strength}</td>`;
-      html += `<td>${cobj.hits_on[i]}</td>`;
-      html += `<td>${cobj.unmodified_roll[i]}</td>`;
+      html += `<td class="combat_log_td">${cobj.units_firing[i].name}</td>`;
+      html += `<td class="combat_log_td">${cobj.units_firing[i].strength}</td>`;
+      html += `<td class="combat_log_td">${cobj.hits_on[i]}</td>`;
+      html += `<td class="combat_log_td">${cobj.unmodified_roll[i]}</td>`;
   if (are_there_modified_rolls) {
-      html += `<td>${cobj.modified_roll[i]}</td>`;
+      html += `<td class="combat_log_td">${cobj.modified_roll[i]}</td>`;
   }
   if (are_there_rerolls) {
-      html += `<td>${cobj.reroll[i]}</td>`;
+      html += `<td class="combat_log_td">${cobj.reroll[i]}</td>`;
   }
-      html += `<td>${cobj.hits_or_misses[i]}</td>`;
+      html += `<td class="combat_log_td">${cobj.hits_or_misses[i]}</td>`;
       html += '</tr>';
   }
       html += '</table>';
@@ -109,21 +109,21 @@ returnPlanetInformationHTML(planet) {
   if (ionp > 0) {
     html += '<li class="sector_information_planet_content_box">';
     html += '<div class="planet_infantry_count">'+ionp+'</div>';
-    hmtl += '</li>';
+    html += '</li>';
   }
   html += '</ul>';
 
   if (sonp > 0) {
     html += '<li class="sector_information_planet_content_box">';
     html += '<div class="planet_spacedock_count">'+sonp+'</div>';
-    hmtl += '</li>';
+    html += '</li>';
   }
   html += '</ul>';
 
   if (ponp > 0) {
     html += '<li class="sector_information_planet_content_box">';
     html += '<div class="planet_pds_count">'+ponp+'</div>';
-    hmtl += '</li>';
+    html += '</li>';
   }
   html += '</ul>';
 
@@ -332,7 +332,6 @@ console.log(JSON.stringify(objc[o]));
   return html;
 
 }
-
 
 
 
@@ -1178,24 +1177,63 @@ updateSectorGraphics(sector) {
   showSectorHighlight(sector) { this.addSectorHighlight(sector); }
   hideSectorHighlight(sector) { this.removeSectorHighlight(sector); }
   addSectorHighlight(sector) {
-
-//alert("This is where we switch over to the new display");
-
+    try {
     if (sector.indexOf("planet") == 0 || sector == 'new-byzantium') {
       sector = this.game.planets[sector].sector;
     }
     let sys = this.returnSectorAndPlanets(sector);
-    let divname = "#hex_space_" + sys.s.tile;
-    $(divname).css('background-color', '#900');
+    //let divname = "#hex_space_" + sys.s.tile;
+   //$(divname).css('background-color', '#900');
+
+    //returnPlanetInformationHTML(this.game.sectors[sector].planets[0])
+
+    // if we got here but the sector has no planets, nope out.
+    if(this.game.sectors[sector].planets.length ==0) { return;}
+
+    //handle writing for one or two planets
+    var info_tile = document.querySelector("#hex_info_" + sys.s.tile);
+    if(this.game.sectors[sector].planets.length = 1) {
+      let html = this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
+      info_tile.innerHTML = html;
+      info_tile.classList.add('one_planet');
+    } else {
+      let html = '<div class="top_planet">';
+      html += this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
+      html += '</div><div class="bottom_planet">';
+      html += this.returnPlanetInformationHTML(this.game.sectors[sector].planets[1]);
+      html += '</div>';
+      info_tile.innerHTML = html;
+      info_tile.classList.add('two_planet');
+    }
+
+
+/*    if(this.game.sectors[sector].planets.length = 1) {
+      let html = '<div class="top_planet">';
+      html += this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
+      html += '</div><div class="bottom_planet">';
+      html += this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
+      html += '</div>';
+      info_tile.innerHTML = html;
+      info_tile.classList.add('two_planet');
+    }
+*/
+
+    document.querySelector("#hexIn_" + sys.s.tile).classList.add('bi');
+    } catch (err) {}
   }
+
   removeSectorHighlight(sector) {
+    try {
     if (sector.indexOf("planet") == 0 || sector == 'new-byzantium') {
       sector = this.game.planets[sector].sector;
     }
     let sys = this.returnSectorAndPlanets(sector);
-    let divname = "#hex_space_" + sys.s.tile;
-    $(divname).css('background-color', 'transparent');
+    //let divname = "#hex_space_" + sys.s.tile;
+    //$(divname).css('background-color', 'transparent');coo
+    document.querySelector("#hexIn_" + sys.s.tile).classList.remove('bi');
+    } catch (err) {}
   }
+
   addPlanetHighlight(sector, pid)  {
     this.showSectorHighlight(sector);
 // red overlay

@@ -3516,7 +3516,7 @@ imperium_self.saveGame(imperium_self.game.id);
 	  for (let i = 0; i < sys.p[planet_idx].units[attacker-1].length; i++) {
 	    if (sys.p[planet_idx].units[attacker-1][i].type == "infantry" ) {
 
-	      units_firing.push(sys.p[planet_idx].units[attacker-1][i];
+	      units_firing.push(sys.p[planet_idx].units[attacker-1][i]);
 
 	      let roll = this.rollDice(10);
 
