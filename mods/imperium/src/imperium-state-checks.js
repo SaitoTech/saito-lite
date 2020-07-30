@@ -1271,7 +1271,33 @@ if (this.game.board[tmp[k]] != undefined) {
   
 
 
-
+  returnPDSOnPlanet(planet) {
+    let total = 0;
+    for (let i = 0; i < planet.units.length && (i+1) == planet.owner; i++) {
+      for (let k = 0; k < planet.units[i].length; k++) {
+	if (planet.units[i][k].type == "pds") { total++; }
+      }
+    }
+    return total;
+  }
+  returnSpaceDocksOnPlanet(planet) {
+    let total = 0;
+    for (let i = 0; i < planet.units.length && (i+1) == planet.owner; i++) {
+      for (let k = 0; k < planet.units[i].length; k++) {
+	if (planet.units[i][k].type == "spacedock") { total++; }
+      }
+    }
+    return total;
+  }
+  returnInfantryOnPlanet(planet) {
+    let total = 0;
+    for (let i = 0; i < planet.units.length; i++) {
+      for (let k = 0; k < planet.units[i].length && (i+1) == planet.owner; k++) {
+	if (planet.units[i][k].type == "infantry") { total++; }
+      }
+    }
+    return total;
+  }
 
   doesPlanetHavePDS(planet) {
     if (planet.units == undefined) {
