@@ -1916,42 +1916,37 @@ input[type=range] {
 }
 
 .gameboard img {
-  transition: 0.4s;
+  transition: 0.2s;
 }
 
 /* double planet */
 
 .bi .sector8, .bi .sector9, .bi .sector10, .bi .sector11, .bi .sector12, .bi .sector13, .bi .sector14, .bi .sector15, .bi .sector16, .bi .sector17, .bi .sector18, .bi .sector19, .bi .sector20, .bi .sector21, .bi .sector38, .bi .sector39, .bi .sector40, .bi .sector50, .bi .sector51 {
-  scale: 2.6;
-  transform: rotate(-30deg);
+  transform: scale(2.6)rotate(-30deg);
 }
 
 /* large single planet */
 
 .bi .sector22, .bi .sector23, .bi .sector24, .bi .sector25, .bi .sector26, .bi .sector27, .bi .sector28, .bi .new-byzantium, .bi .sector29, .bi .sector30, .bi .sector31, .bi .sector32, .bi .sector45, .bi .sector52, .bi .sector53, .bi .sector73 {
-  scale: 2.3;
-  transform: translate(0%, 25%) rotate(17deg);
+  transform: scale(2.3) translate(0%, 25%) rotate(17deg);
 }
 
 /* small single planet */
 
 .bi .sector58, .bi .sector59, .bi .sector60, .bi .sector61, .bi .sector62, .bi .sector63, .bi .sector64, .bi .sector65, .bi .sector66, .bi .sector67, .bi .sector62, .bi .sector69, .bi .sector70 {
-  scale: 3;
-  transform: translate(-5%, 16%);
+  transform: scale(3) translate(-5%, 16%);
 }
 
 /* planet and wormhole */
 
 .bi .sector41, .bi .sector42, .bi .sector46, .bi .sector47, .bi .sector55, .bi .sector57 {
-  scale: 3;
-  transform: translate(11%, 35%);
+  transform: scale(3) translate(11%, 35%);
 }
 
 /* small planet bottom */
 
 .bi .sector43, .bi .sector44 {
-  scale: 3;
-  transform: translate(-10%, 6%);
+  transform: scale(3) translate(-10%, 6%);
 }
 
 .hexInfo {
