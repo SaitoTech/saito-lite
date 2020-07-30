@@ -8040,7 +8040,7 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
           <div class="hexIn" id="hexIn_'+i+'"> \
             <div class="hexLink" id="hexLink_'+i+'"> \
               <div class="hex_bg" id="hex_bg_'+i+'"> \
-                <img class="hex_img sector_graphics_background" id="hex_img_'+i+'" src="" /> \
+                <img class="hex_img sector_graphics_background '+this.game.board[i].tile+'" id="hex_img_'+i+'" src="" /> \
                 <img src="/imperium/img/frame/border_full_white.png" id="hex_img_faction_border_'+i+'" class="faction_border" /> \
                 <img src="/imperium/img/frame/border_full_yellow.png" id="hex_img_hazard_border_'+i+'" class="hazard_border" /> \
                 <div class="hex_activated" id="hex_activated_'+i+'"> \
@@ -21219,6 +21219,14 @@ setPlayerActiveOnly(player) {
   for (let i = 1; i <= this.game.players_info.length; i++) {
     if (player == i) { this.setPlayerActive(i); } else { this.setPlayerInactive(i); }  
   }
+}
+
+
+returnPlanetInformationHTML(planet) {
+
+  let html = '';
+  let p = this.game.planets[planet]; 
+
 }
 
 returnFactionDashboard() {

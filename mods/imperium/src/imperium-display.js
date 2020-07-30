@@ -44,6 +44,14 @@ setPlayerActiveOnly(player) {
   }
 }
 
+
+returnPlanetInformationHTML(planet) {
+
+  let html = '';
+  let p = this.game.planets[planet]; 
+
+}
+
 returnFactionDashboard() {
 
   let html = '';
