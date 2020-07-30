@@ -1916,7 +1916,7 @@ input[type=range] {
 }
 
 .gameboard img {
-  transition: 0.2s;
+  transition: 0.333s;
 }
 
 /* double planet */
@@ -1987,5 +1987,35 @@ input[type=range] {
 .bottom_planet .sector_information_planetname {
   top: 190px;
   left: 230px;
+  transform: translateX(-100%);
+}
+
+.sector_information_planet_content {
+  display: grid;
+  grid-gap: 3px;
+  grid-template-columns: auto auto;
+  position: absolute;
+  top: 60px;
+  left: 120px;
+  background: #000a;
+  padding: 1em;
+  transform: translateX(-50%);
+}
+
+.sector_information_planet_content div {
+  position: relative;
+  text-align: left;
+}
+
+.top_planet .sector_information_planet_content {
+  top: 90px;
+  left: 60px;
+  font-size: smaller;
+}
+
+.bottom_planet .sector_information_planet_content {
+  top: 90px;
+  left: 238px;
+  font-size: smaller;
   transform: translateX(-100%);
 }
