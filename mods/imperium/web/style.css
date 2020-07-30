@@ -1992,3 +1992,11 @@ input[type=range] {
   scale: 3;
   transform: translate(-10%, 6%);
 }
+
+.hexInfo {
+  position: absolute;
+  top: 20px;
+  border: 1px solid aqua;
+  color: #fff;
+  z-index: 99999999;
+}

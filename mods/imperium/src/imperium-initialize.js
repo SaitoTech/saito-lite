@@ -328,6 +328,7 @@
         ' \
           <div class="hexIn" id="hexIn_'+i+'"> \
             <div class="hexLink" id="hexLink_'+i+'"> \
+            <div class="hexInfo" id="hexninfo_'+i+'"></div> \
               <div class="hex_bg" id="hex_bg_'+i+'"> \
                 <img class="hex_img sector_graphics_background '+this.game.board[i].tile+'" id="hex_img_'+i+'" src="" /> \
                 <img src="/imperium/img/frame/border_full_white.png" id="hex_img_faction_border_'+i+'" class="faction_border" /> \
@@ -347,9 +348,12 @@
       // insert planet
       let planet_div = "#hex_img_"+i;
       $(planet_div).attr("src", this.game.sectors[this.game.board[i].tile].img);
+
+      // add planet info
   
       this.updateSectorGraphics(i);
-  
+
+        
           
     }
   
