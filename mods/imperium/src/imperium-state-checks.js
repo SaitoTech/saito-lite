@@ -230,19 +230,20 @@
     let as = this.returnAdjacentSectors(sector);
     for (let i = 0; i < as.length; i++) {
       let addsec = 0;
-      if (this.doesSectorContainPlayerShips(as[i]) && (!this.doesSectorContainNonPlayerShips(as[i]))) { addsec = 1; }
-      if (this.doesSectorContainPlanetOwnedByPlayer(sector, player)&& (!this.doesSectorContainNonPlayerShips(as[i]))) { addsec = 1; }
+      if (this.doesSectorContainPlayerShips(player, as[i]) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { addsec = 1; }
+      if (this.doesSectorContainPlanetOwnedByPlayer(sector, player) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { addsec = 1; }
       if (addsec == 1) { retreat_sectors.push(as[i]); }
     }
 
     return retreat_sectors;
   }
+
   canPlayerRetreat(player, attacker, defender, sector) {
 
     let as = this.returnAdjacentSectors(sector);
     for (let i = 0; i < as.length; i++) {
-      if (this.doesSectorContainPlayerShips(as[i]) && (!this.doesSectorContainNonPlayerShips(as[i]))) { return 1; }
-      if (this.doesSectorContainPlanetOwnedByPlayer(sector, player)&& (!this.doesSectorContainNonPlayerShips(as[i]))) { return 1; }
+      if (this.doesSectorContainPlayerShips(player, as[i]) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
+      if (this.doesSectorContainPlanetOwnedByPlayer(sector, player) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
     }
 
     return 0;

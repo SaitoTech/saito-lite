@@ -11650,9 +11650,6 @@ imperium_self.saveGame(imperium_self.game.id);
 	    let tmple1 = this.game.queue[le+1];
 	    this.game.queue[le]   = tmple1;
 	    this.game.queue[le+1] = tmple;
-	    //
-	    // 
-	    //
 	    return 1;
 	  }
 	}
@@ -12184,9 +12181,6 @@ imperium_self.saveGame(imperium_self.game.id);
 	    let tmple1 = this.game.queue[le+1];
 	    this.game.queue[le]   = tmple1;
 	    this.game.queue[le+1] = tmple;
-	    //
-	    // 
-	    //
 	    return 1;
 	  }
 	}
@@ -12208,20 +12202,25 @@ imperium_self.saveGame(imperium_self.game.id);
 	  //
 	  // barrage against fighters fires first
 	  //
-
-
 	  let total_shots = 0;
 	  let total_hits = 0;
 	  let hits_or_misses = [];
 	  let hits_on = [];
 	  let units_firing = [];
+	  let unmodified_roll = [];
+	  let modified_roll = [];
+	  let reroll = [];
 
 	  //
 	  // then the rest
 	  //
 	  for (let i = 0; i < sys.s.units[attacker-1].length; i++) {
+	  // skip if unit is toast
+          if (sys.s.units[attacker-1][i].strength > 0) {
 
 	    let roll = this.rollDice(10);
+
+	    unmodified_roll.push(roll);
 
 	    for (let z_index in z) {
 	      roll = z[z_index].modifyCombatRoll(this, attacker, defender, attacker, "space", roll);
@@ -12232,6 +12231,9 @@ imperium_self.saveGame(imperium_self.game.id);
 	    roll += this.game.players_info[attacker-1].space_combat_roll_modifier;
 	    roll += this.game.players_info[attacker-1].temporary_space_combat_roll_modifier;
 	    roll += sys.s.units[attacker-1][i].temporary_combat_modifier;
+
+	    modified_roll.push(roll);
+	    reroll.push(0);
 
 	    if (roll >= sys.s.units[attacker-1][i].combat) {
 	      total_hits++;
@@ -12282,7 +12284,9 @@ imperium_self.saveGame(imperium_self.game.id);
 	      }
 	     
 	      let roll = this.rollDice(10);
- 
+
+	      unmodified_roll[lowest_combat_idx] = roll;
+
 	      for (let z_index in z) {
 	        roll =  z[z_index].modifyCombatRerolls(this, player, attacker, player, "space", roll);
 	        total_hits = z[z_index].modifyUnitHits(this, attacker, defender, attacker, "space", rerolling_unit, roll, total_hits);
@@ -12293,6 +12297,9 @@ imperium_self.saveGame(imperium_self.game.id);
 	      roll += this.game.players_info[player-1].temporary_space_combat_roll_modifier;
 	      roll += sys.s.units[attacker-1][lowest_combat_idx].temporary_combat_modifier;
 
+	      modified_roll[lowest_combat_idx] = roll;
+	      reroll[lowest_combat_idx] = 1;
+
 	      if (roll >= hits_on[lowest_combat_idx]) {
 	        total_hits++;
 		hits_or_misses[lowest_combat_idx] = 1;
@@ -12301,7 +12308,22 @@ imperium_self.saveGame(imperium_self.game.id);
 	      }
 	    }
 
-	  }
+	  } // if attacking unit not dead
+	  } // for all attacking units
+
+	  //
+	  // create an object with all this information to update our LOG
+	  //
+	  let combat_info = {};
+	      combat_info.hits_or_misses  = hits_or_misses;
+	      combat_info.units_firing 	  = units_firing;
+	      combat_info.hits_on 	  = hits_on;
+	      combat_info.unmodified_roll = unmodified_roll;  // unmodified roll
+	      combat_info.modified_roll   = modified_roll; // modified roll
+	      combat_info.reroll 	  = reroll; // rerolls
+
+	  this.updateCombatLog(combat_info);
+
 
 	  //
 	  // total hits to assign
@@ -18296,9 +18318,10 @@ console.log("NONE!");
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-      return ["1_1", "4_7"];
-//      return ["1_1", "2_1"];
+//      return ["1_1", "4_7"];
+      return ["1_1", "2_1"];
     }
+
 
     if (players <= 3) {
       return ["1_1", "4_7", "7_1"];
@@ -19026,19 +19049,20 @@ console.log("NONE!");
     let as = this.returnAdjacentSectors(sector);
     for (let i = 0; i < as.length; i++) {
       let addsec = 0;
-      if (this.doesSectorContainPlayerShips(as[i]) && (!this.doesSectorContainNonPlayerShips(as[i]))) { addsec = 1; }
-      if (this.doesSectorContainPlanetOwnedByPlayer(sector, player)&& (!this.doesSectorContainNonPlayerShips(as[i]))) { addsec = 1; }
+      if (this.doesSectorContainPlayerShips(player, as[i]) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { addsec = 1; }
+      if (this.doesSectorContainPlanetOwnedByPlayer(sector, player) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { addsec = 1; }
       if (addsec == 1) { retreat_sectors.push(as[i]); }
     }
 
     return retreat_sectors;
   }
+
   canPlayerRetreat(player, attacker, defender, sector) {
 
     let as = this.returnAdjacentSectors(sector);
     for (let i = 0; i < as.length; i++) {
-      if (this.doesSectorContainPlayerShips(as[i]) && (!this.doesSectorContainNonPlayerShips(as[i]))) { return 1; }
-      if (this.doesSectorContainPlanetOwnedByPlayer(sector, player)&& (!this.doesSectorContainNonPlayerShips(as[i]))) { return 1; }
+      if (this.doesSectorContainPlayerShips(player, as[i]) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
+      if (this.doesSectorContainPlanetOwnedByPlayer(sector, player) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
     }
 
     return 0;
@@ -21235,7 +21259,51 @@ addEventsToBoard() {
 
 }
 
+updateCombatLog(cobj) {
 
+  let are_there_rerolls = 0;
+  let are_there_modified_rolls = 0;
+
+  for (let i = 0; i < cobj.units_firing.length; i++) {
+    if (cobj.reroll[i] == 1) { are_there_rerolls = 1; }
+    if (cobj.modified_roll[i] != cobj.unmodified_roll[i]) { are_there_modified_rolls = 1; }
+  }
+
+  let html = '';
+      html += '<table>';
+      html += '<tr>';
+      html += '<td></th>';
+      html += '<td>Strength</th>';
+      html += '<td>Combat</th>';
+      html += '<td>Roll</th>';
+  if (are_there_modified_rolls) {
+      html += '<td>Modified</th>';
+  }
+  if (are_there_rerolls) {
+      html += '<td>Reroll</th>';
+  }
+      html += '<td>Hit</th>';
+      html += '</tr>';
+  for (let i = 0; i < cobj.units_firing.length; i++) {
+      html += '<tr>';
+      html += `<td>${cobj.units_firing[i].name}</td>`;
+      html += `<td>${cobj.units_firing[i].strength}</td>`;
+      html += `<td>${cobj.hits_on[i]}</td>`;
+      html += `<td>${cobj.unmodified_roll[i]}</td>`;
+  if (are_there_modified_rolls) {
+      html += `<td>${cobj.modified_roll[i]}</td>`;
+  }
+  if (are_there_rerolls) {
+      html += `<td>${cobj.reroll[i]}</td>`;
+  }
+      html += `<td>${cobj.hits_or_misses[i]}</td>`;
+      html += '</tr>';
+  }
+      html += '</table>';
+
+  this.updateLog(html);
+
+}
 
 
 setPlayerActive(player) {
@@ -22338,7 +22406,7 @@ updateSectorGraphics(sector) {
   hideSectorHighlight(sector) { this.removeSectorHighlight(sector); }
   addSectorHighlight(sector) {
 
-alert("This is where we switch over to the new display");
+//alert("This is where we switch over to the new display");
 
     if (sector.indexOf("planet") == 0 || sector == 'new-byzantium') {
       sector = this.game.planets[sector].sector;

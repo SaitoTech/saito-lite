@@ -32,7 +32,51 @@ addEventsToBoard() {
 
 }
 
+updateCombatLog(cobj) {
 
+  let are_there_rerolls = 0;
+  let are_there_modified_rolls = 0;
+
+  for (let i = 0; i < cobj.units_firing.length; i++) {
+    if (cobj.reroll[i] == 1) { are_there_rerolls = 1; }
+    if (cobj.modified_roll[i] != cobj.unmodified_roll[i]) { are_there_modified_rolls = 1; }
+  }
+
+  let html = '';
+      html += '<table>';
+      html += '<tr>';
+      html += '<td></th>';
+      html += '<td>Strength</th>';
+      html += '<td>Combat</th>';
+      html += '<td>Roll</th>';
+  if (are_there_modified_rolls) {
+      html += '<td>Modified</th>';
+  }
+  if (are_there_rerolls) {
+      html += '<td>Reroll</th>';
+  }
+      html += '<td>Hit</th>';
+      html += '</tr>';
+  for (let i = 0; i < cobj.units_firing.length; i++) {
+      html += '<tr>';
+      html += `<td>${cobj.units_firing[i].name}</td>`;
+      html += `<td>${cobj.units_firing[i].strength}</td>`;
+      html += `<td>${cobj.hits_on[i]}</td>`;
+      html += `<td>${cobj.unmodified_roll[i]}</td>`;
+  if (are_there_modified_rolls) {
+      html += `<td>${cobj.modified_roll[i]}</td>`;
+  }
+  if (are_there_rerolls) {
+      html += `<td>${cobj.reroll[i]}</td>`;
+  }
+      html += `<td>${cobj.hits_or_misses[i]}</td>`;
+      html += '</tr>';
+  }
+      html += '</table>';
+
+  this.updateLog(html);
+
+}
 
 
 setPlayerActive(player) {
@@ -1135,7 +1179,7 @@ updateSectorGraphics(sector) {
   hideSectorHighlight(sector) { this.removeSectorHighlight(sector); }
   addSectorHighlight(sector) {
 
-alert("This is where we switch over to the new display");
+//alert("This is where we switch over to the new display");
 
     if (sector.indexOf("planet") == 0 || sector == 'new-byzantium') {
       sector = this.game.planets[sector].sector;

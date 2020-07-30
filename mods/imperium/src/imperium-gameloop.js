@@ -2765,9 +2765,6 @@ imperium_self.saveGame(imperium_self.game.id);
 	    let tmple1 = this.game.queue[le+1];
 	    this.game.queue[le]   = tmple1;
 	    this.game.queue[le+1] = tmple;
-	    //
-	    // 
-	    //
 	    return 1;
 	  }
 	}
@@ -3299,9 +3296,6 @@ imperium_self.saveGame(imperium_self.game.id);
 	    let tmple1 = this.game.queue[le+1];
 	    this.game.queue[le]   = tmple1;
 	    this.game.queue[le+1] = tmple;
-	    //
-	    // 
-	    //
 	    return 1;
 	  }
 	}
@@ -3323,20 +3317,25 @@ imperium_self.saveGame(imperium_self.game.id);
 	  //
 	  // barrage against fighters fires first
 	  //
-
-
 	  let total_shots = 0;
 	  let total_hits = 0;
 	  let hits_or_misses = [];
 	  let hits_on = [];
 	  let units_firing = [];
+	  let unmodified_roll = [];
+	  let modified_roll = [];
+	  let reroll = [];
 
 	  //
 	  // then the rest
 	  //
 	  for (let i = 0; i < sys.s.units[attacker-1].length; i++) {
+	  // skip if unit is toast
+          if (sys.s.units[attacker-1][i].strength > 0) {
 
 	    let roll = this.rollDice(10);
+
+	    unmodified_roll.push(roll);
 
 	    for (let z_index in z) {
 	      roll = z[z_index].modifyCombatRoll(this, attacker, defender, attacker, "space", roll);
@@ -3347,6 +3346,9 @@ imperium_self.saveGame(imperium_self.game.id);
 	    roll += this.game.players_info[attacker-1].space_combat_roll_modifier;
 	    roll += this.game.players_info[attacker-1].temporary_space_combat_roll_modifier;
 	    roll += sys.s.units[attacker-1][i].temporary_combat_modifier;
+
+	    modified_roll.push(roll);
+	    reroll.push(0);
 
 	    if (roll >= sys.s.units[attacker-1][i].combat) {
 	      total_hits++;
@@ -3397,7 +3399,9 @@ imperium_self.saveGame(imperium_self.game.id);
 	      }
 	     
 	      let roll = this.rollDice(10);
- 
+
+	      unmodified_roll[lowest_combat_idx] = roll;
+
 	      for (let z_index in z) {
 	        roll =  z[z_index].modifyCombatRerolls(this, player, attacker, player, "space", roll);
 	        total_hits = z[z_index].modifyUnitHits(this, attacker, defender, attacker, "space", rerolling_unit, roll, total_hits);
@@ -3408,6 +3412,9 @@ imperium_self.saveGame(imperium_self.game.id);
 	      roll += this.game.players_info[player-1].temporary_space_combat_roll_modifier;
 	      roll += sys.s.units[attacker-1][lowest_combat_idx].temporary_combat_modifier;
 
+	      modified_roll[lowest_combat_idx] = roll;
+	      reroll[lowest_combat_idx] = 1;
+
 	      if (roll >= hits_on[lowest_combat_idx]) {
 	        total_hits++;
 		hits_or_misses[lowest_combat_idx] = 1;
@@ -3416,7 +3423,21 @@ imperium_self.saveGame(imperium_self.game.id);
 	      }
 	    }
 
-	  }
+	  } // if attacking unit not dead
+	  } // for all attacking units
+
+	  //
+	  // create an object with all this information to update our LOG
+	  //
+	  let combat_info = {};
+	      combat_info.hits_or_misses  = hits_or_misses;
+	      combat_info.units_firing 	  = units_firing;
+	      combat_info.hits_on 	  = hits_on;
+	      combat_info.unmodified_roll = unmodified_roll;  // unmodified roll
+	      combat_info.modified_roll   = modified_roll; // modified roll
+	      combat_info.reroll 	  = reroll; // rerolls
+
+	  this.updateCombatLog(combat_info);
 
 	  //
 	  // total hits to assign
@@ -3483,6 +3504,11 @@ imperium_self.saveGame(imperium_self.game.id);
 	  let total_hits = 0;
 	  let hits_or_misses = [];
 	  let hits_on = [];
+          let units_firing = [];
+          let unmodified_roll = [];
+          let modified_roll = [];
+          let reroll = [];
+
 
 	  //
 	  // then the rest
@@ -3490,8 +3516,11 @@ imperium_self.saveGame(imperium_self.game.id);
 	  for (let i = 0; i < sys.p[planet_idx].units[attacker-1].length; i++) {
 	    if (sys.p[planet_idx].units[attacker-1][i].type == "infantry" ) {
 
+	      units_firing.push(sys.p[planet_idx].units[attacker-1][i];
+
 	      let roll = this.rollDice(10);
 
+	      unmodified_roll.push(roll);
 
 	      for (let z_index in z) {
 	        roll = z[z_index].modifyCombatRoll(this, attacker, defender, attacker, "ground", roll);
@@ -3501,6 +3530,9 @@ imperium_self.saveGame(imperium_self.game.id);
 	      roll += this.game.players_info[attacker-1].ground_combat_roll_modifier;
 	      roll += this.game.players_info[attacker-1].temporary_ground_combat_roll_modifier;
 	      roll += sys.p[planet_idx].units[attacker-1][i].temporary_combat_modifier;
+
+	      modified_roll.push(roll);
+	      reroll.push(0);
 
 	      if (roll >= sys.p[planet_idx].units[attacker-1][i].combat) {
 	        total_hits++;
@@ -3521,7 +3553,6 @@ imperium_self.saveGame(imperium_self.game.id);
  	  // handle rerolls
 	  //
 	  if (total_hits < total_shots) {
-
 
 	    let max_rerolls = total_shots - total_hits;
 	    let available_rerolls = this.game.players_info[attacker-1].combat_dice_reroll + this.game.players_info[attacker-1].ground_combat_dice_reroll;
@@ -3549,7 +3580,10 @@ imperium_self.saveGame(imperium_self.game.id);
 	      }
 	     
 	      let roll = this.rollDice(10);
- 
+
+	      unmodified_roll[lowest_combat_idx] = roll;
+	      reroll[lowest_combat_idx] = 1;
+
 	      for (let z_index in z) {
 	        roll =  z[z_index].modifyCombatRerolls(this, player, attacker, player, "ground", roll);
 	        imperium_self.game.players_info[defender-1].target_units = z[z_index].modifyTargets(this, attacker, defender, imperium_self.game.player, "ground", imperium_self.game.players_info[defender-1].target_units);
@@ -3558,6 +3592,8 @@ imperium_self.saveGame(imperium_self.game.id);
 	      roll += this.game.players_info[player-1].ground_combat_roll_modifier;
 	      roll += this.game.players_info[player-1].temporary_ground_combat_roll_modifier;
 	      roll += sys.p[planet_idx].units[attacker-1][lowest_combat_idx].temporary_combat_modifier;
+
+	      modified_roll[lowest_combat_idx] = roll;
 
 	      if (roll >= hits_on[lowest_combat_idx]) {
 	        total_hits++;
@@ -3568,6 +3604,20 @@ imperium_self.saveGame(imperium_self.game.id);
 	    }
 
 	  }
+
+	  //
+	  // create an object with all this information to update our LOG
+	  //
+	  let combat_info = {};
+	      combat_info.hits_or_misses  = hits_or_misses;
+	      combat_info.units_firing 	  = units_firing;
+	      combat_info.hits_on 	  = hits_on;
+	      combat_info.unmodified_roll = unmodified_roll;  // unmodified roll
+	      combat_info.modified_roll   = modified_roll; // modified roll
+	      combat_info.reroll 	  = reroll; // rerolls
+
+	  this.updateCombatLog(combat_info);
+
 
 	  //
 	  // total hits to assign
