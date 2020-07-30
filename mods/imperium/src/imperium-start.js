@@ -49,6 +49,12 @@ class Imperium extends GameTemplate {
 
     this.hud = new GameHud(this.app, this.menuItems());
    
+    //
+    // tutorial related
+    //
+    this.tutorial_move_clicked = 0;
+    this.tutorial_produce_clicked = 0;
+
   
     //
     // game-related

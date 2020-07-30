@@ -232,8 +232,12 @@
       }
 
       if (this.game.state.round == 1 && this.game.state.active_player_moved == 0) {
+	if (this.tutorial_move_clicked == 0) {
           html += '<li class="option" id="tutorial_move_ships">move ships</li>';
+	}
+	if (this.tutorial_produce_clicked == 0) {
           html += '<li class="option" id="tutorial_produce_units">produce units</li>';
+        }
       }
 
       if (this.game.players_info[this.game.player-1].command_tokens > 0) {
@@ -303,12 +307,14 @@
         }
 
         if (action2 == "tutorial_move_ships") {
+	  imperium_self.tutorial_move_clicked = 1;
 	  imperium_self.playerAcknowledgeNotice("To move ships select \"activate sector\". Be careful as most ships can only move 1-hexagon and you cannot move ships from sectors that are already activated. You will be able to choose the ships to move, and load infantry and fighters into units that can carry them.", function() {
 	    imperium_self.playerTurn();
 	  });
 	  return;
         }
         if (action2 == "tutorial_produce_units") {
+	  imperium_self.tutorial_produce_clicked = 1;
 	  imperium_self.playerAcknowledgeNotice("To produce units, select \"activate sector\" and choose a sector with a space dock (like your home system). You can only have as many non-fighter ships in any sector as your fleet supply, so move your ships out before producing more!", function() {
 	    imperium_self.playerTurn();
 	  });

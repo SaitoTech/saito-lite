@@ -817,11 +817,11 @@ hideSector(pid) {
   let sector_name = this.game.board[pid].tile;
   this.hideSectorHighlight(sector_name);
 
-//  let hex_space = ".sector_graphics_space_" + pid;
+  let hex_space = ".sector_graphics_space_" + pid;
 //  let hex_ground = ".sector_graphics_planet_" + pid;
 //
 //  $(hex_ground).fadeOut();
-//  $(hex_space).fadeIn();
+  $(hex_space).fadeIn();
 
 }
 
@@ -1027,7 +1027,7 @@ updateSectorGraphics(sector) {
 
 
 
-
+/***
   let ground_frames = [];
   let ground_pos = [];
 
@@ -1145,6 +1145,7 @@ updateSectorGraphics(sector) {
       }
     }
   }
+***/
 
   if (player_border_visible == 0) {
     for (let p = 0; p < sys.p.length; p++) {
@@ -1177,22 +1178,26 @@ updateSectorGraphics(sector) {
   showSectorHighlight(sector) { this.addSectorHighlight(sector); }
   hideSectorHighlight(sector) { this.removeSectorHighlight(sector); }
   addSectorHighlight(sector) {
+
+console.log(JSON.stringify(this.game.sectors[sector].planets));
+
     try {
     if (sector.indexOf("planet") == 0 || sector == 'new-byzantium') {
       sector = this.game.planets[sector].sector;
     }
     let sys = this.returnSectorAndPlanets(sector);
-    //let divname = "#hex_space_" + sys.s.tile;
-   //$(divname).css('background-color', '#900');
+
+    let divname = ".sector_graphics_space_" + sys.s.tile;
+    $(divname).css('display', 'none');
 
     //returnPlanetInformationHTML(this.game.sectors[sector].planets[0])
 
     // if we got here but the sector has no planets, nope out.
-    if(this.game.sectors[sector].planets.length ==0) { return;}
+    if (this.game.sectors[sector].planets.length == 0) { return;}
 
     //handle writing for one or two planets
     var info_tile = document.querySelector("#hex_info_" + sys.s.tile);
-    if(this.game.sectors[sector].planets.length = 1) {
+    if (this.game.sectors[sector].planets.length == 1) {
       let html = this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
       info_tile.innerHTML = html;
       info_tile.classList.add('one_planet');
@@ -1228,8 +1233,11 @@ updateSectorGraphics(sector) {
       sector = this.game.planets[sector].sector;
     }
     let sys = this.returnSectorAndPlanets(sector);
+    let divname = ".sector_graphics_space_" + sys.s.tile;
+    $(divname).css('display', 'all');
+
     //let divname = "#hex_space_" + sys.s.tile;
-    //$(divname).css('background-color', 'transparent');coo
+    //$(divname).css('background-color', 'transparent');
     document.querySelector("#hexIn_" + sys.s.tile).classList.remove('bi');
     } catch (err) {}
   }
