@@ -22445,7 +22445,7 @@ updateSectorGraphics(sector) {
     var info_tile = document.querySelector("#hex_info_" + sys.s.tile);
     let html = '';
 
-    if(this.game.sectors[sector].planets.length = 1) {
+    if(this.game.sectors[sector].planets.length == 1) {
       html = this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
       info_tile.innerHTML = html;
       console.log(html);
