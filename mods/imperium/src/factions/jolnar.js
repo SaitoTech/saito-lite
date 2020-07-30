@@ -19,8 +19,8 @@
       type      	:       "ability" ,
       modifyUnitHits 	: function(imperium_self, player, defender, attacker, combat_type, rerolling_unit, roll, total_hits) {
         if (!imperium_self.doesPlayerHaveTech(attacker, "faction2-flagship")) { return total_hits; }
-	if (unit.owner == attacker) {
-	  if (unit.type == "flagship") {
+	if (rerolling_unit.owner == attacker) {
+	  if (rerolling_unit.type == "flagship") {
 	    if (roll > 8) { 
 	      imperium_self.updateLog("Jol Nar flagship scores an additional hit through flagshup ability");
 	      total_hits++; 

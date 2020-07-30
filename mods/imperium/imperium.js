@@ -1126,8 +1126,8 @@ console.log("P: " + planet);
       type      	:       "ability" ,
       modifyUnitHits 	: function(imperium_self, player, defender, attacker, combat_type, rerolling_unit, roll, total_hits) {
         if (!imperium_self.doesPlayerHaveTech(attacker, "faction2-flagship")) { return total_hits; }
-	if (unit.owner == attacker) {
-	  if (unit.type == "flagship") {
+	if (rerolling_unit.owner == attacker) {
+	  if (rerolling_unit.type == "flagship") {
 	    if (roll > 8) { 
 	      imperium_self.updateLog("Jol Nar flagship scores an additional hit through flagshup ability");
 	      total_hits++; 
@@ -1554,7 +1554,7 @@ console.log("P: " + planet);
       type        :       "ability" ,
       returnPDSUnitsWithinRange : function(imperium_self, player, attacker, defender, sector, battery) {
 
-       if (!imperium_self.doesPlayerHaveTech("faction3-flagship")) { return 0; }
+       if (!imperium_self.doesPlayerHaveTech(player, "faction3-flagship")) { return 0; }
 
        let player_fleet = imperium_self.returnPlayerFleet(player);
        if (player_fleet.flagship > 0) {
@@ -10711,6 +10711,8 @@ imperium_self.saveGame(imperium_self.game.id);
   
   	if (type == "planet") { this.unexhaustPlanet(name); }
   
+	this.displayFactionDashboard();
+
   	this.game.queue.splice(qe, 1);
   	return 1;
   

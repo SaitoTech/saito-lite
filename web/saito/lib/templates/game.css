@@ -932,17 +932,11 @@ body {
 
 @media (min-width: 481px) and (max-width: 850px) and (max-height: 500px) {
   .cardbox {
-    /* position: fixed;
-    height: 95vh;
-    width: calc(95vh * 0.7211);
-    left: calc(45vw - 17.8em);
-    transform: translate(0%, -67%); */
-
     position: fixed;
     height: 75vh;
     width: calc(75vh * 0.7211);
     left: calc(40vw - 25vw);
-    transform: translate(0%, -29%);
+    transform: translate(0%, -22%);
   }
 
   #cardbox-exit-background {

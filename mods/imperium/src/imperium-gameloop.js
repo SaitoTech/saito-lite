@@ -1826,6 +1826,8 @@ imperium_self.saveGame(imperium_self.game.id);
   
   	if (type == "planet") { this.unexhaustPlanet(name); }
   
+	this.displayFactionDashboard();
+
   	this.game.queue.splice(qe, 1);
   	return 1;
   
