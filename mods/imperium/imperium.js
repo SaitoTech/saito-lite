@@ -22347,12 +22347,44 @@ updateSectorGraphics(sector) {
     let sys = this.returnSectorAndPlanets(sector);
     //let divname = "#hex_space_" + sys.s.tile;
    //$(divname).css('background-color', '#900');
-    let divname = "#hexIn_" + sys.s.tile;
 
     //returnPlanetInformationHTML(this.game.sectors[sector].planets[0])
-    let html = this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
-    document.querySelector("#hex_info_" + sys.s.tile).innerHTML += html;
-    document.querySelector(divname).classList.add('bi');
+
+    // if we got here but the sector has no planets, nope out.
+    if(this.game.sectors[sector].planets.length ==0) { return;}
+
+    //handle writing for one or two planets
+    var info_tile = document.querySelector("#hex_info_" + sys.s.tile);
+    if(this.game.sectors[sector].planets.length = 1) {
+      let html = this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
+      info_tile.innerHTML = html;
+      info_tile.classList.add('one_planet');
+    } else {
+      let html = '<div class="top_planet">';
+      html += this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
+      html += '</div><div class="bottom_planet">';
+      html += this.returnPlanetInformationHTML(this.game.sectors[sector].planets[1]);
+      html += '</div>';
+      info_tile.innerHTML = html;
+      info_tile.classList.add('two_planet');
+    }
+
+
+/*    if(this.game.sectors[sector].planets.length = 1) {
+      let html = '<div class="top_planet">';
+      html += this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
+      html += '</div><div class="bottom_planet">';
+      html += this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
+      html += '</div>';
+      info_tile.innerHTML = html;
+      info_tile.classList.add('two_planet');
+    }
+*/
+
+
+
+
+    document.querySelector("#hexIn_" + sys.s.tile).classList.add('bi');
   }
 
   removeSectorHighlight(sector) {
@@ -22361,9 +22393,8 @@ updateSectorGraphics(sector) {
     }
     let sys = this.returnSectorAndPlanets(sector);
     //let divname = "#hex_space_" + sys.s.tile;
-    //$(divname).css('background-color', 'transparent');
-    let divname = "#hexIn_" + sys.s.tile;
-    document.querySelector(divname).classList.add('bi');
+    //$(divname).css('background-color', 'transparent');coo
+    document.querySelector("#hexIn_" + sys.s.tile).classList.remove('bi');
   }
 
   addPlanetHighlight(sector, pid)  {
