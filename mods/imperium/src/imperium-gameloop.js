@@ -3463,6 +3463,8 @@ imperium_self.saveGame(imperium_self.game.id);
 
       if (mv[0] === "infantry_fire") {
 
+console.log("INFANTRY FIRE: " + JSON.stringify(mv));
+
 	//
 	// we need to permit both sides to play action cards before they fire and start destroying units
 	// so we check to make sure that "ground_combat_player_menu" does not immediately precede us... if
@@ -3473,6 +3475,7 @@ imperium_self.saveGame(imperium_self.game.id);
         if (le >= 0) {
 	  lmv = this.game.queue[le].split("\t");
 	  if (lmv[0] === "ground_combat_player_menu") {
+console.log("last move is gcpm");
 	    let tmple = this.game.queue[le];
 	    let tmple1 = this.game.queue[le+1];
 	    this.game.queue[le]   = tmple1;
@@ -3500,6 +3503,8 @@ imperium_self.saveGame(imperium_self.game.id);
 	//
 	if (this.doesPlayerHaveInfantryOnPlanet(attacker, sector, planet_idx) == 1) {	  
 
+console.log("Attacker has infantry on planet: " + imperium_self.returnFaction(attacker));
+
 	  let total_shots = 0;
 	  let total_hits = 0;
 	  let hits_or_misses = [];
@@ -3514,7 +3519,9 @@ imperium_self.saveGame(imperium_self.game.id);
 	  // then the rest
 	  //
 	  for (let i = 0; i < sys.p[planet_idx].units[attacker-1].length; i++) {
-	    if (sys.p[planet_idx].units[attacker-1][i].type == "infantry" && sys.p[planet_idx].units[attacker-1][i].destroyed != 0) {
+	    if (sys.p[planet_idx].units[attacker-1][i].type == "infantry" && sys.p[planet_idx].units[attacker-1][i].destroyed == 0) {
+
+console.log("Attacker infantry index: " + i);
 
 	      units_firing.push(sys.p[planet_idx].units[attacker-1][i]);
 
@@ -3883,9 +3890,13 @@ imperium_self.saveGame(imperium_self.game.id);
         let planet_idx   = mv[4];
         this.game.queue.splice(qe, 1);
 
+console.log("QUEUE ON GROUND COMBAT: " + JSON.stringify(this.game.queue));
+console.log("attacker is: " + this.returnFaction(attacker));
+
         this.updateSectorGraphics(sector);
 
 	if (this.game.player == attacker) {
+console.log("moving into attack myself...");
           this.playerPlayGroundCombat(attacker, defender, sector, planet_idx);
 	}
 
@@ -4131,6 +4142,8 @@ imperium_self.saveGame(imperium_self.game.id);
         // have a round of ground combat
         //
         this.game.state.ground_combat_round++;
+
+console.log("START OF ACTUAL COMBAT IN ROUND: " + this.game.state.ground_combat_round);
 
 	for (let i = 0; i < this.game.players_info.length; i++) {
 	 this.game.players_info[i].units_i_destroyed_last_combat_round = this.game.players_info[i].units_i_destroyed_last_combat_round;

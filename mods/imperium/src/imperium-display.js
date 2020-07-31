@@ -1030,7 +1030,6 @@ updateSectorGraphics(sector) {
 
 
 
-/***
   let ground_frames = [];
   let ground_pos = [];
 
@@ -1144,11 +1143,11 @@ updateSectorGraphics(sector) {
       let pid = 0;
       for (let i = 0; i < ground_frames.length; i++) {
         if (i > 0 && ground_pos[i] != ground_pos[i - 1]) { pid++; }
-        $(divsector2).append('<img class="sector_graphics ' + player_color + ' sector_graphics_planet sector_graphics_planet_' + sector + ' sector_graphics_planet_' + sector + '_' + pid + ' ' + ground_pos[i] + '" src="/imperium/img/frame/' + ground_frames[i] + '" />');
+        //$(divsector2).append('<img class="sector_graphics ' + player_color + ' sector_graphics_planet sector_graphics_planet_' + sector + ' sector_graphics_planet_' + sector + '_' + pid + ' ' + ground_pos[i] + '" src="/imperium/img/frame/' + ground_frames[i] + '" />');
       }
     }
   }
-***/
+
 
   if (player_border_visible == 0) {
     for (let p = 0; p < sys.p.length; p++) {
@@ -1197,6 +1196,7 @@ updateSectorGraphics(sector) {
     //returnPlanetInformationHTML(this.game.sectors[sector].planets[0])
 
     // if we got here but the sector has no planets, nope out.
+    if (!this.game.sectors[sector].planets) { return;}
     if (this.game.sectors[sector].planets.length == 0) { return;}
 
     //handle writing for one or two planets
@@ -1218,19 +1218,6 @@ updateSectorGraphics(sector) {
       info_tile.classList.add('two_planet');
     }
 
-    /* Function for design work - not needed 
-       once plannet array not allways just one planet
-
-   if(this.game.sectors[sector].planets.length = 1) {
-      let html = '<div class="top_planet">';
-      html += this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
-      html += '</div><div class="bottom_planet">';
-      html += this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
-      html += '</div>';
-      info_tile.innerHTML = html;
-      info_tile.classList.add('two_planet');
-    }
-  */
     document.querySelector("#hexIn_" + sys.s.tile).classList.add('bi');
     } catch (err) {}
   }
