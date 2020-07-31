@@ -3514,7 +3514,7 @@ imperium_self.saveGame(imperium_self.game.id);
 	  // then the rest
 	  //
 	  for (let i = 0; i < sys.p[planet_idx].units[attacker-1].length; i++) {
-	    if (sys.p[planet_idx].units[attacker-1][i].type == "infantry" ) {
+	    if (sys.p[planet_idx].units[attacker-1][i].type == "infantry" && sys.p[planet_idx].units[attacker-1][i].destroyed != 0) {
 
 	      units_firing.push(sys.p[planet_idx].units[attacker-1][i]);
 

@@ -4,7 +4,7 @@
       name     		:       "Infantry",
       type     		:       "infantry",
       cost 		:	0.5,
-      combat 		:	1,
+      combat 		:	8,
       strength 		:	1,
       space		:	0,
       ground		:	1,
