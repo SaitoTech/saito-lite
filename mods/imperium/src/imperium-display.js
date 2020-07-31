@@ -1173,13 +1173,16 @@ updateSectorGraphics(sector) {
   hideSectorHighlight(sector) { this.removeSectorHighlight(sector); }
   addSectorHighlight(sector) {
 
+console.log("SECOR IS: " + sector);
+    if (sector.indexOf("_") > -1) { sector = this.game.board[sector].tile; }
 console.log(JSON.stringify(this.game.sectors[sector].planets));
+
+    let sys = this.returnSectorAndPlanets(sector);
 
     try {
     if (sector.indexOf("planet") == 0 || sector == 'new-byzantium') {
       sector = this.game.planets[sector].sector;
     }
-    let sys = this.returnSectorAndPlanets(sector);
 
     let divname = ".sector_graphics_space_" + sys.s.tile;
     $(divname).css('display', 'none');
@@ -1232,6 +1235,10 @@ console.log(JSON.stringify(this.game.sectors[sector].planets));
   }
 
   addPlanetHighlight(sector, pid)  {
+console.log("SECTOR: " + sector + " -- " + pid);
+    if (sector.indexOf("_") > -1) { 
+      sector = this.game.board[sector].tile;
+    }
     this.showSectorHighlight(sector);
 // red overlay
 //    let divname = ".sector_graphics_planet_" + sector + '_' + pid;

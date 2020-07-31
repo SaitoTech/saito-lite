@@ -14781,7 +14781,6 @@ console.log("ERROR: you had no hits left to assign, bug?");
 	//
 	// ships_fire needs to make sure it permits any opponents to fire...
 	//
-alert("sending attack: " + imperium_self.returnFaction(attacker) + " is firing on " + imperium_self.returnFaction(defender));
         imperium_self.prependMove("infantry_fire\t"+attacker+"\t"+defender+"\t"+sector+"\t"+planet_idx);
 	imperium_self.endTurn();
       }
@@ -18376,8 +18375,8 @@ console.log("NONE!");
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-//      return ["1_1", "4_7"];
-      return ["1_1", "2_1"];
+      return ["1_1", "4_7"];
+//      return ["1_1", "2_1"];
     }
 
 
@@ -22458,13 +22457,16 @@ updateSectorGraphics(sector) {
   hideSectorHighlight(sector) { this.removeSectorHighlight(sector); }
   addSectorHighlight(sector) {
 
+console.log("SECOR IS: " + sector);
+    if (sector.indexOf("_") > -1) { sector = this.game.board[sector].tile; }
 console.log(JSON.stringify(this.game.sectors[sector].planets));
+
+    let sys = this.returnSectorAndPlanets(sector);
 
     try {
     if (sector.indexOf("planet") == 0 || sector == 'new-byzantium') {
       sector = this.game.planets[sector].sector;
     }
-    let sys = this.returnSectorAndPlanets(sector);
 
     let divname = ".sector_graphics_space_" + sys.s.tile;
     $(divname).css('display', 'none');
@@ -22517,6 +22519,10 @@ console.log(JSON.stringify(this.game.sectors[sector].planets));
   }
 
   addPlanetHighlight(sector, pid)  {
+console.log("SECTOR: " + sector + " -- " + pid);
+    if (sector.indexOf("_") > -1) { 
+      sector = this.game.board[sector].tile;
+    }
     this.showSectorHighlight(sector);
 // red overlay
 //    let divname = ".sector_graphics_planet_" + sector + '_' + pid;
