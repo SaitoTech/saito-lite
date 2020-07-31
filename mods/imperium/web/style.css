@@ -29,11 +29,12 @@
 }
 
 .combat_log_th {
- padding-right:5px;
+  padding-right: 5px;
 }
+
 .combat_log_td {
- padding-right:5px;
- text-align:right;
+  padding-right: 5px;
+  text-align: right;
 }
 
 .hazard_border {
@@ -95,24 +96,26 @@
 }
 
 .overlay_strategy_card_box {
-  margin-right: 15px;
-  margin-bottom: 15px;
+  /*! margin-right: 15px; */
+  /*! margin-bottom: 15px; */
   position: relative;
-  width: 200px !important;
-  height: 300px;
+  width: 252px !important;
+  height: 378px;
   display: block;
+  overflow: hidden;
+  transform: scale(0.9);
 }
 
 .overlay_strategy_card_text {
   position: relative;
   color: white;
-  padding-left: 20px;
+  padding-left: 15px;
   padding-top: 70px;
   top: 0px;
   width: 80%;
-  line-height: 1.8em;
   font-family: 'orbitron-light', helvetica, sans-serif;
-  font-size: 0.8em;
+  font-size: 1.3em;
+  line-height: 1.4;
 }
 
 .strategy_card_overlay {
@@ -128,13 +131,17 @@
 }
 
 .strategy_card_state {
-  margin-left: 20px;
-  width: 130px;
+  width: 195px;
   min-height: 20px;
   color: white;
   font-weight: bold;
   z-index: 100;
   position: absolute;
+  top: 20px;
+  transform: rotate(-25deg);
+  text-align: center;
+  left: -17px;
+  background: #0008;
 }
 
 .strategy_card_state_internal {
@@ -160,24 +167,34 @@
   cursor: pointer;
 }
 
+.overlay_laws_header {
+  font-size: 2em;
+  color: #fff;
+  padding: 1em;
+}
+
+.overlay_laws_list {
+  display: flex;
+  justify-content: space-around;
+}
+
 .overlay_agendacard {
-  height: 200px;
-  width: 130px;
+  height: 380px;
+  width: 250px;
   color: white;
   padding: 10px;
-  margin-right: 20px;
-  list-style: none;
+  background-size: cover;
+  margin: 5px 10px;
 }
 
 .overlay_agendatitle {
-  position: relative;
+  font-size: 1.75em;
 }
 
 .overlay_agendacontent {
-  clear: both;
-  margin-top: 20px;
-  position: relative;
-  font-size: 0.85em;
+  margin-top: 40px;
+font-size: 1.2em;
+line-height: 1.4em;
 }
 
 .hud-menu-overlay ul li {
@@ -370,10 +387,18 @@ body {
 
 .objectives_card_name {
   color: white;
+  font-size: 2em;
+  padding: 15px 5px 10px;
+  background: #0008;
 }
 
 .objectives_card_content {
   color: white;
+  font-size: 1.5em;
+  padding: 10px;
+  position: relative;
+  top: 33%;
+  transform: translateY(-50%);
 }
 
 .objectives_overlay_objectives_card {
@@ -774,10 +799,25 @@ body {
   color: var(--my-color);
 }
 
-#objectives_overlay {
+.overlay {
+  position: absolute;
+  top: 50vh;
+  left: 50vw;
+  transform: translate(-50%, -50%);
+  z-index: 999;
   border: 1px solid var(--my-color);
   background-color: #4448;
   font-family: 'orbitron-medium', 'bank-gothic', arial, helvetica, sans-serif;
+  display: flex;
+  justify-content: space-around;
+  flex-flow: wrap;
+  max-height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/*
+#objectives_overlay {
 }
 
 #laws_overlay {
@@ -804,29 +844,22 @@ body {
   justify-content: space-around;
   flex-flow: wrap;
 }
-
-.overlay {
-  position: absolute;
-  top: 50vh;
-  left: 50vw;
-  transform: translate(-50%, -50%);
-  z-index: 99;
-}
+*/
 
 .overlay::after {
   content: "\00D7";
   position: absolute;
-  top: -20px;
-  right: -15px;
-  font-size: 40px;
+  top: 3px;
+  right: 3px;
+  font-size: 36px;
   color: #fff;
   border: 3px #fff solid;
-  width: 40px;
-  height: 40px;
+  width: 20px;
+  height: 20px;
   text-align: center;
-  line-height: 48px;
+  line-height: 28px;
   background-color: #8888;
-  border-radius: 50%;
+  border-radius: 0;
 }
 
 .tech_overlay {
@@ -1507,9 +1540,10 @@ body {
 
 .dash-item {
   width: 3em;
-  line-height: 2em;
+  line-height: 1.9em;
   text-align: center;
   font-size: 1.5em;
+  text-shadow: 2px 2px #000A;
 }
 
 .dash-item .avail {
@@ -1858,9 +1892,8 @@ input[type=range] {
 }
 
 .white-stroke {
-  -webkit-text-stroke: 1px #fff;
-  stroke: 1px #fff;
-  ;
+  -webkit-text-stroke: 2px #DDD8;
+  stroke: 2px #DDD8;
 }
 
 .chat-box {
@@ -1919,6 +1952,10 @@ input[type=range] {
   transition: 0.333s;
 }
 
+.new-byzantium {
+  transform: scale(1.4);
+}
+
 /* double planet */
 
 .bi .sector8, .bi .sector9, .bi .sector10, .bi .sector11, .bi .sector12, .bi .sector13, .bi .sector14, .bi .sector15, .bi .sector16, .bi .sector17, .bi .sector18, .bi .sector19, .bi .sector20, .bi .sector21, .bi .sector38, .bi .sector39, .bi .sector40, .bi .sector50, .bi .sector51 {
@@ -1973,6 +2010,7 @@ input[type=range] {
 .one_planet .sector_information_planetname {
   top: 165px;
   left: 10px;
+  font-size: 1.2em;
 }
 
 .two_planet .sector_information_planetname {
@@ -1988,6 +2026,44 @@ input[type=range] {
   top: 190px;
   left: 230px;
   transform: translateX(-100%);
+}
+
+.sector_information_planetname::before {
+  content: "\2B24";
+  text-shadow: none;
+  font-size: 15px;
+  position: relative;
+  display: inline-block;
+  top: -2px;
+  left: -3px;
+}
+
+.sector_information_planetname.p1::before {
+  color: var(--p1);
+}
+
+.sector_information_planetname.p2::before {
+  color: var(--p2);
+}
+
+.sector_information_planetname.p3::before {
+  color: var(--p3);
+}
+
+.sector_information_planetname.p4::before {
+  color: var(--p4);
+}
+
+.sector_information_planetname.p5::before {
+  color: var(--p5);
+}
+
+.sector_information_planetname.p6::before {
+  color: var(--p6);
+}
+
+.sector_information_planetname.nowner::before {
+  display: none;
 }
 
 .sector_information_planet_content {

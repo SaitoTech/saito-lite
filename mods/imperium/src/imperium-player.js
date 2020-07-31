@@ -1436,7 +1436,6 @@ console.log("ERROR: you had no hits left to assign, bug?");
 	//
 	// ships_fire needs to make sure it permits any opponents to fire...
 	//
-alert("sending attack: " + imperium_self.returnFaction(attacker) + " is firing on " + imperium_self.returnFaction(defender));
         imperium_self.prependMove("infantry_fire\t"+attacker+"\t"+defender+"\t"+sector+"\t"+planet_idx);
 	imperium_self.endTurn();
       }
