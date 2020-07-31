@@ -167,24 +167,34 @@
   cursor: pointer;
 }
 
+.overlay_laws_header {
+  font-size: 2em;
+  color: #fff;
+  padding: 1em;
+}
+
+.overlay_laws_list {
+  display: flex;
+  justify-content: space-around;
+}
+
 .overlay_agendacard {
-  height: 200px;
-  width: 130px;
+  height: 380px;
+  width: 250px;
   color: white;
   padding: 10px;
-  margin-right: 20px;
-  list-style: none;
+  background-size: cover;
+  margin: 5px 10px;
 }
 
 .overlay_agendatitle {
-  position: relative;
+  font-size: 1.75em;
 }
 
 .overlay_agendacontent {
-  clear: both;
-  margin-top: 20px;
-  position: relative;
-  font-size: 0.85em;
+  margin-top: 40px;
+font-size: 1.2em;
+line-height: 1.4em;
 }
 
 .hud-menu-overlay ul li {
@@ -802,7 +812,7 @@ body {
   justify-content: space-around;
   flex-flow: wrap;
   max-height: 90vh;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 
@@ -839,17 +849,17 @@ body {
 .overlay::after {
   content: "\00D7";
   position: absolute;
-  top: -20px;
-  right: -15px;
-  font-size: 40px;
+  top: 3px;
+  right: 3px;
+  font-size: 36px;
   color: #fff;
   border: 3px #fff solid;
-  width: 40px;
-  height: 40px;
+  width: 20px;
+  height: 20px;
   text-align: center;
-  line-height: 48px;
+  line-height: 28px;
   background-color: #8888;
-  border-radius: 50%;
+  border-radius: 0;
 }
 
 .tech_overlay {
@@ -1940,6 +1950,10 @@ input[type=range] {
 
 .gameboard img {
   transition: 0.333s;
+}
+
+.new-byzantium {
+  transform: scale(1.4);
 }
 
 /* double planet */

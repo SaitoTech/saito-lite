@@ -21478,17 +21478,16 @@ console.log("1: "+ this.game.state.laws[i]);
   }
 
   if (this.game.state.agendas.length > 0) {
-      html += '<div style="margin-bottom: 1em; color:white;font-size:1.4em;margin-left:auto;margin-right:auto">Galactic Laws Under Consideration:</div>';
-      html += '<p></p>';
-      html += '<ul style="clear:both;margin-top:10px;">';
+      html += '<div class="overlay_laws_header">Galactic Laws Under Consideration:</div>';
+      html += '<div class="overlay_laws_list">';
       for (let i = 0; i < this.game.state.agendas.length; i++) {
-        html += `  <li style="background-image: url('/imperium/img/agenda_card_template.png');background-size:cover;" class="overlay_agendacard card option" id="${i}"><div class="overlay_agendatitle">${laws[this.game.state.agendas[i]].name}</div><div class="overlay_agendacontent">${laws[this.game.state.agendas[i]].text}</div></li>`;
+        html += `  <div style="background-image: url('/imperium/img/agenda_card_template.png');" class="overlay_agendacard card option" id="${i}"><div class="overlay_agendatitle">${laws[this.game.state.agendas[i]].name}</div><div class="overlay_agendacontent">${laws[this.game.state.agendas[i]].text}</div></div>`;
       }
-      html += '</ul>';
+      html += '</div>';
   }
 
   if (this.game.state.laws.length == 0 && this.game.state.agendas.length == 0) {
-      html += '<div class="color:white;font-size:1.2em">There are no laws in force or agendas up for consideration at this time.</div>';
+      html += '<div class="overlay_laws_header">There are no laws in force or agendas up for consideration at this time.</div>';
   }
 
   return html;
