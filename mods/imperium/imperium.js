@@ -9274,13 +9274,13 @@ console.log("MOVE: " + mv[0]);
         let sector       = mv[5];
 
   	let sys = this.returnSectorAndPlanets(sector);
- 
+
   	if (planet_idx != -1) {
           this.addPlanetaryUnit(player, sector, planet_idx, unitname);
-	  this.updateLog(this.returnFaction(player) + " produces " + this.returnUnit(unitname).name + " on " + sys.p[planet_idx].name, 120, 1);  // force message
+	  this.updateLog(this.returnFaction(player) + " produces " + this.returnUnit(player, unitname).name + " on " + sys.p[planet_idx].name, 120, 1);  // force message
  	} else {
           this.addSpaceUnit(player, sector, unitname);
-	  this.updateLog(this.returnFaction(player) + " produces " + this.returnUnit(unitname).name + " in " + sys.s.name, 120, 1); // force message
+	  this.updateLog(this.returnFaction(player) + " produces " + this.returnUnit(player, unitname).name + " in " + sys.s.name, 120, 1); // force message
         }
 
 
