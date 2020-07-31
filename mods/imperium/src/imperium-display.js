@@ -116,15 +116,11 @@ returnPlanetInformationHTML(planet) {
     html += '<div class="planet_spacedock_count_label">Space Doc</div><div class="planet_spacedock_count">'+sonp+'</div>';
   }
 
-  let owner = p.owner;
-  let ownerbox = '<div class="player_color_box player_color_'+owner+'"></div>';
-  if (owner == -1) { ownerbox = ''; }
-
   if (ponp+sonp+ionp > 0) {
-    html = `<div class="sector_information_planetname">${ownerbox}${p.name}</div><div class="sector_information_planet_content">` + html;
+    html = `<div class="sector_information_planetname">${p.name}</div><div class="sector_information_planet_content">` + html;
     html +=  `</div>`;
   } else {
-    html = `<div class="sector_information_planetname">${ownerbox}${p.name}</div>`;
+    html = `<div class="sector_information_planetname">${p.name}</div>`;
   }
 
   return html;
