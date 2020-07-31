@@ -101,6 +101,14 @@ returnPlanetInformationHTML(planet) {
   let ionp = this.returnInfantryOnPlanet(p);
   let ponp = this.returnPDSOnPlanet(p);
   let sonp = this.returnSpaceDocksOnPlanet(p);
+  let powner = '';
+
+  if(this.game.planets[planet].owner > 0) {
+    powner = "p" + this.game.planets[planet].owner;
+  } else {
+    powner = "nowner";
+  }
+
 
   let html = '';
 
@@ -117,10 +125,10 @@ returnPlanetInformationHTML(planet) {
   }
 
   if (ponp+sonp+ionp > 0) {
-    html = `<div class="sector_information_planetname">${p.name}</div><div class="sector_information_planet_content">` + html;
+    html = `<div class="sector_information_planetname ${powner}">${p.name}</div><div class="sector_information_planet_content">` + html;
     html +=  `</div>`;
   } else {
-    html = `<div class="sector_information_planetname">${p.name}</div>`;
+    html = `<div class="sector_information_planetname ${powner}">${p.name}</div>`;
   }
 
   return html;
@@ -1173,9 +1181,7 @@ updateSectorGraphics(sector) {
   hideSectorHighlight(sector) { this.removeSectorHighlight(sector); }
   addSectorHighlight(sector) {
 
-console.log("SECOR IS: " + sector);
     if (sector.indexOf("_") > -1) { sector = this.game.board[sector].tile; }
-console.log(JSON.stringify(this.game.sectors[sector].planets));
 
     let sys = this.returnSectorAndPlanets(sector);
 
@@ -1201,7 +1207,6 @@ console.log(JSON.stringify(this.game.sectors[sector].planets));
     if(this.game.sectors[sector].planets.length == 1) {
       html = this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
       info_tile.innerHTML = html;
-      console.log(html);
       info_tile.classList.add('one_planet');
     } else {
       html = '<div class="top_planet">';
@@ -1209,7 +1214,6 @@ console.log(JSON.stringify(this.game.sectors[sector].planets));
       html += '</div><div class="bottom_planet">';
       html += this.returnPlanetInformationHTML(this.game.sectors[sector].planets[1]);
       html += '</div>';
-      console.log(html);
       info_tile.innerHTML = html;
       info_tile.classList.add('two_planet');
     }
