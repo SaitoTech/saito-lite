@@ -1,4 +1,312 @@
-  
+
+
+  this.importSecretObjective('military-catastrophe', {
+      name 		: 	"Military Catastrophe" ,
+      text		:	"Destroy the flagship of another player" ,
+      type		: 	"secret" ,
+      phase		: 	"action" ,
+      onNewTurn		: 	function(imperium_self, player, mycallback) {
+	imperium_self.game.state.secret_objective_military_catastrophe = 0;
+        return 0; 
+      },
+      spaceCombatRoundEnd :	function(imperium_self, attacker, defender, sector) {
+        if (imperium_self.game.players_info[imperium_self.game.player-1].units_i_destroyed_this_combat_round.includes("flagship")) {
+	  imperium_self.game.state.secret_objective_military_catastrophe = 1;
+	}
+        return 0; 
+      },
+      groundCombatRoundEnd :	function(imperium_self, attacker, defender, sector, planet_idx) {
+        return 0; 
+      },
+      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
+	if (imperium_self.game.state.secret_objective_military_catastrophe == 1) { return 1; }
+	return 0;
+      },
+      scoreObjective : function(imperium_self, player) { 
+	return 1;
+      }
+  });
+
+
+
+  this.importSecretObjective('flagship-dominance', {
+      name 		: 	"" ,
+      text		:	"Achieve victory in a space combat in a system containing your flagship. Your flagship must survive this combat" ,
+      type		: 	"secret" ,
+      phase		: 	"action" ,
+      onNewTurn		: 	function(imperium_self, player, mycallback) {
+	imperium_self.game.state.secret_objective_flagship_dominance = 0;
+        return 0; 
+      },
+      spaceCombatRoundEnd :	function(imperium_self, attacker, defender, sector) {
+	if (imperium_self.doesSectorContainPlayerUnit(imperium_self.game.player, sector, "flagship")) { 
+	  let sys = imperium_self.returnSectorAndPlanets(sector);
+	  if (sys.s.units[defender-1].length == 0) {
+	    if (attacker == imperium_self.game.player && sys.s.units[attacker-1].length > 0) {
+	      imperium_self.game.state.secret_objective_flagship_dominance = 1;
+	    }
+	  }
+	  if (sys.s.units[attacker-1].length == 0) {
+	    if (defender == imperium_self.game.player && sys.s.units[defender-1].length > 0) {
+	      imperium_self.game.state.secret_objective_flagship_dominance = 1;
+	    }
+	  }
+	}
+        return 0; 
+      },
+      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
+	if (imperium_self.game.state.secret_objective_flagship_dominance == 1) { return 1; }
+	return 0;
+      },
+      scoreObjective : function(imperium_self, player) { 
+	return 1;
+      }
+  });
+
+
+
+
+  this.importSecretObjective('nuke-them-from-orbit', {
+      name 		: 	"Nuke them from Orbit" ,
+      text		:	"Destroy the last of a player's ground forces using bombardment" ,
+      type		: 	"secret" ,
+      phase		: 	"action" ,
+      onNewTurn		: 	function(imperium_self, player, mycallback) {
+	imperium_self.game.state.secret_objective_nuke_from_orbit = 0;
+	imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked = 0;
+        return 0; 
+      },
+      bombardmentTriggers :	function(imperium_self, player, bombarding_player, sector, planet_idx) {
+	imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked = 0;
+	let sys = imperium_self.returnSectorAndPlanets(sector);
+	let planet = sys.p[planet_idx];
+	let infantry_on_planet = returnInfantryOnPlanet(planet);
+	for (let i = 0; i < planet.units.length; i++) {
+	  if (planet.units[i].length > 0) {
+	    if ((i+1) != bombarding_player) {
+	      defender = i+1;
+	      imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked = infantry_on_planet;
+	    }
+	  }
+	}
+	return 0;
+      },
+      planetaryDefenseTriggers :  function(imperium_self, player, sector, planet_idx) {
+	if (imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked > 0) {
+	  let sys = imperium_self.returnSectorAndPlanets(sector);
+	  let planet = sys.p[planet_idx];
+	  let infantry_on_planet = returnInfantryOnPlanet(planet);
+	  if (infantry_on_planet == 0) {
+	    imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked = 1;
+	  }
+	}
+	return 0;
+      },
+      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
+	if (imperium_self.game.state.secret_objective_nuke_from_orbit == 1) { return 1; }
+	return 0;
+      },
+      scoreObjective : function(imperium_self, player) { 
+	return 1;
+      }
+  });
+
+
+  this.importSecretObjective('anti-imperialism', {
+      name 		: 	"Anti-Imperialism" ,
+      text		:	"Achieve victory in combat with a player with the most VP" ,
+      type		: 	"secret" ,
+      phase		: 	"action" ,
+      onNewTurn		: 	function(imperium_self, player, mycallback) {
+	imperium_self.game.state.secret_objective_anti_imperialism = 0;
+        return 0; 
+      },
+      spaceCombatRoundEnd :	function(imperium_self, attacker, defender, sector) {
+	let sys = imperium_self.returnSectorAndPlanets(sector);
+	let players_with_most_vp = imperium_self.returnPlayersWithHighestVP();
+
+	if (imperium_self.game.player == attacker && sys.s.units[attacker-1].length > 0) {
+	  if (sys.s.units[defender-1].length == 0) {
+	    if (players_with_most_vp.includes(defender)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; } 
+	  }
+	}
+	if (imperium_self.game.player == defender && sys.s.units[defender-1].length > 0) {
+	  if (sys.s.units[attacker-1].length == 0) {
+	    if (players_with_most_vp.includes(attacker)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; }
+	  }
+	}
+        return 0; 
+      },
+      groundCombatRoundEnd :	function(imperium_self, attacker, defender, sector, planet_idx) {
+        let sys = imperium_self.returnSectorAndPlanets(sector);
+        let planet = sys.p[planet_idx];
+
+	if (imperium_self.game.player == attacker && planet.units[attacker-1].length > 0) {
+	  if (planet.units[defender-1].length == 0) {
+	    if (players_with_most_vp.includes(defender)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; } 
+	  }
+	}
+	if (imperium_self.game.player == defender && planet.units[defender-1].length > 0) {
+	  if (plenet.units[attacker-1].length == 0) {
+	    if (players_with_most_vp.includes(attacker)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; }
+	  }
+	}
+	return 0;
+      },
+      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
+	if (imperium_self.game.state.secret_objective_anti_imperialism == 1) { return 1; }
+	return 0;
+      },
+      scoreObjective : function(imperium_self, player) { 
+	return 1;
+      }
+  });
+
+
+
+  this.importSecretObjective('end-their-suffering', {
+      name 		: 	"End Their Suffering" ,
+      text		:	"Eliminate a player with the lowest VP from the board in Space or Ground Combat" ,
+      type		: 	"secret" ,
+      phase		: 	"action" ,
+      onNewTurn		: 	function(imperium_self, player, mycallback) {
+	imperium_self.game.state.secret_objective_end_their_suffering = 0;
+        return 0; 
+      },
+      spaceCombatRoundEnd :	function(imperium_self, attacker, defender, sector) {
+	let sys = imperium_self.returnSectorAndPlanets(sector);
+	let players_with_lowest_vp = imperium_self.returnPlayersWithLowestVP();
+
+	if (imperium_self.game.player == attacker) {
+	  if (sys.s.units[defender-1].length == 0) {
+	    if (players_with_most_vp.includes(defender)) { 
+	      // does the player have any units left?
+	      for (let i in this.game.sectors) {
+		if (this.game.sectors[i].units[defender-1].length > 0) { return; }
+	      }
+	      for (let i in this.game.planets) {
+		if (this.game.planets[i].units[defender-1].length > 0) { return; }
+	      }
+	      imperium_self.game.state.secret_objective_end_their_suffering = 1;
+	    }
+	  }
+	}
+	if (imperium_self.game.player == defender) {
+	  if (sys.s.units[attacker-1].length == 0) {
+	    if (players_with_lowest_vp.includes(attacker)) { 
+	      for (let i in this.game.sectors) {
+		if (this.game.sectors[i].units[attacker-1].length > 0) { return; }
+	      }
+	      for (let i in this.game.planets) {
+		if (this.game.planets[i].units[attacker-1].length > 0) { return; }
+	      }
+	      imperium_self.game.state.secret_objective_end_their_suffering = 1;
+	    }
+	  }
+	}
+        return 0; 
+      },
+      groundCombatRoundEnd :	function(imperium_self, attacker, defender, sector, planet_idx) {
+        let sys = imperium_self.returnSectorAndPlanets(sector);
+        let planet = sys.p[planet_idx];
+
+	if (imperium_self.game.player == attacker) {
+	  if (planetunits[defender-1].length == 0) {
+	    if (players_with_most_vp.includes(defender)) { 
+	      // does the player have any units left?
+	      for (let i in this.game.sectors) {
+		if (this.game.sectors[i].units[defender-1].length > 0) { return; }
+	      }
+	      for (let i in this.game.planets) {
+		if (this.game.planets[i].units[defender-1].length > 0) { return; }
+	      }
+	      imperium_self.game.state.secret_objective_end_their_suffering = 1;
+	    }
+	  }
+	}
+	if (imperium_self.game.player == defender) {
+	  if (planet.units[attacker-1].length == 0) {
+	    if (players_with_lowest_vp.includes(attacker)) { 
+	      for (let i in this.game.sectors) {
+		if (this.game.sectors[i].units[attacker-1].length > 0) { return; }
+	      }
+	      for (let i in this.game.planets) {
+		if (this.game.planets[i].units[attacker-1].length > 0) { return; }
+	      }
+	      imperium_self.game.state.secret_objective_end_their_suffering = 1;
+	    }
+	  }
+	}
+        return 0; 
+      },
+      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
+	if (imperium_self.game.state.secret_objective_end_their_suffering == 1) { return 1; }
+	return 0;
+      },
+      scoreObjective : function(imperium_self, player) { 
+	return 1;
+      }
+  });
+
+
+
+
+/****
+
+
+  this.importSecretObjective('establish-a-blockade', {
+      name 		: 	"Establish a Blockade" ,
+      text		:	"Have at least 1 ship in the same sector as an opponent's spacedock",
+      type		: 	"secret" ,
+      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
+
+	for (let i in imperium_self.game.board) {
+      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
+	return 1;
+      },
+      scoreObjective : function(imperium_self, player) { 
+	return 1;
+      }
+  });
+
+  this.importSecretObjective('close-the-trap', {
+      name 		: 	"Close the Trap" ,
+      text		:	"Destroy another player's last ship in a system using a PDS" ,
+      type		: 	"secret" ,
+      phase		: 	"action" ,
+      onNewTurn		: 	function(imperium_self, player, mycallback) {
+	imperium_self.game.state.secret_objective_close_the_trap = 0;
+        return 0; 
+      },
+      spaceCombatRoundEnd :	function(imperium_self, attacker, defender, sector) {
+	let sys = imperium_self.returnSectorAndPlanets(sector);
+	if (imperium_self.game.player == attacker && sys.s.units[attacker-1].length > 0) {
+	  if (sys.s.units[defender-1].length == 0) {
+	    
+	  }
+	}
+	if (imperium_self.game.player == defender && sys.s.units[defender-1].length > 0) {
+	  if (sys.s.units[attacker-1].length == 0) {
+	    imperium_self.game.state.secret_
+	  }
+	}
+
+        if (imperium_self.game.players_info[imperium_self.game.player-1].units_i_destroyed_this_combat_round.includes("flagship")) {
+	  imperium_self.game.state.secret_objective_military_catastrophe = 1;
+	}
+        return 0; 
+      },
+      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
+	if (imperium_self.game.state.secret_objective_close_the_trap == 1) { return 1; }
+	return 0;
+      },
+      scoreObjective : function(imperium_self, player) { 
+	return 1;
+      }
+  });
+
+/**
+
   this.importSecretObjective('establish-a-blockade', {
       name 		: 	"Establish a Blockade" ,
       text		:	"Have at least 1 ship in the same sector as an opponent's spacedock",
@@ -312,61 +620,5 @@
 
 
 
-/*****
-  this.importSecretObjective('military-catastrophe', {
-      name 		: 	"Military Catastrophe" ,
-      text		:	"Destroy the flagship of another player" ,
-      type		: 	"secret" ,
-      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
-	return 0;
-      },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
-      }
-  });
-  this.importSecretObjective('nuke-them-from-orbit', {
-      name 		: 	"Nuke them from Orbit" ,
-      text		:	"Destroy the last of a player's ground forces using bombardment" ,
-      type		: 	"secret" ,
-      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
-	return 0;
-      },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
-      }
-  });
-  this.importSecretObjective('anti-imperialism', {
-      name 		: 	"Anti-Imperialism" ,
-      text		:	"Achieve victory in combat with a player with the most VP" ,
-      type		: 	"secret" ,
-      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
-	return 0;
-      },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
-      }
-  });
-  this.importSecretObjective('close-the-trap', {
-      name 		: 	"Close the Trap" ,
-      text		:	"Destroy another player's last ship in a system using a PDS" ,
-      type		: 	"secret" ,
-      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
-	return 0;
-      },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
-      }
-  });
-  this.importSecretObjective('flagship-dominance', {
-      name 		: 	"" ,
-      text		:	"Achieve victory in a space combat in a system containing your flagship. Your flagship must survive this combat" ,
-      type		: 	"secret" ,
-      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
-	return 0;
-      },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
-      }
-  });
-
 ***/
+

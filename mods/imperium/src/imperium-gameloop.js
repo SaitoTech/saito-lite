@@ -16,8 +16,6 @@
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
 
-console.log("MOVE: " + mv[0]);
-  
       if (mv[0] === "gameover") {
   	if (imperium_self.browser_active == 1) {
   	  alert("Game Over");
@@ -3862,6 +3860,7 @@ console.log("Attacker infantry index: " + i);
 
       }
 
+
       if (mv[0] === "space_combat_post") {
 
   	let player       = parseInt(mv[1]);
@@ -3915,6 +3914,24 @@ console.log("Attacker infantry index: " + i);
         return 1;
 
       }
+
+
+
+      if (mv[0] === "anti_fighter_barrage") {
+
+  	let player       = parseInt(mv[1]);
+        let attacker	 = mv[2];
+        let defender	 = mv[3];
+        let sector	 = mv[4];
+
+        this.updateSectorGraphics(sector);
+  	this.game.queue.splice(qe, 1);
+
+        return 1;
+
+      }
+
+
 
       if (mv[0] === "space_combat_over_player_menu") {
 

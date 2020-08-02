@@ -43,6 +43,7 @@
       players[i].strategy_cards_retained        = [];
       players[i].cost_of_technology_primary	= 6;
       players[i].cost_of_technology_secondary	= 4;
+      players[i].promissary_notes		= [];
 
       //
       // unit limits
@@ -1853,6 +1854,10 @@ console.log("can " + this.returnFaction(imperium_self.game.player) + " retreat? 
     let playercol = "player_color_"+this.game.player;
     let html  = "<div class='sf-readable'><div class='player_color_box "+playercol+"'></div>" + this.returnFaction(player) + ": </div><ul>";
 
+    if (this.canPlayerScoreActionStageVictoryPoints(player) != "") {
+      html += '<li class="option" id="score">score secret objective</li>';
+      options_available++;
+    }
     if (this.canPlayerProduceInSector(player, sector) && this.game.tracker.production == 0) {
       html += '<li class="option" id="produce">produce units</li>';
       options_available++;
@@ -1916,9 +1921,11 @@ console.log("can " + this.returnFaction(imperium_self.game.player) + " retreat? 
         imperium_self.addMove("resolve\tplay");
         imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t"+"int"+"\t"+"0");
         imperium_self.endTurn();
+	return 0;
       }
 
       if (action2 == "trade") {
+        imperium_self.addMove("continue\t"+player+"\t"+sector);
         imperium_self.playerTrade();
         return 0;
       }
@@ -1983,8 +1990,18 @@ console.log("can " + this.returnFaction(imperium_self.game.player) + " retreat? 
 	});
       }
 
-    });
 
+
+      if (action2 == "score") {
+        imperium_self.playerScoreActionStageVictoryPoints(imperium_self, function(imperium_self, vp, objective) {
+          imperium_self.addMove("continue\t"+player+"\t"+sector);
+          if (vp > 0) { imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); }
+          imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
+          imperium_self.endTurn();
+	  return;
+        });
+      }
+    });
   }
 
 
@@ -2193,9 +2210,83 @@ console.log("can " + this.returnFaction(imperium_self.game.player) + " retreat? 
 
     });
   
-  
   }
+ 
+ 
+  //
+  // return string if YES, empty string if NO
+  //
+  canPlayerScoreActionStageVictoryPoints(player) {
+
+    let imperium_self = this;
+    let html = "";
+
+    //
+    // Secret Objectives - Action Phase
+    //
+    for (let i = 0 ; i < imperium_self.game.deck[5].hand.length; i++) {
+      if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored.includes(imperium_self.game.deck[5].hand[i])) {
+        if (imperium_self.canPlayerScoreVictoryPoints(imperium_self.game.player, imperium_self.game.deck[5].hand[i], 3)) {
+	  if (imperium_self.secret_objectives[ imperium_self.game.deck[5].hand[i]   ].phase === "action") {
+	    html += '<li class="option secret3" id="'+imperium_self.game.deck[5].hand[i]+'">'+imperium_self.secret_objectives[imperium_self.game.deck[5].hand[i]].name+'</li>';
+          }
+        }
+      }
+    }
+
+    return html;
+
+  }
+
+
+
   
+  playerScoreActionStageVictoryPoints(imperium_self, mycallback, stage=0) {  
+
+    let html = '';  
+    let player = imperium_self.game.player;
+
+    html += '<div class="sf-readable">Do you wish to score a secret objective? </div><ul>';
+
+    html += this.canPlayerScoreActionStageVictoryPoints(player);  
+    html += '<li class="option cancel" id="cancel">cancel</li>';
+    html += '</ul>';
+  
+    imperium_self.updateStatus(html);
+    imperium_self.lockInterface(); 
+
+    $('.option').off();
+    $('.option').on('click', function() {
+  
+      if (!imperium_self.mayUnlockInterface()) {
+	alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+        return;
+      }
+      imperium_self.unlockInterface();
+
+      let action = $(this).attr("id");
+      let objective_type = 3;
+  
+      if ($(this).hasClass("stage1")) { objective_type = 1; }
+      if ($(this).hasClass("stage2")) { objective_type = 2; }
+      if ($(this).hasClass("secret3")) { objective_type = 3; }
+  
+      if (action === "no") {
+        mycallback(imperium_self, 0, "");
+  
+      } else {
+
+        let objective = action;
+        let vp = 1;
+        if (imperium_self.secret_objectives[objective]) {
+          if (imperium_self.secret_objectives[objective].vp > 1) { vp = imperium_self.stage_ii_objectives[objective].vp; }
+	}
+
+        mycallback(imperium_self, vp, objective);
+  
+      }
+    });
+  }
 
 
 

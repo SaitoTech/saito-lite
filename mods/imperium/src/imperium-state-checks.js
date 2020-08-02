@@ -28,6 +28,49 @@
     let sys = this.returnSectorAndPlanets(sector);
     return sys.p[planet_idx].name;
   }
+  returnPlayersWithHighestVP() {
+
+    let highest_vp = 0;
+    let array_of_leaders = [];
+    let p = imperium_self.game.players_info;
+
+    for (let i = 0; i < p.length; i++) {
+      if (p[i].vp > highest_vp) {
+	highest_vp = p[i].vp;
+      }
+    }
+
+    for (let i = 0; i < p.length; i++) {
+      if (p[i].vp == highest_vp) {
+	array_of_leaders.push((i+1));
+      }
+    }
+
+    return array_of_leaders;
+
+  }
+
+  returnPlayersWithLowestVP() {
+
+    let lowest_vp = 1000;
+    let array_of_leaders = [];
+    let p = imperium_self.game.players_info;
+
+    for (let i = 0; i < p.length; i++) {
+      if (p[i].vp < lowest_vp) {
+	lowest_vp = p[i].vp;
+      }
+    }
+
+    for (let i = 0; i < p.length; i++) {
+      if (p[i].vp == lowest_vp) {
+	array_of_leaders.push((i+1));
+      }
+    }
+
+    return array_of_leaders;
+
+  }
 
 
 
@@ -1040,15 +1083,12 @@ console.log(as[i] + " -- " + this.doesSectorContainPlanetOwnedByPlayer(as[i], pl
     }
     if (planets_ripe_for_plucking == 0) { return 0; }
 
- alert("planet here...");
-  
     //
     // do we have any infantry for an invasion
     //
     for (let i = 0; i < sys.s.units[player-1].length; i++) {
       let unit = sys.s.units[player-1][i];
       for (let k = 0; k < unit.storage.length; k++) {
-console.log("unit: " + unit.storage[k]);
         if (unit.storage[k].type == "infantry") {
           total_available_infantry += 1;
         }
@@ -1056,7 +1096,6 @@ console.log("unit: " + unit.storage[k]);
       if (unit.capacity > 0) { space_tranport_available = 1; }
     }
   
- alert("nanplaneryt here..." + total_available_infantry);
     //
     // return yes if troops in space
     //

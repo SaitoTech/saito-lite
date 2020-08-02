@@ -32,15 +32,16 @@ module.exports = ArcadeMain = {
       console.log("PLAYERS: " + players);
       console.log("PLAYER SIGS: " + players_sigs);
 
+
+
+
+
+
       if (game == '') { return; }
 
       let button_text = {};
       button_text.join = "JOIN";
 
-
-      //
-      // eliminate "JOIN" button if I am in the game already
-      //
       if (tx.msg.over == 1) {
         delete button_text.join;
       }
@@ -49,11 +50,11 @@ module.exports = ArcadeMain = {
         if (players.includes(app.wallet.returnPublicKey())) {
           delete button_text.join;
         }
-
         if (players.includes(app.wallet.returnPublicKey())) {
           button_text.cancel = "CANCEL";
         }
       }
+
 
       if (app.options.games) {
 
@@ -62,6 +63,7 @@ module.exports = ArcadeMain = {
         games.forEach(game => {
 
           if (game.initializing == 0 && game.id == game_id) {
+
             button_text.continue = "CONTINUE";
             delete button_text.join;
 
@@ -70,10 +72,7 @@ module.exports = ArcadeMain = {
             }
 
           }
-
-	  button_text.cancel = "CANCEL";
-
-	});
+        });
       }
 
       document.querySelector('.arcade-gamelist').innerHTML += ArcadeGameListRowTemplate(app, tx, button_text);

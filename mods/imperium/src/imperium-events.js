@@ -103,20 +103,12 @@
     if (obj.gainStrategyTokens == null) {
       obj.gainStrategyTokens = function(imperium_self, gainer, amount) { return amount; }
     }
-
     if (obj.losePlanet == null) {
       obj.losePlanet = function(imperium_self, loser, planet) { return 1; }
     }
-
-    //
-    // ALL players run upgradeUnit, so upgrades should manage who have them
-    //
     if (obj.upgradeUnit == null) {
       obj.upgradeUnit = function(imperium_self, player, unit) { return unit; }
     }
-    //
-    // ALL players run unitDestroyed
-    //
     if (obj.unitDestroyed == null) {
       obj.unitDestroyed = function(imperium_self, attacker, unit) { return unit;}
     }
@@ -128,6 +120,12 @@
     }
     if (obj.onNewTurn == null) {
       obj.onNewTurn = function(imperium_self, player, mycallback) { return 0; }
+    }
+    if (obj.spaceCombatRoundEnd == null) {
+      obj.spaceCombatRoundEnd = function(imperium_self, attacker, defender, sector) { return 1; }
+    }
+    if (obj.groundCombatRoundEnd == null) {
+      obj.groundCombatRoundEnd = function(imperium_self, attacker, defender, sector, planet_idx) { return 1; }
     }
 
 
@@ -205,7 +203,9 @@
     }
     //
     // when an agenda is resolved (passes) --> not necessarily if it is voted in favour
-    // for permanent game effects, run initialize after setting a var
+    // for permanent game effects, run initialize after setting a var if you want to have
+    // an effect that will last over time (i.e. not just change current variables)
+    //
     if (obj.onPass == null) {
       obj.onPass = function(imperium_self, winning_choice) { return 0; }
     }
@@ -241,15 +241,6 @@
     }
 
 
-    //
-    // synchronous interventions in combat state -- take place at the END of the combat round
-    //
-    if (obj.spaceCombatRoundEnd == null) {
-      obj.spaceCombatRoundEnd = function(imperium_self, attacker, defender, sector) { return 1; }
-    }
-    if (obj.groundCombatRoundEnd == null) {
-      obj.groundCombatRoundEnd = function(imperium_self, attacker, defender, sector, planet_idx) { return 1; }
-    }
 
 
     ////////////////////
@@ -270,12 +261,16 @@
       obj.returnPDSUnitsWithinRange = function(imperium_self, player, attacker, defender, sector, battery) { return battery; }
     }
 
+
+
+
     //////////////////////////
     // asynchronous eventsa //
     //////////////////////////
     //
     // these events must be triggered by something that is put onto the stack. they allow users to stop the execution of the game
-    // and take arbitrary action. 
+    // and take arbitrary action. The functions must return 1 in order to stop execution and return 0 in order for pass-through
+    // logic to work and the engine to continue to execute the game as usually.
     //
 
     //

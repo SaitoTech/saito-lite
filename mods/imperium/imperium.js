@@ -1476,7 +1476,7 @@ console.log("P: " + planet);
       faction     :       "faction1",
       type        :       "ability" ,
       onNewRound     :    function(imperium_self, player) {
-        if (imperium_self.doesPlayerHaveTech("faction1-versatile")) {
+        if (imperium_self.doesPlayerHaveTech(player, "faction1-versatile")) {
           imperium_self.game.players_info[player-1].new_tokens_per_round = 3;
 	}
       },
@@ -2706,7 +2706,315 @@ console.log("WINNIGN CHOICE: " + winning_choice);
       },
     });
 
-  
+
+
+  this.importSecretObjective('military-catastrophe', {
+      name 		: 	"Military Catastrophe" ,
+      text		:	"Destroy the flagship of another player" ,
+      type		: 	"secret" ,
+      phase		: 	"action" ,
+      onNewTurn		: 	function(imperium_self, player, mycallback) {
+	imperium_self.game.state.secret_objective_military_catastrophe = 0;
+        return 0; 
+      },
+      spaceCombatRoundEnd :	function(imperium_self, attacker, defender, sector) {
+        if (imperium_self.game.players_info[imperium_self.game.player-1].units_i_destroyed_this_combat_round.includes("flagship")) {
+	  imperium_self.game.state.secret_objective_military_catastrophe = 1;
+	}
+        return 0; 
+      },
+      groundCombatRoundEnd :	function(imperium_self, attacker, defender, sector, planet_idx) {
+        return 0; 
+      },
+      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
+	if (imperium_self.game.state.secret_objective_military_catastrophe == 1) { return 1; }
+	return 0;
+      },
+      scoreObjective : function(imperium_self, player) { 
+	return 1;
+      }
+  });
+
+
+
+  this.importSecretObjective('flagship-dominance', {
+      name 		: 	"" ,
+      text		:	"Achieve victory in a space combat in a system containing your flagship. Your flagship must survive this combat" ,
+      type		: 	"secret" ,
+      phase		: 	"action" ,
+      onNewTurn		: 	function(imperium_self, player, mycallback) {
+	imperium_self.game.state.secret_objective_flagship_dominance = 0;
+        return 0; 
+      },
+      spaceCombatRoundEnd :	function(imperium_self, attacker, defender, sector) {
+	if (imperium_self.doesSectorContainPlayerUnit(imperium_self.game.player, sector, "flagship")) { 
+	  let sys = imperium_self.returnSectorAndPlanets(sector);
+	  if (sys.s.units[defender-1].length == 0) {
+	    if (attacker == imperium_self.game.player && sys.s.units[attacker-1].length > 0) {
+	      imperium_self.game.state.secret_objective_flagship_dominance = 1;
+	    }
+	  }
+	  if (sys.s.units[attacker-1].length == 0) {
+	    if (defender == imperium_self.game.player && sys.s.units[defender-1].length > 0) {
+	      imperium_self.game.state.secret_objective_flagship_dominance = 1;
+	    }
+	  }
+	}
+        return 0; 
+      },
+      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
+	if (imperium_self.game.state.secret_objective_flagship_dominance == 1) { return 1; }
+	return 0;
+      },
+      scoreObjective : function(imperium_self, player) { 
+	return 1;
+      }
+  });
+
+
+
+
+  this.importSecretObjective('nuke-them-from-orbit', {
+      name 		: 	"Nuke them from Orbit" ,
+      text		:	"Destroy the last of a player's ground forces using bombardment" ,
+      type		: 	"secret" ,
+      phase		: 	"action" ,
+      onNewTurn		: 	function(imperium_self, player, mycallback) {
+	imperium_self.game.state.secret_objective_nuke_from_orbit = 0;
+	imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked = 0;
+        return 0; 
+      },
+      bombardmentTriggers :	function(imperium_self, player, bombarding_player, sector, planet_idx) {
+	imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked = 0;
+	let sys = imperium_self.returnSectorAndPlanets(sector);
+	let planet = sys.p[planet_idx];
+	let infantry_on_planet = returnInfantryOnPlanet(planet);
+	for (let i = 0; i < planet.units.length; i++) {
+	  if (planet.units[i].length > 0) {
+	    if ((i+1) != bombarding_player) {
+	      defender = i+1;
+	      imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked = infantry_on_planet;
+	    }
+	  }
+	}
+	return 0;
+      },
+      planetaryDefenseTriggers :  function(imperium_self, player, sector, planet_idx) {
+	if (imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked > 0) {
+	  let sys = imperium_self.returnSectorAndPlanets(sector);
+	  let planet = sys.p[planet_idx];
+	  let infantry_on_planet = returnInfantryOnPlanet(planet);
+	  if (infantry_on_planet == 0) {
+	    imperium_self.game.state.secret_objective_nuke_from_orbit_how_many_got_nuked = 1;
+	  }
+	}
+	return 0;
+      },
+      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
+	if (imperium_self.game.state.secret_objective_nuke_from_orbit == 1) { return 1; }
+	return 0;
+      },
+      scoreObjective : function(imperium_self, player) { 
+	return 1;
+      }
+  });
+
+
+  this.importSecretObjective('anti-imperialism', {
+      name 		: 	"Anti-Imperialism" ,
+      text		:	"Achieve victory in combat with a player with the most VP" ,
+      type		: 	"secret" ,
+      phase		: 	"action" ,
+      onNewTurn		: 	function(imperium_self, player, mycallback) {
+	imperium_self.game.state.secret_objective_anti_imperialism = 0;
+        return 0; 
+      },
+      spaceCombatRoundEnd :	function(imperium_self, attacker, defender, sector) {
+	let sys = imperium_self.returnSectorAndPlanets(sector);
+	let players_with_most_vp = imperium_self.returnPlayersWithHighestVP();
+
+	if (imperium_self.game.player == attacker && sys.s.units[attacker-1].length > 0) {
+	  if (sys.s.units[defender-1].length == 0) {
+	    if (players_with_most_vp.includes(defender)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; } 
+	  }
+	}
+	if (imperium_self.game.player == defender && sys.s.units[defender-1].length > 0) {
+	  if (sys.s.units[attacker-1].length == 0) {
+	    if (players_with_most_vp.includes(attacker)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; }
+	  }
+	}
+        return 0; 
+      },
+      groundCombatRoundEnd :	function(imperium_self, attacker, defender, sector, planet_idx) {
+        let sys = imperium_self.returnSectorAndPlanets(sector);
+        let planet = sys.p[planet_idx];
+
+	if (imperium_self.game.player == attacker && planet.units[attacker-1].length > 0) {
+	  if (planet.units[defender-1].length == 0) {
+	    if (players_with_most_vp.includes(defender)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; } 
+	  }
+	}
+	if (imperium_self.game.player == defender && planet.units[defender-1].length > 0) {
+	  if (plenet.units[attacker-1].length == 0) {
+	    if (players_with_most_vp.includes(attacker)) { imperium_self.game.state.secret_objective_anti_imperialism = 1; }
+	  }
+	}
+	return 0;
+      },
+      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
+	if (imperium_self.game.state.secret_objective_anti_imperialism == 1) { return 1; }
+	return 0;
+      },
+      scoreObjective : function(imperium_self, player) { 
+	return 1;
+      }
+  });
+
+
+
+  this.importSecretObjective('end-their-suffering', {
+      name 		: 	"End Their Suffering" ,
+      text		:	"Eliminate a player with the lowest VP from the board in Space or Ground Combat" ,
+      type		: 	"secret" ,
+      phase		: 	"action" ,
+      onNewTurn		: 	function(imperium_self, player, mycallback) {
+	imperium_self.game.state.secret_objective_end_their_suffering = 0;
+        return 0; 
+      },
+      spaceCombatRoundEnd :	function(imperium_self, attacker, defender, sector) {
+	let sys = imperium_self.returnSectorAndPlanets(sector);
+	let players_with_lowest_vp = imperium_self.returnPlayersWithLowestVP();
+
+	if (imperium_self.game.player == attacker) {
+	  if (sys.s.units[defender-1].length == 0) {
+	    if (players_with_most_vp.includes(defender)) { 
+	      // does the player have any units left?
+	      for (let i in this.game.sectors) {
+		if (this.game.sectors[i].units[defender-1].length > 0) { return; }
+	      }
+	      for (let i in this.game.planets) {
+		if (this.game.planets[i].units[defender-1].length > 0) { return; }
+	      }
+	      imperium_self.game.state.secret_objective_end_their_suffering = 1;
+	    }
+	  }
+	}
+	if (imperium_self.game.player == defender) {
+	  if (sys.s.units[attacker-1].length == 0) {
+	    if (players_with_lowest_vp.includes(attacker)) { 
+	      for (let i in this.game.sectors) {
+		if (this.game.sectors[i].units[attacker-1].length > 0) { return; }
+	      }
+	      for (let i in this.game.planets) {
+		if (this.game.planets[i].units[attacker-1].length > 0) { return; }
+	      }
+	      imperium_self.game.state.secret_objective_end_their_suffering = 1;
+	    }
+	  }
+	}
+        return 0; 
+      },
+      groundCombatRoundEnd :	function(imperium_self, attacker, defender, sector, planet_idx) {
+        let sys = imperium_self.returnSectorAndPlanets(sector);
+        let planet = sys.p[planet_idx];
+
+	if (imperium_self.game.player == attacker) {
+	  if (planetunits[defender-1].length == 0) {
+	    if (players_with_most_vp.includes(defender)) { 
+	      // does the player have any units left?
+	      for (let i in this.game.sectors) {
+		if (this.game.sectors[i].units[defender-1].length > 0) { return; }
+	      }
+	      for (let i in this.game.planets) {
+		if (this.game.planets[i].units[defender-1].length > 0) { return; }
+	      }
+	      imperium_self.game.state.secret_objective_end_their_suffering = 1;
+	    }
+	  }
+	}
+	if (imperium_self.game.player == defender) {
+	  if (planet.units[attacker-1].length == 0) {
+	    if (players_with_lowest_vp.includes(attacker)) { 
+	      for (let i in this.game.sectors) {
+		if (this.game.sectors[i].units[attacker-1].length > 0) { return; }
+	      }
+	      for (let i in this.game.planets) {
+		if (this.game.planets[i].units[attacker-1].length > 0) { return; }
+	      }
+	      imperium_self.game.state.secret_objective_end_their_suffering = 1;
+	    }
+	  }
+	}
+        return 0; 
+      },
+      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
+	if (imperium_self.game.state.secret_objective_end_their_suffering == 1) { return 1; }
+	return 0;
+      },
+      scoreObjective : function(imperium_self, player) { 
+	return 1;
+      }
+  });
+
+
+
+
+/****
+
+
+  this.importSecretObjective('establish-a-blockade', {
+      name 		: 	"Establish a Blockade" ,
+      text		:	"Have at least 1 ship in the same sector as an opponent's spacedock",
+      type		: 	"secret" ,
+      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
+
+	for (let i in imperium_self.game.board) {
+      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
+	return 1;
+      },
+      scoreObjective : function(imperium_self, player) { 
+	return 1;
+      }
+  });
+
+  this.importSecretObjective('close-the-trap', {
+      name 		: 	"Close the Trap" ,
+      text		:	"Destroy another player's last ship in a system using a PDS" ,
+      type		: 	"secret" ,
+      phase		: 	"action" ,
+      onNewTurn		: 	function(imperium_self, player, mycallback) {
+	imperium_self.game.state.secret_objective_close_the_trap = 0;
+        return 0; 
+      },
+      spaceCombatRoundEnd :	function(imperium_self, attacker, defender, sector) {
+	let sys = imperium_self.returnSectorAndPlanets(sector);
+	if (imperium_self.game.player == attacker && sys.s.units[attacker-1].length > 0) {
+	  if (sys.s.units[defender-1].length == 0) {
+	    
+	  }
+	}
+	if (imperium_self.game.player == defender && sys.s.units[defender-1].length > 0) {
+	  if (sys.s.units[attacker-1].length == 0) {
+	    imperium_self.game.state.secret_
+	  }
+	}
+
+        if (imperium_self.game.players_info[imperium_self.game.player-1].units_i_destroyed_this_combat_round.includes("flagship")) {
+	  imperium_self.game.state.secret_objective_military_catastrophe = 1;
+	}
+        return 0; 
+      },
+      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
+	if (imperium_self.game.state.secret_objective_close_the_trap == 1) { return 1; }
+	return 0;
+      },
+      scoreObjective : function(imperium_self, player) { 
+	return 1;
+      }
+  });
+
+/**
+
   this.importSecretObjective('establish-a-blockade', {
       name 		: 	"Establish a Blockade" ,
       text		:	"Have at least 1 ship in the same sector as an opponent's spacedock",
@@ -3020,64 +3328,8 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 
 
 
-/*****
-  this.importSecretObjective('military-catastrophe', {
-      name 		: 	"Military Catastrophe" ,
-      text		:	"Destroy the flagship of another player" ,
-      type		: 	"secret" ,
-      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
-	return 0;
-      },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
-      }
-  });
-  this.importSecretObjective('nuke-them-from-orbit', {
-      name 		: 	"Nuke them from Orbit" ,
-      text		:	"Destroy the last of a player's ground forces using bombardment" ,
-      type		: 	"secret" ,
-      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
-	return 0;
-      },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
-      }
-  });
-  this.importSecretObjective('anti-imperialism', {
-      name 		: 	"Anti-Imperialism" ,
-      text		:	"Achieve victory in combat with a player with the most VP" ,
-      type		: 	"secret" ,
-      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
-	return 0;
-      },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
-      }
-  });
-  this.importSecretObjective('close-the-trap', {
-      name 		: 	"Close the Trap" ,
-      text		:	"Destroy another player's last ship in a system using a PDS" ,
-      type		: 	"secret" ,
-      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
-	return 0;
-      },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
-      }
-  });
-  this.importSecretObjective('flagship-dominance', {
-      name 		: 	"" ,
-      text		:	"Achieve victory in a space combat in a system containing your flagship. Your flagship must survive this combat" ,
-      type		: 	"secret" ,
-      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
-	return 0;
-      },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
-      }
-  });
-
 ***/
+
 /***
   this.importStageIPublicObjective('manage-to-breathe', {
       name 	: 	"Deep Breathing" ,
@@ -7774,6 +8026,7 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
     // this.stage_i_objectives
     // this.stage_ii_objectives
     // this.secret_objectives
+    // this.promissary_notes
     //
 
     //
@@ -8799,6 +9052,7 @@ console.log("type: " + type + " -- " + player + " -- " + upgrade_unit);
     if (obj.name == null) 	{ obj.name = "Unknown Objective"; }
     if (obj.text == null)	{ obj.type = "Unclear Objective"; }
     if (obj.type == null)	{ obj.type = "normal"; }
+    if (obj.phase == null)	{ obj.type = "imperial"; } // "action" if can be scored at end of turn
     if (obj.img  == null) 	{ obj.img = "/imperium/img/secret_objective.jpg"; }
     if (obj.vp == null)		{ obj.vp = 1; }
 
@@ -8844,6 +9098,7 @@ console.log("type: " + type + " -- " + player + " -- " + upgrade_unit);
     this.stage_ii_objectives[name] = obj;
 
   }  
+
 
 
   
@@ -8943,8 +9198,6 @@ console.log("type: " + type + " -- " + player + " -- " + upgrade_unit);
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
 
-console.log("MOVE: " + mv[0]);
-  
       if (mv[0] === "gameover") {
   	if (imperium_self.browser_active == 1) {
   	  alert("Game Over");
@@ -11516,10 +11769,6 @@ imperium_self.saveGame(imperium_self.game.id);
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  if (this.doesPlayerHavePDSUnitsWithinRange(attacker, speaker_order[i], sector) == 1) {
-console.log("\n\n\n\n");
-console.log("Player: " + this.returnFaction(speaker_order[i]) + " has units within range...");
-console.log("do we have units in range? " + this.doesPlayerHavePDSUnitsWithinRange(attacker, speaker_order[i], sector));
-
 	    this.game.queue.push("pds_space_defense_player_menu\t"+speaker_order[i]+"\t"+attacker+"\t"+sector);
           }
         }
@@ -12793,6 +13042,7 @@ console.log("Attacker infantry index: " + i);
 
       }
 
+
       if (mv[0] === "space_combat_post") {
 
   	let player       = parseInt(mv[1]);
@@ -12846,6 +13096,24 @@ console.log("Attacker infantry index: " + i);
         return 1;
 
       }
+
+
+
+      if (mv[0] === "anti_fighter_barrage") {
+
+  	let player       = parseInt(mv[1]);
+        let attacker	 = mv[2];
+        let defender	 = mv[3];
+        let sector	 = mv[4];
+
+        this.updateSectorGraphics(sector);
+  	this.game.queue.splice(qe, 1);
+
+        return 1;
+
+      }
+
+
 
       if (mv[0] === "space_combat_over_player_menu") {
 
@@ -13508,6 +13776,7 @@ console.log("START OF ACTUAL COMBAT IN ROUND: " + this.game.state.ground_combat_
       players[i].strategy_cards_retained        = [];
       players[i].cost_of_technology_primary	= 6;
       players[i].cost_of_technology_secondary	= 4;
+      players[i].promissary_notes		= [];
 
       //
       // unit limits
@@ -15318,6 +15587,10 @@ console.log("can " + this.returnFaction(imperium_self.game.player) + " retreat? 
     let playercol = "player_color_"+this.game.player;
     let html  = "<div class='sf-readable'><div class='player_color_box "+playercol+"'></div>" + this.returnFaction(player) + ": </div><ul>";
 
+    if (this.canPlayerScoreActionStageVictoryPoints(player) != "") {
+      html += '<li class="option" id="score">score secret objective</li>';
+      options_available++;
+    }
     if (this.canPlayerProduceInSector(player, sector) && this.game.tracker.production == 0) {
       html += '<li class="option" id="produce">produce units</li>';
       options_available++;
@@ -15381,9 +15654,11 @@ console.log("can " + this.returnFaction(imperium_self.game.player) + " retreat? 
         imperium_self.addMove("resolve\tplay");
         imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t"+"int"+"\t"+"0");
         imperium_self.endTurn();
+	return 0;
       }
 
       if (action2 == "trade") {
+        imperium_self.addMove("continue\t"+player+"\t"+sector);
         imperium_self.playerTrade();
         return 0;
       }
@@ -15448,8 +15723,18 @@ console.log("can " + this.returnFaction(imperium_self.game.player) + " retreat? 
 	});
       }
 
-    });
 
+
+      if (action2 == "score") {
+        imperium_self.playerScoreActionStageVictoryPoints(imperium_self, function(imperium_self, vp, objective) {
+          imperium_self.addMove("continue\t"+player+"\t"+sector);
+          if (vp > 0) { imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); }
+          imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
+          imperium_self.endTurn();
+	  return;
+        });
+      }
+    });
   }
 
 
@@ -15658,9 +15943,83 @@ console.log("can " + this.returnFaction(imperium_self.game.player) + " retreat? 
 
     });
   
-  
   }
+ 
+ 
+  //
+  // return string if YES, empty string if NO
+  //
+  canPlayerScoreActionStageVictoryPoints(player) {
+
+    let imperium_self = this;
+    let html = "";
+
+    //
+    // Secret Objectives - Action Phase
+    //
+    for (let i = 0 ; i < imperium_self.game.deck[5].hand.length; i++) {
+      if (!imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored.includes(imperium_self.game.deck[5].hand[i])) {
+        if (imperium_self.canPlayerScoreVictoryPoints(imperium_self.game.player, imperium_self.game.deck[5].hand[i], 3)) {
+	  if (imperium_self.secret_objectives[ imperium_self.game.deck[5].hand[i]   ].phase === "action") {
+	    html += '<li class="option secret3" id="'+imperium_self.game.deck[5].hand[i]+'">'+imperium_self.secret_objectives[imperium_self.game.deck[5].hand[i]].name+'</li>';
+          }
+        }
+      }
+    }
+
+    return html;
+
+  }
+
+
+
   
+  playerScoreActionStageVictoryPoints(imperium_self, mycallback, stage=0) {  
+
+    let html = '';  
+    let player = imperium_self.game.player;
+
+    html += '<div class="sf-readable">Do you wish to score a secret objective? </div><ul>';
+
+    html += this.canPlayerScoreActionStageVictoryPoints(player);  
+    html += '<li class="option cancel" id="cancel">cancel</li>';
+    html += '</ul>';
+  
+    imperium_self.updateStatus(html);
+    imperium_self.lockInterface(); 
+
+    $('.option').off();
+    $('.option').on('click', function() {
+  
+      if (!imperium_self.mayUnlockInterface()) {
+	alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+        return;
+      }
+      imperium_self.unlockInterface();
+
+      let action = $(this).attr("id");
+      let objective_type = 3;
+  
+      if ($(this).hasClass("stage1")) { objective_type = 1; }
+      if ($(this).hasClass("stage2")) { objective_type = 2; }
+      if ($(this).hasClass("secret3")) { objective_type = 3; }
+  
+      if (action === "no") {
+        mycallback(imperium_self, 0, "");
+  
+      } else {
+
+        let objective = action;
+        let vp = 1;
+        if (imperium_self.secret_objectives[objective]) {
+          if (imperium_self.secret_objectives[objective].vp > 1) { vp = imperium_self.stage_ii_objectives[objective].vp; }
+	}
+
+        mycallback(imperium_self, vp, objective);
+  
+      }
+    });
+  }
 
 
 
@@ -18815,20 +19174,12 @@ console.log("NONE!");
     if (obj.gainStrategyTokens == null) {
       obj.gainStrategyTokens = function(imperium_self, gainer, amount) { return amount; }
     }
-
     if (obj.losePlanet == null) {
       obj.losePlanet = function(imperium_self, loser, planet) { return 1; }
     }
-
-    //
-    // ALL players run upgradeUnit, so upgrades should manage who have them
-    //
     if (obj.upgradeUnit == null) {
       obj.upgradeUnit = function(imperium_self, player, unit) { return unit; }
     }
-    //
-    // ALL players run unitDestroyed
-    //
     if (obj.unitDestroyed == null) {
       obj.unitDestroyed = function(imperium_self, attacker, unit) { return unit;}
     }
@@ -18840,6 +19191,12 @@ console.log("NONE!");
     }
     if (obj.onNewTurn == null) {
       obj.onNewTurn = function(imperium_self, player, mycallback) { return 0; }
+    }
+    if (obj.spaceCombatRoundEnd == null) {
+      obj.spaceCombatRoundEnd = function(imperium_self, attacker, defender, sector) { return 1; }
+    }
+    if (obj.groundCombatRoundEnd == null) {
+      obj.groundCombatRoundEnd = function(imperium_self, attacker, defender, sector, planet_idx) { return 1; }
     }
 
 
@@ -18917,7 +19274,9 @@ console.log("NONE!");
     }
     //
     // when an agenda is resolved (passes) --> not necessarily if it is voted in favour
-    // for permanent game effects, run initialize after setting a var
+    // for permanent game effects, run initialize after setting a var if you want to have
+    // an effect that will last over time (i.e. not just change current variables)
+    //
     if (obj.onPass == null) {
       obj.onPass = function(imperium_self, winning_choice) { return 0; }
     }
@@ -18953,15 +19312,6 @@ console.log("NONE!");
     }
 
 
-    //
-    // synchronous interventions in combat state -- take place at the END of the combat round
-    //
-    if (obj.spaceCombatRoundEnd == null) {
-      obj.spaceCombatRoundEnd = function(imperium_self, attacker, defender, sector) { return 1; }
-    }
-    if (obj.groundCombatRoundEnd == null) {
-      obj.groundCombatRoundEnd = function(imperium_self, attacker, defender, sector, planet_idx) { return 1; }
-    }
 
 
     ////////////////////
@@ -18982,12 +19332,16 @@ console.log("NONE!");
       obj.returnPDSUnitsWithinRange = function(imperium_self, player, attacker, defender, sector, battery) { return battery; }
     }
 
+
+
+
     //////////////////////////
     // asynchronous eventsa //
     //////////////////////////
     //
     // these events must be triggered by something that is put onto the stack. they allow users to stop the execution of the game
-    // and take arbitrary action. 
+    // and take arbitrary action. The functions must return 1 in order to stop execution and return 0 in order for pass-through
+    // logic to work and the engine to continue to execute the game as usually.
     //
 
     //
@@ -19145,6 +19499,49 @@ console.log("NONE!");
   returnPlanetName(sector, planet_idx) {
     let sys = this.returnSectorAndPlanets(sector);
     return sys.p[planet_idx].name;
+  }
+  returnPlayersWithHighestVP() {
+
+    let highest_vp = 0;
+    let array_of_leaders = [];
+    let p = imperium_self.game.players_info;
+
+    for (let i = 0; i < p.length; i++) {
+      if (p[i].vp > highest_vp) {
+	highest_vp = p[i].vp;
+      }
+    }
+
+    for (let i = 0; i < p.length; i++) {
+      if (p[i].vp == highest_vp) {
+	array_of_leaders.push((i+1));
+      }
+    }
+
+    return array_of_leaders;
+
+  }
+
+  returnPlayersWithLowestVP() {
+
+    let lowest_vp = 1000;
+    let array_of_leaders = [];
+    let p = imperium_self.game.players_info;
+
+    for (let i = 0; i < p.length; i++) {
+      if (p[i].vp < lowest_vp) {
+	lowest_vp = p[i].vp;
+      }
+    }
+
+    for (let i = 0; i < p.length; i++) {
+      if (p[i].vp == lowest_vp) {
+	array_of_leaders.push((i+1));
+      }
+    }
+
+    return array_of_leaders;
+
   }
 
 
@@ -20158,15 +20555,12 @@ console.log(as[i] + " -- " + this.doesSectorContainPlanetOwnedByPlayer(as[i], pl
     }
     if (planets_ripe_for_plucking == 0) { return 0; }
 
- alert("planet here...");
-  
     //
     // do we have any infantry for an invasion
     //
     for (let i = 0; i < sys.s.units[player-1].length; i++) {
       let unit = sys.s.units[player-1][i];
       for (let k = 0; k < unit.storage.length; k++) {
-console.log("unit: " + unit.storage[k]);
         if (unit.storage[k].type == "infantry") {
           total_available_infantry += 1;
         }
@@ -20174,7 +20568,6 @@ console.log("unit: " + unit.storage[k]);
       if (unit.capacity > 0) { space_tranport_available = 1; }
     }
   
- alert("nanplaneryt here..." + total_available_infantry);
     //
     // return yes if troops in space
     //
@@ -20569,8 +20962,6 @@ console.log("RIDER: " + this.game.turn[i]);
   //
   //
   doesPlayerHavePDSUnitsWithinRange(attacker, player, sector) {
-
-alert("units in range?");
 
     let sys = this.returnSectorAndPlanets(sector);
     let x = this.returnSectorsWithinHopDistance(sector, 1);
