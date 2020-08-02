@@ -362,10 +362,10 @@ console.log("MOVE: " + mv[0]);
 
   	if (planet_idx != -1) {
           this.addPlanetaryUnit(player, sector, planet_idx, unitname);
-	  this.updateLog(this.returnFaction(player) + " produces " + this.returnUnit(player, unitname).name + " on " + sys.p[planet_idx].name, 120, 1);  // force message
+	  this.updateLog(this.returnFaction(player) + " produces " + this.returnUnit(unitname, player).name + " on " + sys.p[planet_idx].name, 120, 1);  // force message
  	} else {
           this.addSpaceUnit(player, sector, unitname);
-	  this.updateLog(this.returnFaction(player) + " produces " + this.returnUnit(player, unitname).name + " in " + sys.s.name, 120, 1); // force message
+	  this.updateLog(this.returnFaction(player) + " produces " + this.returnUnit(unitname, player).name + " in " + sys.s.name, 120, 1); // force message
         }
 
 
@@ -2434,6 +2434,90 @@ imperium_self.saveGame(imperium_self.game.id);
 
           this.playerPlayPostAgendaStage(player, agenda, tied_choices); 
 	}
+        return 0;
+      }
+
+
+
+      //////////////////////
+      // PDS SPACE ATTACK //
+      //////////////////////
+      if (mv[0] === "pds_space_attack") {  
+
+  	let attacker     = mv[1];
+        let sector       = mv[2];
+	let z		 = this.returnEventObjects();
+
+  	this.game.queue.splice(qe, 1);
+
+        let speaker_order = this.returnSpeakerOrder();
+
+	//
+	// reset 
+	//
+	this.resetTargetUnits();
+
+  	for (let i = 0; i < speaker_order.length; i++) {
+	  for (let k = 0; k < z.length; k++) {
+	    if (z[k].pdsSpaceAttackTriggers(this, attacker, speaker_order[i], sector) == 1) {
+	      this.game.queue.push("pds_space_attack_event\t"+speaker_order[i]+"\t"+attacker+"\t"+sector+"\t"+k);
+            }
+          }
+        }
+  	return 1;
+      }
+
+
+      if (mv[0] === "pds_space_attack_event") {
+  
+        let z 	 	 = this.returnEventObjects();
+  	let player       = parseInt(mv[1]);
+  	let attacker       = parseInt(mv[2]);
+        let sector	 = mv[3];
+        let z_index	 = parseInt(mv[4]);
+  	this.game.queue.splice(qe, 1);
+
+	//
+	// opportunity to add action cards / graviton / etc.
+	//
+	return z[z_index].pdsSpaceAttackEvent(this, attacker, player, sector);
+
+      }
+
+
+      if (mv[0] === "pds_space_attack_post") {
+
+  	let attacker     = parseInt(mv[1]);
+        let sector	 = mv[2];
+  	this.game.queue.splice(qe, 1);
+
+        this.updateSectorGraphics(sector);
+
+	if (this.doesPlayerHavePDSUnitsWithinRange(attacker, attacker, sector) == 1) {
+	  this.game.queue.push("pds_space_attack_player_menu\t"+attacker+"\t"+attacker+"\t"+sector);
+        }
+
+  	return 1;
+
+      }
+
+
+
+      if (mv[0] === "pds_space_attack_player_menu") {
+
+        let player       = parseInt(mv[1]);
+        let attacker     = parseInt(mv[2]);
+        let sector       = mv[3];
+        this.game.queue.splice(qe, 1);
+
+        this.updateSectorGraphics(sector);
+
+	this.updateLog(this.returnFaction(player) + " is preparing to fire PDS shots");
+
+	if (this.game.player == player) {
+          this.playerPlayPDSAttack(player, attacker, sector);        
+	}
+
         return 0;
       }
 

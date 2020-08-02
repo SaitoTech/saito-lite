@@ -240,8 +240,14 @@
 
   canPlayerRetreat(player, attacker, defender, sector) {
 
+console.log("SECTOR: " + sector);
     let as = this.returnAdjacentSectors(sector);
+console.log(JSON.stringify(as));
+
     for (let i = 0; i < as.length; i++) {
+console.log(as[i] + " -- " + this.doesSectorContainPlayerShips(player, as[i]));
+console.log(as[i] + " -- " + this.doesSectorContainNonPlayerShips(player, as[i]));
+console.log(as[i] + " -- " + this.doesSectorContainPlanetOwnedByPlayer(as[i], player));
       if (this.doesSectorContainPlayerShips(player, as[i]) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
       if (this.doesSectorContainPlanetOwnedByPlayer(sector, player) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
     }
@@ -855,6 +861,8 @@
 
   returnAdjacentSectors(sector) {
 
+    if (sector.indexOf("_") > -1) { sector = this.game.board[sector].tile; }
+
     let adjasec = [];
     let s = this.addWormholesToBoardTiles(this.returnBoardTiles());  
     for (let i in s) {
@@ -1032,7 +1040,7 @@
     }
     if (planets_ripe_for_plucking == 0) { return 0; }
 
-  
+ alert("planet here...");
   
     //
     // do we have any infantry for an invasion
@@ -1040,6 +1048,7 @@
     for (let i = 0; i < sys.s.units[player-1].length; i++) {
       let unit = sys.s.units[player-1][i];
       for (let k = 0; k < unit.storage.length; k++) {
+console.log("unit: " + unit.storage[k]);
         if (unit.storage[k].type == "infantry") {
           total_available_infantry += 1;
         }
@@ -1047,6 +1056,7 @@
       if (unit.capacity > 0) { space_tranport_available = 1; }
     }
   
+ alert("nanplaneryt here..." + total_available_infantry);
     //
     // return yes if troops in space
     //
@@ -1437,7 +1447,9 @@ console.log("RIDER: " + this.game.turn[i]);
 
   }
 
-
+  //
+  //
+  //
   doesPlayerHavePDSUnitsWithinRange(attacker, player, sector) {
 
     let sys = this.returnSectorAndPlanets(sector);
@@ -1453,8 +1465,18 @@ console.log("RIDER: " + this.game.turn[i]);
     //
     let battery = this.returnPDSWithinRange(attacker, sector, sectors, distance);
 
+    //
+    // what are the range of my PDS shots
+    //
+
     for (let i = 0; i < battery.length; i++) {
-      if (battery[i].owner == player) { return 1; }
+      if (battery[i].owner == player) { 
+        if (battery[i].sector != sector) {
+	  if (battery[i].range > 0) { return 1; }
+	} else {
+          return 1; 
+	}
+      }
     }
 
     return 0;
@@ -1512,7 +1534,8 @@ console.log("RIDER: " + this.game.turn[i]);
       for (let z = 0; z < this.game.players_info.length; z++) {
         if (this.game.players_info[z].experimental_battlestation === sectors[i]) {
           let pds = {};
-  	      pds.combat = this.returnUnit((z+1), "pds").combat;
+  	      pds.range = this.returnUnit("pds", (z+1)).range;
+  	      pds.combat = this.returnUnit("pds", (z+1)).combat;
   	      pds.owner = (z+1);
   	      pds.sector = sectors[i];
     	  battery.push(pds);
@@ -1531,6 +1554,7 @@ console.log("RIDER: " + this.game.turn[i]);
     	        if (sys.p[j].units[k][z].type == "pds") {
   		  if (sys.p[j].units[k][z].range >= distance[i]) {
   	            let pds = {};
+  	                pds.range = sys.p[j].units[k][z].range;
   	                pds.combat = sys.p[j].units[k][z].combat;
   		        pds.owner = (k+1);
   		        pds.sector = sectors[i];

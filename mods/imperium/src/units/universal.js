@@ -27,7 +27,7 @@
     this.importUnit("pds", {
       name     		:       "PDS",
       type     		:       "pds",
-      range 		:	1,
+      range 		:	0,
       cost 		:	5,
       combat 		:	6
     });
@@ -143,7 +143,7 @@
       type     		:       "pds",
       cost 		:	5,
       combat 		:	5,
-      range		:	2,
+      range		:	1,
       extension : 1
     });
 

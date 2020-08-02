@@ -105,7 +105,9 @@
       faction     :       "faction1",
       type        :       "ability" ,
       onNewRound     :    function(imperium_self, player) {
-        imperium_self.game.players_info[player-1].new_tokens_per_round = 3;
+        if (imperium_self.doesPlayerHaveTech("faction1-versatile")) {
+          imperium_self.game.players_info[player-1].new_tokens_per_round = 3;
+	}
       },
 
     });

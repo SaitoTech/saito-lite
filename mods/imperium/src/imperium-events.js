@@ -330,6 +330,16 @@
     //
     // when pds combat starts
     //
+    if (obj.pdsSpaceAttackTriggers == null) {
+      obj.pdsSpaceAttackTriggers = function(imperium_self, attacker, player, sector) { return 0; }
+    }
+    if (obj.pdsSpaceAttackEvent == null) {
+      obj.pdsSpaceAttackEvent = function(imperium_self, attacker, player, sector) { return 0; }
+    }
+
+    //
+    // when pds defense starts
+    //
     if (obj.pdsSpaceDefenseTriggers == null) {
       obj.pdsSpaceDefenseTriggers = function(imperium_self, attacker, player, sector) { return 0; }
     }

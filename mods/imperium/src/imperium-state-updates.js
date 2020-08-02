@@ -160,6 +160,8 @@
 
   updatePlanetOwner(sector, planet_idx, new_owner=-1) {
 
+    if (sector.indexOf("_") > -1) { sector = this.game.board[sector].tile; }
+
     let planetname = "";
     let sys = this.returnSectorAndPlanets(sector);
     let owner = new_owner;

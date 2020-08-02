@@ -29,16 +29,19 @@
 	   if (imperium_self.doesSectorContainPlayerUnit(player, as[i], "flagship")) {
 
              let pds1 = {};
+                 pds1.range = imperium_self.returnUnit(player, "pds").range;
                  pds1.combat = imperium_self.returnUnit(player, "pds").combat;
                  pds1.owner = player;
                  pds1.sector = sector;
 
              let pds2 = {};
+                 pds2.range = imperium_self.returnUnit(player, "pds").range;
                  pds2.combat = imperium_self.returnUnit(player, "pds").combat;
                  pds2.owner = player;
                  pds2.sector = sector;
 
              let pds3 = {};
+                 pds3.range = imperium_self.returnUnit(player, "pds").range;
                  pds3.combat = imperium_self.returnUnit(player, "pds").combat;
                  pds3.owner = player;
                  pds3.sector = sector;

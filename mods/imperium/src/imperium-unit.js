@@ -24,6 +24,7 @@
     if (obj.range == null) 		{ obj.range = 0; }			// firing range
     if (obj.last_round_damaged == null) { obj.last_round_damaged = 0; }		// last round in which hit (some techs care)
     if (obj.production == null) 	{ obj.production = 0; }			// can produce X units (production limit)
+    if (obj.extension == null)		{ obj.extension = 0; }			// 1 if replacing other unit as upgrade
     if (obj.temporary_combat_modifier == null) { obj.temporary_combat_modifier = 0; } // some action cards manipulate
     if (obj.bombardment_rolls == null)  { obj.bombardment = 0; } // 0 means no bombardment abilities
     if (obj.bombardment_combat == null) { obj.bombardment = -1; } // hits on N
@@ -153,6 +154,7 @@
   };
   unloadUnitFromPlanet(player, sector, planet_idx, unitname) {
     let sys = this.returnSectorAndPlanets(sector);
+console.log("UNLOADING FROM PLANET WITH " + sys.p[planet_idx].units[player-1].length + " UNITS");
     for (let i = 0; i < sys.p[planet_idx].units[player - 1].length; i++) {
       if (sys.p[planet_idx].units[player - 1][i].type === unitname) {
         let unit_to_remove = sys.p[planet_idx].units[player - 1][i];
@@ -165,6 +167,7 @@
   };
   unloadUnitByJSONFromPlanet(player, sector, planet_idx, unitjson) {
     let sys = this.returnSectorAndPlanets(sector);
+console.log("UNLOADING FROM PLANET WITH " + sys.p[planet_idx].units[player-1].length + " UNITS");
     for (let i = 0; i < sys.p[planet_idx].units[player-1].length; i++) {
       if (JSON.stringify(sys.p[planet_idx].units[player - 1][i]) === unitjson) {
         let unit_to_remove = sys.p[planet_idx].units[player - 1][i];
@@ -177,6 +180,7 @@
   };
   unloadUnitByJSONFromShip(player, sector, ship_idx, unitjson) {
     let sys = this.returnSectorAndPlanets(sector);
+console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][ship_idx].storage.length + " UNITS");
     for (let i = 0; i < sys.s.units[player - 1][ship_idx].storage.length; i++) {
       if (JSON.stringify(sys.s.units[player - 1][ship_idx].storage[i]) === unitjson) {
         sys.s.units[player-1][ship_idx].storage.splice(i, 1);
@@ -190,6 +194,7 @@
     let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.s.units[player - 1].length; i++) {
       if (JSON.stringify(sys.s.units[player - 1][i]) === shipjson) {
+console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][i].storage.length + " UNITS");
         for (let j = 0; j < sys.s.units[player - 1][i].storage.length; j++) {
           if (sys.s.units[player - 1][i].storage[j].type === unitname) {
             sys.s.units[player-1][i].storage.splice(j, 1);
@@ -205,6 +210,7 @@
     let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.s.units[player - 1].length; i++) {
       if (JSON.stringify(sys.s.units[player - 1][i]) === shipjson) {
+console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][i].storage.length + " UNITS");
         for (let j = 0; j < sys.s.units[player - 1][i].storage.length; j++) {
           if (JSON.stringify(sys.s.units[player - 1][i].storage[j]) === unitjson) {
             sys.s.units[player-1][i].storage.splice(j, 1);
@@ -281,6 +287,7 @@
   	      if (sys.p[j].units[k][z].type == "pds") {
   		if (sys.p[j].units[k][z].range <= distance[i]) {
   	          let pds = {};
+  	              pds.range = sys.p[j].units[k][z].range;
   	              pds.combat = sys.p[j].units[k][z].combat;
   		      pds.owner = (k+1);
   		      pds.sector = sectors[i];

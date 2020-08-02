@@ -1028,6 +1028,13 @@ updateSectorGraphics(sector) {
   }
 
 
+  //
+  // if player_fleet_drawn is 0 then remove any space ships
+  //
+  if (player_fleet_drawn == 0) {
+    let old_images = "#hex_bg_" + sector + " > .sector_graphics";
+    $(old_images).remove();
+  }
 
 
   let ground_frames = [];

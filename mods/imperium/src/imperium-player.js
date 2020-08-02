@@ -1009,7 +1009,9 @@ console.log("ERROR: you had no hits left to assign, bug?");
     //
     // can I retreat
     //
+console.log("can " + this.returnFaction(imperium_self.game.player) + " retreat? " + imperium_self.canPlayerRetreat(imperium_self.game.player, attacker, defender, sector));
     if (this.canPlayerRetreat(imperium_self.game.player, attacker, defender, sector)) {
+console.log("can " + this.returnFaction(imperium_self.game.player) + " retreat? " + imperium_self.canPlayerRetreat(imperium_self.game.player, attacker, defender, sector));
       html += '<li class="option" id="retreat">announce retreat</li>';
     }
 
@@ -1070,9 +1072,8 @@ console.log("ERROR: you had no hits left to assign, bug?");
       }
 
       if (action2 == "retreat") {
-	if (this.canPlayerRetreat(player, sector)) {
-
-	  let retreat_options = this.selectSectorsWherePlayerCanRetreat(player, sector);
+	if (imperium_self.canPlayerRetreat(imperium_self.game.player, attacker, defender, sector)) {
+	  let retreat_options = imperium_self.returnSectorsWherePlayerCanRetreat(imperium_self.game.player, sector);
 	
           let html = '<div clss="sf-readable">Retreat into which Sector? </div><ul>';
 	  for (let i = 0; i < retreat_options.length; i++) {
@@ -1080,20 +1081,22 @@ console.log("ERROR: you had no hits left to assign, bug?");
 	  }
 	  html += '</ul>';
 
+	  imperium_self.updateStatus(html);
+
 	  $('.option').off();
 	  $('.option').on('click', function() {
 
 	    let opt = $(this).attr("id");
 	    let retreat_to_sector = retreat_options[opt];
 
-	    imperium_self.addMove("retreat\t"+player+"\t"+opponent+"\t"+sector+"\t"+retreat_to_sector);
+	    imperium_self.addMove("retreat\t"+imperium_self.game.player+"\t"+opponent+"\t"+sector+"\t"+retreat_to_sector);
 	    imperium_self.endTurn();
 	    return 0;
 	  });
 
 
 	} else {
-          this.playerPlaySpaceCombat(attacker, defender, sector);
+          imperium_self.playerPlaySpaceCombat(attacker, defender, sector);
         }
       }
 
@@ -1452,6 +1455,115 @@ console.log("ERROR: you had no hits left to assign, bug?");
   //
   // reaching this implies that the player can choose to fire / not-fire
   //
+  playerPlayPDSAttack(player, attacker, sector) {
+
+    let imperium_self = this;
+    let html = '';
+    let relevant_action_cards = ["pre_pds"];
+    let can_target_with_pds_fire = 1;
+
+    let defender = -1;
+    let sys = imperium_self.returnSectorAndPlanets(sector);
+
+    for (let i = 0; i < sys.s.units.length; i++) {
+      if ((i+1) != attacker) {
+	if (sys.s.units[i].length > 0) {
+	  defender = (i+1);
+	}
+      }
+    }
+
+    html = '<div class="sf-readable">Do you wish to fire your PDS before moving into the sector?</div><ul>';
+
+    //
+    // skip if attacker is immune
+    //
+    if (defender != -1) {
+      if (imperium_self.game.players_info[defender-1].temporary_immune_to_pds_fire) {
+        html = '<div class="sf-readable">'+imperium_self.returnFaction(defender) + ' cannot be targeted by PDS fire during this invasion:</div><ul>';
+        can_target_with_pds_fire = 0;
+      }
+    } else {
+      html = '<div class="sf-readable">You cannot target any ships with PDS fire and must skip firing:</div><ul>';
+      can_target_with_pds_fire = 0;
+    }
+
+
+    let ac = this.returnPlayerActionCards(player, relevant_action_cards);
+    if (1 == 1) {
+      html += '<li class="option" id="skip">skip PDS</li>';
+    }
+    if (can_target_with_pds_fire == 1) {
+      html += '<li class="option" id="fire">fire PDS</li>';
+    }
+    if (ac.length > 0) {
+      html += '<li class="option" id="action">play action card</li>';
+    }
+
+    let tech_attach_menu_events = 0;
+    let tech_attach_menu_triggers = [];
+    let tech_attach_menu_index = [];
+
+    let z = this.returnEventObjects();
+    for (let i = 0; i < z.length; i++) {
+      if (z[i].menuOptionTriggers(this, "pds", this.game.player) == 1) {
+        let x = z[i].menuOption(this, "pds", this.game.player);
+        html += x.html;
+	tech_attach_menu_index.push(i);
+	tech_attach_menu_triggers.push(x.event);
+	tech_attach_menu_events = 1;
+      }
+    }
+    html += '</ul>';
+
+    this.updateStatus(html);
+  
+    $('.option').on('click', function() {
+  
+      let action2 = $(this).attr("id");
+
+      //
+      // respond to tech and factional abilities
+      //
+      if (tech_attach_menu_events == 1) {
+	for (let i = 0; i < tech_attach_menu_triggers.length; i++) {
+	  if (action2 == tech_attach_menu_triggers[i]) {
+	    $(this).remove();
+	    z[tech_attach_menu_index[i]].menuOptionActivated(imperium_self, "pds", imperium_self.game.player);
+          }
+        }
+      }
+
+
+      if (action2 == "action") {
+        imperium_self.playerSelectActionCard(function(card) {
+  	  imperium_self.addMove("action_card_post\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("action_card\t"+imperium_self.game.player+"\t"+card);
+  	  imperium_self.addMove("lose\t"+imperium_self.game.player+"\taction_cards\t1");
+	  imperium_self.playerPlayPDSAttack(player, attacker, sector);
+        }, function() {
+	  imperium_self.playerPlayPDSAttack(player, attacker, sector);
+	}, relevant_action_cards);
+      }
+
+      if (action2 == "skip") {
+	imperium_self.endTurn();
+      }
+
+      if (action2 == "fire") {
+	// prepend so it happens after the modifiers -- defender instead of attacker here
+        imperium_self.prependMove("pds_fire\t"+imperium_self.game.player+"\t"+defender+"\t"+sector);
+	imperium_self.endTurn();
+      };
+
+    });
+
+  }
+
+
+  //
+  // reaching this implies that the player can choose to fire / not-fire
+  //
   playerPlayPDSDefense(player, attacker, sector) {
 
     let imperium_self = this;
@@ -1747,7 +1859,7 @@ console.log("ERROR: you had no hits left to assign, bug?");
     }
     if (this.canPlayerInvadePlanet(player, sector) && this.game.tracker.invasion == 0) {
       if (sector == "new-byzantium" || sector == "4_4") {
-        if ( (imperium_self.game.planets['new-byzantium'].owner != -1) || imperium_self.returnAvailableInfluence(imperium_self.game.player) >= 6) {
+        if ( (imperium_self.game.planets['new-byzantium'].owner != -1) || (imperium_self.returnAvailableInfluence(imperium_self.game.player)+imperium_self.game.players_info[imperium_self.game.player-1].goods) >= 6) {
           html += '<li class="option" id="invade">invade planet</li>';
           options_available++;
 	}
