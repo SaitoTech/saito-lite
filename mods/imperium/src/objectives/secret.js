@@ -256,9 +256,6 @@
       text		:	"Have at least 1 ship in the same sector as an opponent's spacedock",
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
-
-	for (let i in imperium_self.game.board) {
-      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
 	return 1;
       },
       scoreObjective : function(imperium_self, player) { 
