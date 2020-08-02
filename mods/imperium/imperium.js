@@ -2959,9 +2959,6 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 
 
 
-/****
-
-
   this.importSecretObjective('establish-a-blockade', {
       name 		: 	"Establish a Blockade" ,
       text		:	"Have at least 1 ship in the same sector as an opponent's spacedock",
@@ -3012,32 +3009,6 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	return 1;
       }
   });
-
-/**
-
-  this.importSecretObjective('establish-a-blockade', {
-      name 		: 	"Establish a Blockade" ,
-      text		:	"Have at least 1 ship in the same sector as an opponent's spacedock",
-      type		: 	"secret" ,
-      canPlayerScoreVictoryPoints	: function(imperium_self, player) {
-
-	for (let i in imperium_self.game.board) {
-	  let sector = imperium_self.game.board[i].tile;
-	  if (imperium_self.doesSectorContainPlayerShip(player, sector)) {
-	    if (imperium_self.doesSectorContainNonPlayerUnit(player, sector, "spacedock")) {
-	      return 1;
-	    }
-	  }
-	}
-
-	return 0;
-      },
-      scoreObjective : function(imperium_self, player) { 
-	return 1;
-      }
-  });
-
-
 
 
   this.importSecretObjective('galactic-observer', {
