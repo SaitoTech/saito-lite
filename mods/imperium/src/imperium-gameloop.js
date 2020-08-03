@@ -1117,6 +1117,11 @@
   
       if (mv[0] === "newround") {
 
+	//
+	// reset to turn 0
+	//
+  	this.game.state.turn = 0;
+
   	//
   	// SCORING
   	//

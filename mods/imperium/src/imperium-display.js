@@ -100,7 +100,6 @@ returnPlanetInformationHTML(planet) {
   if (this.game.planets[planet]) { p = this.game.planets[planet]; }
   let ionp = this.returnInfantryOnPlanet(p);
   let ponp = this.returnPDSOnPlanet(p);
-console.log("PDS are: " + ponp + " on " + p.name);
   let sonp = this.returnSpaceDocksOnPlanet(p);
   let powner = '';
 
@@ -237,7 +236,13 @@ returnLawsOverlay() {
 returnStrategyOverlay() {
 
   let html = '';
+  let rank = [];
+  let cards = [];
+  let ranked_cards = [];
   let imperium_self = this;
+
+alert("SDONE!");
+
 
   for (let s in this.strategy_cards) {
 
@@ -254,7 +259,8 @@ returnStrategyOverlay() {
         };
       };
     }
-    html += `
+    
+    cards.push(`
 	<div class="overlay_strategy_card_box">
 	  <img class="overlay_strategy_card_box_img" src="${thiscard.img}" style="width:100%" />
 	  <div class="overlay_strategy_card_text">${thiscard.text}</div>
@@ -262,11 +268,40 @@ returnStrategyOverlay() {
 	    <div class="strategy_card_state_internal bk">${strategy_card_state}</div>
      	  </div>
 	</div>
-    `;;
+    `);
+     rank.push(this.strategy_cards[s].rank);
+
   }
 
+  let sorted_cards = [];
+  let crashguard = 0;
 
-  return html;
+  while (cards.length > 0) {
+
+    crashguard++;
+    if (crashguard > 100) { break; }
+
+    let lowest_rank = 100;
+    let lowest_idx = -1;
+    for (let i = 0; i < rank.length; i++) {
+      if (lowest_rank > rank[i]) {
+	lowest_rank = rank[i];
+	lowest_idx = i;
+      }
+    }
+
+    sorted_cards.push(cards[lowest_idx]);
+    cards.splice(lowest_idx, 1);
+    rank.splice(lowest_idx, 1);
+
+  }
+
+  let final_result = "";
+  for (let i = 0; i < sorted_cards.length; i++) {
+    final_result += sorted_cards[i];
+  }
+
+  return final_result;
 
 }
 
