@@ -269,6 +269,8 @@
 
   returnSectorsWherePlayerCanRetreat(player, sector) {
 
+    if (sector.indexOf("_") > -1) { sector = this.game.board[sector].tile; }
+
     let retreat_sectors = [];
     let as = this.returnAdjacentSectors(sector);
     for (let i = 0; i < as.length; i++) {
@@ -283,16 +285,13 @@
 
   canPlayerRetreat(player, attacker, defender, sector) {
 
-console.log("SECTOR: " + sector);
     let as = this.returnAdjacentSectors(sector);
-console.log(JSON.stringify(as));
 
     for (let i = 0; i < as.length; i++) {
-console.log(as[i] + " -- " + this.doesSectorContainPlayerShips(player, as[i]));
-console.log(as[i] + " -- " + this.doesSectorContainNonPlayerShips(player, as[i]));
-console.log(as[i] + " -- " + this.doesSectorContainPlanetOwnedByPlayer(as[i], player));
-      if (this.doesSectorContainPlayerShips(player, as[i]) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
-      if (this.doesSectorContainPlanetOwnedByPlayer(sector, player) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
+      if (this.game.board[as[i]]) {
+        if (this.doesSectorContainPlayerShips(player, as[i]) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
+        if (this.doesSectorContainPlanetOwnedByPlayer(sector, player) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
+      }
     }
 
     return 0;
@@ -907,20 +906,28 @@ console.log(as[i] + " -- " + this.doesSectorContainPlanetOwnedByPlayer(as[i], pl
     if (sector.indexOf("_") > -1) { sector = this.game.board[sector].tile; }
 
     let adjasec = [];
-    let s = this.addWormholesToBoardTiles(this.returnBoardTiles());  
-    for (let i in s) {
 
+    let s = this.addWormholesToBoardTiles(this.returnBoardTiles());  
+
+    for (let i in s) {
       if (this.game.board[i]) {
         let sys = this.returnSectorAndPlanets(i);
-        if (sys.s.sector == sector) {
-          for (let t = 0; t < s[i].neighbours.length; t++) {
-
-	    let sys2 = this.returnSectorAndPlanets(s[i].neighbours[t]);
-
-	    adjasec.push(sys2.s.sector);
-
-  	  }
-        }
+        if (sys) {
+          if (sys.s) {
+            if (sys.s.sector == sector) {
+              for (let t = 0; t < s[i].neighbours.length; t++) {
+	        let sys2 = this.returnSectorAndPlanets(s[i].neighbours[t]);
+	        if (sys2) {
+	          if (sys2.s) {
+  	            adjasec.push(sys2.s.sector);
+	          }
+	        }
+  	      }
+            }
+          } else {
+	  }
+        } else {
+	}
       }
 
     }
@@ -1323,7 +1330,7 @@ if (this.game.board[tmp[k]] != undefined) {
 
   returnPDSOnPlanet(planet) {
     let total = 0;
-    for (let i = 0; i < planet.units.length && (i+1) == planet.owner; i++) {
+    for (let i = 0; i < planet.units.length; i++) {
       for (let k = 0; k < planet.units[i].length; k++) {
 	if (planet.units[i][k].type == "pds") { total++; }
       }
@@ -1376,7 +1383,6 @@ if (this.game.board[tmp[k]] != undefined) {
 
 
   doesPlanetHaveInfantry(planet) {
-console.log("p: " + planet);
     if (planet.units == undefined) { planet = this.game.planets[planet]; }
     for (let i = 0; i < planet.units.length; i++) {
       for (let ii = 0; ii < planet.units[i].length; ii++) {
@@ -1432,7 +1438,6 @@ console.log("p: " + planet);
 
     if (this.game.turn) {
       for (let i = 0; i < this.game.turn.length; i++) {
-console.log("RIDER: " + this.game.turn[i]);
 	if (this.game.turn[i]) {
 	  let x = this.game.turn[i].split("\t");
 	  if (x[0] == "rider") { if (x[1] == this.game.player) { return 1; } }
@@ -1536,7 +1541,6 @@ console.log("RIDER: " + this.game.turn[i]);
       }
     }
 
-
     sectors = x.sectors;
     distance = x.distance;
 
@@ -1559,7 +1563,7 @@ console.log("RIDER: " + this.game.turn[i]);
 
 
   returnPDSWithinRange(attacker, destination, sectors, distance) {
-  
+
     let z = this.returnEventObjects();
     let battery = [];
   
@@ -1577,6 +1581,7 @@ console.log("RIDER: " + this.game.turn[i]);
   	      pds.combat = this.returnUnit("pds", (z+1)).combat;
   	      pds.owner = (z+1);
   	      pds.sector = sectors[i];
+  	      pds.unit = this.returnUnit("pds", (z+1));
     	  battery.push(pds);
         }  
       }
@@ -1588,6 +1593,7 @@ console.log("RIDER: " + this.game.turn[i]);
       if (sys != null) {
         for (let j = 0; j < sys.p.length; j++) {
           for (let k = 0; k < sys.p[j].units.length; k++) {
+
   	  if (k != attacker-1) {
   	      for (let z = 0; z < sys.p[j].units[k].length; z++) {
     	        if (sys.p[j].units[k][z].type == "pds") {
@@ -1597,6 +1603,7 @@ console.log("RIDER: " + this.game.turn[i]);
   	                pds.combat = sys.p[j].units[k][z].combat;
   		        pds.owner = (k+1);
   		        pds.sector = sectors[i];
+  	      		pds.unit = sys.p[j].units[k][z];
   	            battery.push(pds);
   	  	  }
   	        }

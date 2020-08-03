@@ -208,7 +208,6 @@ returnLawsOverlay() {
       html += '<p></p>';
       html += '<ul style="clear:both;margin-top:10px;">';
       for (let i = 0; i < this.game.state.laws.length; i++) {
-console.log("1: "+ this.game.state.laws[i]);
         html += `  <li style="background-image: url('/imperium/img/agenda_card_template.png');background-size:cover;" class="overlay_agendacard card option" id="${i}"><div class="overlay_agendatitle">${laws[this.game.state.laws[i]].name}</div><div class="overlay_agendacontent">${laws[this.game.state.laws[i]].text}</div></li>`;
       }
       html += '</ul>';
@@ -237,6 +236,9 @@ console.log("1: "+ this.game.state.laws[i]);
 returnStrategyOverlay() {
 
   let html = '';
+  let rank = [];
+  let cards = [];
+  let ranked_cards = [];
   let imperium_self = this;
 
   for (let s in this.strategy_cards) {
@@ -254,7 +256,8 @@ returnStrategyOverlay() {
         };
       };
     }
-    html += `
+    
+    cards.push(`
 	<div class="overlay_strategy_card_box">
 	  <img class="overlay_strategy_card_box_img" src="${thiscard.img}" style="width:100%" />
 	  <div class="overlay_strategy_card_text">${thiscard.text}</div>
@@ -262,11 +265,40 @@ returnStrategyOverlay() {
 	    <div class="strategy_card_state_internal bk">${strategy_card_state}</div>
      	  </div>
 	</div>
-    `;;
+    `);
+     rank.push(this.strategy_cards[s].rank);
+
   }
 
+  let sorted_cards = [];
+  let crashguard = 0;
 
-  return html;
+  while (cards.length > 0) {
+
+    crashguard++;
+    if (crashguard > 100) { break; }
+
+    let lowest_rank = 100;
+    let lowest_idx = -1;
+    for (let i = 0; i < rank.length; i++) {
+      if (lowest_rank > rank[i]) {
+	lowest_rank = rank[i];
+	lowest_idx = i;
+      }
+    }
+
+    sorted_cards.push(cards[lowest_idx]);
+    cards.splice(lowest_idx, 1);
+    rank.splice(lowest_idx, 1);
+
+  }
+
+  let final_result = "";
+  for (let i = 0; i < sorted_cards.length; i++) {
+    final_result += sorted_cards[i];
+  }
+
+  return final_result;
 
 }
 
@@ -322,8 +354,6 @@ returnObjectivesOverlay() {
     if (i > 0) { html += '<p></p>'; }
     let objc = imperium_self.returnPlayerObjectivesScored((i+1), ["secret_objectives"]);
     for (let o in objc) {
-console.log("SECRET OBJECTIVES: ");
-console.log(JSON.stringify(objc[o]));
       html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${objc[o].img})">
                <div class="objectives_card_name">${objc[o].name}</div>
                <div class="objectives_card_content">${objc[o].text}</div>
@@ -1211,7 +1241,7 @@ updateSectorGraphics(sector) {
 
     let html = '';
 
-    if(this.game.sectors[sector].planets.length == 1) {
+    if (this.game.sectors[sector].planets.length == 1) {
       html = this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
       info_tile.innerHTML = html;
       info_tile.classList.add('one_planet');

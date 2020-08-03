@@ -4,7 +4,8 @@
       homeworld		: 	"sector51",
       space_units	: 	["carrier","cruiser","cruiser","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship"],
+      tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship","pds-ii"],
+      //tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship"],
       background	: 	'faction3.jpg',
       intro		:	`<div style="font-weight:bold">The Senate has Collapsed!</div><div style="margin-top:10px">The failure of diplomatic options has struck the XXCha Kingdom harshly...</div><div style="margin-top:10px">What is left for your people but the conquest of New Byzantium and imposition of peace by force?</div>`
     });
@@ -19,7 +20,7 @@
       type        :       "ability" ,
       returnPDSUnitsWithinRange : function(imperium_self, player, attacker, defender, sector, battery) {
 
-       if (!imperium_self.doesPlayerHaveTech(player, "faction3-flagship")) { return 0; }
+       if (!imperium_self.doesPlayerHaveTech(player, "faction3-flagship")) { return battery; }
 
        let player_fleet = imperium_self.returnPlayerFleet(player);
        if (player_fleet.flagship > 0) {

@@ -146,7 +146,17 @@
 
 .strategy_card_state_internal {
   color: white;
-  padding: 5px;
+  padding: 15px;
+  font-size: 1.2em;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+
+
+
+
+
 }
 
 #confirm {

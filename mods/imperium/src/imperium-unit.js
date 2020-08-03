@@ -291,6 +291,7 @@ console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][i].storage.lengt
   	              pds.combat = sys.p[j].units[k][z].combat;
   		      pds.owner = (k+1);
   		      pds.sector = sectors[i];
+  		      pds.unit = sys.p[j].units[k][z];
   
   	          battery.push(pds);
   		}
