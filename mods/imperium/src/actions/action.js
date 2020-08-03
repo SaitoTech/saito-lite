@@ -1061,7 +1061,7 @@ alert("select sector with filter");
 	  if (imperium_self.game.player == action_card_player) {
 
             imperium_self.playerSelectSectorWithFilter(
-	      "Select a hazardous planet and exhaust it. Destroy 3 infantry on that planet if they exist" ,
+	      "Select a sector that you have activated and deactivate it: " ,
               function(sector) {
 		if (imperium_self.game.sectors[sector].activated[action_card_player-1] == 1) {
 		  return 1;

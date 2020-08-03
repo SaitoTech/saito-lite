@@ -100,7 +100,7 @@
       name        	: 	"Duranium Armor" ,
       color       	: 	"red" ,
       prereqs     	:       ['red','red'],
-      text		:	"Each round, you may epair any ship which has not taken damage this round" ,
+      text		:	"Each round, you may repair any ship which has not taken damage this round" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].duranium_armor == undefined) {
           imperium_self.game.players_info[player-1].duranium_armor = 0;
