@@ -1,11 +1,11 @@
 
 
-
     this.importTech("spacedock-ii", {
       name        :       "SpaceDock II" ,
       unit        :       1 ,
       prereqs     :       ["yellow","yellow"],
       initialize :       function(imperium_self, player) {
+	if (imperium_self.game.players_info[player-1].spacedock_ii == 1) { return 1; };
         imperium_self.game.players_info[player-1].spacedock_ii = 0;
       },
       gainTechnology :       function(imperium_self, gainer, tech) {
@@ -29,6 +29,7 @@
       unit        :       1 ,
       prereqs     :       ["red","yellow"],
       initialize :       function(imperium_self, player) {
+	if (imperium_self.game.players_info[player-1].pds_ii == 1) { return 1; };
         imperium_self.game.players_info[player-1].pds_ii = 0;
       },
       gainTechnology :       function(imperium_self, gainer, tech) {
@@ -51,6 +52,7 @@
       unit        :       1 ,
       prereqs     :       ["blue","blue"],
       initialize :       function(imperium_self, player) {
+	if (imperium_self.game.players_info[player-1].carrier_ii == 1) { return 1; };
         imperium_self.game.players_info[player-1].carrier_ii = 0;
       },
       gainTechnology :       function(imperium_self, gainer, tech) {
@@ -74,6 +76,7 @@ console.log("returning upgraded carrier...");
       unit        :       1 ,
       prereqs     :       ["green","green"],
       initialize :       function(imperium_self, player) {
+	if (imperium_self.game.players_info[player-1].infantry_ii == 1) { return 1; };
         imperium_self.game.players_info[player-1].infantry_ii = 0;
       },
       gainTechnology :       function(imperium_self, gainer, tech) {
@@ -95,6 +98,7 @@ console.log("returning upgraded carrier...");
       unit        :       1 ,
       prereqs     :       ["red","red"],
       initialize :       function(imperium_self, player) {
+	if (imperium_self.game.players_info[player-1].destroyer_ii == 1) { return 1; };
         imperium_self.game.players_info[player-1].destroyer_ii = 0;
       },
       gainTechnology :       function(imperium_self, gainer, tech) {
@@ -116,6 +120,7 @@ console.log("returning upgraded carrier...");
       unit        :       1 ,
       prereqs     :       ["green","blue"],
       initialize :       function(imperium_self, player) {
+	if (imperium_self.game.players_info[player-1].fighter_ii == 1) { return 1; };
         imperium_self.game.players_info[player-1].fighter_ii = 0;
       },
       gainTechnology :       function(imperium_self, gainer, tech) {
@@ -137,6 +142,7 @@ console.log("returning upgraded carrier...");
       unit        :       1 ,
       prereqs     :       ["green","yellow","red"],
       initialize :       function(imperium_self, player) {
+	if (imperium_self.game.players_info[player-1].cruiser_ii == 1) { return 1; };
         imperium_self.game.players_info[player-1].cruiser_ii = 0;
       },
       gainTechnology :       function(imperium_self, gainer, tech) {
@@ -158,6 +164,7 @@ console.log("returning upgraded carrier...");
       unit        :       1 ,
       prereqs     :       ["blue","blue","yellow"],
       initialize :       function(imperium_self, player) {
+	if (imperium_self.game.players_info[player-1].dreadnaught_ii == 1) { return 1; };
         imperium_self.game.players_info[player-1].dreadnaught_ii = 0;
       },
       gainTechnology :       function(imperium_self, gainer, tech) {

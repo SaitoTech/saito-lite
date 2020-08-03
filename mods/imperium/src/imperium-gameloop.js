@@ -461,6 +461,11 @@
 	if (this.game.state.playing_strategy_card_secondary == 1) {
 	  if (this.game.confirms_players.includes(this.app.wallet.returnPublicKey())) {
 	    return 0;
+	  } else {
+	    //
+	    // if our interface is locked, we're processing the secondary already
+	    //
+	    if (this.lock_interface == 1) { return 0; }
 	  }
 	}
 
@@ -863,7 +868,6 @@
             this.updateLog(this.returnFaction(player) + " votes " + votes + " on " + this.game.sectors[this.game.state.choices[vote]].sector);
 	  }
 	  if (is_player == 1) {
-console.log("we think this is a player agenda: " + JSON.stringify(this.game.state.choices));
             this.updateLog(this.returnFaction(player) + " votes " + votes + " on " + this.returnFaction(this.game.state.choices[vote]));
 	  }
 	  if (is_planet == 0 && is_sector == 0 && is_player == 0) {
@@ -3100,13 +3104,21 @@ imperium_self.saveGame(imperium_self.game.id);
 	  let total_shots = 0;
 	  let hits_on = [];
 	  let hits_or_misses = [];
+	  let units_firing = [];
+
 	  let total_hits  = 0;
 	  let z = this.returnEventObjects();
+
+	  let unmodified_roll = [];
+ 	  let modified_roll = [];
+	  let reroll = [];
+
 
 	  for (let i = 0; i < battery.length; i++) {
 	    if (battery[i].owner == player) {
  	      total_shots++;
 	      hits_on.push(battery[i].combat);
+	      units_firing.push(battery[i].unit);
 	    }
 	  }
 
@@ -3116,7 +3128,13 @@ imperium_self.saveGame(imperium_self.game.id);
 
 
 	  for (let s = 0; s < total_shots; s++) {
+
+
 	    let roll = this.rollDice(10);
+
+	    unmodified_roll.push(roll);
+
+
 	    for (let z_index in z) {
 	      roll = z[z_index].modifyCombatRoll(this, player, attacker, player, "pds", roll);
 	      imperium_self.game.players_info[attacker-1].target_units = z[z_index].modifyTargets(this, attacker, player, imperium_self.game.player, "pds", imperium_self.game.players_info[attacker-1].target_units);
@@ -3124,6 +3142,10 @@ imperium_self.saveGame(imperium_self.game.id);
 
 	    roll += this.game.players_info[player-1].pds_combat_roll_modifier;
 	    roll += this.game.players_info[player-1].temporary_pds_combat_roll_modifier;
+
+            modified_roll.push(roll);
+            reroll.push(0);
+
 	    if (roll >= hits_on[s]) {
 	      total_hits++;
 	      hits_or_misses.push(1);
@@ -3165,7 +3187,10 @@ imperium_self.saveGame(imperium_self.game.id);
 	      }
 	     
 	      let roll = this.rollDice(10);
- 
+
+	      reroll[lowest_combat_idx] = 1; 
+	      unmodified_roll[lowest_combat_idx] = roll; 
+
 	      for (let z_index in z) {
 	        roll =  z[z_index].modifyCombatRerolls(this, player, attacker, player, "pds", roll);
 	        imperium_self.game.players_info[player-1].target_units = z[z_index].modifyTargets(this, attacker, player, imperium_self.game.player, "pds", imperium_self.game.players_info[player-1].target_units);
@@ -3173,6 +3198,8 @@ imperium_self.saveGame(imperium_self.game.id);
 
 	      roll += this.game.players_info[player-1].pds_combat_roll_modifier;
 	      roll += this.game.players_info[player-1].temporary_pds_combat_roll_modifier;
+	      modified_roll[lowest_combat_idx] = roll;
+ 
 	      if (roll >= hits_on[lowest_combat_idx]) {
 	        total_hits++;
 		hits_or_misses[lowest_combat_idx] = 1;
@@ -3196,6 +3223,20 @@ imperium_self.saveGame(imperium_self.game.id);
 	  let restrictions = [];
 
 	  this.game.queue.push("assign_hits\t"+player+"\t"+attacker+"\tspace\t"+sector+"\tpds\t"+total_hits+"\tpds");
+
+          //
+          // create an object with all this information to update our LOG
+          //
+          let combat_info = {};
+              combat_info.hits_or_misses  = hits_or_misses;
+              combat_info.units_firing    = units_firing;
+              combat_info.hits_on         = hits_on;
+              combat_info.unmodified_roll = unmodified_roll;  // unmodified roll
+              combat_info.modified_roll   = modified_roll; // modified roll
+              combat_info.reroll          = reroll; // rerolls
+
+          this.updateCombatLog(combat_info);
+
 
         }
 
@@ -3545,8 +3586,6 @@ imperium_self.saveGame(imperium_self.game.id);
 
       if (mv[0] === "infantry_fire") {
 
-console.log("INFANTRY FIRE: " + JSON.stringify(mv));
-
 	//
 	// we need to permit both sides to play action cards before they fire and start destroying units
 	// so we check to make sure that "ground_combat_player_menu" does not immediately precede us... if
@@ -3557,7 +3596,6 @@ console.log("INFANTRY FIRE: " + JSON.stringify(mv));
         if (le >= 0) {
 	  lmv = this.game.queue[le].split("\t");
 	  if (lmv[0] === "ground_combat_player_menu") {
-console.log("last move is gcpm");
 	    let tmple = this.game.queue[le];
 	    let tmple1 = this.game.queue[le+1];
 	    this.game.queue[le]   = tmple1;
@@ -3585,8 +3623,6 @@ console.log("last move is gcpm");
 	//
 	if (this.doesPlayerHaveInfantryOnPlanet(attacker, sector, planet_idx) == 1) {	  
 
-console.log("Attacker has infantry on planet: " + imperium_self.returnFaction(attacker));
-
 	  let total_shots = 0;
 	  let total_hits = 0;
 	  let hits_or_misses = [];
@@ -3602,8 +3638,6 @@ console.log("Attacker has infantry on planet: " + imperium_self.returnFaction(at
 	  //
 	  for (let i = 0; i < sys.p[planet_idx].units[attacker-1].length; i++) {
 	    if (sys.p[planet_idx].units[attacker-1][i].type == "infantry" && sys.p[planet_idx].units[attacker-1][i].destroyed == 0) {
-
-console.log("Attacker infantry index: " + i);
 
 	      units_firing.push(sys.p[planet_idx].units[attacker-1][i]);
 
@@ -3991,13 +4025,9 @@ console.log("Attacker infantry index: " + i);
         let planet_idx   = mv[4];
         this.game.queue.splice(qe, 1);
 
-console.log("QUEUE ON GROUND COMBAT: " + JSON.stringify(this.game.queue));
-console.log("attacker is: " + this.returnFaction(attacker));
-
         this.updateSectorGraphics(sector);
 
 	if (this.game.player == attacker) {
-console.log("moving into attack myself...");
           this.playerPlayGroundCombat(attacker, defender, sector, planet_idx);
 	}
 
@@ -4243,8 +4273,6 @@ console.log("moving into attack myself...");
         // have a round of ground combat
         //
         this.game.state.ground_combat_round++;
-
-console.log("START OF ACTUAL COMBAT IN ROUND: " + this.game.state.ground_combat_round);
 
 	for (let i = 0; i < this.game.players_info.length; i++) {
 	 this.game.players_info[i].units_i_destroyed_last_combat_round = this.game.players_info[i].units_i_destroyed_last_combat_round;

@@ -288,10 +288,8 @@
     let as = this.returnAdjacentSectors(sector);
 
     for (let i = 0; i < as.length; i++) {
-      if (this.game.board[as[i]]) {
-        if (this.doesSectorContainPlayerShips(player, as[i]) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
-        if (this.doesSectorContainPlanetOwnedByPlayer(sector, player) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
-      }
+      if (this.doesSectorContainPlayerShips(player, as[i]) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
+      if (this.doesSectorContainPlanetOwnedByPlayer(sector, player) && (!this.doesSectorContainNonPlayerShips(player, as[i]))) { return 1; }
     }
 
     return 0;
@@ -1572,7 +1570,6 @@ if (this.game.board[tmp[k]] != undefined) {
   	      pds.combat = this.returnUnit("pds", (z+1)).combat;
   	      pds.owner = (z+1);
   	      pds.sector = sectors[i];
-  	      pds.unit = this.returnUnit("pds", (z+1));
     	  battery.push(pds);
         }  
       }
@@ -1594,7 +1591,6 @@ if (this.game.board[tmp[k]] != undefined) {
   	                pds.combat = sys.p[j].units[k][z].combat;
   		        pds.owner = (k+1);
   		        pds.sector = sectors[i];
-  	      		pds.unit = sys.p[j].units[k][z];
   	            battery.push(pds);
   	  	  }
   	        }

@@ -18,6 +18,7 @@
                 imperium_self.addMove("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
                 if (vp > 0) { imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); }
 		imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
+                imperium_self.addMove("score\t"+imperium_self.game.player+"\t"+"1"+"\t"+"new-byzantium");
 		imperium_self.updateStatus("scoring completed");
                 imperium_self.endTurn();
               }, 1);
@@ -25,15 +26,20 @@
 	  };
 
 	  let supplementary_secret = function() {
-            imperium_self.addMove("resolve\tstrategy");
-            imperium_self.addMove("strategy\t"+"imperial"+"\t"+strategy_card_player+"\t2");
-            imperium_self.addMove("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
-            imperium_self.addMove("gain\t"+strategy_card_player+"\tsecret_objectives\t1");
-            for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-              imperium_self.addMove("DEAL\t6\t"+(i+1)+"\t1");
-            }
-	    imperium_self.updateStatus("scoring completed");
-	    imperium_self.endTurn();
+  	    imperium_self.playerAcknowledgeNotice("You will next be asked to score a public objective if you can. The game will then precede and allow all players (including you) to score additional objectives in initiative order.", function() {
+              imperium_self.addMove("resolve\tstrategy");
+              imperium_self.playerScoreVictoryPoints(imperium_self, function(imperium_self, vp, objective) {
+                imperium_self.addMove("strategy\t"+"imperial"+"\t"+strategy_card_player+"\t2");
+                imperium_self.addMove("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
+                if (vp > 0) { imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective); }
+		imperium_self.game.players_info[imperium_self.game.player-1].objectives_scored_this_round.push(objective);
+                imperium_self.addMove("gain\t"+strategy_card_player+"\tsecret_objectives\t1");
+                for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+                  imperium_self.addMove("DEAL\t6\t"+(i+1)+"\t1");
+                }
+                imperium_self.endTurn();
+              }, 1);
+            });
 	  };
 
 	  if (imperium_self.game.planets['new-byzantium'].owner == strategy_card_player) {
