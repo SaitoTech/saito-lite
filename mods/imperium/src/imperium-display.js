@@ -100,6 +100,7 @@ returnPlanetInformationHTML(planet) {
   if (this.game.planets[planet]) { p = this.game.planets[planet]; }
   let ionp = this.returnInfantryOnPlanet(p);
   let ponp = this.returnPDSOnPlanet(p);
+console.log("PDS are: " + ponp + " on " + p.name);
   let sonp = this.returnSpaceDocksOnPlanet(p);
   let powner = '';
 
@@ -208,7 +209,6 @@ returnLawsOverlay() {
       html += '<p></p>';
       html += '<ul style="clear:both;margin-top:10px;">';
       for (let i = 0; i < this.game.state.laws.length; i++) {
-console.log("1: "+ this.game.state.laws[i]);
         html += `  <li style="background-image: url('/imperium/img/agenda_card_template.png');background-size:cover;" class="overlay_agendacard card option" id="${i}"><div class="overlay_agendatitle">${laws[this.game.state.laws[i]].name}</div><div class="overlay_agendacontent">${laws[this.game.state.laws[i]].text}</div></li>`;
       }
       html += '</ul>';
@@ -322,8 +322,6 @@ returnObjectivesOverlay() {
     if (i > 0) { html += '<p></p>'; }
     let objc = imperium_self.returnPlayerObjectivesScored((i+1), ["secret_objectives"]);
     for (let o in objc) {
-console.log("SECRET OBJECTIVES: ");
-console.log(JSON.stringify(objc[o]));
       html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${objc[o].img})">
                <div class="objectives_card_name">${objc[o].name}</div>
                <div class="objectives_card_content">${objc[o].text}</div>
@@ -1211,7 +1209,7 @@ updateSectorGraphics(sector) {
 
     let html = '';
 
-    if(this.game.sectors[sector].planets.length == 1) {
+    if (this.game.sectors[sector].planets.length == 1) {
       html = this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
       info_tile.innerHTML = html;
       info_tile.classList.add('one_planet');

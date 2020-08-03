@@ -906,19 +906,28 @@
     if (sector.indexOf("_") > -1) { sector = this.game.board[sector].tile; }
 
     let adjasec = [];
+
     let s = this.addWormholesToBoardTiles(this.returnBoardTiles());  
+
     for (let i in s) {
       if (this.game.board[i]) {
         let sys = this.returnSectorAndPlanets(i);
-        if (sys.s.sector == sector) {
-          for (let t = 0; t < s[i].neighbours.length; t++) {
-
-	    let sys2 = this.returnSectorAndPlanets(s[i].neighbours[t]);
-
-	    adjasec.push(sys2.s.sector);
-
-  	  }
-        }
+        if (sys) {
+          if (sys.s) {
+            if (sys.s.sector == sector) {
+              for (let t = 0; t < s[i].neighbours.length; t++) {
+	        let sys2 = this.returnSectorAndPlanets(s[i].neighbours[t]);
+	        if (sys2) {
+	          if (sys2.s) {
+  	            adjasec.push(sys2.s.sector);
+	          }
+	        }
+  	      }
+            }
+          } else {
+	  }
+        } else {
+	}
       }
 
     }
@@ -1321,7 +1330,7 @@ if (this.game.board[tmp[k]] != undefined) {
 
   returnPDSOnPlanet(planet) {
     let total = 0;
-    for (let i = 0; i < planet.units.length && (i+1) == planet.owner; i++) {
+    for (let i = 0; i < planet.units.length; i++) {
       for (let k = 0; k < planet.units[i].length; k++) {
 	if (planet.units[i][k].type == "pds") { total++; }
       }

@@ -3209,14 +3209,6 @@ imperium_self.saveGame(imperium_self.game.id);
 	    }
 
 	  }
-
-	  if (total_hits == 1) {
-	    this.updateLog(this.returnFaction(attacker) + " takes " + total_hits + " hit");
-	  } else {
-	    this.updateLog(this.returnFaction(attacker) + " takes " + total_hits + " hits");
-	  }
-
-
 	  //
 	  // total hits to assign
 	  //
@@ -3236,6 +3228,14 @@ imperium_self.saveGame(imperium_self.game.id);
               combat_info.reroll          = reroll; // rerolls
 
           this.updateCombatLog(combat_info);
+
+
+	  if (total_hits == 1) {
+	    this.updateLog(this.returnFaction(attacker) + " takes " + total_hits + " hit");
+	  } else {
+	    this.updateLog(this.returnFaction(attacker) + " takes " + total_hits + " hits");
+	  }
+
 
 
         }

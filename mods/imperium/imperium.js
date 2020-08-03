@@ -12373,14 +12373,6 @@ imperium_self.saveGame(imperium_self.game.id);
 	    }
 
 	  }
-
-	  if (total_hits == 1) {
-	    this.updateLog(this.returnFaction(attacker) + " takes " + total_hits + " hit");
-	  } else {
-	    this.updateLog(this.returnFaction(attacker) + " takes " + total_hits + " hits");
-	  }
-
-
 	  //
 	  // total hits to assign
 	  //
@@ -12400,6 +12392,14 @@ imperium_self.saveGame(imperium_self.game.id);
               combat_info.reroll          = reroll; // rerolls
 
           this.updateCombatLog(combat_info);
+
+
+	  if (total_hits == 1) {
+	    this.updateLog(this.returnFaction(attacker) + " takes " + total_hits + " hit");
+	  } else {
+	    this.updateLog(this.returnFaction(attacker) + " takes " + total_hits + " hits");
+	  }
+
 
 
         }
@@ -20388,19 +20388,28 @@ console.log("NONE!");
     if (sector.indexOf("_") > -1) { sector = this.game.board[sector].tile; }
 
     let adjasec = [];
+
     let s = this.addWormholesToBoardTiles(this.returnBoardTiles());  
+
     for (let i in s) {
       if (this.game.board[i]) {
         let sys = this.returnSectorAndPlanets(i);
-        if (sys.s.sector == sector) {
-          for (let t = 0; t < s[i].neighbours.length; t++) {
-
-	    let sys2 = this.returnSectorAndPlanets(s[i].neighbours[t]);
-
-	    adjasec.push(sys2.s.sector);
-
-  	  }
-        }
+        if (sys) {
+          if (sys.s) {
+            if (sys.s.sector == sector) {
+              for (let t = 0; t < s[i].neighbours.length; t++) {
+	        let sys2 = this.returnSectorAndPlanets(s[i].neighbours[t]);
+	        if (sys2) {
+	          if (sys2.s) {
+  	            adjasec.push(sys2.s.sector);
+	          }
+	        }
+  	      }
+            }
+          } else {
+	  }
+        } else {
+	}
       }
 
     }
@@ -20803,7 +20812,7 @@ if (this.game.board[tmp[k]] != undefined) {
 
   returnPDSOnPlanet(planet) {
     let total = 0;
-    for (let i = 0; i < planet.units.length && (i+1) == planet.owner; i++) {
+    for (let i = 0; i < planet.units.length; i++) {
       for (let k = 0; k < planet.units[i].length; k++) {
 	if (planet.units[i][k].type == "pds") { total++; }
       }
@@ -22053,6 +22062,7 @@ returnPlanetInformationHTML(planet) {
   if (this.game.planets[planet]) { p = this.game.planets[planet]; }
   let ionp = this.returnInfantryOnPlanet(p);
   let ponp = this.returnPDSOnPlanet(p);
+console.log("PDS are: " + ponp + " on " + p.name);
   let sonp = this.returnSpaceDocksOnPlanet(p);
   let powner = '';
 
@@ -22161,7 +22171,6 @@ returnLawsOverlay() {
       html += '<p></p>';
       html += '<ul style="clear:both;margin-top:10px;">';
       for (let i = 0; i < this.game.state.laws.length; i++) {
-console.log("1: "+ this.game.state.laws[i]);
         html += `  <li style="background-image: url('/imperium/img/agenda_card_template.png');background-size:cover;" class="overlay_agendacard card option" id="${i}"><div class="overlay_agendatitle">${laws[this.game.state.laws[i]].name}</div><div class="overlay_agendacontent">${laws[this.game.state.laws[i]].text}</div></li>`;
       }
       html += '</ul>';
@@ -22275,8 +22284,6 @@ returnObjectivesOverlay() {
     if (i > 0) { html += '<p></p>'; }
     let objc = imperium_self.returnPlayerObjectivesScored((i+1), ["secret_objectives"]);
     for (let o in objc) {
-console.log("SECRET OBJECTIVES: ");
-console.log(JSON.stringify(objc[o]));
       html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${objc[o].img})">
                <div class="objectives_card_name">${objc[o].name}</div>
                <div class="objectives_card_content">${objc[o].text}</div>
@@ -23164,7 +23171,7 @@ updateSectorGraphics(sector) {
 
     let html = '';
 
-    if(this.game.sectors[sector].planets.length == 1) {
+    if (this.game.sectors[sector].planets.length == 1) {
       html = this.returnPlanetInformationHTML(this.game.sectors[sector].planets[0]);
       info_tile.innerHTML = html;
       info_tile.classList.add('one_planet');
