@@ -214,7 +214,16 @@ body {
 .hud-button {
   cursor: pointer;
 }
-
+.standalone-hud-toggle-fullscreen {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  height: 40px;
+  width: 40px;
+  font-size: 30px;
+  background-color: var(--saito-skyline-grey);
+  padding: 6px;
+}
 /** HUD BODY **/
 
 .hud-body {
@@ -585,6 +594,13 @@ body {
 }
 @media screen and (orientation:portrait) and (max-width: 700px) {
 
+  .standalone-hud-toggle-fullscreen {
+    display: all;
+  }
+  .controls > .hud-toggle-fullscreen {
+    display: none;
+  }
+
   .cardbox {
     position: fixed;
     float: none;
@@ -797,11 +813,19 @@ body {
     max-height: unset;
   }
 
+  .controls {
+    padding-top:5px;
+  }
+
+  .hud-toggle-fullscreen-inhud {
+    display: none;
+  }
+
   .hud-header {
     grid-template-rows: auto;
     grid-template-columns: unset;
     width: unset;
-    height: 50px;
+    height: 40px;
     border-right: 1px solid grey;
     cursor: initial;
     position: relative;

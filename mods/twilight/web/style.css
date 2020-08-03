@@ -764,7 +764,7 @@ body {
     grid-template-areas:
       "hud-header hud-content"
       "hud-transparent hud-content";
-    grid-template-columns: 2em auto auto;
+    grid-template-columns: 2em auto;
     grid-template-rows: 30px auto;
     min-width: unset;
     max-width: unset;
