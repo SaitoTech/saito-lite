@@ -2105,3 +2105,8 @@ input[type=range] {
   font-size: smaller;
   transform: translateX(-100%);
 }
+
+.ship_selector b::after {
+  content: " \1F5F9";
+}
+

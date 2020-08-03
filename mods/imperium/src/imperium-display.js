@@ -241,9 +241,6 @@ returnStrategyOverlay() {
   let ranked_cards = [];
   let imperium_self = this;
 
-alert("SDONE!");
-
-
   for (let s in this.strategy_cards) {
 
     let strategy_card_state = "not picked";
