@@ -4,8 +4,7 @@
       homeworld		: 	"sector51",
       space_units	: 	["carrier","cruiser","cruiser","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship","pds-ii"],
-      //tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship"],
+      tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship"],
       background	: 	'faction3.jpg',
       intro		:	`<div style="font-weight:bold">The Senate has Collapsed!</div><div style="margin-top:10px">The failure of diplomatic options has struck the XXCha Kingdom harshly...</div><div style="margin-top:10px">What is left for your people but the conquest of New Byzantium and imposition of peace by force?</div>`
     });
@@ -186,7 +185,9 @@
       },
       menuOptionTriggers:  function(imperium_self, menu, player) { 
         if (imperium_self.doesPlayerHaveTech(player, "faction3-quash") && menu == "main") {
-	  return 1;
+          if (imperium_self.game.players_info[player-1].strategy_tokens > 0) { 
+	    return 1;
+	  }
 	}
 	return 0;
       },

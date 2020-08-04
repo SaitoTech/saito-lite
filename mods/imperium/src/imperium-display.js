@@ -37,6 +37,9 @@ updateCombatLog(cobj) {
   let are_there_rerolls = 0;
   let are_there_modified_rolls = 0;
 
+console.log("UNMODIFIED: " + JSON.stringify(cobj.unmodified_roll));
+console.log("MODIFIED: " + JSON.stringify(cobj.modified_roll));
+
   for (let i = 0; i < cobj.units_firing.length; i++) {
     if (cobj.reroll[i] == 1) { are_there_rerolls = 1; }
     if (cobj.modified_roll[i] != cobj.unmodified_roll[i]) { are_there_modified_rolls = 1; }
@@ -172,6 +175,10 @@ returnFactionDashboard() {
 	<div data-id="${(i+1)}" class="dash-faction-status-${(i+1)} dash-faction-status"></div>
 	commodities : <span data-id="${(i+1)}" class="dash-item-commodities">${this.game.players_info[i].commodities}</span> / <span data-id="${(i+1)}" class="dash-item-commodity-limit">${this.game.players_info[i].commodity_limit}</span>
       </div>
+
+      <div data-id="${(i+1)}" class="dash-faction-speaker`;
+      if (this.game.state.speaker == (i+1)) {  html += ' speaker">speaker'; } else { html += '">'; }
+      html += `</div>
     </div>
     `;
 

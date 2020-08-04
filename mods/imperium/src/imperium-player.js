@@ -2192,12 +2192,19 @@ playerResearchTechnology(mycallback) {
   }
   html += '</ul>';
 
+  imperium_self.lockInterface();
   this.updateStatus(html);
 
   $('.option').off();
   $('.option').on('mouseenter', function () { let s = $(this).attr("id"); imperium_self.showTechCard(s); });
   $('.option').on('mouseleave', function () { let s = $(this).attr("id"); imperium_self.hideTechCard(s); });
   $('.option').on('click', function () {
+
+    if (!imperium_self.mayUnlockInterface()) {
+      alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+      return;
+    }
+    imperium_self.unlockInterface();
 
     let i = $(this).attr("id");
     imperium_self.hideTechCard(i);
@@ -3511,8 +3518,6 @@ playerSelectUnitsToMove(destination) {
     obj.distance_adjustment += obj.fleet_move_bonus;
   }
 
-  console.log("SECTORS: " + JSON.stringify(sectors));
-
   obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance);
 
   let updateInterface = function (imperium_self, obj, updateInterface) {
@@ -3580,7 +3585,6 @@ playerSelectUnitsToMove(destination) {
     $(adddiv).on('mouseleave', function () { let s = $(this).attr("id"); imperium_self.removeSectorHighlight(s); });
 
 
-
     $('.option').off();
     $('.option').on('click', function () {
 
@@ -3609,8 +3613,25 @@ playerSelectUnitsToMove(destination) {
       // clear the list to start again
       //
       if (id == "clear") {
+alert("To change movement options, just reload!");
+	window.location.reload(true);
+/***
+ *
+ * we can't just remove movement items from array as below, as we are unloading from the planet
+ * and loading to the ships in real-time.
+ *
         obj.stuff_to_move = [];
-        updateInterface(imperium_self, obj, updateInterface);
+        for (let i = 0; i < obj.ships_and_sectors.length; i++) { 
+          for (let ii = 0; ii < obj.ships_and_sectors[i].ships.length; ii++) { 
+            obj.ships_and_sectors[i].ships[ii].already_moved = 0;
+	  }
+	}
+       fighters_loaded = 0;
+       infantry_loaded = 0;
+       obj.stuff_to_load = [];
+       updateInterface(imperium_self, obj, updateInterface);
+***/
+       return;
       }
 
 
@@ -3715,7 +3736,7 @@ playerSelectUnitsToMove(destination) {
         }
 
 
-        let user_message = `<div class="sf-readable">This ship has <span class="capacity_remaining">${total_ship_capacity}</span> capacity to carry fighters / infantry. Do you wish to add them? </div><ul>`;
+        let user_message = `<div class="sf-readable">This ship has <span class="capacity_remaining">${total_ship_capacity}</span> capacity. Infantry can capture planets and fighters can protect your fleet. Do you wish to add them? </div><ul>`;
 
         for (let i = 0; i < sys.p.length; i++) {
           let planetary_units = sys.p[i].units[imperium_self.game.player - 1];
@@ -3793,8 +3814,6 @@ playerSelectUnitsToMove(destination) {
               //
               let unitjson = imperium_self.unloadUnitFromPlanet(imperium_self.game.player, sector, planet_idx, "infantry");
               let shipjson_preload = JSON.stringify(sys.s.units[imperium_self.game.player - 1][obj.ships_and_sectors[i].ship_idxs[ii]]);
-
-
               imperium_self.loadUnitByJSONOntoShip(imperium_self.game.player, sector, obj.ships_and_sectors[i].ship_idxs[ii], unitjson);
 
               $(irdiv).html((ir - 1));

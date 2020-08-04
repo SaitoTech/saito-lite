@@ -4,7 +4,6 @@
       homeworld		: 	"sector50",
       space_units	: 	["carrier","carrier","dreadnaught","fighter"],
       ground_units	: 	["infantry","infantry","pds","spacedock"],
-      //tech		: 	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector","faction2-analytic","faction2-brilliant","faction2-fragile","faction2-deep-space-conduits","faction2-eres-siphons"],
       tech		: 	["sarween-tools", "neural-motivator", "plasma-scoring", "antimass-deflectors", "faction2-analytic", "faction2-brilliant", "faction2-fragile", "faction2-flagship"],
       background	: 	'faction2.jpg' ,
       intro		:	`<div style="font-weight:bold">The Republic has fallen!</div><div style="margin-top:10px">The Universities of Jol Nar have been preparing for War for decades...</div><div style="margin-top:10px">But the leadership is torn: assault New Byzantium or establish a regional power-base first?</div>`
@@ -55,24 +54,21 @@
       faction     :       "faction2",
       type        :       "ability" ,
       onNewRound     :    function(imperium_self, player) {
-        if (imperium_self.doesPlayerHaveTech(player, "faction2-analytic")) {
+        if (imperium_self.doesPlayerHaveTech(player, "faction2-fragile")) {
           imperium_self.game.players_info[player-1].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 1;
         }
       },
       modifyCombatRoll :	  function(imperium_self, attacker, defender, player, combat_type, roll) {
-
-	if (combat_type == "pds") {
+	if (combat_type == "pds" || combat_type == "space" || combat_type == "ground") {
           if (imperium_self.doesPlayerHaveTech(attacker, "faction2-fragile")) {
-  	    imperium_self.updateLog("Jol Nar combat roll adjusted to -1 due to faction limitation");
+  	    imperium_self.updateLog("Jol Nar combat rolls -1 due to fragility");
 	    roll -= 1;
 	    if (roll < 1) { roll = 1; }
 	  }
         }
 
 	return roll;
-
       },
-
     });
     this.importTech('faction2-brilliant', {
       name        :       "Brilliant" ,

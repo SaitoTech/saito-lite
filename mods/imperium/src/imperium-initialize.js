@@ -78,8 +78,11 @@
     //
     // IF THIS IS A NEW GAME
     //
+    let is_this_a_new_game = 0;
     if (this.game.board == null) {
-  
+
+      is_this_a_new_game = 1;
+
       //
       // dice
       //
@@ -279,6 +282,24 @@
         z[i].initialize(this, (k+1));
       }
     }
+
+
+    //
+    // if this is a new game, gainTechnology that we start with
+    //
+    if (is_this_a_new_game == 1) {
+      for (let i = 0; i < z.length; i++) {
+        for (let k = 0; k < this.game.players_info.length; k++) {
+          for (let kk = 0; kk < this.game.players_info[k].tech.length; kk++) {
+            z[i].gainTechnology(this, (k+1), this.game.players_info[k].tech[kk]);
+          }
+        }
+      }
+      for (let k = 0; k < this.game.players_info.length; k++) {
+        this.upgradePlayerUnitsOnBoard((k+1));
+      }
+    }
+
 
 
     //

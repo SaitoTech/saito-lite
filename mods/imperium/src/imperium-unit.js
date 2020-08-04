@@ -154,7 +154,6 @@
   };
   unloadUnitFromPlanet(player, sector, planet_idx, unitname) {
     let sys = this.returnSectorAndPlanets(sector);
-console.log("UNLOADING FROM PLANET WITH " + sys.p[planet_idx].units[player-1].length + " UNITS");
     for (let i = 0; i < sys.p[planet_idx].units[player - 1].length; i++) {
       if (sys.p[planet_idx].units[player - 1][i].type === unitname) {
         let unit_to_remove = sys.p[planet_idx].units[player - 1][i];
@@ -167,7 +166,6 @@ console.log("UNLOADING FROM PLANET WITH " + sys.p[planet_idx].units[player-1].le
   };
   unloadUnitByJSONFromPlanet(player, sector, planet_idx, unitjson) {
     let sys = this.returnSectorAndPlanets(sector);
-console.log("UNLOADING FROM PLANET WITH " + sys.p[planet_idx].units[player-1].length + " UNITS");
     for (let i = 0; i < sys.p[planet_idx].units[player-1].length; i++) {
       if (JSON.stringify(sys.p[planet_idx].units[player - 1][i]) === unitjson) {
         let unit_to_remove = sys.p[planet_idx].units[player - 1][i];
@@ -430,10 +428,9 @@ console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][i].storage.lengt
   
   
   returnUnit(type = "", player, upgrade_unit=1) {
-console.log("type: " + type + " -- " + player + " -- " + upgrade_unit);
     let unit = JSON.parse(JSON.stringify(this.units[type]));
     unit.owner = player;
-    // this is optional as otherwise we can have a loop
+    // optional as otherwise we can have a loop
     if (upgrade_unit == 1) {
       unit = this.upgradeUnit(unit, player);
     }
