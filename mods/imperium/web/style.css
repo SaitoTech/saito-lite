@@ -1515,6 +1515,19 @@ body {
   text-weight: bold;
   margin-top: 2px;
 }
+.dash-faction-speaker {
+  height: 40px;
+  margin-top: 10px;
+}
+.speaker {
+  background-color: red;
+  color: white;
+  font-size:16px;
+  font-weight: bold;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
+}
 
 .dash-faction-status {
   border: 1px solid #c16400;

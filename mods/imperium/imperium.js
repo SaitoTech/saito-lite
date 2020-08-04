@@ -1174,14 +1174,14 @@ console.log("P: " + planet);
       faction     :       "faction2",
       type        :       "ability" ,
       onNewRound     :    function(imperium_self, player) {
-        if (imperium_self.doesPlayerHaveTech(player, "faction2-analytic")) {
+        if (imperium_self.doesPlayerHaveTech(player, "faction2-fragile")) {
           imperium_self.game.players_info[player-1].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 1;
         }
       },
       modifyCombatRoll :	  function(imperium_self, attacker, defender, player, combat_type, roll) {
 	if (combat_type == "pds" || combat_type == "space" || combat_type == "ground") {
           if (imperium_self.doesPlayerHaveTech(attacker, "faction2-fragile")) {
-  	    imperium_self.updateLog("Jol Nar combat roll adjusted to -1 due to faction limitation");
+  	    imperium_self.updateLog("Jol Nar combat rolls -1 due to fragility");
 	    roll -= 1;
 	    if (roll < 1) { roll = 1; }
 	  }
@@ -7966,6 +7966,8 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
     $('.hud_menu_game-logs').css('display', 'none');
     $('.hud_menu_game-status').css('display', 'none');
 
+    //this.preloadImages();
+
 
   }
 
@@ -7973,6 +7975,12 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
 
   
   async initializeGame(game_id) {
+
+    //
+    // start image preload as soon as we know we are really going to play RI
+    //
+
+    this.preloadImages();
 
     this.updateStatus("loading game...: " + game_id);
     this.loadGame(game_id);
@@ -8348,8 +8356,21 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
     this.addUIEvents();
 
 
+
   }
   
+  async preloadImages() {
+
+    var allImages = ["img/influence/5.png", "img/influence/8.png", "img/influence/2.png", "img/influence/1.png", "img/influence/7.png", "img/influence/0.png", "img/influence/9.png", "img/influence/4.png", "img/influence/3.png", "img/influence/6.png", "img/agenda_card_template.png", "img/card_template.jpg", "img/strategy/EMPIRE.png", "img/strategy/DIPLOMACY.png", "img/strategy/BUILD.png", "img/strategy/INITIATIVE.png", "img/strategy/TRADE.png", "img/strategy/TECH.png", "img/strategy/MILITARY.png", "img/strategy/POLITICS.png", "img/secret_objective_ii_back.png", "img/units/fighter.png", "img/units/flagship.png", "img/units/spacedock.png", "img/units/warsun.png", "img/units/dreadnaught.png", "img/units/cruiser.png", "img/units/infantry.png", "img/units/pds.png", "img/units/carrier.png", "img/units/destroyer.png", "img/action_card_back.jpg", "img/sectors_unadorned/sector13.png", "img/sectors_unadorned/sector71.png", "img/sectors_unadorned/sector6.png", "img/sectors_unadorned/sector35.png", "img/sectors_unadorned/sector66.png", "img/sectors_unadorned/sector9.png", "img/sectors_unadorned/sector20.png", "img/sectors_unadorned/sector25.png", "img/sectors_unadorned/sector39.png", "img/sectors_unadorned/sector23.png", "img/sectors_unadorned/sector11.png", "img/sectors_unadorned/sector69.png", "img/sectors_unadorned/sector4.png", "img/sectors_unadorned/sector53.png", "img/sectors_unadorned/sector60.png", "img/sectors_unadorned/sector10.png", "img/sectors_unadorned/sector28.png", "img/sectors_unadorned/sector2.png", "img/sectors_unadorned/sector43.png", "img/sectors_unadorned/sector27.png", "img/sectors_unadorned/sector72.png", "img/sectors_unadorned/sector55.png", "img/sectors_unadorned/sector49.png", "img/sectors_unadorned/sector50.png", "img/sectors_unadorned/sector65.png", "img/sectors_unadorned/sector58.png", "img/sectors_unadorned/sector29.png", "img/sectors_unadorned/sector44.png", "img/sectors_unadorned/sector41.png", "img/sectors_unadorned/sector19.png", "img/sectors_unadorned/sector1.png", "img/sectors_unadorned/sector40.png", "img/sectors_unadorned/sector52.png", "img/sectors_unadorned/sector42.png", "img/sectors_unadorned/sector59.png", "img/sectors_unadorned/sector57.png", "img/sectors_unadorned/sector3.png", "img/sectors_unadorned/sector18.png", "img/sectors_unadorned/sector32.png", "img/sectors_unadorned/sector22.png", "img/sectors_unadorned/sector63.png", "img/sectors_unadorned/sector38.png", "img/sectors_unadorned/sector70.png", "img/sectors_unadorned/sector16.png", "img/sectors_unadorned/sector14.png", "img/sectors_unadorned/sector54.png", "img/sectors_unadorned/sector62.png", "img/sectors_unadorned/sector8.png", "img/sectors_unadorned/sector36.png", "img/sectors_unadorned/sector48.png", "img/sectors_unadorned/sector17.png", "img/sectors_unadorned/sector33.png", "img/sectors_unadorned/sector26.png", "img/sectors_unadorned/sector56.png", "img/sectors_unadorned/sector61.png", "img/sectors_unadorned/sector15.png", "img/sectors_unadorned/sector34.png", "img/sectors_unadorned/sector51.png", "img/sectors_unadorned/sector12.png", "img/sectors_unadorned/sector7.png", "img/sectors_unadorned/sector5.png", "img/sectors_unadorned/sector21.png", "img/sectors_unadorned/sector30.png", "img/sectors_unadorned/sector31.png", "img/sectors_unadorned/sector24.png", "img/sectors_unadorned/sector47.png", "img/sectors_unadorned/sector68.png", "img/sectors_unadorned/sector67.png", "img/sectors_unadorned/sector64.png", "img/sectors_unadorned/sector45.png", "img/sectors_unadorned/sector46.png", "img/arcade/arcade-banner-background.png", "img/secret_objective2.jpg", "img/objective_card_1_template.png", "img/techicons/Cyber D.png", "img/techicons/Warfare D.png", "img/techicons/Warfare L.png", "img/techicons/Biotic D.png", "img/techicons/Propultion Dark.png", "img/techicons/Biotic L.png", "img/techicons/Cybernetic D.png", "img/techicons/Propultion Light.png", "img/techicons/Cybernetic L.png", "img/secret_objective_back.png", "img/planet_card_template.png", "img/secret_objective.jpg", "img/arcade_release.jpg", "img/tech_card_template.jpg", "img/blank_influence_hex.png", "img/spaceb2.jpg", "img/frame/white_space_frame_1_5.png", "img/frame/white_space_frame_4_1.png", "img/frame/white_planet_center_1_9.png", "img/frame/white_planet_center_3_1.png", "img/frame/white_space_frame_full.png", "img/frame/white_space_frame_4_9.png", "img/frame/white_space_frame_6_3.png", "img/frame/white_space_frame_2_4.png", "img/frame/white_space_frame_3_2.png", "img/frame/white_space_frame_2_2.png", "img/frame/white_space_frame_2_3.png", "img/frame/white_space_frame_2_6.png", "img/frame/white_space_frame_7_4.png", "img/frame/white_planet_center_2_5.png", "img/frame/white_space_frame_5_8.png", "img/frame/white_space_frame_1_4.png", "img/frame/white_space_frame_4_4.png", "img/frame/white_space_frame_4_7.png", "img/frame/white_space_frame_2_1.png", "img/frame/white_planet_center_2_1.png", "img/frame/white_planet_center_2_9.png", "img/frame/white_space_frame_4_3.png", "img/frame/border_full_yellow.png", "img/frame/white_planet_center.png", "img/frame/white_space_frame_3_6.png", "img/frame/white_space_frame_7_8.png", "img/frame/white_planet_center_3_7.png", "img/frame/border_corner_red.png", "img/frame/white_space_frame_2_7.png", "img/frame/white_space_frame_3_3.png", "img/frame/white_space_frame_7_7.png", "img/frame/white_planet_center_3_5.png", "img/frame/white_planet_right_bottom.png", "img/frame/white_space_frame_6_2.png", "img/frame/white_planet_left_top.png", "img/frame/white_space_frame_5_7.png", "img/frame/white_space_frame_2_5.png", "img/frame/white_space_frame_1_3.png", "img/frame/white_space_frame_4_2.png", "img/frame/white_space_frame_3_8.png", "img/frame/white_space_frame_2_8.png", "img/frame/white_planet_center_1_8.png", "img/frame/white_space_frame_3_9.png", "img/frame/white_space_frame_3_5.png", "img/frame/white_space_frame_4_5.png", "img/frame/white_space_frame_5_3.png", "img/frame/white_planet_center_2_4.png", "img/frame/white_planet_center_2_3.png", "img/frame/white_space_frame_1_1.png", "img/frame/white_space_frame_1_7.png", "img/frame/white_space_frame_7_1.png", "img/frame/white_space_frame_7_9.png", "img/frame/white_space_frame_5_9.png", "img/frame/white_planet_center_2_7.png", "img/frame/white_space_frame_6_8.png", "img/frame/white_planet_center_3_4.png", "img/frame/white_space_frame_3_7.png", "img/frame/white_space_frame_6_7.png", "img/frame/white_space_frame_6_4.png", "img/frame/white_planet_center_2_6.png", "img/frame/white_space_warsun.png", "img/frame/border_corner_yellow.png", "img/frame/white_planet_center_3_9.png", "img/frame/white_planet_center_3_3.png", "img/frame/white_space_frame_5_6.png", "img/frame/white_space_frame_5_2.png", "img/frame/border_full_white.png", "img/frame/white_planet_center_3_6.png", "img/frame/white_space_carrier.png", "img/frame/border_full_red.png", "img/frame/white_space_flagship.png", "img/frame/white_space_destroyer.png", "img/frame/white_space_frame_4_6.png", "img/frame/white_planet_center_2_2.png", "img/frame/white_space_frame_4_8.png", "img/frame/white_space_cruiser.png", "img/frame/white_space_frame_3_4.png", "img/frame/white_planet_center_1_6.png", "img/frame/white_planet_center_1_1.png", "img/frame/white_space_frame_5_4.png", "img/frame/white_space_frame_6_9.png", "img/frame/white_space_frame_7_5.png", "img/frame/white_planet_center_1_7.png", "img/frame/white_space_frame_1_8.png", "img/frame/white_space_frame_7_6.png", "img/frame/white_planet_center_3_2.png", "img/frame/white_planet_center_1_4.png", "img/frame/white_space_frame_7_2.png", "img/frame/white_space_frame_5_1.png", "img/frame/white_space_frame_7_3.png", "img/frame/white_space_frame_6_6.png", "img/frame/white_space_frame_1_6.png", "img/frame/white_planet_center_3_8.png", "img/frame/white_space_frame.png", "img/frame/white_space_frame_1_9.png", "img/frame/white_space_frame_6_5.png", "img/frame/white_planet_center_1_2.png", "img/frame/white_planet_center_2_8.png", "img/frame/white_space_frame_5_5.png", "img/frame/white_space_frame_2_9.png", "img/frame/white_space_frame_3_1.png", "img/frame/white_space_frame_6_1.png", "img/frame/white_space_dreadnaught.png", "img/frame/white_planet_center_1_3.png", "img/frame/white_space_frame_1_2.png", "img/frame/white_space_fighter.png", "img/frame/white_planet_center_1_5.png", "img/sectors/sector13.png", "img/sectors/sector71.png", "img/sectors/sector6.png", "img/sectors/sector35.png", "img/sectors/sector66.png", "img/sectors/sector9.png", "img/sectors/sector20.png", "img/sectors/sector25.png", "img/sectors/sector39.png", "img/sectors/sector23.png", "img/sectors/sector11.png", "img/sectors/sector69.png", "img/sectors/sector4.png", "img/sectors/sector53.png", "img/sectors/sector60.png", "img/sectors/sector10.png", "img/sectors/sector28.png", "img/sectors/sector2.png", "img/sectors/sector43.png", "img/sectors/sector27.png", "img/sectors/sector72.png", "img/sectors/sector55.png", "img/sectors/sector49.png", "img/sectors/sector50.png", "img/sectors/sector65.png", "img/sectors/sector58.png", "img/sectors/sector29.png", "img/sectors/sector44.png", "img/sectors/sector41.png", "img/sectors/sector19.png", "img/sectors/sector1.png", "img/sectors/sector73.png", "img/sectors/sector40.png", "img/sectors/sector52.png", "img/sectors/sector42.png", "img/sectors/sector59.png", "img/sectors/sector57.png", "img/sectors/sector3.png", "img/sectors/sector18.png", "img/sectors/sector32.png", "img/sectors/sector22.png", "img/sectors/sector63.png", "img/sectors/sector38.png", "img/sectors/sector70.png", "img/sectors/sector16.png", "img/sectors/sector14.png", "img/sectors/sector54.png", "img/sectors/sector62.png", "img/sectors/sector8.png", "img/sectors/sector36.png", "img/sectors/sector48.png", "img/sectors/sector17.png", "img/sectors/sector33.png", "img/sectors/sector26.png", "img/sectors/sector56.png", "img/sectors/sector61.png", "img/sectors/sector15.png", "img/sectors/sector34.png", "img/sectors/sector51.png", "img/sectors/sector12.png", "img/sectors/sector7.png", "img/sectors/sector5.png", "img/sectors/sector21.png", "img/sectors/sector30.png", "img/sectors/sector31.png", "img/sectors/sector24.png", "img/sectors/sector47.png", "img/sectors/sector68.png", "img/sectors/sector67.png", "img/sectors/sector64.png", "img/sectors/sector45.png", "img/sectors/sector46.png", "img/arcade.jpg", "img/ships/ship_1.png", "img/ships/ship_16.png", "img/ships/ship_15.png", "img/ships/ship_5.png", "img/ships/ship_18.png", "img/ships/ship19.png", "img/ships/ship_17.png", "img/ships/ship_2.png", "img/ships/ship_12.png", "img/ships/ship_8.png", "img/ships/ship_3.png", "img/ships/ship_11.png", "img/ships/ship_10.png", "img/ships/ship_14.png", "img/ships/ship_9.png", "img/ships/ship_13.png", "img/ships/Ship_6.png", "img/blank_resources_hex.png", "img/factions/faction2.jpg", "img/factions/faction1.jpg", "img/factions/faction3.jpg", "img/spacebg.png", "img/resources/5.png", "img/resources/8.png", "img/resources/2.png", "img/resources/1.png", "img/resources/7.png", "img/resources/0.png", "img/resources/9.png", "img/resources/4.png", "img/resources/3.png", "img/resources/6.png", "img/planets/HARKON-CALEDONIA.png", "img/planets/KLENCORY.png", "img/planets/STARTIDE.png", "img/planets/UNSULLA.png", "img/planets/GRAVITYS-EDGE.png", "img/planets/OLYMPIA.png", "img/planets/OTHO.png", "img/planets/ARCHION-REX.png", "img/planets/KROEBER.png", "img/planets/COTILLARD.png", "img/planets/INCARTH.png", "img/planets/XERXES-IV.png", "img/planets/HEARTHSLOUGH.png", "img/planets/QUARTIL.png", "img/planets/SOUNDRA-IV.png", "img/planets/INDUSTRYL.png", "img/planets/VIGOR.png", "img/planets/CALTHREX.png", "img/planets/VESPAR.png", "img/planets/HIRAETH.png", "img/planets/LAZAKS-CURSE.png", "img/planets/CRYSTALIS.png", "img/planets/SINGHARTA.png", "img/planets/JOL.png", "img/planets/NOVA-KLONDIKE.png", "img/planets/QUANDAM.png", "img/planets/OLD-MOLTOUR.png", "img/planets/FIREHOLE.png", "img/planets/CONTOURI-I.png", "img/planets/CONTOURI-II.png", "img/planets/SIRENS-END.png", "img/planets/FJORDRA.png", "img/planets/LORSTRUCK.png", "img/planets/SHRIVA.png", "img/planets/EARTH.png", "img/planets/HOTH.png", "img/planets/KROMER.png", "img/planets/VOLUNTRA.png", "img/planets/EBERBACH.png", "img/planets/NEW-BYZANTIUM.png", "img/planets/TROTH.png", "img/planets/ARTIZZ.png", "img/planets/NEW-JYLANX.png", "img/planets/XIAO-ZUOR.png", "img/planets/NAR.png", "img/planets/GIANTS-DRINK.png", "img/planets/GRANTON-MEX.png", "img/planets/MIRANDA.png", "img/planets/HOPES-LURE.png", "img/planets/OUTERANT.png", "img/planets/BELVEDYR.png", "img/planets/YODERUX.png", "img/planets/YSSARI-II.png", "img/planets/QUAMDAM.png", "img/planets/ZONDOR.png", "img/planets/SIGURD.png", "img/planets/MECHANEX.png", "img/planets/RIFTVIEW.png", "img/planets/POPULAX.png", "img/planets/GROX-TOWERS.png", "img/planets/BREST.png", "img/planets/TERRA-CORE.png", "img/planets/QUANDOR.png", "img/planets/DOMINIC.png", "img/planets/LONDRAK.png", "img/planets/PESTULON.png", "img/planets/NEW-ILLIA.png", "img/planets/LEGUIN.png", "img/planets/UDON-I.png", "img/planets/CITADEL.png", "img/planets/UDON-II.png", "img/planets/PERTINAX.png", "img/planets/ARCHION-TAO.png", "img/planets/CRAW-POPULI.png", "img/planets/RIFVIEW.png", "img/planets/BROUGHTON.png", "img/planets/AANDOR.png", "img/tech_tree.png", "img/action_card_template.png", "img/objective_card_2_template.png"];
+
+    var pre_images = new Array;
+
+    for (i = 0; i < allImages.length; i++) {
+      pre_images[i] = new Image;
+      pre_images[i].src = "/imperium/" + allImages[i];
+      console.log("preloaded: " + "/imperium/" + allImages[i]);
+    }
+  }
 
 
 
@@ -8709,7 +8730,6 @@ console.log("player: " + player + " ---- " + tech);
   };
   unloadUnitFromPlanet(player, sector, planet_idx, unitname) {
     let sys = this.returnSectorAndPlanets(sector);
-console.log("UNLOADING FROM PLANET WITH " + sys.p[planet_idx].units[player-1].length + " UNITS");
     for (let i = 0; i < sys.p[planet_idx].units[player - 1].length; i++) {
       if (sys.p[planet_idx].units[player - 1][i].type === unitname) {
         let unit_to_remove = sys.p[planet_idx].units[player - 1][i];
@@ -8722,7 +8742,6 @@ console.log("UNLOADING FROM PLANET WITH " + sys.p[planet_idx].units[player-1].le
   };
   unloadUnitByJSONFromPlanet(player, sector, planet_idx, unitjson) {
     let sys = this.returnSectorAndPlanets(sector);
-console.log("UNLOADING FROM PLANET WITH " + sys.p[planet_idx].units[player-1].length + " UNITS");
     for (let i = 0; i < sys.p[planet_idx].units[player-1].length; i++) {
       if (JSON.stringify(sys.p[planet_idx].units[player - 1][i]) === unitjson) {
         let unit_to_remove = sys.p[planet_idx].units[player - 1][i];
@@ -10955,9 +10974,21 @@ imperium_self.saveGame(imperium_self.game.id);
         if (type == "action") {
 	  if (details === "random") {
 	    if (this.game.player == pullee) {
-	      let roll = this.rollDice(this.game.deck[1].hand.length);
-	      let action_card = this.game.deck[1].hand[roll-1];
-	      this.game.deck[1].hand.splice((roll-1), 1);
+
+	      let selectable = [];
+	      for (let i = 0; i < this.game.deck[1].hand.length; i++) {
+		if (!this.game.players_info[pullee-1].action_cards_played.includes(this.game.deck[1].hand[i])) {
+		  selectable.push(this.game.deck[1].hand[i]);
+		}
+	      }
+
+	      let roll = this.rollDice(selectable.length);
+	      let action_card = selectable[roll-1];
+	      for (let i = 0; i < this.game.deck[1].hand.length; i++) {
+	        if (this.game.deck[1].hand[i] === action_card) {
+		  this.game.deck[1].hand.splice((roll-1), 1);
+		}
+	      }
 	      this.addMove("give\t"+pullee+"\t"+puller+"\t"+"action"+"\t"+action_card);
 	      this.addMove("notify\t" + this.returnFaction(puller) + " pulls " + this.action_cards[action_card].name);
 	      this.endTurn();
@@ -11386,8 +11417,27 @@ imperium_self.saveGame(imperium_self.game.id);
   
   	this.updateSectorGraphics(sector_to);
   	this.updateSectorGraphics(sector_from);
-
   	this.game.queue.splice(qe, 1);
+
+        //
+        // handle fleet supply
+        //
+        let handle_fleet_supply = 1;
+        for (let i = 0; i < this.game.queue.length; i++) {
+          let nextcmd = this.game.queue[i];
+          let tmpc = nextcmd.split("\t");
+          if (tmpc[0] == "move" && parseInt(tmpc[3]) == sector_from) {
+            //
+            // handle fleet supply when all of my units are moved from that sector
+            //
+            handle_fleet_supply = 0;
+          }
+        }
+        if (handle_fleet_supply == 1) {
+          return this.handleFleetSupply(player, sector);
+        }
+
+
   	return 1;
   
       }
@@ -17378,8 +17428,25 @@ playerSelectUnitsToMove(destination) {
       // clear the list to start again
       //
       if (id == "clear") {
+alert("To change movement options, just reload!");
+	window.location.reload(true);
+/***
+ *
+ * we can't just remove movement items from array as below, as we are unloading from the planet
+ * and loading to the ships in real-time.
+ *
         obj.stuff_to_move = [];
-        updateInterface(imperium_self, obj, updateInterface);
+        for (let i = 0; i < obj.ships_and_sectors.length; i++) { 
+          for (let ii = 0; ii < obj.ships_and_sectors[i].ships.length; ii++) { 
+            obj.ships_and_sectors[i].ships[ii].already_moved = 0;
+	  }
+	}
+       fighters_loaded = 0;
+       infantry_loaded = 0;
+       obj.stuff_to_load = [];
+       updateInterface(imperium_self, obj, updateInterface);
+***/
+       return;
       }
 
 
@@ -17484,7 +17551,7 @@ playerSelectUnitsToMove(destination) {
         }
 
 
-        let user_message = `<div class="sf-readable">This ship has <span class="capacity_remaining">${total_ship_capacity}</span> capacity to carry fighters / infantry. Do you wish to add them? </div><ul>`;
+        let user_message = `<div class="sf-readable">This ship has <span class="capacity_remaining">${total_ship_capacity}</span> capacity. Infantry can capture planets and fighters can protect your fleet. Do you wish to add them? </div><ul>`;
 
         for (let i = 0; i < sys.p.length; i++) {
           let planetary_units = sys.p[i].units[imperium_self.game.player - 1];
@@ -17562,8 +17629,6 @@ playerSelectUnitsToMove(destination) {
               //
               let unitjson = imperium_self.unloadUnitFromPlanet(imperium_self.game.player, sector, planet_idx, "infantry");
               let shipjson_preload = JSON.stringify(sys.s.units[imperium_self.game.player - 1][obj.ships_and_sectors[i].ship_idxs[ii]]);
-
-
               imperium_self.loadUnitByJSONOntoShip(imperium_self.game.player, sector, obj.ships_and_sectors[i].ship_idxs[ii], unitjson);
 
               $(irdiv).html((ir - 1));
@@ -22174,6 +22239,10 @@ returnFactionDashboard() {
 	<div data-id="${(i+1)}" class="dash-faction-status-${(i+1)} dash-faction-status"></div>
 	commodities : <span data-id="${(i+1)}" class="dash-item-commodities">${this.game.players_info[i].commodities}</span> / <span data-id="${(i+1)}" class="dash-item-commodity-limit">${this.game.players_info[i].commodity_limit}</span>
       </div>
+
+      <div data-id="${(i+1)}" class="dash-faction-speaker`;
+      if (this.game.state.speaker == (i+1)) {  html += ' speaker">speaker'; } else { html += '">'; }
+      html += `</div>
     </div>
     `;
 

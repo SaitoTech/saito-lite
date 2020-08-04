@@ -154,7 +154,6 @@
   };
   unloadUnitFromPlanet(player, sector, planet_idx, unitname) {
     let sys = this.returnSectorAndPlanets(sector);
-console.log("UNLOADING FROM PLANET WITH " + sys.p[planet_idx].units[player-1].length + " UNITS");
     for (let i = 0; i < sys.p[planet_idx].units[player - 1].length; i++) {
       if (sys.p[planet_idx].units[player - 1][i].type === unitname) {
         let unit_to_remove = sys.p[planet_idx].units[player - 1][i];
@@ -167,7 +166,6 @@ console.log("UNLOADING FROM PLANET WITH " + sys.p[planet_idx].units[player-1].le
   };
   unloadUnitByJSONFromPlanet(player, sector, planet_idx, unitjson) {
     let sys = this.returnSectorAndPlanets(sector);
-console.log("UNLOADING FROM PLANET WITH " + sys.p[planet_idx].units[player-1].length + " UNITS");
     for (let i = 0; i < sys.p[planet_idx].units[player-1].length; i++) {
       if (JSON.stringify(sys.p[planet_idx].units[player - 1][i]) === unitjson) {
         let unit_to_remove = sys.p[planet_idx].units[player - 1][i];

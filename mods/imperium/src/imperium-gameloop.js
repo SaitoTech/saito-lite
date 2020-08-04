@@ -1776,7 +1776,7 @@ imperium_self.saveGame(imperium_self.game.id);
 	    if (this.game.player == pullee) {
 
 	      let selectable = [];
-	      for (let i = 0; i < this.game.deck[1].hand.length; ++) {
+	      for (let i = 0; i < this.game.deck[1].hand.length; i++) {
 		if (!this.game.players_info[pullee-1].action_cards_played.includes(this.game.deck[1].hand[i])) {
 		  selectable.push(this.game.deck[1].hand[i]);
 		}
@@ -2217,8 +2217,27 @@ imperium_self.saveGame(imperium_self.game.id);
   
   	this.updateSectorGraphics(sector_to);
   	this.updateSectorGraphics(sector_from);
-
   	this.game.queue.splice(qe, 1);
+
+        //
+        // handle fleet supply
+        //
+        let handle_fleet_supply = 1;
+        for (let i = 0; i < this.game.queue.length; i++) {
+          let nextcmd = this.game.queue[i];
+          let tmpc = nextcmd.split("\t");
+          if (tmpc[0] == "move" && parseInt(tmpc[3]) == sector_from) {
+            //
+            // handle fleet supply when all of my units are moved from that sector
+            //
+            handle_fleet_supply = 0;
+          }
+        }
+        if (handle_fleet_supply == 1) {
+          return this.handleFleetSupply(player, sector);
+        }
+
+
   	return 1;
   
       }
