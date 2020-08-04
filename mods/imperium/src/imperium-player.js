@@ -2192,12 +2192,19 @@ playerResearchTechnology(mycallback) {
   }
   html += '</ul>';
 
+  imperium_self.lockInterface();
   this.updateStatus(html);
 
   $('.option').off();
   $('.option').on('mouseenter', function () { let s = $(this).attr("id"); imperium_self.showTechCard(s); });
   $('.option').on('mouseleave', function () { let s = $(this).attr("id"); imperium_self.hideTechCard(s); });
   $('.option').on('click', function () {
+
+    if (!imperium_self.mayUnlockInterface()) {
+      alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+      return;
+    }
+    imperium_self.unlockInterface();
 
     let i = $(this).attr("id");
     imperium_self.hideTechCard(i);
@@ -3511,8 +3518,6 @@ playerSelectUnitsToMove(destination) {
     obj.distance_adjustment += obj.fleet_move_bonus;
   }
 
-  console.log("SECTORS: " + JSON.stringify(sectors));
-
   obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance);
 
   let updateInterface = function (imperium_self, obj, updateInterface) {
@@ -3578,7 +3583,6 @@ playerSelectUnitsToMove(destination) {
     let adddiv = ".sector_name";
     $(adddiv).on('mouseenter', function () { let s = $(this).attr("id"); imperium_self.addSectorHighlight(s); });
     $(adddiv).on('mouseleave', function () { let s = $(this).attr("id"); imperium_self.removeSectorHighlight(s); });
-
 
 
     $('.option').off();

@@ -1230,8 +1230,8 @@
   	//
         if (this.game.state.round > 1) {
   	  for (let i = 1; i <= this.game.players_info.length; i++) {
-            this.game.queue.push("gain\t"+i+'\t'+"action_cards"+"\t"+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
-            this.game.queue.push("DEAL\t2\t"+i+'\t'+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
+            this.game.queue.push("gain\t"+i+'\t'+"action_cards"+"\t"+(this.game.players_info[i-1].action_cards_per_round+this.game.players_info[i-1].action_cards_bonus_when_issued));
+            this.game.queue.push("DEAL\t2\t"+i+'\t'+(this.game.players_info[i-1].action_cards_per_round+this.game.players_info[i-1].action_cards_bonus_when_issued));
   	  }
   	}
   
@@ -1774,9 +1774,21 @@ imperium_self.saveGame(imperium_self.game.id);
         if (type == "action") {
 	  if (details === "random") {
 	    if (this.game.player == pullee) {
-	      let roll = this.rollDice(this.game.deck[1].hand.length);
-	      let action_card = this.game.deck[1].hand[roll-1];
-	      this.game.deck[1].hand.splice((roll-1), 1);
+
+	      let selectable = [];
+	      for (let i = 0; i < this.game.deck[1].hand.length; ++) {
+		if (!this.game.players_info[pullee-1].action_cards_played.includes(this.game.deck[1].hand[i])) {
+		  selectable.push(this.game.deck[1].hand[i]);
+		}
+	      }
+
+	      let roll = this.rollDice(selectable.length);
+	      let action_card = selectable[roll-1];
+	      for (let i = 0; i < this.game.deck[1].hand.length; i++) {
+	        if (this.game.deck[1].hand[i] === action_card) {
+		  this.game.deck[1].hand.splice((roll-1), 1);
+		}
+	      }
 	      this.addMove("give\t"+pullee+"\t"+puller+"\t"+"action"+"\t"+action_card);
 	      this.addMove("notify\t" + this.returnFaction(puller) + " pulls " + this.action_cards[action_card].name);
 	      this.endTurn();

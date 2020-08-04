@@ -430,10 +430,9 @@ console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][i].storage.lengt
   
   
   returnUnit(type = "", player, upgrade_unit=1) {
-console.log("type: " + type + " -- " + player + " -- " + upgrade_unit);
     let unit = JSON.parse(JSON.stringify(this.units[type]));
     unit.owner = player;
-    // this is optional as otherwise we can have a loop
+    // optional as otherwise we can have a loop
     if (upgrade_unit == 1) {
       unit = this.upgradeUnit(unit, player);
     }

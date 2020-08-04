@@ -3,10 +3,8 @@
       name		: 	"Federation of Sol",
       homeworld		: 	"sector52",
       space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter"],
-      ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock","pds"],
-      //ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock"],
-      tech		:	["neural-motivator","antimass-deflectors", "faction1-orbital-drop", "faction1-versatile", "faction1-flagship","pds-ii"],
-      //tech		:	["neural-motivator","antimass-deflectors", "faction1-orbital-drop", "faction1-versatile", "faction1-flagship"],
+      ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock"],
+      tech		:	["neural-motivator","antimass-deflectors", "faction1-orbital-drop", "faction1-versatile", "faction1-flagship"],
       background	: 	"faction1.jpg",
       intro		:	`<div style="font-weight:bold">Rise of the Sol Federation</div><div style="margin-top:10px">The fall of the Galactic Senate marked the end of Earth's pursuit of ex-terra appeasement policies...</div><div style="margin-top:10px">Rule of the day is swift action in pursuit of humanity's interest, as broadly defined by Earth's Governing Trifecta.</div>`
     });
@@ -71,7 +69,9 @@
       },
       menuOptionTriggers:  function(imperium_self, menu, player) { 
         if (imperium_self.doesPlayerHaveTech(player, "faction1-orbital-drop") && menu == "main") {
-	  return 1;
+          if (imperium_self.game.players_info[player-1].strategy_tokens > 0) { 
+	    return 1;
+	  }
 	}
         return 0; 
       },

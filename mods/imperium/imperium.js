@@ -1124,7 +1124,6 @@ console.log("P: " + planet);
       homeworld		: 	"sector50",
       space_units	: 	["carrier","carrier","dreadnaught","fighter"],
       ground_units	: 	["infantry","infantry","pds","spacedock"],
-      //tech		: 	["sarween-tools","graviton-laser-system", "transit-diodes", "integrated-economy", "neural-motivator","dacxive-animators","hyper-metabolism","x89-bacterial-weapon","plasma-scoring","magen-defense-grid","duranium-armor","assault-cannon","antimass-deflectors","gravity-drive","fleet-logistics","lightwave-deflector","faction2-analytic","faction2-brilliant","faction2-fragile","faction2-deep-space-conduits","faction2-eres-siphons"],
       tech		: 	["sarween-tools", "neural-motivator", "plasma-scoring", "antimass-deflectors", "faction2-analytic", "faction2-brilliant", "faction2-fragile", "faction2-flagship"],
       background	: 	'faction2.jpg' ,
       intro		:	`<div style="font-weight:bold">The Republic has fallen!</div><div style="margin-top:10px">The Universities of Jol Nar have been preparing for War for decades...</div><div style="margin-top:10px">But the leadership is torn: assault New Byzantium or establish a regional power-base first?</div>`
@@ -1180,8 +1179,7 @@ console.log("P: " + planet);
         }
       },
       modifyCombatRoll :	  function(imperium_self, attacker, defender, player, combat_type, roll) {
-
-	if (combat_type == "pds") {
+	if (combat_type == "pds" || combat_type == "space" || combat_type == "ground") {
           if (imperium_self.doesPlayerHaveTech(attacker, "faction2-fragile")) {
   	    imperium_self.updateLog("Jol Nar combat roll adjusted to -1 due to faction limitation");
 	    roll -= 1;
@@ -1190,9 +1188,7 @@ console.log("P: " + planet);
         }
 
 	return roll;
-
       },
-
     });
     this.importTech('faction2-brilliant', {
       name        :       "Brilliant" ,
@@ -1381,10 +1377,8 @@ console.log("P: " + planet);
       name		: 	"Federation of Sol",
       homeworld		: 	"sector52",
       space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter"],
-      ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock","pds"],
-      //ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock"],
-      tech		:	["neural-motivator","antimass-deflectors", "faction1-orbital-drop", "faction1-versatile", "faction1-flagship","pds-ii"],
-      //tech		:	["neural-motivator","antimass-deflectors", "faction1-orbital-drop", "faction1-versatile", "faction1-flagship"],
+      ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock"],
+      tech		:	["neural-motivator","antimass-deflectors", "faction1-orbital-drop", "faction1-versatile", "faction1-flagship"],
       background	: 	"faction1.jpg",
       intro		:	`<div style="font-weight:bold">Rise of the Sol Federation</div><div style="margin-top:10px">The fall of the Galactic Senate marked the end of Earth's pursuit of ex-terra appeasement policies...</div><div style="margin-top:10px">Rule of the day is swift action in pursuit of humanity's interest, as broadly defined by Earth's Governing Trifecta.</div>`
     });
@@ -1449,7 +1443,9 @@ console.log("P: " + planet);
       },
       menuOptionTriggers:  function(imperium_self, menu, player) { 
         if (imperium_self.doesPlayerHaveTech(player, "faction1-orbital-drop") && menu == "main") {
-	  return 1;
+          if (imperium_self.game.players_info[player-1].strategy_tokens > 0) { 
+	    return 1;
+	  }
 	}
         return 0; 
       },
@@ -1555,8 +1551,7 @@ console.log("P: " + planet);
       homeworld		: 	"sector51",
       space_units	: 	["carrier","cruiser","cruiser","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship","pds-ii"],
-      //tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship"],
+      tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship"],
       background	: 	'faction3.jpg',
       intro		:	`<div style="font-weight:bold">The Senate has Collapsed!</div><div style="margin-top:10px">The failure of diplomatic options has struck the XXCha Kingdom harshly...</div><div style="margin-top:10px">What is left for your people but the conquest of New Byzantium and imposition of peace by force?</div>`
     });
@@ -1737,7 +1732,9 @@ console.log("P: " + planet);
       },
       menuOptionTriggers:  function(imperium_self, menu, player) { 
         if (imperium_self.doesPlayerHaveTech(player, "faction3-quash") && menu == "main") {
-	  return 1;
+          if (imperium_self.game.players_info[player-1].strategy_tokens > 0) { 
+	    return 1;
+	  }
 	}
 	return 0;
       },
@@ -8025,8 +8022,11 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
     //
     // IF THIS IS A NEW GAME
     //
+    let is_this_a_new_game = 0;
     if (this.game.board == null) {
-  
+
+      is_this_a_new_game = 1;
+
       //
       // dice
       //
@@ -8226,6 +8226,24 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
         z[i].initialize(this, (k+1));
       }
     }
+
+
+    //
+    // if this is a new game, gainTechnology that we start with
+    //
+    if (is_this_a_new_game == 1) {
+      for (let i = 0; i < z.length; i++) {
+        for (let k = 0; k < this.game.players_info.length; k++) {
+          for (let kk = 0; kk < this.game.players_info[k].tech.length; kk++) {
+            z[i].gainTechnology(this, (k+1), this.game.players_info[k].tech[kk]);
+          }
+        }
+      }
+      for (let k = 0; k < this.game.players_info.length; k++) {
+        this.upgradePlayerUnitsOnBoard((k+1));
+      }
+    }
+
 
 
     //
@@ -8967,10 +8985,9 @@ console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][i].storage.lengt
   
   
   returnUnit(type = "", player, upgrade_unit=1) {
-console.log("type: " + type + " -- " + player + " -- " + upgrade_unit);
     let unit = JSON.parse(JSON.stringify(this.units[type]));
     unit.owner = player;
-    // this is optional as otherwise we can have a loop
+    // optional as otherwise we can have a loop
     if (upgrade_unit == 1) {
       unit = this.upgradeUnit(unit, player);
     }
@@ -10394,8 +10411,8 @@ console.log("type: " + type + " -- " + player + " -- " + upgrade_unit);
   	//
         if (this.game.state.round > 1) {
   	  for (let i = 1; i <= this.game.players_info.length; i++) {
-            this.game.queue.push("gain\t"+i+'\t'+"action_cards"+"\t"+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
-            this.game.queue.push("DEAL\t2\t"+i+'\t'+(this.game.players_info[this.game.player-1].action_cards_per_round+this.game.players_info[this.game.player-1].action_cards_bonus_when_issued));
+            this.game.queue.push("gain\t"+i+'\t'+"action_cards"+"\t"+(this.game.players_info[i-1].action_cards_per_round+this.game.players_info[i-1].action_cards_bonus_when_issued));
+            this.game.queue.push("DEAL\t2\t"+i+'\t'+(this.game.players_info[i-1].action_cards_per_round+this.game.players_info[i-1].action_cards_bonus_when_issued));
   	  }
   	}
   
@@ -15940,12 +15957,19 @@ playerResearchTechnology(mycallback) {
   }
   html += '</ul>';
 
+  imperium_self.lockInterface();
   this.updateStatus(html);
 
   $('.option').off();
   $('.option').on('mouseenter', function () { let s = $(this).attr("id"); imperium_self.showTechCard(s); });
   $('.option').on('mouseleave', function () { let s = $(this).attr("id"); imperium_self.hideTechCard(s); });
   $('.option').on('click', function () {
+
+    if (!imperium_self.mayUnlockInterface()) {
+      alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+      return;
+    }
+    imperium_self.unlockInterface();
 
     let i = $(this).attr("id");
     imperium_self.hideTechCard(i);
@@ -17259,8 +17283,6 @@ playerSelectUnitsToMove(destination) {
     obj.distance_adjustment += obj.fleet_move_bonus;
   }
 
-  console.log("SECTORS: " + JSON.stringify(sectors));
-
   obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance);
 
   let updateInterface = function (imperium_self, obj, updateInterface) {
@@ -17326,7 +17348,6 @@ playerSelectUnitsToMove(destination) {
     let adddiv = ".sector_name";
     $(adddiv).on('mouseenter', function () { let s = $(this).attr("id"); imperium_self.addSectorHighlight(s); });
     $(adddiv).on('mouseleave', function () { let s = $(this).attr("id"); imperium_self.removeSectorHighlight(s); });
-
 
 
     $('.option').off();
@@ -22015,6 +22036,9 @@ updateCombatLog(cobj) {
   let are_there_rerolls = 0;
   let are_there_modified_rolls = 0;
 
+console.log("UNMODIFIED: " + JSON.stringify(cobj.unmodified_roll));
+console.log("MODIFIED: " + JSON.stringify(cobj.modified_roll));
+
   for (let i = 0; i < cobj.units_firing.length; i++) {
     if (cobj.reroll[i] == 1) { are_there_rerolls = 1; }
     if (cobj.modified_roll[i] != cobj.unmodified_roll[i]) { are_there_modified_rolls = 1; }
@@ -22218,9 +22242,6 @@ returnStrategyOverlay() {
   let cards = [];
   let ranked_cards = [];
   let imperium_self = this;
-
-alert("SDONE!");
-
 
   for (let s in this.strategy_cards) {
 
