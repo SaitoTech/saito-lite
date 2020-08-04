@@ -900,7 +900,7 @@ body {
   border: 1px solid var(--my-color);
   background-color: #4448;
   font-family: 'orbitron-medium', 'bank-gothic', arial, helvetica, sans-serif;
-  background-image: url('/imperium/tech_tree.png');
+  background-image: url('/imperium/img/tech_tree.png');
   background-size: "contain";
 }
 
