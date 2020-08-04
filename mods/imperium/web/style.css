@@ -2106,7 +2106,6 @@ input[type=range] {
   transform: translateX(-100%);
 }
 
-.ship_selector b::after {
-  content: " \1F5F9";
+.ship_selector b::before {
+  content: " \1F5F9   ";
 }
-
