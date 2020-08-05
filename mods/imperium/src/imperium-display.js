@@ -247,11 +247,24 @@ returnStrategyOverlay() {
   let cards = [];
   let ranked_cards = [];
   let imperium_self = this;
+  let card_no = 0;
 
   for (let s in this.strategy_cards) {
 
     let strategy_card_state = "not picked";
     let strategy_card_player = -1;
+
+    let strategy_card_bonus = this.game.state.strategy_cards_bonus[card_no];
+
+    let strategy_card_bonus_html = "";
+    if (strategy_card_bonus > 0) {
+      strategy_card_bonus_html = 
+      `<div class="strategy_card_bonus">    
+        <i class="fas fa-database white-stroke"></i>
+        <span>${strategy_card_bonus}</span>
+      </div>`;
+
+    }
   
     let thiscard = this.strategy_cards[s];
     for (let i = 0; i < this.game.players_info.length; i++) {
@@ -262,6 +275,7 @@ returnStrategyOverlay() {
   	  strategy_card_state = "played";
         };
       };
+      
     }
     
     cards.push(`
@@ -270,11 +284,12 @@ returnStrategyOverlay() {
 	  <div class="overlay_strategy_card_text">${thiscard.text}</div>
 	  <div class="strategy_card_state p${strategy_card_player}">
 	    <div class="strategy_card_state_internal bk">${strategy_card_state}</div>
-     	  </div>
+     </div>
+     ${strategy_card_bonus_html}
 	</div>
     `);
      rank.push(this.strategy_cards[s].rank);
-
+     card_no++;
   }
 
   let sorted_cards = [];
@@ -1309,7 +1324,20 @@ console.log("SECTOR: " + sector + " -- " + pid);
   showStrategyCard(c) {
     let strategy_cards = this.returnStrategyCards();
     let thiscard = strategy_cards[c];
-    $('.cardbox').html('<img src="' + thiscard.img + '" style="width:100%" /><div class="strategy_card_overlay">'+thiscard.text+'</div>');
+    // - show bonus available
+
+    let strategy_card_bonus = this.game.state.strategy_cards_bonus[thiscard.rank];
+
+    let strategy_card_bonus_html = "";
+    if (strategy_card_bonus > 0) {
+      strategy_card_bonus_html = 
+      `<div class="strategy_card_bonus">    
+        <i class="fas fa-database white-stroke"></i>
+        <span>${strategy_card_bonus}</span>
+      </div>`;
+
+    }
+    $('.cardbox').html('<img src="' + thiscard.img + '" style="width:100%" /><div class="strategy_card_overlay">'+thiscard.text+'</div>'+strategy_card_bonus_html);
     $('.cardbox').show();
   }
   hideStrategyCard(c) {

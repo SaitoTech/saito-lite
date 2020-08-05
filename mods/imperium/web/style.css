@@ -116,6 +116,7 @@
   font-family: 'orbitron-light', helvetica, sans-serif;
   font-size: 1.3em;
   line-height: 1.4;
+  z-index: 101;
 }
 
 .strategy_card_overlay {
@@ -153,10 +154,30 @@
 }
 
 
+.strategy_card_bonus {
+  position: fixed;
+  bottom: 40px;
+  right: 0px;
+  font-size: 3em;
+  color: gold;
+}
 
+.strategy_card_bonus span {
+  position: relative;
+  right: 1.135em;
+  color: white;
+  text-shadow: 1px 1px #444;
+  background: #8888;
+}
 
+.cardbox .strategy_card_bonus {
+  right: 15px;
+  bottom: 0px;
+}
 
-
+.cardbox .strategy_card_bonus span {
+  right: 1em;
+  background-color: #fff0;
 }
 
 #confirm {
@@ -879,7 +900,7 @@ body {
   border: 1px solid var(--my-color);
   background-color: #4448;
   font-family: 'orbitron-medium', 'bank-gothic', arial, helvetica, sans-serif;
-  background-image: url('/imperium/tech_tree.png');
+  background-image: url('/imperium/img/tech_tree.png');
   background-size: "contain";
 }
 
