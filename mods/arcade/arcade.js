@@ -238,6 +238,16 @@ class Arcade extends ModTemplate {
       this.render(app, data);
     }
 
+
+    // initialize any existing game
+    this.onConnectionStable(app);
+
+
+  }
+
+
+  onConnectionStable(app) {
+
     //
     // are we initializing any game?
     //
