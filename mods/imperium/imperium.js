@@ -1202,16 +1202,11 @@ console.log("P: " + planet);
 	  imperium_self.brilliant_original_event = imperium_self.strategy_cards['technology'].strategySecondaryEvent;
 	  imperium_self.strategy_cards["technology"].strategySecondaryEvent = function(imperium_self, player, strategy_card_player) {
 
-alert("in strategy sec");
-
 	    if (imperium_self.doesPlayerHaveTech(player, "faction2-brilliant") && player != strategy_card_player && imperium_self.game.player == player) {
 
 	      imperium_self.game.players_info[player-1].cost_of_technology_secondary = 6;
 
-alert("TESTING");
-
               imperium_self.playerAcknowledgeNotice("The Jol Nar may research a free-technology, and then purchase another for 6 resources:", function() {
-alert("TESTING HERE");
 
                 imperium_self.playerResearchTechnology(function(tech) {
 
@@ -1272,7 +1267,6 @@ alert("TESTING HERE");
                 });
               });
 	    } else {
-alert("HERE");
 	      imperium_self.brilliant_original_event(imperium_self, player, strategy_card_player);
 	    }
 	  }
@@ -3327,6 +3321,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
       },
   });
 ***/
+
   this.importStageIPublicObjective('planetary-unity', {
       name 	: 	"Planetary Unity" ,
       img	:	"/imperium/img/objective_card_1_template.png" ,
@@ -14411,11 +14406,7 @@ playerAcknowledgeNotice(msg, mycallback) {
   this.updateStatus(html);
 
   $('.textchoice').off();
-  $('.textchoice').on('click', function () { 
-
-alert("callback!");
-
-mycallback(); });
+  $('.textchoice').on('click', function () { mycallback(); });
 
   return 0;
 
@@ -17982,6 +17973,8 @@ playerActivateSystem() {
       let c = sconfirm("Activate this system?");
       if (c) {
         sys.s.activated[imperium_self.game.player - 1] = 1;
+        imperium_self.addMove("pds_space_attack_post\t"+imperium_self.game.player+"\t"+pid);
+        imperium_self.addMove("pds_space_attack\t" + imperium_self.game.player + "\t" + pid);
         imperium_self.addMove("activate_system_post\t" + imperium_self.game.player + "\t" + pid);
         imperium_self.addMove("activate_system\t" + imperium_self.game.player + "\t" + pid);
         imperium_self.addMove("expend\t" + imperium_self.game.player + "\t" + "command" + "\t" + 1);
@@ -20075,6 +20068,25 @@ playerDiscardActionCards(num) {
 
 
     //
+    // check if our unexhausted_tech_skips removes anything left - game auto-selects to avoid UI complexity.
+    //
+    let unexhausted_tech_skips = this.returnPlayerPlanetTechSkips(this.game.player, 1);
+    for (let j = 0; j < prereqs.length; j++) {
+      for (let k = 0; k < unexhausted_tech_skips.length; k++) {
+	if (prereqs[j] === unexhausted_tech_skips[k].color) {
+          this.addMove("expend\t" + this.game.player + "\tplanet\t" + unexhausted_tech_skips[k].planet);
+	  prereqs.splice(j, 1);
+	  unexhausted_tech_skips.splice(k, 1);
+	  j--;
+	  k--;
+	}
+      }
+    }
+
+
+
+
+    //
     // we meet the pre-reqs
     //
     if (prereqs.length == 0) {
@@ -20087,8 +20099,12 @@ playerDiscardActionCards(num) {
 
     return 0;
 
-
   }
+
+
+
+
+
 
 
   canPlayerResearchTechnology(tech) {
@@ -20104,6 +20120,7 @@ playerDiscardActionCards(num) {
     let prereqs = JSON.parse(JSON.stringify(this.tech[tech].prereqs));
     let techfaction = this.tech[tech].faction;
     let techtype = this.tech[tech].type;
+    let unexhausted_tech_skips = this.returnPlayerPlanetTechSkips(this.game.player, 1);
 
     //
     // we can use tech to represent non-researchable
@@ -20233,6 +20250,21 @@ playerDiscardActionCards(num) {
     if (prereqs.length == 1 && this.game.players_info[this.game.player-1].temporary_ignore_number_of_tech_prerequisites_on_nonunit_upgrade >= 1) {
       prereqs.splice(0, 1);
     }
+
+    //
+    // check if our unexhausted_tech_skips removes anything left
+    //
+    for (let j = 0; j < prereqs.length; j++) {
+      for (let k = 0; k < unexhausted_tech_skips.length; k++) {
+	if (prereqs[j] === unexhausted_tech_skips[k].color) {
+	  prereqs.splice(j, 1);
+	  unexhausted_tech_skips.splice(k, 1);
+	  j--;
+	  k--;
+	}
+      }
+    }
+
 
     //
     // we meet the pre-reqs
@@ -21371,7 +21403,31 @@ if (this.game.board[tmp[k]] != undefined) {
     let home_sector = this.game.board[this.game.players_info[player-1].homeworld].tile;  // "sector";
     return this.game.sectors[home_sector].planets;
   }
-  
+  // 0 = all
+  // 1 = unexhausted
+  // 2 = exhausted
+  returnPlayerPlanetTechSkips(player, mode=0) {
+    let tech_skips = [];
+    let planet_cards = this.returnPlayerPlanetCards(player, mode);
+    for (let i = 0; i < planet_cards.length; i++) {
+
+console.log("return tech skips: " + planet_cards[i] + " --- " + this.game.planets[planet_cards[i]]);
+
+      if (this.game.planets[planet_cards[i]].bonus.indexOf("blue") > -1) {
+	tech_skips.push({color:"blue",planet:planet_cards[i]});
+      }
+      if (this.game.planets[planet_cards[i]].bonus.indexOf("red") > -1) {
+	tech_skips.push({color:"red",planet:planet_cards[i]});
+      }
+      if (this.game.planets[planet_cards[i]].bonus.indexOf("yellow") > -1) {
+	tech_skips.push({color:"yellow",planet:planet_cards[i]});
+      }
+      if (this.game.planets[planet_cards[i]].bonus.indexOf("green") > -1) {
+	tech_skips.push({color:"green",planet:planet_cards[i]});
+      }
+    }
+    return tech_skips;
+  }
   returnPlayerUnexhaustedPlanetCards(player=null) {
     if (player == null) { player = this.game.player; }
     return this.returnPlayerPlanetCards(player, 1);
@@ -22324,12 +22380,20 @@ returnStrategyOverlay() {
   let imperium_self = this;
   let card_no = 0;
 
+console.log(JSON.stringify(this.game.state.strategy_cards));
+console.log(JSON.stringify(this.game.state.strategy_cards_bonus));
+
   for (let s in this.strategy_cards) {
 
     let strategy_card_state = "not picked";
     let strategy_card_player = -1;
 
-    let strategy_card_bonus = this.game.state.strategy_cards_bonus[card_no];
+    let strategy_card_bonus = 0;
+    for (let i = 0; i < this.game.state.strategy_cards.length; i++) {
+      if (s === this.game.state.strategy_cards[i]) {
+        strategy_card_bonus = this.game.state.strategy_cards_bonus[i];
+      }
+    }
 
     let strategy_card_bonus_html = "";
     if (strategy_card_bonus > 0) {
@@ -23401,7 +23465,15 @@ console.log("SECTOR: " + sector + " -- " + pid);
     let thiscard = strategy_cards[c];
     // - show bonus available
 
-    let strategy_card_bonus = this.game.state.strategy_cards_bonus[thiscard.rank];
+console.log(JSON.stringify(this.game.state.strategy_cards));
+console.log(JSON.stringify(this.game.state.strategy_cards_bonus));
+
+    let strategy_card_bonus = 0;
+    for (let i = 0; i < this.game.state.strategy_cards.length; i++) {
+      if (thiscard === this.game.state.strategy_cards[i]) {
+        strategy_card_bonus = this.game.state.strategy_cards_bonus[i];
+      }
+    }
 
     let strategy_card_bonus_html = "";
     if (strategy_card_bonus > 0) {

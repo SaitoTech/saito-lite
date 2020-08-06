@@ -1401,13 +1401,13 @@
   	//
   	// all strategy cards on table again
   	//
-  	this.game.state.strategy_cards = [];
+  	//this.game.state.strategy_cards = [];
   	let x = this.returnStrategyCards();
   
   	for (let z in x) {
     	  if (!this.game.state.strategy_cards.includes(z)) {
+  	    this.game.state.strategy_cards_bonus[this.game.state.strategy_cards.length] = 0;
   	    this.game.state.strategy_cards.push(z);
-  	    this.game.state.strategy_cards_bonus.push(0);
           }
   	}
   

@@ -147,7 +147,6 @@
                 });
               });
 	    } else {
-alert("HERE");
 	      imperium_self.brilliant_original_event(imperium_self, player, strategy_card_player);
 	    }
 	  }

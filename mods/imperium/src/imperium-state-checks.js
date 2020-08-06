@@ -480,6 +480,25 @@
 
 
     //
+    // check if our unexhausted_tech_skips removes anything left - game auto-selects to avoid UI complexity.
+    //
+    let unexhausted_tech_skips = this.returnPlayerPlanetTechSkips(this.game.player, 1);
+    for (let j = 0; j < prereqs.length; j++) {
+      for (let k = 0; k < unexhausted_tech_skips.length; k++) {
+	if (prereqs[j] === unexhausted_tech_skips[k].color) {
+          this.addMove("expend\t" + this.game.player + "\tplanet\t" + unexhausted_tech_skips[k].planet);
+	  prereqs.splice(j, 1);
+	  unexhausted_tech_skips.splice(k, 1);
+	  j--;
+	  k--;
+	}
+      }
+    }
+
+
+
+
+    //
     // we meet the pre-reqs
     //
     if (prereqs.length == 0) {
@@ -492,8 +511,12 @@
 
     return 0;
 
-
   }
+
+
+
+
+
 
 
   canPlayerResearchTechnology(tech) {
@@ -509,6 +532,7 @@
     let prereqs = JSON.parse(JSON.stringify(this.tech[tech].prereqs));
     let techfaction = this.tech[tech].faction;
     let techtype = this.tech[tech].type;
+    let unexhausted_tech_skips = this.returnPlayerPlanetTechSkips(this.game.player, 1);
 
     //
     // we can use tech to represent non-researchable
@@ -638,6 +662,21 @@
     if (prereqs.length == 1 && this.game.players_info[this.game.player-1].temporary_ignore_number_of_tech_prerequisites_on_nonunit_upgrade >= 1) {
       prereqs.splice(0, 1);
     }
+
+    //
+    // check if our unexhausted_tech_skips removes anything left
+    //
+    for (let j = 0; j < prereqs.length; j++) {
+      for (let k = 0; k < unexhausted_tech_skips.length; k++) {
+	if (prereqs[j] === unexhausted_tech_skips[k].color) {
+	  prereqs.splice(j, 1);
+	  unexhausted_tech_skips.splice(k, 1);
+	  j--;
+	  k--;
+	}
+      }
+    }
+
 
     //
     // we meet the pre-reqs
@@ -1776,7 +1815,31 @@ if (this.game.board[tmp[k]] != undefined) {
     let home_sector = this.game.board[this.game.players_info[player-1].homeworld].tile;  // "sector";
     return this.game.sectors[home_sector].planets;
   }
-  
+  // 0 = all
+  // 1 = unexhausted
+  // 2 = exhausted
+  returnPlayerPlanetTechSkips(player, mode=0) {
+    let tech_skips = [];
+    let planet_cards = this.returnPlayerPlanetCards(player, mode);
+    for (let i = 0; i < planet_cards.length; i++) {
+
+console.log("return tech skips: " + planet_cards[i] + " --- " + this.game.planets[planet_cards[i]]);
+
+      if (this.game.planets[planet_cards[i]].bonus.indexOf("blue") > -1) {
+	tech_skips.push({color:"blue",planet:planet_cards[i]});
+      }
+      if (this.game.planets[planet_cards[i]].bonus.indexOf("red") > -1) {
+	tech_skips.push({color:"red",planet:planet_cards[i]});
+      }
+      if (this.game.planets[planet_cards[i]].bonus.indexOf("yellow") > -1) {
+	tech_skips.push({color:"yellow",planet:planet_cards[i]});
+      }
+      if (this.game.planets[planet_cards[i]].bonus.indexOf("green") > -1) {
+	tech_skips.push({color:"green",planet:planet_cards[i]});
+      }
+    }
+    return tech_skips;
+  }
   returnPlayerUnexhaustedPlanetCards(player=null) {
     if (player == null) { player = this.game.player; }
     return this.returnPlayerPlanetCards(player, 1);

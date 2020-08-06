@@ -249,12 +249,20 @@ returnStrategyOverlay() {
   let imperium_self = this;
   let card_no = 0;
 
+console.log(JSON.stringify(this.game.state.strategy_cards));
+console.log(JSON.stringify(this.game.state.strategy_cards_bonus));
+
   for (let s in this.strategy_cards) {
 
     let strategy_card_state = "not picked";
     let strategy_card_player = -1;
 
-    let strategy_card_bonus = this.game.state.strategy_cards_bonus[card_no];
+    let strategy_card_bonus = 0;
+    for (let i = 0; i < this.game.state.strategy_cards.length; i++) {
+      if (s === this.game.state.strategy_cards[i]) {
+        strategy_card_bonus = this.game.state.strategy_cards_bonus[i];
+      }
+    }
 
     let strategy_card_bonus_html = "";
     if (strategy_card_bonus > 0) {
@@ -1326,7 +1334,15 @@ console.log("SECTOR: " + sector + " -- " + pid);
     let thiscard = strategy_cards[c];
     // - show bonus available
 
-    let strategy_card_bonus = this.game.state.strategy_cards_bonus[thiscard.rank];
+console.log(JSON.stringify(this.game.state.strategy_cards));
+console.log(JSON.stringify(this.game.state.strategy_cards_bonus));
+
+    let strategy_card_bonus = 0;
+    for (let i = 0; i < this.game.state.strategy_cards.length; i++) {
+      if (thiscard === this.game.state.strategy_cards[i]) {
+        strategy_card_bonus = this.game.state.strategy_cards_bonus[i];
+      }
+    }
 
     let strategy_card_bonus_html = "";
     if (strategy_card_bonus > 0) {

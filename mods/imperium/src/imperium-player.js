@@ -4157,6 +4157,8 @@ playerActivateSystem() {
       let c = sconfirm("Activate this system?");
       if (c) {
         sys.s.activated[imperium_self.game.player - 1] = 1;
+        imperium_self.addMove("pds_space_attack_post\t"+imperium_self.game.player+"\t"+pid);
+        imperium_self.addMove("pds_space_attack\t" + imperium_self.game.player + "\t" + pid);
         imperium_self.addMove("activate_system_post\t" + imperium_self.game.player + "\t" + pid);
         imperium_self.addMove("activate_system\t" + imperium_self.game.player + "\t" + pid);
         imperium_self.addMove("expend\t" + imperium_self.game.player + "\t" + "command" + "\t" + 1);
