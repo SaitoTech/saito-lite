@@ -1197,79 +1197,85 @@ console.log("P: " + planet);
       initialize     :    function(imperium_self, player) {
 	if (imperium_self.faction2_brilliant_swapped == undefined) {
 
-	imperium_self.faction2_brilliant_swapped = 1;
+	  imperium_self.faction2_brilliant_swapped = 1;
 
-	imperium_self.brilliant_original_event = imperium_self.strategy_cards['technology'].strategySecondaryEvent;
-	imperium_self.strategy_cards["technology"].strategySecondaryEvent = function(imperium_self, player, strategy_card_player) {
+	  imperium_self.brilliant_original_event = imperium_self.strategy_cards['technology'].strategySecondaryEvent;
+	  imperium_self.strategy_cards["technology"].strategySecondaryEvent = function(imperium_self, player, strategy_card_player) {
 
-	  if (imperium_self.doesPlayerHaveTech(player, "faction2-brilliant") && player != strategy_card_player && imperium_self.game.player == player) {
+alert("in strategy sec");
 
-	    imperium_self.game.players_info[player-1].cost_of_technology_secondary = 6;
+	    if (imperium_self.doesPlayerHaveTech(player, "faction2-brilliant") && player != strategy_card_player && imperium_self.game.player == player) {
 
-            imperium_self.playerAcknowledgeNotice("The Jol Nar may research a free-technology, and then purchase another for 6 resources:", function() {
+	      imperium_self.game.players_info[player-1].cost_of_technology_secondary = 6;
 
-              imperium_self.playerResearchTechnology(function(tech) {
+alert("TESTING");
 
-                imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-                imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
+              imperium_self.playerAcknowledgeNotice("The Jol Nar may research a free-technology, and then purchase another for 6 resources:", function() {
+alert("TESTING HERE");
 
-		let resources_to_spend = 6;
-                let html = '<p>Do you wish to spend 6 resources to research a second technology? </p><ul>';
+                imperium_self.playerResearchTechnology(function(tech) {
 
-  	        if (
-        	  imperium_self.game.players_info[player-1].permanent_research_technology_card_must_not_spend_resources == 1 ||
-        	  imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources == 1
-        	) {
-        	  html = '<p>Do you wish to research a second technology for free?';
-        	  resources_to_spend = 0;
-        	}
+                  imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+                  imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
 
-	        let available_resources = imperium_self.returnAvailableResources(imperium_self.game.player);
-	        if (available_resources >= resources_to_spend) {
-	          html += '<li class="option" id="yes">Yes</li>';
-	        }
-	        html += '<li class="option" id="no">No</li>';
-	        html += '</ul>';
+	  	  let resources_to_spend = 6;
+                  let html = '<p>Do you wish to spend 6 resources to research a second technology? </p><ul>';
+
+  	          if (
+        	    imperium_self.game.players_info[player-1].permanent_research_technology_card_must_not_spend_resources == 1 ||
+        	    imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources == 1
+        	  ) {
+        	    html = '<p>Do you wish to research a second technology for free?';
+        	    resources_to_spend = 0;
+        	  }
+
+	          let available_resources = imperium_self.returnAvailableResources(imperium_self.game.player);
+	          if (available_resources >= resources_to_spend) {
+	            html += '<li class="option" id="yes">Yes</li>';
+	          }
+	          html += '<li class="option" id="no">No</li>';
+	          html += '</ul>';
  
-	        imperium_self.updateStatus(html);
-	        imperium_self.lockInterface();
+	          imperium_self.updateStatus(html);
+	          imperium_self.lockInterface();
 
-	        $('.option').off();
-	        $('.option').on('click', function() {
+	          $('.option').off();
+	          $('.option').on('click', function() {
 
-	          if (!imperium_self.mayUnlockInterface()) {
-	            alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
-	            return;
-	          }
-	          imperium_self.unlockInterface();
+	            if (!imperium_self.mayUnlockInterface()) {
+	              alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+	              return;
+	            }
+	            imperium_self.unlockInterface();
 
-	          let id = $(this).attr("id");
+	            let id = $(this).attr("id");
 
-	          if (id === "yes") {
-	            imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources = 0;
-	            imperium_self.playerSelectResources(resources_to_spend, function(success) {
-	              if (success == 1) {
-	                imperium_self.playerResearchTechnology(function(tech) {
-	                  imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
+	            if (id === "yes") {
+	              imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources = 0;
+	              imperium_self.playerSelectResources(resources_to_spend, function(success) {
+	                if (success == 1) {
+	                  imperium_self.playerResearchTechnology(function(tech) {
+	                    imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
+	                    imperium_self.endTurn();
+	                  });
+	                } else {
 	                  imperium_self.endTurn();
-	                });
-	              } else {
-	                imperium_self.endTurn();
-			return 0;
-	              }
-	            });
-	          }
-	          if (id === "no") {
-	            imperium_self.endTurn();
-	            return 0;
-	          }
-	        });
+		  	  return 0;
+	                }
+	              });
+	            }
+	            if (id === "no") {
+	              imperium_self.endTurn();
+	              return 0;
+	            }
+	          });
+                });
               });
-            });
-	  } else {
-	    imperium_self.brilliant_original_event(imperium_self, player, strategy_card_player);
+	    } else {
+alert("HERE");
+	      imperium_self.brilliant_original_event(imperium_self, player, strategy_card_player);
+	    }
 	  }
-	}
 	}
       }
     });
@@ -14405,7 +14411,11 @@ playerAcknowledgeNotice(msg, mycallback) {
   this.updateStatus(html);
 
   $('.textchoice').off();
-  $('.textchoice').on('click', function () { mycallback(); });
+  $('.textchoice').on('click', function () { 
+
+alert("callback!");
+
+mycallback(); });
 
   return 0;
 
@@ -16007,8 +16017,9 @@ playerResearchTechnology(mycallback) {
   }
   html += '</ul>';
 
-  imperium_self.lockInterface();
   this.updateStatus(html);
+
+  imperium_self.lockInterface();
 
   $('.option').off();
   $('.option').on('mouseenter', function () { let s = $(this).attr("id"); imperium_self.showTechCard(s); });
@@ -18729,12 +18740,12 @@ playerDiscardActionCards(num) {
     planets['planet50'] = { type : "cultural" , img : "/imperium/img/planets/FIREHOLE.png" , name : "Firehole" , resources : 3 , influence : 0 , bonus : ""  }
     planets['planet51'] = { type : "industrial" , img : "/imperium/img/planets/QUARTIL.png" , name : "Quartil" , resources : 3 , influence : 1 , bonus : ""  } // wormhole A system planet
     planets['planet52'] = { type : "hazardous" , img : "/imperium/img/planets/YODERUX.png" , name : "Yoderux" , resources : 3 , influence : 0 , bonus : ""  } // wormhole B system planet
-    planets['planet53'] = { type : "homeworld" , img : "/imperium/img/planets/JOL.png" , name : "Jol" , resources : 1 , influence : 2 , bonus : ""  }
-    planets['planet54'] = { type : "homeworld" , img : "/imperium/img/planets/NAR.png" , name : "Nar" , resources : 2 , influence : 3 , bonus : ""  }
-    planets['planet55'] = { type : "homeworld" , img : "/imperium/img/planets/ARCHION-REX.png" , name : "Archion Rex" , resources : 2 , influence : 3 , bonus : ""  }
-    planets['planet56'] = { type : "homeworld" , img : "/imperium/img/planets/ARCHION-TAO.png" , name : "Archion Tao" , resources : 1 , influence : 1 , bonus : ""  }
-    planets['planet57'] = { type : "homeworld" , img : "/imperium/img/planets/EARTH.png" , name : "Earth" , resources : 4 , influence : 2 , bonus : ""  }
-    planets['planet58'] = { type : "homeworld" , img : "/imperium/img/planets/ARTIZZ.png" , name : "Artizz" , resources : 4 , influence : 1 , bonus : ""  }
+    planets['planet53'] = { type : "homeworld" , img : "/imperium/img/planets/JOL.png" , name : "Jol" , resources : 1 , influence : 2 , bonus : "blue"  }
+    planets['planet54'] = { type : "homeworld" , img : "/imperium/img/planets/NAR.png" , name : "Nar" , resources : 2 , influence : 3 , bonus : "blue"  }
+    planets['planet55'] = { type : "homeworld" , img : "/imperium/img/planets/ARCHION-REX.png" , name : "Archion Rex" , resources : 2 , influence : 3 , bonus : "blue"  }
+    planets['planet56'] = { type : "homeworld" , img : "/imperium/img/planets/ARCHION-TAO.png" , name : "Archion Tao" , resources : 1 , influence : 1 , bonus : "blue"  }
+    planets['planet57'] = { type : "homeworld" , img : "/imperium/img/planets/EARTH.png" , name : "Earth" , resources : 4 , influence : 2 , bonus : "blue"  }
+    planets['planet58'] = { type : "homeworld" , img : "/imperium/img/planets/ARTIZZ.png" , name : "Artizz" , resources : 4 , influence : 1 , bonus : "blue"  }
     planets['planet59'] = { type : "cultural" , img : "/imperium/img/planets/STARTIDE.png" , name : "Startide" , resources : 2 , influence : 0 , bonus : ""  }   	// sector 58
     planets['planet60'] = { type : "industrial" , img : "/imperium/img/planets/GIANTS-DRINK.png" , name : "Giant's Drink" , resources : 1 , influence : 1 , bonus : ""  }	// sector 59
     planets['planet61'] = { type : "hazardous" , img : "/imperium/img/planets/MIRANDA.png" , name : "Miranda" , resources : 0 , influence : 2 , bonus : ""  }		// sector 60

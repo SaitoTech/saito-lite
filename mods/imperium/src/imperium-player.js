@@ -2192,8 +2192,9 @@ playerResearchTechnology(mycallback) {
   }
   html += '</ul>';
 
-  imperium_self.lockInterface();
   this.updateStatus(html);
+
+  imperium_self.lockInterface();
 
   $('.option').off();
   $('.option').on('mouseenter', function () { let s = $(this).attr("id"); imperium_self.showTechCard(s); });
