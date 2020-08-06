@@ -238,6 +238,31 @@ class Arcade extends ModTemplate {
       this.render(app, data);
     }
 
+
+    // initialize any existing game
+    this.onConnectionStable(app);
+
+
+  }
+
+
+  onConnectionStable(app) {
+
+    //
+    // are we initializing any game?
+    //
+    if (this.app.options) {
+    if (this.app.options.games) {
+    for (let i = 0; i < this.app.options.games.length; i++) {
+      if (this.app.options.games[i].initializing == 1) {
+        let gamemod = this.app.modules.returnModule(this.app.options.games[i].module);
+        gamemod.loadGame(this.app.options.games[i].id);
+        gamemod.startQueue();
+      }
+    }
+    }
+    }
+
   }
 
 
