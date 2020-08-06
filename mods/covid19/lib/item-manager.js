@@ -1,6 +1,7 @@
 const ItemManagerTemplate = require('./item-manager.template');
 const UpdateItem = require('./update-item');
 const AttachProduct = require('./attach-product');
+const LOI = require('./orders/loi')
 const ItemProduct = require('./utils/item-product');
 
 
@@ -59,7 +60,8 @@ module.exports = ItemManager = {
         <div class="grid-buttons fullrow hr ${row.item_id}">
           <div class="grid-action edit" data-item_id="${row.item_id}">Edit</div>
           <div class="grid-action delete" data-item_id="${row.item_id}">Delete</div>
-          <div class="grid-action attach-product" data-category_id="${row.category_id}" data-item_id="${row.item_id}">Add&nbspProduct</div>          
+          <div class="grid-action attach-product" data-category_id="${row.category_id}" data-item_id="${row.item_id}">Add&nbspProduct</div>
+          <div class="grid-action download-loi" data-category="${row.category}" data-quantity="${s2Number(row.quantity)}"><i class="fas fa-file-word"></i>&nbsp; LOI</div>          
         </div>
         `;
       });
@@ -85,10 +87,28 @@ module.exports = ItemManager = {
 
       document.querySelectorAll('.grid-action.attach-product').forEach(el => {
         el.addEventListener('click', (e) => {
+
           data.item_id = e.target.dataset.item_id;
           data.category_id = e.target.dataset.category_id;
+
           AttachProduct.render(app, data);
           AttachProduct.attachEvents(app, data);
+        });
+      });
+
+      document.querySelectorAll('.grid-action.download-loi').forEach(el => {
+        el.addEventListener('click', (e) => {
+          
+          var filename = 'DHBGlobal_Template_Letter_of_Intent.doc';
+
+          data.loi_category = e.target.dataset.category;
+          data.loi_quantity = e.target.dataset.quantity;
+          data.pricing_mode = document.getElementById('pricing_mode').value;
+          data.fetch = "document";
+
+          LOI.render(app, data, function (html) {
+            sWord(html, filename);
+          });
         });
       });
 
