@@ -622,6 +622,7 @@ playerAssignHits(attacker, defender, type, sector, details, total_hits, source =
   if (details == "pds") { menu_type = "assign_hits_pds"; }
   if (menu_type == "" && type == "space") { menu_type = "assign_hits_space"; }
   if (type == "ground") { menu_type = "assign_hits_ground"; }
+  if (type == "anti_fighter_barrage") { menu_type = "assign_hits_anti_fighter_barrage"; }
 
   let tech_attach_menu_events = 0;
   let tech_attach_menu_triggers = [];
@@ -691,11 +692,24 @@ playerAssignHits(attacker, defender, type, sector, details, total_hits, source =
 
       let total_targetted_units = 0;
       let targetted_units = imperium_self.game.players_info[imperium_self.game.player - 1].target_units;
-
+      if (type == "anti_fighter_barrage") {
+	//
+	// overwrite
+	//
+	targetted_units = [	"fighter", "fighter", "fighter" , "fighter" , "fighter" , 
+				"fighter" , "fighter" , "fighter" , "fighter" , "fighter", 
+				"fighter" , "fighter" , "fighter" , "fighter" , "fighter", 
+				"fighter" , "fighter" , "fighter" , "fighter" , "fighter", 
+				"fighter" , "fighter" , "fighter" , "fighter" , "fighter", 
+				"fighter" , "fighter" , "fighter" , "fighter" , "fighter", 
+				"fighter" , "fighter" , "fighter" , "fighter" , "fighter", 
+				"fighter" , "fighter" , "fighter" , "fighter" , "fighter", 
+				"fighter" , "fighter" , "fighter" , "fighter" , "fighter", 
+				"fighter" , "fighter" , "fighter" , "fighter" , "fighter", 
+				"fighter" , "fighter" , "fighter" , "fighter" , "fighter" ];
+      }
 
       for (let i = 0; i < sys.s.units[imperium_self.game.player - 1].length; i++) {
-
-
         if (sys.s.units[imperium_self.game.player - 1][i].destroyed == 0 && sys.s.units[imperium_self.game.player - 1][i].strength > 0) {
 
           console.log("INDEX: " + i + " --- ship: " + sys.s.units[imperium_self.game.player - 1][i].type);

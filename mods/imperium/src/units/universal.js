@@ -57,7 +57,9 @@
       cost 		:	1,
       move 		:	2,
       combat 		:	9,
-      strength 		:	1
+      strength 		:	1,
+      anti_fighter_barrage :	2,
+      anti_fighter_barrage_combat :	9,
     });
 
     this.importUnit("cruiser", {
@@ -165,7 +167,9 @@
       move 		:	2,
       combat 		:	8,
       strength 		:	1,
-      extension : 1
+      extension : 1,
+      anti_fighter_barrage :	3,
+      anti_fighter_barrage_combat :	6,
     });
 
     this.importUnit("cruiser-ii", {

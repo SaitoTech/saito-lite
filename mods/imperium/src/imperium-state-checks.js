@@ -1501,6 +1501,8 @@ if (this.game.board[tmp[k]] != undefined) {
 
   doesPlayerHaveShipsInSector(player, sector) {
 
+    if (player == -1) { return 0; }
+
     let sys = this.returnSectorAndPlanets(sector);
     if (sys.s.units[player-1].length > 0) { 
       for (let i = 0; i < sys.s.units[player-1].length; i++) {

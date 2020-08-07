@@ -124,6 +124,12 @@
     if (obj.spaceCombatRoundEnd == null) {
       obj.spaceCombatRoundEnd = function(imperium_self, attacker, defender, sector) { return 1; }
     }
+    if (obj.antiFighterBarrageEventTriggers == null) {
+      obj.antiFighterBarrageEventTriggers = function(imperium_self, player, attacker, defender, sector) { return 0; }
+    }
+    if (obj.antiFighterBarrageEvent == null) {
+      obj.antiFighterBarrageEvent = function(imperium_self, player, attacker, defender, sector) { return 1; }
+    }
     if (obj.groundCombatRoundEnd == null) {
       obj.groundCombatRoundEnd = function(imperium_self, attacker, defender, sector, planet_idx) { return 1; }
     }

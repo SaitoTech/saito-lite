@@ -982,7 +982,9 @@ console.log("P: " + planet);
       cost 		:	1,
       move 		:	2,
       combat 		:	9,
-      strength 		:	1
+      strength 		:	1,
+      anti_fighter_barrage :	2,
+      anti_fighter_barrage_combat :	9,
     });
 
     this.importUnit("cruiser", {
@@ -1090,7 +1092,9 @@ console.log("P: " + planet);
       move 		:	2,
       combat 		:	8,
       strength 		:	1,
-      extension : 1
+      extension : 1,
+      anti_fighter_barrage :	3,
+      anti_fighter_barrage_combat :	6,
     });
 
     this.importUnit("cruiser-ii", {
@@ -1122,7 +1126,8 @@ console.log("P: " + planet);
     this.importFaction('faction2', {
       name		: 	"Universities of Jol Nar",
       homeworld		: 	"sector50",
-      space_units	: 	["carrier","carrier","dreadnaught","fighter"],
+      //space_units	: 	["carrier","carrier","dreadnaught","fighter"],
+      space_units	: 	["carrier","carrier","destroyer","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","pds","spacedock"],
       tech		: 	["sarween-tools", "neural-motivator", "plasma-scoring", "antimass-deflectors", "faction2-analytic", "faction2-brilliant", "faction2-fragile", "faction2-flagship"],
       background	: 	'faction2.jpg' ,
@@ -1376,6 +1381,7 @@ console.log("P: " + planet);
     this.importFaction('faction1', {
       name		: 	"Federation of Sol",
       homeworld		: 	"sector52",
+//      space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter"],
       space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter"],
       ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock"],
       tech		:	["neural-motivator","antimass-deflectors", "faction1-orbital-drop", "faction1-versatile", "faction1-flagship"],
@@ -1549,7 +1555,8 @@ console.log("P: " + planet);
     this.importFaction('faction3', {
       name		: 	"XXCha Kingdom",
       homeworld		: 	"sector51",
-      space_units	: 	["carrier","cruiser","cruiser","fighter","fighter","fighter"],
+//      space_units	: 	["carrier","cruiser","cruiser","fighter","fighter","fighter"],
+      space_units	: 	["destroyer","destroyer","cruiser","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","pds","spacedock"],
       tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship"],
       background	: 	'faction3.jpg',
@@ -8602,6 +8609,8 @@ console.log("player: " + player + " ---- " + tech);
     if (obj.last_round_damaged == null) { obj.last_round_damaged = 0; }		// last round in which hit (some techs care)
     if (obj.production == null) 	{ obj.production = 0; }			// can produce X units (production limit)
     if (obj.extension == null)		{ obj.extension = 0; }			// 1 if replacing other unit as upgrade
+    if (obj.anti_fighter_barrage ==null){ obj.anti_fighter_barrage = 0; }
+    if (obj.anti_fighter_barrage_combat ==null){ obj.anti_fighter_barrage_combat = 0; }
     if (obj.temporary_combat_modifier == null) { obj.temporary_combat_modifier = 0; } // some action cards manipulate
     if (obj.bombardment_rolls == null)  { obj.bombardment = 0; } // 0 means no bombardment abilities
     if (obj.bombardment_combat == null) { obj.bombardment = -1; } // hits on N
@@ -10602,13 +10611,13 @@ console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][i].storage.lengt
   	//
   	// all strategy cards on table again
   	//
-  	this.game.state.strategy_cards = [];
+  	//this.game.state.strategy_cards = [];
   	let x = this.returnStrategyCards();
   
   	for (let z in x) {
     	  if (!this.game.state.strategy_cards.includes(z)) {
+  	    this.game.state.strategy_cards_bonus[this.game.state.strategy_cards.length] = 0;
   	    this.game.state.strategy_cards.push(z);
-  	    this.game.state.strategy_cards_bonus.push(0);
           }
   	}
   
@@ -11435,9 +11444,8 @@ imperium_self.saveGame(imperium_self.game.id);
           }
         }
         if (handle_fleet_supply == 1) {
-          return this.handleFleetSupply(player, sector);
+          return this.handleFleetSupply(player, sector_from);
         }
-
 
   	return 1;
   
@@ -12100,8 +12108,9 @@ imperium_self.saveGame(imperium_self.game.id);
 	let planet_idx	   = mv[5]; // "pds" for pds shots
 	if (planet_idx != "pds") { planet_idx = parseInt(planet_idx); }
 	let total_hits     = parseInt(mv[6]);
-	let source	   = mv[7]; // pds // bombardment // space_combat // ground_combat
+	let source	   = mv[7]; // pds // bombardment // space_combat // ground_combat // anti_fighter_barrage
         let sys 	   = this.returnSectorAndPlanets(sector);
+
 
 	this.game.state.assign_hits_queue_instruction = "";
         if (this.game.player == defender) {
@@ -12129,6 +12138,20 @@ imperium_self.saveGame(imperium_self.game.id);
               this.updateStatus(this.returnFaction(defender) + " assigning hits to units ... ");
 	    }
   	    return 0;
+	  } else {
+	    return 1;
+	  }
+	}
+
+	if (type == "anti_fighter_barrage") {
+	  if (total_hits > 0) {
+	    if (this.game.player == defender) {
+  	      this.playerAssignHits(attacker, defender, type, sector, planet_idx, total_hits, source);
+	      return 0;
+	    } else {
+              this.updateStatus(this.returnFaction(defender) + " assigning hits to units ... ");
+	    }
+	    return 0;
 	  } else {
 	    return 1;
 	  }
@@ -12674,9 +12697,6 @@ imperium_self.saveGame(imperium_self.game.id);
 	//
 	if (this.doesPlayerHaveShipsInSector(attacker, sector) == 1) {	  
 
-	  //
-	  // barrage against fighters fires first
-	  //
 	  let total_shots = 0;
 	  let total_hits = 0;
 	  let hits_or_misses = [];
@@ -13033,6 +13053,7 @@ imperium_self.saveGame(imperium_self.game.id);
 	  this.addMove("space_combat_post\t"+player+"\t"+sector);
 	  this.addMove("space_combat\t"+player+"\t"+sector);
 	  this.addMove("space_combat_start\t"+player+"\t"+sector);
+	  this.addMove("anti_fighter_barrage\t"+player+"\t"+sector);
 	  this.addMove("pds_space_defense_post\t"+player+"\t"+sector);
 	  this.addMove("pds_space_defense\t"+player+"\t"+sector);
 	  this.endTurn();
@@ -13191,13 +13212,231 @@ imperium_self.saveGame(imperium_self.game.id);
       if (mv[0] === "anti_fighter_barrage") {
 
   	let player       = parseInt(mv[1]);
-        let attacker	 = mv[2];
-        let defender	 = mv[3];
-        let sector	 = mv[4];
+        let sector	 = mv[2];
+        let sys = this.returnSectorAndPlanets(sector);
+        let z = this.returnEventObjects();
+
+        let attacker	 = player;
+        let defender	 = -1;
+
+	for (let i = 0; i < sys.s.units.length; i++) {
+	  if ((i+1) != player) {
+	    if (sys.s.units[i].length > 0) {
+	      defender = (i+1);
+	      i = sys.s.units.length+1;
+	    }
+	  }
+	}
 
         this.updateSectorGraphics(sector);
   	this.game.queue.splice(qe, 1);
 
+	if (defender != -1) {
+
+          this.game.queue.push("anti_fighter_barrage_post\t"+player+"\t"+defender+"\t"+attacker+"\t"+sector);
+          let speaker_order = this.returnSpeakerOrder();
+    	  for (let i = 0; i < speaker_order.length; i++) {
+ 	    for (let k = 0; k < z.length; k++) {
+	      if (z[k].antiFighterBarrageEventTriggers(this, speaker_order[i], defender, attacker, sector) == 1) {
+                this.game.queue.push("anti_fighter_barrage_event\t"+speaker_order[i]+"\t"+defender+"\t"+attacker+"\t"+sector+"\t"+k);
+              }
+            }
+          }
+
+          this.game.queue.push("anti_fighter_barrage_post\t"+player+"\t"+attacker+"\t"+defender+"\t"+sector);
+  	  for (let i = 0; i < speaker_order.length; i++) {
+	    for (let k = 0; k < z.length; k++) {
+	      if (z[k].antiFighterBarrageEventTriggers(this, speaker_order[i], attacker, defender, sector) == 1) {
+                this.game.queue.push("anti_fighter_barrage_event\t"+speaker_order[i]+"\t"+attacker+"\t"+defender+"\t"+sector+"\t"+k);
+              }
+            }
+          }
+        }
+
+  	return 1;
+      }
+
+      if (mv[0] === "anti_fighter_barrage_event") {
+  
+  	let player       = parseInt(mv[1]);
+        let attacker	 = mv[2];
+        let defender	 = mv[3];
+        let sector	 = mv[4];
+        let z_index	 = mv[5];
+
+        let z = this.returnEventObjects();
+  	this.game.queue.splice(qe, 1);
+	return z[z_index].antiFighterBarrageEvent(this, player, attacker, defender, sector);
+
+      }
+      if (mv[0] === "anti_fighter_barrage_post") {
+
+  	let player       = parseInt(mv[1]);
+  	let attacker     = parseInt(mv[2]);
+  	let defender     = parseInt(mv[3]);
+        let sector	 = mv[4];
+        let sys          = this.returnSectorAndPlanets(sector);
+            sector	 = sys.s.sector;
+
+	//
+	// sanity check
+	//
+	if (this.doesPlayerHaveShipsInSector(attacker, sector) == 1) {	  
+
+	  //
+	  // update log
+	  //
+          this.updateLog(this.returnFaction(attacker) + " launches anti-fighter barrage...");
+
+console.log("Player Has Ships in Setor!");
+
+	  let total_shots = 0;
+	  let total_hits = 0;
+	  let hits_or_misses = [];
+	  let hits_on = [];
+	  let units_firing = [];
+	  let unmodified_roll = [];
+	  let modified_roll = [];
+	  let reroll = [];
+
+	  //
+	  // then the rest
+	  //
+	  for (let i = 0; i < sys.s.units[attacker-1].length; i++) {
+	  // skip if unit is toast or lacks fighter barrage
+console.log("AFB: " + sys.s.units[attacker-1][i].anti_fighter_barrage);
+
+          if (sys.s.units[attacker-1][i].strength > 0 && sys.s.units[attacker-1][i].anti_fighter_barrage > 0) {
+
+console.log("yup!");
+
+            for (let b = 0; b < sys.s.units[attacker-1][i].anti_fighter_barrage; b++) {
+
+console.log("shot: " + (b+1));
+
+	      let roll = this.rollDice(10);
+
+	      unmodified_roll.push(roll);
+
+	      for (let z_index in z) {
+	        roll = z[z_index].modifyCombatRoll(this, attacker, defender, attacker, "anti_fighter_barrage", roll);
+	        total_hits = z[z_index].modifyUnitHits(this, attacker, defender, attacker, "anti_fighter_barrage", sys.s.units[attacker-1][i], roll, total_hits);
+	        imperium_self.game.players_info[defender-1].target_units = z[z_index].modifyTargets(this, attacker, defender, imperium_self.game.player, "anti_fighter_barrage", imperium_self.game.players_info[defender-1].target_units);
+	      }
+
+	      roll += this.game.players_info[attacker-1].space_combat_roll_modifier;
+	      roll += this.game.players_info[attacker-1].temporary_space_combat_roll_modifier;
+	      roll += sys.s.units[attacker-1][i].temporary_combat_modifier;
+
+	      modified_roll.push(roll);
+	      reroll.push(0);
+
+	      if (roll >= sys.s.units[attacker-1][i].anti_fighter_barrage_combat) {
+	        total_hits++;
+	        total_shots++;
+	        hits_on.push(sys.s.units[attacker-1][i].anti_fighter_barrage_combat);
+	        hits_or_misses.push(1);
+	        units_firing.push(sys.s.units[attacker-1][i]);
+	      } else {
+	        total_shots++;
+	        hits_or_misses.push(0);
+	        hits_on.push(sys.s.units[attacker-1][i].anti_fighter_barrage_combat);
+	        units_firing.push(sys.s.units[attacker-1][i]);
+	      }
+
+  	    }
+
+console.log("total hits and shots: " + total_hits + " -- " + total_shots);
+
+	    //
+ 	    // handle rerolls
+	    //
+	    if (total_hits < total_shots) {
+
+	      let max_rerolls = total_shots - total_hits;
+	      let available_rerolls = this.game.players_info[attacker-1].combat_dice_reroll + this.game.players_info[attacker-1].space_combat_dice_reroll;
+
+	      for (let z_index in z) {
+	        available_rerolls = z[z_index].modifyCombatRerolls(this, player, attacker, player, "anti_fighter_barrage", available_rerolls);
+	        imperium_self.game.players_info[defender-1].target_units = z[z_index].modifyTargets(this, attacker, defender, imperium_self.game.player, "anti_fighter_barrage", imperium_self.game.players_info[defender-1].target_units);
+	      }
+
+	      let attacker_rerolls = available_rerolls;
+	      if (max_rerolls < available_rerolls) {
+	        attacker_rerolls = max_rerolls;
+	      }
+
+	      for (let i = 0; i < attacker_rerolls; i++) {
+
+	        let lowest_combat_hit = 11;
+	        let lowest_combat_idx = 11;
+	        let rerolling_unit = null;
+
+	        for (let n = 0; n < hits_to_misses.length; n++) {
+	          if (hits_on[n] < lowest_combat_hit && hits_or_misses[n] == 0) {
+	  	    lowest_combat_idx = n;
+		    lowest_combat_hit = hits_on[n];
+	            rerolling_unit = units_firing[n];;
+		  }
+	        }
+	     
+	        let roll = this.rollDice(10);
+
+	        unmodified_roll[lowest_combat_idx] = roll;
+
+	        for (let z_index in z) {
+	          roll =  z[z_index].modifyCombatRerolls(this, player, attacker, player, "anti_fighter_barrage", roll);
+	          total_hits = z[z_index].modifyUnitHits(this, attacker, defender, attacker, "space", rerolling_unit, roll, total_hits);
+	          imperium_self.game.players_info[defender-1].target_units = z[z_index].modifyTargets(this, attacker, defender, imperium_self.game.player, "space", imperium_self.game.players_info[defender-1].target_units);
+	        }
+
+	        roll += this.game.players_info[player-1].space_combat_roll_modifier;
+	        roll += this.game.players_info[player-1].temporary_space_combat_roll_modifier;
+	        roll += sys.s.units[attacker-1][lowest_combat_idx].temporary_combat_modifier;
+
+	        modified_roll[lowest_combat_idx] = roll;
+	        reroll[lowest_combat_idx] = 1;
+
+	        if (roll >= hits_on[lowest_combat_idx]) {
+	          total_hits++;
+	    	  hits_or_misses[lowest_combat_idx] = 1;
+	        } else {
+	  	  hits_or_misses[lowest_combat_idx] = -1;
+	        }
+	      }
+
+	    } // per anti_fighter_barrageif attacking unit not dead
+	  } // if attacking unit not dead
+	  } // for all attacking units
+
+	  //
+	  // create an object with all this information to update our LOG
+	  //
+	  let combat_info = {};
+	      combat_info.hits_or_misses  = hits_or_misses;
+	      combat_info.units_firing 	  = units_firing;
+	      combat_info.hits_on 	  = hits_on;
+	      combat_info.unmodified_roll = unmodified_roll;  // unmodified roll
+	      combat_info.modified_roll   = modified_roll; // modified roll
+	      combat_info.reroll 	  = reroll; // rerolls
+
+	  this.updateCombatLog(combat_info);
+
+	  //
+	  // total hits to assign
+	  //
+	  let restrictions = [];
+
+	  if (total_hits == 1) {
+  	    this.updateLog(this.returnFaction(attacker) + ":  " + total_hits + " hit");
+	  } else {
+  	    this.updateLog(this.returnFaction(attacker) + ":  " + total_hits + " hits");
+	  }
+	  this.game.queue.push("assign_hits\t"+attacker+"\t"+defender+"\tanti_fighter_barrage\t"+sector+"\tanti_fighter_barrage\t"+total_hits+"\tanti_fighter_barrage");
+
+        }
+
+  	this.game.queue.splice(qe, 1);
         return 1;
 
       }
@@ -14438,6 +14677,7 @@ playerAssignHits(attacker, defender, type, sector, details, total_hits, source =
   if (details == "pds") { menu_type = "assign_hits_pds"; }
   if (menu_type == "" && type == "space") { menu_type = "assign_hits_space"; }
   if (type == "ground") { menu_type = "assign_hits_ground"; }
+  if (type == "anti_fighter_barrage") { menu_type = "assign_hits_anti_fighter_barrage"; }
 
   let tech_attach_menu_events = 0;
   let tech_attach_menu_triggers = [];
@@ -14507,11 +14747,24 @@ playerAssignHits(attacker, defender, type, sector, details, total_hits, source =
 
       let total_targetted_units = 0;
       let targetted_units = imperium_self.game.players_info[imperium_self.game.player - 1].target_units;
-
+      if (type == "anti_fighter_barrage") {
+	//
+	// overwrite
+	//
+	targetted_units = [	"fighter", "fighter", "fighter" , "fighter" , "fighter" , 
+				"fighter" , "fighter" , "fighter" , "fighter" , "fighter", 
+				"fighter" , "fighter" , "fighter" , "fighter" , "fighter", 
+				"fighter" , "fighter" , "fighter" , "fighter" , "fighter", 
+				"fighter" , "fighter" , "fighter" , "fighter" , "fighter", 
+				"fighter" , "fighter" , "fighter" , "fighter" , "fighter", 
+				"fighter" , "fighter" , "fighter" , "fighter" , "fighter", 
+				"fighter" , "fighter" , "fighter" , "fighter" , "fighter", 
+				"fighter" , "fighter" , "fighter" , "fighter" , "fighter", 
+				"fighter" , "fighter" , "fighter" , "fighter" , "fighter", 
+				"fighter" , "fighter" , "fighter" , "fighter" , "fighter" ];
+      }
 
       for (let i = 0; i < sys.s.units[imperium_self.game.player - 1].length; i++) {
-
-
         if (sys.s.units[imperium_self.game.player - 1][i].destroyed == 0 && sys.s.units[imperium_self.game.player - 1][i].strength > 0) {
 
           console.log("INDEX: " + i + " --- ship: " + sys.s.units[imperium_self.game.player - 1][i].type);
@@ -19311,6 +19564,12 @@ playerDiscardActionCards(num) {
     if (obj.spaceCombatRoundEnd == null) {
       obj.spaceCombatRoundEnd = function(imperium_self, attacker, defender, sector) { return 1; }
     }
+    if (obj.antiFighterBarrageEventTriggers == null) {
+      obj.antiFighterBarrageEventTriggers = function(imperium_self, player, attacker, defender, sector) { return 0; }
+    }
+    if (obj.antiFighterBarrageEvent == null) {
+      obj.antiFighterBarrageEvent = function(imperium_self, player, attacker, defender, sector) { return 1; }
+    }
     if (obj.groundCombatRoundEnd == null) {
       obj.groundCombatRoundEnd = function(imperium_self, attacker, defender, sector, planet_idx) { return 1; }
     }
@@ -21088,6 +21347,8 @@ if (this.game.board[tmp[k]] != undefined) {
 
 
   doesPlayerHaveShipsInSector(player, sector) {
+
+    if (player == -1) { return 0; }
 
     let sys = this.returnSectorAndPlanets(sector);
     if (sys.s.units[player-1].length > 0) { 

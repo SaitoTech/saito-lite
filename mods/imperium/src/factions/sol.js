@@ -2,6 +2,7 @@
     this.importFaction('faction1', {
       name		: 	"Federation of Sol",
       homeworld		: 	"sector52",
+//      space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter"],
       space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter"],
       ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock"],
       tech		:	["neural-motivator","antimass-deflectors", "faction1-orbital-drop", "faction1-versatile", "faction1-flagship"],

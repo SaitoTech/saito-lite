@@ -2,7 +2,8 @@
     this.importFaction('faction2', {
       name		: 	"Universities of Jol Nar",
       homeworld		: 	"sector50",
-      space_units	: 	["carrier","carrier","dreadnaught","fighter"],
+      //space_units	: 	["carrier","carrier","dreadnaught","fighter"],
+      space_units	: 	["carrier","carrier","destroyer","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","pds","spacedock"],
       tech		: 	["sarween-tools", "neural-motivator", "plasma-scoring", "antimass-deflectors", "faction2-analytic", "faction2-brilliant", "faction2-fragile", "faction2-flagship"],
       background	: 	'faction2.jpg' ,
