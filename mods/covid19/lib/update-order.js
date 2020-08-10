@@ -12,6 +12,7 @@ module.exports = UpdateOrder = {
 
     var html = "";
 
+    //we are creating a new order
     if (typeof data.order_id == 'undefined' || data.order_id == "") {
       data.covid19.returnFormFromPragma("covid19", "orders", function (res) {
         document.querySelector('.main-form').innerHTML = res;
@@ -20,13 +21,15 @@ module.exports = UpdateOrder = {
         data.covid19.treatLog(document.getElementById('order_status'));
       });
     } else {
+      //load the order
       data.covid19.sendPeerDatabaseRequest("covid19", "orders", "*", "deleted <> 1 AND orders.id = " + data.order_id, null, function (res) {
         //data.order = res.rows[0];
         html = data.covid19.returnForm("covid19", "orders", data.order_id, res.rows[0]);
         document.querySelector('.main-form').innerHTML += html;
         data.covid19.treatTextArea(document.getElementById('requirements'));
+        data.covid19.treatReLabel(document.getElementById('details'), 'Buyer Name');
         data.covid19.treatACDropDown(document.getElementById('order_status'), 'statuses', 'id', 'status_name', true);
-        //data.covid19.treatLog(document.getElementById('order_status'));
+        data.covid19.treatACDropDown(document.getElementById('pricing_mode'), 'payment_terms', 'id', 'payment_terms_name', true);
 
         ItemManager.render(app, data);
         ItemManager.attachEvents(app, data);
@@ -47,6 +50,7 @@ module.exports = UpdateOrder = {
           siteMessage('Tracking Link Copied to Clipboard', 5000);
         });
 
+        //treat photo request tool
         document.querySelector('.request-photo').innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-camera"></i>';
         
         document.querySelector('.request-photo').addEventListener('click', () => {
@@ -63,7 +67,7 @@ module.exports = UpdateOrder = {
 
       });
     }
-
+    //Add the log to the log box.
     Log.render(app, data, document.querySelector('.order-log'));
       Log.attachEvents(app, data);
 
