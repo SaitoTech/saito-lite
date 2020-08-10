@@ -50,6 +50,7 @@
 
   }
 
+
   returnPlayersWithLowestVP() {
 
     let lowest_vp = 1000;
@@ -309,6 +310,10 @@
 	    if (this.game.players_info[i].commodities > 0 || this.game.players_info[i].goods > 0) {
 	      return 1;
 	    }
+	  }
+
+	  if (this.game.players_info[this.game.player-1].promissary_notes.length > 0 || this.game.players_info[i].promissary_notes.length > 0) {
+	    return 1;
 	  }
         }
       }
@@ -746,7 +751,6 @@
     }
     return fleet;
   }
-
 
   returnTotalResources(player) {
   
@@ -1469,6 +1473,23 @@ if (this.game.board[tmp[k]] != undefined) {
 
 
 
+  doesPlayerHavePromissary(player, promissary) {
+    if (this.game.players_info[player-1].promissary_notes.includes(promissary)) { return 1; }
+    return 0;
+  }
+
+
+  returnPlayablePromissaryArray(player, promissary) {
+    let tmpar = [];
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      if ((i+1) != player) {
+        tmpar.push(imperium_self.game.players_info[player-1].faction + "-" + promissary);
+      }
+    }
+    return tmpar;
+  }
+
+
   doesPlayerHaveRider(player) {
 
     for (let i = 0; i < this.game.state.riders.length; i++) {
@@ -1508,6 +1529,24 @@ if (this.game.board[tmp[k]] != undefined) {
       for (let i = 0; i < sys.s.units[player-1].length; i++) {
         if (sys.s.units[player-1][i].destroyed == 0) { return 1; } 
       }
+    }
+    return 0;
+
+  }
+
+  doesPlayerHaveUnitsInSector(player, sector) {
+
+    if (player == -1) { return 0; }
+
+    let sys = this.returnSectorAndPlanets(sector);
+
+    if (sys.s.units[player-1].length > 0) { 
+      for (let i = 0; i < sys.s.units[player-1].length; i++) {
+        if (sys.s.units[player-1][i].destroyed == 0) { return 1; } 
+      }
+    }
+    for (let p = 0; p < sys.p.length; p++) {
+      if (sys.p[p].units[player-1].length > 0) { return 1; }
     }
     return 0;
 

@@ -1729,8 +1729,8 @@ playerPlayPreAgendaStage(player, agenda, agenda_idx) {
 
   let z = this.returnEventObjects();
   for (let i = 0; i < z.length; i++) {
-    if (z[i].menuOptionTriggers(this, "agenda", this.game.player) == 1) {
-      let x = z[i].menuOption(this, "agenda", this.game.player);
+    if (z[i].menuOptionTriggers(this, "pre_agenda", this.game.player) == 1) {
+      let x = z[i].menuOption(this, "pre_agenda", this.game.player);
       html += x.html;
       tech_attach_menu_index.push(i);
       tech_attach_menu_triggers.push(x.event);

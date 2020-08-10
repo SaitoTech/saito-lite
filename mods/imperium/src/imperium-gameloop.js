@@ -1743,9 +1743,20 @@ imperium_self.saveGame(imperium_self.game.id);
 	    }
 	    this.endTurn();
 	  }
+	  return 0;
         }
   
-  	return 0;  
+	
+	if (type == "promissary") {
+	  this.givePromissary(giver, recipient, details);
+	  let z = this.returnEventObjects();
+	  for (let z_index = 0; z_index < z.length; z++) {
+	    z[z_index].gainPromissary(this, receipient, details);
+	    z[z_index].losePromissary(this, sender, details);
+	  }
+	}
+
+  	return 1;
 
       }
 
@@ -1862,7 +1873,6 @@ imperium_self.saveGame(imperium_self.game.id);
 
 	this.updateLog(this.returnFaction(offering_faction) + " makes a trade offer to " + this.returnFaction(faction_to_consider));
 	if (this.game.player == faction_to_consider) {
-alert("handle trade offer");
 	  this.playerHandleTradeOffer(offering_faction, stuff_on_offer, stuff_in_return);
 	}
 
@@ -1914,24 +1924,14 @@ alert("handle trade offer");
 
 	if (offer.promissaries) {
 	  for (let i = 0; i < offer.promissaries.length; i++) {
-	    this.game.players_info[faction_responding-1].promissary_notes.push(offer.promissaries[i].promissary);
-	    for (let k = 0; k < this.game.players_info[offering_faction-1].promissary_notes.length; k++) {
-	      if (this.game.players_info[offering_faction-1].promissary_notes[k] === offer.promissaries[i].promissary) {
-		this.game.players_info[offering_faction-1].promissary_notes.splice(k, 1);
-		k = this.game.players_info[offering_faction-1].promissary_notes.length;
-	      }
-	    }
+console.log(this.returnFaction(offering_faction) + " gives " + offer.promissaries[i].promissary);
+	    this.givePromissary(offering_faction, faction_responding, offer.promissaries[i].promissary);
 	  }
 	}
 	if (response.promissaries) {
 	  for (let i = 0; i < response.promissaries.length; i++) {
-	    this.game.players_info[offering_faction-1].promissary_notes.push(response.promissaries[i].promissary);
-	    for (let k = 0; k < this.game.players_info[faction_responding-1].promissary_notes.length; k++) {
-	      if (this.game.players_info[faction_responding-1].promissary_notes[k] === response.promissaries[i].promissary) {
-		this.game.players_info[faction_responding-1].promissary_notes.splice(k, 1);
-		k = this.game.players_info[faction_responding-1].promissary_notes.length;
-	      }
-	    }
+console.log(this.returnFaction(faction_responding) + " gives " + response.promissaries[i].promissary);
+	    this.givePromissary(faction_responding, offering_faction, response.promissaries[i].promissary);
 	  }
 	}
 
@@ -2329,7 +2329,9 @@ alert("handle trade offer");
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
+console.log("TESTING: " + z[k].name);
 	    if (z[k].activateSystemTriggers(this, activating_player, speaker_order[i], sector) == 1) {
+alert("TESTING!");
 	      this.game.queue.push("activate_system_event\t"+activating_player+"\t"+speaker_order[i]+"\t"+sector+"\t"+k);
 	    }
           }

@@ -14,6 +14,7 @@
   }  
 
   returnPromissaryPlayer(promissary) {
+  returnPromissaryPlayer(promissary) {
 
     let tmpar = promissary.split("-");
     for (let i = 0; i < this.game.players_info.length; i++) {

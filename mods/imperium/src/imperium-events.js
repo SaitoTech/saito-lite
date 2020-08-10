@@ -20,6 +20,14 @@
     }
 
     //
+    // promissary notes
+    //
+    for (let i in this.promissary_notes) {
+      z.push(this.promissary_notes[i]);
+    }
+
+
+    //
     // factions in-play
     //
     for (let i = 0; i < this.game.players_info.length; i++) {
@@ -78,6 +86,12 @@
     }
     if (obj.gainPlanet == null) {
       obj.gainPlanet = function(imperium_self, gainer, planet) { return 1; }
+    }
+    if (obj.gainPromissary == null) {
+      obj.gainPromissary = function(imperium_self, gainer, promissary) { return 1; }
+    }
+    if (obj.losePromissary == null) {
+      obj.losePromissary = function(imperium_self, loser, promissary) { return 1; }
     }
     if (obj.gainTechnology == null) {
       obj.gainTechnology = function(imperium_self, gainer, tech) { return 1; }

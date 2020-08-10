@@ -21,6 +21,27 @@
     }
   }
 
+
+  givePromissary(sender, receiver, promissary) {
+    this.game.players_info[receiver-1].promissary_notes.push(promissary);
+
+    for (let k = 0; k < this.game.players_info[sender-1].promissary_notes.length; k++) {
+      if (this.game.players_info[sender-1].promissary_notes[k] === promissary) {
+        this.game.players_info[sender-1].promissary_notes.splice(k, 1);
+        k = this.game.players_info[sender-1].promissary_notes.length;
+      }
+    }
+
+    let z = this.returnEventObjects();
+    for (let i = 0; i < z.length; i++) {
+      z[i].gainPromissary(this, receiver, promissary);
+      z[i].losePromissary(this, sender, promissary);
+    }
+
+  }
+
+
+
   handleFleetSupply(player, sector) {
 
     let imperium_self = this;
