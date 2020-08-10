@@ -8,7 +8,7 @@
       // we use 
       //
       activateSystemTriggers	:	function(imperium_self, attacker, player, sector) {
-	let promissary_name = imperium_self.game.players_info[player-1].faction + "-" + "ceasefire";
+	let promissary_name = imperium_self.game.players_info[attacker-1].faction + "-" + "ceasefire";
 	if (imperium_self.doesPlayerHavePromissary(player, promissary_name)) { 
 	  if (imperium_self.game.attacker != player) {
 	    if (imperium_self.doesPlayerHaveUnitsInSector(player, sector)) {
@@ -19,6 +19,11 @@
 	return 0;
       },
       activateSystemEvent	:	function(imperium_self, attacker, player, sector) {
+
+	if (imperium_self.game.player != player) {
+	  imperium_self.updateStatus(imperium_self.returnFaction(player) + " is deciding whether to use Ceasefire");
+	  return 0; 
+	}
 
         let html = '<div clss="sf-readable">Permit '+imperium_self.returnFaction(attacker) + ' to activate sector or use ceasefire? </div><ul>';
         html += '<li class="option" id="activate">use ceasefire</li>';
@@ -39,6 +44,7 @@
 	  }
 
 	  if (opt === "activate") {
+	    imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " uses Ceasefire to end " + imperium_self.returnFaction(attacker) + " turn");
 	    imperium_self.addMove("ceasefire\t"+attacker+"\t"+player);
             imperium_self.endTurn();
             return 0;
@@ -162,8 +168,6 @@
       gainPromissary	:    function(imperium_self, gainer, promissary) {
 	if (promissary.indexOf("throne") > -1) {
 	  let pprom = imperium_self.returnPromissaryPlayer(promissary);
-console.log("\n\n\nPPPPPPROM FOR SHARD FOR THE THRONE");
-console.log(pprom + " is " + gainer);
 	  if (pprom != gainer) {
 	    imperium_self.game.players_info[gainer-1][promissary] = 1;
 	    imperium_self.game.players_info[gainer-1].vp++;

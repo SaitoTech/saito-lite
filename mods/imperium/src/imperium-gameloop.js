@@ -2329,9 +2329,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
-console.log("TESTING: " + z[k].name);
 	    if (z[k].activateSystemTriggers(this, activating_player, speaker_order[i], sector) == 1) {
-alert("TESTING!");
 	      this.game.queue.push("activate_system_event\t"+activating_player+"\t"+speaker_order[i]+"\t"+sector+"\t"+k);
 	    }
           }

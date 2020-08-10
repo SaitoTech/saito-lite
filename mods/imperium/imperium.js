@@ -1133,7 +1133,7 @@ console.log("P: " + planet);
       // we use 
       //
       activateSystemTriggers	:	function(imperium_self, attacker, player, sector) {
-	let promissary_name = imperium_self.game.players_info[player-1].faction + "-" + "ceasefire";
+	let promissary_name = imperium_self.game.players_info[attacker-1].faction + "-" + "ceasefire";
 	if (imperium_self.doesPlayerHavePromissary(player, promissary_name)) { 
 	  if (imperium_self.game.attacker != player) {
 	    if (imperium_self.doesPlayerHaveUnitsInSector(player, sector)) {
@@ -1144,6 +1144,11 @@ console.log("P: " + planet);
 	return 0;
       },
       activateSystemEvent	:	function(imperium_self, attacker, player, sector) {
+
+	if (imperium_self.game.player != player) {
+	  imperium_self.updateStatus(imperium_self.returnFaction(player) + " is deciding whether to use Ceasefire");
+	  return 0; 
+	}
 
         let html = '<div clss="sf-readable">Permit '+imperium_self.returnFaction(attacker) + ' to activate sector or use ceasefire? </div><ul>';
         html += '<li class="option" id="activate">use ceasefire</li>';
@@ -1164,6 +1169,7 @@ console.log("P: " + planet);
 	  }
 
 	  if (opt === "activate") {
+	    imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " uses Ceasefire to end " + imperium_self.returnFaction(attacker) + " turn");
 	    imperium_self.addMove("ceasefire\t"+attacker+"\t"+player);
             imperium_self.endTurn();
             return 0;
@@ -1287,8 +1293,6 @@ console.log("P: " + planet);
       gainPromissary	:    function(imperium_self, gainer, promissary) {
 	if (promissary.indexOf("throne") > -1) {
 	  let pprom = imperium_self.returnPromissaryPlayer(promissary);
-console.log("\n\n\nPPPPPPROM FOR SHARD FOR THE THRONE");
-console.log(pprom + " is " + gainer);
 	  if (pprom != gainer) {
 	    imperium_self.game.players_info[gainer-1][promissary] = 1;
 	    imperium_self.game.players_info[gainer-1].vp++;
@@ -1410,7 +1414,6 @@ console.log(pprom + " is " + gainer);
       type        :       "ability" ,
       initialize     :    function(imperium_self, player) {
 	if (imperium_self.faction2_brilliant_swapped == undefined) {
-
 	  imperium_self.faction2_brilliant_swapped = 1;
 
 	  imperium_self.brilliant_original_event = imperium_self.strategy_cards['technology'].strategySecondaryEvent;
@@ -1420,64 +1423,89 @@ console.log(pprom + " is " + gainer);
 
 	      imperium_self.game.players_info[player-1].cost_of_technology_secondary = 6;
 
-              imperium_self.playerAcknowledgeNotice("The Jol Nar may research a free-technology, and then purchase another for 6 resources:", function() {
+              imperium_self.playerAcknowledgeNotice("The Jol Nar may expend a strategy token to research a technology, and then purchase another for 6 resources:", function() {
 
-                imperium_self.playerResearchTechnology(function(tech) {
+                let html = '<p>Technology has been played. Do you wish to spend a strategy token to research a technology? </p><ul>';
+                    html += '<li class="option" id="yes">Yes</li>';
+                    html += '<li class="option" id="no">No</li>';
+                    html += '</ul>';
 
-                  imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-                  imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
+                imperium_self.updateStatus(html);
+                imperium_self.lockInterface();
 
-	  	  let resources_to_spend = 6;
-                  let html = '<p>Do you wish to spend 6 resources to research a second technology? </p><ul>';
+                $('.option').off();
+                $('.option').on('click', function() {
 
-  	          if (
-        	    imperium_self.game.players_info[player-1].permanent_research_technology_card_must_not_spend_resources == 1 ||
-        	    imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources == 1
-        	  ) {
-        	    html = '<p>Do you wish to research a second technology for free?';
-        	    resources_to_spend = 0;
-        	  }
-
-	          let available_resources = imperium_self.returnAvailableResources(imperium_self.game.player);
-	          if (available_resources >= resources_to_spend) {
-	            html += '<li class="option" id="yes">Yes</li>';
+	          if (!imperium_self.mayUnlockInterface()) {
+	            alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+	            return;
 	          }
-	          html += '<li class="option" id="no">No</li>';
-	          html += '</ul>';
+	          imperium_self.unlockInterface();
+
+	          let id = $(this).attr("id");
+
+		  if (id === "no") {
+		    imperium_self.endTurn();
+		    return 0;
+		  }
+
+                  imperium_self.playerResearchTechnology(function(tech) {
+
+                    imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+                    imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
+
+	  	    let resources_to_spend = 6;
+                    let html = '<p>Do you wish to spend 6 resources to research a second technology? </p><ul>';
+
+  	            if (
+        	      imperium_self.game.players_info[player-1].permanent_research_technology_card_must_not_spend_resources == 1 ||
+        	      imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources == 1
+        	    ) {
+        	      html = '<p>Do you wish to research a second technology for free?';
+        	      resources_to_spend = 0;
+        	    }
+
+	            let available_resources = imperium_self.returnAvailableResources(imperium_self.game.player);
+	            if (available_resources >= resources_to_spend) {
+	              html += '<li class="option" id="yes">Yes</li>';
+	            }
+	            html += '<li class="option" id="no">No</li>';
+	            html += '</ul>';
  
-	          imperium_self.updateStatus(html);
-	          imperium_self.lockInterface();
+	            imperium_self.updateStatus(html);
+	            imperium_self.lockInterface();
 
-	          $('.option').off();
-	          $('.option').on('click', function() {
+	            $('.option').off();
+	            $('.option').on('click', function() {
 
-	            if (!imperium_self.mayUnlockInterface()) {
-	              alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
-	              return;
-	            }
-	            imperium_self.unlockInterface();
+	              if (!imperium_self.mayUnlockInterface()) {
+	                alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+	                return;
+	              }
+	              imperium_self.unlockInterface();
+ 
+	              let id = $(this).attr("id");
 
-	            let id = $(this).attr("id");
-
-	            if (id === "yes") {
-	              imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources = 0;
-	              imperium_self.playerSelectResources(resources_to_spend, function(success) {
-	                if (success == 1) {
-	                  imperium_self.playerResearchTechnology(function(tech) {
-	                    imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
+	              if (id === "yes") {
+	                imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources = 0;
+	                imperium_self.playerSelectResources(resources_to_spend, function(success) {
+	                  if (success == 1) {
+	                    imperium_self.playerResearchTechnology(function(tech) {
+	                      imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
+	                      imperium_self.endTurn();
+	                    });
+	                  } else {
 	                    imperium_self.endTurn();
-	                  });
-	                } else {
-	                  imperium_self.endTurn();
-		  	  return 0;
-	                }
-	              });
-	            }
-	            if (id === "no") {
-	              imperium_self.endTurn();
-	              return 0;
-	            }
-	          });
+		    	    return 0;
+	                  }
+	                });
+	              }
+	              if (id === "no") {
+	                imperium_self.endTurn();
+	                return 0;
+	              }
+	            });
+		  });
                 });
               });
 	    } else {
