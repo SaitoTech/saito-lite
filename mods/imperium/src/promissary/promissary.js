@@ -1,24 +1,28 @@
 
 
-/***
-    this.importPromissary("trade", {
-      name        :       "Trade Promissary" ,
-      player	  :	  -1 ,
-      prereqs     :       ["yellow","yellow"],
-      initialize :       function(imperium_self, player) {
-        if (imperium_self.game.round == 0) { 
-          imperium_self.game.players_info[player-1].promissary.push("trade");
-        }
-      },
-      upgradeUnit :       function(imperium_self, player, unit) {
-        if (unit.type === "spacedock" && imperium_self.doesPlayerHaveTech(player, "spacedock-ii")) {
-          return imperium_self.returnUnit("spacedock-ii", player, 0);
-        }
-        return unit;
-      },
-
+    this.importPromissary("ceasefire", {
+      name        :       "Ceasefire Promissary" ,
+      faction	  :	  -1,
+      text	  :	  "When the owner activates a sector that contains one of your units, you may trigger this to prevent them moving in units." ,
     });
 
-***/
+    this.importPromissary("trade", {
+      name        :       "Trade Promissary" ,
+      faction	  :	  -1,
+      text	  :	  "When the owner replenishes commodities, you may trigger this to gain their commodities as trade goods" ,
+    });
+
+    this.importPromissary("political", {
+      name        :       "Political Promissary" ,
+      faction	  :	  -1,
+      text	  :	  "The owner of this card cannot participate in resolving this agenda" ,
+    });
+
+    this.importPromissary("throne", {
+      name        :       "Support for the Throne" ,
+      faction	  :	  -1,
+      text	  :	  "Gain 1 VP when you receive this card. Lose this card and 1 VP if the owner of this card is eliminated or you activate a system containing any of their units." ,
+    });
+
 
 

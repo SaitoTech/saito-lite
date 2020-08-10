@@ -46,6 +46,7 @@ class Imperium extends GameTemplate {
     this.stage_i_objectives     = {};
     this.stage_ii_objectives    = {};
     this.units          	= {};
+    this.promissary_notes	= {};
 
     this.hud = new GameHud(this.app, this.menuItems());
    
@@ -1123,14 +1124,44 @@ console.log("P: " + planet);
 
  
 
+
+    this.importPromissary("ceasefire", {
+      name        :       "Ceasefire Promissary" ,
+      faction	  :	  -1,
+      text	  :	  "When the owner activates a sector that contains one of your units, you may trigger this to prevent them moving in units." ,
+    });
+
+    this.importPromissary("trade", {
+      name        :       "Trade Promissary" ,
+      faction	  :	  -1,
+      text	  :	  "When the owner replenishes commodities, you may trigger this to gain their commodities as trade goods" ,
+    });
+
+    this.importPromissary("political", {
+      name        :       "Political Promissary" ,
+      faction	  :	  -1,
+      text	  :	  "The owner of this card cannot participate in resolving this agenda" ,
+    });
+
+    this.importPromissary("throne", {
+      name        :       "Support for the Throne" ,
+      faction	  :	  -1,
+      text	  :	  "Gain 1 VP when you receive this card. Lose this card and 1 VP if the owner of this card is eliminated or you activate a system containing any of their units." ,
+    });
+
+
+
+
     this.importFaction('faction2', {
+      id		:	"faction2" ,
       name		: 	"Universities of Jol Nar",
       homeworld		: 	"sector50",
-      //space_units	: 	["carrier","carrier","dreadnaught","fighter"],
-      space_units	: 	["carrier","carrier","destroyer","fighter","fighter","fighter"],
+      space_units	: 	["carrier","carrier","dreadnaught","fighter"],
+//      space_units	: 	["carrier","carrier","destroyer","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","pds","spacedock"],
       tech		: 	["sarween-tools", "neural-motivator", "plasma-scoring", "antimass-deflectors", "faction2-analytic", "faction2-brilliant", "faction2-fragile", "faction2-flagship"],
       background	: 	'faction2.jpg' ,
+      promissary_notes	:	["trade","political","ceasefire","throne"],
       intro		:	`<div style="font-weight:bold">The Republic has fallen!</div><div style="margin-top:10px">The Universities of Jol Nar have been preparing for War for decades...</div><div style="margin-top:10px">But the leadership is torn: assault New Byzantium or establish a regional power-base first?</div>`
     });
 
@@ -1379,14 +1410,17 @@ console.log("P: " + planet);
 
 
     this.importFaction('faction1', {
+      id		:	"faction1" ,
       name		: 	"Federation of Sol",
       homeworld		: 	"sector52",
-//      space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter"],
       space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter"],
+//      space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter"],
       ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock"],
       tech		:	["neural-motivator","antimass-deflectors", "faction1-orbital-drop", "faction1-versatile", "faction1-flagship"],
       background	: 	"faction1.jpg",
+      promissary_notes	:	["trade","political","ceasefire","throne"],
       intro		:	`<div style="font-weight:bold">Rise of the Sol Federation</div><div style="margin-top:10px">The fall of the Galactic Senate marked the end of Earth's pursuit of ex-terra appeasement policies...</div><div style="margin-top:10px">Rule of the day is swift action in pursuit of humanity's interest, as broadly defined by Earth's Governing Trifecta.</div>`
+
     });
  
 
@@ -1553,13 +1587,15 @@ console.log("P: " + planet);
 
 
     this.importFaction('faction3', {
+      id		:	"faction3" ,
       name		: 	"XXCha Kingdom",
       homeworld		: 	"sector51",
-//      space_units	: 	["carrier","cruiser","cruiser","fighter","fighter","fighter"],
-      space_units	: 	["destroyer","destroyer","cruiser","fighter","fighter","fighter"],
+      space_units	: 	["carrier","cruiser","cruiser","fighter","fighter","fighter"],
+//      space_units	: 	["destroyer","destroyer","cruiser","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","pds","spacedock"],
       tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship"],
       background	: 	'faction3.jpg',
+      promissary_notes	:	["trade","political","ceasefire","throne"],
       intro		:	`<div style="font-weight:bold">The Senate has Collapsed!</div><div style="margin-top:10px">The failure of diplomatic options has struck the XXCha Kingdom harshly...</div><div style="margin-top:10px">What is left for your people but the conquest of New Byzantium and imposition of peace by force?</div>`
     });
   
@@ -8193,6 +8229,14 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
 	  let player = i+1;
           this.game.players_info[i].tech.push(free_tech);
         }
+	//
+	// assign starting promissary notes
+	//
+	for (let k = 0; k < this.factions[this.game.players_info[i].faction].promissary_notes.length; k++) {
+	  let promissary = this.factions[this.game.players_info[i].faction].id + "-" + this.factions[this.game.players_info[i].faction].promissary_notes[k];
+	  let player = i+1;
+          this.game.players_info[i].promissary_notes.push(promissary);
+        }
 
         this.saveSystemAndPlanets(sys);
   
@@ -9130,6 +9174,26 @@ console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][i].storage.lengt
 
 
   
+  returnPromissaryNotes() {
+    return this.promissary_notes;
+  }
+  
+  importPromissary(name, obj) {
+
+    if (obj.name == null) 	{ obj.name = "Unknown Promissary"; }
+    if (obj.text == null)	{ obj.text = "Unknown Promissary"; }
+
+    obj = this.addEvents(obj);
+    this.promissary_notes[name] = obj;
+
+  }  
+
+  
+  
+
+
+
+  
   
   returnFactions() {
     return this.factions;
@@ -9137,6 +9201,7 @@ console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][i].storage.lengt
   
   importFaction(name, obj) {
 
+    if (obj.id == null)			{ obj.id = "faction"; }
     if (obj.name == null) 		{ obj.name = "Unknown Faction"; }
     if (obj.homeworld  == null) 	{ obj.homeworld = "sector32"; }
     if (obj.space_units == null) 	{ obj.space_units = []; }
@@ -11072,6 +11137,7 @@ imperium_self.saveGame(imperium_self.game.id);
 
 	this.updateLog(this.returnFaction(offering_faction) + " makes a trade offer to " + this.returnFaction(faction_to_consider));
 	if (this.game.player == faction_to_consider) {
+alert("handle trade offer");
 	  this.playerHandleTradeOffer(offering_faction, stuff_on_offer, stuff_in_return);
 	}
 
@@ -11119,7 +11185,30 @@ imperium_self.saveGame(imperium_self.game.id);
         this.game.players_info[faction_responding-1].traded_this_turn = 1;
 
   	this.game.players_info[offering_faction-1].commodities -= parseInt(offer.goods);
-  	this.game.players_info[faction_responding-1].commodities -= parseInt(response.goods);
+       	this.game.players_info[faction_responding-1].commodities -= parseInt(response.goods);
+
+	if (offer.promissaries) {
+	  for (let i = 0; i < offer.promissaries.length; i++) {
+	    this.game.players_info[faction_responding-1].promissary_notes.push(offer.promissaries[i].promissary);
+	    for (let k = 0; k < this.game.players_info[offering_faction-1].promissary_notes.length; k++) {
+	      if (this.game.players_info[offering_faction-1].promissary_notes[k] === offer.promissaries[i].promissary) {
+		this.game.players_info[offering_faction-1].promissary_notes.splice(k, 1);
+		k = this.game.players_info[offering_faction-1].promissary_notes.length;
+	      }
+	    }
+	  }
+	}
+	if (response.promissaries) {
+	  for (let i = 0; i < response.promissaries.length; i++) {
+	    this.game.players_info[offering_faction-1].promissary_notes.push(response.promissaries[i].promissary);
+	    for (let k = 0; k < this.game.players_info[faction_responding-1].promissary_notes.length; k++) {
+	      if (this.game.players_info[faction_responding-1].promissary_notes[k] === response.promissaries[i].promissary) {
+		this.game.players_info[faction_responding-1].promissary_notes.splice(k, 1);
+		k = this.game.players_info[faction_responding-1].promissary_notes.length;
+	      }
+	    }
+	  }
+	}
 
   	this.game.players_info[offering_faction-1].goods += parseInt(response.goods);
   	this.game.players_info[faction_responding-1].goods += parseInt(offer.goods);
@@ -16871,14 +16960,71 @@ playerProduceUnits(sector, production_limit = 0, cost_limit = 0, stage = 0, warf
 
 playerHandleTradeOffer(faction_offering, their_offer, my_offer) {
 
+
   let imperium_self = this;
 
-  let html = '<div class="sf-readable">You have received a trade offer from ' + imperium_self.returnFaction(faction_offering) + '. They offer ' + their_offer.goods + ' trade goods in exchange for ' + my_offer.goods + ' trade goods or commodities: </div><ul>';
+  let goods_offered = 0;
+  let goods_received = 0;
+  let promissaries_offered = "";
+  let promissaries_received = "";
+
+  if (their_offer.promissaries) {
+    if (their_offer.promissaries.length > 0) {
+      for (let i = 0; i < their_offer.promissaries.length; i++) {
+        let pm = their_offer.promissaries[i].promissary;
+	let tmpar = pm.split("-");
+        let faction_promissary_owner = imperium_self.factions[tmpar[0]].name;
+        if (i > 0) { promissaries_received += ', '; }
+        promissaries_received += `${faction_promissary_owner} - ${imperium_self.promissary_notes[tmpar[1]].name}`;	
+      }
+    }
+  }
+
+  if (my_offer.promissaries) {
+    if (my_offer.promissaries.length > 0) {
+      for (let i = 0; i < my_offer.promissaries.length; i++) {
+        let pm = my_offer.promissaries[i].promissary;
+	let tmpar = pm.split("-");
+        let faction_promissary_owner = imperium_self.factions[tmpar[0]].name;
+        if (i > 0) { promissaries_offered += ', '; }
+        promissaries_offered += `${faction_promissary_owner} - ${imperium_self.promissary_notes[tmpar[1]].name}`;	
+      }
+    }
+  }
+
+  let html = '<div class="sf-readable">You have received a trade offer from ' + imperium_self.returnFaction(faction_offering) + '. ';
+  html += 'They offer ';
+
+  if (goods_received > 0) {
+    html += my_offer.goods + ' trade goods';
+  }
+  if (promissaries_received.length > 0) {
+    if (goods_received > 0) { html += ' and '; }
+    html += promissaries_received;
+  }
+  if (goods_received == 0 && promissaries_received.length == 0) {
+    html += 'nothing';
+  }
+  html += ' in exchange for ';
+  if (goods_offered > 0) {
+    html += their_offer.goods + ' trade goods';
+  }
+  if (promissaries_offered.length > 0) {
+    if (goods_offered > 0) { html += ' and '; }
+    html += promissaries_offered;
+  }
+  if (goods_offered == 0 && promissaries_offered.length == 0) {
+    html += 'nothing';
+  }
+
+
+  html += ': </div><ul>';
   html += `  <li class="option" id="yes">accept trade</li>`;
   html += `  <li class="option" id="no">refuse trade</li>`;
   html += '</ul>';
 
-  this.updateStatus(html);
+  imperium_self.updateStatus(html);
+
 
   $('.option').off();
   $('.option').on('click', function () {
@@ -16901,79 +17047,221 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer) {
 
   });
 
+
 }
 
 
-playerTrade() {
+  playerTrade() {
 
-  let imperium_self = this;
-  let factions = this.returnFactions();
-
-  let html = '<div class="sf-readable">Make Trade Offer to Faction: </div><ul>';
-  for (let i = 0; i < this.game.players_info.length; i++) {
-    if (this.game.players_info[i].traded_this_turn == 0 && (i + 1) != this.game.player) {
-      if (this.arePlayersAdjacent(this.game.player, (i + 1))) {
-        html += `  <li class="option" id="${i}">${factions[this.game.players_info[i].faction].name}</li>`;
-      }
-    }
-  }
-  html += `  <li class="option" id="cancel">cancel</li>`;
-  html += '</ul>';
-
-  this.updateStatus(html);
-
-  $('.option').off();
-  $('.option').on('click', function () {
-
-    let faction = $(this).attr("id");
-
-    if (faction == "cancel") {
-      imperium_self.playerTurn();
-      return 0;
-    }
-
+    let imperium_self = this;
+    let factions = this.returnFactions();
 
     let offer_selected = 0;
     let receive_selected = 0;
+    let offer_promissaries = [];
+    let receive_promissaries = [];
+    let max_offer = 0;
+    let max_receipt = 0;
 
-    let max_offer = imperium_self.game.players_info[imperium_self.game.player - 1].commodities + imperium_self.game.players_info[imperium_self.game.player - 1].goods;
-    let max_receipt = imperium_self.game.players_info[parseInt(faction)].commodities + imperium_self.game.players_info[parseInt(faction)].goods;
 
-    let html = "<div class='sf-readable'>Make an Offer: </div><ul>";
-    html += '<li id="to_offer" class="option">you give <span class="offer_total">0</span> commodities/goods</li>';
-    html += '<li id="to_receive" class="option">you receive <span class="receive_total">0</span> trade goods</li>';
-    html += '<li id="confirm" class="option">submit offer</li>';
-    html += '</ul>';
+    let goodsTradeInterface = function (imperium_self, player, mainTradeInterface, goodsTradeInterface, promissaryTradeInterface) {
 
-    imperium_self.updateStatus(html);
+      let receive_promissary_text = 'no promissaries';
+      for (let i = 0; i < receive_promissaries.length; i++) {
+        if (i == 0) { receive_promissary_text = ''; }
+        let pm = receive_promissaries[i];
+	let tmpar = pm.promissary.split("-");
+        let faction_promissary_owner = imperium_self.factions[tmpar[0]].name;
+	if (i > 0) { receive_promissary_text += ', '; }
+        receive_promissary_text += `${faction_promissary_owner} - ${imperium_self.promissary_notes[tmpar[1]].name}`;	
+      }
 
-    $('.option').off();
-    $('.option').on('click', function () {
+      let offer_promissary_text = 'no promissaries';
+      for (let i = 0; i < offer_promissaries.length; i++) {
+        if (i == 0) { offer_promissary_text = ''; }
+        let pm = offer_promissaries[i];
+	let tmpar = pm.promissary.split("-");
+        let faction_promissary_owner = imperium_self.factions[tmpar[0]].name;
+	if (i > 0) { offer_promissary_text += ', '; }
+        offer_promissary_text += `${faction_promissary_owner} - ${imperium_self.promissary_notes[tmpar[1]].name}`;	
+      }
 
-      let selected = $(this).attr("id");
+      let html = "<div class='sf-readable'>Make an Offer: </div><ul>";
+      html += '<li id="to_offer" class="option">you give <span class="offer_total">0</span> commodities/goods</li>';
+      html += '<li id="to_receive" class="option">you receive <span class="receive_total">0</span> trade goods</li>';
+      html += '<li id="promissary_offer" class="option">you give <span class="give_promissary">'+offer_promissary_text+'</span></li>';
+      html += '<li id="promissary_receive" class="option">you receive <span class="receive_promissary">'+receive_promissary_text+'</span></li>';
+      html += '<li id="confirm" class="option">submit offer</li>';
+      html += '</ul>';
 
-      if (selected == "to_offer") { offer_selected++; if (offer_selected > max_offer) { offer_selected = 0; } }
-      if (selected == "to_receive") { receive_selected++; if (receive_selected > max_receipt) { receive_selected = 0; } }
+      imperium_self.updateStatus(html);
 
-      if (selected == "confirm") {
+      $('.option').off();
+      $('.option').on('click', function () {
 
-        let my_offer = {};
-        my_offer.goods = $('.offer_total').html();
-        let my_receive = {};
-        my_receive.goods = $('.receive_total').html();
+        let selected = $(this).attr("id");
 
-        imperium_self.addMove("offer\t" + imperium_self.game.player + "\t" + (parseInt(faction) + 1) + "\t" + JSON.stringify(my_offer) + "\t" + JSON.stringify(my_receive));
-        imperium_self.updateStatus("trade offer submitted");
-        imperium_self.endTurn();
+        if (selected == "to_offer") { offer_selected++; if (offer_selected > max_offer) { offer_selected = 0; } }
+        if (selected == "to_receive") { receive_selected++; if (receive_selected > max_receipt) { receive_selected = 0; } }
+
+	if (selected == "promissary_offer") {
+	  promissaryTradeInterface(imperium_self, player, 1, mainTradeInterface, goodsTradeInterface, promissaryTradeInterface);
+	  return;
+	}
+	if (selected == "promissary_receive") {
+	  promissaryTradeInterface(imperium_self, player, 2, mainTradeInterface, goodsTradeInterface, promissaryTradeInterface);
+	  return;
+	}
+
+        if (selected == "confirm") {
+
+          let my_offer = {};
+          my_offer.goods = $('.offer_total').html();
+	  my_offer.promissaries = offer_promissaries;
+          let my_receive = {};
+          my_receive.goods = $('.receive_total').html();
+	  my_receive.promissaries = receive_promissaries;
+
+          imperium_self.addMove("offer\t" + imperium_self.game.player + "\t" + player + "\t" + JSON.stringify(my_offer) + "\t" + JSON.stringify(my_receive));
+          imperium_self.updateStatus("trade offer submitted");
+          imperium_self.endTurn();
+
+        }
+
+        $('.offer_total').html(offer_selected);
+        $('.receive_total').html(receive_selected);
+
+      });
+    }
+    //
+    // mode = 1 // offer
+	      2 // receive
+    //
+    let promissaryTradeInterface = function (imperium_self, player, mode, mainTradeInterface, goodsTradeInterface, promissaryTradeInterface) {
+
+      // offer mine to them
+      if (mode == 1) {
+
+        let html = '<div class="sf-readable">Add Promissary to YOUR Offer: </div><ul>';
+        for (let i = 0; i < imperium_self.game.players_info[imperium_self.game.player-1].promissary_notes.length; i++) {
+
+	  let pm = imperium_self.game.players_info[imperium_self.game.player-1].promissary_notes[i];
+	  let tmpar = pm.split("-");
+          let faction_promissary_owner = imperium_self.factions[tmpar[0]].name;
+	  let already_offered = 0;
+	  for (let b = 0; b < offer_promissaries.length; b++) {
+	    if (offer_promissaries[b].promissary === pm) {
+	      already_offered = 1;
+	    }
+	  }
+	  if (already_offered == 0) {
+            html += `  <li class="option" id="${i}">${faction_promissary_owner} - ${imperium_self.promissary_notes[tmpar[1]].name}</li>`;
+          }
+        }
+        html += `  <li class="option" id="cancel">cancel</li>`;
+
+	imperium_self.updateStatus(html);
+        $('.option').off();
+        $('.option').on('click', function () {
+
+          let prom = $(this).attr("id");
+
+          if (prom == "cancel") {
+            goodsTradeInterface(imperium_self, player, mainTradeInterface, goodsTradeInterface, promissaryTradeInterface);
+            return 0;
+          }
+	  
+	  let promobj = { player : imperium_self.game.player , promissary : imperium_self.game.players_info[imperium_self.game.player-1].promissary_notes[prom] }
+	  offer_promissaries.push(promobj);
+          goodsTradeInterface(imperium_self, player, mainTradeInterface, goodsTradeInterface, promissaryTradeInterface);
+	  return;
+
+	});
+      }
+
+
+
+      // request theirs
+      if (mode == 2) {
+
+        let html = '<div class="sf-readable">Request Promissary FROM them: </div><ul>';
+        for (let i = 0; i < imperium_self.game.players_info[player-1].promissary_notes.length; i++) {
+	  let pm = imperium_self.game.players_info[player-1].promissary_notes[i];
+	  let tmpar = pm.split("-");
+          let faction_promissary_owner = imperium_self.factions[tmpar[0]].name;
+	  let already_offered = 0;
+	  for (let b = 0; b < receive_promissaries.length; b++) {
+	    if (receive_promissaries[b].promissary === pm) {
+	      already_offered = 1;
+	    }
+	  }
+	  if (already_offered == 0) {
+            html += `  <li class="option" id="${i}">${faction_promissary_owner} - ${imperium_self.promissary_notes[tmpar[1]].name}</li>`;
+          }
+        }
+        html += `  <li class="option" id="cancel">cancel</li>`;
+
+	imperium_self.updateStatus(html);
+        $('.option').off();
+        $('.option').on('click', function () {
+
+          let prom = $(this).attr("id");
+
+          if (prom == "cancel") {
+            goodsTradeInterface(imperium_self, player, mainTradeInterface, goodsTradeInterface, promissaryTradeInterface);
+            return 0;
+          }
+	  
+	  let promobj = { player : player , promissary : imperium_self.game.players_info[player-1].promissary_notes[prom] }
+	  receive_promissaries.push(promobj);
+          goodsTradeInterface(imperium_self, player, mainTradeInterface, goodsTradeInterface, promissaryTradeInterface);
+	  return;
+
+	});
+
 
       }
 
-      $('.offer_total').html(offer_selected);
-      $('.receive_total').html(receive_selected);
+    }
+    let mainTradeInterface = function (imperium_self, mainTradeInterface, goodsTradeInterface, promissaryTradeInterface) {
 
-    });
-  });
-}
+      let html = '<div class="sf-readable">Make Trade Offer to Faction: </div><ul>';
+      for (let i = 0; i < imperium_self.game.players_info.length; i++) {
+        if (imperium_self.game.players_info[i].traded_this_turn == 0 && (i + 1) != imperium_self.game.player) {
+          if (imperium_self.arePlayersAdjacent(imperium_self.game.player, (i + 1))) {
+            html += `  <li class="option" id="${i}">${factions[imperium_self.game.players_info[i].faction].name}</li>`;
+          }
+        }
+      }
+      html += `  <li class="option" id="cancel">cancel</li>`;
+      html += '</ul>';
+
+      imperium_self.updateStatus(html);
+
+      $('.option').off();
+      $('.option').on('click', function () {
+
+        let faction = $(this).attr("id");
+
+        if (faction == "cancel") {
+          imperium_self.playerTurn();
+          return 0;
+        }
+
+        max_offer = imperium_self.game.players_info[imperium_self.game.player - 1].commodities + imperium_self.game.players_info[imperium_self.game.player - 1].goods;
+        max_receipt = imperium_self.game.players_info[parseInt(faction)].commodities + imperium_self.game.players_info[parseInt(faction)].goods;
+
+	goodsTradeInterface(imperium_self, (parseInt(faction)+1), mainTradeInterface, goodsTradeInterface, promissaryTradeInterface);
+
+      });
+    }
+
+    //
+    // start with the main interface
+    //
+    mainTradeInterface(imperium_self, mainTradeInterface, goodsTradeInterface, promissaryTradeInterface);
+
+  }
 
 
 
@@ -18986,12 +19274,12 @@ playerDiscardActionCards(num) {
     planets['planet50'] = { type : "cultural" , img : "/imperium/img/planets/FIREHOLE.png" , name : "Firehole" , resources : 3 , influence : 0 , bonus : ""  }
     planets['planet51'] = { type : "industrial" , img : "/imperium/img/planets/QUARTIL.png" , name : "Quartil" , resources : 3 , influence : 1 , bonus : ""  } // wormhole A system planet
     planets['planet52'] = { type : "hazardous" , img : "/imperium/img/planets/YODERUX.png" , name : "Yoderux" , resources : 3 , influence : 0 , bonus : ""  } // wormhole B system planet
-    planets['planet53'] = { type : "homeworld" , img : "/imperium/img/planets/JOL.png" , name : "Jol" , resources : 1 , influence : 2 , bonus : "blue"  }
-    planets['planet54'] = { type : "homeworld" , img : "/imperium/img/planets/NAR.png" , name : "Nar" , resources : 2 , influence : 3 , bonus : "blue"  }
-    planets['planet55'] = { type : "homeworld" , img : "/imperium/img/planets/ARCHION-REX.png" , name : "Archion Rex" , resources : 2 , influence : 3 , bonus : "blue"  }
-    planets['planet56'] = { type : "homeworld" , img : "/imperium/img/planets/ARCHION-TAO.png" , name : "Archion Tao" , resources : 1 , influence : 1 , bonus : "blue"  }
-    planets['planet57'] = { type : "homeworld" , img : "/imperium/img/planets/EARTH.png" , name : "Earth" , resources : 4 , influence : 2 , bonus : "blue"  }
-    planets['planet58'] = { type : "homeworld" , img : "/imperium/img/planets/ARTIZZ.png" , name : "Artizz" , resources : 4 , influence : 1 , bonus : "blue"  }
+    planets['planet53'] = { type : "homeworld" , img : "/imperium/img/planets/JOL.png" , name : "Jol" , resources : 1 , influence : 2 , bonus : ""  }
+    planets['planet54'] = { type : "homeworld" , img : "/imperium/img/planets/NAR.png" , name : "Nar" , resources : 2 , influence : 3 , bonus : ""  }
+    planets['planet55'] = { type : "homeworld" , img : "/imperium/img/planets/ARCHION-REX.png" , name : "Archion Rex" , resources : 2 , influence : 3 , bonus : ""  }
+    planets['planet56'] = { type : "homeworld" , img : "/imperium/img/planets/ARCHION-TAO.png" , name : "Archion Tao" , resources : 1 , influence : 1 , bonus : ""  }
+    planets['planet57'] = { type : "homeworld" , img : "/imperium/img/planets/EARTH.png" , name : "Earth" , resources : 4 , influence : 2 , bonus : ""  }
+    planets['planet58'] = { type : "homeworld" , img : "/imperium/img/planets/ARTIZZ.png" , name : "Artizz" , resources : 4 , influence : 1 , bonus : ""  }
     planets['planet59'] = { type : "cultural" , img : "/imperium/img/planets/STARTIDE.png" , name : "Startide" , resources : 2 , influence : 0 , bonus : ""  }   	// sector 58
     planets['planet60'] = { type : "industrial" , img : "/imperium/img/planets/GIANTS-DRINK.png" , name : "Giant's Drink" , resources : 1 , influence : 1 , bonus : ""  }	// sector 59
     planets['planet61'] = { type : "hazardous" , img : "/imperium/img/planets/MIRANDA.png" , name : "Miranda" , resources : 0 , influence : 2 , bonus : ""  }		// sector 60

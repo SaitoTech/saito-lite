@@ -2816,7 +2816,7 @@ playerProduceUnits(sector, production_limit = 0, cost_limit = 0, stage = 0, warf
 
 playerHandleTradeOffer(faction_offering, their_offer, my_offer) {
 
-
+/**
   let imperium_self = this;
 
   let goods_offered = 0;
@@ -2828,7 +2828,7 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer) {
     if (their_offer.promissaries.length > 0) {
       for (let i = 0; i < their_offer.promissaries.length; i++) {
         let pm = their_offer.promissaries[i].promissary;
-	let tmpar = pm.split("-");
+	let tmpar = pm.promissary.split("-");
         let faction_promissary_owner = imperium_self.factions[tmpar[0]].name;
         if (i > 0) { promissaries_received += ', '; }
         promissaries_received += `${faction_promissary_owner} - ${imperium_self.promissary_notes[tmpar[1]].name}`;	
@@ -2840,7 +2840,7 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer) {
     if (my_offer.promissaries.length > 0) {
       for (let i = 0; i < my_offer.promissaries.length; i++) {
         let pm = my_offer.promissaries[i].promissary;
-	let tmpar = pm.split("-");
+	let tmpar = pm.promissary.split("-");
         let faction_promissary_owner = imperium_self.factions[tmpar[0]].name;
         if (i > 0) { promissaries_offered += ', '; }
         promissaries_offered += `${faction_promissary_owner} - ${imperium_self.promissary_notes[tmpar[1]].name}`;	
@@ -2850,9 +2850,20 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer) {
 
   let html = '<div class="sf-readable">You have received a trade offer from ' + imperium_self.returnFaction(faction_offering) + '. ';
   html += 'They offer ';
+  if (goods_offered > 0) {
+    html += their_offer.goods + ' trade goods";
+  }
+  if (promissaries_offered.length > 0) {
+    if (goods_offered > 0) { html += ' and '; }
+    html += promissaries_received;
+  }
+  if (goods_offered == 0 && promissaries_offered.length == 0) {
+    html += 'nothing';
+  }
+  html += ' in exchange for ';
 
   if (goods_received > 0) {
-    html += my_offer.goods + ' trade goods';
+    html += their_offer.goods + ' trade goods";
   }
   if (promissaries_received.length > 0) {
     if (goods_received > 0) { html += ' and '; }
@@ -2861,26 +2872,13 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer) {
   if (goods_received == 0 && promissaries_received.length == 0) {
     html += 'nothing';
   }
-  html += ' in exchange for ';
-  if (goods_offered > 0) {
-    html += their_offer.goods + ' trade goods';
-  }
-  if (promissaries_offered.length > 0) {
-    if (goods_offered > 0) { html += ' and '; }
-    html += promissaries_offered;
-  }
-  if (goods_offered == 0 && promissaries_offered.length == 0) {
-    html += 'nothing';
-  }
-
 
   html += ': </div><ul>';
   html += `  <li class="option" id="yes">accept trade</li>`;
   html += `  <li class="option" id="no">refuse trade</li>`;
   html += '</ul>';
 
-  imperium_self.updateStatus(html);
-
+  this.updateStatus(html);
 
   $('.option').off();
   $('.option').on('click', function () {
@@ -2902,7 +2900,7 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer) {
     }
 
   });
-
+**/
 
 }
 
@@ -3043,7 +3041,7 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer) {
         let html = '<div class="sf-readable">Request Promissary FROM them: </div><ul>';
         for (let i = 0; i < imperium_self.game.players_info[player-1].promissary_notes.length; i++) {
 	  let pm = imperium_self.game.players_info[player-1].promissary_notes[i];
-	  let tmpar = pm.split("-");
+	  let tmpar = pm.promissary.split("-");
           let faction_promissary_owner = imperium_self.factions[tmpar[0]].name;
 	  let already_offered = 0;
 	  for (let b = 0; b < receive_promissaries.length; b++) {
@@ -3068,7 +3066,7 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer) {
             return 0;
           }
 	  
-	  let promobj = { player : player , promissary : imperium_self.game.players_info[player-1].promissary_notes[prom] }
+	  let promobj = { player : imperium_self.game.player , promissary : imperium_self.game.players_info[imperium_self.game.player-1].promissary_notes[prom] }
 	  receive_promissaries.push(promobj);
           goodsTradeInterface(imperium_self, player, mainTradeInterface, goodsTradeInterface, promissaryTradeInterface);
 	  return;

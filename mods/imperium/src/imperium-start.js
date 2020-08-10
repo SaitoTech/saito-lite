@@ -46,6 +46,7 @@ class Imperium extends GameTemplate {
     this.stage_i_objectives     = {};
     this.stage_ii_objectives    = {};
     this.units          	= {};
+    this.promissary_notes	= {};
 
     this.hud = new GameHud(this.app, this.menuItems());
    

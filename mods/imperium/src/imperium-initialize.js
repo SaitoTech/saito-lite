@@ -233,6 +233,14 @@
 	  let player = i+1;
           this.game.players_info[i].tech.push(free_tech);
         }
+	//
+	// assign starting promissary notes
+	//
+	for (let k = 0; k < this.factions[this.game.players_info[i].faction].promissary_notes.length; k++) {
+	  let promissary = this.factions[this.game.players_info[i].faction].id + "-" + this.factions[this.game.players_info[i].faction].promissary_notes[k];
+	  let player = i+1;
+          this.game.players_info[i].promissary_notes.push(promissary);
+        }
 
         this.saveSystemAndPlanets(sys);
   

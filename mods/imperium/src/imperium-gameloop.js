@@ -1862,6 +1862,7 @@ imperium_self.saveGame(imperium_self.game.id);
 
 	this.updateLog(this.returnFaction(offering_faction) + " makes a trade offer to " + this.returnFaction(faction_to_consider));
 	if (this.game.player == faction_to_consider) {
+alert("handle trade offer");
 	  this.playerHandleTradeOffer(offering_faction, stuff_on_offer, stuff_in_return);
 	}
 
@@ -1909,7 +1910,30 @@ imperium_self.saveGame(imperium_self.game.id);
         this.game.players_info[faction_responding-1].traded_this_turn = 1;
 
   	this.game.players_info[offering_faction-1].commodities -= parseInt(offer.goods);
-  	this.game.players_info[faction_responding-1].commodities -= parseInt(response.goods);
+       	this.game.players_info[faction_responding-1].commodities -= parseInt(response.goods);
+
+	if (offer.promissaries) {
+	  for (let i = 0; i < offer.promissaries.length; i++) {
+	    this.game.players_info[faction_responding-1].promissary_notes.push(offer.promissaries[i].promissary);
+	    for (let k = 0; k < this.game.players_info[offering_faction-1].promissary_notes.length; k++) {
+	      if (this.game.players_info[offering_faction-1].promissary_notes[k] === offer.promissaries[i].promissary) {
+		this.game.players_info[offering_faction-1].promissary_notes.splice(k, 1);
+		k = this.game.players_info[offering_faction-1].promissary_notes.length;
+	      }
+	    }
+	  }
+	}
+	if (response.promissaries) {
+	  for (let i = 0; i < response.promissaries.length; i++) {
+	    this.game.players_info[offering_faction-1].promissary_notes.push(response.promissaries[i].promissary);
+	    for (let k = 0; k < this.game.players_info[faction_responding-1].promissary_notes.length; k++) {
+	      if (this.game.players_info[faction_responding-1].promissary_notes[k] === response.promissaries[i].promissary) {
+		this.game.players_info[faction_responding-1].promissary_notes.splice(k, 1);
+		k = this.game.players_info[faction_responding-1].promissary_notes.length;
+	      }
+	    }
+	  }
+	}
 
   	this.game.players_info[offering_faction-1].goods += parseInt(response.goods);
   	this.game.players_info[faction_responding-1].goods += parseInt(offer.goods);

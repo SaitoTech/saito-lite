@@ -15,6 +15,10 @@ for file in ./src/units/*
 do
   cat $file >> ./imperium.js
 done
+for file in ./src/promissary/*
+do
+  cat $file >> ./imperium.js
+done
 for file in ./src/factions/*
 do
   cat $file >> ./imperium.js
@@ -55,6 +59,7 @@ cat ./src/imperium-ui.js >> ./imperium.js
 cat ./src/imperium-tech.js >> ./imperium.js
 cat ./src/imperium-unit.js >> ./imperium.js
 cat ./src/imperium-objectives.js >> ./imperium.js
+cat ./src/imperium-promissary.js >> ./imperium.js
 cat ./src/imperium-factions.js >> ./imperium.js
 cat ./src/imperium-agenda-cards.js >> ./imperium.js
 cat ./src/imperium-action-cards.js >> ./imperium.js

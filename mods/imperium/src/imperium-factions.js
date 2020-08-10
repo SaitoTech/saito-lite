@@ -6,6 +6,7 @@
   
   importFaction(name, obj) {
 
+    if (obj.id == null)			{ obj.id = "faction"; }
     if (obj.name == null) 		{ obj.name = "Unknown Faction"; }
     if (obj.homeworld  == null) 	{ obj.homeworld = "sector32"; }
     if (obj.space_units == null) 	{ obj.space_units = []; }
