@@ -495,8 +495,12 @@ select * from
       }
 
       field.querySelector(`#${dbtable}-display`).addEventListener("change", (e) => {
-        el.value = field.querySelector(`#${dbtable}-options [value='${e.target.value}']`).dataset.value;
-        el.dataset[after] = field.querySelector(`#${dbtable}-display`).value;
+        try {
+          el.value = field.querySelector(`#${dbtable}-options [value='${e.target.value}']`).dataset.value;
+          el.dataset[after] = field.querySelector(`#${dbtable}-display`).value;
+        } catch(e){
+          console.log(error);
+        }
       });
       field.querySelector(`#${dbtable}-display`).addEventListener("focus", (e) => {
         e.target.value = "";
@@ -511,6 +515,10 @@ select * from
   treatHide(el) {
     el.parentNode.previousSibling.classList.add('hidden');
     el.parentNode.classList.add('hidden');
+  },
+
+  treatReLabel(el, html) {
+    el.parentNode.previousSibling.innerHTML = html;
   },
 
   treatFile(el, typeel = null, nameel = null) {
