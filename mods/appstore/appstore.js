@@ -116,6 +116,11 @@ class AppStore extends ModTemplate {
       //
       dirs.forEach(dir => {
 
+console.log("##########################");
+console.log("##########################");
+console.log("##########################");
+console.log("processing: " + dir);
+
         let mod_path = path.resolve(__dirname, `mods/${dir}.zip`);
         let output = fs.createWriteStream(mod_path);
 
@@ -152,12 +157,17 @@ class AppStore extends ModTemplate {
           let newtx = app.wallet.createUnsignedTransactionWithDefaultFee();
           let zip = fs.readFileSync(mod_path, { encoding: 'base64' });
 
+
+
           newtx.msg = {
             module: "AppStore",
             request: "submit module",
             module_zip: zip,
             name: dir,
           };
+
+console.log("About to Fail: " + newtx.msg.name);
+console.log("ZIP LEN: " + zip.length);
 
           newtx = app.wallet.signTransaction(newtx);
 
