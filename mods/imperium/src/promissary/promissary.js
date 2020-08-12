@@ -10,7 +10,7 @@
       activateSystemTriggers	:	function(imperium_self, attacker, player, sector) {
 	let promissary_name = imperium_self.game.players_info[attacker-1].faction + "-" + "ceasefire";
 	if (imperium_self.doesPlayerHavePromissary(player, promissary_name)) { 
-	  if (imperium_self.game.attacker != player) {
+	  if (attacker != player) {
 	    if (imperium_self.doesPlayerHaveUnitsInSector(player, sector)) {
 	      return 1; 
 	    }

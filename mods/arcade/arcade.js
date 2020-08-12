@@ -251,14 +251,18 @@ class Arcade extends ModTemplate {
     //
     // are we initializing any game?
     //
-    if (this.browser_active == 1) {
-      if (this.app.options) {
-        if (this.app.options.games) {
-          for (let i = 0; i < this.app.options.games.length; i++) {
-            if (this.app.options.games[i].initializing == 1) {
-              let gamemod = this.app.modules.returnModule(this.app.options.games[i].module);
-              gamemod.loadGame(this.app.options.games[i].id);
-              gamemod.startQueue();
+    let arcadeMod = app.modules.returnModule("Arcade");
+
+    if (arcadeMod.browser_active == 1) {
+      if (app.options) {
+        if (app.options.games) {
+          for (let i = 0; i < app.options.games.length; i++) {
+            if (app.options.games[i].initializing == 1) {
+              let gamemod = app.modules.returnModule(app.options.games[i].module);
+              if (gamemod) {
+		gamemod.loadGame(app.options.games[i].id);
+                gamemod.startQueue();
+              }
             }
           }
         }
