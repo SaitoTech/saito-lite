@@ -2193,7 +2193,53 @@ console.log("return tech skips: " + planet_cards[i] + " --- " + this.game.planet
     return 0;
  
   }
-  
-  
+ 
+
+  canPlayerMoveShipsIntoSector(player, destination) {
+
+    let imperium_self = this;
+    let hops = 3;
+    let sectors = [];
+    let distance = [];
+
+    let obj = {};
+    obj.max_hops = 2;
+    obj.ship_move_bonus = this.game.players_info[this.game.player - 1].ship_move_bonus + this.game.players_info[this.game.player - 1].temporary_ship_move_bonus;
+    obj.fleet_move_bonus = this.game.players_info[this.game.player - 1].fleet_move_bonus + this.game.players_info[this.game.player - 1].temporary_fleet_move_bonus;
+    obj.ships_and_sectors = [];
+    obj.stuff_to_move = [];
+    obj.stuff_to_load = [];
+    obj.distance_adjustment = 0;
+
+    obj.max_hops += obj.ship_move_bonus;
+    obj.max_hops += obj.fleet_move_bonus;
+
+    let x = imperium_self.returnSectorsWithinHopDistance(destination, obj.max_hops, imperium_self.game.player);
+    sectors = x.sectors;
+    distance = x.distance;
+
+    for (let i = 0; i < distance.length; i++) {
+      if (obj.ship_move_bonus > 0) {
+        distance[i]--;
+      }
+      if (obj.fleet_move_bonus > 0) {
+        distance[i]--;
+      }
+    }
+
+    if (obj.ship_move_bonus > 0) {
+      obj.distance_adjustment += obj.ship_move_bonus;
+    }
+    if (obj.fleet_move_bonus > 0) {
+      obj.distance_adjustment += obj.fleet_move_bonus;
+    }
+
+    obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance);
+ 
+    if (obj.ships_and_sectors.length > 0) { return 1; }
+    return 0;
+
+  }
+
 
 

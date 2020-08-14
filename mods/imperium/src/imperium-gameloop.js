@@ -1070,6 +1070,7 @@
       if (mv[0] == "change_speaker") {
   
   	this.game.state.speaker = parseInt(mv[1]);
+	this.displayFactionDashboard();
   	this.game.queue.splice(qe, 1);
   	return 1;
   

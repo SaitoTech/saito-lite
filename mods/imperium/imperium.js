@@ -1348,8 +1348,6 @@ console.log("P: " + planet);
     });
 
 
-
-
     this.importTech("faction2-flagship", {
       name        	:       "XXCha Flagship" ,
       faction     	:       "faction2",
@@ -1437,7 +1435,7 @@ console.log("P: " + planet);
                 $('.option').on('click', function() {
 
 	          if (!imperium_self.mayUnlockInterface()) {
-	            alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+	            alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
 	            return;
 	          }
 	          imperium_self.unlockInterface();
@@ -1479,7 +1477,7 @@ console.log("P: " + planet);
 	            $('.option').on('click', function() {
 
 	              if (!imperium_self.mayUnlockInterface()) {
-	                alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+	                alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
 	                return;
 	              }
 	              imperium_self.unlockInterface();
@@ -1612,6 +1610,299 @@ console.log("P: " + planet);
     });
 
 
+
+
+
+    this.importFaction('faction4', {
+      id		:	"faction4" ,
+      name		: 	"Sardaak N'Orr",
+      homeworld		: 	"sector53",
+      space_units	: 	["carrier","carrier","cruiser"],
+      ground_units	: 	["infantry","infantry","infantry","infantry","infantry","pds","spacedock"],
+      tech		: 	["faction4-unrelenting"],
+      //tech		: 	["faction4-unrelenting", "faction4-particle-weave", "faction4-flagship"],
+      background	: 	'faction4.jpg' ,
+      promissary_notes	:	["trade","political","ceasefire","throne"],
+      intro		:	`<div style="font-weight:bold">What use are frames of quivvering flesh in times of war? Let the Sardakk do what we will -- the weak will suffer what they must.</div>`
+    });
+
+
+
+
+    this.importTech('faction4-unrelenting', {
+
+      name        :       "Fragile" ,
+      faction     :       "faction4",
+      type        :       "ability" ,
+      onNewRound     :    function(imperium_self, player) {
+        if (imperium_self.doesPlayerHaveTech(player, "faction4-unrelenting")) {
+          imperium_self.game.players_info[player-1].faction4_unrelenting = 1;
+        }
+      },
+      modifyCombatRoll :	  function(imperium_self, attacker, defender, player, combat_type, roll) {
+	if (combat_type == "space" || combat_type == "ground") {
+          if (imperium_self.doesPlayerHaveTech(attacker, "faction4-unrelenting")) {
+  	    imperium_self.updateLog("Sardakk combat rolls +1 due to Sardakk");
+	    roll += 1;
+	    if (roll > 10) { roll = 10; }
+	  }
+        }
+	return roll;
+      },
+    });
+
+
+/*****
+    this.importTech("faction2-flagship", {
+      name        	:       "Sardaak Flagship" ,
+      faction     	:       "faction4",
+      type      	:       "ability" ,
+      modifyCombatRoll :	  function(imperium_self, attacker, defender, player, combat_type, roll) {
+	if (combat_type == "space" || combat_type == "ground") {
+          if (imperium_self.doesPlayerHaveTech(attacker, "faction4-unrelenting")) {
+  	    imperium_self.updateLog("Sardakk combat rolls +1 due to Sardakk");
+	    roll += 1;
+	    if (roll > 10) { roll = 10; }
+	  }
+        }
+	return roll;
+      },
+      modifyUnitHits 	: function(imperium_self, player, defender, attacker, combat_type, rerolling_unit, roll, total_hits) {
+        if (!imperium_self.doesPlayerHaveTech(attacker, "faction2-flagship")) { return total_hits; }
+	if (rerolling_unit.owner == attacker) {
+	  if (rerolling_unit.type == "flagship") {
+	    if (roll > 8) { 
+	      imperium_self.updateLog("Jol Nar flagship scores an additional hit through flagshup ability");
+	      total_hits++; 
+	      return total_hits;
+	    }
+	  }
+	}
+	return total_hits;
+      } ,
+    });
+
+
+
+
+    this.importTech('faction2-analytic', {
+
+      name        :       "Analytic" ,
+      faction     :       "faction2",
+      type        :       "ability" ,
+      onNewRound     :    function(imperium_self, player) {
+        if (imperium_self.doesPlayerHaveTech(player, "faction2-analytic")) {
+          imperium_self.game.players_info[player-1].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 1;
+        }
+      },
+
+    });
+
+
+    this.importTech('faction2-brilliant', {
+      name        :       "Brilliant" ,
+      faction     :       "faction2",
+      type        :       "ability" ,
+      initialize     :    function(imperium_self, player) {
+	if (imperium_self.faction2_brilliant_swapped == undefined) {
+	  imperium_self.faction2_brilliant_swapped = 1;
+
+	  imperium_self.brilliant_original_event = imperium_self.strategy_cards['technology'].strategySecondaryEvent;
+	  imperium_self.strategy_cards["technology"].strategySecondaryEvent = function(imperium_self, player, strategy_card_player) {
+
+	    if (imperium_self.doesPlayerHaveTech(player, "faction2-brilliant") && player != strategy_card_player && imperium_self.game.player == player) {
+
+	      imperium_self.game.players_info[player-1].cost_of_technology_secondary = 6;
+
+              imperium_self.playerAcknowledgeNotice("The Jol Nar may expend a strategy token to research a technology, and then purchase another for 6 resources:", function() {
+
+                let html = '<p>Technology has been played. Do you wish to spend a strategy token to research a technology? </p><ul>';
+                    html += '<li class="option" id="yes">Yes</li>';
+                    html += '<li class="option" id="no">No</li>';
+                    html += '</ul>';
+
+                imperium_self.updateStatus(html);
+                imperium_self.lockInterface();
+
+                $('.option').off();
+                $('.option').on('click', function() {
+
+	          if (!imperium_self.mayUnlockInterface()) {
+	            alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+	            return;
+	          }
+	          imperium_self.unlockInterface();
+
+	          let id = $(this).attr("id");
+
+		  if (id === "no") {
+		    imperium_self.endTurn();
+		    return 0;
+		  }
+
+                  imperium_self.playerResearchTechnology(function(tech) {
+
+                    imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
+                    imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
+
+	  	    let resources_to_spend = 6;
+                    let html = '<p>Do you wish to spend 6 resources to research a second technology? </p><ul>';
+
+  	            if (
+        	      imperium_self.game.players_info[player-1].permanent_research_technology_card_must_not_spend_resources == 1 ||
+        	      imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources == 1
+        	    ) {
+        	      html = '<p>Do you wish to research a second technology for free?';
+        	      resources_to_spend = 0;
+        	    }
+
+	            let available_resources = imperium_self.returnAvailableResources(imperium_self.game.player);
+	            if (available_resources >= resources_to_spend) {
+	              html += '<li class="option" id="yes">Yes</li>';
+	            }
+	            html += '<li class="option" id="no">No</li>';
+	            html += '</ul>';
+ 
+	            imperium_self.updateStatus(html);
+	            imperium_self.lockInterface();
+
+	            $('.option').off();
+	            $('.option').on('click', function() {
+
+	              if (!imperium_self.mayUnlockInterface()) {
+	                alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+	                return;
+	              }
+	              imperium_self.unlockInterface();
+ 
+	              let id = $(this).attr("id");
+
+	              if (id === "yes") {
+	                imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources = 0;
+	                imperium_self.playerSelectResources(resources_to_spend, function(success) {
+	                  if (success == 1) {
+	                    imperium_self.playerResearchTechnology(function(tech) {
+	                      imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
+	                      imperium_self.endTurn();
+	                    });
+	                  } else {
+	                    imperium_self.endTurn();
+		    	    return 0;
+	                  }
+	                });
+	              }
+	              if (id === "no") {
+	                imperium_self.endTurn();
+	                return 0;
+	              }
+	            });
+		  });
+                });
+              });
+	    } else {
+	      imperium_self.brilliant_original_event(imperium_self, player, strategy_card_player);
+	    }
+	  }
+	}
+      }
+    });
+
+
+
+    this.importTech('faction2-eres-siphons', {
+      name        :       "E-Res Siphons" ,
+      faction     :       "faction2",
+      type        :       "special" ,
+      prereqs	:	["yellow","yellow"],
+      initialize  :	  function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].eres_siphons == null) {
+          imperium_self.game.players_info[player-1].eres_siphons = 0;
+	}
+      },
+      gainTechnology : function(imperium_self, gainer, tech) {
+	if (tech == "faction2-eres-siphons") {
+          imperium_self.game.players_info[gainer-1].eres_siphons = 1;
+        }
+      },
+      activateSystemTriggers :    function(imperium_self, activating_player, player, sector) {
+	if (imperium_self.game.players_info[player-1].eres_siphons == 1 && activating_player != player) {
+          if (imperium_self.doesSectorContainPlayerShips(player, sector) == 1) { return 1; }
+	}
+        return 0;
+      },
+      postSystemActivation :   function(imperium_self, activating_player, player, sector) {
+        imperium_self.game.players_info[player-1].goods += 4;
+      }
+    });
+
+
+
+    this.importTech('faction2-deep-space-conduits', {
+      name        :       "Deep Space Conduits" ,
+      faction     :       "faction2",
+      type        :       "special" ,
+      prereqs	:	["blue","blue"],
+      initialize  :	  function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].deep_space_conduits == null) {
+          imperium_self.game.players_info[player-1].deep_space_conduits = 0;
+          imperium_self.game.players_info[player-1].deep_space_conduits_exhausted = 0;
+	}
+      },
+      onNewRound : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].deep_space_conduits == 1) {
+          imperium_self.game.players_info[player-1].deep_space_conduits_exhausted = 0;
+        }
+      },
+      gainTechnology : function(imperium_self, gainer, tech) {
+	if (tech == "faction2-deep-space-conduits") {
+          imperium_self.game.players_info[gainer-1].deep_space_conduits = 1;
+          imperium_self.game.players_info[gainer-1].deep_space_conduits_exhausted = 0;
+        }
+      },
+      activateSystemTriggers : function(imperium_self, activating_player, player, sector) { 
+	if (player == imperium_self.game.player && activating_player == player) {
+	  if (imperium_self.game.players_info[activating_player-1].deep_space_conduits == 1 && imperium_self.game.players_info[activating_player-1].deep_space_conduits_exhausted == 0) {
+	    if (imperium_self.doesSectorContainPlayerUnits(activating_player, sector)) {
+	      return 1;
+	    }
+	  }
+	}
+	return 0;
+      },
+      activateSystemEvent : function(imperium_self, activating_player, player, sector) { 
+
+	let html = 'Do you wish to activate Deep Space Conduits: <ul>';
+	html    += '<li class="textchoice" id="yes">activate</li>';
+	html    += '<li class="textchoice" id="no">skip</li>';
+	html    += '</ul>';
+
+	imperium_self.updateStatus(html);
+
+	$('.textchoice').off();
+	$('.textchoice').on('click', function() {
+
+	  let action = $(this).attr("id");
+
+	  if (action == "yes") {
+	    let sectors = imperium_self.returnSectorsWithPlayerUnits(activating_player);
+	    imperium_self.game.players_info[activating_player-1].deep_space_conduits_exhausted = 1;
+            imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"deep_space_conduits_exhausted"+"\t"+"int"+"\t"+"1");
+	    for (let i = 0; i < sectors.length; i++) {
+	      imperium_self.addMove("adjacency\ttemporary\t"+sectors[i]+"\t"+sector);
+	    }
+	    imperium_self.endTurn();
+	  }
+
+	  if (action == "no") {
+	    imperium_self.updateStatus();
+	    imperium_self.endTurn();
+	  }
+
+	});
+      }
+    });
+
+******/
 
 
 
@@ -2114,8 +2405,9 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
           imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
           imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
 	  imperium_self.playerAcknowledgeNotice("You have played Construction. First you will have the option of producing a PDS or Space Dock. Then you will have the option of producing an additional PDS if you so choose.", function() {
-            imperium_self.playerBuildInfrastructure(() => {
-              imperium_self.playerBuildInfrastructure(() => {
+            imperium_self.playerBuildInfrastructure((sector) => {
+              imperium_self.playerBuildInfrastructure((sector) => {
+		imperium_self.updateSectorGraphics(sector);
                 imperium_self.endTurn();
               }, 2);
             }, 1);
@@ -2129,7 +2421,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
 
         if (imperium_self.game.player != strategy_card_player && imperium_self.game.player == player) {
 
-          let html = '<p>Construction has been played. Do you wish to spend 1 strategy token to build a PDS or Space Dock? </p><ul>';
+          let html = '<p>Construction has been played. Do you wish to spend 1 strategy token to build a PDS or Space Dock? This will activate the sector (if unactivated): </p><ul>';
           if (imperium_self.game.players_info[player-1].strategy_tokens > 0) {
             html += '<li class="option" id="yes">Yes</li>';
           }
@@ -2144,7 +2436,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
           $('.option').on('click', function() {
 
             if (!imperium_self.mayUnlockInterface()) {
-              alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+              alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
               return;
             }
             imperium_self.unlockInterface();
@@ -2155,7 +2447,9 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
             if (id == "yes") {
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
               imperium_self.addMove("expend\t"+imperium_self.game.player+"\tstrategy\t1");
-              imperium_self.playerBuildInfrastructure(() => {
+              imperium_self.playerBuildInfrastructure((sector) => {
+                imperium_self.addMove("activate\t"+imperium_self.game.player+"\t"+sector);
+		imperium_self.updateSectorGraphics(sector);
                 imperium_self.endTurn();
               }, 1);
             }
@@ -2262,7 +2556,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
               $(divname).on('click', function() {
 
 	        if (!imperium_self.mayUnlockInterface()) {
-	          alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+	          alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
 	          return;
 	        }
 	        imperium_self.unlockInterface();
@@ -2521,6 +2815,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
 	    //
 	    if (imperium_self.game.planets['new-byzantium'].owner == -1) {
 	      imperium_self.playerAcknowledgeNotice("The Galactic Senate has yet to be established on New Byzantium. Occupy the planet to establish the Senate and earn 1 VP: ", function() {
+                imperium_self.addMove("change_speaker\t"+chancellor);
 		imperium_self.endTurn();
 	      });
 	      return 0;
@@ -2645,7 +2940,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
           $('.option').on('click', function() {
  
             if (!imperium_self.mayUnlockInterface()) {
-              alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+              alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
               return;
             }
             imperium_self.unlockInterface();
@@ -2708,7 +3003,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
           $('.option').on('click', function() {
 
             if (!imperium_self.mayUnlockInterface()) {
-              alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+              alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
               return;
             }
             imperium_self.unlockInterface();
@@ -2877,7 +3172,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
           $('.option').on('click', function() {
  
             if (!imperium_self.mayUnlockInterface()) {
-              alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+              alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
               return;
             }
             imperium_self.unlockInterface();
@@ -2946,7 +3241,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
           $('.option').on('click', function() {
 
             if (!imperium_self.mayUnlockInterface()) {
-              alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and try again.");
+              alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
               return;
             }
             imperium_self.unlockInterface();
@@ -3225,7 +3520,21 @@ console.log("WINNIGN CHOICE: " + winning_choice);
       text		:	"Have at least 1 ship in the same sector as an opponent's spacedock",
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
-	return 1;
+	for (let i in this.game.sectors) {
+	  if (imperium_self.game.sectors[i].units[player-1].length > 0) {
+	    let sys = imperium_self.returnSectorAndPlanets(i);
+	    for (let p = 0; p < sys.p.length; p++) {
+	      for (let b = 0; b < sys.p[p].units.length; b++) {
+	 	if ((b+1) != player) {
+	          for (let bb = 0; bb < sys.p[p].units[b].length; bb++) {
+		    if (sys.p[p].units[b][bb].type === "spacedock") { return 1; }
+		  }
+		}
+	      }
+	    }
+	  }
+	}
+	return 0;
       },
       scoreObjective : function(imperium_self, player) { 
 	return 1;
@@ -7443,7 +7752,7 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
     this.importActionCard('technology-rider', {
   	name : "Technology Rider" ,
   	type : "rider" ,
-  	text : "Select a planet and destroy all PDS units on that planet" ,
+  	text : "Research a technology for free" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
@@ -10560,6 +10869,7 @@ console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][i].storage.lengt
       if (mv[0] == "change_speaker") {
   
   	this.game.state.speaker = parseInt(mv[1]);
+	this.displayFactionDashboard();
   	this.game.queue.splice(qe, 1);
   	return 1;
   
@@ -14296,6 +14606,7 @@ console.log("total hits and shots: " + total_hits + " -- " + total_shots);
     tracker.invasion = 0;
     tracker.action_card = 0;
     tracker.trade = 0;
+    tracker.action = 0;
     return tracker;
   };
   
@@ -16897,11 +17208,11 @@ playerBuildInfrastructure(mycallback, stage = 1) {
       function (planet) {
         if (id == "pds") {
           imperium_self.addMove("produce\t" + imperium_self.game.player + "\t" + 1 + "\t" + imperium_self.game.planets[planet].idx + "\tpds\t" + imperium_self.game.planets[planet].sector);
-          mycallback();
+          mycallback(imperium_self.game.planets[planet].sector);
         }
         if (id == "spacedock") {
           imperium_self.addMove("produce\t" + imperium_self.game.player + "\t" + 1 + "\t" + imperium_self.game.planets[planet].idx + "\tspacedock\t" + imperium_self.game.planets[planet].sector);
-          mycallback();
+          mycallback(imperium_self.game.planets[planet].sector);
         }
       },
       null
@@ -18719,6 +19030,18 @@ playerActivateSystem() {
       alert("You cannot activate that system.");
     } else {
 
+      //
+      // sanity check on whether we want to do this
+      //
+      let do_we_permit_this_activation = 1;
+      if (!imperium_self.canPlayerMoveShipsIntoSector(imperium_self.game.player, pid)) {
+	let c = confirm("You cannot move ships into this sector. Are you sure you wish to activate it?");
+	if (c) {
+        } else {
+	  return;
+	}
+      }
+ 
       activated_once = 1;
       let sys = imperium_self.returnSectorAndPlanets(pid);
       let divpid = '#' + pid;
@@ -18763,7 +19086,11 @@ playerPostActivateSystem(sector) {
   let player = imperium_self.game.player;
 
   let html = "<div class='sf-readable'>" + this.returnFaction(this.game.player) + ": </div><ul>";
-  html += '<li class="option" id="move">move into sector</li>';
+
+  if (imperium_self.canPlayerMoveShipsIntoSector(player, sector)) {
+    html += '<li class="option" id="move">move into sector</li>';
+  }
+
   if (this.canPlayerProduceInSector(this.game.player, sector)) {
     html += '<li class="option" id="produce">produce units</li>';
   }
@@ -19544,7 +19871,7 @@ playerDiscardActionCards(num) {
   
   
   ////////////////////
-  // Return Planets //
+  // Return Sectors //
   ////////////////////
   //
   // type 0 - normal
@@ -19627,7 +19954,7 @@ playerDiscardActionCards(num) {
     sectors['sector50']        = { img : "/imperium/img/sectors/sector50.png" , 	   name : "Jol Nar Homeworld" , hw : 1 , wormhole : 0 , mr : 0 , planets : ['planet53','planet54'] }
     sectors['sector51']        = { img : "/imperium/img/sectors/sector51.png" , 	   name : "XXCha Homeworld" , hw : 1 , wormhole : 0 , mr : 0 , planets : ['planet55','planet56'] }
     sectors['sector52']        = { img : "/imperium/img/sectors/sector52.png" , 	   name : "Sol Homeworld" , hw : 1 , wormhole : 0 , mr : 0 , planets : ['planet57'] }
-    sectors['sector53']        = { img : "/imperium/img/sectors/sector53.png" , 	   name : "Mentak Homeworld" , hw : 1 , wormhole: 0 , mr : 0 , planets : ['planet58'] }
+    sectors['sector53']        = { img : "/imperium/img/sectors/sector53.png" , 	   name : "Sardaak Homeworld" , hw : 1 , wormhole: 0 , mr : 0 , planets : ['planet58'] }
 
     for (var i in sectors) {
 
@@ -22557,8 +22884,54 @@ console.log("return tech skips: " + planet_cards[i] + " --- " + this.game.planet
     return 0;
  
   }
-  
-  
+ 
+
+  canPlayerMoveShipsIntoSector(player, destination) {
+
+    let imperium_self = this;
+    let hops = 3;
+    let sectors = [];
+    let distance = [];
+
+    let obj = {};
+    obj.max_hops = 2;
+    obj.ship_move_bonus = this.game.players_info[this.game.player - 1].ship_move_bonus + this.game.players_info[this.game.player - 1].temporary_ship_move_bonus;
+    obj.fleet_move_bonus = this.game.players_info[this.game.player - 1].fleet_move_bonus + this.game.players_info[this.game.player - 1].temporary_fleet_move_bonus;
+    obj.ships_and_sectors = [];
+    obj.stuff_to_move = [];
+    obj.stuff_to_load = [];
+    obj.distance_adjustment = 0;
+
+    obj.max_hops += obj.ship_move_bonus;
+    obj.max_hops += obj.fleet_move_bonus;
+
+    let x = imperium_self.returnSectorsWithinHopDistance(destination, obj.max_hops, imperium_self.game.player);
+    sectors = x.sectors;
+    distance = x.distance;
+
+    for (let i = 0; i < distance.length; i++) {
+      if (obj.ship_move_bonus > 0) {
+        distance[i]--;
+      }
+      if (obj.fleet_move_bonus > 0) {
+        distance[i]--;
+      }
+    }
+
+    if (obj.ship_move_bonus > 0) {
+      obj.distance_adjustment += obj.ship_move_bonus;
+    }
+    if (obj.fleet_move_bonus > 0) {
+      obj.distance_adjustment += obj.fleet_move_bonus;
+    }
+
+    obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance);
+ 
+    if (obj.ships_and_sectors.length > 0) { return 1; }
+    return 0;
+
+  }
+
 
 
   

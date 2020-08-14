@@ -256,7 +256,21 @@
       text		:	"Have at least 1 ship in the same sector as an opponent's spacedock",
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
-	return 1;
+	for (let i in this.game.sectors) {
+	  if (imperium_self.game.sectors[i].units[player-1].length > 0) {
+	    let sys = imperium_self.returnSectorAndPlanets(i);
+	    for (let p = 0; p < sys.p.length; p++) {
+	      for (let b = 0; b < sys.p[p].units.length; b++) {
+	 	if ((b+1) != player) {
+	          for (let bb = 0; bb < sys.p[p].units[b].length; bb++) {
+		    if (sys.p[p].units[b][bb].type === "spacedock") { return 1; }
+		  }
+		}
+	      }
+	    }
+	  }
+	}
+	return 0;
       },
       scoreObjective : function(imperium_self, player) { 
 	return 1;

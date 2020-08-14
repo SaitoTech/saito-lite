@@ -60,6 +60,7 @@
     tracker.invasion = 0;
     tracker.action_card = 0;
     tracker.trade = 0;
+    tracker.action = 0;
     return tracker;
   };
   

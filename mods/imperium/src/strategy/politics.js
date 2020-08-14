@@ -73,6 +73,7 @@
 	    //
 	    if (imperium_self.game.planets['new-byzantium'].owner == -1) {
 	      imperium_self.playerAcknowledgeNotice("The Galactic Senate has yet to be established on New Byzantium. Occupy the planet to establish the Senate and earn 1 VP: ", function() {
+                imperium_self.addMove("change_speaker\t"+chancellor);
 		imperium_self.endTurn();
 	      });
 	      return 0;

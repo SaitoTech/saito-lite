@@ -1,22 +1,58 @@
 
-    this.importFaction('faction2', {
-      id		:	"faction2" ,
-      name		: 	"Universities of Jol Nar",
-      homeworld		: 	"sector50",
-      space_units	: 	["carrier","carrier","dreadnaught","fighter"],
-//      space_units	: 	["carrier","carrier","destroyer","fighter","fighter","fighter"],
-      ground_units	: 	["infantry","infantry","pds","spacedock"],
-      tech		: 	["sarween-tools", "neural-motivator", "plasma-scoring", "antimass-deflectors", "faction2-analytic", "faction2-brilliant", "faction2-fragile", "faction2-flagship"],
-      background	: 	'faction2.jpg' ,
+    this.importFaction('faction4', {
+      id		:	"faction4" ,
+      name		: 	"Sardaak N'Orr",
+      homeworld		: 	"sector53",
+      space_units	: 	["carrier","carrier","cruiser"],
+      ground_units	: 	["infantry","infantry","infantry","infantry","infantry","pds","spacedock"],
+      tech		: 	["faction4-unrelenting"],
+      //tech		: 	["faction4-unrelenting", "faction4-particle-weave", "faction4-flagship"],
+      background	: 	'faction4.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
-      intro		:	`<div style="font-weight:bold">The Republic has fallen!</div><div style="margin-top:10px">The Universities of Jol Nar have been preparing for War for decades...</div><div style="margin-top:10px">But the leadership is torn: assault New Byzantium or establish a regional power-base first?</div>`
+      intro		:	`<div style="font-weight:bold">What use are frames of quivvering flesh in times of war? Let the Sardakk do what we will -- the weak will suffer what they must.</div>`
     });
 
 
+
+
+    this.importTech('faction4-unrelenting', {
+
+      name        :       "Fragile" ,
+      faction     :       "faction4",
+      type        :       "ability" ,
+      onNewRound     :    function(imperium_self, player) {
+        if (imperium_self.doesPlayerHaveTech(player, "faction4-unrelenting")) {
+          imperium_self.game.players_info[player-1].faction4_unrelenting = 1;
+        }
+      },
+      modifyCombatRoll :	  function(imperium_self, attacker, defender, player, combat_type, roll) {
+	if (combat_type == "space" || combat_type == "ground") {
+          if (imperium_self.doesPlayerHaveTech(attacker, "faction4-unrelenting")) {
+  	    imperium_self.updateLog("Sardakk combat rolls +1 due to Sardakk");
+	    roll += 1;
+	    if (roll > 10) { roll = 10; }
+	  }
+        }
+	return roll;
+      },
+    });
+
+
+/*****
     this.importTech("faction2-flagship", {
-      name        	:       "XXCha Flagship" ,
-      faction     	:       "faction2",
+      name        	:       "Sardaak Flagship" ,
+      faction     	:       "faction4",
       type      	:       "ability" ,
+      modifyCombatRoll :	  function(imperium_self, attacker, defender, player, combat_type, roll) {
+	if (combat_type == "space" || combat_type == "ground") {
+          if (imperium_self.doesPlayerHaveTech(attacker, "faction4-unrelenting")) {
+  	    imperium_self.updateLog("Sardakk combat rolls +1 due to Sardakk");
+	    roll += 1;
+	    if (roll > 10) { roll = 10; }
+	  }
+        }
+	return roll;
+      },
       modifyUnitHits 	: function(imperium_self, player, defender, attacker, combat_type, rerolling_unit, roll, total_hits) {
         if (!imperium_self.doesPlayerHaveTech(attacker, "faction2-flagship")) { return total_hits; }
 	if (rerolling_unit.owner == attacker) {
@@ -49,28 +85,6 @@
     });
 
 
-    this.importTech('faction2-fragile', {
-
-      name        :       "Fragile" ,
-      faction     :       "faction2",
-      type        :       "ability" ,
-      onNewRound     :    function(imperium_self, player) {
-        if (imperium_self.doesPlayerHaveTech(player, "faction2-fragile")) {
-          imperium_self.game.players_info[player-1].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 1;
-        }
-      },
-      modifyCombatRoll :	  function(imperium_self, attacker, defender, player, combat_type, roll) {
-	if (combat_type == "pds" || combat_type == "space" || combat_type == "ground") {
-          if (imperium_self.doesPlayerHaveTech(attacker, "faction2-fragile")) {
-  	    imperium_self.updateLog("Jol Nar combat rolls -1 due to fragility");
-	    roll -= 1;
-	    if (roll < 1) { roll = 1; }
-	  }
-        }
-
-	return roll;
-      },
-    });
     this.importTech('faction2-brilliant', {
       name        :       "Brilliant" ,
       faction     :       "faction2",
@@ -274,6 +288,6 @@
       }
     });
 
-
+******/
 
 

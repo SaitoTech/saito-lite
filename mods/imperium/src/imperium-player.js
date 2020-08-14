@@ -2538,11 +2538,11 @@ playerBuildInfrastructure(mycallback, stage = 1) {
       function (planet) {
         if (id == "pds") {
           imperium_self.addMove("produce\t" + imperium_self.game.player + "\t" + 1 + "\t" + imperium_self.game.planets[planet].idx + "\tpds\t" + imperium_self.game.planets[planet].sector);
-          mycallback();
+          mycallback(imperium_self.game.planets[planet].sector);
         }
         if (id == "spacedock") {
           imperium_self.addMove("produce\t" + imperium_self.game.player + "\t" + 1 + "\t" + imperium_self.game.planets[planet].idx + "\tspacedock\t" + imperium_self.game.planets[planet].sector);
-          mycallback();
+          mycallback(imperium_self.game.planets[planet].sector);
         }
       },
       null
@@ -4360,6 +4360,18 @@ playerActivateSystem() {
       alert("You cannot activate that system.");
     } else {
 
+      //
+      // sanity check on whether we want to do this
+      //
+      let do_we_permit_this_activation = 1;
+      if (!imperium_self.canPlayerMoveShipsIntoSector(imperium_self.game.player, pid)) {
+	let c = confirm("You cannot move ships into this sector. Are you sure you wish to activate it?");
+	if (c) {
+        } else {
+	  return;
+	}
+      }
+ 
       activated_once = 1;
       let sys = imperium_self.returnSectorAndPlanets(pid);
       let divpid = '#' + pid;
@@ -4404,7 +4416,11 @@ playerPostActivateSystem(sector) {
   let player = imperium_self.game.player;
 
   let html = "<div class='sf-readable'>" + this.returnFaction(this.game.player) + ": </div><ul>";
-  html += '<li class="option" id="move">move into sector</li>';
+
+  if (imperium_self.canPlayerMoveShipsIntoSector(player, sector)) {
+    html += '<li class="option" id="move">move into sector</li>';
+  }
+
   if (this.canPlayerProduceInSector(this.game.player, sector)) {
     html += '<li class="option" id="produce">produce units</li>';
   }

@@ -260,7 +260,7 @@
     this.importActionCard('technology-rider', {
   	name : "Technology Rider" ,
   	type : "rider" ,
-  	text : "Select a planet and destroy all PDS units on that planet" ,
+  	text : "Research a technology for free" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
 	  if (imperium_self.game.player == action_card_player) {
