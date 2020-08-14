@@ -1399,7 +1399,7 @@ if (this.game.board[tmp[k]] != undefined) {
   }
   returnSpaceDocksOnPlanet(planet) {
     let total = 0;
-    for (let i = 0; i < planet.units.length && (i+1) == planet.owner; i++) {
+    for (let i = 0; i < planet.units.length; i++) {
       for (let k = 0; k < planet.units[i].length; k++) {
 	if (planet.units[i][k].type == "spacedock") { total++; }
       }
@@ -1409,7 +1409,7 @@ if (this.game.board[tmp[k]] != undefined) {
   returnInfantryOnPlanet(planet) {
     let total = 0;
     for (let i = 0; i < planet.units.length; i++) {
-      for (let k = 0; k < planet.units[i].length && (i+1) == planet.owner; k++) {
+      for (let k = 0; k < planet.units[i].length; k++) {
 	if (planet.units[i][k].type == "infantry") { total++; }
       }
     }

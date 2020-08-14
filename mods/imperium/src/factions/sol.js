@@ -65,14 +65,14 @@
       },
       menuOption  :       function(imperium_self, menu, player) {
         let x = {};
-	if (menu == "main") {
+	if (menu === "main") {
           x.event = 'orbitaldrop';
           x.html = '<li class="option" id="orbitaldrop">orbital drop</li>';
 	}
         return x;
       },
       menuOptionTriggers:  function(imperium_self, menu, player) { 
-        if (imperium_self.doesPlayerHaveTech(player, "faction1-orbital-drop") && menu == "main") {
+        if (imperium_self.doesPlayerHaveTech(player, "faction1-orbital-drop") && menu === "main") {
           if (imperium_self.game.players_info[player-1].strategy_tokens > 0) { 
 	    return 1;
 	  }

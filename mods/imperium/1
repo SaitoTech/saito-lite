@@ -101,7 +101,6 @@ returnPlanetInformationHTML(planet) {
 
   let p = planet;
   if (this.game.planets[planet]) { p = this.game.planets[planet]; }
-console.log(JSON.stringify(p.units));
   let ionp = this.returnInfantryOnPlanet(p);
   let ponp = this.returnPDSOnPlanet(p);
   let sonp = this.returnSpaceDocksOnPlanet(p);

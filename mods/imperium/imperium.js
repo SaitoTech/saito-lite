@@ -1520,6 +1520,7 @@ console.log("P: " + planet);
       name        :       "E-Res Siphons" ,
       faction     :       "faction2",
       type        :       "special" ,
+      color       	: 	"yellow" ,
       prereqs	:	["yellow","yellow"],
       initialize  :	  function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].eres_siphons == null) {
@@ -1548,6 +1549,7 @@ console.log("P: " + planet);
       name        :       "Deep Space Conduits" ,
       faction     :       "faction2",
       type        :       "special" ,
+      color       	: 	"blue" ,
       prereqs	:	["blue","blue"],
       initialize  :	  function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].deep_space_conduits == null) {
@@ -1960,14 +1962,14 @@ console.log("P: " + planet);
       },
       menuOption  :       function(imperium_self, menu, player) {
         let x = {};
-	if (menu == "main") {
+	if (menu === "main") {
           x.event = 'orbitaldrop';
           x.html = '<li class="option" id="orbitaldrop">orbital drop</li>';
 	}
         return x;
       },
       menuOptionTriggers:  function(imperium_self, menu, player) { 
-        if (imperium_self.doesPlayerHaveTech(player, "faction1-orbital-drop") && menu == "main") {
+        if (imperium_self.doesPlayerHaveTech(player, "faction1-orbital-drop") && menu === "main") {
           if (imperium_self.game.players_info[player-1].strategy_tokens > 0) { 
 	    return 1;
 	  }
@@ -2308,6 +2310,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
       name        :       "Instinct Training" ,
       faction     :       "faction3",
       prereqs	:	["green"] ,
+      color	:   "green" ,
       type        :       "special" ,
       initialize  :	  function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].instinct_training == null) {
@@ -2343,6 +2346,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
       name        :       "Nullification Fields" ,
       faction     :       "faction3",
       type        :       "special" ,
+      color	  :	  "yellow" ,
       prereqs	:	["yellow","yellow"] ,
       initialize  : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].field_nullification == undefined) {
@@ -3511,7 +3515,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
       text		:	"Have at least 1 ship in the same sector as an opponent's spacedock",
       type		: 	"secret" ,
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
-	for (let i in this.game.sectors) {
+	for (let i in imperium_self.game.sectors) {
 	  if (imperium_self.game.sectors[i].units[player-1].length > 0) {
 	    let sys = imperium_self.returnSectorAndPlanets(i);
 	    for (let p = 0; p < sys.p.length; p++) {
@@ -22168,7 +22172,7 @@ if (this.game.board[tmp[k]] != undefined) {
   }
   returnSpaceDocksOnPlanet(planet) {
     let total = 0;
-    for (let i = 0; i < planet.units.length && (i+1) == planet.owner; i++) {
+    for (let i = 0; i < planet.units.length; i++) {
       for (let k = 0; k < planet.units[i].length; k++) {
 	if (planet.units[i][k].type == "spacedock") { total++; }
       }
@@ -22178,7 +22182,7 @@ if (this.game.board[tmp[k]] != undefined) {
   returnInfantryOnPlanet(planet) {
     let total = 0;
     for (let i = 0; i < planet.units.length; i++) {
-      for (let k = 0; k < planet.units[i].length && (i+1) == planet.owner; k++) {
+      for (let k = 0; k < planet.units[i].length; k++) {
 	if (planet.units[i][k].type == "infantry") { total++; }
       }
     }
@@ -23538,6 +23542,7 @@ returnPlanetInformationHTML(planet) {
 
   let p = planet;
   if (this.game.planets[planet]) { p = this.game.planets[planet]; }
+console.log(JSON.stringify(p.units));
   let ionp = this.returnInfantryOnPlanet(p);
   let ponp = this.returnPDSOnPlanet(p);
   let sonp = this.returnSpaceDocksOnPlanet(p);
