@@ -144,6 +144,8 @@ class ExplorerCore extends ModTemplate {
 
           let blk = explorer_self.app.storage.loadBlockByHash(hash);
 
+console.log("BLOCK: " + JSON.stringify(blk.block));
+
           if (blk == null) {
             res.setHeader('Content-type', 'text/html');
             res.charset = 'UTF-8';
