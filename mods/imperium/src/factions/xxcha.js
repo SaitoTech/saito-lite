@@ -233,6 +233,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
       name        :       "Instinct Training" ,
       faction     :       "faction3",
       prereqs	:	["green"] ,
+      color	:   "green" ,
       type        :       "special" ,
       initialize  :	  function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].instinct_training == null) {
@@ -268,6 +269,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
       name        :       "Nullification Fields" ,
       faction     :       "faction3",
       type        :       "special" ,
+      color	  :	  "yellow" ,
       prereqs	:	["yellow","yellow"] ,
       initialize  : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].field_nullification == undefined) {

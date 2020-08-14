@@ -121,4 +121,55 @@
   }
 
 
+  returnGameOptionsHTML() {
+ 
+    return `
+
+            <label for="game_length">Game Length:</label>
+            <select name="game_length">
+              <option value="4">4 VP</option>
+              <option value="8" default>8 VP</option>
+              <option value="12">12 VP</option>
+              <option value="14">14 VP</option>
+            </select>
+
+            <label for="player1">Player 1:</label>
+            <select name="player1">
+              <option value="random" default>random</option>
+              <option value="faction1" default>Sol Federation</option>
+              <option value="faction2">Universities of Jol Nar</option>
+              <option value="faction3">XXcha Kingdom</option>
+              <option value="faction4">Sardakk N'Orr</option>
+            </select>
+ 
+            <label for="player2">Player 2:</label>
+            <select name="player2">
+              <option value="random" default>random</option>
+              <option value="faction1" default>Sol Federation</option>
+              <option value="faction2">Universities of Jol Nar</option>
+              <option value="faction3">XXcha Kingdom</option>
+              <option value="faction4">Sardakk N'Orr</option>
+            </select>
+
+            <label for="player3" class="game-players-options game-players-options-3p">Player 3:</label>
+            <select name="player3" id="game-players-select-3p" class="game-players-options game-players-options-3p">
+              <option value="random" default>random</option>
+              <option value="faction1" default>Sol Federation</option>
+              <option value="faction2">Universities of Jol Nar</option>
+              <option value="faction3">XXcha Kingdom</option>
+              <option value="faction4">Sardakk N'Orr</option>
+            </select>
+
+            <label for="player4" class="game-players-options game-players-options-4p">Player 4:</label>
+            <select name="player4" id="game-players-select-4p" class="game-players-options game-players-options-4p">
+              <option value="random" default>random</option>
+              <option value="faction1" default>Sol Federation</option>
+              <option value="faction2">Universities of Jol Nar</option>
+              <option value="faction3">XXcha Kingdom</option>
+              <option value="faction4">Sardakk N'Orr</option>
+            </select>
+
+    `;
+
+  }
 

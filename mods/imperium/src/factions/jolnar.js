@@ -185,6 +185,7 @@
       name        :       "E-Res Siphons" ,
       faction     :       "faction2",
       type        :       "special" ,
+      color       	: 	"yellow" ,
       prereqs	:	["yellow","yellow"],
       initialize  :	  function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].eres_siphons == null) {
@@ -213,6 +214,7 @@
       name        :       "Deep Space Conduits" ,
       faction     :       "faction2",
       type        :       "special" ,
+      color       	: 	"blue" ,
       prereqs	:	["blue","blue"],
       initialize  :	  function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].deep_space_conduits == null) {

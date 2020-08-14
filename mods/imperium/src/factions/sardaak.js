@@ -5,7 +5,7 @@
       homeworld		: 	"sector53",
       space_units	: 	["carrier","carrier","cruiser"],
       ground_units	: 	["infantry","infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech		: 	["faction4-unrelenting"],
+      tech		: 	["faction4-unrelenting", "faction4-flagship"],
       //tech		: 	["faction4-unrelenting", "faction4-particle-weave", "faction4-flagship"],
       background	: 	'faction4.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
@@ -38,38 +38,26 @@
     });
 
 
-/*****
-    this.importTech("faction2-flagship", {
+    this.importTech("faction4-flagship", {
       name        	:       "Sardaak Flagship" ,
       faction     	:       "faction4",
       type      	:       "ability" ,
       modifyCombatRoll :	  function(imperium_self, attacker, defender, player, combat_type, roll) {
-	if (combat_type == "space" || combat_type == "ground") {
-          if (imperium_self.doesPlayerHaveTech(attacker, "faction4-unrelenting")) {
-  	    imperium_self.updateLog("Sardakk combat rolls +1 due to Sardakk");
+	if (combat_type == "space") {
+	  let flagship_bonus = 0;
+	  if (imperium_self.doesSectorContainPlayerUnit(attacker, imperium_self.game.state.activated_sector, "flagship")) {
+	    imperium_self.updateLog("Sardakk Flagship adds +1 to dice roll");
 	    roll += 1;
 	    if (roll > 10) { roll = 10; }
-	  }
-        }
-	return roll;
-      },
-      modifyUnitHits 	: function(imperium_self, player, defender, attacker, combat_type, rerolling_unit, roll, total_hits) {
-        if (!imperium_self.doesPlayerHaveTech(attacker, "faction2-flagship")) { return total_hits; }
-	if (rerolling_unit.owner == attacker) {
-	  if (rerolling_unit.type == "flagship") {
-	    if (roll > 8) { 
-	      imperium_self.updateLog("Jol Nar flagship scores an additional hit through flagshup ability");
-	      total_hits++; 
-	      return total_hits;
-	    }
-	  }
+	  } 
 	}
-	return total_hits;
-      } ,
+        return roll;
+      },
     });
 
 
 
+/*****
 
     this.importTech('faction2-analytic', {
 

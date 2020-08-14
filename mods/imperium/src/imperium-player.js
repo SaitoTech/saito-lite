@@ -17,7 +17,43 @@ returnPlayers(num = 0) {
 
     var keys = Object.keys(factions);
     let rf = keys[this.rollDice(keys.length) - 1];
-    delete factions[rf];
+    let delete_as_assigned = 1;
+
+    if (i == 0) {
+      if (this.game.options.player1 != undefined) {
+        if (this.game.options.player1 != "random") {
+          rf = this.game.options.player1;
+          delete_as_assigned = 0;
+        }
+      }
+    }
+    if (i == 1) {
+      if (this.game.options.player2 != undefined) {
+        if (this.game.options.player2 != "random") {
+          rf = this.game.options.player2;
+          delete_as_assigned = 0;
+        }
+      }
+    }
+    if (i == 2) {
+      if (this.game.options.player3 != undefined) {
+        if (this.game.options.player3 != "random") {
+          rf = this.game.options.player3;
+          delete_as_assigned = 0;
+        }
+      }
+    }
+    if (i == 3) {
+      if (this.game.options.player4 != undefined) {
+        if (this.game.options.player4 != "random") {
+          rf = this.game.options.player4;
+          delete_as_assigned = 0;
+        }
+      }
+    }
+
+    if (delete_as_assigned) { delete factions[rf]; }
+
 
     players[i] = {};
     players[i].can_intervene_in_action_card = 0;

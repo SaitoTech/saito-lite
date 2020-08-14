@@ -13,7 +13,7 @@ class Imperium extends GameTemplate {
     this.description      = `Red Imperium is a multi-player space exploration and conquest simulator. Each player controls a unique faction vying for political control of the galaxy in the waning days of a dying Empire.`;
     this.categories	  = "Arcade Games Entertainment";
     this.minPlayers       = 2;
-    this.maxPlayers       = 3; 
+    this.maxPlayers       = 4; 
     this.type             = "Strategy Boardgame";
 
     this.gameboardWidth   = 1900;
@@ -1619,7 +1619,7 @@ console.log("P: " + planet);
       homeworld		: 	"sector53",
       space_units	: 	["carrier","carrier","cruiser"],
       ground_units	: 	["infantry","infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech		: 	["faction4-unrelenting"],
+      tech		: 	["faction4-unrelenting", "faction4-flagship"],
       //tech		: 	["faction4-unrelenting", "faction4-particle-weave", "faction4-flagship"],
       background	: 	'faction4.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
@@ -1652,38 +1652,26 @@ console.log("P: " + planet);
     });
 
 
-/*****
-    this.importTech("faction2-flagship", {
+    this.importTech("faction4-flagship", {
       name        	:       "Sardaak Flagship" ,
       faction     	:       "faction4",
       type      	:       "ability" ,
       modifyCombatRoll :	  function(imperium_self, attacker, defender, player, combat_type, roll) {
-	if (combat_type == "space" || combat_type == "ground") {
-          if (imperium_self.doesPlayerHaveTech(attacker, "faction4-unrelenting")) {
-  	    imperium_self.updateLog("Sardakk combat rolls +1 due to Sardakk");
+	if (combat_type == "space") {
+	  let flagship_bonus = 0;
+	  if (imperium_self.doesSectorContainPlayerUnit(attacker, imperium_self.game.state.activated_sector, "flagship")) {
+	    imperium_self.updateLog("Sardakk Flagship adds +1 to dice roll");
 	    roll += 1;
 	    if (roll > 10) { roll = 10; }
-	  }
-        }
-	return roll;
-      },
-      modifyUnitHits 	: function(imperium_self, player, defender, attacker, combat_type, rerolling_unit, roll, total_hits) {
-        if (!imperium_self.doesPlayerHaveTech(attacker, "faction2-flagship")) { return total_hits; }
-	if (rerolling_unit.owner == attacker) {
-	  if (rerolling_unit.type == "flagship") {
-	    if (roll > 8) { 
-	      imperium_self.updateLog("Jol Nar flagship scores an additional hit through flagshup ability");
-	      total_hits++; 
-	      return total_hits;
-	    }
-	  }
+	  } 
 	}
-	return total_hits;
-      } ,
+        return roll;
+      },
     });
 
 
 
+/*****
 
     this.importTech('faction2-analytic', {
 
@@ -1997,6 +1985,9 @@ console.log("P: " + planet);
             },
             function(planet) {
               planet = imperium_self.game.planets[planet];
+              imperium_self.addMove("resolve\tplay");
+              imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t" + "int" + "\t" + "0");
+              imperium_self.addMove("player_end_turn\t" + imperium_self.game.player);
               imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
               imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
               imperium_self.addMove("expend\t"+imperium_self.game.player+"\t"+"strategy"+"\t"+"1");
@@ -14667,6 +14658,57 @@ console.log("total hits and shots: " + total_hits + " -- " + total_shots);
   }
 
 
+  returnGameOptionsHTML() {
+ 
+    return `
+
+            <label for="game_length">Game Length:</label>
+            <select name="game_length">
+              <option value="4">4 VP</option>
+              <option value="8" default>8 VP</option>
+              <option value="12">12 VP</option>
+              <option value="14">14 VP</option>
+            </select>
+
+            <label for="player1">Player 1:</label>
+            <select name="player1">
+              <option value="random" default>random</option>
+              <option value="faction1" default>Sol Federation</option>
+              <option value="faction2">Universities of Jol Nar</option>
+              <option value="faction3">XXcha Kingdom</option>
+              <option value="faction4">Sardakk N'Orr</option>
+            </select>
+ 
+            <label for="player2">Player 2:</label>
+            <select name="player2">
+              <option value="random" default>random</option>
+              <option value="faction1" default>Sol Federation</option>
+              <option value="faction2">Universities of Jol Nar</option>
+              <option value="faction3">XXcha Kingdom</option>
+              <option value="faction4">Sardakk N'Orr</option>
+            </select>
+
+            <label for="player3" class="game-players-options game-players-options-3p">Player 3:</label>
+            <select name="player3" id="game-players-select-3p" class="game-players-options game-players-options-3p">
+              <option value="random" default>random</option>
+              <option value="faction1" default>Sol Federation</option>
+              <option value="faction2">Universities of Jol Nar</option>
+              <option value="faction3">XXcha Kingdom</option>
+              <option value="faction4">Sardakk N'Orr</option>
+            </select>
+
+            <label for="player4" class="game-players-options game-players-options-4p">Player 4:</label>
+            <select name="player4" id="game-players-select-4p" class="game-players-options game-players-options-4p">
+              <option value="random" default>random</option>
+              <option value="faction1" default>Sol Federation</option>
+              <option value="faction2">Universities of Jol Nar</option>
+              <option value="faction3">XXcha Kingdom</option>
+              <option value="faction4">Sardakk N'Orr</option>
+            </select>
+
+    `;
+
+  }
 
 
 
@@ -14687,7 +14729,43 @@ returnPlayers(num = 0) {
 
     var keys = Object.keys(factions);
     let rf = keys[this.rollDice(keys.length) - 1];
-    delete factions[rf];
+    let delete_as_assigned = 1;
+
+    if (i == 0) {
+      if (this.game.options.player1 != undefined) {
+        if (this.game.options.player1 != "random") {
+          rf = this.game.options.player1;
+          delete_as_assigned = 0;
+        }
+      }
+    }
+    if (i == 1) {
+      if (this.game.options.player2 != undefined) {
+        if (this.game.options.player2 != "random") {
+          rf = this.game.options.player2;
+          delete_as_assigned = 0;
+        }
+      }
+    }
+    if (i == 2) {
+      if (this.game.options.player3 != undefined) {
+        if (this.game.options.player3 != "random") {
+          rf = this.game.options.player3;
+          delete_as_assigned = 0;
+        }
+      }
+    }
+    if (i == 3) {
+      if (this.game.options.player4 != undefined) {
+        if (this.game.options.player4 != "random") {
+          rf = this.game.options.player4;
+          delete_as_assigned = 0;
+        }
+      }
+    }
+
+    if (delete_as_assigned) { delete factions[rf]; }
+
 
     players[i] = {};
     players[i].can_intervene_in_action_card = 0;
@@ -21216,7 +21294,9 @@ playerDiscardActionCards(num) {
 
 
   canPlayerResearchTechnology(tech) {
-  
+
+console.log("checking: " + tech);
+
     let mytech = this.game.players_info[this.game.player-1].tech;
     if (mytech.includes(tech)) { return 0; }
  
@@ -21231,11 +21311,21 @@ playerDiscardActionCards(num) {
     let unexhausted_tech_skips = this.returnPlayerPlanetTechSkips(this.game.player, 1);
 
     //
-    // we can use tech to represent non-researchable
-    // powers, these are marked as "special" because
+    // we can use tech to represent researchable
+    // powers, these are marked as "ability" because
     // they cannot be researched or stolen.
     //
-    if (techtype == "special") { return 0; };
+    if (techtype == "ability") { return 0; };
+    //
+    // faction tech is "special" so we have to do 
+    // a secondary check to see if the faction can
+    // research it.
+    //
+    if (techtype == "special") { 
+      if (techfaction != this.game.players_info[this.game.player-1].faction) {
+	return 0;
+      }
+    };
 
     for (let i = 0; i < mytech.length; i++) {
       if (this.tech[mytech[i]]) {
@@ -21352,6 +21442,11 @@ playerDiscardActionCards(num) {
       prereqs.splice(0, 1);
     }
 
+//
+//
+//
+console.log("PREREQS: " + prereqs);
+
     //
     // we don't meet the prereqs but have a skip
     //
@@ -21379,7 +21474,7 @@ playerDiscardActionCards(num) {
     //
     if (prereqs.length == 0) {
       if (techfaction == "all" || techfaction == this.game.players_info[this.game.player-1].faction) {
-	if (techtype == "normal") {
+	if (techtype == "normal" || techtype == "special") {
           return 1;
 	}
       }

@@ -525,7 +525,9 @@
 
 
   canPlayerResearchTechnology(tech) {
-  
+
+console.log("checking: " + tech);
+
     let mytech = this.game.players_info[this.game.player-1].tech;
     if (mytech.includes(tech)) { return 0; }
  
@@ -540,11 +542,21 @@
     let unexhausted_tech_skips = this.returnPlayerPlanetTechSkips(this.game.player, 1);
 
     //
-    // we can use tech to represent non-researchable
-    // powers, these are marked as "special" because
+    // we can use tech to represent researchable
+    // powers, these are marked as "ability" because
     // they cannot be researched or stolen.
     //
-    if (techtype == "special") { return 0; };
+    if (techtype == "ability") { return 0; };
+    //
+    // faction tech is "special" so we have to do 
+    // a secondary check to see if the faction can
+    // research it.
+    //
+    if (techtype == "special") { 
+      if (techfaction != this.game.players_info[this.game.player-1].faction) {
+	return 0;
+      }
+    };
 
     for (let i = 0; i < mytech.length; i++) {
       if (this.tech[mytech[i]]) {
@@ -661,6 +673,11 @@
       prereqs.splice(0, 1);
     }
 
+//
+//
+//
+console.log("PREREQS: " + prereqs);
+
     //
     // we don't meet the prereqs but have a skip
     //
@@ -688,7 +705,7 @@
     //
     if (prereqs.length == 0) {
       if (techfaction == "all" || techfaction == this.game.players_info[this.game.player-1].faction) {
-	if (techtype == "normal") {
+	if (techtype == "normal" || techtype == "special") {
           return 1;
 	}
       }
