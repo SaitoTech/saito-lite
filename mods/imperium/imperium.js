@@ -22273,7 +22273,7 @@ if (this.game.board[tmp[k]] != undefined) {
     let tmpar = [];
     for (let i = 0; i < this.game.players_info.length; i++) {
       if ((i+1) != player) {
-        tmpar.push(imperium_self.game.players_info[player-1].faction + "-" + promissary);
+        tmpar.push(this.game.players_info[player-1].faction + "-" + promissary);
       }
     }
     return tmpar;
