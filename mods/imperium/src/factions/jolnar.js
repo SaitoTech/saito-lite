@@ -60,7 +60,7 @@
         }
       },
       modifyCombatRoll :	  function(imperium_self, attacker, defender, player, combat_type, roll) {
-	if (combat_type == "pds" || combat_type == "space" || combat_type == "ground") {
+	if (combat_type == "space" || combat_type == "ground") {
           if (imperium_self.doesPlayerHaveTech(attacker, "faction2-fragile")) {
   	    imperium_self.updateLog("Jol Nar combat rolls -1 due to fragility");
 	    roll -= 1;

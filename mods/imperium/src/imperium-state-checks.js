@@ -1537,6 +1537,24 @@ if (this.game.board[tmp[k]] != undefined) {
 
 
 
+  doesPlayerHaveAntiFighterBarrageInSector(player, sector) {
+
+    if (player == -1) { return 0; }
+
+    let sys = this.returnSectorAndPlanets(sector);
+    if (sys.s.units[player-1].length > 0) { 
+      for (let i = 0; i < sys.s.units[player-1].length; i++) {
+        if (sys.s.units[player-1][i].destroyed == 0) { 
+          if (sys.s.units[player-1][i].type == "destroyer") {
+	    return 1; 
+	  } 
+	} 
+      }
+    }
+    return 0;
+
+  }
+
   doesPlayerHaveShipsInSector(player, sector) {
 
     if (player == -1) { return 0; }

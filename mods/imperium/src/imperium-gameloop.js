@@ -4096,8 +4096,9 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	//
 	// sanity check
 	//
-	if (this.doesPlayerHaveShipsInSector(attacker, sector) == 1) {	  
-
+	if (this.doesPlayerHaveShipsInSector(attacker, sector) == 1) {	 	
+	if (this.doesPlayerHaveAntiFighterBarrageInSector(attacker, sector) == 1) {	   
+	
 	  //
 	  // update log
 	  //
@@ -4249,7 +4250,8 @@ console.log("total hits and shots: " + total_hits + " -- " + total_shots);
 	  }
 	  this.game.queue.push("assign_hits\t"+attacker+"\t"+defender+"\tanti_fighter_barrage\t"+sector+"\tanti_fighter_barrage\t"+total_hits+"\tanti_fighter_barrage");
 
-        }
+        } // does have anti fighter barrage in sector
+        } // does have ships in sector
 
   	this.game.queue.splice(qe, 1);
         return 1;

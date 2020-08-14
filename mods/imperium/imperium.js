@@ -1621,7 +1621,7 @@ console.log("P: " + planet);
       homeworld		: 	"sector53",
       space_units	: 	["carrier","carrier","cruiser"],
       ground_units	: 	["infantry","infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech		: 	["faction4-unrelenting", "faction4-flagship"],
+      tech		: 	["faction4-unrelenting", "faction4-exotrireme-i", "faction4-particle-weave", "faction4-flagship"],
       //tech		: 	["faction4-unrelenting", "faction4-particle-weave", "faction4-flagship"],
       background	: 	'faction4.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
@@ -1673,226 +1673,142 @@ console.log("P: " + planet);
 
 
 
-/*****
 
-    this.importTech('faction2-analytic', {
+    this.importTech("faction4-exotrireme-i", {
 
-      name        :       "Analytic" ,
-      faction     :       "faction2",
-      type        :       "ability" ,
-      onNewRound     :    function(imperium_self, player) {
-        if (imperium_self.doesPlayerHaveTech(player, "faction2-analytic")) {
-          imperium_self.game.players_info[player-1].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 1;
+      name        :       "Exotrireme I" ,
+      faction     :       "faction4",
+      replaces    :       "dreadnaught",
+      unit        :       1 ,
+      type        :       "special",
+      prereqs     :       [],
+      initialize :       function(imperium_self, player) {
+        imperium_self.game.players_info[player-1].faction4_advanced_dreadnaught_i = 0;
+      },
+      gainTechnology :       function(imperium_self, gainer, tech) {
+        imperium_self.game.players_info[gainer-1].faction4_advanced_dreadnaught_i = 1;
+      },
+      upgradeUnit :       function(imperium_self, player, unit) {
+        if (imperium_self.game.players_info[unit.owner-1].faction4_advanced_dreadnaught_i == 1 && unit.type == "dreadnaught") {
+          unit.cost = 4;
+          unit.combat = 5;
+          unit.move = 1;
+          unit.capacity = 1;
+	  unit.strength = 2;
+	  unit.bombardment_rolls = 2;
+	  unit.bombardment_combat = 4;
+
         }
+
+        return unit;
       },
 
     });
 
 
-    this.importTech('faction2-brilliant', {
-      name        :       "Brilliant" ,
-      faction     :       "faction2",
-      type        :       "ability" ,
-      initialize     :    function(imperium_self, player) {
-	if (imperium_self.faction2_brilliant_swapped == undefined) {
-	  imperium_self.faction2_brilliant_swapped = 1;
 
-	  imperium_self.brilliant_original_event = imperium_self.strategy_cards['technology'].strategySecondaryEvent;
-	  imperium_self.strategy_cards["technology"].strategySecondaryEvent = function(imperium_self, player, strategy_card_player) {
+    this.importTech("faction4-exotrireme-ii", {
 
-	    if (imperium_self.doesPlayerHaveTech(player, "faction2-brilliant") && player != strategy_card_player && imperium_self.game.player == player) {
+      name        :       "Exotrireme I" ,
+      faction     :       "faction4",
+      replaces    :       "dreadnaught",
+      unit        :       1 ,
+      type        :       "special",
+      prereqs     :       [],
+      initialize :       function(imperium_self, player) {
+        imperium_self.game.players_info[player-1].faction4_advanced_dreadnaught_ii = 0;
+      },
+      gainTechnology :       function(imperium_self, gainer, tech) {
+        imperium_self.game.players_info[gainer-1].faction4_advanced_dreadnaught_ii = 1;
+        imperium_self.game.players_info[gainer-1].faction4_advanced_dreadnaught_i = 0;
+      },
+      upgradeUnit :       function(imperium_self, player, unit) {
+        if (imperium_self.game.players_info[unit.owner-1].faction4_advanced_dreadnaught_ii == 1 && unit.type == "dreadnaught") {
+          unit.cost = 4;
+          unit.combat = 5;
+          unit.move = 2;
+          unit.capacity = 1;
+	  unit.strength = 2;
+	  unit.bombardment_rolls = 2;
+	  unit.bombardment_combat = 4;
 
-	      imperium_self.game.players_info[player-1].cost_of_technology_secondary = 6;
+        }
 
-              imperium_self.playerAcknowledgeNotice("The Jol Nar may expend a strategy token to research a technology, and then purchase another for 6 resources:", function() {
+        return unit;
+      },
 
-                let html = '<p>Technology has been played. Do you wish to spend a strategy token to research a technology? </p><ul>';
-                    html += '<li class="option" id="yes">Yes</li>';
-                    html += '<li class="option" id="no">No</li>';
-                    html += '</ul>';
-
-                imperium_self.updateStatus(html);
-                imperium_self.lockInterface();
-
-                $('.option').off();
-                $('.option').on('click', function() {
-
-	          if (!imperium_self.mayUnlockInterface()) {
-	            alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
-	            return;
-	          }
-	          imperium_self.unlockInterface();
-
-	          let id = $(this).attr("id");
-
-		  if (id === "no") {
-		    imperium_self.endTurn();
-		    return 0;
-		  }
-
-                  imperium_self.playerResearchTechnology(function(tech) {
-
-                    imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-                    imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
-
-	  	    let resources_to_spend = 6;
-                    let html = '<p>Do you wish to spend 6 resources to research a second technology? </p><ul>';
-
-  	            if (
-        	      imperium_self.game.players_info[player-1].permanent_research_technology_card_must_not_spend_resources == 1 ||
-        	      imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources == 1
-        	    ) {
-        	      html = '<p>Do you wish to research a second technology for free?';
-        	      resources_to_spend = 0;
-        	    }
-
-	            let available_resources = imperium_self.returnAvailableResources(imperium_self.game.player);
-	            if (available_resources >= resources_to_spend) {
-	              html += '<li class="option" id="yes">Yes</li>';
-	            }
-	            html += '<li class="option" id="no">No</li>';
-	            html += '</ul>';
- 
-	            imperium_self.updateStatus(html);
-	            imperium_self.lockInterface();
-
-	            $('.option').off();
-	            $('.option').on('click', function() {
-
-	              if (!imperium_self.mayUnlockInterface()) {
-	                alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
-	                return;
-	              }
-	              imperium_self.unlockInterface();
- 
-	              let id = $(this).attr("id");
-
-	              if (id === "yes") {
-	                imperium_self.game.players_info[player-1].temporary_research_technology_card_must_not_spend_resources = 0;
-	                imperium_self.playerSelectResources(resources_to_spend, function(success) {
-	                  if (success == 1) {
-	                    imperium_self.playerResearchTechnology(function(tech) {
-	                      imperium_self.addMove("purchase\t"+player+"\ttechnology\t"+tech);
-	                      imperium_self.endTurn();
-	                    });
-	                  } else {
-	                    imperium_self.endTurn();
-		    	    return 0;
-	                  }
-	                });
-	              }
-	              if (id === "no") {
-	                imperium_self.endTurn();
-	                return 0;
-	              }
-	            });
-		  });
-                });
-              });
-	    } else {
-	      imperium_self.brilliant_original_event(imperium_self, player, strategy_card_player);
-	    }
-	  }
-	}
-      }
     });
 
 
 
-    this.importTech('faction2-eres-siphons', {
-      name        :       "E-Res Siphons" ,
-      faction     :       "faction2",
+
+    this.importTech('faction4-particle-weave', {
+      name        :       "Particle Weave" ,
+      faction     :       "faction4",
       type        :       "special" ,
-      prereqs	:	["yellow","yellow"],
-      initialize  :	  function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].eres_siphons == null) {
-          imperium_self.game.players_info[player-1].eres_siphons = 0;
-	}
+      prereqs	  :	["red","red"],
+      initialize : function(imperium_self, player) {
+        if (imperium_self.game.players_info[player-1].faction4_particle_weave == undefined) {
+          imperium_self.game.players_info[player-1].faction4_particle_weave = 0;
+          imperium_self.game.players_info[player-1].faction4_particle_weave_opponent = 0;
+          imperium_self.game.players_info[player-1].faction4_particle_weave_my_forces = 0;
+        }
       },
       gainTechnology : function(imperium_self, gainer, tech) {
-	if (tech == "faction2-eres-siphons") {
-          imperium_self.game.players_info[gainer-1].eres_siphons = 1;
+	if (tech == "faction4-particle-weave") {
+          imperium_self.game.players_info[gainer-1].faction4_particle_weave = 1;
         }
       },
-      activateSystemTriggers :    function(imperium_self, activating_player, player, sector) {
-	if (imperium_self.game.players_info[player-1].eres_siphons == 1 && activating_player != player) {
-          if (imperium_self.doesSectorContainPlayerShips(player, sector) == 1) { return 1; }
-	}
+      groundCombatTriggers : function(imperium_self, player, sector, planet_idx) {
+        if (imperium_self.doesPlayerHaveTech(player, "faction4-particle-weave")) {
+	  //
+	  // if player is in combat
+	  //
+	  let sys = imperium_self.returnSectorAndPlanets(sector);
+          let planet = sys.p[planet_idx];
+          imperium_self.game.players_info[player-1].faction4_particle_weave_my_forces = planet.units[player-1].length;
+
+        }
         return 0;
       },
-      postSystemActivation :   function(imperium_self, activating_player, player, sector) {
-        imperium_self.game.players_info[player-1].goods += 4;
-      }
-    });
 
+      groundCombatRoundEnd(imperium_self, attacker, defender, sector, planet_idx) { 
 
-
-    this.importTech('faction2-deep-space-conduits', {
-      name        :       "Deep Space Conduits" ,
-      faction     :       "faction2",
-      type        :       "special" ,
-      prereqs	:	["blue","blue"],
-      initialize  :	  function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].deep_space_conduits == null) {
-          imperium_self.game.players_info[player-1].deep_space_conduits = 0;
-          imperium_self.game.players_info[player-1].deep_space_conduits_exhausted = 0;
-	}
-      },
-      onNewRound : function(imperium_self, player) {
-        if (imperium_self.game.players_info[player-1].deep_space_conduits == 1) {
-          imperium_self.game.players_info[player-1].deep_space_conduits_exhausted = 0;
-        }
-      },
-      gainTechnology : function(imperium_self, gainer, tech) {
-	if (tech == "faction2-deep-space-conduits") {
-          imperium_self.game.players_info[gainer-1].deep_space_conduits = 1;
-          imperium_self.game.players_info[gainer-1].deep_space_conduits_exhausted = 0;
-        }
-      },
-      activateSystemTriggers : function(imperium_self, activating_player, player, sector) { 
-	if (player == imperium_self.game.player && activating_player == player) {
-	  if (imperium_self.game.players_info[activating_player-1].deep_space_conduits == 1 && imperium_self.game.players_info[activating_player-1].deep_space_conduits_exhausted == 0) {
-	    if (imperium_self.doesSectorContainPlayerUnits(activating_player, sector)) {
-	      return 1;
+        if (imperium_self.doesPlayerHaveTech(attacker, "faction4-particle-weave")) {
+	  let sys = imperium_self.returnSectorAndPlanets(sector);
+	  let planet = sys.p[planet_idx];
+	  let current_forces = planet.units[attacker-1].length;
+	  if (current_forces < imperium_self.game.players_info[attacker-1].faction4_particle_weave_my_forces) {
+	    imperium_self.updateLog("Sardakk Particle Weave vaporizes 1 opponent infantry...");
+	    for (let z = 0; z < planet.units[defender-1].length; z++) {
+	      if (planet.units[defender-1][z].type == "infantry") {
+		planet.units[defender-1].splice(z, 1);
+		z = planet.units[defender-1].length+1;
+	      }
 	    }
 	  }
+	  imperium_self.saveSystemAndPlanets(sys);
 	}
-	return 0;
-      },
-      activateSystemEvent : function(imperium_self, activating_player, player, sector) { 
 
-	let html = 'Do you wish to activate Deep Space Conduits: <ul>';
-	html    += '<li class="textchoice" id="yes">activate</li>';
-	html    += '<li class="textchoice" id="no">skip</li>';
-	html    += '</ul>';
-
-	imperium_self.updateStatus(html);
-
-	$('.textchoice').off();
-	$('.textchoice').on('click', function() {
-
-	  let action = $(this).attr("id");
-
-	  if (action == "yes") {
-	    let sectors = imperium_self.returnSectorsWithPlayerUnits(activating_player);
-	    imperium_self.game.players_info[activating_player-1].deep_space_conduits_exhausted = 1;
-            imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"deep_space_conduits_exhausted"+"\t"+"int"+"\t"+"1");
-	    for (let i = 0; i < sectors.length; i++) {
-	      imperium_self.addMove("adjacency\ttemporary\t"+sectors[i]+"\t"+sector);
+        if (imperium_self.doesPlayerHaveTech(defender, "faction4-particle-weave")) {
+	  let sys = imperium_self.returnSectorAndPlanets(sector);
+	  let planet = sys.p[planet_idx];
+	  let current_forces = planet.units[defender-1].length;
+	  if (current_forces < imperium_self.game.players_info[defender-1].faction4_particle_weave_my_forces) {
+	    imperium_self.updateLog("Sardakk Particle Weave vaporizes 1 opponent infantry...");
+	    for (let z = 0; z < planet.units[attacker-1].length; z++) {
+	      if (planet.units[attacker-1][z].type == "infantry") {
+		planet.units[attacker-1].splice(z, 1);
+		z = planet.units[attacker-1].length+1;
+	      }
 	    }
-	    imperium_self.endTurn();
 	  }
+	  imperium_self.saveSystemAndPlanets(sys);
+	}
 
-	  if (action == "no") {
-	    imperium_self.updateStatus();
-	    imperium_self.endTurn();
-	  }
-
-	});
+	return 1; 
       }
     });
-
-******/
 
 
 
@@ -13890,8 +13806,9 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	//
 	// sanity check
 	//
-	if (this.doesPlayerHaveShipsInSector(attacker, sector) == 1) {	  
-
+	if (this.doesPlayerHaveShipsInSector(attacker, sector) == 1) {	 	
+	if (this.doesPlayerHaveAntiFighterBarrageInSector(attacker, sector) == 1) {	   
+	
 	  //
 	  // update log
 	  //
@@ -14043,7 +13960,8 @@ console.log("total hits and shots: " + total_hits + " -- " + total_shots);
 	  }
 	  this.game.queue.push("assign_hits\t"+attacker+"\t"+defender+"\tanti_fighter_barrage\t"+sector+"\tanti_fighter_barrage\t"+total_hits+"\tanti_fighter_barrage");
 
-        }
+        } // does have anti fighter barrage in sector
+        } // does have ships in sector
 
   	this.game.queue.splice(qe, 1);
         return 1;
@@ -20247,8 +20165,8 @@ playerDiscardActionCards(num) {
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-      return ["1_1", "4_7"];
-//      return ["1_1", "2_1"];
+//      return ["1_1", "4_7"];
+      return ["1_1", "2_1"];
     }
 
 
@@ -22309,6 +22227,24 @@ if (this.game.board[tmp[k]] != undefined) {
   }
 
 
+
+  doesPlayerHaveAntiFighterBarrageInSector(player, sector) {
+
+    if (player == -1) { return 0; }
+
+    let sys = this.returnSectorAndPlanets(sector);
+    if (sys.s.units[player-1].length > 0) { 
+      for (let i = 0; i < sys.s.units[player-1].length; i++) {
+        if (sys.s.units[player-1][i].destroyed == 0) { 
+          if (sys.s.units[player-1][i].type == "destroyer") {
+	    return 1; 
+	  } 
+	} 
+      }
+    }
+    return 0;
+
+  }
 
   doesPlayerHaveShipsInSector(player, sector) {
 
