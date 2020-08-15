@@ -12,6 +12,9 @@ const helpers = require('../../lib/helpers/index');
 var is_this_missile_envy_noneventable = 0;
 var is_player_skipping_playing_china_card = 0;
 
+var start_turn_game_state = null;
+var start_turn_game_queue = null;
+
 //
 // allows cancellation of pick "pickagain"
 //
@@ -494,6 +497,13 @@ try {
     let player = "ussr"; if (this.game.player == 2) { player = "us"; }
 
     //
+    // copy for reversion
+    //
+    start_turn_game_state = JSON.parse(JSON.stringify(this.game.state));
+    start_turn_game_queue = JSON.parse(JSON.stringify(this.game.queue));
+
+
+    //
     // support observer mode
     //
     if (this.game.player == 0) { player = "observer"; }
@@ -534,6 +544,7 @@ try {
         // placement (initial placement)
         // ops [us/ussr] card num
         // round
+        // revert -- return to start of turn
         // move [us/ussr]
         // turn [us/ussr]
         // event [us/ussr] card
@@ -587,6 +598,10 @@ try {
           this.game.queue.splice(qe, 1);
 
         }
+        if (mv[0] === "revert") {
+          this.revertTurn();
+          this.game.queue.splice(qe, 1);
+        }
         if (mv[0] === "turn") {
           this.game.state.turn_in_round++;
           this.game.state.events.china_card_eligible = 0;
@@ -612,6 +627,7 @@ try {
             }
           } else {
 
+alert("removing "+mv[2]);
             //
             // remove from hand if present
             //
@@ -3124,9 +3140,20 @@ console.log("CARD: " + card);
 
     if (player === me) {
 
-      let html = twilight_self.formatPlayOpsStatus(player, ops);
+      //let html = twilight_self.formatPlayOpsStatus(player, ops);
+      let html = twilight_self.formatPlayOpsStatus(player, ops, true); // back button
 
       twilight_self.updateStatus(html);
+
+      twilight_self.bindBackButtonFunction(() => {
+        //
+        // revert to the start of the turn
+        //
+        twilight_self.addMove("revert");
+        twilight_self.endTurn();
+	return;
+      });
+
 
       // TODO:
       $('.card').off();
@@ -3366,7 +3393,7 @@ console.log("CARD: " + card);
         }
 
         twilight_self.bindBackButtonFunction(() => {
-    twilight_self.playOps(player, ops, card);
+          twilight_self.playOps(player, ops, card);
         });
 
       });
@@ -3380,8 +3407,11 @@ console.log("CARD: " + card);
     return confirm("Confirm your desire to play this event");
   }
 
-  formatPlayOpsStatus(player, ops) {
+  formatPlayOpsStatus(player, ops, bind_back_button=false) {
+
     let html = `<span>${player.toUpperCase()} plays ${ops} OPS:</span><ul>`;
+        html = this.formatStatusHeader(html, bind_back_button);
+
     if (this.game.state.limit_placement == 0) { html += '<li class="card" id="place">place influence</li>'; }
     if (this.game.state.limit_coups == 0) { html += '<li class="card" id="coup">launch coup</li>'; }
     if (this.game.state.limit_realignments == 0) { html += '<li class="card" id="realign">realign country</li>'; }
@@ -3398,7 +3428,6 @@ console.log("CARD: " + card);
         html += '<li class="card" id="cancel_cmc">cancel cuban missile crisis</li>';
       }
     }
-
 
     html += '</ul>';
     return html;
@@ -3484,6 +3513,32 @@ this.startClock();
     });
 
   }
+
+
+  revertTurn() {
+    let twilight_self = this;
+    twilight_self.game.state = start_turn_game_state;
+    for (let i = twilight_self.game.queue.length-1; i >= 0; i--) {
+      let tmpar = twilight_self.game.queue[i].split("\t");
+      if (tmpar[0] === "discard") {
+	if (tmpar[1] === "ussr" && twilight_self.game.player == 1) {
+          twilight_self.updateLog("USSR second-guesses themselves...");
+	  twilight_self.addCardToHand(tmpar[2]);
+	}
+	if (tmpar[1] === "us" && twilight_self.game.player == 2) {
+          twilight_self.updateLog("US second-guesses themselves...");
+	  twilight_self.addCardToHand(tmpar[2]);
+	}
+      }
+      if (tmpar[0] === "play") {
+	return 1;
+      } else {
+	twilight_self.game.queue.splice(i, 1);
+      }
+    }
+  }
+
+
 
 
   playerTurnHeadlineSelected(card, player) {
@@ -4018,7 +4073,6 @@ this.startClock();
             sre = 0;
           }
         }
-
 
         let announcement = "";
 
@@ -4887,14 +4941,15 @@ this.startClock();
   /////////////////////
   // PLACE INFLUENCE //
   /////////////////////
+  addCardToHand(card) {
+    this.game.deck[0].hand.push(card);
+  }
   removeCardFromHand(card) {
-
     for (i = 0; i < this.game.deck[0].hand.length; i++) {
       if (this.game.deck[0].hand[i] == card) {
         this.game.deck[0].hand.splice(i, 1);
       }
     }
-
   }
   removeInfluence(country, inf, player, mycallback=null) {
 

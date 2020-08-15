@@ -601,8 +601,6 @@ class Arcade extends ModTemplate {
 	    if (this.games[i].transaction.msg) {
 	      if (txmsg.game_id == this.games[i].transaction.msg.game_id) {
 
-console.log("we have received a join request for an existing game on our list...");
-
 		let existing_players_found = 0;
 
 		for (let z = 0; z < this.games[i].transaction.msg.players.length; z++) {
@@ -629,12 +627,8 @@ console.log(JSON.stringify(tx.transaction.to));
 	  }
 	}
 
-console.log("AFTER ALL THE FUSS");
-
         this.joinGameOnOpenList(tx);
         this.receiveJoinRequest(blk, tx, conf, app);
-
-console.log("OUT OF JOIN GAME ON OPEN");
 
 	//
 	// it is possible that we have multiple joins that bring us up to
@@ -662,8 +656,6 @@ console.log("OUT OF JOIN GAME ON OPEN");
 	      console.log("NUMBER OF PLAYERS NEEDED IN THIS GAME: " + number_of_players_needed);
 
 	      if (number_of_willing_players >= number_of_players_needed) {
-console.log("ALL PLAYERS: " + JSON.stringify(this.games[i].msg.players));
-	        console.log(this.games[i].msg.players[0] + " is the critical address, we are: " + this.app.wallet.returnPublicKey());
 
 	        //
 	        // first player is the only one with a guaranteed consistent order in all 
@@ -676,16 +668,9 @@ console.log("ALL PLAYERS: " + JSON.stringify(this.games[i].msg.players));
 		  this.games[i].msg.players.splice(0, 1);
 		  this.games[i].msg.players_sigs.splice(0, 1);
 
-console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-console.log("CREATING A TRANSACTION TO ACCEPT THIS GAME");
-console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-
 		  let newtx = this.createAcceptTransaction(this.games[i]);
 		  this.app.network.propagateTransaction(newtx);
 
-console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-console.log("AND PROPAGATED... ");
-console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	        }
 	      }
 	    }
@@ -794,6 +779,8 @@ console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
               //
               // only load games that are for us
               //
+	      // this eliminates observer mode....
+	      //
               if (tx.isTo(app.wallet.returnPublicKey())) {
                 let gamemod = this.app.modules.returnModule(tx.msg.game);
                 if (gamemod) {
@@ -837,12 +824,8 @@ console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
           if (!tx.isTo(app.wallet.returnPublicKey())) {
             if (this.games.length > 0) {
               for (let i = 0; i < this.games.length; i++) {
-
                 let transaction = Object.assign({ sig: "" }, this.games[i].transaction);
                 if (transaction.sig == txmsg.game_id) {
-                  //
-                  // remove game (accepted players are equal to number needed)
-                  //
                   transaction.msg = Object.assign({ players_needed: 0, players: [] }, this.games[i].msg);
                   if (parseInt(transaction.msg.players_needed) == (transaction.msg.players.length + 1)) {
                     this.removeGameFromOpenList(txmsg.game_id); // handle peer
@@ -859,9 +842,6 @@ console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
           for (let i = 0; i < this.games.length; i++) {
             let transaction = Object.assign({ sig: "" }, this.games[i].transaction);
             if (transaction.sig === tx.msg.game_id) {
-              //
-              //
-              //
               if (transaction.options) {
                 if (transaction.options.players_needed <= (transaction.players.length + 1)) {
                   console.info("ACCEPT MESSAGE SENT ON GAME WAITING FOR ONE PLAYER! -- deleting");
@@ -888,7 +868,7 @@ console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         }
 
         //
-        // only launch game if it is for us
+        // only launch game if it is for us -- observer mode?
         //
         if (tx.isTo(app.wallet.returnPublicKey())) {
           console.info("THIS GAMEIS FOR ME: " + tx.isTo(app.wallet.returnPublicKey()));
