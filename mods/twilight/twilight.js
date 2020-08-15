@@ -3411,6 +3411,7 @@ console.log("CARD: " + card);
 
     let html = `<span>${player.toUpperCase()} plays ${ops} OPS:</span><ul>`;
         html = this.formatStatusHeader(html, bind_back_button);
+	html += '<ul>';
 
     if (this.game.state.limit_placement == 0) { html += '<li class="card" id="place">place influence</li>'; }
     if (this.game.state.limit_coups == 0) { html += '<li class="card" id="coup">launch coup</li>'; }
