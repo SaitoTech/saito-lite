@@ -108,6 +108,7 @@
 	          let id = $(this).attr("id");
 
 		  if (id === "no") {
+                    imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
 		    imperium_self.endTurn();
 		    return 0;
 		  }

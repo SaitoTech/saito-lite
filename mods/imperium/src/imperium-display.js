@@ -939,11 +939,17 @@ updateLeaderboard() {
 
 updateSectorGraphics(sector) {
 
+
   //
   // handle both 'sector41' and '2_1'
   //
   let sys = this.returnSectorAndPlanets(sector);
   if (sector.indexOf("_") == -1) { sector = sys.s.tile; }
+
+  for (let i = 0; i < this.game.players_info.length; i++) {
+    this.eliminateDestroyedUnitsInSector((i+1), sector);
+  }
+
 
   let divsector = '#hex_space_' + sector;
   let fleet_color = '';

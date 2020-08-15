@@ -178,8 +178,8 @@
       if (ship.type == "fighter") { fighter_ships++; }
     }
 
-    if ((fleet_supply-capital_ships) > 0) {
-      return (fleet_supply-capital_ships);
+    if ((fleet_supply - capital_ships) > 0) {
+      return (fleet_supply - capital_ships);
     }
     
     return 0;
@@ -242,10 +242,23 @@
     }
 
     //
+    // fighters can be parked at space docks
+    //
+    for (let i = 0; i < sys.p.length; i++) {
+      for (let ii = 0; ii < sys.p[i].units[player-1].length; ii++) {
+        if (sys.p[i].units[player-1][ii].type === "spacedock") {
+	  fighter_ships -= 3;
+	  if (fighter_ships < 0) { fighter_ships = 0; }
+        }
+      }
+    }
+
+
+    //
     // fighter II
     //
     if (imperium_self.doesPlayerHaveTech(player, "fighter-ii")) {
-      if ((fighter_ships+capital_ships-spare_capacity) > fleet_supply) { return (fighter_ships - (spare_capacity+(fleet_supply-capital_ships))); }
+      if ((fighter_ships + capital_ships - spare_capacity) > fleet_supply) { return (fighter_ships - (spare_capacity+(fleet_supply-capital_ships))); }
     }
 
     //

@@ -45,7 +45,7 @@ class Twilight extends GameTemplate {
     this.boardgameWidth  = 5100;
 
     this.moves           = [];
-    this.is_testing 	 = 0;
+    this.is_testing 	 = 1;
 
     this.log_length 	 = 150;
     this.interface 	 = 1;
@@ -1879,9 +1879,9 @@ console.log("CARD: " + card);
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["tehran","starwars","saltnegotiations","peronism", "manwhosavedtheworld", "europe", "greatsociety", "nationbuilding", "asia"];
+              this.game.deck[0].hand = ["missileenvy","starwars","saltnegotiations","peronism", "manwhosavedtheworld", "europe", "europe", "asia"];
             } else {
-              this.game.deck[0].hand = ["eurocommunism", "perestroika", "missileenvy", "redscare", "cubanmissile","china","vietnamrevolts"];
+              this.game.deck[0].hand = ["duckandcover", "fiveyearplan", "wwby", "mideast", "redscare", "cubanmissile","china","vietnamrevolts"];
             }
           }
 
@@ -3639,6 +3639,9 @@ this.startClock();
     }
 
     is_this_missile_envy_noneventable = this.game.state.events.missileenvy;
+    if ( (player === "ussr" && this.game.state.events.missile_envy == 1) || (player === "us" && this.game.state.events.missile_envy == 2)) {
+      is_this_missile_envy_noneventable = 1;
+    }
 
     let user_message = "";
     if (selected_card == null) {
@@ -3823,12 +3826,15 @@ this.startClock();
       if (twilight_self.app.browser.isMobileBrowser(navigator.userAgent)) {
         twilight_self.mobileCardSelect(card, player, function() {
 
+	  //
           // cancel missile envy if played appropriately
+	  //
+/*** August 15
           if (twilight_self.game.state.events.missile_envy != 0 && twilight_self.game.state.events.missileenvy != 0 && card == "missileenvy") {
             twilight_self.game.state.events.missile_envy = 0;
             twilight_self.game.state.events.missileenvy = 0;
           }
-
+****/
           twilight_self.playerTurnCardSelected(card, player);
         }, "select");
         return;
@@ -3836,10 +3842,12 @@ this.startClock();
 
 
       // cancel missile envy if played appropriately
+/**** August 15
       if (twilight_self.game.state.events.missile_envy != 0 && twilight_self.game.state.events.missileenvy != 0 && card == "missileenvy") {
         twilight_self.game.state.events.missile_envy = 0;
         twilight_self.game.state.events.missileenvy = 0;
       }
+****/
 
       twilight_self.playerTurnCardSelected(card, player);
 
@@ -4111,6 +4119,20 @@ this.startClock();
 
         let action = $(this).attr("id");
         $('.card').off();
+
+        //
+        // missile envy (reset if held over headline)
+        // - added August 15 2020
+        //
+	if ((twilight_self.game.player == 2 && twilight_self.game.state.events.missile_envy == 2) || (twilight_self.game.player == 1 && twilight_self.game.state.events.missile_envy == 1)) {
+	  if (card == "missileenvy") {
+alert("UPDATED TO ZERO HERE");
+	    twilight_self.game.state.events.missileenvy = 0;
+	    twilight_self.game.state.events.missile_envy = 0;
+	    is_this_missile_envy_noneventable = 0;
+	  }
+	}
+
 
         //
         // Cuban Missile Crisis

@@ -85,7 +85,7 @@
 
     if (imperium_self.game.players_info[player-1].action_cards_in_hand > imperium_self.game.players_info[player-1].action_card_limit) {
       if (imperium_self.game.player == player) {
-	imperium_self.playerDiscardActionCards( (imperium_self.game.players_info[player-1].action_card_limit - imperium_self.game.players_info[player-1].action_cards_in_hand) );
+	imperium_self.playerDiscardActionCards( ( imperium_self.game.players_info[player-1].action_cards_in_hand - imperium_self.game.players_info[player-1].action_card_limit ) );
       }
       return 0;
     }
@@ -243,36 +243,57 @@ console.log("GET THAT VP");
 
 
   eliminateDestroyedUnitsInSector(player, sector) {
-  
+
+console.log(player + " -- " + sector);  
+
+    player = parseInt(player);
     if (player < 0) { return; }
   
     let sys = this.returnSectorAndPlanets(sector);
+    let save_sector = 0;
   
     //
     // in space
     //
-    for (let z = 0; z < sys.s.units[player-1].length; z++) {
+    let unit_length = sys.s.units[player-1].length;
+    for (let z = 0; z < unit_length; z++) {
       if (sys.s.units[player-1][z].destroyed == 1) {
+        save_sector = 1;
         sys.s.units[player-1].splice(z, 1);
         z--;
+	unit_length--;
       }
     }
-  
+
+console.log("no planets");  
+
     //
     // on planets
     //
-    for (let planet_idx = 0; planet_idx < sys.p.length; planet_idx++) {
-      for (let z = 0; z < sys.p[planet_idx].units[player-1].length; z++) {
-        if (sys.p[planet_idx].units[player-1][z].destroyed == 1) {
+    if (sys.p) {
+      for (let planet_idx = 0; planet_idx < sys.p.length; planet_idx++) {
+console.log("on " + planet_idx);
+console.log(JSON.stringify(sys.p[planet_idx]));
+        let unit_length = sys.p[planet_idx].units[player-1].length;
+console.log("pu " + unit_length);
+        for (let z = 0; z < unit_length; z++) {
+console.log("pu on " + z);
+          if (sys.p[planet_idx].units[player-1][z].destroyed == 1) {
 console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
-          sys.p[planet_idx].units[player-1].splice(z, 1);
-          z--;
+            save_sector = 1;
+            sys.p[planet_idx].units[player-1].splice(z, 1);
+            z--;
+            unit_length--;
+          }
         }
       }
     }
   
-    this.saveSystemAndPlanets(sys);
-  
+
+    if (save_sector == 1) {
+      this.saveSystemAndPlanets(sys);
+    }
+
   }
   
 

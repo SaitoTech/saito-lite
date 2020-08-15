@@ -93,12 +93,12 @@
 
     this.importTech("faction4-exotrireme-ii", {
 
-      name        :       "Exotrireme I" ,
+      name        :       "Exotrireme II" ,
       faction     :       "faction4",
       replaces    :       "dreadnaught",
       unit        :       1 ,
       type        :       "special",
-      prereqs     :       [],
+      prereqs     :       ["blue","blue","yellow"],
       initialize :       function(imperium_self, player) {
         imperium_self.game.players_info[player-1].faction4_advanced_dreadnaught_ii = 0;
       },

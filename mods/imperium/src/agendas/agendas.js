@@ -360,7 +360,7 @@
 	  //
 	  imperium_self.game.planets[winning_choice].units = []; 
 	  for (let i = 0; i < imperium_self.game.players_info.length; i++) {
-	    imperium_self.game.planets[winning_choice].units = [];
+	    imperium_self.game.planets[winning_choice].units.push([]);
 	  }
 
 	  imperium_self.game.planets[winning_choice].locked = 1;
@@ -754,7 +754,7 @@
 	      imperium_self.game.state.minister_of_policy_player = i+1;
 	    }
 	  }
-	  imperium_self.game.players_info[imperium_self.game.state.minister_of_policy_player].action_cards_bonus_when_issued++;
+	  imperium_self.game.players_info[imperium_self.game.state.minister_of_policy_player-1].action_cards_bonus_when_issued++;
         }
   });
 

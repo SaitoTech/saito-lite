@@ -5089,6 +5089,8 @@ playerDiscardActionCards(num) {
 
   let imperium_self = this;
 
+  if (num < 0) { imperium_self.endTurn(); }
+
   let html = "<div class='sf-readable'>You must discard <div style='display:inline' class='totalnum' id='totalnum'>" + num + "</div> action card"; if (num > 1) { html += 's'; }; html += ':</div>';
   html += '<ul>';
   for (let i = 0; i < this.game.deck[1].hand.length; i++) {

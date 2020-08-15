@@ -861,11 +861,14 @@
 	  if (elected_choice.indexOf("planet") == 0 || elected_choice.indexOf("new-byzantium") == 0) { is_planet = 1; }
 	  if (elected_choice.indexOf("sector") == 0) { is_sector = 1; }
 
+console.log("VOTING OPTIONS: ");
+console.log(JSON.stringify(this.game.state.choices));
+
 	  if (is_planet == 1) {
             this.updateLog(this.returnFaction(player) + " votes " + votes + " on " + this.game.planets[this.game.state.choices[vote]].name);
 	  }
 	  if (is_sector == 1) {
-            this.updateLog(this.returnFaction(player) + " votes " + votes + " on " + this.game.sectors[this.game.state.choices[vote]].sector);
+            this.updateLog(this.returnFaction(player) + " votes " + votes + " on " + this.game.sectors[this.game.state.choices[vote]].name);
 	  }
 	  if (is_player == 1) {
             this.updateLog(this.returnFaction(player) + " votes " + votes + " on " + this.returnFaction(this.game.state.choices[vote]));
@@ -3314,6 +3317,8 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 
 
         }
+
+	this.updateSectorGraphics(sector);
 
         return 1;
 
