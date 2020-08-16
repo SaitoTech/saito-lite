@@ -1,6 +1,6 @@
 const GameTemplate = require('../../lib/templates/gametemplate');
 const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
-//const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
+const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
 //const GameHammerMobile = require('../../lib/templates/lib/game-hammer-mobile/game-hammer-mobile');
 const helpers = require('../../lib/helpers/index');
 
