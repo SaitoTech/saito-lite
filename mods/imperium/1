@@ -2282,11 +2282,6 @@ console.log("tx processed this loop... 2");
 
     this.game.status = str;
 
-    if (this.useHUD) {
-      this.hud.updateStatus(str);
-      return;
-    }
-
     try {
       if (this.browser_active == 1) {
         let status_obj = document.getElementById("status");    

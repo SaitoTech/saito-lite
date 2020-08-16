@@ -23906,8 +23906,8 @@ addUIEvents() {
 
   if (this.browser_active == 0) { return; }
 
-  GameBoardSizer.render(this.app, this.data);
-  GameBoardSizer.attachEvents(this.app, this.data, '.gameboard');
+  //GameBoardSizer.render(this.app, this.data);
+  //GameBoardSizer.attachEvents(this.app, this.data, '.gameboard');
 
 
 

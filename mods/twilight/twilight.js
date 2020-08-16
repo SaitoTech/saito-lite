@@ -1,7 +1,7 @@
-const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
-const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
-const GameHammerMobile = require('../../lib/templates/lib/game-hammer-mobile/game-hammer-mobile');
 const GameTemplate = require('../../lib/templates/gametemplate');
+const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
+//const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
+//const GameHammerMobile = require('../../lib/templates/lib/game-hammer-mobile/game-hammer-mobile');
 const helpers = require('../../lib/helpers/index');
 
 
@@ -270,26 +270,26 @@ class Twilight extends GameTemplate {
     this.addLogCardEvents();
   }
 
+
   initializeHTML(app) {
+
     super.initializeHTML(app);
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
-
-    let data = {}; 
-        data.game = this;
+    this.hud.render(app, this);
 
     try {
       if (app.browser.isMobileBrowser(navigator.userAgent)) {
 
-        GameHammerMobile.render(this.app, data);
-        GameHammerMobile.attachEvents(this.app, data, '.gameboard');
+        GameHammerMobile.render(this.app, this);
+        GameHammerMobile.attachEvents(this.app, this, '.gameboard');
 
       } else {
 
-        GameBoardSizer.render(this.app, data);
-        GameBoardSizer.attachEvents(this.app, data, '.gameboard');
+        GameBoardSizer.render(this.app, this);
+        GameBoardSizer.attachEvents(this.app, this, '.gameboard');
 
         $('#gameboard').draggable();
 
@@ -627,7 +627,6 @@ try {
             }
           } else {
 
-alert("removing "+mv[2]);
             //
             // remove from hand if present
             //
@@ -14092,9 +14091,6 @@ console.log("card: " + card);
     this.addShowCardEvents();
   }
 
-  updateStatus(status_html) {
-    this.hud.updateStatus(status_html, this.addShowCardEvents.bind(this));
-  }
 
   updateRound() {
 
@@ -15202,9 +15198,13 @@ console.log("card: " + card);
   //
   // OVERWRITES GAME.JS MODULE TO ADD CARD HOVERING
   //
-  updateLog(str, length = 150, force=0) {
-    this.hud.updateLog(str, this.addLogCardEvents.bind(this), force);
-  }
+//  updateLog(str, length = 150, force=0) {
+//    this.hud.updateLog(str, this.addLogCardEvents.bind(this), force);
+//  }
+//  updateStatus(status_html) {
+//    this.hud.updateStatus(status_html, this.addShowCardEvents.bind(this));
+//  }
+
 
 
 
