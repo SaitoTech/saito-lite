@@ -217,14 +217,21 @@ input#game_board_sizer {
 }
 
 .cardbox-menu {
-  position: absolute;
-  display: none;
-  top: 50%;
-  left: 50%;
-  width: 10%;
-  height: 10%;
-  z-index: 999999;
-  transform: translate(-50%, -50%);
+  position: relative;
+  left: 0%;
+  top: 100%;
+  text-align: center;
+  font-size: 2em;
+  font-weight: bold;
+  background-color: #eb2d2d;
+  border: 2px solid #111311;
+  cursor: pointer;
+  padding: 10px 25px;
+  text-decoration: none;
+  color: white;
+  border-radius: 10px;
+  z-index: 900009;
+
 }
 
 .cardbox-exit {
@@ -248,24 +255,6 @@ input#game_board_sizer {
   justify-content: center;
   align-items: center;
   z-index: 9999999999;
-}
-
-.cardbox-menu {
-  text-align: center;
-  width: 72%;
-  font-size: 2em;
-  font-weight: bold;
-  background-color: #eb2d2d;
-  border: 2px solid #111311;
-  cursor: pointer;
-  padding: 10px 25px;
-  text-decoration: none;
-  color: white;
-  border-radius: 10px;
-  position: fixed;
-  left: 0%;
-  top: 100%;
-  z-index: 900009;
 }
 
 
