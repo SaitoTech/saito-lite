@@ -15,11 +15,6 @@
 .china_card_status_ussr_facedown {
   background-color: #ea3041;
 }
-.hud-menu {
-  grid-area: hud-menu;
-  display: flex;
-}
-
 .china_card_status {
   position: absolute;
   width: 130px;
@@ -86,21 +81,6 @@ body {
   margin-top: unset;
 }
 
-/** STATUS **/
-.status {
-  padding: 5px;
-  text-align: center;
-}
-
-.status-header {
-  display: grid;
-  grid-template-columns: 1em auto;
-  padding: 10px 5px;
-}
-
-.log {
-  padding: 2px;
-}
 
 /** Modal **/
 .modal {
@@ -266,15 +246,7 @@ body {
   color: #fff
 } */
 
-.hud-body {
-  height: 380px;
-}
 
-.hud-menu-topleft {
-  display: none;
-}
-
-/* #menu-container {}
 
 #menu-container > div {
   margin-bottom: 0.5em;
@@ -317,12 +289,6 @@ body {
   width: 100%;
   padding: 0.25em;
   margin-top: 5px;
-}
-
-.display-cards-status {
-  padding: 0;
-  padding-top: 0.5em;
-  overflow: unset;
 }
 
 .round {
@@ -465,11 +431,6 @@ body {
   margin-top: 0;
 }
 
-.cardbox-status-container {
-  display: grid;
-  grid-template-rows: auto auto;
-  height: 100%;
-}
 
 .cardbox_menu {
   position: absolute;
@@ -581,295 +542,3 @@ body {
   position: absolute;
 }
 
-@media only screen and (min-width: 750px) {
-  .status {
-    /* float: none;
-    z-index: 40000; */
-  }
-  .cardbox {
-    position: fixed;
-    float: none;
-    z-index: 2;
-  }
-}
-
-
-@media only screen and (orientation: portrait) and (max-width: 750px) {
-  .status {
-    font-size: 0.8em;
-  }
-
-  .status > ul {
-    margin: 0;
-  }
-
-  .status {
-    padding-bottom: unset;
-  }
-
-  .hud-body {
-    height: unset;
-  }
-
-  .hud-menu-overlay {
-    display: grid;
-    grid-template-rows: auto 1em;
-    font-size: 0.8em;
-  }
-
-  .status > ul > li {
-    padding: 20px;
-  }
-
-  .status > span > ul > li {
-    padding: 3vh;
-  }
-
-  .hud-menuoverlay > div > ul > li {
-    padding: 20px;
-  }
-
-  .cardimg-hud {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 16vh;
-    width: calc(16vh * 0.72110);
-  }
-
-  .cardbox {
-    position: fixed;
-    z-index: 90000;
-    top: 33vh;
-    left: 53vw;
-    display: block;
-    height: 60vh;
-    width: calc(60vh * 0.7211);
-  }
-
-  .cardbox_menu_btn {
-    width: 97%;
-  }
-
-  .display-cards {
-    display: flex;
-    flex-direction: row;
-    padding: 0.5em;
-    height: 74%;
-    height: unset;
-    width: unset;
-  }
-
-  .display-cards-status {
-    padding: 0;
-    margin: 0;
-    overflow: scroll;
-  }
-
-  .cardbox-hud {
-    display: block;
-    min-width: calc(16vh * 0.7211);
-    min-height: 100%;
-    z-index: 2;
-    width: calc(16vh * 0.7211);
-    transform: translate(0%, 0%);
-    margin-right: 0.5em;
-    margin-top: 0em;
-  }
-
-  .cardbox-status-container {
-    display: grid;
-    grid-template-rows: auto auto;
-    grid-gap: 0.5em;
-    /* height: 75%; */
-  }
-
-
-  .hud {
-    max-height: 35vh;
-  }
-  .cardbox-hud-status {
-    width: calc(16vh * 0.72110);
-    min-width: calc(16vh * 0.72110);
-    height: 16vh;
-    min-height: 16vh;
-    margin-right: 0.75em;
-  }
-
-  #sizer {
-    padding: 20px 15px;
-  }
-
-  .hud-header li {
-    width: 20%;
-    font-size: 0.8em;
-  }
-}
-
-
-
-@media only screen and (orientation: portrait) and (max-height: 700px) {
-  /* .cardbox {
-    zoom: 0.5;
-    top: 23%;
-  } */
-}
-
-
-
-@media only screen and (orientation: landscape) and (max-height: 700px) {
-
-  .hud-menu {
-    position: absolute;
-    display: block;
-    top: 0px;
-    left: 0px;
-    height: 30px;
-    width: auto;
-    max-width: auto;
-    z-index: 90000;
-    float: left;
-    grid-area: none;
-  }
-
-  .hud-menu-inhud {
-    display: none;
-  }
-  .hud-menu-topleft {
-    display: flex;
-  }
-  .hud-menu-topleft ul {
-    width: auto;
-    margin-bottom: 0px;
-  }
-  .hud-menu-topleft ul li {
-    height: 30px;
-    line-height: 35px;
-    float:left;
-    width: auto;
-    max-width: auto;
-    margin-left:10px;
-    margin-right: 10px;
-  }
-  .hud-menu-first-letter {
-  }
-  .hud-menu-other-letters { }
-
-  .log {
-    display: block;
-    visibility: hidden;
-  }
-
-  .hud {
-    grid-template-areas:
-      "hud-header hud-content"
-      "hud-transparent hud-content";
-    grid-template-columns: 2em auto;
-    grid-template-rows: 30px auto;
-    min-width: unset;
-    max-width: unset;
-    width: 22vw;
-    height: 100vh;
-    right: -12vw;
-    left: unset;
-    cursor: unset;
-    max-height: unset;
-    box-shadow: 0px 0px 0px 0px #BBB;
-  }
-  .hud-hidden-horizontal {
-    width: 2em;
-    right: -1em;
-  }
-
-  .status {
-    font-size: 0.8em;
-  }
-
-  .status > ul {
-    margin: 0;
-  }
-
-  .status > ul > li {
-    padding: 20px;
-  }
-
-  .status > span > ul > li {
-    padding: 3vh;
-  }
-
-  .hud-menu-overlay > div > ul > li {
-    padding: 20px;
-  }
-
-  .cardbox {
-    position: fixed;
-    height: 50vh;
-    width: calc(50vh * 0.7211);
-    left: 20vw;
-    transform: translate(0%, -5%);
-  }
-
-  .display-cards {
-    display:flex;
-    flex-direction:column;
-    align-items: center;
-    overflow-y: scroll;
-    height: 97%;
-    width: 100%;
-    /* height: 90%; */
-    padding-top: 0.5em;
-  }
-
-  .cardbox-hud {
-    width: calc(26vh * 0.7211);
-    min-height: 26vh;
-    margin-top: 0;
-    margin-bottom: 0.5em;
-  }
-
-  .cardimg-hud {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 26vh;
-    width: calc(26vh * 0.72110);
-  }
-
-  .cardbox_menu_btn {
-    width: 97%;
-  }
-
-  .cardbox-exit {
-    left: 88.9%;
-  }
-}
-
-
-@media (min-width: 481px) and (max-width: 850px) and (max-height: 500px) {
-  .cardbox {
-    /* position: fixed;
-    height: 95vh;
-    width: calc(95vh * 0.7211);
-    left: calc(45vw - 17.8em);
-    transform: translate(0%, -67%); */
-
-    position: fixed;
-    height: 75vh;
-    width: calc(75vh * 0.7211);
-    left: calc(40vw - 25vw);
-    transform: translate(0%, -29%);
-  }
-
-  #cardbox-exit-background {
-    width: 5vw;
-    height: 5vw;
-  }
-}
-
-input#game_board_sizer {
-  position: absolute;
-  top: 20px;
-  right: 50px;
-  width: 300px;
-  background: #0004;
-}

@@ -14,6 +14,96 @@
 ::-webkit-scrollbar-corner { background-color: #c9c9c9;}
 ::-webkit-resizer { background-color: #ddd;}
 
+body {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 13px;
+  padding: 0px;
+  margin: 0px;
+  background-color: #4e4e4e !important;
+}
+
+.hud {
+  display: grid;
+  font-family: visuelt-light;
+  position: fixed;
+  left: 50%;
+  bottom: 0%;
+  float: none;
+  z-index: 40;
+  font-size: 1.2rem;
+  border-bottom: 0px;
+  transform: translate(-50%, -0%);
+  transition: height 0.2s ease, width 0.2s ease, right 0.2s ease;
+  box-shadow: 0 0 3px 3px #BBB;
+}
+.hud-header {
+  display: grid;
+  width: 100%;
+  height: 40px;
+  cursor: move;
+  background-color: whitesmoke;
+  border-bottom: 1px solid var(--saito-skyline-grey);
+}
+.hud-body {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  cursor: move;
+  background-color: whitesmoke;
+  border-bottom: 1px solid var(--saito-skyline-grey);
+}
+.hud-menu {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  display: block;
+  width: 200px;
+  height: 50px;
+  background-color: whitesmoke;
+  border-bottom: 1px solid var(--saito-skyline-grey);
+}
+.hud-menu ul li {
+  color: black;
+  list-style: none;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  border-bottom: none;
+  height: 50px;
+  line-height: 50px;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+ul li a {
+  color: black;
+}
+.hud-button {
+  padding: 9px;
+  padding-right: 3px;
+}
+.hud-hidden-vertical {
+  height: 40px;
+}
+
+
+
+.status-message {
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.status-cardbox {
+  display: grid;
+  row-gap: 10px;
+  overflow-x: scroll;
+  height: 100%;
+  width: 100%;
+  padding: 0.25em;
+  margin-top: 5px;
+}
 
 .log {
   top: 0px;
@@ -31,12 +121,11 @@
   border-left: 3px solid var(--my-color);
   font-size: 1.25em;
   font-family: courier, sans-serif;
+  padding: 2px;
 }
-
 .log:hover {
   right: 0;
 }
-
 .log-lock {
   right: 0;
   border-left: 1px solid var(--my-color);
@@ -45,60 +134,65 @@
 
 
 .status {
-  overflow-y: scroll;
+  padding: 5px;
+  text-align: center;
 }
 
-
-
-.hud {
-  display: grid;
-  grid-template-areas:
-    "hud-header hud-header"
-    "hud-menu hud-body";
-  grid-template-rows: 40px auto;
-  grid-template-columns: 100px auto;
-  font-family: visuelt-light;
-  position: fixed;
-  left: 50%;
-  bottom: 0%;
-  float: none;
-  z-index: 40;
-  font-size: 1.2rem;
-  height: 420px;
-  width: 600px;
-  min-width: 600px;
-  max-width: 9.1em;
-  border-bottom: 0px;
-  transform: translate(-50%, -0%);
-  transition: height 0.2s ease, width 0.2s ease, right 0.2s ease;
-  box-shadow: 0 0 3px 3px #BBB;
-}
-.hud-header {
-  grid-area: hud-header;
-  display: grid;
-  width: 100%;
-  height: 40px;
-  cursor: move;
-  background-color: whitesmoke;
-  border-bottom: 1px solid var(--saito-skyline-grey);
-}
-.hud-body {
-  grid-area: hud-body;
-  display: grid;
-  width: 100%;
-  height: 40px;
-  cursor: move;
-  background-color: whitesmoke;
-  border-bottom: 1px solid var(--saito-skyline-grey);
-}
-.hud-menu {
-  grid-area: hud-menu;
-  display: grid;
-  width: 100%;
+.status-overlay {
   height: 100%;
-  cursor: move;
-  background-color: whitesmoke;
-  border-bottom: 1px solid var(--saito-skyline-grey);
+}
+
+
+
+
+.hud-square {
+  height: 420px;
+  width: 510px;
+  min-width: 510px;
+  max-width: 9.1em;
+}
+.hud-square .hud-body .status .status-cardbox {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.hud-long {
+  width: 1200px;
+  max-width: 1200px;
+  height: 285px;
+  max-height: 285px;
+}
+.hud-long .hud-body .status .status-cardbox {
+  grid-template-columns: repeat( auto-fit, minmax(80px, 1fr) );
+}
+.hud-vertical {
+  width: 210px;
+  max-width: 210px;
+  height: 100%;
+  max-height: 100%;
+  top: 0px;
+  left: -70px;
+}
+.hud-vertical .hud-body .status .status-message {
+  max-width: 200px;
+}
+.hud-vertical .hud-body .status .status-cardbox {
+  grid-template-columns: 1fr;
+}
+.hud-vertical:hover {
+  left: 105px;
+}
+.hud-vertical-lock {
+  left: 105px;
+}
+
+
+
+
+input#game_board_sizer {
+  position: absolute;
+  top: 20px;
+  right: 50px;
+  width: 300px;
+  background: #0004;
 }
 
 
@@ -106,16 +200,73 @@
 
 
 
-
-body {
-  font-family: arial, helvetica, sans-serif;
-  font-size: 13px;
-  padding: 0px;
-  margin: 0px;
-  background-color: #4e4e4e !important;
+.hud-cardbox {
+  position: absolute;
+  height: 48vh;
+  max-height: 520px;
+  width: calc(48vh * 0.72110);
+  max-width: 375px;
+  background-image: url("/twilight/img/Base.svg");
+  background-size: cover;
+  z-index: 2;
+  display: none;
+  top: 27%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 
+.cardbox-menu {
+  position: absolute;
+  display: none;
+  top: 50%;
+  left: 50%;
+  width: 10%;
+  height: 10%;
+  z-index: 999999;
+  transform: translate(-50%, -50%);
+}
 
+.cardbox-exit {
+  text-align: center;
+  font-size: 2.9em;
+  color: white;
+  z-index: 9999999999;
+  cursor: pointer;
+}
+
+.cardbox-exit-background {
+  position: absolute;
+  left: 85%;
+  width: 5vh;
+  height: 5vh;
+  border: 3px black solid;
+  border-radius: 100px;
+  top: -1%;
+  background: #eb2d2d;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999999999;
+}
+
+.cardbox-menu {
+  text-align: center;
+  width: 72%;
+  font-size: 2em;
+  font-weight: bold;
+  background-color: #eb2d2d;
+  border: 2px solid #111311;
+  cursor: pointer;
+  padding: 10px 25px;
+  text-decoration: none;
+  color: white;
+  border-radius: 10px;
+  position: fixed;
+  left: 0%;
+  top: 100%;
+  z-index: 900009;
+}
 
 
 

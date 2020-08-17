@@ -123,9 +123,9 @@ class Twilight extends GameTemplate {
       </div>
     `;
 
-    $('.hud-menu-overlay').html(html);
+    $('.status-overlay').html(html);
     $('.status').hide();
-    $('.hud-menu-overlay').show();
+    $('.status-overlay').show();
 
 
     $('.menu-item').on('click', function() {
@@ -159,7 +159,7 @@ class Twilight extends GameTemplate {
         }
       });
 
-      let display_message = `<div class="display-cards">${cards_img_html.join('')}</div>`;
+      let display_message = `<div class="status-cardbox">${cards_img_html.join('')}</div>`;
 
       if (cards_img_html.length == 0) {
         display_message = `
@@ -169,7 +169,7 @@ class Twilight extends GameTemplate {
         `;
       }
 
-      $('.hud-menu-overlay').html(display_message);
+      $('.status-overlay').html(display_message);
     });
 
   }
@@ -191,9 +191,9 @@ class Twilight extends GameTemplate {
         </ul>
       </div>`;
 
-    $('.hud-menu-overlay').html(user_message);
+    $('.status-overlay').html(user_message);
     $('.status').hide();
-    $('.hud-menu-overlay').show();
+    $('.status-overlay').show();
 
     // leave action enabled on other panels
     //$('.card').off();
@@ -242,7 +242,7 @@ class Twilight extends GameTemplate {
     // let opponent = await this.app.dns.fetchIdentifierPromise(this.game.opponents[0]);
 
     $('.status').hide();
-    $('.hud-menu-overlay').show();
+    $('.status-overlay').show();
     // let's use the address controller for this in the future;
     let opponent = this.game.opponents[0];
 
@@ -256,8 +256,8 @@ class Twilight extends GameTemplate {
       </div>
     `;
 
-    $('.hud-menu-overlay').html(user_message);
-    $('.hud-menu-overlay').show();
+    $('.status-overlay').html(user_message);
+    $('.status-overlay').show();
     $('.status').hide();
 
   }
@@ -266,7 +266,7 @@ class Twilight extends GameTemplate {
     //
     // we explicitly add this in the mobile version
     //
-    $('.hud-menu-overlay').html(`<div style="padding: 0.5em">${$('.log').html()}</div>`);
+    $('.status-overlay').html(`<div style="padding: 0.5em">${$('.log').html()}</div>`);
     this.addLogCardEvents();
   }
 
@@ -3458,37 +3458,37 @@ this.startClock();
     if (this.game.state.man_in_earth_orbit != "") {
       if (this.game.state.man_in_earth_orbit === "us") {
         if (this.game.player == 1) {
-          x = `<div class="cardbox-status-container">
+          x = `
             <div><span>${player.toUpperCase()}</span> <span>pick your headline card first</span></div>
             ${this.returnCardList(this.game.deck[0].hand)}
-          </div>`;
+          `;
         } else {
-          x = `<div class="cardbox-status-container">
+          x = `
             <div><span>${player.toUpperCase()}</span> <span>pick your headline card second (opponent selected: ${twilight_self.game.state.headline_opponent_card})</span></div>
             ${this.returnCardList(this.game.deck[0].hand)}
-          </div>`;
+          `;
         }
       } else {
         if (this.game.player == 1) {
-          x = `<div class="cardbox-status-container">
+          x = `
             <div><span>${player.toUpperCase()}</span> <span>pick your headline card second (opponent selected: ${twilight_self.game.state.headline_opponent_card})</span></div>
             ${this.returnCardList(this.game.deck[0].hand)}
-          </div>`;
+          `;
         } else {
-          x = `<div class="cardbox-status-container">
+          x = `
             <div><span>${player.toUpperCase()}</span> <span>pick your headline card first</span></div>
             ${this.returnCardList(this.game.deck[0].hand)}
-          </div>`;
+          `;
         }
       }
     //
     // NORMAL HEADLINE ORDER
     //
     } else {
-      x = `<div class="cardbox-status-container">
+      x = `
         <div><span>${player.toUpperCase()}</span> <span>pick your headline card</span></div>
         ${this.returnCardList(this.game.deck[0].hand)}
-      </div>`;
+      `;
     }
 
     this.updateStatus(x);
@@ -14055,7 +14055,7 @@ console.log("card: " + card);
         html += this.returnCardItem(cardarray[i]);
       }
       html = `
-        <div class="display-cards display-cards-status">
+        <div class="status-cardbox">
           ${html}
         </div>`;
     } else {
@@ -14081,10 +14081,8 @@ console.log("card: " + card);
     }
 
     html = `
-      <div class="cardbox-status-container">
-        <div class="cardbox-message">${message}</div>
+        <div class="status-message">${message}</div>
         ${this.returnCardList(cards)}
-      </div>
     `
 
     this.updateStatus(html);
