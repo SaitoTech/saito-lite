@@ -49,7 +49,8 @@ class Imperium extends GameTemplate {
     this.promissary_notes	= {};
 
     this.hud = new GameHud(this.app, this.menuItems());
-   
+    this.hud.mode = 1;  // classic interface
+
     //
     // tutorial related
     //

@@ -22,6 +22,14 @@
   font-style: normal;
 }
 
+
+/* customize game.css */
+.hud-menu {
+  width: 750px;
+  min-width: 750px;
+}
+
+
 /* restore when lore added */
 
 .faction_sheet_lore, .lore.anchor, .show_lore {
@@ -240,7 +248,7 @@ line-height: 1.4em;
   line-height: 1.6em;
 }
 
-.status>.sf-readable {
+.status > .sf-readable {
   padding-top: 14px;
 }
 
@@ -974,33 +982,6 @@ body {
   background-color: var(--p6);
 }
 
-.log {
-  display: block;
-  width: 498px;
-  height: 100vh;
-  z-index: 50;
-  overflow-x: hidden;
-  overflow-y: auto;
-  right: -485px;
-  position: absolute;
-  color: #fff;
-  background: #222c;
-  transition: all 500ms;
-  border-left: 3px solid var(--my-color);
-  font-size: 1.25em;
-  font-family: courier, sans-serif;
-}
-
-.log:hover {
-  right: 0;
-}
-
-.log-lock {
-  right: 0;
-  border-left: 1px solid var(--my-color);
-  width: 501px;
-}
-
 .status, .hud-header, .hud-menu, .hud-body, .controls, #menu-container>ul>li, #menu-container>ul>li:first-child {
   background-color: #222C;
   color: #fff;
@@ -1066,6 +1047,7 @@ body {
   display: block;
   text-align: center;
   padding-top: 9px;
+  padding: 4px;
   border: none;
   overflow-y: auto;
   background-color: transparent;
@@ -1095,6 +1077,7 @@ body {
   font-size: 3em;
   width: 2em;
   color: #fff;
+  margin-top:65px;
 }
 
 .round {
@@ -1525,7 +1508,7 @@ body {
   z-index: 9;
   color: #fff;
   background: transparent;
-  margin-top: 10px;
+  margin-top: 65px;
   margin-left: 15em;
 }
 

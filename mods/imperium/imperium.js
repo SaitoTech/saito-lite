@@ -49,7 +49,8 @@ class Imperium extends GameTemplate {
     this.promissary_notes	= {};
 
     this.hud = new GameHud(this.app, this.menuItems());
-   
+    this.hud.mode = 1;  // classic interface
+
     //
     // tutorial related
     //
@@ -8435,11 +8436,11 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
     $('.content').css('visibility', 'visible');
-    $('.hud_menu_game-logs').css('display', 'none');
     $('.hud_menu_game-status').css('display', 'none');
 
-    //this.preloadImages();
 
+
+    this.hud.addCardType("textchoice", "", null);
 
   }
 
@@ -8897,7 +8898,7 @@ menuItems() {
       callback: this.handleTechMenuItem.bind(this)
     },
     'game-strategy': {
-      name: 'Strat',
+      name: 'Strategy',
       callback: this.handleStrategyMenuItem.bind(this)
     },
     'game-objectives': {
@@ -24733,37 +24734,27 @@ updateSectorGraphics(sector) {
   }
 
   addPlanetHighlight(sector, pid)  {
-console.log("SECTOR: " + sector + " -- " + pid);
     if (sector.indexOf("_") > -1) { 
       sector = this.game.board[sector].tile;
     }
     this.showSectorHighlight(sector);
-// red overlay
-//    let divname = ".sector_graphics_planet_" + sector + '_' + pid;
-//    $(divname).show();
   }
   removePlanetHighlight(sector, pid)  {
     this.hideSectorHighlight(sector);
-// red overlay
-//    let divname = ".sector_graphics_planet_" + sector + '_' + pid;
-//    $(divname).hide();
   }
   showActionCard(c) {
     let thiscard = this.action_cards[c];
-    $('.cardbox').html('<img src="' + thiscard.img + '" style="width:100%" /><div class="action_card_overlay">'+thiscard.text+'</div>');
-    $('.cardbox').show();
+    this.hud.cardbox.showCardboxHTML('<img src="' + thiscard.img + '" style="width:100%" /><div class="action_card_overlay">'+thiscard.text+'</div>');
   }
   hideActionCard(c) {
-    $('.cardbox').hide();
+    this.hud.cardbox.hideCardbox(1);
   }
   showStrategyCard(c) {
+
     let strategy_cards = this.returnStrategyCards();
     let thiscard = strategy_cards[c];
+
     // - show bonus available
-
-console.log(JSON.stringify(this.game.state.strategy_cards));
-console.log(JSON.stringify(this.game.state.strategy_cards_bonus));
-
     let strategy_card_bonus = 0;
     for (let i = 0; i < this.game.state.strategy_cards.length; i++) {
       if (thiscard === this.game.state.strategy_cards[i]) {
@@ -24780,11 +24771,10 @@ console.log(JSON.stringify(this.game.state.strategy_cards_bonus));
       </div>`;
 
     }
-    $('.cardbox').html('<img src="' + thiscard.img + '" style="width:100%" /><div class="strategy_card_overlay">'+thiscard.text+'</div>'+strategy_card_bonus_html);
-    $('.cardbox').show();
+    this.hud.cardbox.showCardboxHTML('<img src="' + thiscard.img + '" style="width:100%" /><div class="strategy_card_overlay">'+thiscard.text+'</div>'+strategy_card_bonus_html);
   }
   hideStrategyCard(c) {
-    $('.cardbox').hide();
+    this.hud.cardbox.hideCardbox(1);
   }
   showPlanetCard(sector, pid) {
     let planets = this.returnPlanets();
@@ -24792,26 +24782,22 @@ console.log(JSON.stringify(this.game.state.strategy_cards_bonus));
     let sector_name = this.game.board[sector].tile;
     let this_planet_name = systems[sector_name].planets[pid];
     let thiscard = planets[this_planet_name];
-    $('.cardbox').html('<img src="' + thiscard.img + '" style="width:100%" />');
-    $('.cardbox').show();
+    this.hud.cardbox.showCardboxHTML('<img src="' + thiscard.img + '" style="width:100%" />');
   }
   hidePlanetCard(sector, pid) {
-    $('.cardbox').hide();
+    this.hud.cardbox.hideCardbox(1);
   }
   showAgendaCard(agenda) {
-    $('.cardbox').html('<img src="' + this.agenda_cards[agenda].img + '" style="width:100%" /><div class="agenda_card_overlay">'+this.agenda_cards[agenda].text+'</div>');
-    $('.cardbox').show();
+    this.hud.cardbox.showCardboxHTML('<img src="' + this.agenda_cards[agenda].img + '" style="width:100%" /><div class="agenda_card_overlay">'+this.agenda_cards[agenda].text+'</div>');
   }
   hideAgendaCard(sector, pid) {
-    $('.cardbox').hide();
+    this.hud.cardbox.hideCardbox(1);
   }
   showTechCard(tech) {
-    let html = this.returnTechCardHTML(tech);
-    $('.cardbox').html(html);
-    $('.cardbox').show();
+    this.hud.cardbox.showCardboxHTML(this.returnTechCardHTML(tech));
   }
   hideTechCard(tech) {
-    $('.cardbox').hide();
+    this.hud.cardbox.hideCardbox(1);
   }
 
 

@@ -40,7 +40,7 @@ menuItems() {
       callback: this.handleTechMenuItem.bind(this)
     },
     'game-strategy': {
-      name: 'Strat',
+      name: 'Strategy',
       callback: this.handleStrategyMenuItem.bind(this)
     },
     'game-objectives': {

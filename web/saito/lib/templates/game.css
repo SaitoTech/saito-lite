@@ -59,7 +59,7 @@ body {
   top: 0px;
   left: 0px;
   display: block;
-  width: 200px;
+  width: 150px;
   height: 50px;
   background-color: whitesmoke;
   border-bottom: 1px solid var(--saito-skyline-grey);
@@ -70,12 +70,14 @@ body {
   text-align: center;
   padding: 0;
   margin: 0;
-  width: 100%;
+  width: 120px;
+  max-width: 150px;
   border-bottom: none;
   height: 50px;
   line-height: 50px;
   font-size: 1.1rem;
   cursor: pointer;
+  float: left;
 }
 ul li a {
   color: black;
