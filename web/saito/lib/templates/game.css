@@ -352,7 +352,6 @@ input#game_board_sizer {
 /*****************/
 /**TRANSPARENCY **/
 /*****************/
-/*
 .hud , .hud-body , .hud-header {
   background-color: transparent;
   border-bottom: 0px;
@@ -392,7 +391,6 @@ input#game_board_sizer {
     width: 0px;
     background: transparent;
 }
-*/
 
 .status-header i {
   float: left;
