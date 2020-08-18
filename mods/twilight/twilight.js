@@ -4231,10 +4231,10 @@ alert("UPDATED TO ZERO HERE");
           //
           if (twilight_self.game.deck[0].cards[card].player != "both" && twilight_self.game.deck[0].cards[card].player != player) {
 
-            let fr =  "<span>This is your opponent's event. Are you sure you wish to play it for the event instead of the OPS?</span><ul>";
+            let fr =  "<div class="status-message" id="status-message"><span>This is your opponent's event. Are you sure you wish to play it for the event instead of the OPS?</span><ul>";
                 fr += '<li class="card" id="playevent">play event</li>';
                 fr += '<li class="card" id="pickagain">pick again</li>';
-                fr += '</ul>';
+                fr += '</ul></div>';
 
             twilight_self.updateStatus(fr);
 
@@ -4265,12 +4265,14 @@ alert("UPDATED TO ZERO HERE");
 
             let fr =
               `
+	      <div class="status-message" id="status-message">
               <div>Confirm you want to play this event</div>
              <ul>
               <li class="card" id="playevent">play event</li>
               <li class="card" id="pickagain">pick again</li>
               </ul>
               <input type="checkbox" name="dontshowme" value="true" style="width: 20px;height: 1.5em;"> don't ask me to confirm moves...
+	      </div>
               `;
 
             twilight_self.updateStatus(fr);
@@ -4317,12 +4319,14 @@ alert("UPDATED TO ZERO HERE");
 
             let fr =
               `
+	      <div class="status-message" id="status-message">
               <div>Confirm you want to play for ops</div>
               <ul>
               <li class="card" id="playevent">play for ops</li>
               <li class="card" id="pickagain">pick again</li>
               </ul>
               <input type="checkbox" name="dontshowme" value="true" style="width: 20px;height: 1.5em;"> don't ask me to confirm moves...
+	      </div>
               `;
 
             twilight_self.updateStatus(fr);
@@ -4366,12 +4370,14 @@ alert("UPDATED TO ZERO HERE");
 
             let fr =
               `
+	      <div class="status-message" id="status-message">
               <div>Confirm you want to space ${twilight_self.game.deck[0].cards[card].name}</div>
              <ul>
               <li class="card" id="playevent">send into orbit</li>
               <li class="card" id="pickagain">pick again</li>
               </ul>
               <input type="checkbox" name="dontshowme" value="true" style="width: 20px;height: 1.5em;"> don't ask to confirm moves...
+	      </div>
               `;
 
             twilight_self.updateStatus(fr);
@@ -8088,11 +8094,13 @@ this.startClock();
         twilight_self.playerFinishedPlacingInfluence();
 
         let html = `
+          <div class="status-message" id="status-message">
           <div>USSR establishes the Warsaw Pact:</div>
           <ul>
             <li class="card" id="remove">remove all US influence in four countries in Eastern Europe</li>
             <li class="card" id="add">add five USSR influence in Eastern Europe (max 2 per country)</li>
           </ul>
+	  </div>
         `;
         twilight_self.updateStatus(html);
 

@@ -52,6 +52,18 @@ class Thirteen extends GameTemplate {
     //
     this.opponent_cards_in_hand = 0;
 
+    //
+    // instead of associating a different function with each card css we are
+    // associating a single one, and changing the reference function inside
+    // to get different actions executed on click. Basically we swap out the
+    // changeable function before attachingCardEvents and everything just works
+    //
+    this.chengeable_callback = function(card) {}
+    let thirteen_self = this;
+    this.cardbox_callback = function(card) { thirteen_self.changeable_callback(card); };
+
+
+
   }
 
 
