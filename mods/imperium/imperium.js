@@ -24744,7 +24744,7 @@ updateSectorGraphics(sector) {
   }
   showActionCard(c) {
     let thiscard = this.action_cards[c];
-    this.hud.cardbox.showCardboxHTML('<img src="' + thiscard.img + '" style="width:100%" /><div class="action_card_overlay">'+thiscard.text+'</div>');
+    this.hud.cardbox.showCardboxHTML(thiscard, '<img src="' + thiscard.img + '" style="width:100%" /><div class="action_card_overlay">'+thiscard.text+'</div>');
   }
   hideActionCard(c) {
     this.hud.cardbox.hideCardbox(1);
@@ -24771,7 +24771,7 @@ updateSectorGraphics(sector) {
       </div>`;
 
     }
-    this.hud.cardbox.showCardboxHTML('<img src="' + thiscard.img + '" style="width:100%" /><div class="strategy_card_overlay">'+thiscard.text+'</div>'+strategy_card_bonus_html);
+    this.hud.cardbox.showCardboxHTML(thiscard, '<img src="' + thiscard.img + '" style="width:100%" /><div class="strategy_card_overlay">'+thiscard.text+'</div>'+strategy_card_bonus_html);
   }
   hideStrategyCard(c) {
     this.hud.cardbox.hideCardbox(1);
@@ -24782,19 +24782,19 @@ updateSectorGraphics(sector) {
     let sector_name = this.game.board[sector].tile;
     let this_planet_name = systems[sector_name].planets[pid];
     let thiscard = planets[this_planet_name];
-    this.hud.cardbox.showCardboxHTML('<img src="' + thiscard.img + '" style="width:100%" />');
+    this.hud.cardbox.showCardboxHTML(thiscard, '<img src="' + thiscard.img + '" style="width:100%" />');
   }
   hidePlanetCard(sector, pid) {
     this.hud.cardbox.hideCardbox(1);
   }
   showAgendaCard(agenda) {
-    this.hud.cardbox.showCardboxHTML('<img src="' + this.agenda_cards[agenda].img + '" style="width:100%" /><div class="agenda_card_overlay">'+this.agenda_cards[agenda].text+'</div>');
+    this.hud.cardbox.showCardboxHTML(agenda, '<img src="' + this.agenda_cards[agenda].img + '" style="width:100%" /><div class="agenda_card_overlay">'+this.agenda_cards[agenda].text+'</div>');
   }
   hideAgendaCard(sector, pid) {
     this.hud.cardbox.hideCardbox(1);
   }
   showTechCard(tech) {
-    this.hud.cardbox.showCardboxHTML(this.returnTechCardHTML(tech));
+    this.hud.cardbox.showCardboxHTML(tech, this.returnTechCardHTML(tech));
   }
   hideTechCard(tech) {
     this.hud.cardbox.hideCardbox(1);
