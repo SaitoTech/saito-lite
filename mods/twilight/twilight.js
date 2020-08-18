@@ -64,16 +64,6 @@ class Twilight extends GameTemplate {
 
     this.hud = new GameHud(this.app, this.menuItems());
 
-    //
-    // instead of associating a different function with each card css we are
-    // associating a single one, and changing the reference function inside
-    // to get different actions executed on click. Basically we swap out the 
-    // changeable function before attachingCardEvents and everything just works
-    //
-    this.chengeable_callback = function(card) {}
-    let twilight_self = this;
-    this.cardbox_callback = function(card) { twilight_self.changeable_callback(card); };
-
   }
 
 

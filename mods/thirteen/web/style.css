@@ -215,6 +215,8 @@ body {
 
 .card {
   cursor: pointer;
+  height: 200px;
+  width: 150px;
 }
 
 .link {
