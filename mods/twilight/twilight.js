@@ -4165,7 +4165,6 @@ this.startClock();
         //
 	if ((twilight_self.game.player == 2 && twilight_self.game.state.events.missile_envy == 2) || (twilight_self.game.player == 1 && twilight_self.game.state.events.missile_envy == 1)) {
 	  if (card == "missileenvy") {
-alert("UPDATED TO ZERO HERE");
 	    twilight_self.game.state.events.missileenvy = 0;
 	    twilight_self.game.state.events.missile_envy = 0;
 	    is_this_missile_envy_noneventable = 0;

@@ -82,6 +82,10 @@ body {
 ul li a {
   color: black;
 }
+ul li:hover {
+  font-weight: bold;
+  background-color: #e7e7e7;
+}
 .hud-button {
   padding: 9px;
   padding-right: 3px;
