@@ -1,6 +1,7 @@
 var saito = require('../../lib/saito/saito');
 var GameTemplate = require('../../lib/templates/gametemplate');
-
+const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
+const GameHammerMobile = require('../../lib/templates/lib/game-hammer-mobile/game-hammer-mobile');
 
 class Wordblocks extends GameTemplate {
 
@@ -78,21 +79,36 @@ class Wordblocks extends GameTemplate {
   }
 
   initializeHTML(app) {
+
+    this.hud.mode = 1; // square
+
     super.initializeHTML(app);
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(this.app, this);
     });
+
+    this.hud.render(app, this);
+
+    try {
+
+      if (app.browser.isMobileBrowser(navigator.userAgent)) {
+
+        GameHammerMobile.render(this.app, this);
+        GameHammerMobile.attachEvents(this.app, this, '.gameboard');
+
+      } else {
+
+        GameBoardSizer.render(this.app, this);
+        GameBoardSizer.attachEvents(this.app, this, '.gameboard');
+
+        $('#gameboard').draggable();
+
+      }
+    } catch (err) {}
+
   }
 
   initializeGame(game_id) {
-
-console.log("INITIALIZE GAME");
-
-//    if (!this.app.browser.isMobileBrowser(navigator.userAgent)) {
-//      const chat = this.app.modules.returnModule("Chat");
-//      chat.addPopUpChat();
-//    }
-
 
     this.updateStatus("loading game...");
     this.loadGame(game_id);
