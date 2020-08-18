@@ -352,26 +352,25 @@ input#game_board_sizer {
 /*****************/
 /**TRANSPARENCY **/
 /*****************/
-.hud , .hud-body , .hud-header {
+.hud-long , .hud-body , .hud-header {
   background-color: transparent;
   border-bottom: 0px;
   box-shadow: 0 0 0 0 #888;
 }
-.status-message {
+.hud-long .hud-body .status .status-message {
   background-color: whitesmoke;
-  padding: 10px;
+  padding: 0px;
   box-shadow: 0 0 3px 1px #BBB
   width: 500px;
   margin-left: auto;
   margin-right: auto;
 }
-.status-message ul li {
+.hud-long .hud-body .status .status-message ul li {
   background-color: whitesmoke;
   padding: 10px;
 }
-.status-message ul {
+.hud-long .hud-body .status .status-message ul {
   background-color: whitesmoke;
-  padding: 10px;
   list-style-type: none;
   margin-block-start: 0em;
   margin-block-end: 0em;
@@ -379,19 +378,19 @@ input#game_board_sizer {
   margin-inline-end: 0px;
   padding-inline-start: 0px;
 }
-.status-header {
+.hud-long .hud-body .status .status-header {
   background-color: whitesmoke;
   width: 500px;
   margin-left: auto;
   margin-right: auto;
   padding-top:10px;
   padding-left:10px;
+  min-height: 40px;
 }
 ::-webkit-scrollbar {
     width: 0px;
     background: transparent;
 }
-
 .status-header i {
   float: left;
 }

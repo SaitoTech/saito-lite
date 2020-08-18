@@ -1402,11 +1402,12 @@ console.log("CARD: " + card);
         //
         if (mv[0] === "cambridge") {
           if (this.game.player == 1) {
-            let placetxt = player.toUpperCase() + " place 1 OP in";
+            let placetxt = '<div class="status-message" id="status-message">' + player.toUpperCase() + " place 1 OP in";
             for (let b = 1; b < mv.length; b++) {
               placetxt += " ";
               placetxt += mv[b];
             }
+	    placetxt += '</div>';
             twilight_self.updateStatus(placetxt);
             for (let i = 1; i < mv.length; i++) {
               for (var k in this.countries) {
@@ -4460,7 +4461,7 @@ alert("UPDATED TO ZERO HERE");
           }
         }
 
-        let html = twilight_self.formatStatusHeader('Playing opponent card:', true);
+        let html = twilight_self.formatStatusHeader('Playing opponent card:', "", true);
             html += '<ul><li class="card" id="before">event before ops</li><li class="card" id="after">event after ops</li></ul>';
         twilight_self.updateStatus(html);
         twilight_self.bindBackButtonFunction(() => {

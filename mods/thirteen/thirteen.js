@@ -1,8 +1,5 @@
-const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
 const GameTemplate = require('../../lib/templates/gametemplate');
 const helpers = require('../../lib/helpers/index');
-
-
 
 
 
@@ -48,6 +45,8 @@ class Thirteen extends GameTemplate {
     this.menuItems = ['lang'];
     //this.hud = new gamehud(this.app, this.menuItems());
 
+    this.hud.mode = 0; // transparent
+
     //
     //
     //
@@ -78,91 +77,15 @@ class Thirteen extends GameTemplate {
   }
 
 
-/***
-  menuItems() {
-    return {
-      'game-cards': {
-        name: 'cards',
-        callback: this.handleCardsMenuItem.bind(this)
-      },
-    }
-  }
-
-  handleCardsMenuItem() {
-    let thirteen_self = this;
-    let html =
-    `
-      <div id="menu-container">
-        <div>select your deck:</div>
-       <ul>
-          <li class="menu-item" id="hand">hand</li>
-          <li class="menu-item" id="discards">discard</li>
-          <li class="menu-item" id="removed">removed</li>
-        </ul>
-      </div>
-    `;
-
-    $('.hud-menu-overlay').html(html);
-    $('.status').hide();
-    $('.hud-menu-overlay').show();
-
-
-    $('.menu-item').on('click', function() {
-
-      let player_action = $(this).attr("id");
-      var deck = thirteen_self.game.deck[0];
-      var cards_img_html = [];
-      var cards;
-
-      switch (player_action) {
-        case "hand":
-          cards = deck.hand
-          break;
-        case "discards":
-          cards = Object.keys(deck.discards)
-          break;
-        case "removed":
-          cards = Object.keys(deck.removed)
-          break;
-        default:
-          break;
-      }
-
-      let cards_in_pile = 0;
-
-      cards_img_html = cards.map(card =>  {
-        if (card != undefined) {
-          return `<div class="cardbox-hud" id="cardbox-hud-${cards_in_pile}">${thirteen_self.returncardimage(card)}</div>`;
-        } else {
-  	  return '';
-        }
-      });
-
-      let display_message = `<div class="display-cards">${cards_img_html.join('')}</div>`;
-
-      if (cards_img_html.length == 0) {
-        display_message = `
-          <div style="text-align:center; margin: auto;">
-            there are no cards in ${player_action}
-          </div>
-        `;
-      }
-
-      $('.hud-menu-overlay').html(display_message);
-    });
-
-  }
-****/
-
-
-
-
   initializeHTML(app) {
     super.initializeHTML(app);
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
+
+    this.hud.addCardType("logcard", "", null);
+    //this.hud.addCardType("showcard", "select", this.cardbox_callback);
   }
 
 
