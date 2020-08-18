@@ -2,6 +2,12 @@
 .hud {
   z-index: 200000;
 }
+.hud-menu {
+  display: none;
+}
+
+
+
 .vial {
   position: absolute;
   background-size: cover;

@@ -1,5 +1,6 @@
 const GameHud = require('../../lib/templates/lib/game-hud/game-hud');
 const GameTemplate = require('../../lib/templates/gametemplate');
+//const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
 const helpers = require('../../lib/helpers/index');
 
 
@@ -41,9 +42,10 @@ class Scotland extends GameTemplate {
 
 
     //
-    //
+    // custom menu items? manually instantiate
     //
     this.hud = new GameHud(this.app, this.menuItems());
+    this.hud.mode = 0;
 
   }
 
@@ -104,12 +106,42 @@ class Scotland extends GameTemplate {
 
 
   initializeHTML(app) {
+
     super.initializeHTML(app);
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
     $('.gameboard').css('zoom',this.gameboardZoom);
+
+
+    //
+    // add card events -- text shown and callback run if there
+    //
+    this.hud.mode = 0;
+    //this.hud.addCardType("logcard", "", null);
+    //if (!app.browser.isMobileBrowser(navigator.userAgent)) {
+    //  this.hud.cardbox.skip_card_prompt = 1;
+    //}
+
+    this.hud.render(app, this);
+
+    try {
+
+      $('#hud').draggable();
+
+      if (app.browser.isMobileBrowser(navigator.userAgent)) {
+        GameHammerMobile.render(this.app, this);
+        GameHammerMobile.attachEvents(this.app, this, '.gameboard');
+      } else {
+        GameBoardSizer.render(this.app, this);
+        GameBoardSizer.attachEvents(this.app, this, '.gameboard');
+	$('.gameboard').draggable();
+      }
+    } catch (err) {}
+
+
+
   }
 
 
@@ -177,12 +209,6 @@ class Scotland extends GameTemplate {
       $(divname).css('height', this.scale(75)+"px");
 
     }
-
-    //
-    // make board draggable
-    //
-    var element = document.getElementById('gameboard');
-    if (element !== null) { helpers.hammer(this, element); }
 
   }
 

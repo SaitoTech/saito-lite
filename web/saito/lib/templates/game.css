@@ -349,8 +349,10 @@ input#game_board_sizer {
 
 
 
-
-/* MAKE STUFF TRANSPARENT */
+/*****************/
+/**TRANSPARENCY **/
+/*****************/
+/*
 .hud , .hud-body , .hud-header {
   background-color: transparent;
   border-bottom: 0px;
@@ -364,6 +366,20 @@ input#game_board_sizer {
   margin-left: auto;
   margin-right: auto;
 }
+.status-message ul li {
+  background-color: whitesmoke;
+  padding: 10px;
+}
+.status-message ul {
+  background-color: whitesmoke;
+  padding: 10px;
+  list-style-type: none;
+  margin-block-start: 0em;
+  margin-block-end: 0em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 0px;
+}
 .status-header {
   background-color: whitesmoke;
   width: 500px;
@@ -376,7 +392,10 @@ input#game_board_sizer {
     width: 0px;
     background: transparent;
 }
+*/
+
 .status-header i {
   float: left;
 }
+
 

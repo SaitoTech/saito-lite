@@ -1,6 +1,7 @@
 const GameTemplate = require('../../lib/templates/gametemplate');
-  
-  
+const GameBoardSizer = require('../../lib/templates/lib/game-board-sizer/game-board-sizer');
+const GameHammerMobile = require('../../lib/templates/lib/game-hammer-mobile/game-hammer-mobile');
+ 
   
 //////////////////
 // CONSTRUCTOR  //
@@ -29,7 +30,9 @@ class Pandemic extends GameTemplate {
   
     this.active_moves = 0;		// player active moves
     this.interface = 1;  			// default to graphics
-  
+
+    this.hud.mode = 1;
+
     return this;
   
   }
@@ -199,7 +202,37 @@ class Pandemic extends GameTemplate {
   
   
   
-  
+  initializeHTML(app) {
+
+    super.initializeHTML(app);
+
+    this.app.modules.respondTo("chat-manager").forEach(mod => {
+      mod.respondTo('chat-manager').render(app, this);
+      mod.respondTo('chat-manager').attachEvents(app, this);
+    });
+
+    $('.hud_menu_game-status').css('display', 'none');
+
+    try {
+
+      $('#hud').draggable();
+
+      if (app.browser.isMobileBrowser(navigator.userAgent)) {
+
+        GameHammerMobile.render(this.app, this);
+        GameHammerMobile.attachEvents(this.app, this, '.gameboard');
+
+      } else {
+
+        GameBoardSizer.render(this.app, this);
+        GameBoardSizer.attachEvents(this.app, this, '.gameboard');
+
+        $('#gameboard').draggable();
+
+      }
+    } catch (err) {}
+
+  }
 
 
 
@@ -1417,7 +1450,7 @@ class Pandemic extends GameTemplate {
           this.playerTurn();
         } else {
   	this.removeEvents();
-  	this.updateStatus("You are the "+this.game.players_info[this.game.player-1].role+" ("+this.game.cities[this.game.players_info[this.game.player-1].city].name+"). Waiting for Player " + mv[1] + " ("+this.game.players_info[parseInt(mv[1])].name+")");
+ 	this.updateStatus("You are the "+this.game.players_info[this.game.player-1].role+" ("+this.game.cities[this.game.players_info[this.game.player-1].city].name+"). Waiting for Player " + mv[1] + " ("+this.game.players_info[parseInt(mv[1])-1].role+")");
         }
   
   
@@ -2527,7 +2560,7 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
         html += this.returnCardItem(cardarray[i], cardtype);
       }
       html = `
-        <div class="display-cards display-cards-status">
+        <div class="status-cardbox">
           ${html}
         </div>`;
     } else {
@@ -2573,10 +2606,10 @@ console.log("PLAYER: " + player + " --- " + " need to overwrite now that players
     }
   
     html = `
-      <div class="cardbox-status-container">
-        <div>${message}</div>
-        ${this.returnCardList(cards, "city")}
+      <div class="status-message">
+        ${message}
       </div>
+        ${this.returnCardList(cards, "city")}
     `
   
     this.updateStatus(html);
