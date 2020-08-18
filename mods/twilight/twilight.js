@@ -64,6 +64,16 @@ class Twilight extends GameTemplate {
 
     this.hud = new GameHud(this.app, this.menuItems());
 
+    //
+    // instead of associating a different function with each card css we are
+    // associating a single one, and changing the reference function inside
+    // to get different actions executed on click. Basically we swap out the 
+    // changeable function before attachingCardEvents and everything just works
+    //
+    this.chengeable_callback = function(card) {}
+    let twilight_self = this;
+    this.cardbox_callback = function(card) { twilight_self.changeable_callback(card); };
+
   }
 
 
@@ -159,7 +169,7 @@ class Twilight extends GameTemplate {
         }
       });
 
-      let display_message = `<div class="status-cardbox">${cards_img_html.join('')}</div>`;
+      let display_message = `<div class="status-cardbox" id="status-cardbox">${cards_img_html.join('')}</div>`;
 
       if (cards_img_html.length == 0) {
         display_message = `
@@ -278,9 +288,23 @@ class Twilight extends GameTemplate {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
+
+
+    //
+    // add card events -- text shown and callback run if there
+    //
+    //this.hud.addCardType("showcard", "", null);
+    this.hud.addCardType("logcard", "", null);
+    this.hud.addCardType("showcard", "select", this.cardbox_callback);
+    //this.hud.addCardType("playcard", "play", this.cardbox_callback);
+    //this.hud.addCardType("headlinecard", "headline", this.cardbox_callback);
+
     this.hud.render(app, this);
 
     try {
+
+      $('#hud').draggable();
+
       if (app.browser.isMobileBrowser(navigator.userAgent)) {
 
         GameHammerMobile.render(this.app, this);
@@ -320,7 +344,6 @@ initializeGame(game_id) {
       }
     }
   }
-
 
   if (this.game.status != "") { this.updateStatus(this.game.status); }
   if (this.game.log) { 
@@ -3222,7 +3245,7 @@ console.log("CARD: " + card);
         if (action2 == "place") {
 
           let j = ops;
-          let html = twilight_self.formatStatusHeader("Place " + j + " influence", true)
+          let html = twilight_self.formatStatusHeader("Place " + j + " influence", "", true)
           twilight_self.updateStatus(html);
           twilight_self.prePlayerPlaceInfluence(player);
           if (j == 1) {
@@ -3245,7 +3268,7 @@ console.log("CARD: " + card);
               twilight_self.uneventOpponentControlledCountries(player, card);
             }
 
-            let html = twilight_self.formatStatusHeader("Place " + j + " influence", true)
+            let html = twilight_self.formatStatusHeader("Place " + j + " influence", "",  true)
             twilight_self.updateStatus(html);
 
             if (j <= 0) {
@@ -3278,7 +3301,7 @@ console.log("CARD: " + card);
 
         if (action2 == "coup") {
 
-          let html = twilight_self.formatStatusHeader("Pick a country to coup", true);
+          let html = twilight_self.formatStatusHeader("Pick a country to coup", "", true);
           twilight_self.updateStatus(html);
           twilight_self.playerCoupCountry(player, ops, card);
 
@@ -3287,8 +3310,9 @@ console.log("CARD: " + card);
 
         if (action2 == "realign") {
 
-          let html = twilight_self.formatStatusHeader(`Realign with ${ops} OPS, or:`, true);
-          html += `<ul><li class=\"card\" id=\"cancelrealign\">end turn</li></ul>`;
+          let header_msg = `Realign with ${ops} OPS, or:`;
+          let html = `<ul><li class=\"card\" id=\"cancelrealign\">end turn</li></ul>`;
+              html = twilight_self.formatStatusHeader(header_msg, html, true);
           twilight_self.updateStatus(html);
 
           $('.card').off();
@@ -3330,8 +3354,8 @@ console.log("CARD: " + card);
             j--;
 
             twilight_self.updateStatus("Realign with " + j + " OPS, or:<ul><li class=\"card\" id=\"cancelrealign\">stop realigning</li></ul>");
-            let html = twilight_self.formatStatusHeader(`Realign with ${j} OPS, or:`, true);
-            html += `<ul><li class=\"card\" id=\"cancelrealign\">end turn</li></ul>`;
+            let html = `<ul><li class=\"card\" id=\"cancelrealign\">end turn</li></ul>`;
+                html = twilight_self.formatStatusHeader(`Realign with ${j} OPS, or:`, html, true);
             twilight_self.updateStatus(html);
 
             $('.card').off();
@@ -3408,9 +3432,8 @@ console.log("CARD: " + card);
 
   formatPlayOpsStatus(player, ops, bind_back_button=false) {
 
-    let html = `<span>${player.toUpperCase()} plays ${ops} OPS:</span><ul>`;
-        html = this.formatStatusHeader(html, bind_back_button);
-	html += '<ul>';
+    let header_msg = `<span>${player.toUpperCase()} plays ${ops} OPS:</span><ul>`;
+    let html = '<ul>';
 
     if (this.game.state.limit_placement == 0) { html += '<li class="card" id="place">place influence</li>'; }
     if (this.game.state.limit_coups == 0) { html += '<li class="card" id="coup">launch coup</li>'; }
@@ -3430,6 +3453,7 @@ console.log("CARD: " + card);
     }
 
     html += '</ul>';
+    html = this.formatStatusHeader(header_msg, html, bind_back_button);
     return html;
   }
 
@@ -3494,22 +3518,7 @@ this.startClock();
     this.updateStatus(x);
 
     twilight_self.addShowCardEvents(function(card) {
-
-      card = $(card).attr("id");
-
-      //
-      // mobile clients have sanity check on card check
-      //
-      if (twilight_self.app.browser.isMobileBrowser(navigator.userAgent)) {
-        twilight_self.mobileCardSelect(card, player, function() {
-          twilight_self.playerTurnHeadlineSelected(card, player);
-        }, "play");
-
-        return;
-      }
-
       twilight_self.playerTurnHeadlineSelected(card, player);
-
     });
 
   }
@@ -3872,40 +3881,7 @@ this.startClock();
 
 
     twilight_self.addShowCardEvents(function(card) {
-
-      card = $(card).attr("id");
-
-      //
-      // mobile clients have sanity check on card check
-      //
-      if (twilight_self.app.browser.isMobileBrowser(navigator.userAgent)) {
-        twilight_self.mobileCardSelect(card, player, function() {
-
-	  //
-          // cancel missile envy if played appropriately
-	  //
-/*** August 15
-          if (twilight_self.game.state.events.missile_envy != 0 && twilight_self.game.state.events.missileenvy != 0 && card == "missileenvy") {
-            twilight_self.game.state.events.missile_envy = 0;
-            twilight_self.game.state.events.missileenvy = 0;
-          }
-****/
-          twilight_self.playerTurnCardSelected(card, player);
-        }, "select");
-        return;
-      }
-
-
-      // cancel missile envy if played appropriately
-/**** August 15
-      if (twilight_self.game.state.events.missile_envy != 0 && twilight_self.game.state.events.missileenvy != 0 && card == "missileenvy") {
-        twilight_self.game.state.events.missile_envy = 0;
-        twilight_self.game.state.events.missileenvy = 0;
-      }
-****/
-
       twilight_self.playerTurnCardSelected(card, player);
-
     });
 
   }
@@ -4045,14 +4021,14 @@ this.startClock();
       if (twilight_self.game.deck[0].cards[card].scoring == 1) {
         let status_header = `Playing ${twilight_self.game.deck[0].cards[card].name}:`;
         let html = ``;
+        html += `<ul><li class="card" id="event">score region</li></ul>`
 
         // true means we want to include the back button in our functionality
         if (this.game.state.back_button_cancelled == 1) {
-          html += twilight_self.formatStatusHeader(status_header, false);
+          html = twilight_self.formatStatusHeader(status_header, html, false);
         } else {
-          html += twilight_self.formatStatusHeader(status_header, true);
+          html = twilight_self.formatStatusHeader(status_header, html, true);
         }
-        html += `<ul><li class="card" id="event">score region</li></ul>`
         twilight_self.updateStatus(html);
       } else {
 
@@ -4076,18 +4052,6 @@ this.startClock();
 
         let announcement = "";
 
-        if (twilight_self.game.state.back_button_cancelled == 1) {
-          announcement = twilight_self.formatStatusHeader(
-            `<span>${player.toUpperCase()}</span> <span>playing</span> <span>${twilight_self.game.deck[0].cards[card].name}</span>`,
-            false
-          );
-        } else {
-          announcement = twilight_self.formatStatusHeader(
-            `<span>${player.toUpperCase()}</span> <span>playing</span> <span>${twilight_self.game.deck[0].cards[card].name}</span>`,
-            true
-          );
-
-        }
         announcement += `<ul>`;
 
         //
@@ -4158,6 +4122,20 @@ this.startClock();
           if (can_remove == 1) {
             announcement += '<li class="card" id="cancel_cmc">cancel cuban missile crisis</li>';
           }
+        }
+
+        if (twilight_self.game.state.back_button_cancelled == 1) {
+          announcement = twilight_self.formatStatusHeader(
+            `<span>${player.toUpperCase()}</span> <span>playing</span> <span>${twilight_self.game.deck[0].cards[card].name}</span>`,
+	    announcement,
+            false
+          );
+        } else {
+          announcement = twilight_self.formatStatusHeader(
+            `<span>${player.toUpperCase()}</span> <span>playing</span> <span>${twilight_self.game.deck[0].cards[card].name}</span>`,
+	    announcement,
+            true
+          );
         }
 
         twilight_self.updateStatus(announcement);
@@ -8982,9 +8960,6 @@ console.log("card: " + card);
         twilight_self.addMove("resolve\tasknot");
 
         twilight_self.addShowCardEvents(function(card) {
-
-          let action2 = $(card).attr("id");
-
           if (action2 == "finished") {
 
             //
@@ -9036,20 +9011,9 @@ console.log("card: " + card);
             twilight_self.endTurn();
 
           } else {
-
-            if (twilight_self.app.browser.isMobileBrowser(navigator.userAgent)) {
-              twilight_self.mobileCardSelect(card, player, function() {
-                $(card).hide();
-                cards_discarded++;
-                twilight_self.removeCardFromHand(action2);
-                twilight_self.addMove("discard\tus\t"+action2);
-              }, "discard");
-            } else {
-              $(card).hide();
-              cards_discarded++;
-              twilight_self.removeCardFromHand(action2);
-              twilight_self.addMove("discard\tus\t"+action2);
-            }
+            cards_discarded++;
+            twilight_self.removeCardFromHand(action2);
+            twilight_self.addMove("discard\tus\t"+action2);
           }
         });
 
@@ -11188,22 +11152,9 @@ console.log("card: " + card);
       twilight_self.updateStatus(user_message);
 
       twilight_self.addShowCardEvents(function(card) {
-
-        let action2 = $(card).attr("id");
-
-        if (twilight_self.app.browser.isMobileBrowser(navigator.userAgent)) {
-          twilight_self.mobileCardSelect(action2, player, function() {
-            twilight_self.addMove("event\tus\t"+action2);
-            twilight_self.addMove("notify\t"+player+" retrieved "+twilight_self.game.deck[0].cards[action2].name);
-            twilight_self.endTurn();
-          }, "play event");
-          return 0;
-        }
-
         twilight_self.addMove("event\tus\t"+action2);
         twilight_self.addMove("notify\t"+player+" retrieved "+twilight_self.game.deck[0].cards[action2].name);
         twilight_self.endTurn();
-
       });
 
       return 0;
@@ -11889,22 +11840,9 @@ console.log("card: " + card);
         twilight_self.addMove("resolve\tpoliovaccine");
 
         twilight_self.addShowCardEvents(function(card) {
-
-          let action2 = $(card).attr("id");
-
-          if (twilight_self.app.browser.isMobileBrowser(navigator.userAgent)) {
-            twilight_self.mobileCardSelect(card, player, function() {
-              $(card).hide();
-              cards_discarded++;
-              twilight_self.removeCardFromHand(action2);
-              twilight_self.addMove("discard\tus\t"+action2);
-            }, "discard");
-          } else {
-            $(card).hide();
-            cards_discarded++;
-            twilight_self.removeCardFromHand(action2);
-            twilight_self.addMove("discard\tus\t"+action2);
-          }
+          cards_discarded++;
+          twilight_self.removeCardFromHand(action2);
+          twilight_self.addMove("discard\tus\t"+action2);
 
           console.log(cards_discarded);
 
@@ -12288,18 +12226,13 @@ console.log("card: " + card);
 	      let html = 'Discard one of the following cards to increase the stability of this country by 1 and add 1 influence: ';
               twilight_self.updateStatusAndListCards(html, eligible_cards);
               twilight_self.addShowCardEvents(function(card) {
-
-	        card = $(card).attr("id");
-
                 twilight_self.placeInfluence(c, 1, player, function() {
                   twilight_self.removeCardFromHand(card);
-
                   twilight_self.addMove("place\t"+player+"\t"+player+"\t"+c+"\t1");
                   twilight_self.addMove("stability\t"+player+"\t"+c+"\t1");
                   twilight_self.addMove("discard\t"+player+"\t"+card);
                   twilight_self.addMove("notify\t"+player.toUpperCase()+" discards <span class=\"logcard\" id=\""+card+"\">"+twilight_self.game.deck[0].cards[card].name + "</span>");
                   twilight_self.endTurn(1);
-
 	        });
 	      });
 	    });
@@ -14055,7 +13988,7 @@ console.log("card: " + card);
         html += this.returnCardItem(cardarray[i]);
       }
       html = `
-        <div class="status-cardbox">
+        <div class="status-cardbox" id="status-cardbox">
           ${html}
         </div>`;
     } else {
@@ -15193,20 +15126,6 @@ console.log("card: " + card);
 
 
 
-  //
-  // OVERWRITES GAME.JS MODULE TO ADD CARD HOVERING
-  //
-//  updateLog(str, length = 150, force=0) {
-//    this.hud.updateLog(str, this.addLogCardEvents.bind(this), force);
-//  }
-//  updateStatus(status_html) {
-//    this.hud.updateStatus(status_html, this.addShowCardEvents.bind(this));
-//  }
-
-
-
-
-
 
   returnGameOptionsHTML() {
 
@@ -15404,49 +15323,9 @@ console.log("card: " + card);
 
   }
 
-  addShowCardEvents(onCardClickFunction) {
-
-    // let twilight_self = this;
-
-    this.hud.status_callback = () => {
-      let twilight_self = this;
-      let isMobile = this.app.browser.isMobileBrowser(navigator.userAgent);
-
-      $('.card').off();
-
-      if (!isMobile) {
-
-        $('.showcard').off();
-        $('.showcard').mouseover(function() {
-          let card = $(this).attr("id");
-          twilight_self.showCard(card);
-        }).mouseout(function() {
-          let card = $(this).attr("id");
-          twilight_self.hideCard(card);
-        });
-
-      }
-
-      $('.card').on('click', function() {
-        if (onCardClickFunction) { onCardClickFunction(this); }
-        else {
-          if (isMobile) {
-            let card = $(this).attr("id");
-            twilight_self.showCard(card);
-
-            $('.cardbox-exit').off();
-            $('.cardbox-exit').on('click', function () {
-              twilight_self.hideCard();
-              $('.cardbox_menu_playcard').css('display','none');
-              $(this).css('display', 'none');
-            });
-          }
-        }
-      });
-    }
-
-    this.hud.status_callback();
-
+  addShowCardEvents(onCardClickFunction=null) {
+    this.changeable_callback = onCardClickFunction;
+    this.hud.attachCardEvents(this.app, this);
   }
 
   addLogCardEvents() {
@@ -15470,8 +15349,6 @@ console.log("card: " + card);
       $('.logcard').on('click', function() {
 
         let card = $(this).attr("id");
-
-alert(card);
 
         twilight_self.showCard(card);
         $('.cardbox-exit').off();
@@ -15506,7 +15383,7 @@ alert(card);
 
 
 
-  formatStatusHeader(status_header, include_back_button=false) {
+  formatStatusHeader(status_header, status_message, include_back_button=false) {
     let back_button_html = `<i class="fa fa-arrow-left" id="back_button"></i>`;
     return `
     <div class="status-header">
@@ -15514,6 +15391,9 @@ alert(card);
       <div style="text-align: center;">
         ${status_header}
       </div>
+    </div>
+    <div class="status-message">
+      ${status_message}
     </div>
     `
   }

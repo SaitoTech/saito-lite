@@ -24,6 +24,7 @@ body {
 
 .hud {
   display: grid;
+  grid-template-rows: 40px auto;
   font-family: visuelt-light;
   position: fixed;
   left: 50%;
@@ -86,7 +87,13 @@ ul li a {
 .hud-hidden-vertical {
   height: 40px;
 }
-
+.status-message ul li , .status ul li {
+  width: 100%;
+  line-height: 3.5em;
+  border-top: 1px solid var(--saito-skyline-grey);
+  cursor: pointer;
+  list-style: none;
+}
 
 
 .status-message {
@@ -140,6 +147,8 @@ ul li a {
 
 .status-overlay {
   height: 100%;
+  padding: 5px;
+  text-align: center;
 }
 
 
@@ -151,14 +160,29 @@ ul li a {
   min-width: 510px;
   max-width: 9.1em;
 }
+.hud-square .hud-body {
+  min-height: 380px;
+}
 .hud-square .hud-body .status .status-cardbox {
   grid-template-columns: 1fr 1fr 1fr;
 }
 .hud-long {
+  grid-template-rows: 20px auto;
   width: 1200px;
   max-width: 1200px;
-  height: 285px;
-  max-height: 285px;
+  height: 270px;
+  max-height: 270px;
+}
+.hud-long .hud-body {
+  min-height: 245px;
+}
+.hud-long .hud-header {
+  opacity: 0.2;
+  background-color: #444;
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 20px;
 }
 .hud-long .hud-body .status .status-cardbox {
   grid-template-columns: repeat( auto-fit, minmax(80px, 1fr) );
@@ -174,6 +198,11 @@ ul li a {
 .hud-vertical .hud-body .status .status-message {
   max-width: 200px;
 }
+.hud-vertical .hud-body {
+  min-height: 100%;
+  min-width: 210px;
+  max-width: 210px;
+}
 .hud-vertical .hud-body .status .status-cardbox {
   grid-template-columns: 1fr;
 }
@@ -183,7 +212,6 @@ ul li a {
 .hud-vertical-lock {
   left: 105px;
 }
-
 
 
 
@@ -258,4 +286,34 @@ input#game_board_sizer {
 }
 
 
+
+/* MAKE STUFF TRANSPARENT */
+.hud , .hud-body , .hud-header {
+  background-color: transparent;
+  border-bottom: 0px;
+  box-shadow: 0 0 0 0 #888;
+}
+.status-message {
+  background-color: whitesmoke;
+  padding: 10px;
+  box-shadow: 0 0 3px 1px #BBB
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.status-header {
+  background-color: whitesmoke;
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top:10px;
+  padding-left:10px;
+}
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+.status-header i {
+  float: left;
+}
 
