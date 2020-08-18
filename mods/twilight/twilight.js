@@ -4231,7 +4231,7 @@ alert("UPDATED TO ZERO HERE");
           //
           if (twilight_self.game.deck[0].cards[card].player != "both" && twilight_self.game.deck[0].cards[card].player != player) {
 
-            let fr =  "<div class="status-message" id="status-message"><span>This is your opponent's event. Are you sure you wish to play it for the event instead of the OPS?</span><ul>";
+            let fr =  "<div class='status-message' id='status-message'><span>This is your opponent's event. Are you sure you wish to play it for the event instead of the OPS?</span><ul>";
                 fr += '<li class="card" id="playevent">play event</li>';
                 fr += '<li class="card" id="pickagain">pick again</li>';
                 fr += '</ul></div>';
@@ -4467,8 +4467,8 @@ alert("UPDATED TO ZERO HERE");
           }
         }
 
-        let html = twilight_self.formatStatusHeader('Playing opponent card:', "", true);
-            html += '<ul><li class="card" id="before">event before ops</li><li class="card" id="after">event after ops</li></ul>';
+        let html = '<ul><li class="card" id="before">event before ops</li><li class="card" id="after">event after ops</li></ul>';
+            html = twilight_self.formatStatusHeader('Playing opponent card:', html, true);
         twilight_self.updateStatus(html);
         twilight_self.bindBackButtonFunction(() => {
           twilight_self.playerTurnCardSelected(card, player);
