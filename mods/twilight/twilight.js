@@ -48,7 +48,7 @@ class Twilight extends GameTemplate {
     this.boardgameWidth  = 5100;
 
     this.moves           = [];
-    this.is_testing 	 = 0;
+    this.is_testing 	 = 1;
 
     this.log_length 	 = 150;
     this.interface 	 = 1;
@@ -307,7 +307,7 @@ class Twilight extends GameTemplate {
 
     try {
 
-      $('#hud').draggable();
+//      $('#hud').draggable();
 
       if (app.browser.isMobileBrowser(navigator.userAgent)) {
 
@@ -1054,7 +1054,7 @@ console.log("CARD: " + card);
               for (let i = 0; i < cardoptions.length; i++) {
                 user_message += '<li class="card" id="'+this.game.deck[0].crypt[i]+'_'+cardoptions[i]+'">'+this.game.deck[0].cards[cardoptions[i]].name+'</li>';
               }
-              user_message += '</ul> When you are done discarding <span class="card dashed" id="finished">click here</span>.</div>';
+              user_message += '</ul> When you are done discarding <span class="card dashed showcard nocard" id="finished">click here</span>.</div>';
               twilight_self.updateStatus(user_message);
 
               //
@@ -1924,7 +1924,7 @@ console.log("CARD: " + card);
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["missileenvy","starwars","saltnegotiations","peronism", "manwhosavedtheworld", "europe", "europe", "asia"];
+              this.game.deck[0].hand = ["asknot","tehran","saltnegotiations","peronism", "manwhosavedtheworld", "centralamerica", "europe", "asia"];
             } else {
               this.game.deck[0].hand = ["duckandcover", "fiveyearplan", "wwby", "mideast", "redscare", "cubanmissile","china","vietnamrevolts"];
             }
@@ -2208,7 +2208,7 @@ console.log("CARD: " + card);
                   return;
                 }
 
-                user_message += '</ul> </span>If you wish to cancel your discard,</span> <span class="card dashed" id="finished">click here</span>.</div>';
+                user_message += '</ul> </span>If you wish to cancel your discard,</span> <span class="card dashed showcard nocard" id="finished">click here</span>.</div>';
                 twilight_self.updateStatus(user_message);
 
                 twilight_self.addShowCardEvents(function(card) {
@@ -7872,7 +7872,6 @@ this.startClock();
             choicehtml += '</ul>';
             twilight_self.updateStatus(choicehtml);
 
-
             $('.card').off();
             $('.card').on('click', function() {
 
@@ -8963,7 +8962,7 @@ console.log("card: " + card);
         let user_message = "<div class='status-message' id='status-message'>Select cards to discard:<ul>";
         for (let i = 0; i < this.game.deck[0].hand.length; i++) {
           if (this.game.deck[0].hand[i] != "china" && this.game.deck[0].hand[i] != this.game.state.headline_opponent_card && this.game.deck[0].hand != this.game.state.headline_card) {
-            user_message += '<li class="card showcard" id="'+this.game.deck[0].hand[i]+'">'+this.game.deck[0].cards[this.game.deck[0].hand[i]].name+'</li>';
+            user_message += '<li class="card showcard card_'+this.game.deck[0].hand[i]+'" id="'+this.game.deck[0].hand[i]+'">'+this.game.deck[0].cards[this.game.deck[0].hand[i]].name+'</li>';
             cards_to_discard++;
           }
         }
@@ -8974,11 +8973,10 @@ console.log("card: " + card);
           return;
         }
 
-        user_message += '</ul> When you are done discarding <span class="card dashed" id="finished">click here</span>.</div>';
+        user_message += '</ul> When you are done discarding <span class="card dashed showcard nocard" id="finished">click here</span>.</div>';
 
         twilight_self.updateStatus(user_message);
         twilight_self.addMove("resolve\tasknot");
-
         twilight_self.addShowCardEvents(function(action2) {
 
           if (action2 == "finished") {
@@ -9033,6 +9031,8 @@ console.log("card: " + card);
 
           } else {
             cards_discarded++;
+            let id_to_remove = ".card_"+action2;
+	    $(id_to_remove).hide();
             twilight_self.removeCardFromHand(action2);
             twilight_self.addMove("discard\tus\t"+action2);
           }
@@ -11863,7 +11863,7 @@ console.log("card: " + card);
           return 0;
         }
 
-        user_message += '</ul> When you are done discarding <span class="card dashed" id="finished">click here</span>.</div>';
+        user_message += '</ul> When you are done discarding <span class="card dashed showcard nocard" id="finished">click here</span>.</div>';
         twilight_self.updateStatus(user_message);
         twilight_self.addMove("resolve\tpoliovaccine");
 
