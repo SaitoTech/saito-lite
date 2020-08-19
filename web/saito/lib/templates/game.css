@@ -284,8 +284,6 @@ input#game_board_sizer {
   max-height: 520px;
   width: calc(48vh * 0.72110);
   max-width: 375px;
-  background-image: url("/twilight/img/Base.svg");
-  background-size: cover;
   z-index: 2;
   display: none;
   top: 27%;
