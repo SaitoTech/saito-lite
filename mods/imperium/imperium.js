@@ -14595,7 +14595,7 @@ console.log("total hits and shots: " + total_hits + " -- " + total_shots);
             <label for="game_length">Game Length:</label>
             <select name="game_length">
               <option value="4">4 VP</option>
-              <option value="8" default>8 VP</option>
+              <option value="8" selected>8 VP</option>
               <option value="12">12 VP</option>
               <option value="14">14 VP</option>
             </select>
@@ -18667,8 +18667,8 @@ alert("To change movement options, just reload!");
         //
         // choice
         //
-        $('.hud-menu-overlay').html(user_message);
-        $('.hud-menu-overlay').show();
+        $('.status-overlay').html(user_message);
+        $('.status-overlay').show();
         $('.status').hide();
         $('.textchoice').off();
 
@@ -18727,7 +18727,7 @@ alert("To change movement options, just reload!");
 
               if (ic === 1 && total_ship_capacity == 0) {
                 $('.status').show();
-                $('.hud-menu-overlay').hide();
+                $('.status-overlay').hide();
               }
 
             }
@@ -18794,13 +18794,13 @@ alert("To change movement options, just reload!");
 
               if (ic == 1 && total_ship_capacity == 0) {
                 $('.status').show();
-                $('.hud-menu-overlay').hide();
+                $('.status-overlay').hide();
               }
             }
           } // total ship capacity
 
           if (action2 === "skip") {
-            $('.hud-menu-overlay').hide();
+            $('.status-overlay').hide();
             $('.status').show();
           }
 
@@ -18947,9 +18947,9 @@ playerInvadePlanet(player, sector) {
     //
     // choice
     //
-    $('.hud-menu-overlay').html(html);
+    $('.status-overlay').html(html);
     $('.status').hide();
-    $('.hud-menu-overlay').show();
+    $('.status-overlay').show();
 
 
     $('.invadechoice').off();
@@ -19006,7 +19006,7 @@ playerInvadePlanet(player, sector) {
         landing_forces = [];
 
         $('.status').show();
-        $('.hud-menu-overlay').hide();
+        $('.status-overlay').hide();
 
         return;
       }

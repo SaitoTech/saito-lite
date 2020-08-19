@@ -102,6 +102,13 @@ ul li a {
   font-weight: bold;
   background-color: #e7e7e7;
 }
+.status-overlay ul li {
+  width: 100%;
+  line-height: 3.5em;
+  border-top: 1px solid var(--saito-skyline-grey);
+  cursor: pointer;
+  list-style: none;
+}
 
 
 .status-message {
