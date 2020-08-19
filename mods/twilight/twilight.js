@@ -7185,10 +7185,7 @@ this.startClock();
 
         let target = 4;
 
-        $('.card').off();
-        $('.card').on('click', function() {
-
-          let invaded = $(this).attr("id");
+        twilight_self.addShowCardEvents(function(invaded) {
 
           if (invaded == "invadepakistan") {
 
