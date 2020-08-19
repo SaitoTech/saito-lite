@@ -244,8 +244,6 @@ console.log("GET THAT VP");
 
   eliminateDestroyedUnitsInSector(player, sector) {
 
-console.log(player + " -- " + sector);  
-
     player = parseInt(player);
     if (player < 0) { return; }
   
@@ -265,21 +263,14 @@ console.log(player + " -- " + sector);
       }
     }
 
-console.log("no planets");  
-
     //
     // on planets
     //
     if (sys.p) {
       for (let planet_idx = 0; planet_idx < sys.p.length; planet_idx++) {
-console.log("on " + planet_idx);
-console.log(JSON.stringify(sys.p[planet_idx]));
         let unit_length = sys.p[planet_idx].units[player-1].length;
-console.log("pu " + unit_length);
         for (let z = 0; z < unit_length; z++) {
-console.log("pu on " + z);
           if (sys.p[planet_idx].units[player-1][z].destroyed == 1) {
-console.log("ELIMINATING DESTROYED UNIT FROM PLAYER ARRAY ON PLANET");
             save_sector = 1;
             sys.p[planet_idx].units[player-1].splice(z, 1);
             z--;

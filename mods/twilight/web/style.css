@@ -6,6 +6,21 @@
 .hud-menu {
   width: 500px;
 }
+.hud-cardbox {
+  position: absolute;
+  height: 48vh;
+  max-height: 520px;
+  width: calc(48vh * 0.72110);
+  max-width: 375px;
+  background-image: url("/twilight/img/Base.svg");
+  background-size: cover;
+  z-index: 2;
+  display: none;
+  top: 27%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
 
 .china_card_status_us_faceup {
   background-color: #3277de;

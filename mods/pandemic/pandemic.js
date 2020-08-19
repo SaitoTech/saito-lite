@@ -31,7 +31,7 @@ class Pandemic extends GameTemplate {
     this.active_moves = 0;		// player active moves
     this.interface = 1;  			// default to graphics
 
-    this.hud.mode = 1;
+    this.hud.mode = 0;
 
     return this;
   
@@ -337,7 +337,7 @@ class Pandemic extends GameTemplate {
   
     this.active_moves = moves;
   
-    let html  = "You are the " + player.role + " ("+this.game.cities[player.city].name+"). " + moves +' moves remaining. Choose an action:<p></p><ul>';
+    let html  = "You are the " + player.role + " ("+this.game.cities[player.city].name+"). " + moves +' moves remaining. Choose an action:<ul>';
         html += '<li class="card" id="move">drive / ferry</li>';
         html += '<li class="card" id="flight">direct flight</li>';
     
@@ -453,7 +453,7 @@ class Pandemic extends GameTemplate {
     //
     if (exchange_mode == 1) {
   
-      let html = 'Give card to whom? <p></p><ul>';
+      let html = 'Give card to whom?<ul>';
       for (let i = 0; i < this.game.players_info.length; i++) {
         if (this.game.players_info[i].city == city && i != (this.game.player-1)) { 
           html += '<li class="card" id="'+(i+1)+'">Player '+(i+1)+'</li>';
@@ -562,7 +562,7 @@ class Pandemic extends GameTemplate {
     let cards = this.game.players_info[this.game.player-1].cards;
     let pandemic_self = this;
   
-    let html = 'Play an event card: <p></p><ul>';
+    let html = 'Play an event card:<ul>';
   
     for (let i = 0; i < cards.length; i++) {
       if (cards[i] == "event1" || cards[i] == "event2" || cards[i] == "event3" || cards[i] == "event4" || cards[i] == "event5") {
@@ -586,7 +586,7 @@ class Pandemic extends GameTemplate {
       //
       if (id == "event1") {
   
-        html = 'Pick a pawn to move to another city: <p></p><ul>';
+        html = 'Pick a pawn to move to another city:<ul>';
         for (let i = 0; i < pandemic_self.game.players_info.length; i++) {
   	html += '<li id="'+(i+1)+'" class="card">Player '+(i+1)+' ('+pandemic_self.game.players_info[i].role+')</li>'
         }
@@ -599,7 +599,7 @@ class Pandemic extends GameTemplate {
   	let player_to_move = $(this).attr('id');
   	let cities_array = [];
   
-          html = 'Move to which city: <p></p><ul>';
+          html = 'Move to which city:<ul>';
           for (let key in pandemic_self.game.cities) {
     	  cities_array.push(key);
           }
@@ -641,7 +641,7 @@ class Pandemic extends GameTemplate {
   
         pandemic_self.game.state.infection_drawn.sort();
   
-        html = 'Resilient Population: remove a card from the infection discard pile <p></p><ul>';
+        html = 'Resilient Population: remove a card from the infection discard pile<ul>';
         for (let i = 0; i < pandemic_self.game.state.infection_drawn.length; i++) {
           html += '<li class="card" id="'+pandemic_self.game.state.infection_drawn[i]+'">'+pandemic_self.game.cities[pandemic_self.game.state.infection_drawn[i]].name+'</li>';
         }
@@ -700,7 +700,7 @@ class Pandemic extends GameTemplate {
   	forecast.push(pandemic_self.app.crypto.hexToString(pandemic_self.game.deck[0].crypt[i]));
         }
   
-        let html = 'These are the top six cards of the infection pile. Put them back on the pile one-by-one: <p></p><ul>';
+        let html = 'These are the top six cards of the infection pile. Put them back on the pile one-by-one:<ul>';
         for (let i = 0; i < forecast.length; i++) {
   	html += '<li id="'+forecast[i]+'" class="card">'+pandemic_self.game.cities[forecast[i]].name+'</li>';
         }
@@ -755,7 +755,7 @@ class Pandemic extends GameTemplate {
   
         let cities_array = [];
   
-        html = 'Pick a city for a free research station: <p></p><ul>';
+        html = 'Pick a city for a free research station:<ul>';
         for (let key in pandemic_self.game.cities) {
   	cities_array.push(key);
         }
@@ -828,7 +828,7 @@ class Pandemic extends GameTemplate {
       }
     }
   
-    let html = 'Research Cure: <p></p><ul>';
+    let html = 'Research Cure:<ul>';
   
     if (yellow >= research_limit && this.game.state.yellow_cure == 0) { html += '<li id="yellow" class="card">yellow</li>'; }
     if (blue >= research_limit && this.game.state.blue_cure == 0) { html += '<li id="blue" class="card">blue</li>'; }
