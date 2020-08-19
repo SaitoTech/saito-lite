@@ -908,7 +908,6 @@ body {
   border: 1px solid var(--my-color);
   background-color: #4448;
   font-family: 'orbitron-medium', 'bank-gothic', arial, helvetica, sans-serif;
-  background-image: url('/imperium/img/tech_tree.png');
   background-size: "contain";
 }
 
@@ -1041,6 +1040,10 @@ body {
 .hud-menu ul li a {
   text-decoration: none;
   color: #fffD;
+}
+
+.hud-menu ul li:hover {
+  background-color: #888888;
 }
 
 .status {
