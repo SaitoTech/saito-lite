@@ -48,7 +48,7 @@ class Twilight extends GameTemplate {
     this.boardgameWidth  = 5100;
 
     this.moves           = [];
-    this.is_testing 	 = 0;
+    this.is_testing 	 = 1;
 
     this.log_length 	 = 150;
     this.interface 	 = 1;
@@ -1040,7 +1040,7 @@ console.log("CARD: " + card);
 
               let user_message = "<div class='status-message' id='status-message'>Select cards to discard:<ul>";
               for (let i = 0; i < cardoptions.length; i++) {
-                user_message += '<li class="card card_'+this.game.deck[0].crypto[i]+'" id="'+this.game.deck[0].crypt[i]+'_'+cardoptions[i]+'">'+this.game.deck[0].cards[cardoptions[i]].name+'</li>';
+                user_message += '<li class="card card_'+this.game.deck[0].crypt[i]+'" id="'+this.game.deck[0].crypt[i]+'_'+cardoptions[i]+'">'+this.game.deck[0].cards[cardoptions[i]].name+'</li>';
               }
               user_message += '</ul> When you are done discarding <span class="card dashed showcard nocard" id="finished">click here</span>.</div>';
               twilight_self.updateStatus(user_message);
