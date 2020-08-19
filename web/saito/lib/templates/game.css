@@ -82,10 +82,6 @@ body {
 ul li a {
   color: black;
 }
-ul li:hover {
-  font-weight: bold;
-  background-color: #e7e7e7;
-}
 .hud-button {
   padding: 9px;
   padding-right: 3px;
@@ -100,12 +96,18 @@ ul li:hover {
   cursor: pointer;
   list-style: none;
 }
+.status-message ul li:hover , .status ul li:hover {
+  font-weight: bold;
+  background-color: #e7e7e7;
+}
 
 
 .status-message {
   width: 500px;
   margin-left: auto;
   margin-right: auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .status-cardbox {
@@ -161,13 +163,13 @@ ul li:hover {
 
 
 .hud-square {
-  height: 420px;
+  height: 410px;
   width: 510px;
   min-width: 510px;
   max-width: 9.1em;
 }
 .hud-square .hud-body {
-  min-height: 380px;
+  min-height: 390px;
 }
 .hud-square .hud-body .status .status-cardbox {
   grid-template-columns: 1fr 1fr 1fr;
@@ -176,11 +178,12 @@ ul li:hover {
   grid-template-rows: 20px auto;
   width: 1200px;
   max-width: 1200px;
-  height: 270px;
-  max-height: 270px;
+  height: 280px;
+  max-height: 280px;
 }
 .hud-long .hud-body {
-  min-height: 245px;
+  min-height: 260px;
+  height: 260px;
 }
 .hud-long .hud-header {
   opacity: 0.2;
@@ -363,7 +366,6 @@ input#game_board_sizer {
 }
 .hud-long .hud-body .status .status-message {
   background-color: whitesmoke;
-  padding: 0px;
   box-shadow: 0 0 3px 1px #BBB
   width: 500px;
   margin-left: auto;
@@ -372,6 +374,9 @@ input#game_board_sizer {
 .hud-long .hud-body .status .status-message ul li {
   background-color: whitesmoke;
   padding: 10px;
+}
+.hud-long .hud-body .status .status-message ul li:hover {
+  background-color: #e7e7e7;
 }
 .hud-long .hud-body .status .status-message ul {
   background-color: whitesmoke;
@@ -398,5 +403,8 @@ input#game_board_sizer {
 .status-header i {
   float: left;
 }
+
+
+
 
 
