@@ -82,10 +82,6 @@ body {
 ul li a {
   color: black;
 }
-ul li:hover {
-  font-weight: bold;
-  background-color: #e7e7e7;
-}
 .hud-button {
   padding: 9px;
   padding-right: 3px;
@@ -99,6 +95,10 @@ ul li:hover {
   border-top: 1px solid var(--saito-skyline-grey);
   cursor: pointer;
   list-style: none;
+}
+.status-message ul li:hover , .status ul li:hover {
+  font-weight: bold;
+  background-color: #e7e7e7;
 }
 
 
@@ -178,11 +178,12 @@ ul li:hover {
   grid-template-rows: 20px auto;
   width: 1200px;
   max-width: 1200px;
-  height: 295px;
-  max-height: 295px;
+  height: 280px;
+  max-height: 280px;
 }
 .hud-long .hud-body {
-  min-height: 265px;
+  min-height: 260px;
+  height: 260px;
 }
 .hud-long .hud-header {
   opacity: 0.2;
@@ -365,7 +366,6 @@ input#game_board_sizer {
 }
 .hud-long .hud-body .status .status-message {
   background-color: whitesmoke;
-  padding: 0px;
   box-shadow: 0 0 3px 1px #BBB
   width: 500px;
   margin-left: auto;
@@ -374,6 +374,9 @@ input#game_board_sizer {
 .hud-long .hud-body .status .status-message ul li {
   background-color: whitesmoke;
   padding: 10px;
+}
+.hud-long .hud-body .status .status-message ul li:hover {
+  background-color: #e7e7e7;
 }
 .hud-long .hud-body .status .status-message ul {
   background-color: whitesmoke;
@@ -400,5 +403,8 @@ input#game_board_sizer {
 .status-header i {
   float: left;
 }
+
+
+
 
 
