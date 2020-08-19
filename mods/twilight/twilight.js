@@ -1040,7 +1040,7 @@ console.log("CARD: " + card);
 
               let user_message = "<div class='status-message' id='status-message'>Select cards to discard:<ul>";
               for (let i = 0; i < cardoptions.length; i++) {
-                user_message += '<li class="card" id="'+this.game.deck[0].crypt[i]+'_'+cardoptions[i]+'">'+this.game.deck[0].cards[cardoptions[i]].name+'</li>';
+                user_message += '<li class="card card_'+this.game.deck[0].crypto[i]+'" id="'+this.game.deck[0].crypt[i]+'_'+cardoptions[i]+'">'+this.game.deck[0].cards[cardoptions[i]].name+'</li>';
               }
               user_message += '</ul> When you are done discarding <span class="card dashed showcard nocard" id="finished">click here</span>.</div>';
               twilight_self.updateStatus(user_message);
@@ -1062,7 +1062,8 @@ console.log("CARD: " + card);
 
                   let tmpar = action2.split("_");
 
-                  $(this).hide();
+                  let id_to_remove = ".card_"+tmpar[0];
+                  $(id_to_remove).hide();
                   pos_to_discard.push(tmpar[0]);
                   cards_discarded++;
                   twilight_self.addMove("discard\tus\t"+tmpar[1]);
