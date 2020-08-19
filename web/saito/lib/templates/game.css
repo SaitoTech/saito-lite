@@ -1,3 +1,4 @@
+/*****
 ::-webkit-scrollbar { width: 8px; height: 3px;}
 ::-webkit-scrollbar-button {  background-color: #868686; }
 ::-webkit-scrollbar-track {  background-color: #868686;}
@@ -5,6 +6,7 @@
 ::-webkit-scrollbar-thumb { height: 50px; background-color: #868686; border-radius: 3px;}
 ::-webkit-scrollbar-corner { background-color: #868686;}
 ::-webkit-resizer { background-color: #646464;}
+****/
 
 ::-webkit-scrollbar { width: 8px; height: 3px;}
 ::-webkit-scrollbar-button {  background-color: #c9c9c9; }
@@ -396,6 +398,7 @@ input#game_board_sizer {
   padding-left:10px;
   min-height: 40px;
 }
+
 ::-webkit-scrollbar {
     width: 0px;
     background: transparent;
