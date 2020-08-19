@@ -11,6 +11,8 @@
           imperium_self.updateStatus('Select sector to quagmire in diplomatic negotiations, and refresh any planets in that system: ');
           imperium_self.playerSelectSector(function(sector) {
 
+	      if (sector.indexOf("_") > -1) { sector = imperium_self.game.board[sector].tile; }
+
               imperium_self.addMove("resolve\tstrategy");
               imperium_self.addMove("strategy\t"+"diplomacy"+"\t"+strategy_card_player+"\t2");
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());

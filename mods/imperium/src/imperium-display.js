@@ -29,8 +29,90 @@ addEventsToBoard() {
     pid = $(this).attr("id");
     imperium_self.hideSector(pid);
   });
+  $('.sector').on('click', function () {
+    pid = $(this).attr("id");
+    imperium_self.updateLog(imperium_self.returnSectorInformationHTML(pid));
+  });
+}
+
+
+returnSectorInformationHTML(sector) {
+
+  if (sector.indexOf("_") > -1) { sector = this.game.board[sector].tile; }
+
+  let sys = this.returnSectorAndPlanets(sector);
+  let html = "System Summary: <br/>";
+      html += '<div style="margin-left:20px;margin-top:10px;">';
+      html += sys.s.name + " (sector):";
+      html += "<div style='clear:both;margin-left:10px;margin-top:6px;'>";
+
+  for (let i = 0; i < sys.s.units.length; i++) {
+    if (sys.s.units.length > 0) {
+      html += this.returnPlayerFleetInSector((i+1), sector);
+      i = sys.s.units.length;
+    }
+  }
+  html += '</div>';
+
+  for (let i = 0; i < sys.p.length; i++) {
+    html += '<p style="margin-top:10px" />';
+    html += "  " + sys.p[i].name + " (planet):";
+    html += "<div style='clear:both;margin-left:10px;margin-top:6px;'>";
+    html += "    " + this.returnInfantryOnPlanet(sys.p[i]) + " infantry";
+    html += '<br />';
+    html += "    " + this.returnPDSOnPlanet(sys.p[i]) + " pds";
+    html += '<br />';
+    html += "    " + this.returnSpaceDocksOnPlanet(sys.p[i]) + " space docks";
+  }
+  html += '</div>';
+  html += '</div>';
+
+  return html;
 
 }
+
+     
+returnPlanetInformationHTML(planet) {
+      
+  let p = planet;
+  if (this.game.planets[planet]) { p = this.game.planets[planet]; }
+  let ionp = this.returnInfantryOnPlanet(p);
+  let ponp = this.returnPDSOnPlanet(p);
+  let sonp = this.returnSpaceDocksOnPlanet(p);
+  let powner = '';
+      
+  if(this.game.planets[planet].owner > 0) {
+    powner = "p" + this.game.planets[planet].owner;
+  } else { 
+    powner = "nowner";
+  }   
+      
+      
+  let html = '';
+      
+  if (ionp > 0) {
+    html += '<div class="planet_infantry_count_label">Infantry</div><div class="planet_infantry_count">'+ionp+'</div>';
+  }   
+  
+  if (ponp > 0) {
+    html += '<div class="planet_pds_count_label">PDS</div><div class="planet_pds_count">'+ponp+'</div>';
+  }
+      
+  if (sonp > 0) {
+    html += '<div class="planet_spacedock_count_label">Space Doc</div><div class="planet_spacedock_count">'+sonp+'</div>';
+  }
+
+  if (ponp+sonp+ionp > 0) {
+    html = `<div class="sector_information_planetname ${powner}">${p.name}</div><div class="sector_information_planet_content">` + html;
+    html +=  `</div>`;
+  } else {
+    html = `<div class="sector_information_planetname ${powner}">${p.name}</div>`;
+  }
+
+
+
+}
+
 
 updateCombatLog(cobj) {
 

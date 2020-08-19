@@ -424,7 +424,6 @@
     for (i = 0; i < allImages.length; i++) {
       pre_images[i] = new Image;
       pre_images[i].src = "/imperium/" + allImages[i];
-      console.log("preloaded: " + "/imperium/" + allImages[i]);
     }
   }
 

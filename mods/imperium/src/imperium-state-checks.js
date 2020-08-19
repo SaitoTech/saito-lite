@@ -769,14 +769,27 @@ console.log("PREREQS: " + prereqs);
       if (sys.s.units[player-1][i].destroyed == 0) {
         if (i > 0) { fleet += ", "; }
         fleet += sys.s.units[player-1][i].name;
-        //if (sys.s.units[player-1][i].storage.length > 0) {
-        //  fleet += ' (';
-        //  for (let ii = 0; ii < sys.s.units[player-1][i].storage.length; ii++) {
-        //    if (ii > 0) { fleet += ", "; }
-        //    fleet += sys.s.units[player-1][i].storage[ii].name;
-        //  }
-        //  fleet += ')';
-        //}
+        if (sys.s.units[player-1][i].storage.length > 0) {
+          let fighters = 0;
+          let infantry = 0;
+          for (let ii = 0; ii < sys.s.units[player-1][i].storage.length; ii++) {
+	    if (sys.s.units[player-1][i].storage[ii].type == "infantry") {
+	      infantry++;
+	    }
+	    if (sys.s.units[player-1][i].storage[ii].type == "fighter") {
+	      fighters++;
+	    }
+          }
+          if (infantry > 0 || fighters > 0) {
+            fleet += ' (';
+	    if (infantry > 0) { fleet += infantry + "i"; }
+            if (fighters > 0) {
+	      if (infantry > 0) { fleet += ", "; }
+	      fleet += fighters + "f";
+	    }
+            fleet += ')';
+          }
+        }
       }
     }
     return fleet;
