@@ -106,6 +106,8 @@ ul li:hover {
   width: 500px;
   margin-left: auto;
   margin-right: auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .status-cardbox {
@@ -161,13 +163,13 @@ ul li:hover {
 
 
 .hud-square {
-  height: 420px;
+  height: 410px;
   width: 510px;
   min-width: 510px;
   max-width: 9.1em;
 }
 .hud-square .hud-body {
-  min-height: 380px;
+  min-height: 390px;
 }
 .hud-square .hud-body .status .status-cardbox {
   grid-template-columns: 1fr 1fr 1fr;
@@ -176,11 +178,11 @@ ul li:hover {
   grid-template-rows: 20px auto;
   width: 1200px;
   max-width: 1200px;
-  height: 270px;
-  max-height: 270px;
+  height: 295px;
+  max-height: 295px;
 }
 .hud-long .hud-body {
-  min-height: 245px;
+  min-height: 265px;
 }
 .hud-long .hud-header {
   opacity: 0.2;

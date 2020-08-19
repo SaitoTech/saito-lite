@@ -1539,7 +1539,7 @@ console.log("SHOULD PLACE: " + player);
     //
     } else {
 
-      html = '<div class='status-message' id='status-message'>how would you like to play this card: <p></p><ul>';
+      html = "<div class='status-message' id='status-message'>how would you like to play this card: <p></p><ul>";
       html += '<li class="card" id="playcommand">play for command</li>';
       html += '</ul></div>';
 
