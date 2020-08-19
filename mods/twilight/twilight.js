@@ -4382,10 +4382,7 @@ this.startClock();
           twilight_self.playerTurnCardSelected(card, player);
         });
 
-        $('.card').off();
-        $('.card').on('click', function() {
-
-          let action2 = $(this).attr("id");
+        twilight_self.addShowCardEvents(function(action2) {
 
           twilight_self.game.state.event_before_ops = 0;
           twilight_self.game.state.event_name = "";
