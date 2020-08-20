@@ -123,6 +123,10 @@ class ExplorerCore extends ModTemplate {
       res.sendFile(__dirname + '/web/style.css');
       return;
     });
+    expressapp.get('/explorer/utils.js', function (req, res) {
+      res.sendFile(__dirname + '/web/utils.js');
+      return;
+    });
     expressapp.get('/explorer/vip', function (req, res) {
       explorer_self.printVIP(res);
     });
@@ -144,7 +148,7 @@ class ExplorerCore extends ModTemplate {
 
           let blk = explorer_self.app.storage.loadBlockByHash(hash);
 
-console.log("BLOCK: " + JSON.stringify(blk.block));
+          console.log("BLOCK: " + JSON.stringify(blk.block));
 
           if (blk == null) {
             res.setHeader('Content-type', 'text/html');
@@ -155,7 +159,7 @@ console.log("BLOCK: " + JSON.stringify(blk.block));
           } else {
             res.setHeader('Content-type', 'text/html');
             res.charset = 'UTF-8';
-            res.write(explorer_self.returnBlockHTML(app, blk));
+            res.write(explorer_self.returnBlockHTML(app, hash));
             res.end();
             return;
           }
@@ -197,7 +201,7 @@ console.log("BLOCK: " + JSON.stringify(blk.block));
           } else {
             res.setHeader('Content-type', 'text/html');
             res.charset = 'UTF-8';
-            res.write(explorer_self.returnBlockSourceHTML(app, blk));
+            res.write(explorer_self.returnBlockSourceHTML(app, hash));
             res.end();
             return;
           }
@@ -270,6 +274,7 @@ console.log("BLOCK: " + JSON.stringify(blk.block));
     <link rel="stylesheet" type="text/css" href="/explorer/style.css" /> \
     <link rel="stylesheet" type="text/css" href="/saito/lib/jsonTree/jsonTree.css" /> \
     <link rel="stylesheet" href="/saito/lib/font-awesome-5/css/all.css" type="text/css" media="screen"> \
+    <script src="/explorer/utils.js"></script> \
     <script src="/saito/lib/jsonTree/jsonTree.js"></script> \
     <link rel="icon" sizes="192x192" href="/saito/img/touch/pwa-192x192.png"> \
     <link rel="apple-touch-icon" sizes="192x192" href="/saito/img/touch/pwa-192x192.png"> \
@@ -325,13 +330,16 @@ console.log("BLOCK: " + JSON.stringify(blk.block));
     return html;
   }
 
-  returnBlockSourceHTML(app, blk) {
+  returnBlockSourceHTML(app, hash) {
     var html = this.returnHead()
     html += this.returnHeader()
     html += '<div class="explorer-main">'
-    html += '<a class="button" href="/explorer/block?hash=' + blk.returnHash() + '"><i class="fas fa-cubes"></i> back to block</a>'
-    html += '<h3>Block Source:</h3><h4>' + blk.returnHash('hex') + '</h4><div data-json="' + encodeURI(JSON.stringify(blk.block, null, 4)) + '" class="json">' + JSON.stringify(blk.block, null, 4) + '</div></div>'
-    html += this.returnInvokeJSONTree();
+    html += '<a class="button" href="/explorer/block?hash=' + hash + '"><i class="fas fa-cubes"></i> back to block</a>'
+    html += '<h3>Block Source (' + hash + '):</h3><div class="blockJson"><div class="loader"></div></div>';
+    html += '<script> \
+        fetchRawBlock("' + hash + '"); \
+      </script>';
+    //html += this.returnInvokeJSONTree();
     html += this.returnPageClose();
     return html;
   }
@@ -371,20 +379,34 @@ console.log("BLOCK: " + JSON.stringify(blk.block));
   ////////////////////////
   // Single Block Page  //
   ////////////////////////
-  returnBlockHTML(app, blk) {
+  returnBlockHTML(app, hash) {
     var html = this.returnHead() + this.returnHeader();
-    html += '<div class="explorer-main"> \
+    /*html += '<div class="explorer-main"> \
       <a href="/explorer"> \
           <button class="explorer-nav"><i class="fas fa-cubes"></i> back to blocks</button> \
         </a> \
       <h3>Block Explorer:</h3> \
         '+ this.listTransactions(blk) + ' \
-      </div> '
+      </div> ';
+      */
+      html += '<div class="explorer-main"> \
+      <a href="/explorer"> \
+          <button class="explorer-nav"><i class="fas fa-cubes"></i> back to blocks</button> \
+        </a> \
+      <h3>Block Explorer:</h3> \
+      <div class="txlist"><div class="loader"></div></div> \
+      </div> \
+      <script> \
+        fetchBlock("' + hash + '"); \
+      </script> \
+      ';
+
     html += this.returnPageClose();
     return html;
 
   }
 
+  /* deprecated
   listTransactions(blk) {
 
     var explorer_self = this;
@@ -400,11 +422,11 @@ console.log("BLOCK: " + JSON.stringify(blk.block));
       html += '<h3>Bundled Transactions:</h3>';
 
       html += '<div class="block-transactions-table">';
-      html += '<div>id</div>';
-      html += '<div>sender</div>';
-      html += '<div>fee</div>';
-      html += '<div>type</div>';
-      html += '<div>module</div>';
+      html += '<div class="table-header">id</div>';
+      html += '<div class="table-header">sender</div>';
+      html += '<div class="table-header">fee</div>';
+      html += '<div class="table-header">type</div>';
+      html += '<div class="table-header">module</div>';
 
       for (var mt = 0; mt < blk.transactions.length; mt++) {
         var tmptx = blk.transactions[mt];
@@ -428,6 +450,7 @@ console.log("BLOCK: " + JSON.stringify(blk.block));
     }
     return html;
   }
+  */
 
 
 

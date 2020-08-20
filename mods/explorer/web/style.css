@@ -58,12 +58,10 @@
 .json, #block-list, .block-transactions-table {
     font-family: monospace;
     border: 1px solid #ccc;
-    border-radius: 10px;
     background: #eee;
     padding: 10px;
     overflow: auto;
     width: 99%;
-    max-width: 850px;
 }
 
 input[type=text], input[type=number] {
@@ -94,9 +92,8 @@ a.button {
 
 .blockchain-table {
     display: grid;
-    grid-template-columns: 0.5em 3.5em 11fr auto 5fr;
+    grid-template-columns: 0.5em 1.5em 39em 1.5em auto;
     grid-gap: 10px;
-    max-width: 850px;
 }
 
 .blockchain-table div {
@@ -112,7 +109,8 @@ a.button {
     grid-template-columns: 7em 1fr;
     grid-gap: 10px;
     max-width: 850px;
-    margin-bottom: 2em;}
+    margin-bottom: 2em;
+}
 
 .block-table div {
     overflow: hidden;
@@ -120,9 +118,9 @@ a.button {
 }
 
 .block-transactions-table {
-  display: grid;
-  grid-template-columns: 2.5em 30em 8em 3em 10em;
-  grid-gap: 10px;
+    display: grid;
+    grid-template-columns: 2.5em 30em 8em 3em auto;
+    grid-gap: 10px;
 }
 
 h1, h2, h3, h4, h5 {
@@ -130,4 +128,20 @@ h1, h2, h3, h4, h5 {
     min-width: 200px;
     width: 100%;
     overflow: hidden;
+}
+
+a {
+    cursor: pointer;
+}
+
+.txbox {
+    grid-column-start: 1;
+    grid-column-end: span 5;
+    background-color: #fff;
+    box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.blockJson {
+    border: 1px solid #ddd;
+    padding: 1em 0;
 }
