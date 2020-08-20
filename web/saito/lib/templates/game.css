@@ -99,7 +99,6 @@ ul li a {
   list-style: none;
 }
 .status-message ul li:hover , .status ul li:hover {
-  font-weight: bold;
   background-color: #e7e7e7;
 }
 .status-overlay ul li {
@@ -231,6 +230,13 @@ ul li a {
   left: 105px;
 }
 
+
+
+
+.status-overlay .status-cardbox {
+  grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
+  overflow-y: scroll;
+}
 
 
 /*****************/
@@ -371,21 +377,21 @@ input#game_board_sizer {
   border-bottom: 0px;
   box-shadow: 0 0 0 0 #888;
 }
-.hud-long .hud-body .status .status-message {
+.hud-long .hud-body .status .status-message , .hud-long .hud-body .status-overlay .status-message {
   background-color: whitesmoke;
   box-shadow: 0 0 3px 1px #BBB
   width: 500px;
   margin-left: auto;
   margin-right: auto;
 }
-.hud-long .hud-body .status .status-message ul li {
+.hud-long .hud-body .status .status-message ul li , .hud-long .hud-body .status-overlay .status-message ul li {
   background-color: whitesmoke;
   padding: 10px;
 }
-.hud-long .hud-body .status .status-message ul li:hover {
+.hud-long .hud-body .status .status-message ul li:hover ,  .hud-long .hud-body .status-overlay .status-message ul li:hover {
   background-color: #e7e7e7;
 }
-.hud-long .hud-body .status .status-message ul {
+.hud-long .hud-body .status .status-message ul , .hud-long .hud-body .status-overlay .status-message ul {
   background-color: whitesmoke;
   list-style-type: none;
   margin-block-start: 0em;
@@ -394,7 +400,7 @@ input#game_board_sizer {
   margin-inline-end: 0px;
   padding-inline-start: 0px;
 }
-.hud-long .hud-body .status .status-header {
+.hud-long .hud-body .status .status-header , .hud-long .hud-body .status-overlay .status-header {
   background-color: whitesmoke;
   width: 500px;
   margin-left: auto;
