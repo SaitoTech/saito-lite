@@ -2745,6 +2745,8 @@ console.log("CARD: " + card);
       let my_card = this.game.state.headline_card;
       let opponent_card = this.game.state.headline_opponent_card;
 
+console.log(my_card + " -- " + opponent_card);
+
       if (this.game.player == 1) {
         if (this.returnOpsOfCard(my_card) > this.returnOpsOfCard(opponent_card)) {
           this.game.state.player_to_go = 1;
@@ -4085,8 +4087,7 @@ this.startClock();
         this.playerTurn();
       });
 
-      $('.card').off();
-      $('.card').on('click', function() {
+      twilight_self.addShowCardEvents(function(action) {
 
         let action = $(this).attr("id");
         $('.card').off();
@@ -6916,10 +6917,8 @@ this.startClock();
         this.updateStatus(userhtml);
         let twilight_self = this;
 
-        $('.card').off();
-        $('.card').on('click', function() {
-
-          let myselect = $(this).attr("id");
+        twilight_self.addShowCardEvents(function(myselect) {
+          $('.card').off();
 
           if (myselect == "romania") {
             twilight_self.placeInfluence(myselect, romania_diff, "us");
@@ -7764,11 +7763,7 @@ this.startClock();
         }
 
         this.updateStatus('<div class="status-message" id="status-message"><span>Blockade triggers:</span><ul><li class="card" id="discard">discard 3 OP card</li><li class="card" id="remove">remove all US influence in W. Germany</li></ul></div>');
-
-        $('.card').off();
-        $('.card').on('click', function() {
-
-          let action = $(this).attr("id");
+        twilight_self.addShowCardEvents(function(action) {
 
           if (action == "discard") {
             let choicehtml = '<div class="status-message" id="status-message"><span>Choose a card to discard:</span><ul>';
@@ -7779,26 +7774,11 @@ this.startClock();
             }
             choicehtml += '</ul></div>';
             twilight_self.updateStatus(choicehtml);
-
-            $('.card').off();
-            $('.card').on('click', function() {
-
-              let card = $(this).attr("id");
-
-              if (twilight_self.app.browser.isMobileBrowser(navigator.userAgent)) {
-                twilight_self.mobileCardSelect(card, player, function() {
-                  twilight_self.removeCardFromHand(card);
-                  twilight_self.addMove("notify\tus discarded "+card);
-                  twilight_self.endTurn();
-                }, "discard");
-                return 0;
-              }
-
+            twilight_self.addShowCardEvents(function(card) {
               twilight_self.removeCardFromHand(card);
                 twilight_self.addMove("notify\tus discarded "+card);
               twilight_self.endTurn();
               return 0;
-
             });
 
           }
@@ -7839,10 +7819,7 @@ this.startClock();
 
         twilight_self.updateStatus('<div class="status-message" id="status-message"><span>' + opponent.toUpperCase() + ' holds the Olympics:</span><ul><li class="card" id="boycott">boycott</li><li class="card" id="participate">participate</li></ul></div>');
 
-        $('.card').off();
-        $('.card').on('click', function() {
-
-          let action = $(this).attr("id");
+        twilight_self.addShowCardEvents(function(action) {
 
           if (action == "boycott") {
             twilight_self.addMove("ops\t"+opponent+"\tolympic\t4");
@@ -8010,10 +7987,7 @@ this.startClock();
         `;
         twilight_self.updateStatus(html);
 
-        $('.card').off();
-        $('.card').on('click', function() {
-
-          let action2 = $(this).attr("id");
+        twilight_self.addShowCardEvents(function(action2) {
 
           if (action2 == "remove") {
 
@@ -8742,11 +8716,7 @@ console.log("card: " + card);
           }
           user_message += '</ul>';
           this.updateStatus("<div class='status-message' id='status-message'>" + user_message + "</div>");
-
-          $('.card').off();
-          $('.card').on('click', function() {
-
-            let action2 = $(this).attr("id");
+          twilight_self.addShowCardEvents(function(action2) {
 
             //
             // offer card
@@ -8800,10 +8770,7 @@ console.log("card: " + card);
             user_message += '<li class="card" id="skipche">or skip coup</li>';
             user_message += '</ul></div>';
         twilight_self.updateStatus(user_message);
-
-        $('.card').off();
-        $('.card').on('click', function() {
-          let action2 = $(this).attr("id");
+        twilight_self.addShowCardEvents(function(action2) {
           if (action2 == "skipche") {
             twilight_self.updateStatus("<div class='status-message' id='status-message'>Skipping Che coups...</div>");
             twilight_self.addMove("resolve\tche");
@@ -9261,11 +9228,7 @@ console.log("card: " + card);
 
                 let confirmoptional = '<div class="status-message" id="status-message"><span>Do you wish to launch a free coup or conduct realignment rolls in Central or South America with the Junta card?</span><ul><li class="card" id="conduct">coup or realign</li><li class="card" id="skip">skip</li></ul></div>';
                 twilight_self.updateStatus(confirmoptional);
-
-                $('.card').off();
-                $('.card').on('click', function() {
-
-                  let action2 = $(this).attr("id");
+                twilight_self.addShowCardEvents(function(action2) {
 
                   if (action2 == "conduct") {
                     twilight_self.addMove("resolve\tjunta");
