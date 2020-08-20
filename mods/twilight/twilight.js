@@ -127,7 +127,6 @@ class Twilight extends GameTemplate {
     $('.status').hide();
     $('.status-overlay').show();
 
-
     $('.menu-item').on('click', function() {
 
       let player_action = $(this).attr("id");
@@ -4088,8 +4087,6 @@ this.startClock();
       });
 
       twilight_self.addShowCardEvents(function(action) {
-
-        let action = $(this).attr("id");
         $('.card').off();
 
         //
