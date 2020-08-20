@@ -48,7 +48,7 @@ class Twilight extends GameTemplate {
     this.boardgameWidth  = 5100;
 
     this.moves           = [];
-    this.is_testing 	 = 1;
+    this.is_testing 	 = 0;
 
     this.log_length 	 = 150;
     this.interface 	 = 1;
@@ -11885,11 +11885,11 @@ console.log("card: " + card);
 
       } else {
 
-        let html = `<span>Do you choose to:</span>
+        let html = `<div class="status-message" id="status-message"><span>Do you choose to:</span>
 	  <ul>
 	    <li class="card" id="place">place 1 influence in Argentina</li>
 	    <li class="card" id="couporrealign">coup or realign Argentina</li>
-          </ul>`;
+          </ul></div>`;
 
         this.updateStatus(html);
 
@@ -11905,11 +11905,11 @@ console.log("card: " + card);
 	  }
 	  if (action2 == "couporrealign") {
 
-            html = `<span>Do you choose to:</span>
+            html = `<div class="status-message" id="status-message"><span>Do you choose to:</span>
 	      <ul>
 	        <li class="card" id="coup">coup in Argentina</li>
 	        <li class="card" id="realign">realign in Argentina</li>
-            </ul>`;
+            </ul></div>`;
 
             twilight_self.updateStatus(html);
             twilight_self.addShowCardEvents(function(action2) {
@@ -11927,11 +11927,11 @@ console.log("card: " + card);
 		modified_ops--;
 	        if (modified_ops > 0) {
 
-                  html = `<span>You have an OP Bonus. Realign again?:</span>
+                  html = `<div class="status-message" id="status-message"><span>You have an OP Bonus. Realign again?:</span>
 	          <ul>
 	            <li class="card" id="realign">realign in Argentina</li>
 	            <li class="card" id="skip">no, please stop</li>
-                  </ul>`;
+                  </ul></div>`;
 
                   let action2 = $(this).attr("id");
                   if (action2 == "realign") {
