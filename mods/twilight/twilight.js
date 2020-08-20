@@ -48,7 +48,7 @@ class Twilight extends GameTemplate {
     this.boardgameWidth  = 5100;
 
     this.moves           = [];
-    this.is_testing 	 = 1;
+    this.is_testing 	 = 0;
 
     this.log_length 	 = 150;
     this.interface 	 = 1;
@@ -1321,7 +1321,7 @@ console.log("CARD: " + card);
           if (mv[1] == "us") {
 
             let num = mv[2];
-            let html = "<span>Aldrich Ames triggered. USSR discard card from US hand:<span><ul>";
+            let html = "<div class='status-message' id='status-message'><span>Aldrich Ames triggered. USSR discard card from US hand:<span><ul>";
             this.game.queue.splice(qe, 1);
 
             for (let i = 0; i < num; i++) {
@@ -1329,7 +1329,7 @@ console.log("CARD: " + card);
               html += '<li class="card showcard" id="'+uscard+'">'+this.game.deck[0].cards[uscard].name+'</li>';
               this.game.queue.splice(this.game.queue.length-1, 1);
             }
-            html += '</ul>';
+            html += '</ul></div>';
 
             if (this.game.player == 2) {
               this.updateStatus("<div class='status-message' id='status-message'>USSR is playing Aldrich Ames</div>");
@@ -2068,10 +2068,10 @@ console.log("CARD: " + card);
             //
             // US gets extra move
             //
-            let html  = "<span>Do you want to take an extra turn: (North Sea Oil)</span><ul>";
+            let html  = "<div class='status-message' id='status-message'><span>Do you want to take an extra turn: (North Sea Oil)</span><ul>";
                 html += '<li class="card" id="play">play extra turn</li>';
                 html += '<li class="card" id="nope">do not play</li>';
-                html += '</ul>';
+                html += '</ul></div>';
             this.updateStatus(html);
 
             let twilight_self = this;
@@ -3474,12 +3474,16 @@ this.startClock();
       let tmpar = twilight_self.game.queue[i].split("\t");
       if (tmpar[0] === "discard") {
 	if (tmpar[1] === "ussr" && twilight_self.game.player == 1) {
-          twilight_self.updateLog("USSR second-guesses themselves...");
-	  twilight_self.addCardToHand(tmpar[2]);
+	  if (tmpar[2] != "ops") {
+            twilight_self.updateLog("USSR second-guesses themselves...");
+	    twilight_self.addCardToHand(tmpar[2]);
+	  }
 	}
 	if (tmpar[1] === "us" && twilight_self.game.player == 2) {
-          twilight_self.updateLog("US second-guesses themselves...");
-	  twilight_self.addCardToHand(tmpar[2]);
+	  if (tmpar[2] != "ops") {
+            twilight_self.updateLog("US second-guesses themselves...");
+	    twilight_self.addCardToHand(tmpar[2]);
+	  }
 	}
       }
       if (tmpar[0] === "play") {
@@ -7767,13 +7771,13 @@ this.startClock();
           let action = $(this).attr("id");
 
           if (action == "discard") {
-            let choicehtml = "<span>Choose a card to discard:</span><ul>";
+            let choicehtml = '<div class="status-message" id="status-message"><span>Choose a card to discard:</span><ul>';
             for (let i = 0; i < twilight_self.game.deck[0].hand.length; i++) {
               if (twilight_self.modifyOps(twilight_self.game.deck[0].cards[twilight_self.game.deck[0].hand[i]].ops, twilight_self.game.deck[0].hand[i], twilight_self.game.player, 0) >= 3 && twilight_self.game.deck[0].hand[i] != "china") {
                 choicehtml += '<li class="card showcard" id="'+twilight_self.game.deck[0].hand[i]+'">'+twilight_self.game.deck[0].cards[twilight_self.game.deck[0].hand[i]].name+'</li>';
               }
             }
-            choicehtml += '</ul>';
+            choicehtml += '</ul></div>';
             twilight_self.updateStatus(choicehtml);
 
             $('.card').off();
@@ -9231,7 +9235,7 @@ console.log("card: " + card);
         var twilight_self = this;
         twilight_self.playerFinishedPlacingInfluence();
 
-        twilight_self.updateStatus(player.toUpperCase() + ' to place 2 Influence in Central or South America');
+        twilight_self.updateStatus('<div class="status-message" id="status-message">' + player.toUpperCase() + ' to place 2 Influence in Central or South America</div>');
 
         for (var i in this.countries) {
 
@@ -9255,7 +9259,7 @@ console.log("card: " + card);
               //
               $('.country').off();
 
-                let confirmoptional = '<span>Do you wish to launch a free coup or conduct realignment rolls in Central or South America with the Junta card?</span><ul><li class="card" id="conduct">coup or realign</li><li class="card" id="skip">skip</li></ul>';
+                let confirmoptional = '<div class="status-message" id="status-message"><span>Do you wish to launch a free coup or conduct realignment rolls in Central or South America with the Junta card?</span><ul><li class="card" id="conduct">coup or realign</li><li class="card" id="skip">skip</li></ul></div>';
                 twilight_self.updateStatus(confirmoptional);
 
                 $('.card').off();
@@ -10898,14 +10902,14 @@ console.log("card: " + card);
 
       }
 
-      let html = "<span>Chernobyl triggered. Designate region to prohibit USSR placement of influence from OPS: </span><ul>";
+      let html = "<div class='status-message' id='status-message'><span>Chernobyl triggered. Designate region to prohibit USSR placement of influence from OPS: </span><ul>";
           html += '<li class="card" id="asia">Asia</li>';
           html += '<li class="card" id="europe">Europe</li>';
           html += '<li class="card" id="africa">Africa</li>';
           html += '<li class="card" id="camerica">Central America</li>';
           html += '<li class="card" id="samerica">South America</li>';
           html += '<li class="card" id="mideast">Middle-East</li>';
-          html += '</ul>';
+          html += '</ul></div>';
 
       this.updateStatus(html);
 
@@ -11087,7 +11091,7 @@ console.log("card: " + card);
       let player_to_go = 1;
       if (player == "us") { player_to_go = 2; }
 
-      let choicehtml = '<span>Wargames triggers. Do you want to give your opponent 6 VP and End the Game? (VP ties will be won by opponents)</span><ul><li class="card" id="endgame">end the game</li><li class="card" id="cont">continue playing</li></ul>';
+      let choicehtml = '<div class="status-message" id="status-message"><span>Wargames triggers. Do you want to give your opponent 6 VP and End the Game? (VP ties will be won by opponents)</span><ul><li class="card" id="endgame">end the game</li><li class="card" id="cont">continue playing</li></ul></div>';
 
       if (player_to_go == this.game.player) {
         this.updateStatus(choicehtml);
@@ -11881,11 +11885,11 @@ console.log("card: " + card);
 
       } else {
 
-        let html = `<span>Do you choose to:</span>
+        let html = `<div class="status-message" id="status-message"><span>Do you choose to:</span>
 	  <ul>
 	    <li class="card" id="place">place 1 influence in Argentina</li>
 	    <li class="card" id="couporrealign">coup or realign Argentina</li>
-          </ul>`;
+          </ul></div>`;
 
         this.updateStatus(html);
 
@@ -11901,11 +11905,11 @@ console.log("card: " + card);
 	  }
 	  if (action2 == "couporrealign") {
 
-            html = `<span>Do you choose to:</span>
+            html = `<div class="status-message" id="status-message"><span>Do you choose to:</span>
 	      <ul>
 	        <li class="card" id="coup">coup in Argentina</li>
 	        <li class="card" id="realign">realign in Argentina</li>
-            </ul>`;
+            </ul></div>`;
 
             twilight_self.updateStatus(html);
             twilight_self.addShowCardEvents(function(action2) {
@@ -11923,11 +11927,11 @@ console.log("card: " + card);
 		modified_ops--;
 	        if (modified_ops > 0) {
 
-                  html = `<span>You have an OP Bonus. Realign again?:</span>
+                  html = `<div class="status-message" id="status-message"><span>You have an OP Bonus. Realign again?:</span>
 	          <ul>
 	            <li class="card" id="realign">realign in Argentina</li>
 	            <li class="card" id="skip">no, please stop</li>
-                  </ul>`;
+                  </ul></div>`;
 
                   let action2 = $(this).attr("id");
                   if (action2 == "realign") {
