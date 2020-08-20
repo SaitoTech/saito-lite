@@ -48,7 +48,7 @@ class Twilight extends GameTemplate {
     this.boardgameWidth  = 5100;
 
     this.moves           = [];
-    this.is_testing 	 = 0;
+    this.is_testing 	 = 1;
 
     this.log_length 	 = 150;
     this.interface 	 = 1;
@@ -1884,7 +1884,7 @@ console.log("CARD: " + card);
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["asknot","tehran","saltnegotiations","peronism", "manwhosavedtheworld", "centralamerica", "europe", "asia"];
+              this.game.deck[0].hand = ["asknot","tehran","saltnegotiations","lonegunman", "manwhosavedtheworld", "centralamerica", "europe", "asia"];
             } else {
               this.game.deck[0].hand = ["grainsales", "fiveyearplan", "wwby", "mideast", "redscare", "cubanmissile","china","vietnamrevolts"];
             }
@@ -3118,20 +3118,21 @@ console.log(my_card + " -- " + opponent_card);
 
     if (player === me) {
 
-      //let html = twilight_self.formatPlayOpsStatus(player, ops);
-      let html = twilight_self.formatPlayOpsStatus(player, ops, true); // back button
-
+      let bind_back_button_state = true;
+      if (twilight_self.game.state.headline == 1) { bind_back_button_state = false; }
+      let html = twilight_self.formatPlayOpsStatus(player, ops, bind_back_button_state); // back button
       twilight_self.updateStatus(html);
 
-      twilight_self.bindBackButtonFunction(() => {
-        //
-        // revert to the start of the turn
-        //
-        twilight_self.addMove("revert");
-        twilight_self.endTurn();
-	return;
-      });
-
+      if (bind_back_button_state) {
+        twilight_self.bindBackButtonFunction(() => {
+          //
+          // revert to the start of the turn
+          //
+          twilight_self.addMove("revert");
+          twilight_self.endTurn();
+  	  return;
+        });
+      }
 
       // TODO:
       twilight_self.addShowCardEvents(function(action2) {
