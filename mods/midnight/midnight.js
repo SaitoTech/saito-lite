@@ -20,6 +20,8 @@ class Midnight extends GameTemplate {
     this.minPlayers      = 1;
     this.type            = "Fiction";
 
+    this.useHUD = 0;
+
   }
 
 
@@ -116,7 +118,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
 	for (let i = 0; i < book[page].choices.length; i++) {
 	  html += `<li class="textchoice" id="${i}">${book[page].choices[i].option}</li>`;
 	}
-	html += '/<ul>';
+	html += '</ul>';
       }
     }
 
@@ -126,6 +128,7 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
     $('.textchoice').on('click', function() {
 
       let action = $(this).attr("id");
+      alert("HERE ---> " + book[page].choices[action].command);
 
       midnight_self.addMove(book[page].choices[action].command);
       midnight_self.endTurn();
