@@ -3597,8 +3597,8 @@ this.startClock();
 
 	  is_player_skipping_playing_china_card = 1;
 
-          let html = 'You only have the China Card remaining. Do you wish to play it this turn?';
-              html += '<ul><li class="card" id="play">play card</li><li class="card" id="skipturn">skip turn</li></ul>';
+          let html = '<div class="status-message" id="status-message">You only have the China Card remaining. Do you wish to play it this turn?';
+              html += '<ul><li class="card" id="play">play card</li><li class="card" id="skipturn">skip turn</li></ul></div>';
           this.updateStatus(html);
           this.addShowCardEvents(function(action2) {
 
