@@ -591,8 +591,8 @@ class Arcade extends ModTemplate {
 	//
 	// check to see if this 
 	//
-	console.log("JOIN REQUEST FOR OPEN GAMES: ");
-	console.log(JSON.stringify(this.games));
+//	console.log("JOIN REQUEST FOR OPEN GAMES: ");
+//	console.log(JSON.stringify(this.games));
 
 	let game_id = txmsg.game_id;
 
@@ -714,10 +714,10 @@ console.log(JSON.stringify(tx.transaction.to));
       //
       if (txmsg.request === "accept") {
 
-        console.info("\n\n\nARCADE GETS ACCEPT MESSAGE: " + txmsg.request);
-        console.info("i am " + app.wallet.returnPublicKey());
-        console.info("TX: " + JSON.stringify(tx.transaction));
-        console.info("MSG: " + txmsg);
+//        console.info("\n\n\nARCADE GETS ACCEPT MESSAGE: " + txmsg.request);
+//        console.info("i am " + app.wallet.returnPublicKey());
+//        console.info("TX: " + JSON.stringify(tx.transaction));
+//        console.info("MSG: " + txmsg);
 
         //
         // remove game from server
