@@ -119,7 +119,7 @@ a.button {
 
 .block-transactions-table {
     display: grid;
-    grid-template-columns: 2.5em 30em 8em 3em auto;
+    grid-template-columns: 3.75em 28em 8em 3em auto;
     grid-gap: 10px;
 }
 
