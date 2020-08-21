@@ -241,32 +241,38 @@ class ChatCore extends ModTemplate {
 
     this.groups.forEach(group => {
 
-      if (group.id == txmsg.group_id) {
+      try {
 
-        let from_add = tx.transaction.from[0].add;
-        let msg_type = from_add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
+        if (group.id == txmsg.group_id) {
 
-        this.addrController.fetchIdentifiers([from_add]);
-        let message = Object.assign(txmsg, {
-          sig: tx.transaction.sig,
-          type: msg_type,
-          identicon: this.app.keys.returnIdenticon()
-        });
+          let from_add = tx.transaction.from[0].add;
+          let msg_type = from_add == this.app.wallet.returnPublicKey() ? 'myself' : 'others';
 
-        group.messages.push(message);
+          this.addrController.fetchIdentifiers([from_add]);
+          let message = Object.assign(txmsg, {
+            sig: tx.transaction.sig,
+            type: msg_type,
+            identicon: this.app.keys.returnIdenticon()
+          });
 
-        if (this.app.wallet.returnPublicKey() != txmsg.publickey) {
-          let identifier = app.keys.returnIdentifierByPublicKey(message.publickey);
-          let title =  identifier ? identifier : message.publickey;
-          let tmp = document.createElement("DIV");
-          tmp.innerHTML = this.app.crypto.base64ToString(message.message);
-          let clean_message = tmp.innerText;
-          app.browser.sendNotification(title, clean_message, 'chat-message-notification');
-          this.sendEvent('chat_receive_message', message);
+          group.messages.push(message);
+
+          if (this.app.wallet.returnPublicKey() != txmsg.publickey) {
+            let identifier = app.keys.returnIdentifierByPublicKey(message.publickey);
+            let title =  identifier ? identifier : message.publickey;
+	    let clean_message = "";
+	    clean_message = this.app.crypto.base64ToString(message.message);
+	    clean_message = clean_message.replace(/<[^>]*>?/gm, '');
+            app.browser.sendNotification(title, clean_message, 'chat-message-notification');
+            this.sendEvent('chat_receive_message', message);
+          }
+
+          this.sendEvent('chat-render-request', {});
         }
 
-        this.sendEvent('chat-render-request', {});
+      } catch (err) {
       }
+
     });
   }
 

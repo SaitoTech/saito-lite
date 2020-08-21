@@ -183,7 +183,7 @@ class ExplorerCore extends ModTemplate {
       if (hash == null) {
         res.setHeader('Content-type', 'text/html');
         res.charset = 'UTF-8';
-        res.write("NO BLOCK FOUND1: ");
+        res.write("NO BLOCK FOUND 1: ");
         res.end();
         return;
 
@@ -195,7 +195,7 @@ class ExplorerCore extends ModTemplate {
           if (blk == null) {
             res.setHeader('Content-type', 'text/html');
             res.charset = 'UTF-8';
-            res.write("NO BLOCK FOUND1: ");
+            res.write("NO BLOCK FOUND 2: ");
             res.end();
             return;
           } else {

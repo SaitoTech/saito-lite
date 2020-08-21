@@ -23846,6 +23846,23 @@ returnObjectivesOverlay() {
   let html = '';
   let imperium_self = this;
 
+
+  //
+  // SECRET OBJECTIVES
+  //
+  for (let i = 0; i < imperium_self.game.deck[5].hand.length; i++) {
+    if (!imperium_self.game.players_info[imperium_self.game.player - 1].objectives_scored.includes(imperium_self.game.deck[5].hand[i])) {
+      let obj = imperium_self.secret_objectives[imperium_self.game.deck[5].hand[i]];
+      html += `<div class="objectives_overlay_objectives_card" style="background-image: url(${obj.img})">
+                 <div class="objectives_card_name">${obj.name}</div>
+                 <div class="objectives_card_content">${obj.text}</div>
+	       </div>
+      `;
+    }
+  }
+
+
+
   //
   // STAGE 1 OBJECTIVES
   //

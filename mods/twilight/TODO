@@ -1,0 +1,20 @@
+
+
+Bugs
+
+Sometimes the influence in the counties highlights in blue like when you highlight text on Word. Not sure how to reproduce it, it just happened sometimes.
+
+Socket connection lost. I was trying to play a game against myself with the game open in 2 different browsers. It all went well for a few minutes and at some point the browser lost socket connection on both browsers.
+
+UI - Is it possible to bind the middle bottom on the mouse to zoom in/out instead of scrolling?
+
+Did you implement the go back functionality? if you did, I didn't know how to use it. All I could do is double confirm the action. My intention is to be able to roll back anything that happens before a roll. eg. I couldn't just place influence to see how it looks and then go back if I rather do a coup instead. Maybe the easiest way is to force a manual handover of the turn, like when they push the bottom on the clock in chess and just force the players to do that unless they roll a dice, then it automatically triggers the handover of the turn.
+
+The last action that happened is logged at the top of the log. with the placement of the clock and the zoom bar on the top right, they kind of overlap making very difficult to read what just happened.
+Is it possible to have a pop-up to remind you what just happened? just like you have it pop up when a coup happened, but for everything.
+Future recommendations
+Animations. From the standpoint of the player, they are completely useless. However, I am trying to keep an audience entertained and animations help to keep the public engaged as they can effortlessly follow what happens in the game. Is it technologically possible to create some animations for when we place influence, coups, wars,etc?
+Is it technologically possible to create an automated matchmaking system? On a client-server architecture is kind of trivial, but with this p2p could be trickier. I am asking out of ignorance. But I think it would be a really good feature, as one of the most annoying things of Playdek for me is to have to find a player, i would like to be able to Queue up and wait for a match with someone with a similar level, we could expand the range of "similar level" as time passes, so people don't have to wait forever.
+Let me know your thoughts,
+
+

@@ -127,7 +127,6 @@ class Twilight extends GameTemplate {
     $('.status').hide();
     $('.status-overlay').show();
 
-
     $('.menu-item').on('click', function() {
 
       let player_action = $(this).attr("id");
@@ -1885,7 +1884,7 @@ console.log("CARD: " + card);
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["asknot","tehran","saltnegotiations","peronism", "manwhosavedtheworld", "centralamerica", "europe", "asia"];
+              this.game.deck[0].hand = ["asknot","tehran","saltnegotiations","lonegunman", "manwhosavedtheworld", "centralamerica", "europe", "asia"];
             } else {
               this.game.deck[0].hand = ["grainsales", "fiveyearplan", "wwby", "mideast", "redscare", "cubanmissile","china","vietnamrevolts"];
             }
@@ -2745,6 +2744,8 @@ console.log("CARD: " + card);
       let my_card = this.game.state.headline_card;
       let opponent_card = this.game.state.headline_opponent_card;
 
+console.log(my_card + " -- " + opponent_card);
+
       if (this.game.player == 1) {
         if (this.returnOpsOfCard(my_card) > this.returnOpsOfCard(opponent_card)) {
           this.game.state.player_to_go = 1;
@@ -3117,20 +3118,21 @@ console.log("CARD: " + card);
 
     if (player === me) {
 
-      //let html = twilight_self.formatPlayOpsStatus(player, ops);
-      let html = twilight_self.formatPlayOpsStatus(player, ops, true); // back button
-
+      let bind_back_button_state = true;
+      if (twilight_self.game.state.headline == 1) { bind_back_button_state = false; }
+      let html = twilight_self.formatPlayOpsStatus(player, ops, bind_back_button_state); // back button
       twilight_self.updateStatus(html);
 
-      twilight_self.bindBackButtonFunction(() => {
-        //
-        // revert to the start of the turn
-        //
-        twilight_self.addMove("revert");
-        twilight_self.endTurn();
-	return;
-      });
-
+      if (bind_back_button_state) {
+        twilight_self.bindBackButtonFunction(() => {
+          //
+          // revert to the start of the turn
+          //
+          twilight_self.addMove("revert");
+          twilight_self.endTurn();
+  	  return;
+        });
+      }
 
       // TODO:
       twilight_self.addShowCardEvents(function(action2) {
@@ -3595,8 +3597,8 @@ this.startClock();
 
 	  is_player_skipping_playing_china_card = 1;
 
-          let html = 'You only have the China Card remaining. Do you wish to play it this turn?';
-              html += '<ul><li class="card" id="play">play card</li><li class="card" id="skipturn">skip turn</li></ul>';
+          let html = '<div class="status-message" id="status-message">You only have the China Card remaining. Do you wish to play it this turn?';
+              html += '<ul><li class="card" id="play">play card</li><li class="card" id="skipturn">skip turn</li></ul></div>';
           this.updateStatus(html);
           this.addShowCardEvents(function(action2) {
 
@@ -4085,10 +4087,7 @@ this.startClock();
         this.playerTurn();
       });
 
-      $('.card').off();
-      $('.card').on('click', function() {
-
-        let action = $(this).attr("id");
+      twilight_self.addShowCardEvents(function(action) {
         $('.card').off();
 
         //
@@ -6916,10 +6915,8 @@ this.startClock();
         this.updateStatus(userhtml);
         let twilight_self = this;
 
-        $('.card').off();
-        $('.card').on('click', function() {
-
-          let myselect = $(this).attr("id");
+        twilight_self.addShowCardEvents(function(myselect) {
+          $('.card').off();
 
           if (myselect == "romania") {
             twilight_self.placeInfluence(myselect, romania_diff, "us");
@@ -7764,11 +7761,7 @@ this.startClock();
         }
 
         this.updateStatus('<div class="status-message" id="status-message"><span>Blockade triggers:</span><ul><li class="card" id="discard">discard 3 OP card</li><li class="card" id="remove">remove all US influence in W. Germany</li></ul></div>');
-
-        $('.card').off();
-        $('.card').on('click', function() {
-
-          let action = $(this).attr("id");
+        twilight_self.addShowCardEvents(function(action) {
 
           if (action == "discard") {
             let choicehtml = '<div class="status-message" id="status-message"><span>Choose a card to discard:</span><ul>';
@@ -7779,26 +7772,11 @@ this.startClock();
             }
             choicehtml += '</ul></div>';
             twilight_self.updateStatus(choicehtml);
-
-            $('.card').off();
-            $('.card').on('click', function() {
-
-              let card = $(this).attr("id");
-
-              if (twilight_self.app.browser.isMobileBrowser(navigator.userAgent)) {
-                twilight_self.mobileCardSelect(card, player, function() {
-                  twilight_self.removeCardFromHand(card);
-                  twilight_self.addMove("notify\tus discarded "+card);
-                  twilight_self.endTurn();
-                }, "discard");
-                return 0;
-              }
-
+            twilight_self.addShowCardEvents(function(card) {
               twilight_self.removeCardFromHand(card);
                 twilight_self.addMove("notify\tus discarded "+card);
               twilight_self.endTurn();
               return 0;
-
             });
 
           }
@@ -7839,10 +7817,7 @@ this.startClock();
 
         twilight_self.updateStatus('<div class="status-message" id="status-message"><span>' + opponent.toUpperCase() + ' holds the Olympics:</span><ul><li class="card" id="boycott">boycott</li><li class="card" id="participate">participate</li></ul></div>');
 
-        $('.card').off();
-        $('.card').on('click', function() {
-
-          let action = $(this).attr("id");
+        twilight_self.addShowCardEvents(function(action) {
 
           if (action == "boycott") {
             twilight_self.addMove("ops\t"+opponent+"\tolympic\t4");
@@ -8010,10 +7985,7 @@ this.startClock();
         `;
         twilight_self.updateStatus(html);
 
-        $('.card').off();
-        $('.card').on('click', function() {
-
-          let action2 = $(this).attr("id");
+        twilight_self.addShowCardEvents(function(action2) {
 
           if (action2 == "remove") {
 
@@ -8742,11 +8714,7 @@ console.log("card: " + card);
           }
           user_message += '</ul>';
           this.updateStatus("<div class='status-message' id='status-message'>" + user_message + "</div>");
-
-          $('.card').off();
-          $('.card').on('click', function() {
-
-            let action2 = $(this).attr("id");
+          twilight_self.addShowCardEvents(function(action2) {
 
             //
             // offer card
@@ -8800,10 +8768,7 @@ console.log("card: " + card);
             user_message += '<li class="card" id="skipche">or skip coup</li>';
             user_message += '</ul></div>';
         twilight_self.updateStatus(user_message);
-
-        $('.card').off();
-        $('.card').on('click', function() {
-          let action2 = $(this).attr("id");
+        twilight_self.addShowCardEvents(function(action2) {
           if (action2 == "skipche") {
             twilight_self.updateStatus("<div class='status-message' id='status-message'>Skipping Che coups...</div>");
             twilight_self.addMove("resolve\tche");
@@ -9261,11 +9226,7 @@ console.log("card: " + card);
 
                 let confirmoptional = '<div class="status-message" id="status-message"><span>Do you wish to launch a free coup or conduct realignment rolls in Central or South America with the Junta card?</span><ul><li class="card" id="conduct">coup or realign</li><li class="card" id="skip">skip</li></ul></div>';
                 twilight_self.updateStatus(confirmoptional);
-
-                $('.card').off();
-                $('.card').on('click', function() {
-
-                  let action2 = $(this).attr("id");
+                twilight_self.addShowCardEvents(function(action2) {
 
                   if (action2 == "conduct") {
                     twilight_self.addMove("resolve\tjunta");
