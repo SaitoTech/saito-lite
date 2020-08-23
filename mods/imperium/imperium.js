@@ -15279,7 +15279,7 @@ playerAcknowledgeNotice(msg, mycallback) {
 //
 // assign hits to my forces
 //
-playerAssignHits(attacker, defender, type, sector, details, total_hits, source = "") {
+ playerAssignHits(attacker, defender, type, sector, details, total_hits, source = "") {
 
   let imperium_self = this;
   let hits_assigned = 0;
@@ -15397,11 +15397,35 @@ playerAssignHits(attacker, defender, type, sector, details, total_hits, source =
           maximum_assignable_hits++;
           if (targetted_units.includes(unit.type)) { total_targetted_units++; }
           html += '<li class="textchoice player_ship_' + i + '" id="' + i + '">' + unit.name;
+          if (unit.capacity >= 1) {
+	    let fleet = '';
+            let fighters = 0;
+            let infantry = 0;
+            for (let ii = 0; ii < sys.s.units[imperium_self.game.player-1][i].storage.length; ii++) {
+              if (sys.s.units[imperium_self.game.player-1][i].storage[ii].type == "infantry") {
+                infantry++;
+              }
+              if (sys.s.units[imperium_self.game.player-1][i].storage[ii].type == "fighter") {
+                fighters++;
+              }
+            }
+            if (infantry > 0 || fighters > 0) {
+              fleet += ' ';
+              if (infantry > 0) { fleet += infantry + "i"; }
+              if (fighters > 0) {
+                if (infantry > 0) { fleet += ", "; }
+                fleet += fighters + "f";
+              }
+              fleet += ' ';
+            }
+	    html += fleet;
+	  }
           if (unit.strength > 1) {
             maximum_assignable_hits += (unit.strength - 1);
             html += ' <div style="display:inline" id="player_ship_' + i + '_hits">(';
             for (let bb = 1; bb < unit.strength; bb++) { html += '*'; }
-            html += ')</div>'
+            html += ')';
+	    html += '</div>'
           }
           html += '</li>';
         }
@@ -19911,7 +19935,7 @@ playerDiscardActionCards(num) {
     sectors['sector54']        = { img : "/imperium/img/sectors/sector54.png" , 	   name : "Wormhole A" , type : 0 , hw : 0 , wormhole : 1, mr : 0 , planets : [] } 		// wormhole a
     sectors['sector56']        = { img : "/imperium/img/sectors/sector56.png" , 	   name : "Wormhole B" , type : 0 , hw : 0 , wormhole : 2, mr : 0 , planets : [] } 		// wormhole b
 
-    sectors['sector55']        = { img : "/imperium/img/sectors/sector55.png" , 	   name : "Quartis" , type : 0 , hw : 0 , wormhole : 1, mr : 0 , planets : ['planet51'] } 	// wormhole a
+    sectors['sector55']        = { img : "/imperium/img/sectors/sector55.png" , 	   name : "Quartil" , type : 0 , hw : 0 , wormhole : 1, mr : 0 , planets : ['planet51'] } 	// wormhole a
     sectors['sector57']        = { img : "/imperium/img/sectors/sector57.png" , 	   name : "Yoderux" , type : 0 , hw : 0 , wormhole : 2, mr : 0 , planets : ['planet52'] } 	// wormhole b
 
     sectors['sector8']         = { img : "/imperium/img/sectors/sector8.png" , 	   	   name : "Crystalis / Troth" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : ['planet1','planet2'] }
@@ -20176,8 +20200,8 @@ playerDiscardActionCards(num) {
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-      return ["1_1", "4_7"];
-//      return ["1_1", "2_1"];
+//      return ["1_1", "4_7"];
+      return ["1_1", "2_1"];
     }
 
 
