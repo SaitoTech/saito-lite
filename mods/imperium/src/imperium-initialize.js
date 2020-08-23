@@ -13,6 +13,20 @@
     $('.content').css('visibility', 'visible');
     $('.hud_menu_game-status').css('display', 'none');
 
+    try {
+
+      if (app.browser.isMobileBrowser(navigator.userAgent)) {
+
+        GameHammerMobile.render(this.app, this);
+        GameHammerMobile.attachEvents(this.app, this, '.gameboard');
+
+      } else {
+
+        GameBoardSizer.render(this.app, this);
+        GameBoardSizer.attachEvents(this.app, this, '.gameboard');
+
+      }
+    } catch (err) {}
 
 
     this.hud.addCardType("textchoice", "", null);
