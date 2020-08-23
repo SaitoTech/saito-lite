@@ -3115,10 +3115,11 @@ console.log(my_card + " -- " + opponent_card);
     twilight_self.playerFinishedPlacingInfluence();
 
     if (this.game.player == 2) { me = "us"; }
-
+a
     if (player === me) {
 
       let bind_back_button_state = true;
+      if (twilight_self.game.state.event_before_ops == 1) { bind_back_button_state = false; }
       if (twilight_self.game.state.headline == 1) { bind_back_button_state = false; }
       let html = twilight_self.formatPlayOpsStatus(player, ops, bind_back_button_state); // back button
       twilight_self.updateStatus(html);
