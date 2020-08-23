@@ -4,7 +4,7 @@
 }
 
 .hud-menu {
-  width: 500px;
+  width: 550px;
 }
 .hud-cardbox {
   position: absolute;
@@ -429,5 +429,55 @@ body {
 .event_tile {
   display:none;
   float:right;
+}
+
+
+
+
+
+
+
+
+
+@media screen and (orientation:landscape) and (max-width: 700px) {
+
+  .hud-long {
+    height: 120px;
+    min-height: 120px;
+    width: 550px;
+    min-width: 550px;
+    max-width: 550px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hud-long .hud-body {
+    height: 120px;
+    min-height: 120px;
+    width: 550px;
+    min-width: 550px;
+    max-width: 550px;
+  }
+
+  .hud-long .hud-header {
+    visibility: hidden;
+  }
+
+  .cardbox-hud {
+    width: calc(4em * 0.811);
+    height: 4em;
+  }
+
+  .status {
+    height: 100px;
+  }
+
+  .status-message {
+    width: 300px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 13px;
+ }
+
 }
 

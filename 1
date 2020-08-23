@@ -59,6 +59,8 @@ class GameHud {
           let hud_controls	= document.querySelector('.hud-controls');
           let hud_header 	= document.querySelector('.hud-header');
 
+alert("HUD MODE: " + this.mode);
+
 	  //
 	  // handle preferred display mode
 	  //
@@ -73,26 +75,23 @@ class GameHud {
             hud.appendChild(hud_header);
             hud.appendChild(hud_body);
 	  }
-/**
 	  if (this.mode == 2) {
 	    hud.classList.add("hud-vertical");
 	    hud_header.appendChild(hud_controls);
             hud.appendChild(hud_header);
             hud.appendChild(hud_body);
-	    game_mod.interface = 2;
 	  }
-**/
+
           if (this.use_cardbox == 1) 	{ this.cardbox.render(app, game_mod); }
 	  if (this.use_log == 0) { log.style.display = "none"; }
 
 	  //
 	  // render top menu
 	  //
-	  hud_menu.append(hud_controls);
-	  hud_menu.append(elParser(GameHudMenuTemplate(this.menu_function_map)));
-
-
-
+	  if (this.mod == 0 || this.mode == 1) {
+	    hud_menu.append(hud_controls);
+	    hud_menu.append(elParser(GameHudMenuTemplate(this.menu_function_map)));
+	  }
 
 	  //
 	  // avoid adding to DOM
@@ -120,7 +119,6 @@ class GameHud {
       let hud_body 	= document.getElementById('hud-body');
 
       dragElement(hud, function() {
-
 	let wheight = window.innerHeight;
 
         let hud_rect = hud.getBoundingClientRect();
@@ -210,7 +208,9 @@ class GameHud {
       });
 
       } catch (err) {
+
 console.log("ERROR: " + err);
+
       }
 
     }

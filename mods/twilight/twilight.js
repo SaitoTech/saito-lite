@@ -64,6 +64,7 @@ class Twilight extends GameTemplate {
 
     this.hud = new GameHud(this.app, this.menuItems());
 
+
   }
 
 
@@ -276,6 +277,7 @@ class Twilight extends GameTemplate {
   initializeHTML(app) {
 
     super.initializeHTML(app);
+
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
@@ -285,13 +287,14 @@ class Twilight extends GameTemplate {
     //
     // add card events -- text shown and callback run if there
     //
-    this.hud.mode = 0;
-    //this.hud.addCardType("card", "", null);
+    //this.hud.mode = 0;
     this.hud.addCardType("logcard", "", null);
     this.hud.addCardType("showcard", "select", this.cardbox_callback);
     this.hud.addCardType("card", "select", this.cardbox_callback);
     if (!app.browser.isMobileBrowser(navigator.userAgent)) {
       this.hud.cardbox.skip_card_prompt = 1;
+    } else {
+      this.hud.card_width = 50;
     }
 
     this.hud.render(app, this);
