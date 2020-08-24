@@ -3118,7 +3118,7 @@ console.log(my_card + " -- " + opponent_card);
     twilight_self.playerFinishedPlacingInfluence();
 
     if (this.game.player == 2) { me = "us"; }
-a
+
     if (player === me) {
 
       let bind_back_button_state = true;
