@@ -103,6 +103,7 @@ function reset_persistent {
   rm -f ./data/rewards.sq3
   rm -f ./data/forum.sq3
   rm -f ./data/tutorial.sq3
+  rm -f ./web/client.options
 
 }
 
