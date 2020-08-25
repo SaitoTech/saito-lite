@@ -592,10 +592,10 @@ addUIEvents() {
 
   $('#hexGrid').draggable();
 
-  //log-lock
-  document.querySelector('.log').addEventListener('click', (e) => {
-    document.querySelector('.log').toggleClass('log-lock');
-  });
+  //log-lock - game engine template does now
+  //document.querySelector('.log').addEventListener('click', (e) => {
+  //  document.querySelector('.log').toggleClass('log-lock');
+  //});
 
   document.querySelector('.leaderboardbox').addEventListener('click', (e) => {
     document.querySelector('.leaderboardbox').toggleClass('leaderboardbox-lock');

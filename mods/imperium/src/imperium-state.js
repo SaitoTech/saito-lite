@@ -14,6 +14,11 @@
 	//
         state.laws = [];
         state.agendas = [];
+	state.vp_target = 14;
+
+	if (this.game.options.vp) {
+	  state.vp_target = parseInt(this.game.options.vp);
+        } 
 
 	//
 	// riders => who has riders (and is not voting
