@@ -28,6 +28,11 @@ class Registry extends ModTemplate {
   }
 
 
+  returnServices() {
+    let services = [];
+    services.push({ service : "registry" , domain : "saito" });
+    return services;
+  }
 
 /*******
   respondTo(type) {
