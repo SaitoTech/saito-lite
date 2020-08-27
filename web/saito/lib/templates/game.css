@@ -318,6 +318,10 @@ input#game_board_sizer {
 }
 
 .cardbox-exit {
+  position: absolute; 
+  left: 50%; 
+  top: 50%;
+  transform: translate(-50%, -50%); 
   text-align: center;
   font-size: 2.9em;
   color: white;
