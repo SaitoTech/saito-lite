@@ -174,6 +174,7 @@ class Twilight extends GameTemplate {
 
   }
 
+
   handleLangMenuItem() {
 
     let twilight_self = this;
@@ -184,10 +185,14 @@ class Twilight extends GameTemplate {
           <li class="menu-item" id="english">English</li>
           <li class="menu-item" id="chinese">简体中文</li>
         </ul>
-        <div style="margin-top:20px">Card Display:</div>
+       <div style="margin-top:20px">Card Display:</div>
        <ul>
           <li class="menu-item" id="text">Text Menu</li>
           <li class="menu-item" id="graphics">Graphical Menu</li>
+        </ul>
+       <div style="margin-top:20px">Observer Mode:</div>
+       <ul>
+          <li class="menu-item" id="enable_observer_mode">Enable</li>
         </ul>
       </div>`;
 
@@ -201,6 +206,24 @@ class Twilight extends GameTemplate {
 
       let action2 = $(this).attr("id");
 
+      if (action2 === "enable_observer_mode") {
+        twilight_self.displayModal("Observer Mode enabled...");
+        twilight_self.saveGameState = 1;
+
+	let msgobj = {
+	  game_id : twilight_self.game.id ,
+	  player : twilight_self.app.wallet.returnPublicKey()
+	};
+
+        let msg = twilight_self.app.crypto.stringToBase64(JSON.stringify(msgobj));
+	
+	let html  = 'Your friends can observe this game by visiting the following link: ';
+	    html += 'https://saito.io/arcade/?i=watch&msg='+msg;
+        //twilight_self.saveGame(twilight_self.game.id);
+	//setTimeout(function() {
+        //  window.location.reload();
+	//}, 1000);
+      }
       if (action2 === "text") {
         twilight_self.displayModal("Card Menu options changed to text-mode. Please reload.");
         twilight_self.interface = 0;

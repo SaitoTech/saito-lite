@@ -65,6 +65,21 @@ class Arcade extends ModTemplate {
   }
 
 
+  handleUrlParams(urlParams) {
+
+    let i = urlParams.get('i');
+
+    if (i == "watch") {
+alert("observing this game!");
+      let msg = urlParams.get('msg');
+      this.observeGame(msg);
+    }   
+
+  }
+
+
+
+
   observeGame(msg) {
 
     let msgobj = JSON.parse(this.app.crypto.base64ToString(msg));
