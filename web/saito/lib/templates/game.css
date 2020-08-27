@@ -145,9 +145,7 @@ ul li a {
   font-family: courier, sans-serif;
   padding: 2px;
 }
-.log:hover {
-  right: 0;
-}
+
 .log-lock {
   right: 0;
   border-left: 1px solid var(--my-color);
@@ -374,9 +372,9 @@ input#game_board_sizer {
 
 
 
-/*****************/
-/**TRANSPARENCY **/
-/*****************/
+/******************/
+/** TRANSPARENCY **/
+/******************/
 .hud-long , .hud-long .hud-body , .hud-long .hud-header {
   background-color: transparent;
   border-bottom: 0px;
@@ -462,6 +460,36 @@ input#game_board_sizer {
 
   .hud-long .hud-body .status .status-cardbox {
     grid-template-columns: repeat( auto-fit, minmax(40px, 1fr) );
+  }
+
+  .hud-menu {
+    height: 25px;
+  }
+  .hud-controls {
+    font-size: 12px;
+  }
+  .hud-button {
+    padding-top: 5px; 
+  }
+  .hud-menu ul li {
+    line-height: 24px;
+    font-size: 14px;
+  }
+
+  .log {
+    right: -200px;
+    width: 220px;
+    font-size: 10px;
+  }
+
+  .log:hover {
+    right: none; /* undefine to fix mobile */
+  }
+
+  .log-lock {
+    right: 0px;
+    border-left: 1px solid var(--my-color);
+    width: 220px;
   }
 
 
