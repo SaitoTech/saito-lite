@@ -162,10 +162,6 @@ class Registry extends ModTemplate {
       }
 
 
-
-      //
-      //
-      //
       if (txmsg.module == "Email") {
         if (tx.transaction.from[0].add == registry_self.publickey) {
           if (tx.transaction.to[0].add == registry_self.app.wallet.returnPublicKey()) {
