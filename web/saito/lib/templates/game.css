@@ -474,6 +474,7 @@ input#game_board_sizer {
   .hud-menu ul li {
     line-height: 24px;
     font-size: 14px;
+    height: 25px;
   }
 
   .log {
