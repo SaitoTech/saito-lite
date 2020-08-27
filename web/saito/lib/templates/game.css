@@ -373,7 +373,7 @@ input#game_board_sizer {
 /*****************/
 /**TRANSPARENCY **/
 /*****************/
-.hud-long , .hud-body , .hud-header {
+.hud-long , .hud-long .hud-body , .hud-long .hud-header {
   background-color: transparent;
   border-bottom: 0px;
   box-shadow: 0 0 0 0 #888;
