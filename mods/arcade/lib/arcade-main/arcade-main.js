@@ -220,12 +220,12 @@ module.exports = ArcadeMain = {
           //
           // check with server to see if this game is taken yet
           //
-          data.arcade.sendPeerDatabaseRequest(
-            "arcade",
-            "games",
-            "is_game_already_accepted",
-            game_id,
-            null,
+          data.arcade.sendPeerDatabaseRequestWithFilter(
+
+	    "Arcade" ,
+
+	    `SELECT is_game_already_accepted FROM games WHERE game_id = ${game_id}` ,
+
             (res) => {
 
               if (res.rows == undefined) {
@@ -233,9 +233,6 @@ module.exports = ArcadeMain = {
                 return;
               }
 
-        //
-        // n > 2 player or game not accepted
-        //
               if (res.rows.length > 0) {
                 if (res.rows[0].game_still_open == 1 || (res.rows[0].game_still_open == 0 && players_needed > 2)) {
 
@@ -261,7 +258,8 @@ module.exports = ArcadeMain = {
               } else {
                 salert("Sorry... game already accepted. Your list of open games will update shortly on next block!");
               }
-            });
+            }
+	  );
         }
       };
     });

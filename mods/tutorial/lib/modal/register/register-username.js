@@ -26,24 +26,34 @@ module.exports = RegisterUsername = {
       var hp = document.querySelector('#name').value;
 
       if (hp == "") {
-        app.modules.returnActiveModule().sendPeerDatabaseRequest("registry", "records", "*", "identifier = '" + identifier + "@saito'", null, (res) => {
-          if (res.rows.length > 0) {
-            salert("Identifier already in use. Please select another");
-            return;
-          } else {
-            let register_success = app.modules.returnModule('Registry').registerIdentifier(identifier);
-            if (register_success) {
-	      data.tutorial.username_registered = 1;
-              salert("Registering " + identifier + "@saito");
-              data.modal.destroy();
-            } else {
-              salert("That's a bug, Jim.")
-            }
-          }
-        });
+        app.modules.returnActiveModule().sendPeerDatabaseRequestWithFilter(
+
+		"Registry" ,
+
+		`SELECT * FROM records WHERE identifier = "${identifier}@saito"`,
+
+		(res) => {
+		  if (res.rows) {
+          	  if (res.rows.length > 0) {
+          	    salert("Identifier already in use. Please select another");
+          	    return;
+          	  } else {
+          	    let register_success = app.modules.returnModule('Registry').registerIdentifier(identifier);
+          	    if (register_success) {
+	  	      data.tutorial.username_registered = 1;
+          	      salert("Registering " + identifier + "@saito");
+          	      data.modal.destroy();
+          	    } else {
+          	      salert("That's a bug, Jim.")
+            	    }
+          	  }
+		  }
+        	}
+	);
       }
     }
   }
+
 }
 
 

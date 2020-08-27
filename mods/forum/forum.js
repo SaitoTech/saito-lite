@@ -437,33 +437,36 @@ class Forum extends ModTemplate {
       let forum_self = app.modules.returnModule('Forum');
       let where = "1 = 1 AND parent_id = \"\" ORDER BY rank DESC LIMIT 10";
 
-      forum_self.sendPeerDatabaseRequest("forum", "posts", "*", where, null, function (res) {
-        res.rows.forEach(row => {
+      forum_self.sendPeerDatabaseRequestWithFilter(
 
-          let tx = new saito.transaction(JSON.parse(row.tx));
+	"Forum" , 
 
-          let txmsg = tx.returnMessage();
+	`SELECT * FROM posts WHERE ${where}` ,
 
-	  let subforum = txmsg.forum;
-	  if (subforum == "") { subforum = "main"; }
+        (res) => {
+          res.rows.forEach(row => {
 
-          let title = txmsg.title;
-          let address = tx.transaction.from[0].add;
-          let author = forum_self.formatAuthor(tx.transaction.from[0].add);
-          let date = forum_self.formatDate(tx.transaction.ts);
-          let votes = row.votes;
-          let comments = row.comments;
-          let forum = "/forum/" + subforum;
-          let link = "/forum/" + subforum + "/" + tx.transaction.sig;
+            let tx = new saito.transaction(JSON.parse(row.tx));
+            let txmsg = tx.returnMessage();
+	    let subforum = txmsg.forum;
+	    if (subforum == "") { subforum = "main"; }
 
-          identifiers_to_fetch.push(tx.transaction.from[0].add);
+            let title = txmsg.title;
+            let address = tx.transaction.from[0].add;
+            let author = forum_self.formatAuthor(tx.transaction.from[0].add);
+            let date = forum_self.formatDate(tx.transaction.ts);
+            let votes = row.votes;
+            let comments = row.comments;
+            let forum = "/forum/" + subforum;
+            let link = "/forum/" + subforum + "/" + tx.transaction.sig;
 
-          ArcadeSidebar.addPost(app, title, author, address, date, forum, link, votes, comments);
+            identifiers_to_fetch.push(tx.transaction.from[0].add);
 
-        });
-        //forum_self.addrController.fetchIdentifiers(identifiers_to_fetch);
-      });
+            ArcadeSidebar.addPost(app, title, author, address, date, forum, link, votes, comments);
 
+          });
+        }
+      )
       return;
     }
 
@@ -475,34 +478,37 @@ class Forum extends ModTemplate {
     if (this.view_post_id == "mod") {
       where_clause = "reported = 1";
 
-      this.sendPeerDatabaseRequest("forum", "teasers", "*", where_clause, null, (res, data) => {
+      this.sendPeerDatabaseRequestWithFilter(
 
-	let forum_self = this;
-	forum_self.forum.mods = [];
+	"Forum" ,
 
-        if (res.rows) {
+	`SELECT * FROM teasers WHERE ${where_clause}` ,
 
-          res.rows.forEach(row => {
-            let tx = new saito.transaction(row.tx);
-            forum_self.forum.mods.push(tx);
-          });
+	(res) => {
 
-	  let data = {};
-	  data.forum = forum_self;
-          ForumMod.render(this.app, data);
-          ForumMod.attachEvents(this.app, data);
+	  let forum_self = this;
+	  forum_self.forum.mods = [];
 
+          if (res.rows) {
+
+            res.rows.forEach(row => {
+              let tx = new saito.transaction(row.tx);
+              forum_self.forum.mods.push(tx);
+            });
+
+	    let data = {};
+	    data.forum = forum_self;
+            ForumMod.render(this.app, data);
+            ForumMod.attachEvents(this.app, data);
+
+          }
         }
-
-
-      });
+      );
 
       return;
     }
 
-
     let forum_self = this;
-
     let loading = "main";
 
     //
@@ -522,102 +528,106 @@ class Forum extends ModTemplate {
       loading = "post";
     }
 
-    this.sendPeerDatabaseRequest("forum", "teasers", "*", where_clause, null, (res, data) => {
-      if (res.rows) {
+    this.sendPeerDatabaseRequestWithFilter(
 
-        let post_ids = [];
+	"Forum" ,
 
-        res.rows.forEach(row => {
+	`SELECT * FROM teasers WHERE ${where_clause} ` ,
 
-          let tx = new saito.transaction(row.tx);
-          post_ids.push(tx.transaction.sig);
-          identifiers_to_fetch.push(tx.transaction.from[0].add);
-
-          if (loading == "main" || loading == "forum") {
-            try {
-              forum_self.forum.teasers.push(tx);
-            } catch (err) {
-              console.log("Error fetching posts!: " + err);
-            }
-          }
-
-
-          if (loading == "post") {
-            try {
-              if (tx.msg.parent_id == "") {
-                forum_self.forum.post = tx;
-              } else {
-                forum_self.forum.comments.push(tx);
-              }
-            } catch (err) {
-              console.log("Error fetching posts!: " + err);
-            }
-          }
-
-        });
-
-        data = {};
-        data.forum = forum_self;
-
-        ForumMain.render(this.app, data);
-        ForumMain.attachEvents(this.app, data);
-
-
-        //
-        // fetch upvotes
-        //
-        where_clause = "publickey = '" + app.wallet.returnPublicKey() + "' AND post_id IN (";
-        for (let i = 0; i < post_ids.length; i++) {
-          where_clause += '"' + post_ids[i] + '"';
-          if (i < post_ids.length - 1) { where_clause += ","; } else { where_clause += ") "; }
-        }
-        this.sendPeerDatabaseRequest("forum", "votes", "*", where_clause, null, (res, data) => {
+        (res) => {
           if (res.rows) {
+            let post_ids = [];
+            res.rows.forEach(row => {
 
-            for (let i = 0; i < res.rows.length; i++) {
+              let tx = new saito.transaction(row.tx);
+              post_ids.push(tx.transaction.sig);
+              identifiers_to_fetch.push(tx.transaction.from[0].add);
 
-              let this_post_id = res.rows[i].post_id;
-              let this_vote_type = res.rows[i].type;
-
-              //
-              // upvotes
-              //
-              if (this_vote_type == "upvote") {
-                Array.from(document.getElementsByClassName('post_upvote')).forEach(upvote => {
-                  let post_id = upvote.getAttribute("id");
-                  if (post_id == this_post_id) {
-                    upvote.getElementsByClassName("post_upvote_arrow")[0].style.color = "#ff8235";
-                  }
-                });
+              if (loading == "main" || loading == "forum") {
+                try {
+                  forum_self.forum.teasers.push(tx);
+                } catch (err) {
+                  console.log("Error fetching posts!: " + err);
+                }
               }
 
-              //
-              // downvotes
-              //
-              if (this_vote_type == "downvote") {
-                Array.from(document.getElementsByClassName('post_downvote')).forEach(upvote => {
-                  let post_id = upvote.getAttribute("id");
-                  if (post_id == this_post_id) {
-                    upvote.getElementsByClassName("post_downvote_arrow")[0].style.color = "#ff8235";
+              if (loading == "post") {
+                try {
+                  if (tx.msg.parent_id == "") {
+                    forum_self.forum.post = tx;
+                  } else {
+                    forum_self.forum.comments.push(tx);
                   }
-                });
+                } catch (err) {
+                  console.log("Error fetching posts!: " + err);
+                }
               }
 
+            });
 
+            data = {};
+            data.forum = forum_self;
+
+            ForumMain.render(this.app, data);
+            ForumMain.attachEvents(this.app, data);
+
+
+            //
+            // fetch upvotes
+            //
+            where_clause = "publickey = '" + app.wallet.returnPublicKey() + "' AND post_id IN (";
+            for (let i = 0; i < post_ids.length; i++) {
+              where_clause += '"' + post_ids[i] + '"';
+              if (i < post_ids.length - 1) { where_clause += ","; } else { where_clause += ") "; }
             }
-          }
-        });
+            this.sendPeerDatabaseRequestWithFilter(
 
-        //
-        // fetch identifiers
-        //
-        forum_self.addrController.fetchIdentifiers(identifiers_to_fetch);
+	      "Forum" ,
 
+	      `SELECT * FROM votes WHERE ${where_clause}` ,
 
+	      (res) => {
+                if (res.rows) {
 
+                for (let i = 0; i < res.rows.length; i++) {
 
+                  let this_post_id = res.rows[i].post_id;
+                  let this_vote_type = res.rows[i].type;
+
+                  if (this_vote_type == "upvote") {
+                    Array.from(document.getElementsByClassName('post_upvote')).forEach(upvote => {
+                      let post_id = upvote.getAttribute("id");
+                      if (post_id == this_post_id) {
+                        upvote.getElementsByClassName("post_upvote_arrow")[0].style.color = "#ff8235";
+                      }
+                    });
+                  }
+
+                  //
+                  // downvotes
+                  //
+                  if (this_vote_type == "downvote") {
+                    Array.from(document.getElementsByClassName('post_downvote')).forEach(upvote => {
+                      let post_id = upvote.getAttribute("id");
+                      if (post_id == this_post_id) {
+                        upvote.getElementsByClassName("post_downvote_arrow")[0].style.color = "#ff8235";
+                      }
+                    });
+                  }
+
+                }
+              }
+            }
+          );
+
+          //
+          // fetch identifiers
+          //
+          forum_self.addrController.fetchIdentifiers(identifiers_to_fetch);
+
+        }
       }
-    });
+    );
   }
 
 

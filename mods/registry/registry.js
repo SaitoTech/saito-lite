@@ -28,6 +28,13 @@ class Registry extends ModTemplate {
   }
 
 
+  returnServices() {
+    let services = [];
+    if (this.app.wallet.returnPublicKey == this.publickey) {
+      services.push({ service : "registry" , domain : "saito" });
+    }
+    return services;
+  }
 
 /*******
   respondTo(type) {
@@ -157,10 +164,6 @@ class Registry extends ModTemplate {
       }
 
 
-
-      //
-      //
-      //
       if (txmsg.module == "Email") {
         if (tx.transaction.from[0].add == registry_self.publickey) {
           if (tx.transaction.to[0].add == registry_self.app.wallet.returnPublicKey()) {

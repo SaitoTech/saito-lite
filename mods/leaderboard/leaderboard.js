@@ -75,56 +75,64 @@ class Leaderboard extends ModTemplate {
       installed_games += ")";
       var where = "module IN " + installed_games + " ORDER BY ranking desc, games desc LIMIT 100"
 
-      app.modules.returnModule("Leaderboard").sendPeerDatabaseRequest("leaderboard", "leaderboard", "*", where, null, function (res) {
+      app.modules.returnModule("Leaderboard").sendPeerDatabaseRequestWithFilter(
 
-        res.rows.forEach(row => {
-          var player = "other";
-          if (row.publickey == app.wallet.returnPublicKey()) {
-            player = "me";
-          }
+	"Leaderboard" ,
 
-      let player_identifier = app.keys.returnIdentifierByPublicKey(row.publickey, true);
-      if (app.crypto.isPublicKey(player_identifier)) { identifiers_to_fetch.push(player_identifier); }
+	`SELECT * FROM leaderboard WHERE ${where}` ,
 
-          leaderboard_self.rankings[row.module].push({
-            "address": row.publickey ,
-            "publickey": app.keys.returnIdentifierByPublicKey(row.publickey, true),
-            "player": player,
-            "games": row.games,
-            "ranking": row.ranking,
+	(res) => {
+
+          res.rows.forEach(row => {
+            var player = "other";
+            if (row.publickey == app.wallet.returnPublicKey()) {
+              player = "me";
+            }
+
+            let player_identifier = app.keys.returnIdentifierByPublicKey(row.publickey, true);
+            if (app.crypto.isPublicKey(player_identifier)) { identifiers_to_fetch.push(player_identifier); }
+
+            leaderboard_self.rankings[row.module].push({
+              "address": row.publickey ,
+              "publickey": app.keys.returnIdentifierByPublicKey(row.publickey, true),
+              "player": player,
+              "games": row.games,
+              "ranking": row.ranking,
+            });
           });
-        });
 
-        let html = '';
-        let shown = 0;
-        let loop = 0;
-        let styledata = "display:grid";
-        for (var z in leaderboard_self.rankings) {
-          if (leaderboard_self.rankings[z].length > 0) {
-            html += `<div style="${styledata}" class="leaderboard-rankings leaderboard_${z}" id="leaderboard_${z}">`;
-            for (let i = 0; i < leaderboard_self.rankings[z].length; i++) {
-              let entry = leaderboard_self.rankings[z][i];
-              html += `<div class="${entry.player} playername saito-address saito-address-${entry.address}">${entry.publickey}</div><div class="${entry.player}">${entry.games}</div><div class="${entry.player}">${entry.ranking}</div>`;
+          let html = '';
+          let shown = 0;
+          let loop = 0;
+          let styledata = "display:grid";
+          for (var z in leaderboard_self.rankings) {
+            if (leaderboard_self.rankings[z].length > 0) {
+              html += `<div style="${styledata}" class="leaderboard-rankings leaderboard_${z}" id="leaderboard_${z}">`;
+              for (let i = 0; i < leaderboard_self.rankings[z].length; i++) {
+                let entry = leaderboard_self.rankings[z][i];
+                html += `<div class="${entry.player} playername saito-address saito-address-${entry.address}">${entry.publickey}</div><div class="${entry.player}">${entry.games}</div><div class="${entry.player}">${entry.ranking}</div>`;
+              }
+              if (shown == 0) {
+                document.querySelector('.leaderboard-game-module').innerHTML = (leaderboard_self.mods[loop].name + ' Leaderboard:');
+              }
+              shown = 1;
+              this.carousel_idx = loop;
+              styledata = "display:none";
+              html += '</div>';
             }
-            if (shown == 0) {
-              document.querySelector('.leaderboard-game-module').innerHTML = (leaderboard_self.mods[loop].name + ' Leaderboard:');
-            }
-            shown = 1;
-            this.carousel_idx = loop;
-            styledata = "display:none";
-            html += '</div>';
+            loop++;
           }
-          loop++;
+
+          leaderboard_self.addrController.fetchIdentifiers(identifiers_to_fetch);
+
+          document.querySelector(".leaderboard-container").innerHTML = html;
+          document.querySelectorAll('.me.playername').forEach(el => {
+            el.scrollIntoView();
+          });
+          leaderboard_self.startCarousel(leaderboard_self.mods);
         }
 
-        leaderboard_self.addrController.fetchIdentifiers(identifiers_to_fetch);
-
-        document.querySelector(".leaderboard-container").innerHTML = html;
-        document.querySelectorAll('.me.playername').forEach(el => {
-          el.scrollIntoView();
-        });
-        leaderboard_self.startCarousel(leaderboard_self.mods);
-      });
+      );
     }
   }
 
