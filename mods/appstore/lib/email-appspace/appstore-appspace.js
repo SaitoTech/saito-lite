@@ -29,16 +29,20 @@ module.exports = AppStoreAppspace = {
 
     }
 
-    data.appstore.sendPeerDatabaseRequest(db_database, db_table, db_select, db_where, null, (res) => {
-        if (res.rows != undefined) {
+    data.appstore.sendPeerDatabaseRequestWithFilter(
 
+	"AppStore" ,
+
+	`SELECT ${db_select} FROM ${db_table} WHERE ${db_where}` ,
+
+	(res) => {
+        if (res.rows != undefined) {
 	  let installed_apps = [];
 	  if (app.options.modules) {
 	    for (let i = 0; i < app.options.modules.length; i++) {
 	      installed_apps.push(app.options.modules[i].name);
 	    }
 	  }
-
 	  for (let z = 0; z < res.rows.length; z++) {
 	    if (installed_apps.includes(res.rows[z].name) || res.rows[z].name == "name" || res.rows[z].name == "Unknown") {
 	      res.rows.splice(z, 1);
@@ -46,16 +50,14 @@ module.exports = AppStoreAppspace = {
 	    } else {
 	    }
 	  }
-
 	  try {
             this.addCategories(app, data, res.rows);
             this.populateAppsSpace(app, data, res.rows);
 	  } catch (err) {
-	    console.log("________________\nissuing fetching rows from server in appstore\n");
-//console.log("RES ROWS: " + JSON.stringify(res.rows));
 	  }
         }
-    });
+      }
+    );
   },
 
 

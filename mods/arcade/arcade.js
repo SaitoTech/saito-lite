@@ -284,27 +284,35 @@ class Arcade extends ModTemplate {
     //
     // load open games from server
     //
-    this.sendPeerDatabaseRequest("arcade", "games", "*", "status = 'open'", null, (res, data) => {
-      if (res.rows) {
-        res.rows.forEach(row => {
-          let gametx = JSON.parse(row.tx);
-          let tx = new saito.transaction(gametx.transaction);
-          this.addGameToOpenList(tx);
-        });
+    this.sendPeerDatabaseRequestWithFilter(
 
-      }
-    });
+	"Arcade",
+
+	`SELECT * FROM games WHERE status = "open"`,
+
+	(res) => {
+          if (res.rows) {
+            res.rows.forEach(row => {
+              let gametx = JSON.parse(row.tx);
+              let tx = new saito.transaction(gametx.transaction);
+              this.addGameToOpenList(tx);
+            });
+          }
+        }
+    );
+
 
     //
     // load active games for observer mode
     //
     let current_timestamp = new Date().getTime() - 1200000;
-    this.sendPeerDatabaseRequest(
-      "arcade",
-      "gamestate",
-      "DISTINCT game_id, module, player, players_array",
-      ('1 = 1 AND last_move > '+current_timestamp+' GROUP BY game_id ORDER BY last_move DESC LIMIT 5'),
-      null,
+
+    this.sendPeerDatabaseRequestWithFilter(
+
+      "Arcade" , 
+
+      `SELECT DISTINCT game_id, module, player, players_array FROM gamestate WHERE (1 = 1 AND last_move > ${current_timestamp} GROUP BY game_id ORDER BY last_move DESC LIMIT 5`,
+
       (res) => {
         if (res.rows) {
           res.rows.forEach(row => {
@@ -317,7 +325,8 @@ class Arcade extends ModTemplate {
             });
           });
         }
-    });
+      }
+    );
    
 
   }
@@ -1719,45 +1728,6 @@ console.log(JSON.stringify(tx.transaction.to));
   }
 
 
-
-  async sendPeerDatabaseRequest(dbname, tablename, select = "", where = "", peer = null, mycallback = null) {
-
-/****
-    //
-    // if someone is trying to accept a game, check no-one else has taken it yet
-    //
-    if (dbname == "arcade" && tablename == "games" && select == "is_game_already_accepted") {
-
-      let game_id = where;
-      let res = {};
-      res.rows = [];
-
-      if (this.accepted[game_id] > 0) {
-
-console.log("REPORTING BACK WITH NO!");
-
-        //
-        // check required of players_needed vs. players_accepted
-        //
-        res.rows.push({ game_still_open: 0 });
-      } else {
-console.log("REPORTING BACK WITH YES!");
-        this.accepted[game_id] = 1;
-        res.rows.push({ game_still_open: 1 });
-      }
-
-      mycallback(res);
-      return;
-
-    }
-*****/
-
-    //
-    // otherwise kick into parent
-    //
-    super.sendPeerDatabaseRequest(dbname, tablename, select, where, peer, mycallback);
-
-  }
 
   shouldAffixCallbackToModule(modname) {
     if (modname == "ArcadeInvite") { return 1; }
