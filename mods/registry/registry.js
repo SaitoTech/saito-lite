@@ -30,7 +30,9 @@ class Registry extends ModTemplate {
 
   returnServices() {
     let services = [];
-    services.push({ service : "registry" , domain : "saito" });
+    if (this.app.wallet.returnPublicKey == this.publickey) {
+      services.push({ service : "registry" , domain : "saito" });
+    }
     return services;
   }
 
