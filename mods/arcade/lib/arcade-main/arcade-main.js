@@ -220,11 +220,19 @@ module.exports = ArcadeMain = {
           //
           // check with server to see if this game is taken yet
           //
-          data.arcade.sendPeerDatabaseRequestWithFilter(
+          data.arcade.sendPeerRequestWithFilter(
+	    () => {
 
-	    "Arcade" ,
+	      let msg = {};
+	          msg.request = 'rawSQL';
+		  msg.data = {};
+		  msg.data.module = "Arcade";
+		  msg.data.sql = `SELECT is_game_already_accepted FROM games WHERE game_id = "${game_id}"`;
+		  msg.data.game_id = game_id;
 
-	    `SELECT is_game_already_accepted FROM games WHERE game_id = ${game_id}` ,
+	      return msg;
+
+	    },
 
             (res) => {
 

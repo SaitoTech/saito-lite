@@ -208,21 +208,23 @@ class Twilight extends GameTemplate {
 
       if (action2 === "enable_observer_mode") {
         twilight_self.displayModal("Observer Mode enabled...");
-        twilight_self.saveGameState = 1;
+        twilight_self.game.saveGameState = 1;
 
 	let msgobj = {
 	  game_id : twilight_self.game.id ,
-	  player : twilight_self.app.wallet.returnPublicKey()
+	  player : twilight_self.app.wallet.returnPublicKey() ,
+	  module : twilight_self.game.module
 	};
 
         let msg = twilight_self.app.crypto.stringToBase64(JSON.stringify(msgobj));
 	
-	let html  = 'Your friends can observe this game by visiting the following link: ';
-	    html += 'https://saito.io/arcade/?i=watch&msg='+msg;
-        //twilight_self.saveGame(twilight_self.game.id);
-	//setTimeout(function() {
-        //  window.location.reload();
-	//}, 1000);
+	let html  = '<div class="status-message">Observer Mode will be enabled on your next move.</div>';
+	    html += 'Your friends can observe this game by visiting the following link: ';
+	    html += 'http://localhost:12101/arcade/?i=watch&msg='+msg;
+	    html += '</div>';
+
+	$('.status-overlay').html(html);
+
       }
       if (action2 === "text") {
         twilight_self.displayModal("Card Menu options changed to text-mode. Please reload.");
@@ -543,9 +545,13 @@ try {
     //
     // copy for reversion
     //
-    start_turn_game_state = JSON.parse(JSON.stringify(this.game.state));
-    start_turn_game_queue = JSON.parse(JSON.stringify(this.game.queue));
-
+    try {
+      start_turn_game_state = JSON.parse(JSON.stringify(this.game.state));
+      start_turn_game_queue = JSON.parse(JSON.stringify(this.game.queue));
+    } catch (err) {
+      start_turn_game_state = null;
+      start_turn_game_queue = null;
+    }
 
     //
     // support observer mode
@@ -2770,7 +2776,15 @@ console.log("CARD: " + card);
       let my_card = this.game.state.headline_card;
       let opponent_card = this.game.state.headline_opponent_card;
 
-console.log(my_card + " -- " + opponent_card);
+      //
+      // observer mode
+      //
+      if (this.game.player == 0) {
+	this.updateLog("Observer Mode does not handle headlines well...");
+	this.game.queue.splice(this.game.queue.length-1, 1);
+	return 1;
+      }
+
 
       if (this.game.player == 1) {
         if (this.returnOpsOfCard(my_card) > this.returnOpsOfCard(opponent_card)) {
@@ -2884,6 +2898,16 @@ console.log(my_card + " -- " + opponent_card);
 
       let my_card = this.game.state.headline_card;
       let opponent_card = this.game.state.headline_opponent_card;
+
+      //
+      // observer mode
+      //
+      if (this.game.player == 0) {
+	this.updateLog("Observer Mode does not handle headlines well...");
+	this.game.queue.splice(this.game.queue.length-1, 1); // get rid of headline // we have already executed the event
+	return 1;
+      }
+
 
       //
       // we switch to the other player now
@@ -3126,6 +3150,8 @@ console.log(my_card + " -- " + opponent_card);
 
 
   playOps(player, ops, card) {
+
+    if (this.game.player == 0) { return; }
 
     let original_ops = ops;
 
@@ -6920,7 +6946,7 @@ this.startClock();
       } else {
 
 
-        let userhtml = "<span>Match USSR influence in which country?</span><ul>";
+        let userhtml = "<div class='status-message' id='status-message'>Match USSR influence in which country? <ul>";
 
         if (yugo_diff > 0) {
           userhtml += '<li class="card" id="yugoslavia">Yugoslavia</li>';
@@ -6937,7 +6963,7 @@ this.startClock();
         if (czechoslovakia_diff > 0) {
           userhtml += '<li class="card" id="czechoslovakia">Czechoslovakia</li>';
         }
-        userhtml += '</ul>';
+        userhtml += '</ul></div>';
 
         this.updateStatus(userhtml);
         let twilight_self = this;

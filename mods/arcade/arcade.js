@@ -42,6 +42,7 @@ class Arcade extends ModTemplate {
 
 
 
+
   receiveEvent(type, data) {
     if (type == 'chat-render-request') {
       if (this.browser_active) {
@@ -70,7 +71,6 @@ class Arcade extends ModTemplate {
     let i = urlParams.get('i');
 
     if (i == "watch") {
-alert("observing this game!");
       let msg = urlParams.get('msg');
       this.observeGame(msg);
     }   
@@ -87,21 +87,30 @@ alert("observing this game!");
     let game_id = msgobj.game_id;
     let arcade_self = this;
 
+
+console.log("observing game: " + game_id);
+
     //
     // already watching game... load it
     //
     if (this.app.options.games) {
       let { games } = this.app.options;
       for (let i = 0; i < games.length; i++) {
-        if (games[i].id == game_id) {
+        if (games[i].id === game_id) {
+          games[i].observer_mode = 1;
+          games[i].observer_mode_active = 0;
           games[i].ts = new Date().getTime();
-          this.app.keys.addWatchedPublicKey(address_to_watch);
-          let slug = this.app.modules.returnModule(msgobj.module).returnSlug();
+          arcade_self.app.keys.addWatchedPublicKey(address_to_watch); 
+	  arcade_self.app.options.games = games;
+	  arcade_self.app.storage.saveOptions();
+          let slug = arcade_self.app.modules.returnModule(msgobj.module).returnSlug();
           window.location = '/' + slug;
           return;
         }
       }
     }
+
+console.log("fetching game id: " + game_id);
 
     fetch(`/arcade/observer/${game_id}`)
       .then(response => {
@@ -110,8 +119,8 @@ alert("observing this game!");
           //
           // tell peers to forward this address transactions
           //
-          this.app.keys.addWatchedPublicKey(address_to_watch);
-          let { games } = this.app.options;
+          arcade_self.app.keys.addWatchedPublicKey(address_to_watch);
+          let { games } = arcade_self.app.options;
 
           //
           // specify observer mode only
@@ -127,14 +136,20 @@ alert("observing this game!");
             }
           }
 
+          game.observer_mode = 1;
+          game.observer_mode_active = 0;
+
           games.push(game);
 
-          this.app.storage.saveOptions();
+	  arcade_self.app.options.games = games;
+          arcade_self.app.storage.saveOptions();
+
+alert("Observing a New Game!");
 
           //
           // move into game
           //
-          let slug = this.app.modules.returnModule(msgobj.module).returnSlug();
+          let slug = arcade_self.app.modules.returnModule(msgobj.module).returnSlug();
           window.location = '/' + slug;
         })
       })
@@ -570,6 +585,7 @@ alert("observing this game!");
         }
       }
 
+console.log("Processing Tx Here 1");
 
       //
       // notify SPV clients of "open", "join" and "close"(, and "accept") messages
@@ -612,12 +628,6 @@ alert("observing this game!");
       //
       if (txmsg.request == "join") {
 
-	//
-	// check to see if this 
-	//
-//	console.log("JOIN REQUEST FOR OPEN GAMES: ");
-//	console.log(JSON.stringify(this.games));
-
 	let game_id = txmsg.game_id;
 
 	for (let i = 0; i < this.games; i++) {
@@ -645,11 +655,11 @@ console.log(JSON.stringify(tx.transaction.to));
 
 
 		}
-
 	      }
 	    }
 	  }
 	}
+
 
         this.joinGameOnOpenList(tx);
         this.receiveJoinRequest(blk, tx, conf, app);
@@ -719,13 +729,6 @@ console.log(JSON.stringify(tx.transaction.to));
       }
 
 
-      //
-      // ignore msgs for others
-      //
-      // if (!tx.isTo(app.wallet.returnPublicKey())) { return; }
-
-
-
       if (txmsg.request === "sorry") {
         if (tx.isTo(app.wallet.returnPublicKey())) {
           arcade_self.receiveSorryAcceptedTransaction(blk, tx, conf, app);
@@ -757,7 +760,24 @@ console.log(JSON.stringify(tx.transaction.to));
         //
         // do not process if transaction is not for us
         //
-         if (!tx.isTo(app.wallet.returnPublicKey())) { return; }
+        if (!tx.isTo(app.wallet.returnPublicKey())) { 
+
+/*****
+	  let game_found = false;
+
+          if (this.app.options.games) {
+            for (let i = 0; i < this.app.options.games.length; i++) {
+              if (this.app.options.games[i].id == txmsg.game_id) {
+                game_found = true;
+              }
+            }
+	  }
+
+          if (game_found == false) { return; }
+*****/
+	  return;
+	}
+
 
 
         //
@@ -910,6 +930,9 @@ console.log(JSON.stringify(tx.transaction.to));
 
   async handlePeerRequest(app, message, peer, mycallback = null) {
 
+
+console.log("IN ARCADE WITH HPR: " + JSON.stringify(message));
+
     //
     // this code doubles onConfirmation
     //
@@ -1004,14 +1027,16 @@ console.log(JSON.stringify(tx.transaction.to));
 
 
 
-    if (message.request == 'arcade load games') {
+    if (message.request == 'rawSQL') {
 
       //
-      // is this a sanity check 
+      // intercept a very particular query
       //
-      if (message.data.select == "is_game_already_accepted") {
+      if (message.data.sql.indexOf("is_game_already_accepted") > -1) {
 
-        let game_id = message.data.where;
+console.log("\nIS GAME ALREADY ACCEPTED REQUEST");
+
+        let game_id = message.data.game_id;
 
         let res = {};
         res.rows = [];
@@ -1643,7 +1668,7 @@ console.log(JSON.stringify(tx.transaction.to));
 
       expressapp.get('/arcade/observer/:game_id', async (req, res) => {
 
-        //console.info("\n\n\n\nHERE WE ARE!");
+        console.info("\n\n\n\nHERE WE ARE!");
 
         let sql = "SELECT * FROM gamestate WHERE game_id = $game_id ORDER BY id DESC LIMIT 1";
         let params = { $game_id: req.params.game_id }
@@ -1657,7 +1682,9 @@ console.log(JSON.stringify(tx.transaction.to));
           res.write(game.game_state);
           res.end();
           return;
-        }
+        } else {
+console.log("GAME DOES NOT EXIST!");
+	}
 
       });
 
