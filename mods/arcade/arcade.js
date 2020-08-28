@@ -148,9 +148,9 @@ console.log("fetching game id: " + game_id);
 	  //
 	  // and we add this stuff to our queue....
 	  //
-console.log("NEXT MOVE: " + JSON.stringify(game.last_move));
-	  for (let z = 0; z < game.last_move.turn.length; z++) {
-	    game.queue.push(game.last_move.turn[z]);
+console.log("NEXT MOVE: " + JSON.stringify(game.last_turn));
+	  for (let z = 0; z < game.last_turn.length; z++) {
+	    game.queue.push(game.last_turn[z]);
           }
 
 console.log("GQUEUE NOW: " + game.queue);
@@ -1256,7 +1256,7 @@ console.log("\nIS GAME ALREADY ACCEPTED REQUEST");
     // for the next turn / broadcast
     //
 console.log("SAVING TXMSG IN GAMESTATE!");
-    game_state.last_move = txmsg;
+    game_state.last_turn = txmsg.turn;
 
 
     //
