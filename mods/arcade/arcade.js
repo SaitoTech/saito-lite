@@ -139,6 +139,15 @@ console.log("fetching game id: " + game_id);
           game.observer_mode = 1;
           game.observer_mode_active = 0;
 
+	  //
+	  // and we add this stuff to our queue....
+	  //
+console.log("NEXT MOVE: " + JSON.stringify(game.last_move));
+	  for (let z = 0; z < game.last_move.turn.length; z++) {
+	    game.queue.push(game.last_move.turn[z]);
+          }
+
+console.log("GQUEUE NOW: " + game.queue);
           games.push(game);
 
 	  arcade_self.app.options.games = games;
@@ -1233,6 +1242,16 @@ console.log("\nIS GAME ALREADY ACCEPTED REQUEST");
     for (let z = 0; z < txto.length; z++) {
       if (!x.includes(txto[z].add)) { x.push(txto[z].add); }
     }
+
+    //
+    // add any move associated with this tx to the 
+    // gamestate so that it can be executed to pull
+    // us up-to-date on what happened in preparation 
+    // for the next turn / broadcast
+    //
+console.log("SAVING TXMSG IN GAMESTATE!");
+    game_state.last_move = txmsg;
+
 
     //
     // do not save 1-player games
