@@ -40,6 +40,12 @@ class Arcade extends ModTemplate {
 
   }
 
+  returnServices() {
+    let services = [];
+    services.push({ service : "arcade" , domain : "saito" });
+    return services;
+  }
+
 
 
   receiveEvent(type, data) {
