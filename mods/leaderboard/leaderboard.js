@@ -55,15 +55,16 @@ class Leaderboard extends ModTemplate {
 
   }
 
+
+
+
   onPeerHandshakeComplete(app, peer) {
 
     let leaderboard_self = app.modules.returnModule("Leaderboard");
+    let arcade_self = app.modules.returnModule("Arcade");
 
-    
-    let arcade_installed = app.modules.returnModule("Arcade");
-    if (arcade_installed == null) { return ; }
-
-    if (app.modules.returnModule('Arcade').browser_active == 1) {
+    if (arcade_self == null) { return ; }
+    if (arcade_self.browser_active == 1) {
 
       let installed_games = "(";
       let identifiers_to_fetch = [];
@@ -73,22 +74,19 @@ class Leaderboard extends ModTemplate {
         if (i < this.mods.length - 1) { installed_games += ","; }
       }
       installed_games += ")";
-      var where = "module IN " + installed_games + " ORDER BY ranking desc, games desc LIMIT 100"
 
       app.modules.returnModule("Leaderboard").sendPeerDatabaseRequestWithFilter(
 
 	"Leaderboard" ,
 
-	`SELECT * FROM leaderboard WHERE ${where}` ,
+	`SELECT * FROM leaderboard WHERE module IN ${installed_games} ORDER BY ranking desc, games desc LIMIT 100` ,
 
 	(res) => {
 
           res.rows.forEach(row => {
-            var player = "other";
-            if (row.publickey == app.wallet.returnPublicKey()) {
-              player = "me";
-            }
 
+            let player = "other";
+            if (row.publickey == app.wallet.returnPublicKey()) { player = "me"; }
             let player_identifier = app.keys.returnIdentifierByPublicKey(row.publickey, true);
             if (app.crypto.isPublicKey(player_identifier)) { identifiers_to_fetch.push(player_identifier); }
 
@@ -99,6 +97,7 @@ class Leaderboard extends ModTemplate {
               "games": row.games,
               "ranking": row.ranking,
             });
+
           });
 
           let html = '';
@@ -155,10 +154,13 @@ class Leaderboard extends ModTemplate {
       if (txmsg.request == "gameover") {
 
         console.log('+++++++++++++++++++++++++++++++++++++++');
-        console.log('++++++' + tx.transaction.sig);
+        console.log('+++ LEADRBRD +++' + tx.transaction.sig);
         console.log('+++++++++++++++++++++++++++++++++++++++');
 
-    if (txmsg.winner === "") { return; } // tie game
+        if (txmsg.winner === "") { 
+console.log("NO WINNER PROVIDED -- OUT!");
+	  return; 
+	} // tie game
 
         winner.publickey = txmsg.winner;
         module = txmsg.module;

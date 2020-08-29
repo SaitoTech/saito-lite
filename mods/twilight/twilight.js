@@ -207,7 +207,6 @@ class Twilight extends GameTemplate {
       let action2 = $(this).attr("id");
 
       if (action2 === "enable_observer_mode") {
-        twilight_self.displayModal("Observer Mode enabled...");
         twilight_self.game.saveGameState = 1;
 
 	let msgobj = {
@@ -218,9 +217,8 @@ class Twilight extends GameTemplate {
 
         let msg = twilight_self.app.crypto.stringToBase64(JSON.stringify(msgobj));
 	
-	let html  = '<div class="status-message">Observer Mode will be enabled on your next move.</div>';
-	    html += 'Your friends can observe this game by visiting the following link: ';
-	    html += 'http://localhost:12101/arcade/?i=watch&msg='+msg;
+	let html  = '<div class="status-message" id="status-message">Observer Mode will be enabled on your next move (if you do not reload your browser before you make it). Your friends can observe the game from your perspective at the following link:';
+	    html += '<div style="padding:15px;font-size:0.9em;overflow-wrap:anywhere">http://localhost:12101/arcade/?i=watch&msg='+msg+'</div>';
 	    html += '</div>';
 
 	$('.status-overlay').html(html);
