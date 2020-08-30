@@ -15,14 +15,14 @@ Block producers rebroadcast UTXO by creating special "automatic transaction rebr
 
 Saito adds cryptographic signatures to the network layer. These create an unforgeable record of the path each transaction has taken into the network. This allows us to measure the "routing work" contained in any transaction. At every point in its journey the routing work in a transaction is the value of the transaction fee halved with each additional hop beyond the first that the transaction has taken into the network.
 
-The blockchain sets a "difficulty" for block production. This difficulty is met by including transactions containing adequate "routing work" into blocks. Consensus rules specify that nodes cannot use "routing work" from transactions if they are not included in the routing path. A bonus payment may be issued to block producers if there is more "routing work" in their blocks than required by consensus.
+The blockchain sets a "difficulty" for block production. This difficulty is met by including transactions containing adequate "routing work" into blocks. Consensus rules specify that nodes cannot use "routing work" from transactions if they are not included in the routing path. A bonus payment may be issued to block producers if there is more "routing work" in their blocks than required by consensus. All other fees are collected into the network treasury (i.e. not paid out to the block producer)
 
 
 ## 3. THE PAYMENT LOTTERY
 
-Each block contains a NEW proof-of-work challenge in its block hash. This is not used to produce blocks since (section 2) Saito does not using hashing to produce blocks. Instead, miners solve these challenges to release payments. Once a solution is found it is broadcast into the network in the form of a normal, fee-paying transaction.
-`
-If a solution is not found and included by the time the next block is produced, the funds eventually fall off the chain (when they pass out of the current epoch) and are collected by the consensus layer for eventual inclusion in a future block reward. But if exactly one solution is included in the very next block the network splits the block reward between the lucky miner and a routing node selected randomly from the previous block. Each routing node has a chance of winning proportional to the amount of work it contributed to that block. 
+Each block contains a proof-of-work challenge in its block hash. This proof-of-work puzzle is not used to produce blocks since (section 2) Saito does not using hashing to produce blocks. Instead, miners solve these challenges in order to hold a payment lottery. Miners begin conducting this hashing-lottery on receipt of a block and once a solution is found it is broadcast into the network in the form of a normal, fee-paying transaction.
+
+If a solution is not found by the time the next block is produced, the funds are not released from the treasury. Uncollected funds will eventually fall off the chain (when the block containing them passes out of the current epoch) and are then collected by the consensus layer for eventual inclusion in a future block reward. But if exactly one solution is included in the very next block the network splits the block reward between the lucky miner and a routing node selected randomly from the previous block. Each routing node has a chance of winning proportional to the amount of routing work it contributed to that block.
 
 Mining difficulty auto-adjusts until the network produces one golden ticket on average per block. 
 
