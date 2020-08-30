@@ -8,12 +8,12 @@ Saito divides the blockchain into "epochs" of roughly 100,000 blocks. If the lat
 
 Once a block falls out of the current epoch, its unspent transaction outputs (UTXO) are no longer spendable. Any UTXO which contains enough tokens to pay a rebroadcasting fee must be re-included in the very next block however. The rebroadcasting fee is twice the average fee per byte paid by new transactions over a smoothing period.
 
-Block producers rebroadcast UTXO by creating special "automatic transaction rebroadcasting" (ATR) transactions. These ATR transactions include the original transaction but have new UTXO. The rebroadcasting fee is deducted from these new UTXO and added to the block reward. Any blocks not containing all necessary ATR transactions are invalid by consensus rules. After two epochs block producers may delete old transactions, keeping only the 32-byte header hash to prove the connection with the genesis block.
+Block producers rebroadcast UTXO by creating special "automatic transaction rebroadcasting" (ATR) transactions. These ATR transactions include the original transaction within an associated data field but have new UTXO. The rebroadcasting fee is deducted from these new UTXO and added to the block reward. Any blocks not containing all necessary ATR transactions are invalid by consensus rules. After two epochs block producers may delete old transactions, keeping only the 32-byte header hash to prove the connection with the genesis block.
 
 
 ## 2. PRODUCING BLOCKS
 
-Saito adds cryptographic signatures to the network layer. Each transaction contains an unforgeable record of the path it takes into the network. This allows us to measure the "routing work" contained any transaction at any point in its journey. This is the value of the transaction fee halved with each additional hop beyond the first that the transaction has taken into the network.
+Saito adds cryptographic signatures to the network layer. These create an unforgeable record of the path each transaction has taken into the network. This allows us to measure the "routing work" contained in any transaction. At every point in its journey the routing work in a transaction is the value of the transaction fee halved with each additional hop beyond the first that the transaction has taken into the network.
 
 The blockchain sets a "difficulty" for block production. This difficulty is met by including transactions containing adequate "routing work" into blocks. Consensus rules specify that nodes cannot use "routing work" from transactions if they are not included in the routing path. A bonus payment may be issued to block producers if there is more "routing work" in their blocks than required by consensus.
 
