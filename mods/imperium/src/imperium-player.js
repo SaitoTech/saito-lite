@@ -4540,6 +4540,8 @@ playerActivateSystem() {
       alert("You cannot activate that system.");
     } else {
 
+      let sys = imperium_self.returnSectorAndPlanets(pid);
+
       //
       // sanity check on whether we want to do this
       //
@@ -4552,8 +4554,17 @@ playerActivateSystem() {
 	}
       }
  
+      //
+      // if this is our homeworld, it is round 1 and we haven't moved ships out, we may not 
+      // understand 
+      //
+      if (imperium_self.returnPlayerHomeworldSector() == sys.s.sector && imperium_self.game.state.round == 1) {
+	let confirm_choice = confirm("If you activate your homeworld you will not be able to move ships out of it until Round 2. Are you sure you want to do this?");
+	if (!confirm_choice) { return; }
+      }
+
+
       activated_once = 1;
-      let sys = imperium_self.returnSectorAndPlanets(pid);
       let divpid = '#' + pid;
 
       $(divpid).find('.hex_activated').css('background-color', 'var(--p' + imperium_self.game.player + ')');
