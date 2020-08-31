@@ -271,7 +271,7 @@
 
   checkForVictory() {
     for (let i = 0; i < this.game.players_info.length; i++) {
-      if (this.game.players_info[i].vp >= this.vp_needed) {
+      if (this.game.players_info[i].vp >= this.game.state.vp_target) {
         this.updateStatus("Game Over: " + this.returnFaction(i+1) + " has reached 14 VP");
         return 1;
       }
@@ -1160,6 +1160,76 @@ console.log("PREREQS: " + prereqs);
 
 
 
+  canPlayerLandInfantry(player, sector) {
+
+    let planets_owned_by_player = 0;
+    let planets_with_infantry = [];
+    let total_infantry_on_planets = 0;
+    let infantry_in_space = this.returnInfantryInSpace(player, sector);
+
+    let sys = this.returnSectorAndPlanets(sector);
+    for (let i = 0; i < sys.p.length; i++) {
+      if (sys.p[i].owner == this.game.player) {
+	planets_owned_by_player++;
+	planets_with_infantry.push(this.returnInfantryOnPlanet(sys.p[i]));
+	total_infantry_on_planets += this.returnInfantryOnPlanet(sys.p[i]);
+      }
+    }
+
+    if (planets_owned_by_player > 1) {
+
+      // infantry on both planets
+      for (let z = 0; z < planets_with_infantry.length; z++) {
+	if (planets_with_infantry[z] <= total_infantry_on_planets) { return 1; }
+      }
+
+    } else {
+
+      // infantry in space
+      if (infantry_in_space) { return 1; }
+
+    }
+
+    return 0;
+
+    //
+    // do we have any infantry for an invasion
+    //
+    for (let i = 0; i < sys.s.units[player-1].length; i++) {
+      let unit = sys.s.units[player-1][i];
+      for (let k = 0; k < unit.storage.length; k++) {
+        if (unit.storage[k].type == "infantry") {
+          total_available_infantry += 1;
+        }
+      }
+      if (unit.capacity > 0) { space_tranport_available = 1; }
+    }
+  
+    //
+    // return yes if troops in space
+    //
+    if (total_available_infantry > 0) {
+      return 1;
+    }
+  
+    //
+    // otherwise see if we can transfer over from another planet in the sector
+    //
+    if (space_transport_available == 1) {
+      for (let i = 0; i < sys.p.length; i++) {
+        for (let k = 0; k < sys.p[i].units[player-1].length; k++) {
+          if (sys.p[i].units[player-1][k].type == "infantry") { return 1; }
+        }
+      }
+    }
+  
+    //
+    // sad!
+    //
+    return 0;
+  }
+  
+  
   canPlayerInvadePlanet(player, sector) {
   
     let sys = this.returnSectorAndPlanets(sector);
@@ -1440,6 +1510,36 @@ if (this.game.board[tmp[k]] != undefined) {
       }
     }
     return total;
+  }
+  returnInfantryInUnit(unit) {
+
+    let infantry = 0;
+
+    for (let ii = 0; ii < unit.storage.length; ii++) {
+      if (unit.storage[ii].type == "infantry") {
+        infantry++;
+      }
+    }
+    return infantry;
+
+  }
+  returnInfantryInSpace(player, sector) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+    let infantry_in_space = 0;
+
+    for (let i = 0; i < sys.s.units[player-1].length; i++) {
+      if (sys.s.units[player-1][i].destroyed == 0) {
+        if (sys.s.units[player-1][i].storage.length > 0) {
+          for (let ii = 0; ii < sys.s.units[player-1][i].storage.length; ii++) {
+            if (sys.s.units[player-1][i].storage[ii].type == "infantry") {
+              infantry_in_space++;
+            }
+          }
+        }
+      }
+    }
+    return infantry_in_space;
   }
 
   doesPlanetHavePDS(planet) {
@@ -2257,6 +2357,15 @@ console.log("return tech skips: " + planet_cards[i] + " --- " + this.game.planet
  
 
   canPlayerMoveShipsIntoSector(player, destination) {
+
+    //
+    // supernovas ?
+    //
+    if (this.game.players_info[player-1].move_into_supernovas == 0) {
+      let sys = this.returnSectorAndPlanets(destination);
+      if (sys.s.type == 4) { return 0; }
+    }
+
 
     let imperium_self = this;
     let hops = 3;

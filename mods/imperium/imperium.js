@@ -20,7 +20,6 @@ class Imperium extends GameTemplate {
   
     this.rmoves           = [];
     this.totalPlayers     = 2;
-    this.vp_needed        = 14;
 
 
 
@@ -808,12 +807,12 @@ console.log("returning upgraded carrier...");
 	  // defenders in PDS are the ones with this enabled
 	  //
           if (imperium_self.game.players_info[defender-1].graviton_laser_system_active == 1) {
-	    if (!targets.include("warsun")) { targets.push("warsun"); }
-	    if (!targets.include("flagship")) { targets.push("flagship"); }
-	    if (!targets.include("dreadnaught")) { targets.push("dreadnaught"); }
-	    if (!targets.include("cruiser")) { targets.push("cruiser"); }
-	    if (!targets.include("carrier")) { targets.push("carrier"); }
-	    if (!targets.include("destroyer")) { targets.push("destroyer"); }
+	    if (!targets.includes("warsun")) { targets.push("warsun"); }
+	    if (!targets.includes("flagship")) { targets.push("flagship"); }
+	    if (!targets.includes("dreadnaught")) { targets.push("dreadnaught"); }
+	    if (!targets.includes("cruiser")) { targets.push("cruiser"); }
+	    if (!targets.includes("carrier")) { targets.push("carrier"); }
+	    if (!targets.includes("destroyer")) { targets.push("destroyer"); }
           }
         }
 	return targets;
@@ -3970,6 +3969,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
       },
       scoreObjective : function(imperium_self, player) {
         imperium_self.game.players_info[player-1].goods -= 5;
+	imperium_self.displayFactionDashboard();
 	return 1;
       },
   });
@@ -4016,6 +4016,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
       },
       scoreObjective : function(imperium_self, player) {
         imperium_self.game.players_info[player-1].goods -= 10;
+	imperium_self.displayFactionDashboard();
         return 1;
       },
   });
@@ -6417,8 +6418,8 @@ alert("H: " + planet);
 		let goods = planet.resources;
 
                 imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tgoods\t"+goods);
-                imperium_self.addMove("expend\t"+imperium_self.game.player+"\tplanet\t"+planet);
-                imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " exhausting "+imperium_self.game.planets[planet].name + " and gaining " + goods + " trade goods");
+                imperium_self.addMove("expend\t"+imperium_self.game.player+"\tplanet\t"+planet.planet);
+                imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " exhausting "+planet.name + " and gaining " + goods + " trade goods");
                 imperium_self.endTurn();
 		return 0;
 
@@ -7766,8 +7767,8 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
 	    let roll1 = imperium_self.rollDice(10);
 	    let roll2 = imperium_self.rollDice(10);
 
-	    let counterparty = imperium_self.state.space_combat_attacker;
-	    if (counterparty == player) { counterparty = imperium_self.state.space_combat_defender; }
+	    let counterparty = imperium_self.game.state.space_combat_attacker;
+	    if (counterparty == player) { counterparty = imperium_self.game.state.space_combat_defender; }
 
 	    let total_ships_to_destroy = 0;
 
@@ -9246,6 +9247,18 @@ console.log("player: " + player + " ---- " + tech);
         sys.p[planet_idx].units[player-1].splice(i, 1);
         this.saveSystemAndPlanets(sys);
         return JSON.stringify(unit_to_remove);
+      }
+    }
+    return "";
+  };
+  unloadUnitFromShip(player, sector, ship_idx, unitname) {
+    let sys = this.returnSectorAndPlanets(sector);
+console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][ship_idx].storage.length + " UNITS");
+    for (let i = 0; i < sys.s.units[player - 1][ship_idx].storage.length; i++) {
+      if (sys.s.units[player - 1][ship_idx].storage[i].type === unitname) {
+        sys.s.units[player-1][ship_idx].storage.splice(i, 1);
+        this.saveSystemAndPlanets(sys);
+        return unitjson;
       }
     }
     return "";
@@ -10990,7 +11003,8 @@ console.log(JSON.stringify(this.game.state.choices));
         if (this.game.state.round == 1) {
           this.game.queue.push("revealobjectives");
   	  for (let i = 1; i <= this.game.players_info.length; i++) {
-            this.game.queue.push("FLIPCARD\t4\t2\t2\t"+i); // deck card poolnum player
+            // only 1 card because first turn is short
+            this.game.queue.push("FLIPCARD\t4\t1\t2\t"+i); // deck card poolnum player
   	  }
         } else {
 
@@ -11342,7 +11356,43 @@ console.log(JSON.stringify(this.game.state.choices));
         return 1;
   
       }
-  
+
+
+      if (mv[0] === "unload_infantry") {
+
+  	let player       = mv[1];
+  	let player_moves = mv[2];
+        let sector       = mv[3];
+        let source       = mv[4];   // planet ship
+        let source_idx   = mv[5];   // planet_idx or ship_idx
+
+        if (source === "planet") {
+	  this.unloadUnitFromPlanet(player, sector, source_idx, "infantry");
+        } else {
+	  this.unloadUnitFromShip(player, sector, source_idx, "infantry");
+        }
+      }
+
+      if (mv[0] === "load_infantry") {
+
+  	let player       = mv[1];
+  	let player_moves = mv[2];
+        let sector       = mv[3];
+        let destination  = mv[4];   // planet ship
+        let source_idx   = mv[5];   // planet_idx or ship_idx
+
+        if (destination === "planet") {
+          this.loadUnitOntoPlanet(player, sector, source_idx, "infantry");
+	}
+        if (destination === "ship") {
+          this.loadUnitOntoShip(player, sector, source_idx, "infantry");
+	}
+
+      }
+
+
+
+
       if (mv[0] === "load") {
   
   	let player       = mv[1];
@@ -11603,9 +11653,68 @@ imperium_self.saveGame(imperium_self.game.id);
 	let stuff_in_return = JSON.parse(mv[4]);
   	this.game.queue.splice(qe, 1);
 
-	this.updateLog(this.returnFaction(offering_faction) + " makes a trade offer to " + this.returnFaction(faction_to_consider));
+        let log_offer = '';
+        let offering_html = this.returnFaction(offering_faction) + " makes a trade offer to " + this.returnFaction(faction_to_consider) + ": ";
+	    offering_html += '<div style="padding:20px;clear:left">';
+
+	    if (stuff_on_offer.goods > 0) {
+	      log_offer += stuff_on_offer.goods + " ";
+	      if (stuff_on_offer.goods > 1) {
+		log_offer += "trade goods";
+	      } else {
+		log_offer += "trade good";
+	      }
+	    }
+	    if (stuff_on_offer.promissaries.length > 0) {
+	      if (stuff_on_offer.goods >= 1) {
+	        log_offer += " and ";
+	      }
+	      for (let i = 0; i < stuff_on_offer.promissaries.length; i++) {
+	        let pm = stuff_on_offer.promissaries[i].promissary;
+        	let tmpar = pm.split("-");
+        	let faction_promissary_owner = imperium_self.factions[tmpar[0]].name;
+		log_offer += this.promissary_notes[tmpar[1]].name;
+		log_offer += " ";
+		log_offer += "("+faction_promissary_owner+")";
+	      }
+	    }
+	    if (stuff_on_offer.goods == 0 && stuff_on_offer.promissaries_length == 0) {
+	      log_offer += 'nothing';
+	    }
+
+	    log_offer += " in exchange for ";
+
+	    if (stuff_in_return.goods > 0) {
+	      log_offer += stuff_in_return.goods + " ";
+	      if (stuff_in_return.goods > 1) {
+		log_offer += "trade goods or commodities";
+	      } else {
+		log_offer += "trade good or commodity";
+	      }
+	    }
+	    if (stuff_in_return.promissaries.length > 0) {
+	      if (stuff_in_return.goods > 1) {
+	        log_offer += " and ";
+	      }
+	      for (let i = 0; i < stuff_in_return.promissaries.length; i++) {
+	        let pm = stuff_in_return.promissaries[i].promissary;
+        	let tmpar = pm.split("-");
+        	let faction_promissary_owner = imperium_self.factions[tmpar[0]].name;
+		log_offer += this.promissary_notes[tmpar[1]].name;
+		log_offer += " ";
+		log_offer += "("+faction_promissary_owner+")";
+	      }
+	    }
+	    if (stuff_in_return.goods == 0 && stuff_in_return.promissaries_length == 0) {
+	      log_offer += 'nothing';
+	    }
+
+	    offering_html += log_offer;
+	    offering_html += '</div>';
+
+	this.updateLog(log_offer);
 	if (this.game.player == faction_to_consider) {
-	  this.playerHandleTradeOffer(offering_faction, stuff_on_offer, stuff_in_return);
+	  this.playerHandleTradeOffer(offering_faction, stuff_on_offer, stuff_in_return, log_offer);
 	}
 
         return 0;
@@ -13742,6 +13851,16 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	this.game.state.space_combat_attacker = player;
 	this.game.state.space_combat_defender = defender;
 
+	//
+	// check that attacker and defender both have ships
+	//
+        if (this.doesPlayerHaveShipsInSector(player, sector) != 1 || this.doesPlayerHaveShipsInSector(defender, sector) != 1) {
+	  //
+	  // we can skip the combat as there is none
+	  //
+	  return 1;
+	}
+
 
 	//
 	// otherwise, process combat
@@ -14656,7 +14775,6 @@ console.log("total hits and shots: " + total_hits + " -- " + total_shots);
   }
 
 
-
 returnPlayers(num = 0) {
 
   var players = [];
@@ -14769,6 +14887,7 @@ returnPlayers(num = 0) {
     players[i].fly_through_asteroids = 0;
     players[i].fly_through_nebulas = 0;
     players[i].fly_through_supernovas = 0;
+    players[i].move_into_supernovas = 0;
     players[i].reinforce_infantry_after_successful_ground_combat = 0;
     players[i].bacterial_weapon = 0;
     players[i].evasive_bonus_on_pds_shots = 0;
@@ -16604,6 +16723,10 @@ playerContinueTurn(player, sector) {
       options_available++;
     }
   }
+  if (this.canPlayerLandInfantry(player, sector) && this.game.tracker.invasion == 0) {
+    html += '<li class="option" id="land">reassign infantry</li>';
+    options_available++;
+  }
   if (this.game.tracker.trade == 0 && this.canPlayerTrade(this.game.player) == 1) {
     html += '<li class="option" id="trade">trade</li>';
   }
@@ -16658,6 +16781,12 @@ playerContinueTurn(player, sector) {
     if (action2 == "trade") {
       imperium_self.addMove("continue\t" + player + "\t" + sector);
       imperium_self.playerTrade();
+      return 0;
+    }
+
+    if (action2 == "land") {
+      imperium_self.addMove("continue\t" + player + "\t" + sector);
+      imperium_self.playerSelectInfantryToLand(sector);
       return 0;
     }
 
@@ -17531,8 +17660,7 @@ playerProduceUnits(sector, production_limit = 0, cost_limit = 0, stage = 0, warf
 }
 
 
-playerHandleTradeOffer(faction_offering, their_offer, my_offer) {
-
+playerHandleTradeOffer(faction_offering, their_offer, my_offer, offer_log) {
 
   let imperium_self = this;
 
@@ -17566,31 +17694,7 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer) {
   }
 
   let html = '<div class="sf-readable">You have received a trade offer from ' + imperium_self.returnFaction(faction_offering) + '. ';
-  html += 'They offer ';
-
-  if (goods_received > 0) {
-    html += my_offer.goods + ' trade goods';
-  }
-  if (promissaries_received.length > 0) {
-    if (goods_received > 0) { html += ' and '; }
-    html += promissaries_received;
-  }
-  if (goods_received == 0 && promissaries_received.length == 0) {
-    html += 'nothing';
-  }
-  html += ' in exchange for ';
-  if (goods_offered > 0) {
-    html += their_offer.goods + ' trade goods';
-  }
-  if (promissaries_offered.length > 0) {
-    if (goods_offered > 0) { html += ' and '; }
-    html += promissaries_offered;
-  }
-  if (goods_offered == 0 && promissaries_offered.length == 0) {
-    html += 'nothing';
-  }
-
-
+  html += 'They offer ' + offer_log;
   html += ': </div><ul>';
   html += `  <li class="option" id="yes">accept trade</li>`;
   html += `  <li class="option" id="no">refuse trade</li>`;
@@ -17660,8 +17764,8 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer) {
       }
 
       let html = "<div class='sf-readable'>Make an Offer: </div><ul>";
-      html += '<li id="to_offer" class="option">you give <span class="offer_total">0</span> commodities/goods</li>';
-      html += '<li id="to_receive" class="option">you receive <span class="receive_total">0</span> trade goods</li>';
+      html += '<li id="to_offer" class="option">you give <span class="offer_total">'+offer_selected+'</span> commodities/goods</li>';
+      html += '<li id="to_receive" class="option">you receive <span class="receive_total">'+receive_selected+'</span> trade goods</li>';
       html += '<li id="promissary_offer" class="option">you give <span class="give_promissary">'+offer_promissary_text+'</span></li>';
       html += '<li id="promissary_receive" class="option">you receive <span class="receive_promissary">'+receive_promissary_text+'</span></li>';
       html += '<li id="confirm" class="option">submit offer</li>';
@@ -18014,8 +18118,8 @@ playerSelectStrategyAndCommandTokens(cost, mycallback) {
   let selected_cost = 0;
 
   let html = "<div class='sf-readable'>Select " + cost + " in Strategy and Command Tokens: </div><ul>";
-  html += '<li class="textchoice" id="strategy">strategy tokens</li>';
-  html += '<li class="textchoice" id="command">command tokens</li>';
+  html += '<li class="textchoice" id="strategy">strategy tokens - <span class="available_strategy_tokens">'+imperium_self.game.players_info[imperium_self.game.player-1].strategy_tokens+'</span></li>';
+  html += '<li class="textchoice" id="command">command tokens - <span class="available_command_tokens">'+imperium_self.game.players_info[imperium_self.game.player-1].command_tokens+'</span></li>';
   html += '</ul>';
 
   this.updateStatus(html);
@@ -18023,13 +18127,21 @@ playerSelectStrategyAndCommandTokens(cost, mycallback) {
 
     let action2 = $(this).attr("id");
 
-    selected_cost++;
-
     if (action2 == "strategy") {
-      imperium_self.addMove("expend\t" + imperium_self.game.player + "\tstrategy\t1");
+      let x = parseInt($('.available_strategy_tokens').html());
+      if (x > 0) {
+        selected_cost++;
+        $('.available_strategy_tokens').html((x-1));
+        imperium_self.addMove("expend\t" + imperium_self.game.player + "\tstrategy\t1");
+      }
     }
     if (action2 == "command") {
-      imperium_self.addMove("expend\t" + imperium_self.game.player + "\tcommand\t1");
+      let x = parseInt($('.available_command_tokens').html());
+      if (x > 0) {
+        selected_cost++;
+        $('.available_command_tokens').html((x-1));
+        imperium_self.addMove("expend\t" + imperium_self.game.player + "\tcommand\t1");
+      }
     }
 
     if (cost <= selected_cost) { mycallback(1); }
@@ -18854,6 +18966,128 @@ alert("To change movement options, just reload!");
 
 }
 
+//////////////////////////
+// Select Units to Move //
+//////////////////////////
+playerSelectInfantryToLand(sector) {
+
+  let imperium_self = this;
+  let html = '<div id="status-message" class="status-message">Unload Infantry (source): <ul>';
+  let sys = imperium_self.returnSectorAndPlanets(sector);
+
+  let space_infantry = [];
+  let ground_infantry = [];
+
+  for (let i = 0; i < sys.s.units[this.game.player-1].length; i++) {
+    space_infantry.push(0);
+    let unit = sys.s.units[this.game.player-1][i];
+    if (imperium_self.returnInfantryInUnit(unit) > 0) { 
+    html += `<li class="option textchoice" id="addinfantry_s_${i}">remove infantry from ${unit.name} - <span class="add_infantry_remaining_s_${i}">${imperium_self.returnInfantryInUnit(unit)}</span></li>`;
+    }
+  }
+
+  for (let p = 0; p < sys.p.length; p++) {
+    ground_infantry.push(0);
+    let planet = sys.p[p];
+    if (imperium_self.returnInfantryOnPlanet(planet) > 0) { 
+      html += `<li class="option textchoice" id="addinfantry_p_${p}">remove infantry from ${planet.name} - <span class="add_infantry_remaining_p_${p}">${imperium_self.returnInfantryOnPlanet(planet)}</span></li>`;
+    }
+  }
+
+  html += '</ul>';
+  html += '</div>';
+
+  html += '<div id="confirm" class="option">click here to move</div>';
+  html += '<hr />';
+  html += '<div id="clear" class="option">clear selected</div>';
+  imperium_self.updateStatus(html);
+
+  $('.option').off();
+  $('.option').on('click', function () {
+
+    let id = $(this).attr("id");
+    let assigned_planets = [];
+    for (let i = 0; i < sys.p.length; i++) {
+      assigned_planets.push(0);
+    }
+
+    //
+    // submit when done
+    //
+    if (id == "confirm") {
+
+      for (let i = 0; i < space_infantry.length; i++) {
+	imperium_self.addMove("unload_infantry\t"+imperium_self.game.player+"\t"+1+"\t"+sector+"\t"+"ship"+"\t"+space_infantry[i]);
+      }
+      for (let i = 0; i < ground_infantry.length; i++) {
+	imperium_self.addMove("unload_infantry\t"+imperium_self.game.player+"\t"+1+"\t"+sector+"\t"+"planet"+"\t"+ground_infantry[i]);
+      }
+
+      let html = '<div class="status-message" id="status-message">Reassign Infantry to Planets: <ul>';
+          for (let i = 0; i < sys.p.length; i++) {
+  	    html += `<li class="option textchoice" id="${i}">${sys.s[i].name} - <span class="infantry_on_${i}">${imperium_self.returnInfantryOnPlanet(sys.p[i]) - ground_infantry[i] }</span></li>`;
+          }
+          html += '<div id="confirm" class="option">click here to move</div>';
+          html += '</ul'; 
+          html += '</div>';
+
+      imperium_self.updateStatus(html);
+
+      $('.option').off();
+      $('.option').on('click', function () {
+
+        let id = $(this).attr("id");
+
+        if (id == "confirm") {
+	  imperium_self.endTurn();
+        }
+
+        let divname = "infantry_on_"+id;
+        let v = parseInt($(divname).html());
+        v++;
+	$(divname).html((v));
+
+	imperium_self.addMove("load_infantry\t"+imperium_self.game.player+"\t"+1+"\t"+sector+"\t"+"planet"+"\t"+id);
+
+      });
+    };
+
+    //
+    // clear the list to start again
+    //
+    if (id == "clear") {
+      alert("To change movement options, just reload!");
+      window.location.reload(true);
+    }
+
+
+    //
+    // otherwise we selected
+    //
+    let user_selected = id.split("_");
+    if (user_selected[1] === "p") {
+      let divname = ".add_infantry_remaining_p_"+user_selected[2];
+      let v = parseInt($(divname).html());
+      if (v > 0) {
+        ground_infantry.push({ planet_idx : user_selected[2] });
+	$(divname).html((v-1));
+      }
+    }
+    if (user_selected[1] === "s") {
+      let divname = ".add_infantry_remaining_s_"+user_selected[2];
+      let v = parseInt($(divname).html());
+      if (v > 0) {
+        space_infantry.push({ ship_idx : user_selected[2] });
+	$(divname).html((v-1));
+      }
+    }
+
+  });
+
+  return;
+
+}
+
 
 
 playerInvadePlanet(player, sector) {
@@ -19141,6 +19375,9 @@ playerPostActivateSystem(sector) {
   if (this.canPlayerProduceInSector(this.game.player, sector)) {
     html += '<li class="option" id="produce">produce units</li>';
   }
+  if (this.canPlayerLandInfantry(player, sector) && this.game.tracker.invasion == 0) {
+    html += '<li class="option" id="land">relocate infantry</li>';
+  }
   if (ac.length > 0) {
     html += '<li class="option" id="action">play action card</li>';
   }
@@ -19165,6 +19402,11 @@ playerPostActivateSystem(sector) {
       }, ["action"]);
     }
 
+    if (action2 == "land") {
+      imperium_self.addMove("continue\t" + player + "\t" + sector);
+      imperium_self.playerSelectInfantryToLand(sector);
+      return 0;
+    }
 
     if (action2 == "move") {
       imperium_self.playerSelectUnitsToMove(sector);
@@ -19215,6 +19457,7 @@ playerAllocateNewTokens(player, tokens, resolve_needed = 1, stage = 0, leadershi
     obj.new_fleet = 0;
     obj.new_tokens = tokens;
 
+
     let updateInterface = function (imperium_self, obj, updateInterface) {
 
       let html = '<div class="sf-readable">You have ' + obj.new_tokens + ' tokens to allocate. How do you want to allocate them? </div><ul>';
@@ -19235,12 +19478,13 @@ playerAllocateNewTokens(player, tokens, resolve_needed = 1, stage = 0, leadershi
       html += '</ul>';
 
       imperium_self.updateStatus(html);
+      imperium_self.lockInterface();
 
       $('.option').off();
       $('.option').on('click', function () {
 
+        imperium_self.unlockInterface();
         let id = $(this).attr("id");
-
 
         if (id == "strategy") {
           obj.new_strategy++;
@@ -20258,7 +20502,7 @@ playerDiscardActionCards(num) {
 	if (this.game.options.vp) {
 	  state.vp_target = parseInt(this.game.options.vp);
         } 
-
+       
 	//
 	// riders => who has riders (and is not voting
 	// choices => possible outcomes (for/against, players, etc)
@@ -21016,7 +21260,7 @@ playerDiscardActionCards(num) {
 
   checkForVictory() {
     for (let i = 0; i < this.game.players_info.length; i++) {
-      if (this.game.players_info[i].vp >= this.vp_needed) {
+      if (this.game.players_info[i].vp >= this.game.state.vp_target) {
         this.updateStatus("Game Over: " + this.returnFaction(i+1) + " has reached 14 VP");
         return 1;
       }
@@ -21905,6 +22149,76 @@ console.log("PREREQS: " + prereqs);
 
 
 
+  canPlayerLandInfantry(player, sector) {
+
+    let planets_owned_by_player = 0;
+    let planets_with_infantry = [];
+    let total_infantry_on_planets = 0;
+    let infantry_in_space = this.returnInfantryInSpace(player, sector);
+
+    let sys = this.returnSectorAndPlanets(sector);
+    for (let i = 0; i < sys.p.length; i++) {
+      if (sys.p[i].owner == this.game.player) {
+	planets_owned_by_player++;
+	planets_with_infantry.push(this.returnInfantryOnPlanet(sys.p[i]));
+	total_infantry_on_planets += this.returnInfantryOnPlanet(sys.p[i]);
+      }
+    }
+
+    if (planets_owned_by_player > 1) {
+
+      // infantry on both planets
+      for (let z = 0; z < planets_with_infantry.length; z++) {
+	if (planets_with_infantry[z] <= total_infantry_on_planets) { return 1; }
+      }
+
+    } else {
+
+      // infantry in space
+      if (infantry_in_space) { return 1; }
+
+    }
+
+    return 0;
+
+    //
+    // do we have any infantry for an invasion
+    //
+    for (let i = 0; i < sys.s.units[player-1].length; i++) {
+      let unit = sys.s.units[player-1][i];
+      for (let k = 0; k < unit.storage.length; k++) {
+        if (unit.storage[k].type == "infantry") {
+          total_available_infantry += 1;
+        }
+      }
+      if (unit.capacity > 0) { space_tranport_available = 1; }
+    }
+  
+    //
+    // return yes if troops in space
+    //
+    if (total_available_infantry > 0) {
+      return 1;
+    }
+  
+    //
+    // otherwise see if we can transfer over from another planet in the sector
+    //
+    if (space_transport_available == 1) {
+      for (let i = 0; i < sys.p.length; i++) {
+        for (let k = 0; k < sys.p[i].units[player-1].length; k++) {
+          if (sys.p[i].units[player-1][k].type == "infantry") { return 1; }
+        }
+      }
+    }
+  
+    //
+    // sad!
+    //
+    return 0;
+  }
+  
+  
   canPlayerInvadePlanet(player, sector) {
   
     let sys = this.returnSectorAndPlanets(sector);
@@ -22185,6 +22499,36 @@ if (this.game.board[tmp[k]] != undefined) {
       }
     }
     return total;
+  }
+  returnInfantryInUnit(unit) {
+
+    let infantry = 0;
+
+    for (let ii = 0; ii < unit.storage.length; ii++) {
+      if (unit.storage[ii].type == "infantry") {
+        infantry++;
+      }
+    }
+    return infantry;
+
+  }
+  returnInfantryInSpace(player, sector) {
+
+    let sys = this.returnSectorAndPlanets(sector);
+    let infantry_in_space = 0;
+
+    for (let i = 0; i < sys.s.units[player-1].length; i++) {
+      if (sys.s.units[player-1][i].destroyed == 0) {
+        if (sys.s.units[player-1][i].storage.length > 0) {
+          for (let ii = 0; ii < sys.s.units[player-1][i].storage.length; ii++) {
+            if (sys.s.units[player-1][i].storage[ii].type == "infantry") {
+              infantry_in_space++;
+            }
+          }
+        }
+      }
+    }
+    return infantry_in_space;
   }
 
   doesPlanetHavePDS(planet) {
@@ -23003,6 +23347,15 @@ console.log("return tech skips: " + planet_cards[i] + " --- " + this.game.planet
 
   canPlayerMoveShipsIntoSector(player, destination) {
 
+    //
+    // supernovas ?
+    //
+    if (this.game.players_info[player-1].move_into_supernovas == 0) {
+      let sys = this.returnSectorAndPlanets(destination);
+      if (sys.s.type == 4) { return 0; }
+    }
+
+
     let imperium_self = this;
     let hops = 3;
     let sectors = [];
@@ -23514,26 +23867,25 @@ returnSectorInformationHTML(sector) {
       html += '<div style="margin-left:20px;margin-top:10px;">';
       html += sys.s.name + " (sector):";
       html += "<div style='clear:both;margin-left:10px;margin-top:6px;'>";
-
-  for (let i = 0; i < sys.s.units.length; i++) {
-    if (sys.s.units.length > 0) {
-      html += this.returnPlayerFleetInSector((i+1), sector);
-      i = sys.s.units.length;
-    }
-  }
-  html += '</div>';
+      for (let i = 0; i < sys.s.units.length; i++) {
+        if (sys.s.units.length > 0) {
+          html += this.returnPlayerFleetInSector((i+1), sector);
+          i = sys.s.units.length;
+        }
+      }
+      html += '</div>';
 
   for (let i = 0; i < sys.p.length; i++) {
     html += '<p style="margin-top:10px" />';
     html += "  " + sys.p[i].name + " (planet):";
     html += "<div style='clear:both;margin-left:10px;margin-top:6px;'>";
-    html += "    " + this.returnInfantryOnPlanet(sys.p[i]) + " infantry";
-    html += '<br />';
-    html += "    " + this.returnPDSOnPlanet(sys.p[i]) + " pds";
-    html += '<br />';
-    html += "    " + this.returnSpaceDocksOnPlanet(sys.p[i]) + " space docks";
+    html +=   "    " + this.returnInfantryOnPlanet(sys.p[i]) + " infantry";
+    html +=   '<br />';
+    html +=   "    " + this.returnPDSOnPlanet(sys.p[i]) + " pds";
+    html +=   '<br />';
+    html +=   "    " + this.returnSpaceDocksOnPlanet(sys.p[i]) + " space docks";
+    html += '</div>';
   }
-  html += '</div>';
   html += '</div>';
 
   return html;
@@ -23916,9 +24268,10 @@ returnObjectivesOverlay() {
                <div class="objectives_card_content">${obj.text}</div>
     `;
     for (let p = 0; p < this.game.players_info.length; p++) {
-      let objc = imperium_self.returnPlayerObjectivesScored((p+1), ["stage_i_objectives"]);
-      if (objc[obj]) {
-        html += `<div class="objectives_players_scored players_scored_${(p+1)} p${(p+1)}"><div class="bk" style="width:100%;height:100%"></div></div>`;
+      for (let z = 0; z < this.game.players_info[p].objectives_scored.length; z++) {
+        if (this.stage_i_objectives[this.game.players_info[p].objectives_scored[z]]) {
+          html += `<div class="objectives_players_scored players_scored_${(p+1)} p${(p+1)}"><div class="bk" style="width:100%;height:100%"></div></div>`;
+        }
       }
     }
     html += `</div>`;
@@ -23936,9 +24289,10 @@ returnObjectivesOverlay() {
                <div class="objectives_card_content">${obj.text}</div>
     `;
     for (let p = 0; p < this.game.players_info.length; p++) {
-      let objc = imperium_self.returnPlayerObjectivesScored((p+1), ["stage_ii_objectives"]);
-      if (objc[obj]) {
-        html += `<div class="objectives_players_scored players_scored_${(p+1)} p${(p+1)}"><div class="bk" style="width:100%;height:100%"></div></div>`;
+      for (let z = 0; z < this.game.players_info[p].objectives_scored.length; z++) {
+        if (this.stage_ii_objectives[this.game.players_info[p].objectives_scored[z]]) {
+          html += `<div class="objectives_players_scored players_scored_${(p+1)} p${(p+1)}"><div class="bk" style="width:100%;height:100%"></div></div>`;
+        }
       }
     }
     html += `</div>`;
@@ -24485,7 +24839,11 @@ updateLeaderboard() {
 
     let html = '<div class="VP-track-label">Victory Points</div>';
 
-    for (let j = this.vp_needed; j >= 0; j--) {
+    let vp_needed = 14;
+    if (this.game.state.vp_target != 14 && this.game.state.vp_target > 0) { vp_needed = this.game.state.vp_target; }
+    if (this.game.options.vp) { vp_needed = parseInt(this.game.options.vp); }
+
+    for (let j = vp_needed; j >= 0; j--) {
       html += '<div class="vp ' + j + '-points"><div class="player-vp-background">' + j + '</div>';
       html += '<div class="vp-players">'
 

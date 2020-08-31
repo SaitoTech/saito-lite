@@ -1,5 +1,4 @@
 
-
 returnPlayers(num = 0) {
 
   var players = [];
@@ -112,6 +111,7 @@ returnPlayers(num = 0) {
     players[i].fly_through_asteroids = 0;
     players[i].fly_through_nebulas = 0;
     players[i].fly_through_supernovas = 0;
+    players[i].move_into_supernovas = 0;
     players[i].reinforce_infantry_after_successful_ground_combat = 0;
     players[i].bacterial_weapon = 0;
     players[i].evasive_bonus_on_pds_shots = 0;
@@ -1947,6 +1947,10 @@ playerContinueTurn(player, sector) {
       options_available++;
     }
   }
+  if (this.canPlayerLandInfantry(player, sector) && this.game.tracker.invasion == 0) {
+    html += '<li class="option" id="land">reassign infantry</li>';
+    options_available++;
+  }
   if (this.game.tracker.trade == 0 && this.canPlayerTrade(this.game.player) == 1) {
     html += '<li class="option" id="trade">trade</li>';
   }
@@ -2001,6 +2005,12 @@ playerContinueTurn(player, sector) {
     if (action2 == "trade") {
       imperium_self.addMove("continue\t" + player + "\t" + sector);
       imperium_self.playerTrade();
+      return 0;
+    }
+
+    if (action2 == "land") {
+      imperium_self.addMove("continue\t" + player + "\t" + sector);
+      imperium_self.playerSelectInfantryToLand(sector);
       return 0;
     }
 
@@ -2874,8 +2884,7 @@ playerProduceUnits(sector, production_limit = 0, cost_limit = 0, stage = 0, warf
 }
 
 
-playerHandleTradeOffer(faction_offering, their_offer, my_offer) {
-
+playerHandleTradeOffer(faction_offering, their_offer, my_offer, offer_log) {
 
   let imperium_self = this;
 
@@ -2909,31 +2918,7 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer) {
   }
 
   let html = '<div class="sf-readable">You have received a trade offer from ' + imperium_self.returnFaction(faction_offering) + '. ';
-  html += 'They offer ';
-
-  if (goods_received > 0) {
-    html += my_offer.goods + ' trade goods';
-  }
-  if (promissaries_received.length > 0) {
-    if (goods_received > 0) { html += ' and '; }
-    html += promissaries_received;
-  }
-  if (goods_received == 0 && promissaries_received.length == 0) {
-    html += 'nothing';
-  }
-  html += ' in exchange for ';
-  if (goods_offered > 0) {
-    html += their_offer.goods + ' trade goods';
-  }
-  if (promissaries_offered.length > 0) {
-    if (goods_offered > 0) { html += ' and '; }
-    html += promissaries_offered;
-  }
-  if (goods_offered == 0 && promissaries_offered.length == 0) {
-    html += 'nothing';
-  }
-
-
+  html += 'They offer ' + offer_log;
   html += ': </div><ul>';
   html += `  <li class="option" id="yes">accept trade</li>`;
   html += `  <li class="option" id="no">refuse trade</li>`;
@@ -3003,8 +2988,8 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer) {
       }
 
       let html = "<div class='sf-readable'>Make an Offer: </div><ul>";
-      html += '<li id="to_offer" class="option">you give <span class="offer_total">0</span> commodities/goods</li>';
-      html += '<li id="to_receive" class="option">you receive <span class="receive_total">0</span> trade goods</li>';
+      html += '<li id="to_offer" class="option">you give <span class="offer_total">'+offer_selected+'</span> commodities/goods</li>';
+      html += '<li id="to_receive" class="option">you receive <span class="receive_total">'+receive_selected+'</span> trade goods</li>';
       html += '<li id="promissary_offer" class="option">you give <span class="give_promissary">'+offer_promissary_text+'</span></li>';
       html += '<li id="promissary_receive" class="option">you receive <span class="receive_promissary">'+receive_promissary_text+'</span></li>';
       html += '<li id="confirm" class="option">submit offer</li>';
@@ -3357,8 +3342,8 @@ playerSelectStrategyAndCommandTokens(cost, mycallback) {
   let selected_cost = 0;
 
   let html = "<div class='sf-readable'>Select " + cost + " in Strategy and Command Tokens: </div><ul>";
-  html += '<li class="textchoice" id="strategy">strategy tokens</li>';
-  html += '<li class="textchoice" id="command">command tokens</li>';
+  html += '<li class="textchoice" id="strategy">strategy tokens - <span class="available_strategy_tokens">'+imperium_self.game.players_info[imperium_self.game.player-1].strategy_tokens+'</span></li>';
+  html += '<li class="textchoice" id="command">command tokens - <span class="available_command_tokens">'+imperium_self.game.players_info[imperium_self.game.player-1].command_tokens+'</span></li>';
   html += '</ul>';
 
   this.updateStatus(html);
@@ -3366,13 +3351,21 @@ playerSelectStrategyAndCommandTokens(cost, mycallback) {
 
     let action2 = $(this).attr("id");
 
-    selected_cost++;
-
     if (action2 == "strategy") {
-      imperium_self.addMove("expend\t" + imperium_self.game.player + "\tstrategy\t1");
+      let x = parseInt($('.available_strategy_tokens').html());
+      if (x > 0) {
+        selected_cost++;
+        $('.available_strategy_tokens').html((x-1));
+        imperium_self.addMove("expend\t" + imperium_self.game.player + "\tstrategy\t1");
+      }
     }
     if (action2 == "command") {
-      imperium_self.addMove("expend\t" + imperium_self.game.player + "\tcommand\t1");
+      let x = parseInt($('.available_command_tokens').html());
+      if (x > 0) {
+        selected_cost++;
+        $('.available_command_tokens').html((x-1));
+        imperium_self.addMove("expend\t" + imperium_self.game.player + "\tcommand\t1");
+      }
     }
 
     if (cost <= selected_cost) { mycallback(1); }
@@ -4197,6 +4190,128 @@ alert("To change movement options, just reload!");
 
 }
 
+//////////////////////////
+// Select Units to Move //
+//////////////////////////
+playerSelectInfantryToLand(sector) {
+
+  let imperium_self = this;
+  let html = '<div id="status-message" class="status-message">Unload Infantry (source): <ul>';
+  let sys = imperium_self.returnSectorAndPlanets(sector);
+
+  let space_infantry = [];
+  let ground_infantry = [];
+
+  for (let i = 0; i < sys.s.units[this.game.player-1].length; i++) {
+    space_infantry.push(0);
+    let unit = sys.s.units[this.game.player-1][i];
+    if (imperium_self.returnInfantryInUnit(unit) > 0) { 
+    html += `<li class="option textchoice" id="addinfantry_s_${i}">remove infantry from ${unit.name} - <span class="add_infantry_remaining_s_${i}">${imperium_self.returnInfantryInUnit(unit)}</span></li>`;
+    }
+  }
+
+  for (let p = 0; p < sys.p.length; p++) {
+    ground_infantry.push(0);
+    let planet = sys.p[p];
+    if (imperium_self.returnInfantryOnPlanet(planet) > 0) { 
+      html += `<li class="option textchoice" id="addinfantry_p_${p}">remove infantry from ${planet.name} - <span class="add_infantry_remaining_p_${p}">${imperium_self.returnInfantryOnPlanet(planet)}</span></li>`;
+    }
+  }
+
+  html += '</ul>';
+  html += '</div>';
+
+  html += '<div id="confirm" class="option">click here to move</div>';
+  html += '<hr />';
+  html += '<div id="clear" class="option">clear selected</div>';
+  imperium_self.updateStatus(html);
+
+  $('.option').off();
+  $('.option').on('click', function () {
+
+    let id = $(this).attr("id");
+    let assigned_planets = [];
+    for (let i = 0; i < sys.p.length; i++) {
+      assigned_planets.push(0);
+    }
+
+    //
+    // submit when done
+    //
+    if (id == "confirm") {
+
+      for (let i = 0; i < space_infantry.length; i++) {
+	imperium_self.addMove("unload_infantry\t"+imperium_self.game.player+"\t"+1+"\t"+sector+"\t"+"ship"+"\t"+space_infantry[i]);
+      }
+      for (let i = 0; i < ground_infantry.length; i++) {
+	imperium_self.addMove("unload_infantry\t"+imperium_self.game.player+"\t"+1+"\t"+sector+"\t"+"planet"+"\t"+ground_infantry[i]);
+      }
+
+      let html = '<div class="status-message" id="status-message">Reassign Infantry to Planets: <ul>';
+          for (let i = 0; i < sys.p.length; i++) {
+  	    html += `<li class="option textchoice" id="${i}">${sys.s[i].name} - <span class="infantry_on_${i}">${imperium_self.returnInfantryOnPlanet(sys.p[i]) - ground_infantry[i] }</span></li>`;
+          }
+          html += '<div id="confirm" class="option">click here to move</div>';
+          html += '</ul'; 
+          html += '</div>';
+
+      imperium_self.updateStatus(html);
+
+      $('.option').off();
+      $('.option').on('click', function () {
+
+        let id = $(this).attr("id");
+
+        if (id == "confirm") {
+	  imperium_self.endTurn();
+        }
+
+        let divname = "infantry_on_"+id;
+        let v = parseInt($(divname).html());
+        v++;
+	$(divname).html((v));
+
+	imperium_self.addMove("load_infantry\t"+imperium_self.game.player+"\t"+1+"\t"+sector+"\t"+"planet"+"\t"+id);
+
+      });
+    };
+
+    //
+    // clear the list to start again
+    //
+    if (id == "clear") {
+      alert("To change movement options, just reload!");
+      window.location.reload(true);
+    }
+
+
+    //
+    // otherwise we selected
+    //
+    let user_selected = id.split("_");
+    if (user_selected[1] === "p") {
+      let divname = ".add_infantry_remaining_p_"+user_selected[2];
+      let v = parseInt($(divname).html());
+      if (v > 0) {
+        ground_infantry.push({ planet_idx : user_selected[2] });
+	$(divname).html((v-1));
+      }
+    }
+    if (user_selected[1] === "s") {
+      let divname = ".add_infantry_remaining_s_"+user_selected[2];
+      let v = parseInt($(divname).html());
+      if (v > 0) {
+        space_infantry.push({ ship_idx : user_selected[2] });
+	$(divname).html((v-1));
+      }
+    }
+
+  });
+
+  return;
+
+}
+
 
 
 playerInvadePlanet(player, sector) {
@@ -4484,6 +4599,9 @@ playerPostActivateSystem(sector) {
   if (this.canPlayerProduceInSector(this.game.player, sector)) {
     html += '<li class="option" id="produce">produce units</li>';
   }
+  if (this.canPlayerLandInfantry(player, sector) && this.game.tracker.invasion == 0) {
+    html += '<li class="option" id="land">relocate infantry</li>';
+  }
   if (ac.length > 0) {
     html += '<li class="option" id="action">play action card</li>';
   }
@@ -4508,6 +4626,11 @@ playerPostActivateSystem(sector) {
       }, ["action"]);
     }
 
+    if (action2 == "land") {
+      imperium_self.addMove("continue\t" + player + "\t" + sector);
+      imperium_self.playerSelectInfantryToLand(sector);
+      return 0;
+    }
 
     if (action2 == "move") {
       imperium_self.playerSelectUnitsToMove(sector);
@@ -4558,6 +4681,7 @@ playerAllocateNewTokens(player, tokens, resolve_needed = 1, stage = 0, leadershi
     obj.new_fleet = 0;
     obj.new_tokens = tokens;
 
+
     let updateInterface = function (imperium_self, obj, updateInterface) {
 
       let html = '<div class="sf-readable">You have ' + obj.new_tokens + ' tokens to allocate. How do you want to allocate them? </div><ul>';
@@ -4578,12 +4702,13 @@ playerAllocateNewTokens(player, tokens, resolve_needed = 1, stage = 0, leadershi
       html += '</ul>';
 
       imperium_self.updateStatus(html);
+      imperium_self.lockInterface();
 
       $('.option').off();
       $('.option').on('click', function () {
 
+        imperium_self.unlockInterface();
         let id = $(this).attr("id");
-
 
         if (id == "strategy") {
           obj.new_strategy++;

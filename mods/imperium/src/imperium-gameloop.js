@@ -1262,7 +1262,8 @@ console.log(JSON.stringify(this.game.state.choices));
         if (this.game.state.round == 1) {
           this.game.queue.push("revealobjectives");
   	  for (let i = 1; i <= this.game.players_info.length; i++) {
-            this.game.queue.push("FLIPCARD\t4\t2\t2\t"+i); // deck card poolnum player
+            // only 1 card because first turn is short
+            this.game.queue.push("FLIPCARD\t4\t1\t2\t"+i); // deck card poolnum player
   	  }
         } else {
 
@@ -1614,7 +1615,43 @@ console.log(JSON.stringify(this.game.state.choices));
         return 1;
   
       }
-  
+
+
+      if (mv[0] === "unload_infantry") {
+
+  	let player       = mv[1];
+  	let player_moves = mv[2];
+        let sector       = mv[3];
+        let source       = mv[4];   // planet ship
+        let source_idx   = mv[5];   // planet_idx or ship_idx
+
+        if (source === "planet") {
+	  this.unloadUnitFromPlanet(player, sector, source_idx, "infantry");
+        } else {
+	  this.unloadUnitFromShip(player, sector, source_idx, "infantry");
+        }
+      }
+
+      if (mv[0] === "load_infantry") {
+
+  	let player       = mv[1];
+  	let player_moves = mv[2];
+        let sector       = mv[3];
+        let destination  = mv[4];   // planet ship
+        let source_idx   = mv[5];   // planet_idx or ship_idx
+
+        if (destination === "planet") {
+          this.loadUnitOntoPlanet(player, sector, source_idx, "infantry");
+	}
+        if (destination === "ship") {
+          this.loadUnitOntoShip(player, sector, source_idx, "infantry");
+	}
+
+      }
+
+
+
+
       if (mv[0] === "load") {
   
   	let player       = mv[1];
@@ -1875,9 +1912,68 @@ imperium_self.saveGame(imperium_self.game.id);
 	let stuff_in_return = JSON.parse(mv[4]);
   	this.game.queue.splice(qe, 1);
 
-	this.updateLog(this.returnFaction(offering_faction) + " makes a trade offer to " + this.returnFaction(faction_to_consider));
+        let log_offer = '';
+        let offering_html = this.returnFaction(offering_faction) + " makes a trade offer to " + this.returnFaction(faction_to_consider) + ": ";
+	    offering_html += '<div style="padding:20px;clear:left">';
+
+	    if (stuff_on_offer.goods > 0) {
+	      log_offer += stuff_on_offer.goods + " ";
+	      if (stuff_on_offer.goods > 1) {
+		log_offer += "trade goods";
+	      } else {
+		log_offer += "trade good";
+	      }
+	    }
+	    if (stuff_on_offer.promissaries.length > 0) {
+	      if (stuff_on_offer.goods >= 1) {
+	        log_offer += " and ";
+	      }
+	      for (let i = 0; i < stuff_on_offer.promissaries.length; i++) {
+	        let pm = stuff_on_offer.promissaries[i].promissary;
+        	let tmpar = pm.split("-");
+        	let faction_promissary_owner = imperium_self.factions[tmpar[0]].name;
+		log_offer += this.promissary_notes[tmpar[1]].name;
+		log_offer += " ";
+		log_offer += "("+faction_promissary_owner+")";
+	      }
+	    }
+	    if (stuff_on_offer.goods == 0 && stuff_on_offer.promissaries_length == 0) {
+	      log_offer += 'nothing';
+	    }
+
+	    log_offer += " in exchange for ";
+
+	    if (stuff_in_return.goods > 0) {
+	      log_offer += stuff_in_return.goods + " ";
+	      if (stuff_in_return.goods > 1) {
+		log_offer += "trade goods or commodities";
+	      } else {
+		log_offer += "trade good or commodity";
+	      }
+	    }
+	    if (stuff_in_return.promissaries.length > 0) {
+	      if (stuff_in_return.goods > 1) {
+	        log_offer += " and ";
+	      }
+	      for (let i = 0; i < stuff_in_return.promissaries.length; i++) {
+	        let pm = stuff_in_return.promissaries[i].promissary;
+        	let tmpar = pm.split("-");
+        	let faction_promissary_owner = imperium_self.factions[tmpar[0]].name;
+		log_offer += this.promissary_notes[tmpar[1]].name;
+		log_offer += " ";
+		log_offer += "("+faction_promissary_owner+")";
+	      }
+	    }
+	    if (stuff_in_return.goods == 0 && stuff_in_return.promissaries_length == 0) {
+	      log_offer += 'nothing';
+	    }
+
+	    offering_html += log_offer;
+	    offering_html += '</div>';
+
+	this.updateLog(log_offer);
 	if (this.game.player == faction_to_consider) {
-	  this.playerHandleTradeOffer(offering_faction, stuff_on_offer, stuff_in_return);
+	  this.playerHandleTradeOffer(offering_faction, stuff_on_offer, stuff_in_return, log_offer);
 	}
 
         return 0;
@@ -4013,6 +4109,16 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 
 	this.game.state.space_combat_attacker = player;
 	this.game.state.space_combat_defender = defender;
+
+	//
+	// check that attacker and defender both have ships
+	//
+        if (this.doesPlayerHaveShipsInSector(player, sector) != 1 || this.doesPlayerHaveShipsInSector(defender, sector) != 1) {
+	  //
+	  // we can skip the combat as there is none
+	  //
+	  return 1;
+	}
 
 
 	//

@@ -50,12 +50,12 @@
 	  // defenders in PDS are the ones with this enabled
 	  //
           if (imperium_self.game.players_info[defender-1].graviton_laser_system_active == 1) {
-	    if (!targets.include("warsun")) { targets.push("warsun"); }
-	    if (!targets.include("flagship")) { targets.push("flagship"); }
-	    if (!targets.include("dreadnaught")) { targets.push("dreadnaught"); }
-	    if (!targets.include("cruiser")) { targets.push("cruiser"); }
-	    if (!targets.include("carrier")) { targets.push("carrier"); }
-	    if (!targets.include("destroyer")) { targets.push("destroyer"); }
+	    if (!targets.includes("warsun")) { targets.push("warsun"); }
+	    if (!targets.includes("flagship")) { targets.push("flagship"); }
+	    if (!targets.includes("dreadnaught")) { targets.push("dreadnaught"); }
+	    if (!targets.includes("cruiser")) { targets.push("cruiser"); }
+	    if (!targets.includes("carrier")) { targets.push("carrier"); }
+	    if (!targets.includes("destroyer")) { targets.push("destroyer"); }
           }
         }
 	return targets;

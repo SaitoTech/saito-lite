@@ -178,6 +178,18 @@
     }
     return "";
   };
+  unloadUnitFromShip(player, sector, ship_idx, unitname) {
+    let sys = this.returnSectorAndPlanets(sector);
+console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][ship_idx].storage.length + " UNITS");
+    for (let i = 0; i < sys.s.units[player - 1][ship_idx].storage.length; i++) {
+      if (sys.s.units[player - 1][ship_idx].storage[i].type === unitname) {
+        sys.s.units[player-1][ship_idx].storage.splice(i, 1);
+        this.saveSystemAndPlanets(sys);
+        return unitjson;
+      }
+    }
+    return "";
+  };
   unloadUnitByJSONFromShip(player, sector, ship_idx, unitjson) {
     let sys = this.returnSectorAndPlanets(sector);
 console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][ship_idx].storage.length + " UNITS");

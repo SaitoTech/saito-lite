@@ -45,26 +45,25 @@ returnSectorInformationHTML(sector) {
       html += '<div style="margin-left:20px;margin-top:10px;">';
       html += sys.s.name + " (sector):";
       html += "<div style='clear:both;margin-left:10px;margin-top:6px;'>";
-
-  for (let i = 0; i < sys.s.units.length; i++) {
-    if (sys.s.units.length > 0) {
-      html += this.returnPlayerFleetInSector((i+1), sector);
-      i = sys.s.units.length;
-    }
-  }
-  html += '</div>';
+      for (let i = 0; i < sys.s.units.length; i++) {
+        if (sys.s.units.length > 0) {
+          html += this.returnPlayerFleetInSector((i+1), sector);
+          i = sys.s.units.length;
+        }
+      }
+      html += '</div>';
 
   for (let i = 0; i < sys.p.length; i++) {
     html += '<p style="margin-top:10px" />';
     html += "  " + sys.p[i].name + " (planet):";
     html += "<div style='clear:both;margin-left:10px;margin-top:6px;'>";
-    html += "    " + this.returnInfantryOnPlanet(sys.p[i]) + " infantry";
-    html += '<br />';
-    html += "    " + this.returnPDSOnPlanet(sys.p[i]) + " pds";
-    html += '<br />';
-    html += "    " + this.returnSpaceDocksOnPlanet(sys.p[i]) + " space docks";
+    html +=   "    " + this.returnInfantryOnPlanet(sys.p[i]) + " infantry";
+    html +=   '<br />';
+    html +=   "    " + this.returnPDSOnPlanet(sys.p[i]) + " pds";
+    html +=   '<br />';
+    html +=   "    " + this.returnSpaceDocksOnPlanet(sys.p[i]) + " space docks";
+    html += '</div>';
   }
-  html += '</div>';
   html += '</div>';
 
   return html;
@@ -447,9 +446,10 @@ returnObjectivesOverlay() {
                <div class="objectives_card_content">${obj.text}</div>
     `;
     for (let p = 0; p < this.game.players_info.length; p++) {
-      let objc = imperium_self.returnPlayerObjectivesScored((p+1), ["stage_i_objectives"]);
-      if (objc[obj]) {
-        html += `<div class="objectives_players_scored players_scored_${(p+1)} p${(p+1)}"><div class="bk" style="width:100%;height:100%"></div></div>`;
+      for (let z = 0; z < this.game.players_info[p].objectives_scored.length; z++) {
+        if (this.stage_i_objectives[this.game.players_info[p].objectives_scored[z]]) {
+          html += `<div class="objectives_players_scored players_scored_${(p+1)} p${(p+1)}"><div class="bk" style="width:100%;height:100%"></div></div>`;
+        }
       }
     }
     html += `</div>`;
@@ -467,9 +467,10 @@ returnObjectivesOverlay() {
                <div class="objectives_card_content">${obj.text}</div>
     `;
     for (let p = 0; p < this.game.players_info.length; p++) {
-      let objc = imperium_self.returnPlayerObjectivesScored((p+1), ["stage_ii_objectives"]);
-      if (objc[obj]) {
-        html += `<div class="objectives_players_scored players_scored_${(p+1)} p${(p+1)}"><div class="bk" style="width:100%;height:100%"></div></div>`;
+      for (let z = 0; z < this.game.players_info[p].objectives_scored.length; z++) {
+        if (this.stage_ii_objectives[this.game.players_info[p].objectives_scored[z]]) {
+          html += `<div class="objectives_players_scored players_scored_${(p+1)} p${(p+1)}"><div class="bk" style="width:100%;height:100%"></div></div>`;
+        }
       }
     }
     html += `</div>`;
@@ -1016,7 +1017,11 @@ updateLeaderboard() {
 
     let html = '<div class="VP-track-label">Victory Points</div>';
 
-    for (let j = this.vp_needed; j >= 0; j--) {
+    let vp_needed = 14;
+    if (this.game.state.vp_target != 14 && this.game.state.vp_target > 0) { vp_needed = this.game.state.vp_target; }
+    if (this.game.options.vp) { vp_needed = parseInt(this.game.options.vp); }
+
+    for (let j = vp_needed; j >= 0; j--) {
       html += '<div class="vp ' + j + '-points"><div class="player-vp-background">' + j + '</div>';
       html += '<div class="vp-players">'
 

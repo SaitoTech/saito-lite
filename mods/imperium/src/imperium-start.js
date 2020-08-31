@@ -20,7 +20,6 @@ class Imperium extends GameTemplate {
   
     this.rmoves           = [];
     this.totalPlayers     = 2;
-    this.vp_needed        = 14;
 
 
 

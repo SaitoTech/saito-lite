@@ -35,8 +35,8 @@
 	    let roll1 = imperium_self.rollDice(10);
 	    let roll2 = imperium_self.rollDice(10);
 
-	    let counterparty = imperium_self.state.space_combat_attacker;
-	    if (counterparty == player) { counterparty = imperium_self.state.space_combat_defender; }
+	    let counterparty = imperium_self.game.state.space_combat_attacker;
+	    if (counterparty == player) { counterparty = imperium_self.game.state.space_combat_defender; }
 
 	    let total_ships_to_destroy = 0;
 

@@ -19,7 +19,7 @@
 	if (this.game.options.vp) {
 	  state.vp_target = parseInt(this.game.options.vp);
         } 
-
+       
 	//
 	// riders => who has riders (and is not voting
 	// choices => possible outcomes (for/against, players, etc)

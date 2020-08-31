@@ -186,6 +186,7 @@
       },
       scoreObjective : function(imperium_self, player) {
         imperium_self.game.players_info[player-1].goods -= 5;
+	imperium_self.displayFactionDashboard();
 	return 1;
       },
   });
