@@ -197,7 +197,6 @@
         }
       }
  
-      this.game.board["2_2"].tile = "sector7";
 
       //
       // set homeworlds
