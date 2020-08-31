@@ -118,9 +118,6 @@ updateCombatLog(cobj) {
   let are_there_rerolls = 0;
   let are_there_modified_rolls = 0;
 
-console.log("UNMODIFIED: " + JSON.stringify(cobj.unmodified_roll));
-console.log("MODIFIED: " + JSON.stringify(cobj.modified_roll));
-
   for (let i = 0; i < cobj.units_firing.length; i++) {
     if (cobj.reroll[i] == 1) { are_there_rerolls = 1; }
     if (cobj.modified_roll[i] != cobj.unmodified_roll[i]) { are_there_modified_rolls = 1; }
@@ -182,7 +179,6 @@ returnPlanetInformationHTML(planet) {
 
   let p = planet;
   if (this.game.planets[planet]) { p = this.game.planets[planet]; }
-console.log(JSON.stringify(p.units));
   let ionp = this.returnInfantryOnPlanet(p);
   let ponp = this.returnPDSOnPlanet(p);
   let sonp = this.returnSpaceDocksOnPlanet(p);
@@ -330,9 +326,6 @@ returnStrategyOverlay() {
   let ranked_cards = [];
   let imperium_self = this;
   let card_no = 0;
-
-console.log(JSON.stringify(this.game.state.strategy_cards));
-console.log(JSON.stringify(this.game.state.strategy_cards_bonus));
 
   for (let s in this.strategy_cards) {
 
