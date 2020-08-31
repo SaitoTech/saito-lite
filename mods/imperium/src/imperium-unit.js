@@ -322,15 +322,14 @@ console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][i].storage.lengt
 
 
 
-  returnShipsMovableToDestinationFromSectors(destination, sectors, distance) {
-  
+  returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards) {  
+
     let imperium_self = this;
     let ships_and_sectors = [];
     for (let i = 0; i < sectors.length; i++) {
-  
+
       let sys = this.returnSectorAndPlanets(sectors[i]);
       
-  
       //
       // some sectors not playable in 3 player game
       //
@@ -342,6 +341,7 @@ console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][i].storage.lengt
         x.sector = null;
         x.distance = distance[i];
         x.adjusted_distance = [];
+        x.hazards = [];
   
         //
         // only move from unactivated systems
@@ -351,20 +351,88 @@ console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][i].storage.lengt
           for (let k = 0; k < sys.s.units[this.game.player-1].length; k++) {
             let this_ship = sys.s.units[this.game.player-1][k];
             if (this_ship.move >= distance[i]) {
-  	    x.adjusted_distance.push(distance[i]);
+    	      x.adjusted_distance.push(distance[i]);
               x.ships.push(this_ship);
+	      x.hazards.push(hazards[i]);
               x.ship_idxs.push(k);
               x.sector = sectors[i];
             }
           }
+
           if (x.sector != null) {
-            ships_and_sectors.push(x);
+
+
+console.log("Found sector with ships: " + x.sector);
+
+
+	    //
+	    // if we have moved through a rift, check to see if there
+	    // is a non-rift way to make this passage, if there is and
+	    // the distance is comparable, we choose the non-dangerous
+	    // path by default.
+	    //
+	    if (hazards[i] === "rift") {
+	      for (let z = 0; z < sectors.length; z++) {
+		if (i != z) {
+		  if (sectors[i] == sectors[z]) {
+		    if (distance[z] <= distance[i]) {
+		      if (hazards[z] !== "rift") {
+		        x.hazards[z] = hazards[z];
+		      }
+		    }
+		  }
+		}
+	      }
+	    }
+
+	    //
+	    // if this is the second time we hit a sector, new ships
+	    // may be able to travel if there is a rift in the way, while
+	    // old through-rift passages may be uncompetitive
+	    //
+	    let new_ships = 1;
+	    for (let bb = 0; bb < ships_and_sectors.length; bb++) {
+	      if (ships_and_sectors[bb].sector == x.sector) {
+
+		// sector added before, maybe one or two new ships need
+		// appending, but we will not add everything here just
+		// by default.
+		new_ships = 0;
+
+		for (let y = 0; y < x.ship_idxs.length; y++) {
+		  let is_this_ship_new = 1;
+		  for (let ii = 0; ii < ships_and_sectors[bb].ship_idxs.length; ii++) {
+console.log("comparing: " + ships_and_sectors[bb].ship_idxs[ii] + " with " + x.ship_idxs[y]);
+		    if (ships_and_sectors[bb].ship_idxs[ii] == x.ship_idxs[y]) { 
+		      is_this_ship_new = 0;
+		      if (x.hazards[y] === "") {
+console.log("removing rift!");
+			ships_and_sectors[bb].hazards[ii] = "";
+		      }
+		    }
+		  }
+		  // add new ship (maybe rift has made passable)
+		  if (is_this_ship_new == 1) {
+		    ships_and_sectors[bb].adjusted_distance.push(x.adjusted_distance[y]);
+		    ships_and_sectors[bb].ships.push(x.ships[y]);
+		    ships_and_sectors[bb].hazards.push(x.hazards[y]);
+		    ships_and_sectors[bb].ship_idxs.push(x.ship_idxs[y]);
+		  }
+		}
+	      }
+	    }
+	    if (new_ships == 1) {
+console.log("adding x as new ships...");
+              ships_and_sectors.push(x);
+	    }
           }
         }
-  
       }
     }
   
+console.log("RETURNING SHIPS AND SECTORS: ");
+console.log(JSON.stringify(ships_and_sectors));
+
     return ships_and_sectors;
   
   }

@@ -59,7 +59,7 @@ returnPlayers(num = 0) {
     players[i].secret_objectives_in_hand = 0;
     players[i].action_cards_in_hand = 0;
     players[i].action_cards_per_round = 2;
-    players[i].action_card_limit = 7;
+    players[i].action_card_limit = 1;
     players[i].action_cards_played = [];
     players[i].new_tokens_per_round = 2;
     players[i].command_tokens = 3;
@@ -3750,6 +3750,7 @@ playerSelectUnitsToMove(destination) {
   let hops = 3;
   let sectors = [];
   let distance = [];
+  let hazards = [];
   let fighters_loaded = 0;
   let infantry_loaded = 0;
 
@@ -3768,6 +3769,7 @@ playerSelectUnitsToMove(destination) {
   let x = imperium_self.returnSectorsWithinHopDistance(destination, obj.max_hops, imperium_self.game.player);
   sectors = x.sectors;
   distance = x.distance;
+  hazards = x.hazards;
 
   for (let i = 0; i < distance.length; i++) {
     if (obj.ship_move_bonus > 0) {
@@ -3785,7 +3787,9 @@ playerSelectUnitsToMove(destination) {
     obj.distance_adjustment += obj.fleet_move_bonus;
   }
 
-  obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance);
+  obj.ships_and_sectors = imperium_self.returnShipsMovableToDestinationFromSectors(destination, sectors, distance, hazards);
+
+console.log("HERE: " + JSON.stringify(obj.ships_and_sectors));
 
   let updateInterface = function (imperium_self, obj, updateInterface) {
 
@@ -3828,11 +3832,22 @@ playerSelectUnitsToMove(destination) {
           }
         }
 
+	let rift_passage = 0;
+	if (obj.ships_and_sectors[i].hazards[ii] === "rift") { rift_passage = 1; }
+
         if (already_moved == 1) {
-          html += '<li id="sector_' + i + '_' + ii + '" class=""><b>' + obj.ships_and_sectors[i].ships[ii].name + '</b></li>';
+          if (rift_passage == 0) {
+            html += `<li id="sector_${i}_${ii}" class=""><b>${obj.ships_and_sectors[i].ships[ii].name}</b></li>`;
+	  } else {
+            html += `<li id="sector_${i}_${ii}" class=""><b>${obj.ships_and_sectors[i].ships[ii].name}</b> - rift</li>`;
+	  }
         } else {
           if (obj.ships_and_sectors[i].ships[ii].move - (obj.ships_and_sectors[i].adjusted_distance[ii] + spent_distance_boost) >= 0) {
-            html += '<li id="sector_' + i + '_' + ii + '" class="option">' + obj.ships_and_sectors[i].ships[ii].name + '</li>';
+            if (rift_passage == 0) {
+	      html += `<li id="sector_${i}_${ii}" class="option">${obj.ships_and_sectors[i].ships[ii].name}</li>`;
+            } else {
+	      html += `<li id="sector_${i}_${ii}" class="option">${obj.ships_and_sectors[i].ships[ii].name} - rift</li>`;
+	    }
           }
         }
       }
@@ -3867,11 +3882,17 @@ playerSelectUnitsToMove(destination) {
         imperium_self.addMove("space_invasion\t" + imperium_self.game.player + "\t" + destination);
         imperium_self.addMove("check_fleet_supply\t" + imperium_self.game.player + "\t" + destination);
         for (let y = 0; y < obj.stuff_to_move.length; y++) {
-          imperium_self.addMove("move\t" + imperium_self.game.player + "\t" + 1 + "\t" + obj.ships_and_sectors[obj.stuff_to_move[y].i].sector + "\t" + destination + "\t" + JSON.stringify(obj.ships_and_sectors[obj.stuff_to_move[y].i].ships[obj.stuff_to_move[y].ii]));
+
+	  let this_ship_i = obj.stuff_to_move[y].i;
+	  let this_ship_ii = obj.stuff_to_move[y].ii;
+	  let this_ship_hazard = obj.ships_and_sectors[this_ship_i].hazards[this_ship_ii];
+
+          imperium_self.addMove("move\t" + imperium_self.game.player + "\t" + 1 + "\t" + obj.ships_and_sectors[obj.stuff_to_move[y].i].sector + "\t" + destination + "\t" + JSON.stringify(obj.ships_and_sectors[obj.stuff_to_move[y].i].ships[obj.stuff_to_move[y].ii]) + "\t" + this_ship_hazard);
         }
         for (let y = obj.stuff_to_load.length - 1; y >= 0; y--) {
           imperium_self.addMove("load\t" + imperium_self.game.player + "\t" + 0 + "\t" + obj.stuff_to_load[y].sector + "\t" + obj.stuff_to_load[y].source + "\t" + obj.stuff_to_load[y].source_idx + "\t" + obj.stuff_to_load[y].unitjson + "\t" + obj.stuff_to_load[y].shipjson);
         }
+
         imperium_self.endTurn();
         return;
       };
@@ -3880,25 +3901,9 @@ playerSelectUnitsToMove(destination) {
       // clear the list to start again
       //
       if (id == "clear") {
-alert("To change movement options, just reload!");
+        alert("To change movement options, please reload!");
 	window.location.reload(true);
-/***
- *
- * we can't just remove movement items from array as below, as we are unloading from the planet
- * and loading to the ships in real-time.
- *
-        obj.stuff_to_move = [];
-        for (let i = 0; i < obj.ships_and_sectors.length; i++) { 
-          for (let ii = 0; ii < obj.ships_and_sectors[i].ships.length; ii++) { 
-            obj.ships_and_sectors[i].ships[ii].already_moved = 0;
-	  }
-	}
-       fighters_loaded = 0;
-       infantry_loaded = 0;
-       obj.stuff_to_load = [];
-       updateInterface(imperium_self, obj, updateInterface);
-***/
-       return;
+        return;
       }
 
 
@@ -5242,8 +5247,10 @@ playerDiscardActionCards(num) {
 
   let html = "<div class='sf-readable'>You must discard <div style='display:inline' class='totalnum' id='totalnum'>" + num + "</div> action card"; if (num > 1) { html += 's'; }; html += ':</div>';
   html += '<ul>';
-  for (let i = 0; i < this.game.deck[1].hand.length; i++) {
-    html += '<li class="textchoice" id="' + i + '">' + this.action_cards[this.game.deck[1].hand[i]].name + '</li>';
+  let ac_in_hand = this.returnPlayerActionCards(imperium_self.game.player);
+
+  for (let i = 0; i < ac_in_hand.length; i++) {
+    html += '<li class="textchoice" id="' + i + '">' + this.action_cards[ac_in_hand[i]].name + '</li>';
   }
   html += '</ul>';
 
@@ -5258,9 +5265,12 @@ playerDiscardActionCards(num) {
 
     $('.totalnum').html(num);
     $(this).remove();
-    imperium_self.game.players_info[imperium_self.game.player - 1].action_cards_played.push(action2);
+
+    imperium_self.game.players_info[imperium_self.game.player - 1].action_cards_played.push(ac_in_hand[action2]);
+    imperium_self.addMove("lose\t" + imperium_self.game.player + "\taction_cards\t1");
 
     if (num == 0) {
+      imperium_self.updateStatus("discarding...");
       imperium_self.endTurn();
     }
 

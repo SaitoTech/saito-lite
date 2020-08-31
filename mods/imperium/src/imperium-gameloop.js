@@ -428,11 +428,17 @@
 	    //
 	    this.resetTurnVariables(player);
 
-	    //
-	    // removed this July 1 when added splice above
-	    //
-  	    //this.addMove("resolve\tplay");
+	  }
 
+
+	  //
+	  // discard extra action cards here
+	  //
+	  let ac_in_hand = this.returnPlayerActionCards(this.game.player);
+	  let excess_ac = ac_in_hand.length - this.game.players_info[this.game.player-1].action_card_limit;
+	  if (excess_ac > 0) {
+	    this.playerDiscardActionCards(excess_ac);
+	    return 0;
 	  }
 
   	  this.playerTurn();
@@ -2314,7 +2320,33 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
         let sector_from  = mv[3];
         let sector_to    = mv[4];
         let shipjson     = mv[5];
-  
+        let hazard 	 = mv[6];
+
+        //
+	//
+	// 
+	if (hazard === "rift") {
+
+	  let obj = JSON.parse(shipjson);
+
+	  // on die roll 1-3 blow this puppy up
+	  let roll = this.rollDice(10);
+	  if (roll <= 3) {
+
+	    this.updateLog("The Gravity Rift has destroyed your "+obj.name +" (roll: "+roll+")");
+  	    this.game.queue.splice(qe, 1);
+  	    this.updateSectorGraphics(sector_to);
+  	    this.updateSectorGraphics(sector_from);
+	    return 1;
+
+	  } else {
+
+	    this.updateLog("The Gravity Risk has accelerated your "+obj.name+" (roll: "+roll+")");
+
+	  }
+
+	}
+
   	//
   	// move any ships
   	//
