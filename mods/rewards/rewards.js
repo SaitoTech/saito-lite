@@ -40,6 +40,12 @@ class Rewards extends ModTemplate {
 
   }
 
+  returnServices() {
+    let services = [];
+    services.push({ service : "rewards", domain : "saito" });
+    return services;
+  }
+
 
   respondTo(type) {
     if (type == 'email-appspace') {
