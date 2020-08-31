@@ -221,18 +221,18 @@ module.exports = ArcadeMain = {
           // check with server to see if this game is taken yet
           //
           data.arcade.sendPeerRequestWithFilter(
-	    () => {
+            () => {
 
-	      let msg = {};
-	          msg.request = 'rawSQL';
-		  msg.data = {};
-		  msg.data.module = "Arcade";
-		  msg.data.sql = `SELECT is_game_already_accepted FROM games WHERE game_id = "${game_id}"`;
-		  msg.data.game_id = game_id;
+              let msg = {};
+                  msg.request = 'rawSQL';
+                  msg.data = {};
+                  msg.data.module = "Arcade";
+                  msg.data.sql = `SELECT is_game_already_accepted FROM games WHERE game_id = "${game_id}"`;
+                  msg.data.game_id = game_id;
 
-	      return msg;
+              return msg;
 
-	    },
+            },
 
             (res) => {
 
@@ -267,7 +267,7 @@ module.exports = ArcadeMain = {
                 salert("Sorry... game already accepted. Your list of open games will update shortly on next block!");
               }
             }
-	  );
+          );
         }
       };
     });

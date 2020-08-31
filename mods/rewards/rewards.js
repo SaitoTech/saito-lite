@@ -42,7 +42,7 @@ class Rewards extends ModTemplate {
 
   returnServices() {
     let services = [];
-    services.push({ service : "rewards", domain : "saito" });
+    services.push({ service: "rewards", domain: "saito" });
     return services;
   }
 
@@ -84,11 +84,26 @@ class Rewards extends ModTemplate {
           console.log('drawing achievements');
           try {
             if (document.querySelector(".arcade-sidebar-done")) {
-              
-              app.network.sendRequestWithCallback("get achievements", app.wallet.returnPublicKey(), (rows) => {
-                document.querySelector(".arcade-sidebar-done").innerHTML = "";
-                rows.forEach(row => rewards_self.renderAchievmentRow(row));
-              });
+
+              rewards_self.sendPeerRequestWithFilter(
+                () => {
+                  let msg = {};
+                  msg.request = "get achievements";
+                  msg.data = app.wallet.returnPublicKey();
+                },
+                (rows) => {
+                  document.querySelector(".arcade-sidebar-done").innerHTML = "";
+                  rows.forEach(row => rewards_self.renderAchievmentRow(row));
+                },
+                (peer) => {
+                  if (peer.peer.services) {
+                    for (let z = 0; z < peer.peer.services.length; z++) {
+                      if (peer.peer.services[z].service === "registry") {
+                        return 1;
+                      }
+                    }
+                  }
+                });
             }
           } catch (err) {
             console.error(err);
@@ -97,6 +112,8 @@ class Rewards extends ModTemplate {
       }
     }
   }
+
+  //              app.network.sendRequestWithCallback("get achievements", app.wallet.returnPublicKey(), 
 
 
   renderAchievmentRow(row) {
