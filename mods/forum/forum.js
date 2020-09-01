@@ -444,6 +444,8 @@ class Forum extends ModTemplate {
 	`SELECT * FROM posts WHERE ${where}` ,
 
         (res) => {
+          if (res.rows) {
+	  if (res.rows.length) {
           res.rows.forEach(row => {
 
             let tx = new saito.transaction(JSON.parse(row.tx));
@@ -465,6 +467,8 @@ class Forum extends ModTemplate {
             ArcadeSidebar.addPost(app, title, author, address, date, forum, link, votes, comments);
 
           });
+          }
+	  }
         }
       )
       return;
