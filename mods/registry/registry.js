@@ -19,7 +19,7 @@ class Registry extends ModTemplate {
     //
     // master DNS publickey for this module
     //
-    this.publickey = '23ykRYbjvAzHLRaTYPcqjkQ2LnFYeMkg9cJgXPbrWcHmr';
+    this.publickey = 'zYCCXRZt2DyPD9UmxRfwFgLTNAqCd5VE8RuNneg4aNMK';
 
     this.description = "A naming service for Saito Addresses";
     this.categories  = "Utilities Communications";
