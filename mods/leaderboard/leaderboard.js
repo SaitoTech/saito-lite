@@ -39,10 +39,12 @@ class Leaderboard extends ModTemplate {
     //
     // main-panel games
     //
-    this.app.modules.respondTo("arcade-games").forEach(mod => {
-      this.mods.push(mod);
-      this.affix_callbacks_to.push(mod.name);
-    });
+    if (this.app.modules.respondTo("arcade-games")) {
+      this.app.modules.respondTo("arcade-games").forEach(mod => {
+        this.mods.push(mod);
+        this.affix_callbacks_to.push(mod.name);
+      });
+    }
 
   }
 
