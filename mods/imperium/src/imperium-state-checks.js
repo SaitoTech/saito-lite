@@ -2143,6 +2143,12 @@ console.log(JSON.stringify(return_obj));
   }
   
   
+  returnPlayerHomeworldSector(player=null) {
+    if (player == null) { player = this.game.player; }
+    let home_sector = this.game.board[this.game.players_info[player-1].homeworld].tile;  // "sector";
+    return home_sector;
+  }
+
   returnPlayerHomeworldPlanets(player=null) {
     if (player == null) { player = this.game.player; }
     let home_sector = this.game.board[this.game.players_info[player-1].homeworld].tile;  // "sector";

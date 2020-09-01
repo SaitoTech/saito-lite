@@ -8625,7 +8625,6 @@ alert("Confusing Legal Text -- multiple options appear to be winning -- nothing 
         }
       }
  
-      this.game.board["2_2"].tile = "sector7";
 
       //
       // set homeworlds
@@ -19417,6 +19416,8 @@ playerActivateSystem() {
       alert("You cannot activate that system.");
     } else {
 
+      let sys = imperium_self.returnSectorAndPlanets(pid);
+
       //
       // sanity check on whether we want to do this
       //
@@ -19429,8 +19430,17 @@ playerActivateSystem() {
 	}
       }
  
+      //
+      // if this is our homeworld, it is round 1 and we haven't moved ships out, we may not 
+      // understand 
+      //
+      if (imperium_self.returnPlayerHomeworldSector() == sys.s.sector && imperium_self.game.state.round == 1) {
+	let confirm_choice = confirm("If you activate your homeworld you will not be able to move ships out of it until Round 2. Are you sure you want to do this?");
+	if (!confirm_choice) { return; }
+      }
+
+
       activated_once = 1;
-      let sys = imperium_self.returnSectorAndPlanets(pid);
       let divpid = '#' + pid;
 
       $(divpid).find('.hex_activated').css('background-color', 'var(--p' + imperium_self.game.player + ')');
@@ -20294,7 +20304,7 @@ playerDiscardActionCards(num) {
     sectors['sector6']         = { img : "/imperium/img/sectors/sector6.png" , 	   	   name : "Empty Space" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
     sectors['sector1']         = { img : "/imperium/img/sectors/sector1.png" , 	   	   name : "Empty Space" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : [] }
     sectors['sector2']         = { img : "/imperium/img/sectors/sector2.png" , 	   	   name : "Empty Space" , type : 0 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } 
-    sectors['sector7']         = { img : "/imperium/img/sectors/sector7.png" , 	   name : "Gravity Rift" , type : 1 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } // black hole or rift
+    sectors['sector7']         = { img : "/imperium/img/sectors/sector7.png" , 	   	   name : "Gravity Rift" , type : 1 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } // black hole or rift
     //sectors['sector33']        = { img : "/imperium/img/sectors/sector33.png" , 	   name : "Nebula" , type : 2 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } // nebula
     sectors['sector72']         = { img : "/imperium/img/sectors/sector72.png" , 	   name : "Nebula" , type : 2 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } // nebula
     sectors['sector34']        = { img : "/imperium/img/sectors/sector34.png" , 	   name : "Asteroid Field" , type : 3 , hw : 0 , wormhole : 0, mr : 0 , planets : [] } // asteroids
@@ -20569,8 +20579,8 @@ playerDiscardActionCards(num) {
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-//      return ["1_1", "4_7"];
-      return ["1_1", "2_1"];
+      return ["1_1", "4_7"];
+//      return ["1_1", "2_1"];
     }
 
 
@@ -23243,6 +23253,12 @@ console.log(JSON.stringify(return_obj));
   }
   
   
+  returnPlayerHomeworldSector(player=null) {
+    if (player == null) { player = this.game.player; }
+    let home_sector = this.game.board[this.game.players_info[player-1].homeworld].tile;  // "sector";
+    return home_sector;
+  }
+
   returnPlayerHomeworldPlanets(player=null) {
     if (player == null) { player = this.game.player; }
     let home_sector = this.game.board[this.game.players_info[player-1].homeworld].tile;  // "sector";
