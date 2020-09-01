@@ -38,14 +38,17 @@ module.exports = RegisterUsername = {
           	    salert("Identifier already in use. Please select another");
           	    return;
           	  } else {
-          	    let register_success = app.modules.returnModule('Registry').registerIdentifier(identifier);
-          	    if (register_success) {
-	  	      data.tutorial.username_registered = 1;
-          	      salert("Registering " + identifier + "@saito");
-          	      data.modal.destroy();
-          	    } else {
-          	      salert("That's a bug, Jim.")
-            	    }
+		    let register_mod = app.modules.returnModule("Registry");
+		    if (register_mod) {
+          	      let register_success = app.modules.returnModule('Registry').registerIdentifier(identifier);
+          	      if (register_success) {
+	  	        data.tutorial.username_registered = 1;
+          	        salert("Registering " + identifier + "@saito");
+          	        data.modal.destroy();
+          	      } else {
+          	        salert("That's a bug, Jim.")
+            	      }
+		    }
           	  }
 		  }
         	}
