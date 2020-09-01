@@ -1098,6 +1098,7 @@ console.log("\nIS GAME ALREADY ACCEPTED REQUEST");
         let sql2 = `SELECT * FROM invites WHERE game_id = "${gametx.sig}"`;
         let rows2 = await this.app.storage.queryDatabase(sql2, {}, 'arcade');
 
+        if (rows2) {
         if (rows2.length > 0) {
 
           // only do if invites exist
@@ -1111,6 +1112,7 @@ console.log("\nIS GAME ALREADY ACCEPTED REQUEST");
             gametx.msg.players_sigs.push(rows2[z].acceptance_sig);
           }
 
+        }
         }
 
         rows[i].tx = JSON.stringify(gametx);
