@@ -945,9 +945,6 @@ console.log(JSON.stringify(tx.transaction.to));
 
   async handlePeerRequest(app, message, peer, mycallback = null) {
 
-
-console.log("IN ARCADE WITH HPR: " + JSON.stringify(message));
-
     //
     // this code doubles onConfirmation
     //
