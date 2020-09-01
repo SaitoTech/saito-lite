@@ -85,6 +85,7 @@ class Leaderboard extends ModTemplate {
 
 	(res) => {
 
+	  if (res.rows) {
           res.rows.forEach(row => {
 
             let player = "other";
@@ -101,6 +102,7 @@ class Leaderboard extends ModTemplate {
             });
 
           });
+          }
 
           let html = '';
           let shown = 0;
