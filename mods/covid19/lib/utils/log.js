@@ -68,7 +68,7 @@ module.exports = Log = {
           <div class="log-time">
             <p>
               <span><i class="far fa-clock"></i></span>
-              <span>${new Date(row.ts).toLocaleDateString('zh-CN', { dateStyle: 'short', timeStyle: 'short', hour12: false })}</span>
+              <span>${new Date(row.ts).toLocaleDateString('zh-CN', { dateStyle: 'short', hour12: false })}</span>
             </p>
           </div>
           <div class="log-message">

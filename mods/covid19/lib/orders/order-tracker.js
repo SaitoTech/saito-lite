@@ -49,7 +49,7 @@ module.exports = OrderTracker = {
           <div class="grid-title">Created:</div>
           <div class="grid-value">
             <span><i class="far fa-clock"></i></span>
-            <span>${new Date(parseInt(row.created)).toLocaleDateString('zh-CN', { dateStyle: 'short', timeStyle: 'short', hour12: false })}</span>
+            <span>${new Date(parseInt(row.created)).toLocaleDateString('zh-CN', { dateStyle: 'short', hour12: false })}</span>
           </div>
           <div class="grid-title">Last Update:</div>
           <div class="grid-value last-update"></div>          

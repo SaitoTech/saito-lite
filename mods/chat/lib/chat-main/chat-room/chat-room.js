@@ -141,6 +141,7 @@ module.exports = ChatRoom = {
     },
 
     addMessageToDOM(app, msg, data) {
+
         let message = Object.assign({}, msg, {
             keyHTML: data.chat.addrController.returnAddressHTML(msg.publickey),
             identicon : app.keys.returnIdenticon(msg.publickey),

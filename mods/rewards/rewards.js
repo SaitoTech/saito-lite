@@ -70,15 +70,15 @@ class Rewards extends ModTemplate {
     if (app.BROWSER == 1) {
       if (typeof data == 'undefined') { var data = {} };
 
-      this.renderBadges(app, data);
+      this.renderBadges();
     }
   }
 
-  renderBadges(app, data) {
-    let rewards_self = app.modules.returnModule("Rewards");
+  renderBadges() {
+    let rewards_self = this.app.modules.returnModule("Rewards");
 
-    if (app.BROWSER == 1) {
-      let active_mod = app.modules.returnActiveModule();
+    if (this.app.BROWSER == 1) {
+      let active_mod = this.app.modules.returnActiveModule();
       if (active_mod != null) {
         if (active_mod.name == "Arcade") {
           console.log('drawing achievements');
@@ -89,7 +89,8 @@ class Rewards extends ModTemplate {
                 () => {
                   let msg = {};
                   msg.request = "get achievements";
-                  msg.data = app.wallet.returnPublicKey();
+                  msg.data = this.app.wallet.returnPublicKey();
+                  return msg;
                 },
                 (rows) => {
                   document.querySelector(".arcade-sidebar-done").innerHTML = "";
@@ -98,7 +99,7 @@ class Rewards extends ModTemplate {
                 (peer) => {
                   if (peer.peer.services) {
                     for (let z = 0; z < peer.peer.services.length; z++) {
-                      if (peer.peer.services[z].service === "registry") {
+                      if (peer.peer.services[z].service === "rewards") {
                         return 1;
                       }
                     }
@@ -146,8 +147,13 @@ class Rewards extends ModTemplate {
     }
 
     if (message.request == "update activities") {
-      var completed = await this.returnEvents(message.data)
+      var completed = await this.returnEvents(message.data);
       mycallback(completed);
+    }
+
+    if (message.request == "user status") {
+      var status = await this.returnUserStatus(message.data);
+      mycallback(status);
     }
   }
 
@@ -261,6 +267,11 @@ class Rewards extends ModTemplate {
         this.payoutFirstInstance(tx.transaction.to[0].add, "register identifier", this.registryPayout);
       }
     }
+  }
+
+  onNewBlock(blk, lc) {
+    if (this.app.BROWSER != 1) { return }
+    this.renderBadges();
   }
 
   async updateUsers(tx) {
@@ -432,6 +443,25 @@ class Rewards extends ModTemplate {
     }
   }
 
+  async returnUserStatus(address) {
+    let sql = "SELECT * from users where address = $address";
+    let params = {
+      $address: address
+    }
+
+    try {
+      let rows = await this.app.storage.queryDatabase(sql, params, "rewards");
+      rows.forEach(row => {
+        row.next_payout_amount = Math.ceil(row.last_payout_amt / this.payoutRatio);
+        row.next_payout_after = Math.ceil((row.total_payout * this.payoutRatio) - row.total_spend);
+      });
+
+      return rows;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  
   async checkEvent(address, event) {
     let sql = "SELECT * FROM events where address = $address and $event = event";
     let params = {
