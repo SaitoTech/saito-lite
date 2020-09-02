@@ -4,7 +4,6 @@
       name		: 	"Federation of Sol",
       homeworld		: 	"sector52",
       space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter"],
-//      space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter"],
       ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock"],
       tech		:	["neural-motivator","antimass-deflectors", "faction1-orbital-drop", "faction1-versatile", "faction1-flagship"],
       background	: 	"faction1.jpg",
@@ -19,7 +18,8 @@
 
       name        :       "Sol Flagship" ,
       faction     :       "faction1",
-      type	:	"ability" ,
+      text	  :	  "Flagship gains 1 infantry when player selects a strategy card" ,
+      type	  :	  "ability" ,
       playersChooseStrategyCardsBeforeTriggers : function(imperium_self, player) {
 	if (!imperium_self.doesPlayerHaveTech(player, "faction1-flagship")) { return 0; }
         let player_fleet = imperium_self.returnPlayerFleet(player);

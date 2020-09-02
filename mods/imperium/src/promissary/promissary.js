@@ -1,5 +1,4 @@
 
-
     this.importPromissary("ceasefire", {
       name        :       "Ceasefire Promissary" ,
       faction	  :	  -1,

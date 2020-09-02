@@ -1186,47 +1186,14 @@ console.log("PREREQS: " + prereqs);
     } else {
 
       // infantry in space
-      if (infantry_in_space) { return 1; }
+      if (planets_owned_by_player > 0) {
+        if (infantry_in_space) { return 1; }
+      }
 
     }
 
     return 0;
 
-    //
-    // do we have any infantry for an invasion
-    //
-    for (let i = 0; i < sys.s.units[player-1].length; i++) {
-      let unit = sys.s.units[player-1][i];
-      for (let k = 0; k < unit.storage.length; k++) {
-        if (unit.storage[k].type == "infantry") {
-          total_available_infantry += 1;
-        }
-      }
-      if (unit.capacity > 0) { space_tranport_available = 1; }
-    }
-  
-    //
-    // return yes if troops in space
-    //
-    if (total_available_infantry > 0) {
-      return 1;
-    }
-  
-    //
-    // otherwise see if we can transfer over from another planet in the sector
-    //
-    if (space_transport_available == 1) {
-      for (let i = 0; i < sys.p.length; i++) {
-        for (let k = 0; k < sys.p[i].units[player-1].length; k++) {
-          if (sys.p[i].units[player-1][k].type == "infantry") { return 1; }
-        }
-      }
-    }
-  
-    //
-    // sad!
-    //
-    return 0;
   }
   
   

@@ -1124,7 +1124,6 @@ console.log("P: " + planet);
 
  
 
-
     this.importPromissary("ceasefire", {
       name        :       "Ceasefire Promissary" ,
       faction	  :	  -1,
@@ -1818,7 +1817,6 @@ console.log("P: " + planet);
       name		: 	"Federation of Sol",
       homeworld		: 	"sector52",
       space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter"],
-//      space_units	:	["carrier","carrier","destroyer","fighter","fighter","fighter"],
       ground_units	:	["infantry","infantry","infantry","infantry","infantry","spacedock"],
       tech		:	["neural-motivator","antimass-deflectors", "faction1-orbital-drop", "faction1-versatile", "faction1-flagship"],
       background	: 	"faction1.jpg",
@@ -1833,7 +1831,8 @@ console.log("P: " + planet);
 
       name        :       "Sol Flagship" ,
       faction     :       "faction1",
-      type	:	"ability" ,
+      text	  :	  "Flagship gains 1 infantry when player selects a strategy card" ,
+      type	  :	  "ability" ,
       playersChooseStrategyCardsBeforeTriggers : function(imperium_self, player) {
 	if (!imperium_self.doesPlayerHaveTech(player, "faction1-flagship")) { return 0; }
         let player_fleet = imperium_self.returnPlayerFleet(player);
@@ -4620,15 +4619,21 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	      law_to_push.option = winning_choice;
 	  imperium_self.game.state.laws.push(law_to_push);
 
+	  let options = imperium_self.returnPlanetsOnBoard(function(planet) {
+	    if (planet.type === "hazardous") { return 1; } return 0; 
+	  });
+
 	  //
 	  // also - destroy the planet and increase its resource value
 	  //
-	  for (let i = 0; i < imperium_self.game.planets[winning_choice].units.length; i++) {
+	  let planetidx = options[winning_choice].planet;
+
+	  for (let i = 0; i < imperium_self.game.planets[planetidx].units.length; i++) {
 	    let destroy = 1;
-	    for (let ii = 0; ii < imperium_self.game.planets[winning_choice].units[i].length; ii++) {
-	      if (imperium_self.game.planets[winning_choice].units[i][ii].type == "infantry") {
+	    for (let ii = 0; ii < imperium_self.game.planets[planetidx].units[i].length; ii++) {
+	      if (imperium_self.game.planets[planetidx].units[i][ii].type == "infantry") {
 	        if (destroy == 1) {
-	          imperium_self.game.players[winning_choice].units[i].splice(ii, 1);
+	          imperium_self.game.players[planetidx].units[i].splice(ii, 1);
 		  ii--;
 		  destroy = 0;
 		} else {
@@ -11752,13 +11757,15 @@ imperium_self.saveGame(imperium_self.game.id);
 		log_offer += "("+faction_promissary_owner+")";
 	      }
 	    }
-	    if (stuff_on_offer.goods == 0 && stuff_on_offer.promissaries_length == 0) {
+	    if ((stuff_on_offer.goods == 0 && stuff_on_offer.promissaries_length == 0) || log_offer === "") {
 	      log_offer += 'nothing';
 	    }
 
 	    log_offer += " in exchange for ";
 
+	    let nothing_check = "nothing";
 	    if (stuff_in_return.goods > 0) {
+	      nothing_check = "";
 	      log_offer += stuff_in_return.goods + " ";
 	      if (stuff_in_return.goods > 1) {
 		log_offer += "trade goods or commodities";
@@ -11767,10 +11774,12 @@ imperium_self.saveGame(imperium_self.game.id);
 	      }
 	    }
 	    if (stuff_in_return.promissaries.length > 0) {
+	      nothing_check = "";
 	      if (stuff_in_return.goods > 1) {
 	        log_offer += " and ";
 	      }
 	      for (let i = 0; i < stuff_in_return.promissaries.length; i++) {
+	        nothing_check = "";
 	        let pm = stuff_in_return.promissaries[i].promissary;
         	let tmpar = pm.split("-");
         	let faction_promissary_owner = imperium_self.factions[tmpar[0]].name;
@@ -11779,7 +11788,7 @@ imperium_self.saveGame(imperium_self.game.id);
 		log_offer += "("+faction_promissary_owner+")";
 	      }
 	    }
-	    if (stuff_in_return.goods == 0 && stuff_in_return.promissaries_length == 0) {
+	    if ((stuff_in_return.goods == 0 && stuff_in_return.promissaries_length == 0) || nothing_check === "nothing") {
 	      log_offer += 'nothing';
 	    }
 
@@ -14935,7 +14944,7 @@ returnPlayers(num = 0) {
     players[i].secret_objectives_in_hand = 0;
     players[i].action_cards_in_hand = 0;
     players[i].action_cards_per_round = 2;
-    players[i].action_card_limit = 1;
+    players[i].action_card_limit = 7;
     players[i].action_cards_played = [];
     players[i].new_tokens_per_round = 2;
     players[i].command_tokens = 3;
@@ -19232,6 +19241,11 @@ playerInvadePlanet(player, sector) {
 
     if (planet_idx == "confirm") {
 
+      if (landing_forces.length == 0) {
+	let sanity_check = confirm("Invade without any landing forces? Are you sure -- the invasion will fail.");
+	if (!sanity_check) { return; }
+      }
+
       for (let i = 0; i < planets_invaded.length; i++) {
 
         let owner = sys.p[planets_invaded[i]].owner;
@@ -22296,47 +22310,14 @@ console.log("PREREQS: " + prereqs);
     } else {
 
       // infantry in space
-      if (infantry_in_space) { return 1; }
+      if (planets_owned_by_player > 0) {
+        if (infantry_in_space) { return 1; }
+      }
 
     }
 
     return 0;
 
-    //
-    // do we have any infantry for an invasion
-    //
-    for (let i = 0; i < sys.s.units[player-1].length; i++) {
-      let unit = sys.s.units[player-1][i];
-      for (let k = 0; k < unit.storage.length; k++) {
-        if (unit.storage[k].type == "infantry") {
-          total_available_infantry += 1;
-        }
-      }
-      if (unit.capacity > 0) { space_tranport_available = 1; }
-    }
-  
-    //
-    // return yes if troops in space
-    //
-    if (total_available_infantry > 0) {
-      return 1;
-    }
-  
-    //
-    // otherwise see if we can transfer over from another planet in the sector
-    //
-    if (space_transport_available == 1) {
-      for (let i = 0; i < sys.p.length; i++) {
-        for (let k = 0; k < sys.p[i].units[player-1].length; k++) {
-          if (sys.p[i].units[player-1][k].type == "infantry") { return 1; }
-        }
-      }
-    }
-  
-    //
-    // sad!
-    //
-    return 0;
   }
   
   
@@ -24522,7 +24503,7 @@ returnObjectivesOverlay() {
     `;
     for (let p = 0; p < this.game.players_info.length; p++) {
       for (let z = 0; z < this.game.players_info[p].objectives_scored.length; z++) {
-        if (this.stage_i_objectives[this.game.players_info[p].objectives_scored[z]]) {
+        if (this.game.state.stage_i_objectives[i] === this.game.players_info[p].objectives_scored[z]) {
           html += `<div class="objectives_players_scored players_scored_${(p+1)} p${(p+1)}"><div class="bk" style="width:100%;height:100%"></div></div>`;
         }
       }
@@ -24543,7 +24524,7 @@ returnObjectivesOverlay() {
     `;
     for (let p = 0; p < this.game.players_info.length; p++) {
       for (let z = 0; z < this.game.players_info[p].objectives_scored.length; z++) {
-        if (this.stage_ii_objectives[this.game.players_info[p].objectives_scored[z]]) {
+        if (this.game.state.stage_ii_objectives[i] === this.game.players_info[p].objectives_scored[z]) {
           html += `<div class="objectives_players_scored players_scored_${(p+1)} p${(p+1)}"><div class="bk" style="width:100%;height:100%"></div></div>`;
         }
       }

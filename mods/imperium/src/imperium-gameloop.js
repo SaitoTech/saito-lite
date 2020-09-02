@@ -1943,13 +1943,15 @@ imperium_self.saveGame(imperium_self.game.id);
 		log_offer += "("+faction_promissary_owner+")";
 	      }
 	    }
-	    if (stuff_on_offer.goods == 0 && stuff_on_offer.promissaries_length == 0) {
+	    if ((stuff_on_offer.goods == 0 && stuff_on_offer.promissaries_length == 0) || log_offer === "") {
 	      log_offer += 'nothing';
 	    }
 
 	    log_offer += " in exchange for ";
 
+	    let nothing_check = "nothing";
 	    if (stuff_in_return.goods > 0) {
+	      nothing_check = "";
 	      log_offer += stuff_in_return.goods + " ";
 	      if (stuff_in_return.goods > 1) {
 		log_offer += "trade goods or commodities";
@@ -1958,10 +1960,12 @@ imperium_self.saveGame(imperium_self.game.id);
 	      }
 	    }
 	    if (stuff_in_return.promissaries.length > 0) {
+	      nothing_check = "";
 	      if (stuff_in_return.goods > 1) {
 	        log_offer += " and ";
 	      }
 	      for (let i = 0; i < stuff_in_return.promissaries.length; i++) {
+	        nothing_check = "";
 	        let pm = stuff_in_return.promissaries[i].promissary;
         	let tmpar = pm.split("-");
         	let faction_promissary_owner = imperium_self.factions[tmpar[0]].name;
@@ -1970,7 +1974,7 @@ imperium_self.saveGame(imperium_self.game.id);
 		log_offer += "("+faction_promissary_owner+")";
 	      }
 	    }
-	    if (stuff_in_return.goods == 0 && stuff_in_return.promissaries_length == 0) {
+	    if ((stuff_in_return.goods == 0 && stuff_in_return.promissaries_length == 0) || nothing_check === "nothing") {
 	      log_offer += 'nothing';
 	    }
 

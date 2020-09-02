@@ -440,7 +440,7 @@ returnObjectivesOverlay() {
     `;
     for (let p = 0; p < this.game.players_info.length; p++) {
       for (let z = 0; z < this.game.players_info[p].objectives_scored.length; z++) {
-        if (this.stage_i_objectives[this.game.players_info[p].objectives_scored[z]]) {
+        if (this.game.state.stage_i_objectives[i] === this.game.players_info[p].objectives_scored[z]) {
           html += `<div class="objectives_players_scored players_scored_${(p+1)} p${(p+1)}"><div class="bk" style="width:100%;height:100%"></div></div>`;
         }
       }
@@ -461,7 +461,7 @@ returnObjectivesOverlay() {
     `;
     for (let p = 0; p < this.game.players_info.length; p++) {
       for (let z = 0; z < this.game.players_info[p].objectives_scored.length; z++) {
-        if (this.stage_ii_objectives[this.game.players_info[p].objectives_scored[z]]) {
+        if (this.game.state.stage_ii_objectives[i] === this.game.players_info[p].objectives_scored[z]) {
           html += `<div class="objectives_players_scored players_scored_${(p+1)} p${(p+1)}"><div class="bk" style="width:100%;height:100%"></div></div>`;
         }
       }

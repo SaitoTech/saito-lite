@@ -4356,6 +4356,11 @@ playerInvadePlanet(player, sector) {
 
     if (planet_idx == "confirm") {
 
+      if (landing_forces.length == 0) {
+	let sanity_check = confirm("Invade without any landing forces? Are you sure -- the invasion will fail.");
+	if (!sanity_check) { return; }
+      }
+
       for (let i = 0; i < planets_invaded.length; i++) {
 
         let owner = sys.p[planets_invaded[i]].owner;

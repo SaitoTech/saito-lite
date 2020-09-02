@@ -386,15 +386,21 @@
 	      law_to_push.option = winning_choice;
 	  imperium_self.game.state.laws.push(law_to_push);
 
+	  let options = imperium_self.returnPlanetsOnBoard(function(planet) {
+	    if (planet.type === "hazardous") { return 1; } return 0; 
+	  });
+
 	  //
 	  // also - destroy the planet and increase its resource value
 	  //
-	  for (let i = 0; i < imperium_self.game.planets[winning_choice].units.length; i++) {
+	  let planetidx = options[winning_choice].planet;
+
+	  for (let i = 0; i < imperium_self.game.planets[planetidx].units.length; i++) {
 	    let destroy = 1;
-	    for (let ii = 0; ii < imperium_self.game.planets[winning_choice].units[i].length; ii++) {
-	      if (imperium_self.game.planets[winning_choice].units[i][ii].type == "infantry") {
+	    for (let ii = 0; ii < imperium_self.game.planets[planetidx].units[i].length; ii++) {
+	      if (imperium_self.game.planets[planetidx].units[i][ii].type == "infantry") {
 	        if (destroy == 1) {
-	          imperium_self.game.players[winning_choice].units[i].splice(ii, 1);
+	          imperium_self.game.players[planetidx].units[i].splice(ii, 1);
 		  ii--;
 		  destroy = 0;
 		} else {
