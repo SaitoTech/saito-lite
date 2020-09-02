@@ -197,6 +197,7 @@ ul li a {
   margin-left: auto;
   margin-right: auto;
   height: 20px;
+  grid-template-rows: auto;
 }
 .hud-long .hud-body .status .status-cardbox {
   grid-template-columns: repeat( auto-fit, minmax(80px, 1fr) );
@@ -206,21 +207,36 @@ ul li a {
   max-width: 210px;
   height: 100%;
   max-height: 100%;
-  top: 0px;
-  /* left: -70px; */
+  top: 50px;
   left: 105px;
+  box-shadow: none;
+  grid-template-rows: auto;
+}
+.hud-vertical .hud-header {
+  display: none;
 }
 .hud-vertical .hud-body .status .status-message {
+  max-width: 200px;
+}
+.hud-vertical .hud-body .status-overlay {
+  max-width: 200px;
+}
+.hud-vertical .hud-body .status-overlay .status-message {
   max-width: 200px;
 }
 .hud-vertical .hud-body {
   min-height: 100%;
   min-width: 210px;
   max-width: 210px;
+  border-right: 3px solid #bbb;
 }
 .hud-vertical .hud-body .status .status-cardbox {
-  grid-template-columns: 1fr;
+  /* grid-template-columns: 1fr; */
+  /* grid-template-rows: repeat( auto-fit, minmax(40px, 1fr) ); */
+  grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px;
 }
+
+
 /**
 .hud-vertical:hover {
   left: 105px;
@@ -432,6 +448,9 @@ input#game_board_sizer {
 
 @media screen and (orientation:landscape) and (max-width: 700px) {
 
+  /****************/
+  /**** MODE 1 ****/
+  /****************/
   .hud-long .hud-body {
     height: 120px;
     min-height: 120px;
@@ -492,6 +511,21 @@ input#game_board_sizer {
     border-left: 1px solid var(--my-color);
     width: 220px;
   }
+
+
+
+  /****************/
+  /**** MODE 2 ****/
+  /****************/
+  .hud-vertical {
+    top: 25px;
+  }
+  .hud-vertical .hud-body .status .status-cardbox {
+    grid-template-columns: 1fr;
+    grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px;
+  }
+
+
 
 
 }

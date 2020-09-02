@@ -42,7 +42,6 @@ class ChatCore extends ModTemplate {
     let keys = this.app.keys.returnKeys();
     for (let i = 0; i < keys.length; i++) {
       if (keys[i].aes_publickey == "") { return; }
-
       let members = [keys[i].publickey, this.app.wallet.returnPublicKey()];
       let newgroup = this.createChatGroup(members);
       this.addNewGroup(newgroup);
@@ -59,6 +58,7 @@ class ChatCore extends ModTemplate {
     }
     this.sendEvent('chat-render-request', {});
   }
+
 
   async onPeerHandshakeComplete(app, peer) {
 
@@ -155,7 +155,26 @@ class ChatCore extends ModTemplate {
 
     cg.is_encrypted = 0;
     cg.initialize(this.app);
-    this.groups.push(cg);
+
+    let prepend_group = 0;
+
+    //
+    // main server mastadon is always #1 
+    //
+    if (cg.members) {
+      if (cg.members.length == 1) {
+	if (cg.members[0] === this.app.network.peers[0].peer.publickey) {
+	  prepend_group = 1;
+	}
+      }
+    }
+
+    if (prepend_group == 0) {
+      this.groups.push(cg);
+    } else {
+      this.groups.unshift(cg);
+    }
+
   }
 
   //

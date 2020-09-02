@@ -90,17 +90,11 @@ class Chat extends ChatCore {
     }
 
     super.initializeHTML(app);
-
     this.uidata.chat = this;
-
     Header.render(app, this.uidata);
     Header.attachEvents(app, this.uidata);
-
     this.uidata.chat.active = "chat_list";
-
     ChatMain.initialize(app, this.uidata);
-
-    // ChatMain.render(app, this.uidata);
   }
 
 }
