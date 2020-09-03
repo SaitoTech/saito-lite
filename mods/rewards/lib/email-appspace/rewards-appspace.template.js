@@ -31,7 +31,7 @@ module.exports = RewardsAppspaceTemplate = (app) => {
           display: grid;
           grid-gap: 1em;
           font-size: 1.2em;
-          grid-template-columns: auto 2em auto 2em;
+          grid-template-columns: auto auto auto auto;
           margin: 1em 0 2em 0;
       } 
     </style>
