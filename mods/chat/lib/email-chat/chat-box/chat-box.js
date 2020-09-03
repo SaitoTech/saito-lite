@@ -32,6 +32,10 @@ module.exports = ChatBox = {
             </p>`;
     } else {
       this.removeDefaultMessage(group.id);
+      //this is a cludge that should be removed in a rewrite of the arcade page.
+      if (chat_box_main.querySelectorAll('.chat-message-set').length > 0) {
+        chat_box_main.innerHTML = "";
+      }
     }
 
     this.message_blocks.forEach(message_block => {
