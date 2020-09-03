@@ -112,6 +112,7 @@ console.log(sql + " -- " + params);
 
 
   respondTo(type = "") {
+    /*
     if (type == "arcade-sidebar") {
       let obj = {};
       obj.render = this.renderSidebar;
@@ -119,6 +120,7 @@ console.log(sql + " -- " + params);
       return obj;
     }
     return null;
+    */
   }
   renderSidebar(app, data) {
     data.observer = app.modules.returnModule("Observer");

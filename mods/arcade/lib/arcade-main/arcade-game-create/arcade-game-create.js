@@ -18,7 +18,7 @@ module.exports = ArcadeGameDreate = {
 
   render(app, data) {
 
-    document.querySelector('.arcade-main').innerHTML = ArcadeGameCreateTemplate();
+    document.querySelector('.wizard-holder').innerHTML += ArcadeGameCreateTemplate();
     let game_id = data.active_game;
 
     for (let i = 0; i < data.arcade.mods.length; i++) {
@@ -103,8 +103,10 @@ module.exports = ArcadeGameDreate = {
 
             let newtx = data.arcade.createOpenTransaction(gamedata);
             data.arcade.app.network.propagateTransaction(newtx);
-            document.querySelector('.arcade-main').innerHTML = '';
-            data.arcade.render(app, data);
+            //document.querySelector('.arcade-main').innerHTML = '';
+            document.querySelector('.background-shim').destroy();
+            document.querySelector('.create-game-wizard').destroy();
+            data.arcade.renderMain(app, data);
 
           });
 
@@ -138,8 +140,11 @@ module.exports = ArcadeGameDreate = {
 
               let newtx = data.arcade.createOpenTransaction(gamedata);
               data.arcade.app.network.propagateTransaction(newtx);
-              document.querySelector('.arcade-main').innerHTML = '';
-              data.arcade.render(app, data);
+              //document.querySelector('.arcade-main').innerHTML = '';
+              //make more specific
+              document.querySelector('.background-shim').destroy();
+              document.querySelector('.create-game-wizard').destroy();
+              data.arcade.renderMain(app, data);
             } else {
               salert('More players needed. Add a comma separated list of their names or addresses.');
               document.querySelector('#game-invitees').focus();
@@ -207,14 +212,20 @@ module.exports = ArcadeGameDreate = {
 
     document.querySelector('#return-to-arcade')
       .onclick = (e) => {
-        document.querySelector('.arcade-main').innerHTML = '';
-        data.arcade.render(app, data);
+        //document.querySelector('.arcade-main').innerHTML = '';
+        // make more specific
+        document.querySelector('.background-shim').destroy();
+        document.querySelector('.create-game-wizard').destroy();
+        data.arcade.renderMain(app, data);
       }
 
     document.querySelector('.background-shim-cover')
       .onclick = (e) => {
-        document.querySelector('.arcade-main').innerHTML = '';
-        data.arcade.render(app, data);
+        //document.querySelector('.arcade-main').innerHTML = '';
+        // make more specific
+        document.querySelector('.background-shim').destroy();
+        document.querySelector('.create-game-wizard').destroy();
+        data.arcade.renderMain(app, data);
       }
 
 

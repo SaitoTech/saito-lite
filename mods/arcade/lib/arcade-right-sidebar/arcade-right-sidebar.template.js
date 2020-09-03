@@ -14,6 +14,6 @@ module.exports = ArcadeRightSidebarTemplate = (publickey, id) => {
   return `
   <div class="arcade-announcement">${top_right_html}</div>
   <div class="arcade-sidebar-respondees"></div>
-  <div class="arcade-sidebar-active-games-body"></div>
+  <!--div class="arcade-sidebar-active-games-body"></div-->
   `;
 }
