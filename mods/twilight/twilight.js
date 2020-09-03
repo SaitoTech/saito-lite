@@ -63,7 +63,7 @@ class Twilight extends GameTemplate {
     this.categories 	 = "Bordgame Game"
 
     this.hud = new GameHud(this.app, this.menuItems());
-    this.hud.mode = 2;
+    this.hud.mode = 0;
 
   }
 
