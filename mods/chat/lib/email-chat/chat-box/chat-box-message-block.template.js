@@ -7,7 +7,14 @@ module.exports = ChatBoxMessageBlockTemplate = (message_block, data) => {
   let { datetime_formatter } = data.chat.helpers;
 
   let datetime = datetime_formatter(last_message_timestamp);
-  let messages_html = messages.map(message => ChatRoomMessageTemplate(message, data)).join('');
+  let messages_html = "";
+  let sigs = [];
+   messages.forEach(message => {
+     if (!sigs.includes(message.sig) && !document.getElementById(message.sig)) {
+       sigs.push(message.sig);
+       messages_html += ChatRoomMessageTemplate(message, data);
+     }
+   });
 
   return `
   <div class="chat-message-set chat-message-set-${type}" id="chat-message-set-${publickey}-${last_message_timestamp}">

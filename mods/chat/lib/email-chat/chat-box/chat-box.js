@@ -134,7 +134,7 @@ module.exports = ChatBox = {
 
   addMessageToDOM(app, data, msg) {
     try {
-      if (document.getElementById(msg.sig)) {return};
+      if (document.getElementById(msg.sig)) {console.log('we have this message alread'); return};
       let message = Object.assign({}, msg, {
         keyHTML: data.chat.addrController.returnAddressHTML(msg.publickey),
         identicon: app.keys.returnIdenticon(msg.publickey),

@@ -10,6 +10,17 @@ module.exports = RewardsAppspace = {
     for (let i = 0; i < RewardsActivities.length; i++) {
       document.querySelector(".rewards-grid").innerHTML += RewardsGridRow(RewardsActivities[i]);
     }
+
+    try {
+      if (document.querySelector(".rewards-grid")) {
+        app.network.sendRequestWithCallback("user status", app.wallet.returnPublicKey(), (rows) => {
+          rows.forEach(row => this.updateUserRewardsStatus(row));
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+
     try {
       if (document.querySelector(".rewards-grid")) {
         app.network.sendRequestWithCallback("update activities", app.wallet.returnPublicKey(), (rows) => {
@@ -20,14 +31,15 @@ module.exports = RewardsAppspace = {
       console.error(err);
     }
 
-  },
-
-  attachEvents(app, data) {
-    //document.querySelector('.rewards-back').onclick = () => {data.render}
     for (let i = 0; i < RewardsActivities.length; i++) {
       document.getElementById(`${RewardsActivities[i].id}-row`)
         .onclick = ()  => RewardsActivities[i].action(app);
     }
+  },
+
+  attachEvents(app, data) {
+    //document.querySelector('.rewards-back').onclick = () => {data.render}
+ 
   },
 
   updateRewardsGridRow(row) {
@@ -39,5 +51,15 @@ module.exports = RewardsAppspace = {
       }
     }
   },
+
+  updateUserRewardsStatus(row) {
+    var status_grid = document.querySelector('.rewards-status');
+    let html = `<div>Total Earned: </div><div>${row.total_payout}</div>
+      <div>Total Spent: </div><div>${row.total_spend}</div>
+      <div>Next Payout Amount: </div><div>${row.next_payout_amount}</div>
+      <div>Spend For Next Payout: </div><div>${row.next_payout_after}</div>
+    `;
+    status_grid.innerHTML = html;
+  }
 
 }

@@ -19,6 +19,7 @@ module.exports = RewardsSidebar = {
         let msg = {};
         msg.request = "get achievements";
         msg.data = app.wallet.returnPublicKey();
+        return msg;
       },
       (rows) => {
         document.querySelector(".arcade-sidebar-done").innerHTML = "";
