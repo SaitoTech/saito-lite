@@ -17,6 +17,7 @@ module.exports = ChatManager = {
   },
 
   render(app, data) {
+
     if( typeof window != "undefined") {
       if (!document.querySelector('.chat-manager')) {
         let {el_parser} = data.chat.helpers;
@@ -32,9 +33,11 @@ module.exports = ChatManager = {
         if (!parent_elem) return;
         parent_elem.append(el_parser('<div class="chat-manager"></div>'));
       }
-      if (data.chat.active_groups == 0 && data.chat.groups.length > 0) data.chat.active_groups = [data.chat.groups[0]];
-      data.chat.active_groups.forEach(group => this.addChatBox(app, data, group));
+      if (data.chat.active_groups == 0 && data.chat.groups.length > 0) { 
+	data.chat.active_groups = [data.chat.groups[0]];
+      }
 
+      data.chat.active_groups.forEach(group => this.addChatBox(app, data, group));
 
     }
   },

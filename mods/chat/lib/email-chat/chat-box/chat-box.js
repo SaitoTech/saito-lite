@@ -12,7 +12,7 @@ module.exports = ChatBox = {
 
   render(app, data, group = null) {
 
-    if (!group) return;
+    if (!group) { return; }
 
     let active_group_name = "";
     active_group_name = group.name;

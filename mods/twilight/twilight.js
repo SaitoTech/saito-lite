@@ -63,7 +63,7 @@ class Twilight extends GameTemplate {
     this.categories 	 = "Bordgame Game"
 
     this.hud = new GameHud(this.app, this.menuItems());
-
+    this.hud.mode = 2;
 
   }
 
@@ -310,7 +310,7 @@ class Twilight extends GameTemplate {
     //
     // add card events -- text shown and callback run if there
     //
-    //this.hud.mode = 0;
+    this.hud.mode = 2;
     this.hud.addCardType("logcard", "", null);
     this.hud.addCardType("showcard", "select", this.cardbox_callback);
     this.hud.addCardType("card", "select", this.cardbox_callback);

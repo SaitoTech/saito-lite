@@ -93,9 +93,6 @@ class Arcade extends ModTemplate {
     let game_id = msgobj.game_id;
     let arcade_self = this;
 
-
-console.log("observing game: " + game_id);
-
     //
     // already watching game... load it
     //
@@ -115,8 +112,6 @@ console.log("observing game: " + game_id);
         }
       }
     }
-
-console.log("fetching game id: " + game_id);
 
     fetch(`/arcade/observer/${game_id}`)
       .then(response => {
@@ -148,18 +143,14 @@ console.log("fetching game id: " + game_id);
 	  //
 	  // and we add this stuff to our queue....
 	  //
-console.log("NEXT MOVE: " + JSON.stringify(game.last_turn));
 	  for (let z = 0; z < game.last_turn.length; z++) {
 	    game.queue.push(game.last_turn[z]);
           }
 
-console.log("GQUEUE NOW: " + game.queue);
           games.push(game);
 
 	  arcade_self.app.options.games = games;
           arcade_self.app.storage.saveOptions();
-
-alert("Observing a New Game!");
 
           //
           // move into game
@@ -321,6 +312,8 @@ alert("Observing a New Game!");
   // load transactions into interface when the network is up
   //
   onPeerHandshakeComplete(app, peer) {
+
+console.log("PEER HANDSHAKE COMPLETE: "+ JSON.stringify(peer.peer));
 
     if (this.browser_active == 0) { return; }
 
@@ -1039,14 +1032,12 @@ console.log(JSON.stringify(tx.transaction.to));
 
 
 
-    if (message.request == 'rawSQL') {
+    if (message.request == 'rawSQL' && app.BROWSER == 0) {
 
       //
       // intercept a very particular query
       //
       if (message.data.sql.indexOf("is_game_already_accepted") > -1) {
-
-console.log("\nIS GAME ALREADY ACCEPTED REQUEST");
 
         let game_id = message.data.game_id;
 
@@ -1254,7 +1245,6 @@ console.log("\nIS GAME ALREADY ACCEPTED REQUEST");
     // us up-to-date on what happened in preparation 
     // for the next turn / broadcast
     //
-console.log("SAVING TXMSG IN GAMESTATE!");
     game_state.last_turn = txmsg.turn;
 
 
