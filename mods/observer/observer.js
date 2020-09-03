@@ -44,8 +44,12 @@ class Observer extends ModTemplate {
     let data = {};
     data.observer = this;
 
-    ObserverSidebar.render(app, data);
-    ObserverSidebar.attachEvent(app, data);
+    //
+    // removing observer sidebar as not needed.
+    //
+
+    //ObserverSidebar.render(app, data);
+    //ObserverSidebar.attachEvent(app, data);
 
   }
 
