@@ -250,8 +250,17 @@ class Rewards extends ModTemplate {
   async payoutFirstInstance(address, event, payout) {
     if (await this.checkEvent(address, event) == false) {
       this.makePayout(address, payout, event);
+      let params = {
+        $address: address,
+        $payout_ts: new Date().getTime(),
+        $payout_amt: payout,
+      }
+      let sql = `UPDATE users SET last_payout_ts = $payout_ts, total_payout = total_payout + $payout_amt WHERE address = $address`;
+  
+      await this.app.storage.executeDatabase(sql, params, "rewards");
     }
     this.recordEvent(address, event);
+ 
   }
 
   async onConfirmation(blk, tx, conf, app) {
@@ -326,7 +335,7 @@ class Rewards extends ModTemplate {
         $games_finished: row.games_finished + gameOver,
         $game_tx_count: row.game_tx_count + isGame,
         $latest_tx: tx.transaction.ts,
-        $total_spend: row.total_spend + Number(tx.fees_total)
+        $total_spend: row.total_spend + Number(tx.returnFees())
       }
       sql = `UPDATE users SET last_payout_ts = $last_payout_ts, last_payout_amt = $last_payout_amt, total_payout = $total_payout, tx_count = $tx_count, games_finished = $games_finished, game_tx_count = $game_tx_count, latest_tx = $latest_tx, total_spend = $total_spend WHERE address = $address`
 
@@ -382,7 +391,7 @@ class Rewards extends ModTemplate {
       await this.app.storage.executeDatabase(sql, params, "rewards");
 
       //initial funds sent
-      //this.makePayout(tx.transaction.from[ii].add, this.initial);
+      this.makePayout(tx.transaction.from[ii].add, this.initial);
 
       return;
     } catch (err) {
