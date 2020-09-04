@@ -181,6 +181,18 @@ class Arcade extends ModTemplate {
 
   }
 
+  renderMain(app, data=null) {
+
+    if (this.browser_active == 0) { return; }
+
+    if (data == null) { data = {}; data.arcade = this; }
+
+    ArcadeMain.render(app, data);
+    ArcadeMain.attachEvents(app, data);
+
+  }
+  
+
   renderInvite(app, data) {
     let inviteBase64 = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
     try {
@@ -900,7 +912,7 @@ console.log(JSON.stringify(tx.transaction.to));
                   this.games.splice(i, 1);
                   console.info("RE-RENDER");
                   if (this.viewing_arcade_initialization_page == 0) {
-                    this.render(this.app);
+                    this.renderMain(this.app);
                   }
                 }
               }
@@ -1024,7 +1036,7 @@ console.log(JSON.stringify(tx.transaction.to));
 
         this.removeGameFromOpenList(txmsg.sig);
         if (this.viewing_arcade_initialization_page == 0 && this.browser_active == 1) {
-          this.render(this.app);
+          this.renderMain(this.app);
         }
       }
       this.receiveCloseRequest(blk, tx, conf, app);

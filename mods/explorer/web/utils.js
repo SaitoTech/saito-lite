@@ -91,7 +91,7 @@ function listTransactions(blk, hash) {
 
     var txdiv = document.querySelector('.txbox.' + obj);
     if (!txdiv.classList.contains('treated')){
-      var txjson = JSON.parse(txdiv.innerHTML);
+      var txjson = JSON.parse(txdiv.innerText);
       txdiv.innerHTML = "";
       var tree = jsonTree.create(txjson, txdiv);
       txdiv.classList.add('treated');

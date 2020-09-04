@@ -54,10 +54,10 @@ module.exports = RewardsAppspace = {
 
   updateUserRewardsStatus(row) {
     var status_grid = document.querySelector('.rewards-status');
-    let html = `<div>Total Earned: </div><div>${s2Number(row.total_payout)}</div>
-      <div>Total Spent: </div><div>${s2Number(row.total_spend)}</div>
-      <div>Next Payout Amount: </div><div>${s2Number(row.next_payout_amount)}</div>
-      <div>Spend For Next Payout: </div><div>${s2Number(row.next_payout_after)}</div>
+    let html = `<div>Total Earned: </div><div class="right">${s2Number(Math.floor(row.total_payout))}</div>
+      <div>Total Spent: </div><div class="right">${s2Number(Math.floor(row.total_spend))}</div>
+      <div>Next Payout Amount: </div><div class="right">${s2Number(Math.floor(row.next_payout_amount))}</div>
+      <div>Spend For Next Payout: </div><div class="right">${s2Number(Math.floor(row.next_payout_after))}</div>
     `;
     status_grid.innerHTML = html;
   }
