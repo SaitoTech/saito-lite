@@ -141,6 +141,7 @@
         let hazardous = 0;
         let cultural = 0;
         let industrial = 0;
+        let diplomatic = 0;
 
         let planetcards = imperium_self.returnPlayerPlanetCards();
 
@@ -148,9 +149,10 @@
           if (planetcards[i].type === "hazardous")  { hazardous++; }
           if (planetcards[i].type === "industrial") { industrial++; }
           if (planetcards[i].type === "cultural")   { cultural++; }
+          if (planetcards[i].type === "diplomatic")   { diplomatic++; }
         }
 
-        if ((cultural+hazardous+industrial) >= 6) { return 1; }
+        if ((cultural+hazardous+industrial+diplomatic) >= 6) { return 1; }
 
         return 0;
       },

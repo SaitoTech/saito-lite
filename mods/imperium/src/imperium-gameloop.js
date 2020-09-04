@@ -471,9 +471,14 @@
 	    //
 	    // if our interface is locked, we're processing the secondary already
 	    //
-	    if (this.lock_interface == 1) { return 0; }
+	    if (this.lock_interface == 1) {
+console.log("interface is locked...");
+	      return 0;
+	    }
 	  }
 	}
+
+console.log("RECEIVED MOVE!");
 
 	if (strategy_card_player != -1) {
 	  if (!imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.includes(card)) {
