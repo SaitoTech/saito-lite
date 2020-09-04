@@ -1780,7 +1780,7 @@ console.log(JSON.stringify(return_obj));
     let tmpar = [];
     for (let i = 0; i < this.game.players_info.length; i++) {
       if ((i+1) != player) {
-        tmpar.push(this.game.players_info[player-1].faction + "-" + promissary);
+        tmpar.push(this.game.players_info[i].faction + "-" + promissary);
       }
     }
     return tmpar;

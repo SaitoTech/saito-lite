@@ -1986,6 +1986,7 @@ imperium_self.saveGame(imperium_self.game.id);
 	    offering_html += log_offer;
 	    offering_html += '</div>';
 
+        log_offer = this.returnFaction(offering_faction) + " offers " + this.returnFaction(faction_to_consider) + " " + log_offer;
 	this.updateLog(log_offer);
 	if (this.game.player == faction_to_consider) {
 	  this.playerHandleTradeOffer(offering_faction, stuff_on_offer, stuff_in_return, log_offer);

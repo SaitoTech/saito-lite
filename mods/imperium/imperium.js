@@ -1246,9 +1246,17 @@ console.log("P: " + planet);
       },
       menuOptionTriggers:  function(imperium_self, menu, player) {
 	if (menu != "pre_agenda") { return 0; }
-        let playable_promissaries = imperium_self.returnPlayablePromissaryArray(imperium_self.game.player, "political");
+        let playable_promissaries = imperium_self.returnPlayablePromissaryArray(player, "political");
+alert("myfaction: " + imperium_self.game.players_info[imperium_self.game.player-1].faction);
+alert("PLAYABLE: " + JSON.stringify(playable_promissaries));
         for (let i = 0; i < playable_promissaries.length; i++) {
-	  if (imperium_self.game.players_info[imperium_self.game.player-1].promissary_notes.includes(playable_promissaries[i])) { return 1; }
+alert(JSON.stringify(imperium_self.game.players_info[player-1].promissary_notes));
+//	  let tmpar = playable_promissaries[i].split("-");
+//	  let pprom = imperium_self.returnPromissaryPlayer(playable_promissaries[i]);
+
+	  if (imperium_self.game.players_info[imperium_self.game.player-1].promissary_notes.includes(playable_promissaries[i])) { 
+alert("This triggers for: " + player);
+return 1; }
 	}
         return 0;
       },
@@ -11804,6 +11812,7 @@ imperium_self.saveGame(imperium_self.game.id);
 	    offering_html += log_offer;
 	    offering_html += '</div>';
 
+        log_offer = this.returnFaction(offering_faction) + " offers " + this.returnFaction(faction_to_consider) + " " + log_offer;
 	this.updateLog(log_offer);
 	if (this.game.player == faction_to_consider) {
 	  this.playerHandleTradeOffer(offering_faction, stuff_on_offer, stuff_in_return, log_offer);
@@ -16694,6 +16703,9 @@ playerPlayPreAgendaStage(player, agenda, agenda_idx) {
     }
   }
   html += '</ul>';
+
+
+alert(JSON.stringify(tech_attach_menu_triggers));
 
   this.updateStatus(html);
 
@@ -22948,9 +22960,10 @@ console.log(JSON.stringify(return_obj));
 
   returnPlayablePromissaryArray(player, promissary) {
     let tmpar = [];
+console.log("RPPA: " + player);
     for (let i = 0; i < this.game.players_info.length; i++) {
       if ((i+1) != player) {
-        tmpar.push(this.game.players_info[player-1].faction + "-" + promissary);
+        tmpar.push(this.game.players_info[i].faction + "-" + promissary);
       }
     }
     return tmpar;
