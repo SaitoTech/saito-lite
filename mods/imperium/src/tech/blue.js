@@ -29,10 +29,12 @@
         }
       },
       gainTechnology : function(imperium_self, gainer, tech) {
+console.log("player " + gainer + " -- gains " + tech);
         if (tech == "gravity-drive") {
           imperium_self.game.players_info[gainer-1].gravity_drive = 1;
           imperium_self.game.players_info[gainer-1].ship_move_bonus = 1;
         }
+console.log("ship move bonus updated to 1");
       },
     });
 

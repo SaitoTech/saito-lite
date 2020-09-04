@@ -112,10 +112,12 @@ class Imperium extends GameTemplate {
         }
       },
       gainTechnology : function(imperium_self, gainer, tech) {
+console.log("player " + gainer + " -- gains " + tech);
         if (tech == "gravity-drive") {
           imperium_self.game.players_info[gainer-1].gravity_drive = 1;
           imperium_self.game.players_info[gainer-1].ship_move_bonus = 1;
         }
+console.log("ship move bonus updated to 1");
       },
     });
 
@@ -9042,14 +9044,10 @@ handleLawsMenuItem() {
   }  
 
   doesPlayerHaveTech(player, tech) {
-
-console.log("player: " + player + " ---- " + tech);
-
     for (let i = 0; i < this.game.players_info[player-1].tech.length; i++) {
       if (this.game.players_info[player-1].tech[i] == tech) { return 1; }
     }
     return 0;
-
   }
 
   returnTechCardHTML(tech, tclass="tech_card") {
@@ -12011,6 +12009,9 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
   	  if (!this.game.players_info[player-1].tech.includes(mv[3])) {
 	    this.game.players_info[player-1].tech.push(mv[3]);
 	  }
+
+	  // we added tech, so re-fetch events
+	  z = this.returnEventObjects();
 	  for (let z_index in z) {
   	    z[z_index].gainTechnology(imperium_self, player, mv[3]);
   	  }
@@ -12068,7 +12069,6 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	this.updateTokenDisplay();
 	this.updateLeaderboard();
 	this.displayFactionDashboard();
- 
 
   	this.game.queue.splice(qe, 1);
   	return 1;
@@ -20243,7 +20243,7 @@ playerDiscardActionCards(num) {
     planets['planet49'] = { type : "hazardous" , img : "/imperium/img/planets/HIRAETH.png" , name : "Hiraeth" , resources : 1 , influence : 1 , bonus : ""  }
     planets['planet50'] = { type : "cultural" , img : "/imperium/img/planets/FIREHOLE.png" , name : "Firehole" , resources : 3 , influence : 0 , bonus : ""  }
     planets['planet51'] = { type : "industrial" , img : "/imperium/img/planets/QUARTIL.png" , name : "Quartil" , resources : 3 , influence : 1 , bonus : ""  } // wormhole A system planet
-    planets['planet52'] = { type : "hazardous" , img : "/imperium/img/planets/YODERUX.png" , name : "Yoderux" , resources : 3 , influence : 0 , bonus : ""  } // wormhole B system planet
+    planets['planet52'] = { type : "hazardous" , img : "/imperium/img/planets/YODERUX.png" , name : "Yoderux" , resources : 3 , influence : 1 , bonus : ""  } // wormhole B system planet
     planets['planet53'] = { type : "homeworld" , img : "/imperium/img/planets/JOL.png" , name : "Jol" , resources : 1 , influence : 2 , bonus : ""  }
     planets['planet54'] = { type : "homeworld" , img : "/imperium/img/planets/NAR.png" , name : "Nar" , resources : 2 , influence : 3 , bonus : ""  }
     planets['planet55'] = { type : "homeworld" , img : "/imperium/img/planets/ARCHION-REX.png" , name : "Archion Rex" , resources : 2 , influence : 3 , bonus : ""  }
@@ -20256,7 +20256,7 @@ playerDiscardActionCards(num) {
     planets['planet62'] = { type : "industrial" , img : "/imperium/img/planets/EBERBACH.png" , name : "Eberbach" , resources : 2 , influence : 1 , bonus : ""  }		// sector 61
     planets['planet63'] = { type : "hazardous" , img : "/imperium/img/planets/OTHO.png" , name : "Otho" , resources : 1 , influence : 2 , bonus : ""  }			// sector 62
     planets['planet64'] = { type : "hazardous" , img : "/imperium/img/planets/PERTINAX.png" , name : "Pertinax" , resources : 2 , influence : 2 , bonus : ""  }		// sector 63
-    planets['planet65'] = { type : "cotillard" , img : "/imperium/img/planets/COTILLARD.png" , name : "Cotillard" , resources : 2 , influence : 2 , bonus : ""  }	// sector 64
+    planets['planet65'] = { type : "cultural" , img : "/imperium/img/planets/COTILLARD.png" , name : "Cotillard" , resources : 2 , influence : 2 , bonus : ""  }	// sector 64
     planets['planet66'] = { type : "cultural" , img : "/imperium/img/planets/DOMINIC.png" , name : "Dominic" , resources : 3 , influence : 1 , bonus : ""  }		// sector 65
     planets['planet67'] = { type : "industrial" , img : "/imperium/img/planets/PESTULON.png" , name : "Pestulon" , resources : 1 , influence : 1 , bonus : "yellow"  }	// sector 66
     planets['planet68'] = { type : "hazardous" , img : "/imperium/img/planets/XIAO-ZUOR.png" , name : "Xiao Zuor" , resources : 1 , influence : 3 , bonus : ""  }	// sector 67
@@ -21663,8 +21663,6 @@ playerDiscardActionCards(num) {
 
   canPlayerResearchTechnology(tech) {
 
-console.log("checking: " + tech);
-
     let mytech = this.game.players_info[this.game.player-1].tech;
     if (mytech.includes(tech)) { return 0; }
  
@@ -21677,6 +21675,15 @@ console.log("checking: " + tech);
     let techfaction = this.tech[tech].faction;
     let techtype = this.tech[tech].type;
     let unexhausted_tech_skips = this.returnPlayerPlanetTechSkips(this.game.player, 1);
+
+    //
+    // do we have tech that replaces this? if so skip
+    //
+    for (let i = 0; i < mytech.length; i++) {
+      if (this.tech[mytech[i]].replaces == techtype) {
+	return 0;
+      }
+    }
 
     //
     // we can use tech to represent researchable
@@ -23612,6 +23619,8 @@ console.log("return tech skips: " + planet_cards[i] + " --- " + this.game.planet
 
     obj.max_hops += obj.ship_move_bonus;
     obj.max_hops += obj.fleet_move_bonus;
+
+console.log("max hops is: " + obj.max_hops);
 
     let x = imperium_self.returnSectorsWithinHopDistance(destination, obj.max_hops, imperium_self.game.player);
     sectors = x.sectors;

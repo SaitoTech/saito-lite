@@ -539,8 +539,6 @@
 
   canPlayerResearchTechnology(tech) {
 
-console.log("checking: " + tech);
-
     let mytech = this.game.players_info[this.game.player-1].tech;
     if (mytech.includes(tech)) { return 0; }
  
@@ -553,6 +551,15 @@ console.log("checking: " + tech);
     let techfaction = this.tech[tech].faction;
     let techtype = this.tech[tech].type;
     let unexhausted_tech_skips = this.returnPlayerPlanetTechSkips(this.game.player, 1);
+
+    //
+    // do we have tech that replaces this? if so skip
+    //
+    for (let i = 0; i < mytech.length; i++) {
+      if (this.tech[mytech[i]].replaces == techtype) {
+	return 0;
+      }
+    }
 
     //
     // we can use tech to represent researchable
@@ -2488,6 +2495,8 @@ console.log("return tech skips: " + planet_cards[i] + " --- " + this.game.planet
 
     obj.max_hops += obj.ship_move_bonus;
     obj.max_hops += obj.fleet_move_bonus;
+
+console.log("max hops is: " + obj.max_hops);
 
     let x = imperium_self.returnSectorsWithinHopDistance(destination, obj.max_hops, imperium_self.game.player);
     sectors = x.sectors;
