@@ -3466,7 +3466,6 @@ playerSelectResources(cost, mycallback) {
       }
       imperium_self.unlockInterface();
 
-
       mycallback(1); 
 
     }
