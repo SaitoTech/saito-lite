@@ -3651,7 +3651,7 @@ this.startClock();
           let html = '<div class="status-message" id="status-message">You only have the China Card remaining. Do you wish to play it this turn?';
               html += '<ul><li class="card" id="play">play card</li><li class="card" id="skipturn">skip turn</li></ul></div>';
           this.updateStatus(html);
-          this.addShowCardEvents(function(action2) {
+          this.addShowCardEvents(function(action) {
 
 	    if (action === "play") {
 	      twilight_self.playerTurn(selected_card);
@@ -10600,6 +10600,7 @@ console.log("card: " + card);
 
       this.countries["lebanon"].us = 0;
       this.showInfluence("lebanon", "us");
+      this.showInfluence("lebanon", "ussr");
       this.updateLog("All US influence removed from Lebanon");
 
       let ustroops = 0;
