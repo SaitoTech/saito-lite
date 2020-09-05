@@ -1247,16 +1247,8 @@ console.log("P: " + planet);
       menuOptionTriggers:  function(imperium_self, menu, player) {
 	if (menu != "pre_agenda") { return 0; }
         let playable_promissaries = imperium_self.returnPlayablePromissaryArray(player, "political");
-alert("myfaction: " + imperium_self.game.players_info[imperium_self.game.player-1].faction);
-alert("PLAYABLE: " + JSON.stringify(playable_promissaries));
         for (let i = 0; i < playable_promissaries.length; i++) {
-alert(JSON.stringify(imperium_self.game.players_info[player-1].promissary_notes));
-//	  let tmpar = playable_promissaries[i].split("-");
-//	  let pprom = imperium_self.returnPromissaryPlayer(playable_promissaries[i]);
-
-	  if (imperium_self.game.players_info[imperium_self.game.player-1].promissary_notes.includes(playable_promissaries[i])) { 
-alert("This triggers for: " + player);
-return 1; }
+	  if (imperium_self.game.players_info[imperium_self.game.player-1].promissary_notes.includes(playable_promissaries[i])) { return 1; }
 	}
         return 0;
       },
@@ -16704,9 +16696,6 @@ playerPlayPreAgendaStage(player, agenda, agenda_idx) {
   }
   html += '</ul>';
 
-
-alert(JSON.stringify(tech_attach_menu_triggers));
-
   this.updateStatus(html);
 
   $('.option').off();
@@ -22960,7 +22949,6 @@ console.log(JSON.stringify(return_obj));
 
   returnPlayablePromissaryArray(player, promissary) {
     let tmpar = [];
-console.log("RPPA: " + player);
     for (let i = 0; i < this.game.players_info.length; i++) {
       if ((i+1) != player) {
         tmpar.push(this.game.players_info[i].faction + "-" + promissary);

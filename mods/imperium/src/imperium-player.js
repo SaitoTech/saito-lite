@@ -1799,9 +1799,6 @@ playerPlayPreAgendaStage(player, agenda, agenda_idx) {
   }
   html += '</ul>';
 
-
-alert(JSON.stringify(tech_attach_menu_triggers));
-
   this.updateStatus(html);
 
   $('.option').off();
