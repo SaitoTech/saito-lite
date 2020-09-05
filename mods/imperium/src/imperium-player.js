@@ -3283,8 +3283,10 @@ playerSelectInfluence(cost, mycallback) {
   }
   html += '</ul>';
 
-
   this.updateStatus(html);
+
+  this.lockInterface();
+
   $('.cardchoice , .textchoice').on('click', function () {
 
     let action2 = $(this).attr("id");
@@ -3324,7 +3326,16 @@ playerSelectInfluence(cost, mycallback) {
       selected_cost += imperium_self.game.planets[array_of_cards[idx]].influence;
     }
 
-    if (cost <= selected_cost) { mycallback(1); }
+    if (cost <= selected_cost) {
+
+      if (!imperium_self.mayUnlockInterface()) {
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+        return;
+      }
+      imperium_self.unlockInterface();
+
+      mycallback(1);
+    }
 
   });
 }
@@ -3347,6 +3358,8 @@ playerSelectStrategyAndCommandTokens(cost, mycallback) {
   html += '</ul>';
 
   this.updateStatus(html);
+  this.lockInterface();
+
   $('.textchoice').on('click', function () {
 
     let action2 = $(this).attr("id");
@@ -3368,7 +3381,14 @@ playerSelectStrategyAndCommandTokens(cost, mycallback) {
       }
     }
 
-    if (cost <= selected_cost) { mycallback(1); }
+    if (cost <= selected_cost) { 
+      if (!imperium_self.mayUnlockInterface()) {
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+        return;
+      }
+      imperium_self.unlockInterface();
+      mycallback(1); 
+    }
 
   });
 
@@ -3398,6 +3418,8 @@ playerSelectResources(cost, mycallback) {
   html += '</ul>';
 
   this.updateStatus(html);
+  this.lockInterface();
+
   $('.cardchoice , .textchoice').on('click', function () {
 
     let action2 = $(this).attr("id");
@@ -3436,7 +3458,17 @@ playerSelectResources(cost, mycallback) {
       selected_cost += parseInt(imperium_self.game.planets[array_of_cards[idx]].resources);
     }
 
-    if (cost <= selected_cost) { mycallback(1); }
+    if (cost <= selected_cost) { 
+
+      if (!imperium_self.mayUnlockInterface()) {
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+        return;
+      }
+      imperium_self.unlockInterface();
+
+      mycallback(1); 
+
+    }
 
   });
 
@@ -4354,13 +4386,14 @@ playerInvadePlanet(player, sector) {
 
     let planet_idx = $(this).attr('id');
 
-    if (planet_idx == "confirm") {
+    if (planet_idx === "confirm") {
 
+/**
       if (landing_forces.length == 0) {
 	let sanity_check = confirm("Invade without any landing forces? Are you sure -- the invasion will fail.");
 	if (!sanity_check) { return; }
       }
-
+**/
       for (let i = 0; i < planets_invaded.length; i++) {
 
         let owner = sys.p[planets_invaded[i]].owner;
@@ -4728,7 +4761,6 @@ playerAllocateNewTokens(player, tokens, resolve_needed = 1, stage = 0, leadershi
       $('.option').off();
       $('.option').on('click', function () {
 
-        imperium_self.unlockInterface();
         let id = $(this).attr("id");
 
         if (id == "strategy") {
@@ -4757,8 +4789,10 @@ playerAllocateNewTokens(player, tokens, resolve_needed = 1, stage = 0, leadershi
           imperium_self.addMove("purchase\t" + player + "\tstrategy\t" + obj.new_strategy);
           imperium_self.addMove("purchase\t" + player + "\tcommand\t" + obj.new_command);
           imperium_self.addMove("purchase\t" + player + "\tfleetsupply\t" + obj.new_fleet);
+          imperium_self.unlockInterface();
           imperium_self.endTurn();
         } else {
+          imperium_self.unlockInterface();
           updateInterface(imperium_self, obj, updateInterface);
         }
 

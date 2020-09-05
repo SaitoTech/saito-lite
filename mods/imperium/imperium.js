@@ -1246,7 +1246,7 @@ console.log("P: " + planet);
       },
       menuOptionTriggers:  function(imperium_self, menu, player) {
 	if (menu != "pre_agenda") { return 0; }
-        let playable_promissaries = imperium_self.returnPlayablePromissaryArray(imperium_self.game.player, "political");
+        let playable_promissaries = imperium_self.returnPlayablePromissaryArray(player, "political");
         for (let i = 0; i < playable_promissaries.length; i++) {
 	  if (imperium_self.game.players_info[imperium_self.game.player-1].promissary_notes.includes(playable_promissaries[i])) { return 1; }
 	}
@@ -3925,6 +3925,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
         let hazardous = 0;
         let cultural = 0;
         let industrial = 0;
+        let diplomatic = 0;
 
         let planetcards = imperium_self.returnPlayerPlanetCards();
 
@@ -3932,9 +3933,10 @@ console.log("WINNIGN CHOICE: " + winning_choice);
           if (planetcards[i].type === "hazardous")  { hazardous++; }
           if (planetcards[i].type === "industrial") { industrial++; }
           if (planetcards[i].type === "cultural")   { cultural++; }
+          if (planetcards[i].type === "diplomatic")   { diplomatic++; }
         }
 
-        if ((cultural+hazardous+industrial) >= 6) { return 1; }
+        if ((cultural+hazardous+industrial+diplomatic) >= 6) { return 1; }
 
         return 0;
       },
@@ -4134,6 +4136,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
         let hazardous = 0;
         let cultural = 0;
         let industrial = 0;
+        let diplomatic = 0;
 
         let planetcards = imperium_self.returnPlayerPlanetCards();
 
@@ -4141,9 +4144,10 @@ console.log("WINNIGN CHOICE: " + winning_choice);
           if (planetcards[i].type === "hazardous")  { hazardous++; }
           if (planetcards[i].type === "industrial") { industrial++; }
           if (planetcards[i].type === "cultural")   { cultural++; }
+          if (planetcards[i].type === "diplomatic")   { diplomatic++; }
         }
 
-        if (hazardous >= 6 || cultural >= 6 || industrial >= 6) { return 1; }
+        if (hazardous >= 6 || cultural >= 6 || industrial >= 6 || diplomatic >= 6) { return 1; }
 
         return 0;
       },
@@ -4179,6 +4183,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
         let hazardous = 0;
         let cultural = 0;
         let industrial = 0;
+        let diplomatic = 0;
 
         let planetcards = imperium_self.returnPlayerPlanetCards();
 
@@ -4186,9 +4191,10 @@ console.log("WINNIGN CHOICE: " + winning_choice);
           if (planetcards[i].type === "hazardous")  { hazardous++; }
           if (planetcards[i].type === "industrial") { industrial++; }
           if (planetcards[i].type === "cultural")   { cultural++; }
+          if (planetcards[i].type === "diplomatic")   { diplomatic++; }
         }
 
-        if ((cultural+hazardous+industrial) >= 11) { return 1; }
+        if ((cultural+hazardous+industrial+diplomatic) >= 11) { return 1; }
 
         return 0;
       },
@@ -10283,9 +10289,14 @@ console.log(JSON.stringify(ships_and_sectors));
 	    //
 	    // if our interface is locked, we're processing the secondary already
 	    //
-	    if (this.lock_interface == 1) { return 0; }
+	    if (this.lock_interface == 1) {
+console.log("interface is locked...");
+	      return 0;
+	    }
 	  }
 	}
+
+console.log("RECEIVED MOVE!");
 
 	if (strategy_card_player != -1) {
 	  if (!imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.includes(card)) {
@@ -11793,6 +11804,7 @@ imperium_self.saveGame(imperium_self.game.id);
 	    offering_html += log_offer;
 	    offering_html += '</div>';
 
+        log_offer = this.returnFaction(offering_faction) + " offers " + this.returnFaction(faction_to_consider) + " " + log_offer;
 	this.updateLog(log_offer);
 	if (this.game.player == faction_to_consider) {
 	  this.playerHandleTradeOffer(offering_faction, stuff_on_offer, stuff_in_return, log_offer);
@@ -18168,8 +18180,10 @@ playerSelectInfluence(cost, mycallback) {
   }
   html += '</ul>';
 
-
   this.updateStatus(html);
+
+  this.lockInterface();
+
   $('.cardchoice , .textchoice').on('click', function () {
 
     let action2 = $(this).attr("id");
@@ -18209,7 +18223,16 @@ playerSelectInfluence(cost, mycallback) {
       selected_cost += imperium_self.game.planets[array_of_cards[idx]].influence;
     }
 
-    if (cost <= selected_cost) { mycallback(1); }
+    if (cost <= selected_cost) {
+
+      if (!imperium_self.mayUnlockInterface()) {
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+        return;
+      }
+      imperium_self.unlockInterface();
+
+      mycallback(1);
+    }
 
   });
 }
@@ -18232,6 +18255,8 @@ playerSelectStrategyAndCommandTokens(cost, mycallback) {
   html += '</ul>';
 
   this.updateStatus(html);
+  this.lockInterface();
+
   $('.textchoice').on('click', function () {
 
     let action2 = $(this).attr("id");
@@ -18253,7 +18278,14 @@ playerSelectStrategyAndCommandTokens(cost, mycallback) {
       }
     }
 
-    if (cost <= selected_cost) { mycallback(1); }
+    if (cost <= selected_cost) { 
+      if (!imperium_self.mayUnlockInterface()) {
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+        return;
+      }
+      imperium_self.unlockInterface();
+      mycallback(1); 
+    }
 
   });
 
@@ -18283,6 +18315,8 @@ playerSelectResources(cost, mycallback) {
   html += '</ul>';
 
   this.updateStatus(html);
+  this.lockInterface();
+
   $('.cardchoice , .textchoice').on('click', function () {
 
     let action2 = $(this).attr("id");
@@ -18321,7 +18355,17 @@ playerSelectResources(cost, mycallback) {
       selected_cost += parseInt(imperium_self.game.planets[array_of_cards[idx]].resources);
     }
 
-    if (cost <= selected_cost) { mycallback(1); }
+    if (cost <= selected_cost) { 
+
+      if (!imperium_self.mayUnlockInterface()) {
+        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+        return;
+      }
+      imperium_self.unlockInterface();
+
+      mycallback(1); 
+
+    }
 
   });
 
@@ -19239,13 +19283,14 @@ playerInvadePlanet(player, sector) {
 
     let planet_idx = $(this).attr('id');
 
-    if (planet_idx == "confirm") {
+    if (planet_idx === "confirm") {
 
+/**
       if (landing_forces.length == 0) {
 	let sanity_check = confirm("Invade without any landing forces? Are you sure -- the invasion will fail.");
 	if (!sanity_check) { return; }
       }
-
+**/
       for (let i = 0; i < planets_invaded.length; i++) {
 
         let owner = sys.p[planets_invaded[i]].owner;
@@ -19613,7 +19658,6 @@ playerAllocateNewTokens(player, tokens, resolve_needed = 1, stage = 0, leadershi
       $('.option').off();
       $('.option').on('click', function () {
 
-        imperium_self.unlockInterface();
         let id = $(this).attr("id");
 
         if (id == "strategy") {
@@ -19642,8 +19686,10 @@ playerAllocateNewTokens(player, tokens, resolve_needed = 1, stage = 0, leadershi
           imperium_self.addMove("purchase\t" + player + "\tstrategy\t" + obj.new_strategy);
           imperium_self.addMove("purchase\t" + player + "\tcommand\t" + obj.new_command);
           imperium_self.addMove("purchase\t" + player + "\tfleetsupply\t" + obj.new_fleet);
+          imperium_self.unlockInterface();
           imperium_self.endTurn();
         } else {
+          imperium_self.unlockInterface();
           updateInterface(imperium_self, obj, updateInterface);
         }
 
@@ -22904,7 +22950,7 @@ console.log(JSON.stringify(return_obj));
     let tmpar = [];
     for (let i = 0; i < this.game.players_info.length; i++) {
       if ((i+1) != player) {
-        tmpar.push(this.game.players_info[player-1].faction + "-" + promissary);
+        tmpar.push(this.game.players_info[i].faction + "-" + promissary);
       }
     }
     return tmpar;

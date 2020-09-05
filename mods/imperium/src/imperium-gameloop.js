@@ -471,9 +471,14 @@
 	    //
 	    // if our interface is locked, we're processing the secondary already
 	    //
-	    if (this.lock_interface == 1) { return 0; }
+	    if (this.lock_interface == 1) {
+console.log("interface is locked...");
+	      return 0;
+	    }
 	  }
 	}
+
+console.log("RECEIVED MOVE!");
 
 	if (strategy_card_player != -1) {
 	  if (!imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.includes(card)) {
@@ -1981,6 +1986,7 @@ imperium_self.saveGame(imperium_self.game.id);
 	    offering_html += log_offer;
 	    offering_html += '</div>';
 
+        log_offer = this.returnFaction(offering_faction) + " offers " + this.returnFaction(faction_to_consider) + " " + log_offer;
 	this.updateLog(log_offer);
 	if (this.game.player == faction_to_consider) {
 	  this.playerHandleTradeOffer(offering_faction, stuff_on_offer, stuff_in_return, log_offer);

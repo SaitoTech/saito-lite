@@ -119,7 +119,7 @@
       },
       menuOptionTriggers:  function(imperium_self, menu, player) {
 	if (menu != "pre_agenda") { return 0; }
-        let playable_promissaries = imperium_self.returnPlayablePromissaryArray(imperium_self.game.player, "political");
+        let playable_promissaries = imperium_self.returnPlayablePromissaryArray(player, "political");
         for (let i = 0; i < playable_promissaries.length; i++) {
 	  if (imperium_self.game.players_info[imperium_self.game.player-1].promissary_notes.includes(playable_promissaries[i])) { return 1; }
 	}
