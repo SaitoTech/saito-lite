@@ -346,7 +346,7 @@ class Rewards extends ModTemplate {
         $games_finished: row.games_finished + gameOver,
         $game_tx_count: row.game_tx_count + isGame,
         $latest_tx: tx.transaction.ts,
-        $total_spend: row.total_spend + Number(tx.fees_total)
+        $total_spend: row.total_spend + Number(tx.returnFees())
       }
       sql = `UPDATE users SET last_payout_ts = $last_payout_ts, tx_count = $tx_count, games_finished = $games_finished, game_tx_count = $game_tx_count, latest_tx = $latest_tx, total_spend = $total_spend WHERE address = $address`
     }
