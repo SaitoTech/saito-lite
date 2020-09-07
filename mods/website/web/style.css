@@ -56,6 +56,26 @@ body {
   transform: rotate(180deg);
 }
 
+
+.fundamentals_row {
+  background-color: whitesmoke;
+}
+.fundamentals {
+  font-size: 1.2em;
+  background-color: whitesmoke;
+  padding: 30px;
+}
+.fundamentals-intro {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.fundamentals-column {
+  width: 48%;
+  float: left;
+  padding: 10px;
+}
+
+
 .intro-box {
   width: 580px;
   background-color: #f9f9f9;
