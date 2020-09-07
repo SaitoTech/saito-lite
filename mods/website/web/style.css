@@ -1,25 +1,58 @@
 body {
   background-color: var(--saito-skyline-grey);
   font-size: 1em;
-  background-image: url('/saito/img/dreamscape.png');
-  background-repeat: no-repeat;
-  background-size: 100% 600px;
   font-family: "visuelt-light";
   overflow-x: hidden;
   width: 100%;
+  /*
+  background-image: url(/saito/img/background.png);
+  */
 }
 
 .header {
   position: absolute;
   top: 0px;
   left: 0px;
-  background-image: transparent;
-  background: transparent;
+  background-image: url('/saito/img/dreamscape.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100px;
 }
 
 .site-main {
-  margin: 220px 0 0 0;
+  max-width: 1600px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
 }
+
+.banner {
+  height: 34em;
+  background-color: rgb(247 31 61 / 57%);
+  background-image: url('/saito/img/dreamscape.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  clip-path: polygon(100% 0, 100% 12%, 42% 100%, 0 38%, 0 0);
+}
+
+img.banner-logo {
+  width: 39%;
+  position: absolute;
+  left: 40%;
+  top: 3em;
+  transform: translate(-50%, 0em);
+}
+
+.banner-title {
+  color: #fff;
+  font-size: 3em;
+  font-family: visuelt-medium;
+  position: absolute;
+  top: 6em;
+  left: 42%;
+  transform: translate(-50%, 10px);
+}
+
+
 
 .title-container {
   width: 580px;
