@@ -59,6 +59,7 @@ img.banner-logo {
   display: grid;
   grid-gap: 2px;
   grid-template-columns: repeat(6, auto);
+  padding: 1em;
 }
 
 .compare-grid div {
