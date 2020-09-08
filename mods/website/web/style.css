@@ -28,7 +28,7 @@ h2, h5 {
 
 .site-main {
   max-width: 1600px;
-  height: 650px;
+  height: 675px;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
@@ -87,6 +87,7 @@ img.banner-logo {
   
   min-height: 6em;
   text-align: center;
+  display: flex;
 }
 
 .roadmap .background {
@@ -95,13 +96,40 @@ img.banner-logo {
 
 .roadmap-row .content {
   color: #444;
-  background-color: #fff;
-  width: 25em;
+  background-color: #4444;
+  width: 35%;
   display: inline-block;
-  clip-path: polygon(0 0, 97% 0%, 100% 50%, 97% 100%, 0 100%, 3% 50%);
+  /* clip-path: polygon(0 0, 97% 0%, 100% 50%, 97% 100%, 0 100%, 3% 50%); */
   line-height: 1.2em;
   text-align: left;
   padding: 3px 3em;
+}
+.content.blanc {
+  width: 15%;
+  padding: 4em;
+}
+
+.content.blanc h4 {}
+
+.content.start {
+  clip-path: polygon(16% 49%, 0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.content.end {
+  clip-path: polygon(0 0, 75% 0%, 100% 50%, 75% 100%, 0 100%);
+}
+
+.content-shim {
+  height: 110%;
+  border: 6px solid var(--saito-red);
+  background-color: #fff;
+  position: relative;
+  top: -5%;
+  padding: 1em 0 1em 2em;
+  border: 10px solid;
+  border-image-slice: 1;
+  border-width: 5px;
+  border-image-source: linear-gradient(to right, var(--saito-red), var(--saito-orange));
 }
 
 .roadmap .content-label {
@@ -224,6 +252,10 @@ img.banner-logo {
   clear:both;
 }
 
+.about-saito h2 {
+  color: #fff;
+}
+
 .intro-box {
   width: 580px;
   background-color: #f9f9f9;
@@ -255,6 +287,10 @@ img.banner-logo {
 
 .white {
   background-color: var(--saito-skyline-grey);
+}
+
+.red {
+  background-color: var(--saito-red);
 }
 
 .arcade-text {
@@ -329,7 +365,6 @@ img.banner-logo {
 .deeperboxes {
   display: flex;
   width: 100%;
-  transform: scale(0.5);
 }
 
 .deeperbox {
@@ -340,7 +375,7 @@ img.banner-logo {
 .deeperbox i {
   color: #fff;
   background-color: var(--saito-red);
-  font-size: 6em;
+  font-size: 3em;
   line-height: 2em;
   width: 2em;
   text-align: center;
@@ -349,7 +384,7 @@ img.banner-logo {
 
 .deepertext {
   text-align: center;
-  font-size: 2em;
+  font-size: 1.5em;
   line-height: 2em;
   color: var(--saito-red);
   text-shadow: 0 0 1px #0009;
