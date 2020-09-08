@@ -9,6 +9,14 @@ body {
   */
 }
 
+section {
+  padding: 1em 7em;
+}
+
+h2, h5 {
+  color: var(--saito-red);
+}
+
 .header {
   position: absolute;
   top: 0px;
@@ -20,6 +28,7 @@ body {
 
 .site-main {
   max-width: 1600px;
+  height: 650px;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
@@ -176,34 +185,37 @@ img.banner-logo {
   transform: rotate(180deg);
 }
 
-
+/*
 .fundamentals-row {
   background-color: whitesmoke;
   position:relative;
   top: -200px;
 }
+*/
 .fundamentals {
-  width: 80%;
-  margin-left: auto;
-  margin-right: auto;
   font-size: 1.2em;
-  background-color: whitesmoke;
-  padding: 30px;
+  line-height: 1.4em;
 }
+
+.fundamentals-grid {
+  display: grid;
+  grid-gap: 0 5em;
+  grid-template-columns: 1fr 1fr;
+  margin: 0 0 1em 0;
+}
+
 .fundamentals-intro {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
 .fundamentals-column {
-  width: 42.5%;
-  float: left;
-  padding: 40px;
-  margin-left: 4%;
+  padding: 1em;
+  background-color: #fff;
+  border: 1px solid #0002;
+  line-height: 1.1em;
 }
-.fundamentals-title {
-  font-size:1em;
-  font-weight: bold;
-}
+
 .fundamentals-text {
   margin-top: 9px;
   font-size:0.8em;
@@ -317,6 +329,7 @@ img.banner-logo {
 .deeperboxes {
   display: flex;
   width: 100%;
+  transform: scale(0.5);
 }
 
 .deeperbox {
