@@ -39,103 +39,119 @@
 
   <div class="main">
     <div class="site-main">
-     
+
       <section id="banner" class="banner">
         <img class="banner-logo" alt="saito logo" src="/saito/img/logo.svg"></img>
       </section>
 
       <section class="splash-row">
-      <div class="grid-2-columns row">
+        <div class="grid-2-columns row">
 
-        <div class="title-container">
+          <div class="title-container">
 
-          <div class="featured-app">
-	    <div class="featured-app-inner">
-	      <div class="featured-app-front">
-                <img class="arcade-banner" alt="Arcade Banner" src="/website/img/arcade-banner.jpg">
-	      </div>
-	      <div class="featured-app-back">
-	        why not try a game on the <a href="/arcade">Saito Arcade</a>?
-	      </div>
+            <div class="featured-app">
+              <div class="featured-app-inner">
+                <div class="featured-app-front">
+                  <img class="arcade-banner" alt="Arcade Banner" src="/website/img/arcade-banner.jpg">
+                </div>
+                <div class="featured-app-back">
+                  why not try a game on the <a href="/arcade">Saito Arcade</a>?
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="intro-box">
+            <div class="intro-title">Welcome to the Saito Network</div>
+            <div class="intro-content">
+              <p>
+                Most blockchains force users to pay for <em>forever storage</em> and require separate payments for
+                off-chain data. Saito fixes both problems.
+              </p>
+              <p>
+                Saito applications only pay for the on-chain time they need, while the network uses a new kind of mining
+                that secures the blockchain with fee-routing infrastructure. The result is lower fees and higher
+                throughput than any other blockchain.
+              </p>
+              <p>
+                <a href="https://org.saito.tech" target="_blank">Learn More about Saito</a> | <a
+                  href="https://org.saito.tech/saito-network" target="_blank">Network Status</a>
+              </p>
             </div>
           </div>
         </div>
+    </div>
 
-        <div class="intro-box">
-          <div class="intro-title">Welcome to the Saito Network</div>
-          <div class="intro-content">
-	    <p>
-	      Most blockchains force users to pay for <em>forever storage</em> and require separate payments for off-chain data. Saito fixes both problems.
-	    </p>
-	    <p>
-	     Saito applications only pay for the on-chain time they need, while the network uses a new kind of mining that secures the blockchain with fee-routing infrastructure. The result is lower fees and higher throughput than any other blockchain.
-	    </p>
-            <p>
-	      <a href="https://org.saito.tech" target="_blank">Learn More about Saito</a> | <a href="https://org.saito.tech/saito-network" target="_blank">Network Status</a>
-	    </p>
-	  </div>
-          </div>
+    <section class="godeeper-row">
+      <div class="godeeper">
+        <h2>Quick Links:</h2>
+        <div class="deeperboxes">
+          <a target="_blank" alt="How it works" href="http://org.saito.tech/saito-economics/" class="deeperbox">
+            <i class="fas fa-cogs"></i>
+            <div class="deepertext">How it Works</div>
+          </a>
+          <a href="https://t.me/joinchat/BOSYOk_BR8HIqp-scldlEA" target="_blank" alt="chat with us" class="deeperbox">
+            <i class="fab fa-telegram"></i>
+            <div class="deepertext">Chat with us</div>
+          </a>
+          <a href="/arcade/" alt="Play on the Saito arcade" class="deeperbox">
+            <i class="fas fa-gamepad"></i>
+            <div class="deepertext">Play a game</div>
+          </a>
+          <a href="https://org.saito.tech/developers" target="_blank" alt="saito for developers" class="deeperbox">
+            <i class="fas fa-code-branch"></i>
+            <div class="deepertext">Developers</div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+
+
+
+
+    <section class="fundamentals-row white">
+      <div class="fundamentals">
+        <h2>Revolutionary Technology:</h2>
+        <div class="fundamentals-intro">
+          Saito has patent protection on the fundamental mechanisms needed to support a scalable chain: market-driven
+          rent for on-chain storage, and cryptographic routing signatures to identify and pay nodes that route
+          transactions. We are committed to the launch of a public blockchain that will bring these benefits. The two
+          key techniques are:
+        </div>
+        <div class="fundamentals-column">
+          Transaction Rebroadcasting
+          <p>
+            Saito prunes data by default, but keeps old data circulating on-chain if they are able to out-competes new
+            transactions for space on the blockchain. The key advance is a form of rent that does not require developers
+            to hardcode economic variables.
+          </p>
+          <p>
+            Transaction broadcasting allows for the elimination of blocksize limits, as block producers have financial
+            inentivize to limit scalability once the marginal cost of adding more data grows above the marginal revenue
+            from doing so. Economics keep the chain from getting so big it collapses, while transaction fees fall as
+            transactions only need to pay for forever if they need it.
+          </p>
+        </div>
+        <div class="fundamentals-column">
+          Saito Consensus
+          <p>
+            Saito uses a new form of mining that pays the nodes which collect transactions from users. Cryptographic
+            signatures and a provably-fair lottery make this as secure as mining: attackers cannot collect payments from
+            transactions that do not include them on their cryptographically-secured routing paths.
+          </p>
+          <p>
+            In addition to eliminating the 51 percent attack, Saito's consensus mechanism incentivizes the provision of
+            whatever routing infrastructure, software, and off-chain archival services are needed to drive transaction
+            volume. No separate fees are needed to pay for scale.
+          </p>
         </div>
       </div>
 
-      <section class="godeeper-row">
-        <div class="godeeper">
-          <h2>Quick Links:</h2>
-          <div class="deeperboxes">
-            <a target="_blank" alt="How it works" href="http://org.saito.tech/saito-economics/" class="deeperbox">
-              <i class="fas fa-cogs"></i>
-              <div class="deepertext">How it Works</div>
-            </a>
-            <a href="https://t.me/joinchat/BOSYOk_BR8HIqp-scldlEA" target="_blank" alt="chat with us" class="deeperbox">
-              <i class="fab fa-telegram"></i>
-              <div class="deepertext">Chat with us</div>
-            </a>
-            <a href="/arcade/" alt="Play on the Saito arcade" class="deeperbox">
-              <i class="fas fa-gamepad"></i>
-              <div class="deepertext">Play a game</div>
-            </a>
-            <a href="https://org.saito.tech/developers" target="_blank" alt="saito for developers" class="deeperbox">
-              <i class="fas fa-code-branch"></i>
-              <div class="deepertext">Developers</div>
-            </a>
-          </div>
-        </div>
-      </section>
 
+    </section>
 
-
-
-
-      <section class="fundamentals-row white">
-        <div class="fundamentals">
-          <h2>Revolutionary Technology:</h2>
-	  <div class="fundamentals-intro">
-Saito has patent protection on the fundamental mechanisms needed to support a scalable chain: market-driven rent for on-chain storage, and cryptographic routing signatures to identify and pay nodes that route transactions. We are committed to the launch of a public blockchain that will bring these benefits. The two key techniques are:
-	  </div>
-          <div class="fundamentals-column">
-Transaction Rebroadcasting
-<p>
-Saito prunes data by default, but keeps old data circulating on-chain if they are able to out-competes new transactions for space on the blockchain. The key advance is a form of rent that does not require developers to hardcode economic variables.
-</p>
-<p>
-Transaction broadcasting allows for the elimination of blocksize limits, as block producers have financial inentivize to limit scalability once the marginal cost of adding more data grows above the marginal revenue from doing so. Economics keep the chain from getting so big it collapses, while transaction fees fall as transactions only need to pay for forever if they need it.
-</p>	
-	  </div>
-          <div class="fundamentals-column">
-Saito Consensus
-<p>
-Saito uses a new form of mining that pays the nodes which collect transactions from users. Cryptographic signatures and a provably-fair lottery make this as secure as mining: attackers cannot collect payments from transactions that do not include them on their cryptographically-secured routing paths.
-</p>
-<p>
-In addition to eliminating the 51 percent attack, Saito's consensus mechanism incentivizes the provision of whatever routing infrastructure, software, and off-chain archival services are needed to drive transaction volume. No separate fees are needed to pay for scale.
-</p>
-	  </div>
-        </div>
-
-
-      </section>
-
-        <!--div class="godeeper">
+    <!--div class="godeeper">
         <h2>Want to go deeper?</h2>
         <p>
           <h4>Content</h4>
@@ -179,35 +195,84 @@ In addition to eliminating the 51 percent attack, Saito's consensus mechanism in
             </video>
           </div>
         </div-->
-      </section>
+    </section>
 
-      <section class="arcade black">
-        <div class="row">
-          <div class="grid-2-columns arcade-grid">
-          </div>
+    <section class="arcade black">
+      <div class="row">
+        <div class="grid-2-columns arcade-grid">
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="godeeper-row">
-        <div class="godeeper">
+    <section class="arcade">
+      <div class="row">
+        <div class="compare-grid">
+          <div class="compare-grid-header"></div>
+          <div class="compare-grid-header">Bitcoin</div>
+          <div class="compare-grid-header">Ethereum</div>
+          <div class="compare-grid-header">Tendermint</div>
+          <div class="compare-grid-header">Polkadot</div>
+          <div class="compare-grid-header">Saito</div>
+          <div class="compare-grid-cell label">Where is Data Shared?</div>
+          <div class="compare-grid-cell">off-chain</div>
+          <div class="compare-grid-cell">off-chain</div>
+          <div class="compare-grid-cell">off-chain</div>
+          <div class="compare-grid-cell">off-chain</div>
+          <div class="compare-grid-cell">on-chain / off-chain</div>
+          <div class="compare-grid-cell label">How is Data Paid For?</div>
+          <div class="compare-grid-cell">extra fees</div>
+          <div class="compare-grid-cell">extra fees</div>
+          <div class="compare-grid-cell">extra fees</div>
+          <div class="compare-grid-cell">extra fees</div>
+          <div class="compare-grid-cell">no extra fee</div>
+          <div class="compare-grid-cell label">Data Cost</div>
+          <div class="compare-grid-cell">10x transaction fee</div>
+          <div class="compare-grid-cell">5x transaction fee</div>
+          <div class="compare-grid-cell">2x transaction fee</div>
+          <div class="compare-grid-cell">2x transaction fee</div>
+          <div class="compare-grid-cell">no extra fee</div>
+          <div class="compare-grid-cell label">User Barrier(s)</div>
+          <div class="compare-grid-cell">usability</div>
+          <div class="compare-grid-cell">metamask / Infura</div>
+          <div class="compare-grid-cell">network economics</div>
+          <div class="compare-grid-cell">sidechains, servers</div>
+          <div class="compare-grid-cell">none</div>
+          <div class="compare-grid-cell label">Developer Barrier(s)</div>
+          <div class="compare-grid-cell">UTXO scripting</div>
+          <div class="compare-grid-cell">underpowered smart contracts</div>
+          <div class="compare-grid-cell">multi-server architectures</div>
+          <div class="compare-grid-cell">coordinating and migrating parachains</div>
+          <div class="compare-grid-cell">none</div>
+          <div class="compare-grid-cell label">Cost-of-Attack</div>
+          <div class="compare-grid-cell">~51%</div>
+          <div class="compare-grid-cell">~51%</div>
+          <div class="compare-grid-cell">~33%</div>
+          <div class="compare-grid-cell">~33%</div>
+          <div class="compare-grid-cell">~125%</div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section id="testimonials" class="testimonials">
-      </section>
+    <section class="godeeper-row">
+      <div class="godeeper">
+      </div>
+    </section>
 
-      <footer class="footer">
-        <div class="footer-container">
-          <img class="footer-logo" alt="saito logo" src="/saito/img/logo.svg"></img>
-          <center>
-            <div class="light">info@saito.tech</div>
-          </center>
-          <p></p>
-          <span class="copyright">&copy; Proclus Technologies. All Rights Reserved</span>
-        </div>
-      </footer>
-      <div class="chat-manager" id="chat-manager"></div>
-    </div>
+    <section id="testimonials" class="testimonials">
+    </section>
+
+    <footer class="footer">
+      <div class="footer-container">
+        <img class="footer-logo" alt="saito logo" src="/saito/img/logo.svg"></img>
+        <center>
+          <div class="light">info@saito.tech</div>
+        </center>
+        <p></p>
+        <span class="copyright">&copy; Proclus Technologies. All Rights Reserved</span>
+      </div>
+    </footer>
+    <div class="chat-manager" id="chat-manager"></div>
+  </div>
   </div>
 
   <script id="saito" type="text/javascript" src="/saito/saito.js"></script>

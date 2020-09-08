@@ -52,7 +52,24 @@ img.banner-logo {
   transform: translate(-50%, 10px);
 }
 
+.compare-grid {
+  background-image: url('/saito/img/dreamscape.png');
+  background-size: cover;
+  color: #fff;
+  display: grid;
+  grid-gap: 2px;
+  grid-template-columns: repeat(6, auto);
+}
 
+.compare-grid div {
+  background: #444;
+  padding: 1em;
+}
+
+.compare-grid-header, .compare-grid .label {
+  font-family: visuelt-medium;
+  font-size: larger;
+}
 
 
 .featured-app {
