@@ -54,10 +54,51 @@ img.banner-logo {
 
 
 
+
+.featured-app {
+  background-color: transparent;
+  width: 100%;
+  perspective: 1000px; /* Remove this if you don't want the 3D effect */
+
+}
+.featured-app-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+.featured-app:hover .featured-app-inner {
+  transform: rotateY(180deg);
+}
+
+.featured-app-front, .featured-app-back {
+  position: absolute;
+  width: 100%;
+  -webkit-backface-visibility: hidden; /* Safari */
+  backface-visibility: hidden;
+}
+
+.featured-app-front {
+  background-color: #bbb;
+  color: black;
+}
+
+.featured-app-back {
+  background-color: dodgerblue;
+  color: white;
+  transform: rotateY(180deg);
+  height: 100%;
+}
+
+
+
 .title-container {
   width: 580px;
   color: #fff;
   justify-self: right;
+  margin-top:75px;
 }
 
 .title-content {
@@ -182,8 +223,19 @@ img.banner-logo {
   width: 530px;
 }
 
+.splash-row {
+  height: 19em;
+  top: -300px;
+  clear:both;
+  position: relative;
+}
+
+
+
 .godeeper-row {
   height: 19em;
+  top: -0px;
+  position: relative;
 }
 
 .godeeper h2 {
@@ -251,7 +303,8 @@ img.banner-logo {
 }
 
 .arcade-banner {
-  width: 590px;
+ /* width: 590px; */
+ width: 100%;
 }
 
 .flowplayer video {
