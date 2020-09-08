@@ -75,7 +75,7 @@
               </p>
               <p>
                 <a href="https://org.saito.tech" target="_blank">Learn More about Saito</a> | <a
-                  href="https://org.saito.tech/saito-network" target="_blank">Network Status</a>
+                  href="https://org.saito.tech/saito-network" target="_blank">Try Out the Network</a>
               </p>
             </div>
           </div>
@@ -84,40 +84,41 @@
 
     <section class="fundamentals-row white">
       <div class="fundamentals">
-        <h2>Revolutionary Technology:</h2>
+        <h2>How Saito Works:</h2>
         <div class="fundamentals-intro">
-          Saito has patent protection on the fundamental mechanisms needed to support a scalable chain: market-driven
-          rent for on-chain storage, and cryptographic routing signatures to identify and pay nodes that route
-          transactions. We are committed to the launch of a public blockchain that will bring these benefits. The two
-          key techniques are:
+	  Saito is a fundamental project most similar to Bitcoin, only without its economic problems and comcomitant attacks. Those interested in learning how Saito works can see our <a href="https://github.com/SaitoTech/saito-lite/blob/master/docs/how_saito_works.md">simplified description</a> of the network or read the more academic <a href="https://saito.tech/saito-whitepaper.pdf">Saito Whitepaper</a> for a more substantive discussion of the underlying economic techniques. Key advances include:
         </div>
         <div class="fundamentals-column">
-          Transaction Rebroadcasting
-          <p>
-            Saito prunes data by default, but keeps old data circulating on-chain if they are able to out-competes new
-            transactions for space on the blockchain. The key advance is a form of rent that does not require developers
-            to hardcode economic variables.
+          <p class="fundamentals-title">
+            Transaction Rebroadcasting
+	  </p>
+          <p class="fundamentals-text">
+            Saito prunes data by default, but allows old transactions to out-compete new ones for space on-chain. 
+	    The result is a rent mechanism where prices are set by the market, not hardcoded by devs.
           </p>
-          <p>
-            Transaction broadcasting allows for the elimination of blocksize limits, as block producers have financial
-            inentivize to limit scalability once the marginal cost of adding more data grows above the marginal revenue
-            from doing so. Economics keep the chain from getting so big it collapses, while transaction fees fall as
-            transactions only need to pay for forever if they need it.
+          <p class="fundamentals-text">
+            Transaction rebroadcasting eliminates blocksize limits. Maximizing profits requires 
+	    block producers to target a fee-level where the amount of data removed each block matches the 
+	    amount added. The blockchain can never get so bloated it collapses.
           </p>
         </div>
         <div class="fundamentals-column">
-          Saito Consensus
-          <p>
-            Saito uses a new form of mining that pays the nodes which collect transactions from users. Cryptographic
-            signatures and a provably-fair lottery make this as secure as mining: attackers cannot collect payments from
-            transactions that do not include them on their cryptographically-secured routing paths.
+          <p class="fundamentals-title">
+            Saito Consensus
+	  </p>
+          <p class="fundamentals-text">
+            Saito uses a form of mining that pays the nodes which collect transactions from users. Cryptographic routing 
+	    signatures and a provably-fair lottery make this as secure as mining.
           </p>
-          <p>
-            In addition to eliminating the 51 percent attack, Saito's consensus mechanism incentivizes the provision of
-            whatever routing infrastructure, software, and off-chain archival services are needed to drive transaction
-            volume. No separate fees are needed to pay for scale.
+          <p class="fundamentals-text">
+            Turning "efficient fee collection" into the network's form of work incentivizes the 
+	    provision all routing infrastructure, software and data services needed to drive on-chain activity, 
+	    incentivizing all activities needed to support essential network services.
           </p>
         </div>
+	<div class="fundamentals-contact">
+	  We welcome contact from those with questions about how Saito works and what the network will deliver at scale. If you'd like to get in touch, the best ways to reach out are via email at &lt;<a href="mailto:info@saito.tech">info@saito.tech</a>&gt; or via chat in our public <a href="https://t.me/joinchat/BOSYOk_BR8Epp0X35A54UQ">Telegram Group</a>.
+	</div>
       </div>
 
 
