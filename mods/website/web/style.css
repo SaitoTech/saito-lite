@@ -73,6 +73,34 @@ img.banner-logo {
 }
 
 
+.roadmap-row {
+  margin: 3em 0;
+  
+  min-height: 6em;
+  text-align: center;
+}
+
+.roadmap .background {
+  background-color: var(--saito-red);
+}
+
+.roadmap-row .content {
+  color: #444;
+  background-color: #fff;
+  width: 25em;
+  display: inline-block;
+  clip-path: polygon(0 0, 97% 0%, 100% 50%, 97% 100%, 0 100%, 3% 50%);
+  line-height: 1.2em;
+  text-align: left;
+  padding: 3px 3em;
+}
+
+.roadmap .content-label {
+  font-size: larger;
+  font-family: visuelt-medium;
+  line-height: 2em;
+}
+
 .featured-app {
   background-color: transparent;
   width: 100%;
