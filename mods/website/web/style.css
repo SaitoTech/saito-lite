@@ -87,25 +87,48 @@ img.banner-logo {
   width: 100%;
 }
 
+.build-grid>div {
+  background-size: cover;
+  transition: transform 0.3s ease-in;
+  cursor: pointer;
+  position: relative;
+}
+
+.build-content {
+  position: absolute;
+  background-color: #000a;
+  color: #fff;
+  font-size: 1.6em;
+  padding: 2em;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .build-grid img {
   width: 100%;
-  transition: transform 0.8s;
-  cursor: pointer;
 }
 
-.build-grid img:hover {
-  width: 100%;
+.build-grid .email{
+  background-image: url('/website/img/email.png');
+}
+.build-grid .poker{
+  background-image: url('/website/img/poker.png');
+}
+.build-grid .scotland{
+  background-image: url('/website/img/scotland.png');
+}
+.build-grid .twilight{
+  background-image: url('/website/img/twilight.png');
+}
+
+
+
+.build-grid div:hover {
   transform: scale(1.1);
+  position: relative;
 }
 
-.build-grid .email:hover:after {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background-color: #0004;
-  color: #fff;
-  content: "Rich Enterprise Applications.";
-}
 
 
 .roadmap-row {
