@@ -81,6 +81,32 @@ img.banner-logo {
   font-size: larger;
 }
 
+.build-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+}
+
+.build-grid img {
+  width: 100%;
+  transition: transform 0.8s;
+  cursor: pointer;
+}
+
+.build-grid img:hover {
+  width: 100%;
+  transform: scale(1.1);
+}
+
+.build-grid .email:hover:after {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #0004;
+  color: #fff;
+  content: "Rich Enterprise Applications.";
+}
+
 
 .roadmap-row {
   margin: 2em 0;
@@ -175,9 +201,21 @@ img.banner-logo {
 }
 
 .featured-app-back-inner {
-  
+  height: 100%;
   background-color: var(--saito-red);
   font-size: 1.3em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.featured-app-back-inner a {
+  color: #fff; 
+  font-family: visuelt-medium;
+}
+
+.featured-app-back-inner a:hover {
+  color: #fffd;
 }
 
 .title-container {
@@ -652,4 +690,8 @@ img.banner-logo {
   .title-content blockquote {
     text-align: center;
   }
+}
+
+.chat-box-header-title {
+  color: #fff;
 }
