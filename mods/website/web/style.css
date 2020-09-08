@@ -83,8 +83,7 @@ img.banner-logo {
 
 
 .roadmap-row {
-  margin: 3em 0;
-  
+  margin: 2em 0;
   min-height: 6em;
   text-align: center;
   display: flex;
@@ -96,14 +95,14 @@ img.banner-logo {
 
 .roadmap-row .content {
   color: #444;
-  background-color: #4444;
   width: 35%;
   display: inline-block;
-  /* clip-path: polygon(0 0, 97% 0%, 100% 50%, 97% 100%, 0 100%, 3% 50%); */
   line-height: 1.2em;
   text-align: left;
   padding: 3px 3em;
+  background: linear-gradient(0deg, #DDD 50%, #CCC 100%);
 }
+
 .content.blanc {
   width: 15%;
   padding: 4em;
