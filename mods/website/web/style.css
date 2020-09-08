@@ -108,8 +108,6 @@ img.banner-logo {
   padding: 4em;
 }
 
-.content.blanc h4 {}
-
 .content.start {
   clip-path: polygon(16% 49%, 0 0, 100% 0, 100% 100%, 0 100%);
 }
@@ -168,13 +166,19 @@ img.banner-logo {
 }
 
 .featured-app-back {
-  background-color: dodgerblue;
-  color: white;
   transform: rotateY(180deg);
-  height: 100%;
+  background-color: #fff;
+  color: white;
+  height: 320px;
+  padding: 1em;
+  border: 1px solid var(--saito-skyline-grey);
 }
 
-
+.featured-app-back-inner {
+  
+  background-color: var(--saito-red);
+  font-size: 1.3em;
+}
 
 .title-container {
   width: 580px;
@@ -255,6 +259,12 @@ img.banner-logo {
   color: #fff;
 }
 
+.about-content {
+  font-size: 1.3em;
+  color: #fff;
+  line-height: 1.5em;
+}
+
 .intro-box {
   width: 580px;
   background-color: #f9f9f9;
@@ -305,7 +315,7 @@ img.banner-logo {
 
 .row {
   grid-gap: 2em;
-  margin: 0 0 3em 0;
+  margin: 0 0 0 0;
 }
 
 #testimonials {
