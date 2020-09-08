@@ -43,6 +43,17 @@ h2, h5 {
   clip-path: polygon(100% 0, 100% 12%, 42% 100%, 0 38%, 0 0);
 }
 
+.can-build-img-small {
+  height: 200px;
+}
+.can-build-img-tall {
+  height: 400px;
+  float: left;
+  margin: 0px;
+  padding: 0px;
+}
+
+
 img.banner-logo {
   width: 39%;
   position: absolute;
