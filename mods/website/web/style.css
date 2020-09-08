@@ -177,10 +177,15 @@ img.banner-logo {
 }
 
 
-.fundamentals_row {
+.fundamentals-row {
   background-color: whitesmoke;
+  position:relative;
+  top: -200px;
 }
 .fundamentals {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
   font-size: 1.2em;
   background-color: whitesmoke;
   padding: 30px;
@@ -190,11 +195,22 @@ img.banner-logo {
   margin-bottom: 10px;
 }
 .fundamentals-column {
-  width: 48%;
+  width: 42.5%;
   float: left;
-  padding: 10px;
+  padding: 40px;
+  margin-left: 4%;
 }
-
+.fundamentals-title {
+  font-size:1em;
+  font-weight: bold;
+}
+.fundamentals-text {
+  margin-top: 9px;
+  font-size:0.8em;
+}
+.fundamentals-contact {
+  clear:both;
+}
 
 .intro-box {
   width: 580px;
