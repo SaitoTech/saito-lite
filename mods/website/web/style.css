@@ -86,14 +86,19 @@ img.banner-logo {
   padding: 1em;
 }
 
-.compare-grid div {
+.compare-grid>div {
   background: #444;
-  padding: 1em;
+  display: flex;
+  align-items: center;
 }
 
 .compare-title {
   color: var(--saito-red);
   font-size: larger;
+}
+
+.compare-grid>div>div {
+padding:0.8em
 }
 
 .compare-grid-header, .compare-grid .label {
@@ -531,7 +536,7 @@ img.banner-logo {
 .slider-content-wrapper {
 	display: flex;
 	
-	transition: transform 0.5s ease-in-out;
+	transition: transform 1s ease-in-out;
 }
 
 /*Слайд*/
@@ -552,17 +557,17 @@ img.banner-logo {
 }
 
 .image-1 {
-  background-color: #F61E3C;}
+  background-color: #F20952;}
 .image-2 {background-color: #F61E3C;}
-.image-3 {background-color: #F61E3C;}
-.image-4 {background-color: #FA3835;}
+.image-3 {background-color: #FA3835;}
+.image-4 {background-color: #FA6635;}
 .image-5 {background-color: #FE9537;}
 .image-6 {background-color: #FCAF45;}
 
 
 /* Блок с контролами */
 .slider-controls {
-	padding:20px;
+	height: 0;
 	text-align: center;
 }
 
@@ -602,7 +607,7 @@ img.banner-logo {
 	display: flex;
 	left:50%;
 	transform: translateX(-50%);
-	bottom:10%;
+	bottom: 3%;
 }
 
 .dot {
