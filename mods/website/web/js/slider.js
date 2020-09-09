@@ -239,12 +239,3 @@ slider.init({
         buttons: false,
         dots: true
 });
-
-intervalId = setInterval(function(){
-        if (itemsInfo.position.current < itemsInfo.position.max) {
-                itemsInfo.update(itemsInfo.position.current + 1);
-        } else {
-                itemsInfo.reset();
-        }
-        _slideItem();
-}, itemsInfo.intervalSpeed);
