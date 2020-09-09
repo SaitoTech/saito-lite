@@ -23,7 +23,7 @@ const slider = (function () {
                         min: 0, // первый слайд
                         max: elements.length - 1 // последний слайд        
                 },
-                intervalSpeed: 2000, // Скорость смены слайдов в авторежиме
+                intervalSpeed: 3500, // Скорость смены слайдов в авторежиме
 
                 update: function (value) {
                         this.position.current = value;
@@ -236,7 +236,7 @@ const slider = (function () {
 
 
 slider.init({
-        intervalSpeed: 3500,
+        intervalSpeed: 500,
         currentItem: 0,
         buttons: true,
         dots: true
@@ -253,7 +253,10 @@ var isInViewport = function (elem) {
 };
 
 document.querySelector('.main').addEventListener("scroll", function () {
-        if (isInViewport(document.querySelector('.can-build'))) {
-                document.querySelector('.auto-control').click();
-        };
+        if(!window.slidertriggered){
+                if (isInViewport(document.querySelector('.can-build'))) {
+                        window.slidertriggered = true;
+                        document.querySelector('.auto-control').click();
+                };
+        }
 });

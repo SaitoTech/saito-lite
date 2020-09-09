@@ -536,7 +536,7 @@ padding:0.8em
 .slider-content-wrapper {
 	display: flex;
 	
-	transition: transform 1s ease-in-out;
+	transition: transform 0.5s ease-in-out;
 }
 
 /*Слайд*/
