@@ -1,263 +1,30 @@
 body {
   background-color: var(--saito-skyline-grey);
   font-size: 1em;
+  background-image: url('/saito/img/dreamscape.png');
+  background-repeat: no-repeat;
+  background-size: 100% 600px;
   font-family: "visuelt-light";
   overflow-x: hidden;
   width: 100%;
-  /*
-  background-image: url(/saito/img/background.png);
-  */
-}
-
-section {
-  padding: 1em 7em;
-}
-
-h2, h5 {
-  color: var(--saito-red);
 }
 
 .header {
   position: absolute;
   top: 0px;
   left: 0px;
-  background-image: url('/saito/img/dreamscape.png');
-  background-repeat: no-repeat;
-  background-size: 100% 100px;
+  background-image: transparent;
+  background: transparent;
 }
 
 .site-main {
-  max-width: 1600px;
-  height: 675px;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.banner {
-  height: 34em;
-  background-color: rgb(247 31 61 / 57%);
-  background-image: url('/saito/img/dreamscape.png');
-  background-repeat: no-repeat;
-  background-size: cover;
-  clip-path: polygon(100% 0, 100% 12%, 42% 100%, 0 38%, 0 0);
-}
-
-.can-build-img-small {
-  height: 200px;
-}
-.can-build-img-tall {
-  height: 400px;
-  float: left;
-  margin: 0px;
-  padding: 0px;
-}
-
-
-img.banner-logo {
-  width: 39%;
-  position: absolute;
-  left: 40%;
-  top: 3em;
-  transform: translate(-50%, 0em);
-}
-
-.banner-title {
-  color: #fff;
-  font-size: 3em;
-  font-family: visuelt-medium;
-  position: absolute;
-  top: 6em;
-  left: 42%;
-  transform: translate(-50%, 10px);
-  margin-top: 0px;
-}
-
-.compare-grid {
-  background-image: url('/saito/img/dreamscape.png');
-  background-size: cover;
-  color: #fff;
-  display: grid;
-  grid-gap: 2px;
-  grid-template-columns: repeat(6, auto);
-  padding: 1em;
-}
-
-.compare-grid div {
-  background: #444;
-  padding: 1em;
-}
-
-.compare-grid-header, .compare-grid .label {
-  font-family: visuelt-medium;
-  font-size: larger;
-}
-
-.build-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  width: 100%;
-}
-
-.build-grid>div {
-  background-size: cover;
-  transition: transform 0.3s ease-in;
-  cursor: pointer;
-  position: relative;
-}
-
-.build-content {
-  position: absolute;
-  background-color: #000a;
-  color: #fff;
-  font-size: 1.6em;
-  padding: 2em;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.build-grid img {
-  width: 100%;
-}
-
-.build-grid .email{
-  background-image: url('/website/img/email.png');
-}
-.build-grid .poker{
-  background-image: url('/website/img/poker.png');
-}
-.build-grid .scotland{
-  background-image: url('/website/img/scotland.png');
-}
-.build-grid .twilight{
-  background-image: url('/website/img/twilight.png');
-}
-
-
-
-.build-grid div:hover {
-  transform: scale(1.1);
-  position: relative;
-}
-
-
-
-.roadmap-row {
-  margin: 2em 0;
-  min-height: 6em;
-  text-align: center;
-  display: flex;
-}
-
-.roadmap .background {
-  background-color: var(--saito-red);
-}
-
-.roadmap-row .content {
-  color: #444;
-  width: 35%;
-  display: inline-block;
-  line-height: 1.2em;
-  text-align: left;
-  padding: 3px 3em;
-  background: linear-gradient(0deg, #DDD 50%, #CCC 100%);
-}
-
-.content.blanc {
-  width: 15%;
-  padding: 4em;
-}
-
-.content.start {
-  clip-path: polygon(16% 49%, 0 0, 100% 0, 100% 100%, 0 100%);
-}
-
-.content.end {
-  clip-path: polygon(0 0, 75% 0%, 100% 50%, 75% 100%, 0 100%);
-}
-
-.content-shim {
-  height: 110%;
-  border: 6px solid var(--saito-red);
-  background-color: #fff;
-  position: relative;
-  top: -5%;
-  padding: 1em 0 1em 2em;
-  border: 10px solid;
-  border-image-slice: 1;
-  border-width: 5px;
-  border-image-source: linear-gradient(to right, var(--saito-red), var(--saito-orange));
-}
-
-.roadmap .content-label {
-  font-size: larger;
-  font-family: visuelt-medium;
-  line-height: 2em;
-}
-
-.featured-app {
-  background-color: transparent;
-  width: 100%;
-  perspective: 1000px; /* Remove this if you don't want the 3D effect */
-
-}
-.featured-app-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  transition: transform 0.8s;
-  transform-style: preserve-3d;
-}
-.featured-app:hover .featured-app-inner {
-  transform: rotateY(180deg);
-}
-
-.featured-app-front, .featured-app-back {
-  position: absolute;
-  width: 100%;
-  -webkit-backface-visibility: hidden; /* Safari */
-  backface-visibility: hidden;
-}
-
-.featured-app-front {
-  background-color: #bbb;
-  color: black;
-}
-
-.featured-app-back {
-  transform: rotateY(180deg);
-  background-color: #fff;
-  color: white;
-  height: 320px;
-  padding: 1em;
-  border: 1px solid var(--saito-skyline-grey);
-}
-
-.featured-app-back-inner {
-  height: 100%;
-  background-color: var(--saito-red);
-  font-size: 1.3em;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-}
-
-.featured-app-back-inner a {
-  color: #fff; 
-  font-family: visuelt-medium;
-}
-
-.featured-app-back-inner a:hover {
-  color: #fffd;
+  margin: 220px 0 0 0;
 }
 
 .title-container {
   width: 580px;
   color: #fff;
   justify-self: right;
-  margin-top:75px;
 }
 
 .title-content {
@@ -289,55 +56,6 @@ img.banner-logo {
   transform: rotate(180deg);
 }
 
-/*
-.fundamentals-row {
-  background-color: whitesmoke;
-  position:relative;
-  top: -200px;
-}
-*/
-.fundamentals {
-  font-size: 1.2em;
-  line-height: 1.4em;
-}
-
-.fundamentals-grid {
-  display: grid;
-  grid-gap: 0 5em;
-  grid-template-columns: 1fr 1fr;
-  margin: 0 0 1em 0;
-}
-
-.fundamentals-intro {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.fundamentals-column {
-  padding: 1em;
-  background-color: #fff;
-  border: 1px solid #0002;
-  line-height: 1.1em;
-}
-
-.fundamentals-text {
-  margin-top: 9px;
-  font-size:0.8em;
-}
-.fundamentals-contact {
-  clear:both;
-}
-
-.about-saito h2 {
-  color: #fff;
-}
-
-.about-content {
-  font-size: 1.3em;
-  color: #fff;
-  line-height: 1.5em;
-}
-
 .intro-box {
   width: 580px;
   background-color: #f9f9f9;
@@ -349,7 +67,7 @@ img.banner-logo {
   color: #f71e3d;
   font-size: 2.1em;
   font-weight: 700;
-  margin: 0 0 0.5em 0;
+  margin: 0 0 1em 0;
 }
 
 .intro-content {
@@ -371,10 +89,6 @@ img.banner-logo {
   background-color: var(--saito-skyline-grey);
 }
 
-.red {
-  background-color: var(--saito-red);
-}
-
 .arcade-text {
   margin: 4em 0;
   padding: 1em;
@@ -388,7 +102,7 @@ img.banner-logo {
 
 .row {
   grid-gap: 2em;
-  margin: 0 0 0 0;
+  margin: 0 0 3em 0;
 }
 
 #testimonials {
@@ -415,19 +129,8 @@ img.banner-logo {
   width: 530px;
 }
 
-.splash-row {
-  height: 19em;
-  top: -300px;
-  clear:both;
-  position: relative;
-}
-
-
-
 .godeeper-row {
   height: 19em;
-  top: -0px;
-  position: relative;
 }
 
 .godeeper h2 {
@@ -457,7 +160,7 @@ img.banner-logo {
 .deeperbox i {
   color: #fff;
   background-color: var(--saito-red);
-  font-size: 3em;
+  font-size: 6em;
   line-height: 2em;
   width: 2em;
   text-align: center;
@@ -466,7 +169,7 @@ img.banner-logo {
 
 .deepertext {
   text-align: center;
-  font-size: 1.5em;
+  font-size: 2em;
   line-height: 2em;
   color: var(--saito-red);
   text-shadow: 0 0 1px #0009;
@@ -495,8 +198,7 @@ img.banner-logo {
 }
 
 .arcade-banner {
- /* width: 590px; */
- width: 100%;
+  width: 590px;
 }
 
 .flowplayer video {
@@ -725,8 +427,4 @@ img.banner-logo {
   .title-content blockquote {
     text-align: center;
   }
-}
-
-.chat-box-header-title {
-  color: #fff;
 }
