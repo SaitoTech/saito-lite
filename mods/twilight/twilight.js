@@ -310,14 +310,13 @@ class Twilight extends GameTemplate {
     //
     // add card events -- text shown and callback run if there
     //
-    this.hud.mode = 2;
     this.hud.addCardType("logcard", "", null);
     this.hud.addCardType("showcard", "select", this.cardbox_callback);
     this.hud.addCardType("card", "select", this.cardbox_callback);
     if (!app.browser.isMobileBrowser(navigator.userAgent)) {
       this.hud.cardbox.skip_card_prompt = 1;
     } else {
-      this.hud.card_width = 50;
+      this.hud.card_width = 110;
     }
 
     this.hud.render(app, this);
@@ -15217,7 +15216,10 @@ console.log("card: " + card);
 
   addShowCardEvents(onCardClickFunction=null) {
     this.changeable_callback = onCardClickFunction;
+console.log("attach card events...");
+console.log("ACTIVE? " + this.browser_active);
     this.hud.attachCardEvents(this.app, this);
+console.log("done attaching card events...");
   }
 
   addLogCardEvents() {
