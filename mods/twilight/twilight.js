@@ -190,6 +190,12 @@ class Twilight extends GameTemplate {
           <li class="menu-item" id="text">Text Menu</li>
           <li class="menu-item" id="graphics">Graphical Menu</li>
         </ul>
+       <div style="margin-top:20px">HUD Mode:</div>
+       <ul>
+          <li class="menu-item" id="enable_hud_horizontal">Horizontal</li>
+          <li class="menu-item" id="enable_hud_vertical">Vertical</li>
+          <li class="menu-item" id="enable_hud_square">Square</li>
+        </ul>
        <div style="margin-top:20px">Observer Mode:</div>
        <ul>
           <li class="menu-item" id="enable_observer_mode">Enable</li>
@@ -202,6 +208,33 @@ class Twilight extends GameTemplate {
 
     // leave action enabled on other panels
     //$('.card').off();
+
+    $('#enable_hud_vertical').on('click', function() {
+      $('.hud').addClass('hud-vertical').removeClass('hud-long').removeClass('hud-square').removeAttr("style");
+      twilight_self.hud.mode = 2;
+      twilight_self.hud.initial_render = 0;
+      twilight_self.hud.render(twilight_self.app, twilight_self);
+      twilight_self.hud.attachEvents(twilight_self.app, twilight_self);
+      twilight_self.hud.attachCardEvents(twilight_self.app, twilight_self);
+    });
+    $('#enable_hud_horizontal').on('click', function() {
+      $('.hud').addClass('hud-long').removeClass('hud-vertical').removeClass('hud-square').removeAttr("style");
+      twilight_self.hud.mode = 0;
+      twilight_self.hud.initial_render = 0;
+      twilight_self.hud.render(twilight_self.app, twilight_self);
+      twilight_self.hud.attachEvents(twilight_self.app, twilight_self);
+      twilight_self.hud.attachCardEvents(twilight_self.app, twilight_self);
+    });
+    $('#enable_hud_square').on('click', function() {
+      $('.hud').addClass('hud-square').removeClass('hud-long').removeClass('hud-vertical').removeAttr("style");
+      twilight_self.hud.mode = 1;
+      twilight_self.hud.initial_render = 0;
+      twilight_self.hud.render(twilight_self.app, twilight_self);
+      twilight_self.hud.attachEvents(twilight_self.app, twilight_self);
+      twilight_self.hud.attachCardEvents(twilight_self.app, twilight_self);
+    });
+
+
     $('.menu-item').on('click', function() {
 
       let action2 = $(this).attr("id");

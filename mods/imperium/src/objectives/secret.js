@@ -435,7 +435,7 @@
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
         let cultural = 0;
         let planetcards = imperium_self.returnPlayerPlanetCards();
-        for (let i = 0; i < planetcards.length; i++) { if (planetcards[i].type === "cultural")   { cultural++; } }
+        for (let i = 0; i < planetcards.length; i++) { if (imperium_self.game.planets[planetcards[i]].type === "cultural")   { cultural++; } }
         if (cultural >= 4) { return 1; }
 	return 0;
       },
@@ -519,7 +519,7 @@
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
         let hazardous = 0;
         let planetcards = imperium_self.returnPlayerPlanetCards();
-        for (let i = 0; i < planetcards.length; i++) { if (planetcards[i].type === "hazardous")   { hazardous++; } }
+        for (let i = 0; i < planetcards.length; i++) { if (imperium_self.game.planets[planetcards[i]].type === "hazardous")   { hazardous++; } }
         if (hazardous >= 4) { return 1; }
 	return 0;
       },
@@ -534,7 +534,7 @@
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
         let industrial = 0;
         let planetcards = imperium_self.returnPlayerPlanetCards();
-        for (let i = 0; i < planetcards.length; i++) { if (planetcards[i].type === "industrial")   { industrial++; } }
+        for (let i = 0; i < planetcards.length; i++) { if (imperium_self.game.planets[planetcards[i]].type === "industrial")   { industrial++; } }
         if (industrial >= 4) { return 1; }
 	return 0;
       },

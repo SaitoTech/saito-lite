@@ -25,9 +25,9 @@
 	let planetcards = imperium_self.returnPlayerPlanetCards();
 
 	for (let i = 0; i < planetcards.length; i++) {
-	  if (planetcards[i].type === "hazardous")  { hazardous++; }
-	  if (planetcards[i].type === "industrial") { industrial++; }
-	  if (planetcards[i].type === "cultural")   { cultural++; }
+	  if (imperium_self.game.planets[planetcards[i]].type === "hazardous")  { hazardous++; }
+	  if (imperium_self.game.planets[planetcards[i]].type === "industrial") { industrial++; }
+	  if (imperium_self.game.planets[planetcards[i]].type === "cultural")   { cultural++; }
 	}
 
 	if (hazardous >= 4 || cultural >= 4 || industrial >= 4) { return 1; }
@@ -146,10 +146,10 @@
         let planetcards = imperium_self.returnPlayerPlanetCards();
 
         for (let i = 0; i < planetcards.length; i++) {
-          if (planetcards[i].type === "hazardous")  { hazardous++; }
-          if (planetcards[i].type === "industrial") { industrial++; }
-          if (planetcards[i].type === "cultural")   { cultural++; }
-          if (planetcards[i].type === "diplomatic")   { diplomatic++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "hazardous")  { hazardous++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "industrial") { industrial++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "cultural")   { cultural++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "diplomatic") { diplomatic++; }
         }
 
         if ((cultural+hazardous+industrial+diplomatic) >= 6) { return 1; }

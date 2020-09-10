@@ -3615,7 +3615,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
         let cultural = 0;
         let planetcards = imperium_self.returnPlayerPlanetCards();
-        for (let i = 0; i < planetcards.length; i++) { if (planetcards[i].type === "cultural")   { cultural++; } }
+        for (let i = 0; i < planetcards.length; i++) { if (imperium_self.game.planets[planetcards[i]].type === "cultural")   { cultural++; } }
         if (cultural >= 4) { return 1; }
 	return 0;
       },
@@ -3699,7 +3699,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
         let hazardous = 0;
         let planetcards = imperium_self.returnPlayerPlanetCards();
-        for (let i = 0; i < planetcards.length; i++) { if (planetcards[i].type === "hazardous")   { hazardous++; } }
+        for (let i = 0; i < planetcards.length; i++) { if (imperium_self.game.planets[planetcards[i]].type === "hazardous")   { hazardous++; } }
         if (hazardous >= 4) { return 1; }
 	return 0;
       },
@@ -3714,7 +3714,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
       canPlayerScoreVictoryPoints	: function(imperium_self, player) {
         let industrial = 0;
         let planetcards = imperium_self.returnPlayerPlanetCards();
-        for (let i = 0; i < planetcards.length; i++) { if (planetcards[i].type === "industrial")   { industrial++; } }
+        for (let i = 0; i < planetcards.length; i++) { if (imperium_self.game.planets[planetcards[i]].type === "industrial")   { industrial++; } }
         if (industrial >= 4) { return 1; }
 	return 0;
       },
@@ -3809,9 +3809,9 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	let planetcards = imperium_self.returnPlayerPlanetCards();
 
 	for (let i = 0; i < planetcards.length; i++) {
-	  if (planetcards[i].type === "hazardous")  { hazardous++; }
-	  if (planetcards[i].type === "industrial") { industrial++; }
-	  if (planetcards[i].type === "cultural")   { cultural++; }
+	  if (imperium_self.game.planets[planetcards[i]].type === "hazardous")  { hazardous++; }
+	  if (imperium_self.game.planets[planetcards[i]].type === "industrial") { industrial++; }
+	  if (imperium_self.game.planets[planetcards[i]].type === "cultural")   { cultural++; }
 	}
 
 	if (hazardous >= 4 || cultural >= 4 || industrial >= 4) { return 1; }
@@ -3930,10 +3930,10 @@ console.log("WINNIGN CHOICE: " + winning_choice);
         let planetcards = imperium_self.returnPlayerPlanetCards();
 
         for (let i = 0; i < planetcards.length; i++) {
-          if (planetcards[i].type === "hazardous")  { hazardous++; }
-          if (planetcards[i].type === "industrial") { industrial++; }
-          if (planetcards[i].type === "cultural")   { cultural++; }
-          if (planetcards[i].type === "diplomatic")   { diplomatic++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "hazardous")  { hazardous++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "industrial") { industrial++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "cultural")   { cultural++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "diplomatic") { diplomatic++; }
         }
 
         if ((cultural+hazardous+industrial+diplomatic) >= 6) { return 1; }
@@ -3993,21 +3993,6 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	return 0;
       },
   });
-
-
-/**** TEST CARD EASY TO SCORE ****
-  this.importStageIIPublicObjective('deep-breathing', {
-      name 	: 	"Deep Breathing" ,
-      img	:	"/imperium/img/objective_card_2_template.png" ,
-      text	:	"Just score this two VP for free..." ,
-      canPlayerScoreVictoryPoints : function(imperium_self, player) {
-        return 1;
-      },
-      scoreObjective : function(imperium_self, player) {
-        return 1;
-      },
-  });
-****/
 
   this.importStageIIPublicObjective('master-of-commerce', {
       name 	: 	"Master of Commerce" ,
@@ -4141,10 +4126,10 @@ console.log("WINNIGN CHOICE: " + winning_choice);
         let planetcards = imperium_self.returnPlayerPlanetCards();
 
         for (let i = 0; i < planetcards.length; i++) {
-          if (planetcards[i].type === "hazardous")  { hazardous++; }
-          if (planetcards[i].type === "industrial") { industrial++; }
-          if (planetcards[i].type === "cultural")   { cultural++; }
-          if (planetcards[i].type === "diplomatic")   { diplomatic++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "hazardous")  { hazardous++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "industrial") { industrial++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "cultural")   { cultural++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "diplomatic")   { diplomatic++; }
         }
 
         if (hazardous >= 6 || cultural >= 6 || industrial >= 6 || diplomatic >= 6) { return 1; }
@@ -4188,10 +4173,10 @@ console.log("WINNIGN CHOICE: " + winning_choice);
         let planetcards = imperium_self.returnPlayerPlanetCards();
 
         for (let i = 0; i < planetcards.length; i++) {
-          if (planetcards[i].type === "hazardous")  { hazardous++; }
-          if (planetcards[i].type === "industrial") { industrial++; }
-          if (planetcards[i].type === "cultural")   { cultural++; }
-          if (planetcards[i].type === "diplomatic")   { diplomatic++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "hazardous")  { hazardous++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "industrial") { industrial++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "cultural")   { cultural++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "diplomatic")   { diplomatic++; }
         }
 
         if ((cultural+hazardous+industrial+diplomatic) >= 11) { return 1; }
@@ -11606,8 +11591,10 @@ imperium_self.saveGame(imperium_self.game.id);
         if (type == "action") {
 	  if (this.game.player == recipient) {
 	    this.game.deck[1].hand.push(details);
-	    if (this.game.deck[1].hand.length > this.game.players_info[this.game.player-1].action_card_limit) {
-	      this.playerDiscardActionCards(1);
+            let ac_in_hand = this.returnPlayerActionCards(this.game.player);
+            let excess_ac = ac_in_hand.length - this.game.players_info[this.game.player-1].action_card_limit;
+	    if (excess_ac > 0) {
+	      this.playerDiscardActionCards(excess_ac);
 	      return 0;
 	    } else {
 	    }

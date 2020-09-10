@@ -1788,8 +1788,10 @@ imperium_self.saveGame(imperium_self.game.id);
         if (type == "action") {
 	  if (this.game.player == recipient) {
 	    this.game.deck[1].hand.push(details);
-	    if (this.game.deck[1].hand.length > this.game.players_info[this.game.player-1].action_card_limit) {
-	      this.playerDiscardActionCards(1);
+            let ac_in_hand = this.returnPlayerActionCards(this.game.player);
+            let excess_ac = ac_in_hand.length - this.game.players_info[this.game.player-1].action_card_limit;
+	    if (excess_ac > 0) {
+	      this.playerDiscardActionCards(excess_ac);
 	      return 0;
 	    } else {
 	    }

@@ -1,19 +1,4 @@
 
-
-/**** TEST CARD EASY TO SCORE ****
-  this.importStageIIPublicObjective('deep-breathing', {
-      name 	: 	"Deep Breathing" ,
-      img	:	"/imperium/img/objective_card_2_template.png" ,
-      text	:	"Just score this two VP for free..." ,
-      canPlayerScoreVictoryPoints : function(imperium_self, player) {
-        return 1;
-      },
-      scoreObjective : function(imperium_self, player) {
-        return 1;
-      },
-  });
-****/
-
   this.importStageIIPublicObjective('master-of-commerce', {
       name 	: 	"Master of Commerce" ,
       img	:	"/imperium/img/objective_card_2_template.png" ,
@@ -146,10 +131,10 @@
         let planetcards = imperium_self.returnPlayerPlanetCards();
 
         for (let i = 0; i < planetcards.length; i++) {
-          if (planetcards[i].type === "hazardous")  { hazardous++; }
-          if (planetcards[i].type === "industrial") { industrial++; }
-          if (planetcards[i].type === "cultural")   { cultural++; }
-          if (planetcards[i].type === "diplomatic")   { diplomatic++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "hazardous")  { hazardous++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "industrial") { industrial++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "cultural")   { cultural++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "diplomatic")   { diplomatic++; }
         }
 
         if (hazardous >= 6 || cultural >= 6 || industrial >= 6 || diplomatic >= 6) { return 1; }
@@ -193,10 +178,10 @@
         let planetcards = imperium_self.returnPlayerPlanetCards();
 
         for (let i = 0; i < planetcards.length; i++) {
-          if (planetcards[i].type === "hazardous")  { hazardous++; }
-          if (planetcards[i].type === "industrial") { industrial++; }
-          if (planetcards[i].type === "cultural")   { cultural++; }
-          if (planetcards[i].type === "diplomatic")   { diplomatic++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "hazardous")  { hazardous++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "industrial") { industrial++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "cultural")   { cultural++; }
+          if (imperium_self.game.planets[planetcards[i]].type === "diplomatic")   { diplomatic++; }
         }
 
         if ((cultural+hazardous+industrial+diplomatic) >= 11) { return 1; }
