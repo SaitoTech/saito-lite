@@ -16,3 +16,16 @@ CREATE TABLE IF NOT EXISTS log (
 
   PRIMARY KEY(id ASC)
 );
+
+
+CREATE TABLE IF NOT EXISTS tmp (
+  tx_date INTEGER ,
+  tx_count INTEGER,
+  PRIMARY KEY(tx_date ASC)
+);
+
+CREATE TABLE IF NOT EXISTS daily_tx (
+  tx_date INTEGER ,
+  tx_count INTEGER,
+  PRIMARY KEY(tx_date ASC)
+);
