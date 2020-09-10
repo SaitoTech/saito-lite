@@ -220,8 +220,12 @@ class Twilight extends GameTemplate {
 	  module : twilight_self.game.module
 	};
         let msg = twilight_self.app.crypto.stringToBase64(JSON.stringify(msgobj));
+	let observe_link = window.location.href;
+	let tmpar = observe_link.split("/");
+	let oblink = tmpar[0] + "//" + tmpar[2];
+
 	let html  = '<div class="status-message" id="status-message">Observer Mode will be enabled on your next move (if you do not reload your browser before you make it). Your friends can observe the game from your perspective at the following link:';
-	html += '<div style="padding:15px;font-size:0.9em;overflow-wrap:anywhere">http://localhost:12101/arcade/?i=watch&msg='+msg+'</div>';
+	html += '<div style="padding:15px;font-size:0.9em;overflow-wrap:anywhere">'+oblink+'/arcade/?i=watch&msg='+msg+'</div>';
 	html += '</div>';
 	$('.status-overlay').html(html);
       }
