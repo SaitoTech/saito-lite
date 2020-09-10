@@ -128,11 +128,15 @@ class Leaderboard extends ModTemplate {
 
           leaderboard_self.addrController.fetchIdentifiers(identifiers_to_fetch);
 
-          document.querySelector(".leaderboard-container").innerHTML = html;
-          document.querySelectorAll('.me.playername').forEach(el => {
-            el.scrollIntoView();
-          });
-          leaderboard_self.startCarousel(leaderboard_self.mods);
+          try {
+            document.querySelector(".leaderboard-container").innerHTML = html;
+            document.querySelectorAll('.me.playername').forEach(el => {
+              el.scrollIntoView();
+            });
+            leaderboard_self.startCarousel(leaderboard_self.mods);
+          } catch (err) {
+            console.log(err);
+          }
         }
 
       );
