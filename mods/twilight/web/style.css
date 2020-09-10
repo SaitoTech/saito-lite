@@ -395,6 +395,7 @@ body {
   background-size: cover;
   text-align: center;
   line-height: 48px;
+  padding-top:2px;
 }
 
 .us_uncontrol {
@@ -403,6 +404,7 @@ body {
   background-size: cover;
   text-align: center;
   line-height: 48px;
+  padding-top:2px;
 }
 
 .ussr_control {
@@ -411,6 +413,7 @@ body {
   background-size: cover;
   text-align: center;
   line-height: 48px;
+  padding-top:2px;
 }
 
 .ussr_uncontrol {
@@ -419,6 +422,7 @@ body {
   background-image: url("img/SovietInfluenceUnControlledBackground.png");
   text-align: center;
   line-height: 48px;
+  padding-top:2px;
 }
 
 .loader {

@@ -17,7 +17,7 @@ module.exports = ArcadeRightSidebar = {
 
     if (document.querySelector('.arcade-sidebar-balance')) {
       let balance = app.wallet.returnBalance();
-      document.querySelector('.arcade-sidebar-balance').innerHTML = balance + " SAITO";
+      document.querySelector('.arcade-sidebar-balance').innerHTML = s2Number(Math.floor(balance)) + " SAITO";
     }
     
     for (let i = 0; i < data.arcade.observer.length; i++) {

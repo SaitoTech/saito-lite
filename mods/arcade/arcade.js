@@ -102,6 +102,11 @@ class Arcade extends ModTemplate {
         if (games[i].id === game_id) {
           games[i].observer_mode = 1;
           games[i].observer_mode_active = 0;
+	  for (let z = 0; z < games[i].players.length; z++) {
+	    if (games[i].players[z] == address_to_watch) {
+              games[i].observer_mode_player = (z+1);
+	    }
+	  } 
           games[i].ts = new Date().getTime();
           arcade_self.app.keys.addWatchedPublicKey(address_to_watch); 
 	  arcade_self.app.options.games = games;

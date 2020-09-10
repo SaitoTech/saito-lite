@@ -209,54 +209,23 @@ class Twilight extends GameTemplate {
     // leave action enabled on other panels
     //$('.card').off();
 
-    $('#enable_hud_vertical').on('click', function() {
-      $('.hud').addClass('hud-vertical').removeClass('hud-long').removeClass('hud-square').removeAttr("style");
-      twilight_self.hud.mode = 2;
-      twilight_self.hud.initial_render = 0;
-      twilight_self.hud.render(twilight_self.app, twilight_self);
-      twilight_self.hud.attachEvents(twilight_self.app, twilight_self);
-      twilight_self.hud.attachCardEvents(twilight_self.app, twilight_self);
-    });
-    $('#enable_hud_horizontal').on('click', function() {
-      $('.hud').addClass('hud-long').removeClass('hud-vertical').removeClass('hud-square').removeAttr("style");
-      twilight_self.hud.mode = 0;
-      twilight_self.hud.initial_render = 0;
-      twilight_self.hud.render(twilight_self.app, twilight_self);
-      twilight_self.hud.attachEvents(twilight_self.app, twilight_self);
-      twilight_self.hud.attachCardEvents(twilight_self.app, twilight_self);
-    });
-    $('#enable_hud_square').on('click', function() {
-      $('.hud').addClass('hud-square').removeClass('hud-long').removeClass('hud-vertical').removeAttr("style");
-      twilight_self.hud.mode = 1;
-      twilight_self.hud.initial_render = 0;
-      twilight_self.hud.render(twilight_self.app, twilight_self);
-      twilight_self.hud.attachEvents(twilight_self.app, twilight_self);
-      twilight_self.hud.attachCardEvents(twilight_self.app, twilight_self);
-    });
-
-
     $('.menu-item').on('click', function() {
-
       let action2 = $(this).attr("id");
 
       if (action2 === "enable_observer_mode") {
         twilight_self.game.saveGameState = 1;
-
 	let msgobj = {
 	  game_id : twilight_self.game.id ,
 	  player : twilight_self.app.wallet.returnPublicKey() ,
 	  module : twilight_self.game.module
 	};
-
         let msg = twilight_self.app.crypto.stringToBase64(JSON.stringify(msgobj));
-	
 	let html  = '<div class="status-message" id="status-message">Observer Mode will be enabled on your next move (if you do not reload your browser before you make it). Your friends can observe the game from your perspective at the following link:';
-	    html += '<div style="padding:15px;font-size:0.9em;overflow-wrap:anywhere">http://localhost:12101/arcade/?i=watch&msg='+msg+'</div>';
-	    html += '</div>';
-
+	html += '<div style="padding:15px;font-size:0.9em;overflow-wrap:anywhere">http://localhost:12101/arcade/?i=watch&msg='+msg+'</div>';
+	html += '</div>';
 	$('.status-overlay').html(html);
-
       }
+
       if (action2 === "text") {
         twilight_self.displayModal("Card Menu options changed to text-mode. Please reload.");
         twilight_self.interface = 0;
@@ -265,6 +234,7 @@ class Twilight extends GameTemplate {
           window.location.reload();
 	}, 1000);
       }
+
       if (action2 === "graphics") {
         twilight_self.displayModal("Card Menu options changed to graphical mode. Please reload.");
         twilight_self.interface = 1;
@@ -282,6 +252,7 @@ class Twilight extends GameTemplate {
           window.location.reload();
 	}, 1000);
       }
+
       if (action2 === "chinese") {
         twilight_self.displayModal("语言设定", "卡牌语言改成简体中文");
         twilight_self.lang = "zh";
@@ -289,6 +260,34 @@ class Twilight extends GameTemplate {
 	setTimeout(function() {
           window.location.reload();
 	}, 1000);
+      }
+
+      if (action2 == "enable_hud_vertical") {
+        $('.hud').addClass('hud-vertical').removeClass('hud-long').removeClass('hud-square').removeAttr("style");
+        twilight_self.hud.mode = 2;
+        twilight_self.hud.initial_render = 0;
+        twilight_self.hud.render(twilight_self.app, twilight_self);
+        twilight_self.hud.attachEvents(twilight_self.app, twilight_self);
+        twilight_self.hud.attachCardEvents(twilight_self.app, twilight_self);
+        return;
+      }
+      if (action2 == "enable_hud_square") {
+        $('.hud').addClass('hud-square').removeClass('hud-long').removeClass('hud-vertical').removeAttr("style");
+        twilight_self.hud.mode = 1;
+        twilight_self.hud.initial_render = 0;
+        twilight_self.hud.render(twilight_self.app, twilight_self);
+        twilight_self.hud.attachEvents(twilight_self.app, twilight_self);
+        twilight_self.hud.attachCardEvents(twilight_self.app, twilight_self);
+        return;
+      }
+      if (action2 == "enable_hud_horizontal") {
+        $('.hud').addClass('hud-long').removeClass('hud-vertical').removeClass('hud-square').removeAttr("style");
+        twilight_self.hud.mode = 0;
+        twilight_self.hud.initial_render = 0;
+        twilight_self.hud.render(twilight_self.app, twilight_self);
+        twilight_self.hud.attachEvents(twilight_self.app, twilight_self);
+        twilight_self.hud.attachCardEvents(twilight_self.app, twilight_self);
+        return;
       }
 
     });
@@ -643,7 +642,8 @@ try {
         // discard [ussr/us] card
         // deal [1/2]  --- player decides how many cards they need, adds DEAL and clears when ready
         // init
-        //
+        // observer -- reveal cards to player0s (insecure)
+	//
         if (mv[0] == "init") {
 
           let tmpar = this.game.players[0];
@@ -677,6 +677,37 @@ try {
           }
 
           this.game.queue.splice(qe, 1);
+
+        }
+
+	if (mv[0] === "update_observers") {
+
+	  let p = mv[1];
+	  if (this.game.player == p) {
+	    this.addMove("observer_cards_update\t"+this.game.player+"\t"+JSON.stringify(this.game.deck[0].hand));
+	    this.endTurn();
+	  }
+
+          this.game.queue.splice(qe, 1);
+	  return 0;
+
+	}
+        if (mv[0] === "observer_cards_update") {
+
+	  let player = mv[1];
+	  let cards = JSON.stringify(mv[2]);
+
+	  if (player == this.game.observer_mode_player) {
+	    if (this.game.player == 0) {
+	      this.game.deck[0].hand = [];
+	      for (let i = 0; i < cards.length; i++) {
+	        this.game.deck[0].hand.push(cards[i]);
+	      }
+	    }
+	  }
+
+          this.game.queue.splice(qe, 1);
+	  return 1;
 
         }
         if (mv[0] === "revert") {
@@ -2318,6 +2349,8 @@ console.log("CARD: " + card);
             this.game.queue.push("play\t1");
           }
           this.game.queue.push("headline");
+          this.game.queue.push("update_observers\t2");
+          this.game.queue.push("update_observers\t1");
           this.game.state.headline = 0;
 
 
@@ -2684,7 +2717,15 @@ console.log("CARD: " + card);
       // USSR confirms US XOR
       //
       if (stage == "headline5") {
+
+        if (this.game.player == 0) {
+    	  this.updateLog("Observer Mode does not handle headlines well...");
+	  this.game.queue.splice(this.game.queue.length-1, 1);
+	  return 1;
+        }
+
         if (this.game.player == player) {
+
 
           this.game.state.headline_opponent_xor  = xor;
           this.game.state.headline_opponent_card = card;
