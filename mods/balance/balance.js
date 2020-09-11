@@ -13,7 +13,7 @@ class Balance extends ModTemplate {
     this.description = "Ensures token persistance";
     this.categories = "Utilities Dev";
     this.maxbid = -1;
-    this.trigger_bid = 4;
+    this.trigger_bid = 2;
     this.fully_paid_out = 0;
     this.was_the_chain_reset = 0;
   }
@@ -136,7 +136,7 @@ class Balance extends ModTemplate {
     //
     // handle normal transactions (bid of 3 allows a bit of time)
     //
-    sql = "SELECT SUM(CAST(amt AS FLOAT)) as sum, address FROM slips WHERE type = 0 AND bid > " + this.trigger_bid + " GROUP BY address";
+    sql = "SELECT SUM(CAST(amt AS FLOAT)) as sum, address FROM slips WHERE type = 0 AND (paid <> 1 OR paid is null) AND bid >= " + this.trigger_bid + " GROUP BY address";
     params = {}
     rows = await this.app.storage.queryDatabase(sql, params, "balance");
 
@@ -147,7 +147,8 @@ class Balance extends ModTemplate {
         let address = rows[i].address;
 
         let sql2_1 = "BEGIN";
-        let sql2_2 = "DELETE FROM slips WHERE address = '" + address + "' AND type != 4;";
+        //ignore block 1 again
+        let sql2_2 = "DELETE FROM slips WHERE address = '" + address + "' AND bid > 1 AND type != 4;";
         let sql2_3 = `INSERT INTO slips (
         address,
         bid,
@@ -269,7 +270,8 @@ class Balance extends ModTemplate {
 
     console.log('issuing balance payments');
 
-    let sql = "SELECT SUM(CAST(amt AS FLOAT)) AS sum, address FROM slips WHERE spent > 0 GROUP BY address";
+    // ignore first block payments - lest we just keep making them.
+    let sql = "SELECT SUM(CAST(amt AS FLOAT)) AS sum, address FROM slips WHERE spent > 1 and paid = 0 and bid >= " + this.trigger_bid + " GROUP BY address";
     let params = {}
     let rows = await this.app.storage.queryDatabase(sql, params, "balance");
     if (rows) {
@@ -296,7 +298,7 @@ class Balance extends ModTemplate {
             //
             // issue payment
             //
-            let sql2 = "UPDATE slips SET spent = 0 WHERE address = $address";
+            let sql2 = "UPDATE slips SET spent = 0, paid = 1 WHERE address = $address";
             let params2 = { $address: address }
             await this.app.storage.executeDatabase(sql2, params2, "balance");
 
@@ -325,10 +327,10 @@ class Balance extends ModTemplate {
         }
       } else {
 
-        this.fully_paid = 1;
+        this.fully_paid_out = 1;
       }
     } else {
-      this.fully_paid = 1;
+      this.fully_paid_out = 1;
     }
   }
 
@@ -377,7 +379,6 @@ class Balance extends ModTemplate {
 
     return;
   }
-
 
 
   //
@@ -459,7 +460,7 @@ class Balance extends ModTemplate {
       if (!parseInt(lim) > 0) { lim = '10'; }
       if (typeof addresses == 'undefined') {
 
-        sql = "SELECT address, SUM(CAST(amt AS FLOAT)) as 'balance' from slips where substr(address, 14, 29) <> 'yMTVpvuKNEHt2fZQUxDebpiBaqwkW' group by address order by SUM(CAST(amt AS FLOAT)) desc limit $lim;";
+        sql = "SELECT address, SUM(CAST(amt AS FLOAT)) as 'balance' from slips where substr(address, 14, 29) <> 'yMTVpvuKNEHt2fZQUxDebpiBaqwkW' AND (paid <> 1 OR paid is null) group by address order by SUM(CAST(amt AS FLOAT)) desc limit $lim;";
         params = { $lim: lim };
 
       } else {
@@ -474,7 +475,7 @@ class Balance extends ModTemplate {
         //sql = "SELECT address, SUM(CAST(amt AS FLOAT)) as 'balance' from slips WHERE address in ($address) group by address order by SUM(CAST(amt AS FLOAT));";
         //params = { $address: address };
 
-        sql = "SELECT address, SUM(CAST(amt AS FLOAT)) as 'balance' from slips WHERE address in (" + address + ") group by address order by SUM(CAST(amt AS FLOAT));";
+        sql = "SELECT address, SUM(CAST(amt AS FLOAT)) as 'balance' from slips WHERE address in (" + address + ") AND (paid <> 1 OR paid is null) group by address order by SUM(CAST(amt AS FLOAT));";
         params = {};
         //console.log(sql);
         //console.log(address);
