@@ -10,12 +10,12 @@ body {
   */
 }
 
-
 .slider-content-title {
- font-size: 1.5em;
+  font-size: 1.5em;
 }
+
 .slider-content-details {
- font-size: 1em;
+  font-size: 1em;
 }
 
 section {
@@ -120,8 +120,6 @@ img.banner-logo {
   top: 3em;
   transform: translate(-50%, 0em);
 }
-
-
 
 .banner-title {
   color: #fff;
@@ -409,9 +407,10 @@ img.banner-logo {
 }
 
 .about-saito h2 {
-  color: #fff;}
+  color: #fff;
+}
 
-.about-saito {  
+.about-saito {
   clip-path: polygon(0 10%, 100% 0%, 100% 91%, 0% 100%);
   padding: 3em 1em;
 }
@@ -885,6 +884,10 @@ button:focus {
   display: none;
 }
 
+.mobile {
+  display: none;
+}
+
 @media only screen and (max-width: 1460px) {
   section {
     padding: 1em 2em;
@@ -923,88 +926,113 @@ button:focus {
   .deeperbox {
     font-size: 2vw;
   }
-}
-
-@media only screen and (max-width: 800px) {
-  .main {
-    display: block;
-    padding: 0px;
-    height: unset;
-    overflow: hidden;
+  .about-saito {
+    clip-path: polygon(0 5%, 100% 0%, 100% 95%, 0% 100%);
   }
-  .site-main {
-    height: 5px;
-    z-index: -1;
+  @media only screen and (max-width: 800px) {
+    .mobile {
+      display: block;
+    }
+    .background-logo {
+      width: 90%;
+      margin: auto;
+      padding: 2em 0;
+    }
+    .desktop {
+      display: none;
+    }
+    .main {
+      display: block;
+      padding: 0px;
+      height: unset;
+      overflow: hidden;
+    }
+    .site-main {
+      height: 5px;
+      z-index: -1;
+    }
+    .mobile-banner {
+      display: block;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .arcade-banner {
+      border: 1px solid #4444;
+    }
+    .intro-box-mobile {
+      border: 1px solid #888;
+      background-color: #fffd;
+      padding: 1em;
+      width: calc(100vw - 2em);
+    }
+    .featured-app-inner-mobile {
+      width: calc(100vw - 2em);
+      margin: 1em auto;
+      display: block;
+    }
+    .roadmap-wrapper {
+      padding: 1em 0;
+    }
+    .featured-app-back-inner {
+      padding: 0 1em;
+      text-align: center;
+      color: #fff;
+    }
+    .banner {
+      clip-path: polygon(100% 0, 100% 56%, -10% 100%, 0 38%, 0 0);
+    }
+    .banner-logo {
+      display: none;
+    }
+    .featured-app-back-inner p {
+      margin: 1em;
+    }
+    .fundamentals-grid {
+      grid-template-columns: 1fr;
+      grid-gap: 1em;
+    }
+    .splash-row {
+      display: none;
+    }
+    .slider-content_grid {
+      font-size: 18px;
+    }
+    .can-build {
+      margin-top: 850px;
+    }
+    .can-build-img-tall {
+      height: 250px;
+    }
+    .love-tools p {
+      font-size: 25px;
+    }
+    .roadmap-row {
+      display: flex;
+      flex-flow: column;
+      margin: 0;
+    }
+    .roadmap-row .content {
+      padding: 0;
+      clip-path: unset;
+      background: transparent;
+      margin: 0 0 1em 0;
+      width: 100%;
+    }
+    section {
+      padding: 0 1em;
+    }
+    section.roadmap {
+      background: linear-gradient(0deg, #DDD 50%, #CCC 100%);
+    }
+    .join-us {
+      overflow: auto;
+    }
+    .compare-grid {
+      overflow: auto;
+      padding: 0;
+      grid-template-columns: 7em repeat(5, auto);
+    }
+    .compare-grid-header, .compare-grid .label {
+      font-size: medium;
+    }
   }
-  .mobile-banner {
-    display: block;
-  }
-  .intro-box-mobile {
-    border: 1px solid #888;
-    background-color: #fffe;
-    padding: 1em;
-    width: calc(100vw - 2em);
-  }
-  .featured-app-inner-mobile {
-    padding: 1em;
-  }
-  .featured-app-back-mobile {
-    margin: 0 0.5em;
-  }
-  .featured-app-back-inner {
-    padding: 1em;
-    text-align: center;
-    color: #fff;
-  }
-  .banner-logo {
-    display: none;
-  }
-  .featured-app-back-inner p {
-    margin: 1em;
-  }
-  .fundamentals-grid {
-    grid-template-columns: 1fr;
-    grid-gap: 1em;
-  }
-  .splash-row {
-    display: none;
-  }
-  .slider-content_grid {
-    font-size: 18px;
-  }
-  .can-build-img-tall {
-    height: 250px;
-  }
-  .love-tools p {
-    font-size: 25px;
-  }
-  .roadmap-row {
-    display: flex;
-    flex-flow: column;
-    margin: 0;
-  }
-  .roadmap-row .content {
-    padding: 0;
-    clip-path: unset;
-    background: transparent;
-    margin: 0 0 1em 0;
-    width: 100%;
-  }
-  section {
-    padding: 1em;
-  }
-  section.roadmap {
-    background: linear-gradient(0deg, #DDD 50%, #CCC 100%);
-  }
-  .join-us {
-    overflow: auto;
-  }
-  .compare-grid {
-    overflow: auto;
-    padding: 0;
-    grid-template-columns: 7em repeat(5, auto);
-  }
-  .compare-grid-header, .compare-grid .label {
-    font-size: medium;
-  }
-}
