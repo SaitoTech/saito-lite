@@ -32,11 +32,8 @@ h2, h5 {
 
 .main {
   display: block;
-  height: unset;
-}
-.all {
-  overflow-y: auto;
-  height: 100vh;
+  height: 900px;
+  z-index: 9;
 }
 
 .site-main {
@@ -44,6 +41,39 @@ h2, h5 {
   position: relative;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 9;
+}
+
+.all {
+  overflow-y: auto;
+  height: 100vh;
+  overflow-x: hidden;
+  perspective: 1px;
+}
+
+.parallax-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.parallax-back {
+  -webkit-transform: translateZ(-0.5px) scale(1.33);
+  transform: translateZ(-0.5px) scale(1.33);
+}
+
+.parallax-logo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.paralax-base {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 .banner {
@@ -53,6 +83,16 @@ h2, h5 {
   background-repeat: no-repeat;
   background-size: cover;
   clip-path: polygon(100% 0, 100% 12%, 42% 100%, 0 38%, 0 0);
+}
+
+.background-logo-box {
+  width: 80%;
+  margin: 20vh auto;
+  display: none;
+}
+
+.can-build {
+  margin-top: -150px;
 }
 
 .can-build-img-small {
@@ -72,6 +112,8 @@ img.banner-logo {
   top: 3em;
   transform: translate(-50%, 0em);
 }
+
+
 
 .banner-title {
   color: #fff;
@@ -354,7 +396,11 @@ img.banner-logo {
 }
 
 .about-saito h2 {
-  color: #fff;
+  color: #fff;}
+
+.about-saito {  
+  clip-path: polygon(0 10%, 100% 0%, 100% 91%, 0% 100%);
+  padding: 3em 1em;
 }
 
 .about-content {
@@ -362,7 +408,7 @@ img.banner-logo {
   color: #fff;
   line-height: 1.5em;
   padding: 1em;
-    border: 1px solid white;
+  border: 1px solid white;
 }
 
 .intro-box {
@@ -395,7 +441,7 @@ img.banner-logo {
 }
 
 .white {
-  background-color: var(--saito-skyline-grey);
+  background-color: RGB(234, 234, 239, 0.7);
 }
 
 .red {
@@ -444,7 +490,7 @@ img.banner-logo {
 
 .splash-row {
   height: 19em;
-  top: -300px;
+  top: 275px;
   clear: both;
   position: relative;
 }
@@ -825,6 +871,7 @@ button:focus {
 .featured-app-inner-mobile {
   display: none;
 }
+
 @media only screen and (max-width: 1460px) {
   section {
     padding: 1em 2em;
@@ -897,7 +944,7 @@ button:focus {
     color: #fff;
   }
   .banner-logo {
-    display:none;
+    display: none;
   }
   .featured-app-back-inner p {
     margin: 1em;
