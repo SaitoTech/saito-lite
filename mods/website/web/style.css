@@ -13,7 +13,7 @@ body {
 section {
   padding: 1em 7em;
   max-width: 1600px;
-  margin: 0 auto;
+  margin: 1em auto;
   width: 100%;
 }
 
@@ -32,6 +32,7 @@ h2, h5 {
 
 .main {
   display: block;
+  height: unset;
 }
 .all {
   overflow-y: auto;
