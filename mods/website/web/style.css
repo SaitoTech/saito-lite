@@ -821,6 +821,9 @@ button:focus {
   display: none;
 }
 
+.featured-app-inner-mobile {
+  display: none;
+}
 @media only screen and (max-width: 1460px) {
   section {
     padding: 1em 2em;
