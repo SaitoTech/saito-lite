@@ -10,6 +10,14 @@ body {
   */
 }
 
+
+.slider-content-title {
+ font-size: 1.5em;
+}
+.slider-content-details {
+ font-size: 1em;
+}
+
 section {
   padding: 1em 7em;
   max-width: 1600px;
@@ -92,7 +100,7 @@ h2, h5 {
 }
 
 .can-build {
-  margin-top: -150px;
+  margin-top: 800px;
 }
 
 .can-build-img-small {
@@ -395,6 +403,11 @@ img.banner-logo {
   clear: both;
 }
 
+.fundamentals-img {
+  width: 100%;
+  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2);
+}
+
 .about-saito h2 {
   color: #fff;}
 
@@ -490,7 +503,7 @@ img.banner-logo {
 
 .splash-row {
   height: 19em;
-  top: 275px;
+  top: 250px;
   clear: both;
   position: relative;
 }

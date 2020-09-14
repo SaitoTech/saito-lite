@@ -15087,7 +15087,8 @@ console.log("card: " + card);
   }
 
   hideCard() {
-    $('#cardbox').hide();
+    this.hud.cardbox.hideCardbox(1);
+    //$('#cardbox').hide();
     //$('.cardbox_event_blocker').css('height','0px');
     //$('.cardbox_event_blocker').css('width','0px');
     //$('.cardbox_event_blocker').css('display','none');
