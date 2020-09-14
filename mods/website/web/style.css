@@ -10,6 +10,14 @@ body {
   */
 }
 
+
+.slider-content-title {
+ font-size: 1.5em;
+}
+.slider-content-details {
+ font-size: 1em;
+}
+
 section {
   padding: 1em 7em;
   max-width: 1600px;
