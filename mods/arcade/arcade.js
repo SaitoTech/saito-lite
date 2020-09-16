@@ -610,8 +610,6 @@ console.log("PEER HANDSHAKE COMPLETE: "+ JSON.stringify(peer.peer));
         }
       }
 
-console.log("Processing Tx Here 1");
-
       //
       // notify SPV clients of "open", "join" and "close"(, and "accept") messages
       //

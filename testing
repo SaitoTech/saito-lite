@@ -1,0 +1,4 @@
+rm -rf ./data/blocks
+cp -rfp ./data/blocks3 ./data/blocks
+cp ./config/options.saito.io.client ./config/options
+

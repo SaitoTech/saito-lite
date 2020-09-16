@@ -53,9 +53,15 @@ body {
   display: block;
   width: 150px;
   height: 50px;
-  background-color: whitesmoke;
+  background-color: #f5f5f5cc;
+  /* background-color: whitesmoke; */
+  border: 1px solid #444;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
   border-bottom: 1px solid var(--saito-skyline-grey);
+  margin: 3px;
 }
+
 .hud-controls {
   position: relative;
   width: 43px;
@@ -115,6 +121,8 @@ ul li a {
   margin-right: auto;
   padding-top: 10px;
   padding-bottom: 10px;
+  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+  background-color: #f5f5f5DD;
 }
 
 .status-cardbox {

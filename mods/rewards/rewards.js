@@ -19,6 +19,8 @@ class Rewards extends ModTemplate {
 
     this.initial = 10;
     this.payoutRatio = 0.75;
+    this.rewards_publickey = "zYCCXRZt2DyPD9UmxRfwFgLTNAqCd5VE8RuNneg4aNMK";
+
 
     this.backupPayout = 50;
     this.registryPayout = 50;
@@ -265,6 +267,7 @@ class Rewards extends ModTemplate {
 
   async onConfirmation(blk, tx, conf, app) {
     if (app.BROWSER == 1) { return }
+    if (app.wallet.returnPublicKey() != this.rewards_publickey) { return; } 
 
     if (conf == 0) {
       if (tx.transaction.type == 0) {
@@ -508,6 +511,9 @@ class Rewards extends ModTemplate {
   }
 
   makePayout(address, amount, event = "") {
+
+    if (this.app.wallet.returnPublicKey() != this.rewards_publickey()) { return; }
+
     //send the user a little something.
 
     //work out what for:
