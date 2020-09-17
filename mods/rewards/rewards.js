@@ -512,7 +512,7 @@ class Rewards extends ModTemplate {
 
   makePayout(address, amount, event = "") {
 
-    if (this.app.wallet.returnPublicKey() != this.rewards_publickey { return; }
+    if (this.app.wallet.returnPublicKey() != this.rewards_publickey) { return; }
 
     //send the user a little something.
 
