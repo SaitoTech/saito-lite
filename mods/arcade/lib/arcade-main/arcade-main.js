@@ -26,11 +26,11 @@ module.exports = ArcadeMain = {
       let players = tx.msg.players;
       let players_sigs = tx.msg.players_sigs;
 
-      console.log("\n\n\nSHOWING GAMES: ");
-      console.log("PLAYERS: " + JSON.stringify(tx.msg.players));
-      console.log("TX: " + JSON.stringify(tx));
-      console.log("PLAYERS: " + players);
-      console.log("PLAYER SIGS: " + players_sigs);
+//      console.log("\n\n\nSHOWING GAMES: ");
+//      console.log("PLAYERS: " + JSON.stringify(tx.msg.players));
+//      console.log("TX: " + JSON.stringify(tx));
+//      console.log("PLAYERS: " + players);
+//      console.log("PLAYER SIGS: " + players_sigs);
 
 
 

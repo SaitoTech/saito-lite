@@ -471,17 +471,11 @@ console.log("PEER HANDSHAKE COMPLETE: "+ JSON.stringify(peer.peer));
 
 
     var for_us = true;
-
     if (txmsg.options.players_invited) {
-
       for_us = false;
-
       if (tx.transaction.from[0].add == this.app.wallet.returnPublicKey()) {
-
         for_us = true;
-
       } else {
-
         txmsg.options.players_invited.forEach(player => {
           if (player == this.app.wallet.returnPublicKey() || player == this.app.keys.returnIdentifierByPublicKey(this.app.wallet.returnPublicKey())) {
             for_us = true;
@@ -489,6 +483,9 @@ console.log("PEER HANDSHAKE COMPLETE: "+ JSON.stringify(peer.peer));
         });
       }
     }
+
+
+    this.removeOldGames();
 
 
     if (for_us) {
@@ -506,6 +503,38 @@ console.log("PEER HANDSHAKE COMPLETE: "+ JSON.stringify(peer.peer));
       }
     }
   }
+
+
+
+  removeOldGames() {
+
+    let removed_old_games = 0;
+
+    // if the game is very old, remove it
+    for (let i = 0; i < this.games.length; i++) {
+      let gamets = parseInt(this.games[i].transaction.ts);
+      let timepassed = (new Date().getTime()) - gamets;
+      if (timepassed > 100000) {
+	this.games.splice(i, 1);
+        removed_old_games = 1;
+	i--;
+      }
+    }
+    
+    let data = {};
+    data.arcade = this;
+
+    if (this.browser_active == 1) {
+      if (this.viewing_arcade_initialization_page == 0) {
+        if (removed_old_games == 1) {
+          ArcadeMain.render(this.app, data);
+          ArcadeMain.attachEvents(this.app, data);
+        }
+      }
+    }
+
+  }
+
 
 
 
@@ -671,10 +700,10 @@ console.log("PEER HANDSHAKE COMPLETE: "+ JSON.stringify(peer.peer));
 
 		if (existing_players_found < this.games[i].transaction.msg.players.length) {
 
-console.log("WE HAVE FOUND A GAME WITH A PLAYER IN IT WHO WAS NOT ACCEPTED...");
-console.log(JSON.stringify(this.games[i].transaction.msg.players));
-console.log("vs");
-console.log(JSON.stringify(tx.transaction.to));
+//console.log("WE HAVE FOUND A GAME WITH A PLAYER IN IT WHO WAS NOT ACCEPTED...");
+//console.log(JSON.stringify(this.games[i].transaction.msg.players));
+//console.log("vs");
+//console.log(JSON.stringify(tx.transaction.to));
 
 
 		}
