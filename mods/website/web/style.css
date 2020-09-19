@@ -41,7 +41,7 @@ h2, h5 {
 .main {
   display: block;
   height: 900px;
-  z-index: 9;
+  height: 100%;
 }
 
 .site-main {
@@ -49,7 +49,16 @@ h2, h5 {
   position: relative;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 9;
+}
+
+.backslash {
+  background-color: var(--saito-skyline-grey);
+  height: 100vh;
+  position: relative;
+  z-index: -1;
+  clip-path: polygon(0 48vh, 100% 0%, 100% 69vh, 0% 100%);
+  width: 116vw;
+  left: -8vw;
 }
 
 .all {
@@ -70,6 +79,7 @@ h2, h5 {
 .parallax-back {
   -webkit-transform: translateZ(-0.5px) scale(1.33);
   transform: translateZ(-0.5px) scale(1.33);
+  z-index: -1;
 }
 
 .parallax-logo {
@@ -82,6 +92,7 @@ h2, h5 {
 .paralax-base {
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
+  z-index: 1;
 }
 
 .banner {
@@ -115,6 +126,7 @@ h2, h5 {
 
 img.banner-logo {
   width: 39%;
+  max-width: 700px;
   position: absolute;
   left: 40%;
   top: 3em;
@@ -906,6 +918,10 @@ button:focus {
   }
   .intro-box {
     width: 100%;
+    height: 340px;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
   }
   .grid-2-columns div {
     overflow: unset;
@@ -929,6 +945,10 @@ button:focus {
   .about-saito {
     clip-path: polygon(0 5%, 100% 0%, 100% 95%, 0% 100%);
   }
+  .can-build {
+    margin-top: 1100px;
+  }
+}
   @media only screen and (max-width: 800px) {
     .mobile {
       display: block;
@@ -964,6 +984,10 @@ button:focus {
       background-color: #fffd;
       padding: 1em;
       width: calc(100vw - 2em);
+      height: 240px;
+      display: flex;
+      flex-flow: column;
+      justify-content: space-around;
     }
     .featured-app-inner-mobile {
       width: calc(100vw - 2em);
@@ -998,7 +1022,7 @@ button:focus {
       font-size: 18px;
     }
     .can-build {
-      margin-top: 850px;
+      margin-top: calc(475px + 57.15vw);
     }
     .can-build-img-tall {
       height: 250px;
@@ -1034,5 +1058,16 @@ button:focus {
     }
     .compare-grid-header, .compare-grid .label {
       font-size: medium;
+    }
+  }
+  @media only screen and (max-width: 600px) {
+    body {
+      font-size: 0.8em;
+    }
+    .intro-title {
+      font-size: 1.7em;
+    }
+    .can-build {
+      margin-top: calc(435px + 57.15vw);
     }
   }
