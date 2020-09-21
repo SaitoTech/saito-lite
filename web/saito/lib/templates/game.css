@@ -262,6 +262,77 @@ ul li a {
 }
 
 
+
+/*** Cardfan Tilted Cards ***/
+.cardfan {
+  bottom: 0px;
+  left: 0px;
+}
+
+/*
+.cardfan .card {
+  position: relative;
+  width: 0px;
+}
+ below changed for president cardbox */
+
+.cardfan .card {
+  position: absolute;
+  width: 100%;
+}
+
+.cardfan>.card:nth-child(1) {
+  transform: rotate(-20deg);
+  left: 0px;
+}
+
+.cardfan>.card:nth-child(2) {
+  transform: rotate(-10deg);
+  left: 3vh;
+}
+
+.cardfan>.card:nth-child(3) {
+  transform: rotate(0deg);
+  left: 6vh;
+}
+
+.cardfan>.card:nth-child(4) {
+  transform: rotate(10deg);
+  left: 9vh;
+}
+
+.cardfan>.card:nth-child(5) {
+  transform: rotate(20deg);
+  left: 12vh;
+}
+
+.hand>.card:nth-child(1) {
+  transform: rotate(-20deg);
+  left: 0px;
+}
+
+.hand>.card:nth-child(2) {
+  transform: rotate(-10deg);
+  left: 2vh;
+}
+
+.hand>.card:nth-child(3) {
+  transform: rotate(0deg);
+  left: 4vh;
+}
+
+.hand>.card:nth-child(4) {
+  transform: rotate(10deg);
+  left: 6vh;
+}
+
+.hand>.card:nth-child(5) {
+  transform: rotate(20deg);
+  left: 8vh;
+}
+
+
+
 /*****************/
 /** BOARD SIZER **/
 /*****************/
@@ -372,14 +443,13 @@ input#game_board_sizer {
 /** CARDFAN CSS **/
 /*****************/
 .cardfan {
-  position: absolute;
-  bottom: 20vh;
-
+  position: relative;
+  bottom: 0px;
   margin-left: auto;
   margin-right: auto;
   clear: both;
-  padding-left: 600px;
-  padding-top: 100px;
+  padding-left: 0px;
+  padding-top: 0px;
 }
 
 .card {

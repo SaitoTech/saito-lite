@@ -31,7 +31,6 @@ class Poker extends GameTemplate {
     this.updateHTML = "";
 
     this.cardfan = new Cardfan(this.app, this);
-    //this.hud = new GameHud(this.app, this.menuItems());
 
     return this;
 

@@ -15295,10 +15295,7 @@ console.log("card: " + card);
 
   addShowCardEvents(onCardClickFunction=null) {
     this.changeable_callback = onCardClickFunction;
-console.log("attach card events...");
-console.log("ACTIVE? " + this.browser_active);
     this.hud.attachCardEvents(this.app, this);
-console.log("done attaching card events...");
   }
 
   addLogCardEvents() {
