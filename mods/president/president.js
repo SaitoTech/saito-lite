@@ -77,7 +77,8 @@ class President extends GameTemplate {
     this.game.queue.push("READY");
 
     if (this.game.players.length == 2) {
-      this.game.queue.push("POOL\t1"); // pool for cards on table
+      this.game.queue.push("cards\t1\t22");
+      this.game.queue.push("cards\t2\t22");
       this.game.queue.push("DEAL\t1\t2\t22");
       this.game.queue.push("DEAL\t1\t1\t22");
       this.game.queue.push("DECKENCRYPT\t1\t2");
@@ -328,11 +329,12 @@ class President extends GameTemplate {
 
         this.game.queue.splice(qe, 1);
 
-	if (this.game.players_info[player_to_go-1].cards == 0) {
+/***
+	if (this.game.players_info[player_to_go-1].cards == 0 && this.game.state.turn > 0) {
 	  alert("PLayer is out of cards!");
 	  return;
         }
-
+***/
 
         if (this.game.players_info[player_to_go - 1].passed == 1) {
           this.game.queue.splice(qe, 1);
@@ -593,13 +595,10 @@ class President extends GameTemplate {
       let divname = "#player-info-" + player_box_num;
       let boxobj = document.querySelector(divname);
 
-      let newhtml = `<div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">`;
-      for (let z = 0; z < this.game.players_info[i].cards; z++) {
-        newhtml += `
+      let newhtml = `
+        <div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">
+          <div class="player-info-hand-cards">${this.game.players_info[i].cards}</div>
           <img class="card" src="${this.card_img_dir}/red_back.png">
-        `;
-      }
-      newhtml += `
         </div>
         <div class="player-info-name" id="player-info-name-${i+1}">${this.game.players[i]}</div>
       `;
