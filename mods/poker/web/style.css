@@ -162,6 +162,7 @@ body {
 }
 
 .cardfan {
+  position: absolute;
   bottom: 30vh;
   left: 45vw;
   transform: translateX(-40vh);
@@ -360,6 +361,7 @@ body {
     width: 4vh;
   }
   .cardfan {
+    position: absolute;
     top: 40vh;
     left: 50%;
     transform: translateX(-50%);
