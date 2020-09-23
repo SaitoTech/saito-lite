@@ -286,6 +286,16 @@ ul li a {
   left: 0px;
 }
 
+.cardfan>.cards:first-child:last-child {
+  transform: rotate(0deg);
+  left: 0px;
+}
+.cardfan>.card:only-child {
+  transform: rotate(0deg);
+  left: 0px;
+}
+
+
 .cardfan>.card:nth-child(2) {
   transform: rotate(-10deg);
   left: 3vh;
