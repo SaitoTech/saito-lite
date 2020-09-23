@@ -66,148 +66,16 @@ class President extends GameTemplate {
 
 
 
-
+  
 
 
   initializeQueue() {
 
     this.game.queue = [];
 
-    this.game.queue.push("round");
+    this.game.queue.push("newround");
     this.game.queue.push("READY");
 
-    if (this.game.players.length == 2) {
-      this.game.queue.push("cards\t1\t22");
-      this.game.queue.push("cards\t2\t22");
-      this.game.queue.push("DEAL\t1\t2\t22");
-      this.game.queue.push("DEAL\t1\t1\t22");
-      this.game.queue.push("DECKENCRYPT\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t1");
-      this.game.queue.push("DECKXOR\t1\t2");
-      this.game.queue.push("DECKXOR\t1\t1");
-    }
-/***
-    if (this.game.players.length == 3) {
-      this.game.queue.push("POOL\t1"); // pool for cards on table
-      this.game.queue.push("DEAL\t1\t3\t2");
-      this.game.queue.push("DEAL\t1\t2\t2");
-      this.game.queue.push("DEAL\t1\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t3");
-      this.game.queue.push("DECKENCRYPT\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t1");
-      this.game.queue.push("DECKXOR\t1\t3");
-      this.game.queue.push("DECKXOR\t1\t2");
-      this.game.queue.push("DECKXOR\t1\t1");
-    }
-    if (this.game.players.length == 4) {
-      this.game.queue.push("POOL\t1"); // pool for cards on table
-      this.game.queue.push("DEAL\t1\t4\t2");
-      this.game.queue.push("DEAL\t1\t3\t2");
-      this.game.queue.push("DEAL\t1\t2\t2");
-      this.game.queue.push("DEAL\t1\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t4");
-      this.game.queue.push("DECKENCRYPT\t1\t3");
-      this.game.queue.push("DECKENCRYPT\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t1");
-      this.game.queue.push("DECKXOR\t1\t4");
-      this.game.queue.push("DECKXOR\t1\t3");
-      this.game.queue.push("DECKXOR\t1\t2");
-      this.game.queue.push("DECKXOR\t1\t3");
-      this.game.queue.push("DECKXOR\t1\t2");
-      this.game.queue.push("DECKXOR\t1\t1");
-    }
-    if (this.game.players.length == 5) {
-      this.game.queue.push("POOL\t1"); // pool for cards on table
-      this.game.queue.push("DEAL\t1\t5\t2");
-      this.game.queue.push("DEAL\t1\t4\t2");
-      this.game.queue.push("DEAL\t1\t3\t2");
-      this.game.queue.push("DEAL\t1\t2\t2");
-      this.game.queue.push("DEAL\t1\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t5");
-      this.game.queue.push("DECKENCRYPT\t1\t4");
-      this.game.queue.push("DECKENCRYPT\t1\t3");
-      this.game.queue.push("DECKENCRYPT\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t1");
-      this.game.queue.push("DECKXOR\t1\t5");
-      this.game.queue.push("DECKXOR\t1\t4");
-      this.game.queue.push("DECKXOR\t1\t3");
-      this.game.queue.push("DECKXOR\t1\t2");
-      this.game.queue.push("DECKXOR\t1\t1");
-    }
-    if (this.game.players.length == 6) {
-      this.game.queue.push("POOL\t1"); // pool for cards on table
-      this.game.queue.push("DEAL\t1\t6\t2");
-      this.game.queue.push("DEAL\t1\t5\t2");
-      this.game.queue.push("DEAL\t1\t4\t2");
-      this.game.queue.push("DEAL\t1\t3\t2");
-      this.game.queue.push("DEAL\t1\t2\t2");
-      this.game.queue.push("DEAL\t1\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t6");
-      this.game.queue.push("DECKENCRYPT\t1\t5");
-      this.game.queue.push("DECKENCRYPT\t1\t4");
-      this.game.queue.push("DECKENCRYPT\t1\t3");
-      this.game.queue.push("DECKENCRYPT\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t1");
-      this.game.queue.push("DECKXOR\t1\t6");
-      this.game.queue.push("DECKXOR\t1\t5");
-      this.game.queue.push("DECKXOR\t1\t4");
-      this.game.queue.push("DECKXOR\t1\t3");
-      this.game.queue.push("DECKXOR\t1\t2");
-      this.game.queue.push("DECKXOR\t1\t1");
-    }
-    if (this.game.players.length == 7) {
-      this.game.queue.push("POOL\t1"); // pool for cards on table
-      this.game.queue.push("DEAL\t1\t7\t2");
-      this.game.queue.push("DEAL\t1\t6\t2");
-      this.game.queue.push("DEAL\t1\t5\t2");
-      this.game.queue.push("DEAL\t1\t4\t2");
-      this.game.queue.push("DEAL\t1\t3\t2");
-      this.game.queue.push("DEAL\t1\t2\t2");
-      this.game.queue.push("DEAL\t1\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t7");
-      this.game.queue.push("DECKENCRYPT\t1\t6");
-      this.game.queue.push("DECKENCRYPT\t1\t5");
-      this.game.queue.push("DECKENCRYPT\t1\t4");
-      this.game.queue.push("DECKENCRYPT\t1\t3");
-      this.game.queue.push("DECKENCRYPT\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t1");
-      this.game.queue.push("DECKXOR\t1\t7");
-      this.game.queue.push("DECKXOR\t1\t6");
-      this.game.queue.push("DECKXOR\t1\t5");
-      this.game.queue.push("DECKXOR\t1\t4");
-      this.game.queue.push("DECKXOR\t1\t3");
-      this.game.queue.push("DECKXOR\t1\t2");
-      this.game.queue.push("DECKXOR\t1\t1");
-    }
-    if (this.game.players.length == 8) {
-      this.game.queue.push("POOL\t1"); // pool for cards on table
-      this.game.queue.push("DEAL\t1\t8\t2");
-      this.game.queue.push("DEAL\t1\t7\t2");
-      this.game.queue.push("DEAL\t1\t6\t2");
-      this.game.queue.push("DEAL\t1\t5\t2");
-      this.game.queue.push("DEAL\t1\t4\t2");
-      this.game.queue.push("DEAL\t1\t3\t2");
-      this.game.queue.push("DEAL\t1\t2\t2");
-      this.game.queue.push("DEAL\t1\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t8");
-      this.game.queue.push("DECKENCRYPT\t1\t7");
-      this.game.queue.push("DECKENCRYPT\t1\t6");
-      this.game.queue.push("DECKENCRYPT\t1\t5");
-      this.game.queue.push("DECKENCRYPT\t1\t4");
-      this.game.queue.push("DECKENCRYPT\t1\t3");
-      this.game.queue.push("DECKENCRYPT\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t1");
-      this.game.queue.push("DECKXOR\t1\t8");
-      this.game.queue.push("DECKXOR\t1\t7");
-      this.game.queue.push("DECKXOR\t1\t6");
-      this.game.queue.push("DECKXOR\t1\t5");
-      this.game.queue.push("DECKXOR\t1\t4");
-      this.game.queue.push("DECKXOR\t1\t3");
-      this.game.queue.push("DECKXOR\t1\t2");
-      this.game.queue.push("DECKXOR\t1\t1");
-    }
-****/
-    this.game.queue.push("DECK\t1\t" + JSON.stringify(this.returnDeck()));
   }
 
 
@@ -300,6 +168,12 @@ class President extends GameTemplate {
 
 	let player = parseInt(mv[1]);
 	let cards = JSON.parse(mv[2]);
+	for (let i = 0; i < cards.length; i++) {
+	  this.game.state.played.push(cards[i]);
+	}
+console.log("setting LPTP: " + player);
+	this.game.state.last_player_to_play = player;
+	this.game.state.last_played = cards;
 
 	if (player == this.game.player) {
           for (let i = 0; i < cards.length; i++) {
@@ -308,6 +182,9 @@ class President extends GameTemplate {
         }
 
         this.game.queue.splice(qe, 1);
+        this.displayTable();
+	return 1;
+
       }
 
       if (mv[0] === "cards") {
@@ -316,7 +193,16 @@ class President extends GameTemplate {
 	let cards_left = parseInt(mv[2]);
 	this.game.players_info[player-1].cards = cards_left;
 
+	if (cards_left == 0) {
+	  this.game.players_info[player-1].out = 1;
+	  this.game.players_info[player-1].rank = (this.game.state.players_out+1);
+	  this.game.state.players_out++;
+	}
+
         this.game.queue.splice(qe, 1);
+        this.displayTable();
+	return 1;
+
       }
 
 
@@ -329,14 +215,15 @@ class President extends GameTemplate {
 
         this.game.queue.splice(qe, 1);
 
-/***
-	if (this.game.players_info[player_to_go-1].cards == 0 && this.game.state.turn > 0) {
-	  alert("PLayer is out of cards!");
-	  return;
+	let has_everyone_passed = 1;
+	for (let i = 0; i < this.game.players_info.length; i++) {
+	  if (this.game.players_info[i].passed == 0 && this.game.players_info[i].out != 1) { has_everyone_passed = 0; } 
         }
-***/
+	if (has_everyone_passed == 1) { 
+	  return 1;
+	}
 
-        if (this.game.players_info[player_to_go - 1].passed == 1) {
+        if (this.game.players_info[player_to_go - 1].out == 1) {
           this.game.queue.splice(qe, 1);
           return 1;
         } else {
@@ -352,22 +239,88 @@ class President extends GameTemplate {
         }
       }
 
+
+      if (mv[0] === "newround") {
+        this.game.queue.splice(qe, 1);
+	this.startNewRound();
+        return 1;
+      }
+
+
+
       if (mv[0] === "round") {
 
+	//
+	// new round of turns for players
+	//
+        let has_everyone_passed = 1;
+        for (let i = 0; i < this.game.players_info.length; i++) {
+          if (this.game.players_info[i].passed == 0) { has_everyone_passed = 0; }
+        }
+        if (has_everyone_passed == 1) {
+
+	  //
+	  // clear the table and let the last player go first
+	  //
+	  this.game.state.last_played = [];
+          for (let i = 0; i < this.game.players_info.length; i++) {
+            this.game.players_info[i].passed = 0;
+          }
+
+        }
+
+
+
+	//
+	// are there any players left ?
+	//
+	let players_left = 0;
+	for (let i = 0; i < this.game.players_info.length; i++) {
+	  if (this.game.players_info[i].out == 0) {
+	    players_left++;
+	  }
+	}
+
+	//
+	// end of a turn, so redeal
+	//
+	if (players_left <= 1) {
+
+	  //
+	  // the last player out gets the last rank
+	  //
+	  for (let i = 0; i < this.game.players_info.length; i++) {
+	    if (this.game.players_info[i].rank == 0) {
+	      this.game.players_info[i].rank = (this.game.state.players_out+1);
+	      this.game.state.players_out++;
+	    }
+	  }
+
+          this.game.queue.splice(qe, 1);
+	  this.startNewRound();
+	  return 1;
+	}
 
         this.displayBoard();
 
-        //
-        // update game state
-        //
-        this.game.state.round++;
-        this.game.state.turn++;
 
-        for (let i = 0; i <= this.game.players_info.length; i++) {
-          let player_to_go = (i % this.game.players.length);
-          if (player_to_go == 0) { player_to_go = this.game.players.length; }
-          this.game.queue.push("turn\t" + player_to_go);
+console.log("LPTP: " + this.game.state.last_player_to_play);
+        let player_to_go = this.game.state.last_player_to_play;
+        if (player_to_go == 0) {
+	  // we are at the start of a new round
+	  player_to_go = 1;
+console.log("HACKERY HERE");
         }
+
+console.log("player to go: " + player_to_go);
+
+        for (let i = player_to_go; i <= (player_to_go+this.game.players.length-1); i++) {
+          let player_to_turn = (i%this.game.players.length);
+          if (player_to_turn == 0) { player_to_turn = this.game.players.length; }
+console.log("player to turn: " + player_to_turn);
+          this.game.queue.push("turn\t" + player_to_turn);
+        }
+
       }
 
 
@@ -396,14 +349,27 @@ class President extends GameTemplate {
 
 
 
-  startNextRound() {
+
+  startNewRound() {
+
+    this.resetDeck(0);
+
+    if (this.game.players.length == 2) {
+      this.game.queue.push("round");
+      this.game.queue.push("cards\t1\t22");
+      this.game.queue.push("cards\t2\t22");
+      this.game.queue.push("DEAL\t1\t2\t22");
+      this.game.queue.push("DEAL\t1\t1\t22");
+      this.game.queue.push("DECKENCRYPT\t1\t2");
+      this.game.queue.push("DECKENCRYPT\t1\t1");
+      this.game.queue.push("DECKXOR\t1\t2");
+      this.game.queue.push("DECKXOR\t1\t1");
+      this.game.queue.push("DECK\t1\t" + JSON.stringify(this.returnDeck()));
+    }
 
     this.game.state.turn = 0;
+    this.game.state.players_out = 0;  
     this.game.state.round++;
-
-    for (let i = 0; i < this.game.players.length; i++) {
-      this.game.players_info[i].passed = 0;
-    }
 
     for (let i = 0; i < this.game.players.length; i++) {
       if (this.game.players[i] === this.app.wallet.returnPublicKey()) {
@@ -411,19 +377,15 @@ class President extends GameTemplate {
       }
     }
    
-
-    this.updateLog("Starting New Round...");
-    document.querySelectorAll('.plog').forEach(el => {
-      el.innerHTML = "";
-    });
-
-    this.initializeQueue();
-    this.displayBoard();
+    for (let i = 0; i < this.game.players_info.length; i++) {
+      this.game.players_info[i].passed = 0;
+      this.game.players_info[i].out = 0;
+      this.game.players_info[i].rank = 0;
+    }
+    this.game.state.last_played = [];
+    this.game.state.last_player_to_play = 0;
 
   }
-
-
-
 
 
   playerTurn() {
@@ -431,13 +393,35 @@ class President extends GameTemplate {
     let president_self = this;
 
     this.displayBoard();
-    this.updateStatusAndListCards("Your turn");
-    this.addShowCardEvents(function(card) {
-      president_self.addMove("play\t"+president_self.game.player+"\t"+JSON.stringify(this.hud.cardbox.cards));
-      president_self.addMove("cards\t"+president_self.game.player+"\t"+president_self.game.deck[0].hand.length);
-      president_self.updateLog("cards played");
+
+    if (this.game.state.last_played.length == 0) {
+      this.updateStatusAndListCards("Start the Round");
+    } else {
+      this.updateStatusAndListCards("Play a card or <div style='display:inline' class='pass'>pass</div>");
+    }
+
+    $('.pass').on('click', function() {
+      president_self.addMove("pass\t"+president_self.game.player);
       president_self.endTurn(1);
+      return;
     });
+    this.addShowCardEvents(function(card) {
+      if (president_self.isValidPlay(this.hud.cardbox.cards)) {
+        president_self.addMove("cards\t"+president_self.game.player+"\t"+(president_self.game.deck[0].hand.length-1));
+        president_self.addMove("play\t"+president_self.game.player+"\t"+JSON.stringify(this.hud.cardbox.cards));
+        president_self.updateLog("cards played");
+        president_self.endTurn(1);
+      } else {
+alert("invalid move!");
+      }
+    });
+
+    this.updateLog("Starting New Round...");
+    document.querySelectorAll('.plog').forEach(el => {
+      el.innerHTML = "";
+    });
+
+    this.displayBoard();
 
   }
 
@@ -467,6 +451,8 @@ class President extends GameTemplate {
       players_info.push({});
       players_info[i].cards = 0;
       players_info[i].passed = 0;
+      players_info[i].out = 0;
+      players_info[i].rank = 0;
     };
 
     return players_info;
@@ -479,6 +465,10 @@ class President extends GameTemplate {
 
     state.round = 0;
     state.turn = 0;
+    state.last_player_to_play = 0;
+    state.played = [];
+    state.last_played = [];
+    state.players_out = 0;
 
     return state;
 
@@ -615,6 +605,15 @@ class President extends GameTemplate {
 
 
   displayTable() {
+
+    if (this.browser_active == 0) { return; }
+
+    let obj = document.getElementById("played_cards");
+    let html = '';
+    for (let i = 0; i < this.game.state.last_played.length; i++) {
+      html += this.returnCardImage(this.game.state.last_played[i], 1);
+    }   
+    obj.innerHTML = html;
 
   }
 
@@ -773,6 +772,103 @@ alert("selected: " + card);
   }
 
 
+
+  isValidPlay(cards) {
+
+    let hand1 = this.convertHand(cards);
+    let hand2 = this.convertHand(this.game.state.last_played);
+
+    if (hand1.length > 1) {
+      if (hand1.length == 2 && hand1.pair == 0) { return 0; }
+      if (hand1.length == 3 && hand1.triple == 0) { return 0; }
+      if (hand1.length == 4 && hand1.four_of_a_kind == 0) { return 0; }
+    }
+
+    if (this.isHigher(hand1, hand2)) {
+      return 1;
+    } else {
+      return 0;
+    }
+
+  }
+
+
+
+
+
+  // is hand1 higher than hand2
+  isHigher(hand1, hand2) {
+    if (hand2.length != 0) {
+      if (hand1.length != hand2.length) { return 0; }
+      if (hand1.lowest <= hand2.lowest) { return 0; }
+    }
+    return 1;
+  }
+
+
+  convertHand(cards) {
+
+    let deck = this.returnDeck();
+
+    let x = {};
+    x.suite = [];
+    x.val = [];
+
+    for (let i = 0; i < cards.length; i++) {
+      let card_from_deck = this.returnCardFromDeck(cards[i]);
+      let card_suite = card_from_deck[0];
+      let card_value = parseInt(card_from_deck.substring(1));
+      let cva = 0;
+      x.suite.push(card_suite);
+      // aces high
+      if (card_suite == "J" && cva == 0) { cva = 1; x.val.push("16"); }
+      if (card_value == 2 && cva == 0) { cva = 1; x.val.push("15"); }
+      if (card_value == 1 && cva == 0) { cva = 1; x.val.push("14"); }
+      if (cva == 0) { cva = 1; x.val.push(card_value); }
+    }
+
+    x.lowest = x.val[0];
+    for (let i = 0; i < x.val.length; i++) {
+      if (x.val[i] < x.lowest) { x.lowest = x.val[i]; }
+    }
+
+    x.one_of_a_kind = 0;
+    x.pair = 0;
+    x.triple = 0;
+    x.four_of_a_kind = 0;
+
+    if (x.val.length == 1) {
+      x.one_of_a_kind = 1;
+    }
+    if (x.val.length == 2 && this.isOfAKind(x)) {
+      x.pair = 1;
+    }
+    if (x.val.length == 3 && this.isOfAKind(x)) {
+      x.triple = 1;
+    }
+    if (x.val.length == 4 && this.isOfAKind(x)) {
+      x.four_of_a_kind = 1;
+    }
+
+    return x;
+
+  }
+
+
+
+  isOfAKind(hand) {
+
+    if (hand.val.length == 0) { return 0; }
+
+    let vlu = hand.val[0];
+
+    for (let i = 0; i < hand.val.length; i++) {
+      if (hand.val[i] != vlu) { return 0; }
+    }
+
+    return 1;
+
+  }
 
 
 

@@ -3,6 +3,10 @@
   padding: 10px;
 }
 
+.cardfan {
+  position: unset;
+}
+
 .hud-menu {
   width: 550px;
 }
@@ -323,7 +327,6 @@ body {
   text-decoration: none;
   cursor: pointer;
 }
-
 .cardimg-hud {
   position: absolute;
   left: 0;

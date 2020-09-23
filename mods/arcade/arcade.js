@@ -330,8 +330,6 @@ class Arcade extends ModTemplate {
   //
   onPeerHandshakeComplete(app, peer) {
 
-console.log("PEER HANDSHAKE COMPLETE: "+ JSON.stringify(peer.peer));
-
     if (this.browser_active == 0) { return; }
 
     let arcade_self = this;
