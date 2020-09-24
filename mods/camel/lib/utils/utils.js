@@ -255,7 +255,7 @@ select * from
   },
 
   returnFile(id) {
-    this.sendPeerDatabaseRequest("covid19", "files", "*", "id= " + id, null, function (res) {
+    this.sendPeerDatabaseRequest("camel", "files", "*", "id= " + id, null, function (res) {
       if (res.rows.length > 0) {
         var a = document.createElement("a");
         document.body.appendChild(a);
@@ -269,7 +269,7 @@ select * from
   },
 
   returnAttachment(id) {
-    this.sendPeerDatabaseRequest("covid19", "attachments", "*", "id= " + id, null, function (res) {
+    this.sendPeerDatabaseRequest("camel", "attachments", "*", "id= " + id, null, function (res) {
       if (res.rows.length > 0) {
         var blob = new Blob([res.rows[0]["attachment_data"]], { type: res.rows[0]["attachment_type"] });
         var url = window.URL.createObjectURL(blob);
@@ -474,7 +474,7 @@ select * from
     }
     let html = "";
     var options = "";
-    this.sendPeerDatabaseRequest("covid19", dbtable, idcol + " as 'id', " + valuecol + " as 'value'", "deleted <> 1", null, function (res) {
+    this.sendPeerDatabaseRequest("camel", dbtable, idcol + " as 'id', " + valuecol + " as 'value'", "deleted <> 1", null, function (res) {
       res.rows.forEach(opt => {
         options += `<option data-value="${opt.id}" value="${opt.value}"></option>`
       });

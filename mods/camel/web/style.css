@@ -1004,6 +1004,7 @@ textarea, .medium-editor-element {
   display: flex;
   flex-flow: row;
   justify-content: space-around;
+  max-height: 3em;
 }
 
 .powered-by {
@@ -1032,5 +1033,6 @@ textarea, .medium-editor-element {
   .main-form-buttons {
     display: flex;
     flex-flow: column;
+    max-height: 3em;
   }
 }

@@ -1,6 +1,6 @@
 module.exports = HeaderTemplate = (ddmods) => {
   html = `
-    <a href="/covid19">
+    <a href="/camel">
       <img class="logo major-logo" src="/camel/img/camel.png" />
       <img class="logo powered-by" src="/camel/img/dreamscape-logo.png" />
     </a>

@@ -1,6 +1,9 @@
 const ProductManagerTemplate = require('./product-manager.template');
 const UpdateProduct = require('./product-update');
+const ScanIn = require('./scan-in');
 //const AttachFile = require('./attach-file');
+
+
 
 
 module.exports = ProductManager = {
@@ -53,7 +56,9 @@ module.exports = ProductManager = {
       document.querySelectorAll('.grid-action.scan').forEach(el => {
         el.addEventListener('click', (e) => {
           data.product_uuid = e.target.dataset.uuid;
-          salert(`Trigger Scan Action Here <br> ${data.product_uuid}`);  
+          //salert(`Trigger Scan Action Here <br> ${data.product_uuid}`);
+          ScanIn.render(app, data);
+          ScanIn.attachEvents(app,data);
         });
       });
 
@@ -69,7 +74,7 @@ module.exports = ProductManager = {
         el.addEventListener('click', (e) => {
 
           data.product_uuid = e.target.dataset.uuid;
-          data.covid19.sendPeerDatabaseRequest("covid19", "products", "uuid", "product.uuid = '" + data.product_uuid + "'", null, async (res) => {
+          data.mod.sendPeerDatabaseRequest("camel", "products", "uuid", "product.uuid = '" + data.product_uuid + "'", null, async (res) => {
 
             let c = confirm("Are you sure you want to delete this product?");
             if (c) {

@@ -104,7 +104,7 @@ module.exports = HomeHeader = {
 
 	<p></p>
 
-	<a href="/covid19">Click here to return to the main page when done.</a>
+	<a href="/camel">Click here to return to the main page when done.</a>
 
 	      `;
 
