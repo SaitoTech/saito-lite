@@ -1006,6 +1006,21 @@ textarea, .medium-editor-element {
   justify-content: space-around;
 }
 
+.powered-by {
+  width: 120px;
+  height: 60px;
+  padding: 20px 0 0 0;
+  position: fixed;
+  bottom: 5px;
+  left: 5px;
+}
+
+.powered-by::after {
+  content: "Built On";
+  color: #fff;
+  display: block;
+}
+
 @media only screen and (max-width: 800px) {
   .grid-2 {
     grid-template-columns: 1fr;

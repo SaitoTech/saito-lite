@@ -9,25 +9,9 @@ module.exports = ProductManager = {
 
     document.querySelector(".main").innerHTML = ProductManagerTemplate();
 
-
     //
     // load products
     //
-    /*
-        var sql = `
-          select 
-            *
-          from 
-            products
-          where
-            products.deleted <> 1 AND
-            (
-              (admin = "${app.wallet.returnPublicKey()}"
-            OR
-              "${app.wallet.returnPublicKey()}" = "${data.covid19.admin_pkey}") 
-            )
-    `;
-    */
     var sql = `
       select 
         *
@@ -65,7 +49,6 @@ module.exports = ProductManager = {
       document.querySelector("#product-table").innerHTML = html;
 
 
-
       //treat buttons
       document.querySelectorAll('.grid-action.scan').forEach(el => {
         el.addEventListener('click', (e) => {
@@ -93,12 +76,12 @@ module.exports = ProductManager = {
 
               let values = [];
               values[0] = {};
-              values[0].dbname = "covid19";
+              values[0].dbname = "camel";
               values[0].table = "products";
               values[0].column = "uuid";
               values[0].value = res.rows[0].uuid;
 
-              data.covid19.deleteDatabase(values);
+              data.mod.deleteDatabase(values);
 
               await salert("Delete Requested - please reload in 30 seconds");
 
