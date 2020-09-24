@@ -1,11 +1,11 @@
-module.exports = ScanManagerTemplate = () => {
+module.exports = ScanCheckTemplate = () => {
 
   let html = '';
 
   html = `
   <div class="scan-information">
 
-    <h2>Scan QR Code</h2>
+    <h2>Check QR Code</h2>
 
     <hr />
 

@@ -53,6 +53,11 @@ class Camel extends ModTemplate {
 
     let data = {};
         data.mod = this;
+  
+    this.setRoute(app, data);
+  }
+
+  setRoute(app, data) {
 
     if (this.app.BROWSER == 0) { return; }
 

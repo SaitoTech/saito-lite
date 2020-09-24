@@ -963,11 +963,13 @@ span.rewards-row-name {
   margin: 2em 1em 0;
 }
 
-
-
 @media only screen and (max-width: 600px) {}
 
 /* camel */
+
+.button {
+  text-align: center;
+}
 
 .product-table {
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -994,6 +996,7 @@ span.rewards-row-name {
 input[type=text], input[type=number], input[type=password], input[type=date] {
   border-bottom: 1px solid var(--saito-red);
 }
+
 textarea, .medium-editor-element {
   border: 1px solid var(--saito-red);
   padding: 3px;
@@ -1030,9 +1033,18 @@ textarea, .medium-editor-element {
   .grid-2 div {
     padding: 0;
   }
-  .main-form-buttons {
+  .main-form-buttons, .flex-around {
     display: flex;
     flex-flow: column;
     max-height: 3em;
+  }
+  .grid-buttons {
+    grid-column: 1 / span 4;
+    display: flex;
+    justify-content: space-evenly;
+    flex-flow: wrap;
+    border-bottom: 1px solid #8888;
+    padding: 5px 0;
+    margin-bottom: 1em;
   }
 }

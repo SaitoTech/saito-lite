@@ -1,6 +1,8 @@
 const ProductManagerTemplate = require('./product-manager.template');
 const UpdateProduct = require('./product-update');
 const ScanIn = require('./scan-in');
+const ScanCheck = require('./scan-check');
+const ScanSummary = require('./scan-summary');
 //const AttachFile = require('./attach-file');
 
 
@@ -28,7 +30,7 @@ module.exports = ProductManager = {
           <div class="table-head">Name</div>
           <div class="table-head">Details</div>
           <div class="table-head">Product Image</div>
-          <div class="table-head"></div>
+          <div class="table-head grid-buttons"></div>
         `;
     var rownum = 0;
     var rowclass = "";
@@ -39,10 +41,11 @@ module.exports = ProductManager = {
         if (rownum % 2) { rowclass = "even" } else { rowclass = "odd" };
         html += `<div class="${rowclass}">${row.product_name}</div>`;
         html += `<div class="${rowclass}">${row.product_details}</div>`;
-        html += `<div class="${rowclass}"><img style='max-width:200px;max-height:200px' src='${row.product_photo}'/></div>`;
+        html += `<div class="${rowclass}"><img style='max-width:100px;max-height:100px' src='${row.product_photo}'/></div>`;
         html += `
         <div class="grid-buttons ${row.uuid} rowclass">
           <div class="grid-action scan" data-uuid="${row.uuid}">Scan In</div>
+          <div class="grid-action summary" data-uuid="${row.uuid}">Summary</div>
           <div class="grid-action edit" data-uuid="${row.uuid}">Edit</div>
           <div class="grid-action delete" data-uuid="${row.uuid}">Delete</div>          
         </div>`;
@@ -59,6 +62,14 @@ module.exports = ProductManager = {
           //salert(`Trigger Scan Action Here <br> ${data.product_uuid}`);
           ScanIn.render(app, data);
           ScanIn.attachEvents(app,data);
+        });
+      });
+
+      document.querySelectorAll('.grid-action.summary').forEach(el => {
+        el.addEventListener('click', (e) => {
+          data.product_uuid = e.target.dataset.uuid;
+          ScanSummary.render(app, data);
+          ScanSummary.attachEvents(app,data);
         });
       });
 
@@ -105,5 +116,11 @@ module.exports = ProductManager = {
       UpdateProduct.render(app, data);
       UpdateProduct.attachEvents(app, data);
     });
+
+    document.querySelector('.check-btn').addEventListener('click', (e) => {
+      ScanCheck.render(app, data);
+      ScanCheck.attachEvents(app,data);
+    });
+
   }
 }

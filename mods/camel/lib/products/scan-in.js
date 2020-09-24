@@ -1,10 +1,10 @@
-const ScanManagerTemplate = require('./scan-in.template');
+const ScanInTemplate = require('./scan-in.template');
 
 
-module.exports = ScanManager = {
+module.exports = ScanIn = {
 
   render(app, data) {
-    document.querySelector(".main").innerHTML = ScanManagerTemplate();
+    document.querySelector(".main").innerHTML = ScanInTemplate();
     document.querySelector(".product_id").value = data.product_uuid;
 
     //this.generateQRCode("Hello World!");
@@ -79,19 +79,25 @@ module.exports = ScanManager = {
     this.app.modules.returnModule('Camel').submitValues(values);
 
     document.querySelector(".main").innerHTML = `
+      <div>
+        <h2>Scan QR Code</h2>
+        <hr />
+      </div>
       <p>ID: ${payload.uuid} scanned in.</p>
       <div class="main-form-buttons">
         <button class="scan-again">Scan Another</button>
-        <button class="exit">Exit</button>
+        <button class="scan-exit">Exit</button>
       </div>
       `;
 
     document.querySelector('.scan-again').addEventListener('click', () => {
-      document.querySelector(".main").innerHTML = ScanManagerTemplate();
+      document.querySelector(".main").innerHTML = ScanInTemplate();
       document.querySelector(".product_id").value = document.querySelector('.product_id').value;
     });
 
-    document.querySelector('.scan-again').addEventListener('click', () => {
+    document.querySelector('.scan-exit').addEventListener('click', () => {
+      let app = this.app;
+      let data = {};
       UpdateSuccess.render(app, data);
       UpdateSuccess.attachEvents(app, data);
     });
