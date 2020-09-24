@@ -62,7 +62,7 @@ class Camel extends ModTemplate {
     let data = {};
     data.mod = this;
 
-    this.onConnectionStable(app);
+    //this.onConnectionStable(app);
 
   }
 
@@ -73,14 +73,14 @@ class Camel extends ModTemplate {
   onPeerHandshakeComplete(app, peer) {
 
     let data = {};
-    data.camel = this;
-    data.camel.mode = "scan";
+    data.mod = this;
+    data.mod.mode = "scan";
 
     if (this.browser_active == 0) { return; }
 
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('mode')) {
-      data.camel.mode = urlParams.get('mode');
+      data.mod.mode = urlParams.get('mode');
     }
     this.renderPage(app, data);
 
@@ -115,11 +115,13 @@ class Camel extends ModTemplate {
     if (conf == 0) {
     }
 
+    super.onConfirmation(blk, tx, conf, app);
+
   }
 
   renderPage(app, data) {
 
-    switch (data.camel.mode) {
+    switch (data.mod.mode) {
       case "scan":
         //scan-page
         break;
