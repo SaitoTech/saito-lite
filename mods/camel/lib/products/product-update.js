@@ -24,7 +24,7 @@ module.exports = UpdateProduct = {
       });
     } else {
       //load the product
-      data.mod.sendPeerDatabaseRequest("camel", "products", "*", "deleted <> 1 AND products.id = " + data.product_uuid, null, function (res) {
+      data.mod.sendPeerDatabaseRequest("camel", "products", "*", "deleted <> 1 AND products.uuid = " + data.product_uuid, null, function (res) {
         //data.product = res.rows[0];
         html = data.mod.returnForm("camel", "products", data.product_uuid, res.rows[0]);
         document.querySelector('.main-form').innerHTML += html;
