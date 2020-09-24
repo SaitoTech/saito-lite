@@ -86,7 +86,7 @@ module.exports = ProductManager = {
         el.addEventListener('click', (e) => {
 
           data.product_uuid = e.target.dataset.uuid;
-          data.covid19.sendPeerDatabaseRequest("covid19", "products", "uuid", "product.id = " + data.product_uuid, null, async (res) => {
+          data.covid19.sendPeerDatabaseRequest("covid19", "products", "uuid", "product.uuid = '" + data.product_uuid + "'", null, async (res) => {
 
             let c = confirm("Are you sure you want to delete this product?");
             if (c) {

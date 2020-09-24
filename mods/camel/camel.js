@@ -3,6 +3,8 @@ const ModTemplate = require('../../lib/templates/dbmodtemplate');
 const AddressController = require('../../lib/ui/menu/address-controller');
 const utils = require('./lib/utils/utils');
 
+const Header = require('./lib/header/covid_header');
+
 const AdminHome = require('./lib/admin/admin-home');
 const ProductManager = require('./lib/products/product-manager');
 
@@ -32,6 +34,14 @@ class Camel extends ModTemplate {
     }
   }
 
+  initializeHTML(app) {
+
+    if (this.app.BROWSER == 0) { return; }
+
+    Header.render(app, data);
+    Header.attachEvents(app, data);
+
+  }
 
 
   onPeerHandshakeComplete(app, peer) {
