@@ -36,7 +36,7 @@ module.exports = utils = {
             file_attachments.object_id = ${product_id}
         `;
 
-    this.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
+    this.sendPeerDatabaseRequestRaw("camel", sql, function (res) {
 
       if (res.rows.length > 0) {
         _this.renderCerts(res.rows, target);
@@ -74,7 +74,7 @@ module.exports = utils = {
 
     var result = [];
 
-    await this.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
+    await this.sendPeerDatabaseRequestRaw("camel", sql, function (res) {
 
       if (res.rows.length > 0) {
         _this.zipRows(res.rows);
@@ -137,7 +137,7 @@ select * from
   order by folder asc, file_name asc
     `;
 
-    this.sendPeerDatabaseRequestRaw("covid19", sql, function (res) {
+    this.sendPeerDatabaseRequestRaw("camel", sql, function (res) {
 
       if (res.rows.length > 0) {
         res.rows.forEach(row => {
@@ -193,7 +193,7 @@ select * from
           html += "<div class='cert tip'><a class='attach-cert-" + row["id"] + "'>" + row["Name"] + "</a>" + note;
           html += " <i data-id='" + row["id"] + "' id='delete-cert-" + row["id"] + "' class='fright far fa-times-circle'></i></div>";
         } else {
-          html += "<div class='cert tip'><a target='_blank' href='/covid19/dummy.pdf'>" + row["Name"] + "</a><div class='tiptext'> Certification available on receipt of formal purchase order. </div></div>";
+          html += "<div class='cert tip'><a target='_blank' href='/camel/dummy.pdf'>" + row["Name"] + "</a><div class='tiptext'> Certification available on receipt of formal purchase order. </div></div>";
         }
 
         el.append(elParser(html));
@@ -212,7 +212,7 @@ select * from
         if (row["product_id"] != null) {
           html += "<div class='cert tip'><a class='attach-file-" + row["id"] + "'>" + row["Name"] + "</a></div>";
         } else {
-          html += "<div class='cert tip'><a target='_blank' href='/covid19/dummy.pdf'>" + row["Name"] + "</a></div>";
+          html += "<div class='cert tip'><a target='_blank' href='/camel/dummy.pdf'>" + row["Name"] + "</a></div>";
         }
         el.append(elParser(html));
       }
@@ -241,7 +241,7 @@ select * from
   },
 
   returnCertFile(id) {
-    this.sendPeerDatabaseRequest("covid19", "products_certifications", "*", "id = " + id, null, function (res) {
+    this.sendPeerDatabaseRequest("camel", "products_certifications", "*", "id = " + id, null, function (res) {
       if (res.rows.length > 0) {
         var a = document.createElement("a");
         document.body.appendChild(a);
@@ -611,25 +611,25 @@ select * from
       update.to_value = field.nextElementSibling.value;
       if (update.from_value != update.to_value) {
         let obj = {};
-        obj.dbname = 'covid19';
+        obj.dbname = 'camel';
         obj.table = log_table;
         obj.column = "order_id";
         obj.value = object_id;
         values.push(obj);
         let tm = {};
-        tm.dbname = 'covid19';
+        tm.dbname = 'camel';
         tm.table = log_table;
         tm.column = "ts";
         tm.value = new Date().getTime();
         values.push(tm);
         let val = {};
-        val.dbname = 'covid19';
+        val.dbname = 'camel';
         val.table = log_table;
         val.column = "type";
         val.value = "update";
         values.push(val);
         let val_body = {};
-        val_body.dbname = 'covid19';
+        val_body.dbname = 'camel';
         val_body.table = log_table;
         val_body.column = "body";
         val_body.value = JSON.stringify(update);

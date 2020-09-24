@@ -9,25 +9,9 @@ module.exports = ProductManager = {
 
     document.querySelector(".main").innerHTML = ProductManagerTemplate();
 
-
     //
     // load products
     //
-    /*
-        var sql = `
-          select 
-            *
-          from 
-            products
-          where
-            products.deleted <> 1 AND
-            (
-              (admin = "${app.wallet.returnPublicKey()}"
-            OR
-              "${app.wallet.returnPublicKey()}" = "${data.covid19.admin_pkey}") 
-            )
-    `;
-    */
     var sql = `
       select 
         *
@@ -65,7 +49,6 @@ module.exports = ProductManager = {
       document.querySelector("#product-table").innerHTML = html;
 
 
-
       //treat buttons
       document.querySelectorAll('.grid-action.edit').forEach(el => {
         el.addEventListener('click', (e) => {
@@ -79,19 +62,19 @@ module.exports = ProductManager = {
         el.addEventListener('click', (e) => {
 
           data.product_uuid = e.target.dataset.uuid;
-          data.covid19.sendPeerDatabaseRequest("covid19", "products", "uuid", "product.id = " + data.product_uuid, null, async (res) => {
+          data.mod.sendPeerDatabaseRequest("camel", "products", "uuid", "product.id = " + data.product_uuid, null, async (res) => {
 
             let c = confirm("Are you sure you want to delete this product?");
             if (c) {
 
               let values = [];
               values[0] = {};
-              values[0].dbname = "covid19";
+              values[0].dbname = "camel";
               values[0].table = "products";
               values[0].column = "uuid";
               values[0].value = res.rows[0].uuid;
 
-              data.covid19.deleteDatabase(values);
+              data.mod.deleteDatabase(values);
 
               await salert("Delete Requested - please reload in 30 seconds");
 
