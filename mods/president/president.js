@@ -250,6 +250,8 @@ console.log("setting LPTP: " + player);
 
       if (mv[0] === "round") {
 
+	this.game.deck[0].hand.sort();
+
 	//
 	// new round of turns for players
 	//
@@ -266,6 +268,9 @@ console.log("setting LPTP: " + player);
           for (let i = 0; i < this.game.players_info.length; i++) {
             this.game.players_info[i].passed = 0;
           }
+
+console.log("updating fpir: " + this.game.state.last_player_to_play);
+	  this.game.state.first_player_in_round = this.game.state.last_player_to_play;
 
         }
 
@@ -303,21 +308,21 @@ console.log("setting LPTP: " + player);
 
         this.displayBoard();
 
+	//
+	//
+	//
+	let player_to_go = this.game.state.first_player_in_round;
 
-console.log("LPTP: " + this.game.state.last_player_to_play);
-        let player_to_go = this.game.state.last_player_to_play;
+console.log("LPTP 1: " + this.game.state.last_player_to_play);
+console.log("LPTP 2: " + this.game.state.first_player_in_round);
         if (player_to_go == 0) {
 	  // we are at the start of a new round
 	  player_to_go = 1;
-console.log("HACKERY HERE");
         }
 
-console.log("player to go: " + player_to_go);
-
-        for (let i = player_to_go; i <= (player_to_go+this.game.players.length-1); i++) {
+        for (let i = player_to_go+1; i <= (player_to_go+this.game.players.length); i++) {
           let player_to_turn = (i%this.game.players.length);
           if (player_to_turn == 0) { player_to_turn = this.game.players.length; }
-console.log("player to turn: " + player_to_turn);
           this.game.queue.push("turn\t" + player_to_turn);
         }
 
@@ -384,6 +389,7 @@ console.log("player to turn: " + player_to_turn);
     }
     this.game.state.last_played = [];
     this.game.state.last_player_to_play = 0;
+    this.game.state.first_player_in_round = 0;
 
   }
 
@@ -484,7 +490,7 @@ alert("invalid move!");
     return card.name.substring(0, card.name.indexOf('.'));
 
   }
-
+/***
   returnDeck() {
 
     var deck = {};
@@ -541,6 +547,70 @@ alert("invalid move!");
     deck['50'] = { name: "D11.png" }
     deck['51'] = { name: "D12.png" }
     deck['52'] = { name: "D13.png" }
+    //deck['53'] = { name: "J1.png" }
+    //deck['54'] = { name: "J2.png" }
+
+    return deck;
+
+  }
+***/
+
+  returnDeck() {
+
+    var deck = {};
+
+    deck['1'] = { name: "C3.png" }
+    deck['2'] = { name: "H3.png" }
+    deck['3'] = { name: "D3.png" }
+    deck['4'] = { name: "S3.png" }
+    deck['5'] = { name: "C4.png" }
+    deck['6'] = { name: "H4.png" }
+    deck['7'] = { name: "D4.png" }
+    deck['8'] = { name: "S4.png" }
+    deck['9'] = { name: "C5.png" }
+    deck['10'] = { name: "H5.png" }
+    deck['11'] = { name: "D5.png" }
+    deck['12'] = { name: "S5.png" }
+    deck['13'] = { name: "C6.png" }
+    deck['14'] = { name: "H6.png" }
+    deck['15'] = { name: "D6.png" }
+    deck['16'] = { name: "S6.png" }
+    deck['17'] = { name: "C7.png" }
+    deck['18'] = { name: "H7.png" }
+    deck['19'] = { name: "D7.png" }
+    deck['20'] = { name: "S7.png" }
+    deck['21'] = { name: "C8.png" }
+    deck['22'] = { name: "H8.png" }
+    deck['23'] = { name: "D8.png" }
+    deck['24'] = { name: "S8.png" }
+    deck['25'] = { name: "C9.png" }
+    deck['26'] = { name: "H9.png" }
+    deck['27'] = { name: "D9.png" }
+    deck['28'] = { name: "S9.png" }
+    deck['29'] = { name: "C10.png" }
+    deck['30'] = { name: "H10.png" }
+    deck['31'] = { name: "D10.png" }
+    deck['32'] = { name: "S10.png" }
+    deck['33'] = { name: "C11.png" }
+    deck['34'] = { name: "H11.png" }
+    deck['35'] = { name: "D11.png" }
+    deck['36'] = { name: "S11.png" }
+    deck['37'] = { name: "C12.png" }
+    deck['38'] = { name: "H12.png" }
+    deck['39'] = { name: "D12.png" }
+    deck['40'] = { name: "S12.png" }
+    deck['41'] = { name: "C13.png" }
+    deck['42'] = { name: "H13.png" }
+    deck['43'] = { name: "D13.png" }
+    deck['44'] = { name: "S13.png" }
+    deck['45'] = { name: "C1.png" }
+    deck['46'] = { name: "H1.png" }
+    deck['47'] = { name: "D1.png" }
+    deck['48'] = { name: "S1.png" }
+    deck['49'] = { name: "C2.png" }
+    deck['50'] = { name: "H2.png" }
+    deck['51'] = { name: "D2.png" }
+    deck['52'] = { name: "S2.png" }
     //deck['53'] = { name: "J1.png" }
     //deck['54'] = { name: "J2.png" }
 
