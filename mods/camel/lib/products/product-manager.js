@@ -8,7 +8,6 @@ module.exports = ProductManager = {
   render(app, data) {
 
     document.querySelector(".main").innerHTML = ProductManagerTemplate();
-    //document.querySelector(".navigation").innerHTML = '<div class="button navlink covid_back"><i class="fas fa-back"></i> Back</div>';
 
 
     //
