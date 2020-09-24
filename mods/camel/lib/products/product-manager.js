@@ -39,9 +39,9 @@ module.exports = ProductManager = {
         html += `<div class="${rowclass}"><img style='max-width:200px;max-height:200px' src='${row.product_photo}'/></div>`;
         html += `
         <div class="grid-buttons ${row.uuid} rowclass">
-          <div class="grid-action scan" data-id="${row.uuid}">Edit</div>
-          <div class="grid-action edit" data-id="${row.uuid}">Edit</div>
-          <div class="grid-action delete" data-id="${row.uuid}">Delete</div>          
+          <div class="grid-action scan" data-uuid="${row.uuid}">Scan In</div>
+          <div class="grid-action edit" data-uuid="${row.uuid}">Edit</div>
+          <div class="grid-action delete" data-uuid="${row.uuid}">Delete</div>          
         </div>`;
       });
       document.querySelector(".loading").style.display = "none";
@@ -50,6 +50,13 @@ module.exports = ProductManager = {
 
 
       //treat buttons
+      document.querySelectorAll('.grid-action.scan').forEach(el => {
+        el.addEventListener('click', (e) => {
+          data.product_uuid = e.target.dataset.uuid;
+          salert(`Trigger Scan Action Here <br> ${data.product_uuid}`);  
+        });
+      });
+
       document.querySelectorAll('.grid-action.edit').forEach(el => {
         el.addEventListener('click', (e) => {
           data.product_uuid = e.target.dataset.uuid;
