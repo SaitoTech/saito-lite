@@ -98,47 +98,6 @@ console.log("T: " + uuid);
 
   }
 
-
-
-
-
-  webServer(app, expressapp, express) {
-
-    super.webServer(app, expressapp, express);
-
-    const fs = app.storage.returnFileSystem();
-    const path = require('path');
-
-    if (fs != null) {
-
-      expressapp.get('/camel/scan/:uuid', async (req, res) => {
-
-	//
-	// user has scanned an app
-	//
-        console.info("user scan");
-
-/************
-        let sql = "SELECT * FROM gamestate WHERE game_id = $game_id ORDER BY id DESC LIMIT 1";
-        let params = { $game_id: req.params.game_id }
-        let games = await app.storage.queryDatabase(sql, params, "arcade");
-
-        if (games.length > 0) {
-          let game = games[0];
-          res.setHeader('Content-type', 'text/html');
-          res.charset = 'UTF-8';
-          res.write(game.game_state);
-          res.end();
-          return;
-        } else {
-	  console.log("GAME DOES NOT EXIST!");
-	}
-**************/
-      });
-
-    }
-  }
-
 }
 
 module.exports = Camel;
