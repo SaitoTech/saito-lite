@@ -39,6 +39,8 @@ class Camel extends ModTemplate {
     let data = {};
         data.mod = this;
 
+    if (this.app.BROWSER == 0) { return; }
+
     switch (this.mode) {
       case "scan":
         //scan-page
