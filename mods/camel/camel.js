@@ -28,37 +28,17 @@ class Camel extends ModTemplate {
 
   handleUrlParams(urlParams) {
     if (urlParams.get('mode')) {
-alert("setting mode!");
       this.mode = urlParams.get('mode');
     }
   }
 
 
-  render(app, data=null) {
+  onPeerHandshakeComplete(app, peer) {
 
-    if (this.browser_active == 0) { return; }
-
-    if (data == null) { 
-      data = {};
-      data.mod = this; 
-    }
-
-    CamelMain.render(app, data);
-    CamelMain.attachEvents(app, data);
-
-  }
-
-
-  initializeHTML(app) {
     let data = {};
-    data.mod = this;
-    this.renderPage(app, data);
-  }
+        data.mod = this;
 
-
-  renderPage(app, data) {
-
-    switch (data.mod.mode) {
+    switch (this.mode) {
       case "scan":
         //scan-page
         break;
