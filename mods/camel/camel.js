@@ -21,8 +21,6 @@ class Camel extends ModTemplate {
 
     let uuid = urlParams.get('uuid');
 
-console.log("T: " + uuid);
-
   }
 
 
