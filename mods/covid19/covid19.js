@@ -165,33 +165,7 @@ class Covid19 extends DBModTemplate {
       if (urlParams.get('mode')) {
         var mode = urlParams.get('mode');
         data.covid19.renderPage(mode, app, data);
-        /*switch (mode) {
-          case 'home':
-            data.covid19.renderPage("home", app, data);
-            break;
-          case 'customer':
-            data.covid19.renderPage("customer", app, data);
-            break;
-          case 'supplier':
-            data.covid19.renderPage("supplier", app, data);
-            break;
-          case 'supplier-profile':
-            data.covid19.renderPage("supplier-profile", app, data);
-            break;
-          case 'file-manager':
-            data.covid19.renderPage("file-manager", app, data);
-            break;
-          case 'bundle-manager':
-            data.covid19.renderPage("bundle-manager", app, data);
-            break;
-          case 'category-manager':
-            data.covid19.renderPage("category-manager", app, data);
-            break;
-          case 'default':
-            SplashPage.render(app, data);
-            SplashPage.postrender(app, data);
-            SplashPage.attachEvents(app, data);
-        }*/
+       
       } else {
         SplashPage.render(app, data);
         SplashPage.postrender(app, data);
