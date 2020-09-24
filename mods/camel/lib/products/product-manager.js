@@ -52,9 +52,10 @@ module.exports = ProductManager = {
         if (rownum % 2) { rowclass = "even" } else { rowclass = "odd" };
         html += `<div class="${rowclass}">${row.product_name}</div>`;
         html += `<div class="${rowclass}">${row.product_details}</div>`;
-        html += `<div class="${rowclass}">${row.product_photo}</div>`;
+        html += `<div class="${rowclass}"><img style='max-width:200px;max-height:200px' src='${row.product_photo}'/></div>`;
         html += `
         <div class="grid-buttons ${row.uuid} rowclass">
+          <div class="grid-action scan" data-id="${row.uuid}">Edit</div>
           <div class="grid-action edit" data-id="${row.uuid}">Edit</div>
           <div class="grid-action delete" data-id="${row.uuid}">Delete</div>          
         </div>`;

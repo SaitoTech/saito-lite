@@ -970,3 +970,27 @@ span.rewards-row-name {
     margin: 0 0 1em 0;
   }
 }
+
+/* camel */
+
+.product-table {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.fullview_product, .edit_product, .delete_product, .add_cert, .inquire_product, .grid-action {
+  cursor: pointer;
+  width: 100px;
+  text-align: center;
+  padding: 5px;
+  border-radius: 5px;
+  display: inline-block;
+  margin: 0 5px 5px 0;
+  background: var(--saito-jester);
+  border: 1px solid var(--saito-red);
+  color: var(--saito-skyline-grey);
+}
+
+.fullview_product:hover, .edit_product:hover, .delete_product:hover, .add_cert:hover, .inquire_product:hover, .grid-action:hover {
+  color: #FFF;
+  background: linear-gradient(-45deg, #537 50%, #324 100%);
+}
