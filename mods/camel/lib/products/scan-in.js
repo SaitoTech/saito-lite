@@ -96,10 +96,9 @@ module.exports = ScanIn = {
     });
 
     document.querySelector('.scan-exit').addEventListener('click', () => {
-      let app = this.app;
-      let data = {};
-      UpdateSuccess.render(app, data);
-      UpdateSuccess.attachEvents(app, data);
+      let data = {}
+      data.mod = this;
+      this.app.modules.returnModule('Camel').setRoute(this.app, data);
     });
 
 

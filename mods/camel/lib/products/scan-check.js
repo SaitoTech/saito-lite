@@ -129,10 +129,9 @@ module.exports = ScanCheck = {
             });
       
             document.querySelector('.scan-exit').addEventListener('click', () => {
-              let app = this.app;
-              let data = {};
-              UpdateSuccess.render(app, data);
-              UpdateSuccess.attachEvents(app, data);
+              let data = {}
+              data.mod = this_mod;
+              this_mod.setRoute(this_mod.app, data);
             });
 
           }
