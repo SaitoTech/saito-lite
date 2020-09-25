@@ -1025,7 +1025,31 @@ textarea, .medium-editor-element {
   display: block;
 }
 
+.scan-result {
+  font-size: 20em;
+  margin: auto;
+}
+
+.main {
+  max-width: 1200px;
+  margin: 5em auto;
+  padding: 0 1em;
+}
+
+.product-table>div {
+  margin-top: 1em;
+}
+
+body {
+  overflow: hidden;
+}
+
 @media only screen and (max-width: 800px) {
+  .main {
+    max-width: 1200px;
+    margin: 3em auto;
+    padding: 0 1em;
+}
   .grid-2 {
     grid-template-columns: 1fr;
     grid-gap: 3px;
@@ -1047,4 +1071,15 @@ textarea, .medium-editor-element {
     padding: 5px 0;
     margin-bottom: 1em;
   }
+  .scan-result {
+    font-size: 60vw;
+}
+.grid-4 div:nth-child(2n-1), .grid-2 div:nth-child(2n-1) {
+  padding: 0; 
+  line-height: 28x; 
+}
+.grid-2-columns {
+  grid-gap: 3px;
+  margin: 0;
+}
 }

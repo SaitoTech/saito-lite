@@ -8,6 +8,7 @@ const Header = require('./lib/header/header');
 const AdminHome = require('./lib/admin/admin-home');
 const ProductManager = require('./lib/products/product-manager');
 const ScanManager = require('./lib/scan/scan-manager');
+const ScanReturn = require('./lib/user/scan-return');
 
 
 
@@ -17,10 +18,10 @@ class Camel extends ModTemplate {
 
     super(app);
 
-    this.name 		= "Camel";
-    this.description    = "Product Code Scanning and Tracking";
-    this.categories     = "SCM";
-    this.mode           = "product";
+    this.name = "Camel";
+    this.description = "Product Code Scanning and Tracking";
+    this.categories = "SCM";
+    this.mode = "product";
 
 
     Object.assign(Camel.prototype, utils)
@@ -52,8 +53,8 @@ class Camel extends ModTemplate {
     if (this.browser_active == 0) { return; }
 
     let data = {};
-        data.mod = this;
-  
+    data.mod = this;
+
     this.setRoute(app, data);
   }
 
@@ -75,11 +76,42 @@ class Camel extends ModTemplate {
         ProductManager.attachEvents(app, data);
         break;
       default:
-        //scan-page
+      //scan-page
     }
   }
 
-}
 
+
+  async webServer(app, expressapp, express) {
+
+    super.webServer(app, expressapp, express);
+    
+    let data = {};
+    data.mod = this;
+
+    const fs = app.storage.returnFileSystem();
+    const path = require('path');
+
+    if (fs != null) {
+
+      expressapp.get('/camel/u/', async (req, res) => {
+
+        data.query = req.query;
+
+        res.setHeader('Content-type', 'text/html');
+        res.charset = 'UTF-8';
+        res.write(await ScanReturn.render(app, data));
+        res.end();
+        return;
+                
+      });
+    }
+
+  
+
+    
+  }
+
+}
 module.exports = Camel;
 

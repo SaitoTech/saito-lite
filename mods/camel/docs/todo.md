@@ -22,14 +22,16 @@
   * Count of canned in items
   * Count of client scans for product
 
-## To Do
-
 #### Client Scan Page
 * Non-Saito page to record scan
-* Alert if previously scanned 
+* Alert if previously scanned
 
 #### Cleanup
 * css
+
+## To Do
+
+#### Cleanup
 * navigation
   * cancel scan
   * cancel buttons on add and edit product
