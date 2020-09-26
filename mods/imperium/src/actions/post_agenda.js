@@ -60,7 +60,6 @@
 	
 	      return 0;
 	    } else {
-alert("Confusing Legal Text -- multiple options appear to be winning -- nothing to be done");
 	      return 1;
 	    }
 	  }

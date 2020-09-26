@@ -2266,7 +2266,7 @@ console.log("CARD: " + card);
                   if (action2 == "finished") {
                     twilight_self.endTurn(1);
                   } else {
-                    $(card).hide();
+                    $(action2).hide();
                     twilight_self.hideCard();
                     twilight_self.updateStatus("<div class='status-message' id='status-message'>Discarding...</div>");
                     cards_discarded++;

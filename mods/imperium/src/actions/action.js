@@ -411,9 +411,6 @@ ACTION CARD - types
 		}
               },
 	      function(planet) {
-
-alert("H: " + planet);
-
 		planet = imperium_self.game.planets[planet];
 		let sector = planet.sector;
 		let tile = planet.tile;	        
@@ -674,8 +671,6 @@ alert("H: " + planet);
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
           if (imperium_self.game.player == action_card_player) {
-
-alert("select sector with filter");
             imperium_self.playerSelectSectorWithFilter(
               "Place a destroyer in a sector with a wormhole and no enemy ships: " ,
               function(sector) {

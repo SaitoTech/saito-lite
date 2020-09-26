@@ -83,7 +83,6 @@ class Rewards extends ModTemplate {
       let active_mod = this.app.modules.returnActiveModule();
       if (active_mod != null) {
         if (active_mod.name == "Arcade") {
-          console.log('drawing achievements');
           try {
             if (document.querySelector(".arcade-sidebar-done")) {
 

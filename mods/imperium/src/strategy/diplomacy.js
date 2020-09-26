@@ -92,7 +92,7 @@
               $(divname).on('click', function() {
 
 	        if (!imperium_self.mayUnlockInterface()) {
-	          alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+	          salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
 	          return;
 	        }
 	        imperium_self.unlockInterface();

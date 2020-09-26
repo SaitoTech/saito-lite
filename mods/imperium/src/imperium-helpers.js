@@ -99,7 +99,7 @@
     this.game.over = 1;
   
     if (this.active_browser == 1) {
-      alert("The Game is Over!");
+      salert("The Game is Over!");
     }
   };
   

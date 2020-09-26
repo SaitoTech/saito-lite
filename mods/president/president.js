@@ -17,14 +17,14 @@ class President extends GameTemplate {
 
     this.app = app;
     this.name = "President";
-    this.description = 'BETA version of President / Asshole for the Saito Arcade.';
+    this.description = 'Play cards in singles or sets in increasing value. Last player starts when all are done. The first player who gets rid of their cards is the President. The last?';
     this.categories = "Games Arcade Entertainment";
 
     this.card_img_dir = '/president/img/cards';
     this.useHUD = 1;
 
     this.minPlayers = 2;
-    this.maxPlayers = 2;
+    this.maxPlayers = 4;
     this.interface = 1;
     this.boardgameWidth = 5100;
 
@@ -153,25 +153,14 @@ class President extends GameTemplate {
         this.game.queue.splice(qe, 1);
       }
 
-      if (mv[0] === "winner") {
-        this.updateStatus("Game Over: " + this.game.state.player_names[mv[1] - 1] + " wins!");
-        this.updateLog("Game Over: " + this.game.state.player_names[mv[1] - 1] + " wins!");
-        this.showSplash("<h1>Game Over: " + this.game.state.player_names[mv[1] - 1] + " wins!</h1>" + this.updateHTML);
-        this.game.winner = this.game.players[mv[1] - 1];
-        this.resignGame(this.game.id); //post to leaderboard - ignore 'resign'
-        this.saveGame(this.game.id);
-        return 0;
-      }
-
-
       if (mv[0] === "play") {
 
 	let player = parseInt(mv[1]);
 	let cards = JSON.parse(mv[2]);
+	let deck = this.returnDeck();
 	for (let i = 0; i < cards.length; i++) {
 	  this.game.state.played.push(cards[i]);
 	}
-console.log("setting LPTP: " + player);
 	this.game.state.last_player_to_play = player;
 	this.game.state.last_played = cards;
 
@@ -180,6 +169,13 @@ console.log("setting LPTP: " + player);
             this.removeCardFromHand(cards[i]);
           }
         }
+
+	let cards_played = "";
+	for (let i = 0; i < cards.length; i++) {
+	  if (i > 0) { cards_played += ", "; }
+	  cards_played += deck[cards[i]].name;
+        }
+	this.updateLog(this.returnPlayerName(player) + " plays " + cards_played);
 
         this.game.queue.splice(qe, 1);
         this.displayTable();
@@ -269,7 +265,6 @@ console.log("setting LPTP: " + player);
             this.game.players_info[i].passed = 0;
           }
 
-console.log("updating fpir: " + this.game.state.last_player_to_play);
 	  this.game.state.first_player_in_round = this.game.state.last_player_to_play;
 
         }
@@ -313,8 +308,6 @@ console.log("updating fpir: " + this.game.state.last_player_to_play);
 	//
 	let player_to_go = this.game.state.first_player_in_round;
 
-console.log("LPTP 1: " + this.game.state.last_player_to_play);
-console.log("LPTP 2: " + this.game.state.first_player_in_round);
         if (player_to_go == 0) {
 	  // we are at the start of a new round
 	  player_to_go = 1;
@@ -335,6 +328,8 @@ console.log("LPTP 2: " + this.game.state.first_player_in_round);
         this.game.players_info[player-1].passed = 1;
         this.game.queue.splice(qe, 1);
 
+	this.updateLog(this.returnPlayerName(player) + " passes");
+
       }
 
 
@@ -352,21 +347,68 @@ console.log("LPTP 2: " + this.game.state.first_player_in_round);
   }
 
 
-
+  returnPlayerName(player_num) {
+    return ("Player "+player_num);
+  }
 
 
   startNewRound() {
+
+    this.updateLog("shuffling the Deck and dealing new cards...");
 
     this.resetDeck(0);
 
     if (this.game.players.length == 2) {
       this.game.queue.push("round");
-      this.game.queue.push("cards\t1\t22");
-      this.game.queue.push("cards\t2\t22");
-      this.game.queue.push("DEAL\t1\t2\t22");
-      this.game.queue.push("DEAL\t1\t1\t22");
+      this.game.queue.push("cards\t1\t26");
+      this.game.queue.push("cards\t2\t26");
+      this.game.queue.push("DEAL\t1\t2\t26");
+      this.game.queue.push("DEAL\t1\t1\t26");
       this.game.queue.push("DECKENCRYPT\t1\t2");
       this.game.queue.push("DECKENCRYPT\t1\t1");
+      this.game.queue.push("DECKXOR\t1\t2");
+      this.game.queue.push("DECKXOR\t1\t1");
+      this.game.queue.push("DECK\t1\t" + JSON.stringify(this.returnDeck()));
+    }
+    if (this.game.players.length == 3) {
+      let num = this.rollDice(3);
+      let p1c = 17;
+      let p2c = 17;
+      let p3c = 17;
+      if (num == 1) { p1c++; }
+      if (num == 2) { p2c++; }
+      if (num == 3) { p3c++; }
+      this.game.queue.push("round");
+      this.game.queue.push("cards\t1\t"+(p1c));
+      this.game.queue.push("cards\t2\t"+(p2c));
+      this.game.queue.push("cards\t3\t"+(p3c));
+      this.game.queue.push("DEAL\t1\t3\t"+(p3c));
+      this.game.queue.push("DEAL\t1\t2\t"+(p2c));
+      this.game.queue.push("DEAL\t1\t1\t"+(p1c));
+      this.game.queue.push("DECKENCRYPT\t1\t3");
+      this.game.queue.push("DECKENCRYPT\t1\t2");
+      this.game.queue.push("DECKENCRYPT\t1\t1");
+      this.game.queue.push("DECKXOR\t1\t3");
+      this.game.queue.push("DECKXOR\t1\t2");
+      this.game.queue.push("DECKXOR\t1\t1");
+      this.game.queue.push("DECK\t1\t" + JSON.stringify(this.returnDeck()));
+    }
+    if (this.game.players.length == 4) {
+      this.game.queue.push("round");
+      this.game.queue.push("cards\t4\t26");
+      this.game.queue.push("cards\t3\t26");
+      this.game.queue.push("cards\t2\t26");
+      this.game.queue.push("cards\t1\t26");
+      this.game.queue.push("DEAL\t1\t4\t26");
+      this.game.queue.push("DEAL\t1\t3\t26");
+      this.game.queue.push("DEAL\t1\t2\t26");
+      this.game.queue.push("DEAL\t1\t1\t26");
+      this.game.queue.push("DECKENCRYPT\t1\t4");
+      this.game.queue.push("DECKENCRYPT\t1\t3");
+      this.game.queue.push("DECKENCRYPT\t1\t2");
+      this.game.queue.push("DECKENCRYPT\t1\t1");
+      this.game.queue.push("DECKXOR\t1\t4");
+      this.game.queue.push("DECKXOR\t1\t3");
       this.game.queue.push("DECKXOR\t1\t2");
       this.game.queue.push("DECKXOR\t1\t1");
       this.game.queue.push("DECK\t1\t" + JSON.stringify(this.returnDeck()));
@@ -490,84 +532,20 @@ alert("invalid move!");
     return card.name.substring(0, card.name.indexOf('.'));
 
   }
-/***
-  returnDeck() {
-
-    var deck = {};
-
-    deck['1'] = { name: "S1.png" }
-    deck['2'] = { name: "S2.png" }
-    deck['3'] = { name: "S3.png" }
-    deck['4'] = { name: "S4.png" }
-    deck['5'] = { name: "S5.png" }
-    deck['6'] = { name: "S6.png" }
-    deck['7'] = { name: "S7.png" }
-    deck['8'] = { name: "S8.png" }
-    deck['9'] = { name: "S9.png" }
-    deck['10'] = { name: "S10.png" }
-    deck['11'] = { name: "S11.png" }
-    deck['12'] = { name: "S12.png" }
-    deck['13'] = { name: "S13.png" }
-    deck['14'] = { name: "C1.png" }
-    deck['15'] = { name: "C2.png" }
-    deck['16'] = { name: "C3.png" }
-    deck['17'] = { name: "C4.png" }
-    deck['18'] = { name: "C5.png" }
-    deck['19'] = { name: "C6.png" }
-    deck['20'] = { name: "C7.png" }
-    deck['21'] = { name: "C8.png" }
-    deck['22'] = { name: "C9.png" }
-    deck['23'] = { name: "C10.png" }
-    deck['24'] = { name: "C11.png" }
-    deck['25'] = { name: "C12.png" }
-    deck['26'] = { name: "C13.png" }
-    deck['27'] = { name: "H1.png" }
-    deck['28'] = { name: "H2.png" }
-    deck['29'] = { name: "H3.png" }
-    deck['30'] = { name: "H4.png" }
-    deck['31'] = { name: "H5.png" }
-    deck['32'] = { name: "H6.png" }
-    deck['33'] = { name: "H7.png" }
-    deck['34'] = { name: "H8.png" }
-    deck['35'] = { name: "H9.png" }
-    deck['36'] = { name: "H10.png" }
-    deck['37'] = { name: "H11.png" }
-    deck['38'] = { name: "H12.png" }
-    deck['39'] = { name: "H13.png" }
-    deck['40'] = { name: "D1.png" }
-    deck['41'] = { name: "D2.png" }
-    deck['42'] = { name: "D3.png" }
-    deck['43'] = { name: "D4.png" }
-    deck['44'] = { name: "D5.png" }
-    deck['45'] = { name: "D6.png" }
-    deck['46'] = { name: "D7.png" }
-    deck['47'] = { name: "D8.png" }
-    deck['48'] = { name: "D9.png" }
-    deck['49'] = { name: "D10.png" }
-    deck['50'] = { name: "D11.png" }
-    deck['51'] = { name: "D12.png" }
-    deck['52'] = { name: "D13.png" }
-    //deck['53'] = { name: "J1.png" }
-    //deck['54'] = { name: "J2.png" }
-
-    return deck;
-
-  }
-***/
 
   returnDeck() {
 
     var deck = {};
 
-    deck['1'] = { name: "C3.png" }
-    deck['2'] = { name: "H3.png" }
-    deck['3'] = { name: "D3.png" }
-    deck['4'] = { name: "S3.png" }
-    deck['5'] = { name: "C4.png" }
-    deck['6'] = { name: "H4.png" }
-    deck['7'] = { name: "D4.png" }
-    deck['8'] = { name: "S4.png" }
-    deck['9'] = { name: "C5.png" }
+    deck['01'] = { name: "C3.png" }
+    deck['02'] = { name: "H3.png" }
+    deck['03'] = { name: "D3.png" }
+    deck['04'] = { name: "S3.png" }
+    deck['05'] = { name: "C4.png" }
+    deck['06'] = { name: "H4.png" }
+    deck['07'] = { name: "D4.png" }
+    deck['08'] = { name: "S4.png" }
+    deck['09'] = { name: "C5.png" }
     deck['10'] = { name: "H5.png" }
     deck['11'] = { name: "D5.png" }
     deck['12'] = { name: "S5.png" }
@@ -692,16 +670,7 @@ alert("invalid move!");
 
   returnGameOptionsHTML() {
 
-    return `
-            <label for="stake">Initial Stake:</label>
-            <select name="stake">
-              <option value="100">100</option>
-              <option value="500">500</option>
-              <option value="1000" selected="selected">1000</option>
-              <option value="5000" >5000</option>
-              <option value="10000">10000</option>
-      </select>
-    `;
+    return '';
 
   }
 
@@ -808,7 +777,6 @@ alert("invalid move!");
     `
     this.updateStatus(html);
     this.addShowCardEvents(function(card) {
-alert("selected: " + card);
     });
 
   }

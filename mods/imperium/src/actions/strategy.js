@@ -5,8 +5,6 @@
   	text : "Force a player who has already picked a strategy card to select another. They select before you do" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 
-	  alert("Force player to pick a new strategy card!");
-
 	  // pick the player
 
 	  // pick the strategy card
@@ -54,7 +52,6 @@
         }
 
     });
-
 
 
 

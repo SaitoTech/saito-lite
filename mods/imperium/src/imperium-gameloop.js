@@ -18,7 +18,7 @@
 
       if (mv[0] === "gameover") {
   	if (imperium_self.browser_active == 1) {
-  	  alert("Game Over");
+  	  salert("Game Over");
   	}
   	imperium_self.game.over = 1;
   	imperium_self.saveGame(imperium_self.game.id);
@@ -111,6 +111,7 @@
 	    for (let i = 0; i < this.game.confirms_players.length; i++) {
 	      for (let z = 0; z < still_to_move.length; z++) {
 		if (still_to_move[z] === this.game.confirms_players[i]) {
+console.log("resolve from: " + still_to_move[z]);
 		  still_to_move.splice(z, 1);
 	        }
 	      }
@@ -477,8 +478,6 @@ console.log("interface is locked...");
 	    }
 	  }
 	}
-
-console.log("RECEIVED MOVE!");
 
 	if (strategy_card_player != -1) {
 	  if (!imperium_self.game.players_info[strategy_card_player-1].strategy_cards_played.includes(card)) {

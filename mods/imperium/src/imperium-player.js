@@ -806,7 +806,7 @@ playerAcknowledgeNotice(msg, mycallback) {
 
         if (total_targetted_units > 0) {
           if (!targetted_units.includes(selected_unit.type)) {
-            alert("You must first assign hits to the required unit types");
+            salert("You must first assign hits to the required unit types");
             return;
           } else {
             total_targetted_units--;
@@ -938,7 +938,7 @@ playerDestroyUnits(player, total, sector, capital = 0) {
 
     if (total_targetted_units > 0) {
       if (!targetted_units.includes(selected_unit.type)) {
-        alert("You must first destroy the required unit types");
+        salert("You must first destroy the required unit types");
         return;
       } else {
         total_targetted_units--;
@@ -1022,7 +1022,7 @@ playerDestroyShips(player, total, sector, capital = 0) {
 
     if (total_targetted_units > 0) {
       if (!targetted_units.includes(selected_unit.type)) {
-        alert("You must first destroy the required unit types");
+        salert("You must first destroy the required unit types");
         return;
       } else {
         total_targetted_units--;
@@ -2049,7 +2049,7 @@ playerContinueTurn(player, sector) {
               imperium_self.playerInvadePlanet(player, sector);
             });
           } else {
-            alert("The first conquest of New Byzantium requires spending 6 influence, which you lack.");
+            salert("The first conquest of New Byzantium requires spending 6 influence, which you lack.");
             return;
           }
           return;
@@ -2136,7 +2136,7 @@ playerBuyTokens(stage = 0, resolve = 1) {
   $('.buildchoice').on('click', function () {
 
     if (!imperium_self.mayUnlockInterface()) {
-      alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+      salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
     }
     imperium_self.unlockInterface();
@@ -2192,7 +2192,7 @@ playerBuyTokens(stage = 0, resolve = 1) {
 
     let return_to_zero = 0;
     if (total_cost > imperium_self.returnAvailableInfluence(imperium_self.game.player)) {
-      alert("You cannot buy more tokens than you have influence available to pay");
+      salert("You cannot buy more tokens than you have influence available to pay");
       return_to_zero = 1;
     }
     if (return_to_zero == 1) {
@@ -2233,7 +2233,7 @@ playerBuyActionCards(stage = 0, resolve = 1) {
   $('.buildchoice').on('click', function () {
 
     if (!imperium_self.mayUnlockInterface()) {
-      alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+      salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
     }
     imperium_self.unlockInterface();
@@ -2286,7 +2286,7 @@ playerResearchTechnology(mycallback) {
   $('.option').on('click', function () {
 
     if (!imperium_self.mayUnlockInterface()) {
-      alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+      salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
     }
     imperium_self.unlockInterface();
@@ -2351,7 +2351,7 @@ playerScoreActionStageVictoryPoints(imperium_self, mycallback, stage = 0) {
   $('.option').on('click', function () {
 
     if (!imperium_self.mayUnlockInterface()) {
-      alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+      salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
     }
     imperium_self.unlockInterface();
@@ -2450,7 +2450,7 @@ playerScoreSecretObjective(imperium_self, mycallback, stage = 0) {
   $('.option').on('click', function () {
 
     if (!imperium_self.mayUnlockInterface()) {
-      alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+      salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
     }
     imperium_self.unlockInterface();
@@ -2521,7 +2521,7 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
   $('.option').on('click', function () {
 
     if (!imperium_self.mayUnlockInterface()) {
-      alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+      salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
     }
     imperium_self.unlockInterface();
@@ -2578,7 +2578,7 @@ playerBuildInfrastructure(mycallback, stage = 1) {
   $('.buildchoice').on('click', function () {
 
     if (!imperium_self.mayUnlockInterface()) {
-      alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+      salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
     }
     imperium_self.unlockInterface();
@@ -2710,7 +2710,7 @@ playerProduceUnits(sector, production_limit = 0, cost_limit = 0, stage = 0, warf
   $('.buildchoice').on('click', function () {
 
     if (!imperium_self.mayUnlockInterface()) {
-      alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+      salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
     }
     imperium_self.unlockInterface();
@@ -2752,7 +2752,7 @@ playerProduceUnits(sector, production_limit = 0, cost_limit = 0, stage = 0, warf
           imperium_self.endTurn();
           return;
         } else {
-          alert("failure to find appropriate influence");
+          salert("failure to find appropriate influence");
         }
       });
 
@@ -2781,51 +2781,51 @@ playerProduceUnits(sector, production_limit = 0, cost_limit = 0, stage = 0, warf
     //
     let return_to_zero = 0;
     if (id == "fighter" && (player_build.fighters + player_fleet.fighters) > imperium_self.game.players_info[imperium_self.game.player - 1].fighter_limit) {
-      alert("You can only have " + imperium_self.game.players_info[imperium_self.game.player - 1].fighter_limit + " fighters on the board");
+      salert("You can only have " + imperium_self.game.players_info[imperium_self.game.player - 1].fighter_limit + " fighters on the board");
       return_to_zero = 1;
     }
     if (id == "infantry" && (player_build.infantry + player_fleet.infantry) > imperium_self.game.players_info[imperium_self.game.player - 1].infantry_limit) {
-      alert("You can only have " + imperium_self.game.players_info[imperium_self.game.player - 1].infantry_limit + " infantry on the board");
+      salert("You can only have " + imperium_self.game.players_info[imperium_self.game.player - 1].infantry_limit + " infantry on the board");
       return_to_zero = 1;
     }
     if (id == "destroyer" && (player_build.destroyers + player_fleet.destroyers) > imperium_self.game.players_info[imperium_self.game.player - 1].destroyer_limit) {
-      alert("You can only have " + imperium_self.game.players_info[imperium_self.game.player - 1].destroyer_limit + " destroyers on the board");
+      salert("You can only have " + imperium_self.game.players_info[imperium_self.game.player - 1].destroyer_limit + " destroyers on the board");
       return_to_zero = 1;
     }
     if (id == "carrier" && (player_build.carriers + player_fleet.carriers) > imperium_self.game.players_info[imperium_self.game.player - 1].carrier_limit) {
-      alert("You can only have " + imperium_self.game.players_info[imperium_self.game.player - 1].carrier_limit + " carriers on the board");
+      salert("You can only have " + imperium_self.game.players_info[imperium_self.game.player - 1].carrier_limit + " carriers on the board");
       return_to_zero = 1;
     }
     if (id == "cruiser" && (player_build.cruisers + player_fleet.cruisers) > imperium_self.game.players_info[imperium_self.game.player - 1].cruiser_limit) {
-      alert("You can only have " + imperium_self.game.players_info[imperium_self.game.player - 1].cruiser_limit + " cruisers on the board");
+      salert("You can only have " + imperium_self.game.players_info[imperium_self.game.player - 1].cruiser_limit + " cruisers on the board");
       return_to_zero = 1;
     }
     if (id == "dreadnaught" && (player_build.dreadnaughts + player_fleet.dreadnaughts) > imperium_self.game.players_info[imperium_self.game.player - 1].dreadnaught_limit) {
-      alert("You can only have " + imperium_self.game.players_info[imperium_self.game.player - 1].dreadnaught_limit + " dreadnaughts on the board");
+      salert("You can only have " + imperium_self.game.players_info[imperium_self.game.player - 1].dreadnaught_limit + " dreadnaughts on the board");
       return_to_zero = 1;
     }
     if (id == "flagship" && (player_build.flagships + player_fleet.flagships) > imperium_self.game.players_info[imperium_self.game.player - 1].flagships_limit) {
-      alert("You can only have " + imperium_self.game.players_info[imperium_self.game.player - 1].flagship_limit + " flagships on the board");
+      salert("You can only have " + imperium_self.game.players_info[imperium_self.game.player - 1].flagship_limit + " flagships on the board");
       return_to_zero = 1;
     }
     if (id == "warsun" && (player_build.warsuns + player_fleet.warsuns) > imperium_self.game.players_info[imperium_self.game.player - 1].warsun_limit) {
-      alert("You can only have " + imperium_self.game.players_info[imperium_self.game.player - 1].warsun_limit + " warsuns on the board");
+      salert("You can only have " + imperium_self.game.players_info[imperium_self.game.player - 1].warsun_limit + " warsuns on the board");
       return_to_zero = 1;
     }
     if (calculated_total_cost > imperium_self.returnAvailableResources(imperium_self.game.player)) {
-      alert("You cannot build more than you have available to pay for it.");
+      salert("You cannot build more than you have available to pay for it.");
       return_to_zero = 1;
     }
     if (production_limit < stuff_to_build.length && production_limit > 0) {
-      alert("You cannot build more units than your production limit");
+      salert("You cannot build more units than your production limit");
       return_to_zero = 1;
     }
     if (cost_limit < calculated_total_cost && cost_limit > 0) {
-      alert("You cannot build units that cost more than your cost limit");
+      salert("You cannot build units that cost more than your cost limit");
       return_to_zero = 1;
     }
     if ((stuff_to_build.length + 1) > calculated_production_limit) {
-      alert("You cannot build more units than your production limit");
+      salert("You cannot build more units than your production limit");
       return_to_zero = 1;
     }
     if (return_to_zero == 1) {
@@ -3223,7 +3223,7 @@ playerSelectPlanet(mycallback, mode = 0) {
         }
       }
       if (exist_controlled_planets == 0) {
-        alert("Invalid Choice: you do not control planets in that sector");
+        salert("Invalid Choice: you do not control planets in that sector");
         return;
       }
     }
@@ -3329,7 +3329,7 @@ playerSelectInfluence(cost, mycallback) {
     if (cost <= selected_cost) {
 
       if (!imperium_self.mayUnlockInterface()) {
-        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+        salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
         return;
       }
       imperium_self.unlockInterface();
@@ -3383,7 +3383,7 @@ playerSelectStrategyAndCommandTokens(cost, mycallback) {
 
     if (cost <= selected_cost) { 
       if (!imperium_self.mayUnlockInterface()) {
-        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+        salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
         return;
       }
       imperium_self.unlockInterface();
@@ -3461,7 +3461,7 @@ playerSelectResources(cost, mycallback) {
     if (cost <= selected_cost) { 
 
       if (!imperium_self.mayUnlockInterface()) {
-        alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+        salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
         return;
       }
       imperium_self.unlockInterface();
@@ -3933,7 +3933,7 @@ console.log("HERE: " + JSON.stringify(obj.ships_and_sectors));
       // clear the list to start again
       //
       if (id == "clear") {
-        alert("To change movement options, please reload!");
+        salert("To change movement options, please reload!");
 	window.location.reload(true);
         return;
       }
@@ -4317,7 +4317,7 @@ playerSelectInfantryToLand(sector) {
     // clear the list to start again
     //
     if (id == "clear") {
-      alert("To change movement options, just reload!");
+      salert("To change movement options, just reload!");
       window.location.reload(true);
     }
 
@@ -4507,13 +4507,13 @@ playerInvadePlanet(player, sector) {
       if (action2 == "invasion") {
 
         if (source == "planet") {
-          if (space_transport_available <= 0) { alert("Invalid Choice! No space transport available!"); return; }
+          if (space_transport_available <= 0) { salert("Invalid Choice! No space transport available!"); return; }
           forces_on_planets[source_idx]--;
         } else {
           forces_on_ships[source_idx]--;
         }
         if (counter == 0) {
-          alert("You cannot attack with forces you do not have available."); return;
+          salert("You cannot attack with forces you do not have available."); return;
         }
 
         let unitjson = JSON.stringify(imperium_self.returnUnit("infantry", imperium_self.game.player));
@@ -4575,7 +4575,7 @@ playerActivateSystem() {
     let pid = $(this).attr("id");
 
     if (imperium_self.canPlayerActivateSystem(pid) == 0) {
-      alert("You cannot activate that system.");
+      salert("You cannot activate that system.");
     } else {
 
       let sys = imperium_self.returnSectorAndPlanets(pid);
@@ -4835,7 +4835,7 @@ playerSelectPlayerWithFilter(msg, filter_func, mycallback = null, cancel_func = 
   $('.textchoice').on('click', function () {
 
     if (!imperium_self.mayUnlockInterface()) {
-      alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+      salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
     }
     imperium_self.unlockInterface();
@@ -4893,7 +4893,7 @@ playerSelectSectorWithFilter(msg, filter_func, mycallback = null, cancel_func = 
   $('.textchoice').on('click', function () {
 
     if (!imperium_self.mayUnlockInterface()) {
-      alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+      salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
     }
     imperium_self.unlockInterface();
@@ -4951,7 +4951,7 @@ playerSelectChoice(msg, choices, elect = "other", mycallback = null) {
   $('.textchoice').on('click', function () {
 
     if (!imperium_self.mayUnlockInterface()) {
-      alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+      salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
     }
     imperium_self.unlockInterface();
@@ -5013,7 +5013,7 @@ playerSelectPlanetWithFilter(msg, filter_func, mycallback = null, cancel_func = 
   $('.textchoice').on('click', function () {
 
     if (!imperium_self.mayUnlockInterface()) {
-      alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+      salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
     }
     imperium_self.unlockInterface();
@@ -5106,7 +5106,7 @@ playerSelectUnitInSectorWithFilter(msg, sector, filter_func, mycallback = null, 
   $('.textchoice').on('click', function () {
 
     if (!imperium_self.mayUnlockInterface()) {
-      alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+      salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
     }
     imperium_self.unlockInterface();
@@ -5209,7 +5209,7 @@ playerSelectUnitWithFilter(msg, filter_func, mycallback = null, cancel_func = nu
   $('.textchoice').on('click', function () {
 
     if (!imperium_self.mayUnlockInterface()) {
-      alert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
+      salert("The game engine is currently processing moves related to another player's move. Please wait a few seconds and reload your browser.");
       return;
     }
     imperium_self.unlockInterface();

@@ -1,4 +1,3 @@
-/****
 
   this.importAgendaCard('archived-secret', {
   	name : "Archived Secret" ,
@@ -79,7 +78,6 @@
 	},
 	onPass : function(imperium_self, winning_choice) {
 
-alert("WINNING CHOICE: " + winning_choice);
 	  imperium_self.game.state.mutiny = 1;
 
           if (winning_choice === "for") {
@@ -820,7 +818,5 @@ imperium_self.updateLog("Ixthian Artifact rolls " + roll);
   });
 
 
-
-***/
 
 

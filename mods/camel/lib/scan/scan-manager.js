@@ -10,6 +10,19 @@ module.exports = ScanManager = {
 
   },
 
+  //
+  // test QR Code for scanning
+  //
+  generateQRCode(data) {
+    try {
+      const QRCode = require('../../../../lib/helpers/qrcode');
+      return new QRCode(
+        document.getElementById("qrcode"),
+        data
+      );
+    } catch (err) {}
+  },
+
   attachEvents(app, data) {
 
     let scanner_self = this;
@@ -22,23 +35,7 @@ module.exports = ScanManager = {
 
   },
 
-
-  generateQRCode(data) {
-    try {
-      const QRCode = require('../../../../lib/helpers/qrcode');
-      return new QRCode(
-        document.getElementById("qrcode"),
-        data
-      );
-    } catch (err) {}
-  },
-
-
-  //
-  // handle scanned message
-  //
   handleDecodedMessage(msg) {
-alert("Handing a Decoded Scanner!");
     try {
       document.body.innerHTML = `This is the data in the QR Code: <p></p> ${msg} <p></p>In a production system, this could be a signed transaction which the receiver could broadcast onto the network, or sign themselves and then return to the originator.`;
     } catch (err) {
