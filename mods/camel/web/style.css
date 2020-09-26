@@ -963,15 +963,13 @@ span.rewards-row-name {
   margin: 2em 1em 0;
 }
 
-@media only screen and (max-width: 600px) {
-  #game-invite-controls div {
-    grid-template-columns: 1fr;
-    grid-gap: 5px;
-    margin: 0 0 1em 0;
-  }
-}
+@media only screen and (max-width: 600px) {}
 
 /* camel */
+
+.button {
+  text-align: center;
+}
 
 .product-table {
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -993,4 +991,95 @@ span.rewards-row-name {
 .fullview_product:hover, .edit_product:hover, .delete_product:hover, .add_cert:hover, .inquire_product:hover, .grid-action:hover {
   color: #FFF;
   background: linear-gradient(-45deg, #537 50%, #324 100%);
+}
+
+input[type=text], input[type=number], input[type=password], input[type=date] {
+  border-bottom: 1px solid var(--saito-red);
+}
+
+textarea, .medium-editor-element {
+  border: 1px solid var(--saito-red);
+  padding: 3px;
+  font-size: 1.2em;
+}
+
+.main-form-buttons {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-around;
+  max-height: 3em;
+}
+
+.powered-by {
+  width: 120px;
+  height: 60px;
+  padding: 20px 0 0 0;
+  position: fixed;
+  bottom: 5px;
+  left: 5px;
+}
+
+.powered-by::after {
+  content: "Built On";
+  color: #fff;
+  display: block;
+}
+
+.scan-result {
+  font-size: 20em;
+  margin: auto;
+}
+
+.main {
+  max-width: 1200px;
+  margin: 5em auto;
+  padding: 0 1em;
+}
+
+.product-table>div {
+  margin-top: 1em;
+}
+
+body {
+  overflow: hidden;
+}
+
+@media only screen and (max-width: 800px) {
+  .main {
+    max-width: 1200px;
+    margin: 3em auto;
+    padding: 0 1em;
+}
+  .grid-2 {
+    grid-template-columns: 1fr;
+    grid-gap: 3px;
+  }
+  .grid-2 div {
+    padding: 0;
+  }
+  .main-form-buttons, .flex-around {
+    display: flex;
+    flex-flow: column;
+    max-height: 3em;
+  }
+  .grid-buttons {
+    grid-column: 1 / span 4;
+    display: flex;
+    justify-content: space-evenly;
+    flex-flow: wrap;
+    border-bottom: 1px solid #8888;
+    padding: 5px 0;
+    margin-bottom: 1em;
+  }
+  .scan-result {
+    font-size: 60vw;
+}
+.grid-4 div:nth-child(2n-1), .grid-2 div:nth-child(2n-1) {
+  padding: 0; 
+  line-height: 28x; 
+}
+.grid-2-columns {
+  grid-gap: 3px;
+  margin: 0;
+}
 }

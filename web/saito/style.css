@@ -420,6 +420,13 @@ fieldset {
   margin: 0 0 1em 0;
 }
 
+.grid-4-columns {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: auto auto auto auto;
+  margin: 0 0 1em 0;
+}
+
 .grid-2 div, .grid-4 div {
   padding: 0.5em 0;
 }

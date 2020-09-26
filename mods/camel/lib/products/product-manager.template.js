@@ -19,10 +19,12 @@ module.exports = ProductManagerTemplate = () => {
 
     <div id="product-table" class="product-table" style="display:none"></div>
 
-    <p><hr /></p>
+    <hr />
+    <br />
 
     <div class="flex-around">
        <div class="new-product-btn button">New Product</div>
+       <div class="check-btn button">Check Barcode</div>
     </div>
     
   </div>

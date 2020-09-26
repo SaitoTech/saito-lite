@@ -114,6 +114,26 @@ class QRScanner extends ModTemplate {
 
   }
 
+  startEmbeddedScanner(el, mycallback=null) {
+
+    if (this.app.BROWSER == 0) { return; }
+    if (!document) { return; }
+    if (document.querySelector('.qrscanner-container')) { return; }
+
+    this.scanner_callback = null;
+    if (mycallback) { this.scanner_callback = mycallback; }
+
+    el.innerHTML = this.returnScannerHTML();
+
+    let scanner_self = this;
+
+    scanner_self.start(
+      document.getElementById("qr-video"),
+      document.getElementById("qr-canvas")
+    );
+
+  }
+
 
   startQRDecoder() {
 
@@ -134,7 +154,7 @@ class QRScanner extends ModTemplate {
         <div id="qr-target" class="qr-target"></div>
         <div id="scanline" class="scanline"></div>
         <div class="video-container">
-          <video playsinline autoplay id="qr-video" style="height: 100vh;width: 100vw;"></video>
+          <video playsinline autoplay id="qr-video" class="qr-video"></video>
         </div>
         <canvas style="display: none" id="qr-canvas"></canvas>
       </div>
