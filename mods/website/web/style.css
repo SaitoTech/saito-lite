@@ -602,16 +602,16 @@ img.banner-logo {
 }
 
 .supporter-list {
-  padding: 1em;
+  padding: 0 2em;
   background: #fff;
-  column-width: 25vw;
+  column-width: 35vw;
   column-count: auto;
   column-fill: balance;
   text-align: center;
 }
 
 .supporter-list img {
-  max-width: 200px;
+  max-width: 300px;
   width: 25vw;
   margin: 1em;
 }
