@@ -2,6 +2,7 @@ var saito = require('../../lib/saito/saito');
 var ModTemplate = require('../../lib/templates/modtemplate');
 const Header = require('../../lib/ui/header/header');
 const Data = require('./lib/data');
+const elParser = require('../../lib/helpers/el_parser');
 
 
 class Website extends ModTemplate {
@@ -44,6 +45,17 @@ class Website extends ModTemplate {
     this.app.modules.respondTo("chat-manager").forEach(mod => {
       mod.respondTo('chat-manager').render(this.app, this);
     });
+
+    var html = `
+    <a class="header-icon-fullscreen tip" target="_blank" href="https://org.saito.tech/blog">
+    <i id="blog" class="header-icon icon-med fas fa-rss-square">
+    <div class="redicon"></div></i>
+    <div class="tiptext headertip">Saito Blog</div>
+    </a>
+    `;
+    var iconlist = document.querySelector('.header-icon-links');
+    iconlist.insertBefore(elParser(html), iconlist.firstChild);
+    
   }
 
   onConfirmation(blk, tx, conf, app) {

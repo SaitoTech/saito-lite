@@ -42,6 +42,7 @@ h2, h5 {
   display: block;
   height: 900px;
   height: 100%;
+  overflow: hidden;
 }
 
 .site-main {
@@ -152,6 +153,7 @@ img.banner-logo {
   grid-gap: 2px;
   grid-template-columns: 20em repeat(5, auto);
   padding: 1em;
+  overflow: auto;
 }
 
 .compare-grid>div {
@@ -597,6 +599,21 @@ img.banner-logo {
 .flowplayer video {
   box-shadow: 0 0 5px var(--saito-skyline-grey);
   border: 1px solid var(--saito-skyline-grey);
+}
+
+.supporter-list {
+  padding: 1em;
+  background: #fff;
+  column-width: 25vw;
+  column-count: auto;
+  column-fill: balance;
+  text-align: center;
+}
+
+.supporter-list img {
+  max-width: 200px;
+  width: 25vw;
+  margin: 1em;
 }
 
 .happening {
@@ -1047,6 +1064,10 @@ button:focus {
     }
     section.roadmap {
       background: linear-gradient(0deg, #DDD 50%, #CCC 100%);
+    }
+
+    section.supporters {
+      padding: 1em 2em;
     }
     .join-us {
       overflow: auto;
