@@ -576,6 +576,12 @@ try {
     let player = "ussr"; if (this.game.player == 2) { player = "us"; }
 
     //
+    // avoid China bug on reshuffle
+    //
+    this.game.deck[0].cards["china"] = this.returnChinaCard();
+
+
+    //
     // copy for reversion
     //
     try {
@@ -5959,12 +5965,14 @@ this.startClock();
     //
     if (this.game.state.round > 1) {
       for (let i = 0 ; i < this.game.deck[0].hand.length; i++) {
-        if (this.game.deck[0].cards[this.game.deck[0].hand[i]].scoring == 1) {
-          let player = "us";
-          let winner = "ussr";
-          if (this.game.player == 1) { player = "ussr"; winner = "us"; this.game.winner = 2; }
-          this.endGame(winner, "opponent held scoring card");
-        }
+        if (this.game.deck[0].hand[i] != "china") {
+          if (this.game.deck[0].cards[this.game.deck[0].hand[i]].scoring == 1) {
+            let player = "us";
+            let winner = "ussr";
+            if (this.game.player == 1) { player = "ussr"; winner = "us"; this.game.winner = 2; }
+            this.endGame(winner, "opponent held scoring card");
+          }
+	}
       }
     }
 
