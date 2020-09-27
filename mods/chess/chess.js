@@ -227,6 +227,7 @@ class Chessgame extends GameTemplate {
       if (c) {
 	this.resignGame(this.game.id);
 	alert("You have resigned the game...");
+	window.location.href = '/arcade';
 	return;
       }
     }
