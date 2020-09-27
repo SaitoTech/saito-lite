@@ -63,6 +63,7 @@ class Relay extends ModTemplate {
     for (let i = 0; i < this.app.network.peers.length; i++) {
       if (this.app.network.peers[i].peer) {
       if (this.app.network.peers[i].peer.modules) {
+      if (this.app.network.peers[i].peer.modules.length > 0) {
       if (this.app.network.peers[i].peer.modules.includes(this.name)) {
         let peer = this.app.network.peers[i];
 
@@ -92,6 +93,7 @@ class Relay extends ModTemplate {
         peer.sendRequestWithCallback("relay peer message", tx2.transaction, function(res) {
         });
 
+      }
       }
       }
       }
