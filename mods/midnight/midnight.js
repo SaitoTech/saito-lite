@@ -11,7 +11,7 @@ class Midnight extends GameTemplate {
 
     super(app);
 
-    this.name            = "Midnight Rogue";
+    this.name            = "Midnight";
     this.slug            = "midnight";
     this.description     = "Experimental Interactive Fiction demo";
     this.categories      = "Arcade Games Entertainment";
@@ -59,7 +59,6 @@ class Midnight extends GameTemplate {
   handleGameLoop(msg=null) {
 
     let midnight_self = this;
-
 
     ///////////
     // QUEUE //
@@ -128,7 +127,8 @@ console.log("QUEUE: " + JSON.stringify(this.game.queue));
     $('.textchoice').on('click', function() {
 
       let action = $(this).attr("id");
-      alert("HERE ---> " + book[page].choices[action].command);
+
+      alert(book[page].choices[action].command);
 
       midnight_self.addMove(book[page].choices[action].command);
       midnight_self.endTurn();

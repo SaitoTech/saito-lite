@@ -1981,9 +1981,9 @@ console.log("CARD: " + card);
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["asknot","tehran","saltnegotiations","lonegunman", "manwhosavedtheworld", "centralamerica", "europe", "asia"];
+              this.game.deck[0].hand = ["missileenvy","tehran","saltnegotiations","lonegunman", "manwhosavedtheworld", "centralamerica", "europe", "asia"];
             } else {
-              this.game.deck[0].hand = ["grainsales", "fiveyearplan", "wwby", "mideast", "redscare", "cubanmissile","china","vietnamrevolts"];
+              this.game.deck[0].hand = ["grainsales", "brezhnev", "wwby", "mideast", "opec", "cubanmissile","china","vietnamrevolts"];
             }
           }
 
@@ -8809,12 +8809,12 @@ console.log("card: " + card);
 
           let card = this.game.deck[0].cards[available_cards[i]];
 
-          if (card.ops == selected_ops) {
+          if (this.modifyOps(card.ops) == selected_ops) {
 	    multiple_cards = 1;
 	  }
 
-          if (card.ops > selected_ops) {
-            selected_ops  = card.ops;
+          if (this.modifyOps(card.ops) > selected_ops) {
+            selected_ops  = this.modifyOps(card.ops);
             selected_card = available_cards[i];
             multiple_cards = 0;
           }
@@ -8836,7 +8836,7 @@ console.log("card: " + card);
           //
           let user_message = "<span>Select card to give opponent:</span><ul>";
           for (let i = 0; i < available_cards.length; i++) {
-            if (this.game.deck[0].cards[available_cards[i]].ops == selected_ops && this.game.deck[0].hand[i] != "china") {
+            if (this.modifyOps(this.game.deck[0].cards[available_cards[i]].ops) == selected_ops && this.game.deck[0].hand[i] != "china") {
               user_message += '<li class="card showcard" id="'+available_cards[i]+'">'+this.game.deck[0].cards[available_cards[i]].name+'</li>';
             }
           }

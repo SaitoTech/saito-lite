@@ -217,9 +217,19 @@ class Chessgame extends GameTemplate {
 
   attachEvents() {
 
+    let resign_icon = document.getElementById('resign_icon');
     let move_accept = document.getElementById('move_accept');
     let move_reject = document.getElementById('move_reject');
     if (!move_accept) return;
+
+    resign_icon.onclick = () => {
+      let c = confirm("Do you really want to resign?");
+      if (c) {
+	this.resignGame(this.game.id);
+	alert("You have resigned the game...");
+	return;
+      }
+    }
 
     move_accept.onclick = () => {
       console.log('send move transaction and wait for reply.');
