@@ -578,7 +578,9 @@ try {
     //
     // avoid China bug on reshuffle
     //
-    this.game.deck[0].cards["china"] = this.returnChinaCard();
+    if (this.game.deck[0]) {
+      this.game.deck[0].cards["china"] = this.returnChinaCard();
+    }
 
 
     //
