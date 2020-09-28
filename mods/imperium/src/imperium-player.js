@@ -2213,7 +2213,7 @@ playerBuyTokens(stage = 0, resolve = 1) {
 
 
 
-playerBuyActionCards(stage = 0, resolve = 1) {
+ playerBuyActionCards(stage = 0, resolve = 1) {
 
   let imperium_self = this;
 
@@ -2247,12 +2247,14 @@ playerBuyActionCards(stage = 0, resolve = 1) {
       imperium_self.addMove("DEAL\t2\t" + imperium_self.game.player + "\t2");
       imperium_self.addMove("expend\t" + imperium_self.game.player + "\tstrategy\t1");
       imperium_self.endTurn();
+      imperium_self.updateStatus("submitted...");
       return;
 
     } else {
 
       imperium_self.addMove("resolve\tstrategy\t1\t" + imperium_self.app.wallet.returnPublicKey());
       imperium_self.endTurn();
+      imperium_self.updateStatus("submitted...");
       return;
 
     }
@@ -2553,7 +2555,7 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
 
 
 
-playerBuildInfrastructure(mycallback, stage = 1) {
+ playerBuildInfrastructure(mycallback, stage = 1) {
 
   let imperium_self = this;
 
@@ -2582,6 +2584,7 @@ playerBuildInfrastructure(mycallback, stage = 1) {
       return;
     }
     imperium_self.unlockInterface();
+    $('.buildchoice').off();
 
     let id = $(this).attr("id");
 
@@ -2622,7 +2625,7 @@ playerBuildInfrastructure(mycallback, stage = 1) {
 }
 
 
-playerProduceUnits(sector, production_limit = 0, cost_limit = 0, stage = 0, warfare = 0) {
+ playerProduceUnits(sector, production_limit = 0, cost_limit = 0, stage = 0, warfare = 0) {
 
   let imperium_self = this;
 
@@ -2714,6 +2717,7 @@ playerProduceUnits(sector, production_limit = 0, cost_limit = 0, stage = 0, warf
       return;
     }
     imperium_self.unlockInterface();
+    $('.buildchoice').off();
 
 
     let id = $(this).attr("id");
@@ -3333,6 +3337,7 @@ playerSelectInfluence(cost, mycallback) {
         return;
       }
       imperium_self.unlockInterface();
+      $('.cardchoice , .textchoice').off();
 
       mycallback(1);
     }
@@ -3387,6 +3392,7 @@ playerSelectStrategyAndCommandTokens(cost, mycallback) {
         return;
       }
       imperium_self.unlockInterface();
+      $('.textchoice').off();
       mycallback(1); 
     }
 
@@ -3465,6 +3471,7 @@ playerSelectResources(cost, mycallback) {
         return;
       }
       imperium_self.unlockInterface();
+      $('.cardchoice , .textchoice').off();
 
       mycallback(1); 
 
