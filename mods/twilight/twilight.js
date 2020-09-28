@@ -576,10 +576,13 @@ try {
     let player = "ussr"; if (this.game.player == 2) { player = "us"; }
 
     //
-    // avoid China bug on reshuffle
+    // avoid China bug on reshuffle - sept 27
     //
-    this.game.deck[0].cards["china"] = this.returnChinaCard();
-
+    if (this.game.deck[0]) {
+      if (this.game.deck[0].cards) {
+        this.game.deck[0].cards["china"] = this.returnChinaCard();
+      }
+    }
 
     //
     // copy for reversion
