@@ -578,11 +578,14 @@ try {
     //
     // avoid China bug on reshuffle - sept 27
     //
+    try {
     if (this.game.deck[0]) {
       if (this.game.deck[0].cards) {
         this.game.deck[0].cards["china"] = this.returnChinaCard();
       }
     }
+    } catch (err) {}
+
 
     //
     // copy for reversion
