@@ -26,7 +26,7 @@ class Arcade extends ModTemplate {
     this.affix_callbacks_to = [];
     this.games = [];
     this.observer = [];
-    this.old_game_removal_delay = 3000000;
+    this.old_game_removal_delay = 2000000;
     this.initialization_timer = null;
     this.viewing_arcade_initialization_page = 0;
 
