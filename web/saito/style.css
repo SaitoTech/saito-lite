@@ -101,6 +101,7 @@ body {
   font-family: visuelt-light;
   scrollbar-width: thin;
   scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+  overflow: hidden;
 }
 
 ::-webkit-scrollbar {
