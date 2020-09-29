@@ -26,6 +26,7 @@ class Arcade extends ModTemplate {
     this.affix_callbacks_to = [];
     this.games = [];
     this.observer = [];
+    this.old_game_removal_delay = 3000000;
     this.initialization_timer = null;
     this.viewing_arcade_initialization_page = 0;
 
@@ -512,7 +513,7 @@ class Arcade extends ModTemplate {
     for (let i = 0; i < this.games.length; i++) {
       let gamets = parseInt(this.games[i].transaction.ts);
       let timepassed = (new Date().getTime()) - gamets;
-      if (timepassed > 100000) {
+      if (timepassed > this.old_game_removal_delay) {
 	this.games.splice(i, 1);
         removed_old_games = 1;
 	i--;
