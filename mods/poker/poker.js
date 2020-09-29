@@ -247,6 +247,7 @@ class Poker extends GameTemplate {
 
     this.game.state.turn = 0;
     this.game.state.round++;
+    console.log("Round: "+ this.game.state.round);
 
     this.game.state.big_blind_player--;
     this.game.state.small_blind_player--;
@@ -326,6 +327,11 @@ class Poker extends GameTemplate {
    
 
     this.updateLog("New Round...");
+    this.updateLog("Round: "+(this.game.state.round));
+      //Flavor Round counters
+    //this.updateLog("Round: "+(this.game.state.round) +". FIGHT!");
+    //this.updateLog("Heaven or Hell. Duel: "+(this.game.state.round) +". Let's Rock");
+    //this.updateLog("The wheel of fate is turning. Rebel: "+(this.game.state.round) +". Action");
     document.querySelectorAll('.plog').forEach(el => {
       el.innerHTML = "";
     });
@@ -717,7 +723,7 @@ class Poker extends GameTemplate {
         //
         // update game state
         //
-        this.game.state.round++;
+        //this.game.state.round++;
         this.game.state.turn++;
 
         if (this.game.state.required_pot < this.game.state.big_blind) {

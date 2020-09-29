@@ -101,6 +101,7 @@ body {
   font-family: visuelt-light;
   scrollbar-width: thin;
   scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+  overflow: hidden;
 }
 
 ::-webkit-scrollbar {
@@ -1055,7 +1056,7 @@ div#message-wrapper {
   /* Hidden by default */
   position: fixed;
   /* Stay in place */
-  z-index: 1;
+  z-index: 100;
   /* Sit on top */
   left: 0;
   top: 0;

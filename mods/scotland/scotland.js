@@ -112,7 +112,7 @@ class Scotland extends GameTemplate {
       mod.respondTo('chat-manager').render(app, this);
       mod.respondTo('chat-manager').attachEvents(app, this);
     });
-    $('.gameboard').css('zoom',this.gameboardZoom);
+//    $('.gameboard').css('zoom',this.gameboardZoom);
 
 
     //
