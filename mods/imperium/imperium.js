@@ -18766,6 +18766,7 @@ console.log("HERE: " + JSON.stringify(obj.ships_and_sectors));
     html += '<div id="confirm" class="option">click here to move</div>';
     html += '<hr />';
     html += '<div id="clear" class="option">clear selected</div>';
+    html += '<hr />';
     imperium_self.updateStatus(html);
 
     //
@@ -19110,7 +19111,7 @@ console.log("HERE: " + JSON.stringify(obj.ships_and_sectors));
 playerSelectInfantryToLand(sector) {
 
   let imperium_self = this;
-  let html = '<div id="status-message" class="status-message">Unload Infantry (source): <ul>';
+  let html = '<div id="status-message" class="imperial-status-message">Unload Infantry (source): <ul>';
   let sys = imperium_self.returnSectorAndPlanets(sector);
 
   let space_infantry = [];
@@ -19161,7 +19162,7 @@ playerSelectInfantryToLand(sector) {
 	imperium_self.addMove("unload_infantry\t"+imperium_self.game.player+"\t"+1+"\t"+sector+"\t"+"planet"+"\t"+ground_infantry[i]);
       }
 
-      let html = '<div class="status-message" id="imperial-status-message">Reassign Infantry to Planets: <ul>';
+      let html = '<div class="status-message" id="status-message">Reassign Infantry to Planets: <ul>';
           for (let i = 0; i < sys.p.length; i++) {
   	    html += `<li class="option textchoice" id="${i}">${sys.s[i].name} - <span class="infantry_on_${i}">${imperium_self.returnInfantryOnPlanet(sys.p[i]) - ground_infantry[i] }</span></li>`;
           }
