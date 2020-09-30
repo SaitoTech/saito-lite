@@ -5,14 +5,14 @@ module.exports = ChatRoomMessageTemplate = ({ message, sig, type }, data) => {
   try {
     var link = message.match(/<a href="([^"]*)/)[1];
     for (var img of imgs){
-      if (link.includes(img)){
+      if (link.toLowerCase().includes(img)){
         return `
         <div id="${sig}" class="chat-room-message chat-room-message-${type}">
           <div class="chat-message-text">${message}</div>
         </div>
         <div id="${sig}" class="chat-room-message chat-room-message-${type}">
           <div class="chat-message-text">
-              <img class="img-preview" src="${link}">
+              <img class="img-prev" src="${link}">
           </div>
         </div>`;
       }
