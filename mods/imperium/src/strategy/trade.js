@@ -2,7 +2,7 @@
     this.importStrategyCard("trade", {
       name     			:       "Trade",
       rank			:	5,
-      img			:	"/imperium/img/strategy/TRADE.png",
+      img			:	"/strategy/TRADE.png",
       text			:	"Gain 3 trade goods and refresh your commodities. You may refresh the commodities of any other players, or they may refresh themselves by spending a strategy token." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 

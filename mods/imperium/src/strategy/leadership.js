@@ -3,7 +3,7 @@
     this.importStrategyCard("leadership", {
       name     			:       "Leadership",
       rank			:	1,
-      img			:	"/imperium/img/strategy/INITIATIVE.png",
+      img			:	"/strategy/INITIATIVE.png",
       text			:	"Get three tokens. Everyone may purchase additional tokens at three influence per token." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 

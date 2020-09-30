@@ -2,7 +2,7 @@
     this.importStrategyCard("imperial", {
       name     			:       "Imperial",
       rank			:	8,
-      img			:	"/imperium/img/strategy/EMPIRE.png",
+      img			:	"/strategy/EMPIRE.png",
       text			:	"You may score a public objective. All players then score objectives in Initiative Order" ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 

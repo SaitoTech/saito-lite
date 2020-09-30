@@ -363,7 +363,7 @@ returnStrategyOverlay() {
     
     cards.push(`
 	<div class="overlay_strategy_card_box">
-	  <img class="overlay_strategy_card_box_img" src="${thiscard.img}" style="width:100%" />
+	  <img class="overlay_strategy_card_box_img" src="/imperium/img/${thiscard.img}" style="width:100%" />
 	  <div class="overlay_strategy_card_text">${thiscard.text}</div>
 	  <div class="strategy_card_state p${strategy_card_player}">
 	    <div class="strategy_card_state_internal bk">${strategy_card_state}</div>
@@ -1447,8 +1447,32 @@ updateSectorGraphics(sector) {
       </div>`;
 
     }
-    this.hud.cardbox.showCardboxHTML(thiscard, '<img src="' + thiscard.img + '" style="width:100%" /><div class="strategy_card_overlay">'+thiscard.text+'</div>'+strategy_card_bonus_html);
+    this.hud.cardbox.showCardboxHTML(thiscard, '<img src="/imperium/img' + thiscard.img + '" style="width:100%" /><div class="strategy_card_overlay">'+thiscard.text+'</div>'+strategy_card_bonus_html);
   }
+  /*
+  // overriding this because imperium is incompatible with the generic function
+  returnCardImage(cardname) {
+    
+    let c = null;
+    
+    for (let z = 0; c == undefined && z < this.game.deck.length; z++) {
+      c = this.game.deck[z].cards[cardname];
+      if (c == undefined) { c = this.game.deck[z].discards[cardname]; }
+      if (c == undefined) { c = this.game.deck[z].removed[cardname]; }
+    }
+    
+    // 
+    // this is not a card, it is something like "skip turn" or cancel
+    // 
+    if (c == undefined) {
+      return '<div class="noncard">'+cardname+'</div>';
+    
+    }
+    // the generic function adds another "img/" into the path which breaks imperium.
+    return `<img class="cardimg showcard" id="${cardname}" src="/${this.returnSlug()}/${c.img}" />`;
+  
+  }
+*/
   hideStrategyCard(c) {
     this.hud.cardbox.hideCardbox(1);
   }
