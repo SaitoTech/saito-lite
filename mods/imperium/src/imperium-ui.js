@@ -31,6 +31,7 @@ menuItems() {
       name: 'Systems',
       callback: this.handleSystemsMenuItem.bind(this)
     },
+/***
     'game-player': {
       name: 'Laws',
       callback: this.handleLawsMenuItem.bind(this)
@@ -39,6 +40,7 @@ menuItems() {
       name: 'Tech',
       callback: this.handleTechMenuItem.bind(this)
     },
+***/
     'game-strategy': {
       name: 'Strategy',
       callback: this.handleStrategyMenuItem.bind(this)

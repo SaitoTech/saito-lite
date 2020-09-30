@@ -192,7 +192,6 @@ console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][ship_idx].storag
   };
   unloadUnitByJSONFromShip(player, sector, ship_idx, unitjson) {
     let sys = this.returnSectorAndPlanets(sector);
-console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][ship_idx].storage.length + " UNITS");
     for (let i = 0; i < sys.s.units[player - 1][ship_idx].storage.length; i++) {
       if (JSON.stringify(sys.s.units[player - 1][ship_idx].storage[i]) === unitjson) {
         sys.s.units[player-1][ship_idx].storage.splice(i, 1);
@@ -206,7 +205,6 @@ console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][ship_idx].storag
     let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.s.units[player - 1].length; i++) {
       if (JSON.stringify(sys.s.units[player - 1][i]) === shipjson) {
-console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][i].storage.length + " UNITS");
         for (let j = 0; j < sys.s.units[player - 1][i].storage.length; j++) {
           if (sys.s.units[player - 1][i].storage[j].type === unitname) {
             sys.s.units[player-1][i].storage.splice(j, 1);
@@ -222,7 +220,6 @@ console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][i].storage.lengt
     let sys = this.returnSectorAndPlanets(sector);
     for (let i = 0; i < sys.s.units[player - 1].length; i++) {
       if (JSON.stringify(sys.s.units[player - 1][i]) === shipjson) {
-console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][i].storage.length + " UNITS");
         for (let j = 0; j < sys.s.units[player - 1][i].storage.length; j++) {
           if (JSON.stringify(sys.s.units[player - 1][i].storage[j]) === unitjson) {
             sys.s.units[player-1][i].storage.splice(j, 1);
@@ -361,10 +358,6 @@ console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][i].storage.lengt
 
           if (x.sector != null) {
 
-
-console.log("Found sector with ships: " + x.sector);
-
-
 	    //
 	    // if we have moved through a rift, check to see if there
 	    // is a non-rift way to make this passage, if there is and
@@ -402,11 +395,9 @@ console.log("Found sector with ships: " + x.sector);
 		for (let y = 0; y < x.ship_idxs.length; y++) {
 		  let is_this_ship_new = 1;
 		  for (let ii = 0; ii < ships_and_sectors[bb].ship_idxs.length; ii++) {
-console.log("comparing: " + ships_and_sectors[bb].ship_idxs[ii] + " with " + x.ship_idxs[y]);
 		    if (ships_and_sectors[bb].ship_idxs[ii] == x.ship_idxs[y]) { 
 		      is_this_ship_new = 0;
 		      if (x.hazards[y] === "") {
-console.log("removing rift!");
 			ships_and_sectors[bb].hazards[ii] = "";
 		      }
 		    }
@@ -422,7 +413,6 @@ console.log("removing rift!");
 	      }
 	    }
 	    if (new_ships == 1) {
-console.log("adding x as new ships...");
               ships_and_sectors.push(x);
 	    }
           }
@@ -430,9 +420,6 @@ console.log("adding x as new ships...");
       }
     }
   
-console.log("RETURNING SHIPS AND SECTORS: ");
-console.log(JSON.stringify(ships_and_sectors));
-
     return ships_and_sectors;
   
   }
@@ -486,26 +473,36 @@ console.log(JSON.stringify(ships_and_sectors));
   repairUnits() {
   
     for (let i in this.game.board) {
+
+      if (this.game.board[i] != null) {
+
       let sys = this.returnSectorAndPlanets(i);
-      for (let i = 0; i < sys.s.units.length; i++) {
-        for (let ii = 0; ii < sys.s.units[i].length; ii++) {
-	  if (sys.s.units[i][ii].max_strenth > sys.s.units[i][ii].strength) {
-            sys.s.units[i][ii].strength = sys.s.units[i][ii].max_strength;
-	  }
+
+      if (sys.s) {
+        for (let i = 0; i < sys.s.units.length; i++) {
+          for (let ii = 0; ii < sys.s.units[i].length; ii++) {
+	    if (sys.s.units[i][ii].max_strenth > sys.s.units[i][ii].strength) {
+              sys.s.units[i][ii].strength = sys.s.units[i][ii].max_strength;
+  	    }
+          }
         }
       }
-      for (let i = 0; i < sys.p.length; i++) {
-        for (let ii = 0; ii < sys.p[i].units; ii++) {
-          for (let iii = 0; iii < sys.p[i].units[ii].length; iii++) {
-	    if (sys.p[i].units[ii][iii].max_strenth > sys.p[i].units[ii][iii].strength) {
-              sys.p[i].units[ii][iii].strength = sys.p[i].units[ii][iii].max_strength;
+      if (sys.p) {
+        for (let i = 0; i < sys.p.length; i++) {
+          for (let ii = 0; ii < sys.p[i].units; ii++) {
+            for (let iii = 0; iii < sys.p[i].units[ii].length; iii++) {
+	      if (sys.p[i].units[ii][iii].max_strenth > sys.p[i].units[ii][iii].strength) {
+                sys.p[i].units[ii][iii].strength = sys.p[i].units[ii][iii].max_strength;
+              }
             }
           }
         }
       }
       this.saveSystemAndPlanets(sys);
+      }
+
     }
-  
+
   }
   
   

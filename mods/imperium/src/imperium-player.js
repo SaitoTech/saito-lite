@@ -632,6 +632,147 @@ playerAcknowledgeNotice(msg, mycallback) {
 
 }
 
+//
+// assign hits to capital ships without triggering events or special abilities
+//  -- this is used by special abilities that assign damage outside combat, where they
+//  -- cannot be removed by normal factional abilities, etc.
+//
+ playerAssignHitsCapitalShips(player, sector, total_hits) {
+
+  let imperium_self = this;
+  let hits_assigned = 0;
+  let maximum_assignable_hits = 0;
+  let total_targetted_units = 0;
+
+  let targetted_units = ["destroyer","cruiser","carrier","dreadnaught","warsun","flagship"];
+
+  html = '<div class="sf-readable">You must assign ' + total_hits + ' to your capital ships (if possible):</div><ul>';
+  html += '<li class="option" id="assign">continue</li>';
+  html += '</ul>';
+  this.updateStatus(html);
+
+  $('.option').on('click', function () {
+
+    let action2 = $(this).attr("id");
+
+    if (action2 == "assign") {
+
+      let sys = imperium_self.returnSectorAndPlanets(sector);
+
+      let html = '';
+      html += '<div class="sf-readable">Assign <div style="display:inline" id="total_hits_to_assign">' + total_hits + '</div> hits:</div>';
+      html += '<ul>';
+
+      for (let i = 0; i < sys.s.units[imperium_self.game.player - 1].length; i++) {
+        if (sys.s.units[imperium_self.game.player - 1][i].destroyed == 0 && sys.s.units[imperium_self.game.player - 1][i].strength > 0) {
+
+          let unit = sys.s.units[imperium_self.game.player - 1][i];
+          maximum_assignable_hits++;
+          if (targetted_units.includes(unit.type)) { total_targetted_units++; }
+          html += '<li class="textchoice player_ship_' + i + '" id="' + i + '">' + unit.name;
+          if (unit.capacity >= 1) {
+	    let fleet = '';
+            let fighters = 0;
+            let infantry = 0;
+            for (let ii = 0; ii < sys.s.units[imperium_self.game.player-1][i].storage.length; ii++) {
+              if (sys.s.units[imperium_self.game.player-1][i].storage[ii].type == "infantry") {
+                infantry++;
+              }
+              if (sys.s.units[imperium_self.game.player-1][i].storage[ii].type == "fighter") {
+                fighters++;
+              }
+            }
+            if (infantry > 0 || fighters > 0) {
+              fleet += ' ';
+              if (infantry > 0) { fleet += infantry + "i"; }
+              if (fighters > 0) {
+                if (infantry > 0) { fleet += ", "; }
+                fleet += fighters + "f";
+              }
+              fleet += ' ';
+            }
+	    html += fleet;
+	  }
+          if (unit.strength > 1) {
+            maximum_assignable_hits += (unit.strength - 1);
+            html += ' <div style="display:inline" id="player_ship_' + i + '_hits">(';
+            for (let bb = 1; bb < unit.strength; bb++) { html += '*'; }
+            html += ')';
+	    html += '</div>'
+          }
+          html += '</li>';
+        }
+
+      }
+      html += '</ul>';
+
+      if (maximum_assignable_hits == 0) {
+        console.log("ERROR: you had no hits left to assign, bug?");
+        imperium_self.endTurn();
+        return 0;
+      }
+
+      imperium_self.updateStatus(html);
+
+      $('.textchoice').off();
+      $('.textchoice').on('click', function () {
+
+        let ship_idx = $(this).attr("id");
+        let selected_unit = sys.s.units[imperium_self.game.player - 1][ship_idx];
+
+        if (total_targetted_units > 0) {
+          if (!targetted_units.includes(selected_unit.type)) {
+            salert("You must first assign hits to the required unit types");
+            return;
+          } else {
+            total_targetted_units--;
+          }
+        }
+
+        imperium_self.addMove("assign_hit\t" + player + "\t" + player + "\t" + imperium_self.game.player + "\tship\t" + sector + "\t" + ship_idx + "\t0"); // last argument --> player should not assign again 
+
+
+        total_hits--;
+        hits_assigned++;
+
+        $('#total_hits_to_assign').innerHTML = total_hits;
+
+        if (selected_unit.strength > 1) {
+          selected_unit.strength--;
+          let ship_to_reduce = "#player_ship_" + ship_idx + '_hits';
+          let rhtml = '';
+          if (selected_unit.strength > 1) {
+            html += '(';
+            for (let bb = 1; bb < selected_unit.strength; bb++) {
+              rhtml += '*';
+            }
+            rhtml += ')';
+          }
+          $(ship_to_reduce).html(rhtml);
+        } else {
+          selected_unit.strength = 0;
+          selected_unit.destroyed = 0;
+          $(this).remove();
+        }
+
+        //
+        // we have assigned damage, so make sure sys is updated
+        //
+        imperium_self.saveSystemAndPlanets(sys);
+
+        if (total_hits == 0 || hits_assigned >= maximum_assignable_hits) {
+          imperium_self.updateStatus("Notifying players of hits assignment...");
+          imperium_self.endTurn();
+          imperium_self.updateStatus("Hits taken...");
+        }
+
+      });
+    }
+
+  });
+}
+
+
 
 //
 // assign hits to my forces
@@ -2751,6 +2892,7 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
             let planet_idx = imperium_self.returnPlayersLeastDefendedPlanetInSector(imperium_self.game.player, sector);
             if (stuff_to_build[y] != "infantry") { planet_idx = -1; }
             imperium_self.addMove("produce\t" + imperium_self.game.player + "\t" + 1 + "\t" + planet_idx + "\t" + stuff_to_build[y] + "\t" + sector);
+            imperium_self.addMove("setvar"+"\t"+"state"+"\t"+"0"+"\t"+"active_player_has_produced"+"\t"+1)
             imperium_self.game.tracker.production = 1;
           }
           imperium_self.endTurn();
@@ -2853,8 +2995,6 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
       player_build.warsuns = 0;
       return;
     }
-
-
 
     //
     //  figure out if we need to load infantry / fighters

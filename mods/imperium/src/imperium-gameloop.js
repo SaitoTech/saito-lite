@@ -405,7 +405,16 @@ console.log("resolve from: " + still_to_move[z]);
 
     	let player = mv[1];
     	let contplay = 0;
-	if (this.game.state.active_player_turn == player) { contplay = 1; }
+	if (this.game.state.active_player_turn == player) { 
+	  contplay = 1; 
+	} else {
+
+	  //
+	  // new player turn
+	  //
+	  this.game.state.active_player_has_produced = 0;
+
+	}
 	if (parseInt(mv[2]) == 1) { contplay = 1; }
 	this.game.state.active_player_turn = player;
 
@@ -2461,7 +2470,8 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
         let z = this.returnEventObjects();
 
         sys = this.returnSectorAndPlanets(sector);
-  	sys.s.activated[player_to_continue-1] = 1;
+  	sys.s.activated[activating_player-1] = 1;
+  	//sys.s.activated[player_to_continue-1] = 1;
   	this.saveSystemAndPlanets(sys);
         this.updateSectorGraphics(sector);
 
@@ -3035,6 +3045,26 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
       }
 
 
+      //
+      // must assign hit to capital ship, no events trigger
+      //
+      if (mv[0] === "assign_hits_capital_ship") {
+
+        let player       = parseInt(mv[1]);
+        let sector 	 = mv[2];
+        let total_hits 	 = mv[3];
+	let sys = this.returnSectorAndPlanets(sector);
+
+        this.game.queue.splice(qe, 1);
+
+	if (this.game.player == player) {
+  	  this.playerAssignHitsCapitalShips(player, sector, total_hits);
+        }
+	return 0;
+
+      }
+
+
 
       //
       // triggers menu for user to choose how to assign hits
@@ -3103,6 +3133,17 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	}
 
 	if (type == "anti_fighter_barrage") {
+
+	  // reduce total hits to fighters in sector
+	  let fighters_in_sector = 0;
+	  let sys = this.returnSectorAndPlanets(sector);
+	  for (let i = 0; i < sys.s.units[defender-1].length; i++) {
+	    if (sys.s.units[defender-1][i].type === "fighter") {
+	      fighters_in_sector++;
+	    }
+	  }
+	  if (total_hits > fighters_in_sector) { total_hits = fighters_in_sector; }
+
 	  if (total_hits > 0) {
 	    if (this.game.player == defender) {
   	      this.playerAssignHits(attacker, defender, type, sector, planet_idx, total_hits, source);
@@ -4094,7 +4135,8 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
-	    if (z[k].spaceCombatTriggers(this, player, sector) == 1) {
+	    //if (z[k].spaceCombatTriggers(this, player, sector) == 1) {
+	    if (z[k].spaceCombatTriggers(this, speaker_order[i], sector) == 1) {
 	      this.game.queue.push("space_combat_event\t"+speaker_order[i]+"\t"+sector+"\t"+k);
             }
           }

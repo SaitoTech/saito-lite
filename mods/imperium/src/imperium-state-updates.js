@@ -191,11 +191,8 @@
     //
     // first-to-the-post New Byzantium bonus
     //
-console.log("SECTOR: " + sector);
     if (sector == 'new-byzantium') {
-console.log("NEW BYZANTIUM OWNER: " + sys.p[planet_idx].owner + " ----> " + new_owner);
       if (sys.p[planet_idx].owner == -1 && new_owner != -1) {
-console.log("GET THAT VP");
 	this.game.players_info[new_owner-1].vp += 1;
 	this.updateLog(this.returnFaction(new_owner) + " gains 1 VP for first conquest of New Byzantium");
 	this.updateLeaderboard();
@@ -255,11 +252,15 @@ console.log("GET THAT VP");
     //
     let unit_length = sys.s.units[player-1].length;
     for (let z = 0; z < unit_length; z++) {
-      if (sys.s.units[player-1][z].destroyed == 1) {
-        save_sector = 1;
-        sys.s.units[player-1].splice(z, 1);
-        z--;
-	unit_length--;
+      if (sys.s.units[player-1][z] == null) {
+	sys.s.units[player-1].splice(z, 1);
+      } else {
+        if (sys.s.units[player-1][z].destroyed == 1) {
+          save_sector = 1;
+          sys.s.units[player-1].splice(z, 1);
+          z--;
+	  unit_length--;
+        }
       }
     }
 
@@ -270,11 +271,15 @@ console.log("GET THAT VP");
       for (let planet_idx = 0; planet_idx < sys.p.length; planet_idx++) {
         let unit_length = sys.p[planet_idx].units[player-1].length;
         for (let z = 0; z < unit_length; z++) {
-          if (sys.p[planet_idx].units[player-1][z].destroyed == 1) {
-            save_sector = 1;
-            sys.p[planet_idx].units[player-1].splice(z, 1);
-            z--;
-            unit_length--;
+          if (sys.p[planet_idx].units[player-1][z] == null) {
+	    sys.p[planet_idx].units[player-1].splice(z, 1);
+	  } else {
+            if (sys.p[planet_idx].units[player-1][z].destroyed == 1) {
+              save_sector = 1;
+              sys.p[planet_idx].units[player-1].splice(z, 1);
+              z--;
+              unit_length--;
+            }
           }
         }
       }
@@ -298,9 +303,13 @@ console.log("GET THAT VP");
     let sys = this.returnSectorAndPlanets(sector);
   
     for (let z = 0; z < sys.p[planet_idx].units[player-1].length; z++) {
-      if (sys.p[planet_idx].units[player-1][z].destroyed == 1) {
-        sys.p[planet_idx].units[player-1].splice(z, 1);
-        z--;
+      if (sys.p[planet_idx].units[player-1][z] == null) {
+	sys.p[planet_idx].units[player-1].splice(z, 1);
+      } else {
+        if (sys.p[planet_idx].units[player-1][z].destroyed == 1) {
+          sys.p[planet_idx].units[player-1].splice(z, 1);
+          z--;
+        }
       }
     }
   
@@ -344,8 +353,6 @@ console.log("GET THAT VP");
       if (weakest_unit_idx != -1) {
         sys.p[planet_idx].units[defender-1][weakest_unit_idx].strength--;
         if (sys.p[planet_idx].units[defender-1][weakest_unit_idx].strength <= 0) {
-
-console.log(this.returnFaction(defender) + " has assigned a hit to their weakest unit...");
 
           ground_forces_destroyed++;
           sys.p[planet_idx].units[defender-1][weakest_unit_idx].destroyed = 1;

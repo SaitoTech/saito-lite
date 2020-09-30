@@ -1391,37 +1391,37 @@ console.log("PREREQS: " + prereqs);
 	        can_hop_through_this_sector = 0;
 	      }
 	    }
+
+
+            //
+            // ASTEROIDS
+            //
+            if (sector_type == 3) {
+              if (this.game.players_info[player-1].fly_through_asteroids == 0) {
+                can_hop_through_this_sector = 0;
+              }
+            }
+
+
+            //
+            // SUPERNOVA
+            //
+            if (sector_type == 4) {
+              if (this.game.players_info[player-1].fly_through_supernovas == 0) {
+                can_hop_through_this_sector = 0;
+              }
+            }
+
+
+            //
+            // NEBULA
+            //
+            if (sector_type == 2) {
+              if (this.game.players_info[player-1].fly_through_nebulas == 0) {
+                can_hop_through_this_sector = 0;
+              }
+            }
 	  }
-
-
-          //
-          // ASTEROIDS
-          //
-          if (sector_type == 3) {
-            if (this.game.players_info[player-1].fly_through_asteroids == 0) {
-              can_hop_through_this_sector = 0;
-            }
-          }
-
-
-          //
-          // SUPERNOVA
-          //
-          if (sector_type == 4) {
-            if (this.game.players_info[player-1].fly_through_supernovas == 0) {
-              can_hop_through_this_sector = 0;
-            }
-          }
-
-
-          //
-          // NEBULA
-          //
-          if (sector_type == 2) {
-            if (this.game.players_info[player-1].fly_through_nebulas == 0) {
-              can_hop_through_this_sector = 0;
-            }
-          }
 
 
           //
@@ -1656,6 +1656,44 @@ console.log(JSON.stringify(return_obj));
     }
     return total;
   }
+  returnOpponentInSector(player, sector) {
+    let sys = this.returnSectorAndPlanets(sector);
+    for (let i = 0; i < sys.s.units.length; i++) {
+      if ((i+1) != player) {
+        if (sys.s.units.length > 0) { return (i+1); }
+      }
+    }
+    return -1;
+  }
+  returnOpponentOnPlanet(player, planet) {
+    for (let i = 0; i < planet.units.length; i++) {
+      if ((i+1) != player) {
+        if (planet.units[i].length > 0) {
+	  return (i+1);
+	}
+      }
+    }
+    return -1;
+  }
+  returnPlayerInfantryOnPlanet(player, planet) {
+    let total = 0;
+    for (let k = 0; k < planet.units[player-1].length; k++) { 
+      if (planet.units[player-1][k].type == "infantry") { total++; }
+    }
+    return total;
+  }
+  returnNonPlayerInfantryOnPlanet(player, planet) {
+    let total = 0;
+    for (let i = 0; i < planet.units.length; i++) {
+      if ((i+1) != player) {
+        for (let k = 0; k < planet.units[i].length; k++) {
+  	  if (planet.units[i][k].type == "infantry") { total++; }
+        }
+      }
+    }
+    return total;
+  }
+
   returnInfantryOnPlanet(planet) {
     let total = 0;
     for (let i = 0; i < planet.units.length; i++) {
@@ -1824,10 +1862,15 @@ console.log(JSON.stringify(return_obj));
     let sys = this.returnSectorAndPlanets(sector);
     if (sys.s.units[player-1].length > 0) { 
       for (let i = 0; i < sys.s.units[player-1].length; i++) {
-        if (sys.s.units[player-1][i].destroyed == 0) { 
-          if (sys.s.units[player-1][i].type == "destroyer") {
-	    return 1; 
-	  } 
+        if (sys.s.units[player-1][i] == null) {
+	  sys.s.units[player-1].splice(i, 1);
+	  i--;
+	} else {
+          if (sys.s.units[player-1][i].destroyed == 0) { 
+            if (sys.s.units[player-1][i].type == "destroyer") {
+	      return 1; 
+	    } 
+	  }
 	} 
       }
     }
@@ -1842,7 +1885,12 @@ console.log(JSON.stringify(return_obj));
     let sys = this.returnSectorAndPlanets(sector);
     if (sys.s.units[player-1].length > 0) { 
       for (let i = 0; i < sys.s.units[player-1].length; i++) {
-        if (sys.s.units[player-1][i].destroyed == 0) { return 1; } 
+        if (sys.s.units[player-1][i] == null) {
+	  sys.s.units[player-1].splice(i, 1);
+	  i--;
+	} else {
+          if (sys.s.units[player-1][i].destroyed == 0) { return 1; } 
+        }
       }
     }
     return 0;
@@ -1857,7 +1905,12 @@ console.log(JSON.stringify(return_obj));
 
     if (sys.s.units[player-1].length > 0) { 
       for (let i = 0; i < sys.s.units[player-1].length; i++) {
-        if (sys.s.units[player-1][i].destroyed == 0) { return 1; } 
+        if (sys.s.units[player-1][i] == null) {
+	  sys.s.units[player-1].splice(i, 1);
+	  i--;
+	} else {
+          if (sys.s.units[player-1][i].destroyed == 0) { return 1; } 
+        }
       }
     }
     for (let p = 0; p < sys.p.length; p++) {
@@ -2425,7 +2478,6 @@ console.log("return tech skips: " + planet_cards[i] + " --- " + this.game.planet
     }
     return 0;
   }
-
 
   doesSectorContainNonPlayerUnit(player, sector, unittype) {
 

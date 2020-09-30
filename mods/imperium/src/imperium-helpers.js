@@ -140,6 +140,7 @@
               <option value="faction2">Universities of Jol Nar</option>
               <option value="faction3">XXcha Kingdom</option>
               <option value="faction4">Sardakk N'Orr</option>
+              <option value="faction5">Brotherhood of Yin</option>
             </select>
  
             <label for="player2">Player 2:</label>
@@ -149,6 +150,7 @@
               <option value="faction2">Universities of Jol Nar</option>
               <option value="faction3">XXcha Kingdom</option>
               <option value="faction4">Sardakk N'Orr</option>
+              <option value="faction5">Brotherhood of Yin</option>
             </select>
 
             <label for="player3" class="game-players-options game-players-options-3p">Player 3:</label>
@@ -158,6 +160,7 @@
               <option value="faction2">Universities of Jol Nar</option>
               <option value="faction3">XXcha Kingdom</option>
               <option value="faction4">Sardakk N'Orr</option>
+              <option value="faction5">Brotherhood of Yin</option>
             </select>
 
             <label for="player4" class="game-players-options game-players-options-4p">Player 4:</label>
@@ -167,6 +170,7 @@
               <option value="faction2">Universities of Jol Nar</option>
               <option value="faction3">XXcha Kingdom</option>
               <option value="faction4">Sardakk N'Orr</option>
+              <option value="faction5">Brotherhood of Yin</option>
             </select>
 
     `;
