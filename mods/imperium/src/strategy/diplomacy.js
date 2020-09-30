@@ -2,7 +2,7 @@
     this.importStrategyCard("diplomacy", {
       name     			:       "Diplomacy",
       rank			:	2,
-      img			:	"/imperium/img/strategy/DIPLOMACY.png",
+      img			:	"/strategy/DIPLOMACY.png",
       text			:	"Everyone but you activates a system other than New Byzantium. All planets in that sector are refreshed. Ohters may spend a strategy token to refresh two planets." ,
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 

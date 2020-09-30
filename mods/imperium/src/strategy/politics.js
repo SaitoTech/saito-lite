@@ -3,7 +3,7 @@
     this.importStrategyCard("politics", {
       name     			:       "Politics",
       rank			:	3,
-      img			:	"/imperium/img/strategy/POLITICS.png",
+      img			:	"/strategy/POLITICS.png",
       text			:	"Pick a new Speaker. If New Byzantium is controlled vote on two agendas. Other players may spend a strategy token to purchase two action cards. ",
       strategyPrimaryEvent 	:	function(imperium_self, player, strategy_card_player) {
 

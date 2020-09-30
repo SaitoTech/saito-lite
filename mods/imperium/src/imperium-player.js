@@ -4033,9 +4033,11 @@ console.log("HERE: " + JSON.stringify(obj.ships_and_sectors));
 
       html += '</ul>';
     }
+    html += '<hr />';
     html += '<div id="confirm" class="option">click here to move</div>';
     html += '<hr />';
     html += '<div id="clear" class="option">clear selected</div>';
+    html += '<hr />';
     imperium_self.updateStatus(html);
 
     //
@@ -4380,7 +4382,7 @@ console.log("HERE: " + JSON.stringify(obj.ships_and_sectors));
 playerSelectInfantryToLand(sector) {
 
   let imperium_self = this;
-  let html = '<div id="status-message" class="status-message">Unload Infantry (source): <ul>';
+  let html = '<div id="status-message" class="imperial-status-message">Unload Infantry (source): <ul>';
   let sys = imperium_self.returnSectorAndPlanets(sector);
 
   let space_infantry = [];
