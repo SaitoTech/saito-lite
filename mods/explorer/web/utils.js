@@ -69,7 +69,11 @@ function listTransactions(blk, hash) {
         html += '<div>' + tmptx.fees_total + '</div>';
         html += '<div>' + tmptx.transaction.type + '</div>';
         if (tmptx.transaction.type == 0) {
-          html += '<div>' + tmptx.msg.module + '</div>';
+          if (tmptx.mgs.module) {
+            html += '<div>' + tmptx.msg.module + '</div>';
+          } else {
+            html += '<div>Money</div>';
+          }
         }
         if (tmptx.transaction.type == 1) {
           html += '<div>' + tmptx.msg.name + '</div>';
