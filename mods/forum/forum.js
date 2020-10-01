@@ -444,9 +444,13 @@ class Forum extends ModTemplate {
 	`SELECT * FROM posts WHERE ${where}` ,
 
         (res) => {
+
+console.log("1 HERE: " + JSON.stringify(res));
+
           if (res.rows) {
 	  if (res.rows.length) {
           res.rows.forEach(row => {
+
 
             let tx = new saito.transaction(JSON.parse(row.tx));
             let txmsg = tx.returnMessage();
@@ -486,7 +490,7 @@ class Forum extends ModTemplate {
 
 	"Forum" ,
 
-	`SELECT * FROM teasers WHERE ${where_clause}` ,
+	`SELECT * FROM posts WHERE ${where_clause}` ,
 
 	(res) => {
 
@@ -536,14 +540,16 @@ class Forum extends ModTemplate {
 
 	"Forum" ,
 
-	`SELECT * FROM teasers WHERE ${where_clause} ` ,
+	`SELECT * FROM posts WHERE ${where_clause} ` ,
 
         (res) => {
+
           if (res.rows) {
             let post_ids = [];
             res.rows.forEach(row => {
 
-              let tx = new saito.transaction(row.tx);
+              let tx = new saito.transaction(JSON.parse(row.tx));
+	      tx.transaction.votes = row.votes;
               post_ids.push(tx.transaction.sig);
               identifiers_to_fetch.push(tx.transaction.from[0].add);
 
@@ -575,7 +581,7 @@ class Forum extends ModTemplate {
             ForumMain.render(this.app, data);
             ForumMain.attachEvents(this.app, data);
 
-
+if (post_ids.length > 0) {
             //
             // fetch upvotes
             //
@@ -623,6 +629,7 @@ class Forum extends ModTemplate {
               }
             }
           );
+}
 
           //
           // fetch identifiers
@@ -835,8 +842,7 @@ class Forum extends ModTemplate {
 
 
 
-
-    if (msg.request === "forum load teasers") {
+    if (msg.request === "forum load posts") {
 
       let res = {};
       res.err = "";
@@ -1025,16 +1031,6 @@ class Forum extends ModTemplate {
 
 }
 module.exports = Forum;
-
-
-
-
-
-
-
-
-
-
 
 
 

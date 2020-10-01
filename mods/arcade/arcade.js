@@ -981,6 +981,7 @@ class Arcade extends ModTemplate {
 
   async handlePeerRequest(app, message, peer, mycallback = null) {
 
+
     //
     // this code doubles onConfirmation
     //
@@ -1075,7 +1076,7 @@ class Arcade extends ModTemplate {
 
 
 
-    if (message.request == 'rawSQL' && app.BROWSER == 0) {
+    if (message.request == 'rawSQL' && app.BROWSER == 0 && message.data.module == "Arcade") {
 
       //
       // intercept a very particular query
