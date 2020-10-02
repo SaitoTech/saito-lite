@@ -53,6 +53,7 @@
       name        :       "Orbital Drop" ,
       faction     :       "faction1",
       type	:	"ability" ,
+      text	  :	  "Drop two infantry onto any controlled planet" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].orbital_drop == undefined) {
           imperium_self.game.players_info[player-1].orbital_drop = 0;
@@ -112,6 +113,7 @@
       name        :       "Versatile" ,
       faction     :       "faction1",
       type        :       "ability" ,
+      text	  :	  "Gain an extra command token each round" ,
       onNewRound     :    function(imperium_self, player) {
         if (imperium_self.doesPlayerHaveTech(player, "faction1-versatile")) {
           imperium_self.game.players_info[player-1].new_tokens_per_round = 3;
@@ -128,6 +130,7 @@
       replaces    :       "carrier-ii",
       unit        :       1 ,
       type	:	"special",
+      text	  :	  "A more sophisticated carrier" ,
       prereqs     :       ["blue","blue"],
       initialize :       function(imperium_self, player) {
 	imperium_self.game.players_info[player-1].faction1_advanced_carrier_ii = 0;
@@ -157,6 +160,7 @@
       replaces    :       "infantry-ii",
       unit        :       1 ,
       type	:	"special",
+      text	  :	  "Battle-hardened infantry" ,
       prereqs     :       ["green","green"],
       initialize :       function(imperium_self, player) {
 	imperium_self.game.players_info[player-1].faction1_advanced_infantry_ii = 0;

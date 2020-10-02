@@ -28,7 +28,7 @@ respondTo(type) {
 menuItems() {
   return {
     'game.sectors': {
-      name: 'Systems',
+      name: 'Status',
       callback: this.handleSystemsMenuItem.bind(this)
     },
 /***

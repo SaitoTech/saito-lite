@@ -4731,7 +4731,7 @@ console.log("total hits and shots: " + total_hits + " -- " + total_shots);
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
-	    if (z[k].groundCombatTriggers(this, player, sector, planet_idx) == 1) {
+	    if (z[k].groundCombatTriggers(this, speaker_order[i], sector, planet_idx) == 1) {
               this.game.queue.push("ground_combat_event\t"+speaker_order[i]+"\t"+sector+"\t"+planet_idx+"\t"+k);
             }
           }

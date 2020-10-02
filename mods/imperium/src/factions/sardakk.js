@@ -5,8 +5,7 @@
       homeworld		: 	"sector53",
       space_units	: 	["carrier","carrier","cruiser"],
       ground_units	: 	["infantry","infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech		: 	["faction4-unrelenting", "faction4-exotrireme-i", "faction4-particle-weave", "faction4-flagship"],
-      //tech		: 	["faction4-unrelenting", "faction4-particle-weave", "faction4-flagship"],
+      tech		: 	["faction4-unrelenting", "faction4-exotrireme-i", "faction4-flagship"],
       background	: 	'faction4.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
       intro		:	`<div style="font-weight:bold">What use are frames of quivvering flesh in times of war? Let the Sardakk do what we will -- the weak will suffer what they must.</div>`
@@ -17,9 +16,10 @@
 
     this.importTech('faction4-unrelenting', {
 
-      name        :       "Fragile" ,
+      name        :       "Unrelenting" ,
       faction     :       "faction4",
       type        :       "ability" ,
+      text	  :	  "+1 on all combat rolls" ,
       onNewRound     :    function(imperium_self, player) {
         if (imperium_self.doesPlayerHaveTech(player, "faction4-unrelenting")) {
           imperium_self.game.players_info[player-1].faction4_unrelenting = 1;
@@ -42,6 +42,7 @@
       name        	:       "Sardakk Flagship" ,
       faction     	:       "faction4",
       type      	:       "ability" ,
+      text	  :	  "+1 on all combat rolls for ships in same sector" ,
       modifyCombatRoll :	  function(imperium_self, attacker, defender, player, combat_type, roll) {
 	if (combat_type == "space") {
 	  let flagship_bonus = 0;
@@ -65,6 +66,7 @@
       replaces    :       "dreadnaught",
       unit        :       1 ,
       type        :       "special",
+      text	  :	  "A more powerful dreadnaught" ,
       prereqs     :       [],
       initialize :       function(imperium_self, player) {
         imperium_self.game.players_info[player-1].faction4_advanced_dreadnaught_i = 0;
@@ -81,7 +83,6 @@
 	  unit.strength = 2;
 	  unit.bombardment_rolls = 2;
 	  unit.bombardment_combat = 4;
-
         }
 
         return unit;
@@ -99,6 +100,7 @@
       unit        :       1 ,
       type        :       "special",
       prereqs     :       ["blue","blue","yellow"],
+      text	  :	  "A much more powerful dreadnaught" ,
       initialize :       function(imperium_self, player) {
         imperium_self.game.players_info[player-1].faction4_advanced_dreadnaught_ii = 0;
       },
@@ -115,9 +117,7 @@
 	  unit.strength = 2;
 	  unit.bombardment_rolls = 2;
 	  unit.bombardment_combat = 4;
-
         }
-
         return unit;
       },
 
@@ -131,6 +131,7 @@
       faction     :       "faction4",
       type        :       "special" ,
       prereqs	  :	["red","red"],
+      text	  :	  "Infantry vaporize 1 opponent for each hit received" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].faction4_particle_weave == undefined) {
           imperium_self.game.players_info[player-1].faction4_particle_weave = 0;

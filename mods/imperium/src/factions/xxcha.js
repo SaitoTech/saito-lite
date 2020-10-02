@@ -4,7 +4,6 @@
       name		: 	"XXCha Kingdom",
       homeworld		: 	"sector51",
       space_units	: 	["carrier","cruiser","cruiser","fighter","fighter","fighter"],
-//      space_units	: 	["destroyer","destroyer","cruiser","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","pds","spacedock"],
       tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship"],
       background	: 	'faction3.jpg',
@@ -20,6 +19,7 @@
       name        :       "XXCha Flagship" ,
       faction     :       "faction3",
       type        :       "ability" ,
+      text	:	  "3 space cannons which target adjacent systems attached to flagship" ,
       returnPDSUnitsWithinRange : function(imperium_self, player, attacker, defender, sector, battery) {
 
        if (!imperium_self.doesPlayerHaveTech(player, "faction3-flagship")) { return battery; }
@@ -71,6 +71,7 @@
       name        :       "Peace Accords" ,
       faction     :       "faction3",
       type        :       "ability",
+      text	:	  "Colonize adjacent unprotected planet when diplomacy secondary is played" ,
       initialize  : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].peace_accords == undefined) {
           imperium_self.game.players_info[player-1].peace_accords = 0;
@@ -168,6 +169,7 @@
       name        :       "Quash" ,
       faction     :       "faction3",
       type        :       "ability" ,
+      text	:	  "Spend strategy token to quash upcoming agenda" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].quash == undefined) {
           imperium_self.game.players_info[player-1].quash = 0;
@@ -235,6 +237,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
       prereqs	:	["green"] ,
       color	:   "green" ,
       type        :       "special" ,
+      text	:	  "Expend strategy token to cancel opponent action card" ,
       initialize  :	  function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].instinct_training == null) {
           imperium_self.game.players_info[player-1].instinct_training = 0;
@@ -271,6 +274,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
       type        :       "special" ,
       color	  :	  "yellow" ,
       prereqs	:	["yellow","yellow"] ,
+      text	:	  "Terminate the turn of active player who activates a system containing your ship" ,
       initialize  : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].field_nullification == undefined) {
           imperium_self.game.players_info[player-1].field_nullification = 0;
