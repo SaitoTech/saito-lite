@@ -4,7 +4,6 @@
       name		: 	"Universities of Jol Nar",
       homeworld		: 	"sector50",
       space_units	: 	["carrier","carrier","dreadnaught","fighter"],
-//      space_units	: 	["carrier","carrier","destroyer","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","pds","spacedock"],
       tech		: 	["sarween-tools", "neural-motivator", "plasma-scoring", "antimass-deflectors", "faction2-analytic", "faction2-brilliant", "faction2-fragile", "faction2-flagship"],
       background	: 	'faction2.jpg' ,
@@ -17,6 +16,7 @@
       name        	:       "XXCha Flagship" ,
       faction     	:       "faction2",
       type      	:       "ability" ,
+      text		:	"Extra hit on every roll of 9 or 10 before modifications" ,
       modifyUnitHits 	: function(imperium_self, player, defender, attacker, combat_type, rerolling_unit, roll, total_hits) {
         if (!imperium_self.doesPlayerHaveTech(attacker, "faction2-flagship")) { return total_hits; }
 	if (rerolling_unit.owner == attacker) {
@@ -40,6 +40,7 @@
       name        :       "Analytic" ,
       faction     :       "faction2",
       type        :       "ability" ,
+      text	  :	"Ignore 1 tech prerequisite on non-unit upgrades",
       onNewRound     :    function(imperium_self, player) {
         if (imperium_self.doesPlayerHaveTech(player, "faction2-analytic")) {
           imperium_self.game.players_info[player-1].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 1;
@@ -54,6 +55,7 @@
       name        :       "Fragile" ,
       faction     :       "faction2",
       type        :       "ability" ,
+      text	  :	  "-1 on all combat rolls" ,
       onNewRound     :    function(imperium_self, player) {
         if (imperium_self.doesPlayerHaveTech(player, "faction2-fragile")) {
           imperium_self.game.players_info[player-1].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 1;
@@ -75,6 +77,7 @@
       name        :       "Brilliant" ,
       faction     :       "faction2",
       type        :       "ability" ,
+      text	  :	  "Tech primary is played when token spent to execute secondary" ,
       initialize     :    function(imperium_self, player) {
 	if (imperium_self.faction2_brilliant_swapped == undefined) {
 	  imperium_self.faction2_brilliant_swapped = 1;
@@ -188,6 +191,7 @@
       type        :       "special" ,
       color       	: 	"yellow" ,
       prereqs	:	["yellow","yellow"],
+      text	:	"Gain 4 trade goods whenever a system is activated containing your ships" ,
       initialize  :	  function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].eres_siphons == null) {
           imperium_self.game.players_info[player-1].eres_siphons = 0;
@@ -217,6 +221,7 @@
       type        :       "special" ,
       color       	: 	"blue" ,
       prereqs	:	["blue","blue"],
+      text	:	"Activate card to make activated system 1 hop away from all other systems with Jol Nar ships" ,
       initialize  :	  function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].deep_space_conduits == null) {
           imperium_self.game.players_info[player-1].deep_space_conduits = 0;

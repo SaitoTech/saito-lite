@@ -2858,7 +2858,6 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
       return;
     }
     imperium_self.unlockInterface();
-    $('.buildchoice').off();
 
 
     let id = $(this).attr("id");
@@ -2867,6 +2866,8 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
     // submit when done
     //
     if (id == "confirm") {
+
+      $('.buildchoice').off();
 
       let total_cost = 0;
       for (let i = 0; i < stuff_to_build.length; i++) {

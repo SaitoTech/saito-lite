@@ -1340,7 +1340,6 @@ console.log("P: " + planet);
       name		: 	"Universities of Jol Nar",
       homeworld		: 	"sector50",
       space_units	: 	["carrier","carrier","dreadnaught","fighter"],
-//      space_units	: 	["carrier","carrier","destroyer","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","pds","spacedock"],
       tech		: 	["sarween-tools", "neural-motivator", "plasma-scoring", "antimass-deflectors", "faction2-analytic", "faction2-brilliant", "faction2-fragile", "faction2-flagship"],
       background	: 	'faction2.jpg' ,
@@ -1353,6 +1352,7 @@ console.log("P: " + planet);
       name        	:       "XXCha Flagship" ,
       faction     	:       "faction2",
       type      	:       "ability" ,
+      text		:	"Extra hit on every roll of 9 or 10 before modifications" ,
       modifyUnitHits 	: function(imperium_self, player, defender, attacker, combat_type, rerolling_unit, roll, total_hits) {
         if (!imperium_self.doesPlayerHaveTech(attacker, "faction2-flagship")) { return total_hits; }
 	if (rerolling_unit.owner == attacker) {
@@ -1376,6 +1376,7 @@ console.log("P: " + planet);
       name        :       "Analytic" ,
       faction     :       "faction2",
       type        :       "ability" ,
+      text	  :	"Ignore 1 tech prerequisite on non-unit upgrades",
       onNewRound     :    function(imperium_self, player) {
         if (imperium_self.doesPlayerHaveTech(player, "faction2-analytic")) {
           imperium_self.game.players_info[player-1].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 1;
@@ -1390,6 +1391,7 @@ console.log("P: " + planet);
       name        :       "Fragile" ,
       faction     :       "faction2",
       type        :       "ability" ,
+      text	  :	  "-1 on all combat rolls" ,
       onNewRound     :    function(imperium_self, player) {
         if (imperium_self.doesPlayerHaveTech(player, "faction2-fragile")) {
           imperium_self.game.players_info[player-1].permanent_ignore_number_of_tech_prerequisites_on_nonunit_upgrade = 1;
@@ -1411,6 +1413,7 @@ console.log("P: " + planet);
       name        :       "Brilliant" ,
       faction     :       "faction2",
       type        :       "ability" ,
+      text	  :	  "Tech primary is played when token spent to execute secondary" ,
       initialize     :    function(imperium_self, player) {
 	if (imperium_self.faction2_brilliant_swapped == undefined) {
 	  imperium_self.faction2_brilliant_swapped = 1;
@@ -1524,6 +1527,7 @@ console.log("P: " + planet);
       type        :       "special" ,
       color       	: 	"yellow" ,
       prereqs	:	["yellow","yellow"],
+      text	:	"Gain 4 trade goods whenever a system is activated containing your ships" ,
       initialize  :	  function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].eres_siphons == null) {
           imperium_self.game.players_info[player-1].eres_siphons = 0;
@@ -1553,6 +1557,7 @@ console.log("P: " + planet);
       type        :       "special" ,
       color       	: 	"blue" ,
       prereqs	:	["blue","blue"],
+      text	:	"Activate card to make activated system 1 hop away from all other systems with Jol Nar ships" ,
       initialize  :	  function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].deep_space_conduits == null) {
           imperium_self.game.players_info[player-1].deep_space_conduits = 0;
@@ -1623,8 +1628,7 @@ console.log("P: " + planet);
       homeworld		: 	"sector53",
       space_units	: 	["carrier","carrier","cruiser"],
       ground_units	: 	["infantry","infantry","infantry","infantry","infantry","pds","spacedock"],
-      tech		: 	["faction4-unrelenting", "faction4-exotrireme-i", "faction4-particle-weave", "faction4-flagship"],
-      //tech		: 	["faction4-unrelenting", "faction4-particle-weave", "faction4-flagship"],
+      tech		: 	["faction4-unrelenting", "faction4-exotrireme-i", "faction4-flagship"],
       background	: 	'faction4.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
       intro		:	`<div style="font-weight:bold">What use are frames of quivvering flesh in times of war? Let the Sardakk do what we will -- the weak will suffer what they must.</div>`
@@ -1635,9 +1639,10 @@ console.log("P: " + planet);
 
     this.importTech('faction4-unrelenting', {
 
-      name        :       "Fragile" ,
+      name        :       "Unrelenting" ,
       faction     :       "faction4",
       type        :       "ability" ,
+      text	  :	  "+1 on all combat rolls" ,
       onNewRound     :    function(imperium_self, player) {
         if (imperium_self.doesPlayerHaveTech(player, "faction4-unrelenting")) {
           imperium_self.game.players_info[player-1].faction4_unrelenting = 1;
@@ -1660,6 +1665,7 @@ console.log("P: " + planet);
       name        	:       "Sardakk Flagship" ,
       faction     	:       "faction4",
       type      	:       "ability" ,
+      text	  :	  "+1 on all combat rolls for ships in same sector" ,
       modifyCombatRoll :	  function(imperium_self, attacker, defender, player, combat_type, roll) {
 	if (combat_type == "space") {
 	  let flagship_bonus = 0;
@@ -1683,6 +1689,7 @@ console.log("P: " + planet);
       replaces    :       "dreadnaught",
       unit        :       1 ,
       type        :       "special",
+      text	  :	  "A more powerful dreadnaught" ,
       prereqs     :       [],
       initialize :       function(imperium_self, player) {
         imperium_self.game.players_info[player-1].faction4_advanced_dreadnaught_i = 0;
@@ -1699,7 +1706,6 @@ console.log("P: " + planet);
 	  unit.strength = 2;
 	  unit.bombardment_rolls = 2;
 	  unit.bombardment_combat = 4;
-
         }
 
         return unit;
@@ -1717,6 +1723,7 @@ console.log("P: " + planet);
       unit        :       1 ,
       type        :       "special",
       prereqs     :       ["blue","blue","yellow"],
+      text	  :	  "A much more powerful dreadnaught" ,
       initialize :       function(imperium_self, player) {
         imperium_self.game.players_info[player-1].faction4_advanced_dreadnaught_ii = 0;
       },
@@ -1733,9 +1740,7 @@ console.log("P: " + planet);
 	  unit.strength = 2;
 	  unit.bombardment_rolls = 2;
 	  unit.bombardment_combat = 4;
-
         }
-
         return unit;
       },
 
@@ -1749,6 +1754,7 @@ console.log("P: " + planet);
       faction     :       "faction4",
       type        :       "special" ,
       prereqs	  :	["red","red"],
+      text	  :	  "Infantry vaporize 1 opponent for each hit received" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].faction4_particle_weave == undefined) {
           imperium_self.game.players_info[player-1].faction4_particle_weave = 0;
@@ -1868,6 +1874,7 @@ console.log("P: " + planet);
       name        :       "Orbital Drop" ,
       faction     :       "faction1",
       type	:	"ability" ,
+      text	  :	  "Drop two infantry onto any controlled planet" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].orbital_drop == undefined) {
           imperium_self.game.players_info[player-1].orbital_drop = 0;
@@ -1927,6 +1934,7 @@ console.log("P: " + planet);
       name        :       "Versatile" ,
       faction     :       "faction1",
       type        :       "ability" ,
+      text	  :	  "Gain an extra command token each round" ,
       onNewRound     :    function(imperium_self, player) {
         if (imperium_self.doesPlayerHaveTech(player, "faction1-versatile")) {
           imperium_self.game.players_info[player-1].new_tokens_per_round = 3;
@@ -1943,6 +1951,7 @@ console.log("P: " + planet);
       replaces    :       "carrier-ii",
       unit        :       1 ,
       type	:	"special",
+      text	  :	  "A more sophisticated carrier" ,
       prereqs     :       ["blue","blue"],
       initialize :       function(imperium_self, player) {
 	imperium_self.game.players_info[player-1].faction1_advanced_carrier_ii = 0;
@@ -1972,6 +1981,7 @@ console.log("P: " + planet);
       replaces    :       "infantry-ii",
       unit        :       1 ,
       type	:	"special",
+      text	  :	  "Battle-hardened infantry" ,
       prereqs     :       ["green","green"],
       initialize :       function(imperium_self, player) {
 	imperium_self.game.players_info[player-1].faction1_advanced_infantry_ii = 0;
@@ -1999,7 +2009,6 @@ console.log("P: " + planet);
       name		: 	"XXCha Kingdom",
       homeworld		: 	"sector51",
       space_units	: 	["carrier","cruiser","cruiser","fighter","fighter","fighter"],
-//      space_units	: 	["destroyer","destroyer","cruiser","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","pds","spacedock"],
       tech		: 	["graviton-laser-system","faction3-peace-accords","faction3-quash","faction3-flagship"],
       background	: 	'faction3.jpg',
@@ -2015,6 +2024,7 @@ console.log("P: " + planet);
       name        :       "XXCha Flagship" ,
       faction     :       "faction3",
       type        :       "ability" ,
+      text	:	  "3 space cannons which target adjacent systems attached to flagship" ,
       returnPDSUnitsWithinRange : function(imperium_self, player, attacker, defender, sector, battery) {
 
        if (!imperium_self.doesPlayerHaveTech(player, "faction3-flagship")) { return battery; }
@@ -2066,6 +2076,7 @@ console.log("P: " + planet);
       name        :       "Peace Accords" ,
       faction     :       "faction3",
       type        :       "ability",
+      text	:	  "Colonize adjacent unprotected planet when diplomacy secondary is played" ,
       initialize  : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].peace_accords == undefined) {
           imperium_self.game.players_info[player-1].peace_accords = 0;
@@ -2163,6 +2174,7 @@ console.log("P: " + planet);
       name        :       "Quash" ,
       faction     :       "faction3",
       type        :       "ability" ,
+      text	:	  "Spend strategy token to quash upcoming agenda" ,
       initialize : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].quash == undefined) {
           imperium_self.game.players_info[player-1].quash = 0;
@@ -2230,6 +2242,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
       prereqs	:	["green"] ,
       color	:   "green" ,
       type        :       "special" ,
+      text	:	  "Expend strategy token to cancel opponent action card" ,
       initialize  :	  function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].instinct_training == null) {
           imperium_self.game.players_info[player-1].instinct_training = 0;
@@ -2266,6 +2279,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
       type        :       "special" ,
       color	  :	  "yellow" ,
       prereqs	:	["yellow","yellow"] ,
+      text	:	  "Terminate the turn of active player who activates a system containing your ship" ,
       initialize  : function(imperium_self, player) {
         if (imperium_self.game.players_info[player-1].field_nullification == undefined) {
           imperium_self.game.players_info[player-1].field_nullification = 0;
@@ -2308,9 +2322,9 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
       id		:	"faction5" ,
       name		: 	"Yin Brotherhood",
       homeworld		: 	"sector13",
-      space_units	: 	["carrier","carrier","destroyer","fighter","fighter","fighter","fighter","flagship"],
+      space_units	: 	["carrier","carrier","destroyer","fighter","fighter","fighter","fighter"],
       ground_units	: 	["infantry","infantry","infantry","infantry","spacedock"],
-      tech		: 	["faction5-indoctrination", "faction5-devotion", "faction5-impulse-core", "faction5-yin-spinner", "faction5-flagship"],
+      tech		: 	["faction5-indoctrination", "faction5-devotion", "faction5-flagship"],
       background	: 	'faction5.jpg' ,
       promissary_notes	:	["trade","political","ceasefire","throne"],
       intro		:	`<div style="font-weight:bold">One must conquer the turmoil within to conquer the turmoil without. Such is the will. Such is the law. So be it.</div>`
@@ -9259,7 +9273,7 @@ respondTo(type) {
 menuItems() {
   return {
     'game.sectors': {
-      name: 'Systems',
+      name: 'Status',
       callback: this.handleSystemsMenuItem.bind(this)
     },
 /***
@@ -21178,8 +21192,8 @@ playerDiscardActionCards(num) {
   ///////////////////////////////
   returnHomeworldSectors(players = 4) {
     if (players <= 2) {
-//    return ["1_1", "4_7"];
-      return ["1_1", "2_1"];
+      return ["1_1", "4_7"];
+//      return ["1_1", "2_1"];
     }
 
 

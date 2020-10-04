@@ -88,16 +88,14 @@
 
 	    if (this.game.confirms_received == undefined || this.game.confirms_received == null) { this.resetConfirmsNeeded(this.game.players_info.length); }
 
-
-  	    this.game.confirms_received += parseInt(mv[2]);
-  	    this.game.confirms_players.push(mv[3]);
-
 	    //
 	    // set confirming player as inactive
 	    //
 	    for (let i = 0; i < this.game.players.length; i++) {
 	      if (this.game.players[i] === mv[3]) {
 	        this.setPlayerInactive((i+1));
+  	        this.game.confirms_received += parseInt(mv[2]);
+  	        this.game.confirms_players.push(mv[3]);
 	      }
 	    }
 
@@ -4731,7 +4729,7 @@ console.log("total hits and shots: " + total_hits + " -- " + total_shots);
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
-	    if (z[k].groundCombatTriggers(this, player, sector, planet_idx) == 1) {
+	    if (z[k].groundCombatTriggers(this, speaker_order[i], sector, planet_idx) == 1) {
               this.game.queue.push("ground_combat_event\t"+speaker_order[i]+"\t"+sector+"\t"+planet_idx+"\t"+k);
             }
           }
