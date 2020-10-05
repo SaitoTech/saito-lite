@@ -36,11 +36,11 @@ module.exports = InviteFriends = {
 
     document.querySelector('.generate-link-box').onclick = () => {
       document.querySelector('.welcome-modal-left').innerHTML = InviteFriendsLinkTemplate(app);
-      document.querySelector('.fa-copy').onclick = () => {
+      document.querySelector('.link-space').addEventListener('click', (e) => {
         let text = document.querySelector('.share-link');
         text.select();
         document.execCommand('copy');
-      }
+      });
     }
 
     document.querySelector('.scanqr-link-box').onclick = () => {

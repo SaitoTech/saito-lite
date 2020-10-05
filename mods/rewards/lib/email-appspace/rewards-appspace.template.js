@@ -53,7 +53,7 @@ module.exports = RewardsAppspaceTemplate = (app) => {
       </div>
       
       <hr />
-      <h3>referral Rewards</h3>   
+      <h3>Referral Rewards</h3>   
       <div class="referral-status">
       <center><div class="loader"></div></center>
     </div>

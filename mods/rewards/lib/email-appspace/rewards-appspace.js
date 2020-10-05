@@ -33,7 +33,7 @@ module.exports = RewardsAppspace = {
                 this.updateUserreferralStatus(app, row);
                 total_earn += row.total_payout;
               }); 
-              document.querySelector('.total-earned').innerHTML += `<div class="total-earned-content"><h3>Total Earned: ${Math.floor(total_earn/10)} SAITO</h3></div>`;
+              document.querySelector('.total-earned').innerHTML += `<div class="total-earned-content"><h3>Total Bonus: ${Math.floor(total_earn/10)} SAITO</h3></div>`;
             } else {
               referral_grid.innerHTML = "<p>Click 'Refer Friends' below to get your personal referral link and start earning today.</p>";
             }
