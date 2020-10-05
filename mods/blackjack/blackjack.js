@@ -321,10 +321,7 @@ console.log("testing: " + JSON.stringify(this.game.queue));
         this.game.queue.push("dealer");
         this.game.queue.push("score");
         this.game.queue.push("endround");
-        for (let i = 0; i < this.game.players.length; i++) {
-          let player_to_go = (i+1);
-          this.game.queue.push("play\t" + player_to_go);
-        }
+        this.game.queue.push("PLAY\tall");	
 
 console.log("NEW ROUND: " + JSON.stringify(this.game.queue));
 
@@ -360,13 +357,6 @@ console.log("NEW ROUND: " + JSON.stringify(this.game.queue));
 
       if (mv[0] === "stay") {
         this.game.queue.splice(qe, 1);
-        this.game.queue.push("RESOLVE");
-        return 1;
-      }
-
-      if (mv[0] === "stay") {
-        this.game.queue.splice(qe, 1);
-        this.game.queue.push("RESOLVE");
         return 1;
       }
 
@@ -447,12 +437,17 @@ console.log("start of nextround: " + JSON.stringify(this.game.queue));
     html += '<li class="menu_option" id="stay">stay</li>';
     html += '</ul>';
     
-    this.updateStatus(html);
+    this.updateStatus(html, 1);
+    this.lockInterface();
+
+
+console.log("player turn!");
 
     $('.menu_option').off();
     $('.menu_option').on('click', function () {
 
       $('.menu_option').off();
+      blackjack_self.unlockInterface();
       let choice = $(this).attr("id");
 
       if (choice === "hit") {
@@ -462,6 +457,7 @@ console.log("start of nextround: " + JSON.stringify(this.game.queue));
       }
 
       if (choice === "stay") {
+        blackjack_self.addMove("RESOLVE\t"+blackjack_self.app.wallet.returnPublicKey());
         blackjack_self.addMove("stay\t" + blackjack_self.game.player);
         blackjack_self.endTurn();
 	return 0;
@@ -722,8 +718,6 @@ console.log("start of nextround: " + JSON.stringify(this.game.queue));
 
 
   endTurn(nextTarget = 0) {
-
-    this.updateStatus("Waiting for information from peers....");
 
     $(".menu_option").off();
 
