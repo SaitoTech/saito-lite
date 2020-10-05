@@ -7923,7 +7923,7 @@ ACTION CARD - types
     this.importActionCard('construction-rider', {
   	name : "Construction Rider" ,
   	type : "rider" ,
-  	text : "Player gains 1 VP" ,
+  	text : "Player may place a space dock on a planet they control" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (action_card_player == imperium_self.game.player) {
 
@@ -10263,16 +10263,14 @@ console.log("UNLOADING FROM SHIP WITH " + sys.s.units[player-1][ship_idx].storag
 
 	    if (this.game.confirms_received == undefined || this.game.confirms_received == null) { this.resetConfirmsNeeded(this.game.players_info.length); }
 
-
-  	    this.game.confirms_received += parseInt(mv[2]);
-  	    this.game.confirms_players.push(mv[3]);
-
 	    //
 	    // set confirming player as inactive
 	    //
 	    for (let i = 0; i < this.game.players.length; i++) {
 	      if (this.game.players[i] === mv[3]) {
 	        this.setPlayerInactive((i+1));
+  	        this.game.confirms_received += parseInt(mv[2]);
+  	        this.game.confirms_players.push(mv[3]);
 	      }
 	    }
 
@@ -11135,12 +11133,13 @@ console.log(JSON.stringify(this.game.state.choices));
 	this.game.state.voting_on_agenda = agenda_num;
 
 	//
-	// voting happens in turns
+	// voting happens in turns, speaker last
 	//
         let who_is_next = 0;
+	let speaker_order = this.returnSpeakerOrder();
 
-	for (let i = 0; i < this.game.players_info.length; i++) {
-	  if (this.game.state.voted_on_agenda[i][agenda_num] == 0) { 
+	for (let i = 0; i < speaker_order.length; i++) {
+	  if (this.game.state.voted_on_agenda[speaker_order[i]-1][agenda_num] == 0) { 
 	    who_is_next = i+1;
 	    i = this.game.players_info.length; 
 	  }
@@ -14906,7 +14905,7 @@ console.log("total hits and shots: " + total_hits + " -- " + total_shots);
 
   	for (let i = 0; i < speaker_order.length; i++) {
 	  for (let k = 0; k < z.length; k++) {
-	    if (z[k].groundCombatTriggers(this, player, sector, planet_idx) == 1) {
+	    if (z[k].groundCombatTriggers(this, speaker_order[i], sector, planet_idx) == 1) {
               this.game.queue.push("ground_combat_event\t"+speaker_order[i]+"\t"+sector+"\t"+planet_idx+"\t"+k);
             }
           }
@@ -18132,7 +18131,7 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
   if (available_resources >= 4) {
     html += '<li class="buildchoice" id="dreadnaught">Dreadnaught - <span class="dreadnaught_total">0</span></li>';
   }
-  if (available_resources >= 8) {
+  if (available_resources >= 8 && this.canPlayerProduceFlagship(imperium_self.game.player)) {
     html += '<li class="buildchoice" id="flagship">Flagship - <span class="flagship_total">0</span></li>';
   }
   if (imperium_self.game.players_info[imperium_self.game.player - 1].may_produce_warsuns == 1) {
@@ -18159,7 +18158,6 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
       return;
     }
     imperium_self.unlockInterface();
-    $('.buildchoice').off();
 
 
     let id = $(this).attr("id");
@@ -18168,6 +18166,8 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
     // submit when done
     //
     if (id == "confirm") {
+
+      $('.buildchoice').off();
 
       let total_cost = 0;
       for (let i = 0; i < stuff_to_build.length; i++) {
@@ -20058,24 +20058,37 @@ playerActivateSystem() {
       $(divpid).find('.hex_activated').css('background-color', 'var(--p' + imperium_self.game.player + ')');
       $(divpid).find('.hex_activated').css('opacity', '0.3');
 
-      let c = sconfirm("Activate this system?");
-      if (c) {
-        sys.s.activated[imperium_self.game.player - 1] = 1;
-        imperium_self.addMove("pds_space_attack_post\t"+imperium_self.game.player+"\t"+pid);
-        imperium_self.addMove("pds_space_attack\t" + imperium_self.game.player + "\t" + pid);
-        imperium_self.addMove("activate_system_post\t" + imperium_self.game.player + "\t" + pid);
-        imperium_self.addMove("activate_system\t" + imperium_self.game.player + "\t" + pid);
-        imperium_self.addMove("expend\t" + imperium_self.game.player + "\t" + "command" + "\t" + 1);
-        imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t" + "int" + "\t" + "1");
-        imperium_self.endTurn();
 
-      } else {
+      let chtml = "<div class='sf-readable'>Activate this system?</div><ul>";
+          chtml += '<li class="option" id="yes">activate sector</li>';
+          chtml += '<li class="option" id="no">choose again</li>';
+          chtml += '</ul>';
 
-        activated_once = 0;
-        $(divpid).find('.hex_activated').css('background-color', 'transparent');
-        $(divpid).find('.hex_activated').css('opacity', '1');
+      this.updateStatus(chtml);
+      
+      $('.option').off();
+      $('.option').on('click', function() {
 
-      }
+        let action2 = $(this).attr("id");
+
+        if (action2 === "yes") {
+          sys.s.activated[imperium_self.game.player - 1] = 1;
+          imperium_self.addMove("pds_space_attack_post\t"+imperium_self.game.player+"\t"+pid);
+          imperium_self.addMove("pds_space_attack\t" + imperium_self.game.player + "\t" + pid);
+          imperium_self.addMove("activate_system_post\t" + imperium_self.game.player + "\t" + pid);
+          imperium_self.addMove("activate_system\t" + imperium_self.game.player + "\t" + pid);
+          imperium_self.addMove("expend\t" + imperium_self.game.player + "\t" + "command" + "\t" + 1);
+          imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t" + "int" + "\t" + "1");
+          imperium_self.endTurn();
+
+        } else {
+
+          activated_once = 0;
+          $(divpid).find('.hex_activated').css('background-color', 'transparent');
+          $(divpid).find('.hex_activated').css('opacity', '1');
+
+        }
+      });
     }
 
   });
@@ -22057,6 +22070,19 @@ playerDiscardActionCards(num) {
     return 0;
   }
   
+
+  canPlayerProduceFlagship(player) {
+    let flagship_found = 0;
+    for (let s in this.game.sectors) {
+      if (this.game.sectors[s]) {
+	for (let i = 0; i < this.game.sectors[s].units[player-1].length; i++) {
+	  if (this.game.sectors[s].units[player-1][i].type === "flagship") { return 0; }
+        }
+      }
+    }
+    return 1;
+  }
+
   canPlayerPlayStrategyCard(player) {
     for (let i = 0; i < this.game.players_info[player-1].strategy.length; i++) {
       if (!this.game.players_info[player-1].strategy_cards_played.includes(this.game.players_info[player-1].strategy[i])) {

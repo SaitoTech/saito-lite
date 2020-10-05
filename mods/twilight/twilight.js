@@ -454,6 +454,8 @@ console.log("\n\n\n\n");
     //
     if (this.is_testing == 1) {
 
+      this.game.state.vp = -17;
+
       this.game.options = {};
       this.game.options.culturaldiplomacy = 1;
       this.game.options.gouzenkoaffair = 1;
@@ -570,7 +572,7 @@ try {
   //
   // Core Game Logic
   //
-  handleGameLoop(msg=null) {
+  handleGameLoop() {
 
     let twilight_self = this;
     let player = "ussr"; if (this.game.player == 2) { player = "us"; }
@@ -1993,9 +1995,9 @@ console.log("CARD: " + card);
 
           if (this.is_testing == 1) {
             if (this.game.player == 2) {
-              this.game.deck[0].hand = ["missileenvy","tehran","saltnegotiations","lonegunman", "manwhosavedtheworld", "centralamerica", "europe", "asia"];
+              this.game.deck[0].hand = ["wwby" , "tehran","saltnegotiations","africa", "manwhosavedtheworld", "centralamerica", "europe", "asia"];
             } else {
-              this.game.deck[0].hand = ["grainsales", "brezhnev", "wwby", "mideast", "opec", "cubanmissile","china","vietnamrevolts"];
+              this.game.deck[0].hand = ["junta", "grainsales", "brezhnev", "missileenvy", "mideast", "opec", "cubanmissile","china","vietnamrevolts"];
             }
           }
 
@@ -4015,6 +4017,19 @@ this.startClock();
       // Quagmire / Bear Trap
       //
       if (twilight_self.game.state.headline == 0 && (twilight_self.game.state.events.quagmire == 1 && twilight_self.game.player == 2) || (twilight_self.game.state.events.beartrap == 1 && twilight_self.game.player == 1) ) {
+
+        //
+        // WWBY triggers if US cannot play UN intervention because of Quagmire
+        //
+        if (twilight_self.game.state.events.wwby == 1 && twilight_self.game.state.headline == 0) {
+          if (player == "us") {
+            if (card != "unintervention") {
+              twilight_self.game.state.events.wwby_triggers = 1;
+            }
+            twilight_self.game.state.events.wwby = 0;
+          }
+        }
+
 
         //
         // scoring cards score, not get discarded

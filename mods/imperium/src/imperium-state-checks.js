@@ -334,6 +334,19 @@
     return 0;
   }
   
+
+  canPlayerProduceFlagship(player) {
+    let flagship_found = 0;
+    for (let s in this.game.sectors) {
+      if (this.game.sectors[s]) {
+	for (let i = 0; i < this.game.sectors[s].units[player-1].length; i++) {
+	  if (this.game.sectors[s].units[player-1][i].type === "flagship") { return 0; }
+        }
+      }
+    }
+    return 1;
+  }
+
   canPlayerPlayStrategyCard(player) {
     for (let i = 0; i < this.game.players_info[player-1].strategy.length; i++) {
       if (!this.game.players_info[player-1].strategy_cards_played.includes(this.game.players_info[player-1].strategy[i])) {

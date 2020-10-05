@@ -140,7 +140,7 @@
     this.importActionCard('construction-rider', {
   	name : "Construction Rider" ,
   	type : "rider" ,
-  	text : "Player gains 1 VP" ,
+  	text : "Player may place a space dock on a planet they control" ,
 	playActionCard : function(imperium_self, player, action_card_player, card) {
 	  if (action_card_player == imperium_self.game.player) {
 

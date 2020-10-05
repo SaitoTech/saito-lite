@@ -958,12 +958,13 @@ console.log(JSON.stringify(this.game.state.choices));
 	this.game.state.voting_on_agenda = agenda_num;
 
 	//
-	// voting happens in turns
+	// voting happens in turns, speaker last
 	//
         let who_is_next = 0;
+	let speaker_order = this.returnSpeakerOrder();
 
-	for (let i = 0; i < this.game.players_info.length; i++) {
-	  if (this.game.state.voted_on_agenda[i][agenda_num] == 0) { 
+	for (let i = 0; i < speaker_order.length; i++) {
+	  if (this.game.state.voted_on_agenda[speaker_order[i]-1][agenda_num] == 0) { 
 	    who_is_next = i+1;
 	    i = this.game.players_info.length; 
 	  }

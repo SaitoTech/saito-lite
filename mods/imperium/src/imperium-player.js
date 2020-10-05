@@ -2831,7 +2831,7 @@ playerScoreVictoryPoints(imperium_self, mycallback, stage = 0) {
   if (available_resources >= 4) {
     html += '<li class="buildchoice" id="dreadnaught">Dreadnaught - <span class="dreadnaught_total">0</span></li>';
   }
-  if (available_resources >= 8) {
+  if (available_resources >= 8 && this.canPlayerProduceFlagship(imperium_self.game.player)) {
     html += '<li class="buildchoice" id="flagship">Flagship - <span class="flagship_total">0</span></li>';
   }
   if (imperium_self.game.players_info[imperium_self.game.player - 1].may_produce_warsuns == 1) {
@@ -4758,24 +4758,37 @@ playerActivateSystem() {
       $(divpid).find('.hex_activated').css('background-color', 'var(--p' + imperium_self.game.player + ')');
       $(divpid).find('.hex_activated').css('opacity', '0.3');
 
-      let c = sconfirm("Activate this system?");
-      if (c) {
-        sys.s.activated[imperium_self.game.player - 1] = 1;
-        imperium_self.addMove("pds_space_attack_post\t"+imperium_self.game.player+"\t"+pid);
-        imperium_self.addMove("pds_space_attack\t" + imperium_self.game.player + "\t" + pid);
-        imperium_self.addMove("activate_system_post\t" + imperium_self.game.player + "\t" + pid);
-        imperium_self.addMove("activate_system\t" + imperium_self.game.player + "\t" + pid);
-        imperium_self.addMove("expend\t" + imperium_self.game.player + "\t" + "command" + "\t" + 1);
-        imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t" + "int" + "\t" + "1");
-        imperium_self.endTurn();
 
-      } else {
+      let chtml = "<div class='sf-readable'>Activate this system?</div><ul>";
+          chtml += '<li class="option" id="yes">activate sector</li>';
+          chtml += '<li class="option" id="no">choose again</li>';
+          chtml += '</ul>';
 
-        activated_once = 0;
-        $(divpid).find('.hex_activated').css('background-color', 'transparent');
-        $(divpid).find('.hex_activated').css('opacity', '1');
+      this.updateStatus(chtml);
+      
+      $('.option').off();
+      $('.option').on('click', function() {
 
-      }
+        let action2 = $(this).attr("id");
+
+        if (action2 === "yes") {
+          sys.s.activated[imperium_self.game.player - 1] = 1;
+          imperium_self.addMove("pds_space_attack_post\t"+imperium_self.game.player+"\t"+pid);
+          imperium_self.addMove("pds_space_attack\t" + imperium_self.game.player + "\t" + pid);
+          imperium_self.addMove("activate_system_post\t" + imperium_self.game.player + "\t" + pid);
+          imperium_self.addMove("activate_system\t" + imperium_self.game.player + "\t" + pid);
+          imperium_self.addMove("expend\t" + imperium_self.game.player + "\t" + "command" + "\t" + 1);
+          imperium_self.addMove("setvar\tstate\t0\tactive_player_moved\t" + "int" + "\t" + "1");
+          imperium_self.endTurn();
+
+        } else {
+
+          activated_once = 0;
+          $(divpid).find('.hex_activated').css('background-color', 'transparent');
+          $(divpid).find('.hex_activated').css('opacity', '1');
+
+        }
+      });
     }
 
   });
