@@ -43,6 +43,19 @@ module.exports = RewardsAppspaceTemplate = (app) => {
         .total-earned-content {
           margin: 1em 0;
         }
+        .invite-link {
+          display: grid;
+          grid-template-columns: 7em auto 2em;
+          align-items: center;
+          font-size: 1.25em;
+          gap: 1em;
+      }
+        i.fas.fa-copy {
+          border: 1px solid white;
+          border-radius: 2em;
+          padding: 0.5em;
+      }
+      .fa, .fas {
     </style>
     <div class="email-appspace-rewards">
       <h2>Saito Network Rewards</h2>
@@ -58,6 +71,7 @@ module.exports = RewardsAppspaceTemplate = (app) => {
       <center><div class="loader"></div></center>
     </div>
     <div class="right total-earned"></div>
+    <div class="invite-link"></div>
     <hr />
       <h3>Extra Reward Activities</h3>
     <div class="rewards-grid"></div>

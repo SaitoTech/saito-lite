@@ -28,7 +28,7 @@ module.exports = RewardsAppspace = {
             var referral_grid = document.querySelector('.referral-status');
             var total_earn = 0;
             if (rows.length > 0) {
-              referral_grid.innerHTML = `<div class="table-head">User</div><div class="table-head right">Total Rewards</div><div class="table-head right">referral Date</div>`;
+              referral_grid.innerHTML = `<div class="table-head">User</div><div class="table-head right">Total Rewards</div><div class="table-head right">Referral Date</div>`;
               rows.forEach((row) => {
                 this.updateUserreferralStatus(app, row);
                 total_earn += row.total_payout;
@@ -40,6 +40,9 @@ module.exports = RewardsAppspace = {
           } catch (err) {
             console.log(err);
           }
+          document.querySelector('.invite-link').innerHTML = `
+          Your referral link: <input class="invite-link-input" type="text" value="${app.browser.returnInviteLink()}" /><i class="fas fa-copy"></i>
+          `;
         });
       }
     } catch (err) {
@@ -64,6 +67,11 @@ module.exports = RewardsAppspace = {
 
   attachEvents(app, data) {
     //document.querySelector('.rewards-back').onclick = () => {data.render}
+    document.querySelector('.invite-link').addEventListener('click', (e) => {
+      let text = document.querySelector('.invite-link-input');
+      text.select();
+      document.execCommand('copy');
+    });
 
   },
 
