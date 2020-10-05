@@ -33,7 +33,16 @@ module.exports = RewardsAppspaceTemplate = (app) => {
           font-size: 1.2em;
           grid-template-columns: auto auto auto auto;
           margin: 1em 0 2em 0;
-      } 
+
+        }
+        .referral-status {
+          display: grid;
+          grid-template-columns: auto 6em 7em;
+          gap: 1em;
+        } 
+        .total-earned-content {
+          margin: 1em 0;
+        }
     </style>
     <div class="email-appspace-rewards">
       <h2>Saito Network Rewards</h2>
@@ -42,6 +51,14 @@ module.exports = RewardsAppspaceTemplate = (app) => {
       <div class="rewards-status">
         <center><div class="loader"></div></center>
       </div>
+      
+      <hr />
+      <h3>referral Rewards</h3>   
+      <div class="referral-status">
+      <center><div class="loader"></div></center>
+    </div>
+    <div class="right total-earned"></div>
+    <hr />
       <h3>Extra Reward Activities</h3>
     <div class="rewards-grid"></div>
   `;

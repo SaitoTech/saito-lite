@@ -22,6 +22,31 @@ module.exports = RewardsAppspace = {
     }
 
     try {
+      if (document.querySelector(".referral-status")) {
+        app.network.sendRequestWithCallback("user referrals", app.wallet.returnPublicKey(), (rows) => {
+          try {
+            var referral_grid = document.querySelector('.referral-status');
+            var total_earn = 0;
+            if (rows.length > 0) {
+              referral_grid.innerHTML = `<div class="table-head">User</div><div class="table-head right">Total Rewards</div><div class="table-head right">referral Date</div>`;
+              rows.forEach((row) => {
+                this.updateUserreferralStatus(app, row);
+                total_earn += row.total_payout;
+              }); 
+              document.querySelector('.total-earned').innerHTML += `<div class="total-earned-content"><h3>Total Earned: ${Math.floor(total_earn/10)} SAITO</h3></div>`;
+            } else {
+              referral_grid.innerHTML = "<p>Click 'Refer Friends' below to get your personal referral link and start earning today.</p>";
+            }
+          } catch (err) {
+            console.log(err);
+          }
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+
+    try {
       if (document.querySelector(".rewards-grid")) {
         app.network.sendRequestWithCallback("update activities", app.wallet.returnPublicKey(), (rows) => {
           rows.forEach(row => this.updateRewardsGridRow(row));
@@ -33,13 +58,13 @@ module.exports = RewardsAppspace = {
 
     for (let i = 0; i < RewardsActivities.length; i++) {
       document.getElementById(`${RewardsActivities[i].id}-row`)
-        .onclick = ()  => RewardsActivities[i].action(app);
+        .onclick = () => RewardsActivities[i].action(app);
     }
   },
 
   attachEvents(app, data) {
     //document.querySelector('.rewards-back').onclick = () => {data.render}
- 
+
   },
 
   updateRewardsGridRow(row) {
@@ -60,6 +85,18 @@ module.exports = RewardsAppspace = {
       <div>Spend For Next Payout: </div><div class="right">${s2Number(Math.floor(row.next_payout_after))}</div>
     `;
     status_grid.innerHTML = html;
+  },
+
+  updateUserreferralStatus(app, row) {
+    var referral_grid = document.querySelector('.referral-status');
+    
+    let html =
+      `
+     <div>${app.keys.returnIdentifierByPublicKey(row.address, true)}</div>
+      <div class="right">${s2Number(Math.floor(row.total_payout))}</div>
+      <div class="right">${new Date(row.first_tx).toLocaleDateString('zh-CN', { dateStyle: 'short', hour12: false })}</div>
+    `;
+    referral_grid.innerHTML += html;
   }
 
 }
