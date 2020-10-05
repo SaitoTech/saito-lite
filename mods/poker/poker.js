@@ -365,11 +365,8 @@ class Poker extends GameTemplate {
         this.updateStatus("Game Over: " + this.game.state.player_names[mv[1] - 1] + " wins!");
         this.updateLog("Game Over: " + this.game.state.player_names[mv[1] - 1] + " wins!");
         this.showSplash("<h1>Game Over: " + this.game.state.player_names[mv[1] - 1] + " wins!</h1>" + this.updateHTML);
-        //this.game.over = 1;
         this.game.winner = this.game.players[mv[1] - 1];
-        //if (this.game.player = mv[1]) {
         this.resignGame(this.game.id); //post to leaderboard - ignore 'resign'
-        //}
         this.saveGame(this.game.id);
         return 0;
       }
@@ -420,7 +417,6 @@ class Poker extends GameTemplate {
           for (let i = 0; i < this.game.state.passed.length; i++) {
             if (this.game.state.passed[i] == 0) {
               let winnings = (this.game.state.pot - this.game.state.player_pot)
-              //salert(this.game.state.player_names[i] + " wins " + winnings);
               this.updateLog(this.game.state.player_names[i] + " wins " + this.game.state.pot);
               this.game.state.player_credit[i] += this.game.state.pot;
               player_left_idx = i;
