@@ -210,7 +210,8 @@ console.log("how many players: " + this.game.players.length);
     }
     this.game.queue.push("DECK\t1\t" + JSON.stringify(this.returnDeck()));
 
-console.log("QUEUE is now: " +JSON.stringify(this.game.queue));
+    this.game.queue.push("PAY\t1\t"+this.app.wallet.returnPublicKey()+"\t"+"SAITO");
+    this.game.queue.push("BALANCE\t0\t"+this.app.wallet.returnPublicKey()+"\t"+"SAITO");
 
   }
 
@@ -355,7 +356,12 @@ console.log("NEW ROUND: " + JSON.stringify(this.game.queue));
 	return 1;
       }
 
-      if (mv[0] === "stay") {
+      if (mv[0] === "stand") {
+        this.game.queue.splice(qe, 1);
+        return 1;
+      }
+
+      if (mv[0] === "bust") {
         this.game.queue.splice(qe, 1);
         return 1;
       }
@@ -372,6 +378,8 @@ console.log("NEW ROUND: " + JSON.stringify(this.game.queue));
 	  }
 	}
         this.game.queue.splice(qe, 1);
+
+        this.displayTable();
 
 	this.game.queue.push("nextround");
 	this.game.queue.push("ACKNOWLEDGE\tready for the next round");
@@ -427,21 +435,34 @@ console.log("start of nextround: " + JSON.stringify(this.game.queue));
     let blackjack_self = this;
 
     this.displayBoard();
+    this.pickWinner();
 
-    let html = "";
-    html += '<div class="menu-player">Your move ';
-    html += '</div>';
-    html += '<ul>';
+    if (this.game.state.player_total[this.game.player-1] > 21) {
 
-    html += '<li class="menu_option" id="hit">hit</li>';
-    html += '<li class="menu_option" id="stay">stay</li>';
-    html += '</ul>';
+      let html = "";
+      html += '<div class="menu-player">You have gone bust</div>';
+      html += '<ul>';
+      html += '<li class="menu_option" id="bust">confirm</li>';
+      html += '</ul>';
     
-    this.updateStatus(html, 1);
+      this.updateStatus(html, 1);
+
+    } else {
+
+      let html = "";
+      html += '<div class="menu-player">Your move ';
+      html += '</div>';
+      html += '<ul>';
+
+      html += '<li class="menu_option" id="hit">hit</li>';
+      html += '<li class="menu_option" id="stand">stand</li>';
+      html += '</ul>';
+    
+      this.updateStatus(html, 1);
+
+    }
+
     this.lockInterface();
-
-
-console.log("player turn!");
 
     $('.menu_option').off();
     $('.menu_option').on('click', function () {
@@ -456,9 +477,16 @@ console.log("player turn!");
 	return 0;
       }
 
-      if (choice === "stay") {
+      if (choice === "bust") {
         blackjack_self.addMove("RESOLVE\t"+blackjack_self.app.wallet.returnPublicKey());
-        blackjack_self.addMove("stay\t" + blackjack_self.game.player);
+        blackjack_self.addMove("bust\t" + blackjack_self.game.player);
+        blackjack_self.endTurn();
+	return 0;
+      }
+
+      if (choice === "stand") {
+        blackjack_self.addMove("RESOLVE\t"+blackjack_self.app.wallet.returnPublicKey());
+        blackjack_self.addMove("stand\t" + blackjack_self.game.player);
         blackjack_self.endTurn();
 	return 0;
       }
