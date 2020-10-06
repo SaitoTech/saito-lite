@@ -1,15 +1,5 @@
 module.exports = [
     {
-        id: "addcontact",
-        icon: "<i class='fas fa-qrcode'></i>",
-        reward: 50,
-        title: "Refer Friend",
-        event: "user add contact",
-        description:"Sharing is great. Don't keep Saito to your self - tell your friends.",
-        completed: false,
-        action: function(app){app.modules.returnModule("Tutorial").inviteFriendsModal();},
-    },
-    {
         id: "identifier",
         icon: "<i class='fas fa-user-tag'></i>",
         reward: 50,
@@ -28,6 +18,16 @@ module.exports = [
         description:"Backup your wallet and we'll send you a heap of Saito tokens, enough to use the network for a long, long, time. Backing up your wallet is important as it provides you with the ability to restore your account.",
         completed: false,
         action: function(app){app.modules.returnModule('Tutorial').welcomeBackupModal();},
+    },
+    {
+        id: "addcontact",
+        icon: "<i class='fas fa-qrcode'></i>",
+        reward: 50,
+        title: "Refer Friend",
+        event: "user add contact",
+        description:"Sharing is great. Don't keep Saito to your self - tell your friends.",
+        completed: false,
+        action: function(app){app.modules.returnModule("Tutorial").inviteFriendsModal();},
     },
     {
         id: "survey",
