@@ -2607,7 +2607,7 @@ console.log("CARD: " + card);
           this.updateMilitaryOperations();
           this.updateRound();
 
-          this.playMove(msg);
+          this.playMove();
           return 0;
         }
 
@@ -3058,7 +3058,7 @@ console.log("CARD: " + card);
 
 
 
-  playMove(msg) {
+  playMove() {
 
     this.game.state.headline  = 0;
     this.game.state.headline_hash = "";

@@ -177,15 +177,6 @@ class Tutorial06 extends GameTemplate {
 
 
       //
-      // print to log
-      //
-      if (mv[0] === "notify") {
-	this.game.queue.splice(qe, 1);
-	this.updateLog(mv[1]);
-	return 1;
-      }
-
-      //
       // player turn
       //
       if (mv[0] === "turn") {
@@ -245,7 +236,7 @@ class Tutorial06 extends GameTemplate {
       // add our move and end our turn
       //
       tutorial06_self.addMove("place\t"+tutorial06_self.game.player+"\t"+deck[card_selected].value);
-      tutorial06_self.addMove("notify\tPlayer "+tutorial06_self.game.player+" selected "+deck[card_selected].name);
+      tutorial06_self.addMove("NOTIFY\tPlayer "+tutorial06_self.game.player+" selected "+deck[card_selected].name);
       tutorial06_self.endTurn();
 
     });

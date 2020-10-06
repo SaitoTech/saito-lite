@@ -5,6 +5,11 @@ body {
   margin: 0px;
 }
 
+.dealer-notice {
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  font-size: 1.1em;
+}
 .main {
   margin-top: unset;
   padding: unset;

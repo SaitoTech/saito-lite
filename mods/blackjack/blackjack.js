@@ -82,8 +82,12 @@ console.log("how many players: " + this.game.players.length);
 
     if (this.game.players.length == 2) {
       this.game.queue.push("POOL\t1"); // pool for dealer cards
-      this.game.queue.push("DEAL\t1\t2\t2");
-      this.game.queue.push("DEAL\t1\t1\t2");
+      if (this.game.state.dealer != 2) {
+        this.game.queue.push("DEAL\t1\t2\t2");
+      }
+      if (this.game.state.dealer != 1) {
+        this.game.queue.push("DEAL\t1\t1\t2");
+      }
       this.game.queue.push("DECKENCRYPT\t1\t2");
       this.game.queue.push("DECKENCRYPT\t1\t1");
       this.game.queue.push("DECKXOR\t1\t2");
@@ -91,9 +95,15 @@ console.log("how many players: " + this.game.players.length);
     }
     if (this.game.players.length == 3) {
       this.game.queue.push("POOL\t1"); // pool for dealer cards
-      this.game.queue.push("DEAL\t1\t3\t2");
-      this.game.queue.push("DEAL\t1\t2\t2");
-      this.game.queue.push("DEAL\t1\t1\t2");
+      if (this.game.state.dealer != 3) {
+        this.game.queue.push("DEAL\t1\t3\t2");
+      }
+      if (this.game.state.dealer != 2) {
+        this.game.queue.push("DEAL\t1\t2\t2");
+      }
+      if (this.game.state.dealer != 1) {
+        this.game.queue.push("DEAL\t1\t1\t2");
+      }
       this.game.queue.push("DECKENCRYPT\t1\t3");
       this.game.queue.push("DECKENCRYPT\t1\t2");
       this.game.queue.push("DECKENCRYPT\t1\t1");
@@ -103,10 +113,18 @@ console.log("how many players: " + this.game.players.length);
     }
     if (this.game.players.length == 4) {
       this.game.queue.push("POOL\t1"); // pool for dealer cards
-      this.game.queue.push("DEAL\t1\t4\t2");
-      this.game.queue.push("DEAL\t1\t3\t2");
-      this.game.queue.push("DEAL\t1\t2\t2");
-      this.game.queue.push("DEAL\t1\t1\t2");
+      if (this.game.state.dealer != 4) {
+        this.game.queue.push("DEAL\t1\t4\t2");
+      }
+      if (this.game.state.dealer != 3) {
+        this.game.queue.push("DEAL\t1\t3\t2");
+      }
+      if (this.game.state.dealer != 2) {
+        this.game.queue.push("DEAL\t1\t2\t2");
+      }
+      if (this.game.state.dealer != 1) {
+        this.game.queue.push("DEAL\t1\t1\t2");
+      }
       this.game.queue.push("DECKENCRYPT\t1\t4");
       this.game.queue.push("DECKENCRYPT\t1\t3");
       this.game.queue.push("DECKENCRYPT\t1\t2");
@@ -120,11 +138,21 @@ console.log("how many players: " + this.game.players.length);
     }
     if (this.game.players.length == 5) {
       this.game.queue.push("POOL\t1"); // pool for dealer cards
-      this.game.queue.push("DEAL\t1\t5\t2");
-      this.game.queue.push("DEAL\t1\t4\t2");
-      this.game.queue.push("DEAL\t1\t3\t2");
-      this.game.queue.push("DEAL\t1\t2\t2");
-      this.game.queue.push("DEAL\t1\t1\t2");
+      if (this.game.state.dealer != 5) {
+        this.game.queue.push("DEAL\t1\t5\t2");
+      }
+      if (this.game.state.dealer != 4) {
+        this.game.queue.push("DEAL\t1\t4\t2");
+      }
+      if (this.game.state.dealer != 3) {
+        this.game.queue.push("DEAL\t1\t3\t2");
+      }
+      if (this.game.state.dealer != 2) {
+        this.game.queue.push("DEAL\t1\t2\t2");
+      }
+      if (this.game.state.dealer != 1) {
+        this.game.queue.push("DEAL\t1\t1\t2");
+      }
       this.game.queue.push("DECKENCRYPT\t1\t5");
       this.game.queue.push("DECKENCRYPT\t1\t4");
       this.game.queue.push("DECKENCRYPT\t1\t3");
@@ -138,69 +166,30 @@ console.log("how many players: " + this.game.players.length);
     }
     if (this.game.players.length == 6) {
       this.game.queue.push("POOL\t1"); // pool for dealer cards
-      this.game.queue.push("DEAL\t1\t6\t2");
-      this.game.queue.push("DEAL\t1\t5\t2");
-      this.game.queue.push("DEAL\t1\t4\t2");
-      this.game.queue.push("DEAL\t1\t3\t2");
-      this.game.queue.push("DEAL\t1\t2\t2");
-      this.game.queue.push("DEAL\t1\t1\t2");
+      if (this.game.state.dealer != 6) {
+        this.game.queue.push("DEAL\t1\t6\t2");
+      }
+      if (this.game.state.dealer != 5) {
+        this.game.queue.push("DEAL\t1\t5\t2");
+      }
+      if (this.game.state.dealer != 4) {
+        this.game.queue.push("DEAL\t1\t4\t2");
+      }
+      if (this.game.state.dealer != 3) {
+        this.game.queue.push("DEAL\t1\t3\t2");
+      }
+      if (this.game.state.dealer != 2) {
+        this.game.queue.push("DEAL\t1\t2\t2");
+      }
+      if (this.game.state.dealer != 1) {
+        this.game.queue.push("DEAL\t1\t1\t2");
+      }
       this.game.queue.push("DECKENCRYPT\t1\t6");
       this.game.queue.push("DECKENCRYPT\t1\t5");
       this.game.queue.push("DECKENCRYPT\t1\t4");
       this.game.queue.push("DECKENCRYPT\t1\t3");
       this.game.queue.push("DECKENCRYPT\t1\t2");
       this.game.queue.push("DECKENCRYPT\t1\t1");
-      this.game.queue.push("DECKXOR\t1\t6");
-      this.game.queue.push("DECKXOR\t1\t5");
-      this.game.queue.push("DECKXOR\t1\t4");
-      this.game.queue.push("DECKXOR\t1\t3");
-      this.game.queue.push("DECKXOR\t1\t2");
-      this.game.queue.push("DECKXOR\t1\t1");
-    }
-    if (this.game.players.length == 7) {
-      this.game.queue.push("POOL\t1"); // pool for dealer cards
-      this.game.queue.push("DEAL\t1\t7\t2");
-      this.game.queue.push("DEAL\t1\t6\t2");
-      this.game.queue.push("DEAL\t1\t5\t2");
-      this.game.queue.push("DEAL\t1\t4\t2");
-      this.game.queue.push("DEAL\t1\t3\t2");
-      this.game.queue.push("DEAL\t1\t2\t2");
-      this.game.queue.push("DEAL\t1\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t7");
-      this.game.queue.push("DECKENCRYPT\t1\t6");
-      this.game.queue.push("DECKENCRYPT\t1\t5");
-      this.game.queue.push("DECKENCRYPT\t1\t4");
-      this.game.queue.push("DECKENCRYPT\t1\t3");
-      this.game.queue.push("DECKENCRYPT\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t1");
-      this.game.queue.push("DECKXOR\t1\t7");
-      this.game.queue.push("DECKXOR\t1\t6");
-      this.game.queue.push("DECKXOR\t1\t5");
-      this.game.queue.push("DECKXOR\t1\t4");
-      this.game.queue.push("DECKXOR\t1\t3");
-      this.game.queue.push("DECKXOR\t1\t2");
-      this.game.queue.push("DECKXOR\t1\t1");
-    }
-    if (this.game.players.length == 8) {
-      this.game.queue.push("POOL\t1"); // pool for dealer cards
-      this.game.queue.push("DEAL\t1\t8\t2");
-      this.game.queue.push("DEAL\t1\t7\t2");
-      this.game.queue.push("DEAL\t1\t6\t2");
-      this.game.queue.push("DEAL\t1\t5\t2");
-      this.game.queue.push("DEAL\t1\t4\t2");
-      this.game.queue.push("DEAL\t1\t3\t2");
-      this.game.queue.push("DEAL\t1\t2\t2");
-      this.game.queue.push("DEAL\t1\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t8");
-      this.game.queue.push("DECKENCRYPT\t1\t7");
-      this.game.queue.push("DECKENCRYPT\t1\t6");
-      this.game.queue.push("DECKENCRYPT\t1\t5");
-      this.game.queue.push("DECKENCRYPT\t1\t4");
-      this.game.queue.push("DECKENCRYPT\t1\t3");
-      this.game.queue.push("DECKENCRYPT\t1\t2");
-      this.game.queue.push("DECKENCRYPT\t1\t1");
-      this.game.queue.push("DECKXOR\t1\t8");
-      this.game.queue.push("DECKXOR\t1\t7");
       this.game.queue.push("DECKXOR\t1\t6");
       this.game.queue.push("DECKXOR\t1\t5");
       this.game.queue.push("DECKXOR\t1\t4");
@@ -209,8 +198,6 @@ console.log("how many players: " + this.game.players.length);
       this.game.queue.push("DECKXOR\t1\t1");
     }
     this.game.queue.push("DECK\t1\t" + JSON.stringify(this.returnDeck()));
-
-    this.game.queue.push("PAY\t1\t"+this.app.wallet.returnPublicKey()+"\t"+"SAITO");
     this.game.queue.push("BALANCE\t0\t"+this.app.wallet.returnPublicKey()+"\t"+"SAITO");
 
   }
@@ -261,6 +248,9 @@ console.log("how many players: " + this.game.players.length);
 
     this.game.state.turn = 0;
     this.game.state.round++;
+    this.game.state.dealer++;
+    if (this.game.state.dealer > this.game.players.length) { this.game.state.dealer = 1; }
+
     console.log("Round: "+ this.game.state.round);
 
 
@@ -288,8 +278,6 @@ console.log("how many players: " + this.game.players.length);
       let qe = this.game.queue.length - 1;
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
-
-console.log("testing: " + JSON.stringify(this.game.queue));
 
       if (mv[0] === "play") {
 
@@ -322,9 +310,17 @@ console.log("testing: " + JSON.stringify(this.game.queue));
         this.game.queue.push("dealer");
         this.game.queue.push("score");
         this.game.queue.push("endround");
-        this.game.queue.push("PLAY\tall");	
+	let players_to_go = [];
+        for (let i = 0; i < this.game.players.length; i++) {
+	  if ((i+1) != this.game.state.dealer) {
+	    players_to_go.push((i+1));
+	  }
+	}
+        this.game.queue.push("PLAY\t"+JSON.stringify(players_to_go));	
 
-console.log("NEW ROUND: " + JSON.stringify(this.game.queue));
+	if (this.game.player == this.game.state.dealer) {
+	  this.updateStatus("You are the dealer this round");
+	}
 
 	return 1;
       }
@@ -369,10 +365,35 @@ console.log("NEW ROUND: " + JSON.stringify(this.game.queue));
 
       if (mv[0] === "pickwinner") {
         if (this.game.state.dealer_wins == 1) {
+
+	  //
+	  // all players lose their bets
+	  //
+	  for (let i = 0; i < this.game.players.length; i++) {
+	    if (this.game.state.dealer != (i+1)) {
+	      this.game.state.player_credit[i] -= 100;
+	      this.game.queue.push("PAY"+"\t"+"100"+"\t"+this.game.players[i]+"\t"+this.game.players[this.game.state.dealer-1]+"\t"+(new Date().getTime())+"\t"+"SAITO");
+	      this.game.state.player_credit[this.game.state.dealer-1] += 100;
+	    }
+	  }
+
 	  console.log("dealer wins");
+
 	} else {
-	  for (let i = 0; i < this.game.state.players_winner.length; i++) {
-	    if (this.game.state.players_winner[i] == 1) {
+	  for (let i = 0; i < this.game.state.player_winner.length; i++) {
+	    if (this.game.state.player_winner[i] == 1) {
+
+  	      //
+	      // dealer loses this one...
+	      //
+	      for (let i = 0; i < this.game.players.length; i++) {
+	        if (this.game.state.dealer != (i+1)) {
+	          this.game.state.player_credit[i] += 100;
+	          this.game.queue.push("PAY\t"+"100"+"\t"+this.game.players[this.game.state.dealer-1]+"\t"+this.game.players[i]+"\t"+(new Date().getTime())+"\t"+"SAITO");
+	          this.game.state.player_credit[this.game.state.dealer-1] -= 100;
+	        }
+	      }
+
 	      console.log("Player "+(i+1)+" wins");
 	    }
 	  }
@@ -382,13 +403,28 @@ console.log("NEW ROUND: " + JSON.stringify(this.game.queue));
         this.displayTable();
 
 	this.game.queue.push("nextround");
-	this.game.queue.push("ACKNOWLEDGE\tready for the next round");
+	if (this.game.state.dealer_wins == 1) {
+	  this.game.queue.push("ACKNOWLEDGE\tdealer wins");
+	} else {
+	  if (this.game.state.dealer == this.game.player) {
+	    if (this.game.state.dealer_tie == 1) {
+	      this.game.queue.push("ACKNOWLEDGE\tyou tie");
+	    } else {
+	      this.game.queue.push("ACKNOWLEDGE\tyou lose");
+	    }
+	  } else {
+  	    if (this.game.state.player_winner[this.game.player-1] == 1) {
+	      this.game.queue.push("ACKNOWLEDGE\tyou win");
+	    } else {
+	      this.game.queue.push("ACKNOWLEDGE\tyou lose");
+	    }
+	  }
+	}
 
         return 1;
       }
 
       if (mv[0] === "nextround") {
-console.log("start of nextround: " + JSON.stringify(this.game.queue));
         this.game.queue.splice(qe, 1);
 	this.initializeQueue(); 
 	return 1;
@@ -437,7 +473,16 @@ console.log("start of nextround: " + JSON.stringify(this.game.queue));
     this.displayBoard();
     this.pickWinner();
 
-    if (this.game.state.player_total[this.game.player-1] > 21) {
+    let array_of_cards = [];
+
+    for (let i = 0; i < this.game.deck[0].hand.length; i++) {
+      let tmpr = this.game.deck[0].cards[this.game.deck[0].hand[i]].name;
+      let tmpr2 = tmpr.split(".");
+      array_of_cards.push(tmpr2[0]);
+    }
+    my_total = this.scoreArrayOfCards(array_of_cards);
+
+    if (my_total > 21) {
 
       let html = "";
       html += '<div class="menu-player">You have gone bust</div>';
@@ -526,9 +571,12 @@ console.log("start of nextround: " + JSON.stringify(this.game.queue));
     state.dealer_total = 0;
     state.dealer_wins = 0;
     state.dealer_tie = 0;
+    state.dealer = 1;		// player 1 starts as the dealer
+
 
     for (let i = 0; i < num_of_players; i++) {
       state.player_credit[i] = 1000;
+      if (this.game.options.stake != undefined) { state.player_credit[i] = parseInt(this.game.options.stake); }
       state.player_names[i] = this.app.keys.returnIdentifierByPublicKey(this.game.players[i], 1);
       if (state.player_names[i].indexOf("@") > 0) {
         state.player_names[i] = state.player_names[i].substring(0, state.player_names[i].indexOf("@"));
@@ -682,30 +730,50 @@ console.log("start of nextround: " + JSON.stringify(this.game.queue));
 
     for (let i = 0; i < this.game.players.length; i++) {
 
-      let seat = i - prank;
-      if (seat < 0) { seat += this.game.players.length }
+      if (this.game.state.dealer != (i+1)) {
 
-      let player_box_num = player_box[seat];
-      let divname = "#player-info-" + player_box_num;
-      let boxobj = document.querySelector(divname);
+        let seat = i - prank;
+        if (seat < 0) { seat += this.game.players.length }
 
-      let newhtml = `
-      <div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">
-      `;
+        let player_box_num = player_box[seat];
+        let divname = "#player-info-" + player_box_num;
+        let boxobj = document.querySelector(divname);
 
-      newhtml += `
-          <img class="card" src="${this.card_img_dir}/red_back.png">
-          <img class="card" src="${this.card_img_dir}/red_back.png">
-      `;
-      newhtml += `
-        </div>
-        <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player_names[i]}</div>
-        <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player_credit[i]} SAITO</div> 
-      `;
-      boxobj.querySelector(".info").innerHTML = newhtml;
+        let newhtml = `
+	  <div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">
+            <img class="card" src="${this.card_img_dir}/red_back.png">
+            <img class="card" src="${this.card_img_dir}/red_back.png">
+          </div>
+          <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player_names[i]}</div>
+          <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player_credit[i]} SAITO</div> 
+        `;
+        boxobj.querySelector(".info").innerHTML = newhtml;
 
-      if (boxobj.querySelector(".plog").innerHTML == "") {
-        boxobj.querySelector(".plog").innerHTML += `<div class="player-info-log" id="player-info-log-${i + 1}"></div>`;
+        if (boxobj.querySelector(".plog").innerHTML == "") {
+          boxobj.querySelector(".plog").innerHTML += `<div class="player-info-log" id="player-info-log-${i + 1}"></div>`;
+        }
+
+      } else {
+
+        let seat = i - prank;
+        if (seat < 0) { seat += this.game.players.length }
+
+        let player_box_num = player_box[seat];
+        let divname = "#player-info-" + player_box_num;
+        let boxobj = document.querySelector(divname);
+
+        let newhtml = `
+	  <div class="player-info-hand" id="player-info-hand-${i + 1}">
+            <div class="dealer-notice">DEALER</div>
+	  </div>
+          <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player_names[i]}</div>
+          <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player_credit[i]} SAITO</div> 
+        `;
+        boxobj.querySelector(".info").innerHTML = newhtml;
+
+        if (boxobj.querySelector(".plog").innerHTML == "") {
+          boxobj.querySelector(".plog").innerHTML += `<div class="player-info-log" id="player-info-log-${i + 1}"></div>`;
+        }
       }
     }
   }
@@ -763,27 +831,16 @@ console.log("start of nextround: " + JSON.stringify(this.game.queue));
   dealerFlips() {
 
     let dealer_total = 0;
-
-    let total = 0;
-    let aces = 0;
+    let array_of_cards = [];
 
     for (let i = 0; i < this.game.pool[0].hand.length; i++) {
       let tmpr = this.game.pool[0].cards[this.game.pool[0].hand[i]].name;
       let tmpr2 = tmpr.split(".");
-      let card = tmpr2[0];	
-      if (card[0] === 'A') {
-	  total += 1;
-	  aces++;
-      } else {
-          let card_total = parseInt(card.substring(1));
-	  if (card_total > 10) { card_total = 10; }
-	  total += card_total;
-      }
+      array_of_cards.push(tmpr2[0]);
     }
-    for (let z = 0; z < aces; z++) {
-      if ((total+10) <= 21) { total += 10; }
-    }
-    dealer_total = total;
+    dealer_total = this.scoreArrayOfCards(array_of_cards);
+
+console.log("dealer total calculated at: " + dealer_total);
 
     //
     // the dealer either wins / loses / or pulls a new card
@@ -792,7 +849,7 @@ console.log("start of nextround: " + JSON.stringify(this.game.queue));
 
       this.game.queue.splice(this.game.queue.length-1, 1);
 
-      if (total > 21) { 
+      if (dealer_total > 21) { 
 	this.game.state.dealer_wins = 0;
 	this.game.state.dealer_tie = 1;
  	for (let i = 0; i < this.game.state.player_winner.length; i++) {
@@ -801,6 +858,7 @@ console.log("start of nextround: " + JSON.stringify(this.game.queue));
 	    return 1;
 	  }
 	}
+        return 1;
       }
 
       this.game.state.dealer_wins = 1;
@@ -863,32 +921,44 @@ console.log("start of nextround: " + JSON.stringify(this.game.queue));
 
   }
 
+  scoreArrayOfCards(array_of_cards) {
+
+    let total = 0;
+    let aces = 0;
+
+    for (let i = 0; i < array_of_cards.length; i++) {
+      let card = array_of_cards[i];
+      if (card[0] === 'A') {
+	  total += 1;
+	  aces++;
+      } else {
+        let card_total = parseInt(card.substring(1));
+	if ((card_total+total) == 11 && aces == 1) {
+	  return 21;
+	}
+	if (card_total > 10) { card_total = 10; }
+	total += card_total;
+      }
+    }
+    for (let z = 0; z < aces; z++) {
+      if ((total+10) <= 21) { total += 10; }
+    }
+
+    return total;
+  }
+
   pickWinner() {
 
     //
-    // score dealer
+    // score players
     //
+    this.game.state.player_total = [];
     for (let i = 0; i < this.game.state.player_hands.length; i++) {
-
-      let total = 0;
-      let aces = 0;
-
+      let array_of_cards = [];
       for (let ii = 0; ii < this.game.state.player_hands[i].length; ii++) {
-        let card = this.game.state.player_hands[i][ii];
-        if (card[0] === 'A') {
-	  total += 1;
-	  aces++;
-	} else {
-          let card_total = parseInt(card.substring(1));
-	  if (card_total > 10) { card_total = 10; }
-	  total += card_total;
-	}
-      }
-      for (let z = 0; z < aces; z++) {
-	if ((total+10) <= 21) { total += 10; }
-      }
-      this.game.state.player_total[i] = total;
-
+        array_of_cards.push(this.game.state.player_hands[i][ii]);
+      };
+      this.game.state.player_total,push(this.scoreArrayOfCards(array_of_cards));
     }
 
     let max_score = 0;
@@ -898,17 +968,14 @@ console.log("start of nextround: " + JSON.stringify(this.game.queue));
       }
     }
     for (let i = 0; i < this.game.state.player_total.length; i++) {
-      if (this.game.state.player_total[i] == max_score) {
+      if (this.game.state.player_total[i] == max_score && (i+1) != this.game.state.dealer) {
 	this.game.state.player_winner[i] = 1;
       } else {
 	this.game.state.player_winner[i] = 0;
       }
     }
 
-   
-
     return 1;
-
   }
 
 
@@ -918,8 +985,6 @@ console.log("start of nextround: " + JSON.stringify(this.game.queue));
     return `
             <label for="stake">Initial Stake:</label>
             <select name="stake">
-              <option value="100">100</option>
-              <option value="500">500</option>
               <option value="1000" selected="selected">1000</option>
               <option value="5000" >5000</option>
               <option value="10000">10000</option>
