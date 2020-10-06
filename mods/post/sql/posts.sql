@@ -7,5 +7,7 @@ CREATE TABLE IF NOT EXISTS posts (
       content TEXT,
       post_transaction TEXT,
       ts INTEGER,
+      children INTEGER,
+      deleted INTEGER,
       PRIMARY KEY(id DESC)
 );

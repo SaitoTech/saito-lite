@@ -1,18 +1,23 @@
 const PostSidebarTemplate = require('./post-sidebar.template');
-const NewPost = require('../new-post/new-post');
+const NewPost = require('../post/new-post');
+const ShowPost = require('../post/show-post');
+const elParser = require('../../../../lib/helpers/el_parser');
 
 module.exports = PostSidebar = {
 
-  loaded : 0 ,
+  loaded: 0,
+  contentLoaded: 0,
 
   render(app, data) {
     if (this.loaded == 0) {
       try {
         document.querySelector(".arcade-left-sidebar-apps").innerHTML += PostSidebarTemplate(app, data);
+        this.loaded = 1;
       } catch (err) {
+        console.log(err);
       }
     }
-    this.loaded = 1;
+
   },
 
   attachEvents(app, data) {
@@ -24,31 +29,79 @@ module.exports = PostSidebar = {
         NewPost.attachEvents(app, data);
       }
     });
-
   },
 
-  addPost(app, title, author, address, date, post, link, votes, comments) {
+  addPosts(app, data) {
+    if (this.contentLoaded == 0) {
+      try {
+        app.modules.returnModule("Post").sendPeerDatabaseRequestWithFilter(
+
+          "Post",
+
+          (`SELECT
+          * 
+        FROM 
+          posts 
+        WHERE 
+          deleted = 0 AND 
+          parent_id = ""
+        ORDER BY
+          ts desc
+        LIMIT 10
+        ;`),
+
+          (res) => {
+            if (res.rows) {
+              res.rows.forEach(row => {
+                this.addPost(app, data, row);
+              });
+              this.contentLoaded = 1;
+            }
+          },
+
+          (peer) => {
+            if (peer.peer.services) {
+              for (let z = 0; z < peer.peer.services.length; z++) {
+                if (peer.peer.services[z].service === "post") {
+                  return 1;
+                }
+              }
+            }
+          }
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  },
+
+
+  addPost(app, data, row) {
 
     let html = `<div class="arcade-post-post">
       <div class="poster-id">
         <div class="tip">
-          <img class="sidebar-post-identicon" src="${app.keys.returnIdenticon(author)}" alt="${address}">
-          <div class="tiptext">${app.keys.returnIdentifierByPublicKey(author, true)}"</div>
+          <img class="sidebar-post-identicon" src="${app.keys.returnIdenticon(row.author)}"/>
+          <div class="tiptext">${app.keys.returnIdentifierByPublicKey(row.author, true)}"</div>
         </div>
       </div>
       <div class="about-post">
-        <div class="post-title" style="">
-          <a href="${link}" class="post-title-link">${title}</a>
+        <div class="post-title" id="${row.id}">
+          <span class="side-bar-post">${row.content.substr(0, 60)}</span>
         </div>
         <div class="post-details">
-          <div class="comment-count"><i class="far fa-comment-alt"></i>&nbsp;<b>${comments}</b></div>
-          <div class="vote-count"><i class="fas fa-vote-yea"></i>&nbsp;<b>${votes}</b></div>          
-          <div class="sub-post"> in <a href="${post}">${post}</a></div>
+          <div class="comment-count"><i class="far fa-comment-alt"></i>&nbsp;<b>${row.children}</b></div>
         </div>
       </div>
     </div>`;
 
-    document.querySelector('.arcade-post-posts').innerHTML += html;
+    document.querySelector('.arcade-post-posts').append(elParser(html));
+
+    document.getElementById(row.id).addEventListener('click', (e, app, data, row) => {
+      console.log('click');
+      ShowPost.render(app, data, row);
+      ShowPost.attachEvents(app, data, row);
+    });
 
   }
 

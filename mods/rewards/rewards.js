@@ -27,6 +27,7 @@ class Rewards extends ModTemplate {
     this.surveyPayout = 50;
     this.suggestPayout = 25;
     this.newsletterPayout = 50;
+    this.referralPayout = 50;
 
     this.referralBonus = 0.1;
 
@@ -155,6 +156,11 @@ class Rewards extends ModTemplate {
     if (message.request == "user status") {
       var status = await this.returnUserStatus(message.data);
       mycallback(status);
+    }
+
+    if (message.request == "user referrals") {
+      var referrals = await this.returnUserreferrals(message.data);
+      mycallback(referrals);
     }
   }
 
@@ -404,6 +410,7 @@ class Rewards extends ModTemplate {
 
       //initial funds sent
       this.makePayout(tx.transaction.from[ii].add, this.initial);
+      this.makePayout(referer, this.referralPayout, "New Referral User");
 
       return;
     } catch (err) {
@@ -477,6 +484,20 @@ class Rewards extends ModTemplate {
         row.next_payout_after = Math.ceil((row.total_payout * this.payoutRatio) - row.total_spend);
       });
 
+      return rows;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async returnUserreferrals(address) {
+    let sql = "SELECT * from users where referer = $address order by total_payout desc";
+    let params = {
+      $address: address
+    }
+
+    try {
+      let rows = await this.app.storage.queryDatabase(sql, params, "rewards");
       return rows;
     } catch (err) {
       console.error(err);
