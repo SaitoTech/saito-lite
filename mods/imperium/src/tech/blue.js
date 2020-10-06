@@ -91,7 +91,7 @@ console.log("ship move bonus updated to 1");
           imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"fleet_logistics_exhausted"+"\t"+"int"+"\t"+"1");
 	  imperium_self.addMove("play\t"+player);
 	  imperium_self.addMove("play\t"+player);
-          imperium_self.addMove("notify\t"+player+" activates fleet logistics");
+          imperium_self.addMove("NOTIFY\t"+player+" activates fleet logistics");
 	  imperium_self.endTurn();
 	  imperium_self.updateStatus("Activating Fleet Logistics");
         }

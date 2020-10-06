@@ -855,7 +855,7 @@ playerAcknowledgeNotice(msg, mycallback) {
         total_hits -= imperium_self.game.state.assign_hits_to_cancel;
         if (total_hits < 0) { total_hits = 0; }
         if (total_hits == 0) {
-          imperium_self.updateLog("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " does not take any hits");
+          imperium_self.updateLog("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " does not take any hits");
           imperium_self.endTurn();
           return 0;
         }
@@ -1045,7 +1045,7 @@ playerDestroyUnits(player, total, sector, capital = 0) {
   html += '</ul>';
 
   if (maximum_assignable_hits == 0) {
-    this.addMove("notify\t" + this.returnFaction(player) + " has no ships to destroy");
+    this.addMove("NOTIFY\t" + this.returnFaction(player) + " has no ships to destroy");
     this.endTurn();
     return 0;
   }
@@ -1147,7 +1147,7 @@ playerDestroyShips(player, total, sector, capital = 0) {
   html += '</ul>';
 
   if (maximum_assignable_hits == 0) {
-    this.addMove("notify\t" + this.returnFaction(player) + " has no ships to destroy");
+    this.addMove("NOTIFY\t" + this.returnFaction(player) + " has no ships to destroy");
     this.endTurn();
     return 0;
   }
@@ -2158,7 +2158,7 @@ playerContinueTurn(player, sector) {
     if (action2 == "produce") {
 
       //
-      // check the fleet supply and notify users if they are about to surpass it
+      // check the fleet supply and NOTIFY users if they are about to surpass it
       //
       let fleet_supply_in_sector = imperium_self.returnSpareFleetSupplyInSector(imperium - self.game.player, sector);
       if (fleet_supply_in_sector <= 1) {
@@ -3079,14 +3079,14 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer, offer_log) {
 
     if (action == "no") {
       imperium_self.addMove("refuse_offer\t" + imperium_self.game.player + "\t" + faction_offering);
-      imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " refuses trade offer from " + imperium_self.returnFaction(faction_offering));
+      imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " refuses trade offer from " + imperium_self.returnFaction(faction_offering));
       imperium_self.endTurn();
       return 0;
     }
 
     if (action == "yes") {
       imperium_self.addMove("trade\t" + faction_offering + "\t" + imperium_self.game.player + "\t" + JSON.stringify(their_offer) + "\t" + JSON.stringify(my_offer));
-      imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " accepts trade offer from " + imperium_self.returnFaction(faction_offering));
+      imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " accepts trade offer from " + imperium_self.returnFaction(faction_offering));
       imperium_self.endTurn();
       return 0;
     }
@@ -3837,7 +3837,7 @@ playerRemoveInfantryFromPlanets(player, total = 1, mycallback) {
             planet_in_question.units[player - 1].splice(ii, 1);
             ii = total_units_on_planet + 2; // 0 as player_moves below because we have removed above
             imperium_self.addMove("remove_infantry_from_planet\t" + player + "\t" + infantry_to_remove[i].planet + "\t" + "0");
-            imperium_self.addMove("notify\tREMOVING INFANTRY FROM PLANET: " + infantry_to_remove[i].planet);
+            imperium_self.addMove("NOTIFY\tREMOVING INFANTRY FROM PLANET: " + infantry_to_remove[i].planet);
             console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
           }
         }
@@ -4854,7 +4854,7 @@ playerPostActivateSystem(sector) {
     }
     if (action2 == "produce") {
       //
-      // check the fleet supply and notify users if they are about to surpass it
+      // check the fleet supply and NOTIFY users if they are about to surpass it
       //
       let fleet_supply_in_sector = imperium_self.returnSpareFleetSupplyInSector(player, sector);
       if (fleet_supply_in_sector <= 1) {

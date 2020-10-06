@@ -147,7 +147,7 @@
                 },
                 function(planet) {
                   imperium_self.addMove("annex\t"+imperium_self.game.player+"\t"+imperium_self.game.planets[planet].sector+"\t"+imperium_self.game.planets[planet].idx);
-                  imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " annexes " + imperium_self.game.planets[planet].name + " via Peace Accords");
+                  imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " annexes " + imperium_self.game.planets[planet].name + " via Peace Accords");
 	    	  imperium_self.endTurn();
                   return 0;
                 },

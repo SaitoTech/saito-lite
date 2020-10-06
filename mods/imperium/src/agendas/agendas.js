@@ -102,12 +102,12 @@
                       let unit          = unit_identifier.unit;
 
 		      if (unit == null) {
-                        imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " has no PDS units to destroy");
+                        imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " has no PDS units to destroy");
 		        imperium_self.endTurn();
 			return 0;
 		      }
                       imperium_self.addMove("destroy\t"+imperium_self.game.player+"\t"+imperium_self.game.player+"\t"+"ground"+"\t"+sector+"\t"+planet_idx+"\t"+unit_idx+"\t"+"1");
-                      imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit.name + " in " + imperium_self.game.sectors[sector].name);
+                      imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit.name + " in " + imperium_self.game.sectors[sector].name);
 		      imperium_self.endTurn();
                     }
               );
@@ -456,7 +456,7 @@
                       } else {
                         imperium_self.addMove("destroy\t"+imperium_self.game.player+"\t"+imperium_self.game.player+"\t"+"ground"+"\t"+sector+"\t"+planet_idx+"\t"+unit_idx+"\t"+"1");
                       }
-                      imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit.name + " in " + imperium_self.game.sectors[sector].name);
+                      imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit.name + " in " + imperium_self.game.sectors[sector].name);
                       old_tech_func(imperium_self, player, strategy_card_player);
 
                     }
@@ -500,7 +500,7 @@
 	      if (imperium_self.game.state.choices[imperium_self.game.state.how_voted_on_agenda[i]] == winning_choice) {
                 imperium_self.game.queue.push("gain\t2\t"+(i+2)+"\taction_cards"+"\t"+2);
                 imperium_self.game.queue.push("DEAL\t2\t"+(i+1)+"\t2");
-                imperium_self.game.queue.push("notify\tdealing two action cards to player "+(i+1));
+                imperium_self.game.queue.push("NOTIFY\tdealing two action cards to player "+(i+1));
 	      }	      
 	    }
 	  }
@@ -552,7 +552,7 @@
 	    for (let i = 0; i < io.length; i++) {
 	      if (highest_vp == imperium_self.game.players_info[io[i]-1].vp) {
 		imperium_self.game.players_info[io[i]-1].vp += 1;
-		imperium_self.game.queue.push("notify\t"+imperium_self.returnFaction((io[i])) + " gains 1 VP from Seeds of an Empire");
+		imperium_self.game.queue.push("NOTIFY\t"+imperium_self.returnFaction((io[i])) + " gains 1 VP from Seeds of an Empire");
 	        imperium_self.game.state.seeds_of_an_empire = (io[i]);
 		if (imperium_self.checkForVictory()) { return 0; }
 	      }
@@ -574,7 +574,7 @@
 	    for (let i = 0; i < io.length; i++) {
 	      if (lowest_vp == imperium_self.game.players_info[io[i]-1].vp) {
 		imperium_self.game.players_info[io[i]-1].vp += 1;
-		imperium_self.game.queue.push("notify\t"+imperium_self.returnFaction((io[i]+1)) + " gains 1 VP from Seeds of an Empire");
+		imperium_self.game.queue.push("NOTIFY\t"+imperium_self.returnFaction((io[i]+1)) + " gains 1 VP from Seeds of an Empire");
 	        imperium_self.game.state.seeds_of_an_empire = (io[i]);
 		if (imperium_self.checkForVictory()) { return 0; }
 
@@ -713,7 +713,7 @@
                 imperium_self.addMove("rider\t"+player+"\tassassinate-representative\t-1");
 	      }
 	    }
-            imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " forms a committee...");
+            imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " forms a committee...");
 	    
 
 	  });

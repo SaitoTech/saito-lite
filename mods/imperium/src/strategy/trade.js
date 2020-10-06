@@ -61,7 +61,7 @@
 
 	  if (imperium_self.game.players_info[imperium_self.game.player-1].commodities == imperium_self.game.players_info[imperium_self.game.player-1].commodity_limit) {
             imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-	    imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " already has commodities and skips trade secondary");
+	    imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " already has commodities and skips trade secondary");
 	    imperium_self.endTurn();
 	    return 0;
 	  }

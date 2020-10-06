@@ -37,13 +37,13 @@
           let opt = $(this).attr("id");
 
 	  if (opt === "nothing") {
-	    imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " does not use Ceasefire");
+	    imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " does not use Ceasefire");
 	    imperium_self.endTurn();
 	    return 0;
 	  }
 
 	  if (opt === "activate") {
-	    imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " uses Ceasefire to end " + imperium_self.returnFaction(attacker) + " turn");
+	    imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " uses Ceasefire to end " + imperium_self.returnFaction(attacker) + " turn");
 	    imperium_self.addMove("ceasefire\t"+attacker+"\t"+player);
             imperium_self.endTurn();
             return 0;

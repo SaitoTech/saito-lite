@@ -43,7 +43,7 @@
           imperium_self.addMove("resolve\tstrategy");
           imperium_self.addMove("gain\t2\t"+imperium_self.game.player+"\taction_cards"+"\t"+2);
           imperium_self.addMove("DEAL\t2\t"+imperium_self.game.player+"\t2");
-          imperium_self.addMove("notify\tdealing action cards to " + imperium_self.returnFaction(player));
+          imperium_self.addMove("NOTIFY\tdealing action cards to " + imperium_self.returnFaction(player));
           imperium_self.addMove("strategy\t"+"politics"+"\t"+strategy_card_player+"\t2");
           imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
 

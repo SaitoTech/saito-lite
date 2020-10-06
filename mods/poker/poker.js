@@ -414,6 +414,7 @@ class Poker extends GameTemplate {
           if (this.game.state.passed[i] == 0) { active_players++; }
         }
         if (active_players == 1) {
+
           for (let i = 0; i < this.game.state.passed.length; i++) {
             if (this.game.state.passed[i] == 0) {
               let winnings = (this.game.state.pot - this.game.state.player_pot)
@@ -433,6 +434,12 @@ class Poker extends GameTemplate {
 
           // if everyone has folded - start a new round
           this.startNextRound();
+
+	  this.game.queue.push("PAY"+ "\t" + this.game.state.player_pot[this.game.player-1] + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[player_left_idx] + "\t" + (new Date().getTime()) + "\t" + "SAITO");
+//          let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[player_left_idx], this.game.state.player_pot[this.game.player - 1]);
+//          newtx = this.app.wallet.signTransaction(newtx);
+//          this.app.network.propagateTransaction(newtx);
+
           return 1;
         }
 
@@ -613,6 +620,7 @@ class Poker extends GameTemplate {
           //
           // report winner
           //
+	  let round_settlement = [];
           if (winners.length > 1) {
 
             //
@@ -633,9 +641,11 @@ class Poker extends GameTemplate {
               //
               // non-winners send wagers to winner
               //
-              let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[winners[i]], this.game.state.player_pot[this.game.player - 1]);
-              newtx = this.app.wallet.signTransaction(newtx);
-              this.app.network.propagateTransaction(newtx);
+	      round_settlement.push("PAY" + "\t" + (this.game.state.player_pot[this.game.player-1]/winners.length) + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[winners[i]] + "\t" + (new Date().getTime()) + "\t" + "SAITO");
+
+              //let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[winners[i]], this.game.state.player_pot[this.game.player - 1]);
+              //newtx = this.app.wallet.signTransaction(newtx);
+              //this.app.network.propagateTransaction(newtx);
             }
           } else {
 
@@ -645,17 +655,21 @@ class Poker extends GameTemplate {
             this.updateLog(this.game.state.player_names[winners[0]] + " wins " + this.game.state.pot);
             this.game.state.player_credit[winners[0]] += this.game.state.pot;
 
+	    round_settlement.push("PAY"+ "\t" + (this.game.state.player_pot[this.game.player-1]) + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[winners[0]] + "\t" + (new Date().getTime()) + "\t" + "SAITO");
             //
             // non-winners send wagers to winner
             //
-            let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[winners[0]], this.game.state.player_pot[this.game.player - 1]);
-            newtx = this.app.wallet.signTransaction(newtx);
-            this.app.network.propagateTransaction(newtx);
+            //let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[winners[0]], this.game.state.player_pot[this.game.player - 1]);
+            //newtx = this.app.wallet.signTransaction(newtx);
+            //this.app.network.propagateTransaction(newtx);
 
           }
-          // we have a hand winner - move on 
           this.startNextRound();
-          return 1;
+
+	  for (let i = 0;  i < round_settlement.length; i++) {
+	    this.game.queue.push(round_settlement[i]);
+          }
+	  return 1;
         }
 
         if (this.game.player - 1 == first_scorer) {
@@ -797,15 +811,18 @@ class Poker extends GameTemplate {
 
           this.game.state.player_credit[player_left_idx] = this.game.state.pot;
 
+          // that fold closed out the hand.
+          this.startNextRound();
+
           //
           // everyone should send anything they owe to winner
           //
-          let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[player_left_idx], this.game.state.player_pot[this.game.player - 1]);
-          newtx = this.app.wallet.signTransaction(newtx);
-          this.app.network.propagateTransaction(newtx);
+	  this.game.queue.push("PAY"+ "\t" + this.game.state.player_pot[this.game.player-1] + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[player_left_idx] + "\t" + (new Date.getTime()) + "\t" + "SAITO");
+//          let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[player_left_idx], this.game.state.player_pot[this.game.player - 1]);
+//          newtx = this.app.wallet.signTransaction(newtx);
+//          this.app.network.propagateTransaction(newtx);
 
-          // that fold closed out the hand.
-          this.startNextRound();
+
         }
       }
 
