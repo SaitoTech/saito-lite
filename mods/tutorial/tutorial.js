@@ -66,9 +66,13 @@ class Tutorial extends ModTemplate {
     //
     // run on load (or dom ready)
     //
+    // 20201006 - added balance check so does not pop up 
+    // on first load
     if (!localStorage.getItem('visited')) {
-      localStorage.setItem('visited', true);
-      this.welcomeBackupModal();
+      if (this.app.wallet.wallet.balance > 5) {
+        localStorage.setItem('visited', true);
+        this.welcomeBackupModal();
+      }
     }
   }
 
