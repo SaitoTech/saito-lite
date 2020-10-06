@@ -79,7 +79,7 @@
           imperium_self.game.players_info[player-1].graviton_laser_system_active = 1;
           imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"graviton_laser_system_exhausted"+"\t"+"int"+"\t"+"1");
           imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"graviton_laser_system_active"+"\t"+"int"+"\t"+"1");
-          imperium_self.addMove("notify\t"+player+" activates graviton_laser_system");
+          imperium_self.addMove("NOTIFY\t"+player+" activates graviton_laser_system");
 	}
 	return 0;
       }
@@ -124,8 +124,8 @@
 	  imperium_self.playerRemoveInfantryFromPlanets(player, 4, function(num_to_add) {
 	    imperium_self.playerAddInfantryToPlanets(player, num_to_add, function() {
               imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"transit_diodes_exhausted"+"\t"+"int"+"\t"+"1");
-              imperium_self.addMove("notify\t"+player+" activates transit diodes");
-	      imperium_self.addMove("notify\t"+imperium_self.returnFaction(player) + " has moved infantry");
+              imperium_self.addMove("NOTIFY\t"+player+" activates transit diodes");
+	      imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(player) + " has moved infantry");
 	      imperium_self.endTurn();
 	    });	    
 	  });

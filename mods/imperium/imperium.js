@@ -174,7 +174,7 @@ console.log("ship move bonus updated to 1");
           imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"fleet_logistics_exhausted"+"\t"+"int"+"\t"+"1");
 	  imperium_self.addMove("play\t"+player);
 	  imperium_self.addMove("play\t"+player);
-          imperium_self.addMove("notify\t"+player+" activates fleet logistics");
+          imperium_self.addMove("NOTIFY\t"+player+" activates fleet logistics");
 	  imperium_self.endTurn();
 	  imperium_self.updateStatus("Activating Fleet Logistics");
         }
@@ -333,11 +333,11 @@ console.log("ship move bonus updated to 1");
 	    // destroy 100 == destroy them all :)
 	    imperium_self.addMove("destroy_infantry_on_planet\t"+player+"\t"+sector+"\t"+planet_idx+"\t"+"100");
             imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"x89_bacterial_weapon_exhausted"+"\t"+"int"+"\t"+"1");
-	    imperium_self.addMove("notify\t" + imperium_self.returnFaction(player) + " uses Bacterial Weapons");
+	    imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(player) + " uses Bacterial Weapons");
 	    imperium_self.endTurn();
 	  }
 	  if (action2 == "skip") {
-	    imperium_self.addMove("notify\t" + imperium_self.returnFaction(player) + " refrains from using Bacterial Weapons");
+	    imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(player) + " refrains from using Bacterial Weapons");
 	    imperium_self.endTurn();
 	  }
         });
@@ -838,7 +838,7 @@ console.log("returning upgraded carrier...");
           imperium_self.game.players_info[player-1].graviton_laser_system_active = 1;
           imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"graviton_laser_system_exhausted"+"\t"+"int"+"\t"+"1");
           imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"graviton_laser_system_active"+"\t"+"int"+"\t"+"1");
-          imperium_self.addMove("notify\t"+player+" activates graviton_laser_system");
+          imperium_self.addMove("NOTIFY\t"+player+" activates graviton_laser_system");
 	}
 	return 0;
       }
@@ -883,8 +883,8 @@ console.log("returning upgraded carrier...");
 	  imperium_self.playerRemoveInfantryFromPlanets(player, 4, function(num_to_add) {
 	    imperium_self.playerAddInfantryToPlanets(player, num_to_add, function() {
               imperium_self.addMove("setvar\tplayers\t"+player+"\t"+"transit_diodes_exhausted"+"\t"+"int"+"\t"+"1");
-              imperium_self.addMove("notify\t"+player+" activates transit diodes");
-	      imperium_self.addMove("notify\t"+imperium_self.returnFaction(player) + " has moved infantry");
+              imperium_self.addMove("NOTIFY\t"+player+" activates transit diodes");
+	      imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(player) + " has moved infantry");
 	      imperium_self.endTurn();
 	    });	    
 	  });
@@ -1164,13 +1164,13 @@ console.log("P: " + planet);
           let opt = $(this).attr("id");
 
 	  if (opt === "nothing") {
-	    imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " does not use Ceasefire");
+	    imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " does not use Ceasefire");
 	    imperium_self.endTurn();
 	    return 0;
 	  }
 
 	  if (opt === "activate") {
-	    imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " uses Ceasefire to end " + imperium_self.returnFaction(attacker) + " turn");
+	    imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " uses Ceasefire to end " + imperium_self.returnFaction(attacker) + " turn");
 	    imperium_self.addMove("ceasefire\t"+attacker+"\t"+player);
             imperium_self.endTurn();
             return 0;
@@ -1918,7 +1918,7 @@ console.log("P: " + planet);
               imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
               imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
               imperium_self.addMove("expend\t"+imperium_self.game.player+"\t"+"strategy"+"\t"+"1");
-              imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys three infantry to " + planet.name);
+              imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys three infantry to " + planet.name);
               imperium_self.endTurn();
               return 0;
             },
@@ -2152,7 +2152,7 @@ console.log("P: " + planet);
                 },
                 function(planet) {
                   imperium_self.addMove("annex\t"+imperium_self.game.player+"\t"+imperium_self.game.planets[planet].sector+"\t"+imperium_self.game.planets[planet].idx);
-                  imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " annexes " + imperium_self.game.planets[planet].name + " via Peace Accords");
+                  imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " annexes " + imperium_self.game.planets[planet].name + " via Peace Accords");
 	    	  imperium_self.endTurn();
                   return 0;
                 },
@@ -2458,7 +2458,7 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
               function(planet) {
                 planet = imperium_self.game.planets[planet];
                 imperium_self.addMove("produce\t"+imperium_self.game.player+"\t1\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sectors);
-                imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " spins extra infantry on " + planet.name);
+                imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " spins extra infantry on " + planet.name);
                 imperium_self.endTurn();
                 return 0;
 
@@ -2784,7 +2784,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
               imperium_self.addMove("strategy\t"+"diplomacy"+"\t"+strategy_card_player+"\t2");
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
               imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
-              imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player)+" uses Diplomacy to activate "+imperium_self.game.sectors[sector].name);
+              imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player)+" uses Diplomacy to activate "+imperium_self.game.sectors[sector].name);
 
               for (let i = 0; i < imperium_self.game.players_info.length; i++) {
                 imperium_self.addMove("activate\t"+(i+1)+"\t"+sector);
@@ -2983,11 +2983,11 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
 	      imperium_self.updateStatus("scoring completed");
               imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
 
-              //if (my_secret_vp == 0) { imperium_self.addMove("notify\t"+imperium_self.returnFaction(player) + " elects not to score any secret objectives"); }
+              //if (my_secret_vp == 0) { imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(player) + " elects not to score any secret objectives"); }
               if (my_secret_vp > 0) { 
 		imperium_self.addMove("score\t"+player+"\t"+my_secret_vp+"\t"+my_secret_objective); 
 	      }
-              //if (vp == 0) { imperium_self.addMove("notify\t"+imperium_self.returnFaction(player) + " elects not to score any public objectives"); }
+              //if (vp == 0) { imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(player) + " elects not to score any public objectives"); }
               if (vp > 0) {
 		imperium_self.addMove("score\t"+player+"\t"+vp+"\t"+objective);
 	      }
@@ -3088,7 +3088,7 @@ this.playDevotionAssignHit = function(imperium_self, player, sector, mycallback,
           imperium_self.addMove("resolve\tstrategy");
           imperium_self.addMove("gain\t2\t"+imperium_self.game.player+"\taction_cards"+"\t"+2);
           imperium_self.addMove("DEAL\t2\t"+imperium_self.game.player+"\t2");
-          imperium_self.addMove("notify\tdealing action cards to " + imperium_self.returnFaction(player));
+          imperium_self.addMove("NOTIFY\tdealing action cards to " + imperium_self.returnFaction(player));
           imperium_self.addMove("strategy\t"+"politics"+"\t"+strategy_card_player+"\t2");
           imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
 
@@ -3460,7 +3460,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 
 	  if (imperium_self.game.players_info[imperium_self.game.player-1].commodities == imperium_self.game.players_info[imperium_self.game.player-1].commodity_limit) {
             imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
-	    imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " already has commodities and skips trade secondary");
+	    imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " already has commodities and skips trade secondary");
 	    imperium_self.endTurn();
 	    return 0;
 	  }
@@ -3517,7 +3517,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
             imperium_self.addMove("resolve\tstrategy\t1\t"+imperium_self.app.wallet.returnPublicKey());
             imperium_self.addMove("resetconfirmsneeded\t"+imperium_self.game.players_info.length);
             imperium_self.addMove("deactivate\t"+strategy_card_player+"\t"+sector);
-            imperium_self.addMove("notify\t"+imperium_self.returnFaction(strategy_card_player)+" deactivates "+sys.s.name);
+            imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(strategy_card_player)+" deactivates "+sys.s.name);
             imperium_self.playerAllocateNewTokens(imperium_self.game.player, 1, 0, 3, 0);
           });
     
@@ -4714,12 +4714,12 @@ console.log("WINNIGN CHOICE: " + winning_choice);
                       let unit          = unit_identifier.unit;
 
 		      if (unit == null) {
-                        imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " has no PDS units to destroy");
+                        imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " has no PDS units to destroy");
 		        imperium_self.endTurn();
 			return 0;
 		      }
                       imperium_self.addMove("destroy\t"+imperium_self.game.player+"\t"+imperium_self.game.player+"\t"+"ground"+"\t"+sector+"\t"+planet_idx+"\t"+unit_idx+"\t"+"1");
-                      imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit.name + " in " + imperium_self.game.sectors[sector].name);
+                      imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit.name + " in " + imperium_self.game.sectors[sector].name);
 		      imperium_self.endTurn();
                     }
               );
@@ -5068,7 +5068,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
                       } else {
                         imperium_self.addMove("destroy\t"+imperium_self.game.player+"\t"+imperium_self.game.player+"\t"+"ground"+"\t"+sector+"\t"+planet_idx+"\t"+unit_idx+"\t"+"1");
                       }
-                      imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit.name + " in " + imperium_self.game.sectors[sector].name);
+                      imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit.name + " in " + imperium_self.game.sectors[sector].name);
                       old_tech_func(imperium_self, player, strategy_card_player);
 
                     }
@@ -5112,7 +5112,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	      if (imperium_self.game.state.choices[imperium_self.game.state.how_voted_on_agenda[i]] == winning_choice) {
                 imperium_self.game.queue.push("gain\t2\t"+(i+2)+"\taction_cards"+"\t"+2);
                 imperium_self.game.queue.push("DEAL\t2\t"+(i+1)+"\t2");
-                imperium_self.game.queue.push("notify\tdealing two action cards to player "+(i+1));
+                imperium_self.game.queue.push("NOTIFY\tdealing two action cards to player "+(i+1));
 	      }	      
 	    }
 	  }
@@ -5164,7 +5164,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	    for (let i = 0; i < io.length; i++) {
 	      if (highest_vp == imperium_self.game.players_info[io[i]-1].vp) {
 		imperium_self.game.players_info[io[i]-1].vp += 1;
-		imperium_self.game.queue.push("notify\t"+imperium_self.returnFaction((io[i])) + " gains 1 VP from Seeds of an Empire");
+		imperium_self.game.queue.push("NOTIFY\t"+imperium_self.returnFaction((io[i])) + " gains 1 VP from Seeds of an Empire");
 	        imperium_self.game.state.seeds_of_an_empire = (io[i]);
 		if (imperium_self.checkForVictory()) { return 0; }
 	      }
@@ -5186,7 +5186,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 	    for (let i = 0; i < io.length; i++) {
 	      if (lowest_vp == imperium_self.game.players_info[io[i]-1].vp) {
 		imperium_self.game.players_info[io[i]-1].vp += 1;
-		imperium_self.game.queue.push("notify\t"+imperium_self.returnFaction((io[i]+1)) + " gains 1 VP from Seeds of an Empire");
+		imperium_self.game.queue.push("NOTIFY\t"+imperium_self.returnFaction((io[i]+1)) + " gains 1 VP from Seeds of an Empire");
 	        imperium_self.game.state.seeds_of_an_empire = (io[i]);
 		if (imperium_self.checkForVictory()) { return 0; }
 
@@ -5325,7 +5325,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
                 imperium_self.addMove("rider\t"+player+"\tassassinate-representative\t-1");
 	      }
 	    }
-            imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " forms a committee...");
+            imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " forms a committee...");
 	    
 
 	  });
@@ -6064,7 +6064,7 @@ console.log("WINNIGN CHOICE: " + winning_choice);
 		imperium_self.updateStatus("");
 		imperium_self.addMove("produce\t" + player + "\t" + "1" + "\t" + planet_idx + "\t" + "infantry" + "\t" + sector);
 		imperium_self.addMove("annex\t" + player + "\t" + sector + "\t" + planet_idx);
-		imperium_self.addMove("notify\t" + imperium_self.returnFaction(player) + " gains the contested planet");
+		imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(player) + " gains the contested planet");
 		imperium_self.endTurn();
 		return 0;
 	      },
@@ -6257,7 +6257,7 @@ imperium_self.updateLog("Ixthian Artifact rolls " + roll);
 		imperium_self.game.queue.push("research\t"+(i+1));
 		imperium_self.game.queue.push("research\t"+(i+1));
 	      }
-	      imperium_self.game.queue.push("acknowledge\tThe Ixthian Artifact did not explode. All players may now research two technologies...");
+	      imperium_self.game.queue.push("ACKNOWLEDGE\tThe Ixthian Artifact did not explode. All players may now research two technologies...");
           }
         }
         return 1;
@@ -6318,7 +6318,7 @@ ACTION CARD - types
               },
               function(planet) {
                 imperium_self.addMove("unexhaust\tplanet\t"+planet);
-                imperium_self.addMove("notify\t"+imperium_self.returnFaction(action_card_player)+" refreshes " + imperium_self.game.planets[planet].name);
+                imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(action_card_player)+" refreshes " + imperium_self.game.planets[planet].name);
                 imperium_self.endTurn();
                 return 0;
               },
@@ -6404,7 +6404,7 @@ ACTION CARD - types
               },
 	      function(planet) {
 		imperium_self.addMove("plague\t"+imperium_self.game.player+"\t"+planet);
-		imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " unleashes a plague on " + imperium_self.game.planets[planet].name);
+		imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " unleashes a plague on " + imperium_self.game.planets[planet].name);
 		imperium_self.endTurn();
 		return 0;
 	      },
@@ -6649,7 +6649,7 @@ ACTION CARD - types
                   }
                 }
 
-		imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " destroys all PDS units destroyed on "+sys.p[planet_idx].name);
+		imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " destroys all PDS units destroyed on "+sys.p[planet_idx].name);
 		imperium_self.endTurn();
 		return 0;
 
@@ -6694,7 +6694,7 @@ ACTION CARD - types
                   }
                 }
 
-		imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " destroys all Space Docks on "+sys.p[planet_idx].name);
+		imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " destroys all Space Docks on "+sys.p[planet_idx].name);
 		imperium_self.endTurn();
 		return 0;
 
@@ -6725,7 +6725,7 @@ ACTION CARD - types
 	      function(sector) {
 
                 imperium_self.addMove("produce\t"+imperium_self.game.player+"\t1\t-1\tdestroyer\t"+sector);
-                imperium_self.addMove("notify\tAdding destroyer to gamebaord");
+                imperium_self.addMove("NOTIFY\tAdding destroyer to gamebaord");
                 imperium_self.endTurn();
 		return 0;
 
@@ -6758,7 +6758,7 @@ ACTION CARD - types
 		planet = imperium_self.game.planets[planet];
 		let sector = planet.sector;
                 imperium_self.addMove("gain_planet\t"+imperium_self.game.player+"\t"+sector+"\t"+planet.idx);
-                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " gains planet " + planet.name);
+                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " gains planet " + planet.name);
                 imperium_self.endTurn();
 		return 0;
 
@@ -6796,7 +6796,7 @@ ACTION CARD - types
 
                 imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tgoods\t"+goods);
                 imperium_self.addMove("expend\t"+imperium_self.game.player+"\tplanet\t"+planet.planet);
-                imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " exhausting "+planet.name + " and gaining " + goods + " trade goods");
+                imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " exhausting "+planet.name + " and gaining " + goods + " trade goods");
                 imperium_self.endTurn();
 		return 0;
 
@@ -6834,7 +6834,7 @@ ACTION CARD - types
 
                 imperium_self.addMove("purchase\t"+imperium_self.game.player+"\tgoods\t"+goods);
                 imperium_self.addMove("expend\t"+imperium_self.game.player+"\tplanet\t"+planetname);
-                imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " exhausting "+planet.name + " and gaining " + goods + " trade goods");
+                imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " exhausting "+planet.name + " and gaining " + goods + " trade goods");
                 imperium_self.endTurn();
 		return 0;
 
@@ -6889,7 +6889,7 @@ ACTION CARD - types
             imperium_self.playerResearchTechnology(function(tech) {
               imperium_self.addMove("purchase\t"+imperium_self.game.player+"\ttech\t"+tech);
               imperium_self.addMove("expend\t"+imperium_self.game.player+"\tgoods\t4");
-              imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " researches " + imperium_self.tech[tech].name);
+              imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " researches " + imperium_self.tech[tech].name);
               imperium_self.endTurn();
 	    });
 
@@ -6918,7 +6918,7 @@ ACTION CARD - types
                 imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
                 imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
                 imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sector);
-                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys three infantry to " + planet.name);
+                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys three infantry to " + planet.name);
                 imperium_self.endTurn();
                 return 0;
               },
@@ -6947,7 +6947,7 @@ ACTION CARD - types
               },
               function(sector) {
                 imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+"-1"+"\t"+"destroyer"+"\t"+sector);
-                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys a Destroyer to " + imperium_self.game.sectors[sector].name);
+                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys a Destroyer to " + imperium_self.game.sectors[sector].name);
                imperium_self.endTurn();
                 return 0;
               },
@@ -6977,7 +6977,7 @@ ACTION CARD - types
               },
               function(sector) {
                 imperium_self.addMove("produce\t"+imperium_self.game.player+"\t"+"1"+"\t"+"-1"+"\t"+"cruiser"+"\t"+sector);
-                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys a Cruiser to " + imperium_self.game.sectors[sector].name);
+                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " deploys a Cruiser to " + imperium_self.game.sectors[sector].name);
                 imperium_self.endTurn();
                 return 0;
               },
@@ -7036,7 +7036,7 @@ ACTION CARD - types
               },
 	      function(player) {
                 imperium_self.addMove("expend\t"+player+"\tcommand\t"+"1");
-		imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " loses one comand token");
+		imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " loses one comand token");
 		imperium_self.endTurn();
 		return 0;
 	      },
@@ -7091,7 +7091,7 @@ ACTION CARD - types
 		    let unit_to_destroy = unit_info.unit;
 
                     imperium_self.addMove("destroy_unit\t"+imperium_self.game.player+"\t"+unit_to_destroy.owner+"\t"+"space"+"\t"+s+"\t"+"-1"+"\t"+uidx+"\t"+"1");
-		    imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit_to_destroy.name + " in " + sys.name);
+		    imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " destroys a " + unit_to_destroy.name + " in " + sys.name);
 		    imperium_self.endTurn();
 		    return 0;
 	          },
@@ -7187,7 +7187,7 @@ ACTION CARD - types
 		  }
 		}
                 imperium_self.addMove("purchase\t"+action_card_player+"\tgoods\t"+planet_res);
-		imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " gains " + planet_res + " trade goods");
+		imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " gains " + planet_res + " trade goods");
 		imperium_self.endTurn();
 		return 0;
 	      },
@@ -7220,7 +7220,7 @@ ACTION CARD - types
               },
 	      function(player) {
                 imperium_self.addMove("pull\t"+imperium_self.game.player+"\t"+player+"\t"+"action"+"\t"+"random");
-		imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " pulls a random action card from " + imperium_self.returnFaction(player));
+		imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " pulls a random action card from " + imperium_self.returnFaction(player));
 		imperium_self.endTurn();
 		return 0;
 	      },
@@ -7257,7 +7257,7 @@ ACTION CARD - types
 		let planets_in_sector = imperium_self.game.sectors[sector].planets;
 		for (let i = 0; i < planets_in_sector.length; i++) {
                   imperium_self.addMove("expend\t"+player+"\tplanet\t"+planets_in_sector[i]);
-		  imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " exhausts " + imperium_self.game.planets[planets_in_sector[i]].name);
+		  imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " exhausts " + imperium_self.game.planets[planets_in_sector[i]].name);
 		}
 		imperium_self.endTurn();
 		return 0;
@@ -7299,7 +7299,7 @@ ACTION CARD - types
                   },
 	          function(p) {
                     imperium_self.addMove("activate\t"+p+"\t"+sector);
-		    imperium_self.addMove("notify\t" + imperium_self.returnFaction(p) + " suffers signal jamming in " + imperium_self.game.sectors[sector].name);
+		    imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(p) + " suffers signal jamming in " + imperium_self.game.sectors[sector].name);
 		    imperium_self.endTurn();
 		    return 0;
 	          },
@@ -7334,7 +7334,7 @@ ACTION CARD - types
 	      function(sector) {
                 imperium_self.addMove("purchase\t"+action_card_player+"\tcommand\t"+"1");
                 imperium_self.addMove("deactivate\t"+action_card_player+"\t"+sector);
-                imperium_self.addMove("notify\t"+imperium_self.returnFaction(action_card_player) + " deactivates " + imperium_self.game.sectors[sector].name);
+                imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(action_card_player) + " deactivates " + imperium_self.game.sectors[sector].name);
 		imperium_self.endTurn();
 		return 0;
 	      },
@@ -7718,7 +7718,7 @@ ACTION CARD - types
               function(player) {
                 imperium_self.addMove("rider\t"+player+"\tassassinate-representative\t-1");
                 //imperium_self.addMove("assassinate_representative\t"+imperium_self.game.player+"\t"+player);
-                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " assassinates the voting representative of " + imperium_self.returnFaction(player));
+                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " assassinates the voting representative of " + imperium_self.returnFaction(player));
                 imperium_self.endTurn();
                 return 0;
               },
@@ -7747,7 +7747,7 @@ ACTION CARD - types
               },
               function(player) {
                 imperium_self.addMove("ancient_burial\t"+imperium_self.game.player+"\t"+player);
-                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " finds soe dirt on the voting representative of " + imperium_self.returnFaction(player));
+                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " finds soe dirt on the voting representative of " + imperium_self.returnFaction(player));
                 imperium_self.endTurn();
                 return 0;
               },
@@ -7795,7 +7795,7 @@ ACTION CARD - types
             let msg  = 'On which choice do you wish to place your Leadership rider?';
 	    imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
 	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"diplomacy-rider"+"\t"+choice);
-	      imperium_self.addMove("notify\t"+imperium_self.game.player+" has placed a Leadership Rider on "+choice);
+	      imperium_self.addMove("NOTIFY\t"+imperium_self.game.player+" has placed a Leadership Rider on "+choice);
 	      imperium_self.endTurn();
 	    });
 	  }
@@ -7829,7 +7829,7 @@ ACTION CARD - types
             let msg  = 'On which choice do you wish to place your Diplomacy rider?';
 	    imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
 	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"diplomacy-rider"+"\t"+choice);
-	      imperium_self.addMove("notify\t"+imperium_self.game.player+" has placed a Diplomacy Rider on "+choice);
+	      imperium_self.addMove("NOTIFY\t"+imperium_self.game.player+" has placed a Diplomacy Rider on "+choice);
 	      imperium_self.endTurn();
 	    });
 	  }
@@ -7853,7 +7853,7 @@ ACTION CARD - types
                 for (let b = 0; b < imperium_self.game.players_info.length; b++) {
                   imperium_self.addMove("activate\t"+(b+1)+"\t"+sector);
                 }
-                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " uses Diplomacy Rider to protect " + sector);
+                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " uses Diplomacy Rider to protect " + sector);
                 imperium_self.endTurn();
                 return 0;
               },
@@ -7880,7 +7880,7 @@ ACTION CARD - types
             let msg  = 'On which choice do you wish to place your Politics rider?';
             imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
               imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"politics-rider"+"\t"+choice);
-              imperium_self.addMove("notify\t"+imperium_self.game.player+" has placed a Politics Rider on "+choice);
+              imperium_self.addMove("NOTIFY\t"+imperium_self.game.player+" has placed a Politics Rider on "+choice);
               imperium_self.endTurn();
             });
           }
@@ -7893,7 +7893,7 @@ ACTION CARD - types
 	    // three action cards
             imperium_self.addMove("gain\t"+imperium_self.game.player+"\taction_cards\t3");
             imperium_self.addMove("DEAL\t2\t"+imperium_self.game.player+"\t3");
-            imperium_self.addMove("notify\tdealing two action cards to player "+player);
+            imperium_self.addMove("NOTIFY\tdealing two action cards to player "+player);
 
 	    // and change speaker
 	    let html = 'Make which player the speaker? <ul>';
@@ -7934,7 +7934,7 @@ ACTION CARD - types
             let msg = 'On which choice do you wish to place the Construction rider?';
             imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
               imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"construction-rider"+"\t"+choice);
-              imperium_self.addMove("notify\t"+imperium_self.game.player+" has placed a Construction Rider on "+choice);
+              imperium_self.addMove("NOTIFY\t"+imperium_self.game.player+" has placed a Construction Rider on "+choice);
               imperium_self.endTurn();
             });
 
@@ -7950,7 +7950,7 @@ ACTION CARD - types
               },
               function(planet) {
                 imperium_self.addMove("produce\t"+imperium_self.game.player+"\t1\t"+imperium_self.game.planets[planet].idx+"\t"+"spacedock"+"\t"+imperium_self.game.planets[planet].sector);
-                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " builds a Space Dock in " + imperium_self.game.sectors[imperium_self.game.planets[planet].sector].name);
+                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " builds a Space Dock in " + imperium_self.game.sectors[imperium_self.game.planets[planet].sector].name);
                 imperium_self.endTurn();
                 return 0;
               },
@@ -8027,7 +8027,7 @@ ACTION CARD - types
               function(sector) {
 
                 imperium_self.addMove("produce\t"+imperium_self.game.player+"\t1\t-1\tdreadnaught\t"+sector);
-                imperium_self.addMove("notify\tAdding dreadnaught to board");
+                imperium_self.addMove("NOTIFY\tAdding dreadnaught to board");
                 imperium_self.endTurn();
                 return 0;
 
@@ -8087,7 +8087,7 @@ ACTION CARD - types
             let msg = 'On which choice do you wish to place the Imperial rider?';	
 	    imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
 	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"imperial-rider"+"\t"+choice);
-	      imperium_self.addMove("notify\t"+imperium_self.game.player+" has placed an Imperial Rider on "+choice);
+	      imperium_self.addMove("NOTIFY\t"+imperium_self.game.player+" has placed an Imperial Rider on "+choice);
 	      imperium_self.endTurn();
 	    });
 
@@ -8562,13 +8562,13 @@ ACTION CARD - types
               function(s) {
 		// from active sector into... s
 	        imperium_self.addMove("skilled_retreat\t"+action_card_player+"\t"+s+"\t"+imperium_self.game.state.space_combat_sector);
-	        imperium_self.addMove("notify\t"+imperium_self.returnFaction(action_card_player) + " makes skilled retreat into " + imperium_self.game.sectors[s].name);
+	        imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(action_card_player) + " makes skilled retreat into " + imperium_self.game.sectors[s].name);
 	        imperium_self.addMove("activate\t"+action_card_player+"\t"+s);
 	        imperium_self.addMove("activate\t"+action_card_player+"\t"+imperium_self.game.state.space_combat_sector);
 		imperium_self.endTurn();
               },
 	      function() {
-		imperium_self.addMove("notify\tno suitable sectors available for skilled retreat");
+		imperium_self.addMove("NOTIFY\tno suitable sectors available for skilled retreat");
 		imperium_self.endTurn();
 	      }
             );
@@ -8650,13 +8650,13 @@ ACTION CARD - types
               function(s) {
 		// from active sector into... s
 	        imperium_self.addMove("skilled_retreat\t"+action_card_player+"\t"+s+"\t"+imperium_self.game.state.space_combat_sector);
-	        imperium_self.addMove("notify\t"+imperium_self.returnFaction(action_card_player) + " makes skilled retreat into " + imperium_self.game.sectors[s].name);
+	        imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(action_card_player) + " makes skilled retreat into " + imperium_self.game.sectors[s].name);
 	        imperium_self.addMove("activate\t"+action_card_player+"\t"+s);
 	        imperium_self.addMove("activate\t"+action_card_player+"\t"+imperium_self.game.state.space_combat_sector);
 		imperium_self.endTurn();
               },
 	      function() {
-		imperium_self.addMove("notify\tno suitable sectors available for skilled retreat");
+		imperium_self.addMove("NOTIFY\tno suitable sectors available for skilled retreat");
 		imperium_self.endTurn();
 	      }
             );
@@ -8686,13 +8686,13 @@ ACTION CARD - types
               function(s) {
 		// from active sector into... s
 	        imperium_self.addMove("skilled_retreat\t"+action_card_player+"\t"+s+"\t"+imperium_self.game.state.space_combat_sector);
-	        imperium_self.addMove("notify\t"+imperium_self.returnFaction(action_card_player) + " makes skilled retreat into " + imperium_self.game.sectors[s].name);
+	        imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(action_card_player) + " makes skilled retreat into " + imperium_self.game.sectors[s].name);
 	        imperium_self.addMove("activate\t"+action_card_player+"\t"+s);
 	        imperium_self.addMove("activate\t"+action_card_player+"\t"+imperium_self.game.state.space_combat_sector);
 		imperium_self.endTurn();
               },
 	      function() {
-		imperium_self.addMove("notify\tno suitable sectors available for skilled retreat");
+		imperium_self.addMove("NOTIFY\tno suitable sectors available for skilled retreat");
 		imperium_self.endTurn();
 	      }
             );
@@ -8722,13 +8722,13 @@ ACTION CARD - types
               function(s) {
 		// from active sector into... s
 	        imperium_self.addMove("skilled_retreat\t"+action_card_player+"\t"+s+"\t"+imperium_self.game.state.space_combat_sector);
-	        imperium_self.addMove("notify\t"+imperium_self.returnFaction(action_card_player) + " makes skilled retreat into " + imperium_self.game.sectors[s].name);
+	        imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(action_card_player) + " makes skilled retreat into " + imperium_self.game.sectors[s].name);
 	        imperium_self.addMove("activate\t"+action_card_player+"\t"+s);
 	        imperium_self.addMove("activate\t"+action_card_player+"\t"+imperium_self.game.state.space_combat_sector);
 		imperium_self.endTurn();
               },
 	      function() {
-		imperium_self.addMove("notify\tno suitable sectors available for skilled retreat");
+		imperium_self.addMove("NOTIFY\tno suitable sectors available for skilled retreat");
 		imperium_self.endTurn();
 	      }
             );
@@ -10392,7 +10392,7 @@ console.log("resolve from: " + still_to_move[z]);
         if (imperium_self.game.player == player) {
             imperium_self.playerResearchTechnology(function(tech) {
               imperium_self.addMove("purchase\t"+imperium_self.game.player+"\ttech\t"+tech);
-              imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " researches " + imperium_self.tech[tech].name);
+              imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " researches " + imperium_self.tech[tech].name);
               imperium_self.endTurn();
           });
         } else {
@@ -11003,9 +11003,9 @@ console.log("interface is locked...");
         }
 
 	//
-	// notify users of vote results
+	// NOTIFY users of vote results
 	//
-	this.game.queue.push("acknowledge\tThe Galactic Senate has settled on '"+this.returnNameFromIndex(winning_choice)+"'");
+	this.game.queue.push("ACKNOWLEDGE\tThe Galactic Senate has settled on '"+this.returnNameFromIndex(winning_choice)+"'");
 
       }
 
@@ -11326,7 +11326,7 @@ console.log(JSON.stringify(this.game.state.choices));
           this.game.queue.push("strategy\t"+"imperial"+"\t"+"-1"+"\t2\t"+1);
 	  this.game.state.playing_strategy_card_secondary = 0; // reset to 0 as we are kicking into secondary
           this.game.queue.push("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
-          this.game.queue.push("acknowledge\t"+"As the Imperial card was not played in the previous round, all players now have an opportunity to score Victory Points (in initiative order)");
+          this.game.queue.push("ACKNOWLEDGE\t"+"As the Imperial card was not played in the previous round, all players now have an opportunity to score Victory Points (in initiative order)");
   	  this.game.state.round_scoring = 0;
 	  return 1;
   	} else {
@@ -11404,7 +11404,7 @@ console.log(JSON.stringify(this.game.state.choices));
         this.game.queue.push("playerschoosestrategycards_before");
         if (this.game.state.round == 1) {
           let faction = this.game.players_info[this.game.player-1].faction;
-          this.game.queue.push("acknowledge\t"+this.factions[faction].intro);
+          this.game.queue.push("ACKNOWLEDGE\t"+this.factions[faction].intro);
  	}
 
 
@@ -11888,54 +11888,6 @@ console.log(JSON.stringify(this.game.state.choices));
       }
 
 
-      if (mv[0] === "notify") {
-  
-  	this.updateLog(mv[1]);
-  	this.game.queue.splice(qe, 1);
-  	return 1;
-  
-      }
-
-
-      if (mv[0] === "acknowledge") {  
-
-	let imperium_self = this;
-	let notice = mv[1];
-  	//this.game.queue.splice(qe, 1);
-	this.game.halted = 1;
-	//this.saveGame(this.game.id);
-
-	let my_specific_game_id = this.game.id;
-
-  	this.playerAcknowledgeNotice(notice, function() {
-
-	  imperium_self.game = imperium_self.loadGame(my_specific_game_id);
-
-	  imperium_self.updateStatus(" acknowledged...");
-
-  	  imperium_self.game.queue.splice(qe, 1);
-	  // we have stopped queue execution, so need to restart at the lowest level
-	  imperium_self.game.halted = 0;
-
-//
-// and save so we continue from AFTER this point...
-//
-imperium_self.saveGame(imperium_self.game.id);
-//
-//
-//
-	  let cont = imperium_self.runQueue();
-	  if (cont == 0) { 
-	    imperium_self.processFutureMoves();
-	  }
-
-	  return 0;
-
-	});
-
-	return 0;
-      }
-
 
       if (mv[0] === "annex") {
   
@@ -12037,7 +11989,7 @@ imperium_self.saveGame(imperium_self.game.id);
 		}
 	      }
 	      this.addMove("give\t"+pullee+"\t"+puller+"\t"+"action"+"\t"+action_card);
-	      this.addMove("notify\t" + this.returnFaction(puller) + " pulls " + this.action_cards[action_card].name);
+	      this.addMove("NOTIFY\t" + this.returnFaction(puller) + " pulls " + this.action_cards[action_card].name);
 	      this.endTurn();
 	    } else {
 	      let roll = this.rollDice();
@@ -12191,7 +12143,7 @@ imperium_self.saveGame(imperium_self.game.id);
         this.game.players_info[faction_that_offered-1].traded_this_turn = 1;
 
 	if (faction_that_offered == this.game.player) {
-	  this.game.queue.push("acknowledge\tYour trade offer has been spurned by "+this.returnFaction(refusing_faction));
+	  this.game.queue.push("ACKNOWLEDGE\tYour trade offer has been spurned by "+this.returnFaction(refusing_faction));
 	  return 1;
 	}
 
@@ -12213,7 +12165,7 @@ imperium_self.saveGame(imperium_self.game.id);
   	this.game.queue.splice(qe, 1);
 
 	if (offering_faction == this.game.player) {
-	  this.game.queue.push("acknowledge\tYour trade offer has been accepted by "+this.returnFaction(faction_responding));
+	  this.game.queue.push("ACKNOWLEDGE\tYour trade offer has been accepted by "+this.returnFaction(faction_responding));
 	}
 
         this.game.players_info[offering_faction-1].traded_this_turn = 1;
@@ -13394,7 +13346,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
               }
 
               //
-              // notify and change ownership (if needed)
+              // NOTIFY and change ownership (if needed)
               //
 	      if (sys.p[planet_idx].owner == attacker) {
 
@@ -16155,7 +16107,7 @@ playerAcknowledgeNotice(msg, mycallback) {
         total_hits -= imperium_self.game.state.assign_hits_to_cancel;
         if (total_hits < 0) { total_hits = 0; }
         if (total_hits == 0) {
-          imperium_self.updateLog("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " does not take any hits");
+          imperium_self.updateLog("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " does not take any hits");
           imperium_self.endTurn();
           return 0;
         }
@@ -16345,7 +16297,7 @@ playerDestroyUnits(player, total, sector, capital = 0) {
   html += '</ul>';
 
   if (maximum_assignable_hits == 0) {
-    this.addMove("notify\t" + this.returnFaction(player) + " has no ships to destroy");
+    this.addMove("NOTIFY\t" + this.returnFaction(player) + " has no ships to destroy");
     this.endTurn();
     return 0;
   }
@@ -16447,7 +16399,7 @@ playerDestroyShips(player, total, sector, capital = 0) {
   html += '</ul>';
 
   if (maximum_assignable_hits == 0) {
-    this.addMove("notify\t" + this.returnFaction(player) + " has no ships to destroy");
+    this.addMove("NOTIFY\t" + this.returnFaction(player) + " has no ships to destroy");
     this.endTurn();
     return 0;
   }
@@ -17458,7 +17410,7 @@ playerContinueTurn(player, sector) {
     if (action2 == "produce") {
 
       //
-      // check the fleet supply and notify users if they are about to surpass it
+      // check the fleet supply and NOTIFY users if they are about to surpass it
       //
       let fleet_supply_in_sector = imperium_self.returnSpareFleetSupplyInSector(imperium - self.game.player, sector);
       if (fleet_supply_in_sector <= 1) {
@@ -18379,14 +18331,14 @@ playerHandleTradeOffer(faction_offering, their_offer, my_offer, offer_log) {
 
     if (action == "no") {
       imperium_self.addMove("refuse_offer\t" + imperium_self.game.player + "\t" + faction_offering);
-      imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " refuses trade offer from " + imperium_self.returnFaction(faction_offering));
+      imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " refuses trade offer from " + imperium_self.returnFaction(faction_offering));
       imperium_self.endTurn();
       return 0;
     }
 
     if (action == "yes") {
       imperium_self.addMove("trade\t" + faction_offering + "\t" + imperium_self.game.player + "\t" + JSON.stringify(their_offer) + "\t" + JSON.stringify(my_offer));
-      imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " accepts trade offer from " + imperium_self.returnFaction(faction_offering));
+      imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " accepts trade offer from " + imperium_self.returnFaction(faction_offering));
       imperium_self.endTurn();
       return 0;
     }
@@ -19137,7 +19089,7 @@ playerRemoveInfantryFromPlanets(player, total = 1, mycallback) {
             planet_in_question.units[player - 1].splice(ii, 1);
             ii = total_units_on_planet + 2; // 0 as player_moves below because we have removed above
             imperium_self.addMove("remove_infantry_from_planet\t" + player + "\t" + infantry_to_remove[i].planet + "\t" + "0");
-            imperium_self.addMove("notify\tREMOVING INFANTRY FROM PLANET: " + infantry_to_remove[i].planet);
+            imperium_self.addMove("NOTIFY\tREMOVING INFANTRY FROM PLANET: " + infantry_to_remove[i].planet);
             console.log("PLANET HAS LEFT: " + JSON.stringify(planet_in_question));
           }
         }
@@ -20154,7 +20106,7 @@ playerPostActivateSystem(sector) {
     }
     if (action2 == "produce") {
       //
-      // check the fleet supply and notify users if they are about to surpass it
+      // check the fleet supply and NOTIFY users if they are about to surpass it
       //
       let fleet_supply_in_sector = imperium_self.returnSpareFleetSupplyInSector(player, sector);
       if (fleet_supply_in_sector <= 1) {

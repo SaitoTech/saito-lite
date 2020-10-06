@@ -12,7 +12,7 @@
             let msg  = 'On which choice do you wish to place your Leadership rider?';
 	    imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
 	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"diplomacy-rider"+"\t"+choice);
-	      imperium_self.addMove("notify\t"+imperium_self.game.player+" has placed a Leadership Rider on "+choice);
+	      imperium_self.addMove("NOTIFY\t"+imperium_self.game.player+" has placed a Leadership Rider on "+choice);
 	      imperium_self.endTurn();
 	    });
 	  }
@@ -46,7 +46,7 @@
             let msg  = 'On which choice do you wish to place your Diplomacy rider?';
 	    imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
 	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"diplomacy-rider"+"\t"+choice);
-	      imperium_self.addMove("notify\t"+imperium_self.game.player+" has placed a Diplomacy Rider on "+choice);
+	      imperium_self.addMove("NOTIFY\t"+imperium_self.game.player+" has placed a Diplomacy Rider on "+choice);
 	      imperium_self.endTurn();
 	    });
 	  }
@@ -70,7 +70,7 @@
                 for (let b = 0; b < imperium_self.game.players_info.length; b++) {
                   imperium_self.addMove("activate\t"+(b+1)+"\t"+sector);
                 }
-                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " uses Diplomacy Rider to protect " + sector);
+                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " uses Diplomacy Rider to protect " + sector);
                 imperium_self.endTurn();
                 return 0;
               },
@@ -97,7 +97,7 @@
             let msg  = 'On which choice do you wish to place your Politics rider?';
             imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
               imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"politics-rider"+"\t"+choice);
-              imperium_self.addMove("notify\t"+imperium_self.game.player+" has placed a Politics Rider on "+choice);
+              imperium_self.addMove("NOTIFY\t"+imperium_self.game.player+" has placed a Politics Rider on "+choice);
               imperium_self.endTurn();
             });
           }
@@ -110,7 +110,7 @@
 	    // three action cards
             imperium_self.addMove("gain\t"+imperium_self.game.player+"\taction_cards\t3");
             imperium_self.addMove("DEAL\t2\t"+imperium_self.game.player+"\t3");
-            imperium_self.addMove("notify\tdealing two action cards to player "+player);
+            imperium_self.addMove("NOTIFY\tdealing two action cards to player "+player);
 
 	    // and change speaker
 	    let html = 'Make which player the speaker? <ul>';
@@ -151,7 +151,7 @@
             let msg = 'On which choice do you wish to place the Construction rider?';
             imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
               imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"construction-rider"+"\t"+choice);
-              imperium_self.addMove("notify\t"+imperium_self.game.player+" has placed a Construction Rider on "+choice);
+              imperium_self.addMove("NOTIFY\t"+imperium_self.game.player+" has placed a Construction Rider on "+choice);
               imperium_self.endTurn();
             });
 
@@ -167,7 +167,7 @@
               },
               function(planet) {
                 imperium_self.addMove("produce\t"+imperium_self.game.player+"\t1\t"+imperium_self.game.planets[planet].idx+"\t"+"spacedock"+"\t"+imperium_self.game.planets[planet].sector);
-                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " builds a Space Dock in " + imperium_self.game.sectors[imperium_self.game.planets[planet].sector].name);
+                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " builds a Space Dock in " + imperium_self.game.sectors[imperium_self.game.planets[planet].sector].name);
                 imperium_self.endTurn();
                 return 0;
               },
@@ -244,7 +244,7 @@
               function(sector) {
 
                 imperium_self.addMove("produce\t"+imperium_self.game.player+"\t1\t-1\tdreadnaught\t"+sector);
-                imperium_self.addMove("notify\tAdding dreadnaught to board");
+                imperium_self.addMove("NOTIFY\tAdding dreadnaught to board");
                 imperium_self.endTurn();
                 return 0;
 
@@ -304,7 +304,7 @@
             let msg = 'On which choice do you wish to place the Imperial rider?';	
 	    imperium_self.playerSelectChoice(msg, choices, elect, function(choice) {
 	      imperium_self.addMove("rider\t"+imperium_self.game.player+"\t"+"imperial-rider"+"\t"+choice);
-	      imperium_self.addMove("notify\t"+imperium_self.game.player+" has placed an Imperial Rider on "+choice);
+	      imperium_self.addMove("NOTIFY\t"+imperium_self.game.player+" has placed an Imperial Rider on "+choice);
 	      imperium_self.endTurn();
 	    });
 

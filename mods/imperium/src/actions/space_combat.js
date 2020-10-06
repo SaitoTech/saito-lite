@@ -456,13 +456,13 @@
               function(s) {
 		// from active sector into... s
 	        imperium_self.addMove("skilled_retreat\t"+action_card_player+"\t"+s+"\t"+imperium_self.game.state.space_combat_sector);
-	        imperium_self.addMove("notify\t"+imperium_self.returnFaction(action_card_player) + " makes skilled retreat into " + imperium_self.game.sectors[s].name);
+	        imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(action_card_player) + " makes skilled retreat into " + imperium_self.game.sectors[s].name);
 	        imperium_self.addMove("activate\t"+action_card_player+"\t"+s);
 	        imperium_self.addMove("activate\t"+action_card_player+"\t"+imperium_self.game.state.space_combat_sector);
 		imperium_self.endTurn();
               },
 	      function() {
-		imperium_self.addMove("notify\tno suitable sectors available for skilled retreat");
+		imperium_self.addMove("NOTIFY\tno suitable sectors available for skilled retreat");
 		imperium_self.endTurn();
 	      }
             );
@@ -544,13 +544,13 @@
               function(s) {
 		// from active sector into... s
 	        imperium_self.addMove("skilled_retreat\t"+action_card_player+"\t"+s+"\t"+imperium_self.game.state.space_combat_sector);
-	        imperium_self.addMove("notify\t"+imperium_self.returnFaction(action_card_player) + " makes skilled retreat into " + imperium_self.game.sectors[s].name);
+	        imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(action_card_player) + " makes skilled retreat into " + imperium_self.game.sectors[s].name);
 	        imperium_self.addMove("activate\t"+action_card_player+"\t"+s);
 	        imperium_self.addMove("activate\t"+action_card_player+"\t"+imperium_self.game.state.space_combat_sector);
 		imperium_self.endTurn();
               },
 	      function() {
-		imperium_self.addMove("notify\tno suitable sectors available for skilled retreat");
+		imperium_self.addMove("NOTIFY\tno suitable sectors available for skilled retreat");
 		imperium_self.endTurn();
 	      }
             );
@@ -580,13 +580,13 @@
               function(s) {
 		// from active sector into... s
 	        imperium_self.addMove("skilled_retreat\t"+action_card_player+"\t"+s+"\t"+imperium_self.game.state.space_combat_sector);
-	        imperium_self.addMove("notify\t"+imperium_self.returnFaction(action_card_player) + " makes skilled retreat into " + imperium_self.game.sectors[s].name);
+	        imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(action_card_player) + " makes skilled retreat into " + imperium_self.game.sectors[s].name);
 	        imperium_self.addMove("activate\t"+action_card_player+"\t"+s);
 	        imperium_self.addMove("activate\t"+action_card_player+"\t"+imperium_self.game.state.space_combat_sector);
 		imperium_self.endTurn();
               },
 	      function() {
-		imperium_self.addMove("notify\tno suitable sectors available for skilled retreat");
+		imperium_self.addMove("NOTIFY\tno suitable sectors available for skilled retreat");
 		imperium_self.endTurn();
 	      }
             );
@@ -616,13 +616,13 @@
               function(s) {
 		// from active sector into... s
 	        imperium_self.addMove("skilled_retreat\t"+action_card_player+"\t"+s+"\t"+imperium_self.game.state.space_combat_sector);
-	        imperium_self.addMove("notify\t"+imperium_self.returnFaction(action_card_player) + " makes skilled retreat into " + imperium_self.game.sectors[s].name);
+	        imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(action_card_player) + " makes skilled retreat into " + imperium_self.game.sectors[s].name);
 	        imperium_self.addMove("activate\t"+action_card_player+"\t"+s);
 	        imperium_self.addMove("activate\t"+action_card_player+"\t"+imperium_self.game.state.space_combat_sector);
 		imperium_self.endTurn();
               },
 	      function() {
-		imperium_self.addMove("notify\tno suitable sectors available for skilled retreat");
+		imperium_self.addMove("NOTIFY\tno suitable sectors available for skilled retreat");
 		imperium_self.endTurn();
 	      }
             );

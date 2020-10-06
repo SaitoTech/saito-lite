@@ -139,7 +139,7 @@
               function(planet) {
                 planet = imperium_self.game.planets[planet];
                 imperium_self.addMove("produce\t"+imperium_self.game.player+"\t1\t"+planet.idx+"\t"+"infantry"+"\t"+planet.sectors);
-                imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " spins extra infantry on " + planet.name);
+                imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " spins extra infantry on " + planet.name);
                 imperium_self.endTurn();
                 return 0;
 

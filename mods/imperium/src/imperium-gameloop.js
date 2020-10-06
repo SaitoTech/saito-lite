@@ -217,7 +217,7 @@ console.log("resolve from: " + still_to_move[z]);
         if (imperium_self.game.player == player) {
             imperium_self.playerResearchTechnology(function(tech) {
               imperium_self.addMove("purchase\t"+imperium_self.game.player+"\ttech\t"+tech);
-              imperium_self.addMove("notify\t"+imperium_self.returnFaction(imperium_self.game.player) + " researches " + imperium_self.tech[tech].name);
+              imperium_self.addMove("NOTIFY\t"+imperium_self.returnFaction(imperium_self.game.player) + " researches " + imperium_self.tech[tech].name);
               imperium_self.endTurn();
           });
         } else {
@@ -828,9 +828,9 @@ console.log("interface is locked...");
         }
 
 	//
-	// notify users of vote results
+	// NOTIFY users of vote results
 	//
-	this.game.queue.push("acknowledge\tThe Galactic Senate has settled on '"+this.returnNameFromIndex(winning_choice)+"'");
+	this.game.queue.push("ACKNOWLEDGE\tThe Galactic Senate has settled on '"+this.returnNameFromIndex(winning_choice)+"'");
 
       }
 
@@ -1151,7 +1151,7 @@ console.log(JSON.stringify(this.game.state.choices));
           this.game.queue.push("strategy\t"+"imperial"+"\t"+"-1"+"\t2\t"+1);
 	  this.game.state.playing_strategy_card_secondary = 0; // reset to 0 as we are kicking into secondary
           this.game.queue.push("resetconfirmsneeded\t" + imperium_self.game.players_info.length);
-          this.game.queue.push("acknowledge\t"+"As the Imperial card was not played in the previous round, all players now have an opportunity to score Victory Points (in initiative order)");
+          this.game.queue.push("ACKNOWLEDGE\t"+"As the Imperial card was not played in the previous round, all players now have an opportunity to score Victory Points (in initiative order)");
   	  this.game.state.round_scoring = 0;
 	  return 1;
   	} else {
@@ -1229,7 +1229,7 @@ console.log(JSON.stringify(this.game.state.choices));
         this.game.queue.push("playerschoosestrategycards_before");
         if (this.game.state.round == 1) {
           let faction = this.game.players_info[this.game.player-1].faction;
-          this.game.queue.push("acknowledge\t"+this.factions[faction].intro);
+          this.game.queue.push("ACKNOWLEDGE\t"+this.factions[faction].intro);
  	}
 
 
@@ -1713,54 +1713,6 @@ console.log(JSON.stringify(this.game.state.choices));
       }
 
 
-      if (mv[0] === "notify") {
-  
-  	this.updateLog(mv[1]);
-  	this.game.queue.splice(qe, 1);
-  	return 1;
-  
-      }
-
-
-      if (mv[0] === "acknowledge") {  
-
-	let imperium_self = this;
-	let notice = mv[1];
-  	//this.game.queue.splice(qe, 1);
-	this.game.halted = 1;
-	//this.saveGame(this.game.id);
-
-	let my_specific_game_id = this.game.id;
-
-  	this.playerAcknowledgeNotice(notice, function() {
-
-	  imperium_self.game = imperium_self.loadGame(my_specific_game_id);
-
-	  imperium_self.updateStatus(" acknowledged...");
-
-  	  imperium_self.game.queue.splice(qe, 1);
-	  // we have stopped queue execution, so need to restart at the lowest level
-	  imperium_self.game.halted = 0;
-
-//
-// and save so we continue from AFTER this point...
-//
-imperium_self.saveGame(imperium_self.game.id);
-//
-//
-//
-	  let cont = imperium_self.runQueue();
-	  if (cont == 0) { 
-	    imperium_self.processFutureMoves();
-	  }
-
-	  return 0;
-
-	});
-
-	return 0;
-      }
-
 
       if (mv[0] === "annex") {
   
@@ -1862,7 +1814,7 @@ imperium_self.saveGame(imperium_self.game.id);
 		}
 	      }
 	      this.addMove("give\t"+pullee+"\t"+puller+"\t"+"action"+"\t"+action_card);
-	      this.addMove("notify\t" + this.returnFaction(puller) + " pulls " + this.action_cards[action_card].name);
+	      this.addMove("NOTIFY\t" + this.returnFaction(puller) + " pulls " + this.action_cards[action_card].name);
 	      this.endTurn();
 	    } else {
 	      let roll = this.rollDice();
@@ -2016,7 +1968,7 @@ imperium_self.saveGame(imperium_self.game.id);
         this.game.players_info[faction_that_offered-1].traded_this_turn = 1;
 
 	if (faction_that_offered == this.game.player) {
-	  this.game.queue.push("acknowledge\tYour trade offer has been spurned by "+this.returnFaction(refusing_faction));
+	  this.game.queue.push("ACKNOWLEDGE\tYour trade offer has been spurned by "+this.returnFaction(refusing_faction));
 	  return 1;
 	}
 
@@ -2038,7 +1990,7 @@ imperium_self.saveGame(imperium_self.game.id);
   	this.game.queue.splice(qe, 1);
 
 	if (offering_faction == this.game.player) {
-	  this.game.queue.push("acknowledge\tYour trade offer has been accepted by "+this.returnFaction(faction_responding));
+	  this.game.queue.push("ACKNOWLEDGE\tYour trade offer has been accepted by "+this.returnFaction(faction_responding));
 	}
 
         this.game.players_info[offering_faction-1].traded_this_turn = 1;
@@ -3219,7 +3171,7 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
               }
 
               //
-              // notify and change ownership (if needed)
+              // NOTIFY and change ownership (if needed)
               //
 	      if (sys.p[planet_idx].owner == attacker) {
 

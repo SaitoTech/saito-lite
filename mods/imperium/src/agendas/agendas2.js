@@ -617,7 +617,7 @@
 		imperium_self.updateStatus("");
 		imperium_self.addMove("produce\t" + player + "\t" + "1" + "\t" + planet_idx + "\t" + "infantry" + "\t" + sector);
 		imperium_self.addMove("annex\t" + player + "\t" + sector + "\t" + planet_idx);
-		imperium_self.addMove("notify\t" + imperium_self.returnFaction(player) + " gains the contested planet");
+		imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(player) + " gains the contested planet");
 		imperium_self.endTurn();
 		return 0;
 	      },
@@ -810,7 +810,7 @@ imperium_self.updateLog("Ixthian Artifact rolls " + roll);
 		imperium_self.game.queue.push("research\t"+(i+1));
 		imperium_self.game.queue.push("research\t"+(i+1));
 	      }
-	      imperium_self.game.queue.push("acknowledge\tThe Ixthian Artifact did not explode. All players may now research two technologies...");
+	      imperium_self.game.queue.push("ACKNOWLEDGE\tThe Ixthian Artifact did not explode. All players may now research two technologies...");
           }
         }
         return 1;

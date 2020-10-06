@@ -18,7 +18,7 @@
               function(player) {
                 imperium_self.addMove("rider\t"+player+"\tassassinate-representative\t-1");
                 //imperium_self.addMove("assassinate_representative\t"+imperium_self.game.player+"\t"+player);
-                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " assassinates the voting representative of " + imperium_self.returnFaction(player));
+                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " assassinates the voting representative of " + imperium_self.returnFaction(player));
                 imperium_self.endTurn();
                 return 0;
               },
@@ -47,7 +47,7 @@
               },
               function(player) {
                 imperium_self.addMove("ancient_burial\t"+imperium_self.game.player+"\t"+player);
-                imperium_self.addMove("notify\t" + imperium_self.returnFaction(imperium_self.game.player) + " finds soe dirt on the voting representative of " + imperium_self.returnFaction(player));
+                imperium_self.addMove("NOTIFY\t" + imperium_self.returnFaction(imperium_self.game.player) + " finds soe dirt on the voting representative of " + imperium_self.returnFaction(player));
                 imperium_self.endTurn();
                 return 0;
               },
