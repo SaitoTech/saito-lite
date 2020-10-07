@@ -1,0 +1,30 @@
+
+rm ../../web/saito/saito.js
+
+
+#
+# class constructor
+#
+cat ./src/twilight-start.js > ./twilight.js
+
+for file in ./src/cards/core/*
+do
+  cat $file >> ./twilight.js
+done
+for file in ./src/cards/community/*
+do
+  cat $file >> ./twilight.js
+done
+for file in ./src/cards/end_of_history/*
+do
+  cat $file >> ./twilight.js
+done
+
+#
+# and inirtialize
+#
+cat ./src/imperium-end.js >> ./twilight.js
+
+
+npm run compile $1
+
