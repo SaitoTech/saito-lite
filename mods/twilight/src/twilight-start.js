@@ -7351,9 +7351,9 @@ console.log("CONTROL IS: " + control);
 	for (let i in this.countries) {
 	  if (this.countries[i].region === "samerica") {
 	    if (this.countries[i].bg === 1) {
-	      as_bg_countries.push(i);
+	      sa_bg_countries.push(i);
 	    } else {
-	      as_countries.push(i);
+	      sa_countries.push(i);
 	    }
 	  }
         }
