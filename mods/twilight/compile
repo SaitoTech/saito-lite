@@ -19,11 +19,19 @@ for file in ./src/cards/end_of_history/*
 do
   cat $file >> ./twilight.js
 done
+for file in ./src/cards/cold_war_crazies/*
+do
+  cat $file >> ./twilight.js
+done
+for file in ./src/cards/absurdum/*
+do
+  cat $file >> ./twilight.js
+done
 
 #
 # and inirtialize
 #
-cat ./src/imperium-end.js >> ./twilight.js
+cat ./src/twilight-end.js >> ./twilight.js
 
 
 npm run compile $1

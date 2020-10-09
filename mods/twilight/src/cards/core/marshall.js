@@ -25,6 +25,8 @@
 
         this.updateStatus("<div class='status-message' id='status-message'>Place 1 influence in each of "+ops_to_place+" non USSR-controlled countries in Western Europe</div>");
 
+        this.updateStatus("<div class='status-message' id='status-message'>Place 1 influence in each of "+ops_to_place+" non USSR-controlled countries in Western Europe</div>");
+
         twilight_self.playerFinishedPlacingInfluence();
 
         twilight_self.addMove("resolve\tmarshall");
@@ -47,7 +49,6 @@
                       twilight_self.playerFinishedPlacingInfluence();
                       twilight_self.endTurn();
                     }
-                    }
                   });
                 } else {
                   twilight_self.displayModal("you cannot place there...");
@@ -59,6 +60,5 @@
         return 0;
       }
     }
-
 
 

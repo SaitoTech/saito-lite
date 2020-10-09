@@ -5,10 +5,14 @@
     //////////////
     if (card == "blockade") {
 
+      //
+      // COMMUNITY
+      //
       if (this.game.state.events.optional.berlinagreement == 1) {
         this.updateLog("Berlin Agreement prevents Blockade.");
         return 1;
       }
+
 
       if (this.game.player == 1) {
         this.updateStatus("<div class='status-message' id='status-message'>US is responding to Blockade</div>");

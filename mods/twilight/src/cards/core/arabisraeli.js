@@ -25,6 +25,7 @@
         this.updateLog("USSR wins the Arab-Israeli War");
         this.placeInfluence("israel", this.countries['israel'].us, "ussr");
         this.removeInfluence("israel", this.countries['israel'].us, "us");
+        this.updateLog("USSR receives 2 VP from Arab-Israeli War");
         this.game.state.vp -= 2;
         this.game.state.milops_ussr += 2;
         this.updateVictoryPoints();

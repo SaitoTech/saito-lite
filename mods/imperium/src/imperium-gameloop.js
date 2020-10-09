@@ -2855,8 +2855,10 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
         let destroy 	 = parseInt(mv[4]);
 
 	let sys = this.returnSectorAndPlanets(sector);
+
 	let z = this.returnEventObjects();
 	let planet = sys.p[planet_idx];
+	let player = planet.owner;
 
 	for (let i = 0; i < planet.units.length; i++) {
 
@@ -2882,13 +2884,11 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	          //
 	          // record units destroyed this round
 	          //
-	          if (sys.s.units[player-1][unit_idx].destroyed == 1) {
-	  	    this.game.players_info[player-1].my_units_destroyed_this_combat_round.push(planet.units[i][ii].type);
+	          if (sys.s.units[i][ii].destroyed == 1) {
+	  	    this.game.players_info[i].my_units_destroyed_this_combat_round.push(planet.units[i][ii].type);
 		    this.game.players_info[attacker-1].units_i_destroyed_this_combat_round.push(planet.units[i][ii].type);
 	          }
 
-
-		  
         	  imperium_self.eliminateDestroyedUnitsInSector(planet.owner, sector);
 
 	        }
