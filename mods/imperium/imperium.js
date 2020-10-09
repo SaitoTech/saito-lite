@@ -2357,8 +2357,8 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
   	      imperium_self.endTurn();
             });
 	  } else {
-console.log("No Indoctrination Possible");
-	  console.log("No Indoctrination Possible");}
+	    console.log("No Indoctrination Possible");
+	  }
         }
         return 0;
       },
