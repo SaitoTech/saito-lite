@@ -62,6 +62,11 @@ class ChatCore extends ModTemplate {
 
   async onPeerHandshakeComplete(app, peer) {
 
+    //
+    // we only want to process our first group server
+    //
+    if (!peer.peer.host == app.options.peers[0].host) { return; }
+
     // if (this.groups.length == 0) {
     let { publickey, name } = peer.peer;
 

@@ -65,11 +65,6 @@ class Blackjack extends GameTemplate {
 
   initializeQueue() {
 
-    this.game.queue = [];
-
-    this.game.queue.push("round");
-    this.game.queue.push("READY");
-
     //
     // dealer
     //
@@ -78,32 +73,22 @@ class Blackjack extends GameTemplate {
     }
     this.game.queue.push("FLIPRESET\t1");
 
-console.log("how many players: " + this.game.players.length);
-
+    //
+    // playes
+    //
     if (this.game.players.length == 2) {
       this.game.queue.push("POOL\t1"); // pool for dealer cards
-      if (this.game.state.dealer != 2) {
-        this.game.queue.push("DEAL\t1\t2\t2");
-      }
-      if (this.game.state.dealer != 1) {
-        this.game.queue.push("DEAL\t1\t1\t2");
-      }
+      this.game.queue.push("DEAL\t1\t2\t2");
+      this.game.queue.push("DEAL\t1\t1\t2");
       this.game.queue.push("DECKENCRYPT\t1\t2");
       this.game.queue.push("DECKENCRYPT\t1\t1");
       this.game.queue.push("DECKXOR\t1\t2");
       this.game.queue.push("DECKXOR\t1\t1");
     }
     if (this.game.players.length == 3) {
-      this.game.queue.push("POOL\t1"); // pool for dealer cards
-      if (this.game.state.dealer != 3) {
-        this.game.queue.push("DEAL\t1\t3\t2");
-      }
-      if (this.game.state.dealer != 2) {
-        this.game.queue.push("DEAL\t1\t2\t2");
-      }
-      if (this.game.state.dealer != 1) {
-        this.game.queue.push("DEAL\t1\t1\t2");
-      }
+      this.game.queue.push("DEAL\t1\t3\t2");
+      this.game.queue.push("DEAL\t1\t2\t2");
+      this.game.queue.push("DEAL\t1\t1\t2");
       this.game.queue.push("DECKENCRYPT\t1\t3");
       this.game.queue.push("DECKENCRYPT\t1\t2");
       this.game.queue.push("DECKENCRYPT\t1\t1");
@@ -112,19 +97,10 @@ console.log("how many players: " + this.game.players.length);
       this.game.queue.push("DECKXOR\t1\t1");
     }
     if (this.game.players.length == 4) {
-      this.game.queue.push("POOL\t1"); // pool for dealer cards
-      if (this.game.state.dealer != 4) {
-        this.game.queue.push("DEAL\t1\t4\t2");
-      }
-      if (this.game.state.dealer != 3) {
-        this.game.queue.push("DEAL\t1\t3\t2");
-      }
-      if (this.game.state.dealer != 2) {
-        this.game.queue.push("DEAL\t1\t2\t2");
-      }
-      if (this.game.state.dealer != 1) {
-        this.game.queue.push("DEAL\t1\t1\t2");
-      }
+      this.game.queue.push("DEAL\t1\t4\t2");
+      this.game.queue.push("DEAL\t1\t3\t2");
+      this.game.queue.push("DEAL\t1\t2\t2");
+      this.game.queue.push("DEAL\t1\t1\t2");
       this.game.queue.push("DECKENCRYPT\t1\t4");
       this.game.queue.push("DECKENCRYPT\t1\t3");
       this.game.queue.push("DECKENCRYPT\t1\t2");
@@ -137,22 +113,11 @@ console.log("how many players: " + this.game.players.length);
       this.game.queue.push("DECKXOR\t1\t1");
     }
     if (this.game.players.length == 5) {
-      this.game.queue.push("POOL\t1"); // pool for dealer cards
-      if (this.game.state.dealer != 5) {
-        this.game.queue.push("DEAL\t1\t5\t2");
-      }
-      if (this.game.state.dealer != 4) {
-        this.game.queue.push("DEAL\t1\t4\t2");
-      }
-      if (this.game.state.dealer != 3) {
-        this.game.queue.push("DEAL\t1\t3\t2");
-      }
-      if (this.game.state.dealer != 2) {
-        this.game.queue.push("DEAL\t1\t2\t2");
-      }
-      if (this.game.state.dealer != 1) {
-        this.game.queue.push("DEAL\t1\t1\t2");
-      }
+      this.game.queue.push("DEAL\t1\t5\t2");
+      this.game.queue.push("DEAL\t1\t4\t2");
+      this.game.queue.push("DEAL\t1\t3\t2");
+      this.game.queue.push("DEAL\t1\t2\t2");
+      this.game.queue.push("DEAL\t1\t1\t2");
       this.game.queue.push("DECKENCRYPT\t1\t5");
       this.game.queue.push("DECKENCRYPT\t1\t4");
       this.game.queue.push("DECKENCRYPT\t1\t3");
@@ -165,25 +130,12 @@ console.log("how many players: " + this.game.players.length);
       this.game.queue.push("DECKXOR\t1\t1");
     }
     if (this.game.players.length == 6) {
-      this.game.queue.push("POOL\t1"); // pool for dealer cards
-      if (this.game.state.dealer != 6) {
-        this.game.queue.push("DEAL\t1\t6\t2");
-      }
-      if (this.game.state.dealer != 5) {
-        this.game.queue.push("DEAL\t1\t5\t2");
-      }
-      if (this.game.state.dealer != 4) {
-        this.game.queue.push("DEAL\t1\t4\t2");
-      }
-      if (this.game.state.dealer != 3) {
-        this.game.queue.push("DEAL\t1\t3\t2");
-      }
-      if (this.game.state.dealer != 2) {
-        this.game.queue.push("DEAL\t1\t2\t2");
-      }
-      if (this.game.state.dealer != 1) {
-        this.game.queue.push("DEAL\t1\t1\t2");
-      }
+      this.game.queue.push("DEAL\t1\t6\t2");
+      this.game.queue.push("DEAL\t1\t5\t2");
+      this.game.queue.push("DEAL\t1\t4\t2");
+      this.game.queue.push("DEAL\t1\t3\t2");
+      this.game.queue.push("DEAL\t1\t2\t2");
+      this.game.queue.push("DEAL\t1\t1\t2");
       this.game.queue.push("DECKENCRYPT\t1\t6");
       this.game.queue.push("DECKENCRYPT\t1\t5");
       this.game.queue.push("DECKENCRYPT\t1\t4");
@@ -230,7 +182,10 @@ console.log("how many players: " + this.game.players.length);
       this.game.state = this.returnState(this.game.players.length);
       this.updateStatus("Generating the Game");
       this.game.state.required_pot = this.game.state.big_blind;
-      this.initializeQueue();
+
+      this.game.queue = [];
+      this.game.queue.push("start");
+      this.game.queue.push("READY");
     }
 
     if (this.browser_active) {
@@ -279,6 +234,19 @@ console.log("how many players: " + this.game.players.length);
       let mv = this.game.queue[qe].split("\t");
       let shd_continue = 1;
 
+console.log(JSON.stringify(mv));
+
+      if (mv[0] === "start") {
+	this.startNextRound();
+        return 1;
+      }
+
+
+
+
+
+
+
       if (mv[0] === "play") {
 
         let player_to_go = parseInt(mv[1]);
@@ -311,12 +279,17 @@ console.log("how many players: " + this.game.players.length);
         this.game.queue.push("score");
         this.game.queue.push("endround");
 	let players_to_go = [];
+	let players_to_reveal = [];
         for (let i = 0; i < this.game.players.length; i++) {
 	  if ((i+1) != this.game.state.dealer) {
 	    players_to_go.push((i+1));
+	    players_to_reveal.push((i+1));
 	  }
 	}
         this.game.queue.push("PLAY\t"+JSON.stringify(players_to_go));	
+        for (let i = 0; i < players_to_reveal.length; i++) {
+	  this.game.queue.push("revealhand\t"+players_to_reveal[i]);
+        }
 
 	if (this.game.player == this.game.state.dealer) {
 	  this.updateStatus("You are the dealer this round");
@@ -327,10 +300,14 @@ console.log("how many players: " + this.game.players.length);
 
 
       if (mv[0] === "revealhand") {
+	this.pickWinner();
         this.game.queue.splice(qe, 1);
 	let player = parseInt(mv[1]);
         if (this.game.player == parseInt(mv[1])) {
-	  this.addMove("hand\t"+this.game.player+"\t"+JSON.stringify(this.game.deck[0].hand));
+console.log("DECK: " + JSON.stringify(this.game.deck[0]));
+	  if (this.game.deck[0].hand.length > 0) {
+	    this.addMove("hand\t"+this.game.player+"\t"+JSON.stringify(this.game.deck[0].hand));
+	  }
 	  this.endTurn();
 	}
 	return 0;
@@ -338,14 +315,17 @@ console.log("how many players: " + this.game.players.length);
 
 
       if (mv[0] === "hand") {
+	this.pickWinner();
 	let player = parseInt(mv[1]);
-	let hand = JSON.parse(parseInt(mv[2]));
+console.log("hand is player; " + player + " -- " + mv[2])
+	let hand = JSON.parse(mv[2]);
         this.game.state.player_hands[player-1] = hand;
         this.game.queue.splice(qe, 1);
 	return 1;
       }
 
       if (mv[0] === "hit") {
+	this.pickWinner();
 	let player = parseInt(mv[1]);
         this.game.queue.splice(qe, 1);
         this.game.queue.push("DEAL\t1\t"+player+"\t1");
@@ -353,6 +333,7 @@ console.log("how many players: " + this.game.players.length);
       }
 
       if (mv[0] === "stand") {
+	this.pickWinner();
         this.game.queue.splice(qe, 1);
         return 1;
       }
@@ -364,6 +345,9 @@ console.log("how many players: " + this.game.players.length);
 
 
       if (mv[0] === "pickwinner") {
+
+console.log("PICK WINNER: " +JSON.stringify(this.game.state));
+
         if (this.game.state.dealer_wins == 1) {
 
 	  //
@@ -402,6 +386,8 @@ console.log("how many players: " + this.game.players.length);
 
         this.displayTable();
 
+console.log(JSON.stringify(this.game.state));
+
 	this.game.queue.push("nextround");
 	if (this.game.state.dealer_wins == 1) {
 	  this.game.queue.push("ACKNOWLEDGE\tdealer wins");
@@ -416,7 +402,13 @@ console.log("how many players: " + this.game.players.length);
   	    if (this.game.state.player_winner[this.game.player-1] == 1) {
 	      this.game.queue.push("ACKNOWLEDGE\tyou win");
 	    } else {
-	      this.game.queue.push("ACKNOWLEDGE\tyou lose");
+	      if (this.game.state.dealer_tie == 1) {
+console.log("HERE 3");
+	        this.game.queue.push("ACKNOWLEDGE\teveryone loses");
+	      } else {
+console.log("HERE 3");
+	        this.game.queue.push("ACKNOWLEDGE\tyou lose");
+	      }
 	    }
 	  }
 	}
@@ -474,7 +466,6 @@ console.log("how many players: " + this.game.players.length);
     this.pickWinner();
 
     let array_of_cards = [];
-
     for (let i = 0; i < this.game.deck[0].hand.length; i++) {
       let tmpr = this.game.deck[0].cards[this.game.deck[0].hand[i]].name;
       let tmpr2 = tmpr.split(".");
@@ -565,6 +556,7 @@ console.log("how many players: " + this.game.players.length);
     state.turn = 0;
     state.player_names = [];
     state.player_credit = [];
+    state.player_payoff = [];
     state.player_hands = [];
     state.player_total = [];
     state.player_winner = [];
@@ -585,7 +577,6 @@ console.log("how many players: " + this.game.players.length);
         state.player_names[i] = this.game.players[i].substring(0, 10) + "...";
       }
     }
-
 
     return state;
 
@@ -738,15 +729,43 @@ console.log("how many players: " + this.game.players.length);
         let player_box_num = player_box[seat];
         let divname = "#player-info-" + player_box_num;
         let boxobj = document.querySelector(divname);
+	let newhtml = '';
+	let player_hand_shown = 0;
 
-        let newhtml = `
-	  <div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">
-            <img class="card" src="${this.card_img_dir}/red_back.png">
-            <img class="card" src="${this.card_img_dir}/red_back.png">
-          </div>
-          <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player_names[i]}</div>
-          <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player_credit[i]} SAITO</div> 
-        `;
+console.log("HERE: " + JSON.stringify(this.game.state));	
+	if (this.game.state.player_hands.length > 0) {
+	  if (this.game.state.player_hands[i] != null) {
+	    if (this.game.state.player_hands[i].length > 0) {
+	      player_hand_shown = 1;
+              newhtml = `
+	        <div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">
+             `;
+console.log("PH: " + JSON.stringify(this.game.state.player_hands));
+	      if (this.game.state.player_hands[i] != null) {
+	        for (let z = 0; z < this.game.state.player_hands[i].length; z++) {
+	          let card = this.game.deck[0].cards[this.game.state.player_hands[i][z]];
+                  newhtml += `<img class="card" src="${this.card_img_dir}/${card.name}">`;
+    	        //newhtml += `<img class="card" src="${this.card_img_dir}/red_back.png">`;
+	        }
+	      }
+	      newhtml += `
+                </div>
+                <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player_names[i]}</div>
+                <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player_credit[i]} SAITO</div> 
+             `;
+	    }
+          }
+        }
+	if (player_hand_shown == 0) {
+            newhtml = `
+	      <div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">
+                <img class="card" src="${this.card_img_dir}/red_back.png">
+                <img class="card" src="${this.card_img_dir}/red_back.png">
+              </div>
+              <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player_names[i]}</div>
+              <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player_credit[i]} SAITO</div> 
+           `;
+	}
         boxobj.querySelector(".info").innerHTML = newhtml;
 
         if (boxobj.querySelector(".plog").innerHTML == "") {
@@ -761,14 +780,44 @@ console.log("how many players: " + this.game.players.length);
         let player_box_num = player_box[seat];
         let divname = "#player-info-" + player_box_num;
         let boxobj = document.querySelector(divname);
+	let player_hand_shown = 0;
+	let newhtml = '';
 
-        let newhtml = `
-	  <div class="player-info-hand" id="player-info-hand-${i + 1}">
-            <div class="dealer-notice">DEALER</div>
-	  </div>
-          <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player_names[i]}</div>
-          <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player_credit[i]} SAITO</div> 
-        `;
+console.log("HERE: " + JSON.stringify(this.game.state));	
+	if (this.game.state.player_hands.length > 0) {
+	  if (this.game.state.player_hands[i] != null) {
+	    if (this.game.state.player_hands[i].length > 0) {
+	      player_hand_shown = 1;
+              newhtml = `
+	        <div class="player-info-hand hand tinyhand" id="player-info-hand-${i + 1}">
+             `;
+
+console.log("PH: " + JSON.stringify(this.game.state.player_hands));
+	      if (this.game.state.player_hands[i] != null) {
+	        for (let z = 0; z < this.game.state.player_hands[i].length; z++) {
+	          let card = this.game.deck[0].cards[this.game.state.player_hands[i][z]];
+                  newhtml += `<img class="card" src="${this.card_img_dir}/${card.name}">`;
+    	        //newhtml += `<img class="card" src="${this.card_img_dir}/red_back.png">`;
+	        }
+	      }
+	      newhtml += `
+                </div>
+                <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player_names[i]}</div>
+                <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player_credit[i]} SAITO</div> 
+             `;
+	    }
+          }
+        }
+	if (player_hand_shown == 1) {
+          newhtml = `
+	    <div class="player-info-hand" id="player-info-hand-${i + 1}">
+              <div class="dealer-notice">DEALER</div>
+	    </div>
+            <div class="player-info-name" id="player-info-name-${i + 1}">${this.game.state.player_names[i]}</div>
+            <div class="player-info-chips" id="player-info-chips-${i + 1}">${this.game.state.player_credit[i]} SAITO</div> 
+          `;
+	}
+
         boxobj.querySelector(".info").innerHTML = newhtml;
 
         if (boxobj.querySelector(".plog").innerHTML == "") {
@@ -928,8 +977,9 @@ console.log("dealer total calculated at: " + dealer_total);
 
     for (let i = 0; i < array_of_cards.length; i++) {
       let card = array_of_cards[i];
+console.log("CARD: " + card);
       if (card[0] === 'A') {
-	  total += 1;
+	  total += parseInt(1);
 	  aces++;
       } else {
         let card_total = parseInt(card.substring(1));
@@ -937,15 +987,17 @@ console.log("dealer total calculated at: " + dealer_total);
 	  return 21;
 	}
 	if (card_total > 10) { card_total = 10; }
-	total += card_total;
+	total += parseInt(card_total);
       }
     }
+
     for (let z = 0; z < aces; z++) {
       if ((total+10) <= 21) { total += 10; }
     }
 
     return total;
   }
+
 
   pickWinner() {
 
@@ -955,10 +1007,13 @@ console.log("dealer total calculated at: " + dealer_total);
     this.game.state.player_total = [];
     for (let i = 0; i < this.game.state.player_hands.length; i++) {
       let array_of_cards = [];
-      for (let ii = 0; ii < this.game.state.player_hands[i].length; ii++) {
-        array_of_cards.push(this.game.state.player_hands[i][ii]);
-      };
-      this.game.state.player_total,push(this.scoreArrayOfCards(array_of_cards));
+      if (this.game.state.player_hands[i] != null) {
+        for (let ii = 0; ii < this.game.state.player_hands[i].length; ii++) {
+          array_of_cards.push(this.game.state.player_hands[i][ii]);
+        };
+      }
+      let handscore = this.scoreArrayOfCards(array_of_cards);
+      this.game.state.player_total.push(handscore);
     }
 
     let max_score = 0;

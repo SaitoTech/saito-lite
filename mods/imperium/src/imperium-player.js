@@ -4764,7 +4764,7 @@ playerActivateSystem() {
           chtml += '<li class="option" id="no">choose again</li>';
           chtml += '</ul>';
 
-      this.updateStatus(chtml);
+      imperium_self.updateStatus(chtml);
       
       $('.option').off();
       $('.option').on('click', function() {

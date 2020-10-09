@@ -2351,9 +2351,14 @@ console.log("agenda: " + imperium_self.game.state.agendas[i]);
       },
       groundCombatEvent : function(imperium_self, player, sector, planet_idx) { 
         if (imperium_self.game.player == player) {
-          imperium_self.playIndoctrination(imperium_self, player, sector, planet_idx, function(imperium_self) {	  
-	    imperium_self.endTurn();
-          });
+	  let sys = imperium_self.returnSectorAndPlanets(sector);
+	  if (sys.p[planet_idx].units[player-1].length > 0) {
+            imperium_self.playIndoctrination(imperium_self, player, sector, planet_idx, function(imperium_self) {	  
+  	      imperium_self.endTurn();
+            });
+	  } else {
+	    console.log("No Indoctrination Possible");
+	  }
         }
         return 0;
       },
@@ -2532,6 +2537,11 @@ this.playIndoctrination = function(imperium_self, player, sector, planet_idx, my
     mycallback(imperium_self);
     return;
   }
+  if (sys.p[planet_idx].units[opponent].length <= 0) {
+    mycallback(imperium_self);
+    return;
+  }
+
 
   let html = "<div class='sf-readable'>Do you wish to spend 2 influence to convert 1 enemy infantry to your side?</div><ul>";
       html += '<li class="textchoice" id="yes">yes</li>';
@@ -13030,8 +13040,10 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
         let destroy 	 = parseInt(mv[4]);
 
 	let sys = this.returnSectorAndPlanets(sector);
+
 	let z = this.returnEventObjects();
 	let planet = sys.p[planet_idx];
+	let player = planet.owner;
 
 	for (let i = 0; i < planet.units.length; i++) {
 
@@ -13057,13 +13069,11 @@ console.log(this.returnFaction(faction_responding) + " gives " + response.promis
 	          //
 	          // record units destroyed this round
 	          //
-	          if (sys.s.units[player-1][unit_idx].destroyed == 1) {
-	  	    this.game.players_info[player-1].my_units_destroyed_this_combat_round.push(planet.units[i][ii].type);
+	          if (sys.s.units[i][ii].destroyed == 1) {
+	  	    this.game.players_info[i].my_units_destroyed_this_combat_round.push(planet.units[i][ii].type);
 		    this.game.players_info[attacker-1].units_i_destroyed_this_combat_round.push(planet.units[i][ii].type);
 	          }
 
-
-		  
         	  imperium_self.eliminateDestroyedUnitsInSector(planet.owner, sector);
 
 	        }
@@ -20016,7 +20026,7 @@ playerActivateSystem() {
           chtml += '<li class="option" id="no">choose again</li>';
           chtml += '</ul>';
 
-      this.updateStatus(chtml);
+      imperium_self.updateStatus(chtml);
       
       $('.option').off();
       $('.option').on('click', function() {
