@@ -122,6 +122,7 @@ ul li a {
   padding-top: 10px;
   padding-bottom: 10px;
   box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+  border-radius: 5px;
   background-color: #f5f5f5DD;
 }
 

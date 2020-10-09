@@ -90,8 +90,10 @@ function reset_nonpersistent {
   rm -f ./logs/*
 
   #let the system know that users pre-existed a reset.
+  if [ -f ./data/rewards.sq3 ]; then
   echo "update users set latest_tx = -1;" | sqlite3 ./data/rewards.sq3
-  
+  fi
+
   if [ ! -f ./config/modules.config.js ]; then
     cp ./config/modules.default.js ./config/modules.config.js
   fi

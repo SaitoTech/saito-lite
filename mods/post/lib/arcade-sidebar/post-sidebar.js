@@ -95,14 +95,16 @@ module.exports = PostSidebar = {
       </div>
     </div>`;
 
-    document.querySelector('.arcade-post-posts').append(elParser(html));
+    if (document.querySelector('.arcade-post-posts')) {
 
-    document.getElementById(row.id).addEventListener('click', (e, app, data, row) => {
-      console.log('click');
-      ShowPost.render(app, data, row);
-      ShowPost.attachEvents(app, data, row);
-    });
+      document.querySelector('.arcade-post-posts').append(elParser(html));
 
+      document.getElementById(row.id).addEventListener('click', (e, app, data, row) => {
+        console.log('click');
+        ShowPost.render(app, data, row);
+        ShowPost.attachEvents(app, data, row);
+      });
+    }
   }
 
 }

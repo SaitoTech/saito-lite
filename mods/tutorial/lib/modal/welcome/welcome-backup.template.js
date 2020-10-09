@@ -6,7 +6,7 @@ module.exports = WelcomeBackupTemplate = () => {
       <div class="welcome-modal-left">
         <div class="welcome-modal-header">Welcome to Saito</h1></div>
         <div class="welcome-modal-main">
-          <div style="margin:1em 0">Backup your Saito wallet and start getting Saito tokens for free:</div>
+          <div style="margin:1em 0">You have a balance in your wallet. Back up to keep it safe:</div>
           <div style="display:flex;">
       <input style="width:100%; color:black; font-size:1em; background:white;margin:0 1em 0 0;" id="registry-input" type="text" placeholder="email@domain.com">
       <input style="display: var(--saito-wu);" id="name" name="name" type="text"></input>

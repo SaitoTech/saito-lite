@@ -247,7 +247,7 @@ class Poker extends GameTemplate {
 
     this.game.state.turn = 0;
     this.game.state.round++;
-    console.log("Round: "+ this.game.state.round);
+    console.log("Round: " + this.game.state.round);
 
     this.game.state.big_blind_player--;
     this.game.state.small_blind_player--;
@@ -324,11 +324,11 @@ class Poker extends GameTemplate {
         this.game.player = (i + 1);
       }
     }
-   
+
 
     this.updateLog("New Round...");
-    this.updateLog("Round: "+(this.game.state.round));
-      //Flavor Round counters
+    this.updateLog("Round: " + (this.game.state.round));
+    //Flavor Round counters
     //this.updateLog("Round: "+(this.game.state.round) +". FIGHT!");
     //this.updateLog("Heaven or Hell. Duel: "+(this.game.state.round) +". Let's Rock");
     //this.updateLog("The wheel of fate is turning. Rebel: "+(this.game.state.round) +". Action");
@@ -435,10 +435,10 @@ class Poker extends GameTemplate {
           // if everyone has folded - start a new round
           this.startNextRound();
 
-	  this.game.queue.push("PAY"+ "\t" + this.game.state.player_pot[this.game.player-1] + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[player_left_idx] + "\t" + (new Date().getTime()) + "\t" + "SAITO");
-//          let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[player_left_idx], this.game.state.player_pot[this.game.player - 1]);
-//          newtx = this.app.wallet.signTransaction(newtx);
-//          this.app.network.propagateTransaction(newtx);
+          this.game.queue.push("PAY" + "\t" + this.game.state.player_pot[this.game.player - 1] + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[player_left_idx] + "\t" + (new Date().getTime()) + "\t" + "SAITO");
+          //          let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[player_left_idx], this.game.state.player_pot[this.game.player - 1]);
+          //          newtx = this.app.wallet.signTransaction(newtx);
+          //          this.app.network.propagateTransaction(newtx);
 
           return 1;
         }
@@ -620,7 +620,7 @@ class Poker extends GameTemplate {
           //
           // report winner
           //
-	  let round_settlement = [];
+          let round_settlement = [];
           if (winners.length > 1) {
 
             //
@@ -641,7 +641,7 @@ class Poker extends GameTemplate {
               //
               // non-winners send wagers to winner
               //
-	      round_settlement.push("PAY" + "\t" + (this.game.state.player_pot[this.game.player-1]/winners.length) + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[winners[i]] + "\t" + (new Date().getTime()) + "\t" + "SAITO");
+              round_settlement.push("PAY" + "\t" + (this.game.state.player_pot[this.game.player - 1] / winners.length) + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[winners[i]] + "\t" + (new Date().getTime()) + "\t" + "SAITO");
 
               //let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[winners[i]], this.game.state.player_pot[this.game.player - 1]);
               //newtx = this.app.wallet.signTransaction(newtx);
@@ -655,7 +655,7 @@ class Poker extends GameTemplate {
             this.updateLog(this.game.state.player_names[winners[0]] + " wins " + this.game.state.pot);
             this.game.state.player_credit[winners[0]] += this.game.state.pot;
 
-	    round_settlement.push("PAY"+ "\t" + (this.game.state.player_pot[this.game.player-1]) + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[winners[0]] + "\t" + (new Date().getTime()) + "\t" + "SAITO");
+            round_settlement.push("PAY" + "\t" + (this.game.state.player_pot[this.game.player - 1]) + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[winners[0]] + "\t" + (new Date().getTime()) + "\t" + "SAITO");
             //
             // non-winners send wagers to winner
             //
@@ -666,10 +666,10 @@ class Poker extends GameTemplate {
           }
           this.startNextRound();
 
-	  for (let i = 0;  i < round_settlement.length; i++) {
-	    this.game.queue.push(round_settlement[i]);
+          for (let i = 0; i < round_settlement.length; i++) {
+            this.game.queue.push(round_settlement[i]);
           }
-	  return 1;
+          return 1;
         }
 
         if (this.game.player - 1 == first_scorer) {
@@ -817,10 +817,10 @@ class Poker extends GameTemplate {
           //
           // everyone should send anything they owe to winner
           //
-	  this.game.queue.push("PAY"+ "\t" + this.game.state.player_pot[this.game.player-1] + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[player_left_idx] + "\t" + (new Date.getTime()) + "\t" + "SAITO");
-//          let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[player_left_idx], this.game.state.player_pot[this.game.player - 1]);
-//          newtx = this.app.wallet.signTransaction(newtx);
-//          this.app.network.propagateTransaction(newtx);
+          this.game.queue.push("PAY" + "\t" + this.game.state.player_pot[this.game.player - 1] + "\t" + this.app.wallet.returnPublicKey() + "\t" + this.game.players[player_left_idx] + "\t" + (new Date.getTime()) + "\t" + "SAITO");
+          //          let newtx = this.app.wallet.createUnsignedTransactionWithDefaultFee(this.game.players[player_left_idx], this.game.state.player_pot[this.game.player - 1]);
+          //          newtx = this.app.wallet.signTransaction(newtx);
+          //          this.app.network.propagateTransaction(newtx);
 
 
         }
@@ -1890,20 +1890,32 @@ class Poker extends GameTemplate {
 
       let x = this.isStraight(suite, val);
 
+      hand_description = "straight";
+
+      //ace hight straight
       if (x == 10) {
         cards_to_score.push(this.returnHighestSuiteCard(suite, val, 1));
         cards_to_score.push(this.returnHighestSuiteCard(suite, val, 13));
         cards_to_score.push(this.returnHighestSuiteCard(suite, val, 12));
         cards_to_score.push(this.returnHighestSuiteCard(suite, val, 11));
         cards_to_score.push(this.returnHighestSuiteCard(suite, val, 10));
-      } else {
-        for (let i = 4; i >= 0; i--) {
-          cards_to_score.push(this.returnHighestSuiteCard(suite, val, x + i));
-        }
-      }
-      hand_description = "straight";
-      return { cards_to_score: this.sortByValue(cards_to_score), hand_description: hand_description };
 
+        return { cards_to_score: cards_to_score, hand_description: hand_description };
+      }
+      //ace low straight
+      if (x == 1) {
+        cards_to_score.push(this.returnHighestSuiteCard(suite, val, 5));
+        cards_to_score.push(this.returnHighestSuiteCard(suite, val, 4));
+        cards_to_score.push(this.returnHighestSuiteCard(suite, val, 3));
+        cards_to_score.push(this.returnHighestSuiteCard(suite, val, 2));
+        cards_to_score.push(this.returnHighestSuiteCard(suite, val, 1));
+
+        return { cards_to_score: cards_to_score, hand_description: hand_description };
+      }
+      for (let i = 4; i >= 0; i--) {
+        cards_to_score.push(this.returnHighestSuiteCard(suite, val, x + i));
+      }
+      return { cards_to_score: this.sortByValue(cards_to_score), hand_description: hand_description };
     }
 
 
@@ -1958,12 +1970,12 @@ class Poker extends GameTemplate {
         pairs.shift();
       }
 
-      let x = pairs[pairs.length - 1];
-      let y = pairs[pairs.length - 2];
+      let m = pairs[pairs.length - 1];
+      let n = pairs[pairs.length - 2];
 
-      if (x > y) { highest_card = x; }
-      else { highest_card = y; }
-      if (y == 1) { highest_card = y }
+      if (m > n) { highest_card = m; }
+      else { highest_card = n; }
+      if (n == 1) { highest_card = n }
 
       cards_remaining = val.length;
       for (let i = 0; i < cards_remaining; i++) {
@@ -1977,7 +1989,7 @@ class Poker extends GameTemplate {
       }
       cards_remaining = val.length;
       for (let i = 0; i < cards_remaining; i++) {
-        if (val[i] == x || val[i] == y) {
+        if (val[i] == m || val[i] == n) {
           cards_to_score.push(suite[i] + val[i]);
           val.splice(i, 1);
           suite.splice(i, 1);

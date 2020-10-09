@@ -1,3 +1,8 @@
+* {
+  --card-width: 110px;
+  --card-spacing: calc(var(--card-width) * 0.25);
+}
+
 body {
   font-family: arial, helvetica, sans-serif;
   font-size: 13px;
@@ -5,23 +10,57 @@ body {
   margin: 0px;
 }
 
-
 .played_cards {
-  transform: translateX(40%) translateY(30%);
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: calc(50% - var(--card-width));
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
+
 .card {
- width: 110px;
+  width: var(--card-width);
 }
+
+.mini-cardfan-holder {
+  position: relative;
+  z-index: -9;
+}
+.mini-cardfan div {
+  transform: rotate(6deg);
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.mini-cardfan div img {
+  margin-bottom: 10em;
+}
+
+/*
+.p3 .mini-cardfan-holder, .p4 .mini-cardfan-holder, .p5 .mini-cardfan-holder {
+  transform: rotate(180deg);
+}
+*/
+
+.hud-cardbox {
+  top: 40%;
+  transform: translate(-50%, -50%) scale(0.8);
+}
+
 .status-cardbox {
-  width: 60%;
-  max-width: 100%;
+  width: 80vw;
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
+  padding: 0 calc(var(--card-width) * 0.75);
 }
+
 .hud-long .hud-body .status .status-cardbox {
-    grid-template-columns: repeat( auto-fit, minmax(30px, 1fr) );
+  grid-template-columns: repeat( auto-fit, minmax(calc(var(--card-width) * 0.25), 1fr));
+}
+
+.hud-body {
+  overflow-y: hidden;
 }
 
 .player-info-hand-cards {
@@ -31,6 +70,14 @@ body {
   top: 60px;
   left: 60px;
   font-weight: bold;
+  border: 1px solid #fff;
+  padding: 20px;
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  line-height: 1.5em;
+  text-align: center;
+  background: #444a;
 }
 
 .main {
@@ -124,10 +171,6 @@ body {
   top: 2vh;
 }
 
-
-
-
-
 .chat-box {
   height: unset !important;
 }
@@ -158,14 +201,15 @@ body {
 .dealerbutton::before {
   content: "⬤";
   margin-right: 0.5em;
-  color: #fff;;
+  color: #fff;
+  ;
   -webkit-text-stroke: 1px #444;
 }
 
-
 @media all and (max-aspect-ratio:13/9) {
   .player-info-hand .card {
-    width: 110px;1G
+    width: 110px;
+    1G
   }
   .p4 .hand, .p5 .hand, .p3 .hand {
     right: -3vh;
@@ -222,6 +266,12 @@ body {
     right: 1em;
     top: 42vh;
     transform: translateY(-50%);
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  * {
+    --card-width: 10vw;
   }
 }
 
