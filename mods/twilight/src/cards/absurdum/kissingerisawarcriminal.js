@@ -31,7 +31,7 @@
         twilight_self.addMove("resolve\tkissingerisawarcriminal");
 
 	for (let i in twilight_self.countries) {
-	  if (twilight_self.countries[i].region.indexOf(action2) != -1) {
+	  if (twilight_self.countries[i].region.indexOf(action2) != -1 && twilight_self.countries[i].control == 1) {
             twilight_self.addMove("SETVAR\tcountries\t"+i+"\tbg\t"+1);
             twilight_self.addMove("notify\t"+twilight_self.countries[i].name + " is now a battleground country");
 	  }
