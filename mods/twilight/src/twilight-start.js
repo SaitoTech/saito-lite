@@ -7080,29 +7080,36 @@ console.log("CONTROL IS: " + control);
 
 
     let vp_adjustment = 0;
+    let total_vp = 0;
 
     vp_adjustment = this.calculateScoring("europe");
-    this.game.state.vp += vp_adjustment;
+    total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
+    this.game.state.vp += total_vp;
     this.updateLog("<span>Europe:</span> " + vp_adjustment + " <span>VP</span>");
  
     vp_adjustment = this.calculateScoring("asia");
-    this.game.state.vp += vp_adjustment;
+    total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
+    this.game.state.vp += total_vp;
     this.updateLog("<span>Asia:</span> " + vp_adjustment + " <span>VP</span>");
 
     vp_adjustment = this.calculateScoring("mideast");
-    this.game.state.vp += vp_adjustment;
+    total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
+    this.game.state.vp += total_vp;
     this.updateLog("<span>Middle East:</span> " + vp_adjustment + " <span>VP</span>");
 
     vp_adjustment = this.calculateScoring("africa");
-    this.game.state.vp += vp_adjustment;
+    total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
+    this.game.state.vp += total_vp;
     this.updateLog("<span>Africa:</span> " + vp_adjustment + " <span>VP</span>");
 
     vp_adjustment = this.calculateScoring("southamerica");
-    this.game.state.vp += vp_adjustment;
+    total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
+    this.game.state.vp += total_vp;
     this.updateLog("<span>South America:</span> " + vp_adjustment + " <span>VP</span>");
 
-    vp_adjustment = this.calculateScoring("scentralamerica");
-    this.game.state.vp += vp_adjustment;
+    vp_adjustment = this.calculateScoring("centralamerica");
+    total_vp = vp_adjustment.us.vp - vp_adjustment.ussr.vp;
+    this.game.state.vp += total_vp;
     this.updateLog("<span>Central America:</span> " + vp_adjustment + " <span>VP</span>");
 
     this.updateVictoryPoints();

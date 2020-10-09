@@ -28,7 +28,7 @@
 	if (action2 == "samerica") { selreg = "South America"; }
 	if (action2 == "mideast") { selreg = "Middle East"; }
 
-        twilight_self.addMove("resolve\tdomino");
+        twilight_self.addMove("resolve\tkissingerisawarcriminal");
 
 	for (let i in twilight_self.countries) {
 	  if (twilight_self.countries[i].region.indexOf(i) != -1) {
